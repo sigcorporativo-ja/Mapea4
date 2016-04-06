@@ -1,0 +1,178 @@
+<!--
+
+    Empresa desarrolladora: GUADALTEL S.A.
+
+    Autor: Junta de Andalucía
+
+    Derechos de explotación propiedad de la Junta de Andalucía.
+
+    Este programa es software libre: usted tiene derecho a redistribuirlo y/o modificarlo bajo los términos de la
+
+    Licencia EUPL European Public License publicada por el organismo IDABC de la Comisión Europea, en su versión 1.0.
+    o posteriores.
+
+    Este programa se distribuye de buena fe, pero SIN NINGUNA GARANTÍA, incluso sin las presuntas garantías implícitas
+    de USABILIDAD o ADECUACIÓN A PROPÓSITO CONCRETO. Para mas información consulte la Licencia EUPL European Public
+    License.
+
+    Usted recibe una copia de la Licencia EUPL European Public License junto con este programa, si por algún motivo no
+    le es posible visualizarla, puede consultarla en la siguiente URL: http://ec.europa.eu/idabc/servlets/Doc?id=31099
+
+    You should have received a copy of the EUPL European Public License along with this program. If not, see
+    http://ec.europa.eu/idabc/servlets/Doc?id=31096
+
+    Vous devez avoir reçu une copie de la EUPL European Public License avec ce programme. Si non, voir
+    http://ec.europa.eu/idabc/servlets/Doc?id=30194
+
+    Sie sollten eine Kopie der EUPL European Public License zusammen mit diesem Programm. Wenn nicht, finden Sie da
+    http://ec.europa.eu/idabc/servlets/Doc?id=29919
+
+-->
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html>
+
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+   <title>MAPEA - TESTS</title>
+   <style type="text/css">
+      .container {
+        float: left;
+         margin-top: 30px;
+         width: 100%;
+      }
+      
+      .prueba {
+         height: 100px;
+         width: 140px;
+         margin: 5px;
+         float: left;
+         overflow: hidden;
+         text-overflow: clip;
+         word-wrap: break-word;
+         border: 1px solid rgba(0, 0, 0, 0.18);
+         padding: 2px;
+         text-align: center;
+         background-color: rgba(11, 97, 6, 0.04);
+      }
+      
+      .pending {
+         opacity: 0.4;
+         background-color: #7e7e7e;
+      }
+      
+      .prueba a {
+         text-decoration: none;
+         font-family: sans-serif;
+         color: #4E4E4E;
+      }
+   </style>
+</head>
+
+<body>
+   <div class="container">
+      <h1>PLAN DE PRUEBAS FUNCIONALES</h1>
+      <div class="prueba"><a target="_blank" href="../api/actions"><b>CP-002</b><br/>invocación de las distintas "actions" disponibles</a></div>
+      <div class="prueba"><a target="_blank" href="../?"><b>CP-003-01</b><br/>Parámetro wmcfile (contexto predefinido)</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=http://clientes.guadaltel.es/desarrollo/mapea/Componente/mapConfig/contextIDEA.xml*Mapa"><b>CP-003-02</b><br/>Parámetro wmcfile (contexto incluido)</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?wmcfile=http://sad.guadaltel.es/desarrollo/mockFileGenerator/generator?type=wmc%26name=idea*Mapa dinámico"><b>CP-003-03</b><br/>Parámetro wmcfile (contexto dinámico)</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?wmcfile=callejerocacheado,http://sad.guadaltel.es/desarrollo/mockFileGenerator/generator?type=wmc%26name=ortofotocallejero*Ortofoto dinámica,http://clientes.guadaltel.es/desarrollo/mapea/Componente/mapConfig/contextIDEA.xml*IDEA estática"><b>CP-003-04</b><br/>Parámetro wmcfile (contexto predefinido + contexto dinámico + contexto estático)</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?wmcfile=callejerocacheado,ortofoto,idea&controls=navtoolbar,layerswitcher&operations=searchcallejero"><b>CP-003-05</b><br/>Parámetro wmcfile (Carga de varios contextos) + búsqueda</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejerocacheado,ortofoto,idea&controls=navtoolbar,layerswitcher&layers=KML*Arboleda*http://sad.guadaltel.es/desarrollo/mapea/Componente/kml/*arbda_sing_se.kml*true"><b>CP-003-06</b><br/>Parámetro wmcfile (Carga de varios contextos) + KML</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero,ortofoto,idea&controls=navtoolbar,layerswitcher&layers=WMS_FULL*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Permeabilidad_Andalucia?"><b>CP-003-07</b><br/>Parámetro wmcfile (Carga de varios contextos) + WMS_FULL</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejerocacheado,ortofoto,idea&controls=navtoolbar,layerswitcher&layers=WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true"><b>CP-003-08</b><br/>Parámetro wmcfile (Carga de varios contextos) + WMS</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejerocacheado,ortofoto,idea&controls=navtoolbar,layerswitcher&layers=WFST*CapaWFS*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON"><b>CP-003-09</b><br/>Parámetro wmcfile (Carga de varios contextos) + WFS</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar,layerswitcher&wmcfile=callejero&layers=WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true"><b>CP-004-01</b><br/>Parámetro layer (capa WMS)</a></div>
+   <div class="prueba"><a target="_blank" href="../?controls=navtoolbar,layerswitcher&wmcfile=callejero&layers=KML*Arboleda*http://sad.guadaltel.es/desarrollo/mapea/Componente/kml/*arbda_sing_se.kml*true"><b>CP-004-02</b><br/>Parámetro layer (capa KML estática)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar,layerswitcher&wmcfile=callejero&layers=KML*SEPIM*http://mapea-sigc.juntadeandalucia.es/sepim_server/api/datos/kml/221/item/6*true&center=235061.9,4141933.04&zoom=12"><b>CP-004-03</b><br/>Parámetro layer (capa KML dinámica)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar,layerswitcher&wmcfile=callejero&layers=WMS_FULL*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Permeabilidad_Andalucia?"><b>CP-004-04</b><br/>Parámetro layer (capa WMS-FULL)</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*CapaWFS*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&controls=layerswitcher,panzoom,navtoolbar"><b>CP-004-05</b><br/>Parámetro layer (capa WFS)</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*CapaWFS*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON*1118&controls=layerswitcher,panzoom,navtoolbar"><b>CP-004-06</b><br/>Parámetro layer (capa WFS filtrada)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar&layers=WMS*Limites*http://www.ideandalucia.es/wms/mta10v_2007?*Limites*false,KML*arboles*http://www.juntadeandalucia.es/servicios/mapas/mapea/Componente/kml/*arbda_sing_se.kml*true"><b>CP-004-07</b><br/>Parámetro layer (capa WMS como base + capa KML)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar,layerswitcher&wmcfile=callejero&layers=KML*arboledas*http://www.juntadeandalucia.es/servicios/mapas/mapea/Componente/kml/*arbda_sing_se.kml*true,KML*sepim*http://mapea-sigc.juntadeandalucia.es/sepim_server/api/datos/kml/221/item/6*true"><b>CP-004-08</b><br/>Parámetro layer (capa KML estática + KML dinámica)</a></div>
+      <div class="prueba"><a target="_blank" href="../?layers=WMS*Limites*http://www.ideandalucia.es/wms/mta10v_2007?*Limites*false,WMS*MTA400*http://www.ideandalucia.es/wms/mta400r_2008?*MTA400*false,KML*arboles*http://www.juntadeandalucia.es/servicios/mapas/mapea/Componente/kml/*arbda_sing_se.kml*true&controls=layerswitcher,navtoolbar"><b>CP-004-09</b><br/>Parámetro layer (capa WMS como base + WMS como base + KML</a></div>
+      <div class="prueba"><a target="_blank" href="../?layers=WMS*Limites*http://www.ideandalucia.es/wms/mta10v_2007?*Limites*false,WMS_FULL*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Permeabilidad_Andalucia?&controls=layerswitcher,panzoom,navtoolbar"><b>CP-004-10</b><br/>Parámetro layer (capa WMS como base + WMS-FULL)</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&zoom=6"><b>CP-005-01</b><br/>Zoom</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&zoom=6&center=235061.9,4141933.04"><b>CP-005-02</b><br/>Center</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&zoom=6&center=235061.9,4141933.04*true"><b>CP-005-03</b><br/>Center con chincheta</a></div>
+      <div class="prueba"><a target="_blank" href="../?layers=WMS*Capa wms1*http://www.ideandalucia.es/wms/mta400r_2008?*MTA400*false,WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true&projection=EPSG:4326*d"><b>CP-005-04</b><br/>Projection con varias capas</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?layers=WMS*Capa wms1*http://www.ideandalucia.es/wms/mta400r_2008?*MTA400*false,WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true&projection=EPSG:4326"><b>CP-005-05*Mapea 4 no aplica este CP</b><br/>Projection sin unidad</a></div>
+      <div class="prueba"><a target="_b-lank" href="../?wmcfile=idea&projection=EPSG:4326*d"><b>CP-005-06</b><br/>Projection con WMC predefinido</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?wmcfile=http://clientes.guadaltel.es/desarrollo/mapea/Componente/mapConfig/contextCallejero.xml*Callejero,http://clientes.guadaltel.es/desarrollo/mapea/Componente/mapConfig/contextIDEA.xml*IDEA&projection=EPSG:4326*d"><b>CP-005-07</b><br/>Projection con varios WMC</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?controls=navtoolbar,layerswitcher&projection=EPSG:4326*d"><b>CP-005-08</b><br/>Projection sin capas ni contextos</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&bbox=323020.1,4126873.2,374759.9,4152013.3"><b>CP-005-09</b><br/>BBox</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar&layers=WMS*Capa%20wms1*http://www.ideandalucia.es/wms/mta400r_2008?*MTA400*false,WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true&maxextent=216000,3970000,520000,4290000"><b>CP-005-10</b><br/>MaxExtent</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&zoom=6&center=235061.9,4141933.04&label=<b>Popup de prueba</b><br>Funciona correctamente con tildes: camión áéíóú"><b>CP-005-11</b><br/>Label</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&zoom=6&center=235061.9,4141933.04*true&label=<b>Popup de prueba</b><br>Funciona correctamente con tildes: camión áéíóú"><b>CP-005-12</b><br/>Label con chincheta</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=panzoombar"><b>CP-006-01</b><br/>Parámetro controls (panzoombar)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=panzoom"><b>CP-006-02</b><br/>Parámetro controls (panzoom)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=panzoom,layerswitcher"><b>CP-006-03</b><br/>Parámetro controls (layerswitcher)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=mouse"><b>CP-006-04</b><br/>Parámetro controls (mouse)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar"><b>CP-006-05</b><br/>Parámetro controls (navtoolbar)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=overviewmap&layers=WMS*Limites*http://www.ideandalucia.es/wms/mta10v_2007?*Limites*false,WMS_FULL*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Permeabilidad_Andalucia?"><b>CP-006-06</b><br/>Parámetro controls (overviewmap)</a></div>
+      <div class="prueba"><a target="_blank" href="../?plugins=measurebar"><b>CP-006-07</b><br/>Parámetro controls (measurebar</b><br/>distancias)</a></div>
+      <div class="prueba"><a target="_blank" href="../?plugins=measurebar"><b>CP-006-08</b><br/>Parámetro controls (measurebar</b><br/>áreas)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=scale,panzoombar"><b>CP-006-09</b><br/>Parámetro controls (scale)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=scaleline,panzoombar"><b>CP-006-10</b><br/>Parámetro controls (scaleline)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=location"><b>CP-006-11</b><br/>Parámetro controls (location)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar&wmcfile=callejero&getfeatureinfo&center=236019.8,4141583.0&zoom=14"><b>CP-007-01</b><br/>Parámetro getfeatureinfo (texto plano)</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?controls=navtoolbar&layers=WMS*Capa2*http://www.ideandalucia.es/wms/mta400r_2008?*MTA400*false,WMS*Capa1*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_GeoParques?*GeoParques*true&getfeatureinfo=gml"><b>CP-007-02</b><br/>Parámetro getfeatureinfo (gml)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar&layers=WMS*Capa2*http://www.ideandalucia.es/wms/mta400r_2008?*MTA400*false,WMS*Capa1*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_GeoParques?*GeoParques*true&getfeatureinfo=html"><b>CP-007-03</b><br/>Parámetro getfeatureinfo (html)</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WMS*Capa2*http://www.juntadeandalucia.es/servicios/mapas/callejero/wms?*Educacion*true&getfeatureinfo=gml&projection=EPSG:23030*m&controls=navtoolbar,layerswitcher"><b>CP-007-04</b><br/>Parámetro getfeatureinfo (capas anidadas)</a></div>
+      <div class="prueba"><a target="_blank" href="../?layers=KML*Arboleda*http://mapea-sigc.juntadeandalucia.es/Componente/kml/*arbda_sing_se.kml*true&plugins=measurebar"><b>CP-008-01</b><br/>Capa KML y measurebar</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejerocacheado&layers=KML*monumentos*http://www.juntadeandalucia.es/servicios/mapas/mapea/Componente/kml/*arbda_sing_se.kml*true&getfeatureinfo&controls=layerswitcher,navtoolbar&center=236019.8,4141583.0&zoom=12"><b>CP-008-02</b><br/>Capa KML y getfeatureinfo</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?controls=navtoolbar,layerswitcher&wmcfile=callejero,ortofoto&layers=KML*monumentos*http://www.juntadeandalucia.es/servicios/mapas/mapea/Componente/kml/*arbda_sing_se.kml*true&operations=searchcallejero"><b>CP-008-03</b><br/>Capa KML, searchcallejero y cambio de contexto</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&wfstcontrols=drawfeature"><b>CP-009-01</b><br/>Drawfeature</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&wfstcontrols=modifyfeature"><b>CP-009-02</b><br/>Modifyfeature</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&wfstcontrols=deletefeature"><b>CP-009-03</b><br/>Deletefeature</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&wfstcontrols=editattribute"><b>CP-009-04</b><br/>Editattribute</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&wfstcontrols=drawfeature,modifyfeature,editattribute,deletefeature"><b>CP-009-05</b><br/>Save</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&wfstcontrols=drawfeature,modifyfeature,editattribute,deletefeature"><b>CP-009-06</b><br/>Clear</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&wfstcontrols=drawfeature&projection=EPSG:4326*d"><b>CP-009-07</b><br/>Drawfeature y Projection</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&projection=EPSG:4326*d&wfstcontrols=modifyfeature"><b>CP-009-08</b><br/>Modifyfeature y Projection</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&projection=EPSG:4326*d&wfstcontrols=deletefeature"><b>CP-009-09</b><br/>Deletefeature y Projection</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&projection=EPSG:4326*d&wfstcontrols=editattribute"><b>CP-009-10</b><br/>Editattribute y Projection</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&projection=EPSG:4326*d&wfstcontrols=drawfeature,modifyfeature,editattribute,deletefeature"><b>CP-009-11</b><br/>Save y Projection</a></div>
+      <div class="prueba"><a target="_-blank" href="../?wmcfile=callejero&layers=WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&projection=EPSG:4326*d&wfstcontrols=drawfeature,modifyfeature,editattribute,deletefeature"><b>CP-009-12</b><br/>Clear y Projection</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar&layers=WMS*Terminos%20Municipales*http://www.idejaen.es/wms?*eiel:Terminos_Municipales_ED50*false,WMS*es*http://www.idemap.es/jac/ArcGIS/services/wDivAdm/MapServer/WMSServer?*0*true"><b>CP-010-01</b><br/>Extensiones (dos capas WMS I)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar&layers=WMS*Limites*http://www.ideandalucia.es/wms/mta100v_2005?*Limites_Administrativos*false,WMS*canarias*http://idecan2.grafcan.es/ServicioWMS/MOS?*WMS_MOS*true&projection=EPSG:32628*m"><b>CP-010-02</b><br/>Extensiones (dos capas WMS II con SRS)</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar,layerswitcher&wmcfile=callejero&layers=WMS_FULL*http://visor.itelazpi.net/geoserver/v49a/wms?"><b>CP-010-03</b><br/>Extensiones (WMC y WMS-full)</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WMS*ign*http://www.ign.es/wms-inspire/ign-base?*HY.Network*true&controls=navtoolbar,layerswitcher"><b>CP-010-04</b><br/>Extensiones (WMS con varios niveles de anidamiento)</a></div>
+      <div class="prueba"><a target="_blank" href="../?searchstreet"><b>CP-011-02</b><br/>searchstreet</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?controls=navtoolbar&operations=searchcallejero"><b>CP-011-07</b><br/>searchcallejero</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?controls=navtoolbar&operations=searchcallejero"><b>CP-011-08</b><br/>autocompletador</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?layers=WMS*Capa%20wms1*http://www.ideandalucia.es/wms/mta400r_2008?*MTA400*false,WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true&projection=EPSG:4230*d&operations=searchcallejero"><b>CP-011-11</b><br/>Búsquedas con SRS especificado</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?operations=searchcallejero&locality=04079"><b>CP-011-12</b><br/>Parámetro municipio y búsqueda general</a></div>
+      <div class="prueba "><a target="_blank" href="../?searchstreet=41091"><b>CP-011-13</b><br/>Parámetro municipio y búsqueda de direcciones</a></div>
+   <div class="prueba"><a target="_blank" href="../?geosearch=http://geobusquedas-sigc.juntadeandalucia.es/*sigc*/search"><b>CP-011-14</b><br/>geosearch (core específico)</a></div>
+      <div class="prueba"><a target="_blank" href="../?geosearch"><b>CP-011-15</b><br/>geosearch (por defecto)</a></div>
+      <div class="prueba"><a target="_blank" href="../?searchstreetgeosearch"><b>CP-011-16</b><br/>geosearch + searchstreet</a></div>
+      <div class="prueba"><a target="_blank" href="../?geosearchbylocation"><b>CP-012-01</b><br/>geosearchByLocation (por defecto)</a></div>
+      <div class="prueba"><a target="_blank" href="../?geosearchbylocation=500"><b>CP-012-02</b><br/>geosearchByLocation (especificando radio)</a></div>
+      <div class="prueba"><a target="_blank" href="../?geosearchbylocation=500*http://clientes.guadaltel.es/desarrollo/geosearch/*sigc*/search"><b>CP-012-03</b><br/>geosearchByLocation (especificando core y radio)</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?geosearchbylocation&controls=location,scale,scaleline,panzoombar,mouse,overviewmap,measurebar,drawfeature,modifyfeature,deletefeature,editattribute,navtoolbar,layerswitcher&wmcfile=callejerocacheado&layers=WFST*wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&operations=searchcallejero&getfeatureinfo&theme=dark"><b>CP-014-01</b><br/>Invocación de tema predefinido</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?geosearchbylocation&controls=location,scale,scaleline,panzoombar,mouse,overviewmap,measurebar,drawfeature,modifyfeature,deletefeature,editattribute,navtoolbar,layerswitcher&wmcfile=callejerocacheado&layers=WFST*wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON&operations=searchcallejero&getfeatureinfo&theme=http://clientes.guadaltel.es/desarrollo/mapea/Componente/javascriptVisor/Mapea/theme/classic"><b>CP-014-02</b><br/>Invocación de tema externo</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&controls=layerswitcher,navtoolbar&layers=KML*Arboleda*http://www.juntadeandalucia.es/servicios/mapas/mapea/Componente/kml/*arbda_sing_se.kml*true,WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true,WFST*wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pun_wfst*MPOINT&printer&bbox=228087.40443128,4134891.2403129,236839.92121302,4140976.9746377"><b>CP-016-01</b><br/>Módulo de impresión (por defecto)</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&controls=layerswitcher,navtoolbar&layers=KML*Arboleda*http://www.juntadeandalucia.es/servicios/mapas/mapea/Componente/kml/*arbda_sing_se.kml*true,WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true,WFST*wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pun_wfst*MPOINT&printer=http://clientes.guadaltel.es/desarrollo/geoprint/pdf&bbox=228087.40443128,4134891.2403129,236839.92121302,4140976.9746377"><b>CP-017-01</b><br/>Módulo de impresión (url específica)</a></div>
+      <div class="prueba pending"><a target="_blank" href="../?controls=navtoolbar&plugins=streetview&zoom=10&center=235061.9,4141933.04"><b>CP-018-01</b><br/>Street View</a></div>
+      
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero&layers=WMTS*http://www.ideandalucia.es/geowebcache/service/wmts?*toporaster&controls=layerswitcher"><b>CP-019-01</b><br/>Capa WMTS</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=callejero,ortofoto&controls=mouse,panzoombar,panzoom,navtoolbar,layerswitcher,overviewmap,scale,scaleline,location&layers=WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true,KML*Arboleda*http://sad.guadaltel.es/desarrollo/mapea/Componente/kml/*arbda_sing_se.kml*true,WFST*capa%20wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON,WMTS*http://www.ideandalucia.es/geowebcache/service/wmts?*toporaster&getfeatureinfo=html&wfstcontrols=drawfeature,modifyfeature,deletefeature,editattribute&plugins=measurebar,streetview&geosearch=http://geobusquedas-sigc.juntadeandalucia.es/*sigc*/search&geosearchbylocation&printer"><b>CP-020-01</b><br/>Todos los controles</a></div>
+      <div class="prueba"><a target="_blank" href="../GeneratedTicket"><b>CP-021-01</b><br/>Ticket</a></div>
+   </div>
+   
+   <div class="container">
+      <h1>ALGUNOS SERVICIOS ACTUALES</h1>
+      <div class="prueba"><a target="_blank" href="http://mapea-sigc.juntadeandalucia.es/Componente/templateMapeaOL.jsp?layers=WMS*limites*http://www.ideandalucia.es/wms/mta100v_2005?*Limites_Administrativos*false,WMS*Ortofoto Andalucia 2008-09*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Ortofoto_Andalucia_RGB_2008_2009?*orto_rgb_2008_2009*false,WMS_FULL*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_siose_2009?*true,&amp;controls=mouse,panzoombar,layerswitcher,navtoolbar,measurebar&amp;getfeatureinfo=gml&amp;center=460878,4064330&amp;zoom=6"><b>CMA</b><br/>MAPEA 3 - Rediam</a></div>
+      <div class="prueba"><a target="_blank" href="../?layers=WMS*limites*http://www.ideandalucia.es/wms/mta100v_2005?*Limites_Administrativos*false,WMS*Ortofoto Andalucia 2008-09*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Ortofoto_Andalucia_RGB_2008_2009?*orto_rgb_2008_2009*false,WMS_FULL*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_siose_2009?*true,&amp;controls=mouse,panzoombar,layerswitcher,navtoolbar,measurebar&amp;getfeatureinfo=gml&amp;center=460878,4064330&amp;zoom=6"><b>CMA</b><br/>MAPEA 4 - Rediam</a></div>
+      <div class="prueba"><a target="_blank" href="http://mapea-sigc.juntadeandalucia.es/Componente/templateMapeaOL.jsp?wmcfile=http://www.callejerodeandalucia.es/wmc/context_cdau_hibrido.xml*Callejero (híbrido),http://www.callejerodeandalucia.es/wmc/context_cdau_satelite.xml*Ortofoto,http://www.callejerodeandalucia.es/wmc/context_cdau_callejero.xml*Callejero&layers=KML*Servicios*http://www.juntadeandalucia.es/institutodeestadisticaycartografia/callejeromunicipal/kmls/00000u159/*tl_aguadulce.kml*true&controls=panzoombar,layerswitcher,navtoolbar&bbox=537692.396912,4074044.611171,539420.607054,4074778.376371"><b>CEEC</b><br/>MAPEA 3 - Residencias tiempo libre</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=http://www.callejerodeandalucia.es/wmc/context_cdau_hibrido.xml*Callejero (híbrido),http://www.callejerodeandalucia.es/wmc/context_cdau_satelite.xml*Ortofoto,http://www.callejerodeandalucia.es/wmc/context_cdau_callejero.xml*Callejero&layers=KML*Servicios*http://www.juntadeandalucia.es/institutodeestadisticaycartografia/callejeromunicipal/kmls/00000u159/*tl_aguadulce.kml*true&controls=panzoombar,layerswitcher,navtoolbar&bbox=537692.396912,4074044.611171,539420.607054,4074778.376371"><b>CEEC</b><br/>MAPEA 4 - Residencias tiempo libre</a></div>
+      <div class="prueba"><a target="_blank" href="http://mapea-sigc.juntadeandalucia.es/?controls=navtoolbar,layerswitcher,panzoombar,scale,scaleline,mouse&amp;wmcfile=http://www.juntadeandalucia.es/fomentoyvivienda/IDE/laboratorioscalidad/config/wmc/context_laboratorioscalidad.xml*LaboratoriosCalidad&amp;getfeatureinfo=html"><b>CFV</b><br/>MAPEA 3 - Mapa de laboratorios de calidad</a></div>
+      <div class="prueba"><a target="_blank" href="../?controls=navtoolbar,layerswitcher,panzoombar,scale,scaleline,mouse&amp;wmcfile=http://www.juntadeandalucia.es/fomentoyvivienda/IDE/laboratorioscalidad/config/wmc/context_laboratorioscalidad.xml*LaboratoriosCalidad&amp;getfeatureinfo=html"><b>CFV</b><br/>MAPEA 4 - Mapa de laboratorios de calidad</a></div>
+      <div class="prueba"><a target="_blank" href="http://mapea-sigc.juntadeandalucia.es/Componente/templateMapeaOL.jsp?layers=WMS_FULL*http://www.ideandalucia.es/wms/mta10v_2007?*false&amp;controls=panzoombar,layerswitcher,mouse,navtoolbar&amp;center=235504.56,4140754.93&amp;zoom=9"><b>CEE</b><br/>MAPEA 3 - IDEA</a></div>
+      <div class="prueba"><a target="_blank" href="../?layers=WMS_FULL*http://www.ideandalucia.es/wms/mta10v_2007?*false&amp;controls=panzoombar,layerswitcher,mouse,navtoolbar&amp;center=235504.56,4140754.93&amp;zoom=9"><b>CEE</b><br/>MAPEA 4 - IDEA</a></div>
+      <div class="prueba"><a target="_blank" href="http://mapea-sigc.juntadeandalucia.es/?wmcfile=http://www.csalud.junta-andalucia.es/salud/ZHD/VISOR/contextSaludB2.xml*Mio&controls=layerswitcher,panzoom,panzoombar,navtoolbar&centerlejeroCompleto*false*false,WMS*Secciones Censales*http://www.ideandalucia.es/wms/secciones_censales?*Secciones*true*false&controls=layerswitcher,panzoom,panzoombar,navtoolbar&center=247491.599361669,4136601.2006272&zoom=8"><b>CSALUD</b><br/>MAPEA 3- Visor de farmacias</a></div>
+      <div class="prueba"><a target="_blank" href="../?wmcfile=http://www.csalud.junta-andalucia.es/salud/ZHD/VISOR/contextSaludB2.xml*Mio&controls=layerswitcher,panzoom,panzoombar,navtoolbar&centerlejeroCompleto*false*false,WMS*Secciones Censales*http://www.ideandalucia.es/wms/secciones_censales?*Secciones*true*false&controls=layerswitcher,panzoom,panzoombar,navtoolbar&center=247491.599361669,4136601.2006272&zoom=8"><b>CSALUD</b><br/>MAPEA 4- Visor de farmacias</a></div>
+   </div>
+</body>
+
+</html>

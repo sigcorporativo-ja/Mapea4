@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+
+   <title>Mapea Tests</title>
+   <link href="http://localhost:8080/mapea/assets/css/mapea.ol3.min.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="map-container" class="container" style="width: 45%"></div>
+
+   <!-- libraries -->
+   <!--<script src="../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js "></script>-->
+   <script src="http://localhost:8080/mapea/js/mapea.ol3.min.js"></script>
+   <script src="http://localhost:8080/mapea/js/configuration.js"></script>
+
+   <!-- rest -->
+   <script type="text/javascript">
+      function mostrarMensajeActivado() {
+         M.dialog.info('el control fue activado');
+      }
+
+      function mostrarMensajeDesactivado() {
+         M.dialog.info('el control fue DESactivado');
+         // desregistramos el vento de activación para
+         // que no vuelva a mostrarse
+         featureinfoCtrl.un(M.evt.ACTIVATED, mostrarMensajeActivado);
+      }
+
+      var mapa = M.map({
+         container: 'map-container',
+      }).addLayers(new M.layer.WMS({
+         url: 'http://www.idejaen.es/wms?',
+         name: 'ESTABLECIMIENTOS_COMERCIALES',
+         legend: 'Establecimientos'
+      }));
+
+      var featureinfoCtrl = new M.control.GetFeatureInfo();
+      featureinfoCtrl.on(M.evt.ACTIVATED, mostrarMensajeActivado);
+      featureinfoCtrl.on(M.evt.DEACTIVATED, mostrarMensajeDesactivado);
+
+      mapa.addControls(featureinfoCtrl);
+
+      var source = new ol.source.Vector({
+         wrapX: false
+      });
+      var vector = new ol.layer.Vector({
+         source: source,
+         style: new ol.style.Style({
+            fill: new ol.style.Fill({
+               color: 'rgba(255, 255, 255, 0.2)'
+            }),
+            stroke: new ol.style.Stroke({
+               color: '#ffcc33',
+               width: 2
+            }),
+            image: new ol.style.Circle({
+               radius: 7,
+               fill: new ol.style.Fill({
+                  color: '#ffcc33'
+               })
+            })
+         }),
+         zIndex: 99999999
+      });
+      mapa.getMapImpl().addLayer(vector);
+
+      var draw = new ol.interaction.Draw({
+         source: source,
+         type: 'Point'
+      });
+      mapa.getMapImpl().addInteraction(draw);
+
+
+      var layerOsm = new ol.layer.Tile({
+         source: new ol.source.OSM(),
+         zIndex: 9999999
+      });
+
+      mapa.getMapImpl().addLayer(layerOsm);
+   </script>
+</body>
+
+</html>

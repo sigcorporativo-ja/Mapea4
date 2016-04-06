@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <title>PRUEBA DESARROLLO</title>
+
+   <!-- styles -->
+   <link href="http://localhost:8080/mapea/css/mapea.ol3.min.css" rel="stylesheet" />
+   <style rel="stylesheet">
+      html,
+      body {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+         overflow: hidden;
+      }
+   </style>
+</head>
+
+<body>
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script src="http://localhost:8080/mapea/js/mapea.ol3.min.js "></script>
+   <script src="http://localhost:8080/mapea/js/configuration.js "></script>
+
+   <script>
+      //M.impl(M.ol3);
+
+      var wmc1 = new M.layer.WMC({
+         name: 'cdau',
+         url: 'http://www.callejerodeandalucia.es/wmc/context_cdau_callejero.xml'
+      });
+      var wmc2 = new M.layer.WMC({
+         name: 'callejero',
+         url: 'http://clientes.guadaltel.es/desarrollo/mapea/Componente/mapConfig/contextCallejeroCache.xml'
+      });
+      var wmc3 = new M.layer.WMC({
+         name: 'cdau_no_cache',
+         url: 'http://clientes.guadaltel.es/desarrollo/mapea/Componente/mapConfig/context_cdau_callejero_25830_no_cache.xml'
+      });
+
+      var wfs = new M.layer.WFS({
+         url: 'http://clientes.guadaltel.es/desarrollo/geossigc/wfs?',
+         namespace: 'callejero',
+         name: 'prueba_pol_wfst'
+      });
+
+      var wms1 = new M.layer.WMS({
+         url: 'http://www.ideandalucia.es/wms/mta400v_2008?',
+         name: 'Redes_energeticas',
+         legend: 'Redes'
+      });
+
+      var wms2 = new M.layer.WMS({
+         url: 'http://www.ideandalucia.es/wms/mta10v_2007?',
+         name: 'Limites',
+         transparent: false
+      });
+
+      var wms3 = new M.layer.WMS({
+         url: 'http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Permeabilidad_Andalucia?'
+      });
+
+      var wms4 = new M.layer.WMS('WMS*MTA400*http://www.ideandalucia.es/wms/mta400r_2008?*MTA400*false');
+
+      /*var wmts = new M.layer.WMTS({
+         url: 'http://www.ideandalucia.es/geowebcache/service/wmts?',
+         name: 'toporaster',
+         legend: 'Capa wmts',
+      });*/
+
+      var wmts = new M.layer.WMTS({
+         url: 'http://www.ign.es/wmts/pnoa-ma?',
+         name: 'OI.OrthoimageCoverage',
+         legend: 'Capa wmts',
+      });
+
+      var wmts2 = new M.layer.WMTS({
+         url: 'http://www.ideandalucia.es/geowebcache/service/wmts?',
+         name: 'toporaster',
+         legend: 'Capa wmts 2',
+      });
+
+
+
+      window.NAME_KML_2 = 'Carril bici';
+      window.URL_KML_2 = 'http://localhost:8080/mapea/files/kml/CarrilbiciSevillaactualizado.kml';
+
+      var layer2 = new M.layer.KML({
+         url: URL_KML_2,
+         name: NAME_KML_2,
+         extract: true
+
+      });
+
+      window.mapa = M.map({
+         container: 'mapa',
+         layers: [wmts, wfs],
+         projection: 'EPSG:25830*m',
+         /*maxExtent: {
+               left: 96388.1179,
+               bottom: 3959795.9442,
+               right: 621889.9370,
+               top: 4299792.1070
+
+         },*/
+         zoom: 6,
+         center: '235061.9,4141933.04',
+         controls: ['layerswitcher', 'mouse', 'scale', 'scaleline', 'panzoombar', 'panzoom', 'overviewmap']
+      });
+
+      //.addControls(new M.control.GetFeatureInfo("plain"));
+
+      //wms2,wms4 REV_ERROR
+
+      // pruebas operaciones Mapea
+      //var miProj = window.mapa.getProjection();
+      //alert('Projection: ' + miProj.code);
+      //alert('Zoom: ' + window.mapa.getZoom());
+   </script>
+</body>
+
+</html>

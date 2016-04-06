@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+
+   <title>Mapea Tests</title>
+   <link href="../../../build/core/4.0.0-SNAPSHOT/assets/css/mapea.ol3.min.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script src="../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+   <script src="../../configuration_filtered.js"></script>
+
+   <script type="text/javascript">
+      // params
+      var wmtsLayer = new M.layer.WMTS({
+         url: 'http://www.ideandalucia.es/geowebcache/service/wmts?',
+         name: 'toporaster',
+         legend: 'Capa wmts',
+      });
+
+      var map = M.map({
+         container: 'mapa',
+         wmts: wmtsLayer
+      });
+   </script>
+</body>
+
+</html>

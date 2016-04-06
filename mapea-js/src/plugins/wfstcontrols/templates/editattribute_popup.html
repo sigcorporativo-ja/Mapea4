@@ -1,0 +1,13 @@
+<div class="m-editattribute-content">
+   <table>
+      {{#each properties}}
+      <tr>
+         <td>{{key}}:</td>
+         <td>
+            <input id="{{key}}" type="text" value="{{value}}">
+         </td>
+      </tr>
+      {{/each}}
+   </table>
+   <button id="m-button-editattributeSave" class="save"><i class="g-cartografia-impresora"></i> Guardar</button>
+</div>

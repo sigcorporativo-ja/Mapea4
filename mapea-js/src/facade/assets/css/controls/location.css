@@ -1,0 +1,13 @@
+.m-location-container {
+   top: 20px;
+   left: 600px;
+}
+
+.m-location-container.m-locating > button#m-location-button:before {
+   position: absolute;
+   top: 15px;
+   left: 10px;
+   -webkit-animation: mloading 1s linear infinite;
+   -moz-animation: mloading 1s linear infinite;
+   animation: mloading 1s linear infinite;
+}

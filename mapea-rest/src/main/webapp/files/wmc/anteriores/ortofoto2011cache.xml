@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!--
+
+    Empresa desarrolladora: GUADALTEL S.A.
+
+    Autor: Junta de Andalucía
+
+    Derechos de explotación propiedad de la Junta de Andalucía.
+
+    Este programa es software libre: usted tiene derecho a redistribuirlo y/o modificarlo bajo los términos de la
+
+    Licencia EUPL European Public License publicada por el organismo IDABC de la Comisión Europea, en su versión 1.0.
+    o posteriores.
+
+    Este programa se distribuye de buena fe, pero SIN NINGUNA GARANTÍA, incluso sin las presuntas garantías implícitas
+    de USABILIDAD o ADECUACIÓN A PROPÓSITO CONCRETO. Para mas información consulte la Licencia EUPL European Public
+    License.
+
+    Usted recibe una copia de la Licencia EUPL European Public License junto con este programa, si por algún motivo no
+    le es posible visualizarla, puede consultarla en la siguiente URL: http://ec.europa.eu/idabc/servlets/Doc?id=31099
+
+    You should have received a copy of the EUPL European Public License along with this program. If not, see
+    http://ec.europa.eu/idabc/servlets/Doc?id=31096
+
+    Vous devez avoir reçu une copie de la EUPL European Public License avec ce programme. Si non, voir
+    http://ec.europa.eu/idabc/servlets/Doc?id=30194
+
+    Sie sollten eine Kopie der EUPL European Public License zusammen mit diesem Programm. Wenn nicht, finden Sie da
+    http://ec.europa.eu/idabc/servlets/Doc?id=29919
+
+-->
+<ViewContext xmlns="http://www.opengis.net/context" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="1.1.0" id="OpenLayers_Context_936" xsi:schemaLocation="http://www.opengis.net/context http://schemas.opengis.net/context/1.1.0/context.xsd">
+  <General>
+    <Window width="1016" height="812"/>
+    <BoundingBox SRS="EPSG:23030" minx="96500" miny="3960000" maxx="622000" maxy="4300000"/>
+    <Title/>
+    <Extension>
+      <ol:maxExtent xmlns:ol="http://openlayers.org/context" minx="96500" miny="3960000" maxx="622000" maxy="4300000"/>
+    </Extension>
+  </General>
+  <LayerList>
+    <Layer queryable="0" hidden="0">
+      <Server service="OGC:WMS" version="1.1.1">
+        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.juntadeandalucia.es/institutodeestadisticaycartografia/geoserver-ieca/grid/wms?"/>
+      </Server>
+      <Name>mapa_base_grid</Name>
+      <Title>mapa_base_grid</Title>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">41000.000000</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">2350000.000</sld:MaxScaleDenominator>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Default</Title>
+        </Style>
+      </StyleList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:opacity xmlns:ol="http://openlayers.org/context">1</ol:opacity>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+        <ol:groupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">none</ol:groupDisplayLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
+      </Extension>
+    </Layer>
+    <Layer queryable="0" hidden="0">
+      <Server service="OGC:WMS" version="1.1.1">
+        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/geowebcache/service/wms?"/>
+      </Server>
+      <Name>orto_2010-11_23030</Name>
+      <Title>Ortofoto</Title>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">41000</sld:MaxScaleDenominator>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+        </Style>
+      </StyleList>
+      <Extension>
+        <!--<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>-->
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
+      </Extension>
+    </Layer>
+    <Layer hidden="0" queryable="0">
+      <Server service="OGC:WMS" version="1.1.1">
+        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.juntadeandalucia.es/servicios/mapas/callejero/wms?"/>
+      </Server>
+      <Name>Calles</Name>
+      <Title>Calles</Title>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">25000</sld:MaxScaleDenominator>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:opacity xmlns:ol="http://openlayers.org/context">1</ol:opacity>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+        </Style>
+      </StyleList>
+    </Layer>
+    <Layer queryable="1" hidden="0">
+      <Server service="OGC:WMS" version="1.1.1">
+        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.juntadeandalucia.es/institutodeestadisticaycartografia/geoserver-ieca/grid/wms?"/>
+      </Server>
+      <Name>contorno</Name>
+      <Title>Contorno</Title>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">3804948.276746881248</sld:MaxScaleDenominator>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Default</Title>
+        </Style>
+      </StyleList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">true</ol:isBaseLayer>
+        <ol:opacity xmlns:ol="http://openlayers.org/context">1</ol:opacity>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+        <ol:groupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">none</ol:groupDisplayLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
+      </Extension>
+    </Layer>
+    <Layer queryable="1" hidden="0">
+      <Server service="OGC:WMS" version="1.1.1">
+        <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.juntadeandalucia.es/institutodeestadisticaycartografia/geoserver-ieca/grid/wms?"/>
+      </Server>
+      <Name>grid:toponimos_jerarquizados</Name>
+      <Title>Toponimos</Title>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">2350000.000</sld:MaxScaleDenominator>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Default</Title>
+        </Style>
+      </StyleList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:opacity xmlns:ol="http://openlayers.org/context">1</ol:opacity>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+        <ol:groupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">none</ol:groupDisplayLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+    </Layer>
+  </LayerList>
+</ViewContext>

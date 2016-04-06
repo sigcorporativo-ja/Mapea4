@@ -1,0 +1,3290 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>                                                             
+<kml xmlns="http://earth.google.com/kml/2.2" xmlns:atom="http://www.w3.org/2005/Atom">   >       
+  <Document>                                                                                  
+    <atom:author>                                                                          
+      <atom:name>ARTEHISTORIA PROYECTOS DIGITALES</atom:name>                           
+    </atom:author>                                                                   
+    <atom:link href="http://WWW.ARTEHISTORIA.COM" />                              
+    <name>Museos de ARTEHISTORIA, Ciudades del Arte</name>                                           
+    <description>Museos con información ampliada en ARTEHISTORIA</description>     
+    <Style id="highlightPlacemark">                                                           
+      <IconStyle>                                                                          
+        <Icon>                                                                          
+          <href>http://www.artehistoria.jcyl.es/icono1h.png</href>                   
+        </Icon>                                                                   
+      </IconStyle>                                                             
+    </Style>                                                                
+    <Style id="normalPlacemark">                                                     
+      <IconStyle>                                                                 
+        <Icon>                                                                 
+          <href>http://www.artehistoria.jcyl.es/icono1n.png</href>          
+        </Icon>                                                                             
+      </IconStyle>                                                                       
+    </Style>                                                                          
+    <StyleMap id="exampleStyleMap">                                                
+      <Pair>                                                                    
+        <key>normal</key>                                                    
+        <styleUrl>#normalPlacemark</styleUrl>                                
+     </Pair>                                                                 
+      <Pair>                                                                 
+        <key>highlight</key>                                                 
+        <styleUrl>#highlightPlacemark</styleUrl>                             
+      </Pair>                                                                
+    </StyleMap>                                                              
+  <Placemark>  
+    <name>Academia de San Lucas de Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE742.jpg" alt="ACADEMIA DE SAN LUCAS DE ROMA" /></TD></TR>
+     <TR><TD><h1>Academia de San Lucas de Roma</h1>
+<p>Institución pública italiana, importante referente en el campo de las bellas artes.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/742.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.483703,41.901598,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Akademie der Bildenden Künste </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE378.jpg" alt="AKADEMIE DER BILDENDEN KüNSTE" /></TD></TR>
+     <TR><TD><h1>Akademie der Bildenden Künste</h1>
+<p>Su fundación se remonta al año 1822. Los fondos que en él se incluyen son obras pictóricas realizadas entre los siglos XIV al XX.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/378.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.365166,48.201423,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Alcázar de los Reyes Cristianos de Córdoba </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE979.jpg" alt="ALCáZAR DE LOS REYES CRISTIANOS DE CóRDOBA" /></TD></TR>
+     <TR><TD><h1>Alcázar de los Reyes Cristianos de Córdoba</h1>
+<p>En el Alcázar de los Reyes Cristianos de Córdoba se pueden contemplar algunas piezas arqueológicas halladas en la zona.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/979.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.781805,37.876793,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Ara Pacis Augustae </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE888.jpg" alt="ARA PACIS AUGUSTAE" /></TD></TR>
+     <TR><TD><h1>Ara Pacis Augustae</h1>
+<p>Construido por Augusto, conmemora la paz romana conseguida tras una época de guerras civiles y expansionistas. La planta es cuadrada en cuyo interior hay un patio a cielo abierto y en cuyo centro se sitúa el altar. Tiene dos puertas de acceso, una es la principal por las que entran las personas que van a rendir culto y la trasera por la que entran los sacerdotes. En el exterior está construida por unos relieves que constituyen la cima de la escultura romana.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/888.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.475445,41.906145,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Archivo Histórico Nacional </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE829.jpg" alt="ARCHIVO HISTóRICO NACIONAL" /></TD></TR>
+     <TR><TD><h1>Archivo Histórico Nacional</h1>
+<p>Fundado en el siglo XIX su sede original fue la Real Academia de la Historia, hasta que en 1896 es trasladado al Palacio de Bibliotecas y Museos. En 1953 se trasladaron los fondos al edificio actual en la calle Serrano. El Archivo conserva fondos de muy variada procedencia, principalmente producidos por las instituciones del Antiguo Régimen y contemporáneas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/829.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.686948,40.440791,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Ayuntamiento de Sevilla </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE106.jpg" alt="AYUNTAMIENTO DE SEVILLA" /></TD></TR>
+     <TR><TD><h1>Ayuntamiento de Sevilla</h1>
+<p>En 1527 se iniciaron las obras del nuevo Ayuntamiento de Sevilla. Concluyeron en 1534 y hoy día pueden admirarse tanto su armoniosa arquitectura como los tesoros artísticos que alberga.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/106.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-5.9943032,37.388719,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Banco de España </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE233.jpg" alt="BANCO DE ESPAñA" /></TD></TR>
+     <TR><TD><h1>Banco de España</h1>
+<p>Colección pública ubicada en Madrid que consta de importantes retratos y obras contemporáneas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/233.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.6948115,40.418255,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Baptisterio de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE917.jpg" alt="BAPTISTERIO DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Baptisterio de Florencia</h1>
+<p>Es uno de los edificios más antiguo de Florencia de planta octogonal. Se accede a través de las célebres puertas de bronce realizadas por Ghiberti.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/917.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.254978,43.773139,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Basílica de San Marcos de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE635.jpg" alt="BASíLICA DE SAN MARCOS DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Basílica de San Marcos de Venecia</h1>
+<p>Templo construido en el siglo XI conserva los restos de san Marcos.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/635.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.340307,45.433801,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Basílica de Santa María la Mayor de Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE53.jpg" alt="BASíLICA DE SANTA MARíA LA MAYOR DE ROMA" /></TD></TR>
+     <TR><TD><h1>Basílica de Santa María la Mayor de Roma</h1>
+<p>Templo construido en el siglo IV que ha sufrido importantes transformaciones con el paso del tiempo. En su interior conserva importantes tesoros artísticos.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/53.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.498349,41.897702,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Biblioteca de Cataluña </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE967.jpg" alt="BIBLIOTECA DE CATALUñA" /></TD></TR>
+     <TR><TD><h1>Biblioteca de Cataluña</h1>
+<p>Fundada en 1907 por la Diputación de Barcelona, la Biblioteca, situada en unas dependencias del histórico Palau de la Generalitat de Cataluña, reunía ya obras de gran valor, entre los 28.000 volúmenes y 250 manuscritos catalogados. Con la dictadura del general Primo de Rivera (1923-1930), la Biblioteca cambió de nombre, pasó a ser la Biblioteca Central de la Diputación de Barcelona.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/967.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.169510,41.381035,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Biblioteca del Instituto de Francia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE362.jpg" alt="BIBLIOTECA DEL INSTITUTO DE FRANCIA" /></TD></TR>
+     <TR><TD><h1>Biblioteca del Instituto de Francia</h1>
+<p>La biblioteca que fue donada por Mazarino, forma parte de un interesante complejo artístico. Se encuentra ubicada en el palacio que realizó Le Vau y que fue donado junto a los volúmenes bibliográficos.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/362.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.336612,48.857409,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Biblioteca Forney de París </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2202.jpg" alt="BIBLIOTECA FORNEY DE PARíS" /></TD></TR>
+     <TR><TD><h1>Biblioteca Forney de París</h1>
+<p>En 1910, la colección de la biblioteca ya contaba con 18000 libros y 85000 estampas, siendo una biblioteca especializada en artes y técnicas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2202.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.358960,48.853414,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Biblioteca Laurenziana de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE624.jpg" alt="BIBLIOTECA LAURENZIANA DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Biblioteca Laurenziana de Florencia</h1>
+<p>Biblioteca realizada por Miguel Ángel por encargo de Clemente VII sin embargo fue Vasari quien finalizó su construcción</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/624.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.253943,43.774607,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Biblioteca Nacional de Madrid </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE275.jpg" alt="BIBLIOTECA NACIONAL DE MADRID" /></TD></TR>
+     <TR><TD><h1>Biblioteca Nacional de Madrid</h1>
+<p>El año de su fundación se remonta a 1712. Es una gran biblioteca que posee una extensa cantidad de fondos, por ejemplo: 4 millones de volúmenes, más de 3.000 incunables, 80.000 periódicos, 2.036.000 panfletos o folletos, 1.637.000 grabados y fotografías. Tiene además unos 20.000 dibujos y 771.000 pinturas, así como fondos modernos como son grabaciones en vídeo, CD-ROM, microfilms, multimedia, archivos informatizados y grabaciones en cintas (cassettes).</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/275.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.6899502,40.423703,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Biblioteca Nacional de París (Richelieu) </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE67.jpg" alt="BIBLIOTECA NACIONAL DE PARíS (RICHELIEU)" /></TD></TR>
+     <TR><TD><h1>Biblioteca Nacional de París (Richelieu)</h1>
+<p>La Biblioteca Nacional de París reúne una importante colección de dibujos, grabados, joyas y objetos preciosos de las colecciones reales francesas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/67.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.3381368,48.867859,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Biblioteca Nacional de Viena </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE618.jpg" alt="BIBLIOTECA NACIONAL DE VIENA" /></TD></TR>
+     <TR><TD><h1>Biblioteca Nacional de Viena</h1>
+<p>Edificio construido por Johann Fischer Von Erlach en 1722 y finalizado por su hijo Joseph Manuel, conserva en su interior más de dos millones de libros entre los que se conserva la Biblia de Gutemberg.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/618.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.364136,48.207673,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Biblioteca Vaticana </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE619.jpg" alt="BIBLIOTECA VATICANA" /></TD></TR>
+     <TR><TD><h1>Biblioteca Vaticana</h1>
+<p>Fundada en 1451 por Nicolás V, en 1475 bajo el Papado de Sixto IV, poseía ya 2.527 códices. Actualmente alberga cerca de 800.000 impresos, 100.000 grabados y mapas y 8.000 incunables.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/619.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.454631,41.904769,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Capilla Sixtina (Roma) </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE371.jpg" alt="CAPILLA SIXTINA (ROMA)" /></TD></TR>
+     <TR><TD><h1>Capilla Sixtina (Roma)</h1>
+<p>La Capilla Sixtina fue erigida entre los años 1473 y 1481 por orden del Papa Sixto IV. Los frescos fueron pintados entre 1481 y 1483 por reputados maestros del Renacimiento, como Peruggino, Ghirlandaio y Botticelli. Pero es a Miguel Angel a quien se atribuyen los más destacados: el techo y el muro oeste, llamado el Juicio Final. La primera decoración mantuvo en la bóveda tan sólo un firmamento azul con estrellas, pero en 1508, Julio II llamó a Miguel Angel para sustituir esta decoración, que no era de su agrado. Este primer fresco del artista le llevó más de cuatro años, y representó a un Dios creador. Veinte años después, Clemente VII pidió al mismo Miguel Angel que pintase la pared del altar representando el Juicio Final, para lo que necesitó diez años. <br>
+Lugar de reunión del Colegio Sagrado de Cardenales, la Capilla Sixtina fue durante siglos objeto de especulación por parte de famosos historiadores de arte, que establecieron profundas teorías sobre los colores oscuros de los frescos. La restauración de que fue objeto la capilla durante la última década del siglo XX demostró que tales colores eran debidos únicamente al efecto de la suciedad y el humo. Por otra parte, dicha restauración fue costeada por la televisión japonesa a cambio de los derechos de reproducción. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/371.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.454515,41.90294,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Cartuja de Granada </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE956.jpg" alt="CARTUJA DE GRANADA" /></TD></TR>
+     <TR><TD><h1>Cartuja de Granada</h1>
+<p>Se alza sobre los cerros de Aynadamar. La entrada al conjunto se realiza por una portada de estilo plateresco, realizada en el siglo XVI por Juan García de Pradas. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/956.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.599696,37.191997,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Casa - Museo F. García Lorca </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2254.jpg" alt="CASA - MUSEO F. GARCíA LORCA" /></TD></TR>
+     <TR><TD><h1>Casa - Museo F. García Lorca</h1>
+<p>Museo que recupera el ambiente de al casa familiar en la que García Lorca vivió sus últimos diez años.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2254.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.609556,37.170623,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Casa - Museo Manuel de Falla </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2253.jpg" alt="CASA - MUSEO MANUEL DE FALLA" /></TD></TR>
+     <TR><TD><h1>Casa - Museo Manuel de Falla</h1>
+<p>Típico "carmen" granadino del siglo XVI que acoge este museo personal del compositor desde 1962.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2253.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.588442,37.173338,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Casa - Museo Salvador Morera </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2248.jpg" alt="CASA - MUSEO SALVADOR MORERA" /></TD></TR>
+     <TR><TD><h1>Casa - Museo Salvador Morera</h1>
+<p>Típica casa cordobesa, donde se exhiben colecciones de pinturas, dibujos, esmaltes, cerámicas, vidrieras, etc. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2248.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.773621,37.888231,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Casa Buonarroti </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE294.jpg" alt="CASA BUONARROTI" /></TD></TR>
+     <TR><TD><h1>Casa Buonarroti</h1>
+<p>Museo que contiene una amplia muestra de obras de Miguel Ángel.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/294.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.264167,43.769676,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Casa-Museo de Sigmund Freud </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2313.jpg" alt="CASA-MUSEO DE SIGMUND FREUD" /></TD></TR>
+     <TR><TD><h1>Casa-Museo de Sigmund Freud</h1>
+<p>Casa-museo en la que vivió el psicoanalista Sigmund Freud desde 1891 hasta 1938. El museo conserva documentos, fotografías, muebles e, incluso, la sala de espera original.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2313.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.362880,48.218618,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Casa-Museo Victorio Macho </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2282.jpg" alt="CASA-MUSEO VICTORIO MACHO" /></TD></TR>
+     <TR><TD><h1>Casa-Museo Victorio Macho</h1>
+<p>Sobre una ladera que asoma al río Tajo, Victorio Macho construyó en 1953 su casa y taller. Hoy, este bellísimo espacio acoge la sede de la Real Fundación de Toledo.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2282.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.030920,39.856066,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Casino Boncompagni Ludovisi </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE220.jpg" alt="CASINO BONCOMPAGNI LUDOVISI" /></TD></TR>
+     <TR><TD><h1>Casino Boncompagni Ludovisi</h1>
+<p>Los casinos son pequeños palacetes que las familias aristocráticas de Italia se construyeron durante el Renacimiento y el Barroco. Este pertenece a la familia Boncompagni-Ludovisi.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/220.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.487206,41.907371,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Catedral de Córdoba </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE955.jpg" alt="CATEDRAL DE CóRDOBA" /></TD></TR>
+     <TR><TD><h1>Catedral de Córdoba</h1>
+<p>El mismo año de la reconquista de Córdoba, 1236, la Mezquita de Córdoba fue consagrada como Catedral cristiana. El paso del tiempo se ha valido la combinación de tres estilos distintos, el renacentista, el barroco y el romántico. Pero lo que más llama la atención son su cúpula de madera y el altar íntegramente realizado en plata. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/955.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.779418,37.878885,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Catedral de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE462.jpg" alt="CATEDRAL DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Catedral de Florencia</h1>
+<p>Se trata de la cuarta catedral más grande de Europa, situada en la denominada Piazza del Duomo, frente al Baptisterio. En el Museo Dell´Opera se conserva, entre sus obras más destacadas, la Pietá de Miguel Angel.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/462.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.257102,43.773480,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Catedral de Sevilla </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE88.jpg" alt="CATEDRAL DE SEVILLA" /></TD></TR>
+     <TR><TD><h1>Catedral de Sevilla</h1>
+<p>La catedral de Sevilla es considerada uno de los monumentos más interesantes de la arquitectura española. Comenzó a construirse en 1401 en el solar donde estuvo ubicada una mezquita almohade. Su pinacoteca es una de las mayores de España y tiene una amplia colección de pintura del siglo XVI.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/88.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-5.9926053,37.385819,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Catedral de Toledo </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE281.jpg" alt="CATEDRAL DE TOLEDO" /></TD></TR>
+     <TR><TD><h1>Catedral de Toledo</h1>
+<p>La catedral toledana es uno de los museos más destacados de España y guarda piezas únicas de todas las bellas artes. Tanto el continente como el contenido son difícilmente superables.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/281.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.0239095,39.857139,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Centro Andaluz de Arte Contemporáneo </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2310.jpg" alt="CENTRO ANDALUZ DE ARTE CONTEMPORáNEO" /></TD></TR>
+     <TR><TD><h1>Centro Andaluz de Arte Contemporáneo</h1>
+<p>Museo de arte contemporáneo que cuenta con una amplia colección de obras que arranca en las primeras décadas del siglo XX.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2310.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-6.007392,37.397420,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Centro Georges Pompidou </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE640.jpg" alt="CENTRO GEORGES POMPIDOU" /></TD></TR>
+     <TR><TD><h1>Centro Georges Pompidou</h1>
+<p>El Georges Pompidou es considerado uno de los centros culturales más espectaculares del mundo y uno de los más grandes por su colección de arte contemporáneo. Inaugurado oficialmente en 1977 por el presidente Georges Pompidou, el "Beaubourg" -también llamado así por la calle que pasa por el frente- incluye espacios dedicados a la experimentación musical y el diseño industrial, salas de exhibiciones temporales, cafeterías, una boutique y una completísima biblioteca pública. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/640.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.352726,48.860685,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Círculo de la Amistad de Córdoba </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2252.jpg" alt="CíRCULO DE LA AMISTAD DE CóRDOBA" /></TD></TR>
+     <TR><TD><h1>Círculo de la Amistad de Córdoba</h1>
+<p>Inaugurado en 1853, el Círculo de la Amistad reunió a las la burguesía decimonónica cordobesa. Desde aquí se fomentó la cultura, haciendo especial incidencia en las artes y la literatura.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2252.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.778130,37.885521,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Colección Contini Bonacossi </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE610.jpg" alt="COLECCIóN CONTINI BONACOSSI" /></TD></TR>
+     <TR><TD><h1>Colección Contini Bonacossi</h1>
+<p>Museo que cuenta con 150 piezas de escultura, muebles, objetos de artes aplicadas y pinturas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/610.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.250386,43.762649,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Colección Longhi </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE139.jpg" alt="COLECCIóN LONGHI" /></TD></TR>
+     <TR><TD><h1>Colección Longhi</h1>
+<p>Fundación privada dedicada al estudio de la Historia del Arte que cuenta con una importante colección de obras entre los que destaca un Caravaggio.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/139.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.278442,43.755861,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Colección Particular Boccapaduli </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE440.jpg" alt="COLECCIóN PARTICULAR BOCCAPADULI" /></TD></TR>
+     <TR><TD><h1>Colección Particular Boccapaduli</h1>
+<p>Archivo en el que se conserva importante documentación relacionada con Miguel Angel y el diseño del Capitolio.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/440.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.478999,41.901782,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Colección Querini-Stampalia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2223.jpg" alt="COLECCIóN QUERINI-STAMPALIA" /></TD></TR>
+     <TR><TD><h1>Colección Querini-Stampalia</h1>
+<p>Colección particular que conserva intresantes obras de arte venecianas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2223.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.341069,45.436297,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Col. Odescalchi Balbi </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE202.jpg" alt="COL. ODESCALCHI BALBI" /></TD></TR>
+     <TR><TD><h1>Col. Odescalchi Balbi</h1>
+<p>Colección dedicada a armas blancas y de fuego de los siglos XV-VII.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/202.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.481477,41.896240,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Convento de San Marcos de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE404.jpg" alt="CONVENTO DE SAN MARCOS DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Convento de San Marcos de Florencia</h1>
+<p>Convento dominico restaurado por orden de Cosme de Medici, cuya decoración pictórica fue encargada a Fray Giovanni Da Fiesole, El Beato Angelico.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/404.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.259393,43.778422,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Escuela de Bellas Artes de París </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE259.jpg" alt="ESCUELA DE BELLAS ARTES DE PARíS" /></TD></TR>
+     <TR><TD><h1>Escuela de Bellas Artes de París</h1>
+<p>En París se ubica la Escuela Superior de Bellas Artes, que heredó la colección de obras de arte de la Academia de Bellas Artes de París.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/259.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.3331692,48.856853,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Estancias Vaticanas </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE567.jpg" alt="ESTANCIAS VATICANAS" /></TD></TR>
+     <TR><TD><h1>Estancias Vaticanas</h1>
+<p>Las Estancias son una serie de habitaciones decoradas por Rafael y otros artistas para el papa Julio II. Dentro de ellas destacan la Stanza Eliodor y la Stanza della Signatura, donde se encuentra la más célebre de las obras de Rafael, La escuela de Atenas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/567.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.454648,41.903276,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Fundación Miró </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE965.jpg" alt="FUNDACIóN MIRó" /></TD></TR>
+     <TR><TD><h1>Fundación Miró</h1>
+<p>Edificio construido por el arquitecto Josep Lluís Sert para albergar el trabajo del artista Joan Miró, amigo del arquitecto. Los fondos constituyen más de 10.000 piezas entre pinturas, esculturas, textiles y otros.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/965.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.159854,41.368669,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Fundación Rodríguez Acosta </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE1027.jpg" alt="FUNDACIóN RODRíGUEZ ACOSTA" /></TD></TR>
+     <TR><TD><h1>Fundación Rodríguez Acosta</h1>
+<p>El muy rico y exquisito pintor José Rodríguez Acosta reunió a principios de nuestro siglo su estudio, sus lienzos y sus caprichosas colecciones en este fastuoso carmen granadino.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/1027.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.592175,37.174992,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Fundación Tápies </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2331.jpg" alt="FUNDACIóN TáPIES" /></TD></TR>
+     <TR><TD><h1>Fundación Tápies</h1>
+<p>Fundación creada en 1984 por el pintor Antoni Tápies con el objetivo de fomentar el estudio y la difusión del arte moderno y contemporáneo.  </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2331.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.163631,41.391660,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galería Albertina </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE340.jpg" alt="GALERíA ALBERTINA" /></TD></TR>
+     <TR><TD><h1>Galería Albertina</h1>
+<p>La Galería de Dibujos Albertina, en Viena, es una de las grandes colecciones europeas de obra gráfica.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/340.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.367762,48.204956,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galería Borghese (Roma) </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE138.jpg" alt="GALERíA BORGHESE (ROMA)" /></TD></TR>
+     <TR><TD><h1>Galería Borghese (Roma)</h1>
+<p>La Galería Borghese se encuentra en Roma, en medio de unos espléndidos jardines de varios kilómetros de superficie, que incluyen además un museo de arte antiguo. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/138.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.492077,41.914203,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galería de la Academia de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE383.jpg" alt="GALERíA DE LA ACADEMIA DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Galería de la Academia de Florencia</h1>
+<p>Su fundación tuvo lugar el 1784 y posee la colección más completa e importante de esculturas de Miguel Angel, y muchos trabajos de arte realizados por buenos autores entre los siglos XIII-XIX, especialmente de la zona toscana.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/383.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.258438,43.776796,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galería de los Inocentes </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE382.jpg" alt="GALERíA DE LOS INOCENTES" /></TD></TR>
+     <TR><TD><h1>Galería de los Inocentes</h1>
+<p>Colección de arte italiano que se encuentra en un edificio proyectado por Brunelleschi.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/382.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.260493,43.776819,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galería de los Uffizi </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE44.jpg" alt="GALERíA DE LOS UFFIZI" /></TD></TR>
+     <TR><TD><h1>Galería de los Uffizi</h1>
+<p>La Galería de los Uffizi, que significa "de los oficios", se encuentra en Florencia y ostenta una brillante colección de arte europeo del Renacimiento y Barroco.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/44.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.255541,43.768145,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galeria Farnesio </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE300.jpg" alt="GALERIA FARNESIO" /></TD></TR>
+     <TR><TD><h1>Galeria Farnesio</h1>
+<p>El palacio Farnese es actualmente la sede de la Embajada de Francia. Su construcción se llevó a cabo en 1517, bajo orden del Cardenal Alejandro Farnese, futuro Papa Paolo III, basándose en el proyecto de A. da Sangallo el Joven.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/300.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.470946,41.894811,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galería Franchetti </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE433.jpg" alt="GALERíA FRANCHETTI" /></TD></TR>
+     <TR><TD><h1>Galería Franchetti</h1>
+<p>Ocupa un palacio gótico construido a mediados del siglo XV por Giovanni y Bartolomeo Bon para el procurador Marino Contarini. En 1895 fue adquirido por el gran coleccionista Giorgio Franchetti, el cual lo cedió al estado junto a su magnífica colección en 1916. Destacan sus fondos pictóricos entre los que se incluye a Tiziano, Van Eyck, Tintoretto, Guardi, L. Signorelli,...y la multitud de objetos artísticos como tapices, cerámicas, bronces,...de autores italianos y flamencos.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/433.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.333827,45.440833,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galería Internacional de Arte Moderno de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE580.jpg" alt="GALERíA INTERNACIONAL DE ARTE MODERNO DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Galería Internacional de Arte Moderno de Venecia</h1>
+<p>Antigua residencia de la familia Pesaro, desde 1902 alberga el Museo de Arte Moderno con obras de Kandinsky, Miró, Moore, Nolde o Morandi entre otros. El palacio también es sede del Museo de Arte Oriental.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/580.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.332153,45.440494,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galería Nacional de Arte Antiguo (Roma) </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE144.jpg" alt="GALERíA NACIONAL DE ARTE ANTIGUO (ROMA)" /></TD></TR>
+     <TR><TD><h1>Galería Nacional de Arte Antiguo (Roma)</h1>
+<p>Esta galería se encuentra en el Palacio Barberini de Roma, en el centro de la ciudad. Contiene pinturas de grandes maestros italianos, franceses y holandeses.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/144.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.490532,41.903958,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galería Palatina </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE427.jpg" alt="GALERíA PALATINA" /></TD></TR>
+     <TR><TD><h1>Galería Palatina</h1>
+<p>Su inauguración tuvo lugar en 1828, siendo una colección privada. Los fondos que podemos ver expuestos en el lugar corresponden a obras renacentistas y barrocas, entre las que destacan las de Tiziano, Rafael, Andrea del Sarto, Volterrano o especialmente Salvatore Rosa.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/427.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.250805,43.765539,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galería Pallavicini (Roma) </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE814.jpg" alt="GALERíA PALLAVICINI (ROMA)" /></TD></TR>
+     <TR><TD><h1>Galería Pallavicini (Roma)</h1>
+<p>Palacio barroco que alberga una interesante colección de grandes genios del Renacimiento y del Barroco.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/814.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.487850,41.898268,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galeria Spada </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE293.jpg" alt="GALERIA SPADA" /></TD></TR>
+     <TR><TD><h1>Galeria Spada</h1>
+<p>Se encuentra situada en el interior del Palazzo Spada y conserva obras de Brueghel, Andrea del Sarto o Tiziano. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/293.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.471800,41.894112,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galerías de la Academia de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE43.jpg" alt="GALERíAS DE LA ACADEMIA DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Galerías de la Academia de Venecia</h1>
+<p>Las Galerías de la Academia de Venecia eran la antigua Scuola Grande della Caritá. Pasó a ser Academia de Bellas Artes en 1750. Se trata de una colección muy importante ya que contiene pintura veneciana desde el s. XIV al s. XVIII.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/43.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.3282,45.430991,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galleria Doria (Roma) </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE14.jpg" alt="GALLERIA DORIA (ROMA)" /></TD></TR>
+     <TR><TD><h1>Galleria Doria (Roma)</h1>
+<p>En el corazón de Roma se encuentra el Palacio Doria, que alberga la Galería homónima.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/14.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.481107,41.897246,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Galleria Nazionale d´Arte Moderna di Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE646.jpg" alt="GALLERIA NAZIONALE D´ARTE MODERNA DI ROMA" /></TD></TR>
+     <TR><TD><h1>Galleria Nazionale d´Arte Moderna di Roma</h1>
+<p>La Galería Nacional de Arte Moderno de Roma incluye trabajos de artistas como Balla, Morandi, Pirandello, Carrà, De Chirico, De Pisis, Guttuso, Fontana, Burri, Mastroianni, Turcato, Kandisky, Cézanne, etc. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/646.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.482153,41.917088,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Hospital Tavera </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE135.jpg" alt="HOSPITAL TAVERA" /></TD></TR>
+     <TR><TD><h1>Hospital Tavera</h1>
+<p>En Toledo se encuentra el antiguo Hospital del cardenal Tavera, con salas dedicadas al Greco y con obras de otros pintores españoles.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/135.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.0242841,39.865401,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Hôtel des Monnaies </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2325.jpg" alt="HôTEL DES MONNAIES" /></TD></TR>
+     <TR><TD><h1>Hôtel des Monnaies</h1>
+<p>Museo dedicado a la historia de la Moneda en Francia. Cuenta con una rica colección en monedas y medallones.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2325.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.338575,48.856298,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de la Santa Felicita de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE763.jpg" alt="IGLESIA DE LA SANTA FELICITA DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de la Santa Felicita de Florencia</h1>
+<p>Iglesia de una sola nave, donde destaca la Capilla Capponi, diseñada por Brunelleschi, con obras de Pontormo.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/763.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.252532,43.766918,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de los Jesuitas de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE745.jpg" alt="IGLESIA DE LOS JESUITAS DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de los Jesuitas de Venecia</h1>
+<p>Construida entre 1715 y 1730 con una sola nave, es destacable por su rica decoración interior, y por el fabuloso lienzo de Tiziano donde se representa El martirio de San Lorenzo.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/745.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.338870,45.443091,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de Saint Medard </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE99.jpg" alt="IGLESIA DE SAINT MEDARD" /></TD></TR>
+     <TR><TD><h1>Iglesia de Saint Medard</h1>
+<p>La iglesia de San Medardo se encuentra en la capital de Francia, París.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/99.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.3505594,48.839849,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de San Juan Crisóstomo de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE413.jpg" alt="IGLESIA DE SAN JUAN CRISóSTOMO DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de San Juan Crisóstomo de Venecia</h1>
+<p>Templo construido en 1497 por Mauro Codussi con una interesante colección de obras de arte.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/413.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.337314,45.439075,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de San Juan Limosnero de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE756.jpg" alt="IGLESIA DE SAN JUAN LIMOSNERO DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de San Juan Limosnero de Venecia</h1>
+<p>Templo construido en el siglo XVI, en el altar mayor se conserva un lienzo de Tiziano.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/756.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.334519,45.438604,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de San Juan y San Pablo de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE411.jpg" alt="IGLESIA DE SAN JUAN Y SAN PABLO DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de San Juan y San Pablo de Venecia</h1>
+<p>Construcción gótica que guarda en su interior magníficas obras de arte como un políptico de Bellini o el monumento funerario realizado por Pietro Lombardo.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/411.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.341970,45.439274,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de San León de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE759.jpg" alt="IGLESIA DE SAN LEóN DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de San León de Venecia</h1>
+<p>Templo veneciano construido en el siglo XVII y decorado con obras de los Lombardo y Tiziano.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/759.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.338542,45.437456,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de San Lorenzo de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE416.jpg" alt="IGLESIA DE SAN LORENZO DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de San Lorenzo de Florencia</h1>
+<p>Iglesia predilecta de los Médicis, en ella se conservan sus tumbas realizadas por Miguel Angel.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/416.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.253734,43.774998,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de San Marcial de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE755.jpg" alt="IGLESIA DE SAN MARCIAL DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de San Marcial de Venecia</h1>
+<p>Templo que conserva obras de Sebastiano Ricci y Tiziano.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/755.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.332867,45.443772,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de San Pietro in Vincoli </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE674.jpg" alt="IGLESIA DE SAN PIETRO IN VINCOLI" /></TD></TR>
+     <TR><TD><h1>Iglesia de San Pietro in Vincoli</h1>
+<p>Iglesia antigua, remodelada en años posteriores donde se conserva el majestuoso Moisés de Miguel Angel.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/674.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.49313,41.89381,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de San Salvador de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE746.jpg" alt="IGLESIA DE SAN SALVADOR DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de San Salvador de Venecia</h1>
+<p>Templo construido en el siglo XVI con interesantes piezas decorativas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/746.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.336477,45.436557,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de San Zacarías de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE414.jpg" alt="IGLESIA DE SAN ZACARíAS DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de San Zacarías de Venecia</h1>
+<p>Templo construido en el siglo XV decorado con obras de Tintoretto y Bellini.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/414.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.343419,45.434644,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de Santa Croce de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE675.jpg" alt="IGLESIA DE SANTA CROCE DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de Santa Croce de Florencia</h1>
+<p>La iglesia es una de las obras maestras del gótico florentino con un interior de más de 115 m. de longitud y 3 naves divididas por grandes arquerías ojivales sustentadas por pilares, realizada por Arnolfo di Cambio.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/675.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.263041,43.768456,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de Santa María dei Frari (Venezia) </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE339.jpg" alt="IGLESIA DE SANTA MARíA DEI FRARI (VENEZIA)" /></TD></TR>
+     <TR><TD><h1>Iglesia de Santa María dei Frari (Venezia)</h1>
+<p>Esta iglesia constituye una parte del complejo conventual de los frailes franciscanos. Es gótica y contiene numerosas tumbas, entre ellas un mausoleo de Tiziano.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/339.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.326569,436865,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de Santa Maria della Salute de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE737.jpg" alt="IGLESIA DE SANTA MARIA DELLA SALUTE DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Iglesia de Santa Maria della Salute de Venecia</h1>
+<p>Templo construido por Baldassare Longhena entre 1631-87 y decorada por los mejores artistas venecianos.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/737.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.334986,45.430594,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de Santa Maria della Vittoria de Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE911.jpg" alt="IGLESIA DE SANTA MARIA DELLA VITTORIA DE ROMA" /></TD></TR>
+     <TR><TD><h1>Iglesia de Santa Maria della Vittoria de Roma</h1>
+<p>Fue construida por Carlo Maderno y su interior es uno de los ejemplos más elaborados de decoración barroca en Roma.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/911.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.494212,41.904716,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de Santa María Novella </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE48.jpg" alt="IGLESIA DE SANTA MARíA NOVELLA" /></TD></TR>
+     <TR><TD><h1>Iglesia de Santa María Novella</h1>
+<p>Construcción iniciada a finales del siglo XIII por los dominicos, con fachada realizada por Alberti en el siglo XV. En su interior, podemos contemplar obras de Giotto, Ghirlandaio, Filippino Lippi y Masaccio entre otros.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/48.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.249336,43.774903,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de Santo Tomé de Toledo </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE524.jpg" alt="IGLESIA DE SANTO TOMé DE TOLEDO" /></TD></TR>
+     <TR><TD><h1>Iglesia de Santo Tomé de Toledo</h1>
+<p>Iglesia que aparece ya nombrada en el siglo XII, y fue reconstruida en el XIV por encargo del Señor de Orgaz, donde se conserva una de las más célebres obras de El Greco "El entierro del Conde Orgaz", asi como una figura de marmórea de la Virgen del siglo XIII y un lienzo de Tristán, entre otras interesantes obras de diferentes épocas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/524.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.028302,39.856762,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de Sta. Bárbara </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE95.jpg" alt="IGLESIA DE STA. BáRBARA" /></TD></TR>
+     <TR><TD><h1>Iglesia de Sta. Bárbara</h1>
+<p>Iglesia madrileña bajo la advocación de Santa Bárbara. Conserva algunas obras de arte de interés.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/95.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.693748,40.42441,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia de S. Esteban de Sevilla </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE104.jpg" alt="IGLESIA DE S. ESTEBAN DE SEVILLA" /></TD></TR>
+     <TR><TD><h1>Iglesia de S. Esteban de Sevilla</h1>
+<p>Ejemplo arquitectónico del gótico mudéjar. Fue semidestruida por un terremoto a mediados del siglo XIV, por lo que se reconstruyó de nuevo. Se encuentra en Sevilla.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/104.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-5.9860623,37.389919,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia del Carmine de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE395.jpg" alt="IGLESIA DEL CARMINE DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Iglesia del Carmine de Florencia</h1>
+<p>Iglesia románico-gótica destruida en un incendio en 1771, se conservan algunas capillas entre las que destaca la Brancacci pintada por Masaccio, Masolino da Panicale y Filippino Lippi.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/395.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.243885,43.768018,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Iglesia del Ognissanti </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE385.jpg" alt="IGLESIA DEL OGNISSANTI" /></TD></TR>
+     <TR><TD><h1>Iglesia del Ognissanti</h1>
+<p>Espacio religioso florentino construido entre los siglos XIII-XVII.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/385.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.245848,43.772469,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Instituto Gómez-Moreno </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE109.jpg" alt="INSTITUTO GóMEZ-MORENO" /></TD></TR>
+     <TR><TD><h1>Instituto Gómez-Moreno</h1>
+<p>En Granada se encuentra el Instituto Gómez Moreno, que toma su nombre del famoso historiador español del siglo XX.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/109.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.5915353,37.174834,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Instituto Valencia de Don Juan </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE518.jpg" alt="INSTITUTO VALENCIA DE DON JUAN" /></TD></TR>
+     <TR><TD><h1>Instituto Valencia de Don Juan</h1>
+<p>Ubicado en el Palacio de Osma edificado en 1886, conserva varias colecciones de documentos y objetos de artes industriales.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/518.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.690349,40.433192,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Istituto Nazionale per la Grafica di Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE669.jpg" alt="ISTITUTO NAZIONALE PER LA GRAFICA DI ROMA" /></TD></TR>
+     <TR><TD><h1>Istituto Nazionale per la Grafica di Roma</h1>
+<p>Institución pública italiana, su principal objetivo es la recogida, estudio y valoración de gráficos tradicionales, únicos o múltiples, y el conocimiento de las nuevas técnicas para el revelado de fotografías.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/669.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.483344,41.901650,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Kunsthistorisches Museum </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE151.jpg" alt="KUNSTHISTORISCHES MUSEUM" /></TD></TR>
+     <TR><TD><h1>Kunsthistorisches Museum</h1>
+<p>Al este de la ciudad imperial de Viena, capital austriaca, existe este Museo de la Historia del Arte, uno de los más importantes del mundo.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/151.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.36119,48.203825,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Leopold Museum </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2326.jpg" alt="LEOPOLD MUSEUM" /></TD></TR>
+     <TR><TD><h1>Leopold Museum</h1>
+<p>Importante colección privada que cuenta con la mejor muestra de pintura austriaca del siglo XX.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2326.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.359104,48.202725,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Libreria Marciana de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE539.jpg" alt="LIBRERIA MARCIANA DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Libreria Marciana de Venecia</h1>
+<p>Edificio construido por Sansovino y decorado por Tiziano, Tintoretto y Veronés. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/539.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.339031,45.433372,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Logia dei Lanzi </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE927.jpg" alt="LOGIA DEI LANZI" /></TD></TR>
+     <TR><TD><h1>Logia dei Lanzi</h1>
+<p>Lugar donde se desarrollaban las ceremonias de la Signoria, en la actualidad es un museo de réplicas de famosas estatuas florentinas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/927.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.255659,43.769246,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Monasterio de las Descalzas Reales </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE153.jpg" alt="MONASTERIO DE LAS DESCALZAS REALES" /></TD></TR>
+     <TR><TD><h1>Monasterio de las Descalzas Reales</h1>
+<p>Partiendo de la plaza de Santo Domingo y por la calle Veneras, en la que vivió Rubén Darío, se desemboca en la plaza de las Descalzas, donde se encuentra el Monasterio de las Descalzas Reales (siglo XVI). Dio cobijo a mujeres de la Casa Real quienes, al ingresar, aportaban una valiosa dote en obras de arte que han formado la colección que ahora puede admirarse.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/153.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.706314,40.418483,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Arqueológico de Barcelona </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE629.jpg" alt="MUSEO ARQUEOLóGICO DE BARCELONA" /></TD></TR>
+     <TR><TD><h1>Museo Arqueológico de Barcelona</h1>
+<p>El museo conserva una colección de piezas que abarcan desde la prehistoria hasta el siglo VII. Interesantes hallazgos de la cultura de Empuries y de la cultura balear y una magnífica colección de mosaicos romanos.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/629.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.1576763,41.369701,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Arqueológico de Córdoba </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE813.jpg" alt="MUSEO ARQUEOLóGICO DE CóRDOBA" /></TD></TR>
+     <TR><TD><h1>Museo Arqueológico de Córdoba</h1>
+<p>Ubicado en el antiguo palacio de los Páez de Castillejo, está considerado el tercero en importancia en España. Contiene fondos ibéricos, romanos, visigodos, arte árabe, mudéjar y renacentista.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/813.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.7779256,37.881491,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Arqueológico de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE72.jpg" alt="MUSEO ARQUEOLóGICO DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Museo Arqueológico de Florencia</h1>
+<p>Fundado en 1824, es el museo arqueológico más completo de Italia después del de Turín. Está divido en tres apartados fundamentales: la colección etrusca, con objetos funerarios fundamentalmente; la colección grecorromana y la egipcia.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/72.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.262095,43.776065,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Arqueológico de Sevilla </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE812.jpg" alt="MUSEO ARQUEOLóGICO DE SEVILLA" /></TD></TR>
+     <TR><TD><h1>Museo Arqueológico de Sevilla</h1>
+<p>El edificio de estilo renacentista fue proyectado por Aníbal González entre 1910 y 1915 para la Exposición Iberoamericana de 1929. Es en 1942 cuando se decide trasladar las colecciones arqueológicas al mismo. La excelente colección de piezas que alberga el museo lo hace estar situado entre uno de los mejores de España. Destacan espacialmente las romanas e hispanoromanas procedentes, en su mayoría, de Itálica. También se conservan objetos de gran calidad de épocas prerromanas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/812.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-5.987184,37.371070,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Arqueológico Nacional </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE64.jpg" alt="MUSEO ARQUEOLóGICO NACIONAL" /></TD></TR>
+     <TR><TD><h1>Museo Arqueológico Nacional</h1>
+<p>El Museo Arqueológico Nacional, situado en la capital y con una colección representativa y amplia de materiales arqueológicos, es el que tiene mejor posición para dar una visión de conjunto sobre las aportaciones de la arqueología española y para mostrar la diversidad cultural del país a lo largo de su historia y su identidad como Estado.<br>
+El Museo dispone también de la reproducción parcial de la sala de los policromos de la cueva de Altamira.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/64.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.6888052,40.423395,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Arqueológico Nacional de Atenas </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE595.jpg" alt="MUSEO ARQUEOLóGICO NACIONAL DE ATENAS" /></TD></TR>
+     <TR><TD><h1>Museo Arqueológico Nacional de Atenas</h1>
+<p>El Museo Arqueológico Nacional de Atenas es el museo arqueológico más importante de Grecia y uno de los más ricos del mundo en lo que a arte griego se refiere. Sus colecciones son representativas de todas las culturas que florecieron en Grecia. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/595.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>23.73234,37.98911,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Arqueológico Nacional de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2221.jpg" alt="MUSEO ARQUEOLóGICO NACIONAL DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Museo Arqueológico Nacional de Venecia</h1>
+<p>El Museo Arqueológico Nacional de Venecia, ubicado en Plaza San Marcos, es la sede de una importante colección de esculturas antiguas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2221.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.339299,45.433632,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Arqueológico Provincial de Granada </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE830.jpg" alt="MUSEO ARQUEOLóGICO PROVINCIAL DE GRANADA" /></TD></TR>
+     <TR><TD><h1>Museo Arqueológico Provincial de Granada</h1>
+<p>Este museo se sitúa en la Carrera del Darro, justo a la altura de la iglesia de San Pedro y San Pablo, y se encuentra en la denominada Casa de Castril, bello palacio señorial del Siglo XVI, perteneciente al señor de la Villa de Castril, de donde toma su nombre.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/830.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.5914708,37.178742,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Austriaco de Artes Aplicadas </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2318.jpg" alt="MUSEO AUSTRIACO DE ARTES APLICADAS" /></TD></TR>
+     <TR><TD><h1>Museo Austriaco de Artes Aplicadas</h1>
+<p>Museo fundado en 1864 y restaurado en 1993. Cuenta con tres plantas y está enfocado hacia las artes decorativas de Austria.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2318.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.381613,48.207537,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo BB.AA. Sevilla </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE92.jpg" alt="MUSEO BB.AA. SEVILLA" /></TD></TR>
+     <TR><TD><h1>Museo BB.AA. Sevilla</h1>
+<p>El Museo de Bellas Artes de Sevilla tiene un estilo manierista y fue construido por el arquitecto y escultor Juan de Oviedo. La colección abarca del siglo XII al XIX y muestra una amplia representación de grandes pintores españoles.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/92.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-5.9998597,37.392418,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Benaki </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE515.jpg" alt="MUSEO BENAKI" /></TD></TR>
+     <TR><TD><h1>Museo Benaki</h1>
+<p>Museo fundado en 1931, alberga una suntuosa y ecléctica colección de objetos procedentes de Europa y Asia, incluidos diversos hallazgos de la edad del Bronce en Micenas y Tesalia, dos obras tempranas de El Greco y mobiliario eclesiástico transportado por los refugiados desde Asia Menor. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/515.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>23.740414,37.975936,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Bizantino de Atenas </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2237.jpg" alt="MUSEO BIZANTINO DE ATENAS" /></TD></TR>
+     <TR><TD><h1>Museo Bizantino de Atenas</h1>
+<p>El museo bizantino recrean en su interior varias iglesias bizantinas para dar idea de lo maravilloso de este arte. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2237.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>23.744770,37.974726,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Carnavalet Historia de Paris </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2324.jpg" alt="MUSEO CARNAVALET HISTORIA DE PARIS" /></TD></TR>
+     <TR><TD><h1>Museo Carnavalet Historia de Paris</h1>
+<p>Museo de historia que abarca la Prehistoria parisina. El museo se sitúa en el Hôtel Carnavalet y en otras dos estructuras adyacentes. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2324.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.362517,48.857427,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo catedralicio de Granada </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE150.jpg" alt="MUSEO CATEDRALICIO DE GRANADA" /></TD></TR>
+     <TR><TD><h1>Museo catedralicio de Granada</h1>
+<p>El Museo de la Catedral se encuentra situado en la Sacristía de la Capilla Real, edificada sobre el solar de la Mezquita Mayor musulmana en 1504 con el objetivo de convertir esta capilla en mausoleo de la dinastía de los Austrias. Al ser construida en varias etapas, en ella encontramos varios estilos artísticos (Gótico, Renacimiento y Barroco). La Capilla Real fue declarada Monumento Histórico Artístico el 19 de mayo de 1884. Los fondos del museo lo constituyen fundamentalmente el legado de los Reyes Católicos y otros del Emperador Carlos V y la Emperatriz Isabel. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/150.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.598339,37.176616,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Cernuschi de París </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE594.jpg" alt="MUSEO CERNUSCHI DE PARíS" /></TD></TR>
+     <TR><TD><h1>Museo Cernuschi de París</h1>
+<p>El museo, fundado por Henri Cernuschi, exhibe arte de China desde la prehistoria hasta el siglo XIV. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/594.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.3127166,48.879543,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Cerralbo </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE87.jpg" alt="MUSEO CERRALBO" /></TD></TR>
+     <TR><TD><h1>Museo Cerralbo</h1>
+<p>Palacio-museo, casa histórica, museo de ambiente, es un referente obligado para conocer la vida de la aristocracia madrileña de finales del siglo XIX e inicios del XX. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/87.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.7144547,40.423849,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Correr de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE741.jpg" alt="MUSEO CORRER DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Museo Correr de Venecia</h1>
+<p>Museo creado en 1830 que conserva piezas importantes relacionadas con la historia de la ciudad de Venecia.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/741.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.337201,45.433470,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de América </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE751.jpg" alt="MUSEO DE AMéRICA" /></TD></TR>
+     <TR><TD><h1>Museo de América</h1>
+<p>Tiene su origen en el Real Gabinete de Historia Natural creado en el siglo XVIII. El Museo de América descubre la vida del hombre y la mujer americanos, su forma de obtener alimento, su vivienda, sus adornos y modo de vestir, sus mitos y creencias, sus formas de comunicarse, en definitiva todo lo que les hace iguales y diferentes a otros.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/751.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.7218744,40.43827,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Arte Barroco </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2316.jpg" alt="MUSEO DE ARTE BARROCO" /></TD></TR>
+     <TR><TD><h1>Museo de Arte Barroco</h1>
+<p>Museo instalado en el Bajo Belvedere que conserva una interesante colección de arte barroco austriaco.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2316.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.380894,48.191690,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Arte Cicládico de Atenas </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2238.jpg" alt="MUSEO DE ARTE CICLáDICO DE ATENAS" /></TD></TR>
+     <TR><TD><h1>Museo de Arte Cicládico de Atenas</h1>
+<p>Fundado por Nikolaos P. Goulandris en 1986, la colección permanente abarca desde los orígenes de la edad de Bronce hasta finales de la Antigüedad, concediendo especial atención al arte de las islas Cícladas, en el mar Egeo.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2238.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>23.742802,37.975610,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de arte contemporáneo de Barcelona </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2332.jpg" alt="MUSEO DE ARTE CONTEMPORáNEO DE BARCELONA" /></TD></TR>
+     <TR><TD><h1>Museo de arte contemporáneo de Barcelona</h1>
+<p>Museo de arte contemporáneo abierto en 1998 aunque con unos antecedentes que se remontan a los años 60. Cuenta con una colección fija y otras temporales. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2332.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.166474,41.383056,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Arte Contemporáneo de Toledo </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2280.jpg" alt="MUSEO DE ARTE CONTEMPORáNEO DE TOLEDO" /></TD></TR>
+     <TR><TD><h1>Museo de Arte Contemporáneo de Toledo</h1>
+<p>Instalado desde 1975 en la toledana Casa de las Cadenas, este museo acoge una importante colección de pintura, escultura, dibujos y litografías.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2280.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.028785,39.857952,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Arte de los Siglos XIX y XX </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2320.jpg" alt="MUSEO DE ARTE DE LOS SIGLOS XIX Y XX" /></TD></TR>
+     <TR><TD><h1>Museo de Arte de los Siglos XIX y XX</h1>
+<p>Museo instalado en el Belvedere que conserva una interesante colección de arte de los siglos XIX y XX.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2320.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.381109,48.191454,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Arte Medieval </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2317.jpg" alt="MUSEO DE ARTE MEDIEVAL" /></TD></TR>
+     <TR><TD><h1>Museo de Arte Medieval</h1>
+<p>Museo instalado en el Belvedere que conserva una interesante colección de arte medieval austriaco.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2317.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.380583,48.191447,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Arte Moderno </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE766.jpg" alt="MUSEO DE ARTE MODERNO" /></TD></TR>
+     <TR><TD><h1>Museo de Arte Moderno</h1>
+<p>Dependiente del Museo Nacional de Arte de Cataluña, el Museo de Arte Moderno acoge más de 5.000 piezas de pintura, escultura y artes del objeto en un recorrido que nos lleva desde el neoclasicismo al modernismo.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/766.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.153857,41.368564,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Arte Moderno Fundación Ludwig Wien </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2327.jpg" alt="MUSEO DE ARTE MODERNO FUNDACIóN LUDWIG WIEN" /></TD></TR>
+     <TR><TD><h1>Museo de Arte Moderno Fundación Ludwig Wien</h1>
+<p>Museo de arte contemporáneo fundado en 1962, posee una importante colección que comprende una amplia variedad de géneros.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2327.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.357977,48.203819,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Arte y de Historia del Judaísmo </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2323.jpg" alt="MUSEO DE ARTE Y DE HISTORIA DEL JUDAíSMO" /></TD></TR>
+     <TR><TD><h1>Museo de Arte y de Historia del Judaísmo</h1>
+<p>Museo situado en el Hôtel de St.-Aignan, recoge la historia del judaísmo en Francia a través de sus objetos materiales.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2323.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.355489,48.860974,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Artes Africanas y Oceánicas </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2224.jpg" alt="MUSEO DE ARTES AFRICANAS Y OCEáNICAS" /></TD></TR>
+     <TR><TD><h1>Museo de Artes Africanas y Oceánicas</h1>
+<p>Ubicado en un edificio construido en 1931 para la Exposición colonial de ese año, fue Malraux quien consagró el edificio a la exposición de objetos de arte africano y oceánico, de los que actualmente guarda excelentes muestras.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2224.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.409246,48.835218,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Artes Decorativas de París </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE267.jpg" alt="MUSEO DE ARTES DECORATIVAS DE PARíS" /></TD></TR>
+     <TR><TD><h1>Museo de Artes Decorativas de París</h1>
+<p>Dentro del conjunto del Palais du Louvre se encuentra el Pavillon de Marsan, en cuyo seno se encuentra el Museo de Artes Decorativas de París.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/267.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.3327812,48.863204,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Artes y Costumbres </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2309.jpg" alt="MUSEO DE ARTES Y COSTUMBRES" /></TD></TR>
+     <TR><TD><h1>Museo de Artes y Costumbres</h1>
+<p>Museo fundado en 1972 cuyas colecciones nos permiten conocer de cerca el arte y las costumbres populares andaluzas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2309.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-5.987828,37.372357,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de BB. AA. de Granada </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE148.jpg" alt="MUSEO DE BB. AA. DE GRANADA" /></TD></TR>
+     <TR><TD><h1>Museo de BB. AA. de Granada</h1>
+<p>Museo granadino de pintura y escultura, exhibe especialmente obras de esa Escuela andaluza.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/148.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.589842,37.177099,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Bellas Artes de Córdoba </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE668.jpg" alt="MUSEO DE BELLAS ARTES DE CóRDOBA" /></TD></TR>
+     <TR><TD><h1>Museo de Bellas Artes de Córdoba</h1>
+<p>La colección del Museo Provincial de Bellas Artes ofrece un interesante recorrido por la obra de los principales artistas cordobeses desde la Edad Media hasta la actualidad.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/668.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.774775,37.881239,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Carruajes </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2311.jpg" alt="MUSEO DE CARRUAJES" /></TD></TR>
+     <TR><TD><h1>Museo de Carruajes</h1>
+<p>Museo instalado en el antiguo convento de los Remedios, edificio de la segunda mitad del siglo XVI. El museo fue inaugurado en 1999, y cuenta con 25 carruajes de diferentes tipos.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2311.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-5.996872,37.379493,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de El Greco </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE335.jpg" alt="MUSEO DE EL GRECO" /></TD></TR>
+     <TR><TD><h1>Museo de El Greco</h1>
+<p>En este museo se exponen obras del último periodo de la carrera artística de El Greco, así como importantes pinturas de la Escuela Toledana, la Escuela Madrileña y la Escuela Sevillana del siglo XVII.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/335.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.029236,39.856178,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Historia de Cataluña </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2330.jpg" alt="MUSEO DE HISTORIA DE CATALUñA" /></TD></TR>
+     <TR><TD><h1>Museo de Historia de Cataluña</h1>
+<p>Museo en el que se explica la evolución política, social, cultural y económica de Cataluña desde los tiempos más remotos hasta los últimos años del siglo XX.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2330.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.185829,41.381043,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Historia Natural </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2314.jpg" alt="MUSEO DE HISTORIA NATURAL" /></TD></TR>
+     <TR><TD><h1>Museo de Historia Natural</h1>
+<p>Situado en la Plaza de María Teresa, el Museo de Historia Natural fue inaugurado en 1889. Se divide en dos plantas, la baja relacionada con la mineralogía y la primera con la zoología. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2314.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.359930,48.205170,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de la Acrópolis de Atenas </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE600.jpg" alt="MUSEO DE LA ACRóPOLIS DE ATENAS" /></TD></TR>
+     <TR><TD><h1>Museo de la Acrópolis de Atenas</h1>
+<p>Museo que conserva la mayoría de los tesoros procedentes de la Acrópolis de Atenas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/600.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>23.727664,37.971419,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de la Armada </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE260.jpg" alt="MUSEO DE LA ARMADA" /></TD></TR>
+     <TR><TD><h1>Museo de la Armada</h1>
+<p>Cuenta con una impresionante colección de objetos bélicos que van desde antiguas armaduras del Siglo XVII expuestos en cuatro grandes salas, hasta artillería usada durante las Guerras Mundiales en el segundo y tercer piso del museo.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/260.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.312043,48.855729,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de la Catedral </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2319.jpg" alt="MUSEO DE LA CATEDRAL" /></TD></TR>
+     <TR><TD><h1>Museo de la Catedral</h1>
+<p>Museo situado en el interior de la catedral. Destaca por sus pinturas religiosas del siglo XVIII y sus tallas de los siglos XVI-XVII. También en la catedral está la Cámara del Tesoro.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2319.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.373416,48.208316,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de la Ciudad de Barcelona </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE966.jpg" alt="MUSEO DE LA CIUDAD DE BARCELONA" /></TD></TR>
+     <TR><TD><h1>Museo de la Ciudad de Barcelona</h1>
+<p>Las dos plantas dedicadas a museo muestran todo lo relacionado con la historia de la ciudad de Barcelona desde el siglo XVI hasta nuestros días: su industria, transformaciones urbanas, actividades económicas e infraestructuras.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/966.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.177712,41.383981,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de la Civilización Romana </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE613.jpg" alt="MUSEO DE LA CIVILIZACIóN ROMANA" /></TD></TR>
+     <TR><TD><h1>Museo de la Civilización Romana</h1>
+<p>Destaca en este museo la magnífica maqueta de la antigua Roma, así como las numerosas copias en yeso de cientos de esculturas de la época.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/613.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.44936,41.863863,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de la Orangerie </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE232.jpg" alt="MUSEO DE LA ORANGERIE" /></TD></TR>
+     <TR><TD><h1>Museo de la Orangerie</h1>
+<p>Acoge una importantísima colección de obras impresionistas y del siglo XX entre las que destacan algunas de Monet, Picasso o Matisse entre otros.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/232.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.322675,48.863728,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de la Real Maestranza </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2312.jpg" alt="MUSEO DE LA REAL MAESTRANZA" /></TD></TR>
+     <TR><TD><h1>Museo de la Real Maestranza</h1>
+<p>Museo situado en la plaza de toros de la Maestranza. Fue abierto en 1989 y se divide en cuatro salas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2312.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-5.999018,37.386057,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de las Termas de Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE603.jpg" alt="MUSEO DE LAS TERMAS DE ROMA" /></TD></TR>
+     <TR><TD><h1>Museo de las Termas de Roma</h1>
+<p>Situado en la célebre Stazione Termini de Roma, el Museo de las Termas conserva una destacada colección de antigüedades, entre las que es destacable el famoso Trono Ludovisi, una obra emblemática den la escultura arcaica griega.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/603.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.498389,41.903039,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de los Concilios y de la Cultura Visigótica </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2281.jpg" alt="MUSEO DE LOS CONCILIOS Y DE LA CULTURA VISIGóTICA" /></TD></TR>
+     <TR><TD><h1>Museo de los Concilios y de la Cultura Visigótica</h1>
+<p>La iglesia de San Román acoge este museo dedicado todas las manifestaciones artísticas desarrolladas en tiempo de los visigodos. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2281.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.027444,39.858451,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Muséo de l´Homme de París </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE591.jpg" alt="MUSéO DE L´HOMME DE PARíS" /></TD></TR>
+     <TR><TD><h1>Muséo de l´Homme de París</h1>
+<p>Uno de los más importantes museos del mundo por lo que respecta a Antropología, Etnología y Prehistoria, el Musée de l'Homme de París es heredero del Museo de Etnografía del Trocadero, fundado en 1878.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/591.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.287560,48.861990,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Orsay </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE19.jpg" alt="MUSEO DE ORSAY" /></TD></TR>
+     <TR><TD><h1>Museo de Orsay</h1>
+<p>Las obras de este museo pertenecen a la segunda mitad del siglo XIX, desde 1840 hasta 1914. Son obras de escultura y pintura con autores tan significativos como Manet, Monet y Van Gogh.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/19.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.325291,48.860313,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Santa Apolonia de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE836.jpg" alt="MUSEO DE SANTA APOLONIA DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Museo de Santa Apolonia de Florencia</h1>
+<p>Antiguo cenáculo del monasterio de Santa Apolonia, hoy convertido en museo dedicado a la pintura florentina de la primera mitad del Quattrocento, especialmente a Andrea Castagno.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/836.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.256673,43.778608,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo de Santa Cruz (Toledo) </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE513.jpg" alt="MUSEO DE SANTA CRUZ (TOLEDO)" /></TD></TR>
+     <TR><TD><h1>Museo de Santa Cruz (Toledo)</h1>
+<p>Hospital fundación del Cardenal Mendoza. De estilo plateresco destaca su fachada. El Museo está instalado en la antigua iglesia con planta de cruz griega. Creado en el siglo pasado como museo provincial, en él se guardan lo más destacado de la arqueología y las bellas artes de la provincia. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/513.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.0203382,39.859619,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo del Bargello de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE628.jpg" alt="MUSEO DEL BARGELLO DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Museo del Bargello de Florencia</h1>
+<p>Magnífico edificio construido en 1345, donde abundan esculturas de Miguel Angel, Donatello y Giambologna.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/628.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.258100,43.770455,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo del Ejército </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE996.jpg" alt="MUSEO DEL EJéRCITO" /></TD></TR>
+     <TR><TD><h1>Museo del Ejército</h1>
+<p>El museo consta de tres plantas dedicadas a Infantería, Caballería y Artillería donde se muestran un gran número de piezas relacionados con la historia militar española.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/996.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.690398,40.415816,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo del Petit Palais </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE188.jpg" alt="MUSEO DEL PETIT PALAIS" /></TD></TR>
+     <TR><TD><h1>Museo del Petit Palais</h1>
+<p>Este museo posee obras realistas e impresionistas. Incluso se pueden encontrar obras de Rembrandt, pintor barroco, aunque el Impresionismo domine en las salas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/188.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.315090,48.866395,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo del Prado </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE1.jpg" alt="MUSEO DEL PRADO" /></TD></TR>
+     <TR><TD><h1>Museo del Prado</h1>
+<p>El Museo del Prado de Madrid es una de las pinacotecas más importantes del mundo. Su enorme colección de pintura se complementa con grabados, dibujos, joyas de incalculable valor, esculturas, etc. El propio edificio que lo constituye es una obra maestra del Neoclasicismo español, realizado por el arquitecto Juan de Villanueva.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/1.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.6922556,40.413737,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo del Settecento Veneciano </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2222.jpg" alt="MUSEO DEL SETTECENTO VENECIANO" /></TD></TR>
+     <TR><TD><h1>Museo del Settecento Veneciano</h1>
+<p>Colección dedicada al Settecento veneciano, se conserva en el palaci Ca'Rezzonico.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2222.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.326698,45.433481,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo dell´Opera del Duomo de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE929.jpg" alt="MUSEO DELL´OPERA DEL DUOMO DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Museo dell´Opera del Duomo de Florencia</h1>
+<p>Museo que ofrece una interesante panorámica de la escultura florentina desde finales del siglo XIII hasta el XV. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/929.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.257945,43.773108,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Diocesano </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE34.jpg" alt="MUSEO DIOCESANO" /></TD></TR>
+     <TR><TD><h1>Museo Diocesano</h1>
+<p>Situado junto a la Catedral, el edificio de la Pia Almoina consta, actualmente, de dos cuerpos: el gótico, construido hacia 1435, y el renacentista, longitudinal al anterior y añadido en 1546. Una vez terminadas las obras de rehabilitación, el Museo Diocesano dispondrá de un total de siete salas de exposición.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/34.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.1759659,41.38464,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Diocesano </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2250.jpg" alt="MUSEO DIOCESANO" /></TD></TR>
+     <TR><TD><h1>Museo Diocesano</h1>
+<p>Instalado en el viejo Hospital Mayor de San Sebastián, acoge una importante colección artística que abarca desde el siglo XIII hasta nuestros días. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2250.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.780174,37.878313,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Egipcio de Barcelona </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE1005.jpg" alt="MUSEO EGIPCIO DE BARCELONA" /></TD></TR>
+     <TR><TD><h1>Museo Egipcio de Barcelona</h1>
+<p>Este museo, fundado en 1993, está formado por objetos pertenecientes a la Colección de Arqueología Egipcia Jordi Clos, sin duda una de las secciones más interesantes de la Fundación Clos.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/1005.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.164768,41.393608,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Etnobotáncio </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2247.jpg" alt="MUSEO ETNOBOTáNCIO" /></TD></TR>
+     <TR><TD><h1>Museo Etnobotáncio</h1>
+<p>Este museo se considera único en España; fue inaugurado en 1992 y su objetivo es el estudio de las distintas modalidades en la interacción "humanidad-plantas". </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2247.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.786016,37.868603,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Fortuny (Venecia) </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE578.jpg" alt="MUSEO FORTUNY (VENECIA)" /></TD></TR>
+     <TR><TD><h1>Museo Fortuny (Venecia)</h1>
+<p>Museo veneciano en el que se conserva buena parte de la colección de Mariano Fortuny y Madrazo.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/578.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.331971,45.435217,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Frederic Marés </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE621.jpg" alt="MUSEO FREDERIC MARéS" /></TD></TR>
+     <TR><TD><h1>Museo Frederic Marés</h1>
+<p>Instalado en uno de los anexos del Palacio Real Mayor, está dedicado principalmente al arte sacro.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/621.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.1767192,41.384435,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Guimet de las Artes Asiáticas </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE1023.jpg" alt="MUSEO GUIMET DE LAS ARTES ASIáTICAS" /></TD></TR>
+     <TR><TD><h1>Museo Guimet de las Artes Asiáticas</h1>
+<p>El Museo Guimet fue creado en 1889 por el industrial y coleccionista Emile Guimet. Es uno de los mejores y más completos del mundo en su especialidad, y ha sido sometido a una profunda renovación y ampliación en el último lustro.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/1023.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.293611,48.865223,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Heeresgeschichtliches </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2321.jpg" alt="MUSEO HEERESGESCHICHTLICHES" /></TD></TR>
+     <TR><TD><h1>Museo Heeresgeschichtliches</h1>
+<p>Impresionante museo con la historia del ejército austriaco. Cronológicamente, abarca desde el siglo XVI hasta el siglo XX. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2321.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.387879,48.183693,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Horne de Florencia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE398.jpg" alt="MUSEO HORNE DE FLORENCIA" /></TD></TR>
+     <TR><TD><h1>Museo Horne de Florencia</h1>
+<p>El museo es una fundación creada sobre el 1916 por un coleccionista inglés. Sus fondos se centran en mobiliarios y objetos artísticos muy diversos de los siglos XIV-XVI.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/398.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.259549,43.767383,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Jacquemart-Andre </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE290.jpg" alt="MUSEO JACQUEMART-ANDRE" /></TD></TR>
+     <TR><TD><h1>Museo Jacquemart-Andre</h1>
+<p>Diseñado por el arquitecto Henri Parent y edificado entre 1869 y 1875 para el banquero y coleccionista Edouard André y su esposa, la pintora Nelié Jacquemart. En este museo podrá descubrir pinturas, esculturas, objetos de artes y mobiliario tal y como lo dispusieron sus propietarios.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/290.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.3105226,48.875386,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Julio Romero de Torres </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2251.jpg" alt="MUSEO JULIO ROMERO DE TORRES" /></TD></TR>
+     <TR><TD><h1>Museo Julio Romero de Torres</h1>
+<p>A lo largo de sus seis salas, el Museo de Julio Romero de Torres exhibe más de medio centenar de cuadros donados al Ayuntamiento de la ciudad por su familia. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2251.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.775059,37.881103,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Lateranense de Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE607.jpg" alt="MUSEO LATERANENSE DE ROMA" /></TD></TR>
+     <TR><TD><h1>Museo Lateranense de Roma</h1>
+<p></p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/607.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.505904,41.886404,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Lázaro Galdiano </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE134.jpg" alt="MUSEO LáZARO GALDIANO" /></TD></TR>
+     <TR><TD><h1>Museo Lázaro Galdiano</h1>
+<p>Este museo madrileño corresponde a la colección donada por un particular.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/134.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.685784,40.436928,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Marítimo </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2333.jpg" alt="MUSEO MARíTIMO" /></TD></TR>
+     <TR><TD><h1>Museo Marítimo</h1>
+<p>Museo situado en los Drassanes, cuyos orígenes se remontan a 1929. El Museo Marítimo inició su expansión a partir de 1958.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2333.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.176151,41.375263,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Marmottan de París </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE191.jpg" alt="MUSEO MARMOTTAN DE PARíS" /></TD></TR>
+     <TR><TD><h1>Museo Marmottan de París</h1>
+<p>Este museo destaca básicamente por poseer una de las mayores colecciones de obras de Monet, primer pintor que se llamó impresionista.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/191.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.2673898,48.859273,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Moreau </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE310.jpg" alt="MUSEO MOREAU" /></TD></TR>
+     <TR><TD><h1>Museo Moreau</h1>
+<p>Museo parisino en el que se exhiben buena parte de las obras de Gustave Moreau acompañadas de escenas de amigos y colaboradores.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/310.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.334455,48.877821,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Municipal de Madrid </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE282.jpg" alt="MUSEO MUNICIPAL DE MADRID" /></TD></TR>
+     <TR><TD><h1>Museo Municipal de Madrid</h1>
+<p>El Museo Municipal de Madrid tiene como objetivo mostrar al visitante la historia, la vida y las costumbres de la ciudad.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/282.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.700746,40.425838,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Nacional Centro de Arte 'Reina Sofía' </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE27.jpg" alt="MUSEO NACIONAL CENTRO DE ARTE 'REINA SOFíA'" /></TD></TR>
+     <TR><TD><h1>Museo Nacional Centro de Arte 'Reina Sofía'</h1>
+<p>Antiguo Hospital General, el MNCARS, como se le conoce, es hoy día el mayor depósito de arte contemporáneo en Madrid. Sus fondos se dividen entre la obra de artistas españoles y la producción internacional.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/27.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.6940877,40.40812,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Nacional de Antropología </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE1021.jpg" alt="MUSEO NACIONAL DE ANTROPOLOGíA" /></TD></TR>
+     <TR><TD><h1>Museo Nacional de Antropología</h1>
+<p>El Museo Nacional de Antropología, es el primer museo de carácter antropológico que se crea en España. Consta de dos sedes: Sede Alfonso XII y Sede Juan de Herrera.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/1021.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.688944,40.407753,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Nacional de Arte de Cataluña </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE75.jpg" alt="MUSEO NACIONAL DE ARTE DE CATALUñA" /></TD></TR>
+     <TR><TD><h1>Museo Nacional de Arte de Cataluña</h1>
+<p>Importante museo sitaudo en el Palacio Real de Montjuïc, la riqueza de su pintura mural y sus magníficas colecciones de Arte medieval le convierten en uno de los mejores del mundo.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/75.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.1536331,41.368275,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Nacional de Arte Moderno de París </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE57.jpg" alt="MUSEO NACIONAL DE ARTE MODERNO DE PARíS" /></TD></TR>
+     <TR><TD><h1>Museo Nacional de Arte Moderno de París</h1>
+<p></p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/57.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.2980496,48.864178,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Nacional de Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE615.jpg" alt="MUSEO NACIONAL DE ROMA" /></TD></TR>
+     <TR><TD><h1>Museo Nacional de Roma</h1>
+<p>Este museo posee una de las colecciones arqueológicas más importantes del mundo, distribuidas entre los baños de Diocleciano, el llamado Pasillo octogonal, el Palacio Massimo y el Palacio Attemps.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/615.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.473353,41.896821,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Nacional del Louvre </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2.jpg" alt="MUSEO NACIONAL DEL LOUVRE" /></TD></TR>
+     <TR><TD><h1>Museo Nacional del Louvre</h1>
+<p>El Museo Nacional del Louvre es, de todas las pinacotecas del mundo, la más conocida por la gente. Se alberga en un gran palacio, terminado en el Barroco francés pero cuyos cimientos se remontan al período de las fortalezas medievales. En su interior se alinean tesoros artísticos de incalculable valor que abarcan todas las épocas y todos los países de la historia del arte occidental y asiático.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.3358176,48.861066,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Nacional Etrusco de Villa Giulia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE598.jpg" alt="MUSEO NACIONAL ETRUSCO DE VILLA GIULIA" /></TD></TR>
+     <TR><TD><h1>Museo Nacional Etrusco de Villa Giulia</h1>
+<p>Museo romano que conserva las colecciones de antigüedades pre-romanas del Lazio, la baja Etruria y Umbría.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/598.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.478276,41.918106,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Napoleónico de Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE734.jpg" alt="MUSEO NAPOLEóNICO DE ROMA" /></TD></TR>
+     <TR><TD><h1>Museo Napoleónico de Roma</h1>
+<p>Esta colección tiene como objetivo dar testimonio de la grandeza imperial de la familia Bonaparte, además de documentar desde una óptica privada las intensas relaciones mantenidas entre Roma y la familia Bonaparte.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/734.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.471253,41.901842,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Picasso de Barcelona </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE711.jpg" alt="MUSEO PICASSO DE BARCELONA" /></TD></TR>
+     <TR><TD><h1>Museo Picasso de Barcelona</h1>
+<p>Museo dedicado a Picasso que cuenta con la mejor muestra de la producción juvenil del pintor malagueño.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/711.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.180918,41.385219,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Picasso de París </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE165.jpg" alt="MUSEO PICASSO DE PARíS" /></TD></TR>
+     <TR><TD><h1>Museo Picasso de París</h1>
+<p>La colección de este museo consta de pinturas, esculturas y piezas de cerámica de Picasso. Contiene obras de todos sus diferentes periodos que ayudan a comprender la evolución del gran pintor.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/165.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.362348,48.859732,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Pigorini de Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE592.jpg" alt="MUSEO PIGORINI DE ROMA" /></TD></TR>
+     <TR><TD><h1>Museo Pigorini de Roma</h1>
+<p>Museo de Arqueología y Etnografía que constituye uno de los mayores de su género.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/592.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.471639,41.832255,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Rodín </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE326.jpg" alt="MUSEO RODíN" /></TD></TR>
+     <TR><TD><h1>Museo Rodín</h1>
+<p>Este museo fue fundado en 1919 en el que había sido hasta 1918 el hotel Biron de París. Sus fondos son las obras del autor francés Rodin, con esculturas, dibujos y objetos de su propiedad. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/326.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.315819,48.855334,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Romántico de Madrid </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE244.jpg" alt="MUSEO ROMáNTICO DE MADRID" /></TD></TR>
+     <TR><TD><h1>Museo Romántico de Madrid</h1>
+<p>Museo fundado en 1924 por el Marqués de la Vega-Inclán para acoger obras de la época romántica.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/244.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.698933,40.425826,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Sefardí de Toledo </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2219.jpg" alt="MUSEO SEFARDí DE TOLEDO" /></TD></TR>
+     <TR><TD><h1>Museo Sefardí de Toledo</h1>
+<p>Museo instalado en la Sinagoga del Tránsito de Toledo, fue creado en 1964. Actualmente el Museo se esfuerza en dar a conocer los aspectos fundamentales de la cultura judía española, así como su aportación a la historia y la cultura europeas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2219.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.029681,39.855774,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Sissi </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2315.jpg" alt="MUSEO SISSI" /></TD></TR>
+     <TR><TD><h1>Museo Sissi</h1>
+<p>Museo recién creado para conmemorar el 150º aniversario de la boda entre Elisabeth y el emperador Francisco José. Contiene objetos personales de Sisí, entre otras cosas.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2315.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.365337,48.207880,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Sorolla </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE716.jpg" alt="MUSEO SOROLLA" /></TD></TR>
+     <TR><TD><h1>Museo Sorolla</h1>
+<p>Casa del pintor Sorolla en la que podemos admirar su mejor colección de obras al tiempo que compartimos su manera de vivir.<br>
+<br>
+</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/716.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.692758,40.435405,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Taurino </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE2249.jpg" alt="MUSEO TAURINO" /></TD></TR>
+     <TR><TD><h1>Museo Taurino</h1>
+<p>El Museo Taurino de Córdoba alberga una interesante colección relacionada con el mundo de los toros.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/2249.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-4.783022,37.879278,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museo Thyssen Bornemisza </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE28.jpg" alt="MUSEO THYSSEN BORNEMISZA" /></TD></TR>
+     <TR><TD><h1>Museo Thyssen Bornemisza</h1>
+<p>El Museo Thyssen Bornemisza es uno de los últimos añadidos a la vida cultural madrileña, e incluso española, si tenemos en cuenta su prolongación en los depósitos del Museo Pedralbes en Barcelona. Creado gracias a un acuerdo del Gobierno español con el matrimonio Thyssen, hoy conforma el denominado Triángulo del Arte en pleno corazón madrileño.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/28.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.6948535,40.416285,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museos Capitolinos </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE143.jpg" alt="MUSEOS CAPITOLINOS" /></TD></TR>
+     <TR><TD><h1>Museos Capitolinos</h1>
+<p>Los Museos Capitolinos toman su nombre de la plaza del Capitolio, diseñada por Miguel Ángel, donde se ubican.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/143.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.482751,41.893058,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Museos Vaticanos </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE127.jpg" alt="MUSEOS VATICANOS" /></TD></TR>
+     <TR><TD><h1>Museos Vaticanos</h1>
+<p>Los Museos Vaticanos se encuentran en el interior de la Ciudad del Vaticano. Se dividen en varios museos con sus propios recorridos, cada uno especializado en un tema.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/127.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.454666,41.905227,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Österreichische Galerie Wien </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE502.jpg" alt="ÖSTERREICHISCHE GALERIE WIEN" /></TD></TR>
+     <TR><TD><h1>Österreichische Galerie Wien</h1>
+<p>Los museos en los palacios del Belvedere ofrecen un examen excelente del arte austríaco desde la Edad media hasta nuestros días. De los siglos XIX y XX también se conservan excepcionales obras del arte internacional. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/502.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>16.380883,48.191565,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Palacio de los Conservadores de Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE616.jpg" alt="PALACIO DE LOS CONSERVADORES DE ROMA" /></TD></TR>
+     <TR><TD><h1>Palacio de los Conservadores de Roma</h1>
+<p>Junto con el Palacion Nuevo, el de los Conservadores de Roma forma parte de los excepcionales Museos Capitolinos.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/616.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.482621,41.892658,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Palacio Ducal de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE430.jpg" alt="PALACIO DUCAL DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Palacio Ducal de Venecia</h1>
+<p>Edificio institucional que conserva interesantes piezas de los mejores artistas de la ciudad.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/430.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.340318,45.433763,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Palacio Farnese </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE470.jpg" alt="PALACIO FARNESE" /></TD></TR>
+     <TR><TD><h1>Palacio Farnese</h1>
+<p>Palacio renacentista construido por Sangallo el Joven, las pinturas que se pueden ver en su interior celebran el ascenso de una dinastía e inauguran triunfalmente el siglo del barroco.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/470.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.470946,41.894811,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Palacio Médici-Riccardi </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE464.jpg" alt="PALACIO MéDICI-RICCARDI" /></TD></TR>
+     <TR><TD><h1>Palacio Médici-Riccardi</h1>
+<p>Obra de Michelozzo con ventanales de Miguel Angel. Destacan los frescos de su interior, obra de Gozzoli y Fra Angelico, especialmente los de la capilla de Lorenzo el Magnífico. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/464.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.255794,43.775169,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Palacio Real de El Pardo </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE660.jpg" alt="PALACIO REAL DE EL PARDO" /></TD></TR>
+     <TR><TD><h1>Palacio Real de El Pardo</h1>
+<p>Los orígenes del Palacio del Pardo hay que buscarlos en una Casa Real que Enrique III mandó construir en esos terrenos en 1405. Carlos I construyó en ese lugar un palacio de dos plantas, como lugar de recreo y descanso. Felipe II mejoró la construcción iniciada por su padre, terminando las obras en el año1568.<br>
+La decoración interior del Palacio de El Pardo tiene como elemento protagonista los tapices, tejidos en la Real Fábrica de Madrid, según modelos de las composiciones pintadas por Bayeu, Castillo, y sobre todo por Goya, que para este Palacio efectuó cinco de sus series más conocidas. <br>
+Entre las obras de arte conservadas destacan el Retrato de Isabel la Católica de Juan de Flandes y el Retrato de Don Juan José de Austria a caballo por Ribera, así como importantes piezas de mobiliario de los siglos XVIII y XIX. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/660.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.7751677,40.521368,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Palazzo Barberini </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE468.jpg" alt="PALAZZO BARBERINI" /></TD></TR>
+     <TR><TD><h1>Palazzo Barberini</h1>
+<p>Galería que recoge numerosas obras italianas que van desde el siglo XII hasta el siglo XVII. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/468.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.489728,41.903475,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Palazzo Pallavicini Rospigliosi </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE466.jpg" alt="PALAZZO PALLAVICINI ROSPIGLIOSI" /></TD></TR>
+     <TR><TD><h1>Palazzo Pallavicini Rospigliosi</h1>
+<p>Colección de arte de la familia Rospigliosi-Pallavicini.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/466.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.486241,41.900033,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Palazzo Pitti </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE213.jpg" alt="PALAZZO PITTI" /></TD></TR>
+     <TR><TD><h1>Palazzo Pitti</h1>
+<p>El Palazzo Pitti atrae a todos los visitantes de Florencia tanto por su arquitectura como por sus jardines y por los museos que alberga en su interior. </p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/213.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>11.250418,43.765415,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Parroquia de S. Pedro de Sevilla </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE114.jpg" alt="PARROQUIA DE S. PEDRO DE SEVILLA" /></TD></TR>
+     <TR><TD><h1>Parroquia de S. Pedro de Sevilla</h1>
+<p>Iglesia sevillana. Uno de sus atractivos es la posesión de un lienzo de Zurbarán.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/114.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-5.9898998,37.392716,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Parroquia Santa María Magdalena </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE91.jpg" alt="PARROQUIA SANTA MARíA MAGDALENA" /></TD></TR>
+     <TR><TD><h1>Parroquia Santa María Magdalena</h1>
+<p>Iglesia barroca de Sevilla. Contiene varias obras de maestros españoles del Siglo de Oro.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/91.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-5.9981683,37.390613,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Peggy Guggenheim Collection </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE725.jpg" alt="PEGGY GUGGENHEIM COLLECTION" /></TD></TR>
+     <TR><TD><h1>Peggy Guggenheim Collection</h1>
+<p>Colección de arte moderno que se conserva en el Palazzo Venier dei Leoni.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/725.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.331569,45.430816,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Pinacoteca Nacional de Atenas </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE529.jpg" alt="PINACOTECA NACIONAL DE ATENAS" /></TD></TR>
+     <TR><TD><h1>Pinacoteca Nacional de Atenas</h1>
+<p>La pinacoteca destaca por sus colecciones permanentes, principalmente, de pintura y escultura griega de los siglos XIX-XX.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/529.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>23.749345,37.975613,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Real Academia de Bellas Artes de San Fernando (Madrid) </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE29.jpg" alt="REAL ACADEMIA DE BELLAS ARTES DE SAN FERNANDO (MADRID)" /></TD></TR>
+     <TR><TD><h1>Real Academia de Bellas Artes de San Fernando (Madrid)</h1>
+<p>La Academia de Bellas Artes de Madrid posee importantes salas dedicadas a la exhibición de pinturas españolas de todos los siglos. Se encuentra cerca de la Puerta del Sol y permite una visita complementaria a los grandes museos de la ciudad.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/29.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.7002278,40.418002,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Real Academia de Bellas Artes de San Jorge </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE574.jpg" alt="REAL ACADEMIA DE BELLAS ARTES DE SAN JORGE" /></TD></TR>
+     <TR><TD><h1>Real Academia de Bellas Artes de San Jorge</h1>
+<p>Academia fundada en 1775 por la Junta de Comercio de Barcelona en el edificio de la Lonja.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/574.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>2.182653,41.382371,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Real Academia de la Historia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE235.jpg" alt="REAL ACADEMIA DE LA HISTORIA" /></TD></TR>
+     <TR><TD><h1>Real Academia de la Historia</h1>
+<p>La fundación de la Real Academia de la Historia fue consecuencia del desarrollo de una tertulia que varios eruditos y hombres ilustrados residentes en Madrid comenzaron a mantener en 1735 en el domicilio de D.Julián Hermosilla. Posee una colección de retratos realizados por los mejores maestros españoles del siglo XVIII y XIX, especialmente Goya.<br>
+</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/235.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>-3.698959,40.413443,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Scuola Grande di San Rocco de Venecia </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE532.jpg" alt="SCUOLA GRANDE DI SAN ROCCO DE VENECIA" /></TD></TR>
+     <TR><TD><h1>Scuola Grande di San Rocco de Venecia</h1>
+<p>Fundada en 1477 por la Cofradía de San Roque, prácticamente toda su decoración interior estuvo a cargo de Jacopo Tintoretto.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/532.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.325394,45.436542,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Villa Farnesina </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE570.jpg" alt="VILLA FARNESINA" /></TD></TR>
+     <TR><TD><h1>Villa Farnesina</h1>
+<p>Baltasare Peruzzi diseñó este palacio entre 1509 y 1511, famoso por sus graciosas proporciones y por sus frescos en la Sala delle Prospettive.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/570.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.467444,41.893612,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  <Placemark>  
+    <name>Villa Médicis de Roma </name>   
+    <styleUrl>#exampleStyleMap</styleUrl>  
+    <description><![CDATA[ 
+    <DIV><img src="http://www.artehistoria.jcyl.es/logoAHcabGoogleEarth.png"></DIV><BR>
+     <TABLE><TR><TD><img src="http://www.artehistoria.com/ciudades/museos/MUSE605.jpg" alt="VILLA MéDICIS DE ROMA" /></TD></TR>
+     <TR><TD><h1>Villa Médicis de Roma</h1>
+<p>Villa construida en 1544, rodeada de magníficos jardines, con ruinas, y adornados con estatuas. Napoleón la convirtió en Academia de Arte.</p></TD></TR></TABLE>
+<p><a href="http://www.artehistoria.com/ciudades/museos/605.htm" target="_blank">Más información en ARTEHISTORIA</a></p>
+
+      ]]>               
+    </description> 
+    <Point>       
+      <coordinates>12.482588,41.908381,0</coordinates> 
+    </Point>    
+  </Placemark> 
+  </Document>   
+  </kml>  

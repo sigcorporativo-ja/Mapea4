@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+
+   <title>Mapea Tests</title>
+   <link href="../../../build/core/4.0.0-SNAPSHOT/css/mapea.ol3.min.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script src="../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+      <script src="../../../build/core/4.0.0-SNAPSHOT/js/configuration.js"></script>
+
+   <script type="text/javascript">
+   var mapaLabel = M.map({
+      container : 'mapa',
+      maxExtent : {
+         left : 96497.813642565,
+         bottom : 3959999.4840389,
+         right : 622003.74990423,
+         top : 4300000.6565066
+      },
+      //label: 'Estoy aquí',
+      wmc : [ 'callejero' ]
+   })
+   .addLayers("WMS*Capa1*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_GeoParques?*GeoParques*true");
+   </script>
+</body>
+
+</html>

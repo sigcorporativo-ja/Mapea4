@@ -1,0 +1,23 @@
+{
+   "url": {
+      "name": "geosearch",
+      "separator": "*"
+   },
+   "constructor": "M.plugin.Geosearch",
+   "parameters": [{
+      "type": "object",
+      "properties": [{
+         "type": "simple",
+         "name": "url",
+         "position": 0
+      }, {
+         "type": "simple",
+         "name": "core",
+         "position": 1
+      }, {
+         "type": "simple",
+         "name": "handler",
+         "position": 2
+      }]
+   }]
+}

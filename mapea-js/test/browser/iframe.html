@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <title>PRUEBA IFRAME</title>
+   <style rel="stylesheet">
+      body {
+         text-align: center;
+      }
+      
+      .prueba {
+         width: 100%;
+         height: 500px;
+         background-color: #bcbc47
+      }
+      
+      iframe,
+      div.pruebajs {
+         height: 400px;
+         width: 400px;
+         margin: 0 auto;
+      }
+   </style>
+   <link href="../../src/impl/ol3/assets/css/custom.css" rel="stylesheet" />
+   <link href="../../src/impl/ol3/assets/css/ol3.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/fonts.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/popup.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/dialog.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/getfeatureinfo.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/layerswitcher.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/location.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/scale.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/wmcselector.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/mouse.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/panel.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/mapea.css" rel="stylesheet" />
+   <script type="text/javascript" src="../../libraries/proj4/proj4.js"></script>
+   <script type="text/javascript" src="../../libraries/closure/closure/goog/base.js"></script>
+   <script type="text/javascript" src="../mapea.ol3.deps.js"></script>
+   <script type="text/javascript" src="allcontrols.js"></script>
+   <script type="text/javascript" src="../configuration_filtered.js"></script>
+   <script type="text/javascript" src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script>
+</head>
+
+<body>
+   <div class="prueba"></div>
+
+   <iframe src="http://192.168.60.2:8080/mapea/?wmcfile=callejero,ortofoto&controls=mouse,panzoombar,panzoom,navtoolbar,layerswitcher,overviewmap,scale,scaleline,location&layers=WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true,KML*Arboleda*http://sad.guadaltel.es/desarrollo/mapea/Componente/kml/*arbda_sing_se.kml*true,WFST*capa%20wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON,WMTS*http://www.ideandalucia.es/geowebcache/service/wmts?*toporaster&getfeatureinfo=html&wfstcontrols=drawfeature,modifyfeature,deletefeature,editattribute&plugins=measurebar,streetview&geosearch=http://geobusquedas-sigc.juntadeandalucia.es/*sigc*/search&geosearchbylocation&printer" frameborder="0"></iframe>
+   <div id="mapa" class="pruebajs"></div>
+
+   <script type="text/javascript">
+      M.map({
+         "controls": ["mouse", "panzoombar", "panzoom", "navtoolbar", "layerswitcher", "overviewmap", "scale", "scaleline", "location"],
+         "wmcfiles": ["callejero", "ortofoto"],
+         "container": "mapa",
+         "projection": "EPSG:23030*m",
+         "layers": ["WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true", "KML*Arboleda*http://sad.guadaltel.es/desarrollo/mapea/Componente/kml/*arbda_sing_se.kml*true", "WFST*capa wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON", "WMTS*http://www.ideandalucia.es/geowebcache/service/wmts?*toporaster"],
+         "getfeatureinfo": "html"
+      }).addPlugin(new M.plugin.Geosearchbylocation({
+         "core": "",
+         "handler": ""
+      })).addPlugin(new M.plugin.WFSTControls(["drawfeature", "modifyfeature", "deletefeature", "editattribute"])).addPlugin(new M.plugin.Geosearch({
+         "core": "sigc",
+         "url": "http://geobusquedas-sigc.juntadeandalucia.es/",
+         "handler": "/search"
+      })).addPlugin(new M.plugin.Printer({
+         "params": {
+            "pages": {
+               "infoSRS": "x",
+               "clientLogo": "http://www.juntadeandalucia.es/economiayhacienda/images/plantilla/logo_cabecera.gif",
+               "creditos": "Impresión generada a través de Mapea"
+            },
+            "layout": {
+               "outputFilename": "mapea_${yyyy-MM-dd_hhmmss}"
+            }
+         }
+      }, {
+         "options": {
+            "legend": "true"
+         }
+      })).addPlugin(new M.plugin.Measurebar()).addPlugin(new M.plugin.Streetview())
+   </script>
+</body>
+
+</html>

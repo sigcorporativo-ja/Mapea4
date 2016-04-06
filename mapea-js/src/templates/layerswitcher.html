@@ -1,0 +1,42 @@
+<div class="m-control m-layerswitcher-container">
+   <div class="m-layersiwtcher-panel" id="m-layerswitcher-panel">
+      <ul>
+         {{#gt baseLayers.length 0}}
+            <li class="group">
+               <div class="title">Capas base</div>
+               <ul>
+                  {{#each baseLayers}}
+                     <li class="{{#if outOfRange}}disabled{{/if}}{{#if visible}} visible{{/if}}">
+                        <div class="layer-base">
+                           <span id="{{id}}" class="m-check g-cartografia-check{{#if visible}}5{{^}}4{{/if}}"></span>
+                           <span>{{title}}</span>
+                        </div>
+                        <div class="legend">
+                           <img data-layer-name="{{id}}" src="{{legend}}"></img>
+                        </div>
+                     </li>
+                  {{/each}}
+               </ul>
+            </li>
+         {{/gt}}
+         {{#gt overlayLayers.length 0}}
+            <li class="group">
+               <div class="title">Otras capas</div>
+               <ul>
+                  {{#each overlayLayers}}
+                     <li class="{{#if outOfRange}}disabled{{/if}}{{#if visible}} visible{{/if}}">
+                        <div class="layer">
+                           <span id="{{id}}" class="m-check g-cartografia-check{{#if visible}}3{{^}}2{{/if}}"></span>
+                           <span>{{title}}</span>
+                        </div>
+                        <div class="legend">
+                           <img data-layer-name="{{id}}" src="{{legend}}"></img>
+                        </div>
+                     </li>
+                  {{/each}}
+               </ul>
+            </li>
+         {{/gt}}
+      </ul>
+   </div>
+</div>

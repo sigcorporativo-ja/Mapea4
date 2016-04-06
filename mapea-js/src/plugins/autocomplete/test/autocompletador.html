@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <title>PRUEBA DESARROLLO</title>
+
+   <!-- styles -->
+   <link href="../../libraries/components-font-awesome/font-awesome.css" rel="stylesheet" />
+   <link href="../../src/impl/ol3/css/ol3.css" rel="stylesheet" />
+   <link href="../../src/impl/ol3/css/custom.css" rel="stylesheet" />
+   <link href="../../src/facade/css/fonts.css" rel="stylesheet" />
+   <link href="../../src/facade/css/popup.css" rel="stylesheet" />
+   <link href="../../src/facade/css/controls/getfeatureinfo.css" rel="stylesheet" />
+   <link href="../../src/facade/css/controls/layerswitcher.css" rel="stylesheet" />
+   <link href="../../src/facade/css/controls/location.css" rel="stylesheet" />
+   <link href="../../src/facade/css/controls/scale.css" rel="stylesheet" />
+   <link href="../../src/facade/css/controls/wmcselector.css" rel="stylesheet" />
+   <link href="../../src/facade/css/mapea.css" rel="stylesheet" />
+   <style rel="stylesheet">
+      html,
+      body {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+         overflow: hidden;
+      }
+   </style>
+
+   <!-- plugin -->
+   <link href="../../src/plugins/geosearch/facade/css/geosearch.css" rel="stylesheet" />
+   <link href="../../src/plugins/autocomplete/facade/css/autocomplete.css" rel="stylesheet" />
+</head>
+
+<body>
+   <!-- container -->
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script type="text/javascript" src="../../libraries/proj4/proj4.js"></script>
+   <script type="text/javascript" src="../../libraries/closure/closure/goog/base.js"></script>
+   <script type="text/javascript" src="../mapea.deps.js"></script>
+   <!-- plugin -->
+   <script type="text/javascript" src="autocompletador.js"></script>
+
+   <script type="text/javascript" src="../../src/configuration.js"></script>
+
+   <script type="application/javascript">
+      var mapa = M.map({
+         container: 'mapa',
+         layers: [
+            'WMS*Capa%20wms1*http://www.ideandalucia.es/wms/mta400r_2008?*MTA400*false',
+            'WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true'
+         ],
+         projection: 'EPSG:4326*d'
+      });
+
+      // creates the plugins
+      var geosearch = new M.plugin.GeoSearch({
+         'url': 'http://clientes.guadaltel.es/desarrollo/geosearch',
+         'core': 'sigc',
+         'handler': '/search',
+         'params': {
+            'rows': 15,
+            'threshold': 0.9
+         }
+      });
+      geosearch.onLoad(function () {
+         var autocompletador = new M.plugin.Autocomplete({
+            'url': 'http://callejerows.juntadeandalucia.es/ws/autocomplete',
+            'minLength': 4,
+            'delay': 1000,
+            'target': geosearch.getInput()
+         });
+         mapa.addPlugin(autocompletador);
+      });
+      mapa.addPlugin(geosearch);
+   </script>
+</body>
+
+</html>

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Folder>
+      <name>LAS_HUERTAS_N1</name>
+      <Style id="huertaHl">
+       <IconStyle>
+         <Icon>
+           <href>http://clientes.guadaltel.es/desarrollo/mapea/test/home.png</href>    
+         </Icon>
+       </IconStyle>
+      </Style>
+      <Style id="huertaNormal">
+        <IconStyle>
+          <Icon>
+            <href>https://cdn1.iconfinder.com/data/icons/mapicons/icons/home.png</href>
+          </Icon>
+        </IconStyle>
+      </Style>
+      <StyleMap id="huertaStyle">
+        <Pair>
+          <key>normal</key>
+          <styleUrl>#huertaNormal</styleUrl>
+       </Pair>
+        <Pair>
+          <key>highlight</key>
+          <styleUrl>#huertaHl</styleUrl>
+        </Pair>
+      </StyleMap>
+      <Placemark>
+        <styleUrl>#huertaStyle</styleUrl>
+        <name>Inmueble</name> 
+        <description><![CDATA[ 
+           <table class="mapea-table">
+             <tbody>
+               <tr>
+                 <td>
+                   <b>Nombre Promoción</b>
+                 </td>
+                 <td>Las Huertas</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Matrícula</b>
+                 </td>
+                 <td>SE-0901</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Nº Cuenta</b>
+                 </td>
+                 <td>5</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Cód.PRINEX</b>
+                 </td>
+                 <td>709-VP-207-51</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Tipología</b>
+                 </td>
+                 <td>VIV PISOo</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Dirección</b>
+                 </td>
+                 <td>Avda. 28 de febrero</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Número</b>
+                 </td>
+                 <td>1</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Bloque</b>
+                 </td>
+                 <td>1</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Piso</b>
+                 </td>
+                 <td>2º</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Letra</b>
+                 </td>
+                 <td>A</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Provincia</b>
+                 </td>
+                 <td>Sevilla</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Municipio</b>
+                 </td>
+                 <td>Sevilla</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Gerencia</b>
+                 </td>
+                 <td>Sevilla</td>
+               </tr>
+             </tbody>
+           </table>
+        ]]></description>
+        <ExtendedData>
+          <SchemaData schemaUrl="#LAS_HUERTAS_N1">
+            <SimpleData name="id">1</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Point>
+          <coordinates>-5.967738115307893,37.396984272474768
+          </coordinates>
+        </Point>
+      </Placemark>
+    </Folder>
+    <Schema name="LAS_HUERTAS_N1" id="LAS_HUERTAS_N1">
+      <SimpleField name="id" type="int"></SimpleField>
+    </Schema>
+  </Document>
+</kml>

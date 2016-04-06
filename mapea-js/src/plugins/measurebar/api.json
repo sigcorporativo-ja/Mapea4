@@ -1,0 +1,6 @@
+{
+   "url": {
+      "name": "measurebar"
+   },
+   "constructor": "M.plugin.Measurebar"
+}

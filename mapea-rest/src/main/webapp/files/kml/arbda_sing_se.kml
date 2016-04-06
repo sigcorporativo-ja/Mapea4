@@ -1,0 +1,667 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<kml xmlns="http://earth.google.com/kml/2.1">
+<Document>
+            <Style id="arbol">
+              <IconStyle>
+                <Icon>
+                  <href>http://maps.google.com/mapfiles/kml/pal2/icon4.png</href>
+                </Icon>
+              </IconStyle>
+              <LineStyle>
+                <width>2</width>
+              </LineStyle>
+            </Style>
+    <open>1</open>
+        <ScreenOverlay>
+            <name>Nombre</name>
+            <Icon>
+                <href>http://192.168.60.2:8080/mapea/logojunta.gif</href>
+            </Icon>
+            <overlayXY x="0.5" y="1" xunits="fraction" yunits="fraction"/>
+            <screenXY x="0.5" y="1" xunits="fraction" yunits="fraction"/>
+            <rotationXY x="50" y="50" xunits="pixels" yunits="pixels"/>
+            <size x="94" y="73" xunits="pixels" yunits="pixels"/>
+        </ScreenOverlay>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="102">
+    <styleUrl>#arbol</styleUrl>
+        <name>Agracejal de la Cuerda de Vallehondo</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Agracejal de la Cuerda de Vallehondo</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Tama&ntilde;o , Rareza</b></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.58288384444444,37.8449611,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="96">
+    <styleUrl>#arbol</styleUrl>
+        <name>Alcornocal de la Indiana</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Alcornocal de la Indiana</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Otros , Rareza</b></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.85889086666667,37.1916069583333,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="97">
+    <styleUrl>#arbol</styleUrl>
+        <name>Alcornocal de la Mocheta</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Alcornocal de la Mocheta</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Tama&ntilde;o</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_97.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.48207405555556,37.2678068222222,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="106">
+    <styleUrl>#arbol</styleUrl>
+        <name>Alcornoques de la Finca El Alcornocal</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Alcornoques de la Finca El Alcornocal</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Tama&ntilde;o , Forma</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_106.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.77237164166667,37.9537608166667,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="99">
+    <styleUrl>#arbol</styleUrl>
+        <name>Almezar de La Cartuja</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Almezar de La Cartuja</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Rareza , Inter&eacute;s hist&oacute;rico cultural</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_99.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.72789629444444,37.9538222944445,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="94">
+    <styleUrl>#arbol</styleUrl>
+        <name>Ciruelos Silvestres de la Hoya de Santa Mar&#xED;a</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Ciruelos Silvestres de la Hoya de Santa Mar&iacute;a</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Rareza , Tama&ntilde;o , Otros</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_94.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.85838345833333,37.9930792277778,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="90">
+    <styleUrl>#arbol</styleUrl>
+        <name>Encinar de Coronado</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Encinar de Coronado</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Tama&ntilde;o</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_90.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.81015456666667,37.9802310694444,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="93">
+    <styleUrl>#arbol</styleUrl>
+        <name>Eucaliptos de la Casa de El Colmenar</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Eucaliptos de la Casa de El Colmenar</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Tama&ntilde;o , Rareza</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_93.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-6.194889375,37.2616089861111,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="105">
+    <styleUrl>#arbol</styleUrl>
+        <name>Lentiscos de La Motilla</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Lentiscos de La Motilla</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Tama&ntilde;o , Forma</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_105.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.26002325,37.581755975,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="89">
+    <styleUrl>#arbol</styleUrl>
+        <name>Madro&#xF1;os de la Finca la Algaidilla</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Madro&ntilde;os de la Finca la Algaidilla</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Edad , Tama&ntilde;o , Rareza</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_89.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-4.79915325833333,37.2511880027778,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="88">
+    <styleUrl>#arbol</styleUrl>
+        <name>Melojar de Cerro Negrillo</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Melojar de Cerro Negrillo</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Rareza , Otros</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_88.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.58335940833333,37.9180365972222,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="107">
+    <styleUrl>#arbol</styleUrl>
+        <name>Melojar de la Ca&#xF1;ada del del Robledo</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Melojar de la Ca&ntilde;ada del del Robledo</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Rareza , Tama&ntilde;o</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_107.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.59183774722222,37.9617881972222,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="101">
+    <styleUrl>#arbol</styleUrl>
+        <name>Melojar de los Navazos</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Melojar de los Navazos</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Rareza , Tama&ntilde;o</b></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.59758210277778,37.9581744916667,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="92">
+    <styleUrl>#arbol</styleUrl>
+        <name>Pinar de Los Planos</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Pinar de Los Planos</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Tama&ntilde;o</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_92.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-6.18468338611111,37.25382425,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="91">
+    <styleUrl>#arbol</styleUrl>
+        <name>Quejigar de La Abejera</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Quejigar de La Abejera</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Rareza , Tama&ntilde;o</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_91.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.59693125555556,37.9580484833333,14000</coordinates>
+        </Point>
+    </Placemark>
+<!-- Detalle del Equipamiento -->
+    <Placemark id="103">
+    <styleUrl>#arbol</styleUrl>
+        <name>Ribera del Arroyo de La Brava</name>
+        <visibility>0</visibility>
+        <Snippet maxLines="2"></Snippet>
+        <description>
+        <![CDATA[<table>
+        <tr>
+            <td></td>
+            <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
+            <td align="right"><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoarbol.png" border="0"></td>
+        </tr>
+        <tr>
+            <td colspan="3"><font size="3" face="Arial" color="#0000FF"><b>Ribera del Arroyo de La Brava</b></font></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><font size="3" face="Arial">Singularidad: <b>Rareza , Tama&ntilde;o</b></font></td>
+            <td></td>
+        </tr>
+        <tr align="right">
+            <td></td>
+            <td><font face="Arial" size="3"><a href="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/PDFs/Abda_103.pdf">Consultar Ficha</a></font></td>
+            <td></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td>&nbsp;</td>
+            <td></td>
+        </tr>
+        <tr align="center">
+            <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
+        </tr>
+        </table>]]>
+        </description>
+        <Point>
+            <!-- LONG., LAT., AND THEN ALTITUDE -->
+            <coordinates>-5.72800698888889,37.9472941027778,14000</coordinates>
+        </Point>
+    </Placemark>
+</Document>
+</kml>

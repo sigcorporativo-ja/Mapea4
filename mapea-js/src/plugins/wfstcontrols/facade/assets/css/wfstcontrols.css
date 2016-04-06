@@ -1,0 +1,105 @@
+.m-clearfeature-container {
+   order: 3;
+   margin: 0;
+   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+   padding: 5px;
+   left: 580px;
+   font-weight: bold;
+   bottom: 2em;
+   display: block;
+   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+   font-size: smaller;
+   background-color: rgba(103, 175, 19, 0.5);
+   font-weight: normal;
+   border-top-left-radius: 2px;
+   border-bottom-left-radius: 2px;
+}
+
+.m-deletefeature-container {
+   order: 5;
+   margin: 0;
+   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+   padding: 5px;
+   left: 450px;
+   font-weight: bold;
+   bottom: 2em;
+   display: block;
+   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+   font-size: smaller;
+   background-color: rgba(103, 175, 19, 0.5);
+   font-weight: normal;
+   border-top-left-radius: 2px;
+   border-bottom-left-radius: 2px;
+}
+
+.m-drawfeature-container {
+   order: 1;
+   margin: 0;
+   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+   padding: 5px;
+   left: 200px;
+   font-weight: bold;
+   bottom: 2em;
+   display: block;
+   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+   font-size: smaller;
+   background-color: rgba(103, 175, 19, 0.5);
+   font-weight: normal;
+   border-top-left-radius: 2px;
+   border-bottom-left-radius: 2px;
+}
+
+.m-editattribute-container {
+   order: 4;
+   margin: 0;
+   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+   padding: 5px;
+   left: 850px;
+   font-weight: bold;
+   bottom: 2em;
+   display: block;
+   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+   font-size: smaller;
+   background-color: rgba(103, 175, 19, 0.5);
+   font-weight: normal;
+   border-top-left-radius: 2px;
+   border-bottom-left-radius: 2px;
+}
+
+.m-modifyfeature-container {
+   order: 2;
+   margin: 0;
+   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+   padding: 5px;
+   left: 320px;
+   font-weight: bold;
+   bottom: 2em;
+   display: block;
+   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+   font-size: smaller;
+   background-color: rgba(103, 175, 19, 0.5);
+   font-weight: normal;
+   border-top-left-radius: 2px;
+   border-bottom-left-radius: 2px;
+}
+
+.m-savefeature-container {
+   order: 6;
+   margin: 0;
+   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+   padding: 5px;
+   left: 710px;
+   font-weight: bold;
+   bottom: 2em;
+   display: block;
+   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+   font-size: smaller;
+   background-color: rgba(103, 175, 19, 0.5);
+   font-weight: normal;
+   border-top-left-radius: 2px;
+   border-bottom-left-radius: 2px;
+}
+
+.m-savefeature-saving {
+   border: 2px solid red;
+}

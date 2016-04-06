@@ -1,0 +1,9 @@
+{
+   "sub": true,
+   "loopfunc": true,
+   "esversion": 6,
+   "undef": true,
+   "unused": "vars",
+   "node": true,
+   "eqeqeq": false
+}

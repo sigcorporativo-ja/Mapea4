@@ -1,0 +1,19 @@
+{
+   "sub": true,
+   "loopfunc": true,
+   "esversion": 6,
+   "undef": true,
+   "unused": "vars",
+   "globals": {
+      "M": true
+   },
+   "predef": [
+      "goog",
+      "ol",
+      "L",
+      "Handlebars",
+      "proj4",
+      "ActiveXObject"
+   ],
+   "browser": true
+}
