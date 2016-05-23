@@ -1,20 +1,11 @@
 (function (M) {
    /**
-    * Pixels width for mobile devices
-    * 
-    * @private
-    * @type {Number}
-    */
-   M.config('MOBILE_WIDTH', 768);
-   
-   /**
     * The Mapea URL
     * @const
     * @type {string}
     * @public
     * @api stable
     */
-   //   M.config('MAPEA_URL', 'http://192.168.60.2:8080/mapea');
    M.config('MAPEA_URL', 'http://localhost:8080/mapea');
 
    /**
@@ -47,23 +38,13 @@
    M.config('TEMPLATES_PATH', '/files/templates/');
 
    /**
-    * The path to the Mapea theme
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   //   M.config('THEME_URL', 'http://192.168.60.2:8080/mapea/assets/');
-   M.config('THEME_URL', 'http://localhost:8080/mapea/assets/');
-
-   /**
     * The Geosearch URL
     * @const
     * @type {string}
     * @public
     * @api stable
     */
-   M.config('GEOSEARCH_URL', 'http://geobusquedas-sigc.juntadeandalucia.es');
+   M.config('GEOSEARCH_URL', 'http://clientes.guadaltel.es/desarrollo/geosearch');
 
    /**
     * The Geosearch core
@@ -108,16 +89,7 @@
     * @public
     * @api stable
     */
-   M.config('GEOSEARCH_ROWS', 20);
-   
-   /**
-    * The Geosearch rows
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('GEOSEARCHBYLOCATION_ROWS', 100);
+   M.config('GEOSEARCH_ROWS', 100);
 
    /**
     * Predefined WMC files. It is composed of URL,
@@ -160,50 +132,7 @@
          return stringValue.split(',');
       })('mapa callejero cache,mapa del callejero,mapa ortofoto,mapa idea,mapa ortofoto09,Callejero,Ortofoto,Híbrido')
    });
-   
-   /**
-    * TODO
-    * @type {object}
-    * @public
-    * @api stable
-    */
-   M.config('tileMappgins', {
-      /**
-       * Predefined WMC URLs
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'tiledNames': 'base,SPOT_Andalucia,orto_2010-11_25830,CallejeroCompleto,orto_2010-11_23030'.split(','),
 
-      /**
-       * WMC predefined names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'tiledUrls': 'http://www.callejerodeandalucia.es/servicios/base/gwc/service/wms?,http://www.callejerodeandalucia.es/servicios/base/gwc/service/wms?,http://www.ideandalucia.es/geowebcache/service/wms?,http://www.juntadeandalucia.es/servicios/mapas/callejero/wms-tiled?,http://www.ideandalucia.es/geowebcache/service/wms?'.split(','),
-
-      /**
-       * WMC context names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'names': 'CDAU_base,mosaico_spot_2005,orto_2010-11,CallejeroCompleto,orto_2010-11'.split(','),
-
-      /**
-       * WMC context names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'urls': 'http://www.callejerodeandalucia.es/servicios/base/wms?,http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_SPOT_Andalucia_2005?,http://www.ideandalucia.es/wms/ortofoto2010?,http://www.juntadeandalucia.es/servicios/mapas/callejero/wms?,http://www.ideandalucia.es/wms/ortofoto2010?'.split(',')
-   });
 
    /**
     * Default projection
@@ -212,167 +141,5 @@
     * @public
     * @api stable
     */
-   M.config('DEFAULT_PROJ', 'EPSG:25830*m');
-
-   /**
-    * Predefined WMC files. It is composed of URL,
-    * predefined name and context name.
-    * @type {object}
-    * @public
-    * @api stable
-    */
-   M.config('geoprint', {
-      /**
-       * Printer service URL
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'URL': 'http://geoprint-sigc.juntadeandalucia.es/geoprint/pdf',
-
-      /**
-       * WMC predefined names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'DPI': 150,
-
-      /**
-       * WMC context names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'FORMAT': 'png',
-
-      /**
-       * WMC context names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'TEMPLATE': 'A4 horizontal (Leyenda en una hoja)',
-
-      /**
-       * WMC context names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'FORCE_SCALE': false,
-      
-      /**
-       * TODO
-       * @const
-       * @type {boolean}
-       * @public
-       * @api stable
-       */
-      'LEGEND': true
-   });
-
-   /**
-    * Predefined WMC files. It is composed of URL,
-    * predefined name and context name.
-    * @type {object}
-    * @public
-    * @api stable
-    */
-   M.config('panels', {
-      /**
-       * TODO
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'TOOLS': 'measurebar,getfeatureinfo'.split(','),
-
-      /**
-       * TODO
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'EDITION': 'drawfeature,modifyfeature,deletefeature,editattribute,savefeature,clearfeature'.split(',')
-   });
-
-   /**
-    * Searchstreet service URL
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('SEARCHSTREET_URL', 'http://ws079.juntadeandalucia.es/EXT_PUB_CallejeroREST/geocoderMunProvSrs');
-
-   /**
-    * Autocomplete municipality service URL
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('SEARCHSTREET_URLCODINEAUTOCOMPLETE', 'http://ws079.juntadeandalucia.es/EXT_PUB_CallejeroREST/autocompletarDireccionMunicipio');
-
-   /**
-    * service URL check code INE
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('SEARCHSTREET_URLCOMPROBARINE', 'http://ws079.juntadeandalucia.es/EXT_PUB_CallejeroREST/comprobarCodIne');
-
-   /**
-    * Normalizar searchstreet service URL
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('SEARCHSTREET_NORMALIZAR', 'http://ws079.juntadeandalucia.es/EXT_PUB_CallejeroREST/normalizar');
-
-   
-   /**
-    * Autocomplete service URL
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('AUTOCOMPLETE_URL', 'http://ws079.juntadeandalucia.es/EXT_PUB_CallejeroREST/autocompletarDireccion');
-
-   /**
-    * Minimum number of characters to start autocomplete
-    * @const
-    * @type {number}
-    * @public
-    * @api stable
-    */
-   M.config('AUTOCOMPLETE_MINLENGTH', '3');
-   
-   /**
-    * TODO
-    * 
-    * @private
-    * @type {Number}
-    */
-   M.config('AUTOCOMPLETE_DELAYTIME', '750');
-   
-   /**
-    * Number of results to show
-    * 
-    * @private
-    * @type {Number}
-    */
-   M.config('AUTOCOMPLETE_LIMIT', '10');
-
+   M.config('DEFAULT_PROJ', 'EPSG:23030*m');
 })(window.M);

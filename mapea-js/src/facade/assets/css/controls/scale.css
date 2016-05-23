@@ -6,21 +6,10 @@
    font-weight: bold;
    bottom: 2em;
    display: block;
+   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
    font-size: smaller;
    background-color: rgba(0, 60, 136, .5);
    font-weight: normal;
    border-top-left-radius: 2px;
    border-bottom-left-radius: 2px;
-   /*   min-width: 132px;*/
-}
-
-.m-scale-container > .m-unit {
-   font-family: 'Muli' !important;
-}
-
-.m-scale-container > .m-unit:before {
-   font-family: 'g-cartografia' !important;
-   color: #a35d38;
-   font-size: 12px !important;
-   margin-right: 5px;
 }

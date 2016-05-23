@@ -37,13 +37,6 @@ goog.require('goog.style');
        */
       this.name = 'drawLayer';
 
-      /**
-       * Selected features for this layer
-       * @private
-       * @type {Array<ol.Feature>}
-       */
-      this.selectedFeatures_ = [];
-
       // calls the super constructor
       goog.base(this);
    });
@@ -100,11 +93,10 @@ goog.require('goog.style');
     * @api stable
     */
    M.impl.layer.Draw.prototype.selectFeatures = function (features) {
-      this.selectedFeatures_ = features;
-
       // TODO: manage multiples features
-      if (M.utils.isFunction(this.selectedFeatures_[0].click)) {
-         this.selectedFeatures_[0].click();
+      var feature = features[0];
+      if (M.utils.isFunction(feature.click)) {
+         feature.click();
       }
    };
 
@@ -118,10 +110,7 @@ goog.require('goog.style');
     * @api stable
     */
    M.impl.layer.Draw.prototype.unselectFeatures = function () {
-      if (this.selectedFeatures_.length > 0) {
-         this.selectedFeatures_.length = 0;
-         this.map.removePopup();
-      }
+      this.map.getImpl().removePopup();
    };
 
    /**

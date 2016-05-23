@@ -24,7 +24,7 @@ goog.require('M.exception');
       var impl = new M.impl.control.Mouse();
 
       // calls the super constructor
-      goog.base(this, impl, M.control.Mouse.NAME);
+      goog.base(this, impl);
    });
    goog.inherits(M.control.Mouse, M.Control);
 

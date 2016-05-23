@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <title>MAPEA</title>
+
+   <!-- styles -->
+   <link href="../../assets/css/mapea.ol3.min.css" rel="stylesheet" />
+   <style rel="stylesheet">
+      html,
+      body {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+         overflow: hidden;
+      }
+   </style>
+
+   <!-- plugin -->
+   <link href="../../plugins/geosearchbylocation/geosearchbylocation.min.css" rel="stylesheet" />
+</head>
+
+<body>
+   <!-- container -->
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script type="text/javascript" src="../../js/mapea.ol3.min.js"></script>
+   <script type="text/javascript" src="../../plugins/geosearchbylocation/mapea.geosearchbylocation.ol3.min.js"></script>
+   <script type="text/javascript" src="../../js/configuration.js"></script>
+
+   <script type="application/javascript">
+   var mapa = M.map({
+      container: 'mapa',
+      wmcfile: ['callejero']
+   });
+   
+   // 5. Creates the plugin
+   plugin = new M.plugin.Geosearchbylocation();
+
+    // 6. Adds the plugin into the map
+   mapa.addPlugin(plugin);
+   </script>
+</body>
+
+</html>

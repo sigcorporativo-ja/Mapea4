@@ -16,18 +16,15 @@ goog.require('M.exception');
     * @extends {M.Control}
     * @api stable
     */
-   M.control.OverviewMap = (function (options) {
+   M.control.OverviewMap = (function () {
       if (M.utils.isUndefined(M.impl.control.OverviewMap)) {
          M.exception('La implementación usada no puede crear controles OverviewMap');
       }
-
-      options = (options || {});
-
       // implementation of this control
-      var impl = new M.impl.control.OverviewMap(options);
+      var impl = new M.impl.control.OverviewMap();
 
       // calls the super constructor
-      goog.base(this, impl, M.control.OverviewMap.NAME);
+      goog.base(this, impl);
    });
    goog.inherits(M.control.OverviewMap, M.Control);
 

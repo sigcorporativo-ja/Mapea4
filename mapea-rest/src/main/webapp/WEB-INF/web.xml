@@ -17,7 +17,7 @@
     </servlet-mapping>
     <servlet>
       <servlet-name>proxyMapea</servlet-name>
-      <servlet-class>es.juntadeandalucia.mapea.proxy.ProxyRedirect</servlet-class>
+      <servlet-class>es.juntadeandalucia.sigcmapea.proxy.ProxyRedirect</servlet-class>
     </servlet>
     <servlet-mapping>
          <servlet-name>proxyMapea</servlet-name>

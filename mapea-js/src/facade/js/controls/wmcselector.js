@@ -25,7 +25,7 @@ goog.require('M.exception');
       var impl = new M.impl.control.WMCSelector();
 
       // calls the super constructor
-      goog.base(this, impl, 'wmcselector');
+      goog.base(this, impl);
    });
    goog.inherits(M.control.WMCSelector, M.Control);
 

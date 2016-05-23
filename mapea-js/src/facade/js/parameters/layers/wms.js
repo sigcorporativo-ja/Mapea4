@@ -218,10 +218,12 @@ goog.require('M.exception');
          // <URL>*<NAME>*<TITLE>*<TRANSPARENCE>*<TILED>
          else if (/^[^\*]+\*[^\*]+\*[^\*]+\*(true|false)\*(true|false)/i.test(parameter)) {
             params = parameter.split(/\*/);
+            transparent = params[4].trim();
          }
          // <URL>*<NAME>*<TRANSPARENCE>*<TILED>
          else if (/^[^\*]+\*[^\*]+\*(true|false)\*(true|false)/i.test(parameter)) {
             params = parameter.split(/\*/);
+            transparent = params[3].trim();
          }
       }
       else if (M.utils.isObject(parameter)) {

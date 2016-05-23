@@ -34,18 +34,6 @@ goog.require('ol.control.Zoom');
    };
 
    /**
-    * TODO
-    * 
-    * @public
-    * @function
-    * @api stable
-    * @export
-    */
-   M.impl.control.Panzoom.prototype.getElement = function () {
-      return this.element;
-   };
-
-   /**
     * This function destroys this control, cleaning the HTML
     * and unregistering all events
     *

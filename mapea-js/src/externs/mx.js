@@ -11,12 +11,6 @@
 Mx.config;
 
 /**
- * Pixels width for mobile devices
- * @type {Number}
- */
-Mx.config.MOBILE_WIDTH;
-
-/**
  * Mapea url
  * @type {string}
  */
@@ -41,12 +35,6 @@ Mx.config.PROXY_POST_PATH;
  * @type {string}
  */
 Mx.config.TEMPLATES_PATH;
-
-/**
- * The Mapea theme URL
- * @type {string}
- */
-Mx.config.THEME_URL;
 
 /**
  * The Geosearch URL
@@ -92,88 +80,10 @@ Mx.config.predefinedWMC.predefinedNames;
 Mx.config.predefinedWMC.names;
 
 /**
- * TODO
- * @type {object}
- */
-Mx.config.tileMappgins;
-
-/**
- * TODO
- * @type {Array<string>}
- */
-Mx.config.tileMappgins.tiledNames;
-
-/**
- * TODO
- * @type {Array<string>}
- */
-Mx.config.tileMappgins.tiledUrls;
-
-/**
- * TODO
- * @type {Array<string>}
- */
-Mx.config.tileMappgins.names;
-
-/**
- * TODO
- * @type {Array<string>}
- */
-Mx.config.tileMappgins.urls;
-
-/**
  * Default projection
  * @type {string}
  */
 Mx.config.DEFAULT_PROJ;
-
-/**
- * Default projection
- * @type {string}
- */
-Mx.config.geoprint.URL;
-
-/**
- * Default projection
- * @type {string}
- */
-Mx.config.geoprint.DPI;
-
-/**
- * Default projection
- * @type {string}
- */
-Mx.config.geoprint.FORMAT;
-
-/**
- * Default projection
- * @type {string}
- */
-Mx.config.geoprint.TEMPLATE;
-
-/**
- * Default projection
- * @type {string}
- */
-Mx.config.geoprint.FORCE_SCALE;
-
-/**
- * TODO
- * @type {string}
- */
-Mx.config.geoprint.LEGEND;
-
-/**
- * Default projection
- * @type {string}
- */
-Mx.config.panels.TOOLS;
-
-/**
- * Default projection
- * @type {string}
- */
-Mx.config.panels.EDITION;
 
 /**
  * Namespace.
@@ -189,6 +99,7 @@ Mx.parameters;
  * @api
  */
 Mx.parameters.Map;
+
 
 /**
  * Container where the map will be loaded
@@ -296,64 +207,6 @@ Mx.parameters.Map.prototype.bbox;
 Mx.parameters.Map.prototype.resolutions;
 
 /**
- * Object literal with config options for the map provided by the user.
- * @typedef {{
- *     container: (Object|string)
- * }}
- * @api
- */
-Mx.parameters.Panel;
-
-/**
- * Flag to indicate if the panel is collapsible
- * @type {boolean}
- * @api stable
- */
-Mx.parameters.Panel.collapsible;
-
-/**
- * Position of the panel
- * @type {string}
- * @api stable
- */
-Mx.parameters.Panel.position;
-
-/**
- * Flag to indicate if the panel is collapsed
- * @type {boolean}
- * @api stable
- */
-Mx.parameters.Panel.collapsed;
-
-/**
- * Flag to indicate if manages multi-activation
- * @type {boolean}
- * @api stable
- */
-Mx.parameters.Panel.multiActivation;
-
-/**
- * class name for panel
- * @type {String}
- * @api stable
- */
-Mx.parameters.Panel.className;
-
-/**
- * class name for collapsed button
- * @type {String}
- * @api stable
- */
-Mx.parameters.Panel.collapsedButtonClass;
-
-/**
- * class name for opened button
- * @type {String}
- * @api stable
- */
-Mx.parameters.Panel.openedButtonClass;
-
-/**
  * Object literal with config options for the map
  * @typedef {{
  *     renderer: (String)
@@ -454,13 +307,6 @@ Mx.parameters.WMC.prototype.url;
  * @api stable
  */
 Mx.parameters.WMC.prototype.resolutions;
-
-/**
- * Number of zoom levels for the laeyr
- * @type {Number}
- * @api stable
- */
-Mx.parameters.WMC.prototype.numZoomLevels;
 
 /**
  * Object literal with config options for the WMS layer provided by the user.
@@ -728,37 +574,6 @@ Mx.parameters.Layer.prototype.name;
  */
 Mx.parameters.Layer.prototype.url;
 
-/**
- * Object literal with x y coordinates for an extent.
- * @typedef {{
- *     x: (Object),
- *     y: (Object),
- *    draw: (boolean)
- * }}
- * @api stable
- */
-Mx.Center;
-
-/**
- * TODO
- * @type {Number}
- * @api stable
- */
-Mx.Center.x;
-
-/**
- * TODO
- * @type {Number}
- * @api stable
- */
-Mx.Center.y;
-
-/**
- * TODO
- * @type {boolean}
- * @api stable
- */
-Mx.Center.draw;
 
 /**
  * Object literal with x y coordinates for an extent.
@@ -781,19 +596,6 @@ Mx.Extent;
 Mx.Extent.x;
 
 /**
- * TODO
- * @type {Number}
- * @api stable
- */
-Mx.Extent.x.min;
-
-/**
- * TODO
- * @type {Number}
- * @api stable
- */
-Mx.Extent.x.max;
-/**
  * Object literal with y coordinate for an extent.
  * @typedef {{
  *     min: (Number),
@@ -802,20 +604,6 @@ Mx.Extent.x.max;
  * @api stable
  */
 Mx.Extent.y;
-
-/**
- * TODO
- * @type {Number}
- * @api stable
- */
-Mx.Extent.y.min;
-
-/**
- * TODO
- * @type {Number}
- * @api stable
- */
-Mx.Extent.y.max;
 
 /**
  * Plugin provided by the user
@@ -861,27 +649,11 @@ Mx.Response.responseXml;
 /**
  * Object literal representing a GetCapabilities response
  * @typedef {{
- *    Capability: (Mx.GetCapabilities.Capability),
- *    singleTile: ({boolean}),
- *    queryable: ({boolean})
+ *     Capability: (Mx.GetCapabilities.Capability)
  * }}
  * @api stable
  */
 Mx.GetCapabilities;
-
-/**
- * Object literal representing the service capability
- * @typedef {boolean}
- * @api stable
- */
-Mx.GetCapabilities.singleTile;
-
-/**
- * Object literal representing the service capability
- * @typedef {boolean}
- * @api stable
- */
-Mx.GetCapabilities.queryable;
 
 /**
  * Object literal representing the service capability
@@ -1001,65 +773,3 @@ Mx.WMTSGetCapabilities.TileMatrixSet;
  * @api stable
  */
 Mx.WMTSGetCapabilities.TileMatrix;
-
-
-/**
- * Object literal representing a WFS DescribeFeatureType response
- * @typedef {{
- *     targetNamespace: (String),
- *     targetPrefix: (String),
- *     localType: (String)
- * }}
- * @api stable
- */
-Mx.WFSDescribeFeatureType;
-
-/**
- * @type {String}
- * @api stable
- */
-Mx.WFSDescribeFeatureType.targetNamespace;
-
-/**
- * @type {String}
- * @api stable
- */
-Mx.WFSDescribeFeatureType.targetPrefix;
-
-/**
- * @type {String}
- * @api stable
- */
-Mx.WFSDescribeFeatureType.localType;
-
-
-/**
- * Object literal representing a OverviewMap options
- * @typedef {{
- *     toggleDelay: (Boolean)
- * }}
- * @api stable
- */
-Mx.OverviewMapOpts;
-
-/**
- * @type {String}
- * @api stable
- */
-Mx.OverviewMapOpts.toggleDelay;
-
-
-/**
- * Object literal representing a M.Popup options
- * @typedef {{
- *     content: (HTMLElement)
- * }}
- * @api stable
- */
-Mx.Popup;
-
-/**
- * @type {HTMLElement}
- * @api stable
- */
-Mx.Popup.content;

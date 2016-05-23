@@ -9,7 +9,7 @@ goog.require('ol.layer.Tile');
 goog.require('ol.source.WMTS');
 goog.require('ol.extent');
 
-(function() {
+(function () {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMTS layer
@@ -20,7 +20,7 @@ goog.require('ol.extent');
     * @param {Mx.parameters.LayerOptions} options custom options for this layer
     * @api stable
     */
-   M.impl.layer.WMTS = (function(options) {
+   M.impl.layer.WMTS = (function (options) {
       /**
        * Options from the GetCapabilities
        * @private
@@ -41,7 +41,7 @@ goog.require('ol.extent');
     * @param {M.impl.Map} map
     * @api stable
     */
-   M.impl.layer.WMTS.prototype.addTo = function(map) {
+   M.impl.layer.WMTS.prototype.addTo = function (map) {
       this.map = map;
 
       // calculates the resolutions from scales
@@ -53,7 +53,7 @@ goog.require('ol.extent');
 
       // adds layer from capabilities
       var this_ = this;
-      this.getCapabilitiesOptions_().then(function(capabilitiesOptions) {
+      this.getCapabilitiesOptions_().then(function (capabilitiesOptions) {
          this_.addLayer_(capabilitiesOptions);
       });
    };
@@ -66,13 +66,13 @@ goog.require('ol.extent');
     * @param {Array<Number>} resolutions
     * @api stable
     */
-   M.impl.layer.WMTS.prototype.setResolutions = function(resolutions) {
+   M.impl.layer.WMTS.prototype.setResolutions = function (resolutions) {
       // gets the projection
       var projection = ol.proj.get(this.map.getProjection().code);
 
-      // gets the extent
+      // gets the extent         
       var extent = this.map.getMaxExtent();
-      var olExtent;
+      var olExtent, tileGrid;
       if (!M.utils.isNullOrEmpty(extent)) {
          olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
       }
@@ -106,7 +106,7 @@ goog.require('ol.extent');
       else {
          // adds layer from capabilities
          var this_ = this;
-         this.getCapabilities_().then(function(capabilitiesParser) {
+         this.getCapabilities_().then(function (capabilitiesParser) {
             this_.capabilitiesParser = capabilitiesParser;
 
             // gets matrix
@@ -140,7 +140,7 @@ goog.require('ol.extent');
     * @private
     * @function
     */
-   M.impl.layer.WMTS.prototype.addLayer_ = function(capabilitiesOptions) {
+   M.impl.layer.WMTS.prototype.addLayer_ = function (capabilitiesOptions) {
       // gets resolutions from defined min/max resolutions
       var minResolution = this.options.minResolution;
       var maxResolution = this.options.maxResolution;
@@ -151,15 +151,7 @@ goog.require('ol.extent');
          minResolution: minResolution,
          maxResolution: maxResolution
       });
-
-      // keeps z-index values before ol resets
-      let zIndex = this.zIndex_;
       this.map.getMapImpl().addLayer(this.ol3Layer);
-
-      // sets its z-index
-      if (zIndex !== null) {
-         this.setZIndex(zIndex);
-      }
    };
 
    /**
@@ -169,7 +161,7 @@ goog.require('ol.extent');
     * @private
     * @function
     */
-   M.impl.layer.WMTS.prototype.getCapabilitiesOptions_ = function() {
+   M.impl.layer.WMTS.prototype.getCapabilitiesOptions_ = function () {
       // name
       var layerName = this.name;
       // matrix set
@@ -185,9 +177,9 @@ goog.require('ol.extent');
       // parser
       var parser = new ol.format.WMTSCapabilities();
       var this_ = this;
-      var promise = new Promise(function(success, fail) {
-         M.remote.get(getCapabilitiesUrl).then(function(response) {
-            var getCapabilitiesDocument = response.xml;
+      var promise = new Promise(function (success, fail) {
+         M.remote.get(getCapabilitiesUrl).then(function (response) {
+            var getCapabilitiesDocument = response.responseXml;
             var parsedCapabilities = parser.read(getCapabilitiesDocument);
             var options = ol.source.WMTS.optionsFromCapabilities(parsedCapabilities, {
                'layer': layerName,
@@ -207,7 +199,7 @@ goog.require('ol.extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMTS.prototype.destroy = function() {
+   M.impl.layer.WMTS.prototype.destroy = function () {
       var olMap = this.map.getMapImpl();
       if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
          olMap.removeLayer(this.ol3Layer);
@@ -223,7 +215,7 @@ goog.require('ol.extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMTS.prototype.equals = function(obj) {
+   M.impl.layer.WMTS.prototype.equals = function (obj) {
       var equals = false;
 
       if (obj instanceof M.impl.layer.WMTS) {

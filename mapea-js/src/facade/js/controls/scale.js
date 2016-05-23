@@ -24,7 +24,7 @@ goog.require('M.exception');
       var impl = new M.impl.control.Scale();
 
       // calls the super constructor
-      goog.base(this, impl, M.control.Scale.NAME);
+      goog.base(this, impl);
    });
    goog.inherits(M.control.Scale, M.Control);
 

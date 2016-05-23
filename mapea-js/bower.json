@@ -3,13 +3,13 @@
    "version": "4.0.0",
    "description": "Herramienta para crear mapas interactivos de forma sencilla",
    "keywords": [
-      "map",
-      "mapping",
-      "tools"
-   ],
+    "map",
+    "mapping",
+    "tools"
+  ],
    "authors": [
-      "Junta de Andalucía"
-   ],
+    "Junta de Andalucía"
+  ],
    "license": "MIT",
    "homepage": "http://mapea-sigc.juntadeandalucia.es",
    "dependencies": {
@@ -20,6 +20,7 @@
       "jquery": "*",
       "mocha": "*",
       "ol3": "openlayers/ol3#3.11.2",
-      "proj4": "~2.3.10"
+      "proj4": "~2.3.10",
+      "components-font-awesome": "*"
    }
 }

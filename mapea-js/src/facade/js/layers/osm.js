@@ -36,30 +36,8 @@ goog.require('M.exception');
 
       // options
       this.options = options;
-
-      // options
-      this.legend = 'OpenStreetMap';
    });
    goog.inherits(M.layer.OSM, M.Layer);
-
-   /**
-    * 'type' This property indicates if
-    * the layer was selected
-    */
-   Object.defineProperty(M.layer.OSM.prototype, "type", {
-      get: function () {
-         return M.layer.type.OSM;
-      },
-      // defining new type is not allowed
-      set: function (newType) {
-         if (!M.utils.isUndefined(newType) &&
-            !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.OSM)) {
-            M.exception('El tipo de capa debe ser \''.concat(M.layer.type.OSM).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
-         }
-      }
-   });
-
-
 
    /**
     * This function checks if an object is equals

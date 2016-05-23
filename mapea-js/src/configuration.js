@@ -5,14 +5,6 @@
  */
 (function (M) {
    /**
-    * Pixels width for mobile devices
-    * 
-    * @private
-    * @type {Number}
-    */
-   M.config('MOBILE_WIDTH', ${mobile.width});
-   
-   /**
     * The Mapea URL
     * @const
     * @type {string}
@@ -49,15 +41,6 @@
     * @api stable
     */
    M.config('TEMPLATES_PATH', '${mapea.templates.path}');
-
-   /**
-    * The path to the Mapea theme
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('THEME_URL', '${mapea.theme.url}');
 
    /**
     * The Geosearch URL
@@ -114,15 +97,6 @@
    M.config('GEOSEARCH_ROWS', '${geosearch.rows}');
 
    /**
-    * The Geosearch rows
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('GEOSEARCHBYLOCATION_ROWS', '${geosearchbylocation.rows}');
-
-   /**
     * Predefined WMC files. It is composed of URL,
     * predefined name and context name.
     * @type {object}
@@ -137,7 +111,9 @@
        * @public
        * @api stable
        */
-      'urls': '${wmc.urls}'.split(','),
+      'urls': (function (stringValue) {
+         return stringValue.split(',');
+      })('${wmc.urls}'),
 
       /**
        * WMC predefined names
@@ -146,7 +122,9 @@
        * @public
        * @api stable
        */
-      'predefinedNames': '${wmc.predefinedNames}'.split(','),
+      'predefinedNames': (function (stringValue) {
+         return stringValue.split(',');
+      })('${wmc.predefinedNames}'),
 
       /**
        * WMC context names
@@ -155,52 +133,11 @@
        * @public
        * @api stable
        */
-      'names': '${wmc.names}'.split(',')
+      'names': (function (stringValue) {
+         return stringValue.split(',');
+      })('${wmc.names}')
    });
 
-   /**
-    * TODO
-    * @type {object}
-    * @public
-    * @api stable
-    */
-   M.config('tileMappgins', {
-      /**
-       * Predefined WMC URLs
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'tiledNames': '${tile.mappings.tiledNames}'.split(','),
-
-      /**
-       * WMC predefined names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'tiledUrls': '${tile.mappings.tiledUrls}'.split(','),
-
-      /**
-       * WMC context names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'names': '${tile.mappings.names}'.split(','),
-
-      /**
-       * WMC context names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'urls': '${tile.mappings.urls}'.split(',')
-   });
 
    /**
     * Default projection
@@ -210,164 +147,4 @@
     * @api stable
     */
    M.config('DEFAULT_PROJ', '${mapea.proj.default}');
-
-   /**
-    * Predefined WMC files. It is composed of URL,
-    * predefined name and context name.
-    * @type {object}
-    * @public
-    * @api stable
-    */
-   M.config('geoprint', {
-      /**
-       * Printer service URL
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'URL': '${geoprint.url}',
-
-      /**
-       * WMC predefined names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'DPI': ${geoprint.dpi},
-
-      /**
-       * WMC context names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'FORMAT': '${geoprint.format}',
-
-      /**
-       * WMC context names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'TEMPLATE': '${geoprint.template}',
-
-      /**
-       * WMC context names
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'FORCE_SCALE': ${geoprint.force_scale},
-      
-      /**
-       * TODO
-       * @const
-       * @type {boolean}
-       * @public
-       * @api stable
-       */
-      'LEGEND': ${geoprint.legend}
-   });
-
-   /**
-    * Predefined WMC files. It is composed of URL,
-    * predefined name and context name.
-    * @type {object}
-    * @public
-    * @api stable
-    */
-   M.config('panels', {
-      /**
-       * TODO
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'TOOLS': '${panels.tools.controls}'.split(','),
-
-      /**
-       * TODO
-       * @const
-       * @type {Array<string>}
-       * @public
-       * @api stable
-       */
-      'EDITION': '${panels.edition.controls}'.split(',')
-   });
-
-   /**
-    * Searchstreet service URL
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('SEARCHSTREET_URL', '${searchstreet.url}');
-
-   /**
-    * Autocomplete municipality service URL
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('SEARCHSTREET_URLCODINEAUTOCOMPLETE', '${searchstreet.urlcodineautocomplete}');
-
-   /**
-    * service URL check code INE
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('SEARCHSTREET_URLCOMPROBARINE', '${searchstreet.urlcomprobarine}');
-   
-   /**
-    * Normalizar searchstreet service URL
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('SEARCHSTREET_NORMALIZAR', '${searchstreet.normalizar}');
-
-   /**
-    * Autocomplete service URL
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.config('AUTOCOMPLETE_URL', '${autocomplete.url}');
-   
-   /**
-    * Minimum number of characters to start autocomplete
-    * @const
-    * @type {number}
-    * @public
-    * @api stable
-    */
-    M.config('AUTOCOMPLETE_MINLENGTH', '${autocomplete.minLength}');
-    
-    /**
-     * TODO
-     * 
-     * @private
-     * @type {Number}
-     */
-    M.config('AUTOCOMPLETE_DELAYTIME', '${autocomplete.delaytime}');
-    
-    /**
-     * Number of results to show
-     * 
-     * @private
-     * @type {Number}
-     */
-    M.config('AUTOCOMPLETE_LIMIT', '${autocomplete.limit}');
 })(window.M);

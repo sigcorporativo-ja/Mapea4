@@ -14,7 +14,7 @@ goog.require('ol.xml');
  * @extends {M.impl.format.XML}
  * @api stable
  */
-M.impl.format.WMC.v110 = function(options) {
+M.impl.format.WMC.v110 = function (options) {
    /**
     * Prefix on the root node that maps to the context namespace URI
     * @private
@@ -54,7 +54,7 @@ goog.inherits(M.impl.format.WMC.v110, ol.format.XML);
  * @return {Object} WMC object.
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read = function(data) {
+M.impl.format.WMC.v110.prototype.read = function (data) {
    if (data.nodeType !== goog.dom.NodeType.DOCUMENT) {
       M.excetion('doc.nodeType should be DOCUMENT');
    }
@@ -75,7 +75,7 @@ M.impl.format.WMC.v110.prototype.read = function(data) {
  * @param {Document} node
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.runChildNodes = function(obj, node) {
+M.impl.format.WMC.v110.prototype.runChildNodes = function (obj, node) {
    var children = node.childNodes;
    var childNode, processor, prefix, local;
    for (var i = 0, len = children.length; i < len; ++i) {
@@ -100,7 +100,7 @@ M.impl.format.WMC.v110.prototype.runChildNodes = function(obj, node) {
  * @return {String} A namespace prefix or null if none found
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.getNamespacePrefix = function(uri) {
+M.impl.format.WMC.v110.prototype.getNamespacePrefix = function (uri) {
    var prefix = null;
    if (uri === null) {
       prefix = this.namespaces[this.defaultPrefix];
@@ -124,8 +124,10 @@ M.impl.format.WMC.v110.prototype.getNamespacePrefix = function(uri) {
  * @param {Element} node An element node.
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_sld_MinScaleDenominator = function(layerInfo, node) {
-   layerInfo['options']['minScale'] = parseFloat(this.getChildValue(node));
+M.impl.format.WMC.v110.prototype.read_sld_MinScaleDenominator = function (layerInfo, node) {
+   var options = 'options';
+   var minScale = 'minScale';
+   layerInfo[options][minScale] = parseFloat(this.getChildValue(node));
 };
 
 /**
@@ -133,7 +135,7 @@ M.impl.format.WMC.v110.prototype.read_sld_MinScaleDenominator = function(layerIn
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Layer = function(context, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Layer = function (context, node) {
    var layerInfo = {
       'params': this.layerParams || {},
       'options': {
@@ -146,12 +148,19 @@ M.impl.format.WMC.v110.prototype.read_wmc_Layer = function(context, node) {
    };
    this.runChildNodes(layerInfo, node);
    // set properties common to multiple objects on layer options/params
-   layerInfo['params']['isWMC'] = 'ok';
-   layerInfo['params']['layers'] = layerInfo['name'];
-   layerInfo['options']['maxExtent'] = layerInfo.maxExtent;
+   var isWMC = 'isWMC';
+   var layers = 'layers';
+   var maxExtent = 'maxExtent';
+   var paramsAttr = 'params';
+   var optionsAttr = 'options';
+   var nameAttr = 'name';
+
+   layerInfo[paramsAttr][isWMC] = 'ok';
+   layerInfo[paramsAttr][layers] = layerInfo[nameAttr];
+   layerInfo[optionsAttr][maxExtent] = layerInfo.maxExtent;
    // create the layer
    var layer = this.getLayerFromInfo(layerInfo);
-   context['layers'].push(layer);
+   context[layers].push(layer);
 };
 
 /**
@@ -163,12 +172,16 @@ M.impl.format.WMC.v110.prototype.read_wmc_Layer = function(context, node) {
  * @return {M.layer.WMS} A WMS layer
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.getLayerFromInfo = function(layerInfo) {
-   var options = layerInfo['options'];
-   options['params'] = layerInfo['params'];
+M.impl.format.WMC.v110.prototype.getLayerFromInfo = function (layerInfo) {
+   var options = 'options';
+   var params = 'params';
+   var name = 'name';
+   var href = 'href';
+   options = layerInfo[options];
+   options[params] = layerInfo[params];
    var layer = new M.layer.WMS({
-      'name': layerInfo['name'],
-      'url': layerInfo['href'],
+      'name': layerInfo[name],
+      'url': layerInfo[href],
       'transparent': !/^true$/i.test(options.isBaseLayer)
    }, options);
    return layer;
@@ -179,8 +192,9 @@ M.impl.format.WMC.v110.prototype.getLayerFromInfo = function(layerInfo) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_units = function(obj, node) {
-   obj['units'] = this.getChildValue(node);
+M.impl.format.WMC.v110.prototype.read_ol_units = function (obj, node) {
+   var units = 'units';
+   obj[units] = this.getChildValue(node);
 };
 
 /**
@@ -188,8 +202,9 @@ M.impl.format.WMC.v110.prototype.read_ol_units = function(obj, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_tileSize = function(context, node) {
-   context['tileSize'] = {
+M.impl.format.WMC.v110.prototype.read_ol_tileSize = function (context, node) {
+   var tileSize = 'tileSize';
+   context[tileSize] = {
       'width': parseFloat(node.getAttribute("width")),
       'height': parseFloat(node.getAttribute("height"))
    };
@@ -200,8 +215,10 @@ M.impl.format.WMC.v110.prototype.read_ol_tileSize = function(context, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_groupDisplayLayerSwitcher = function(layerInfo, node) {
-   layerInfo['options']['groupDisplayLayerSwitcher'] =
+M.impl.format.WMC.v110.prototype.read_ol_groupDisplayLayerSwitcher = function (layerInfo, node) {
+   var options = 'options';
+   var groupDisplayLayerSwitcher = 'groupDisplayLayerSwitcher';
+   layerInfo[options][groupDisplayLayerSwitcher] =
       (this.getChildValue(node));
 };
 
@@ -210,8 +227,10 @@ M.impl.format.WMC.v110.prototype.read_ol_groupDisplayLayerSwitcher = function(la
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_orderInsideGroupDisplayLayerSwitcher = function(layerInfo, node) {
-   layerInfo['options']['orderInsideGroupDisplayLayerSwitcher'] =
+M.impl.format.WMC.v110.prototype.read_ol_orderInsideGroupDisplayLayerSwitcher = function (layerInfo, node) {
+   var options = 'options';
+   var orderInsideGroupDisplayLayerSwitcher = 'orderInsideGroupDisplayLayerSwitcher';
+   layerInfo[options][orderInsideGroupDisplayLayerSwitcher] =
       this.getChildValue(node);
 };
 
@@ -224,8 +243,10 @@ M.impl.format.WMC.v110.prototype.read_ol_orderInsideGroupDisplayLayerSwitcher = 
  * @param {Element} node an element node
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_sld_MaxScaleDenominator = function(layerInfo, node) {
-   layerInfo['options']['maxScale'] = parseFloat(this.getChildValue(node));
+M.impl.format.WMC.v110.prototype.read_sld_MaxScaleDenominator = function (layerInfo, node) {
+   var options = 'options';
+   var maxScale = 'maxScale';
+   layerInfo[options][maxScale] = parseFloat(this.getChildValue(node));
 };
 
 /**
@@ -233,11 +254,12 @@ M.impl.format.WMC.v110.prototype.read_sld_MaxScaleDenominator = function(layerIn
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Style = function(layerInfo, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Style = function (layerInfo, node) {
 
    var style = {};
    this.runChildNodes(style, node);
 
+   var styles = 'styles';
    if (node.getAttribute("current") == "1") {
       // three style types to consider
       // 1) linked SLD
@@ -246,21 +268,29 @@ M.impl.format.WMC.v110.prototype.read_wmc_Style = function(layerInfo, node) {
       // running child nodes always gets name, optionally gets href or body
 
       //MDRC_STYLE_LEGEND 06102008
-      if (style['legend']) {
-         layerInfo['params']['layerLegend'] = style['legend'];
+      var legend = 'legend';
+      var params = 'params';
+      var layerLegend = 'layerLegend';
+      var href = 'href';
+      var sld = 'sld';
+      var body = 'body';
+      var sld_body = 'sld_body';
+      var name = 'name';
+      if (style[legend]) {
+         layerInfo[params][layerLegend] = style[legend];
       }
       ////////////////////////////////////////////////
-      if (style['href']) {
-         layerInfo['params']['sld'] = style['href'];
+      if (style[href]) {
+         layerInfo[params][sld] = style[href];
       }
-      else if (style['body']) {
-         layerInfo['params']['sld_body'] = style['body'];
+      else if (style[body]) {
+         layerInfo[params][sld_body] = style[body];
       }
       else {
-         layerInfo['params']['styles'] = style['name'];
+         layerInfo[params][styles] = style[name];
       }
    }
-   layerInfo['styles'].push(style);
+   layerInfo[styles].push(style);
 };
 
 /**
@@ -268,7 +298,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_Style = function(layerInfo, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_General = function(context, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_General = function (context, node) {
    this.runChildNodes(context, node);
 };
 
@@ -277,9 +307,11 @@ M.impl.format.WMC.v110.prototype.read_wmc_General = function(context, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_BoundingBox = function(context, node) {
-   context['projection'] = node.getAttribute("SRS");
-   context['bounds'] = [
+M.impl.format.WMC.v110.prototype.read_wmc_BoundingBox = function (context, node) {
+   var projection = 'projection';
+   var bounds = 'bounds';
+   context[projection] = node.getAttribute("SRS");
+   context[bounds] = [
       parseFloat(node.getAttribute("minx")),
       parseFloat(node.getAttribute("miny")),
       parseFloat(node.getAttribute("maxx")),
@@ -292,8 +324,9 @@ M.impl.format.WMC.v110.prototype.read_wmc_BoundingBox = function(context, node) 
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_LayerList = function(context, node) {
-   context['layers'] = [];
+M.impl.format.WMC.v110.prototype.read_wmc_LayerList = function (context, node) {
+   var layers = 'layers';
+   context[layers] = [];
    this.runChildNodes(context, node);
 };
 
@@ -302,7 +335,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_LayerList = function(context, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Extension = function(obj, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Extension = function (obj, node) {
    this.runChildNodes(obj, node);
 };
 
@@ -311,7 +344,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_Extension = function(obj, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_maxExtent = function(obj, node) {
+M.impl.format.WMC.v110.prototype.read_ol_maxExtent = function (obj, node) {
    var maxExtent = 'maxExtent';
 
    var extent = [
@@ -336,7 +369,8 @@ M.impl.format.WMC.v110.prototype.read_ol_maxExtent = function(obj, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_transparent = function(layerInfo, node) {
+M.impl.format.WMC.v110.prototype.read_ol_transparent = function (layerInfo, node) {
+   var options = 'options';
    var transparent = 'transparent';
    var params = 'params';
    layerInfo[params][transparent] = this.getChildValue(node);
@@ -347,7 +381,7 @@ M.impl.format.WMC.v110.prototype.read_ol_transparent = function(layerInfo, node)
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_numZoomLevels = function(layerInfo, node) {
+M.impl.format.WMC.v110.prototype.read_ol_numZoomLevels = function (layerInfo, node) {
    var options = 'options';
    var numZoomLevels = 'numZoomLevels';
    layerInfo[options][numZoomLevels] = parseInt(this.getChildValue(node));
@@ -358,8 +392,10 @@ M.impl.format.WMC.v110.prototype.read_ol_numZoomLevels = function(layerInfo, nod
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_opacity = function(layerInfo, node) {
-   layerInfo['options']['opacity'] = parseFloat(this.getChildValue(node));
+M.impl.format.WMC.v110.prototype.read_ol_opacity = function (layerInfo, node) {
+   var options = 'options';
+   var opacity = 'opacity';
+   layerInfo[options][opacity] = parseFloat(this.getChildValue(node));
 };
 
 /**
@@ -367,8 +403,10 @@ M.impl.format.WMC.v110.prototype.read_ol_opacity = function(layerInfo, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_singleTile = function(layerInfo, node) {
-   layerInfo['options']['singleTile'] = (this.getChildValue(node) == "true");
+M.impl.format.WMC.v110.prototype.read_ol_singleTile = function (layerInfo, node) {
+   var options = 'options';
+   var singleTile = 'singleTile';
+   layerInfo[options][singleTile] = (this.getChildValue(node) == "true");
 };
 
 /**
@@ -376,8 +414,10 @@ M.impl.format.WMC.v110.prototype.read_ol_singleTile = function(layerInfo, node) 
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_isBaseLayer = function(layerInfo, node) {
-   layerInfo['options']['isBaseLayer'] = (this.getChildValue(node) == "true");
+M.impl.format.WMC.v110.prototype.read_ol_isBaseLayer = function (layerInfo, node) {
+   var options = 'options';
+   var isBaseLayer = 'isBaseLayer';
+   layerInfo[options][isBaseLayer] = (this.getChildValue(node) == "true");
 };
 
 /**
@@ -385,9 +425,11 @@ M.impl.format.WMC.v110.prototype.read_ol_isBaseLayer = function(layerInfo, node)
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_ol_displayInLayerSwitcher = function(layerInfo, node) {
+M.impl.format.WMC.v110.prototype.read_ol_displayInLayerSwitcher = function (layerInfo, node) {
    var nodeValue = M.utils.normalize(this.getChildValue(node));
-   layerInfo['options']['displayInLayerSwitcher'] = (nodeValue == "true");
+   var options = 'options';
+   var displayInLayerSwitcher = 'displayInLayerSwitcher';
+   layerInfo[options][displayInLayerSwitcher] = (nodeValue == "true");
 };
 
 /**
@@ -395,8 +437,11 @@ M.impl.format.WMC.v110.prototype.read_ol_displayInLayerSwitcher = function(layer
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Server = function(layerInfo, node) {
-   layerInfo['params']['version'] = node.getAttribute("version");
+M.impl.format.WMC.v110.prototype.read_wmc_Server = function (layerInfo, node) {
+   var options = 'options';
+   var version = 'version';
+   var params = 'params';
+   layerInfo[params][version] = node.getAttribute("version");
    this.runChildNodes(layerInfo, node);
 };
 
@@ -405,7 +450,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_Server = function(layerInfo, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_FormatList = function(layerInfo, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_FormatList = function (layerInfo, node) {
    this.runChildNodes(layerInfo, node);
 };
 
@@ -414,11 +459,14 @@ M.impl.format.WMC.v110.prototype.read_wmc_FormatList = function(layerInfo, node)
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Format = function(layerInfo, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Format = function (layerInfo, node) {
    var format = this.getChildValue(node);
-   layerInfo['formats'].push(format);
+   var formats = 'formats';
+   layerInfo[formats].push(format);
    if (node.getAttribute("current") == "1") {
-      layerInfo['params']['format'] = format;
+      var paramsAttr = 'params';
+      var formatAttr = 'format';
+      layerInfo[paramsAttr][formatAttr] = format;
    }
 };
 
@@ -427,7 +475,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_Format = function(layerInfo, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_StyleList = function(layerInfo, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_StyleList = function (layerInfo, node) {
    this.runChildNodes(layerInfo, node);
 };
 
@@ -436,7 +484,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_StyleList = function(layerInfo, node) 
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_SLD = function(style, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_SLD = function (style, node) {
    this.runChildNodes(style, node);
    // style either comes back with an href or a body property
 };
@@ -446,7 +494,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_SLD = function(style, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_sld_StyledLayerDescriptor = function(sld, node) {
+M.impl.format.WMC.v110.prototype.read_sld_StyledLayerDescriptor = function (sld, node) {
    var body = 'body';
    sld[body] = ol.xml.getAllTextContent(node);
 };
@@ -456,7 +504,7 @@ M.impl.format.WMC.v110.prototype.read_sld_StyledLayerDescriptor = function(sld, 
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_OnlineResource = function(obj, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_OnlineResource = function (obj, node) {
    var href = 'href';
    var xlink = 'xlink';
    obj[href] = this.getAttributeNS(
@@ -469,7 +517,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_OnlineResource = function(obj, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Name = function(obj, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Name = function (obj, node) {
    var nameValue = this.getChildValue(node);
    if (nameValue) {
       var nameAttr = 'name';
@@ -482,7 +530,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_Name = function(obj, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Title = function(obj, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Title = function (obj, node) {
    var title = this.getChildValue(node);
    if (title) {
       var titleAttr = 'title';
@@ -495,7 +543,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_Title = function(obj, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_MetadataURL = function(layerInfo, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_MetadataURL = function (layerInfo, node) {
    var metadataURL = {};
    var links = node.getElementsByTagName("OnlineResource");
    if (links.length > 0) {
@@ -513,7 +561,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_MetadataURL = function(layerInfo, node
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Abstract = function(obj, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Abstract = function (obj, node) {
    var abst = this.getChildValue(node);
    if (abst) {
       var abstProp = 'abstract';
@@ -526,14 +574,14 @@ M.impl.format.WMC.v110.prototype.read_wmc_Abstract = function(obj, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_LatLonBoundingBox = function(layer, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_LatLonBoundingBox = function (layer, node) {
    var llbbox = 'llbbox';
    layer[llbbox] = [
       parseFloat(node.getAttribute("minx")),
       parseFloat(node.getAttribute("miny")),
       parseFloat(node.getAttribute("maxx")),
       parseFloat(node.getAttribute("maxy"))
-   ];
+  ];
 };
 
 /**
@@ -541,7 +589,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_LatLonBoundingBox = function(layer, no
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_LegendURL = function(style, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_LegendURL = function (style, node) {
    var legend = {
       'width': node.getAttribute('width'),
       'height': node.getAttribute('height')
@@ -559,7 +607,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_LegendURL = function(style, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_sld_FeatureTypeStyle = function(sld, node) {
+M.impl.format.WMC.v110.prototype.read_sld_FeatureTypeStyle = function (sld, node) {
    var body = 'body';
    sld[body] = ol.xml.getAllTextContent(node);
 };
@@ -570,7 +618,7 @@ M.impl.format.WMC.v110.prototype.read_sld_FeatureTypeStyle = function(sld, node)
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_KeywordList = function(context, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_KeywordList = function (context, node) {
    var keywords = 'keywords';
    context[keywords] = [];
    this.runChildNodes(context[keywords], node);
@@ -581,7 +629,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_KeywordList = function(context, node) 
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Keyword = function(keywords, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Keyword = function (keywords, node) {
    keywords.push(this.getChildValue(node));
 };
 
@@ -590,7 +638,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_Keyword = function(keywords, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_LogoURL = function(context, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_LogoURL = function (context, node) {
    var logo = 'logo';
    context[logo] = {
       'width': node.getAttribute("width"),
@@ -605,7 +653,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_LogoURL = function(context, node) {
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_DescriptionURL = function(context, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_DescriptionURL = function (context, node) {
    var descriptionURL = 'descriptionURL';
    context[descriptionURL] = this.getOnlineResource_href(node);
 };
@@ -615,7 +663,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_DescriptionURL = function(context, nod
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_ContactInformation = function(obj, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_ContactInformation = function (obj, node) {
    var contact = {};
    this.runChildNodes(contact, node);
    var contactInformation = 'contactInformation';
@@ -627,7 +675,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_ContactInformation = function(obj, nod
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_ContactPersonPrimary = function(contact, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_ContactPersonPrimary = function (contact, node) {
    var personPrimary = {};
    this.runChildNodes(personPrimary, node);
    var personPrimaryAttr = 'personPrimary';
@@ -639,7 +687,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_ContactPersonPrimary = function(contac
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_ContactPerson = function(primaryPerson, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_ContactPerson = function (primaryPerson, node) {
    var person = this.getChildValue(node);
    if (person) {
       var personAttr = 'person';
@@ -652,7 +700,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_ContactPerson = function(primaryPerson
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_ContactOrganization = function(primaryPerson, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_ContactOrganization = function (primaryPerson, node) {
    var organization = this.getChildValue(node);
    if (organization) {
       var organizationAttr = 'organization';
@@ -665,7 +713,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_ContactOrganization = function(primary
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_ContactPosition = function(contact, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_ContactPosition = function (contact, node) {
    var position = this.getChildValue(node);
    if (position) {
       var positionAttr = 'position';
@@ -678,7 +726,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_ContactPosition = function(contact, no
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_ContactAddress = function(contact, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_ContactAddress = function (contact, node) {
    var contactAddress = {};
    this.runChildNodes(contactAddress, node);
    var contactAddressAttr = 'contactAddress';
@@ -690,7 +738,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_ContactAddress = function(contact, nod
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_AddressType = function(contactAddress, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_AddressType = function (contactAddress, node) {
    var type = this.getChildValue(node);
    if (type) {
       var typeAttr = 'type';
@@ -703,7 +751,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_AddressType = function(contactAddress,
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Address = function(contactAddress, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Address = function (contactAddress, node) {
    var address = this.getChildValue(node);
    if (address) {
       var addressAttr = 'address';
@@ -716,7 +764,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_Address = function(contactAddress, nod
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_City = function(contactAddress, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_City = function (contactAddress, node) {
    var city = this.getChildValue(node);
    if (city) {
       var cityAttr = 'city';
@@ -729,7 +777,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_City = function(contactAddress, node) 
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_StateOrProvince = function(contactAddress, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_StateOrProvince = function (contactAddress, node) {
    var stateOrProvince = this.getChildValue(node);
    if (stateOrProvince) {
       var stateOrProvinceAttr = 'stateOrProvince';
@@ -742,7 +790,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_StateOrProvince = function(contactAddr
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_PostCode = function(contactAddress, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_PostCode = function (contactAddress, node) {
    var postcode = this.getChildValue(node);
    if (postcode) {
       var postcodeAttr = 'postcode';
@@ -755,7 +803,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_PostCode = function(contactAddress, no
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Country = function(contactAddress, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Country = function (contactAddress, node) {
    var country = this.getChildValue(node);
    if (country) {
       var countryAttr = 'country';
@@ -768,7 +816,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_Country = function(contactAddress, nod
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_ContactVoiceTelephone = function(contact, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_ContactVoiceTelephone = function (contact, node) {
    var phone = this.getChildValue(node);
    if (phone) {
       var phoneAttr = 'phone';
@@ -781,7 +829,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_ContactVoiceTelephone = function(conta
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_ContactFacsimileTelephone = function(contact, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_ContactFacsimileTelephone = function (contact, node) {
    var fax = this.getChildValue(node);
    if (fax) {
       var faxAttr = 'fax';
@@ -794,7 +842,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_ContactFacsimileTelephone = function(c
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_ContactElectronicMailAddress = function(contact, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_ContactElectronicMailAddress = function (contact, node) {
    var email = this.getChildValue(node);
    if (email) {
       var emailAttr = 'email';
@@ -807,7 +855,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_ContactElectronicMailAddress = functio
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_DataURL = function(layerContext, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_DataURL = function (layerContext, node) {
    var dataURL = 'dataURL';
    layerContext[dataURL] = this.getOnlineResource_href(node);
 };
@@ -817,7 +865,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_DataURL = function(layerContext, node)
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_DimensionList = function(layerContext, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_DimensionList = function (layerContext, node) {
    var dimensions = 'dimensions';
    layerContext[dimensions] = {};
    this.runChildNodes(layerContext[dimensions], node);
@@ -828,7 +876,7 @@ M.impl.format.WMC.v110.prototype.read_wmc_DimensionList = function(layerContext,
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.read_wmc_Dimension = function(dimensions, node) {
+M.impl.format.WMC.v110.prototype.read_wmc_Dimension = function (dimensions, node) {
    var name = node.getAttribute("name").toLowerCase();
 
    var dim = {
@@ -855,14 +903,14 @@ M.impl.format.WMC.v110.prototype.read_wmc_Dimension = function(dimensions, node)
  * @function
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.getChildValue = function(node, def) {
+M.impl.format.WMC.v110.prototype.getChildValue = function (node, def) {
    var value = def || "";
    if (node) {
       for (var child = node.firstChild; child; child = child.nextSibling) {
          switch (child.nodeType) {
-            case 3: // text node
-            case 4: // cdata section
-               value += child.nodeValue;
+         case 3: // text node
+         case 4: // cdata section
+            value += child.nodeValue;
          }
       }
    }
@@ -880,7 +928,7 @@ M.impl.format.WMC.v110.prototype.getChildValue = function(node, def) {
  * @return {String} An attribute value or and empty string if none found
  * @api stable
  */
-M.impl.format.WMC.v110.prototype.getAttributeNS = function(node, uri, name) {
+M.impl.format.WMC.v110.prototype.getAttributeNS = function (node, uri, name) {
    var attributeValue = "";
    if (node.getAttributeNS) {
       attributeValue = node.getAttributeNS(uri, name) || "";

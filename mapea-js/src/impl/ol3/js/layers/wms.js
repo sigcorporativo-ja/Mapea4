@@ -13,7 +13,7 @@ goog.require('ol.tilegrid.TileGrid');
 goog.require('ol.source.ImageWMS');
 goog.require('ol.extent');
 
-(function() {
+(function () {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMS layer
@@ -24,29 +24,13 @@ goog.require('ol.extent');
     * @param {Mx.parameters.LayerOptions} options custom options for this layer
     * @api stable
     */
-   M.impl.layer.WMS = (function(options) {
+   M.impl.layer.WMS = (function (options) {
       /**
        * The WMS layers instances from capabilities
        * @private
        * @type {Array<M.layer.WMS>}
        */
       this.layers = [];
-
-      /**
-       * WMS layer options
-       * @private
-       * @type {object}
-       * @expose
-       */
-      this.options = options || {};
-
-      /**
-       * WMS layer options
-       * @private
-       * @type {boolean}
-       * @expose
-       */
-      this.displayInLayerSwitcher = true;
 
       /**
        * get WMS getCapabilities promise
@@ -76,33 +60,13 @@ goog.require('ol.extent');
        */
       this.resolutions_ = null;
 
-      /**
-       * Legend URL for this layer
-       * @private
-       * @type {string}
-       * @expose
-       */
-      this.legendUrl_ = null;
-
       // sets visibility
-      if (this.options.visibility === false) {
+      if (options.visibility === false) {
          this.visibility = false;
       }
 
-      // tiled
-      if (M.utils.isNullOrEmpty(this.tiled)) {
-         this.tiled = (this.options.singleTile !== true);
-      }
-
-      // number of zoom levels
-      if (M.utils.isNullOrEmpty(this.options.numZoomLevels)) {
-         this.options.numZoomLevels = 16; // by default
-      }
-
       // calls the super constructor
-      goog.base(this, this.options);
-
-      this.zIndex_ = M.impl.Map.Z_INDEX[M.layer.type.WMS];
+      goog.base(this, options);
    });
    goog.inherits(M.impl.layer.WMS, M.impl.Layer);
 
@@ -112,34 +76,21 @@ goog.require('ol.extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMS.prototype.setVisible = function(visibility) {
-      this.visibility = visibility;
+   M.impl.layer.WMS.prototype.setVisible = function (visibility) {
       if (this.inRange() === true) {
+         this.visibility = visibility;
+
          // if this layer is base then it hides all base layers
          if ((visibility === true) && (this.transparent !== true)) {
-            this.map.getBaseLayers().filter(function(layer) {
-               return (!layer.equals(this) && layer.isVisible());
-            }).forEach(function(layer) {
+            this.map.getBaseLayers().forEach(function (layer) {
                layer.setVisible(false);
             });
-            this.map.getImpl().updateResolutionsFromBaseLayer();
          }
 
          if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
             this.ol3Layer.setVisible(visibility);
          }
       }
-   };
-
-   /**
-    * This function indicates if the layer is queryable
-    *
-    * @function
-    * @api stable
-    * @expose
-    */
-   M.impl.layer.WMS.prototype.isQueryable = function() {
-      return (this.options.queryable !== false);
    };
 
    /**
@@ -150,7 +101,7 @@ goog.require('ol.extent');
     * @param {M.impl.Map} map
     * @api stable
     */
-   M.impl.layer.WMS.prototype.addTo = function(map) {
+   M.impl.layer.WMS.prototype.addTo = function (map) {
       this.map = map;
 
       // calculates the resolutions from scales
@@ -167,15 +118,6 @@ goog.require('ol.extent');
       else { // just one WMS layer
          this.addSingleLayer_();
       }
-
-      this.legendUrl_ = M.utils.addParameters(this.url, {
-         'SERVICE': "WMS",
-         'VERSION': this.version,
-         'REQUEST': "GetLegendGraphic",
-         'LAYER': this.name,
-         'FORMAT': "image/png",
-         'EXCEPTIONS': "image/png"
-      });
    };
 
    /**
@@ -186,36 +128,35 @@ goog.require('ol.extent');
     * @param {Array<Number>} resolutions
     * @api stable
     */
-   M.impl.layer.WMS.prototype.setResolutions = function(resolutions) {
+   M.impl.layer.WMS.prototype.setResolutions = function (resolutions) {
       this.resolutions_ = resolutions;
 
       if ((this.tiled === true) && !M.utils.isNullOrEmpty(this.ol3Layer)) {
+         // gets the projection
+         var projection = ol.proj.get(this.map.getProjection().code);
+
          // gets the extent
          var this_ = this;
-         this.getMaxExtent_().then(function(olExtent) {
-            var layerParams = {};
-            var optParams = this_.options.params;
-            if (!M.utils.isNullOrEmpty(optParams)) {
-               for (var key in optParams) {
-                  if (optParams.hasOwnProperty(key)) {
-                     layerParams[key.toUpperCase()] = optParams[key];
-                  }
-               }
-               //TODO: parche para pedir todas las capas en PNG
-               // layerParams.FORMAT = "image/png";
+         (new Promise(function (success, fail) {
+            // gets the extent         
+            var extent = this_.map.getMaxExtent();
+            if (!M.utils.isNullOrEmpty(extent)) {
+               success.call(this_, extent);
             }
             else {
-               layerParams = {
+               M.impl.envolvedExtent.calculate(this_.map, this_).then(success);
+            }
+         })).then(function (extent) {
+            var olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
+
+            var newSource = new ol.source.TileWMS({
+               url: this_.url,
+               params: {
                   'LAYERS': this_.name,
                   'TILED': true,
                   'VERSION': this_.version,
-                  'TRANSPARENT': this_.transparent,
-                  'FORMAT': 'image/png'
-               };
-            }
-            var newSource = new ol.source.TileWMS({
-               url: this_.url,
-               params: layerParams,
+                  'TRANSPARENT': this_.transparent
+               },
                tileGrid: new ol.tilegrid.TileGrid({
                   resolutions: resolutions,
                   extent: olExtent,
@@ -234,16 +175,31 @@ goog.require('ol.extent');
     * @private
     * @function
     */
-   M.impl.layer.WMS.prototype.addSingleLayer_ = function() {
+   M.impl.layer.WMS.prototype.addSingleLayer_ = function () {
+      // gets resolutions from defined min/max resolutions
+      var minResolution = this.options.minResolution;
+      var maxResolution = this.options.maxResolution;
+
       // gets resolutions of the map
       var resolutions = this.map.getResolutions();
 
       // gets the extent
-      this.getMaxExtent_().then(function(olExtent) {
+      var this_ = this;
+      (new Promise(function (success, fail) {
+         // gets the extent         
+         var extent = this_.map.getMaxExtent();
+         if (!M.utils.isNullOrEmpty(extent)) {
+            success.call(this_, extent);
+         }
+         else {
+            M.impl.envolvedExtent.calculate(this_.map, this_).then(success);
+         }
+      })).then(function (extent) {
+         var olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
          var tileGrid;
 
-         if (M.utils.isNullOrEmpty(resolutions) && !M.utils.isNullOrEmpty(this.resolutions_)) {
-            resolutions = this.resolutions_;
+         if (M.utils.isNullOrEmpty(resolutions) && !M.utils.isNullOrEmpty(this_.resolutions_)) {
+            resolutions = this_.resolutions_;
          }
 
          // gets the tileGrid
@@ -255,74 +211,52 @@ goog.require('ol.extent');
             });
          }
 
-         var layerParams = {};
-         var optParams = this.options.params;
-         if (!M.utils.isNullOrEmpty(optParams)) {
-            for (var key in optParams) {
-               if (optParams.hasOwnProperty(key)) {
-                  layerParams[key.toUpperCase()] = optParams[key];
-               }
-            }
-            //TODO: parche para pedir todas las capas en PNG
-            // layerParams.FORMAT = "image/png";
-         }
-         else {
-            layerParams = {
-               'LAYERS': this.name,
-               'TILED': true,
-               'VERSION': this.version,
-               'TRANSPARENT': this.transparent,
-               'FORMAT': 'image/png'
-            };
-         }
-
-         if (this.tiled === true) {
-            this.ol3Layer = new ol.layer.Tile({
-               visible: this.visibility,
+         if (this_.tiled === true) {
+            this_.ol3Layer = new ol.layer.Tile({
+               visible: this_.visibility,
                source: new ol.source.TileWMS({
-                  url: this.url,
-                  params: layerParams,
-                  tileGrid: tileGrid
+                  url: this_.url,
+                  params: {
+                     'LAYERS': this_.name,
+                     'TILED': true,
+                     'VERSION': this_.version,
+                     'TRANSPARENT': this_.transparent
+                  },
+                  tileGrid: tileGrid,
+                  extent: olExtent
                }),
-               extent: olExtent,
-               minResolution: this.options.minResolution,
-               maxResolution: this.options.maxResolution,
-               opacity: this.opacity_
+               minResolution: minResolution,
+               maxResolution: maxResolution
             });
          }
          else {
-            this.ol3Layer = new ol.layer.Image({
-               visible: this.options.visibility,
+            this_.ol3Layer = new ol.layer.Image({
+               visible: this_.options.visibility,
                source: new ol.source.ImageWMS({
-                  url: this.url,
-                  params: layerParams
+                  url: this_.url,
+                  params: {
+                     'LAYERS': this_.name,
+                     'VERSION': this_.version
+                  }
                }),
-               extent: olExtent,
-               minResolution: this.options.minResolution,
-               maxResolution: this.options.maxResolution,
-               opacity: this.opacity_
+               minResolution: minResolution,
+               maxResolution: maxResolution
             });
          }
-         // keeps z-index values before ol resets
-         let zIndex = this.zIndex_;
-         this.map.getMapImpl().addLayer(this.ol3Layer);
+         this_.map.getMapImpl().addLayer(this_.ol3Layer);
          // sets its visibility if it is in range
-         if (this.isVisible() && !this.inRange()) {
-            this.setVisible(false);
+         if (this_.options.visibility !== false) {
+            this_.setVisible(this_.inRange());
          }
          // sets its z-index
-         if (zIndex !== null) {
-            this.setZIndex(zIndex);
+         if (this_.zIndex_ !== null) {
+            this_.setZIndex(this_.zIndex_);
          }
          // sets the resolutions
-         if (this.resolutions_ !== null) {
-            this.setResolutions(this.resolutions_);
+         if (this_.resolutions_ !== null) {
+            this_.setResolutions(this_.resolutions_);
          }
-         // sets base attribute for disable animations
-         //         this.ol3Layer.set("base", (this.transparent !== true));
-         // desactive animations for all layers
-         this.ol3Layer.set("base", false);
-      }.bind(this));
+      });
    };
 
    /**
@@ -331,10 +265,10 @@ goog.require('ol.extent');
     * @private
     * @function
     */
-   M.impl.layer.WMS.prototype.addAllLayers_ = function() {
+   M.impl.layer.WMS.prototype.addAllLayers_ = function () {
       var this_ = this;
-      this.getCapabilities().then(function(getCapabilities) {
-         getCapabilities.getLayers().forEach(function(layer) {
+      this.getCapabilities().then(function (getCapabilities) {
+         getCapabilities.getLayers().forEach(function (layer) {
             var wmsLayer = new M.layer.WMS({
                'url': this.url,
                'name': layer.name,
@@ -344,6 +278,7 @@ goog.require('ol.extent');
             this.map.addWMS([wmsLayer]);
          }, this_);
       });
+
    };
 
    /**
@@ -354,20 +289,16 @@ goog.require('ol.extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMS.prototype.getExtent = function() {
+   M.impl.layer.WMS.prototype.getExtent = function () {
       // creates the promise
       if (M.utils.isNullOrEmpty(this.extentPromise)) {
-         this.extentPromise = new Promise(function(success, fail) {
-            if (!M.utils.isNullOrEmpty(this.extent_)) {
-               success(this.extent_);
-            }
-            else {
-               this.getCapabilities().then(function(getCapabilities) {
-                  var extent = getCapabilities.getLayerExtent(this.name);
-                  success(extent);
-               }.bind(this));
-            }
-         }.bind(this));
+         var this_ = this;
+         this.extentPromise = new Promise(function (success, fail) {
+            this_.getCapabilities().then(function (getCapabilities) {
+               var extent = getCapabilities.getLayerExtent(this_.name);
+               success(extent);
+            });
+         });
       }
       return this.extentPromise;
    };
@@ -380,7 +311,7 @@ goog.require('ol.extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMS.prototype.getMinResolution = function() {
+   M.impl.layer.WMS.prototype.getMinResolution = function () {
       return this.options.minResolution;
    };
 
@@ -392,20 +323,8 @@ goog.require('ol.extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMS.prototype.getMaxResolution = function() {
+   M.impl.layer.WMS.prototype.getMaxResolution = function () {
       return this.options.maxResolution;
-   };
-
-   /**
-    * This function gets the max resolution for
-    * this WMS
-    *
-    * @public
-    * @function
-    * @api stable
-    */
-   M.impl.layer.WMS.prototype.getNumZoomLevels = function() {
-      return this.options.numZoomLevels;
    };
 
    /**
@@ -416,7 +335,7 @@ goog.require('ol.extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMS.prototype.getLayers = function() {
+   M.impl.layer.WMS.prototype.getLayers = function () {
       return this.layers;
    };
 
@@ -428,18 +347,18 @@ goog.require('ol.extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMS.prototype.getCapabilities = function() {
+   M.impl.layer.WMS.prototype.getCapabilities = function () {
       // creates the promise
       if (M.utils.isNullOrEmpty(this.getCapabilitiesPromise)) {
          var layerUrl = this.url;
          var layerVersion = this.version;
          var projection = this.map.getProjection();
-         this.getCapabilitiesPromise = new Promise(function(success, fail) {
+         this.getCapabilitiesPromise = new Promise(function (success, fail) {
             // gest the capabilities URL
             var wmsGetCapabilitiesUrl = M.utils.getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
             // gets the getCapabilities response
-            M.remote.get(wmsGetCapabilitiesUrl).then(function(response) {
-               var getCapabilitiesDocument = response.xml;
+            M.remote.get(wmsGetCapabilitiesUrl).then(function (response) {
+               var getCapabilitiesDocument = response.responseXml;
                var getCapabilitiesParser = new M.impl.format.WMSCapabilities();
                var getCapabilities = getCapabilitiesParser.read(getCapabilitiesDocument);
 
@@ -452,32 +371,6 @@ goog.require('ol.extent');
    };
 
    /**
-    * TODO
-    *
-    * @private
-    * @function
-    */
-   M.impl.layer.WMS.prototype.getMaxExtent_ = function() {
-      var extent = this.map.getMaxExtent();
-      return (new Promise(function(success, fail) {
-         if (!M.utils.isNullOrEmpty(extent)) {
-            success.call(this, [extent.x.min, extent.y.min, extent.x.max, extent.y.max]);
-         }
-         else {
-            M.impl.envolvedExtent.calculate(this.map, this).then(function(extent) {
-               let maxExtent = this.map.getMaxExtent();
-               if (!M.utils.isNullOrEmpty(maxExtent)) {
-                  success.call(this, [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max]);
-               }
-               else {
-                  success.call(this, [extent.x.min, extent.y.min, extent.x.max, extent.y.max]);
-               }
-            }.bind(this));
-         }
-      }.bind(this)));
-   };
-
-   /**
     * This function destroys this layer, cleaning the HTML
     * and unregistering all events
     *
@@ -485,30 +378,7 @@ goog.require('ol.extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMS.prototype.getLegendURL = function() {
-      return this.legendUrl_;
-   };
-
-   /**
-    * TODO
-    *
-    * @public
-    * @function
-    * @api stable
-    */
-   M.impl.layer.WMS.prototype.setLegendURL = function(legendUrl) {
-      this.legendUrl_ = legendUrl;
-   };
-
-   /**
-    * This function destroys this layer, cleaning the HTML
-    * and unregistering all events
-    *
-    * @public
-    * @function
-    * @api stable
-    */
-   M.impl.layer.WMS.prototype.destroy = function() {
+   M.impl.layer.WMS.prototype.destroy = function () {
       var olMap = this.map.getMapImpl();
       if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
          olMap.removeLayer(this.ol3Layer);
@@ -528,7 +398,7 @@ goog.require('ol.extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMS.prototype.equals = function(obj) {
+   M.impl.layer.WMS.prototype.equals = function (obj) {
       var equals = false;
 
       if (obj instanceof M.impl.layer.WMS) {
@@ -540,6 +410,4 @@ goog.require('ol.extent');
 
       return equals;
    };
-
-   M.impl.layer.WMS.LEGEND_IMAGE = null;
 })();

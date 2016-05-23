@@ -3,12 +3,12 @@ goog.provide('P.control.ClearFeature');
 (function () {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a ClearFeature
-    * control to clean deleted, created and modified unsaved features.
+    * Main constructor of the class. Creates a GetFeatureInfo
+    * control to provides a popup with information about the place 
+    * where the user has clicked inside the map.
     *
     * @constructor
-    * @param {M.layer.WFS}
-    * layer layer for use in control
+    * @param {String} format format response
     * @extends {M.Control}
     * @api stable
     */
@@ -19,7 +19,7 @@ goog.provide('P.control.ClearFeature');
       // implementation of this control
       var impl = new M.impl.control.ClearFeature(layer);
       // calls the super constructor
-      goog.base(this, impl, M.control.ClearFeature.NAME);
+      goog.base(this, impl);
    });
    goog.inherits(M.control.ClearFeature, M.Control);
 
@@ -33,21 +33,15 @@ goog.provide('P.control.ClearFeature');
     * @api stable
     */
    M.control.ClearFeature.prototype.createView = function (map) {
-      return M.template.compile(M.control.ClearFeature.TEMPLATE);
-   };
-
-   /**
-    * TODO
-    *
-    * @public
-    * @function
-    * @param {HTMLElement} html to add the plugin
-    * @api stable
-    * @export
-    */
-   M.control.ClearFeature.prototype.manageActivation = function (element) {
-      var activationBtn = element.querySelector('button#m-button-clearfeature');
-      goog.events.listen(activationBtn, goog.events.EventType.CLICK, this.clear_, false, this);
+      this.facadeMap_ = map;
+      var this_ = this;
+      var promise = new Promise(function (success, fail) {
+         M.template.compile(M.control.ClearFeature.TEMPLATE).then(function (html) {
+            this_.addEvents(html);
+            success(html);
+         });
+      });
+      return promise;
    };
 
    /**
@@ -55,7 +49,6 @@ goog.provide('P.control.ClearFeature');
     * to this control
     *
     * @function
-    * @returns {Boolean}
     * @api stable
     */
    M.control.ClearFeature.prototype.equals = function (obj) {
@@ -64,10 +57,28 @@ goog.provide('P.control.ClearFeature');
    };
 
    /**
-    * This function clean deleted, created and modified unsaved features
+    * This function creates the view to the specified map
     *
-    * @private
+    * @public
     * @function
+    * @param {M.Map} map to add the control
+    * @api stable
+    */
+   M.control.ClearFeature.prototype.addEvents = function (html) {
+      var button = html.getElementsByTagName('button')['m-button-clearfeature'];
+      goog.events.listen(button, [goog.events.EventType.CLICK, goog.events.EventType.TOUCHEND],
+         function (e) {
+            this.clear_();
+         }, false, this);
+   };
+
+   /**
+    * This function creates the view to the specified map
+    *
+    * @public
+    * @function
+    * @param {M.Map} map to add the control
+    * @api stable
     */
    M.control.ClearFeature.prototype.clear_ = function () {
       this.getImpl().clear();
@@ -75,7 +86,7 @@ goog.provide('P.control.ClearFeature');
 
 
    /**
-    * Name for this controls
+    * Template for this controls - button
     * @const
     * @type {string}
     * @public

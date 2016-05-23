@@ -8,7 +8,7 @@
    <name>Mapea 4 PARENT</name>
    <description>Herramienta para desarrollo de mapas interactivos de forma sencilla</description>
    <properties>
-      <project.release.date>05-04-2016</project.release.date>
+      <project.release.date>20-05-2016</project.release.date>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <build.timestamp>${maven.build.timestamp}</build.timestamp>
       <maven.build.timestamp.format>dd-MM-yyyy</maven.build.timestamp.format>
@@ -76,6 +76,15 @@
             <environment>mapea-preproduccion</environment>
          </properties>
       </profile>
+      <profile>
+         <id>mapea-amazon</id>
+         <activation>
+            <activeByDefault>false</activeByDefault>
+         </activation>
+         <properties>
+            <environment>mapea-amazon</environment>
+         </properties>
+      </profile>
    </profiles>
    <repositories>
       <repository>
@@ -84,9 +93,21 @@
          <url>http://repositorio-librerias.i-administracion.junta-andalucia.es/artifactory/ja-internal</url>
       </repository>
    </repositories>
+   <scm>
+      <developerConnection>scm:svn:https://www.guadaltel.es/subversion/sigc/trunk/mapea4/mapea-parent</developerConnection>
+   </scm>
    <build>
       <pluginManagement>
          <plugins>
+            <plugin>
+               <artifactId>maven-release-plugin</artifactId>
+               <version>2.5</version>
+               <configuration>
+                  <preparationGoals>clean package</preparationGoals>
+                  <autoVersionSubmodules>true</autoVersionSubmodules>
+                  <tagNameFormat>MAPEA_v@{project.version}_@{maven.build.timestamp}</tagNameFormat>
+               </configuration>
+            </plugin>
             <plugin>
                <groupId>org.apache.maven.plugins</groupId>
                <artifactId>maven-compiler-plugin</artifactId>

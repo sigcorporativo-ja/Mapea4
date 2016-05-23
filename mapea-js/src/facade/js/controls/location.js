@@ -24,7 +24,7 @@ goog.require('M.exception');
       var impl = new M.impl.control.Location();
 
       // calls the super constructor
-      goog.base(this, impl, M.control.Location.NAME);
+      goog.base(this, impl);
    });
    goog.inherits(M.control.Location, M.Control);
 
@@ -39,19 +39,6 @@ goog.require('M.exception');
     */
    M.control.Location.prototype.createView = function (map) {
       return M.template.compile(M.control.Location.TEMPLATE);
-   };
-
-   /**
-    * TODO
-    *
-    * @public
-    * @function
-    * @param {HTMLElement} html to add the plugin
-    * @api stable
-    * @export
-    */
-   M.control.Location.prototype.getActivationButton = function (element) {
-      return element.querySelector('button#m-location-button');
    };
 
    /**

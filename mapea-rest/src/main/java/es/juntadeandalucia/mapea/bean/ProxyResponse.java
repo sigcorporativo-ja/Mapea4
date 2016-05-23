@@ -1,7 +1,8 @@
 package es.juntadeandalucia.mapea.bean;
 
-import org.apache.commons.httpclient.Header;
 import org.json.JSONObject;
+
+import es.juntadeandalucia.mapea.util.Utils;
 
 /**
  * This class gives shape to a response retrieved by the
@@ -16,14 +17,12 @@ public class ProxyResponse {
    private boolean error;
    private String content;
    private String errorMessage;
-   private Header[] headers;
    
    public ProxyResponse() {
       this.valid = true;
       this.error = false;
       this.content = "";
       this.errorMessage = "";
-      this.headers = new Header[0];
    }
 
    public int getStatusCode () {
@@ -65,14 +64,6 @@ public class ProxyResponse {
    public void setErrorMessage (String errorMessage) {
       this.errorMessage = errorMessage;
    }
-   
-   public Header[] getHeaders () {
-      return headers;
-   }
-
-   public void setHeaders (Header[] headers) {
-      this.headers = headers;
-   }
 
    public String toJSON () {
       JSONObject json = new JSONObject();
@@ -91,13 +82,7 @@ public class ProxyResponse {
 //      String content = Utils.escape(getContent());
       json.put("content", getContent());
       
-      // header
-      JSONObject headers = new JSONObject();
-      for (Header head : getHeaders()) {
-         headers.put(head.getName(), head.getValue());
-      }
-      json.put("headers", headers);
-      
       return json.toString();
    }
+
 }

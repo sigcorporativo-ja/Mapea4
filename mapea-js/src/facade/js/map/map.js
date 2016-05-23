@@ -8,8 +8,6 @@ goog.require('M.utils');
 goog.require('M.Layer');
 goog.require('M.remote');
 goog.require('M.Parameters');
-goog.require('M.style.state');
-goog.require('M.ui.Panel');
 goog.require('M.layer.WMC');
 goog.require('M.layer.WMS');
 goog.require('M.layer.WMTS');
@@ -29,12 +27,9 @@ goog.require('M.control.OverviewMap');
 goog.require('M.control.Location');
 goog.require('M.control.GetFeatureInfo');
 goog.require('M.Label');
-goog.require('M.Popup');
-goog.require('M.dialog');
 goog.require('M.Plugin');
-goog.require('M.window');
 
-(function() {
+(function () {
    /**
     * @classdesc
     * Main constructor of the class. Creates a Map
@@ -43,12 +38,12 @@ goog.require('M.window');
     * @constructor
     * @extends {M.facade.Base}
     * @param {string|Mx.parameters.Map} userParameters parameters
-    * @param {Mx.parameters.MapOptions} options custom options
+    * @param {Mx.parameters.MapOptions} options custom options 
     * for the implementation
     * provided by the user
     * @api stable
     */
-   M.Map = (function(userParameters, options) {
+   M.Map = (function (userParameters, options) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(userParameters)) {
          M.exception('No ha especificado ningún parámetro');
@@ -59,58 +54,11 @@ goog.require('M.window');
          M.exception('La implementación usada no posee un constructor');
       }
 
-      /**
-       * @private
-       * @type {array<M.ui.Panel>}
-       * @expose
-       */
-      this._panels = [];
-
-      /**
-       * @private
-       * @type {HTMLElement}
-       * @expose
-       */
-      this._areasContainer = null;
-
-      /**
-       * The added popup
-       * @private
-       * @type {M.Popup}
-       */
-      this.popup_ = null;
-
-      /**
-       * Flag that indicates if the used projection
-       * is by default
-       * @public
-       * @type {Boolean}
-       * @api stable
-       * @expose
-       */
-      this._defaultProj = true;
-
-      /**
-       * @public
-       * @type {object}
-       * @api stable
-       */
-      this.panel = {
-         'LEFT': null,
-         'RIGHT': 'null'
-      };
-
-      /**
-       * @private
-       * @type {Number}
-       */
-      this._userZoom = null;
-
       // parses parameters to build the new map
       var params = new M.Parameters(userParameters);
 
       // adds class to the container
-      goog.dom.classlist.add(params.container, 'm-mapea-container');
+      goog.dom.classlist.add(params.container, 'm-container');
 
       // calls the super constructor
       var impl = new M.impl.Map(params.container, (options || {}));
@@ -118,17 +66,17 @@ goog.require('M.window');
 
       goog.base(this, impl);
 
-      var this_ = this;
-
-      // creates main panels
-      this.createMainPanels_();
-
       // projection
       if (!M.utils.isNullOrEmpty(params.projection)) {
          this.setProjection(params.projection);
       }
       else { // default projection
-         this.setProjection(M.config.DEFAULT_PROJ, true);
+         this.setProjection(M.config.DEFAULT_PROJ);
+      }
+
+      // maxExtent
+      if (!M.utils.isNullOrEmpty(params.maxExtent)) {
+         this.setMaxExtent(params.maxExtent);
       }
 
       // resolutions
@@ -176,14 +124,11 @@ goog.require('M.window');
       }
 
       // default WMC
-      if (M.utils.isNullOrEmpty(params.wmc) && M.utils.isNullOrEmpty(params.layers)) {
+      if (this.getLayers().length === 0) {
          this.addWMC(M.config.predefinedWMC.predefinedNames[0]);
       }
 
-      // maxExtent
-      if (!M.utils.isNullOrEmpty(params.maxExtent)) {
-         this.setMaxExtent(params.maxExtent);
-      }
+      var this_ = this;
 
       // bbox
       if (!M.utils.isNullOrEmpty(params.bbox)) {
@@ -195,14 +140,8 @@ goog.require('M.window');
             this.setCenter(params.center);
          }
          else {
-            this.getInitCenter_().then(function(initCenter) {
-               // checks if the user stablished a center while it was
-               // calculated
-               let newCenter = this_.getCenter();
-               if (M.utils.isNullOrEmpty(newCenter)) {
-                  newCenter = initCenter;
-               }
-               this_.setCenter(newCenter);
+            this.getInitCenter_().then(function (initCenter) {
+               this_.setCenter(initCenter);
             });
          }
          // zoom
@@ -213,17 +152,14 @@ goog.require('M.window');
 
       // label
       if (!M.utils.isNullOrEmpty(params.label)) {
-         this.addLabel(params.label);
+         this.getInitCenter_().then(function (initCenter) {
+            this_.addLabel(params.label, initCenter);
+         });
       }
 
       // initial zoom
       if (M.utils.isNullOrEmpty(params.bbox) && M.utils.isNullOrEmpty(params.zoom) && M.utils.isNullOrEmpty(params.center)) {
-         this.zoomToMaxExtent(true);
-      }
-
-      //ticket
-      if (!M.utils.isNullOrEmpty(params.ticket)) {
-         this.setTicket(params.ticket);
+         this.zoomToMaxExtent();
       }
    });
    goog.inherits(M.Map, M.facade.Base);
@@ -236,7 +172,7 @@ goog.require('M.window');
     * @returns {Array<M.Layer>}
     * @api stable
     */
-   M.Map.prototype.getLayers = function(layersParam) {
+   M.Map.prototype.getLayers = function (layersParam) {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.getLayers)) {
          M.exception('La implementación usada no posee el método getLayers');
@@ -259,7 +195,7 @@ goog.require('M.window');
       }
 
       // gets the layers
-      layers = this.getImpl().getLayers(filters).sort(M.Map.LAYER_SORT);
+      layers = this.getImpl().getLayers(filters);
 
       return layers;
    };
@@ -271,13 +207,13 @@ goog.require('M.window');
     * @returns {Array<M.Layer>}
     * @api stable
     */
-   M.Map.prototype.getBaseLayers = function() {
+   M.Map.prototype.getBaseLayers = function () {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.getBaseLayers)) {
          M.exception('La implementación usada no posee el método getBaseLayers');
       }
 
-      return this.getImpl().getBaseLayers().sort(M.Map.LAYER_SORT);
+      return this.getImpl().getBaseLayers();
    };
 
    /**
@@ -288,7 +224,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.addLayers = function(layersParam) {
+   M.Map.prototype.addLayers = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa');
@@ -305,24 +241,19 @@ goog.require('M.window');
       }
 
       // gets the parameters as M.Layer objects to add
-      var layers = layersParam.map(function(layerParam) {
+      var layers = layersParam.map(function (layerParam) {
          var layer;
 
          if (layerParam instanceof M.Layer) {
             layer = layerParam;
          }
          else {
-            try {
-               var parameter = M.parameter.layer(layerParam);
-               if (!M.utils.isNullOrEmpty(parameter.type)) {
-                  layer = new M.layer[parameter.type](layerParam);
-               }
-               else {
-                  M.dialog.error('No se ha especificado un tipo válido para la capa');
-               }
+            var parameter = M.parameter.layer(layerParam);
+            if (!M.utils.isNullOrEmpty(parameter.type)) {
+               layer = new M.layer[parameter.type](layerParam);
             }
-            catch (err) {
-               M.dialog.error('El formato de la capa (' + layerParam + ') no se reconoce');
+            else {
+               M.exception('No se ha especificado un tipo válido para la capa');
             }
          }
          return layer;
@@ -343,7 +274,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.removeLayers = function(layersParam) {
+   M.Map.prototype.removeLayers = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa a eliminar');
@@ -371,7 +302,7 @@ goog.require('M.window');
     * @returns {Array<M.layer.WMC>}
     * @api stable
     */
-   M.Map.prototype.getWMC = function(layersParam) {
+   M.Map.prototype.getWMC = function (layersParam) {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.getWMC)) {
          M.exception('La implementación usada no posee el método getWMC');
@@ -390,13 +321,13 @@ goog.require('M.window');
       // gets the parameters as M.Layer objects to filter
       var filters = [];
       if (layersParam.length > 0) {
-         filters = layersParam.map(function(layerParam) {
+         filters = layersParam.map(function (layerParam) {
             return M.parameter.layer(layerParam, M.layer.type.WMC);
          });
       }
 
       // gets the layers
-      layers = this.getImpl().getWMC(filters).sort(M.Map.LAYER_SORT);
+      layers = this.getImpl().getWMC(filters);
 
       return layers;
    };
@@ -409,7 +340,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.addWMC = function(layersParam) {
+   M.Map.prototype.addWMC = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa WMC');
@@ -420,6 +351,8 @@ goog.require('M.window');
          M.exception('La implementación usada no posee el método addWMC');
       }
 
+      var layers;
+
       // parses parameters to Array
       if (!M.utils.isArray(layersParam)) {
          layersParam = [layersParam];
@@ -427,17 +360,12 @@ goog.require('M.window');
 
       // gets the parameters as M.layer.WMC objects to add
       var wmcLayers = [];
-      layersParam.forEach(function(layerParam) {
+      layersParam.forEach(function (layerParam) {
          if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMC)) {
             wmcLayers.push(layerParam);
          }
          else if (!(layerParam instanceof M.Layer)) {
-            try {
-               wmcLayers.push(new M.layer.WMC(layerParam, layerParam.options));
-            }
-            catch (err) {
-               M.dialog.error(err);
-            }
+            wmcLayers.push(new M.layer.WMC(layerParam, layerParam.options));
          }
       });
 
@@ -467,7 +395,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.removeWMC = function(layersParam) {
+   M.Map.prototype.removeWMC = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa WMC');
@@ -495,7 +423,7 @@ goog.require('M.window');
     * @returns {Array<M.layer.KML>}
     * @api stable
     */
-   M.Map.prototype.getKML = function(layersParam) {
+   M.Map.prototype.getKML = function (layersParam) {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.getKML)) {
          M.exception('La implementación usada no posee el método getKML');
@@ -514,13 +442,13 @@ goog.require('M.window');
       // gets the parameters as M.Layer objects to filter
       var filters = [];
       if (layersParam.length > 0) {
-         filters = layersParam.map(function(layerParam) {
+         filters = layersParam.map(function (layerParam) {
             return M.parameter.layer(layerParam, M.layer.type.KML);
          });
       }
 
       // gets the layers
-      layers = this.getImpl().getKML(filters).sort(M.Map.LAYER_SORT);
+      layers = this.getImpl().getKML(filters);
 
       return layers;
    };
@@ -533,7 +461,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.addKML = function(layersParam) {
+   M.Map.prototype.addKML = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa KML');
@@ -544,6 +472,8 @@ goog.require('M.window');
          M.exception('La implementación usada no posee el método addKML');
       }
 
+      var layers;
+
       // parses parameters to Array
       if (!M.utils.isArray(layersParam)) {
          layersParam = [layersParam];
@@ -551,7 +481,7 @@ goog.require('M.window');
 
       // gets the parameters as M.layer.KML objects to add
       var kmlLayers = [];
-      layersParam.forEach(function(layerParam) {
+      layersParam.forEach(function (layerParam) {
          if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.KML)) {
             kmlLayers.push(layerParam);
          }
@@ -574,7 +504,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.removeKML = function(layersParam) {
+   M.Map.prototype.removeKML = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa WMS');
@@ -602,7 +532,7 @@ goog.require('M.window');
     * @returns {Array<M.layer.WMS>} layers from the map
     * @api stable
     */
-   M.Map.prototype.getWMS = function(layersParam) {
+   M.Map.prototype.getWMS = function (layersParam) {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.getWMS)) {
          M.exception('La implementación usada no posee el método getWMS');
@@ -621,13 +551,13 @@ goog.require('M.window');
       // gets the parameters as M.Layer objects to filter
       var filters = [];
       if (layersParam.length > 0) {
-         filters = layersParam.map(function(layerParam) {
+         filters = layersParam.map(function (layerParam) {
             return M.parameter.layer(layerParam, M.layer.type.WMS);
          });
       }
 
       // gets the layers
-      layers = this.getImpl().getWMS(filters).sort(M.Map.LAYER_SORT);
+      layers = this.getImpl().getWMS(filters);
 
       return layers;
    };
@@ -640,7 +570,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.addWMS = function(layersParam) {
+   M.Map.prototype.addWMS = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa WMS');
@@ -651,6 +581,8 @@ goog.require('M.window');
          M.exception('La implementación usada no posee el método addWMS');
       }
 
+      var layers;
+
       // parses parameters to Array
       if (!M.utils.isArray(layersParam)) {
          layersParam = [layersParam];
@@ -658,7 +590,7 @@ goog.require('M.window');
 
       // gets the parameters as M.layer.WMS objects to add
       var wmsLayers = [];
-      layersParam.forEach(function(layerParam) {
+      layersParam.forEach(function (layerParam) {
          if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMS)) {
             wmsLayers.push(layerParam);
          }
@@ -681,7 +613,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.removeWMS = function(layersParam) {
+   M.Map.prototype.removeWMS = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa WMS');
@@ -709,7 +641,7 @@ goog.require('M.window');
     * @returns {Array<M.layer.WFS>} layers from the map
     * @api stable
     */
-   M.Map.prototype.getWFS = function(layersParam) {
+   M.Map.prototype.getWFS = function (layersParam) {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.getWFS)) {
          M.exception('La implementación usada no posee el método getWFS');
@@ -728,13 +660,13 @@ goog.require('M.window');
       // gets the parameters as M.Layer objects to filter
       var filters = [];
       if (layersParam.length > 0) {
-         filters = layersParam.map(function(layerParam) {
+         filters = layersParam.map(function (layerParam) {
             return M.parameter.layer(layerParam, M.layer.type.WFS);
          });
       }
 
       // gets the layers
-      layers = this.getImpl().getWFS(filters).sort(M.Map.LAYER_SORT);
+      layers = this.getImpl().getWFS(filters);
 
       return layers;
    };
@@ -747,7 +679,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.addWFS = function(layersParam) {
+   M.Map.prototype.addWFS = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa WFS');
@@ -758,6 +690,8 @@ goog.require('M.window');
          M.exception('La implementación usada no posee el método addWFS');
       }
 
+      var layers;
+
       // parses parameters to Array
       if (!M.utils.isArray(layersParam)) {
          layersParam = [layersParam];
@@ -765,17 +699,12 @@ goog.require('M.window');
 
       // gets the parameters as M.layer.WFS objects to add
       var wfsLayers = [];
-      layersParam.forEach(function(layerParam) {
+      layersParam.forEach(function (layerParam) {
          if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WFS)) {
             wfsLayers.push(layerParam);
          }
          else if (!(layerParam instanceof M.Layer)) {
-            try {
-               wfsLayers.push(new M.layer.WFS(layerParam, layerParam.options));
-            }
-            catch (err) {
-               M.dialog.error(err);
-            }
+            wfsLayers.push(new M.layer.WFS(layerParam, layerParam.options));
          }
       });
 
@@ -793,7 +722,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.removeWFS = function(layersParam) {
+   M.Map.prototype.removeWFS = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa WFS');
@@ -821,7 +750,7 @@ goog.require('M.window');
     * @returns {Array<M.layer.WMTS>} layers from the map
     * @api stable
     */
-   M.Map.prototype.getWMTS = function(layersParam) {
+   M.Map.prototype.getWMTS = function (layersParam) {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.getWMTS)) {
          M.exception('La implementación usada no posee el método getWMTS');
@@ -840,13 +769,13 @@ goog.require('M.window');
       // gets the parameters as M.Layer objects to filter
       var filters = [];
       if (layersParam.length > 0) {
-         filters = layersParam.map(function(layerParam) {
+         filters = layersParam.map(function (layerParam) {
             return M.parameter.layer(layerParam, M.layer.type.WMTS);
          });
       }
 
       // gets the layers
-      layers = this.getImpl().getWMTS(filters).sort(M.Map.LAYER_SORT);
+      layers = this.getImpl().getWMTS(filters);
 
       return layers;
    };
@@ -859,7 +788,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.addWMTS = function(layersParam) {
+   M.Map.prototype.addWMTS = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa WMTS');
@@ -870,6 +799,8 @@ goog.require('M.window');
          M.exception('La implementación usada no posee el método addWMTS');
       }
 
+      var layers;
+
       // parses parameters to Array
       if (!M.utils.isArray(layersParam)) {
          layersParam = [layersParam];
@@ -877,7 +808,7 @@ goog.require('M.window');
 
       // gets the parameters as M.layer.WMS objects to add
       var wmtsLayers = [];
-      layersParam.forEach(function(layerParam) {
+      layersParam.forEach(function (layerParam) {
          if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMTS)) {
             wmtsLayers.push(layerParam);
          }
@@ -900,7 +831,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.removeWMTS = function(layersParam) {
+   M.Map.prototype.removeWMTS = function (layersParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna capa WMTS');
@@ -928,7 +859,7 @@ goog.require('M.window');
     * @returns {Array<M.layer.MBtiles>} layers from the map
     * @api stable
     */
-   M.Map.prototype.getMBtiles = function(layersParam) {
+   M.Map.prototype.getMBtiles = function (layersParam) {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.getMBtiles)) {
          M.exception('La implementación usada no posee el método getMBtiles');
@@ -951,7 +882,7 @@ goog.require('M.window');
       }
 
       // gets the layers
-      layers = this.getImpl().getMBtiles(filters).sort(M.Map.LAYER_SORT);
+      layers = this.getImpl().getMBtiles(filters);
 
       return layers;
    };
@@ -964,7 +895,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.addMBtiles = function(layersParam) {
+   M.Map.prototype.addMBtiles = function (layersParam) {
       // TODO
    };
 
@@ -976,7 +907,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.removeMBtiles = function(layersParam) {
+   M.Map.prototype.removeMBtiles = function (layersParam) {
       // TODO
    };
 
@@ -989,7 +920,7 @@ goog.require('M.window');
     * @returns {Array<M.Control>}
     * @api stable
     */
-   M.Map.prototype.getControls = function(controlsParam) {
+   M.Map.prototype.getControls = function (controlsParam) {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.getControls)) {
          M.exception('La implementación usada no posee el método getControls');
@@ -1018,7 +949,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.addControls = function(controlsParam) {
+   M.Map.prototype.addControls = function (controlsParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(controlsParam)) {
          M.exception('No ha especificado ningún control');
@@ -1035,168 +966,52 @@ goog.require('M.window');
       }
 
       // gets the parameters as M.Control to add them
-      var controls = [];
-      for (var i = 0, ilen = controlsParam.length; i < ilen; i++) {
-         var controlParam = controlsParam[i];
+      var controls = controlsParam.map(function (controlParam) {
          var control;
-         var panel;
          if (M.utils.isString(controlParam)) {
             controlParam = M.utils.normalize(controlParam);
             switch (controlParam) {
-               case M.control.Scale.NAME:
-                  control = new M.control.Scale();
-                  panel = this.getPanels('map-info')[0];
-                  if (M.utils.isNullOrEmpty(panel)) {
-                     panel = new M.ui.Panel('map-info', {
-                        "collapsible": false,
-                        "className": "m-map-info",
-                        "position": M.ui.position.BR
-                     });
-                  }
-                  panel.addClassName('m-with-scale');
-                  break;
-               case M.control.ScaleLine.NAME:
-                  control = new M.control.ScaleLine();
-                  panel = new M.ui.Panel(M.control.ScaleLine.NAME, {
-                     "collapsible": false,
-                     "className": "m-scaleline",
-                     "position": M.ui.position.BL
-                  });
-                  break;
-               case M.control.Panzoombar.NAME:
-                  control = new M.control.Panzoombar();
-                  panel = new M.ui.Panel(M.control.Panzoombar.NAME, {
-                     "collapsible": false,
-                     "className": "m-panzoombar",
-                     "position": M.ui.position.TL
-                  });
-                  break;
-               case M.control.Panzoom.NAME:
-                  control = new M.control.Panzoom();
-                  panel = new M.ui.Panel(M.control.Panzoom.NAME, {
-                     "collapsible": false,
-                     "className": "m-panzoom",
-                     "position": M.ui.position.TL
-                  });
-                  break;
-               case M.control.LayerSwitcher.NAME:
-                  control = new M.control.LayerSwitcher();
-                  panel = new M.ui.Panel(M.control.LayerSwitcher.NAME, {
-                     "collapsible": true,
-                     "className": "m-layerswitcher",
-                     "collapsedButtonClass": "g-cartografia-capas2",
-                     "position": M.ui.position.TR
-                  });
-                  // enables touch scroll
-                  panel.on(M.evt.ADDED_TO_MAP, function(html) {
-                     M.utils.enableTouchScroll(html.querySelector('.m-panel-controls'));
-                  }, this);
-                  break;
-               case M.control.Mouse.NAME:
-                  control = new M.control.Mouse();
-                  panel = this.getPanels('map-info')[0];
-                  if (M.utils.isNullOrEmpty(panel)) {
-                     panel = new M.ui.Panel('map-info', {
-                        "collapsible": false,
-                        "className": "m-map-info",
-                        "position": M.ui.position.BR
-                     });
-                  }
-                  panel.addClassName('m-with-mouse');
-                  break;
-               case M.control.Navtoolbar.NAME:
-                  control = new M.control.Navtoolbar();
-                  break;
-               case M.control.OverviewMap.NAME:
-                  control = new M.control.OverviewMap({
-                     'toggleDelay': 400
-                  });
-                  panel = this.getPanels('map-info')[0];
-                  if (M.utils.isNullOrEmpty(panel)) {
-                     panel = new M.ui.Panel('map-info', {
-                        "collapsible": false,
-                        "className": "m-map-info",
-                        "position": M.ui.position.BR
-                     });
-                  }
-                  panel.addClassName('m-with-overviewmap');
-                  break;
-               case M.control.Location.NAME:
-                  control = new M.control.Location();
-                  panel = new M.ui.Panel(M.control.Location.NAME, {
-                     "collapsible": false,
-                     "className": 'm-location',
-                     "position": M.ui.position.BR
-                  });
-                  break;
-               case M.control.GetFeatureInfo.NAME:
-                  control = new M.control.GetFeatureInfo();
-                  break;
-               default:
-                  let getControlsAvailable = M.utils.concatUrlPaths([M.config.MAPEA_URL, '/api/actions/controls']);
-                  M.dialog.error('El control "'.concat(controlParam).concat('" no está definido. Consulte los controles disponibles <a href="' + getControlsAvailable + '" target="_blank">aquí</a>'));
-                  break;
+            case M.control.Scale.NAME:
+               control = new M.control.Scale();
+               break;
+            case M.control.ScaleLine.NAME:
+               control = new M.control.ScaleLine();
+               break;
+            case M.control.Panzoombar.NAME:
+               control = new M.control.Panzoombar();
+               break;
+            case M.control.Panzoom.NAME:
+               control = new M.control.Panzoom();
+               break;
+            case M.control.LayerSwitcher.NAME:
+               control = new M.control.LayerSwitcher();
+               break;
+            case M.control.Mouse.NAME:
+               control = new M.control.Mouse();
+               break;
+            case M.control.Navtoolbar.NAME:
+               control = new M.control.Navtoolbar();
+               break;
+            case M.control.OverviewMap.NAME:
+               control = new M.control.OverviewMap();
+               break;
+            case M.control.Location.NAME:
+               control = new M.control.Location();
+               break;
+            default:
+               M.exception('El control "'.concat(controlParam).concat('" no es un control válido.'));
+               break;
             }
          }
          else if (controlParam instanceof M.Control) {
             control = controlParam;
-            if (control instanceof M.control.WMCSelector) {
-               panel = this.getPanels('map-info')[0];
-               if (M.utils.isNullOrEmpty(panel)) {
-                  panel = new M.ui.Panel('map-info', {
-                     "collapsible": false,
-                     "className": "m-map-info",
-                     "position": M.ui.position.BR
-                  });
-               }
-               panel.addClassName('m-with-wmcselector');
-            }
          }
          else {
             M.exception('El control "'.concat(controlParam).concat('" no es un control válido.'));
          }
-
-         // checks if it has to be added into a main panel
-         if (M.config.panels.TOOLS.indexOf(control.name) !== -1) {
-            if (M.utils.isNullOrEmpty(this.panel.TOOLS)) {
-               this.panel.TOOLS = new M.ui.Panel('tools', {
-                  "collapsible": true,
-                  "className": 'm-tools',
-                  "collapsedButtonClass": 'g-cartografia-herramienta',
-                  "position": M.ui.position.TL
-               });
-               //               this.addPanels([this.panel.TOOLS]);
-            }
-            //            if (!this.panel.TOOLS.hasControl(control)) {
-            //               this.panel.TOOLS.addControls(control);
-            //            }
-            panel = this.panel.TOOLS;
-         }
-         else if (M.config.panels.EDITION.indexOf(control.name) !== -1) {
-            if (M.utils.isNullOrEmpty(this.panel.EDITION)) {
-               this.panel.EDITION = new M.ui.Panel('edit', {
-                  "collapsible": true,
-                  "className": 'm-edition',
-                  "collapsedButtonClass": 'g-cartografia-editar',
-                  "position": M.ui.position.TL
-               });
-               //               this.addPanels([this.panel.EDITION]);
-            }
-            //            if (!this.panel.EDITION.hasControl(control)) {
-            //               this.panel.EDITION.addControls(control);
-            //            }
-            panel = this.panel.EDITION;
-         }
-
-         if (!M.utils.isNullOrEmpty(panel) && !panel.hasControl(control)) {
-            panel.addControls(control);
-            this.addPanels(panel);
-         }
-         else {
-            control.addTo(this);
-            controls.push(control);
-         }
-      }
+         control.addTo(this);
+         return control;
+      }, this);
 
       this.getImpl().addControls(controls);
 
@@ -1212,7 +1027,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.removeControls = function(controlsParam) {
+   M.Map.prototype.removeControls = function (controlsParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(controlsParam)) {
          M.exception('No ha especificado ningún control a eliminar');
@@ -1242,7 +1057,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.removePlugins = function(controlsParam) {
+   M.Map.prototype.removePlugins = function (controlsParam) {
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(controlsParam)) {
          M.exception('No ha especificado ningún control a eliminar');
@@ -1261,7 +1076,7 @@ goog.require('M.window');
     * @returns {Mx.Extent}
     * @api stable
     */
-   M.Map.prototype.getMaxExtent = function() {
+   M.Map.prototype.getMaxExtent = function () {
       // checks if the implementation can set the maxExtent
       if (M.utils.isUndefined(M.impl.Map.prototype.getMaxExtent)) {
          M.exception('La implementación usada no posee el método getMaxExtent');
@@ -1283,7 +1098,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.setMaxExtent = function(maxExtentParam) {
+   M.Map.prototype.setMaxExtent = function (maxExtentParam) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(maxExtentParam)) {
          M.exception('No ha especificado ningún maxExtent');
@@ -1295,13 +1110,9 @@ goog.require('M.window');
       }
 
       // parses the parameter
-      try {
-         var maxExtent = M.parameter.maxExtent(maxExtentParam);
-         this.getImpl().setMaxExtent(maxExtent);
-      }
-      catch (err) {
-         M.dialog.error(err);
-      }
+      var maxExtent = M.parameter.maxExtent(maxExtentParam);
+      this.getImpl().setMaxExtent(maxExtent);
+
       return this;
    };
 
@@ -1314,7 +1125,7 @@ goog.require('M.window');
     * @returns {Mx.Extent}
     * @api stable
     */
-   M.Map.prototype.getBbox = function() {
+   M.Map.prototype.getBbox = function () {
       // checks if the implementation can set the maxExtent
       if (M.utils.isUndefined(M.impl.Map.prototype.getBbox)) {
          M.exception('La implementación usada no posee el método getBbox');
@@ -1335,7 +1146,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.setBbox = function(bboxParam) {
+   M.Map.prototype.setBbox = function (bboxParam) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(bboxParam)) {
          M.exception('No ha especificado ningún bbox');
@@ -1346,14 +1157,10 @@ goog.require('M.window');
          M.exception('La implementación usada no posee el método setBbox');
       }
 
-      try {
-         // parses the parameter
-         var bbox = M.parameter.maxExtent(bboxParam);
-         this.getImpl().setBbox(bbox);
-      }
-      catch (err) {
-         M.dialog.error('El formato del parámetro bbox no es el correcto');
-      }
+      // parses the parameter
+      var bbox = M.parameter.maxExtent(bboxParam);
+      this.getImpl().setBbox(bbox);
+
       return this;
    };
 
@@ -1366,7 +1173,7 @@ goog.require('M.window');
     * @returns {Number}
     * @api stable
     */
-   M.Map.prototype.getZoom = function() {
+   M.Map.prototype.getZoom = function () {
       // checks if the implementation can get the zoom
       if (M.utils.isUndefined(M.impl.Map.prototype.getZoom)) {
          M.exception('La implementación usada no posee el método getZoom');
@@ -1387,7 +1194,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.setZoom = function(zoomParam) {
+   M.Map.prototype.setZoom = function (zoomParam) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(zoomParam)) {
          M.exception('No ha especificado ningún zoom');
@@ -1398,20 +1205,14 @@ goog.require('M.window');
          M.exception('La implementación usada no posee el método setZoom');
       }
 
-      try {
-         // parses the parameter
-         var zoom = M.parameter.zoom(zoomParam);
-         this._userZoom = zoom;
-         this.getImpl().setZoom(zoom);
-      }
-      catch (err) {
-         M.dialog.error(err);
-      }
+      // parses the parameter
+      var zoom = M.parameter.zoom(zoomParam);
+      this.getImpl().setZoom(zoom);
 
       return this;
    };
 
-   //
+   // 
    /**
     * This function provides the current center of this
     * map instance
@@ -1421,7 +1222,7 @@ goog.require('M.window');
     * @returns {Array<Number>}
     * @api stable
     */
-   M.Map.prototype.getCenter = function() {
+   M.Map.prototype.getCenter = function () {
       // checks if the implementation can get the center
       if (M.utils.isUndefined(M.impl.Map.prototype.getCenter)) {
          M.exception('La implementación usada no posee el método getCenter');
@@ -1442,7 +1243,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.setCenter = function(centerParam) {
+   M.Map.prototype.setCenter = function (centerParam) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(centerParam)) {
          M.exception('No ha especificado ningún center');
@@ -1454,13 +1255,8 @@ goog.require('M.window');
       }
 
       // parses the parameter
-      try {
-         let center = M.parameter.center(centerParam);
-         this.getImpl().setCenter(center);
-      }
-      catch (err) {
-         M.dialog.error(err);
-      }
+      var center = M.parameter.center(centerParam);
+      this.getImpl().setCenter(center);
 
       return this;
    };
@@ -1474,7 +1270,7 @@ goog.require('M.window');
     * @returns {Array<Number>}
     * @api stable
     */
-   M.Map.prototype.getResolutions = function() {
+   M.Map.prototype.getResolutions = function () {
       // checks if the implementation can set the maxExtent
       if (M.utils.isUndefined(M.impl.Map.prototype.getResolutions)) {
          M.exception('La implementación usada no posee el método getResolutions');
@@ -1495,7 +1291,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.setResolutions = function(resolutionsParam) {
+   M.Map.prototype.setResolutions = function (resolutionsParam) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(resolutionsParam)) {
          M.exception('No ha especificado ninguna resolución');
@@ -1515,26 +1311,6 @@ goog.require('M.window');
    };
 
    /**
-    * This function provides the current scale of this
-    * map instance
-    *
-    * @public
-    * @function
-    * @returns {Mx.Projection}
-    * @api stable
-    */
-   M.Map.prototype.getScale = function() {
-      // checks if the implementation has the method
-      if (M.utils.isUndefined(M.impl.Map.prototype.getScale)) {
-         M.exception('La implementación usada no posee el método getScale');
-      }
-
-      var scale = this.getImpl().getScale();
-
-      return scale;
-   };
-
-   /**
     * This function provides the current projection of this
     * map instance
     *
@@ -1543,7 +1319,7 @@ goog.require('M.window');
     * @returns {Mx.Projection}
     * @api stable
     */
-   M.Map.prototype.getProjection = function() {
+   M.Map.prototype.getProjection = function () {
       // checks if the implementation has the method
       if (M.utils.isUndefined(M.impl.Map.prototype.getProjection)) {
          M.exception('La implementación usada no posee el método getProjection');
@@ -1564,7 +1340,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.setProjection = function(projection, asDefault) {
+   M.Map.prototype.setProjection = function (projection) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(projection)) {
          M.exception('No ha especificado ninguna proyección');
@@ -1576,14 +1352,8 @@ goog.require('M.window');
       }
 
       // parses the parameter
-      try {
-         projection = M.parameter.projection(projection);
-         this.getImpl().setProjection(projection);
-         this._defaultProj = (this._defaultProj && (asDefault === true));
-      }
-      catch (err) {
-         M.dialog.error(err);
-      }
+      projection = M.parameter.projection(projection);
+      this.getImpl().setProjection(projection);
 
       return this;
    };
@@ -1598,7 +1368,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.addPlugin = function(plugin) {
+   M.Map.prototype.addPlugin = function (plugin) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(plugin)) {
          M.exception('No ha especificado ningún plugin');
@@ -1623,7 +1393,7 @@ goog.require('M.window');
     * @returns {Promise}
     * @api stable
     */
-   M.Map.prototype.getEnvolvedExtent = function() {
+   M.Map.prototype.getEnvolvedExtent = function () {
       // checks if the implementation can set the maxExtent
       if (M.utils.isUndefined(M.impl.Map.prototype.getEnvolvedExtent)) {
          M.exception('La implementación usada no posee el método getEnvolvedExtent');
@@ -1643,7 +1413,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.zoomToMaxExtent = function(keepUserZoom) {
+   M.Map.prototype.zoomToMaxExtent = function () {
       // zoom to maxExtent if no zoom was specified
       var maxExtent = this.getMaxExtent();
       if (!M.utils.isNullOrEmpty(maxExtent)) {
@@ -1653,37 +1423,12 @@ goog.require('M.window');
          /* if no maxExtent was provided then
           calculates the envolved extent */
          var this_ = this;
-         this.getEnvolvedExtent().then(function(extent) {
-            if ((keepUserZoom !== true) || (M.utils.isNullOrEmpty(this_._userZoom))) {
-               this_.setBbox(extent);
-            }
+         this.getEnvolvedExtent().then(function (extent) {
+            this_.setBbox(extent);
          });
       }
 
       return this;
-   };
-
-   /**
-    * This function adds a ticket to control secure layers
-    *
-    * @public
-    * @function
-    * @param {String} ticket ticket user
-    * @api stable
-    */
-   M.Map.prototype.setTicket = function(ticket) {
-      if (!M.utils.isNullOrEmpty(ticket)) {
-         if (M.config.PROXY_POST_PATH.indexOf("ticket=") == -1) {
-            M.config('PROXY_POST_PATH', M.utils.addParameters(M.config.PROXY_POST_PATH, {
-               'ticket': ticket
-            }));
-         }
-         if (M.config.PROXY_PATH.indexOf("ticket=") == -1) {
-            M.config('PROXY_PATH', M.utils.addParameters(M.config.PROXY_PATH, {
-               'ticket': ticket
-            }));
-         }
-      }
    };
 
    /**
@@ -1694,9 +1439,9 @@ goog.require('M.window');
     * @function
     * @returns {M.Map}
     */
-   M.Map.prototype.getInitCenter_ = function() {
+   M.Map.prototype.getInitCenter_ = function () {
       var this_ = this;
-      var promise = new Promise(function(success, fail) {
+      var promise = new Promise(function (success, fail) {
          var center = this_.getCenter();
          if (!M.utils.isNullOrEmpty(center)) {
             success(center);
@@ -1712,7 +1457,7 @@ goog.require('M.window');
                success(center);
             }
             else {
-               this_.getEnvolvedExtent().then(function(extent) {
+               this_.getEnvolvedExtent().then(function (extent) {
                   // obtener centrol del extent
                   center = {
                      'x': ((extent.x.max + extent.x.min) / 2),
@@ -1736,7 +1481,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.destroy = function() {
+   M.Map.prototype.destroy = function () {
       // checks if the implementation can provide the implementation map
       if (M.utils.isUndefined(M.impl.Map.prototype.destroy)) {
          M.exception('La implementación usada no posee el método destroy');
@@ -1754,9 +1499,9 @@ goog.require('M.window');
     * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
     * @api stable
     */
-   M.Map.prototype.addLabel = function(labelParam, coordParam) {
+   M.Map.prototype.addLabel = function (layersParam, coordParam) {
       // checks if the param is null or empty
-      if (M.utils.isNullOrEmpty(labelParam)) {
+      if (M.utils.isNullOrEmpty(layersParam)) {
          M.exception('No ha especificado ninguna proyección');
       }
 
@@ -1769,13 +1514,13 @@ goog.require('M.window');
       var coord = null;
 
       // object
-      if (M.utils.isObject(labelParam)) {
-         text = M.utils.escapeJSCode(labelParam.text);
-         coord = labelParam.coord;
+      if (M.utils.isObject(layersParam)) {
+         text = layersParam.text;
+         coord = layersParam.coord;
       }
       // string
       else {
-         text = M.utils.escapeJSCode(labelParam);
+         text = layersParam;
          coord = coordParam;
       }
 
@@ -1786,23 +1531,8 @@ goog.require('M.window');
          coord = M.parameter.center(coord);
       }
 
-      if (M.utils.isNullOrEmpty(coord)) {
-         let this_ = this;
-         this.getInitCenter_().then(function(initCenter) {
-            // checks if the user stablished a center while it was
-            // calculated
-            let newCenter = this_.getCenter();
-            if (M.utils.isNullOrEmpty(newCenter)) {
-               newCenter = initCenter;
-            }
-            var label = new M.Label(text, newCenter);
-            this_.getImpl().addLabel(label);
-         });
-      }
-      else {
-         var label = new M.Label(text, coord);
-         this.getImpl().addLabel(label);
-      }
+      var label = new M.Label(text, coord);
+      this.getImpl().addLabel(label);
    };
 
 
@@ -1814,7 +1544,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.getLabel = function() {
+   M.Map.prototype.getLabel = function () {
       return this.getImpl().getLabel();
    };
 
@@ -1827,7 +1557,7 @@ goog.require('M.window');
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.removeLabel = function() {
+   M.Map.prototype.removeLabel = function () {
       return this.getImpl().removeLabel();
    };
 
@@ -1838,7 +1568,7 @@ goog.require('M.window');
     * @param {Array<Mx.Point>|Mx.Point} points
     * @api stable
     */
-   M.Map.prototype.drawPoints = function(points) {
+   M.Map.prototype.drawPoints = function (points) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(points)) {
          M.exception('No ha especificado ningún punto');
@@ -1857,133 +1587,13 @@ goog.require('M.window');
    };
 
    /**
-    * TODO
-    *
-    * @function
-    * @api stable
-    * @returns {M.Map}
-    */
-   M.Map.prototype.addPanels = function(panels) {
-      if (!M.utils.isNullOrEmpty(panels)) {
-         if (!M.utils.isArray(panels)) {
-            panels = [panels];
-         }
-         panels.forEach(function(panel) {
-            var isIncluded = false;
-            for (var i = 0, ilen = this._panels.length; i < ilen; i++) {
-               if (this._panels[i].equals(panel)) {
-                  isIncluded = true;
-                  break;
-               }
-            }
-            if ((panel instanceof M.ui.Panel) && !isIncluded) {
-               this._panels.push(panel);
-               var queryArea = 'div.m-area'.concat(panel.position);
-               var areaContainer = this._areasContainer.querySelector(queryArea);
-               panel.addTo(this, areaContainer);
-            }
-         }, this);
-      }
-      return this;
-   };
-
-   /**
-    * TODO
-    *
-    * @function
-    * @api stable
-    * @returns {array<M.ui.Panel>}
-    */
-   M.Map.prototype.getPanels = function(names) {
-      var panels = [];
-
-      // parses parameters to Array
-      if (M.utils.isNullOrEmpty(names)) {
-         panels = this._panels;
-      }
-      else {
-         if (!M.utils.isArray(names)) {
-            names = [names];
-         }
-         for (var i = 0, ilen = names.length; i < ilen; i++) {
-            var name = names[i];
-            for (var e = 0, elen = this._panels.length; e < elen; e++) {
-               if (this._panels[e].name === name) {
-                  panels.push(this._panels[e]);
-                  break;
-               }
-            }
-         }
-      }
-
-      return panels;
-   };
-
-   /**
-    * TODO
-    *
-    * @private
-    * @function
-    */
-   M.Map.prototype.createMainPanels_ = function() {
-      // areas container
-      this._areasContainer = goog.dom.createElement('div');
-      goog.dom.classlist.add(this._areasContainer, 'm-areas');
-
-      // top-left area
-      var tlArea = goog.dom.createElement('div');
-      goog.dom.classlist.add(tlArea, 'm-area');
-      goog.dom.classlist.add(tlArea, 'm-top');
-      goog.dom.classlist.add(tlArea, 'm-left');
-      // top-right area
-      var trArea = goog.dom.createElement('div');
-      goog.dom.classlist.add(trArea, 'm-area');
-      goog.dom.classlist.add(trArea, 'm-top');
-      goog.dom.classlist.add(trArea, 'm-right');
-
-      // bottom-left area
-      var blArea = goog.dom.createElement('div');
-      goog.dom.classlist.add(blArea, 'm-area');
-      goog.dom.classlist.add(blArea, 'm-bottom');
-      goog.dom.classlist.add(blArea, 'm-left');
-      // bottom-right area
-      var brArea = goog.dom.createElement('div');
-      goog.dom.classlist.add(brArea, 'm-area');
-      goog.dom.classlist.add(brArea, 'm-bottom');
-      goog.dom.classlist.add(brArea, 'm-right');
-
-      goog.dom.appendChild(this._areasContainer, tlArea);
-      goog.dom.appendChild(this._areasContainer, trArea);
-      goog.dom.appendChild(this._areasContainer, blArea);
-      goog.dom.appendChild(this._areasContainer, brArea);
-
-      goog.dom.appendChild(this.getContainer(), this._areasContainer);
-   };
-
-   /**
-    * This function provides the core map used by the
-    * implementation
-    *
-    * @function
-    * @api stable
-    * @returns {Object} core map used by the implementation
-    */
-   M.Map.prototype.getContainer = function() {
-      // checks if the implementation can provides the container
-      if (M.utils.isUndefined(M.impl.Map.prototype.getContainer)) {
-         M.exception('La implementación usada no posee el método getContainer');
-      }
-      return this.getImpl().getContainer();
-   };
-
-   /**
     * This function removes the WMC layers to the map
     *
     * @function
     * @returns {Array<Mx.Point>}
     * @api stable
     */
-   M.Map.prototype.getPoints = function(coordinate) {
+   M.Map.prototype.getPoints = function (coordinate) {
       // checks if the implementation can add points
       if (M.utils.isUndefined(M.impl.Map.prototype.getPoints)) {
          M.exception('La implementación usada no posee el método getPoints');
@@ -2000,89 +1610,11 @@ goog.require('M.window');
     * @api stable
     * @returns {Object} core map used by the implementation
     */
-   M.Map.prototype.getMapImpl = function() {
+   M.Map.prototype.getMapImpl = function () {
       // checks if the implementation can add points
       if (M.utils.isUndefined(M.impl.Map.prototype.getMapImpl)) {
          M.exception('La implementación usada no posee el método getMapImpl');
       }
       return this.getImpl().getMapImpl();
-   };
-
-   /**
-    * TODO
-    *
-    * @function
-    * @api stable
-    * @returns {M.Popup} core map used by the implementation
-    */
-   M.Map.prototype.getPopup = function() {
-      return this.popup_;
-   };
-
-   /**
-    * TODO
-    *
-    * @function
-    * @api stable
-    * @returns {M.Map} core map used by the implementation
-    */
-   M.Map.prototype.removePopup = function() {
-      // checks if the implementation can add popups
-      if (M.utils.isUndefined(M.impl.Map.prototype.removePopup)) {
-         M.exception('La implementación usada no posee el método removePopup');
-      }
-
-      if (!M.utils.isNullOrEmpty(this.popup_)) {
-         this.getImpl().removePopup(this.popup_);
-         this.popup_.destroy();
-         this.popup_ = null;
-      }
-
-      return this;
-   };
-
-   /**
-    * TODO
-    *
-    * @function
-    * @api stable
-    * @returns {M.Map} core map used by the implementation
-    */
-   M.Map.prototype.addPopup = function(popup, coordinate) {
-      // checks if the param is null or empty
-      if (M.utils.isNullOrEmpty(popup)) {
-         M.exception('No ha especificado ningún popup');
-      }
-
-      if (!(popup instanceof M.Popup)) {
-         M.exception('El popup especificado no es válido');
-      }
-
-      if (!M.utils.isNullOrEmpty(this.popup_)) {
-         this.removePopup(this.popup_);
-      }
-      this.popup_ = popup;
-      this.popup_.addTo(this, coordinate);
-
-      return this;
-   };
-
-
-   /**
-    * TODO
-    * @public
-    * @function
-    * @api stable
-    */
-   M.Map.LAYER_SORT = function(layer1, layer2) {
-      if (!M.utils.isNullOrEmpty(layer1) && !M.utils.isNullOrEmpty(layer2)) {
-         let z1 = layer1.getZIndex();
-         let z2 = layer2.getZIndex();
-
-         return (z1 - z2);
-      }
-
-      // equals
-      return 0;
    };
 })();

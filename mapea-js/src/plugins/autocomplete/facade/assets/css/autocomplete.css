@@ -3,6 +3,6 @@ input.m-plugin-autocomplete {
    outline: none
 }
 
-input.m-plugin-autocomplete.m-searching {
+input.m-plugin-autocomplete.searching {
    border-color: red;
 }

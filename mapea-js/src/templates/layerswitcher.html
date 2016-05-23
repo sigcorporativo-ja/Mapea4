@@ -1,42 +1,39 @@
 <div class="m-control m-layerswitcher-container">
+   <button id="m-layersiwtcher-btn" title="Leyenda"></button>
    <div class="m-layersiwtcher-panel" id="m-layerswitcher-panel">
       <ul>
          {{#gt baseLayers.length 0}}
-            <li class="group">
-               <div class="title">Capas base</div>
-               <ul>
-                  {{#each baseLayers}}
-                     <li class="{{#if outOfRange}}disabled{{/if}}{{#if visible}} visible{{/if}}">
-                        <div class="layer-base">
-                           <span id="{{id}}" class="m-check g-cartografia-check{{#if visible}}5{{^}}4{{/if}}"></span>
-                           <span>{{title}}</span>
-                        </div>
-                        <div class="legend">
-                           <img data-layer-name="{{id}}" src="{{legend}}"></img>
-                        </div>
-                     </li>
-                  {{/each}}
-               </ul>
-            </li>
+         <li class="group">
+            <span>Capas base</span>
+            <ul>
+               {{#each baseLayers}}
+               <li{{#if outOfRange}} class="disabled" {{/if}}>
+                  <div class="layer-base">
+                     <i id="{{id}}" class="fa fa-{{#if visible}}dot-{{/if}}circle-o"></i>
+                     <span>{{title}}</span>
+                  </div>
+         </li>
+         {{/each}}
+         </ul>
+         </li>
          {{/gt}}
-         {{#gt overlayLayers.length 0}}
-            <li class="group">
-               <div class="title">Otras capas</div>
-               <ul>
-                  {{#each overlayLayers}}
-                     <li class="{{#if outOfRange}}disabled{{/if}}{{#if visible}} visible{{/if}}">
-                        <div class="layer">
-                           <span id="{{id}}" class="m-check g-cartografia-check{{#if visible}}3{{^}}2{{/if}}"></span>
-                           <span>{{title}}</span>
-                        </div>
-                        <div class="legend">
-                           <img data-layer-name="{{id}}" src="{{legend}}"></img>
-                        </div>
-                     </li>
-                  {{/each}}
-               </ul>
-            </li>
-         {{/gt}}
+         <li class="group">
+            <span>Otras capas</span>
+            <ul>
+               {{#each overlayLayers}}
+               <li class="{{#if outOfRange}}disabled{{/if}}{{#if visible}} visible{{/if}}">
+                  <div class="layer">
+                     <i id="{{id}}" class="fa fa-toggle-{{#if visible}}on{{^}}off{{/if}}"></i>
+                     <span>{{title}}</span>
+                  </div>
+                  <div class="legend">
+                     <img src="{{legend}}"></img>
+                  </div>
+                  <!-- <div class="legend" style="background-image: url('{{legend}}')"></div> -->
+               </li>
+               {{/each}}
+            </ul>
+         </li>
       </ul>
    </div>
 </div>

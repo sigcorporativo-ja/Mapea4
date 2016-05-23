@@ -1,0 +1,16 @@
+<div class="m-geobusquedas-help">
+   {{#each entities}}
+   <div class="entity">
+      <div class="name">{{entity}}</div>
+      <div class="info">{{info}}</div>
+      <ul class="keywords">
+         {{#each keywords}}
+         <li>{{this}}</li>
+         {{/each}}
+      </ul>
+      <div class="example">
+         <code>{{example}}</code>
+      </div>
+   </div>
+   {{/each}}
+</div>

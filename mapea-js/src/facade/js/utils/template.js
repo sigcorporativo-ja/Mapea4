@@ -25,22 +25,16 @@ goog.require('M.exception');
     * @function
     * @param {string} templatePath name of the template
     * @param {Object} templateVars JSON with the variables for the template
-    * @param {boolean} parseToHtml flag to indicate if the compilated template
-    * should be parsed to HTML. Default value is true.
     * @param {Object} opt_this scope
     * @returns {Promise} the promise with the html resultant
     * @api stable
     */
-   M.template.compile = function (templatePath, templateVars, parseToHtml, opt_this) {
+   M.template.compile = function (templatePath, templateVars, opt_this) {
       var compilePromise = new Promise(function (success, fail) {
          M.template.get(templatePath, opt_this).then(function (fn) {
             var htmlText = fn.call(null, templateVars);
-            if (parseToHtml !== false) {
-               success.call(opt_this, M.utils.stringToHtml(htmlText));
-            }
-            else {
-               success.call(opt_this, htmlText);
-            }
+            var html = M.utils.stringToHtml(htmlText);
+            success.call(opt_this, html);
          });
       });
       return compilePromise;
@@ -66,7 +60,7 @@ goog.require('M.exception');
             // loads the template
             var templateUrl = M.template.getTemplateUrl_(templatePath);
             M.remote.get(templateUrl).then(function (response) {
-               templateFn = Handlebars.compile(response.text);
+               templateFn = Handlebars.compile(response.responseTxt);
                M.template.templates_[templatePath] = templateFn;
                success.call(opt_this, templateFn);
             });

@@ -11,7 +11,7 @@ goog.require('P.control.Measure');
  * @extends {M.control.Measure}
  * @api stable
  */
-M.control.MeasureLength = (function() {
+M.control.MeasureLength = (function () {
    // checks if the implementation can create WMC layers
    if (M.utils.isUndefined(M.impl.control.MeasureLength)) {
       M.exception('La implementación usada no puede crear controles MeasureLength');
@@ -32,7 +32,7 @@ goog.inherits(M.control.MeasureLength, M.control.Measure);
  * @function
  * @api stable
  */
-M.control.MeasureLength.prototype.equals = function(obj) {
+M.control.MeasureLength.prototype.equals = function (obj) {
    var equals = false;
    if (obj instanceof M.control.MeasureLength) {
       equals = (this.name === obj.name);
@@ -48,12 +48,3 @@ M.control.MeasureLength.prototype.equals = function(obj) {
  * @api stable
  */
 M.control.MeasureLength.TEMPLATE = 'measurelength.html';
-
-/**
- * Help message
- * @const
- * @type {string}
- * @public
- * @api stable
- */
-M.control.MeasureLength.HELP_KEEP_MESSAGE = 'Click para continuar dibujando la línea';

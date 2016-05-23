@@ -6,7 +6,7 @@ goog.require('M.exception');
 goog.require('goog.dom.classlist');
 
 
-(function() {
+(function () {
    /**
     * @classdesc
     * Main constructor of the class. Creates a Label
@@ -19,49 +19,43 @@ goog.require('goog.dom.classlist');
     * @extends {M.Control}
     * @api stable
     */
-   M.Label = (function(text, coordOpts) {
+   M.Label = (function (text, coord) {
+      this.text = text;
+      this.coord = coord;
+      if (M.utils.isUndefined(M.impl.Label)) {
+         M.exception('La implementación usada no puede crear labels');
+      }
       // implementation of this control
-      var impl = new M.impl.Label(text, coordOpts);
+      var impl = new M.impl.Label(text, coord);
       // calls the super constructor
       goog.base(this, impl);
    });
    goog.inherits(M.Label, M.facade.Base);
 
    /**
-    * This function calls the hide method of implementation
-    *
-    * @public
-    * @function
-    * @api stable
-    * @export
-    */
-   M.Label.prototype.hide = function() {
-      this.getImpl().hide();
-   };
-
-   /**
     * This function calls the show method of implementation
-    *
+    * 
     * @public
     * @function
     * @param {M.Map} map map to add the plugin
     * @api stable
     * @export
     */
-   M.Label.prototype.show = function(map) {
+   M.Label.prototype.show = function (map) {
       this.getImpl().show(map);
+
    };
 
    /**
     * This function return popup created
-    *
+    * 
     * @public
     * @function
     * @returns {Object} popup created
     * @api stable
     * @export
     */
-   M.Label.prototype.getPopup = function() {
+   M.Label.prototype.getPopup = function () {
       return this.getImpl().getPopup();
    };
 

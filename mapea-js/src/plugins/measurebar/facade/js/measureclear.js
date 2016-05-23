@@ -19,7 +19,7 @@ M.control.MeasureClear = (function (measureLengthControl, measureAreaControl) {
    var impl = new M.impl.control.MeasureClear(measureLengthControl.getImpl(), measureAreaControl.getImpl());
 
    // calls the super constructor
-   goog.base(this, impl, M.control.MeasureClear.NAME);
+   goog.base(this, impl);
 });
 goog.inherits(M.control.MeasureClear, M.Control);
 
@@ -61,16 +61,6 @@ M.control.MeasureClear.prototype.destroy = function () {
    this.getImpl().destroy();
    this.impl = null;
 };
-
-/**
- * Name to identify this control
- * @const
- * @type {string}
- * @public
- * @api stable
- */
-M.control.MeasureClear.NAME = 'measurebar';
-
 /**
  * Template for this controls
  * @const

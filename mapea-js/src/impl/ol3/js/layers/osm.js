@@ -49,7 +49,7 @@ goog.require('ol.source.OSM');
          // if this layer is base then it hides all base layers
          if ((visibility === true) && (this.transparent !== true)) {
             this.map.getBaseLayers().forEach(function (layer) {
-               this.ol3Layer.setVisible(false);
+               wmsLayer.setVisible(false);
             });
          }
 
@@ -101,6 +101,9 @@ goog.require('ol.source.OSM');
       this.resolutions_ = resolutions;
 
       if ((this.tiled === true) && !M.utils.isNullOrEmpty(this.ol3Layer)) {
+         // gets the projection
+         var projection = ol.proj.get(this.map.getProjection().code);
+
          // gets the extent
          var this_ = this;
          (new Promise(function (success, fail) {

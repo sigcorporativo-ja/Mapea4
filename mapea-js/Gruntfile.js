@@ -37,7 +37,7 @@ module.exports = function (grunt) {
       jshint: {
          core: {
             options: {
-               jshintrc: '.jshintrc'
+               sub: true
             },
             files: {
                'src': [
@@ -48,7 +48,7 @@ module.exports = function (grunt) {
          },
          plugins: {
             options: {
-               jshintrc: 'src/plugins/.jshintrc'
+               sub: true
             },
             files: {
                'src': [
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
          },
          tasks: {
             options: {
-               jshintrc: 'grunt-tasks/.jshintrc'
+               sub: true
             },
             files: {
                'src': [
@@ -86,7 +86,6 @@ module.exports = function (grunt) {
                create: [
                   'build/core/<%= pkg.version %>/assets/fonts',
                   'build/core/<%= pkg.version %>/assets/css',
-                  'build/core/<%= pkg.version %>/assets/img',
                   'build/core/<%= pkg.version %>/js',
                   'build/plugins/<%= pkg.version %>',
                   'build/templates/<%= pkg.version %>'
@@ -126,7 +125,8 @@ module.exports = function (grunt) {
                'build/core/<%= pkg.version %>/assets/css/mapea.ol3.min.css': [
                      'src/facade/assets/css/**/*.css',
                      'src/impl/ol3/assets/css/**/*.css',
-                     'libraries/ol3-popup/**/*.css'
+                     'libraries/ol3-popup/**/*.css',
+                     'libraries/components-font-awesome/font-awesome.css'
                   ]
             }]
          },
@@ -153,26 +153,21 @@ module.exports = function (grunt) {
                encoding: 'utf-8'
             }]
          },
-         assets: {
-            files: [{ // fonts
+         css: {
+            files: [{
+               expand: true,
+               cwd: 'libraries/components-font-awesome',
+               src: '**/*-webfont.*',
+               dest: 'build/core/<%= pkg.version %>/assets/fonts/',
+               flatten: false,
+               encoding: 'utf-8'
+            }, {
                expand: true,
                cwd: 'src',
                src: '**/assets/fonts/*.*',
                dest: 'build/core/<%= pkg.version %>/assets/fonts/',
                flatten: true,
                encoding: 'utf-8'
-            }, { // facade img
-               expand: true,
-               cwd: 'src',
-               src: 'facade/assets/img/*.*',
-               dest: 'build/core/<%= pkg.version %>/assets/img/',
-               flatten: true
-            }, { // impl img
-               expand: true,
-               cwd: 'src',
-               src: 'impl/assets/img/*.*',
-               dest: 'build/core/<%= pkg.version %>/assets/img/',
-               flatten: true
             }]
          },
          templates: {
@@ -199,13 +194,6 @@ module.exports = function (grunt) {
                src: '**/*.css',
                dest: 'build/plugins/<%= pkg.version %>/',
                flatten: true,
-               encoding: 'utf-8'
-            }, { // json
-               expand: true,
-               cwd: 'src/plugins',
-               src: '**/*.json',
-               dest: 'build/plugins/<%= pkg.version %>/',
-               flatten: false,
                encoding: 'utf-8'
             }]
          }
@@ -361,8 +349,6 @@ module.exports = function (grunt) {
                         "const",
                         "uselessCode"
                      ],
-                     language_in: "ECMASCRIPT6",
-                     language_out: "ECMASCRIPT5",
                      extra_annotation_name: ["api", "observable"],
                      compilation_level: "ADVANCED",
                      warning_level: "QUIET",
@@ -475,8 +461,6 @@ module.exports = function (grunt) {
                      "uselessCode"
                   ],
                   extra_annotation_name: ["api", "observable"],
-                  language_in: "ECMASCRIPT6",
-                  language_out: "ECMASCRIPT5",
                   compilation_level: "SIMPLE",
                   warning_level: "QUIET",
                   use_types_for_optimization: true,
@@ -599,7 +583,7 @@ module.exports = function (grunt) {
    grunt.loadTasks('./grunt-tasks');
 
    grunt.registerTask('clean-target', ['clean:build', 'mkdir']);
-   grunt.registerTask('css-core', ['copy:assets', 'cssmin:core']);
+   grunt.registerTask('css-core', ['copy:css', 'cssmin:core']);
    grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'concat', 'copy:configuration']);
    grunt.registerTask('css-plugins', ['copy:plugins', 'cssmin:plugins']);
    grunt.registerTask('js-plugins', ['jshint:plugins', 'generate-symbols-plugins', 'generate-exports-plugins', 'compile-plugins', 'clean:plugins-css']);

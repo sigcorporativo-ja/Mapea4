@@ -11,9 +11,9 @@ goog.require('P.impl.control.Measure');
  * @extends {M.impl.control.Measure}
  * @api stable
  */
-M.impl.control.MeasureLength = function() {
-   this.helpMsg_ = M.control.Measure.HELP_MESSAGE;
-   this.helpMsgContinue_ = M.control.MeasureLength.HELP_KEEP_MESSAGE;
+M.impl.control.MeasureLength = function () {
+   this.helpMsg_ = 'Click to start drawing';
+   this.helpMsgContinue_ = 'Click to continue drawing the line';
 
    goog.base(this, 'LineString');
 };
@@ -24,7 +24,7 @@ goog.inherits(M.impl.control.MeasureLength, M.impl.control.Measure);
  * Handle pointer move.
  * @param {ol.MapBrowserEvent} evt
  */
-M.impl.control.MeasureLength.prototype.formatGeometry = function(geometry) {
+M.impl.control.MeasureLength.prototype.formatGeometry = function (geometry) {
    var length = Math.round(geometry.getLength() * 100) / 100;
    var output;
    if (length > 100) {
@@ -42,6 +42,6 @@ M.impl.control.MeasureLength.prototype.formatGeometry = function(geometry) {
  * Handle pointer move.
  * @param {ol.MapBrowserEvent} evt
  */
-M.impl.control.MeasureLength.prototype.getTooltipCoordinate = function(geometry) {
+M.impl.control.MeasureLength.prototype.getTooltipCoordinate = function (geometry) {
    return geometry.getLastCoordinate();
 };

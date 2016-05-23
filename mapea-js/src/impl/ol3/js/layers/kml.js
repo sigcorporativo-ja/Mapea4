@@ -3,7 +3,7 @@ goog.provide('M.impl.layer.KML');
 goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.impl.Layer');
-goog.require('M.impl.loader.KML');
+goog.require('M.impl.FeatureLoaderJsonp');
 goog.require('M.impl.Popup');
 goog.require('M.impl.format.KML');
 
@@ -80,19 +80,12 @@ goog.require('goog.style');
       this.map = map;
 
       var formater = new M.impl.format.KML();
-      var loader = new M.impl.loader.KML(map, this.url, formater);
-      var this_ = this;
+      var loader = ol.featureloader.jsonp(this.url, formater, map, this);
       this.ol3Layer = new ol.layer.Vector({
          source: new ol.source.Vector({
             url: this.url,
             format: formater,
-            loader: loader.getLoaderFn(function (features, screenOverlay) {
-               this.addFeatures(features);
-               if (!M.utils.isNullOrEmpty(screenOverlay)) {
-                  var screenOverLayImg = M.impl.utils.addOverlayImage(screenOverlay, map);
-                  this_.setScreenOverlayImg(screenOverLayImg);
-               }
-            })
+            loader: loader
          })
       });
       // sets its visibility if it is in range
@@ -120,22 +113,16 @@ goog.require('goog.style');
       var feature = features[0];
 
       if (this.extract === true) {
-         var featureName = feature.get('name');
-         var featureDesc = feature.get('description');
-         var featureCoord = feature.getGeometry().getFirstCoordinate();
-
+         var popupVars = {
+            'name': feature.get('name'),
+            'desc': feature.get('description')
+         };
          var this_ = this;
-         M.template.compile(M.layer.KML.POPUP_TEMPLATE, {
-            'name': featureName,
-            'desc': featureDesc
-         }, false).then(function (htmlAsText) {
-            this_.popup_ = new M.Popup();
-            this_.popup_.addTab({
-               'icon': 'g-cartografia-comentarios',
-               'title': featureName,
-               'content': htmlAsText
-            });
-            this_.map.addPopup(this_.popup_, featureCoord);
+         M.template.compile(M.layer.KML.POPUP_TEMPLATE, popupVars).then(function (html) {
+            this_.popup_ = new M.impl.Popup(html);
+            this_.map.getImpl().addPopup(this_.popup_);
+            var coord = feature.getGeometry().getFirstCoordinate();
+            this_.popup_.show(coord, html);
          });
       }
    };

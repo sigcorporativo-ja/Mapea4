@@ -53,30 +53,34 @@ M.impl.format.GeoJSON.prototype.writeFeatureObject = function (
    var object = {
       'type': 'Feature'
    };
+   var idAttr = 'id';
+   var geometryAttr = 'geometry';
+   var propertiesAttr = 'properties';
+   var clickAttr = 'click';
 
    var id = feature.getId();
    if (id) {
-      object['id'] = id;
+      object[idAttr] = id;
    }
    var geometry = feature.getGeometry();
    if (geometry) {
-      object['geometry'] =
+      object[geometryAttr] =
          ol.format.GeoJSON.writeGeometry_(geometry, opt_options);
    }
    else {
-      object['geometry'] = null;
+      object[geometryAttr] = null;
    }
    var properties = feature.getProperties();
    delete properties[feature.getGeometryName()];
    if (!goog.object.isEmpty(properties)) {
-      object['properties'] = properties;
+      object[propertiesAttr] = properties;
    }
    else {
-      object['properties'] = null;
+      object[propertiesAttr] = null;
    }
 
    if (!M.utils.isNullOrEmpty(feature.click)) {
-      object['click'] = feature.click;
+      object[clickAttr] = feature.click;
    }
    return object;
 };

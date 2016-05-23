@@ -15,14 +15,7 @@ goog.require('ol.control.Control');
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.Control = function () {
-      /**
-       * @private
-       * @type {string}
-       * @expose
-       */
-      this.facadeMap_ = null;
-   };
+   M.impl.Control = function () {};
    goog.inherits(M.impl.Control, ol.control.Control);
 
    /**
@@ -36,7 +29,6 @@ goog.require('ol.control.Control');
     * @export
     */
    M.impl.Control.prototype.addTo = function (map, element) {
-      this.facadeMap_ = map;
       ol.control.Control.call(this, {
          'element': element,
          'target': null
@@ -54,19 +46,7 @@ goog.require('ol.control.Control');
     * @export
     */
    M.impl.Control.prototype.destroy = function () {
-      this.facadeMap_.removeControl(this);
-      this.facadeMap_ = null;
-   };
-
-   /**
-    * function remove the event 'click'
-    * 
-    * @public
-    * @function
-    * @api stable
-    * @export
-    */
-   M.impl.Control.prototype.getElement = function () {
-      return this.element;
+      this.map.removeControl(this);
+      this.map = null;
    };
 })();

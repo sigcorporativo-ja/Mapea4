@@ -24,7 +24,7 @@ goog.require('M.exception');
       var impl = new M.impl.control.Panzoombar();
 
       // calls the super constructor
-      goog.base(this, impl, M.control.Panzoombar.NAME);
+      goog.base(this, impl);
    });
    goog.inherits(M.control.Panzoombar, M.Control);
 

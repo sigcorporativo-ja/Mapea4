@@ -11,7 +11,7 @@ goog.require('goog.dom.classes');
  * @extends {ol.control.Control}
  * @api stable
  */
-M.impl.control.Measure = function(type) {
+M.impl.control.Measure = function (type) {
    /**
     * Type of the measure geometry
     * @private
@@ -88,8 +88,15 @@ goog.inherits(M.impl.control.Measure, M.impl.Control);
  * @param {function} template template of this control
  * @api stable
  */
-M.impl.control.Measure.prototype.addTo = function(map, element) {
+M.impl.control.Measure.prototype.addTo = function (map, element) {
    this.facadeMap_ = map;
+
+   // adds select events
+   var button = element.getElementsByTagName('button')['m-measure-button'];
+   goog.events.listen(button, [
+         goog.events.EventType.CLICK,
+         goog.events.EventType.TOUCHEND
+      ], this.onClick, false, this);
 
    // adds layer
    map.getMapImpl().addLayer(this.layer_);
@@ -107,7 +114,7 @@ M.impl.control.Measure.prototype.addTo = function(map, element) {
  * @function
  * @api stable
  */
-M.impl.control.Measure.prototype.onClick = function(obj) {
+M.impl.control.Measure.prototype.onClick = function (obj) {
    if (this.active === true) {
       this.deactivate();
    }
@@ -118,41 +125,41 @@ M.impl.control.Measure.prototype.onClick = function(obj) {
 
 /**
  * This function call 'addOnClickEvent_' to active 'OnClick' Event
- *
+ * 
  * @public
  * @function
  * @api stable
  */
-M.impl.control.Measure.prototype.activate = function() {
+M.impl.control.Measure.prototype.activate = function () {
    // if it is measure length then deactivate measure area
    if (this instanceof M.impl.control.MeasureLength) {
-      var measureArea = this.facadeMap_.getControls().filter(function(control) {
+      var measureArea = this.facadeMap_.getControls().filter(function (control) {
          return (control instanceof M.control.MeasureArea);
       })[0];
       measureArea.deactivate();
    }
    // if it is measure area then deactivate measure length
    else if (this instanceof M.impl.control.MeasureArea) {
-      var measureLength = this.facadeMap_.getControls().filter(function(control) {
+      var measureLength = this.facadeMap_.getControls().filter(function (control) {
          return (control instanceof M.control.MeasureLength);
       })[0];
       measureLength.deactivate();
    }
-   this.createHelpTooltip_().then(function() {
-      this.facadeMap_.getMapImpl().on('pointermove', this.pointerMoveHandler_, this);
-      this.facadeMap_.getMapImpl().addInteraction(this.draw_);
-      this.active = true;
-   }.bind(this));
+   this.createHelpTooltip_();
+   this.facadeMap_.getMapImpl().on('pointermove', this.pointerMoveHandler_, this);
+   this.facadeMap_.getMapImpl().addInteraction(this.draw_);
+
+   this.active = true;
 };
 
 /**
  * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
- *
+ * 
  * @public
  * @function
  * @api stable
  */
-M.impl.control.Measure.prototype.deactivate = function() {
+M.impl.control.Measure.prototype.deactivate = function () {
    this.facadeMap_.getMapImpl().un('pointermove', this.pointerMoveHandler_, this);
    this.facadeMap_.getMapImpl().removeInteraction(this.draw_);
    this.clear();
@@ -163,25 +170,25 @@ M.impl.control.Measure.prototype.deactivate = function() {
 
 /**
  * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
- *
+ * 
  * @private
  * @function
  */
-M.impl.control.Measure.prototype.createLayer_ = function() {
+M.impl.control.Measure.prototype.createLayer_ = function () {
    var layer = new ol.layer.Vector({
       source: new ol.source.Vector(),
       style: new ol.style.Style({
          fill: new ol.style.Fill({
-            color: 'rgba(51, 124, 235, 0.2)'
+            color: 'rgba(255, 255, 255, 0.2)'
          }),
          stroke: new ol.style.Stroke({
-            color: '#337ceb',
+            color: '#ffcc33',
             width: 2
          }),
          image: new ol.style.Circle({
             radius: 7,
             fill: new ol.style.Fill({
-               color: '#337ceb'
+               color: '#ffcc33'
             })
          })
       }),
@@ -192,30 +199,30 @@ M.impl.control.Measure.prototype.createLayer_ = function() {
 
 /**
  * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
- *
+ * 
  * @private
  * @function
  */
-M.impl.control.Measure.prototype.createIteractionDraw_ = function() {
+M.impl.control.Measure.prototype.createIteractionDraw_ = function () {
    var draw = new ol.interaction.Draw({
       source: this.layer_.getSource(),
       type: this.type_,
       style: new ol.style.Style({
          fill: new ol.style.Fill({
-            color: 'rgba(255, 255, 255, 0.5)'
+            color: 'rgba(255, 255, 255, 0.2)'
          }),
          stroke: new ol.style.Stroke({
-            color: '#b54d01',
+            color: 'rgba(0, 0, 0, 0.5)',
             lineDash: [10, 10],
             width: 2
          }),
          image: new ol.style.Circle({
             radius: 5,
             stroke: new ol.style.Stroke({
-               color: '#b54d01'
+               color: 'rgba(0, 0, 0, 0.7)'
             }),
             fill: new ol.style.Fill({
-               color: 'rgba(255, 255, 255, 0.5)'
+               color: 'rgba(255, 255, 255, 0.2)'
             })
          })
       })
@@ -228,13 +235,13 @@ M.impl.control.Measure.prototype.createIteractionDraw_ = function() {
 
 /**
  * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
- *
+ * 
  * @private
  * @function
  */
-M.impl.control.Measure.prototype.createHelpTooltip_ = function() {
+M.impl.control.Measure.prototype.createHelpTooltip_ = function () {
    var this_ = this;
-   return M.template.compile(M.control.Measure.POINTER_TOOLTIP_TEMPLATE).then(function(helpTooltipElement) {
+   M.template.compile(M.control.Measure.POINTER_TOOLTIP_TEMPLATE).then(function (helpTooltipElement) {
       this_.helpTooltip_ = new ol.Overlay({
          element: helpTooltipElement,
          offset: [15, 0],
@@ -242,17 +249,18 @@ M.impl.control.Measure.prototype.createHelpTooltip_ = function() {
       });
       this_.facadeMap_.getMapImpl().addOverlay(this_.helpTooltip_);
    });
+
 };
 
 /**
  * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
- *
+ * 
  * @private
  * @function
  */
-M.impl.control.Measure.prototype.createMeasureTooltip_ = function() {
+M.impl.control.Measure.prototype.createMeasureTooltip_ = function () {
    var this_ = this;
-   M.template.compile(M.control.Measure.MEASURE_TOOLTIP_TEMPLATE).then(function(measureTooltipElement) {
+   M.template.compile(M.control.Measure.MEASURE_TOOLTIP_TEMPLATE).then(function (measureTooltipElement) {
       if (!M.utils.isNullOrEmpty(this_.measureTooltip_)) {
          this_.overlays_.push(this_.measureTooltip_);
       }
@@ -267,11 +275,11 @@ M.impl.control.Measure.prototype.createMeasureTooltip_ = function() {
 
 /**
  * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
- *
+ * 
  * @private
  * @function
  */
-M.impl.control.Measure.prototype.onDrawStart_ = function(evt) {
+M.impl.control.Measure.prototype.onDrawStart_ = function (evt) {
    this.currentFeature_ = evt.feature;
    this.tooltipCoord_ = evt.coordinate;
    this.currentFeature_.getGeometry().on('change', this.onGeometryChange_, this);
@@ -279,11 +287,11 @@ M.impl.control.Measure.prototype.onDrawStart_ = function(evt) {
 
 /**
  * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
- *
+ * 
  * @private
  * @function
  */
-M.impl.control.Measure.prototype.onDrawEnd_ = function(evt) {
+M.impl.control.Measure.prototype.onDrawEnd_ = function (evt) {
    this.currentFeature_.getGeometry().un('change', this.onGeometryChange_);
 
    // unset sketch
@@ -298,7 +306,7 @@ M.impl.control.Measure.prototype.onDrawEnd_ = function(evt) {
  * Handle pointer move.
  * @param {ol.MapBrowserEvent} evt
  */
-M.impl.control.Measure.prototype.pointerMoveHandler_ = function(evt) {
+M.impl.control.Measure.prototype.pointerMoveHandler_ = function (evt) {
    if (evt.dragging) {
       return;
    }
@@ -316,7 +324,7 @@ M.impl.control.Measure.prototype.pointerMoveHandler_ = function(evt) {
  * Handle pointer move.
  * @param {ol.MapBrowserEvent} evt
  */
-M.impl.control.Measure.prototype.onGeometryChange_ = function(evt) {
+M.impl.control.Measure.prototype.onGeometryChange_ = function (evt) {
    var newGeometry = evt.target;
    var tooltipText = this.formatGeometry(newGeometry);
    var tooltipCoord = this.getTooltipCoordinate(newGeometry);
@@ -329,16 +337,16 @@ M.impl.control.Measure.prototype.onGeometryChange_ = function(evt) {
 
 /**
  * Clear all measures
- *
+ * 
  * @public
  * @function
  * @api stable
  */
-M.impl.control.Measure.prototype.clear = function() {
+M.impl.control.Measure.prototype.clear = function () {
    if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.layer_.getSource().clear();
    }
-   this.overlays_.forEach(function(overlay) {
+   this.overlays_.forEach(function (overlay) {
       this.facadeMap_.getMapImpl().removeOverlay(overlay);
    }, this);
    this.overlays_.length = 0;
@@ -352,7 +360,7 @@ M.impl.control.Measure.prototype.clear = function() {
  * @function
  * @api stable
  */
-M.impl.control.Measure.prototype.destroy = function() {
+M.impl.control.Measure.prototype.destroy = function () {
    this.facadeMap_.removeControl(this);
    this.facadeMap_ = null;
    this.overlays_.length = 0;

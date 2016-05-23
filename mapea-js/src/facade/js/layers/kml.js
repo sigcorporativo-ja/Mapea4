@@ -102,6 +102,7 @@ goog.require('M.exception');
       }
    });
 
+
    /**
     * This function checks if an object is equals
     * to this layer

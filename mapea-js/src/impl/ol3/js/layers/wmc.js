@@ -8,7 +8,7 @@ goog.require('M.impl.format.WMC.v110');
 goog.require('ol.Extent');
 
 
-(function() {
+(function () {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMC layer
@@ -19,7 +19,7 @@ goog.require('ol.Extent');
     * @param {Mx.parameters.LayerOptions} options custom options for this layer
     * @api stable
     */
-   M.impl.layer.WMC = (function(options) {
+   M.impl.layer.WMC = (function (options) {
       /**
        * Indicates if the layer was selected
        * @private
@@ -61,7 +61,7 @@ goog.require('ol.Extent');
     * @param {M.impl.Map} map
     * @api stable
     */
-   M.impl.layer.WMC.prototype.addTo = function(map) {
+   M.impl.layer.WMC.prototype.addTo = function (map) {
       this.map = map;
    };
 
@@ -73,12 +73,10 @@ goog.require('ol.Extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMC.prototype.select = function() {
+   M.impl.layer.WMC.prototype.select = function () {
       if (this.selected === false) {
-         var bbox = this.map.getBbox();
-
          // unselect layers
-         this.map.getWMC().forEach(function(wmcLayer) {
+         this.map.getWMC().forEach(function (wmcLayer) {
             wmcLayer.unselect();
          });
 
@@ -86,34 +84,18 @@ goog.require('ol.Extent');
 
          // loads the layers from this WMC if it is not cached
          var this_ = this;
-         this.loadContextPromise = new Promise(function(success, fail) {
-            M.remote.get(this_.url).then(function(response) {
-               var proj;
-               if (this_.map._defaultProj === false) {
-                  proj = this_.map.getProjection().code;
-               }
-               var wmcDocument = response.xml;
+         this.loadContextPromise = new Promise(function (success, fail) {
+            M.remote.get(this_.url).then(function (response) {
+               var wmcDocument = response.responseXml;
                var formater = new M.impl.format.WMC({
-                  'projection': proj
+                  'projection': this_.map.getProjection().code
                });
                var context = formater.readFromDocument(wmcDocument);
                success.call(this_, context);
             });
          });
-         this.loadContextPromise.then(function(context) {
-            // set projection with the wmc
-            if (this_.map._defaultProj) {
-               var olproj = ol.proj.get(context.projection);
-               this_.map.setProjection({
-                  "code": olproj.getCode(),
-                  "units": olproj.getUnits()
-               }, true);
-            }
-            // load layers
+         this.loadContextPromise.then(function (context) {
             this_.loadLayers(context);
-            if (!M.utils.isNullOrEmpty(bbox)) {
-               this_.map.setBbox(bbox);
-            }
          });
       }
    };
@@ -126,7 +108,7 @@ goog.require('ol.Extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMC.prototype.unselect = function() {
+   M.impl.layer.WMC.prototype.unselect = function () {
       if (this.selected === true) {
          this.selected = false;
 
@@ -145,18 +127,12 @@ goog.require('ol.Extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMC.prototype.loadLayers = function(context) {
+   M.impl.layer.WMC.prototype.loadLayers = function (context) {
       this.layers = context.layers;
+      this.projection = context.projection;
       this.maxExtent = context.maxExtent;
 
       this.map.addWMS(this.layers, true);
-
-      // updates the z-index of the layers
-      var baseLayersIdx = this.layers.length;
-      this.layers.forEach(function(layer) {
-         layer.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WMC] + baseLayersIdx);
-         baseLayersIdx++;
-      });
    };
 
    /**
@@ -167,11 +143,11 @@ goog.require('ol.Extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMC.prototype.getMaxExtent = function() {
+   M.impl.layer.WMC.prototype.getMaxExtent = function () {
       var this_ = this;
-      var promise = new Promise(function(success, fail) {
+      var promise = new Promise(function (success, fail) {
          if (M.utils.isNullOrEmpty(this_.maxExtent)) {
-            this_.loadContextPromise.then(function(context) {
+            this_.loadContextPromise.then(function (context) {
                this_.maxExtent = context.maxExtent;
                success(this_.maxExtent);
             });
@@ -191,7 +167,7 @@ goog.require('ol.Extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMC.prototype.getLayers = function() {
+   M.impl.layer.WMC.prototype.getLayers = function () {
       return this.layers;
    };
 
@@ -203,7 +179,7 @@ goog.require('ol.Extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMC.prototype.destroy = function() {
+   M.impl.layer.WMC.prototype.destroy = function () {
       if (!M.utils.isNullOrEmpty(this.layers)) {
          this.map.removeLayers(this.layers);
       }
@@ -219,7 +195,7 @@ goog.require('ol.Extent');
     * @function
     * @api stable
     */
-   M.impl.layer.WMC.prototype.equals = function(obj) {
+   M.impl.layer.WMC.prototype.equals = function (obj) {
       var equals = false;
 
       if (obj instanceof M.impl.layer.WMC) {

@@ -4,7 +4,7 @@
    <packaging>pom</packaging>
    <name>Mapea 4 JS</name>
    <parent>
-      <groupId>es.juntadeandalucia.mapea</groupId>
+      <groupId>es.juntadeandalucia</groupId>
       <artifactId>mapea-parent</artifactId>
       <version>4.0.0-SNAPSHOT</version>
       <relativePath>../mapea-parent/pom.xml</relativePath>

@@ -3,7 +3,7 @@ goog.provide('M.parameter.projection');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function() {
+(function () {
    'use strict';
 
    /**
@@ -16,7 +16,7 @@ goog.require('M.exception');
     * @function
     * @api stable
     */
-   M.parameter.projection = function(projectionParameter) {
+   M.parameter.projection = function (projectionParameter) {
       var projection = {
          code: null,
          units: null
@@ -56,7 +56,7 @@ goog.require('M.exception');
       }
 
       if ((projection.units !== 'm') && (projection.units !== 'd')) {
-         M.exception('La unidad "' + projectionParameter.units + '" del parámetro projection no es válida. Las disponibles son: "m" o "d"');
+         M.exception('El formato del parámetro projection no es correcto');
       }
 
       return projection;
