@@ -9,7 +9,7 @@ goog.require('M.impl.Control');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a layerswitcher
@@ -20,7 +20,7 @@ goog.require('M.impl.Control');
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.control.LayerSwitcher = function () {
+   M.impl.control.LayerSwitcher = function() {
       this.mouseoutTimeId = null;
       this.panel = null;
       this.facadeMap_ = null;
@@ -36,72 +36,21 @@ goog.require('M.impl.Control');
     * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.LayerSwitcher.prototype.addTo = function (map, element) {
+   M.impl.control.LayerSwitcher.prototype.addTo = function(map, element) {
       this.facadeMap_ = map;
-
-      // button
-      var button = element.getElementsByTagName('button')[M.impl.control.LayerSwitcher.BUTTON_ID];
+      var olMap = map.getMapImpl();
 
       // panel
       this.panel = element.getElementsByTagName('div')[M.impl.control.LayerSwitcher.PANEL_ID];
 
-      // show panel events
-      goog.events.listen(element, goog.events.EventType.MOUSEOVER, this.showPanel, false, this);
-      goog.events.listen(button, goog.events.EventType.CLICK, this.showPanel, false, this);
-
-      // hide panel event
-      goog.events.listen(element, goog.events.EventType.MOUSEOUT, this.hidePanel, false, this);
-
       // click layer event
-      goog.events.listen(this.panel, [
-               goog.events.EventType.CLICK,
-               goog.events.EventType.TOUCHEND
-            ], this.clickLayer, false, this);
+      goog.events.listen(this.panel, goog.events.EventType.CLICK, this.clickLayer, false, this);
 
       ol.control.Control.call(this, {
          'element': element,
-         'target': null,
-         'render': this.renderPanel
+         'target': null
       });
-      map.getMapImpl().addControl(this);
-   };
-
-   /**
-    * Shows the panel of the layerswitcher
-    *
-    * @public
-    * @function
-    * @api stable
-    */
-   M.impl.control.LayerSwitcher.prototype.showPanel = function (evt) {
-      if (!M.utils.isNullOrEmpty(this.mouseoutTimeId)) {
-         clearTimeout(this.mouseoutTimeId);
-         this.mouseoutTimeId = null;
-      }
-
-      if (!goog.dom.classlist.contains(this.element, M.impl.control.LayerSwitcher.SHOWN_CLASS)) {
-         goog.dom.classlist.add(this.element, M.impl.control.LayerSwitcher.SHOWN_CLASS);
-         this.renderPanel();
-      }
-   };
-
-   /**
-    * This function hides the panel of this control
-    *
-    * @public
-    * @function
-    * @api stable
-    */
-   M.impl.control.LayerSwitcher.prototype.hidePanel = function (evt) {
-      evt = (evt || window.event);
-      var element = this.element;
-      if (!element.contains(evt.toElement)) {
-         this.mouseoutTimeId = setTimeout(function () {
-            if (goog.dom.classlist.contains(element, M.impl.control.LayerSwitcher.SHOWN_CLASS)) {
-               goog.dom.classlist.remove(element, M.impl.control.LayerSwitcher.SHOWN_CLASS);
-            }
-         }, 500);
-      }
+      olMap.addControl(this);
    };
 
    /**
@@ -111,81 +60,170 @@ goog.require('M.impl.Control');
     * @function
     * @api stable
     */
-   M.impl.control.LayerSwitcher.prototype.clickLayer = function (evt) {
+   M.impl.control.LayerSwitcher.prototype.clickLayer = function(evt) {
       evt = (evt || window.event);
       if (!M.utils.isNullOrEmpty(evt.target) && !M.utils.isNullOrEmpty(evt.target.id)) {
-         var layerName = evt.target.id;
-         var filter = {
-            'name': layerName
-         };
-         var layers = this.facadeMap_.getWMTS(filter)
-            .concat(this.facadeMap_.getKML(filter))
-            .concat(this.facadeMap_.getWFS(filter))
-            .concat(this.facadeMap_.getWMS(filter));
-         layers.forEach(function (layer) {
-            /* sets the layer visibility only if
+         evt.stopPropagation();
+
+         let layer = this.facadeMap_.getLayers().filter(function(layer) {
+            return (layer.name === evt.target.id);
+         })[0];
+         /* sets the layer visibility only if
             the layer is not base layer and visible */
-            if ((layer.transparent === true) || !layer.isVisible()) {
-               layer.setVisible(!layer.isVisible());
-            }
-         });
+         if ((layer.transparent === true) || !layer.isVisible()) {
+            layer.setVisible(!layer.isVisible());
+         }
       }
    };
 
    /**
     * Re-draw the layer panel to represent the current state of the layers.
+    *
+    * @public
+    * @function
+    * @api stable
     */
-   M.impl.control.LayerSwitcher.prototype.renderPanel = function () {
+   M.impl.control.LayerSwitcher.prototype.renderPanel = function() {
       var this_ = this;
-      M.template.compile(M.control.LayerSwitcher.TEMPLATE,
-         M.control.LayerSwitcher.getTemplateVariables_(this_.facadeMap_)).then(function (html) {
-         var newPanel = html.getElementsByTagName('div')[M.impl.control.LayerSwitcher.PANEL_ID];
+      M.template.compile(M.control.LayerSwitcher.TEMPLATE, {
+         'jsonp': true,
+         'vars': M.control.LayerSwitcher.getTemplateVariables_(this.facadeMap_)
+      }).then(function(html) {
+         this_.registerImgErrorEvents_(html);
+         var newPanel = html.querySelector('div#'.concat(M.impl.control.LayerSwitcher.PANEL_ID));
          this_.panel.innerHTML = newPanel.innerHTML;
       });
+   };
+
+   /**
+    * Registers events on map and layers to render the
+    * layerswitcher
+    *
+    * @public
+    * @function
+    * @api stable
+    */
+   M.impl.control.LayerSwitcher.prototype.registerEvents = function() {
+      if (!M.utils.isNullOrEmpty(this.facadeMap_)) {
+         var olMap = this.facadeMap_.getMapImpl();
+
+         this.registerViewEvents_(olMap.getView());
+         this.registerLayersEvents_(olMap.getLayers());
+         olMap.on('change:view', this.onViewChange_, this);
+      }
+   };
+
+   /**
+    * Unegisters events for map and layers from the layerswitcher
+    *
+    * @public
+    * @function
+    * @api stable
+    */
+   M.impl.control.LayerSwitcher.prototype.unregisterEvents = function() {
+      if (!M.utils.isNullOrEmpty(this.facadeMap_)) {
+         var olMap = this.facadeMap_.getMapImpl();
+
+         this.unregisterViewEvents_(olMap.getView());
+         this.unregisterLayersEvents_(olMap.getLayers());
+         olMap.un('change:view', this.onViewChange_, this);
+      }
+   };
+
+   /**
+    * TODO
+    */
+   M.impl.control.LayerSwitcher.prototype.registerViewEvents_ = function(view) {
+      view.on('change:resolution', this.renderPanel, this);
+   };
+
+   /**
+    * TODO
+    */
+   M.impl.control.LayerSwitcher.prototype.registerLayersEvents_ = function(layers) {
+      layers.forEach(this.registerLayerEvents_, this);
+      layers.on('remove', this.renderPanel, this);
+      layers.on('add', this.onAddLayer_, this);
+   };
+
+   /**
+    * TODO
+    */
+   M.impl.control.LayerSwitcher.prototype.registerLayerEvents_ = function(layer) {
+      layer.on('change:visible', this.renderPanel, this);
+      layer.on('change:opacity', this.renderPanel, this);
+      layer.on('change:extent', this.renderPanel, this);
+   };
+
+   /**
+    * TODO
+    */
+   M.impl.control.LayerSwitcher.prototype.unregisterViewEvents_ = function(view) {
+      view.un('change:resolution', this.renderPanel, this);
+   };
+
+   /**
+    * TODO
+    */
+   M.impl.control.LayerSwitcher.prototype.unregisterLayersEvents_ = function(layers) {
+      layers.forEach(this.registerLayerEvents_, this);
+      layers.un('remove', this.renderPanel, this);
+      layers.un('add', this.onAddLayer_, this);
+   };
+
+   /**
+    * TODO
+    */
+   M.impl.control.LayerSwitcher.prototype.unregisterLayerEvents_ = function(layer) {
+      layer.un('change:visible', this.renderPanel, this);
+      layer.un('change:opacity', this.renderPanel, this);
+      layer.un('change:extent', this.renderPanel, this);
+   };
+
+   /**
+    * TODO
+    */
+   M.impl.control.LayerSwitcher.prototype.onViewChange_ = function(evt) {
+      var olMap = this.facadeMap_.getMapImpl();
+      this.unregisterViewEvents_(olMap.getView());
+   };
+
+   /**
+    * TODO
+    */
+   M.impl.control.LayerSwitcher.prototype.onAddLayer_ = function(evt) {
+      this.registerLayerEvents_(evt.element);
+      this.renderPanel();
+   };
+
+   /**
+    * TODO
+    */
+   M.impl.control.LayerSwitcher.prototype.registerImgErrorEvents_ = function(html) {
+      var imgElements = html.querySelectorAll('img');
+      Array.prototype.forEach.call(imgElements, function(imgElem) {
+         goog.events.listen(imgElem, goog.events.EventType.ERROR, function(evt) {
+            var layerName = evt.target.getAttribute('data-layer-name');
+            var legendErrorUrl = M.utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_ERROR]);
+            var layer = this.facadeMap_.getLayers().filter(function(l) {
+               return (l.name === layerName);
+            })[0];
+            if (!M.utils.isNullOrEmpty(layer)) {
+               layer.setLegendURL(legendErrorUrl);
+               this.renderPanel();
+            }
+         }, false, this);
+      }, this);
    };
 
    /**
     * Set the map instance the control is associated with.
     * @param {ol.Map} map The map instance.
     */
-   M.impl.control.LayerSwitcher.prototype.setMap = function (map) {
+   M.impl.control.LayerSwitcher.prototype.setMap = function(map) {
       goog.base(this, 'setMap', map);
-
-      map.on('pointerdown', this.hidePanel, this);
       this.renderPanel();
    };
-
-   /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
-    *
-    * @public
-    * @function
-    * @api stable
-    */
-   M.impl.control.LayerSwitcher.prototype.destroy = function () {
-      // TODO remove events
-      this.map.un('pointerdown', this.hidePanel);
-      goog.base(this, 'destroy');
-   };
-
-   /**
-    * Shown class for this control
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.impl.control.LayerSwitcher.SHOWN_CLASS = 'shown';
-
-   /**
-    * LayerSwitcher button id
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.impl.control.LayerSwitcher.BUTTON_ID = 'm-layersiwtcher-btn';
 
    /**
     * LayerSwitcher panel id

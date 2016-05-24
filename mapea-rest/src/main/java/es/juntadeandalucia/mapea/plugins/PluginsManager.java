@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -29,6 +30,10 @@ public abstract class PluginsManager {
    
    private static Map<String, PluginAPI> availablePlugins;
 
+   public static Collection<PluginAPI> getAllPlugins () {
+      return availablePlugins.values();
+   }
+   
    public static List<String> getPlugins (MultivaluedMap<String, String> queryParams) {
       List<String> plugins = new LinkedList<String>();
       if (availablePlugins != null) {

@@ -67,7 +67,7 @@ module.exports = function (grunt) {
             //               cwd: ROOT
             //            };
             var closureDepsOpts = {
-               lib: [path.join(dir, '**', '*.js')],
+               lib: [path.join(dir, '**', 'js', '*.js')],
                cwd: ROOT
             };
 

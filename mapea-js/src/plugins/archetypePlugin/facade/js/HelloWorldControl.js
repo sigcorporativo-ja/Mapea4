@@ -32,7 +32,9 @@ goog.inherits(M.control.HelloWorldControl, M.Control);
  * @api stable
  */
 M.control.HelloWorldControl.prototype.createView = function(map) {
-   return M.template.compile('helloworld.html');
+   return M.template.compile('helloworld.html', {
+      'jsonp': true
+   });
 };
 
 /**

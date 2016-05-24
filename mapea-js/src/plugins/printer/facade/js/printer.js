@@ -2,7 +2,7 @@ goog.provide('P.plugin.Printer');
 
 goog.require('P.control.Printer');
 
-(function () {
+(function() {
    /**
     * @classdesc
     * Main facade plugin object. This class creates a plugin
@@ -13,7 +13,7 @@ goog.require('P.control.Printer');
     * @param {Object} impl implementation object
     * @api stable
     */
-   M.plugin.Printer = (function (parameters) {
+   M.plugin.Printer = (function(parameters) {
       parameters = (parameters || {});
 
       /**
@@ -80,7 +80,7 @@ goog.require('P.control.Printer');
     * @param {Object} map the map to add the plugin
     * @api stable
     */
-   M.plugin.Printer.prototype.addTo = function (map) {
+   M.plugin.Printer.prototype.addTo = function(map) {
       this.map_ = map;
 
       this.control_ = new M.control.Printer(this.url_, this.params_,
@@ -91,7 +91,7 @@ goog.require('P.control.Printer');
          'collapsedButtonClass': 'g-cartografia-impresora',
          'position': M.ui.position.TR
       });
-      this.panel_.on(M.evt.ADDED_TO_MAP, function (html) {
+      this.panel_.on(M.evt.ADDED_TO_MAP, function(html) {
          M.utils.enableTouchScroll(html);
       });
       this.panel_.addControls(this.control_);
@@ -105,8 +105,13 @@ goog.require('P.control.Printer');
     * @function
     * @api stable
     */
-   M.plugin.Printer.prototype.destroy = function () {
-      this.map_.removeControls(this.control_);
+   M.plugin.Printer.prototype.destroy = function() {
+      this.map_.removeControls([this.control_]);
       this.map_ = null;
+      this.control_ = null;
+      this.panel_ = null;
+      this.url_ = null;
+      this.params_ = null;
+      this.options_ = null;
    };
 })();

@@ -78,16 +78,6 @@ goog.require('goog.dom');
       this.searchUrl_ = url;
 
       /**
-       * Facade of the map
-       * @private
-       * @type {M.Map}
-       */
-      this.searchParameters_ = searchParameters;
-      if (!M.utils.isNullOrEmpty(this.searchParameters_)) {
-         this.searchUrl_ = M.utils.addParameters(this.searchUrl_, this.searchParameters_);
-      }
-
-      /**
        * Municipality to search
        *
        * @private
@@ -165,6 +155,20 @@ goog.require('goog.dom');
        */
       this.contadorProvincias = 0;
 
+      /**
+       * Container of the results
+       * @private
+       * @type {HTMLElement}
+       */
+      this.resultsContainer_ = null;
+
+      /**
+       * Container of the results to scroll
+       * @private
+       * @type {HTMLElement}
+       */
+      this.resultsScrollContainer_ = null;
+
       // implementation of this control
       var impl = new M.impl.control.Searchstreet();
 
@@ -185,7 +189,9 @@ goog.require('goog.dom');
       var this_ = this;
       this.facadeMap_ = map;
       var promise = new Promise(function(success, fail) {
-         M.template.compile(M.control.Searchstreet.TEMPLATE).then(
+         M.template.compile(M.control.Searchstreet.TEMPLATE, {
+            'jsonp': true
+         }).then(
             function(html) {
                this_.addEvents(html);
                success(html);
@@ -226,7 +232,7 @@ goog.require('goog.dom');
       // results container
       this.resultsContainer_ = this.element_.getElementsByTagName('div')["m-searchstreet-results"];
       this.resultsAutocomplete_ = this.element_.getElementsByTagName('div')["m-autocomplete-results"];
-      this.searchingResult_ = this.element_.querySelector('div#m-searchstreet-results > div#m-searching-result');
+      this.searchingResult_ = this.element_.querySelector('div#m-searchstreet-results > div#m-searching-result-searchstreet');
 
       if (!M.utils.isUndefined(this.codIne_) && !M.utils.isNullOrEmpty(this.codIne_)) {
          var searchCodIne = M.utils.addParameters(this.searchCodIne_, {
@@ -252,6 +258,7 @@ goog.require('goog.dom');
                }
             });
       }
+      goog.dom.removeChildren(this.resultsContainer_, this.searchingResult_);
    };
 
    /**
@@ -277,6 +284,9 @@ goog.require('goog.dom');
       evt.preventDefault();
 
       if ((evt.type !== goog.events.EventType.KEYUP) || (evt.keyCode === 13)) {
+         goog.dom.classlist.remove(this.resultsAutocomplete_,
+            M.control.Searchstreet.MINIMUM);
+         goog.dom.removeChildren(this.resultsAutocomplete_, this.resultsAutocomplete_.querySelector("div#m-searching-result-autocomplete"));
          // gets the query
          var query = this.input_.value;
          if (M.utils.isNullOrEmpty(query)) {
@@ -320,6 +330,8 @@ goog.require('goog.dom');
       goog.dom.appendChild(this.resultsContainer_, this.searchingResult_);
       // adds the class
       goog.dom.classlist.add(this.element_, M.control.Searchstreet.SEARCHING_CLASS);
+      goog.dom.classlist.add(this.resultsContainer_,
+         M.control.Searchstreet.MINIMUM);
 
       var normalizar = M.utils.addParameters(M.config.SEARCHSTREET_NORMALIZAR, {
          cadena: query
@@ -335,8 +347,10 @@ goog.require('goog.dom');
                streetNumber: results.numeroPortal,
                streetType: results.tipoVia,
                municipio: this_.municipio_,
-               provincia: this_.provincia_
+               provincia: this_.provincia_,
+               srs: this_.facadeMap_.getProjection().code
             });
+            this_.searchTime_ = Date.now();
             this_.querySearch_(searchUrl, this_.provincia_, processor);
          }
          else if (M.utils.isNullOrEmpty(this_.provincia_) && !M.utils.isNullOrEmpty(this_.municipio_)) {
@@ -349,7 +363,8 @@ goog.require('goog.dom');
                   streetNumber: results.numeroPortal,
                   streetType: results.tipoVia,
                   municipio: this_.municipio_,
-                  provincia: this_.provincias_[i]
+                  provincia: this_.provincias_[i],
+                  srs: this_.facadeMap_.getProjection().code
                });
                this_.querySearchProvinces(searchUrl, this_.provincias_[i], processor);
             }
@@ -360,8 +375,10 @@ goog.require('goog.dom');
                streetNumber: null,
                streetType: null,
                municipio: null,
-               provincia: null
+               provincia: null,
+               srs: this_.facadeMap_.getProjection().code
             });
+            this_.searchTime_ = Date.now();
             this_.querySearch_(searchUrl, null, processor);
          }
       });
@@ -395,10 +412,14 @@ goog.require('goog.dom');
                   this_.provincia_ = M.utils.beautifyString(provincia);
                   processor.call(this_, results);
                   goog.dom.classlist.remove(this_.element_, M.control.Searchstreet.SEARCHING_CLASS);
+                  goog.dom.classlist.remove(this_.resultsContainer_,
+                     M.control.Searchstreet.MINIMUM);
                }
                else {
                   processor.call(this_, results);
                   goog.dom.classlist.remove(this_.element_, M.control.Searchstreet.SEARCHING_CLASS);
+                  goog.dom.classlist.remove(this_.resultsContainer_,
+                     M.control.Searchstreet.MINIMUM);
                }
             }
          });
@@ -438,6 +459,8 @@ goog.require('goog.dom');
                         this_.provincia_ = M.utils.beautifyString(provincia);
                         processor.call(this_, results);
                         goog.dom.classlist.remove(this_.element_, M.control.Searchstreet.SEARCHING_CLASS);
+                        goog.dom.classlist.remove(this_.resultsContainer_,
+                           M.control.Searchstreet.MINIMUM);
                      }
                   }
                }
@@ -467,9 +490,17 @@ goog.require('goog.dom');
             }
          }
       }
-      M.template.compile(M.control.Searchstreet.RESULTS_TEMPLATE,
-         resultsTemplateVars).then(function(html) {
+      M.template.compile(M.control.Searchstreet.RESULTS_TEMPLATE, {
+         'jsonp': true,
+         'vars': resultsTemplateVars
+      }).then(function(html) {
+         goog.dom.classlist.remove(this_.resultsContainer_, M.control.Searchstreet.HIDDEN_RESULTS_CLASS);
          this_.resultsContainer_.innerHTML = html.innerHTML;
+         this_.resultsScrollContainer_ = this_.resultsContainer_.querySelector("div#m-searchstreet-results-scroll");
+         if (!M.utils.isNullOrEmpty(this_.resultsScrollContainer_)) {
+            M.utils.enableTouchScroll(this_.resultsScrollContainer_);
+         }
+
          this_.facadeMap_.removePopup();
          if (this_.getImpl().listPoints.length > 0) {
             this_.getImpl().removePoints_();
@@ -479,6 +510,8 @@ goog.require('goog.dom');
             this_.eventList_(resultsTemplateVars.docs);
          }
          goog.dom.classlist.remove(this_.element_, M.control.Searchstreet.SEARCHING_CLASS);
+         goog.dom.classlist.remove(this_.resultsContainer_,
+            M.control.Searchstreet.MINIMUM);
 
          // results buntton
          var btnResults = this_.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
@@ -591,6 +624,11 @@ goog.require('goog.dom');
       result) {
       var this_ = this;
       goog.events.listen(element, goog.events.EventType.CLICK, function(e) {
+         // hidden results on click for mobile devices
+         if (M.window.WIDTH <= M.config.MOBILE_WIDTH) {
+            e.target = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
+            this.resultsClick_(e);
+         }
          this_.getImpl().addEventClickFeature(result);
       }, false, this);
    };
@@ -656,6 +694,8 @@ goog.require('goog.dom');
     * @function
     */
    M.control.Searchstreet.prototype.resultsClick_ = function(evt) {
+      goog.dom.classlist.add(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
+         "top-extra-search");
       goog.dom.classlist.toggle(evt.target, 'g-cartografia-flecha-arriba');
       goog.dom.classlist.toggle(evt.target, 'g-cartografia-flecha-abajo');
       goog.dom.classlist.toggle(this.resultsContainer_, M.control.Searchstreet.HIDDEN_RESULTS_CLASS);
@@ -699,5 +739,14 @@ goog.require('goog.dom');
     * @api stable
     */
    M.control.Searchstreet.HIDDEN_RESULTS_CLASS = 'hidden';
+
+   /**
+    * Class minimum
+    * @const
+    * @type {string}
+    * @public
+    * @api stable
+    */
+   M.control.Searchstreet.MINIMUM = 'minimum';
 
 })();

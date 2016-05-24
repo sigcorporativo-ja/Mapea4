@@ -125,9 +125,22 @@ goog.require('M.exception');
     * Flag that indicates if the proxy is
     * enabled to use
     * @type {boolean}
+    */
+   M.proxy_ = true;
+
+   /**
+    * This function enables/disables the proxy
+    *
+    * @public
+    * @function
+    * @param {boolean} enable 
     * @api stable
     */
-   M.proxy = true;
+   M.proxy = function (enable) {
+      if (M.utils.isBoolean(enable)) {
+         M.proxy_ = enable;
+      }
+   };
 
    /**
     * This function sets the language used

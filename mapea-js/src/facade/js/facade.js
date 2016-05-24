@@ -1,7 +1,8 @@
 goog.provide('M.facade.Base');
 
+goog.require('M.Object');
+
 (function () {
-   'use strict';
    /**
     * @classdesc
     * Main facade Object. This class creates a facede
@@ -10,6 +11,7 @@ goog.provide('M.facade.Base');
     *
     * @constructor
     * @param {Object} impl implementation object
+    * @extends {M.Object}
     * @api stable
     */
    M.facade.Base = (function (impl) {
@@ -20,16 +22,10 @@ goog.provide('M.facade.Base');
        */
       this.impl_ = impl;
 
-      /**
-       * Callback when the object is loaded
-       * This callback is used by objects that
-       * load some resource
-       * 
-       * @private
-       * @type {Object}
-       */
-      this.onLoadCallback_ = function () {};
+      // calls the super constructor
+      goog.base(this);
    });
+   goog.inherits(M.facade.Base, M.Object);
 
    /**
     * This function provides the implementation
@@ -43,29 +39,16 @@ goog.provide('M.facade.Base');
    M.facade.Base.prototype.getImpl = function () {
       return this.impl_;
    };
-   
-  /**
-   * This function set implementation of this control
-   *
-   * @public
-   * @function
-   * @param {M.Map} impl to add the plugin
-   * @api stable
-   */
-   M.facade.Base.prototype.setImpl = function (impl) {
-     this.impl_ = impl;
-  };
 
    /**
-    * Sets the callback when the instace is loaded
+    * This function set implementation of this control
     *
     * @public
     * @function
+    * @param {M.Map} impl to add the plugin
     * @api stable
     */
-   M.facade.Base.prototype.onLoad = function (fn) {
-      if (M.utils.isFunction(fn)) {
-         this.onLoadCallback_ = fn;
-      }
+   M.facade.Base.prototype.setImpl = function (impl) {
+      this.impl_ = impl;
    };
 })();

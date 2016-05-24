@@ -6,11 +6,11 @@ goog.require('M.exception');
 goog.require('goog.dom.classlist');
 
 
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a GetFeatureInfo
-    * control to provides a popup with information about the place 
+    * control to provides a popup with information about the place
     * where the user has clicked inside the map.
     *
     * @constructor
@@ -18,15 +18,18 @@ goog.require('goog.dom.classlist');
     * @extends {M.Control}
     * @api stable
     */
-   M.control.GetFeatureInfo = (function (format) {
+   M.control.GetFeatureInfo = (function(format, options) {
       if (M.utils.isUndefined(M.impl.control.GetFeatureInfo)) {
          M.exception('La implementación usada no puede crear controles GetFeatureInfo');
       }
+
+      options = (options || {});
+
       // implementation of this control
-      var impl = new M.impl.control.GetFeatureInfo(format);
+      var impl = new M.impl.control.GetFeatureInfo(format, options);
 
       // calls the super constructor
-      goog.base(this, impl);
+      goog.base(this, impl, M.control.GetFeatureInfo.NAME);
    });
    goog.inherits(M.control.GetFeatureInfo, M.Control);
 
@@ -39,8 +42,23 @@ goog.require('goog.dom.classlist');
     * @returns {Promise} html response
     * @api stable
     */
-   M.control.GetFeatureInfo.prototype.createView = function (map) {
-      return M.template.compile(M.control.GetFeatureInfo.TEMPLATE);
+   M.control.GetFeatureInfo.prototype.createView = function(map) {
+      return M.template.compile(M.control.GetFeatureInfo.TEMPLATE, {
+         'jsonp': true
+      });
+   };
+
+   /**
+    * TODO
+    *
+    * @public
+    * @function
+    * @param {HTMLElement} html to add the plugin
+    * @api stable
+    * @export
+    */
+   M.control.GetFeatureInfo.prototype.getActivationButton = function(element) {
+      return element.querySelector('button#m-getfeatureinfo-button');
    };
 
    /**
@@ -50,13 +68,31 @@ goog.require('goog.dom.classlist');
     * @function
     * @api stable
     */
-   M.control.GetFeatureInfo.prototype.equals = function (obj) {
+   M.control.GetFeatureInfo.prototype.equals = function(obj) {
       var equals = false;
       if (obj instanceof M.control.GetFeatureInfo) {
          equals = (this.name === obj.name);
       }
       return equals;
    };
+
+   /**
+    * Template for this controls - button
+    * @const
+    * @type {string}
+    * @public
+    * @api stable
+    */
+   M.control.GetFeatureInfo.NAME = 'getfeatureinfo';
+
+   /**
+    * Title for the popup
+    * @const
+    * @type {string}
+    * @public
+    * @api stable
+    */
+   M.control.GetFeatureInfo.POPUP_TITLE = 'Información';
 
    /**
     * Template for this controls - button

@@ -3,7 +3,7 @@ goog.provide('M.parameter.maxExtent');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function () {
+(function() {
    'use strict';
 
    /**
@@ -16,7 +16,7 @@ goog.require('M.exception');
     * @function
     * @api stable
     */
-   M.parameter.maxExtent = function (maxExtentParameter) {
+   M.parameter.maxExtent = function(maxExtentParameter) {
       var maxExtent = {
          x: {},
          y: {}
@@ -29,7 +29,7 @@ goog.require('M.exception');
 
       // string
       if (M.utils.isString(maxExtentParameter)) {
-         if (/^\d+(\.\d+)?[\,\;]\d+(\.\d+)?[\,\;]\d+(\.\d+)?[\,\;]\d+(\.\d+)?$/.test(maxExtentParameter)) {
+         if (/^\s*-?\d+(\.\d+)?\s*[\,\;]\s*-?\d+(\.\d+)?\s*[\,\;]\s*-?\d+(\.\d+)?\s*[\,\;]\s*-?\d+(\.\d+)?$/.test(maxExtentParameter)) {
             var extentArray = maxExtentParameter.split(/[\,\;]+/);
             if (extentArray.length === 4) {
                maxExtent.x.min = Number.parseFloat(extentArray[0]);

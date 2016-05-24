@@ -17,7 +17,7 @@ var Utils = {};
 /**
  * TODO
  */
-Utils.clone = function (obj) {
+Utils.clone = function(obj) {
    var target;
 
    if (Utils.isArray(obj)) {
@@ -43,13 +43,13 @@ Utils.clone = function (obj) {
 /**
  * TODO
  */
-Utils.getJSFiles = function (dir, callback) {
+Utils.getJSFiles = function(dir, callback) {
    var paths = [];
    var finishedWalkers = 0;
    for (var i = 0, il = dir.length; i < il; i++) {
       var walker = walk(dir[i]);
       // for each file it checks if it is a js file
-      walker.on('file', function (root, stats, next) {
+      walker.on('file', function(root, stats, next) {
          var sourcePath = path.join(root, stats.name);
          if (/\.js$/.test(sourcePath)) {
             // puts the file into the paths
@@ -58,10 +58,10 @@ Utils.getJSFiles = function (dir, callback) {
          next();
       });
       // check if some error occurred
-      walker.on('errors', function (err) {
+      walker.on('errors', function(err) {
          callback('Trouble walking ' + err);
       });
-      walker.on('end', function () {
+      walker.on('end', function() {
          // it calls callback when all walkers have finished
          finishedWalkers++;
          if (finishedWalkers == il) {
@@ -74,9 +74,9 @@ Utils.getJSFiles = function (dir, callback) {
 /**
  * TODO
  */
-Utils.writeFile = function (path, content) {
-   return new Promise(function (success, fail) {
-      fs.outputFile(path, content, function (err) {
+Utils.writeFile = function(path, content) {
+   return new Promise(function(success, fail) {
+      fs.outputFile(path, content, function(err) {
          if (err != null) {
             fail(err);
          }
@@ -90,15 +90,20 @@ Utils.writeFile = function (path, content) {
 /**
  * TODO
  */
-Utils.getFolders = function (dir, exclude) {
+Utils.getFolders = function(dir, exclude) {
    var folders = [];
-   var files = fs.readdirSync(dir);
-   for (var i = 0, ilen = files.length; i < ilen; i++) {
-      var fileName = files[i];
-      var fileRealPath = path.join(dir, fileName);
-      if (fs.statSync(fileRealPath).isDirectory() && (fileName !== exclude)) {
-         folders.push(fileName);
+   try {
+      var files = fs.readdirSync(dir);
+      for (var i = 0, ilen = files.length; i < ilen; i++) {
+         var fileName = files[i];
+         var fileRealPath = path.join(dir, fileName);
+         if (fs.statSync(fileRealPath).isDirectory() && (fileName !== exclude)) {
+            folders.push(fileName);
+         }
       }
+   }
+   catch (err) {
+      console.info('it does not exist ' + dir);
    }
    return folders;
 };
@@ -106,7 +111,7 @@ Utils.getFolders = function (dir, exclude) {
 /**
  * TODO
  */
-Utils.isArray = function (obj) {
+Utils.isArray = function(obj) {
    var isArray = false;
    if (obj != null) {
       isArray = (Object.prototype.toString.call(obj) === Object.prototype.toString.call([]));
@@ -117,7 +122,7 @@ Utils.isArray = function (obj) {
 /**
  * TODO
  */
-Utils.isObject = function (obj) {
+Utils.isObject = function(obj) {
    var isObject = false;
    if (obj != null) {
       isObject = ((typeof obj === 'object') && (obj.toString !== undefined));
@@ -128,7 +133,7 @@ Utils.isObject = function (obj) {
 /**
  * TODO
  */
-Utils.extend = function (objOld, objNew) {
+Utils.extend = function(objOld, objNew) {
    if ((objOld != null) && (objNew != null)) {
       for (var attr in objNew) {
          if (!objOld[attr]) {

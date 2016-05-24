@@ -2,24 +2,18 @@
        GENERAL
 *********************/
 
-.m-geosearch-container,
-.m-searchstreetgeosearch-container,
-.m-searchstreet-container {
+.m-geosearch-container, .m-searchstreetgeosearch-container, .m-searchstreet-container {
    top: 75px;
    width: 100%;
 }
 
 @media only screen and (min-width: 769px) {
-   .m-geosearch-container,
-   .m-searchstreetgeosearch-container,
-   .m-searchstreet-container {
+   .m-geosearch-container, .m-searchstreetgeosearch-container, .m-searchstreet-container {
       width: 33vw;
    }
 }
 
-.m-geosearch-container.m-searching button.m-input-search,
-.m-searchstreetgeosearch-container.m-searching button.m-input-search,
-.m-searchstreet-container.m-searching button.m-input-search {
+.m-geosearch-container.m-searching button.m-input-search, .m-searchstreetgeosearch-container.m-searching button.m-input-search, .m-searchstreet-container.m-searching button.m-input-search {
    color: #a15bd7;
    opacity: 1;
 }
@@ -29,46 +23,34 @@
      SEARCH PANEL
 *********************/
 
-.m-geosearch-container > div.search-panel,
-.m-searchstreetgeosearch-container > div.search-panel,
-.m-searchstreet-container > div.search-panel {
+.m-geosearch-container > div.search-panel, .m-searchstreetgeosearch-container > div.search-panel, .m-searchstreet-container > div.search-panel {
    -webkit-display: flex;
    display: flex;
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
    background-color: white;
 }
 
-.m-geosearch-container,
-.m-searchstreetgeosearch-container,
-.m-searchstreet-container {
+.m-geosearch-container, .m-searchstreetgeosearch-container, .m-searchstreet-container {
    border-top-left-radius: 4px !important;
    border-bottom-left-radius: 4px !important;
    border-top-right-radius: 0;
-   !important;
+   ! important;
    border-bottom-right-radius: 0;
-   !important;
+   ! important;
 }
 
-.m-geosearch-container.shown,
-.m-searchstreetgeosearch-container.shown,
-.m-searchstreet-container.shown {
+.m-geosearch-container.shown, .m-searchstreetgeosearch-container.shown, .m-searchstreet-container.shown {
    border-bottom-right-radius: 4px !important;
 }
 
 @media only screen and (max-width: 768px) {
-   .m-areas > div.m-area > div.m-geosearch.collapsed,
-   .m-areas > div.m-area > div.m-searchstreetgeosearch.collapsed,
-   .m-areas > div.m-area > div.m-searchstreet.collapsed {
+   .m-areas > div.m-area > div.m-geosearch.collapsed, .m-areas > div.m-area > div.m-searchstreetgeosearch.collapsed, .m-areas > div.m-area > div.m-searchstreet.collapsed {
       border-radius: 4px !important;
    }
-   .m-geosearch-container,
-   .m-searchstreetgeosearch-container,
-   .m-searchstreet-container {
+   .m-geosearch-container, .m-searchstreetgeosearch-container, .m-searchstreet-container {
       border-radius: 4px !important;
    }
-   div.m-geosearch.collapsed > div.m-panel-controls,
-   div.m-searchstreetgeosearch.collapsed > div.m-panel-controls,
-   div.m-searchstreet.collapsed > div.m-panel-controls {
+   div.m-geosearch.collapsed > div.m-panel-controls, div.m-searchstreetgeosearch.collapsed > div.m-panel-controls, div.m-searchstreet.collapsed > div.m-panel-controls {
       opacity: 100 !important;
       max-width: initial !important;
       -webkit-transition: max-width .4s ease 0s, opacity .3s ease 0s;
@@ -76,11 +58,37 @@
    }
 }
 
+
+/****************************
+     FIREFOX HACKS
+****************************/
+
 @-moz-document url-prefix() {
-   div.m-geosearch div.m-panel-controls,
-   div.m-searchstreetgeosearch div.m-panel-controls,
-   div.m-searchstreet div.m-panel-controls {
+   div.m-geosearch div.m-panel-controls, div.m-searchstreetgeosearch div.m-panel-controls, div.m-searchstreet div.m-panel-controls {
       display: flex !important;
+   }
+   div.m-geosearch-container.shown, div.m-searchstreet-container.shown {
+      display: initial !important;
+   }
+}
+
+
+/****************************
+ INTERNET EXPLORER HACKS
+****************************/
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+   div.search-panel > input.m-input-search {
+      width: 75% !important;
+   }
+   div.search-panel > input.m-input-search::-ms-clear {
+      display: none;
+   }
+   div#m-searching-result, div#m-searching-result-searchstreet, div#m-searching-result-geosearch, div#m-searching-result-autocomplete {
+      padding-left: 44%;
+   }
+   div.m-control.m-searchstreetgeosearch-container.shown {
+      display: block !important;
    }
 }
 
@@ -101,7 +109,13 @@ div.search-panel > input.m-input-search {
 }
 
 @media only screen and (max-width: 768px) {
-   div.search-panel > input.m-input-search {
+   div.search-panel>input.m-input-search#m-searchstreet-search-input {
+      width: calc(100vw - 120px);
+   }
+   div.search-panel>input.m-input-search#m-geosearch-search-input {
+      width: calc(100vw - 157px);
+   }
+   div.search-panel>input.m-input-search#m-searchstreetgeosearch-search-input {
       width: calc(100vw - 157px);
    }
 }
@@ -125,19 +139,42 @@ div.search-panel > button.m-input-search.shown {
 *********************/
 
 #m-autocomplete-results {
-   position: fixed;
-   z-index: 1;
-   background-color: bisque;
-   height: auto;
+   background-color: #F9F9F9;
+}
+
+#m-autocomplete-results > div#m-autcomplete > div {
+   padding: 7px;
+   border: 1px solid #EBF1EB;
+   cursor: pointer
+}
+
+div#m-autcomplete > div:hover {
+   background-color: #F7F4F4;
+}
+
+.m-control.m-searchstreet-container.shown.m-searching, .m-control.m-searchstreetgeosearch-container.shown.m-searching {
+   overflow-y: inherit !important;
+}
+
+.m-areas > div.m-area > div.m-panel > div.m-panel-controls > div.m-searchstreet-container.m-searching, .m-areas > div.m-area > div.m-panel > div.m-panel-controls > div.m-searchstreetgeosearch-container.m-searching{
+	overflow: auto;
 }
 
 .results-panel {
    position: relative;
 }
 
-.m-geosearch-container.m-searching div.results-panel,
-.m-searchstreetgeosearch-container.m-searching div.results-panel,
-.m-searchstreet-container.m-searching div.results-panel {
+.results-panel-content {
+   z-index: 1000;
+   position: absolute !important;
+   width: 99%;
+}
+
+.m-geosearch-container.m-searching div.results-panel {
+   min-height: 50px;
+}
+
+.minimum {
    min-height: 50px;
 }
 
@@ -158,6 +195,10 @@ div.search-panel > button.m-input-search.shown {
 #m-tabs-content > .results-panel > div.results {
    margin-top: 0px;
    max-height: 65vh;
+}
+
+#m-tabs-content > .results-panel.hidden > div.results {
+   max-height: 0px;
 }
 
 .results-panel.hidden > div.results {
@@ -187,9 +228,7 @@ div.search-panel > button.m-input-search.shown {
    animation: mloading 1s linear infinite;
 }
 
-.m-geosearch-container:not(.m-searching) div.m-searching-result,
-.m-searchsteetgeosearch-container:not(.m-searching) div.m-searching-result,
-.m-searchstreet-container:not(.m-searching) div.m-searching-result {
+.m-geosearch-container:not(.m-searching) div.m-searching-result, .m-searchsteetgeosearch-container:not(.m-searching) div.m-searching-result, .m-searchstreet-container:not(.m-searching) div.m-searching-result {
    display: none;
 }
 
@@ -206,11 +245,11 @@ div.search-panel > button.m-input-search.shown {
    border-bottom: 1px solid rgba(0, 0, 0, 0.13);
 }
 
-.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result {
+.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result, m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result {
    border-top: 1px solid rgba(0, 0, 0, 0.13);
 }
 
-.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result:nth-child(1) {
+.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result:nth-child(1), .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result:nth-child(1) {
    border: 0px;
 }
 
@@ -231,31 +270,44 @@ div.search-panel > button.m-input-search.shown {
      RESULT TABLE
 *********************/
 
-.results-panel > div.results > div.result > table,
-.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table {
+.results-panel > div.results > div.result > table, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table, .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table {
    width: 100%;
    border-top: 1px solid rgba(0, 0, 0, 0.09);
    border-top-style: dashed;
 }
 
-.results-panel > div.results > div.result > table:nth-child(1),
-.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table:nth-child(1) {
+.results-panel > div.results > div.result > table:nth-child(1), .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table:nth-child(1), .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table:nth-child(1) {
    border: 0px
 }
 
-.results > div.result > table td.value,
-.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.value {
+.results > div.result > table td.value, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.value , .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table td.value {
    text-align: right;
 }
 
-.results > div.result > table td.key,
-.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
+.results > div.result > table td.key, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
    font-weight: bold;
 }
 
-.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.value,
-.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
+.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.value, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
    white-space: nowrap;
+}
+
+.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
+   text-align: left;
+}
+
+.m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table td.value, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
+   white-space: nowrap;
+}
+
+.m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table td.key {
+   text-align: left;
+   font-weight: bold;
+}
+
+.m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result td {
+    border-bottom: 1px solid rgba(0,0,0,.09);
+    border-bottom-style: dashed;
 }
 
 
@@ -279,9 +331,7 @@ div.search-panel > button.m-input-search.shown {
      HELP
 *********************/
 
-.m-geosearch-help,
-.m-searchstreetgeosearch-help,
-.m-searchstreet-help {
+.m-geosearch-help, .m-searchstreetgeosearch-help, .m-searchstreet-help {
    top: 59px;
    left: 70px;
    margin-right: 10px;
@@ -294,31 +344,23 @@ div.search-panel > button.m-input-search.shown {
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
 }
 
-.m-geosearch-help > div.entity,
-.m-searchstreetgeosearch-help > div.entity,
-.m-searchstreet-help > div.entity {
+.m-geosearch-help > div.entity, .m-searchstreetgeosearch-help > div.entity, .m-searchstreet-help > div.entity {
    padding-bottom: 10px;
    border-bottom: 1px solid rgba(0, 0, 0, 0.2)
 }
 
-.m-geosearch-help > div.entity:last-child,
-.m-searchstreetgeosearch-help > div.entity:last-child,
-.m-searchstreet-help > div.entity:last-child {
+.m-geosearch-help > div.entity:last-child, .m-searchstreetgeosearch-help > div.entity:last-child, .m-searchstreet-help > div.entity:last-child {
    padding-bottom: 10px;
    border-bottom: 0px
 }
 
-.m-geosearch-help > div.entity > div.name,
-.m-searchstreetgeosearch-help > div.entity > div.name,
-.m-searchstreet-help > div.entity > div.name {
+.m-geosearch-help > div.entity > div.name, .m-searchstreetgeosearch-help > div.entity > div.name, .m-searchstreet-help > div.entity > div.name {
    padding: 5px;
    font-size: 15px;
    color: #404040
 }
 
-.m-geosearch-help > div.entity > div.example,
-.m-searchstreetgeosearch-help > div.entity > div.example,
-.m-searchstreet-help > div.entity > div.example {
+.m-geosearch-help > div.entity > div.example, .m-searchstreetgeosearch-help > div.entity > div.example, .m-searchstreet-help > div.entity > div.example {
    padding: 5px;
    color: #404040;
    border: 1px solid rgba(0, 0, 0, 0.1);
@@ -332,26 +374,20 @@ div.search-panel > button.m-input-search.shown {
        PANEL
 ***************/
 
-.m-areas > div.m-area > div.m-panel.m-geosearch,
-.m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch,
-.m-areas > div.m-area > div.m-panel.m-searchstreet {
+.m-areas > div.m-area > div.m-panel.m-geosearch, .m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch, .m-areas > div.m-area > div.m-panel.m-searchstreet {
    order: -100;
    width: auto;
    z-index: 1001;
 }
 
 @media only screen and (max-width: 768px) {
-   .m-areas > div.m-area > div.m-panel.m-geosearch,
-   .m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch,
-   .m-areas > div.m-area > div.m-panel.m-searchstreet {
+   .m-areas > div.m-area > div.m-panel.m-geosearch, .m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch, .m-areas > div.m-area > div.m-panel.m-searchstreet {
       width: calc(100vw - 20px);
       z-index: 1001;
    }
 }
 
-.m-areas > div.m-area > div.m-panel.m-geosearch > button.m-panel-btn,
-.m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch > button.m-panel-btn,
-.m-areas > div.m-area > div.m-panel.m-searchstreet > button.m-panel-btn {
+.m-areas > div.m-area > div.m-panel.m-geosearch > button.m-panel-btn, .m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch > button.m-panel-btn, .m-areas > div.m-area > div.m-panel.m-searchstreet > button.m-panel-btn {
    position: absolute;
    right: -40px;
    background-color: #a15bd7;
@@ -360,9 +396,7 @@ div.search-panel > button.m-input-search.shown {
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
 }
 
-.m-areas > div.m-area > div.m-panel.m-geosearch.collapsed > button.m-panel-btn,
-.m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch.collapsed > button.m-panel-btn,
-.m-areas > div.m-area > div.m-panel.m-searchstreet.collapsed > button.m-panel-btn {
+.m-areas > div.m-area > div.m-panel.m-geosearch.collapsed > button.m-panel-btn, .m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch.collapsed > button.m-panel-btn, .m-areas > div.m-area > div.m-panel.m-searchstreet.collapsed > button.m-panel-btn {
    color: #a15bd7;
    position: inherit;
    right: 0;
@@ -370,9 +404,7 @@ div.search-panel > button.m-input-search.shown {
 }
 
 @media only screen and (max-width: 768px) {
-   div.m-panel.m-geosearch > button.m-panel-btn,
-   div.m-panel.m-searchstreetgeosearch > button.m-panel-btn,
-   div.m-panel.m-searchstreet > button.m-panel-btn {
+   div.m-panel.m-geosearch > button.m-panel-btn, div.m-panel.m-searchstreetgeosearch > button.m-panel-btn, div.m-panel.m-searchstreet > button.m-panel-btn {
       display: none;
    }
 }
@@ -380,46 +412,35 @@ div.search-panel > button.m-input-search.shown {
 
 /* ANIMATIONS */
 
-.m-areas > div.m-area > div.m-panel.m-geosearch,
-.m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch,
-.m-areas > div.m-area > div.m-panel.m-searchstreet {
+.m-areas > div.m-area > div.m-panel.m-geosearch, .m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch, .m-areas > div.m-area > div.m-panel.m-searchstreet {
    -webkit-transition: max-height .33s ease-in-out 0s;
    transition: max-height .33s ease-in-out 0s;
    max-height: 100vh;
 }
 
-.m-areas > div.m-area > div.m-panel.m-geosearch.collapsed,
-.m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch.collapsed,
-.m-areas > div.m-area > div.m-panel.m-searchstreet.collapsed {
+.m-areas > div.m-area > div.m-panel.m-geosearch.collapsed, .m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch.collapsed, .m-areas > div.m-area > div.m-panel.m-searchstreet.collapsed {
    -webkit-transition: max-height .33s ease-in-out 0s;
    transition: max-height .33s ease-in-out 0s;
    /*max-height: 40px;
     width: auto;*/
 }
 
-.m-areas > div.m-area > div.m-panel.m-geosearch > div.m-panel-controls,
-.m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch > div.m-panel-controls,
-.m-areas > div.m-area > div.m-panel.m-searchstreet > div.m-panel-controls {
+.m-areas > div.m-area > div.m-panel.m-geosearch > div.m-panel-controls, .m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch > div.m-panel-controls, .m-areas > div.m-area > div.m-panel.m-searchstreet > div.m-panel-controls {
    -webkit-transition: max-width .5s ease 0s, opacity .44s ease 0s;
    transition: max-width .5s ease 0s, opacity .44s ease 0s;
 }
 
-.m-geosearch-container > .results-panel > div.results,
-.m-searchstreetgeosearch-container > .results-panel > div.results,
-.m-searchstreet-container > .results-panel > div.results {
+.m-geosearch-container > .results-panel > div.results, .m-searchstreetgeosearch-container > .results-panel > div.results, .m-searchstreet-container > .results-panel > div.results {
    -webkit-transition: max-height .33s ease-in-out 0s;
    transition: max-height .33s ease-in-out 0s;
 }
 
-.m-areas > div.m-area > div.m-panel.m-geosearch.collapsed > div.m-panel-controls > div.m-geosearch-container > div.results-panel > div.results,
-.m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch.collapsed > div.m-panel-controls > div.m-searchstreetgeosearch-container > div.results-panel > div.results,
-.m-areas > div.m-area > div.m-panel.m-searchstreet.collapsed > div.m-panel-controls > div.m-searchstreet-container > div.results-panel > div.results {
+.m-areas > div.m-area > div.m-panel.m-geosearch.collapsed > div.m-panel-controls > div.m-geosearch-container > div.results-panel > div.results, .m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch.collapsed > div.m-panel-controls > div.m-searchstreetgeosearch-container > div.results-panel > div.results, .m-areas > div.m-area > div.m-panel.m-searchstreet.collapsed > div.m-panel-controls > div.m-searchstreet-container > div.results-panel > div.results {
    /*margin: 0px;
    max-height: 0;*/
 }
 
-.results-panel div.page > div.g-cartografia-flecha-arriba,
-.results-panel div.page > div.g-cartografia-flecha-abajo {
+.results-panel div.page > div.g-cartografia-flecha-arriba, .results-panel div.page > div.g-cartografia-flecha-abajo {
    float: right;
    margin-right: 10px;
    cursor: pointer;
@@ -535,7 +556,14 @@ div.search-panel > button.m-input-search.shown {
    overflow-x: hidden;
 }
 
-#m-searchstreet-results:target,
-#m-searchstreet-results:target {
+.m-tabcontent.hidden {
+   min-height: 0px;
+}
+
+#m-tabs-content.hidden {
+   min-height: 0px;
+}
+
+#m-searchstreet-results:target, #m-searchstreet-results:target {
    display: block;
 }

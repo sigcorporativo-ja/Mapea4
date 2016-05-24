@@ -1,18 +1,28 @@
 package es.juntadeandalucia.mapea.api;
 
-import javax.ws.rs.DefaultValue;
+import java.util.List;
+
+import javax.servlet.ServletContext;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
-import javax.ws.rs.QueryParam;
+import javax.ws.rs.core.Context;
+import javax.ws.rs.core.MultivaluedMap;
+import javax.ws.rs.core.UriInfo;
 
 import es.juntadeandalucia.mapea.builder.JSBuilder;
 import es.juntadeandalucia.mapea.parameter.Parameters;
+import es.juntadeandalucia.mapea.parameter.adapter.ParametersAdapterV3ToV4;
+import es.juntadeandalucia.mapea.parameter.parser.ParametersParser;
+import es.juntadeandalucia.mapea.plugins.PluginsManager;
 
 @Produces("application/javascript; charset=UTF-8") 
 @Path("/")
 public class BuilderWS {
 
+   @Context
+   private ServletContext context;
+   
    /**
     * Provides the code to build a map using the Javascript
     * API
@@ -24,37 +34,20 @@ public class BuilderWS {
     */
    @GET
    @Path("/js")
-   public String js(
-         @DefaultValue("map") @QueryParam("container") String container,
-         @QueryParam("wmcfile") String wmcfiles,
-         @QueryParam("layers") String layers,
-         @DefaultValue("navtoolbar") @QueryParam("controls") String controls,
-         @QueryParam("label") String label,
-         @QueryParam("getfeatureinfo") String getfeatureinfo,
-         @QueryParam("zoom") String zoom,
-         @QueryParam("projection") String projection,
-         @QueryParam("center") String center,
-         @QueryParam("bbox") String bbox,
-         @QueryParam("maxextent") String maxextent,
-         @QueryParam("geosearch") String geosearch,
-         @QueryParam("geosearchbylocation") String geosearchbylocation,
-         @QueryParam("callback") String callbackFn) {
+   public String js(@Context UriInfo uriInfo) {
+      MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
 
-      Parameters parameters = new Parameters();
-      parameters.addContainer(container);
-      parameters.addWmcfiles(wmcfiles);
-      parameters.addLayers(layers);
-      parameters.addControls(controls);
-      parameters.addLabel(label);
-      parameters.addGetFeatureInfo(getfeatureinfo);
-      parameters.addZoom(zoom);
-      parameters.addProjection(projection);
-      parameters.addCenter(center);
-      parameters.addBbox(bbox);
-      parameters.addMaxextent(maxextent);
-      parameters.addGeosearch(geosearch);
-      parameters.addGeosearchByLocation(geosearchbylocation);
-      String codeJS = JSBuilder.build(parameters, callbackFn);
+      // adapts v3 queries to v4
+      ParametersAdapterV3ToV4.adapt(queryParams);
+      
+      
+      Parameters parameters = ParametersParser.parse(queryParams);
+      
+      // plugins
+      PluginsManager.init(context);
+      List<String> plugins = PluginsManager.getPlugins(queryParams);
+      
+      String codeJS = JSBuilder.build(parameters, plugins);
 
       return codeJS;
    }

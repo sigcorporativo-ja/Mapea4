@@ -5,7 +5,7 @@ goog.require('ol.control.Control');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMC selector
@@ -15,7 +15,14 @@ goog.require('ol.control.Control');
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.Control = function () {};
+   M.impl.Control = function() {
+      /**
+       * @private
+       * @type {string}
+       * @expose
+       */
+      this.facadeMap_ = null;
+   };
    goog.inherits(M.impl.Control, ol.control.Control);
 
    /**
@@ -28,7 +35,8 @@ goog.require('ol.control.Control');
     * @api stable
     * @export
     */
-   M.impl.Control.prototype.addTo = function (map, element) {
+   M.impl.Control.prototype.addTo = function(map, element) {
+      this.facadeMap_ = map;
       ol.control.Control.call(this, {
          'element': element,
          'target': null
@@ -45,8 +53,20 @@ goog.require('ol.control.Control');
     * @api stable
     * @export
     */
-   M.impl.Control.prototype.destroy = function () {
-      this.map.removeControl(this);
-      this.map = null;
+   M.impl.Control.prototype.destroy = function() {
+      this.facadeMap_.getMapImpl().removeControl(this);
+      this.facadeMap_ = null;
+   };
+
+   /**
+    * function remove the event 'click'
+    *
+    * @public
+    * @function
+    * @api stable
+    * @export
+    */
+   M.impl.Control.prototype.getElement = function() {
+      return this.element;
    };
 })();

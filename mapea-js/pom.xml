@@ -4,7 +4,7 @@
    <packaging>pom</packaging>
    <name>Mapea 4 JS</name>
    <parent>
-      <groupId>es.juntadeandalucia</groupId>
+      <groupId>es.juntadeandalucia.mapea</groupId>
       <artifactId>mapea-parent</artifactId>
       <version>4.0.0-SNAPSHOT</version>
       <relativePath>../mapea-parent/pom.xml</relativePath>
@@ -20,7 +20,7 @@
 			<organization>Guadaltel S.A.</organization>
 			<organizationUrl>www.guadaltel.com</organizationUrl>
 		</developer>
-	</developers>   
+	</developers>
    <build>
       <finalName>mapea</finalName>
       <plugins>
@@ -42,7 +42,7 @@
                   <configuration>
                      <nodeVersion>v0.10.18</nodeVersion>
                      <npmVersion>1.3.8</npmVersion>
-                     <!--<nodeDownloadRoot>http://nodejs.org/dist/</nodeDownloadRoot> 
+                     <!--<nodeDownloadRoot>http://nodejs.org/dist/</nodeDownloadRoot>
                         <npmDownloadRoot>http://nodejs.org/dist/</npmDownloadRoot> -->
                   </configuration>
                </execution>
@@ -86,6 +86,7 @@
                         <descriptor>assembly/plugins-resources.xml</descriptor>
                         <descriptor>assembly/debug-resources.xml</descriptor>
                         <descriptor>assembly/templates-resources.xml</descriptor>
+                        <descriptor>assembly/doc-resources.xml</descriptor>
                      </descriptors>
                   </configuration>
                </execution>

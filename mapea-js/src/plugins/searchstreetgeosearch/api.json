@@ -8,7 +8,7 @@
       "properties": [{
          "type": "simple",
          "name": "locality",
-         "position": 1
+         "position": 0
       }]
    }]
 }

@@ -45,7 +45,7 @@ goog.require('M.exception');
       }
       // array
       else if (M.utils.isArray(centerParameter)) {
-         if (centerParameter.length === 2) {
+         if ((centerParameter.length === 2) || (centerParameter.length === 3)) {
             if (M.utils.isString(centerParameter[0])) {
                centerParameter[0] = Number.parseFloat(centerParameter[0]);
             }

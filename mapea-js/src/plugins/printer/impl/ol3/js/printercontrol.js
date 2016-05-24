@@ -51,31 +51,32 @@ goog.provide('P.impl.control.Printer');
     * @api stable
     */
    M.impl.control.Printer.prototype.encodeLayer = function(layer) {
-      var encodedLayer = null;
-
-      if (layer.type === M.layer.type.WMC) {
-         // none
-      }
-      else if (layer.type === M.layer.type.KML) {
-         encodedLayer = this.encodeKML(layer);
-      }
-      else if (layer.type === M.layer.type.WMS) {
-         encodedLayer = this.encodeWMS(layer);
-      }
-      else if (layer.type === M.layer.type.WFS) {
-         encodedLayer = this.encodeWFS(layer);
-      }
-      else if (layer.type === M.layer.type.WMTS) {
-         encodedLayer = this.encodeWMTS(layer);
-      }
-      else if (layer.type === M.layer.type.MBtiles) {
-         // none
-      }
-      else if (layer.type === M.layer.type.OSM) {
-         encodedLayer = this.encodeOSM(layer);
-      }
-
-      return encodedLayer;
+      var this_ = this;
+      return (new Promise(function(success, fail) {
+         if (layer.type === M.layer.type.WMC) {
+            // none
+         }
+         else if (layer.type === M.layer.type.KML) {
+            success(this_.encodeKML(layer));
+         }
+         else if (layer.type === M.layer.type.WMS) {
+            success(this_.encodeWMS(layer));
+         }
+         else if (layer.type === M.layer.type.WFS) {
+            success(this_.encodeWFS(layer));
+         }
+         else if (layer.type === M.layer.type.WMTS) {
+            this_.encodeWMTS(layer).then(function(encodedLayer) {
+               success(encodedLayer);
+            });
+         }
+         else if (layer.type === M.layer.type.MBtiles) {
+            // none
+         }
+         else if (layer.type === M.layer.type.OSM) {
+            success(this_.encodeOSM(layer));
+         }
+      }));
    };
 
    /**
@@ -345,8 +346,8 @@ goog.provide('P.impl.control.Printer');
     * @api stable
     */
    M.impl.control.Printer.prototype.encodeWMTS = function(layer) {
-      var encodedLayer = null;
-
+      var zoom = this.facadeMap_.getZoom();
+      // var units = this.facadeMap_.getProjection().units;
       var layerImpl = layer.getImpl();
       var olLayer = layerImpl.getOL3Layer();
       var layerSource = olLayer.getSource();
@@ -354,40 +355,60 @@ goog.provide('P.impl.control.Printer');
 
       var layerUrl = layer.url;
       var layerName = layer.name;
-      var layerVersion = layer.version;
+      // var layerVersion = layer.version;
       var layerOpacity = olLayer.getOpacity();
       var layerReqEncoding = layerSource.getRequestEncoding();
       var tiled = layerImpl.tiled;
-      var style = layerSource.getStyle();
+      // var style = layerSource.getStyle();
       var layerExtent = olLayer.getExtent();
       var params = {};
       var matrixSet = layerSource.getMatrixSet();
-      var tileOrigin = tileGrid.getOrigin();
-      var tileSize = tileGrid.getTileSize();
+      // var tileOrigin = tileGrid.getOrigin(zoom);
+      var tileSize = tileGrid.getTileSize(zoom);
       var resolutions = tileGrid.getResolutions();
+      // var matrixIds = tileGrid.getMatrixIds();
 
-      encodedLayer = {
-         'baseURL': layerUrl,
-         'opacity': layerOpacity,
-         'singleTile': !tiled,
-         'type': 'WMTS',
-         'layer': layerName,
-         'version': layerVersion,
-         'requestEncoding': layerReqEncoding,
-         'tileOrigin': tileOrigin,
-         'tileSize': tileSize,
-         'style': style,
-
-         //         'formatSuffix': layer.formatSuffix,
-         //         'dimensions': layer.dimensions,
-         'params': params,
-         'maxExtent': layerExtent,
-         'matrixSet': matrixSet,
-         //         'zoomOffset': layer.zoomOffset,
-         'resolutions': resolutions
-      };
-
-      return encodedLayer;
+      /**
+       * @see http: //www.mapfish.org/doc/print/protocol.html#layers-params
+       */
+      return layer.getImpl().getCapabilities().then(function(capabilities) {
+         var matrixIdsObj = capabilities["Contents"]["TileMatrixSet"].filter(function(tileMatrixSet) {
+            return (tileMatrixSet["Identifier"] === matrixSet);
+         })[0];
+         return {
+            'baseURL': layerUrl,
+            'opacity': layerOpacity,
+            'singleTile': !tiled,
+            'type': 'WMTS',
+            'layer': layerName,
+            'requestEncoding': layerReqEncoding,
+            'tileSize': tileSize,
+            // 'style': style,
+            'style': "deafult",
+            // 'tileOrigin': tileOrigin,
+            // 'zoomOffset': 0,
+            "rotation": 0,
+            "imageFormat": "image/png",
+            "dimensionParams": {},
+            "dimensions": [],
+            'params': params,
+            // 'version': layerVersion,
+            "version": "1.0.0",
+            'maxExtent': layerExtent,
+            'matrixSet': matrixSet,
+            'matrixIds': matrixIdsObj.TileMatrix.map(function(tileMatrix, i) {
+               return {
+                  "identifier": tileMatrix["Identifier"],
+                  "matrixSize": [tileMatrix["MatrixHeight"], tileMatrix["MatrixWidth"]],
+                  // "resolution": resolutions[resolutions.length - (i + 1)],
+                  "scaleDenominator": tileMatrix["ScaleDenominator"],
+                  "tileSize": [tileMatrix["TileWidth"], tileMatrix["TileHeight"]],
+                  "topLeftCorner": tileMatrix["TopLeftCorner"]
+               };
+            }),
+            'resolutions': resolutions
+         };
+      });
    };
 
    /**
@@ -439,7 +460,7 @@ goog.provide('P.impl.control.Printer');
     * @api stable
     */
    M.impl.control.Printer.prototype.destroy = function() {
-      this.facadeMap_.removeControl(this);
+      this.facadeMap_.getMapImpl().removeControl(this);
       this.facadeMap_ = null;
    };
 })();

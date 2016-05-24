@@ -35,14 +35,12 @@
 
 /* TITLE & DESCRIPTION */
 
-.m-printer-container > div.form > div.title,
-.m-printer-container > div.form > div.description {
+.m-printer-container > div.form > div.title, .m-printer-container > div.form > div.description {
    width: 90%;
    margin: 10px auto;
 }
 
-.m-printer-container > div.form > div.title > input,
-.m-printer-container > div.form > div.description > textarea {
+.m-printer-container > div.form > div.title > input, .m-printer-container > div.form > div.description > textarea {
    width: calc(100% - 10px);
    min-width: 200px;
    border: 1px solid #ccc;
@@ -64,8 +62,7 @@
 
 /* LAYOUT */
 
-.m-printer-container > div.form > div.layout,
-.m-printer-container > div.form > div.format {
+.m-printer-container > div.form > div.layout, .m-printer-container > div.form > div.format {
    width: 45%;
    border-radius: 0px;
    float: left;
@@ -73,9 +70,7 @@
    margin-left: 5%;
 }
 
-.m-printer-container > div.form > div.layout > select,
-.m-printer-container > div.form > div.dpi > select,
-.m-printer-container > div.form > div.format > select {
+.m-printer-container > div.form > div.layout > select, .m-printer-container > div.form > div.dpi > select, .m-printer-container > div.form > div.format > select {
    height: 25px;
    cursor: pointer;
    padding-left: 5px;
@@ -88,18 +83,12 @@
 }
 
 @media only screen and (max-width: 380px) {
-   .m-printer-container > div.form > div.layout,
-   .m-printer-container > div.form > div.format,
-   .m-printer-container > div.form > div.dpi,
-   .m-printer-container > div.form > div.forcescale {
+   .m-printer-container > div.form > div.layout, .m-printer-container > div.form > div.format, .m-printer-container > div.form > div.dpi, .m-printer-container > div.form > div.forcescale {
       width: calc(100vw - 10%) !important;
       margin-left: 5% !important;
       text-align: left !important;
    }
-   .m-printer-container > div.form > div.layout label,
-   .m-printer-container > div.form > div.format label,
-   .m-printer-container > div.form > div.dpi label,
-   .m-printer-container > div.form > div.forcescale label {
+   .m-printer-container > div.form > div.layout label, .m-printer-container > div.form > div.format label, .m-printer-container > div.form > div.dpi label, .m-printer-container > div.form > div.forcescale label {
       margin-right: 10px;
    }
 }
@@ -107,8 +96,7 @@
 
 /* DPI */
 
-.m-printer-container > div.form > div.dpi,
-.m-printer-container > div.form > div.forcescale {
+.m-printer-container > div.form > div.dpi, .m-printer-container > div.form > div.forcescale {
    width: 45%;
    float: right;
    border-radius: 0px;
@@ -151,8 +139,7 @@
    background-color: #eaeaea;
 }
 
-.m-printer-container > div.button > button.print,
-.m-printer-container > div.button > button.remove {
+.m-printer-container > div.button > button.print, .m-printer-container > div.button > button.remove {
    border-radius: 4px;
    border: 1px solid rgba(0, 0, 0, 0.4);
    font-size: 15px;
@@ -164,18 +151,15 @@
    color: #404040;
 }
 
-.m-printer-container > div.button > button.print:hover,
-.m-printer-container > div.button > button.remove:hover {
+.m-printer-container > div.button > button.print:hover, .m-printer-container > div.button > button.remove:hover {
    opacity: 1;
 }
 
-.m-printer-container > div.button > button.print:focus,
-.m-printer-container > div.button > button.remove:focus {
+.m-printer-container > div.button > button.print:focus, .m-printer-container > div.button > button.remove:focus {
    outline: none;
 }
 
-.m-printer-container > div.button > button.print:before,
-.m-printer-container > div.button > button.remove:before {
+.m-printer-container > div.button > button.print:before, .m-printer-container > div.button > button.remove:before {
    font-size: 21px;
    margin-right: 10px;
 }
@@ -204,8 +188,7 @@
    cursor: pointer;
 }
 
-.m-printer-container > div.button > button.print i,
-.m-printer-container > div.button > button.remove i {
+.m-printer-container > div.button > button.print i, .m-printer-container > div.button > button.remove i {
    font-size: 20px;
    vertical-align: text-bottom;
 }
@@ -241,6 +224,7 @@
 *********************/
 
 .m-printer-container > div.queue > ul.queue-container > li {
+   position: relative;
    padding: 10px;
    -webkit-transition: box-shadow 0.3s ease 0s, background 0.3s ease 0s, transform 0.05s ease 0s;
    transition: box-shadow 0.3s ease 0s, background 0.3s ease 0s, transform 0.05s ease 0s;
@@ -259,8 +243,7 @@
    -moz-osx-font-smoothing: grayscale;
 }
 
-.m-printer-container > div.queue > ul.queue-container > li:after,
-.m-printer-container > div.queue > ul.queue-container > li.printing:after {
+.m-printer-container > div.queue > ul.queue-container > li:after, .m-printer-container > div.queue > ul.queue-container > li.printing:after {
    position: absolute;
    right: 15px;
    font-size: 19px;
@@ -365,6 +348,7 @@
 .m-areas > div.m-area > div.m-panel.m-printer > div.m-panel-controls {
    -webkit-transition: max-width .5s ease 0s, opacity .44s ease 0s;
    transition: max-width .5s ease 0s, opacity .44s ease 0s;
+   background: white;
 }
 
 .m-printer-container > .results-panel > div.results {

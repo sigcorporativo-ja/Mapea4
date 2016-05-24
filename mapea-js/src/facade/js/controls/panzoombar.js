@@ -4,11 +4,11 @@ goog.require('M.Control');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a GetFeatureInfo
-    * control to provides a popup with information about the place 
+    * control to provides a popup with information about the place
     * where the user has clicked inside the map.
     *
     * @constructor
@@ -16,7 +16,7 @@ goog.require('M.exception');
     * @extends {M.Control}
     * @api stable
     */
-   M.control.Panzoombar = (function () {
+   M.control.Panzoombar = (function() {
       if (M.utils.isUndefined(M.impl.control.Panzoombar)) {
          M.exception('La implementación usada no puede crear controles Panzoombar');
       }
@@ -24,7 +24,7 @@ goog.require('M.exception');
       var impl = new M.impl.control.Panzoombar();
 
       // calls the super constructor
-      goog.base(this, impl);
+      goog.base(this, impl, M.control.Panzoombar.NAME);
    });
    goog.inherits(M.control.Panzoombar, M.Control);
 
@@ -37,8 +37,10 @@ goog.require('M.exception');
     * @returns {Promise} html response
     * @api stable
     */
-   M.control.Panzoombar.prototype.createView = function (map) {
-      return M.template.compile(M.control.Panzoombar.TEMPLATE);
+   M.control.Panzoombar.prototype.createView = function(map) {
+      return M.template.compile(M.control.Panzoombar.TEMPLATE, {
+         'jsonp': true
+      });
    };
 
    /**
@@ -48,7 +50,7 @@ goog.require('M.exception');
     * @function
     * @api stable
     */
-   M.control.Panzoombar.prototype.equals = function (obj) {
+   M.control.Panzoombar.prototype.equals = function(obj) {
       var equals = (obj instanceof M.control.Panzoombar);
       return equals;
    };

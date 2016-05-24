@@ -173,7 +173,10 @@ goog.require('goog.style');
             }
             // forceScale
             capabilities.forceScale = this_.options_.forceScale;
-            M.template.compile(M.control.Printer.TEMPLATE, capabilities).then(function(html) {
+            M.template.compile(M.control.Printer.TEMPLATE, {
+               'jsonp': true,
+               'vars': capabilities
+            }).then(function(html) {
                this_.addEvents(html);
                success(html);
             });
@@ -283,6 +286,7 @@ goog.require('goog.style');
 
       // queue
       this.queueContainer_ = this.element_.querySelector('.queue > ul.queue-container');
+      M.utils.enableTouchScroll(this.queueContainer_);
    };
 
    /**
@@ -365,33 +369,34 @@ goog.require('goog.style');
    M.control.Printer.prototype.printClick_ = function(evt) {
       evt.preventDefault();
 
-      var printData = this.getPrintData();
       var this_ = this;
       this.getCapabilities().then(function(capabilities) {
-         var printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
+         this_.getPrintData().then(function(printData) {
+            var printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
 
-         // append child
-         var queueEl = this_.createQueueElement();
-         goog.dom.appendChild(this_.queueContainer_, queueEl);
-         goog.dom.classlist.add(queueEl, M.control.Printer.LOADING_CLASS);
+            // append child
+            var queueEl = this_.createQueueElement();
+            goog.dom.appendChild(this_.queueContainer_, queueEl);
+            goog.dom.classlist.add(queueEl, M.control.Printer.LOADING_CLASS);
 
-         M.remote.post(printUrl, printData).then(function(response) {
-            goog.dom.classlist.remove(queueEl, M.control.Printer.LOADING_CLASS);
+            M.remote.post(printUrl, printData).then(function(response) {
+               goog.dom.classlist.remove(queueEl, M.control.Printer.LOADING_CLASS);
 
-            if (response.error !== true) {
-               var downloadUrl;
-               try {
-                  response = JSON.parse(response.text);
-                  downloadUrl = response['getURL'];
+               if (response.error !== true) {
+                  var downloadUrl;
+                  try {
+                     response = JSON.parse(response.text);
+                     downloadUrl = response['getURL'];
+                  }
+                  catch (err) {}
+                  // sets the download URL
+                  queueEl.setAttribute(M.control.Printer.DOWNLOAD_ATTR_NAME, downloadUrl);
+                  goog.events.listen(queueEl, goog.events.EventType.CLICK, this_.dowloadPrint, false, queueEl);
                }
-               catch (err) {}
-               // sets the download URL
-               queueEl.setAttribute(M.control.Printer.DOWNLOAD_ATTR_NAME, downloadUrl);
-               goog.events.listen(queueEl, goog.events.EventType.CLICK, this_.dowloadPrint, false, queueEl);
-            }
-            else {
-               M.dialog.error('Se ha producido un error en la impresión');
-            }
+               else {
+                  M.dialog.error('Se ha producido un error en la impresión');
+               }
+            });
          });
       });
    };
@@ -419,13 +424,15 @@ goog.require('goog.style');
          'outputFormat': outputFormat
       }, this.params_.layout);
 
-      printData.layers = this.encodeLayers();
-      printData.pages = this.encodePages(title, description);
-      if (this.options_.legend === true) {
-         printData.legends = this.encodeLegends();
-      }
-
-      return printData;
+      var this_ = this;
+      return this.encodeLayers().then(function(encodedLayers) {
+         printData.layers = encodedLayers;
+         printData.pages = this_.encodePages(title, description);
+         if (this_.options_.legend === true) {
+            printData.legends = this_.encodeLegends();
+         }
+         return printData;
+      });
    };
 
    /**
@@ -436,17 +443,27 @@ goog.require('goog.style');
     * @function
     */
    M.control.Printer.prototype.encodeLayers = function() {
-      var encodedLayers = [];
-      var layers = this.map_.getLayers();
-      layers.forEach(function(layer) {
-         if ((layer.isVisible() === true) && (layer.inRange() === true)) {
-            var encodedLayer = this.getImpl().encodeLayer(layer);
-            if (encodedLayer !== null) {
-               encodedLayers.push(encodedLayer);
-            }
-         }
-      }, this);
-      return encodedLayers;
+      var layers = this.map_.getLayers().filter(function(layer) {
+         return ((layer.isVisible() === true) && (layer.inRange() === true));
+      });
+      var numLayersToProc = layers.length;
+
+      var this_ = this;
+      return (new Promise(function(success, fail) {
+         var encodedLayers = [];
+         layers.forEach(function(layer) {
+            this.getImpl().encodeLayer(layer).then(function(encodedLayer) {
+               if (encodedLayer !== null) {
+                  encodedLayers.push(encodedLayer);
+               }
+               numLayersToProc--;
+               if (numLayersToProc === 0) {
+                  success(encodedLayers);
+               }
+            });
+
+         }, this_);
+      }));
    };
 
    /**
@@ -556,19 +573,6 @@ goog.require('goog.style');
          equals = (this.name === obj.name);
       }
       return equals;
-   };
-
-   /**
-    * function adds the event 'click'
-    *
-    * @public
-    * @function
-    * @api stable
-    */
-   M.control.Printer.prototype.destroy = function() {
-      this.getImpl().destroy();
-      this.template_ = null;
-      this.impl = null;
    };
 
    /**

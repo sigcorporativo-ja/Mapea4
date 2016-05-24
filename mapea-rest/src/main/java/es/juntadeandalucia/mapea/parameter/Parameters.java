@@ -8,7 +8,7 @@ import org.json.JSONObject;
 import es.juntadeandalucia.mapea.parameter.parser.ParametersParser;
 
 public class Parameters {
-
+   private String callbackFn;
    private JSONObject parameters;
 
    public Parameters() {
@@ -86,16 +86,10 @@ public class Parameters {
          parameters.put("maxExtent", maxextent);
       }
    }
-
-   public void addGeosearch (String geosearch) {
-      if (geosearch != null) {
-         parameters.put("geosearch", geosearch);
-      }
-   }
-
-   public void addGeosearchByLocation (String geosearchbylocation) {
-      if (geosearchbylocation != null) {
-         parameters.put("geosearchbylocation", geosearchbylocation);
+   
+   public void addTicket (String ticket) {
+      if (ticket != null) {
+         parameters.put("ticket", ticket);
       }
    }
 
@@ -111,8 +105,16 @@ public class Parameters {
          }
       }
    }
-
+   
    public JSONObject toJSON () {
       return parameters;
+   }
+
+   public String getCallbackFn () {
+      return callbackFn;
+   }
+
+   public void setCallbackFn (String callbackFn) {
+      this.callbackFn = callbackFn;
    }
 }

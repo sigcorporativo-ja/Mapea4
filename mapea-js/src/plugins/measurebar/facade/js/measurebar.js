@@ -14,7 +14,7 @@ goog.require('P.control.MeasureClear');
  * @param {Object} impl implementation object
  * @api stable
  */
-M.plugin.Measurebar = (function () {
+M.plugin.Measurebar = (function() {
    /**
     * Facade of the map
     * @private
@@ -56,7 +56,7 @@ goog.inherits(M.plugin.Measurebar, M.Plugin);
  * @param {Object} map the map to add the plugin
  * @api stable
  */
-M.plugin.Measurebar.prototype.addTo = function (map) {
+M.plugin.Measurebar.prototype.addTo = function(map) {
    this.map_ = map;
 
    this.measureLength_ = new M.control.MeasureLength();
@@ -73,7 +73,10 @@ M.plugin.Measurebar.prototype.addTo = function (map) {
  * @function
  * @api stable
  */
-M.plugin.Measurebar.prototype.destroy = function () {
+M.plugin.Measurebar.prototype.destroy = function() {
    this.map_.removeControls([this.measureLength_, this.measureArea_, this.measureClear_]);
    this.map_ = null;
+   this.measureLength_ = null;
+   this.measureArea_ = null;
+   this.measureClear_ = null;
 };

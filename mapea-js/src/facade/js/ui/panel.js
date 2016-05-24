@@ -5,7 +5,7 @@ goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.facade.Base');
 
-(function () {
+(function() {
    /**
     * @classdesc
     * TODO
@@ -16,7 +16,7 @@ goog.require('M.facade.Base');
     * @extends {M.Object}
     * @api stable
     */
-   M.ui.Panel = (function (name, options) {
+   M.ui.Panel = (function(name, options) {
       options = (options || {});
 
       /**
@@ -132,6 +132,14 @@ goog.require('M.facade.Base');
       this._element = null;
 
       /**
+       * TODO
+       * @private
+       * @type {HTMLElement}
+       * @expose
+       */
+      this._areaContainer = null;
+
+      /**
        * @private
        * @type {HTMLElement}
        * @expose
@@ -148,49 +156,12 @@ goog.require('M.facade.Base');
     *
     * @public
     * @function
-    * @param {array<M.Control>} controls
+    @param {HTMLElement} html panel
+    @param {HTMLElement} html area
     * @api stable
     */
-   M.ui.Panel.prototype.addTo = function (map, areaContainer) {
-      this._map = map;
-      var this_ = this;
-      M.template.compile(M.ui.Panel.TEMPLATE).then(function (html) {
-         this_._element = html;
-         var buttonPanel = html.querySelector('button.m-panel-btn');
-         if (!M.utils.isNullOrEmpty(this_._className)) {
-            this_._className.split(/\s+/).forEach(function (className) {
-               goog.dom.classlist.add(html, className);
-            });
-         }
-
-         if (this_._collapsed === true) {
-            goog.dom.classlist.add(html, 'collapsed');
-            goog.dom.classlist.add(buttonPanel, this_._collapsedButtonClass);
-         }
-         else {
-            goog.dom.classlist.add(html, 'opened');
-            goog.dom.classlist.add(buttonPanel, this_._openedButtonClass);
-         }
-
-         if (this_._collapsible !== true) {
-            goog.dom.classlist.add(html, 'no-collapsible');
-         }
-
-         this_._controlsContainer = html.querySelector('div.m-panel-controls');
-         goog.dom.appendChild(areaContainer, html);
-
-         goog.events.listen(buttonPanel, goog.events.EventType.CLICK, function (evt) {
-            evt.preventDefault();
-            goog.dom.classlist.toggle(html, 'collapsed');
-            goog.dom.classlist.toggle(html, 'opened');
-            goog.dom.classlist.toggle(buttonPanel, this_._collapsedButtonClass);
-            goog.dom.classlist.toggle(buttonPanel, this_._openedButtonClass);
-            this._collapsed = !this._collapsed;
-         }, false, this_);
-
-         this_.addControls(this_._controls);
-         this_.fire(M.evt.ADDED_TO_MAP, html);
-      });
+   M.ui.Panel.prototype.destroy = function() {
+      this._areaContainer.removeChild(this._element);
    };
 
    /**
@@ -201,7 +172,89 @@ goog.require('M.facade.Base');
     * @param {array<M.Control>} controls
     * @api stable
     */
-   M.ui.Panel.prototype.getControls = function () {
+   M.ui.Panel.prototype.addTo = function(map, areaContainer) {
+      this._map = map;
+      this._areaContainer = areaContainer;
+      var this_ = this;
+      M.template.compile(M.ui.Panel.TEMPLATE, {
+         'jsonp': true
+      }).then(function(html) {
+         this_._element = html;
+         var buttonPanel = html.querySelector('button.m-panel-btn');
+         if (!M.utils.isNullOrEmpty(this_._className)) {
+            this_._className.split(/\s+/).forEach(function(className) {
+               goog.dom.classlist.add(html, className);
+            });
+         }
+
+         if (this_._collapsed === true) {
+            this_._collapse(html, buttonPanel);
+         }
+         else {
+            this_._open(html, buttonPanel);
+         }
+
+         if (this_._collapsible !== true) {
+            goog.dom.classlist.add(html, 'no-collapsible');
+         }
+
+         this_._controlsContainer = html.querySelector('div.m-panel-controls');
+         goog.dom.appendChild(areaContainer, html);
+
+         goog.events.listen(buttonPanel, goog.events.EventType.CLICK, function(evt) {
+            evt.preventDefault();
+            if (this._collapsed === false) {
+               this._collapse(html, buttonPanel);
+            }
+            else {
+               this._open(html, buttonPanel);
+            }
+         }, false, this_);
+
+         this_.addControls(this_._controls);
+         this_.fire(M.evt.ADDED_TO_MAP, html);
+      });
+   };
+
+   /**
+    * TODO
+    *
+    * @private
+    * @function
+    */
+   M.ui.Panel.prototype._collapse = function(html, buttonPanel) {
+      goog.dom.classlist.remove(html, 'opened');
+      goog.dom.classlist.remove(buttonPanel, this._openedButtonClass);
+      goog.dom.classlist.add(html, 'collapsed');
+      goog.dom.classlist.add(buttonPanel, this._collapsedButtonClass);
+      this._collapsed = true;
+      this.fire(M.evt.HIDE);
+   };
+
+   /**
+    * TODO
+    *
+    * @private
+    * @function
+    */
+   M.ui.Panel.prototype._open = function(html, buttonPanel) {
+      goog.dom.classlist.remove(html, 'collapsed');
+      goog.dom.classlist.remove(buttonPanel, this._collapsedButtonClass);
+      goog.dom.classlist.add(html, 'opened');
+      goog.dom.classlist.add(buttonPanel, this._openedButtonClass);
+      this._collapsed = false;
+      this.fire(M.evt.SHOW);
+   };
+
+   /**
+    * TODO
+    *
+    * @public
+    * @function
+    * @param {array<M.Control>} controls
+    * @api stable
+    */
+   M.ui.Panel.prototype.getControls = function() {
       return this._controls;
    };
 
@@ -213,15 +266,17 @@ goog.require('M.facade.Base');
     * @param {array<M.Control>} controls
     * @api stable
     */
-   M.ui.Panel.prototype.addControls = function (controls) {
+   M.ui.Panel.prototype.addControls = function(controls) {
       if (!M.utils.isNullOrEmpty(controls)) {
          if (!M.utils.isArray(controls)) {
             controls = [controls];
          }
-         controls.forEach(function (control) {
+         controls.forEach(function(control) {
             if (control instanceof M.Control) {
                if (!this.hasControl(control)) {
                   this._controls.push(control);
+                  control.setPanel(this);
+                  control.on(M.evt.DESTROY, this._removeControl, this);
                }
                if (!M.utils.isNullOrEmpty(this._controlsContainer)) {
                   control.on(M.evt.ADDED_TO_MAP, this._moveControlView, this);
@@ -241,7 +296,7 @@ goog.require('M.facade.Base');
     * @param {array<M.Control>} controls
     * @api stable
     */
-   M.ui.Panel.prototype.hasControl = function (controlParam) {
+   M.ui.Panel.prototype.hasControl = function(controlParam) {
       var hasControl = false;
       if (!M.utils.isNullOrEmpty(controlParam)) {
          if (M.utils.isString(controlParam)) {
@@ -264,13 +319,39 @@ goog.require('M.facade.Base');
     * @param {array<M.Control>} controls
     * @api stable
     */
-   M.ui.Panel.prototype.removeControls = function (controlsParam) {
+   M.ui.Panel.prototype.removeControls = function(controls) {
+      if (!M.utils.isNullOrEmpty(controls)) {
+         if (!M.utils.isArray(controls)) {
+            controls = [controls];
+         }
+         controls.forEach(function(control) {
+            if ((control instanceof M.Control) && this.hasControl(control)) {
+               this._controls.remove(control);
+               control.setPanel(null);
+            }
+         }, this);
+         // if this panel hasn't any controls then it's removed
+         // from the map
+         if (this._controls.length === 0) {
+            this._map.removePanel(this);
+         }
+      }
+   };
+
+   /**
+    * TODO
+    *
+    * @public
+    * @function
+    * @param {array<M.Control>} controls
+    * @api stable
+    */
+   M.ui.Panel.prototype._removeControl = function(controlsParam) {
       var controls = this._map.getControls(controlsParam);
-      controls.forEach(function (control) {
+      controls.forEach(function(control) {
          var index = this._controls.indexOf(control);
          if (index !== -1) {
             this._controls.splice(index, 1);
-            this._map.removeControls(control);
          }
       });
    };
@@ -283,7 +364,7 @@ goog.require('M.facade.Base');
     * @param {array<M.Control>} controls
     * @api stable
     */
-   M.ui.Panel.prototype.removeClassName = function (className) {
+   M.ui.Panel.prototype.removeClassName = function(className) {
       if (!M.utils.isNullOrEmpty(this._element)) {
          goog.dom.classlist.remove(this._element, className);
       }
@@ -300,7 +381,7 @@ goog.require('M.facade.Base');
     * @param {array<M.Control>} controls
     * @api stable
     */
-   M.ui.Panel.prototype.addClassName = function (className) {
+   M.ui.Panel.prototype.addClassName = function(className) {
       if (!M.utils.isNullOrEmpty(this._element)) {
          goog.dom.classlist.add(this._element, className);
       }
@@ -317,7 +398,7 @@ goog.require('M.facade.Base');
     * @param {array<M.Control>} controls
     * @api stable
     */
-   M.ui.Panel.prototype._moveControlView = function (control) {
+   M.ui.Panel.prototype._moveControlView = function(control) {
       var controlElem = control.getElement();
       goog.dom.appendChild(this._controlsContainer, controlElem);
       control.fire(M.evt.ADDED_TO_PANEL);
@@ -331,9 +412,9 @@ goog.require('M.facade.Base');
     * @param {array<M.Control>} controls
     * @api stable
     */
-   M.ui.Panel.prototype._manageActivation = function (control) {
+   M.ui.Panel.prototype._manageActivation = function(control) {
       if (this._multiActivation !== true) {
-         this._controls.forEach(function (panelControl) {
+         this._controls.forEach(function(panelControl) {
             if (!panelControl.equals(control) && panelControl.activated) {
                panelControl.deactivate();
             }
@@ -349,7 +430,7 @@ goog.require('M.facade.Base');
     * @param {array<M.Control>} controls
     * @api stable
     */
-   M.ui.Panel.prototype.equals = function (obj) {
+   M.ui.Panel.prototype.equals = function(obj) {
       var equals = false;
       if (obj instanceof M.ui.Panel) {
          equals = (obj.name === this.name);

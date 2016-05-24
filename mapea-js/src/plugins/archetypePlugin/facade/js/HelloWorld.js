@@ -22,7 +22,7 @@ goog.inherits(M.plugin.HelloWorld, M.Plugin);
  *
  * @public
  * @function
- * @param {Object} map the map to add the plugin
+ * @param {M.Map} map the map to add the plugin
  * @api stable
  */
 M.plugin.HelloWorld.prototype.addTo = function(map) {

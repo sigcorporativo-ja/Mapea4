@@ -35,6 +35,8 @@ goog.require('M.facade.Base');
     * @api stable
     */
    M.Plugin.prototype.addTo = function (map) {
+      var this_;
+      
       // checks if the parameter is null or empty
       if (M.utils.isNullOrEmpty(map)) {
          M.exception('No ha especificado ningún mapa');
@@ -49,16 +51,17 @@ goog.require('M.facade.Base');
       var view = this.createView(map);
       // checks if the view is a promise
       if (view instanceof Promise) {
+         this_ = this;
          view.then(function (html) {
             impl.addTo(map, html);
             // executes load callback
-            this_.onLoadCallback_();
+            this_.fire(M.evt.ADDED_TO_MAP);
          });
       }
       else { // view is an HTML or text
          impl.addTo(map, view);
          // executes load callback
-         this.onLoadCallback_();
+         this.fire(M.evt.ADDED_TO_MAP);
       }
    };
 

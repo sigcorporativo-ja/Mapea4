@@ -24,7 +24,7 @@ M.impl.control.MeasureClear = function (measureLengthControl, measureAreaControl
     */
    this.measureAreaControl_ = measureAreaControl;
 };
-goog.inherits(M.impl.control.MeasureClear, ol.control.Control);
+goog.inherits(M.impl.control.MeasureClear, M.impl.Control);
 
 /**
  * This function adds the control to the specified map
@@ -37,10 +37,7 @@ goog.inherits(M.impl.control.MeasureClear, ol.control.Control);
  */
 M.impl.control.MeasureClear.prototype.addTo = function (map, element) {
    var button = element.getElementsByTagName('button')['m-measure-button'];
-   goog.events.listen(button, [
-         goog.events.EventType.CLICK,
-         goog.events.EventType.TOUCHEND
-      ], this.onClick, false, this);
+   goog.events.listen(button, goog.events.EventType.CLICK, this.onClick, false, this);
 
    ol.control.Control.call(this, {
       'element': element,
@@ -76,6 +73,6 @@ M.impl.control.MeasureClear.prototype.onClick = function (map, element) {
  * @api stable
  */
 M.impl.control.MeasureClear.prototype.destroy = function () {
-   this.map.removeControl(this);
-   this.map = null;
+   this.facadeMap_.removeControl(this);
+   this.facadeMap_ = null;
 };

@@ -4,7 +4,7 @@ goog.require('M.Layer');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMS layer
@@ -16,7 +16,7 @@ goog.require('M.exception');
     * @param {Mx.parameters.LayerOptions} options provided by the user
     * @api stable
     */
-   M.layer.WMS = (function (userParameters, options) {
+   M.layer.WMS = (function(userParameters, options) {
       // checks if the implementation can create WMC layers
       if (M.utils.isUndefined(M.impl.layer.WMS)) {
          M.exception('La implementación usada no puede crear capas WMS');
@@ -44,14 +44,19 @@ goog.require('M.exception');
       // legend
       this.legend = parameters.legend;
 
-      // tiled
-      this.tiled = parameters.tiled;
-
       // cql
       this.cql = parameters.cql;
 
       // version
       this.version = parameters.version;
+
+      // tiled
+      if (!M.utils.isNullOrEmpty(parameters.tiled)) {
+         this.tiled = parameters.tiled;
+      }
+
+      // transparent
+      this.transparent = parameters.transparent;
 
       // options
       this.options = options;
@@ -59,15 +64,44 @@ goog.require('M.exception');
    goog.inherits(M.layer.WMS, M.Layer);
 
    /**
+    * 'url' The service URL of the
+    * layer
+    */
+   Object.defineProperty(M.layer.WMS.prototype, "url", {
+      get: function() {
+         return this.getImpl().url;
+      },
+      // defining new type is not allowed
+      set: function(newUrl) {
+         this.getImpl().url = newUrl;
+         this._updateNoCache();
+      }
+   });
+
+   /**
+    * 'name' the layer name
+    */
+   Object.defineProperty(M.layer.WMS.prototype, "name", {
+      get: function() {
+         return this.getImpl().name;
+      },
+      // defining new type is not allowed
+      set: function(newName) {
+         this.getImpl().name = newName;
+         this._updateNoCache();
+      }
+   });
+
+   /**
     * 'type' This property indicates if
     * the layer was selected
     */
-   Object.defineProperty(M.Layer.prototype, "type", {
-      get: function () {
+   Object.defineProperty(M.layer.WMS.prototype, "type", {
+      get: function() {
          return M.layer.type.WMS;
       },
       // defining new type is not allowed
-      set: function (newType) {
+      set: function(newType) {
          if (!M.utils.isUndefined(newType) &&
             !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.WMS)) {
             M.exception('El tipo de capa debe ser \''.concat(M.layer.type.WMS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -79,11 +113,11 @@ goog.require('M.exception');
     * 'legend' the layer name
     */
    Object.defineProperty(M.layer.WMS.prototype, "legend", {
-      get: function () {
+      get: function() {
          return this.getImpl().legend;
       },
       // defining new type is not allowed
-      set: function (newLegend) {
+      set: function(newLegend) {
          if (M.utils.isNullOrEmpty(newLegend)) {
             this.getImpl().legend = this.name;
          }
@@ -97,10 +131,10 @@ goog.require('M.exception');
     * 'tiled' the layer name
     */
    Object.defineProperty(M.layer.WMS.prototype, "tiled", {
-      get: function () {
+      get: function() {
          return this.getImpl().tiled;
       },
-      set: function (newTiled) {
+      set: function(newTiled) {
          if (!M.utils.isNullOrEmpty(newTiled)) {
             if (M.utils.isString(newTiled)) {
                this.getImpl().tiled = (M.utils.normalize(newTiled) === 'true');
@@ -119,11 +153,11 @@ goog.require('M.exception');
     * 'cql' the CQL filter
     */
    Object.defineProperty(M.layer.WMS.prototype, "cql", {
-      get: function () {
+      get: function() {
          return this.getImpl().cql;
       },
       // defining new type is not allowed
-      set: function (newCql) {
+      set: function(newCql) {
          this.getImpl().cql = newCql;
       }
    });
@@ -133,11 +167,11 @@ goog.require('M.exception');
     * default value is 1.3.0
     */
    Object.defineProperty(M.layer.WMS.prototype, "version", {
-      get: function () {
+      get: function() {
          return this.getImpl().version;
       },
       // defining new type is not allowed
-      set: function (newVersion) {
+      set: function(newVersion) {
          if (!M.utils.isNullOrEmpty(newVersion)) {
             this.getImpl().version = newVersion;
          }
@@ -152,15 +186,48 @@ goog.require('M.exception');
     * 'options' the layer options
     */
    Object.defineProperty(M.layer.WMS.prototype, "options", {
-      get: function () {
+      get: function() {
          return this.getImpl().options;
       },
       // defining new type is not allowed
-      set: function (newOptions) {
+      set: function(newOptions) {
          this.getImpl().options = newOptions;
       }
    });
 
+   /**
+    * TODO
+    *
+    * @function
+    * @api stable
+    */
+   M.layer.WMS.prototype.getNoChacheUrl = function() {
+      return this._noCacheUrl;
+   };
+
+   /**
+    * TODO
+    *
+    * @function
+    * @api stable
+    */
+   M.layer.WMS.prototype.getNoChacheName = function() {
+      return this._noCacheName;
+   };
+
+   /**
+    * TODO
+    *
+    * @private
+    * @function
+    */
+   M.layer.WMS.prototype._updateNoCache = function() {
+      var tiledIdx = M.config.tileMappgins.tiledNames.indexOf(this.name);
+      if ((tiledIdx !== -1) && M.utils.sameUrl(M.config.tileMappgins.tiledUrls[tiledIdx], this.url)) {
+         this._noCacheUrl = M.config.tileMappgins.urls[tiledIdx];
+         this._noCacheName = M.config.tileMappgins.names[tiledIdx];
+      }
+   };
 
    /**
     * This function checks if an object is equals
@@ -169,7 +236,7 @@ goog.require('M.exception');
     * @function
     * @api stable
     */
-   M.layer.WMS.prototype.equals = function (obj) {
+   M.layer.WMS.prototype.equals = function(obj) {
       var equals = false;
 
       if (obj instanceof M.layer.WMS) {

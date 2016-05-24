@@ -4,20 +4,20 @@ goog.require('P.impl.control.SearchstreetIntegrated');
 goog.require('P.control.Searchstreet');
 goog.require('P.impl.control.Searchstreet');
 
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a Searchstreet control
-    * 
+    *
     * @constructor
     * @extends {M.control.Searchstreet}
     * @param {String}
-    * url Service URL 
+    * url Service URL
     * @param {Number}
     * locality INE code to specify the search
     * @api stable
     */
-   M.control.SearchstreetIntegrated = (function (url, locality) {
+   M.control.SearchstreetIntegrated = (function(url, locality) {
       if (M.utils.isUndefined(M.impl.control.SearchstreetIntegrated)) {
          M.exception('La implementación usada no puede crear controles SearchstreetIntegrated');
       }
@@ -31,7 +31,7 @@ goog.require('P.impl.control.Searchstreet');
 
    /**
     * This function replaces createView of geosearch not to add the template control
-    * 
+    *
     * @public
     * @function
     * @param {HTMLElement}
@@ -41,7 +41,7 @@ goog.require('P.impl.control.Searchstreet');
     * @api stable
     * @return {null}
     */
-   M.control.SearchstreetIntegrated.prototype.createView = function (html, map) {
+   M.control.SearchstreetIntegrated.prototype.createView = function(html, map) {
       this.facadeMap_ = map;
       this.addEvents(html);
       return null;
@@ -49,18 +49,18 @@ goog.require('P.impl.control.Searchstreet');
 
    /**
     * This function add events to HTML elements
-    * 
+    *
     * @public
     * @function
     * @param {HTMLElement}
     *        html html to add events
     * @api stable
     */
-   M.control.SearchstreetIntegrated.prototype.addEvents = function (html) {
+   M.control.SearchstreetIntegrated.prototype.addEvents = function(html) {
       this.element_ = html;
       var this_ = this;
 
-      this.on(M.evt.COMPLETED, function () {
+      this.on(M.evt.COMPLETED, function() {
          goog.dom.classlist.add(this.element_,
             "shown");
       }, this);
@@ -87,15 +87,20 @@ goog.require('P.impl.control.Searchstreet');
          var searchCodIne = M.utils.addParameters(this.searchCodIne_, {
             codigo: this.codIne_
          });
-         (function (searchTime) {
+         (function(searchTime) {
             M.remote.get(searchCodIne).then(
-               function (response) {
+               function(response) {
                   var results;
                   try {
                      if (!M.utils.isNullOrEmpty(response.text)) {
                         results = JSON.parse(response.text);
-                        this_.getMunProv_(results);
-                        this_.element_.getElementsByTagName("span")["codIne"].innerHTML = "Búsquedas en " + this_.municipio_ + "  (" + this_.provincia_ + ")";
+                        if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
+                           M.dialog.error("El código del municipio '" + this_.codIne_ + "' no es válido");
+                        }
+                        else {
+                           this_.getMunProv_(results);
+                           this_.element_.getElementsByTagName("span")["codIne"].innerHTML = "Búsquedas en " + this_.municipio_ + "  (" + this_.provincia_ + ")";
+                        }
                      }
                   }
                   catch (err) {
@@ -104,15 +109,16 @@ goog.require('P.impl.control.Searchstreet');
                });
          })(this.searchTime_);
       }
+      goog.dom.removeChildren(this.resultsContainer_, this.searchingResult_);
    };
 
    /**
     * Clear results and searchs
-    * 
+    *
     * @private
     * @function
     */
-   M.control.SearchstreetIntegrated.prototype.clearSearchs_ = function () {
+   M.control.SearchstreetIntegrated.prototype.clearSearchs_ = function() {
       goog.dom.classlist.remove(this.element_,
          "shown");
       var controls = this.facadeMap_.getControls();
@@ -130,16 +136,19 @@ goog.require('P.impl.control.Searchstreet');
    };
 
    /**
-    * This function checks the query field is not empty, if it is not 
+    * This function checks the query field is not empty, if it is not
     * sending the query to the search function
-    * 
+    *
     * @private
     * @function
     */
-   M.control.SearchstreetIntegrated.prototype.searchClick_ = function (evt) {
+   M.control.SearchstreetIntegrated.prototype.searchClick_ = function(evt) {
       evt.preventDefault();
 
       if ((evt.type !== goog.events.EventType.KEYUP) || (evt.keyCode === 13)) {
+         goog.dom.classlist.remove(this.resultsAutocomplete_,
+            M.control.Searchstreet.MINIMUM);
+         goog.dom.removeChildren(this.resultsAutocomplete_, this.resultsAutocomplete_.querySelector("div#m-searching-result-autocomplete"));
          // gets the query
          var query = this.input_.value;
          if (!M.utils.isNullOrEmpty(query)) {
@@ -165,14 +174,32 @@ goog.require('P.impl.control.Searchstreet');
    };
 
    /**
+    * This function checks if an object is equals
+    * to this control
+    *
+    * @private
+    * @function
+    */
+   M.control.SearchstreetIntegrated.prototype.resultsClick_ = function(evt) {
+      goog.dom.classlist.add(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
+         "top-extra-searchs");
+      goog.dom.classlist.toggle(evt.target, 'g-cartografia-flecha-arriba');
+      goog.dom.classlist.toggle(evt.target, 'g-cartografia-flecha-abajo');
+      goog.dom.classlist.toggle(this.resultsContainer_, "hidden");
+      if (M.utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector("div#m-geosearch-results.hidden"))) {
+         goog.dom.classlist.toggle(this.resultsContainer_.parentElement, "hidden");
+      }
+   };
+
+   /**
     * This function return impl control
-    * 
+    *
     * @public
     * @function
     * @api stable
     * @return {Object}
     */
-   M.control.SearchstreetIntegrated.prototype.getImpl = (function () {
+   M.control.SearchstreetIntegrated.prototype.getImpl = (function() {
       return this.impl;
    });
 

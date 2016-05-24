@@ -15,7 +15,7 @@ goog.require('goog.events');
  * @param {Object} impl implementation object
  * @api stable
  */
-M.plugin.Streetview = (function () {
+M.plugin.Streetview = (function() {
 
    /**
     * Facade of the map
@@ -23,6 +23,8 @@ M.plugin.Streetview = (function () {
     * @type {M.Map}
     */
    this.map_ = null;
+
+   this.streetview = null;
 
    /**
     * TODO
@@ -44,7 +46,7 @@ goog.inherits(M.plugin.Streetview, M.Plugin);
  * @param {Object} map the map to add the plugin
  * @api stable
  */
-M.plugin.Streetview.prototype.addTo = function (map) {
+M.plugin.Streetview.prototype.addTo = function(map) {
    this.map_ = map;
    this.streetview = new M.control.Streetview();
    this.panel_ = new M.ui.Panel(M.plugin.Streetview.NAME, {
@@ -82,9 +84,11 @@ M.plugin.Streetview.prototype.addTo = function (map) {
  * @function
  * @api stable
  */
-M.plugin.Streetview.prototype.destroy = function () {
+M.plugin.Streetview.prototype.destroy = function() {
    this.map_.removeControls([this.streetview]);
    this.map_ = null;
+   this.streetview = null;
+   this.panel_ = null;
 };
 
 /**

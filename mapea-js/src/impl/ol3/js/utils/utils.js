@@ -48,25 +48,14 @@ goog.require('goog.style');
    M.impl.utils.addOverlayImage = function (overlayImage, map) {
       var mapSize = map.getMapImpl().getSize();
 
-      var screenXYAttr = 'screenXY';
-      var screenXUnitsAttr = 'screenXUnits';
-      var screenYUnitsAttr = 'screenYUnits';
-      var overlayXYAttr = 'overlayXY';
-      var overlayXUnitsAttr = 'overlayXUnits';
-      var overlayYUnitsAttr = 'overlayYUnits';
-      var rotationXYAttr = 'rotationXY';
-      var sizeAttr = 'size';
-      var srcAttr = 'src';
-
-      var screenXY = overlayImage[screenXYAttr];
-      var screenXUnits = overlayImage[screenXUnitsAttr];
-      var screenYUnits = overlayImage[screenYUnitsAttr];
-      var overlayXY = overlayImage[overlayXYAttr];
-      var overlayXUnits = overlayImage[overlayXUnitsAttr];
-      var overlayYUnits = overlayImage[overlayYUnitsAttr];
-      var rotationXY = overlayImage[rotationXYAttr];
-      var size = overlayImage[sizeAttr];
-      var src = overlayImage[srcAttr];
+      var screenXY = overlayImage['screenXY'];
+      var screenXUnits = overlayImage['screenXUnits'];
+      var screenYUnits = overlayImage['screenYUnits'];
+      var overlayXY = overlayImage['overlayXY'];
+      var overlayXUnits = overlayImage['overlayXUnits'];
+      var overlayYUnits = overlayImage['overlayYUnits'];
+      var size = overlayImage['size'];
+      var src = overlayImage['src'];
 
       // src
       var img = goog.dom.createDom('img', {

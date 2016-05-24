@@ -1,18 +1,19 @@
 goog.provide('P.control.SaveFeature');
 
-(function () {
+(function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a GetFeatureInfo
-    * control to provides a popup with information about the place 
-    * where the user has clicked inside the map.
+    * Main constructor of the class. Creates a SaveFeature
+    * control save changes to features
     *
     * @constructor
-    * @param {String} format format response
+    * @param {M.layer.WFS}
+    * layer layer for use in control
     * @extends {M.Control}
     * @api stable
     */
-   M.control.SaveFeature = (function (layer) {
+   M.control.SaveFeature = (function(layer) {
+      this.name = M.control.SaveFeature.NAME;
 
       if (M.utils.isUndefined(M.impl.control.SaveFeature)) {
          M.exception('La implementación usada no puede crear controles SaveFeature');
@@ -20,7 +21,7 @@ goog.provide('P.control.SaveFeature');
       // implementation of this control
       var impl = new M.impl.control.SaveFeature(layer);
       // calls the super constructor
-      goog.base(this, impl);
+      goog.base(this, impl, M.control.SaveFeature.NAME);
    });
    goog.inherits(M.control.SaveFeature, M.Control);
 
@@ -33,16 +34,11 @@ goog.provide('P.control.SaveFeature');
     * @returns {Promise} html response
     * @api stable
     */
-   M.control.SaveFeature.prototype.createView = function (map) {
+   M.control.SaveFeature.prototype.createView = function(map) {
       this.facadeMap_ = map;
-      var this_ = this;
-      var promise = new Promise(function (success, fail) {
-         M.template.compile(M.control.SaveFeature.TEMPLATE).then(function (html) {
-            this_.addEvents(html);
-            success(html);
-         });
+      return M.template.compile(M.control.SaveFeature.TEMPLATE, {
+         'jsonp': true
       });
-      return promise;
    };
 
    /**
@@ -52,7 +48,7 @@ goog.provide('P.control.SaveFeature');
     * @function
     * @api stable
     */
-   M.control.SaveFeature.prototype.equals = function (obj) {
+   M.control.SaveFeature.prototype.equals = function(obj) {
       var equals = (obj instanceof M.control.SaveFeature);
       return equals;
    };
@@ -65,14 +61,11 @@ goog.provide('P.control.SaveFeature');
     * @param {M.Map} map to add the control
     * @api stable
     */
-   M.control.SaveFeature.prototype.addEvents = function (html) {
-      var button = html.getElementsByTagName('button')['m-button-savefeature'];
-      goog.events.listen(button, [goog.events.EventType.CLICK, goog.events.EventType.TOUCHEND],
-         function (e) {
-            this.saveFeature_();
-         }, false, this);
+   M.control.SaveFeature.prototype.manageActivation = function(html) {
+      var button = html.querySelector('button#m-button-savefeature');
+      goog.events.listen(button, goog.events.EventType.CLICK, this.saveFeature_, false, this);
    };
-   
+
    /**
     * This function creates the view to the specified map
     *
@@ -81,7 +74,7 @@ goog.provide('P.control.SaveFeature');
     * @param {M.Map} map to add the control
     * @api stable
     */
-   M.control.SaveFeature.prototype.saveFeature_ = function (html) {
+   M.control.SaveFeature.prototype.saveFeature_ = function(html) {
       this.getImpl().saveFeature();
    };
 

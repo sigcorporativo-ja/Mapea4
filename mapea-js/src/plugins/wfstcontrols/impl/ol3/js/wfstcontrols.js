@@ -1,5 +1,6 @@
 goog.provide('P.impl.plugin.WFSTControls');
 
+goog.require('P.impl.control.WFSTBase');
 goog.require('P.impl.control.DrawFeature');
 goog.require('P.impl.control.ModifyFeature');
 goog.require('P.impl.control.DeleteFeature');

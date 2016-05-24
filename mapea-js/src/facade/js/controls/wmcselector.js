@@ -5,7 +5,7 @@ goog.require('M.template');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMCSelector
@@ -15,7 +15,7 @@ goog.require('M.exception');
     * @extends {M.Control}
     * @api stable
     */
-   M.control.WMCSelector = (function () {
+   M.control.WMCSelector = (function() {
       // checks if the implementation can create WMC layers
       if (M.utils.isUndefined(M.impl.control.WMCSelector)) {
          M.exception('La implementación usada no puede crear controles WMCSelector');
@@ -25,7 +25,7 @@ goog.require('M.exception');
       var impl = new M.impl.control.WMCSelector();
 
       // calls the super constructor
-      goog.base(this, impl);
+      goog.base(this, impl, 'wmcselector');
    });
    goog.inherits(M.control.WMCSelector, M.Control);
 
@@ -37,10 +37,13 @@ goog.require('M.exception');
     * @param {M.Map} map to add the control
     * @api stable
     */
-   M.control.WMCSelector.prototype.createView = function (map) {
+   M.control.WMCSelector.prototype.createView = function(map) {
       // compiles the template
       return M.template.compile(M.control.WMCSelector.TEMPLATE, {
-         'layers': map.getWMC()
+         'jsonp': true,
+         'vars': {
+            'layers': map.getWMC()
+         }
       });
    };
 
@@ -51,7 +54,7 @@ goog.require('M.exception');
     * @function
     * @api stable
     */
-   M.control.WMCSelector.prototype.equals = function (obj) {
+   M.control.WMCSelector.prototype.equals = function(obj) {
       var equals = false;
       if (obj instanceof M.control.WMCSelector) {
          equals = (this.name === obj.name);

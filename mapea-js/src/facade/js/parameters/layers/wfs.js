@@ -3,7 +3,7 @@ goog.provide('M.parameter.wfs');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function () {
+(function() {
    'use strict';
 
    /**
@@ -16,7 +16,7 @@ goog.require('M.exception');
     * @function
     * @api stable
     */
-   M.parameter.wfs = function (userParameters) {
+   M.parameter.wfs = function(userParameters) {
       var layers = [];
 
       // checks if the param is null or empty
@@ -30,7 +30,7 @@ goog.require('M.exception');
          userParametersArray = [userParametersArray];
       }
 
-      layers = userParametersArray.map(function (userParam) {
+      layers = userParametersArray.map(function(userParam) {
          var layerObj = {};
 
          // gets the layer type
@@ -78,7 +78,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getURL = function (parameter) {
+   var getURL = function(parameter) {
       var url;
       if (M.utils.isString(parameter)) {
          var urlMatches = parameter.match(/^([^\*]*\*)*(https?\:\/\/[^\*]+)([^\*]*\*?)*$/i);
@@ -100,7 +100,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getName = function (parameter) {
+   var getName = function(parameter) {
       var name, params, namespaceName;
       if (M.utils.isString(parameter)) {
          if (/^WFS(T)?\*.+/i.test(parameter)) {
@@ -110,12 +110,16 @@ goog.require('M.exception');
                namespaceName = params[3].trim();
                name = namespaceName.split('\:')[1];
             }
+            else if (/^WFS(T)?\*[^\*]*\*[^\*]+[^\*]+/i.test(parameter)) {
+               // <WFS(T)?>*(<TITLE>)?*<URL>*<NAME>
+               params = parameter.split(/\*/);
+               name = params[3].trim();
+            }
          }
          // <URL>*<NAMESPACE>:<NAME>
          else if (/^[^\*]*\*[^\*]+\:[^\*]+/.test(parameter)) {
             params = parameter.split(/\*/);
-            namespaceName = params[1].trim();
-            name = namespaceName.split('\:')[1];
+            name = params[3].trim();
          }
       }
       else if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.name)) {
@@ -136,7 +140,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getNamespace = function (parameter) {
+   var getNamespace = function(parameter) {
       var namespace, params, namespaceName;
       if (M.utils.isString(parameter)) {
          if (/^WFS(T)?\*.+/i.test(parameter)) {
@@ -172,7 +176,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getLegend = function (parameter) {
+   var getLegend = function(parameter) {
       var legend, params;
       if (M.utils.isString(parameter)) {
          // <WFS(T)?>*<TITLE>*<URL>...
@@ -204,7 +208,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getCQL = function (parameter) {
+   var getCQL = function(parameter) {
       var cql, params;
       if (M.utils.isString(parameter)) {
          // URL*NAMESPACE:NAME*TITLE*CQL
@@ -231,12 +235,17 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getGeometry = function (parameter) {
+   var getGeometry = function(parameter) {
       var geometry, params;
       if (M.utils.isString(parameter)) {
          if (/^WFS(T)?\*.+/i.test(parameter)) {
             // <WFS(T)?>*(<TITLE>)?*<URL>*<NAMESPACE>:<NAME>*<GEOM>
             if (/^WFS(T)?\*[^\*]*\*[^\*]+\*[^\*]+\:[^\*]+\*[^\*]+/i.test(parameter)) {
+               params = parameter.split(/\*/);
+               geometry = params[4].trim();
+            }
+            else if (/^WFS(T)?\*[^\*]*\*[^\*][^\*]+\*[^\*]+/i.test(parameter)) {
+               // <WFS(T)?>*(<TITLE>)?*<URL>*<NAME>*<GEOM>
                params = parameter.split(/\*/);
                geometry = params[4].trim();
             }
@@ -260,12 +269,17 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getIds = function (parameter) {
+   var getIds = function(parameter) {
       var ids, params;
       if (M.utils.isString(parameter)) {
          if (/^WFS(T)?\*.+/i.test(parameter)) {
             // <WFS(T)?>*(<TITLE>)?*<URL>*<NAMESPACE>:<NAME>*<GEOM>*<FEATURE_ID1>-<FEATURE_ID2>...
-            if (/^WFS(T)?\*[^\*]*\*[^\*]+\*[^\*]+\:[^\*]+\*[^\*]+\*(\d\-?)+$/i.test(parameter)) {
+            if (/^WFS(T)?\*[^\*]*\*[^\*]+\*[^\*]+\:[^\*]+\*[^\*]+\*(.\-?)+$/i.test(parameter)) {
+               params = parameter.split(/\*/);
+               ids = params[5].trim().split('\-');
+            }
+            else if (/^WFS(T)?\*[^\*]*\*[^\*]+\*[^\*]+\*[^\*]+\*(.\-?)+$/i.test(parameter)) {
+               // <WFS(T)?>*(<TITLE>)?*<URL>*<NAME>*<GEOM>*<FEATURE_ID1>-<FEATURE_ID2>...
                params = parameter.split(/\*/);
                ids = params[5].trim().split('\-');
             }
@@ -288,12 +302,13 @@ goog.require('M.exception');
       return ids;
    };
 
+
    /**
     * Parses the parameter in order to get the version
     * @private
     * @function
     */
-   var getVersion = function (parameter) {
+   var getVersion = function(parameter) {
       var version;
       if (M.utils.isString(parameter)) {
          if (/(\d\.\d\.\d)$/.test(parameter)) {
@@ -314,7 +329,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getOptions = function (parameter) {
+   var getOptions = function(parameter) {
       var options;
       if (M.utils.isString(parameter)) {
          // TODO ver como se pone el parámetro

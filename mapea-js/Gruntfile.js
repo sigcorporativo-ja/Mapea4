@@ -1,8 +1,8 @@
-/* 
+/*
    wrapper function (all of the Grunt code must
    be specified inside this function)
 */
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
    // Project configuration
    grunt.initConfig({
@@ -27,7 +27,7 @@ module.exports = function (grunt) {
                layout: 'byComponent',
                install: true,
                verbose: false,
-               cleanup: false,
+               cleanup: true,
                bowerOptions: {}
             }
          }
@@ -37,7 +37,7 @@ module.exports = function (grunt) {
       jshint: {
          core: {
             options: {
-               sub: true
+               jshintrc: '.jshintrc'
             },
             files: {
                'src': [
@@ -48,7 +48,7 @@ module.exports = function (grunt) {
          },
          plugins: {
             options: {
-               sub: true
+               jshintrc: 'src/plugins/.jshintrc'
             },
             files: {
                'src': [
@@ -58,7 +58,7 @@ module.exports = function (grunt) {
          },
          tasks: {
             options: {
-               sub: true
+               jshintrc: 'grunt-tasks/.jshintrc'
             },
             files: {
                'src': [
@@ -75,7 +75,8 @@ module.exports = function (grunt) {
          options: {
             destination: 'doc',
             template: "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
-            configure: "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template/jsdoc.conf.json"
+            // configure: "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template/jsdoc.conf.json"
+            configure: "jsdoc.conf.json"
          }
       },
 
@@ -86,6 +87,7 @@ module.exports = function (grunt) {
                create: [
                   'build/core/<%= pkg.version %>/assets/fonts',
                   'build/core/<%= pkg.version %>/assets/css',
+                  'build/core/<%= pkg.version %>/assets/img',
                   'build/core/<%= pkg.version %>/js',
                   'build/plugins/<%= pkg.version %>',
                   'build/templates/<%= pkg.version %>'
@@ -118,16 +120,15 @@ module.exports = function (grunt) {
          core: {
             files: [{ // leaflet
                'build/core/<%= pkg.version %>/assets/css/mapea.l.min.css': [
-                     'src/facade/assets/css/**/*.css',
-                     'src/impl/leaflet/assets/css/**/*.css'
-                  ]
+                  'src/facade/assets/css/**/*.css',
+                  'src/impl/leaflet/assets/css/**/*.css'
+               ]
             }, { // ol3
                'build/core/<%= pkg.version %>/assets/css/mapea.ol3.min.css': [
-                     'src/facade/assets/css/**/*.css',
-                     'src/impl/ol3/assets/css/**/*.css',
-                     'libraries/ol3-popup/**/*.css',
-                     'libraries/components-font-awesome/font-awesome.css'
-                  ]
+                  'src/facade/assets/css/**/*.css',
+                  'src/impl/ol3/assets/css/**/*.css',
+                  'libraries/ol3-popup/**/*.css'
+               ]
             }]
          },
          plugins: {
@@ -153,21 +154,26 @@ module.exports = function (grunt) {
                encoding: 'utf-8'
             }]
          },
-         css: {
-            files: [{
-               expand: true,
-               cwd: 'libraries/components-font-awesome',
-               src: '**/*-webfont.*',
-               dest: 'build/core/<%= pkg.version %>/assets/fonts/',
-               flatten: false,
-               encoding: 'utf-8'
-            }, {
+         assets: {
+            files: [{ // fonts
                expand: true,
                cwd: 'src',
                src: '**/assets/fonts/*.*',
                dest: 'build/core/<%= pkg.version %>/assets/fonts/',
                flatten: true,
                encoding: 'utf-8'
+            }, { // facade img
+               expand: true,
+               cwd: 'src',
+               src: 'facade/assets/img/*.*',
+               dest: 'build/core/<%= pkg.version %>/assets/img/',
+               flatten: true
+            }, { // impl img
+               expand: true,
+               cwd: 'src',
+               src: 'impl/assets/img/*.*',
+               dest: 'build/core/<%= pkg.version %>/assets/img/',
+               flatten: true
             }]
          },
          templates: {
@@ -194,6 +200,13 @@ module.exports = function (grunt) {
                src: '**/*.css',
                dest: 'build/plugins/<%= pkg.version %>/',
                flatten: true,
+               encoding: 'utf-8'
+            }, { // json
+               expand: true,
+               cwd: 'src/plugins',
+               src: '**/*.json',
+               dest: 'build/plugins/<%= pkg.version %>/',
+               flatten: false,
                encoding: 'utf-8'
             }]
          }
@@ -349,6 +362,8 @@ module.exports = function (grunt) {
                         "const",
                         "uselessCode"
                      ],
+                     language_in: "ECMASCRIPT6",
+                     language_out: "ECMASCRIPT5",
                      extra_annotation_name: ["api", "observable"],
                      compilation_level: "ADVANCED",
                      warning_level: "QUIET",
@@ -461,6 +476,8 @@ module.exports = function (grunt) {
                      "uselessCode"
                   ],
                   extra_annotation_name: ["api", "observable"],
+                  language_in: "ECMASCRIPT6",
+                  language_out: "ECMASCRIPT5",
                   compilation_level: "SIMPLE",
                   warning_level: "QUIET",
                   use_types_for_optimization: true,
@@ -479,84 +496,65 @@ module.exports = function (grunt) {
          core: {
             impl: [{ // ol3
                closurePath: 'libraries/closure/',
-               deps: [
-                  { // source
-                     path: 'src/facade/js',
-                     prefix: '../mapea/facade/js'
-                  },
-                  { // ol3 impl
-                     path: 'src/impl/ol3/js',
-                     prefix: '../mapea/impl/ol3/js'
-                  },
-                  { // ol3 sources
-                     path: 'libraries/ol3/src/ol',
-                     prefix: '../ol3/js'
-                  },
-                  { // ol3 externs
-                     path: 'externs/ol3',
-                     prefix: '../externs/ol3'
-                  },
-                  { // ol3-popup
-                     path: 'libraries/ol3-popup',
-                     prefix: '../'
-                  },
-                  { // handlebars
-                     path: 'libraries/handlebars',
-                     prefix: '../'
-                  },
-                  { // proj4js
-                     path: 'libraries/proj4',
-                     prefix: '../'
-                  },
-                  { // plugins
-                     path: 'src/plugins',
-                     prefix: '../mapea/plugins'
-                  }
-               ],
+               deps: [{ // source
+                  path: 'src/facade/js',
+                  prefix: '../mapea/facade/js'
+               }, { // ol3 impl
+                  path: 'src/impl/ol3/js',
+                  prefix: '../mapea/impl/ol3/js'
+               }, { // ol3 sources
+                  path: 'libraries/ol3/src/ol',
+                  prefix: '../ol3/js'
+               }, { // ol3 externs
+                  path: 'externs/ol3',
+                  prefix: '../externs/ol3'
+               }, { // ol3-popup
+                  path: 'libraries/ol3-popup',
+                  prefix: '../'
+               }, { // handlebars
+                  path: 'libraries/handlebars',
+                  prefix: '../'
+               }, { // proj4js
+                  path: 'libraries/proj4',
+                  prefix: '../'
+               }, { // plugins
+                  path: 'src/plugins',
+                  prefix: '../mapea/plugins'
+               }],
                outputFile: 'build/core/<%= pkg.version %>/js/mapea.ol3.deps.js'
             }]
          },
          dev: {
             impl: [{ // ol3
                closurePath: 'libraries/closure/',
-               deps: [
-                  { // source
-                     path: 'src/facade/js',
-                     prefix: '../../../../src/facade/js'
-                  },
-                  { // source externs
-                     path: 'src/externs',
-                     prefix: '../../../../src/externs'
-                  },
-                  { // ol3 impl
-                     path: 'src/impl/ol3/js',
-                     prefix: '../../../../src/impl/ol3/js'
-                  },
-                  { // ol3-popup
-                     path: 'libraries/ol3-popup',
-                     prefix: '../../../ol3-popup'
-                  },
-                  { // handlebars
-                     path: 'libraries/handlebars',
-                     prefix: '../../../handlebars'
-                  },
-                  { // proj4js
-                     path: 'libraries/proj4',
-                     prefix: '../../../proj4'
-                  },
-                  { // ol3 externs
-                     path: 'externs/ol3',
-                     prefix: '../../../../externs/ol3'
-                  },
-                  { // ol3 src
-                     path: 'libraries/ol3/src/ol',
-                     prefix: '../../../../libraries/ol3/src/ol'
-                  },
-                  { // plugins
-                     path: 'src/plugins',
-                     prefix: '../../../../src/plugins'
-                  }
-               ],
+               deps: [{ // source
+                  path: 'src/facade/js',
+                  prefix: '../../../../src/facade/js'
+               }, { // source externs
+                  path: 'src/externs',
+                  prefix: '../../../../src/externs'
+               }, { // ol3 impl
+                  path: 'src/impl/ol3/js',
+                  prefix: '../../../../src/impl/ol3/js'
+               }, { // ol3-popup
+                  path: 'libraries/ol3-popup',
+                  prefix: '../../../ol3-popup'
+               }, { // handlebars
+                  path: 'libraries/handlebars',
+                  prefix: '../../../handlebars'
+               }, { // proj4js
+                  path: 'libraries/proj4',
+                  prefix: '../../../proj4'
+               }, { // ol3 externs
+                  path: 'externs/ol3',
+                  prefix: '../../../../externs/ol3'
+               }, { // ol3 src
+                  path: 'libraries/ol3/src/ol',
+                  prefix: '../../../../libraries/ol3/src/ol'
+               }, { // plugins
+                  path: 'src/plugins',
+                  prefix: '../../../../src/plugins'
+               }],
                outputFile: 'test/mapea.ol3.deps.js'
             }]
          }
@@ -577,13 +575,13 @@ module.exports = function (grunt) {
    grunt.loadNpmTasks('grunt-contrib-cssmin');
    grunt.loadNpmTasks('grunt-contrib-concat');
    // debug task
-   grunt.loadNpmTasks('grunt-debug-task');
+   // grunt.loadNpmTasks('grunt-debug-task');
 
    // load custom tasks
    grunt.loadTasks('./grunt-tasks');
 
    grunt.registerTask('clean-target', ['clean:build', 'mkdir']);
-   grunt.registerTask('css-core', ['copy:css', 'cssmin:core']);
+   grunt.registerTask('css-core', ['copy:assets', 'cssmin:core']);
    grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'concat', 'copy:configuration']);
    grunt.registerTask('css-plugins', ['copy:plugins', 'cssmin:plugins']);
    grunt.registerTask('js-plugins', ['jshint:plugins', 'generate-symbols-plugins', 'generate-exports-plugins', 'compile-plugins', 'clean:plugins-css']);

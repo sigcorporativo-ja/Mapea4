@@ -3,7 +3,7 @@ goog.provide('M.parameter.wms');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function () {
+(function() {
    'use strict';
 
    /**
@@ -16,7 +16,7 @@ goog.require('M.exception');
     * @function
     * @api stable
     */
-   M.parameter.wms = function (userParameters) {
+   M.parameter.wms = function(userParameters) {
       var layers = [];
 
       // checks if the param is null or empty
@@ -30,7 +30,7 @@ goog.require('M.exception');
          userParametersArray = [userParametersArray];
       }
 
-      layers = userParametersArray.map(function (userParam) {
+      layers = userParametersArray.map(function(userParam) {
          var layerObj = {};
 
          // gets the layer type
@@ -75,7 +75,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getURL = function (parameter) {
+   var getURL = function(parameter) {
       var url;
       if (M.utils.isString(parameter)) {
          var urlMatches = parameter.match(/^([^\*]*\*)*(https?\:\/\/[^\*]+)([^\*]*\*?)*$/i);
@@ -97,7 +97,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getName = function (parameter) {
+   var getName = function(parameter) {
       var name, params;
       if (M.utils.isString(parameter)) {
          if (/^WMS\*.+/i.test(parameter)) {
@@ -136,7 +136,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getLegend = function (parameter) {
+   var getLegend = function(parameter) {
       var legend, params;
       if (M.utils.isString(parameter)) {
          // <WMS>*<TITLE>
@@ -168,13 +168,18 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getTransparent = function (parameter) {
+   var getTransparent = function(parameter) {
       var transparent, params;
       if (M.utils.isString(parameter)) {
          // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>
          if (/^WMS\*[^\*]+\*[^\*]+\*[^\*]+\*(true|false)/i.test(parameter)) {
             params = parameter.split(/\*/);
             transparent = params[4].trim();
+         }
+         // <WMS_FULL>*<URL>(*<TILED>)?
+         else if (/^WMS_FULL\*[^\*]+(\*(true|false))?/i.test(parameter)) {
+            params = parameter.split(/\*/);
+            transparent = true;
          }
          // <URL>*<NAME>*<TITLE>*<TRANSPARENCE>
          else if (/^[^\*]+\*[^\*]+\*[^\*]+\*(true|false)/i.test(parameter)) {
@@ -204,7 +209,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getTiled = function (parameter) {
+   var getTiled = function(parameter) {
       var tiled, params;
       if (M.utils.isString(parameter)) {
          // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>*<TILED>
@@ -215,15 +220,18 @@ goog.require('M.exception');
          else if (/^WMS\*[^\*]+\*[^\*]+\*[^\*]+\*(true|false)/i.test(parameter)) {
             tiled = true;
          }
+         // <WMS_FULL>*<URL>*<TILED>
+         else if (/^WMS_FULL\*[^\*]+\*(true|false)/i.test(parameter)) {
+            params = parameter.split(/\*/);
+            tiled = params[2].trim();
+         }
          // <URL>*<NAME>*<TITLE>*<TRANSPARENCE>*<TILED>
          else if (/^[^\*]+\*[^\*]+\*[^\*]+\*(true|false)\*(true|false)/i.test(parameter)) {
             params = parameter.split(/\*/);
-            transparent = params[4].trim();
          }
          // <URL>*<NAME>*<TRANSPARENCE>*<TILED>
          else if (/^[^\*]+\*[^\*]+\*(true|false)\*(true|false)/i.test(parameter)) {
             params = parameter.split(/\*/);
-            transparent = params[3].trim();
          }
       }
       else if (M.utils.isObject(parameter)) {
@@ -243,7 +251,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getCQL = function (parameter) {
+   var getCQL = function(parameter) {
       var cql, params;
       if (M.utils.isString(parameter)) {
          // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>*<TILED>
@@ -293,7 +301,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getVersion = function (parameter) {
+   var getVersion = function(parameter) {
       var version;
       if (M.utils.isString(parameter)) {
          if (/(\d\.\d\.\d)$/.test(parameter)) {
@@ -314,7 +322,7 @@ goog.require('M.exception');
     * @private
     * @function
     */
-   var getOptions = function (parameter) {
+   var getOptions = function(parameter) {
       var options;
       if (M.utils.isString(parameter)) {
          // TODO ver como se pone el parámetro

@@ -3,16 +3,16 @@ goog.provide('P.control.SearchstreetGeosearch');
 goog.require('P.control.SearchstreetIntegrated');
 goog.require('P.control.GeosearchIntegrated');
 
-(function () {
+(function() {
    /**
     * @classdesc Main constructor of the class. Creates a WMCSelector
     *            control to provides a way to select an specific WMC
-    * 
+    *
     * @constructor
     * @extends {M.Control}
     * @api stable
     */
-   M.control.SearchstreetGeosearch = (function (parameters) {
+   M.control.SearchstreetGeosearch = (function(parameters) {
       // checks if the implementation can create WMC layers
       if (M.utils.isUndefined(M.impl.control.SearchstreetGeosearch)) {
          M.exception('La implementación usada no puede crear controles SearchStreetGeosearch');
@@ -22,7 +22,7 @@ goog.require('P.control.GeosearchIntegrated');
 
       /**
        * Facade of the map
-       * 
+       *
        * @private
        * @type {String}
        */
@@ -32,8 +32,8 @@ goog.require('P.control.GeosearchIntegrated');
       }
 
       /**
-       * INE code to specify the search 
-       * 
+       * INE code to specify the search
+       *
        * @private
        * @type {Number}
        */
@@ -80,7 +80,7 @@ goog.require('P.control.GeosearchIntegrated');
 
       /**
        * Control that executes the searches
-       * 
+       *
        * @private
        * @type {Object}
        */
@@ -88,7 +88,7 @@ goog.require('P.control.GeosearchIntegrated');
 
       /**
        * Control that executes the searches
-       * 
+       *
        * @private
        * @type {Object}
        */
@@ -96,7 +96,7 @@ goog.require('P.control.GeosearchIntegrated');
 
       /**
        * Control that executes the searches
-       * 
+       *
        * @private
        * @type {Object}
        */
@@ -104,7 +104,7 @@ goog.require('P.control.GeosearchIntegrated');
 
       /**
        * Control that executes the searches
-       * 
+       *
        * @private
        * @type {Object}
        */
@@ -112,16 +112,23 @@ goog.require('P.control.GeosearchIntegrated');
 
       /**
        * Control that executes the searches
-       * 
+       *
        * @private
        * @type {Object}
        */
       this.element_ = null;
 
+      /**
+       * Facade of the map
+       * @private
+       * @type {M.Map}
+       */
+      this.facadeMap_ = null;
+
       // implementation of this control
       var impl = new M.impl.control.SearchstreetGeosearch();
 
-      goog.base(this, impl);
+      goog.base(this, impl, this.name_);
    });
    goog.inherits(M.control.SearchstreetGeosearch, M.Control);
 
@@ -135,19 +142,20 @@ goog.require('P.control.GeosearchIntegrated');
     * @api stable
     * @export
     */
-   M.control.SearchstreetGeosearch.prototype.addTo = function (map) {
+   M.control.SearchstreetGeosearch.prototype.addTo = function(map) {
       var this_ = this;
       var impl = this.getImpl();
+      this.facadeMap_ = map;
       var view = this.createView(map);
       if (view instanceof Promise) { // the view is a promise
-         view.then(function (html) {
+         view.then(function(html) {
             impl.addTo(map, html);
             this_.html = html;
             this_.fire(M.evt.ADDED_TO_MAP);
          });
       }
 
-      this.on(M.evt.ADDED_TO_MAP, function (evt) {
+      this.on(M.evt.ADDED_TO_MAP, function(evt) {
          if (M.utils.isUndefined(this_.locality_)) {
             this_.ctrlSearchstreet = new M.control.SearchstreetIntegrated(this_.urlSearchstret_);
          }
@@ -161,25 +169,27 @@ goog.require('P.control.GeosearchIntegrated');
          this_.ctrlGeosearch = new M.control.GeosearchIntegrated(this_.urlGeosearch_, this_.coreGeosearch_,
             this_.handlerGeosearch_, this_.paramsGeosearch_);
          impl = this_.ctrlGeosearch.getImpl();
-         view = this_.ctrlGeosearch.createView(this_.html);
+         view = this_.ctrlGeosearch.createView(this_.html, this_.facadeMap_);
          impl.addTo(map, this_.html);
 
          var completados = false;
 
-         this_.ctrlSearchstreet.on(M.evt.COMPLETED, function () {
+         this_.ctrlSearchstreet.on(M.evt.COMPLETED, function() {
             if (completados === true) {
                goog.dom.classlist.add(this_.element_,
                   "shown");
                completados = false;
+               this_.zoomResults();
             }
             completados = true;
          }, this);
 
-         this_.ctrlGeosearch.on(M.evt.COMPLETED, function () {
+         this_.ctrlGeosearch.on(M.evt.COMPLETED, function() {
             if (completados === true) {
                goog.dom.classlist.add(this_.element_,
                   "shown");
                completados = false;
+               this_.zoomResults();
             }
             completados = true;
          }, this);
@@ -189,25 +199,27 @@ goog.require('P.control.GeosearchIntegrated');
 
    /**
     * This function creates the view to the specified map
-    * 
+    *
     * @public
     * @function
     * @param {M.Map}
     *        map to add the control
     * @api stabletrue
     */
-   M.control.SearchstreetGeosearch.prototype.createView = function (map) {
+   M.control.SearchstreetGeosearch.prototype.createView = function(map) {
       var this_ = this;
-      var promise = new Promise(function (success, fail) {
-         M.template.compile(M.control.SearchstreetGeosearch.TEMPLATE).then(
-            function (html) {
+      var promise = new Promise(function(success, fail) {
+         M.template.compile(M.control.SearchstreetGeosearch.TEMPLATE, {
+            'jsonp': true
+         }).then(
+            function(html) {
                this_.element_ = html;
                this_.input_ = html.querySelector("input#m-searchstreetgeosearch-search-input");
                var searchstreetResuts = html.querySelector('div#m-searchstreet-results');
                var geosearchResuts = html.querySelector('div#m-geosearch-results');
                var searchstreetTab = html.querySelector("ul#m-tabs > li:nth-child(1) > a");
                var geosearchTab = html.querySelector("ul#m-tabs > li:nth-child(2) > a");
-               goog.events.listen(searchstreetTab, goog.events.EventType.CLICK, function (evt) {
+               goog.events.listen(searchstreetTab, goog.events.EventType.CLICK, function(evt) {
                   evt.preventDefault();
                   if (!goog.dom.classlist.contains(searchstreetTab, 'activated')) {
                      goog.dom.classlist.add(searchstreetTab, 'activated');
@@ -216,7 +228,7 @@ goog.require('P.control.GeosearchIntegrated');
                      goog.dom.classlist.remove(geosearchResuts, 'show');
                   }
                }, false, this);
-               goog.events.listen(geosearchTab, goog.events.EventType.CLICK, function (evt) {
+               goog.events.listen(geosearchTab, goog.events.EventType.CLICK, function(evt) {
                   evt.preventDefault();
                   if (!goog.dom.classlist.contains(geosearchTab, 'activated')) {
                      goog.dom.classlist.add(geosearchTab, 'activated');
@@ -233,25 +245,25 @@ goog.require('P.control.GeosearchIntegrated');
 
    /**
     * This function creates the view to the specified map
-    * 
+    *
     * @public
     * @function
     * @param {M.Map}
     *        map to add the control
     * @api stabletrue
     */
-   M.control.SearchstreetGeosearch.prototype.getInput = function () {
+   M.control.SearchstreetGeosearch.prototype.getInput = function() {
       return this.input_;
    };
 
 
    /**
     * This function checks if an object is equals to this control
-    * 
+    *
     * @function
     * @api stable
     */
-   M.control.SearchstreetGeosearch.prototype.equals = function (obj) {
+   M.control.SearchstreetGeosearch.prototype.equals = function(obj) {
       var equals = false;
       if (obj instanceof M.control.SearchstreetGeosearch) {
          equals = (this.name === obj.name);
@@ -262,32 +274,27 @@ goog.require('P.control.GeosearchIntegrated');
 
    /**
     * This function checks if an object is equals to this control
-    * 
+    *
     * @private
     * @function
     */
-   M.control.SearchstreetGeosearch.prototype.getHtml = function () {
+   M.control.SearchstreetGeosearch.prototype.getHtml = function() {
       return this.element_;
    };
 
-
    /**
-    * function adds the event 'click'
-    * 
-    * @public
+    * This function call the zoomResults method of implementation to zoom
+    *
+    * @private
     * @function
-    * @api stable
     */
-   M.control.SearchstreetGeosearch.prototype.destroy = function () {
-      this.getImpl().destroy();
-      this.input_ = null;
-      this.ctrlSearchstreet = null;
-      this.ctrlGeosearch = null;
+   M.control.SearchstreetGeosearch.prototype.zoomResults = function() {
+      this.getImpl().zoomResults();
    };
 
    /**
     * Template for this controls
-    * 
+    *
     * @const
     * @type {string}
     * @public

@@ -1,5 +1,6 @@
 goog.provide('M.impl.format.KML');
 
+goog.require('M.impl.style.Icon');
 goog.require('ol.format.KML');
 
 /**
@@ -320,7 +321,7 @@ M.impl.format.KML.IconStyleParser_ = function (node, objectStack) {
       }
    }
 
-   var imageStyle = new ol.style.Icon({
+   var imageStyle = new M.impl.style.Icon({
       anchor: anchor,
       anchorOrigin: ol.style.IconOrigin.BOTTOM_LEFT,
       anchorXUnits: anchorXUnits,

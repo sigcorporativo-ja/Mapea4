@@ -9,7 +9,7 @@ goog.require("M.parameter.resolutions");
 goog.require("M.parameter.zoom");
 goog.require("M.parameter.center");
 
-(function (document) {
+(function(document) {
    'use strict';
 
    /**
@@ -22,7 +22,7 @@ goog.require("M.parameter.center");
     * provided by the user
     * @api stable
     */
-   M.Parameters = (function (userParameters) {
+   M.Parameters = (function(userParameters) {
       if (M.utils.isNullOrEmpty(userParameters)) {
          M.exception('No ha especificado ningún parámetro');
       }
@@ -131,6 +131,13 @@ goog.require("M.parameter.center");
        * @api stable
        */
       this.label = parseLabel(userParameters);
+
+      /**
+       * @public
+       * @type {Object}
+       * @api stable
+       */
+      this.ticket = parseTicket(userParameters);
    });
 
    /**
@@ -143,7 +150,7 @@ goog.require("M.parameter.center");
     * especified by the user
     * @returns {Object} container of the map
     */
-   var parseContainer = function (userParameters) {
+   var parseContainer = function(userParameters) {
       var container;
 
       if (M.utils.isString(userParameters)) {
@@ -181,7 +188,7 @@ goog.require("M.parameter.center");
     * especified by the user
     * @returns {string|Object|Array<string|Object>} layers specified by the user
     */
-   var parseLayers = function (parameter) {
+   var parseLayers = function(parameter) {
       var layers;
 
       if (M.utils.isString(parameter)) {
@@ -207,7 +214,7 @@ goog.require("M.parameter.center");
     * especified by the user
     * @returns {string|Object|Array<string|Object>} WMC layers
     */
-   var parseWMC = function (parameter) {
+   var parseWMC = function(parameter) {
       var wmc;
 
       if (M.utils.isString(parameter)) {
@@ -244,8 +251,8 @@ goog.require("M.parameter.center");
     * especified by the user
     * @returns {string|Object|Array<string|Object>} WMS layers
     */
-   var parseWMS = function (parameter) {
-      var wms, layers;
+   var parseWMS = function(parameter) {
+      var wms;
 
       if (M.utils.isString(parameter)) {
          wms = M.utils.getParameterValue('wms', parameter);
@@ -270,8 +277,8 @@ goog.require("M.parameter.center");
     * especified by the user
     * @returns {string|Object|Array<string|Object>} WMTS layers
     */
-   var parseWMTS = function (parameter) {
-      var wmts, layers;
+   var parseWMTS = function(parameter) {
+      var wmts;
 
       if (M.utils.isString(parameter)) {
          wmts = M.utils.getParameterValue('wmts', parameter);
@@ -296,8 +303,8 @@ goog.require("M.parameter.center");
     * especified by the user
     * @returns {string|Object|Array<string|Object>} KML layers
     */
-   var parseKML = function (parameter) {
-      var kml, layers;
+   var parseKML = function(parameter) {
+      var kml;
 
       if (M.utils.isString(parameter)) {
          kml = M.utils.getParameterValue('kml', parameter);
@@ -322,7 +329,7 @@ goog.require("M.parameter.center");
     * especified by the user
     * @returns {string|Object|Array<string|Object>} WMS layers
     */
-   var parseControls = function (parameter) {
+   var parseControls = function(parameter) {
       var controls;
 
       if (M.utils.isString(parameter)) {
@@ -348,7 +355,7 @@ goog.require("M.parameter.center");
     * especified by the user
     * @returns {string|Object|Array<string|Object>} WMS layers
     */
-   var parseGetFeatureInfo = function (parameter) {
+   var parseGetFeatureInfo = function(parameter) {
       var getFeatureInfo;
 
       if (M.utils.isString(parameter)) {
@@ -356,6 +363,9 @@ goog.require("M.parameter.center");
       }
       else if (M.utils.isObject(parameter)) {
          getFeatureInfo = parameter.getfeatureinfo;
+         if (!M.utils.isUndefined(getFeatureInfo) && M.utils.isNullOrEmpty(getFeatureInfo)) {
+            getFeatureInfo = 'plain';
+         }
       }
       else {
          M.exception('El tipo del parámetro controls no es válido: ' + (typeof parameter));
@@ -375,7 +385,7 @@ goog.require("M.parameter.center");
     * @returns {String|Array<String>|Array<Number>|Mx.Extent} maximum extent
     * established by the user
     */
-   var parseMaxExtent = function (parameter) {
+   var parseMaxExtent = function(parameter) {
       var maxExtent;
 
       if (M.utils.isString(parameter)) {
@@ -407,7 +417,7 @@ goog.require("M.parameter.center");
     * @returns {String|Array<String>|Array<Number>|Mx.Extent} bbox
     * established by the user
     */
-   var parseBbox = function (parameter) {
+   var parseBbox = function(parameter) {
       var bbox;
 
       if (M.utils.isString(parameter)) {
@@ -423,7 +433,7 @@ goog.require("M.parameter.center");
       return bbox;
    };
 
-   var parseZoom = function (parameter) {
+   var parseZoom = function(parameter) {
       var zoom;
 
       if (M.utils.isString(parameter)) {
@@ -439,7 +449,7 @@ goog.require("M.parameter.center");
       return zoom;
    };
 
-   var parseCenter = function (parameter) {
+   var parseCenter = function(parameter) {
       var center;
 
       if (M.utils.isString(parameter)) {
@@ -456,6 +466,33 @@ goog.require("M.parameter.center");
    };
 
    /**
+    * This function parses a ticket parameter in a legible
+    * parameter to Mapea and checks posible errors
+    *
+    * @private
+    * @function
+    * @param {string|Mx.parameters.Map} parameter parameters
+    * especified by the user
+    * @returns {String} ticket
+    * established by the user
+    */
+   var parseTicket = function(parameter) {
+      var ticket;
+
+      if (M.utils.isString(parameter)) {
+         ticket = M.utils.getParameterValue('ticket', parameter);
+      }
+      else if (M.utils.isObject(parameter)) {
+         ticket = parameter.ticket;
+      }
+      else {
+         M.exception('El tipo del parámetro ticket no es válido: ' + (typeof parameter));
+      }
+
+      return ticket;
+   };
+
+   /**
     * This function parses a resolutions parameter in a legible
     * parameter to Mapea and checks posible errors
     *
@@ -466,7 +503,7 @@ goog.require("M.parameter.center");
     * @returns {String|Array<String>|Array<Number> resolutions
     * established by the user
     */
-   var parseResolutions = function (parameter) {
+   var parseResolutions = function(parameter) {
       var resolutions;
 
       if (M.utils.isString(parameter)) {
@@ -493,7 +530,7 @@ goog.require("M.parameter.center");
     * @returns {String|Array<String>|Array<Number>|Mx.Extent} bbox
     * established by the user
     */
-   var parseProjection = function (parameter) {
+   var parseProjection = function(parameter) {
       var projection;
 
       if (M.utils.isString(parameter)) {
@@ -520,7 +557,7 @@ goog.require("M.parameter.center");
     * @returns {String|Array<String>|Array<Number>|Mx.Extent} bbox
     * established by the user
     */
-   var parseLabel = function (parameter) {
+   var parseLabel = function(parameter) {
       var label;
 
       if (M.utils.isString(parameter)) {

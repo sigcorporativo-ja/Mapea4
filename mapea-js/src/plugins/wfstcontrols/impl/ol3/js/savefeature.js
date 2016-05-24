@@ -1,11 +1,12 @@
 goog.provide('P.impl.control.SaveFeature');
 
 goog.require('goog.dom.xml');
+goog.require('goog.dom.classes');
 
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMC selector
@@ -15,8 +16,8 @@ goog.require('goog.dom.xml');
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.control.SaveFeature = function (layer) {
-      this.layer = layer;
+   M.impl.control.SaveFeature = function(layer) {
+      this.layer_ = layer;
    };
    goog.inherits(M.impl.control.SaveFeature, M.impl.Control);
 
@@ -29,11 +30,11 @@ goog.require('goog.dom.xml');
     * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.SaveFeature.prototype.addTo = function (map, element) {
+   M.impl.control.SaveFeature.prototype.addTo = function(map, element) {
       this.facadeMap_ = map;
       goog.base(this, 'addTo', map, element);
    };
-   
+
    /**
     * This function creates the view to the specified map
     *
@@ -42,62 +43,54 @@ goog.require('goog.dom.xml');
     * @param {M.Map} map to add the control
     * @api stable
     */
-   M.impl.control.SaveFeature.prototype.saveFeature = function () {
-      var this_ = this;
-      var formatWFS = new ol.format.WFS();
-      var newDraw = null;
-      var newDeletes = null;
-      var newModify = null;
-      var controls = this.facadeMap_.getControls();
-      var j;
-      for (var i = 0; i < controls.length; i++) {
-         if (controls[i].name === "drawfeature") {
-            if (controls[i].getImpl().draw !== null) {
-               if (controls[i].getImpl().newDraw !== null && controls[i].getImpl().newDraw.length > 0) {
-                  newDraw = controls[i].getImpl().newDraw;
-                  controls[i].getImpl().newDraw = [];
-               }
-            }
-         }
-         else if (controls[i].name === "deletefeature") {
-            if (controls[i].getImpl().newDeletes !== null) {
-               if (controls[i].getImpl().newDeletes !== null && controls[i].getImpl().newDeletes.length > 0) {
-                  for (j = 0; j < controls[i].getImpl().newDeletes.length; j++) {
-                     var p = controls[i].getImpl().newDeletes[j].getGeometry();
-                     controls[i].getImpl().newDeletes[j].setGeometryName("the_geom");
-                     controls[i].getImpl().newDeletes[j].setGeometry(p);
-                  }
-                  newDeletes = controls[i].getImpl().newDeletes;
-                  controls[i].getImpl().newDeletes = [];
-               }
-            }
-         }
-         else if (controls[i].name === "modifyfeature") {
-            if (controls[i].getImpl().modifyfeature !== null) {
-               if (controls[i].getImpl().newModify !== null && controls[i].getImpl().newModify.length > 0) {
+   M.impl.control.SaveFeature.prototype.saveFeature = function() {
+      // TODO
+      //      goog.dom.classes.add(goog.dom.$('m-button-savefeature'), 'm-savefeature-saving');
+      var saveFeaturesDraw = null;
+      var saveFeaturesModify = null;
+      var saveFeaturesDelete = null;
 
-                  for (j = 0; j < controls[i].getImpl().newModify.length; j++) {
-                     controls[i].getImpl().newModify[j].set("geometry", undefined);
-                  }
-
-                  newModify = controls[i].getImpl().newModify;
-                  controls[i].getImpl().newModify = [];
-               }
-            }
-         }
+      var drawfeatureCtrl = this.facadeMap_.getControls(M.control.DrawFeature.NAME)[0];
+      if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
+         saveFeaturesDraw = drawfeatureCtrl.getImpl().modifiedFeatures;
       }
-      
-         var wfstRequestXml = formatWFS.writeTransaction(newDraw, newModify, newDeletes, {
-            featureNS: 'www.callejero.es',
-            featurePrefix: 'feature',
-            featureType: this.layer.name
+      var modifyfeatureCtrl = this.facadeMap_.getControls(M.control.ModifyFeature.NAME)[0];
+      if (!M.utils.isNullOrEmpty(modifyfeatureCtrl)) {
+         saveFeaturesModify = modifyfeatureCtrl.getImpl().modifiedFeatures;
+      }
+      var deletefeatureCtrl = this.facadeMap_.getControls(M.control.DeleteFeature.NAME)[0];
+      if (!M.utils.isNullOrEmpty(deletefeatureCtrl)) {
+         saveFeaturesDelete = deletefeatureCtrl.getImpl().modifiedFeatures;
+      }
+
+      var this_ = this;
+      var layerImpl = this.layer_.getImpl();
+      layerImpl.getDescribeFeatureType().then(function(describeFeatureType) {
+         var projectionCode = this_.facadeMap_.getProjection().code;
+         var formatWFS = new ol.format.WFS();
+         var wfstRequestXml = formatWFS.writeTransaction(saveFeaturesDraw, saveFeaturesModify, saveFeaturesDelete, {
+            'featureNS': describeFeatureType.featureNS,
+            'featurePrefix': describeFeatureType.featurePrefix,
+            'featureType': this_.layer_.name,
+            'srsName': projectionCode,
+            'gmlOptions': {
+               'srsName': projectionCode
+            }
          });
-            
-         var wfstRequest = goog.dom.xml.serialize(wfstRequestXml);
-         
-         M.remote.post(this.layer.url, wfstRequest).then(function(result) {
-            console.debug(result);
+
+         var wfstRequestText = goog.dom.xml.serialize(wfstRequestXml);
+         M.remote.post(this_.layer_.url, wfstRequestText).then(function(response) {
+            // clears layer
+            let clearCtrl = this_.facadeMap_.getControls(M.control.ClearFeature.NAME)[0];
+            clearCtrl.getImpl().clear();
+            if (response.code === 200 && response.text.indexOf("ExceptionText") === -1) {
+               M.dialog.success('Se ha guardado correctamente');
+            }
+            else {
+               M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
+            }
          });
+      });
    };
 
    /**
@@ -108,8 +101,8 @@ goog.require('goog.dom.xml');
     * @function
     * @api stable
     */
-   M.impl.control.SaveFeature.prototype.destroy = function () {
-      this.layer = null;
+   M.impl.control.SaveFeature.prototype.destroy = function() {
+      this.layer_ = null;
       this.facadeMap_.getMapImpl().removeControl(this);
    };
 })();

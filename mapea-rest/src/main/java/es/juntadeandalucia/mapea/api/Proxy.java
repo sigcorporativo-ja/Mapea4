@@ -2,7 +2,9 @@ package es.juntadeandalucia.mapea.api;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Map;
 
+import javax.servlet.ServletContext;
 import javax.ws.rs.DefaultValue;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -15,6 +17,8 @@ import org.apache.commons.httpclient.HttpStatus;
 import org.apache.commons.httpclient.methods.GetMethod;
 import org.apache.commons.io.IOUtils;
 
+import es.guadaltel.framework.ticket.Ticket;
+import es.guadaltel.framework.ticket.TicketFactory;
 import es.juntadeandalucia.mapea.bean.ProxyResponse;
 import es.juntadeandalucia.mapea.builder.JSBuilder;
 
@@ -27,6 +31,10 @@ import es.juntadeandalucia.mapea.builder.JSBuilder;
 @Path("/proxy")
 @Produces("application/javascript")
 public class Proxy {
+   
+   // Ticket
+   private static final String AUTHORIZATION = "Authorization"; 
+   public ServletContext context_ = null;
 
    /**
     * Proxy to execute a request to specified URL using JSONP protocol to avoid the Cross-Domain
@@ -41,6 +49,7 @@ public class Proxy {
    @GET
    public String proxy (
          @QueryParam("url") String url,
+         @QueryParam("ticket") String ticket,
          @QueryParam("op") String operation,
          @DefaultValue("GET") @QueryParam("method") String method,
          @QueryParam("callback") String callbackFn) {
@@ -49,7 +58,7 @@ public class Proxy {
       try {
          this.checkRequest(url, operation);
          if (method.equalsIgnoreCase("GET")) {
-            proxyResponse = this.get(url, operation);
+            proxyResponse = this.get(url, ticket, operation);
          }
          else if (method.equalsIgnoreCase("POST")) {
             proxyResponse = this.post(url, operation);
@@ -77,13 +86,38 @@ public class Proxy {
     * 
     * @param url URL of the request
     * @param op type of mapea operation
+    * @param ticketParameter user ticket
     *
     * @return the response of the request
     */
-   private ProxyResponse get (String url, String operation) throws HttpException, IOException {
+   private ProxyResponse get (String url, String ticketParameter, String operation) throws HttpException, IOException {
       ProxyResponse response = new ProxyResponse();
       HttpClient client = new HttpClient();
       GetMethod httpget = new GetMethod(url);
+      
+      // sets ticket if the user specified one
+      if (ticketParameter != null) {
+         ticketParameter = ticketParameter.trim();
+         if (!ticketParameter.isEmpty()) {
+            Ticket ticket = TicketFactory.createInstance();
+            try {
+               Map<String, String> props = ticket.getProperties(ticketParameter);
+               String user = props.get("user");
+               String pass = props.get("pass");
+               String userAndPass = user + ":" + pass;
+               String encodedLogin = new String(
+                     org.apache.commons.codec.binary.Base64.encodeBase64(userAndPass.getBytes()));
+               httpget.addRequestHeader(AUTHORIZATION, "Basic " + encodedLogin);
+            }
+            catch (Exception e) {
+               System.out.println("-------------------------------------------");
+               System.out.println("EXCEPCTION THROWED BY PROXYREDIRECT CLASS");
+               System.out.println("METHOD: doPost");
+               System.out.println("TICKET VALUE: " + ticketParameter);
+               System.out.println("-------------------------------------------");
+            }
+         }
+      }
       
       client.executeMethod(httpget);
       
@@ -94,6 +128,7 @@ public class Proxy {
          String responseContent = IOUtils.toString(responseStream, "UTF-8");
          response.setContent(responseContent);
       }
+      response.setHeaders(httpget.getResponseHeaders());
       return response;
    }
    

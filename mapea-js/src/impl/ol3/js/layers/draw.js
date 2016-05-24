@@ -11,7 +11,7 @@ goog.require('ol.source.Vector');
 
 goog.require('goog.style');
 
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a KML layer
@@ -22,7 +22,7 @@ goog.require('goog.style');
     * @param {Mx.parameters.LayerOptions} options custom options for this layer
     * @api stable
     */
-   M.impl.layer.Draw = (function () {
+   M.impl.layer.Draw = (function() {
       /**
        * Currently drawn feature coordinate.
        * @private
@@ -37,6 +37,13 @@ goog.require('goog.style');
        */
       this.name = 'drawLayer';
 
+      /**
+       * Selected features for this layer
+       * @private
+       * @type {Array<ol.Feature>}
+       */
+      this.selectedFeatures_ = [];
+
       // calls the super constructor
       goog.base(this);
    });
@@ -50,7 +57,7 @@ goog.require('goog.style');
     * @param {M.impl.Map} map
     * @api stable
     */
-   M.impl.layer.Draw.prototype.addTo = function (map) {
+   M.impl.layer.Draw.prototype.addTo = function(map) {
       this.map = map;
 
       this.ol3Layer = new ol.layer.Vector({
@@ -92,11 +99,12 @@ goog.require('goog.style');
     * @param {ol.Feature} feature
     * @api stable
     */
-   M.impl.layer.Draw.prototype.selectFeatures = function (features) {
+   M.impl.layer.Draw.prototype.selectFeatures = function(features) {
+      this.selectedFeatures_ = features;
+
       // TODO: manage multiples features
-      var feature = features[0];
-      if (M.utils.isFunction(feature.click)) {
-         feature.click();
+      if (M.utils.isFunction(this.selectedFeatures_[0].click)) {
+         this.selectedFeatures_[0].click();
       }
    };
 
@@ -109,8 +117,11 @@ goog.require('goog.style');
     * @param {ol.Feature} feature
     * @api stable
     */
-   M.impl.layer.Draw.prototype.unselectFeatures = function () {
-      this.map.getImpl().removePopup();
+   M.impl.layer.Draw.prototype.unselectFeatures = function() {
+      if (this.selectedFeatures_.length > 0) {
+         this.selectedFeatures_.length = 0;
+         this.map.removePopup();
+      }
    };
 
    /**
@@ -122,7 +133,7 @@ goog.require('goog.style');
     * @param {Array<Mx.Point>} coordinate
     * @api stable
     */
-   M.impl.layer.Draw.prototype.drawPoints = function (points) {
+   M.impl.layer.Draw.prototype.drawPoints = function(points) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(points)) {
          M.exception('No ha especificado ningún punto');
@@ -143,7 +154,7 @@ goog.require('goog.style');
     * @param {Array<Mx.Point>} coordinate
     * @api stable
     */
-   M.impl.layer.Draw.prototype.drawGeoJSON = function (geojsons) {
+   M.impl.layer.Draw.prototype.drawGeoJSON = function(geojsons) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(geojsons)) {
          M.exception('No ha especificado ningún GeoJSON');
@@ -156,7 +167,7 @@ goog.require('goog.style');
       var projection = ol.proj.get(this.map.getProjection().code);
 
       var features = [];
-      geojsons.forEach(function (geojson) {
+      geojsons.forEach(function(geojson) {
          var formattedFeatures = this.geojsonFormatter_.readFeatures(geojson, {
             'dataProjection': projection
          });
@@ -175,7 +186,7 @@ goog.require('goog.style');
     * @param {Array<Mx.Point>} coordinate
     * @api stable
     */
-   M.impl.layer.Draw.prototype.drawFeatures = function (features) {
+   M.impl.layer.Draw.prototype.drawFeatures = function(features) {
       // checks if the param is null or empty
       if (!M.utils.isNullOrEmpty(features)) {
          if (!M.utils.isArray(features)) {
@@ -194,14 +205,22 @@ goog.require('goog.style');
     * @param {Array<Mx.Point>} coordinate
     * @api stable
     */
-   M.impl.layer.Draw.prototype.removeFeatures = function (features) {
+   M.impl.layer.Draw.prototype.removeFeatures = function(features) {
       // checks if the param is null or empty
       if (!M.utils.isNullOrEmpty(features)) {
          if (!M.utils.isArray(features)) {
             features = [features];
          }
          var olSource = this.ol3Layer.getSource();
-         features.forEach(olSource.removeFeature, olSource);
+
+         features.forEach(function(feature) {
+            try {
+               this.removeFeature(feature);
+            }
+            catch (err) {
+               // the feature does not exist in the source
+            }
+         }, olSource);
       }
    };
 
@@ -215,7 +234,7 @@ goog.require('goog.style');
     * @param {ol.Coordinate} coordinate
     * @api stable
     */
-   M.impl.layer.Draw.prototype.getPoints = function (coordinate) {
+   M.impl.layer.Draw.prototype.getPoints = function(coordinate) {
       var features = [];
       var drawSource = this.ol3Layer.getSource();
 
@@ -237,7 +256,7 @@ goog.require('goog.style');
     * @function
     * @api stable
     */
-   M.impl.layer.Draw.prototype.destroy = function () {
+   M.impl.layer.Draw.prototype.destroy = function() {
       var olMap = this.map.getMapImpl();
 
       if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
@@ -255,7 +274,7 @@ goog.require('goog.style');
     * @function
     * @api stable
     */
-   M.impl.layer.Draw.prototype.equals = function (obj) {
+   M.impl.layer.Draw.prototype.equals = function(obj) {
       var equals = false;
 
       if (obj instanceof M.impl.layer.Draw) {
@@ -271,13 +290,13 @@ goog.require('goog.style');
     * @private
     * @function
     */
-   M.impl.layer.Draw.prototype.pointsToGeoJSON_ = function (points) {
+   M.impl.layer.Draw.prototype.pointsToGeoJSON_ = function(points) {
       var geojsons = [];
 
       // gets the projection
       var projection = ol.proj.get(this.map.getProjection().code);
 
-      geojsons = points.map(function (point) {
+      geojsons = points.map(function(point) {
          // properties
          var geojsonProperties = point.data;
 
@@ -307,7 +326,7 @@ goog.require('goog.style');
     * @private
     * @function
     */
-   M.impl.layer.Draw.prototype.featuresToPoints_ = function (points) {
+   M.impl.layer.Draw.prototype.featuresToPoints_ = function(points) {
       var features = [];
 
       return features;

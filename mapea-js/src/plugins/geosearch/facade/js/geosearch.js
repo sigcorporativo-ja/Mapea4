@@ -2,7 +2,7 @@ goog.provide('P.plugin.Geosearch');
 
 goog.require('P.control.Geosearch');
 
-(function () {
+(function() {
    /**
     * @classdesc
     * Main facade plugin object. This class creates a plugin
@@ -13,7 +13,7 @@ goog.require('P.control.Geosearch');
     * @param {Object} impl implementation object
     * @api stable
     */
-   M.plugin.Geosearch = (function (parameters) {
+   M.plugin.Geosearch = (function(parameters) {
       parameters = (parameters || {});
 
       /**
@@ -87,14 +87,11 @@ goog.require('P.control.Geosearch');
     * @param {Object} map the map to add the plugin
     * @api stable
     */
-   M.plugin.Geosearch.prototype.addTo = function (map) {
+   M.plugin.Geosearch.prototype.addTo = function(map) {
       this.map_ = map;
 
-      // checks if the user specified the srs parameter
-      if (M.utils.isNullOrEmpty(this.searchParameters_) ||
-         M.utils.isNullOrEmpty(this.searchParameters_.srs)) {
-         this.searchParameters_.srs = this.map_.getProjection().code;
-      }
+      goog.dom.classlist.add(map._areasContainer.getElementsByClassName("m-top m-right")[0],
+         "top-extra");
 
       this.control_ = new M.control.Geosearch(this.url_, this.core_,
          this.handler_, this.searchParameters_);
@@ -117,7 +114,7 @@ goog.require('P.control.Geosearch');
     * @returns {HTMLElement} the input that executes the search
     * @api stable
     */
-   M.plugin.Geosearch.prototype.getInput = function () {
+   M.plugin.Geosearch.prototype.getInput = function() {
       var inputSearch = null;
       if (!M.utils.isNullOrEmpty(this.control_)) {
          inputSearch = this.control_.getInput();
@@ -132,8 +129,14 @@ goog.require('P.control.Geosearch');
     * @function
     * @api stable
     */
-   M.plugin.Geosearch.prototype.destroy = function () {
-      this.map_.removeControls(this.control_);
+   M.plugin.Geosearch.prototype.destroy = function() {
+      this.map_.removeControls([this.control_]);
       this.map_ = null;
+      this.control_ = null;
+      this.panel_ = null;
+      this.url_ = null;
+      this.core_ = null;
+      this.handler_ = null;
+      this.searchParameters_ = null;
    };
 })();

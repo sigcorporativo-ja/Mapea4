@@ -3,7 +3,7 @@ goog.provide('P.impl.control.WFSTBase');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMC selector
@@ -13,7 +13,7 @@ goog.provide('P.impl.control.WFSTBase');
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.control.WFSTBase = function (layer) {
+   M.impl.control.WFSTBase = function(layer) {
       /**
        * TODO
        * @private
@@ -56,7 +56,7 @@ goog.provide('P.impl.control.WFSTBase');
     * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.WFSTBase.prototype.addTo = function (map, element) {
+   M.impl.control.WFSTBase.prototype.addTo = function(map, element) {
       this.facadeMap_ = map;
 
       ol.control.Control.call(this, {
@@ -74,10 +74,10 @@ goog.provide('P.impl.control.WFSTBase');
     * @param {function} html control button
     * @api stable
     */
-   M.impl.control.WFSTBase.prototype.activate = function () {
+   M.impl.control.WFSTBase.prototype.activate = function() {
       if (M.utils.isNullOrEmpty(this.interaction_)) {
          var this_ = this;
-         this.layer_.getImpl().getDescribeFeatureType().then(function (describeFeatureType) {
+         this.layer_.getImpl().getDescribeFeatureType().then(function(describeFeatureType) {
             this_.describeFeatureType_ = describeFeatureType;
             this_.createInteraction_();
             this_.facadeMap_.getMapImpl().addInteraction(this_.interaction_);
@@ -97,10 +97,10 @@ goog.provide('P.impl.control.WFSTBase');
     * @param {function} html control button
     * @api stable
     */
-   M.impl.control.WFSTBase.prototype.deactivate = function () {
+   M.impl.control.WFSTBase.prototype.deactivate = function() {
       if (M.utils.isNullOrEmpty(this.interaction_)) {
          var this_ = this;
-         this.layer_.getImpl().getDescribeFeatureType().then(function (describeFeatureType) {
+         this.layer_.getImpl().getDescribeFeatureType().then(function(describeFeatureType) {
             this_.describeFeatureType_ = describeFeatureType;
             this_.createInteraction_();
             this_.facadeMap_.getMapImpl().addInteraction(this_.interaction_);
@@ -118,7 +118,7 @@ goog.provide('P.impl.control.WFSTBase');
     * @private
     * @function
     */
-   M.impl.control.WFSTBase.prototype.createInteraction_ = function () {};
+   M.impl.control.WFSTBase.prototype.createInteraction_ = function() {};
 
    /**
     * This function destroys this control, cleaning the HTML
@@ -128,9 +128,11 @@ goog.provide('P.impl.control.WFSTBase');
     * @function
     * @api stable
     */
-   M.impl.control.WFSTBase.prototype.destroy = function () {
+   M.impl.control.WFSTBase.prototype.destroy = function() {
+      this.facadeMap_.getMapImpl().removeControl(this);
       this.layer_ = null;
       this.interaction_ = null;
-      this.facadeMap_.getMapImpl().removeControl(this);
+      this.describeFeatureType_ = null;
+      this.modifiedFeatures = null;
    };
 })();

@@ -1,6 +1,6 @@
 <div class="results-panels">
    {{#if containtResult}}
-   <div class="results">
+   <div class="results" id="m-searchstreet-results-scroll">
       {{#each docs}}
       <div class="result">
          <table>
@@ -16,8 +16,12 @@
       </div>
       {{/each}}
    </div>
-   {{else}} <span class="partial">No se han encontrado resultados
-		para la búsqueda "{{search}}".</span> {{/if}}
+   {{else}}
+   <div class="results">
+   <span class="partial">No se han encontrado resultados
+		para la búsqueda "{{search}}".</span>
+   </div>
+   {{/if}}
    <div class="page">
       <span class="found" id="m-searchstreet-page-found">Resultados encontrados:</span>
    {{#if containtResult}}
@@ -27,4 +31,4 @@
 {{/if}}
       <div class="g-cartografia-flecha-arriba"></div>
    </div>
-</div>
+</div> 

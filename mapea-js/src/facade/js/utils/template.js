@@ -8,7 +8,7 @@ goog.require('M.exception');
 /**
  * @namespace M.template
  */
-(function (window) {
+(function(window) {
    /**
     * This function stores the requested templates
     * caching and reducing the code
@@ -24,20 +24,32 @@ goog.require('M.exception');
     *
     * @function
     * @param {string} templatePath name of the template
-    * @param {Object} templateVars JSON with the variables for the template
-    * @param {Object} opt_this scope
+    * @param {Mx.parameters.TemplateOptions} options of the template compilation
     * @returns {Promise} the promise with the html resultant
     * @api stable
     */
-   M.template.compile = function (templatePath, templateVars, opt_this) {
-      var compilePromise = new Promise(function (success, fail) {
-         M.template.get(templatePath, opt_this).then(function (fn) {
-            var htmlText = fn.call(null, templateVars);
-            var html = M.utils.stringToHtml(htmlText);
-            success.call(opt_this, html);
+   M.template.compile = function(templatePath, options) {
+      var templateVars;
+      var parseToHtml;
+      var jsonp;
+      var scope;
+      if (!M.utils.isUndefined(options)) {
+         templateVars = options.vars;
+         parseToHtml = options.parseToHtml;
+         jsonp = options.jsonp;
+         scope = options.scope;
+      }
+      return (new Promise(function(success, fail) {
+         M.template.get(templatePath, options).then(function(templateFn) {
+            var htmlText = templateFn.call(null, templateVars);
+            if (parseToHtml !== false) {
+               success.call(scope, M.utils.stringToHtml(htmlText));
+            }
+            else {
+               success.call(scope, htmlText);
+            }
          });
-      });
-      return compilePromise;
+      }));
    };
 
    /**
@@ -49,24 +61,31 @@ goog.require('M.exception');
     * @returns {Promise} the promise with the handlebars function
     * @api stable
     */
-   M.template.get = function (templatePath, opt_this) {
-      var templatePromise = new Promise(function (success, fail) {
+   M.template.get = function(templatePath, options) {
+      var scope;
+      if (!M.utils.isUndefined(options)) {
+         scope = options.scope;
+      }
+      return (new Promise(function(success, fail) {
          var templateFn = M.template.templates_[templatePath];
-         // checks if the template was already loaded
          if (!M.utils.isUndefined(templateFn)) {
-            success.call(opt_this, templateFn);
+            success.call(scope, templateFn);
          }
          else {
-            // loads the template
-            var templateUrl = M.template.getTemplateUrl_(templatePath);
-            M.remote.get(templateUrl).then(function (response) {
-               templateFn = Handlebars.compile(response.responseTxt);
+            var templateUrl = templatePath;
+            if (!M.utils.isUndefined(options) && options.jsonp === true) {
+               templateUrl = M.template.getTemplateUrl_(templatePath);
+            }
+            var useJsonp = (!M.utils.isNullOrEmpty(options) && (options.jsonp === true));
+            M.remote.get(templateUrl, null, {
+               "jsonp": useJsonp
+            }).then(function(response) {
+               templateFn = Handlebars.compile(response.text);
                M.template.templates_[templatePath] = templateFn;
-               success.call(opt_this, templateFn);
+               success.call(scope, templateFn);
             });
          }
-      });
-      return templatePromise;
+      }));
    };
 
    /**
@@ -77,7 +96,7 @@ goog.require('M.exception');
     * @param {string} templatePath name of the template
     * @returns {string} full URL of the tempalte
     */
-   M.template.getTemplateUrl_ = function (templatePath) {
+   M.template.getTemplateUrl_ = function(templatePath) {
       var templateUrl = null;
       if (!M.utils.isNullOrEmpty(templatePath)) {
          templateUrl = M.config.MAPEA_URL.concat(M.config.TEMPLATES_PATH);

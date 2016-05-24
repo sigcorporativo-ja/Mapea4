@@ -34,9 +34,9 @@
    border-top-left-radius: 4px !important;
    border-bottom-left-radius: 4px !important;
    border-top-right-radius: 0;
-   !important;
+   ! important;
    border-bottom-right-radius: 0;
-   !important;
+   ! important;
 }
 
 .m-geosearch-container.shown, .m-searchstreetgeosearch-container.shown, .m-searchstreet-container.shown {
@@ -67,7 +67,7 @@
    div.m-geosearch div.m-panel-controls, div.m-searchstreetgeosearch div.m-panel-controls, div.m-searchstreet div.m-panel-controls {
       display: flex !important;
    }
-   div.m-geosearch-container.shown {
+   div.m-geosearch-container.shown, div.m-searchstreet-container.shown {
       display: initial !important;
    }
 }
@@ -84,8 +84,11 @@
    div.search-panel > input.m-input-search::-ms-clear {
       display: none;
    }
-   div#m-searching-result {
+   div#m-searching-result, div#m-searching-result-searchstreet, div#m-searching-result-geosearch, div#m-searching-result-autocomplete {
       padding-left: 44%;
+   }
+   div.m-control.m-searchstreetgeosearch-container.shown {
+      display: block !important;
    }
 }
 
@@ -106,7 +109,13 @@ div.search-panel > input.m-input-search {
 }
 
 @media only screen and (max-width: 768px) {
-   div.search-panel > input.m-input-search {
+   div.search-panel>input.m-input-search#m-searchstreet-search-input {
+      width: calc(100vw - 120px);
+   }
+   div.search-panel>input.m-input-search#m-geosearch-search-input {
+      width: calc(100vw - 157px);
+   }
+   div.search-panel>input.m-input-search#m-searchstreetgeosearch-search-input {
       width: calc(100vw - 157px);
    }
 }
@@ -130,17 +139,42 @@ div.search-panel > button.m-input-search.shown {
 *********************/
 
 #m-autocomplete-results {
-   position: fixed;
-   z-index: 1;
-   background-color: bisque;
-   height: auto;
+   background-color: #F9F9F9;
+}
+
+#m-autocomplete-results > div#m-autcomplete > div {
+   padding: 7px;
+   border: 1px solid #EBF1EB;
+   cursor: pointer
+}
+
+div#m-autcomplete > div:hover {
+   background-color: #F7F4F4;
+}
+
+.m-control.m-searchstreet-container.shown.m-searching, .m-control.m-searchstreetgeosearch-container.shown.m-searching {
+   overflow-y: inherit !important;
+}
+
+.m-areas > div.m-area > div.m-panel > div.m-panel-controls > div.m-searchstreet-container.m-searching, .m-areas > div.m-area > div.m-panel > div.m-panel-controls > div.m-searchstreetgeosearch-container.m-searching{
+	overflow: auto;
 }
 
 .results-panel {
    position: relative;
 }
 
-.m-geosearch-container.m-searching div.results-panel, .m-searchstreetgeosearch-container.m-searching div.results-panel, .m-searchstreet-container.m-searching div.results-panel {
+.results-panel-content {
+   z-index: 1000;
+   position: absolute !important;
+   width: 99%;
+}
+
+.m-geosearch-container.m-searching div.results-panel {
+   min-height: 50px;
+}
+
+.minimum {
    min-height: 50px;
 }
 
@@ -161,6 +195,10 @@ div.search-panel > button.m-input-search.shown {
 #m-tabs-content > .results-panel > div.results {
    margin-top: 0px;
    max-height: 65vh;
+}
+
+#m-tabs-content > .results-panel.hidden > div.results {
+   max-height: 0px;
 }
 
 .results-panel.hidden > div.results {
@@ -207,13 +245,12 @@ div.search-panel > button.m-input-search.shown {
    border-bottom: 1px solid rgba(0, 0, 0, 0.13);
 }
 
-.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result {
+.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result, m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result {
    border-top: 1px solid rgba(0, 0, 0, 0.13);
 }
 
-.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result:nth-child(1) {
+.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result:nth-child(1), .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result:nth-child(1) {
    border: 0px;
-}
 
 .results-panel > div.results > div.result {
    cursor: pointer;
@@ -232,17 +269,17 @@ div.search-panel > button.m-input-search.shown {
      RESULT TABLE
 *********************/
 
-.results-panel > div.results > div.result > table, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table {
+.results-panel > div.results > div.result > table, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table, .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table {
    width: 100%;
    border-top: 1px solid rgba(0, 0, 0, 0.09);
    border-top-style: dashed;
 }
 
-.results-panel > div.results > div.result > table:nth-child(1), .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table:nth-child(1) {
+.results-panel > div.results > div.result > table:nth-child(1), .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table:nth-child(1), .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table:nth-child(1) {
    border: 0px
 }
 
-.results > div.result > table td.value, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.value {
+.results > div.result > table td.value, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.value , .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table td.value {
    text-align: right;
 }
 
@@ -253,6 +290,26 @@ div.search-panel > button.m-input-search.shown {
 .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.value, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
    white-space: nowrap;
 }
+
+.m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
+   text-align: left;
+}
+
+.m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table td.value, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
+   white-space: nowrap;
+}
+
+.m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table td.key {
+   text-align: left;
+   font-weight: bold;
+}
+
+.m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result td {
+    border-bottom: 1px solid rgba(0,0,0,.09);
+    border-bottom-style: dashed;
+}
+
+
 
 
 /*********************
@@ -498,6 +555,14 @@ div.search-panel > button.m-input-search.shown {
    display: block;
    position: relative;
    overflow-x: hidden;
+}
+
+.m-tabcontent.hidden {
+   min-height: 0px;
+}
+
+#m-tabs-content.hidden {
+   min-height: 0px;
 }
 
 #m-searchstreet-results:target, #m-searchstreet-results:target {

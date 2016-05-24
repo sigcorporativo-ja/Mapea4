@@ -3,7 +3,7 @@ goog.provide('M.impl.Label');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc Main constructor of the class. Creates a Label
     * control to provides a popup with specified information.
@@ -16,44 +16,68 @@ goog.provide('M.impl.Label');
     * @constructor
     * @api stable
     */
-   M.impl.Label = function (text, coord) {
+   M.impl.Label = function(text, coordOpts) {
       this.text_ = text;
-      this.coord_ = coord;
-      /**
-       * 
-       */
+
+      this.coord_ = [coordOpts.x, coordOpts.y];
+
       this.popup_ = null;
+
+      this.facadeMap_ = null;
    };
 
    /**
     * This feature displays a popup with information
-    * 
+    *
     * @public
     * @function
     * @param {M.Map}
     *        map map to add the plugin
     * @api stable
     */
-   M.impl.Label.prototype.show = function (map) {
-      var ob = this;
+   M.impl.Label.prototype.show = function(map) {
+      this.facadeMap_ = map;
+      var this_ = this;
       M.template.compile(M.Label.POPUP_TEMPLATE, {
-         'info': String(this.text_)
-      }).then(function (html) {
-         ob.popup_ = new M.impl.Popup(html);
-         map.addPopup(ob.popup_);
-         ob.popup_.show([ob.coord_.x, ob.coord_.y]);
+         'jsonp': true,
+         'vars': {
+            'info': this.text_
+         },
+         'parseToHtml': false
+      }).then(function(htmlAsText) {
+         map.removePopup();
+         this_.popup_ = new M.Popup();
+         this_.popup_.addTab({
+            'icon': 'g-cartografia-comentarios',
+            'title': 'Información',
+            'content': htmlAsText
+         });
+         map.addPopup(this_.popup_, this_.coord_);
       });
    };
 
    /**
+    * This feature displays a popup with information
+    *
+    * @public
+    * @function
+    * @param {M.Map}
+    *        map map to add the plugin
+    * @api stable
+    */
+   M.impl.Label.prototype.hide = function() {
+      this.facadeMap_.removePopup();
+   };
+
+   /**
     * This function return popup created
-    * 
+    *
     * @public
     * @function
     * @returns {Object} popup created
     * @api stable
     */
-   M.impl.Label.prototype.getPopup = function () {
+   M.impl.Label.prototype.getPopup = function() {
       return this.popup_;
    };
 })();

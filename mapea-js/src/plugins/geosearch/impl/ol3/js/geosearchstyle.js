@@ -1,13 +1,13 @@
 goog.provide('P.impl.geosearch.style');
 
-(function () {
+(function() {
 
    M.impl.geosearch = {};
    M.impl.geosearch.style = {};
 
    M.impl.geosearch.style.initialized = false;
 
-   M.impl.geosearch.style.init = function () {
+   M.impl.geosearch.style.init = function() {
       if (M.impl.geosearch.style.initialized === false) {
          M.impl.geosearch.style.initialized = true;
          /*******************
@@ -15,9 +15,16 @@ goog.provide('P.impl.geosearch.style');
           *******************/
          M.impl.geosearch.style.DEFAULT = {};
          // default point
+         var imgIconDefault = document.createElement('IMG');
+         imgIconDefault.src = M.utils.concatUrlPaths([M.config.THEME_URL, '/img/m-pin-24.svg']);
+         imgIconDefault.width = '24';
+         imgIconDefault.height = '24';
+         imgIconDefault.crossOrigin = "anonymous";
          M.impl.geosearch.style.DEFAULT[M.geom.wkt.type.POINT] = new ol.style.Style({
             'image': new ol.style.Icon({
-               'src': M.utils.concatUrlPaths([M.config.THEME_URL, '/img/m-pin-24.svg'])
+               // 'src': M.utils.concatUrlPaths([M.config.THEME_URL, '/img/m-pin-24.svg'])
+               'img': imgIconDefault,
+               'imgSize': [24, 24]
             })
          });
          // default line
@@ -33,7 +40,8 @@ goog.provide('P.impl.geosearch.style');
          // default polygon
          M.impl.geosearch.style.DEFAULT[M.geom.wkt.type.POLYGON] = new ol.style.Style({
             'image': new ol.style.Icon({
-               'src': M.utils.concatUrlPaths([M.config.THEME_URL, '/img/m-pin-24.svg'])
+               'img': imgIconDefault,
+               'imgSize': [24, 24]
             })
          });
          M.impl.geosearch.style.DEFAULT[M.geom.wkt.type.MULTI_POINT] = M.impl.geosearch.style.DEFAULT[M.geom.wkt.type.POINT];
@@ -48,9 +56,15 @@ goog.provide('P.impl.geosearch.style');
           *******************/
          M.impl.geosearch.style.NEW = {};
          // NEW point
+         var imgIconNew = document.createElement('IMG');
+         imgIconNew.src = M.utils.concatUrlPaths([M.config.THEME_URL, '/img/m-pin-24-new.svg']);
+         imgIconNew.width = '24';
+         imgIconNew.height = '24';
+         imgIconNew.crossOrigin = "anonymous";
          M.impl.geosearch.style.NEW[M.geom.wkt.type.POINT] = new ol.style.Style({
             'image': new ol.style.Icon({
-               'src': M.utils.concatUrlPaths([M.config.THEME_URL, '/img/m-pin-24-new.svg'])
+               'img': imgIconNew,
+               'imgSize': [24, 24]
             })
          });
          // NEW line
@@ -66,7 +80,8 @@ goog.provide('P.impl.geosearch.style');
          // NEW polygon
          M.impl.geosearch.style.NEW[M.geom.wkt.type.POLYGON] = new ol.style.Style({
             'image': new ol.style.Icon({
-               'src': M.utils.concatUrlPaths([M.config.THEME_URL, '/img/m-pin-24-new.svg'])
+               'img': imgIconNew,
+               'imgSize': [24, 24]
             })
          });
          M.impl.geosearch.style.NEW[M.geom.wkt.type.MULTI_POINT] = M.impl.geosearch.style.NEW[M.geom.wkt.type.POINT];
@@ -80,9 +95,15 @@ goog.provide('P.impl.geosearch.style');
                SELECT
           *******************/
          M.impl.geosearch.style.SELECTED = {};
+         var imgIconSelected = document.createElement('IMG');
+         imgIconSelected.src = M.utils.concatUrlPaths([M.config.THEME_URL, '/img/m-pin-24-sel.svg']);
+         imgIconSelected.width = '24';
+         imgIconSelected.height = '24';
+         imgIconSelected.crossOrigin = "anonymous";
          M.impl.geosearch.style.SELECTED[M.geom.wkt.type.POINT] = new ol.style.Style({
             'image': new ol.style.Icon({
-               'src': M.utils.concatUrlPaths([M.config.THEME_URL, '/img/m-pin-24-sel.svg'])
+               'img': imgIconSelected,
+               'imgSize': [24, 24]
             })
          });
          // SELECTED line

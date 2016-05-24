@@ -142,6 +142,13 @@ goog.require('goog.style');
        */
       this.spatialSearch_ = false;
 
+      /**
+       * Facade of the map
+       * @private
+       * @type {M.Map}
+       */
+      this.facadeMap_ = null;
+
       // implementation of this control
       var impl = new M.impl.control.Geosearch();
 
@@ -159,8 +166,11 @@ goog.require('goog.style');
     */
    M.control.Geosearch.prototype.createView = function(map) {
       var this_ = this;
+      this.facadeMap_ = map;
       var promise = new Promise(function(success, fail) {
-         M.template.compile(M.control.Geosearch.TEMPLATE).then(function(html) {
+         M.template.compile(M.control.Geosearch.TEMPLATE, {
+            'jsonp': true
+         }).then(function(html) {
             this_.addEvents(html);
             success(html);
          });
@@ -271,7 +281,8 @@ goog.require('goog.style');
 
       var searchUrl = M.utils.addParameters(this.searchUrl_, {
          'q': query,
-         'start': this.results_.length
+         'start': this.results_.length,
+         'srs': this.facadeMap_.getProjection().code
       });
 
       /* Stores the current search time into a
@@ -315,8 +326,11 @@ goog.require('goog.style');
 
       var resultsTemplateVars = this.parseResultsForTemplate_(results);
       var this_ = this;
-      M.template.compile(M.control.Geosearch.RESULTS_TEMPLATE, resultsTemplateVars).then(function(html) {
-
+      M.template.compile(M.control.Geosearch.RESULTS_TEMPLATE, {
+         'jsonp': true,
+         'vars': resultsTemplateVars
+      }).then(function(html) {
+         goog.dom.classlist.remove(this_.resultsContainer_, M.control.Geosearch.HIDDEN_RESULTS_CLASS);
          /* unregisters previous events */
          // scroll
          if (!M.utils.isNullOrEmpty(this_.resultsScrollContainer_)) {
@@ -328,6 +342,9 @@ goog.require('goog.style');
          for (var i = 0, ilen = resultsHtmlElements.length; i < ilen; i++) {
             resultHtml = resultsHtmlElements.item(i);
             goog.events.unlisten(resultHtml, goog.events.EventType.CLICK, this_.resultClick_, false, this_);
+         }
+         if (results.response.docs.length > 0) {
+            this_.zoomToResults();
          }
 
          // results buntton
@@ -385,6 +402,18 @@ goog.require('goog.style');
    };
 
    /**
+    * This function sets zoom to results
+    *
+    * @public
+    * @function
+    * @param {M.Map} map to add the control
+    * @api stable
+    */
+   M.control.Geosearch.prototype.zoomToResults = function() {
+      this.getImpl().zoomToResults();
+   };
+
+   /**
     * This function provides the input search
     *
     * @public
@@ -409,7 +438,10 @@ goog.require('goog.style');
 
       var resultsTemplateVars = this.parseResultsForTemplate_(results, true);
       var this_ = this;
-      M.template.compile(M.control.Geosearch.RESULTS_TEMPLATE, resultsTemplateVars).then(function(html) {
+      M.template.compile(M.control.Geosearch.RESULTS_TEMPLATE, {
+         'jsonp': true,
+         'vars': resultsTemplateVars
+      }).then(function(html) {
          // appends the new results
          var newResultsScrollContainer = html.getElementsByTagName("div")["m-geosearch-results-scroll"];
          var newResults = newResultsScrollContainer.children;
@@ -493,7 +525,10 @@ goog.require('goog.style');
                M.exception('La respuesta no es un JSON válido: ' + err);
             }
             M.template.compile(M.control.Geosearch.HELP_TEMPLATE, {
-               'entities': help
+               'jsonp': true,
+               'vars': {
+                  'entities': help
+               }
             }).then(function(html) {
                this_.getImpl().showHelp(html);
                this_.helpShown_ = true;
@@ -535,6 +570,8 @@ goog.require('goog.style');
     * @function
     */
    M.control.Geosearch.prototype.resultsClick_ = function(evt) {
+      goog.dom.classlist.add(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
+         "top-extra-search");
       goog.dom.classlist.toggle(evt.target, 'g-cartografia-flecha-arriba');
       goog.dom.classlist.toggle(evt.target, 'g-cartografia-flecha-abajo');
       goog.dom.classlist.toggle(this.resultsContainer_, M.control.Geosearch.HIDDEN_RESULTS_CLASS);
@@ -553,19 +590,6 @@ goog.require('goog.style');
          equals = (this.name === obj.name);
       }
       return equals;
-   };
-
-   /**
-    * function adds the event 'click'
-    *
-    * @public
-    * @function
-    * @api stable
-    */
-   M.control.Geosearch.prototype.destroy = function() {
-      this.getImpl().destroy();
-      this.template_ = null;
-      this.impl = null;
    };
 
    /**

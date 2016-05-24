@@ -11,9 +11,9 @@ goog.require('P.impl.control.Measure');
  * @extends {M.impl.control.Measure}
  * @api stable
  */
-M.impl.control.MeasureArea = function () {
-   this.helpMsg_ = 'Click to start drawing';
-   this.helpMsgContinue_ = 'Click to continue drawing the polygon';
+M.impl.control.MeasureArea = function() {
+   this.helpMsg_ = M.control.Measure.HELP_MESSAGE;
+   this.helpMsgContinue_ = M.control.MeasureArea.HELP_KEEP_MESSAGE;
 
    goog.base(this, 'Polygon');
 };
@@ -24,7 +24,7 @@ goog.inherits(M.impl.control.MeasureArea, M.impl.control.Measure);
  * Handle pointer move.
  * @param {ol.MapBrowserEvent} evt
  */
-M.impl.control.MeasureArea.prototype.formatGeometry = function (geometry) {
+M.impl.control.MeasureArea.prototype.formatGeometry = function(geometry) {
    var area = geometry.getArea();
    var output;
    if (area > 10000) {
@@ -42,6 +42,6 @@ M.impl.control.MeasureArea.prototype.formatGeometry = function (geometry) {
  * Handle pointer move.
  * @param {ol.MapBrowserEvent} evt
  */
-M.impl.control.MeasureArea.prototype.getTooltipCoordinate = function (geometry) {
+M.impl.control.MeasureArea.prototype.getTooltipCoordinate = function(geometry) {
    return geometry.getInteriorPoint().getCoordinates();
 };

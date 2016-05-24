@@ -1,23 +1,25 @@
 .m-measurelength-container {
    top: 0px;
    left: 200px;
+   order: 10;
 }
 
 .m-measurearea-container {
    top: 0px;
    left: 250px;
+   order: 9;
 }
 
 .m-measureclear-container {
    top: 0px;
    left: 300px;
+   order: 8;
 }
 
 .m-measure-tooltip {
    position: absolute;
    z-index: 1070;
    display: block;
-   font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
    font-size: 12px;
    font-style: normal;
    font-weight: 400;
@@ -40,30 +42,29 @@
 .m-measure-tooltip.measure,
 .m-measure-tooltip.pointer {
    position: relative;
-   background: rgba(0, 0, 0, 0.5);
+   background: #b54d01;
    border-radius: 4px;
    color: white;
    padding: 4px 8px;
-   opacity: 0.7;
+   opacity: .75;
    white-space: nowrap;
 }
 
 .m-measure-tooltip.measure {
-   opacity: 1;
    font-weight: bold;
 }
 
 .m-measure-tooltip.static {
-   background-color: #ffcc33;
-   color: black;
+   background-color: #337ceb;
+   color: #fff;
    border: 1px solid white;
-   opacity: 0.7;
    font-weight: normal;
+   opacity: 1;
 }
 
 .m-measure-tooltip.measure:before,
 .m-measure-tooltip.static:before {
-   border-top: 6px solid rgba(0, 0, 0, 0.5);
+   border-top: 6px solid #b54d01;
    border-right: 6px solid transparent;
    border-left: 6px solid transparent;
    content: "";
@@ -74,5 +75,5 @@
 }
 
 .m-measure-tooltip.static:before {
-   border-top-color: #ffcc33;
+   border-top-color: #337ceb;
 }

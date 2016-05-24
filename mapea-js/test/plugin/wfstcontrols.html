@@ -8,16 +8,16 @@
    <!-- styles -->
    <!-- styles -->
    <link href="../../libraries/components-font-awesome/font-awesome.css" rel="stylesheet" />
-   <link href="../../src/impl/ol3/css/ol3.css" rel="stylesheet" />
-   <link href="../../src/impl/ol3/css/custom.css" rel="stylesheet" />
-   <link href="../../src/facade/css/fonts.css" rel="stylesheet" />
-   <link href="../../src/facade/css/popup.css" rel="stylesheet" />
-   <link href="../../src/facade/css/controls/getfeatureinfo.css" rel="stylesheet" />
-   <link href="../../src/facade/css/controls/layerswitcher.css" rel="stylesheet" />
-   <link href="../../src/facade/css/controls/location.css" rel="stylesheet" />
-   <link href="../../src/facade/css/controls/scale.css" rel="stylesheet" />
-   <link href="../../src/facade/css/controls/wmcselector.css" rel="stylesheet" />
-   <link href="../../src/facade/css/mapea.css" rel="stylesheet" />
+   <link href="../../src/impl/ol3/assets/css/ol3.css" />
+   <link href="../../src/impl/ol3/assets/css/custom.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/fonts.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/popup.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/getfeatureinfo.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/layerswitcher.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/location.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/scale.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/controls/wmcselector.css" rel="stylesheet" />
+   <link href="../../src/facade/assets/css/mapea.css" rel="stylesheet" />
    <style rel="stylesheet">
       html,
       body {
@@ -29,7 +29,7 @@
    </style>
 
    <!-- plugin -->
-   <link href="../../src/plugins/wfstcontrols/facade/css/wfstcontrols.css" rel="stylesheet" />
+   <link href="../../src/plugins/wfstcontrols/facade/assets/css/wfstcontrols.css" rel="stylesheet" />
 </head>
 
 <body>
@@ -43,16 +43,27 @@
    <script type="text/javascript" src="../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
    <script type="text/javascript" src="wfstcontrols.js"></script>
    <!-- plugin -->
-   <script type="text/javascript" src="../../src/configuration.js"></script>
+   <script type="text/javascript" src="../configuration_filtered.js"></script>
 
    <script type="application/javascript">
+
+
+   var layer2 = new M.layer.WFS({
+      url: 'http://clientes.guadaltel.es/desarrollo/geossigc/wfs?',
+      namespace: 'callejero',
+      name: 'prueba_pol_wfst',
+      geometry: 'MPOLYGON'
+   });
+
+   
       var mapa = M.map({
          container: 'mapa',
-         wmcfile: ['callejero']
+         wmcfile: ['callejero'],
+         layers: [layer2]
       });
 
       // 5. Creates the plugin
-      plugin = new M.plugin.WFSTControls(["drawfeature", "delete"]);
+      plugin = new M.plugin.WFSTControls(["drawfeature","deletefeature","modifyfeature"]);
 
       // 6. Adds the plugin into the map
       mapa.addPlugin(plugin);

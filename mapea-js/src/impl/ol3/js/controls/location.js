@@ -6,7 +6,7 @@ goog.require('ol.Geolocation');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc Main constructor of the class. Creates a Location
     * control
@@ -17,54 +17,68 @@ goog.require('ol.Geolocation');
     * @api stable
     */
 
-   M.impl.control.Location = function () {
-      /**
-       * Specifies the status of the location
-       * @private
-       * @type {Boolean}
-       */
-      this.activeLocation_ = false;
-
+   M.impl.control.Location = function() {
       /**
        * The map instance
        * @private
-       * @type {M.Map}
+       * @type {ol.Geolocation}
        */
-      this.facadeMap_ = null;
+      this.geolocation_ = null;
 
       /**
        * Feature of the accuracy position
        * @private
        * @type {ol.Feature}
        */
-      this.accuracyFeature_ = null;
+      this.accuracyFeature_ = new ol.Feature();
 
       /**
        * Feature of the position
        * @private
        * @type {ol.Feature}
        */
-      this.positionFeature_ = null;
+      this.positionFeature_ = new ol.Feature({
+         'style': M.impl.control.Location.POSITION_STYLE
+      });
    };
    goog.inherits(M.impl.control.Location, M.impl.Control);
 
    /**
-    * This function adds the control to the specified map
+    * This function paints a point on the map with your location
     *
     * @public
     * @function
-    * @param {M.Map} map to add the plugin
-    * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.Location.prototype.addTo = function (map, element) {
-      this.facadeMap_ = map;
-      var btnLocate = element.querySelector('button#m-location-button');
-      goog.events.listen(btnLocate, [
-               goog.events.EventType.CLICK,
-               goog.events.EventType.TOUCHEND
-            ], this.locate, false, this);
-      goog.base(this, 'addTo', map, element);
+   M.impl.control.Location.prototype.activate = function() {
+      goog.dom.classlist.add(this.element, 'm-locating');
+
+      if (M.utils.isNullOrEmpty(this.geolocation_)) {
+         var proj = ol.proj.get(this.facadeMap_.getProjection().code);
+         this.geolocation_ = new ol.Geolocation({
+            projection: proj
+         });
+         this.geolocation_.on('change:accuracyGeometry', function(evt) {
+            var accuracyGeom = evt.target.get(evt.key);
+            this.accuracyFeature_.setGeometry(accuracyGeom);
+         }, this);
+         this.geolocation_.on('change:position', function(evt) {
+            var newCoord = evt.target.get(evt.key);
+            var newPosition = null;
+            if (!M.utils.isNullOrEmpty(newCoord)) {
+               newPosition = new ol.geom.Point(newCoord);
+            }
+            this.positionFeature_.setGeometry(newPosition);
+            this.facadeMap_.setZoom(12).setCenter(newCoord);
+            goog.dom.classlist.remove(this.element, 'm-locating');
+            goog.dom.classlist.add(this.element, 'm-located');
+
+            this.geolocation_.setTracking(false);
+         }, this);
+      }
+
+      this.geolocation_.setTracking(true);
+      this.facadeMap_.getImpl().drawFeatures([this.accuracyFeature_, this.positionFeature_]);
    };
 
    /**
@@ -75,58 +89,57 @@ goog.require('ol.Geolocation');
     * @function
     * @api stable
     */
-   M.impl.control.Location.prototype.destroy = function () {
-      this.facadeMap_.getImpl().removeFeatures([this.accuracyFeature_, this.positionFeature_]);
-      this.scaleContainer_ = null;
-      goog.base(this, 'destroy');
+   M.impl.control.Location.prototype.removePositions_ = function() {
+      if (!M.utils.isNullOrEmpty(this.accuracyFeature_)) {
+         this.facadeMap_.getImpl().removeFeatures([this.accuracyFeature_]);
+      }
+      if (!M.utils.isNullOrEmpty(this.positionFeature_)) {
+         this.facadeMap_.getImpl().removeFeatures([this.positionFeature_]);
+      }
    };
 
    /**
     * This function paints a point on the map with your location
-    * 
+    *
     * @public
     * @function
     * @api stable
     */
-   M.impl.control.Location.prototype.locate = function () {
-      if (this.activeLocation_ === true) {
-         this.facadeMap_.getImpl().removeFeatures([this.accuracyFeature_, this.positionFeature_]);
-         this.activeLocation_ = false;
-      }
-      else {
-         goog.dom.classlist.add(document.getElementById("m-location-div"), 'm-location-div-load');
-         var view = this.map_.getView();
-         var geolocation = new ol.Geolocation({
-            projection: this.map_.getView().getProjection()
-         });
-         geolocation.setTracking(true);
-         this.accuracyFeature_ = new ol.Feature();
-         geolocation.on('change:accuracyGeometry', function () {
-            this.accuracyFeature_.setGeometry(geolocation.getAccuracyGeometry());
-         }, this);
-         this.positionFeature_ = new ol.Feature();
-         this.positionFeature_.setStyle(new ol.style.Style({
-            image: new ol.style.Circle({
-               radius: 6,
-               fill: new ol.style.Fill({
-                  color: '#3399CC'
-               }),
-               stroke: new ol.style.Stroke({
-                  color: '#fff',
-                  width: 2
-               })
-            })
-         }));
-         geolocation.on('change:position', function () {
-            var coordinates = geolocation.getPosition();
-            this.positionFeature_.setGeometry(coordinates ? new ol.geom.Point(
-               coordinates) : null);
-            this.facadeMap_.setZoom(12).setCenter(coordinates);
-            goog.dom.classlist.remove(document.getElementById("m-location-div"), 'm-location-div-load');
-         }, this);
-         this.facadeMap_.getImpl().drawFeatures(
-               [this.accuracyFeature_, this.positionFeature_]);
-         this.activeLocation_ = true;
-      }
+   M.impl.control.Location.prototype.deactivate = function() {
+      this.removePositions_();
+      goog.dom.classlist.remove(this.element, 'm-located');
    };
+
+   /**
+    * This function destroys this control, cleaning the HTML
+    * and unregistering all events
+    *
+    * @public
+    * @function
+    * @api stable
+    */
+   M.impl.control.Location.prototype.destroy = function() {
+      this.removePositions_();
+      goog.base(this, 'destroy');
+   };
+
+   /**
+    * TODO
+    * @const
+    * @type {ol.style.Style}
+    * @public
+    * @api stable
+    */
+   M.impl.control.Location.POSITION_STYLE = new ol.style.Style({
+      image: new ol.style.Circle({
+         radius: 6,
+         fill: new ol.style.Fill({
+            color: '#3399CC'
+         }),
+         stroke: new ol.style.Stroke({
+            color: '#fff',
+            width: 2
+         })
+      })
+   });
 })();

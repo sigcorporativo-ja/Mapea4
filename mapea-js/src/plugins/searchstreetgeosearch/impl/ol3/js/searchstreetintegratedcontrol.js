@@ -8,7 +8,7 @@ goog.require('P.impl.control.Searchstreet');
 (function() {
    /**
     * @classdesc Main constructor of the SearchstreetIntegrated control.
-    * 
+    *
     * @constructor
     * @extends {M.impl.control.Searchstreet}
     * @api stable
@@ -17,10 +17,10 @@ goog.require('P.impl.control.Searchstreet');
       goog.base(this);
    };
    goog.inherits(M.impl.control.SearchstreetIntegrated, M.impl.control.Searchstreet);
-   
+
    /**
     * This function replaces the addto of searchstreet not to add control
-    * 
+    *
     * @public
     * @function
     * @param {M.Map}
@@ -34,9 +34,19 @@ goog.require('P.impl.control.Searchstreet');
       this.element_ = element;
 
       ol.control.Control.call(this, {
-         'element' : element,
-         'target' : null
+         'element': element,
+         'target': null
       });
    };
+
+   /**
+    * This function cancels the zoom function of searchstreet
+    *
+    * @public
+    * @function
+    * @api stable
+    */
+   M.impl.control.SearchstreetIntegrated.prototype.zoomResults = function() {};
+
 
 })();

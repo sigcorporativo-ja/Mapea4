@@ -5,7 +5,7 @@ goog.require('ol.control.MousePosition');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMC selector
@@ -15,7 +15,9 @@ goog.require('ol.control.MousePosition');
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.control.Mouse = function () {};
+   M.impl.control.Mouse = function() {
+      this.facadeMap_ = null;
+   };
    goog.inherits(M.impl.control.Mouse, ol.control.MousePosition);
 
    /**
@@ -27,13 +29,27 @@ goog.require('ol.control.MousePosition');
     * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.Mouse.prototype.addTo = function (map, element) {
+   M.impl.control.Mouse.prototype.addTo = function(map, element) {
+      this.facadeMap_ = map;
       ol.control.MousePosition.call(this, {
-         coordinateFormat: ol.coordinate.createStringXY(4),
-         projection: map.getProjection().code,
-         undefinedHTML: '&nbsp;'
+         'coordinateFormat': ol.coordinate.createStringXY(4),
+         'projection': map.getProjection().code,
+         'undefinedHTML': '',
+         'className': 'm-mouse-position g-cartografia-flecha'
       });
       map.getMapImpl().addControl(this);
+   };
+
+   /**
+    * function remove the event 'click'
+    *
+    * @public
+    * @function
+    * @api stable
+    * @export
+    */
+   M.impl.control.Mouse.prototype.getElement = function() {
+      return this.element;
    };
 
    /**
@@ -43,9 +59,10 @@ goog.require('ol.control.MousePosition');
     * @public
     * @function
     * @api stable
+    * @export
     */
-   M.impl.control.Mouse.prototype.destroy = function () {
-      this.map.removeControl(this);
-      this.map = null;
+   M.impl.control.Mouse.prototype.destroy = function() {
+      this.facadeMap_.getMapImpl().removeControl(this);
+      this.facadeMap_ = null;
    };
 })();

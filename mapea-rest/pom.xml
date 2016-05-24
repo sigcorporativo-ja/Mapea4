@@ -12,23 +12,23 @@
       <maven.build.timestamp.format>dd-MM-yyyy</maven.build.timestamp.format>
    </properties>
    <parent>
-      <groupId>es.juntadeandalucia</groupId>
+      <groupId>es.juntadeandalucia.mapea</groupId>
       <artifactId>mapea-parent</artifactId>
       <version>4.0.0-SNAPSHOT</version>
       <relativePath>../mapea-parent/pom.xml</relativePath>
    </parent>
-   	<licenses>
-		<license>
-			<name>European Union Public Licence - EUPL v.1.1</name>
-			<url>LICENSE.txt</url>
-		</license>
-	</licenses>
-	<developers>
-		<developer>
-			<organization>Guadaltel S.A.</organization>
-			<organizationUrl>www.guadaltel.com</organizationUrl>
-		</developer>
-	</developers>
+   <licenses>
+      <license>
+         <name>European Union Public Licence - EUPL v.1.1</name>
+         <url>LICENSE.txt</url>
+      </license>
+   </licenses>
+   <developers>
+      <developer>
+         <organization>Guadaltel S.A.</organization>
+         <organizationUrl>www.guadaltel.com</organizationUrl>
+      </developer>
+   </developers>
    <build>
       <finalName>mapea</finalName>
       <resources>
@@ -90,21 +90,40 @@
             <groupId>org.apache.maven.plugins</groupId>
             <artifactId>maven-dependency-plugin</artifactId>
             <executions>
+               <!-- mapea js resources -->
                <execution>
-                  <id>unpack build javascript</id>
+                  <id>unpack-js</id>
                   <goals>
                      <goal>unpack-dependencies</goal>
                   </goals>
                   <phase>generate-resources</phase>
                   <configuration>
                      <outputDirectory>${project.build.directory}/${project.build.finalName}</outputDirectory>
-                     <includeArtifacIds>mapea-js</includeArtifacIds>
                      <includeGroupIds>${project.groupId}</includeGroupIds>
+                     <includeArtifacIds>mapea-js</includeArtifacIds>
+                     <excludeArtifactIds>mapea-proxy</excludeArtifactIds>
                      <excludeTransitive>true</excludeTransitive>
                   </configuration>
                </execution>
+               <!-- / mapea js resources -->
             </executions>
-         </plugin>
+          </plugin>
+          <plugin>
+            	<!-- El uso de este plugin requiere Maven 3 -->
+		<groupId>com.spotify</groupId>
+		<artifactId>docker-maven-plugin</artifactId>
+		<version>0.2.11</version>
+		<configuration>
+			<dockerDirectory>${basedir}/../mapea-parent/src/main/docker/mapea</dockerDirectory>
+			<resources>
+				<resource>
+					<targetPath>/</targetPath>
+					<directory>${project.build.directory}</directory>
+					<include>${project.build.finalName}.war</include>
+				</resource>
+			</resources>
+		</configuration>
+	  </plugin>
       </plugins>
    </build>
    <dependencies>
@@ -154,7 +173,7 @@
       <dependency>
          <groupId>commons-httpclient</groupId>
          <artifactId>commons-httpclient</artifactId>
-         <version>2.0.2</version>
+         <version>3.1</version>
       </dependency>
       <dependency>
          <groupId>tomcat</groupId>
@@ -195,29 +214,21 @@
          <scope>provided</scope>
       </dependency>
       <dependency>
-         <groupId>proxy</groupId>
-         <artifactId>proxy</artifactId>
-         <version>1.0.0</version>
-         <scope>system</scope>
-         <systemPath>${basedir}/src/main/webapp/WEB-INF/lib/proxyMapea.jar</systemPath>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>mapea-js</artifactId>
+         <version>${project.version}</version>
+         <classifier>doc-resources</classifier>
+         <type>zip</type>
+         <scope>provided</scope>
       </dependency>
+      <!-- / MAPEA JS -->
 
+      <!-- MAPEA PROXY -->
       <dependency>
-         <groupId>commons-httpclient</groupId>
-         <artifactId>commons-httpclient</artifactId>
-         <version>3.1-rc1</version>
+         <groupId>${project.groupId}</groupId>
+         <artifactId>mapea-proxy</artifactId>
+         <version>${project.version}</version>
       </dependency>
-      <dependency>
-         <groupId>commons-codec</groupId>
-         <artifactId>commons-codec</artifactId>
-         <version>1.2</version>
-      </dependency>
-      <!-- LOG4J -->
-      <dependency>
-         <groupId>log4j</groupId>
-         <artifactId>log4j</artifactId>
-         <version>1.2.15</version>
-      </dependency>
-      <!-- /MAPEA JS -->
+      <!-- / MAPEA PROXY -->
    </dependencies>
 </project>

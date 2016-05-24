@@ -3,7 +3,7 @@ goog.provide('P.impl.control.Streetview');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMC selector
@@ -13,7 +13,7 @@ goog.provide('P.impl.control.Streetview');
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.control.Streetview = function () {
+   M.impl.control.Streetview = function() {
       this.sv = null;
    };
    goog.inherits(M.impl.control.Streetview, M.impl.Control);
@@ -27,14 +27,14 @@ goog.provide('P.impl.control.Streetview');
     * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.Streetview.prototype.openStreetView = function (evt, canvas) {
+   M.impl.control.Streetview.prototype.openStreetView = function(evt, canvas) {
       this.initializeStreetView(canvas);
       if (evt.clientX && evt.clientY) {
          var lonlat = this.facadeMap_.getMapImpl().getCoordinateFromPixel([evt.clientX, evt.clientY]);
          var point = new ol.geom.Point(lonlat);
          var newPoint = ol.proj.transform(point.getCoordinates(), this.facadeMap_.getImpl().getProjection().code, ol.proj.get("EPSG:4326"));
          var newPointGoogle = new google.maps.LatLng(newPoint[1], newPoint[0]);
-         this.sv.getPanoramaByLocation(newPointGoogle, 50, function (data, status) {
+         this.sv.getPanoramaByLocation(newPointGoogle, 50, function(data, status) {
             this.processSVData(data, status, canvas);
          }.bind(this));
 
@@ -50,7 +50,7 @@ goog.provide('P.impl.control.Streetview');
     * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.Streetview.prototype.processSVData = function (data, status, canvas) {
+   M.impl.control.Streetview.prototype.processSVData = function(data, status, canvas) {
       if (status == google.maps.StreetViewStatus.OK) {
          myPano.setPosition(data.location.latLng);
          canvas.style.visibility = "visible";
@@ -67,7 +67,7 @@ goog.provide('P.impl.control.Streetview');
       }
    };
 
-   M.impl.control.Streetview.prototype.initializeStreetView = function (canvas) {
+   M.impl.control.Streetview.prototype.initializeStreetView = function(canvas) {
       myPano = new google.maps.StreetViewPanorama(canvas, {
          position: new google.maps.LatLng(0, 0),
          pov: {
@@ -87,7 +87,8 @@ goog.provide('P.impl.control.Streetview');
     * @function
     * @api stable
     */
-   M.impl.control.Streetview.prototype.destroy = function () {
+   M.impl.control.Streetview.prototype.destroy = function() {
       this.facadeMap_.getMapImpl().removeControl(this);
+      this.sv = null;
    };
 })();

@@ -5,7 +5,7 @@ goog.require('ol.control.ScaleLine');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMC selector
@@ -15,7 +15,8 @@ goog.require('ol.control.ScaleLine');
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.control.ScaleLine = function () {
+   M.impl.control.ScaleLine = function() {
+      this.facadeMap_ = null;
       goog.base(this);
    };
    goog.inherits(M.impl.control.ScaleLine, ol.control.ScaleLine);
@@ -29,8 +30,21 @@ goog.require('ol.control.ScaleLine');
     * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.ScaleLine.prototype.addTo = function (map, element) {
+   M.impl.control.ScaleLine.prototype.addTo = function(map, element) {
+      this.facadeMap_ = map;
       map.getMapImpl().addControl(this);
+   };
+
+   /**
+    * TODO
+    *
+    * @public
+    * @function
+    * @api stable
+    * @export
+    */
+   M.impl.control.ScaleLine.prototype.getElement = function() {
+      return this.element;
    };
 
    /**
@@ -40,9 +54,10 @@ goog.require('ol.control.ScaleLine');
     * @public
     * @function
     * @api stable
+    * @export
     */
-   M.impl.control.ScaleLine.prototype.destroy = function () {
-      this.map.removeControl(this);
-      this.map = null;
+   M.impl.control.ScaleLine.prototype.destroy = function() {
+      this.facadeMap_.getMapImpl().removeControl(this);
+      this.facadeMap_ = null;
    };
 })();

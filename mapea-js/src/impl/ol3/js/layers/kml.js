@@ -3,7 +3,7 @@ goog.provide('M.impl.layer.KML');
 goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.impl.Layer');
-goog.require('M.impl.FeatureLoaderJsonp');
+goog.require('M.impl.loader.KML');
 goog.require('M.impl.Popup');
 goog.require('M.impl.format.KML');
 
@@ -12,7 +12,7 @@ goog.require('ol.source.Vector');
 
 goog.require('goog.style');
 
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a KML layer
@@ -23,7 +23,7 @@ goog.require('goog.style');
     * @param {Mx.parameters.LayerOptions} options custom options for this layer
     * @api stable
     */
-   M.impl.layer.KML = (function (options) {
+   M.impl.layer.KML = (function(options) {
       /**
        * Popup showed
        * @private
@@ -50,7 +50,7 @@ goog.require('goog.style');
     * @function
     * @api stable
     */
-   M.impl.layer.KML.prototype.setVisible = function (visibility) {
+   M.impl.layer.KML.prototype.setVisible = function(visibility) {
       this.visibility = visibility;
 
       // layer
@@ -76,16 +76,23 @@ goog.require('goog.style');
     * @param {M.impl.Map} map
     * @api stable
     */
-   M.impl.layer.KML.prototype.addTo = function (map) {
+   M.impl.layer.KML.prototype.addTo = function(map) {
       this.map = map;
 
       var formater = new M.impl.format.KML();
-      var loader = ol.featureloader.jsonp(this.url, formater, map, this);
+      var loader = new M.impl.loader.KML(map, this.url, formater);
+      var this_ = this;
       this.ol3Layer = new ol.layer.Vector({
          source: new ol.source.Vector({
             url: this.url,
             format: formater,
-            loader: loader
+            loader: loader.getLoaderFn(function(features, screenOverlay) {
+               this.addFeatures(features);
+               if (!M.utils.isNullOrEmpty(screenOverlay)) {
+                  var screenOverLayImg = M.impl.utils.addOverlayImage(screenOverlay, map);
+                  this_.setScreenOverlayImg(screenOverLayImg);
+               }
+            })
          })
       });
       // sets its visibility if it is in range
@@ -108,21 +115,31 @@ goog.require('goog.style');
     * @param {ol.Feature} feature
     * @api stable
     */
-   M.impl.layer.KML.prototype.selectFeatures = function (features) {
+   M.impl.layer.KML.prototype.selectFeatures = function(features) {
       // TODO: manage multiples features
       var feature = features[0];
 
       if (this.extract === true) {
-         var popupVars = {
-            'name': feature.get('name'),
-            'desc': feature.get('description')
-         };
+         var featureName = feature.get('name');
+         var featureDesc = feature.get('description');
+         var featureCoord = feature.getGeometry().getFirstCoordinate();
+
          var this_ = this;
-         M.template.compile(M.layer.KML.POPUP_TEMPLATE, popupVars).then(function (html) {
-            this_.popup_ = new M.impl.Popup(html);
-            this_.map.getImpl().addPopup(this_.popup_);
-            var coord = feature.getGeometry().getFirstCoordinate();
-            this_.popup_.show(coord, html);
+         M.template.compile(M.layer.KML.POPUP_TEMPLATE, {
+            'jsonp': true,
+            'vars': {
+               'name': featureName,
+               'desc': featureDesc
+            },
+            'parseToHtml': false
+         }).then(function(htmlAsText) {
+            this_.popup_ = new M.Popup();
+            this_.popup_.addTab({
+               'icon': 'g-cartografia-comentarios',
+               'title': featureName,
+               'content': htmlAsText
+            });
+            this_.map.addPopup(this_.popup_, featureCoord);
          });
       }
    };
@@ -136,7 +153,7 @@ goog.require('goog.style');
     * @param {ol.Feature} feature
     * @api stable
     */
-   M.impl.layer.KML.prototype.unselectFeatures = function () {
+   M.impl.layer.KML.prototype.unselectFeatures = function() {
       if (!M.utils.isNullOrEmpty(this.popup_)) {
          this.popup_.hide();
          this.popup_ = null;
@@ -150,7 +167,7 @@ goog.require('goog.style');
     * @function
     * @api stable
     */
-   M.impl.layer.KML.prototype.setScreenOverlayImg = function (screenOverlayImg) {
+   M.impl.layer.KML.prototype.setScreenOverlayImg = function(screenOverlayImg) {
       this.screenOverlayImg_ = screenOverlayImg;
    };
 
@@ -162,7 +179,7 @@ goog.require('goog.style');
     * @function
     * @api stable
     */
-   M.impl.layer.KML.prototype.destroy = function () {
+   M.impl.layer.KML.prototype.destroy = function() {
       var olMap = this.map.getMapImpl();
 
       if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
@@ -180,7 +197,7 @@ goog.require('goog.style');
     * @function
     * @api stable
     */
-   M.impl.layer.KML.prototype.equals = function (obj) {
+   M.impl.layer.KML.prototype.equals = function(obj) {
       var equals = false;
 
       if (obj instanceof M.impl.layer.KML) {

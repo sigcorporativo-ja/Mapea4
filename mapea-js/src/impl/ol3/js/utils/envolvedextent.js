@@ -3,7 +3,7 @@ goog.provide('M.impl.envolvedExtent');
 /**
  * @namespace M.impl.envolvedExtent
  */
-(function () {
+(function() {
 
    /**
     * The map instance
@@ -22,7 +22,7 @@ goog.provide('M.impl.envolvedExtent');
     * @returns {Mx.Extent}
     * @api stable
     */
-   M.impl.envolvedExtent.calculate = function (map, opt_this) {
+   M.impl.envolvedExtent.calculate = function(map, opt_this) {
       var envolvedExtent = {
          x: {
             max: Number.NEGATIVE_INFINITY,
@@ -36,17 +36,30 @@ goog.provide('M.impl.envolvedExtent');
 
       var calculatingWMCExtent = false;
       var calculatingWMSExtent = false;
-      var envolvedExtentPromise = new Promise(function (success, fail) {
+
+      return new Promise(function(success, fail) {
          // get max extent from the selected WMC
-         var selectedWMC = map.getWMC().filter(function (wmcLayer) {
+         var selectedWMC = map.getWMC().filter(function(wmcLayer) {
             return (wmcLayer.selected === true);
          })[0];
          // get max extent from WMS layers
-         var wmsLayers = map.getWMS();
+         // if a base layer was specified then it calculates its maxExtent
+         var wmsLayers = [];
+         var baseLayers = map.getBaseLayers().filter(function(baseLayer) {
+            return baseLayer.isVisible();
+         });
+         if (baseLayers.length > 0) {
+            wmsLayers.push(baseLayers[0]);
+         }
+         else {
+            // if no base layers were specified then calculates the
+            // envolved max extent for all WMS layers
+            wmsLayers = map.getWMS();
+         }
 
          if (!M.utils.isNullOrEmpty(selectedWMC)) {
             calculatingWMCExtent = true;
-            selectedWMC.getImpl().getMaxExtent().then(function (extent) {
+            selectedWMC.getImpl().getMaxExtent().then(function(extent) {
                M.impl.envolvedExtent.updateExtent_(envolvedExtent, extent);
                calculatingWMCExtent = false;
 
@@ -58,7 +71,7 @@ goog.provide('M.impl.envolvedExtent');
          }
          else if (wmsLayers.length > 0) {
             calculatingWMSExtent = true;
-            M.impl.envolvedExtent.calculateFromWMS(wmsLayers).then(function (extent) {
+            M.impl.envolvedExtent.calculateFromWMS(wmsLayers).then(function(extent) {
                M.impl.envolvedExtent.updateExtent_(envolvedExtent, extent);
                calculatingWMSExtent = false;
 
@@ -77,7 +90,6 @@ goog.provide('M.impl.envolvedExtent');
             success.call(opt_this, envolvedExtent);
          }
       });
-      return envolvedExtentPromise;
    };
 
    /**
@@ -90,12 +102,12 @@ goog.provide('M.impl.envolvedExtent');
     * @returns {Mx.Extent}
     * @api stable
     */
-   M.impl.envolvedExtent.calculateFromWMS = function (wmsLayers) {
-      var promise = new Promise(function (success, fail) {
+   M.impl.envolvedExtent.calculateFromWMS = function(wmsLayers) {
+      var promise = new Promise(function(success, fail) {
          var index = 0;
          var wmsLayersLength = wmsLayers.length;
          var envolvedExtent = [Infinity, Infinity, -Infinity, -Infinity];
-         var updateExtent = function (extent) {
+         var updateExtent = function(extent) {
             M.impl.envolvedExtent.updateExtent_(envolvedExtent, extent);
             if (index === (wmsLayersLength - 1)) {
                success(envolvedExtent);
@@ -130,7 +142,7 @@ goog.provide('M.impl.envolvedExtent');
     * @function
     * @param {Mx.GetCapabilities} capabilities
     */
-   M.impl.envolvedExtent.updateExtent_ = function (extent, newExtent) {
+   M.impl.envolvedExtent.updateExtent_ = function(extent, newExtent) {
       if (M.utils.isArray(extent) && M.utils.isArray(newExtent)) {
          extent[0] = Math.min(extent[0], newExtent[0]);
          extent[1] = Math.min(extent[1], newExtent[1]);

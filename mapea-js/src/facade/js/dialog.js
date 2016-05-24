@@ -12,9 +12,12 @@ goog.require('M.utils');
     */
    M.dialog.show = function(message, title, severity) {
       M.template.compile('dialog.html', {
-         'message': message,
-         'title': title,
-         'severity': severity
+         'jsonp': true,
+         'vars': {
+            'message': message,
+            'title': title,
+            'severity': severity
+         }
       }).then(function(html) {
          // removes previous dialogs
          M.dialog.remove();

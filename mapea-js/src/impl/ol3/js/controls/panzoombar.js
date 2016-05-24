@@ -5,7 +5,7 @@ goog.require('ol.control.ZoomSlider');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMC selector
@@ -15,7 +15,8 @@ goog.require('ol.control.ZoomSlider');
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.control.Panzoombar = function () {
+   M.impl.control.Panzoombar = function() {
+      this.facadeMap_ = null;
       goog.base(this);
    };
    goog.inherits(M.impl.control.Panzoombar, ol.control.ZoomSlider);
@@ -29,8 +30,21 @@ goog.require('ol.control.ZoomSlider');
     * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.Panzoombar.prototype.addTo = function (map, element) {
+   M.impl.control.Panzoombar.prototype.addTo = function(map, element) {
+      this.facadeMap_ = map;
       map.getMapImpl().addControl(this);
+   };
+
+   /**
+    * TODO
+    *
+    * @public
+    * @function
+    * @api stable
+    * @export
+    */
+   M.impl.control.Panzoombar.prototype.getElement = function() {
+      return this.element;
    };
 
    /**
@@ -40,9 +54,10 @@ goog.require('ol.control.ZoomSlider');
     * @public
     * @function
     * @api stable
+    * @export
     */
-   M.impl.control.Panzoombar.prototype.destroy = function () {
-      this.map.removeControl(this);
-      this.map = null;
+   M.impl.control.Panzoombar.prototype.destroy = function() {
+      this.facadeMap_.getMapImpl().removeControl(this);
+      this.facadeMap_ = null;
    };
 })();

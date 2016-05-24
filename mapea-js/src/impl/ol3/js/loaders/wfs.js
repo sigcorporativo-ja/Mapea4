@@ -3,7 +3,7 @@ goog.provide('M.impl.loader.WFS');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc TODO
     * control
@@ -13,7 +13,7 @@ goog.provide('M.impl.loader.WFS');
     * @extends {M.Object}
     * @api stable
     */
-   M.impl.loader.WFS = function (map, service, format) {
+   M.impl.loader.WFS = function(map, service, format) {
       /**
        * TODO
        * @private
@@ -47,9 +47,9 @@ goog.provide('M.impl.loader.WFS');
     * @function
     * @api stable
     */
-   M.impl.loader.WFS.prototype.getLoaderFn = function (callback) {
+   M.impl.loader.WFS.prototype.getLoaderFn = function(callback) {
       var this_ = this;
-      return (function (extent, resolution, projection) {
+      return (function(extent, resolution, projection) {
          var requestUrl = this_.getRequestUrl_(extent, projection);
          this_.loadInternal_(requestUrl, projection).then(callback.bind(this));
       });
@@ -61,10 +61,10 @@ goog.provide('M.impl.loader.WFS');
     * @private
     * @function
     */
-   M.impl.loader.WFS.prototype.loadInternal_ = function (url, projection) {
+   M.impl.loader.WFS.prototype.loadInternal_ = function(url, projection) {
       var this_ = this;
-      return (new Promise(function (success, fail) {
-         M.remote.get(url).then(function (response) {
+      return (new Promise(function(success, fail) {
+         M.remote.get(url).then(function(response) {
             if (!M.utils.isNullOrEmpty(response.text)) {
                var features = this_.format_.readFeatures(response.text, {
                   featureProjection: projection
@@ -72,10 +72,11 @@ goog.provide('M.impl.loader.WFS');
                success(features);
             }
             else {
-               if(response.code === 401){
+               if (response.code === 401) {
                   M.dialog.error('Ha ocurrido un error al cargar la capa: Usuario no autorizado.');
-               }else{
-                  M.exception('No hubo respuesta en la operación GetFeature');  
+               }
+               else {
+                  M.exception('No hubo respuesta en la operación GetFeature');
                }
             }
          });
@@ -88,15 +89,16 @@ goog.provide('M.impl.loader.WFS');
     * @private
     * @function
     */
-   M.impl.loader.WFS.prototype.getRequestUrl_ = function (extent, projection) {
-      var mapBbox = this.map_.getBbox();
-      var minExtent = [
-         Math.min(Math.abs(extent[0]), mapBbox.x.min),
-         Math.min(Math.abs(extent[1]), mapBbox.y.min),
-         Math.min(Math.abs(extent[2]), mapBbox.x.max),
-         Math.min(Math.abs(extent[3]), mapBbox.y.max)
-      ];
+   M.impl.loader.WFS.prototype.getRequestUrl_ = function(extent, projection) {
+      // var mapBbox = this.map_.getBbox();
+      // var minExtent = [
+      //    Math.min(Math.abs(extent[0]), mapBbox.x.min),
+      //    Math.min(Math.abs(extent[1]), mapBbox.y.min),
+      //    Math.min(Math.abs(extent[2]), mapBbox.x.max),
+      //    Math.min(Math.abs(extent[3]), mapBbox.y.max)
+      // ];
 
-      return this.service_.getFeatureUrl(minExtent, projection);
+      // return this.service_.getFeatureUrl(minExtent, projection);
+      return this.service_.getFeatureUrl(null, projection);
    };
 })();

@@ -98,7 +98,10 @@ goog.require('M.facade.Base');
       if (M.utils.isNullOrEmpty(this.element_)) {
          var this_ = this;
          M.template.compile(M.Popup.TEMPLATE, {
-            'tabs': this.tabs_
+            'jsonp': true,
+            'vars': {
+               'tabs': this.tabs_
+            }
          }).then(function(html) {
             this_.element_ = html;
             this_.addEvents(html);
@@ -122,7 +125,10 @@ goog.require('M.facade.Base');
       if (!M.utils.isNullOrEmpty(this.map_)) {
          var this_ = this;
          M.template.compile(M.Popup.TEMPLATE, {
-            'tabs': this.tabs_
+            'jsonp': true,
+            'vars': {
+               'tabs': this.tabs_
+            }
          }).then(function(html) {
             this_.element_ = html;
             this_.addEvents(html);

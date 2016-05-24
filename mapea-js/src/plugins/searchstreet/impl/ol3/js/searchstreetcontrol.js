@@ -23,8 +23,9 @@ goog.provide('P.impl.control.Searchstreet');
       /**
        * List of items drawn on the map for control
        *
-       * @private
+       * @public
        * @type {Array}
+       * @api stable
        */
       this.listPoints = [];
 
@@ -70,16 +71,8 @@ goog.provide('P.impl.control.Searchstreet');
     * @api stable
     */
    M.impl.control.Searchstreet.prototype.drawPoints = function(results) {
-      var coordZoomXmax = 0;
-      var coordZoomYmax = 0;
-      var coordZoomXmin = 0;
-      var coordZoomYmin = 0;
-      var accuracyFeature = null;
       var positionFeature = null;
-      var arrayX = [];
-      var arrayY = [];
       for (var i = 0, ilen = results.length; i < ilen; i++) {
-         accuracyFeature = new ol.Feature();
          positionFeature = new ol.Feature();
          positionFeature.setStyle(new ol.style.Style({
             image: new ol.style.Circle({
@@ -93,30 +86,38 @@ goog.provide('P.impl.control.Searchstreet');
                })
             })
          }));
-         arrayX.push(results[i].coordinateX);
-         arrayY.push(results[i].coordinateY);
          positionFeature.setGeometry([results[i].coordinateX,
             results[i].coordinateY
          ] ? new ol.geom.Point([
             results[i].coordinateX, results[i].coordinateY
          ]) : null);
-         this.facadeMap_.getImpl().drawFeatures(
-            [accuracyFeature, positionFeature]);
+         this.facadeMap_.getImpl().drawFeatures([positionFeature]);
          var feature = results[i];
 
          this.addEventClickFeature(feature, positionFeature);
-         this.listPoints.push([accuracyFeature, positionFeature]);
+         this.listPoints.push([positionFeature]);
       }
-      coordZoomXmin = arrayX.sort()[0];
-      coordZoomYmin = arrayY.sort()[0];
-      coordZoomXmax = arrayX.sort()[arrayX.length - 1];
-      coordZoomYmax = arrayY.sort()[arrayX.length - 1];
-      if (coordZoomXmin !== 0 && coordZoomYmin !== 0 && coordZoomXmax !== 0 && coordZoomYmax !== 0) {
-         this.facadeMap_.setBbox([coordZoomXmin, coordZoomYmin, coordZoomXmax, coordZoomYmax]);
-      }
-      else {
-         this.facadeMap_.setBbox([results[0].coordinateX, results[0].coordinateY, results[0].coordinateX, results[0].coordinateY]);
-      }
+      this.zoomResults();
+   };
+
+   /**
+    * This function zooms results
+    *
+    * @public
+    * @function
+    * @param {Object} result specific result query response
+    * @api stable
+    */
+   M.impl.control.Searchstreet.prototype.zoomResults = function() {
+      var features = this.facadeMap_.getImpl().getDrawLayer().getOL3Layer().getSource().getFeatures();
+      var bbox = ol.extent.boundingExtent(features
+         .filter(function(feature) {
+            return (!M.utils.isNullOrEmpty(feature.getGeometry()));
+         })
+         .map(function(feature) {
+            return feature.getGeometry().getFirstCoordinate();
+         }));
+      this.facadeMap_.setBbox(bbox);
    };
 
 
@@ -134,7 +135,8 @@ goog.provide('P.impl.control.Searchstreet');
       this.facadeMap_.removePopup();
       var this_ = this;
       if (M.utils.isNullOrEmpty(result)) {
-         this.showPopup_(element);
+         this.showPopup_(element, false);
+         this.facadeMap_.setBbox([element.coordinateX, element.coordinateY, element.coordinateX, element.coordinateY]);
       }
       else {
          result.click = function(evt) {
@@ -151,15 +153,19 @@ goog.provide('P.impl.control.Searchstreet');
     * @param {Object}
     *        feature specific feature
     */
-   M.impl.control.Searchstreet.prototype.showPopup_ = function(feature) {
+   M.impl.control.Searchstreet.prototype.showPopup_ = function(feature, noPanMapIfOutOfView) {
       var this_ = this;
       M.template.compile(M.impl.control.Searchstreet.POPUP_TEMPLATE, {
-         'tVia': feature.streetType,
-         'nVia': feature.streetName,
-         'num': feature.streetNumber,
-         'mun': feature.localityName,
-         'prov': feature.cityName
-      }, false).then(function(htmlAsText) {
+         'jsonp': true,
+         'vars': {
+            'tVia': feature.streetType,
+            'nVia': feature.streetName,
+            'num': feature.streetNumber,
+            'mun': feature.localityName,
+            'prov': feature.cityName
+         },
+         'parseToHtml': false
+      }).then(function(htmlAsText) {
          var popupContent = {
             'icon': 'g-cartografia-zoom',
             'title': 'Searchstreet',
@@ -173,7 +179,14 @@ goog.provide('P.impl.control.Searchstreet');
             });
             if (!hasExternalContent) {
                this_.facadeMap_.removePopup();
-               this_.popup_ = new M.Popup();
+               if (M.utils.isUndefined(noPanMapIfOutOfView)) {
+                  this_.popup_ = new M.Popup();
+               }
+               else {
+                  this_.popup_ = new M.Popup({
+                     'panMapIfOutOfView': noPanMapIfOutOfView
+                  });
+               }
                this_.popup_.addTab(popupContent);
                this_.facadeMap_.addPopup(this_.popup_, [feature.coordinateX, feature.coordinateY]);
             }
@@ -182,7 +195,14 @@ goog.provide('P.impl.control.Searchstreet');
             }
          }
          else {
-            this_.popup_ = new M.Popup();
+            if (M.utils.isUndefined(noPanMapIfOutOfView)) {
+               this_.popup_ = new M.Popup();
+            }
+            else {
+               this_.popup_ = new M.Popup({
+                  'panMapIfOutOfView': noPanMapIfOutOfView
+               });
+            }
             this_.popup_.addTab(popupContent);
             this_.facadeMap_.addPopup(this_.popup_, [feature.coordinateX, feature.coordinateY]);
          }
@@ -225,11 +245,13 @@ goog.provide('P.impl.control.Searchstreet');
     * @api stable
     */
    M.impl.control.Searchstreet.prototype.destroy = function() {
+      goog.dom.classlist.remove(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
+         "top-extra");
       this.removePoints_();
       this.facadeMap_.getMapImpl().removeControl(this);
       this.facadeMap_.getImpl().removePopup();
       this.facadeMap_ = null;
-      this.listPoints_ = null;
+      this.listPoints = null;
       this.element_ = null;
    };
 

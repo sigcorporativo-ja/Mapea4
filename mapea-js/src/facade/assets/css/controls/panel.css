@@ -28,8 +28,6 @@
 
 .m-areas > div.m-area.m-top {
    top: 0;
-   height: 0px;
-   max-height: 0px;
 }
 
 
@@ -65,7 +63,16 @@
 
 @media only screen and (max-width: 768px) {
    .m-areas > div.m-area.m-top.m-right {
+      /*top: 50px;*/
+   }
+   .m-areas > div.m-area.m-top.top-extra {
       top: 50px;
+   }
+   .m-areas > div.m-area.m-top.top-extra.top-extra-search {
+      top: 75px;
+   }
+   .m-areas > div.m-area.m-top.top-extra.top-extra-searchs {
+      top: 135px;
    }
 }
 
@@ -80,6 +87,10 @@
    background: #fff;
    box-sizing: border-box;
    border-radius: 4px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+}
+
+div.m-panel > button {
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
 }
 
@@ -207,7 +218,7 @@
 
 .m-areas > div.m-area > div.m-panel.collapsed > button.m-panel-btn {
    border-radius: 20px;
-   background-color: transparent !important;
+   background-color: white !important;
 }
 
 .m-areas > div.m-area > div.m-panel > button.m-panel-btn:focus {
@@ -323,12 +334,60 @@
    .m-areas > div.m-area > div.m-panel.collapsed {
       height: auto !important;
    }
+   .m-areas > div.m-area > div.m-panel.m-layerswitcher.collapsed {
+      width: 40px !important;
+   }
    .m-areas > div.m-area > div.m-panel.m-layerswitcher > div.m-panel-controls {
       width: 100% !important;
    }
    .m-areas > div.m-area > div.m-panel.m-panzoom {
       height: auto !important;
    }
+   .m-printer.opened .m-printer-container .form {
+      min-height: 176px;
+   }
+   .m-printer-container > div.button > button.print {
+      width: 57% !important;
+   }
+}
+
+
+/****************************
+ SAFARI HACKS
+****************************/
+
+@supports (overflow:-webkit-marquee) and (justify-content:inherit) {
+   /*
+		.m-areas > div.m-area > div.m-panel.m-panzoombar {
+		   margin-top: 75px;
+		}
+
+	.m-areas > div.m-area > div.m-panel.m-panzoom {
+		   margin-top: 55px;
+		}
+	*/
+   .m-areas > div.m-area.m-top {
+      top: 0;
+      /*height: auto;
+	   max-height: 1000px;*/
+   }
+}
+
+
+/****************************
+     VISIBILITY
+****************************/
+
+.m-areas > div.m-area.m-top, .m-areas > div.m-area.m-bottom, .m-areas > div.m-area > div.m-panel.m-map-info, .m-areas > div.m-area > div.m-panel.m-map-info > div.m-panel-controls {
+   visibility: hidden;
+}
+
+.m-areas > div.m-area > div.m-panel {
+   visibility: visible;
+}
+
+.m-areas > div.m-area > div.m-panel.m-map-info > div.m-panel-controls > div {
+   visibility: visible !important;
 }
 
 
@@ -347,6 +406,8 @@
 
 .m-areas > div.m-area > div.m-panel > div.m-panel-controls {
    opacity: 1;
+   /*background-color: white;*/
+   border-radius: 10px;
    /*max-width: 50vw;*/
    -webkit-transition: max-width 1s ease 0s, opacity .75s ease .1s;
    transition: max-width 1s ease 0s, opacity .75s ease .1s;
@@ -425,6 +486,13 @@
    border-bottom-left-radius: 0px !important;
 }
 
+@media only screen and (max-width: 768px) {
+   .m-panel.m-map-info.m-with-mouse > div.m-panel-controls > div.m-control.m-scale-container {
+      border-top-left-radius: 20px !important;
+      border-bottom-left-radius: 20px !important;
+   }
+}
+
 .m-panel.m-map-info.m-with-wmcselector > div.m-panel-controls > div.m-control.m-scale-container {
    border-top-right-radius: 0px !important;
    border-bottom-right-radius: 0px !important;
@@ -437,6 +505,13 @@
 .m-panel.m-map-info.m-with-mouse > div.m-panel-controls > div.m-control.m-wmcselector-container, .m-panel.m-map-info.m-with-scale > div.m-panel-controls > div.m-control.m-wmcselector-container {
    border-top-left-radius: 0px !important;
    border-bottom-left-radius: 0px !important;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-panel.m-map-info.m-with-mouse:not(.m-with-scale) > div.m-panel-controls > div.m-control.m-wmcselector-container {
+      border-top-left-radius: 20px !important;
+      border-bottom-left-radius: 20px !important;
+   }
 }
 
 .m-areas > div.m-area > div.m-panel > div.m-panel-controls .m-mouse-position {
@@ -478,7 +553,7 @@
 .m-wmcselector-container:before {
    color: #a35d38;
    margin-right: 5px;
-   margin-top: 2px;
+   margin-top: 3px;
 }
 
 @media only screen and (max-width: 768px) {
@@ -493,4 +568,8 @@
    .m-geosearch.collapsed div.search-panel, .m-geosearch.collapsed div.results-panel {
       display: none !important;
    }
+}
+
+.m-kml-desc > table {
+   width: 100%;
 }
