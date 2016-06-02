@@ -95,7 +95,7 @@ goog.require('goog.events');
             'properties': []
          };
          this.describeFeatureType_.properties.forEach(function(p) {
-            if (p.localType !== 'Geometry') {
+            if (!M.utils.isGeometryType(p.localType)) {
                templateVar.properties.push({
                   'key': p.name,
                   'value': this.editFeature.get(p.name),

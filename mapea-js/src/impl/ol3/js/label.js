@@ -5,34 +5,50 @@ goog.provide('M.impl.Label');
  */
 (function() {
    /**
-    * @classdesc Main constructor of the class. Creates a Label
-    * control to provides a popup with specified information.
-    * If assign coordinates the popup appears in that position,
-    * otherwise, in the center of the map.
+    * @classdesc
+    * Main constructor of the class. Creates a Label
+    * control
     * @constructor
     * @param {String} text text to show
-    * @param {Object} coord coordinated to display popup
-    * @extends {ol.control.Control}
-    * @constructor
+    * @param {Object} coordOpts coordinate to display popup
     * @api stable
     */
    M.impl.Label = function(text, coordOpts) {
+      /**
+       * Text to show
+       * @private
+       * @type {String}
+       */
       this.text_ = text;
 
+      /**
+       * Coordinates where to display the popup
+       * @private
+       * @type {Array}
+       */
       this.coord_ = [coordOpts.x, coordOpts.y];
 
+      /**
+       * Popup
+       * @private
+       * @type {M.Popup}
+       */
       this.popup_ = null;
 
+      /**
+       * Map
+       * @private
+       * @type {M.Map}
+       */
       this.facadeMap_ = null;
    };
 
    /**
-    * This feature displays a popup with information
+    * This function displays the popup with information
     *
     * @public
     * @function
-    * @param {M.Map}
-    *        map map to add the plugin
+    * @param {M.Map} map map where show popup
     * @api stable
     */
    M.impl.Label.prototype.show = function(map) {
@@ -57,12 +73,10 @@ goog.provide('M.impl.Label');
    };
 
    /**
-    * This feature displays a popup with information
+    * This function remove the popup with information
     *
     * @public
     * @function
-    * @param {M.Map}
-    *        map map to add the plugin
     * @api stable
     */
    M.impl.Label.prototype.hide = function() {
@@ -74,7 +88,7 @@ goog.provide('M.impl.Label');
     *
     * @public
     * @function
-    * @returns {Object} popup created
+    * @returns {M.Popup} popup created
     * @api stable
     */
    M.impl.Label.prototype.getPopup = function() {

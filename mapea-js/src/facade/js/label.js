@@ -11,12 +11,10 @@ goog.require('goog.dom.classlist');
     * @classdesc
     * Main constructor of the class. Creates a Label
     * control to provides a popup with specified information.
-    * If assign coordinates the popup appears in that position,
-    * otherwise, in the center of the map.
     * @constructor
     * @param {String} text text to show
-    * @param {Object} coord coordinated to display popup
-    * @extends {M.Control}
+    * @param {Object} coordOpts coordinate to display popup
+    * @extends {M.facade.Base}
     * @api stable
     */
    M.Label = (function(text, coordOpts) {
@@ -28,7 +26,7 @@ goog.require('goog.dom.classlist');
    goog.inherits(M.Label, M.facade.Base);
 
    /**
-    * This function calls the hide method of implementation
+    * This function remove the popup with information
     *
     * @public
     * @function
@@ -40,11 +38,11 @@ goog.require('goog.dom.classlist');
    };
 
    /**
-    * This function calls the show method of implementation
+    * This function displays the popup with information
     *
     * @public
     * @function
-    * @param {M.Map} map map to add the plugin
+    * @param {M.Map} map map where show popup
     * @api stable
     * @export
     */
@@ -57,7 +55,7 @@ goog.require('goog.dom.classlist');
     *
     * @public
     * @function
-    * @returns {Object} popup created
+    * @returns {M.Popup} popup created
     * @api stable
     * @export
     */
@@ -68,7 +66,7 @@ goog.require('goog.dom.classlist');
    /**
     * Template for this controls - popup
     * @const
-    * @type {string}
+    * @type {String}
     * @public
     * @api stable
     */

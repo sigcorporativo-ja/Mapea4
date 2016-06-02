@@ -4,7 +4,7 @@ goog.require('P.impl.control.WFSTBase');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WMC selector
@@ -14,7 +14,7 @@ goog.require('P.impl.control.WFSTBase');
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.control.DrawFeature = function (layer) {
+   M.impl.control.DrawFeature = function(layer) {
       goog.base(this, layer);
    };
    goog.inherits(M.impl.control.DrawFeature, M.impl.control.WFSTBase);
@@ -28,7 +28,7 @@ goog.require('P.impl.control.WFSTBase');
     * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.DrawFeature.prototype.createInteraction_ = function () {
+   M.impl.control.DrawFeature.prototype.createInteraction_ = function() {
       var layerImpl = this.layer_.getImpl();
       var olLayer = layerImpl.getOL3Layer();
 
@@ -39,10 +39,10 @@ goog.require('P.impl.control.WFSTBase');
          'geometryName': this.describeFeatureType_.geometryName
       });
 
-      this.interaction_.on('drawend', function (event) {
+      this.interaction_.on('drawend', function(event) {
          var feature = event.feature;
-         this.describeFeatureType_.properties.forEach(function (property) {
-            if (property.localType !== 'Geometry') {
+         this.describeFeatureType_.properties.forEach(function(property) {
+            if (!M.utils.isGeometryType(property.localType)) {
                feature.set(property.name, layerImpl.getDefaultValue(property.localType));
             }
          });
@@ -60,7 +60,7 @@ goog.require('P.impl.control.WFSTBase');
     * @private
     * @function
     */
-   M.impl.control.DrawFeature.prototype.updateLayerFeatures_ = function () {
+   M.impl.control.DrawFeature.prototype.updateLayerFeatures_ = function() {
       this.facadeMap_.getMapImpl().removeInteraction(this.interaction_);
       this.interaction_ = null;
    };

@@ -18,14 +18,23 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * @classdesc Main constructor of the class. Creates a GetFeatureInfo
-    * control
-    * @param {String} format format specify the format map
+    * @classdesc
+    * Main constructor of the class. Creates a GetFeatureInfo
+    * control to provides a popup with information about the place
+    * where the user has clicked inside the map.
+    *
     * @constructor
-    * @extends {ol.control.Control}
+    * @param {String} format format response
+    * @param {Object} options control options
+    * @extends {M.impl.Control}
     * @api stable
     */
    M.impl.control.GetFeatureInfo = function(format, options) {
+      /**
+       * Format response
+       * @public
+       * @type {String}
+       */
       this.userFormat = format;
 
       this.featureCount = options.featureCount;
@@ -36,7 +45,7 @@ goog.require('ol.format.GML');
    goog.inherits(M.impl.control.GetFeatureInfo, M.impl.Control);
 
    /**
-    * This function call 'addOnClickEvent_' to active 'OnClick' Event
+    * This function active 'OnClick' Event
     *
     * @public
     * @function
@@ -47,7 +56,7 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
+    * This function disable 'OnClick' Event
     *
     * @public
     * @function
@@ -58,7 +67,7 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * function adds the event singleclick to the specified map
+    * This function adds the event singleclick to the specified map
     *
     * @private
     * @function
@@ -78,11 +87,11 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * function build Array URLs and call 'showInfoFromURL_'
-    * to show
+    * This function builds the query URL and show results
     *
     * @private
     * @function
+    * @param {ol.MapBrowserPointerEvent} evt Event.
     */
    M.impl.control.GetFeatureInfo.prototype.buildUrl_ = function(evt) {
       var olMap = this.facadeMap_.getMapImpl();
@@ -113,7 +122,7 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * function delete the event singleclick to the specified map
+    * This function delete the event singleclick to the specified map
     *
     * @private
     * @function
@@ -128,7 +137,7 @@ goog.require('ol.format.GML');
     *
     * @param {String} info information to validate
     * @param {String} formato specific format to validate
-    * @returns {boolean} is valid or not
+    * @returns {boolean} res is valid or not format
     * @private
     * @function
     */
@@ -194,10 +203,11 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * function formatting information
+    * This function formats the response
     *
     * @param {String} info information to formatting
     * @param {String} formato specific format
+    * @param {String} layername layer name
     * @returns {String} information formatted in the format indicated
     * @private
     * @function
@@ -244,11 +254,11 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * TODO
+    * This function indicates whether the format is accepted
     *
-    * @param {String} info information to formatting
+    * @param {String} info information
     * @param {String} formato specific format
-    * @returns {String} information formatted in the format indicated
+    * @returns {Boolean} unsupported it indicates whether the format is accepted
     * @private
     * @function
     */
@@ -261,11 +271,12 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * function return formatted information url. Specific format "text/plain"
+    * This function return formatted information url. Specific format "text/plain" Geoserver
     *
     * @private
     * @function
     * @param {String} info information to formatting
+    * @param {String} layername layer name
     * @returns {String} information formated
     */
    M.impl.control.GetFeatureInfo.prototype.txtToHtml_Geoserver_ = function(info, layerName) {
@@ -317,7 +328,7 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * function return formatted information url. Specific format "text/plain"
+    * This function return formatted information url. Specific format "text/plain" Mapserver
     *
     * @private
     * @function
@@ -387,15 +398,13 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * function displays information in a popup
+    * This function displays information in a popup
     *
     * @private
     * @function
-    * @param {Array<Object>} layerNamesUrls
-    * @param {String}
-    * coordinate coordinate position onClick
-    * @param {olMap}
-    * olMap map
+    * @param {Array<Object>} layerNamesUrls consulted layers
+    * @param {Array} coordinate coordinate position onClick
+    * @param {olMap} olMap map
     */
    M.impl.control.GetFeatureInfo.prototype.showInfoFromURL_ = function(layerNamesUrls,
       coordinate, olMap) {
@@ -476,10 +485,11 @@ goog.require('ol.format.GML');
    };
 
    /**
-    * TODO
-    *
-    * @private
-    * @function
+    * Loading message
+    * @const
+    * @type {string}
+    * @public
+    * @api stable
     */
    M.impl.control.GetFeatureInfo.LOADING_MESSAGE = 'Obteniendo información...';
 })();

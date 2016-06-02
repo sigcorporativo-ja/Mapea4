@@ -8,18 +8,19 @@ goog.require('ol.Geolocation');
  */
 (function() {
    /**
-    * @classdesc Main constructor of the class. Creates a Location
-    * control
-    * @param {function} element template of this control
-    * @param {M.Map} map map to add the plugin
+    * @classdesc
+    * Main constructor of the class. Creates a Location
+    * control that allows the user to locate and draw your
+    * position on the map.
+    *
     * @constructor
-    * @extends {ol.control.Control}
+    * @extends {M.impl.Control}
     * @api stable
     */
 
    M.impl.control.Location = function() {
       /**
-       * The map instance
+       * Helper class for providing HTML5 Geolocation
        * @private
        * @type {ol.Geolocation}
        */
@@ -82,12 +83,10 @@ goog.require('ol.Geolocation');
    };
 
    /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
+    * This function remove the drawn location
     *
-    * @public
+    * @private
     * @function
-    * @api stable
     */
    M.impl.control.Location.prototype.removePositions_ = function() {
       if (!M.utils.isNullOrEmpty(this.accuracyFeature_)) {
@@ -99,7 +98,7 @@ goog.require('ol.Geolocation');
    };
 
    /**
-    * This function paints a point on the map with your location
+    * This function remove the drawn location and restores the style button
     *
     * @public
     * @function
@@ -111,8 +110,7 @@ goog.require('ol.Geolocation');
    };
 
    /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
+    * This function destroys this control and cleaning the HTML
     *
     * @public
     * @function
@@ -124,7 +122,7 @@ goog.require('ol.Geolocation');
    };
 
    /**
-    * TODO
+    * Style for location
     * @const
     * @type {ol.style.Style}
     * @public

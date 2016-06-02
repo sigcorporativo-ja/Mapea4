@@ -7,12 +7,11 @@ goog.require('M.exception');
 (function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a GetFeatureInfo
-    * control to provides a popup with information about the place
-    * where the user has clicked inside the map.
+    * Main constructor of the class. Creates a Location
+    * control that allows the user to locate and draw your
+    * position on the map.
     *
     * @constructor
-    * @param {String} format format response
     * @extends {M.Control}
     * @api stable
     */
@@ -44,11 +43,12 @@ goog.require('M.exception');
    };
 
    /**
-    * TODO
+    * This function returns the HTML button control.
     *
     * @public
     * @function
-    * @param {HTMLElement} html to add the plugin
+    * @param {HTMLElement} element control template
+    * @returns {HTMLElement} HTML control button
     * @api stable
     * @export
     */
@@ -60,7 +60,10 @@ goog.require('M.exception');
     * This function checks if an object is equals
     * to this control
     *
+    * @public
     * @function
+    * @param {Object} obj object to compare
+    * @returns {Boolean}
     * @api stable
     */
    M.control.Location.prototype.equals = function(obj) {
@@ -69,7 +72,7 @@ goog.require('M.exception');
    };
 
    /**
-    * Template for this controls - button
+    * Name to identify this control
     * @const
     * @type {string}
     * @public

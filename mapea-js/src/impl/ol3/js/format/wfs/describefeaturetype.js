@@ -4,7 +4,7 @@ goog.require('M.utils');
 goog.require('M.exception');
 
 
-(function () {
+(function() {
    /**
     * @classdesc
     * Main constructor of the class. Creates a WFS layer
@@ -15,7 +15,7 @@ goog.require('M.exception');
     * @param {Mx.parameters.LayerOptions} options custom options for this layer
     * @api stable
     */
-   M.impl.format.DescribeFeatureType = (function (typeName) {
+   M.impl.format.DescribeFeatureType = (function(typeName) {
       /**
        * TOOD
        * @private
@@ -32,7 +32,7 @@ goog.require('M.exception');
     * @param {M.Map} map
     * @api stable
     */
-   M.impl.format.DescribeFeatureType.prototype.read = function (response) {
+   M.impl.format.DescribeFeatureType.prototype.read = function(response) {
       var geometryName;
       var featureNS;
       var featurePrefix;
@@ -43,11 +43,11 @@ goog.require('M.exception');
       featureNS = jsonResponse.targetNamespace;
       featurePrefix = jsonResponse.targetPrefix;
 
-      jsonResponse.featureTypes.some(function (featureType) {
+      jsonResponse.featureTypes.some(function(featureType) {
          if (featureType.typeName === this.typeName_) {
             properties = featureType.properties;
-            properties.some(function (prop) {
-               if (prop.localType === 'Geometry') {
+            properties.some(function(prop) {
+               if (M.utils.isGeometryType(prop.localType)) {
                   geometryName = prop.name;
                   return true;
                }

@@ -15,6 +15,7 @@ goog.require('goog.dom.classlist');
     *
     * @constructor
     * @param {String} format format response
+    * @param {Object} options control options
     * @extends {M.Control}
     * @api stable
     */
@@ -49,11 +50,12 @@ goog.require('goog.dom.classlist');
    };
 
    /**
-    * TODO
+    * This function returns the HTML button control.
     *
     * @public
     * @function
-    * @param {HTMLElement} html to add the plugin
+    * @param {HTMLElement} element control template
+    * @returns {HTMLElement} HTML control button
     * @api stable
     * @export
     */
@@ -65,7 +67,10 @@ goog.require('goog.dom.classlist');
     * This function checks if an object is equals
     * to this control
     *
+    * @public
     * @function
+    * @param {Object} obj object to compare
+    * @returns {Boolean}
     * @api stable
     */
    M.control.GetFeatureInfo.prototype.equals = function(obj) {
@@ -77,7 +82,7 @@ goog.require('goog.dom.classlist');
    };
 
    /**
-    * Template for this controls - button
+    * Name to identify this control
     * @const
     * @type {string}
     * @public

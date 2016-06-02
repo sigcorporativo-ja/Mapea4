@@ -5,16 +5,16 @@ goog.require('M.template');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function () {
+(function() {
    'use strict';
 
-   /** 
+   /**
     * 0.02540005080010160020 (A sensible default)
     * @const {Number}
     */
    M.METERS_PER_INCH = 0.02540005080010160020;
 
-   /** 
+   /**
     * 72 (A sensible default)
     * @const {Number}
     */
@@ -133,10 +133,10 @@ goog.require('M.exception');
     *
     * @public
     * @function
-    * @param {boolean} enable 
+    * @param {boolean} enable
     * @api stable
     */
-   M.proxy = function (enable) {
+   M.proxy = function(enable) {
       if (M.utils.isBoolean(enable)) {
          M.proxy_ = enable;
       }
@@ -153,7 +153,7 @@ goog.require('M.exception');
     * @see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
     * @api stable
     */
-   M.lang = function (langCode) {
+   M.lang = function(langCode) {
       if (!M.utils.isNullOrEmpty(langCode)) {
          M.lang_ = langCode;
       }
@@ -175,7 +175,7 @@ goog.require('M.exception');
     * @param {*} configValue value of the configuration variable
     * @api stable
     */
-   M.config = function (configKey, configValue) {
+   M.config = function(configKey, configValue) {
       M.config[configKey] = configValue;
    };
 
@@ -189,7 +189,7 @@ goog.require('M.exception');
     * @returns {M.Map}
     * @api stable
     */
-   M.map = function (parameters, options) {
+   M.map = function(parameters, options) {
       // checks if the user specified an implementation
       if (M.utils.isUndefined(M.impl) || M.utils.isNull(M.impl)) {
          M.exception('No se ha especificado ninguna implementación');

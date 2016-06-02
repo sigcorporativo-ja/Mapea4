@@ -161,30 +161,8 @@
    box-shadow: none;
 }
 
-
-/* ANIMATIONS */
-
-.m-areas > div.m-area > div.m-panel.m-layerswitcher > div.m-panel-controls {
-   opacity: 1;
-   max-width: 50vw;
-   max-height: 80vh;
-   -webkit-transition: max-width .75s ease 0s, max-height .5s ease 0s, opacity 1s ease .2s;
-   transition: max-width .75s ease 0s, max-height .5s ease 0s, opacity 1s ease .2s;
-   overflow: hidden;
-   overflow-y: auto;
-   padding-right: 0px;
-}
-
 .m-areas > div.m-area > div.m-panel.m-layerswitcher.collapsed > div.m-panel-controls {
    padding: 0px;
-}
-
-.m-areas > div.m-area > div.m-panel.m-layerswitcher.collapsed > div.m-panel-controls {
-   opacity: 0;
-   max-width: 0px;
-   max-height: 0px;
-   -webkit-transition: max-width .5s ease 0s, max-height 2s ease 0s, opacity .3s ease 0s;
-   transition: max-width .5s ease 0s, max-height 2s ease 0s, opacity .3s ease 0s;
 }
 
 .m-areas > div.m-area > div.m-panel.m-layerswitcher.opened {

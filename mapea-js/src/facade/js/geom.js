@@ -2,7 +2,7 @@ goog.provide('M.geom');
 goog.provide('M.geom.wfs.type');
 goog.provide('M.geom.wkt.type');
 
-(function () {
+(function() {
    /**
     * WFS geometry type
     * @const
@@ -56,6 +56,15 @@ goog.provide('M.geom.wkt.type');
     * @api stable
     */
    M.geom.wfs.type.MPOLYGON = 'MPOLYGON';
+
+   /**
+    * WKT geometry type
+    * @const
+    * @type {string}
+    * @public
+    * @api stable
+    */
+   M.geom.wkt.type.GEOMETRY = 'Geometry';
 
    /**
     * WKT geometry type
@@ -146,7 +155,7 @@ goog.provide('M.geom.wkt.type');
     * @param {string} rawType the type to be parsed
     * @api stable
     */
-   M.geom.parse = function (rawGeom) {
+   M.geom.parse = function(rawGeom) {
       var parsedGeom = M.utils.normalize(rawGeom, true);
       return M.geom.wfs.type[parsedGeom];
    };
@@ -158,7 +167,7 @@ goog.provide('M.geom.wkt.type');
     * @param {string} rawType the type to be parsed
     * @api stable
     */
-   M.geom.parseWFS = function (wfsType) {
+   M.geom.parseWFS = function(wfsType) {
       var parsedWFS;
       if (wfsType === M.geom.wfs.type.POINT) {
          parsedWFS = M.geom.wkt.type.POINT;

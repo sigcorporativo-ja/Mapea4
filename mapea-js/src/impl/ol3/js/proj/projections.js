@@ -12,6 +12,7 @@ goog.require('ol.proj.Units');
       'extent': [-729785.83, 3715125.82, 940929.67, 9518470.69]
    });
    ol.proj.projections_['urn:ogc:def:crs:EPSG::25830'] = prj25830;
+   ol.proj.projections_['http://www.opengis.net/gml/srs/epsg.xml#25830'] = prj25830;
    ol.proj.addProjection(prj25830);
 
    // EPSG:23030
@@ -21,6 +22,7 @@ goog.require('ol.proj.Units');
       'extent': [-99844.71, 3879626.63, 1682737.72, 8251830.80]
    });
    ol.proj.projections_['urn:ogc:def:crs:EPSG::23030'] = prj23030;
+   ol.proj.projections_['http://www.opengis.net/gml/srs/epsg.xml#23030'] = prj23030;
    ol.proj.addProjection(prj23030);
 
    // EPSG:4258
@@ -30,6 +32,7 @@ goog.require('ol.proj.Units');
       'extent': [-16.1, 32.88, 39.65, 84.17]
    });
    ol.proj.projections_['urn:ogc:def:crs:EPSG::4258'] = prj4258;
+   ol.proj.projections_['http://www.opengis.net/gml/srs/epsg.xml#4258'] = prj4258;   
    ol.proj.addProjection(prj4258);
 
    // EPSG:25829
@@ -39,6 +42,7 @@ goog.require('ol.proj.Units');
       'extent': [-164850.78, 3660417.01, 988728.57, 9567111.85]
    });
    ol.proj.projections_['urn:ogc:def:crs:EPSG::25829'] = prj25829;
+   ol.proj.projections_['http://www.opengis.net/gml/srs/epsg.xml#25829'] = prj25829;   
    ol.proj.addProjection(prj25829);
 
    // EPSG:23029
@@ -48,6 +52,7 @@ goog.require('ol.proj.Units');
       'extent': [448933.91, 3860083.93, 1860436.11, 8381369.16]
    });
    ol.proj.projections_['urn:ogc:def:crs:EPSG::23029'] = prj23029;
+   ol.proj.projections_['http://www.opengis.net/gml/srs/epsg.xml#23029'] = prj23029;   
    ol.proj.addProjection(prj23029);
 
    // EPSG:4230
@@ -57,6 +62,7 @@ goog.require('ol.proj.Units');
       'extent': [-16.09882145355955, 25.711114310330917, 48.60999527749605, 84.16977336415472]
    });
    ol.proj.projections_['urn:ogc:def:crs:EPSG::4230'] = prj4230;
+   ol.proj.projections_['http://www.opengis.net/gml/srs/epsg.xml#4230'] = prj4230;   
    ol.proj.addProjection(prj4230);
 
    // EPSG:32628
@@ -66,5 +72,6 @@ goog.require('ol.proj.Units');
       'extent': [166021.44317933178, 0, 833978.5568206678, 9329005.18301614]
    });
    ol.proj.projections_['urn:ogc:def:crs:EPSG::32628'] = prj32628;
+   ol.proj.projections_['http://www.opengis.net/gml/srs/epsg.xml#32628'] = prj32628;   
    ol.proj.addProjection(prj32628);
 })();

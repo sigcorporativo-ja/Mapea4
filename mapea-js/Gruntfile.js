@@ -214,12 +214,15 @@ module.exports = function(grunt) {
 
       'closure-libraries-wrapper': {
          build: {
-            libs: [{
+            libs: [{ // handlebars
                file: 'libraries/handlebars/handlebars.js',
                provideDirective: "goog.provide('M.Handlebars');"
-            }, {
+            }, { // ol3-popup
                file: 'libraries/ol3-popup/ol3-popup.js',
                provideDirective: "goog.provide('ol.Overlay.Popup');"
+            }, { // leaflet
+               file: 'libraries/leaflet/leaflet-src.js',
+               provideDirective: "goog.provide('M.Leaflet');"
             }]
          }
       },
@@ -250,24 +253,39 @@ module.exports = function(grunt) {
                   'libraries/ol3/externs'
                ],
                output: 'grunt-tasks/utilities/symbols/mapea-ol3.json'
+            }, { // mapea-leaflet
+               dir: [
+                  'src/facade/js',
+                  'src/impl/leaflet/js',
+                  'libraries/handlebars',
+                  'libraries/proj4',
+                  'libraries/leaflet'
+               ],
+               output: 'grunt-tasks/utilities/symbols/mapea-leaflet.json'
             }]
          }
       },
 
       'generate-exports': {
          build: {
-            files: [{
+            files: [{ // mapea-ol3
                symbolsFile: 'grunt-tasks/utilities/symbols/mapea-ol3.json',
                output: 'grunt-tasks/utilities/exports/mapea-ol3.js'
+            }, { // mapea-leaflet
+               symbolsFile: 'grunt-tasks/utilities/symbols/mapea-leaflet.json',
+               output: 'grunt-tasks/utilities/exports/mapea-leaflet.js'
             }]
          }
       },
 
       'generate-externs': {
          build: {
-            files: [{
+            files: [{ // mapea-ol3
                symbolsFile: 'grunt-tasks/utilities/symbols/mapea-ol3.json',
                output: 'src/externs/mapea-ol3x.js'
+            }, { // mapea-leaflet
+               symbolsFile: 'grunt-tasks/utilities/symbols/mapea-leaflet.json',
+               output: 'src/externs/mapea-leafletx.js'
             }]
          }
       },
@@ -362,6 +380,8 @@ module.exports = function(grunt) {
                         "const",
                         "uselessCode"
                      ],
+                     // create_source_map: 'build/core/<%= pkg.version %>/js/mapea.ol3.min.js.map',
+                     // source_map_location_mapping: '/|mapea/debug/',
                      language_in: "ECMASCRIPT6",
                      language_out: "ECMASCRIPT5",
                      extra_annotation_name: ["api", "observable"],
@@ -374,6 +394,99 @@ module.exports = function(grunt) {
                   }
                },
                output: 'build/core/<%= pkg.version %>/js/mapea.ol3.min.js'
+            }, { // mapea-leaflet
+               closureDepsOpts: {
+                  lib: [
+                     'src/facade/js/**/*.js',
+                     'src/impl/leaflet/js/**/*.js',
+                     'libraries/handlebars/**/*.js',
+                     'libraries/proj4/**/*.js',
+                     'libraries/leaflet/**/*.js'
+                  ]
+               },
+               closureComplileOpts: {
+                  compile: {
+                     externs: [
+                        "src/externs/proj4x.js",
+                        "src/externs/handlebarsx.js",
+                        "src/externs/mapea-leafletx.js",
+                        "src/externs/mx.js",
+                        "src/externs/leafletx.js"
+                     ],
+                     define: [
+                        "goog.array.ASSUME_NATIVE_FUNCTIONS=true",
+                        "goog.dom.ASSUME_STANDARDS_MODE=true",
+                        "goog.json.USE_NATIVE_JSON=true",
+                        "goog.DEBUG=false"
+                     ],
+                     jscomp_error: [
+                        "accessControls",
+                        "ambiguousFunctionDecl",
+                        "checkEventfulObjectDisposal",
+                        "checkRegExp",
+                        "checkTypes",
+                        "const",
+                        "constantProperty",
+                        "deprecated",
+                        "duplicateMessage",
+                        "es3",
+                        "es5Strict",
+                        "fileoverviewTags",
+                        "globalThis",
+                        "internetExplorerChecks",
+                        "invalidCasts",
+                        "misplacedTypeAnnotation",
+                        "missingGetCssName",
+                        "missingProperties",
+                        "missingProvide",
+                        "missingRequire",
+                        "missingReturn",
+                        "newCheckTypes",
+                        "nonStandardJsDocs",
+                        "suspiciousCode",
+                        "strictModuleDepCheck",
+                        "typeInvalidation",
+                        "undefinedNames",
+                        "undefinedVars",
+                        "unknownDefines",
+                        "visibility"
+                     ],
+                     jscomp_off: [
+                        "checkVars",
+                        "externsValidation",
+                        "accessControls",
+                        "missingProperties",
+                        "missingProvide",
+                        "missingRequire",
+                        "newCheckTypes",
+                        "nonStandardJsDocs",
+                        "suspiciousCode",
+                        "undefinedNames",
+                        "undefinedVars",
+                        "unknownDefines",
+                        "checkTypes",
+                        "const",
+                        "uselessCode"
+                     ],
+                     // create_source_map: 'build/core/<%= pkg.version %>/js/mapea.ol3.min.js.map',
+                     // source_map_location_mapping: '/|mapea/debug/',
+                     language_in: "ECMASCRIPT6",
+                     language_out: "ECMASCRIPT5",
+                     extra_annotation_name: ["api", "observable"],
+                     // compilation_level: "ADVANCED",
+
+                     export_local_property_definitions: true,
+                     generate_exports: true,
+                     compilation_level: "SIMPLE",
+
+                     warning_level: "QUIET",
+                     use_types_for_optimization: true,
+                     manage_closure_dependencies: true,
+                     js: ["grunt-tasks/utilities/exports/mapea-leaflet.js"],
+                     output_wrapper: "(function (root, factory) { root.M = factory(); } (this, function () { %output% return M; }));"
+                  }
+               },
+               output: 'build/core/<%= pkg.version %>/js/mapea.l.min.js'
             }]
          }
       },
@@ -382,7 +495,6 @@ module.exports = function(grunt) {
          dist: {
             src: [
                'libraries/proj4/proj4.js',
-               //'libraries/ol3/ol.js',
                'build/core/<%= pkg.version %>/js/mapea.ol3.min.js'
             ],
             dest: 'build/core/<%= pkg.version %>/js/mapea.ol3.min.js',
@@ -484,7 +596,6 @@ module.exports = function(grunt) {
                   manage_closure_dependencies: true,
                   export_local_property_definitions: true,
                   generate_exports: true,
-                  //                  js: ['grunt-tasks/utilities/exports/mapea-measurebar-ol3.js'],
                   js: [],
                   output_wrapper: "(function (M) { %output% })(window.M);"
                }
@@ -522,6 +633,25 @@ module.exports = function(grunt) {
                   prefix: '../mapea/plugins'
                }],
                outputFile: 'build/core/<%= pkg.version %>/js/mapea.ol3.deps.js'
+            }, { // leaflet
+               closurePath: 'libraries/closure/',
+               deps: [{ // source
+                  path: 'src/facade/js',
+                  prefix: '../mapea/facade/js'
+               }, { // ol3 impl
+                  path: 'src/impl/leaflet/js',
+                  prefix: '../mapea/impl/leaflet/js'
+               }, { // handlebars
+                  path: 'libraries/handlebars',
+                  prefix: '../'
+               }, { // proj4js
+                  path: 'libraries/proj4',
+                  prefix: '../'
+               }, { // plugins
+                  path: 'src/plugins',
+                  prefix: '../mapea/plugins'
+               }],
+               outputFile: 'build/core/<%= pkg.version %>/js/mapea.l.deps.js'
             }]
          },
          dev: {
@@ -556,6 +686,31 @@ module.exports = function(grunt) {
                   prefix: '../../../../src/plugins'
                }],
                outputFile: 'test/mapea.ol3.deps.js'
+            }, { // leaflet
+               closurePath: 'libraries/closure/',
+               deps: [{ // source
+                  path: 'src/facade/js',
+                  prefix: '../../../../src/facade/js'
+               }, { // source externs
+                  path: 'src/externs',
+                  prefix: '../../../../src/externs'
+               }, { // ol3 impl
+                  path: 'src/impl/leaflet/js',
+                  prefix: '../../../../src/impl/leaflet/js'
+               }, { // handlebars
+                  path: 'libraries/handlebars',
+                  prefix: '../../../handlebars'
+               }, { // proj4js
+                  path: 'libraries/proj4',
+                  prefix: '../../../proj4'
+               }, { // leaflet src
+                  path: 'libraries/leaflet',
+                  prefix: '../../../../libraries/leaflet'
+               }, { // plugins
+                  path: 'src/plugins',
+                  prefix: '../../../../src/plugins'
+               }],
+               outputFile: 'test/mapea.l.deps.js'
             }]
          }
       },

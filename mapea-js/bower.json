@@ -20,6 +20,7 @@
       "jquery": "*",
       "mocha": "*",
       "ol3": "openlayers/ol3#3.11.2",
+      "leaflet": "Leaflet/Leaflet#0.7.7",
       "proj4": "~2.3.10"
    }
 }

@@ -1,6 +1,7 @@
 goog.provide('M.utils');
 
 goog.require('M.polyfills');
+goog.require('M.geom.wkt.type');
 goog.require('goog.color');
 goog.require('goog.color.alpha');
 
@@ -727,5 +728,44 @@ goog.require('goog.color.alpha');
       url2 = url2.replace(/^(.+)\/$/, '$1').replace(/^(.+)\?$/, '$1');
 
       return url1.toLowerCase() === url2.toLowerCase();
+   };
+
+   /**
+    * TODO
+    *
+    * @function
+    * @api stable
+    */
+   M.utils.isGeometryType = function(type) {
+      var geometricTypes = [
+         M.geom.wkt.type.GEOMETRY.toLowerCase(),
+         M.geom.wkt.type.POINT.toLowerCase(),
+         M.geom.wkt.type.LINE_STRING.toLowerCase(),
+         M.geom.wkt.type.LINEAR_RING.toLowerCase(),
+         M.geom.wkt.type.POLYGON.toLowerCase(),
+         M.geom.wkt.type.MULTI_POINT.toLowerCase(),
+         M.geom.wkt.type.MULTI_LINE_STRING.toLowerCase(),
+         M.geom.wkt.type.MULTI_POLYGON.toLowerCase(),
+         M.geom.wkt.type.GEOMETRY_COLLECTION.toLowerCase(),
+         M.geom.wkt.type.CIRCLE.toLowerCase(),
+         "pointpropertytype",
+         "polygonpropertytype",
+         "linestringpropertytype",
+         "geometrypropertytype",
+         "multisurfacepropertytype",
+         "multilinestringpropertytype",
+         "surfacepropertytype",
+         "geometrypropertytype",
+         "geometryarraypropertytype",
+         "multigeometrypropertytype",
+         "multipointpropertytype",
+         "abstractgeometricaggregatetype",
+         "pointarraypropertytype",
+         "curvearraypropertytype",
+         "solidpropertytype",
+         "solidarraypropertytype"
+      ];
+      type = type.toLowerCase();
+      return (geometricTypes.indexOf(type) !== -1);
    };
 })();
