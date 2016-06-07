@@ -23,6 +23,10 @@ goog.exportProperty(
     M.plugin.Geosearchbylocation.prototype.destroy);
 
 goog.exportSymbol(
+    'M.plugin.Geosearchbylocation.NAME',
+    M.plugin.Geosearchbylocation.NAME);
+
+goog.exportSymbol(
     'M.control.Geosearchbylocation',
     M.control.Geosearchbylocation);
 
@@ -43,8 +47,26 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.control.Geosearchbylocation.prototype,
-    'locate',
-    M.control.Geosearchbylocation.prototype.locate);
+    'getActivationButton',
+    M.control.Geosearchbylocation.prototype.getActivationButton);
+
+goog.exportProperty(
+    M.control.Geosearchbylocation.prototype,
+    'activate',
+    M.control.Geosearchbylocation.prototype.activate);
+
+goog.exportProperty(
+    M.control.Geosearchbylocation.prototype,
+    'deactivate',
+    M.control.Geosearchbylocation.prototype.deactivate);
+
+goog.exportSymbol(
+    'M.control.Geosearchbylocation.NAME',
+    M.control.Geosearchbylocation.NAME);
+
+goog.exportSymbol(
+    'M.control.Geosearchbylocation.HIDDEN',
+    M.control.Geosearchbylocation.HIDDEN);
 
 goog.exportSymbol(
     'M.control.Geosearchbylocation.TEMPLATE',
@@ -60,23 +82,18 @@ goog.exportSymbol(
 
 goog.exportProperty(
     M.impl.control.Geosearchbylocation.prototype,
-    'addTo',
-    M.impl.control.Geosearchbylocation.prototype.addTo);
-
-goog.exportProperty(
-    M.impl.control.Geosearchbylocation.prototype,
     'setMap',
     M.impl.control.Geosearchbylocation.prototype.setMap);
 
 goog.exportProperty(
-    M.impl.control.Geobusquedas.prototype,
+    M.impl.control.Geosearch.prototype,
     'locate',
-    M.impl.control.Geobusquedas.prototype.locate);
+    M.impl.control.Geosearch.prototype.locate);
 
 goog.exportProperty(
-    M.impl.control.Geobusquedas.prototype,
+    M.impl.control.Geosearch.prototype,
     'removeLocate',
-    M.impl.control.Geobusquedas.prototype.removeLocate);
+    M.impl.control.Geosearch.prototype.removeLocate);
 
 goog.exportProperty(
     M.impl.control.Geosearchbylocation.prototype,
@@ -92,6 +109,11 @@ goog.exportProperty(
     M.impl.control.Geosearchbylocation.prototype,
     'removeResultsContainer',
     M.impl.control.Geosearchbylocation.prototype.removeResultsContainer);
+
+goog.exportProperty(
+    M.impl.control.Geosearchbylocation.prototype,
+    'zoomToResultsAll',
+    M.impl.control.Geosearchbylocation.prototype.zoomToResultsAll);
 
 goog.exportProperty(
     M.impl.control.Geosearchbylocation.prototype,

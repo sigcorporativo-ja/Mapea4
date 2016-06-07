@@ -3,28 +3,28 @@
     {
       "name": "M.plugin.Autocomplete",
       "kind": "class",
-      "description": "Main facade plugin object. This class creates a plugin\nobject which has an implementation Object",
+      "description": "Main facade plugin object. This class creates a plugin\n           object which has an implementation Object",
       "stability": "stable",
-      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
       "extends": "M.Plugin",
       "params": [
         {
-          "name": "impl",
+          "name": "parameters",
           "types": [
             "Object"
           ]
         }
       ],
       "provides": [
-        "M.plugin.Autocomplete"
+        "P.plugin.Autocomplete"
       ]
     },
     {
       "name": "M.plugin.Autocomplete#addTo",
       "kind": "function",
-      "description": "This function provides the implementation\nof the object",
+      "description": "This function adds the control to the specified map",
       "stability": "stable",
-      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
       "params": [
         {
           "name": "map",
@@ -34,7 +34,7 @@
         }
       ],
       "provides": [
-        "M.plugin.Autocomplete"
+        "P.plugin.Autocomplete"
       ]
     },
     {
@@ -42,35 +42,61 @@
       "kind": "function",
       "description": "This function destroys this plugin",
       "stability": "stable",
-      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
       "provides": [
-        "M.plugin.Autocomplete"
+        "P.plugin.Autocomplete"
       ]
     },
     {
       "name": "M.plugin.Autocomplete.CLASS",
       "kind": "constant",
-      "description": "Template for this controls",
+      "description": "Class autocomplete",
       "stability": "stable",
-      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
       "types": [
         "string"
       ],
       "provides": [
-        "M.plugin.Autocomplete"
+        "P.plugin.Autocomplete"
       ]
     },
     {
       "name": "M.plugin.Autocomplete.SEARCHING_CLASS",
       "kind": "constant",
-      "description": "Template for this controls",
+      "description": "Class searching autocomplete",
       "stability": "stable",
-      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
       "types": [
         "string"
       ],
       "provides": [
-        "M.plugin.Autocomplete"
+        "P.plugin.Autocomplete"
+      ]
+    },
+    {
+      "name": "M.plugin.Autocomplete.RESULTAUTOCOMPLETE",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.plugin.Autocomplete"
+      ]
+    },
+    {
+      "name": "M.plugin.Autocomplete.MINIMUM",
+      "kind": "constant",
+      "description": "Class minimum",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.plugin.Autocomplete"
       ]
     }
   ],

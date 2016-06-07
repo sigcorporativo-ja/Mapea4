@@ -655,7 +655,32 @@ module.exports = function(grunt) {
             }]
          },
          dev: {
-            impl: [{ // ol3
+            impl: [{ // leaflet
+               closurePath: 'libraries/closure/',
+               deps: [{ // source
+                  path: 'src/facade/js',
+                  prefix: '../../../../src/facade/js'
+               }, { // source externs
+                  path: 'src/externs',
+                  prefix: '../../../../src/externs'
+               }, { // lf impl
+                  path: 'src/impl/leaflet/js',
+                  prefix: '../../../../src/impl/leaflet/js'
+               }, { // handlebars
+                  path: 'libraries/handlebars',
+                  prefix: '../../../handlebars'
+               }, { // proj4js
+                  path: 'libraries/proj4',
+                  prefix: '../../../proj4'
+               }, { // leaflet src
+                  path: 'libraries/leaflet',
+                  prefix: '../../../../libraries/leaflet'
+               }, { // plugins
+                  path: 'src/plugins',
+                  prefix: '../../../../src/plugins'
+               }],
+               outputFile: 'test/mapea.l.deps.js'
+            },{ // ol3
                closurePath: 'libraries/closure/',
                deps: [{ // source
                   path: 'src/facade/js',
@@ -686,31 +711,6 @@ module.exports = function(grunt) {
                   prefix: '../../../../src/plugins'
                }],
                outputFile: 'test/mapea.ol3.deps.js'
-            }, { // leaflet
-               closurePath: 'libraries/closure/',
-               deps: [{ // source
-                  path: 'src/facade/js',
-                  prefix: '../../../../src/facade/js'
-               }, { // source externs
-                  path: 'src/externs',
-                  prefix: '../../../../src/externs'
-               }, { // ol3 impl
-                  path: 'src/impl/leaflet/js',
-                  prefix: '../../../../src/impl/leaflet/js'
-               }, { // handlebars
-                  path: 'libraries/handlebars',
-                  prefix: '../../../handlebars'
-               }, { // proj4js
-                  path: 'libraries/proj4',
-                  prefix: '../../../proj4'
-               }, { // leaflet src
-                  path: 'libraries/leaflet',
-                  prefix: '../../../../libraries/leaflet'
-               }, { // plugins
-                  path: 'src/plugins',
-                  prefix: '../../../../src/plugins'
-               }],
-               outputFile: 'test/mapea.l.deps.js'
             }]
          }
       },

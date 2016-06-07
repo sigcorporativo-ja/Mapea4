@@ -1,0 +1,284 @@
+{
+  "symbols": [
+    {
+      "name": "M.plugin.Streetview",
+      "kind": "class",
+      "description": "Main facade plugin object. This class creates a plugin\nobject which has an implementation Object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetview.js",
+      "extends": "M.Plugin",
+      "params": [
+        {
+          "name": "impl",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.Streetview"
+      ]
+    },
+    {
+      "name": "M.plugin.Streetview#addTo",
+      "kind": "function",
+      "description": "This function provides the implementation\nof the object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetview.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.Streetview"
+      ]
+    },
+    {
+      "name": "M.plugin.Streetview#destroy",
+      "kind": "function",
+      "description": "This function destroys this plugin",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetview.js",
+      "provides": [
+        "P.plugin.Streetview"
+      ]
+    },
+    {
+      "name": "M.plugin.Streetview.NAME",
+      "kind": "constant",
+      "description": "TODO",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetview.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.plugin.Streetview"
+      ]
+    },
+    {
+      "name": "M.impl.control.Streetview",
+      "kind": "class",
+      "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
+      "extends": "ol.control.Control",
+      "provides": [
+        "P.impl.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.impl.control.Streetview#openStreetView",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.impl.control.Streetview#processSVData",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.impl.control.Streetview#destroy",
+      "kind": "function",
+      "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
+      "provides": [
+        "P.impl.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.control.Streetview",
+      "kind": "class",
+      "description": "Main constructor of the class. Creates a Streetview\ncontrol to draw features on the map.",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetviewcontrols.js",
+      "extends": "M.Control",
+      "params": [
+        {
+          "name": "layer",
+          "types": [
+            "M.layer.WFS"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.control.Streetview#createView",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetviewcontrols.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "returns": {
+        "types": [
+          "Promise"
+        ]
+      },
+      "provides": [
+        "P.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.control.Streetview#manageActivation",
+      "kind": "function",
+      "description": "TODO",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetviewcontrols.js",
+      "params": [
+        {
+          "name": "html",
+          "types": [
+            "HTMLElement"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.control.Streetview#closeStreetView",
+      "kind": "function",
+      "description": "This function checks if an object is equals to this control",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetviewcontrols.js",
+      "returns": {
+        "types": [
+          "Boolean"
+        ]
+      },
+      "provides": [
+        "P.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.control.Streetview#equals",
+      "kind": "function",
+      "description": "This function checks if an object is equals to this control",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetviewcontrols.js",
+      "returns": {
+        "types": [
+          "Boolean"
+        ]
+      },
+      "provides": [
+        "P.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.control.Streetview#openStreetView",
+      "kind": "function",
+      "description": "This function add events to the button 'Streetview'",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetviewcontrols.js",
+      "params": [
+        {
+          "name": "html",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.control.Streetview.NAME",
+      "kind": "constant",
+      "description": "Name for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetviewcontrols.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.control.Streetview.TEMPLATE",
+      "kind": "constant",
+      "description": "Template for this controls - button",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetviewcontrols.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.control.Streetview.TEMPLATE_DIALOG",
+      "kind": "constant",
+      "description": "Template for this controls - button",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/facade/js/streetviewcontrols.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Streetview"
+      ]
+    }
+  ],
+  "defines": [],
+  "typedefs": [],
+  "externs": [],
+  "base": []
+}

@@ -3,3 +3,11 @@
 *.project
 *.classpath
 *.externalToolBuilders
+node
+node_modules
+target
+build
+externs
+libraries
+doc
+*~

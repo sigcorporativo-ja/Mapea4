@@ -1411,7 +1411,7 @@
       "kind": "class",
       "description": "Main constructor of the class. Creates a WMS layer\nwith parameters specified by the user",
       "stability": "stable",
-      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/impl/ol3/js/utils/wmscapabilitiesuitls.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/impl/ol3/js/utils/wmscapabilitiesutils.js",
       "params": [
         {
           "name": "options",
@@ -1429,7 +1429,7 @@
       "kind": "function",
       "description": "This function calculates the extent for a specific layer\nfrom its getCapabilities",
       "stability": "stable",
-      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/impl/ol3/js/utils/wmscapabilitiesuitls.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/impl/ol3/js/utils/wmscapabilitiesutils.js",
       "params": [
         {
           "name": "capabilities",

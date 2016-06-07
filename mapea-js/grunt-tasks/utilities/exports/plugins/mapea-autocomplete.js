@@ -3,7 +3,7 @@
  * @suppress {checkVars}
  */
 
-goog.require('M.plugin.Autocomplete');
+goog.require('P.plugin.Autocomplete');
 
 
 goog.exportSymbol(
@@ -27,3 +27,11 @@ goog.exportSymbol(
 goog.exportSymbol(
     'M.plugin.Autocomplete.SEARCHING_CLASS',
     M.plugin.Autocomplete.SEARCHING_CLASS);
+
+goog.exportSymbol(
+    'M.plugin.Autocomplete.RESULTAUTOCOMPLETE',
+    M.plugin.Autocomplete.RESULTAUTOCOMPLETE);
+
+goog.exportSymbol(
+    'M.plugin.Autocomplete.MINIMUM',
+    M.plugin.Autocomplete.MINIMUM);

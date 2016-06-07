@@ -270,6 +270,12 @@ Mx.geom.wfs.type.MPOLYGON;
  * @type {Object}
  * @api stable
  */
+Mx.geom.wkt.type.GEOMETRY;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
 Mx.geom.wkt.type.POINT;
 
 /**
@@ -1180,6 +1186,12 @@ Mx.utils.sameUrl;
  * @type {Object}
  * @api stable
  */
+Mx.utils.isGeometryType;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
 Mx.window.WIDTH;
 
 /**
@@ -1193,126 +1205,6 @@ Mx.window;
  * @api stable
  */
 Mx.window.HEIGHT;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.isVisible;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.isQueryable;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.inRange;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.setVisible;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.getZIndex;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.setZIndex;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.getOpacity;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.setOpacity;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.getLegendURL;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.setLegendURL;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.getNumZoomLevels;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.unselectFeatures;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.selectFeatures;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.layer.OSM;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.layer.OSM.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.layer.OSM.setResolutions;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.layer.OSM.getExtent;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.layer.OSM.destroy;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.layer.OSM.equals;
 
 /**
  * @type {Object}
@@ -1414,6 +1306,90 @@ Mx.ui.Panel.TEMPLATE;
  * @type {Object}
  * @api stable
  */
+Mx.impl.Layer;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.isVisible;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.isQueryable;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.inRange;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.setVisible;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.getZIndex;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.setZIndex;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.getOpacity;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.setOpacity;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.getLegendURL;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.setLegendURL;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.getNumZoomLevels;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.unselectFeatures;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.selectFeatures;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
 Mx.ui.position.TL;
 
 /**
@@ -1444,25 +1420,37 @@ Mx.ui.position.BR;
  * @type {Object}
  * @api stable
  */
-Mx.impl.control.Panzoom;
+Mx.impl.layer.OSM;
 
 /**
  * @type {Object}
  * @api stable
  */
-Mx.impl.control.Panzoom.addTo;
+Mx.impl.layer.OSM.addTo;
 
 /**
  * @type {Object}
  * @api stable
  */
-Mx.impl.control.Panzoom.getElement;
+Mx.impl.layer.OSM.setResolutions;
 
 /**
  * @type {Object}
  * @api stable
  */
-Mx.impl.control.Panzoom.destroy;
+Mx.impl.layer.OSM.getExtent;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.layer.OSM.destroy;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.layer.OSM.equals;
 
 /**
  * @type {Object}
@@ -1487,6 +1475,30 @@ Mx.style.state.NEW;
  * @api stable
  */
 Mx.style.state.SELECTED;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.control.Panzoom;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.control.Panzoom.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.control.Panzoom.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.control.Panzoom.destroy;
 
 /**
  * @type {Object}
@@ -2758,103 +2770,13 @@ Mx.facade.Base.fire;
  * @type {Object}
  * @api stable
  */
-Mx.Control.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.activated;
+Mx.Label.getImpl;
 
 /**
  * @type {Object}
  * @api stable
  */
 Mx.Label.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Label.getImpl;
 
 /**
  * @type {Object}
@@ -2956,6 +2878,24 @@ Mx.remote.Response.fire;
  * @type {Object}
  * @api stable
  */
+Mx.ui.Panel.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.ui.Panel.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.ui.Panel.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
 Mx.impl.Layer.getImpl;
 
 /**
@@ -2981,24 +2921,6 @@ Mx.impl.Layer.un;
  * @api stable
  */
 Mx.impl.Layer.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.ui.Panel.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.ui.Panel.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.ui.Panel.fire;
 
 /**
  * @type {Object}
@@ -3689,6 +3611,30 @@ Mx.layer.WMTS.un;
  * @api stable
  */
 Mx.layer.WMTS.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.fire;
 
 /**
  * @type {Object}
