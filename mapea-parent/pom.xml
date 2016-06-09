@@ -90,7 +90,7 @@
       <repository>
          <id>ceic</id>
          <name>Repositorio CEIC</name>
-         <url>http://repositorio-librerias.i-administracion.junta-andalucia.es/artifactory/ja-internal</url>
+         <url>http://www.juntadeandalucia.es/madeja/repositoriodelibrerias/ja-external</url>
       </repository>
    </repositories>
    <scm>
