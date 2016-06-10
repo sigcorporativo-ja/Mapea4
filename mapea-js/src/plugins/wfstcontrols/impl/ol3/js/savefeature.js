@@ -62,7 +62,14 @@ goog.require('goog.dom.classes');
       if (!M.utils.isNullOrEmpty(deletefeatureCtrl)) {
          saveFeaturesDelete = deletefeatureCtrl.getImpl().modifiedFeatures;
       }
-
+      //JGL 20163105: para evitar que se envié en la petición WFST el bbox
+      saveFeaturesModify.forEach(function(feature){
+        feature.unset('bbox');
+      });
+      saveFeaturesDraw.forEach(function(feature){
+        feature.unset('bbox');
+      });
+      //
       var this_ = this;
       var layerImpl = this.layer_.getImpl();
       layerImpl.getDescribeFeatureType().then(function(describeFeatureType) {

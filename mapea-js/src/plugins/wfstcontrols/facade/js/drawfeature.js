@@ -71,6 +71,17 @@ goog.provide('P.control.DrawFeature');
       return equals;
    };
 
+ /**
+ * This function set layer for editting
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+  M.control.DrawFeature.prototype.setLayer = function(layer) {
+    this.getImpl().layer_ = layer;
+  };
+
    /**
     * Name for this controls
     *

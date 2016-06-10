@@ -66,6 +66,17 @@ goog.provide('P.control.DeleteFeature');
       return equals;
    };
 
+/**
+ * This function set layer for editting
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+  M.control.DeleteFeature.prototype.setLayer = function(layer) {
+    this.getImpl().layer_ = layer;
+  };
+
    /**
     * Name for this controls
     * @const

@@ -19,9 +19,16 @@ goog.require('goog.events');
  * @param {Object} impl implementation object
  * @api stable
  */
-M.plugin.WFSTControls = (function(controls) {
+M.plugin.WFSTControls = (function(controls, layername) {
 
    this.controls = controls;
+
+   /**
+    * Layer for editting
+    * @private
+    * @type {String}
+    */
+   this.layername_ = layername;
 
    /**
     * Facade of the map
@@ -87,7 +94,7 @@ goog.inherits(M.plugin.WFSTControls, M.Plugin);
  */
 M.plugin.WFSTControls.prototype.addTo = function(map) {
    this.map_ = map;
-   var wfslayer = map.getWFS()[0];
+   var wfslayer = M.utils.isNullOrEmpty(this.map_.getWFS({'name':this.layername_})[0])? this.map_.getWFS()[0] : this.map_.getWFS({'name':this.layername_})[0];
 
    if (M.utils.isNullOrEmpty(wfslayer)) {
       M.dialog.error('Los controles <b>' + this.controls.join(',') + '</b> no se pueden añadir al mapa porque no existe una capa WFS cargada.');
@@ -156,4 +163,36 @@ M.plugin.WFSTControls.prototype.destroy = function() {
    this.clearfeature_ = null;
    this.savefeature_ = null;
    this.editattibute_ = null;
+};
+
+/**
+ * This function set layer for editting
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+M.plugin.WFSTControls.prototype.setLayer = function(layername) {
+
+  this.layername_ = layername;
+  var wfslayer = this.map_.getWFS({'name':this.layername_})[0];
+  if (M.utils.isNullOrEmpty(wfslayer)){
+    M.dialog.error('Los capa <b>' + layername + '</b> no es una capa WFS cargada.');
+  }else{
+    let objControls = [];
+     if(this.drawfeature_ != null) objControls.push(this.drawfeature_);
+     if(this.modifyfeature_ != null) objControls.push(this.modifyfeature_);
+     if(this.deletefeature_ != null) objControls.push(this.deletefeature_);
+     if(this.clearfeature_ != null) objControls.push(this.clearfeature_);
+     if(this.savefeature_ != null) objControls.push(this.savefeature_);
+     if(this.editattibute_ != null) objControls.push(this.editattibute_);
+
+    //let ctrlActivo = null;
+    //objControls.forEach(function (ctrl){if (ctrl.activated) ctrlActivo = ctrl});
+    this.clearfeature_.getImpl().clear();
+    objControls.forEach(function (ctrl){
+      ctrl.setLayer(wfslayer);
+      // if(ctrl===ctrlActivo){ ctrl.activate();} //JGL: TODO no funciona
+    });
+  }
 };

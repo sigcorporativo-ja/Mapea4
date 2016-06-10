@@ -75,6 +75,19 @@ goog.provide('P.control.ClearFeature');
       this.getImpl().clear();
    };
 
+ /**
+ * This function set layer for editting
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+  M.control.ClearFeature.prototype.setLayer = function(layer) {
+   
+   this.getImpl().layer_ = layer;
+   
+  };
+
 
    /**
     * Name for this controls

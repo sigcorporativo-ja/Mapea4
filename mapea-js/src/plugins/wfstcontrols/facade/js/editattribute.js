@@ -67,6 +67,17 @@ goog.provide('P.control.EditAttribute');
       return equals;
    };
 
+  /**
+   * This function set layer for editting
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+    M.control.EditAttribute.prototype.setLayer = function(layer) {
+      this.getImpl().layer_ = layer;
+    };
+
    /**
     * Template for this controls - button
     * @const

@@ -78,6 +78,17 @@ goog.provide('P.control.SaveFeature');
       this.getImpl().saveFeature();
    };
 
+        /**
+ * This function set layer for editting
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+  M.control.SaveFeature.prototype.setLayer = function(layer) {
+   this.getImpl().layer_ = layer;
+  };
+
    /**
     * Template for this controls - button
     * @const

@@ -164,10 +164,15 @@ goog.require('goog.events');
     * @api stable
     */
    M.impl.control.EditAttribute.prototype.saveAttributes_ = function(evt) {
+      
+      //JGL 20163105: para evitar que se envié en la petición WFST el bbox
+      this.editFeature.unset("bbox",true);
+      //
       // add class css
       var popupContentHtml = this.popup_.getContent();
       var popupButton = evt.target;
       var featureProps = this.editFeature.getProperties();
+
 
       goog.dom.classes.add(popupButton, 'm-savefeature-saving');
 
