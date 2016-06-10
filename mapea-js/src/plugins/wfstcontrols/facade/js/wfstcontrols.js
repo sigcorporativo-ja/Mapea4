@@ -180,12 +180,12 @@ M.plugin.WFSTControls.prototype.setLayer = function(layername) {
     M.dialog.error('Los capa <b>' + layername + '</b> no es una capa WFS cargada.');
   }else{
     let objControls = [];
-     if(!M.utils.isNullOrEmpty(this.drawfeature_) objControls.push(this.drawfeature_);
-     if(!M.utils.isNullOrEmpty(this.modifyfeature_) objControls.push(this.modifyfeature_);
-     if(!M.utils.isNullOrEmpty(this.deletefeature_) objControls.push(this.deletefeature_);
-     if(!M.utils.isNullOrEmpty(this.clearfeature_) objControls.push(this.clearfeature_);
-     if(!M.utils.isNullOrEmpty(this.savefeature_) objControls.push(this.savefeature_);
-     if(!M.utils.isNullOrEmpty(this.editattibute_) objControls.push(this.editattibute_);
+     if(!M.utils.isNullOrEmpty(this.drawfeature_)) objControls.push(this.drawfeature_);
+     if(!M.utils.isNullOrEmpty(this.modifyfeature_)) objControls.push(this.modifyfeature_);
+     if(!M.utils.isNullOrEmpty(this.deletefeature_)) objControls.push(this.deletefeature_);
+     if(!M.utils.isNullOrEmpty(this.clearfeature_)) objControls.push(this.clearfeature_);
+     if(!M.utils.isNullOrEmpty(this.savefeature_)) objControls.push(this.savefeature_);
+     if(!M.utils.isNullOrEmpty(this.editattibute_)) objControls.push(this.editattibute_);
 
     //let ctrlActivo = null;
     //objControls.forEach(function (ctrl){if (ctrl.activated) ctrlActivo = ctrl});
