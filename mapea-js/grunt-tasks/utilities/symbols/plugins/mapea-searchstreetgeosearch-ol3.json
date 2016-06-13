@@ -1,41 +1,6 @@
 {
   "symbols": [
     {
-      "name": "M.impl.control.GeosearchIntegrated",
-      "kind": "class",
-      "description": "Main constructor of the GeosearchIntegrated control.",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/geosearchintegratedcontrol.js",
-      "extends": "M.impl.control.Geosearch",
-      "provides": [
-        "P.impl.control.GeosearchIntegrated"
-      ]
-    },
-    {
-      "name": "M.impl.control.GeosearchIntegrated#addTo",
-      "kind": "function",
-      "description": "This function replaces the addto of searchstreet not to add control",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/geosearchintegratedcontrol.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "M.Map"
-          ]
-        },
-        {
-          "name": "template",
-          "types": [
-            "Function"
-          ]
-        }
-      ],
-      "provides": [
-        "P.impl.control.GeosearchIntegrated"
-      ]
-    },
-    {
       "name": "M.control.GeosearchIntegrated",
       "kind": "class",
       "description": "Main constructor of the class. Creates a GeosearchIntegrated\n           control.",
@@ -124,6 +89,101 @@
       ]
     },
     {
+      "name": "M.impl.control.GeosearchIntegrated",
+      "kind": "class",
+      "description": "Main constructor of the GeosearchIntegrated control.",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/geosearchintegratedcontrol.js",
+      "extends": "M.impl.control.Geosearch",
+      "provides": [
+        "P.impl.control.GeosearchIntegrated"
+      ]
+    },
+    {
+      "name": "M.impl.control.GeosearchIntegrated#addTo",
+      "kind": "function",
+      "description": "This function replaces the addto of searchstreet not to add control",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/geosearchintegratedcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.GeosearchIntegrated"
+      ]
+    },
+    {
+      "name": "M.plugin.SearchstreetGeosearch",
+      "kind": "class",
+      "description": "Main facade plugin object. This class creates a plugin\n           object which has an implementation Object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/facade/js/searchstreetgeosearch.js",
+      "extends": "M.Plugin",
+      "params": [
+        {
+          "name": "parameters",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.SearchstreetGeosearch"
+      ]
+    },
+    {
+      "name": "M.plugin.SearchstreetGeosearch#name",
+      "kind": "member",
+      "description": "Name plugin",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/facade/js/searchstreetgeosearch.js",
+      "types": [
+        "String"
+      ],
+      "provides": [
+        "P.plugin.SearchstreetGeosearch"
+      ]
+    },
+    {
+      "name": "M.plugin.SearchstreetGeosearch#addTo",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/facade/js/searchstreetgeosearch.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.SearchstreetGeosearch"
+      ]
+    },
+    {
+      "name": "M.plugin.SearchstreetGeosearch#destroy",
+      "kind": "function",
+      "description": "This function destroys this plugin",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/facade/js/searchstreetgeosearch.js",
+      "provides": [
+        "P.plugin.SearchstreetGeosearch"
+      ]
+    },
+    {
       "name": "M.impl.control.SearchstreetGeosearch",
       "kind": "class",
       "description": "Main constructor of the SearchstreetGeosearch control.",
@@ -191,111 +251,6 @@
       "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/searchstreetgeosearchcontrol.js",
       "provides": [
         "P.impl.control.SearchstreetGeosearch"
-      ]
-    },
-    {
-      "name": "M.plugin.SearchstreetGeosearch",
-      "kind": "class",
-      "description": "Main facade plugin object. This class creates a plugin\n           object which has an implementation Object",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/facade/js/searchstreetgeosearch.js",
-      "extends": "M.Plugin",
-      "params": [
-        {
-          "name": "parameters",
-          "types": [
-            "Object"
-          ]
-        }
-      ],
-      "provides": [
-        "P.plugin.SearchstreetGeosearch"
-      ]
-    },
-    {
-      "name": "M.plugin.SearchstreetGeosearch#name",
-      "kind": "member",
-      "description": "Name plugin",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/facade/js/searchstreetgeosearch.js",
-      "types": [
-        "String"
-      ],
-      "provides": [
-        "P.plugin.SearchstreetGeosearch"
-      ]
-    },
-    {
-      "name": "M.plugin.SearchstreetGeosearch#addTo",
-      "kind": "function",
-      "description": "This function adds the control to the specified map",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/facade/js/searchstreetgeosearch.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "Object"
-          ]
-        }
-      ],
-      "provides": [
-        "P.plugin.SearchstreetGeosearch"
-      ]
-    },
-    {
-      "name": "M.plugin.SearchstreetGeosearch#destroy",
-      "kind": "function",
-      "description": "This function destroys this plugin",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/facade/js/searchstreetgeosearch.js",
-      "provides": [
-        "P.plugin.SearchstreetGeosearch"
-      ]
-    },
-    {
-      "name": "M.impl.control.SearchstreetIntegrated",
-      "kind": "class",
-      "description": "Main constructor of the SearchstreetIntegrated control.",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/searchstreetintegratedcontrol.js",
-      "extends": "M.impl.control.Searchstreet",
-      "provides": [
-        "P.impl.control.SearchstreetIntegrated"
-      ]
-    },
-    {
-      "name": "M.impl.control.SearchstreetIntegrated#addTo",
-      "kind": "function",
-      "description": "This function replaces the addto of searchstreet not to add control",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/searchstreetintegratedcontrol.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "M.Map"
-          ]
-        },
-        {
-          "name": "template",
-          "types": [
-            "Function"
-          ]
-        }
-      ],
-      "provides": [
-        "P.impl.control.SearchstreetIntegrated"
-      ]
-    },
-    {
-      "name": "M.impl.control.SearchstreetIntegrated#zoomResults",
-      "kind": "function",
-      "description": "This function cancels the zoom function of searchstreet",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/searchstreetintegratedcontrol.js",
-      "provides": [
-        "P.impl.control.SearchstreetIntegrated"
       ]
     },
     {
@@ -384,6 +339,51 @@
       ],
       "provides": [
         "P.control.SearchstreetGeosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.SearchstreetIntegrated",
+      "kind": "class",
+      "description": "Main constructor of the SearchstreetIntegrated control.",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/searchstreetintegratedcontrol.js",
+      "extends": "M.impl.control.Searchstreet",
+      "provides": [
+        "P.impl.control.SearchstreetIntegrated"
+      ]
+    },
+    {
+      "name": "M.impl.control.SearchstreetIntegrated#addTo",
+      "kind": "function",
+      "description": "This function replaces the addto of searchstreet not to add control",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/searchstreetintegratedcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.SearchstreetIntegrated"
+      ]
+    },
+    {
+      "name": "M.impl.control.SearchstreetIntegrated#zoomResults",
+      "kind": "function",
+      "description": "This function cancels the zoom function of searchstreet",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/searchstreetgeosearch/impl/ol3/js/searchstreetintegratedcontrol.js",
+      "provides": [
+        "P.impl.control.SearchstreetIntegrated"
       ]
     },
     {

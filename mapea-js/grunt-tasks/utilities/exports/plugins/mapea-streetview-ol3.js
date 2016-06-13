@@ -27,25 +27,6 @@ goog.exportSymbol(
     M.plugin.Streetview.NAME);
 
 goog.exportSymbol(
-    'M.impl.control.Streetview',
-    M.impl.control.Streetview);
-
-goog.exportProperty(
-    M.impl.control.Streetview.prototype,
-    'openStreetView',
-    M.impl.control.Streetview.prototype.openStreetView);
-
-goog.exportProperty(
-    M.impl.control.Streetview.prototype,
-    'processSVData',
-    M.impl.control.Streetview.prototype.processSVData);
-
-goog.exportProperty(
-    M.impl.control.Streetview.prototype,
-    'destroy',
-    M.impl.control.Streetview.prototype.destroy);
-
-goog.exportSymbol(
     'M.control.Streetview',
     M.control.Streetview);
 
@@ -85,3 +66,22 @@ goog.exportSymbol(
 goog.exportSymbol(
     'M.control.Streetview.TEMPLATE_DIALOG',
     M.control.Streetview.TEMPLATE_DIALOG);
+
+goog.exportSymbol(
+    'M.impl.control.Streetview',
+    M.impl.control.Streetview);
+
+goog.exportProperty(
+    M.impl.control.Streetview.prototype,
+    'openStreetView',
+    M.impl.control.Streetview.prototype.openStreetView);
+
+goog.exportProperty(
+    M.impl.control.Streetview.prototype,
+    'processSVData',
+    M.impl.control.Streetview.prototype.processSVData);
+
+goog.exportProperty(
+    M.impl.control.Streetview.prototype,
+    'destroy',
+    M.impl.control.Streetview.prototype.destroy);

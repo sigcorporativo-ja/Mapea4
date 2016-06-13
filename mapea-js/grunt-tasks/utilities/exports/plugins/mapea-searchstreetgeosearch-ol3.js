@@ -13,15 +13,6 @@ goog.require('P.plugin.SearchstreetGeosearch');
 
 
 goog.exportSymbol(
-    'M.impl.control.GeosearchIntegrated',
-    M.impl.control.GeosearchIntegrated);
-
-goog.exportProperty(
-    M.impl.control.GeosearchIntegrated.prototype,
-    'addTo',
-    M.impl.control.GeosearchIntegrated.prototype.addTo);
-
-goog.exportSymbol(
     'M.control.GeosearchIntegrated',
     M.control.GeosearchIntegrated);
 
@@ -39,6 +30,34 @@ goog.exportProperty(
     M.control.GeosearchIntegrated.prototype,
     'getImpl',
     M.control.GeosearchIntegrated.prototype.getImpl);
+
+goog.exportSymbol(
+    'M.impl.control.GeosearchIntegrated',
+    M.impl.control.GeosearchIntegrated);
+
+goog.exportProperty(
+    M.impl.control.GeosearchIntegrated.prototype,
+    'addTo',
+    M.impl.control.GeosearchIntegrated.prototype.addTo);
+
+goog.exportSymbol(
+    'M.plugin.SearchstreetGeosearch',
+    M.plugin.SearchstreetGeosearch);
+
+goog.exportProperty(
+    M.plugin.SearchstreetGeosearch.prototype,
+    'name',
+    M.plugin.SearchstreetGeosearch.prototype.name);
+
+goog.exportProperty(
+    M.plugin.SearchstreetGeosearch.prototype,
+    'addTo',
+    M.plugin.SearchstreetGeosearch.prototype.addTo);
+
+goog.exportProperty(
+    M.plugin.SearchstreetGeosearch.prototype,
+    'destroy',
+    M.plugin.SearchstreetGeosearch.prototype.destroy);
 
 goog.exportSymbol(
     'M.impl.control.SearchstreetGeosearch',
@@ -63,39 +82,6 @@ goog.exportProperty(
     M.impl.control.SearchstreetGeosearch.prototype,
     'destroy',
     M.impl.control.SearchstreetGeosearch.prototype.destroy);
-
-goog.exportSymbol(
-    'M.plugin.SearchstreetGeosearch',
-    M.plugin.SearchstreetGeosearch);
-
-goog.exportProperty(
-    M.plugin.SearchstreetGeosearch.prototype,
-    'name',
-    M.plugin.SearchstreetGeosearch.prototype.name);
-
-goog.exportProperty(
-    M.plugin.SearchstreetGeosearch.prototype,
-    'addTo',
-    M.plugin.SearchstreetGeosearch.prototype.addTo);
-
-goog.exportProperty(
-    M.plugin.SearchstreetGeosearch.prototype,
-    'destroy',
-    M.plugin.SearchstreetGeosearch.prototype.destroy);
-
-goog.exportSymbol(
-    'M.impl.control.SearchstreetIntegrated',
-    M.impl.control.SearchstreetIntegrated);
-
-goog.exportProperty(
-    M.impl.control.SearchstreetIntegrated.prototype,
-    'addTo',
-    M.impl.control.SearchstreetIntegrated.prototype.addTo);
-
-goog.exportProperty(
-    M.impl.control.SearchstreetIntegrated.prototype,
-    'zoomResults',
-    M.impl.control.SearchstreetIntegrated.prototype.zoomResults);
 
 goog.exportSymbol(
     'M.control.SearchstreetGeosearch',
@@ -124,6 +110,20 @@ goog.exportProperty(
 goog.exportSymbol(
     'M.control.SearchstreetGeosearch.TEMPLATE',
     M.control.SearchstreetGeosearch.TEMPLATE);
+
+goog.exportSymbol(
+    'M.impl.control.SearchstreetIntegrated',
+    M.impl.control.SearchstreetIntegrated);
+
+goog.exportProperty(
+    M.impl.control.SearchstreetIntegrated.prototype,
+    'addTo',
+    M.impl.control.SearchstreetIntegrated.prototype.addTo);
+
+goog.exportProperty(
+    M.impl.control.SearchstreetIntegrated.prototype,
+    'zoomResults',
+    M.impl.control.SearchstreetIntegrated.prototype.zoomResults);
 
 goog.exportSymbol(
     'M.control.SearchstreetIntegrated',

@@ -1,0 +1,14 @@
+{
+   "url": {
+      "name": "searchstreetgeosearch"
+   },
+   "constructor": "M.plugin.SearchstreetGeosearch",
+   "parameters": [{
+      "type": "object",
+      "properties": [{
+         "type": "simple",
+         "name": "locality",
+         "position": 0
+      }]
+   }]
+}

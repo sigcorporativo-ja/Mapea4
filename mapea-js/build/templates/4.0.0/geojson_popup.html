@@ -1,0 +1,15 @@
+<div class="m-geojson-content">
+   {{#each features}}
+   <div id="{{id}}" class="result">
+      {{#each attributes}}
+      <table>
+         <tr>
+            <td class="key">{{key}}</td>
+            <td class="value">{{value}}</td>
+         </tr>
+      </table>
+      {{/each}}
+   </div>
+   <div class="m-separator"></div>
+   {{/each}}
+</div>

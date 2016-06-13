@@ -6,7 +6,24 @@
 /**
  * @type {Object}
  */
+var olx;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.featureloader.jsonp;
+
+/**
+ * @type {Object}
+ */
 var Mx;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.FeatureLoaderJsonp;
 
 /**
  * @type {Object}
@@ -43,23 +60,6 @@ Mx.dialog.error;
  * @api stable
  */
 Mx.dialog.success;
-
-/**
- * @type {Object}
- */
-var olx;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.featureloader.jsonp;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.FeatureLoaderJsonp;
 
 /**
  * @type {Object}
@@ -215,24 +215,6 @@ Mx.evt.Listener.has;
  * @type {Object}
  * @api stable
  */
-Mx.facade.Base;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.facade.Base.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.facade.Base.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.impl.Label;
 
 /**
@@ -252,6 +234,24 @@ Mx.impl.Label.hide;
  * @api stable
  */
 Mx.impl.Label.getPopup;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.facade.Base;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.facade.Base.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.facade.Base.setImpl;
 
 /**
  * @type {Object}
@@ -659,114 +659,6 @@ olx.animation.zoom;
  * @type {Object}
  * @api stable
  */
-olx.Attribution;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Attribution.getHTML;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.CollectionEvent.element;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.CollectionEvent;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.CollectionEventType;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.clear;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.extend;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.forEach;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.getArray;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.item;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.getLength;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.insertAt;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.pop;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.push;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.remove;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.removeAt;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.setAt;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.impl.View;
 
 /**
@@ -798,60 +690,6 @@ Mx.impl.View.getResolutions;
  * @api stable
  */
 Mx.impl.View.setResolutions;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.coordinate.add;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Coordinate;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.CoordinateFormatType;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.coordinate;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.coordinate.createStringXY;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.coordinate.format;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.coordinate.rotate;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.coordinate.toStringHDMS;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.coordinate.toStringXY;
 
 /**
  * @type {Object}
@@ -904,6 +742,18 @@ var Objectx;
  * @api stable
  */
 Objectx.equals;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Attribution;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Attribution.getHTML;
 
 /**
  * @type {Object}
@@ -1006,54 +856,6 @@ Mx.template;
  * @api stable
  */
 Mx.template.get;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.DeviceOrientation;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.DeviceOrientationProperty;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.DeviceOrientation.getAlpha;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.DeviceOrientation.getBeta;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.DeviceOrientation.getGamma;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.DeviceOrientation.getHeading;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.DeviceOrientation.getTracking;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.DeviceOrientation.setTracking;
 
 /**
  * @type {Object}
@@ -1275,6 +1077,102 @@ Mx.utils.isGeometryType;
  * @type {Object}
  * @api stable
  */
+olx.CollectionEvent.element;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.CollectionEvent;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.CollectionEventType;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.clear;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.extend;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.forEach;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.getArray;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.item;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.getLength;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.insertAt;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.pop;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.push;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.remove;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.removeAt;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.setAt;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
 Mx.window.WIDTH;
 
 /**
@@ -1288,6 +1186,108 @@ Mx.window;
  * @api stable
  */
 Mx.window.HEIGHT;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.coordinate.add;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Coordinate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.CoordinateFormatType;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.coordinate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.coordinate.createStringXY;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.coordinate.format;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.coordinate.rotate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.coordinate.toStringHDMS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.coordinate.toStringXY;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.DeviceOrientation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.DeviceOrientationProperty;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.DeviceOrientation.getAlpha;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.DeviceOrientation.getBeta;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.DeviceOrientation.getGamma;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.DeviceOrientation.getHeading;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.DeviceOrientation.getTracking;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.DeviceOrientation.setTracking;
 
 /**
  * @type {Object}
@@ -2301,42 +2301,6 @@ olx.Overlay.setPositioning;
  * @type {Object}
  * @api stable
  */
-olx.size.toSize;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Size;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.size;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Tile.getTileCoord;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Tile;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.TileState;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.impl.envolvedExtent.calculate;
 
 /**
@@ -2350,6 +2314,66 @@ Mx.impl.envolvedExtent;
  * @api stable
  */
 Mx.impl.envolvedExtent.calculateFromWMS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.utils.generateResolutions;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.utils;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.utils.addOverlayImage;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.utils.getExtentHeight;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.utils.getExtentWidth;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.GetCapabilities;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.GetCapabilities.getLayerExtent;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.size.toSize;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Size;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.size;
 
 /**
  * @type {Object}
@@ -2451,36 +2475,6 @@ Mx.ui.Panel.TEMPLATE;
  * @type {Object}
  * @api stable
  */
-Mx.impl.utils.generateResolutions;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.utils;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.utils.addOverlayImage;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.utils.getExtentHeight;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.utils.getExtentWidth;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.ui.position.TL;
 
 /**
@@ -2511,13 +2505,19 @@ Mx.ui.position.BR;
  * @type {Object}
  * @api stable
  */
-Mx.impl.GetCapabilities;
+olx.Tile.getTileCoord;
 
 /**
  * @type {Object}
  * @api stable
  */
-Mx.impl.GetCapabilities.getLayerExtent;
+olx.Tile;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.TileState;
 
 /**
  * @type {Object}
@@ -2673,30 +2673,6 @@ olx.xml.parse;
  * @type {Object}
  * @api stable
  */
-Mx.style.state.DEFAULT;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.style.state;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.style.state.NEW;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.style.state.SELECTED;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.impl.style.Icon;
 
 /**
@@ -2734,6 +2710,30 @@ Mx.impl.style.STATE.NEW;
  * @api stable
  */
 Mx.impl.style.STATE.SELECTED;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.style.state.DEFAULT;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.style.state;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.style.state.NEW;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.style.state.SELECTED;
 
 /**
  * @type {Object}
@@ -2913,6 +2913,42 @@ Mx.parameter.zoom;
  * @type {Object}
  * @api stable
  */
+Mx.parameter.kml;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.parameter.osm;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.parameter.wfs;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.parameter.wmc;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.parameter.wms;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.parameter.wmts;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
 olx.tilegrid.TileGrid;
 
 /**
@@ -2979,12 +3015,6 @@ olx.tilegrid.createXYZ;
  * @type {Object}
  * @api stable
  */
-Mx.parameter.kml;
-
-/**
- * @type {Object}
- * @api stable
- */
 olx.tilegrid.WMTS;
 
 /**
@@ -2998,48 +3028,6 @@ olx.tilegrid.WMTS.getMatrixIds;
  * @api stable
  */
 olx.tilegrid.WMTS.createFromCapabilitiesMatrixSet;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.parameter.osm;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.parameter.wfs;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.parameter.wmc;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.parameter.wms;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.parameter.wmts;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.style.AtlasManager;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.style.Atlas;
 
 /**
  * @type {Object}
@@ -3472,6 +3460,348 @@ Mx.Map.addPopup;
  * @api stable
  */
 Mx.Map.LAYER_SORT;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.style.AtlasManager;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.style.Atlas;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getLayers;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getBaseLayers;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removeLayers;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getWMC;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.addWMC;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removeWMC;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getKML;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.addKML;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removeKML;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getWMS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.addWMS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removeWMS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getWFS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.addWFS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removeWFS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getWMTS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.addWMTS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removeWMTS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getMBtiles;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.addMBtiles;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removeMBtiles;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getControls;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.addControls;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removeControls;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.setMaxExtent;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getMaxExtent;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.setBbox;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getBbox;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.setZoom;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getZoom;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.setCenter;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getCenter;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getResolutions;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.setResolutions;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getScale;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.setProjection;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getProjection;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getMapImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removePopup;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getEnvolvedExtent;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.destroy;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.updateResolutionsFromBaseLayer;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.addLabel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getLabel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removeLabel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.drawPoints;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.drawFeatures;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getPoints;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.removeFeatures;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getDrawLayer;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getContainer;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.getFeaturesHandler;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.setFacadeMap;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Map.Z_INDEX;
 
 /**
  * @type {Object}
@@ -4011,336 +4341,6 @@ Mx.layer.GeoJSON.POPUP_TEMPLATE;
  * @type {Object}
  * @api stable
  */
-Mx.impl.Map;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getLayers;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getBaseLayers;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removeLayers;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getWMC;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.addWMC;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removeWMC;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getKML;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.addKML;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removeKML;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getWMS;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.addWMS;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removeWMS;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getWFS;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.addWFS;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removeWFS;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getWMTS;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.addWMTS;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removeWMTS;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getMBtiles;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.addMBtiles;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removeMBtiles;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getControls;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.addControls;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removeControls;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.setMaxExtent;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getMaxExtent;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.setBbox;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getBbox;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.setZoom;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getZoom;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.setCenter;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getCenter;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getResolutions;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.setResolutions;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getScale;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.setProjection;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getProjection;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getMapImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removePopup;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getEnvolvedExtent;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.destroy;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.updateResolutionsFromBaseLayer;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.addLabel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getLabel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removeLabel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.drawPoints;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.drawFeatures;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getPoints;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.removeFeatures;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getDrawLayer;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getContainer;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.getFeaturesHandler;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.setFacadeMap;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Map.Z_INDEX;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.layer.KML;
 
 /**
@@ -4593,30 +4593,6 @@ Mx.impl.loader.JSONP.getLoaderFn;
  * @type {Object}
  * @api stable
  */
-Mx.exception;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Sphere;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Sphere.geodesicArea;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Sphere.haversineDistance;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.impl.loader.KML;
 
 /**
@@ -4641,91 +4617,7 @@ Mx.impl.loader.WFS.getLoaderFn;
  * @type {Object}
  * @api stable
  */
-Mx.Control;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.Control.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.BingMaps;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.BingMaps.TOS_ATTRIBUTION;
+Mx.exception;
 
 /**
  * @type {Object}
@@ -4797,66 +4689,6 @@ Mx.impl.layer.Draw.equals;
  * @type {Object}
  * @api stable
  */
-Mx.control.GetFeatureInfo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.NAME;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.POPUP_TITLE;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.TEMPLATE;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.POPUP_TEMPLATE;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.Cluster;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.Cluster.getSource;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.impl.layer.GeoJSON;
 
 /**
@@ -4905,60 +4737,6 @@ Mx.impl.layer.GeoJSON.STYLE;
  * @type {Object}
  * @api stable
  */
-Mx.control.LayerSwitcher;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.render;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.registerEvents;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.unregisterEvents;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.NAME;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.TEMPLATE;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageCanvas;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.impl.layer.KML;
 
 /**
@@ -5002,72 +4780,6 @@ Mx.impl.layer.KML.destroy;
  * @api stable
  */
 Mx.impl.layer.KML.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.NAME;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.TEMPLATE;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageMapGuide;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageMapGuide.getParams;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageMapGuide.getImageLoadFunction;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageMapGuide.updateParams;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageMapGuide.setImageLoadFunction;
 
 /**
  * @type {Object}
@@ -5163,54 +4875,6 @@ Mx.impl.Layer.selectFeatures;
  * @type {Object}
  * @api stable
  */
-Mx.control.Mouse;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.NAME;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.TEMPLATE;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.Image;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageEvent;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageEvent.image;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.impl.layer.OSM;
 
 /**
@@ -5248,42 +4912,6 @@ Mx.impl.layer.OSM.destroy;
  * @api stable
  */
 Mx.impl.layer.OSM.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.NAME;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.TEMPLATE;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageStatic;
 
 /**
  * @type {Object}
@@ -5332,66 +4960,6 @@ Mx.impl.layer.WFS.equals;
  * @api stable
  */
 Mx.impl.layer.WFS.STYLE;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.NAME;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.TEMPLATE;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageVector;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageVector.getSource;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageVector.getStyle;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageVector.getStyleFunction;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageVector.setStyle;
 
 /**
  * @type {Object}
@@ -5446,84 +5014,6 @@ Mx.impl.layer.WMC.destroy;
  * @api stable
  */
 Mx.impl.layer.WMC.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.NAME;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.TEMPLATE;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageWMS;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageWMS.getGetFeatureInfoUrl;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageWMS.getParams;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageWMS.getImageLoadFunction;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageWMS.getUrl;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageWMS.setImageLoadFunction;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageWMS.setUrl;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.ImageWMS.updateParams;
 
 /**
  * @type {Object}
@@ -5619,48 +5109,6 @@ Mx.impl.layer.WMS.equals;
  * @type {Object}
  * @api stable
  */
-Mx.control.Panzoombar;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.NAME;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.TEMPLATE;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.MapQuest;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.MapQuest.getLayer;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.impl.layer.WMTS;
 
 /**
@@ -5697,6 +5145,408 @@ Mx.impl.layer.WMTS.equals;
  * @type {Object}
  * @api stable
  */
+olx.Sphere;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Sphere.geodesicArea;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Sphere.haversineDistance;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.createView;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Control.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.handler.Features;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.handler.Features.addLayer;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.handler.Features.removeLayer;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.handler.Features.destroy;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.createView;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.equals;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.NAME;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.POPUP_TITLE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.POPUP_TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.createView;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.equals;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.render;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.registerEvents;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.unregisterEvents;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.NAME;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.createView;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.equals;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.NAME;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.createView;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.equals;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.NAME;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.createView;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.equals;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.NAME;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.createView;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.equals;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.NAME;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.createView;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.equals;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.NAME;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.createView;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.equals;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.NAME;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
 Mx.control.Scale;
 
 /**
@@ -5727,18 +5577,6 @@ Mx.control.Scale.TEMPLATE;
  * @type {Object}
  * @api stable
  */
-olx.source.OSM;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.source.OSM.ATTRIBUTION;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.control.ScaleLine;
 
 /**
@@ -5764,6 +5602,216 @@ Mx.control.ScaleLine.NAME;
  * @api stable
  */
 Mx.control.ScaleLine.TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.createView;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.equals;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.TEMPLATE;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.BingMaps;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.BingMaps.TOS_ATTRIBUTION;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.Cluster;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.Cluster.getSource;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageCanvas;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageMapGuide;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageMapGuide.getParams;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageMapGuide.getImageLoadFunction;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageMapGuide.updateParams;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageMapGuide.setImageLoadFunction;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.Image;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageEvent;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageEvent.image;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageStatic;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageVector;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageVector.getSource;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageVector.getStyle;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageVector.getStyleFunction;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageVector.setStyle;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageWMS;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageWMS.getGetFeatureInfoUrl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageWMS.getParams;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageWMS.getImageLoadFunction;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageWMS.getUrl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageWMS.setImageLoadFunction;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageWMS.setUrl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.ImageWMS.updateParams;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.MapQuest;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.MapQuest.getLayer;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.OSM;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.source.OSM.ATTRIBUTION;
 
 /**
  * @type {Object}
@@ -5806,30 +5854,6 @@ olx.source.RasterEvent.resolution;
  * @api stable
  */
 olx.source.RasterEvent.data;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.createView;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.equals;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.TEMPLATE;
 
 /**
  * @type {Object}
@@ -6244,30 +6268,6 @@ olx.source.XYZ;
  * @api stable
  */
 olx.source.Zoomify;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.handler.Features;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.handler.Features.addLayer;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.handler.Features.removeLayer;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.handler.Features.destroy;
 
 /**
  * @type {Object}
@@ -6729,84 +6729,6 @@ Mx.impl.format.KML.getScreenOverlay;
  * @type {Object}
  * @api stable
  */
-olx.render.Event.vectorContext;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.Event;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.EventType;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.Event.frameState;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.Event.context;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.Event.glContext;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.Feature.get;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.Feature;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.Feature.getExtent;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.Feature.getGeometry;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.Feature.getProperties;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.Feature.getType;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.VectorContext;
-
-/**
- * @type {Object}
- * @api stable
- */
 Mx.impl.Control;
 
 /**
@@ -6892,96 +6814,6 @@ Mx.impl.control.LayerSwitcher.unregisterEvents;
  * @api stable
  */
 Mx.impl.control.LayerSwitcher.PANEL_ID;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawAsync;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawCircleGeometry;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawFeature;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawGeometryCollectionGeometry;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawPointGeometry;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawLineStringGeometry;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawMultiLineStringGeometry;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawMultiPointGeometry;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawMultiPolygonGeometry;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawPolygonGeometry;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.drawText;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.setFillStrokeStyle;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.setImageStyle;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.render.webgl.Immediate.setTextStyle;
 
 /**
  * @type {Object}
@@ -7192,6 +7024,174 @@ Mx.impl.control.WMCSelector;
  * @api stable
  */
 Mx.impl.control.WMCSelector.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Event.vectorContext;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Event;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.EventType;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Event.frameState;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Event.context;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Event.glContext;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Feature.get;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Feature;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Feature.getExtent;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Feature.getGeometry;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Feature.getProperties;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.Feature.getType;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.VectorContext;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawAsync;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawCircleGeometry;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawFeature;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawGeometryCollectionGeometry;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawPointGeometry;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawLineStringGeometry;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawMultiLineStringGeometry;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawMultiPointGeometry;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawMultiPolygonGeometry;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawPolygonGeometry;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.drawText;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.setFillStrokeStyle;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.setImageStyle;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.render.webgl.Immediate.setTextStyle;
 
 /**
  * @type {Object}
@@ -9759,84 +9759,6 @@ olx.Object.unByKey;
  * @type {Object}
  * @api stable
  */
-olx.Collection.get;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.getKeys;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.getProperties;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.set;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.setProperties;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.unset;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.changed;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.dispatchEvent;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.getRevision;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.once;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-olx.Collection.unByKey;
-
-/**
- * @type {Object}
- * @api stable
- */
 olx.View.get;
 
 /**
@@ -10102,6 +10024,84 @@ Mx.remote.Response.un;
  * @api stable
  */
 Mx.remote.Response.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.get;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.getKeys;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.getProperties;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.set;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.setProperties;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.unset;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.changed;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.dispatchEvent;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.getRevision;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.once;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+olx.Collection.unByKey;
 
 /**
  * @type {Object}
@@ -11739,6 +11739,36 @@ Mx.impl.loader.WFS.fire;
  * @type {Object}
  * @api stable
  */
+Mx.impl.Layer.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.Layer.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
 Mx.Control.getImpl;
 
 /**
@@ -11758,6 +11788,984 @@ Mx.Control.un;
  * @api stable
  */
 Mx.Control.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.GetFeatureInfo.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.LayerSwitcher.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Location.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Mouse.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Navtoolbar.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.OverviewMap.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoom.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Panzoombar.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.Scale.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.ScaleLine.fire;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.name;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.activated;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.setImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.addTo;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.manageActivation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.getActivationButton;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.activate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.deactivate;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.getElement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.setPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.getPanel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.getImpl;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.on;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.un;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.control.WMCSelector.fire;
 
 /**
  * @type {Object}
@@ -12387,90 +13395,6 @@ olx.source.BingMaps.unByKey;
  * @type {Object}
  * @api stable
  */
-Mx.control.GetFeatureInfo.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.GetFeatureInfo.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
 olx.source.Vector.getAttributions;
 
 /**
@@ -12771,96 +13695,6 @@ olx.source.Cluster.unByKey;
  * @type {Object}
  * @api stable
  */
-Mx.control.LayerSwitcher.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.LayerSwitcher.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
 olx.source.Image.getAttributions;
 
 /**
@@ -13077,90 +13911,6 @@ olx.source.ImageCanvas.unByKey;
  * @type {Object}
  * @api stable
  */
-Mx.control.Location.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Location.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
 olx.source.ImageMapGuide.getAttributions;
 
 /**
@@ -13264,216 +14014,6 @@ olx.source.ImageMapGuide.un;
  * @api stable
  */
 olx.source.ImageMapGuide.unByKey;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.Layer.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Mouse.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Navtoolbar.fire;
 
 /**
  * @type {Object}
@@ -13587,96 +14127,6 @@ olx.source.ImageStatic.unByKey;
  * @type {Object}
  * @api stable
  */
-Mx.control.OverviewMap.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.OverviewMap.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
 olx.source.ImageVector.getAttributions;
 
 /**
@@ -13785,96 +14235,6 @@ olx.source.ImageVector.unByKey;
  * @type {Object}
  * @api stable
  */
-Mx.control.Panzoom.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoom.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
 olx.source.ImageWMS.getAttributions;
 
 /**
@@ -13978,96 +14338,6 @@ olx.source.ImageWMS.un;
  * @api stable
  */
 olx.source.ImageWMS.unByKey;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Panzoombar.fire;
 
 /**
  * @type {Object}
@@ -14409,96 +14679,6 @@ olx.source.MapQuest.unByKey;
  * @type {Object}
  * @api stable
  */
-Mx.control.Scale.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.Scale.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
 olx.source.OSM.setRenderReprojectionEdges;
 
 /**
@@ -14667,96 +14847,6 @@ olx.source.OSM.unByKey;
  * @type {Object}
  * @api stable
  */
-Mx.control.ScaleLine.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.ScaleLine.fire;
-
-/**
- * @type {Object}
- * @api stable
- */
 olx.source.Raster.getAttributions;
 
 /**
@@ -14860,96 +14950,6 @@ olx.source.Raster.un;
  * @api stable
  */
 olx.source.Raster.unByKey;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.name;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.activated;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.setImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.addTo;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.manageActivation;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.getActivationButton;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.activate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.deactivate;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.getElement;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.setPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.getPanel;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.getImpl;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.on;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.un;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.control.WMCSelector.fire;
 
 /**
  * @type {Object}
@@ -16731,6 +16731,48 @@ olx.renderer.dom.VectorLayer.unByKey;
  * @type {Object}
  * @api stable
  */
+Mx.impl.format.KML.readFeature;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.format.KML.readFeatures;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.format.KML.readName;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.format.KML.readNetworkLinks;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.format.KML.readProjection;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.format.KML.writeFeatures;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.impl.format.KML.writeFeaturesNode;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
 olx.renderer.canvas.Layer.changed;
 
 /**
@@ -16936,48 +16978,6 @@ olx.renderer.canvas.VectorTileLayer.un;
  * @api stable
  */
 olx.renderer.canvas.VectorTileLayer.unByKey;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.format.KML.readFeature;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.format.KML.readFeatures;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.format.KML.readName;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.format.KML.readNetworkLinks;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.format.KML.readProjection;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.format.KML.writeFeatures;
-
-/**
- * @type {Object}
- * @api stable
- */
-Mx.impl.format.KML.writeFeaturesNode;
 
 /**
  * @type {Object}

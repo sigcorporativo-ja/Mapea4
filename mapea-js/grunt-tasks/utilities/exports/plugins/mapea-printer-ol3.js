@@ -9,20 +9,6 @@ goog.require('P.plugin.Printer');
 
 
 goog.exportSymbol(
-    'M.plugin.Printer',
-    M.plugin.Printer);
-
-goog.exportProperty(
-    M.plugin.Printer.prototype,
-    'addTo',
-    M.plugin.Printer.prototype.addTo);
-
-goog.exportProperty(
-    M.plugin.Printer.prototype,
-    'destroy',
-    M.plugin.Printer.prototype.destroy);
-
-goog.exportSymbol(
     'M.impl.control.Printer',
     M.impl.control.Printer);
 
@@ -70,6 +56,20 @@ goog.exportProperty(
     M.impl.control.Printer.prototype,
     'destroy',
     M.impl.control.Printer.prototype.destroy);
+
+goog.exportSymbol(
+    'M.plugin.Printer',
+    M.plugin.Printer);
+
+goog.exportProperty(
+    M.plugin.Printer.prototype,
+    'addTo',
+    M.plugin.Printer.prototype.addTo);
+
+goog.exportProperty(
+    M.plugin.Printer.prototype,
+    'destroy',
+    M.plugin.Printer.prototype.destroy);
 
 goog.exportSymbol(
     'M.control.Printer',

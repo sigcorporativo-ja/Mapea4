@@ -61,75 +61,6 @@
       ]
     },
     {
-      "name": "M.impl.control.Streetview",
-      "kind": "class",
-      "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
-      "extends": "ol.control.Control",
-      "provides": [
-        "P.impl.control.Streetview"
-      ]
-    },
-    {
-      "name": "M.impl.control.Streetview#openStreetView",
-      "kind": "function",
-      "description": "This function adds the control to the specified map",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "M.Map"
-          ]
-        },
-        {
-          "name": "template",
-          "types": [
-            "Function"
-          ]
-        }
-      ],
-      "provides": [
-        "P.impl.control.Streetview"
-      ]
-    },
-    {
-      "name": "M.impl.control.Streetview#processSVData",
-      "kind": "function",
-      "description": "This function adds the control to the specified map",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "M.Map"
-          ]
-        },
-        {
-          "name": "template",
-          "types": [
-            "Function"
-          ]
-        }
-      ],
-      "provides": [
-        "P.impl.control.Streetview"
-      ]
-    },
-    {
-      "name": "M.impl.control.Streetview#destroy",
-      "kind": "function",
-      "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
-      "provides": [
-        "P.impl.control.Streetview"
-      ]
-    },
-    {
       "name": "M.control.Streetview",
       "kind": "class",
       "description": "Main constructor of the class. Creates a Streetview\ncontrol to draw features on the map.",
@@ -274,6 +205,75 @@
       ],
       "provides": [
         "P.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.impl.control.Streetview",
+      "kind": "class",
+      "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
+      "extends": "ol.control.Control",
+      "provides": [
+        "P.impl.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.impl.control.Streetview#openStreetView",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.impl.control.Streetview#processSVData",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Streetview"
+      ]
+    },
+    {
+      "name": "M.impl.control.Streetview#destroy",
+      "kind": "function",
+      "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/streetview/impl/ol3/js/streetviewcontrols.js",
+      "provides": [
+        "P.impl.control.Streetview"
       ]
     }
   ],

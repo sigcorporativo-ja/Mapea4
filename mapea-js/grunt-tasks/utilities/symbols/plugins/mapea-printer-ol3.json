@@ -1,53 +1,6 @@
 {
   "symbols": [
     {
-      "name": "M.plugin.Printer",
-      "kind": "class",
-      "description": "Main facade plugin object. This class creates a plugin\nobject which has an implementation Object",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printer.js",
-      "extends": "M.Plugin",
-      "params": [
-        {
-          "name": "impl",
-          "types": [
-            "Object"
-          ]
-        }
-      ],
-      "provides": [
-        "P.plugin.Printer"
-      ]
-    },
-    {
-      "name": "M.plugin.Printer#addTo",
-      "kind": "function",
-      "description": "This function provides the implementation\nof the object",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printer.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "Object"
-          ]
-        }
-      ],
-      "provides": [
-        "P.plugin.Printer"
-      ]
-    },
-    {
-      "name": "M.plugin.Printer#destroy",
-      "kind": "function",
-      "description": "This function destroys this plugin",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printer.js",
-      "provides": [
-        "P.plugin.Printer"
-      ]
-    },
-    {
       "name": "M.impl.control.Printer",
       "kind": "class",
       "description": "Main constructor of the measure conrol.",
@@ -258,6 +211,53 @@
       "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
       "provides": [
         "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.plugin.Printer",
+      "kind": "class",
+      "description": "Main facade plugin object. This class creates a plugin\nobject which has an implementation Object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printer.js",
+      "extends": "M.Plugin",
+      "params": [
+        {
+          "name": "impl",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.Printer"
+      ]
+    },
+    {
+      "name": "M.plugin.Printer#addTo",
+      "kind": "function",
+      "description": "This function provides the implementation\nof the object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printer.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.Printer"
+      ]
+    },
+    {
+      "name": "M.plugin.Printer#destroy",
+      "kind": "function",
+      "description": "This function destroys this plugin",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printer.js",
+      "provides": [
+        "P.plugin.Printer"
       ]
     },
     {

@@ -1,75 +1,6 @@
 {
   "symbols": [
     {
-      "name": "M.impl.control.ClearFeature",
-      "kind": "class",
-      "description": "Main constructor of the class. Creates a WMC ClearFeature\ncontrol",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/clearfeature.js",
-      "extends": "ol.control.Control",
-      "provides": [
-        "P.impl.control.ClearFeature"
-      ]
-    },
-    {
-      "name": "M.impl.control.ClearFeature#addTo",
-      "kind": "function",
-      "description": "This function adds the control to the specified map",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/clearfeature.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "M.Map"
-          ]
-        },
-        {
-          "name": "template",
-          "types": [
-            "Function"
-          ]
-        }
-      ],
-      "provides": [
-        "P.impl.control.ClearFeature"
-      ]
-    },
-    {
-      "name": "M.impl.control.ClearFeature#clear",
-      "kind": "function",
-      "description": "This function adds the control to the specified map",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/clearfeature.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "M.Map"
-          ]
-        },
-        {
-          "name": "template",
-          "types": [
-            "Function"
-          ]
-        }
-      ],
-      "provides": [
-        "P.impl.control.ClearFeature"
-      ]
-    },
-    {
-      "name": "M.impl.control.ClearFeature#destroy",
-      "kind": "function",
-      "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/clearfeature.js",
-      "provides": [
-        "P.impl.control.ClearFeature"
-      ]
-    },
-    {
       "name": "M.control.ClearFeature",
       "kind": "class",
       "description": "Main constructor of the class. Creates a ClearFeature\ncontrol to clean deleted, created and modified unsaved features.",
@@ -145,6 +76,16 @@
       ]
     },
     {
+      "name": "M.control.ClearFeature#setLayer",
+      "kind": "function",
+      "description": "This function set layer for editting",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/clearfeature.js",
+      "provides": [
+        "P.control.ClearFeature"
+      ]
+    },
+    {
       "name": "M.control.ClearFeature.NAME",
       "kind": "constant",
       "description": "Name for this controls",
@@ -171,63 +112,72 @@
       ]
     },
     {
-      "name": "M.impl.control.DeleteFeature",
+      "name": "M.impl.control.ClearFeature",
       "kind": "class",
-      "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
+      "description": "Main constructor of the class. Creates a WMC ClearFeature\ncontrol",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/deletefeature.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/clearfeature.js",
       "extends": "ol.control.Control",
       "provides": [
-        "P.impl.control.DeleteFeature"
+        "P.impl.control.ClearFeature"
       ]
     },
     {
-      "name": "M.impl.control.DeleteFeature#modifiedFeatures",
-      "kind": "member",
-      "description": "TODO",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/deletefeature.js",
-      "types": [
-        "ol.Feature"
-      ],
-      "provides": [
-        "P.impl.control.DeleteFeature"
-      ]
-    },
-    {
-      "name": "M.impl.control.DeleteFeature#activate",
+      "name": "M.impl.control.ClearFeature#addTo",
       "kind": "function",
-      "description": "This function add events to the button 'DeleteFeature'",
+      "description": "This function adds the control to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/deletefeature.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/clearfeature.js",
       "params": [
         {
-          "name": "html",
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
           "types": [
             "Function"
           ]
         }
       ],
       "provides": [
-        "P.impl.control.DeleteFeature"
+        "P.impl.control.ClearFeature"
       ]
     },
     {
-      "name": "M.impl.control.DeleteFeature#deactivate",
+      "name": "M.impl.control.ClearFeature#clear",
       "kind": "function",
-      "description": "This function add events to the button 'DeleteFeature'",
+      "description": "This function adds the control to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/deletefeature.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/clearfeature.js",
       "params": [
         {
-          "name": "html",
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
           "types": [
             "Function"
           ]
         }
       ],
       "provides": [
-        "P.impl.control.DeleteFeature"
+        "P.impl.control.ClearFeature"
+      ]
+    },
+    {
+      "name": "M.impl.control.ClearFeature#destroy",
+      "kind": "function",
+      "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/clearfeature.js",
+      "provides": [
+        "P.impl.control.ClearFeature"
       ]
     },
     {
@@ -306,6 +256,16 @@
       ]
     },
     {
+      "name": "M.control.DeleteFeature#setLayer",
+      "kind": "function",
+      "description": "This function set layer for editting",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/deletefeature.js",
+      "provides": [
+        "P.control.DeleteFeature"
+      ]
+    },
+    {
       "name": "M.control.DeleteFeature.NAME",
       "kind": "constant",
       "description": "Name for this controls",
@@ -332,38 +292,63 @@
       ]
     },
     {
-      "name": "M.impl.control.DrawFeature",
+      "name": "M.impl.control.DeleteFeature",
       "kind": "class",
       "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/drawfeature.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/deletefeature.js",
       "extends": "ol.control.Control",
       "provides": [
-        "P.impl.control.DrawFeature"
+        "P.impl.control.DeleteFeature"
       ]
     },
     {
-      "name": "M.impl.control.DrawFeature#createInteraction_",
-      "kind": "function",
-      "description": "This function adds the control to the specified map",
+      "name": "M.impl.control.DeleteFeature#modifiedFeatures",
+      "kind": "member",
+      "description": "TODO",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/drawfeature.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/deletefeature.js",
+      "types": [
+        "ol.Feature"
+      ],
+      "provides": [
+        "P.impl.control.DeleteFeature"
+      ]
+    },
+    {
+      "name": "M.impl.control.DeleteFeature#activate",
+      "kind": "function",
+      "description": "This function add events to the button 'DeleteFeature'",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/deletefeature.js",
       "params": [
         {
-          "name": "map",
-          "types": [
-            "M.Map"
-          ]
-        },
-        {
-          "name": "template",
+          "name": "html",
           "types": [
             "Function"
           ]
         }
       ],
       "provides": [
-        "P.impl.control.DrawFeature"
+        "P.impl.control.DeleteFeature"
+      ]
+    },
+    {
+      "name": "M.impl.control.DeleteFeature#deactivate",
+      "kind": "function",
+      "description": "This function add events to the button 'DeleteFeature'",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/deletefeature.js",
+      "params": [
+        {
+          "name": "html",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.DeleteFeature"
       ]
     },
     {
@@ -442,6 +427,16 @@
       ]
     },
     {
+      "name": "M.control.DrawFeature#setLayer",
+      "kind": "function",
+      "description": "This function set layer for editting",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/drawfeature.js",
+      "provides": [
+        "P.control.DrawFeature"
+      ]
+    },
+    {
       "name": "M.control.DrawFeature.NAME",
       "kind": "constant",
       "description": "Name for this controls",
@@ -465,6 +460,173 @@
       ],
       "provides": [
         "P.control.DrawFeature"
+      ]
+    },
+    {
+      "name": "M.impl.control.DrawFeature",
+      "kind": "class",
+      "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/drawfeature.js",
+      "extends": "ol.control.Control",
+      "provides": [
+        "P.impl.control.DrawFeature"
+      ]
+    },
+    {
+      "name": "M.impl.control.DrawFeature#createInteraction_",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/drawfeature.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.DrawFeature"
+      ]
+    },
+    {
+      "name": "M.control.EditAttribute",
+      "kind": "class",
+      "description": "Main constructor of the class. Creates a EditAttribute\nedit the attributes of the features",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
+      "extends": "M.Control",
+      "params": [
+        {
+          "name": "layer",
+          "types": [
+            "M.layer.WFS"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.EditAttribute"
+      ]
+    },
+    {
+      "name": "M.control.EditAttribute#createView",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "returns": {
+        "types": [
+          "Promise"
+        ]
+      },
+      "provides": [
+        "P.control.EditAttribute"
+      ]
+    },
+    {
+      "name": "M.control.EditAttribute#getActivationButton",
+      "kind": "function",
+      "description": "TODO",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
+      "params": [
+        {
+          "name": "html",
+          "types": [
+            "HTMLElement"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.EditAttribute"
+      ]
+    },
+    {
+      "name": "M.control.EditAttribute#equals",
+      "kind": "function",
+      "description": "This function checks if an object is equals\nto this control",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
+      "provides": [
+        "P.control.EditAttribute"
+      ]
+    },
+    {
+      "name": "M.control.EditAttribute#setLayer",
+      "kind": "function",
+      "description": "This function set layer for editting",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
+      "provides": [
+        "P.control.EditAttribute"
+      ]
+    },
+    {
+      "name": "M.control.EditAttribute.NAME",
+      "kind": "constant",
+      "description": "Template for this controls - button",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.EditAttribute"
+      ]
+    },
+    {
+      "name": "M.control.EditAttribute.POPUP_TITLE",
+      "kind": "constant",
+      "description": "Title for the popup",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.EditAttribute"
+      ]
+    },
+    {
+      "name": "M.control.EditAttribute.TEMPLATE",
+      "kind": "constant",
+      "description": "Template for this controls - button",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.EditAttribute"
+      ]
+    },
+    {
+      "name": "M.control.EditAttribute.TEMPLATE_POPUP",
+      "kind": "constant",
+      "description": "Template for this controls - button",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.EditAttribute"
       ]
     },
     {
@@ -571,185 +733,6 @@
       ]
     },
     {
-      "name": "M.control.EditAttribute",
-      "kind": "class",
-      "description": "Main constructor of the class. Creates a EditAttribute\nedit the attributes of the features",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
-      "extends": "M.Control",
-      "params": [
-        {
-          "name": "layer",
-          "types": [
-            "M.layer.WFS"
-          ]
-        }
-      ],
-      "provides": [
-        "P.control.EditAttribute"
-      ]
-    },
-    {
-      "name": "M.control.EditAttribute#createView",
-      "kind": "function",
-      "description": "This function creates the view to the specified map",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "M.Map"
-          ]
-        }
-      ],
-      "returns": {
-        "types": [
-          "Promise"
-        ]
-      },
-      "provides": [
-        "P.control.EditAttribute"
-      ]
-    },
-    {
-      "name": "M.control.EditAttribute#getActivationButton",
-      "kind": "function",
-      "description": "TODO",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
-      "params": [
-        {
-          "name": "html",
-          "types": [
-            "HTMLElement"
-          ]
-        }
-      ],
-      "provides": [
-        "P.control.EditAttribute"
-      ]
-    },
-    {
-      "name": "M.control.EditAttribute#equals",
-      "kind": "function",
-      "description": "This function checks if an object is equals\nto this control",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
-      "provides": [
-        "P.control.EditAttribute"
-      ]
-    },
-    {
-      "name": "M.control.EditAttribute.NAME",
-      "kind": "constant",
-      "description": "Template for this controls - button",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
-      "types": [
-        "string"
-      ],
-      "provides": [
-        "P.control.EditAttribute"
-      ]
-    },
-    {
-      "name": "M.control.EditAttribute.POPUP_TITLE",
-      "kind": "constant",
-      "description": "Title for the popup",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
-      "types": [
-        "string"
-      ],
-      "provides": [
-        "P.control.EditAttribute"
-      ]
-    },
-    {
-      "name": "M.control.EditAttribute.TEMPLATE",
-      "kind": "constant",
-      "description": "Template for this controls - button",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
-      "types": [
-        "string"
-      ],
-      "provides": [
-        "P.control.EditAttribute"
-      ]
-    },
-    {
-      "name": "M.control.EditAttribute.TEMPLATE_POPUP",
-      "kind": "constant",
-      "description": "Template for this controls - button",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/editattribute.js",
-      "types": [
-        "string"
-      ],
-      "provides": [
-        "P.control.EditAttribute"
-      ]
-    },
-    {
-      "name": "M.impl.control.ModifyFeature",
-      "kind": "class",
-      "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/modifyfeature.js",
-      "extends": "ol.control.Control",
-      "provides": [
-        "P.impl.control.ModifyFeature"
-      ]
-    },
-    {
-      "name": "M.impl.control.ModifyFeature#activate",
-      "kind": "function",
-      "description": "This function add events to the button 'DeleteFeature'",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/modifyfeature.js",
-      "params": [
-        {
-          "name": "html",
-          "types": [
-            "Function"
-          ]
-        }
-      ],
-      "provides": [
-        "P.impl.control.ModifyFeature"
-      ]
-    },
-    {
-      "name": "M.impl.control.ModifyFeature#deactivate",
-      "kind": "function",
-      "description": "This function add events to the button 'DeleteFeature'",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/modifyfeature.js",
-      "params": [
-        {
-          "name": "html",
-          "types": [
-            "Function"
-          ]
-        }
-      ],
-      "provides": [
-        "P.impl.control.ModifyFeature"
-      ]
-    },
-    {
-      "name": "M.impl.control.ModifyFeature#destroy",
-      "kind": "function",
-      "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/modifyfeature.js",
-      "provides": [
-        "P.impl.control.ModifyFeature"
-      ]
-    },
-    {
       "name": "M.control.ModifyFeature",
       "kind": "class",
       "description": "Main constructor of the class. Creates a ModifyFeature\ncontrol to edit map features",
@@ -820,6 +803,16 @@
       ]
     },
     {
+      "name": "M.control.ModifyFeature#setLayer",
+      "kind": "function",
+      "description": "This function set layer for editting",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/modifyfeature.js",
+      "provides": [
+        "P.control.ModifyFeature"
+      ]
+    },
+    {
       "name": "M.control.ModifyFeature.NAME",
       "kind": "constant",
       "description": "Name for this controls",
@@ -846,66 +839,60 @@
       ]
     },
     {
-      "name": "M.impl.control.SaveFeature",
+      "name": "M.impl.control.ModifyFeature",
       "kind": "class",
       "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/savefeature.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/modifyfeature.js",
       "extends": "ol.control.Control",
       "provides": [
-        "P.impl.control.SaveFeature"
+        "P.impl.control.ModifyFeature"
       ]
     },
     {
-      "name": "M.impl.control.SaveFeature#addTo",
+      "name": "M.impl.control.ModifyFeature#activate",
       "kind": "function",
-      "description": "This function adds the control to the specified map",
+      "description": "This function add events to the button 'DeleteFeature'",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/savefeature.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/modifyfeature.js",
       "params": [
         {
-          "name": "map",
-          "types": [
-            "M.Map"
-          ]
-        },
-        {
-          "name": "template",
+          "name": "html",
           "types": [
             "Function"
           ]
         }
       ],
       "provides": [
-        "P.impl.control.SaveFeature"
+        "P.impl.control.ModifyFeature"
       ]
     },
     {
-      "name": "M.impl.control.SaveFeature#saveFeature",
+      "name": "M.impl.control.ModifyFeature#deactivate",
       "kind": "function",
-      "description": "This function creates the view to the specified map",
+      "description": "This function add events to the button 'DeleteFeature'",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/savefeature.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/modifyfeature.js",
       "params": [
         {
-          "name": "map",
+          "name": "html",
           "types": [
-            "M.Map"
+            "Function"
           ]
         }
       ],
       "provides": [
-        "P.impl.control.SaveFeature"
+        "P.impl.control.ModifyFeature"
       ]
     },
     {
-      "name": "M.impl.control.SaveFeature#destroy",
+      "name": "M.impl.control.ModifyFeature#destroy",
       "kind": "function",
       "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/savefeature.js",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/modifyfeature.js",
       "provides": [
-        "P.impl.control.SaveFeature"
+        "P.impl.control.ModifyFeature"
       ]
     },
     {
@@ -997,6 +984,16 @@
       ]
     },
     {
+      "name": "M.control.SaveFeature#setLayer",
+      "kind": "function",
+      "description": "This function set layer for editting",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/savefeature.js",
+      "provides": [
+        "P.control.SaveFeature"
+      ]
+    },
+    {
       "name": "M.control.SaveFeature.NAME",
       "kind": "constant",
       "description": "Template for this controls - button",
@@ -1020,6 +1017,126 @@
       ],
       "provides": [
         "P.control.SaveFeature"
+      ]
+    },
+    {
+      "name": "M.impl.control.SaveFeature",
+      "kind": "class",
+      "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/savefeature.js",
+      "extends": "ol.control.Control",
+      "provides": [
+        "P.impl.control.SaveFeature"
+      ]
+    },
+    {
+      "name": "M.impl.control.SaveFeature#addTo",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/savefeature.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.SaveFeature"
+      ]
+    },
+    {
+      "name": "M.impl.control.SaveFeature#saveFeature",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/savefeature.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.SaveFeature"
+      ]
+    },
+    {
+      "name": "M.impl.control.SaveFeature#destroy",
+      "kind": "function",
+      "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/savefeature.js",
+      "provides": [
+        "P.impl.control.SaveFeature"
+      ]
+    },
+    {
+      "name": "M.plugin.WFSTControls",
+      "kind": "class",
+      "description": "Main facade plugin object. This class creates a plugin\nobject which has an implementation Object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/wfstcontrols.js",
+      "extends": "M.Plugin",
+      "params": [
+        {
+          "name": "impl",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.WFSTControls"
+      ]
+    },
+    {
+      "name": "M.plugin.WFSTControls#addTo",
+      "kind": "function",
+      "description": "This function provides the implementation\nof the object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/wfstcontrols.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.WFSTControls"
+      ]
+    },
+    {
+      "name": "M.plugin.WFSTControls#destroy",
+      "kind": "function",
+      "description": "This function destroys this plugin",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/wfstcontrols.js",
+      "provides": [
+        "P.plugin.WFSTControls"
+      ]
+    },
+    {
+      "name": "M.plugin.WFSTControls#setLayer",
+      "kind": "function",
+      "description": "This function set layer for editting",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/wfstcontrols.js",
+      "provides": [
+        "P.plugin.WFSTControls"
       ]
     },
     {
@@ -1114,53 +1231,6 @@
       "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/impl/ol3/js/wfstcontrolbase.js",
       "provides": [
         "P.impl.control.WFSTBase"
-      ]
-    },
-    {
-      "name": "M.plugin.WFSTControls",
-      "kind": "class",
-      "description": "Main facade plugin object. This class creates a plugin\nobject which has an implementation Object",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/wfstcontrols.js",
-      "extends": "M.Plugin",
-      "params": [
-        {
-          "name": "impl",
-          "types": [
-            "Object"
-          ]
-        }
-      ],
-      "provides": [
-        "P.plugin.WFSTControls"
-      ]
-    },
-    {
-      "name": "M.plugin.WFSTControls#addTo",
-      "kind": "function",
-      "description": "This function provides the implementation\nof the object",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/wfstcontrols.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "Object"
-          ]
-        }
-      ],
-      "provides": [
-        "P.plugin.WFSTControls"
-      ]
-    },
-    {
-      "name": "M.plugin.WFSTControls#destroy",
-      "kind": "function",
-      "description": "This function destroys this plugin",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/wfstcontrols/facade/js/wfstcontrols.js",
-      "provides": [
-        "P.plugin.WFSTControls"
       ]
     }
   ],
