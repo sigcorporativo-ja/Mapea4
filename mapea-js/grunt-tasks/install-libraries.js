@@ -6,9 +6,9 @@ var externs = require('./utilities/build-externs');
 
 var ROOT = path.join(__dirname, '..');
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
-   grunt.registerMultiTask('install-libraries', 'get externs modules for libraries', function () {
+   grunt.registerMultiTask('install-libraries', 'get externs modules for libraries', function() {
       var done = this.async();
 
       var outputDir = this.data.outputDir;
@@ -22,19 +22,19 @@ module.exports = function (grunt) {
          // npm install
          exec('npm install', {
             cwd: implRootDir
-         }, function (err, stdout, stderr) {
+         }, function(err, stdout, stderr) {
             console.log(stdout);
             // bower install
             exec('bower install', {
                cwd: implRootDir
-            }, function (err, stdout, stderr) {
+            }, function(err, stdout, stderr) {
                console.log(stdout);
 
                // creates the external folder
                var externFolder = createExternFolder(outputDir, impl);
                var packagejson = getPackageJSON(implRootDir);
 
-               externs(packagejson, externFolder, implRootDir, function (err) {
+               externs(packagejson, externFolder, implRootDir, function(err) {
                   nExternsDownloaded++;
                   if (err != null) {
                      grunt.log.error(err);
