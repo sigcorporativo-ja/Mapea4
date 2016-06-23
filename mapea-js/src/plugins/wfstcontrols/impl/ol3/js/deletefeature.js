@@ -5,29 +5,28 @@ goog.require('P.impl.control.WFSTBase');
 /**
  * @namespace M.impl.control
  */
-(function() {
+(function () {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a DeleteFeature
+    * Main constructor of the class. Creates a WMC selector
     * control
     *
     * @constructor
-    * @param {M.layer.WFS} layer - Layer for use in control
     * @extends {ol.control.Control}
     * @api stable
     */
-   M.impl.control.DeleteFeature = function(layer) {
+   M.impl.control.DeleteFeature = function (layer) {
       /**
-       * Layer for use in control
+       * TODO
        * @private
        * @type {ol.Feature}
        */
       this.layer_ = layer;
 
       /**
-       * Store modified features
+       * TODO
        * @public
-       * @type {array}
+       * @type {ol.Feature}
        * @api stable
        */
       this.modifiedFeatures = [];
@@ -37,38 +36,38 @@ goog.require('P.impl.control.WFSTBase');
    goog.inherits(M.impl.control.DeleteFeature, M.impl.Control);
 
    /**
-    * This function active control
+    * This function add events to the button 'DeleteFeature'
     *
     * @public
     * @function
+    * @param {function} html control button
     * @api stable
     */
-   M.impl.control.DeleteFeature.prototype.activate = function() {
+   M.impl.control.DeleteFeature.prototype.activate = function () {
       var layerImpl = this.layer_.getImpl();
       layerImpl.on(M.evt.SELECT_FEATURES, this.removeFeature_, this);
    };
 
    /**
-    * This function deactivate control
+    * This function add events to the button 'DeleteFeature'
     *
     * @public
     * @function
+    * @param {function} html control button
     * @api stable
     */
-   M.impl.control.DeleteFeature.prototype.deactivate = function() {
+   M.impl.control.DeleteFeature.prototype.deactivate = function () {
       var layerImpl = this.layer_.getImpl();
       layerImpl.un(M.evt.SELECT_FEATURES, this.removeFeature_, this);
    };
 
    /**
-    * This function remove a specific feature
+    * TODO
     *
     * @private
     * @function
-    * @param {ol.Feature} features - Feature to remove
-    * @param {array} coordinate - Coordinates
     */
-   M.impl.control.DeleteFeature.prototype.removeFeature_ = function(features, coordinate) {
+   M.impl.control.DeleteFeature.prototype.removeFeature_ = function (features, coordinate) {
       var feature = features[0];
       var olLayer = this.layer_.getImpl().getOL3Layer();
       olLayer.getSource().removeFeature(feature);

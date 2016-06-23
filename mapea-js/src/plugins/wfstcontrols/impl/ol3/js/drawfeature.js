@@ -7,12 +7,11 @@ goog.require('P.impl.control.WFSTBase');
 (function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a DrawFeature
+    * Main constructor of the class. Creates a WMC selector
     * control
     *
     * @constructor
-    * @param {M.layer.WFS} layer - Layer for use in control
-    * @extends {M.impl.control.WFSTBase}
+    * @extends {ol.control.Control}
     * @api stable
     */
    M.impl.control.DrawFeature = function(layer) {
@@ -21,10 +20,12 @@ goog.require('P.impl.control.WFSTBase');
    goog.inherits(M.impl.control.DrawFeature, M.impl.control.WFSTBase);
 
    /**
-    * This function creates the interaction to draw
+    * This function adds the control to the specified map
     *
-    * @private
+    * @public
     * @function
+    * @param {M.Map} map to add the plugin
+    * @param {function} template template of this control
     * @api stable
     */
    M.impl.control.DrawFeature.prototype.createInteraction_ = function() {
@@ -50,11 +51,11 @@ goog.require('P.impl.control.WFSTBase');
 
       // updates features from refresh
       layerImpl.on(M.evt.LOAD, this.updateLayerFeatures_, this);
-   
    };
 
    /**
-    * This function remove unsaved changes
+    * This function destroys this control, cleaning the HTML
+    * and unregistering all events
     *
     * @private
     * @function

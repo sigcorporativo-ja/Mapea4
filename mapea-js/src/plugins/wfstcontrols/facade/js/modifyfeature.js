@@ -7,25 +7,13 @@ goog.provide('P.control.ModifyFeature');
     * control to edit map features
     *
     * @constructor
-    * @param {M.layer.WFS} layer - Layer for use in control
+    * @param {M.layer.WFS}
+    * layer layer for use in control
     * @extends {M.Control}
     * @api stable
     */
    M.control.ModifyFeature = (function(layer) {
-      /**
-       * Name of this control
-       * @public
-       * @type {string}
-       * @api stable
-       */
       this.name = M.control.ModifyFeature.NAME;
-
-      /**
-       * Impl control
-       * @public
-       * @type {M.impl.control.ModifyFeature}
-       * @api stable
-       */
       this.modify = null;
 
       if (M.utils.isUndefined(M.impl.control.ModifyFeature)) {
@@ -45,8 +33,8 @@ goog.provide('P.control.ModifyFeature');
     *
     * @public
     * @function
-    * @param {M.Map} map - Map to add the control
-    * @returns {Promise} HTML response
+    * @param {M.Map} map map to add the control
+    * @returns {Promise} html response
     * @api stable
     */
    M.control.ModifyFeature.prototype.createView = function(map) {
@@ -56,12 +44,11 @@ goog.provide('P.control.ModifyFeature');
    };
 
    /**
-    * Returns the control button
+    * TODO
     *
     * @public
     * @function
-    * @param {HTMLElement} element - HTML control
-    * @returns {HTMLElement} HTML control button
+    * @param {HTMLElement} html to add the plugin
     * @api stable
     * @export
     */
@@ -73,16 +60,24 @@ goog.provide('P.control.ModifyFeature');
     * This function checks if an object is equals
     * to this control
     *
-    * @public
     * @function
-    * @param {*} obj - Object to compare
-    * @returns {boolean} equals - Returns if they are equal or not
     * @api stable
     */
    M.control.ModifyFeature.prototype.equals = function(obj) {
       var equals = (obj instanceof M.control.ModifyFeature);
       return equals;
    };
+
+  /**
+   * This function set layer for editting
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+    M.control.ModifyFeature.prototype.setLayer = function(layer) {
+      this.getImpl().layer_ = layer;
+    };
 
    /**
     * Name for this controls

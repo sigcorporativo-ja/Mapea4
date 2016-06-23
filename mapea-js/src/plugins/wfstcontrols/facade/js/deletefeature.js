@@ -7,17 +7,12 @@ goog.provide('P.control.DeleteFeature');
     * control to remove features map
     *
     * @constructor
-    * @param {M.layer.WFS} layer - Layer for use in control
+    * @param {M.layer.WFS}
+    * layer layer for use in control
     * @extends {M.Control}
     * @api stable
     */
    M.control.DeleteFeature = (function(layer) {
-      /**
-       * Name of this control
-       * @public
-       * @type {string}
-       * @api stable
-       */
       this.name = M.control.DeleteFeature.NAME;
 
       if (M.utils.isUndefined(M.impl.control.DeleteFeature)) {
@@ -36,8 +31,8 @@ goog.provide('P.control.DeleteFeature');
     *
     * @public
     * @function
-    * @param {M.Map} map - Map to add the control
-    * @returns {Promise} HTML response
+    * @param {M.Map} map map to add the control
+    * @returns {Promise} html response
     * @api stable
     */
    M.control.DeleteFeature.prototype.createView = function(map) {
@@ -47,12 +42,11 @@ goog.provide('P.control.DeleteFeature');
    };
 
    /**
-    * Returns the control button
+    * TODO
     *
     * @public
     * @function
-    * @param {HTMLElement} element - HTML control
-    * @returns {HTMLElement} HTML control button
+    * @param {HTMLElement} html to add the plugin
     * @api stable
     * @export
     */
@@ -63,17 +57,25 @@ goog.provide('P.control.DeleteFeature');
    /**
     * This function checks if an object is equals
     * to this control
-    *
-    * @public
+    * @returns {Boolean}
     * @function
-    * @param {*} obj - Object to compare
-    * @returns {boolean} equals - Returns if they are equal or not
     * @api stable
     */
    M.control.DeleteFeature.prototype.equals = function(obj) {
       var equals = (obj instanceof M.control.DeleteFeature);
       return equals;
    };
+
+/**
+ * This function set layer for editting
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+  M.control.DeleteFeature.prototype.setLayer = function(layer) {
+    this.getImpl().layer_ = layer;
+  };
 
    /**
     * Name for this controls
@@ -85,7 +87,7 @@ goog.provide('P.control.DeleteFeature');
    M.control.DeleteFeature.NAME = 'deletefeature';
 
    /**
-    * Template for this controls
+    * Template for this controls - button
     * @const
     * @type {string}
     * @public

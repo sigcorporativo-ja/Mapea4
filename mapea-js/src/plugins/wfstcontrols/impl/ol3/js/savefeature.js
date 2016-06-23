@@ -9,20 +9,14 @@ goog.require('goog.dom.classes');
 (function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a Savefeature
+    * Main constructor of the class. Creates a WMC selector
     * control
     *
     * @constructor
-    * @param {M.layer.WFS} layer - layer for use in control
-    * @extends {M.impl.Control}
+    * @extends {ol.control.Control}
     * @api stable
     */
    M.impl.control.SaveFeature = function(layer) {
-      /**
-       * Layer for use in control
-       * @private
-       * @type {M.layer.WFS}
-       */
       this.layer_ = layer;
    };
    goog.inherits(M.impl.control.SaveFeature, M.impl.Control);
@@ -32,8 +26,8 @@ goog.require('goog.dom.classes');
     *
     * @public
     * @function
-    * @param {M.Map} map - Map to add the plugin
-    * @param {HTMLElement} element - Container SaveFeature
+    * @param {M.Map} map to add the plugin
+    * @param {function} template template of this control
     * @api stable
     */
    M.impl.control.SaveFeature.prototype.addTo = function(map, element) {
@@ -42,14 +36,16 @@ goog.require('goog.dom.classes');
    };
 
    /**
-    * This function saves changes
+    * This function creates the view to the specified map
     *
     * @public
     * @function
+    * @param {M.Map} map to add the control
     * @api stable
     */
    M.impl.control.SaveFeature.prototype.saveFeature = function() {
-      // goog.dom.classes.add(goog.dom.$('m-button-savefeature'), 'm-savefeature-saving');
+      // TODO
+      //      goog.dom.classes.add(goog.dom.$('m-button-savefeature'), 'm-savefeature-saving');
       var saveFeaturesDraw = null;
       var saveFeaturesModify = null;
       var saveFeaturesDelete = null;
@@ -66,7 +62,14 @@ goog.require('goog.dom.classes');
       if (!M.utils.isNullOrEmpty(deletefeatureCtrl)) {
          saveFeaturesDelete = deletefeatureCtrl.getImpl().modifiedFeatures;
       }
-
+      //JGL 20163105: para evitar que se envié en la petición WFST el bbox
+      saveFeaturesModify.forEach(function(feature){
+        feature.unset('bbox');
+      });
+      saveFeaturesDraw.forEach(function(feature){
+        feature.unset('bbox');
+      });
+      //
       var this_ = this;
       var layerImpl = this.layer_.getImpl();
       layerImpl.getDescribeFeatureType().then(function(describeFeatureType) {
@@ -98,7 +101,8 @@ goog.require('goog.dom.classes');
    };
 
    /**
-    * This function destroys this control and cleaning the HTML
+    * This function destroys this control, cleaning the HTML
+    * and unregistering all events
     *
     * @public
     * @function
