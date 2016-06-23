@@ -6,8 +6,7 @@ goog.provide('P.control.DrawFeature');
     * control to draw features on the map.
     *
     * @constructor
-    * @param {M.layer.WFS}
-    * layer layer for use in control
+    * @param {M.layer.WFS} layer - Layer for use in control
     * @extends {M.Control}
     * @api stable
     */
@@ -15,7 +14,8 @@ goog.provide('P.control.DrawFeature');
       /**
        * Name of the control
        * @public
-       * @type {String}
+       * @type {string}
+       * @api stable
        */
       this.name = M.control.DrawFeature.NAME;
 
@@ -35,9 +35,8 @@ goog.provide('P.control.DrawFeature');
     *
     * @public
     * @function
-    * @param {M.Map}
-    * map map to add the control
-    * @returns {Promise} html response
+    * @param {M.Map} map - Map to add the control
+    * @returns {Promise} HTML response
     * @api stable
     */
    M.control.DrawFeature.prototype.createView = function(map) {
@@ -47,11 +46,12 @@ goog.provide('P.control.DrawFeature');
    };
 
    /**
-    * TODO
+    * Returns the control button
     *
     * @public
     * @function
-    * @param {HTMLElement} html to add the plugin
+    * @param {HTMLElement} element - HTML control
+    * @returns {HTMLElement} HTML control button
     * @api stable
     * @export
     */
@@ -60,27 +60,19 @@ goog.provide('P.control.DrawFeature');
    };
 
    /**
-    * This function checks if an object is equals to this control
+    * This function checks if an object is equals
+    * to this control
     *
+    * @public
     * @function
-    * @returns {Boolean}
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     * @api stable
     */
    M.control.DrawFeature.prototype.equals = function(obj) {
       var equals = (obj instanceof M.control.DrawFeature);
       return equals;
    };
-
- /**
- * This function set layer for editting
- *
- * @public
- * @function
- * @api stable
- */
-  M.control.DrawFeature.prototype.setLayer = function(layer) {
-    this.getImpl().layer_ = layer;
-  };
 
    /**
     * Name for this controls
@@ -93,7 +85,7 @@ goog.provide('P.control.DrawFeature');
    M.control.DrawFeature.NAME = 'drawfeature';
 
    /**
-    * Template for this controls - button
+    * Template for this controls
     *
     * @const
     * @type {string}

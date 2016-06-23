@@ -5,7 +5,7 @@
       "kind": "class",
       "description": "Main facade plugin object. This class creates a Control\nobject which has an implementation Object",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocation.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocation.js",
       "extends": "M.Plugin",
       "params": [
         {
@@ -24,7 +24,7 @@
       "kind": "function",
       "description": "This function provides the implementation\nof the object",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocation.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocation.js",
       "params": [
         {
           "name": "map",
@@ -42,20 +42,7 @@
       "kind": "function",
       "description": "This function destroys this plugin",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocation.js",
-      "provides": [
-        "P.plugin.Geosearchbylocation"
-      ]
-    },
-    {
-      "name": "M.plugin.Geosearchbylocation.NAME",
-      "kind": "constant",
-      "description": "TODO",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocation.js",
-      "types": [
-        "string"
-      ],
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocation.js",
       "provides": [
         "P.plugin.Geosearchbylocation"
       ]
@@ -65,8 +52,8 @@
       "kind": "class",
       "description": "Main constructor of the class. Creates a Geosearchbylocation\nControl to display nearby points of interest to your location",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
-      "extends": "Geosearch",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
+      "extends": "M.control.Geobusquedas",
       "provides": [
         "P.control.Geosearchbylocation"
       ]
@@ -76,7 +63,7 @@
       "kind": "function",
       "description": "This function checks if an object is equals\nto this control",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
       "returns": {
         "types": [
           "Boolean"
@@ -91,7 +78,7 @@
       "kind": "function",
       "description": "This function creates the view to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
       "returns": {
         "types": [
           "Promise"
@@ -106,7 +93,7 @@
       "kind": "function",
       "description": "This function creates the view to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
       "params": [
         {
           "name": "map",
@@ -120,47 +107,11 @@
       ]
     },
     {
-      "name": "M.control.Geosearchbylocation#getActivationButton",
-      "kind": "function",
-      "description": "TODO",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
-      "params": [
-        {
-          "name": "html",
-          "types": [
-            "HTMLElement"
-          ]
-        }
-      ],
-      "provides": [
-        "P.control.Geosearchbylocation"
-      ]
-    },
-    {
-      "name": "M.control.Geosearchbylocation#activate",
-      "kind": "function",
-      "description": "This function creates the view to the specified map",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
-      "params": [
-        {
-          "name": "map",
-          "types": [
-            "M.Map"
-          ]
-        }
-      ],
-      "provides": [
-        "P.control.Geosearchbylocation"
-      ]
-    },
-    {
-      "name": "M.control.Geosearchbylocation#deactivate",
+      "name": "M.control.Geosearchbylocation#locate",
       "kind": "function",
       "description": "If active is true content removed, otherwise it will display the content",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
       "params": [
         {
           "name": "active",
@@ -174,37 +125,11 @@
       ]
     },
     {
-      "name": "M.control.Geosearchbylocation.NAME",
-      "kind": "constant",
-      "description": "Name of this control",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
-      "types": [
-        "string"
-      ],
-      "provides": [
-        "P.control.Geosearchbylocation"
-      ]
-    },
-    {
-      "name": "M.control.Geosearchbylocation.HIDDEN",
-      "kind": "constant",
-      "description": "hidden class",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
-      "types": [
-        "string"
-      ],
-      "provides": [
-        "P.control.Geosearchbylocation"
-      ]
-    },
-    {
       "name": "M.control.Geosearchbylocation.TEMPLATE",
       "kind": "constant",
       "description": "Template for this controls",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
       "types": [
         "string"
       ],
@@ -217,7 +142,7 @@
       "kind": "constant",
       "description": "Template for show results",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/facade/js/geosearchbylocationcontrol.js",
       "types": [
         "string"
       ],
@@ -230,8 +155,8 @@
       "kind": "class",
       "description": "Main constructor of the class. Creates a Geosearchbylocation\ncontrol",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
-      "extends": "M.impl.control.Geosearch",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "extends": "M.impl.control.Geobusquedas",
       "params": [
         {
           "name": "searchUrl_",
@@ -245,11 +170,35 @@
       ]
     },
     {
+      "name": "M.impl.control.Geosearchbylocation#addTo",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "element",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearchbylocation"
+      ]
+    },
+    {
       "name": "M.impl.control.Geosearchbylocation#setMap",
       "kind": "function",
       "description": "Set the map instance the control is associated with.",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
       "params": [
         {
           "name": "map",
@@ -263,11 +212,11 @@
       ]
     },
     {
-      "name": "M.impl.control.Geosearch#locate",
+      "name": "M.impl.control.Geobusquedas#locate",
       "kind": "function",
       "description": "This function get coordinates",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
       "returns": {
         "types": [
           "Promise"
@@ -278,11 +227,11 @@
       ]
     },
     {
-      "name": "M.impl.control.Geosearch#removeLocate",
+      "name": "M.impl.control.Geobusquedas#removeLocate",
       "kind": "function",
       "description": "This function remove point locate",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
       "provides": [
         "P.impl.control.Geosearchbylocation"
       ]
@@ -292,7 +241,7 @@
       "kind": "function",
       "description": "This function draw point location",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
       "params": [
         {
           "name": "coord",
@@ -310,7 +259,7 @@
       "kind": "function",
       "description": "This function shows the container with the results",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
       "params": [
         {
           "name": "container",
@@ -328,7 +277,7 @@
       "kind": "function",
       "description": "This function destroy the container with the results",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
       "params": [
         {
           "name": "container",
@@ -342,21 +291,11 @@
       ]
     },
     {
-      "name": "M.impl.control.Geosearchbylocation#zoomToResultsAll",
-      "kind": "function",
-      "description": "Zoom Results",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
-      "provides": [
-        "P.impl.control.Geosearchbylocation"
-      ]
-    },
-    {
       "name": "M.impl.control.Geosearchbylocation#destroy",
       "kind": "function",
       "description": "This function destroys this control, clearing the HTML\nand unregistering all events",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
       "provides": [
         "P.impl.control.Geosearchbylocation"
       ]
@@ -366,7 +305,7 @@
       "kind": "constant",
       "description": "Template for popup",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
       "types": [
         "string"
       ],
@@ -379,7 +318,7 @@
       "kind": "function",
       "description": "This function get coordinates",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
       "returns": {
         "types": [
           "Promise"
@@ -394,7 +333,7 @@
       "kind": "function",
       "description": "This function remove point locate",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/geosearchbylocation/impl/ol3/js/geosearchbylocationcontrol.js",
       "provides": [
         "P.impl.control.Geosearchbylocation"
       ]

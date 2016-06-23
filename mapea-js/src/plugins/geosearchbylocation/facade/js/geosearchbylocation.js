@@ -10,18 +10,24 @@ goog.require('P.control.Geosearchbylocation');
     *
     * @constructor
     * @extends {M.Plugin}
-    * @param {Object} parameters It contains the parameters for creating the URL
+    * @param {Mx.parameters.Geosearchbylocation} parameters - Geosearchbylocation parameters
     * @api stable
     */
    M.plugin.Geosearchbylocation = (function(parameters) {
       parameters = (parameters || {});
 
+      /**
+       * Name of this control
+       * @public
+       * @type {string}
+       * @api stable
+       */
       this.name = M.plugin.Geosearchbylocation.NAME;
 
       /**
-       * URL for the request
+       * URL for the query
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.url_ = M.config.GEOSEARCH_URL;
       if (!M.utils.isNullOrEmpty(parameters.url)) {
@@ -29,9 +35,9 @@ goog.require('P.control.Geosearchbylocation');
       }
 
       /**
-       * Core to the URL for the request
+       * Core to the URL for the query
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.core_ = M.config.GEOSEARCH_CORE;
       if (!M.utils.isNullOrEmpty(parameters.core)) {
@@ -39,9 +45,9 @@ goog.require('P.control.Geosearchbylocation');
       }
 
       /**
-       * Handler to the URL for the request
+       * Handler to the URL for the query
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.handler_ = M.config.GEOSEARCH_HANDLER;
       if (!M.utils.isNullOrEmpty(parameters.handler)) {
@@ -49,9 +55,9 @@ goog.require('P.control.Geosearchbylocation');
       }
 
       /**
-       * Distance to the URL for the request
+       * Distance search
        * @private
-       * @type {int}
+       * @type {number}
        */
       this.distance_ = M.config.GEOSEARCH_DISTANCE;
       if (!M.utils.isNullOrEmpty(parameters.distance)) {
@@ -59,25 +65,18 @@ goog.require('P.control.Geosearchbylocation');
       }
 
       /**
-       * Spatial field to the URL for the request
+       * Spatial field
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.spatialField_ = M.config.GEOSEARCH_SPATIAL_FIELD;
 
       /**
-       * Rows to the URL for the request
+       * Number of responses allowed
        * @private
-       * @type {String}
+       * @type {number}
        */
       this.rows_ = M.config.GEOSEARCHBYLOCATION_ROWS;
-
-      /**
-       * Parameters to the URL for the request
-       * @private
-       * @type {Object}
-       */
-      this.searchParameters_ = parameters.params;
 
       /**
        * Facade of the map
@@ -88,13 +87,14 @@ goog.require('P.control.Geosearchbylocation');
 
       /**
        * Implementation of this object
-       * @private
-       * @type {Object}
+       * @public
+       * @type {M.control.Geosearchbylocation}
+       * @api stable
        */
       this.controlGeo = null;
 
       /**
-       * TODO
+       * Plugin panel
        * @private
        * @type {M.ui.Panel}
        */
@@ -106,18 +106,16 @@ goog.require('P.control.Geosearchbylocation');
    goog.inherits(M.plugin.Geosearchbylocation, M.Plugin);
 
    /**
-    * This function provides the implementation
-    * of the object
-    *
+    * @inheritdoc
     * @public
     * @function
-    * @param {Object} map the map to add the plugin
+    * @param {M.Map} map - Map to add the plugin
     * @api stable
     */
    M.plugin.Geosearchbylocation.prototype.addTo = function(map) {
       this.map_ = map;
       this.controlGeo = new M.control.Geosearchbylocation(this.url_,
-         this.core_, this.handler_, this.distance_, this.spatialField_, this.rows_, this.searchParameters_);
+         this.core_, this.handler_, this.distance_, this.spatialField_, this.rows_);
 
       this.panel_ = new M.ui.Panel(M.plugin.Geosearchbylocation.NAME, {
          'collapsible': false,
@@ -163,14 +161,13 @@ goog.require('P.control.Geosearchbylocation');
       this.distance_ = null;
       this.spatialField_ = null;
       this.rows_ = null;
-      this.searchParameters_ = null;
       this.map_ = null;
       this.controlGeo = null;
       this.panel_ = null;
    };
 
    /**
-    * TODO
+    * Name of this control
     * @const
     * @type {string}
     * @public

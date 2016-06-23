@@ -4,8 +4,8 @@ goog.require('P.control.Measure');
 
 /**
  * @classdesc
- * Main constructor of the class. Creates a WMCSelector
- * control to provides a way to select an specific WMC
+ * Main constructor of the class. Creates a MeasureLength
+ * control to provides measure areas
  *
  * @constructor
  * @extends {M.control.Measure}
@@ -29,7 +29,10 @@ goog.inherits(M.control.MeasureArea, M.control.Measure);
  * This function checks if an object is equals
  * to this control
  *
+ * @public
  * @function
+ * @param {*} obj - Object to compare
+ * @returns {boolean} equals - Returns if they are equal or not
  * @api stable
  */
 M.control.MeasureArea.prototype.equals = function(obj) {

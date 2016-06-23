@@ -5,116 +5,114 @@ goog.require('P.control.GeosearchIntegrated');
 
 (function() {
    /**
-    * @classdesc Main constructor of the class. Creates a WMCSelector
-    *            control to provides a way to select an specific WMC
+    * @classdesc Main constructor of the class. Creates a SearchstreetGeosearch
+    * control to search streets and geosearchs
     *
     * @constructor
     * @extends {M.Control}
+    * @param {Mx.parameters.SearchstreetGeosearch} parameters - parameters SearchstreetGeosearch
     * @api stable
     */
    M.control.SearchstreetGeosearch = (function(parameters) {
-      // checks if the implementation can create WMC layers
+      // checks if the implementation can create SearchstreetGeosearch
       if (M.utils.isUndefined(M.impl.control.SearchstreetGeosearch)) {
          M.exception('La implementación usada no puede crear controles SearchStreetGeosearch');
       }
 
-      parameters = (parameters || {});
-
       /**
-       * Facade of the map
+       * Parameters SearchstreetGeosearch
        *
        * @private
-       * @type {String}
+       * @type {Mx.parameters.SearchstreetGeosearch}
        */
-      this.urlSearchstret_ = M.config.SEARCHSTREET_URL;
-      if (!M.utils.isNullOrEmpty(parameters.urlSearchstret)) {
-         this.urlSearchstret_ = parameters.urlSearchstret;
-      }
+      parameters = (parameters || {});
 
       /**
        * INE code to specify the search
        *
        * @private
-       * @type {Number}
+       * @type {number}
        */
       if (!M.utils.isNullOrEmpty(parameters.locality)) {
          this.locality_ = parameters.locality;
       }
+      
+      /**
+       * Search URL - Searchstreet
+       *
+       * @private
+       * @type {string}
+       */
+      this.urlSearchstret_ = M.config.SEARCHSTREET_URL;
 
       /**
-       * Facade of the map
+       * Search URL - Geosearch
+       *
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.urlGeosearch_ = M.config.GEOSEARCH_URL;
-      if (!M.utils.isNullOrEmpty(parameters.urlGeosearch)) {
-         this.urlGeosearch_ = parameters.urlGeosearch;
-      }
 
       /**
-       * Facade of the map
+       * Core to the URL for the query - Geosearch
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.coreGeosearch_ = M.config.GEOSEARCH_CORE;
-      if (!M.utils.isNullOrEmpty(parameters.coreGeosearch)) {
-         this.coreGeosearch_ = parameters.coreGeosearch;
-      }
 
       /**
-       * Facade of the map
+       * Handler to the URL for the query - Geosearch
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.handlerGeosearch_ = M.config.GEOSEARCH_HANDLER;
-      if (!M.utils.isNullOrEmpty(parameters.handlerGeosearch)) {
-         this.handlerGeosearch_ = parameters.handlerGeosearch;
-      }
 
       /**
-       * Facade of the map
+       * Others parameters for Geosearch
        * @private
        * @type {String}
        */
       this.paramsGeosearch_ = parameters.paramsGeosearch || {};
 
       /**
-       * Control that executes the searches
+       * Input SearchstreetGeosearch
        *
        * @private
-       * @type {Object}
+       * @type {HTMLElement}
        */
       this.input_ = null;
 
       /**
-       * Control that executes the searches
+       * Control Searchstreet
        *
-       * @private
-       * @type {Object}
+       * @public
+       * @type {M.control.SearchstreetIntegrated}
+       * @api stable
        */
       this.ctrlSearchstreet = null;
 
       /**
-       * Control that executes the searches
+       * Control Geosearch
        *
-       * @private
-       * @type {Object}
+       * @public
+       * @type {M.control.GeosearchIntegrated}
+       * @api stable
        */
       this.ctrlGeosearch = null;
 
       /**
-       * Control that executes the searches
+       * Name plugin
        *
        * @private
-       * @type {Object}
+       * @type {string}
        */
       this.name_ = "searchstreetgeosearch";
 
       /**
-       * Control that executes the searches
+       * Template SearchstreetGeosearch
        *
        * @private
-       * @type {Object}
+       * @type {HTMLElement}
        */
       this.element_ = null;
 
@@ -138,7 +136,7 @@ goog.require('P.control.GeosearchIntegrated');
     *
     * @public
     * @function
-    * @param {M.Map} map to add the plugin
+    * @param {M.Map} map - Map to add the plugin
     * @api stable
     * @export
     */
@@ -202,9 +200,9 @@ goog.require('P.control.GeosearchIntegrated');
     *
     * @public
     * @function
-    * @param {M.Map}
-    *        map to add the control
-    * @api stabletrue
+    * @param {M.Map} map - Map to add the control
+    * @returns {Promise} HTML template
+    * @api stable
     */
    M.control.SearchstreetGeosearch.prototype.createView = function(map) {
       var this_ = this;
@@ -244,13 +242,12 @@ goog.require('P.control.GeosearchIntegrated');
    };
 
    /**
-    * This function creates the view to the specified map
+    * This query returns the input SearchstreetGeosearch
     *
     * @public
     * @function
-    * @param {M.Map}
-    *        map to add the control
-    * @api stabletrue
+    * @returns {HTMLElement} Input SearchstreetGeosearch
+    * @api stable
     */
    M.control.SearchstreetGeosearch.prototype.getInput = function() {
       return this.input_;
@@ -262,6 +259,8 @@ goog.require('P.control.GeosearchIntegrated');
     *
     * @function
     * @api stable
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     */
    M.control.SearchstreetGeosearch.prototype.equals = function(obj) {
       var equals = false;
@@ -273,20 +272,23 @@ goog.require('P.control.GeosearchIntegrated');
 
 
    /**
-    * This function checks if an object is equals to this control
+    * This function return HTML template
     *
-    * @private
+    * @public
     * @function
+    * @returns {HTMLElement} HTML template
+    * @api stable
     */
    M.control.SearchstreetGeosearch.prototype.getHtml = function() {
       return this.element_;
    };
 
    /**
-    * This function call the zoomResults method of implementation to zoom
+    * This function zoom results
     *
-    * @private
+    * @public
     * @function
+    * @api stable
     */
    M.control.SearchstreetGeosearch.prototype.zoomResults = function() {
       this.getImpl().zoomResults();

@@ -9,8 +9,6 @@ goog.require('goog.fx.Dragger');
     * control to draw features on the map.
     *
     * @constructor
-    * @param {M.layer.WFS}
-    * layer layer for use in control
     * @extends {M.Control}
     * @api stable
     */
@@ -22,6 +20,11 @@ goog.require('goog.fx.Dragger');
       // implementation of this control
       var impl = new M.impl.control.Streetview();
 
+      /**
+       * Canvas Streetview
+       * @private
+       * @type {HTMLElement}
+       */
       this.canvas_ = null;
 
       // calls the super constructor
@@ -34,8 +37,7 @@ goog.require('goog.fx.Dragger');
     *
     * @public
     * @function
-    * @param {M.Map}
-    * map map to add the control
+    * @param {M.Map} map - Map to add the control
     * @returns {Promise} html response
     * @api stable
     */
@@ -59,11 +61,11 @@ goog.require('goog.fx.Dragger');
    };
 
    /**
-    * TODO
+    * This function adds events to change styles control
     *
     * @public
     * @function
-    * @param {HTMLElement} html to add the plugin
+    * @param {HTMLElement} html - Container Streetview
     * @api stable
     * @export
     */
@@ -91,10 +93,9 @@ goog.require('goog.fx.Dragger');
    };
 
    /**
-    * This function checks if an object is equals to this control
-    *
+    * This function close the window Streetview
     * @function
-    * @returns {Boolean}
+    * @param {goog.events.BrowserEvent} evt - Click event
     * @api stable
     */
    M.control.Streetview.prototype.closeStreetView = function(evt) {
@@ -106,7 +107,8 @@ goog.require('goog.fx.Dragger');
     * This function checks if an object is equals to this control
     *
     * @function
-    * @returns {Boolean}
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     * @api stable
     */
    M.control.Streetview.prototype.equals = function(obj) {
@@ -115,11 +117,11 @@ goog.require('goog.fx.Dragger');
    };
 
    /**
-    * This function add events to the button 'Streetview'
+    * This function opens the window Streetview
     *
     * @public
     * @function
-    * @param {function} html control button
+    * @param {goog.events.Event} evt - End event
     * @api stable
     */
    M.control.Streetview.prototype.openStreetView = function(evt) {
@@ -148,7 +150,7 @@ goog.require('goog.fx.Dragger');
    M.control.Streetview.TEMPLATE = 'streetview.html';
 
    /**
-    * Template for this controls - button
+    * Template dialog for this control
     *
     * @const
     * @type {string}

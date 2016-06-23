@@ -6,25 +6,31 @@ goog.provide('P.impl.control.Streetview');
 (function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a WMC selector
+    * Main constructor of the class. Creates a Streetview
     * control
     *
     * @constructor
-    * @extends {ol.control.Control}
+    * @extends {M.impl.Control}
     * @api stable
     */
    M.impl.control.Streetview = function() {
+      /**
+       * Service Streetview
+       *
+       * @private
+       * @type {google.maps.StreetViewService}
+       */
       this.sv = null;
    };
    goog.inherits(M.impl.control.Streetview, M.impl.Control);
 
    /**
-    * This function adds the control to the specified map
+    * This function open the window Streetview
     *
     * @public
     * @function
-    * @param {M.Map} map to add the plugin
-    * @param {function} template template of this control
+    * @param {goog.events.Event} evt - End event
+    * @param {HTMLElement} canvas - Canvas Searchstreet
     * @api stable
     */
    M.impl.control.Streetview.prototype.openStreetView = function(evt, canvas) {
@@ -42,12 +48,12 @@ goog.provide('P.impl.control.Streetview');
    };
 
    /**
-    * This function adds the control to the specified map
-    *
+    * This function checks whether the view is available
     * @public
     * @function
-    * @param {M.Map} map to add the plugin
-    * @param {function} template template of this control
+    * @param {object} data - Information
+    * @param {string} status - Indicates whether results
+    * @param {HTMLElement} canvas - Canvas Streetview
     * @api stable
     */
    M.impl.control.Streetview.prototype.processSVData = function(data, status, canvas) {
@@ -67,6 +73,14 @@ goog.provide('P.impl.control.Streetview');
       }
    };
 
+
+   /**
+    * This function initialize StreetView
+    * @public
+    * @function
+    * @param {HTMLElement} canvas - Canvas Streetview
+    * @api stable
+    */
    M.impl.control.Streetview.prototype.initializeStreetView = function(canvas) {
       myPano = new google.maps.StreetViewPanorama(canvas, {
          position: new google.maps.LatLng(0, 0),
@@ -80,8 +94,7 @@ goog.provide('P.impl.control.Streetview');
    };
 
    /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
+    * This function destroys this control
     *
     * @public
     * @function

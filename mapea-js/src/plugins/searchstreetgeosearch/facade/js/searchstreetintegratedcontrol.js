@@ -7,14 +7,12 @@ goog.require('P.impl.control.Searchstreet');
 (function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a Searchstreet control
+    * Main constructor of the class. Creates a Searchstreet control that allows searches of streets
     *
     * @constructor
-    * @extends {M.control.Searchstreet}
-    * @param {String}
-    * url Service URL
-    * @param {Number}
-    * locality INE code to specify the search
+    * @extends {M.Control}
+    * @param {string} url - Service URL
+    * @param {number} locality - INE code to specify the search
     * @api stable
     */
    M.control.SearchstreetIntegrated = (function(url, locality) {
@@ -22,7 +20,12 @@ goog.require('P.impl.control.Searchstreet');
          M.exception('La implementación usada no puede crear controles SearchstreetIntegrated');
       }
 
-      // implementation of this control
+      /**
+       * Implementation of this control
+       *
+       * @private
+       * @type {M.impl.control.SearchstreetIntegrated}
+       */
       this.impl = new M.impl.control.SearchstreetIntegrated();
       // call super
       goog.base(this, url, locality);
@@ -30,14 +33,12 @@ goog.require('P.impl.control.Searchstreet');
    goog.inherits(M.control.SearchstreetIntegrated, M.control.Searchstreet);
 
    /**
-    * This function replaces createView of geosearch not to add the template control
+    * This function replaces createView of Searchstreet, not to add the template control, add events
     *
     * @public
     * @function
-    * @param {HTMLElement}
-    *        html HTML template searchstreetgeosearch
-    * @param {M.Map}
-    *        map to add the control
+    * @param {HTMLElement} html - HTML template searchstreetgeosearch
+    * @param {M.Map} map - Map to add the control
     * @api stable
     * @return {null}
     */
@@ -53,7 +54,7 @@ goog.require('P.impl.control.Searchstreet');
     * @public
     * @function
     * @param {HTMLElement}
-    *        html html to add events
+    *        html - HTML to add events
     * @api stable
     */
    M.control.SearchstreetIntegrated.prototype.addEvents = function(html) {
@@ -113,7 +114,7 @@ goog.require('P.impl.control.Searchstreet');
    };
 
    /**
-    * Clear results and searchs
+    * This function remove popup, points and results drawn on the map.
     *
     * @private
     * @function
@@ -136,11 +137,11 @@ goog.require('P.impl.control.Searchstreet');
    };
 
    /**
-    * This function checks the query field is not empty, if it is not
-    * sending the query to the search function
+    * This function checks the query field is not empty and send the query to the search function
     *
     * @private
     * @function
+    * @param {goog.events.BrowserEvent} evt - Keypress event
     */
    M.control.SearchstreetIntegrated.prototype.searchClick_ = function(evt) {
       evt.preventDefault();
@@ -174,11 +175,11 @@ goog.require('P.impl.control.Searchstreet');
    };
 
    /**
-    * This function checks if an object is equals
-    * to this control
+    * This function hides/shows the list
     *
     * @private
     * @function
+    * @param {goog.events.BrowserEvent} evt - Keypress event
     */
    M.control.SearchstreetIntegrated.prototype.resultsClick_ = function(evt) {
       goog.dom.classlist.add(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
@@ -197,7 +198,7 @@ goog.require('P.impl.control.Searchstreet');
     * @public
     * @function
     * @api stable
-    * @return {Object}
+    * @return {M.impl.control.SearchstreetIntegrated}
     */
    M.control.SearchstreetIntegrated.prototype.getImpl = (function() {
       return this.impl;

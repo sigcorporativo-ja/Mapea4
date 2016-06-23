@@ -5,17 +5,18 @@ goog.require('goog.dom.classes');
 
 /**
  * @classdesc
- * Main constructor of the measure conrol.
+ * Main constructor of the measure control.
  *
  * @constructor
- * @extends {ol.control.Control}
+ * @param {string} type - Type of the measure geometry
+ * @extends {M.impl.Control}
  * @api stable
  */
 M.impl.control.Measure = function(type) {
    /**
     * Type of the measure geometry
     * @private
-    * @type {String}
+    * @type {string}
     */
    this.type_ = type;
 
@@ -71,7 +72,7 @@ M.impl.control.Measure = function(type) {
    /**
     * Currently drawn feature coordinate.
     * @private
-    * @type {Array<ol.Overlay>}
+    * @type {array<ol.Overlay>}
     */
    this.overlays_ = [];
 
@@ -84,8 +85,8 @@ goog.inherits(M.impl.control.Measure, M.impl.Control);
  *
  * @public
  * @function
- * @param {M.Map} map to add the plugin
- * @param {function} template template of this control
+ * @param {M.Map} map - Map to add the plugin
+ * @param {HTMLElement} element - template of this control
  * @api stable
  */
 M.impl.control.Measure.prototype.addTo = function(map, element) {
@@ -102,7 +103,7 @@ M.impl.control.Measure.prototype.addTo = function(map, element) {
 };
 
 /**
- * This function call 'addOnClickEvent_' to active 'OnClick' Event
+ * This function enables plugin pressed
  *
  * @public
  * @function
@@ -132,7 +133,7 @@ M.impl.control.Measure.prototype.activate = function() {
 };
 
 /**
- * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
+ * This function dissable plugin
  *
  * @public
  * @function
@@ -152,10 +153,11 @@ M.impl.control.Measure.prototype.deactivate = function() {
 };
 
 /**
- * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
+ * This function create vector layer to draw the measures
  *
- * @private
  * @function
+ * @private
+ * @return {ol.layer.Vector} layer - Vector layer
  */
 M.impl.control.Measure.prototype.createLayer_ = function() {
    var layer = new ol.layer.Vector({
@@ -181,10 +183,11 @@ M.impl.control.Measure.prototype.createLayer_ = function() {
 };
 
 /**
- * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
+ * This function create interaction draw
  *
  * @private
  * @function
+ * @return {ol.interaction.Draw} draw - Interaction draw
  */
 M.impl.control.Measure.prototype.createIteractionDraw_ = function() {
    var draw = new ol.interaction.Draw({
@@ -217,10 +220,11 @@ M.impl.control.Measure.prototype.createIteractionDraw_ = function() {
 };
 
 /**
- * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
+ * This function create tooltip with the help
  *
  * @private
  * @function
+ * @return {Promise} Template tooltip
  */
 M.impl.control.Measure.prototype.createHelpTooltip_ = function() {
    var this_ = this;
@@ -237,7 +241,7 @@ M.impl.control.Measure.prototype.createHelpTooltip_ = function() {
 };
 
 /**
- * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
+ * This function create Measure tooltip
  *
  * @private
  * @function
@@ -260,10 +264,10 @@ M.impl.control.Measure.prototype.createMeasureTooltip_ = function() {
 };
 
 /**
- * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
- *
+ * This function allows start to draw
  * @private
  * @function
+ * @param {goog.events.Event} evt - Event draw start
  */
 M.impl.control.Measure.prototype.onDrawStart_ = function(evt) {
    this.currentFeature_ = evt.feature;
@@ -272,10 +276,11 @@ M.impl.control.Measure.prototype.onDrawStart_ = function(evt) {
 };
 
 /**
- * This function call 'deleteOnClickEvent_' to disable 'OnClick' Event
+ * This function allows end to draw
  *
  * @private
  * @function
+ * @param {goog.events.Event} evt - Event draw end
  */
 M.impl.control.Measure.prototype.onDrawEnd_ = function(evt) {
    this.currentFeature_.getGeometry().un('change', this.onGeometryChange_);
@@ -290,7 +295,10 @@ M.impl.control.Measure.prototype.onDrawEnd_ = function(evt) {
 
 /**
  * Handle pointer move.
- * @param {ol.MapBrowserEvent} evt
+ *
+ * private
+ * function
+ * @param {ol.MapBrowserEvent} evt - Event pointer move
  */
 M.impl.control.Measure.prototype.pointerMoveHandler_ = function(evt) {
    if (evt.dragging) {
@@ -308,7 +316,9 @@ M.impl.control.Measure.prototype.pointerMoveHandler_ = function(evt) {
 
 /**
  * Handle pointer move.
- * @param {ol.MapBrowserEvent} evt
+ * private
+ * function
+ * @param {ol.MapBrowserEvent} evt - Event pointer change
  */
 M.impl.control.Measure.prototype.onGeometryChange_ = function(evt) {
    var newGeometry = evt.target;
@@ -339,8 +349,7 @@ M.impl.control.Measure.prototype.clear = function() {
 };
 
 /**
- * This function destroys this control, cleaning the HTML
- * and unregistering all events
+ * This function destroys this control and cleaning the HTML
  *
  * @public
  * @function

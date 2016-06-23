@@ -16,19 +16,19 @@ goog.require('goog.events');
  *
  * @constructor
  * @extends {M.Plugin}
- * @param {Object} impl implementation object
+ * @param {array} controls - Names of the WFST controls that want to add on the map
  * @api stable
  */
-M.plugin.WFSTControls = (function(controls, layername) {
-
-   this.controls = controls;
+M.plugin.WFSTControls = (function(controls) {
 
    /**
-    * Layer for editting
-    * @private
-    * @type {String}
+    * Names controls
+    *
+    * @public
+    * @type {array}
+    * @api stable
     */
-   this.layername_ = layername;
+   this.controls = controls;
 
    /**
     * Facade of the map
@@ -40,42 +40,42 @@ M.plugin.WFSTControls = (function(controls, layername) {
    /**
     * Implementation of this object
     * @private
-    * @type {Object}
+    * @type {M.control.DrawFeature}
     */
    this.drawfeature_ = null;
 
    /**
     * Implementation of this object
     * @private
-    * @type {Object}
+    * @type {M.control.ModifyFeature}
     */
    this.modifyfeature_ = null;
 
    /**
     * Implementation of this object
     * @private
-    * @type {Object}
+    * @type {M.control.DeleteFeature}
     */
    this.deletefeature_ = null;
 
    /**
     * Implementation of this object
     * @private
-    * @type {Object}
+    * @type {M.control.ClearFeature}
     */
    this.clearfeature_ = null;
 
    /**
     * Implementation of this object
     * @private
-    * @type {Object}
+    * @type {M.control.SaveyFeature}
     */
    this.savefeature_ = null;
 
    /**
     * Implementation of this object
     * @private
-    * @type {Object}
+    * @type {M.control.EditAttribute}
     */
    this.editattibute_ = null;
 
@@ -84,17 +84,16 @@ M.plugin.WFSTControls = (function(controls, layername) {
 goog.inherits(M.plugin.WFSTControls, M.Plugin);
 
 /**
- * This function provides the implementation
- * of the object
+ * @inheritdoc
  *
  * @public
  * @function
- * @param {Object} map the map to add the plugin
+ * @param {M.Map} map - Map to add the plugin
  * @api stable
  */
 M.plugin.WFSTControls.prototype.addTo = function(map) {
    this.map_ = map;
-   var wfslayer = M.utils.isNullOrEmpty(this.map_.getWFS({'name':this.layername_})[0])? this.map_.getWFS()[0] : this.map_.getWFS({'name':this.layername_})[0];
+   var wfslayer = map.getWFS()[0];
 
    if (M.utils.isNullOrEmpty(wfslayer)) {
       M.dialog.error('Los controles <b>' + this.controls.join(',') + '</b> no se pueden añadir al mapa porque no existe una capa WFS cargada.');
@@ -163,36 +162,4 @@ M.plugin.WFSTControls.prototype.destroy = function() {
    this.clearfeature_ = null;
    this.savefeature_ = null;
    this.editattibute_ = null;
-};
-
-/**
- * This function set layer for editting
- *
- * @public
- * @function
- * @api stable
- */
-M.plugin.WFSTControls.prototype.setLayer = function(layername) {
-
-  this.layername_ = layername;
-  var wfslayer = this.map_.getWFS({'name':this.layername_})[0];
-  if (M.utils.isNullOrEmpty(wfslayer)){
-    M.dialog.error('Los capa <b>' + layername + '</b> no es una capa WFS cargada.');
-  }else{
-    let objControls = [];
-     if(!M.utils.isNullOrEmpty(this.drawfeature_)) objControls.push(this.drawfeature_);
-     if(!M.utils.isNullOrEmpty(this.modifyfeature_)) objControls.push(this.modifyfeature_);
-     if(!M.utils.isNullOrEmpty(this.deletefeature_)) objControls.push(this.deletefeature_);
-     if(!M.utils.isNullOrEmpty(this.clearfeature_)) objControls.push(this.clearfeature_);
-     if(!M.utils.isNullOrEmpty(this.savefeature_)) objControls.push(this.savefeature_);
-     if(!M.utils.isNullOrEmpty(this.editattibute_)) objControls.push(this.editattibute_);
-
-    //let ctrlActivo = null;
-    //objControls.forEach(function (ctrl){if (ctrl.activated) ctrlActivo = ctrl});
-    this.clearfeature_.getImpl().clear();
-    objControls.forEach(function (ctrl){
-      ctrl.setLayer(wfslayer);
-      // if(ctrl===ctrlActivo){ ctrl.activate();} //JGL: TODO no funciona
-    });
-  }
 };

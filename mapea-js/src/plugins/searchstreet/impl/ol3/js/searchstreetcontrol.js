@@ -5,7 +5,7 @@ goog.provide('P.impl.control.Searchstreet');
  */
 (function() {
    /**
-    * @classdesc Main constructor of the searchstreet control.
+    * @classdesc Main constructor of the Searchstreet control.
     *
     * @constructor
     * @extends {ol.control.Control}
@@ -24,7 +24,7 @@ goog.provide('P.impl.control.Searchstreet');
        * List of items drawn on the map for control
        *
        * @public
-       * @type {Array}
+       * @type {array}
        * @api stable
        */
       this.listPoints = [];
@@ -44,10 +44,8 @@ goog.provide('P.impl.control.Searchstreet');
     *
     * @public
     * @function
-    * @param {M.Map}
-    *        map to add the plugin
-    * @param {HTMLElement}
-    *        element template of this control
+    * @param {M.Map} map - Map to add the plugin
+    * @param {HTMLElement} element - Template of this control
     * @api stable
     */
    M.impl.control.Searchstreet.prototype.addTo = function(map, element) {
@@ -66,8 +64,7 @@ goog.provide('P.impl.control.Searchstreet');
     *
     * @public
     * @function
-    * @param {Array}
-    *        results results query results
+    * @param {array} results - Results query results
     * @api stable
     */
    M.impl.control.Searchstreet.prototype.drawPoints = function(results) {
@@ -105,7 +102,6 @@ goog.provide('P.impl.control.Searchstreet');
     *
     * @public
     * @function
-    * @param {Object} result specific result query response
     * @api stable
     */
    M.impl.control.Searchstreet.prototype.zoomResults = function() {
@@ -126,8 +122,8 @@ goog.provide('P.impl.control.Searchstreet');
     *
     * @public
     * @function
-    * @param {HTMLElement} element item in the list
-    * @param {Object} result specific result query response
+    * @param {object} element - Specific result query response
+    * @param {ol.Feature} result - Feature
     * @api stable
     */
    M.impl.control.Searchstreet.prototype.addEventClickFeature = function(
@@ -150,8 +146,8 @@ goog.provide('P.impl.control.Searchstreet');
     *
     * @private
     * @function
-    * @param {Object}
-    *        feature specific feature
+    * @param {object} feature - Specific result query response
+    * @param {boolean} noPanMapIfOutOfView
     */
    M.impl.control.Searchstreet.prototype.showPopup_ = function(feature, noPanMapIfOutOfView) {
       var this_ = this;
@@ -215,7 +211,7 @@ goog.provide('P.impl.control.Searchstreet');
     * @public
     * @function
     * @api stable
-    * @returns {HTMLElement}
+    * @returns {HTMLElement} HTML template
     */
    M.impl.control.Searchstreet.prototype.getElement = function() {
       return this.element_;
@@ -237,8 +233,7 @@ goog.provide('P.impl.control.Searchstreet');
 
 
    /**
-    * This function destroys this control, clearing the HTML and
-    * unregistering all events
+    * This function destroys this control and clearing the HTML
     *
     * @public
     * @function

@@ -1773,13 +1773,13 @@ goog.require('M.window');
     */
    M.Map.prototype.setTicket = function(ticket) {
       if (!M.utils.isNullOrEmpty(ticket)) {
-         if (M.config.PROXY_POST_PATH.indexOf("ticket=") == -1) {
-            M.config('PROXY_POST_PATH', M.utils.addParameters(M.config.PROXY_POST_PATH, {
+         if (M.config.PROXY_POST_URL.indexOf("ticket=") == -1) {
+            M.config('PROXY_POST_URL', M.utils.addParameters(M.config.PROXY_POST_URL, {
                'ticket': ticket
             }));
          }
-         if (M.config.PROXY_PATH.indexOf("ticket=") == -1) {
-            M.config('PROXY_PATH', M.utils.addParameters(M.config.PROXY_PATH, {
+         if (M.config.PROXY_URL.indexOf("ticket=") == -1) {
+            M.config('PROXY_URL', M.utils.addParameters(M.config.PROXY_URL, {
                'ticket': ticket
             }));
          }

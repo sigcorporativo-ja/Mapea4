@@ -10,8 +10,7 @@ goog.require('ol.Geolocation');
    /**
     * @classdesc
     * Main constructor of the class. Creates a Location
-    * control that allows the user to locate and draw your
-    * position on the map.
+    * control
     *
     * @constructor
     * @extends {M.impl.Control}
