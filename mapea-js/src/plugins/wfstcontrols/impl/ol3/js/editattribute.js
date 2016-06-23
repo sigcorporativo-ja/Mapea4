@@ -8,30 +8,31 @@ goog.require('goog.events');
 (function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a WMC selector
+    * Main constructor of the class. Creates a EditAttribute
     * control
     *
     * @constructor
-    * @extends {ol.control.Control}
+    * @param {M.layer.WFS} layer - Layer for use in control
+    * @extends {M.impl.Control}
     * @api stable
     */
    M.impl.control.EditAttribute = function(layer) {
       /**
-       * TODO
+       * Layer for use in control
        * @private
-       * @type {ol.Feature}
+       * @type {M.layer.WFS}
        */
       this.layer_ = layer;
 
       /**
        * TODO
        * @private
-       * @type {ol.Feature}
+       * @type {Mx.describeFeatureType.WFSTBase}
        */
       this.describeFeatureType_ = null;
 
       /**
-       * TODO
+       * Feature selected
        * @public
        * @type {ol.Feature}
        * @api stable
@@ -43,11 +44,10 @@ goog.require('goog.events');
    goog.inherits(M.impl.control.EditAttribute, M.impl.Control);
 
    /**
-    * This function add events to the button 'DeleteFeature'
+    * This function active control
     *
     * @public
     * @function
-    * @param {function} html control button
     * @api stable
     */
    M.impl.control.EditAttribute.prototype.activate = function() {
@@ -61,11 +61,10 @@ goog.require('goog.events');
    };
 
    /**
-    * This function add events to the button 'DeleteFeature'
+    * This function deactivate control
     *
     * @public
     * @function
-    * @param {function} html control button
     * @api stable
     */
    M.impl.control.EditAttribute.prototype.deactivate = function() {
@@ -75,10 +74,12 @@ goog.require('goog.events');
    };
 
    /**
-    * TODO
+    * This function displays the popup to edit the data
     *
     * @private
     * @function
+    * @param {ol.Feature} features - Feature to edit data
+    * @param {array} coordinate - Coordinated to show popup
     */
    M.impl.control.EditAttribute.prototype.showEditPopup_ = function(features, coordinate) {
       this.editFeature = features[0];
@@ -156,23 +157,18 @@ goog.require('goog.events');
    };
 
    /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
+    * This function save changes
     *
-    * @public
+    * @private
     * @function
+    * @param {goog.events.Event} evt - Event click
     * @api stable
     */
    M.impl.control.EditAttribute.prototype.saveAttributes_ = function(evt) {
-      
-      //JGL 20163105: para evitar que se envié en la petición WFST el bbox
-      this.editFeature.unset("bbox",true);
-      //
       // add class css
       var popupContentHtml = this.popup_.getContent();
       var popupButton = evt.target;
       var featureProps = this.editFeature.getProperties();
-
 
       goog.dom.classes.add(popupButton, 'm-savefeature-saving');
 
@@ -213,8 +209,7 @@ goog.require('goog.events');
    };
 
    /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
+    * This function unselect feature and remove popup
     *
     * @public
     * @function
@@ -229,8 +224,7 @@ goog.require('goog.events');
    };
 
    /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
+    * This function destroys this control and cleaning the HTML
     *
     * @public
     * @function

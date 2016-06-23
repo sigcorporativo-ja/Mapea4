@@ -6,21 +6,21 @@ goog.provide('P.impl.control.MeasureClear');
  * control
  *
  * @constructor
- * @extends {ol.control.Control}
+ * @extends {M.impl.Control}
  * @api stable
  */
-M.impl.control.MeasureClear = function (measureLengthControl, measureAreaControl) {
+M.impl.control.MeasureClear = function(measureLengthControl, measureAreaControl) {
    /**
-    * Template of the control
+    * Implementation measureLength
     * @private
-    * @type {M.impl.Control}
+    * @type {M.impl.control.Measure}
     */
    this.measureLengthControl_ = measureLengthControl;
 
    /**
-    * Template of the control
+    * Implementation measureArea
     * @private
-    * @type {M.impl.Control}
+    * @type {M.impl.control.Measure}
     */
    this.measureAreaControl_ = measureAreaControl;
 };
@@ -31,11 +31,11 @@ goog.inherits(M.impl.control.MeasureClear, M.impl.Control);
  *
  * @public
  * @function
- * @param {M.Map} map to add the plugin
- * @param {function} template template of this control
+ * @param {M.Map} map - Map to add the plugin
+ * @param {HTMLElement} element - Container MeasureClear
  * @api stable
  */
-M.impl.control.MeasureClear.prototype.addTo = function (map, element) {
+M.impl.control.MeasureClear.prototype.addTo = function(map, element) {
    var button = element.getElementsByTagName('button')['m-measure-button'];
    goog.events.listen(button, goog.events.EventType.CLICK, this.onClick, false, this);
 
@@ -47,15 +47,13 @@ M.impl.control.MeasureClear.prototype.addTo = function (map, element) {
 };
 
 /**
- * This function adds the control to the specified map
+ * This function remove items drawn on the map
  *
  * @public
  * @function
- * @param {M.Map} map to add the plugin
- * @param {function} template template of this control
  * @api stable
  */
-M.impl.control.MeasureClear.prototype.onClick = function (map, element) {
+M.impl.control.MeasureClear.prototype.onClick = function() {
    if (!M.utils.isNullOrEmpty(this.measureLengthControl_)) {
       this.measureLengthControl_.clear();
    }
@@ -65,14 +63,13 @@ M.impl.control.MeasureClear.prototype.onClick = function (map, element) {
 };
 
 /**
- * This function destroys this control, cleaning the HTML
- * and unregistering all events
+ * This function destroys this control and cleaning the HTML
  *
  * @public
  * @function
  * @api stable
  */
-M.impl.control.MeasureClear.prototype.destroy = function () {
+M.impl.control.MeasureClear.prototype.destroy = function() {
    this.facadeMap_.removeControl(this);
    this.facadeMap_ = null;
 };

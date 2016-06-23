@@ -3,17 +3,23 @@ goog.provide('P.impl.control.ClearFeature');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a WMC ClearFeature
+    * Main constructor of the class. Creates a ClearFeature
     * control
     *
     * @constructor
-    * @extends {ol.control.Control}
+    * @param {M.layer.WFS} layer - Layer for use in control
+    * @extends {M.impl.Control}
     * @api stable
     */
-   M.impl.control.ClearFeature = function (layer) {
+   M.impl.control.ClearFeature = function(layer) {
+      /**
+       * Layer for use in control
+       * @private
+       * @type {M.layer.WFS}
+       */
       this.layer_ = layer;
    };
 
@@ -24,25 +30,23 @@ goog.provide('P.impl.control.ClearFeature');
     *
     * @public
     * @function
-    * @param {M.Map} map to add the plugin
-    * @param {function} template template of this control
+    * @param {M.Map} map - Map to add the plugin
+    * @param {function} element - Template of this control
     * @api stable
     */
-   M.impl.control.ClearFeature.prototype.addTo = function (map, element) {
+   M.impl.control.ClearFeature.prototype.addTo = function(map, element) {
       this.facadeMap_ = map;
       goog.base(this, 'addTo', map, element);
    };
 
    /**
-    * This function adds the control to the specified map
+    * This function remove unsaved changes
     *
     * @public
     * @function
-    * @param {M.Map} map to add the plugin
-    * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.ClearFeature.prototype.clear = function () {
+   M.impl.control.ClearFeature.prototype.clear = function() {
       var drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
       if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
          drawfeatureCtrl.getImpl().modifiedFeatures.length = 0;
@@ -67,14 +71,13 @@ goog.provide('P.impl.control.ClearFeature');
    };
 
    /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
+    * This function destroys this control and cleaning the HTML
     *
     * @public
     * @function
     * @api stable
     */
-   M.impl.control.ClearFeature.prototype.destroy = function () {
+   M.impl.control.ClearFeature.prototype.destroy = function() {
       this.layer_ = null;
       this.facadeMap_.getMapImpl().removeControl(this);
    };

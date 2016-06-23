@@ -11,11 +11,11 @@ goog.require('goog.dom.classlist');
     * @classdesc
     * Main constructor of the class. Creates a GetFeatureInfo
     * control to provides a popup with information about the place
-    * where the user has clicked inside the map.
+    * where the user has clicked inside the map
     *
     * @constructor
-    * @param {String} format format response
-    * @param {Object} options control options
+    * @param {string} format - Format response
+    * @param {object} options - Control options
     * @extends {M.Control}
     * @api stable
     */
@@ -39,8 +39,8 @@ goog.require('goog.dom.classlist');
     *
     * @public
     * @function
-    * @param {M.Map} map map to add the control
-    * @returns {Promise} html response
+    * @param {M.Map} map - Facade map
+    * @returns {Promise} HTML template
     * @api stable
     */
    M.control.GetFeatureInfo.prototype.createView = function(map) {
@@ -54,7 +54,7 @@ goog.require('goog.dom.classlist');
     *
     * @public
     * @function
-    * @param {HTMLElement} element control template
+    * @param {HTMLElement} element - Template control
     * @returns {HTMLElement} HTML control button
     * @api stable
     * @export
@@ -69,8 +69,8 @@ goog.require('goog.dom.classlist');
     *
     * @public
     * @function
-    * @param {Object} obj object to compare
-    * @returns {Boolean}
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     * @api stable
     */
    M.control.GetFeatureInfo.prototype.equals = function(obj) {

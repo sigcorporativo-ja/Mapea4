@@ -9,27 +9,27 @@ goog.provide('M.impl.Label');
     * Main constructor of the class. Creates a Label
     * control
     * @constructor
-    * @param {String} text text to show
-    * @param {Object} coordOpts coordinate to display popup
+    * @param {string} text - Text to show
+    * @param {array} coordOpts - Coordinate to display popup
     * @api stable
     */
    M.impl.Label = function(text, coordOpts) {
       /**
        * Text to show
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.text_ = text;
 
       /**
-       * Coordinates where to display the popup
+       * Coordinate where to display the popup
        * @private
-       * @type {Array}
+       * @type {array}
        */
       this.coord_ = [coordOpts.x, coordOpts.y];
 
       /**
-       * Popup
+       * Popup to show information
        * @private
        * @type {M.Popup}
        */
@@ -48,7 +48,7 @@ goog.provide('M.impl.Label');
     *
     * @public
     * @function
-    * @param {M.Map} map map where show popup
+    * @param {M.Map} map - Map where show popup
     * @api stable
     */
    M.impl.Label.prototype.show = function(map) {
@@ -73,7 +73,7 @@ goog.provide('M.impl.Label');
    };
 
    /**
-    * This function remove the popup with information
+    * This function hidden the popup with information
     *
     * @public
     * @function

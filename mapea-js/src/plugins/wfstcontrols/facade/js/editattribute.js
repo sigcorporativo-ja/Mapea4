@@ -7,12 +7,17 @@ goog.provide('P.control.EditAttribute');
     * edit the attributes of the features
     *
     * @constructor
-    * @param {M.layer.WFS}
-    * layer layer for use in control
+    * @param {M.layer.WFS} layer - Layer for use in control
     * @extends {M.Control}
     * @api stable
     */
    M.control.EditAttribute = (function(layer) {
+      /**
+       * Name of this control
+       * @public
+       * @type {string}
+       * @api stable
+       */
       this.name = M.control.EditAttribute.NAME;
 
       if (M.utils.isUndefined(M.impl.control.EditAttribute)) {
@@ -32,7 +37,7 @@ goog.provide('P.control.EditAttribute');
     *
     * @public
     * @function
-    * @param {M.Map} map map to add the control
+    * @param {M.Map} map - Map to add the control
     * @returns {Promise} html response
     * @api stable
     */
@@ -43,11 +48,12 @@ goog.provide('P.control.EditAttribute');
    };
 
    /**
-    * TODO
+    * Returns the control button
     *
     * @public
     * @function
-    * @param {HTMLElement} html to add the plugin
+    * @param {HTMLElement} element - HTML control
+    * @returns {HTMLElement} HTML control button
     * @api stable
     * @export
     */
@@ -59,7 +65,10 @@ goog.provide('P.control.EditAttribute');
     * This function checks if an object is equals
     * to this control
     *
+    * @public
     * @function
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     * @api stable
     */
    M.control.EditAttribute.prototype.equals = function(obj) {
@@ -67,19 +76,8 @@ goog.provide('P.control.EditAttribute');
       return equals;
    };
 
-  /**
-   * This function set layer for editting
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-    M.control.EditAttribute.prototype.setLayer = function(layer) {
-      this.getImpl().layer_ = layer;
-    };
-
    /**
-    * Template for this controls - button
+    * Name for this controls
     * @const
     * @type {string}
     * @public
@@ -97,7 +95,7 @@ goog.provide('P.control.EditAttribute');
    M.control.EditAttribute.POPUP_TITLE = 'Editattribute';
 
    /**
-    * Template for this controls - button
+    * Template for this controls
     * @const
     * @type {string}
     * @public
@@ -106,7 +104,7 @@ goog.provide('P.control.EditAttribute');
    M.control.EditAttribute.TEMPLATE = 'editattribute.html';
 
    /**
-    * Template for this controls - button
+    * Template popup
     * @const
     * @type {string}
     * @public

@@ -36,10 +36,8 @@ goog.provide('P.impl.control.SearchstreetGeosearch');
     *
     * @public
     * @function
-    * @param {M.Map}
-    *        map to add the plugin
-    * @param {HTMLElement}
-    *        element template of this control
+    * @param {M.Map} map - Map to add the plugin
+    * @param {HTMLElement} element - Template of this control
     * @api stable
     */
    M.impl.control.SearchstreetGeosearch.prototype.addTo = function(map, element) {
@@ -83,8 +81,7 @@ goog.provide('P.impl.control.SearchstreetGeosearch');
    };
 
    /**
-    * This function destroys this control, clearing the HTML and
-    * unregistering all events
+    * This function destroys this control and clearing the HTML
     *
     * @public
     * @function

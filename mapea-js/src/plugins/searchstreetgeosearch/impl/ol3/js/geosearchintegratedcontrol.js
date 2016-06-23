@@ -21,12 +21,12 @@ goog.require('P.impl.control.Geosearch');
    goog.inherits(M.impl.control.GeosearchIntegrated, M.impl.control.Geosearch);
 
    /**
-    * This function replaces the addto of searchstreet not to add control
+    * This function replaces the addto of Geosearch not to add control
     *
     * @public
     * @function
-    * @param {M.Map} map to add the plugin
-    * @param {function} template template of this control
+    * @param {M.Map} map - Map to add the plugin
+    * @param {function} element - Template SearchstreetGeosearch control
     * @api stable
     */
    M.impl.control.GeosearchIntegrated.prototype.addTo = function(map, element) {
@@ -42,7 +42,7 @@ goog.require('P.impl.control.Geosearch');
    };
 
    /**
-    *  This function cancels the zoom function of geosearch
+    *  This function cancels the zoom function of Geosearch
     *
     * @private
     * @function

@@ -8,7 +8,6 @@ var $infoPath;
 var $jsdoc;
 var $jsdocConfig;
 
-var isWindows = process.platform.indexOf('win') === 0;
 /**
  * Determine if source files have been changed, run JSDoc and write updated
  * info if there are any changes.
@@ -17,17 +16,11 @@ var isWindows = process.platform.indexOf('win') === 0;
  *     (or an error occurs).
  */
 function main(infoFile, jsdoc, paths, callback) {
-
+   console.log('      · Writing symbols JSON file: ' + infoFile);
    // init global vars
    $infoPath = infoFile;
    $jsdoc = jsdoc.path;
-   if(isWindows){
-	   $jsdoc += '.cmd';
-	   $jsdoc = path.resolve($jsdoc);
-   }
-
    $jsdocConfig = jsdoc.config;
-   
 
    async.waterfall([
     spawnJSDoc.bind(null, paths),
@@ -71,7 +64,6 @@ function parseOutput(output) {
  *     the callback will be called with null.
  */
 function spawnJSDoc(paths, callback) {
-	
    if (paths.length === 0) {
       process.nextTick(function () {
          callback(null, null);
@@ -82,7 +74,7 @@ function spawnJSDoc(paths, callback) {
    var output = '';
    var errors = '';
    var cwd = path.join(__dirname, '..', '..');
-   
+
    var child = spawn($jsdoc, ['-c', $jsdocConfig].concat(paths), {
       cwd: cwd
    });
@@ -90,7 +82,6 @@ function spawnJSDoc(paths, callback) {
    child.stdout.on('data', function (data) {
       output += String(data);
    });
-
 
    child.stderr.on('data', function (data) {
       errors += String(data);

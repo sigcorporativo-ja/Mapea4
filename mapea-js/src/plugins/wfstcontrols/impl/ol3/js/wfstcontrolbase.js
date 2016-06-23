@@ -6,39 +6,38 @@ goog.provide('P.impl.control.WFSTBase');
 (function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a WMC selector
-    * control
+    * Main constructor of the class.
     *
     * @constructor
+    * @param {M.layer.WFS} layer - layer for use in control
     * @extends {ol.control.Control}
     * @api stable
     */
    M.impl.control.WFSTBase = function(layer) {
       /**
-       * TODO
+       * Layer for use in control
        * @private
-       * @type {ol.Feature}
+       * @type {M.layer.WFS}
        */
       this.layer_ = layer;
 
       /**
-       * TODO
+       * Interaction pointer
        * @private
-       * @type {ol.Feature}
+       * @type {ol.interaction.Pointer}
        */
       this.interaction_ = null;
 
       /**
-       * TODO
-       * @private
-       * @type {ol.Feature}
+       * Describe feature
+       * @type {Mx.describeFeatureType.WFSTBase} - Describe feature
        */
       this.describeFeatureType_ = null;
 
       /**
-       * TODO
+       * Store modified features
        * @public
-       * @type {ol.Feature}
+       * @type {array}
        * @api stable
        */
       this.modifiedFeatures = [];
@@ -52,8 +51,8 @@ goog.provide('P.impl.control.WFSTBase');
     *
     * @public
     * @function
-    * @param {M.Map} map to add the plugin
-    * @param {function} template template of this control
+    * @param {M.Map} map - Map to add the plugin
+    * @param {HTMLElement} element - Container control
     * @api stable
     */
    M.impl.control.WFSTBase.prototype.addTo = function(map, element) {
@@ -67,11 +66,10 @@ goog.provide('P.impl.control.WFSTBase');
    };
 
    /**
-    * This function add events to the button 'DeleteFeature'
+    * This function activate control
     *
     * @public
     * @function
-    * @param {function} html control button
     * @api stable
     */
    M.impl.control.WFSTBase.prototype.activate = function() {
@@ -90,11 +88,10 @@ goog.provide('P.impl.control.WFSTBase');
    };
 
    /**
-    * This function add events to the button 'DeleteFeature'
+    * This function deactivate control
     *
     * @public
     * @function
-    * @param {function} html control button
     * @api stable
     */
    M.impl.control.WFSTBase.prototype.deactivate = function() {
@@ -113,16 +110,7 @@ goog.provide('P.impl.control.WFSTBase');
    };
 
    /**
-    * TODO
-    *
-    * @private
-    * @function
-    */
-   M.impl.control.WFSTBase.prototype.createInteraction_ = function() {};
-
-   /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
+    * This function destroys this control and cleaning the HTML
     *
     * @public
     * @function

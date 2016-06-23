@@ -100,7 +100,7 @@ goog.addDependency('../mapea/impl/ol3/js/services/wfs.js', ['M.impl.service.WFS'
 goog.addDependency('../mapea/impl/ol3/js/styles/iconstyle.js', ['M.impl.style.Icon'], ['ol.style.Icon'], false);
 goog.addDependency('../mapea/impl/ol3/js/utils/envolvedextent.js', ['M.impl.envolvedExtent'], [], false);
 goog.addDependency('../mapea/impl/ol3/js/utils/utils.js', ['M.impl.utils'], ['goog.style'], false);
-goog.addDependency('../mapea/impl/ol3/js/utils/wmscapabilitiesutils.js', ['M.impl.GetCapabilities'], [], false);
+goog.addDependency('../mapea/impl/ol3/js/utils/wmscapabilitiesuitls.js', ['M.impl.GetCapabilities'], [], false);
 goog.addDependency('../mapea/impl/ol3/js/view/view.js', ['M.impl.View'], ['ol.View'], false);
 goog.addDependency('../mapea/plugins/archetypePlugin/facade/js/HelloWorld.js', ['P.plugin.HelloWorld'], ['P.control.HelloWorldControl'], false);
 goog.addDependency('../mapea/plugins/archetypePlugin/facade/js/HelloWorldControl.js', ['P.control.HelloWorldControl'], [], false);

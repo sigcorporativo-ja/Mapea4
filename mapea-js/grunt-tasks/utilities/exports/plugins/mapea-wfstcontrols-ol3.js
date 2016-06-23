@@ -15,7 +15,6 @@ goog.require('P.impl.control.DrawFeature');
 goog.require('P.impl.control.EditAttribute');
 goog.require('P.impl.control.ModifyFeature');
 goog.require('P.impl.control.SaveFeature');
-goog.require('P.impl.control.WFSTBase');
 goog.require('P.plugin.WFSTControls');
 
 
@@ -30,18 +29,18 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.control.ClearFeature.prototype,
-    'manageActivation',
-    M.control.ClearFeature.prototype.manageActivation);
-
-goog.exportProperty(
-    M.control.ClearFeature.prototype,
     'equals',
     M.control.ClearFeature.prototype.equals);
 
 goog.exportProperty(
     M.control.ClearFeature.prototype,
-    'setLayer',
-    M.control.ClearFeature.prototype.setLayer);
+    'addEvents',
+    M.control.ClearFeature.prototype.addEvents);
+
+goog.exportProperty(
+    M.control.ClearFeature.prototype,
+    'clear_',
+    M.control.ClearFeature.prototype.clear_);
 
 goog.exportSymbol(
     'M.control.ClearFeature.NAME',
@@ -81,18 +80,18 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.control.DeleteFeature.prototype,
-    'getActivationButton',
-    M.control.DeleteFeature.prototype.getActivationButton);
+    'addEvents',
+    M.control.DeleteFeature.prototype.addEvents);
+
+goog.exportProperty(
+    M.control.DeleteFeature.prototype,
+    'activeDelete_',
+    M.control.DeleteFeature.prototype.activeDelete_);
 
 goog.exportProperty(
     M.control.DeleteFeature.prototype,
     'equals',
     M.control.DeleteFeature.prototype.equals);
-
-goog.exportProperty(
-    M.control.DeleteFeature.prototype,
-    'setLayer',
-    M.control.DeleteFeature.prototype.setLayer);
 
 goog.exportSymbol(
     'M.control.DeleteFeature.NAME',
@@ -108,18 +107,23 @@ goog.exportSymbol(
 
 goog.exportProperty(
     M.impl.control.DeleteFeature.prototype,
-    'modifiedFeatures',
-    M.impl.control.DeleteFeature.prototype.modifiedFeatures);
+    'addTo',
+    M.impl.control.DeleteFeature.prototype.addTo);
 
 goog.exportProperty(
     M.impl.control.DeleteFeature.prototype,
-    'activate',
-    M.impl.control.DeleteFeature.prototype.activate);
+    'activeDelete',
+    M.impl.control.DeleteFeature.prototype.activeDelete);
 
 goog.exportProperty(
     M.impl.control.DeleteFeature.prototype,
-    'deactivate',
-    M.impl.control.DeleteFeature.prototype.deactivate);
+    'createInteractionDelete_',
+    M.impl.control.DeleteFeature.prototype.createInteractionDelete_);
+
+goog.exportProperty(
+    M.impl.control.DeleteFeature.prototype,
+    'destroy',
+    M.impl.control.DeleteFeature.prototype.destroy);
 
 goog.exportSymbol(
     'M.control.DrawFeature',
@@ -132,18 +136,18 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.control.DrawFeature.prototype,
-    'getActivationButton',
-    M.control.DrawFeature.prototype.getActivationButton);
-
-goog.exportProperty(
-    M.control.DrawFeature.prototype,
     'equals',
     M.control.DrawFeature.prototype.equals);
 
 goog.exportProperty(
     M.control.DrawFeature.prototype,
-    'setLayer',
-    M.control.DrawFeature.prototype.setLayer);
+    'addEvents',
+    M.control.DrawFeature.prototype.addEvents);
+
+goog.exportProperty(
+    M.control.DrawFeature.prototype,
+    'activeDraw_',
+    M.control.DrawFeature.prototype.activeDraw_);
 
 goog.exportSymbol(
     'M.control.DrawFeature.NAME',
@@ -159,8 +163,23 @@ goog.exportSymbol(
 
 goog.exportProperty(
     M.impl.control.DrawFeature.prototype,
-    'createInteraction_',
-    M.impl.control.DrawFeature.prototype.createInteraction_);
+    'addTo',
+    M.impl.control.DrawFeature.prototype.addTo);
+
+goog.exportProperty(
+    M.impl.control.DrawFeature.prototype,
+    'activeDraw',
+    M.impl.control.DrawFeature.prototype.activeDraw);
+
+goog.exportProperty(
+    M.impl.control.DrawFeature.prototype,
+    'createInteractionDraw',
+    M.impl.control.DrawFeature.prototype.createInteractionDraw);
+
+goog.exportProperty(
+    M.impl.control.DrawFeature.prototype,
+    'destroy',
+    M.impl.control.DrawFeature.prototype.destroy);
 
 goog.exportSymbol(
     'M.control.EditAttribute',
@@ -173,26 +192,22 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.control.EditAttribute.prototype,
-    'getActivationButton',
-    M.control.EditAttribute.prototype.getActivationButton);
+    'addEvents',
+    M.control.EditAttribute.prototype.addEvents);
+
+goog.exportProperty(
+    M.control.EditAttribute.prototype,
+    'edit_',
+    M.control.EditAttribute.prototype.edit_);
 
 goog.exportProperty(
     M.control.EditAttribute.prototype,
     'equals',
     M.control.EditAttribute.prototype.equals);
 
-goog.exportProperty(
-    M.control.EditAttribute.prototype,
-    'setLayer',
-    M.control.EditAttribute.prototype.setLayer);
-
 goog.exportSymbol(
     'M.control.EditAttribute.NAME',
     M.control.EditAttribute.NAME);
-
-goog.exportSymbol(
-    'M.control.EditAttribute.POPUP_TITLE',
-    M.control.EditAttribute.POPUP_TITLE);
 
 goog.exportSymbol(
     'M.control.EditAttribute.TEMPLATE',
@@ -208,37 +223,28 @@ goog.exportSymbol(
 
 goog.exportProperty(
     M.impl.control.EditAttribute.prototype,
-    'editFeature',
-    M.impl.control.EditAttribute.prototype.editFeature);
+    'addTo',
+    M.impl.control.EditAttribute.prototype.addTo);
 
 goog.exportProperty(
     M.impl.control.EditAttribute.prototype,
-    'activate',
-    M.impl.control.EditAttribute.prototype.activate);
+    'edit',
+    M.impl.control.EditAttribute.prototype.edit);
 
 goog.exportProperty(
     M.impl.control.EditAttribute.prototype,
-    'deactivate',
-    M.impl.control.EditAttribute.prototype.deactivate);
+    'editAtt',
+    M.impl.control.EditAttribute.prototype.editAtt);
 
 goog.exportProperty(
     M.impl.control.EditAttribute.prototype,
-    'saveAttributes_',
-    M.impl.control.EditAttribute.prototype.saveAttributes_);
-
-goog.exportProperty(
-    M.impl.control.EditAttribute.prototype,
-    'unselectFeature_',
-    M.impl.control.EditAttribute.prototype.unselectFeature_);
+    'saveAttributes',
+    M.impl.control.EditAttribute.prototype.saveAttributes);
 
 goog.exportProperty(
     M.impl.control.EditAttribute.prototype,
     'destroy',
     M.impl.control.EditAttribute.prototype.destroy);
-
-goog.exportSymbol(
-    'M.impl.control.EditAttribute.SELECTED_STYLE',
-    M.impl.control.EditAttribute.SELECTED_STYLE);
 
 goog.exportSymbol(
     'M.control.ModifyFeature',
@@ -251,18 +257,18 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.control.ModifyFeature.prototype,
-    'getActivationButton',
-    M.control.ModifyFeature.prototype.getActivationButton);
+    'addEvents',
+    M.control.ModifyFeature.prototype.addEvents);
+
+goog.exportProperty(
+    M.control.ModifyFeature.prototype,
+    'activeModify_',
+    M.control.ModifyFeature.prototype.activeModify_);
 
 goog.exportProperty(
     M.control.ModifyFeature.prototype,
     'equals',
     M.control.ModifyFeature.prototype.equals);
-
-goog.exportProperty(
-    M.control.ModifyFeature.prototype,
-    'setLayer',
-    M.control.ModifyFeature.prototype.setLayer);
 
 goog.exportSymbol(
     'M.control.ModifyFeature.NAME',
@@ -278,13 +284,23 @@ goog.exportSymbol(
 
 goog.exportProperty(
     M.impl.control.ModifyFeature.prototype,
-    'activate',
-    M.impl.control.ModifyFeature.prototype.activate);
+    'addTo',
+    M.impl.control.ModifyFeature.prototype.addTo);
 
 goog.exportProperty(
     M.impl.control.ModifyFeature.prototype,
-    'deactivate',
-    M.impl.control.ModifyFeature.prototype.deactivate);
+    'activeModify',
+    M.impl.control.ModifyFeature.prototype.activeModify);
+
+goog.exportProperty(
+    M.impl.control.ModifyFeature.prototype,
+    'createInteractionModify_',
+    M.impl.control.ModifyFeature.prototype.createInteractionModify_);
+
+goog.exportProperty(
+    M.impl.control.ModifyFeature.prototype,
+    'modificar',
+    M.impl.control.ModifyFeature.prototype.modificar);
 
 goog.exportProperty(
     M.impl.control.ModifyFeature.prototype,
@@ -307,18 +323,13 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.control.SaveFeature.prototype,
-    'manageActivation',
-    M.control.SaveFeature.prototype.manageActivation);
+    'addEvents',
+    M.control.SaveFeature.prototype.addEvents);
 
 goog.exportProperty(
     M.control.SaveFeature.prototype,
-    'saveFeature_',
-    M.control.SaveFeature.prototype.saveFeature_);
-
-goog.exportProperty(
-    M.control.SaveFeature.prototype,
-    'setLayer',
-    M.control.SaveFeature.prototype.setLayer);
+    'saveFeature',
+    M.control.SaveFeature.prototype.saveFeature);
 
 goog.exportSymbol(
     'M.control.SaveFeature.NAME',
@@ -339,11 +350,6 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.impl.control.SaveFeature.prototype,
-    'saveFeature',
-    M.impl.control.SaveFeature.prototype.saveFeature);
-
-goog.exportProperty(
-    M.impl.control.SaveFeature.prototype,
     'destroy',
     M.impl.control.SaveFeature.prototype.destroy);
 
@@ -360,37 +366,3 @@ goog.exportProperty(
     M.plugin.WFSTControls.prototype,
     'destroy',
     M.plugin.WFSTControls.prototype.destroy);
-
-goog.exportProperty(
-    M.plugin.WFSTControls.prototype,
-    'setLayer',
-    M.plugin.WFSTControls.prototype.setLayer);
-
-goog.exportSymbol(
-    'M.impl.control.WFSTBase',
-    M.impl.control.WFSTBase);
-
-goog.exportProperty(
-    M.impl.control.WFSTBase.prototype,
-    'modifiedFeatures',
-    M.impl.control.WFSTBase.prototype.modifiedFeatures);
-
-goog.exportProperty(
-    M.impl.control.WFSTBase.prototype,
-    'addTo',
-    M.impl.control.WFSTBase.prototype.addTo);
-
-goog.exportProperty(
-    M.impl.control.WFSTBase.prototype,
-    'activate',
-    M.impl.control.WFSTBase.prototype.activate);
-
-goog.exportProperty(
-    M.impl.control.WFSTBase.prototype,
-    'deactivate',
-    M.impl.control.WFSTBase.prototype.deactivate);
-
-goog.exportProperty(
-    M.impl.control.WFSTBase.prototype,
-    'destroy',
-    M.impl.control.WFSTBase.prototype.destroy);

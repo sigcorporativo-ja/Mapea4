@@ -428,27 +428,27 @@ goog.provide('P.impl.control.Printer');
       var layerSource = olLayer.getSource();
       var tileGrid = layerSource.getTileGrid();
 
-      var layerUrl = layer.url;
+      var layerUrl = 'http://tile.openstreetmap.org/';
       var layerName = layer.name;
       var layerOpacity = olLayer.getOpacity();
       var tiled = layerImpl.tiled;
-      var layerExtent = olLayer.getExtent();
+      var layerExtent = tileGrid.getExtent();
       var tileSize = tileGrid.getTileSize();
       var resolutions = tileGrid.getResolutions();
-
       encodedLayer = {
-         'baseURL': layerUrl.substr(0, layerUrl.indexOf("$")),
+         'baseURL': layerUrl,
          'opacity': layerOpacity,
          'singleTile': !tiled,
          'layer': layerName,
          'maxExtent': layerExtent,
-         'tileSize': tileSize,
-         'resolutions': resolutions,
+         'tileSize': [tileSize, tileSize],
+         "resolutions": resolutions,
          'type': 'OSM',
          'extension': "png"
       };
-
+      
       return encodedLayer;
+
    };
 
    /**

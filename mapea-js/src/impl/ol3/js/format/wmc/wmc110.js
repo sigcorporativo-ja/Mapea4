@@ -168,6 +168,7 @@ M.impl.format.WMC.v110.prototype.getLayerFromInfo = function(layerInfo) {
    options['params'] = layerInfo['params'];
    var layer = new M.layer.WMS({
       'name': layerInfo['name'],
+      'legend': layerInfo['title'],
       'url': layerInfo['href'],
       'transparent': !/^true$/i.test(options.isBaseLayer)
    }, options);

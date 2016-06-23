@@ -7,8 +7,7 @@ goog.provide('P.control.ClearFeature');
     * control to clean deleted, created and modified unsaved features.
     *
     * @constructor
-    * @param {M.layer.WFS}
-    * layer layer for use in control
+    * @param {M.layer.WFS} layer - layer for use in control
     * @extends {M.Control}
     * @api stable
     */
@@ -28,8 +27,8 @@ goog.provide('P.control.ClearFeature');
     *
     * @public
     * @function
-    * @param {M.Map} map map to add the control
-    * @returns {Promise} html response
+    * @param {M.Map} map - Map to add the control
+    * @returns {Promise} HTML response
     * @api stable
     */
    M.control.ClearFeature.prototype.createView = function(map) {
@@ -39,13 +38,12 @@ goog.provide('P.control.ClearFeature');
    };
 
    /**
-    * TODO
+    * This function adds the click event to the button control
     *
     * @public
     * @function
-    * @param {HTMLElement} html to add the plugin
+    * @param {HTMLElement} html - Control template
     * @api stable
-    * @export
     */
    M.control.ClearFeature.prototype.manageActivation = function(element) {
       var activationBtn = element.querySelector('button#m-button-clearfeature');
@@ -56,8 +54,10 @@ goog.provide('P.control.ClearFeature');
     * This function checks if an object is equals
     * to this control
     *
+    * @public
     * @function
-    * @returns {Boolean}
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     * @api stable
     */
    M.control.ClearFeature.prototype.equals = function(obj) {
@@ -75,19 +75,6 @@ goog.provide('P.control.ClearFeature');
       this.getImpl().clear();
    };
 
- /**
- * This function set layer for editting
- *
- * @public
- * @function
- * @api stable
- */
-  M.control.ClearFeature.prototype.setLayer = function(layer) {
-   
-   this.getImpl().layer_ = layer;
-   
-  };
-
 
    /**
     * Name for this controls
@@ -99,7 +86,7 @@ goog.provide('P.control.ClearFeature');
    M.control.ClearFeature.NAME = 'clearfeature';
 
    /**
-    * Template for this controls - button
+    * Template for this control
     * @const
     * @type {string}
     * @public

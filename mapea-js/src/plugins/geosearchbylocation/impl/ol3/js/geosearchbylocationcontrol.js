@@ -8,11 +8,10 @@ goog.require('P.impl.control.Geosearch');
 (function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a Geosearchbylocation
-    * control
+    * Main constructor of the Geosearchbylocation control.
     *
     * @constructor
-    * @param {String} searchUrl_ URL for the request
+    * @param {string} searchUrl_ - URL for the request
     * @extends {M.impl.control.Geosearch}
     * @api stable
     */
@@ -21,22 +20,27 @@ goog.require('P.impl.control.Geosearch');
       /**
        * Popup showed
        * @private
-       * @type {M.impl.Popup}
+       * @type {Mx.Popup}
        */
       this.popup_ = null;
+
+      /**
+       * URL for the query
+       * @private
+       * @type {string}
+       */
+      this.searchUrl_ = searchUrl_;
 
       // calls super
       goog.base(this, {
          'layerName': M.control.Geosearchbylocation.NAME
       });
-
-      this.searchUrl_ = searchUrl_;
    };
    goog.inherits(M.impl.control.Geosearchbylocation, M.impl.control.Geosearch);
 
    /**
     * Set the map instance the control is associated with.
-    * @param {ol.Map} map The map instance.
+    * @param {ol.Map} map - The map instance.
     * @public
     * @function
     * @api stable
@@ -55,7 +59,7 @@ goog.require('P.impl.control.Geosearch');
     * This function get coordinates
     * @public
     * @function
-    * @returns {Promise}
+    * @returns {Promise} coordinates
     * @api stable
     */
    M.impl.control.Geosearch.prototype.locate = function() {
@@ -124,7 +128,7 @@ goog.require('P.impl.control.Geosearch');
 
    /**
     * This function draw point location
-    * @param {Array} coord coordinate
+    * @param {array} coord - Coordinates
     * @public
     * @function
     * @api stable
@@ -139,7 +143,7 @@ goog.require('P.impl.control.Geosearch');
     *
     * @public
     * @function
-    * @param {Object} container HTML to display
+    * @param {HTMLElement} container HTML to display
     * @api stable
     */
    M.impl.control.Geosearchbylocation.prototype.addResultsContainer = function(container) {
@@ -152,7 +156,7 @@ goog.require('P.impl.control.Geosearch');
     *
     * @public
     * @function
-    * @param {Object} container HTML to destroy
+    * @param {HTMLElement} container HTML results panel
     * @api stable
     */
    M.impl.control.Geosearchbylocation.prototype.removeResultsContainer = function(container) {
@@ -175,8 +179,7 @@ goog.require('P.impl.control.Geosearch');
    };
 
    /**
-    * This function destroys this control, clearing the HTML
-    * and unregistering all events
+    * This function destroys this control and clear HTML
     *
     * @public
     * @function
