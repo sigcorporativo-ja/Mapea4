@@ -26,7 +26,7 @@ goog.require('goog.dom.xml');
    M.remote.get = function(url, data, options) {
       var req;
 
-      var useProxy = (M.utils.isNullOrEmpty(options) || (options.jsonp !== false));
+      var useProxy = ((M.utils.isNullOrEmpty(options) || (options.jsonp !== false)) && M.proxy_ !== false);
 
       if (useProxy === true) {
          req = M.remote.jsonp_(url, data, options);
@@ -128,9 +128,9 @@ goog.require('goog.dom.xml');
 
    M.remote.manageProxy_ = function(url, method) {
       // deafult GET
-      var proxyUrl = M.config.MAPEA_URL.concat(M.config.PROXY_PATH);
+      var proxyUrl = M.config.PROXY_URL;
       if (method === M.remote.method.POST) {
-         proxyUrl = M.config.MAPEA_URL.concat(M.config.PROXY_POST_PATH);
+         proxyUrl = M.config.PROXY_POST_URL;
       }
 
       proxyUrl = M.utils.addParameters(proxyUrl, {

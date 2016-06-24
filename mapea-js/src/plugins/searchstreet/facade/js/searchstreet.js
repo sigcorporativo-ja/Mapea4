@@ -9,8 +9,7 @@ goog.require('P.plugin.Autocomplete');
     *
     * @constructor
     * @extends {M.Plugin}
-    * @param {Object}
-    * parameters parameter group to form URL Query
+    * @param {Mx.parameters.Searchstreet} parameters - Searchstreet parameters
     * @api stable
     */
    M.plugin.Searchstreet = (function(parameters) {
@@ -20,7 +19,7 @@ goog.require('P.plugin.Autocomplete');
        * Name plugin
        *
        * @public
-       * @type {String}
+       * @type {string}
        * @api stable
        */
       this.name = "searchstreet";
@@ -33,23 +32,23 @@ goog.require('P.plugin.Autocomplete');
       this.map_ = null;
 
       /**
-       * Searchstreet Control
+       * Searchstreet control
        *
        * @private
-       * @type {Object}
+       * @type {M.control.Searchstreet}
        */
       this.control_ = null;
 
       /**
-       * Autocomplete Control
+       * Autocomplete control
        *
        * @private
-       * @type {Object}
+       * @type {M.plugin.Autocomplete}
        */
       this.autocompletador_ = null;
 
       /**
-       * TODO
+       * Panel Searchstreet
        * @private
        * @type {M.ui.Panel}
        */
@@ -59,7 +58,7 @@ goog.require('P.plugin.Autocomplete');
        * Service URL (Searchstreet)
        *
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.url_ = M.config.SEARCHSTREET_URL;
 
@@ -67,7 +66,7 @@ goog.require('P.plugin.Autocomplete');
        * INE code to specify the search
        *
        * @private
-       * @type {Number}
+       * @type {number}
        */
       this.locality_ = "";
       if (!M.utils.isNullOrEmpty(parameters.locality)) {
@@ -79,12 +78,12 @@ goog.require('P.plugin.Autocomplete');
    goog.inherits(M.plugin.Searchstreet, M.Plugin);
 
    /**
-    * This function adds the control to the specified map
+    * @inheritdoc
     *
     * @public
     * @function
-    * @param {Object}
-    *        map the map to add the plugin
+    * @param {M.Map}
+    *        map - Facade map
     * @api stable
     */
    M.plugin.Searchstreet.prototype.addTo = function(map) {

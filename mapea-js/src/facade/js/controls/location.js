@@ -32,8 +32,8 @@ goog.require('M.exception');
     *
     * @public
     * @function
-    * @param {M.Map} map map to add the control
-    * @returns {Promise} html response
+    * @param {M.Map} map - Facade map
+    * @returns {Promise} HTML template
     * @api stable
     */
    M.control.Location.prototype.createView = function(map) {
@@ -47,7 +47,7 @@ goog.require('M.exception');
     *
     * @public
     * @function
-    * @param {HTMLElement} element control template
+    * @param {HTMLElement} element - Control template
     * @returns {HTMLElement} HTML control button
     * @api stable
     * @export
@@ -62,8 +62,8 @@ goog.require('M.exception');
     *
     * @public
     * @function
-    * @param {Object} obj object to compare
-    * @returns {Boolean}
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     * @api stable
     */
    M.control.Location.prototype.equals = function(obj) {

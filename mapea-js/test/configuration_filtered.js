@@ -1,12 +1,12 @@
-(function (M) {
+(function(M) {
    /**
     * Pixels width for mobile devices
-    * 
+    *
     * @private
     * @type {Number}
     */
    M.config('MOBILE_WIDTH', 768);
-   
+
    /**
     * The Mapea URL
     * @const
@@ -25,7 +25,7 @@
     * @public
     * @api stable
     */
-   M.config('PROXY_PATH', '/api/proxy');
+   M.config('PROXY_URL', 'http://localhost:8080/mapea/api/proxy');
 
    /**
     * The path to the Mapea proxy to send
@@ -35,7 +35,7 @@
     * @public
     * @api stable
     */
-   M.config('PROXY_POST_PATH', '/proxyPost');
+   M.config('PROXY_POST_URL', 'http://localhost:8080/mapea/proxyPost');
 
    /**
     * The path to the Mapea templates
@@ -109,7 +109,7 @@
     * @api stable
     */
    M.config('GEOSEARCH_ROWS', 20);
-   
+
    /**
     * The Geosearch rows
     * @const
@@ -134,7 +134,7 @@
        * @public
        * @api stable
        */
-      'urls': (function (stringValue) {
+      'urls': (function(stringValue) {
          return stringValue.split(',');
       })('http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejeroCache.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejero.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextOrtofoto.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextIDEA.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextOrtofoto2009.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/callejero2011cache.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/ortofoto2011cache.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/hibrido2011cache.xml'),
 
@@ -145,7 +145,7 @@
        * @public
        * @api stable
        */
-      'predefinedNames': (function (stringValue) {
+      'predefinedNames': (function(stringValue) {
          return stringValue.split(',');
       })('callejerocacheado,callejero,ortofoto,idea,ortofoto09,callejero2011cache,ortofoto2011cache,hibrido2011cache'),
 
@@ -156,11 +156,11 @@
        * @public
        * @api stable
        */
-      'names': (function (stringValue) {
+      'names': (function(stringValue) {
          return stringValue.split(',');
       })('mapa callejero cache,mapa del callejero,mapa ortofoto,mapa idea,mapa ortofoto09,Callejero,Ortofoto,Híbrido')
    });
-   
+
    /**
     * TODO
     * @type {object}
@@ -266,7 +266,7 @@
        * @api stable
        */
       'FORCE_SCALE': false,
-      
+
       /**
        * TODO
        * @const
@@ -348,18 +348,18 @@
     * @api stable
     */
    M.config('AUTOCOMPLETE_MINLENGTH', '3');
-   
+
    /**
     * TODO
-    * 
+    *
     * @private
     * @type {Number}
     */
    M.config('AUTOCOMPLETE_DELAYTIME', '750');
-   
+
    /**
     * Number of results to show
-    * 
+    *
     * @private
     * @type {Number}
     */

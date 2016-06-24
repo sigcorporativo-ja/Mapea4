@@ -2,8 +2,8 @@ goog.provide('P.control.Measure');
 
 /**
  * @classdesc
- * Main constructor of the class. Creates a WMCSelector
- * control to provides a way to select an specific WMC
+ * Main constructor of the class. Creates a Measure
+ * control to provides measure tools
  *
  * @constructor
  * @extends {M.Control}
@@ -13,7 +13,7 @@ M.control.Measure = (function(impl, template) {
    /**
     * Template of the control
     * @private
-    * @type {String}
+    * @type {string}
     */
    this.template_ = template;
 
@@ -26,7 +26,8 @@ goog.inherits(M.control.Measure, M.Control);
  *
  * @public
  * @function
- * @param {M.Map} map to add the control
+ * @param {M.Map} map - Map to add the control
+ * @returns {Promise} HTML template
  * @api stable
  */
 M.control.Measure.prototype.createView = function(map) {
@@ -36,7 +37,7 @@ M.control.Measure.prototype.createView = function(map) {
 };
 
 /**
- * TODO
+ * This function returns the HTML control button
  *
  * @public
  * @function
@@ -52,7 +53,10 @@ M.control.Measure.prototype.getActivationButton = function(element) {
  * This function checks if an object is equals
  * to this control
  *
+ * @public
  * @function
+ * @param {*} obj - Object to compare
+ * @returns {boolean} equals - Returns if they are equal or not
  * @api stable
  */
 M.control.Measure.prototype.equals = function(obj) {
@@ -64,7 +68,7 @@ M.control.Measure.prototype.equals = function(obj) {
 };
 
 /**
- * function adds the event 'click'
+ * This function destroys this plugin
  *
  * @public
  * @function

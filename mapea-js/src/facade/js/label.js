@@ -10,10 +10,10 @@ goog.require('goog.dom.classlist');
    /**
     * @classdesc
     * Main constructor of the class. Creates a Label
-    * control to provides a popup with specified information.
+    * control to provides a popup with specified information
     * @constructor
-    * @param {String} text text to show
-    * @param {Object} coordOpts coordinate to display popup
+    * @param {string} text - Text to show
+    * @param {array} coordOpts - Coordinate to display popup
     * @extends {M.facade.Base}
     * @api stable
     */
@@ -42,7 +42,7 @@ goog.require('goog.dom.classlist');
     *
     * @public
     * @function
-    * @param {M.Map} map map where show popup
+    * @param {M.Map} map - Facade map
     * @api stable
     * @export
     */
@@ -64,9 +64,9 @@ goog.require('goog.dom.classlist');
    };
 
    /**
-    * Template for this controls - popup
+    * Template popup for this controls
     * @const
-    * @type {String}
+    * @type {string}
     * @public
     * @api stable
     */

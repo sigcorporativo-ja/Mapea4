@@ -6,23 +6,21 @@ goog.require('goog.dom');
 (function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a Searchstreet control
+    * Main constructor of the class. Creates a Searchstreet control that allows searches of streets
     *
     * @constructor
     * @extends {M.Control}
-    * @param {String}
-    * url Service URL
-    * @param {Number}
-    * locality INE code to specify the search
+    * @param {string} url - Service URL
+    * @param {number} locality - INE code to specify the search
     * @api stable
     */
-   M.control.Searchstreet = (function(url, locality, searchParameters) {
+   M.control.Searchstreet = (function(url, locality) {
       if (M.utils.isUndefined(M.impl.control.Searchstreet)) {
          M.exception('La implementación usada no puede crear controles Searchstreet');
       }
 
       /**
-       * HTML element where the query will be written
+       * Input Searchstreet
        *
        * @private
        * @type {HTMLElement}
@@ -30,7 +28,7 @@ goog.require('goog.dom');
       this.input_ = null;
 
       /**
-       * HTML element where the query is sent to press
+       * Button Searchstreet
        *
        * @private
        * @type {HTMLElement}
@@ -38,7 +36,7 @@ goog.require('goog.dom');
       this.button_ = null;
 
       /**
-       * HTML template
+       * Container Searchstreet
        *
        * @private
        * @type {HTMLElement}
@@ -46,7 +44,7 @@ goog.require('goog.dom');
       this.element_ = null;
 
       /**
-       * HTML element for container of the results
+       * Results panel Searchstreet
        *
        * @private
        * @type {HTMLElement}
@@ -57,7 +55,7 @@ goog.require('goog.dom');
        * Timestamp of the search to abort old requests
        *
        * @private
-       * @type {Number}
+       * @type {number}
        */
       this.searchTime_ = 0;
 
@@ -65,7 +63,7 @@ goog.require('goog.dom');
        * Control name
        *
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.name_ = "searchstreet";
 
@@ -73,7 +71,7 @@ goog.require('goog.dom');
        * Search URL
        *
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.searchUrl_ = url;
 
@@ -81,7 +79,7 @@ goog.require('goog.dom');
        * Municipality to search
        *
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.municipio_ = null;
 
@@ -89,21 +87,33 @@ goog.require('goog.dom');
        * Province to search
        *
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.provincia_ = null;
 
       /**
-       * Provinces
+       * All provinces
        *
        * @private
-       * @type {Array}
+       * @type {array}
        */
       this.provincias_ = ["huelva", "sevilla", "córdoba", "jaén", "cádiz", "málaga", "granada", "almería"];
 
       // checks if you receive the locality parameter, if so create two attributes.
       if (!M.utils.isUndefined(locality)) {
+         /**
+          * INE code
+          *
+          * @private
+          * @type {number}
+          */
          this.codIne_ = locality;
+         /**
+          * Service check INE code
+          *
+          * @private
+          * @type {string}
+          */
          this.searchCodIne_ = M.config.SEARCHSTREET_URLCOMPROBARINE;
       }
 
@@ -111,7 +121,7 @@ goog.require('goog.dom');
        * Minimum number of characters to start autocomplete
        *
        * @private
-       * @type {Number}
+       * @type {number}
        */
       this.minAutocomplete_ = M.config.AUTOCOMPLETE_MINLENGTH;
 
@@ -134,7 +144,7 @@ goog.require('goog.dom');
        * State consultation
        *
        * @public
-       * @type {Boolean}
+       * @type {boolean}
        * @api stable
        */
       this.completed = false;
@@ -143,7 +153,7 @@ goog.require('goog.dom');
        * Stores the answers of the query when the province isn't indicated
        *
        * @private
-       * @type {Array}
+       * @type {array}
        */
       this.respuestasProvincias_ = [];
 
@@ -152,15 +162,9 @@ goog.require('goog.dom');
        *
        * @public
        * @type {number}
+       * @api stable
        */
       this.contadorProvincias = 0;
-
-      /**
-       * Container of the results
-       * @private
-       * @type {HTMLElement}
-       */
-      this.resultsContainer_ = null;
 
       /**
        * Container of the results to scroll
@@ -181,8 +185,8 @@ goog.require('goog.dom');
     *
     * @public
     * @function
-    * @param {M.Map}
-    *        map map to add the control
+    * @param {M.Map} map - Map to add the control
+    * @returns {Promise} HTML template
     * @api stable
     */
    M.control.Searchstreet.prototype.createView = function(map) {
@@ -205,8 +209,7 @@ goog.require('goog.dom');
     *
     * @public
     * @function
-    * @param {HTMLElement}
-    *        html html to add events
+    * @param {HTMLElement} html - HTML to add events
     * @api stable
     */
    M.control.Searchstreet.prototype.addEvents = function(html) {
@@ -264,7 +267,7 @@ goog.require('goog.dom');
    /**
     * Specifies the value of the municipality and province
     *
-    * @param {Object} results query results
+    * @param {object} results - Query results
     * @private
     * @function
     */
@@ -279,6 +282,7 @@ goog.require('goog.dom');
     *
     * @private
     * @function
+    * @param {goog.events.BrowserEvent} evt - Keypress event
     */
    M.control.Searchstreet.prototype.searchClick_ = function(evt) {
       evt.preventDefault();
@@ -319,8 +323,8 @@ goog.require('goog.dom');
     *
     * @private
     * @function
-    * @param {String} query query to search
-    * @param {Function} processor calls function
+    * @param {string} query - Query to search
+    * @param {function} processor - Calls function
     */
    M.control.Searchstreet.prototype.search_ = function(query, processor) {
       var this_ = this;
@@ -389,7 +393,9 @@ goog.require('goog.dom');
     *
     * @private
     * @function
-    * @param {Object} results query results
+    * @param {string} searchUrl - Search URL
+    * @param {string} provincia - Province
+    * @param {string} processor - Calls function
     */
    M.control.Searchstreet.prototype.querySearch_ = function(searchUrl, provincia, processor) {
       var this_ = this;
@@ -429,9 +435,12 @@ goog.require('goog.dom');
    /**
     * This function performs the query if the town and province haven't value
     *
-    * @private
+    * @public
     * @function
-    * @param {Object} results query results
+    * @param {string} searchUrl - Search URL
+    * @param {string} provincia - Province
+    * @param {string} processor - Calls function
+    * @api stable
     */
    M.control.Searchstreet.prototype.querySearchProvinces = function(searchUrl, provincia, processor) {
       var this_ = this;
@@ -474,7 +483,7 @@ goog.require('goog.dom');
     *
     * @private
     * @function
-    * @param {Object} results query results
+    * @param {object} results - Query results
     */
    M.control.Searchstreet.prototype.showResults_ = function(results) {
       var this_ = this;
@@ -527,8 +536,8 @@ goog.require('goog.dom');
     *
     * @private
     * @function
-    * @param {Object} results query results
-    * @returns {Object}
+    * @param {object} results - Query results
+    * @returns {object} resultsTemplateVar - Parse results
     */
    M.control.Searchstreet.prototype.parseResultsForTemplate_ = function(results) {
       var resultsTemplateVar = null;
@@ -603,7 +612,7 @@ goog.require('goog.dom');
     *
     * @private
     * @function
-    * @param {Array} results query results
+    * @param {array} results - Query results
     */
    M.control.Searchstreet.prototype.eventList_ = function(results) {
       var rows = this.resultsContainer_.getElementsByClassName("result");
@@ -613,12 +622,12 @@ goog.require('goog.dom');
    };
 
    /**
-    * This function adds a click event to the elements of the list
+    * This function adds a click event to the element
     *
     * @private
     * @function
-    * @param {HTMLElement} specific item in the list
-    * @param {Object} result result specific
+    * @param {HTMLElement} element - Specific item in the list
+    * @param {object} result - Specific query result
     */
    M.control.Searchstreet.prototype.addEventClickList_ = function(element,
       result) {
@@ -638,7 +647,8 @@ goog.require('goog.dom');
     *
     * @function
     * @api stable
-    * @returns {Boolean}
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     */
    M.control.Searchstreet.prototype.equals = function(obj) {
       var equals = false;
@@ -649,11 +659,12 @@ goog.require('goog.dom');
    };
 
    /**
-    * This function return element input
+    * This query returns the input Searchstreet
     *
     * @public
     * @function
-    * @returns {HTMLElement}
+    * @returns {HTMLElement} Input Searchstreet
+    * @api stable
     */
    M.control.Searchstreet.prototype.getInput = function() {
       return this.input_;
@@ -662,9 +673,10 @@ goog.require('goog.dom');
    /**
     * This function return HTML template
     *
-    * @private
+    * @public
     * @function
-    * @returns {HTMLElement}
+    * @returns {HTMLElement} HTML template
+    * @api stable
     */
    M.control.Searchstreet.prototype.getHtml = function() {
       return this.element_;
@@ -687,11 +699,11 @@ goog.require('goog.dom');
    };
 
    /**
-    * This function checks if an object is equals
-    * to this control
+    * This function hides/shows the list
     *
     * @private
     * @function
+    * @param {goog.events.BrowserEvent} evt - Keypress event
     */
    M.control.Searchstreet.prototype.resultsClick_ = function(evt) {
       goog.dom.classlist.add(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
@@ -722,7 +734,7 @@ goog.require('goog.dom');
    M.control.Searchstreet.RESULTS_TEMPLATE = 'searchstreetresults.html';
 
    /**
-    * Class searching
+    * Class 'searching'
     *
     * @const
     * @type {string}
@@ -732,7 +744,7 @@ goog.require('goog.dom');
    M.control.Searchstreet.SEARCHING_CLASS = 'm-searching';
 
    /**
-    * Class for this controls
+    * Class 'hidden'
     * @const
     * @type {string}
     * @public
@@ -741,7 +753,7 @@ goog.require('goog.dom');
    M.control.Searchstreet.HIDDEN_RESULTS_CLASS = 'hidden';
 
    /**
-    * Class minimum
+    * Class 'minimum'
     * @const
     * @type {string}
     * @public

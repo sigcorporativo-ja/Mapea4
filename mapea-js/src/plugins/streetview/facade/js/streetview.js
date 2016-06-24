@@ -12,7 +12,6 @@ goog.require('goog.events');
  *
  * @constructor
  * @extends {M.Plugin}
- * @param {Object} impl implementation object
  * @api stable
  */
 M.plugin.Streetview = (function() {
@@ -24,10 +23,16 @@ M.plugin.Streetview = (function() {
     */
    this.map_ = null;
 
+   /**
+    * Streetview control
+    * @public
+    * @type {M.control.Streetview}
+    * @api stable
+    */
    this.streetview = null;
 
    /**
-    * TODO
+    * Panel Streetview
     * @private
     * @type {M.ui.Panel}
     */
@@ -38,12 +43,11 @@ M.plugin.Streetview = (function() {
 goog.inherits(M.plugin.Streetview, M.Plugin);
 
 /**
- * This function provides the implementation
- * of the object
+ * @inheritdoc
  *
  * @public
  * @function
- * @param {Object} map the map to add the plugin
+ * @param {M.Map} map - Map to add the plugin
  * @api stable
  */
 M.plugin.Streetview.prototype.addTo = function(map) {
@@ -92,7 +96,7 @@ M.plugin.Streetview.prototype.destroy = function() {
 };
 
 /**
- * TODO
+ * Name plugin
  * @const
  * @type {string}
  * @public

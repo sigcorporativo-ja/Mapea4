@@ -6,12 +6,11 @@ goog.require('goog.dom.classlist');
    /**
     * @classdesc
     * Main facade plugin object. This class creates a plugin
-    *            object which has an implementation Object
+    * Autocomplete
     *
     * @constructor
     * @extends {M.Plugin}
-    * @param {Object}
-    * parameters parameter group to form URL Query
+    * @param {Mx.parameters.Autocomplete} parameters - Autocomplete parameters
     * @api stable
     */
    M.plugin.Autocomplete = (function(parameters) {
@@ -30,7 +29,7 @@ goog.require('goog.dom.classlist');
        * INE code to specify the search
        *
        * @private
-       * @type {Number}
+       * @type {number}
        */
       this.locality_ = "";
       if (!M.utils.isNullOrEmpty(parameters.locality)) {
@@ -41,7 +40,7 @@ goog.require('goog.dom.classlist');
        * Service URL
        *
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.url_ = M.config.SEARCHSTREET_URLCODINEAUTOCOMPLETE;
 
@@ -49,12 +48,12 @@ goog.require('goog.dom.classlist');
        * Minimum number of characters to start autocomplete
        *
        * @private
-       * @type {Number}
+       * @type {number}
        */
       this.minLength_ = M.config.AUTOCOMPLETE_MINLENGTH;
 
       /**
-       * Element at which to write the query
+       * Input searchstreet
        *
        * @private
        * @type {HTMLElement}
@@ -71,10 +70,10 @@ goog.require('goog.dom.classlist');
 
 
       /**
-       * TODO
+       * Delay time
        *
        * @private
-       * @type {Number}
+       * @type {number}
        */
       this.delayTime_ = M.config.AUTOCOMPLETE_DELAYTIME;
 
@@ -82,7 +81,7 @@ goog.require('goog.dom.classlist');
        * Time out Key
        *
        * @private
-       * @type {Number}
+       * @type {number}
        */
       this.timeoutKey_ = null;
 
@@ -90,7 +89,7 @@ goog.require('goog.dom.classlist');
        * Number of results to show
        *
        * @private
-       * @type {Number}
+       * @type {number}
        */
       this.limit_ = M.config.AUTOCOMPLETE_LIMIT;
 
@@ -98,26 +97,32 @@ goog.require('goog.dom.classlist');
        * Timestamp of the search to abort old requests
        *
        * @private
-       * @type {Number}
+       * @type {number}
        */
       this.searchTime_ = 0;
 
       /**
-       * state search municipality
+       * State search municipality
        *
        * @private
-       * @type {Boolean}
+       * @type {boolean}
        */
       this.busqMunicipio_ = false;
 
       /**
-       * state click search municipality
+       * State click search municipality
        *
        * @private
-       * @type {Boolean}
+       * @type {boolean}
        */
       this.busqMunicipioClick_ = false;
 
+      /**
+       * Container searching results
+       *
+       * @private
+       * @type {HTMLElement}
+       */
       this.searchingResult_ = this.resultsContainer_.querySelector('div#m-autocomplete-results > div#m-searching-result-autocomplete');
 
       goog.base(this);
@@ -125,12 +130,11 @@ goog.require('goog.dom.classlist');
    goog.inherits(M.plugin.Autocomplete, M.Plugin);
 
    /**
-    * This function adds the control to the specified map
+    * @inheritdoc
     *
     * @public
     * @function
-    * @param {Object}
-    *        map the map to add the plugin
+    * @param {M.Map} map - Facade map
     * @api stable
     */
    M.plugin.Autocomplete.prototype.addTo = function(map) {
@@ -148,6 +152,8 @@ goog.require('goog.dom.classlist');
     *
     * @private
     * @function
+    * @param {goog.events.BrowserEvent}
+    *        evt - Keypress event
     */
    M.plugin.Autocomplete.prototype.hiddenAutocomplete_ = function(evt) {
       if (evt.keyCode === 27) {
@@ -161,6 +167,8 @@ goog.require('goog.dom.classlist');
     *
     * @private
     * @function
+    * @param {goog.events.BrowserEvent}
+    *        evt - Keypress event
     */
    M.plugin.Autocomplete.prototype.keyPress_ = function(evt) {
       evt.preventDefault();
@@ -189,7 +197,9 @@ goog.require('goog.dom.classlist');
     *
     * @private
     * @function
-    * @param {String} query query to search
+    * @param {string} query - Query to search
+    * @param {goog.events.BrowserEvent}
+    *        evt - Click event
     */
    M.plugin.Autocomplete.prototype.search_ = function(query, evt) {
       var this_ = this;
@@ -328,10 +338,10 @@ goog.require('goog.dom.classlist');
    };
 
    /**
-    * This function add event click that call clickMunicipaly
+    * This function adds the click event to each result with municipality
     *
     * @private
-    * @param {HTMLElement} element HTML element to add the event
+    * @param {HTMLElement} element - HTML element to add the event
     * @function
     */
    M.plugin.Autocomplete.prototype.evtClickMunicipaly_ = function(element) {
@@ -342,12 +352,12 @@ goog.require('goog.dom.classlist');
    };
 
    /**
-    * This function parse query results for template
+    * This function parse results for template
     *
     * @private
-    * @param {Object} results query results
+    * @param {object} results - Query results
     * @function
-    * @return {Object}
+    * @return {object} ResultsTemplateVar - parse results
     */
    M.plugin.Autocomplete.prototype.parseResultsForTemplate_ = function(results) {
       var docs = results.autocompletarDireccionMunicipioResponse.autocompletarDireccionMunicipioReturn.autocompletarDireccionMunicipioReturn;
@@ -392,7 +402,7 @@ goog.require('goog.dom.classlist');
     * This function add events to the results
     *
     * @private
-    * @Param {Array} results array of HTML elements that add the event
+    * @Param {array} results - Array of HTML elements
     * @function
     */
    M.plugin.Autocomplete.prototype.addEvents_ = function(results) {
@@ -405,7 +415,7 @@ goog.require('goog.dom.classlist');
     * This function add events to specific result
     *
     * @private
-    * @param {HTMLElement} result HTML element to add the event
+    * @param {HTMLElement} result - HTML element to add the event
     * @function
     */
    M.plugin.Autocomplete.prototype.addEventSearchMunicipality_ = function(result) {
@@ -415,10 +425,12 @@ goog.require('goog.dom.classlist');
    };
 
    /**
-    * This function active busqMunicipio and call search
+    * This function active 'busqMunicipio' and calls performs the search
     *
     * @private
-    * @param {String} content string to search
+    * @param {string} content - String to search
+    * @param {goog.events.BrowserEvent}
+    *        evt - keypress event
     * @function
     */
    M.plugin.Autocomplete.prototype.searchMunicipality_ = function(content, evt) {
@@ -427,7 +439,7 @@ goog.require('goog.dom.classlist');
    };
 
    /**
-    * This function active busqMunicipioClick_
+    * This function active 'busqMunicipioClick_'
     *
     * @private
     * @function
@@ -441,21 +453,22 @@ goog.require('goog.dom.classlist');
     *
     * @private
     * @function
-    * @param {String} str string to search
-    * @Param {String} find string to find
-    * @Param {String} replace string to replace
-    * @returns {String}
+    * @param {string} str - String to search
+    * @Param {string} find - String to find
+    * @Param {string} replace - String to replace
+    * @returns {string} Format content
     */
    M.plugin.Autocomplete.prototype.formatContent_ = function(str, find, replace) {
       return str.replace(new RegExp(find, 'g'), replace);
    };
 
    /**
-    * This function provides the input search
+    * This function cancel search
     *
     * @private
     * @function
-    * @returns {HTMLElement} the input that executes the search
+    * @param {goog.events.BrowserEvent}
+    *        evt - Keypress event
     */
    M.plugin.Autocomplete.prototype.cancelSearch_ = function(evt) {
       clearTimeout(this.timeoutKey_);
@@ -519,7 +532,7 @@ goog.require('goog.dom.classlist');
    M.plugin.Autocomplete.CLASS = 'm-plugin-autocomplete';
 
    /**
-    * Class searching autocomplete
+    * Class searching
     * @const
     * @type {string}
     * @public
@@ -528,7 +541,7 @@ goog.require('goog.dom.classlist');
    M.plugin.Autocomplete.SEARCHING_CLASS = 'm-searching';
 
    /**
-    * Template for this controls
+    * Template for this plugin - results
     * @const
     * @type {string}
     * @public
