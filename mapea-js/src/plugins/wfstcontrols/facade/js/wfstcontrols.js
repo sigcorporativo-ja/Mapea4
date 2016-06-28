@@ -16,15 +16,20 @@ goog.require('goog.events');
  *
  * @constructor
  * @extends {M.Plugin}
- * @param {Object} impl implementation object
+ * @param {array} controls - Array of controls to be added
  * @api stable
  */
 M.plugin.WFSTControls = (function(controls, layername) {
 
+   /**
+    * Array of controls to be added
+    * @private
+    * @type {String}
+    */
    this.controls = controls;
 
    /**
-    * Layer for editting
+    * Layer
     * @private
     * @type {String}
     */
@@ -89,12 +94,16 @@ goog.inherits(M.plugin.WFSTControls, M.Plugin);
  *
  * @public
  * @function
- * @param {Object} map the map to add the plugin
+ * @param {Object} map - Map to add the plugin
  * @api stable
  */
 M.plugin.WFSTControls.prototype.addTo = function(map) {
    this.map_ = map;
-   var wfslayer = M.utils.isNullOrEmpty(this.map_.getWFS({'name':this.layername_})[0])? this.map_.getWFS()[0] : this.map_.getWFS({'name':this.layername_})[0];
+   var wfslayer = M.utils.isNullOrEmpty(this.map_.getWFS({
+      'name': this.layername_
+   })[0]) ? this.map_.getWFS()[0] : this.map_.getWFS({
+      'name': this.layername_
+   })[0];
 
    if (M.utils.isNullOrEmpty(wfslayer)) {
       M.dialog.error('Los controles <b>' + this.controls.join(',') + '</b> no se pueden añadir al mapa porque no existe una capa WFS cargada.');
@@ -166,33 +175,37 @@ M.plugin.WFSTControls.prototype.destroy = function() {
 };
 
 /**
- * This function set layer for editting
+ * This function set layer
  *
  * @public
  * @function
+ * @param {M.layer.WFS} layer - Layer
  * @api stable
  */
 M.plugin.WFSTControls.prototype.setLayer = function(layername) {
 
-  this.layername_ = layername;
-  var wfslayer = this.map_.getWFS({'name':this.layername_})[0];
-  if (M.utils.isNullOrEmpty(wfslayer)){
-    M.dialog.error('Los capa <b>' + layername + '</b> no es una capa WFS cargada.');
-  }else{
-    let objControls = [];
-     if(!M.utils.isNullOrEmpty(this.drawfeature_)) objControls.push(this.drawfeature_);
-     if(!M.utils.isNullOrEmpty(this.modifyfeature_)) objControls.push(this.modifyfeature_);
-     if(!M.utils.isNullOrEmpty(this.deletefeature_)) objControls.push(this.deletefeature_);
-     if(!M.utils.isNullOrEmpty(this.clearfeature_)) objControls.push(this.clearfeature_);
-     if(!M.utils.isNullOrEmpty(this.savefeature_)) objControls.push(this.savefeature_);
-     if(!M.utils.isNullOrEmpty(this.editattibute_)) objControls.push(this.editattibute_);
+   this.layername_ = layername;
+   var wfslayer = this.map_.getWFS({
+      'name': this.layername_
+   })[0];
+   if (M.utils.isNullOrEmpty(wfslayer)) {
+      M.dialog.error('Los capa <b>' + layername + '</b> no es una capa WFS cargada.');
+   }
+   else {
+      let objControls = [];
+      if (!M.utils.isNullOrEmpty(this.drawfeature_)) objControls.push(this.drawfeature_);
+      if (!M.utils.isNullOrEmpty(this.modifyfeature_)) objControls.push(this.modifyfeature_);
+      if (!M.utils.isNullOrEmpty(this.deletefeature_)) objControls.push(this.deletefeature_);
+      if (!M.utils.isNullOrEmpty(this.clearfeature_)) objControls.push(this.clearfeature_);
+      if (!M.utils.isNullOrEmpty(this.savefeature_)) objControls.push(this.savefeature_);
+      if (!M.utils.isNullOrEmpty(this.editattibute_)) objControls.push(this.editattibute_);
 
-    //let ctrlActivo = null;
-    //objControls.forEach(function (ctrl){if (ctrl.activated) ctrlActivo = ctrl});
-    this.clearfeature_.getImpl().clear();
-    objControls.forEach(function (ctrl){
-      ctrl.setLayer(wfslayer);
-      // if(ctrl===ctrlActivo){ ctrl.activate();} //JGL: TODO no funciona
-    });
-  }
+      //let ctrlActivo = null;
+      //objControls.forEach(function (ctrl){if (ctrl.activated) ctrlActivo = ctrl});
+      this.clearfeature_.getImpl().clear();
+      objControls.forEach(function(ctrl) {
+         ctrl.setLayer(wfslayer);
+         // if(ctrl===ctrlActivo){ ctrl.activate();} //JGL: TODO no funciona
+      });
+   }
 };

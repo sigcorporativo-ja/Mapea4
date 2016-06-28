@@ -1,4 +1,4 @@
-var exec = require('child_process').exec;
+var exec = require('child_process').execSync;
 var isWindows = process.platform.indexOf('win') === 0;
 
 module.exports = function(grunt) {
@@ -33,57 +33,26 @@ module.exports = function(grunt) {
 
          // add executuion permission to the script
          if (!isWindows) {
-            addExecutionPermission(closureFolder, function(error, stdout, stderr) {
-               if (error != null) {
-                  grunt.log.error(error);
-                  done();
-               }
-               else {
-                  // execute closure
-                  executeDepswriter(closureFolder, dependencies, outputFile, function(error, stdout, stderr) {
-                     //grunt.log.writeln('Permisos revisados');
-                     if (error != null) {
-                        grunt.log.error(error);
-                        done();
-                     }
-                     else {
-                        // DONE
-                        index++;
-                        if (index === implLength) {
-                           grunt.log.ok("Build succeeded.");
-                           done();
-                        }
-                     }
-                  });
-               }
-            });
+            addExecutionPermission(closureFolder);
          }
-         else {
-            executeDepswriter(closureFolder, dependencies, outputFile, function(error, stdout, stderr) {
-               if (error != null) {
-                  grunt.log.error(error);
-                  done();
-               }
-               else {
-                  // DONE
-                  index++;
-                  if (index === implLength) {
-                     grunt.log.ok("Build succeeded.");
-                     done();
-                  }
-               }
-            });
+         // execute closure
+         executeDepswriter(closureFolder, dependencies, outputFile);
+         // DONE
+         index++;
+         if (index === implLength) {
+            grunt.log.ok("Build succeeded.");
+            done();
          }
       }
    });
 
-   function addExecutionPermission(closureFolder, callback) {
+   function addExecutionPermission(closureFolder) {
       var depswriterScript = closureFolder.concat('closure/bin/build/depswriter.py');
       var chmod = 'chmod ugo+x '.concat(depswriterScript);
-      exec(chmod, callback);
+      exec(chmod);
    }
 
-   function executeDepswriter(closureFolder, dependencies, outputFile, callback) {
+   function executeDepswriter(closureFolder, dependencies, outputFile) {
 
       // closure variables
       var depswriterScript = closureFolder.concat('closure/bin/build/depswriter.py');
@@ -115,11 +84,11 @@ module.exports = function(grunt) {
       grunt.log.debug(depswriterCmd);
 
       if (!isWindows) {
-         exec(depswriterCmd, callback);
+         exec(depswriterCmd);
       }
       else {
          var wcmd = 'python ' + depswriterCmd;
-         exec(wcmd, callback);
+         exec(wcmd);
       }
    }
 

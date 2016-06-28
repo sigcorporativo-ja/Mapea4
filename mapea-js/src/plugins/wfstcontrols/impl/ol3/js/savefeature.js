@@ -9,14 +9,20 @@ goog.require('goog.dom.classes');
 (function() {
    /**
     * @classdesc
-    * Main constructor of the class. Creates a WMC selector
+    * Main constructor of the class. Creates a Savefeature
     * control
     *
     * @constructor
-    * @extends {ol.control.Control}
+    * @param {M.layer.WFS} layer - Layer for use in control
+    * @extends {M.impl.Control}
     * @api stable
     */
    M.impl.control.SaveFeature = function(layer) {
+      /**
+       * Layer for use in control
+       * @private
+       * @type {M.layer.WFS}
+       */
       this.layer_ = layer;
    };
    goog.inherits(M.impl.control.SaveFeature, M.impl.Control);
@@ -26,8 +32,8 @@ goog.require('goog.dom.classes');
     *
     * @public
     * @function
-    * @param {M.Map} map to add the plugin
-    * @param {function} template template of this control
+    * @param {M.Map} map - Map to add the plugin
+    * @param {HTMLElement} element - Container SaveFeature
     * @api stable
     */
    M.impl.control.SaveFeature.prototype.addTo = function(map, element) {
@@ -36,11 +42,10 @@ goog.require('goog.dom.classes');
    };
 
    /**
-    * This function creates the view to the specified map
+    * This function saves changes
     *
     * @public
     * @function
-    * @param {M.Map} map to add the control
     * @api stable
     */
    M.impl.control.SaveFeature.prototype.saveFeature = function() {
@@ -63,11 +68,11 @@ goog.require('goog.dom.classes');
          saveFeaturesDelete = deletefeatureCtrl.getImpl().modifiedFeatures;
       }
       //JGL 20163105: para evitar que se envié en la petición WFST el bbox
-      saveFeaturesModify.forEach(function(feature){
-        feature.unset('bbox');
+      saveFeaturesModify.forEach(function(feature) {
+         feature.unset('bbox');
       });
-      saveFeaturesDraw.forEach(function(feature){
-        feature.unset('bbox');
+      saveFeaturesDraw.forEach(function(feature) {
+         feature.unset('bbox');
       });
       //
       var this_ = this;
@@ -101,8 +106,7 @@ goog.require('goog.dom.classes');
    };
 
    /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
+    * This function destroys this control and cleaning the HTML
     *
     * @public
     * @function
