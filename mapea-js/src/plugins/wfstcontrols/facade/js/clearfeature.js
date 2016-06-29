@@ -7,8 +7,7 @@ goog.provide('P.control.ClearFeature');
     * control to clean deleted, created and modified unsaved features.
     *
     * @constructor
-    * @param {M.layer.WFS}
-    * layer layer for use in control
+    * @param {M.layer.WFS} layer - Layer for use in control
     * @extends {M.Control}
     * @api stable
     */
@@ -28,7 +27,7 @@ goog.provide('P.control.ClearFeature');
     *
     * @public
     * @function
-    * @param {M.Map} map map to add the control
+    * @param {M.Map} map - Map to add the control
     * @returns {Promise} html response
     * @api stable
     */
@@ -39,11 +38,11 @@ goog.provide('P.control.ClearFeature');
    };
 
    /**
-    * TODO
+    * This function adds the click event to the button
     *
     * @public
     * @function
-    * @param {HTMLElement} html to add the plugin
+    * @param {HTMLElement} element - HTML control
     * @api stable
     * @export
     */
@@ -53,12 +52,12 @@ goog.provide('P.control.ClearFeature');
    };
 
    /**
-    * This function checks if an object is equals
-    * to this control
+    * This function checks if an object is equals to this control
     *
     * @function
-    * @returns {Boolean}
     * @api stable
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     */
    M.control.ClearFeature.prototype.equals = function(obj) {
       var equals = (obj instanceof M.control.ClearFeature);
@@ -70,23 +69,24 @@ goog.provide('P.control.ClearFeature');
     *
     * @private
     * @function
+    * @param {goog.events.BrowserEvent} evt - Event
     */
-   M.control.ClearFeature.prototype.clear_ = function() {
+   M.control.ClearFeature.prototype.clear_ = function(evt) {
+      evt.preventDefault();
       this.getImpl().clear();
    };
 
- /**
- * This function set layer for editting
- *
- * @public
- * @function
- * @api stable
- */
-  M.control.ClearFeature.prototype.setLayer = function(layer) {
-   
-   this.getImpl().layer_ = layer;
-   
-  };
+   /**
+    * This function set layer for clear
+    *
+    * @public
+    * @function
+    * @param {M.layer.WFS} layer - Layer
+    * @api stable
+    */
+   M.control.ClearFeature.prototype.setLayer = function(layer) {
+      this.getImpl().layer_ = layer;
+   };
 
 
    /**

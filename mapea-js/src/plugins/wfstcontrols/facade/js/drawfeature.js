@@ -6,8 +6,7 @@ goog.provide('P.control.DrawFeature');
     * control to draw features on the map.
     *
     * @constructor
-    * @param {M.layer.WFS}
-    * layer layer for use in control
+    * @param {M.layer.WFS} layer - Layer for use in control
     * @extends {M.Control}
     * @api stable
     */
@@ -35,8 +34,7 @@ goog.provide('P.control.DrawFeature');
     *
     * @public
     * @function
-    * @param {M.Map}
-    * map map to add the control
+    * @param {M.Map} map - Map to add the control
     * @returns {Promise} html response
     * @api stable
     */
@@ -47,11 +45,12 @@ goog.provide('P.control.DrawFeature');
    };
 
    /**
-    * TODO
+    * This function returns the HTML button
     *
     * @public
     * @function
-    * @param {HTMLElement} html to add the plugin
+    * @param {HTMLElement} element - HTML control
+    * @return {HTMLElement} return HTML button
     * @api stable
     * @export
     */
@@ -63,24 +62,26 @@ goog.provide('P.control.DrawFeature');
     * This function checks if an object is equals to this control
     *
     * @function
-    * @returns {Boolean}
     * @api stable
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     */
    M.control.DrawFeature.prototype.equals = function(obj) {
       var equals = (obj instanceof M.control.DrawFeature);
       return equals;
    };
 
- /**
- * This function set layer for editting
- *
- * @public
- * @function
- * @api stable
- */
-  M.control.DrawFeature.prototype.setLayer = function(layer) {
-    this.getImpl().layer_ = layer;
-  };
+   /**
+    * This function set layer for draw
+    *
+    * @public
+    * @function
+    * @param {M.layer.WFS} layer - Layer
+    * @api stable
+    */
+   M.control.DrawFeature.prototype.setLayer = function(layer) {
+      this.getImpl().layer_ = layer;
+   };
 
    /**
     * Name for this controls

@@ -6,7 +6,7 @@
    <parent>
       <groupId>es.juntadeandalucia.mapea</groupId>
       <artifactId>mapea-parent</artifactId>
-      <version>4.0.1</version>
+      <version>4.0.2</version>
       <relativePath>../mapea-parent/pom.xml</relativePath>
    </parent>
 	<licenses>
@@ -40,8 +40,8 @@
                   </goals>
                   <phase>generate-resources</phase>
                   <configuration>
-                     <nodeVersion>v0.10.18</nodeVersion>
-                     <npmVersion>1.3.8</npmVersion>
+                     <nodeVersion>v4.4.6</nodeVersion>
+                     <npmVersion>2.15.5</npmVersion>
                      <!--<nodeDownloadRoot>http://nodejs.org/dist/</nodeDownloadRoot>
                         <npmDownloadRoot>http://nodejs.org/dist/</npmDownloadRoot> -->
                   </configuration>
