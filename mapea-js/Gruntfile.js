@@ -113,7 +113,14 @@ module.exports = function(grunt) {
             "build/plugins/<%= pkg.version %>/*.css",
             "build/plugins/<%= pkg.version %>/**/*.css",
             "!build/plugins/<%= pkg.version %>/**/*.min.css"
-         ]
+         ],
+         tasks: [
+               'grunt-tasks/utilities/exports/plugins/*.js',
+               'grunt-tasks/utilities/exports/*.js',
+               'grunt-tasks/utilities/symbols/plugins/*.json',
+               'grunt-tasks/utilities/symbols/*.json',
+               'src/externs/mapea-ol3x.js'
+            ]
       },
 
       cssmin: {
@@ -759,7 +766,7 @@ module.exports = function(grunt) {
    grunt.registerTask('dependencies-core', ['closure-dependencies:core']);
 
    // tasks
-   grunt.registerTask('build', ['clean-target', 'css-core', 'js-core', 'css-plugins', 'js-plugins', 'templates', 'dependencies-core' /*, 'test'*/ ]);
+   grunt.registerTask('build', ['clean-target', 'css-core', 'js-core', 'css-plugins', 'js-plugins', 'templates', 'dependencies-core' /*, 'test'*/, 'clean:tasks']);
    grunt.registerTask('test', ['mocha_phantomjs']);
    grunt.registerTask('dev', ['clean:dev', 'closure-dependencies:dev']);
 
