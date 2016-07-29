@@ -10,7 +10,7 @@ goog.require('M.exception');
  */
 (function(window) {
    /**
-    * This function stores the requested templates
+    * This object stores the requested templates
     * caching and reducing the code
     *
     * @private
@@ -86,6 +86,21 @@ goog.require('M.exception');
             });
          }
       }));
+   };
+
+   /**
+    * This function adds a precompiled template into the
+    * cached templates
+    *
+    * @function
+    * @param {string} templatePath name of the template
+    * @param {function} templateFn function of the precompiled template
+    * @api stable
+    */
+   M.template.add = function(templatePath, templateFn) {
+      if (M.utils.isUndefined(M.template.templates_[templatePath])) {
+         M.template.templates_[templatePath] = templateFn;
+      }
    };
 
    /**

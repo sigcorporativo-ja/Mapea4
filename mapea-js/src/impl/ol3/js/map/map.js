@@ -42,6 +42,7 @@ goog.require('ol.Map');
     * with the specified div
     *
     * @constructor
+    * @extends {M.Object}
     * @param {Object} div
     * @param {Mx.parameters.MapOptions} options
     * @api stable
@@ -104,6 +105,13 @@ goog.require('ol.Map');
        * @type {Mx.Extent}
        */
       this.userBbox_ = null;
+
+      /**
+       * TODO
+       * @private
+       * @type {Boolean}
+       */
+      this._calculatedResolutions = false;
 
       // gets the renderer
       var renderer = ol.RendererType.CANVAS;
@@ -1451,15 +1459,36 @@ goog.require('ol.Map');
          if (!M.utils.isNullOrEmpty(this.userMaxExtent_)) {
             resolutions = M.utils.generateResolutionsFromExtent(this.userMaxExtent_, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
+            // checks if it was the first time to
+            // calculate resolutions in that case
+            // fires the completed event
+            if (this._calculatedResolutions === false) {
+               this._calculatedResolutions = true;
+               this.fire(M.evt.COMPLETED);
+            }
          }
          else if (!M.utils.isNullOrEmpty(minResolution) && !M.utils.isNullOrEmpty(maxResolution)) {
             resolutions = M.utils.fillResolutions(minResolution, maxResolution, zoomLevels);
             this.setResolutions(resolutions, true);
+            // checks if it was the first time to
+            // calculate resolutions in that case
+            // fires the completed event
+            if (this._calculatedResolutions === false) {
+               this._calculatedResolutions = true;
+               this.fire(M.evt.COMPLETED);
+            }
          }
          else {
             M.impl.envolvedExtent.calculate(this).then(function(extent) {
                resolutions = M.utils.generateResolutionsFromExtent(extent, size, zoomLevels, units);
                this.setResolutions(resolutions, true);
+               // checks if it was the first time to
+               // calculate resolutions in that case
+               // fires the completed event
+               if (this._calculatedResolutions === false) {
+                  this._calculatedResolutions = true;
+                  this.fire(M.evt.COMPLETED);
+               }
             }.bind(this));
          }
       }

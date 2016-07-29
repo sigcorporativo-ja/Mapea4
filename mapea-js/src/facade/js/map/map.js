@@ -114,6 +114,37 @@ goog.require('M.window');
        */
       this._userZoom = null;
 
+      /**
+       * TODO
+       * @private
+       * @type {Boolean}
+       */
+      this._finishedInitCenter = true;
+
+      /**
+       * TODO
+       * @private
+       * @type {Boolean}
+       */
+      this._finishedMaxExtent = true;
+
+      /**
+       * TODO
+       * @private
+       * @type {Boolean}
+       */
+      this._finishedMapImpl = false;
+      
+      /**
+       * TODO
+       * @private
+       * @type {Boolean}
+       */
+      this._finishedMap = false;
+
+
+      var this_ = this;
+
       // parses parameters to build the new map
       var params = new M.Parameters(userParameters);
 
@@ -123,10 +154,13 @@ goog.require('M.window');
       // calls the super constructor
       var impl = new M.impl.Map(params.container, (options || {}));
       impl.setFacadeMap(this);
+      // sets flag if the map impl has been completed
+      impl.on(M.evt.COMPLETED, function() {
+         this_._finishedMapImpl = true;
+         this_._checkCompleted();
+      });
 
       goog.base(this, impl);
-
-      var this_ = this;
 
       // creates main panels
       this.createMainPanels_();
@@ -208,6 +242,7 @@ goog.require('M.window');
             this.setCenter(params.center);
          }
          else {
+            this._finishedInitCenter = false;
             this.getInitCenter_().then(function(initCenter) {
                // checks if the user stablished a center while it was
                // calculated
@@ -216,6 +251,9 @@ goog.require('M.window');
                   newCenter = initCenter;
                }
                this_.setCenter(newCenter);
+
+               this_._finishedInitCenter = true;
+               this_._checkCompleted();
             });
          }
          // zoom
@@ -1729,9 +1767,7 @@ goog.require('M.window');
          M.exception('La implementación usada no posee el método getEnvolvedExtent');
       }
 
-      var envolvedExtent = this.getImpl().getEnvolvedExtent();
-
-      return envolvedExtent;
+      return this.getImpl().getEnvolvedExtent();
    };
 
    /**
@@ -1753,10 +1789,13 @@ goog.require('M.window');
          /* if no maxExtent was provided then
           calculates the envolved extent */
          var this_ = this;
+         this._finishedMaxExtent = false;
          this.getEnvolvedExtent().then(function(extent) {
             if ((keepUserZoom !== true) || (M.utils.isNullOrEmpty(this_._userZoom))) {
                this_.setBbox(extent);
             }
+            this_._finishedMaxExtent = true;
+            this_._checkCompleted();
          });
       }
 
@@ -1796,7 +1835,7 @@ goog.require('M.window');
     */
    M.Map.prototype.getInitCenter_ = function() {
       var this_ = this;
-      var promise = new Promise(function(success, fail) {
+      return new Promise(function(success, fail) {
          var center = this_.getCenter();
          if (!M.utils.isNullOrEmpty(center)) {
             success(center);
@@ -1824,7 +1863,6 @@ goog.require('M.window');
          }
 
       });
-      return promise;
    };
 
    /**
@@ -2183,6 +2221,32 @@ goog.require('M.window');
       return this;
    };
 
+   /**
+    * TODO
+    *
+    * @public
+    * @function
+    */
+   M.Map.prototype._checkCompleted = function() {
+      if (this._finishedInitCenter && this._finishedMaxExtent && this._finishedMapImpl) {
+         this.fire(M.evt.COMPLETED);
+         this._finishedMap = true;
+      }
+   };
+
+   /**
+    * Sets the callback when the instace is loaded
+    *
+    * @public
+    * @function
+    * @api stable
+    */
+   M.Map.prototype.on = function (eventType, listener, optThis) {
+      goog.base(this, 'on', eventType, listener, optThis);
+      if ((eventType === M.evt.COMPLETED) && (this._finishedMap === true)) {
+         this.fire(M.evt.COMPLETED);
+      }
+   };
 
    /**
     * TODO

@@ -76,6 +76,20 @@ Compilerx.prototype.compiler;
  * @type {function}
  * @api stable
  */
+Compilerx.prototype.main;
+
+/**
+ * Property of Handlebars
+ * @type {function}
+ * @api stable
+ */
+Compilerx.prototype.useData;
+
+/**
+ * Property of Handlebars
+ * @type {function}
+ * @api stable
+ */
 Compilerx.prototype.equals;
 
 /**
