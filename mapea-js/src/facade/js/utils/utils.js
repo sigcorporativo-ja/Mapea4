@@ -768,4 +768,19 @@ goog.require('goog.color.alpha');
       type = type.toLowerCase();
       return (geometricTypes.indexOf(type) !== -1);
    };
+
+   /**
+    * This function decodes html entities into
+    * text
+    *
+    * @function
+    * @param {String} encodedHtml encoded text with HTML entities
+    * @returns {String} text decoded
+    * @api stable
+    */
+   M.utils.decodeHtml = function(encodedHtml) {
+      let txtarea = document.createElement("textarea");
+      txtarea.innerHTML = encodedHtml;
+      return txtarea.value;
+   };
 })();
