@@ -22,9 +22,7 @@ La arquitectura de Mapea está compuesta por los siguientes componentes:
 
 ## Getting Started
 
-- Descargar el [último release](https://github.com/sigcorporativo-ja/Mapea4/releases)
-- Compilar con maven 3.3.3+: `mvn clean package`
-- Desplegar war generado en cualquier servidor de aplicaciones
+//TODO
 
 ## Navegadores soportados
 
