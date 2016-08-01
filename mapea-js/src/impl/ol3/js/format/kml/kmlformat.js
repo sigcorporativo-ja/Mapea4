@@ -383,6 +383,9 @@ M.impl.format.KML.prototype.readPlacemark_ = function (node, objectStack) {
 
    feature.setProperties(object);
 
+   // fixes #3: decodes name to remove HTML entities
+   feature.set("name", M.utils.decodeHtml(feature.get("name")));
+
    return feature;
 };
 
