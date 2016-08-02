@@ -4,8 +4,8 @@ Buscador de elementos espaciales a través de un servicio de Geobúsquedas.
 
 ## Recursos y uso
 
-- js: [http://mapea4-sigc.des.juntadeandalucia.es/plugins/geosearch/mapea.geosearch.ol3.min.js](http://mapea4-sigc.des.juntadeandalucia.es/plugins/geosearch/mapea.geosearch.ol3.min.js)
-- css: [http://mapea4-sigc.des.juntadeandalucia.es/plugins/geosearch/geosearch.min.css](http://mapea4-sigc.des.juntadeandalucia.es/plugins/geosearch/geosearch.min.css)
+- js: [http://mapea4-sigc.juntadeandalucia.es/plugins/geosearch/mapea.geosearch.ol3.min.js](http://mapea4-sigc.juntadeandalucia.es/plugins/geosearch/mapea.geosearch.ol3.min.js)
+- css: [http://mapea4-sigc.juntadeandalucia.es/plugins/geosearch/geosearch.min.css](http://mapea4-sigc.juntadeandalucia.es/plugins/geosearch/geosearch.min.css)
 
 Configuración por defecto:
 ```
