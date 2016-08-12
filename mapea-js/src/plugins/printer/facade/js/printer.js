@@ -96,6 +96,10 @@ goog.require('P.control.Printer');
       });
       this.panel_.addControls(this.control_);
       this.map_.addPanels(this.panel_);
+            
+      var this_ = this;
+      this.control_.on(M.evt.ADDED_TO_MAP, function (){
+            this_.fire(M.evt.ADDED_TO_MAP);} );
    };
 
    /**
