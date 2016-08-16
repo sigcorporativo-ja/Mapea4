@@ -458,6 +458,11 @@ goog.require('ol.Map');
       kmlMapLayers.forEach(function(kmlLayer) {
          this.layers_.remove(kmlLayer);
          kmlLayer.getImpl().destroy();
+         
+         // remove to featurehandler
+         if (kmlLayer.extract === true) {
+            this.featuresHandler_.removeLayer(kmlLayer.getImpl());
+         }
       }, this);
 
       return this;
