@@ -458,7 +458,6 @@ goog.require('ol.Map');
       kmlMapLayers.forEach(function(kmlLayer) {
          this.layers_.remove(kmlLayer);
          kmlLayer.getImpl().destroy();
-         this.facadeMap_.removePopup();
          
          // remove to featurehandler
          if (kmlLayer.extract === true) {
