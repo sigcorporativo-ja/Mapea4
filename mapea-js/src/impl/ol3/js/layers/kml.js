@@ -32,6 +32,13 @@ goog.require('goog.style');
       this.popup_ = null;
 
       /**
+       * Tab popup
+       * @private
+       * @type {Object}
+       */
+      this.tabPopup_ = null;
+
+      /**
        * Image tag for the screenOverlay
        * @private
        * @type {HTMLElement}
@@ -134,11 +141,12 @@ goog.require('goog.style');
             'parseToHtml': false
          }).then(function(htmlAsText) {
             this_.popup_ = new M.Popup();
-            this_.popup_.addTab({
+            this_.tabPopup_ = {
                'icon': 'g-cartografia-comentarios',
                'title': featureName,
                'content': htmlAsText
-            });
+            };
+            this_.popup_.addTab(this_.tabPopup_);
             this_.map.addPopup(this_.popup_, featureCoord);
          });
       }
@@ -186,8 +194,29 @@ goog.require('goog.style');
          olMap.removeLayer(this.ol3Layer);
          this.ol3Layer = null;
       }
+
+      this.removePopup();
+
       this.options = null;
       this.map = null;
+   };
+
+   /**
+    * This function destroys KML popup
+    *
+    * @public
+    * @function
+    * @api stable
+    */
+   M.impl.layer.KML.prototype.removePopup = function() {
+      if (!M.utils.isNullOrEmpty(this.popup_)) {
+         if (this.popup_.getTabs().length > 1) {
+            this.popup_.removeTab(this.tabPopup_);
+         }
+         else {
+            this.map.removePopup();
+         }
+      }
    };
 
    /**
