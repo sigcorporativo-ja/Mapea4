@@ -68,12 +68,16 @@ goog.require('goog.dom.classes');
          saveFeaturesDelete = deletefeatureCtrl.getImpl().modifiedFeatures;
       }
       //JGL 20163105: para evitar que se envié en la petición WFST el bbox
-      saveFeaturesModify.forEach(function(feature) {
-         feature.unset('bbox');
-      });
-      saveFeaturesDraw.forEach(function(feature) {
-         feature.unset('bbox');
-      });
+      if (!M.utils.isNullOrEmpty(saveFeaturesModify)) {
+         saveFeaturesModify.forEach(function(feature) {
+            feature.unset('bbox');
+         });
+      }
+      if (!M.utils.isNullOrEmpty(saveFeaturesDraw)) {
+         saveFeaturesDraw.forEach(function(feature) {
+            feature.unset('bbox');
+         });
+      }
       //
       var this_ = this;
       var layerImpl = this.layer_.getImpl();
@@ -95,8 +99,11 @@ goog.require('goog.dom.classes');
             // clears layer
             let clearCtrl = this_.facadeMap_.getControls(M.control.ClearFeature.NAME)[0];
             clearCtrl.getImpl().clear();
-            if (response.code === 200 && response.text.indexOf("ExceptionText") === -1) {
+            if (response.code === 200 && response.text.indexOf("ExceptionText") === -1 && response.text.indexOf("<error><descripcion>") === -1) {
                M.dialog.success('Se ha guardado correctamente');
+            }
+            else if (response.code === 401) {
+               M.dialog.error('Ha ocurrido un error al guardar: Usuario no autorizado');
             }
             else {
                M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));

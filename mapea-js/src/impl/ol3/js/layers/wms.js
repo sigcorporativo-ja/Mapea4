@@ -35,7 +35,7 @@ goog.require('ol.extent');
       /**
        * WMS layer options
        * @private
-       * @type {object}
+        * @type {object}
        * @expose
        */
       this.options = options || {};
@@ -83,6 +83,13 @@ goog.require('ol.extent');
        * @expose
        */
       this.legendUrl_ = null;
+
+       /**
+       * Current projection
+       * @private
+       * @type {ol.Projection}
+       */
+      this.extentProj_ = null;
 
       // sets visibility
       if (this.options.visibility === false) {
@@ -170,7 +177,7 @@ goog.require('ol.extent');
 
       // calculates the resolutions from scales
       if (!M.utils.isNull(this.options) && !M.utils.isNull(this.options.minScale) && !M.utils.isNull(this.options.maxScale)) {
-         var units = this.map.getMapImpl().getView().getProjection().getUnits();
+         var units = this.map.getProjection().units;
          this.options.minResolution = M.utils.getResolutionFromScale(this.options.minScale, units);
          this.options.maxResolution = M.utils.getResolutionFromScale(this.options.maxScale, units);
       }
@@ -396,20 +403,23 @@ goog.require('ol.extent');
     * @api stable
     */
    M.impl.layer.WMS.prototype.getExtent = function() {
+      var olProjection = ol.proj.get(this.map.getProjection().code);
+
       // creates the promise
-      if (M.utils.isNullOrEmpty(this.extentPromise)) {
-         this.extentPromise = new Promise(function(success, fail) {
-            if (!M.utils.isNullOrEmpty(this.extent_)) {
+      this.extentPromise = new Promise(function(success, fail) {
+         if (!M.utils.isNullOrEmpty(this.extent_)) {
+            this.extent_ = ol.proj.transformExtent(this.extent_, this.extentProj_, olProjection);
+            this.extentProj_ = olProjection;
+            success(this.extent_);
+         }
+         else {
+            this.getCapabilities().then(function(getCapabilities) {
+               this.extent_ = getCapabilities.getLayerExtent(this.name);
+               this.extentProj_ = olProjection;
                success(this.extent_);
-            }
-            else {
-               this.getCapabilities().then(function(getCapabilities) {
-                  var extent = getCapabilities.getLayerExtent(this.name);
-                  success(extent);
-               }.bind(this));
-            }
-         }.bind(this));
-      }
+            }.bind(this));
+         }
+      }.bind(this));
       return this.extentPromise;
    };
 
@@ -435,6 +445,26 @@ goog.require('ol.extent');
     */
    M.impl.layer.WMS.prototype.getMaxResolution = function() {
       return this.options.maxResolution;
+   };
+
+   /**
+    * Update minimum and maximum resolution WMS layers
+    *
+    * @public
+    * @function
+    * @param {ol.Projection} projection - Projection map
+    * @api stable
+    */
+   M.impl.layer.WMS.prototype.updateMinMaxResolution = function(projection) {
+      if (!M.utils.isNullOrEmpty(this.options.minResolution)) {
+         this.options.minResolution = M.utils.getResolutionFromScale(this.options.minScale, projection.units);
+         this.ol3Layer.setMinResolution(this.options.minResolution);
+      }
+
+      if (!M.utils.isNullOrEmpty(this.options.maxResolution)) {
+         this.options.maxResolution = M.utils.getResolutionFromScale(this.options.maxScale, projection.units);
+         this.ol3Layer.setMaxResolution(this.options.maxResolution);
+      }
    };
 
    /**
@@ -502,16 +532,19 @@ goog.require('ol.extent');
       var extent = this.map.getMaxExtent();
       return (new Promise(function(success, fail) {
          if (!M.utils.isNullOrEmpty(extent)) {
-            success.call(this, [extent.x.min, extent.y.min, extent.x.max, extent.y.max]);
+            if (!M.utils.isArray(extent)) {
+               extent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
+            }
+            success.call(this, extent);
          }
          else {
             M.impl.envolvedExtent.calculate(this.map, this).then(function(extent) {
                let maxExtent = this.map.getMaxExtent();
                if (!M.utils.isNullOrEmpty(maxExtent)) {
-                  success.call(this, [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max]);
+                  success.call(this, maxExtent);
                }
                else {
-                  success.call(this, [extent.x.min, extent.y.min, extent.x.max, extent.y.max]);
+                  success.call(this, extent);
                }
             }.bind(this));
          }

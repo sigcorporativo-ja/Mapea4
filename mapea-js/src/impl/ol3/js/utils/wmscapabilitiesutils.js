@@ -34,7 +34,7 @@ goog.provide('M.impl.GetCapabilities');
        * @private
        * @type {Mx.Projection}
        */
-      this.serviceUrl_ = serviceUrl;
+       this.serviceUrl_ = serviceUrl;
    };
 
    /**
@@ -105,6 +105,12 @@ goog.provide('M.impl.GetCapabilities');
                      var projDest = ol.proj.get(this.projection_.code);
                      extent = ol.proj.transformExtent(extent, projSrc, projDest);
                   }
+               }
+               // if the layer has not the SRS then transformExtent
+               // the latLonBoundingBox which is always present
+               else {
+                  extent = layer.LatLonBoundingBox[0].extent;
+                  extent = ol.proj.transformExtent(extent, ol.proj.get("EPSG:4326"), ol.proj.get(this.projection_.code));
                }
             }
             // recursive case

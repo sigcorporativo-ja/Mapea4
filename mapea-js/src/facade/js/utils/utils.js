@@ -23,7 +23,7 @@ goog.require('goog.color.alpha');
       var nullOrEmpty = false;
 
       if (M.utils.isNull(obj)) {
-         nullOrEmpty = true;
+          nullOrEmpty = true;
       }
       else if (M.utils.isArray(obj)) {
          nullOrEmpty = true;
@@ -322,8 +322,20 @@ goog.require('goog.color.alpha');
     * @api stable
     */
    M.utils.generateResolutionsFromExtent = function(extent, size, zoomLevels, units) {
-      var wExtent = (extent.x.max - extent.x.min);
-      var hExtent = (extent.y.max - extent.y.min);
+      let [wExtent, hExtent] = [null, null];
+      if (M.utils.isArray(extent)) {
+         wExtent = (extent[2] - extent[0]);
+         hExtent = (extent[3] - extent[1]);
+      }
+      else if(M.utils.isObject(extent)) {
+         wExtent = (extent.x.max - extent.x.min);
+         hExtent = (extent.y.max - extent.y.min);
+      }
+      else if(M.utils.isString(extent)){
+         extent = extent.split(",");
+         wExtent = (extent[2] - extent[0]);
+         hExtent = (extent[3] - extent[1]);
+      }
       var wResolution = wExtent / size[0];
       var hResolution = hExtent / size[1];
 
@@ -782,5 +794,24 @@ goog.require('goog.color.alpha');
       let txtarea = document.createElement("textarea");
       txtarea.innerHTML = encodedHtml;
       return txtarea.value;
+   };
+
+   /**
+    * This function gets text content from
+    * an html string or element
+    *
+    * @function
+    * @param {HTMLElement | String} html string or element with HTML tags
+    * @returns {String} text contained by the HTML tags
+    * @api stable
+    */
+   M.utils.getTextFromHtml = function(html) {
+      let htmlText = html;
+      if (!M.utils.isString(html) && html.outerHTML) {
+         htmlText = html.outerHTML;
+      }
+      let divElement = document.createElement("DIV");
+      divElement.innerHTML = htmlText;
+      return divElement.textContent || divElement.innerText || "";
    };
 })();

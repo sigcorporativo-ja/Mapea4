@@ -31,7 +31,7 @@ goog.require('goog.style');
        */
       this.popup_ = null;
 
-      /**
+       /**
        * Tab popup
        * @private
        * @type {Object}
@@ -112,6 +112,10 @@ goog.require('goog.style');
       }
       var olMap = this.map.getMapImpl();
       olMap.addLayer(this.ol3Layer);
+
+      map.getImpl().on(M.evt.CHANGE, function() {
+         this_.getOL3Layer().getSource().clear();
+      }, this);
    };
 
    /**

@@ -672,6 +672,13 @@ Mx.parameters.WFS.prototype.geometry;
 Mx.parameters.WFS.prototype.cql;
 
 /**
+ * CQL filter of the WFS layer
+ * @type {sring}
+ * @api stable
+ */
+Mx.parameters.WFS.prototype.ecql;
+
+/**
  * Version of the WFS service
  * @type {string}
  * @api stable

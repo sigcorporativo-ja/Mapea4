@@ -629,7 +629,8 @@ public class ProxyRedirect extends HttpServlet {
          serverUrlChecked = serverUrl;
       }
       else if ((serverUrl.toLowerCase().contains("wfst"))
-            || (serverUrl.toLowerCase().contains("wfs"))) {
+            || (serverUrl.toLowerCase().contains("wfs"))
+            || (serverUrl.toLowerCase().contains("ows"))) {
          serverUrlChecked = serverUrl;
       }
       else if (serverUrl.toLowerCase().contains("getcapabilities")) {

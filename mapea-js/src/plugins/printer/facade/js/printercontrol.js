@@ -483,7 +483,8 @@ goog.require('goog.style');
          var encodedPage = M.utils.extend({
             'title': title,
             'printTitle': title,
-            'printDescription': description
+            'printDescription': description,
+            'infoSRS': "\n"+this.map_.getProjection().code
          }, page);
 
          if (this.forceScale_ === false) {

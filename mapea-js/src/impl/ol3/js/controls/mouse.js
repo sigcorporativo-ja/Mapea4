@@ -29,7 +29,7 @@ goog.require('ol.control.MousePosition');
     * @param {function} template template of this control
     * @api stable
     */
-   M.impl.control.Mouse.prototype.addTo = function(map, element) {
+    M.impl.control.Mouse.prototype.addTo = function(map, element) {
       this.facadeMap_ = map;
       ol.control.MousePosition.call(this, {
          'coordinateFormat': ol.coordinate.createStringXY(4),
@@ -38,6 +38,11 @@ goog.require('ol.control.MousePosition');
          'className': 'm-mouse-position g-cartografia-flecha'
       });
       map.getMapImpl().addControl(this);
+
+      // update projection mouse
+      map.getImpl().on(M.evt.CHANGE, function() {
+         this.setProjection(ol.proj.get(map.getProjection().code));
+      }, this);
    };
 
    /**

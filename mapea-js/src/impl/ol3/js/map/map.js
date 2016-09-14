@@ -37,7 +37,7 @@ goog.require('ol.Map');
 
 (function() {
    /**
-    * @classdesc
+     * @classdesc
     * Main constructor of the class. Creates a Map
     * with the specified div
     *
@@ -107,12 +107,39 @@ goog.require('ol.Map');
       this.userBbox_ = null;
 
       /**
-       * TODO
+       * MaxExtent specified by the user
+       * @private
+       * @type {Mx.Extent}
+       */
+      this.maxExtentForResolutions_ = null;
+
+      /**
+       * calculated envolved maxExtent
+       * @private
+       * @type {Mx.Extent}
+       */
+      this.envolvedMaxExtent_ = null;
+
+      /**
+       * calculated resolutions
        * @private
        * @type {Boolean}
        */
       this._calculatedResolutions = false;
 
+      /**
+       * calculated resolution form envolved extent
+       * @private
+       * @type {Boolean}
+       */
+      this._resolutionsEnvolvedExtent = false;
+
+      /**
+       * calculated resolution form base layer
+       * @private
+       * @type {Boolean}
+       */
+      this._resolutionsBaseLayer = false;
       // gets the renderer
       var renderer = ol.RendererType.CANVAS;
       if (!M.utils.isNullOrEmpty(this.options_.renderer)) {
@@ -458,7 +485,7 @@ goog.require('ol.Map');
       kmlMapLayers.forEach(function(kmlLayer) {
          this.layers_.remove(kmlLayer);
          kmlLayer.getImpl().destroy();
-         
+
          // remove to featurehandler
          if (kmlLayer.extract === true) {
             this.featuresHandler_.removeLayer(kmlLayer.getImpl());
@@ -586,6 +613,11 @@ goog.require('ol.Map');
                else {
                   var zIndex = this.layers_.length + layer.getImpl().getZIndex();
                   layer.getImpl().setZIndex(zIndex);
+                  // recalculates resolution if there are not
+                  // any base layer
+                  if (!existsBaseLayer) {
+                     this.updateResolutionsFromBaseLayer();
+                  }
                }
             }
          }
@@ -987,10 +1019,11 @@ goog.require('ol.Map');
     * @public
     * @function
     * @param {Mx.Extent} maxExtent the extent max
+    * @param {Boolean} zoomToExtent - Set bbox
     * @returns {M.impl.Map}
     * @api stable
     */
-   M.impl.Map.prototype.setMaxExtent = function(maxExtent) {
+   M.impl.Map.prototype.setMaxExtent = function(maxExtent, zoomToExtent) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(maxExtent)) {
          M.exception('No ha especificado ningún maxExtent');
@@ -1001,6 +1034,11 @@ goog.require('ol.Map');
       var olMap = this.getMapImpl();
       //      var minZoom = olMap.getView().
       olMap.getView().set('extent', olExtent);
+      this.updateResolutionsFromBaseLayer();
+
+      if (zoomToExtent !== false) {
+         this.setBbox(olExtent);
+      }
 
       return this;
    };
@@ -1030,6 +1068,9 @@ goog.require('ol.Map');
                'max': olExtent[3]
             }
          };
+      }
+      else {
+         extent = this.envolvedMaxExtent_;
       }
 
       return extent;
@@ -1316,26 +1357,73 @@ goog.require('ol.Map');
          M.exception('No ha especificado ninguna projection');
       }
 
+      // gets previous data
+      var olPrevProjection = ol.proj.get(this.getProjection().code);
+      var prevBbox = this.facadeMap_.getBbox();
+      var prevMaxExtent = this.facadeMap_.getMaxExtent();
+      var prevCenter = this.facadeMap_.getCenter();
+
       // gets the current view and modifies its projection
       var olProjection = ol.proj.get(projection.code);
       if (M.utils.isNullOrEmpty(olProjection)) {
          olProjection = new ol.proj.Projection(projection);
       }
 
-      // modifies the resolutions
-      var resolutions = this.getResolutions();
-
       var olMap = this.getMapImpl();
       var oldViewProperties = olMap.getView().getProperties();
       var userZoom = olMap.getView().getUserZoom();
       // sets the new view
       var newView = new M.impl.View({
-         'projection': olProjection,
-         'resolutions': resolutions
+         'projection': olProjection
       });
       newView.setProperties(oldViewProperties);
       newView.setUserZoom(userZoom);
       olMap.setView(newView);
+
+      // updates min, max resolutions of all WMS layers
+      this.facadeMap_.getWMS().forEach(function(layer) {
+         layer.updateMinMaxResolution(projection);
+      });
+
+      // recalculates maxExtent
+      if (!M.utils.isNullOrEmpty(prevMaxExtent)) {
+         if (!M.utils.isArray(prevMaxExtent)) {
+            prevMaxExtent = [prevMaxExtent.x.min,
+               prevMaxExtent.y.min,
+               prevMaxExtent.x.max,
+               prevMaxExtent.y.max
+            ];
+         }
+         this.facadeMap_.setMaxExtent(ol.proj.transformExtent(prevMaxExtent, olPrevProjection, olProjection));
+      }
+
+      // recalculates bbox
+      if (!M.utils.isNullOrEmpty(prevBbox)) {
+         this.facadeMap_.setBbox(ol.proj.transformExtent([
+            prevBbox.x.min,
+            prevBbox.y.min,
+            prevBbox.x.max,
+            prevBbox.y.max,
+         ], olPrevProjection, olProjection));
+      }
+
+      // recalculates center
+      if (!M.utils.isNullOrEmpty(prevCenter)) {
+         let draw = false;
+         if(!M.utils.isNullOrEmpty(this.facadeMap_.getFeatureCenter())){
+            draw = true;
+         }
+         this.facadeMap_.setCenter(ol.proj.transform([
+            prevCenter.x,
+            prevCenter.y,
+         ], olPrevProjection, olProjection)+"*"+draw);
+      }
+
+      // recalculates resolutions
+      this.updateResolutionsFromBaseLayer();
+
+      this.fire(M.evt.CHANGE);
+
       return this;
    };
 
@@ -1404,7 +1492,10 @@ goog.require('ol.Map');
     * @api stable
     */
    M.impl.Map.prototype.getEnvolvedExtent = function() {
-      return M.impl.envolvedExtent.calculate(this);
+      return M.impl.envolvedExtent.calculate(this).then(function(extent) {
+         this.envolvedMaxExtent_ = extent;
+         return this.envolvedMaxExtent_;
+      }.bind(this));
    };
 
    /**
@@ -1461,20 +1552,12 @@ goog.require('ol.Map');
       }
 
       if (this.userResolutions_ === null) {
-         if (!M.utils.isNullOrEmpty(this.userMaxExtent_)) {
-            resolutions = M.utils.generateResolutionsFromExtent(this.userMaxExtent_, size, zoomLevels, units);
-            this.setResolutions(resolutions, true);
-            // checks if it was the first time to
-            // calculate resolutions in that case
-            // fires the completed event
-            if (this._calculatedResolutions === false) {
-               this._calculatedResolutions = true;
-               this.fire(M.evt.COMPLETED);
-            }
-         }
-         else if (!M.utils.isNullOrEmpty(minResolution) && !M.utils.isNullOrEmpty(maxResolution)) {
+         if (!M.utils.isNullOrEmpty(minResolution) && !M.utils.isNullOrEmpty(maxResolution)) {
             resolutions = M.utils.fillResolutions(minResolution, maxResolution, zoomLevels);
             this.setResolutions(resolutions, true);
+
+            this._resolutionsBaseLayer = true;
+
             // checks if it was the first time to
             // calculate resolutions in that case
             // fires the completed event
@@ -1485,14 +1568,20 @@ goog.require('ol.Map');
          }
          else {
             M.impl.envolvedExtent.calculate(this).then(function(extent) {
+               if (!this._resolutionsBaseLayer) {
+
                resolutions = M.utils.generateResolutionsFromExtent(extent, size, zoomLevels, units);
                this.setResolutions(resolutions, true);
+
+               this._resolutionsEnvolvedExtent = true;
+
                // checks if it was the first time to
                // calculate resolutions in that case
                // fires the completed event
                if (this._calculatedResolutions === false) {
                   this._calculatedResolutions = true;
                   this.fire(M.evt.COMPLETED);
+               }
                }
             }.bind(this));
          }

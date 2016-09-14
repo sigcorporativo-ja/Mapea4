@@ -13,7 +13,7 @@ goog.require('M.exception');
     * @constructor
     * @extends {M.Layer}
     * @param {string|Mx.parameters.WMS} userParameters parameters
-    * @param {Mx.parameters.LayerOptions} options provided by the user
+     * @param {Mx.parameters.LayerOptions} options provided by the user
     * @api stable
     */
    M.layer.WMS = (function(userParameters, options) {
@@ -213,6 +213,18 @@ goog.require('M.exception');
     */
    M.layer.WMS.prototype.getNoChacheName = function() {
       return this._noCacheName;
+   };
+
+   /**
+    * Update minimum and maximum resolution WMS layers
+    *
+    * @public
+    * @function
+    * @param {ol.Projection} projection - Projection map
+    * @api stable
+    */
+   M.layer.WMS.prototype.updateMinMaxResolution = function(projection) {
+      return this.getImpl().updateMinMaxResolution(projection);
    };
 
    /**
