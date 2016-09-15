@@ -303,7 +303,7 @@ width: calc(100vw - 20px);
 }
 
 .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table td.value, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
-   white-space: nowrap;
+   white-space: normal;
 }
 
 .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result > table td.key {
