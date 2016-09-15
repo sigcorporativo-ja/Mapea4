@@ -35,7 +35,7 @@ goog.require('ol.source.Vector');
        * @private
        * @type {M.impl.format.GeoJSON}
        */
-      this.formater_ = null;
+       this.formater_ = null;
 
       /**
        *
@@ -72,7 +72,8 @@ goog.require('ol.source.Vector');
          'namespace': this.namespace,
          'name': this.name,
          'version': this.version,
-         'ids': this.ids
+         'ids': this.ids,
+         'cql': this.cql
       });
 
       this.describeFeatureType_ = this.service_.getDescribeFeatureType();
@@ -88,6 +89,7 @@ goog.require('ol.source.Vector');
             style: M.impl.layer.WFS.STYLE
          });
          this_.updateSource_();
+         this_.setVisible(this_.visibility);
          // sets its z-index
          if (this_.zIndex_ !== null) {
             this_.setZIndex(this_.zIndex_);
@@ -95,6 +97,10 @@ goog.require('ol.source.Vector');
          var olMap = this_.map.getMapImpl();
          olMap.addLayer(this_.ol3Layer);
       });
+
+      map.getImpl().on(M.evt.CHANGE, function() {
+         this_.refresh();
+      }, this);
    };
 
    /**

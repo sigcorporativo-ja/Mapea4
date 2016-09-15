@@ -37,7 +37,7 @@ goog.require('M.window');
 
 (function() {
    /**
-    * @classdesc
+     * @classdesc
     * Main constructor of the class. Creates a Map
     * with parameters specified by the user
     *
@@ -134,13 +134,20 @@ goog.require('M.window');
        * @type {Boolean}
        */
       this._finishedMapImpl = false;
-      
+
       /**
        * TODO
        * @private
        * @type {Boolean}
        */
       this._finishedMap = false;
+
+      /**
+       * Feature Center
+       * @private
+       * @type {ol.Feature}
+       */
+      this._featureCenter = null;
 
 
       var this_ = this;
@@ -171,6 +178,11 @@ goog.require('M.window');
       }
       else { // default projection
          this.setProjection(M.config.DEFAULT_PROJ, true);
+      }
+
+      // bbox
+      if (!M.utils.isNullOrEmpty(params.bbox)) {
+         this.setBbox(params.bbox);
       }
 
       // resolutions
@@ -229,13 +241,9 @@ goog.require('M.window');
 
       // maxExtent
       if (!M.utils.isNullOrEmpty(params.maxExtent)) {
-         this.setMaxExtent(params.maxExtent);
+         this.setMaxExtent(params.maxExtent, false);
       }
 
-      // bbox
-      if (!M.utils.isNullOrEmpty(params.bbox)) {
-         this.setBbox(params.bbox);
-      }
       else {
          // center
          if (!M.utils.isNullOrEmpty(params.center)) {
@@ -1355,10 +1363,11 @@ goog.require('M.window');
     * @public
     * @function
     * @param {String|Array<String>|Array<Number>|Mx.Extent} maxExtentParam the extent max
+    * @param {Boolean} zoomToExtent - Set bbox
     * @returns {M.Map}
     * @api stable
     */
-   M.Map.prototype.setMaxExtent = function(maxExtentParam) {
+   M.Map.prototype.setMaxExtent = function(maxExtentParam, zoomToExtent) {
       // checks if the param is null or empty
       if (M.utils.isNullOrEmpty(maxExtentParam)) {
          M.exception('No ha especificado ningún maxExtent');
@@ -1372,7 +1381,7 @@ goog.require('M.window');
       // parses the parameter
       try {
          var maxExtent = M.parameter.maxExtent(maxExtentParam);
-         this.getImpl().setMaxExtent(maxExtent);
+         this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
       }
       catch (err) {
          M.dialog.error(err);
@@ -1532,12 +1541,57 @@ goog.require('M.window');
       try {
          let center = M.parameter.center(centerParam);
          this.getImpl().setCenter(center);
+         if (center.draw === true) {
+            let features = this.getImpl().getDrawLayer().getOL3Layer().getSource().getFeatures();
+            if (!M.utils.isNullOrEmpty(features)) {
+               this._removeFeatureCenter();
+            }
+            this._featureCenter = features[features.length - 1];
+         }
+         else if (!M.utils.isNullOrEmpty(this._featureCenter)) {
+            this._removeFeatureCenter();
+         }
       }
       catch (err) {
          M.dialog.error(err);
       }
 
       return this;
+   };
+   
+   /**
+    * This function remove feature center for this
+    * map instance
+    *
+    * @private
+    * @function
+    */
+   M.Map.prototype.getFeatureCenter = function(){
+      return this._featureCenter;
+   };
+
+   /**
+    * This function remove feature center for this
+    * map instance
+    *
+    * @private
+    * @function
+    */
+   M.Map.prototype._removeFeatureCenter = function() {
+      this.getImpl().removeFeatures(this._featureCenter);
+   };
+
+   /**
+    * This function remove center for this
+    * map instance
+    *
+    * @public
+    * @function
+    * @api stable
+    */
+   M.Map.prototype.removeCenter = function() {
+      this._removeFeatureCenter();
+      this.zoomToMaxExtent();
    };
 
    /**
@@ -1658,6 +1712,7 @@ goog.require('M.window');
       }
       catch (err) {
          M.dialog.error(err);
+         this.setProjection(M.config.DEFAULT_PROJ, true);
       }
 
       return this;
@@ -1854,8 +1909,8 @@ goog.require('M.window');
                this_.getEnvolvedExtent().then(function(extent) {
                   // obtener centrol del extent
                   center = {
-                     'x': ((extent.x.max + extent.x.min) / 2),
-                     'y': ((extent.y.max + extent.y.min) / 2)
+                     'x': ((extent[0] + extent[2]) / 2),
+                     'y': ((extent[1] + extent[3]) / 2)
                   };
                   success(center);
                });
@@ -2241,7 +2296,7 @@ goog.require('M.window');
     * @function
     * @api stable
     */
-   M.Map.prototype.on = function (eventType, listener, optThis) {
+   M.Map.prototype.on = function(eventType, listener, optThis) {
       goog.base(this, 'on', eventType, listener, optThis);
       if ((eventType === M.evt.COMPLETED) && (this._finishedMap === true)) {
          this.fire(M.evt.COMPLETED);

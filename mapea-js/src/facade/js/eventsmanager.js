@@ -27,7 +27,7 @@ goog.provide('M.evt.Listener');
     * @type {string}
     * @api stable
     * @expose
-    */
+     */
    M.evt.ADDED_LAYER = 'added:layer';
 
    /**
@@ -158,6 +158,15 @@ goog.provide('M.evt.Listener');
 
    /**
     * Event type
+    * @public
+    * @type {string}
+    * @api stable
+    * @expose
+    */
+   M.evt.CHANGE = 'change';
+
+   /**
+    * Event type
     * @private
     * @type {array<string>}
     */
@@ -178,7 +187,8 @@ goog.provide('M.evt.Listener');
       M.evt.UNSELECT_FEATURES,
       M.evt.SELECT_FEATURES,
       M.evt.LOAD,
-      M.evt.COMPLETED
+      M.evt.COMPLETED,
+      M.evt.CHANGE
    ];
 
    /**

@@ -12,31 +12,32 @@ goog.provide('M.impl.envolvedExtent');
     */
    M.impl.envolvedExtent.calculating = false;
 
+    /**
+    * Extent from wmc
+    * @private
+    * @type {ol.Extent}
+    */
+   M.impl.envolvedExtent.extentwmc_ = null;
+
    /**
     * This function calculates the envolved extent
-    * of the whole map
+    * of the whole map.
+    *
+    * Gets the maxExtent following this order:
+    *
+    * 1. Gets it from a selected WMC layer
+    * 2. Gets it from a WMS base layer
+    * 3. Gets it from envolved WMS layers
+    * 4. Gets it from other layers
+    * 5. Gets it from the projection
     *
     * @function
     * @param {M.Map} map
     * @param {Object} opt_this
-    * @returns {Mx.Extent}
+     * @returns {Mx.Extent}
     * @api stable
     */
    M.impl.envolvedExtent.calculate = function(map, opt_this) {
-      var envolvedExtent = {
-         x: {
-            max: Number.NEGATIVE_INFINITY,
-            min: Number.POSITIVE_INFINITY
-         },
-         y: {
-            max: Number.NEGATIVE_INFINITY,
-            min: Number.POSITIVE_INFINITY
-         }
-      };
-
-      var calculatingWMCExtent = false;
-      var calculatingWMSExtent = false;
-
       return new Promise(function(success, fail) {
          // get max extent from the selected WMC
          var selectedWMC = map.getWMC().filter(function(wmcLayer) {
@@ -56,39 +57,64 @@ goog.provide('M.impl.envolvedExtent');
             // envolved max extent for all WMS layers
             wmsLayers = map.getWMS();
          }
-
          if (!M.utils.isNullOrEmpty(selectedWMC)) {
-            calculatingWMCExtent = true;
-            selectedWMC.getImpl().getMaxExtent().then(function(extent) {
-               M.impl.envolvedExtent.updateExtent_(envolvedExtent, extent);
-               calculatingWMCExtent = false;
-
-               // call success
-               if (!calculatingWMCExtent && !calculatingWMSExtent) {
-                  success.call(opt_this, envolvedExtent);
-               }
+            M.impl.envolvedExtent.calculateFromWMC(selectedWMC).then(function(extent) {
+               M.impl.envolvedExtent.extentwmc_ = extent;
+               success(extent);
             });
          }
          else if (wmsLayers.length > 0) {
-            calculatingWMSExtent = true;
             M.impl.envolvedExtent.calculateFromWMS(wmsLayers).then(function(extent) {
-               M.impl.envolvedExtent.updateExtent_(envolvedExtent, extent);
-               calculatingWMSExtent = false;
-
-               // call success
-               if (!calculatingWMCExtent && !calculatingWMSExtent) {
-                  success.call(opt_this, envolvedExtent);
+               if(M.utils.isNullOrEmpty(M.impl.envolvedExtent.extentwmc_)){
+                  success(extent);
+               }else{
+                  success(M.impl.envolvedExtent.extentwmc_);
                }
             });
          }
          else {
-            var projExtent = ol.proj.get(map.getProjection().code).getExtent();
-            if (M.utils.isNullOrEmpty(projExtent)) {
-               projExtent = [-180, -90, 180, 90];
-            }
-            M.impl.envolvedExtent.updateExtent_(envolvedExtent, projExtent);
-            success.call(opt_this, envolvedExtent);
+            M.impl.envolvedExtent.calculateFromProjection(map).then(function(extent) {
+               if(M.utils.isNullOrEmpty(M.impl.envolvedExtent.extentwmc_)){
+                  success(extent);
+               }else{
+                  success(M.impl.envolvedExtent.extentwmc_);
+               }
+            });
          }
+      });
+   };
+
+   /**
+    * Calculates the extension from WMC
+    * @function
+    * @public
+    * @param {M.layer.WMC} wmcLayer - WMC
+    * @returns {Promise} extent
+    * @api stable
+    */
+   M.impl.envolvedExtent.calculateFromWMC = function(wmcLayer) {
+      return new Promise(function(success, fail) {
+         wmcLayer.getImpl().getMaxExtent().then(function(extent) {
+            success(extent);
+         });
+      });
+   };
+
+   /**
+    * Calculates the extension from Projection
+    * @function
+    * @public
+    * @param {M.Map} map - Map
+    * @returns {Promise} extent
+    * @api stable
+    */
+   M.impl.envolvedExtent.calculateFromProjection = function(map) {
+      return new Promise(function(success, fail) {
+         var projExtent = ol.proj.get(map.getProjection().code).getExtent();
+         if (M.utils.isNullOrEmpty(projExtent)) {
+            projExtent = [-180, -90, 180, 90];
+         }
+         success(projExtent);
       });
    };
 
@@ -143,29 +169,17 @@ goog.provide('M.impl.envolvedExtent');
     * @param {Mx.GetCapabilities} capabilities
     */
    M.impl.envolvedExtent.updateExtent_ = function(extent, newExtent) {
-      if (M.utils.isArray(extent) && M.utils.isArray(newExtent)) {
+      if (M.utils.isArray(newExtent)) {
          extent[0] = Math.min(extent[0], newExtent[0]);
          extent[1] = Math.min(extent[1], newExtent[1]);
          extent[2] = Math.max(extent[2], newExtent[2]);
          extent[3] = Math.max(extent[3], newExtent[3]);
       }
-      else if (M.utils.isObject(extent) && M.utils.isArray(newExtent)) {
-         extent.x.min = Math.min(extent.x.min, newExtent[0]);
-         extent.y.min = Math.min(extent.y.min, newExtent[1]);
-         extent.x.max = Math.max(extent.x.max, newExtent[2]);
-         extent.y.max = Math.max(extent.y.max, newExtent[3]);
-      }
-      else if (M.utils.isArray(extent) && M.utils.isObject(newExtent)) {
+      else if (M.utils.isObject(newExtent)) {
          extent[0] = Math.min(extent[0], newExtent.x.min);
          extent[1] = Math.min(extent[1], newExtent.y.min);
          extent[2] = Math.max(extent[2], newExtent.x.max);
          extent[3] = Math.max(extent[3], newExtent.y.max);
-      }
-      else if (M.utils.isObject(extent) && M.utils.isObject(newExtent)) {
-         extent.x.min = Math.min(extent.x.min, newExtent.x.min);
-         extent.y.min = Math.min(extent.y.min, newExtent.y.min);
-         extent.x.max = Math.max(extent.x.max, newExtent.x.max);
-         extent.y.max = Math.max(extent.y.max, newExtent.y.max);
       }
    };
 })();

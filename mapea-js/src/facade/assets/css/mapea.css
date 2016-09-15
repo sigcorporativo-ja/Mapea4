@@ -64,8 +64,7 @@
    color: #404040;
 }
 
-div.m-control button[class^="g-cartografia-"],
-div.m-control button[class*=" g-cartografia-"] {
+div.m-control button[class^="g-cartografia-"], div.m-control button[class*=" g-cartografia-"] {
    font-size: 28px;
    padding: 8px;
    font-size: 24px;
@@ -85,22 +84,15 @@ div.m-control button[class*=" g-cartografia-"] {
    transition: opacity 0.25s ease 0s;
 }
 
-div.m-control.activated button[class^="g-cartografia-"],
-div.m-control button[class^="g-cartografia-"]:hover,
-div.m-control button[class*=" g-cartografia-"]:hover,
-.m-areas > div.m-area > div.m-panel > button.m-panel-btn:hover,
-.ol-overviewmap > button:hover {
+div.m-control.activated button[class^="g-cartografia-"], div.m-control button[class^="g-cartografia-"]:hover, div.m-control button[class*=" g-cartografia-"]:hover, .m-areas > div.m-area > div.m-panel > button.m-panel-btn:hover, .ol-overviewmap > button:hover {
    opacity: 1 !important;
 }
 
-div.m-control button[class^="g-cartografia-"]:focus,
-div.m-control button[class*=" g-cartografia-"]:focus,
-.m-areas > div.m-area > div.m-panel > button.m-panel-btn:focus {
+div.m-control button[class^="g-cartografia-"]:focus, div.m-control button[class*=" g-cartografia-"]:focus, .m-areas > div.m-area > div.m-panel > button.m-panel-btn:focus {
    outline: none;
 }
 
-.m-help-btn,
-.m-clear-btn {
+.m-help-btn, .m-clear-btn {
    opacity: 0.4 !important;
    font-size: 18px !important;
 }
@@ -139,8 +131,7 @@ div.m-control button[class*=" g-cartografia-"]:focus,
 
 /* TEXT */
 
-.m-mapea-container input[type="text"],
-.m-mapea-container textarea {
+.m-mapea-container input[type="text"], .m-mapea-container textarea {
    margin: 5px;
    padding: 5px;
    background-color: transparent;
@@ -158,6 +149,13 @@ div.m-control button[class*=" g-cartografia-"]:focus,
 .m-mapea-container input[type="text"]:focus {
    outline: none;
    outline: none;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-wordbreak {
+      word-break: break-all;
+      white-space: none;
+   }
 }
 
 

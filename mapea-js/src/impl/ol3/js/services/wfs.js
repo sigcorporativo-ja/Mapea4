@@ -62,6 +62,13 @@ goog.require('M.exception');
        * @type {String}
        */
       this.ids_ = layerParameters.ids;
+
+      /**
+       *
+       * @private
+       * @type {String}
+       */
+      this.cql_ = layerParameters.cql;
    });
 
    /**
@@ -116,6 +123,9 @@ goog.require('M.exception');
          getFeatureParams['featureId'] = this.ids_.map(function(id) {
             return this.name_.concat('.').concat(id);
          }, this);
+      }
+      if (!M.utils.isNullOrEmpty(this.cql_)) {
+         getFeatureParams['CQL_FILTER'] = this.cql_;
       }
       else if (!M.utils.isNullOrEmpty(extent)) {
          getFeatureParams['bbox'] = extent.join(',') + ',' + projection.getCode();

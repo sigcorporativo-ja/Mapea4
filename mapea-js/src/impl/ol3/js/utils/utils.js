@@ -5,14 +5,14 @@ goog.require('goog.style');
 /**
  * @namespace M.impl.utils
  */
-(function () {
+(function() {
 
    /**
     *
     * @function
     * @api stable
     */
-   M.impl.utils.generateResolutions = function (projection, extent, minZoom, maxZoom) {
+   M.impl.utils.generateResolutions = function(projection, extent, minZoom, maxZoom) {
       var generatedResolutions, defaultMaxZoom = 28;
 
       // extent
@@ -34,7 +34,7 @@ goog.require('goog.style');
 
       generatedResolutions = new Array(zoomLevels);
       for (var i = 0; i < zoomLevels; i++) {
-         generatedResolutions[i] = size / Math.pow(2, i);
+          generatedResolutions[i] = size / Math.pow(2, i);
       }
 
       return generatedResolutions;
@@ -45,7 +45,7 @@ goog.require('goog.style');
     * @function
     * @api stable
     */
-   M.impl.utils.addOverlayImage = function (overlayImage, map) {
+   M.impl.utils.addOverlayImage = function(overlayImage, map) {
       var mapSize = map.getMapImpl().getSize();
 
       var screenXY = overlayImage['screenXY'];
@@ -101,7 +101,7 @@ goog.require('goog.style');
     * @return {number} Height.
     * @api stable
     */
-   M.impl.utils.getExtentHeight = function (extent) {
+   M.impl.utils.getExtentHeight = function(extent) {
       return extent[3] - extent[1];
    };
 
@@ -113,7 +113,7 @@ goog.require('goog.style');
     * @return {number} Width.
     * @api stable
     */
-   M.impl.utils.getExtentWidth = function (extent) {
+   M.impl.utils.getExtentWidth = function(extent) {
       return extent[2] - extent[0];
    };
 })();

@@ -65,7 +65,7 @@ goog.provide('M.impl.loader.WFS');
       var this_ = this;
       return (new Promise(function(success, fail) {
          M.remote.get(url).then(function(response) {
-            if (!M.utils.isNullOrEmpty(response.text)) {
+            if (!M.utils.isNullOrEmpty(response.text) && response.text.indexOf("ServiceExceptionReport") < 0) {
                var features = this_.format_.readFeatures(response.text, {
                   featureProjection: projection
                });
@@ -74,6 +74,9 @@ goog.provide('M.impl.loader.WFS');
             else {
                if (response.code === 401) {
                   M.dialog.error('Ha ocurrido un error al cargar la capa: Usuario no autorizado.');
+               }
+               else if (response.text.indexOf("featureId and cql_filter") >= 0) {
+                  M.dialog.error('FeatureID y CQL son mutuamente excluyentes. Indicar sólo un tipo de filtrado.');
                }
                else {
                   M.exception('No hubo respuesta en la operación GetFeature');

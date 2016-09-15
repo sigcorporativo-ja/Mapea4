@@ -16,6 +16,13 @@ M.impl.control.MeasureClear = function(measureLengthControl, measureAreaControl)
     * @type {M.impl.control.Measure}
     */
    this.measureLengthControl_ = measureLengthControl;
+   
+   /**
+    * Facade of the map
+    * @private
+    * @type {M.Map}
+    */
+   this.facadeMap_ = null;
 
    /**
     * Implementation measureArea
@@ -36,6 +43,7 @@ goog.inherits(M.impl.control.MeasureClear, M.impl.Control);
  * @api stable
  */
 M.impl.control.MeasureClear.prototype.addTo = function(map, element) {
+   this.facadeMap_ = map;
    var button = element.getElementsByTagName('button')['m-measure-button'];
    goog.events.listen(button, goog.events.EventType.CLICK, this.onClick, false, this);
 
@@ -70,6 +78,6 @@ M.impl.control.MeasureClear.prototype.onClick = function() {
  * @api stable
  */
 M.impl.control.MeasureClear.prototype.destroy = function() {
-   this.facadeMap_.removeControl(this);
+   this.facadeMap_.removeControls(this);
    this.facadeMap_ = null;
 };

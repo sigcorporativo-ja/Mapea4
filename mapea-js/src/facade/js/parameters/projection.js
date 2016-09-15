@@ -35,7 +35,7 @@ goog.require('M.exception');
             projection.units = M.utils.normalize(projectionArray[1].substring(0, 1));
          }
          else {
-            M.exception('El formato del parámetro projection no es correcto');
+            M.exception('El formato del parámetro projection no es correcto. </br>Se usará la proyección por defecto: '+M.config.DEFAULT_PROJ);
          }
       }
       // object
@@ -47,7 +47,7 @@ goog.require('M.exception');
             projection.units = M.utils.normalize(projectionParameter.units.substring(0, 1));
          }
          else {
-            M.exception('El formato del parámetro projection no es correcto');
+            M.exception('El formato del parámetro projection no es correcto. </br>Se usará la proyección por defecto: '+M.config.DEFAULT_PROJ);
          }
       }
       // unknown

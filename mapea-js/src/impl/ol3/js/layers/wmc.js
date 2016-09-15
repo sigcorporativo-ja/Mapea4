@@ -34,7 +34,7 @@ goog.require('ol.Extent');
        */
       this.layers = [];
 
-      /**
+       /**
        * Load WMC file promise
        * @private
        * @type {Promise}
@@ -47,6 +47,13 @@ goog.require('ol.Extent');
        * @type {Mx.Extent}
        */
       this.maxExtent = null;
+
+       /**
+       * Current projection
+       * @private
+       * @type {ol.Projection}
+       */
+      this.extentProj_ = null;
 
       // calls the super constructor
       goog.base(this, options);
@@ -169,14 +176,21 @@ goog.require('ol.Extent');
     */
    M.impl.layer.WMC.prototype.getMaxExtent = function() {
       var this_ = this;
+      var olProjection = ol.proj.get(this.map.getProjection().code);
       var promise = new Promise(function(success, fail) {
          if (M.utils.isNullOrEmpty(this_.maxExtent)) {
             this_.loadContextPromise.then(function(context) {
                this_.maxExtent = context.maxExtent;
+               if(M.utils.isNullOrEmpty(this_.extentProj_)){
+                  this_.extentProj_ = M.parameter.projection(M.config.DEFAULT_PROJ).code;
+               }
+               this_.maxExtent = ol.proj.transform(this_.maxExtent, this_.extentProj_, olProjection);
+               this_.extentProj_ = olProjection;
                success(this_.maxExtent);
             });
          }
          else {
+            this_.extentProj_ = olProjection;
             success(this_.maxExtent);
          }
       });

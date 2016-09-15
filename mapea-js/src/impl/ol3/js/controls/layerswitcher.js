@@ -184,8 +184,12 @@ goog.require('M.impl.Control');
     * TODO
     */
    M.impl.control.LayerSwitcher.prototype.onViewChange_ = function(evt) {
+      // removes listener from previous view
+      this.unregisterViewEvents_(evt.oldValue);
+      
+      // attaches listeners to the new view 
       var olMap = this.facadeMap_.getMapImpl();
-      this.unregisterViewEvents_(olMap.getView());
+      this.registerViewEvents_(olMap.getView());
    };
 
    /**

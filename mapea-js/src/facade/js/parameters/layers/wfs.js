@@ -105,7 +105,7 @@ goog.require('M.exception');
       if (M.utils.isString(parameter)) {
          if (/^WFS(T)?\*.+/i.test(parameter)) {
             // <WFS(T)?>*(<TITLE>)?*<URL>*<NAMESPACE>:<NAME>
-            if (/^WFS(T)?\*[^\*]*\*[^\*]+\*[^\*]+\:[^\*]+/i.test(parameter)) {
+            if (/^WFS(T)?\*[^\*]*\*[^\*]+\*[^\*]+\:[^\*]+/i.test(parameter) || /^[^\*]*\*[^\*]+\:[^\*]+/.test(parameter)) {
                params = parameter.split(/\*/);
                namespaceName = params[3].trim();
                name = namespaceName.split('\:')[1];
@@ -119,7 +119,8 @@ goog.require('M.exception');
          // <URL>*<NAMESPACE>:<NAME>
          else if (/^[^\*]*\*[^\*]+\:[^\*]+/.test(parameter)) {
             params = parameter.split(/\*/);
-            name = params[3].trim();
+            namespaceName = params[1].trim();
+            name = namespaceName.split('\:')[1];
          }
       }
       else if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.name)) {
@@ -216,9 +217,14 @@ goog.require('M.exception');
             params = parameter.split(/\*/);
             cql = params[3].trim();
          }
+         // <WFS(T)?>*(<TITLE>)?*<URL>*<NAMESPACE>:<NAME>*<GEOM>*<ID>*<CQL>
+         if (/^WFS(T)?\*[^\*]*\*[^\*]+\*[^\*]+\:[^\*]+\*[^\*]+\*[^\*]*\*[^\*]*/i.test(parameter)) {
+            params = parameter.split(/\*/);
+            cql = params[6].trim();
+         }
       }
-      else if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.cql)) {
-         cql = parameter.cql.trim();
+      else if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.cql) || !M.utils.isNullOrEmpty(parameter.ecql)) {
+         cql = parameter.cql ? parameter.cql.trim() : parameter.ecql.trim();
       }
       else if (!M.utils.isObject(parameter)) {
          M.exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
