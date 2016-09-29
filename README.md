@@ -20,9 +20,9 @@ La arquitectura de Mapea está compuesta por los siguientes componentes:
 - [mapea-proxy](/mapea-proxy) Proxy para realizar peticiones POST por si el [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) no está habilitado.
 - [mapea-rest](/mapea-rest) Servicio Web con API RESTful que genera el código JS necesario para generar un visor con la configuración especificada por parámetros.
 
-## Getting Started
+## Primeros pasos
 
-//TODO
+Se ha creado una [Wiki](https://github.com/sigcorporativo-ja/Mapea4/wiki/Primeros-pasos) para servir de guía en los primeros pasos, así como para tenerla como referencia de consulta en cualquier momento.
 
 ## Navegadores soportados
 
@@ -35,14 +35,6 @@ La arquitectura de Mapea está compuesta por los siguientes componentes:
 - Android KitKat 4.4.2+
 - iOS 9+
 
-## Documentation
-
-// TODO
-
 ## Bugs
 
 A través de [GitHub issue tracker](https://github.com/sigcorporativo-ja/Mapea4/issues) podremos informar de los bugs detectados durante el uso de Mapea o realizar peticiones de nuevas funcionalidades. Antes de crear una petición se recomienda realizar una búsqueda rápida por si ya fue reportada por alguien.
-
-## Aportación
-
-// TODO
