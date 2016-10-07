@@ -63,6 +63,9 @@ goog.require('M.exception');
          // gets the options
          layerObj.options = getOptions(userParam);
 
+         // format specified by the user when create object WFS
+         layerObj.outputFormat = userParameters.outputFormat;
+
          return layerObj;
       });
 

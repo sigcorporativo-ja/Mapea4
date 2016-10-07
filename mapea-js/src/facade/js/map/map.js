@@ -37,7 +37,7 @@ goog.require('M.window');
 
 (function() {
    /**
-     * @classdesc
+    * @classdesc
     * Main constructor of the class. Creates a Map
     * with parameters specified by the user
     *
@@ -1558,7 +1558,7 @@ goog.require('M.window');
 
       return this;
    };
-   
+
    /**
     * This function remove feature center for this
     * map instance
@@ -1566,7 +1566,7 @@ goog.require('M.window');
     * @private
     * @function
     */
-   M.Map.prototype.getFeatureCenter = function(){
+   M.Map.prototype.getFeatureCenter = function() {
       return this._featureCenter;
    };
 
@@ -1712,7 +1712,9 @@ goog.require('M.window');
       }
       catch (err) {
          M.dialog.error(err);
-         this.setProjection(M.config.DEFAULT_PROJ, true);
+         if (String(err).indexOf("El formato del parámetro projection no es correcto") >= 0) {
+            this.setProjection(M.config.DEFAULT_PROJ, true);
+         }
       }
 
       return this;
