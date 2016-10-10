@@ -1,7 +1,6 @@
 goog.provide('M.impl.format.WMC');
 
-goog.require('ol.format.XML');
-//goog.require('M.impl.format.WMC.v100');
+goog.require('M.impl.format.XML');
 
 /**
  * @classdesc
@@ -13,30 +12,23 @@ goog.require('ol.format.XML');
  * @api stable
  */
 M.impl.format.WMC = function (options) {
-   /**
-    * WMC version
-    * @private
-    * @type {string}
-    */
-   this.version = null;
+  /**
+   * WMC version
+   * @private
+   * @type {string}
+   */
+  this.version = null;
 
-   /**
-    * Parser of an specified WMC version
-    * @private
-    * @type {ol.format.XML}
-    */
-   this.parser = null;
+  /**
+   * Parser of an specified WMC version
+   * @private
+   * @type {ol.format.XML}
+   */
+  this.parser = null;
 
-   /**
-    * Custom options for this formater
-    * @private
-    * @type {Mx.parameters.LayerOptions}
-    */
-   this.options = (options || {});
-
-   goog.base(this);
+  goog.base(this, options);
 };
-goog.inherits(M.impl.format.WMC, ol.format.XML);
+goog.inherits(M.impl.format.WMC, M.impl.format.XML);
 
 /**
  * @private
@@ -46,22 +38,22 @@ goog.inherits(M.impl.format.WMC, ol.format.XML);
  * @api stable
  */
 M.impl.format.WMC.prototype.readFromDocument = function (data) {
-   if (data.nodeType !== goog.dom.NodeType.DOCUMENT) {
-      M.excetion('doc.nodeType should be DOCUMENT');
-   }
+  if (data.nodeType !== goog.dom.NodeType.DOCUMENT) {
+    M.excetion('doc.nodeType should be DOCUMENT');
+  }
 
-   var root = data.documentElement;
-   this.version = root.getAttribute("version");
-   if (!this.version) {
-      this.version = M.impl.format.WMC.DEFAULT_VERSION;
-   }
+  var root = data.documentElement;
+  this.version = root.getAttribute("version");
+  if (!this.version) {
+    this.version = M.impl.format.WMC.DEFAULT_VERSION;
+  }
 
-   var paerserVersion = 'v'.concat(M.utils.normalize(this.version).replace(/\./g, ""));
-   this.parser = new M.impl.format.WMC[paerserVersion](this.options);
+  var paerserVersion = 'v'.concat(M.utils.normalize(this.version).replace(/\./g, ""));
+  this.parser = new M.impl.format.WMC[paerserVersion](this.options);
 
-   var context = this.parser.read(data);
+  var context = this.parser.read(data);
 
-   return context;
+  return context;
 };
 
 M.impl.format.WMC.DEFAULT_VERSION = '1.0.0';

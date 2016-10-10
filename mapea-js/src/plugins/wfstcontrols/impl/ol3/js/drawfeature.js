@@ -35,16 +35,10 @@ goog.require('P.impl.control.WFSTBase');
          'source': olLayer.getSource(),
          'type': M.geom.parseWFS(this.layer_.geometry),
          'style': olLayer.getStyle(),
-         'geometryName': this.describeFeatureType_.geometryName
       });
 
       this.interaction_.on('drawend', function(event) {
          var feature = event.feature;
-         this.describeFeatureType_.properties.forEach(function(property) {
-            if (!M.utils.isGeometryType(property.localType)) {
-               feature.set(property.name, layerImpl.getDefaultValue(property.localType));
-            }
-         });
          this.modifiedFeatures.push(feature);
       }, this);
 

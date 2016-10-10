@@ -29,12 +29,6 @@ goog.provide('P.impl.control.WFSTBase');
       this.interaction_ = null;
 
       /**
-       * Describe feature
-       * @type {Mx.describeFeatureType.WFSTBase} - Describe feature
-       */
-      this.describeFeatureType_ = null;
-
-      /**
        * Store modified features
        * @public
        * @type {array}
@@ -74,13 +68,9 @@ goog.provide('P.impl.control.WFSTBase');
     */
    M.impl.control.WFSTBase.prototype.activate = function() {
       if (M.utils.isNullOrEmpty(this.interaction_)) {
-         var this_ = this;
-         this.layer_.getImpl().getDescribeFeatureType().then(function(describeFeatureType) {
-            this_.describeFeatureType_ = describeFeatureType;
-            this_.createInteraction_();
-            this_.facadeMap_.getMapImpl().addInteraction(this_.interaction_);
-            this_.interaction_.setActive(true);
-         });
+        this.createInteraction_();
+        this.facadeMap_.getMapImpl().addInteraction(this.interaction_);
+        this.interaction_.setActive(true);
       }
       else {
          this.interaction_.setActive(true);
@@ -96,13 +86,9 @@ goog.provide('P.impl.control.WFSTBase');
     */
    M.impl.control.WFSTBase.prototype.deactivate = function() {
       if (M.utils.isNullOrEmpty(this.interaction_)) {
-         var this_ = this;
-         this.layer_.getImpl().getDescribeFeatureType().then(function(describeFeatureType) {
-            this_.describeFeatureType_ = describeFeatureType;
-            this_.createInteraction_();
-            this_.facadeMap_.getMapImpl().addInteraction(this_.interaction_);
-            this_.interaction_.setActive(false);
-         });
+        this.createInteraction_();
+        this.facadeMap_.getMapImpl().addInteraction(this.interaction_);
+        this.interaction_.setActive(false);
       }
       else {
          this.interaction_.setActive(false);
@@ -128,7 +114,6 @@ goog.provide('P.impl.control.WFSTBase');
       this.facadeMap_.getMapImpl().removeControl(this);
       this.layer_ = null;
       this.interaction_ = null;
-      this.describeFeatureType_ = null;
       this.modifiedFeatures = null;
    };
 })();

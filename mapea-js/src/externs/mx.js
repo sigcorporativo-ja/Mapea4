@@ -686,6 +686,30 @@ Mx.parameters.WFS.prototype.ecql;
 Mx.parameters.WFS.prototype.version;
 
 /**
+ * Object literal with config options for a WFS
+ * @typedef {{
+ *     getFeatureOutputFormat: (String),
+ *     describeFeatureTypeOutputFormat: (String),
+ * }}
+ * @api stable
+ */
+Mx.parameters.WFSOptions;
+
+/**
+ * GetFeature output format
+ * @type {String}
+ * @api stable
+ */
+Mx.parameters.WFSOptions.getFeatureOutputFormat;
+
+/**
+ * DescribeFeatureType output format
+ * @type {String}
+ * @api stable
+ */
+Mx.parameters.WFSOptions.describeFeatureTypeOutputFormat;
+
+/**
  * Object literal with config options for the KML layer provided by the user.
  * @typedef {{
  *     type: (string),
@@ -1252,7 +1276,6 @@ Mx.WFSDescribeFeatureType.targetPrefix;
  * @api stable
  */
 Mx.WFSDescribeFeatureType.localType;
-
 
 /**
  * Object literal representing a OverviewMap options
