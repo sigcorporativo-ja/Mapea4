@@ -81,28 +81,6 @@ goog.require('ol.source.Vector');
   M.impl.layer.WFS.prototype.addTo = function (map) {
     this.map = map;
 
-    this.service_ = new M.impl.service.WFS({
-      'url': this.url,
-      'namespace': this.namespace,
-      'name': this.name,
-      'version': this.version,
-      'ids': this.ids,
-      'cql': this.cql,
-      'projection': this.map.getProjection(),
-      'getFeatureOutputFormat': this.options.getFeatureOutputFormat,
-      'describeFeatureTypeOutputFormat': this.options.describeFeatureTypeOutputFormat,
-    });
-
-    if (/json/gi.test(this.options.getFeatureOutputFormat)) {
-      this.formater_ = new M.impl.format.GeoJSON({
-        'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
-      });
-    }
-    else {
-      this.formater_ = new M.impl.format.GML(this.name, this.version, this.map.getProjection());
-    }
-
-    this.loader_ = new M.impl.loader.WFS(map, this.service_, this.formater_);
     this.ol3Layer = new ol.layer.Vector({
       style: M.impl.layer.WFS.STYLE
     });
@@ -140,14 +118,49 @@ goog.require('ol.source.Vector');
    */
   M.impl.layer.WFS.prototype.updateSource_ = function () {
     var this_ = this;
+
+    this.service_ = new M.impl.service.WFS({
+      'url': this.url,
+      'namespace': this.namespace,
+      'name': this.name,
+      'version': this.version,
+      'ids': this.ids,
+      'cql': this.cql,
+      'projection': this.map.getProjection(),
+      'getFeatureOutputFormat': this.options.getFeatureOutputFormat,
+      'describeFeatureTypeOutputFormat': this.options.describeFeatureTypeOutputFormat,
+    });
+    if (/json/gi.test(this.options.getFeatureOutputFormat)) {
+      this.formater_ = new M.impl.format.GeoJSON({
+        'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
+      });
+    }
+    else {
+      this.formater_ = new M.impl.format.GML(this.name, this.version, this.map.getProjection());
+    }
+    this.loader_ = new M.impl.loader.WFS(this.map, this.service_, this.formater_);
+
     this.ol3Layer.setSource(new ol.source.Vector({
       format: this.formater_,
       loader: this.loader_.getLoaderFn(function (features) {
         this.addFeatures(features);
-        this_.fire(M.evt.LOAD, features);
+        this_.fire(M.evt.LOAD, [features]);
       }),
       strategy: ol.loadingstrategy.all
     }));
+  };
+
+  /**
+   * This function destroys this layer, cleaning the HTML
+   * and unregistering all events
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.layer.WFS.prototype.setCQL = function (newCQL) {
+    this.cql = newCQL;
+    this.refresh();
   };
 
   /**

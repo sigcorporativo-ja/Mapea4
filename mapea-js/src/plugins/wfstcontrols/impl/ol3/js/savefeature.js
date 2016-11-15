@@ -139,6 +139,7 @@ goog.require('goog.dom.classes');
       // sets geometry name
       var editFeatureGeomName = feature.getGeometryName();
       var editFeatureGeom = feature.getGeometry();
+      feature.set(describeFeatureType.geometryName, editFeatureGeom);
       feature.setGeometryName(describeFeatureType.geometryName);
       feature.setGeometry(editFeatureGeom);
       feature.unset(editFeatureGeomName);
