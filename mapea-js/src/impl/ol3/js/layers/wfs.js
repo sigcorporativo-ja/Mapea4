@@ -140,14 +140,25 @@ goog.require('ol.source.Vector');
     }
     this.loader_ = new M.impl.loader.WFS(this.map, this.service_, this.formater_);
 
-    this.ol3Layer.setSource(new ol.source.Vector({
-      format: this.formater_,
-      loader: this.loader_.getLoaderFn(function (features) {
+    var ol3LayerSource = this.ol3Layer.getSource();
+    if (M.utils.isNullOrEmpty(ol3LayerSource)) {
+      this.ol3Layer.setSource(new ol.source.Vector({
+        format: this.formater_,
+        loader: this.loader_.getLoaderFn(function (features) {
+          this.addFeatures(features);
+          this_.fire(M.evt.LOAD, [features]);
+        }),
+        strategy: ol.loadingstrategy.all
+      }));
+    }
+    else {
+      ol3LayerSource.set("format", this.formater_);
+      ol3LayerSource.set("loader", this.loader_.getLoaderFn(function (features) {
         this.addFeatures(features);
         this_.fire(M.evt.LOAD, [features]);
-      }),
-      strategy: ol.loadingstrategy.all
-    }));
+      }));
+      ol3LayerSource.set("strategy", ol.loadingstrategy.all);
+    }
   };
 
   /**
