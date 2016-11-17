@@ -1433,6 +1433,22 @@ goog.require('ol.Map');
     // recalculates resolutions
     this.updateResolutionsFromBaseLayer();
 
+    // reprojects popup
+    let popup = this.facadeMap_.getPopup();
+    if (!M.utils.isNullOrEmpty(popup)) {
+      let coord = popup.getCoordinate();
+      coord = ol.proj.transform(coord, olPrevProjection, olProjection);
+      popup.setCoordinate(coord);
+    }
+
+    // reprojects label
+    var label = this.facadeMap_.getLabel();
+    if (!M.utils.isNullOrEmpty(label)) {
+      let coord = label.getCoordinate();
+      coord = ol.proj.transform(coord, olPrevProjection, olProjection);
+      label.setCoordinate(coord);
+    }
+
     this.fire(M.evt.CHANGE);
 
     return this;
