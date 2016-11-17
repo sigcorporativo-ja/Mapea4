@@ -45,6 +45,9 @@ goog.require('M.impl.Control');
 
       // click layer event
       goog.events.listen(this.panel, goog.events.EventType.CLICK, this.clickLayer, false, this);
+      
+      // change slider event
+      goog.events.listen(this.panel, goog.events.EventType.INPUT, this.clickLayer, false, this);
 
       ol.control.Control.call(this, {
          'element': element,
@@ -62,6 +65,7 @@ goog.require('M.impl.Control');
     */
    M.impl.control.LayerSwitcher.prototype.clickLayer = function(evt) {
       evt = (evt || window.event);
+      let this_ = this;
       if (!M.utils.isNullOrEmpty(evt.target) && !M.utils.isNullOrEmpty(evt.target.id)) {
          evt.stopPropagation();
 
@@ -71,8 +75,26 @@ goog.require('M.impl.Control');
          /* sets the layer visibility only if
             the layer is not base layer and visible */
          if ((layer.transparent === true) || !layer.isVisible()) {
+            let opacity = evt.target.parentElement.parentElement.getElementsByTagName("input")[0];
+            if(!M.utils.isUndefined(opacity)){
+               layer.setOpacity(opacity.value);
+            }
             layer.setVisible(!layer.isVisible());
          }
+      }
+      else if (!M.utils.isNullOrEmpty(evt.target) && evt.target.classList.contains("m-layerswitcher-remove")) {
+         this.facadeMap_.getLayers().filter(function(layer) {
+            if (layer.name === evt.target.classList[0]) {
+               this_.facadeMap_.removeLayers(layer);
+            }
+         });
+      }
+      else if (!M.utils.isNullOrEmpty(evt.target) && evt.target.classList.contains("m-layerswitcher-transparency")) {
+         this.facadeMap_.getLayers().filter(function(layer) {
+            if (layer.name === evt.target.classList[0]) {
+               layer.setOpacity(evt.target.value);
+            }
+         });
       }
    };
 
@@ -89,6 +111,13 @@ goog.require('M.impl.Control');
          'jsonp': true,
          'vars': M.control.LayerSwitcher.getTemplateVariables_(this.facadeMap_)
       }).then(function(html) {
+         if (screen.width <= 769) {
+            var elems = html.getElementsByClassName("tools");
+            for (var i = 0, ilen = elems.length; i < ilen; i++) {
+               goog.dom.classlist.add(elems[i],
+               "legend");
+            }
+         }
          this_.registerImgErrorEvents_(html);
          var newPanel = html.querySelector('div#'.concat(M.impl.control.LayerSwitcher.PANEL_ID));
          this_.panel.innerHTML = newPanel.innerHTML;
@@ -151,7 +180,7 @@ goog.require('M.impl.Control');
     */
    M.impl.control.LayerSwitcher.prototype.registerLayerEvents_ = function(layer) {
       layer.on('change:visible', this.renderPanel, this);
-      layer.on('change:opacity', this.renderPanel, this);
+      // layer.on('change:opacity', this.renderPanel, this);
       layer.on('change:extent', this.renderPanel, this);
    };
 
@@ -176,7 +205,7 @@ goog.require('M.impl.Control');
     */
    M.impl.control.LayerSwitcher.prototype.unregisterLayerEvents_ = function(layer) {
       layer.un('change:visible', this.renderPanel, this);
-      layer.un('change:opacity', this.renderPanel, this);
+      //layer.un('change:opacity', this.renderPanel, this);
       layer.un('change:extent', this.renderPanel, this);
    };
 
