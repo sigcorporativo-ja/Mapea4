@@ -121,6 +121,16 @@
    }
    .m-layerswitcher-container li input.m-layerswitcher-transparency {
       width: 90%;
+      display: none;
+   }
+   .m-layerswitcher-container li span.m-layerswitcher-remove {
+      font-size: 13px;
+   }
+   .m-layerswitcher-container li.visible input.m-layerswitcher-transparency {
+     display: initial;
+   }
+   .m-layerswitcher-container li.visible span.m-layerswitcher-remove {
+      font-size: 11px;
    }
 }
 
@@ -132,8 +142,21 @@
    text-align: left;
    margin-bottom: 0px;
    border-bottom: none;
+   display: -webkit-box;
+   display: -ms-flexbox;
    display: flex;
-   align-items: center;
+   -webkit-box-align: center;
+       -ms-flex-align: center;
+           align-items: center;
+}
+
+.m-layersiwtcher-panel li.visible > div.tools {
+   width: 40%;
+   height: auto;
+}
+.m-layersiwtcher-panel div.tools {
+  float: right;
+  text-align: left;
 }
 
 .m-layersiwtcher-panel li.visible > div.layer {
@@ -147,15 +170,10 @@
 }
 
 @media only screen and (max-width: 768px) {
-   .m-layersiwtcher-panel div.layer {
-      width: 100%;
+   .m-layersiwtcher-panel li > div.layer-base, .m-layersiwtcher-panel li > div.layer {
+      width: 90%;
+      padding-right: 0px;
    }
-}
-
-.m-layersiwtcher-panel div.tools {
-   float: right;
-   width: 40%;
-   text-align: left;
 }
 
 .m-layersiwtcher-panel li.visible > div.layer-base {
@@ -177,10 +195,16 @@
 }
 
 @media only screen and (max-width: 768px) {
-   .m-layerswitcher-container div.tools {
-      width: 90%;
-      float: inherit;
-   }
+  .m-layersiwtcher-panel li.visible > div.tools {
+     width: 90%;
+     float: initial;
+  }
+  .m-layersiwtcher-panel div.tools {
+    width: calc(10% - 5px);
+    float: right;
+    text-align: left;
+    margin: 0 auto;
+  }
 }
 
 .m-layerswitcher-container li.disabled span {
@@ -233,6 +257,10 @@
    border-top-left-radius: 0;
 }
 
+.m-areas> div.m-area> div.m-panel.m-layerswitcher> div.m-panel-controls {
+    max-width: 50vw;
+    max-height: 80vh;
+}
 @media only screen and (max-width: 768px) {
    .m-areas > div.m-area > div.m-panel.m-layerswitcher.opened {
       margin-left: 0;
@@ -255,12 +283,12 @@ input[type=range].m-layerswitcher-transparency {
    -webkit-appearance: none;
    width: 30%;
    height: 8px;
-} 
+}
 
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
 	input[type=range].m-layerswitcher-transparency {
    height: auto;
-	} 
+	}
 }
 
 input[type=range].m-layerswitcher-transparency:focus {
@@ -360,3 +388,4 @@ input[type=range]:disabled::-webkit-slider-thumb, input[type=range]:disabled::-m
 
 input[type=range]:disabled {
    opacity: 0.5;
+}
