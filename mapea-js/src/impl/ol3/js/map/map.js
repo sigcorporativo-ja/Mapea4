@@ -141,6 +141,7 @@ goog.require('ol.Map');
      * @type {Boolean}
      */
     this._resolutionsBaseLayer = false;
+
     // gets the renderer
     var renderer = ol.RendererType.CANVAS;
     if (!M.utils.isNullOrEmpty(this.options_.renderer)) {
@@ -1358,27 +1359,36 @@ goog.require('ol.Map');
       M.exception('No ha especificado ninguna projection');
     }
 
-    // gets previous data
-    var olPrevProjection = ol.proj.get(this.getProjection().code);
-    var prevBbox = this.facadeMap_.getBbox();
-    var prevMaxExtent = this.facadeMap_.getMaxExtent();
-    var prevCenter = this.facadeMap_.getCenter();
-
     // gets the current view and modifies its projection
     var olProjection = ol.proj.get(projection.code);
     if (M.utils.isNullOrEmpty(olProjection)) {
       olProjection = new ol.proj.Projection(projection);
     }
 
+    // gets previous data
+    var olPrevProjection = ol.proj.get(this.getProjection().code);
+    var prevBbox = this.facadeMap_.getBbox();
+    var prevMaxExtent = this.facadeMap_.getMaxExtent();
+    var prevCenter = this.facadeMap_.getCenter();
+    var resolutions = this.facadeMap_.getResolutions();
+
     var olMap = this.getMapImpl();
     var oldViewProperties = olMap.getView().getProperties();
     var userZoom = olMap.getView().getUserZoom();
+    var resolution = olMap.getView().getResolution();
+
     // sets the new view
     var newView = new M.impl.View({
       'projection': olProjection
     });
     newView.setProperties(oldViewProperties);
     newView.setUserZoom(userZoom);
+    if (!M.utils.isNullOrEmpty(resolutions)) {
+      newView.setResolutions(resolutions);
+    }
+    if (!M.utils.isNullOrEmpty(resolution)) {
+      newView.setResolution(resolution);
+    }
     olMap.setView(newView);
 
     // updates min, max resolutions of all WMS layers
@@ -1569,7 +1579,7 @@ goog.require('ol.Map');
       }
       else {
         M.impl.envolvedExtent.calculate(this).then(function (extent) {
-          if (!this._resolutionsBaseLayer) {
+          if (!this._resolutionsBaseLayer && (this.userResolutions_ === null)) {
 
             resolutions = M.utils.generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
