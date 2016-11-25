@@ -62,6 +62,11 @@ goog.require('M.geom');
 
     // options
     this.options = options;
+
+    // registers on M.evt.LOAD event
+    impl.on(M.evt.LOAD, function (features) {
+      this.fire(M.evt.LOAD, [features]);
+    }, this);
   });
   goog.inherits(M.layer.WFS, M.Layer);
 
@@ -180,6 +185,19 @@ goog.require('M.geom');
       }
     }
   });
+
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @function
+   * @api stable
+   */
+  M.layer.WFS.prototype.setCQL = function (newCQL) {
+    if (this.getImpl().cql !== newCQL) {
+      this.getImpl().setCQL(newCQL);
+    }
+  };
 
   /**
    * This function checks if an object is equals

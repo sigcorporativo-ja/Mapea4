@@ -122,7 +122,8 @@ goog.require('P.plugin.Autocomplete');
                this_.panel_ = new M.ui.Panel('searchstreet', {
                   'collapsible': true,
                   'className': 'm-searchstreet',
-                  'position': M.ui.position.TL
+                  'position': M.ui.position.TL,
+                  'tooltip': 'Buscador de calles'
                });
                this_.panel_.addControls(this_.control_);
                this_.map_.addPanels(this_.panel_);

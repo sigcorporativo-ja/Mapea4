@@ -9,9 +9,10 @@ goog.require('M.utils');
     * @public
     * @function
     * @api stable
+    * @returns {Promise}
     */
    M.dialog.show = function(message, title, severity) {
-      M.template.compile('dialog.html', {
+      return M.template.compile('dialog.html', {
          'jsonp': true,
          'vars': {
             'message': message,
@@ -56,12 +57,13 @@ goog.require('M.utils');
     * @param {string} message to show
     * @param {string} title of the dialog
     * @api stable
+    * @returns {Promise}
     */
    M.dialog.info = function(message, title) {
       if (M.utils.isNullOrEmpty(title)) {
          title = 'INFORMACIÓN';
       }
-      M.dialog.show(message, title, 'info');
+      return M.dialog.show(message, title, 'info');
    };
 
    /**
@@ -72,12 +74,13 @@ goog.require('M.utils');
     * @param {string} message to show
     * @param {string} title of the dialog
     * @api stable
+    * @returns {Promise}
     */
    M.dialog.error = function(message, title) {
       if (M.utils.isNullOrEmpty(title)) {
          title = 'ERROR';
       }
-      M.dialog.show(message, title, 'error');
+      return M.dialog.show(message, title, 'error');
    };
 
    /**
@@ -88,11 +91,12 @@ goog.require('M.utils');
     * @param {string} message to show
     * @param {string} title of the dialog
     * @api stable
+    * @returns {Promise}
     */
    M.dialog.success = function(message, title) {
       if (M.utils.isNullOrEmpty(title)) {
          title = 'ÉXITO';
       }
-      M.dialog.show(message, title, 'success');
+      return M.dialog.show(message, title, 'success');
    };
 })();

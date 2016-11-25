@@ -57,7 +57,6 @@
    line-height: 40px;
    text-align: center;
    height: 39px;
-   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
    font-size: 15px;
 }
 
@@ -76,12 +75,62 @@
    cursor: pointer;
    color: #6abe47;
    margin: 0px;
-   margin-right: 5px;
+   margin-right: 1%;
+}
+
+.m-layerswitcher-container li input.m-layerswitcher-transparency {
+   margin-right: 3%;
+   width: 74%;
+}
+
+@-moz-document url-prefix() {
+   .m-layerswitcher-container li input.m-layerswitcher-transparency {
+      display: block;
+      margin-top: 16px;
+   }
+   .m-layerswitcher-container .tools span {
+      display: block;
+      margin-top: -12px;
+      margin-left: 143px;
+   }
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+   .m-layerswitcher-container li input.m-layerswitcher-transparency {
+      display: block;
+      margin-top: 1px;
+   }
+   .m-layerswitcher-container .tools span {
+      display: block;
+      margin-top: -52px;
+      float: right;
+      margin-right: 13%;
+   }
+}
+
+.m-layerswitcher-container li span.m-layerswitcher-remove {
+   font-size: 11px;
+   color: rgba(0, 0, 0, 0.53);
+   cursor: pointer;
 }
 
 @media only screen and (max-width: 768px) {
    .m-layerswitcher-container li span.m-check {
       font-size: 2em;
+      margin-right: 5%;
+   }
+   .m-layerswitcher-container li input.m-layerswitcher-transparency {
+      width: 90%;
+      display: none;
+   }
+   .m-layerswitcher-container li span.m-layerswitcher-remove {
+      font-size: 13px;
+   }
+   .m-layerswitcher-container li.visible input.m-layerswitcher-transparency {
+     display: initial;
+   }
+   .m-layerswitcher-container li.visible span.m-layerswitcher-remove {
+      font-size: 11px;
    }
 }
 
@@ -93,12 +142,38 @@
    text-align: left;
    margin-bottom: 0px;
    border-bottom: none;
+   display: -webkit-box;
+   display: -ms-flexbox;
    display: flex;
-   align-items: center;
+   -webkit-box-align: center;
+       -ms-flex-align: center;
+           align-items: center;
+}
+
+.m-layersiwtcher-panel li.visible > div.tools {
+   width: 40%;
+   height: auto;
+}
+.m-layersiwtcher-panel div.tools {
+  float: right;
+  text-align: left;
 }
 
 .m-layersiwtcher-panel li.visible > div.layer {
    margin-bottom: 4px;
+}
+
+.m-layersiwtcher-panel div.layer {
+   margin-bottom: 4px;
+   float: left;
+   width: 55%;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-layersiwtcher-panel li > div.layer-base, .m-layersiwtcher-panel li > div.layer {
+      width: 90%;
+      padding-right: 0px;
+   }
 }
 
 .m-layersiwtcher-panel li.visible > div.layer-base {
@@ -117,6 +192,19 @@
    width: 90%;
    height: auto;
    margin: 0 auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .m-layersiwtcher-panel li.visible > div.tools {
+     width: 90%;
+     float: initial;
+  }
+  .m-layersiwtcher-panel div.tools {
+    width: calc(10% - 5px);
+    float: right;
+    text-align: left;
+    margin: 0 auto;
+  }
 }
 
 .m-layerswitcher-container li.disabled span {
@@ -169,6 +257,10 @@
    border-top-left-radius: 0;
 }
 
+.m-areas> div.m-area> div.m-panel.m-layerswitcher> div.m-panel-controls {
+    max-width: 50vw;
+    max-height: 80vh;
+}
 @media only screen and (max-width: 768px) {
    .m-areas > div.m-area > div.m-panel.m-layerswitcher.opened {
       margin-left: 0;
@@ -185,4 +277,115 @@
       max-height: 100vh;
       width: 100%;
    }
+}
+
+input[type=range].m-layerswitcher-transparency {
+   -webkit-appearance: none;
+   width: 30%;
+   height: 8px;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	input[type=range].m-layerswitcher-transparency {
+   height: auto;
+	}
+}
+
+input[type=range].m-layerswitcher-transparency:focus {
+   outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+   width: 100%;
+   height: 2px;
+   cursor: pointer;
+   background: rgba(0, 0, 0, 0.31);
+   border-radius: 12px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+   height: 10px;
+   width: 10px;
+   cursor: pointer;
+   border-radius: 15px;
+   background: #FFF;
+   -webkit-appearance: none;
+   margin-top: -4px;
+   background-color: #fda823;
+}
+
+@media only screen and (max-width: 768px) {
+   input[type=range]::-webkit-slider-thumb {
+      height: 12px;
+      width: 12px;
+   }
+}
+
+/****************************
+     FIREFOX HACKS
+****************************/
+
+input[type="range"]::-moz-range-track {
+   width: 100%;
+   height: 2px;
+   cursor: pointer;
+   background: rgba(0, 0, 0, 0.31);
+   border-radius: 12px;
+}
+
+input[type="range"]::-moz-range-thumb {
+   height: 10px;
+   width: 10px;
+   cursor: pointer;
+   border: none;
+   background: #FFF;
+   -webkit-appearance: none;
+   margin-top: 20px;
+   background-color: #fda823;
+}
+
+/****************************
+     IE HACKS
+****************************/
+
+input[type=range]::-ms-track {
+   cursor: pointer;
+   width: 100%;
+   height: 2px;
+   /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+   background: transparent;
+   /*leave room for the larger thumb to overflow with a transparent border */
+   border-color: transparent;
+   border-width: 12px;
+   /*remove default tick marks*/
+   color: transparent;
+   margin-top: -8px;
+}
+
+input[type=range]::-ms-thumb {
+   border: none;
+   height: 10px;
+   cursor: pointer;
+   width: 10px;
+   border-radius: 15px;
+   background-color: #fda823;
+   -webkit-appearance: none;
+}
+
+input[type=range]::-ms-fill-lower {
+   background: #ddd;
+   border-radius: 10px;
+}
+
+input[type=range]::-ms-fill-upper {
+   background: #ddd;
+   border-radius: 10px;
+}
+
+input[type=range]:disabled::-webkit-slider-thumb, input[type=range]:disabled::-moz-range-thumb, input[type=range]:disabled::-ms-thumb {
+   background-color: #848484;
+}
+
+input[type=range]:disabled {
+   opacity: 0.5;
 }

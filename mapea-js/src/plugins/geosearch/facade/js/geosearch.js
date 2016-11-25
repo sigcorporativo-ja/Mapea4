@@ -100,7 +100,8 @@ goog.require('P.control.Geosearch');
          'collapsible': true,
          'className': 'm-geosearch',
          'collapsedButtonClass': 'g-cartografia-zoom',
-         'position': M.ui.position.TL
+         'position': M.ui.position.TL,
+         'tooltip': 'Geobúsquedas'
       });
       this.panel_.addControls(this.control_);
       this.map_.addPanels(this.panel_);

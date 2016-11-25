@@ -1,11 +1,12 @@
-goog.provide('M.impl.layer.OSM');
+goog.provide('M.impl.layer.Mapbox');
 
 goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.impl.Layer');
+goog.require('M.impl.source.Mapbox');
 
 goog.require('ol.layer.Tile');
-goog.require('ol.source.OSM');
+//goog.require('ol.source.XYZ');
 
 (function () {
   /**
@@ -18,7 +19,7 @@ goog.require('ol.source.OSM');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.OSM = (function (options) {
+  M.impl.layer.Mapbox = (function (userParameters, options) {
     /**
      * Layer resolutions
      * @private
@@ -34,7 +35,7 @@ goog.require('ol.source.OSM');
     // calls the super constructor
     goog.base(this, options);
   });
-  goog.inherits(M.impl.layer.OSM, M.impl.Layer);
+  goog.inherits(M.impl.layer.Mapbox, M.impl.Layer);
 
   /**
    * This function sets the visibility of this layer
@@ -42,7 +43,7 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.OSM.prototype.setVisible = function (visibility) {
+  M.impl.layer.Mapbox.prototype.setVisible = function (visibility) {
     if (this.inRange() === true) {
       this.visibility = visibility;
 
@@ -67,11 +68,13 @@ goog.require('ol.source.OSM');
    * @param {M.impl.Map} map
    * @api stable
    */
-  M.impl.layer.OSM.prototype.addTo = function (map) {
+  M.impl.layer.Mapbox.prototype.addTo = function (map) {
     this.map = map;
 
     this.ol3Layer = new ol.layer.Tile({
-      source: new ol.source.OSM()
+      source: new M.impl.source.Mapbox({
+        'name': this.name
+      })
     });
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
@@ -97,10 +100,10 @@ goog.require('ol.source.OSM');
    * @param {Array<Number>} resolutions
    * @api stable
    */
-  M.impl.layer.OSM.prototype.setResolutions = function (resolutions) {
+  M.impl.layer.Mapbox.prototype.setResolutions = function (resolutions) {
     this.resolutions_ = resolutions;
 
-    if ((this.tiled === true) && !M.utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       // gets the extent
       var this_ = this;
       (new Promise(function (success, fail) {
@@ -115,7 +118,8 @@ goog.require('ol.source.OSM');
       })).then(function (extent) {
         var olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
 
-        var newSource = new ol.source.OSM({
+        var newSource = new M.impl.source.Mapbox({
+          name: this_.name,
           tileGrid: new ol.tilegrid.TileGrid({
             resolutions: resolutions,
             extent: olExtent,
@@ -136,7 +140,7 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.OSM.prototype.getExtent = function () {
+  M.impl.layer.Mapbox.prototype.getExtent = function () {
     var extent = null;
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       extent = ol.proj.get(this.map.getProjection().code).getExtent();
@@ -152,7 +156,7 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.OSM.prototype.destroy = function () {
+  M.impl.layer.Mapbox.prototype.destroy = function () {
     var olMap = this.map.getMapImpl();
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
@@ -168,10 +172,10 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.OSM.prototype.equals = function (obj) {
+  M.impl.layer.Mapbox.prototype.equals = function (obj) {
     var equals = false;
 
-    if (obj instanceof M.impl.layer.OSM) {
+    if (obj instanceof M.impl.layer.Mapbox) {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
     }

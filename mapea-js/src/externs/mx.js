@@ -95,6 +95,30 @@ Mx.config.GEOSEARCH_DISTANCE;
 Mx.config.GEOSEARCH_SPATIAL_FIELD;
 
 /**
+ * TODO
+ * @type {String}
+ */
+M.config.MAPBOX_URL;
+
+/**
+ * TODO
+ * @type {String}
+ */
+M.config.MAPBOX_EXTENSION;
+
+/**
+ * TODO
+ * @type {String}
+ */
+M.config.MAPBOX_TOKEN_NAME;
+
+/**
+ * TODO
+ * @type {String}
+ */
+M.config.MAPBOX_TOKEN_VALUE;
+
+/**
  * Predefined WMC files. It is composed of URL,
  * predefined name and context name.
  * @type {object}
@@ -1347,3 +1371,10 @@ Mx.describeFeatureType.WFSTBase.featurePrefix;
  * @api stable
  */
 Mx.describeFeatureType.WFSTBase.properties;
+
+/**
+ * Panel collapse
+ * @type {function}
+ * @api stable
+ */
+Mx.ui.Panel.prototype.collapse;

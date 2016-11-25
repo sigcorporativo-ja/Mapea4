@@ -41,6 +41,14 @@ goog.require('ol.format.GML');
       if (M.utils.isNullOrEmpty(this.featureCount)) {
          this.featureCount = 10;
       }
+      
+      /**
+       * Buffer
+       * @public
+       * @type {Integer}
+       * @api stable
+       */
+      this.buffer = options.buffer;
    };
    goog.inherits(M.impl.control.GetFeatureInfo, M.impl.Control);
 
@@ -101,10 +109,14 @@ goog.require('ol.format.GML');
       this.facadeMap_.getWMS().forEach(function(layer) {
          var olLayer = layer.getImpl().getOL3Layer();
          if (layer.isVisible() && layer.isQueryable() && !M.utils.isNullOrEmpty(olLayer)) {
-            var url = olLayer.getSource().getGetFeatureInfoUrl(evt.coordinate, viewResolution, srs, {
-               'INFO_FORMAT': this.userFormat,
-               'FEATURE_COUNT': this.featureCount
-            });
+            let getFeatureInfoParams = {
+                  'INFO_FORMAT': this.userFormat,
+                  'FEATURE_COUNT': this.featureCount,
+               };
+            if (!/buffer/i.test(layer.url)) {
+               getFeatureInfoParams['Buffer'] = this.buffer;
+            }
+            var url = olLayer.getSource().getGetFeatureInfoUrl(evt.coordinate, viewResolution, srs, getFeatureInfoParams);
             layerNamesUrls.push({
                /** @type {String} */
                'layer': layer.name,

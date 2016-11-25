@@ -361,5 +361,37 @@
      * @type {Number}
      */
     M.config('AUTOCOMPLETE_LIMIT', '${autocomplete.limit}');
+
+    /**
+     * TODO
+     *
+     * @private
+     * @type {String}
+     */
+    M.config('MAPBOX_URL', '${mapbox.url}');
+
+    /**
+     * TODO
+     *
+     * @private
+     * @type {String}
+     */
+    M.config('MAPBOX_EXTENSION', '${mapbox.extension}');
+
+    /**
+     * TODO
+     *
+     * @private
+     * @type {String}
+     */
+    M.config('MAPBOX_TOKEN_NAME', '${mapbox.token.name}');
+
+    /**
+     * TODO
+     *
+     * @private
+     * @type {String}
+     */
+    M.config('MAPBOX_TOKEN_VALUE', '${mapbox.token.value}');
 })(window.M);
 

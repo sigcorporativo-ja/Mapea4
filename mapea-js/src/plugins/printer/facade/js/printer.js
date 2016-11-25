@@ -89,7 +89,8 @@ goog.require('P.control.Printer');
          'collapsible': true,
          'className': 'm-printer',
          'collapsedButtonClass': 'g-cartografia-impresora',
-         'position': M.ui.position.TR
+         'position': M.ui.position.TR,
+         'tooltip': 'Impresión del mapa'
       });
       this.panel_.on(M.evt.ADDED_TO_MAP, function(html) {
          M.utils.enableTouchScroll(html);
