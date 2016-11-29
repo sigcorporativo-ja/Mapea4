@@ -762,8 +762,8 @@ goog.require('ol.Map');
   M.impl.Map.prototype.removeWFS = function (layers) {
     var wfsMapLayers = this.getWFS(layers);
     wfsMapLayers.forEach(function (wfsLayer) {
-      wfsLayer.getImpl().destroy();
       this.layers_.remove(wfsLayer);
+      wfsLayer.getImpl().destroy();
     }, this);
 
     return this;
@@ -869,8 +869,8 @@ goog.require('ol.Map');
   M.impl.Map.prototype.removeWMTS = function (layers) {
     var wmtsMapLayers = this.getWMTS(layers);
     wmtsMapLayers.forEach(function (wmtsLayer) {
-      wmtsLayer.getImpl().destroy();
       this.layers_.remove(wmtsLayer);
+      wmtsLayer.getImpl().destroy();
     }, this);
 
     return this;
