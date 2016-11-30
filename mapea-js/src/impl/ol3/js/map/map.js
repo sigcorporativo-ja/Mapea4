@@ -1437,16 +1437,20 @@ goog.require('ol.Map');
     let popup = this.facadeMap_.getPopup();
     if (!M.utils.isNullOrEmpty(popup)) {
       let coord = popup.getCoordinate();
-      coord = ol.proj.transform(coord, olPrevProjection, olProjection);
-      popup.setCoordinate(coord);
+      if (!M.utils.isNullOrEmpty(coord)) {
+        coord = ol.proj.transform(coord, olPrevProjection, olProjection);
+        popup.setCoordinate(coord);
+      }
     }
 
     // reprojects label
     var label = this.facadeMap_.getLabel();
     if (!M.utils.isNullOrEmpty(label)) {
       let coord = label.getCoordinate();
-      coord = ol.proj.transform(coord, olPrevProjection, olProjection);
-      label.setCoordinate(coord);
+      if (!M.utils.isNullOrEmpty(coord)) {
+        coord = ol.proj.transform(coord, olPrevProjection, olProjection);
+        label.setCoordinate(coord);
+      }
     }
 
     this.fire(M.evt.CHANGE);

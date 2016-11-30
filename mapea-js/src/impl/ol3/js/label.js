@@ -116,6 +116,9 @@ goog.provide('M.impl.Label');
    */
   M.impl.Label.prototype.setCoordinate = function (coord) {
     this.coord_ = coord;
-    this.getPopup().setCoordinate(coord);
+    let popup = this.getPopup();
+    if (!M.utils.isNullOrEmpty(popup)) {
+      popup.setCoordinate(coord);
+    }
   };
 })();
