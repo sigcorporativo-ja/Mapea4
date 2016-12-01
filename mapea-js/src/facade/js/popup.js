@@ -409,7 +409,9 @@ goog.require('M.facade.Base');
    */
   M.Popup.prototype.setCoordinate = function (coord) {
     this.coord_ = coord;
-    this.getImpl().show(coord);
+    if (!M.utils.isNullOrEmpty(this.element_)) {
+      this.getImpl().show(coord);
+    }
   };
 
   /**

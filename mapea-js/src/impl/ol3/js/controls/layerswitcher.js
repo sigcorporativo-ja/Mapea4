@@ -82,7 +82,7 @@ goog.require('M.impl.Control');
              the layer is not base layer and visible */
           if ((layer.transparent === true) || !layer.isVisible()) {
             let opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
-            if (!M.utils.isUndefined(opacity)) {
+            if (!M.utils.isNullOrEmpty(opacity)) {
               layer.setOpacity(opacity.value);
             }
             layer.setVisible(!layer.isVisible());

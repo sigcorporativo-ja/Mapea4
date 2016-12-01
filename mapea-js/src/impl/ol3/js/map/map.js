@@ -762,8 +762,8 @@ goog.require('ol.Map');
   M.impl.Map.prototype.removeWFS = function (layers) {
     var wfsMapLayers = this.getWFS(layers);
     wfsMapLayers.forEach(function (wfsLayer) {
-      wfsLayer.getImpl().destroy();
       this.layers_.remove(wfsLayer);
+      wfsLayer.getImpl().destroy();
     }, this);
 
     return this;
@@ -869,8 +869,8 @@ goog.require('ol.Map');
   M.impl.Map.prototype.removeWMTS = function (layers) {
     var wmtsMapLayers = this.getWMTS(layers);
     wmtsMapLayers.forEach(function (wmtsLayer) {
-      wmtsLayer.getImpl().destroy();
       this.layers_.remove(wmtsLayer);
+      wmtsLayer.getImpl().destroy();
     }, this);
 
     return this;
@@ -1437,16 +1437,20 @@ goog.require('ol.Map');
     let popup = this.facadeMap_.getPopup();
     if (!M.utils.isNullOrEmpty(popup)) {
       let coord = popup.getCoordinate();
-      coord = ol.proj.transform(coord, olPrevProjection, olProjection);
-      popup.setCoordinate(coord);
+      if (!M.utils.isNullOrEmpty(coord)) {
+        coord = ol.proj.transform(coord, olPrevProjection, olProjection);
+        popup.setCoordinate(coord);
+      }
     }
 
     // reprojects label
     var label = this.facadeMap_.getLabel();
     if (!M.utils.isNullOrEmpty(label)) {
       let coord = label.getCoordinate();
-      coord = ol.proj.transform(coord, olPrevProjection, olProjection);
-      label.setCoordinate(coord);
+      if (!M.utils.isNullOrEmpty(coord)) {
+        coord = ol.proj.transform(coord, olPrevProjection, olProjection);
+        label.setCoordinate(coord);
+      }
     }
 
     this.fire(M.evt.CHANGE);
