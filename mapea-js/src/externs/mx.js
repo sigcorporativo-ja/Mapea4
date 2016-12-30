@@ -834,6 +834,22 @@ Mx.parameters.GeoJSON.prototype.properties.vendor.mapea;
 Mx.parameters.GeoJSON.prototype.properties.vendor.mapea.icon;
 
 /**
+ * Object literal with config options for the Mapbox layer provided by the user.
+ * @typedef {{
+ *     accessToken: (String)
+ * }}
+ * @api
+ */
+Mx.parameters.Mapbox;
+
+/**
+ * Mapbox token API
+ * @type {String}
+ * @api stable
+ */
+Mx.parameters.Mapbox.prototype.accessToken;
+
+/**
  * Object literal with config options for the layer provided by the user.
  * @typedef {{
  *     type: (string),

@@ -74,7 +74,7 @@ M.impl.format.WMC.v110.prototype.getLayerFromInfo = function (layerInfo) {
     'name': layerInfo['name'],
     'legend': layerInfo['title'],
     'url': layerInfo['href'],
-    'transparent': !/^true$/i.test(options.isBaseLayer)
+    'transparent': !/^1|(true)$/i.test(options.isBaseLayer)
   }, options);
   return layer;
 };

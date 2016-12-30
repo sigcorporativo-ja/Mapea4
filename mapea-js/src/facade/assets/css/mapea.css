@@ -188,3 +188,27 @@ button::-moz-focus-inner {
       transform: rotate(360deg);
    }
 }
+
+
+/********************************/
+/* correcciones tamaño relativo */
+
+
+/*#map {
+	width: 600px !important;
+	height: 500px !important;
+}*/
+
+.ol-viewport, .ol-overlaycontainer-stopevent, .m-areas, .m-area.m-top.m-right{
+	height: inherit !important;
+}
+
+.m-panel.m-layerswitcher.opened{
+	height: calc(100% - 30px);
+}
+
+
+.m-areas> div.m-area> div.m-panel.m-layerswitcher> div.m-panel-controls{
+	height: 100% !important;
+	max-height: 100%;	
+}

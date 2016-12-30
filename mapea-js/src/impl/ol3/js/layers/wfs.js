@@ -103,11 +103,11 @@ goog.require('ol.source.Vector');
    *
    * @public
    * @function
-   * @param {M.Map} map
+   * @param {Boolean} forceNewSource
    * @api stable
    */
-  M.impl.layer.WFS.prototype.refresh = function () {
-    this.updateSource_();
+  M.impl.layer.WFS.prototype.refresh = function (forceNewSource) {
+    this.updateSource_(forceNewSource);
   };
 
   /**
@@ -116,7 +116,7 @@ goog.require('ol.source.Vector');
    * @private
    * @function
    */
-  M.impl.layer.WFS.prototype.updateSource_ = function () {
+  M.impl.layer.WFS.prototype.updateSource_ = function (forceNewSource) {
     var this_ = this;
 
     this.service_ = new M.impl.service.WFS({
@@ -129,7 +129,7 @@ goog.require('ol.source.Vector');
       'projection': this.map.getProjection(),
       'getFeatureOutputFormat': this.options.getFeatureOutputFormat,
       'describeFeatureTypeOutputFormat': this.options.describeFeatureTypeOutputFormat,
-    });
+    }, this.options.vendor);
     if (/json/gi.test(this.options.getFeatureOutputFormat)) {
       this.formater_ = new M.impl.format.GeoJSON({
         'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
@@ -141,7 +141,7 @@ goog.require('ol.source.Vector');
     this.loader_ = new M.impl.loader.WFS(this.map, this.service_, this.formater_);
 
     var ol3LayerSource = this.ol3Layer.getSource();
-    if (M.utils.isNullOrEmpty(ol3LayerSource)) {
+    if ((forceNewSource === true) || M.utils.isNullOrEmpty(ol3LayerSource)) {
       this.ol3Layer.setSource(new ol.source.Vector({
         format: this.formater_,
         loader: this.loader_.getLoaderFn(function (features) {
@@ -158,6 +158,7 @@ goog.require('ol.source.Vector');
         this_.fire(M.evt.LOAD, [features]);
       }));
       ol3LayerSource.set("strategy", ol.loadingstrategy.all);
+      ol3LayerSource.changed();
     }
   };
 
@@ -171,7 +172,7 @@ goog.require('ol.source.Vector');
    */
   M.impl.layer.WFS.prototype.setCQL = function (newCQL) {
     this.cql = newCQL;
-    this.refresh();
+    this.refresh(true);
   };
 
   /**

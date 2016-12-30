@@ -73,7 +73,7 @@ goog.require('M.parameter.mapbox');
         type = M.layer.type.OSM;
       }
       else if (/^\s*mapbox\*.+$/i.test(parameter)) {
-        type = M.layer.type.MAPBOX;
+        type = M.layer.type.Mapbox;
       }
       else {
         var typeMatches = parameter.match(/^(\w+)\*.+$/);

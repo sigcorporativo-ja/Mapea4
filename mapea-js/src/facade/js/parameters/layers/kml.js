@@ -158,7 +158,7 @@ goog.require('M.exception');
       }
 
       if (!M.utils.isNullOrEmpty(extract)) {
-         extract = /^true$/i.test(extract);
+         extract = /^1|(true)$/i.test(extract);
       }
       else {
          extract = undefined;
