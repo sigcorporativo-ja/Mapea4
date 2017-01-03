@@ -17,7 +17,7 @@ goog.require('M.geom');
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  M.layer.WFS = (function (userParameters, options) {
+  M.layer.WFS = (function (userParameters, options, implParam) {
     // checks if the implementation can create WFS layers
     if (M.utils.isUndefined(M.impl.layer.WFS)) {
       M.exception('La implementación usada no puede crear capas WFS');
@@ -35,7 +35,10 @@ goog.require('M.geom');
      * @public
      * @type {M.layer.WMS}
      */
-    var impl = new M.impl.layer.WFS(options);
+    var impl = implParam;
+    if (M.utils.isNullOrEmpty(impl)) {
+    	impl = new M.impl.layer.WFS(options);
+    }
 
     var parameters = M.parameter.layer(userParameters, M.layer.type.WFS);
 

@@ -37,7 +37,7 @@ goog.require('M.exception');
             else {
                M.exception('El formato del parámetro center no es correcto');
             }
-            center.draw = /^true$/i.test(draw);
+            center.draw = /^1|(true)$/i.test(draw);
          }
          else {
             M.exception('El formato del parámetro center no es correcto');

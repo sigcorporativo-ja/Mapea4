@@ -33,6 +33,8 @@ goog.require('ol.source.OSM');
 
     // calls the super constructor
     goog.base(this, options);
+
+    this.zIndex_ = M.impl.Map.Z_INDEX[M.layer.type.OSM];
   });
   goog.inherits(M.impl.layer.OSM, M.impl.Layer);
 
@@ -87,6 +89,9 @@ goog.require('ol.source.OSM');
     if (this.resolutions_ !== null) {
       this.setResolutions(this.resolutions_);
     }
+    // activates animation for base layers or animated parameters
+    let animated = (!this.options.animated || (this.options.animated === true));
+    this.ol3Layer.set("animated", animated);
   };
 
   /**

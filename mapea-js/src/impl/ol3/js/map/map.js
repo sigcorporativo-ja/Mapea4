@@ -207,7 +207,7 @@ goog.require('ol.Map');
   M.impl.Map.prototype.getBaseLayers = function () {
     var baseLayers = this.getLayers().filter(function (layer) {
       var isBaseLayer = false;
-      if (M.utils.isNullOrEmpty(layer.type) || (layer.type === M.layer.type.WMS)) {
+      if ((layer.type === M.layer.type.WMS) || (layer.type === M.layer.type.Mapbox)) {
         isBaseLayer = (layer.transparent !== true);
       }
       return isBaseLayer;
@@ -240,11 +240,34 @@ goog.require('ol.Map');
     this.addKML(knowLayers);
     this.addWFS(knowLayers);
 
+    // cehcks if exists a base layer
+    var existsBaseLayer = this.getBaseLayers().length > 0;
+
     // adds unknow layers
     unknowLayers.forEach(function (layer) {
       if (!M.utils.includes(this.layers_, layer)) {
         layer.getImpl().addTo(this.facadeMap_);
         this.layers_.push(layer);
+
+        /* if the layer is a base layer then
+        sets its visibility */
+        if (layer.transparent !== true) {
+          layer.setVisible(!existsBaseLayer);
+          existsBaseLayer = true;
+          if (layer.isVisible()) {
+            this.updateResolutionsFromBaseLayer();
+          }
+          layer.getImpl().setZIndex(0);
+        }
+        else {
+          var zIndex = this.layers_.length + layer.getImpl().getZIndex();
+          layer.getImpl().setZIndex(zIndex);
+          // recalculates resolution if there are not
+          // any base layer
+          if (!existsBaseLayer) {
+            this.updateResolutionsFromBaseLayer();
+          }
+        }
       }
     }, this);
 
@@ -590,9 +613,7 @@ goog.require('ol.Map');
    */
   M.impl.Map.prototype.addWMS = function (layers) {
     // cehcks if exists a base layer
-    var baseLayers = this.getWMS().filter(function (layer) {
-      return (layer.transparent !== true);
-    });
+    var baseLayers = this.getBaseLayers();
     var existsBaseLayer = (baseLayers.length > 0);
 
     layers.forEach(function (layer) {
@@ -1783,6 +1804,8 @@ goog.require('ol.Map');
   M.impl.Map.Z_INDEX[M.layer.type.WMC] = 1;
   M.impl.Map.Z_INDEX[M.layer.type.WMS] = 1000;
   M.impl.Map.Z_INDEX[M.layer.type.WMTS] = 2000;
+  M.impl.Map.Z_INDEX[M.layer.type.Mapbox] = 2000;
+  M.impl.Map.Z_INDEX[M.layer.type.OSM] = 2000;
   M.impl.Map.Z_INDEX[M.layer.type.KML] = 3000;
   M.impl.Map.Z_INDEX[M.layer.type.WFS] = 9999;
 })();

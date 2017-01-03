@@ -36,7 +36,7 @@ goog.require('M.exception');
      */
     var impl = new M.impl.layer.Mapbox(userParameters, options);
 
-    var parameters = M.parameter.layer(userParameters, M.layer.type.MAPBOX);
+    var parameters = M.parameter.layer(userParameters, M.layer.type.Mapbox);
 
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(parameters.name)) {
@@ -53,10 +53,69 @@ goog.require('M.exception');
       this.legend = parameters.name;
     }
 
+    // transparent
+    this.transparent = parameters.transparent;
+
+    // API Key token parameter
+    this.accessToken = parameters.accessToken;
+
     // options
     this.options = options;
   });
   goog.inherits(M.layer.Mapbox, M.Layer);
+
+  /**
+   * 'url' The service URL of the
+   * layer
+   */
+  Object.defineProperty(M.layer.Mapbox.prototype, "url", {
+    get: function () {
+      return this.getImpl().url;
+    },
+    // defining new type is not allowed
+    set: function (newUrl) {
+      if (!M.utils.isNullOrEmpty(newUrl)) {
+        this.getImpl().url = newUrl;
+      }
+      else {
+        this.getImpl().url = M.config.MAPBOX_URL;
+      }
+    }
+  });
+
+  /**
+   * 'tiled' the layer name
+   */
+  Object.defineProperty(M.layer.Mapbox.prototype, "transparent", {
+    get: function () {
+      return this.getImpl().transparent;
+    },
+    set: function (newTransparent) {
+      if (!M.utils.isNullOrEmpty(newTransparent)) {
+        this.getImpl().transparent = newTransparent;
+      }
+      else {
+        this.getImpl().transparent = false;
+      }
+    }
+  });
+
+  /**
+   * 'tiled' the layer name
+   */
+  Object.defineProperty(M.layer.Mapbox.prototype, "accessToken", {
+    get: function () {
+      return this.getImpl().accessToken;
+    },
+    set: function (newAccessToken) {
+      if (!M.utils.isNullOrEmpty(newAccessToken)) {
+        this.getImpl().accessToken = newAccessToken;
+      }
+      else {
+        this.getImpl().accessToken = M.config.MAPBOX_TOKEN_VALUE;
+      }
+    }
+  });
 
   /**
    * 'type' This property indicates if
@@ -64,13 +123,13 @@ goog.require('M.exception');
    */
   Object.defineProperty(M.layer.Mapbox.prototype, "type", {
     get: function () {
-      return M.layer.type.MAPBOX;
+      return M.layer.type.Mapbox;
     },
     // defining new type is not allowed
     set: function (newType) {
       if (!M.utils.isUndefined(newType) &&
-        !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.MAPBOX)) {
-        M.exception('El tipo de capa debe ser \''.concat(M.layer.type.MAPBOX).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
+        !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.Mapbox)) {
+        M.exception('El tipo de capa debe ser \''.concat(M.layer.type.Mapbox).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
       }
     }
   });

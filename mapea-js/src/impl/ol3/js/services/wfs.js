@@ -16,7 +16,7 @@ goog.require('M.exception');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.service.WFS = (function (layerParameters) {
+  M.impl.service.WFS = (function (layerParameters, vendorOpts) {
 
     /**
      *
@@ -95,6 +95,28 @@ goog.require('M.exception');
      * @type {String}
      */
     this.describeFeatureTypeOutputFormat_ = layerParameters.describeFeatureTypeOutputFormat;
+
+    /**
+     * TODO
+     *
+     * @private
+     * @type {Object}
+     */
+    this.getFeatureVendor_ = {};
+    if (!M.utils.isNullOrEmpty(vendorOpts) && !M.utils.isNullOrEmpty(vendorOpts.getFeature)) {
+      this.getFeatureVendor_ = vendorOpts.getFeature;
+    }
+
+    /**
+     * TODO
+     *
+     * @private
+     * @type {Object}
+     */
+    this.describeFeatureTypeVendor_ = {};
+    if (!M.utils.isNullOrEmpty(vendorOpts) && !M.utils.isNullOrEmpty(vendorOpts.describeFeatureType)) {
+      this.describeFeatureTypeVendor_ = vendorOpts.describeFeatureType;
+    }
   });
 
   /**
@@ -117,7 +139,7 @@ goog.require('M.exception');
       describeFeatureParams['outputFormat'] = this.describeFeatureTypeOutputFormat_;
     }
 
-    var describeFeatureTypeUrl = M.utils.addParameters(this.url_, describeFeatureParams);
+    var describeFeatureTypeUrl = M.utils.addParameters(M.utils.addParameters(this.url_, describeFeatureParams), this.describeFeatureTypeVendor_);
     var describeFeatureTypeFormat = new M.impl.format.DescribeFeatureType(this.name_, this.describeFeatureTypeOutputFormat_, this.projection_);
     return new Promise(function (success, fail) {
       M.remote.get(describeFeatureTypeUrl).then(function (response) {
@@ -159,6 +181,6 @@ goog.require('M.exception');
       getFeatureParams['bbox'] = extent.join(',') + ',' + projection.getCode();
     }
 
-    return M.utils.addParameters(this.url_, getFeatureParams);
+    return M.utils.addParameters(M.utils.addParameters(this.url_, getFeatureParams), this.getFeatureVendor_);
   };
 })();

@@ -34,6 +34,8 @@ goog.require('ol.layer.Tile');
 
     // calls the super constructor
     goog.base(this, options);
+
+    this.zIndex_ = M.impl.Map.Z_INDEX[M.layer.type.Mapbox];
   });
   goog.inherits(M.impl.layer.Mapbox, M.impl.Layer);
 
@@ -44,17 +46,30 @@ goog.require('ol.layer.Tile');
    * @api stable
    */
   M.impl.layer.Mapbox.prototype.setVisible = function (visibility) {
+    this.visibility = visibility;
     if (this.inRange() === true) {
-      this.visibility = visibility;
-
       // if this layer is base then it hides all base layers
       if ((visibility === true) && (this.transparent !== true)) {
+        // hides all base layers
         this.map.getBaseLayers().forEach(function (layer) {
-          this.ol3Layer.setVisible(false);
+          if (!layer.equals(this) && layer.isVisible()) {
+            layer.setVisible(false);
+          }
         });
-      }
 
-      if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+        // set this layer visible
+        if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+          this.ol3Layer.setVisible(visibility);
+        }
+
+        // updates resolutions and keep the bbox
+        var oldBbox = this.map.getBbox();
+        this.map.getImpl().updateResolutionsFromBaseLayer();
+        if (!M.utils.isNullOrEmpty(oldBbox)) {
+          this.map.setBbox(oldBbox);
+        }
+      }
+      else if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }
     }
@@ -73,11 +88,16 @@ goog.require('ol.layer.Tile');
 
     this.ol3Layer = new ol.layer.Tile({
       source: new M.impl.source.Mapbox({
-        'name': this.name
+        'url': this.url,
+        'name': this.name,
+        'accessToken': this.accessToken
       })
     });
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
+
+    // recalculate resolutions
+    this.resolutions_ = M.utils.generateResolutionsFromExtent(this.getExtent(), this.map.getMapImpl().getSize(), 16, this.map.getProjection().units);
 
     // sets its visibility if it is in range
     if (this.options.visibility !== false) {
@@ -90,6 +110,9 @@ goog.require('ol.layer.Tile');
     if (this.resolutions_ !== null) {
       this.setResolutions(this.resolutions_);
     }
+    // activates animation for base layers or animated parameters
+    let animated = ((this.transparent === false) || (this.options.animated === true));
+    this.ol3Layer.set("animated", animated);
   };
 
   /**
@@ -116,16 +139,24 @@ goog.require('ol.layer.Tile');
           M.impl.envolvedExtent.calculate(this_.map, this_).then(success);
         }
       })).then(function (extent) {
-        var olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
+        var olExtent;
+        if (M.utils.isArray(extent)) {
+          olExtent = extent;
+        }
+        else {
+          olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
+        }
 
         var newSource = new M.impl.source.Mapbox({
-          name: this_.name,
-          tileGrid: new ol.tilegrid.TileGrid({
+          'url': this_.url,
+          'name': this_.name,
+          'accessToken': this_.accessToken,
+          'tileGrid': new ol.tilegrid.TileGrid({
             resolutions: resolutions,
             extent: olExtent,
             origin: ol.extent.getBottomLeft(olExtent)
           }),
-          extent: olExtent
+          'extent': olExtent
         });
         this_.ol3Layer.setSource(newSource);
       });
@@ -145,7 +176,40 @@ goog.require('ol.layer.Tile');
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       extent = ol.proj.get(this.map.getProjection().code).getExtent();
     }
-    return extent;
+    return {
+      "x": {
+        "min": extent[0],
+        "max": extent[2]
+      },
+      "y": {
+        "min": extent[1],
+        "max": extent[3]
+      }
+    };
+  };
+
+  /**
+   * This function gets the min resolution for
+   * this WMS
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.layer.Mapbox.prototype.getMinResolution = function () {
+    return this.resolutions_[0];
+  };
+
+  /**
+   * This function gets the max resolution for
+   * this WMS
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.layer.Mapbox.prototype.getMaxResolution = function () {
+    return this.resolutions_[this.resolutions_.length - 1];
   };
 
   /**

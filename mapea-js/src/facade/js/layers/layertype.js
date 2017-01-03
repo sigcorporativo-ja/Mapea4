@@ -75,7 +75,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.MAPBOX = 'Mapbox';
+  M.layer.type.Mapbox = 'Mapbox';
 
   /**
    * GeoJSON type
@@ -97,8 +97,14 @@ goog.require('M.layer');
     if (type === 'WMS_FULL') {
       type = M.layer.type.WMS;
     }
-    if (type === 'WFST') {
+    else if (type === 'WFST') {
       type = M.layer.type.WFS;
+    }
+    else {
+      type = Object.keys(M.layer.type).find(function (knowType) {
+        let knowTypeVal = M.layer.type[knowType];
+        return (M.utils.isString(knowTypeVal) && (M.utils.normalize(knowTypeVal, true) === type));
+      });
     }
     return M.layer.type[type];
   };

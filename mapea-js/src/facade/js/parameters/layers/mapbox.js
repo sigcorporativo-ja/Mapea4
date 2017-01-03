@@ -34,10 +34,19 @@ goog.require('M.exception');
       var layerObj = {};
 
       // gets the layer type
-      layerObj.type = M.layer.type.MAPBOX;
+      layerObj.type = M.layer.type.Mapbox;
+
+      // gets the name
+      layerObj.url = getURL(userParam);
 
       // gets the name
       layerObj.name = getName(userParam);
+
+      // gets the transparent
+      layerObj.transparent = getTransparent(userParam);
+
+      // gets the accessToken
+      layerObj.accessToken = getAccessToken(userParam);
 
       // gets the legend
       layerObj.legend = getLegend(userParam);
@@ -57,18 +66,56 @@ goog.require('M.exception');
    * @private
    * @function
    */
+  var getURL = function (parameter) {
+    var url;
+    if (M.utils.isString(parameter)) {
+      url = null; // URL by string type no supported
+    }
+    else if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.url)) {
+      url = parameter.url.trim();
+    }
+    else if (!M.utils.isObject(parameter)) {
+      M.exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
+    }
+    return url;
+  };
+
+  /**
+   * Parses the parameter in order to get the layer name
+   * @private
+   * @function
+   */
+  var getAccessToken = function (parameter) {
+    var accessToken;
+    if (M.utils.isString(parameter)) {
+      accessToken = null; // accessToken by string type no supported
+    }
+    else if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.accessToken)) {
+      accessToken = parameter.accessToken.trim();
+    }
+    else if (!M.utils.isObject(parameter)) {
+      M.exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
+    }
+    return accessToken;
+  };
+
+  /**
+   * Parses the parameter in order to get the layer name
+   * @private
+   * @function
+   */
   var getName = function (parameter) {
     var name, params;
     if (M.utils.isString(parameter)) {
       if (/^MAPBOX\*.+/i.test(parameter)) {
-        // <MAPBOX>*<NAME>(*<TITLE>)?
-        if (/^MAPBOX\*[^\*]+(\*[^\*]+)?/i.test(parameter)) {
+        // <MAPBOX>*<NAME>(*<TRANSPARENT>)?(*<TITLE>)?
+        if (/^MAPBOX\*[^\*]+(\*[^\*]+){0,2}/i.test(parameter)) {
           params = parameter.split(/\*/);
           name = params[1].trim();
         }
       }
-      // <NAME>(*<TITLE>)?
-      else if (/^[^\*]+(\*[^\*]+)?/.test(parameter)) {
+      // <NAME>(*<TRANSPARENT>)?(*<TITLE>)?
+      else if (/^[^\*]+(\*[^\*]+){0,2}/.test(parameter)) {
         params = parameter.split(/\*/);
         name = params[0].trim();
       }
@@ -87,6 +134,39 @@ goog.require('M.exception');
   };
 
   /**
+   * Parses the parameter in order to get the layer name
+   * @private
+   * @function
+   */
+  var getTransparent = function (parameter) {
+    var transparent, params;
+    if (M.utils.isString(parameter)) {
+      if (/^MAPBOX\*.+/i.test(parameter)) {
+        // <MAPBOX>*<NAME>*<TRANSPARENT>(*<TITLE>)?
+        if (/^MAPBOX\*[^\*]+\*[^\*]+(\*[^\*]+)?/i.test(parameter)) {
+          params = parameter.split(/\*/);
+          transparent = params[2].trim();
+        }
+      }
+      // <NAME>*<TRANSPARENT>(*<TITLE>)?
+      else if (/^[^\*]+\*[^\*]+(\*[^\*]+)?/.test(parameter)) {
+        params = parameter.split(/\*/);
+        transparent = params[1].trim();
+      }
+    }
+    else if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.transparent)) {
+      transparent = M.utils.normalize(parameter.transparent);
+    }
+    else if (!M.utils.isObject(parameter)) {
+      M.exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
+    }
+    if (!M.utils.isNullOrEmpty(transparent)) {
+      transparent = /^1|(true)$/i.test(transparent);
+    }
+    return transparent;
+  };
+
+  /**
    * Parses the parameter in order to get the layer legend
    * @private
    * @function
@@ -95,16 +175,16 @@ goog.require('M.exception');
     var legend, params;
     if (M.utils.isString(parameter)) {
       if (/^MAPBOX\*.+/i.test(parameter)) {
-        // <MAPBOX>*<NAME>*<TITLE>
-        if (/^MAPBOX\*[^\*]+\*[^\*]+/i.test(parameter)) {
+        // <MAPBOX>*<NAME>*<TRANSPARENT>*<TITLE>
+        if (/^MAPBOX\*[^\*]+\*[^\*]+\*[^\*]+/i.test(parameter)) {
           params = parameter.split(/\*/);
-          legend = params[2].trim();
+          legend = params[3].trim();
         }
       }
-      // <NAME>*<TITLE>
-      else if (/^[^\*]+\*[^\*]+/.test(parameter)) {
+      // <NAME>*<TRANSPARENT>*<TITLE>
+      else if (/^[^\*]+\*[^\*]+\*[^\*]+/.test(parameter)) {
         params = parameter.split(/\*/);
-        legend = params[1].trim();
+        legend = params[2].trim();
       }
     }
     else if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.legend)) {
