@@ -65,6 +65,12 @@ goog.provide('P.impl.control.Printer');
          else if (layer.type === M.layer.type.WFS) {
             success(this_.encodeWFS(layer));
          }
+         else if (layer.type === M.layer.type.GeoJSON) {
+           /*se reutiliza el codificador WFS ya, aunque ya está en geojson,
+             el proceso a realizar es el mismo y recodificar en geojson no
+             penaliza*/
+            success(this_.encodeWFS(layer));
+         }
          else if (layer.type === M.layer.type.WMTS) {
             this_.encodeWMTS(layer).then(function(encodedLayer) {
                success(encodedLayer);
@@ -146,6 +152,7 @@ goog.provide('P.impl.control.Printer');
          if (!M.utils.isNullOrEmpty(styleFn)) {
             var featureStyle = styleFn.call(feature, resolution)[0];
             if (!M.utils.isNullOrEmpty(featureStyle)) {
+
                var img = featureStyle.getImage();
                var imgSize = img.getImageSize();
                if (M.utils.isNullOrEmpty(imgSize)) {
@@ -160,6 +167,32 @@ goog.provide('P.impl.control.Printer');
                   "graphicOpacity": img.getOpacity(),
                   "strokeWidth": stroke.getWidth()
                };
+               var text = (featureStyle.getText && featureStyle.getText());
+               if (!M.utils.isNullOrEmpty(text)){
+                 style = Object.assign(style, {
+                     "label" : M.utils.isNullOrEmpty(text.getText()) ? feature.get("name") : text.getText(),
+                     "fontColor": M.utils.isNullOrEmpty(text.getFill()) ? ""
+                                  : M.utils.rgbToHex(M.utils.isArray(text.getFill().getColor())?
+                                                    "rgba(" + text.getFill().getColor().toString()+")"
+                                                    : text.getFill().getColor()),
+                     //text.getFont() -->"bold 13px Helvetica, sans-serif"
+                     "fontSize": "11px",
+                     "fontFamily": "Helvetica, sans-serif",
+                     "fontWeight": "bold",
+                     //
+                     "labelAlign": text.getTextAlign(),
+                     "labelXOffset": text.getOffsetX(),
+                     "labelYOffset": text.getOffsetY(),
+                     //no pinta la línea
+                     "labelOutlineColor": M.utils.isNullOrEmpty(text.getStroke()) ? ""
+                                          : M.utils.rgbToHex(M.utils.isArray(text.getStroke().getColor())?
+                                                            "rgba(" + text.getStroke().getColor().toString()+")"
+                                                            : text.getStroke().getColor()),
+                     "labelOutlineWidth": M.utils.isNullOrEmpty(text.getStroke()) ? ""
+                                          : text.getStroke().getWidth()
+                   });
+               }
+
 
                if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
                   var styleStr = JSON.stringify(style);
@@ -281,27 +314,57 @@ goog.provide('P.impl.control.Printer');
       features.forEach(function(feature) {
          var geometry = feature.getGeometry();
          var featureStyle;
+          var fStyle = feature.getStyle();
 
-         var styleFn = feature.getStyle();
-         if (!M.utils.isNullOrEmpty(styleFn)) {
-            featureStyle = styleFn.call(feature, resolution)[0];
-         }
-         else if (!M.utils.isNullOrEmpty(layerStyle)) {
+          if (!M.utils.isNullOrEmpty(fStyle)){
+            featureStyle = fStyle;
+          }else if(!M.utils.isNullOrEmpty(layerStyle)) {
             featureStyle = layerStyle;
-         }
+          }
+
+          if (featureStyle instanceof Function) {
+            featureStyle = featureStyle.call(featureStyle, feature, resolution);
+          }
+
+          if (featureStyle instanceof Array){
+            featureStyle = featureStyle[0];
+          }
 
          if (!M.utils.isNullOrEmpty(featureStyle)) {
-            var stroke = featureStyle.getStroke();
-            var fill = featureStyle.getFill();
             var image = featureStyle.getImage();
+            var imgSize = M.utils.isNullOrEmpty(image) ? [0,0] : (image.getImageSize() || [24,24]);
+            var text = featureStyle.getText();
+            var stroke = featureStyle.getStroke() || (image.getStroke && image.getStroke());
+            var fill = featureStyle.getFill() || (image.getFill && image.getFill());
+
             var style = {
-               "fillColor": M.utils.rgbToHex(fill.getColor()),
-               "fillOpacity": M.utils.getOpacityFromRgba(fill.getColor()),
-               "strokeColor": M.utils.rgbToHex(stroke.getColor()),
-               "strokeOpacity": M.utils.getOpacityFromRgba(stroke.getColor()),
-               "strokeWidth": stroke.getWidth(),
-               "pointRadius": image.getRadius()
+               "fillColor": M.utils.isNullOrEmpty(fill) ? "" : M.utils.rgbToHex(fill.getColor()),
+               "fillOpacity": M.utils.isNullOrEmpty(fill) ? "" : M.utils.getOpacityFromRgba(fill.getColor()),
+               "strokeColor": M.utils.isNullOrEmpty(stroke) ? "" : M.utils.rgbToHex(stroke.getColor()),
+               "strokeOpacity": M.utils.isNullOrEmpty(stroke) ? "" : M.utils.getOpacityFromRgba(stroke.getColor()),
+               "strokeWidth": M.utils.isNullOrEmpty(stroke) ? "" : (stroke.getWidth && stroke.getWidth()),
+               "pointRadius": M.utils.isNullOrEmpty(image) ? "" : (image.getRadius && image.getRadius()),
+               "externalGraphic": M.utils.isNullOrEmpty(image) ? "" : (image.getSrc && image.getSrc()),
+               "graphicHeight": imgSize[0],
+               "graphicWidth": imgSize[1],
             };
+            if (!M.utils.isNullOrEmpty(text)){
+              style = Object.assign(style, {
+                  "label" : text.getText(),
+                  "fontColor": M.utils.isNullOrEmpty(text.getFill()) ? "" : M.utils.rgbToHex(text.getFill().getColor()),
+                  //fuente a mano ya que ol3: text.getFont() -->"bold 13px Helvetica, sans-serif"
+                  "fontSize": "11px",
+                  "fontFamily": "Helvetica, sans-serif",
+                  "fontWeight": "bold",
+                  //
+                  "labelAlign": text.getTextAlign(),
+                  "labelXOffset": text.getOffsetX(),
+                  "labelYOffset": text.getOffsetY(),
+                  //no pinta la línea
+                  "labelOutlineColor": M.utils.isNullOrEmpty(text.getStroke()) ? "" : M.utils.rgbToHex(text.getStroke().getColor()),
+                  "labelOutlineWidth": M.utils.isNullOrEmpty(text.getStroke()) ? "" : text.getStroke().getWidth()
+                });
+            }
 
             if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
                var styleStr = JSON.stringify(style);
@@ -446,7 +509,7 @@ goog.provide('P.impl.control.Printer');
          'type': 'OSM',
          'extension': "png"
       };
-      
+
       return encodedLayer;
 
    };
