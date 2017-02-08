@@ -111,11 +111,6 @@ goog.require('ol.extent');
       this.options.animated = false; // by default
     }
 
-    // check for user resolutions setted in constructor
-    if (!M.utils.isNullOrEmpty(this.options.userResolutions)) {
-      // this.resolutions_ = this.options.userResolutions;
-    }
-
     // calls the super constructor
     goog.base(this, this.options);
 
@@ -245,7 +240,8 @@ goog.require('ol.extent');
           };
         }
 
-        if (!M.utils.isNullOrEmpty(resolutions)) {
+
+        if (this_.transparent !== false && !M.utils.isNullOrEmpty(resolutions) && !M.utils.isNullOrEmpty(this_.options.minResolution) && !M.utils.isNullOrEmpty(this_.options.maxResolution)) {
           this_.options.minResolution = resolutions[resolutions.length - 1];
           this_.options.maxResolution = resolutions[0];
         }
@@ -305,8 +301,10 @@ goog.require('ol.extent');
           extent: olExtent,
           origin: ol.extent.getBottomLeft(olExtent)
         });
-        this.options.minResolution = resolutions[resolutions.length - 1];
-        this.options.maxResolution = resolutions[0];
+        if (this.transparent !== false && !M.utils.isNullOrEmpty(this.options.minResolution) && !M.utils.isNullOrEmpty(this.options.maxResolution)) {
+          this.options.minResolution = resolutions[resolutions.length - 1];
+          this.options.maxResolution = resolutions[0];
+        }
       }
 
       var layerParams = {};
