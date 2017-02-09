@@ -177,7 +177,11 @@ goog.require('ol.extent');
     this.map = map;
 
     // calculates the resolutions from scales
-    if (!M.utils.isNull(this.options) && !M.utils.isNull(this.options.minScale) && !M.utils.isNull(this.options.maxScale)) {
+    if (!M.utils.isNullOrEmpty(this.resolutions_)) {
+      this.options.minResolution = this.resolutions_[0];
+      this.options.maxResolution = this.resolutions_[this.resolutions_.length - 1];
+    }
+    else if (!M.utils.isNull(this.options) && !M.utils.isNull(this.options.minScale) && !M.utils.isNull(this.options.maxScale)) {
       var units = this.map.getProjection().units;
       this.options.minResolution = M.utils.getResolutionFromScale(this.options.minScale, units);
       this.options.maxResolution = M.utils.getResolutionFromScale(this.options.maxScale, units);
@@ -211,7 +215,6 @@ goog.require('ol.extent');
    */
   M.impl.layer.WMS.prototype.setResolutions = function (resolutions) {
     this.resolutions_ = resolutions;
-
     if ((this.tiled === true) && !M.utils.isNullOrEmpty(this.ol3Layer)) {
       // gets the extent
       var this_ = this;
@@ -237,6 +240,12 @@ goog.require('ol.extent');
           };
         }
 
+
+        if (this_.transparent !== false && !M.utils.isNullOrEmpty(resolutions) && !M.utils.isNullOrEmpty(this_.options.minResolution) && !M.utils.isNullOrEmpty(this_.options.maxResolution)) {
+          this_.options.minResolution = resolutions[resolutions.length - 1];
+          this_.options.maxResolution = resolutions[0];
+        }
+
         var newSource;
         if (this_.tiled === true) {
           newSource = new ol.source.TileWMS({
@@ -246,7 +255,12 @@ goog.require('ol.extent');
               resolutions: resolutions,
               extent: olExtent,
               origin: ol.extent.getBottomLeft(olExtent)
-            })
+            }),
+            extent: olExtent,
+            minResolution: this_.options.minResolution,
+            maxResolution: this_.options.maxResolution,
+            opacity: this.opacity_,
+            zIndex: this.zIndex_
           });
         }
         else {
@@ -287,6 +301,10 @@ goog.require('ol.extent');
           extent: olExtent,
           origin: ol.extent.getBottomLeft(olExtent)
         });
+        if (this.transparent !== false && !M.utils.isNullOrEmpty(this.options.minResolution) && !M.utils.isNullOrEmpty(this.options.maxResolution)) {
+          this.options.minResolution = resolutions[resolutions.length - 1];
+          this.options.maxResolution = resolutions[0];
+        }
       }
 
       var layerParams = {};

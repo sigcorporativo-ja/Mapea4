@@ -234,7 +234,6 @@ goog.require('M.window');
         this.addControls(getFeatureInfo);
       }
     }
-
     // default WMC
     if (M.utils.isNullOrEmpty(params.wmc) && M.utils.isNullOrEmpty(params.layers)) {
       this.addWMC(M.config.predefinedWMC.predefinedNames[0]);
@@ -242,33 +241,33 @@ goog.require('M.window');
 
     // maxExtent
     if (!M.utils.isNullOrEmpty(params.maxExtent)) {
-      this.setMaxExtent(params.maxExtent, false);
+      let zoomToMaxExtent = M.utils.isNullOrEmpty(params.zoom) && M.utils.isNullOrEmpty(params.bbox);
+      this.setMaxExtent(params.maxExtent, zoomToMaxExtent);
     }
 
+    // center
+    if (!M.utils.isNullOrEmpty(params.center)) {
+      this.setCenter(params.center);
+    }
     else {
-      // center
-      if (!M.utils.isNullOrEmpty(params.center)) {
-        this.setCenter(params.center);
-      }
-      else {
-        this._finishedInitCenter = false;
-        this.getInitCenter_().then(function (initCenter) {
-          // checks if the user stablished a center while it was
-          // calculated
-          let newCenter = this_.getCenter();
-          if (M.utils.isNullOrEmpty(newCenter)) {
-            newCenter = initCenter;
-            this_.setCenter(newCenter);
-          }
+      this._finishedInitCenter = false;
+      this.getInitCenter_().then(function (initCenter) {
+        // checks if the user stablished a center while it was
+        // calculated
+        let newCenter = this_.getCenter();
+        if (M.utils.isNullOrEmpty(newCenter)) {
+          newCenter = initCenter;
+          this_.setCenter(newCenter);
+        }
 
-          this_._finishedInitCenter = true;
-          this_._checkCompleted();
-        });
-      }
-      // zoom
-      if (!M.utils.isNullOrEmpty(params.zoom)) {
-        this.setZoom(params.zoom);
-      }
+        this_._finishedInitCenter = true;
+        this_._checkCompleted();
+      });
+    }
+
+    // zoom
+    if (!M.utils.isNullOrEmpty(params.zoom)) {
+      this.setZoom(params.zoom);
     }
 
     // label
