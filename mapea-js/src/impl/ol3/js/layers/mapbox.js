@@ -27,6 +27,12 @@ goog.require('ol.layer.Tile');
      */
     this.resolutions_ = null;
 
+    //Añadir plugin attributions
+    this.hasAttributtion = false;
+
+    //Tiene alguna capa que necesite el attributions
+    this.haveOSMorMapboxLayer = false;
+
     // sets visibility
     if (options.visibility === false) {
       this.visibility = false;
@@ -96,12 +102,24 @@ goog.require('ol.layer.Tile');
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
+    this.map.getMapImpl().getControls().getArray().forEach(function (cont) {
+      if (cont instanceof ol.control.Attribution) {
+        this.hasAttributtion = true;
+      }
+    }, this);
+    if (!this.hasAttributtion) {
+      this.map.getMapImpl().addControl(new ol.control.Attribution({
+        className: 'ol-attribution ol-unselectable ol-control ol-collapsed m-attribution'
+      }));
+      this.hasAttributtion = false;
+    }
+
     // recalculate resolutions
     this.resolutions_ = M.utils.generateResolutionsFromExtent(this.getExtent(), this.map.getMapImpl().getSize(), 16, this.map.getProjection().units);
 
     // sets its visibility if it is in range
-    if (this.options.visibility !== false) {
-      this.setVisible(this.inRange());
+    if (this.isVisible() && !this.inRange()) {
+      this.setVisible(false);
     }
     if (this.zIndex_ !== null) {
       this.setZIndex(this.zIndex_);
@@ -156,7 +174,8 @@ goog.require('ol.layer.Tile');
             extent: olExtent,
             origin: ol.extent.getBottomLeft(olExtent)
           }),
-          'extent': olExtent
+          'extent': olExtent,
+          attributionControl: true
         });
         this_.ol3Layer.setSource(newSource);
       });
@@ -225,6 +244,20 @@ goog.require('ol.layer.Tile');
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
+    }
+
+    this.map.getLayers().forEach(function (lay) {
+      if (lay instanceof M.layer.Mapbox || lay instanceof M.layer.OSM) {
+        this.haveOSMorMapboxLayer = true;
+      }
+    }, this);
+
+    if (!this.haveOSMorMapboxLayer) {
+      this.map.getImpl().getMapImpl().getControls().getArray().forEach(function (data) {
+        if (data instanceof ol.control.Attribution) {
+          this.map.getImpl().getMapImpl().removeControl(data);
+        }
+      });
     }
     this.map = null;
   };
