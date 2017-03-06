@@ -1,0 +1,17 @@
+{
+   "opts": {
+      "recurse": true,
+      "template": "grunt-tasks/utilities/jsdoc/info"
+   },
+   "tags": {
+      "allowUnknownTags": true
+   },
+   "source": {
+      "includePattern": "\\.js$"
+   },
+   "plugins": [
+        "grunt-tasks/utilities/jsdoc/info/api-plugin",
+        "grunt-tasks/utilities/jsdoc/info/define-plugin",
+        "grunt-tasks/utilities/jsdoc/info/virtual-plugin"
+    ]
+}

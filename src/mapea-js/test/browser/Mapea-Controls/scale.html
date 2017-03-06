@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+
+   <title>Mapea Tests</title>
+   <link href="../test.css" rel="stylesheet" />
+   <link href="../../../build/core/4.0.0-SNAPSHOT/css/mapea.ol3.min.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script src="../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+   <script src="../../../build/core/4.0.0-SNAPSHOT/js/configuration.js"></script>
+
+   <script type="text/javascript">
+      M.map({
+         container: 'mapa',
+         wmc: new M.layer.WMC({
+            name: 'cdau',
+            url: 'http://www.callejerodeandalucia.es/wmc/context_cdau_callejero.xml'
+         }),
+         maxExtent: {
+            left: 96497.813642565,
+            bottom: 3959999.4840389,
+            right: 622003.74990423,
+            top: 4300000.6565066
+         },
+         controls: ['scale'],
+         resolutions: [
+             490.4640841686878,
+             296.4735539465016,
+             179.21101876124024,
+             108.32868165784868,
+             65.48204095286125,
+             39.58229364311229,
+             23.92652927811816,
+             14.463002282240476,
+             8.742531463073329,
+             5.284646637764822,
+             3.194439757408831,
+             1.9309607743291293,
+             1.167218603309086,
+             0.7055551236581433,
+             0.4264908313738002,
+             0.25780328587628126
+          ]
+      });
+   </script>
+</body>
+
+</html>

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <title>PRUEBA DESARROLLO</title>
+
+   <!-- styles -->
+   <!-- styles -->
+   <link href="../../libraries/components-font-awesome/font-awesome.css" rel="stylesheet" />
+   <link href="../../src/impl/ol3/css/ol3.css" rel="stylesheet" />
+   <link href="../../src/impl/ol3/css/custom.css" rel="stylesheet" />
+   <link href="../../src/facade/css/fonts.css" rel="stylesheet" />
+   <link href="../../src/facade/css/popup.css" rel="stylesheet" />
+   <link href="../../src/facade/css/controls/getfeatureinfo.css" rel="stylesheet" />
+   <link href="../../src/facade/css/controls/layerswitcher.css" rel="stylesheet" />
+   <link href="../../src/facade/css/controls/location.css" rel="stylesheet" />
+   <link href="../../src/facade/css/controls/scale.css" rel="stylesheet" />
+   <link href="../../src/facade/css/controls/wmcselector.css" rel="stylesheet" />
+   <link href="../../src/facade/css/mapea.css" rel="stylesheet" />
+   <style rel="stylesheet">
+      html,
+      body {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+         overflow: hidden;
+      }
+   </style>
+
+   <!-- plugin -->
+   <link href="../../src/plugins/geosearchbylocation/facade/css/geosearchbylocation.css" rel="stylesheet" />
+</head>
+
+<body>
+   <!-- container -->
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script type="text/javascript" src="../../libraries/proj4/proj4.js"></script>
+   <script type="text/javascript" src="../../libraries/closure/closure/goog/base.js"></script>
+   <script type="text/javascript" src="../mapea.deps.js"></script>
+   <script type="text/javascript" src="../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+   <script type="text/javascript" src="geosearchbylocation.js"></script>
+   <!-- plugin -->
+  <script type="text/javascript" src="../../src/configuration.js"></script> 
+
+   <script type="application/javascript">
+      var mapa = M.map({
+         container: 'mapa',
+         wmcfile: ['callejero']
+      });
+      
+      // 5. Creates the plugin
+      plugin = new M.plugin.Geosearchbylocation({
+          'url': 'http://geobusquedas-sigc.juntadeandalucia.es',
+          'core': 'sigc',
+          'handler': '/search',
+          'distance' : 600,
+          'spatialField': "geom",
+          'params': {
+             'rows': 102
+          }
+       });
+
+       // 6. Adds the plugin into the map
+      mapa.addPlugin(plugin);
+   </script>
+</body>
+
+</html>

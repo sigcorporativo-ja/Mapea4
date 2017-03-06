@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!--
+
+    Empresa desarrolladora: GUADALTEL S.A.
+
+    Autor: Junta de Andalucía
+
+    Derechos de explotación propiedad de la Junta de Andalucía.
+
+    Este programa es software libre: usted tiene derecho a redistribuirlo y/o modificarlo bajo los términos de la
+
+    Licencia EUPL European Public License publicada por el organismo IDABC de la Comisión Europea, en su versión 1.0.
+    o posteriores.
+
+    Este programa se distribuye de buena fe, pero SIN NINGUNA GARANTÍA, incluso sin las presuntas garantías implícitas
+    de USABILIDAD o ADECUACIÓN A PROPÓSITO CONCRETO. Para mas información consulte la Licencia EUPL European Public
+    License.
+
+    Usted recibe una copia de la Licencia EUPL European Public License junto con este programa, si por algún motivo no
+    le es posible visualizarla, puede consultarla en la siguiente URL: http://ec.europa.eu/idabc/servlets/Doc?id=31099
+
+    You should have received a copy of the EUPL European Public License along with this program. If not, see
+    http://ec.europa.eu/idabc/servlets/Doc?id=31096
+
+    Vous devez avoir reçu une copie de la EUPL European Public License avec ce programme. Si non, voir
+    http://ec.europa.eu/idabc/servlets/Doc?id=30194
+
+    Sie sollten eine Kopie der EUPL European Public License zusammen mit diesem Programm. Wenn nicht, finden Sie da
+    http://ec.europa.eu/idabc/servlets/Doc?id=29919
+
+-->
+<!DOCTYPE log4j:configuration PUBLIC "-//LOGGER" "http://logging.apache.org/log4j/1.2/apidocs/org/apache/log4j/xml/doc-files/log4j.dtd">
+
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/">
+  <!-- CONSOLE -->
+  <appender name="console" class="org.apache.log4j.ConsoleAppender">
+    <param name="Target" value="System.out" />
+    <layout class="org.apache.log4j.PatternLayout">
+      <param name="ConversionPattern" value="%-5p %c{1} - %m%n" />
+    </layout>
+  </appender>
+  
+  <!-- FILE -->
+  <appender name="file" class="org.apache.log4j.DailyRollingFileAppender">
+     <param name="File" value="/opt/entornos/aplicaciones/comun/logs/panelsigc/panelsigc.log"/>
+     <param name="Append" value="true"/>
+     <param name="DatePattern" value="'.'yyyy-MM-dd"/>
+     <layout class="org.apache.log4j.PatternLayout">
+          <param name="ConversionPattern" value="%d{[HH:mm:ss,SSS]} %5p %C: %m%n" />
+      </layout>
+  </appender>
+    
+  <root>
+    <priority value="info" />
+    <appender-ref ref="console" />
+    <appender-ref ref="file" />
+  </root>
+
+</log4j:configuration>

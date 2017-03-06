@@ -1,0 +1,107 @@
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>Mocha Tests</title>
+   <link href="../../../../libraries/mocha/mocha.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="mocha"></div>
+   <div id="mapa"></div>
+   <div id="constructor-tests"></div>
+
+   <!-- libraries -->
+   <script src="../../../../libraries/babel-polyfill/browser-polyfill.js"></script>
+   <script src="../../../../libraries/chai/chai.js"></script>
+   <script src="../../../../libraries/mocha/mocha.js"></script>
+   <script src="../../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+
+   <!-- tests -->
+   <script src="../../main-suite.js"></script>
+   <script src="js/asserts/asserts.js"></script>
+   <script src="js/suites/suite-wfs-layer.js"></script>
+   <script src="js/suites/suite-wfs-obj.js"></script>
+   <script src="js/suites/suite-addWFS.js"></script>
+   <script src="js/suites/suite-getWFS.js"></script>
+   <script src="js/suites/suite-removeWFS.js"></script>
+   <script src="js/suites/suite-addLayers.js"></script>
+   <script src="js/suites/suite-getLayers.js"></script>
+   <script src="js/suites/suite-removeLayers.js"></script>
+   <script src="js/suites/suite-constructor-wfs.js"></script>
+   <script src="js/suites/suite-constructor-layer.js"></script>
+   <script type="text/javascript">
+      mapeaSuite('Capas WFS', function () {
+         // params
+         // wfs 1 [POINT]
+         window.URL_POINT = 'http://clientes.guadaltel.es/desarrollo/geossigc/wfs?';
+         window.NAME_POINT = 'municipios_pun_wfst';
+         window.TITLE_POINT = 'Puntos';
+         window.NAMESPACE_POINT = 'callejero';
+         window.GEOM_POINT = 'POINT';
+         window.CQL_POINT = "INTERSECT(the_geom,%20POINT%20(-74.817265%2040.5296504));TATE_NAME IN ('New York', 'California', 'Montana', 'Texas')";
+         window.VERSION_POINT = '1.1.0';
+         window.FEATURE_ID1_POINT = '3826';
+         window.FEATURE_ID2_POINT = '3834';
+         // wfs 2 [MULTILINESTRING]
+         window.URL_LINE = 'http://clientes.guadaltel.es/desarrollo/geossigc/wfs?';
+         window.NAME_LINE = 'prueba_lin_wfst';
+         window.TITLE_LINE = 'Lineas';
+         window.NAMESPACE_LINE = 'callejero';
+         window.GEOM_LINE = 'MLINE';
+         window.CQL_LINE = "INTERSECT(the_geom,%20POINT%20(-74.817265%2040.5296504));TATE_NAME IN ('New York', 'California', 'Montana', 'Texas')";
+         window.VERSION_LINE = '1.1.0';
+
+         window.FEATURE_ID1_LINE = '3826';
+         window.FEATURE_ID2_LINE = '3834';
+
+         // wfs 3 [MULTYPOLYGON]
+         window.URL_POL = 'http://clientes.guadaltel.es/desarrollo/geossigc/wfs?';
+         window.NAME_POL = 'prueba_pol_wfst';
+         window.TITLE_POL = 'Polígonos';
+         window.NAMESPACE_POL = 'callejero';
+         window.GEOM_POL = 'MPOLYGON';
+         window.CQL_POL = "INTERSECT(the_geom,%20POINT%20(-74.817265%2040.5296504));TATE_NAME IN ('New York', 'California', 'Montana', 'Texas')";
+         window.VERSION_POL = '1.1.0';
+
+         window.FEATURE_ID1_POL = '3826';
+         window.FEATURE_ID2_POL = '3834';
+
+         // wfs type
+         window.WFS = 'WFS';
+         window.wfS = 'wfS';
+         window.WFST = 'WFST';
+         window.wfST = 'wfST';
+
+         window.map;
+
+         suiteSetup(function () {
+            // supress console logging
+            if (window.console && window.console.error) {
+               window.console.error = function () {};
+            }
+         });
+
+         setup(function () {
+            map = M.map('mapa');
+         });
+
+         teardown(function () {
+            map.destroy();
+         });
+
+         mapeaSuite.wfs.object();
+         //         mapeaSuite.wfs.layer();
+         //         mapeaSuite.wfs.addWMS();
+         //         mapeaSuite.wfs.getWMS();
+         //         mapeaSuite.wfs.removeWMS();
+         //         mapeaSuite.wfs.addLayers();
+         //         mapeaSuite.wfs.getLayers();
+         //         mapeaSuite.wfs.removeLayers();
+         //         mapeaSuite.wfs.constructorWMS();
+         //         mapeaSuite.wfs.constructorLayer();
+      });
+   </script>
+</body>
+
+</html>

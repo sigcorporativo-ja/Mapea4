@@ -1,0 +1,23 @@
+.m-wmcselector-container {
+   bottom: 8px;
+   right: 60px;
+   display: block;
+   /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);*/
+   padding: 0px;
+   margin: 0px;
+}
+
+.m-wmcselector-container:before {
+   font-family: 'g-cartografia' !important;
+}
+
+.m-wmcselector-select {
+   border: none;
+   background-color: #FEFEFE;
+   color: #6C6C6C;
+   font-weight: normal;
+   text-decoration: none;
+   outline: none;
+   margin: 0px;
+   -webkit-appearance: none;
+}

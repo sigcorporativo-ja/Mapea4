@@ -1,0 +1,81 @@
+<assembly xmlns="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/plugins/maven-assembly-plugin/assembly/1.1.3 http://maven.apache.org/xsd/assembly-1.1.3.xsd">
+   <id>debug-resources</id>
+   <formats>
+      <format>zip</format>
+   </formats>
+   <includeBaseDirectory>false</includeBaseDirectory>
+   <fileSets>
+      <!-- closure sources -->
+      <fileSet>
+         <directory>libraries/closure/closure/goog</directory>
+         <outputDirectory>debug/closure/</outputDirectory>
+      </fileSet>
+      <!-- handlebars sources -->
+      <fileSet>
+         <directory>libraries/handlebars</directory>
+         <outputDirectory>debug/</outputDirectory>
+      </fileSet>
+      <!-- proj4js sources -->
+      <fileSet>
+         <directory>libraries/proj4</directory>
+         <outputDirectory>debug/</outputDirectory>
+      </fileSet>
+      <!-- ol3 css sources -->
+      <fileSet>
+         <directory>libraries/ol3/css</directory>
+         <outputDirectory>debug/ol3/css</outputDirectory>
+      </fileSet>
+      <!-- ol3 js sources -->
+      <fileSet>
+         <directory>libraries/ol3/src/ol</directory>
+         <outputDirectory>debug/ol3/js</outputDirectory>
+      </fileSet>
+      <!-- ol3 externs -->
+      <fileSet>
+         <directory>libraries/ol3/externs</directory>
+         <outputDirectory>debug/ol3/js</outputDirectory>
+      </fileSet>
+      <fileSet>
+         <directory>externs/ol3</directory>
+         <outputDirectory>debug/externs/ol3</outputDirectory>
+      </fileSet>
+      <!-- ol3-popup css -->
+      <fileSet>
+         <directory>libraries/ol3-popup/</directory>
+         <includes>
+            <include>**/*.css</include>
+         </includes>
+         <outputDirectory>debug/ol3/css</outputDirectory>
+      </fileSet>
+      <!-- ol3-popup js -->
+      <fileSet>
+         <directory>libraries/ol3-popup/</directory>
+         <includes>
+            <include>**/*.js</include>
+         </includes>
+         <outputDirectory>debug/ol3/js</outputDirectory>
+      </fileSet>
+      <!-- mapea sources -->
+      <fileSet>
+         <directory>src</directory>
+         <includes>
+            <include>facade/**/*</include>
+            <include>impl/**/*</include>
+            <include>plugins/**/*</include>
+         </includes>
+         <outputDirectory>debug/mapea/</outputDirectory>
+      </fileSet>
+      <fileSet>
+         <directory>externs</directory>
+         <outputDirectory>debug/mapea/</outputDirectory>
+      </fileSet>
+      <!-- dependencies -->
+      <fileSet>
+         <directory>build/core/${project.version}/js/</directory>
+         <includes>
+            <include>*.deps.js</include>
+         </includes>
+         <outputDirectory>debug/</outputDirectory>
+      </fileSet>
+   </fileSets>
+</assembly>

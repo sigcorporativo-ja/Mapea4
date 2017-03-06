@@ -1,0 +1,21 @@
+<div class="m-popup{{#gt tabs.length 1}} m-has-tabs{{/gt}} m-collapsed">
+    {{#gt tabs.length 1}}
+    <div class="m-tabs">
+        {{#each tabs}}
+        <div class="m-tab{{#eq @index 0}} m-activated{{/eq}}" data-index="{{@index}}">
+            <i class="{{icon}}"></i>
+        </div>
+        {{/each}}
+    </div>
+    {{/gt}}
+    <div class="m-content">
+        <div class="m-header">
+            {{#eq tabs.length 1}}
+            <div class="m-title">{{{tabs.0.title}}}</div>
+            <div class="m-subtitle">{{{tabs.0.subtitle}}}</div>
+            {{/eq}}
+            <a class="m-popup-closer" href="#" title="cerrar popup"></a>
+        </div>
+        <div class="m-body">{{{tabs.0.content}}}</div>
+    </div>
+</div>

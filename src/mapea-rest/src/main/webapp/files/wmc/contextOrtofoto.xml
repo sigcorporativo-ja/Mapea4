@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="ISO-8859-1" standalone="no"?>
+<!--
+
+    Empresa desarrolladora: GUADALTEL S.A.
+
+    Autor: Junta de Andalucía
+
+    Derechos de explotación propiedad de la Junta de Andalucía.
+
+    Este programa es software libre: usted tiene derecho a redistribuirlo y/o modificarlo bajo los términos de la
+
+    Licencia EUPL European Public License publicada por el organismo IDABC de la Comisión Europea, en su versión 1.0.
+    o posteriores.
+
+    Este programa se distribuye de buena fe, pero SIN NINGUNA GARANTÍA, incluso sin las presuntas garantías implícitas
+    de USABILIDAD o ADECUACIÓN A PROPÓSITO CONCRETO. Para mas información consulte la Licencia EUPL European Public
+    License.
+
+    Usted recibe una copia de la Licencia EUPL European Public License junto con este programa, si por algún motivo no
+    le es posible visualizarla, puede consultarla en la siguiente URL: http://ec.europa.eu/idabc/servlets/Doc?id=31099
+
+    You should have received a copy of the EUPL European Public License along with this program. If not, see
+    http://ec.europa.eu/idabc/servlets/Doc?id=31096
+
+    Vous devez avoir reçu une copie de la EUPL European Public License avec ce programme. Si non, voir
+    http://ec.europa.eu/idabc/servlets/Doc?id=30194
+
+    Sie sollten eine Kopie der EUPL European Public License zusammen mit diesem Programm. Wenn nicht, finden Sie da
+    http://ec.europa.eu/idabc/servlets/Doc?id=29919
+
+-->
+
+<ViewContext version="1.1.0" id="atlas_world"
+	xmlns="http://www.opengis.net/context"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.opengis.net/context http://schemas.opengis.net/context/1.1.0/context.xsd">
+	<General>
+		<Window width="1000" height="500" />
+		 <BoundingBox SRS="EPSG:23030" minx="96500" miny="3960000"
+			maxx="622000" maxy="4300000" />
+
+		<!--<BoundingBox SRS="EPSG:900913" minx="-924582.29" miny="4258459.72"
+			maxx="-84386.48" maxy="4679169.12" /> -->
+
+		<Title>CONTEXT BASE</Title>
+		<Extension>
+			<ol:maxExtent xmlns:ol="http://openlayers.org/context"
+				minx="96500" miny="3960000" maxx="622000" maxy="4300000" />
+		</Extension>
+	</General>
+	<LayerList>
+
+	<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
+				<OnlineResource xlink:href="http://www.ideandalucia.es/wms/ortofoto2007?" xlink:type="simple"/>
+			</Server>
+			<Name>oca10_2007</Name>
+			<Title>Ortofoto</Title>
+			<SRS>EPSG:23030</SRS>
+			<FormatList>
+				<Format current="1">image/jpeg</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">false</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">true</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name/>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">2000</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">2300000</sld:MaxScaleDenominator>
+	</Layer>
+
+	<Layer queryable="0" hidden="0">
+			<Server service="OGC:WMS" version="1.1.1" title="raster">
+				<OnlineResource xlink:type="simple"
+					xlink:href="http://www.ideandalucia.es/wms/mta100v_2005" />
+			</Server>
+			<Name>Limites_Provinciales</Name>
+			<Title>Provincias</Title>
+			<SRS>EPSG:23030</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+			</Extension>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">100000</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">2300000</sld:MaxScaleDenominator>
+	</Layer>
+
+	<Layer queryable="0" hidden="0">
+			<Server service="OGC:WMS" version="1.1.1" title="raster">
+				<OnlineResource xlink:type="simple"
+					xlink:href="http://www.ideandalucia.es/wms/mta100v_2005" />
+			</Server>
+			<Name>Nucleos_de_Poblacion</Name>
+			<Title>Poblaciones</Title>
+			<SRS>EPSG:23030</SRS>
+			<FormatList>
+				<Format current="1">image/jpeg</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+			</Extension>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">100000</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">2300000</sld:MaxScaleDenominator>
+	</Layer>
+
+</LayerList>
+</ViewContext>

@@ -1,0 +1,117 @@
+.m-dialog {
+   position: absolute;
+   top: 0;
+   left: 0;
+   z-index: 99999;
+   width: 100%;
+   height: 100%;
+}
+
+
+/**************************
+         MODAL
+/**************************/
+
+.m-dialog > div.m-modal {
+   width: 100%;
+   height: 100%;
+   background-color: rgba(255, 255, 255, 0.5);
+   display: flex;
+   align-items: center;
+}
+
+
+/**************************
+         CONTENT
+/**************************/
+
+.m-dialog > div.m-modal > div.m-content {
+   position: relative;
+   max-height: 70vh;
+   max-width: 70vw;
+   min-width: 30vw;
+   margin: 0 auto;
+   background-color: #fff;
+   padding: 10px;
+   border-radius: 4px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+}
+
+
+/**************************
+         TITLE
+/**************************/
+
+.m-dialog div.m-title {
+   line-height: 40px;
+   text-align: center;
+   font-weight: bold;
+}
+
+
+/**************************
+         MESSAGE
+/**************************/
+
+.m-dialog div.m-message {
+   padding: 5px;
+   padding-bottom: 10px;
+   padding-top: 10px;
+   border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+   font-size: 15px;
+}
+
+
+/**************************
+         BUTTON
+/**************************/
+
+.m-dialog div.m-button > button {
+   background-color: transparent;
+   border: none;
+   box-shadow: none;
+   cursor: pointer;
+   margin-top: 10px;
+   padding: 5px;
+   width: 50px;
+   font-weight: bold;
+}
+
+
+/* OK */
+
+.m-dialog div.m-button {
+   text-align: right
+}
+
+
+/**************************
+         SEVERITY
+/**************************/
+
+
+/* INFO */
+
+.m-dialog.info div.m-title,
+.m-dialog.info div.m-button > button {
+   background-color: #337ceb;
+   color: #fff
+}
+
+
+/* ERROR */
+
+.m-dialog.error div.m-title,
+.m-dialog.error div.m-button > button {
+   background-color: #d9534f;
+   color: #fff
+}
+
+
+/* SUCCESS */
+
+.m-dialog.success div.m-title,
+.m-dialog.success div.m-button > button {
+   background-color: #67af13;
+   color: #fff
+}

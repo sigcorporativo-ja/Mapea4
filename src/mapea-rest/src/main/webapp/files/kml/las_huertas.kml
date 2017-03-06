@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<kml xmlns="http://www.opengis.net/kml/2.2">
+  <Document>
+    <Folder>
+      <name>LAS_HUERTAS</name>
+      <Placemark>
+        <Style>
+          <LineStyle>
+            <color>ff0000ff</color>
+          </LineStyle>
+          <PolyStyle>
+            <color>7f7faaaa</color>
+            <colorMode>random</colorMode>
+            <fill>1</fill>
+            <outline>1</outline>
+          </PolyStyle>
+        </Style>
+        <name>Promoción</name> 
+        <description><![CDATA[ 
+           <table class="mapea-table">
+             <tbody>
+               <tr>
+                 <td>
+                   <b>Nombre Promoción</b>
+                 </td>
+                 <td>Las Huertas</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Matrícula</b>
+                 </td>
+                 <td>SE-0901</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Expediente</b>
+                 </td>
+                 <td>SE-50-IV/73</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Cód.PRINEX</b>
+                 </td>
+                 <td>709</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Dirección</b>
+                 </td>
+                 <td>Avda. 28 de febrero</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Provincia</b>
+                 </td>
+                 <td>Sevilla</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Municipio</b>
+                 </td>
+                 <td>Sevilla</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Total Uds</b>
+                 </td>
+                 <td>600</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Gerencia</b>
+                 </td>
+                 <td>Sevilla</td>
+               </tr>
+             </tbody>
+           </table>
+        ]]></description>
+        <ExtendedData>
+          <SchemaData schemaUrl="#LAS_HUERTAS">
+            <SimpleData name="id">2</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Polygon>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <outerBoundaryIs>
+            <LinearRing>
+              <altitudeMode>relativeToGround</altitudeMode>
+              <coordinates>-5.96740279700466,37.39782008575667
+                -5.96693369299828,37.397476167230394
+                -5.967760150827651,37.396805868714559
+                -5.968248619067015,37.397149297462121
+                -5.96740279700466,37.39782008575667</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+      <Placemark>
+        <Style>
+          <LineStyle>
+            <color>ff0000ff</color>
+          </LineStyle>
+          <PolyStyle>
+            <color>7f7faaaa</color>
+            <colorMode>random</colorMode>
+            <fill>1</fill>
+            <outline>1</outline>
+          </PolyStyle>
+        </Style>
+        <name>Las Huertas</name> 
+        <description><![CDATA[ 
+           <table class="mapea-table">
+             <tbody>
+               <tr>
+                 <td>
+                   <b>Nombre Promoción</b>
+                 </td>
+                 <td>Las Huertas</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Matrícula</b>
+                 </td>
+                 <td>SE-0901</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Expediente</b>
+                 </td>
+                 <td>SE-50-IV/73</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Cód.PRINEX</b>
+                 </td>
+                 <td>709</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Dirección</b>
+                 </td>
+                 <td>Avda. 28 de febrero</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Provincia</b>
+                 </td>
+                 <td>Sevilla</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Municipio</b>
+                 </td>
+                 <td>Sevilla</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Total Uds</b>
+                 </td>
+                 <td>600</td>
+               </tr>
+               <tr>
+                 <td>
+                   <b>Gerencia</b>
+                 </td>
+                 <td>Sevilla</td>
+               </tr>
+             </tbody>
+           </table>
+        ]]></description>
+        <ExtendedData>
+          <SchemaData schemaUrl="#LAS_HUERTAS">
+            <SimpleData name="id">1</SimpleData>
+          </SchemaData>
+        </ExtendedData>
+        <Polygon>
+          <altitudeMode>relativeToGround</altitudeMode>
+          <outerBoundaryIs>
+            <LinearRing>
+              <altitudeMode>relativeToGround</altitudeMode>
+              <coordinates>-5.963885622715967,37.400552935225868
+                -5.96344465147576,37.400185099252923
+                -5.966708320557798,37.397659677280757
+                -5.967186497803861,37.397987903570275
+                -5.963885622715967,37.400552935225868</coordinates>
+            </LinearRing>
+          </outerBoundaryIs>
+        </Polygon>
+      </Placemark>
+    </Folder>
+    <Schema name="LAS_HUERTAS" id="LAS_HUERTAS">
+      <SimpleField name="id" type="int"></SimpleField>
+    </Schema>
+  </Document>
+</kml>

@@ -1,0 +1,391 @@
+.m-layerswitcher-container {
+   position: absolute;
+   top: 0.5em;
+   right: 0.5em;
+   text-align: left;
+   overflow-y: auto !important;
+   width: 100%;
+}
+
+@media only screen and (min-width: 769px) {
+   .m-layerswitcher-container {
+      min-width: 440px;
+   }
+}
+
+.m-layerswitcher-container .m-layersiwtcher-panel {
+   margin: 0;
+   top: 0px;
+   right: 0px;
+   max-height: 100%;
+   text-align: left;
+   background-color: #f4f4f4;
+}
+
+.m-layerswitcher-container ul {
+   padding-left: 0;
+   list-style: none;
+   margin: 0;
+}
+
+.m-layerswitcher-container li.group {
+   padding-top: 5px;
+   padding-bottom: 8px;
+   text-align: center;
+}
+
+.m-layerswitcher-container li.group > div {
+   line-height: normal;
+   margin: 0px;
+   font-size: 15px;
+   color: #404040;
+   font-family: 'Muli', 'sans-serif' !important;
+   line-height: 40px;
+   text-align: center;
+   height: 39px;
+   border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+   font-size: 15px;
+}
+
+.m-layerswitcher-container li div {
+   font-family: sans-serif;
+   font-size: 0.8em;
+   text-overflow: ellipsis;
+   white-space: nowrap;
+   overflow: hidden;
+   line-height: 1.4em;
+   line-height: 40px;
+   text-align: center;
+   height: 39px;
+   font-size: 15px;
+}
+
+.m-layerswitcher-container ul > li {
+   overflow: hidden;
+}
+
+.m-layerswitcher-container ul > li.group > ul > li {
+   margin: 10px;
+   /*border: 1px solid rgba(0, 0, 0, 0.04);
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);*/
+   background-color: #fff
+}
+
+.m-layerswitcher-container li span.m-check {
+   cursor: pointer;
+   color: #6abe47;
+   margin: 0px;
+   margin-right: 1%;
+}
+
+.m-layerswitcher-container li input.m-layerswitcher-transparency {
+   margin-right: 3%;
+   width: 74%;
+}
+
+@-moz-document url-prefix() {
+   .m-layerswitcher-container li input.m-layerswitcher-transparency {
+      display: block;
+      margin-top: 16px;
+   }
+   .m-layerswitcher-container .tools span {
+      display: block;
+      margin-top: -12px;
+      margin-left: 143px;
+   }
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+   .m-layerswitcher-container li input.m-layerswitcher-transparency {
+      display: block;
+      margin-top: 1px;
+   }
+   .m-layerswitcher-container .tools span {
+      display: block;
+      margin-top: -52px;
+      float: right;
+      margin-right: 13%;
+   }
+}
+
+.m-layerswitcher-container li span.m-layerswitcher-remove {
+   font-size: 11px;
+   color: rgba(0, 0, 0, 0.53);
+   cursor: pointer;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-layerswitcher-container li span.m-check {
+      font-size: 2em;
+      margin-right: 5%;
+   }
+   .m-layerswitcher-container li input.m-layerswitcher-transparency {
+      width: 90%;
+      display: none;
+   }
+   .m-layerswitcher-container li span.m-layerswitcher-remove {
+      font-size: 13px;
+   }
+   .m-layerswitcher-container li.visible input.m-layerswitcher-transparency {
+     display: initial;
+   }
+   .m-layerswitcher-container li.visible span.m-layerswitcher-remove {
+      font-size: 11px;
+   }
+}
+
+.m-layersiwtcher-panel li > div.layer-base, .m-layersiwtcher-panel li > div.layer {
+   margin: 0px;
+   padding: 5px;
+   padding-top: 0px;
+   padding-bottom: 0px;
+   text-align: left;
+   margin-bottom: 0px;
+   border-bottom: none;
+   display: -webkit-box;
+   display: -ms-flexbox;
+   display: flex;
+   -webkit-box-align: center;
+       -ms-flex-align: center;
+           align-items: center;
+}
+
+.m-layersiwtcher-panel li.visible > div.tools {
+   width: 40%;
+   height: auto;
+}
+.m-layersiwtcher-panel div.tools {
+  float: right;
+  text-align: left;
+}
+
+.m-layersiwtcher-panel li.visible > div.layer {
+   margin-bottom: 4px;
+}
+
+.m-layersiwtcher-panel div.layer {
+   margin-bottom: 4px;
+   float: left;
+   width: 55%;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-layersiwtcher-panel li > div.layer-base, .m-layersiwtcher-panel li > div.layer {
+      width: 90%;
+      padding-right: 0px;
+   }
+}
+
+.m-layersiwtcher-panel li.visible > div.layer-base {
+   margin: 0px;
+   border: 0px;
+   /*border-bottom: 1px solid #D2D2D2;*/
+}
+
+.m-layersiwtcher-panel li > div.legend {
+   width: 100%;
+   text-align: left;
+   height: 0px;
+}
+
+.m-layersiwtcher-panel li.visible > div.legend {
+   width: 90%;
+   height: auto;
+   margin: 0 auto;
+}
+
+@media only screen and (max-width: 768px) {
+  .m-layersiwtcher-panel li.visible > div.tools {
+     width: 90%;
+     float: initial;
+  }
+  .m-layersiwtcher-panel div.tools {
+    width: calc(10% - 5px);
+    float: right;
+    text-align: left;
+    margin: 0 auto;
+  }
+}
+
+.m-layerswitcher-container li.disabled span {
+   color: #666666
+}
+
+
+/***************
+       PANEL
+***************/
+
+.m-areas > div.m-area > div.m-panel.m-layerswitcher.collapsed {
+   color: #fda823;
+   height: 40px;
+}
+
+.m-areas > div.m-area > div.m-panel.m-layerswitcher > button.m-panel-btn {
+   position: absolute;
+   left: -40px;
+   background-color: #fda823;
+   color: #fff;
+   z-index: 999999;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+}
+
+@media only screen and (max-width: 768px) {
+   .m-areas > div.m-area > div.m-panel.m-layerswitcher > button.m-panel-btn {
+      background-color: transparent;
+      position: absolute;
+      left: initial;
+      right: 0;
+      color: #fda823;
+      z-index: 999999;
+      box-shadow: none;
+   }
+}
+
+.m-areas > div.m-area > div.m-panel.m-layerswitcher.collapsed > button.m-panel-btn {
+   position: inherit;
+   color: #fda823;
+   left: 0;
+   box-shadow: none;
+}
+
+.m-areas > div.m-area > div.m-panel.m-layerswitcher.collapsed > div.m-panel-controls {
+   padding: 0px;
+}
+
+.m-areas > div.m-area > div.m-panel.m-layerswitcher.opened {
+   border-top-left-radius: 0;
+}
+
+.m-areas> div.m-area> div.m-panel.m-layerswitcher> div.m-panel-controls {
+    max-width: 50vw;
+    max-height: 80vh;
+}
+@media only screen and (max-width: 768px) {
+   .m-areas > div.m-area > div.m-panel.m-layerswitcher.opened {
+      margin-left: 0;
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      margin: 0;
+      z-index: 10000;
+   }
+   .m-areas > div.m-area > div.m-panel.m-layerswitcher > div.m-panel-controls {
+      max-width: 100vw;
+      max-height: 100vh;
+      width: 100%;
+   }
+}
+
+input[type=range].m-layerswitcher-transparency {
+   -webkit-appearance: none;
+   width: 30%;
+   height: 8px;
+}
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+	input[type=range].m-layerswitcher-transparency {
+   height: auto;
+	}
+}
+
+input[type=range].m-layerswitcher-transparency:focus {
+   outline: none;
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+   width: 100%;
+   height: 2px;
+   cursor: pointer;
+   background: rgba(0, 0, 0, 0.31);
+   border-radius: 12px;
+}
+
+input[type=range]::-webkit-slider-thumb {
+   height: 10px;
+   width: 10px;
+   cursor: pointer;
+   border-radius: 15px;
+   background: #FFF;
+   -webkit-appearance: none;
+   margin-top: -4px;
+   background-color: #fda823;
+}
+
+@media only screen and (max-width: 768px) {
+   input[type=range]::-webkit-slider-thumb {
+      height: 12px;
+      width: 12px;
+   }
+}
+
+/****************************
+     FIREFOX HACKS
+****************************/
+
+input[type="range"]::-moz-range-track {
+   width: 100%;
+   height: 2px;
+   cursor: pointer;
+   background: rgba(0, 0, 0, 0.31);
+   border-radius: 12px;
+}
+
+input[type="range"]::-moz-range-thumb {
+   height: 10px;
+   width: 10px;
+   cursor: pointer;
+   border: none;
+   background: #FFF;
+   -webkit-appearance: none;
+   margin-top: 20px;
+   background-color: #fda823;
+}
+
+/****************************
+     IE HACKS
+****************************/
+
+input[type=range]::-ms-track {
+   cursor: pointer;
+   width: 100%;
+   height: 2px;
+   /*remove bg colour from the track, we'll use ms-fill-lower and ms-fill-upper instead */
+   background: transparent;
+   /*leave room for the larger thumb to overflow with a transparent border */
+   border-color: transparent;
+   border-width: 12px;
+   /*remove default tick marks*/
+   color: transparent;
+   margin-top: -8px;
+}
+
+input[type=range]::-ms-thumb {
+   border: none;
+   height: 10px;
+   cursor: pointer;
+   width: 10px;
+   border-radius: 15px;
+   background-color: #fda823;
+   -webkit-appearance: none;
+}
+
+input[type=range]::-ms-fill-lower {
+   background: #ddd;
+   border-radius: 10px;
+}
+
+input[type=range]::-ms-fill-upper {
+   background: #ddd;
+   border-radius: 10px;
+}
+
+input[type=range]:disabled::-webkit-slider-thumb, input[type=range]:disabled::-moz-range-thumb, input[type=range]:disabled::-ms-thumb {
+   background-color: #848484;
+}
+
+input[type=range]:disabled {
+   opacity: 0.5;
+}

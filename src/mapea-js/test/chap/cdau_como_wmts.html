@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <title>PRUEBA DESARROLLO</title>
+
+   <!-- styles -->
+   <link href="http://localhost:8080/mapea/css/mapea.ol3.min.css" rel="stylesheet" />
+
+   <!--  <script src=" http://localhost:8080/mapea/mapea.ol3.min.css"></script>-->
+   <style rel="stylesheet">
+      html,
+      body {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+         overflow: hidden;
+      }
+   </style>
+</head>
+
+<body>
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script src="http://localhost:8080/mapea/js/mapea.ol3.min.js "></script>
+   <script src="http://localhost:8080/mapea/js/configuration.js "></script>
+   <script>
+      //M.impl(M.impl);
+
+      var cdau_wmts = new M.layer.WMTS({
+         url: 'http://www.callejerodeandalucia.es/servicios/base/gwc/service/wmts?',
+         name: 'base',
+         legend: 'CDAU wmts',
+      });
+
+      // Se pueden generar las resoluciones en base a las escalas y niveles de zoom que se quiera, por ej
+      //var misRes = M.utils.generateResolutionsFromScales(3000000, 1000, 15, 'm');
+      //alert(misRes);
+      // Este array puede usarse en el construtctor del mapa.
+
+      window.mapa = M.map({
+         container: 'mapa',
+         //layers: [  wfs,wmc1, wmc2, wmc3,wms1,wms3,wmts,layer2],
+         layers: [cdau_wmts /*,wfs,wmts2*/ ],
+         projection: 'EPSG:25830*m',
+         maxExtent: {
+            left: 96388.1179,
+            bottom: 3959795.9442,
+            right: 621889.9370,
+            top: 4299792.1070
+
+         },
+         //zoom: 6,
+         //center: '235061.9,4141933.04',
+         controls: ['layerswitcher', 'mouse', 'scale', 'scaleline', 'panzoombar', 'panzoom', 'overviewmap'],
+         //resolutions: misRes
+         /*resolutions: [
+                      890.4640841686878,
+                      296.4735539465016,
+                      179.21101876124024,
+                      108.32868165784868,
+                      65.48204095286125,
+                      39.58229364311229,
+                      23.92652927811816,
+                      14.463002282240476,
+                      8.742531463073329,
+                      5.284646637764822,
+                      3.194439757408831,
+                      1.9309607743291293,
+                      1.167218603309086,
+                      0.7055551236581433,
+                      0.4264908313738002,
+                      0.25780328587628126
+                   ]*/
+
+      });
+   </script>
+</body>
+
+</html>

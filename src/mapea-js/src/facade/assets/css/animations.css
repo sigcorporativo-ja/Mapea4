@@ -1,0 +1,66 @@
+/*****************************
+         PANELS
+*****************************/
+
+.m-areas> div.m-area> div.m-panel> button.m-panel-btn, .m-areas> div.m-area> div.m-panel.no-collapsible> div.m-panel-controls> div.m-control> button {
+    -webkit-transition: opacity 0.25s ease 0s, color 0.25s ease 0s;
+    transition: opacity 0.25s ease 0s, color 0.25s ease 0s;
+}
+
+.m-areas> div.m-area> div.m-panel {
+    -webkit-transition: border-radius .5s ease 0s;
+    transition: border-radius .5s ease 0s;
+}
+
+.m-areas> div.m-area> div.m-panel.collapsed {
+    border-radius: 20px;
+}
+
+.m-areas> div.m-area> div.m-panel> div.m-panel-controls {
+    opacity: 1;
+    /*background-color: white;*/
+    border-radius: 10px;
+    /*max-width: 50vw;*/
+    -webkit-transition: max-width 1s ease 0s, opacity .75s ease .1s;
+    transition: max-width 1s ease 0s, opacity .75s ease .1s;
+}
+
+.m-areas> div.m-area> div.m-panel.collapsed> div.m-panel-controls {
+    opacity: 0;
+    max-width: 0px;
+    -webkit-transition: max-width .4s ease 0s, opacity .3s ease 0s;
+    transition: max-width .4s ease 0s, opacity .3s ease 0s;
+}
+
+
+/*****************************
+         LAYERSWITHCER
+*****************************/
+
+.m-areas> div.m-area> div.m-panel.m-layerswitcher> div.m-panel-controls {
+    opacity: 1;
+    -webkit-transition: max-width .75s ease 0s, max-height .5s ease 0s, opacity 1s ease .2s;
+    transition: max-width .75s ease 0s, max-height .5s ease 0s, opacity 1s ease .2s;
+    overflow: hidden;
+    overflow-y: auto;
+    padding-right: 0px;
+}
+
+.m-areas> div.m-area> div.m-panel.m-layerswitcher.collapsed> div.m-panel-controls {
+    opacity: 0;
+    max-width: 0px;
+    max-height: 0px;
+    -webkit-transition: max-width .5s ease 0s, max-height 2s ease 0s, opacity .3s ease 0s;
+    transition: max-width .5s ease 0s, max-height 2s ease 0s, opacity .3s ease 0s;
+}
+
+
+/*****************************
+         LOCATION
+*****************************/
+
+.m-location-container.m-locating> button#m-location-button:before {
+    -webkit-animation: mloading 1s linear infinite;
+    -moz-animation: mloading 1s linear infinite;
+    animation: mloading 1s linear infinite;
+}
