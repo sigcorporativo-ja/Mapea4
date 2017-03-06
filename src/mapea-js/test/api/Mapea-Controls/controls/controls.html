@@ -1,0 +1,66 @@
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>Mocha Tests</title>
+   <link href="../../../../libraries/mocha/mocha.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="mocha"></div>
+   <div id="mapa"></div>
+   <div id="constructor-tests"></div>
+
+   <!-- libraries -->
+   <script src="../../../../libraries/babel-polyfill/browser-polyfill.js"></script>
+   <script src="../../../../libraries/chai/chai.js"></script>
+   <script src="../../../../libraries/mocha/mocha.js"></script>
+   <script src="../../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+
+   <!-- tests -->
+   <script src="../../main-suite.js"></script>
+   <script src="js/suites/suite-controls-obj.js"></script>
+   <script src="js/suites/suite-addControls.js"></script>
+   <script src="js/suites/suite-getControls.js"></script>
+   <script src="js/suites/suite-removeControls.js"></script>
+   <script src="js/suites/suite-constructor-controls.js"></script>
+   <script type="text/javascript">
+      mapeaSuite('Controles default', function () {
+         // params
+         window.SCALE = 'scale';
+         window.SCALE_LINE = 'scaleline';
+         window.PANZOOMBAR = 'panzoombar';
+         window.PANZOOM = 'panzoom';
+         window.LAYERSWITCHER = 'layerswitcher';
+         window.MOUSE = 'mouse';
+         window.NAVTOOLBAR = 'navtoolbar';
+         window.OVERVIEWMAP = 'overviewmap';
+         window.MEASUREBAR = 'measurebar';
+         window.LOCATION = 'location';
+         window.map;
+
+         suiteSetup(function () {
+            // supress console logging
+            if (window.console && window.console.error) {
+               window.console.error = function () {};
+            }
+         });
+
+         setup(function () {
+            map = M.map('mapa');
+         });
+
+         teardown(function () {
+            map.destroy();
+         });
+
+         mapeaSuite.controls.object();
+         mapeaSuite.controls.addControls();
+         mapeaSuite.controls.getControls();
+         mapeaSuite.controls.removeControls();
+         mapeaSuite.controls.constructorControls();
+      });
+   </script>
+</body>
+
+</html>

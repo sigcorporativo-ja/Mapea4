@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="mapea" content="yes">
+
+      <title>ALLCONTROLS</title>
+      <style rel="stylesheet">
+         html,
+         body,
+         .container {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+         }
+      </style>
+
+      <!-- styles -->
+      <link href="ol3151/ol.css" rel="stylesheet" />
+   </head>
+
+   <body>
+      <div id="map" class="container"></div>
+
+      <!-- libraries -->
+      <script src="ol3151/ol.js"></script>
+
+      <script type="application/javascript">
+         var osm = new ol.layer.Tile({
+            source: new ol.source.OSM()
+         });
+         var wms = new ol.layer.Tile({
+            source: new ol.source.TileWMS({
+               url: 'http://www.ideandalucia.es/services/poi/wms',
+               params: {
+                  'LAYERS': 'sv04_equip_educativo',
+                  'TILED': true
+               },
+               serverType: 'geoserver'
+            })
+         });
+         var mapjs = new ol.Map({
+            layers: [osm, wms],
+            target: 'map',
+            view: new ol.View({
+               center: [0, 0],
+               zoom: 2
+            })
+         });
+      </script>
+   </body>
+
+</html>

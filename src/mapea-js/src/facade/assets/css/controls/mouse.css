@@ -1,0 +1,29 @@
+.m-mouse-position {
+   white-space: pre
+}
+
+.m-mouse-position:before {
+   color: #a35d38;
+   margin-right: 5px;
+   font-family: 'g-cartografia' !important;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-mouse-position {
+      display: none !important;
+   }
+}
+
+.m-panel.m-map-info > div.m-panel-controls >.m-mouse-position {
+   border-radius: 20px !important;
+}
+
+.m-panel.m-map-info > div.m-panel-controls >.m-mouse-position {
+   order: 4;
+}
+
+.m-panel.m-map-info.m-with-scale > div.m-panel-controls >.m-mouse-position,
+.m-panel.m-map-info.m-with-wmcselector > div.m-panel-controls >.m-mouse-position {
+   border-top-right-radius: 0px !important;
+   border-bottom-right-radius: 0px !important;
+}

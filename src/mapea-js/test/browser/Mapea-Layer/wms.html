@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <title>Mapea Tests</title>
+   <link href="../../../build/core/4.0.0-SNAPSHOT/css/mapea.ol3.min.css" rel="stylesheet" />
+</head>
+
+<body>
+   <button onclick="removeLayer();">borrar capa WMS_FULL</button>
+   <div id="mapa" class="container"></div>
+   <!-- libraries -->
+   <script src="../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+   <script src="../../../build/core/4.0.0-SNAPSHOT/js/configuration.js"></script>
+
+   <script type="text/javascript">
+      window.URL_WMS = 'http://www.ideandalucia.es/wms/mta400v_2008?';
+      window.NAME_WMS = 'Redes_energeticas';
+      window.TITLE_WMS = 'Redes';
+      window.TRANSPARENCE_WMS = true;
+      window.TILED_WMS = true;
+      window.VERSION_WMS = '1.1.1';
+      // wms 2
+      window.URL_WMS_2 = 'http://www.ideandalucia.es/wms/mta10v_2007?';
+      window.NAME_WMS_2 = 'Limites';
+      window.TITLE_WMS_2 = 'Limites';
+      window.TRANSPARENCE_WMS_2 = false;
+      window.TILED_WMS_2 = true;
+      // wms_full
+      window.WMS_FULL_URL = 'http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Permeabilidad_Andalucia?';
+      window.WMS_FULL_TILED = true;
+      // wms type
+      window.WMS = 'WMS';
+      window.wmS = 'wmS';
+      // wms_full type
+      window.WMS_FULL = 'WMS_FULL';
+      window.wmS_Full = 'wmS_Full';
+
+      var layer1 = new M.layer.WMS({
+         url: URL_WMS,
+         name: NAME_WMS,
+         legend: TITLE_WMS,
+         transparent: TRANSPARENCE_WMS,
+         tiled: TILED_WMS,
+         version: VERSION_WMS
+      });
+      var layer2 = new M.layer.WMS({
+         url: URL_WMS_2,
+         name: NAME_WMS_2,
+         legend: TITLE_WMS_2,
+         transparent: TRANSPARENCE_WMS_2,
+         tiled: TILED_WMS_2
+      });
+      var layerWMSFull = new M.layer.WMS({
+         url: WMS_FULL_URL,
+         tiled: WMS_FULL_TILED
+      });
+
+      var map = M.map({
+         container: 'mapa',
+         layers: [layer1, layer2, layerWMSFull]
+      });
+
+      function removeLayer() {
+         map.removeLayers(layerWMSFull);
+      }
+   </script>
+</body>
+
+</html>

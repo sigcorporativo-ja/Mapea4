@@ -1,0 +1,71 @@
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>Mocha Tests</title>
+   <link href="../../../../libraries/mocha/mocha.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="mocha"></div>
+   <div id="mapa"></div>
+   <div id="constructor-tests"></div>
+
+   <!-- libraries -->
+   <script src="../../../../libraries/babel-polyfill/browser-polyfill.js"></script>
+   <script src="../../../../libraries/chai/chai.js"></script>
+   <script src="../../../../libraries/mocha/mocha.js"></script>
+   <script src="../../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+
+   <!-- tests -->
+   <script src="../../main-suite.js"></script>
+   <script src="js/suites/suite-setMaxExtent.js"></script>
+   <script src="js/suites/suite-constructor-maxExtent.js"></script>
+   <script type="text/javascript">
+      mapeaSuite('maxExtent', function () {
+         // params
+         window.EXTENT_ARRAY = [60109.617681153, 3917476.4415233, 650113.72970273, 4361362.3476771];
+         window.EXTENT_ARRAY_STRING = ['60109.617681153', '3917476.4415233', '650113.72970273', '4361362.3476771'];
+         window.EXTENT_STRING_COMA = '60109.617681153,3917476.4415233,650113.72970273,4361362.3476771';
+         window.EXTENT_STRING_PUNTOYCOMA = '60109.617681153;3917476.4415233;650113.72970273;4361362.3476771';
+         window.EXTENT_OBJETO = {
+            left: 60109.617681153,
+            bottom: 3917476.4415233,
+            right: 650113.72970273,
+            top: 4361362.3476771
+         };
+         window.GET_MAX_EXTENT = {
+            x: {
+               min: 60109.617681153,
+               max: 650113.72970273
+            },
+            y: {
+               min: 3917476.4415233,
+               max: 4361362.3476771
+            }
+         };
+
+         window.map;
+
+         suiteSetup(function () {
+            // supress console logging
+            if (window.console && window.console.error) {
+               window.console.error = function () {};
+            }
+         });
+
+         setup(function () {
+            map = M.map('mapa');
+         });
+
+         teardown(function () {
+            map.destroy();
+         });
+
+         mapeaSuite.maxExtent.setMaxExtent();
+         mapeaSuite.maxExtent.constructorMaxExtent();
+      });
+   </script>
+</body>
+
+</html>

@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+
+   <title>Mapea Tests</title>
+   <link href="../../../build/core/4.0.0-SNAPSHOT/css/mapea.ol3.min.css" rel="stylesheet" />
+   <style rel="stylesheet">
+      html,
+      body {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+         overflow: hidden;
+      }
+   </style>
+</head>
+
+<body>
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script src="../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+   <script src="../../../src/configuration.js"></script>
+
+   <script type="text/javascript">
+      var map = M.map({
+         container: 'mapa',
+         wmc: new M.layer.WMC({
+            name: 'cdau',
+            url: 'http://www.callejerodeandalucia.es/wmc/context_cdau_callejero.xml'
+         }),
+         controls: ['layerswitcher'],
+         layers: ['KML*Arboleda*http://mapea-sigc.juntadeandalucia.es/Componente/kml/*arbda_sing_se.kml*true'],
+      });
+   </script>
+</body>
+
+</html>

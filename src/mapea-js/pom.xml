@@ -1,0 +1,97 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+   <modelVersion>4.0.0</modelVersion>
+   <artifactId>mapea-js</artifactId>
+   <packaging>pom</packaging>
+   <name>Mapea 4 JS</name>
+   <parent>
+      <groupId>es.juntadeandalucia.mapea</groupId>
+      <artifactId>mapea-parent</artifactId>
+      <version>4.0.4-dev</version>
+      <relativePath>../mapea-parent/pom.xml</relativePath>
+   </parent>
+	<licenses>
+		<license>
+			<name>European Union Public Licence - EUPL v.1.1</name>
+			<url>LICENSE.txt</url>
+		</license>
+	</licenses>
+	<developers>
+		<developer>
+			<organization>Guadaltel S.A.</organization>
+			<organizationUrl>www.guadaltel.com</organizationUrl>
+		</developer>
+	</developers>
+   <build>
+      <finalName>mapea</finalName>
+      <plugins>
+         <plugin>
+            <groupId>com.github.eirslett</groupId>
+            <artifactId>frontend-maven-plugin</artifactId>
+            <version>0.0.23</version>
+            <configuration>
+               <workingDirectory></workingDirectory>
+            </configuration>
+            <executions>
+               <!-- INSTALL NODE AND NPM -->
+               <execution>
+                  <id>install node and npm</id>
+                  <goals>
+                     <goal>install-node-and-npm</goal>
+                  </goals>
+                  <phase>generate-resources</phase>
+                  <configuration>
+                     <nodeVersion>v4.4.6</nodeVersion>
+                     <npmVersion>2.15.5</npmVersion>
+                     <!--<nodeDownloadRoot>http://nodejs.org/dist/</nodeDownloadRoot>
+                        <npmDownloadRoot>http://nodejs.org/dist/</npmDownloadRoot> -->
+                  </configuration>
+               </execution>
+               <!-- RUNNING NPM -->
+               <execution>
+                  <id>run npm install</id>
+                  <goals>
+                     <goal>npm</goal>
+                  </goals>
+                  <phase>generate-resources</phase>
+                  <configuration>
+                     <arguments>install</arguments>
+                  </configuration>
+               </execution>
+               <!-- RUN GRUNT MAIN -->
+               <execution>
+                  <id>grunt build</id>
+                  <goals>
+                     <goal>grunt</goal>
+                  </goals>
+                  <phase>generate-resources</phase>
+                  <configuration>
+                     <arguments>build</arguments>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+         <plugin>
+            <groupId>org.apache.maven.plugins</groupId>
+            <artifactId>maven-assembly-plugin</artifactId>
+            <executions>
+               <execution>
+                  <id>packed build javascript</id>
+                  <goals>
+                     <goal>single</goal>
+                  </goals>
+                  <phase>package</phase>
+                  <configuration>
+                     <descriptors>
+                        <descriptor>assembly/core-resources.xml</descriptor>
+                        <descriptor>assembly/plugins-resources.xml</descriptor>
+                        <descriptor>assembly/debug-resources.xml</descriptor>
+                        <descriptor>assembly/templates-resources.xml</descriptor>
+                        <descriptor>assembly/doc-resources.xml</descriptor>
+                     </descriptors>
+                  </configuration>
+               </execution>
+            </executions>
+         </plugin>
+      </plugins>
+   </build>
+</project>

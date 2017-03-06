@@ -1,0 +1,71 @@
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>Mocha Tests</title>
+   <link href="../../../../libraries/mocha/mocha.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="mocha"></div>
+   <div id="mapa"></div>
+   <div id="constructor-tests"></div>
+
+   <!-- libraries -->
+   <script src="../../../../libraries/babel-polyfill/browser-polyfill.js"></script>
+   <script src="../../../../libraries/chai/chai.js"></script>
+   <script src="../../../../libraries/mocha/mocha.js"></script>
+   <script src="../../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+
+   <!-- tests -->
+   <script src="../../main-suite.js"></script>
+   <script src="js/suites/suite-setBbox.js"></script>
+   <script src="js/suites/suite-constructor-bbox.js"></script>
+   <script type="text/javascript">
+      mapeaSuite('bbox', function () {
+         // params
+         window.BBOX_ARRAY = [156444.14342375228, 4046518.9292811914, 347170.0928002936, 4191128.5962624443];
+         window.BBOX_ARRAY_STRING = ['156444.14342375228', '4046518.9292811914', '347170.0928002936', '4191128.5962624443'];
+         window.BBOX_STRING_COMA = '156444.14342375228,4046518.9292811914,347170.0928002936,4191128.5962624443';
+         window.BBOX_STRING_PUNTOYCOMA = '156444.14342375228;4046518.9292811914;347170.0928002936;4191128.5962624443';
+         window.BBOX_OBJETO = {
+            left: 156444.14342375228,
+            bottom: 4046518.9292811914,
+            right: 347170.0928002936,
+            top: 4191128.5962624443
+         };
+         window.GET_BBOX = {
+            x: {
+               min: 156444.14342375228,
+               max: 347170.0928002936
+            },
+            y: {
+               min: 4046518.9292811914,
+               max: 4191128.5962624443
+            }
+         };
+
+         window.map;
+
+         suiteSetup(function () {
+            // supress console logging
+            if (window.console && window.console.error) {
+               window.console.error = function () {};
+            }
+         });
+
+         setup(function () {
+            map = M.map('mapa');
+         });
+
+         teardown(function () {
+            map.destroy();
+         });
+
+         mapeaSuite.bbox.setBbox();
+         mapeaSuite.bbox.constructorBbox();
+      });
+   </script>
+</body>
+
+</html>

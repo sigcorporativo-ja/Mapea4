@@ -1,0 +1,29 @@
+	Instrucciones de compilación:
+
+    1. Asegurar que si se tiene instalado previamente npm se tengan permisos con el usuario que se compila
+	
+	2. Configuración de filtros mvn.
+	
+	mapea-parent/src/main/filters/mapea-<entorno>.properties
+	
+	Parámetro: mapea.url=http://<url_despliegue>/mapea
+	
+	3. Compilación desde mapea-parent
+
+	apache-maven-3.3.3/bin/mvn clean package -P mapea-local
+
+	4. Si la compilación finaliza con éxito se debe generar mapea.war en:
+
+     /mapea-rest/target/mapea.war
+
+    5. Desplegar mapea.war en el servidor de aplicaciones siguiendo el procedimiento habitual.
+    
+    6. Página de test
+
+    <url_mapea>/test/index.html
+    
+    En esta página se incluyen activos los casos de prueba que ya existían en mapea 3.x.x además de nuevos casos para probar las nuevas funcionalidades incorporadas.
+    
+    Se muestran desactivados aquellos casos de prueba que no pueden validarse en la versión actual.
+
+    Se han incluido también algunos casos de prueba de la API JS para aquellas funcionalidades que no están integradas en la API REST como por ejemplo los plugins.

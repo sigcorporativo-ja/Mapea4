@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+   <head>
+      <meta charset="UTF-8">
+      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+      <meta name="mapea" content="yes">
+
+      <title>ALLCONTROLS</title>
+      <style rel="stylesheet">
+         html,
+         body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+         }
+      </style>
+
+      <!-- styles -->
+      <link href="m4/assets/css/mapea.ol3.min.css" rel="stylesheet" />
+   </head>
+
+   <body>
+      <div id="map" class="container"></div>
+
+      <!-- libraries -->
+      <script src="m4/js/mapea.ol3.min.js"></script>
+      <script type="text/javascript" src="../../../js/configuration.js"></script>
+
+      <script type="application/javascript">
+         var osm = new M.layer.OSM();
+         var wms = new M.layer.WMS('WMS*equipos_educativos*http://www.ideandalucia.es/services/poi/wms?*sv04_equip_educativo*true');
+         var mapajs = M.map({
+            'container': "map",
+            'controls': ["mouse", "navtoolbar", "panzoom", "scale", "getfeatureinfo", "layerswitcher"],
+            'layers': [osm, wms],
+            'projection': 'EPSG:3857*m',
+            'maxExtent': ol.proj.get('EPSG:3857').getExtent()
+         }, {
+            'renderer': 'canvas'
+         });
+      </script>
+   </body>
+
+</html>

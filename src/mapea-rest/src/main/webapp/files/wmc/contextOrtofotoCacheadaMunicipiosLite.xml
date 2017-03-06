@@ -1,0 +1,1299 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ViewContext xmlns="http://www.opengis.net/context" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Callejero" version="1.1.0" xsi:schemaLocation="http://www.opengis.net/context http://schemas.opengis.net/context/1.1.0/context.xsd">
+	<General>
+		<Window height="370" width="610"/>
+		<BoundingBox SRS="EPSG:23030" minx="96500" miny="3960000" maxx="622000" maxy="4300000"/>
+		<Title>Callejero Digital de Andalucía Unificado</Title>
+		<Extension>
+			<ol:maxExtent xmlns:ol="http://openlayers.org/context" minx="96500" miny="3960000" maxx="622000" maxy="4300000"/>
+		</Extension>
+		<KeywordList>
+			<Keyword>IECA</Keyword>
+			<Keyword>
+				Callejero Digital de Andalucía Unificado
+			</Keyword>
+		</KeywordList>
+		<Abstract>
+			Fichero de configuración del contexto de visualización de capas.
+		</Abstract>
+	</General>
+
+	<LayerList>
+
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+			</Server>
+			<Name>contexto_andalucia</Name>
+			<Title>Callejero Digital de Andalucía Unificado (Satélite)</Title>
+			<SRS>EPSG:23030</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:opacity xmlns:ol="http://openlayers.org/context">0.9</ol:opacity>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">true</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name/>
+					<Title>Estilo de la leyenda</Title>
+					<LegendURL format="image/png" height="891" width="333">
+							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/img/leyenda_CDAU_satelite.png"/>
+					</LegendURL>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+		</Layer>
+
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+			</Server>
+			<Name>batimetria</Name>
+			<Title>batimetria</Title>
+			<SRS>EPSG:23030</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name/>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+		</Layer>
+		<!--  ******   Satelite Cacheado    ******  -->
+
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/gwc/service/wms?"/>
+			</Server>
+			<Name>SPOT_Andalucia</Name>
+			<Title>Base Cartográfica</Title>
+			<SRS>EPSG:23030</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">false</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name/>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+		</Layer>
+
+		
+		<!--  ******   Ortofoto Cacheada    ******  -->
+		
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/geowebcache/service/wms?"/>
+			</Server>
+			<Name>orto_2010-11_23030</Name>
+			<Title>Ortofoto</Title>
+			<SRS>EPSG:23030</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name/>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">112201.81761065821200</sld:MaxScaleDenominator>
+		</Layer>
+		
+		<!--  ******   Ortofoto    ******  -->
+		
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/wms/ortofoto2010?"/>
+			</Server>
+			<Name>orto_2010-11</Name>
+			<Title>Ortofoto</Title>
+			<SRS>EPSG:23030</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name/>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MaxScaleDenominator>
+		</Layer>
+
+		<!--  ******   Viales y Portales    ******  -->
+
+		<Layer hidden="0" queryable="1">
+			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/cdau/wms?Buffer=5"/>
+			</Server>
+			<Name>CDAU_wms</Name>
+			<Title>Viales y Portales</Title>
+			<SRS>EPSG:23030</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+			</Extension>
+				<StyleList>
+				<Style current="1">
+					<Name/>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+		</Layer>
+
+
+		<!--  ******   TOPONIMIA    ******  -->
+
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+			</Server>
+			<Name>CDAU_toponimia</Name>
+			<Title>Toponimia de núcleos y Litoral</Title>
+			<SRS>EPSG:23030</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+			</Extension>
+				<StyleList>
+				<Style current="1">
+					<Name/>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+		</Layer>
+<!--  ******   POIs    ******  -->
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=10" xlink:type="simple"/>
+      </Server>
+      <Name>sv01_sanidad_centro_salud</Name>
+      <Title>Centros de Salud</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+        <Group name="groupe1"/>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv01_sanidad_centro_salud"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv02_sanidad_hospital</Name>
+      <Title>Hospitales</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv02_sanidad_hospital"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv04_equip_educativo</Name>
+      <Title>Equipamiento Educativo</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv04_equip_educativo"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv06_facultad</Name>
+      <Title>Facultades</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv06_facultad"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv08_arch_biblioteca</Name>
+      <Title>Archivos y Bibliotecas</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv08_arch_biblioteca"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv10_ayuntamiento</Name>
+      <Title>Ayuntamientos</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv10_ayuntamiento"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv11_juzgado</Name>
+      <Title>Juzgados</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv11_juzgado"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv14_farmacia</Name>
+      <Title>Farmacias</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv14_farmacia"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv22_museo</Name>
+      <Title>Museos</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv22_museo"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv29_policia</Name>
+      <Title>Comisarias de Policia</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv29_policia"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv31_parque_bombero</Name>
+      <Title>Parques de Bomberos</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv31_parque_bombero"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv12_sae</Name>
+      <Title>Oficina de Empleo</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv12_sae"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv13_correos</Name>
+      <Title>Oficina de Correos</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv13_correos"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv15_cementerio</Name>
+      <Title>Cementerio</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv15_cementerio"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv16_edif_religioso</Name>
+      <Title>Edificio Religioso</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv16_edif_religioso"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv17_gran_comercio</Name>
+      <Title>Centro Comercial</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv17_gran_comercio"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv18_abasto</Name>
+      <Title>Mercado</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv18_abasto"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv19_comercio_abierto</Name>
+      <Title>Comercio Abierto</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv19_comercio_abierto"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv24_ocio</Name>
+      <Title>Establecimiento de Ocio</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv24_ocio"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv25_oficina_turismo</Name>
+      <Title>Oficina de Turismo</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv25_oficina_turismo"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv27_pal_congreso</Name>
+      <Title>Palacio de Congreso</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv27_pal_congreso"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv26_golf</Name>
+      <Title>Campo de Golf</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv26_golf"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv28_equip_deportivo</Name>
+      <Title>Equipamiento Deportivo</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv28_equip_deportivo"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv30_prision</Name>
+      <Title>Centro Penitenciario</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv30_prision"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+
+
+    
+    
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv09_astronomico</Name>
+      <Title>Observatorio Astronómico</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv09_astronomico"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv20_equip_naturaleza</Name>
+      <Title>Equipamiento en la Naturaleza</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv20_equip_naturaleza"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv21_equip_infoca</Name>
+      <Title>Equipamiento INFOCA</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv21_equip_infoca"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>sv23_alojamiento</Name>
+      <Title>Alojamiento</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv23_alojamiento"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    
+    
+    
+    
+    
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>it01_puerto</Name>
+      <Title>Puertos</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it01_puerto"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>it02_aeropuerto</Name>
+      <Title>Aeropuertos</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it02_aeropuerto"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>it03_faro</Name>
+      <Title>Faros</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it03_faro"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>it04_bus_estacion</Name>
+      <Title>Estaciones de Autobuses</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it04_bus_estacion"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>it06_itv</Name>
+      <Title>ITV</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it06_itv"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>it07_tren_estacion</Name>
+      <Title>Estaciones de Trenes</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it07_tren_estacion"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>it10_gasolinera</Name>
+      <Title>Gasolineras</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it10_gasolinera"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>it12_estacion_metro</Name>
+      <Title>Estaciones Metro o tranvia</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it12_estacion_metro"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>tep01_espacio_productivo</Name>
+      <Title>Espacio Productivo</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+        <ol:groupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">Tejido Productivo</ol:groupDisplayLayerSwitcher>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=tep01_espacio_productivo"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+    <Layer hidden="1" queryable="1">
+      <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
+        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+      </Server>
+      <Name>tep03_espacio_tecnologico</Name>
+      <Title>Espacio Tecnológico</Title>
+      <SRS>EPSG:23030</SRS>
+      <FormatList>
+        <Format current="1">image/png</Format>
+      </FormatList>
+      <Extension>
+        <ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+        <ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+        <ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+        <ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+        <ol:groupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">Tejido Productivo</ol:groupDisplayLayerSwitcher>
+      </Extension>
+      <StyleList>
+        <Style current="1">
+          <Name/>
+          <Title>Estilo de la leyenda</Title>
+          <LegendURL format="image/png" height="37" width="32">
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=tep03_espacio_tecnologico"/>
+          </LegendURL>
+        </Style>
+      </StyleList>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+    </Layer>
+  </LayerList>
+</ViewContext>

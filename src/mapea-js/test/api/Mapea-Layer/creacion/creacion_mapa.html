@@ -1,0 +1,130 @@
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>Mocha Tests</title>
+   <link href="../../../../libraries/mocha/mocha.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="mocha"></div>
+   <div id="mapa"></div>
+
+   <script src="../../../../libraries/babel-polyfill/browser-polyfill.js"></script>
+   <script src="../../../../libraries/chai/chai.js"></script>
+   <script src="../../../../libraries/mocha/mocha.js"></script>
+   <script src="../../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+
+   <script type="text/javascript">
+      var DIV_ID = 'mapa';
+
+      mocha.setup('tdd');
+      mocha.reporter('html');
+
+      var assert = chai.assert;
+
+      suite('Factoría M.map()', function () {
+         suiteSetup(function () {
+            // supress console logging
+            if (window.console && window.console.error) {
+               window.console.error = function () {};
+            }
+         })
+
+         suite('parámetro container', function () {
+            // FAIL
+            test('debería fallar al crear un mapa ya que no pasamos parámetros', function () {
+               assert.throw(function () {
+                  var map = M.map();
+               });
+            });
+
+            test('debería fallar al crear un mapa ya que pasamos un parámetro a null', function () {
+               assert.throw(function () {
+                  var map = M.map(null);
+               });
+            });
+
+            test('debería fallar al crear un mapa ya que pasamos un parámetro objeto vacío', function () {
+               assert.throw(function () {
+                  var map = M.map({});
+               });
+            });
+
+            test('debería fallar al crear un mapa ya que no existe el div con el id especificado', function () {
+               assert.throw(function () {
+                  var map = M.map('meInventoUnIdInexistente');
+               });
+            });
+
+            test('debería fallar al crear un mapa si le pasamos un div inexistente', function () {
+               assert.throw(function () {
+                  var div = document.getElementById('meInventoUnIdInexistente');
+                  var map = M.map(div);
+               });
+            });
+
+            test('debería fallar al crear un mapa si le pasamos un div inexistente', function () {
+               assert.throw(function () {
+                  var map = M.map({
+                     container: 'meInventoUnIdInexistente'
+                  });
+               });
+            });
+
+            test('debería fallar al crear un mapa si no le pasamos un container', function () {
+               assert.throw(function () {
+                  var map = M.map({
+                     layers: []
+                  });
+               });
+            });
+
+            test('debería crear un mapa si le pasamos directamente el div', function () {
+               assert.throw(function () {
+                  var div = document.getElementById('meInventoUnIdInexistente');
+                  var map = M.map({
+                     container: div
+                  });
+               });
+            });
+
+            // SUCCESS
+            test('debería crear un mapa en el div con el id especificado', function () {
+               var map = M.map(DIV_ID);
+               assert.isNotNull(map, 'el mapa no es nulo');
+            });
+
+            test('debería crear un mapa si le pasamos directamente el div', function () {
+               var div = document.getElementById(DIV_ID);
+               var map = M.map(div);
+               assert.isNotNull(map, 'el mapa no es nulo');
+            });
+
+            test('debería crear un mapa si le pasamos directamente el div con el id especificado en un object', function () {
+               var map = M.map({
+                  container: DIV_ID
+               });
+               assert.isNotNull(map, 'el mapa no es nulo');
+            });
+
+            test('debería crear un mapa si le pasamos directamente el div en un object', function () {
+               var div = document.getElementById(DIV_ID);
+               var map = M.map({
+                  container: div
+               });
+               assert.isNotNull(map, 'el mapa no es nulo');
+            });
+         });
+      });
+
+      if (window.mochaPhantomJS) {
+         mochaPhantomJS.run();
+      }
+      else {
+         mocha.run();
+      }
+   </script>
+</body>
+
+</html>

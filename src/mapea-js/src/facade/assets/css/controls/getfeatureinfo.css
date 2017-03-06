@@ -1,0 +1,10 @@
+.m-getfeatureinfo-container {
+   top: 20px;
+   left: 300px;
+}
+
+.m-popup table.mapea-table td.header {
+   text-align: center;
+   padding-top: 10px;
+   border-bottom: 1px ridge #6C6C6C
+}

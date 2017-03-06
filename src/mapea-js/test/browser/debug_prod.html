@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+   <title>PRUEBA DESARROLLO</title>
+
+   <!-- styles -->
+   <link href="http://localhost:8080/mapea/debug/mapea/impl/ol3/assets/css/ol3.css" rel="stylesheet" />
+   <link href="http://localhost:8080/mapea/debug/mapea/impl/ol3/assets/css/custom.css" rel="stylesheet" />
+   <link href="http://localhost:8080/mapea/debug/mapea/facade/assets/css/fonts.css" rel="stylesheet" />
+   <link href="http://localhost:8080/mapea/debug/mapea/facade/assets/css/popup.css" rel="stylesheet" />
+   <link href="http://localhost:8080/mapea/debug/mapea/facade/assets/css/controls/getfeatureinfo.css" rel="stylesheet" />
+   <link href="http://localhost:8080/mapea/debug/mapea/facade/assets/css/controls/layerswitcher.css" rel="stylesheet" />
+   <link href="http://localhost:8080/mapea/debug/mapea/facade/assets/css/controls/location.css" rel="stylesheet" />
+   <link href="http://localhost:8080/mapea/debug/mapea/facade/assets/css/controls/scale.css" rel="stylesheet" />
+   <link href="http://localhost:8080/mapea/debug/mapea/facade/assets/css/controls/wmcselector.css" rel="stylesheet" />
+   <link href="http://localhost:8080/mapea/debug/mapea/facade/assets/css/mapea.css" rel="stylesheet" />
+   <style rel="stylesheet">
+      html,
+      body {
+         margin: 0;
+         padding: 0;
+         height: 100%;
+         overflow: hidden;
+      }
+   </style>
+</head>
+
+<body>
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script type="text/javascript" src="http://localhost:8080/mapea/debug/proj4.js"></script>
+   <script type="text/javascript" src="http://localhost:8080/mapea/debug/closure/base.js"></script>
+   <script type="text/javascript" src="http://localhost:8080/mapea/debug/mapea.ol3.deps.js"></script>
+   <script type="text/javascript" src="debug.js"></script>
+   <script type="text/javascript" src="http://localhost:8080/mapea/js/configuration.js"></script>
+
+   <script type="application/javascript">
+      //      var mapa = M.map({
+      //         "controls": ["navtoolbar", "layerswitcher"],
+      //         //"wmcfiles": ["http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejeroCache.xml*mapa callejero cache"],
+      //         'layers': [new M.layer.WMS('WMS*Biogeografia*http://ideextremadura.com/CICTEX/Biogeografia?*Biogeografia*false')],
+      //         "container": "mapa"
+      //      });
+
+      //      var mapa = M.map({
+      //         "controls": ["navtoolbar", "layerswitcher", "mouse"],
+      //         //"wmcfiles": ["http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejeroCache.xml*mapa callejero cache"],
+      //         'layers': [new M.layer.WMS({
+      //            url: 'http://www.ideandalucia.es/wms/mta400v_2008?',
+      //            name: 'Redes_energeticas',
+      //            legend: 'Redes'
+      //         }), new M.layer.WMS({
+      //            url: 'http://www.ideandalucia.es/wms/mta10v_2007?',
+      //            name: 'Limites',
+      //            transparent: false
+      //         })],
+      //         "projection": "EPSG:4326*d",
+      //         "container": "mapa"
+      //      });
+
+      //      var mapa = M.map({
+      //         "controls": ["navtoolbar", "layerswitcher"],
+      //         //"wmcfiles": ["http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejeroCache.xml*mapa callejero cache"],
+      //         'layers': [new M.layer.WMS({
+      //            url: 'http://www.ideandalucia.es/wms/mta400v_2008?',
+      //            name: 'Redes_energeticas',
+      //            legend: 'Redes'
+      //         }), new M.layer.WMS({
+      //            url: 'http://www.ideandalucia.es/wms/mta10v_2007?',
+      //            name: 'Limites'
+      //         }), new M.layer.WMS('WMS*Biogeografia*http://ideextremadura.com/CICTEX/Biogeografia?*Biogeografia*true')],
+      //         "container": "mapa"
+      //      });
+
+      //      var mapa = M.map({
+      //         "controls": ["navtoolbar", "layerswitcher"],
+      //         "wmcfiles": ["http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejeroCache.xml*mapa callejero cache"],
+      //         "container": "mapa",
+      //         "projection": "EPSG:23030*m"
+      //      });
+
+      //      var mapajs = M.map({
+      //         "controls": ["layerswitcher", "navtoolbar", "mouse"],
+      //         "wmcfiles": ["http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejero.xml*mapa del callejero", "idea", "ortofoto"],
+      //         "zoom": "5",
+      //         "center": "235061.9,4141933.04",
+      //         "container": "mapa"
+      //      });
+
+
+      //      var map = M.map({
+      //         container: 'mapa',
+      //         projection: 'EPSG:3857*m'
+      //      });
+      //
+      //      var osmLayer = new M.layer.OSM();
+      //      map.addLayers([osmLayer]);
+      //      map.zoomToMaxExtent();
+
+
+      window.URL_WMS = 'http://www.ideandalucia.es/wms/mta400v_2008?';
+      window.NAME_WMS = 'Redes_energeticas';
+      window.TITLE_WMS = 'Redes';
+      window.TRANSPARENCE_WMS = true;
+      window.TILED_WMS = true;
+      window.VERSION_WMS = '1.1.1';
+      // wms 2
+      window.URL_WMS_2 = 'http://www.ideandalucia.es/wms/mta10v_2007?';
+      window.NAME_WMS_2 = 'Limites';
+      window.TITLE_WMS_2 = 'Limites';
+      window.TRANSPARENCE_WMS_2 = false;
+      window.TILED_WMS_2 = true;
+      // wms_full
+      window.WMS_FULL_URL = 'http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Permeabilidad_Andalucia?';
+      window.WMS_FULL_TILED = true;
+      // wms type
+      window.WMS = 'WMS';
+      window.wmS = 'wmS';
+      // wms_full type
+      window.WMS_FULL = 'WMS_FULL';
+      window.wmS_Full = 'wmS_Full';
+      //
+      //      var layer1 = new M.layer.WMS({
+      //         url: URL_WMS,
+      //         name: NAME_WMS,
+      //         legend: TITLE_WMS,
+      //         transparent: TRANSPARENCE_WMS,
+      //         tiled: TILED_WMS,
+      //         version: VERSION_WMS
+      //      });
+      //      var layer2 = new M.layer.WMS({
+      //         url: URL_WMS_2,
+      //         name: NAME_WMS_2,
+      //         legend: TITLE_WMS_2,
+      //         transparent: TRANSPARENCE_WMS_2,
+      //         tiled: TILED_WMS_2
+      //      });
+      //      var layerWMSFull = new M.layer.WMS({
+      //         url: WMS_FULL_URL,
+      //         tiled: WMS_FULL_TILED
+      //      });
+      //
+      //      var map = M.map({
+      //         container: 'mapa',
+      //         controls: ['layerswitcher', 'scale', 'mouse', 'overviewmap'],
+      //         layers: [layer1, layer2, layerWMSFull]
+      //      });
+      //
+      //      function removeLayer() {
+      //         map.removeLayers(layerWMSFull);
+      //      }
+
+
+      //      var map = M.map({
+      //         container: 'mapa',
+      //         controls: ['layerswitcher', 'scale', 'mouse', 'overviewmap'],
+      //         wmcfile: ['callejero'],
+      //         layers: [new M.layer.WMS({
+      //            url: URL_WMS,
+      //            name: NAME_WMS,
+      //            legend: TITLE_WMS,
+      //            transparent: TRANSPARENCE_WMS,
+      //            tiled: TILED_WMS,
+      //            version: VERSION_WMS
+      //         })]
+      //      });
+
+      var map = M.map({
+         container: 'mapa',
+         wmc: new M.layer.WMC({
+            name: 'cdau',
+            url: 'http://www.callejerodeandalucia.es/wmc/context_cdau_callejero.xml'
+         }),
+         controls: ['layerswitcher'],
+         layers: ['KML*Arboleda*http://mapea-sigc.juntadeandalucia.es/Componente/kml/*arbda_sing_se.kml*true'],
+      });
+   </script>
+</body>
+
+</html>

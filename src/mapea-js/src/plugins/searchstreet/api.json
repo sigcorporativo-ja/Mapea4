@@ -1,0 +1,14 @@
+{
+   "url": {
+      "name": "searchstreet"
+   },
+   "constructor": "M.plugin.Searchstreet",
+   "parameters": [{
+      "type": "object",
+      "properties": [{
+         "type": "simple",
+         "name": "locality",
+         "position": 0
+      }]
+   }]
+}

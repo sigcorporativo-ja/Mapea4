@@ -1,0 +1,85 @@
+<html>
+
+<head>
+   <meta charset="utf-8">
+   <title>Mocha Tests</title>
+   <link href="../../../../libraries/mocha/mocha.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="mocha"></div>
+   <div id="mapa"></div>
+   <div id="constructor-tests"></div>
+
+   <!-- libraries -->
+   <script src="../../../../libraries/babel-polyfill/browser-polyfill.js"></script>
+   <script src="../../../../libraries/chai/chai.js"></script>
+   <script src="../../../../libraries/mocha/mocha.js"></script>
+   <script src="../../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+
+   <!-- tests -->
+   <script src="../../main-suite.js"></script>
+   <script src="js/asserts/asserts.js"></script>
+   <script src="js/suites/suite-kml-layer.js"></script>
+   <script src="js/suites/suite-kml-obj.js"></script>
+   <script src="js/suites/suite-addKML.js"></script>
+   <script src="js/suites/suite-getKML.js"></script>
+   <script src="js/suites/suite-removeKML.js"></script>
+   <script src="js/suites/suite-addLayers.js"></script>
+   <script src="js/suites/suite-getLayers.js"></script>
+   <script src="js/suites/suite-removeLayers.js"></script>
+   <script src="js/suites/suite-constructor-kml.js"></script>
+   <script src="js/suites/suite-constructor-layer.js"></script>
+   <script type="text/javascript">
+      mapeaSuite('Capas KML', function () {
+         // params
+         // kml 1.1
+         window.DIR_KML = 'http://sad.guadaltel.es/desarrollo/mapea/Componente/kml/';
+         window.FILENAME_KML = 'arbda_sing_se.kml';
+         window.NAME_KML = 'Arboleda';
+         window.EXTRACT_ATTRIBUTES = false;
+         // kml 1.2
+         window.URL_KML = 'http://sad.guadaltel.es/desarrollo/mapea/Componente/kml/arbda_sing_se.kml';
+         // kml 2.1
+         window.DIR_KML_2 = 'http://sad.guadaltel.es/desarrollo/mapea/Componente/kml/';
+         window.FILENAME_KML_2 = 'CarrilbiciSevillaactualizado.kml';
+         window.NAME_KML_2 = 'Carril bici';
+         window.EXTRACT_ATTRIBUTES_2 = true;
+         // kml 2.2
+         window.URL_KML_2 = 'http://sad.guadaltel.es/desarrollo/mapea/Componente/kml/CarrilbiciSevillaactualizado.kml';
+         // kml type
+         window.KML = 'KML';
+         window.kmL = 'kmL';
+
+         window.map;
+
+         suiteSetup(function () {
+            // supress console logging
+            if (window.console && window.console.error) {
+               window.console.error = function () {};
+            }
+         });
+
+         setup(function () {
+            map = M.map('mapa');
+         });
+
+         teardown(function () {
+            map.destroy();
+         });
+
+         mapeaSuite.kml.object();
+         mapeaSuite.kml.layer();
+         mapeaSuite.kml.addKML();
+         mapeaSuite.kml.getKML();
+         mapeaSuite.kml.removeKML();
+         mapeaSuite.kml.addLayers();
+         mapeaSuite.kml.getLayers();
+         mapeaSuite.kml.removeLayers();
+         mapeaSuite.kml.constructorKML();
+         mapeaSuite.kml.constructorLayer();
+      });
+   </script>
+</body>
+
+</html>

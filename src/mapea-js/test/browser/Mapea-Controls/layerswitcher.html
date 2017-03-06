@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="UTF-8">
+
+   <title>Mapea Tests</title>
+   <link href="../test.css" rel="stylesheet" />
+   <link href="../../../build/core/4.0.0-SNAPSHOT/css/mapea.ol3.min.css" rel="stylesheet" />
+</head>
+
+<body>
+   <div id="mapa" class="container"></div>
+
+   <!-- libraries -->
+   <script src="../../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
+
+   <script type="text/javascript">
+      var wmc = new M.layer.WMC({
+         name: 'cdau',
+         url: 'http://www.callejerodeandalucia.es/wmc/context_cdau_callejero.xml'
+      });
+      var wfs = new M.layer.WFS({
+         url: 'http://clientes.guadaltel.es/desarrollo/geossigc/wfs?',
+         namespace: 'callejero',
+         name: 'prueba_pol_wfst'
+      });
+      var wms1 = new M.layer.WMS({
+         url: 'http://www.ideandalucia.es/wms/mta400v_2008?',
+         name: 'Redes_energeticas',
+         legend: 'Redes'
+      });
+      var wms2 = new M.layer.WMS({
+         url: 'http://www.ideandalucia.es/wms/mta10v_2007?',
+         name: 'Limites',
+         transparent: false
+      });
+      var wms3 = new M.layer.WMS({
+         url: 'http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Permeabilidad_Andalucia?'
+      });
+      var wms4 = new M.layer.WMS('WMS*MTA400*http://www.ideandalucia.es/wms/mta400r_2008?*MTA400*false');
+
+      var wmts = new M.layer.WMTS({
+         url: 'http://www.ideandalucia.es/geowebcache/service/wmts?',
+         name: 'toporaster',
+         legend: 'Capa wmts',
+      });
+      var mapa = M.map({
+         container: 'mapa',
+         layers: [wfs, wms1, wms2, wms3, wms4, wmts, wmc],
+         maxExtent: {
+            left: 96497.813642565,
+            bottom: 3959999.4840389,
+            right: 622003.74990423,
+            top: 4300000.6565066
+         },
+         controls: ['layerswitcher'],
+         resolutions: [
+             490.4640841686878,
+             296.4735539465016,
+             179.21101876124024,
+             108.32868165784868,
+             65.48204095286125,
+             39.58229364311229,
+             23.92652927811816,
+             14.463002282240476,
+             8.742531463073329,
+             5.284646637764822,
+             3.194439757408831,
+             1.9309607743291293,
+             1.167218603309086,
+             0.7055551236581433,
+             0.4264908313738002,
+             0.25780328587628126
+          ]
+      });
+   </script>
+</body>
+
+</html>

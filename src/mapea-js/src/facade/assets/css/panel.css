@@ -1,0 +1,575 @@
+/****************************
+     GENERAL
+****************************/
+
+.m-areas {
+   top: 0;
+   left: 0;
+   width: 0;
+   height: 0;
+   max-height: 0;
+}
+
+
+/****************************
+     EACH AREA
+****************************/
+
+.m-areas > div.m-area {
+   -webkit-display: flex;
+   display: flex;
+   position: absolute;
+   -webkit-flex-flow: column nowrap;
+   flex-flow: column nowrap;
+}
+
+
+/* TOP */
+
+.m-areas > div.m-area.m-top {
+   top: 0;
+}
+
+
+/* BOTTOM */
+
+.m-areas > div.m-area.m-bottom {
+   bottom: 0;
+   width: 0;
+   max-width: 0;
+}
+
+.m-areas > div.m-area.m-bottom.m-right {
+   z-index: 10;
+}
+
+
+/* LEFT */
+
+.m-areas > div.m-area.m-left {
+   left: 0;
+   -webkit-align-items: flex-start;
+   align-items: flex-start;
+}
+
+
+/* RIGHT */
+
+.m-areas > div.m-area.m-right {
+   right: 0;
+   -webkit-align-items: flex-end;
+   align-items: flex-end;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-areas > div.m-area.m-top.m-right {
+      /*top: 50px;*/
+   }
+   .m-areas > div.m-area.m-top.top-extra {
+      top: 50px;
+   }
+   .m-areas > div.m-area.m-top.top-extra.top-extra-search {
+      top: 75px;
+   }
+   .m-areas > div.m-area.m-top.top-extra.top-extra-searchs {
+      top: 135px;
+   }
+}
+
+
+/****************************
+     SPECIFIC PANELS
+****************************/
+
+.m-areas > div.m-area > div.m-panel {
+   z-index: 999;
+   position: relative;
+   background: #fff;
+   box-sizing: border-box;
+   border-radius: 4px;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+}
+
+div.m-panel > button {
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+}
+
+
+/*
+.m-areas > div.m-area > div.m-panel.m-geosearch.opened {
+   border-radius: 4px;
+   border-top-right-radius: 0px;
+   border-bottom-right-radius: 0px;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-areas > div.m-area > div.m-panel.m-geosearch.opened {
+      border-top-right-radius: 4px;
+      border-bottom-right-radius: 4px;
+   }
+}
+*/
+
+
+/* TOP */
+
+.m-areas > div.m-area.m-top > div.m-panel {
+   margin-top: 10px;
+}
+
+
+/* BOTTOM */
+
+.m-areas > div.m-area.m-bottom > div.m-panel {
+   margin-bottom: 10px;
+}
+
+
+/* LEFT */
+
+.m-areas > div.m-area.m-left > div.m-panel {
+   margin-left: 10px;
+}
+
+
+/* RIGHT */
+
+.m-areas > div.m-area.m-right > div.m-panel {
+   margin-right: 10px;
+}
+
+
+/* NO COLLAPSIBLE */
+
+.m-areas > div.m-area > div.m-panel.no-collapsible {
+   border-radius: 20px;
+}
+
+
+/* BUTTON */
+
+.m-areas > div.m-area > div.m-panel > button.m-panel-btn {
+   color: #fff;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+}
+
+.m-areas > div.m-area > div.m-panel > button.m-panel-btn, .m-areas > div.m-area > div.m-panel.no-collapsible > div.m-panel-controls > div.m-control > button {
+   -webkit-transition: opacity 0.25s ease 0s, color 0.25s ease 0s;
+   transition: opacity 0.25s ease 0s, color 0.25s ease 0s;
+   padding: 0px;
+   font-size: 19px;
+   background: none;
+   border: none;
+   cursor: pointer;
+   width: 40px;
+   height: 40px;
+   box-sizing: border-box;
+   border: 0px;
+   font-family: 'g-cartografia' !important;
+   speak: none;
+   font-style: normal;
+   font-weight: normal;
+   font-variant: normal;
+   text-transform: none;
+   line-height: 1;
+   /* Better Font Rendering =========== */
+   -webkit-font-smoothing: antialiased;
+   -moz-osx-font-smoothing: grayscale;
+   text-align: center;
+}
+
+.m-areas > div.m-area > div.m-panel.opened > button.m-panel-btn {
+   font-size: 15px;
+}
+
+.m-areas > div.m-area.m-left > div.m-panel > button.m-panel-btn {
+   border-top-right-radius: 4px;
+   border-bottom-right-radius: 4px;
+   float: right;
+}
+
+.m-areas > div.m-area.m-left > div.m-panel.collapsed > button.m-panel-btn {
+   position: inherit;
+   right: 0;
+   box-shadow: none;
+}
+
+.m-areas > div.m-area.m-right > div.m-panel > button.m-panel-btn {
+   border-top-left-radius: 4px;
+   border-bottom-left-radius: 4px;
+   float: left;
+}
+
+.m-areas > div.m-area > div.m-panel.m-tools > button.m-panel-btn {
+   background-color: #337ceb;
+}
+
+.m-areas > div.m-area > div.m-panel.m-edition > button.m-panel-btn {
+   background-color: #67af13;
+}
+
+.m-areas > div.m-area > div.m-panel.m-tools.collapsed > button.m-panel-btn {
+   color: #337ceb;
+}
+
+.m-areas > div.m-area > div.m-panel.m-edition.collapsed > button.m-panel-btn {
+   color: #67af13;
+}
+
+.m-areas > div.m-area > div.m-panel.collapsed > button.m-panel-btn {
+   border-radius: 20px;
+   background-color: white !important;
+}
+
+.m-areas > div.m-area > div.m-panel > button.m-panel-btn:focus {
+   outline: none;
+}
+
+.m-areas > div.m-area > div.m-panel.no-collapsible > button.m-panel-btn {
+   display: none;
+}
+
+.m-areas > div.m-area.m-left > div.m-panel, .m-areas > div.m-area.m-left > div.m-panel > div.m-panel-controls {
+   -webkit-flex-direction: row-reverse;
+   flex-direction: row-reverse;
+}
+
+
+/* LEFT AND RIGHT */
+
+.m-areas > div.m-area > div.m-panel.m-tools {
+   order: -90;
+}
+
+.m-areas > div.m-area > div.m-panel.m-edition {
+   order: -80;
+}
+
+
+/* SPECIFIC CONTROLS */
+
+.m-areas > div.m-area > div.m-panel.m-panzoombar {
+   order: -69;
+   margin-top: 8px;
+   border-radius: 20px;
+   margin-left: 25px;
+   width: 10px;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-areas > div.m-area > div.m-panel.m-panzoombar {
+      display: none;
+   }
+}
+
+.m-areas > div.m-area > div.m-panel.m-panzoom {
+   order: -70;
+   width: 30px;
+   height: 60px;
+   border-radius: 4px;
+   margin-left: 15px;
+}
+
+.m-areas > div.m-area > div.m-panel.m-scaleline {
+   background-color: transparent;
+   box-shadow: none;
+   left: 20px;
+}
+
+.m-areas > div.m-area > div.m-panel.m-location > div.m-panel-controls > div.m-control.activated > button {
+   color: #337ceb;
+}
+
+.m-areas > div.m-area > div.m-panel.m-mouse {
+   border-radius: 4px;
+   padding: 5px;
+}
+
+.m-areas > div.m-area > div.m-panel.m-mouse > div.m-panel-controls {
+   width: auto;
+}
+
+.m-areas > div.m-area > div.m-panel.m-mouse > div.m-panel-controls:before {
+   font-size: 15px;
+   background: none;
+}
+
+.m-areas > div.m-area > div.m-panel.m-overviewmap {
+   /*   border-radius: 4px*/
+   box-shadow: none;
+}
+
+.m-areas > div.m-area > div.m-panel.m-overviewmap.collapsed {
+   /*   height: 40px;*/
+}
+
+
+/****************************
+     PANELS CONTAINER
+****************************/
+
+.m-areas > div.m-area > div.m-panel {}
+
+.m-areas > div.m-area > div.m-panel > div.m-panel-controls {
+   display: flex;
+}
+
+
+/****************************
+     FIREFOX HACKS
+****************************/
+
+@-moz-document url-prefix() {
+   .m-areas > div.m-area > div.m-panel > div.m-panel-controls {
+      display: inline-flex;
+   }
+}
+
+
+/****************************
+ INTERNET EXPLORER HACKS
+****************************/
+
+@media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
+   .m-areas > div.m-area > div.m-panel.collapsed {
+      height: auto !important;
+   }
+   .m-areas > div.m-area > div.m-panel.m-layerswitcher.collapsed {
+      width: 40px !important;
+   }
+   .m-areas > div.m-area > div.m-panel.m-layerswitcher > div.m-panel-controls {
+      width: 100% !important;
+   }
+   .m-areas > div.m-area > div.m-panel.m-panzoom {
+      height: auto !important;
+   }
+   .m-printer.opened .m-printer-container .form {
+      min-height: 176px;
+   }
+   .m-printer-container > div.button > button.print {
+      width: 57% !important;
+   }
+}
+
+
+/****************************
+ SAFARI HACKS
+****************************/
+
+@supports (overflow:-webkit-marquee) and (justify-content:inherit) {
+   /*
+		.m-areas > div.m-area > div.m-panel.m-panzoombar {
+		   margin-top: 75px;
+		}
+
+	.m-areas > div.m-area > div.m-panel.m-panzoom {
+		   margin-top: 55px;
+		}
+	*/
+   .m-areas > div.m-area.m-top {
+      top: 0;
+      /*height: auto;
+	   max-height: 1000px;*/
+   }
+}
+
+
+/****************************
+     VISIBILITY
+****************************/
+
+.m-areas > div.m-area.m-top, .m-areas > div.m-area.m-bottom, .m-areas > div.m-area > div.m-panel.m-map-info, .m-areas > div.m-area > div.m-panel.m-map-info > div.m-panel-controls {
+   visibility: hidden;
+}
+
+.m-areas > div.m-area > div.m-panel {
+   visibility: visible;
+}
+
+.m-areas > div.m-area > div.m-panel.m-map-info > div.m-panel-controls > div {
+   visibility: visible !important;
+}
+
+
+/****************************
+     ANIMATIONS
+****************************/
+
+.m-areas > div.m-area > div.m-panel {
+   -webkit-transition: border-radius .5s ease 0s;
+   transition: border-radius .5s ease 0s;
+}
+
+.m-areas > div.m-area > div.m-panel.collapsed {
+   border-radius: 20px;
+}
+
+.m-areas > div.m-area > div.m-panel > div.m-panel-controls {
+   opacity: 1;
+   /*background-color: white;*/
+   border-radius: 10px;
+   /*max-width: 50vw;*/
+   -webkit-transition: max-width 1s ease 0s, opacity .75s ease .1s;
+   transition: max-width 1s ease 0s, opacity .75s ease .1s;
+}
+
+.m-areas > div.m-area > div.m-panel.collapsed > div.m-panel-controls {
+   opacity: 0;
+   max-width: 0px;
+   -webkit-transition: max-width .4s ease 0s, opacity .3s ease 0s;
+   transition: max-width .4s ease 0s, opacity .3s ease 0s;
+}
+
+
+/****************************
+     CONTROLS
+****************************/
+
+.m-areas > div.m-area > div.m-panel > div.m-panel-controls > div {
+   position: inherit !important;
+   overflow: hidden;
+   background-color: transparent;
+   border-radius: 0px;
+   padding: 0px;
+   box-shadow: none;
+   display: table;
+}
+
+.m-areas > div.m-area > div.m-panel.m-tools > div.m-panel-controls > div.m-control.activated > button {
+   color: #337ceb
+}
+
+.m-areas > div.m-area > div.m-panel.m-edition > div.m-panel-controls > div.m-control.activated > button {
+   color: #67af13
+}
+
+@media only screen and (min-width: 769px) {
+   .m-geosearch.collapsed .m-panel-controls, .m-searchstreet.collapsed .m-panel-controls, .m-searchstreetgeosearch.collapsed .m-panel-controls {
+      display: none !important;
+   }
+}
+
+.m-tools.collapsed .m-panel-controls, .m-edition.collapsed .m-panel-controls {
+   display: none !important;
+}
+
+.m-map-info > div.m-panel-controls {
+   flex-direction: row-reverse;
+   align-items: flex-end;
+}
+
+.m-map-info {
+   background: transparent !important;
+   border-radius: 0 !important;
+   box-shadow: none !important;
+   right: 0;
+   order: 4;
+}
+
+
+/*  Localizacion  */
+
+.m-location {
+   order: 1;
+   z-index: 97;
+}
+
+
+/*  Info mapa  */
+
+.m-panel.m-map-info > div.m-panel-controls > div.m-control.m-scale-container {
+   order: 3;
+}
+
+.m-panel.m-map-info.m-with-mouse > div.m-panel-controls > div.m-control.m-scale-container {
+   border-top-left-radius: 0px !important;
+   border-bottom-left-radius: 0px !important;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-panel.m-map-info.m-with-mouse > div.m-panel-controls > div.m-control.m-scale-container {
+      border-top-left-radius: 20px !important;
+      border-bottom-left-radius: 20px !important;
+   }
+}
+
+.m-panel.m-map-info.m-with-wmcselector > div.m-panel-controls > div.m-control.m-scale-container {
+   border-top-right-radius: 0px !important;
+   border-bottom-right-radius: 0px !important;
+}
+
+.m-panel.m-map-info > div.m-panel-controls > div.m-control.m-wmcselector-container {
+   order: 2;
+}
+
+.m-panel.m-map-info.m-with-mouse > div.m-panel-controls > div.m-control.m-wmcselector-container, .m-panel.m-map-info.m-with-scale > div.m-panel-controls > div.m-control.m-wmcselector-container {
+   border-top-left-radius: 0px !important;
+   border-bottom-left-radius: 0px !important;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-panel.m-map-info.m-with-mouse:not(.m-with-scale) > div.m-panel-controls > div.m-control.m-wmcselector-container {
+      border-top-left-radius: 20px !important;
+      border-bottom-left-radius: 20px !important;
+   }
+}
+
+.m-areas > div.m-area > div.m-panel > div.m-panel-controls .m-mouse-position {
+   background-color: white !important;
+   padding: 6px 12px 3px 12px !important;
+   font-family: 'Muli', 'sans-serif' !important;
+   font-size: 12px !important;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02) !important;
+   display: inline;
+   height: 15px !important;
+}
+
+.m-scale-container {
+   background-color: white !important;
+   padding: 6px 12px 3px 12px !important;
+   font-family: 'Muli', 'sans-serif' !important;
+   font-size: 12px !important;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02) !important;
+   display: flex !important;
+   height: 15px;
+   white-space: pre;
+}
+
+.m-scale-container:before {
+   color: #a35d38;
+   margin-right: 5px;
+}
+
+.m-wmcselector-container {
+   background-color: white !important;
+   padding: 4px 10px 3px 12px !important;
+   font-family: 'Muli', 'sans-serif' !important;
+   font-size: 12px !important;
+   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02) !important;
+   display: flex !important;
+   height: 17px;
+}
+
+.m-wmcselector-container:before {
+   color: #a35d38;
+   margin-right: 5px;
+   margin-top: 3px;
+}
+
+@media only screen and (max-width: 768px) {
+   .m-scale-container {
+      border-top-left-radius: 20px !important;
+      border-bottom-left-radius: 20px !important;
+      padding: 6px 12px 3px 12px !important;
+   }
+}
+
+@media only screen and (min-width: 769px) {
+   .m-geosearch.collapsed div.search-panel, .m-geosearch.collapsed div.results-panel {
+      display: none !important;
+   }
+}
+
+.m-kml-desc > table {
+   width: 100%;
+}
