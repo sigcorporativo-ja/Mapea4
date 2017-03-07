@@ -332,8 +332,8 @@ goog.provide('P.impl.control.Printer');
         var image = featureStyle.getImage();
         var imgSize = M.utils.isNullOrEmpty(image) ? [0, 0] : (image.getImageSize() || [24, 24]);
         var text = featureStyle.getText();
-        var stroke = featureStyle.getStroke() || (image.getStroke && image.getStroke());
-        var fill = featureStyle.getFill() || (image.getFill && image.getFill());
+        var stroke = M.utils.isNullOrEmpty(image) ? featureStyle.getStroke() : (image.getStroke && image.getStroke());
+        var fill = M.utils.isNullOrEmpty(image) ? featureStyle.getFill() : (image.getFill && image.getFill());
 
         var style = {
           "fillColor": M.utils.isNullOrEmpty(fill) ? "" : M.utils.rgbToHex(fill.getColor()),
