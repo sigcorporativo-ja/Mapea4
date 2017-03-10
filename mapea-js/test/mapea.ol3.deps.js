@@ -335,7 +335,7 @@ goog.addDependency('../../../../src/impl/ol3/js/layers/layerbase.js', ['M.impl.L
 goog.addDependency('../../../../src/impl/ol3/js/layers/mapbox.js', ['M.impl.layer.Mapbox'], ['M.exception', 'M.impl.Layer', 'M.impl.source.Mapbox', 'M.utils', 'ol.layer.Tile'], false);
 goog.addDependency('../../../../src/impl/ol3/js/layers/osm.js', ['M.impl.layer.OSM'], ['M.exception', 'M.impl.Layer', 'M.utils', 'ol.layer.Tile', 'ol.source.OSM'], false);
 goog.addDependency('../../../../src/impl/ol3/js/layers/wfs.js', ['M.impl.layer.WFS'], ['M.exception', 'M.impl.Layer', 'M.impl.format.GML', 'M.impl.format.GeoJSON', 'M.impl.loader.WFS', 'M.impl.service.WFS', 'M.utils', 'ol.layer.Vector', 'ol.source.Vector'], false);
-goog.addDependency('../../../../src/impl/ol3/js/layers/wmc.js', ['M.impl.layer.WMC'], ['M.exception', 'M.impl.Layer', 'M.impl.format.WMC.v110', 'M.utils', 'ol.Extent'], false);
+goog.addDependency('../../../../src/impl/ol3/js/layers/wmc.js', ['M.impl.layer.WMC'], ['M.evt.EventsManager', 'M.exception', 'M.impl.Layer', 'M.impl.format.WMC.v110', 'M.utils'], false);
 goog.addDependency('../../../../src/impl/ol3/js/layers/wms.js', ['M.impl.layer.WMS'], ['M.exception', 'M.impl.GetCapabilities', 'M.impl.Layer', 'M.impl.format.WMSCapabilities', 'M.utils', 'ol.extent', 'ol.layer.Image', 'ol.layer.Tile', 'ol.source.ImageWMS', 'ol.source.TileWMS', 'ol.tilegrid.TileGrid'], false);
 goog.addDependency('../../../../src/impl/ol3/js/layers/wmts.js', ['M.impl.layer.WMTS'], ['M.exception', 'M.impl.Layer', 'M.impl.format.WMTSCapabilities', 'M.utils', 'ol.extent', 'ol.layer.Tile', 'ol.source.WMTS'], false);
 goog.addDependency('../../../../src/impl/ol3/js/loaders/jsonp.js', ['M.impl.loader.JSONP'], [], false);

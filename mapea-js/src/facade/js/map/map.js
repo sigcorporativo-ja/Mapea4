@@ -234,6 +234,7 @@ goog.require('M.window');
         this.addControls(getFeatureInfo);
       }
     }
+
     // default WMC
     if (M.utils.isNullOrEmpty(params.wmc) && M.utils.isNullOrEmpty(params.layers)) {
       this.addWMC(M.config.predefinedWMC.predefinedNames[0]);

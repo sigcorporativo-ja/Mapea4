@@ -1,42 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-   <meta charset="UTF-8">
-   <title>PRUEBA DESARROLLO</title>
+    <head>
+        <meta charset="UTF-8">
+        <title>PRUEBA DESARROLLO</title>
 
-   <!-- styles -->
-   <link href="../../build/core/4.0.0-SNAPSHOT/assets/css/mapea.ol3.min.css" rel="stylesheet" />
-   <style rel="stylesheet">
-      html,
-      body {
-         margin: 0;
-         padding: 0;
-         height: 100%;
-         overflow: hidden;
-      }
-   </style>
-   <link href="../../build/plugins/4.0.0-SNAPSHOT/printer/printer.min.css" rel="stylesheet" />
-</head>
+        <!-- styles -->
+        <link href="http://mapea4-sigc.juntadeandalucia.es/assets/css/mapea.ol3.min.css" rel="stylesheet" />
+        <link href="http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css" rel="stylesheet" />
+        <style rel="stylesheet">
+            html,
+            body {
+                margin: 0;
+                padding: 0;
+                height: 100%;
+                overflow: hidden;
+            }
+        </style>
+    </head>
 
-<body>
-   <div id="map" class="container"></div>
+    <body>
+        <div id="map" class="container"></div>
 
-   <!-- libraries -->
-   <script type="text/javascript" src="../../build/core/4.0.0-SNAPSHOT/js/mapea.ol3.min.js"></script>
-   <script type="text/javascript" src="../configuration_filtered.js"></script>
-   <script type="text/javascript" src="../../build/plugins/4.0.0-SNAPSHOT/printer/mapea.printer.ol3.min.js"></script>
+        <!-- libraries -->
+        <!-- <script type="text/javascript" src="http://mapea4-sigc.juntadeandalucia.es/js/mapea.ol3.min.js"></script> -->
+        <script type="text/javascript" src="http://www.juntadeandalucia.es/sandetel/publicacion/mapea/js/mapea.ol3.min.js"></script>
+        <script type="text/javascript" src="http://www.juntadeandalucia.es/sandetel/publicacion/mapea/plugins/printer2/mapea.printer.ol3.min.js"></script>
+        <script type="text/javascript" src="http://mapea4-sigc.juntadeandalucia.es/js/configuration.js"></script>
 
 
-   <script type="application/javascript">
-      M.proxy(false);
-      var mapajs = M.map({
-         container: 'map',
-         wmcfile: ['callejero']
-      });
-
-      mapajs.addControls(['scale', 'scaleline']);
-   </script>
-</body>
+        <script type="application/javascript">
+        </script>
+    </body>
 
 </html>
