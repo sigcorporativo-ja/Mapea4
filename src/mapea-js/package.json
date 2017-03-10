@@ -1,6 +1,6 @@
 {
     "name": "mapea",
-    "version": "4.0.4-dev",
+    "version": "4.0.4",
     "description": "Herramienta para desarrollo de mapas interactivos de forma sencilla",
     "keywords": [
         "map",
