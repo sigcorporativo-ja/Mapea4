@@ -41,7 +41,19 @@
          </properties>
       </profile>
       <profile>
+         <id>mapea-pruebas</id>
+         <activation>
+            <activeByDefault>false</activeByDefault>
+         </activation>
+         <properties>
+            <environment>mapea-pruebas</environment>
+         </properties>
+      </profile>
+      <profile>
          <id>mapea-preproduccion</id>
+         <activation>     
+            <activeByDefault>false</activeByDefault>    
+         </activation>    
          <properties>
             <environment>mapea-preproduccion</environment>
          </properties>
