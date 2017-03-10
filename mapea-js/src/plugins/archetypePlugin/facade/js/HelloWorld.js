@@ -12,8 +12,8 @@ goog.require('P.control.HelloWorldControl');
  * @param {Object} impl implementation object
  * @api stable
  */
-M.plugin.HelloWorld = (function() {
-   goog.base(this);
+M.plugin.HelloWorld = (function () {
+  goog.base(this);
 });
 goog.inherits(M.plugin.HelloWorld, M.Plugin);
 
@@ -25,7 +25,18 @@ goog.inherits(M.plugin.HelloWorld, M.Plugin);
  * @param {M.Map} map the map to add the plugin
  * @api stable
  */
-M.plugin.HelloWorld.prototype.addTo = function(map) {
-   var miControl = new M.control.HelloWorldControl();
-   map.addControls([miControl]);
+M.plugin.HelloWorld.prototype.addTo = function (map) {
+  var miControl = new M.control.HelloWorldControl();
+  map.addControls([miControl]);
+};
+
+/**
+ * This function destroys the plugin from the map
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+M.plugin.HelloWorld.prototype.destroy = function () {
+  // TODO implement this method
 };
