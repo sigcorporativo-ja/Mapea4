@@ -6,7 +6,7 @@
 		<Title>Callejero Digital de Andalucía Unificado</Title>
 		<Extension>
 			<ol:maxExtent xmlns:ol="http://openlayers.org/context" maxx="621889.9370" maxy="4299792.1070" minx="96388.1179" miny="3959795.9442"/>
-		</Extension>		
+		</Extension>
 		<KeywordList>
 			<Keyword>IECA</Keyword>
 			<Keyword>
@@ -46,7 +46,7 @@
 					</LegendURL>
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
 		</Layer>
 
@@ -76,7 +76,7 @@
 			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
 		</Layer>
-		
+
 		<!--  ******   Satelite Cacheado    ******  -->
 
 		<Layer hidden="0" queryable="0">
@@ -105,9 +105,9 @@
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
 		</Layer>
 
-		
+
 		<!--  ******   Ortofoto Cacheada    ******  -->
-		
+
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
 				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/geowebcache/service/wms?"/>
@@ -133,9 +133,9 @@
 			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">112201.81761065821200</sld:MaxScaleDenominator>
 		</Layer>
-		
+
 		<!--  ******   Ortofoto    ******  -->
-		
+
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
 				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/wms/ortofoto2010?"/>
@@ -158,12 +158,12 @@
 					<Title>Estilo de la leyenda</Title>
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MaxScaleDenominator>
 		</Layer>
 
 		<!--  ******   Base Cartografica   Cacheada ******  -->
-		
+
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
 				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/gwc/service/wms?"/>
@@ -190,7 +190,7 @@
 			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
 		</Layer>
-		
+
 		<!--  ******   Base Cartografica ******  -->
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
@@ -215,7 +215,7 @@
 					<Title>Estilo de la leyenda</Title>
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MaxScaleDenominator>
 		</Layer>
 
@@ -243,7 +243,7 @@
 					<Title>Estilo de la leyenda</Title>
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
 		</Layer>
 
@@ -272,7 +272,7 @@
 					<Title>Estilo de la leyenda</Title>
 				</Style>
 			</StyleList>
-			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
 			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
 		</Layer>
 <!--  ******   POIs    ******  -->
@@ -302,7 +302,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -330,7 +330,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -358,7 +358,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -386,7 +386,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -414,7 +414,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -442,7 +442,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -470,7 +470,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -498,7 +498,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -526,7 +526,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -554,7 +554,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -582,7 +582,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -610,7 +610,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -638,7 +638,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -666,7 +666,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -694,7 +694,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -722,7 +722,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -750,7 +750,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -778,7 +778,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -806,7 +806,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -834,7 +834,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -862,7 +862,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -890,7 +890,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -918,7 +918,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -946,13 +946,13 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
 
 
-    
-    
+
+
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
         <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
@@ -978,7 +978,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -1006,7 +1006,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -1034,7 +1034,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -1062,14 +1062,14 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
-    
-    
-    
-    
-    
+
+
+
+
+
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
         <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
@@ -1095,7 +1095,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -1123,7 +1123,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -1151,7 +1151,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -1179,7 +1179,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -1207,7 +1207,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -1235,10 +1235,10 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
-    
+
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
         <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
@@ -1264,7 +1264,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -1292,10 +1292,10 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
-    
+
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
         <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
@@ -1322,7 +1322,7 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
     <Layer hidden="1" queryable="1">
@@ -1351,10 +1351,8 @@
           </LegendURL>
         </Style>
       </StyleList>
-      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+      <sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
       <sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
     </Layer>
   </LayerList>
 </ViewContext>
-
-
