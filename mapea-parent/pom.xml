@@ -8,7 +8,7 @@
    <name>Mapea 4 PARENT</name>
    <description>Herramienta para desarrollo de mapas interactivos de forma sencilla</description>
    <properties>
-      <project.release.date>28/12/2016</project.release.date>
+      <project.release.date>23/02/2017</project.release.date>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <build.timestamp>${maven.build.timestamp}</build.timestamp>
       <maven.build.timestamp.format>dd-MM-yyyy</maven.build.timestamp.format>
@@ -51,9 +51,9 @@
       </profile>
       <profile>
          <id>mapea-preproduccion</id>
-         <activation>
-            <activeByDefault>false</activeByDefault>
-         </activation>
+         <activation>     
+            <activeByDefault>false</activeByDefault>    
+         </activation>    
          <properties>
             <environment>mapea-preproduccion</environment>
          </properties>
