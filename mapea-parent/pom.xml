@@ -3,12 +3,12 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>es.juntadeandalucia.mapea</groupId>
    <artifactId>mapea-parent</artifactId>
-   <version>4.0.3</version>
+   <version>4.0.4-dev</version>
    <packaging>pom</packaging>
    <name>Mapea 4 PARENT</name>
    <description>Herramienta para desarrollo de mapas interactivos de forma sencilla</description>
    <properties>
-      <project.release.date>28/12/2016</project.release.date>
+      <project.release.date>23/02/2017</project.release.date>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <build.timestamp>${maven.build.timestamp}</build.timestamp>
       <maven.build.timestamp.format>dd-MM-yyyy</maven.build.timestamp.format>
@@ -32,57 +32,18 @@
    </developers>
    <profiles>
       <profile>
-         <id>mapea-local</id>
-         <activation>
-            <activeByDefault>false</activeByDefault>
-         </activation>
-         <properties>
-            <environment>mapea-local</environment>
-         </properties>
-      </profile>
-      <profile>
-         <id>mapea-desarrollo</id>
-         <activation>
-            <activeByDefault>true</activeByDefault>
-         </activation>
-         <properties>
-            <environment>mapea-desarrollo</environment>
-         </properties>
-      </profile>
-      <profile>
          <id>mapea-produccion</id>
          <activation>
-            <activeByDefault>false</activeByDefault>
+            <activeByDefault>true</activeByDefault>
          </activation>
          <properties>
             <environment>mapea-produccion</environment>
          </properties>
       </profile>
       <profile>
-         <id>mapea-pruebas</id>
-         <activation>
-            <activeByDefault>false</activeByDefault>
-         </activation>
-         <properties>
-            <environment>mapea-pruebas</environment>
-         </properties>
-      </profile>
-      <profile>
          <id>mapea-preproduccion</id>
-         <activation>
-            <activeByDefault>false</activeByDefault>
-         </activation>
          <properties>
             <environment>mapea-preproduccion</environment>
-         </properties>
-      </profile>
-      <profile>
-         <id>mapea-amazon</id>
-         <activation>
-            <activeByDefault>false</activeByDefault>
-         </activation>
-         <properties>
-            <environment>mapea-amazon</environment>
          </properties>
       </profile>
    </profiles>
