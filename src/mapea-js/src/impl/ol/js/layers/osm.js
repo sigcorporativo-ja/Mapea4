@@ -18,6 +18,9 @@ goog.require('ol.source.OSM');
    * @api stable
    */
   M.impl.layer.OSM = (function (userParameters, options) {
+    // check for null options
+    options = options || {};
+
     /**
      * Layer resolutions
      * @private

@@ -85,12 +85,12 @@ module.exports = function (grunt) {
         options: {
           mode: 0700,
           create: [
-                  'build/core/<%= pkg.version %>/assets/fonts',
-                  'build/core/<%= pkg.version %>/assets/css',
-                  'build/core/<%= pkg.version %>/assets/img',
-                  'build/core/<%= pkg.version %>/js',
+                  'build/core/assets/fonts',
+                  'build/core/assets/css',
+                  'build/core/assets/img',
+                  'build/core/js',
                   'build/plugins',
-                  'build/templates/<%= pkg.version %>'
+                  'build/templates'
                ]
         }
       }
@@ -99,15 +99,15 @@ module.exports = function (grunt) {
     // removes the closure test files
     clean: {
       build: [
-            'build/core/<%= pkg.version %>/',
+            'build/core/',
             'build/plugins/',
-            'build/templates/<%= pkg.version %>/',
+            'build/templates/',
             'externs',
             'grunt-tasks/utilities/symbols',
             'grunt-tasks/utilities/exports'
          ],
       dev: [
-            'test/browser/mapea.deps.js'
+            'test/browser/mapea-<%= pkg.version %>.deps.js'
          ],
       'plugins-css': [
             "build/plugins/*.css",
@@ -133,7 +133,7 @@ module.exports = function (grunt) {
                //    ]
                // },*/
           { // ol3
-            'build/core/<%= pkg.version %>/assets/css/mapea.ol.min.css': [
+            'build/core/assets/css/mapea-<%= pkg.version %>.ol.min.css': [
                      'src/facade/assets/css/**/*.css',
                      'src/impl/ol/assets/css/**/*.css',
                      'libraries/ol3-popup/**/*.css'
@@ -158,8 +158,8 @@ module.exports = function (grunt) {
         files: [{
           expand: true,
           cwd: 'src',
-          src: 'configuration.js',
-          dest: 'build/core/<%= pkg.version %>/js/',
+          src: 'configuration-<%= pkg.version %>.js',
+          dest: 'build/core/js/',
           flatten: false,
           encoding: 'utf-8'
             }]
@@ -169,20 +169,20 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'src',
           src: '**/assets/fonts/*.*',
-          dest: 'build/core/<%= pkg.version %>/assets/fonts/',
+          dest: 'build/core/assets/fonts/',
           flatten: true,
           encoding: 'utf-8'
             }, { // facade img
           expand: true,
           cwd: 'src',
           src: 'facade/assets/img/*.*',
-          dest: 'build/core/<%= pkg.version %>/assets/img/',
+          dest: 'build/core/assets/img/',
           flatten: true
             }, { // impl img
           expand: true,
           cwd: 'src',
           src: 'impl/assets/img/*.*',
-          dest: 'build/core/<%= pkg.version %>/assets/img/',
+          dest: 'build/core/assets/img/',
           flatten: true
             }]
       },
@@ -191,14 +191,14 @@ module.exports = function (grunt) {
           expand: true,
           cwd: 'src/templates',
           src: '*.html',
-          dest: 'build/templates/<%= pkg.version %>/',
+          dest: 'build/templates/',
           flatten: true,
           encoding: 'utf-8'
             }, {
           expand: true,
           cwd: 'src/plugins',
           src: '**/templates/*.html',
-          dest: 'build/templates/<%= pkg.version %>/',
+          dest: 'build/templates/',
           flatten: true,
           encoding: 'utf-8'
             }]
@@ -415,102 +415,8 @@ module.exports = function (grunt) {
                 output_wrapper: "(function (root, factory) { root.M = factory(); } (this, function () { %output% return M; }));",
               }
             },
-            output: 'build/core/<%= pkg.version %>/js/mapea.ol.min.js'
-               },
-               // { // mapea-leaflet
-               //    closureDepsOpts: {
-               //       lib: [
-               //          'src/facade/js/**/*.js',
-               //          'src/impl/leaflet/js/**/*.js',
-               //          'libraries/handlebars/**/*.js',
-               //          'libraries/proj4/**/*.js',
-               //          'libraries/leaflet/**/*.js'
-               //       ]
-               //    },
-               //    closureComplileOpts: {
-               //       compile: {
-               //          externs: [
-               //             "src/externs/proj4x.js",
-               //             "src/externs/handlebarsx.js",
-               //             "src/externs/mapea-leafletx.js",
-               //             "src/externs/mx.js",
-               //             "src/externs/leafletx.js"
-               //          ],
-               //          define: [
-               //             "goog.array.ASSUME_NATIVE_FUNCTIONS=true",
-               //             "goog.dom.ASSUME_STANDARDS_MODE=true",
-               //             "goog.json.USE_NATIVE_JSON=true",
-               //             "goog.DEBUG=false"
-               //          ],
-               //          jscomp_error: [
-               //             "accessControls",
-               //             "ambiguousFunctionDecl",
-               //             "checkEventfulObjectDisposal",
-               //             "checkRegExp",
-               //             "checkTypes",
-               //             "const",
-               //             "constantProperty",
-               //             "deprecated",
-               //             "duplicateMessage",
-               //             "es3",
-               //             "es5Strict",
-               //             "fileoverviewTags",
-               //             "globalThis",
-               //             "internetExplorerChecks",
-               //             "invalidCasts",
-               //             "misplacedTypeAnnotation",
-               //             "missingGetCssName",
-               //             "missingProperties",
-               //             "missingProvide",
-               //             "missingRequire",
-               //             "missingReturn",
-               //             "newCheckTypes",
-               //             "nonStandardJsDocs",
-               //             "suspiciousCode",
-               //             "strictModuleDepCheck",
-               //             "typeInvalidation",
-               //             "undefinedNames",
-               //             "undefinedVars",
-               //             "unknownDefines",
-               //             "visibility"
-               //          ],
-               //          jscomp_off: [
-               //             "checkVars",
-               //             "externsValidation",
-               //             "accessControls",
-               //             "missingProperties",
-               //             "missingProvide",
-               //             "missingRequire",
-               //             "newCheckTypes",
-               //             "nonStandardJsDocs",
-               //             "suspiciousCode",
-               //             "undefinedNames",
-               //             "undefinedVars",
-               //             "unknownDefines",
-               //             "checkTypes",
-               //             "const",
-               //             "uselessCode"
-               //          ],
-               //          // create_source_map: 'build/core/<%= pkg.version %>/js/mapea.ol3.min.js.map',
-               //          // source_map_location_mapping: '/|mapea/debug/',
-               //          language_in: "ECMASCRIPT6",
-               //          language_out: "ECMASCRIPT5",
-               //          extra_annotation_name: ["api", "observable"],
-               //          // compilation_level: "ADVANCED",
-
-               //          export_local_property_definitions: true,
-               //          generate_exports: true,
-               //          compilation_level: "SIMPLE",
-
-               //          warning_level: "QUIET",
-               //          use_types_for_optimization: true,
-               //          manage_closure_dependencies: true,
-               //          js: ["grunt-tasks/utilities/exports/mapea-leaflet.js"],
-               //          output_wrapper: "(function (root, factory) { root.M = factory(); } (this, function () { %output% return M; }));"
-               //       }
-               //    },
-               //    output: 'build/core/<%= pkg.version %>/js/mapea.l.min.js'
-               // }
+            output: 'build/core/js/mapea-<%= pkg.version %>.ol.min.js'
+               }
             ]
       }
     },
@@ -519,9 +425,9 @@ module.exports = function (grunt) {
       dist: {
         src: [
                'libraries/proj4/proj4.js',
-               'build/core/<%= pkg.version %>/js/mapea.ol.min.js'
+               'build/core/js/mapea-<%= pkg.version %>.ol.min.js'
             ],
-        dest: 'build/core/<%= pkg.version %>/js/mapea.ol.min.js',
+        dest: 'build/core/js/mapea-<%= pkg.version %>.ol.min.js',
       }
     },
 
@@ -658,7 +564,7 @@ module.exports = function (grunt) {
               path: 'src/plugins',
               prefix: '../mapea/plugins'
                   }],
-            outputFile: 'build/core/<%= pkg.version %>/js/mapea.ol.deps.js'
+            outputFile: 'build/core/js/mapea-<%= pkg.version %>.ol.deps.js'
                },
                // { // leaflet
                //    closurePath: 'libraries/closure/',

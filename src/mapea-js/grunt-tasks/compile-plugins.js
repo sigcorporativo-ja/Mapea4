@@ -46,8 +46,7 @@ module.exports = function (grunt) {
       closureComplileOpts.compile.js = [exportFile];
 
       // OUTPUT
-      var output = path.join(ROOT, outputDir, pluginFolder, version,
-        'mapea.'.concat(pluginFolder).concat('.min.js'));
+      var output = path.join(ROOT, outputDir, pluginFolder, pluginFolder.concat('-').concat(version).concat('.').concat('.min.js'));
 
       compile(closureDepsOpts, closureComplileOpts, output, callback);
     };
@@ -80,8 +79,7 @@ module.exports = function (grunt) {
         closureComplileOpts.compile.js = [exportFile];
 
         // OUTPUT
-        var output = path.join(ROOT, outputDir, pluginFolder, version,
-          'mapea.'.concat(pluginFolder).concat('.').concat(pluginImpl).concat('.min.js'));
+        var output = path.join(ROOT, outputDir, pluginFolder, pluginFolder.concat('-').concat(version).concat('.').concat(pluginImpl).concat('.min.js'));
 
         compile(closureDepsOpts, closureComplileOpts, output, function (err) {
           if (err != null) {
@@ -159,9 +157,10 @@ module.exports = function (grunt) {
   }
 
   function moveCssMin(pluginFolder, outputDir, version, callback) {
-    var fileName = pluginFolder.concat('.min.css');
-    var src = path.join(ROOT, outputDir, fileName);
-    var dest = path.join(ROOT, outputDir, pluginFolder, version, fileName);
+    var srcFile = pluginFolder.concat('.min.css');
+    var distFile = pluginFolder.concat('-').concat(version).concat('.min.css');
+    var src = path.join(ROOT, outputDir, srcFile);
+    var dest = path.join(ROOT, outputDir, pluginFolder, distFile);
     // we also move the api json file
     moveFile(src, dest, callback);
   }
@@ -169,7 +168,7 @@ module.exports = function (grunt) {
   function moveApiJSON(pluginFolder, outputDir, version, callback) {
     var fileName = 'api.json';
     var src = path.join(ROOT, outputDir, pluginFolder, fileName);
-    var dest = path.join(ROOT, outputDir, pluginFolder, version, fileName);
+    var dest = path.join(ROOT, outputDir, pluginFolder, fileName);
     moveFile(src, dest, callback);
   }
 
