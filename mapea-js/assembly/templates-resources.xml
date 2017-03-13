@@ -6,7 +6,7 @@
    <includeBaseDirectory>false</includeBaseDirectory>
    <fileSets>
       <fileSet>
-         <directory>build/templates/${project.version}/</directory>
+         <directory>build/templates/</directory>
          <outputDirectory>files/templates/</outputDirectory>
       </fileSet>
    </fileSets>

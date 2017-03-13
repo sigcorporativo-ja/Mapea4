@@ -6,7 +6,7 @@
    <includeBaseDirectory>false</includeBaseDirectory>
    <fileSets>
       <fileSet>
-         <directory>build/plugins/${project.version}/</directory>
+         <directory>build/plugins/</directory>
          <outputDirectory>plugins/</outputDirectory>
       </fileSet>
    </fileSets>
