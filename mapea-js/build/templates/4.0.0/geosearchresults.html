@@ -1,0 +1,33 @@
+<div class="results-panels">
+   {{#if partial}}
+   <div class="partial">
+      <p>No se han encontrado resultados para la búsqueda.</p>
+      <p>A continuación se muestran otros resultados que quizás le interesen:...</p>
+   </div>
+   {{/if}}
+   <div class="results" id="m-geosearch-results-scroll">
+      {{#each docs}}
+      <div id="{{solrid}}" class="result">
+         {{#each attributes}}
+         <table>
+            <tbody>
+               <tr>
+                  <td class="key">{{key}}</td>
+                  <td class="value">{{value}}</td>
+               </tr>
+            </tbody>
+         </table>
+         {{/each}}
+      </div>
+      {{/each}}
+   </div>
+   {{#eq docs.length 0}}
+   <div class="results">
+   <div class="partial">No se han encontrado resultados para la búsqueda "{{query}}".</div>
+   </div>
+   {{/eq}}
+   <div class="page">
+      <span class="found" id="m-geosearch-page-found">{{docs.length}}</span> de <span class="total">{{total}}</span>
+      <div class="g-cartografia-flecha-arriba"></div>
+   </div>
+</div> 

@@ -4,7 +4,9 @@ goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.impl.Layer');
 goog.require('M.impl.format.WMC.v110');
-goog.require('M.evt.EventsManager');
+
+goog.require('ol.Extent');
+
 
 (function () {
   /**
@@ -90,36 +92,36 @@ goog.require('M.evt.EventsManager');
       this.selected = true;
 
       // loads the layers from this WMC if it is not cached
+      var this_ = this;
       this.loadContextPromise = new Promise(function (success, fail) {
-        M.remote.get(this.url).then(function (response) {
+        M.remote.get(this_.url).then(function (response) {
           var proj;
-          if (this.map._defaultProj === false) {
-            proj = this.map.getProjection().code;
+          if (this_.map._defaultProj === false) {
+            proj = this_.map.getProjection().code;
           }
           var wmcDocument = response.xml;
           var formater = new M.impl.format.WMC({
             'projection': proj
           });
           var context = formater.readFromDocument(wmcDocument);
-          success.call(this, context);
-        }.bind(this));
-      }.bind(this));
+          success.call(this_, context);
+        });
+      });
       this.loadContextPromise.then(function (context) {
         // set projection with the wmc
-        if (this.map._defaultProj) {
+        if (this_.map._defaultProj) {
           var olproj = ol.proj.get(context.projection);
-          this.map.setProjection({
+          this_.map.setProjection({
             "code": olproj.getCode(),
             "units": olproj.getUnits()
           }, true);
         }
         // load layers
-        this.loadLayers(context);
+        this_.loadLayers(context);
         if (!M.utils.isNullOrEmpty(bbox)) {
-          this.map.setBbox(bbox);
+          this_.map.setBbox(bbox);
         }
-        this.map.fire(M.evt.CHANGE_WMC, this);
-      }.bind(this));
+      });
     }
   };
 

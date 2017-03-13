@@ -17,10 +17,14 @@ Los cambios no persistidos pueden deshacerse con el botón 'deshacer'.
 
 Creación del plugin:
 ```
-var edicionWFST = new M.plugin.WFSTControls(["drawfeature","modifyfeature","deletefeature","editattribute"],'nombreCapaWFS';
+var edicionWFST = new M.plugin.WFSTControls(["drawfeature","modifyfeature","deletefeature","editattribute"],'nombreCapaWFS');
 mapajs.addPlugin(edicionWFST);
 ```
 Cambiar la capa WFS sobre la que se edita:
 ```
 edicionWFST.setLayer('nombreNuevaCapaWFS');
 ```
+
+
+
+

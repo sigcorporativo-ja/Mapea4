@@ -6,7 +6,7 @@
    <includeBaseDirectory>false</includeBaseDirectory>
    <fileSets>
       <fileSet>
-         <directory>build/core/</directory>
+         <directory>build/core/${project.version}/</directory>
          <outputDirectory></outputDirectory>
       </fileSet>
    </fileSets>

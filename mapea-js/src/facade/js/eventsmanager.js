@@ -167,15 +167,6 @@ goog.provide('M.evt.Listener');
 
   /**
    * Event type
-   * @public
-   * @type {string}
-   * @api stable
-   * @expose
-   */
-  M.evt.CHANGE_WMC = 'change:wmc';
-
-  /**
-   * Event type
    * @private
    * @type {array<string>}
    */
@@ -197,8 +188,7 @@ goog.provide('M.evt.Listener');
       M.evt.SELECT_FEATURES,
       M.evt.LOAD,
       M.evt.COMPLETED,
-      M.evt.CHANGE,
-      M.evt.CHANGE_WMC
+      M.evt.CHANGE
    ];
 
   /**
