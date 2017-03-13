@@ -1,0 +1,233 @@
+/* Turn on GPU support where available */
+
+
+/****************
+OL3 PERFORMANCE
+****************/
+
+.ol-viewport>div.ol-unselectable>div img {
+    -webkit-transform: translateZ(0);
+    -moz-transform: translateZ(0);
+    -o-transform: translateZ(0);
+    -ms-transform: translateZ(0);
+    transform: translateZ(0);
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-perspective: 1000;
+    -moz-perspective: 1000;
+    -ms-perspective: 1000;
+    perspective: 1000;
+}
+
+
+/****************
+    ZOOM BOX
+****************/
+
+.ol-box {
+    border: 1px solid #337ceb !important;
+    background-color: rgba(51, 124, 235, 0.33) !important;
+}
+
+
+/****************
+    ZOOM
+****************/
+
+.ol-zoom>button {
+    background-color: white !important;
+    margin: 0 !important;
+    padding: 0px;
+    color: #404040 !important;
+    opacity: .75;
+    font-size: 18px !important;
+    text-align: center;
+    cursor: pointer;
+    width: 30px !important;
+    height: 30px !important;
+    box-shadow: 0px 1px 3px 0px #CACACA;
+}
+
+.ol-zoom>button:hover, .ol-zoom>button:focus {
+    background-color: transparent;
+    outline: none !important;
+}
+
+.ol-zoom>button:hover {
+    opacity: 1;
+}
+
+.ol-zoom>button.ol-zoom-in:before {}
+
+
+/****************
+    PANZOOMBAR
+****************/
+
+.ol-zoomslider {
+    height: 198px !important;
+    overflow: auto !important;
+}
+
+.ol-zoomslider>button.ol-zoomslider-thumb {
+    background-color: #f0f0f0;
+    border: 1px solid rgba(64, 64, 64, 0.4);
+    border-radius: 20px;
+    padding: 0px;
+    /*margin: 0px;
+   margin-left: -5px;*/
+    /* FIXES PANZOOMBAR STYLE BUG */
+    margin: 0px 8px;
+    position: absolute !important;
+    height: 20px !important;
+    width: 20px !important;
+}
+
+
+/* Position relative for Firefox because it adds
+   20px top extra if the position is absolute */
+
+@-moz-document url-prefix() {
+    .ol-zoomslider>button.ol-zoomslider-thumb {
+        position: relative !important;
+    }
+}
+
+
+/****************
+    SCALELINE
+****************/
+
+.ol-scale-line .ol-scale-line-inner {
+    color: #404040;
+    border-color: #404040;
+}
+
+@media only screen and (max-width: 768px) {
+    .ol-scale-line-up {
+        margin-bottom: 30px;
+        margin-left: -15px;
+    }
+}
+
+
+/****************
+    OVERVIEWMAP
+****************/
+
+.ol-overviewmap {
+    background-color: #fff !important;
+    border-radius: 4px !important;
+    display: block;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02) !important;
+    transition: border-radius .33s ease 0s;
+}
+
+.ol-overviewmap {
+    order: 1 !important;
+    margin-left: 10px !important;
+    display: relative !important;
+}
+
+.ol-overviewmap:not(.ol-collapsed) button {
+    position: initial !important;
+    position: absolute !important;
+    right 0 !important;
+    background-color: white !important;
+    padding: 2px;
+    border-radius: 15px;
+    left: initial !important;
+    right: 4px;
+    padding-top: 0px;
+    font-size: 6px;
+}
+
+.ol-overviewmap:not(.ol-collapsed) .ol-overviewmap-map {
+    margin: 4px !important;
+}
+
+.ol-overviewmap:not(.ol-collapsed)>button:before {
+    font-size: 11px !important;
+}
+
+.ol-overviewmap.ol-collapsed {
+    border-radius: 20px !important;
+}
+
+.ol-overviewmap .ol-overviewmap-map {
+    border: 0px !important;
+    /*   -webkit-transition: width 1s ease 5s, height 1s ease 5;*/
+    transition: width .33s ease 0s, height .33s ease 0s;
+}
+
+.ol-overviewmap.ol-collapsed .ol-overviewmap-map {
+    display: inline-block !important;
+    height: 0px;
+    width: 0px;
+    margin: 0px;
+    padding: 0px;
+}
+
+.ol-overviewmap>button {
+    bottom: 4px !important;
+}
+
+.ol-overviewmap.ol-collapsed>button, .ol-overviewmap>button {
+    width: 20px !important;
+    height: 20px !important;
+    border-radius: 20px;
+    margin: 0px !important;
+    padding: 0px;
+    background-color: transparent !important;
+    color: #404040 !important;
+    opacity: .75 !important;
+    font-size: 15px !important;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: 'g-cartografia' !important;
+    speak: none;
+    font-style: normal;
+    font-weight: normal;
+    font-variant: normal;
+    text-transform: none;
+    line-height: 1;
+    /* Better Font Rendering =========== */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-align: center;
+}
+
+.ol-overviewmap.ol-collapsed>button:hover {
+    opacity: 1
+}
+
+.ol-overviewmap.ol-collapsed>button {
+    height: 40px !important;
+    width: 40px !important;
+}
+
+.ol-overviewmap>button:hover, .ol-overviewmap>button:active, .ol-overviewmap>button:focus {
+    background-color: transparent;
+    outline: none;
+}
+
+.ol-overviewmap>button>span {
+    display: none;
+}
+
+@media only screen and (max-width: 768px) {
+    .ol-overviewmap {
+        display: none !important;
+    }
+}
+
+.m-panel.m-map-info>div.m-panel-controls>div.m-control.m-scale-container, .m-panel.m-map-info>div.m-panel-controls>div.m-control.m-wmcselector-container {
+    border-radius: 20px !important;
+}
+
+.m-panel.m-map-info>div.m-panel-controls>div.ol-overviewmap {
+    order: 1;
+}

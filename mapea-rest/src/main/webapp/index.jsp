@@ -11,7 +11,7 @@
    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
    <meta name="mapea" content="yes">
 <title>MAPEA</title>
-<link type="text/css" rel="stylesheet" href="assets/css/mapea.ol3.min.css"></link>
+<link type="text/css" rel="stylesheet" href="assets/css/mapea.ol.min.css"></link>
 <style type="text/css">
 html, body {
    margin: 0;
@@ -39,7 +39,7 @@ html, body {
 <body>
    <div id="map" class="m-container"></div>
    <script type="text/javascript" src="vendor/browser-polyfill.js"></script>
-   <script type="text/javascript" src="js/mapea.ol3.min.js"></script>
+   <script type="text/javascript" src="js/mapea.ol.min.js"></script>
    <script type="text/javascript" src="js/configuration.js"></script>
    <%
       String[] jsfiles = PluginsManager.getJSFiles(adaptedParams);
