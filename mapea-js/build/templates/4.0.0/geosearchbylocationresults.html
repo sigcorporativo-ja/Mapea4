@@ -1,0 +1,25 @@
+<div class="m-geosearchbylocation-results-panel">
+   <div class="title">
+           B&uacute;squeda por localizaci&oacute;n
+            <button class="m-panel-btn"></button>
+    </div>
+   <div class="results" id="m-geosearchbylocation-results-scroll">
+      {{#each docs}}
+      <div id="{{solrid}}" class="result">
+         {{#each attributes}}
+         <table>
+            <tbody>
+               <tr>
+                  <td class="key">{{key}}</td>
+                  <td class="value">{{value}}</td>
+               </tr>
+            </tbody>
+         </table>
+         {{/each}}
+      </div>
+      {{/each}}
+   </div>
+   <div class="page">
+      <span class="total">{{total}} resultados.</span>
+   </div>
+</div>

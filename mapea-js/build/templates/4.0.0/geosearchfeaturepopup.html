@@ -1,0 +1,15 @@
+<div class="m-geosearch-content">
+   {{#each features}}
+   <div id="{{solrid}}" class="result">
+      {{#each attributes}}
+      <table>
+         <tr>
+            <td class="key">{{key}}</td>
+            <td class="value">{{value}}</td>
+         </tr>
+      </table>
+      {{/each}}
+   </div>
+   <div class="m-separator"></div>
+   {{/each}}
+</div>

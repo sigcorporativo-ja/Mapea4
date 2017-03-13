@@ -8,53 +8,53 @@
       <!-- closure sources -->
       <fileSet>
          <directory>libraries/closure/closure/goog</directory>
-         <outputDirectory>debug/libraries/closure/closure/goog</outputDirectory>
-      </fileSet>
-      <fileSet>
-         <directory>node_modules/closure-util</directory>
-         <outputDirectory>debug/node_modules/closure-util</outputDirectory>
+         <outputDirectory>debug/closure/</outputDirectory>
       </fileSet>
       <!-- handlebars sources -->
       <fileSet>
          <directory>libraries/handlebars</directory>
-         <outputDirectory>debug/libraries/handlebars</outputDirectory>
+         <outputDirectory>debug/</outputDirectory>
       </fileSet>
       <!-- proj4js sources -->
       <fileSet>
          <directory>libraries/proj4</directory>
-         <outputDirectory>debug/libraries/proj4</outputDirectory>
+         <outputDirectory>debug/</outputDirectory>
       </fileSet>
       <!-- ol3 css sources -->
       <fileSet>
-         <directory>libraries/ol/css</directory>
-         <outputDirectory>debug/libraries/ol/css</outputDirectory>
+         <directory>libraries/ol3/css</directory>
+         <outputDirectory>debug/ol3/css</outputDirectory>
       </fileSet>
       <!-- ol3 js sources -->
       <fileSet>
-         <directory>libraries/ol/src/ol</directory>
-         <outputDirectory>debug/libraries/ol/src/ol</outputDirectory>
+         <directory>libraries/ol3/src/ol</directory>
+         <outputDirectory>debug/ol3/js</outputDirectory>
       </fileSet>
       <!-- ol3 externs -->
       <fileSet>
-         <directory>libraries/ol/externs</directory>
-         <outputDirectory>debug/libraries/ol/externs</outputDirectory>
+         <directory>libraries/ol3/externs</directory>
+         <outputDirectory>debug/ol3/js</outputDirectory>
       </fileSet>
       <fileSet>
-         <directory>externs/ol</directory>
-         <outputDirectory>debug/externs/ol</outputDirectory>
+         <directory>externs/ol3</directory>
+         <outputDirectory>debug/externs/ol3</outputDirectory>
       </fileSet>
       <!-- ol3-popup css -->
       <fileSet>
          <directory>libraries/ol3-popup/</directory>
-         <outputDirectory>debug/libraries/ol3-popup</outputDirectory>
+         <includes>
+            <include>**/*.css</include>
+         </includes>
+         <outputDirectory>debug/ol3/css</outputDirectory>
       </fileSet>
       <!-- ol3-popup js -->
-      <!-- <fileSet>
+      <fileSet>
          <directory>libraries/ol3-popup/</directory>
          <includes>
+            <include>**/*.js</include>
          </includes>
-         <outputDirectory>debug/ol/js</outputDirectory>
-      </fileSet> -->
+         <outputDirectory>debug/ol3/js</outputDirectory>
+      </fileSet>
       <!-- mapea sources -->
       <fileSet>
          <directory>src</directory>
@@ -63,11 +63,11 @@
             <include>impl/**/*</include>
             <include>plugins/**/*</include>
          </includes>
-         <outputDirectory>debug/src/</outputDirectory>
+         <outputDirectory>debug/mapea/</outputDirectory>
       </fileSet>
       <fileSet>
          <directory>externs</directory>
-         <outputDirectory>debug/externs/</outputDirectory>
+         <outputDirectory>debug/mapea/</outputDirectory>
       </fileSet>
       <!-- dependencies -->
       <fileSet>
