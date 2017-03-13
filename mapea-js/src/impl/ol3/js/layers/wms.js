@@ -256,9 +256,9 @@ goog.require('ol.extent');
         }
         else {
           newSource = new ol.source.ImageWMS({
-            url: this_.url,
             params: layerParams,
-            resolutions: resolutions
+            resolutions: resolutions,
+            projection: this.map.getProjection().code
           });
         }
         this_.ol3Layer.setSource(newSource);
@@ -335,13 +335,14 @@ goog.require('ol.extent');
           visible: this.visibility && (this.options.visibility !== false),
           source: new ol.source.ImageWMS({
             url: this.url,
-            params: layerParams
+            params: layerParams,
+            resolutions: resolutions,
+            projection: this.map.getProjection().code
           }),
           extent: olExtent,
           minResolution: this.options.minResolution,
           maxResolution: this.options.maxResolution,
-          opacity: this.opacity_,
-          zIndex: this.zIndex_
+          opacity: this.opacity_
         });
       }
       // keeps z-index values before ol resets

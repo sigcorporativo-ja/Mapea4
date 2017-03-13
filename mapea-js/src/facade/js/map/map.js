@@ -234,6 +234,7 @@ goog.require('M.window');
         this.addControls(getFeatureInfo);
       }
     }
+
     // default WMC
     if (M.utils.isNullOrEmpty(params.wmc) && M.utils.isNullOrEmpty(params.layers)) {
       this.addWMC(M.config.predefinedWMC.predefinedNames[0]);
@@ -1332,7 +1333,9 @@ goog.require('M.window');
     if (controls.length > 0) {
       // removes controls from their panels
       controls.forEach(function (control) {
-        control.getPanel().removeControls(control);
+        if (!M.utils.isNullOrEmpty(control.getPanel())) {
+          control.getPanel().removeControls(control);
+        }
       }, this);
       // removes the controls
       this.getImpl().removeControls(controls);
