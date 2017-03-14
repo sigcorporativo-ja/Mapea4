@@ -46,7 +46,7 @@ module.exports = function (grunt) {
       closureComplileOpts.compile.js = [exportFile];
 
       // OUTPUT
-      var output = path.join(ROOT, outputDir, pluginFolder, pluginFolder.concat('-').concat(version).concat('.').concat('.min.js'));
+      var output = path.join(ROOT, outputDir, pluginFolder, pluginFolder.concat('-').concat(version).concat('.min.js'));
 
       compile(closureDepsOpts, closureComplileOpts, output, callback);
     };
@@ -79,7 +79,11 @@ module.exports = function (grunt) {
         closureComplileOpts.compile.js = [exportFile];
 
         // OUTPUT
-        var output = path.join(ROOT, outputDir, pluginFolder, pluginFolder.concat('-').concat(version).concat('.').concat(pluginImpl).concat('.min.js'));
+        var fileName = pluginFolder.concat('-').concat(version);
+        if (typeof pluginImpl === 'string' && pluginImpl !== '') {
+          fileName += '.'.concat(pluginImpl);
+        }
+        var output = path.join(ROOT, outputDir, pluginFolder, fileName.concat('.min.js'));
 
         compile(closureDepsOpts, closureComplileOpts, output, function (err) {
           if (err != null) {
