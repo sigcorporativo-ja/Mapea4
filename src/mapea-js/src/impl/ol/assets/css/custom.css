@@ -79,7 +79,7 @@ OL3 PERFORMANCE
     /*margin: 0px;
    margin-left: -5px;*/
     /* FIXES PANZOOMBAR STYLE BUG */
-    margin: 0px 8px;
+    margin: -5px;
     position: absolute !important;
     height: 20px !important;
     width: 20px !important;
