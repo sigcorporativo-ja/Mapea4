@@ -60,19 +60,22 @@ goog.require('ol.control.OverviewMap');
     */
    M.impl.control.OverviewMap.prototype.addTo = function(map, element) {
       this.facadeMap_ = map;
-      var layers = map.getLayers().map(function(layer) {
-         return layer.getImpl().getOL3Layer();
-      });
-      var olProjection = ol.proj.get(map.getProjection().code);
-      var resolutions = map.getResolutions();
+      let olLayers = [];
+      map.getLayers().forEach(layer => {
+         let olLayer = layer.getImpl().getOL3Layer();
+         if (M.utils.isNullOrEmpty(olLayer)) {
+            layer.getImpl().on(M.evt.ADDED_TO_MAP, this.addLayer_, this);
+         }
+         else {
+            olLayers.push(olLayer);
+         }
+      }, this);
 
       ol.control.OverviewMap.call(this, {
-         'layers': layers.filter(function(layer) {
-            return !M.utils.isNullOrEmpty(layer);
-         }),
+         'layers': olLayers,
          'view': new M.impl.View({
-            'projection': olProjection,
-            'resolutions': resolutions
+            'projection': ol.proj.get(map.getProjection().code),
+            'resolutions': map.getResolutions()
          })
       });
 
@@ -97,6 +100,19 @@ goog.require('ol.control.OverviewMap');
    M.impl.control.OverviewMap.prototype.getElement = function() {
       return this.element;
    };
+
+   /**
+    * function remove the event 'click'
+    *
+    * @private
+    * @function
+    */
+   M.impl.control.OverviewMap.prototype.addLayer_ = function(layer) {
+      console.log(layer);
+      layer.un(M.evt.ADDED_TO_MAP, this.addLayer_, this);
+      this.getOverviewMap().addLayer(layer.getOL3Layer());
+   };
+
 
    /**
     * This function destroys this control, cleaning the HTML

@@ -163,6 +163,7 @@ goog.require('ol.extent');
 
       // activates animation always for WMTS layers
       this.ol3Layer.set("animated", true);
+      this.fire(M.evt.ADDED_TO_MAP, this);
    };
 
    /**
