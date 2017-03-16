@@ -1,26 +1,27 @@
 {
-   "name": "mapea",
-   "version": "4.0.0",
-   "description": "Herramienta para crear mapas interactivos de forma sencilla",
-   "keywords": [
-      "map",
-      "mapping",
-      "tools"
-   ],
-   "authors": [
-      "Junta de Andalucía"
-   ],
-   "license": "MIT",
-   "homepage": "http://mapea-sigc.juntadeandalucia.es",
-   "dependencies": {
-      "babel-polyfill": "*",
-      "chai": "*",
-      "closure": "https://github.com/google/closure-library.git",
-      "handlebars": "~4.0.2",
-      "jquery": "*",
-      "mocha": "*",
-      "ol3": "openlayers/ol3#3.11.2",
-      "leaflet": "Leaflet/Leaflet#0.7.7",
-      "proj4": "~2.3.10"
-   }
+    "name": "mapea",
+    "version": "4.0.0",
+    "description": "Herramienta para crear mapas interactivos de forma sencilla",
+    "keywords": [
+        "map",
+        "mapping",
+        "tools"
+    ],
+    "authors": [
+        "Junta de Andalucía"
+    ],
+    "license": "MIT",
+    "homepage": "http://mapea-sigc.juntadeandalucia.es",
+    "dependencies": {
+        "babel-polyfill": "*",
+        "chai": "*",
+        "closure": "https://github.com/google/closure-library.git",
+        "handlebars": "4.0.5",
+        "jquery": "*",
+        "mocha": "*",
+        "ol": "https://github.com/openlayers/openlayers.git#4.0.1",
+        "ol3-popup": "https://github.com/walkermatt/ol3-popup.git#v1.0.1",
+        "leaflet": "Leaflet/Leaflet#0.7.7",
+        "proj4": "https://github.com/proj4js/proj4js.git#2.4.1"
+    }
 }

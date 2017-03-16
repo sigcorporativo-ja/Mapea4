@@ -67,3 +67,9 @@ var proj4x;
  * @api stable
  */
 proj4x.prototype.defs;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+proj4x.prototype.mgrs;

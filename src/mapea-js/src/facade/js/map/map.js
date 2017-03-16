@@ -1333,7 +1333,9 @@ goog.require('M.window');
     if (controls.length > 0) {
       // removes controls from their panels
       controls.forEach(function (control) {
-        control.getPanel().removeControls(control);
+        if (!M.utils.isNullOrEmpty(control.getPanel())) {
+          control.getPanel().removeControls(control);
+        }
       }, this);
       // removes the controls
       this.getImpl().removeControls(controls);
