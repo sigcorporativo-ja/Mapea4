@@ -4,8 +4,10 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -15,20 +17,24 @@ import javax.ws.rs.core.MultivaluedMap;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
+import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import es.juntadeandalucia.mapea.builder.JSBuilder;
+import es.juntadeandalucia.mapea.exception.InvalidAPIException;
 import es.juntadeandalucia.mapea.parameter.PluginAPI;
 import es.juntadeandalucia.mapea.parameter.PluginAPIParam;
 
 public abstract class PluginsManager {
    
    private static Path pluginsDir;
-   private static Map<String, List<String>> jsFiles = new HashMap<String, List<String>>();
-   private static Map<String, List<String>> cssFiles = new HashMap<String, List<String>>();
+   
+   private static final String DEFAULT_IMPL = "ol";
    
    private static Map<String, PluginAPI> availablePlugins;
+   
+   private static final Logger log = Logger.getLogger(PluginsManager.class);
 
    public static Collection<PluginAPI> getAllPlugins () {
       return availablePlugins.values();
@@ -89,12 +95,11 @@ public abstract class PluginsManager {
    
    public static String[] getJSFiles(Map<String, String[]> queryParams) {
       List<String> jsfiles = new LinkedList<String>();
-      
       // searchs plugins by name
       for (String paramName : queryParams.keySet()) {
          PluginAPI plugin = availablePlugins.get(paramName);
          if (plugin != null) {
-            jsfiles.addAll(jsFiles.get(paramName));
+            jsfiles.addAll(plugin.getJSFiles(DEFAULT_IMPL));
          }
       }
       // search plugins in "plugins" parameter
@@ -105,7 +110,7 @@ public abstract class PluginsManager {
          for (String pluginName : pluginNames) {
             PluginAPI plugin = availablePlugins.get(pluginName);
             if (plugin != null) {
-               jsfiles.addAll(jsFiles.get(pluginName));
+               jsfiles.addAll(plugin.getJSFiles(DEFAULT_IMPL));
             }
          }
       }
@@ -119,7 +124,7 @@ public abstract class PluginsManager {
       for (String paramName : queryParams.keySet()) {
          PluginAPI plugin = availablePlugins.get(paramName);
          if (plugin != null) {
-            cssfiles.addAll(cssFiles.get(paramName));
+            cssfiles.addAll(plugin.getCSSFiles(DEFAULT_IMPL));
          }
       }
       // search plugins in "plugins" parameter
@@ -130,7 +135,7 @@ public abstract class PluginsManager {
          for (String pluginName : pluginNames) {
             PluginAPI plugin = availablePlugins.get(pluginName);
             if (plugin != null) {
-               cssfiles.addAll(cssFiles.get(pluginName));
+               cssfiles.addAll(plugin.getCSSFiles(DEFAULT_IMPL));
             }
          }
       }
@@ -145,66 +150,103 @@ public abstract class PluginsManager {
          for (String pluginName : plugins) {
             File pluginFolder = new File(pluginsFolder, pluginName);
             if (pluginFolder.isDirectory()) {
-               List<String> jsFilesList = new LinkedList<String>();
-               List<String> cssFilesList = new LinkedList<String>();
-               File[] files = pluginFolder.listFiles();
-               String pluginId = null;
-               for (File file : files) {
+               for (File file : pluginFolder.listFiles()) {
                   String relativeFile = pluginsDir.relativize(file.toPath()).toString();
-                  if (FilenameUtils.isExtension(relativeFile, "js")) {
-                     jsFilesList.add(relativeFile);
-                  }
-                  else if (FilenameUtils.isExtension(relativeFile, "css")) {
-                     cssFilesList.add(relativeFile);
-                  }
-                  else if (FilenameUtils.getBaseName(relativeFile).equalsIgnoreCase("api")) {
+                  if (FilenameUtils.getBaseName(relativeFile).equalsIgnoreCase("api")) {
                      try {
-                        PluginAPI plugin = readPlugin(file);
-                        pluginId = plugin.getName();
-                        availablePlugins.put(pluginId, plugin);
+                        PluginAPI plugin = readPluginFromApi(file);
+                        availablePlugins.put(plugin.getName(), plugin);
+                        break;
                      }
                      catch (IOException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
+                    	log.error("Error occurred reading plugins directory", e);
+                     } catch (InvalidAPIException e) {
+						log.error("Invalid JSON API from plugin '" + e.getPluginName() + "'", e);
                      }
                   }
-               }
-               if (pluginId != null) {
-                  jsFiles.put(pluginId, jsFilesList);
-                  cssFiles.put(pluginId, cssFilesList);
                }
             }
          }
       }
    }
-
-   private static PluginAPI readPlugin (File apijsonFile) throws IOException {
-      PluginAPI plugin = null;
-      String name = null;
-      String separator = null;
-      String constructor = null;
-      List<PluginAPIParam> parameters = new LinkedList<PluginAPIParam>();
-      JSONObject apijson = readApiJSONFile(apijsonFile);
-      // name and separator
-      JSONObject url = apijson.getJSONObject("url");
-      name = url.getString("name");
-      if (url.has("separator")) {
-         separator = url.getString("separator");
-      }
-      // constructor
-      constructor = apijson.getString("constructor");
-      // parameters
-      if (apijson.has("parameters")) {
-         JSONArray parametersArr = apijson.getJSONArray("parameters");
-         for (int i = 0; i < parametersArr.length(); i++) {
-            PluginAPIParam parameter = null;
-            JSONObject parameterJSON = parametersArr.getJSONObject(i);
-            parameter = readPluginParameter(parameterJSON);
-            parameters.add(parameter);
-         }
-      }
-      plugin = new PluginAPI(name, separator, constructor, parameters);
-      return plugin;
+   
+   private static PluginAPI readPluginFromApi(File apiJSONFile) throws IOException, InvalidAPIException {
+	   PluginAPI pluginAPI = null;
+	   JSONObject apiJSON = readApiJSONFile(apiJSONFile);
+	   List<PluginAPIParam> parameters = new LinkedList<PluginAPIParam>();
+	   
+	   String name = readStringProperty("url.name", apiJSON);
+	   String separator = readStringProperty("url.separator", apiJSON);
+	   String constructor = readStringProperty("constructor", apiJSON);
+	   
+	   if (name == null || constructor == null) {
+		   throw new InvalidAPIException((name == null || name.isEmpty() ? apiJSONFile.getParent() : name), "Invalid ApiJSON file format: name or constructor cannot be null or empty");
+	   }
+	   
+	   if (apiJSON.has("parameters") && !apiJSON.isNull("parameters") && apiJSON.get("parameters") instanceof JSONArray) {
+		   JSONArray jsonParameters = apiJSON.getJSONArray("parameters");
+		   for (int i = 0; i < jsonParameters.length(); i ++) {
+			   parameters.add(readPluginParameter(jsonParameters.getJSONObject(i)));
+		   }
+	   }
+	   
+	   pluginAPI = new PluginAPI(name, separator, constructor, parameters);
+	   
+	   if (apiJSON.has("files") && !apiJSON.isNull("files") && apiJSON.get("files") instanceof JSONObject) {
+		   JSONObject files = apiJSON.getJSONObject("files");	   
+		   @SuppressWarnings("unchecked")
+		   Iterator<String> keys = (Iterator<String>) files.keys();
+		   
+		   while (keys.hasNext()) {
+			   String impl = keys.next();
+			   List<String> scripts = readJSONArray("files.".concat(impl).concat(".scripts"), apiJSON);
+			   List<String> styles = readJSONArray("files.".concat(impl).concat(".styles"), apiJSON);
+			   if (scripts != null) {
+				   for (String script : scripts) {
+					   pluginAPI.addJSFile(impl, pluginAPI.getName().concat(File.separator).concat(script));
+				   }
+			   }
+			   if (styles != null) {
+				   for (String style : styles) {
+					   pluginAPI.addCSSFile(impl, pluginAPI.getName().concat(File.separator).concat(style));
+				   }
+			   }
+		   }
+	   }
+	   
+	   return pluginAPI;
+   }
+   
+   private static String readStringProperty(String property, JSONObject object) {
+	   JSONObject obj = getNestedJSONObject(property, object);
+	   if (obj == null) {
+		   return null;
+	   }
+	   return obj.getString(property.substring(property.lastIndexOf('.') + 1, property.length()));	   
+   }
+   
+   private static List<String> readJSONArray(String property, JSONObject object) {
+	   JSONArray array = getNestedJSONObject(property, object).getJSONArray(property.substring(property.lastIndexOf(".") + 1, property.length()));
+	   List<String> resultList = new ArrayList<>();
+	   if (array == null) {
+		   return null;
+	   }	
+	   for (int i = 0; i < array.length(); i ++) {
+		   resultList.add(array.getString(i));
+	   }
+	   return resultList;
+   }
+   
+   private static JSONObject getNestedJSONObject(String property, JSONObject object) {
+	   String [] splitted = property.split("\\.");
+	   String prop = splitted[0];
+	   if (!object.has(prop) || object.isNull(prop)) {
+		   return null;
+	   }
+	   if (splitted.length > 0 && object.get(prop) instanceof JSONObject) {
+		   return getNestedJSONObject(property.substring(property.indexOf(prop) + prop.length() + 1, property.length()), object.getJSONObject(prop));
+	   }
+	   return object;
    }
 
    private static PluginAPIParam readPluginParameter (JSONObject parameterJSON) {

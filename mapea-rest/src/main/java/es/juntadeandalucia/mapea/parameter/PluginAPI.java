@@ -1,5 +1,6 @@
 package es.juntadeandalucia.mapea.parameter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
@@ -73,5 +74,19 @@ public class PluginAPI {
 
    public void setSeparator (String separator) {
       this.separator = separator;
+   }
+   
+   public List<String> getJSFiles(String impl) {
+	   if (this.jsFiles.containsKey(impl)) {
+		   return this.jsFiles.get(impl);
+	   }
+	   return new ArrayList<>();
+   }
+   
+   public List<String> getCSSFiles(String impl) {
+	   if (this.cssFiles.containsKey(impl)) {
+		   return this.cssFiles.get(impl);
+	   }
+	   return new ArrayList<>();
    }
 }
