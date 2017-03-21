@@ -19,5 +19,15 @@
          "name": "handler",
          "position": 2
       }]
-   }]
+   }],
+   "files": {
+      "ol": {
+         "scripts": [
+            "geosearch.ol.min.js"
+         ],
+         "styles": [
+            "geosearch.min.css"
+         ]
+      }
+   }
 }

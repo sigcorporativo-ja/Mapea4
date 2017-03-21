@@ -46,5 +46,15 @@
             "value": "true"
          }]
       }]
-   }]
+   }],
+   "files": {
+      "ol": {
+         "scripts": [
+            "printer.ol.min.js"
+         ],
+         "styles": [
+            "printer.min.css"
+         ]
+      }
+   }
 }

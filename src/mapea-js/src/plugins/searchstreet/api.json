@@ -10,5 +10,15 @@
          "name": "locality",
          "position": 0
       }]
-   }]
+   }],
+   "files": {
+      "ol": {
+         "scripts": [
+            "searchstreet.ol.min.js"
+         ],
+         "styles": [
+            "searchstreet.min.css"
+         ]
+      }
+   }
 }
