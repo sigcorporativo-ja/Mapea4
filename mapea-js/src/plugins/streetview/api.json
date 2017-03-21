@@ -2,5 +2,15 @@
    "url": {
       "name": "streetview"
    },
-   "constructor": "M.plugin.Streetview"
+   "constructor": "M.plugin.Streetview",
+   "files": {
+      "ol": {
+         "scripts": [
+            "streetview.ol.min.js"
+         ],
+         "styles": [
+            "streetview.min.css"
+         ]
+      }
+   }
 }

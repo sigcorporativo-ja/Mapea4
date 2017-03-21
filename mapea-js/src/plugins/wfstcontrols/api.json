@@ -22,5 +22,15 @@
          "type": "simple",
          "position": 4
       }]
-   }]
+   }],
+   "files": {
+      "ol": {
+         "scripts": [
+            "wfstcontrols.ol.min.js"
+         ],
+         "styles": [
+            "wfstcontrols.min.css"
+         ]
+      }
+   }
 }
