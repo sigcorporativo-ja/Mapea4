@@ -2,5 +2,15 @@
    "url": {
       "name": "measurebar"
    },
-   "constructor": "M.plugin.Measurebar"
+   "constructor": "M.plugin.Measurebar",
+   "files": {
+      "ol": {
+         "scripts": [
+            "measurebar.ol.min.js"
+         ],
+         "styles": [
+            "measurebar.min.css"
+         ]
+      }
+   }
 }
