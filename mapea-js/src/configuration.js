@@ -6,12 +6,12 @@
 (function (M) {
    /**
     * Pixels width for mobile devices
-    * 
+    *
     * @private
     * @type {Number}
     */
    M.config('MOBILE_WIDTH', ${mobile.width});
-   
+
    /**
     * The Mapea URL
     * @const
@@ -29,7 +29,7 @@
     * @public
     * @api stable
     */
-   M.config('PROXY_PATH', '${mapea.proxy.path}');
+   M.config('PROXY_URL', '${mapea.proxy.url}');
 
    /**
     * The path to the Mapea proxy to send
@@ -39,7 +39,7 @@
     * @public
     * @api stable
     */
-   M.config('PROXY_POST_PATH', '${mapea.proxy_post.path}');
+   M.config('PROXY_POST_URL', '${mapea.proxy_post.url}');
 
    /**
     * The path to the Mapea templates
@@ -263,7 +263,7 @@
        * @api stable
        */
       'FORCE_SCALE': ${geoprint.force_scale},
-      
+
       /**
        * TODO
        * @const
@@ -327,7 +327,7 @@
     * @api stable
     */
    M.config('SEARCHSTREET_URLCOMPROBARINE', '${searchstreet.urlcomprobarine}');
-   
+
    /**
     * Normalizar searchstreet service URL
     * @const
@@ -336,7 +336,7 @@
     * @api stable
     */
    M.config('SEARCHSTREET_NORMALIZAR', '${searchstreet.normalizar}');
-   
+
    /**
     * Minimum number of characters to start autocomplete
     * @const
@@ -345,20 +345,53 @@
     * @api stable
     */
     M.config('AUTOCOMPLETE_MINLENGTH', '${autocomplete.minLength}');
-    
+
     /**
      * TODO
-     * 
+     *
      * @private
      * @type {Number}
      */
     M.config('AUTOCOMPLETE_DELAYTIME', '${autocomplete.delaytime}');
-    
+
     /**
      * Number of results to show
-     * 
+     *
      * @private
      * @type {Number}
      */
     M.config('AUTOCOMPLETE_LIMIT', '${autocomplete.limit}');
+
+    /**
+     * TODO
+     *
+     * @private
+     * @type {String}
+     */
+    M.config('MAPBOX_URL', '${mapbox.url}');
+
+    /**
+     * TODO
+     *
+     * @private
+     * @type {String}
+     */
+    M.config('MAPBOX_EXTENSION', '${mapbox.extension}');
+
+    /**
+     * TODO
+     *
+     * @private
+     * @type {String}
+     */
+    M.config('MAPBOX_TOKEN_NAME', '${mapbox.token.name}');
+
+    /**
+     * TODO
+     *
+     * @private
+     * @type {String}
+     */
+    M.config('MAPBOX_TOKEN_VALUE', '${mapbox.token.value}');
 })(window.M);
+

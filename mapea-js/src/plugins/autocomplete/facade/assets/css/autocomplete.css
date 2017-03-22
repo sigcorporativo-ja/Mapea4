@@ -1,8 +1,0 @@
-input.m-plugin-autocomplete {
-   border: 1px solid rgba(0, 0, 0, 0.33);
-   outline: none
-}
-
-input.m-plugin-autocomplete.searching {
-   border-color: red;
-}

@@ -7,18 +7,14 @@ goog.require('P.impl.control.GeosearchIntegrated');
 (function() {
    /**
     * @classdesc Main constructor of the class. Creates a GeosearchIntegrated
-    *            control.
+    * control.
     *
     * @constructor
+    * @param {string} url - URL for the query
+    * @param {string} core - Core to the URL for the query
+    * @param {string} handler - Handler to the URL for the query
+    * @param {object} searchParameters - Others parameters
     * @extends {M.control.Geosearch}
-    * @param {String}
-    *        url Service URL
-    * @param {String}
-    *        core core URL
-    * @param {String}
-    *        handler handler URL
-    * @param {Object}
-    *        searchParameters parameters to the URL
     * @api stable
     */
    M.control.GeosearchIntegrated = (function(url, core, handler, searchParameters) {
@@ -35,12 +31,14 @@ goog.require('P.impl.control.GeosearchIntegrated');
 
 
    /**
-    * This function replaces createView of geosearch not to add the template control
+    * This function replaces createView of Geosearch, not to add the template control, add events
     *
     * @public
     * @function
-    * @param {HTMLElement} html HTML template searchstreetgeosearch
-    * @api stabletrue
+    * @param {HTMLElement} html - HTML template SearchstreetGeosearch
+    * @param {M.Map} map - Map to add the control
+    * @return {null}
+    * @api stable
     */
    M.control.GeosearchIntegrated.prototype.createView = function(html, map) {
       this.facadeMap_ = map;
@@ -53,7 +51,7 @@ goog.require('P.impl.control.GeosearchIntegrated');
     *
     * @public
     * @function
-    * @param {HTMLElement} html HTML template searchstreetgeosearch
+    * @param {HTMLElement} html - HTML template SearchstreetGeosearch
     * @api stable
     */
    M.control.GeosearchIntegrated.prototype.addEvents = function(html) {
@@ -90,11 +88,12 @@ goog.require('P.impl.control.GeosearchIntegrated');
 
 
    /**
-    * This function checks if an object is equals
+    * This function add new results panel Geosearch when done scroll
     * to this control
     *
     * @private
     * @function
+    * @param {object} results - New results
     */
    M.control.GeosearchIntegrated.prototype.appendResults_ = function(results) {
       // draws the new results on the map
@@ -128,11 +127,11 @@ goog.require('P.impl.control.GeosearchIntegrated');
    };
 
    /**
-    * This function checks if an object is equals
-    * to this control
+    * This function hides/shows the list
     *
     * @private
     * @function
+    * @param {goog.events.BrowserEvent} evt - Keypress event
     */
    M.control.GeosearchIntegrated.prototype.resultsClick_ = function(evt) {
       goog.dom.classlist.toggle(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
@@ -151,8 +150,8 @@ goog.require('P.impl.control.GeosearchIntegrated');
     *
     * @public
     * @function
-    * @api stabletrue
-    * @return {Object}
+    * @api stable
+    * @return {M.impl.control.GeosearchIntegrated}
     */
    M.control.GeosearchIntegrated.prototype.getImpl = function(html) {
       return this.impl;

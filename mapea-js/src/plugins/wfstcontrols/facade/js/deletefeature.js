@@ -7,8 +7,7 @@ goog.provide('P.control.DeleteFeature');
     * control to remove features map
     *
     * @constructor
-    * @param {M.layer.WFS}
-    * layer layer for use in control
+    * @param {M.layer.WFS} layer - Layer for use in control
     * @extends {M.Control}
     * @api stable
     */
@@ -31,7 +30,7 @@ goog.provide('P.control.DeleteFeature');
     *
     * @public
     * @function
-    * @param {M.Map} map map to add the control
+    * @param {M.Map} map - Map to add the control
     * @returns {Promise} html response
     * @api stable
     */
@@ -42,11 +41,12 @@ goog.provide('P.control.DeleteFeature');
    };
 
    /**
-    * TODO
+    * This function returns the HTML button
     *
     * @public
     * @function
-    * @param {HTMLElement} html to add the plugin
+    * @param {HTMLElement} element - HTML control
+    * @return {HTMLElement} return HTML button
     * @api stable
     * @export
     */
@@ -55,27 +55,29 @@ goog.provide('P.control.DeleteFeature');
    };
 
    /**
-    * This function checks if an object is equals
-    * to this control
-    * @returns {Boolean}
+    * This function checks if an object is equals to this control
+    *
     * @function
     * @api stable
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     */
    M.control.DeleteFeature.prototype.equals = function(obj) {
       var equals = (obj instanceof M.control.DeleteFeature);
       return equals;
    };
 
-/**
- * This function set layer for editting
- *
- * @public
- * @function
- * @api stable
- */
-  M.control.DeleteFeature.prototype.setLayer = function(layer) {
-    this.getImpl().layer_ = layer;
-  };
+   /**
+    * This function set layer for delete features
+    *
+    * @public
+    * @function
+    * @param {M.layer.WFS} layer - Layer
+    * @api stable
+    */
+   M.control.DeleteFeature.prototype.setLayer = function(layer) {
+      this.getImpl().layer_ = layer;
+   };
 
    /**
     * Name for this controls

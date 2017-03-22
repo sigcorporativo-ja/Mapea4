@@ -1,9 +1,9 @@
-var exec = require('child_process').exec;
+var exec = require('child_process').execSync;
 var isWindows = process.platform.indexOf('win') === 0;
 
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
-   grunt.registerMultiTask('closure-dependencies', 'use closure to build the dependencies', function () {
+   grunt.registerMultiTask('closure-dependencies', 'use closure to build the dependencies', function() {
       var done = this.async();
 
       var impls = this.data.impl;
@@ -32,57 +32,27 @@ module.exports = function (grunt) {
          grunt.log.writeln("Building the dependencies file '" + outputFile + "' ...");
 
          // add executuion permission to the script
-		   if(!isWindows){
-			 addExecutionPermission(closureFolder, function (error, stdout, stderr) {
-				if (error != null) {
-				   grunt.log.error(error);
-				   done();
-				}
-				else {
-				   // execute closure
-				   executeDepswriter(closureFolder, dependencies, outputFile, function (error, stdout, stderr) {
-					  //grunt.log.writeln('Permisos revisados'); 
-					  if (error != null) {
-						 grunt.log.error(error);
-						 done();
-					  }
-					  else {
-						 // DONE
-						 index++;
-						 if (index === implLength) {
-							grunt.log.ok("Build succeeded.");
-							done();
-						 }
-					  }
-				   });
-				}
-			 });
-		 } else {
-			 executeDepswriter(closureFolder, dependencies, outputFile, function (error, stdout, stderr) {
-					  if (error != null) {
-						 grunt.log.error(error);
-						 done();
-					  }
-					  else {
-						 // DONE
-						 index++;
-						 if (index === implLength) {
-							grunt.log.ok("Build succeeded.");
-							done();
-						 }
-					  }
-				   });
-		 }
+         if (!isWindows) {
+            addExecutionPermission(closureFolder);
+         }
+         // execute closure
+         executeDepswriter(closureFolder, dependencies, outputFile);
+         // DONE
+         index++;
+         if (index === implLength) {
+            grunt.log.ok("Build succeeded.");
+            done();
+         }
       }
    });
 
-   function addExecutionPermission(closureFolder, callback) { 
-		  var depswriterScript = closureFolder.concat('closure/bin/build/depswriter.py');
-		  var chmod = 'chmod ugo+x '.concat(depswriterScript);
-		  exec(chmod, callback);
+   function addExecutionPermission(closureFolder) {
+      var depswriterScript = closureFolder.concat('closure/bin/build/depswriter.py');
+      var chmod = 'chmod ugo+x '.concat(depswriterScript);
+      exec(chmod);
    }
 
-   function executeDepswriter(closureFolder, dependencies, outputFile, callback) {
+   function executeDepswriter(closureFolder, dependencies, outputFile) {
 
       // closure variables
       var depswriterScript = closureFolder.concat('closure/bin/build/depswriter.py');
@@ -112,13 +82,14 @@ module.exports = function (grunt) {
       depswriterCmd += '  --output_file="'.concat(outputFile).concat('"');
 
       grunt.log.debug(depswriterCmd);
-	  
-	  if(!isWindows){
-      exec(depswriterCmd, callback);
-	  } else {
-		  var wcmd = 'python ' + depswriterCmd;
-		  exec(wcmd, callback);
-	  }
+
+      if (!isWindows) {
+         exec(depswriterCmd);
+      }
+      else {
+         var wcmd = 'python ' + depswriterCmd;
+         exec(wcmd);
+      }
    }
 
    function isNullOrEmpty(obj) {

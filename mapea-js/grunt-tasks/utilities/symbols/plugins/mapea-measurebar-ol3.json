@@ -5,7 +5,7 @@
       "kind": "class",
       "description": "Main constructor of the class. Creates a WMCSelector\ncontrol to provides a way to select an specific WMC",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurearea.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurearea.js",
       "extends": "M.control.Measure",
       "provides": [
         "P.control.MeasureArea"
@@ -16,7 +16,7 @@
       "kind": "function",
       "description": "This function checks if an object is equals\nto this control",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurearea.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurearea.js",
       "provides": [
         "P.control.MeasureArea"
       ]
@@ -26,20 +26,7 @@
       "kind": "constant",
       "description": "Template for this controls",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurearea.js",
-      "types": [
-        "string"
-      ],
-      "provides": [
-        "P.control.MeasureArea"
-      ]
-    },
-    {
-      "name": "M.control.MeasureArea.HELP_KEEP_MESSAGE",
-      "kind": "constant",
-      "description": "Help message",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurearea.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurearea.js",
       "types": [
         "string"
       ],
@@ -52,7 +39,7 @@
       "kind": "class",
       "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurearea.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurearea.js",
       "extends": "M.impl.control.Measure",
       "provides": [
         "P.impl.control.MeasureArea"
@@ -63,7 +50,7 @@
       "kind": "class",
       "description": "Main facade plugin object. This class creates a plugin\nobject which has an implementation Object",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebar.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebar.js",
       "extends": "M.Plugin",
       "params": [
         {
@@ -82,7 +69,7 @@
       "kind": "function",
       "description": "This function provides the implementation\nof the object",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebar.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebar.js",
       "params": [
         {
           "name": "map",
@@ -100,7 +87,7 @@
       "kind": "function",
       "description": "This function destroys this plugin",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebar.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebar.js",
       "provides": [
         "P.plugin.Measurebar"
       ]
@@ -110,7 +97,7 @@
       "kind": "class",
       "description": "Main constructor of the class. Creates a WMCSelector\ncontrol to provides a way to select an specific WMC",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
       "extends": "M.Control",
       "provides": [
         "P.control.Measure"
@@ -121,7 +108,7 @@
       "kind": "function",
       "description": "This function creates the view to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
       "params": [
         {
           "name": "map",
@@ -135,29 +122,11 @@
       ]
     },
     {
-      "name": "M.control.Measure#getActivationButton",
-      "kind": "function",
-      "description": "TODO",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
-      "params": [
-        {
-          "name": "html",
-          "types": [
-            "HTMLElement"
-          ]
-        }
-      ],
-      "provides": [
-        "P.control.Measure"
-      ]
-    },
-    {
       "name": "M.control.Measure#equals",
       "kind": "function",
       "description": "This function checks if an object is equals\nto this control",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
       "provides": [
         "P.control.Measure"
       ]
@@ -167,20 +136,7 @@
       "kind": "function",
       "description": "function adds the event 'click'",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
-      "provides": [
-        "P.control.Measure"
-      ]
-    },
-    {
-      "name": "M.control.Measure.NAME",
-      "kind": "constant",
-      "description": "Name to identify this control",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
-      "types": [
-        "string"
-      ],
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
       "provides": [
         "P.control.Measure"
       ]
@@ -190,7 +146,7 @@
       "kind": "constant",
       "description": "Template for this controls",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
       "types": [
         "string"
       ],
@@ -203,20 +159,7 @@
       "kind": "constant",
       "description": "Template for this controls",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
-      "types": [
-        "string"
-      ],
-      "provides": [
-        "P.control.Measure"
-      ]
-    },
-    {
-      "name": "M.control.Measure.HELP_MESSAGE",
-      "kind": "constant",
-      "description": "Help message",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
       "types": [
         "string"
       ],
@@ -229,7 +172,7 @@
       "kind": "class",
       "description": "Main constructor of the measure conrol.",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "extends": "ol.control.Control",
       "provides": [
         "P.impl.control.Measure"
@@ -240,7 +183,7 @@
       "kind": "function",
       "description": "This function adds the control to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "params": [
         {
           "name": "map",
@@ -260,11 +203,21 @@
       ]
     },
     {
+      "name": "M.impl.control.Measure#onClick",
+      "kind": "function",
+      "description": "This function manages the click on the button",
+      "stability": "stable",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "provides": [
+        "P.impl.control.Measure"
+      ]
+    },
+    {
       "name": "M.impl.control.Measure#activate",
       "kind": "function",
       "description": "This function call 'addOnClickEvent_' to active 'OnClick' Event",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -274,7 +227,7 @@
       "kind": "function",
       "description": "This function call 'deleteOnClickEvent_' to disable 'OnClick' Event",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -284,7 +237,7 @@
       "kind": "function",
       "description": "Clear all measures",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -294,7 +247,7 @@
       "kind": "function",
       "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -304,7 +257,7 @@
       "kind": "class",
       "description": "Main constructor of the class. Creates a WMCSelector\ncontrol to provides a way to select an specific WMC",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
       "extends": "M.Control",
       "provides": [
         "P.control.MeasureClear"
@@ -315,7 +268,7 @@
       "kind": "function",
       "description": "This function creates the view to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
       "params": [
         {
           "name": "map",
@@ -333,7 +286,7 @@
       "kind": "function",
       "description": "This function checks if an object is equals\nto this control",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
       "provides": [
         "P.control.MeasureClear"
       ]
@@ -343,20 +296,7 @@
       "kind": "function",
       "description": "function adds the event 'click'",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
-      "provides": [
-        "P.control.MeasureClear"
-      ]
-    },
-    {
-      "name": "M.control.MeasureClear.NAME",
-      "kind": "constant",
-      "description": "Name to identify this control",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
-      "types": [
-        "string"
-      ],
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
       "provides": [
         "P.control.MeasureClear"
       ]
@@ -366,7 +306,7 @@
       "kind": "constant",
       "description": "Template for this controls",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measureclear.js",
       "types": [
         "string"
       ],
@@ -379,7 +319,7 @@
       "kind": "class",
       "description": "Main constructor of the class. Creates a MeasureClear\ncontrol",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measureclear.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measureclear.js",
       "extends": "ol.control.Control",
       "provides": [
         "P.impl.control.MeasureClear"
@@ -390,7 +330,7 @@
       "kind": "function",
       "description": "This function adds the control to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measureclear.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measureclear.js",
       "params": [
         {
           "name": "map",
@@ -414,7 +354,7 @@
       "kind": "function",
       "description": "This function adds the control to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measureclear.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measureclear.js",
       "params": [
         {
           "name": "map",
@@ -438,7 +378,7 @@
       "kind": "function",
       "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measureclear.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measureclear.js",
       "provides": [
         "P.impl.control.MeasureClear"
       ]
@@ -448,7 +388,7 @@
       "kind": "class",
       "description": "Main constructor of the class. Creates a WMCSelector\ncontrol to provides a way to select an specific WMC",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurelength.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurelength.js",
       "extends": "M.control.Measure",
       "provides": [
         "P.control.MeasureLength"
@@ -459,7 +399,7 @@
       "kind": "function",
       "description": "This function checks if an object is equals\nto this control",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurelength.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurelength.js",
       "provides": [
         "P.control.MeasureLength"
       ]
@@ -469,20 +409,7 @@
       "kind": "constant",
       "description": "Template for this controls",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurelength.js",
-      "types": [
-        "string"
-      ],
-      "provides": [
-        "P.control.MeasureLength"
-      ]
-    },
-    {
-      "name": "M.control.MeasureLength.HELP_KEEP_MESSAGE",
-      "kind": "constant",
-      "description": "Help message",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurelength.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurelength.js",
       "types": [
         "string"
       ],
@@ -495,7 +422,7 @@
       "kind": "class",
       "description": "Main constructor of the class. Creates a WMC selector\ncontrol",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurelength.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurelength.js",
       "extends": "M.impl.control.Measure",
       "provides": [
         "P.impl.control.MeasureLength"
@@ -506,30 +433,12 @@
       "kind": "function",
       "description": "This function creates the view to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
       "params": [
         {
           "name": "map",
           "types": [
             "M.Map"
-          ]
-        }
-      ],
-      "provides": [
-        "P.control.Measure"
-      ]
-    },
-    {
-      "name": "M.control.MeasureArea#getActivationButton",
-      "kind": "function",
-      "description": "TODO",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
-      "params": [
-        {
-          "name": "html",
-          "types": [
-            "HTMLElement"
           ]
         }
       ],
@@ -542,7 +451,7 @@
       "kind": "function",
       "description": "function adds the event 'click'",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
       "provides": [
         "P.control.Measure"
       ]
@@ -552,7 +461,7 @@
       "kind": "function",
       "description": "This function adds the control to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "params": [
         {
           "name": "map",
@@ -572,11 +481,21 @@
       ]
     },
     {
+      "name": "M.impl.control.MeasureArea#onClick",
+      "kind": "function",
+      "description": "This function manages the click on the button",
+      "stability": "stable",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "provides": [
+        "P.impl.control.Measure"
+      ]
+    },
+    {
       "name": "M.impl.control.MeasureArea#activate",
       "kind": "function",
       "description": "This function call 'addOnClickEvent_' to active 'OnClick' Event",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -586,7 +505,7 @@
       "kind": "function",
       "description": "This function call 'deleteOnClickEvent_' to disable 'OnClick' Event",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -596,7 +515,7 @@
       "kind": "function",
       "description": "Clear all measures",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -606,7 +525,7 @@
       "kind": "function",
       "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -616,30 +535,12 @@
       "kind": "function",
       "description": "This function creates the view to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
       "params": [
         {
           "name": "map",
           "types": [
             "M.Map"
-          ]
-        }
-      ],
-      "provides": [
-        "P.control.Measure"
-      ]
-    },
-    {
-      "name": "M.control.MeasureLength#getActivationButton",
-      "kind": "function",
-      "description": "TODO",
-      "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
-      "params": [
-        {
-          "name": "html",
-          "types": [
-            "HTMLElement"
           ]
         }
       ],
@@ -652,7 +553,7 @@
       "kind": "function",
       "description": "function adds the event 'click'",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/facade/js/measurebase.js",
       "provides": [
         "P.control.Measure"
       ]
@@ -662,7 +563,7 @@
       "kind": "function",
       "description": "This function adds the control to the specified map",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "params": [
         {
           "name": "map",
@@ -682,11 +583,21 @@
       ]
     },
     {
+      "name": "M.impl.control.MeasureLength#onClick",
+      "kind": "function",
+      "description": "This function manages the click on the button",
+      "stability": "stable",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "provides": [
+        "P.impl.control.Measure"
+      ]
+    },
+    {
       "name": "M.impl.control.MeasureLength#activate",
       "kind": "function",
       "description": "This function call 'addOnClickEvent_' to active 'OnClick' Event",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -696,7 +607,7 @@
       "kind": "function",
       "description": "This function call 'deleteOnClickEvent_' to disable 'OnClick' Event",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -706,7 +617,7 @@
       "kind": "function",
       "description": "Clear all measures",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]
@@ -716,7 +627,7 @@
       "kind": "function",
       "description": "This function destroys this control, cleaning the HTML\nand unregistering all events",
       "stability": "stable",
-      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/measurebar/impl/ol3/js/measurebase.js",
       "provides": [
         "P.impl.control.Measure"
       ]

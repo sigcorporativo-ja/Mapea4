@@ -1,5 +1,5 @@
 //INTEGRACIÓN DE PARÁMETROS EN API REST
-//OPCIONES - (1) Nuevo parámetro en la API REST, normalmente porque requiera parámetros 
+//OPCIONES - (1) Nuevo parámetro en la API REST, normalmente porque requiera parámetros
 //de configuración.
 //Example: <url_mapea>?geosearch=
 //Example: <url_mapea>?printer=
@@ -39,4 +39,22 @@
          "position": 2
       }]
    }]
+}
+
+//Archivos del plugin que Mapea REST debe importar cuando se invoque el plugin por URL
+{
+   "url": {
+      "name": "nombre_plugin"
+   },
+   "constructor": "M.plugin.nombre_plugin",
+   "files": {
+      "ol": {
+         "scripts": [
+            "mapea.nombre_plugin.ol.min.js"
+         ],
+         "styles": [
+            "mapea.nombre_plugin.min.css"
+         ]
+      }
+   }
 }

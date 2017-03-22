@@ -196,7 +196,7 @@ goog.require('M.parameter.layer');
          M.exception('La implementación usada no posee el método setVisible');
       }
 
-      visibility = /^true$/i.test(visibility);
+      visibility = /^1|(true)$/i.test(visibility);
 
       this.getImpl().setVisible(visibility);
    };

@@ -192,6 +192,12 @@ div#m-autcomplete > div:hover {
    max-height: 75vh;
 }
 
+@media only screen and (max-width: 768px) {
+.results-panel > div.results {
+width: calc(100vw - 20px);
+}
+}
+
 #m-tabs-content > .results-panel > div.results {
    margin-top: 0px;
    max-height: 65vh;
@@ -251,6 +257,7 @@ div#m-autcomplete > div:hover {
 
 .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result:nth-child(1), .m-popup > div.m-content > div.m-body > div.m-searchstreet-content > div.result:nth-child(1) {
    border: 0px;
+}
 
 .results-panel > div.results > div.result {
    cursor: pointer;
@@ -288,7 +295,7 @@ div#m-autcomplete > div:hover {
 }
 
 .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.value, .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
-   white-space: nowrap;
+   white-space: normal;
 }
 
 .m-popup > div.m-content > div.m-body > div.m-geosearch-content > div.result > table td.key {
@@ -308,8 +315,6 @@ div#m-autcomplete > div:hover {
     border-bottom: 1px solid rgba(0,0,0,.09);
     border-bottom-style: dashed;
 }
-
-
 
 
 /*********************

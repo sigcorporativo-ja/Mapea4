@@ -13,10 +13,10 @@ goog.require('M.exception');
     * @constructor
     * @extends {M.Layer}
     * @param {string|Mx.parameters.WMS} userParameters parameters
-    * @param {Mx.parameters.LayerOptions} options provided by the user
+     * @param {Mx.parameters.LayerOptions} options provided by the user
     * @api stable
     */
-   M.layer.WMS = (function(userParameters, options) {
+   M.layer.WMS = (function(userParameters, options, implParam) {
       // checks if the implementation can create WMC layers
       if (M.utils.isUndefined(M.impl.layer.WMS)) {
          M.exception('La implementación usada no puede crear capas WMS');
@@ -34,8 +34,11 @@ goog.require('M.exception');
        * @public
        * @type {M.layer.WMS}
        */
-      var impl = new M.impl.layer.WMS(options);
-
+      var impl = implParam;
+      if (M.utils.isNullOrEmpty(impl)) {
+         impl = new M.impl.layer.WMS(options);
+      }
+      
       var parameters = M.parameter.layer(userParameters, M.layer.type.WMS);
 
       // calls the super constructor
@@ -213,6 +216,18 @@ goog.require('M.exception');
     */
    M.layer.WMS.prototype.getNoChacheName = function() {
       return this._noCacheName;
+   };
+
+   /**
+    * Update minimum and maximum resolution WMS layers
+    *
+    * @public
+    * @function
+    * @param {ol.Projection} projection - Projection map
+    * @api stable
+    */
+   M.layer.WMS.prototype.updateMinMaxResolution = function(projection) {
+      return this.getImpl().updateMinMaxResolution(projection);
    };
 
    /**

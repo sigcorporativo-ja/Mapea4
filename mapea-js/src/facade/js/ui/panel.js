@@ -40,6 +40,15 @@ goog.require('M.facade.Base');
        * @expose
        */
       this._controls = [];
+      
+      
+      
+      /**
+       * @private
+       * @type {HTMLElement}
+       * @expose
+       */
+      this._buttonPanel = null;
 
       /**
        * @private
@@ -145,6 +154,16 @@ goog.require('M.facade.Base');
        * @expose
        */
       this._controlsContainer = null;
+      
+      /**
+       * @private
+       * @type {String}
+       * @expose
+       */
+      this._tooltip = null;
+      if (!M.utils.isNullOrEmpty(options.tooltip)) {
+         this._tooltip = options.tooltip;
+      }
 
       // calls the super constructor
       goog.base(this);
@@ -180,7 +199,10 @@ goog.require('M.facade.Base');
          'jsonp': true
       }).then(function(html) {
          this_._element = html;
-         var buttonPanel = html.querySelector('button.m-panel-btn');
+         if(!M.utils.isNullOrEmpty(this_._tooltip)){
+            this_._element.setAttribute("title", this_._tooltip);
+         }
+         this_._buttonPanel = html.querySelector('button.m-panel-btn');
          if (!M.utils.isNullOrEmpty(this_._className)) {
             this_._className.split(/\s+/).forEach(function(className) {
                goog.dom.classlist.add(html, className);
@@ -188,10 +210,10 @@ goog.require('M.facade.Base');
          }
 
          if (this_._collapsed === true) {
-            this_._collapse(html, buttonPanel);
+            this_._collapse(html, this_._buttonPanel);
          }
          else {
-            this_._open(html, buttonPanel);
+            this_._open(html, this_._buttonPanel);
          }
 
          if (this_._collapsible !== true) {
@@ -201,13 +223,13 @@ goog.require('M.facade.Base');
          this_._controlsContainer = html.querySelector('div.m-panel-controls');
          goog.dom.appendChild(areaContainer, html);
 
-         goog.events.listen(buttonPanel, goog.events.EventType.CLICK, function(evt) {
+         goog.events.listen(this_._buttonPanel, goog.events.EventType.CLICK, function(evt) {
             evt.preventDefault();
             if (this._collapsed === false) {
-               this._collapse(html, buttonPanel);
+               this._collapse(html, this_._buttonPanel);
             }
             else {
-               this._open(html, buttonPanel);
+               this._open(html, this_._buttonPanel);
             }
          }, false, this_);
 
@@ -222,11 +244,11 @@ goog.require('M.facade.Base');
     * @private
     * @function
     */
-   M.ui.Panel.prototype._collapse = function(html, buttonPanel) {
+   M.ui.Panel.prototype._collapse = function(html) {
       goog.dom.classlist.remove(html, 'opened');
-      goog.dom.classlist.remove(buttonPanel, this._openedButtonClass);
+      goog.dom.classlist.remove(this._buttonPanel, this._openedButtonClass);
       goog.dom.classlist.add(html, 'collapsed');
-      goog.dom.classlist.add(buttonPanel, this._collapsedButtonClass);
+      goog.dom.classlist.add(this._buttonPanel, this._collapsedButtonClass);
       this._collapsed = true;
       this.fire(M.evt.HIDE);
    };
@@ -237,14 +259,35 @@ goog.require('M.facade.Base');
     * @private
     * @function
     */
-   M.ui.Panel.prototype._open = function(html, buttonPanel) {
+   M.ui.Panel.prototype._open = function(html) {
       goog.dom.classlist.remove(html, 'collapsed');
-      goog.dom.classlist.remove(buttonPanel, this._collapsedButtonClass);
+      goog.dom.classlist.remove(this._buttonPanel, this._collapsedButtonClass);
       goog.dom.classlist.add(html, 'opened');
-      goog.dom.classlist.add(buttonPanel, this._openedButtonClass);
+      goog.dom.classlist.add(this._buttonPanel, this._openedButtonClass);
       this._collapsed = false;
       this.fire(M.evt.SHOW);
    };
+   
+   /**
+    * Call private method _open
+    *
+    * @public
+    * @function
+    */
+   M.ui.Panel.prototype.open = function() {
+      this._open(this._element);
+   };
+   
+   /**
+    * Call private method _collapse
+    *
+    * @public
+    * @function
+    */
+   M.ui.Panel.prototype.collapse = function() {
+      this._collapse(this._element);
+   };
+
 
    /**
     * TODO
@@ -436,6 +479,30 @@ goog.require('M.facade.Base');
          equals = (obj.name === this.name);
       }
       return equals;
+   };
+   
+   /**
+    * Returns the template panel
+    *
+    * @public
+    * @function
+    * @api stable
+    * @returns {HTMLElement}
+    */
+   M.ui.Panel.prototype.getTemplatePanel = function() {
+      return this._element;
+   };
+   
+   /**
+    * Returns is collapsed
+    *
+    * @public
+    * @function
+    * @api stable
+    * @returns {Boolean}
+    */
+   M.ui.Panel.prototype.isCollapsed = function() {
+      return this._collapsed;
    };
 
    /**

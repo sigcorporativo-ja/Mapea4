@@ -30,10 +30,6 @@
                "value": "http://www.juntadeandalucia.es/economiayhacienda/images/plantilla/logo_cabecera.gif"
             }, {
                "type": "simple",
-               "name": "infoSRS",
-               "value": "x"
-            }, {
-               "type": "simple",
                "name": "creditos",
                "value": "Impresión generada a través de Mapea"
             }]
@@ -50,5 +46,15 @@
             "value": "true"
          }]
       }]
-   }]
+   }],
+   "files": {
+      "ol": {
+         "scripts": [
+            "printer.ol.min.js"
+         ],
+         "styles": [
+            "printer.min.css"
+         ]
+      }
+   }
 }

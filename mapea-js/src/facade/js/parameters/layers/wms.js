@@ -199,7 +199,7 @@ goog.require('M.exception');
          M.exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
       }
       if (!M.utils.isNullOrEmpty(transparent)) {
-         transparent = /^true$/i.test(transparent);
+         transparent = /^1|(true)$/i.test(transparent);
       }
       return transparent;
    };
@@ -241,7 +241,7 @@ goog.require('M.exception');
          M.exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
       }
       if (!M.utils.isNullOrEmpty(tiled)) {
-         tiled = /^true$/i.test(tiled);
+         tiled = /^1|(true)$/i.test(tiled);
       }
       return tiled;
    };

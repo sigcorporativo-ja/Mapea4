@@ -129,7 +129,8 @@ goog.require('M.exception');
          'id': layer.name,
          'title': layerTitle,
          'legend': layer.getLegendURL(),
-         'outOfRange': !layer.inRange()
+         'outOfRange': !layer.inRange(),
+         'opacity': layer.getOpacity()
       };
    };
 

@@ -25,7 +25,7 @@ goog.require('M.exception');
     * derivation of nautical miles from http://en.wikipedia.org/wiki/Nautical_mile
     * Includes the full set of units supported by CS-MAP (http://trac.osgeo.org/csmap/)
     * and PROJ.4 (http://trac.osgeo.org/proj/)
-    * The hardcoded table is maintain in a CS-MAP source code module named CSdataU.c
+     * The hardcoded table is maintain in a CS-MAP source code module named CSdataU.c
     * The hardcoded table of PROJ.4 units are in pj_units.c.
     * @const {Object}
     * @api stable
@@ -39,6 +39,7 @@ goog.require('M.exception');
       'm': 39.3701,
       'dd': 4374754,
       'yd': 36,
+      'd': 4374754,
       'degrees': 4374754,
       'nmi': 1852 * 39.3701,
       'Meter': 1.0 / M.METERS_PER_INCH, //EPSG:9001

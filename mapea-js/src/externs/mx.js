@@ -5,6 +5,34 @@
 /* typedefs for object literals provided by applications */
 
 /**
+ * @namespace Mx
+ */
+
+/**
+ * @namespace Mx.config
+ */
+
+/**
+ * @namespace Mx.config
+ */
+
+/**
+ * @namespace Mx.parameters
+ */
+
+/**
+ * @namespace Mx.Center
+ */
+
+/**
+ * @namespace Mx.OverviewMapOpts
+ */
+
+/**
+ * @namespace Mx.Popup
+ */
+
+/**
  * Namespace.
  * @type {Object}
  */
@@ -23,18 +51,18 @@ Mx.config.MOBILE_WIDTH;
 Mx.config.MAPEA_URL;
 
 /**
- * The path to the Mapea proxy to send
+ * The URL to the Mapea proxy to send
  * jsonp requests
  * @type {string}
  */
-Mx.config.PROXY_PATH;
+Mx.config.PROXY_URL;
 
 /**
- * The path to the Mapea proxy to send
+ * The URL to the Mapea proxy to send
  * jsonp requests
  * @type {string}
  */
-Mx.config.PROXY_POST_PATH;
+Mx.config.PROXY_POST_URL;
 
 /**
  * The path to the Mapea templates
@@ -65,6 +93,30 @@ Mx.config.GEOSEARCH_DISTANCE;
  * @type {string}
  */
 Mx.config.GEOSEARCH_SPATIAL_FIELD;
+
+/**
+ * TODO
+ * @type {String}
+ */
+M.config.MAPBOX_URL;
+
+/**
+ * TODO
+ * @type {String}
+ */
+M.config.MAPBOX_EXTENSION;
+
+/**
+ * TODO
+ * @type {String}
+ */
+M.config.MAPBOX_TOKEN_NAME;
+
+/**
+ * TODO
+ * @type {String}
+ */
+M.config.MAPBOX_TOKEN_VALUE;
 
 /**
  * Predefined WMC files. It is composed of URL,
@@ -176,17 +228,11 @@ Mx.config.panels.TOOLS;
 Mx.config.panels.EDITION;
 
 /**
- * Namespace.
- * @type {Object}
- */
-Mx.parameters;
-
-/**
  * Object literal with config options for the map provided by the user.
  * @typedef {{
  *     container: (Object|string)
  * }}
- * @api
+ * @api @stable
  */
 Mx.parameters.Map;
 
@@ -370,12 +416,12 @@ Mx.parameters.MapOptions;
 Mx.parameters.MapOptions.renderer;
 
 /**
- * Object literal with config options for a lyaer
+ * Object literal with config options for a layer
  * @typedef {{
  *     minResolution: (Number),
  *     maxResolution: (Number),
  *     minScale: (Number),
- *     maxScale: (Number),
+ *     maxScale: (Number)
  * }}
  * @api stable
  */
@@ -583,14 +629,6 @@ Mx.parameters.WMTS.prototype.url;
 Mx.parameters.WMTS.prototype.matrixSet;
 
 /**
-* Version of the WMS service
-   * @type {
-      string
-   } * @api stable
-
-Mx.parameters.WMS.prototype.setResolutions;*/
-
-/**
  * Object literal with config options for the WFS layer provided by the user.
  * @typedef {{
  *     type: (string),
@@ -658,11 +696,42 @@ Mx.parameters.WFS.prototype.geometry;
 Mx.parameters.WFS.prototype.cql;
 
 /**
+ * CQL filter of the WFS layer
+ * @type {sring}
+ * @api stable
+ */
+Mx.parameters.WFS.prototype.ecql;
+
+/**
  * Version of the WFS service
  * @type {string}
  * @api stable
  */
 Mx.parameters.WFS.prototype.version;
+
+/**
+ * Object literal with config options for a WFS
+ * @typedef {{
+ *     getFeatureOutputFormat: (String),
+ *     describeFeatureTypeOutputFormat: (String),
+ * }}
+ * @api stable
+ */
+Mx.parameters.WFSOptions;
+
+/**
+ * GetFeature output format
+ * @type {String}
+ * @api stable
+ */
+Mx.parameters.WFSOptions.getFeatureOutputFormat;
+
+/**
+ * DescribeFeatureType output format
+ * @type {String}
+ * @api stable
+ */
+Mx.parameters.WFSOptions.describeFeatureTypeOutputFormat;
 
 /**
  * Object literal with config options for the KML layer provided by the user.
@@ -765,6 +834,22 @@ Mx.parameters.GeoJSON.prototype.properties.vendor.mapea;
 Mx.parameters.GeoJSON.prototype.properties.vendor.mapea.icon;
 
 /**
+ * Object literal with config options for the Mapbox layer provided by the user.
+ * @typedef {{
+ *     accessToken: (String)
+ * }}
+ * @api
+ */
+Mx.parameters.Mapbox;
+
+/**
+ * Mapbox token API
+ * @type {String}
+ * @api stable
+ */
+Mx.parameters.Mapbox.prototype.accessToken;
+
+/**
  * Object literal with config options for the layer provided by the user.
  * @typedef {{
  *     type: (string),
@@ -832,6 +917,101 @@ Mx.parameters.TemplateOptions.jsonp;
  * @api stable
  */
 Mx.parameters.TemplateOptions.scope;
+
+/**
+ * Object literal with config options for Autocomplete
+ * @typedef {{
+ *     locality: (number),
+ *     target: (HTMLElement),
+ *     html: (HTMLElement)
+ * }}
+ * @api stable
+ */
+Mx.parameters.Autocomplete;
+/**
+ * INE code to specify the search
+ * @type {number}
+ * @api stable
+ */
+Mx.parameters.Autocomplete.locality;
+/**
+ * Input searchstreet
+ * @type {HTMLElement}
+ * @api stable
+ */
+Mx.parameters.Autocomplete.target;
+/**
+ * Container searchstreet
+ * @type {HTMLElement}
+ * @api stable
+ */
+Mx.parameters.Autocomplete.html;
+
+/**
+ * Object literal with config options for Searchstreet
+ * @typedef {{
+ *     locality: (number)
+ * }}
+ * @api stable
+ */
+Mx.parameters.Searchstreet;
+/**
+ * INE code to specify the search
+ * @type {number}
+ * @api stable
+ */
+Mx.parameters.Searchstreet.locality;
+
+/**
+ * Object literal with config options for SearchstreetGeosearch
+ * @typedef {{
+ *     locality: (number)
+ * }}
+ * @api stable
+ */
+Mx.parameters.SearchstreetGeosearch;
+/**
+ * INE code to specify the search
+ * @type {number}
+ * @api stable
+ */
+Mx.parameters.SearchstreetGeosearch.locality;
+
+/**
+ * Object literal with config options for Geosearchbylocation
+ * @typedef {{
+ *     distance: (number),
+ *     core: (string),
+ *     url: (string),
+ *     handler: (string)
+ * }}
+ * @api stable
+ */
+Mx.parameters.Geosearchbylocation;
+/**
+ * Distance search
+ * @type {number}
+ * @api stable
+ */
+Mx.parameters.Geosearchbylocation.distance;
+/**
+ * Core to the URL for the query
+ * @type {string}
+ * @api stable
+ */
+Mx.parameters.Geosearchbylocation.core;
+/**
+ * URL for the query
+ * @type {string}
+ * @api stable
+ */
+Mx.parameters.Geosearchbylocation.url;
+/**
+ * Handler to the URL for the query
+ * @type {string}
+ * @api stable
+ */
+Mx.parameters.Geosearchbylocation.handler;
 
 /**
  * Object literal with x y coordinates for an extent.
@@ -1137,7 +1317,6 @@ Mx.WFSDescribeFeatureType.targetPrefix;
  */
 Mx.WFSDescribeFeatureType.localType;
 
-
 /**
  * Object literal representing a OverviewMap options
  * @typedef {{
@@ -1168,3 +1347,50 @@ Mx.Popup;
  * @api stable
  */
 Mx.Popup.content;
+
+/**
+ * Describe Feature WFST
+ * @typedef {{
+ *     geometryName: (string),
+ *     featureNS: (string),
+ *     featurePrefix: (string),
+ *     properties: (array)
+ * }}
+ * @api stable
+ */
+Mx.describeFeatureType.WFSTBase;
+
+/**
+ * Name geometry
+ * @type {string}
+ * @api stable
+ */
+Mx.describeFeatureType.WFSTBase.geometryName;
+
+/**
+ * Feature NS
+ * @type {string}
+ * @api stable
+ */
+Mx.describeFeatureType.WFSTBase.featureNS;
+
+/**
+ * Prefix feature
+ * @type {string}
+ * @api stable
+ */
+Mx.describeFeatureType.WFSTBase.featurePrefix;
+
+/**
+ * Properties feature
+ * @type {array}
+ * @api stable
+ */
+Mx.describeFeatureType.WFSTBase.properties;
+
+/**
+ * Panel collapse
+ * @type {function}
+ * @api stable
+ */
+Mx.ui.Panel.prototype.collapse;

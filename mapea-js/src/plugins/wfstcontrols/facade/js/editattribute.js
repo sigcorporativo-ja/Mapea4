@@ -7,12 +7,16 @@ goog.provide('P.control.EditAttribute');
     * edit the attributes of the features
     *
     * @constructor
-    * @param {M.layer.WFS}
-    * layer layer for use in control
+    * @param {M.layer.WFS} layer - Layer for use in control
     * @extends {M.Control}
     * @api stable
     */
    M.control.EditAttribute = (function(layer) {
+      /**
+       * Name of the control
+       * @public
+       * @type {String}
+       */
       this.name = M.control.EditAttribute.NAME;
 
       if (M.utils.isUndefined(M.impl.control.EditAttribute)) {
@@ -32,7 +36,7 @@ goog.provide('P.control.EditAttribute');
     *
     * @public
     * @function
-    * @param {M.Map} map map to add the control
+    * @param {M.Map} map - Map to add the control
     * @returns {Promise} html response
     * @api stable
     */
@@ -43,11 +47,12 @@ goog.provide('P.control.EditAttribute');
    };
 
    /**
-    * TODO
+    * This function returns the HTML button
     *
     * @public
     * @function
-    * @param {HTMLElement} html to add the plugin
+    * @param {HTMLElement} element - HTML control
+    * @return {HTMLElement} return HTML button
     * @api stable
     * @export
     */
@@ -56,27 +61,29 @@ goog.provide('P.control.EditAttribute');
    };
 
    /**
-    * This function checks if an object is equals
-    * to this control
+    * This function checks if an object is equals to this control
     *
     * @function
     * @api stable
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     */
    M.control.EditAttribute.prototype.equals = function(obj) {
       var equals = (obj instanceof M.control.EditAttribute);
       return equals;
    };
 
-  /**
-   * This function set layer for editting
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-    M.control.EditAttribute.prototype.setLayer = function(layer) {
+   /**
+    * This function set layer for edit attributes features
+    *
+    * @public
+    * @function
+    * @param {M.layer.WFS} layer - Layer
+    * @api stable
+    */
+   M.control.EditAttribute.prototype.setLayer = function(layer) {
       this.getImpl().layer_ = layer;
-    };
+   };
 
    /**
     * Template for this controls - button

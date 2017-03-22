@@ -2,10 +2,12 @@ goog.provide('P.control.MeasureClear');
 
 /**
  * @classdesc
- * Main constructor of the class. Creates a WMCSelector
- * control to provides a way to select an specific WMC
+ * Main constructor of the class. Creates a MeasureClear
+ * control to provides clean items drawn on the map
  *
  * @constructor
+ * @param {M.control.Measure} measureLengthControl - Control measure distances
+ * @param {M.control.Measure} measureAreaControl - Control measure areas
  * @extends {M.Control}
  * @api stable
  */
@@ -28,7 +30,8 @@ goog.inherits(M.control.MeasureClear, M.Control);
  *
  * @public
  * @function
- * @param {M.Map} map to add the control
+ * @param {M.Map} map - Map to add the control
+ * @returns {Promise} HTML template
  * @api stable
  */
 M.control.MeasureClear.prototype.createView = function(map) {
@@ -41,7 +44,10 @@ M.control.MeasureClear.prototype.createView = function(map) {
  * This function checks if an object is equals
  * to this control
  *
+ * @public
  * @function
+ * @param {*} obj - Object to compare
+ * @returns {boolean} equals - Returns if they are equal or not
  * @api stable
  */
 M.control.MeasureClear.prototype.equals = function(obj) {
@@ -53,7 +59,7 @@ M.control.MeasureClear.prototype.equals = function(obj) {
 };
 
 /**
- * function adds the event 'click'
+ * This function destroys this plugin
  *
  * @public
  * @function

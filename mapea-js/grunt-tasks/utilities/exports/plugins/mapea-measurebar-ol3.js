@@ -28,10 +28,6 @@ goog.exportSymbol(
     M.control.MeasureArea.TEMPLATE);
 
 goog.exportSymbol(
-    'M.control.MeasureArea.HELP_KEEP_MESSAGE',
-    M.control.MeasureArea.HELP_KEEP_MESSAGE);
-
-goog.exportSymbol(
     'M.impl.control.MeasureArea',
     M.impl.control.MeasureArea);
 
@@ -60,11 +56,6 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.control.Measure.prototype,
-    'getActivationButton',
-    M.control.Measure.prototype.getActivationButton);
-
-goog.exportProperty(
-    M.control.Measure.prototype,
     'equals',
     M.control.Measure.prototype.equals);
 
@@ -72,10 +63,6 @@ goog.exportProperty(
     M.control.Measure.prototype,
     'destroy',
     M.control.Measure.prototype.destroy);
-
-goog.exportSymbol(
-    'M.control.Measure.NAME',
-    M.control.Measure.NAME);
 
 goog.exportSymbol(
     'M.control.Measure.POINTER_TOOLTIP_TEMPLATE',
@@ -86,10 +73,6 @@ goog.exportSymbol(
     M.control.Measure.MEASURE_TOOLTIP_TEMPLATE);
 
 goog.exportSymbol(
-    'M.control.Measure.HELP_MESSAGE',
-    M.control.Measure.HELP_MESSAGE);
-
-goog.exportSymbol(
     'M.impl.control.Measure',
     M.impl.control.Measure);
 
@@ -97,6 +80,11 @@ goog.exportProperty(
     M.impl.control.Measure.prototype,
     'addTo',
     M.impl.control.Measure.prototype.addTo);
+
+goog.exportProperty(
+    M.impl.control.Measure.prototype,
+    'onClick',
+    M.impl.control.Measure.prototype.onClick);
 
 goog.exportProperty(
     M.impl.control.Measure.prototype,
@@ -138,10 +126,6 @@ goog.exportProperty(
     M.control.MeasureClear.prototype.destroy);
 
 goog.exportSymbol(
-    'M.control.MeasureClear.NAME',
-    M.control.MeasureClear.NAME);
-
-goog.exportSymbol(
     'M.control.MeasureClear.TEMPLATE',
     M.control.MeasureClear.TEMPLATE);
 
@@ -178,10 +162,6 @@ goog.exportSymbol(
     M.control.MeasureLength.TEMPLATE);
 
 goog.exportSymbol(
-    'M.control.MeasureLength.HELP_KEEP_MESSAGE',
-    M.control.MeasureLength.HELP_KEEP_MESSAGE);
-
-goog.exportSymbol(
     'M.impl.control.MeasureLength',
     M.impl.control.MeasureLength);
 
@@ -192,11 +172,6 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.control.MeasureArea.prototype,
-    'getActivationButton',
-    M.control.MeasureArea.prototype.getActivationButton);
-
-goog.exportProperty(
-    M.control.MeasureArea.prototype,
     'destroy',
     M.control.MeasureArea.prototype.destroy);
 
@@ -204,6 +179,11 @@ goog.exportProperty(
     M.impl.control.MeasureArea.prototype,
     'addTo',
     M.impl.control.MeasureArea.prototype.addTo);
+
+goog.exportProperty(
+    M.impl.control.MeasureArea.prototype,
+    'onClick',
+    M.impl.control.MeasureArea.prototype.onClick);
 
 goog.exportProperty(
     M.impl.control.MeasureArea.prototype,
@@ -232,11 +212,6 @@ goog.exportProperty(
 
 goog.exportProperty(
     M.control.MeasureLength.prototype,
-    'getActivationButton',
-    M.control.MeasureLength.prototype.getActivationButton);
-
-goog.exportProperty(
-    M.control.MeasureLength.prototype,
     'destroy',
     M.control.MeasureLength.prototype.destroy);
 
@@ -244,6 +219,11 @@ goog.exportProperty(
     M.impl.control.MeasureLength.prototype,
     'addTo',
     M.impl.control.MeasureLength.prototype.addTo);
+
+goog.exportProperty(
+    M.impl.control.MeasureLength.prototype,
+    'onClick',
+    M.impl.control.MeasureLength.prototype.onClick);
 
 goog.exportProperty(
     M.impl.control.MeasureLength.prototype,

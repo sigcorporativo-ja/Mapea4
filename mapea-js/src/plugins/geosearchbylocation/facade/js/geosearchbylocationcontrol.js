@@ -9,63 +9,62 @@ goog.require('P.control.Geosearch');
     * Control to display nearby points of interest to your location
     *
     * @constructor
-    * @extends {Geosearch}
+    * @param {string} url - URL for the query
+    * @param {string} core - Core to the URL for the query
+    * @param {string} handler - Handler to the URL for the query
+    * @param {number} distance - Distance search
+    * @param {string} spatialField - Spatial field
+    * @param {number} rows - Number of responses allowed
+    * @extends {M.control.Geosearch}
     * @api stable
     */
-   M.control.Geosearchbylocation = (function(url, core, handler, distance, spatialField, rows, searchParameters) {
+   M.control.Geosearchbylocation = (function(url, core, handler, distance, spatialField, rows) {
       /**
-       * Status button Geosearchbylocation
+       * Status button 'Geosearchbylocation'
        * @private
-       * @type {Boolean}
+       * @type {boolean}
        */
       this.activate_ = true;
 
       /**
-       * Status button Mostar Lista
+       * Status button 'List' Geosearchbylocation
        * @private
-       * @type {Boolean}
+       * @type {boolean}
        */
       this.activatebtnList_ = true;
 
       /**
-       * Parameters to the URL for the request
+       * Distance search
        * @private
-       * @type {Object}
-       */
-      this.searchParameters_ = searchParameters;
-
-      /**
-       * Distance to the URL for the request
-       * @private
-       * @type {Object}
+       * @type {number}
        */
       this.distance_ = distance;
 
       /**
-       * Spatial field to the URL for the request
+       * Spatial field
        * @private
-       * @type {Object}
+       * @type {string}
        */
       this.spatialField_ = spatialField;
 
       /**
-       * Rows to the URL for the request
+       * Number of responses allowed
        * @private
-       * @type {Object}
+       * @type {number}
        */
       this.rows_ = rows;
 
       /**
-       * Search URL
+       * URL for the query
        * @private
-       * @type {String}
+       * @type {string}
        */
       this.searchUrl_ = M.utils.concatUrlPaths([url, core, handler]);
 
       /**
        * Facade Map
        * @private
-       * @type {Object}
+       * @type {M.map}
        */
       this.facadeMap_ = null;
 
@@ -82,9 +81,9 @@ goog.require('P.control.Geosearch');
       }
 
       // calls super
-      goog.base(this, url, core, handler, searchParameters);
+      goog.base(this, url, core, handler);
 
-      // modifies the name for this control
+      // name for this control
       this.name = M.control.Geosearchbylocation.NAME;
 
       // implementation of this control
@@ -97,8 +96,10 @@ goog.require('P.control.Geosearch');
     * This function checks if an object is equals
     * to this control
     *
+    * @public
     * @function
-    * @returns {Boolean}
+    * @param {*} obj - Object to compare
+    * @returns {boolean} equals - Returns if they are equal or not
     * @api stable
     */
    M.control.Geosearchbylocation.prototype.equals = function(obj) {
@@ -114,7 +115,8 @@ goog.require('P.control.Geosearch');
     *
     * @public
     * @function
-    * @returns {Promise}
+    * @param {M.Map} map - Facade map
+    * @returns {Promise} HTML template
     * @api stable
     */
    M.control.Geosearchbylocation.prototype.createView = function(map) {
@@ -125,17 +127,7 @@ goog.require('P.control.Geosearch');
    };
 
    /**
-    * This function creates the view to the specified map
-    *
-    * @public
-    * @function
-    * @param {M.Map} map to add the control
-    * @api stable
-    */
-   M.control.Geosearchbylocation.prototype.addEvents = function(html) {};
-
-   /**
-    * TODO
+    * This function returns the HTML control button
     *
     * @public
     * @function
@@ -148,11 +140,10 @@ goog.require('P.control.Geosearch');
    };
 
    /**
-    * This function creates the view to the specified map
+    * This function enables search
     *
     * @public
     * @function
-    * @param {M.Map} map to add the control
     * @api stable
     */
    M.control.Geosearchbylocation.prototype.activate = function() {
@@ -168,8 +159,7 @@ goog.require('P.control.Geosearch');
    };
 
    /**
-    * If active is true content removed, otherwise it will display the content
-    * @param {Boolean} active decides whether to display the contents or delete
+    * This feature disables the search and delete the contents displayed by this control
     * @public
     * @function
     * @api stable
@@ -182,8 +172,8 @@ goog.require('P.control.Geosearch');
    };
 
    /**
-    * This function calls the function drawLocation implementation
-    * @param {Array} coor location coordinates
+    * This function draws the location on the map
+    * @param {array} coor - Location coordinates
     * @private
     * @function
     */
@@ -193,9 +183,10 @@ goog.require('P.control.Geosearch');
 
 
    /**
-    * This function builds the request URL and the requesting
-    * @param {String} coorTrans formatted coordinates with WKT
-    * @param {Array} coor coordinates
+    * This function performs search
+    *
+    * @param {string} coorTrans - Formatted coordinates with WKT
+    * @param {array} coor - Coordinates
     * @private
     * @function
     */
@@ -238,7 +229,7 @@ goog.require('P.control.Geosearch');
    };
 
    /**
-    * Zoom Results
+    * This function zooms results
     *
     * @private
     * @function
@@ -248,11 +239,11 @@ goog.require('P.control.Geosearch');
    };
 
    /**
-    * This function adds a button click event to show list
+    * This function clear map. draw results and adds a button click event to show list
     *
     * @private
     * @function
-    * @param {Object} results query results
+    * @param {object} results - Query results
     */
    M.control.Geosearchbylocation.prototype.showResults_ = function(results) {
       // clears the layer
@@ -273,7 +264,6 @@ goog.require('P.control.Geosearch');
     *
     * @private
     * @function
-    * @param {Object} results query results
     */
    M.control.Geosearchbylocation.prototype.showList_ = function() {
       var this_ = this;
@@ -309,10 +299,11 @@ goog.require('P.control.Geosearch');
    };
 
    /**
-    * Hides the list
+    * This function add/remove 'hidden' class
     *
     * @private
     * @function
+    * @param {goog.events.BrowserEvent} evt - Keypress event
     */
    M.control.Geosearchbylocation.prototype.resultsClick_ = function(evt) {
       goog.dom.classlist.toggle(this.resultsContainer_, M.control.Geosearch.HIDDEN_RESULTS_CLASS);
@@ -329,7 +320,7 @@ goog.require('P.control.Geosearch');
    M.control.Geosearchbylocation.NAME = 'geosearchbylocation';
 
    /**
-    * hidden class
+    * Hidden class
     *
     * @const
     * @type {string}
