@@ -1196,8 +1196,8 @@ goog.require('ol.Map');
    * @api stable
    */
   M.impl.Map.prototype.getZoom = function () {
-    var zoom = this.getMapImpl().getView().getZoom();
-    return zoom;
+    let resolution = this.getMapImpl().getView().getResolution();
+    return this.getResolutions().findIndex(i => i <= resolution);
   };
 
   /**
