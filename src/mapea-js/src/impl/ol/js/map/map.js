@@ -1197,7 +1197,15 @@ goog.require('ol.Map');
    */
   M.impl.Map.prototype.getZoom = function () {
     let resolution = this.getMapImpl().getView().getResolution();
-    return this.getResolutions().findIndex(i => i <= resolution);
+    let resolutions = this.getResolutions();
+    let zoom = null;
+    for (var ilen = 0; ilen < resolutions.length; ilen++) {
+      if (resolutions[ilen] <= resolution) {
+        zoom = ilen;
+        break;
+      }
+    }
+    return zoom;
   };
 
   /**
