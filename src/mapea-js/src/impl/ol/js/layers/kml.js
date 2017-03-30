@@ -2,7 +2,7 @@ goog.provide('M.impl.layer.KML');
 
 goog.require('M.utils');
 goog.require('M.exception');
-goog.require('M.impl.Layer');
+goog.require('M.impl.layer.Vector');
 goog.require('M.impl.loader.KML');
 goog.require('M.impl.Popup');
 goog.require('M.impl.format.KML');
@@ -48,7 +48,7 @@ goog.require('goog.style');
     // calls the super constructor
     goog.base(this, options);
   });
-  goog.inherits(M.impl.layer.KML, M.impl.Layer);
+  goog.inherits(M.impl.layer.KML, M.impl.layer.Vector);
 
 
   /**
