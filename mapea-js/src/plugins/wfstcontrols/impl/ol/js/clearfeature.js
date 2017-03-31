@@ -67,7 +67,7 @@ goog.provide('P.impl.control.ClearFeature');
          editattributeCtrl.getImpl().editedFeature = null;
          editattributeCtrl.deactivate();
       }
-      this.layer_.getImpl().refresh();
+      this.layer_.getImpl().refresh(true);
    };
 
    /**
