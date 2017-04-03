@@ -23,6 +23,31 @@ goog.require('ol.source.OSM');
   goog.inherits(M.impl.layer.Vector, M.impl.Layer);
 
   /**
+   * This function returns all features of the layer
+   *
+   * @function
+   * @return {Array<M.feature>} returns all features of the layer
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.addFeatures = function (features) {
+    this.ol3Layer.setSource(new ol.source.Vector(features));
+  };
+
+  /**
+   * This function returns all features of the layer
+   *
+   * @function
+   * @return {Array<M.feature>} returns all features of the layer
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.getFeatures = function (applyFilter, filter) {
+    let features = this.getOL3Layer().getSource().getFeatures();
+    if (applyFilter) features = filter.execute(features);
+    return features;
+  };
+
+
+  /**
    * This function checks if an object is equals
    * to this layer
    *
@@ -38,17 +63,6 @@ goog.require('ol.source.OSM');
     }
 
     return equals;
-  };
-
-  /**
-   * This function returns all features of the layer
-   *
-   * @function
-   * @return {Array<M.feature>} returns all features of the layer
-   * @api stable
-   */
-  M.impl.layer.Vector.prototype.getFeatures = function () {
-    return this.getOL3Layer().getSource().getFeatures();
   };
 
   /**
@@ -78,6 +92,19 @@ goog.require('ol.source.OSM');
   };
 
   /**
+   * This function refresh layer
+   *
+   * @function
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.refreshLayer = function (extent) {
+    this.getOL3Layer().getSource().clear();
+    if (this instanceof M.layer.GeoJSON) {
+      ol.featureloader.xhr(this.url, new ol.format.GeoJSON()).call(this.getImpl().getOL3Layer().getSource(), [], 'EPSG:23030');
+    }
+  };
+
+  /**
    * This function return features in bbox
    *
    * @function
@@ -85,22 +112,24 @@ goog.require('ol.source.OSM');
    * return {null | Array<M.feature>} features - Features in bbox
    * @api stable
    */
-  M.impl.layer.Vector.prototype.getFeaturesExtent = function (bbox) {
-    return this.getOL3Layer().getSource().getFeaturesInExtent(bbox);
-  };
-
-  /**
-   * This function refresh layer
-   *
-   * @function
-   * @api stable
-   */
-  M.impl.layer.Vector.prototype.refresh = function (extent) {
-    this.getOL3Layer().getSource().clear();
-    if (this instanceof M.layer.GeoJSON) {
-      ol.featureloader.xhr(this.url, new ol.format.GeoJSON()).call(this.getImpl().getOL3Layer().getSource(), [], 'EPSG:23030');
+  M.impl.layer.Vector.prototype.getFeaturesExtent = function (applyFilter, filter) {
+    let features = this.getOL3Layer().getSource().getFeatures();
+    if (applyFilter) features = filter.execute(features);
+    let extent = {
+      minX: null,
+      minY: null,
+      maxX: null,
+      maxY: null
     }
+    for (var i = 0, ilen = features.length; i < ilen; i++) {
+      let extentFeature = features[i].getGeometry().getExtent();
+      if (M.utils.isNullOrEmpty(extent.minX) || extentFeature[0] < extent.minX) extent.minX = extentFeature[0];
+      if (M.utils.isNullOrEmpty(extent.minY) || extentFeature[1] < extent.minY) extent.minY = extentFeature[1];
+      if (M.utils.isNullOrEmpty(extent.maxX) || extentFeature[2] > extent.maxX) extent.maxX = extentFeature[2];
+      if (M.utils.isNullOrEmpty(extent.maxY) || extentFeature[3] > extent.maxY) extent.maxY = extentFeature[3];
+    }
+    mapajs.setBbox([extent.minX, extent.minY, extent.maxX, extent.maxY]);
+    return [extent.minX, extent.minY, extent.maxX, extent.maxY];
   };
-
 
 })();

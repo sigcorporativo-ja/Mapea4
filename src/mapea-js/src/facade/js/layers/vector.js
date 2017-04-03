@@ -51,21 +51,14 @@ goog.require('M.exception');
   });
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * This function returns all features of the layer
    *
    * @function
+   * @return {Array<M.feature>} returns all features of the layer
    * @api stable
    */
-  M.layer.Vector.prototype.equals = function (obj) {
-    var equals = false;
-
-    if (obj instanceof M.layer.Vector) {
-      equals = (this.url === obj.url);
-      equals = equals && (this.name === obj.name);
-      equals = equals && (this.options === obj.options);
-    }
-    return equals;
+  M.layer.Vector.prototype.addFeatures = function (features) {
+    this.getImpl().addFeatures(features);
   };
 
   /**
@@ -75,8 +68,11 @@ goog.require('M.exception');
    * @return {Array<M.feature>} returns all features of the layer
    * @api stable
    */
-  M.layer.Vector.prototype.getFeatures = function () {
-    return this.getImpl().getFeatures();
+  M.layer.Vector.prototype.getFeatures = function (applyFilter) {
+    if (M.utils.isNullOrEmpty(this.getFilter())) {
+      applyFilter = false;
+    }
+    return this.getImpl().getFeatures(applyFilter, this.filter_);
   };
 
   /**
@@ -115,13 +111,76 @@ goog.require('M.exception');
   };
 
   /**
-   * This function remove all features
+   * This function return features in bbox
+   *
+   * @function
+   * @param {Array<number>|object} bbox - bbox to filter
+   * return {null | Array<M.feature>} features - Returns the features inside the bbox or null if the bbox has not been indicated
+   * @api stable
+   */
+  M.layer.Vector.prototype.getFeaturesExtent = function (applyFilter) {
+    if (M.utils.isNullOrEmpty(this.getFilter())) {
+      applyFilter = false;
+    }
+    return this.getImpl().getFeaturesExtent(applyFilter, this.filter_);
+  };
+
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @function
+   * @param {object} obj - Object to compare
+   * @api stable
+   */
+  M.layer.Vector.prototype.equals = function (obj) {
+    var equals = false;
+    if (obj instanceof M.layer.Vector) {
+      equals = (this.url === obj.url);
+      equals = equals && (this.name === obj.name);
+      equals = equals && (this.options === obj.options);
+    }
+    return equals;
+  };
+
+
+  /**
+   * This function set a filter
    *
    * @function
    * @api stable
    */
-  M.layer.Vector.prototype.clear = function () {
-    this.removeFeatures(this.getFeatures());
+  M.layer.Vector.prototype.setFilter = function (filter) {
+    if (filter instanceof M.filter.Function) {
+      this.filter_ = filter;
+    }
+    else {
+      M.dialog.error("El filtro indicado no es correcto");
+    }
+  };
+
+  /**
+   * This function return filter
+   *
+   * @function
+   * @api stable
+   */
+  M.layer.Vector.prototype.getFilter = function () {
+    return this.filter_;
+  };
+
+  /**
+   * This function returns all features of the layer
+   *
+   * @function
+   * @return {Array<M.feature>} returns all features of the layer
+   * @api stable
+   */
+  M.layer.Vector.prototype.getFeatures = function (applyFilter) {
+    if (M.utils.isNullOrEmpty(this.getFilter())) {
+      applyFilter = false;
+    }
+    return this.getImpl().getFeatures(applyFilter, this.filter_);
   };
 
   /**
@@ -131,29 +190,17 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.Vector.prototype.refresh = function () {
-    this.getImpl().refresh();
+    this.getImpl().refreshLayer();
   };
 
   /**
-   * This function return features in bbox
+   * This function remove all features
    *
    * @function
-   * @param {Array<number>|object} bbox - bbox to filter
-   * return {null | Array<M.feature>} features - Returns the features inside the bbox or null if the bbox has not been indicated
    * @api stable
    */
-  M.layer.Vector.prototype.getFeaturesExtent = function (bbox) {
-    let features = null;
-    if (!M.utils.isNullOrEmpty(bbox)) {
-      if (M.utils.isObject(bbox)) {
-        bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-      }
-      features = this.getImpl().getFeaturesExtent(bbox);
-    }
-    else {
-      M.dialog.error("El método debe recibir un bbox");
-    }
-    return features;
+  M.layer.Vector.prototype.clear = function () {
+    this.removeFeatures(this.getFeatures());
   };
 
 })();

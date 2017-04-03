@@ -4,7 +4,11 @@ goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.impl.layer.Vector');
 goog.require('M.impl.loader.JSONP');
+
+// TODO borrar:
 goog.require('M.impl.format.GeoJSON');
+
+goog.require('M.format.GeoJSON');
 goog.require('M.impl.Popup');
 
 goog.require('ol.layer.Vector');
@@ -134,13 +138,15 @@ goog.require('goog.style');
       };
     }
     else if (!M.utils.isNullOrEmpty(this.source)) {
-      srcOptions = {
+      let features = M.format.GeoJSON.read(this.source);
+      this.addFeatures(features);
+      /*srcOptions = {
         features: this.formater_.readFeatures(this.source, {
           featureProjection: ol.proj.get(this_.map.getProjection().code)
         })
-      };
+     };*/
     }
-    this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
+    //this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
   };
 
   /**
