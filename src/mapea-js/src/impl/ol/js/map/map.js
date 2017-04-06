@@ -1199,9 +1199,9 @@ goog.require('ol.Map');
     let resolution = this.getMapImpl().getView().getResolution();
     let resolutions = this.getResolutions();
     let zoom = null;
-    for (var i = 0, ilen = resolutions.length; i < ilen; i++) {
-      if (resolutions[i] <= resolution) {
-        zoom = i;
+    for (var ilen = 0; ilen < resolutions.length; ilen++) {
+      if (resolutions[ilen] <= resolution) {
+        zoom = ilen;
         break;
       }
     }
