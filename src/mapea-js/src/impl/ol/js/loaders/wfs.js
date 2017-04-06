@@ -1,4 +1,6 @@
 goog.provide('M.impl.loader.WFS');
+goog.require('M.format.GeoJSON');
+
 
 /**
  * @namespace M.impl.control
@@ -66,9 +68,7 @@ goog.provide('M.impl.loader.WFS');
     return (new Promise(function (success, fail) {
       M.remote.get(url).then(function (response) {
         if (!M.utils.isNullOrEmpty(response.text) && response.text.indexOf("ServiceExceptionReport") < 0) {
-          var features = this_.format_.readFeatures(response.text, {
-            featureProjection: projection
-          });
+          let features = M.format.GeoJSON.read(JSON.parse(response.text));
           success(features);
         }
         else {

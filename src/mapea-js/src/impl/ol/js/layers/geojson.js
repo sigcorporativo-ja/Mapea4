@@ -139,14 +139,9 @@ goog.require('goog.style');
     }
     else if (!M.utils.isNullOrEmpty(this.source)) {
       let features = M.format.GeoJSON.read(this.source);
+      this.ol3Layer.setSource(new ol.source.Vector());
       this.addFeatures(features);
-      /*srcOptions = {
-        features: this.formater_.readFeatures(this.source, {
-          featureProjection: ol.proj.get(this_.map.getProjection().code)
-        })
-     };*/
     }
-    //this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
   };
 
   /**

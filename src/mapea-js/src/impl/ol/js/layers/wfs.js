@@ -147,7 +147,7 @@ goog.require('M.impl.layer.Vector');
       this.ol3Layer.setSource(new ol.source.Vector({
         format: this.formater_,
         loader: this.loader_.getLoaderFn(function (features) {
-          this.addFeatures(features);
+          this_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
         }),
         strategy: ol.loadingstrategy.all

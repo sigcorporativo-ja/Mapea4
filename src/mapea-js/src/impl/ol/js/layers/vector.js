@@ -30,7 +30,7 @@ goog.require('ol.source.OSM');
    * @api stable
    */
   M.impl.layer.Vector.prototype.addFeatures = function (features) {
-    this.ol3Layer.setSource(new ol.source.Vector(features));
+    this.getOL3Layer().getSource().addFeatures(features.map(feature => feature.getImpl().getOLFeature()));
   };
 
   /**
@@ -43,9 +43,14 @@ goog.require('ol.source.OSM');
   M.impl.layer.Vector.prototype.getFeatures = function (applyFilter, filter) {
     let features = this.getOL3Layer().getSource().getFeatures();
     if (applyFilter) features = filter.execute(features);
+    features = features.map(feature => new M.Feature(feature.getId(), JSON.parse(JSON.stringify({
+      "geometry": {
+        "type": feature.getGeometry().getType(),
+        "coordinates": feature.getGeometry().getCoordinates()
+      }
+    }))));
     return features;
   };
-
 
   /**
    * This function checks if an object is equals
@@ -74,6 +79,13 @@ goog.require('ol.source.OSM');
    * @api stable
    */
   M.impl.layer.Vector.prototype.getFeatureById = function (id) {
+    let feature = this.getOL3Layer().getSource().getFeatureById(id);
+    feature = new M.Feature(feature.getId(), {
+      "geometry": {
+        "type": feature.getGeometry().getType(),
+        "coordinates": feature.getGeometry().getCoordinates()
+      }
+    });
     return this.getOL3Layer().getSource().getFeatureById(id);
   };
 

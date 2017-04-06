@@ -31,7 +31,6 @@ goog.require('M.Feature');
    */
   M.format.GeoJSON.read = function (geojson) {
     var features = [];
-
     if (!M.utils.isNullOrEmpty(geojson)) {
       let geojsonFeatures = [];
       if (geojson.type === "FeatureCollection") {
@@ -41,7 +40,7 @@ goog.require('M.Feature');
         geojsonFeatures = [geojson];
       }
       features = geojsonFeatures.map(function (geojsonFeature) {
-        let id = geojsonFeature.properties.id;
+        let id = geojsonFeature.id;
         return new M.Feature(id, geojsonFeature);
       });
     }

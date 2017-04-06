@@ -16,13 +16,15 @@ goog.require('M.impl.Feature');
    */
   M.Feature = (function (id, geojson, options) {
     this.id_ = id;
-    this.GeoJSON = geojson;
+    this.GeoJSON_ = geojson;
+    this.coordinates_ = geojson.geometry.coordinates;
+
     /**
      * Implementation of this layer
      * @public
      * @type {M.layer.KML}
      */
-    var impl = new M.impl.Feature(options);
+    var impl = new M.impl.Feature(id, geojson, geojson.geometry.type, this.coordinates_, options);
 
     goog.base(this, impl);
   });
@@ -35,5 +37,18 @@ goog.require('M.impl.Feature');
   M.Feature.prototype.getId = function (id) {
     return this.id_;
   };
+
+  M.Feature.prototype.getGeometry = function () {
+    return this.GeoJSON_.geometry;
+  };
+
+  M.Feature.prototype.getGeoJSON = function () {
+    return this.GeoJSON_;
+  };
+
+  M.Feature.prototype.setGeoJSON = function (GeoJSON) {
+    return this.GeoJSON_ = GeoJSON;
+  };
+
 
 })();
