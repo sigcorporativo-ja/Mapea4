@@ -73,7 +73,17 @@ goog.require('M.format.GeoJSON');
             featureProjection: projection
           });
           var screenOverlay = this_.format_.getScreenOverlay();
-          success.call(this, [features, screenOverlay]);
+          success.call(this, [features.map(f => new M.Feature(f.getId(), {
+            geometry: {
+              coordinates: f.getGeometry().getCoordinates(),
+              type: f.getGeometry().getType()
+            }
+          }, {
+            implFormat: function (original, impl) {
+              impl.setStyle(original.getStyle());
+              original.getKeys().forEach(key => impl.set(key, original.get(key)));
+            }.bind(this, f)
+          })), screenOverlay]);
         }
         else {
           M.exception('No hubo respuesta del KML');

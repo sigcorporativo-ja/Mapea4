@@ -94,7 +94,8 @@ goog.require('goog.style');
         url: this.url,
         format: formater,
         loader: loader.getLoaderFn(function (features, screenOverlay) {
-          this.addFeatures(features);
+          //this.addFeatures(features.map(f => f.getImpl().getOLFeature()));
+          this_.addFeatures(features);
           if (!M.utils.isNullOrEmpty(screenOverlay)) {
             var screenOverLayImg = M.impl.utils.addOverlayImage(screenOverlay, map);
             this_.setScreenOverlayImg(screenOverLayImg);
@@ -114,8 +115,8 @@ goog.require('goog.style');
     olMap.addLayer(this.ol3Layer);
 
     map.getImpl().on(M.evt.CHANGE, function () {
-      this_.getOL3Layer().getSource().clear();
-    }, this);
+      this.getOL3Layer().getSource().clear();
+    }.bind(this), this);
   };
 
   /**

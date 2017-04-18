@@ -23,10 +23,10 @@ goog.require('ol.source.OSM');
   goog.inherits(M.impl.layer.Vector, M.impl.Layer);
 
   /**
-   * This function returns all features of the layer
+   * This function add features to layer
    *
    * @function
-   * @return {Array<M.feature>} returns all features of the layer
+   * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
   M.impl.layer.Vector.prototype.addFeatures = function (features) {
@@ -34,40 +34,26 @@ goog.require('ol.source.OSM');
   };
 
   /**
-   * This function returns all features of the layer
+   * This function returns all features or discriminating by the filter
    *
    * @function
-   * @return {Array<M.feature>} returns all features of the layer
+   * @param {boolean} applyFilter - Indicates whether to filter the features or not
+   * @param {M.filter.Function} filter - Filter to execute
+   * @return {Array<M.Feature>} returns all features or discriminating by the filter
    * @api stable
    */
   M.impl.layer.Vector.prototype.getFeatures = function (applyFilter, filter) {
     let features = this.getOL3Layer().getSource().getFeatures();
     if (applyFilter) features = filter.execute(features);
-    features = features.map(feature => new M.Feature(feature.getId(), JSON.parse(JSON.stringify({
+    features = features.map(feature => new M.Feature(feature.getId(), {
       "geometry": {
         "type": feature.getGeometry().getType(),
         "coordinates": feature.getGeometry().getCoordinates()
       }
-    }))));
+    }, {
+      ol_uid: feature.ol_uid
+    }));
     return features;
-  };
-
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   *
-   * @function
-   * @api stable
-   */
-  M.impl.layer.Vector.prototype.equals = function (obj) {
-    var equals = false;
-
-    if (obj instanceof M.impl.layer.Vector) {
-      equals = (this.url === obj.url);
-      equals = equals && (this.name === obj.name);
-    }
-
-    return equals;
   };
 
   /**
@@ -83,10 +69,10 @@ goog.require('ol.source.OSM');
     feature = new M.Feature(feature.getId(), {
       "geometry": {
         "type": feature.getGeometry().getType(),
-        "coordinates": feature.getGeometry().getCoordinates()
+        "coordinates": [feature.getGeometry().getCoordinates()]
       }
     });
-    return this.getOL3Layer().getSource().getFeatureById(id);
+    return feature;
   };
 
   /**
@@ -99,7 +85,7 @@ goog.require('ol.source.OSM');
   M.impl.layer.Vector.prototype.removeFeatures = function (features) {
     let source = this.getOL3Layer().getSource();
     features.map(function (feature) {
-      source.removeFeature(feature)
+      source.removeFeature(feature.getImpl().getOLFeature());
     }.bind(this));
   };
 
@@ -109,39 +95,64 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.Vector.prototype.refreshLayer = function (extent) {
-    this.getOL3Layer().getSource().clear();
-    if (this instanceof M.layer.GeoJSON) {
-      ol.featureloader.xhr(this.url, new ol.format.GeoJSON()).call(this.getImpl().getOL3Layer().getSource(), [], 'EPSG:23030');
+  M.impl.layer.Vector.prototype.refreshLayer = function () {
+    if (this instanceof M.impl.layer.GeoJSON) {
+      this.refresh();
+    }
+    else {
+      this.getOL3Layer().getSource().clear();
     }
   };
 
   /**
-   * This function return features in bbox
+   * This function shows the extension of all features or discriminating by the filter
    *
    * @function
-   * @param {Array<number>|object} bbox - bbox to filter
-   * return {null | Array<M.feature>} features - Features in bbox
+   * @param {boolean} applyFilter - Indicates whether to apply the filter or not
+   * @param {null | M.filter.Function} filter - Filter to execute
+   * return {null | Array<number>} Returns the extension of features
    * @api stable
    */
   M.impl.layer.Vector.prototype.getFeaturesExtent = function (applyFilter, filter) {
     let features = this.getOL3Layer().getSource().getFeatures();
+    let extent = null;
     if (applyFilter) features = filter.execute(features);
-    let extent = {
-      minX: null,
-      minY: null,
-      maxX: null,
-      maxY: null
+    if (!M.utils.isNullOrEmpty(features)) {
+      extent = {
+        minX: null,
+        minY: null,
+        maxX: null,
+        maxY: null
+      };
+      for (var i = 0, ilen = features.length; i < ilen; i++) {
+        let extentFeature = features[i].getGeometry().getExtent();
+        if (M.utils.isNullOrEmpty(extent.minX) || extentFeature[0] < extent.minX) extent.minX = extentFeature[0];
+        if (M.utils.isNullOrEmpty(extent.minY) || extentFeature[1] < extent.minY) extent.minY = extentFeature[1];
+        if (M.utils.isNullOrEmpty(extent.maxX) || extentFeature[2] > extent.maxX) extent.maxX = extentFeature[2];
+        if (M.utils.isNullOrEmpty(extent.maxY) || extentFeature[3] > extent.maxY) extent.maxY = extentFeature[3];
+      }
+      if (!M.utils.isNullOrEmpty(extent.minX) && !M.utils.isNullOrEmpty(extent.minY) && !M.utils.isNullOrEmpty(extent.maxX) && !M.utils.isNullOrEmpty(extent.maxY)) {
+        extent = [extent.minX, extent.minY, extent.maxX, extent.maxY];
+      }
     }
-    for (var i = 0, ilen = features.length; i < ilen; i++) {
-      let extentFeature = features[i].getGeometry().getExtent();
-      if (M.utils.isNullOrEmpty(extent.minX) || extentFeature[0] < extent.minX) extent.minX = extentFeature[0];
-      if (M.utils.isNullOrEmpty(extent.minY) || extentFeature[1] < extent.minY) extent.minY = extentFeature[1];
-      if (M.utils.isNullOrEmpty(extent.maxX) || extentFeature[2] > extent.maxX) extent.maxX = extentFeature[2];
-      if (M.utils.isNullOrEmpty(extent.maxY) || extentFeature[3] > extent.maxY) extent.maxY = extentFeature[3];
+    return extent;
+  };
+
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @function
+   * @param {object} obj - Object to compare
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.equals = function (obj) {
+    var equals = false;
+    if (obj instanceof M.impl.layer.Vector) {
+      equals = (this.url === obj.url);
+      equals = equals && (this.name === obj.name);
     }
-    mapajs.setBbox([extent.minX, extent.minY, extent.maxX, extent.maxY]);
-    return [extent.minX, extent.minY, extent.maxX, extent.maxY];
+    return equals;
   };
 
 })();

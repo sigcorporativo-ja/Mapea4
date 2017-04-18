@@ -64,7 +64,6 @@ goog.require('M.format.GeoJSON');
    * @function
    */
   M.impl.loader.WFS.prototype.loadInternal_ = function (url, projection) {
-    var this_ = this;
     return (new Promise(function (success, fail) {
       M.remote.get(url).then(function (response) {
         if (!M.utils.isNullOrEmpty(response.text) && response.text.indexOf("ServiceExceptionReport") < 0) {

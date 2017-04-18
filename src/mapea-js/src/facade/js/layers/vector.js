@@ -21,6 +21,13 @@ goog.require('M.exception');
     }
 
     /**
+     * Filter
+     * @public
+     * @type {M.Filter}
+     */
+    this.filter_ = null;
+
+    /**
      * Implementation of this layer
      * @public
      * @type {M.layer.WMS}
@@ -51,10 +58,10 @@ goog.require('M.exception');
   });
 
   /**
-   * This function returns all features of the layer
+   * This function add features to layer
    *
    * @function
-   * @return {Array<M.feature>} returns all features of the layer
+   * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
   M.layer.Vector.prototype.addFeatures = function (features) {
@@ -62,16 +69,15 @@ goog.require('M.exception');
   };
 
   /**
-   * This function returns all features of the layer
+   * This function returns all features or discriminating by the filter
    *
    * @function
-   * @return {Array<M.feature>} returns all features of the layer
+   * @param {boolean} applyFilter - Indicates whether to filter the features or not
+   * @return {Array<M.Feature>} returns all features or discriminating by the filter
    * @api stable
    */
   M.layer.Vector.prototype.getFeatures = function (applyFilter) {
-    if (M.utils.isNullOrEmpty(this.getFilter())) {
-      applyFilter = false;
-    }
+    if (M.utils.isNullOrEmpty(this.getFilter())) applyFilter = false;
     return this.getImpl().getFeatures(applyFilter, this.filter_);
   };
 
@@ -86,7 +92,7 @@ goog.require('M.exception');
   M.layer.Vector.prototype.getFeatureById = function (id) {
     let features = null;
     if (!M.utils.isNullOrEmpty(id)) {
-      features = this.getImpl().getFeatureById(id)
+      features = this.getImpl().getFeatureById(id);
     }
     else {
       M.dialog.error("No se ha indicado un ID para obtener el feature");
@@ -111,19 +117,66 @@ goog.require('M.exception');
   };
 
   /**
-   * This function return features in bbox
+   * This function returns all features of the layer
    *
    * @function
-   * @param {Array<number>|object} bbox - bbox to filter
-   * return {null | Array<M.feature>} features - Returns the features inside the bbox or null if the bbox has not been indicated
+   * @return {Array<M.feature>} returns all features of the layer
    * @api stable
    */
-  M.layer.Vector.prototype.getFeaturesExtent = function (applyFilter) {
+  M.layer.Vector.prototype.getFeatures = function (applyFilter) {
     if (M.utils.isNullOrEmpty(this.getFilter())) {
       applyFilter = false;
     }
-    return this.getImpl().getFeaturesExtent(applyFilter, this.filter_);
+    return this.getImpl().getFeatures(applyFilter, this.filter_);
   };
+
+  /**
+   * This function remove all features
+   *
+   * @function
+   * @api stable
+   */
+  M.layer.Vector.prototype.clear = function () {
+    this.removeFeatures(this.getFeatures());
+  };
+
+  /**
+   * This function refresh layer
+   *
+   * @function
+   * @api stable
+   */
+  M.layer.Vector.prototype.refresh = function () {
+    this.getImpl().refreshLayer();
+  };
+
+  /**
+   * This function set a filter
+   *
+   * @function
+   * @param {M.Filter}
+   * @api stable
+   */
+  M.layer.Vector.prototype.setFilter = function (filter) {
+    if (filter instanceof M.Filter) {
+      this.filter_ = filter;
+    }
+    else {
+      M.dialog.error("El filtro indicado no es correcto");
+    }
+  };
+
+  /**
+   * This function return filter
+   *
+   * @function
+   * @return returns filter applied
+   * @api stable
+   */
+  M.layer.Vector.prototype.getFilter = function () {
+    return this.filter_;
+  };
+
 
   /**
    * This function checks if an object is equals
@@ -141,66 +194,6 @@ goog.require('M.exception');
       equals = equals && (this.options === obj.options);
     }
     return equals;
-  };
-
-
-  /**
-   * This function set a filter
-   *
-   * @function
-   * @api stable
-   */
-  M.layer.Vector.prototype.setFilter = function (filter) {
-    if (filter instanceof M.filter.Function) {
-      this.filter_ = filter;
-    }
-    else {
-      M.dialog.error("El filtro indicado no es correcto");
-    }
-  };
-
-  /**
-   * This function return filter
-   *
-   * @function
-   * @api stable
-   */
-  M.layer.Vector.prototype.getFilter = function () {
-    return this.filter_;
-  };
-
-  /**
-   * This function returns all features of the layer
-   *
-   * @function
-   * @return {Array<M.feature>} returns all features of the layer
-   * @api stable
-   */
-  M.layer.Vector.prototype.getFeatures = function (applyFilter) {
-    if (M.utils.isNullOrEmpty(this.getFilter())) {
-      applyFilter = false;
-    }
-    return this.getImpl().getFeatures(applyFilter, this.filter_);
-  };
-
-  /**
-   * This function refresh layer
-   *
-   * @function
-   * @api stable
-   */
-  M.layer.Vector.prototype.refresh = function () {
-    this.getImpl().refreshLayer();
-  };
-
-  /**
-   * This function remove all features
-   *
-   * @function
-   * @api stable
-   */
-  M.layer.Vector.prototype.clear = function () {
-    this.removeFeatures(this.getFeatures());
   };
 
 })();

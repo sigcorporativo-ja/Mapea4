@@ -1,5 +1,5 @@
 goog.provide('M.filter.Function');
-goog.require('M.filterAbstract');
+goog.require('M.Filter');
 
 (function () {
   /**
@@ -13,7 +13,7 @@ goog.require('M.filterAbstract');
   M.filter.Function = (function (filterFunction) {
     this.filterFunction_ = filterFunction;
   });
-  goog.inherits(M.filter.Function, M.filterAbstract);
+  goog.inherits(M.filter.Function, M.Filter);
 
   /**
    * TODO

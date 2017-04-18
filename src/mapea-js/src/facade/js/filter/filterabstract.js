@@ -1,4 +1,4 @@
-goog.provide('M.filterAbstract');
+goog.provide('M.Filter');
 
 /**
  * @namespace M.filter
@@ -12,7 +12,7 @@ goog.provide('M.filterAbstract');
    * @constructor
    * @api stable
    */
-  M.filterAbstract = (function () {});
+  M.Filter = (function () {});
 
   /**
    * TODO
@@ -20,7 +20,7 @@ goog.provide('M.filterAbstract');
    * @public
    * @function
    */
-  M.filterAbstract.prototype.getFunctionFilter = function () {};
+  M.Filter.prototype.getFunctionFilter = function () {};
 
   /**
    * TODO
@@ -28,6 +28,6 @@ goog.provide('M.filterAbstract');
    * @protected
    * @function
    */
-  M.filterAbstract.prototype.execute = function (features) {};
+  M.Filter.prototype.execute = function (features) {};
 
 })();

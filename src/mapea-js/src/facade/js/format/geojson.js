@@ -41,7 +41,14 @@ goog.require('M.Feature');
       }
       features = geojsonFeatures.map(function (geojsonFeature) {
         let id = geojsonFeature.id;
-        return new M.Feature(id, geojsonFeature);
+        return new M.Feature(id, {
+          geometry: {
+            coordinates: geojsonFeature.geometry.coordinates,
+            type: geojsonFeature.geometry.type
+          },
+          properties: geojsonFeature.properties
+       });
+        //return new M.Feature(id, geojsonFeature);
       });
     }
     return features;
