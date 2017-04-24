@@ -67,20 +67,20 @@ goog.require('goog.style');
 
       // position
       var offsetX = overlayXY[0];
-      if (overlayXUnits === ol.style.Icon.AnchorUnits.FRACTION) {
+      if (overlayXUnits === ol.style.IconAnchorUnits.FRACTION) {
          offsetX = offsetX * size[0];
       }
       var offsetY = overlayXY[1];
-      if (overlayYUnits === ol.style.Icon.AnchorUnits.FRACTION) {
+      if (overlayYUnits === ol.style.IconAnchorUnits.FRACTION) {
          offsetY = (size[1] - (offsetY * size[1]));
       }
       goog.style.setStyle(img, 'position', 'absolute');
       var left = screenXY[0];
-      if (screenXUnits === ol.style.Icon.AnchorUnits.FRACTION) {
+      if (screenXUnits === ol.style.IconAnchorUnits.FRACTION) {
          left = (left * mapSize[0]) - offsetX;
       }
       var top = screenXY[1];
-      if (screenYUnits === ol.style.Icon.AnchorUnits.FRACTION) {
+      if (screenYUnits === ol.style.IconAnchorUnits.FRACTION) {
          top = (mapSize[1] - (top * mapSize[1])) - offsetY;
       }
       goog.style.setPosition(img, left, top);
