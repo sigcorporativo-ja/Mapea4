@@ -77,9 +77,6 @@ M.impl.format.KML.readScreenXY_ = function (node, objectStack) {
  * @return {Array.<ol.style.Style>} Style.
  */
 M.impl.format.KML.readStyle_ = function (node, objectStack) {
-  goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
-    'node.nodeType should be ELEMENT');
-  goog.asserts.assert(node.localName == 'Style', 'localName should be Style');
   var styleObject = ol.xml.pushParseAndPop({}, M.impl.format.KML.STYLE_PARSERS_, node, objectStack);
   if (!styleObject) {
     return null;
@@ -94,6 +91,9 @@ M.impl.format.KML.readStyle_ = function (node, objectStack) {
   var imageStyle = /** @type {ol.style.Image} */
     ('imageStyle' in styleObject ?
       styleObject['imageStyle'] : ol.format.KML.DEFAULT_IMAGE_STYLE_);
+  if (imageStyle == ol.format.KML.DEFAULT_NO_IMAGE_STYLE_) {
+    imageStyle = undefined;
+  }
   var textStyle = /** @type {ol.style.Text} */
     ('textStyle' in styleObject ?
       styleObject['textStyle'] : ol.format.KML.DEFAULT_TEXT_STYLE_);
@@ -171,16 +171,14 @@ M.impl.format.KML.readSize_ = function (node, objectStack) {
  * @private
  */
 M.impl.format.KML.prototype.readSharedStyle_ = function (node, objectStack) {
-  goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
-    'node.nodeType should be ELEMENT');
-  goog.asserts.assert(node.localName == 'Style', 'localName should be Style');
   var id = node.getAttribute('id');
   if (id !== null) {
     var style = M.impl.format.KML.readStyle_(node, objectStack);
     if (style) {
       var styleUri;
       if (node.baseURI) {
-        styleUri = goog.Uri.resolve(node.baseURI, '#' + id).toString();
+        var url = new URL('#' + id, node.baseURI);
+        styleUri = url.href;
       }
       else {
         styleUri = '#' + id;
@@ -196,9 +194,6 @@ M.impl.format.KML.prototype.readSharedStyle_ = function (node, objectStack) {
  * @private
  */
 M.impl.format.KML.PairDataParser_ = function (node, objectStack) {
-  goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
-    'node.nodeType should be ELEMENT');
-  goog.asserts.assert(node.localName == 'Pair', 'localName should be Pair');
   var pairObject = ol.xml.pushParseAndPop({}, M.impl.format.KML.PAIR_PARSERS_, node, objectStack);
   if (!pairObject) {
     return;
@@ -241,10 +236,6 @@ M.impl.format.KML.readStyleMapValue_ = function (node, objectStack) {
  * @private
  */
 M.impl.format.KML.IconStyleParser_ = function (node, objectStack) {
-  goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
-    'node.nodeType should be an ELEMENT');
-  goog.asserts.assert(node.localName == 'IconStyle',
-    'localName should be IconStyle');
   // FIXME refreshMode
   // FIXME refreshInterval
   // FIXME viewRefreshTime
@@ -256,20 +247,19 @@ M.impl.format.KML.IconStyleParser_ = function (node, objectStack) {
     return;
   }
   var styleObject = /** @type {Object} */ (objectStack[objectStack.length - 1]);
-  goog.asserts.assert(goog.isObject(styleObject),
-    'styleObject should be an Object');
   var IconObject = 'Icon' in object ? object['Icon'] : {};
+  var drawIcon = (!('Icon' in object) || Object.keys(IconObject).length > 0);
   var src;
   var href = /** @type {string|undefined} */
     (IconObject['href']);
   if (href) {
     src = href;
   }
-  else {
+  else if (drawIcon) {
     src = ol.format.KML.DEFAULT_IMAGE_STYLE_SRC_;
   }
   var anchor, anchorXUnits, anchorYUnits;
-  var hotSpot = /** @type {ol.format.KMLVec2_|undefined} */
+  var hotSpot = /** @type {ol.KMLVec2_|undefined} */
     (object['hotSpot']);
   if (hotSpot) {
     anchor = [hotSpot.x, hotSpot.y];
@@ -283,8 +273,8 @@ M.impl.format.KML.IconStyleParser_ = function (node, objectStack) {
   }
   else if (/^http:\/\/maps\.(?:google|gstatic)\.com\//.test(src)) {
     anchor = [0.5, 0];
-    anchorXUnits = ol.style.Icon.AnchorUnits.FRACTION;
-    anchorYUnits = ol.style.Icon.AnchorUnits.FRACTION;
+    anchorXUnits = ol.style.IconAnchorUnits.FRACTION;
+    anchorYUnits = ol.style.IconAnchorUnits.FRACTION;
   }
 
   var offset;
@@ -314,27 +304,33 @@ M.impl.format.KML.IconStyleParser_ = function (node, objectStack) {
 
   var scale = /** @type {number|undefined} */
     (object['scale']);
-  if (src == ol.format.KML.DEFAULT_IMAGE_STYLE_SRC_) {
-    size = ol.format.KML.DEFAULT_IMAGE_STYLE_SIZE_;
-    if (scale === undefined) {
-      scale = ol.format.KML.DEFAULT_IMAGE_SCALE_MULTIPLIER_;
+  if (drawIcon) {
+    if (src == ol.format.KML.DEFAULT_IMAGE_STYLE_SRC_) {
+      size = ol.format.KML.DEFAULT_IMAGE_STYLE_SIZE_;
+      if (scale === undefined) {
+        scale = ol.format.KML.DEFAULT_IMAGE_SCALE_MULTIPLIER_;
+      }
     }
-  }
 
-  var imageStyle = new M.impl.style.Icon({
-    anchor: anchor,
-    anchorOrigin: ol.style.IconOrigin.BOTTOM_LEFT,
-    anchorXUnits: anchorXUnits,
-    anchorYUnits: anchorYUnits,
-    crossOrigin: null, // PATCH: before 'anonymous'
-    offset: offset,
-    offsetOrigin: ol.style.IconOrigin.BOTTOM_LEFT,
-    rotation: rotation,
-    scale: scale,
-    size: size,
-    src: src
-  });
-  styleObject['imageStyle'] = imageStyle;
+    var imageStyle = new M.impl.style.Icon({
+      anchor: anchor,
+      anchorOrigin: ol.style.IconOrigin.BOTTOM_LEFT,
+      anchorXUnits: anchorXUnits,
+      anchorYUnits: anchorYUnits,
+      crossOrigin: null, // PATCH: before 'anonymous'
+      offset: offset,
+      offsetOrigin: ol.style.IconOrigin.BOTTOM_LEFT,
+      rotation: rotation,
+      scale: scale,
+      size: size,
+      src: src
+    });
+    styleObject['imageStyle'] = imageStyle;
+  }
+  else {
+    // handle the case when we explicitly want to draw no icon.
+    styleObject['imageStyle'] = ol.format.KML.DEFAULT_NO_IMAGE_STYLE_;
+  }
 };
 
 /**
@@ -344,10 +340,6 @@ M.impl.format.KML.IconStyleParser_ = function (node, objectStack) {
  * @return {ol.Feature|undefined} Feature.
  */
 M.impl.format.KML.prototype.readPlacemark_ = function (node, objectStack) {
-  goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
-    'node.nodeType should be ELEMENT');
-  goog.asserts.assert(node.localName == 'Placemark',
-    'localName should be Placemark');
   var object = ol.xml.pushParseAndPop({
       'geometry': null
     },
@@ -395,25 +387,19 @@ M.impl.format.KML.prototype.readPlacemark_ = function (node, objectStack) {
  * @private
  */
 M.impl.format.KML.PlacemarkStyleMapParser_ = function (node, objectStack) {
-  goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
-    'node.nodeType should be ELEMENT');
-  goog.asserts.assert(node.localName == 'StyleMap',
-    'localName should be StyleMap');
   var styleMapValue = M.impl.format.KML.readStyleMapValue_(node, objectStack);
   if (!styleMapValue) {
     return;
   }
   var placemarkObject = objectStack[objectStack.length - 1];
-  goog.asserts.assert(goog.isObject(placemarkObject),
-    'placemarkObject should be an Object');
-  if (goog.isArray(styleMapValue)) {
+  if (Array.isArray(styleMapValue)) {
     placemarkObject['Style'] = styleMapValue;
   }
-  else if (goog.isString(styleMapValue)) {
+  else if (typeof styleMapValue === 'string') {
     placemarkObject['styleUrl'] = styleMapValue;
   }
   else {
-    goog.asserts.fail('styleMapValue has an unknown type');
+    ol.asserts.assert(false, 38); // `styleMapValue` has an unknown type
   }
 };
 
@@ -423,10 +409,6 @@ M.impl.format.KML.PlacemarkStyleMapParser_ = function (node, objectStack) {
  * @private
  */
 M.impl.format.KML.prototype.readSharedStyleMap_ = function (node, objectStack) {
-  goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
-    'node.nodeType should be ELEMENT');
-  goog.asserts.assert(node.localName == 'StyleMap',
-    'localName should be StyleMap');
   var id = node.getAttribute('id');
   if (id === null) {
     return;
@@ -437,7 +419,8 @@ M.impl.format.KML.prototype.readSharedStyleMap_ = function (node, objectStack) {
   }
   var styleUri;
   if (node.baseURI) {
-    styleUri = goog.Uri.resolve(node.baseURI, '#' + id).toString();
+    var url = new URL('#' + id, node.baseURI);
+    styleUri = url.href;
   }
   else {
     styleUri = '#' + id;
@@ -506,6 +489,7 @@ M.impl.format.KML.PAIR_PARSERS_ = ol.xml.makeStructureNS(
 M.impl.format.KML.PLACEMARK_PARSERS_ = ol.xml.makeStructureNS(
   ol.format.KML.NAMESPACE_URIS_, {
     'ExtendedData': ol.format.KML.ExtendedDataParser_,
+    'Region': ol.format.KML.RegionParser_,
     'MultiGeometry': ol.xml.makeObjectPropertySetter(
       ol.format.KML.readMultiGeometry_, 'geometry'),
     'LineString': ol.xml.makeObjectPropertySetter(
@@ -574,10 +558,6 @@ M.impl.format.KML.readOverlay_ = function (node, objectStack) {
  * @private
  */
 M.impl.format.KML.prototype.readScreenOverlay_ = function (node, objectStack) {
-  goog.asserts.assert(node.nodeType == goog.dom.NodeType.ELEMENT,
-    'node.nodeType should be ELEMENT');
-  goog.asserts.assert(node.localName == 'ScreenOverlay', 'localName should be ScreenOverlay');
-
   var screenOverlayObject = ol.xml.pushParseAndPop({}, M.impl.format.KML.SCREEN_OVERLAY_PARSERS_, node, objectStack);
 
   if (!screenOverlayObject) {
@@ -627,8 +607,8 @@ M.impl.format.KML.prototype.readScreenOverlay_ = function (node, objectStack) {
   }
   else if (/^http:\/\/maps\.(?:google|gstatic)\.com\//.test(src)) {
     screenXY = [0.5, 0];
-    screenXUnits = ol.style.Icon.AnchorUnits.FRACTION;
-    screenYUnits = ol.style.Icon.AnchorUnits.FRACTION;
+    screenXUnits = ol.style.IconAnchorUnits.FRACTION;
+    screenYUnits = ol.style.IconAnchorUnits.FRACTION;
   }
 
   // rotation
@@ -669,17 +649,13 @@ M.impl.format.KML.prototype.readScreenOverlay_ = function (node, objectStack) {
  * @return {Array.<ol.Feature>|undefined} Features.
  */
 M.impl.format.KML.prototype.readDocumentOrFolder_ = function (node, objectStack) {
-  if (ol.DEBUG) {
-    console.assert(node.nodeType == Node.ELEMENT_NODE, 'node.nodeType should be ELEMENT');
-    var localName = node.localName;
-    console.assert(localName == 'Document' || localName == 'Folder', 'localName should be Document or Folder');
-  }
   // FIXME use scope somehow
   var parsersNS = ol.xml.makeStructureNS(
     ol.format.KML.NAMESPACE_URIS_, {
       'Document': ol.xml.makeArrayExtender(this.readDocumentOrFolder_, this),
       'Folder': ol.xml.makeArrayExtender(this.readDocumentOrFolder_, this),
       'Placemark': ol.xml.makeArrayPusher(this.readPlacemark_, this),
+      'ScreenOverlay': this.readScreenOverlay_.bind(this),
       'Style': this.readSharedStyle_.bind(this),
       'StyleMap': this.readSharedStyleMap_.bind(this)
     });
