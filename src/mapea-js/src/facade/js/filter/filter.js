@@ -5,9 +5,11 @@ goog.provide('M.filter');
  */
 (function () {
   /**
-   * TODO
+   * This function joins the filters so that all the filters are fulfilled
    *
    * @function
+   * @param {Array<M.Fiter>} filters - Filters to joins
+   * @return {M.Filter} Filters joins
    * @api stable
    */
   M.filter.AND = function (filters) {
@@ -19,9 +21,11 @@ goog.provide('M.filter');
   };
 
   /**
-   * TODO
+   * This function joins the filters so that at least one of the filters
    *
    * @function
+   * @param {Array<M.Fiter>} filters - Filters to joins
+   * @return {M.Filter} Filters joins
    * @api stable
    */
   M.filter.OR = function (filters) {
@@ -33,9 +37,11 @@ goog.provide('M.filter');
   };
 
   /**
-   * TODO
+   * This function run the opposite of the filter
    *
    * @function
+   * @param {M.Fiter} filters - Filters to joins
+   * @return {M.Filter} opposite filter
    * @api stable
    */
   M.filter.NOT = function (filter) {
@@ -43,5 +49,6 @@ goog.provide('M.filter');
       return !filter.getFunctionFilter()(feature);
     });
   };
+
 
 })();

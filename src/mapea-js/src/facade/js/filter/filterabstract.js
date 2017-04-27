@@ -6,26 +6,26 @@ goog.provide('M.Filter');
 (function () {
 
   /**
-   * @classdesc
-   * TODO
+   * Abstract class
    *
-   * @constructor
    * @api stable
    */
   M.Filter = (function () {});
 
   /**
-   * TODO
+   * This function get a function filter
    *
    * @public
+   * @protected
    * @function
    */
   M.Filter.prototype.getFunctionFilter = function () {};
 
   /**
-   * TODO
+   * This function execute a function filter
    *
    * @protected
+   * @param {Array<M.Feature>} features - Features on which the filter runs
    * @function
    */
   M.Filter.prototype.execute = function (features) {};

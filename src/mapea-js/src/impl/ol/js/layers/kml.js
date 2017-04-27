@@ -6,6 +6,7 @@ goog.require('M.impl.layer.Vector');
 goog.require('M.impl.loader.KML');
 goog.require('M.impl.Popup');
 goog.require('M.impl.format.KML');
+goog.require('M.impl.layer.Vector');
 
 goog.require('ol.layer.Vector');
 goog.require('ol.source.Vector');
@@ -19,7 +20,7 @@ goog.require('goog.style');
    * with parameters specified by the user
    *
    * @constructor
-   * @implements {M.impl.Layer}
+   * @implements {M.impl.layer.Vector}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */

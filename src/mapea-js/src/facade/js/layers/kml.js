@@ -11,7 +11,7 @@ goog.require('M.exception');
    * with parameters specified by the user
    *
    * @constructor
-   * @extends {M.Layer}
+   * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.KML} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable

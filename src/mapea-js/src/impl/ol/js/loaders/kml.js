@@ -77,13 +77,9 @@ goog.require('M.format.GeoJSON');
             geometry: {
               coordinates: f.getGeometry().getCoordinates(),
               type: f.getGeometry().getType()
-            }
-          }, {
-            implFormat: function (original, impl) {
-              impl.setStyle(original.getStyle());
-              original.getKeys().forEach(key => impl.set(key, original.get(key)));
-            }.bind(this, f)
-          })), screenOverlay]);
+            },
+            properties: f.getProperties()
+          }, f.getStyle())), screenOverlay]);
         }
         else {
           M.exception('No hubo respuesta del KML');

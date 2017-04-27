@@ -20,7 +20,7 @@ goog.require('M.Feature');
   };
 
   /**
-   * TODO
+   * This function read Features
    *
    * @public
    * @function
@@ -46,8 +46,10 @@ goog.require('M.Feature');
             coordinates: geojsonFeature.geometry.coordinates,
             type: geojsonFeature.geometry.type
           },
-          properties: geojsonFeature.properties
-       });
+          properties: geojsonFeature.properties,
+          type: geojsonFeature.type,
+          id: geojsonFeature.id,
+        });
         //return new M.Feature(id, geojsonFeature);
       });
     }

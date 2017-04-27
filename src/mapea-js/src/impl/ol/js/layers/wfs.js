@@ -20,7 +20,7 @@ goog.require('M.impl.layer.Vector');
    * with parameters specified by the user
    *
    * @constructor
-   * @implements {M.impl.Layer}
+   * @implements {M.impl.layer.Vector}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */

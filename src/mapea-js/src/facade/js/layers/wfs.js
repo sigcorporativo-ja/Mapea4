@@ -13,7 +13,7 @@ goog.require('M.geom');
    * with parameters specified by the user
    *
    * @constructor
-   * @extends {M.Layer}
+   * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.WFS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable

@@ -7,22 +7,24 @@ goog.require('M.exception');
 (function () {
   /**
    * @classdesc
-   * Main constructor of the class. Creates a WMS layer
+   * Main constructor of the class. Creates a Vector layer
    * with parameters specified by the user
    *
    * @constructor
    * @extends {M.Layer}
+   * @param {Mx.parameters.Layer} userParameters - parameters
+   * @param {Mx.parameters.LayerOptions} options - custom options for this layer
    * @api stable
    */
   M.layer.Vector = (function (userParameters, options) {
-    // checks if the implementation can create OSM
+    // checks if the implementation can create Vector
     if (M.utils.isUndefined(M.impl.layer.Vector)) {
       M.exception('La implementación usada no puede crear capas Vector');
     }
 
     /**
      * Filter
-     * @public
+     * @private
      * @type {M.Filter}
      */
     this.filter_ = null;
@@ -30,7 +32,7 @@ goog.require('M.exception');
     /**
      * Implementation of this layer
      * @public
-     * @type {M.layer.WMS}
+     * @type {M.impl.layer.Vector}
      */
     var impl = new M.impl.layer.Vector(options);
     var parameters = M.parameter.layer(userParameters, M.layer.type.Vector);
@@ -41,26 +43,10 @@ goog.require('M.exception');
   goog.inherits(M.layer.Vector, M.Layer);
 
   /**
-   * 'type' This property indicates if
-   * the layer was selected
-   */
-  Object.defineProperty(M.layer.Vector.prototype, "type", {
-    get: function () {
-      return M.layer.type.Vector;
-    },
-    // defining new type is not allowed
-    set: function (newType) {
-      if (!M.utils.isUndefined(newType) &&
-        !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.Vector)) {
-        M.exception('El tipo de capa debe ser \''.concat(M.layer.type.Vector).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
-      }
-    }
-  });
-
-  /**
    * This function add features to layer
    *
    * @function
+   * @public
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
@@ -72,7 +58,8 @@ goog.require('M.exception');
    * This function returns all features or discriminating by the filter
    *
    * @function
-   * @param {boolean} applyFilter - Indicates whether to filter the features or not
+   * @public
+   * @param {boolean} applyFilter - Indicates whether execute filter
    * @return {Array<M.Feature>} returns all features or discriminating by the filter
    * @api stable
    */
@@ -85,25 +72,27 @@ goog.require('M.exception');
    * This function returns the feature with this id
    *
    * @function
-   * @param {string | number} id - Id feature
-   * @return {null | M.feature} features - Returns the feature with that id if it is found, in case it is not found or does not indicate the id returns null
+   * @public
+   * @param {string|number} id - Id feature
+   * @return {null|M.feature} feature - Returns the feature with that id if it is found, in case it is not found or does not indicate the id returns null
    * @api stable
    */
   M.layer.Vector.prototype.getFeatureById = function (id) {
-    let features = null;
+    let feature = null;
     if (!M.utils.isNullOrEmpty(id)) {
-      features = this.getImpl().getFeatureById(id);
+      feature = this.getImpl().getFeatureById(id);
     }
     else {
       M.dialog.error("No se ha indicado un ID para obtener el feature");
     }
-    return features;
+    return feature;
   };
 
   /**
    * This function remove the features indicated
    *
    * @function
+   * @public
    * @param {Array<M.feature>} features - Features to remove
    * @api stable
    */
@@ -112,7 +101,7 @@ goog.require('M.exception');
       this.getImpl().removeFeatures(features);
     }
     else {
-      M.dialog.error("El método debe recibir un array de features");
+      M.dialog.error("El método debe recibir un array de M.Features");
     }
   };
 
@@ -120,6 +109,7 @@ goog.require('M.exception');
    * This function returns all features of the layer
    *
    * @function
+   * @param {boolean} applyFilter - Indicates whether execute filter
    * @return {Array<M.feature>} returns all features of the layer
    * @api stable
    */
@@ -134,6 +124,7 @@ goog.require('M.exception');
    * This function remove all features
    *
    * @function
+   * @public
    * @api stable
    */
   M.layer.Vector.prototype.clear = function () {
@@ -144,17 +135,19 @@ goog.require('M.exception');
    * This function refresh layer
    *
    * @function
+   * @public
    * @api stable
    */
   M.layer.Vector.prototype.refresh = function () {
-    this.getImpl().refreshLayer();
+    this.getImpl().refresh(true);
   };
 
   /**
    * This function set a filter
    *
    * @function
-   * @param {M.Filter}
+   * @public
+   * @param {M.Filter} filter - filter to set
    * @api stable
    */
   M.layer.Vector.prototype.setFilter = function (filter) {
@@ -170,11 +163,27 @@ goog.require('M.exception');
    * This function return filter
    *
    * @function
-   * @return returns filter applied
+   * @public
+   * @return {M.Filter} returns filter assigned
    * @api stable
    */
   M.layer.Vector.prototype.getFilter = function () {
     return this.filter_;
+  };
+
+  /**
+   * This function return extent of all features or discriminating by the filter
+   *
+   * @function
+   * @param {boolean} applyFilter - Indicates whether execute filter
+   * @return {Array<number>} Extent of features
+   * @api stable
+   */
+  M.layer.Vector.prototype.getFeaturesExtent = function (applyFilter) {
+    if (M.utils.isNullOrEmpty(this.getFilter())) {
+      applyFilter = false;
+    }
+    return this.getImpl().getFeaturesExtent(applyFilter, this.filter_);
   };
 
 
@@ -188,11 +197,7 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.equals = function (obj) {
     var equals = false;
-    if (obj instanceof M.layer.Vector) {
-      equals = (this.url === obj.url);
-      equals = equals && (this.name === obj.name);
-      equals = equals && (this.options === obj.options);
-    }
+    if (obj instanceof M.layer.Vector) {}
     return equals;
   };
 

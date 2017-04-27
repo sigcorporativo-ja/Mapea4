@@ -1,60 +1,116 @@
 goog.provide('M.impl.Feature');
 
-
 (function () {
   /**
    * @classdesc
-   * Main constructor of the class. Creates a KML layer
-   * with parameters specified by the user
+   * Main constructor of the class. Create a Feature
    *
    * @constructor
    * @implements {M.impl.Layer}
-   * @param {Mx.parameters.LayerOptions} options custom options for this layer
+   * @param {string} id - id to feature
+   * @param {Object} geojson - geojson to feature
    * @api stable
    */
-  M.impl.Feature = (function (id, geojson, options) {
-    let geom = new ol.geom[geojson.geometry.type](geojson.geometry.coordinates.map(coord => ol.proj.transform(coord, 'EPSG:23030', 'EPSG:23030')));
-    // geojson.properties.geometry = geom;
-    /**
-     * ol feature
-     * @private
-     * @type {ol.Feature}
-     */
-    this.olFeature_ = new ol.Feature({
-      geometry: geom
-    } /*geojson.properties*/ );
-    if (!M.utils.isNullOrEmpty(geojson.properties)) {
-      this.olFeature_.setProperties(geojson.properties);
+  M.impl.Feature = (function (id, geojson, style) {
+    if (!M.utils.isNullOrEmpty(geojson)) {
+      let formatter = new M.impl.format.GeoJSON();
+      if (M.utils.isNullOrEmpty(geojson.type)) {
+        geojson.type = "Feature";
+      }
+      this.olFeature_ = formatter.readFeature(geojson);
     }
-
-    this.olFeature_.setId(id);
-
-    if (M.utils.isNullOrEmpty(options) || !M.utils.isObject(options)) {
-      options = {};
+    else {
+      this.olFeature_ = new ol.Feature();
     }
-
-    if (!M.utils.isNullOrEmpty(options.ol_uid)) {
-      this.olFeature_.ol_uid = options.ol_uid;
+    if (!M.utils.isNullOrEmpty(id)) {
+      this.olFeature_.setId(id);
     }
-
-    if (!M.utils.isNullOrEmpty(options.style)) {
-      this.olFeature_.setStyle(options.style);
+    else if (M.utils.isNullOrEmpty(this.olFeature_.getId())) {
+      this.olFeature_.setId(M.utils.generateRandom('mapea_feature_'));
     }
-
-    // funcion para formatear de un objeto original al feature de la implementacion (en este caso ol.Feature)
-    if (!M.utils.isNullOrEmpty(options.implFormat) && typeof options.implFormat === 'function') {
-      options.implFormat(this.olFeature_);
+    if (!M.utils.isNullOrEmpty(style)) {
+      this.getOLFeature().setStyle(style);
     }
   });
 
+  /**
+   * This function returns the openlayers object of the features
+   * @public
+   * @function
+   * @return {ol.Feature} returns the openlayers object of the features
+   * @api stable
+   */
   M.impl.Feature.prototype.getOLFeature = function () {
     return this.olFeature_;
   };
 
-  M.impl.Feature.prototype.setOLFeature = function (ol) {
-    this.olFeature_ = ol;
+  /**
+   * This function set the openlayers object of the features
+   * @public
+   * @param {ol.Feature} olFeature - ol Feature to feature
+   * @function
+   * @api stable
+   */
+  M.impl.Feature.prototype.setOLFeature = function (olFeature) {
+    if (!M.utils.isNullOrEmpty(olFeature)) {
+      this.olFeature_ = olFeature;
+      if (M.utils.isNullOrEmpty(this.olFeature_.getId())) {
+        this.olFeature_.setId(M.utils.generateRandom('mapea_feature_'));
+      }
+    }
   };
 
+  /**
+   * This function return attributes feature
+   * @public
+   * @return {Object} Attributes feature
+   * @function
+   * @api stable
+   */
+  M.impl.Feature.prototype.getAttributes = function () {
+    return this.olFeature_.getProperties();
+  };
 
+  /**
+   * This function return id feature
+   *
+   * @public
+   * @function
+   * @return {string} ID to feature
+   * @api stable
+   */
+  M.impl.Feature.prototype.getId = function () {
+    return this.olFeature_.getId();
+  };
 
+  /**
+   * This function set attributes feature
+   *
+   * @public
+   * @function
+   * @param {Object} attributes - attributes to feature
+   * @api stable
+   */
+  M.impl.Feature.prototype.setAttributes = function (attributes) {
+    this.olFeature_.setProperties(attributes);
+  };
+
+  /**
+   * This funcion transform ol.Feature to M.Feature
+   *
+   * @public
+   * @function
+   * @param {ol.Feature} olFeature - ol.Feature
+   * @return {M.Feature}  facadeFeature - M.Feature
+   * @api stable
+   */
+  M.impl.Feature.olFeature2Facade = function (olFeature) {
+    //let featureStyle = null;
+    let facadeFeature = null;
+    if (!M.utils.isNullOrEmpty(olFeature)) {
+      facadeFeature = new M.Feature();
+      facadeFeature.getImpl().setOLFeature(olFeature);
+    }
+    return facadeFeature;
+  };
 })();

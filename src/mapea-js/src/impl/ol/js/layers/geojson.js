@@ -4,8 +4,8 @@ goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.impl.layer.Vector');
 goog.require('M.impl.loader.JSONP');
+goog.require('M.impl.layer.Vector');
 
-// TODO borrar:
 goog.require('M.impl.format.GeoJSON');
 
 goog.require('M.format.GeoJSON');
@@ -23,7 +23,7 @@ goog.require('goog.style');
    * with parameters specified by the user
    *
    * @constructor
-   * @implements {M.impl.Layer}
+   * @implements {M.impl.layer.Vector}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
