@@ -37,7 +37,7 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature.prototype.setId = function (id) {
-    this.id_ = id;
+    this.id = id;
   };
 
   /**
@@ -49,7 +49,7 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature.prototype.getId = function () {
-    return this.getImpl().getId();
+    return this.id;
   };
 
   /**
@@ -116,5 +116,30 @@ goog.require('M.facade.Base');
     }
   };
 
+  /**
+   * This function returns the value of the indicated attribute
+   *
+   * @public
+   * @function
+   * @param {string} attribute - Name attribute
+   * @return  {string|number|object} returns the value of the indicated attribute
+   * @api stable
+   */
+  M.Feature.prototype.getAttribute = function (attribute) {
+    return this.getImpl().getAttribute(attribute);
+  };
+
+  /**
+   * This function set value the value of the indicated attribute
+   *
+   * @public
+   * @function
+   * @param {string} attribute - Name attribute
+   * @return  {string|number|object} returns the value of the indicated attribute
+   * @api stable
+   */
+  M.Feature.prototype.setAttribute = function (attribute, value) {
+    return this.getImpl().setAttribute(attribute, value);
+  };
 
 })();

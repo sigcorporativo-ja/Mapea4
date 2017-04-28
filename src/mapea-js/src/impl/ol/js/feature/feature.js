@@ -113,4 +113,30 @@ goog.provide('M.impl.Feature');
     }
     return facadeFeature;
   };
+
+  /**
+   * This function returns the value of the indicated attribute
+   *
+   * @public
+   * @function
+   * @param {string} attribute - Name attribute
+   * @return  {string|number|object} returns the value of the indicated attribute
+   * @api stable
+   */
+  M.impl.Feature.prototype.getAttribute = function (attribute) {
+    return this.olFeature_.get(attribute);
+  };
+
+  /**
+   * This function set value of the indicated attribute
+   *
+   * @public
+   * @function
+   * @param {string} attribute - Name attribute
+   * @return  {string|number|object} returns the value of the indicated attribute
+   * @api stable
+   */
+  M.impl.Feature.prototype.setAttribute = function (attribute, value) {
+    return this.olFeature_.set(attribute, value);
+  };
 })();
