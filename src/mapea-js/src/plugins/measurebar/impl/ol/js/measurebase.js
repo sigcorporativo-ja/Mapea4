@@ -1,6 +1,7 @@
 goog.provide('P.impl.control.Measure');
 
 goog.require('goog.events');
+goog.require('goog.dom');
 goog.require('goog.dom.classes');
 
 /**
@@ -115,14 +116,19 @@ M.impl.control.Measure.prototype.activate = function () {
     var measureArea = this.facadeMap_.getControls().filter(function (control) {
       return (control instanceof M.control.MeasureArea);
     })[0];
-    measureArea.deactivate();
+    if (measureArea) {
+      measureArea.deactivate();
+    }
   }
   // if it is measure area then deactivate measure length
   else if (this instanceof M.impl.control.MeasureArea) {
     var measureLength = this.facadeMap_.getControls().filter(function (control) {
       return (control instanceof M.control.MeasureLength);
     })[0];
-    measureLength.deactivate();
+
+    if (measureLength) {
+      measureLength.deactivate();
+    }
   }
   this.createHelpTooltip_().then(function () {
     this.facadeMap_.getMapImpl().on('pointermove', this.pointerMoveHandler_, this);
