@@ -80,6 +80,7 @@ M.impl.control.MeasureClear.prototype.onClick = function () {
  * @api stable
  */
 M.impl.control.MeasureClear.prototype.destroy = function () {
+  this.element.remove();
   this.facadeMap_.removeControls(this);
   this.facadeMap_ = null;
 };

@@ -40,3 +40,20 @@ M.plugin.HelloWorld.prototype.addTo = function (map) {
 M.plugin.HelloWorld.prototype.destroy = function () {
   // TODO implement this method
 };
+
+/**
+ * This function compare if pluging recieved by param is instance of M.plugin.HelloWorld
+ *
+ * @public
+ * @function
+ * @param {M.plugin} plugin to comapre
+ * @api stable
+ */
+M.Plugin.prototype.equals = function (plugin) {
+  if (plugin instanceof M.plugin.HelloWorld) {
+    return true;
+  }
+  else {
+    return false;
+  }
+};

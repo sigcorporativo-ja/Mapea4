@@ -362,6 +362,8 @@ M.impl.control.Measure.prototype.clear = function () {
  * @api stable
  */
 M.impl.control.Measure.prototype.destroy = function () {
+  this.deactivate();
+  this.element.remove();
   this.facadeMap_.removeControls(this);
   this.facadeMap_ = null;
   this.overlays_.length = 0;
