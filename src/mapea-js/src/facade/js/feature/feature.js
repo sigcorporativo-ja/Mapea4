@@ -13,8 +13,6 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature = (function (id, geojson, style) {
-    this.id_ = id;
-    this.GeoJSON_ = geojson;
     this.style_ = style;
 
     /**
@@ -23,7 +21,6 @@ goog.require('M.facade.Base');
      * @type {M.impl.Feature}
      */
     var impl = new M.impl.Feature(id, geojson, style);
-
     goog.base(this, impl);
   });
   goog.inherits(M.Feature, M.facade.Base);
@@ -37,7 +34,7 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature.prototype.setId = function (id) {
-    this.id = id;
+    this.getImpl().setId(id);
   };
 
   /**
@@ -49,7 +46,7 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature.prototype.getId = function () {
-    return this.id;
+    return this.getImpl().getId();
   };
 
   /**
@@ -57,11 +54,11 @@ goog.require('M.facade.Base');
    *
    * @public
    * @function
-   * @return {Object} geometry feature
+   * @return {object} Geometry feature
    * @api stable
    */
   M.Feature.prototype.getGeometry = function () {
-    return this.GeoJSON_.geometry;
+    return this.getImpl().getGeometry()
   };
 
   /**
@@ -73,18 +70,7 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature.prototype.getGeoJSON = function () {
-    return this.GeoJSON_;
-  };
-
-  /**
-   * This function set geojson to feature
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.Feature.prototype.setGeoJSON = function (GeoJSON) {
-    this.GeoJSON_ = GeoJSON;
+    return this.getImpl().getGeoJSON();
   };
 
   /**

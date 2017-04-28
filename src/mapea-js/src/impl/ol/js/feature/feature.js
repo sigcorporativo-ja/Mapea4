@@ -12,12 +12,12 @@ goog.provide('M.impl.Feature');
    * @api stable
    */
   M.impl.Feature = (function (id, geojson, style) {
+    this.formatter_ = new M.impl.format.GeoJSON();
     if (!M.utils.isNullOrEmpty(geojson)) {
-      let formatter = new M.impl.format.GeoJSON();
       if (M.utils.isNullOrEmpty(geojson.type)) {
         geojson.type = "Feature";
       }
-      this.olFeature_ = formatter.readFeature(geojson);
+      this.olFeature_ = this.formatter_.readFeature(geojson);
     }
     else {
       this.olFeature_ = new ol.Feature();
@@ -84,6 +84,18 @@ goog.provide('M.impl.Feature');
   };
 
   /**
+   * This function set id
+   *
+   * @public
+   * @function
+   * @param {string} id - ID to feature
+   * @api stable
+   */
+  M.impl.Feature.prototype.setId = function (id) {
+    this.olFeature_.setId(id);
+  };
+
+  /**
    * This function set attributes feature
    *
    * @public
@@ -139,4 +151,29 @@ goog.provide('M.impl.Feature');
   M.impl.Feature.prototype.setAttribute = function (attribute, value) {
     return this.olFeature_.set(attribute, value);
   };
+
+  /**
+   * This function return geojson feature
+   *
+   * @public
+   * @function
+   * @return {Object} geojson feature
+   * @api stable
+   */
+  M.impl.Feature.prototype.getGeoJSON = function () {
+    return this.formatter_.writeFeatureObject(this.olFeature_);
+  };
+
+  /**
+   * This function return geometry feature
+   *
+   * @public
+   * @function
+   * @return {object} Geometry feature
+   * @api stable
+   */
+  M.impl.Feature.prototype.getGeometry = function () {
+    return this.getGeoJSON().geometry;
+  };
+
 })();

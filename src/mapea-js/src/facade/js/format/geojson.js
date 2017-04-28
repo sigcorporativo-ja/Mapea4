@@ -50,7 +50,6 @@ goog.require('M.Feature');
           type: geojsonFeature.type,
           id: geojsonFeature.id,
         });
-        //return new M.Feature(id, geojsonFeature);
       });
     }
     return features;
