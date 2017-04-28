@@ -264,7 +264,7 @@ goog.require('M.facade.Base');
    * @export
    */
   M.Control.prototype.destroy = function () {
-    this.getImpl().destroy();
-    this.fire(M.evt.DESTROY);
+    // this.getImpl().destroy();
+    // this.fire(M.evt.DESTROY);
   };
 })();

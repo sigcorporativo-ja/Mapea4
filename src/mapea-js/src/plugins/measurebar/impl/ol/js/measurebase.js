@@ -1,6 +1,7 @@
 goog.provide('P.impl.control.Measure');
 
 goog.require('goog.events');
+goog.require('goog.dom');
 goog.require('goog.dom.classes');
 
 /**

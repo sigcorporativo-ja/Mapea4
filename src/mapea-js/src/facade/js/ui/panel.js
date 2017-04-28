@@ -444,7 +444,9 @@ goog.require('M.facade.Base');
    */
   M.ui.Panel.prototype._moveControlView = function (control) {
     var controlElem = control.getElement();
-    goog.dom.appendChild(this._controlsContainer, controlElem);
+    if (!M.utils.isNullOrEmpty(this._controlsContainer)) {
+      goog.dom.appendChild(this._controlsContainer, controlElem);
+    }
     control.fire(M.evt.ADDED_TO_PANEL);
   };
 
