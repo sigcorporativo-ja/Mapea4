@@ -1330,6 +1330,7 @@ goog.require('M.window');
 
     // gets the contros to remove
     var controls = this.getControls(controlsParam);
+    controls = [].concat(controls);
     if (controls.length > 0) {
       // removes controls from their panels
       controls.forEach(function (control) {
@@ -1807,6 +1808,7 @@ goog.require('M.window');
       plugins = [plugins];
     }
 
+    plugins = [].concat(plugins);
     if (plugins.length > 0) {
       // removes controls from their panels
       plugins.forEach(function (plugin) {
