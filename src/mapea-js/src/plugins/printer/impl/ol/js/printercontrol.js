@@ -79,8 +79,8 @@ goog.provide('P.impl.control.Printer');
       else if (layer.type === M.layer.type.MBtiles) {
         // none
       }
-      else if (layer.type === M.layer.type.OSM) {
-        success(this_.encodeOSM(layer));
+      else if (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox) {
+        success(this_.encodeOSMorMapbox(layer));
       }
     }));
   };
@@ -481,7 +481,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeOSM = function (layer) {
+  M.impl.control.Printer.prototype.encodeOSMorMapbox = function (layer) {
     var encodedLayer = null;
 
     var layerImpl = layer.getImpl();
