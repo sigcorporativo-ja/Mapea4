@@ -1028,7 +1028,7 @@ goog.require('ol.Map');
   M.impl.Map.prototype.removeControls = function (controls) {
     var mapControls = this.getControls(controls);
     mapControls.forEach(function (control) {
-      control.getImpl().destroy();
+      control.destroy();
       this.controls_.remove(control);
     }, this);
 

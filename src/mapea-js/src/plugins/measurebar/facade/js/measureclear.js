@@ -11,17 +11,17 @@ goog.provide('P.control.MeasureClear');
  * @extends {M.Control}
  * @api stable
  */
-M.control.MeasureClear = (function(measureLengthControl, measureAreaControl) {
-   // checks if the implementation can create MeasureClear
-   if (M.utils.isUndefined(M.impl.control.MeasureClear)) {
-      M.exception('La implementación usada no puede crear controles MeasureClear');
-   }
+M.control.MeasureClear = (function (measureLengthControl, measureAreaControl) {
+  // checks if the implementation can create MeasureClear
+  if (M.utils.isUndefined(M.impl.control.MeasureClear)) {
+    M.exception('La implementación usada no puede crear controles MeasureClear');
+  }
 
-   // implementation of this control
-   var impl = new M.impl.control.MeasureClear(measureLengthControl.getImpl(), measureAreaControl.getImpl());
+  // implementation of this control
+  var impl = new M.impl.control.MeasureClear(measureLengthControl.getImpl(), measureAreaControl.getImpl());
 
-   // calls the super constructor
-   goog.base(this, impl, M.control.MeasureClear.NAME);
+  // calls the super constructor
+  goog.base(this, impl, M.control.MeasureClear.NAME);
 });
 goog.inherits(M.control.MeasureClear, M.Control);
 
@@ -34,10 +34,10 @@ goog.inherits(M.control.MeasureClear, M.Control);
  * @returns {Promise} HTML template
  * @api stable
  */
-M.control.MeasureClear.prototype.createView = function(map) {
-   return M.template.compile(M.control.MeasureClear.TEMPLATE, {
-      'jsonp': true
-   });
+M.control.MeasureClear.prototype.createView = function (map) {
+  return M.template.compile(M.control.MeasureClear.TEMPLATE, {
+    'jsonp': true
+  });
 };
 
 /**
@@ -50,12 +50,12 @@ M.control.MeasureClear.prototype.createView = function(map) {
  * @returns {boolean} equals - Returns if they are equal or not
  * @api stable
  */
-M.control.MeasureClear.prototype.equals = function(obj) {
-   var equals = false;
-   if (obj instanceof M.control.MeasureClear) {
-      equals = (this.name === obj.name);
-   }
-   return equals;
+M.control.MeasureClear.prototype.equals = function (obj) {
+  var equals = false;
+  if (obj instanceof M.control.MeasureClear) {
+    equals = (this.name === obj.name);
+  }
+  return equals;
 };
 
 /**
@@ -65,9 +65,9 @@ M.control.MeasureClear.prototype.equals = function(obj) {
  * @function
  * @api stable
  */
-M.control.MeasureClear.prototype.destroy = function() {
-   this.getImpl().destroy();
-   this.impl = null;
+M.control.MeasureClear.prototype.destroy = function () {
+  this.getImpl().destroy();
+  this.impl = null;
 };
 
 /**

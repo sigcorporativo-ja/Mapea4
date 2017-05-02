@@ -38,6 +38,14 @@ goog.require('P.control.Printer');
     this.panel_ = null;
 
     /**
+     * Name of this control
+     * @public
+     * @type {string}
+     * @api stable
+     */
+    this.name = M.plugin.Printer.NAME;
+
+    /**
      * Facade of the map
      * @private
      * @type {String}
@@ -67,7 +75,7 @@ goog.require('P.control.Printer');
       this.options_ = parameters.options;
     }
 
-    goog.base(this);
+    goog.base(this, null, M.plugin.Printer.NAME);
   });
   goog.inherits(M.plugin.Printer, M.Plugin);
 
@@ -119,5 +127,32 @@ goog.require('P.control.Printer');
     this.url_ = null;
     this.params_ = null;
     this.options_ = null;
+    this.name = null;
   };
+
+  /**
+   * This function compare if pluging recieved by param is instance of   M.plugin.Printer
+   *
+   * @public
+   * @function
+   * @param {M.plugin} plugin to comapre
+   * @api stable
+   */
+  M.plugin.Printer.prototype.equals = function (plugin) {
+    if (plugin instanceof M.plugin.Printer) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  };
+
+  /**
+   * Name to identify this plugin
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
+   */
+  M.plugin.Printer.NAME = "printer";
 })();
