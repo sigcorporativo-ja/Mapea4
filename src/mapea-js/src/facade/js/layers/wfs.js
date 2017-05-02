@@ -1,6 +1,7 @@
 goog.provide('M.layer.WFS');
 
 goog.require('M.Layer');
+goog.require('M.layer.Vector');
 goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.geom');
@@ -12,7 +13,7 @@ goog.require('M.geom');
    * with parameters specified by the user
    *
    * @constructor
-   * @extends {M.Layer}
+   * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.WFS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
@@ -37,7 +38,7 @@ goog.require('M.geom');
      */
     var impl = implParam;
     if (M.utils.isNullOrEmpty(impl)) {
-    	impl = new M.impl.layer.WFS(options);
+      impl = new M.impl.layer.WFS(options);
     }
 
     var parameters = M.parameter.layer(userParameters, M.layer.type.WFS);
@@ -71,7 +72,7 @@ goog.require('M.geom');
       this.fire(M.evt.LOAD, [features]);
     }, this);
   });
-  goog.inherits(M.layer.WFS, M.Layer);
+  goog.inherits(M.layer.WFS, M.layer.Vector);
 
   /**
    * 'type' This property indicates if
