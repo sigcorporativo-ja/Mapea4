@@ -2,7 +2,6 @@ goog.provide('M.impl.format.KML');
 
 goog.require('M.impl.style.Icon');
 goog.require('ol.format.KML');
-goog.require('goog.Uri');
 
 /**
  * @classdesc
