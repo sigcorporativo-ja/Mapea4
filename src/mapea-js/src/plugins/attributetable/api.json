@@ -1,0 +1,16 @@
+{
+    "url": {
+        "name": "attributetable"
+    },
+    "constructor": "M.plugin.AttributeTable",
+    "files": {
+        "ol": {
+            "scripts": [
+                "attributetable.ol.min.js"
+            ],
+            "styles": [
+                "attributetable.min.css"
+            ]
+        }
+    }
+}

@@ -9,7 +9,7 @@
    <parent>
       <groupId>es.juntadeandalucia.mapea</groupId>
       <artifactId>mapea-parent</artifactId>
-      <version>4.0.4-dev</version>
+      <version>4.1.0-beta</version>
       <relativePath>../mapea-parent/pom.xml</relativePath>
    </parent>
    <licenses>
