@@ -431,8 +431,7 @@ goog.require('goog.style');
       if (this_.options_.legend === true) {
         printData.legends = this_.encodeLegends();
       }
-      // #78640 si hay alguna capa de tipo OSM se fuerza la proyeccion enviada a GEOPRINT
-      if (printData.layers.some((pLayer) => pLayer.layer === 'osm')) {
+      if (projection.code !== "EPSG:3857" && this_.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
         printData.srs = 'EPSG:3857';
       }
       return printData;
@@ -479,6 +478,7 @@ goog.require('goog.style');
    */
   M.control.Printer.prototype.encodePages = function (title, description) {
     var encodedPages = [];
+    var projection = this.map_.getProjection();
 
     if (!M.utils.isArray(this.params_.pages)) {
       this.params_.pages = [this.params_.pages];
@@ -493,13 +493,9 @@ goog.require('goog.style');
 
       if (this.forceScale_ === false) {
         var bbox = this.map_.getBbox();
-        let tmp = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max]
-        // #78640 si hay alguna capa de tipo OSM se modifica el bbox y se transforma a la proyeccion EPSG 3857
-        if (this.map_.getLayers().some((layer) => layer.type === M.layer.type.OSM)) {
-          encodedPage.bbox = ol.proj.transformExtent(tmp, this.map_.getProjection().code, 'EPSG:3857')
-        }
-        else {
-          encodedPage.bbox = tmp;
+        encodedPage.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
+        if (projection.code !== "EPSG:3857" && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+          encodedPage.bbox = ol.proj.transformExtent(encodedPage.bbox, projection.code, 'EPSG:3857');
         }
       }
       else if (this.forceScale_ === true) {

@@ -79,8 +79,11 @@ goog.provide('P.impl.control.Printer');
       else if (layer.type === M.layer.type.MBtiles) {
         // none
       }
-      else if (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox) {
-        success(this_.encodeOSMorMapbox(layer));
+      else if (layer.type === M.layer.type.OSM) {
+        success(this_.encodeOSM(layer));
+      }
+      else if (layer.type === M.layer.type.Mapbox) {
+        success(this_.encodeMapbox(layer));
       }
     }));
   };
@@ -294,6 +297,7 @@ goog.provide('P.impl.control.Printer');
   M.impl.control.Printer.prototype.encodeWFS = function (layer) {
     var encodedLayer = null;
 
+    var projection = this.facadeMap_.getProjection();
     var olLayer = layer.getImpl().getOL3Layer();
     var features = olLayer.getSource().getFeatures();
     var layerName = layer.name;
@@ -373,7 +377,16 @@ goog.provide('P.impl.control.Printer');
             encodedStyles[styleName] = style;
             index++;
           }
-          var geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
+          var geoJSONFeature;
+          if (projection.code !== "EPSG:3857" && this.facadeMap_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+            geoJSONFeature = geoJSONFormat.writeFeatureObject(feature, {
+              'featureProjection': projection.code,
+              'dataProjection': 'EPSG:3857',
+            });
+          }
+          else {
+            geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
+          }
           geoJSONFeature.properties = {
             "_gx_style": styleName
           };
@@ -481,7 +494,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeOSMorMapbox = function (layer) {
+  M.impl.control.Printer.prototype.encodeOSM = function (layer) {
     var encodedLayer = null;
 
     var layerImpl = layer.getImpl();
@@ -489,7 +502,7 @@ goog.provide('P.impl.control.Printer');
     var layerSource = olLayer.getSource();
     var tileGrid = layerSource.getTileGrid();
 
-    var layerUrl = 'http://tile.openstreetmap.org/';
+    var layerUrl = layer.url || 'http://tile.openstreetmap.org/';
     var layerName = layer.name;
     var layerOpacity = olLayer.getOpacity();
     var tiled = layerImpl.tiled;
@@ -510,6 +523,47 @@ goog.provide('P.impl.control.Printer');
 
     return encodedLayer;
 
+  };
+
+  /**
+   * This function adds the control to the specified map
+   *
+   * @public
+   * @function
+   * @param {M.Map} map to add the plugin
+   * @param {function} template template of this control
+   * @api stable
+   */
+  M.impl.control.Printer.prototype.encodeMapbox = function (layer) {
+    var encodedLayer = null;
+
+    var layerImpl = layer.getImpl();
+    var olLayer = layerImpl.getOL3Layer();
+    var layerSource = olLayer.getSource();
+    var tileGrid = layerSource.getTileGrid();
+
+    var layerUrl = M.utils.concatUrlPaths([M.config.MAPBOX_URL, layer.name]);
+    var layerOpacity = olLayer.getOpacity();
+    var layerExtent = tileGrid.getExtent();
+
+    var tileSize = tileGrid.getTileSize();
+    var resolutions = tileGrid.getResolutions();
+
+    var customParams = {};
+    customParams[M.config.MAPBOX_TOKEN_NAME] = M.config.MAPBOX_TOKEN_VALUE;
+    encodedLayer = {
+      'opacity': layerOpacity,
+      'baseURL': layerUrl,
+      'customParams': customParams,
+      'maxExtent': layerExtent,
+      'tileSize': [tileSize, tileSize],
+      'resolutions': resolutions,
+      'extension': M.config.MAPBOX_EXTENSION,
+      'type': 'xyz',
+      'path_format': '/${z}/${x}/${y}.png'
+    };
+
+    return encodedLayer;
   };
 
   /**
