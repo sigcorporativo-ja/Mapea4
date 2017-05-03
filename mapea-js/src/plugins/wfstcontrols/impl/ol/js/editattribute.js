@@ -234,7 +234,9 @@ goog.require('goog.events');
    */
   M.impl.control.EditAttribute.prototype.destroy = function () {
     goog.base(this, 'destroy');
-    this.facadeMap_.removePopup();
+    if (!M.utils.isNull(this.facadeMap_) && !M.utils.isNull(this.facadeMap_.getPopup())) {
+      this.facadeMap_.removePopup();
+    }
   };
 
 
