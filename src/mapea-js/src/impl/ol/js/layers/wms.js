@@ -581,6 +581,22 @@ goog.require('ol.extent');
   };
 
   /**
+   * This function refreshes the state of this
+   * layer
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  M.impl.layer.WMS.prototype.refresh = function () {
+    var ol3Layer = this.getOL3Layer();
+    if (!M.utils.isNullOrEmpty(ol3Layer)) {
+      ol3Layer.getSource().changed();
+    }
+  };
+
+  /**
    * This function destroys this layer, cleaning the HTML
    * and unregistering all events
    *
