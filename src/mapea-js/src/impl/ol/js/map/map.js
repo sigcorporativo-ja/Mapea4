@@ -1838,6 +1838,18 @@ goog.require('ol.Map');
     return this;
   };
 
+  /**
+   * This function refresh the state of this map instance,
+   * this is, all its layers.
+   *
+   * @function
+   * @api stable
+   * @returns {M.impl.Map} the instance
+   */
+  M.impl.Map.prototype.refresh = function () {
+    this.map_.updateSize();
+    return this;
+  };
 
   /**
    * This function gets the layer to draw
