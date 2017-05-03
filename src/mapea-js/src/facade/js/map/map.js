@@ -2319,6 +2319,25 @@ goog.require('M.window');
   };
 
   /**
+   * This function refresh the state of this map instance,
+   * this is, all its layers.
+   *
+   * @function
+   * @api stable
+   * @returns {M.Map} the instance
+   */
+  M.Map.prototype.refresh = function () {
+    // checks if the implementation has refresh method
+    if (!M.utils.isUndefined(this.getImpl().refresh) && M.utils.isFunction(this.getImpl().refresh)) {
+      this.getImpl().refresh();
+    }
+    this.getLayers().forEach(function (layer) {
+      layer.refresh();
+    });
+    return this;
+  };
+
+  /**
    * TODO
    * @public
    * @function
