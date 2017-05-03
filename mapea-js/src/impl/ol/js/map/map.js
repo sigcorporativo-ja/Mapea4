@@ -185,10 +185,7 @@ goog.require('ol.Map');
     var wfsLayers = this.getWFS(filters);
     var wmtsLayers = this.getWMTS(filters);
     var mbtilesLayers = this.getMBtiles(filters);
-
-    var unknowLayers = this.layers_.filter(function (layer) {
-      return !M.layer.type.know(layer.type);
-    });
+    var unknowLayers = this.getUnknowLayers_(filters);
 
     return wmcLayers.concat(kmlLayers).concat(wmsLayers)
       .concat(wfsLayers).concat(wmtsLayers)
@@ -207,7 +204,7 @@ goog.require('ol.Map');
   M.impl.Map.prototype.getBaseLayers = function () {
     var baseLayers = this.getLayers().filter(function (layer) {
       var isBaseLayer = false;
-      if ((layer.type === M.layer.type.WMS) || (layer.type === M.layer.type.Mapbox)) {
+      if ((layer.type === M.layer.type.WMS) || (layer.type === M.layer.type.OSM) || (layer.type === M.layer.type.Mapbox)) {
         isBaseLayer = (layer.transparent !== true);
       }
       return isBaseLayer;
@@ -233,43 +230,13 @@ goog.require('ol.Map');
       return M.layer.type.know(layer.type);
     });
 
+    this.addUnknowLayers_(unknowLayers);
     this.addWMC(knowLayers);
     this.addMBtiles(knowLayers);
     this.addWMS(knowLayers);
     this.addWMTS(knowLayers);
     this.addKML(knowLayers);
     this.addWFS(knowLayers);
-
-    // cehcks if exists a base layer
-    var existsBaseLayer = this.getBaseLayers().length > 0;
-
-    // adds unknow layers
-    unknowLayers.forEach(function (layer) {
-      if (!M.utils.includes(this.layers_, layer)) {
-        layer.getImpl().addTo(this.facadeMap_);
-        this.layers_.push(layer);
-
-        /* if the layer is a base layer then
-        sets its visibility */
-        if (layer.transparent !== true) {
-          layer.setVisible(!existsBaseLayer);
-          existsBaseLayer = true;
-          if (layer.isVisible()) {
-            this.updateResolutionsFromBaseLayer();
-          }
-          layer.getImpl().setZIndex(0);
-        }
-        else {
-          var zIndex = this.layers_.length + layer.getImpl().getZIndex();
-          layer.getImpl().setZIndex(zIndex);
-          // recalculates resolution if there are not
-          // any base layer
-          if (!existsBaseLayer) {
-            this.updateResolutionsFromBaseLayer();
-          }
-        }
-      }
-    }, this);
 
     return this;
   };
@@ -286,26 +253,24 @@ goog.require('ol.Map');
 
     // gets the layers with type defined and undefined
     var unknowLayers = layers.filter(function (layer) {
-      return M.utils.isNullOrEmpty(layer.type);
+      return !M.layer.type.know(layer.type);
     });
     var knowLayers = layers.filter(function (layer) {
-      return !M.utils.isNullOrEmpty(layer.type);
+      return M.layer.type.know(layer.type);
     });
 
-    this.removeWMC(knowLayers);
-    this.removeKML(knowLayers);
-    this.removeWMS(knowLayers);
-    this.removeWFS(knowLayers);
-    this.removeWMTS(knowLayers);
-    this.removeMBtiles(knowLayers);
+    if (knowLayers.length > 0) {
+      this.removeWMC(knowLayers);
+      this.removeKML(knowLayers);
+      this.removeWMS(knowLayers);
+      this.removeWFS(knowLayers);
+      this.removeWMTS(knowLayers);
+      this.removeMBtiles(knowLayers);
+    }
 
-    // removes unknow layers
-    unknowLayers.forEach(function (layer) {
-      if (!M.utils.includes(this.layers_, layer)) {
-        this.layers_.remove(layer);
-        layer.getImpl().destroy();
-      }
-    }, this);
+    if (unknowLayers.length > 0) {
+      this.removeUnknowLayers_(unknowLayers);
+    }
 
     return this;
   };
@@ -951,6 +916,133 @@ goog.require('ol.Map');
   };
 
   /**
+   * This function gets the WMS layers added to the map
+   *
+   * @private
+   * @function
+   * @param {Array<M.Layer>} filters to apply to the search
+   * @returns {Array<M.layer.WMS>} layers from the map
+   */
+  M.impl.Map.prototype.getUnknowLayers_ = function (filters) {
+    var foundLayers = [];
+
+    // get all wmsLayers
+    var unknowLayers = this.layers_.filter(function (layer) {
+      return !M.layer.type.know(layer.type);
+    });
+
+    // parse to Array
+    if (M.utils.isNullOrEmpty(filters)) {
+      filters = [];
+    }
+    if (!M.utils.isArray(filters)) {
+      filters = [filters];
+    }
+
+    if (filters.length === 0) {
+      foundLayers = unknowLayers;
+    }
+    else {
+      filters.forEach(function (filterLayer) {
+        var filteredUnknowLayers = unknowLayers.filter(function (unknowLayer) {
+          var layerMatched = true;
+          // checks if the layer is not in selected layers
+          if (!foundLayers.includes(unknowLayer)) {
+            // if instanceof M.layer.WMS check if it is the same
+            if (filterLayer instanceof M.Layer) {
+              layerMatched = filterLayer.equals(unknowLayer);
+            }
+            else {
+              // type
+              if (!M.utils.isNullOrEmpty(filterLayer.type)) {
+                layerMatched = (layerMatched && (filterLayer.type === unknowLayer.type));
+              }
+              // name
+              if (!M.utils.isNullOrEmpty(filterLayer.name)) {
+                layerMatched = (layerMatched && (filterLayer.name === unknowLayer.name));
+              }
+            }
+          }
+          else {
+            layerMatched = false;
+          }
+          return layerMatched;
+        });
+        foundLayers = foundLayers.concat(filteredUnknowLayers);
+      }, this);
+    }
+    return foundLayers;
+  };
+
+  /**
+   * This function adds layers specified by the user
+   *
+   * @private
+   * @function
+   * @param {Array<Object>} layers
+   * @returns {M.impl.Map}
+   */
+  M.impl.Map.prototype.addUnknowLayers_ = function (layers) {
+    // cehcks if exists a base layer
+    var existsBaseLayer = this.getBaseLayers().length > 0;
+
+    // adds layers
+    layers.forEach(function (layer) {
+      if (!M.utils.includes(this.layers_, layer)) {
+        layer.getImpl().addTo(this.facadeMap_);
+        this.layers_.push(layer);
+
+        /* if the layer is a base layer then
+        sets its visibility */
+        if (layer.transparent !== true) {
+          layer.setVisible(!existsBaseLayer);
+          existsBaseLayer = true;
+          if (layer.isVisible()) {
+            this.updateResolutionsFromBaseLayer();
+          }
+          layer.getImpl().setZIndex(0);
+        }
+        else {
+          var zIndex = this.layers_.length + layer.getImpl().getZIndex();
+          layer.getImpl().setZIndex(zIndex);
+          // recalculates resolution if there are not
+          // any base layer
+          if (!existsBaseLayer) {
+            this.updateResolutionsFromBaseLayer();
+          }
+        }
+      }
+    }, this);
+
+    return this;
+  };
+
+  /**
+   * This function removes the layers from the map
+   *
+   * @private
+   * @function
+   * @param {Array<Object>} layers to remove
+   * @returns {M.impl.Map}
+   */
+  M.impl.Map.prototype.removeUnknowLayers_ = function (layers) {
+    // removes unknow layers
+    layers.forEach(function (layer) {
+      if (M.utils.includes(this.layers_, layer)) {
+        this.layers_.remove(layer);
+        layer.getImpl().destroy();
+        if (layer.transparent !== true) {
+          // it was base layer so sets the visibility of the first one
+          var baseLayers = this.facadeMap_.getBaseLayers();
+          if (baseLayers.length > 0) {
+            baseLayers[0].setVisible(true);
+          }
+        }
+      }
+    }, this);
+  };
+
+  /**
    * This function adds controls specified by the user
    *
    * @public
@@ -1028,7 +1120,7 @@ goog.require('ol.Map');
   M.impl.Map.prototype.removeControls = function (controls) {
     var mapControls = this.getControls(controls);
     mapControls.forEach(function (control) {
-      control.getImpl().destroy();
+      control.destroy();
       this.controls_.remove(control);
     }, this);
 
@@ -1746,6 +1838,18 @@ goog.require('ol.Map');
     return this;
   };
 
+  /**
+   * This function refresh the state of this map instance,
+   * this is, all its layers.
+   *
+   * @function
+   * @api stable
+   * @returns {M.impl.Map} the instance
+   */
+  M.impl.Map.prototype.refresh = function () {
+    this.map_.updateSize();
+    return this;
+  };
 
   /**
    * This function gets the layer to draw

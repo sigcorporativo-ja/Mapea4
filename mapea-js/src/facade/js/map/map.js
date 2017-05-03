@@ -1330,6 +1330,7 @@ goog.require('M.window');
 
     // gets the contros to remove
     var controls = this.getControls(controlsParam);
+    controls = [].concat(controls);
     if (controls.length > 0) {
       // removes controls from their panels
       controls.forEach(function (control) {
@@ -1807,6 +1808,7 @@ goog.require('M.window');
       plugins = [plugins];
     }
 
+    plugins = [].concat(plugins);
     if (plugins.length > 0) {
       // removes controls from their panels
       plugins.forEach(function (plugin) {
@@ -2314,6 +2316,25 @@ goog.require('M.window');
     if ((eventType === M.evt.COMPLETED) && (this._finishedMap === true)) {
       this.fire(M.evt.COMPLETED);
     }
+  };
+
+  /**
+   * This function refresh the state of this map instance,
+   * this is, all its layers.
+   *
+   * @function
+   * @api stable
+   * @returns {M.Map} the instance
+   */
+  M.Map.prototype.refresh = function () {
+    // checks if the implementation has refresh method
+    if (!M.utils.isUndefined(this.getImpl().refresh) && M.utils.isFunction(this.getImpl().refresh)) {
+      this.getImpl().refresh();
+    }
+    this.getLayers().forEach(function (layer) {
+      layer.refresh();
+    });
+    return this;
   };
 
   /**

@@ -14,31 +14,39 @@ goog.require('goog.events');
  * @extends {M.Plugin}
  * @api stable
  */
-M.plugin.Streetview = (function() {
+M.plugin.Streetview = (function () {
 
-   /**
-    * Facade of the map
-    * @private
-    * @type {M.Map}
-    */
-   this.map_ = null;
+  /**
+   * Facade of the map
+   * @private
+   * @type {M.Map}
+   */
+  this.map_ = null;
 
-   /**
-    * Streetview control
-    * @public
-    * @type {M.control.Streetview}
-    * @api stable
-    */
-   this.streetview = null;
+  /**
+   * Streetview control
+   * @public
+   * @type {M.control.Streetview}
+   * @api stable
+   */
+  this.streetview = null;
 
-   /**
-    * Panel Streetview
-    * @private
-    * @type {M.ui.Panel}
-    */
-   this.panel_ = null;
+  /**
+   * Name of this control
+   * @public
+   * @type {string}
+   * @api stable
+   */
+  this.name = "streetview";
 
-   goog.base(this);
+  /**
+   * Panel Streetview
+   * @private
+   * @type {M.ui.Panel}
+   */
+  this.panel_ = null;
+
+  goog.base(this);
 });
 goog.inherits(M.plugin.Streetview, M.Plugin);
 
@@ -50,35 +58,35 @@ goog.inherits(M.plugin.Streetview, M.Plugin);
  * @param {M.Map} map - Map to add the plugin
  * @api stable
  */
-M.plugin.Streetview.prototype.addTo = function(map) {
-   this.map_ = map;
-   this.streetview = new M.control.Streetview();
-   this.panel_ = new M.ui.Panel(M.plugin.Streetview.NAME, {
-      'collapsible': false,
-      'className': 'm-streetview',
-      'position': M.ui.position.BR
-   });
-   // sets the className depending on other panels
-   var locationPanel = map.getPanels([M.control.Location.NAME])[0];
-   var geosearchByLocationPanel;
-   if (!M.utils.isNullOrEmpty(M.plugin.Geosearchbylocation)) {
-      geosearchByLocationPanel = map.getPanels([M.plugin.Geosearchbylocation.NAME])[0];
-   }
-   if (!M.utils.isNullOrEmpty(locationPanel) && !M.utils.isNullOrEmpty(geosearchByLocationPanel)) {
-      locationPanel.addClassName('m-with-streetview');
-      geosearchByLocationPanel.addClassName('m-with-streetview');
-      this.panel_.addClassName('m-with-location m-with-geosearchbylocation');
-   }
-   else if (!M.utils.isNullOrEmpty(locationPanel)) {
-      locationPanel.addClassName('m-with-streetview');
-      this.panel_.addClassName('m-with-location');
-   }
-   else if (!M.utils.isNullOrEmpty(geosearchByLocationPanel)) {
-      geosearchByLocationPanel.addClassName('m-with-streetview');
-      this.panel_.addClassName('m-with-geosearchbylocation');
-   }
-   this.panel_.addControls(this.streetview);
-   this.map_.addPanels(this.panel_);
+M.plugin.Streetview.prototype.addTo = function (map) {
+  this.map_ = map;
+  this.streetview = new M.control.Streetview();
+  this.panel_ = new M.ui.Panel(M.plugin.Streetview.NAME, {
+    'collapsible': false,
+    'className': 'm-streetview',
+    'position': M.ui.position.BR
+  });
+  // sets the className depending on other panels
+  var locationPanel = map.getPanels([M.control.Location.NAME])[0];
+  var geosearchByLocationPanel;
+  if (!M.utils.isNullOrEmpty(M.plugin.Geosearchbylocation)) {
+    geosearchByLocationPanel = map.getPanels([M.plugin.Geosearchbylocation.NAME])[0];
+  }
+  if (!M.utils.isNullOrEmpty(locationPanel) && !M.utils.isNullOrEmpty(geosearchByLocationPanel)) {
+    locationPanel.addClassName('m-with-streetview');
+    geosearchByLocationPanel.addClassName('m-with-streetview');
+    this.panel_.addClassName('m-with-location m-with-geosearchbylocation');
+  }
+  else if (!M.utils.isNullOrEmpty(locationPanel)) {
+    locationPanel.addClassName('m-with-streetview');
+    this.panel_.addClassName('m-with-location');
+  }
+  else if (!M.utils.isNullOrEmpty(geosearchByLocationPanel)) {
+    geosearchByLocationPanel.addClassName('m-with-streetview');
+    this.panel_.addClassName('m-with-geosearchbylocation');
+  }
+  this.panel_.addControls(this.streetview);
+  this.map_.addPanels(this.panel_);
 };
 
 /**
@@ -88,11 +96,11 @@ M.plugin.Streetview.prototype.addTo = function(map) {
  * @function
  * @api stable
  */
-M.plugin.Streetview.prototype.destroy = function() {
-   this.map_.removeControls([this.streetview]);
-   this.map_ = null;
-   this.streetview = null;
-   this.panel_ = null;
+M.plugin.Streetview.prototype.destroy = function () {
+  this.map_.removeControls([this.streetview]);
+  this.map_ = null;
+  this.streetview = null;
+  this.panel_ = null;
 };
 
 /**
@@ -103,3 +111,20 @@ M.plugin.Streetview.prototype.destroy = function() {
  * @api stable
  */
 M.plugin.Streetview.NAME = 'streetview';
+
+/**
+ * This function compare if pluging recieved by param is instance of M.plugin.Streetview
+ *
+ * @public
+ * @function
+ * @param {M.plugin} plugin to comapre
+ * @api stable
+ */
+M.plugin.Streetview.prototype.equals = function (plugin) {
+  if (plugin instanceof M.plugin.Streetview) {
+    return true;
+  }
+  else {
+    return false;
+  }
+};
