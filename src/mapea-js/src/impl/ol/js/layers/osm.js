@@ -98,8 +98,6 @@ goog.require('ol.source.OSM');
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
-
-
     this.map.getImpl().getMapImpl().getControls().getArray().forEach(function (cont) {
       if (cont instanceof ol.control.Attribution) {
         this.hasAttributtion = true;
@@ -111,6 +109,7 @@ goog.require('ol.source.OSM');
       }));
       this.hasAttributtion = false;
     }
+
     // recalculate resolutions
     this.resolutions_ = M.utils.generateResolutionsFromExtent(this.getExtent(), this.map.getMapImpl().getSize(), 16, this.map.getProjection().units);
 
