@@ -1,0 +1,31 @@
+<div id="m-attributetable-content-attributes">
+    <div class="m-attributetable-headers">Tabla Atributos <span id="m-attributetable-attributes" class="g-cartografia-flecha-abajo"></span></div>
+    {{#if attributes}}
+    <div id="m-attributetable-table">
+        <table>
+            <tbody>
+                <tr class="m-attributetable-thead">
+                    <td><input type="checkbox" name="selectAll" value="selectAll"></td>
+                    {{#each headerAtt}}
+                    <td>{{this}}</td>
+                    {{/each}}
+                </tr> {{#each attributes}}
+                <tr>
+                    <td><input type="checkbox" name="" value=""></td>
+                    {{#each this}}
+                    <td> {{{this}}}</td>
+                    {{/each}}
+                </tr>
+                {{/each}}
+            </tbody>
+        </table>
+    </div>
+    <div id="m-attributetable-tfoot">
+        <span class="g-cartografia-flecha-izquierda m-attributetable-hidden" id="m-attributetable-previous"></span>
+        <span>Página {{pages.actual}} de {{pages.total}}</span>
+        <span class="g-cartografia-flecha-derecha m-attributetable-hidden" id="m-attributetable-next"></span>
+    </div>
+    {{else}}
+      <div class="m-attributetable-notResult">No se han encontrado atributos.</div>
+    {{/if}}
+</div>
