@@ -230,13 +230,13 @@ goog.require('ol.Map');
       return M.layer.type.know(layer.type);
     });
 
+    this.addUnknowLayers_(unknowLayers);
     this.addWMC(knowLayers);
     this.addMBtiles(knowLayers);
     this.addWMS(knowLayers);
     this.addWMTS(knowLayers);
     this.addKML(knowLayers);
     this.addWFS(knowLayers);
-    this.addUnknowLayers_(unknowLayers);
 
     return this;
   };
