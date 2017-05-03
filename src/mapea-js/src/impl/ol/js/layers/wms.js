@@ -5,13 +5,14 @@ goog.require('M.exception');
 goog.require('M.impl.Layer');
 goog.require('M.impl.format.WMSCapabilities');
 goog.require('M.impl.GetCapabilities');
+goog.require('M.impl.source.TileWMS');
+goog.require('M.impl.source.ImageWMS');
 
 goog.require('ol.layer.Tile');
 goog.require('ol.layer.Image');
-goog.require('ol.source.TileWMS');
 goog.require('ol.tilegrid.TileGrid');
-goog.require('ol.source.ImageWMS');
 goog.require('ol.extent');
+
 
 (function () {
   /**
@@ -239,10 +240,10 @@ goog.require('ol.extent');
 
         var newSource;
         if (this_.tiled === true) {
-          newSource = new ol.source.TileWMS({
+          newSource = new M.impl.source.TileWMS({
             url: this_.url,
             params: layerParams,
-            tileGrid: new ol.tilegrid.TileGrid({
+            tileGrid: new M.impl.tilegrid.TileGrid({
               resolutions: resolutions,
               extent: olExtent,
               origin: ol.extent.getBottomLeft(olExtent)
@@ -318,7 +319,7 @@ goog.require('ol.extent');
       if (this.tiled === true) {
         this.ol3Layer = new ol.layer.Tile({
           visible: this.visibility && (this.options.visibility !== false),
-          source: new ol.source.TileWMS({
+          source: new M.impl.source.TileWMS({
             url: this.url,
             params: layerParams,
             tileGrid: tileGrid
@@ -333,7 +334,7 @@ goog.require('ol.extent');
       else {
         this.ol3Layer = new ol.layer.Image({
           visible: this.visibility && (this.options.visibility !== false),
-          source: new ol.source.ImageWMS({
+          source: new M.impl.source.ImageWMS({
             url: this.url,
             params: layerParams
           }),

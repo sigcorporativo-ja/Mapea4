@@ -280,6 +280,21 @@ goog.require('M.parameter.layer');
   };
 
   /**
+   * This function refreshes the state of this
+   * layer
+   *
+   * @function
+   * @api stable
+   * @export
+   */
+  M.Layer.prototype.refresh = function () {
+    // checks if the implementation can manage this method
+    if (!M.utils.isUndefined(this.getImpl().refresh) && M.utils.isFunction(this.getImpl().refresh)) {
+      this.getImpl().refresh();
+    }
+  };
+
+  /**
    * This function auto-generates a name for this layer
    * @private
    * @function
