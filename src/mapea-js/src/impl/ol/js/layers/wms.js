@@ -243,7 +243,7 @@ goog.require('ol.extent');
           newSource = new M.impl.source.TileWMS({
             url: this_.url,
             params: layerParams,
-            tileGrid: new M.impl.tilegrid.TileGrid({
+            tileGrid: new ol.tilegrid.TileGrid({
               resolutions: resolutions,
               extent: olExtent,
               origin: ol.extent.getBottomLeft(olExtent)
@@ -256,7 +256,7 @@ goog.require('ol.extent');
           });
         }
         else {
-          newSource = new ol.source.ImageWMS({
+          newSource = new M.impl.source.ImageWMS({
             url: this_.url,
             params: layerParams,
             resolutions: resolutions
