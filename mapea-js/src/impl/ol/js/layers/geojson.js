@@ -2,9 +2,13 @@ goog.provide('M.impl.layer.GeoJSON');
 
 goog.require('M.utils');
 goog.require('M.exception');
-goog.require('M.impl.Layer');
+goog.require('M.impl.layer.Vector');
 goog.require('M.impl.loader.JSONP');
+goog.require('M.impl.layer.Vector');
+
 goog.require('M.impl.format.GeoJSON');
+
+goog.require('M.format.GeoJSON');
 goog.require('M.impl.Popup');
 
 goog.require('ol.layer.Vector');
@@ -19,7 +23,7 @@ goog.require('goog.style');
    * with parameters specified by the user
    *
    * @constructor
-   * @implements {M.impl.Layer}
+   * @implements {M.impl.layer.Vector}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
@@ -67,7 +71,7 @@ goog.require('goog.style');
     // calls the super constructor
     goog.base(this, options);
   });
-  goog.inherits(M.impl.layer.GeoJSON, M.impl.Layer);
+  goog.inherits(M.impl.layer.GeoJSON, M.impl.layer.Vector);
 
   /**
    * This function sets the map object of the layer
@@ -134,13 +138,10 @@ goog.require('goog.style');
       };
     }
     else if (!M.utils.isNullOrEmpty(this.source)) {
-      srcOptions = {
-        features: this.formater_.readFeatures(this.source, {
-          featureProjection: ol.proj.get(this_.map.getProjection().code)
-        })
-      };
+      let features = M.format.GeoJSON.read(this.source);
+      this.ol3Layer.setSource(new ol.source.Vector());
+      this.addFeatures(features);
     }
-    this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
   };
 
   /**

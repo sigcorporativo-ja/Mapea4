@@ -2,10 +2,11 @@ goog.provide('M.impl.layer.KML');
 
 goog.require('M.utils');
 goog.require('M.exception');
-goog.require('M.impl.Layer');
+goog.require('M.impl.layer.Vector');
 goog.require('M.impl.loader.KML');
 goog.require('M.impl.Popup');
 goog.require('M.impl.format.KML');
+goog.require('M.impl.layer.Vector');
 
 goog.require('ol.layer.Vector');
 goog.require('ol.source.Vector');
@@ -19,7 +20,7 @@ goog.require('goog.style');
    * with parameters specified by the user
    *
    * @constructor
-   * @implements {M.impl.Layer}
+   * @implements {M.impl.layer.Vector}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
@@ -48,7 +49,7 @@ goog.require('goog.style');
     // calls the super constructor
     goog.base(this, options);
   });
-  goog.inherits(M.impl.layer.KML, M.impl.Layer);
+  goog.inherits(M.impl.layer.KML, M.impl.layer.Vector);
 
 
   /**
@@ -94,7 +95,8 @@ goog.require('goog.style');
         url: this.url,
         format: formater,
         loader: loader.getLoaderFn(function (features, screenOverlay) {
-          this.addFeatures(features);
+          //this.addFeatures(features.map(f => f.getImpl().getOLFeature()));
+          this_.addFeatures(features);
           if (!M.utils.isNullOrEmpty(screenOverlay)) {
             var screenOverLayImg = M.impl.utils.addOverlayImage(screenOverlay, map);
             this_.setScreenOverlayImg(screenOverLayImg);
@@ -114,8 +116,8 @@ goog.require('goog.style');
     olMap.addLayer(this.ol3Layer);
 
     map.getImpl().on(M.evt.CHANGE, function () {
-      this_.getOL3Layer().getSource().clear();
-    }, this);
+      this.getOL3Layer().getSource().clear();
+    }.bind(this), this);
   };
 
   /**
