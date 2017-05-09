@@ -15,12 +15,14 @@ goog.require('M.exception');
     * @extends {M.Control}
     * @api stable
     */
-   M.control.Location = (function() {
+   M.control.Location = (function(tracking, highAccuracy) {
+      tracking = tracking || true;
+      highAccuracy = highAccuracy || false;
       if (M.utils.isUndefined(M.impl.control.Location)) {
          M.exception('La implementación usada no puede crear controles Location');
       }
       // implementation of this control
-      var impl = new M.impl.control.Location();
+      var impl = new M.impl.control.Location(tracking, highAccuracy, 60000);
 
       // calls the super constructor
       goog.base(this, impl, M.control.Location.NAME);
@@ -69,6 +71,10 @@ goog.require('M.exception');
    M.control.Location.prototype.equals = function(obj) {
       var equals = (obj instanceof M.control.Location);
       return equals;
+   };
+
+   M.control.Location.prototype.setTracking = function(tracking){
+     this.getImpl().setTracking(tracking);
    };
 
    /**
