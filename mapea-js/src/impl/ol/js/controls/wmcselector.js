@@ -30,7 +30,7 @@ goog.require('M.impl.Control');
    M.impl.control.WMCSelector.prototype.addTo = function(map, element) {
       var select = element.getElementsByTagName('select')[0];
       select.addEventListener('change', function(e) {
-         var selectedWMCLayer = map.getWMC(e.target.value)[0];
+         var selectedWMCLayer = map.getWMC(e.target.options[e.target.selectedIndex].text)[0];
          selectedWMCLayer.select();
       });
 
