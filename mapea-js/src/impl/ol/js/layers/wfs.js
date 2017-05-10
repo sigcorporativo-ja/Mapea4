@@ -285,9 +285,13 @@ goog.require('M.impl.layer.Vector');
       width: 2
     }),
     image: new ol.style.Circle({
-      radius: 7,
+      radius: 5,
       fill: new ol.style.Fill({
-        color: '#67af13'
+        color: 'rgba(103, 175, 19, 0.4)'
+      }),
+      stroke: new ol.style.Stroke({
+        color: '#67af13',
+        width: 1
       })
     })
   });
