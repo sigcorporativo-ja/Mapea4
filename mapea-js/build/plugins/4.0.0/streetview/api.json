@@ -1,6 +1,0 @@
-{
-   "url": {
-      "name": "streetview"
-   },
-   "constructor": "M.plugin.Streetview"
-}

@@ -16,8 +16,8 @@ goog.require('M.exception');
     * @api stable
     */
    M.control.Location = (function(tracking, highAccuracy) {
-      tracking = tracking || true;
-      highAccuracy = highAccuracy || false;
+      tracking = tracking !== undefined? tracking : true;
+      highAccuracy = highAccuracy !== undefined? highAccuracy : false;
       if (M.utils.isUndefined(M.impl.control.Location)) {
          M.exception('La implementación usada no puede crear controles Location');
       }
