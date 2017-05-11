@@ -10,8 +10,8 @@ goog.require('goog.dom.classlist');
  * @extends {M.Control}
  * @api stable
  */
-M.control.AttributeTableControl = (function () {
-    [this.facadeMap_, this.selectAllActive_, this.template_, this.areaTable_, this.layer_] = [null, false, null, null, null];
+M.control.AttributeTableControl = (function (numPages) {
+    [this.facadeMap_, this.selectAllActive_, this.template_, this.areaTable_, this.layer_, this.numPages_] = [null, false, null, null, null, numPages];
   this.pages_ = {
     total: 0,
     actual: 1,
@@ -113,7 +113,7 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
         headerAtt: headerAtt,
         legend: this.layer_.legend,
         pages: this.pageResults_(attributes),
-        attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes.slice(this.pages_.element, this.pages_.element + 5)
+        attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes.slice(this.pages_.element, this.pages_.element + this.numPages_)
       }
     }).then(function (html) {
       let content = this.areaTable_.querySelector("table");
@@ -227,7 +227,7 @@ M.control.AttributeTableControl.prototype.removeSelectAll_ = function () {
  * @retrun {number} Returns the number of pages
  */
 M.control.AttributeTableControl.prototype.pageResults_ = function (attributes) {
-  this.pages_.total = Math.ceil(attributes.length / 5);
+  this.pages_.total = Math.ceil(attributes.length / this.numPages_);
   return this.pages_;
 };
 
@@ -240,7 +240,7 @@ M.control.AttributeTableControl.prototype.pageResults_ = function (attributes) {
 M.control.AttributeTableControl.prototype.nextPage_ = function () {
   if (this.pages_.total > this.pages_.actual) {
     this.pages_.actual = this.pages_.actual + 1;
-    this.pages_.element = this.pages_.element + 5;
+    this.pages_.element = this.pages_.element + this.numPages_;
     this.renderPanel_().then(function () {
       this.hasNext_();
       this.hasPrevious_();
@@ -257,7 +257,7 @@ M.control.AttributeTableControl.prototype.nextPage_ = function () {
 M.control.AttributeTableControl.prototype.previousPage_ = function () {
   if (this.pages_.total >= this.pages_.actual) {
     this.pages_.actual = this.pages_.actual - 1;
-    this.pages_.element = this.pages_.element - 5;
+    this.pages_.element = this.pages_.element - this.numPages_;
     this.renderPanel_().then(function () {
       this.hasPrevious_();
     }.bind(this));

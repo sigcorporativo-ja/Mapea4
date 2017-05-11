@@ -13,8 +13,13 @@ goog.require('goog.events');
  * @extends {M.Plugin}
  * @api stable
  */
-M.plugin.AttributeTable = (function () {
+M.plugin.AttributeTable = (function (parameters) {
   [this.control_, this.panel_, this.facadeMap_] = [null, null, null];
+
+  parameters = (parameters || {});
+
+  this.numPages_ = (!M.utils.isNullOrEmpty(parameters.pages) && parameters.pages >= 1 && parameters.pages % 1 === 0) ? parameters.pages : M.config.ATTRIBUTETABLE_PAGES;
+
   /**
    * Name of this control
    * @public
@@ -36,7 +41,7 @@ goog.inherits(M.plugin.AttributeTable, M.Plugin);
  */
 M.plugin.AttributeTable.prototype.addTo = function (map) {
   this.facadeMap_ = map;
-  this.control_ = new M.control.AttributeTableControl();
+  this.control_ = new M.control.AttributeTableControl(this.numPages_);
   this.panel_ = new M.ui.Panel("M.plugin.AttributeTable.NAME", {
     'collapsible': true,
     'className': 'm-attributetable',
