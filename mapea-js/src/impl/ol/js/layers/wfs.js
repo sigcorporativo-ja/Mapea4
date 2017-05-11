@@ -11,6 +11,8 @@ goog.require('M.impl.loader.WFS');
 goog.require('ol.layer.Vector');
 goog.require('ol.source.Vector');
 
+goog.require('M.impl.layer.Vector');
+
 (function () {
   /**
    * @classdesc
@@ -18,7 +20,7 @@ goog.require('ol.source.Vector');
    * with parameters specified by the user
    *
    * @constructor
-   * @implements {M.impl.Layer}
+   * @implements {M.impl.layer.Vector}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
@@ -68,7 +70,7 @@ goog.require('ol.source.Vector');
     // calls the super constructor
     goog.base(this, this.options);
   });
-  goog.inherits(M.impl.layer.WFS, M.impl.Layer);
+  goog.inherits(M.impl.layer.WFS, M.impl.layer.Vector);
 
   /**
    * This function sets the map object of the layer
@@ -145,7 +147,7 @@ goog.require('ol.source.Vector');
       this.ol3Layer.setSource(new ol.source.Vector({
         format: this.formater_,
         loader: this.loader_.getLoaderFn(function (features) {
-          this.addFeatures(features);
+          this_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
         }),
         strategy: ol.loadingstrategy.all
@@ -290,7 +292,7 @@ goog.require('ol.source.Vector');
       stroke: new ol.style.Stroke({
         color: '#67af13',
         width: 1
-    })
+      })
     })
   });
 })();
