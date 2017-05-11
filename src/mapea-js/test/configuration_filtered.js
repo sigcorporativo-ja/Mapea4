@@ -292,7 +292,7 @@
      * @public
      * @api stable
      */
-    'TOOLS': 'measurebar,getfeatureinfo'.split(','),
+    'TOOLS': 'history,measurebar,getfeatureinfo'.split(','),
 
     /**
      * TODO
@@ -396,4 +396,12 @@
    * @type {String}
    */
   M.config('MAPBOX_TOKEN_VALUE', 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpbTgzcHQxMzAxMHp0eWx4bWQ1ZHN2NGcifQ.WVwjmljKYqKciEZIC3NfLA');
+
+  /**
+   * Number of pages for the plugin AttributeTable
+   *
+   * @private
+   * @type {String}
+   */
+  M.config('ATTRIBUTETABLE_PAGES', 5);
 })(window.M);

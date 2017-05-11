@@ -1,8 +1,17 @@
 {
     "url": {
-        "name": "attributetable"
+        "name": "attributetable",
+        "separator": "*"
     },
     "constructor": "M.plugin.AttributeTable",
+    "parameters": [{
+        "type": "object",
+        "properties": [{
+            "type": "simple",
+            "name": "pages",
+            "position": 0
+        }]
+    }],
     "files": {
         "ol": {
             "scripts": [
