@@ -6,8 +6,6 @@ goog.require('M.impl.layer.Vector');
 goog.require('M.impl.loader.JSONP');
 goog.require('M.impl.layer.Vector');
 
-goog.require('M.impl.format.GeoJSON');
-
 goog.require('M.format.GeoJSON');
 goog.require('M.impl.Popup');
 
@@ -84,7 +82,7 @@ goog.require('goog.style');
   M.impl.layer.GeoJSON.prototype.addTo = function (map) {
     this.map = map;
 
-    this.formater_ = new M.impl.format.GeoJSON({
+    this.formater_ = new M.format.GeoJSON({
       'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
     });
     if (!M.utils.isNullOrEmpty(this.url)) {
@@ -138,7 +136,7 @@ goog.require('goog.style');
       };
     }
     else if (!M.utils.isNullOrEmpty(this.source)) {
-      let features = M.format.GeoJSON.read(this.source);
+      let features = this.formater_.read(this.source);
       this.ol3Layer.setSource(new ol.source.Vector());
       this.addFeatures(features);
     }

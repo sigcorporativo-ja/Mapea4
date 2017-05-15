@@ -5,7 +5,7 @@ goog.require('M.exception');
 goog.require('M.impl.Layer');
 goog.require('M.impl.service.WFS');
 goog.require('M.impl.format.GML');
-goog.require('M.impl.format.GeoJSON');
+goog.require('M.format.GeoJSON');
 goog.require('M.impl.loader.WFS');
 
 goog.require('ol.layer.Vector');
@@ -133,7 +133,7 @@ goog.require('M.impl.layer.Vector');
       'describeFeatureTypeOutputFormat': this.options.describeFeatureTypeOutputFormat,
     }, this.options.vendor);
     if (/json/gi.test(this.options.getFeatureOutputFormat)) {
-      this.formater_ = new M.impl.format.GeoJSON({
+      this.formater_ = new M.format.GeoJSON({
         'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
       });
     }
@@ -145,7 +145,7 @@ goog.require('M.impl.layer.Vector');
     var ol3LayerSource = this.ol3Layer.getSource();
     if ((forceNewSource === true) || M.utils.isNullOrEmpty(ol3LayerSource)) {
       this.ol3Layer.setSource(new ol.source.Vector({
-        format: this.formater_,
+        format: this.formater_.getImpl(),
         loader: this.loader_.getLoaderFn(function (features) {
           this_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);

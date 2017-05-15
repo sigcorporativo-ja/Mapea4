@@ -161,7 +161,7 @@ goog.provide('M.impl.Feature');
    * @api stable
    */
   M.impl.Feature.prototype.getGeoJSON = function () {
-    return this.formatter_.writeFeatureObject(this.olFeature_);
+    //return this.formatter_.writeFeatureObject(this.olFeature_);
   };
 
   /**

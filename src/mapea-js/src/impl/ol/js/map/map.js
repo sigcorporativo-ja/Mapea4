@@ -32,6 +32,7 @@ goog.require('M.impl.Label');
 goog.require('M.impl.handler.Features');
 goog.require('M.impl.Popup');
 goog.require('M.impl.patches');
+goog.require('M.impl.format.GeoJSON');
 
 goog.require('ol.renderer.Type');
 goog.require('ol.Map');
