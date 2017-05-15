@@ -51,7 +51,9 @@ M.plugin.AttributeTable.prototype.addTo = function (map) {
   });
   this.panel_.addControls(this.control_);
   this.panel_.on(M.evt.SHOW, function (evt) {
-    if (map.getWFS().length === 0 && map.getKML().length === 0) {
+    if (map.getWFS().length === 0 && map.getKML().length === 0 && map.getLayers().filter(function (layer) {
+        return layer.type === "GeoJSON";
+      }) === 0) {
       this.panel_.collapse();
       M.dialog.info("No existen capas consultables.");
     }
