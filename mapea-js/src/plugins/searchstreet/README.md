@@ -5,7 +5,7 @@ Posibilidad de limitar el ámbito de búsqueda estableciendo el parámetro 'loca
 
 ## Recursos y uso
 
-- js: [http://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/mapea.searchstreet.ol3.min.js](http://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/mapea.searchstreet.ol3.min.js)
+- js: [http://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/searchstreet.ol.min.js](http://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/searchstreet.ol.min.js)
 - css: [http://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/searchstreet.min.css](http://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/searchstreet.min.css)
 
 Configuración por defecto:
