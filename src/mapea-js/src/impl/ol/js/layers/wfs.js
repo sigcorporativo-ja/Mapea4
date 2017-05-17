@@ -96,7 +96,7 @@ goog.require('M.impl.layer.Vector');
     olMap.addLayer(this.ol3Layer);
 
     map.getImpl().on(M.evt.CHANGE, function () {
-      this.refresh(true);
+      this.refresh();
     }, this);
   };
 
@@ -109,7 +109,7 @@ goog.require('M.impl.layer.Vector');
    * @api stable
    */
   M.impl.layer.WFS.prototype.refresh = function (forceNewSource) {
-    this.removeFeatures(this.getFeatures(true));
+    this.features_ = [];
     this.updateSource_(forceNewSource);
   };
 
