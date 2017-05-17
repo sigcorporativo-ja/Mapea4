@@ -30,4 +30,12 @@ goog.provide('M.Filter');
    */
   M.Filter.prototype.execute = function (features) {};
 
+  /**
+   * This function return CQL
+   *
+   * @protected
+   * @function
+   */
+  M.Filter.prototype.toCQL = function () {};
+
 })();

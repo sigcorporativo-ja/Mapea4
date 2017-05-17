@@ -37,6 +37,11 @@ goog.require('M.exception');
     var impl = new M.impl.layer.Vector(options);
     var parameters = M.parameter.layer(userParameters, M.layer.type.Vector);
 
+    // registers on M.evt.LOAD event
+    options.on(M.evt.LOAD, function (features) {
+      this.fire(M.evt.LOAD, [features]);
+    }, this);
+
     // calls the super constructor
     goog.base(this, parameters, options, impl);
   });
@@ -124,7 +129,6 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.Vector.prototype.refresh = function () {
-    this.removeFeatures(this.getFeatures(true));
     this.getImpl().refresh(true);
   };
 
@@ -182,12 +186,23 @@ goog.require('M.exception');
     return this.getImpl().getFeaturesExtent(skipFilter, this.filter_);
   };
 
+  /**
+   * This function remove filter
+   *
+   * @function
+   * @public
+   * @api stable
+   */
+  M.layer.Vector.prototype.removeFilter = function () {
+    this.setFilter(null);
+  };
 
   /**
    * This function checks if an object is equals
    * to this layer
    *
    * @function
+   * @public
    * @param {object} obj - Object to compare
    * @api stable
    */

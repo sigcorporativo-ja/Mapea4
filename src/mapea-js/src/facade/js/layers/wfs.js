@@ -66,11 +66,6 @@ goog.require('M.geom');
 
     // options
     this.options = options;
-
-    // registers on M.evt.LOAD event
-    impl.on(M.evt.LOAD, function (features) {
-      this.fire(M.evt.LOAD, [features]);
-    }, this);
   });
   goog.inherits(M.layer.WFS, M.layer.Vector);
 

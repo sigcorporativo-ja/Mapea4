@@ -18,7 +18,7 @@ goog.require('M.Feature');
   M.format.GeoJSON = (function (options) {
     // checks if the implementation can create format GeoJSON
     if (M.utils.isUndefined(M.impl.format.GeoJSON)) {
-      M.exception('La implementación usada no puede sdgjklsdajglk');
+      M.exception('La implementación usada no puede M.impl.format.GeoJSON');
     }
 
     options = (options || {});

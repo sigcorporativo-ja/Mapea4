@@ -95,8 +95,8 @@ goog.require('goog.style');
         url: this.url,
         format: formater,
         loader: loader.getLoaderFn(function (features, screenOverlay) {
-          //this.addFeatures(features.map(f => f.getImpl().getOLFeature()));
           this_.addFeatures(features);
+          this_.fire(M.evt.LOAD, [features]);
           if (!M.utils.isNullOrEmpty(screenOverlay)) {
             var screenOverLayImg = M.impl.utils.addOverlayImage(screenOverlay, map);
             this_.setScreenOverlayImg(screenOverLayImg);

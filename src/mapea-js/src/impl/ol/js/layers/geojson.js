@@ -130,7 +130,7 @@ goog.require('goog.style');
         format: this.formater_,
         loader: this.loader_.getLoaderFn(function (features) {
           this_.ol3Layer.getSource().addFeatures(features);
-          this_.fire(M.evt.LOAD, features);
+          this_.fire(M.evt.LOAD, [features]);
         }),
         strategy: ol.loadingstrategy.all
       };
@@ -139,6 +139,7 @@ goog.require('goog.style');
       let features = this.formater_.read(this.source);
       this.ol3Layer.setSource(new ol.source.Vector());
       this.addFeatures(features);
+      this_.fire(M.evt.LOAD, [features]);
     }
   };
 
