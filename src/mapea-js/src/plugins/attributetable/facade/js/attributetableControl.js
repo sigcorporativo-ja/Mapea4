@@ -82,7 +82,6 @@ M.control.AttributeTableControl.prototype.createView = function (map) {
  * @return {Promise}
  */
 M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
-  //let this = this;
   if (!M.utils.isNullOrEmpty(name)) {
     this.layer_ = this.hasLayer_(name)[0];
   }
@@ -120,17 +119,24 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
       if (!M.utils.isNullOrEmpty(content)) {
         this.areaTable_.removeChild(this.areaTable_.querySelector("#m-attributetable-content-attributes"));
       }
+      let notResult = this.areaTable_.querySelector(".m-attributetable-notResult");
+      if (!M.utils.isNullOrEmpty(notResult)) {
+        //notResult.parentElement.removeChild(notResult);
+        this.areaTable_.removeChild(this.areaTable_.querySelector("#m-attributetable-content-attributes"));
+      }
       this.areaTable_.appendChild(html);
-      goog.events.listen(this.areaTable_.querySelector('#m-attributetable-next'), goog.events.EventType.CLICK, this.nextPage_, false, this);
-      goog.events.listen(html.querySelector('#m-attributetable-previous'), goog.events.EventType.CLICK, this.previousPage_, false, this);
-      goog.events.listen(html.querySelector('input[value=selectAll]'), goog.events.EventType.CLICK, this.selectAll, false, this);
-      goog.events.listen(html.querySelector('#m-attributetable-attributes'), goog.events.EventType.CLICK, this.openPanel_, false, this);
-      let header = Array.prototype.slice.call(this.areaTable_.querySelector("tr").querySelectorAll("td"), 1);
-      header.forEach(function (td) {
-        goog.events.listen(td, goog.events.EventType.CLICK, this.sort_, false, this);
-      }.bind(this));
-      this.hasNext_(html);
-      this.hasPrevious_(html);
+      if (M.utils.isNullOrEmpty(html.querySelector('div.m-attributetable-notResult'))) {
+        goog.events.listen(this.areaTable_.querySelector('#m-attributetable-next'), goog.events.EventType.CLICK, this.nextPage_, false, this);
+        goog.events.listen(html.querySelector('#m-attributetable-previous'), goog.events.EventType.CLICK, this.previousPage_, false, this);
+        goog.events.listen(html.querySelector('input[value=selectAll]'), goog.events.EventType.CLICK, this.selectAll, false, this);
+        goog.events.listen(html.querySelector('#m-attributetable-attributes'), goog.events.EventType.CLICK, this.openPanel_, false, this);
+        let header = Array.prototype.slice.call(this.areaTable_.querySelector("tr").querySelectorAll("td"), 1);
+        header.forEach(function (td) {
+          goog.events.listen(td, goog.events.EventType.CLICK, this.sort_, false, this);
+        }.bind(this));
+        this.hasNext_(html);
+        this.hasPrevious_(html);
+      }
       success();
     }.bind(this));
   }.bind(this));
