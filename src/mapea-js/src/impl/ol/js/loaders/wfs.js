@@ -67,7 +67,7 @@ goog.require('M.format.GeoJSON');
     return (new Promise(function (success, fail) {
       M.remote.get(url).then(function (response) {
         if (!M.utils.isNullOrEmpty(response.text) && response.text.indexOf("ServiceExceptionReport") < 0) {
-          let features = M.format.GeoJSON.read(JSON.parse(response.text));
+          let features = this.format_.read(response.text);
           success(features);
         }
         else {
@@ -81,8 +81,8 @@ goog.require('M.format.GeoJSON');
             M.exception('No hubo respuesta en la operación GetFeature');
           }
         }
-      });
-    }));
+      }.bind(this));
+    }.bind(this)));
   };
 
   /**

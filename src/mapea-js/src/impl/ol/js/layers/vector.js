@@ -98,17 +98,6 @@ goog.require('M.impl.Layer');
   };
 
   /**
-   * This function refresh layer
-   *
-   * @function
-   * @public
-   * @api stable
-   */
-  M.impl.layer.Vector.prototype.refresh = function () {
-    this.getOL3Layer().getSource().clear();
-  };
-
-  /**
    * This function return extent of all features or discriminating by the filter
    *
    * @function

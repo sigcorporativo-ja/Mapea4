@@ -16,6 +16,13 @@ goog.require('M.facade.Base');
     this.style_ = style;
 
     /**
+     * GeoJSON format
+     * @private
+     * @type {M.format.GeoJSON}
+     */
+    this.formatGeoJSON_ = new M.format.GeoJSON();
+
+    /**
      * Implementation of feature
      * @public
      * @type {M.impl.Feature}
@@ -70,7 +77,7 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature.prototype.getGeoJSON = function () {
-    return this.getImpl().getGeoJSON();
+    return this.formatGeoJSON_.write(this);
   };
 
   /**
