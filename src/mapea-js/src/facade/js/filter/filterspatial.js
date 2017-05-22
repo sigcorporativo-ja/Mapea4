@@ -1,4 +1,4 @@
-goog.provide('M.Filter');
+goog.provide('M.filter.Spatial');
 
 /**
  * @namespace M.filter
@@ -10,7 +10,9 @@ goog.provide('M.Filter');
    *
    * @api stable
    */
-  M.Filter = (function () {});
+  M.filter.Spatial = (function () {
+    [this.layer_, this.geometry_, this.cql_] = [null, null, null];
+  });
 
   /**
    * This function get a function filter
@@ -19,16 +21,16 @@ goog.provide('M.Filter');
    * @protected
    * @function
    */
-  M.Filter.prototype.getFunctionFilter = function () {};
+  M.filter.Spatial.prototype.getFunctionFilter = function () {};
 
   /**
-   * This function execute a function filter
+   * This function return CQL
    *
-   * @protected
-   * @param {Array<M.Feature>} features - Features on which the filter runs
+   * @public
    * @function
+   * @return {string} CQL
    */
-  M.Filter.prototype.execute = function (features) {};
+  M.filter.Spatial.prototype.toCQL = function () {};
 
   /**
    * This function execute a function filter
@@ -38,6 +40,6 @@ goog.provide('M.Filter');
    * @return {Array<M.Feature>} Result of execute
    * @function
    */
-  M.Filter.prototype.toCQL = function () {};
+  M.filter.Spatial.prototype.execute = function (features) {};
 
 })();
