@@ -31,9 +31,11 @@ goog.provide('M.Filter');
   M.Filter.prototype.execute = function (features) {};
 
   /**
-   * This function return CQL
+   * This function execute a function filter
    *
    * @protected
+   * @param {Array<M.Feature>} features - Features on which the filter runs
+   * @return {Array<M.Feature>} Result of execute
    * @function
    */
   M.Filter.prototype.toCQL = function () {};

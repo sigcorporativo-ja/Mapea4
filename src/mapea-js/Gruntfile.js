@@ -476,6 +476,7 @@ module.exports = function (grunt) {
     concat: {
       dist: {
         src: [
+               'node_modules/jsts/dist/jsts.min.js',
                'libraries/proj4/proj4.js',
                'build/core/js/mapea-<%= pkg.version %>.ol.min.js'
             ],

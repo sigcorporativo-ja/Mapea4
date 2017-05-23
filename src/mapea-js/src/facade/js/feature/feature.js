@@ -65,7 +65,7 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature.prototype.getGeometry = function () {
-    return this.getImpl().getGeometry();
+    return this.getGeoJSON().geometry;
   };
 
   /**
@@ -77,7 +77,7 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature.prototype.getGeoJSON = function () {
-    return this.formatGeoJSON_.write(this);
+    return this.formatGeoJSON_.write(this)[0];
   };
 
   /**

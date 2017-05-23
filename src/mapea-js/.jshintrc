@@ -13,7 +13,8 @@
         "L",
         "Handlebars",
         "proj4",
-        "ActiveXObject"
+        "ActiveXObject",
+        "jsts"
     ],
     "browser": true,
     "devel": true

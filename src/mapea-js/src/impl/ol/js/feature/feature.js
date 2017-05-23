@@ -153,27 +153,16 @@ goog.provide('M.impl.Feature');
   };
 
   /**
-   * This function return geojson feature
-   *
-   * @public
-   * @function
-   * @return {Object} geojson feature
-   * @api stable
-   */
-  M.impl.Feature.prototype.getGeoJSON = function () {
-    //return this.formatter_.writeFeatureObject(this.olFeature_);
-  };
-
-  /**
    * This function return geometry feature
    *
    * @public
    * @function
+   * @param {object} geojson - GeoJSON Feature
    * @return {object} Geometry feature
    * @api stable
    */
-  M.impl.Feature.prototype.getGeometry = function () {
-    return this.getGeoJSON().geometry;
+  M.impl.Feature.prototype.getGeometry = function (geojson) {
+    return new ol.geom[geojson.geometry.type](geojson.geometry.coordinates);
   };
 
 })();
