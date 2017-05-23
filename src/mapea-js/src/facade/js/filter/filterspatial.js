@@ -1,4 +1,5 @@
 goog.provide('M.filter.Spatial');
+goog.require('M.filter.Function');
 
 /**
  * @namespace M.filter
@@ -6,40 +7,23 @@ goog.provide('M.filter.Spatial');
 (function () {
 
   /**
-   * Abstract class
+   * Creates a Filter Spatial to filter features
    *
+   * @param {M.layer.Vector|object} param - Layer or geometry
+   * @param {function} filterFunction - filter function
    * @api stable
    */
-  M.filter.Spatial = (function () {
-    [this.layer_, this.geometry_, this.cql_] = [null, null, null];
+  M.filter.Spatial = (function (param, filterFunction) {
+    this.geometries_ = [];
+    if (param instanceof M.layer.Vector) {
+      this.geometries_ = [...param.getFeatures().map(feature => feature.getGeometry())];
+    }
+    else if (M.utils.isObject(param)) {
+      this.geometries_ = [param];
+    }
+    goog.base(this, function (feature, index) {
+      return filterFunction.bind(this)(feature.getGeometry(), index);
+    }.bind(this));
   });
-
-  /**
-   * This function get a function filter
-   *
-   * @public
-   * @protected
-   * @function
-   */
-  M.filter.Spatial.prototype.getFunctionFilter = function () {};
-
-  /**
-   * This function return CQL
-   *
-   * @public
-   * @function
-   * @return {string} CQL
-   */
-  M.filter.Spatial.prototype.toCQL = function () {};
-
-  /**
-   * This function execute a function filter
-   *
-   * @protected
-   * @param {Array<M.Feature>} features - Features on which the filter runs
-   * @return {Array<M.Feature>} Result of execute
-   * @function
-   */
-  M.filter.Spatial.prototype.execute = function (features) {};
-
+  goog.inherits(M.filter.Spatial, M.filter.Function);
 })();
