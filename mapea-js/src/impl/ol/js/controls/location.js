@@ -17,7 +17,7 @@ goog.require('ol.Geolocation');
     * @api stable
     */
 
-   M.impl.control.Location = function() {
+   M.impl.control.Location = function(tracking, highAccuracy, maximumAge) {
       /**
        * Helper class for providing HTML5 Geolocation
        * @private
@@ -31,6 +31,11 @@ goog.require('ol.Geolocation');
        * @type {ol.Feature}
        */
       this.accuracyFeature_ = new ol.Feature();
+
+      this.tracking_ = tracking;
+      this.highAccuracy_ = highAccuracy;
+      this.maximumAge_ = maximumAge;
+      this.activated_ = false;
 
       /**
        * Feature of the position
@@ -51,12 +56,18 @@ goog.require('ol.Geolocation');
     * @api stable
     */
    M.impl.control.Location.prototype.activate = function() {
+
       goog.dom.classlist.add(this.element, 'm-locating');
 
       if (M.utils.isNullOrEmpty(this.geolocation_)) {
          var proj = ol.proj.get(this.facadeMap_.getProjection().code);
          this.geolocation_ = new ol.Geolocation({
-            projection: proj
+            projection: proj,
+            tracking: this.tracking_,
+            trackingOptions: {
+              enableHighAccuracy: this.highAccuracy_,
+              maximumAge: this.maximumAge_
+            }
          });
          this.geolocation_.on('change:accuracyGeometry', function(evt) {
             var accuracyGeom = evt.target.get(evt.key);
@@ -64,17 +75,19 @@ goog.require('ol.Geolocation');
          }, this);
          this.geolocation_.on('change:position', function(evt) {
             var newCoord = evt.target.get(evt.key);
-            var newPosition = null;
-            if (!M.utils.isNullOrEmpty(newCoord)) {
-               newPosition = new ol.geom.Point(newCoord);
-            }
+            var newPosition = M.utils.isNullOrEmpty(newCoord)?
+                                null : new ol.geom.Point(newCoord);
             this.positionFeature_.setGeometry(newPosition);
-            this.facadeMap_.setZoom(12).setCenter(newCoord);
+            this.facadeMap_.setCenter(newCoord);
+            if (goog.dom.classlist.contains(this.element, 'm-locating')){
+                this.facadeMap_.setZoom(12); //solo 1a vez
+            }
             goog.dom.classlist.remove(this.element, 'm-locating');
             goog.dom.classlist.add(this.element, 'm-located');
 
-            this.geolocation_.setTracking(false);
+            this.geolocation_.setTracking(this.tracking_);
          }, this);
+
       }
 
       this.geolocation_.setTracking(true);
@@ -94,6 +107,7 @@ goog.require('ol.Geolocation');
       if (!M.utils.isNullOrEmpty(this.positionFeature_)) {
          this.facadeMap_.getImpl().removeFeatures([this.positionFeature_]);
       }
+      this.geolocation_.setTracking(false);
    };
 
    /**
@@ -106,6 +120,12 @@ goog.require('ol.Geolocation');
    M.impl.control.Location.prototype.deactivate = function() {
       this.removePositions_();
       goog.dom.classlist.remove(this.element, 'm-located');
+   };
+
+   M.impl.control.Location.prototype.setTracking = function(tracking){
+      console.log(tracking);
+      this.tracking_ = tracking;
+      this.geolocation_.setTracking(tracking);
    };
 
    /**
