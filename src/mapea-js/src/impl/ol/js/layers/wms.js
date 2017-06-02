@@ -548,6 +548,9 @@ goog.require('ol.extent');
         M.impl.envolvedExtent.calculate(this.map, this).then(function (extent) {
           let maxExtent = this.map.getMaxExtent();
           if (!M.utils.isNullOrEmpty(maxExtent)) {
+            if (!M.utils.isArray(maxExtent)) {
+              maxExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
+            }
             success.call(this, maxExtent);
           }
           else {
