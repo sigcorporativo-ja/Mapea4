@@ -9,21 +9,21 @@ goog.require('M.filter.Function');
   /**
    * Creates a Filter Spatial to filter features
    *
-   * @param {M.layer.Vector|object} param - Layer or geometry
    * @param {function} filterFunction - filter function
+   * TODO @param {object} options
    * @api stable
    */
-  M.filter.Spatial = (function (param, filterFunction) {
-    this.geometries_ = [];
-    if (param instanceof M.layer.Vector) {
-      this.geometries_ = [...param.getFeatures().map(feature => feature.getGeometry())];
-    }
-    else if (M.utils.isObject(param)) {
-      this.geometries_ = [param];
-    }
-    goog.base(this, function (feature, index) {
-      return filterFunction.bind(this)(feature.getGeometry(), index);
-    }.bind(this));
+  M.filter.Spatial = (function (filterFunctionParam, options) {
+
+    let filterFunction = function (feature, index) {
+      let geometry = null;
+      if (!M.utils.isNullOrEmpty(feature)) {
+        geometry = feature.getGeometry();
+      }
+      return filterFunctionParam(geometry, index);
+    };
+
+    goog.base(this, filterFunction, options);
   });
   goog.inherits(M.filter.Spatial, M.filter.Function);
 })();
