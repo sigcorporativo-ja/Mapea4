@@ -124,8 +124,14 @@
 }
 
 #m-attributetable-layer, #m-attributetable-attributes {
-    position: fixed;
+    position: absolute;
     right: 18px;
+    cursor: pointer;
+}
+
+#m-attributetable-refresh {
+    float: left;
+    margin-left: 10px;
     cursor: pointer;
 }
 

@@ -1,5 +1,8 @@
 <div id="m-attributetable-content-attributes">
-    <div class="m-attributetable-headers">Tabla Atributos <span id="m-attributetable-attributes" class="g-cartografia-flecha-abajo"></span></div>
+    <div class="m-attributetable-headers">
+        <span id="m-attributetable-refresh" class="g-cartografia-flecha-deshacer"></span> Tabla Atributos
+        <span id="m-attributetable-attributes" class="g-cartografia-flecha-abajo"></span>
+    </div>
     {{#if attributes}}
     <div id="m-attributetable-table">
         <table>
@@ -26,6 +29,6 @@
         <span class="g-cartografia-flecha-derecha m-attributetable-hidden" id="m-attributetable-next"></span>
     </div>
     {{else}}
-      <div class="m-attributetable-notResult">No se han encontrado atributos.</div>
+    <div class="m-attributetable-notResult">No se han encontrado atributos.</div>
     {{/if}}
 </div>
