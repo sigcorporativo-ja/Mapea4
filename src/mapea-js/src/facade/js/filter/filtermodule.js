@@ -14,13 +14,16 @@ goog.require('M.filter.Spatial');
    * @api stable
    */
   M.filter.spatial.CONTAIN = function (param) {
-    return new M.filter.Spatial(param, function (geometryToFilter, index) {
+    let geometries = M.filter.spatial.parseParamToGeometries(param);
+    return new M.filter.Spatial(function (geometryToFilter, index) {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
-      return this.geometries_.some(geom => {
+      return geometries.some(geom => {
         let jtsGeom = geojsonParser.read(geom);
-        return jtsGeom.contains(jtsGeomToFilter);
+        return jtsGeomToFilter.contains(jtsGeom);
       });
+    }, {
+      cqlFilter: M.filter.spatial.toCQLFilter_("CONTAINS", geometries)
     });
   };
 
@@ -33,13 +36,16 @@ goog.require('M.filter.Spatial');
    * @api stable
    */
   M.filter.spatial.DISJOINT = function (param) {
-    return new M.filter.Spatial(param, function (geometryToFilter, index) {
+    let geometries = M.filter.spatial.parseParamToGeometries(param);
+    return new M.filter.Spatial(function (geometryToFilter, index) {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
-      return this.geometries_.some(geom => {
+      return geometries.some(geom => {
         let jtsGeom = geojsonParser.read(geom);
-        return jtsGeom.disjoint(jtsGeomToFilter);
+        return jtsGeomToFilter.disjoint(jtsGeom);
       });
+    }, {
+      cqlFilter: M.filter.spatial.toCQLFilter_("DISJOINT", geometries)
     });
   };
 
@@ -52,13 +58,16 @@ goog.require('M.filter.Spatial');
    * @api stable
    */
   M.filter.spatial.WITHIN = function (param) {
-    return new M.filter.Spatial(param, function (geometryToFilter, index) {
+    let geometries = M.filter.spatial.parseParamToGeometries(param);
+    return new M.filter.Spatial(function (geometryToFilter, index) {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
-      return this.geometries_.some(geom => {
+      return geometries.some(geom => {
         let jtsGeom = geojsonParser.read(geom);
-        return jtsGeom.within(jtsGeomToFilter);
+        return jtsGeomToFilter.within(jtsGeom);
       });
+    }, {
+      cqlFilter: M.filter.spatial.toCQLFilter_("WITHIN", geometries)
     });
   };
 
@@ -66,19 +75,80 @@ goog.require('M.filter.Spatial');
    * This function creates a spatial filter to know which features intersects another feature or layer
    *
    * @function
-   * @param {M.layer.Vector|object} param - Layer or geometry on which the query is performed
+   * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param - Layer or geometry on which the query is performed
    * @return {M.filter.Spatial} Space filter
    * @api stable
    */
   M.filter.spatial.INTERSECT = function (param) {
-    return new M.filter.Spatial(param, function (geometryToFilter, index) {
+    let geometries = M.filter.spatial.parseParamToGeometries(param);
+    return new M.filter.Spatial(function (geometryToFilter, index) {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
-      return this.geometries_.some(geom => {
+      return geometries.some(geom => {
         let jtsGeom = geojsonParser.read(geom);
-        return jtsGeom.intersects(jtsGeomToFilter);
+        return jtsGeomToFilter.intersects(jtsGeom);
       });
+    }, {
+      cqlFilter: M.filter.spatial.toCQLFilter_("INTERSECTS", geometries)
     });
+  };
+
+  /**
+   * TODO
+   *
+   * @function
+   * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param - Layer or geometry on which the query is performed
+   * @return {M.filter.Spatial} Space filter
+   * @api stable
+   */
+  M.filter.spatial.parseParamToGeometries = function (param) {
+    let geometries = [];
+    if (param instanceof M.layer.Vector) {
+      geometries = [...param.getFeatures().map(feature => feature.getGeometry())];
+    }
+    else {
+      if (!M.utils.isArray(param)) {
+        param = [param];
+      }
+      geometries = param.map(p => {
+        let geom;
+        if (p instanceof M.Feature) {
+          geom = p.getGeometry();
+        }
+        else if (M.utils.isObject(p)) {
+          geom = p;
+        }
+        return geom;
+      });
+    }
+
+    return geometries;
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param - Layer or geometry on which the query is performed
+   * @return {M.filter.Spatial} Space filter
+   */
+  M.filter.spatial.toCQLFilter_ = function (operation, geometries) {
+    let cqlFilter = "";
+    for (let i = 0; i < geometries.length; i++) {
+      if (i !== 0) {
+        cqlFilter += " OR ";
+      }
+      cqlFilter += operation + "(the_geom, " + geometries[0].type + "(((";
+      for (let j = 0; j < geometries[i].coordinates[0][0].length; j++) {
+        if (j !== 0) {
+          cqlFilter += ",";
+        }
+        cqlFilter += geometries[i].coordinates[0][0][j][0] + " " + geometries[i].coordinates[0][0][j][1];
+      }
+      cqlFilter += "))))";
+    }
+    return cqlFilter;
   };
 
 })();

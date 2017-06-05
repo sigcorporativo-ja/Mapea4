@@ -41,6 +41,7 @@ goog.require("M.filter.Function");
 goog.require("M.impl.Feature");
 goog.require("M.filter.Spatial");
 goog.require("M.filter.spatial");
+goog.require("M.filter");
 
 //     image: new
 goog.require("goog.events");
