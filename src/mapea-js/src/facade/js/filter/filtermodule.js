@@ -139,7 +139,7 @@ goog.require('M.filter.Spatial');
       if (i !== 0) {
         cqlFilter += " OR ";
       }
-      cqlFilter += operation + "(the_geom, " + geometries[0].type + "(((";
+      cqlFilter += operation + "({{geometryName}}, " + geometries[0].type + "(((";
       for (let j = 0; j < geometries[i].coordinates[0][0].length; j++) {
         if (j !== 0) {
           cqlFilter += ",";
