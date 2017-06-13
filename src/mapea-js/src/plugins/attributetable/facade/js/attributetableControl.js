@@ -60,10 +60,14 @@ M.control.AttributeTableControl.prototype.createView = function (map) {
         this.areaTable_ = html.querySelector('div#m-attributetable-datas');
         goog.events.listen(html.querySelector('#m-attributetable-layer'), goog.events.EventType.CLICK, this.openPanel_, false, this);
         goog.events.listen(html.querySelector('#m-attributetable-select'), goog.events.EventType.MOUSEENTER, function () {
-          attributePanel.setEnabled(false);
+          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+            attributePanel.setEnabled(false);
+          }
         }, false, this);
         goog.events.listen(html.querySelector('#m-attributetable-select'), goog.events.EventType.MOUSELEAVE, function () {
-          attributePanel.setEnabled(true);
+          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+            attributePanel.setEnabled(true);
+          }
         }, false, this);
         goog.events.listen(html.querySelector('#m-attributetable-select'), goog.events.EventType.CHANGE,
           function (evt) {
@@ -99,21 +103,22 @@ M.control.AttributeTableControl.prototype.dragPanel_ = function () {
   let marginTop = templatePanel.getBoundingClientRect().top;
 
   goog.events.listen(templatePanel.querySelector('.g-cartografia-localizacion4'), goog.events.EventType.CLICK, function () {
-    if (this.getPanel().isCollapsed()) {
-      attributePanel.setEnabled(false);
-      attributePanel.defaultAction(0, 0);
-    }
-    else {
-      this.calculateDragLimits_(templatePanel, attributePanel, marginTop);
-      attributePanel.setEnabled(true);
+    if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+      if (this.getPanel().isCollapsed()) {
+        attributePanel.setEnabled(false);
+        attributePanel.defaultAction(0, 0);
+      }
+      else {
+        this.calculateDragLimits_(templatePanel, attributePanel, marginTop);
+        attributePanel.setEnabled(true);
+      }
     }
   }, false, this);
 
   var onresize = function () {
-    M.control.AttributeTableControl.prototype.calculateDragLimits_(templatePanel, attributePanel, marginTop);
-  };
+    this.calculateDragLimits_(templatePanel, attributePanel, marginTop);
+  }.bind(this);
   window.addEventListener("resize", onresize);
-
   return attributePanel;
 };
 
@@ -126,22 +131,24 @@ M.control.AttributeTableControl.prototype.dragPanel_ = function () {
  * @param {goog.fx.Dragger} attributePanel- panel that will be dragged
  */
 M.control.AttributeTableControl.prototype.calculateDragLimits_ = function (templatePanel, attributePanel, marginTop) {
-  if (!M.utils.isNullOrEmpty(templatePanel)) {
-    this.templatePanel = templatePanel;
-  }
-  if (!M.utils.isNullOrEmpty(attributePanel)) {
-    this.attributePanel = attributePanel;
-  }
-  if (!M.utils.isNullOrEmpty(marginTop)) {
-    this.marginTop = marginTop;
-  }
+  if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+    if (!M.utils.isNullOrEmpty(templatePanel)) {
+      this.templatePanel = templatePanel;
+    }
+    if (!M.utils.isNullOrEmpty(attributePanel)) {
+      this.attributePanel = attributePanel;
+    }
+    if (!M.utils.isNullOrEmpty(marginTop)) {
+      this.marginTop = marginTop;
+    }
 
-  let windowWidth = window.innerWidth;
-  let windowHeight = window.innerHeight;
-  let tableWidth = this.templatePanel.offsetWidth;
-  let tableHeight = this.templatePanel.offsetHeight;
-  let limits = new goog.math.Rect(-(windowWidth - tableWidth - 50), -this.marginTop, windowWidth - tableWidth - 40, windowHeight - tableHeight);
-  this.attributePanel.setLimits(limits);
+    let windowWidth = window.innerWidth;
+    let windowHeight = window.innerHeight;
+    let tableWidth = this.templatePanel.offsetWidth;
+    let tableHeight = this.templatePanel.offsetHeight;
+    let limits = new goog.math.Rect(-(windowWidth - tableWidth - 50), -this.marginTop, windowWidth - tableWidth - 40, windowHeight - tableHeight);
+    this.attributePanel.setLimits(limits);
+  }
 };
 
 /**
