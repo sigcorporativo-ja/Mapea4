@@ -85,7 +85,7 @@ goog.require('goog.style');
    * @api stable
    */
   M.impl.layer.KML.prototype.addTo = function (map) {
-    this.map = map;
+    goog.base(this, 'addTo', map);
 
     var formater = new M.impl.format.KML();
     var loader = new M.impl.loader.KML(map, this.url, formater);
@@ -95,6 +95,8 @@ goog.require('goog.style');
         url: this.url,
         format: formater,
         loader: loader.getLoaderFn(function (features, screenOverlay) {
+          // removes previous features
+          this_.facadeVector_.clear();
           this_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
           if (!M.utils.isNullOrEmpty(screenOverlay)) {
@@ -114,10 +116,6 @@ goog.require('goog.style');
     }
     var olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
-
-    map.getImpl().on(M.evt.CHANGE, function () {
-      this.getOL3Layer().getSource().clear();
-    }.bind(this), this);
   };
 
   /**

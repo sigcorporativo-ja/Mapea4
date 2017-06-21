@@ -21,6 +21,20 @@ goog.require('M.impl.Layer');
   });
   goog.inherits(M.impl.layer.Vector, M.impl.Layer);
 
+
+  /**
+   * This function sets the map object of the layer
+   *
+   * @public
+   * @function
+   * @param {M.impl.Map} map
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.addTo = function (map) {
+    this.map = map;
+    map.on(M.evt.CHANGE_PROJ, this.setProjection_, this);
+  };
+
   /**
    * This function add features to layer
    *
@@ -122,6 +136,18 @@ goog.require('M.impl.Layer');
    */
   M.impl.layer.Vector.prototype.setFacadeObj = function (obj) {
     this.facadeVector_ = obj;
+  };
+
+  /**
+   * This function sets the map object of the layer
+   *
+   * @private
+   * @function
+   */
+  M.impl.layer.Vector.prototype.setProjection_ = function (oldProj, newProj) {
+    let srcProj = ol.proj.get(oldProj.code);
+    let dstProj = ol.proj.get(newProj.code);
+    this.facadeVector_.getFeatures().forEach(f => f.getImpl().getOLFeature().getGeometry().transform(srcProj, dstProj));
   };
 
   /**
