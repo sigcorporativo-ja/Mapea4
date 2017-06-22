@@ -1394,3 +1394,17 @@ Mx.describeFeatureType.WFSTBase.properties;
  * @api stable
  */
 Mx.ui.Panel.prototype.collapse;
+
+/**
+ * GeoJSON Reader (Filters)
+ * @type {function}
+ * @api stable
+ */
+Mx.jsts.io.GeoJSONReader;
+
+/**
+ * Disjoint (Filters)
+ * @type {function}
+ * @api stable
+ */
+Mx.jtsGeom.disjoint;
