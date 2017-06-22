@@ -37,6 +37,11 @@ goog.require('M.exception');
     var impl = new M.impl.layer.Vector(options);
     var parameters = M.parameter.layer(userParameters, M.layer.type.Vector);
 
+    // registers on M.evt.LOAD event
+    options.on(M.evt.LOAD, function (features) {
+      this.fire(M.evt.LOAD, [features]);
+    }, this);
+
     // calls the super constructor
     goog.base(this, parameters, options, impl);
   });
@@ -63,9 +68,9 @@ goog.require('M.exception');
    * @return {Array<M.Feature>} returns all features or discriminating by the filter
    * @api stable
    */
-  M.layer.Vector.prototype.getFeatures = function (applyFilter) {
-    if (M.utils.isNullOrEmpty(this.getFilter())) applyFilter = false;
-    return this.getImpl().getFeatures(applyFilter, this.filter_);
+  M.layer.Vector.prototype.getFeatures = function (skipFilter) {
+    if (M.utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
+    return this.getImpl().getFeatures(skipFilter, this.filter_);
   };
 
   /**
@@ -106,21 +111,6 @@ goog.require('M.exception');
   };
 
   /**
-   * This function returns all features of the layer
-   *
-   * @function
-   * @param {boolean} applyFilter - Indicates whether execute filter
-   * @return {Array<M.feature>} returns all features of the layer
-   * @api stable
-   */
-  M.layer.Vector.prototype.getFeatures = function (applyFilter) {
-    if (M.utils.isNullOrEmpty(this.getFilter())) {
-      applyFilter = false;
-    }
-    return this.getImpl().getFeatures(applyFilter, this.filter_);
-  };
-
-  /**
    * This function remove all features
    *
    * @function
@@ -143,6 +133,17 @@ goog.require('M.exception');
   };
 
   /**
+   * This function redraw layer
+   *
+   * @function
+   * @public
+   * @api stable
+   */
+  M.layer.Vector.prototype.redraw = function () {
+    this.getImpl().redraw();
+  };
+
+  /**
    * This function set a filter
    *
    * @function
@@ -151,8 +152,9 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.Vector.prototype.setFilter = function (filter) {
-    if (filter instanceof M.Filter) {
+    if (M.utils.isNullOrEmpty(filter) || (filter instanceof M.Filter)) {
       this.filter_ = filter;
+      this.redraw();
     }
     else {
       M.dialog.error("El filtro indicado no es correcto");
@@ -179,19 +181,28 @@ goog.require('M.exception');
    * @return {Array<number>} Extent of features
    * @api stable
    */
-  M.layer.Vector.prototype.getFeaturesExtent = function (applyFilter) {
-    if (M.utils.isNullOrEmpty(this.getFilter())) {
-      applyFilter = false;
-    }
-    return this.getImpl().getFeaturesExtent(applyFilter, this.filter_);
+  M.layer.Vector.prototype.getFeaturesExtent = function (skipFilter) {
+    if (M.utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
+    return this.getImpl().getFeaturesExtent(skipFilter, this.filter_);
   };
 
+  /**
+   * This function remove filter
+   *
+   * @function
+   * @public
+   * @api stable
+   */
+  M.layer.Vector.prototype.removeFilter = function () {
+    this.setFilter(null);
+  };
 
   /**
    * This function checks if an object is equals
    * to this layer
    *
    * @function
+   * @public
    * @param {object} obj - Object to compare
    * @api stable
    */
