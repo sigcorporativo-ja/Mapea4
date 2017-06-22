@@ -1716,9 +1716,11 @@ goog.require('M.window');
 
     // parses the parameter
     try {
+      let oldProj = this.getProjection();
       projection = M.parameter.projection(projection);
       this.getImpl().setProjection(projection);
       this._defaultProj = (this._defaultProj && (asDefault === true));
+      this.fire(M.evt.CHANGE_PROJ, [oldProj, projection]);
     }
     catch (err) {
       M.dialog.error(err);
