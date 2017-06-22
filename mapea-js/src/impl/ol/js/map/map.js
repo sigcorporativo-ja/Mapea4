@@ -32,6 +32,7 @@ goog.require('M.impl.Label');
 goog.require('M.impl.handler.Features');
 goog.require('M.impl.Popup');
 goog.require('M.impl.patches');
+goog.require('M.impl.format.GeoJSON');
 
 goog.require('ol.renderer.Type');
 goog.require('ol.Map');
@@ -1919,3 +1920,4 @@ goog.require('ol.Map');
   M.impl.Map.Z_INDEX[M.layer.type.KML] = 3000;
   M.impl.Map.Z_INDEX[M.layer.type.WFS] = 9999;
 })();
+
