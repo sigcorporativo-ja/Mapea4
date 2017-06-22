@@ -393,5 +393,12 @@
      * @type {String}
      */
     M.config('MAPBOX_TOKEN_VALUE', '${mapbox.token.value}');
-})(window.M);
 
+    /**
+     * Number of pages for the plugin AttributeTable
+     *
+     * @private
+     * @type {String}
+     */
+    M.config('ATTRIBUTETABLE_PAGES', '${attributetable.pages}');
+})(window.M);

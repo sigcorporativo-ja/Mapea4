@@ -1,5 +1,8 @@
 goog.provide('P.control.AttributeTableControl');
 goog.require('goog.dom.classlist');
+goog.require('goog.fx.Dragger');
+goog.require('goog.dom');
+goog.require('goog.style');
 
 /**
  * @classdesc
@@ -10,8 +13,8 @@ goog.require('goog.dom.classlist');
  * @extends {M.Control}
  * @api stable
  */
-M.control.AttributeTableControl = (function () {
-    [this.facadeMap_, this.selectAllActive_, this.template_, this.areaTable_, this.layer_] = [null, false, null, null, null];
+M.control.AttributeTableControl = (function (numPages) {
+  [this.facadeMap_, this.selectAllActive_, this.template_, this.areaTable_, this.layer_, this.numPages_] = [null, false, null, null, null, numPages];
   this.pages_ = {
     total: 0,
     actual: 1,
@@ -42,6 +45,7 @@ goog.inherits(M.control.AttributeTableControl, M.Control);
 M.control.AttributeTableControl.prototype.createView = function (map) {
   this.facadeMap_ = map;
   return new Promise(function (success, fail) {
+
     M.template.compile('attributetable.html', {
       'jsonp': true,
       vars: {
@@ -51,9 +55,20 @@ M.control.AttributeTableControl.prototype.createView = function (map) {
       }
     }).then(
       function (html) {
+        let attributePanel = this.dragPanel_();
         this.template_ = html;
         this.areaTable_ = html.querySelector('div#m-attributetable-datas');
         goog.events.listen(html.querySelector('#m-attributetable-layer'), goog.events.EventType.CLICK, this.openPanel_, false, this);
+        goog.events.listen(html.querySelector('#m-attributetable-select'), goog.events.EventType.MOUSEENTER, function () {
+          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+            attributePanel.setEnabled(false);
+          }
+        }, false, this);
+        goog.events.listen(html.querySelector('#m-attributetable-select'), goog.events.EventType.MOUSELEAVE, function () {
+          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+            attributePanel.setEnabled(true);
+          }
+        }, false, this);
         goog.events.listen(html.querySelector('#m-attributetable-select'), goog.events.EventType.CHANGE,
           function (evt) {
             this.pages_ = {
@@ -74,6 +89,79 @@ M.control.AttributeTableControl.prototype.createView = function (map) {
 };
 
 /**
+ * This function enable the drag function
+ *
+ * @private
+ * @function
+ */
+M.control.AttributeTableControl.prototype.dragPanel_ = function () {
+  let templatePanel = this.getPanel().getTemplatePanel();
+  let attributePanel = new goog.fx.Dragger(templatePanel);
+  attributePanel.setHysteresis(50);
+  attributePanel.setEnabled(false);
+
+  let marginTop = templatePanel.getBoundingClientRect().top;
+
+  goog.events.listen(templatePanel.querySelector('.g-cartografia-localizacion4'), goog.events.EventType.CLICK, function () {
+    if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+      if (this.getPanel().isCollapsed()) {
+        attributePanel.setEnabled(false);
+        attributePanel.defaultAction(0, 0);
+      }
+      else {
+        this.calculateDragLimits_(templatePanel, attributePanel, marginTop);
+        attributePanel.setEnabled(true);
+      }
+    }
+  }, false, this);
+
+  var onresize = function () {
+    this.calculateDragLimits_(templatePanel, attributePanel, marginTop);
+  }.bind(this);
+  window.addEventListener("resize", onresize);
+  return attributePanel;
+};
+
+/**
+ * This function refresh the panel info
+ *
+ * @private
+ * @function
+ * @param {HTMLElement} templatePanel- panel template
+ * @param {goog.fx.Dragger} attributePanel- panel that will be dragged
+ */
+M.control.AttributeTableControl.prototype.calculateDragLimits_ = function (templatePanel, attributePanel, marginTop) {
+  if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+    if (!M.utils.isNullOrEmpty(templatePanel)) {
+      this.templatePanel = templatePanel;
+    }
+    if (!M.utils.isNullOrEmpty(attributePanel)) {
+      this.attributePanel = attributePanel;
+    }
+    if (!M.utils.isNullOrEmpty(marginTop)) {
+      this.marginTop = marginTop;
+    }
+
+    let windowWidth = window.innerWidth;
+    let windowHeight = window.innerHeight;
+    let tableWidth = this.templatePanel.offsetWidth;
+    let tableHeight = this.templatePanel.offsetHeight;
+    let limits = new goog.math.Rect(-(windowWidth - tableWidth - 50), -this.marginTop, windowWidth - tableWidth - 40, windowHeight - tableHeight);
+    this.attributePanel.setLimits(limits);
+  }
+};
+
+/**
+ * This function refresh the panel info
+ *
+ * @private
+ * @function
+ */
+M.control.AttributeTableControl.prototype.refresh_ = function () {
+  this.renderPanel_();
+};
+
+/**
  * This function render to panel info
  *
  * @private
@@ -82,7 +170,6 @@ M.control.AttributeTableControl.prototype.createView = function (map) {
  * @return {Promise}
  */
 M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
-  //let this = this;
   if (!M.utils.isNullOrEmpty(name)) {
     this.layer_ = this.hasLayer_(name)[0];
   }
@@ -113,25 +200,34 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
         headerAtt: headerAtt,
         legend: this.layer_.legend,
         pages: this.pageResults_(attributes),
-        attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes.slice(this.pages_.element, this.pages_.element + 5)
+        attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes.slice(this.pages_.element, this.pages_.element + this.numPages_)
       }
     }).then(function (html) {
       let content = this.areaTable_.querySelector("table");
       if (!M.utils.isNullOrEmpty(content)) {
         this.areaTable_.removeChild(this.areaTable_.querySelector("#m-attributetable-content-attributes"));
       }
+      let notResult = this.areaTable_.querySelector(".m-attributetable-notResult");
+      if (!M.utils.isNullOrEmpty(notResult)) {
+        //notResult.parentElement.removeChild(notResult);
+        this.areaTable_.removeChild(this.areaTable_.querySelector("#m-attributetable-content-attributes"));
+      }
       this.areaTable_.appendChild(html);
-      goog.events.listen(this.areaTable_.querySelector('#m-attributetable-next'), goog.events.EventType.CLICK, this.nextPage_, false, this);
-      goog.events.listen(html.querySelector('#m-attributetable-previous'), goog.events.EventType.CLICK, this.previousPage_, false, this);
-      goog.events.listen(html.querySelector('input[value=selectAll]'), goog.events.EventType.CLICK, this.selectAll, false, this);
-      goog.events.listen(html.querySelector('#m-attributetable-attributes'), goog.events.EventType.CLICK, this.openPanel_, false, this);
-      let header = Array.prototype.slice.call(this.areaTable_.querySelector("tr").querySelectorAll("td"), 1);
-      header.forEach(function (td) {
-        goog.events.listen(td, goog.events.EventType.CLICK, this.sort_, false, this);
-      }.bind(this));
-      this.hasNext_(html);
-      this.hasPrevious_(html);
+      if (M.utils.isNullOrEmpty(html.querySelector('div.m-attributetable-notResult'))) {
+        goog.events.listen(this.areaTable_.querySelector('#m-attributetable-next'), goog.events.EventType.CLICK, this.nextPage_, false, this);
+        goog.events.listen(html.querySelector('#m-attributetable-previous'), goog.events.EventType.CLICK, this.previousPage_, false, this);
+        goog.events.listen(html.querySelector('input[value=selectAll]'), goog.events.EventType.CLICK, this.selectAll, false, this);
+        goog.events.listen(html.querySelector('#m-attributetable-attributes'), goog.events.EventType.CLICK, this.openPanel_, false, this);
+        goog.events.listen(html.querySelector('#m-attributetable-refresh'), goog.events.EventType.CLICK, this.refresh_, false, this);
+        let header = Array.prototype.slice.call(this.areaTable_.querySelector("tr").querySelectorAll("td"), 1);
+        header.forEach(function (td) {
+          goog.events.listen(td, goog.events.EventType.CLICK, this.sort_, false, this);
+        }.bind(this));
+        this.hasNext_(html);
+        this.hasPrevious_(html);
+      }
       success();
+      this.calculateDragLimits_();
     }.bind(this));
   }.bind(this));
 };
@@ -174,7 +270,6 @@ M.control.AttributeTableControl.prototype.hasLayer_ = function (layerSearch) {
   }
   return layersFind;
 };
-
 
 /**
  *This function determines whether to select or deselect all inputs
@@ -227,7 +322,7 @@ M.control.AttributeTableControl.prototype.removeSelectAll_ = function () {
  * @retrun {number} Returns the number of pages
  */
 M.control.AttributeTableControl.prototype.pageResults_ = function (attributes) {
-  this.pages_.total = Math.ceil(attributes.length / 5);
+  this.pages_.total = Math.ceil(attributes.length / this.numPages_);
   return this.pages_;
 };
 
@@ -240,7 +335,7 @@ M.control.AttributeTableControl.prototype.pageResults_ = function (attributes) {
 M.control.AttributeTableControl.prototype.nextPage_ = function () {
   if (this.pages_.total > this.pages_.actual) {
     this.pages_.actual = this.pages_.actual + 1;
-    this.pages_.element = this.pages_.element + 5;
+    this.pages_.element = this.pages_.element + this.numPages_;
     this.renderPanel_().then(function () {
       this.hasNext_();
       this.hasPrevious_();
@@ -257,7 +352,7 @@ M.control.AttributeTableControl.prototype.nextPage_ = function () {
 M.control.AttributeTableControl.prototype.previousPage_ = function () {
   if (this.pages_.total >= this.pages_.actual) {
     this.pages_.actual = this.pages_.actual - 1;
-    this.pages_.element = this.pages_.element - 5;
+    this.pages_.element = this.pages_.element - this.numPages_;
     this.renderPanel_().then(function () {
       this.hasPrevious_();
     }.bind(this));
@@ -352,4 +447,5 @@ M.control.AttributeTableControl.prototype.openPanel_ = function (evt) {
     goog.dom.classlist.toggle(this.template_.querySelector("#m-attributetable-table"), 'm-attributetable-hidden');
     goog.dom.classlist.toggle(this.template_.querySelector("#m-attributetable-tfoot"), 'm-attributetable-hidden');
   }
+  this.calculateDragLimits_();
 };
