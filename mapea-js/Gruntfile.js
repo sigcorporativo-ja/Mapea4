@@ -75,7 +75,7 @@ module.exports = function (grunt) {
       src: 'src/facade/**/*.js',
       options: {
         destination: 'doc',
-        template: "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template",
+        template: "node_modules/ink-docstrap/template",
         // configure: "node_modules/grunt-jsdoc/node_modules/ink-docstrap/template/jsdoc.conf.json"
         configure: "jsdoc.conf.json"
       }
@@ -476,6 +476,7 @@ module.exports = function (grunt) {
     concat: {
       dist: {
         src: [
+               'node_modules/jsts/dist/jsts.min.js',
                'libraries/proj4/proj4.js',
                'build/core/js/mapea-<%= pkg.version %>.ol.min.js'
             ],

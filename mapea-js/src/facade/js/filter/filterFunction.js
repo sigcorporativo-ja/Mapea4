@@ -8,13 +8,25 @@ goog.require('M.Filter');
    * @param {function} filterFunction - Function to execute
    * @api stable
    */
-  M.filter.Function = (function (filterFunction) {
+  M.filter.Function = (function (filterFunction, options) {
+    options = (options || {});
+
     /**
      * Function to execute
      * @private
      * @type {function}
      */
     this.filterFunction_ = filterFunction;
+
+    /**
+     * Filter CQL
+     * @private
+     * @type {String}
+     */
+    this.cqlFilter_ = '';
+    if (!M.utils.isNullOrEmpty(options.cqlFilter)) {
+      this.cqlFilter_ = options.cqlFilter;
+    }
   });
   goog.inherits(M.filter.Function, M.Filter);
 
@@ -41,7 +53,6 @@ goog.require('M.Filter');
     return this.filterFunction_;
   };
 
-
   /**
    * This function execute a function filter
    *
@@ -55,4 +66,15 @@ goog.require('M.Filter');
     return features.filter(this.filterFunction_);
   };
 
+  /**
+   * This function return CQL
+   *
+   * @public
+   * @function
+   * @api stable
+   * @return {string} CQL
+   */
+  M.filter.Function.prototype.toCQL = function () {
+    return this.cqlFilter_;
+  };
 })();

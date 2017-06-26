@@ -66,11 +66,6 @@ goog.require('M.geom');
 
     // options
     this.options = options;
-
-    // registers on M.evt.LOAD event
-    impl.on(M.evt.LOAD, function (features) {
-      this.fire(M.evt.LOAD, [features]);
-    }, this);
   });
   goog.inherits(M.layer.WFS, M.layer.Vector);
 
@@ -198,9 +193,16 @@ goog.require('M.geom');
    * @api stable
    */
   M.layer.WFS.prototype.setCQL = function (newCQL) {
-    if (this.getImpl().cql !== newCQL) {
-      this.getImpl().setCQL(newCQL);
-    }
+    this.getImpl().getDescribeFeatureType().then(function (describeFeatureType) {
+      if (!M.utils.isNullOrEmpty(newCQL)) {
+        var geometryName = describeFeatureType.geometryName;
+        // if exist, replace {{geometryName}} with the value geometryName
+        newCQL = newCQL.replace(/{{geometryName}}/g, geometryName);
+      }
+      if (this.getImpl().cql !== newCQL) {
+        this.getImpl().setCQL(newCQL);
+      }
+    }.bind(this));
   };
 
   /**

@@ -771,6 +771,7 @@ goog.require('goog.color.alpha');
          "geometrypropertytype",
          "geometryarraypropertytype",
          "multigeometrypropertytype",
+         "multipolygonpropertytype",
          "multipointpropertytype",
          "abstractgeometricaggregatetype",
          "pointarraypropertytype",

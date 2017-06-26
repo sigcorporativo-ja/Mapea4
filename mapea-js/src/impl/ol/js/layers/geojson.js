@@ -6,8 +6,6 @@ goog.require('M.impl.layer.Vector');
 goog.require('M.impl.loader.JSONP');
 goog.require('M.impl.layer.Vector');
 
-goog.require('M.impl.format.GeoJSON');
-
 goog.require('M.format.GeoJSON');
 goog.require('M.impl.Popup');
 
@@ -82,9 +80,9 @@ goog.require('goog.style');
    * @api stable
    */
   M.impl.layer.GeoJSON.prototype.addTo = function (map) {
-    this.map = map;
+    goog.base(this, 'addTo', map);
 
-    this.formater_ = new M.impl.format.GeoJSON({
+    this.formater_ = new M.format.GeoJSON({
       'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
     });
     if (!M.utils.isNullOrEmpty(this.url)) {
@@ -132,15 +130,26 @@ goog.require('goog.style');
         format: this.formater_,
         loader: this.loader_.getLoaderFn(function (features) {
           this_.ol3Layer.getSource().addFeatures(features);
-          this_.fire(M.evt.LOAD, features);
+          this_.fire(M.evt.LOAD, [features]);
         }),
         strategy: ol.loadingstrategy.all
       };
     }
     else if (!M.utils.isNullOrEmpty(this.source)) {
-      let features = M.format.GeoJSON.read(this.source);
-      this.ol3Layer.setSource(new ol.source.Vector());
+      let features = this.formater_.read(this.source);
+      this.ol3Layer.setSource(new ol.source.Vector({
+        url: 'fake',
+        // format: this.formater_,
+        loader: (function (extent, resolution, projection) {
+          // removes previous features
+          this_.facadeVector_.clear();
+          this_.addFeatures(features);
+          // this_.ol3Layer.getSource().addFeatures(features);
+          this_.fire(M.evt.LOAD, [features]);
+        })
+      }));
       this.addFeatures(features);
+      this_.fire(M.evt.LOAD, [features]);
     }
   };
 
