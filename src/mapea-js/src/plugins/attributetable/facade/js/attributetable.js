@@ -13,12 +13,12 @@ goog.require('goog.events');
  * @extends {M.Plugin}
  * @api stable
  */
-M.plugin.AttributeTable = (function (parameters) {
+M.plugin.AttributeTable = (function(parameters) {
   [this.control_, this.panel_, this.facadeMap_] = [null, null, null];
 
   parameters = (parameters || {});
 
-  this.numPages_ = (!M.utils.isNullOrEmpty(parameters.pages) && parameters.pages >= 1 && parameters.pages % 1 === 0) ? parameters.pages : M.config.ATTRIBUTETABLE_PAGES;
+  this.numPages_ = parseInt((!M.utils.isNullOrEmpty(parameters.pages) && parameters.pages >= 1 && parameters.pages % 1 === 0) ? parameters.pages : M.config.ATTRIBUTETABLE_PAGES);
 
   /**
    * Name of this control
@@ -39,7 +39,7 @@ goog.inherits(M.plugin.AttributeTable, M.Plugin);
  * @param {M.Map} map the map to add the plugin
  * @api stable
  */
-M.plugin.AttributeTable.prototype.addTo = function (map) {
+M.plugin.AttributeTable.prototype.addTo = function(map) {
   this.facadeMap_ = map;
   this.control_ = new M.control.AttributeTableControl(this.numPages_);
   this.panel_ = new M.ui.Panel("M.plugin.AttributeTable.NAME", {
@@ -50,8 +50,8 @@ M.plugin.AttributeTable.prototype.addTo = function (map) {
     'tooltip': 'Tabla de atributos'
   });
   this.panel_.addControls(this.control_);
-  this.panel_.on(M.evt.SHOW, function (evt) {
-    if (map.getWFS().length === 0 && map.getKML().length === 0 && map.getLayers().filter(function (layer) {
+  this.panel_.on(M.evt.SHOW, function(evt) {
+    if (map.getWFS().length === 0 && map.getKML().length === 0 && map.getLayers().filter(function(layer) {
         return layer.type === "GeoJSON";
       }) === 0) {
       this.panel_.collapse();
@@ -68,7 +68,7 @@ M.plugin.AttributeTable.prototype.addTo = function (map) {
  * @function
  * @api stable
  */
-M.plugin.AttributeTable.prototype.destroy = function () {
+M.plugin.AttributeTable.prototype.destroy = function() {
   this.map_.removeControls([this.control_]);
    [this.control_, this.panel_, this.facadeMap_] = [null, null, null];
 };
