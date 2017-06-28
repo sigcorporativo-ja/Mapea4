@@ -13,7 +13,7 @@ goog.require('goog.style');
  * @extends {M.Control}
  * @api stable
  */
-M.control.AttributeTableControl = (function (numPages) {
+M.control.AttributeTableControl = (function(numPages) {
   [this.facadeMap_, this.selectAllActive_, this.template_, this.areaTable_, this.layer_, this.numPages_] = [null, false, null, null, null, numPages];
   this.pages_ = {
     total: 0,
@@ -42,35 +42,35 @@ goog.inherits(M.control.AttributeTableControl, M.Control);
  * @param {M.Map} map to add the control
  * @api stable
  */
-M.control.AttributeTableControl.prototype.createView = function (map) {
+M.control.AttributeTableControl.prototype.createView = function(map) {
   this.facadeMap_ = map;
-  return new Promise(function (success, fail) {
+  return new Promise(function(success, fail) {
 
     M.template.compile('attributetable.html', {
       'jsonp': true,
       vars: {
-        layers: map.getWFS().concat(map.getKML().concat(map.getLayers().filter(function (layer) {
+        layers: map.getWFS().concat(map.getKML().concat(map.getLayers().filter(function(layer) {
           return layer.type === "GeoJSON";
         })))
       }
     }).then(
-      function (html) {
+      function(html) {
         let attributePanel = this.dragPanel_();
         this.template_ = html;
         this.areaTable_ = html.querySelector('div#m-attributetable-datas');
         goog.events.listen(html.querySelector('#m-attributetable-layer'), goog.events.EventType.CLICK, this.openPanel_, false, this);
-        goog.events.listen(html.querySelector('#m-attributetable-select'), goog.events.EventType.MOUSEENTER, function () {
-          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
-            attributePanel.setEnabled(false);
-          }
-        }, false, this);
-        goog.events.listen(html.querySelector('#m-attributetable-select'), goog.events.EventType.MOUSELEAVE, function () {
+        goog.events.listen(html.querySelector('.title'), goog.events.EventType.MOUSEENTER, function() {
           if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
             attributePanel.setEnabled(true);
           }
         }, false, this);
+        goog.events.listen(html.querySelector('.title'), goog.events.EventType.MOUSELEAVE, function() {
+          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+            attributePanel.setEnabled(false);
+          }
+        }, false, this);
         goog.events.listen(html.querySelector('#m-attributetable-select'), goog.events.EventType.CHANGE,
-          function (evt) {
+          function(evt) {
             this.pages_ = {
               total: 0,
               actual: 1,
@@ -94,15 +94,15 @@ M.control.AttributeTableControl.prototype.createView = function (map) {
  * @private
  * @function
  */
-M.control.AttributeTableControl.prototype.dragPanel_ = function () {
+M.control.AttributeTableControl.prototype.dragPanel_ = function() {
   let templatePanel = this.getPanel().getTemplatePanel();
   let attributePanel = new goog.fx.Dragger(templatePanel);
-  attributePanel.setHysteresis(50);
+  //attributePanel.setHysteresis(50);
   attributePanel.setEnabled(false);
 
   let marginTop = templatePanel.getBoundingClientRect().top;
 
-  goog.events.listen(templatePanel.querySelector('.g-cartografia-localizacion4'), goog.events.EventType.CLICK, function () {
+  goog.events.listen(templatePanel.querySelector('.g-cartografia-localizacion4'), goog.events.EventType.CLICK, function() {
     if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
       if (this.getPanel().isCollapsed()) {
         attributePanel.setEnabled(false);
@@ -115,7 +115,7 @@ M.control.AttributeTableControl.prototype.dragPanel_ = function () {
     }
   }, false, this);
 
-  var onresize = function () {
+  var onresize = function() {
     this.calculateDragLimits_(templatePanel, attributePanel, marginTop);
   }.bind(this);
   window.addEventListener("resize", onresize);
@@ -130,7 +130,7 @@ M.control.AttributeTableControl.prototype.dragPanel_ = function () {
  * @param {HTMLElement} templatePanel- panel template
  * @param {goog.fx.Dragger} attributePanel- panel that will be dragged
  */
-M.control.AttributeTableControl.prototype.calculateDragLimits_ = function (templatePanel, attributePanel, marginTop) {
+M.control.AttributeTableControl.prototype.calculateDragLimits_ = function(templatePanel, attributePanel, marginTop) {
   if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
     if (!M.utils.isNullOrEmpty(templatePanel)) {
       this.templatePanel = templatePanel;
@@ -157,7 +157,7 @@ M.control.AttributeTableControl.prototype.calculateDragLimits_ = function (templ
  * @private
  * @function
  */
-M.control.AttributeTableControl.prototype.refresh_ = function () {
+M.control.AttributeTableControl.prototype.refresh_ = function() {
   this.renderPanel_();
 };
 
@@ -169,7 +169,7 @@ M.control.AttributeTableControl.prototype.refresh_ = function () {
  * @param {null|string} name- Name Layer
  * @return {Promise}
  */
-M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
+M.control.AttributeTableControl.prototype.renderPanel_ = function(name) {
   if (!M.utils.isNullOrEmpty(name)) {
     this.layer_ = this.hasLayer_(name)[0];
   }
@@ -179,7 +179,7 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
 
   let features = this.layer_.getFeatures();
   let attributes = [];
-  features.forEach(function (feature) {
+  features.forEach(function(feature) {
     let properties = Object.values(feature.getAttributes());
     if (geomPos !== -1) {
       properties.splice(geomPos, 1);
@@ -193,7 +193,7 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
     attributes = this.sortAttributes_(attributes, headerAtt);
   }
 
-  return new Promise(function (success, fail) {
+  return new Promise(function(success, fail) {
     M.template.compile('tableData.html', {
       'jsonp': true,
       'vars': {
@@ -202,7 +202,7 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
         pages: this.pageResults_(attributes),
         attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes.slice(this.pages_.element, this.pages_.element + this.numPages_)
       }
-    }).then(function (html) {
+    }).then(function(html) {
       let content = this.areaTable_.querySelector("table");
       if (!M.utils.isNullOrEmpty(content)) {
         this.areaTable_.removeChild(this.areaTable_.querySelector("#m-attributetable-content-attributes"));
@@ -220,7 +220,7 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
         goog.events.listen(html.querySelector('#m-attributetable-attributes'), goog.events.EventType.CLICK, this.openPanel_, false, this);
         goog.events.listen(html.querySelector('#m-attributetable-refresh'), goog.events.EventType.CLICK, this.refresh_, false, this);
         let header = Array.prototype.slice.call(this.areaTable_.querySelector("tr").querySelectorAll("td"), 1);
-        header.forEach(function (td) {
+        header.forEach(function(td) {
           goog.events.listen(td, goog.events.EventType.CLICK, this.sort_, false, this);
         }.bind(this));
         this.hasNext_(html);
@@ -239,7 +239,7 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function (name) {
  * @param {array<string>| string| M.Layer} layerSearch - Array of layer names, layer name or layer instance
  * @function
  */
-M.control.AttributeTableControl.prototype.hasLayer_ = function (layerSearch) {
+M.control.AttributeTableControl.prototype.hasLayer_ = function(layerSearch) {
   var layersFind = [];
   if (M.utils.isNullOrEmpty(layerSearch) || (!M.utils.isArray(layerSearch) && !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
     M.dialog.error("El parametro para el método hasLayer no es correcto.", "Error");
@@ -247,7 +247,7 @@ M.control.AttributeTableControl.prototype.hasLayer_ = function (layerSearch) {
   }
 
   if (M.utils.isString(layerSearch)) {
-    this.facadeMap_.getLayers().forEach(function (lay) {
+    this.facadeMap_.getLayers().forEach(function(lay) {
       if (lay.name == layerSearch) {
         layersFind.push(lay);
       }
@@ -255,14 +255,14 @@ M.control.AttributeTableControl.prototype.hasLayer_ = function (layerSearch) {
   }
 
   if (layerSearch instanceof M.Layer) {
-    this.facadeMap_.getLayers().forEach(function (lay) {
+    this.facadeMap_.getLayers().forEach(function(lay) {
       if (lay.equals(layerSearch)) {
         layersFind.push(lay);
       }
     });
   }
   if (M.utils.isArray(layerSearch)) {
-    this.facadeMap_.getLayers().forEach(function (lay) {
+    this.facadeMap_.getLayers().forEach(function(lay) {
       if (layerSearch.indexOf(lay.name) >= 0) {
         layersFind.push(lay);
       }
@@ -277,7 +277,7 @@ M.control.AttributeTableControl.prototype.hasLayer_ = function (layerSearch) {
  * @private
  * @function
  */
-M.control.AttributeTableControl.prototype.selectAll = function () {
+M.control.AttributeTableControl.prototype.selectAll = function() {
   this.selectAllActive_ = !this.selectAllActive_ ? true : false;
   if (this.selectAllActive_ === true) {
     this.addSelectAll_();
@@ -293,9 +293,9 @@ M.control.AttributeTableControl.prototype.selectAll = function () {
  * @private
  * @function
  */
-M.control.AttributeTableControl.prototype.addSelectAll_ = function () {
+M.control.AttributeTableControl.prototype.addSelectAll_ = function() {
   let checks = this.areaTable_.querySelectorAll('input');
-  checks.forEach(function (element) {
+  checks.forEach(function(element) {
     element.setAttribute('checked', true);
   });
 };
@@ -306,9 +306,9 @@ M.control.AttributeTableControl.prototype.addSelectAll_ = function () {
  * @private
  * @function
  */
-M.control.AttributeTableControl.prototype.removeSelectAll_ = function () {
+M.control.AttributeTableControl.prototype.removeSelectAll_ = function() {
   let checks = this.areaTable_.querySelectorAll('input');
-  checks.forEach(function (element) {
+  checks.forEach(function(element) {
     element.removeAttribute('checked');
   });
 };
@@ -321,7 +321,7 @@ M.control.AttributeTableControl.prototype.removeSelectAll_ = function () {
  * @param {array<string>} attributes - attributes to page
  * @retrun {number} Returns the number of pages
  */
-M.control.AttributeTableControl.prototype.pageResults_ = function (attributes) {
+M.control.AttributeTableControl.prototype.pageResults_ = function(attributes) {
   this.pages_.total = Math.ceil(attributes.length / this.numPages_);
   return this.pages_;
 };
@@ -332,11 +332,11 @@ M.control.AttributeTableControl.prototype.pageResults_ = function (attributes) {
  * @private
  * @function
  */
-M.control.AttributeTableControl.prototype.nextPage_ = function () {
+M.control.AttributeTableControl.prototype.nextPage_ = function() {
   if (this.pages_.total > this.pages_.actual) {
     this.pages_.actual = this.pages_.actual + 1;
     this.pages_.element = this.pages_.element + this.numPages_;
-    this.renderPanel_().then(function () {
+    this.renderPanel_().then(function() {
       this.hasNext_();
       this.hasPrevious_();
     }.bind(this));
@@ -349,11 +349,11 @@ M.control.AttributeTableControl.prototype.nextPage_ = function () {
  * @private
  * @function
  */
-M.control.AttributeTableControl.prototype.previousPage_ = function () {
+M.control.AttributeTableControl.prototype.previousPage_ = function() {
   if (this.pages_.total >= this.pages_.actual) {
     this.pages_.actual = this.pages_.actual - 1;
     this.pages_.element = this.pages_.element - this.numPages_;
-    this.renderPanel_().then(function () {
+    this.renderPanel_().then(function() {
       this.hasPrevious_();
     }.bind(this));
   }
@@ -365,7 +365,7 @@ M.control.AttributeTableControl.prototype.previousPage_ = function () {
  * @private
  * @function
  */
-M.control.AttributeTableControl.prototype.hasNext_ = function (html) {
+M.control.AttributeTableControl.prototype.hasNext_ = function(html) {
   let element = this.template_;
   if (!M.utils.isNullOrEmpty(html)) element = html;
   if (this.pages_.actual < this.pages_.total) {
@@ -379,7 +379,7 @@ M.control.AttributeTableControl.prototype.hasNext_ = function (html) {
  * @private
  * @function
  */
-M.control.AttributeTableControl.prototype.hasPrevious_ = function (html) {
+M.control.AttributeTableControl.prototype.hasPrevious_ = function(html) {
   let element = this.template_;
   if (!M.utils.isNullOrEmpty(html)) element = html;
   if (this.pages_.actual <= this.pages_.total && this.pages_.actual !== 1) {
@@ -394,7 +394,7 @@ M.control.AttributeTableControl.prototype.hasPrevious_ = function (html) {
  * @function
  * @param {goog.events.BrowserEvent} evt - Event
  */
-M.control.AttributeTableControl.prototype.sort_ = function (evt) {
+M.control.AttributeTableControl.prototype.sort_ = function(evt) {
   if (this.sortProperties_.active === false) this.sortProperties_.active = true;
   if (this.sortProperties_.sortBy !== evt.target.innerHTML) {
     this.sortProperties_.sortType = "<";
@@ -415,10 +415,10 @@ M.control.AttributeTableControl.prototype.sort_ = function (evt) {
  * @param {array<string>} headerAtt - name attributes
  * @return {array<string>} attributes - Ordered attributes
  */
-M.control.AttributeTableControl.prototype.sortAttributes_ = function (attributes, headerAtt) {
+M.control.AttributeTableControl.prototype.sortAttributes_ = function(attributes, headerAtt) {
   let sortBy = this.sortProperties_.sortBy;
   let pos = headerAtt.indexOf(sortBy);
-  let attributesSort = attributes.sort(function (a, b) {
+  let attributesSort = attributes.sort(function(a, b) {
     return a[pos] - b[pos];
   });
   if (this.sortProperties_.sortType === ">") {
@@ -436,7 +436,7 @@ M.control.AttributeTableControl.prototype.sortAttributes_ = function (attributes
  * @param {goog.events.BrowserEvent} evt - Event
  * @api stable
  */
-M.control.AttributeTableControl.prototype.openPanel_ = function (evt) {
+M.control.AttributeTableControl.prototype.openPanel_ = function(evt) {
   let id = evt.target.id;
   if (id === "m-attributetable-layer") {
     let element = this.template_.querySelector("select#m-attributetable-select");
