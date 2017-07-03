@@ -14,7 +14,7 @@ goog.require('ol.source.Vector');
 
 goog.require('goog.style');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a KML layer
@@ -25,7 +25,7 @@ goog.require('goog.style');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.GeoJSON = (function (parameters, options) {
+  M.impl.layer.GeoJSON = (function(parameters, options) {
     /**
      * Popup showed
      * @private
@@ -79,7 +79,7 @@ goog.require('goog.style');
    * @param {M.impl.Map} map
    * @api stable
    */
-  M.impl.layer.GeoJSON.prototype.addTo = function (map) {
+  M.impl.layer.GeoJSON.prototype.addTo = function(map) {
     goog.base(this, 'addTo', map);
 
     this.formater_ = new M.format.GeoJSON({
@@ -112,7 +112,7 @@ goog.require('goog.style');
    * @param {M.Map} map
    * @api stable
    */
-  M.impl.layer.GeoJSON.prototype.refresh = function () {
+  M.impl.layer.GeoJSON.prototype.refresh = function() {
     this.updateSource_();
   };
 
@@ -122,36 +122,35 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.impl.layer.GeoJSON.prototype.updateSource_ = function () {
+  M.impl.layer.GeoJSON.prototype.updateSource_ = function() {
     var srcOptions;
     var this_ = this;
     if (!M.utils.isNullOrEmpty(this.url)) {
       srcOptions = {
         format: this.formater_,
-        loader: this.loader_.getLoaderFn(function (features) {
-          this_.ol3Layer.getSource().addFeatures(features);
+        loader: this.loader_.getLoaderFn(function(features) {
+          this_.facadeVector_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
         }),
         strategy: ol.loadingstrategy.all
       };
+      this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
     }
     else if (!M.utils.isNullOrEmpty(this.source)) {
       let features = this.formater_.read(this.source);
       this.ol3Layer.setSource(new ol.source.Vector({
-        url: 'fake',
-        // format: this.formater_,
-        loader: (function (extent, resolution, projection) {
+        loader: (function(extent, resolution, projection) {
           // removes previous features
           this_.facadeVector_.clear();
-          this_.addFeatures(features);
-          // this_.ol3Layer.getSource().addFeatures(features);
+          this_.facadeVector_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
         })
       }));
-      this.addFeatures(features);
+      this.facadeVector_.addFeatures(features);
       this_.fire(M.evt.LOAD, [features]);
     }
   };
+
 
   /**
    * This function checks if an object is equals
@@ -161,7 +160,7 @@ goog.require('goog.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.GeoJSON.prototype.selectFeatures = function (features, coord, evt) {
+  M.impl.layer.GeoJSON.prototype.selectFeatures = function(features, coord, evt) {
     if (this.extract === true) {
       // unselects previous features
       this.unselectFeatures();
@@ -176,7 +175,7 @@ goog.require('goog.style');
             'vars': this.parseFeaturesForTemplate_(features),
             'parseToHtml': false
           })
-          .then(function (htmlAsText) {
+          .then(function(htmlAsText) {
             var featureTabOpts = {
               'icon': 'g-cartografia-pin',
               'title': this.name,
@@ -205,7 +204,7 @@ goog.require('goog.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.GeoJSON.prototype.unselectFeatures = function () {
+  M.impl.layer.GeoJSON.prototype.unselectFeatures = function() {
     this.map.removePopup();
   };
 
@@ -216,12 +215,12 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.impl.layer.GeoJSON.prototype.parseFeaturesForTemplate_ = function (features) {
+  M.impl.layer.GeoJSON.prototype.parseFeaturesForTemplate_ = function(features) {
     var featuresTemplate = {
       'features': []
     };
 
-    features.forEach(function (feature) {
+    features.forEach(function(feature) {
       var properties = feature.getProperties();
       var attributes = [];
       for (var key in properties) {
@@ -258,7 +257,7 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.impl.layer.GeoJSON.prototype.destroy = function () {
+  M.impl.layer.GeoJSON.prototype.destroy = function() {
     var olMap = this.map.getMapImpl();
 
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
@@ -276,7 +275,7 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.impl.layer.GeoJSON.prototype.equals = function (obj) {
+  M.impl.layer.GeoJSON.prototype.equals = function(obj) {
     var equals = false;
 
     if (obj instanceof M.impl.layer.GeoJSON) {

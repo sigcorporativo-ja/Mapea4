@@ -1,6 +1,6 @@
 goog.provide('M.impl.Feature');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Create a Feature
@@ -11,7 +11,8 @@ goog.provide('M.impl.Feature');
    * @param {Object} geojson - geojson to feature
    * @api stable
    */
-  M.impl.Feature = (function (id, geojson, style) {
+  M.impl.Feature = (function(id, geojson, style) {
+    this.facadeFeature_ = null;
     this.formatter_ = new M.impl.format.GeoJSON();
     if (!M.utils.isNullOrEmpty(geojson)) {
       if (M.utils.isNullOrEmpty(geojson.type)) {
@@ -34,13 +35,24 @@ goog.provide('M.impl.Feature');
   });
 
   /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.Feature.prototype.addTo = function(layer) {
+    layer.getImpl().addFeature(this.facadeFeature_);
+  };
+
+  /**
    * This function returns the openlayers object of the features
    * @public
    * @function
    * @return {ol.Feature} returns the openlayers object of the features
    * @api stable
    */
-  M.impl.Feature.prototype.getOLFeature = function () {
+  M.impl.Feature.prototype.getOLFeature = function() {
     return this.olFeature_;
   };
 
@@ -51,7 +63,7 @@ goog.provide('M.impl.Feature');
    * @function
    * @api stable
    */
-  M.impl.Feature.prototype.setOLFeature = function (olFeature) {
+  M.impl.Feature.prototype.setOLFeature = function(olFeature) {
     if (!M.utils.isNullOrEmpty(olFeature)) {
       this.olFeature_ = olFeature;
       if (M.utils.isNullOrEmpty(this.olFeature_.getId())) {
@@ -67,7 +79,7 @@ goog.provide('M.impl.Feature');
    * @function
    * @api stable
    */
-  M.impl.Feature.prototype.getAttributes = function () {
+  M.impl.Feature.prototype.getAttributes = function() {
     return this.olFeature_.getProperties();
   };
 
@@ -79,7 +91,7 @@ goog.provide('M.impl.Feature');
    * @return {string} ID to feature
    * @api stable
    */
-  M.impl.Feature.prototype.getId = function () {
+  M.impl.Feature.prototype.getId = function() {
     return this.olFeature_.getId();
   };
 
@@ -91,7 +103,7 @@ goog.provide('M.impl.Feature');
    * @param {string} id - ID to feature
    * @api stable
    */
-  M.impl.Feature.prototype.setId = function (id) {
+  M.impl.Feature.prototype.setId = function(id) {
     this.olFeature_.setId(id);
   };
 
@@ -103,7 +115,7 @@ goog.provide('M.impl.Feature');
    * @param {Object} attributes - attributes to feature
    * @api stable
    */
-  M.impl.Feature.prototype.setAttributes = function (attributes) {
+  M.impl.Feature.prototype.setAttributes = function(attributes) {
     this.olFeature_.setProperties(attributes);
   };
 
@@ -116,7 +128,7 @@ goog.provide('M.impl.Feature');
    * @return {M.Feature}  facadeFeature - M.Feature
    * @api stable
    */
-  M.impl.Feature.olFeature2Facade = function (olFeature) {
+  M.impl.Feature.olFeature2Facade = function(olFeature) {
     //let featureStyle = null;
     let facadeFeature = null;
     if (!M.utils.isNullOrEmpty(olFeature)) {
@@ -135,7 +147,7 @@ goog.provide('M.impl.Feature');
    * @return  {string|number|object} returns the value of the indicated attribute
    * @api stable
    */
-  M.impl.Feature.prototype.getAttribute = function (attribute) {
+  M.impl.Feature.prototype.getAttribute = function(attribute) {
     return this.olFeature_.get(attribute);
   };
 
@@ -148,7 +160,7 @@ goog.provide('M.impl.Feature');
    * @return  {string|number|object} returns the value of the indicated attribute
    * @api stable
    */
-  M.impl.Feature.prototype.setAttribute = function (attribute, value) {
+  M.impl.Feature.prototype.setAttribute = function(attribute, value) {
     return this.olFeature_.set(attribute, value);
   };
 
@@ -161,8 +173,55 @@ goog.provide('M.impl.Feature');
    * @return {object} Geometry feature
    * @api stable
    */
-  M.impl.Feature.prototype.getGeometry = function (geojson) {
+  M.impl.Feature.prototype.getGeometry = function(geojson) {
     return new ol.geom[geojson.geometry.type](geojson.geometry.coordinates);
+  };
+
+  /**
+   * This function set geometry feature
+   *
+   * @public
+   * @function
+   * @param {object} Geometry - GeoJSON Feature
+   * @api stable
+   */
+  M.impl.Feature.prototype.setGeometry = function(geometry) {
+    let type = geometry.type.toLowerCase();
+    if (type === "circle") {
+      this.olFeature_.setGeometry(new ol.geom.Circle(geometry.coordinates));
+    }
+    else if (type === "geometry") {
+      this.olFeature_.setGeometry(new ol.geom.Geometry(geometry.coordinates));
+    }
+    else if (type === "linestring") {
+      this.olFeature_.setGeometry(new ol.geom.LineString(geometry.coordinates));
+    }
+    else if (type === "multilinestring") {
+      this.olFeature_.setGeometry(new ol.geom.MultiLineString(geometry.coordinates));
+    }
+    else if (type === "multipoint") {
+      this.olFeature_.setGeometry(new ol.geom.MultiPoint(geometry.coordinates));
+    }
+    else if (type === "multipolygon") {
+      this.olFeature_.setGeometry(new ol.geom.MultiPolygon(geometry.coordinates));
+    }
+    else if (type === "point") {
+      this.olFeature_.setGeometry(new ol.geom.Point(geometry.coordinates));
+    }
+    else if (type === "polygon") {
+      this.olFeature_.setGeometry(new ol.geom.Polygon(geometry.coordinates));
+    }
+  };
+
+  /**
+   * This function set facade class vector
+   *
+   * @function
+   * @param {object} obj - Facade vector
+   * @api stable
+   */
+  M.impl.Feature.prototype.setFacadeObj = function(obj) {
+    this.facadeFeature_ = obj;
   };
 
 })();

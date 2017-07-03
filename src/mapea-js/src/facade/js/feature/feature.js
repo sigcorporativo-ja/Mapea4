@@ -1,7 +1,7 @@
 goog.provide('M.Feature');
 goog.require('M.facade.Base');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Create a Feature
@@ -12,7 +12,7 @@ goog.require('M.facade.Base');
    * @param {Object} geojson - geojson to feature
    * @api stable
    */
-  M.Feature = (function (id, geojson, style) {
+  M.Feature = (function(id, geojson, style) {
     this.style_ = style;
 
     /**
@@ -33,6 +33,15 @@ goog.require('M.facade.Base');
   goog.inherits(M.Feature, M.facade.Base);
 
   /**
+   * TODO
+   */
+  M.Feature.prototype.addTo = function(layer) {
+    if (layer instanceof M.layer.Vector) {
+      this.getImpl().addTo(layer);
+    }
+  };
+
+  /**
    * This function set id
    *
    * @public
@@ -40,7 +49,7 @@ goog.require('M.facade.Base');
    * @param {string} id - ID to feature
    * @api stable
    */
-  M.Feature.prototype.setId = function (id) {
+  M.Feature.prototype.setId = function(id) {
     this.getImpl().setId(id);
   };
 
@@ -52,7 +61,7 @@ goog.require('M.facade.Base');
    * @return {string} ID to feature
    * @api stable
    */
-  M.Feature.prototype.getId = function () {
+  M.Feature.prototype.getId = function() {
     return this.getImpl().getId();
   };
 
@@ -64,8 +73,20 @@ goog.require('M.facade.Base');
    * @return {object} Geometry feature
    * @api stable
    */
-  M.Feature.prototype.getGeometry = function () {
+  M.Feature.prototype.getGeometry = function() {
     return this.getGeoJSON().geometry;
+  };
+
+  /**
+   * This function set geometry feature
+   *
+   * @public
+   * @function
+   * @param {object} Geometry feature
+   * @api stable
+   */
+  M.Feature.prototype.setGeometry = function(geometry) {
+    this.getImpl().setGeometry(geometry);
   };
 
   /**
@@ -76,7 +97,7 @@ goog.require('M.facade.Base');
    * @return {Object} geojson feature
    * @api stable
    */
-  M.Feature.prototype.getGeoJSON = function () {
+  M.Feature.prototype.getGeoJSON = function() {
     return this.formatGeoJSON_.write(this)[0];
   };
 
@@ -88,7 +109,7 @@ goog.require('M.facade.Base');
    * @return {Object} attributes feature
    * @api stable
    */
-  M.Feature.prototype.getAttributes = function () {
+  M.Feature.prototype.getAttributes = function() {
     return this.getImpl().getAttributes();
   };
 
@@ -100,7 +121,7 @@ goog.require('M.facade.Base');
    * @param {Object} attributes - attributes to feature
    * @api stable
    */
-  M.Feature.prototype.setAttributes = function (attributes) {
+  M.Feature.prototype.setAttributes = function(attributes) {
     if (typeof attributes === "object") {
       this.getImpl().setAttributes(attributes);
     }
@@ -118,7 +139,7 @@ goog.require('M.facade.Base');
    * @return  {string|number|object} returns the value of the indicated attribute
    * @api stable
    */
-  M.Feature.prototype.getAttribute = function (attribute) {
+  M.Feature.prototype.getAttribute = function(attribute) {
     return this.getImpl().getAttribute(attribute);
   };
 
@@ -131,7 +152,7 @@ goog.require('M.facade.Base');
    * @return  {string|number|object} returns the value of the indicated attribute
    * @api stable
    */
-  M.Feature.prototype.setAttribute = function (attribute, value) {
+  M.Feature.prototype.setAttribute = function(attribute, value) {
     return this.getImpl().setAttribute(attribute, value);
   };
 

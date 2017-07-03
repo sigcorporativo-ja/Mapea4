@@ -37,7 +37,7 @@ goog.require('M.impl.format.GeoJSON');
 goog.require('ol.renderer.Type');
 goog.require('ol.Map');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Map
@@ -49,7 +49,7 @@ goog.require('ol.Map');
    * @param {Mx.parameters.MapOptions} options
    * @api stable
    */
-  M.impl.Map = function (div, options) {
+  M.impl.Map = function(div, options) {
     goog.base(this);
 
     /**
@@ -179,7 +179,7 @@ goog.require('ol.Map');
    * @returns {Array<M.Layer>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getLayers = function (filters) {
+  M.impl.Map.prototype.getLayers = function(filters) {
     var wmcLayers = this.getWMC(filters);
     var kmlLayers = this.getKML(filters);
     var wmsLayers = this.getWMS(filters);
@@ -202,8 +202,8 @@ goog.require('ol.Map');
    * @returns {Array<M.Layer>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getBaseLayers = function () {
-    var baseLayers = this.getLayers().filter(function (layer) {
+  M.impl.Map.prototype.getBaseLayers = function() {
+    var baseLayers = this.getLayers().filter(function(layer) {
       var isBaseLayer = false;
       if ((layer.type === M.layer.type.WMS) || (layer.type === M.layer.type.OSM) || (layer.type === M.layer.type.Mapbox)) {
         isBaseLayer = (layer.transparent !== true);
@@ -222,12 +222,12 @@ goog.require('ol.Map');
    * @param {Array<Object>} layers
    * @returns {M.impl.Map}
    */
-  M.impl.Map.prototype.addLayers = function (layers) {
+  M.impl.Map.prototype.addLayers = function(layers) {
     // gets the layers with type defined and undefined
-    var unknowLayers = layers.filter(function (layer) {
+    var unknowLayers = layers.filter(function(layer) {
       return !M.layer.type.know(layer.type);
     });
-    var knowLayers = layers.filter(function (layer) {
+    var knowLayers = layers.filter(function(layer) {
       return M.layer.type.know(layer.type);
     });
 
@@ -250,13 +250,13 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeLayers = function (layers) {
+  M.impl.Map.prototype.removeLayers = function(layers) {
 
     // gets the layers with type defined and undefined
-    var unknowLayers = layers.filter(function (layer) {
+    var unknowLayers = layers.filter(function(layer) {
       return !M.layer.type.know(layer.type);
     });
-    var knowLayers = layers.filter(function (layer) {
+    var knowLayers = layers.filter(function(layer) {
       return M.layer.type.know(layer.type);
     });
 
@@ -284,11 +284,11 @@ goog.require('ol.Map');
    * @returns {Array<M.layer.WMC>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getWMC = function (filters) {
+  M.impl.Map.prototype.getWMC = function(filters) {
     var foundLayers = [];
 
     // get all wmcLayers
-    var wmcLayers = this.layers_.filter(function (layer) {
+    var wmcLayers = this.layers_.filter(function(layer) {
       return (layer.type === M.layer.type.WMC);
     });
 
@@ -304,8 +304,8 @@ goog.require('ol.Map');
       foundLayers = wmcLayers;
     }
     else {
-      filters.forEach(function (filterLayer) {
-        foundLayers = foundLayers.concat(wmcLayers.filter(function (wmcLayer) {
+      filters.forEach(function(filterLayer) {
+        foundLayers = foundLayers.concat(wmcLayers.filter(function(wmcLayer) {
           var layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmcLayer)) {
@@ -340,8 +340,8 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.addWMC = function (layers) {
-    layers.forEach(function (layer, zIndex) {
+  M.impl.Map.prototype.addWMC = function(layers) {
+    layers.forEach(function(layer, zIndex) {
       // checks if layer is WMC and was added to the map
       if (layer.type == M.layer.type.WMC) {
         if (!M.utils.includes(this.layers_, layer)) {
@@ -363,9 +363,9 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeWMC = function (layers) {
+  M.impl.Map.prototype.removeWMC = function(layers) {
     var wmcMapLayers = this.getWMC(layers);
-    wmcMapLayers.forEach(function (wmcLayer) {
+    wmcMapLayers.forEach(function(wmcLayer) {
       // TODO removing the WMC layer with ol3
       this.layers_.remove(wmcLayer);
     }, this);
@@ -381,11 +381,11 @@ goog.require('ol.Map');
    * @returns {Array<M.layer.KML>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getKML = function (filters) {
+  M.impl.Map.prototype.getKML = function(filters) {
     var foundLayers = [];
 
     // get all kmlLayers
-    var kmlLayers = this.layers_.filter(function (layer) {
+    var kmlLayers = this.layers_.filter(function(layer) {
       return (layer.type === M.layer.type.KML);
     });
 
@@ -401,8 +401,8 @@ goog.require('ol.Map');
       foundLayers = kmlLayers;
     }
     else {
-      filters.forEach(function (filterLayer) {
-        var filteredKMLLayers = kmlLayers.filter(function (kmlLayer) {
+      filters.forEach(function(filterLayer) {
+        var filteredKMLLayers = kmlLayers.filter(function(kmlLayer) {
           var layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(kmlLayer)) {
@@ -442,8 +442,8 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.addKML = function (layers) {
-    layers.forEach(function (layer) {
+  M.impl.Map.prototype.addKML = function(layers) {
+    layers.forEach(function(layer) {
       // checks if layer is WMC and was added to the map
       if (layer.type == M.layer.type.KML) {
         if (!M.utils.includes(this.layers_, layer)) {
@@ -471,9 +471,9 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeKML = function (layers) {
+  M.impl.Map.prototype.removeKML = function(layers) {
     var kmlMapLayers = this.getKML(layers);
-    kmlMapLayers.forEach(function (kmlLayer) {
+    kmlMapLayers.forEach(function(kmlLayer) {
       this.layers_.remove(kmlLayer);
       kmlLayer.getImpl().destroy();
 
@@ -494,11 +494,11 @@ goog.require('ol.Map');
    * @returns {Array<M.layer.WMS>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getWMS = function (filters) {
+  M.impl.Map.prototype.getWMS = function(filters) {
     var foundLayers = [];
 
     // get all wmsLayers
-    var wmsLayers = this.layers_.filter(function (layer) {
+    var wmsLayers = this.layers_.filter(function(layer) {
       return (layer.type === M.layer.type.WMS);
     });
 
@@ -514,8 +514,8 @@ goog.require('ol.Map');
       foundLayers = wmsLayers;
     }
     else {
-      filters.forEach(function (filterLayer) {
-        var filteredWMSLayers = wmsLayers.filter(function (wmsLayer) {
+      filters.forEach(function(filterLayer) {
+        var filteredWMSLayers = wmsLayers.filter(function(wmsLayer) {
           var layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmsLayer)) {
@@ -577,12 +577,12 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.addWMS = function (layers) {
+  M.impl.Map.prototype.addWMS = function(layers) {
     // cehcks if exists a base layer
     var baseLayers = this.getBaseLayers();
     var existsBaseLayer = (baseLayers.length > 0);
 
-    layers.forEach(function (layer) {
+    layers.forEach(function(layer) {
       // checks if layer is WMC and was added to the map
       if (layer.type == M.layer.type.WMS) {
         if (!M.utils.includes(this.layers_, layer)) {
@@ -622,9 +622,9 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeWMS = function (layers) {
+  M.impl.Map.prototype.removeWMS = function(layers) {
     var wmsMapLayers = this.getWMS(layers);
-    wmsMapLayers.forEach(function (wmsLayer) {
+    wmsMapLayers.forEach(function(wmsLayer) {
       this.layers_.remove(wmsLayer);
       wmsLayer.getImpl().destroy();
     }, this);
@@ -640,11 +640,11 @@ goog.require('ol.Map');
    * @returns {Array<M.layer.WFS>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getWFS = function (filters) {
+  M.impl.Map.prototype.getWFS = function(filters) {
     var foundLayers = [];
 
     // get all wfsLayers
-    var wfsLayers = this.layers_.filter(function (layer) {
+    var wfsLayers = this.layers_.filter(function(layer) {
       return (layer.type === M.layer.type.WFS);
     });
 
@@ -660,8 +660,8 @@ goog.require('ol.Map');
       foundLayers = wfsLayers;
     }
     else {
-      filters.forEach(function (filterLayer) {
-        var filteredWFSLayers = wfsLayers.filter(function (wfsLayer) {
+      filters.forEach(function(filterLayer) {
+        var filteredWFSLayers = wfsLayers.filter(function(wfsLayer) {
           var layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wfsLayer)) {
@@ -721,8 +721,8 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.addWFS = function (layers) {
-    layers.forEach(function (layer) {
+  M.impl.Map.prototype.addWFS = function(layers) {
+    layers.forEach(function(layer) {
       // checks if layer is WFS and was added to the map
       if (layer.type == M.layer.type.WFS) {
         if (!M.utils.includes(this.layers_, layer)) {
@@ -746,9 +746,9 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeWFS = function (layers) {
+  M.impl.Map.prototype.removeWFS = function(layers) {
     var wfsMapLayers = this.getWFS(layers);
-    wfsMapLayers.forEach(function (wfsLayer) {
+    wfsMapLayers.forEach(function(wfsLayer) {
       this.layers_.remove(wfsLayer);
       wfsLayer.getImpl().destroy();
     }, this);
@@ -764,11 +764,11 @@ goog.require('ol.Map');
    * @returns {Array<M.layer.WMTS>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getWMTS = function (filters) {
+  M.impl.Map.prototype.getWMTS = function(filters) {
     var foundLayers = [];
 
     // get all kmlLayers
-    var wmtsLayers = this.layers_.filter(function (layer) {
+    var wmtsLayers = this.layers_.filter(function(layer) {
       return (layer.type === M.layer.type.WMTS);
     });
 
@@ -784,9 +784,9 @@ goog.require('ol.Map');
       foundLayers = wmtsLayers;
     }
     else {
-      filters.forEach(function (filterLayer) {
+      filters.forEach(function(filterLayer) {
         // TODO ERROR DE RECURSIVIDAD: var l = map.getLayers(); map.getWMS(l);
-        var filteredWMTSLayers = wmtsLayers.filter(function (wmtsLayer) {
+        var filteredWMTSLayers = wmtsLayers.filter(function(wmtsLayer) {
           var layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmtsLayer)) {
@@ -830,8 +830,8 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.addWMTS = function (layers) {
-    layers.forEach(function (layer) {
+  M.impl.Map.prototype.addWMTS = function(layers) {
+    layers.forEach(function(layer) {
       // checks if layer is WMTS and was added to the map
       if (layer.type == M.layer.type.WMTS) {
         if (!M.utils.includes(this.layers_, layer)) {
@@ -853,9 +853,9 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeWMTS = function (layers) {
+  M.impl.Map.prototype.removeWMTS = function(layers) {
     var wmtsMapLayers = this.getWMTS(layers);
-    wmtsMapLayers.forEach(function (wmtsLayer) {
+    wmtsMapLayers.forEach(function(wmtsLayer) {
       this.layers_.remove(wmtsLayer);
       wmtsLayer.getImpl().destroy();
     }, this);
@@ -871,7 +871,7 @@ goog.require('ol.Map');
    * @returns {Array<M.layer.MBtiles>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getMBtiles = function (filters) {
+  M.impl.Map.prototype.getMBtiles = function(filters) {
     var foundLayers = [];
 
     return foundLayers;
@@ -885,8 +885,8 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.addMBtiles = function (layers) {
-    layers.forEach(function (layer) {
+  M.impl.Map.prototype.addMBtiles = function(layers) {
+    layers.forEach(function(layer) {
       // checks if layer is MBtiles and was added to the map
       if ((layer.type == M.layer.type.MBtiles) &&
         !M.utils.includes(this.layers_, layer)) {
@@ -906,9 +906,9 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeMBtiles = function (layers) {
+  M.impl.Map.prototype.removeMBtiles = function(layers) {
     var mbtilesMapLayers = this.getMBtiles(layers);
-    mbtilesMapLayers.forEach(function (mbtilesLayer) {
+    mbtilesMapLayers.forEach(function(mbtilesLayer) {
       // TODO removing the MBtiles layer with ol3
       this.layers_.remove(mbtilesLayer);
     }, this);
@@ -924,11 +924,11 @@ goog.require('ol.Map');
    * @param {Array<M.Layer>} filters to apply to the search
    * @returns {Array<M.layer.WMS>} layers from the map
    */
-  M.impl.Map.prototype.getUnknowLayers_ = function (filters) {
+  M.impl.Map.prototype.getUnknowLayers_ = function(filters) {
     var foundLayers = [];
 
     // get all wmsLayers
-    var unknowLayers = this.layers_.filter(function (layer) {
+    var unknowLayers = this.layers_.filter(function(layer) {
       return !M.layer.type.know(layer.type);
     });
 
@@ -944,8 +944,8 @@ goog.require('ol.Map');
       foundLayers = unknowLayers;
     }
     else {
-      filters.forEach(function (filterLayer) {
-        var filteredUnknowLayers = unknowLayers.filter(function (unknowLayer) {
+      filters.forEach(function(filterLayer) {
+        var filteredUnknowLayers = unknowLayers.filter(function(unknowLayer) {
           var layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(unknowLayer)) {
@@ -983,12 +983,12 @@ goog.require('ol.Map');
    * @param {Array<Object>} layers
    * @returns {M.impl.Map}
    */
-  M.impl.Map.prototype.addUnknowLayers_ = function (layers) {
+  M.impl.Map.prototype.addUnknowLayers_ = function(layers) {
     // cehcks if exists a base layer
     var existsBaseLayer = this.getBaseLayers().length > 0;
 
     // adds layers
-    layers.forEach(function (layer) {
+    layers.forEach(function(layer) {
       if (!M.utils.includes(this.layers_, layer)) {
         layer.getImpl().addTo(this.facadeMap_);
         this.layers_.push(layer);
@@ -1026,9 +1026,9 @@ goog.require('ol.Map');
    * @param {Array<Object>} layers to remove
    * @returns {M.impl.Map}
    */
-  M.impl.Map.prototype.removeUnknowLayers_ = function (layers) {
+  M.impl.Map.prototype.removeUnknowLayers_ = function(layers) {
     // removes unknow layers
-    layers.forEach(function (layer) {
+    layers.forEach(function(layer) {
       if (M.utils.includes(this.layers_, layer)) {
         this.layers_.remove(layer);
         layer.getImpl().destroy();
@@ -1052,7 +1052,7 @@ goog.require('ol.Map');
    * @returns {Array<M.Control>}
    * @api stable
    */
-  M.impl.Map.prototype.getControls = function (filters) {
+  M.impl.Map.prototype.getControls = function(filters) {
     var foundControls = [];
 
     // parse to Array
@@ -1066,8 +1066,8 @@ goog.require('ol.Map');
       foundControls = this.controls_;
     }
     else {
-      filters.forEach(function (filterControl) {
-        foundControls = foundControls.concat(this.controls_.filter(function (control) {
+      filters.forEach(function(filterControl) {
+        foundControls = foundControls.concat(this.controls_.filter(function(control) {
           var controlMatched = false;
 
           if (!M.utils.includes(foundControls, control)) {
@@ -1097,8 +1097,8 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.addControls = function (controls) {
-    controls.forEach(function (control) {
+  M.impl.Map.prototype.addControls = function(controls) {
+    controls.forEach(function(control) {
       if (control instanceof M.control.Panzoombar) {
         this.facadeMap_.addControls('panzoom');
       }
@@ -1118,9 +1118,9 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeControls = function (controls) {
+  M.impl.Map.prototype.removeControls = function(controls) {
     var mapControls = this.getControls(controls);
-    mapControls.forEach(function (control) {
+    mapControls.forEach(function(control) {
       control.destroy();
       this.controls_.remove(control);
     }, this);
@@ -1139,7 +1139,7 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.setMaxExtent = function (maxExtent, zoomToExtent) {
+  M.impl.Map.prototype.setMaxExtent = function(maxExtent, zoomToExtent) {
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(maxExtent)) {
       M.exception('No ha especificado ningún maxExtent');
@@ -1168,7 +1168,7 @@ goog.require('ol.Map');
    * @returns {Mx.Extent}
    * @api stable
    */
-  M.impl.Map.prototype.getMaxExtent = function () {
+  M.impl.Map.prototype.getMaxExtent = function() {
     var extent;
     var olMap = this.getMapImpl();
     var olExtent = olMap.getView().get('extent');
@@ -1202,7 +1202,7 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.setBbox = function (bbox) {
+  M.impl.Map.prototype.setBbox = function(bbox) {
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(bbox)) {
       M.exception('No ha especificado ningún bbox');
@@ -1233,7 +1233,7 @@ goog.require('ol.Map');
    * @returns {Mx.Extent}
    * @api stable
    */
-  M.impl.Map.prototype.getBbox = function () {
+  M.impl.Map.prototype.getBbox = function() {
     var bbox = null;
 
     var olMap = this.getMapImpl();
@@ -1267,7 +1267,7 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.setZoom = function (zoom) {
+  M.impl.Map.prototype.setZoom = function(zoom) {
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(zoom)) {
       M.exception('No ha especificado ningún zoom');
@@ -1288,7 +1288,7 @@ goog.require('ol.Map');
    * @returns {Number}
    * @api stable
    */
-  M.impl.Map.prototype.getZoom = function () {
+  M.impl.Map.prototype.getZoom = function() {
     let resolution = this.getMapImpl().getView().getResolution();
     let resolutions = this.getResolutions();
     let zoom = null;
@@ -1311,7 +1311,7 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.setCenter = function (center) {
+  M.impl.Map.prototype.setCenter = function(center) {
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(center)) {
       M.exception('No ha especificado ningún center');
@@ -1333,7 +1333,7 @@ goog.require('ol.Map');
       this.drawPoints([{
         'x': center.x,
         'y': center.y,
-        'click': goog.bind(function (evt) {
+        'click': goog.bind(function(evt) {
           var label = this.getLabel();
           if (!M.utils.isNullOrEmpty(label)) {
             label.show(this.facadeMap_);
@@ -1353,7 +1353,7 @@ goog.require('ol.Map');
    * @returns {Object}
    * @api stable
    */
-  M.impl.Map.prototype.getCenter = function () {
+  M.impl.Map.prototype.getCenter = function() {
     var center = null;
     var olCenter = this.getMapImpl().getView().getCenter();
     if (!M.utils.isNullOrEmpty(olCenter)) {
@@ -1374,7 +1374,7 @@ goog.require('ol.Map');
    * @returns {Array<Number>}
    * @api stable
    */
-  M.impl.Map.prototype.getResolutions = function () {
+  M.impl.Map.prototype.getResolutions = function() {
     var olMap = this.getMapImpl();
     var resolutions = olMap.getView().getResolutions();
 
@@ -1391,7 +1391,7 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.setResolutions = function (resolutions, optional) {
+  M.impl.Map.prototype.setResolutions = function(resolutions, optional) {
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(resolutions)) {
       M.exception('No ha especificado ninguna resolución');
@@ -1420,7 +1420,7 @@ goog.require('ol.Map');
 
     // sets the resolutions for each layer
     var layers = this.getWMS();
-    layers.forEach(function (layer) {
+    layers.forEach(function(layer) {
       layer.getImpl().setResolutions(resolutions);
     });
 
@@ -1440,7 +1440,7 @@ goog.require('ol.Map');
    * @returns {number}
    * @api stable
    */
-  M.impl.Map.prototype.getScale = function () {
+  M.impl.Map.prototype.getScale = function() {
     var olMap = this.getMapImpl();
 
     var resolution = olMap.getView().getResolution();
@@ -1473,7 +1473,7 @@ goog.require('ol.Map');
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.setProjection = function (projection) {
+  M.impl.Map.prototype.setProjection = function(projection) {
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(projection)) {
       M.exception('No ha especificado ninguna projection');
@@ -1512,7 +1512,7 @@ goog.require('ol.Map');
     olMap.setView(newView);
 
     // updates min, max resolutions of all WMS layers
-    this.facadeMap_.getWMS().forEach(function (layer) {
+    this.facadeMap_.getWMS().forEach(function(layer) {
       layer.updateMinMaxResolution(projection);
     });
 
@@ -1587,7 +1587,7 @@ goog.require('ol.Map');
    * @returns {Mx.Projection}
    * @api stable
    */
-  M.impl.Map.prototype.getProjection = function () {
+  M.impl.Map.prototype.getProjection = function() {
     var olMap = this.getMapImpl();
     var olProjection = olMap.getView().getProjection();
 
@@ -1610,7 +1610,7 @@ goog.require('ol.Map');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.getMapImpl = function () {
+  M.impl.Map.prototype.getMapImpl = function() {
     return this.map_;
   };
 
@@ -1624,7 +1624,7 @@ goog.require('ol.Map');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.removePopup = function (popup) {
+  M.impl.Map.prototype.removePopup = function(popup) {
     if (!M.utils.isNullOrEmpty(popup)) {
       var olPopup = popup.getImpl();
       var olMap = this.getMapImpl();
@@ -1642,8 +1642,8 @@ goog.require('ol.Map');
    * @returns {Promise}
    * @api stable
    */
-  M.impl.Map.prototype.getEnvolvedExtent = function () {
-    return M.impl.envolvedExtent.calculate(this).then(function (extent) {
+  M.impl.Map.prototype.getEnvolvedExtent = function() {
+    return M.impl.envolvedExtent.calculate(this).then(function(extent) {
       this.envolvedMaxExtent_ = extent;
       return this.envolvedMaxExtent_;
     }.bind(this));
@@ -1657,7 +1657,7 @@ goog.require('ol.Map');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.destroy = function () {
+  M.impl.Map.prototype.destroy = function() {
     this.layers_.length = 0;
     this.controls_.length = 0;
 
@@ -1677,7 +1677,7 @@ goog.require('ol.Map');
    * @returns {M.Map}
    * @api stable
    */
-  M.impl.Map.prototype.updateResolutionsFromBaseLayer = function () {
+  M.impl.Map.prototype.updateResolutionsFromBaseLayer = function() {
     var resolutions = [];
 
     // zoom levels
@@ -1689,7 +1689,7 @@ goog.require('ol.Map');
     // size
     var size = this.getMapImpl().getSize();
 
-    var baseLayer = this.getBaseLayers().filter(function (bl) {
+    var baseLayer = this.getBaseLayers().filter(function(bl) {
       return bl.isVisible();
     })[0];
 
@@ -1718,7 +1718,7 @@ goog.require('ol.Map');
         }
       }
       else {
-        M.impl.envolvedExtent.calculate(this).then(function (extent) {
+        M.impl.envolvedExtent.calculate(this).then(function(extent) {
           if (!this._resolutionsBaseLayer && (this.userResolutions_ === null)) {
 
             resolutions = M.utils.generateResolutionsFromExtent(extent, size, zoomLevels, units);
@@ -1749,7 +1749,7 @@ goog.require('ol.Map');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.addLabel = function (label) {
+  M.impl.Map.prototype.addLabel = function(label) {
     this.label = label;
     label.show(this.facadeMap_);
     return this;
@@ -1765,7 +1765,7 @@ goog.require('ol.Map');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.getLabel = function () {
+  M.impl.Map.prototype.getLabel = function() {
     return this.label;
 
   };
@@ -1778,7 +1778,7 @@ goog.require('ol.Map');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.removeLabel = function () {
+  M.impl.Map.prototype.removeLabel = function() {
     if (!M.utils.isNullOrEmpty(this.label)) {
       var popup = this.label.getPopup();
       this.removePopup(popup);
@@ -1794,7 +1794,7 @@ goog.require('ol.Map');
    * @returns {M.Map}
    * @api stable
    */
-  M.impl.Map.prototype.drawPoints = function (points) {
+  M.impl.Map.prototype.drawPoints = function(points) {
     this.getDrawLayer().drawPoints(points);
 
     return this;
@@ -1808,7 +1808,7 @@ goog.require('ol.Map');
    * @returns {M.Map}
    * @api stable
    */
-  M.impl.Map.prototype.drawFeatures = function (features) {
+  M.impl.Map.prototype.drawFeatures = function(features) {
     this.getDrawLayer().drawFeatures(features);
 
     return this;
@@ -1821,7 +1821,7 @@ goog.require('ol.Map');
    * @returns {Array<Mx.Point>}
    * @api stable
    */
-  M.impl.Map.prototype.getPoints = function (coordinate) {
+  M.impl.Map.prototype.getPoints = function(coordinate) {
     return this.getDrawLayer().getPoints(coordinate);
   };
 
@@ -1833,7 +1833,7 @@ goog.require('ol.Map');
    * @returns {M.Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeFeatures = function (features) {
+  M.impl.Map.prototype.removeFeatures = function(features) {
     this.getDrawLayer().removeFeatures(features);
 
     return this;
@@ -1847,7 +1847,7 @@ goog.require('ol.Map');
    * @api stable
    * @returns {M.impl.Map} the instance
    */
-  M.impl.Map.prototype.refresh = function () {
+  M.impl.Map.prototype.refresh = function() {
     this.map_.updateSize();
     return this;
   };
@@ -1860,7 +1860,7 @@ goog.require('ol.Map');
    * @returns {M.impl.layer.Draw}
    * @api stable
    */
-  M.impl.Map.prototype.getDrawLayer = function (coordinate) {
+  M.impl.Map.prototype.getDrawLayer = function(coordinate) {
     if (M.utils.isNullOrEmpty(this.drawLayer_)) {
       this.drawLayer_ = new M.impl.layer.Draw();
       this.drawLayer_.addTo(this.facadeMap_);
@@ -1877,7 +1877,7 @@ goog.require('ol.Map');
    * @api stable
    * @returns {Object} core map used by the implementation
    */
-  M.impl.Map.prototype.getContainer = function () {
+  M.impl.Map.prototype.getContainer = function() {
     return this.map_.overlayContainerStopEvent_;
   };
 
@@ -1889,7 +1889,7 @@ goog.require('ol.Map');
    * @returns {M.impl.layer.Draw}
    * @api stable
    */
-  M.impl.Map.prototype.getFeaturesHandler = function () {
+  M.impl.Map.prototype.getFeaturesHandler = function() {
     return this.featuresHandler_;
   };
 
@@ -1900,7 +1900,7 @@ goog.require('ol.Map');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.setFacadeMap = function (facadeMap) {
+  M.impl.Map.prototype.setFacadeMap = function(facadeMap) {
     this.facadeMap_ = facadeMap;
   };
 
