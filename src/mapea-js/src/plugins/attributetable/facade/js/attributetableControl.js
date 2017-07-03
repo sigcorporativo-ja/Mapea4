@@ -173,35 +173,39 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function(name) {
   if (!M.utils.isNullOrEmpty(name)) {
     this.layer_ = this.hasLayer_(name)[0];
   }
-  let headerAtt = Object.keys(this.layer_.getFeatures()[0].getAttributes());
-  let geomPos = headerAtt.indexOf("geometry");
-  headerAtt.splice(geomPos, 1);
 
   let features = this.layer_.getFeatures();
-  let attributes = [];
-  features.forEach(function(feature) {
-    let properties = Object.values(feature.getAttributes());
-    if (geomPos !== -1) {
-      properties.splice(geomPos, 1);
+  if (!M.utils.isNullOrEmpty(features)) {
+    var headerAtt = Object.keys(features[0].getAttributes());
+    let geomPos = headerAtt.indexOf("geometry");
+    headerAtt.splice(geomPos, 1);
+    var attributes = [];
+    features.forEach(function(feature) {
+      let properties = Object.values(feature.getAttributes());
+      if (geomPos !== -1) {
+        properties.splice(geomPos, 1);
+      }
+      if (!M.utils.isNullOrEmpty(properties)) {
+        attributes.push(properties);
+      }
+    });
+    if (this.sortProperties_.active) {
+      attributes = this.sortAttributes_(attributes, headerAtt);
     }
-    if (!M.utils.isNullOrEmpty(properties)) {
-      attributes.push(properties);
-    }
-  });
-
-  if (this.sortProperties_.active) {
-    attributes = this.sortAttributes_(attributes, headerAtt);
   }
-
   return new Promise(function(success, fail) {
-    M.template.compile('tableData.html', {
-      'jsonp': true,
-      'vars': {
+    let params = {};
+    if (!M.utils.isUndefined(headerAtt)) {
+      params = {
         headerAtt: headerAtt,
         legend: this.layer_.legend,
         pages: this.pageResults_(attributes),
         attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes.slice(this.pages_.element, this.pages_.element + this.numPages_)
-      }
+      };
+    }
+    M.template.compile('tableData.html', {
+      'jsonp': true,
+      'vars': params
     }).then(function(html) {
       let content = this.areaTable_.querySelector("table");
       if (!M.utils.isNullOrEmpty(content)) {
@@ -225,6 +229,9 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function(name) {
         }.bind(this));
         this.hasNext_(html);
         this.hasPrevious_(html);
+      }
+      else {
+        goog.events.listen(html.querySelector('#m-attributetable-refresh'), goog.events.EventType.CLICK, this.refresh_, false, this);
       }
       success();
       this.calculateDragLimits_();

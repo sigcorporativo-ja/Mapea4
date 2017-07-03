@@ -4,7 +4,7 @@ goog.require('M.Layer');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Vector layer
@@ -16,7 +16,7 @@ goog.require('M.exception');
    * @param {Mx.parameters.LayerOptions} options - custom options for this layer
    * @api stable
    */
-  M.layer.Vector = (function (userParameters, options) {
+  M.layer.Vector = (function(userParameters, options) {
     // checks if the implementation can create Vector
     if (M.utils.isUndefined(M.impl.layer.Vector)) {
       M.exception('La implementación usada no puede crear capas Vector');
@@ -38,7 +38,7 @@ goog.require('M.exception');
     var parameters = M.parameter.layer(userParameters, M.layer.type.Vector);
 
     // registers on M.evt.LOAD event
-    options.on(M.evt.LOAD, function (features) {
+    options.on(M.evt.LOAD, function(features) {
       this.fire(M.evt.LOAD, [features]);
     }, this);
 
@@ -55,8 +55,13 @@ goog.require('M.exception');
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  M.layer.Vector.prototype.addFeatures = function (features) {
-    this.getImpl().addFeatures(features);
+  M.layer.Vector.prototype.addFeatures = function(features) {
+    if (!M.utils.isNullOrEmpty(features)) {
+      if (!M.utils.isArray(features)) {
+        features = [features];
+      }
+      features.forEach(f => f.addTo(this));
+    }
   };
 
   /**
@@ -68,7 +73,7 @@ goog.require('M.exception');
    * @return {Array<M.Feature>} returns all features or discriminating by the filter
    * @api stable
    */
-  M.layer.Vector.prototype.getFeatures = function (skipFilter) {
+  M.layer.Vector.prototype.getFeatures = function(skipFilter) {
     if (M.utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
     return this.getImpl().getFeatures(skipFilter, this.filter_);
   };
@@ -82,7 +87,7 @@ goog.require('M.exception');
    * @return {null|M.feature} feature - Returns the feature with that id if it is found, in case it is not found or does not indicate the id returns null
    * @api stable
    */
-  M.layer.Vector.prototype.getFeatureById = function (id) {
+  M.layer.Vector.prototype.getFeatureById = function(id) {
     let feature = null;
     if (!M.utils.isNullOrEmpty(id)) {
       feature = this.getImpl().getFeatureById(id);
@@ -101,7 +106,7 @@ goog.require('M.exception');
    * @param {Array<M.feature>} features - Features to remove
    * @api stable
    */
-  M.layer.Vector.prototype.removeFeatures = function (features) {
+  M.layer.Vector.prototype.removeFeatures = function(features) {
     if (M.utils.isArray(features)) {
       this.getImpl().removeFeatures(features);
     }
@@ -117,7 +122,7 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.layer.Vector.prototype.clear = function () {
+  M.layer.Vector.prototype.clear = function() {
     this.removeFeatures(this.getFeatures());
   };
 
@@ -128,7 +133,7 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.layer.Vector.prototype.refresh = function () {
+  M.layer.Vector.prototype.refresh = function() {
     this.getImpl().refresh(true);
   };
 
@@ -139,7 +144,7 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.layer.Vector.prototype.redraw = function () {
+  M.layer.Vector.prototype.redraw = function() {
     this.getImpl().redraw();
   };
 
@@ -151,7 +156,7 @@ goog.require('M.exception');
    * @param {M.Filter} filter - filter to set
    * @api stable
    */
-  M.layer.Vector.prototype.setFilter = function (filter) {
+  M.layer.Vector.prototype.setFilter = function(filter) {
     if (M.utils.isNullOrEmpty(filter) || (filter instanceof M.Filter)) {
       this.filter_ = filter;
       this.redraw();
@@ -169,7 +174,7 @@ goog.require('M.exception');
    * @return {M.Filter} returns filter assigned
    * @api stable
    */
-  M.layer.Vector.prototype.getFilter = function () {
+  M.layer.Vector.prototype.getFilter = function() {
     return this.filter_;
   };
 
@@ -181,7 +186,7 @@ goog.require('M.exception');
    * @return {Array<number>} Extent of features
    * @api stable
    */
-  M.layer.Vector.prototype.getFeaturesExtent = function (skipFilter) {
+  M.layer.Vector.prototype.getFeaturesExtent = function(skipFilter) {
     if (M.utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
     return this.getImpl().getFeaturesExtent(skipFilter, this.filter_);
   };
@@ -193,7 +198,7 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.layer.Vector.prototype.removeFilter = function () {
+  M.layer.Vector.prototype.removeFilter = function() {
     this.setFilter(null);
   };
 
@@ -206,7 +211,7 @@ goog.require('M.exception');
    * @param {object} obj - Object to compare
    * @api stable
    */
-  M.layer.Vector.prototype.equals = function (obj) {
+  M.layer.Vector.prototype.equals = function(obj) {
     var equals = false;
     if (obj instanceof M.layer.Vector) {}
     return equals;

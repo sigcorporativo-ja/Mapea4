@@ -13,7 +13,7 @@ goog.require('ol.source.Vector');
 
 goog.require('M.impl.layer.Vector');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -24,7 +24,7 @@ goog.require('M.impl.layer.Vector');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.WFS = (function (options) {
+  M.impl.layer.WFS = (function(options) {
 
     /**
      * WFS layer options
@@ -80,7 +80,7 @@ goog.require('M.impl.layer.Vector');
    * @param {M.Map} map
    * @api stable
    */
-  M.impl.layer.WFS.prototype.addTo = function (map) {
+  M.impl.layer.WFS.prototype.addTo = function(map) {
     this.map = map;
 
     this.ol3Layer = new ol.layer.Vector({
@@ -95,7 +95,7 @@ goog.require('M.impl.layer.Vector');
     var olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
 
-    map.getImpl().on(M.evt.CHANGE, function () {
+    map.getImpl().on(M.evt.CHANGE, function() {
       this.refresh();
     }, this);
   };
@@ -108,7 +108,7 @@ goog.require('M.impl.layer.Vector');
    * @param {Boolean} forceNewSource
    * @api stable
    */
-  M.impl.layer.WFS.prototype.refresh = function (forceNewSource) {
+  M.impl.layer.WFS.prototype.refresh = function(forceNewSource) {
     this.features_ = [];
     this.updateSource_(forceNewSource);
   };
@@ -119,7 +119,7 @@ goog.require('M.impl.layer.Vector');
    * @private
    * @function
    */
-  M.impl.layer.WFS.prototype.updateSource_ = function (forceNewSource) {
+  M.impl.layer.WFS.prototype.updateSource_ = function(forceNewSource) {
     var this_ = this;
 
     this.service_ = new M.impl.service.WFS({
@@ -147,8 +147,8 @@ goog.require('M.impl.layer.Vector');
     if ((forceNewSource === true) || M.utils.isNullOrEmpty(ol3LayerSource)) {
       this.ol3Layer.setSource(new ol.source.Vector({
         format: this.formater_.getImpl(),
-        loader: this.loader_.getLoaderFn(function (features) {
-          this_.addFeatures(features);
+        loader: this.loader_.getLoaderFn(function(features) {
+          this_.facadeVector_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
         }),
         strategy: ol.loadingstrategy.all
@@ -156,8 +156,8 @@ goog.require('M.impl.layer.Vector');
     }
     else {
       ol3LayerSource.set("format", this.formater_);
-      ol3LayerSource.set("loader", this.loader_.getLoaderFn(function (features) {
-        this.addFeatures(features);
+      ol3LayerSource.set("loader", this.loader_.getLoaderFn(function(features) {
+        this.facadeVector_.addFeatures(features);
         this_.fire(M.evt.LOAD, [features]);
       }));
       ol3LayerSource.set("strategy", ol.loadingstrategy.all);
@@ -173,7 +173,7 @@ goog.require('M.impl.layer.Vector');
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.setCQL = function (newCQL) {
+  M.impl.layer.WFS.prototype.setCQL = function(newCQL) {
     this.cql = newCQL;
     this.refresh(true);
   };
@@ -185,9 +185,9 @@ goog.require('M.impl.layer.Vector');
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.getDescribeFeatureType = function () {
+  M.impl.layer.WFS.prototype.getDescribeFeatureType = function() {
     if (M.utils.isNullOrEmpty(this.describeFeatureType_)) {
-      this.describeFeatureType_ = this.service_.getDescribeFeatureType().then(function (describeFeatureType) {
+      this.describeFeatureType_ = this.service_.getDescribeFeatureType().then(function(describeFeatureType) {
         if (!M.utils.isNullOrEmpty(describeFeatureType)) {
           this.formater_ = new M.impl.format.GeoJSON({
             'geometryName': describeFeatureType.geometryName,
@@ -208,7 +208,7 @@ goog.require('M.impl.layer.Vector');
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.getDefaultValue = function (type) {
+  M.impl.layer.WFS.prototype.getDefaultValue = function(type) {
     var defaultValue;
     if (type == "dateTime") {
       defaultValue = '0000-00-00T00:00:00';
@@ -239,7 +239,7 @@ goog.require('M.impl.layer.Vector');
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.destroy = function () {
+  M.impl.layer.WFS.prototype.destroy = function() {
     var olMap = this.map.getMapImpl();
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
@@ -255,7 +255,7 @@ goog.require('M.impl.layer.Vector');
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.equals = function (obj) {
+  M.impl.layer.WFS.prototype.equals = function(obj) {
     var equals = false;
 
     if (obj instanceof M.layer.WFS) {

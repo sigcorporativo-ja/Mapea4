@@ -2,7 +2,7 @@ goog.provide('M.facade.Base');
 
 goog.require('M.Object');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main facade Object. This class creates a facede
@@ -14,7 +14,7 @@ goog.require('M.Object');
    * @extends {M.Object}
    * @api stable
    */
-  M.facade.Base = (function (impl) {
+  M.facade.Base = (function(impl) {
     /**
      * Implementation of this object
      * @private
@@ -40,7 +40,7 @@ goog.require('M.Object');
    * @returns {Object}
    * @api stable
    */
-  M.facade.Base.prototype.getImpl = function () {
+  M.facade.Base.prototype.getImpl = function() {
     return this.impl_;
   };
 
@@ -52,7 +52,7 @@ goog.require('M.Object');
    * @param {M.Map} impl to add the plugin
    * @api stable
    */
-  M.facade.Base.prototype.setImpl = function (impl) {
+  M.facade.Base.prototype.setImpl = function(impl) {
     this.impl_ = impl;
   };
 })();
