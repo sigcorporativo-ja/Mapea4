@@ -8,8 +8,9 @@ goog.provide('M.style.Feature');
   /**
    * TODO
    */
-  M.style.Feature = (function(options) {
-    //para que rec. options si luego no lo guarda y el const. no se hereda?
+  M.style.Feature = (function(options = {}) {
+    // calls the super constructor
+    goog.base(this, options);
   });
   goog.inherits(M.style.Feature, M.Style);
 
@@ -18,18 +19,15 @@ goog.provide('M.style.Feature');
    * TODO
    * Como es protected no se rellena
    */
-  M.style.Feature.prototype.apply_ = function(element) {};
+  M.style.Feature.prototype.apply_ = function(layer) {
+    layer.getFeatures().forEach(function(f) {
+      this.applyToFeature_(f);
+    }, this);
+  };
 
   /**
    * TODO
-   * hace falta poner el get de nuevo si ya lo tiene de style?
+   * Como es protected no se rellena
    */
-  M.Style.prototype.get = function(property) {};
-
-  /**
-   * TODO
-   * hace falta poner el set de nuevo si ya lo tiene de style?
-   */
-  M.style.Feature.prototype.set = function(property, value) {};
-
+  M.style.Feature.prototype.applyToFeature_ = function(element) {};
 })();

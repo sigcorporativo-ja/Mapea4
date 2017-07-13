@@ -1,21 +1,34 @@
 goog.provide('M.Style');
 
-/**
- * TODO
- */
 (function() {
 
   /**
    * Rec. options que es el json del estilo
    */
-  M.Style = (function(options) {
+  M.Style = (function(options = {}) {
+    /**
+     * TODO
+     */
     this.options_ = options;
+
+    /**
+     * TODO
+     */
+    this.canvas_ = document.createElement('canvas');
+
+    /**
+     * TODO
+     */
+    this.layer_ = null;
+
     // si rec. una imagen podemos tener un canvas
     if (!M.utils.isNullOrEmpty(options.icon)) {
-      let canvas = document.createElement('canvas');
-      // ruta en el json
-      canvas.toDataURL(options.icon.src);
-      this.canvas_ = canvas;
+      let ctx = this.canvas_.getContext('2d');
+      let img = new Image;
+      img.onload = function() {
+        ctx.drawImage(img, 0, 0); // Or at whatever offset you like
+      };
+      img.src = options.icon.src;
     }
   });
 
@@ -23,7 +36,9 @@ goog.provide('M.Style');
    * TODO
    * Como es protected no se rellena, pero que se supone que debe hacer?
    */
-  M.Style.prototype.apply_ = function(layer) {};
+  M.Style.prototype.apply_ = function(layer) {
+    this.layer_ = layer;
+  };
 
   /**
    * TODO
@@ -40,8 +55,10 @@ goog.provide('M.Style');
    */
   M.Style.prototype.set = function(property, value) {
     this.options[property] = value;
-    // le pasamos las opciones de estilos a la impl
-    this.getImpl().setStyle(this.options_);
+
+    // TODO refrescamos de nuevo el estilo
+    this.apply_(this.layer_);
+
     return this;
   };
 
@@ -49,7 +66,7 @@ goog.provide('M.Style');
    * TODO
    */
   M.Style.prototype.toImage = function() {
-    return this.canvas_.toDataURL();
+    return this.canvas_.toDataURL('png');
   };
 
   /**
