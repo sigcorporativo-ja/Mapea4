@@ -9,6 +9,10 @@ goog.provide('M.style.Polygon');
    * TODO
    */
   M.style.Polygon = (function(options) {
+    /**
+     * TODO
+     */
+    var impl = new M.impl.Polygon(options);
     // calls the super constructor
     goog.base(this, options);
   });
@@ -18,8 +22,7 @@ goog.provide('M.style.Polygon');
    * TODO
    */
   M.style.Simple.prototype.applyToFeature_ = function(feature) {
-    /*no se que tiene que hacer esto...*/
-    this.getImpl().applyToFeature_(feature);
+    this.getImpl().applyToFeature(feature);
   };
 
   /**

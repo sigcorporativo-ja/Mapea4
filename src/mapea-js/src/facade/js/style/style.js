@@ -31,6 +31,7 @@ goog.provide('M.Style');
       img.src = options.icon.src;
     }
   });
+  goog.inherits(M.Style, M.facade.Base);
 
   /**
    * TODO

@@ -20,6 +20,7 @@ goog.provide('M.style.Feature');
    * Como es protected no se rellena
    */
   M.style.Feature.prototype.apply_ = function(layer) {
+    goog.base(this, 'apply_', layer);
     layer.getFeatures().forEach(function(f) {
       this.applyToFeature_(f);
     }, this);
