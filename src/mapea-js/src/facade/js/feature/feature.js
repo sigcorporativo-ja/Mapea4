@@ -156,4 +156,11 @@ goog.require('M.facade.Base');
     return this.getImpl().setAttribute(attribute, value);
   };
 
+  /**
+   * TODO
+   */
+  M.Feature.prototype.setStyle = function(style) {
+    style.applyToFeature(this);
+  };
+
 })();

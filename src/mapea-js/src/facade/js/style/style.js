@@ -5,7 +5,7 @@ goog.provide('M.Style');
   /**
    * Rec. options que es el json del estilo
    */
-  M.Style = (function(options = {}) {
+  M.Style = (function(options = {}, impl) {
     /**
      * TODO
      */
@@ -30,6 +30,8 @@ goog.provide('M.Style');
       };
       img.src = options.icon.src;
     }
+
+    goog.base(this, impl);
   });
   goog.inherits(M.Style, M.facade.Base);
 

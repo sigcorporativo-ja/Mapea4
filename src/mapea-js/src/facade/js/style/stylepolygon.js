@@ -14,14 +14,14 @@ goog.provide('M.style.Polygon');
      */
     var impl = new M.impl.Polygon(options);
     // calls the super constructor
-    goog.base(this, options);
+    goog.base(this, options, impl);
   });
   goog.inherits(M.style.Polygon, M.style.Simple);
 
   /**
    * TODO
    */
-  M.style.Simple.prototype.applyToFeature_ = function(feature) {
+  M.style.Simple.prototype.applyToFeature = function(feature) {
     this.getImpl().applyToFeature(feature);
   };
 
