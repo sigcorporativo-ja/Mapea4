@@ -8,7 +8,7 @@ goog.provide('M.style.Feature');
   /**
    * TODO
    */
-  M.style.Feature = (function(options = {}, impl) {
+  M.style.Feature = (function(options, impl) {
     // calls the super constructor
     goog.base(this, options, impl);
   });

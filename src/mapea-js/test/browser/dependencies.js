@@ -43,5 +43,18 @@ goog.require("M.filter.Spatial");
 goog.require("M.filter.spatial");
 goog.require("M.filter");
 
+// styles
+goog.require('M.Style');
+goog.require('M.style.Feature');
+goog.require('M.style.Simple');
+goog.require('M.style.Polygon');
+goog.require('M.impl.style.Polygon');
+goog.require('M.style.Line');
+goog.require('M.impl.style.Line');
+goog.require('M.style.Point');
+goog.require('M.impl.style.Point');
+goog.require('M.style.align');
+goog.require('M.style.baseline');
+
 //     image: new
 goog.require("goog.events");

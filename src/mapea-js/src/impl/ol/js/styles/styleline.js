@@ -1,14 +1,17 @@
-goog.provide('M.impl.style.Polygon');
+goog.provide('M.impl.style.Line');
+
 
 /**
  * @namespace M.style.Polygon
  */
 (function() {
-  M.impl.style.Polygon = function(options) {
+
+  M.impl.style.Line = function(options) {
     let stroke = options.stroke;
     let label = options.label;
     let fill = options.fill;
     this.style_ = new ol.style.Style();
+    this.styleStroke_ = new ol.style.Style();
     if (!M.utils.isNullOrEmpty(stroke)) {
       this.style_.setStroke(new ol.style.Stroke({
         color: stroke.color,
@@ -25,8 +28,7 @@ goog.provide('M.impl.style.Polygon');
         font: label.font,
         rotateWithView: label.rotate,
         scale: label.scale,
-        offsetX: label.offset[0],
-        offsetY: label.offset[1],
+        offset: [label.offsetX, label.offsetY],
         fill: new ol.style.Fill({
           color: label.color
         }),
@@ -48,18 +50,20 @@ goog.provide('M.impl.style.Polygon');
       }
     }
     if (!M.utils.isNullOrEmpty(fill)) {
-      this.style_.setFill(
-        new ol.style.Fill({
-          color: chroma(fill.color).alpha(fill.opacity).css()
-        }));
+      this.styleStroke_.setStroke(
+        new ol.style.Stroke({
+          color: fill.color,
+          width: fill.width
+        })
+      )
     }
   };
 
   /**
    * TODO
    */
-  M.impl.style.Polygon.prototype.applyToFeature = function(feature) {
-    feature.getImpl().getOLFeature().setStyle(this.style_);
+  M.impl.style.Line.prototype.applyToFeature = function(feature) {
+    feature.getImpl().getOLFeature().setStyle([this.style_, this.styleStroke_]);
   };
 
 })();

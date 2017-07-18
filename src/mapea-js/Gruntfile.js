@@ -3,7 +3,7 @@
    be specified inside this function)
 */
 var renamePluginsFn = require('./grunt-tasks/utilities/rename-plugins');
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
   // Project configuration
   grunt.initConfig({
@@ -170,7 +170,7 @@ module.exports = function (grunt) {
           dest: 'build/core/js/',
           flatten: false,
           encoding: 'utf-8',
-          rename: function (version, dest, src) {
+          rename: function(version, dest, src) {
             console.log('version ' + version + ' dest ' + dest + ' src ' + src);
             return dest.concat('configuration-' + version + '.js')
           }.bind(this, '<%= pkg.version %>')
@@ -183,7 +183,7 @@ module.exports = function (grunt) {
           src: 'mapea-<%= pkg.version %>.ol.min.js',
           dest: 'build/core/js/',
           encoding: 'utf-8',
-          rename: function (dest, source) {
+          rename: function(dest, source) {
             return dest.concat('mapea.ol.min.js');
           }
         }, {
@@ -192,7 +192,7 @@ module.exports = function (grunt) {
           src: 'mapea-<%= pkg.version %>.ol.min.css',
           dest: 'build/core/assets/css/',
           encoding: 'utf-8',
-          rename: function (dest, source) {
+          rename: function(dest, source) {
             return dest.concat('mapea.ol.min.css');
           }
         }]
@@ -477,6 +477,7 @@ module.exports = function (grunt) {
       dist: {
         src: [
                'node_modules/jsts/dist/jsts.min.js',
+               'node_modules/chroma-js/chroma.min.js',
                'libraries/proj4/proj4.js',
                'build/core/js/mapea-<%= pkg.version %>.ol.min.js'
             ],

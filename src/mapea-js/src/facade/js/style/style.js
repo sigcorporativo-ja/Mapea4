@@ -5,7 +5,7 @@ goog.provide('M.Style');
   /**
    * Rec. options que es el json del estilo
    */
-  M.Style = (function(options = {}, impl) {
+  M.Style = (function(options, impl) {
     /**
      * TODO
      */
@@ -24,7 +24,7 @@ goog.provide('M.Style');
     // si rec. una imagen podemos tener un canvas
     if (!M.utils.isNullOrEmpty(options.icon)) {
       let ctx = this.canvas_.getContext('2d');
-      let img = new Image;
+      let img = new Image();
       img.onload = function() {
         ctx.drawImage(img, 0, 0); // Or at whatever offset you like
       };

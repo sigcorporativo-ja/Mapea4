@@ -1,4 +1,4 @@
-goog.provide('M.style.Polygon');
+goog.provide('M.style.Point');
 
 /**
  * @namespace M.style.Polygon
@@ -8,27 +8,27 @@ goog.provide('M.style.Polygon');
   /**
    * TODO
    */
-  M.style.Polygon = (function(options) {
+  M.style.Point = (function(options) {
     /**
      * TODO
      */
-    var impl = new M.impl.style.Polygon(options);
+    var impl = new M.impl.style.Point(options);
     // calls the super constructor
     goog.base(this, options, impl);
   });
-  goog.inherits(M.style.Polygon, M.style.Simple);
+  goog.inherits(M.style.Point, M.style.Simple);
 
   /**
    * TODO
    */
-  M.style.Polygon.prototype.applyToFeature = function(feature) {
+  M.style.Point.prototype.applyToFeature = function(feature) {
     this.getImpl().applyToFeature(feature);
   };
 
   /**
    * TODO
    */
-  M.style.Polygon.prototype.serialize = function() {
+  M.style.Point.prototype.serialize = function() {
     // TODO
   };
 })();
