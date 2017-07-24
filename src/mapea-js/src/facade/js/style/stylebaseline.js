@@ -7,31 +7,31 @@ goog.provide('M.style.baseline');
   /**
    * TODO
    */
-  M.style.baseline.TOP = "top";
+  M.style.baseline.TOP = "TOP";
 
   /**
    * TODO
    */
-  M.style.baseline.MIDDLE = "middle";
+  M.style.baseline.MIDDLE = "MIDDLE";
 
   /**
    * TODO
    */
-  M.style.baseline.BOTTOM = "bottom";
+  M.style.baseline.BOTTOM = "BOTTOM";
 
   /**
    * TODO
    */
-  M.style.baseline.ALPHABETIC = "alphabetic";
+  M.style.baseline.ALPHABETIC = "ALPHABETIC";
 
   /**
    * TODO
    */
-  M.style.baseline.HANGING = "hanging";
+  M.style.baseline.HANGING = "HANGING";
 
   /**
    * TODO
    */
-  M.style.baseline.IDEOGRAPHIC = "ideographic";
+  M.style.baseline.IDEOGRAPHIC = "IDEOGRAPHIC";
 
 })();

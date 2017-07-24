@@ -33,7 +33,7 @@ goog.provide('M.impl.style.Line');
           color: label.color
         }),
         textAlign: label.align,
-        textBaseline: label.baseline,
+        textBaseline: (label.baseline || "").toLowerCase(),
         text: label.text,
         rotation: label.rotation
       }));
@@ -52,7 +52,7 @@ goog.provide('M.impl.style.Line');
     if (!M.utils.isNullOrEmpty(fill)) {
       this.styleStroke_.setStroke(
         new ol.style.Stroke({
-          color: fill.color,
+          color: chroma(fill.color).alpha(fill.opacity).css(),
           width: fill.width
         })
       )

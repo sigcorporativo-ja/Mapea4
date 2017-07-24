@@ -55,6 +55,8 @@ goog.require('M.style.Point');
 goog.require('M.impl.style.Point');
 goog.require('M.style.align');
 goog.require('M.style.baseline');
+goog.require('M.style.pattern');
+goog.require('M.style.form');
 
 //     image: new
 goog.require("goog.events");

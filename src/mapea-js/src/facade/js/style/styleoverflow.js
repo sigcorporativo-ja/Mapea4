@@ -7,21 +7,21 @@ goog.provide('M.style.overflow');
   /**
    * TODO
    */
-  M.style.overflow.HIDDEN = "hidden";
+  M.style.overflow.HIDDEN = "HIDDEN";
 
   /**
    * TODO
    */
-  M.style.overflow.VISIBLE = "visible";
+  M.style.overflow.VISIBLE = "VISIBLE";
 
   /**
    * TODO
    */
-  M.style.overflow.ELLIPSIS = "ellipsis";
+  M.style.overflow.ELLIPSIS = "ELLIPSIS";
 
   /**
    * TODO
    */
-  M.style.overflow.CUSTOM = "custom";
+  M.style.overflow.CUSTOM = "CUSTOM";
 
 })();

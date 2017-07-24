@@ -22,7 +22,7 @@ goog.provide('M.Style');
     this.layer_ = null;
 
     // si rec. una imagen podemos tener un canvas
-    if (!M.utils.isNullOrEmpty(options.icon)) {
+    if (!M.utils.isNullOrEmpty(options.icon) && !M.utils.isNullOrEmpty(options.icon.src)) {
       let ctx = this.canvas_.getContext('2d');
       let img = new Image();
       img.onload = function() {

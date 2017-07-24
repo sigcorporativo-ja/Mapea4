@@ -33,7 +33,7 @@ goog.provide('M.impl.style.Polygon');
           color: label.color
         }),
         textAlign: label.align,
-        textBaseline: label.baseline,
+        textBaseline: (label.baseline || "").toLowerCase(),
         text: label.text,
         rotation: label.rotation
       }));
@@ -60,16 +60,19 @@ goog.provide('M.impl.style.Polygon');
       if (!M.utils.isNullOrEmpty(fill.pattern)) {
         this.stylePattern_ = new ol.style.Style({
           fill: new ol.style.FillPattern({
-            pattern: pattern.name.toLowerCase(),
+            pattern: (pattern.name || "").toLowerCase(),
             color: pattern.color,
             size: pattern.size,
             spacing: pattern.spacing,
+            image: (pattern.name == 'Image') ? new ol.style.Icon({
+              src: pattern.src
+            }) : undefined,
             angle: pattern.rotation,
             scale: pattern.scale,
             offset: pattern.offset,
-            fill: new ol.style.Fill({
-              color: chroma(pattern.fill.color).alpha(pattern.fill.opacity).css()
-            }),
+            // fill: new ol.style.Fill({
+            //   color: chroma(pattern.fill.color).alpha(pattern.fill.opacity).css()
+            // }),
           })
         })
         this.styles_.push(this.stylePattern_);
@@ -81,7 +84,9 @@ goog.provide('M.impl.style.Polygon');
    * TODO
    */
   M.impl.style.Polygon.prototype.applyToFeature = function(feature) {
-    feature.getImpl().getOLFeature().setStyle(this.styles_);
+    setTimeout(function() {
+      feature.getImpl().getOLFeature().setStyle([this.styles_[0], this.styles_[1]]);
+    }.bind(this), 1000);
   };
 
 })();

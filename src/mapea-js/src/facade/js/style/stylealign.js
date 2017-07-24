@@ -7,21 +7,21 @@ goog.provide('M.style.align');
   /**
    * TODO
    */
-  M.style.align.LEFT = "left";
+  M.style.align.LEFT = "LEFT";
 
   /**
    * TODO
    */
-  M.style.align.CENTER = "center";
+  M.style.align.CENTER = "CENTER";
 
   /**
    * TODO
    */
-  M.style.align.RIGHT = "right";
+  M.style.align.RIGHT = "RIGHT";
 
   /**
    * TODO
    */
-  M.style.align.JUSTIFY = "justify";
+  M.style.align.JUSTIFY = "JUSTIFY";
 
 })();
