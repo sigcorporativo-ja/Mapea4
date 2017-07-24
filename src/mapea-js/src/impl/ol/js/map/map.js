@@ -160,13 +160,7 @@ goog.require('ol.Map');
       renderer: renderer,
       view: new M.impl.View()
     });
-
-    /**
-     * Features manager
-     * @private
-     * @type {M.impl.FeaturesHandler}
-     */
-    this.featuresHandler_ = new M.impl.handler.Features(this);
+    this.map_.on('click', this.onMapClick_, this);
   };
   goog.inherits(M.impl.Map, M.Object);
 
@@ -451,11 +445,6 @@ goog.require('ol.Map');
           this.layers_.push(layer);
           var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.KML];
           layer.getImpl().setZIndex(zIndex);
-
-          // adds to featurehandler
-          if (layer.extract === true) {
-            this.featuresHandler_.addLayer(layer.getImpl());
-          }
         }
       }
     }, this);
@@ -476,11 +465,6 @@ goog.require('ol.Map');
     kmlMapLayers.forEach(function(kmlLayer) {
       this.layers_.remove(kmlLayer);
       kmlLayer.getImpl().destroy();
-
-      // remove to featurehandler
-      if (kmlLayer.extract === true) {
-        this.featuresHandler_.removeLayer(kmlLayer.getImpl());
-      }
     }, this);
 
     return this;
@@ -730,7 +714,6 @@ goog.require('ol.Map');
           this.layers_.push(layer);
           var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.WFS];
           layer.getImpl().setZIndex(zIndex);
-          this.featuresHandler_.addLayer(layer.getImpl());
         }
       }
     }, this);
@@ -1882,18 +1865,6 @@ goog.require('ol.Map');
   };
 
   /**
-   * This function gets the layer to draw
-   *
-   * @public
-   * @function
-   * @returns {M.impl.layer.Draw}
-   * @api stable
-   */
-  M.impl.Map.prototype.getFeaturesHandler = function() {
-    return this.featuresHandler_;
-  };
-
-  /**
    * This function sets the facade map to implement
    *
    * @public
@@ -1902,6 +1873,29 @@ goog.require('ol.Map');
    */
   M.impl.Map.prototype.setFacadeMap = function(facadeMap) {
     this.facadeMap_ = facadeMap;
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   */
+  M.impl.Map.prototype.onMapClick_ = function(evt) {
+    let pixel = evt.pixel;
+    let coord = this.map_.getCoordinateFromPixel(pixel);
+
+    // hides the label if it was added
+    let label = this.facadeMap_.getLabel();
+    if (!M.utils.isNullOrEmpty(label)) {
+      label.hide();
+    }
+
+    this.facadeMap_.fire(M.evt.CLICK, [{
+      'pixel': pixel,
+      'coord': coord,
+      'vendor': evt
+    }]);
   };
 
   /**
