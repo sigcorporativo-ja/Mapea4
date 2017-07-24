@@ -101,7 +101,6 @@ goog.require('goog.style');
     this.setZIndex(999999);
     var olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
-    this.map.getImpl().getFeaturesHandler().addLayer(this);
   };
 
   /**
@@ -166,31 +165,34 @@ goog.require('goog.style');
       this.unselectFeatures();
 
       var feature = features[0];
-      if (!M.utils.isNullOrEmpty(feature) && !M.utils.isNullOrEmpty(feature.getProperties()) && !M.utils.isNullOrEmpty(feature.getProperties().vendor) && !M.utils.isNullOrEmpty(feature.getProperties().vendor.mapea) && !M.utils.isNullOrEmpty(feature.getProperties().vendor.mapea.click) && M.utils.isFunction(feature.getProperties().vendor.mapea.click)) {
-        feature.getProperties().vendor.mapea.click(evt, feature);
-      }
-      else {
-        M.template.compile(M.layer.GeoJSON.POPUP_TEMPLATE, {
-            'jsonp': true,
-            'vars': this.parseFeaturesForTemplate_(features),
-            'parseToHtml': false
-          })
-          .then(function(htmlAsText) {
-            var featureTabOpts = {
-              'icon': 'g-cartografia-pin',
-              'title': this.name,
-              'content': htmlAsText
-            };
-            var popup = this.map.getPopup();
-            if (M.utils.isNullOrEmpty(popup)) {
-              popup = new M.Popup();
-              popup.addTab(featureTabOpts);
-              this.map.addPopup(popup, coord);
-            }
-            else {
-              popup.addTab(featureTabOpts);
-            }
-          }.bind(this));
+      if (!M.utils.isNullOrEmpty(feature)) {
+        let clickFn = feature.getAttribute('vendor.mapea.click');
+        if (M.utils.isFunction(clickFn)) {
+          clickFn(evt, feature);
+        }
+        else {
+          M.template.compile(M.layer.GeoJSON.POPUP_TEMPLATE, {
+              'jsonp': true,
+              'vars': this.parseFeaturesForTemplate_(features),
+              'parseToHtml': false
+            })
+            .then(function(htmlAsText) {
+              var featureTabOpts = {
+                'icon': 'g-cartografia-pin',
+                'title': this.name,
+                'content': htmlAsText
+              };
+              var popup = this.map.getPopup();
+              if (M.utils.isNullOrEmpty(popup)) {
+                popup = new M.Popup();
+                popup.addTab(featureTabOpts);
+                this.map.addPopup(popup, coord);
+              }
+              else {
+                popup.addTab(featureTabOpts);
+              }
+            }.bind(this));
+        }
       }
     }
   };
@@ -221,7 +223,7 @@ goog.require('goog.style');
     };
 
     features.forEach(function(feature) {
-      var properties = feature.getProperties();
+      var properties = feature.getAttributes();
       var attributes = [];
       for (var key in properties) {
         let addAttribute = true;
