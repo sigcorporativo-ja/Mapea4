@@ -58,5 +58,8 @@ goog.require('M.style.baseline');
 goog.require('M.style.pattern');
 goog.require('M.style.form');
 
-//     image: new
+// ext
+goog.require('ol.style.FillPattern');
+
+// image: new
 goog.require("goog.events");

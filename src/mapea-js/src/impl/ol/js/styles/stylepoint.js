@@ -24,7 +24,7 @@ goog.provide('M.impl.style.Point');
         lineCap: stroke.linecap,
         lineJoin: stroke.linejoin,
         miterLimit: stroke.miterlimit
-      })
+      });
     }
     else {
       stroke = null;
@@ -33,7 +33,7 @@ goog.provide('M.impl.style.Point');
     if (!M.utils.isNullOrEmpty(fill)) {
       fill = new ol.style.Fill({
         color: chroma(fill.color).alpha(fill.opacity).css()
-      })
+      });
     }
     else {
       fill = null;
@@ -102,7 +102,6 @@ goog.provide('M.impl.style.Point');
             crossOrigin: icon.crossorigin,
             anchorOrigin: icon.anchororigin,
             size: icon.size,
-            src: icon.src
           })
         });
       }
@@ -177,8 +176,7 @@ goog.provide('M.impl.style.Point');
  * @implements {ol.structs.IHasChecksum}
  * @api
  */
-ol.style.FontSymbol = function(opt_options) {
-  options = opt_options || {};
+ol.style.FontSymbol = function(options = {}) {
   var strokeWidth = 0;
   if (options.stroke) strokeWidth = options.stroke.getWidth();
   ol.style.RegularShape.call(this, {
@@ -217,7 +215,7 @@ ol.style.Image.prototype.getImagePNG = function() {
     }
   }
   else return false;
-}
+};
 
 /**
  *	Font defs
@@ -338,7 +336,7 @@ ol.style.FontSymbol.prototype.getGlyphName = function() {
  */
 ol.style.FontSymbol.prototype.getFontInfo = function(glyph) {
   return ol.style.FontSymbol.prototype.defs.fonts[glyph.font];
-}
+};
 
 ol.style.FontSymbol.prototype.renderMarker_ = function(atlasManager) {
   var strokeStyle;
@@ -486,7 +484,6 @@ ol.style.FontSymbol.prototype.drawPath_ = function(renderOptions, context) {
             pts = [0.5, 0, 1, 0.5, 0.5, 1, 0, 0.5, 0.5, 0];
             transfo.fac = 0.7;
             break;
-          case "square":
           default:
             pts = [0, 0, 1, 0, 1, 1, 0, 1, 0, 0];
             break;
@@ -497,7 +494,7 @@ ol.style.FontSymbol.prototype.drawPath_ = function(renderOptions, context) {
 
   context.closePath();
   return transfo;
-}
+};
 
 /**
  * @private

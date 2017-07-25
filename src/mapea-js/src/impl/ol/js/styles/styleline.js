@@ -55,7 +55,7 @@ goog.provide('M.impl.style.Line');
           color: chroma(fill.color).alpha(fill.opacity).css(),
           width: fill.width
         })
-      )
+      );
     }
   };
 

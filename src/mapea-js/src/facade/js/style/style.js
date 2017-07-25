@@ -57,7 +57,7 @@ goog.provide('M.Style');
    * es decir, que no se puede cambiar solo el color por ejemplo
    */
   M.Style.prototype.set = function(property, value) {
-    this.options[property] = value;
+    this.options_[property] = value;
 
     // TODO refrescamos de nuevo el estilo
     this.apply_(this.layer_);
