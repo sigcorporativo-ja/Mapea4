@@ -3,7 +3,7 @@
    be specified inside this function)
 */
 var renamePluginsFn = require('./grunt-tasks/utilities/rename-plugins');
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
   // Project configuration
   grunt.initConfig({
@@ -170,7 +170,7 @@ module.exports = function (grunt) {
           dest: 'build/core/js/',
           flatten: false,
           encoding: 'utf-8',
-          rename: function (version, dest, src) {
+          rename: function(version, dest, src) {
             console.log('version ' + version + ' dest ' + dest + ' src ' + src);
             return dest.concat('configuration-' + version + '.js')
           }.bind(this, '<%= pkg.version %>')
@@ -183,7 +183,7 @@ module.exports = function (grunt) {
           src: 'mapea-<%= pkg.version %>.ol.min.js',
           dest: 'build/core/js/',
           encoding: 'utf-8',
-          rename: function (dest, source) {
+          rename: function(dest, source) {
             return dest.concat('mapea.ol.min.js');
           }
         }, {
@@ -192,7 +192,7 @@ module.exports = function (grunt) {
           src: 'mapea-<%= pkg.version %>.ol.min.css',
           dest: 'build/core/assets/css/',
           encoding: 'utf-8',
-          rename: function (dest, source) {
+          rename: function(dest, source) {
             return dest.concat('mapea.ol.min.css');
           }
         }]
@@ -474,13 +474,20 @@ module.exports = function (grunt) {
     },
 
     concat: {
-      dist: {
+      core: {
         src: [
                'node_modules/jsts/dist/jsts.min.js',
                'libraries/proj4/proj4.js',
                'build/core/js/mapea-<%= pkg.version %>.ol.min.js'
             ],
         dest: 'build/core/js/mapea-<%= pkg.version %>.ol.min.js',
+      },
+      plugins: {
+        src: [
+         'libraries/draggabilly/js/draggabilly.pkgd.min.js',
+         'build/plugins/attributetable/attributetable.ol.min.js'
+       ],
+        dest: 'build/plugins/attributetable/attributetable.ol.min.js',
       }
     },
 
@@ -724,11 +731,11 @@ module.exports = function (grunt) {
 
   grunt.registerTask('clean-target', ['clean:build', 'mkdir']);
   grunt.registerTask('css-core', ['copy:assets', 'cssmin:core']);
-  grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'concat', 'copy:configuration', 'copy:core']);
+  grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'concat:core', 'copy:configuration', 'copy:core']);
   //grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'copy:configuration']);
   //grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'concat:deps', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'copy:configuration']);
   grunt.registerTask('css-plugins', ['copy:plugins', 'cssmin:plugins']);
-  grunt.registerTask('js-plugins', ['jshint:plugins', 'generate-symbols-plugins', 'generate-exports-plugins', 'compile-plugins', 'clean:plugins-css', 'copy:pluginsDist']);
+  grunt.registerTask('js-plugins', ['jshint:plugins', 'generate-symbols-plugins', 'generate-exports-plugins', 'compile-plugins', 'clean:plugins-css', 'copy:pluginsDist', 'concat:plugins']);
   grunt.registerTask('templates', ['copy:templates']);
   grunt.registerTask('dependencies-core', ['closure-dependencies:core']);
 

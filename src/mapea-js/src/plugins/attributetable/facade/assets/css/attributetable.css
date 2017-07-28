@@ -3,18 +3,18 @@
 *********************/
 
 .m-attributetable-container {
-    position: absolute;
-    top: 0.5em;
-    right: 0.5em;
-    text-align: left;
-    overflow-y: auto !important;
-    width: 100%;
+  position: absolute;
+  top: 0.5em;
+  right: 0.5em;
+  text-align: left;
+  overflow-y: auto !important;
+  width: 100%;
 }
 
 @media only screen and (min-width: 769px) {
-    .m-attributetable-container {
-        min-width: 340px;
-    }
+  .m-attributetable-container {
+    min-width: 340px;
+  }
 }
 
 
@@ -23,11 +23,16 @@
 *********************/
 
 .m-attributetable-container>div.m-attributetable-panel div.title {
-    line-height: 40px;
-    text-align: center;
-    height: 39px;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-    font-size: 15px;
+  line-height: 40px;
+  text-align: center;
+  height: 39px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  font-size: 15px;
+  cursor: move;
+  /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
 }
 
 
@@ -36,68 +41,68 @@
 ***************/
 
 .m-areas>div.m-area>div.m-panel.m-attributetable.collapsed {
-    color: #fda823;
-    max-height: 40px;
+  color: #fda823;
+  max-height: 40px;
 }
 
 .m-areas>div.m-area>div.m-panel.m-attributetable>button.m-panel-btn {
-    position: absolute;
-    left: -40px;
-    background-color: #0F8A45;
-    color: #fff;
-    z-index: 999999;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
+  position: absolute;
+  left: -40px;
+  background-color: #0F8A45;
+  color: #fff;
+  z-index: 999999;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
 }
 
 .m-areas>div.m-area>div.m-panel.m-attributetable.collapsed>button.m-panel-btn {
-    position: inherit;
-    color: #0F8A45;
-    left: 0;
-    box-shadow: none;
+  position: inherit;
+  color: #0F8A45;
+  left: 0;
+  box-shadow: none;
 }
 
 .m-areas>div.m-area>div.m-panel.m-attributetable.opened {
-    border-top-left-radius: 0;
-    background-color: #f4f4f4;
+  border-top-left-radius: 0;
+  background-color: #f4f4f4;
 }
 
 .m-attributetable-container .m-attributetable-panel {
-    margin: 0;
-    top: 0px;
-    right: 0px;
-    max-height: 100%;
-    text-align: left;
-    background-color: #fffbfb;
+  margin: 0;
+  top: 0px;
+  right: 0px;
+  max-height: 100%;
+  text-align: left;
+  background-color: #fffbfb;
 }
 
 @media only screen and (max-width: 768px) {
-    .m-areas>div.m-area>div.m-panel.m-attributetable.opened {
-        margin-left: 0;
-        width: 100vw;
-        height: 100vh;
-        position: fixed;
-        top: 0;
-        left: 0;
-        margin: 0;
-        z-index: 10000;
-    }
-    .m-areas>div.m-area>div.m-panel.m-attributetable.collapsed>div.m-panel-controls {
-        max-height: 100vh;
-        width: 100%;
-    }
-    .m-areas>div.m-area>div.m-panel.m-attributetable.opened>div.m-panel-controls {
-        max-width: 100vw;
-        max-height: 100%;
-    }
-    .m-areas>div.m-area>div.m-panel.m-attributetable>button.m-panel-btn {
-        background-color: transparent;
-        position: absolute;
-        left: initial;
-        right: 0;
-        color: #fda823;
-        z-index: 999999;
-        box-shadow: none;
-    }
+  .m-areas>div.m-area>div.m-panel.m-attributetable.opened {
+    margin-left: 0;
+    width: 100vw;
+    height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 0;
+    z-index: 10000;
+  }
+  .m-areas>div.m-area>div.m-panel.m-attributetable.collapsed>div.m-panel-controls {
+    max-height: 100vh;
+    width: 100%;
+  }
+  .m-areas>div.m-area>div.m-panel.m-attributetable.opened>div.m-panel-controls {
+    max-width: 100vw;
+    max-height: 100%;
+  }
+  .m-areas>div.m-area>div.m-panel.m-attributetable>button.m-panel-btn {
+    background-color: transparent;
+    position: absolute;
+    left: initial;
+    right: 0;
+    color: #fda823;
+    z-index: 999999;
+    box-shadow: none;
+  }
 }
 
 
@@ -106,33 +111,33 @@
 *********/
 
 .m-attributetable-headers {
-    margin: 0;
-    padding: 10px 0 10px 0;
-    font-size: 14px;
-    font-weight: bold;
-    background-color: rgba(15, 138, 69, 0.82);
-    color: white;
-    text-align: center;
+  margin: 0;
+  padding: 10px 0 10px 0;
+  font-size: 14px;
+  font-weight: bold;
+  background-color: rgba(15, 138, 69, 0.82);
+  color: white;
+  text-align: center;
 }
 
 .m-attributetable-hidden {
-    display: none;
+  display: none;
 }
 
 .m-attributetable-show {
-    display: grid;
+  display: grid;
 }
 
 #m-attributetable-layer, #m-attributetable-attributes {
-    position: absolute;
-    right: 18px;
-    cursor: pointer;
+  position: absolute;
+  right: 18px;
+  cursor: pointer;
 }
 
 #m-attributetable-refresh {
-    float: left;
-    margin-left: 10px;
-    cursor: pointer;
+  float: left;
+  margin-left: 10px;
+  cursor: pointer;
 }
 
 
@@ -141,20 +146,20 @@ SELECTOR DE CAPAS
 ******************/
 
 .m-attributetable-container>.m-attributetable-panel>.m-attributetable-container-select {
-    text-align: center;
-    margin-bottom: 2px;
+  text-align: center;
+  margin-bottom: 2px;
 }
 
 .m-attributetable-container>.m-attributetable-panel>.m-attributetable-container-select #m-attributetable-select {
-    width: 70%;
-    padding: 4px 0 5px 5px;
-    margin: 15px 0 20px 0;
+  width: 70%;
+  padding: 4px 0 5px 5px;
+  margin: 15px 0 20px 0;
 }
 
 @-moz-document url-prefix() {
-    .m-attributetable-container>.m-attributetable-panel>.m-attributetable-container-select #m-attributetable-select {
-        padding: 0 !important;
-    }
+  .m-attributetable-container>.m-attributetable-panel>.m-attributetable-container-select #m-attributetable-select {
+    padding: 0 !important;
+  }
 }
 
 
@@ -163,46 +168,62 @@ TABLE
 **********/
 
 div.m-attributetable-container>div.m-attributetable-panel>div#m-attributetable-datas>div>#m-attributetable-table {
-    max-width: 60vw;
-    max-height: 60vh;
-    overflow: auto;
+  max-width: 60vw;
+  max-height: 60vh;
+  overflow: auto;
 }
 
 @media only screen and (max-width: 768px) {
-    div.m-attributetable-container>div.m-attributetable-panel>div#m-attributetable-datas>div>#m-attributetable-table {
-        max-width: 100vw;
-    }
+  div.m-attributetable-container>div.m-attributetable-panel>div#m-attributetable-datas>div>#m-attributetable-table {
+    max-width: 100vw;
+  }
 }
 
 div.m-attributetable-container>div.m-attributetable-panel>div#m-attributetable-datas>div>div#m-attributetable-table>table {
-    border-collapse: collapse;
-    width: 100%;
+  border-collapse: collapse;
+  width: 100%;
 }
 
 div.m-attributetable-container>div.m-attributetable-panel>div#m-attributetable-datas>div>div#m-attributetable-table>table>tbody>tr>td, div.m-attributetable-container>div.m-attributetable-panel>div#m-attributetable-datas>table th {
-    border: 1px solid #dddddd;
-    text-align: left;
-    padding: 8px;
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
 }
 
 .m-attributetable-thead {
-    font-weight: bold;
-    background-color: rgba(86, 145, 55, 0.35);
-    color: rgba(0, 0, 0, 0.62);
+  font-weight: bold;
+  background-color: rgba(86, 145, 55, 0.35);
+  color: rgba(0, 0, 0, 0.62);
 }
 
 div.m-attributetable-container>div.m-attributetable-panel>div#m-attributetable-datas>div>div#m-attributetable-table>table>tbody>tr:nth-child(odd) {
-    background-color: rgba(15, 138, 69, 0.12);
+  background-color: rgba(15, 138, 69, 0.12);
 }
 
 #m-attributetable-tfoot {
-    text-align: center;
-    width: 100%;
-    padding: 8px 0px 8px 0px;
+  text-align: center;
+  width: 100%;
+  padding: 8px 0px 8px 0px;
 }
 
 .m-attributetable-notResult {
-    text-align: center;
-    padding: 20px 0px 20px 0px;
-    font-weight: bolder;
+  text-align: center;
+  padding: 20px 0px 20px 0px;
+  font-weight: bolder;
+}
+
+.m-areas>div.m-area>div.m-panel.m-attributetable.is-pointer-down {
+  /*padding-left: 50px;*/
+  background-color: transparent;
+  box-shadow: none;
+}
+
+.m-areas>div.m-area>div.m-panel.m-attributetable.is-pointer-down .m-attributetable-container>div.m-attributetable-panel div.title {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.m-areas>div.m-area>div.m-panel.m-attributetable.is-pointer-down>button.m-panel-btn {
+  /*left: 0px;*/
 }
