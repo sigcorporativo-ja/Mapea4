@@ -88,13 +88,6 @@ goog.require('ol.Map');
     this.initZoom_ = true;
 
     /**
-     * Vector layer used to draw
-     * @private
-     * @type {ol.layer.Vector}
-     */
-    this.drawLayer_ = null;
-
-    /**
      * Resolutions specified by the user
      * @private
      * @type {Array<Number>}
@@ -226,12 +219,12 @@ goog.require('ol.Map');
     });
 
     this.addUnknowLayers_(unknowLayers);
-    this.addWMC(knowLayers);
-    this.addMBtiles(knowLayers);
-    this.addWMS(knowLayers);
-    this.addWMTS(knowLayers);
-    this.addKML(knowLayers);
-    this.addWFS(knowLayers);
+    this.facadeMap_.addWMC(knowLayers.filter(layer => (layer.type === M.layer.type.WMC)));
+    this.facadeMap_.addMBtiles(knowLayers.filter(layer => (layer.type === M.layer.type.MBtiles)));
+    this.facadeMap_.addWMS(knowLayers.filter(layer => (layer.type === M.layer.type.WMS)));
+    this.facadeMap_.addWMTS(knowLayers.filter(layer => (layer.type === M.layer.type.WMTS)));
+    this.facadeMap_.addKML(knowLayers.filter(layer => (layer.type === M.layer.type.KML)));
+    this.facadeMap_.addWFS(knowLayers.filter(layer => (layer.type === M.layer.type.WFS)));
 
     return this;
   };
@@ -439,7 +432,7 @@ goog.require('ol.Map');
   M.impl.Map.prototype.addKML = function(layers) {
     layers.forEach(function(layer) {
       // checks if layer is WMC and was added to the map
-      if (layer.type == M.layer.type.KML) {
+      if (layer.type === M.layer.type.KML) {
         if (!M.utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
@@ -1311,19 +1304,6 @@ goog.require('ol.Map');
       });
     }
     olView.setCenter(olCenter);
-
-    if (center.draw === true) {
-      this.drawPoints([{
-        'x': center.x,
-        'y': center.y,
-        'click': goog.bind(function(evt) {
-          var label = this.getLabel();
-          if (!M.utils.isNullOrEmpty(label)) {
-            label.show(this.facadeMap_);
-          }
-        }, this)
-         }]);
-    }
     return this;
   };
 
@@ -1770,59 +1750,6 @@ goog.require('ol.Map');
   };
 
   /**
-   * This function removes the WMC layers to the map
-   *
-   * @function
-   * @param {Array<Mx.Point>|Mx.Point} points
-   * @returns {M.Map}
-   * @api stable
-   */
-  M.impl.Map.prototype.drawPoints = function(points) {
-    this.getDrawLayer().drawPoints(points);
-
-    return this;
-  };
-
-  /**
-   * This function removes the WMC layers to the map
-   *
-   * @function
-   * @param {Array<Mx.Point>|Mx.Point} points
-   * @returns {M.Map}
-   * @api stable
-   */
-  M.impl.Map.prototype.drawFeatures = function(features) {
-    this.getDrawLayer().drawFeatures(features);
-
-    return this;
-  };
-
-  /**
-   * This function removes the WMC layers to the map
-   *
-   * @function
-   * @returns {Array<Mx.Point>}
-   * @api stable
-   */
-  M.impl.Map.prototype.getPoints = function(coordinate) {
-    return this.getDrawLayer().getPoints(coordinate);
-  };
-
-  /**
-   * This function removes the WMC layers to the map
-   *
-   * @function
-   * @param {Array<Mx.Point>|Mx.Point} points
-   * @returns {M.Map}
-   * @api stable
-   */
-  M.impl.Map.prototype.removeFeatures = function(features) {
-    this.getDrawLayer().removeFeatures(features);
-
-    return this;
-  };
-
-  /**
    * This function refresh the state of this map instance,
    * this is, all its layers.
    *
@@ -1833,23 +1760,6 @@ goog.require('ol.Map');
   M.impl.Map.prototype.refresh = function() {
     this.map_.updateSize();
     return this;
-  };
-
-  /**
-   * This function gets the layer to draw
-   *
-   * @public
-   * @function
-   * @returns {M.impl.layer.Draw}
-   * @api stable
-   */
-  M.impl.Map.prototype.getDrawLayer = function(coordinate) {
-    if (M.utils.isNullOrEmpty(this.drawLayer_)) {
-      this.drawLayer_ = new M.impl.layer.Draw();
-      this.drawLayer_.addTo(this.facadeMap_);
-      this.featuresHandler_.addLayer(this.drawLayer_);
-    }
-    return this.drawLayer_;
   };
 
   /**

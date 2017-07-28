@@ -14,7 +14,7 @@ goog.require('M.facade.Base');
    * @extends {M.facade.Base}
    * @api stable
    */
-  M.handler.Features = (function(options = {}, implParam) {
+  M.handler.Features = (function(options = {}, impl = new M.impl.handler.Features(options)) {
     /**
      * @private
      * @type {M.Map}
@@ -35,11 +35,6 @@ goog.require('M.facade.Base');
      * @expose
      */
     this.activated_ = false;
-
-    let impl = implParam;
-    if (M.utils.isNullOrEmpty(impl)) {
-      impl = new M.impl.handler.Features(options);
-    }
 
     // checks if the implementation has all methods
     if (!M.utils.isFunction(impl.addTo)) {
@@ -82,14 +77,14 @@ goog.require('M.facade.Base');
         let features = impl.getFeaturesByLayer(evt, layer);
         let layerImpl = layer.getImpl();
         if (M.utils.isNullOrEmpty(features)) {
-          if (M.utils.isFunction(layer.getImpl().unselectFeatures)) {
-            layer.getImpl().unselectFeatures(features, evt.coord);
+          if (M.utils.isFunction(layerImpl.unselectFeatures)) {
+            layerImpl.unselectFeatures(features, evt.coord);
           }
           layer.fire(M.evt.UNSELECT_FEATURES, evt.coord);
         }
         else {
-          if (M.utils.isFunction(layer.getImpl().selectFeatures)) {
-            layer.getImpl().selectFeatures(features, evt.coord, evt);
+          if (M.utils.isFunction(layerImpl.selectFeatures)) {
+            layerImpl.selectFeatures(features, evt.coord, evt);
           }
           layer.fire(M.evt.SELECT_FEATURES, [features, evt]);
         }

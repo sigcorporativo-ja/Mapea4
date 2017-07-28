@@ -80,27 +80,14 @@ goog.require('goog.style');
    * @api stable
    */
   M.impl.layer.GeoJSON.prototype.addTo = function(map) {
-    goog.base(this, 'addTo', map);
-
     this.formater_ = new M.format.GeoJSON({
-      'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
+      'defaultDataProjection': ol.proj.get(map.getProjection().code)
     });
     if (!M.utils.isNullOrEmpty(this.url)) {
       this.loader_ = new M.impl.loader.JSONP(map, this.url, this.formater_);
     }
-    this.ol3Layer = new ol.layer.Vector();
-    this.updateSource_();
-    // sets its visibility if it is in range
-    if (this.options.visibility !== false) {
-      this.setVisible(this.inRange());
-    }
-    // sets its z-index
-    if (this.zIndex_ !== null) {
-      this.setZIndex(this.zIndex_);
-    }
-    this.setZIndex(999999);
-    var olMap = this.map.getMapImpl();
-    olMap.addLayer(this.ol3Layer);
+
+    goog.base(this, 'addTo', map);
   };
 
   /**
@@ -195,19 +182,6 @@ goog.require('goog.style');
         }
       }
     }
-  };
-
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   *
-   * @public
-   * @function
-   * @param {ol.Feature} feature
-   * @api stable
-   */
-  M.impl.layer.GeoJSON.prototype.unselectFeatures = function() {
-    this.map.removePopup();
   };
 
   /**

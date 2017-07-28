@@ -3,7 +3,7 @@ goog.provide('P.impl.layer.Geosearch');
 goog.require('P.impl.utils.Geosearch');
 goog.require('P.impl.geosearch.style');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -14,7 +14,7 @@ goog.require('P.impl.geosearch.style');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.Geosearch = (function (name, options) {
+  M.impl.layer.Geosearch = (function(name = 'geosearch', options) {
     /**
      * Currently drawn feature coordinate.
      * @private
@@ -41,15 +41,12 @@ goog.require('P.impl.geosearch.style');
      * @private
      * @type {String}
      */
-    this.name = 'geosearch';
-    if (!M.utils.isNullOrEmpty(name)) {
-      this.name = name;
-    }
+    this.name = name;
 
     // calls the super constructor
     goog.base(this, options);
   });
-  goog.inherits(M.impl.layer.Geosearch, M.impl.Layer);
+  goog.inherits(M.impl.layer.Geosearch, M.impl.layer.Vector);
 
   /**
    * This function sets the map object of the layer
@@ -59,19 +56,12 @@ goog.require('P.impl.geosearch.style');
    * @param {M.Map} map
    * @api stable
    */
-  M.impl.layer.Geosearch.prototype.addTo = function (map) {
-    this.map = map;
-    this.ol3Layer = new ol.layer.Vector({
-      source: new ol.source.Vector({
-        'useSpatialIndex': false
-      }),
-      zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
-    });
-    // sets its visibility if it is in range
-    if (this.options.visibility !== false) {
-      this.setVisible(this.inRange());
-    }
-    this.map.getMapImpl().addLayer(this.ol3Layer);
+  M.impl.layer.Geosearch.prototype.addTo = function(map) {
+    goog.base(this, 'addTo', map);
+
+    this.ol3Layer.setSource(new ol.source.Vector({
+      'useSpatialIndex': false
+    }));
   };
 
   /**
@@ -82,7 +72,7 @@ goog.require('P.impl.geosearch.style');
    * @param {Array<Object>} results to draw
    * @api stable
    */
-  M.impl.layer.Geosearch.prototype.drawResults = function (results) {
+  M.impl.layer.Geosearch.prototype.drawResults = function(results) {
     var projection = ol.proj.get(this.map.getProjection().code);
 
     var docs = [];
@@ -93,7 +83,7 @@ goog.require('P.impl.geosearch.style');
       docs = results.response.docs;
     }
 
-    var features = docs.map(function (doc) {
+    var features = docs.map(function(doc) {
       var feature = this.wktFormatter_.readFeature(doc.geom, {
         'dataProjection': projection
       });
@@ -103,10 +93,10 @@ goog.require('P.impl.geosearch.style');
 
       this.wrapComplexFeature_(feature);
 
-      return feature;
+      return M.impl.Feature.olFeature2Facade(feature);
     }, this);
 
-    this.ol3Layer.getSource().addFeatures(features);
+    this.facadeVector_.addFeatures(features);
   };
 
   /**
@@ -117,7 +107,7 @@ goog.require('P.impl.geosearch.style');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.impl.layer.Geosearch.prototype.drawNewResults = function (results) {
+  M.impl.layer.Geosearch.prototype.drawNewResults = function(results) {
     var projection = ol.proj.get(this.map.getProjection().code);
 
     var docs;
@@ -128,7 +118,7 @@ goog.require('P.impl.geosearch.style');
       docs = results.response.docs;
     }
 
-    var features = docs.map(function (doc) {
+    var features = docs.map(function(doc) {
       var feature = this.wktFormatter_.readFeature(doc.geom, {
         'dataProjection': projection
       });
@@ -136,10 +126,10 @@ goog.require('P.impl.geosearch.style');
       feature.setProperties(doc);
       M.impl.layer.Geosearch.setStyleFeature_(feature, M.style.state.NEW);
 
-      return feature;
+      return M.impl.Feature.olFeature2Facade(feature);
     }, this);
 
-    this.ol3Layer.getSource().addFeatures(features);
+    this.facadeVector_.addFeatures(features);
   };
 
   /**
@@ -150,9 +140,10 @@ goog.require('P.impl.geosearch.style');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.impl.layer.Geosearch.prototype.clear = function (results) {
+  M.impl.layer.Geosearch.prototype.clear = function(results) {
     this.map.removePopup();
-    this.ol3Layer.getSource().clear();
+    // this.ol3Layer.getSource().clear();
+    this.facadeVector_.clear();
   };
 
   /**
@@ -163,12 +154,16 @@ goog.require('P.impl.geosearch.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.Geosearch.prototype.selectFeatures = function (features, coord, noPanMapIfOutOfView) {
+  M.impl.layer.Geosearch.prototype.selectFeatures = function(features, coord, evt, noPanMapIfOutOfView) {
     // unselects previous features
     this.unselectFeatures();
 
     // sets the style
     this.selectedFeatures_ = features;
+
+    // gets olFeatures
+    features = features.map(M.impl.Feature.facade2OLFeature);
+
     M.impl.layer.Geosearch.setStyleFeature_(features, M.style.state.SELECTED);
 
     var featureForTemplate = this.parseFeaturesForTemplate_(features);
@@ -178,7 +173,7 @@ goog.require('P.impl.geosearch.style');
         'vars': featureForTemplate,
         'parseToHtml': false
       })
-      .then(function (htmlAsText) {
+      .then(function(htmlAsText) {
         var featureTabOpts = {
           'icon': 'g-cartografia-pin',
           'title': 'Geosearch',
@@ -197,7 +192,7 @@ goog.require('P.impl.geosearch.style');
           popup.addTab(featureTabOpts);
         }
         // removes events on destroy
-        popup.on(M.evt.DESTROY, function () {
+        popup.on(M.evt.DESTROY, function() {
           this.internalUnselectFeatures_(true);
         }, this_);
       });
@@ -211,15 +206,16 @@ goog.require('P.impl.geosearch.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.Geosearch.prototype.selectFeatureBySolrid = function (solrid) {
-    var feature = this.ol3Layer.getSource().getFeatureById(solrid);
+  M.impl.layer.Geosearch.prototype.selectFeatureBySolrid = function(solrid) {
+    // var feature = this.ol3Layer.getSource().getFeatureById(solrid);
+    let feature = this.facadeVector_.getFeatureById(solrid);
     this.selectedFeatures_ = [feature];
 
-    var featureGeom = feature.getGeometry();
+    var featureGeom = feature.getImpl().getOLFeature().getGeometry();
     var coord = M.impl.utils.getCentroidCoordinate(featureGeom);
 
     this.unselectFeatures();
-    this.selectFeatures([feature], coord, true);
+    this.selectFeatures([feature], coord, null, true);
 
     this.map.setBbox(featureGeom.getExtent());
   };
@@ -231,12 +227,12 @@ goog.require('P.impl.geosearch.style');
    * @private
    * @function
    */
-  M.impl.layer.Geosearch.prototype.parseFeaturesForTemplate_ = function (features) {
+  M.impl.layer.Geosearch.prototype.parseFeaturesForTemplate_ = function(features) {
     var featuresTemplate = {
       'features': []
     };
 
-    features.forEach(function (feature) {
+    features.forEach(function(feature) {
       var hiddenAttributes = ['geom', '_version_', 'keywords', 'solrid', feature.getGeometryName()];
       var properties = feature.getProperties();
       var attributes = [];
@@ -264,7 +260,7 @@ goog.require('P.impl.geosearch.style');
    * @private
    * @function
    */
-  M.impl.layer.Geosearch.prototype.wrapComplexFeature_ = function (feature) {
+  M.impl.layer.Geosearch.prototype.wrapComplexFeature_ = function(feature) {
     var featureGeom = feature.getGeometry();
     if ((featureGeom.getType() === M.geom.wkt.type.POLYGON) || (featureGeom.getType() === M.geom.wkt.type.MULTI_POLYGON)) {
       var centroid;
@@ -288,7 +284,7 @@ goog.require('P.impl.geosearch.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.Geosearch.prototype.unselectFeatures = function (features, coord) {
+  M.impl.layer.Geosearch.prototype.unselectFeatures = function(features, coord) {
     this.internalUnselectFeatures_();
   };
 
@@ -300,10 +296,10 @@ goog.require('P.impl.geosearch.style');
    * @function
    * @param {ol.Feature} feature
    */
-  M.impl.layer.Geosearch.prototype.internalUnselectFeatures_ = function (keepPopup) {
+  M.impl.layer.Geosearch.prototype.internalUnselectFeatures_ = function(keepPopup) {
     if (this.selectedFeatures_.length > 0) {
       // sets the style
-      M.impl.layer.Geosearch.setStyleFeature_(this.selectedFeatures_, M.style.state.DEFAULT);
+      M.impl.layer.Geosearch.setStyleFeature_(this.selectedFeatures_.map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
       this.selectedFeatures_.length = 0;
 
       // removes the popup just when event destroy was not fired
@@ -322,8 +318,8 @@ goog.require('P.impl.geosearch.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.Geosearch.prototype.setNewResultsAsDefault = function () {
-    M.impl.layer.Geosearch.setStyleFeature_(this.getOL3Layer().getSource().getFeatures(), M.style.state.DEFAULT);
+  M.impl.layer.Geosearch.prototype.setNewResultsAsDefault = function() {
+    M.impl.layer.Geosearch.setStyleFeature_(this.facadeVector_.getFeatures().map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
   };
 
   /**
@@ -334,7 +330,7 @@ goog.require('P.impl.geosearch.style');
    * @function
    * @api stable
    */
-  M.impl.layer.Geosearch.prototype.destroy = function () {
+  M.impl.layer.Geosearch.prototype.destroy = function() {
     var olMap = this.map.getMapImpl();
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
@@ -354,7 +350,7 @@ goog.require('P.impl.geosearch.style');
    * @function
    * @api stable
    */
-  M.impl.layer.Geosearch.prototype.equals = function (obj) {
+  M.impl.layer.Geosearch.prototype.equals = function(obj) {
     var equals = false;
 
     if (obj instanceof M.impl.layer.Geosearch) {
@@ -371,14 +367,14 @@ goog.require('P.impl.geosearch.style');
    * @private
    * @function
    */
-  M.impl.layer.Geosearch.setStyleFeature_ = function (features, state) {
+  M.impl.layer.Geosearch.setStyleFeature_ = function(features, state) {
     M.impl.geosearch.style.init();
 
     if (!M.utils.isArray(features)) {
       features = [features];
     }
 
-    features.forEach(function (feature) {
+    features.forEach(function(feature) {
       // gets the geometry type
       var geometryType = feature.getGeometry().getType();
       if (M.utils.isNullOrEmpty(state) || (state === M.style.state.DEFAULT)) {

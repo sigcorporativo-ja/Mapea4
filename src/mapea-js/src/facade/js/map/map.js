@@ -147,9 +147,16 @@ goog.require('M.window');
     /**
      * Feature Center
      * @private
-     * @type {ol.Feature}
+     * @type {M.Feature}
      */
-    this._featureCenter = null;
+    this.featureCenter_ = null;
+
+    /**
+     * Draw layer
+     * @private
+     * @type {M.layer.Vector}
+     */
+    this.drawLayer_ = null;
 
     var this_ = this;
 
@@ -181,6 +188,13 @@ goog.require('M.window');
     this.featuresHandler_ = new M.handler.Features();
     this.featuresHandler_.addTo(this);
     this.featuresHandler_.activate();
+
+    this.drawLayer_ = new M.layer.Vector({
+      'name': '__draw__'
+    }, {
+      'displayInLayerSwitcher': false
+    });
+    this.addLayers(this.drawLayer_);
 
     // projection
     if (!M.utils.isNullOrEmpty(params.projection)) {
@@ -358,54 +372,51 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.addLayers = function(layersParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa');
-    }
-
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.addLayers)) {
-      M.exception('La implementación usada no posee el método addLayers');
-    }
-
-    // parses parameters to Array
-    if (!M.utils.isArray(layersParam)) {
-      layersParam = [layersParam];
-    }
-
-    // gets the parameters as M.Layer objects to add
-    var layers = layersParam.map(function(layerParam) {
-      let layer;
-
-      if (layerParam instanceof M.Layer) {
-        layer = layerParam;
+    if (!M.utils.isNullOrEmpty(layersParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.addLayers)) {
+        M.exception('La implementación usada no posee el método addLayers');
       }
-      else {
-        try {
-          var parameter = M.parameter.layer(layerParam);
-          if (!M.utils.isNullOrEmpty(parameter.type)) {
-            layer = new M.layer[parameter.type](layerParam);
+
+      // parses parameters to Array
+      if (!M.utils.isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      // gets the parameters as M.Layer objects to add
+      var layers = layersParam.map(function(layerParam) {
+        let layer;
+
+        if (layerParam instanceof M.Layer) {
+          layer = layerParam;
+        }
+        else {
+          try {
+            var parameter = M.parameter.layer(layerParam);
+            if (!M.utils.isNullOrEmpty(parameter.type)) {
+              layer = new M.layer[parameter.type](layerParam);
+            }
+            else {
+              M.dialog.error('No se ha especificado un tipo válido para la capa');
+            }
           }
-          else {
-            M.dialog.error('No se ha especificado un tipo válido para la capa');
+          catch (err) {
+            M.dialog.error('El formato de la capa (' + layerParam + ') no se reconoce');
           }
         }
-        catch (err) {
-          M.dialog.error('El formato de la capa (' + layerParam + ') no se reconoce');
+
+        // KML and WFS layers handler its features
+        if ((layer instanceof M.layer.Vector) && !(layer instanceof M.layer.KML) && !(layer instanceof M.layer.WFS)) {
+          this.featuresHandler_.addLayer(layer);
         }
-      }
 
-      // KML and WFS layers handler its features
-      if ((layer instanceof M.layer.Vector) && !(layer instanceof M.layer.KML) && !(layer instanceof M.layer.WFS)) {
-        this.featuresHandler_.addLayer(layer);
-      }
+        return layer;
+      }, this);
 
-      return layer;
-    }, this);
-
-    // adds the layers
-    this.getImpl().addLayers(layers);
-    this.fire(M.evt.ADDED_LAYER, [layers]);
+      // adds the layers
+      this.getImpl().addLayers(layers);
+      this.fire(M.evt.ADDED_LAYER, [layers]);
+    }
     return this;
   };
 
@@ -419,27 +430,24 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.removeLayers = function(layersParam) {
-    // checks if the parameter is null or empty
     if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa a eliminar');
-    }
-
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.removeLayers)) {
-      M.exception('La implementación usada no posee el método removeLayers');
-    }
-
-    // gets the layers to remove
-    let layers = this.getLayers(layersParam);
-    layers.forEach(function(layer) {
-      // KML and WFS layers handler its features
-      if ((layer instanceof M.layer.Vector) && !(layer instanceof M.layer.KML) && !(layer instanceof M.layer.WFS)) {
-        this.featuresHandler_.removeLayer(layer);
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.removeLayers)) {
+        M.exception('La implementación usada no posee el método removeLayers');
       }
-    }, this);
 
-    // removes the layers
-    this.getImpl().removeLayers(layers);
+      // gets the layers to remove
+      let layers = this.getLayers(layersParam);
+      layers.forEach(function(layer) {
+        // KML and WFS layers handler its features
+        if ((layer instanceof M.layer.Vector) && !(layer instanceof M.layer.KML) && !(layer instanceof M.layer.WFS)) {
+          this.featuresHandler_.removeLayer(layer);
+        }
+      }, this);
+
+      // removes the layers
+      this.getImpl().removeLayers(layers);
+    }
 
     return this;
   };
@@ -491,54 +499,50 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.addWMC = function(layersParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa WMC');
-    }
-
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.addWMC)) {
-      M.exception('La implementación usada no posee el método addWMC');
-    }
-
-    // parses parameters to Array
-    if (!M.utils.isArray(layersParam)) {
-      layersParam = [layersParam];
-    }
-
-    // gets the parameters as M.layer.WMC objects to add
-    var wmcLayers = [];
-    layersParam.forEach(function(layerParam) {
-      if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMC)) {
-        wmcLayers.push(layerParam);
+    if (!M.utils.isNullOrEmpty(layersParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.addWMC)) {
+        M.exception('La implementación usada no posee el método addWMC');
       }
-      else if (!(layerParam instanceof M.Layer)) {
-        try {
-          wmcLayers.push(new M.layer.WMC(layerParam, layerParam.options));
-        }
-        catch (err) {
-          M.dialog.error(err);
-        }
+
+      // parses parameters to Array
+      if (!M.utils.isArray(layersParam)) {
+        layersParam = [layersParam];
       }
-    });
 
-    // adds the layers
-    this.getImpl().addWMC(wmcLayers);
-    this.fire(M.evt.ADDED_LAYER, [wmcLayers]);
-    this.fire(M.evt.ADDED_WMC, [wmcLayers]);
+      // gets the parameters as M.layer.WMC objects to add
+      var wmcLayers = [];
+      layersParam.forEach(function(layerParam) {
+        if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMC)) {
+          wmcLayers.push(layerParam);
+        }
+        else if (!(layerParam instanceof M.Layer)) {
+          try {
+            wmcLayers.push(new M.layer.WMC(layerParam, layerParam.options));
+          }
+          catch (err) {
+            M.dialog.error(err);
+          }
+        }
+      });
 
-    /* checks if it should create the WMC control
-       to select WMC */
-    var addedWmcLayers = this.getWMC();
-    if (addedWmcLayers.length > 1) {
-      this.addControls(new M.control.WMCSelector());
+      // adds the layers
+      this.getImpl().addWMC(wmcLayers);
+      this.fire(M.evt.ADDED_LAYER, [wmcLayers]);
+      this.fire(M.evt.ADDED_WMC, [wmcLayers]);
+
+      /* checks if it should create the WMC control
+         to select WMC */
+      var addedWmcLayers = this.getWMC();
+      if (addedWmcLayers.length > 1) {
+        this.addControls(new M.control.WMCSelector());
+      }
+
+      // select the first WMC
+      if (addedWmcLayers.length > 0) {
+        addedWmcLayers[0].select();
+      }
     }
-
-    // select the first WMC
-    if (addedWmcLayers.length > 0) {
-      addedWmcLayers[0].select();
-    }
-
     return this;
   };
 
@@ -551,21 +555,18 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.removeWMC = function(layersParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa WMC');
-    }
+    if (!M.utils.isNullOrEmpty(layersParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.removeWMC)) {
+        M.exception('La implementación usada no posee el método removeWMC');
+      }
 
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.removeWMC)) {
-      M.exception('La implementación usada no posee el método removeWMC');
-    }
-
-    // gets the layers
-    var wmcLayers = this.getWMC(layersParam);
-    if (wmcLayers.length > 0) {
-      // removes the layers
-      this.getImpl().removeWMC(wmcLayers);
+      // gets the layers
+      var wmcLayers = this.getWMC(layersParam);
+      if (wmcLayers.length > 0) {
+        // removes the layers
+        this.getImpl().removeWMC(wmcLayers);
+      }
     }
     return this;
   };
@@ -617,42 +618,38 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.addKML = function(layersParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa KML');
-    }
-
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.addKML)) {
-      M.exception('La implementación usada no posee el método addKML');
-    }
-
-    // parses parameters to Array
-    if (!M.utils.isArray(layersParam)) {
-      layersParam = [layersParam];
-    }
-
-    // gets the parameters as M.layer.KML objects to add
-    var kmlLayers = [];
-    layersParam.forEach(function(layerParam) {
-      let kmlLayer;
-      if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.KML)) {
-        kmlLayer = layerParam;
+    if (!M.utils.isNullOrEmpty(layersParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.addKML)) {
+        M.exception('La implementación usada no posee el método addKML');
       }
-      else if (!(layerParam instanceof M.Layer)) {
-        kmlLayer = new M.layer.KML(layerParam, layerParam.options);
-      }
-      if (kmlLayer.extract === true) {
-        this.featuresHandler_.addLayer(layer);
-      }
-      kmlLayers.push(kmlLayer);
-    }, this);
 
-    // adds the layers
-    this.getImpl().addKML(kmlLayers);
-    this.fire(M.evt.ADDED_LAYER, [kmlLayers]);
-    this.fire(M.evt.ADDED_KML, [kmlLayers]);
+      // parses parameters to Array
+      if (!M.utils.isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
 
+      // gets the parameters as M.layer.KML objects to add
+      var kmlLayers = [];
+      layersParam.forEach(function(layerParam) {
+        let kmlLayer;
+        if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.KML)) {
+          kmlLayer = layerParam;
+        }
+        else if (!(layerParam instanceof M.Layer)) {
+          kmlLayer = new M.layer.KML(layerParam, layerParam.options);
+        }
+        if (kmlLayer.extract === true) {
+          this.featuresHandler_.addLayer(kmlLayer);
+        }
+        kmlLayers.push(kmlLayer);
+      }, this);
+
+      // adds the layers
+      this.getImpl().addKML(kmlLayers);
+      this.fire(M.evt.ADDED_LAYER, [kmlLayers]);
+      this.fire(M.evt.ADDED_KML, [kmlLayers]);
+    }
     return this;
   };
 
@@ -665,22 +662,19 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.removeKML = function(layersParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa WMS');
-    }
+    if (!M.utils.isNullOrEmpty(layersParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.removeKML)) {
+        M.exception('La implementación usada no posee el método removeKML');
+      }
 
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.removeKML)) {
-      M.exception('La implementación usada no posee el método removeKML');
-    }
-
-    // gets the layers
-    var kmlLayers = this.getKML(layersParam);
-    if (kmlLayers.length > 0) {
-      kmlLayers.forEach(this.featuresHandler_.removeLayer);
-      // removes the layers
-      this.getImpl().removeKML(kmlLayers);
+      // gets the layers
+      var kmlLayers = this.getKML(layersParam);
+      if (kmlLayers.length > 0) {
+        kmlLayers.forEach(this.featuresHandler_.removeLayer);
+        // removes the layers
+        this.getImpl().removeKML(kmlLayers);
+      }
     }
     return this;
   };
@@ -732,36 +726,33 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.addWMS = function(layersParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa WMS');
-    }
-
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.addWMS)) {
-      M.exception('La implementación usada no posee el método addWMS');
-    }
-
-    // parses parameters to Array
-    if (!M.utils.isArray(layersParam)) {
-      layersParam = [layersParam];
-    }
-
-    // gets the parameters as M.layer.WMS objects to add
-    var wmsLayers = [];
-    layersParam.forEach(function(layerParam) {
-      if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMS)) {
-        wmsLayers.push(layerParam);
+    if (!M.utils.isNullOrEmpty(layersParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.addWMS)) {
+        M.exception('La implementación usada no posee el método addWMS');
       }
-      else if (!(layerParam instanceof M.Layer)) {
-        wmsLayers.push(new M.layer.WMS(layerParam, layerParam.options));
-      }
-    });
 
-    // adds the layers
-    this.getImpl().addWMS(wmsLayers);
-    this.fire(M.evt.ADDED_LAYER, [wmsLayers]);
-    this.fire(M.evt.ADDED_WMS, [wmsLayers]);
+      // parses parameters to Array
+      if (!M.utils.isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      // gets the parameters as M.layer.WMS objects to add
+      var wmsLayers = [];
+      layersParam.forEach(function(layerParam) {
+        if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMS)) {
+          wmsLayers.push(layerParam);
+        }
+        else if (!(layerParam instanceof M.Layer)) {
+          wmsLayers.push(new M.layer.WMS(layerParam, layerParam.options));
+        }
+      });
+
+      // adds the layers
+      this.getImpl().addWMS(wmsLayers);
+      this.fire(M.evt.ADDED_LAYER, [wmsLayers]);
+      this.fire(M.evt.ADDED_WMS, [wmsLayers]);
+    }
     return this;
   };
 
@@ -774,21 +765,18 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.removeWMS = function(layersParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa WMS');
-    }
+    if (!M.utils.isNullOrEmpty(layersParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.removeWMS)) {
+        M.exception('La implementación usada no posee el método removeWMS');
+      }
 
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.removeWMS)) {
-      M.exception('La implementación usada no posee el método removeWMS');
-    }
-
-    // gets the layers
-    var wmsLayers = this.getWMS(layersParam);
-    if (wmsLayers.length > 0) {
-      // removes the layers
-      this.getImpl().removeWMS(wmsLayers);
+      // gets the layers
+      var wmsLayers = this.getWMS(layersParam);
+      if (wmsLayers.length > 0) {
+        // removes the layers
+        this.getImpl().removeWMS(wmsLayers);
+      }
     }
     return this;
   };
@@ -840,45 +828,41 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.addWFS = function(layersParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa WFS');
-    }
-
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.addWFS)) {
-      M.exception('La implementación usada no posee el método addWFS');
-    }
-
-    // parses parameters to Array
-    if (!M.utils.isArray(layersParam)) {
-      layersParam = [layersParam];
-    }
-
-    // gets the parameters as M.layer.WFS objects to add
-    var wfsLayers = [];
-    layersParam.forEach(function(layerParam) {
-      let wfsLayer;
-      if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WFS)) {
-        wfsLayer = layerParam;
+    if (!M.utils.isNullOrEmpty(layersParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.addWFS)) {
+        M.exception('La implementación usada no posee el método addWFS');
       }
-      else if (!(layerParam instanceof M.Layer)) {
-        try {
-          wfsLayer = new M.layer.WFS(layerParam, layerParam.options);
-        }
-        catch (err) {
-          M.dialog.error(err);
-        }
+
+      // parses parameters to Array
+      if (!M.utils.isArray(layersParam)) {
+        layersParam = [layersParam];
       }
-      this.featuresHandler_.addLayer(wfsLayer);
-      wfsLayers.push(wfsLayer);
-    });
 
-    // adds the layers
-    this.getImpl().addWFS(wfsLayers);
-    this.fire(M.evt.ADDED_LAYER, [wfsLayers]);
-    this.fire(M.evt.ADDED_WFS, [wfsLayers]);
+      // gets the parameters as M.layer.WFS objects to add
+      var wfsLayers = [];
+      layersParam.forEach(function(layerParam) {
+        let wfsLayer;
+        if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WFS)) {
+          wfsLayer = layerParam;
+        }
+        else if (!(layerParam instanceof M.Layer)) {
+          try {
+            wfsLayer = new M.layer.WFS(layerParam, layerParam.options);
+          }
+          catch (err) {
+            M.dialog.error(err);
+          }
+        }
+        this.featuresHandler_.addLayer(wfsLayer);
+        wfsLayers.push(wfsLayer);
+      }, this);
 
+      // adds the layers
+      this.getImpl().addWFS(wfsLayers);
+      this.fire(M.evt.ADDED_LAYER, [wfsLayers]);
+      this.fire(M.evt.ADDED_WFS, [wfsLayers]);
+    }
     return this;
   };
 
@@ -891,22 +875,19 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.removeWFS = function(layersParam) {
-    // checks if the parameter is null or empty
     if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa WFS');
-    }
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.removeWFS)) {
+        M.exception('La implementación usada no posee el método removeWFS');
+      }
 
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.removeWFS)) {
-      M.exception('La implementación usada no posee el método removeWFS');
-    }
-
-    // gets the layers
-    var wfsLayers = this.getWFS(layersParam);
-    if (wfsLayers.length > 0) {
-      wfsLayers.forEach(this.featuresHandler_.removeLayer);
-      // removes the layers
-      this.getImpl().removeWFS(wfsLayers);
+      // gets the layers
+      var wfsLayers = this.getWFS(layersParam);
+      if (wfsLayers.length > 0) {
+        wfsLayers.forEach(this.featuresHandler_.removeLayer);
+        // removes the layers
+        this.getImpl().removeWFS(wfsLayers);
+      }
     }
     return this;
   };
@@ -958,37 +939,33 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.addWMTS = function(layersParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa WMTS');
-    }
-
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.addWMTS)) {
-      M.exception('La implementación usada no posee el método addWMTS');
-    }
-
-    // parses parameters to Array
-    if (!M.utils.isArray(layersParam)) {
-      layersParam = [layersParam];
-    }
-
-    // gets the parameters as M.layer.WMS objects to add
-    var wmtsLayers = [];
-    layersParam.forEach(function(layerParam) {
-      if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMTS)) {
-        wmtsLayers.push(layerParam);
+    if (!M.utils.isNullOrEmpty(layersParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.addWMTS)) {
+        M.exception('La implementación usada no posee el método addWMTS');
       }
-      else if (!(layerParam instanceof M.Layer)) {
-        wmtsLayers.push(new M.layer.WMTS(layerParam, layerParam.options));
+
+      // parses parameters to Array
+      if (!M.utils.isArray(layersParam)) {
+        layersParam = [layersParam];
       }
-    });
 
-    // adds the layers
-    this.getImpl().addWMTS(wmtsLayers);
-    this.fire(M.evt.ADDED_LAYER, [wmtsLayers]);
-    this.fire(M.evt.ADDED_WMTS, [wmtsLayers]);
+      // gets the parameters as M.layer.WMS objects to add
+      var wmtsLayers = [];
+      layersParam.forEach(function(layerParam) {
+        if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMTS)) {
+          wmtsLayers.push(layerParam);
+        }
+        else if (!(layerParam instanceof M.Layer)) {
+          wmtsLayers.push(new M.layer.WMTS(layerParam, layerParam.options));
+        }
+      });
 
+      // adds the layers
+      this.getImpl().addWMTS(wmtsLayers);
+      this.fire(M.evt.ADDED_LAYER, [wmtsLayers]);
+      this.fire(M.evt.ADDED_WMTS, [wmtsLayers]);
+    }
     return this;
   };
 
@@ -1001,21 +978,18 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.removeWMTS = function(layersParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(layersParam)) {
-      M.exception('No ha especificado ninguna capa WMTS');
-    }
+    if (!M.utils.isNullOrEmpty(layersParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.removeWMTS)) {
+        M.exception('La implementación usada no posee el método removeWMTS');
+      }
 
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.removeWMTS)) {
-      M.exception('La implementación usada no posee el método removeWMTS');
-    }
-
-    // gets the layers
-    var wmtsLayers = this.getWMTS(layersParam);
-    if (wmtsLayers.length > 0) {
-      // removes the layers
-      this.getImpl().removeWMTS(wmtsLayers);
+      // gets the layers
+      var wmtsLayers = this.getWMTS(layersParam);
+      if (wmtsLayers.length > 0) {
+        // removes the layers
+        this.getImpl().removeWMTS(wmtsLayers);
+      }
     }
     return this;
   };
@@ -1119,32 +1093,153 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.addControls = function(controlsParam) {
-    // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(controlsParam)) {
-      M.exception('No ha especificado ningún control');
-    }
+    if (!M.utils.isNullOrEmpty(controlsParam)) {
+      // checks if the implementation can manage layers
+      if (M.utils.isUndefined(M.impl.Map.prototype.addControls)) {
+        M.exception('La implementación usada no posee el método addControls');
+      }
 
-    // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.addControls)) {
-      M.exception('La implementación usada no posee el método addControls');
-    }
+      // parses parameters to Array
+      if (!M.utils.isArray(controlsParam)) {
+        controlsParam = [controlsParam];
+      }
 
-    // parses parameters to Array
-    if (!M.utils.isArray(controlsParam)) {
-      controlsParam = [controlsParam];
-    }
-
-    // gets the parameters as M.Control to add them
-    var controls = [];
-    for (var i = 0, ilen = controlsParam.length; i < ilen; i++) {
-      var controlParam = controlsParam[i];
-      var control;
-      var panel;
-      if (M.utils.isString(controlParam)) {
-        controlParam = M.utils.normalize(controlParam);
-        switch (controlParam) {
-          case M.control.Scale.NAME:
-            control = new M.control.Scale();
+      // gets the parameters as M.Control to add them
+      var controls = [];
+      for (var i = 0, ilen = controlsParam.length; i < ilen; i++) {
+        var controlParam = controlsParam[i];
+        var control;
+        var panel;
+        if (M.utils.isString(controlParam)) {
+          controlParam = M.utils.normalize(controlParam);
+          switch (controlParam) {
+            case M.control.Scale.NAME:
+              control = new M.control.Scale();
+              panel = this.getPanels('map-info')[0];
+              if (M.utils.isNullOrEmpty(panel)) {
+                panel = new M.ui.Panel('map-info', {
+                  "collapsible": false,
+                  "className": "m-map-info",
+                  "position": M.ui.position.BR
+                });
+                panel.on(M.evt.ADDED_TO_MAP, function(html) {
+                  if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
+                    goog.dom.classlist.add(this.getControls(["scaleline"])[0].getImpl().getElement(),
+                      "ol-scale-line-up");
+                  }
+                }, this);
+              }
+              panel.addClassName('m-with-scale');
+              break;
+            case M.control.ScaleLine.NAME:
+              control = new M.control.ScaleLine();
+              panel = new M.ui.Panel(M.control.ScaleLine.NAME, {
+                "collapsible": false,
+                "className": "m-scaleline",
+                "position": M.ui.position.BL,
+                "tooltip": "Línea de escala"
+              });
+              panel.on(M.evt.ADDED_TO_MAP, function(html) {
+                if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
+                  goog.dom.classlist.add(this.getControls(["scaleline"])[0].getImpl().getElement(),
+                    "ol-scale-line-up");
+                }
+              }, this);
+              break;
+            case M.control.Panzoombar.NAME:
+              control = new M.control.Panzoombar();
+              panel = new M.ui.Panel(M.control.Panzoombar.NAME, {
+                "collapsible": false,
+                "className": "m-panzoombar",
+                "position": M.ui.position.TL,
+                "tooltip": "Nivel de zoom"
+              });
+              break;
+            case M.control.Panzoom.NAME:
+              control = new M.control.Panzoom();
+              panel = new M.ui.Panel(M.control.Panzoom.NAME, {
+                "collapsible": false,
+                "className": "m-panzoom",
+                "position": M.ui.position.TL
+              });
+              break;
+            case M.control.LayerSwitcher.NAME:
+              control = new M.control.LayerSwitcher();
+              /* closure a function in order to keep
+               * the control value in the scope*/
+              (function(layerswitcherCtrl) {
+                panel = new M.ui.Panel(M.control.LayerSwitcher.NAME, {
+                  "collapsible": true,
+                  "className": "m-layerswitcher",
+                  "collapsedButtonClass": "g-cartografia-capas2",
+                  "position": M.ui.position.TR,
+                  "tooltip": "Selector de capas"
+                });
+                // enables touch scroll
+                panel.on(M.evt.ADDED_TO_MAP, function(html) {
+                  M.utils.enableTouchScroll(html.querySelector('.m-panel-controls'));
+                }, this);
+                // renders and registers events
+                panel.on(M.evt.SHOW, function(evt) {
+                  layerswitcherCtrl.registerEvents();
+                  layerswitcherCtrl.render();
+                }, this);
+                // unregisters events
+                panel.on(M.evt.HIDE, function(evt) {
+                  layerswitcherCtrl.unregisterEvents();
+                }, this);
+              })(control);
+              break;
+            case M.control.Mouse.NAME:
+              control = new M.control.Mouse();
+              panel = this.getPanels('map-info')[0];
+              if (M.utils.isNullOrEmpty(panel)) {
+                panel = new M.ui.Panel('map-info', {
+                  "collapsible": false,
+                  "className": "m-map-info",
+                  "position": M.ui.position.BR,
+                  "tooltip": "Coordenadas del puntero"
+                });
+              }
+              panel.addClassName('m-with-mouse');
+              break;
+            case M.control.Navtoolbar.NAME:
+              control = new M.control.Navtoolbar();
+              break;
+            case M.control.OverviewMap.NAME:
+              control = new M.control.OverviewMap({
+                'toggleDelay': 400
+              });
+              panel = this.getPanels('map-info')[0];
+              if (M.utils.isNullOrEmpty(panel)) {
+                panel = new M.ui.Panel('map-info', {
+                  "collapsible": false,
+                  "className": "m-map-info",
+                  "position": M.ui.position.BR
+                });
+              }
+              panel.addClassName('m-with-overviewmap');
+              break;
+            case M.control.Location.NAME:
+              control = new M.control.Location();
+              panel = new M.ui.Panel(M.control.Location.NAME, {
+                "collapsible": false,
+                "className": 'm-location',
+                "position": M.ui.position.BR
+              });
+              break;
+            case M.control.GetFeatureInfo.NAME:
+              control = new M.control.GetFeatureInfo();
+              break;
+            default:
+              let getControlsAvailable = M.utils.concatUrlPaths([M.config.MAPEA_URL, '/api/actions/controls']);
+              M.dialog.error('El control "'.concat(controlParam).concat('" no está definido. Consulte los controles disponibles <a href="' + getControlsAvailable + '" target="_blank">aquí</a>'));
+              break;
+          }
+        }
+        else if (controlParam instanceof M.Control) {
+          control = controlParam;
+          if (control instanceof M.control.WMCSelector) {
             panel = this.getPanels('map-info')[0];
             if (M.utils.isNullOrEmpty(panel)) {
               panel = new M.ui.Panel('map-info', {
@@ -1159,183 +1254,58 @@ goog.require('M.window');
                 }
               }, this);
             }
-            panel.addClassName('m-with-scale');
-            break;
-          case M.control.ScaleLine.NAME:
-            control = new M.control.ScaleLine();
-            panel = new M.ui.Panel(M.control.ScaleLine.NAME, {
-              "collapsible": false,
-              "className": "m-scaleline",
-              "position": M.ui.position.BL,
-              "tooltip": "Línea de escala"
-            });
-            panel.on(M.evt.ADDED_TO_MAP, function(html) {
-              if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
-                goog.dom.classlist.add(this.getControls(["scaleline"])[0].getImpl().getElement(),
-                  "ol-scale-line-up");
-              }
-            }, this);
-            break;
-          case M.control.Panzoombar.NAME:
-            control = new M.control.Panzoombar();
-            panel = new M.ui.Panel(M.control.Panzoombar.NAME, {
-              "collapsible": false,
-              "className": "m-panzoombar",
-              "position": M.ui.position.TL,
-              "tooltip": "Nivel de zoom"
-            });
-            break;
-          case M.control.Panzoom.NAME:
-            control = new M.control.Panzoom();
-            panel = new M.ui.Panel(M.control.Panzoom.NAME, {
-              "collapsible": false,
-              "className": "m-panzoom",
-              "position": M.ui.position.TL
-            });
-            break;
-          case M.control.LayerSwitcher.NAME:
-            control = new M.control.LayerSwitcher();
-            /* closure a function in order to keep
-             * the control value in the scope*/
-            (function(layerswitcherCtrl) {
-              panel = new M.ui.Panel(M.control.LayerSwitcher.NAME, {
-                "collapsible": true,
-                "className": "m-layerswitcher",
-                "collapsedButtonClass": "g-cartografia-capas2",
-                "position": M.ui.position.TR,
-                "tooltip": "Selector de capas"
-              });
-              // enables touch scroll
-              panel.on(M.evt.ADDED_TO_MAP, function(html) {
-                M.utils.enableTouchScroll(html.querySelector('.m-panel-controls'));
-              }, this);
-              // renders and registers events
-              panel.on(M.evt.SHOW, function(evt) {
-                layerswitcherCtrl.registerEvents();
-                layerswitcherCtrl.render();
-              }, this);
-              // unregisters events
-              panel.on(M.evt.HIDE, function(evt) {
-                layerswitcherCtrl.unregisterEvents();
-              }, this);
-            })(control);
-            break;
-          case M.control.Mouse.NAME:
-            control = new M.control.Mouse();
-            panel = this.getPanels('map-info')[0];
-            if (M.utils.isNullOrEmpty(panel)) {
-              panel = new M.ui.Panel('map-info', {
-                "collapsible": false,
-                "className": "m-map-info",
-                "position": M.ui.position.BR,
-                "tooltip": "Coordenadas del puntero"
-              });
-            }
-            panel.addClassName('m-with-mouse');
-            break;
-          case M.control.Navtoolbar.NAME:
-            control = new M.control.Navtoolbar();
-            break;
-          case M.control.OverviewMap.NAME:
-            control = new M.control.OverviewMap({
-              'toggleDelay': 400
-            });
-            panel = this.getPanels('map-info')[0];
-            if (M.utils.isNullOrEmpty(panel)) {
-              panel = new M.ui.Panel('map-info', {
-                "collapsible": false,
-                "className": "m-map-info",
-                "position": M.ui.position.BR
-              });
-            }
-            panel.addClassName('m-with-overviewmap');
-            break;
-          case M.control.Location.NAME:
-            control = new M.control.Location();
-            panel = new M.ui.Panel(M.control.Location.NAME, {
-              "collapsible": false,
-              "className": 'm-location',
-              "position": M.ui.position.BR
-            });
-            break;
-          case M.control.GetFeatureInfo.NAME:
-            control = new M.control.GetFeatureInfo();
-            break;
-          default:
-            let getControlsAvailable = M.utils.concatUrlPaths([M.config.MAPEA_URL, '/api/actions/controls']);
-            M.dialog.error('El control "'.concat(controlParam).concat('" no está definido. Consulte los controles disponibles <a href="' + getControlsAvailable + '" target="_blank">aquí</a>'));
-            break;
-        }
-      }
-      else if (controlParam instanceof M.Control) {
-        control = controlParam;
-        if (control instanceof M.control.WMCSelector) {
-          panel = this.getPanels('map-info')[0];
-          if (M.utils.isNullOrEmpty(panel)) {
-            panel = new M.ui.Panel('map-info', {
-              "collapsible": false,
-              "className": "m-map-info",
-              "position": M.ui.position.BR
-            });
-            panel.on(M.evt.ADDED_TO_MAP, function(html) {
-              if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
-                goog.dom.classlist.add(this.getControls(["scaleline"])[0].getImpl().getElement(),
-                  "ol-scale-line-up");
-              }
-            }, this);
+            panel.addClassName('m-with-wmcselector');
           }
-          panel.addClassName('m-with-wmcselector');
         }
-      }
-      else {
-        M.exception('El control "'.concat(controlParam).concat('" no es un control válido.'));
-      }
+        else {
+          M.exception('El control "'.concat(controlParam).concat('" no es un control válido.'));
+        }
 
-      // checks if it has to be added into a main panel
-      if (M.config.panels.TOOLS.indexOf(control.name) !== -1) {
-        if (M.utils.isNullOrEmpty(this.panel.TOOLS)) {
-          this.panel.TOOLS = new M.ui.Panel('tools', {
-            "collapsible": true,
-            "className": 'm-tools',
-            "collapsedButtonClass": 'g-cartografia-herramienta',
-            "position": M.ui.position.TL,
-            "tooltip": "Panel de herramientas"
-          });
-          //               this.addPanels([this.panel.TOOLS]);
+        // checks if it has to be added into a main panel
+        if (M.config.panels.TOOLS.indexOf(control.name) !== -1) {
+          if (M.utils.isNullOrEmpty(this.panel.TOOLS)) {
+            this.panel.TOOLS = new M.ui.Panel('tools', {
+              "collapsible": true,
+              "className": 'm-tools',
+              "collapsedButtonClass": 'g-cartografia-herramienta',
+              "position": M.ui.position.TL,
+              "tooltip": "Panel de herramientas"
+            });
+            //               this.addPanels([this.panel.TOOLS]);
+          }
+          //            if (!this.panel.TOOLS.hasControl(control)) {
+          //               this.panel.TOOLS.addControls(control);
+          //            }
+          panel = this.panel.TOOLS;
         }
-        //            if (!this.panel.TOOLS.hasControl(control)) {
-        //               this.panel.TOOLS.addControls(control);
-        //            }
-        panel = this.panel.TOOLS;
-      }
-      else if (M.config.panels.EDITION.indexOf(control.name) !== -1) {
-        if (M.utils.isNullOrEmpty(this.panel.EDITION)) {
-          this.panel.EDITION = new M.ui.Panel('edit', {
-            "collapsible": true,
-            "className": 'm-edition',
-            "collapsedButtonClass": 'g-cartografia-editar',
-            "position": M.ui.position.TL,
-            "tooltip": "Herramientas de edición"
-          });
-          //               this.addPanels([this.panel.EDITION]);
+        else if (M.config.panels.EDITION.indexOf(control.name) !== -1) {
+          if (M.utils.isNullOrEmpty(this.panel.EDITION)) {
+            this.panel.EDITION = new M.ui.Panel('edit', {
+              "collapsible": true,
+              "className": 'm-edition',
+              "collapsedButtonClass": 'g-cartografia-editar',
+              "position": M.ui.position.TL,
+              "tooltip": "Herramientas de edición"
+            });
+            //               this.addPanels([this.panel.EDITION]);
+          }
+          //            if (!this.panel.EDITION.hasControl(control)) {
+          //               this.panel.EDITION.addControls(control);
+          //            }
+          panel = this.panel.EDITION;
         }
-        //            if (!this.panel.EDITION.hasControl(control)) {
-        //               this.panel.EDITION.addControls(control);
-        //            }
-        panel = this.panel.EDITION;
-      }
 
-      if (!M.utils.isNullOrEmpty(panel) && !panel.hasControl(control)) {
-        panel.addControls(control);
-        this.addPanels(panel);
+        if (!M.utils.isNullOrEmpty(panel) && !panel.hasControl(control)) {
+          panel.addControls(control);
+          this.addPanels(panel);
+        }
+        else {
+          control.addTo(this);
+          controls.push(control);
+        }
       }
-      else {
-        control.addTo(this);
-        controls.push(control);
-      }
+      this.getImpl().addControls(controls);
     }
-
-    this.getImpl().addControls(controls);
     return this;
   };
 
@@ -1583,14 +1553,17 @@ goog.require('M.window');
       let center = M.parameter.center(centerParam);
       this.getImpl().setCenter(center);
       if (center.draw === true) {
-        let features = this.getImpl().getDrawLayer().getOL3Layer().getSource().getFeatures();
-        if (!M.utils.isNullOrEmpty(features)) {
-          this._removeFeatureCenter();
-        }
-        this._featureCenter = features[features.length - 1];
-      }
-      else if (!M.utils.isNullOrEmpty(this._featureCenter)) {
-        this._removeFeatureCenter();
+        this.drawLayer_.clear();
+        this.drawPoints([{
+          'x': center.x,
+          'y': center.y,
+          'click': goog.bind(function(evt) {
+            var label = this.getLabel();
+            if (!M.utils.isNullOrEmpty(label)) {
+              label.show(this);
+            }
+          }, this)
+        }]);
       }
     }
     catch (err) {
@@ -2085,16 +2058,53 @@ goog.require('M.window');
       M.exception('No ha especificado ningún punto');
     }
 
-    // checks if the implementation can add points
-    if (M.utils.isUndefined(M.impl.Map.prototype.drawPoints)) {
-      M.exception('La implementación usada no posee el método drawPoints');
-    }
-
     if (!M.utils.isArray(points)) {
       points = [points];
     }
 
-    this.getImpl().drawPoints(points);
+    let features = points.map(point => {
+      let gj = {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [point.x, point.y]
+        },
+        "properties": {}
+      };
+      if (M.utils.isFunction(point.click)) {
+        gj.properties.vendor = {
+          "mapea": {
+            "click": point.click
+          }
+        };
+      }
+      return new M.Feature(null, gj);
+    }, this);
+    this.drawLayer_.addFeatures(features);
+  };
+
+  /**
+   * TODO
+   *
+   * @function
+   * @param {Array<M.Feature>|M.Feature} features
+   * @api stable
+   */
+  M.Map.prototype.drawFeatures = function(features) {
+    this.drawLayer_.addFeatures(features);
+    return this;
+  };
+
+  /**
+   * TODO
+   *
+   * @function
+   * @param {Array<M.Feature>|M.Feature} features
+   * @api stable
+   */
+  M.Map.prototype.removeFeatures = function(features) {
+    this.drawLayer_.removeFeatures(features);
+    return this;
   };
 
   /**
@@ -2231,22 +2241,6 @@ goog.require('M.window');
       M.exception('La implementación usada no posee el método getContainer');
     }
     return this.getImpl().getContainer();
-  };
-
-  /**
-   * This function removes the WMC layers to the map
-   *
-   * @function
-   * @returns {Array<Mx.Point>}
-   * @api stable
-   */
-  M.Map.prototype.getPoints = function(coordinate) {
-    // checks if the implementation can add points
-    if (M.utils.isUndefined(M.impl.Map.prototype.getPoints)) {
-      M.exception('La implementación usada no posee el método getPoints');
-    }
-
-    return this.getImpl().getPoints(coordinate);
   };
 
   /**
