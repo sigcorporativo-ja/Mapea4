@@ -85,7 +85,7 @@ goog.provide('M.impl.style.Polygon');
    */
   M.impl.style.Polygon.prototype.applyToFeature = function(feature) {
     setTimeout(function() {
-      feature.getImpl().getOLFeature().setStyle([this.styles_[0], this.styles_[1]]);
+      feature.getImpl().getOLFeature().setStyle(this.styles_);
     }.bind(this), 1000);
   };
 
