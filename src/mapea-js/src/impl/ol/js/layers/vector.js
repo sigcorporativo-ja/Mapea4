@@ -15,8 +15,22 @@ goog.require('M.impl.Layer');
    * @api stable
    */
   M.impl.layer.Vector = (function(options) {
+    /**
+     * The facade layer instance
+     * @private
+     * @type {M.layer.Vector}
+     * @expose
+     */
     this.facadeVector_ = null;
+
+    /**
+     * Features of this layer
+     * @private
+     * @type {Array<M.Feature>}
+     * @expose
+     */
     this.features_ = [];
+
     goog.base(this, options);
   });
   goog.inherits(M.impl.layer.Vector, M.impl.Layer);
