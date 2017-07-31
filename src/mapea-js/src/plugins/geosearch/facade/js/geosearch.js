@@ -1,8 +1,9 @@
 goog.provide('P.plugin.Geosearch');
 
 goog.require('P.control.Geosearch');
+goog.require('P.layer.Geosearch');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -13,7 +14,7 @@ goog.require('P.control.Geosearch');
    * @param {Object} impl implementation object
    * @api stable
    */
-  M.plugin.Geosearch = (function (parameters) {
+  M.plugin.Geosearch = (function(parameters) {
     parameters = (parameters || {});
 
     /**
@@ -95,7 +96,7 @@ goog.require('P.control.Geosearch');
    * @param {Object} map the map to add the plugin
    * @api stable
    */
-  M.plugin.Geosearch.prototype.addTo = function (map) {
+  M.plugin.Geosearch.prototype.addTo = function(map) {
     this.map_ = map;
 
     goog.dom.classlist.add(map._areasContainer.getElementsByClassName("m-top m-right")[0],
@@ -123,7 +124,7 @@ goog.require('P.control.Geosearch');
    * @returns {HTMLElement} the input that executes the search
    * @api stable
    */
-  M.plugin.Geosearch.prototype.getInput = function () {
+  M.plugin.Geosearch.prototype.getInput = function() {
     var inputSearch = null;
     if (!M.utils.isNullOrEmpty(this.control_)) {
       inputSearch = this.control_.getInput();
@@ -138,7 +139,7 @@ goog.require('P.control.Geosearch');
    * @function
    * @api stable
    */
-  M.plugin.Geosearch.prototype.destroy = function () {
+  M.plugin.Geosearch.prototype.destroy = function() {
     this.map_.removeControls([this.control_]);
     this.map_ = null;
     this.control_ = null;
@@ -157,7 +158,7 @@ goog.require('P.control.Geosearch');
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.Geosearch.prototype.equals = function (plugin) {
+  M.plugin.Geosearch.prototype.equals = function(plugin) {
     if (plugin instanceof M.plugin.Geosearch) {
       return true;
     }

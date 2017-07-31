@@ -126,14 +126,14 @@ goog.require('goog.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.KML.prototype.selectFeatures = function(features) {
+  M.impl.layer.KML.prototype.selectFeatures = function(features, coord, evt) {
     // TODO: manage multiples features
     var feature = features[0];
 
     if (this.extract === true) {
-      var featureName = feature.get('name');
-      var featureDesc = feature.get('description');
-      var featureCoord = feature.getGeometry().getFirstCoordinate();
+      var featureName = feature.getAttribute('name');
+      var featureDesc = feature.getAttribute('description');
+      var featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();
 
       var this_ = this;
       M.template.compile(M.layer.KML.POPUP_TEMPLATE, {
