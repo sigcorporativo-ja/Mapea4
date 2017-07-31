@@ -78,8 +78,9 @@ goog.addDependency('../../../../src/plugins/attributetable/facade/js/attributeta
 goog.addDependency('../../../../src/plugins/attributetable/impl/ol/js/attributetableControl.js', ['P.impl.control.AttributeTableControl'], [], false);
 goog.addDependency('../../../../src/plugins/autocomplete/facade/js/autocomplete.js', ['P.plugin.Autocomplete'], ['goog.dom.classlist'], false);
 goog.addDependency('../../../../src/plugins/autocomplete/test/autocompletador.js', ['pruebaPlugin2'], ['M', 'M.impl', 'P.plugin.Autocomplete'], false);
-goog.addDependency('../../../../src/plugins/geosearch/facade/js/geosearch.js', ['P.plugin.Geosearch'], ['P.control.Geosearch'], false);
-goog.addDependency('../../../../src/plugins/geosearch/facade/js/geosearchcontrol.js', ['P.control.Geosearch'], ['goog.dom.classlist', 'goog.events', 'goog.style'], false);
+goog.addDependency('../../../../src/plugins/geosearch/facade/js/geosearch.js', ['P.plugin.Geosearch'], ['P.control.Geosearch', 'P.layer.Geosearch'], false);
+goog.addDependency('../../../../src/plugins/geosearch/facade/js/geosearchcontrol.js', ['P.control.Geosearch'], ['P.layer.Geosearch', 'goog.dom.classlist', 'goog.events', 'goog.style'], false);
+goog.addDependency('../../../../src/plugins/geosearch/facade/js/geosearchlayer.js', ['P.layer.Geosearch'], [], false);
 goog.addDependency('../../../../src/plugins/geosearch/impl/ol/js/geosearchcontrol.js', ['P.impl.control.Geosearch'], ['P.impl.layer.Geosearch', 'goog.dom.classes'], false);
 goog.addDependency('../../../../src/plugins/geosearch/impl/ol/js/geosearchlayer.js', ['P.impl.layer.Geosearch'], ['P.impl.geosearch.style', 'P.impl.utils.Geosearch'], false);
 goog.addDependency('../../../../src/plugins/geosearch/impl/ol/js/geosearchstyle.js', ['P.impl.geosearch.style'], [], false);

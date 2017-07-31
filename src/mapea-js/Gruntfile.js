@@ -3,7 +3,7 @@
    be specified inside this function)
 */
 var renamePluginsFn = require('./grunt-tasks/utilities/rename-plugins');
-module.exports = function (grunt) {
+module.exports = function(grunt) {
 
   // Project configuration
   grunt.initConfig({
@@ -42,9 +42,9 @@ module.exports = function (grunt) {
         },
         files: {
           'src': [
-                  'src/facade/**/*.js',
-                  'src/impl/**/*.js'
-              ]
+            'src/facade/**/*.js',
+            'src/impl/**/*.js'
+          ]
         }
       },
       plugins: {
@@ -53,8 +53,8 @@ module.exports = function (grunt) {
         },
         files: {
           'src': [
-                  'src/plugins/**/*.js'
-               ]
+            'src/plugins/**/*.js'
+          ]
         }
       },
       tasks: {
@@ -63,9 +63,9 @@ module.exports = function (grunt) {
         },
         files: {
           'src': [
-                  'grunt-tasks/*.js',
-                  'grunt-tasks/utilities/*.js'
-               ]
+            'grunt-tasks/*.js',
+            'grunt-tasks/utilities/*.js'
+          ]
         }
       }
     },
@@ -109,7 +109,7 @@ module.exports = function (grunt) {
          ],
       dev: [
             'test/browser/mapea-<%= pkg.version %>.deps.js'
-         ],
+        ],
       'plugins-css': [
             "build/plugins/*.css",
             "build/plugins/**/*.css",
@@ -170,7 +170,7 @@ module.exports = function (grunt) {
           dest: 'build/core/js/',
           flatten: false,
           encoding: 'utf-8',
-          rename: function (version, dest, src) {
+          rename: function(version, dest, src) {
             console.log('version ' + version + ' dest ' + dest + ' src ' + src);
             return dest.concat('configuration-' + version + '.js')
           }.bind(this, '<%= pkg.version %>')
@@ -183,7 +183,7 @@ module.exports = function (grunt) {
           src: 'mapea-<%= pkg.version %>.ol.min.js',
           dest: 'build/core/js/',
           encoding: 'utf-8',
-          rename: function (dest, source) {
+          rename: function(dest, source) {
             return dest.concat('mapea.ol.min.js');
           }
         }, {
@@ -192,7 +192,7 @@ module.exports = function (grunt) {
           src: 'mapea-<%= pkg.version %>.ol.min.css',
           dest: 'build/core/assets/css/',
           encoding: 'utf-8',
-          rename: function (dest, source) {
+          rename: function(dest, source) {
             return dest.concat('mapea.ol.min.css');
           }
         }]
