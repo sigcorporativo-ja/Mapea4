@@ -302,9 +302,9 @@ goog.require('goog.style');
     }),
     image: new ol.style.Circle({
       radius: 7,
-      fill: new ol.style.Fill({
-        color: '#a35d38'
-      })
+      // fill: new ol.style.Fill({
+      //   color: '#a35d38'
+      // })
     })
   });
 })();
