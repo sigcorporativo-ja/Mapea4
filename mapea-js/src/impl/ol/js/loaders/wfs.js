@@ -104,4 +104,3 @@ goog.require('M.format.GeoJSON');
     return this.service_.getFeatureUrl(null, projection);
   };
 })();
-
