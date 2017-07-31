@@ -14,7 +14,7 @@ goog.require('P.impl.geosearch.style');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.Geosearch = (function(name = 'geosearch', options) {
+  M.impl.layer.Geosearch = (function(name = 'geosearch', options = {}) {
     /**
      * Currently drawn feature coordinate.
      * @private
