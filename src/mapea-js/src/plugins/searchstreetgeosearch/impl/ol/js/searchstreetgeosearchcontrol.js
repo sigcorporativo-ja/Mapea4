@@ -71,7 +71,10 @@ goog.provide('P.impl.control.SearchstreetGeosearch');
    * @api stable
    */
   M.impl.control.SearchstreetGeosearch.prototype.zoomResults = function() {
-    this.facadeMap_.setBbox(this.facadeMap_.getControls().find(c => c.name_ === "searchstreetgeosearch").ctrlGeosearch.getImpl().layer_.getFeaturesExtent());
+    let bbox = this.facadeMap_.getControls().find(c => c.name_ === "searchstreetgeosearch").ctrlGeosearch.getImpl().layer_.getFeaturesExtent();
+    if (!M.utils.isNullOrEmpty(bbox)) {
+      this.facadeMap_.setBbox(bbox);
+    }
   };
 
   /**

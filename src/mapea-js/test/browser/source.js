@@ -147,5 +147,5 @@ function searchstreetgeosearch_test() {
 // geosearch_test();
 // geosearchbylocation_test();
 // searchstreet_test();
-searchstreetgeosearch_test();
 // center_test();
+searchstreetgeosearch_test();
