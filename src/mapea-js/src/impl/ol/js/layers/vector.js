@@ -21,7 +21,6 @@ goog.require('M.impl.Layer');
   });
   goog.inherits(M.impl.layer.Vector, M.impl.Layer);
 
-
   /**
    * This function sets the map object of the layer
    *
@@ -33,6 +32,67 @@ goog.require('M.impl.Layer');
   M.impl.layer.Vector.prototype.addTo = function(map) {
     this.map = map;
     map.on(M.evt.CHANGE_PROJ, this.setProjection_, this);
+
+    this.ol3Layer = new ol.layer.Vector({
+      style: new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: 'rgba(0, 158, 0, 0.1)'
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#fcfcfc',
+          width: 2
+        }),
+        image: new ol.style.Circle({
+          radius: 7,
+          fill: new ol.style.Fill({
+            color: '#009E00'
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#fcfcfc',
+            width: 2
+          })
+        })
+      }),
+      zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
+    });
+    this.updateSource_();
+
+    // sets its visibility if it is in range
+    if (this.options.visibility !== false) {
+      this.setVisible(this.inRange());
+    }
+    // sets its z-index
+    if (this.zIndex_ !== null) {
+      this.setZIndex(this.zIndex_);
+    }
+    this.setZIndex(999999);
+
+    let olMap = this.map.getMapImpl();
+    olMap.addLayer(this.ol3Layer);
+  };
+
+  /**
+   * This function sets the map object of the layer
+   *
+   * @private
+   * @function
+   */
+  M.impl.layer.Vector.prototype.updateSource_ = function() {
+    if (M.utils.isNullOrEmpty(this.ol3Layer.getSource())) {
+      this.ol3Layer.setSource(new ol.source.Vector());
+    }
+  };
+
+  /**
+   * This function indicates if the layer is in range
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  M.impl.layer.Vector.prototype.inRange = function() {
+    // vectors are always in range
+    return true;
   };
 
   /**
@@ -103,12 +163,17 @@ goog.require('M.impl.Layer');
    * @api stable
    */
   M.impl.layer.Vector.prototype.redraw = function() {
-    let olSource = this.getOL3Layer().getSource();
-    olSource.forEachFeature(function(feature) {
-      olSource.removeFeature(feature);
-    });
-    let features = this.facadeVector_.getFeatures();
-    this.getOL3Layer().getSource().addFeatures(features.map(feature => feature.getImpl().getOLFeature()));
+    let olLayer = this.getOL3Layer();
+    if (!M.utils.isNullOrEmpty(olLayer)) {
+      let olSource = olLayer.getSource();
+
+      // remove all features from ol vector
+      let olFeatures = [...olSource.getFeatures()];
+      olFeatures.forEach(olSource.removeFeature, olSource);
+
+      let features = this.facadeVector_.getFeatures();
+      olSource.addFeatures(features.map(M.impl.Feature.facade2OLFeature));
+    }
   };
 
   /**
@@ -126,6 +191,33 @@ goog.require('M.impl.Layer');
     return (extents.length === 0) ? null : extents.reduce((ext1, ext2) => ol.extent.extend(ext1, ext2));
   };
 
+  /**
+   * TODO
+   * @public
+   * @function
+   * @param {ol.Feature} feature
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.selectFeatures = function(features, coord, evt) {
+    var feature = features[0];
+    if (!M.utils.isNullOrEmpty(feature)) {
+      let clickFn = feature.getAttribute('vendor.mapea.click');
+      if (M.utils.isFunction(clickFn)) {
+        clickFn(evt, feature);
+      }
+    }
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.unselectFeatures = function() {
+    this.map.removePopup();
+  };
 
   /**
    * This function set facade class vector

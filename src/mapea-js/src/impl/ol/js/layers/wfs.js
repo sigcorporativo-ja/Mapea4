@@ -81,19 +81,10 @@ goog.require('M.impl.layer.Vector');
    * @api stable
    */
   M.impl.layer.WFS.prototype.addTo = function(map) {
-    this.map = map;
+    goog.base(this, 'addTo', map);
 
-    this.ol3Layer = new ol.layer.Vector({
-      style: M.impl.layer.WFS.STYLE
-    });
+    this.ol3Layer.setStyle(M.impl.layer.WFS.STYLE);
     this.updateSource_();
-    this.setVisible(this.visibility);
-    // sets its z-index
-    if (this.zIndex_ !== null) {
-      this.setZIndex(this.zIndex_);
-    }
-    var olMap = this.map.getMapImpl();
-    olMap.addLayer(this.ol3Layer);
 
     map.getImpl().on(M.evt.CHANGE, function() {
       this.refresh();
@@ -109,7 +100,6 @@ goog.require('M.impl.layer.Vector');
    * @api stable
    */
   M.impl.layer.WFS.prototype.refresh = function(forceNewSource) {
-    this.features_ = [];
     this.updateSource_(forceNewSource);
   };
 

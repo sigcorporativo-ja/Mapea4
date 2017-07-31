@@ -4,7 +4,7 @@ goog.require('M.layer.Vector');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -16,7 +16,7 @@ goog.require('M.exception');
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  M.layer.KML = (function (userParameters, options) {
+  M.layer.KML = (function(userParameters, options = {}) {
     // checks if the implementation can create KML layers
     if (M.utils.isUndefined(M.impl.layer.KML)) {
       M.exception('La implementación usada no puede crear capas KML');
@@ -26,8 +26,6 @@ goog.require('M.exception');
     if (M.utils.isNullOrEmpty(userParameters)) {
       M.exception('No ha especificado ningún parámetro');
     }
-
-    options = (options || {});
 
     /**
      * Implementation of this layer
@@ -39,7 +37,7 @@ goog.require('M.exception');
     var parameters = M.parameter.layer(userParameters, M.layer.type.KML);
 
     // calls the super constructor
-    goog.base(this, parameters, impl);
+    goog.base(this, parameters, options, impl);
 
     // extract
     this.extract = parameters.extract;
@@ -54,11 +52,11 @@ goog.require('M.exception');
    * the layer was selected
    */
   Object.defineProperty(M.layer.KML.prototype, "type", {
-    get: function () {
+    get: function() {
       return M.layer.type.KML;
     },
     // defining new type is not allowed
-    set: function (newType) {
+    set: function(newType) {
       if (!M.utils.isUndefined(newType) &&
         !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.KML)) {
         M.exception('El tipo de capa debe ser \''.concat(M.layer.type.KML).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -70,11 +68,11 @@ goog.require('M.exception');
    * 'transparent' the layer name
    */
   Object.defineProperty(M.layer.KML.prototype, "extract", {
-    get: function () {
+    get: function() {
       return this.getImpl().extract;
     },
     // defining new type is not allowed
-    set: function (newExtract) {
+    set: function(newExtract) {
       if (!M.utils.isNullOrEmpty(newExtract)) {
         if (M.utils.isString(newExtract)) {
           this.getImpl().extract = (M.utils.normalize(newExtract) === 'true');
@@ -93,11 +91,11 @@ goog.require('M.exception');
    * 'options' the layer options
    */
   Object.defineProperty(M.layer.KML.prototype, "options", {
-    get: function () {
+    get: function() {
       return this.getImpl().options;
     },
     // defining new type is not allowed
-    set: function (newOptions) {
+    set: function(newOptions) {
       this.getImpl().options = newOptions;
     }
   });
@@ -109,7 +107,7 @@ goog.require('M.exception');
    * @function
    * @api stable
    */
-  M.layer.KML.prototype.equals = function (obj) {
+  M.layer.KML.prototype.equals = function(obj) {
     var equals = false;
 
     if (obj instanceof M.layer.KML) {
