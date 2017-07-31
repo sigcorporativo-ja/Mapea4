@@ -1,6 +1,13 @@
-window.mapajs = M.map({
-  "controls": ["mouse", "panzoombar", "panzoom", "navtoolbar", "layerswitcher", "overviewmap", "scale", "scaleline", "location"],
-  "container": "map",
-  "layers": ["WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true", "WMTS*http://www.ideandalucia.es/geowebcache/service/wmts?*toporaster"],
-  "getfeatureinfo": "html"
-});
+//
+// let mapajs = M.map({
+//     container: "map",
+//   }).addLayers(["WFST*CapaWFS*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_lin_wfst*MLINE"])
+//   .addLayers(["WFST*CapaWFS*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pun_wfst*MPOINT"])
+//   .addLayers(["WFST*CapaWFS*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pol_wfst*MPOLYGON"]);
+//
+
+
+let mapajs = M.map({
+  container: "map",
+  controls: ['layerswitcher', 'overviewmap'],
+}).addLayers(["WFST*CapaWFS*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pun_wfst*MPOINT"]).addPlugin(new M.plugin.AttributeTable());

@@ -217,4 +217,18 @@ goog.require('M.exception');
     return equals;
   };
 
+  /**
+   * TODO
+   */
+  M.layer.Vector.prototype.setStyle = function(style) {
+    let label = style.get("label");
+    if (style instanceof M.style.Line && !M.utils.isNullOrEmpty(label)) {
+      //style.set("label", {});
+      delete style.options_.label;
+    }
+    this.getFeatures().forEach(function(f) {
+      f.setStyle(style);
+    });
+  };
+
 })();

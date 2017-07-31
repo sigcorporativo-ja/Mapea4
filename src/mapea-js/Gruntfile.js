@@ -477,6 +477,7 @@ module.exports = function(grunt) {
       core: {
         src: [
                'node_modules/jsts/dist/jsts.min.js',
+               'node_modules/chroma-js/chroma.min.js',
                'libraries/proj4/proj4.js',
                'build/core/js/mapea-<%= pkg.version %>.ol.min.js'
             ],
