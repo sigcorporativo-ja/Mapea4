@@ -1,6 +1,5 @@
 goog.provide('P.control.AttributeTableControl');
 goog.require('goog.dom.classlist');
-goog.require('goog.fx.Dragger');
 goog.require('goog.dom');
 goog.require('goog.style');
 
@@ -14,7 +13,7 @@ goog.require('goog.style');
  * @api stable
  */
 M.control.AttributeTableControl = (function(numPages) {
-  [this.facadeMap_, this.selectAllActive_, this.template_, this.areaTable_, this.layer_, this.numPages_] = [null, false, null, null, null, numPages];
+  [this.facadeMap_, this.selectAllActive_, this.template_, this.areaTable_, this.layer_, this.numPages_, this.draggable_] = [null, false, null, null, null, numPages, null];
   this.pages_ = {
     total: 0,
     actual: 1,
@@ -45,7 +44,6 @@ goog.inherits(M.control.AttributeTableControl, M.Control);
 M.control.AttributeTableControl.prototype.createView = function(map) {
   this.facadeMap_ = map;
   return new Promise(function(success, fail) {
-
     M.template.compile('attributetable.html', {
       'jsonp': true,
       vars: {
@@ -55,20 +53,31 @@ M.control.AttributeTableControl.prototype.createView = function(map) {
       }
     }).then(
       function(html) {
-        let attributePanel = this.dragPanel_();
+        /*Draggable*/
+        let panel = this.getPanel().getTemplatePanel();
+        goog.events.listen(panel.querySelector('.g-cartografia-localizacion4'), goog.events.EventType.CLICK, function() {
+          if (this.getPanel().isCollapsed()) {
+            panel.style.removeProperty("left");
+            panel.style.removeProperty("top");
+          }
+          else {
+
+          }
+        }, false, this);
+        goog.events.listen(this.getPanel().getTemplatePanel().querySelector('.g-cartografia-localizacion4'), goog.events.EventType.CLICK, function() {
+          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+            if (this.getPanel().isCollapsed()) {
+              this.deactivateDraggable_();
+            }
+            else {
+              this.activateDraggable_();
+            }
+          }
+        }, false, this);
+
         this.template_ = html;
         this.areaTable_ = html.querySelector('div#m-attributetable-datas');
         goog.events.listen(html.querySelector('#m-attributetable-layer'), goog.events.EventType.CLICK, this.openPanel_, false, this);
-        goog.events.listen(html.querySelector('.title'), goog.events.EventType.MOUSEENTER, function() {
-          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
-            attributePanel.setEnabled(true);
-          }
-        }, false, this);
-        goog.events.listen(html.querySelector('.title'), goog.events.EventType.MOUSELEAVE, function() {
-          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
-            attributePanel.setEnabled(false);
-          }
-        }, false, this);
         goog.events.listen(html.querySelector('#m-attributetable-select'), goog.events.EventType.CHANGE,
           function(evt) {
             this.pages_ = {
@@ -86,69 +95,6 @@ M.control.AttributeTableControl.prototype.createView = function(map) {
         success(html);
       }.bind(this));
   }.bind(this));
-};
-
-/**
- * This function enable the drag function
- *
- * @private
- * @function
- */
-M.control.AttributeTableControl.prototype.dragPanel_ = function() {
-  let templatePanel = this.getPanel().getTemplatePanel();
-  let attributePanel = new goog.fx.Dragger(templatePanel);
-  //attributePanel.setHysteresis(50);
-  attributePanel.setEnabled(false);
-
-  let marginTop = templatePanel.getBoundingClientRect().top;
-
-  goog.events.listen(templatePanel.querySelector('.g-cartografia-localizacion4'), goog.events.EventType.CLICK, function() {
-    if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
-      if (this.getPanel().isCollapsed()) {
-        attributePanel.setEnabled(false);
-        attributePanel.defaultAction(0, 0);
-      }
-      else {
-        this.calculateDragLimits_(templatePanel, attributePanel, marginTop);
-        attributePanel.setEnabled(true);
-      }
-    }
-  }, false, this);
-
-  var onresize = function() {
-    this.calculateDragLimits_(templatePanel, attributePanel, marginTop);
-  }.bind(this);
-  window.addEventListener("resize", onresize);
-  return attributePanel;
-};
-
-/**
- * This function refresh the panel info
- *
- * @private
- * @function
- * @param {HTMLElement} templatePanel- panel template
- * @param {goog.fx.Dragger} attributePanel- panel that will be dragged
- */
-M.control.AttributeTableControl.prototype.calculateDragLimits_ = function(templatePanel, attributePanel, marginTop) {
-  if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
-    if (!M.utils.isNullOrEmpty(templatePanel)) {
-      this.templatePanel = templatePanel;
-    }
-    if (!M.utils.isNullOrEmpty(attributePanel)) {
-      this.attributePanel = attributePanel;
-    }
-    if (!M.utils.isNullOrEmpty(marginTop)) {
-      this.marginTop = marginTop;
-    }
-
-    let windowWidth = window.innerWidth;
-    let windowHeight = window.innerHeight;
-    let tableWidth = this.templatePanel.offsetWidth;
-    let tableHeight = this.templatePanel.offsetHeight;
-    let limits = new goog.math.Rect(-(windowWidth - tableWidth - 50), -this.marginTop, windowWidth - tableWidth - 40, windowHeight - tableHeight);
-    this.attributePanel.setLimits(limits);
-  }
 };
 
 /**
@@ -173,35 +119,39 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function(name) {
   if (!M.utils.isNullOrEmpty(name)) {
     this.layer_ = this.hasLayer_(name)[0];
   }
-  let headerAtt = Object.keys(this.layer_.getFeatures()[0].getAttributes());
-  let geomPos = headerAtt.indexOf("geometry");
-  headerAtt.splice(geomPos, 1);
 
   let features = this.layer_.getFeatures();
-  let attributes = [];
-  features.forEach(function(feature) {
-    let properties = Object.values(feature.getAttributes());
-    if (geomPos !== -1) {
-      properties.splice(geomPos, 1);
+  if (!M.utils.isNullOrEmpty(features)) {
+    var headerAtt = Object.keys(features[0].getAttributes());
+    let geomPos = headerAtt.indexOf("geometry");
+    headerAtt.splice(geomPos, 1);
+    var attributes = [];
+    features.forEach(function(feature) {
+      let properties = Object.values(feature.getAttributes());
+      if (geomPos !== -1) {
+        properties.splice(geomPos, 1);
+      }
+      if (!M.utils.isNullOrEmpty(properties)) {
+        attributes.push(properties);
+      }
+    });
+    if (this.sortProperties_.active) {
+      attributes = this.sortAttributes_(attributes, headerAtt);
     }
-    if (!M.utils.isNullOrEmpty(properties)) {
-      attributes.push(properties);
-    }
-  });
-
-  if (this.sortProperties_.active) {
-    attributes = this.sortAttributes_(attributes, headerAtt);
   }
-
   return new Promise(function(success, fail) {
-    M.template.compile('tableData.html', {
-      'jsonp': true,
-      'vars': {
+    let params = {};
+    if (!M.utils.isUndefined(headerAtt)) {
+      params = {
         headerAtt: headerAtt,
         legend: this.layer_.legend,
         pages: this.pageResults_(attributes),
         attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes.slice(this.pages_.element, this.pages_.element + this.numPages_)
-      }
+      };
+    }
+    M.template.compile('tableData.html', {
+      'jsonp': true,
+      'vars': params
     }).then(function(html) {
       let content = this.areaTable_.querySelector("table");
       if (!M.utils.isNullOrEmpty(content)) {
@@ -226,8 +176,11 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function(name) {
         this.hasNext_(html);
         this.hasPrevious_(html);
       }
+      else {
+        goog.events.listen(html.querySelector('#m-attributetable-refresh'), goog.events.EventType.CLICK, this.refresh_, false, this);
+      }
+      this.rePosition_();
       success();
-      this.calculateDragLimits_();
     }.bind(this));
   }.bind(this));
 };
@@ -447,5 +400,71 @@ M.control.AttributeTableControl.prototype.openPanel_ = function(evt) {
     goog.dom.classlist.toggle(this.template_.querySelector("#m-attributetable-table"), 'm-attributetable-hidden');
     goog.dom.classlist.toggle(this.template_.querySelector("#m-attributetable-tfoot"), 'm-attributetable-hidden');
   }
-  this.calculateDragLimits_();
+  this.rePosition_();
+};
+
+
+/**
+ * This function activates the draggable function to the plugin
+ *
+ * @private
+ * @function
+ * @api stable
+ */
+M.control.AttributeTableControl.prototype.activateDraggable_ = function() {
+  if (M.utils.isNullOrEmpty(this.draggable_)) {
+    this.setFixed_();
+    let panel = this.getPanel().getTemplatePanel();
+    this.draggable_ = new Draggabilly(panel, {
+      containment: '.m-mapea-container',
+      handle: ".m-attributetable-container>div.m-attributetable-panel div.title",
+    });
+  }
+  this.draggable_.enable();
+};
+
+
+/**
+ * This function deactivates the draggable function to the plugin
+ *
+ * @private
+ * @function
+ * @api stable
+ */
+M.control.AttributeTableControl.prototype.deactivateDraggable_ = function() {
+  var panel = document.querySelector(".m-attributetable");
+  panel.style.position = 'relative';
+  this.draggable_.disable();
+};
+
+/**
+ * This function set fixed style to panel
+ *
+ * @private
+ * @function
+ * @api stable
+ */
+M.control.AttributeTableControl.prototype.setFixed_ = function() {
+  var panel = document.querySelector(".m-attributetable");
+  var bClient = panel.getBoundingClientRect();
+  panel.style.position = 'fixed';
+  panel.style.left = (bClient.left) + 'px';
+  panel.style.top = bClient.top + 'px';
+};
+
+/**
+ * This function adjusts the panel position
+ *
+ * @private
+ * @function
+ * @api stable
+ */
+M.control.AttributeTableControl.prototype.rePosition_ = function() {
+  var panel = this.getPanel().getTemplatePanel();
+  if (parseInt(panel.style.left.replace("px", "")) + panel.clientWidth > document.querySelector('.m-mapea-container').clientWidth) {
+    panel.style.left = document.querySelector('.m-mapea-container').clientWidth - panel.clientWidth + "px";
+  }
+  if (parseInt(panel.style.top.replace("px", "")) + panel.clientHeight > document.querySelector('.m-mapea-container').clientHeight) {
+    panel.style.top = document.querySelector('.m-mapea-container').clientHeight - panel.clientHeight - 10 + "px";
+  }
 };
