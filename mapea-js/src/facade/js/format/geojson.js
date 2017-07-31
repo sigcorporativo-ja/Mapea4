@@ -2,7 +2,7 @@ goog.provide('M.format.GeoJSON');
 
 goog.require('M.Feature');
 
-(function () {
+(function() {
 
   /**
    * @classdesc
@@ -15,7 +15,7 @@ goog.require('M.Feature');
    * provided by the user
    * @api stable
    */
-  M.format.GeoJSON = (function (options) {
+  M.format.GeoJSON = (function(options) {
     // checks if the implementation can create format GeoJSON
     if (M.utils.isUndefined(M.impl.format.GeoJSON)) {
       M.exception('La implementación usada no puede M.impl.format.GeoJSON');
@@ -45,7 +45,7 @@ goog.require('M.Feature');
    * @return {Array<Object>}
    * @api estable
    */
-  M.format.GeoJSON.prototype.write = function (features) {
+  M.format.GeoJSON.prototype.write = function(features) {
     if (!M.utils.isArray(features)) {
       features = [features];
     }
@@ -62,7 +62,7 @@ goog.require('M.Feature');
    * @return {Array<M.Feature>}
    * @api estable
    */
-  M.format.GeoJSON.prototype.read = function (geojson) {
+  M.format.GeoJSON.prototype.read = function(geojson) {
     var features = [];
     if (!M.utils.isNullOrEmpty(geojson)) {
       if (M.utils.isString(geojson)) {
@@ -75,7 +75,7 @@ goog.require('M.Feature');
       else if (geojson.type === "Feature") {
         geojsonFeatures = [geojson];
       }
-      features = geojsonFeatures.map(function (geojsonFeature) {
+      features = geojsonFeatures.map(function(geojsonFeature) {
         let id = geojsonFeature.id;
         return new M.Feature(id, {
           geometry: {
