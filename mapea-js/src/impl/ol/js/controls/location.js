@@ -30,7 +30,7 @@ goog.require('ol.Geolocation');
      * @private
      * @type {ol.Feature}
      */
-    this.accuracyFeature_ = new ol.Feature();
+    this.accuracyFeature_ = M.impl.Feature.olFeature2Facade(new ol.Feature());
 
     this.tracking_ = tracking;
     this.highAccuracy_ = highAccuracy;
@@ -42,9 +42,9 @@ goog.require('ol.Geolocation');
      * @private
      * @type {ol.Feature}
      */
-    this.positionFeature_ = new ol.Feature({
+    this.positionFeature_ = M.impl.Feature.olFeature2Facade(new ol.Feature({
       'style': M.impl.control.Location.POSITION_STYLE
-    });
+    }));
   };
   goog.inherits(M.impl.control.Location, M.impl.Control);
 
@@ -71,13 +71,13 @@ goog.require('ol.Geolocation');
       });
       this.geolocation_.on('change:accuracyGeometry', function(evt) {
         var accuracyGeom = evt.target.get(evt.key);
-        this.accuracyFeature_.setGeometry(accuracyGeom);
+        this.accuracyFeature_.getImpl().getOLFeature().setGeometry(accuracyGeom);
       }, this);
       this.geolocation_.on('change:position', function(evt) {
         var newCoord = evt.target.get(evt.key);
         var newPosition = M.utils.isNullOrEmpty(newCoord) ?
           null : new ol.geom.Point(newCoord);
-        this.positionFeature_.setGeometry(newPosition);
+        this.positionFeature_.getImpl().getOLFeature().setGeometry(newPosition);
         this.facadeMap_.setCenter(newCoord);
         if (goog.dom.classlist.contains(this.element, 'm-locating')) {
           this.facadeMap_.setZoom(12); //solo 1a vez
@@ -91,7 +91,7 @@ goog.require('ol.Geolocation');
     }
 
     this.geolocation_.setTracking(true);
-    this.facadeMap_.getImpl().drawFeatures([this.accuracyFeature_, this.positionFeature_]);
+    this.facadeMap_.drawFeatures([this.accuracyFeature_, this.positionFeature_]);
   };
 
   /**
@@ -102,10 +102,10 @@ goog.require('ol.Geolocation');
    */
   M.impl.control.Location.prototype.removePositions_ = function() {
     if (!M.utils.isNullOrEmpty(this.accuracyFeature_)) {
-      this.facadeMap_.getImpl().removeFeatures([this.accuracyFeature_]);
+      this.facadeMap_.removeFeatures([this.accuracyFeature_]);
     }
     if (!M.utils.isNullOrEmpty(this.positionFeature_)) {
-      this.facadeMap_.getImpl().removeFeatures([this.positionFeature_]);
+      this.facadeMap_.removeFeatures([this.positionFeature_]);
     }
     this.geolocation_.setTracking(false);
   };
