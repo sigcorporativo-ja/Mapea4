@@ -1,5 +1,6 @@
 goog.provide('M.style.Point');
 
+// REVISION #86837 M.style.Point
 /**
  * @namespace M.style.Polygon
  */
@@ -8,11 +9,13 @@ goog.provide('M.style.Point');
   /**
    * TODO
    */
+  // REVISION #86837 valor por defecto
   M.style.Point = (function(options) {
     /**
      * TODO
      */
     var impl = new M.impl.style.Point(options);
+
     // calls the super constructor
     goog.base(this, options, impl);
   });

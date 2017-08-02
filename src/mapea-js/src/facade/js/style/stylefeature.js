@@ -21,6 +21,8 @@ goog.provide('M.style.Feature');
    */
   M.style.Feature.prototype.apply_ = function(layer) {
     goog.base(this, 'apply_', layer);
+
+    // REVISION #86837 ¿Sería lo mismo que con setStyle de Vector?
     layer.getFeatures().forEach(function(f) {
       this.applyToFeature_(f);
     }, this);
@@ -30,5 +32,5 @@ goog.provide('M.style.Feature');
    * TODO
    * Como es protected no se rellena
    */
-  M.style.Feature.prototype.applyToFeature_ = function(element) {};
+  M.style.Feature.prototype.applyToFeature_ = function(feature) {};
 })();

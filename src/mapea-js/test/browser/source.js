@@ -140,7 +140,9 @@ let puntos = new M.layer.GeoJSON({
 let mapajs = M.map({
   container: "map",
   projection: "EPSG:4326*d",
-  layers: ["OSM", puntos],
+  wmcfile: ["callejero"],
+  layers: [puntos],
+  // layers: ["OSM", puntos],
   center: {
     x: -5.9584180843195425,
     y: 37.36912689160224
@@ -157,32 +159,45 @@ puntos.setStyle(new M.style.Point({
   },
   fill: {
     color: '#ff3d3d',
-    opacity: 0.5
-  }
+    opacity: 0.1
+  },
+  radius: 15
 }));
 
 puntos.setFilter(M.filter.EQUAL('styleType', 2));
 puntos.setStyle(new M.style.Point({
   stroke: {
-    color: '#67af13',
+    color: '#169940',
     width: 2
   },
   fill: {
-    color: 'red',
-    opacity: 0.2
+    color: '#31ce63',
+    opacity: 0.5
   }
 }));
 
 puntos.setFilter(M.filter.EQUAL('styleType', 3));
 puntos.setStyle(new M.style.Point({
   stroke: {
-    color: '#67af13',
+    color: '#115bad',
     width: 2
   },
   fill: {
-    color: 'red',
-    opacity: 0.2
+    color: '#317cce',
+    opacity: 0.5
   }
 }));
 
 puntos.removeFilter();
+
+
+puntos.getFeatures()[4].setStyle(new M.style.Point({
+  stroke: {
+    color: '#f759f7',
+    width: 2
+  },
+  fill: {
+    color: '#f759f7'
+  },
+  radius: 30
+}));

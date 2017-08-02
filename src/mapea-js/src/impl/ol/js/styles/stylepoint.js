@@ -4,7 +4,7 @@ goog.provide('M.impl.style.Point');
  * @namespace M.style.Polygon
  */
 (function() {
-
+  // REVISION #86837 subir valores por defecto a la fachada
   M.impl.style.Point = function(options = {
     radius: 7
   }) {
@@ -16,7 +16,7 @@ goog.provide('M.impl.style.Point');
     let snaptopixel = options.snaptopixel;
     this.style_ = null;
     this.styleIcon_ = null;
-    this.styles_ = [];
+    // REVISION #86837
 
     if (!M.utils.isNullOrEmpty(stroke)) {
       stroke = new ol.style.Stroke({
@@ -86,7 +86,8 @@ goog.provide('M.impl.style.Point');
         }),
         text: label
       });
-      this.styles_.push(this.style_);
+      // REVISION #86837
+      // this.styles_.push(this.style_);
     }
 
     if (!M.utils.isNullOrEmpty(icon)) {
@@ -145,7 +146,8 @@ goog.provide('M.impl.style.Point');
           })
         });
       }
-      this.styles_.push(this.styleIcon_);
+      // REVISION #86837
+      // this.styles_.push(this.styleIcon_);
     }
   };
 
@@ -153,7 +155,8 @@ goog.provide('M.impl.style.Point');
    * TODO
    */
   M.impl.style.Point.prototype.applyToFeature = function(feature) {
-    feature.getImpl().getOLFeature().setStyle(this.styles_);
+    // REVISION #86837
+    feature.getImpl().getOLFeature().setStyle([this.style_, this.styleIcon_]);
   };
 
 

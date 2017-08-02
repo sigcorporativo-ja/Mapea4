@@ -5,7 +5,7 @@ goog.provide('M.Style');
   /**
    * Rec. options que es el json del estilo
    */
-  M.Style = (function(options, impl) {
+  M.Style = (function(options = {}, impl) {
     /**
      * TODO
      */
@@ -22,13 +22,13 @@ goog.provide('M.Style');
     this.layer_ = null;
 
     // si rec. una imagen podemos tener un canvas
-    if (!M.utils.isNullOrEmpty(options.icon) && !M.utils.isNullOrEmpty(options.icon.src)) {
+    if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
       let ctx = this.canvas_.getContext('2d');
       let img = new Image();
       img.onload = function() {
         ctx.drawImage(img, 0, 0); // Or at whatever offset you like
       };
-      img.src = options.icon.src;
+      img.src = this.options_.icon.src;
     }
 
     goog.base(this, impl);
@@ -39,6 +39,7 @@ goog.provide('M.Style');
    * TODO
    * Como es protected no se rellena, pero que se supone que debe hacer?
    */
+  // REVISION #86837 Debería ser público y llamarse apply
   M.Style.prototype.apply_ = function(layer) {
     this.layer_ = layer;
   };
@@ -48,6 +49,7 @@ goog.provide('M.Style');
    * supongo que, solo se puede obtener las propiedades de primer nivel.
    * ej del polygon : fill, stroke y label.
    */
+   // REVISION #86837 copiar método getAttribute de M.Facade de la rama mapea_410
   M.Style.prototype.get = function(property) {
     return this.options_[property];
   };
