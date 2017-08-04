@@ -194,6 +194,22 @@ goog.require('M.geom');
   };
 
   /**
+   * This function set a filter
+   *
+   * @function
+   * @public
+   * @param {M.Filter} filter - filter to set
+   * @api stable
+   */
+  M.layer.WFS.prototype.setFilter = function(filter) {
+    goog.base(this, 'setFilter', filter);
+
+    if (!M.utils.isNullOrEmpty(this.filter_) && M.utils.isFunction(this.filter_.toCQL)) {
+      this.setCQL(this.filter_.toCQL());
+    }
+  };
+
+  /**
    * This function checks if an object is equals
    * to this layer
    *

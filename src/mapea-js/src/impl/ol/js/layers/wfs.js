@@ -100,6 +100,7 @@ goog.require('M.impl.layer.Vector');
    * @api stable
    */
   M.impl.layer.WFS.prototype.refresh = function(forceNewSource) {
+    this.facadeVector_.clear();
     this.updateSource_(forceNewSource);
   };
 
