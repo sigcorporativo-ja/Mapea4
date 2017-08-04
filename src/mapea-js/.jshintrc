@@ -14,7 +14,8 @@
         "Handlebars",
         "proj4",
         "ActiveXObject",
-        "jsts"
+        "jsts",
+        "chroma"
     ],
     "browser": true,
     "devel": true
