@@ -140,7 +140,19 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature.prototype.getAttribute = function(attribute) {
-    return this.getImpl().getAttribute(attribute);
+    let attrValue;
+
+    attrValue = this.getImpl().getAttribute(attribute);
+    if (M.utils.isNullOrEmpty(attrValue)) {
+      // we look up the attribute by its path. Example: getAttribute('foo.bar.attr')
+      // --> return feature.properties.foo.bar.attr value
+      let attrPath = attribute.split('.');
+      if (attrPath.length > 1) {
+        attrValue = attrPath.reduce((obj, attr) => !M.utils.isNullOrEmpty(obj) ? ((obj instanceof M.Feature) ? obj.getAttribute(attr) : obj[attr]) : undefined, this);
+      }
+    }
+
+    return attrValue;
   };
 
   /**

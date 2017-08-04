@@ -10,7 +10,7 @@ goog.require('M.parameter.kml');
 goog.require('M.parameter.osm');
 goog.require('M.parameter.mapbox');
 
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -24,7 +24,7 @@ goog.require('M.parameter.mapbox');
    * @function
    * @api stable
    */
-  M.parameter.layer = function (userParameters, forcedType) {
+  M.parameter.layer = function(userParameters, forcedType) {
     var layers = [];
 
     // checks if the param is null or empty
@@ -38,7 +38,7 @@ goog.require('M.parameter.mapbox');
       userParametersArray = [userParametersArray];
     }
 
-    layers = userParametersArray.map(function (userParam) {
+    layers = userParametersArray.map(function(userParam) {
       var layerObj = null;
       if (M.utils.isObject(userParam) && (userParam instanceof M.Layer)) {
         layerObj = userParam;
@@ -48,7 +48,12 @@ goog.require('M.parameter.mapbox');
         var type = getType(userParam, forcedType);
         type = M.utils.normalize(type);
 
-        layerObj = M.parameter[type](userParam);
+        if (M.utils.isFunction(M.parameter[type])) {
+          layerObj = M.parameter[type](userParam);
+        }
+        else {
+          layerObj = userParam;
+        }
       }
 
       return layerObj;
@@ -66,7 +71,7 @@ goog.require('M.parameter.mapbox');
    * @private
    * @function
    */
-  var getType = function (parameter, forcedType) {
+  var getType = function(parameter, forcedType) {
     var type;
     if (M.utils.isString(parameter)) {
       if (/^\s*osm\s*$/i.test(parameter)) {

@@ -1,7 +1,7 @@
 goog.provide('M.evt.EventsManager');
 goog.provide('M.evt.Listener');
 
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -185,6 +185,15 @@ goog.provide('M.evt.Listener');
 
   /**
    * Event type
+   * @public
+   * @type {string}
+   * @api stable
+   * @expose
+   */
+  M.evt.CLICK = 'click';
+
+  /**
+   * Event type
    * @private
    * @type {array<string>}
    */
@@ -208,7 +217,8 @@ goog.provide('M.evt.Listener');
       M.evt.COMPLETED,
       M.evt.CHANGE,
       M.evt.CHANGE_WMC,
-      M.evt.CHANGE_PROJ
+      M.evt.CHANGE_PROJ,
+      M.evt.CLICK
    ];
 
   /**
@@ -221,7 +231,7 @@ goog.provide('M.evt.Listener');
    * @param {Object} impl implementation object
    * @api stable
    */
-  M.evt.EventsManager = (function () {
+  M.evt.EventsManager = (function() {
     /**
      * Callback for events managed by the
      * facade object
@@ -239,7 +249,7 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.EventsManager.prototype.add = function (eventType, listener, optThis) {
+  M.evt.EventsManager.prototype.add = function(eventType, listener, optThis) {
     if (!M.utils.isNullOrEmpty(eventType) && (_eventTypes.indexOf(eventType) !== -1) && M.utils.isFunction(listener)) {
       if (M.utils.isNullOrEmpty(this.events_[eventType])) {
         this.events_[eventType] = [];
@@ -258,7 +268,7 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.EventsManager.prototype.remove = function (eventType, listener, optThis) {
+  M.evt.EventsManager.prototype.remove = function(eventType, listener, optThis) {
     var listeners = this.events_[eventType];
     if (!M.utils.isNullOrEmpty(listeners)) {
       var index = this.indexOf(eventType, listener, optThis);
@@ -275,10 +285,10 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.EventsManager.prototype.fire = function (eventType, args) {
+  M.evt.EventsManager.prototype.fire = function(eventType, args) {
     var evtListeners = this.events_[eventType];
     if (!M.utils.isNullOrEmpty(evtListeners)) {
-      evtListeners.forEach(function (evtListener) {
+      evtListeners.forEach(function(evtListener) {
         evtListener.fire(args);
       }, this);
     }
@@ -291,7 +301,7 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.EventsManager.prototype.indexOf = function (eventType, listener, optThis) {
+  M.evt.EventsManager.prototype.indexOf = function(eventType, listener, optThis) {
     var index = -1;
     var evtListeners = this.events_[eventType];
     if (!M.utils.isNullOrEmpty(evtListeners)) {
@@ -313,7 +323,7 @@ goog.provide('M.evt.Listener');
    * @param {Object} impl implementation object
    * @api stable
    */
-  M.evt.Listener = (function (listener, scope) {
+  M.evt.Listener = (function(listener, scope) {
     /**
      * TODO
      *
@@ -338,7 +348,7 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.Listener.prototype.fire = function (args) {
+  M.evt.Listener.prototype.fire = function(args) {
     if (!M.utils.isArray(args)) {
       args = [args];
     }
@@ -352,7 +362,7 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.Listener.prototype.has = function (listener, scope) {
+  M.evt.Listener.prototype.has = function(listener, scope) {
     return ((this._listener === listener) && (this._scope === scope));
   };
 })();

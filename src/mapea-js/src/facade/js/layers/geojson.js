@@ -4,7 +4,7 @@ goog.require('M.layer.Vector');
 goog.require('M.utils');
 goog.require('M.exception');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -16,7 +16,7 @@ goog.require('M.exception');
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  M.layer.GeoJSON = (function (parameters, options) {
+  M.layer.GeoJSON = (function(parameters, options = {}) {
     // checks if the implementation can create KML layers
     if (M.utils.isUndefined(M.impl.layer.GeoJSON)) {
       M.exception('La implementación usada no puede crear capas GeoJSON');
@@ -27,8 +27,6 @@ goog.require('M.exception');
       M.exception('No ha especificado ningún parámetro');
     }
 
-    options = (options || {});
-
     /**
      * Implementation of this layer
      * @public
@@ -37,7 +35,7 @@ goog.require('M.exception');
     var impl = new M.impl.layer.GeoJSON(parameters, options);
 
     // calls the super constructor
-    goog.base(this, this, impl);
+    goog.base(this, this, options, impl);
 
     if (M.utils.isString(parameters)) {
       this.url = parameters;
@@ -73,11 +71,11 @@ goog.require('M.exception');
    * the layer was selected
    */
   Object.defineProperty(M.layer.GeoJSON.prototype, "type", {
-    get: function () {
+    get: function() {
       return M.layer.type.GeoJSON;
     },
     // defining new type is not allowed
-    set: function (newType) {
+    set: function(newType) {
       if (!M.utils.isUndefined(newType) &&
         !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.GeoJSON)) {
         M.exception('El tipo de capa debe ser \''.concat(M.layer.type.GeoJSON).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -89,11 +87,11 @@ goog.require('M.exception');
    * 'extract' the features properties
    */
   Object.defineProperty(M.layer.GeoJSON.prototype, "source", {
-    get: function () {
+    get: function() {
       return this.getImpl().source;
     },
     // defining new type is not allowed
-    set: function (newSource) {
+    set: function(newSource) {
       this.getImpl().source = newSource;
     }
   });
@@ -102,11 +100,11 @@ goog.require('M.exception');
    * 'extract' the features properties
    */
   Object.defineProperty(M.layer.GeoJSON.prototype, "extract", {
-    get: function () {
+    get: function() {
       return this.getImpl().extract;
     },
     // defining new type is not allowed
-    set: function (newExtract) {
+    set: function(newExtract) {
       if (!M.utils.isNullOrEmpty(newExtract)) {
         if (M.utils.isString(newExtract)) {
           this.getImpl().extract = (M.utils.normalize(newExtract) === 'true');
@@ -128,7 +126,7 @@ goog.require('M.exception');
    * @function
    * @api stable
    */
-  M.layer.GeoJSON.prototype.equals = function (obj) {
+  M.layer.GeoJSON.prototype.equals = function(obj) {
     var equals = false;
 
     if (obj instanceof M.layer.GeoJSON) {
