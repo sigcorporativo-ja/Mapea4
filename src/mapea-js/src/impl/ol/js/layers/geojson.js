@@ -80,28 +80,14 @@ goog.require('goog.style');
    * @api stable
    */
   M.impl.layer.GeoJSON.prototype.addTo = function(map) {
-    goog.base(this, 'addTo', map);
-
     this.formater_ = new M.format.GeoJSON({
-      'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
+      'defaultDataProjection': ol.proj.get(map.getProjection().code)
     });
     if (!M.utils.isNullOrEmpty(this.url)) {
       this.loader_ = new M.impl.loader.JSONP(map, this.url, this.formater_);
     }
-    this.ol3Layer = new ol.layer.Vector();
-    this.updateSource_();
-    // sets its visibility if it is in range
-    if (this.options.visibility !== false) {
-      this.setVisible(this.inRange());
-    }
-    // sets its z-index
-    if (this.zIndex_ !== null) {
-      this.setZIndex(this.zIndex_);
-    }
-    this.setZIndex(999999);
-    var olMap = this.map.getMapImpl();
-    olMap.addLayer(this.ol3Layer);
-    this.map.getImpl().getFeaturesHandler().addLayer(this);
+
+    goog.base(this, 'addTo', map);
   };
 
   /**
@@ -166,46 +152,36 @@ goog.require('goog.style');
       this.unselectFeatures();
 
       var feature = features[0];
-      if (!M.utils.isNullOrEmpty(feature) && !M.utils.isNullOrEmpty(feature.getProperties()) && !M.utils.isNullOrEmpty(feature.getProperties().vendor) && !M.utils.isNullOrEmpty(feature.getProperties().vendor.mapea) && !M.utils.isNullOrEmpty(feature.getProperties().vendor.mapea.click) && M.utils.isFunction(feature.getProperties().vendor.mapea.click)) {
-        feature.getProperties().vendor.mapea.click(evt, feature);
-      }
-      else {
-        M.template.compile(M.layer.GeoJSON.POPUP_TEMPLATE, {
-            'jsonp': true,
-            'vars': this.parseFeaturesForTemplate_(features),
-            'parseToHtml': false
-          })
-          .then(function(htmlAsText) {
-            var featureTabOpts = {
-              'icon': 'g-cartografia-pin',
-              'title': this.name,
-              'content': htmlAsText
-            };
-            var popup = this.map.getPopup();
-            if (M.utils.isNullOrEmpty(popup)) {
-              popup = new M.Popup();
-              popup.addTab(featureTabOpts);
-              this.map.addPopup(popup, coord);
-            }
-            else {
-              popup.addTab(featureTabOpts);
-            }
-          }.bind(this));
+      if (!M.utils.isNullOrEmpty(feature)) {
+        let clickFn = feature.getAttribute('vendor.mapea.click');
+        if (M.utils.isFunction(clickFn)) {
+          clickFn(evt, feature);
+        }
+        else {
+          M.template.compile(M.layer.GeoJSON.POPUP_TEMPLATE, {
+              'jsonp': true,
+              'vars': this.parseFeaturesForTemplate_(features),
+              'parseToHtml': false
+            })
+            .then(function(htmlAsText) {
+              var featureTabOpts = {
+                'icon': 'g-cartografia-pin',
+                'title': this.name,
+                'content': htmlAsText
+              };
+              var popup = this.map.getPopup();
+              if (M.utils.isNullOrEmpty(popup)) {
+                popup = new M.Popup();
+                popup.addTab(featureTabOpts);
+                this.map.addPopup(popup, coord);
+              }
+              else {
+                popup.addTab(featureTabOpts);
+              }
+            }.bind(this));
+        }
       }
     }
-  };
-
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   *
-   * @public
-   * @function
-   * @param {ol.Feature} feature
-   * @api stable
-   */
-  M.impl.layer.GeoJSON.prototype.unselectFeatures = function() {
-    this.map.removePopup();
   };
 
   /**
@@ -221,7 +197,7 @@ goog.require('goog.style');
     };
 
     features.forEach(function(feature) {
-      var properties = feature.getProperties();
+      var properties = feature.getAttributes();
       var attributes = [];
       for (var key in properties) {
         let addAttribute = true;

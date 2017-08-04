@@ -1,7 +1,7 @@
 goog.provide('P.plugin.SearchstreetGeosearch');
 goog.require('P.plugin.Autocomplete');
 
-(function () {
+(function() {
   /**
    * @classdesc Main facade plugin object. This class creates a plugin
    *            object which has an implementation Object
@@ -11,7 +11,7 @@ goog.require('P.plugin.Autocomplete');
    * @param {Mx.parameters.SearchstreetGeosearch} parameters - parameters SearchstreetGeosearch
    * @api stable
    */
-  M.plugin.SearchstreetGeosearch = (function (parameters) {
+  M.plugin.SearchstreetGeosearch = (function(parameters) {
     parameters = (parameters || {});
 
     /**
@@ -67,7 +67,7 @@ goog.require('P.plugin.Autocomplete');
    * @param {M.Map} map - Map to add the control
    * @api stable
    */
-  M.plugin.SearchstreetGeosearch.prototype.addTo = function (map) {
+  M.plugin.SearchstreetGeosearch.prototype.addTo = function(map) {
     this.map_ = map;
     var this_ = this;
     this.control_ = new M.control.SearchstreetGeosearch(this.parameters_);
@@ -75,7 +75,7 @@ goog.require('P.plugin.Autocomplete');
     goog.dom.classlist.add(map._areasContainer.getElementsByClassName("m-top m-right")[0],
       "top-extra");
 
-    this.control_.on(M.evt.ADDED_TO_MAP, function () {
+    this.control_.on(M.evt.ADDED_TO_MAP, function() {
       this.fire(M.evt.ADDED_TO_MAP);
 
       // Checks if the received INE code is correct.
@@ -83,7 +83,7 @@ goog.require('P.plugin.Autocomplete');
         codigo: this.locality_
       });
       M.remote.get(comCodIne).then(
-        function (response) {
+        function(response) {
           var results = JSON.parse(response.text);
           if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
             this_.locality_ = "";
@@ -113,7 +113,7 @@ goog.require('P.plugin.Autocomplete');
    * @function
    * @api stable
    */
-  M.plugin.SearchstreetGeosearch.prototype.destroy = function () {
+  M.plugin.SearchstreetGeosearch.prototype.destroy = function() {
     this.map_.removeControls([this.control_]);
     this.name = null;
     this.parameters_ = null;
@@ -130,7 +130,7 @@ goog.require('P.plugin.Autocomplete');
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.SearchstreetGeosearch.prototype.equals = function (plugin) {
+  M.plugin.SearchstreetGeosearch.prototype.equals = function(plugin) {
     if (plugin instanceof M.plugin.SearchstreetGeosearch) {
       return true;
     }

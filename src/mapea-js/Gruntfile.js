@@ -42,9 +42,9 @@ module.exports = function(grunt) {
         },
         files: {
           'src': [
-                  'src/facade/**/*.js',
-                  'src/impl/**/*.js'
-              ]
+            'src/facade/**/*.js',
+            'src/impl/**/*.js'
+          ]
         }
       },
       plugins: {
@@ -53,8 +53,8 @@ module.exports = function(grunt) {
         },
         files: {
           'src': [
-                  'src/plugins/**/*.js'
-               ]
+            'src/plugins/**/*.js'
+          ]
         }
       },
       tasks: {
@@ -63,9 +63,9 @@ module.exports = function(grunt) {
         },
         files: {
           'src': [
-                  'grunt-tasks/*.js',
-                  'grunt-tasks/utilities/*.js'
-               ]
+            'grunt-tasks/*.js',
+            'grunt-tasks/utilities/*.js'
+          ]
         }
       }
     },
@@ -109,7 +109,7 @@ module.exports = function(grunt) {
          ],
       dev: [
             'test/browser/mapea-<%= pkg.version %>.deps.js'
-         ],
+        ],
       'plugins-css': [
             "build/plugins/*.css",
             "build/plugins/**/*.css",
