@@ -207,15 +207,17 @@ goog.require('M.exception');
   /**
    * TODO
    */
+  // REVISION #86837 guardar el style como atributo de la clase
   M.layer.Vector.prototype.setStyle = function(style) {
     let label = style.get("label");
     if (style instanceof M.style.Line && !M.utils.isNullOrEmpty(label)) {
       //style.set("label", {});
       delete style.options_.label;
     }
-    this.getFeatures().forEach(function(f) {
-      f.setStyle(style);
-    });
+
+    // REVISION #86837 dejar la fachada limpia: this.getImpl().setStyle
   };
+
+  // REVISION #86837 implementar getStyle
 
 })();

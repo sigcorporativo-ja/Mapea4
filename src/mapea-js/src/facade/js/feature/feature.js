@@ -171,8 +171,10 @@ goog.require('M.facade.Base');
   /**
    * TODO
    */
+  // REVISION #86837 guardar el style
   M.Feature.prototype.setStyle = function(style) {
     style.applyToFeature(this);
   };
 
+  // REVISION #86837 implementar getStyle
 })();

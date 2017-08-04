@@ -4,16 +4,19 @@ goog.provide('M.impl.style.Point');
  * @namespace M.style.Polygon
  */
 (function() {
-  M.impl.style.Point = function(options) {
+  // REVISION #86837 subir valores por defecto a la fachada
+  M.impl.style.Point = function(options = {
+    radius: 7
+  }) {
     let stroke = options.stroke;
-    let radius = options.radius;
+    let radius = options.radius || M.impl.style.Point.OPTS_DEFAULT.radius;
     let fill = options.fill;
     let label = options.label;
     let icon = options.icon;
     let snaptopixel = options.snaptopixel;
     this.style_ = null;
     this.styleIcon_ = null;
-    this.styles_ = [];
+    // REVISION #86837
 
     if (!M.utils.isNullOrEmpty(stroke)) {
       stroke = new ol.style.Stroke({
@@ -73,6 +76,8 @@ goog.provide('M.impl.style.Point');
 
     if (!M.utils.isNullOrEmpty(stroke) || !M.utils.isNullOrEmpty(radius) || !M.utils.isNullOrEmpty(fill)) {
       this.style_ = new ol.style.Style({
+        stroke: stroke,
+        fill: fill,
         image: new ol.style.Circle({
           stroke: stroke,
           fill: fill,
@@ -81,7 +86,8 @@ goog.provide('M.impl.style.Point');
         }),
         text: label
       });
-      this.styles_.push(this.style_);
+      // REVISION #86837
+      // this.styles_.push(this.style_);
     }
 
     if (!M.utils.isNullOrEmpty(icon)) {
@@ -140,7 +146,8 @@ goog.provide('M.impl.style.Point');
           })
         });
       }
-      this.styles_.push(this.styleIcon_);
+      // REVISION #86837
+      // this.styles_.push(this.styleIcon_);
     }
   };
 
@@ -148,7 +155,20 @@ goog.provide('M.impl.style.Point');
    * TODO
    */
   M.impl.style.Point.prototype.applyToFeature = function(feature) {
-    feature.getImpl().getOLFeature().setStyle(this.styles_);
+    // REVISION #86837
+    feature.getImpl().getOLFeature().setStyle([this.style_, this.styleIcon_]);
+  };
+
+
+  /**
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.impl.style.Point.OPTS_DEFAULT = {
+    radius: 7
   };
 
 })();
