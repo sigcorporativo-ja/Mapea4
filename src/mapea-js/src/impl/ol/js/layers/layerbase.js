@@ -1,6 +1,6 @@
 goog.provide('M.impl.Layer');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -12,7 +12,7 @@ goog.provide('M.impl.Layer');
    * provided by the user
    * @api stable
    */
-  M.impl.Layer = (function (options) {
+  M.impl.Layer = (function(options) {
     /**
      * The map instance
      * @private
@@ -82,7 +82,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.isVisible = function () {
+  M.impl.Layer.prototype.isVisible = function() {
     var visible = false;
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       visible = this.ol3Layer.getVisible();
@@ -100,7 +100,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.isQueryable = function () {
+  M.impl.Layer.prototype.isQueryable = function() {
     return false;
   };
 
@@ -111,7 +111,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.inRange = function () {
+  M.impl.Layer.prototype.inRange = function() {
     var inRange = false;
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       var resolution = this.map.getMapImpl().getView().getResolution();
@@ -130,7 +130,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setVisible = function (visibility) {
+  M.impl.Layer.prototype.setVisible = function(visibility) {
     this.visibility = visibility;
 
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
@@ -145,7 +145,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.getZIndex = function () {
+  M.impl.Layer.prototype.getZIndex = function() {
     if (!M.utils.isNullOrEmpty(this.getOL3Layer())) {
       this.zIndex_ = this.getOL3Layer().getZIndex();
     }
@@ -159,7 +159,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setZIndex = function (zIndex) {
+  M.impl.Layer.prototype.setZIndex = function(zIndex) {
     this.zIndex_ = zIndex;
     if (!M.utils.isNullOrEmpty(this.getOL3Layer())) {
       this.getOL3Layer().setZIndex(zIndex);
@@ -173,7 +173,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.getOpacity = function () {
+  M.impl.Layer.prototype.getOpacity = function() {
     if (!M.utils.isNullOrEmpty(this.getOL3Layer())) {
       this.opacity_ = this.getOL3Layer().getOpacity();
     }
@@ -187,7 +187,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setOpacity = function (opacity) {
+  M.impl.Layer.prototype.setOpacity = function(opacity) {
     this.opacity_ = opacity;
     if (!M.utils.isNullOrEmpty(this.getOL3Layer())) {
       this.getOL3Layer().setOpacity(opacity);
@@ -201,7 +201,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.getOL3Layer = function () {
+  M.impl.Layer.prototype.getOL3Layer = function() {
     return this.ol3Layer;
   };
 
@@ -212,7 +212,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.getLegendURL = function () {
+  M.impl.Layer.prototype.getLegendURL = function() {
     return M.utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_DEFAULT]);
   };
 
@@ -223,7 +223,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setLegendURL = function (legendUrl) {};
+  M.impl.Layer.prototype.setLegendURL = function(legendUrl) {};
 
   /**
    * This function gets the max resolution for
@@ -233,7 +233,7 @@ goog.provide('M.impl.Layer');
    * @function
    * @api stable
    */
-  M.impl.Layer.prototype.getNumZoomLevels = function () {
+  M.impl.Layer.prototype.getNumZoomLevels = function() {
     return 16; // 16 zoom levels by default
   };
 
@@ -245,7 +245,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.unselectFeatures = function (features, coord) {};
+  M.impl.Layer.prototype.unselectFeatures = function(features, coord, evt) {};
 
   /**
    * This function exectues a select feature
@@ -254,5 +254,5 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.selectFeatures = function (features, coord) {};
+  M.impl.Layer.prototype.selectFeatures = function(features, coord, evt) {};
 })();

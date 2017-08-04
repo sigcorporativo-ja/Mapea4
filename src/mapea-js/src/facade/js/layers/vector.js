@@ -16,7 +16,7 @@ goog.require('M.exception');
    * @param {Mx.parameters.LayerOptions} options - custom options for this layer
    * @api stable
    */
-  M.layer.Vector = (function(userParameters, options) {
+  M.layer.Vector = (function(parameters = {}, options = {}, impl = new M.impl.layer.Vector(options)) {
     // checks if the implementation can create Vector
     if (M.utils.isUndefined(M.impl.layer.Vector)) {
       M.exception('La implementación usada no puede crear capas Vector');
@@ -29,21 +29,8 @@ goog.require('M.exception');
      */
     this.filter_ = null;
 
-    /**
-     * Implementation of this layer
-     * @public
-     * @type {M.impl.layer.Vector}
-     */
-    var impl = new M.impl.layer.Vector(options);
-    var parameters = M.parameter.layer(userParameters, M.layer.type.Vector);
-
-    // registers on M.evt.LOAD event
-    options.on(M.evt.LOAD, function(features) {
-      this.fire(M.evt.LOAD, [features]);
-    }, this);
-
     // calls the super constructor
-    goog.base(this, parameters, options, impl);
+    goog.base(this, parameters, impl);
   });
   goog.inherits(M.layer.Vector, M.Layer);
 

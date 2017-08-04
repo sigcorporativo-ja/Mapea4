@@ -139,6 +139,19 @@ goog.provide('M.impl.Feature');
   };
 
   /**
+   * This funcion transform M.Feature to ol.Feature
+   *
+   * @public
+   * @function
+   * @param {M.Feature}  facadeFeature - M.Feature
+   * @return {ol.Feature} olFeature - ol.Feature
+   * @api stable
+   */
+  M.impl.Feature.facade2OLFeature = function(feature) {
+    return feature.getImpl().getOLFeature();
+  };
+
+  /**
    * This function returns the value of the indicated attribute
    *
    * @public
