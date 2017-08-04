@@ -1289,6 +1289,35 @@ Mx.WMTSGetCapabilities.TileMatrix;
 
 
 /**
+ * Object literal representing a Event in Mapea
+ * @typedef {{
+ *     coord: (Mx.Evt.coord),
+ *     pixel: (Mx.Evt.pixel),
+ *     vendor: (Mx.Evt.vendor)
+ * }}
+ * @api stable
+ */
+Mx.Event;
+
+/**
+ * @type {Array<Number>}
+ * @api stable
+ */
+Mx.Event.coord;
+
+/**
+ * @type {Array<Number>}
+ * @api stable
+ */
+Mx.Event.pixel;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.Event.vendor;
+
+/**
  * Object literal representing a WFS DescribeFeatureType response
  * @typedef {{
  *     targetNamespace: (String),
