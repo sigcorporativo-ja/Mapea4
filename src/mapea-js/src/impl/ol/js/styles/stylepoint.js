@@ -1,22 +1,18 @@
 goog.provide('M.impl.style.Point');
 
 /**
- * @namespace M.style.Polygon
+ * @namespace M.style.Point
  */
 (function() {
-  // REVISION #86837 subir valores por defecto a la fachada
-  M.impl.style.Point = function(options = {
-    radius: 7
-  }) {
+  M.impl.style.Point = function(options) {
     let stroke = options.stroke;
-    let radius = options.radius || M.impl.style.Point.OPTS_DEFAULT.radius;
+    let radius = options.radius;
     let fill = options.fill;
     let label = options.label;
     let icon = options.icon;
     let snaptopixel = options.snaptopixel;
     this.style_ = null;
     this.styleIcon_ = null;
-    // REVISION #86837
 
     if (!M.utils.isNullOrEmpty(stroke)) {
       stroke = new ol.style.Stroke({
@@ -86,8 +82,6 @@ goog.provide('M.impl.style.Point');
         }),
         text: label
       });
-      // REVISION #86837
-      // this.styles_.push(this.style_);
     }
 
     if (!M.utils.isNullOrEmpty(icon)) {
@@ -146,8 +140,6 @@ goog.provide('M.impl.style.Point');
           })
         });
       }
-      // REVISION #86837
-      // this.styles_.push(this.styleIcon_);
     }
   };
 
@@ -155,20 +147,13 @@ goog.provide('M.impl.style.Point');
    * TODO
    */
   M.impl.style.Point.prototype.applyToFeature = function(feature) {
-    // REVISION #86837
-    feature.getImpl().getOLFeature().setStyle([this.style_, this.styleIcon_]);
+    // REVISION #86837 Probar que pasa cuando style_ y styleIcon_ son nulos
+    feature.getImpl().getOLFeature().setStyle(this.style_);
   };
 
 
   /**
-   * Default options for this style
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
+   * TODO
    */
-  M.impl.style.Point.OPTS_DEFAULT = {
-    radius: 7
-  };
-
+  // M.impl.style.Point.prototype.applyToLayer = function(layer);
 })();

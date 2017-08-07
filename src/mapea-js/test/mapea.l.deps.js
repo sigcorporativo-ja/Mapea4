@@ -16,7 +16,7 @@ goog.addDependency('../../../../src/facade/js/dialog.js', ['M.dialog'], ['M.util
 goog.addDependency('../../../../src/facade/js/eventsmanager.js', ['M.evt.EventsManager', 'M.evt.Listener'], [], false);
 goog.addDependency('../../../../src/facade/js/exception/exception.js', ['M.exception'], ['M.dialog'], false);
 goog.addDependency('../../../../src/facade/js/facade.js', ['M.facade.Base'], ['M.Object'], false);
-goog.addDependency('../../../../src/facade/js/feature/feature.js', ['M.Feature'], ['M.facade.Base'], false);
+goog.addDependency('../../../../src/facade/js/feature/feature.js', ['M.Feature'], ['M.facade.Base', 'M.utils'], false);
 goog.addDependency('../../../../src/facade/js/filter/filter.js', ['M.filter'], [], false);
 goog.addDependency('../../../../src/facade/js/filter/filterFunction.js', ['M.filter.Function'], ['M.Filter'], false);
 goog.addDependency('../../../../src/facade/js/filter/filterabstract.js', ['M.Filter'], [], false);
@@ -24,6 +24,7 @@ goog.addDependency('../../../../src/facade/js/filter/filtermodule.js', ['M.filte
 goog.addDependency('../../../../src/facade/js/filter/filterspatial.js', ['M.filter.Spatial'], ['M.filter.Function'], false);
 goog.addDependency('../../../../src/facade/js/format/geojson.js', ['M.format.GeoJSON'], ['M.Feature'], false);
 goog.addDependency('../../../../src/facade/js/geom.js', ['M.geom', 'M.geom.wfs.type', 'M.geom.wkt.type'], [], false);
+goog.addDependency('../../../../src/facade/js/handlers/featureshandler.js', ['M.handler.Features'], ['M.exception', 'M.facade.Base', 'M.utils'], false);
 goog.addDependency('../../../../src/facade/js/label.js', ['M.Label'], ['M.exception', 'M.facade.Base', 'M.utils', 'goog.dom.classlist'], false);
 goog.addDependency('../../../../src/facade/js/layers/geojson.js', ['M.layer.GeoJSON'], ['M.exception', 'M.layer.Vector', 'M.utils'], false);
 goog.addDependency('../../../../src/facade/js/layers/kml.js', ['M.layer.KML'], ['M.exception', 'M.layer.Vector', 'M.utils'], false);
@@ -36,7 +37,7 @@ goog.addDependency('../../../../src/facade/js/layers/wfs.js', ['M.layer.WFS'], [
 goog.addDependency('../../../../src/facade/js/layers/wmc.js', ['M.layer.WMC'], ['M.Layer', 'M.exception', 'M.utils'], false);
 goog.addDependency('../../../../src/facade/js/layers/wms.js', ['M.layer.WMS'], ['M.Layer', 'M.exception', 'M.utils'], false);
 goog.addDependency('../../../../src/facade/js/layers/wmts.js', ['M.layer.WMTS'], ['M.Layer', 'M.exception', 'M.utils'], false);
-goog.addDependency('../../../../src/facade/js/map/map.js', ['M.Map'], ['M.Control', 'M.Label', 'M.Layer', 'M.Parameters', 'M.Plugin', 'M.Popup', 'M.control.GetFeatureInfo', 'M.control.LayerSwitcher', 'M.control.Location', 'M.control.Mouse', 'M.control.Navtoolbar', 'M.control.OverviewMap', 'M.control.Panzoom', 'M.control.Panzoombar', 'M.control.Scale', 'M.control.ScaleLine', 'M.control.WMCSelector', 'M.dialog', 'M.exception', 'M.facade.Base', 'M.layer.GeoJSON', 'M.layer.KML', 'M.layer.Mapbox', 'M.layer.OSM', 'M.layer.WFS', 'M.layer.WMC', 'M.layer.WMS', 'M.layer.WMTS', 'M.remote', 'M.style.state', 'M.ui.Panel', 'M.utils', 'M.window', 'goog.dom.classlist'], false);
+goog.addDependency('../../../../src/facade/js/map/map.js', ['M.Map'], ['M.Control', 'M.Label', 'M.Layer', 'M.Parameters', 'M.Plugin', 'M.Popup', 'M.control.GetFeatureInfo', 'M.control.LayerSwitcher', 'M.control.Location', 'M.control.Mouse', 'M.control.Navtoolbar', 'M.control.OverviewMap', 'M.control.Panzoom', 'M.control.Panzoombar', 'M.control.Scale', 'M.control.ScaleLine', 'M.control.WMCSelector', 'M.dialog', 'M.exception', 'M.facade.Base', 'M.handler.Features', 'M.layer.GeoJSON', 'M.layer.KML', 'M.layer.Mapbox', 'M.layer.OSM', 'M.layer.WFS', 'M.layer.WMC', 'M.layer.WMS', 'M.layer.WMTS', 'M.remote', 'M.style.state', 'M.ui.Panel', 'M.utils', 'M.window', 'goog.dom.classlist'], false);
 goog.addDependency('../../../../src/facade/js/mapea.js', ['M'], ['M.Map', 'M.exception', 'M.template', 'M.utils'], false);
 goog.addDependency('../../../../src/facade/js/object.js', ['M.Object'], ['M.evt.EventsManager', 'M.evt.Listener'], false);
 goog.addDependency('../../../../src/facade/js/parameters/center.js', ['M.parameter.center'], ['M.exception', 'M.utils'], false);
@@ -88,8 +89,9 @@ goog.addDependency('../../../../src/plugins/attributetable/facade/js/attributeta
 goog.addDependency('../../../../src/plugins/attributetable/impl/ol/js/attributetableControl.js', ['P.impl.control.AttributeTableControl'], [], false);
 goog.addDependency('../../../../src/plugins/autocomplete/facade/js/autocomplete.js', ['P.plugin.Autocomplete'], ['goog.dom.classlist'], false);
 goog.addDependency('../../../../src/plugins/autocomplete/test/autocompletador.js', ['pruebaPlugin2'], ['M', 'M.impl', 'P.plugin.Autocomplete'], false);
-goog.addDependency('../../../../src/plugins/geosearch/facade/js/geosearch.js', ['P.plugin.Geosearch'], ['P.control.Geosearch'], false);
-goog.addDependency('../../../../src/plugins/geosearch/facade/js/geosearchcontrol.js', ['P.control.Geosearch'], ['goog.dom.classlist', 'goog.events', 'goog.style'], false);
+goog.addDependency('../../../../src/plugins/geosearch/facade/js/geosearch.js', ['P.plugin.Geosearch'], ['P.control.Geosearch', 'P.layer.Geosearch'], false);
+goog.addDependency('../../../../src/plugins/geosearch/facade/js/geosearchcontrol.js', ['P.control.Geosearch'], ['P.layer.Geosearch', 'goog.dom.classlist', 'goog.events', 'goog.style'], false);
+goog.addDependency('../../../../src/plugins/geosearch/facade/js/geosearchlayer.js', ['P.layer.Geosearch'], [], false);
 goog.addDependency('../../../../src/plugins/geosearch/impl/ol/js/geosearchcontrol.js', ['P.impl.control.Geosearch'], ['P.impl.layer.Geosearch', 'goog.dom.classes'], false);
 goog.addDependency('../../../../src/plugins/geosearch/impl/ol/js/geosearchlayer.js', ['P.impl.layer.Geosearch'], ['P.impl.geosearch.style', 'P.impl.utils.Geosearch'], false);
 goog.addDependency('../../../../src/plugins/geosearch/impl/ol/js/geosearchstyle.js', ['P.impl.geosearch.style'], [], false);
