@@ -430,7 +430,7 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.removeLayers = function(layersParam) {
-    if (M.utils.isNullOrEmpty(layersParam)) {
+    if (!M.utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.removeLayers)) {
         M.exception('La implementación usada no posee el método removeLayers');
@@ -875,7 +875,7 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.removeWFS = function(layersParam) {
-    if (M.utils.isNullOrEmpty(layersParam)) {
+    if (!M.utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
       if (M.utils.isUndefined(M.impl.Map.prototype.removeWFS)) {
         M.exception('La implementación usada no posee el método removeWFS');
