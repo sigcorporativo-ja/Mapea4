@@ -16,11 +16,20 @@ goog.require('M.exception');
    * @param {Mx.parameters.LayerOptions} options - custom options for this layer
    * @api stable
    */
-  M.layer.Vector = (function(parameters = {}, options = {}, impl = new M.impl.layer.Vector(options)) {
+  M.layer.Vector = (function(parameters, options, impl) {
+    parameters = parameters || {};
+    options = options || {};
+    impl = impl || new M.impl.layer.Vector(options);
+
     // checks if the implementation can create Vector
     if (M.utils.isUndefined(M.impl.layer.Vector)) {
       M.exception('La implementación usada no puede crear capas Vector');
     }
+
+    /**
+     * TODO
+     */
+    this.style_ = null;
 
     /**
      * Filter
@@ -208,16 +217,27 @@ goog.require('M.exception');
    * TODO
    */
   // REVISION #86837 guardar el style como atributo de la clase
+  // Duda con que clase de style se le pasa a vector
+  // Duda con que pasa cuando se llama al apply. Tiene pinta de no funcionar así
   M.layer.Vector.prototype.setStyle = function(style) {
-    let label = style.get("label");
-    if (style instanceof M.style.Line && !M.utils.isNullOrEmpty(label)) {
-      //style.set("label", {});
-      delete style.options_.label;
-    }
+    // let label = style.get("label");
+    // if (style instanceof M.style.Line && !M.utils.isNullOrEmpty(label)) {
+    //   //style.set("label", {});
+    //   delete style.options_.label;
+    // }
+    this.style_ = style;
+    //style.apply(this);
 
-    // REVISION #86837 dejar la fachada limpia: this.getImpl().setStyle
   };
 
-  // REVISION #86837 implementar getStyle
+  /**
+   * This function return style vector
+   *
+   * TODO
+   * @api stable
+   */
+  M.layer.Vector.prototype.getStyle = function() {
+    return this.style_;
+  };
 
 })();

@@ -1,6 +1,6 @@
 goog.provide('M.Feature');
 goog.require('M.facade.Base');
-
+goog.require('M.utils');
 (function() {
   /**
    * @classdesc
@@ -13,7 +13,14 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature = (function(id, geojson, style) {
-    this.style_ = style;
+
+    /**
+     * Style of feature
+     * @private
+     * @type {M.style.Feature}
+     */
+
+    this.style_ = null;
 
     /**
      * GeoJSON format
@@ -29,6 +36,8 @@ goog.require('M.facade.Base');
      */
     var impl = new M.impl.Feature(id, geojson, style);
     goog.base(this, impl);
+
+    this.setStyle(style);
   });
   goog.inherits(M.Feature, M.facade.Base);
 
@@ -169,12 +178,33 @@ goog.require('M.facade.Base');
   };
 
   /**
-   * TODO
+   * This function set style feature
+   *
+   * @public
+   * @function
+   * @param {M.style.Feature}
+   * @api stable
    */
-  // REVISION #86837 guardar el style
   M.Feature.prototype.setStyle = function(style) {
-    style.applyToFeature(this);
+    if (!M.utils.isNullOrEmpty(style) || style instanceof M.style.Feature) {
+      this.style_ = style;
+    }
+    else {
+      // TODO comprobar geometria para pasarle el style adecuado
+      this.style_ = new M.style.Point();
+    }
+    this.style_.applyToFeature(this);
   };
 
-  // REVISION #86837 implementar getStyle
+  /**
+   * This function returns style feature
+   *
+   * @public
+   * @function
+   * @return {M.style.Feature} returns the style feature
+   * @api stable
+   */
+  M.Feature.prototype.getStyle = function() {
+    return this.style_;
+  };
 })();
