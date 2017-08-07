@@ -1,16 +1,18 @@
 goog.provide('M.style.Point');
 
-// REVISION #86837 M.style.Point
+
 /**
- * @namespace M.style.Polygon
+ * @namespace M.style.Point
  */
 (function() {
 
   /**
    * TODO
    */
-  // REVISION #86837 valor por defecto
+
   M.style.Point = (function(options) {
+    // TODO añadir atributo radius a las opciones pasadas por parametros
+    options = options || M.style.Point.OPTS_DEFAULT;
     /**
      * TODO
      */
@@ -33,5 +35,16 @@ goog.provide('M.style.Point');
    */
   M.style.Point.prototype.serialize = function() {
     // TODO
+  };
+
+  /**
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.style.Point.OPTS_DEFAULT = {
+    radius: 7
   };
 })();
