@@ -117,8 +117,8 @@ goog.require('M.impl.Layer');
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  M.impl.layer.Vector.prototype.addFeature = function(feature) {
-    this.features_.push(feature);
+  M.impl.layer.Vector.prototype.addFeatures = function(features) {
+    this.features_ = this.features_.concat(features);
     this.redraw();
   };
 

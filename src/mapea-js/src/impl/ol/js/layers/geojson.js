@@ -88,6 +88,8 @@ goog.require('goog.style');
     }
 
     goog.base(this, 'addTo', map);
+
+    this.ol3Layer.setStyle(undefined);
   };
 
   /**
@@ -260,27 +262,4 @@ goog.require('goog.style');
     }
     return equals;
   };
-
-  /**
-   * Style for this layer
-   * @const
-   * @type {ol.style.Style}
-   * @public
-   * @api stable
-   */
-  M.impl.layer.GeoJSON.STYLE = new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: 'rgba(163, 93, 56, 0.2)'
-    }),
-    stroke: new ol.style.Stroke({
-      color: '#a35d38',
-      width: 2
-    }),
-    image: new ol.style.Circle({
-      radius: 7,
-      fill: new ol.style.Fill({
-        color: '#a35d38'
-      })
-    })
-  });
 })();
