@@ -35,17 +35,6 @@ goog.provide('M.impl.Feature');
   });
 
   /**
-   * TODO
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.impl.Feature.prototype.addTo = function(layer) {
-    layer.getImpl().addFeature(this.facadeFeature_);
-  };
-
-  /**
    * This function returns the openlayers object of the features
    * @public
    * @function

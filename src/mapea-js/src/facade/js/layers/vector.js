@@ -47,7 +47,7 @@ goog.require('M.exception');
       if (!M.utils.isArray(features)) {
         features = [features];
       }
-      features.forEach(f => f.addTo(this));
+      this.getImpl().addFeatures(features);
     }
   };
 
@@ -110,7 +110,8 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.Vector.prototype.clear = function() {
-    this.removeFeatures(this.getFeatures());
+    this.removeFilter();
+    this.removeFeatures(this.getFeatures(true));
   };
 
   /**
