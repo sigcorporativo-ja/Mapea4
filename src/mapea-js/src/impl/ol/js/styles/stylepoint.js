@@ -1,10 +1,11 @@
 goog.provide('M.impl.style.Point');
 
+goog.require('M.impl.style.Simple');
 /**
  * @namespace M.style.Point
  */
 (function() {
-  M.impl.style.Point = function(options) {
+  M.impl.style.Point = (function(options) {
     let stroke = options.stroke;
     let radius = options.radius;
     let fill = options.fill;
@@ -141,19 +142,22 @@ goog.provide('M.impl.style.Point');
         });
       }
     }
-  };
-
+  });
+  goog.inherits(M.impl.style.Point, M.impl.style.Simple);
   /**
    * TODO
    */
   M.impl.style.Point.prototype.applyToFeature = function(feature) {
-    // REVISION #86837 Probar que pasa cuando style_ y styleIcon_ son nulos
-    feature.getImpl().getOLFeature().setStyle(this.style_);
+    let styles = [];
+
+    if (!M.utils.isNullOrEmpty(this.style_)) {
+      styles.push(this.style_);
+    }
+    if (!M.utils.isNullOrEmpty(this.styleIcon_)) {
+      styles.push(this.styleIcon_);
+    }
+
+    let olFeature = feature.getImpl().getOLFeature();
+    olFeature.setStyle(styles);
   };
-
-
-  /**
-   * TODO
-   */
-  // M.impl.style.Point.prototype.applyToLayer = function(layer);
 })();

@@ -8,7 +8,7 @@ goog.require('goog.color.alpha');
 /**
  * @namespace M.utils
  */
-(function () {
+(function() {
   'use strict';
 
   /**
@@ -19,7 +19,7 @@ goog.require('goog.color.alpha');
    * @returns {boolean}
    * @api stable
    */
-  M.utils.isNullOrEmpty = function (obj) {
+  M.utils.isNullOrEmpty = function(obj) {
     var nullOrEmpty = false;
 
     if (M.utils.isNull(obj)) {
@@ -28,7 +28,7 @@ goog.require('goog.color.alpha');
     else if (M.utils.isArray(obj)) {
       nullOrEmpty = true;
       if (obj.length > 0) {
-        nullOrEmpty = !obj.some(function (objElem) {
+        nullOrEmpty = !obj.some(function(objElem) {
           return !M.utils.isNullOrEmpty(objElem);
         });
       }
@@ -45,7 +45,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.isNull = function (obj) {
+  M.utils.isNull = function(obj) {
     var isNull = false;
 
     if (!M.utils.isBoolean(obj) && (typeof obj !== 'number')) {
@@ -68,7 +68,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.isArray = function (obj) {
+  M.utils.isArray = function(obj) {
     var isArray = false;
     if (!M.utils.isNull(obj)) {
       isArray = (Object.prototype.toString.call(obj) === Object.prototype.toString
@@ -82,7 +82,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.isFunction = function (obj) {
+  M.utils.isFunction = function(obj) {
     var isFunction = false;
     if (!M.utils.isNull(obj)) {
       isFunction = ((typeof obj === 'function') && !M.utils.isUndefined(obj.call));
@@ -95,7 +95,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.isObject = function (obj) {
+  M.utils.isObject = function(obj) {
     var isObject = false;
     if (!M.utils.isNull(obj)) {
       isObject = ((typeof obj === 'object') && !M.utils.isUndefined(obj.toString));
@@ -108,7 +108,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.isString = function (obj) {
+  M.utils.isString = function(obj) {
     var isString = false;
     if (!M.utils.isNull(obj)) {
       isString = (typeof obj === 'string');
@@ -121,7 +121,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.isBoolean = function (obj) {
+  M.utils.isBoolean = function(obj) {
     var isBoolean = false;
     if ((obj !== null) && !M.utils.isUndefined(obj)) {
       isBoolean = (typeof obj === 'boolean');
@@ -134,7 +134,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.isUrl = function (obj) {
+  M.utils.isUrl = function(obj) {
     var isUrl = false;
     if (!M.utils.isNull(obj) && M.utils.isString(obj)) {
       isUrl = /(https?\:\/\/[^\*]+)/.test(obj);
@@ -147,7 +147,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.isUndefined = function (obj) {
+  M.utils.isUndefined = function(obj) {
     return (typeof obj === 'undefined');
   };
 
@@ -156,7 +156,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.normalize = function (stringToNormalize, upperCase) {
+  M.utils.normalize = function(stringToNormalize, upperCase) {
     var normalizedString = stringToNormalize;
     if (!M.utils.isNullOrEmpty(normalizedString) && M.utils.isString(normalizedString)) {
       normalizedString = normalizedString.trim();
@@ -170,7 +170,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.getParameterValue = function (paramName, url) {
+  M.utils.getParameterValue = function(paramName, url) {
     var parameterValue = null;
 
     paramName = paramName.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -194,7 +194,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.addParameters = function (url, params) {
+  M.utils.addParameters = function(url, params) {
     var requestUrl = url;
     if (requestUrl.indexOf('?') === -1) {
       requestUrl += '?';
@@ -227,7 +227,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.generateRandom = function (prefix, sufix) {
+  M.utils.generateRandom = function(prefix, sufix) {
     var random = '';
 
     // adds prefix
@@ -251,7 +251,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.getWMSGetCapabilitiesUrl = function (serverUrl, version) {
+  M.utils.getWMSGetCapabilitiesUrl = function(serverUrl, version) {
     var wmsGetCapabilitiesUrl = serverUrl;
 
     // request
@@ -273,7 +273,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.getWMTSGetCapabilitiesUrl = function (serverUrl, version) {
+  M.utils.getWMTSGetCapabilitiesUrl = function(serverUrl, version) {
     var wmtsGetCapabilitiesUrl = serverUrl;
 
     // request
@@ -302,7 +302,7 @@ goog.require('goog.color.alpha');
    * @returns {Array<Number>} the resolutions
    * @api stable
    */
-  M.utils.generateResolutionsFromScales = function (maxScale, minScale, zoomLevels, units) {
+  M.utils.generateResolutionsFromScales = function(maxScale, minScale, zoomLevels, units) {
     var minResolution = M.utils.getResolutionFromScale(maxScale, units);
     var maxResolution = M.utils.getResolutionFromScale(minScale, units);
 
@@ -321,7 +321,7 @@ goog.require('goog.color.alpha');
    * @returns {Array<Number>} the resolutions
    * @api stable
    */
-  M.utils.generateResolutionsFromExtent = function (extent, size, zoomLevels, units) {
+  M.utils.generateResolutionsFromExtent = function(extent, size, zoomLevels, units) {
     let [wExtent, hExtent] = [null, null];
     if (M.utils.isArray(extent)) {
       wExtent = (extent[2] - extent[0]);
@@ -357,7 +357,7 @@ goog.require('goog.color.alpha');
    * @returns {Array<Number>} the resolutions
    * @api stable
    */
-  M.utils.fillResolutions = function (minResolution, maxResolution, numZoomLevels) {
+  M.utils.fillResolutions = function(minResolution, maxResolution, numZoomLevels) {
     var resolutions = new Array(numZoomLevels);
 
     minResolution = Number.parseFloat(minResolution);
@@ -375,7 +375,7 @@ goog.require('goog.color.alpha');
       resolutions[i] = maxResolution / Math.pow(base, i);
     }
     //sort resolutions array descendingly
-    resolutions.sort(function (a, b) {
+    resolutions.sort(function(a, b) {
       return (b - a);
     });
     return resolutions;
@@ -391,7 +391,7 @@ goog.require('goog.color.alpha');
    * @returns {Number} the resolution for the specified scale
    * @api stable
    */
-  M.utils.getResolutionFromScale = function (scale, units) {
+  M.utils.getResolutionFromScale = function(scale, units) {
     var resolution;
     if (!M.utils.isNullOrEmpty(scale)) {
       if (M.utils.isNull(units)) {
@@ -414,7 +414,7 @@ goog.require('goog.color.alpha');
    * @returns {Number} the scale for the specified resolution
    * @api stable
    */
-  M.utils.getScaleFromResolution = function (resolution, units) {
+  M.utils.getScaleFromResolution = function(resolution, units) {
     if (M.utils.isNullOrEmpty(units)) {
       units = "degrees";
     }
@@ -429,7 +429,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.stringToHtml = function (htmlTxt) {
+  M.utils.stringToHtml = function(htmlTxt) {
     var html;
 
     if (!M.utils.isNullOrEmpty(htmlTxt)) {
@@ -446,7 +446,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.htmlToString = function (html) {
+  M.utils.htmlToString = function(html) {
     var text;
 
     if (!M.utils.isNullOrEmpty(html)) {
@@ -466,7 +466,7 @@ goog.require('goog.color.alpha');
    * @returns {String} beautifyString formated String
    * @api stable
    */
-  M.utils.beautifyString = function (text) {
+  M.utils.beautifyString = function(text) {
     var beautifyString;
 
     // 1 to lower case
@@ -485,12 +485,12 @@ goog.require('goog.color.alpha');
     beautifyString = beautifyString.replace(/\s+/, " ");
 
     // 6 to camel case
-    beautifyString = beautifyString.replace(/(\s\w)+/g, function (match) {
+    beautifyString = beautifyString.replace(/(\s\w)+/g, function(match) {
       return match.toUpperCase();
     });
 
     // 7 common words to lower case
-    beautifyString = beautifyString.replace(/\s+(de|del|las?|el|los?|un|unas?|unos?|y|a|al|en)\s+/ig, function (match) {
+    beautifyString = beautifyString.replace(/\s+(de|del|las?|el|los?|un|unas?|unos?|y|a|al|en)\s+/ig, function(match) {
       return match.toLowerCase();
     });
 
@@ -506,7 +506,7 @@ goog.require('goog.color.alpha');
    * @returns {Number} formated String
    * @api stable
    */
-  M.utils.beautifyAttribute = function (attributeName) {
+  M.utils.beautifyAttribute = function(attributeName) {
     var beautifyString = attributeName;
 
     if (beautifyString) {
@@ -531,12 +531,12 @@ goog.require('goog.color.alpha');
    * @returns {Number} formated String
    * @api stable
    */
-  M.utils.beautifyAttributeName = function (rawAttributeName) {
+  M.utils.beautifyAttributeName = function(rawAttributeName) {
     var attributeName = M.utils.normalize(rawAttributeName);
-    attributeName = attributeName.replace(/_(\w)/g, function (match, group) {
+    attributeName = attributeName.replace(/_(\w)/g, function(match, group) {
       return ' '.concat(group.toUpperCase());
     });
-    attributeName = attributeName.replace(/^\w/, function (match) {
+    attributeName = attributeName.replace(/^\w/, function(match) {
       return match.toUpperCase();
     });
     return attributeName;
@@ -550,7 +550,7 @@ goog.require('goog.color.alpha');
    * @returns {Number} formated String
    * @api stable
    */
-  M.utils.concatUrlPaths = function (paths) {
+  M.utils.concatUrlPaths = function(paths) {
     var finalUrl = null;
     if (!M.utils.isNullOrEmpty(paths)) {
       finalUrl = paths[0];
@@ -572,7 +572,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.includes = function (array, searchElement, fromIndex) {
+  M.utils.includes = function(array, searchElement, fromIndex) {
     var O = Object(array);
     var len = parseInt(O.length) || 0;
     if (len === 0) {
@@ -607,7 +607,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.extend = function (target, source, override) {
+  M.utils.extend = function(target, source, override) {
     for (var prop in source) {
       if (M.utils.isUndefined(target[prop])) {
         target[prop] = source[prop];
@@ -628,7 +628,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.escapeXSS = function (xssValue) {
+  M.utils.escapeXSS = function(xssValue) {
     var validValue;
 
     // & --> &amp;
@@ -658,7 +658,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.escapeJSCode = function (jsCode) {
+  M.utils.escapeJSCode = function(jsCode) {
     var validValue;
 
     validValue = jsCode.replace(/(<\s*script[^\>]*\>)+[^<]*(<\s*\/\s*script[^\>]*\>)+/ig, '');
@@ -673,15 +673,15 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.enableTouchScroll = function (elem) {
+  M.utils.enableTouchScroll = function(elem) {
     if ('ontouchstart' in goog.global) {
       var scrollStartPos = 0;
 
-      goog.events.listen(elem, goog.events.EventType.TOUCHSTART, function (evt) {
+      goog.events.listen(elem, goog.events.EventType.TOUCHSTART, function(evt) {
         scrollStartPos = this.scrollTop + evt.getBrowserEvent().touches[0].pageY;
       });
 
-      goog.events.listen(elem, goog.events.EventType.TOUCHMOVE, function (evt) {
+      goog.events.listen(elem, goog.events.EventType.TOUCHMOVE, function(evt) {
         this.scrollTop = scrollStartPos - evt.getBrowserEvent().touches[0].pageY;
       });
     }
@@ -693,7 +693,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.rgbToHex = function (rgbColor) {
+  M.utils.rgbToHex = function(rgbColor) {
     var hexColor;
 
     if (goog.color.isValidColor(rgbColor)) {
@@ -714,7 +714,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.getOpacityFromRgba = function (rgbaColor) {
+  M.utils.getOpacityFromRgba = function(rgbaColor) {
     var opacity;
 
     var rgbaRegExp = /^rgba\s*\((\s*\d+\s*\,){3}\s*([\d\.]+)\s*\)$/;
@@ -735,7 +735,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.sameUrl = function (url1, url2) {
+  M.utils.sameUrl = function(url1, url2) {
     url1 = url1.replace(/^(.+)\/$/, '$1').replace(/^(.+)\?$/, '$1');
     url2 = url2.replace(/^(.+)\/$/, '$1').replace(/^(.+)\?$/, '$1');
 
@@ -748,7 +748,7 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.isGeometryType = function (type) {
+  M.utils.isGeometryType = function(type) {
     var geometricTypes = [
          M.geom.wkt.type.GEOMETRY.toLowerCase(),
          "GeometryPropertyType".toLowerCase(),
@@ -792,7 +792,7 @@ goog.require('goog.color.alpha');
    * @returns {String} text decoded
    * @api stable
    */
-  M.utils.decodeHtml = function (encodedHtml) {
+  M.utils.decodeHtml = function(encodedHtml) {
     let txtarea = document.createElement("textarea");
     txtarea.innerHTML = encodedHtml;
     return txtarea.value;
@@ -807,7 +807,7 @@ goog.require('goog.color.alpha');
    * @returns {String} text contained by the HTML tags
    * @api stable
    */
-  M.utils.getTextFromHtml = function (html) {
+  M.utils.getTextFromHtml = function(html) {
     let htmlText = html;
     if (!M.utils.isString(html) && html.outerHTML) {
       htmlText = html.outerHTML;

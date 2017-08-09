@@ -31,6 +31,7 @@ goog.require('M.exception');
      */
     this.style_ = null;
 
+
     /**
      * Filter
      * @private
@@ -40,6 +41,12 @@ goog.require('M.exception');
 
     // calls the super constructor
     goog.base(this, parameters, impl);
+
+    let style = options.style;
+    if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {
+      this.setStyle(style);
+    }
+
   });
   goog.inherits(M.layer.Vector, M.Layer);
 
@@ -217,8 +224,6 @@ goog.require('M.exception');
    * TODO
    */
   // REVISION #86837 guardar el style como atributo de la clase
-  // Duda con que clase de style se le pasa a vector
-  // Duda con que pasa cuando se llama al apply. Tiene pinta de no funcionar así
   M.layer.Vector.prototype.setStyle = function(style) {
     // let label = style.get("label");
     // if (style instanceof M.style.Line && !M.utils.isNullOrEmpty(label)) {
@@ -226,7 +231,7 @@ goog.require('M.exception');
     //   delete style.options_.label;
     // }
     this.style_ = style;
-    //style.apply(this);
+    this.style_.apply(this);
 
   };
 

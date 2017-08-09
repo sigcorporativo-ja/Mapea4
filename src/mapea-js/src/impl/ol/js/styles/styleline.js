@@ -1,8 +1,8 @@
 goog.provide('M.impl.style.Line');
 
-
+goog.require('M.impl.style.Simple');
 /**
- * @namespace M.style.Polygon
+ * @namespace M.style.Line
  */
 (function() {
 
@@ -58,7 +58,7 @@ goog.provide('M.impl.style.Line');
       );
     }
   };
-
+  goog.inherits(M.impl.style.Line, M.impl.style.Simple);
   /**
    * TODO
    */

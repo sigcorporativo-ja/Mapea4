@@ -1,5 +1,6 @@
 goog.provide('M.impl.style.Polygon');
 
+goog.require('M.impl.style.Simple');
 /**
  * @namespace M.style.Polygon
  */
@@ -79,7 +80,7 @@ goog.provide('M.impl.style.Polygon');
       }
     }
   };
-
+  goog.inherits(M.impl.style.Polygon, M.impl.style.Simple);
   /**
    * TODO
    */
