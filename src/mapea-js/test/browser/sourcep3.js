@@ -156,7 +156,7 @@ let categoryStyle = new M.style.Category("styleType", {
   "privado": rojo,
 });
 
-categoryStyle.apply_(layer);
+layer.setStyle(categoryStyle);
 
 categoryStyle.setAttributeName("styleTypee");
 

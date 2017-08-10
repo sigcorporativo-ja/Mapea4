@@ -155,6 +155,7 @@ let categoryStyle = new M.style.Category("styleType", {
   "concertado": amarillo,
   "privado": rojo,
 });
+
 layer.setStyle(categoryStyle);
 
 let res = categoryStyle.getCategories();
