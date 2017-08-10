@@ -186,34 +186,11 @@ goog.require('M.utils');
    * @api stable
    */
   M.Feature.prototype.setStyle = function(style) {
-    if (!M.utils.isNullOrEmpty(style) || style instanceof M.style.Feature) {
+    if (!M.utils.isNullOrEmpty(style) && style instanceof M.style.Feature) {
       this.style_ = style;
+      this.style_.applyToFeature(this);
     }
-    else {
-      let geom = this.getGeometry();
-      if (!M.utils.isNullOrEmpty(geom)) {
-        if (geom.type === M.geom.geojson.type.POINT || geom.type === M.geom.geojson.type.MULTI_POINT) {
-          this.style_ = new M.style.Point();
-        }
-        else if (geom.type === M.geom.geojson.type.LINE_STRING || geom.type === M.geom.geojson.type.MULTI_LINE_STRING) {
-          this.style_ = new M.style.Line();
-        }
-        else if (geom.type === M.geom.geojson.type.POLYGON || geom.type === M.geom.geojson.type.MULTI_POLYGON) {
-          this.style_ = new M.style.Polygon();
-        }
-        else {
-          // Provisional (¿Que estilo debería ponerse?)
-          this.style_ = new M.style.Point();
-        }
-      }
-      else {
-        // En caso de los iconos, al clickar, si no se define algun estilo
-        // lanza un error (provisional)
-        this.style_ = new M.style.Point();
-
-      }
-    }
-    this.style_.applyToFeature(this);
+    //a las features no se les pone ningún estilo por defecto porque tiene mas prioridad que el de la capa
   };
 
 

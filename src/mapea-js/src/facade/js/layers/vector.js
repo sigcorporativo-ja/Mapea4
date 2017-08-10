@@ -231,8 +231,10 @@ goog.require('M.exception');
     //   delete style.options_.label;
     // }
     this.style_ = style;
-    this.style_.apply(this);
 
+    if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {
+      this.style_.apply(this);
+    }
   };
 
   /**

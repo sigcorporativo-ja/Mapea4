@@ -1,7 +1,7 @@
 // constructor del mapa
 let mapajs = M.map({
   container: "map",
-  projection: "EPSG:4326*d",
+  projection: "EPSG:3857*m",
   layers: ["OSM"],
   center: {
     x: -5.9584180843195425,
@@ -37,34 +37,9 @@ let style = new M.style.Point({
 
 
 let points = new M.layer.GeoJSON({
-  name: 'points',
-  source: {
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.03173828125,
-          38.762650338334154
-        ]
-        }
-    },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -4.24072265625,
-          38.8824811975508
-        ]
-        }
-    }
-  ]
-  },
+  name: "Empresas",
+  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/wfs?outputFormat=application/json&request=getfeature&typeNames=sepim:empresas&version=1.3.0",
+  extract: false
 }, {
   style: style
 });
