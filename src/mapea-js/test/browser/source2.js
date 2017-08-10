@@ -35,43 +35,44 @@ let style = new M.style.Point({
   }
 });
 
+let featureP = new M.Feature("f", {
+  "type": "Feature",
+  "properties": {},
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+          -3.69140625,
+          37.84015683604136
+        ]
+  }
+}, style);
 
-let points = new M.layer.GeoJSON({
-  name: 'points',
-  source: {
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.03173828125,
-          38.762650338334154
+let featureP2 = new M.Feature("f2", {
+  "type": "Feature",
+  "properties": {},
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+          -3.99140625,
+          38.04015683604136
         ]
-        }
-    },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -4.24072265625,
-          38.8824811975508
-        ]
-        }
-    }
-  ]
-  },
-}, {
-  style: style
+  }
+}, style);
+
+// featureP.setStyle(style);
+let layer = new M.layer.Vector({
+  name: 'layerVector'
 });
 
-mapajs.addLayers([points]);
+
+
+layer.addFeatures([featureP, featureP2]);
+
+mapajs.addLayers([layer]);
+
+
 
 
 function removeStyle() {
-  points.setStyle(null);
+  layer.setStyle(null);
 }

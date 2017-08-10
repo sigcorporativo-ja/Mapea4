@@ -9,6 +9,7 @@ goog.provide('M.style.Polygon');
    * TODO
    */
   M.style.Polygon = (function(options) {
+    options = options || M.style.Polygon.OPTS_DEFAULT;
     /**
      * TODO
      */
@@ -30,5 +31,18 @@ goog.provide('M.style.Polygon');
    */
   M.style.Polygon.prototype.serialize = function() {
     // TODO
+  };
+
+  /**
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.style.Polygon.OPTS_DEFAULT = {
+    stroke: {
+      width: 1
+    }
   };
 })();
