@@ -206,6 +206,19 @@ goog.provide('M.impl.Layer');
   };
 
   /**
+ * This function sets the OL layer
+ *
+ * @function
+ * @api stable
+ * @expose
+ */
+M.impl.Layer.prototype.setOL3Layer = function(layer) {
+  this.ol3Layer = layer;
+  this.map.getMapImpl().addLayer(layer);
+  return this;
+};
+
+  /**
    * This function gets the created OL layer
    *
    * @function

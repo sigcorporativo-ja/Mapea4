@@ -21,6 +21,7 @@
     "mocha": "*",
     "ol": "https://github.com/openlayers/openlayers.git#4.0.1",
     "ol3-popup": "https://github.com/walkermatt/ol3-popup.git#v1.0.1",
+    "ol3-animatedcluster": "https://github.com/guadaltel/OL3-AnimatedCluster.git#gh-pages",
     "leaflet": "Leaflet/Leaflet#0.7.7",
     "proj4": "https://github.com/proj4js/proj4js.git#2.4.1",
     "chroma-js": "^1.3.3",

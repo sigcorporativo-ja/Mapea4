@@ -37,6 +37,8 @@ goog.require('M.impl.format.GeoJSON');
 goog.require('ol.renderer.Type');
 goog.require('ol.Map');
 
+goog.require('M.impl.style.Cluster');
+
 (function() {
   /**
    * @classdesc

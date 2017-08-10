@@ -37,6 +37,8 @@ goog.require('M.dialog');
 goog.require('M.Plugin');
 goog.require('M.window');
 
+goog.require('M.style.Cluster');
+
 (function() {
   /**
    * @classdesc

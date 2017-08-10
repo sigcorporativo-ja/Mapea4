@@ -282,6 +282,12 @@ module.exports = function(grunt) {
           }, { // ol3-popup
             file: 'libraries/ol3-popup/ol3-popup.js',
             provideDirective: "goog.provide('ol.Overlay.Popup');"
+          }, { // ol3-animatedcluster/layer
+            file: 'libraries/ol3-animatedcluster/layer/animatedclusterlayer.js',
+            provideDirective: "goog.provide('ol.layer.AnimatedCluster');"
+          }, { // ol3-animatedcluster/interaction
+            file: 'libraries/ol3-animatedcluster/interaction/selectclusterinteraction.js',
+            provideDirective: "goog.provide('ol.interaction.SelectCluster');"
           }
           /*, { // proj4
                       file: 'libraries/proj4/proj4.js',
@@ -317,6 +323,7 @@ module.exports = function(grunt) {
                      'src/impl/ol/js',
                      'libraries/handlebars',
                      'libraries/proj4',
+                     'libraries/ol3-animatedcluster',
                      'libraries/ol/src',
                      'libraries/ol/externs'
                   ],
@@ -373,6 +380,7 @@ module.exports = function(grunt) {
                         'src/impl/ol/js/**/*.js',
                         'libraries/handlebars/**/*.js',
                         'libraries/proj4/**/*.js',
+                        'libraries/ol3-animatedcluster/**/*.js',
                         'libraries/ol/src/**/*.js',
                         'externs/ol/*.js'
                      ]
@@ -621,6 +629,9 @@ module.exports = function(grunt) {
                   }, { // proj4js
               path: 'libraries/proj4',
               prefix: '../'
+                  }, { // ol3-animatedcluster
+              path: 'libraries/ol3-animatedcluster',
+              prefix: '../'
                   }, { // plugins
               path: 'src/plugins',
               prefix: '../mapea/plugins'
@@ -695,7 +706,10 @@ module.exports = function(grunt) {
                }, { // proj4js
             path: 'libraries/proj4',
             prefix: '../../../proj4'
-               }, { // ol3 externs
+               }, { // ol3-animatedcluster
+            path: 'libraries/ol3-animatedcluster',
+            prefix: '../../../ol3-animatedcluster'
+              }, { // ol3 externs
             path: 'externs/ol',
             prefix: '../../../../externs/ol'
                }, { // ol3 src
