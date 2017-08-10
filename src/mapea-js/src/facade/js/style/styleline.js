@@ -9,6 +9,7 @@ goog.provide('M.style.Line');
    * TODO
    */
   M.style.Line = (function(options) {
+    options = options || M.style.Line.OPTS_DEFAULT;
     var impl = new M.impl.style.Line(options);
     // calls the super constructor
     goog.base(this, options, impl);
@@ -27,5 +28,11 @@ goog.provide('M.style.Line');
    */
   M.style.Line.prototype.serialize = function() {
     // TODO
+  };
+
+  M.style.Line.OPTS_DEFAULT = {
+    stroke: {
+      width: 1
+    }
   };
 })();
