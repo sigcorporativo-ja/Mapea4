@@ -40,19 +40,28 @@ goog.provide('M.Style');
    *
    */
   M.Style.prototype.apply = function(layer) {
-    this.getImpl().apply(layer);
+    this.getImpl().applyToLayer(layer);
   };
 
   /**
    * TODO
-   * supongo que, solo se puede obtener las propiedades de primer nivel.
-   * ej del polygon : fill, stroke y label.
+   *
    */
-  // REVISION #86837 copiar método getAttribute de M.Facade de la rama mapea_410
-  M.Style.prototype.get = function(property) {
-    return this.options_[property];
-  };
+  M.Style.prototype.get = function(attribute) {
+    let attrValue;
 
+    attrValue = this.options_[attribute];
+    if (M.utils.isNullOrEmpty(attrValue)) {
+      // we look up the attribute by its path. Example: getAttribute('foo.bar.attr')
+      // --> return feature.properties.foo.bar.attr value
+      let attrPath = attribute.split('.');
+      if (attrPath.length > 1) {
+        attrValue = attrPath.reduce((obj, attr) => !M.utils.isNullOrEmpty(obj) ? ((obj instanceof M.Style) ? obj.get(attr) : obj[attr]) : undefined, this);
+      }
+    }
+
+    return attrValue;
+  };
   /**
    * supongo que, solo se pude hacer un set de fill, stroke y label, y que sería del objeto completo
    * es decir, que no se puede cambiar solo el color por ejemplo
