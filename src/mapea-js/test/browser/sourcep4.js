@@ -1,4 +1,5 @@
-// constructor del mapa
+// cambiar AttributeName_
+
 
 let mapajs = M.map({
   container: "map",
@@ -148,3 +149,15 @@ let catStyle = new M.style.Category('styleType', {
 */
 
 // constructor del mapa
+
+let categoryStyle = new M.style.Category("styleType", {
+  "public": verde,
+  "concertado": amarillo,
+  "privado": rojo,
+});
+
+categoryStyle.apply_(layer);
+
+let res = categoryStyle.getStyleForCategories("privado");
+
+/* EL resultado tiene que ser el Stylo de "privado" */

@@ -226,7 +226,7 @@ goog.require('M.exception');
     //   delete style.options_.label;
     // }
     this.style_ = style;
-    //style.apply(this);
+    style.apply(this);
 
   };
 

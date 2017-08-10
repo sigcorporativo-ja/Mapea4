@@ -1,4 +1,5 @@
-// constructor del mapa
+// aplicar categoryStyles a la capa
+
 
 let mapajs = M.map({
   container: "map",
@@ -148,3 +149,12 @@ let catStyle = new M.style.Category('styleType', {
 */
 
 // constructor del mapa
+
+let categoryStyle = new M.style.Category("styleType", {
+  "public": verde,
+  "concertado": amarillo,
+  "privado": rojo,
+});
+layer.setStyle(categoryStyle);
+
+let res = categoryStyle.getCategories();

@@ -1,4 +1,5 @@
-// constructor del mapa
+// applicar un estilo nuevo "setStyleForCategories"
+
 
 let mapajs = M.map({
   container: "map",
@@ -148,3 +149,17 @@ let catStyle = new M.style.Category('styleType', {
 */
 
 // constructor del mapa
+
+let categoryStyle = new M.style.Category("styleType", {
+  "public": verde,
+  "concertado": amarillo,
+  "privado": rojo,
+});
+
+categoryStyle.apply_(layer);
+
+
+categoryStyle.setStyleForCategories("religiosos", azul);
+
+/*EL resultado tendra que ser el cambio de la categoria "concertado" a style2
+Por consiguiente tambien se tendra que cambiar la variable categoryStyles_*/
