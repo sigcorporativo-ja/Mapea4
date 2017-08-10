@@ -204,8 +204,11 @@ goog.require('M.geom');
   M.layer.WFS.prototype.setFilter = function(filter) {
     goog.base(this, 'setFilter', filter);
 
-    if (!M.utils.isNullOrEmpty(this.filter_) && M.utils.isFunction(this.filter_.toCQL)) {
-      this.setCQL(this.filter_.toCQL());
+    if (!M.utils.isNullOrEmpty(this.filter_)) {
+      let cql = this.filter_.toCQL();
+      if (!M.utils.isNullOrEmpty(cql)) {
+        this.setCQL();
+      }
     }
   };
 
