@@ -186,15 +186,13 @@ goog.require('M.utils');
    * @api stable
    */
   M.Feature.prototype.setStyle = function(style) {
-    if (!M.utils.isNullOrEmpty(style) || style instanceof M.style.Feature) {
+    if (!M.utils.isNullOrEmpty(style) && style instanceof M.style.Feature) {
       this.style_ = style;
+      this.style_.applyToFeature(this);
     }
-    else {
-      // TODO comprobar geometria para pasarle el style adecuado
-      this.style_ = new M.style.Point();
-    }
-    this.style_.applyToFeature(this);
+    //a las features no se les pone ningún estilo por defecto porque tiene mas prioridad que el de la capa
   };
+
 
   /**
    * This function returns style feature

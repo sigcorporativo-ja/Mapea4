@@ -11,7 +11,7 @@ goog.provide('M.style.Point');
    */
 
   M.style.Point = (function(options) {
-    // TODO añadir atributo radius a las opciones pasadas por parametros
+    // TODO
     options = options || M.style.Point.OPTS_DEFAULT;
     /**
      * TODO
@@ -45,6 +45,10 @@ goog.provide('M.style.Point');
    * @api stable
    */
   M.style.Point.OPTS_DEFAULT = {
-    radius: 7
+    stroke: {
+      color: 'black',
+      width: 1
+    },
+    radius: 3
   };
 })();
