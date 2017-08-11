@@ -94,12 +94,10 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.Vector.prototype.removeFeatures = function(features) {
-    if (M.utils.isArray(features)) {
-      this.getImpl().removeFeatures(features);
+    if (!M.utils.isArray(features)) {
+      features = [features];
     }
-    else {
-      M.dialog.error("El método debe recibir un array de M.Features");
-    }
+    this.getImpl().removeFeatures(features);
   };
 
   /**
