@@ -85,7 +85,21 @@ let feature4 = new M.Feature('feature4', {
   "geometry": {
     "type": "Point",
     "coordinates": [
-          -8.983428955078124,
+          -10.983428955078124,
+          36.38761749978395
+        ]
+  }
+}, style2);
+
+let feature5 = new M.Feature('feature5', {
+  "type": "Feature",
+  "properties": {
+    "styleType": "hibridos"
+  },
+  "geometry": {
+    "type": "Point",
+    "coordinates": [
+          -20.983428955078124,
           36.38761749978395
         ]
   }
@@ -97,7 +111,7 @@ let layer = new M.layer.Vector({
 });
 
 mapajs.addLayers([layer]);
-layer.addFeatures([feature, feature2, feature3, feature4]);
+layer.addFeatures([feature, feature2, feature3, feature4, feature5]);
 
 let verde = new M.style.Point({
   fill: {
@@ -158,6 +172,5 @@ let categoryStyle = new M.style.Category("styleType", {
 
 layer.setStyle(categoryStyle);
 
-let res = categoryStyle.getStyleForCategories("privado");
 
 /* EL resultado tiene que ser el Stylo de "privado" */

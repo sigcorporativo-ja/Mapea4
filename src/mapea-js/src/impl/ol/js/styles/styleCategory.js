@@ -16,7 +16,7 @@ goog.provide('M.impl.style.Category');
 
 
   M.impl.style.Category.prototype.setAttributeName = function(styleCategory, newAttributeName) {
-    //devolvemos el AttributeName_
+    //devolvemos el nuevo AttributeName_
     styleCategory.AttributeName_ = newAttributeName;
     return styleCategory;
 
@@ -29,9 +29,7 @@ goog.provide('M.impl.style.Category');
     dado por AttributeName_*/
 
     let array_value = [];
-
     try {
-
       let layer = styleCategory.layer_;
       let array_features = layer.getFeatures(true);
       for (var i = 0; i < array_features.length; i++) {
@@ -45,9 +43,7 @@ goog.provide('M.impl.style.Category');
     }
     //caso en que no se hubiera aplicado el apply
     catch (e) {
-
       M.exception('No existe layer');
-
     }
     return array_value;
   };
@@ -79,50 +75,32 @@ goog.provide('M.impl.style.Category');
 
     /*
     modificamos el estilo de una Categoria del tipo AttributeName_
-
     IMPORTANTE: tambien tiene que modificarse en categoryStyles_
-
     */
 
     let layer = categoryStyle.layer_;
-
     let categories = categoryStyle.getCategories();
-
     if (categories.indexOf(string) < 0) {
-
       M.exception('Se ha escpecificado una Categoria inexistente');
-
     }
-
     else {
-
       layer.setFilter(M.filter.EQUAL(categoryStyle.AttributeName_, string));
-
       let array_features = layer.getFeatures();
-
       for (var i = 0; i < array_features.length; i++) {
-
         array_features[i].setStyle(style);
-
       }
-
       layer.removeFilter();
-
     }
 
     categoryStyle.categoryStyles_[string] = style;
-
     categoryStyle.layer_ = layer;
-
     return categoryStyle;
 
   };
 
 
   M.impl.style.Category.prototype.setFacadeObj = function(obj) {
-
     this.facadeStyleCategory_ = obj;
-
   }
 
 
@@ -131,20 +109,51 @@ goog.provide('M.impl.style.Category');
     /*
     Aplicamos el categoryStyle a un "layer"
     */
-
+    var colores = [];
     this.facadeStyleCategory_.layer_ = layer;
-
+    let categoryStyles = this.facadeStyleCategory_.categoryStyles_;
+    let arraycategoryStyle = [];
+    for (var i in categoryStyles) {
+      arraycategoryStyle.push(i);
+    }
     var categorias_existentes = this.facadeStyleCategory_.getCategories();
+    for (var i = 0; i < categorias_existentes.length; i++) {
+      if (arraycategoryStyle.indexOf(categorias_existentes[i]) >= 0) {
+        let style = this.facadeStyleCategory_.categoryStyles_[categorias_existentes[i]];
+        this.facadeStyleCategory_.setStyleForCategories(categorias_existentes[i], style);
+      }
+      else {
+        //cogemos color y se almacena en colores
+        let color_escogido = false;
+        while (color_escogido != true) {
+          var color_random = chroma.random().name();
+          if (colores.indexOf(color_random) < 0) {
+            color_escogido = true;
+          }
+        }
 
-    for (var categoryStyle in this.facadeStyleCategory_.categoryStyles_) {
+        /* estilo por defecto, lo ideal seria que se copiara el objeto estilo
+           de la categoria que se le va a poner el color random, asi evitamos mirar cada
+           caso de estilo (point, line....) y se evitaria tambien incorporar nuevos casos
+           cada vez que se incorporara un nuevo estilo
+        */
 
-      if (categorias_existentes.indexOf(categoryStyle) >= 0) {
-
-        this.facadeStyleCategory_.setStyleForCategories(categoryStyle, this.facadeStyleCategory_.categoryStyles_[categoryStyle]);
+        let random = new M.style.Point({
+          fill: {
+            color: color_random
+          },
+          stroke: {
+            color: color_random,
+            width: 1
+          },
+          radius: 6
+        });
+        this.facadeStyleCategory_.setStyleForCategories(categorias_existentes[i], random);
 
       }
 
     }
+
 
   }
 
