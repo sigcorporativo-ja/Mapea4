@@ -156,6 +156,7 @@ let categoryStyle = new M.style.Category("styleType", {
   "privado": rojo,
 });
 
+
 layer.setStyle(categoryStyle);
 
 

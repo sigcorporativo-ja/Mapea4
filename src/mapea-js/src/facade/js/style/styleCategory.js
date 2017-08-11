@@ -29,7 +29,7 @@ goog.require('M.Style');
 
   M.style.Category.prototype.apply_ = function(layer) {
 
-    this.layer_ = layer
+    this.layer_ = layer;
 
     return this.getImpl().applyToLayer(layer);
 

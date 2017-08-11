@@ -80,6 +80,7 @@ goog.provide('M.impl.style.Category');
 
     let layer = categoryStyle.layer_;
     let categories = categoryStyle.getCategories();
+
     if (categories.indexOf(string) < 0) {
       M.exception('Se ha escpecificado una Categoria inexistente');
     }
@@ -101,7 +102,7 @@ goog.provide('M.impl.style.Category');
 
   M.impl.style.Category.prototype.setFacadeObj = function(obj) {
     this.facadeStyleCategory_ = obj;
-  }
+  };
 
 
   M.impl.style.Category.prototype.applyToLayer = function(layer) {
@@ -110,23 +111,31 @@ goog.provide('M.impl.style.Category');
     Aplicamos el categoryStyle a un "layer"
     */
     var colores = [];
+    var color_random = null;
     this.facadeStyleCategory_.layer_ = layer;
     let categoryStyles = this.facadeStyleCategory_.categoryStyles_;
     let arraycategoryStyle = [];
     for (var i in categoryStyles) {
       arraycategoryStyle.push(i);
     }
+
     var categorias_existentes = this.facadeStyleCategory_.getCategories();
-    for (var i = 0; i < categorias_existentes.length; i++) {
-      if (arraycategoryStyle.indexOf(categorias_existentes[i]) >= 0) {
-        let style = this.facadeStyleCategory_.categoryStyles_[categorias_existentes[i]];
-        this.facadeStyleCategory_.setStyleForCategories(categorias_existentes[i], style);
+
+    for (var a = 0; a < categorias_existentes.length; a++) {
+      if (arraycategoryStyle.indexOf(categorias_existentes[a]) >= 0) {
+
+        let style = this.facadeStyleCategory_.categoryStyles_[categorias_existentes[a]];
+
+
+        this.facadeStyleCategory_.setStyleForCategories(categorias_existentes[a], style);
       }
       else {
+
+
         //cogemos color y se almacena en colores
         let color_escogido = false;
         while (color_escogido != true) {
-          var color_random = chroma.random().name();
+          color_random = chroma.random().name();
           if (colores.indexOf(color_random) < 0) {
             color_escogido = true;
           }
@@ -148,14 +157,16 @@ goog.provide('M.impl.style.Category');
           },
           radius: 6
         });
-        this.facadeStyleCategory_.setStyleForCategories(categorias_existentes[i], random);
+
+
+        this.facadeStyleCategory_.setStyleForCategories(categorias_existentes[a], random);
 
       }
 
     }
 
 
-  }
+  };
 
 
 })();
