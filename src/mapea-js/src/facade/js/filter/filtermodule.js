@@ -1,8 +1,7 @@
 goog.provide('M.filter.spatial');
 
 goog.require('M.filter.Spatial');
-goog.require('M.impl.format.GeoJSON');
-goog.require('ol.format.WKT');
+
 
 /**
  * @namespace M.filter.spatial
@@ -138,20 +137,18 @@ goog.require('ol.format.WKT');
    */
   M.filter.spatial.toCQLFilter_ = function(operation, geometries) {
     let cqlFilter = "";
-    let gjFormat = new M.impl.format.GeoJSON();
-    let wktFormat = new ol.format.WKT();
+    let wktFormat = new M.format.WKT();
     for (let i = 0; i < geometries.length; i++) {
-      let olGeometry = gjFormat.readGeometryFromObject(geometries[i]);
       if (i !== 0) {
         // es un OR porque se hace una interseccion completa con todas
         // las geometries
         cqlFilter += " OR ";
       }
-      if (olGeometry.getType().toLowerCase() === "point") {
-        let pointCoord = olGeometry.getCoordinates();
-        olGeometry.setCoordinates([pointCoord[0], pointCoord[1]]);
+      let geometry = geometries[i];
+      if (geometry.type.toLowerCase() === "point") {
+        geometry.coordinates.length = 2;
       }
-      cqlFilter += operation + "({{geometryName}}, " + wktFormat.writeGeometryText(olGeometry) + ")";
+      cqlFilter += operation + "({{geometryName}}, " + wktFormat.write(geometry) + ")";
     }
     return cqlFilter;
   };
