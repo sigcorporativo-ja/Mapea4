@@ -48,6 +48,7 @@ goog.require('M.impl.Layer');
     map.on(M.evt.CHANGE_PROJ, this.setProjection_, this);
 
     this.ol3Layer = new ol.layer.Vector({
+      visible: this.visibility && (this.options.visibility !== false),
       style: new ol.style.Style({
         fill: new ol.style.Fill({
           color: 'rgba(0, 158, 0, 0.1)'
@@ -72,9 +73,9 @@ goog.require('M.impl.Layer');
     this.updateSource_();
 
     // sets its visibility if it is in range
-    if (this.options.visibility !== false) {
-      this.setVisible(this.inRange());
-    }
+    // if (this.options.visibility != false) {
+    //   this.setVisible(this.inRange());
+    // }
     // sets its z-index
     if (this.zIndex_ !== null) {
       this.setZIndex(this.zIndex_);
