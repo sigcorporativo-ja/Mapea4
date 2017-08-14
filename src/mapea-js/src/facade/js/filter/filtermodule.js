@@ -147,6 +147,10 @@ goog.require('ol.format.WKT');
         // las geometries
         cqlFilter += " OR ";
       }
+      if (olGeometry.getType().toLowerCase() === "point") {
+        let pointCoord = olGeometry.getCoordinates();
+        olGeometry.setCoordinates([pointCoord[0], pointCoord[1]]);
+      }
       cqlFilter += operation + "({{geometryName}}, " + wktFormat.writeGeometryText(olGeometry) + ")";
     }
     return cqlFilter;
