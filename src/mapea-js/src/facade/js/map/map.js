@@ -31,6 +31,7 @@ goog.require('M.control.OverviewMap');
 goog.require('M.control.Location');
 goog.require('M.control.GetFeatureInfo');
 goog.require('M.handler.Features');
+goog.require('M.format.WKT');
 goog.require('M.Label');
 goog.require('M.Popup');
 goog.require('M.dialog');
