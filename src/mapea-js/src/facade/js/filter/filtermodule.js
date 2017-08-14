@@ -1,10 +1,13 @@
 goog.provide('M.filter.spatial');
+
 goog.require('M.filter.Spatial');
+goog.require('M.impl.format.GeoJSON');
+goog.require('ol.format.WKT');
 
 /**
  * @namespace M.filter.spatial
  */
-(function () {
+(function() {
   /**
    * This function creates a spatial filter to know which features contain another feature or layer
    *
@@ -13,9 +16,9 @@ goog.require('M.filter.Spatial');
    * @return {M.filter.Spatial} Space filter
    * @api stable
    */
-  M.filter.spatial.CONTAIN = function (param) {
+  M.filter.spatial.CONTAIN = function(param) {
     let geometries = M.filter.spatial.parseParamToGeometries(param);
-    return new M.filter.Spatial(function (geometryToFilter, index) {
+    return new M.filter.Spatial(function(geometryToFilter, index) {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
       return geometries.some(geom => {
@@ -35,9 +38,9 @@ goog.require('M.filter.Spatial');
    * @return {M.filter.Spatial} Space filter
    * @api stable
    */
-  M.filter.spatial.DISJOINT = function (param) {
+  M.filter.spatial.DISJOINT = function(param) {
     let geometries = M.filter.spatial.parseParamToGeometries(param);
-    return new M.filter.Spatial(function (geometryToFilter, index) {
+    return new M.filter.Spatial(function(geometryToFilter, index) {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
       return geometries.some(geom => {
@@ -57,9 +60,9 @@ goog.require('M.filter.Spatial');
    * @return {M.filter.Spatial} Space filter
    * @api stable
    */
-  M.filter.spatial.WITHIN = function (param) {
+  M.filter.spatial.WITHIN = function(param) {
     let geometries = M.filter.spatial.parseParamToGeometries(param);
-    return new M.filter.Spatial(function (geometryToFilter, index) {
+    return new M.filter.Spatial(function(geometryToFilter, index) {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
       return geometries.some(geom => {
@@ -79,9 +82,9 @@ goog.require('M.filter.Spatial');
    * @return {M.filter.Spatial} Space filter
    * @api stable
    */
-  M.filter.spatial.INTERSECT = function (param) {
+  M.filter.spatial.INTERSECT = function(param) {
     let geometries = M.filter.spatial.parseParamToGeometries(param);
-    return new M.filter.Spatial(function (geometryToFilter, index) {
+    return new M.filter.Spatial(function(geometryToFilter, index) {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
       return geometries.some(geom => {
@@ -101,7 +104,7 @@ goog.require('M.filter.Spatial');
    * @return {M.filter.Spatial} Space filter
    * @api stable
    */
-  M.filter.spatial.parseParamToGeometries = function (param) {
+  M.filter.spatial.parseParamToGeometries = function(param) {
     let geometries = [];
     if (param instanceof M.layer.Vector) {
       geometries = [...param.getFeatures().map(feature => feature.getGeometry())];
@@ -133,22 +136,23 @@ goog.require('M.filter.Spatial');
    * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param - Layer or geometry on which the query is performed
    * @return {M.filter.Spatial} Space filter
    */
-  M.filter.spatial.toCQLFilter_ = function (operation, geometries) {
+  M.filter.spatial.toCQLFilter_ = function(operation, geometries) {
     let cqlFilter = "";
+    let gjFormat = new M.impl.format.GeoJSON();
+    let wktFormat = new ol.format.WKT();
     for (let i = 0; i < geometries.length; i++) {
+      let olGeometry = gjFormat.readGeometryFromObject(geometries[i]);
       if (i !== 0) {
+        // es un OR porque se hace una interseccion completa con todas
+        // las geometries
         cqlFilter += " OR ";
       }
-      cqlFilter += operation + "({{geometryName}}, " + geometries[0].type + "(((";
-      for (let j = 0; j < geometries[i].coordinates[0][0].length; j++) {
-        if (j !== 0) {
-          cqlFilter += ",";
-        }
-        cqlFilter += geometries[i].coordinates[0][0][j][0] + " " + geometries[i].coordinates[0][0][j][1];
+      if (olGeometry.getType().toLowerCase() === "point") {
+        let pointCoord = olGeometry.getCoordinates();
+        olGeometry.setCoordinates([pointCoord[0], pointCoord[1]]);
       }
-      cqlFilter += "))))";
+      cqlFilter += operation + "({{geometryName}}, " + wktFormat.writeGeometryText(olGeometry) + ")";
     }
     return cqlFilter;
   };
-
 })();
