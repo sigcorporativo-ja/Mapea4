@@ -140,7 +140,7 @@ goog.require('M.impl.layer.Vector');
         format: this.formater_.getImpl(),
         loader: this.loader_.getLoaderFn(function(features) {
           this_.facadeVector_.addFeatures(features);
-          this_.fire(M.evt.LOAD, [features]);
+          this_.facadeVector_.fire(M.evt.LOAD, [features]);
         }),
         strategy: ol.loadingstrategy.all
       }));
@@ -149,7 +149,7 @@ goog.require('M.impl.layer.Vector');
       ol3LayerSource.set("format", this.formater_);
       ol3LayerSource.set("loader", this.loader_.getLoaderFn(function(features) {
         this.facadeVector_.addFeatures(features);
-        this_.fire(M.evt.LOAD, [features]);
+        this.facadeVector_.fire(M.evt.LOAD, [features]);
       }));
       ol3LayerSource.set("strategy", ol.loadingstrategy.all);
       ol3LayerSource.changed();
