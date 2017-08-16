@@ -59,6 +59,7 @@
 
 
 
+
       let feature = new M.Feature('feature', {
         "type": "Feature",
         "properties": {
@@ -66,80 +67,92 @@
         },
         "geometry": {
           "type": "Polygon",
-          "coordinates": [308241.7352,
-            4169727.5908
+
+          "coordinates": [
+            [296620.8567,
+              4044018.5257
+            ],
+            [294659.0004,
+              4072465.4426
+            ],
+            [347629.1215,
+              4065598.9455
+            ],
+
           ]
         }
       }, style);
 
-      /*
 
-            let layer = new M.layer.Vector({
-              name: 'layerVector'
+
+      let layer = new M.layer.Vector({
+        name: 'layerVector'
+      });
+
+      mapajs.addLayers([layer]);
+      layer.addFeatures([feature]);
+
+      /*
+      //layer.addFeatures([feature5, feature4, feature3]);
+
+
+            let verde = new M.style.Point({
+              fill: {
+                color: 'green'
+              },
+              stroke: {
+                color: 'green',
+                width: 1
+              },
+              radius: 6
+            });
+            let amarillo = new M.style.Point({
+              fill: {
+                color: 'yellow'
+              },
+              stroke: {
+                color: 'yellow',
+                width: 1
+              },
+              radius: 3
+            });
+            let rojo = new M.style.Point({
+              fill: {
+                color: 'red'
+              },
+              stroke: {
+                color: 'red',
+                width: 1
+              },
+              radius: 6
             });
 
-            mapajs.addLayers([layer]);
-            layer.addFeatures([feature]);
-            //layer.addFeatures([feature5, feature4, feature3]);
+            let azul = new M.style.Point({
+              fill: {
+                color: 'blue'
+              },
+              stroke: {
+                color: 'blue',
+                width: 1
+              },
+              radius: 6
+            });
+
+            /*
+            let catStyle = new M.style.Category('styleType', {
+              catStyle.setStyleForCategory('publico', style);
+              catStyle.setStyleForCategory('privado', style2);
+            });
 
 
-                  let verde = new M.style.Point({
-                    fill: {
-                      color: 'green'
-                    },
-                    stroke: {
-                      color: 'green',
-                      width: 1
-                    },
-                    radius: 6
-                  });
-                  let amarillo = new M.style.Point({
-                    fill: {
-                      color: 'yellow'
-                    },
-                    stroke: {
-                      color: 'yellow',
-                      width: 1
-                    },
-                    radius: 3
-                  });
-                  let rojo = new M.style.Point({
-                    fill: {
-                      color: 'red'
-                    },
-                    stroke: {
-                      color: 'red',
-                      width: 1
-                    },
-                    radius: 6
-                  });
+            // constructor del mapa
 
-                  let azul = new M.style.Point({
-                    fill: {
-                      color: 'blue'
-                    },
-                    stroke: {
-                      color: 'blue',
-                      width: 1
-                    },
-                    radius: 6
-                  });
-
-                  /*
-                  let catStyle = new M.style.Category('styleType', {
-                    catStyle.setStyleForCategory('publico', style);
-                    catStyle.setStyleForCategory('privado', style2);
-                  });
-
-
-                  // constructor del mapa
-
-                  let categoryStyle = new M.style.Category("styleType", {
-                    "public": verde,
-                    "concertado": amarillo,
-                    "privado": rojo,
-                  });
-                  */
+            let categoryStyle = new M.style.Category("styleType", {
+              "public": verde,
+              "concertado": amarillo,
+              "privado": rojo,
+            });
+            */
     </script>
   </body>
 
