@@ -85,14 +85,14 @@ var options = {ranges:
       radius: 20
     })}
   ],
-  animated: true
+  animated: true,
+  hoverInteraction: true,
+  displayAmount: true,
+  selectedInteraction: true,
 };
 
 var vendorParameters = {
-  hoverInteraction: true,
-  displayAmount: true,
   displayInLayerSwitcherHoverLayer: false,
-  selectedInteraction: true,
   distanceSelectFeatures: 15
 }
 

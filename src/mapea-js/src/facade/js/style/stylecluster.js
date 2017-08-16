@@ -20,14 +20,13 @@ goog.require('M.Style');
    */
   M.style.Cluster = (function(options = {}, optsVendor = {}) {
 
-    this.ranges_ = M.utils.isArray(options.ranges)  ? options.ranges : [];
-    this.animated_ = options.animated;
+    this.options_ = options;
     this.optionsVendor_ = optsVendor;
 
     /**
      * TODO
      */
-    var impl = new M.impl.style.Cluster(this.ranges_, this.animated_, this.optionsVendor_);
+    var impl = new M.impl.style.Cluster(this.options_, this.optionsVendor_);
     // calls the super constructor
     goog.base(this, {options: options, optsVendor: optsVendor}, impl);
   });
@@ -51,7 +50,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.getRanges = function() {
-    return this.ranges_;
+    return this.options_.ranges;
   };
 
   /**
@@ -61,7 +60,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.setRanges = function(newRanges = []) {
-    this.ranges_ = newRanges;
+    this.options_.ranges = newRanges;
     return this;
   };
 
@@ -72,7 +71,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.getRange = function(min, max) {
-    return this.ranges_.find(el => (el.min == min && el.max == max));
+    return this.options_.ranges.find(el => (el.min == min && el.max == max));
   };
 
   /**
@@ -82,7 +81,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.updateRange = function(min, max, newRange) {
-    let element = this.ranges_.find(el => (el.min == min && el.max == max));
+    let element = this.options_.ranges.find(el => (el.min == min && el.max == max));
     if (element) {
       element = newRange;
       return this;
@@ -99,7 +98,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.setAnimated = function(animated = true) {
-    this.animated_ = animated;
+    this.options_.animated = animated;
     return this;
   };
 
@@ -110,7 +109,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.isAnimated = function() {
-    return this.animated_;
+    return this.options_.animated;
   };
 
   /**
@@ -131,6 +130,5 @@ goog.require('M.Style');
    *
    */
   M.style.Cluster.ANIMATION_METHOD = 'linear';
-
 
 })();

@@ -21,19 +21,19 @@ goog.require('ol.geom.convexhull');
    * @param {Object} animated - if layer is animated
    * @api stable
    */
-  M.impl.style.Cluster = function(ranges, animated, optionsVendor) {
+  M.impl.style.Cluster = function(options, optionsVendor) {
     this.numFeaturesToDoCluster = 0;
     this.styleCache = [];
     this.olLayerOld = null;
-    this.ranges = ranges;
-    this.animated = animated;
-    this.optionsVendor = optionsVendor;
+    this.ranges = options.ranges;
+    this.animated = options.animated;
     this.vectorCover = null;
     this.optionsVendor = optionsVendor;
-    this.maxFeaturesToSelect = optionsVendor.maxFeaturesToSelect || 50;
+    this.options = options;
+    this.maxFeaturesToSelect = this.options.maxFeaturesToSelect || 50;
 
     this.clusterSource = new ol.source.Cluster({
-      distance : optionsVendor.distance ? optionsVendor.distance : M.style.Cluster.DEFAULT_DISTANCE,
+      distance : this.options.distance ? this.options.distance : M.style.Cluster.DEFAULT_DISTANCE,
       source : new ol.source.Vector()
     });
 
@@ -66,11 +66,11 @@ goog.require('ol.geom.convexhull');
       this.clusterLayer.setZIndex(99999);
       layer.getImpl().setOL3Layer(this.clusterLayer);
 
-      if (this.optionsVendor.hoverInteraction) {
+      if (this.options.hoverInteraction) {
         this.addCoverInteraction(map);
       }
 
-      if (this.optionsVendor.selectedInteraction) {
+      if (this.options.selectedInteraction) {
         this.addSelectedInteraction(map);
       }
 
@@ -88,16 +88,13 @@ goog.require('ol.geom.convexhull');
   M.impl.style.Cluster.prototype.addSelectedInteraction = function(map) {
 
     this.selectCluster = new M.impl.interaction.SelectCluster({
+      map: map,
       maxFeaturesToSelect: this.maxFeaturesToSelect,
 			pointRadius:this.optionsVendor.distanceSelectFeatures || 15,
 			animate: true,
-
 			style: function(f,res) {
         var cluster = f.get('features');
-        if (cluster && cluster.length > 10) {
-          alert("centrar");
-        }
-				else if (cluster && cluster.length > 1) {
+        if (cluster && cluster.length > 1) {
           return this.getStyle(f,res);
 				}
 				else {
@@ -199,6 +196,7 @@ goog.require('ol.geom.convexhull');
    * @export
    */
   M.impl.style.Cluster.prototype.getStyle = function (feature, resolution) {
+
     if(this.ranges.length == 0) {
       this.ranges = this.getDefaulStyles(this.clusterLayer);
     }
@@ -212,7 +210,7 @@ goog.require('ol.geom.convexhull');
         let range = this.ranges.find(el => (el.min <= size && el.max >= size));
         if (range) {
           let style = range.style.getImpl().style_;
-          if (this.optionsVendor.displayAmount) {
+          if (this.options.displayAmount) {
             style.text_ = new ol.style.Text(
 						{	text: size.toString(),
 							fill: new ol.style.Fill(
