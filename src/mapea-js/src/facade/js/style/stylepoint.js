@@ -1,5 +1,6 @@
 goog.provide('M.style.Point');
 
+goog.require('M.style.Simple');
 
 /**
  * @namespace M.style.Point
