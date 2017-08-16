@@ -1,18 +1,52 @@
 goog.provide('M.impl.style.Category');
 
 
+
+
 (function() {
 
+  /**
+   * @classdesc
+   *
+   */
+
   M.impl.style.Category = function() {
+
+    /**
+     * TODO
+     * @private
+     * @type {M.style.Category}
+     */
+
     this.facadeStyleCategory_ = null;
   };
 
+
+
+  /**
+   *
+   * @function
+   * @param {M.style.Category}
+   * @returns {String}
+   * @api stable
+   */
 
   M.impl.style.Category.prototype.getAttributeName = function(styleCategory) {
     //devolvemos el AttributeName_
     return styleCategory.AttributeName_;
 
   };
+
+
+
+  /**
+   *
+   *
+   * @function
+   * @param {M.style.Category|String}
+   * @returns {M.style.Category}
+   * @api stable
+   */
 
 
   M.impl.style.Category.prototype.setAttributeName = function(styleCategory, newAttributeName) {
@@ -22,6 +56,15 @@ goog.provide('M.impl.style.Category');
 
   };
 
+
+
+  /**
+   *
+   * @function
+   * @param {M.style.Category}
+   * @returns {Array<String>}
+   * @api stable
+   */
 
   M.impl.style.Category.prototype.getCategories = function(styleCategory) {
 
@@ -49,6 +92,16 @@ goog.provide('M.impl.style.Category');
   };
 
 
+
+  /**
+   *
+   * @function
+   * @param {M.style.Category|String}
+   * @returns {M.style}
+   * @api stable
+   */
+
+
   M.impl.style.Category.prototype.getStyleForCategories = function(categoryStyle, string) {
     /*
     Nos devolvera el estilo de una Categoria del tipo AttributeName_
@@ -68,6 +121,17 @@ goog.provide('M.impl.style.Category');
     }
 
   };
+
+
+
+  /**
+   *
+   *
+   * @function
+   * @param {M.style.Category|String|M.Style}
+   * @returns {M.style.Category}
+   * @api stable
+   */
 
 
 
@@ -100,10 +164,29 @@ goog.provide('M.impl.style.Category');
   };
 
 
+
+  /**
+   * This function gets the Name
+   *
+   * @function
+   * @param {object}
+   * @api stable
+   */
+
+
   M.impl.style.Category.prototype.setFacadeObj = function(obj) {
     this.facadeStyleCategory_ = obj;
   };
 
+
+  /**
+   * This function gets the Name
+   *
+   * @function
+   * @param {M.layer.Vector}
+   * @returns {M.style.Category}
+   * @api stable
+   */
 
   M.impl.style.Category.prototype.applyToLayer = function(layer) {
 

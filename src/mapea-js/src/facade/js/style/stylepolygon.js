@@ -1,4 +1,6 @@
 goog.provide('M.style.Polygon');
+goog.require('M.style.Simple');
+
 
 /**
  * @namespace M.style.Polygon

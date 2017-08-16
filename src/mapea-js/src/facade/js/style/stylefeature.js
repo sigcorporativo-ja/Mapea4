@@ -1,5 +1,8 @@
 goog.provide('M.style.Feature');
 
+goog.require('M.Style');
+
+
 /**
  * TODO
  */
