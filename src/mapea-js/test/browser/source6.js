@@ -1,19 +1,31 @@
 // constructor del mapa
 let mapajs = M.map({
   container: "map",
-  projection: "EPSG:4326*d",
+  projection: "EPSG:3857*m",
   layers: ["OSM"],
-  center: {
+  /*center: {
     x: -5.9584180843195425,
     y: 37.36912689160224
   },
-  zoom: 5,
-  controls: ['layerswitcher', 'overviewmap'],
+  zoom: 5,*/
+  controls: ['layerswitcher', 'overviewmap', 'mouse'],
 });
+
+let points = new M.layer.GeoJSON({
+  name: "Empresas",
+  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/wfs?outputFormat=application/json&request=getfeature&typeNames=sepim:empresas&version=1.3.0",
+  extract: false
+});
+
+points.on(M.evt.ADDED_LAYER, function(){
+  alert("capa cargada");
+});
+mapajs.addLayers([points]);
+
 
 var options = {ranges:
   [
-    {min:0, max:1, style: new M.style.Point({
+    {min:1, max:1, style: new M.style.Point({
       fill: {
         color: 'red'
       },
@@ -36,198 +48,53 @@ var options = {ranges:
         size: [150, 95]
       }
     })},
-    {min:1, max:2, style: new M.style.Point({
+    {min:2, max:3, style: new M.style.Point({
       fill: {
-        color: 'blue'
+        color: '#819FF7'
       },
-      radius: 5,
-      icon: {
-        src: 'https://cdn3.iconfinder.com/data/icons/free-icons-3/128/cat_6.png',
-        rotation: 0.5,
-        scale: 0.5,
-        opacity: 0.8,
-        anchor: [0.5, 1.9],
-        anchororigin: 'top-left',
-        anchororigin: 'top-left',
-        anchorxunits: 'fraction',
-        anchoryunits: 'fraction',
-        rotate: false,
-        // offset: [10, 0],
-        crossorigin: null,
-        snaptopixel: true,
-        offsetorigin: 'bottom-left',
-        size: [150, 95]
-      }
+      radius: 10
     })},
-    {min:2, max:100, style: new M.style.Point({
+    {min:3, max:5, style: new M.style.Point({
       fill: {
-        color: 'orange'
+        color: '#8181F7'
       },
-      radius: 5,
-      icon: {
-        src: 'https://cdn3.iconfinder.com/data/icons/free-icons-3/128/cat_6.png',
-        rotation: 0.5,
-        scale: 0.5,
-        opacity: 0.8,
-        anchor: [0.5, 1.9],
-        anchororigin: 'top-left',
-        anchororigin: 'top-left',
-        anchorxunits: 'fraction',
-        anchoryunits: 'fraction',
-        rotate: false,
-        // offset: [10, 0],
-        crossorigin: null,
-        snaptopixel: true,
-        offsetorigin: 'bottom-left',
-        size: [150, 95]
-      }
+      radius: 12
+    })},
+    {min:5, max:10, style: new M.style.Point({
+      fill: {
+        color: '#0000FF'
+      },
+      radius: 14
+    })},
+    {min:10, max:15, style: new M.style.Point({
+      fill: {
+        color: '#FF00BF'
+      },
+      radius: 16
+    })},
+    {min:15, max:20, style: new M.style.Point({
+      fill: {
+        color: '#FF0040'
+      },
+      radius: 18
+    })},
+    {min:20, max:50000, style: new M.style.Point({
+      fill: {
+        color: '#B40431'
+      },
+      radius: 20
     })}
   ],
   animated: true
 };
 
+var vendorParameters = {
+  hoverInteraction: true,
+  displayAmount: true,
+  displayInLayerSwitcherHoverLayer: false,
+  selectedInteraction: true,
+  distanceSelectFeatures: 15
+}
 
 
-let points = new M.layer.GeoJSON({
-  name: 'points',
-  source: {
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.03173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.24072265625,
-          38.8824811975508
-          ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.13173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.23173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.33173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.43173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-            -5.53173828125,
-            38.762650338334154
-          ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.63173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.73173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.83173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.93173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -6.13173828125,
-          38.762650338334154
-        ]
-        }
-      }
-    ]
-  },
-});
-
-mapajs.addLayers([points]);
-//puntos.setStyle(new M.style.Cluster(options));
+points.setStyle(new M.style.Cluster(options, vendorParameters));

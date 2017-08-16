@@ -1,6 +1,7 @@
 goog.provide('M.style.Cluster');
 
 goog.require('M.Style');
+
 /**
  * @namespace M.style.Cluster
  */
@@ -19,20 +20,16 @@ goog.require('M.Style');
    */
   M.style.Cluster = (function(options = {}, optsVendor = {}) {
 
-    //{ranges: [{min:0, max:10, style: M.style.Point({})}, {min:10, max:20, style: M.style.Point({})}],
-    //animated: true|false}
-    this.ranges_ = options.ranges;
+    this.ranges_ = M.utils.isArray(options.ranges)  ? options.ranges : [];
     this.animated_ = options.animated;
     this.optionsVendor_ = optsVendor;
 
     /**
-     * Implementation of this layer
-     * @public
-     * @type {M.style.Cluster}
+     * TODO
      */
     var impl = new M.impl.style.Cluster(this.ranges_, this.animated_, this.optionsVendor_);
     // calls the super constructor
-    goog.base(this, this, impl);
+    goog.base(this, {options: options, optsVendor: optsVendor}, impl);
   });
   goog.inherits(M.style.Cluster, M.Style);
 
@@ -42,8 +39,8 @@ goog.require('M.Style');
    * @function
    * @api stable
    */
-  M.style.Cluster.prototype.apply = function(layer, map) {
-    this.getImpl().apply(layer, map);
+  M.style.Cluster.prototype.apply = function(layer) {
+    this.getImpl().apply(layer);
   };
 
 
@@ -120,20 +117,20 @@ goog.require('M.Style');
    * Distance to calculate clusters
    *
    */
-  M.style.Cluster.prototype.DEFAULT_DISTANCE = 60;
+  M.style.Cluster.DEFAULT_DISTANCE = 60;
 
   /**
    * Time to animate cluster when users change of zoom or bbox
    *
    */
-  M.style.Cluster.prototype.ANIMATION_DURATION = 250;
+  M.style.Cluster.ANIMATION_DURATION = 250;
 
   /**
    * Effect to animate cluster when users change of zoom or bbox
    * easeIn | easeOut | linear | upAndDown
    *
    */
-  M.style.Cluster.prototype.ANIMATION_METHOD = 'linear';
+  M.style.Cluster.ANIMATION_METHOD = 'linear';
 
 
 })();

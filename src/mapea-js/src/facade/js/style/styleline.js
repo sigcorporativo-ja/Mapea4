@@ -1,5 +1,7 @@
 goog.provide('M.style.Line');
 
+goog.require('M.style.Simple');
+
 /**
  * @namespace M.style.Polygon
  */
