@@ -88,6 +88,8 @@ goog.require('goog.style');
     }
 
     goog.base(this, 'addTo', map);
+
+    this.ol3Layer.setStyle(undefined);
   };
 
   /**
@@ -116,7 +118,7 @@ goog.require('goog.style');
         format: this.formater_,
         loader: this.loader_.getLoaderFn(function(features) {
           this_.facadeVector_.addFeatures(features);
-          this_.fire(M.evt.LOAD, [features]);
+          this_.facadeVector_.fire(M.evt.LOAD, [features]);
         }),
         strategy: ol.loadingstrategy.all
       };
@@ -129,11 +131,11 @@ goog.require('goog.style');
           // removes previous features
           this_.facadeVector_.clear();
           this_.facadeVector_.addFeatures(features);
-          this_.fire(M.evt.LOAD, [features]);
+          this_.facadeVector_.fire(M.evt.LOAD, [features]);
         })
       }));
       this.facadeVector_.addFeatures(features);
-      this_.fire(M.evt.LOAD, [features]);
+      this.facadeVector_.fire(M.evt.LOAD, [features]);
     }
   };
 
@@ -260,27 +262,4 @@ goog.require('goog.style');
     }
     return equals;
   };
-
-  /**
-   * Style for this layer
-   * @const
-   * @type {ol.style.Style}
-   * @public
-   * @api stable
-   */
-  M.impl.layer.GeoJSON.STYLE = new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: 'rgba(163, 93, 56, 0.2)'
-    }),
-    stroke: new ol.style.Stroke({
-      color: '#a35d38',
-      width: 2
-    }),
-    image: new ol.style.Circle({
-      radius: 7,
-      fill: new ol.style.Fill({
-        color: '#a35d38'
-      })
-    })
-  });
 })();
