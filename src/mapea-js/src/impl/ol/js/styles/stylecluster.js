@@ -62,9 +62,6 @@ goog.require('ol.geom.convexhull');
     layer.getImpl().on(M.evt.LOAD, function(e) {
       this.changeLayerOLToCluster_(layer);
     }.bind(this));
-    layer.getImpl().on(M.evt.COMPLETED, function(e) {
-      this.changeLayerOLToCluster_(layer);
-    }.bind(this))
   };
 
   /**
@@ -81,16 +78,13 @@ goog.require('ol.geom.convexhull');
     this.clusterSource.getSource().addFeatures(features);
     this.clusterLayer.setZIndex(99999);
     layer.getImpl().setOL3Layer(this.clusterLayer);
-
     if (this.options.hoverInteraction) {
       this.addCoverInteraction(map);
     }
-
     if (this.options.selectedInteraction) {
       this.addSelectedInteraction(map);
     }
-
-  }
+  };
 
   /**
    * Add selected interaction and layer to see the features of cluster
