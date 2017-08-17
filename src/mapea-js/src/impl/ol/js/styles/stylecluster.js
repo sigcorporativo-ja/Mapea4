@@ -17,20 +17,21 @@ goog.require('ol.geom.convexhull');
    * control
    *
    * @constructor
-   * @param {Object} ranges - ranges defined by user
-   * @param {Object} animated - if layer is animated
+   * @param {Object} options - config options of user
+   * @param {Object} optionsVendor - specified options from ol
    * @api stable
    */
   M.impl.style.Cluster = function(options, optionsVendor) {
+
     this.numFeaturesToDoCluster = 0;
     this.styleCache = [];
     this.olLayerOld = null;
-    this.ranges = options.ranges;
-    this.animated = options.animated;
     this.vectorCover = null;
     this.optionsVendor = optionsVendor;
     this.options = options;
-    this.maxFeaturesToSelect = this.options.maxFeaturesToSelect || 50;
+    if (!M.utils.isArray(options.range) || (M.utils.isArray(options.range) && options.range.length == 0)) {
+      this.options.range = this.getDefaulStyles();
+    }
 
     this.clusterSource = new ol.source.Cluster({
       distance : this.options.distance ? this.options.distance : M.style.Cluster.DEFAULT_DISTANCE,
@@ -56,26 +57,40 @@ goog.require('ol.geom.convexhull');
    * @export
    */
   M.impl.style.Cluster.prototype.apply = function(layer) {
-    this.mLayer = layer;
 
-    this.mLayer.getImpl().on(M.evt.LOAD, function(e) {
-      let map = layer.getImpl().map;
-      this.numFeaturesToDoCluster = layer.getFeatures().length;
-      let features = layer.getImpl().getOL3Layer().getSource().getFeatures();
-      this.clusterSource.getSource().addFeatures(features);
-      this.clusterLayer.setZIndex(99999);
-      layer.getImpl().setOL3Layer(this.clusterLayer);
 
-      if (this.options.hoverInteraction) {
-        this.addCoverInteraction(map);
-      }
-
-      if (this.options.selectedInteraction) {
-        this.addSelectedInteraction(map);
-      }
-
+    layer.getImpl().on(M.evt.LOAD, function(e) {
+      this.changeLayerOLToCluster_(layer);
     }.bind(this));
+    layer.getImpl().on(M.evt.COMPLETED, function(e) {
+      this.changeLayerOLToCluster_(layer);
+    }.bind(this))
   };
+
+  /**
+   * Change the layer from ol to cluster when source is ready
+   *
+   * @private
+   * @function
+   */
+  M.impl.style.Cluster.prototype.changeLayerOLToCluster_ = function (layer) {
+    this.mLayer = layer;
+    let map = layer.getImpl().map;
+    this.numFeaturesToDoCluster = layer.getFeatures().length;
+    let features = layer.getImpl().getOL3Layer().getSource().getFeatures();
+    this.clusterSource.getSource().addFeatures(features);
+    this.clusterLayer.setZIndex(99999);
+    layer.getImpl().setOL3Layer(this.clusterLayer);
+
+    if (this.options.hoverInteraction) {
+      this.addCoverInteraction(map);
+    }
+
+    if (this.options.selectedInteraction) {
+      this.addSelectedInteraction(map);
+    }
+
+  }
 
   /**
    * Add selected interaction and layer to see the features of cluster
@@ -89,7 +104,7 @@ goog.require('ol.geom.convexhull');
 
     this.selectCluster = new M.impl.interaction.SelectCluster({
       map: map,
-      maxFeaturesToSelect: this.maxFeaturesToSelect,
+      maxFeaturesToSelect: this.options.maxFeaturesToSelect || 50,
 			pointRadius:this.optionsVendor.distanceSelectFeatures || 15,
 			animate: true,
 			style: function(f,res) {
@@ -182,7 +197,7 @@ goog.require('ol.geom.convexhull');
    * @export
    */
   M.impl.style.Cluster.prototype.hasIndividualStyle = function () {
-    let individualStyle = this.ranges.find(el => (el.min == 1 && el.max == 1));
+    let individualStyle = this.options.ranges.find(el => (el.min == 1 && el.max == 1));
     return individualStyle ? true : false;
   };
 
@@ -197,17 +212,23 @@ goog.require('ol.geom.convexhull');
    */
   M.impl.style.Cluster.prototype.getStyle = function (feature, resolution) {
 
-    if(this.ranges.length == 0) {
-      this.ranges = this.getDefaulStyles(this.clusterLayer);
-    }
+    this.options.ranges = this.getDefaulStyles(this.clusterLayer);
+
     var size = feature.get('features').length;
     var style = this.styleCache[size];
     if (!style) {
       if (size == 1 && !this.hasIndividualStyle()) {
-        return new ol.style.Style.defaultFunction();
+        let styleFeature = feature.get('features')[0].getStyle();
+        if (styleFeature) {
+          return styleFeature;
+        }
+        else {
+          return new ol.style.Style.defaultFunction();
+        }
+
       }
       else {
-        let range = this.ranges.find(el => (el.min <= size && el.max >= size));
+        let range = this.options.ranges.find(el => (el.min <= size && el.max >= size));
         if (range) {
           let style = range.style.getImpl().style_;
           if (this.options.displayAmount) {

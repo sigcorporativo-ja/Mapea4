@@ -6,6 +6,15 @@ goog.require('M.impl.style.Simple');
  */
 (function() {
 
+  /**
+   * @classdesc
+   * Main constructor of the class. Creates a line
+   * control
+   *
+   * @constructor
+   * @param {Object} options - config options of user
+   * @api stable
+   */
   M.impl.style.Line = function(options) {
     let stroke = options.stroke;
     let label = options.label;
@@ -59,6 +68,7 @@ goog.require('M.impl.style.Simple');
     }
   };
   goog.inherits(M.impl.style.Line, M.impl.style.Simple);
+
   /**
    * TODO
    */

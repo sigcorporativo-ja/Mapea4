@@ -25,7 +25,7 @@ mapajs.addLayers([points]);
 
 var options = {ranges:
   [
-    {min:1, max:1, style: new M.style.Point({
+    /*{min:1, max:1, style: new M.style.Point({
       fill: {
         color: 'red'
       },
@@ -83,12 +83,13 @@ var options = {ranges:
         color: '#B40431'
       },
       radius: 20
-    })}
+    })}*/
   ],
   animated: true,
   hoverInteraction: true,
   displayAmount: true,
   selectedInteraction: true,
+  distance: 80
 };
 
 var vendorParameters = {
@@ -97,4 +98,4 @@ var vendorParameters = {
 }
 
 
-points.setStyle(new M.style.Cluster(options, vendorParameters));
+//points.setStyle(new M.style.Cluster(options, vendorParameters));

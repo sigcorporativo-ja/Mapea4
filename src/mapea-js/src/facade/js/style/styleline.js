@@ -8,10 +8,21 @@ goog.require('M.style.Simple');
 (function() {
 
   /**
-   * TODO
+   * @classdesc
+   * Main constructor of the class. Creates a style line
+   * with parameters specified by the user
+   *
+   * @constructor
+   * @extends {M.style.Simple}
+   * @param {object} parameters for style line
+   * @api stable
    */
   M.style.Line = (function(options) {
     options = options || M.style.Line.OPTS_DEFAULT;
+
+    /**
+     * TODO
+     */
     var impl = new M.impl.style.Line(options);
     // calls the super constructor
     goog.base(this, options, impl);
@@ -31,6 +42,7 @@ goog.require('M.style.Simple');
   M.style.Line.prototype.serialize = function() {
     // TODO
   };
+
 
   M.style.Line.OPTS_DEFAULT = {
     stroke: {
