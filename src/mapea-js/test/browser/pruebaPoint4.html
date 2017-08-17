@@ -137,7 +137,6 @@
 
       mapajs.addLayers([layer]);
       layer.addFeatures([feature, feature2, feature3, feature4]);
-      //layer.addFeatures([feature5, feature4, feature3]);
 
 
       let verde = new M.style.Point({
@@ -182,14 +181,7 @@
         radius: 6
       });
 
-      /*
-      let catStyle = new M.style.Category('styleType', {
-        catStyle.setStyleForCategory('publico', style);
-        catStyle.setStyleForCategory('privado', style2);
-      });
-      */
 
-      // constructor del mapa
 
       let categoryStyle = new M.style.Category("styleType", {
         "public": verde,

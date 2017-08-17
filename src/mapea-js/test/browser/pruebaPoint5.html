@@ -182,14 +182,7 @@
         radius: 6
       });
 
-      /*
-      let catStyle = new M.style.Category('styleType', {
-        catStyle.setStyleForCategory('publico', style);
-        catStyle.setStyleForCategory('privado', style2);
-      });
-      */
 
-      // constructor del mapa
 
       let categoryStyle = new M.style.Category("styleType", {
         "public": verde,
@@ -202,6 +195,9 @@
       layer.setStyle(categoryStyle);
 
       categoryStyle.setStyleForCategories("privado", azul);
+
+      /*Cambia el estilo de un tipo dado
+       */
     </script>
   </body>
 
