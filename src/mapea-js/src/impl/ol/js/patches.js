@@ -29,7 +29,7 @@ ol.layer.Layer.visibleAtResolution = function(layerState, resolution) {
  * PATCH: disables axis order configuration
  */
 ol.format.GML3.prototype.writePos_ = function(node, value, objectStack) {
-  var context = objectStack[objectStack.length - 1];
+  // var context = objectStack[objectStack.length - 1];
   // PATCH: ------------------------------ init
   // var srsName = context['srsName'];
   // var axisOrientation = 'enu';
