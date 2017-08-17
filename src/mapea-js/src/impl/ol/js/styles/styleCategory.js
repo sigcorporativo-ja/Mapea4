@@ -230,16 +230,81 @@ goog.provide('M.impl.style.Category');
            cada vez que se incorporara un nuevo estilo
         */
 
-        let random = new M.style.Point({
-          fill: {
-            color: color_random
-          },
-          stroke: {
-            color: color_random,
-            width: 1
-          },
-          radius: 6
-        });
+
+        let array_features = layer.getFeatures();
+
+        let random = null;
+
+
+        for (var f = 0; f < array_features.length; f++) {
+
+
+
+          let comprueba_categoria = array_features[f].getAttributes()[this.facadeStyleCategory_.AttributeName_];
+
+          if (comprueba_categoria == categorias_existentes[a]) {
+
+
+            let type = array_features[f].getGeometry().type;
+
+            if (type == "Point") {
+
+              random = new M.style.Point({
+                fill: {
+                  color: color_random
+                },
+                stroke: {
+                  color: color_random,
+                  width: 1
+                },
+                radius: 6
+              });
+
+
+            }
+
+            if (type == "Polygon") {
+
+              random = new M.style.Polygon({
+                fill: {
+                  color: color_random
+                },
+                stroke: {
+                  color: color_random,
+                  width: 2
+                },
+
+              });
+
+
+
+            }
+
+            if (type == "LineString") {
+
+              random = new M.style.Line({
+                fill: {
+                  color: color_random,
+                  width: 15
+                },
+                stroke: {
+                  color: color_random,
+                  width: 5
+                },
+
+              });
+
+
+
+            }
+
+
+          }
+
+        }
+
+
+
 
 
         this.facadeStyleCategory_.setStyleForCategories(categorias_existentes[a], random);

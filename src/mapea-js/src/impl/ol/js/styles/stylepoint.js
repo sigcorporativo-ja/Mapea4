@@ -1,9 +1,13 @@
 goog.provide('M.impl.style.Point');
 
 goog.require('M.impl.style.Simple');
+
 /**
- * @namespace M.style.Point
+ * TODO
+ * @private
+ * @type {M.style.Point}
  */
+
 (function() {
   M.impl.style.Point = (function(options) {
     let stroke = options.stroke;
