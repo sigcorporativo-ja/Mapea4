@@ -64,7 +64,8 @@ goog.require('P.impl.control.GeosearchIntegrated');
 
     // input search
     this.input_ = this.element_.getElementsByTagName('input')["m-searchstreetgeosearch-search-input"];
-    goog.events.listen(this.input_, goog.events.EventType.KEYUP, this.searchClick_, false, this);
+    //JGL20170818: traslado gestión evento a autocomplete
+    //goog.events.listen(this.input_, goog.events.EventType.KEYUP, this.searchClick_, false, this);
 
     // search buntton
     var btnSearch = this.element_.getElementsByTagName('button')["m-searchstreetgeosearch-search-btn"];
