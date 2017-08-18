@@ -220,7 +220,7 @@ goog.require('M.exception');
     return equals;
   };
 
-  /**
+/**
    * TODO
    */
   // REVISION #86837 guardar el style como atributo de la clase
@@ -230,6 +230,11 @@ goog.require('M.exception');
     //   //style.set("label", {});
     //   delete style.options_.label;
     // }
+
+    if (!M.utils.isNullOrEmpty(this.style_) && !this.style_.equals(style)) {
+      this.style_.unapply(this);
+    }
+
     this.style_ = style;
 
     if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {

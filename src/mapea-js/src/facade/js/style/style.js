@@ -43,6 +43,13 @@ goog.provide('M.Style');
     this.getImpl().applyToLayer(layer);
   };
 
+
+  /**
+   * TODO
+   *
+   */
+  M.Style.prototype.unapply = function(layer) {};
+
   /**
    * TODO
    *
@@ -87,5 +94,20 @@ goog.provide('M.Style');
    * Como es protected no se rellena
    */
   M.Style.prototype.serialize = function() {};
+
+
+  /**
+   * TODO
+   *
+   */
+  M.Style.prototype.equals = function(style) {
+
+    if (this.constructor === style.constructor) {
+      return true;
+    }
+    else {
+      return false;
+    }
+  };
 
 })();

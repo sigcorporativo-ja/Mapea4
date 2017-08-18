@@ -42,6 +42,16 @@ goog.require('M.Style');
     this.getImpl().apply(layer);
   };
 
+  /**
+   * This function apply the style to specified layer
+   *
+   * @function
+   * @api stable
+   */
+  M.style.Cluster.prototype.unapply = function(layer) {
+    this.getImpl().unapply(layer);
+  };
+
 
   /**
    * This function return a set of ranges defined by user
