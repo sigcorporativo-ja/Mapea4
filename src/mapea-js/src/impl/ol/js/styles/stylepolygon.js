@@ -6,6 +6,11 @@ goog.require('M.impl.style.Simple');
  */
 (function() {
   M.impl.style.Polygon = function(options) {
+    this.setOptionsToOLStyle(options);
+  };
+  goog.inherits(M.impl.style.Polygon, M.impl.style.Simple);
+
+  M.impl.style.Polygon.prototype.setOptionsToOLStyle = function (options) {
     let stroke = options.stroke;
     let label = options.label;
     let fill = options.fill;
@@ -80,7 +85,7 @@ goog.require('M.impl.style.Simple');
       }
     }
   };
-  goog.inherits(M.impl.style.Polygon, M.impl.style.Simple);
+  
   /**
    * TODO
    */
