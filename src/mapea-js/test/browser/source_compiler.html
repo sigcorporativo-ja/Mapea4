@@ -1,116 +1,138 @@
 <!DOCTYPE html>
 <html lang="en">
-   <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-      <meta name="mapea" content="yes">
-      <link rel="shortcut icon" href="http://www.juntadeandalucia.es/fomentoyvivienda/NodoIDE/Visualizadores/VisualizadorAreasConservacion/imagenes/favicon_verde.ico" />
-      <title>Visualizador Exploca</title>
 
-      <!-- styles -->
-      <link href="http://192.168.60.7:8080/mapea/assets/css/mapea.ol.min.css" rel="stylesheet" />
-      <style rel="stylesheet">
-         html,
-         body {
-            margin: 0;
-            padding: 0;
-            height: 100%;
-            overflow: hidden;
-         }
-      </style>
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+    <link rel="shortcut icon" href="http://www.juntadeandalucia.es/fomentoyvivienda/NodoIDE/Visualizadores/VisualizadorAreasConservacion/imagenes/favicon_verde.ico" />
+    <title>Visualizador Exploca</title>
 
-
-   </head>
-
-   <body>
-      <!-- container -->
-      <div id="mapjs" class="container"></div>
+    <!-- styles -->
+    <link href="http://192.168.60.226:8080/mapea/assets/css/mapea.ol.min.css" rel="stylesheet" />
+    <style rel="stylesheet">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+    </style>
 
 
+  </head>
 
-      <script type="text/javascript" src="http://192.168.60.7:8080/mapea/vendor/browser-polyfill.js"></script>
-      <script type="text/javascript" src="http://192.168.60.7:8080/mapea/js/mapea.ol.min.js"></script>
-      <!-- configuration -->
-      <script type="text/javascript" src="http://192.168.60.7:8080/mapea/js/configuration.js"></script>
+  <body>
+    <!-- container -->
+    <div id="mapjs" class="container"></div>
 
 
 
-      <script type="application/javascript">
-      	M.proxy(true);
-         var mapajs = M.map({
-            'container': 'mapjs',
-            "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline"],
-         });
+    <script type="text/javascript" src="http://192.168.60.226:8080/mapea/vendor/browser-polyfill.js"></script>
+    <script type="text/javascript" src="http://192.168.60.226:8080/mapea/js/mapea.ol.min.js"></script>
+    <!-- configuration -->
+    <script type="text/javascript" src="http://192.168.60.226:8080/mapea/js/configuration.js"></script>
 
 
-         let points = new M.layer.GeoJSON({
-           name: "Empresas",
-           url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/wfs?outputFormat=application/json&request=getfeature&typeNames=sepim:empresas&version=1.3.0",
-           extract: false
-         });
 
-         mapajs.addLayers([points]);
-
-         var options = {ranges:
-           [
-           /*{min:1, max:1, style: new M.style.Point({
-               fill: {
-                 color: 'red'
-               },
-               radius: 15
-             })},*/
-             {min:2, max:3, style: new M.style.Point({
-               fill: {
-                 color: 'blue'
-               },
-               radius: 5
-             })},
-             {min:3, max:5, style: new M.style.Point({
-               fill: {
-                 color: 'orange'
-               },
-               radius: 5
-             })},
-             {min:5, max:10, style: new M.style.Point({
-               fill: {
-                 color: 'orange'
-               },
-               radius: 5
-             })},
-             {min:10, max:15, style: new M.style.Point({
-               fill: {
-                 color: 'orange'
-               },
-               radius: 5
-             })},
-             {min:15, max:20, style: new M.style.Point({
-               fill: {
-                 color: 'orange'
-               },
-               radius: 5
-             })}/* ,
-             {min:20, max:50000, style: new M.style.Point({
-               fill: {
-                 color: 'black'
-               },
-               radius: 5
-             })}*/
-           ],
-           animated: true
-         };
-
-         var vendorParameters = {
-           hoverInteraction: true,
-           displayAmount: true,
-           displayInLayerSwitcherHoverLayer: false,
-           selectedInteraction: true
-         }
+    <script type="application/javascript">
+      M.proxy(true);
+      var mapajs = M.map({
+        'container': 'mapjs',
+        "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline"],
+      });
 
 
-         points.setStyle(new M.style.Cluster(options, vendorParameters));
+      let points = new M.layer.GeoJSON({
+        name: "Empresas",
+        url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/wfs?outputFormat=application/json&request=getfeature&typeNames=sepim:empresas&version=1.3.0",
+        extract: false
+      });
 
-      </script>
-   </body>
+      mapajs.addLayers([points]);
+
+      var options = {
+        ranges: [
+          /*{min:1, max:1, style: new M.style.Point({
+              fill: {
+                color: 'red'
+              },
+              radius: 15
+            })},*/
+
+          {
+            min: 2,
+            max: 3,
+            style: new M.style.Point({
+              fill: {
+                color: 'blue'
+              },
+              radius: 5
+            })
+          },
+          {
+            min: 3,
+            max: 5,
+            style: new M.style.Point({
+              fill: {
+                color: 'orange'
+              },
+              radius: 5
+            })
+          },
+          {
+            min: 5,
+            max: 10,
+            style: new M.style.Point({
+              fill: {
+                color: 'orange'
+              },
+              radius: 5
+            })
+          },
+          {
+            min: 10,
+            max: 15,
+            style: new M.style.Point({
+              fill: {
+                color: 'orange'
+              },
+              radius: 5
+            })
+          },
+          {
+            min: 15,
+            max: 20,
+            style: new M.style.Point({
+              fill: {
+                color: 'orange'
+              },
+              radius: 5
+            })
+          }
+          /* ,
+                       {min:20, max:50000, style: new M.style.Point({
+                         fill: {
+                           color: 'black'
+                         },
+                         radius: 5
+                       })}*/
+        ],
+        animated: true
+      };
+
+      var vendorParameters = {
+        hoverInteraction: true,
+        displayAmount: true,
+        displayInLayerSwitcherHoverLayer: false,
+        selectedInteraction: true
+      }
+
+
+      points.setStyle(new M.style.Cluster(options, vendorParameters));
+    </script>
+  </body>
 
 </html>
