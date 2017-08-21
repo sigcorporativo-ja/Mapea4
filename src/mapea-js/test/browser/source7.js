@@ -1,307 +1,195 @@
-// constructor del mapa
-let mapajs = M.map({
-  container: "map",
-  projection: "EPSG:4326*d",
-  layers: ["OSM"],
-  center: {
-    x: -5.9584180843195425,
-    y: 37.36912689160224
-  },
-  zoom: 5,
-  controls: ['layerswitcher', 'overviewmap', 'mouse'],
+M.proxy(true);
+var mapajs = M.map({
+  'container': 'map',
+  "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline"],
 });
 
-var options = {ranges:
-  [
-  /*{min:1, max:1, style: new M.style.Point({
-      fill: {
-        color: 'red'
-      },
-      radius: 15
-    })},*/
-    {min:2, max:3, style: new M.style.Point({
-      fill: {
-        color: 'blue'
-      },
-      radius: 5
-    })},
-    {min:3, max:5, style: new M.style.Point({
-      fill: {
-        color: 'orange'
-      },
-      radius: 5
-    })},
-    {min:5, max:10, style: new M.style.Point({
-      fill: {
-        color: 'orange'
-      },
-      radius: 5
-    })},
-    {min:10, max:15, style: new M.style.Point({
-      fill: {
-        color: 'orange'
-      },
-      radius: 5
-    })},
-    {min:20, max:25, style: new M.style.Point({
-      fill: {
-        color: 'orange'
-      },
-      radius: 5
-    })}
-  ],
-  animated: true
-};
 
-var vendorParameters = {
-  hoverInteraction: true,
-  displayAmount: true,
-  displayInLayerSwitcher: false,
-  selectedInteraction: true
-}
+let style = new M.style.Line({
+  fill: {
+    color: 'red',
+    width: 20
+  },
+  stroke: {
+    color: 'black',
+    width: 20
+  },
 
+});
+let feature = new M.Feature('feature', {
+  "type": "Feature",
+  "properties": {
+    "styleType": "public"
+  },
+  "geometry": {
+    "type": "LineString",
 
+    "coordinates": [
+      [362192.7844, 4117738.3979],
+      [372192.7844, 4117738.3979],
+      [382192.7844, 4078501.2712]
 
-let points = new M.layer.GeoJSON({
-  name: 'points',
-  source: {
-    "type": "FeatureCollection",
-    "features": [
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.03173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -4.24072265625,
-          38.8824811975508
-          ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.53173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.83173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -6.00173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -6.55173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-            -6.88173828125,
-            38.762650338334154
-          ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.63173828125,
-          39.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.73173828125,
-          39.332650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.83173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -5.93173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -6.13173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -7.03173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-      "type": "Feature",
-      "properties": {},
-      "geometry": {
-        "type": "Point",
-        "coordinates": [
-          -6.24072265625,
-          38.8824811975508
-          ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -7.53173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -7.83173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -7.63173828125,
-          39.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -7.73173828125,
-          39.332650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -7.83173828125,
-          38.762650338334154
-        ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {},
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-          -7.93173828125,
-          38.762650338334154
-        ]
-        }
-      }
     ]
   }
+}, style);
+
+
+let style2 = new M.style.Line({
+  fill: {
+    color: 'green',
+    width: 20
+  },
+  stroke: {
+    color: 'black',
+    width: 20
+  },
+
+});
+let feature2 = new M.Feature('feature2', {
+  "type": "Feature",
+  "properties": {
+    "styleType": "concertado"
+  },
+  "geometry": {
+    "type": "LineString",
+
+    "coordinates": [
+      [509448.9020, 4135936.8778],
+      [512192.7844, 4117738.3979],
+      [512193.7844, 4178501.2712]
+
+    ]
+  }
+}, style2);
+
+let style3 = new M.style.Line({
+  fill: {
+    color: 'pink',
+    width: 20
+  },
+  stroke: {
+    color: 'black',
+    width: 20
+  },
+
+});
+let feature3 = new M.Feature('feature3', {
+  "type": "Feature",
+  "properties": {
+    "styleType": "privado"
+  },
+  "geometry": {
+    "type": "LineString",
+
+    "coordinates": [
+      [439448.9020, 4135936.8778],
+      [432192.7844, 4117738.3979],
+      [432193.7844, 4178501.2712]
+
+    ]
+  }
+}, style3);
+
+let feature4 = new M.Feature('feature4', {
+  "type": "Feature",
+  "properties": {
+    "styleType": "hibrido"
+  },
+  "geometry": {
+    "type": "LineString",
+
+    "coordinates": [
+      [279448.9020, 4135936.8778],
+      [272192.7844, 4117738.3979],
+      [272193.7844, 4178501.2712]
+
+    ]
+  }
+}, style);
+
+
+
+
+
+
+
+let layer = new M.layer.Vector({
+  name: 'layerVector'
 });
 
-mapajs.addLayers([points]);
-points.setStyle(new M.style.Cluster(options, vendorParameters));
-/*
-points.on(M.evt.SELECT_FEATURES, f => console.log('click capa', f));
 
-let f = points.getFeatures()[4];
-f.setStyle(new M.style.Point({
+mapajs.addLayers([layer]);
+layer.addFeatures([feature, feature2, feature3, feature4]);
+
+
+
+let rojo = new M.style.Line({
   fill: {
-    color: 'red'
+    color: 'red',
+    width: 15
   },
-  radius: 15
-}));
-f.setAttribute("vendor", {'mapea': {'click': () => console.log('click feature', f)}});
-*/
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
+});
+
+let amarillo = new M.style.Line({
+  fill: {
+    color: 'yellow',
+    width: 15
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
+});
+
+let rosa = new M.style.Line({
+  fill: {
+    color: 'pink',
+    width: 15
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
+});
+let azul = new M.style.Line({
+  fill: {
+    color: 'blue',
+    width: 15
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
+});
+
+let verde = new M.style.Line({
+  fill: {
+    color: 'green',
+    width: 15
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
+});
+
+let categoryStyle = new M.style.Category("styleType", {
+  "public": verde,
+  "concertado": amarillo,
+  "privado": rosa
+
+
+});
+
+
+
+layer.setStyle(categoryStyle);

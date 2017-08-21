@@ -1,101 +1,210 @@
-// constructor del mapa
-let mapajs = M.map({
-  container: "map",
-  projection: "EPSG:3857*m",
-  layers: ["OSM"],
-  /*center: {
-    x: -5.9584180843195425,
-    y: 37.36912689160224
+M.proxy(true);
+var mapajs = M.map({
+  'container': 'map',
+  "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline"],
+});
+
+
+let style = new M.style.Polygon({
+  fill: {
+    color: 'red'
   },
-  zoom: 5,*/
-  controls: ['layerswitcher', 'overviewmap', 'mouse'],
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
 });
 
-let points = new M.layer.GeoJSON({
-  name: "Empresas",
-  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/wfs?outputFormat=application/json&request=getfeature&typeNames=sepim:empresas&version=1.3.0",
-  extract: false
+let style2 = new M.style.Polygon({
+  fill: {
+    color: 'yellow'
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
 });
 
-points.on(M.evt.ADDED_LAYER, function(){
-  alert("capa cargada");
+let style3 = new M.style.Polygon({
+  fill: {
+    color: 'pink'
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
 });
-mapajs.addLayers([points]);
 
 
-var options = {ranges:
-  [
-    /*{min:1, max:1, style: new M.style.Point({
-      fill: {
-        color: 'red'
-      },
-      radius: 5,
-      icon: {
-        src: 'https://cdn3.iconfinder.com/data/icons/free-icons-3/128/cat_6.png',
-        rotation: 0.5,
-        scale: 0.5,
-        opacity: 0.8,
-        anchor: [0.5, 1.9],
-        anchororigin: 'top-left',
-        anchororigin: 'top-left',
-        anchorxunits: 'fraction',
-        anchoryunits: 'fraction',
-        rotate: false,
-        // offset: [10, 0],
-        crossorigin: null,
-        snaptopixel: true,
-        offsetorigin: 'bottom-left',
-        size: [150, 95]
-      }
-    })},
-    {min:2, max:3, style: new M.style.Point({
-      fill: {
-        color: '#819FF7'
-      },
-      radius: 10
-    })},
-    {min:3, max:5, style: new M.style.Point({
-      fill: {
-        color: '#8181F7'
-      },
-      radius: 12
-    })},
-    {min:5, max:10, style: new M.style.Point({
-      fill: {
-        color: '#0000FF'
-      },
-      radius: 14
-    })},
-    {min:10, max:15, style: new M.style.Point({
-      fill: {
-        color: '#FF00BF'
-      },
-      radius: 16
-    })},
-    {min:15, max:20, style: new M.style.Point({
-      fill: {
-        color: '#FF0040'
-      },
-      radius: 18
-    })},
-    {min:20, max:50000, style: new M.style.Point({
-      fill: {
-        color: '#B40431'
-      },
-      radius: 20
-    })}*/
-  ],
-  animated: true,
-  hoverInteraction: true,
-  displayAmount: true,
-  selectedInteraction: true,
-  distance: 80
-};
-
-var vendorParameters = {
-  displayInLayerSwitcherHoverLayer: false,
-  distanceSelectFeatures: 15
-}
 
 
-//points.setStyle(new M.style.Cluster(options, vendorParameters));
+let feature = new M.Feature('feature', {
+  "type": "Feature",
+  "properties": {
+    "styleType": "public"
+  },
+  "geometry": {
+    "type": "Polygon",
+
+    "coordinates": [
+      [
+        [296961.0613, 4238337.8894],
+        [329822.1549, 4054495.9951],
+        [279822.1549, 4154495.9951],
+      ]
+    ]
+  }
+}, style);
+
+let feature2 = new M.Feature('feature2', {
+  "type": "Feature",
+  "properties": {
+    "styleType": "concertado"
+  },
+  "geometry": {
+    "type": "Polygon",
+
+    "coordinates": [
+      [
+        [476961.3802, 4190327.0824],
+        [439822.1549, 4154495.9951],
+        [509448.9020, 4135936.8778],
+
+      ]
+    ]
+  }
+}, style2);
+
+let feature3 = new M.Feature('feature3', {
+  "type": "Feature",
+  "properties": {
+    "styleType": "privado"
+  },
+  "geometry": {
+    "type": "Polygon",
+
+    "coordinates": [
+      [
+        [349931.1824, 4239373],
+        [412710.5852, 4236921.1703],
+        [391130.1635, 4173651.3035],
+
+      ]
+    ]
+  }
+}, style3);
+
+
+let feature5 = new M.Feature('feature5', {
+  "type": "Feature",
+  "properties": {
+    "styleType": "religiosos"
+  },
+  "geometry": {
+    "type": "Polygon",
+    "coordinates": [
+      [
+        [362192.7844, 4117738.3979],
+        [421048.4746, 4117738.3979],
+        [397015.7345, 4078501.2712],
+
+      ]
+    ]
+  }
+}, style);
+
+
+let layer = new M.layer.Vector({
+  name: 'layerVector'
+});
+
+mapajs.addLayers([layer]);
+layer.addFeatures([feature, feature2, feature3, feature5]);
+
+
+
+/*
+let catStyle = new M.style.Category('styleType', {
+  catStyle.setStyleForCategory('publico', style);
+  catStyle.setStyleForCategory('privado', style2);
+});
+*/
+
+// constructor del mapa
+
+
+let rojo = new M.style.Polygon({
+  fill: {
+    color: 'red'
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
+});
+
+let amarillo = new M.style.Polygon({
+  fill: {
+    color: 'yellow'
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
+});
+
+let rosa = new M.style.Polygon({
+  fill: {
+    color: 'pink'
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
+});
+
+let azul = new M.style.Polygon({
+  fill: {
+    color: 'blue'
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
+});
+
+let verde = new M.style.Polygon({
+  fill: {
+    color: 'green'
+  },
+  stroke: {
+    color: 'black',
+    width: 2
+  },
+
+});
+
+/*
+let catStyle = new M.style.Category('styleType', {
+  catStyle.setStyleForCategory('publico', style);
+  catStyle.setStyleForCategory('privado', style2);
+});
+*/
+
+// constructor del mapa
+
+let categoryStyle = new M.style.Category("styleType", {
+  "public": verde,
+  "concertado": verde,
+  "privado": verde,
+});
+
+
+layer.setStyle(categoryStyle);

@@ -1,20 +1,18 @@
 goog.provide('M.impl.style.Line');
 
 goog.require('M.impl.style.Simple');
+
+
 /**
- * @namespace M.style.Line
+ * @classdesc
+ *
  */
+
+
 (function() {
 
-  /**
-   * @classdesc
-   * Main constructor of the class. Creates a line
-   * control
-   *
-   * @constructor
-   * @param {Object} options - config options of user
-   * @api stable
-   */
+
+
   M.impl.style.Line = function(options) {
     let stroke = options.stroke;
     let label = options.label;
@@ -69,9 +67,16 @@ goog.require('M.impl.style.Simple');
   };
   goog.inherits(M.impl.style.Line, M.impl.style.Simple);
 
+
   /**
-   * TODO
+   * This function gets the Name
+   *
+   * @function
+   * @param {M.Feature}
+   * @returns {M.style.Line}
+   * @api stable
    */
+
   M.impl.style.Line.prototype.applyToFeature = function(feature) {
     feature.getImpl().getOLFeature().setStyle([this.style_, this.styleStroke_]);
   };

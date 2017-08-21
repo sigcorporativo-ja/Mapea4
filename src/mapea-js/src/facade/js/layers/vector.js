@@ -31,7 +31,6 @@ goog.require('M.exception');
      */
     this.style_ = null;
 
-
     /**
      * Filter
      * @private
