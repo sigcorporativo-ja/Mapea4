@@ -36,6 +36,10 @@ goog.require('P.impl.geosearch.style');
      */
     this.selectedFeatures_ = [];
 
+    if (!options.displayInLayerSwitcher) {
+      options.displayInLayerSwitcher = false;
+    }
+    
     /**
      * Name of the layer
      * @private

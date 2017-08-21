@@ -85,6 +85,12 @@ goog.provide('P.impl.control.Printer');
       else if (layer.type === M.layer.type.Mapbox) {
         success(this_.encodeMapbox(layer));
       }
+      else if (M.utils.isNullOrEmpty(layer.type) && layer instanceof M.layer.Vector) {
+        success(this_.encodeWFS(layer));
+      }
+      else {
+        success(this_.encodeWFS(layer));
+      }
     }));
   };
 
