@@ -400,9 +400,9 @@ goog.require('M.exception');
 
   /**
 
-   * TODO
+     * TODO
 
-   */
+     */
 
   // REVISION #86837 guardar el style como atributo de la clase
 
@@ -417,6 +417,12 @@ goog.require('M.exception');
     //   delete style.options_.label;
 
     // }
+
+    if (!M.utils.isNullOrEmpty(this.style_) && !this.style_.equals(style)) {
+
+      this.style_.unapply(this);
+
+    }
 
     this.style_ = style;
 

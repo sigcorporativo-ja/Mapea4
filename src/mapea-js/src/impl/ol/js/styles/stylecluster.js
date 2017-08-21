@@ -100,20 +100,23 @@ goog.require('ol.geom.convexhull');
 
   M.impl.style.Cluster.prototype.apply = function(layer) {
 
-
     if (layer.getImpl().getOL3Layer().getSource().getState() === 'ready' && layer.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {
+
       this.changeLayerOLToCluster_(layer);
 
-
     }
+
     else {
+
       layer.getImpl().on(M.evt.LOAD, function(e) {
+
         this.changeLayerOLToCluster_(layer);
+
       }.bind(this));
+
     }
+
   };
-
-
 
   /**
 
@@ -558,7 +561,6 @@ goog.require('ol.geom.convexhull');
 
    */
 
-
   M.impl.style.Cluster.prototype.selectClusterFeature_ = function(evt) {
 
     if (M.utils.isArray(evt.selected) && evt.selected.length == 1 && evt.selected[0].getProperties().features && M.utils.isArray(evt.selected[0].getProperties().features) && evt.selected[0].getProperties().features.length == 1) {
@@ -598,36 +600,50 @@ goog.require('ol.geom.convexhull');
   M.impl.style.Cluster.prototype.unapply = function(layer) {
 
     let layerol = this.mLayer.getImpl().getOL3Layer();
+
     let featuresCluster = layerol.getSource().getFeatures();
+
     let features = [];
 
     featuresCluster.forEach(function(f) {
+
       if (f.getProperties() && M.utils.isArray(f.getProperties()['features'])) {
+
         features = features.concat(f.getProperties()['features']);
+
       }
+
     });
 
     let source = new ol.source.Vector({});
+
     source.addFeatures(features);
 
     let vector = new ol.layer.Vector({
+
       source: source
+
     });
 
     vector.setZIndex(9999);
+
     layer.getImpl().setOL3Layer(vector);
 
     if (this.options.hoverInteraction) {
+
       this.removeInteraction(layer, ol.interaction.Hover);
+
     }
 
     if (this.options.selectedInteraction) {
+
       this.removeInteraction(layer, M.impl.interaction.SelectCluster);
+
     }
+
   };
 
   /**
-<<<<<<< HEAD
 
    * remove interactions added to style cluster
 
@@ -659,56 +675,4 @@ goog.require('ol.geom.convexhull');
 
   };
 
-  /**
-   * remove style cluster
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-
-
-  M.impl.style.Cluster.prototype.unapply = function(layer) {
-    let layerol = this.mLayer.getImpl().getOL3Layer();
-    let featuresCluster = layerol.getSource().getFeatures();
-    let features = [];
-    featuresCluster.forEach(function(f) {
-      if (f.getProperties() && M.utils.isArray(f.getProperties()['features'])) {
-        features = features.concat(f.getProperties()['features']);
-      }
-    });
-
-    let source = new ol.source.Vector({});
-    source.addFeatures(features);
-    let vector = new ol.layer.Vector({
-      source: source
-    });
-
-    layer.getImpl().setOL3Layer(vector);
-
-
-    if (this.options.hoverInteraction) {
-      this.removeInteraction(layer, ol.interaction.Hover);
-    }
-    if (this.options.selectedInteraction) {
-      this.removeInteraction(layer, M.impl.interaction.SelectCluster);
-    }
-  };
-
-  /**
-   * remove interactions added to style cluster
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.impl.style.Cluster.prototype.removeInteraction = function(layer, type) {
-    let map = layer.getImpl().map;
-    let olmap = map.getMapImpl();
-    olmap.getInteractions().forEach(function(i) {
-      if (i instanceof type) {
-        olmap.removeInteraction(i);
-      }
-    });
-  };
 })();

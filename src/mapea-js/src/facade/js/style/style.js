@@ -80,6 +80,16 @@ goog.provide('M.Style');
 
    */
 
+  M.Style.prototype.unapply = function(layer) {};
+
+  /**
+
+   * TODO
+
+   *
+
+   */
+
   M.Style.prototype.get = function(attribute) {
 
     let attrValue;
@@ -147,5 +157,29 @@ goog.provide('M.Style');
    */
 
   M.Style.prototype.serialize = function() {};
+
+  /**
+
+   * TODO
+
+   *
+
+   */
+
+  M.Style.prototype.equals = function(style) {
+
+    if (this.constructor === style.constructor) {
+
+      return true;
+
+    }
+
+    else {
+
+      return false;
+
+    }
+
+  };
 
 })();
