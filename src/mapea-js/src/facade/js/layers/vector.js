@@ -398,18 +398,12 @@ goog.require('M.exception');
 
   };
 
-<<<<<<< HEAD
   /**
 
-     * TODO
-
-     */
-
-=======
-/**
    * TODO
+
    */
->>>>>>> branch 'redmine_76437' of https://www.guadaltel.es/git/mapea-chap
+
   // REVISION #86837 guardar el style como atributo de la clase
 
   M.layer.Vector.prototype.setStyle = function(style) {
@@ -423,16 +417,6 @@ goog.require('M.exception');
     //   delete style.options_.label;
 
     // }
-
-    if (!M.utils.isNullOrEmpty(this.style_) && !this.style_.equals(style)) {
-<<<<<<< HEAD
-
-      this.style_.unapply(this);
-
-=======
-      this.style_.unapply(this);
->>>>>>> branch 'redmine_76437' of https://www.guadaltel.es/git/mapea-chap
-    }
 
     this.style_ = style;
 

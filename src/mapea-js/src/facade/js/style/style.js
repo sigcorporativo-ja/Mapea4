@@ -72,23 +72,6 @@ goog.provide('M.Style');
 
   };
 
-
-  /**
-   * TODO
-   *
-   */
-  M.Style.prototype.unapply = function(layer) {};
-
-  /**
-
-   * TODO
-
-   *
-
-   */
-
-  M.Style.prototype.unapply = function(layer) {};
-
   /**
 
    * TODO
@@ -164,45 +147,5 @@ goog.provide('M.Style');
    */
 
   M.Style.prototype.serialize = function() {};
-
-<<<<<<< HEAD
-  /**
-
-   * TODO
-
-   *
-
-   */
-
-  M.Style.prototype.equals = function(style) {
-
-    if (this.constructor === style.constructor) {
-
-      return true;
-
-    }
-
-    else {
-
-      return false;
-
-    }
-
-=======
-
-  /**
-   * TODO
-   *
-   */
-  M.Style.prototype.equals = function(style) {
-
-    if (this.constructor === style.constructor) {
-      return true;
-    }
-    else {
-      return false;
-    }
->>>>>>> branch 'redmine_76437' of https://www.guadaltel.es/git/mapea-chap
-  };
 
 })();
