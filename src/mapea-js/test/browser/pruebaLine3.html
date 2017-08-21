@@ -55,6 +55,8 @@
           width: 20
         },
 
+        radius: 2
+
       });
       let feature = new M.Feature('feature', {
         "type": "Feature",
@@ -83,6 +85,7 @@
           color: 'black',
           width: 20
         },
+        radius: 2
 
       });
       let feature2 = new M.Feature('feature2', {
@@ -111,6 +114,7 @@
           color: 'black',
           width: 20
         },
+        radius: 2
 
       });
       let feature3 = new M.Feature('feature3', {
@@ -162,64 +166,9 @@
 
 
 
-      let rojo = new M.style.Line({
-        fill: {
-          color: 'red',
-          width: 15
-        },
-        stroke: {
-          color: 'black',
-          width: 2
-        },
-
-      });
-
-      let amarillo = new M.style.Line({
-        fill: {
-          color: 'yellow',
-          width: 15
-        },
-        stroke: {
-          color: 'black',
-          width: 2
-        },
-
-      });
-
-      let rosa = new M.style.Line({
-        fill: {
-          color: 'pink',
-          width: 15
-        },
-        stroke: {
-          color: 'black',
-          width: 2
-        },
-
-      });
-      let azul = new M.style.Line({
-        fill: {
-          color: 'blue',
-          width: 15
-        },
-        stroke: {
-          color: 'black',
-          width: 2
-        },
-
-      });
-
-      let verde = new M.style.Line({
-        fill: {
-          color: 'green',
-          width: 15
-        },
-        stroke: {
-          color: 'black',
-          width: 2
-        },
-
-      });
+      let rojo = new M.style.Line({ fill: { color: 'red', width: 15 }, stroke: { color: 'black', width: 2 }, radius: 2 }); let amarillo = new M.style.Line({ fill: { color: 'yellow', width: 15 }, stroke: { color: 'black', width: 2 }, }); let rosa = new M.style.Line({
+fill: { color: 'pink', width: 15 }, stroke: { color: 'black', width: 2 }, }); let azul = new M.style.Line({ fill: { color: 'blue', width: 15 }, stroke: { color: 'black', width: 2 }, }); let verde = new M.style.Line({ fill: { color: 'green', width: 15
+}, stroke: { color: 'black', width: 2 }, });
 
       let categoryStyle = new M.style.Category("styleType", {
         "public": verde,
