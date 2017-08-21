@@ -76,6 +76,7 @@ goog.require('M.Style');
   };
 
   /**
+<<<<<<< HEAD
 
    * This function apply the style to specified layer
 
@@ -92,6 +93,17 @@ goog.require('M.Style');
     this.getImpl().unapply(layer);
 
   };
+=======
+   * This function apply the style to specified layer
+   *
+   * @function
+   * @api stable
+   */
+  M.style.Cluster.prototype.unapply = function(layer) {
+    this.getImpl().unapply(layer);
+  };
+
+>>>>>>> branch 'redmine_76437' of https://www.guadaltel.es/git/mapea-chap
 
   /**
 
