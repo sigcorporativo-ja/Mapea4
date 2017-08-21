@@ -6,7 +6,12 @@ goog.provide('M.style.Polygon');
 (function() {
 
   /**
-   * TODO
+   * @classdesc
+   * Creates a style polygon
+   * @constructor
+   * @extends {M.style.Simple}   *
+   * @param {Object} options - options style
+   * @api stable
    */
   M.style.Polygon = (function(options) {
     options = options || M.style.Polygon.OPTS_DEFAULT;
@@ -20,7 +25,11 @@ goog.provide('M.style.Polygon');
   goog.inherits(M.style.Polygon, M.style.Simple);
 
   /**
-   * TODO
+   * This function apply style to feature
+   *
+   * @public
+   * @param {M.Feature} feature - Feature to apply style
+   * @function
    */
   M.style.Polygon.prototype.applyToFeature = function(feature) {
     this.getImpl().applyToFeature(feature);

@@ -1,12 +1,17 @@
 goog.provide('M.style.Line');
 
 /**
- * @namespace M.style.Polygon
+ * @namespace M.style.Line
  */
 (function() {
 
   /**
-   * TODO
+   * @classdesc
+   * Creates a style line
+   * @constructor
+   * @extends {M.style.Simple}
+   * @param {Object} options - options style
+   * @api stable
    */
   M.style.Line = (function(options) {
     options = options || M.style.Line.OPTS_DEFAULT;
@@ -17,7 +22,11 @@ goog.provide('M.style.Line');
   goog.inherits(M.style.Line, M.style.Simple);
 
   /**
-   * TODO
+   * This function apply style to feature
+   *
+   * @public
+   * @param {M.Feature} feature - Feature to apply style
+   * @function
    */
   M.style.Line.prototype.applyToFeature = function(feature) {
     this.getImpl().applyToFeature(feature);
@@ -30,6 +39,13 @@ goog.provide('M.style.Line');
     // TODO
   };
 
+  /**
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
   M.style.Line.OPTS_DEFAULT = {
     stroke: {
       width: 1

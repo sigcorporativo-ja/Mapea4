@@ -1,12 +1,14 @@
 goog.provide('M.style.Simple');
 
 /**
- * TODO
+ * @namespace M.style.Simple
  */
 (function() {
 
   /**
-   * TODO
+   * Abstract class
+   *
+   * @api stable
    */
   M.style.Simple = (function(options, impl) {
     // calls the super constructor

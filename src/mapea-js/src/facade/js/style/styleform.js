@@ -1,56 +1,93 @@
 goog.provide('M.style.form');
 
-/**
- * TODO
- */
 (function() {
   /**
-   * TODO
+   * Circle style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.form.CIRCLE = "CIRCLE";
 
   /**
-   * TODO
+   * Buble style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.form.BUBLE = "BUBLE";
 
   /**
-   * TODO
+   * Marker style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.form.MARKER = "MARKER";
 
   /**
-   * TODO
+   * Shield style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.form.SHIELD = "SHIELD";
 
   /**
-   * TODO
+   * Blazon style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.form.BLAZON = "BLAZON";
 
   /**
-   * TODO
+   * Triangle style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.form.TRIANGLE = "TRIANGLE";
 
   /**
-   * TODO
+   * Sing style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.form.SING = "SING";
 
   /**
-   * TODO
+   * Ban style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.form.BAN = "BAN";
 
   /**
-   * TODO
+   * Lozenge style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.form.LOZENGE = "LOZENGE";
 
   /**
-   * TODO
+   * Square style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.form.SQUARE = "SQUARE";
 })();

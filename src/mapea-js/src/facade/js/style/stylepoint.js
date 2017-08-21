@@ -7,15 +7,16 @@ goog.provide('M.style.Point');
 (function() {
 
   /**
-   * TODO
+   * @classdesc
+   * Creates a style point
+   * @constructor
+   * @extends {M.style.Simple}
+   * @param {Object} options - options style
+   * @api stable
    */
 
   M.style.Point = (function(options) {
-    // TODO
     options = options || M.style.Point.OPTS_DEFAULT;
-    /**
-     * TODO
-     */
     var impl = new M.impl.style.Point(options);
 
     // calls the super constructor
@@ -24,7 +25,11 @@ goog.provide('M.style.Point');
   goog.inherits(M.style.Point, M.style.Simple);
 
   /**
-   * TODO
+   * This function apply style to feature
+   *
+   * @public
+   * @param {M.Feature} feature - Feature to apply style
+   * @function
    */
   M.style.Point.prototype.applyToFeature = function(feature) {
     this.getImpl().applyToFeature(feature);

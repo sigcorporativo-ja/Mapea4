@@ -5,6 +5,13 @@ goog.require('M.impl.style.Simple');
  * @namespace M.style.Point
  */
 (function() {
+  /**
+   * Main constructor of the class.
+   * @constructor
+   * @implements {
+     M.impl.style.Simple
+   }   * @api stable
+   */
   M.impl.style.Point = (function(options) {
     this.setOptionsToOLStyle(options);
   });
@@ -12,8 +19,12 @@ goog.require('M.impl.style.Simple');
 
 
   /**
-  * TODO
-  */
+   * This function se options to ol style
+   *
+   * @public
+   * @param {object} options - options to style
+   * @function
+   */
   M.impl.style.Point.prototype.setOptionsToOLStyle = function (options) {
     let stroke = options.stroke;
     let radius = options.radius;
@@ -154,7 +165,11 @@ goog.require('M.impl.style.Simple');
   };
 
   /**
-   * TODO
+   * This function apply style to feature
+   *
+   * @public
+   * @param {M.Feature} feature - Feature to apply style
+   * @function
    */
   M.impl.style.Point.prototype.applyToFeature = function(feature) {
     let styles = [];
