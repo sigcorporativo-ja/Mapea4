@@ -7,6 +7,14 @@ goog.require('M.impl.style.Simple');
 (function() {
 
   M.impl.style.Line = function(options) {
+    this.setOptionsToOLStyle(options);
+  };
+  goog.inherits(M.impl.style.Line, M.impl.style.Simple);
+
+  /**
+  * TODO
+  */
+  M.impl.style.Line.prototype.setOptionsToOLStyle = function (options) {
     let stroke = options.stroke;
     let label = options.label;
     let fill = options.fill;
@@ -58,7 +66,7 @@ goog.require('M.impl.style.Simple');
       );
     }
   };
-  goog.inherits(M.impl.style.Line, M.impl.style.Simple);
+
   /**
    * TODO
    */

@@ -40,6 +40,7 @@ goog.provide('M.Style');
    *
    */
   M.Style.prototype.apply = function(layer) {
+    this.layer_ = layer;
     this.getImpl().applyToLayer(layer);
   };
 
@@ -59,21 +60,51 @@ goog.provide('M.Style');
         attrValue = attrPath.reduce((obj, attr) => !M.utils.isNullOrEmpty(obj) ? ((obj instanceof M.Style) ? obj.get(attr) : obj[attr]) : undefined, this);
       }
     }
-
     return attrValue;
   };
+
   /**
    * supongo que, solo se pude hacer un set de fill, stroke y label, y que sería del objeto completo
    * es decir, que no se puede cambiar solo el color por ejemplo
    */
   M.Style.prototype.set = function(property, value) {
-    this.options_[property] = value;
-
-    // TODO refrescamos de nuevo el estilo
-    this.apply_(this.layer_);
+    this.setValue(this.options_, property, value);
+    this.getImpl().setOptionsToOLStyle(this.options_);
+    this.apply(this.layer_);
 
     return this;
   };
+
+
+  /**
+  * TODO
+  */
+  M.Style.prototype.deep = function (obj, path, value) {
+    if (arguments.length === 3) {
+      return set.apply(null, arguments);
+    }
+    else {
+      return get.apply(null, arguments);
+    }
+  };
+
+
+  /**
+  * TODO
+  */
+  M.Style.prototype.setValue = function(obj, path, value) {
+    let keys = Array.isArray(path) ? path : path.split('.');
+    for (let i = 0; i < keys.length - 1; i++) {
+      let key = keys[i];
+      if (this.deep.p && !hasOwnProp.call(obj, key)) {
+        obj[key] = {}
+      };
+      obj = obj[key];
+    }
+    obj[keys[i]] = value;
+    return value;
+  };
+
 
   /**
    * TODO

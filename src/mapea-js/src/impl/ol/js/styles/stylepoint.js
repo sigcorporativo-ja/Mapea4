@@ -6,6 +6,15 @@ goog.require('M.impl.style.Simple');
  */
 (function() {
   M.impl.style.Point = (function(options) {
+    this.setOptionsToOLStyle(options);
+  });
+  goog.inherits(M.impl.style.Point, M.impl.style.Simple);
+
+
+  /**
+  * TODO
+  */
+  M.impl.style.Point.prototype.setOptionsToOLStyle = function (options) {
     let stroke = options.stroke;
     let radius = options.radius;
     let fill = options.fill;
@@ -142,8 +151,8 @@ goog.require('M.impl.style.Simple');
         });
       }
     }
-  });
-  goog.inherits(M.impl.style.Point, M.impl.style.Simple);
+  };
+
   /**
    * TODO
    */
