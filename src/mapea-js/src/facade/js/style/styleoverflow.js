@@ -1,26 +1,39 @@
 goog.provide('M.style.overflow');
 
-/**
- * TODO
- */
 (function() {
   /**
-   * TODO
+   * Hidden style overflow
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.overflow.HIDDEN = "HIDDEN";
 
   /**
-   * TODO
+   * Visible style overflow
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.overflow.VISIBLE = "VISIBLE";
 
   /**
-   * TODO
+   * Ellipsis style overflow
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.overflow.ELLIPSIS = "ELLIPSIS";
 
   /**
-   * TODO
+   * Custom style overflow
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.overflow.CUSTOM = "CUSTOM";
 
