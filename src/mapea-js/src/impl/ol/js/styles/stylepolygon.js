@@ -1,9 +1,13 @@
 goog.provide('M.impl.style.Polygon');
 
 goog.require('M.impl.style.Simple');
+
 /**
- * @namespace M.style.Polygon
+ * TODO
+ * @private
+ * @type {M.style.Polygon}
  */
+
 (function() {
   M.impl.style.Polygon = function(options) {
     let stroke = options.stroke;
