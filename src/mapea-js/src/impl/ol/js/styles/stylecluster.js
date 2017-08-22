@@ -100,6 +100,8 @@ goog.require('ol.geom.convexhull');
 
   M.impl.style.Cluster.prototype.apply = function(layer) {
 
+    console.log("en cluster");
+
     if (layer.getImpl().getOL3Layer().getSource().getState() === 'ready' && layer.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {
 
       this.changeLayerOLToCluster_(layer);

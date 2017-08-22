@@ -195,7 +195,47 @@ goog.provide('M.impl.style.Category');
    * @api stable
    */
 
+
+
+
   M.impl.style.Category.prototype.applyToLayer = function(layer) {
+
+    console.log("en Category");
+
+
+    if ((layer.getImpl().getOL3Layer().getSource().getState() === 'ready') &&
+      (layer.getImpl().getOL3Layer().getSource().getFeatures().length > 0)) {
+
+      this.applyToLayer_(layer);
+
+    }
+
+    else {
+
+      layer.getImpl().on(M.evt.LOAD, function(e) {
+
+        this.applyToLayer_(layer);
+
+      });
+
+    }
+
+  };
+
+
+  /**
+
+   * @public
+
+   * @function
+
+   * @api stable
+
+   * @export
+
+   */
+
+  M.impl.style.Category.prototype.applyToLayer_ = function(layer) {
 
     /*
     Aplicamos el categoryStyle a un "layer"
@@ -239,11 +279,6 @@ goog.provide('M.impl.style.Category');
             }
           }
 
-          /* estilo por defecto, lo ideal seria que se copiara el objeto estilo
-             de la categoria que se le va a poner el color random, asi evitamos mirar cada
-             caso de estilo (point, line....) y se evitaria tambien incorporar nuevos casos
-             cada vez que se incorporara un nuevo estilo
-          */
 
 
           let array_features = layer.getFeatures();

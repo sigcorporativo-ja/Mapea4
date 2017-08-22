@@ -562,3 +562,51 @@ let stylePoint = new M.style.Point({
   }
 
 });
+
+
+let verde = new M.style.Point({
+  fill: {
+    color: 'green'
+  },
+  stroke: {
+    color: 'green',
+    width: 1
+  },
+  radius: 6
+});
+let amarillo = new M.style.Point({
+  fill: {
+    color: 'yellow'
+  },
+  stroke: {
+    color: 'yellow',
+    width: 1
+  },
+  radius: 3
+});
+let rojo = new M.style.Point({
+  fill: {
+    color: 'red'
+  },
+  stroke: {
+    color: 'red',
+    width: 1
+  },
+  radius: 6
+});
+let azul = new M.style.Point({
+  fill: {
+    color: 'blue'
+  },
+  stroke: {
+    color: 'blue',
+    width: 1
+  },
+  radius: 13
+});
+let categoryStyle = new M.style.Category("sector", {
+  "Comercio": azul,
+
+});
+
+points.setStyle(categoryStyle);
