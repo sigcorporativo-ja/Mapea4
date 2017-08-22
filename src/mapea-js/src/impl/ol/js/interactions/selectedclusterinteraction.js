@@ -14,6 +14,7 @@ goog.require('ol.interaction.Select');
 M.impl.interaction.SelectCluster = function(options)
 {	options = options || {};
 
+  this.map = options.map;
 	this.pointRadius = options.pointRadius || 12;
 	this.circleMaxObjects = options.circleMaxObjects || 10;
 	this.maxObjects = options.maxObjects || 60;
@@ -146,7 +147,14 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function (e)
 	// Not a cluster (or just one feature)
 	if (!cluster || cluster.length==1) return;
 
-  if (!cluster || cluster.length > this.maxFeaturesToSelect) return;
+  if (!cluster || cluster.length > this.maxFeaturesToSelect) {
+    let extents = cluster.map((feature) => feature.getGeometry().getExtent().slice(0));
+    let extend =  (extents.length === 0) ? null : extents.reduce((ext1, ext2) => ol.extent.extend(ext1, ext2));
+    if (M.utils.isArray(extend)) {
+      this.map.setBbox(extend);
+    }
+    return;
+  }
 
 	// Remove cluster from selection
 	if (!this.selectCluster_) this.getFeatures().clear();

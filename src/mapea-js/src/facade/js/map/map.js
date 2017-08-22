@@ -8,6 +8,7 @@ goog.require('M.utils');
 goog.require('M.Layer');
 goog.require('M.remote');
 goog.require('M.Parameters');
+goog.require('M.style.state');
 goog.require('M.ui.Panel');
 goog.require('M.layer.WMC');
 goog.require('M.layer.WMS');
@@ -36,12 +37,27 @@ goog.require('M.dialog');
 goog.require('M.Plugin');
 goog.require('M.window');
 
-goog.require('M.style.state');
+//goog.require('M.Style');
+
+
+
+
+//goog.require('M.style.Simple');
 goog.require('M.style.Point');
-goog.require('M.style.Line');
 goog.require('M.style.Polygon');
+goog.require('M.style.Line');
+
 goog.require('M.style.Cluster');
 goog.require('M.style.Choropleth');
+
+
+goog.require('M.style.Category');
+
+
+
+
+
+
 
 
 (function() {

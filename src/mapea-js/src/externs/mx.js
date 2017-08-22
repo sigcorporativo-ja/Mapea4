@@ -1437,3 +1437,65 @@ Mx.jsts.io.GeoJSONReader;
  * @api stable
  */
 Mx.jtsGeom.disjoint;
+
+
+/**
+ * distanceSelectFeatures (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.optionsVendor.distanceSelectFeatures;
+
+/**
+ * displayInLayerSwitcherHoverLayer (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.optionsVendor.displayInLayerSwitcherHoverLayer;
+
+/**
+ * ranges (options)
+ * @type {Array}
+ * @api stable
+ */
+Mx.options.ranges;
+
+/**
+ * distance (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.options.distance;
+
+/**
+ * hoverInteraction (options)
+ * @type {boolean}
+ * @api stable
+ */
+Mx.options.hoverInteraction;
+/**
+ * selectedInteraction (options)
+ * @type {boolean}
+ * @api stable
+ */
+Mx.options.selectedInteraction;
+
+/**
+ * maxFeaturesToSelect (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.options.maxFeaturesToSelect;
+/**
+ * animated (options)
+ * @type {boolean}
+ * @api stable
+ */
+Mx.options.animated;
+
+/**
+ * displayAmount (options)
+ * @type {boolean}
+ * @api stable
+ */
+Mx.options.displayAmount;
