@@ -816,4 +816,15 @@ goog.require('goog.color.alpha');
     divElement.innerHTML = htmlText;
     return divElement.textContent || divElement.innerText || "";
   };
+
+  /**
+   * This function gets an array scale color in hexadecimal format
+   * @function
+   * @public
+   * @return {Array<string>} array scale color in hexadecimal format
+   * @api stable
+   */
+  M.utils.generateColorScale = function(color1, color2, n_classes) {
+    return chroma.scale([color1, color2]).colors(n_classes);
+  };
 })();
