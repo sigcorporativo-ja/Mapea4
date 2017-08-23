@@ -186,6 +186,10 @@ goog.provide('M.impl.style.Category');
   };
 
 
+
+
+
+
   /**
    * This function gets the Name
    *
@@ -197,45 +201,7 @@ goog.provide('M.impl.style.Category');
 
 
 
-
   M.impl.style.Category.prototype.applyToLayer = function(layer) {
-
-    console.log("en Category");
-
-
-    if ((layer.getImpl().getOL3Layer().getSource().getState() === 'ready') &&
-      (layer.getImpl().getOL3Layer().getSource().getFeatures().length > 0)) {
-
-      this.applyToLayer_(layer);
-
-    }
-
-    else {
-
-      layer.getImpl().on(M.evt.LOAD, function(e) {
-
-        this.applyToLayer_(layer);
-
-      });
-
-    }
-
-  };
-
-
-  /**
-
-   * @public
-
-   * @function
-
-   * @api stable
-
-   * @export
-
-   */
-
-  M.impl.style.Category.prototype.applyToLayer_ = function(layer) {
 
     /*
     Aplicamos el categoryStyle a un "layer"
