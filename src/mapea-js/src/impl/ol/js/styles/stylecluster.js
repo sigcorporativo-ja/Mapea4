@@ -25,9 +25,7 @@ goog.require('ol.geom.convexhull');
     this.vectorCover = null;
     this.optionsVendor = optionsVendor;
     this.options = options;
-    if (!M.utils.isArray(options.range) || (M.utils.isArray(options.range) && options.range.length == 0)) {
-      this.options.range = this.getDefaulStyles();
-    }
+
     this.clusterSource = new ol.source.Cluster({
       distance: this.options.distance ? this.options.distance : M.style.Cluster.DEFAULT_DISTANCE,
       source: new ol.source.Vector()
@@ -52,6 +50,9 @@ goog.require('ol.geom.convexhull');
     this.mLayer = layer;
     let map = layer.getImpl().map;
     this.numFeaturesToDoCluster = layer.getFeatures().length;
+    if (!M.utils.isArray(this.options.range) || (M.utils.isArray(this.options.range) && this.options.range.length == 0)) {
+      this.options.range = this.getDefaulStyles();
+    }
     let features = layer.getImpl().getOL3Layer().getSource().getFeatures();
     this.clusterSource.getSource().addFeatures(features);
     this.clusterLayer.setZIndex(99999);
@@ -258,7 +259,7 @@ goog.require('ol.geom.convexhull');
       },
       {
         min: (rangeInt * 2),
-        max: isReal ? ((rangeInt * 3) + 1) : (rangeInt * 3),
+        max: this.numFeaturesToDoCluster + 1,
         style: new M.style.Point({
           fill: {
             color: 'red'

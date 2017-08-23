@@ -48,6 +48,8 @@ goog.require('M.style.Polygon');
 goog.require('M.style.Line');
 
 goog.require('M.style.Cluster');
+goog.require('M.style.Choropleth');
+
 
 goog.require('M.style.Category');
 

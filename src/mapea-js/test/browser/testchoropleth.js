@@ -55,6 +55,8 @@
 // 14. Tests de todos los getters que tiene M.style.Choropleth. Estos getters devolverán
 // la información por la consola del navegador.
 
+//==============================================================================
+
 let mapajs = M.map({
   container: "map",
   projection: "EPSG:4326*m",
@@ -1600,12 +1602,18 @@ function getAttributeName() {
   if (!M.utils.isNullOrEmpty(choropleth)) {
     console.log(choropleth.getAttributeName());
   }
+  else {
+    console.log('No hay M.style.Choropleth asignado');
+  }
 }
 
 function getStyles() {
   let choropleth = polygons.getStyle();
   if (!M.utils.isNullOrEmpty(choropleth)) {
     console.log(choropleth.getStyles());
+  }
+  else {
+    console.log('No hay M.style.Choropleth asignado');
   }
 }
 
@@ -1614,12 +1622,18 @@ function getQuantification() {
   if (!M.utils.isNullOrEmpty(choropleth)) {
     console.log(choropleth.getQuantification());
   }
+  else {
+    console.log('No hay M.style.Choropleth asignado');
+  }
 }
 
 function getValues() {
   let choropleth = polygons.getStyle();
   if (!M.utils.isNullOrEmpty(choropleth)) {
     console.log(choropleth.getValues());
+  }
+  else {
+    console.log('No hay M.style.Choropleth asignado');
   }
 }
 
