@@ -2,7 +2,7 @@
 
 
 let mapajs = M.map({
-  container: "map",
+  container: "mapjs",
   projection: "EPSG:4326*d",
   layers: ["OSM"],
   // center: {
@@ -101,3 +101,5 @@ let categoryStyle = new M.style.Category("styleType", {
   "concertado": amarillo,
   "privado": rojo,
 });
+
+layer.setStyle(categoryStyle);

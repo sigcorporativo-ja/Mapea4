@@ -2,7 +2,7 @@
 
 
 let mapajs = M.map({
-  container: "map",
+  container: "mapjs",
   projection: "EPSG:4326*d",
   layers: ["OSM"],
   // center: {
@@ -158,6 +158,8 @@ let categoryStyle = new M.style.Category("styleType", {
 
 layer.setStyle(categoryStyle);
 
-categoryStyle.setAttributeName("styleTypee");
+categoryStyle.getImpl().unapply(layer);
+
+//categoryStyle.setAttributeName("styleTypee");
 
 /*El resultado tendra que ser el cambio del AttributeName_*/
