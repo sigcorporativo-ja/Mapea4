@@ -1,5 +1,7 @@
 goog.provide('M.style.Polygon');
 
+goog.require('M.style.Simple');
+
 /**
  * @namespace M.style.Polygon
  */
@@ -15,6 +17,17 @@ goog.provide('M.style.Polygon');
    */
   M.style.Polygon = (function(options) {
     options = options || M.style.Polygon.OPTS_DEFAULT;
+
+    //default stoke
+    if (M.utils.isNullOrEmpty(options.stroke)) options.stroke = {};
+    if (M.utils.isNullOrEmpty(options.stroke.width)) options.stroke.width = 2;
+    if (M.utils.isNullOrEmpty(options.stroke.color)) options.stroke.color = '#67af13';
+
+    //default fill
+    if (M.utils.isNullOrEmpty(options.fill)) options.fill = {};
+    if (M.utils.isNullOrEmpty(options.fill.color)) options.fill.color = '#67af13';
+    if (M.utils.isNullOrEmpty(options.fill.opacity)) options.fill.opacity = 0.2;
+
     /**
      * TODO
      */

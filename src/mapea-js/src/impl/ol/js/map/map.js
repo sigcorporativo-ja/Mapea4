@@ -37,6 +37,10 @@ goog.require('M.impl.format.GeoJSON');
 goog.require('ol.renderer.Type');
 goog.require('ol.Map');
 
+goog.require('M.impl.style.Point');
+goog.require('M.impl.style.Line');
+goog.require('M.impl.style.Polygon');
+
 (function() {
   /**
    * @classdesc

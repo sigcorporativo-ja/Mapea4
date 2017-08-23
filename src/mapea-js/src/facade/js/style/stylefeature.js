@@ -1,4 +1,5 @@
 goog.provide('M.style.Feature');
+goog.require('M.Style');
 
 /**
  * @namespace M.style.Feature
