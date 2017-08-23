@@ -1600,7 +1600,7 @@ function points_setAttributeName(attributeName) {
 //==============================================================================
 function getAttributeName() {
   let choropleth = points.getStyle();
-  if (!M.utils.isNullOrEmpty(choropleth)) {
+  if (!M.utils.isNullOrEmpty(choropleth) && choropleth instanceof M.style.Choropleth) {
     console.log(choropleth.getAttributeName());
   }
   else {
