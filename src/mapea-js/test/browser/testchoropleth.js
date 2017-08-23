@@ -1,5 +1,6 @@
 //=============================================================================
 //==================== TESTS DE M.style.Choropleth ============================
+//========================   PARA CAPAS LOCALES   =============================
 //=============================================================================
 
 //================== RESUMEN DE DE LOS TEST ===================================
@@ -56,7 +57,7 @@
 // la información por la consola del navegador.
 
 //==============================================================================
-
+//==============================================================================
 let mapajs = M.map({
   container: "map",
   projection: "EPSG:4326*m",
@@ -1587,10 +1588,10 @@ function polygons_setQuantification() {
 // ============================================================================
 
 
-function points_setAttributeName() {
+function points_setAttributeName(attributeName) {
   let choropleth = points.getStyle();
   if (!M.utils.isNullOrEmpty(choropleth)) {
-    choropleth.setAttributeName("colegios");
+    choropleth.setAttributeName(attributeName);
   }
 }
 
@@ -1636,6 +1637,34 @@ function getValues() {
     console.log('No hay M.style.Choropleth asignado');
   }
 }
+
+
+//=============================================================================
+// TEST Choropleth-Cluster ====================================================
+// ============================================================================
+
+function choropleth_cluster() {
+  let options = {
+    ranges: [
+      ],
+    animated: true,
+    hoverInteraction: true,
+    displayAmount: true,
+    selectedInteraction: true,
+    distance: 40
+  };
+
+  let optionsVendor = {
+    displayInLayerSwitcherHoverLayer: false,
+    distanceSelectFeatures: 15
+  }
+  let cluster = new M.style.Cluster(options, optionsVendor);
+  let choropleth = new M.style.Choropleth('alumnos', null, M.style.quantification.JENKS(3));
+  points.setStyle(choropleth);
+  points.setStyle(cluster);
+}
+
+
 
 
 // Funcion auxiliar para ocultar las capas deseadas

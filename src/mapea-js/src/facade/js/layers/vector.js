@@ -216,23 +216,28 @@ goog.require('M.exception');
         if (this.getImpl().getOL3Layer().getSource().getState() === 'ready' && this.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {
           style.apply(this);
         }
-        this.getImpl().on(M.evt.LOAD, function(e) {
-          style.apply(this);
-        }.bind(this));
+        else {
+          this.getImpl().on(M.evt.LOAD, function(e) {
+            style.apply(this);
+          }.bind(this));
+        }
       }
     }
     else {
       if (!M.utils.isNullOrEmpty(this.style_) && !this.style_.equals(style)) {
-        if (style instanceof M.style.Cluster) {
+        if (this.style_ instanceof M.style.Cluster) {
           if (this.getImpl().getOL3Layer().getSource().getState() === 'ready' && this.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {
-            style.unapply(this);
+            this.style_.unapply(this);
           }
-          this.getImpl().on(M.evt.LOAD, function(e) {
-            style.unapply(this);
-          }.bind(this));
+          else {
+            var style_old = this.style_;
+            this.getImpl().on(M.evt.LOAD, function(e) {
+              style_old.unapply(this);
+            }.bind(this));
+          }
         }
         else {
-          style.unapply(this);
+          this.style_.unapply(this);
         }
       }
       if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {
