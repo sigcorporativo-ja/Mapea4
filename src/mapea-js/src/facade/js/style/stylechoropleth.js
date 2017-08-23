@@ -150,6 +150,7 @@ goog.require('M.style.quantification');
    * @function
    * @public
    * @param {Array<M.style.Point>|Array<M.style.Line>|Array<M.style.Polygon>} styles - styles defined by user
+   * @api stable
    */
   M.style.Choropleth.prototype.setStyles = function(styles) {
     let features = this.layer_.getFeatures();
@@ -193,6 +194,7 @@ goog.require('M.style.quantification');
    * @function
    * @public
    * @return {Array<number>} numeric features values of layer
+   * @api stable
    */
   M.style.Choropleth.prototype.getValues = function() {
     let layer = this.layer_;
@@ -218,6 +220,7 @@ goog.require('M.style.quantification');
    * This function updates the style
    * @function
    * @private
+   * @api stable
    */
   M.style.Choropleth.prototype.update_ = function() {
     let features = this.layer_.getFeatures();
@@ -234,6 +237,7 @@ goog.require('M.style.quantification');
    * @public
    * @param {String} c - color in hexadecimal format
    * @return {M.style.Point}
+   * @api stable
    */
   M.style.Choropleth.DEFAULT_STYLE_POINT = function(c) {
     return new M.style.Point({
@@ -254,6 +258,7 @@ goog.require('M.style.quantification');
    * @public
    * @param {String} c - color in hexadecimal format
    * @return {M.style.Line}
+   * @api stable
    */
 
   M.style.Choropleth.DEFAULT_STYLE_LINE = function(c) {
@@ -270,6 +275,7 @@ goog.require('M.style.quantification');
    * @public
    * @param {String} c - color in hexadecimal format
    * @return {M.style.Polygon}
+   * @api stable
    */
   M.style.Choropleth.DEFAULT_STYLE_POLYGON = function(c) {
     return new M.style.Polygon({
@@ -284,13 +290,14 @@ goog.require('M.style.quantification');
   };
   /** Color style by default
    * @constant
-   *
+   * @api stable
    */
   M.style.Choropleth.DEFAULT_COLOR1 = 'red';
 
   /**
    * Color style by default
    * @constant
+   * @api stable
    */
   M.style.Choropleth.DEFAULT_COLOR2 = 'black';
 

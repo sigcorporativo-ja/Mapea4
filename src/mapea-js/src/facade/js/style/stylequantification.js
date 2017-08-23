@@ -10,6 +10,7 @@ goog.provide('M.style.quantification');
    * @public
    * @param {number} n_classes_param - Number of classes
    * @return {function}
+   * @api stable
    */
 
   M.style.quantification.JENKS = function(n_classes_param) {
@@ -42,6 +43,7 @@ goog.provide('M.style.quantification');
    * @public
    * @param {number} n_classes_param - Number of classes
    * @return {function}
+   * @api stable
    */
 
   M.style.quantification.QUANTILE = function(n_classes_param) {
@@ -74,6 +76,7 @@ goog.provide('M.style.quantification');
    * can be used for any classing of data with `classes <= n_classes`
    * @function
    * @private
+   * @api stable
    *
    */
   M.style.quantification.getMatrices_ = function(data, n_classes) {
@@ -178,6 +181,7 @@ goog.provide('M.style.quantification');
    * and derive an array of n breaks.
    * @function
    * @private
+   * @api stable
    */
 
   M.style.quantification.jenksBreaks_ = function(data, lower_class_limits, n_classes) {
@@ -208,6 +212,7 @@ goog.provide('M.style.quantification');
    * @private
    * @param {Array} array - array of elements
    * @return {Array}
+   * @api stable
    */
 
   M.style.quantification.uniqueArray_ = function(array) {
@@ -222,10 +227,12 @@ goog.provide('M.style.quantification');
 
   /**
    * @constant
+   * @api stable
    */
   M.style.quantification.DEFAULT_CLASES_JENKS = 5;
   /**
    * @constant
+   * @api stable
    */
   M.style.quantification.DEFAULT_CLASES_QUANTILE = 5;
 })();
