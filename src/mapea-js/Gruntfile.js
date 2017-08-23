@@ -382,6 +382,7 @@ module.exports = function(grunt) {
                 externs: [
                            "src/externs/proj4x.js",
                            "src/externs/handlebarsx.js",
+                           "src/externs/chromax.js",
                            "src/externs/mapea-olx.js",
                            "src/externs/mx.js",
                            "libraries/ol/externs/bingmaps.js",
@@ -618,7 +619,11 @@ module.exports = function(grunt) {
                   }, { // handlebars
               path: 'libraries/handlebars',
               prefix: '../'
-                  }, { // proj4js
+            }, {
+              //chromajs
+              path: 'libraries/chroma-js',
+              prefix: '../'
+            }, { // proj4js
               path: 'libraries/proj4',
               prefix: '../'
             }, { // plugins
@@ -667,6 +672,9 @@ module.exports = function(grunt) {
                }, { // proj4js
             path: 'libraries/proj4',
             prefix: '../../../proj4'
+          }, { // chromajs
+            path: 'libraries/chroma-js',
+            prefix: '../../../chroma-js'
                }, { // leaflet src
             path: 'libraries/leaflet',
             prefix: '../../../../libraries/leaflet'
@@ -695,7 +703,7 @@ module.exports = function(grunt) {
                }, { // proj4js
             path: 'libraries/proj4',
             prefix: '../../../proj4'
-          },{ // ol3 externs
+          }, { // ol3 externs
             path: 'externs/ol',
             prefix: '../../../../externs/ol'
                }, { // ol3 src
