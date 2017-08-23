@@ -1,5 +1,7 @@
 goog.provide('M.style.Simple');
 
+goog.require('M.style.Feature');
+
 /**
  * @namespace M.style.Simple
  */

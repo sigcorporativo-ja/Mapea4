@@ -1,5 +1,7 @@
 goog.provide('M.style.Line');
 
+goog.require('M.style.Simple');
+
 /**
  * @namespace M.style.Line
  */
@@ -15,6 +17,12 @@ goog.provide('M.style.Line');
    */
   M.style.Line = (function(options) {
     options = options || M.style.Line.OPTS_DEFAULT;
+
+    //Default stroke
+    if (M.utils.isNullOrEmpty(options.stroke)) options.stroke = {};
+    if (M.utils.isNullOrEmpty(options.stroke.width)) options.stroke.width = 2;
+    if (M.utils.isNullOrEmpty(options.stroke.color)) options.stroke.color = '#67af13';
+
     var impl = new M.impl.style.Line(options);
     // calls the super constructor
     goog.base(this, options, impl);
