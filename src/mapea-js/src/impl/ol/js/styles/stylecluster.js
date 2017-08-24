@@ -301,11 +301,22 @@ goog.require('ol.geom.convexhull');
     let layerol = this.mLayer.getImpl().getOL3Layer();
     let featuresCluster = layerol.getSource().getFeatures();
     let features = [];
-    featuresCluster.forEach(function(f) {
-      if (f.getProperties() && M.utils.isArray(f.getProperties()['features'])) {
-        features = features.concat(f.getProperties()['features']);
-      }
-    });
+    if (featuresCluster.length == 0) {
+      let feats = layer.getFeatures();
+      feats.forEach(function(f) {
+        features.push(f.impl_.olFeature_);
+      });
+
+    }
+    else {
+      featuresCluster.forEach(function(f) {
+        if (f.getProperties() && M.utils.isArray(f.getProperties()['features'])) {
+          features = features.concat(f.getProperties()['features']);
+        }
+      });
+    }
+
+
     let source = new ol.source.Vector({});
     source.addFeatures(features);
     let vector = new ol.layer.Vector({
@@ -313,7 +324,7 @@ goog.require('ol.geom.convexhull');
     });
     vector.setZIndex(9999);
     layer.getImpl().setOL3Layer(vector);
-    layer.getImpl().fire(M.evt.LOAD, [features]);
+    //layer.getImpl().fire(M.evt.LOAD, [features]);
 
     if (this.options.hoverInteraction) {
       this.removeInteraction(layer, ol.interaction.Hover);

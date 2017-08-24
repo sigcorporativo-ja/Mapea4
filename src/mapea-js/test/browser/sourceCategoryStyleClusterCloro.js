@@ -16,8 +16,8 @@ let points = new M.layer.GeoJSON({
 
   name: "Empresas",
 
-  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/wfs?outputFormat=application/json&request=getfeature&typeNames=sepim:empresas&version=1.3.0",
-  //url: "http://192.168.60.189:8081/test/puntos.json",
+  //url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/wfs?outputFormat=application/json&request=getfeature&typeNames=sepim:empresas&version=1.3.0",
+  url: "http://192.168.60.189:8081/test/puntos.json",
   extract: false
 
 });
@@ -198,15 +198,18 @@ let stylesPoint = [
 
 let choropleth = new M.style.Choropleth("codmun", stylesPoint, M.style.quantification.JENKS()); //M.style.quantification.JENKS() --> f(d, l = 6) --> f(d, 2)
 
+function clusterf() {
+  points.setStyle(style);
+}
 
-points.setStyle(style);
+function choroplethf() {
+  points.setStyle(choropleth);
+}
 
-points.setStyle(categoryStyle);
 
-points.setStyle(style);
-
-points.setStyle(choropleth);
-
+function CategoryStylef() {
+  points.setStyle(categoryStyle);
+}
 
 
 

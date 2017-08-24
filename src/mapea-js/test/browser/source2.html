@@ -14,7 +14,7 @@
         margin: 0;
         padding: 0;
         height: 100%;
-        overflow: scroll;
+        overflow: hidden;
       }
 
       .makidentist:before {
@@ -50,7 +50,42 @@
   </head>
 
   <body>
-    <div id="mapjs" class="container"></div>
+    <button onclick="points_jenks()">Puntos Jenks</button>
+    <button onclick="points_quantile()">Puntos Quantile</button>
+    <button onclick="lines_jenks()">Lineas Jenks</button>
+    <button onclick="lines_quantile()">Lineas Quantile</button>
+    <button onclick="polygons_jenks()">Poligonos Jenks</button>
+    <button onclick="polygons_quantile()">Poligonos Quantile</button> Clases:
+    <input id="clases" type="number" name="" value="5">
+    <br>
+    <button onclick="points_quantile2()">Puntos QUANTILE (Custom Styles)</button>
+    <button onclick="points_jenks2()">Puntos JENKS (Custom Styles)</button>
+    <button onclick="lines_jenks2()">Lineas QUANTILE (Custom Styles)</button>
+    <button onclick="lines_quantile2()">Lineas QUANTILE (Custom Styles)</button>
+    <button onclick="polygons_jenks2()">Poligonos JENKS (Custom Styles)</button>
+    <button onclick="polygons_quantile2()">Poligonos QUANTILE (Custom Styles)</button>
+    <br>
+    <button onclick="points_setStyles()">Choropleth setStyles (Puntos)</button>
+    <button onclick="lines_setStyles()">Choropleth setStyles (Lineas)</button>
+    <button onclick="polygons_setStyles()">Choropleth setStyles (Poligonos)</button>
+    <br>
+    <button onclick="points_setQuantification()">Choropleth setQuantification (Puntos)</button>
+    <button onclick="lines_setQuantification()">Choropleth setQuantification (Lineas)</button>
+    <button onclick="polygons_setQuantification()">Choropleth setQuantification (Poligonos)</button>
+    <br>
+    <button onclick="points_setAttributeName()">Cambia el atributo de puntos a 'colegios'</button>
+    <br>
+    <button onclick="getAttributeName()">Get attribute name (Puntos)</button>
+    <button onclick="getStyles()">Get Styles (Poligonos)</button>
+    <button onclick="getQuantification()">Get quantification (Lineas)</button>
+    <button onclick="getValues()">Get values (Poligonos)</button>
+
+    <br>
+    <button onclick="toogle_layer(points)"> ON/OFF Puntos</button>
+    <button onclick="toogle_layer(lines)"> ON/OFF Lineas</button>
+    <button onclick="toogle_layer(polygons)"> ON/OFF Poligonos</button>
+    <div id="map" class="container"></div>
+
     <script type="text/javascript" src="../../libraries/babel-polyfill/browser-polyfill.js"></script>
     <script type="text/javascript" src="../../libraries/proj4/proj4.js"></script>
     <script type="text/javascript" src="../../node_modules/jsts/dist/jsts.min.js"></script>
@@ -67,59 +102,8 @@
     <!-- cartografia -->
     <script type="text/javascript" src="cartografias/fontCartografia.def.js"></script>
 
-    <!-- prueba
-    <script type="text/javascript" src="source8.js"></script>
-    -->
-    <script type="text/javascript" src="sourceCategoryStyle.js"></script>
-
-
-
-
-    <div id="pruebas" class="container">
-
-      <P>Introduzca objeto JSON categoria/Estilo
-
-        <TEXTAREA rows="10" cols="50" name="json"></TEXTAREA>
-      </P>
-
-      <P>Introduzca el estilo
-
-        <TEXTAREA rows="10" cols="50" name="estilo"></TEXTAREA>
-      </P>
-
-
-      <P>Introduzca el nuevo AttributeName
-        <INPUT type="text" name="AttributeName"> </P>
-
-      <P>Introduzca la categoria
-        <INPUT type="text" name="CategoryStyle"> </P>
-
-
-      <P>constructor creara el objeto CategoryStyle, para ello habra que especificar un JSON donde estará el valor a categorizar y los distintos valores que esta categoria podria tener junto con el estilo que se le va a aplicar.</P>
-
-      <button type="button" onclick="constructor(AttributeName,json)">constructor</button>
-
-      <P>GetStyleForCategories devolverá el estilo de una categoria (escpecificada por parametro)</P>
-
-      <button type="button" onclick="GetStyleForCategories(CategoryStyle)">GetStyleForCategories</button>
-
-      <P>SetStyleForCategories aplicará un estilo nuevo (escpecificado por parametro) a una categoria (escpecificada por parametro)</P>
-
-      <button type="button" onclick="SetStyleForCategories(CategoryStyle,estilo)">SetStyleForCategories</button>
-
-      <P>Devuelve el valor de AttributeName del objeto CategoryStyle</P>
-
-
-      <button type="button" onclick="GetAttributeName()">GetAttributeName</button>
-
-      <P>Cambia el valor AttributeName del objeto CategoryStyle</P>
-
-      <button type="button" onclick="SetAttributeName(AttributeName)">SetAttributeName</button>
-
-      <P>Devuelve todas las posibles valores que tiene una determinada categoria</P>
-
-      <button type="button" onclick="GetCategories()">GetCategories</button>
-    </div>
+    <!-- prueba -->
+    <script type="text/javascript" src="source.js"></script>
   </body>
 
 </html>
