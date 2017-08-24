@@ -672,7 +672,11 @@ goog.require('M.window');
       // gets the layers
       var kmlLayers = this.getKML(layersParam);
       if (kmlLayers.length > 0) {
-        kmlLayers.forEach(this.featuresHandler_.removeLayer);
+        kmlLayers.forEach(
+          function(layer) {
+            this.featuresHandler_.removeLayer(layer);
+          }.bind(this)
+        );
         // removes the layers
         this.getImpl().removeKML(kmlLayers);
       }
@@ -885,7 +889,11 @@ goog.require('M.window');
       // gets the layers
       var wfsLayers = this.getWFS(layersParam);
       if (wfsLayers.length > 0) {
-        wfsLayers.forEach(this.featuresHandler_.removeLayer);
+        wfsLayers.forEach(
+          function(layer) {
+            this.featuresHandler_.removeLayer(layer);
+          }.bind(this)
+        );
         // removes the layers
         this.getImpl().removeWFS(wfsLayers);
       }
