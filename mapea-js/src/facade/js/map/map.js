@@ -672,7 +672,11 @@ goog.require('M.window');
       // gets the layers
       var kmlLayers = this.getKML(layersParam);
       if (kmlLayers.length > 0) {
-        kmlLayers.forEach(this.featuresHandler_.removeLayer);
+        kmlLayers.forEach(
+          function(layer) {
+            this.featuresHandler_.removeLayer(layer);
+          }.bind(this)
+        );
         // removes the layers
         this.getImpl().removeKML(kmlLayers);
       }
@@ -885,7 +889,11 @@ goog.require('M.window');
       // gets the layers
       var wfsLayers = this.getWFS(layersParam);
       if (wfsLayers.length > 0) {
-        wfsLayers.forEach(this.featuresHandler_.removeLayer);
+        wfsLayers.forEach(
+          function(layer) {
+            this.featuresHandler_.removeLayer(layer);
+          }.bind(this)
+        );
         // removes the layers
         this.getImpl().removeWFS(wfsLayers);
       }
@@ -2361,6 +2369,25 @@ goog.require('M.window');
       this.getImpl().refresh();
     }
     this.getLayers().forEach(function(layer) {
+      layer.refresh();
+    });
+    return this;
+  };
+
+  /**
+   * This function refresh the state of this map instance,
+   * this is, all its layers.
+   *
+   * @function
+   * @api stable
+   * @returns {M.Map} the instance
+   */
+  M.Map.prototype.refresh = function () {
+    // checks if the implementation has refresh method
+    if (!M.utils.isUndefined(this.getImpl().refresh) && M.utils.isFunction(this.getImpl().refresh)) {
+      this.getImpl().refresh();
+    }
+    this.getLayers().forEach(function (layer) {
       layer.refresh();
     });
     return this;
