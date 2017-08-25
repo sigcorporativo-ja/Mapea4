@@ -1,0 +1,415 @@
+{
+  "symbols": [
+    {
+      "name": "M.impl.control.Printer",
+      "kind": "class",
+      "description": "Main constructor of the measure conrol.",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
+      "extends": "ol.control.Control",
+      "provides": [
+        "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.impl.control.Printer#addTo",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.impl.control.Printer#encodeLayer",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.impl.control.Printer#encodeLegend",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.impl.control.Printer#encodeKML",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.impl.control.Printer#encodeWMS",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.impl.control.Printer#encodeWFS",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.impl.control.Printer#encodeWMTS",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.impl.control.Printer#encodeOSM",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.impl.control.Printer#destroy",
+      "kind": "function",
+      "description": "This function destroys this control, clearing the HTML\nand unregistering all events",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/impl/ol3/js/printercontrol.js",
+      "provides": [
+        "P.impl.control.Printer"
+      ]
+    },
+    {
+      "name": "M.plugin.Printer",
+      "kind": "class",
+      "description": "Main facade plugin object. This class creates a plugin\nobject which has an implementation Object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printer.js",
+      "extends": "M.Plugin",
+      "params": [
+        {
+          "name": "impl",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.Printer"
+      ]
+    },
+    {
+      "name": "M.plugin.Printer#addTo",
+      "kind": "function",
+      "description": "This function provides the implementation\nof the object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printer.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.Printer"
+      ]
+    },
+    {
+      "name": "M.plugin.Printer#destroy",
+      "kind": "function",
+      "description": "This function destroys this plugin",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printer.js",
+      "provides": [
+        "P.plugin.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer",
+      "kind": "class",
+      "description": "Main constructor of the class. Creates a WMCSelector\ncontrol to provides a way to select an specific WMC",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "extends": "M.Control",
+      "provides": [
+        "P.control.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer#createView",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stabletrue",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer#addEvents",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer#getCapabilities",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer#createQueueElement",
+      "kind": "function",
+      "description": "This function checks if an object is equals\nto this control",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "provides": [
+        "P.control.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer#dowloadPrint",
+      "kind": "function",
+      "description": "This function checks if an object is equals\nto this control",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "provides": [
+        "P.control.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer#equals",
+      "kind": "function",
+      "description": "This function checks if an object is equals\nto this control",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "provides": [
+        "P.control.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer.TEMPLATE",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer.LOADING_CLASS",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer.DOWNLOAD_ATTR_NAME",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Printer"
+      ]
+    },
+    {
+      "name": "M.control.Printer.NO_TITLE",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/printer/facade/js/printercontrol.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Printer"
+      ]
+    }
+  ],
+  "defines": [],
+  "typedefs": [],
+  "externs": [],
+  "base": []
+}

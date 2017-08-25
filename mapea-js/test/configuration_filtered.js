@@ -1,4 +1,4 @@
-(function (M) {
+(function(M) {
   /**
    * Pixels width for mobile devices
    *
@@ -15,7 +15,7 @@
    * @api stable
    */
   //   M.config('MAPEA_URL', 'http://192.168.60.2:8080/mapea');
-  M.config('MAPEA_URL', 'http://localhost:8080/mapea');
+  M.config('MAPEA_URL', 'http://localhost:3030/mapea');
 
   /**
    * The path to the Mapea proxy to send
@@ -25,7 +25,7 @@
    * @public
    * @api stable
    */
-  M.config('PROXY_URL', 'http://localhost:8080/mapea/api/proxy');
+  M.config('PROXY_URL', 'http://localhost:3030/mapea/api/proxy');
 
   /**
    * The path to the Mapea proxy to send
@@ -35,7 +35,7 @@
    * @public
    * @api stable
    */
-  M.config('PROXY_POST_URL', 'http://localhost:8080/mapea/proxyPost');
+  M.config('PROXY_POST_URL', 'http://localhost:3030/mapea/proxyPost');
 
   /**
    * The path to the Mapea templates
@@ -54,7 +54,7 @@
    * @api stable
    */
   //   M.config('THEME_URL', 'http://192.168.60.2:8080/mapea/assets/');
-  M.config('THEME_URL', 'http://localhost:8080/mapea/assets/');
+  M.config('THEME_URL', 'http://localhost:3030/mapea/assets/');
 
   /**
    * The Geosearch URL
@@ -134,7 +134,7 @@
      * @public
      * @api stable
      */
-    'urls': (function (stringValue) {
+    'urls': (function(stringValue) {
       return stringValue.split(',');
     })('http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejeroCache.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejero.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextOrtofoto.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextIDEA.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextOrtofoto2009.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/callejero2011cache.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/ortofoto2011cache.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/hibrido2011cache.xml'),
 
@@ -145,7 +145,7 @@
      * @public
      * @api stable
      */
-    'predefinedNames': (function (stringValue) {
+    'predefinedNames': (function(stringValue) {
       return stringValue.split(',');
     })('callejerocacheado,callejero,ortofoto,idea,ortofoto09,callejero2011cache,ortofoto2011cache,hibrido2011cache'),
 
@@ -156,7 +156,7 @@
      * @public
      * @api stable
      */
-    'names': (function (stringValue) {
+    'names': (function(stringValue) {
       return stringValue.split(',');
     })('mapa callejero cache,mapa del callejero,mapa ortofoto,mapa idea,mapa ortofoto09,Callejero,Ortofoto,Híbrido')
   });
@@ -292,7 +292,7 @@
      * @public
      * @api stable
      */
-    'TOOLS': 'measurebar,getfeatureinfo'.split(','),
+    'TOOLS': 'history,measurebar,getfeatureinfo'.split(','),
 
     /**
      * TODO
@@ -396,4 +396,12 @@
    * @type {String}
    */
   M.config('MAPBOX_TOKEN_VALUE', 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpbTgzcHQxMzAxMHp0eWx4bWQ1ZHN2NGcifQ.WVwjmljKYqKciEZIC3NfLA');
+
+  /**
+   * Number of pages for the plugin AttributeTable
+   *
+   * @private
+   * @type {String}
+   */
+  M.config('ATTRIBUTETABLE_PAGES', 5);
 })(window.M);

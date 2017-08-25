@@ -271,4 +271,13 @@ goog.require('M.impl.Layer');
     return equals;
   };
 
+  /**
+   * This function refresh layer
+   * @function
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.refresh = function() {
+    this.getOL3Layer().getSource().clear();
+  };
+
 })();

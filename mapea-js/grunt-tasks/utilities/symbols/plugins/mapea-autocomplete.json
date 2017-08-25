@@ -1,0 +1,81 @@
+{
+  "symbols": [
+    {
+      "name": "M.plugin.Autocomplete",
+      "kind": "class",
+      "description": "Main facade plugin object. This class creates a plugin\nobject which has an implementation Object",
+      "stability": "stable",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "extends": "M.Plugin",
+      "params": [
+        {
+          "name": "impl",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "M.plugin.Autocomplete"
+      ]
+    },
+    {
+      "name": "M.plugin.Autocomplete#addTo",
+      "kind": "function",
+      "description": "This function provides the implementation\nof the object",
+      "stability": "stable",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "M.plugin.Autocomplete"
+      ]
+    },
+    {
+      "name": "M.plugin.Autocomplete#destroy",
+      "kind": "function",
+      "description": "This function destroys this plugin",
+      "stability": "stable",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "provides": [
+        "M.plugin.Autocomplete"
+      ]
+    },
+    {
+      "name": "M.plugin.Autocomplete.CLASS",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "M.plugin.Autocomplete"
+      ]
+    },
+    {
+      "name": "M.plugin.Autocomplete.SEARCHING_CLASS",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/home/manueljmorillo/environment/workspace/mapea-js/src/plugins/autocomplete/facade/js/autocomplete.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "M.plugin.Autocomplete"
+      ]
+    }
+  ],
+  "defines": [],
+  "typedefs": [],
+  "externs": [],
+  "base": []
+}

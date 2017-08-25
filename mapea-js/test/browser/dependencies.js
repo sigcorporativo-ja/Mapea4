@@ -11,6 +11,9 @@ goog.require("P.plugin.Measurebar");
 goog.require("P.impl.plugin.Measurebar");
 goog.require("P.plugin.Printer");
 goog.require("P.impl.control.Printer");
+// goog.require("P.plugin.AttributeTable");
+// goog.require("P.control.AttributeTableControl");
+// goog.require("P.impl.control.AttributeTableControl");
 goog.require("P.plugin.Streetview");
 goog.require("P.impl.plugin.Streetview");
 goog.require("P.impl.plugin.WFSTControls");
@@ -33,6 +36,12 @@ goog.require("ol.style.Style");
 goog.require("ol.style.Text");
 goog.require("ol.style.Fill");
 goog.require("ol.style.Stroke");
+goog.require("M.Filter");
+goog.require("M.filter.Function");
+goog.require("M.impl.Feature");
+goog.require("M.filter.Spatial");
+goog.require("M.filter.spatial");
+goog.require("M.filter");
 
 //     image: new
 goog.require("goog.events");

@@ -1,0 +1,691 @@
+{
+  "symbols": [
+    {
+      "name": "M.plugin.Geosearch",
+      "kind": "class",
+      "description": "Main facade plugin object. This class creates a plugin\nobject which has an implementation Object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearch.js",
+      "extends": "M.Plugin",
+      "params": [
+        {
+          "name": "impl",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.Geosearch"
+      ]
+    },
+    {
+      "name": "M.plugin.Geosearch#addTo",
+      "kind": "function",
+      "description": "This function provides the implementation\nof the object",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearch.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "Object"
+          ]
+        }
+      ],
+      "provides": [
+        "P.plugin.Geosearch"
+      ]
+    },
+    {
+      "name": "M.plugin.Geosearch#getInput",
+      "kind": "function",
+      "description": "This function provides the input search",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearch.js",
+      "returns": {
+        "types": [
+          "HTMLElement"
+        ]
+      },
+      "provides": [
+        "P.plugin.Geosearch"
+      ]
+    },
+    {
+      "name": "M.plugin.Geosearch#destroy",
+      "kind": "function",
+      "description": "This function destroys this plugin",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearch.js",
+      "provides": [
+        "P.plugin.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch",
+      "kind": "class",
+      "description": "Main constructor of the measure conrol.",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "extends": "ol.control.Control",
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#addTo",
+      "kind": "function",
+      "description": "This function adds the control to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        },
+        {
+          "name": "template",
+          "types": [
+            "Function"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#unselectResults",
+      "kind": "function",
+      "description": "This function draws the results into the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "keepPopup",
+          "types": [
+            "boolean"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#setNewResultsAsDefault",
+      "kind": "function",
+      "description": "This function draws the results into the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "keepPopup",
+          "types": [
+            "boolean"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#drawResults",
+      "kind": "function",
+      "description": "This function draws the results into the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "results",
+          "types": [
+            "Array.<Object>"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#drawNewResults",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#zoomToResults",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#getLayer",
+      "kind": "function",
+      "description": "This function returns the layer used",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "returns": {
+        "types": [
+          "ol.layer.Vector"
+        ]
+      },
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#resultClick",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#hideHelp",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#showHelp",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#clear",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.control.Geosearch#destroy",
+      "kind": "function",
+      "description": "This function destroys this control, clearing the HTML\nand unregistering all events",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchcontrol.js",
+      "provides": [
+        "P.impl.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch",
+      "kind": "class",
+      "description": "Main constructor of the class. Creates a WMCSelector\ncontrol to provides a way to select an specific WMC",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "extends": "M.Control",
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch#createView",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stabletrue",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch#addEvents",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch#drawResults",
+      "kind": "function",
+      "description": "This function draws the results into the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "results",
+          "types": [
+            "Array.<Object>"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch#drawNewResults",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch#zoomToResults",
+      "kind": "function",
+      "description": "This function sets zoom to results",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch#getInput",
+      "kind": "function",
+      "description": "This function provides the input search",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "returns": {
+        "types": [
+          "HTMLElement"
+        ]
+      },
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch#equals",
+      "kind": "function",
+      "description": "This function checks if an object is equals\nto this control",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch.NAME",
+      "kind": "constant",
+      "description": "Name of this control",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch.TEMPLATE",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch.RESULTS_TEMPLATE",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch.HELP_TEMPLATE",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch.SEARCHING_CLASS",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.control.Geosearch.HIDDEN_RESULTS_CLASS",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/facade/js/geosearchcontrol.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.control.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch",
+      "kind": "class",
+      "description": "Main constructor of the class. Creates a WFS layer\nwith parameters specified by the user",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "params": [
+        {
+          "name": "options",
+          "types": [
+            "Mx.parameters.LayerOptions"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch#addTo",
+      "kind": "function",
+      "description": "This function sets the map object of the layer",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch#drawResults",
+      "kind": "function",
+      "description": "This function draws the results into the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "params": [
+        {
+          "name": "results",
+          "types": [
+            "Array.<Object>"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch#drawNewResults",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch#clear",
+      "kind": "function",
+      "description": "This function creates the view to the specified map",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "params": [
+        {
+          "name": "map",
+          "types": [
+            "M.Map"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch#selectFeatures",
+      "kind": "function",
+      "description": "This function checks if an object is equals\nto this layer",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "params": [
+        {
+          "name": "feature",
+          "types": [
+            "ol.Feature"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch#selectFeatureBySolrid",
+      "kind": "function",
+      "description": "This function checks if an object is equals\nto this layer",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "params": [
+        {
+          "name": "feature",
+          "types": [
+            "ol.Feature"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch#unselectFeatures",
+      "kind": "function",
+      "description": "This function checks if an object is equals\nto this layer",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "params": [
+        {
+          "name": "feature",
+          "types": [
+            "ol.Feature"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch#setNewResultsAsDefault",
+      "kind": "function",
+      "description": "This function checks if an object is equals\nto this layer",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "params": [
+        {
+          "name": "feature",
+          "types": [
+            "ol.Feature"
+          ]
+        }
+      ],
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch#destroy",
+      "kind": "function",
+      "description": "This function destroys this layer, clearing the HTML\nand unregistering all events",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch#equals",
+      "kind": "function",
+      "description": "This function checks if an object is equals\nto this layer",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    },
+    {
+      "name": "M.impl.layer.Geosearch.POPUP_RESULT",
+      "kind": "constant",
+      "description": "Template for this controls",
+      "stability": "stable",
+      "path": "/media/jgleal/DATOS/Desarrollo/GIT/Mapea4/mapea-js/src/plugins/geosearch/impl/ol3/js/geosearchlayer.js",
+      "types": [
+        "string"
+      ],
+      "provides": [
+        "P.impl.layer.Geosearch"
+      ]
+    }
+  ],
+  "defines": [],
+  "typedefs": [],
+  "externs": [],
+  "base": []
+}
