@@ -13,6 +13,22 @@ goog.require('M.impl.style.Simple');
    }   * @api stable
    */
   M.impl.style.Point = (function(options) {
+
+
+    this.olStyleFn_ = function(resolution) {
+      let style = null;
+      let styleIcon = null;
+      let stroke = options.stroke;
+      let radius = options.radius;
+      let fill = M.impl.style.Simple.getValues(options.fill, this);
+      let label = options.label;
+      let icon = options.icon;
+      let snaptopixel = options.snaptopixel;
+
+
+      return style;
+    };
+
     this.setOptionsToOLStyle(options);
   });
   goog.inherits(M.impl.style.Point, M.impl.style.Simple);
@@ -25,7 +41,7 @@ goog.require('M.impl.style.Simple');
    * @param {object} options - options to style
    * @function
    */
-  M.impl.style.Point.prototype.setOptionsToOLStyle = function (options) {
+  M.impl.style.Point.prototype.setOptionsToOLStyle = function(options) {
     let stroke = options.stroke;
     let radius = options.radius;
     let fill = options.fill;
@@ -182,6 +198,6 @@ goog.require('M.impl.style.Simple');
     }
 
     let olFeature = feature.getImpl().getOLFeature();
-    olFeature.setStyle(styles);
+    olFeature.setStyle(this.olStyleFn_);
   };
 })();
