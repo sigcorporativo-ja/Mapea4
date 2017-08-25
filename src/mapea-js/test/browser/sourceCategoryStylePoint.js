@@ -29,20 +29,20 @@ var style2 = new M.style.Point({
 var feature = new M.Feature('feature', {
   "type": "Feature",
   "properties": {
-    "styleType": "concertado"
+    "colegio": "public"
   },
   "geometry": {
     "type": "Point",
-    "coordinates": [308241.7352,
+    "coordinates": [508241.7352,
       4169727.5908
     ]
   }
-}, style);
+}, style2);
 
 var feature2 = new M.Feature('feature2', {
   "type": "Feature",
   "properties": {
-    "styleType": "public"
+    "colegio": "public"
   },
   "geometry": {
     "type": "Point",
@@ -55,7 +55,7 @@ var feature2 = new M.Feature('feature2', {
 var feature3 = new M.Feature('feature3', {
   "type": "Feature",
   "properties": {
-    "styleType": "hibrido"
+    "colegio": "hibrido"
   },
   "geometry": {
     "type": "Point",
@@ -68,7 +68,7 @@ var feature3 = new M.Feature('feature3', {
 var feature4 = new M.Feature('feature4', {
   "type": "Feature",
   "properties": {
-    "styleType": "public"
+    "colegio": "public"
   },
   "geometry": {
     "type": "Point",
@@ -81,22 +81,24 @@ var feature4 = new M.Feature('feature4', {
 var feature5 = new M.Feature('feature5', {
   "type": "Feature",
   "properties": {
-    "styleType": "privado"
+    "colegio": "hibrido"
   },
   "geometry": {
     "type": "Point",
-    "coordinates": [408685.7378,
-      4069564.8875
+    "coordinates": [334236.6796,
+      4135337.8894
     ]
   }
-}, style);
+}, style2);
+
+
 
 var layer = new M.layer.Vector({
   name: 'layerVector'
 });
 
 mapajs.addLayers([layer]);
-layer.addFeatures([feature, feature2, feature3, feature4, feature5]);
+layer.addFeatures([feature5, feature4, feature3, feature2, feature]);
 //layer.addFeatures([feature5, feature4, feature3]);
 
 
@@ -166,10 +168,11 @@ var verde = new M.style.Point({
 
 // constructor del mapa
 
-var categoryStyle = new M.style.Category("styleType", {
-  "public": verde,
+var categoryStyle = new M.style.Category("colegio", {
+  "public": rojo,
   "privado": verde,
   "religiosos": rojo
+
 });
 
 

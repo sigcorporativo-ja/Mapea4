@@ -1,4 +1,5 @@
 goog.provide('M.Style');
+
 (function() {
   /**   * Rec. options que es el json del estilo   */
 
