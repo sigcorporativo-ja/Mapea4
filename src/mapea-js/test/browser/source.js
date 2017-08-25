@@ -1636,3 +1636,24 @@ function numClass() {
   numClases = numClases === "" ? 0 : parseInt(numClases);
   return numClases;
 }
+
+function choropleth_cluster() {
+  let options = {
+    ranges: [
+      ],
+    animated: true,
+    hoverInteraction: true,
+    displayAmount: true,
+    selectedInteraction: true,
+    distance: 40
+  };
+
+  let optionsVendor = {
+    displayInLayerSwitcherHoverLayer: false,
+    distanceSelectFeatures: 15
+  }
+  let cluster = new M.style.Cluster(options, optionsVendor);
+  let choropleth = new M.style.Choropleth('alumnos', null, M.style.quantification.JENKS(3));
+  points.setStyle(choropleth);
+  points.setStyle(cluster);
+}
