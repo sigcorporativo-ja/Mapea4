@@ -9,7 +9,25 @@ goog.require('M.impl.style.Simple');
  */
 
 (function() {
+  /**
+   * Main constructor of the class.
+   * @constructor
+   * @implements {M.impl.style.Simple}
+   * @api stable
+   */
   M.impl.style.Polygon = function(options) {
+    this.setOptionsToOLStyle(options);
+  };
+  goog.inherits(M.impl.style.Polygon, M.impl.style.Simple);
+
+  /**
+   * This function se options to ol style
+   *
+   * @public
+   * @param {object} options - options to style
+   * @function
+   */
+  M.impl.style.Polygon.prototype.setOptionsToOLStyle = function(options) {
     let stroke = options.stroke;
     let label = options.label;
     let fill = options.fill;
@@ -84,9 +102,13 @@ goog.require('M.impl.style.Simple');
       }
     }
   };
-  goog.inherits(M.impl.style.Polygon, M.impl.style.Simple);
+
   /**
-   * TODO
+   * This function apply style to feature
+   *
+   * @public
+   * @param {M.Feature} feature - Feature to apply style
+   * @function
    */
   M.impl.style.Polygon.prototype.applyToFeature = function(feature) {
     setTimeout(function() {

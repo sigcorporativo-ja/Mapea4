@@ -37,29 +37,12 @@ goog.require('M.dialog');
 goog.require('M.Plugin');
 goog.require('M.window');
 
-//goog.require('M.Style');
-
-
-
-
-//goog.require('M.style.Simple');
 goog.require('M.style.Point');
 goog.require('M.style.Polygon');
 goog.require('M.style.Line');
-
 goog.require('M.style.Cluster');
-
 goog.require('M.style.Choropleth');
-
-
 goog.require('M.style.Category');
-
-
-
-
-
-
-
 
 (function() {
   /**

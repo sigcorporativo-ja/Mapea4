@@ -1,21 +1,37 @@
 goog.provide('M.style.Point');
 
 goog.require('M.style.Simple');
+
 /**
  * @namespace M.style.Point
  */
 (function() {
 
   /**
-   * TODO
+   * @classdesc
+   * Creates a style point
+   * @constructor
+   * @extends {M.style.Simple}
+   * @param {Object} options - options style
+   * @api stable
    */
 
   M.style.Point = (function(options) {
-    // TODO
     options = options || M.style.Point.OPTS_DEFAULT;
-    /**
-     * TODO
-     */
+
+    //default stroke
+    if (M.utils.isNullOrEmpty(options.stroke)) options.stroke = {};
+    if (M.utils.isNullOrEmpty(options.stroke.width)) options.stroke.width = 2;
+    if (M.utils.isNullOrEmpty(options.stroke.color)) options.stroke.color = '#67af13';
+
+    //default fill
+    if (M.utils.isNullOrEmpty(options.fill)) options.fill = {};
+    if (M.utils.isNullOrEmpty(options.fill.color)) options.fill.color = '#67af13';
+    if (M.utils.isNullOrEmpty(options.fill.opacity)) options.fill.opacity = 0.2;
+
+    //default radius
+    if (M.utils.isNullOrEmpty(options.radius)) options.radius = 6;
+
     var impl = new M.impl.style.Point(options);
 
     // calls the super constructor
@@ -24,7 +40,11 @@ goog.require('M.style.Simple');
   goog.inherits(M.style.Point, M.style.Simple);
 
   /**
-   * TODO
+   * This function apply style to feature
+   *
+   * @public
+   * @param {M.Feature} feature - Feature to apply style
+   * @function
    */
   M.style.Point.prototype.applyToFeature = function(feature) {
     this.getImpl().applyToFeature(feature);

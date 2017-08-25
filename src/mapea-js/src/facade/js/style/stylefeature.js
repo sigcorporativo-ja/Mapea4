@@ -1,15 +1,19 @@
 goog.provide('M.style.Feature');
+goog.require('M.Style');
 
 goog.require('M.Style');
 
 
 /**
- * TODO
+ * @namespace M.style.Feature
  */
+
 (function() {
 
   /**
-   * TODO
+   * Abstract class
+   *
+   * @api stable
    */
   M.style.Feature = (function(options, impl) {
     // calls the super constructor
@@ -19,8 +23,11 @@ goog.require('M.Style');
 
 
   /**
-   * TODO
-   * Como es protected no se rellena
+   * This function apply style to feature
+   *
+   * @protected
+   * @param {M.Feature} feature - Feature to apply style
+   * @function
    */
   M.style.Feature.prototype.applyToFeature_ = function(feature) {};
 })();

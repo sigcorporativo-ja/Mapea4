@@ -1,36 +1,55 @@
 goog.provide('M.style.baseline');
 
-/**
- * TODO
- */
 (function() {
   /**
-   * TODO
+   * Top style baseline
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.baseline.TOP = "TOP";
 
   /**
-   * TODO
+   * Middle style baseline
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.baseline.MIDDLE = "MIDDLE";
-
   /**
-   * TODO
+   * Bottom style baseline
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.baseline.BOTTOM = "BOTTOM";
-
   /**
-   * TODO
+   * Alphabetic style baseline
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.baseline.ALPHABETIC = "ALPHABETIC";
 
   /**
-   * TODO
+   * Hanging style baseline
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.baseline.HANGING = "HANGING";
 
   /**
-   * TODO
+   * Ideographic style baseline
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.baseline.IDEOGRAPHIC = "IDEOGRAPHIC";
 

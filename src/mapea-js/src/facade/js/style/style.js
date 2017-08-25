@@ -1,22 +1,20 @@
 goog.provide('M.Style');
 
+/**
+ * @namespace M.Style
+ */
+
 (function() {
   /**   * Rec. options que es el json del estilo   */
 
+  /**
+   * Abstract class
+   *
+   * @api stable
+   */
   M.Style = (function(options, impl) {
-    /**
-     * TODO
-     */
-    this.options_ = options;
-    /**
-     * TODO
-     */
-    this.canvas_ = document.createElement('canvas');
-    /**
-     * TODO
-     */
-    this.layer_ = null;
-    // si rec. una imagen podemos tener un canvas
+    [this.options_, this.canvas_, this.layer_] = [options, document.createElement('canvas'), null];
+
     if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
       let ctx = this.canvas_.getContext('2d');
       let img = new Image();
@@ -29,10 +27,14 @@ goog.provide('M.Style');
   });
   goog.inherits(M.Style, M.facade.Base);
   /**
-   * TODO
+   * This function apply style
    *
+   * @protected
+   * @param {M.layer.Vector} layer - Layer to apply the styles
+   * @function
    */
   M.Style.prototype.apply = function(layer) {
+    this.layer_ = layer;
     this.getImpl().applyToLayer(layer);
   };
   /**
@@ -41,8 +43,12 @@ goog.provide('M.Style');
    */
   M.Style.prototype.unapply = function(layer) {};
   /**
-   * TODO
+   * This function returns the value of the indicated attribute
    *
+   * @protected
+   * @param {String} attribute - Attribute to know the value
+   * @return {Object} Attribute Value
+   * @function
    */
   M.Style.prototype.get = function(attribute) {
     let attrValue;
@@ -57,25 +63,59 @@ goog.provide('M.Style');
     }
     return attrValue;
   };
+
   /**
-   * supongo que, solo se pude hacer un set de fill, stroke y label, y que sería del objeto completo
-   * es decir, que no se puede cambiar solo el color por ejemplo
+   * This function set value to property and apply new property
+   *
+   * @protected
+   * @param {String} property - Property to change the value
+   * @param {String} value - Value to property
+   * @return {M.Style}
+   * @function
    */
   M.Style.prototype.set = function(property, value) {
-    this.options_[property] = value;
-    // TODO refrescamos de nuevo el estilo
-    this.apply_(this.layer_);
+    this.setValue_(this.options_, property, value);
+    this.getImpl().setOptionsToOLStyle(this.options_);
+    this.apply(this.layer_);
+
     return this;
   };
   /**
-   * TODO
+   * This function set value to property
+   *
+   * @protected
+   * @param {Object} obj - Style
+   * @param {String} path - Path property
+   * @param {String} value - Value property
+   * @return {String} value
+   * @function
+   */
+  M.Style.prototype.setValue_ = function(obj, path, value) {
+    let keys = Array.isArray(path) ? path : path.split('.');
+    for (var i = 0; i < keys.length - 1; i++) {
+      let key = keys[i];
+      if (!hasOwnProperty.call(obj, key)) {
+        obj[key] = {};
+      }
+      obj = obj[key];
+    }
+    obj[keys[i]] = value;
+    return value;
+  };
+
+
+  /**
+   * This function returns data url to canvas
+   *
+   * @function
+   * @protected
+   * @return {String} data url to canvas
    */
   M.Style.prototype.toImage = function() {
     return this.canvas_.toDataURL('png');
   };
   /**
    * TODO
-   * Como es protected no se rellena
    */
   M.Style.prototype.serialize = function() {};
   /**
