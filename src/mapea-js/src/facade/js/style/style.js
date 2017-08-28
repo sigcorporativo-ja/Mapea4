@@ -13,6 +13,7 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style = (function(options, impl) {
+    //rev_87548: añadir jsdoc @export
     [this.options_, this.canvas_, this.layer_] = [options, document.createElement('canvas'), null];
 
     if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
@@ -26,17 +27,20 @@ goog.provide('M.Style');
     goog.base(this, impl);
   });
   goog.inherits(M.Style, M.facade.Base);
+
   /**
    * This function apply style
    *
-   * @protected
+   * @public
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @function
+   * @api stable
    */
   M.Style.prototype.apply = function(layer) {
     this.layer_ = layer;
     this.getImpl().applyToLayer(layer);
   };
+
   /**
    * TODO
    *
@@ -67,17 +71,19 @@ goog.provide('M.Style');
   /**
    * This function set value to property and apply new property
    *
-   * @protected
+   * @public
    * @param {String} property - Property to change the value
    * @param {String} value - Value to property
    * @return {M.Style}
    * @function
+   * @api stable
    */
   M.Style.prototype.set = function(property, value) {
     this.setValue_(this.options_, property, value);
+    // 87548: no se puede usar,
     this.getImpl().setOptionsToOLStyle(this.options_);
-    this.apply(this.layer_);
-
+    // 87548: this.refresh() crear con la linea siguiente
+    //this.apply(this.layer_);
     return this;
   };
   /**
@@ -90,6 +96,7 @@ goog.provide('M.Style');
    * @return {String} value
    * @function
    */
+  // 87548: poner como static
   M.Style.prototype.setValue_ = function(obj, path, value) {
     let keys = Array.isArray(path) ? path : path.split('.');
     for (var i = 0; i < keys.length - 1; i++) {
@@ -123,6 +130,7 @@ goog.provide('M.Style');
    *
    */
   M.Style.prototype.equals = function(style) {
+    //87548: modificar return
     if (this.constructor === style.constructor) {
       return true;
     }

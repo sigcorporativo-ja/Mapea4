@@ -35,7 +35,7 @@ goog.provide('M.impl.style.Simple');
       olLayer.setStyle(styles);
     }
     else {
-      //  tiene que asignar el style de alguna manera
+      //  87548: tiene que asignar el style de alguna manera
       // layerImpl.metodoWhatever()
     }
   };

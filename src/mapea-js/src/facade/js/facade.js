@@ -55,4 +55,8 @@ goog.require('M.Object');
   M.facade.Base.prototype.setImpl = function(impl) {
     this.impl_ = impl;
   };
+
+  //87548: crear metodo, ol2 extend params
+  //    this.extends_(options, M.style.Line.DEFAULT);
+
 })();
