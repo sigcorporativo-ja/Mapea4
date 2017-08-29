@@ -61,6 +61,7 @@ goog.require('M.style.form');
 // ext
 goog.require('ol.style.FillPattern');
 goog.require('ol.style.FontSymbol');
+goog.require('ol.style.TextPath');
 
 // image: new
 goog.require("goog.events");

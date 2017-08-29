@@ -80,7 +80,6 @@ goog.require('M.impl.style.Simple');
       );
     }
   };
-  goog.inherits(M.impl.style.Line, M.impl.style.Simple);
 
   /**
    * This function apply style to feature
