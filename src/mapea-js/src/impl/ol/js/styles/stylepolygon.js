@@ -16,7 +16,7 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Polygon = function(options) {
-    this.setOptionsToOLStyle(options);
+    goog.base(this, options);
   };
   goog.inherits(M.impl.style.Polygon, M.impl.style.Simple);
 
@@ -27,7 +27,7 @@ goog.require('M.impl.style.Simple');
    * @param {object} options - options to style
    * @function
    */
-  M.impl.style.Polygon.prototype.setOptionsToOLStyle = function(options) {
+  M.impl.style.Polygon.prototype.parseFacadeOptions_ = function(options) {
     let stroke = options.stroke;
     let label = options.label;
     let fill = options.fill;

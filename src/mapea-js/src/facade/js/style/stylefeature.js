@@ -21,12 +21,12 @@ goog.require('M.Style');
   /**
    * This function apply style to feature
    *
-   * @private
+   * @public
    * @param {M.Feature} feature - Feature to apply style
    * @function
    * @api stable
    */
-  M.style.Feature.prototype.applyToFeature_ = function(feature) {
+  M.style.Feature.prototype.applyToFeature = function(feature) {
     this.getImpl().applyToFeature(feature);
   };
 })();
