@@ -54,10 +54,13 @@ goog.require('M.exception');
       //features.forEach(f => f.addTo(this));
       features.forEach(function(f, index) {
         f.addTo(this);
+        if (M.utils.isNullOrEmpty(f.getStyle())) {
+          f.setStyle(this.style_);
+        }
         if (index == features.length - 1) {
           this.fire(M.evt.LOAD, [features]);
         }
-      }.bind(this));
+      }, this);
     }
   };
 
@@ -232,7 +235,8 @@ goog.require('M.exception');
 
         if (this.style_ instanceof M.style.Cluster) {
           if (this.getImpl().getOL3Layer().getSource().getState() === 'ready' && this.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {
-            this.style_.unapply(this);          }
+            this.style_.unapply(this);
+          }
           else {
             var style_old = this.style_;
             this.getImpl().on(M.evt.LOAD, function(e) {
