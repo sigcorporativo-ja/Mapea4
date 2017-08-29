@@ -29,9 +29,9 @@ goog.provide('M.impl.Feature');
     else if (M.utils.isNullOrEmpty(this.olFeature_.getId())) {
       this.olFeature_.setId(M.utils.generateRandom('mapea_feature_'));
     }
-    // if (!M.utils.isNullOrEmpty(style)) {
-    //   this.getOLFeature().setStyle(style);
-    // }
+    if (!M.utils.isNullOrEmpty(style)) {
+      this.getOLFeature().setStyle(style);
+    }
   });
 
   /**
