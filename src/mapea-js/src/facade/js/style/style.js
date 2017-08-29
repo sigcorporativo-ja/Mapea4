@@ -13,8 +13,27 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style = (function(options, impl) {
-    //rev_87548: añadir jsdoc @export
-    [this.options_, this.canvas_, this.layer_] = [options, document.createElement('canvas'), null];
+    /**
+     * User options for this style
+     * @private
+     * @type {Object}
+     */
+    this.options_ = options;
+
+    /**
+     * The canvas element to draw the style
+     * into a layer swticher
+     * @private
+     * @type {HTMLCanvasElement}
+     */
+    this.canvas_ = document.createElement('canvas');
+
+    /**
+     * Layer which this style is applied
+     * @private
+     * @type {M.layer.Vector}
+     */
+    this.layer_ = null;
 
     if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
       let ctx = this.canvas_.getContext('2d');
@@ -80,36 +99,46 @@ goog.provide('M.Style');
    */
   M.Style.prototype.set = function(property, value) {
     this.setValue_(this.options_, property, value);
-    // 87548: no se puede usar,
-    this.getImpl().setOptionsToOLStyle(this.options_);
-    // 87548: this.refresh() crear con la linea siguiente
-    //this.apply(this.layer_);
+    this.refresh();
     return this;
   };
   /**
    * This function set value to property
    *
-   * @protected
+   * @private
    * @param {Object} obj - Style
    * @param {String} path - Path property
    * @param {String} value - Value property
    * @return {String} value
    * @function
    */
-  // 87548: poner como static
   M.Style.prototype.setValue_ = function(obj, path, value) {
-    let keys = Array.isArray(path) ? path : path.split('.');
-    for (var i = 0; i < keys.length - 1; i++) {
-      let key = keys[i];
-      if (!hasOwnProperty.call(obj, key)) {
+    let keys = M.utils.isArray(path) ? path : path.split('.');
+    let keyLength = keys.length;
+    if (keyLength === 1) { // base case
+      let key = keys[0];
+      obj[key] = value;
+    }
+    else if (keyLength > 1) { // recursive case
+      if (M.utils.isNullOrEmpty(obj[key])) {
         obj[key] = {};
       }
-      obj = obj[key];
+      this.setValue_(obj[key], keys.slice(1, keyLength), value);
     }
-    obj[keys[i]] = value;
-    return value;
   };
 
+  /**
+   * This function updates the style of the
+   * layer
+   *
+   * @public
+   * @function
+   * @return {String} data url to canvas
+   * @api stable
+   */
+  M.Style.prototype.refresh = function() {
+    this.apply(this.layer_);
+  };
 
   /**
    * This function returns data url to canvas
@@ -121,21 +150,17 @@ goog.provide('M.Style');
   M.Style.prototype.toImage = function() {
     return this.canvas_.toDataURL('png');
   };
+
   /**
    * TODO
    */
   M.Style.prototype.serialize = function() {};
+
   /**
    * TODO
    *
    */
   M.Style.prototype.equals = function(style) {
-    //87548: modificar return
-    if (this.constructor === style.constructor) {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return (this.constructor === style.constructor);
   };
 })();

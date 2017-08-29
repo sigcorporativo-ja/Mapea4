@@ -10,7 +10,18 @@ goog.provide('M.impl.style.Simple');
    * @constructor
    * @api stable
    */
-  M.impl.style.Simple = (function() {});
+  M.impl.style.Simple = (function(options = {}) {
+    this.parseFacadeOptions_(options);
+  });
+
+  /**
+   * This function apply style options facade to impl
+   * @private
+   * @function
+   * @param {Object} options
+   * @api stable
+   */
+  M.impl.style.Simple.prototype.parseFacadeOptions_ = function(options = {}) {};
 
   /**
    * This function apply style to layer
@@ -29,14 +40,17 @@ goog.provide('M.impl.style.Simple');
       styles.push(this.styleIcon_);
     }
 
-    let layerImpl = layer.getImpl();
-    let olLayer = layerImpl.getOL3Layer();
-    if (!M.utils.isNullOrEmpty(olLayer)) {
-      olLayer.setStyle(styles);
-    }
-    else {
-      //  87548: tiene que asignar el style de alguna manera
-      // layerImpl.metodoWhatever()
-    }
+    layer.getFeatures().forEach(f => f.getImpl().getOLFeature().setStyle(styles));
+    // let layerImpl = layer.getImpl();
+    // let olLayer = layerImpl.getOL3Layer();
+    // if (!M.utils.isNullOrEmpty(olLayer)) {
+    //   olLayer.setStyle(function(olFeature, resolution) {
+    //     return styles;
+    //   });
+    // }
+    // else {
+    //   //  87548: tiene que asignar el style de alguna manera
+    //   // layerImpl.metodoWhatever()
+    // }
   };
 })();

@@ -20,7 +20,9 @@ goog.require('M.style.Simple');
    */
   M.style.Line = (function(options = {}) {
     this.extends_(options, M.style.Line.DEFAULT);
-    var impl = new M.impl.style.Line(options);
+
+    let impl = new M.impl.style.Line(options);
+
     // calls the super constructor
     goog.base(this, options, impl);
   });

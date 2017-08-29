@@ -47,6 +47,9 @@ goog.require('M.style.Simple');
     fill: {
       color: '#67af13',
       opacity: 0.2
+    },
+    label: {
+      offset: [0, 0]
     }
   };
 })();
