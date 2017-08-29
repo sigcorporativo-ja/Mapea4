@@ -35,24 +35,35 @@ goog.require('ol.geom.convexhull');
       source: this.clusterSource,
       animationDuration: optionsVendor.animationDuration ? optionsVendor.animationDuration : M.style.Cluster.ANIMATION_DURATION,
       style: this.getStyle.bind(this),
-      animationMethod: ol.easing[optionsVendor.animationMethod ? optionsVendor.animationMethod : M.style.Cluster.ANIMATION_METHOD]
+      animationMethod: ol.easing[M.style.Cluster.ANIMATION_METHOD ? M.style.Cluster.ANIMATION_METHOD : M.style.Cluster.ANIMATION_METHOD]
+
+
     });
+
+    if (this.options.animated === false) {
+      this.clusterLayer.set('animationDuration', undefined);
+    }
   };
+
+
+
   /**
-   * Apply the style cluster to layer vector
+   * Apply the style cluster to layer vectorresolution
+
    *
    * @public
    * @function
    * @api stable
    * @export
    */
-  M.impl.style.Cluster.prototype.apply = function(layer) {
+  M.impl.style.Cluster.prototype.applyToLayer = function(layer) {
     this.mLayer = layer;
     let map = layer.getImpl().map;
     this.numFeaturesToDoCluster = layer.getFeatures().length;
-    if (!M.utils.isArray(this.options.range) || (M.utils.isArray(this.options.range) && this.options.range.length == 0)) {
-      this.options.range = this.getDefaulStyles();
+    if (!M.utils.isArray(this.options.ranges) || (M.utils.isArray(this.options.ranges) && this.options.ranges.length == 0)) {
+      this.options.ranges = this.getDefaulStyles();
     }
+
     let features = layer.getImpl().getOL3Layer().getSource().getFeatures();
     this.clusterSource.getSource().addFeatures(features);
     this.clusterLayer.setZIndex(99999);
@@ -63,11 +74,56 @@ goog.require('ol.geom.convexhull');
     if (this.options.selectedInteraction) {
       this.addSelectedInteraction(map);
     }
-
-
-
   };
 
+
+
+
+  /**
+   * This function update a set of ranges  defined by user
+   *
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.setRangesImpl = function(newRanges, layer, cluster) {
+    cluster.options_.options.ranges = newRanges;
+    return cluster;
+    //return layer.setStyle(cluster);
+  };
+
+  /**
+   * This function set a specified range
+   *
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.updateRangeImpl = function(min, max, newRange, layer, cluster) {
+    let element = cluster.options_.options.ranges.find(el => (el.min == min && el.max == max));
+    if (element) {
+      element.style = newRange;
+      return element;
+      //return layer.setStyle(cluster);
+    }
+    else {
+      return false;
+    }
+  };
+  /**
+   * This function set if layer must be animated
+   *
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.setAnimatedImpl = function(animated, layer, cluster) {
+    cluster.options_.options.animated = animated;
+    if (animated == false) {
+      this.clusterLayer.set('animationDuration', undefined);
+    }
+    else {
+      this.clusterLayer.set('animationDuration', cluster.ANIMATION_DURATION);
+    }
+    return this;
+  };
 
   /**
    * Add selected interaction and layer to see the features of cluster
@@ -187,7 +243,9 @@ goog.require('ol.geom.convexhull');
    * @export
    */
   M.impl.style.Cluster.prototype.getStyle = function(feature, resolution) {
-    this.options.ranges = this.getDefaulStyles(this.clusterLayer);
+    if (!M.utils.isArray(this.options.ranges) || (M.utils.isArray(this.options.ranges) && this.options.ranges.length == 0)) {
+      this.options.ranges = this.getDefaulStyles(this.clusterLayer);
+    }
     var size = feature.get('features').length;
     var style = this.styleCache[size];
     if (!style) {
@@ -252,7 +310,7 @@ goog.require('ol.geom.convexhull');
         max: (rangeInt * 2),
         style: new M.style.Point({
           fill: {
-            color: 'yellow'
+            color: 'red'
           },
           radius: 10,
         })
@@ -262,7 +320,7 @@ goog.require('ol.geom.convexhull');
         max: this.numFeaturesToDoCluster + 1,
         style: new M.style.Point({
           fill: {
-            color: 'red'
+            color: 'blue'
           },
           radius: 15
         })

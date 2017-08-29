@@ -19,6 +19,7 @@ goog.require('M.style.Simple');
   M.style.Point = (function(options) {
     options = options || M.style.Point.OPTS_DEFAULT;
 
+
     //default stroke
     if (M.utils.isNullOrEmpty(options.stroke)) options.stroke = {};
     if (M.utils.isNullOrEmpty(options.stroke.width)) options.stroke.width = 2;
@@ -31,6 +32,7 @@ goog.require('M.style.Simple');
 
     //default radius
     if (M.utils.isNullOrEmpty(options.radius)) options.radius = 6;
+
 
     var impl = new M.impl.style.Point(options);
 
