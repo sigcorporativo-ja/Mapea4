@@ -32,8 +32,8 @@ goog.require('M.impl.style.Simple');
     let label = options.label;
     let fill = options.fill;
     this.style_ = new ol.style.Style();
-    this.stylePattern_ = null;
-    this.styles_ = [this.style_];
+    this.stylePattern_ = new ol.style.Style();
+    this.styles_ = [this.style_, this.stylePattern_];
     if (!M.utils.isNullOrEmpty(stroke)) {
       this.style_.setStroke(new ol.style.Stroke({
         color: stroke.color,
@@ -102,18 +102,4 @@ goog.require('M.impl.style.Simple');
       }
     }
   };
-
-  /**
-   * This function apply style to feature
-   *
-   * @public
-   * @param {M.Feature} feature - Feature to apply style
-   * @function
-   */
-  M.impl.style.Polygon.prototype.applyToFeature = function(feature) {
-    setTimeout(function() {
-      feature.getImpl().getOLFeature().setStyle(this.styles_);
-    }.bind(this), 1000);
-  };
-
 })();
