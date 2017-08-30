@@ -12,7 +12,7 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Line = function(options) {
-    this.setOptionsToOLStyle(options);
+    this.olStyleFn_ = this.setOptionsToOLStyle(options);
   };
   goog.inherits(M.impl.style.Line, M.impl.style.Simple);
 
@@ -24,56 +24,62 @@ goog.require('M.impl.style.Simple');
    * @function
    */
   M.impl.style.Line.prototype.setOptionsToOLStyle = function(options) {
-    let stroke = options.stroke;
-    let label = options.label;
-    let fill = options.fill;
-    this.style_ = new ol.style.Style();
-    this.styleStroke_ = new ol.style.Style();
-    if (!M.utils.isNullOrEmpty(stroke)) {
-      this.style_.setStroke(new ol.style.Stroke({
-        color: stroke.color,
-        width: stroke.width,
-        lineCap: stroke.linecap,
-        lineJoin: stroke.linejoin,
-        lineDash: stroke.linedash,
-        lineDashOffset: stroke.linedashoffset,
-        miterLimit: stroke.miterlimit,
-      }));
-    }
-    if (!M.utils.isNullOrEmpty(label)) {
-      this.style_.setText(new ol.style.Text({
-        font: label.font,
-        rotateWithView: label.rotate,
-        scale: label.scale,
-        offset: [label.offsetX, label.offsetY],
-        fill: new ol.style.Fill({
-          color: label.color
-        }),
-        textAlign: label.align,
-        textBaseline: (label.baseline || "").toLowerCase(),
-        text: label.text,
-        rotation: label.rotation
-      }));
-      if (!M.utils.isNullOrEmpty(label.stroke)) {
-        this.style_.getText().setStroke(new ol.style.Stroke({
-          color: label.stroke.color,
-          width: label.stroke.width,
-          lineCap: label.stroke.linecap,
-          lineJoin: label.stroke.linejoin,
-          lineDash: label.stroke.linedash,
-          lineDashOffset: label.stroke.linedashoffset,
-          miterLimit: label.stroke.miterlimit,
+    return function(resolution) {
+      let stroke = options.stroke;
+      let label = options.label;
+      let fill = options.fill;
+      let style = new ol.style.Style();
+      let styleStroke = new ol.style.Style();
+      if (!M.utils.isNullOrEmpty(stroke)) {
+        style.setStroke(new ol.style.Stroke({
+          color: M.impl.style.Simple.getValue(stroke.color, this),
+          width: M.impl.style.Simple.getValue(stroke.width, this),
+          lineDash: M.impl.style.Simple.getValue(stroke.lineDash, this),
+          lineDashOffset: M.impl.style.Simple.getValue(stroke.lineDashOffset, this),
+          lineCap: M.impl.style.Simple.getValue(stroke.lineCap, this),
+          lineJoin: M.impl.style.Simple.getValue(stroke.lineJoin, this),
+          miterLimit: M.impl.style.Simple.getValue(stroke.miterLimit, this)
         }));
       }
-    }
-    if (!M.utils.isNullOrEmpty(fill)) {
-      this.styleStroke_.setStroke(
-        new ol.style.Stroke({
-          color: chroma(fill.color).alpha(fill.opacity).css(),
-          width: fill.width
-        })
-      );
-    }
+      if (!M.utils.isNullOrEmpty(label)) {
+        style.setText(new ol.style.Text({
+          font: M.impl.style.Simple.getValue(label.font, this),
+          rotateWithView: M.impl.style.Simple.getValue(label.rotate, this),
+          scale: M.impl.style.Simple.getValue(label.scale, this),
+          offsetX: M.impl.style.Simple.getValue(label.offset ? label.offset[0] : undefined, this),
+          offsetY: M.impl.style.Simple.getValue(label.ofsset ? label.offset[1] : undefined, this),
+          fill: new ol.style.Fill({
+            color: M.impl.style.Simple.getValue(label.color, this)
+          }),
+          textAlign: M.impl.style.Simple.getValue(label.align, this),
+          textBaseline: (M.impl.style.Simple.getValue(label.baseline, this) || "").toLowerCase(),
+          text: M.impl.style.Simple.getValue(label.text, this),
+          rotation: M.impl.style.Simple.getValue(label.rotation, this)
+        }));
+        if (!M.utils.isNullOrEmpty(label.stroke)) {
+          style.getText().setStroke(new ol.style.Stroke({
+            color: M.impl.style.Simple.getValue(label.stroke.color, this),
+            width: M.impl.style.Simple.getValue(label.stroke.width, this),
+            lineCap: M.impl.style.Simple.getValue(label.stroke.linecap, this),
+            lineJoin: M.impl.style.Simple.getValue(label.stroke.linejoin, this),
+            lineDash: M.impl.style.Simple.getValue(label.stroke.linedash, this),
+            lineDashOffset: M.impl.style.Simple.getValue(label.stroke.linedashoffset, this),
+            miterLimit: M.impl.style.Simple.getValue(label.stroke.miterlimit, this)
+          }));
+        }
+      }
+
+      if (!M.utils.isNullOrEmpty(fill)) {
+        styleStroke.setStroke(
+          new ol.style.Stroke({
+            color: chroma(M.impl.style.Simple.getValue(fill.color, this))
+              .alpha(M.impl.style.Simple.getValue(fill.opacity, this)).css(),
+            width: M.impl.style.Simple.getValue(fill.width, this)
+          })
+        );
+      }
+      return [style, styleStroke];
+    };
   };
 
   /**
@@ -84,7 +90,7 @@ goog.require('M.impl.style.Simple');
    * @function
    */
   M.impl.style.Line.prototype.applyToFeature = function(feature) {
-    feature.getImpl().getOLFeature().setStyle([this.style_, this.styleStroke_]);
+    feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
   };
 
 })();

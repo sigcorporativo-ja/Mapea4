@@ -20,19 +20,13 @@ goog.provide('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Simple.prototype.applyToLayer = function(layer) {
-    let styles = [];
-
-    if (!M.utils.isNullOrEmpty(this.style_)) {
-      styles.push(this.style_);
-    }
-    if (!M.utils.isNullOrEmpty(this.styleIcon_)) {
-      styles.push(this.styleIcon_);
-    }
-
+    let style = this.olStyleFn_;
     let layerImpl = layer.getImpl();
     let olLayer = layerImpl.getOL3Layer();
     if (!M.utils.isNullOrEmpty(olLayer)) {
-      olLayer.setStyle(styles);
+      olLayer.setStyle(function(olFeature, resolution) {
+        return style.bind(olFeature)(resolution);
+      });
     }
     else {
       //  tiene que asignar el style de alguna manera
@@ -41,36 +35,27 @@ goog.provide('M.impl.style.Simple');
   };
 
   /**
-   * TODO
+   * This function get the value of the feature which key match with
+   * the attr param
+   * @public
+   * @function
+   * @param {string|number|function} attr - attribute or function
+   * @param {M.Feature}  feature - Feature
+   * @api stable
    */
   M.impl.style.Simple.getValue = function(attr, feature) {
-    let regexp = /^\{\{.+\}\}$/;
-    let attrOptions = {};
-    let attrValues = [];
-    if (typeof attr === 'object') {
-      for (let key in attr) {
-        if (attr.hasOwnProperty(key)) {
-          let value = attr[key]
-          attrValues.push([key, value]);
-        }
-      }
+    let regexp = /^\{\{([^\}]+)\}\}$/;
+    let attrFeature = attr;
+    if (regexp.test(attr)) {
+      let keyFeature = attr.replace(regexp, '$1');
+      attrFeature = feature.getProperties()[keyFeature];
     }
-    else {
-      attrValues.push(attr);
+    else if (M.utils.isFunction(attr)) {
+      attrFeature = attr(feature);
     }
-    for (var i = 0; i < attrValues.length; i++) {
-      let key = attrValues[i][0];
-      let value = attrValues[i][1];
-      if (regexp.test(value)) {
-        let len = value.length - 2;
-        value = value.substring(2, len);
-        let valueFeature = feature.getAttribute(value);
-        attrOptions.key = valueFeature;
-      }
+    if (M.utils.isNullOrEmpty(attrFeature)) {
+      attrFeature = undefined;
     }
-
-    return attrOptions;
-
+    return attrFeature;
   }
-
 })();
