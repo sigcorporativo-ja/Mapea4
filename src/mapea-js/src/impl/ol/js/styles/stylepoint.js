@@ -36,9 +36,8 @@ goog.require('M.impl.style.Simple');
     let label = options.label;
     let icon = options.icon;
     let snaptopixel = options.snaptopixel;
-    this.style_ = null;
-    this.styleIcon_ = null;
-
+    this.style_ = new ol.style.Style();
+    this.styleIcon_ = new ol.style.Style();
     if (!M.utils.isNullOrEmpty(stroke)) {
       stroke = new ol.style.Stroke({
         color: stroke.color,
@@ -166,26 +165,6 @@ goog.require('M.impl.style.Simple');
         });
       }
     }
-  };
-
-  /**
-   * This function apply style to feature
-   *
-   * @public
-   * @param {M.Feature} feature - Feature to apply style
-   * @function
-   */
-  M.impl.style.Point.prototype.applyToFeature = function(feature) {
-    let styles = [];
-
-    if (!M.utils.isNullOrEmpty(this.style_)) {
-      styles.push(this.style_);
-    }
-    if (!M.utils.isNullOrEmpty(this.styleIcon_)) {
-      styles.push(this.styleIcon_);
-    }
-
-    let olFeature = feature.getImpl().getOLFeature();
-    olFeature.setStyle(styles);
+    this.styles_ = [this.style_, this.styleIcon_];
   };
 })();

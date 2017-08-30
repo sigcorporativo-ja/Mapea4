@@ -35,6 +35,7 @@ goog.require('M.impl.style.Simple');
     let fill = options.fill;
     this.style_ = new ol.style.Style();
     this.styleStroke_ = new ol.style.Style();
+    this.styles_ = [this.style_, this.styleStroke_];
     if (!M.utils.isNullOrEmpty(stroke)) {
       this.style_.setStroke(new ol.style.Stroke({
         color: stroke.color,
@@ -81,18 +82,4 @@ goog.require('M.impl.style.Simple');
       );
     }
   };
-
-  /**
-   * This function apply style to feature
-   *
-   * @public
-   * @param {M.Feature} feature - Feature to apply style
-   * @function
-   * @api stable
-   */
-
-  M.impl.style.Line.prototype.applyToFeature = function(feature) {
-    feature.getImpl().getOLFeature().setStyle([this.style_, this.styleStroke_]);
-  };
-
 })();
