@@ -42,15 +42,6 @@ goog.require('M.utils');
   goog.inherits(M.Feature, M.facade.Base);
 
   /**
-   * TODO
-   */
-  M.Feature.prototype.addTo = function(layer) {
-    if (layer instanceof M.layer.Vector) {
-      this.getImpl().addTo(layer);
-    }
-  };
-
-  /**
    * This function set id
    *
    * @public

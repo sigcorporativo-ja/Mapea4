@@ -3,7 +3,7 @@ goog.provide('M.impl.Popup');
 goog.require('goog.events');
 goog.require('ol.Overlay');
 
-(function () {
+(function() {
 
   /**
    * OpenLayers 3 Popup Overlay.
@@ -11,7 +11,7 @@ goog.require('ol.Overlay');
    * @extends {ol.Overlay}
    * @api stable
    */
-  M.impl.Popup = function (opt_options) {
+  M.impl.Popup = function(opt_options) {
     var options = opt_options || {};
 
     /**
@@ -73,7 +73,7 @@ goog.require('ol.Overlay');
    * @param {String} html String of HTML to display within the popup.
    * @api stable
    */
-  M.impl.Popup.prototype.addTo = function (map, html) {
+  M.impl.Popup.prototype.addTo = function(map, html) {
     this.facadeMap_ = map;
 
     // container
@@ -100,7 +100,7 @@ goog.require('ol.Overlay');
    * @param {String} html String of HTML to display within the popup.
    * @api stable
    */
-  M.impl.Popup.prototype.show = function (coord, callback) {
+  M.impl.Popup.prototype.show = function(coord, callback) {
     this.setPosition(coord);
     if (this.panMapIfOutOfView) {
       this.panIntoView_(coord);
@@ -120,7 +120,7 @@ goog.require('ol.Overlay');
    * @param {String} html String of HTML to display within the popup.
    * @api stable
    */
-  M.impl.Popup.prototype.centerByStatus = function (status, coord) {
+  M.impl.Popup.prototype.centerByStatus = function(status, coord) {
     var resolution = this.getMap().getView().getResolution();
     var newCoord = [].concat(coord);
     if (status === M.Popup.status.COLLAPSED) {
@@ -140,14 +140,14 @@ goog.require('ol.Overlay');
     });
     // if the center was drawn then draw it again
     if (!M.utils.isNullOrEmpty(featureCenter)) {
-      this.facadeMap_.getImpl().drawFeatures([featureCenter]);
+      this.facadeMap_.drawFeatures([featureCenter]);
     }
   };
 
   /**
    * @private
    */
-  M.impl.Popup.prototype.getContentFromContainer_ = function (html) {
+  M.impl.Popup.prototype.getContentFromContainer_ = function(html) {
     return html.querySelector('div.m-body');
   };
 
@@ -155,9 +155,9 @@ goog.require('ol.Overlay');
   /**
    * @private
    */
-  M.impl.Popup.prototype.panIntoView_ = function (coord) {
+  M.impl.Popup.prototype.panIntoView_ = function(coord) {
     // it waits for the previous animation in order to execute this
-    this.panIntoSynchronizedAnim_().then(function () {
+    this.panIntoSynchronizedAnim_().then(function() {
       this.isAnimating_ = true;
       if (M.window.WIDTH > 768) {
         var tabHeight = 30; // 30px for tabs
@@ -218,8 +218,8 @@ goog.require('ol.Overlay');
   /**
    * @private
    */
-  M.impl.Popup.prototype.panIntoSynchronizedAnim_ = function () {
-    return (new Promise(function (success, fail) {
+  M.impl.Popup.prototype.panIntoSynchronizedAnim_ = function() {
+    return (new Promise(function(success, fail) {
       /* if the popup is animating then it waits for the animation
       in order to execute the next animation */
       if (this.isAnimating_ === true) {
@@ -244,7 +244,7 @@ goog.require('ol.Overlay');
    * @function
    * @api stable
    */
-  M.impl.Popup.prototype.hide = function () {
+  M.impl.Popup.prototype.hide = function() {
     this.facadeMap_.removePopup();
   };
 
@@ -255,7 +255,7 @@ goog.require('ol.Overlay');
    * @param {text} new text.
    * @api stable
    */
-  M.impl.Popup.prototype.setContainer = function (html) {
+  M.impl.Popup.prototype.setContainer = function(html) {
     this.setElement(html);
     //      this.container.innerHTML = html.innerHTML;
     this.content = this.getContentFromContainer_(html);
@@ -269,7 +269,7 @@ goog.require('ol.Overlay');
    * @param {text} new text.
    * @api stable
    */
-  M.impl.Popup.prototype.setContent = function (content) {
+  M.impl.Popup.prototype.setContent = function(content) {
     this.content.innerHTML = content;
   };
 
@@ -280,7 +280,7 @@ goog.require('ol.Overlay');
    * @param {text} new text.
    * @api stable
    */
-  M.impl.Popup.prototype.getContent = function () {
+  M.impl.Popup.prototype.getContent = function() {
     return this.content;
   };
 })();

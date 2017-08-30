@@ -48,17 +48,34 @@ goog.require('M.impl.Layer');
     map.on(M.evt.CHANGE_PROJ, this.setProjection_, this);
 
     this.ol3Layer = new ol.layer.Vector({
+      style: new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: 'rgba(0, 158, 0, 0.1)'
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#fcfcfc',
+          width: 2
+        }),
+        image: new ol.style.Circle({
+          radius: 7,
+          fill: new ol.style.Fill({
+            color: '#009E00'
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#fcfcfc',
+            width: 2
+          })
+        })
+      }),
       zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
     });
-
-
     this.updateSource_();
     this.facadeVector_.setStyle(this.facadeVector_.getStyle());
 
     // sets its visibility if it is in range
-    if (this.options.visibility !== false) {
-      this.setVisible(this.inRange());
-    }
+    // if (this.options.visibility != false) {
+    //   this.setVisible(this.inRange());
+    // }
     // sets its z-index
     if (this.zIndex_ !== null) {
       this.setZIndex(this.zIndex_);
@@ -103,8 +120,8 @@ goog.require('M.impl.Layer');
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  M.impl.layer.Vector.prototype.addFeature = function(feature) {
-    this.features_.push(feature);
+  M.impl.layer.Vector.prototype.addFeatures = function(features) {
+    this.features_ = this.features_.concat(features);
     this.redraw();
   };
 
@@ -147,7 +164,7 @@ goog.require('M.impl.Layer');
    * @api stable
    */
   M.impl.layer.Vector.prototype.removeFeatures = function(features) {
-    let copyFeatures = [...features];
+    let copyFeatures = [...this.features_];
     features.forEach(function(feature) {
       copyFeatures.splice(copyFeatures.indexOf(feature), 1);
     }.bind(this));
@@ -254,6 +271,15 @@ goog.require('M.impl.Layer');
     var equals = false;
     if (obj instanceof M.impl.layer.Vector) {}
     return equals;
+  };
+
+  /**
+   * This function refresh layer
+   * @function
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.refresh = function() {
+    this.getOL3Layer().getSource().clear();
   };
 
 })();
