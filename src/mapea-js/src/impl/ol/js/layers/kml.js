@@ -98,7 +98,7 @@ goog.require('goog.style');
           // removes previous features
           this_.facadeVector_.clear();
           this_.facadeVector_.addFeatures(features);
-          this_.facadeVector_.fire(M.evt.LOAD, [features]);
+          this_.fire(M.evt.LOAD, [features]);
           if (!M.utils.isNullOrEmpty(screenOverlay)) {
             var screenOverLayImg = M.impl.utils.addOverlayImage(screenOverlay, map);
             this_.setScreenOverlayImg(screenOverLayImg);
