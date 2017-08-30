@@ -79,7 +79,7 @@ goog.require('M.style.quantification');
    */
   M.style.Choropleth.prototype.apply = function(layer) {
     this.layer_ = layer;
-    this.setStyles(this.styles_);
+    this.update_();
   };
 
 
@@ -103,7 +103,7 @@ goog.require('M.style.quantification');
    */
   M.style.Choropleth.prototype.setAttributeName = function(attributeName) {
     this.attributeName_ = attributeName;
-    this.setStyles(this.styles_);
+    this.update_();
     return this;
   };
 
@@ -128,7 +128,6 @@ goog.require('M.style.quantification');
    */
   M.style.Choropleth.prototype.setQuantification = function(quantification) {
     this.quantification_ = quantification;
-    this.setStyles(this.styles_);
     this.update_();
     return this;
   };
@@ -153,38 +152,12 @@ goog.require('M.style.quantification');
    * @api stable
    */
   M.style.Choropleth.prototype.setStyles = function(styles) {
-    let features = this.layer_.getFeatures();
-    if (!M.utils.isNullOrEmpty(features)) {
-      this.dataValues_ = this.getValues();
-      let firstFeature = features[0];
-      if (!M.utils.isNullOrEmpty(styles)) {
-        if (!M.utils.isArray(styles)) {
-          styles = [styles];
-        }
-        this.styles_ = styles;
-        this.breakPoints_ = this.quantification_(this.dataValues_, this.styles_.length);
-      }
-      else {
-        this.breakPoints_ = this.quantification_(this.dataValues_);
-        let color1 = M.style.Choropleth.DEFAULT_COLOR1;
-        let color2 = M.style.Choropleth.DEFAULT_COLOR2;
-        let numColors = this.breakPoints_.length;
-        let scaleColor = M.utils.generateColorScale(color1, color2, numColors);
-        if (!M.utils.isArray(scaleColor)) {
-          scaleColor = [scaleColor];
-        }
-        if (firstFeature.getGeometry().type === "Point") {
-          this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_POINT(c));
-        }
-        else if (firstFeature.getGeometry().type === "LineString") {
-          this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_LINE(c));
-        }
-        else {
-          this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_POLYGON(c));
-        }
-      }
-      this.update_();
+    if (!M.utils.isArray(styles)) {
+      styles = [styles];
     }
+    this.styles_ = styles;
+    this.update_();
+    return this;
   };
 
 
@@ -223,12 +196,41 @@ goog.require('M.style.quantification');
    * @api stable
    */
   M.style.Choropleth.prototype.update_ = function() {
-    let features = this.layer_.getFeatures();
-    for (let i = this.breakPoints_.length - 1; i > -1; i--) {
-      let filterLTE = new M.filter.LTE(this.attributeName_, this.breakPoints_[i]);
-      let filteredFeatures = filterLTE.execute(features);
-      let style = this.styles_[i];
-      filteredFeatures.forEach(f => f.setStyle(style));
+    let layer = this.layer_;
+    if (!M.utils.isNullOrEmpty(layer)) {
+      let features = layer.getFeatures();
+      if (!M.utils.isNullOrEmpty(features)) {
+        this.dataValues_ = this.getValues();
+        if (M.utils.isNullOrEmpty(this.styles_)) {
+          this.breakPoints_ = this.quantification_(this.dataValues_);
+          let firstFeature = features[0];
+          let color1 = M.style.Choropleth.DEFAULT_COLOR1;
+          let color2 = M.style.Choropleth.DEFAULT_COLOR2;
+          let numColors = this.breakPoints_.length;
+          let scaleColor = M.utils.generateColorScale(color1, color2, numColors);
+          if (!M.utils.isArray(scaleColor)) {
+            scaleColor = [scaleColor];
+          }
+          if (firstFeature.getGeometry().type === "Point") {
+            this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_POINT(c));
+          }
+          else if (firstFeature.getGeometry().type === "LineString") {
+            this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_LINE(c));
+          }
+          else {
+            this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_POLYGON(c));
+          }
+        }
+        else {
+          this.breakPoints_ = this.quantification_(this.dataValues_, this.styles_.length);
+        }
+      }
+      for (let i = this.breakPoints_.length - 1; i > -1; i--) {
+        let filterLTE = new M.filter.LTE(this.attributeName_, this.breakPoints_[i]);
+        let filteredFeatures = filterLTE.execute(features);
+        let style = this.styles_[i];
+        filteredFeatures.forEach(f => f.setStyle(style));
+      }
     }
   };
   /**
@@ -242,7 +244,8 @@ goog.require('M.style.quantification');
   M.style.Choropleth.DEFAULT_STYLE_POINT = function(c) {
     return new M.style.Point({
       fill: {
-        color: c
+        color: c,
+        opacity: 1
       },
       stroke: {
         color: 'black',
@@ -280,7 +283,8 @@ goog.require('M.style.quantification');
   M.style.Choropleth.DEFAULT_STYLE_POLYGON = function(c) {
     return new M.style.Polygon({
       fill: {
-        color: c
+        color: c,
+        opacity: 1
       },
       stroke: {
         color: 'black',
