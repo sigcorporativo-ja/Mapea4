@@ -12,7 +12,7 @@ var style = new M.style.Point({
     color: 'black',
     width: 2
   },
-  radius: 2
+  radius: 10
 });
 
 var style2 = new M.style.Point({
@@ -23,26 +23,26 @@ var style2 = new M.style.Point({
     color: 'red',
     width: 1
   },
-  radius: 3
+  radius: 20
 });
 
 var feature = new M.Feature('feature', {
   "type": "Feature",
   "properties": {
-    "styleType": "privado"
+    "colegio": "public"
   },
   "geometry": {
     "type": "Point",
-    "coordinates": [308241.7352,
+    "coordinates": [508241.7352,
       4169727.5908
     ]
   }
-}, style);
+}, style2);
 
 var feature2 = new M.Feature('feature2', {
   "type": "Feature",
   "properties": {
-    "styleType": "public"
+    "colegio": "public"
   },
   "geometry": {
     "type": "Point",
@@ -55,7 +55,7 @@ var feature2 = new M.Feature('feature2', {
 var feature3 = new M.Feature('feature3', {
   "type": "Feature",
   "properties": {
-    "styleType": "concertado"
+    "colegio": "hibrido"
   },
   "geometry": {
     "type": "Point",
@@ -63,12 +63,12 @@ var feature3 = new M.Feature('feature3', {
       4138337.8894
     ]
   }
-}, style);
+}, style2);
 
 var feature4 = new M.Feature('feature4', {
   "type": "Feature",
   "properties": {
-    "styleType": "religiosos"
+    "colegio": "public"
   },
   "geometry": {
     "type": "Point",
@@ -81,26 +81,28 @@ var feature4 = new M.Feature('feature4', {
 var feature5 = new M.Feature('feature5', {
   "type": "Feature",
   "properties": {
-    "styleType": "religiosos"
+    "colegio": "hibrido"
   },
   "geometry": {
     "type": "Point",
-    "coordinates": [408685.7378,
-      4069564.8875
+    "coordinates": [334236.6796,
+      4135337.8894
     ]
   }
-}, style);
+}, style2);
+
+
 
 var layer = new M.layer.Vector({
   name: 'layerVector'
 });
 
 mapajs.addLayers([layer]);
-layer.addFeatures([feature, feature2, feature3, feature4]);
+layer.addFeatures([feature5, feature4, feature3, feature2, feature]);
 //layer.addFeatures([feature5, feature4, feature3]);
 
 
-var rojo = new M.style.Line({
+var rojo = new M.style.Point({
   fill: {
     color: 'red',
     width: 15
@@ -114,7 +116,7 @@ var rojo = new M.style.Line({
 
 });
 
-var amarillo = new M.style.Line({
+var amarillo = new M.style.Point({
   fill: {
     color: 'yellow',
     width: 15
@@ -127,7 +129,7 @@ var amarillo = new M.style.Line({
   radius: 5
 });
 
-var rosa = new M.style.Line({
+var rosa = new M.style.Point({
   fill: {
     color: 'pink',
     width: 15
@@ -139,7 +141,7 @@ var rosa = new M.style.Line({
   radius: 2
 
 });
-var azul = new M.style.Line({
+var azul = new M.style.Point({
   fill: {
     color: 'blue',
     width: 15
@@ -151,7 +153,7 @@ var azul = new M.style.Line({
   radius: 5
 });
 
-var verde = new M.style.Line({
+var verde = new M.style.Point({
   fill: {
     color: 'green',
     width: 15
@@ -166,50 +168,53 @@ var verde = new M.style.Line({
 
 // constructor del mapa
 
-var categoryStyle = new M.style.Category("styleType", {
-  "public": verde,
-  "concertado": amarillo,
-  "religiosos": rojo,
+var categoryStyle = new M.style.Category("colegio", {
+  "public": rojo,
+  "privado": verde,
+  "religiosos": rojo
+
 });
 
 
 layer.setStyle(categoryStyle);
 
 
-function constructor() {
 
-  layer.setStyle(categoryStyle);
-
-}
 
 function GetStyleForCategories() {
-
-  return categoryStyle.GetStyleForCategories();
-
-}
-
-
-function SetStyleForCategories(CategoryStyle, estilo) {
-
-  return categoryStyle.setStyleForCategory(CategoryStyle, estilo);
-
+  let CategoryStyle = document.getElementById('CategoryStyle').value;
+  let res = categoryStyle.getStyleForCategories(CategoryStyle);
+  console.log(res);
 
 }
+
+
+function SetStyleForCategories() {
+  let CategoryStyle = document.getElementById('CategoryStyle').value;
+  let res = categoryStyle.setStyleForCategories(CategoryStyle, azul);
+  console.log(res);
+}
+
 
 function GetAttributeName() {
-
-  return categoryStyle.GetAttributeName();
-
+  let res = null;
+  res = categoryStyle.getAttributeName();
+  console.log(res);
 }
 
-function SetAttributeName(AttributeName) {
 
-  return categoryStyle.SetAttributeName(AttributeName);
+
+function SetAttributeName() {
+  let AttributeName = document.getElementById('AttributeName').value;
+  let res = null;
+  res = categoryStyle.setAttributeName(AttributeName);
+  console.log(res);
 
 }
 
 function GetCategories() {
-
-  return categoryStyle.getCategories();
+  let res = null;
+  res = categoryStyle.getCategories();
+  console.log(res);
 
 }

@@ -1,187 +1,328 @@
 goog.provide('M.style.pattern');
 
-/**
- * TODO
- */
 (function() {
 
   /**
-   * TODO
+   * Hatch style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.HATCH = "HATCH";
 
   /**
-   * TODO
+   * Cross style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.CROSS = "CROSS";
 
   /**
-   * TODO
+   * Dot style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.DOT = "DOT";
 
   /**
-   * TODO
+   * Cirlce style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.CIRCLE = "CIRCLE";
 
   /**
-   * TODO
+   * Square style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.SQUARE = "SQUARE";
 
   /**
-   * TODO
+   * Tile style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.TILE = "TILE";
 
   /**
-   * TODO
+   * Woven style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.WOVEN = "WOVEN";
 
   /**
-   * TODO
+   * Crosses style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.CROSSES = "CROSSES";
 
   /**
-   * TODO
+   * Caps style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.CAPS = "CAPS";
 
   /**
-   * TODO
+   * Nylon style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.NYLON = "NYLON";
 
   /**
-   * TODO
+   * Hexagon style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.HEXAGON = "HEXAGON";
 
   /**
-   * TODO
+   * Cementery style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.CEMETRY = "CEMETRY";
 
   /**
-   * TODO
+   * Sand style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.SAND = "SAND";
 
   /**
-   * TODO
+   * Conglomerate style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.CONGLOMERATE = "CONGLOMERATE";
 
   /**
-   * TODO
+   * Gravel style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.GRAVEL = "GRAVEL";
 
   /**
-   * TODO
+   * Brick style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.BRICK = "BRICK";
 
   /**
-   * TODO
+   * Dolomite style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.DOLOMITE = "DOLOMITE";
 
   /**
-   * TODO
+   * Coal style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.COAL = "COAL";
 
   /**
-   * TODO
+   * Brevvia style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.BRECCIA = "BRECCIA";
 
   /**
-   * TODO
+   * Clay style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.CLAY = "CLAY";
 
   /**
-   * TODO
+   * Flooded style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.FLOODED = "FLOODED";
 
   /**
-   * TODO
+   * Chaos style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.CHAOS = "CHAOS";
 
   /**
-   * TODO
+   * Grass style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.GRASS = "GRASS";
 
   /**
-   * TODO
+   * Swamp style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.SWAMP = "SWAMP";
 
   /**
-   * TODO
+   * Wave style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.WAVE = "WAVE";
 
   /**
-   * TODO
+   * Vine style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.VINE = "VINE";
 
   /**
-   * TODO
+   * Forest style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.FOREST = "FOREST";
 
   /**
-   * TODO
+   * Scrub style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.SCRUB = "SCRUB";
 
   /**
-   * TODO
+   * Tree style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.TREE = "TREE";
 
   /**
-   * TODO
+   * Pine style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.PINE = "PINE";
 
   /**
-   * TODO
+   * Pines style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.PINES = "PINES";
 
   /**
-   * TODO
+   * Rock style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.ROCK = "ROCK";
 
   /**
-   * TODO
+   * Rocks style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.ROCKS = "ROCKS";
 
   /**
-   * TODO
+   * Character style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.CHARACTER = "CHARACTER";
 
   /**
-   * TODO
+   * Icon style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.ICON = "ICON";
 
   /**
-   * TODO
+   * Image style pattern
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.pattern.IMAGE = "IMAGE";
 })();

@@ -6,14 +6,18 @@ goog.provide('M.impl.style.Simple');
 
 (function() {
   /**
-   * TODO
+   * Main constructor of the class.
+   * @constructor
+   * @api stable
    */
-  M.impl.style.Simple = (function() {
-
-  });
+  M.impl.style.Simple = (function() {});
 
   /**
-   * TODO
+   * This function apply style to layer
+   * @public
+   * @function
+   * @param {M.layer.Vector} layer - Layer
+   * @api stable
    */
   M.impl.style.Simple.prototype.applyToLayer = function(layer) {
     let styles = [];

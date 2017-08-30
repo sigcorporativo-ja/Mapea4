@@ -1,158 +1,116 @@
 <!DOCTYPE html>
-
 <html lang="en">
 
   <head>
-
     <meta charset="UTF-8">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
-
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-
     <meta name="mapea" content="yes">
 
     <title>PRUEBA DESARROLLO</title>
-
     <style rel="stylesheet">
       html,
-
       body {
-
         margin: 0;
-
         padding: 0;
-
         height: 100%;
-
-        overflow: hidden;
+        overflow: scroll;
       }
 
-
       .makidentist:before {
-
         content: '\e814';
-
         color: 'red'
       }
     </style>
 
     <!-- styles -->
-
     <link href="../../src/impl/ol/assets/css/custom.css" rel="stylesheet" />
-
     <link href="../../src/impl/ol/assets/css/ol3.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/fonts.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/popup.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/dialog.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/controls/getfeatureinfo.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/controls/layerswitcher.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/controls/location.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/controls/scale.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/controls/wmcselector.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/controls/mouse.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/panel.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/animations.css" rel="stylesheet" />
-
     <link href="../../src/facade/assets/css/mapea.css" rel="stylesheet" />
-
     <link href="../../src/plugins/geosearch/facade/assets/css/geosearch.css" rel="stylesheet" />
-
     <link href="../../src/plugins/geosearch/impl/ol/assets/css/geosearch.css" rel="stylesheet" />
-
     <link href="../../src/plugins/geosearchbylocation/facade/assets/css/geosearchbylocation.css" rel="stylesheet" />
-
     <link href="../../src/plugins/measurebar/facade/assets/css/measurebar.css" rel="stylesheet" />
-
     <link href="../../src/plugins/printer/facade/assets/css/printer.css" rel="stylesheet" />
-
     <link href="../../src/plugins/wfstcontrols/facade/assets/css/wfstcontrols.css" rel="stylesheet" />
-
     <link href="../../src/plugins/streetview/facade/assets/css/streetview.css" rel="stylesheet" />
-
     <link href="../../src/plugins/searchstreet/facade/assets/css/searchstreet.css" rel="stylesheet" />
-
     <link href="../../src/plugins/attributetable/facade/assets/css/attributetable.css" rel="stylesheet" />
-
   </head>
 
   <body>
-<<<<<<< HEAD
-=======
-    <button onclick="points_jenks()">Puntos Jenks</button>
-    <button onclick="points_quantile()">Puntos Quantile</button>
-    <button onclick="lines_jenks()">Lineas Jenks</button>
-    <button onclick="lines_quantile()">Lineas Quantile</button>
-    <button onclick="polygons_jenks()">Poligonos Jenks</button>
-    <button onclick="polygons_quantile()">Poligonos Quantile</button> Clases:
-    <input id="clases" type="number" name="" value="5">
-    <br>
-    <button onclick="points_quantile2()">Puntos QUANTILE (Custom Styles)</button>
-    <button onclick="points_jenks2()">Puntos JENKS (Custom Styles)</button>
-    <button onclick="lines_jenks2()">Lineas QUANTILE (Custom Styles)</button>
-    <button onclick="lines_quantile2()">Lineas QUANTILE (Custom Styles)</button>
-    <button onclick="polygons_jenks2()">Poligonos JENKS (Custom Styles)</button>
-    <button onclick="polygons_quantile2()">Poligonos QUANTILE (Custom Styles)</button>
-    <br>
-    <button onclick="points_setStyles()">Choropleth setStyles (Puntos)</button>
-    <button onclick="lines_setStyles()">Choropleth setStyles (Lineas)</button>
-    <button onclick="polygons_setStyles()">Choropleth setStyles (Poligonos)</button>
-    <br>
-    <button onclick="points_setQuantification()">Choropleth setQuantification (Puntos)</button>
-    <button onclick="lines_setQuantification()">Choropleth setQuantification (Lineas)</button>
-    <button onclick="polygons_setQuantification()">Choropleth setQuantification (Poligonos)</button>
-    <br>
-    <button onclick="points_setAttributeName()">Cambia el atributo de puntos a 'colegios'</button>
-    <br>
-    <button onclick="getAttributeName()">Get attribute name (Puntos)</button>
-    <button onclick="getStyles()">Get Styles (Poligonos)</button>
-    <button onclick="getQuantification()">Get quantification (Lineas)</button>
-    <button onclick="getValues()">Get values (Poligonos)</button>
-    <br>
-    <button onclick="choropleth_cluster()">Choropleth-Cluster</button>
->>>>>>> refs/remotes/origin/redmine_76438
-
     <div id="mapjs" class="container"></div>
-
     <script type="text/javascript" src="../../libraries/babel-polyfill/browser-polyfill.js"></script>
-
     <script type="text/javascript" src="../../libraries/proj4/proj4.js"></script>
-
     <script type="text/javascript" src="../../node_modules/jsts/dist/jsts.min.js"></script>
-
     <script type="text/javascript" src="../../libraries/chroma-js/js/chroma.min.js"></script>
-
     <script type="text/javascript" src="../../libraries/draggabilly/js/draggabilly.pkgd.min.js"></script>
 
+
     <!-- libraries -->
-
     <script type="text/javascript" src="../../libraries/closure/closure/goog/base.js"></script>
-
     <script type="text/javascript" src="../mapea.ol.deps.js"></script>
-
     <script type="text/javascript" src="dependencies.js"></script>
-
     <script type="text/javascript" src="../configuration_filtered.js"></script>
 
     <!-- cartografia -->
-
     <script type="text/javascript" src="cartografias/fontCartografia.def.js"></script>
 
-    <!-- prueba -->
-
+    <!-- prueba
     <script type="text/javascript" src="source8.js"></script>
+    -->
+    <script type="text/javascript" src="sourceCategoryStylePoint.js"></script>
 
+
+
+
+    <div id="pruebas" class="container">
+
+
+
+
+      <P>Introduzca el nuevo AttributeName
+        <INPUT type="text" name="AttributeName" id="AttributeName"> </P>
+
+      <P>Introduzca la categoria
+        <INPUT type="text" name="CategoryStyle" id="CategoryStyle"> </P>
+
+
+      <P>GetStyleForCategories devolverá el estilo de una categoria (escpecificada por parametro)</P>
+
+      <button type="button" onclick="GetStyleForCategories()">GetStyleForCategories</button>
+
+      <P>SetStyleForCategories aplicará un estilo nuevo (por defecto se ha configurado uno internamente) a una categoria (escpecificada por parametro)</P>
+
+      <button type="button" onclick="SetStyleForCategories()">SetStyleForCategories</button>
+
+      <P>Devuelve el valor de AttributeName del objeto CategoryStyle</P>
+
+
+      <button type="button" onclick="GetAttributeName()">GetAttributeName</button>
+
+      <P>Cambia el valor AttributeName del objeto CategoryStyle</P>
+
+      <button type="button" onclick="SetAttributeName()">SetAttributeName</button>
+
+
+
+
+      <P>Devuelve todas las posibles valores que tiene una determinada categoria</P>
+
+      <button type="button" onclick="GetCategories()">GetCategories</button>
+    </div>
   </body>
 
 </html>

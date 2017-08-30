@@ -1,26 +1,39 @@
 goog.provide('M.style.align');
 
-/**
- * TODO
- */
 (function() {
   /**
-   * TODO
+   * Left style alignment
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.align.LEFT = "LEFT";
 
   /**
-   * TODO
+   * Center style alignment
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.align.CENTER = "CENTER";
 
   /**
-   * TODO
+   * Right style alignment
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.align.RIGHT = "RIGHT";
 
   /**
-   * TODO
+   * Justify style alignment
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
    */
   M.style.align.JUSTIFY = "JUSTIFY";
 

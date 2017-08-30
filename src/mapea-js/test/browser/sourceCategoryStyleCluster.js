@@ -1,9 +1,8 @@
 M.proxy(true);
 var mapajs = M.map({
-  'container': 'map',
+  'container': 'mapjs',
   "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline"],
 });
-
 
 let style = new M.style.Line({
   fill: {
@@ -15,7 +14,10 @@ let style = new M.style.Line({
     width: 20
   },
 
+  radius: 2
+
 });
+
 let feature = new M.Feature('feature', {
   "type": "Feature",
   "properties": {
@@ -43,6 +45,7 @@ let style2 = new M.style.Line({
     color: 'black',
     width: 20
   },
+  radius: 2
 
 });
 let feature2 = new M.Feature('feature2', {
@@ -71,6 +74,7 @@ let style3 = new M.style.Line({
     color: 'black',
     width: 20
   },
+  radius: 2
 
 });
 let feature3 = new M.Feature('feature3', {
@@ -117,13 +121,17 @@ let layer = new M.layer.Vector({
   name: 'layerVector'
 });
 
-
 mapajs.addLayers([layer]);
 layer.addFeatures([feature, feature2, feature3, feature4]);
 
 
 
-let rojo = new M.style.Line({
+
+
+
+
+
+var rojo = new M.style.Line({
   fill: {
     color: 'red',
     width: 15
@@ -133,9 +141,11 @@ let rojo = new M.style.Line({
     width: 2
   },
 
+  radius: 5
+
 });
 
-let amarillo = new M.style.Line({
+var amarillo = new M.style.Line({
   fill: {
     color: 'yellow',
     width: 15
@@ -145,9 +155,10 @@ let amarillo = new M.style.Line({
     width: 2
   },
 
+  radius: 5
 });
 
-let rosa = new M.style.Line({
+var rosa = new M.style.Line({
   fill: {
     color: 'pink',
     width: 15
@@ -156,9 +167,10 @@ let rosa = new M.style.Line({
     color: 'black',
     width: 2
   },
+  radius: 2
 
 });
-let azul = new M.style.Line({
+var azul = new M.style.Line({
   fill: {
     color: 'blue',
     width: 15
@@ -167,10 +179,10 @@ let azul = new M.style.Line({
     color: 'black',
     width: 2
   },
-
+  radius: 5
 });
 
-let verde = new M.style.Line({
+var verde = new M.style.Line({
   fill: {
     color: 'green',
     width: 15
@@ -179,17 +191,58 @@ let verde = new M.style.Line({
     color: 'black',
     width: 2
   },
-
+  radius: 5
 });
 
-let categoryStyle = new M.style.Category("styleType", {
+
+// constructor del mapa
+
+var categoryStyle = new M.style.Category("styleType", {
   "public": verde,
-  "concertado": amarillo,
-  "privado": rosa
-
-
+  "privado": verde,
+  "religiosos": rojo
 });
-
 
 
 layer.setStyle(categoryStyle);
+
+
+
+
+function GetStyleForCategories() {
+  let CategoryStyle = document.getElementById('CategoryStyle').value;
+  let res = categoryStyle.getStyleForCategories(CategoryStyle);
+  console.log(res);
+
+}
+
+
+function SetStyleForCategories() {
+  let CategoryStyle = document.getElementById('CategoryStyle').value;
+  let res = categoryStyle.setStyleForCategories(CategoryStyle, azul);
+  console.log(res);
+}
+
+
+function GetAttributeName() {
+  let res = null;
+  res = categoryStyle.getAttributeName();
+  console.log(res);
+}
+
+
+
+function SetAttributeName() {
+  let AttributeName = document.getElementById('AttributeName').value;
+  let res = null;
+  res = categoryStyle.setAttributeName(AttributeName);
+  console.log(res);
+
+}
+
+function GetCategories() {
+  let res = null;
+  res = categoryStyle.getCategories();
+  console.log(res);
+
+}
