@@ -118,7 +118,7 @@ goog.require('goog.style');
         format: this.formater_,
         loader: this.loader_.getLoaderFn(function(features) {
           this_.facadeVector_.addFeatures(features);
-          this_.facadeVector_.fire(M.evt.LOAD, [features]);
+          this_.fire(M.evt.LOAD, [features]);
         }),
         strategy: ol.loadingstrategy.all
       };
@@ -131,14 +131,13 @@ goog.require('goog.style');
           // removes previous features
           this_.facadeVector_.clear();
           this_.facadeVector_.addFeatures(features);
-          this_.facadeVector_.fire(M.evt.LOAD, [features]);
+          this_.fire(M.evt.LOAD, [features]);
         })
       }));
       this.facadeVector_.addFeatures(features);
-      this.facadeVector_.fire(M.evt.LOAD, [features]);
+      this.fire(M.evt.LOAD, [features]);
     }
   };
-
 
   /**
    * This function checks if an object is equals
