@@ -115,8 +115,8 @@ goog.provide('M.Style');
   M.Style.prototype.setValue_ = function(obj, path, value) {
     let keys = M.utils.isArray(path) ? path : path.split('.');
     let keyLength = keys.length;
+    let key = keys[0];
     if (keyLength === 1) { // base case
-      let key = keys[0];
       obj[key] = value;
     }
     else if (keyLength > 1) { // recursive case
