@@ -17,7 +17,7 @@ goog.require('M.impl.style.Simple');
    }   * @api stable
    */
   M.impl.style.Point = (function(options) {
-    this.setOptionsToOLStyle(options);
+    goog.base(this, options);
   });
   goog.inherits(M.impl.style.Point, M.impl.style.Simple);
 
@@ -29,7 +29,7 @@ goog.require('M.impl.style.Simple');
    * @param {object} options - options to style
    * @function
    */
-  M.impl.style.Point.prototype.setOptionsToOLStyle = function (options) {
+  M.impl.style.Point.prototype.parseFacadeOptions_ = function(options) {
     let stroke = options.stroke;
     let radius = options.radius;
     let fill = options.fill;

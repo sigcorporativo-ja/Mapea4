@@ -1,9 +1,6 @@
 goog.provide('M.style.Feature');
 goog.require('M.Style');
 
-goog.require('M.Style');
-
-
 /**
  * @namespace M.style.Feature
  */
@@ -21,13 +18,15 @@ goog.require('M.Style');
   });
   goog.inherits(M.style.Feature, M.Style);
 
-
   /**
    * This function apply style to feature
    *
-   * @protected
+   * @public
    * @param {M.Feature} feature - Feature to apply style
    * @function
+   * @api stable
    */
-  M.style.Feature.prototype.applyToFeature_ = function(feature) {};
+  M.style.Feature.prototype.applyToFeature = function(feature) {
+    this.getImpl().applyToFeature(feature);
+  };
 })();

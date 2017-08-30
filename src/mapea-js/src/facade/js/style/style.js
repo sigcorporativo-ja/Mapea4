@@ -13,7 +13,27 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style = (function(options, impl) {
-    [this.options_, this.canvas_, this.layer_] = [options, document.createElement('canvas'), null];
+    /**
+     * User options for this style
+     * @private
+     * @type {Object}
+     */
+    this.options_ = options;
+
+    /**
+     * The canvas element to draw the style
+     * into a layer swticher
+     * @private
+     * @type {HTMLCanvasElement}
+     */
+    this.canvas_ = document.createElement('canvas');
+
+    /**
+     * Layer which this style is applied
+     * @private
+     * @type {M.layer.Vector}
+     */
+    this.layer_ = null;
 
     if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
       let ctx = this.canvas_.getContext('2d');
@@ -26,17 +46,20 @@ goog.provide('M.Style');
     goog.base(this, impl);
   });
   goog.inherits(M.Style, M.facade.Base);
+
   /**
    * This function apply style
    *
-   * @protected
+   * @public
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @function
+   * @api stable
    */
   M.Style.prototype.apply = function(layer) {
     this.layer_ = layer;
     this.getImpl().applyToLayer(layer);
   };
+
   /**
    * TODO
    *
@@ -67,23 +90,22 @@ goog.provide('M.Style');
   /**
    * This function set value to property and apply new property
    *
-   * @protected
+   * @public
    * @param {String} property - Property to change the value
    * @param {String} value - Value to property
    * @return {M.Style}
    * @function
+   * @api stable
    */
   M.Style.prototype.set = function(property, value) {
     this.setValue_(this.options_, property, value);
-    this.getImpl().setOptionsToOLStyle(this.options_);
-    this.apply(this.layer_);
-
+    this.refresh();
     return this;
   };
   /**
    * This function set value to property
    *
-   * @protected
+   * @private
    * @param {Object} obj - Style
    * @param {String} path - Path property
    * @param {String} value - Value property
@@ -91,18 +113,32 @@ goog.provide('M.Style');
    * @function
    */
   M.Style.prototype.setValue_ = function(obj, path, value) {
-    let keys = Array.isArray(path) ? path : path.split('.');
-    for (var i = 0; i < keys.length - 1; i++) {
-      let key = keys[i];
-      if (!hasOwnProperty.call(obj, key)) {
+    let keys = M.utils.isArray(path) ? path : path.split('.');
+    let keyLength = keys.length;
+    let key = keys[0];
+    if (keyLength === 1) { // base case
+      obj[key] = value;
+    }
+    else if (keyLength > 1) { // recursive case
+      if (M.utils.isNullOrEmpty(obj[key])) {
         obj[key] = {};
       }
-      obj = obj[key];
+      this.setValue_(obj[key], keys.slice(1, keyLength), value);
     }
-    obj[keys[i]] = value;
-    return value;
   };
 
+  /**
+   * This function updates the style of the
+   * layer
+   *
+   * @public
+   * @function
+   * @return {String} data url to canvas
+   * @api stable
+   */
+  M.Style.prototype.refresh = function() {
+    this.apply(this.layer_);
+  };
 
   /**
    * This function returns data url to canvas
@@ -114,20 +150,17 @@ goog.provide('M.Style');
   M.Style.prototype.toImage = function() {
     return this.canvas_.toDataURL('png');
   };
+
   /**
    * TODO
    */
   M.Style.prototype.serialize = function() {};
+
   /**
    * TODO
    *
    */
   M.Style.prototype.equals = function(style) {
-    if (this.constructor === style.constructor) {
-      return true;
-    }
-    else {
-      return false;
-    }
+    return (this.constructor === style.constructor);
   };
 })();

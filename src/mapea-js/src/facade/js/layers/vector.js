@@ -14,10 +14,7 @@ goog.require('M.exception');
    * @param {Mx.parameters.LayerOptions} options - custom options for this layer
    * @api stable
    */
-  M.layer.Vector = (function(parameters, options, impl) {
-    parameters = parameters || {};
-    options = options || {};
-    impl = impl || new M.impl.layer.Vector(options);
+  M.layer.Vector = (function(parameters = {}, options = {}, impl = new M.impl.layer.Vector(options)) {
     // checks if the implementation can create Vector
     if (M.utils.isUndefined(M.impl.layer.Vector)) {
       M.exception('La implementación usada no puede crear capas Vector');
@@ -32,6 +29,7 @@ goog.require('M.exception');
      * @type {M.Filter}
      */
     this.filter_ = null;
+
     // calls the super constructor
     goog.base(this, parameters, impl);
     let style = options.style;
@@ -40,24 +38,21 @@ goog.require('M.exception');
     }
   });
   goog.inherits(M.layer.Vector, M.Layer);
-  /**   * This function add features to layer
+
+  /**
+   * This function add features to layer
    *
    * @function
    * @public
    * @param {Array<M.feature>} features - Features to add
-   * @api stable   */
+   * @api stable
+   */
   M.layer.Vector.prototype.addFeatures = function(features) {
     if (!M.utils.isNullOrEmpty(features)) {
       if (!M.utils.isArray(features)) {
         features = [features];
       }
-      //features.forEach(f => f.addTo(this));
-      features.forEach(function(f, index) {
-        f.addTo(this);
-        if (index == features.length - 1) {
-          this.fire(M.evt.LOAD, [features]);
-        }
-      }.bind(this));
+      this.getImpl().addFeatures(features);
     }
   };
 
@@ -74,6 +69,7 @@ goog.require('M.exception');
     if (M.utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
     return this.getImpl().getFeatures(skipFilter, this.filter_);
   };
+
   /**
    * This function returns the feature with this id
    *
@@ -93,6 +89,7 @@ goog.require('M.exception');
     }
     return feature;
   };
+
   /**
    * This function remove the features indicated
    *
@@ -102,13 +99,12 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.Vector.prototype.removeFeatures = function(features) {
-    if (M.utils.isArray(features)) {
-      this.getImpl().removeFeatures(features);
+    if (!M.utils.isArray(features)) {
+      features = [features];
     }
-    else {
-      M.dialog.error("El método debe recibir un array de M.Features");
-    }
+    this.getImpl().removeFeatures(features);
   };
+
   /**
    * This function remove all features
    *
@@ -117,8 +113,10 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.Vector.prototype.clear = function() {
-    this.removeFeatures(this.getFeatures());
+    this.removeFilter();
+    this.removeFeatures(this.getFeatures(true));
   };
+
   /**
    * This function refresh layer
    *
@@ -129,6 +127,7 @@ goog.require('M.exception');
   M.layer.Vector.prototype.refresh = function() {
     this.getImpl().refresh(true);
   };
+
   /**
    * This function redraw layer
    *
@@ -139,6 +138,7 @@ goog.require('M.exception');
   M.layer.Vector.prototype.redraw = function() {
     this.getImpl().redraw();
   };
+
   /**
    * This function set a filter
    *
@@ -156,6 +156,7 @@ goog.require('M.exception');
       M.dialog.error("El filtro indicado no es correcto");
     }
   };
+
   /**
    * This function return filter
    *
@@ -167,6 +168,7 @@ goog.require('M.exception');
   M.layer.Vector.prototype.getFilter = function() {
     return this.filter_;
   };
+
   /**
    * This function return extent of all features or discriminating by the filter
    *
@@ -179,6 +181,7 @@ goog.require('M.exception');
     if (M.utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
     return this.getImpl().getFeaturesExtent(skipFilter, this.filter_);
   };
+
   /**
    * This function remove filter
    *
@@ -189,6 +192,7 @@ goog.require('M.exception');
   M.layer.Vector.prototype.removeFilter = function() {
     this.setFilter(null);
   };
+
   /**
    * This function checks if an object is equals
    * to this layer
@@ -232,7 +236,8 @@ goog.require('M.exception');
 
         if (this.style_ instanceof M.style.Cluster) {
           if (this.getImpl().getOL3Layer().getSource().getState() === 'ready' && this.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {
-            this.style_.unapply(this);          }
+            this.style_.unapply(this);
+          }
           else {
             var style_old = this.style_;
             this.getImpl().on(M.evt.LOAD, function(e) {

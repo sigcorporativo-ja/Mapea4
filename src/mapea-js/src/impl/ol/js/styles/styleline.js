@@ -17,7 +17,7 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Line = function(options) {
-    this.setOptionsToOLStyle(options);
+    goog.base(this, options);
   };
   goog.inherits(M.impl.style.Line, M.impl.style.Simple);
 
@@ -27,8 +27,9 @@ goog.require('M.impl.style.Simple');
    * @public
    * @param {object} options - options to style
    * @function
+   * @api stable
    */
-  M.impl.style.Line.prototype.setOptionsToOLStyle = function(options) {
+  M.impl.style.Line.prototype.parseFacadeOptions_ = function(options) {
     let stroke = options.stroke;
     let label = options.label;
     let fill = options.fill;
@@ -80,7 +81,6 @@ goog.require('M.impl.style.Simple');
       );
     }
   };
-  goog.inherits(M.impl.style.Line, M.impl.style.Simple);
 
   /**
    * This function apply style to feature

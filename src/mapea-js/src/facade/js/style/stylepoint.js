@@ -15,40 +15,14 @@ goog.require('M.style.Simple');
    * @param {Object} options - options style
    * @api stable
    */
-
-  M.style.Point = (function(options) {
-    options = options || M.style.Point.OPTS_DEFAULT;
-
-    //default stroke
-    if (M.utils.isNullOrEmpty(options.stroke)) options.stroke = {};
-    if (M.utils.isNullOrEmpty(options.stroke.width)) options.stroke.width = 2;
-    if (M.utils.isNullOrEmpty(options.stroke.color)) options.stroke.color = '#67af13';
-
-    //default fill
-    if (M.utils.isNullOrEmpty(options.fill)) options.fill = {};
-    if (M.utils.isNullOrEmpty(options.fill.color)) options.fill.color = '#67af13';
-    if (M.utils.isNullOrEmpty(options.fill.opacity)) options.fill.opacity = 0.2;
-
-    //default radius
-    if (M.utils.isNullOrEmpty(options.radius)) options.radius = 6;
-
+  M.style.Point = (function(options = {}) {
+    this.extends_(options, M.style.Point.DEFAULT);
     var impl = new M.impl.style.Point(options);
 
     // calls the super constructor
     goog.base(this, options, impl);
   });
   goog.inherits(M.style.Point, M.style.Simple);
-
-  /**
-   * This function apply style to feature
-   *
-   * @public
-   * @param {M.Feature} feature - Feature to apply style
-   * @function
-   */
-  M.style.Point.prototype.applyToFeature = function(feature) {
-    this.getImpl().applyToFeature(feature);
-  };
 
   /**
    * TODO
@@ -64,11 +38,18 @@ goog.require('M.style.Simple');
    * @public
    * @api stable
    */
-  M.style.Point.OPTS_DEFAULT = {
+  M.style.Point.DEFAULT = {
     stroke: {
-      color: 'black',
-      width: 1
+      color: '#67af13',
+      width: 2
     },
-    radius: 3
+    radius: 6,
+    fill: {
+      color: '#67af13',
+      opacity: 0.2
+    },
+    label: {
+      offset: [0, 0]
+    }
   };
 })();
