@@ -31,6 +31,7 @@ goog.require('M.control.OverviewMap');
 goog.require('M.control.Location');
 goog.require('M.control.GetFeatureInfo');
 goog.require('M.handler.Features');
+goog.require('M.format.WKT');
 goog.require('M.Label');
 goog.require('M.Popup');
 goog.require('M.dialog');
@@ -156,7 +157,7 @@ goog.require('M.style.Category');
      * @private
      * @type {M.Feature}
      */
-    this.featureCenter_ = null;
+    this.centerFeature_ = null;
 
     /**
      * Draw layer
@@ -678,7 +679,11 @@ goog.require('M.style.Category');
       // gets the layers
       var kmlLayers = this.getKML(layersParam);
       if (kmlLayers.length > 0) {
-        kmlLayers.forEach(this.featuresHandler_.removeLayer);
+        kmlLayers.forEach(
+          function(layer) {
+            this.featuresHandler_.removeLayer(layer);
+          }.bind(this)
+        );
         // removes the layers
         this.getImpl().removeKML(kmlLayers);
       }
@@ -891,7 +896,11 @@ goog.require('M.style.Category');
       // gets the layers
       var wfsLayers = this.getWFS(layersParam);
       if (wfsLayers.length > 0) {
-        wfsLayers.forEach(this.featuresHandler_.removeLayer);
+        wfsLayers.forEach(
+          function(layer) {
+            this.featuresHandler_.removeLayer(layer);
+          }.bind(this)
+        );
         // removes the layers
         this.getImpl().removeWFS(wfsLayers);
       }
@@ -1561,16 +1570,27 @@ goog.require('M.style.Category');
       this.getImpl().setCenter(center);
       if (center.draw === true) {
         this.drawLayer_.clear();
-        this.drawPoints([{
-          'x': center.x,
-          'y': center.y,
-          'click': goog.bind(function(evt) {
-            var label = this.getLabel();
-            if (!M.utils.isNullOrEmpty(label)) {
-              label.show(this);
+
+        this.centerFeature_ = new M.Feature("__mapeacenter__", {
+          "type": "Feature",
+          "geometry": {
+            "type": "Point",
+            "coordinates": [center.x, center.y]
+          },
+          "properties": {
+            "vendor": {
+              "mapea": {
+                "click": goog.bind(function(evt) {
+                  var label = this.getLabel();
+                  if (!M.utils.isNullOrEmpty(label)) {
+                    label.show(this);
+                  }
+                }, this)
+              }
             }
-          }, this)
-        }]);
+          }
+        });
+        this.drawFeatures([this.centerFeature_]);
       }
     }
     catch (err) {
@@ -1588,18 +1608,7 @@ goog.require('M.style.Category');
    * @function
    */
   M.Map.prototype.getFeatureCenter = function() {
-    return this._featureCenter;
-  };
-
-  /**
-   * This function remove feature center for this
-   * map instance
-   *
-   * @private
-   * @function
-   */
-  M.Map.prototype._removeFeatureCenter = function() {
-    this.getImpl().removeFeatures(this._featureCenter);
+    return this.centerFeature_;
   };
 
   /**
@@ -1611,7 +1620,8 @@ goog.require('M.style.Category');
    * @api stable
    */
   M.Map.prototype.removeCenter = function() {
-    this._removeFeatureCenter();
+    this.removeFeatures(this.centerFeature_);
+    this.centerFeature_ = null;
     this.zoomToMaxExtent();
   };
 

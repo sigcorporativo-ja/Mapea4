@@ -88,6 +88,8 @@ goog.require('goog.style');
     }
 
     goog.base(this, 'addTo', map);
+
+    this.ol3Layer.setStyle(undefined);
   };
 
   /**
