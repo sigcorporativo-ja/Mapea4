@@ -415,13 +415,18 @@ goog.require('M.window');
       }, this);
 
       // adds the layers
+
       this.getImpl().addLayers(layers);
       this.fire(M.evt.ADDED_LAYER, [layers]);
+
+
     }
     return this;
   };
 
+
   /**
+
    * This function removes the specified layers to the map
    *
    * @function

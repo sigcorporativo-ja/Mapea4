@@ -140,12 +140,12 @@ function searchstreetgeosearch_test() {
 }
 
 
-// geojson_test();
-// kml_test();
-// wfs_test();
-// location_test();
-// geosearch_test();
-// geosearchbylocation_test();
-// searchstreet_test();
-// center_test();
+geojson_test();
+//kml_test();
+//wfs_test();
+location_test();
+//geosearch_test();
+geosearchbylocation_test();
+//earchstreet_test();
+center_test();
 searchstreetgeosearch_test();
