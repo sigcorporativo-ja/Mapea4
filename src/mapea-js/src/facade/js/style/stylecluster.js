@@ -18,6 +18,7 @@ goog.require('M.Style');
   M.style.Cluster = (function(options = {}, optsVendor = {}) {
     this.options_ = options;
     this.optionsVendor_ = optsVendor;
+
     /**
      * TODO
      */
@@ -29,15 +30,7 @@ goog.require('M.Style');
     }, impl);
   });
   goog.inherits(M.style.Cluster, M.Style);
-  /**
-   * This function apply the style to specified layer
-   *
-   * @function
-   * @api stable
-   */
-  M.style.Cluster.prototype.apply = function(layer) {
-    this.getImpl().apply(layer);
-  };
+
   /**
    * This function apply the style to specified layer
    *
@@ -54,7 +47,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.getRanges = function() {
-    return this.options_.ranges;
+    return this.options_.options.ranges;
   };
   /**
    * This function update a set of ranges  defined by user
@@ -62,9 +55,13 @@ goog.require('M.Style');
    * @function
    * @api stable
    */
-  M.style.Cluster.prototype.setRanges = function(newRanges = []) {
-    this.options_.ranges = newRanges;
+  M.style.Cluster.prototype.setRanges = function(newRanges) {
+    this.getImpl().setRangesImpl(newRanges, this.layer_, this);
+    this.unapply(this.layer_);
+    this.layer_.setStyle(this);
     return this;
+    // this.options_.options.ranges = newRanges;
+    // return this.layer_.setStyle(this);
   };
   /**
    * This function return a specified range
@@ -73,7 +70,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.getRange = function(min, max) {
-    return this.options_.ranges.find(el => (el.min == min && el.max == max));
+    return this.options_.options.ranges.find(el => (el.min == min && el.max == max));
   };
   /**
    * This function set a specified range
@@ -82,25 +79,40 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.updateRange = function(min, max, newRange) {
-    let element = this.options_.ranges.find(el => (el.min == min && el.max == max));
-    if (element) {
-      element = newRange;
-      return this;
-    }
-    else {
-      return false;
-    }
+    this.getImpl().updateRangeImpl(min, max, newRange, this.layer_, this);
+    this.unapply(this.layer_);
+    this.layer_.setStyle(this);
+    return this;
   };
+  // let element = this.options_.options.ranges.find(el => (el.min == min && el.max == max));
+  // if (element) {
+  //
+  //   element.style = newRange;
+  //   return this.layer_.setStyle(this);
+  // }
+  // else {
+  //   return false;
+  // }
+
   /**
    * This function set if layer must be animated
    *
    * @function
    * @api stable
    */
-  M.style.Cluster.prototype.setAnimated = function(animated = true) {
-    this.options_.animated = animated;
-    return this;
+  M.style.Cluster.prototype.setAnimated = function(animated) {
+    return this.getImpl().setAnimatedImpl(animated, this.layer_, this);
   };
+  /*
+    this.options_.options.animated = animated;
+    if (animated == false) {
+      this.getImpl().clusterLayer.set('animationDuration', undefined);
+    }
+    else {
+      this.getImpl().clusterLayer.set('animationDuration', M.style.Cluster.ANIMATION_DURATION);
+    }
+    return this;
+  };*/
   /**
    * This function return if layer is animated
    *
@@ -108,7 +120,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.isAnimated = function() {
-    return this.options_.animated;
+    return this.options_.options.animated;
   };
   /**
    * Distance to calculate clusters
@@ -125,5 +137,10 @@ goog.require('M.Style');
    * easeIn | easeOut | linear | upAndDown
    *
    */
-  M.style.Cluster.ANIMATION_METHOD = 'linear';
+  if (this.isAnimated == true) {
+    M.style.Cluster.ANIMATION_METHOD = "linear";
+  }
+  else {
+    M.style.Cluster.ANIMATION_METHOD = null;
+  }
 })();

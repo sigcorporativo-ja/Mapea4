@@ -16,8 +16,8 @@ let points = new M.layer.GeoJSON({
 
   name: "Empresas",
 
-  //url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/wfs?outputFormat=application/json&request=getfeature&typeNames=sepim:empresas&version=1.3.0",
-  url: "http://192.168.60.189:8081/test/puntos.json",
+  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/wfs?outputFormat=application/json&request=getfeature&typeNames=sepim:empresas&version=1.3.0",
+  //url: "http://192.168.60.189:8081/test/puntos.json",
   extract: false
 
 });
@@ -33,9 +33,37 @@ mapajs.addLayers([points]);
 var options = {
   ranges:
 
-    [
-
-
+  [
+      {
+        min: 2,
+        max: 49,
+        style: new M.style.Point({
+          fill: {
+            color: 'red'
+          },
+          radius: 5
+        })
+    },
+      {
+        min: 50,
+        max: 100,
+        style: new M.style.Point({
+          fill: {
+            color: 'blue'
+          },
+          radius: 10,
+        })
+    },
+      {
+        min: 101,
+        max: 12222,
+        style: new M.style.Point({
+          fill: {
+            color: 'pink'
+          },
+          radius: 30
+        })
+    }
     ],
 
   animated: true,
@@ -46,68 +74,21 @@ var options = {
 
   selectedInteraction: true,
 
-  distance: 80
+  distance: 20
 
 };
 
 var vendorParameters = {
 
-  displayInLayerSwitcherHoverLayer: false,
+  displayInLayerSwitcherHoverLayer: true,
 
-  distanceSelectFeatures: 15
+  distanceSelectFeatures: 10
 
 }
 
 var style = new M.style.Cluster(options, vendorParameters);
 
 
-let stylePoint = new M.style.Point({
-
-  fill: {
-
-    color: 'red'
-
-  },
-
-  radius: 5,
-
-  icon: {
-
-    src: 'https://cdn3.iconfinder.com/data/icons/free-icons-3/128/cat_6.png',
-
-    rotation: 0.5,
-
-    scale: 0.5,
-
-    opacity: 0.8,
-
-    anchor: [0.5, 1.9],
-
-    anchororigin: 'top-left',
-
-    anchororigin: 'top-left',
-
-    anchorxunits: 'fraction',
-
-    anchoryunits: 'fraction',
-
-
-
-    rotate: false,
-
-    // offset: [10, 0],
-
-    crossorigin: null,
-
-    snaptopixel: true,
-
-    offsetorigin: 'bottom-left',
-
-    size: [150, 95]
-
-  }
-
-});
 
 
 
@@ -212,6 +193,10 @@ function CategoryStylef() {
 }
 
 
+
+function clusterf() {
+  points.setStyle(style);
+}
 
 
 

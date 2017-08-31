@@ -17,6 +17,7 @@ goog.require('M.style.Simple');
    */
   M.style.Point = (function(options = {}) {
     this.extends_(options, M.style.Point.DEFAULT);
+
     var impl = new M.impl.style.Point(options);
 
     // calls the super constructor
