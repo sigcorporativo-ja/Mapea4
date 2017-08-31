@@ -31,6 +31,8 @@ goog.require('M.exception');
 
     // calls the super constructor
     goog.base(this, parameters, impl);
+
+    impl.on(M.evt.LOAD, (features) => this.fire(M.evt.LOAD, [features]));
   });
   goog.inherits(M.layer.Vector, M.Layer);
 
