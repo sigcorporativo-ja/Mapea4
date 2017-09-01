@@ -21,13 +21,13 @@ goog.require('M.impl.style.Simple');
   });
   goog.inherits(M.impl.style.Point, M.impl.style.Simple);
 
-
   /**
    * This function se options to ol style
    *
-   * @public
+   * @private
    * @param {object} options - options to style
    * @function
+   * @api stable
    */
   M.impl.style.Point.prototype.parseFacadeOptions_ = function(options) {
     let stroke = options.stroke;
@@ -166,5 +166,27 @@ goog.require('M.impl.style.Simple');
       }
     }
     this.styles_ = [this.style_, this.styleIcon_];
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Point.prototype.drawGeometryToCanvas = function(vectorContext) {
+    vectorContext.drawGeometry(new ol.geom.Point([50, 50]));
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Point.prototype.getCanvasSize = function() {
+    return [200, 100];
   };
 })();

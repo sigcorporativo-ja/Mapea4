@@ -32,8 +32,34 @@ goog.require('M.impl.style.Simple');
     let label = options.label;
     let fill = options.fill;
     this.style_ = new ol.style.Style();
-    this.stylePattern_ = new ol.style.Style();
-    this.styles_ = [this.style_, this.stylePattern_];
+
+    // FILL
+    if (!M.utils.isNullOrEmpty(fill)) {
+      if (!M.utils.isNullOrEmpty(fill.pattern)) {
+        this.style_.setFill(new ol.style.FillPattern({
+          pattern: (fill.pattern.name || "").toLowerCase(),
+          color: chroma(fill.pattern.color).alpha(fill.pattern.opacity).css(),
+          size: fill.pattern.size,
+          spacing: fill.pattern.spacing,
+          image: (fill.pattern.name == 'Image') ? new ol.style.Icon({
+            src: fill.pattern.src
+          }) : undefined,
+          angle: fill.pattern.rotation,
+          scale: fill.pattern.scale,
+          offset: fill.pattern.offset,
+          fill: new ol.style.Fill({
+            color: chroma(fill.color).alpha(fill.opacity).css()
+          }),
+        }));
+      }
+      else {
+        this.style_.setFill(new ol.style.Fill({
+          color: chroma(fill.color).alpha(fill.opacity).css()
+        }));
+      }
+    }
+
+    // STROKE
     if (!M.utils.isNullOrEmpty(stroke)) {
       this.style_.setStroke(new ol.style.Stroke({
         color: stroke.color,
@@ -45,6 +71,8 @@ goog.require('M.impl.style.Simple');
         miterLimit: stroke.miterlimit,
       }));
     }
+
+    // LABEL
     if (!M.utils.isNullOrEmpty(label)) {
       this.style_.setText(new ol.style.Text({
         font: label.font,
@@ -72,34 +100,42 @@ goog.require('M.impl.style.Simple');
         }));
       }
     }
-    if (!M.utils.isNullOrEmpty(fill)) {
-      if (!M.utils.isNullOrEmpty(fill.color) || !M.utils.isNullOrEmpty(fill.coopacitylor)) {
-        this.style_.setFill(
-          new ol.style.Fill({
-            color: chroma(fill.color).alpha(fill.opacity).css()
-          }));
-      }
-      let pattern = fill.pattern;
-      if (!M.utils.isNullOrEmpty(fill.pattern)) {
-        this.stylePattern_ = new ol.style.Style({
-          fill: new ol.style.FillPattern({
-            pattern: (pattern.name || "").toLowerCase(),
-            color: pattern.color,
-            size: pattern.size,
-            spacing: pattern.spacing,
-            image: (pattern.name == 'Image') ? new ol.style.Icon({
-              src: pattern.src
-            }) : undefined,
-            angle: pattern.rotation,
-            scale: pattern.scale,
-            offset: pattern.offset,
-            fill: new ol.style.Fill({
-              color: (!M.utils.isNullOrEmpty(pattern.fill) && !M.utils.isNullOrEmpty(pattern.fill.color)) ? chroma(pattern.fill.color).alpha(pattern.fill.opacity).css() : "rgba(255, 255, 255, 0)"
-            }),
-          })
-        });
-        this.styles_.push(this.stylePattern_);
-      }
-    }
+    this.styles_ = [this.style_];
+  };
+
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Polygon.prototype.drawGeometryToCanvas = function(vectorContext) {
+    let canvasSize = this.getCanvasSize();
+
+    let maxW = Math.floor(canvasSize[0] * 0.8);
+    let maxH = Math.floor(canvasSize[1] * 0.8);
+
+    let minW = (canvasSize[0] - maxW);
+    let minH = (canvasSize[1] - maxH);
+    vectorContext.drawGeometry(new ol.geom.Polygon([[
+      [minW, minH],
+      [minW, maxW],
+      [maxW, maxW],
+      [maxW, minH],
+      [minW, minH]
+    ]]));
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Polygon.prototype.getCanvasSize = function() {
+    return [240, 150];
   };
 })();

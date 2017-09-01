@@ -1,9 +1,10 @@
 goog.provide('M.impl.style.Simple');
 
+goog.require('M.impl.Style');
+
 /**
  * @namespace M.impl.style.Simple
  */
-
 (function() {
   /**
    * Main constructor of the class.
@@ -11,40 +12,7 @@ goog.provide('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Simple = (function(options = {}) {
-    this.parseFacadeOptions_(options);
+    goog.base(this, options);
   });
-
-  /**
-   * This function apply style options facade to impl
-   * @private
-   * @function
-   * @param {Object} options
-   * @api stable
-   */
-  M.impl.style.Simple.prototype.parseFacadeOptions_ = function(options = {}) {};
-
-  /**
-   * This function apply style to layer
-   * @public
-   * @function
-   * @param {M.layer.Vector} layer - Layer
-   * @api stable
-   */
-  M.impl.style.Simple.prototype.applyToLayer = function(layer) {
-    layer.getFeatures().forEach(this.applyToFeature, this);
-  };
-
-  /**
-   * This function apply style to feature
-   *
-   * @public
-   * @param {M.Feature} feature - Feature to apply style
-   * @function
-   * @api stable
-   */
-
-  M.impl.style.Simple.prototype.applyToFeature = function(feature) {
-    feature.getImpl().getOLFeature().setStyle(this.styles_);
-  };
-
+  goog.inherits(M.impl.style.Simple, M.impl.Style);
 })();

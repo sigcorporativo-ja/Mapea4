@@ -258,6 +258,7 @@ goog.require('M.exception');
       }
     }
   };
+
   /**
    * This function return style vector
    *
@@ -267,4 +268,20 @@ goog.require('M.exception');
   M.layer.Vector.prototype.getStyle = function() {
     return this.style_;
   };
+
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @function
+   * @api stable
+   */
+  M.layer.Vector.prototype.getLegendURL = function() {
+    let legendUrl;
+    if (!M.utils.isNullOrEmpty(this.style_)) {
+      legendUrl = this.style_.toImage();
+    }
+    return legendUrl;
+  };
+
 })();
