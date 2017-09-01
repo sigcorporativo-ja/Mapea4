@@ -125,7 +125,7 @@ goog.require('goog.style');
       this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
     }
     else if (!M.utils.isNullOrEmpty(this.source)) {
-      let features = this.formater_.read(this.source);
+      let features = this.formater_.read(this.source, this.map.getProjection());
       this.ol3Layer.setSource(new ol.source.Vector({
         loader: (function(extent, resolution, projection) {
           // removes previous features
