@@ -27,7 +27,7 @@ goog.require('M.impl.style.Simple');
    * @param {object} options - options to style
    * @function
    */
-  M.impl.style.Polygon.prototype.parseFacadeOptions_ = function(options) {
+  M.impl.style.Polygon.prototype.updateFacadeOptions = function(options) {
     let stroke = options.stroke;
     let label = options.label;
     let fill = options.fill;

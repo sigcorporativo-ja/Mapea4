@@ -11,7 +11,7 @@ goog.provide('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Simple = (function(options = {}) {
-    this.parseFacadeOptions_(options);
+    this.updateFacadeOptions(options);
   });
 
   /**
@@ -21,7 +21,7 @@ goog.provide('M.impl.style.Simple');
    * @param {Object} options
    * @api stable
    */
-  M.impl.style.Simple.prototype.parseFacadeOptions_ = function(options = {}) {};
+  M.impl.style.Simple.prototype.updateFacadeOptions = function(options = {}) {};
 
   /**
    * This function apply style to layer
