@@ -1,8 +1,7 @@
-goog.provide('ol.style.TextPath');
-/** Add a setTextPath style to draw text along linestrings
-@toto letterpadding/spacing, wordpadding/spacing
-*/
+goog.provide('M.impl.style.TextPath');
+
 (function() {
+
   /** Internal drawing function called on postcompose
    * @param {ol.eventPoscompose} e postcompose event
    */
@@ -83,28 +82,20 @@ goog.provide('ol.style.TextPath');
    *	@param {ol.style.Style|Array.<ol.style.Style>|ol.StyleFunction} style
    *	@param {Number} maxResolution to display text, default: 0
    */
-  ol.layer.Vector.prototype.setTextPathStyle = function(style, maxResolution) {
-    // Remove existing style
-    if (style === null) {
-      if (this.textPath_) this.unByKey(this.textPath_);
-      this.textPath_ = null;
-      this.changed();
-      return;
+  ol.layer.Vector.prototype.setTextPathStyle = function(styleParam, maxResolution) {
+    let style = styleParam;
+    if (!M.utils.isFunction(styleParam)) {
+      if (!M.utils.isArray(styleParam)) {
+        styleParam = [styleParam];
+      }
+      style = (f) => styleParam;
     }
+
     // New postcompose
     if (!this.textPath_) {
       this.textPath_ = this.on('postcompose', drawTextPath, this);
     }
-    // Set textPathStyle
-    if (style === undefined) {
-      style = [new ol.style.Style({
-        text: new ol.style.Text()
-      })];
-    }
-    if (typeof(style) == "function") this.textPathStyle_ = style;
-    else this.textPathStyle_ = function() {
-      return style;
-    };
+    this.textPathStyle_ = style;
     this.textPathMaxResolution_ = Number(maxResolution) || Number.MAX_VALUE;
 
     // Force redraw
@@ -117,19 +108,19 @@ goog.provide('ol.style.TextPath');
    *	- textOverflow {visible|ellipsis|string}
    *	- minWidth {number} minimum width (px) to draw text, default 0
    */
-  ol.style.TextPath = function(options) {
-    if (!options) options = {};
+  M.impl.style.TextPath = function(options = {}) {
+
     ol.style.Text.call(this, options);
     this.textOverflow_ = typeof(options.textOverflow) != "undefined" ? options.textOverflow : "visible";
     this.minWidth_ = options.minWidth || 0;
   }
-  ol.inherits(ol.style.TextPath, ol.style.Text);
+  ol.inherits(M.impl.style.TextPath, ol.style.Text);
 
-  ol.style.TextPath.prototype.getTextOverflow = function() {
+  M.impl.style.TextPath.prototype.getTextOverflow = function() {
     return this.textOverflow_;
   };
 
-  ol.style.TextPath.prototype.getMinWidth = function() {
+  M.impl.style.TextPath.prototype.getMinWidth = function() {
     return this.minWidth_;
   };
 

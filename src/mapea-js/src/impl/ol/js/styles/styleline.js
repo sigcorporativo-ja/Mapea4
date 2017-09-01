@@ -1,6 +1,7 @@
 goog.provide('M.impl.style.Line');
 
 goog.require('M.impl.style.Simple');
+goog.require('M.impl.style.TextPath');
 
 
 /**
