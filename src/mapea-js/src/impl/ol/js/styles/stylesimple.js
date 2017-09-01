@@ -72,5 +72,5 @@ goog.provide('M.impl.style.Simple');
       attrFeature = undefined;
     }
     return attrFeature;
-  }
+  };
 })();

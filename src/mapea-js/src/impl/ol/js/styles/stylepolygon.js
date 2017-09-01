@@ -108,6 +108,6 @@ goog.require('M.impl.style.Simple');
         }
       }
       return styles;
-    }
+    };
   };
 })();

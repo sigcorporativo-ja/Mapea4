@@ -100,7 +100,7 @@ goog.provide('M.Style');
   M.Style.prototype.set = function(property, value) {
     this.setValue_(this.options_, property, value);
     if (!M.utils.isNullOrEmpty(this.layer_)) {
-      this.getImpl().updateFacadeOptions(this.options_)
+      this.getImpl().updateFacadeOptions(this.options_);
       this.refresh();
     }
     return this;
