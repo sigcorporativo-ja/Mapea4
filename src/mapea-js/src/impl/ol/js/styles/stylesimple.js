@@ -42,9 +42,32 @@ goog.provide('M.impl.style.Simple');
    * @function
    * @api stable
    */
-
   M.impl.style.Simple.prototype.applyToFeature = function(feature) {
-    feature.getImpl().getOLFeature().setStyle(this.styles_);
+    feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
   };
 
+  /**
+   * This function get the value of the feature which key match with
+   * the attr param
+   * @public
+   * @function
+   * @param {string|number|function} attr - attribute or function
+   * @param {M.Feature}  feature - Feature
+   * @api stable
+   */
+  M.impl.style.Simple.getValue = function(attr, feature) {
+    let regexp = /^\{\{([^\}]+)\}\}$/;
+    let attrFeature = attr;
+    if (regexp.test(attr)) {
+      let keyFeature = attr.replace(regexp, '$1');
+      attrFeature = feature.getProperties()[keyFeature];
+    }
+    else if (M.utils.isFunction(attr)) {
+      attrFeature = attr(feature);
+    }
+    if (M.utils.isNullOrEmpty(attrFeature)) {
+      attrFeature = undefined;
+    }
+    return attrFeature;
+  }
 })();
