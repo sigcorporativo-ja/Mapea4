@@ -29,7 +29,7 @@ goog.require('M.impl.style.Simple');
    * @param {object} options - options to style
    * @function
    */
-  M.impl.style.Point.prototype.parseFacadeOptions_ = function(options) {
+  M.impl.style.Point.prototype.updateFacadeOptions = function(options) {
     let stroke = options.stroke;
     let radius = options.radius;
     let fill = options.fill;

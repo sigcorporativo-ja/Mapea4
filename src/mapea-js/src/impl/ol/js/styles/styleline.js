@@ -29,7 +29,7 @@ goog.require('M.impl.style.Simple');
    * @function
    * @api stable
    */
-  M.impl.style.Line.prototype.parseFacadeOptions_ = function(options) {
+  M.impl.style.Line.prototype.updateFacadeOptions = function(options) {
     let stroke = options.stroke;
     let label = options.label;
     let fill = options.fill;
