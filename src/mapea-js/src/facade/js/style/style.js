@@ -99,7 +99,9 @@ goog.provide('M.Style');
    */
   M.Style.prototype.set = function(property, value) {
     this.setValue_(this.options_, property, value);
-    this.refresh();
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      this.refresh();
+    }
     return this;
   };
   /**
