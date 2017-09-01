@@ -31,7 +31,11 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Line.prototype.updateFacadeOptions = function(options) {
-    return function(resolution) {
+    return function(feature, resolution) {
+      if (!(feature instanceof ol.Feature)) {
+        resolution = feature;
+        feature = this;
+      }
       let stroke = options.stroke;
       let label = options.label;
       let fill = options.fill;

@@ -30,7 +30,11 @@ goog.require('M.impl.style.Simple');
    * @function
    */
   M.impl.style.Point.prototype.updateFacadeOptions = function(options) {
-    return function(resolution) {
+    return function(feature, resolution) {
+      if (!(feature instanceof ol.Feature)) {
+        resolution = feature;
+        feature = this;
+      }
       let stroke = options.stroke;
       let radius = options.radius;
       let fill = options.fill;

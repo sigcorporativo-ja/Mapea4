@@ -261,23 +261,19 @@ goog.require('ol.geom.convexhull');
       else {
         let range = this.options.ranges.find(el => (el.min <= size && el.max >= size));
         if (range) {
-          let style = range.style.getImpl().style_;
+          let style = range.style;
           if (this.options.displayAmount) {
-            style.text_ = new ol.style.Text({
-              text: size.toString(),
-              fill: new ol.style.Fill({
-                color: '#000'
-              })
-            });
+            style.set('label.text', size.toString());
+            style.set('label.text.color', '#000');
           }
-          return [style];
+          return style.getImpl().olStyleFn_(feature, resolution);
         }
         else {
           return new ol.style.Style.defaultFunction();
         }
       }
     }
-    return [style];
+    return style.getImpl().olStyleFn_(feature, resolution);
   };
   /**
    * This function return a default ranges to cluster
