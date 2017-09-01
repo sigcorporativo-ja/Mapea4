@@ -96,6 +96,7 @@ goog.require('M.impl.Layer');
     if (M.utils.isNullOrEmpty(this.ol3Layer.getSource())) {
       this.ol3Layer.setSource(new ol.source.Vector());
     }
+    this.redraw();
   };
 
   /**

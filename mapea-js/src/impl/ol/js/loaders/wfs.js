@@ -5,7 +5,7 @@ goog.require('M.format.GeoJSON');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
   /**
    * @classdesc TODO
    * control
@@ -15,7 +15,7 @@ goog.require('M.format.GeoJSON');
    * @extends {M.Object}
    * @api stable
    */
-  M.impl.loader.WFS = function (map, service, format) {
+  M.impl.loader.WFS = function(map, service, format) {
     /**
      * TODO
      * @private
@@ -49,9 +49,9 @@ goog.require('M.format.GeoJSON');
    * @function
    * @api stable
    */
-  M.impl.loader.WFS.prototype.getLoaderFn = function (callback) {
+  M.impl.loader.WFS.prototype.getLoaderFn = function(callback) {
     var this_ = this;
-    return (function (extent, resolution, projection) {
+    return (function(extent, resolution, projection) {
       var requestUrl = this_.getRequestUrl_(extent, projection);
       this_.loadInternal_(requestUrl, projection).then(callback.bind(this));
     });
@@ -63,11 +63,11 @@ goog.require('M.format.GeoJSON');
    * @private
    * @function
    */
-  M.impl.loader.WFS.prototype.loadInternal_ = function (url, projection) {
-    return (new Promise(function (success, fail) {
-      M.remote.get(url).then(function (response) {
+  M.impl.loader.WFS.prototype.loadInternal_ = function(url, projection) {
+    return (new Promise(function(success, fail) {
+      M.remote.get(url).then(function(response) {
         if (!M.utils.isNullOrEmpty(response.text) && response.text.indexOf("ServiceExceptionReport") < 0) {
-          let features = this.format_.read(response.text);
+          let features = this.format_.read(response.text, projection);
           success(features);
         }
         else {
@@ -91,7 +91,7 @@ goog.require('M.format.GeoJSON');
    * @private
    * @function
    */
-  M.impl.loader.WFS.prototype.getRequestUrl_ = function (extent, projection) {
+  M.impl.loader.WFS.prototype.getRequestUrl_ = function(extent, projection) {
     // var mapBbox = this.map_.getBbox();
     // var minExtent = [
     //    Math.min(Math.abs(extent[0]), mapBbox.x.min),
