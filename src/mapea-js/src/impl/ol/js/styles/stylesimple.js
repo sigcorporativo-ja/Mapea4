@@ -43,7 +43,10 @@ goog.provide('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Simple.prototype.applyToFeature = function(feature) {
+    let g = ol.Observable.prototype.changed;
+    ol.Observable.prototype.changed = function() {};
     feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
+    ol.Observable.prototype.changed = g;
   };
 
   /**
