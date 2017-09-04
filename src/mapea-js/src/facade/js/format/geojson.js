@@ -84,7 +84,7 @@ goog.require('M.Feature');
           dstProj = ol.proj.get(projection.getCode());
         }
       }
-      let srcProj = geojson.crs ? ol.proj.get(geojson.crs.type.concat(":").concat(geojson.crs.properties.code)) : ol.proj.get("EPSG:4326");
+      let srcProj = this.getImpl().readProjectionFromObject(geojson);
       features = geojsonFeatures.map(function(geojsonFeature) {
         let id = geojsonFeature.id;
         let feature = new M.Feature(id, geojsonFeature);
