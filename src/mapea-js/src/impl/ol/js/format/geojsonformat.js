@@ -11,7 +11,7 @@ goog.require('ol.format.GeoJSON');
  * @param {olx.format.GeoJSONOptions=} opt_options Options.
  * @api stable
  */
-M.impl.format.GeoJSON = function (opt_options) {
+M.impl.format.GeoJSON = function(opt_options) {
   var options = opt_options ? opt_options : {};
   goog.base(this, options);
 };
@@ -20,7 +20,7 @@ goog.inherits(M.impl.format.GeoJSON, ol.format.GeoJSON);
 /**
  * @inheritDoc
  */
-M.impl.format.GeoJSON.prototype.readFeatureFromObject = function (
+M.impl.format.GeoJSON.prototype.readFeatureFromObject = function(
   object, opt_options) {
   var geoJSONFeature = /** @type {GeoJSONFeature} */ (object);
   goog.asserts.assert(geoJSONFeature.type == 'Feature',
@@ -61,7 +61,7 @@ M.impl.format.GeoJSON.prototype.readFeatureFromObject = function (
 /**
  * @inheritDoc
  */
-M.impl.format.GeoJSON.prototype.writeFeatureObject = function (
+M.impl.format.GeoJSON.prototype.writeFeatureObject = function(
   feature, opt_options) {
   opt_options = this.adaptOptions(opt_options);
   var object = {
@@ -98,7 +98,7 @@ M.impl.format.GeoJSON.prototype.writeFeatureObject = function (
 /**
  * @inheritDoc
  */
-M.impl.format.GeoJSON.prototype.readProjectionFromObject = function (object) {
+M.impl.format.GeoJSON.prototype.readProjectionFromObject = function(object) {
   var geoJSONObject = /** @type {GeoJSONObject} */ (object);
   var crs = geoJSONObject.crs;
   if (crs) {
@@ -118,12 +118,12 @@ M.impl.format.GeoJSON.prototype.readProjectionFromObject = function (object) {
     }
   }
   else {
-    return this.defaultDataProjection;
+    return "EPSG:4326";
   }
 };
 
 
-M.impl.format.GeoJSON.applyIcon = function (feature, icon) {
+M.impl.format.GeoJSON.applyIcon = function(feature, icon) {
 
   var imgIcon = document.createElement('IMG');
   imgIcon.src = icon.url;
@@ -148,8 +148,8 @@ M.impl.format.GeoJSON.applyIcon = function (feature, icon) {
 /**
  * @inheritDoc
  */
-M.impl.format.GeoJSON.prototype.write = function (features) {
-  return features.map(function (feature) {
+M.impl.format.GeoJSON.prototype.write = function(features) {
+  return features.map(function(feature) {
     return this.writeFeatureObject(feature.getImpl().getOLFeature());
   }.bind(this));
 };
