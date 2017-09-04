@@ -118,27 +118,26 @@ goog.require('goog.style');
         format: this.formater_,
         loader: this.loader_.getLoaderFn(function(features) {
           this_.facadeVector_.addFeatures(features);
-          this_.facadeVector_.fire(M.evt.LOAD, [features]);
+          this_.fire(M.evt.LOAD, [features]);
         }),
         strategy: ol.loadingstrategy.all
       };
       this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
     }
     else if (!M.utils.isNullOrEmpty(this.source)) {
-      let features = this.formater_.read(this.source);
+      let features = this.formater_.read(this.source, this.map.getProjection());
       this.ol3Layer.setSource(new ol.source.Vector({
         loader: (function(extent, resolution, projection) {
           // removes previous features
           this_.facadeVector_.clear();
           this_.facadeVector_.addFeatures(features);
-          this_.facadeVector_.fire(M.evt.LOAD, [features]);
+          this_.fire(M.evt.LOAD, [features]);
         })
       }));
       this.facadeVector_.addFeatures(features);
-      this.facadeVector_.fire(M.evt.LOAD, [features]);
+      this.fire(M.evt.LOAD, [features]);
     }
   };
-
 
   /**
    * This function checks if an object is equals
