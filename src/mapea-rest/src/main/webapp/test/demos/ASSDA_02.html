@@ -584,7 +584,8 @@
           if (!M.utils.isNullOrEmpty(feature.getProperties().features) && feature.getProperties().features.length == 1) {
             overlay.setPosition(evt.coordinate);
 
-            tooltip.innerHTML = feature.getProperties().features[0].getProperties().nombre_entidad;
+            tooltip.innerHTML = feature.getProperties().features[0].getProperties().denom_centro + "<br />" + feature.getProperties().features[0].getProperties().tipologia + "<br />" + feature.getProperties().features[0].getProperties().subtipologia +
+              "<br />" + feature.getProperties().features[0].getProperties().nombre_entidad;
           }
         }
       };
