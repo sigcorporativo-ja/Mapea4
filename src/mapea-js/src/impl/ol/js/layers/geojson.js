@@ -125,7 +125,7 @@ goog.require('goog.style');
       this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
     }
     else if (!M.utils.isNullOrEmpty(this.source)) {
-      let features = this.formater_.read(this.source);
+      let features = this.formater_.read(this.source, this.map.getProjection());
       this.ol3Layer.setSource(new ol.source.Vector({
         loader: (function(extent, resolution, projection) {
           // removes previous features
@@ -135,10 +135,11 @@ goog.require('goog.style');
         })
       }));
       this.facadeVector_.addFeatures(features);
-      this_.fire(M.evt.LOAD, [features]);
+      //this_.fire(M.evt.LOAD, [features]);
+
+      this.fire(M.evt.LOAD, [features]);
     }
   };
-
 
   /**
    * This function checks if an object is equals
@@ -262,27 +263,4 @@ goog.require('goog.style');
     }
     return equals;
   };
-
-  /**
-   * Style for this layer
-   * @const
-   * @type {ol.style.Style}
-   * @public
-   * @api stable
-   */
-  M.impl.layer.GeoJSON.STYLE = new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: 'rgba(163, 93, 56, 0.2)'
-    }),
-    stroke: new ol.style.Stroke({
-      color: '#a35d38',
-      width: 2
-    }),
-    image: new ol.style.Circle({
-      radius: 7,
-      // fill: new ol.style.Fill({
-      //   color: '#a35d38'
-      // })
-    })
-  });
 })();

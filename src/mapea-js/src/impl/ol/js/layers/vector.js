@@ -98,7 +98,6 @@ goog.require('M.impl.Layer');
       this.ol3Layer.setSource(new ol.source.Vector());
     }
     this.redraw();
-
   };
 
   /**

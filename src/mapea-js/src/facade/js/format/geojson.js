@@ -62,7 +62,7 @@ goog.require('M.Feature');
    * @return {Array<M.Feature>}
    * @api estable
    */
-  M.format.GeoJSON.prototype.read = function(geojson) {
+  M.format.GeoJSON.prototype.read = function(geojson, projection) {
     var features = [];
     if (!M.utils.isNullOrEmpty(geojson)) {
       if (M.utils.isString(geojson)) {
@@ -75,17 +75,21 @@ goog.require('M.Feature');
       else if (geojson.type === "Feature") {
         geojsonFeatures = [geojson];
       }
+      let dstProj = projection.code;
+      if (M.utils.isNullOrEmpty(dstProj)) {
+        if (!M.utils.isNullOrEmpty(projection.featureProjection)) {
+          dstProj = ol.proj.get(projection.featureProjection.getCode());
+        }
+        else {
+          dstProj = ol.proj.get(projection.getCode());
+        }
+      }
+      let srcProj = this.getImpl().readProjectionFromObject(geojson);
       features = geojsonFeatures.map(function(geojsonFeature) {
         let id = geojsonFeature.id;
-        return new M.Feature(id, {
-          geometry: {
-            coordinates: geojsonFeature.geometry.coordinates,
-            type: geojsonFeature.geometry.type
-          },
-          properties: geojsonFeature.properties,
-          type: geojsonFeature.type,
-          id: geojsonFeature.id,
-        });
+        let feature = new M.Feature(id, geojsonFeature);
+        feature.getImpl().getOLFeature().getGeometry().transform(srcProj, dstProj);
+        return feature;
       });
     }
     return features;

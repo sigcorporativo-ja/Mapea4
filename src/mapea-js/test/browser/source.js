@@ -1657,3 +1657,12 @@ function choropleth_cluster() {
   points.setStyle(choropleth);
   points.setStyle(cluster);
 }
+geojson_test();
+//kml_test();
+//wfs_test();
+location_test();
+//geosearch_test();
+geosearchbylocation_test();
+//earchstreet_test();
+center_test();
+searchstreetgeosearch_test();

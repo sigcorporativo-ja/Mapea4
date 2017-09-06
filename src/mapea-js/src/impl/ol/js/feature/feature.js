@@ -69,7 +69,12 @@ goog.provide('M.impl.Feature');
    * @api stable
    */
   M.impl.Feature.prototype.getAttributes = function() {
-    return this.olFeature_.getProperties();
+    let properties = this.olFeature_.getProperties();
+    let geometry = properties.geometry;
+    if (!M.utils.isNullOrEmpty(geometry) && geometry instanceof ol.geom.Geometry) {
+      delete properties.geometry;
+    }
+    return properties;
   };
 
   /**
