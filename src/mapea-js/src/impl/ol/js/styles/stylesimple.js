@@ -46,11 +46,11 @@ goog.provide('M.impl.style.Simple');
     // Hay que ver como se comporta este método porque no cambia los estilos
     // de las capas. Sin embargo en cluster este comportamiento es el deseado.
 
-    // let g = ol.Observable.prototype.changed;
-    // ol.Observable.prototype.changed = function() {};
+    let g = ol.Observable.prototype.changed;
+    ol.Observable.prototype.changed = function() {};
     let featureCtx = feature.getImpl().getOLFeature();
     featureCtx.setStyle(this.olStyleFn_.bind(featureCtx));
-    // ol.Observable.prototype.changed = g;
+    ol.Observable.prototype.changed = g;
   };
 
   /**

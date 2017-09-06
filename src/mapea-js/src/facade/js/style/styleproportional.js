@@ -205,6 +205,7 @@ goog.require('M.style.Point');
    * @api stable
    */
   M.style.Proportional.prototype.update_ = function() {
+
     let features = this.layer_.getFeatures();
     let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
     let attributeName = this.attributeName_;
@@ -215,6 +216,9 @@ goog.require('M.style.Point');
       return M.style.Proportional.calcProportion_(value, minValue, maxValue, minRadius, maxRadius);
     });
     features.forEach(feature => feature.setStyle(style));
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      this.layer_.redraw();
+    }
   };
 
   /**

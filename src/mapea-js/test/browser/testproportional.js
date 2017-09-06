@@ -102,6 +102,7 @@ function setProportional(stylePoint) {
 function setMinRadio(element) {
   let style = centrosSubtipo.getStyle();
   style.setMinRadius(parseInt(element.value));
+
 }
 
 function setMaxRadio(element) {
