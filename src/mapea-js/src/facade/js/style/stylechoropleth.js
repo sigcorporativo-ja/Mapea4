@@ -80,6 +80,7 @@ goog.require('M.style.quantification');
   M.style.Choropleth.prototype.apply = function(layer) {
     this.layer_ = layer;
     this.update_();
+    this.layer_.redraw();
   };
 
 
@@ -204,10 +205,10 @@ goog.require('M.style.quantification');
         if (M.utils.isNullOrEmpty(this.styles_)) {
           this.breakPoints_ = this.quantification_(this.dataValues_);
           let firstFeature = features[0];
-          let color1 = M.style.Choropleth.DEFAULT_COLOR1;
-          let color2 = M.style.Choropleth.DEFAULT_COLOR2;
+          let startColor = M.style.Choropleth.START_COLOR_DEFAULT;
+          let endColor = M.style.Choropleth.END_COLOR_DEFAULT;
           let numColors = this.breakPoints_.length;
-          let scaleColor = M.utils.generateColorScale(color1, color2, numColors);
+          let scaleColor = M.utils.generateColorScale(startColor, endColor, numColors);
           if (!M.utils.isArray(scaleColor)) {
             scaleColor = [scaleColor];
           }
@@ -296,13 +297,13 @@ goog.require('M.style.quantification');
    * @constant
    * @api stable
    */
-  M.style.Choropleth.DEFAULT_COLOR1 = 'red';
+  M.style.Choropleth.START_COLOR_DEFAULT = 'red';
 
   /**
    * Color style by default
    * @constant
    * @api stable
    */
-  M.style.Choropleth.DEFAULT_COLOR2 = 'black';
+  M.style.Choropleth.END_COLOR_DEFAULT = 'black';
 
 })();

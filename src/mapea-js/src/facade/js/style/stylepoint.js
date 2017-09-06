@@ -16,7 +16,7 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Point = (function(options = {}) {
-    this.extends_(options, M.style.Point.DEFAULT);
+    //  this.extends_(options, M.style.Point.DEFAULT);
 
     var impl = new M.impl.style.Point(options);
 

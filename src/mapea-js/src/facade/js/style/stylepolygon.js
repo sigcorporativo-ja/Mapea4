@@ -19,7 +19,7 @@ goog.require('M.style.Simple');
    */
   M.style.Polygon = (function(options = {}) {
 
-    this.extends_(options, M.style.Point.DEFAULT);
+    //this.extends_(options, M.style.Polygon.DEFAULT);
     var impl = new M.impl.style.Polygon(options);
     // calls the super constructor
     goog.base(this, options, impl);

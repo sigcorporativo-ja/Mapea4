@@ -251,10 +251,18 @@ goog.require('M.exception');
       }
       if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {
         this.style_ = style;
-        style.apply(this);
-        this.getImpl().on(M.evt.LOAD, function(e) {
+        if (this.getImpl().getOL3Layer().getSource().getState() === 'ready' && this.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {
+
           style.apply(this);
-        }.bind(this));
+
+        }
+        else {
+          this.getImpl().on(M.evt.LOAD, function(e) {
+            style.apply(this);
+          }.bind(this));
+
+        }
+
       }
     }
   };

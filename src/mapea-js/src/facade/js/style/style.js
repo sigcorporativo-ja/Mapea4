@@ -98,6 +98,8 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style.prototype.set = function(property, value) {
+
+
     this.setValue_(this.options_, property, value);
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.getImpl().updateFacadeOptions(this.options_);
