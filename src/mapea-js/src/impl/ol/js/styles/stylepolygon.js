@@ -42,39 +42,39 @@ goog.require('M.impl.style.Simple');
       let styles = [style];
       if (!M.utils.isNullOrEmpty(stroke)) {
         style.setStroke(new ol.style.Stroke({
-          color: M.impl.style.Simple.getValue(stroke.color, this),
-          width: M.impl.style.Simple.getValue(stroke.width, this),
-          lineDash: M.impl.style.Simple.getValue(stroke.lineDash, this),
-          lineDashOffset: M.impl.style.Simple.getValue(stroke.lineDashOffset, this),
-          lineCap: M.impl.style.Simple.getValue(stroke.lineCap, this),
-          lineJoin: M.impl.style.Simple.getValue(stroke.lineJoin, this),
-          miterLimit: M.impl.style.Simple.getValue(stroke.miterLimit, this)
+          color: M.impl.style.Simple.getValue(stroke.color, feature),
+          width: M.impl.style.Simple.getValue(stroke.width, feature),
+          lineDash: M.impl.style.Simple.getValue(stroke.lineDash, feature),
+          lineDashOffset: M.impl.style.Simple.getValue(stroke.lineDashOffset, feature),
+          lineCap: M.impl.style.Simple.getValue(stroke.lineCap, feature),
+          lineJoin: M.impl.style.Simple.getValue(stroke.lineJoin, feature),
+          miterLimit: M.impl.style.Simple.getValue(stroke.miterLimit, feature)
         }));
       }
       if (!M.utils.isNullOrEmpty(label)) {
         style.setText(new ol.style.Text({
-          font: M.impl.style.Simple.getValue(label.font, this),
-          rotateWithView: M.impl.style.Simple.getValue(label.rotate, this),
-          scale: M.impl.style.Simple.getValue(label.scale, this),
-          offsetX: M.impl.style.Simple.getValue(label.offset ? label.offset[0] : undefined, this),
-          offsetY: M.impl.style.Simple.getValue(label.ofsset ? label.offset[1] : undefined, this),
+          font: M.impl.style.Simple.getValue(label.font, feature),
+          rotateWithView: M.impl.style.Simple.getValue(label.rotate, feature),
+          scale: M.impl.style.Simple.getValue(label.scale, feature),
+          offsetX: M.impl.style.Simple.getValue(label.offset ? label.offset[0] : undefined, feature),
+          offsetY: M.impl.style.Simple.getValue(label.ofsset ? label.offset[1] : undefined, feature),
           fill: new ol.style.Fill({
-            color: M.impl.style.Simple.getValue(label.color, this)
+            color: M.impl.style.Simple.getValue(label.color, feature)
           }),
-          textAlign: M.impl.style.Simple.getValue(label.align, this),
-          textBaseline: (M.impl.style.Simple.getValue(label.baseline, this) || "").toLowerCase(),
-          text: M.impl.style.Simple.getValue(label.text, this),
-          rotation: M.impl.style.Simple.getValue(label.rotation, this)
+          textAlign: M.impl.style.Simple.getValue(label.align, feature),
+          textBaseline: (M.impl.style.Simple.getValue(label.baseline, feature) || "").toLowerCase(),
+          text: M.impl.style.Simple.getValue(label.text, feature),
+          rotation: M.impl.style.Simple.getValue(label.rotation, feature)
         }));
         if (!M.utils.isNullOrEmpty(label.stroke)) {
           style.getText().setStroke(new ol.style.Stroke({
-            color: M.impl.style.Simple.getValue(label.stroke.color, this),
-            width: M.impl.style.Simple.getValue(label.stroke.width, this),
-            lineCap: M.impl.style.Simple.getValue(label.stroke.linecap, this),
-            lineJoin: M.impl.style.Simple.getValue(label.stroke.linejoin, this),
-            lineDash: M.impl.style.Simple.getValue(label.stroke.linedash, this),
-            lineDashOffset: M.impl.style.Simple.getValue(label.stroke.linedashoffset, this),
-            miterLimit: M.impl.style.Simple.getValue(label.stroke.miterlimit, this)
+            color: M.impl.style.Simple.getValue(label.stroke.color, feature),
+            width: M.impl.style.Simple.getValue(label.stroke.width, feature),
+            lineCap: M.impl.style.Simple.getValue(label.stroke.linecap, feature),
+            lineJoin: M.impl.style.Simple.getValue(label.stroke.linejoin, feature),
+            lineDash: M.impl.style.Simple.getValue(label.stroke.linedash, feature),
+            lineDashOffset: M.impl.style.Simple.getValue(label.stroke.linedashoffset, feature),
+            miterLimit: M.impl.style.Simple.getValue(label.stroke.miterlimit, feature)
           }));
         }
       }
@@ -82,29 +82,29 @@ goog.require('M.impl.style.Simple');
         if (!M.utils.isNullOrEmpty(fill.color) || !M.utils.isNullOrEmpty(fill.pacity)) {
           style.setFill(
             new ol.style.Fill({
-              color: chroma(M.impl.style.Simple.getValue(fill.color, this))
-                .alpha(M.impl.style.Simple.getValue(fill.opacity, this)).css()
+              color: chroma(M.impl.style.Simple.getValue(fill.color, feature))
+                .alpha(M.impl.style.Simple.getValue(fill.opacity, feature)).css()
             }));
         }
         let pattern = fill.pattern;
         if (!M.utils.isNullOrEmpty(fill.pattern)) {
           stylePattern = new ol.style.Style({
             fill: new ol.style.FillPattern({
-              pattern: (M.impl.style.Simple.getValue(pattern.name, this) || "").toLowerCase(),
-              color: M.impl.style.Simple.getValue(pattern.color, this),
-              size: M.impl.style.Simple.getValue(pattern.size, this),
-              spacing: M.impl.style.Simple.getValue(pattern.spacing, this),
-              image: (M.impl.style.Simple.getValue(pattern.name, this) == 'Image') ? new ol.style.Icon({
-                src: M.impl.style.Simple.getValue(pattern.src, this)
+              pattern: (M.impl.style.Simple.getValue(pattern.name, feature) || "").toLowerCase(),
+              color: M.impl.style.Simple.getValue(pattern.color, feature),
+              size: M.impl.style.Simple.getValue(pattern.size, feature),
+              spacing: M.impl.style.Simple.getValue(pattern.spacing, feature),
+              image: (M.impl.style.Simple.getValue(pattern.name, feature) == 'Image') ? new ol.style.Icon({
+                src: M.impl.style.Simple.getValue(pattern.src, feature)
               }) : undefined,
-              angle: M.impl.style.Simple.getValue(pattern.rotation, this),
-              scale: M.impl.style.Simple.getValue(pattern.scale, this),
-              offset: M.impl.style.Simple.getValue(pattern.offset, this),
+              angle: M.impl.style.Simple.getValue(pattern.rotation, feature),
+              scale: M.impl.style.Simple.getValue(pattern.scale, feature),
+              offset: M.impl.style.Simple.getValue(pattern.offset, feature),
               fill: new ol.style.Fill({
-                color: (!M.utils.isNullOrEmpty(M.impl.style.Simple.getValue(pattern.fill, this)) &&
-                    !M.utils.isNullOrEmpty(M.impl.style.Simple.getValue(pattern.fill.color, this))) ?
-                  chroma(M.impl.style.Simple.getValue(pattern.fill.color, this))
-                  .alpha(M.impl.style.Simple.getValue(pattern.fill.opacity, this)).css() : "rgba(255, 255, 255, 0)"
+                color: (!M.utils.isNullOrEmpty(M.impl.style.Simple.getValue(pattern.fill, feature)) &&
+                    !M.utils.isNullOrEmpty(M.impl.style.Simple.getValue(pattern.fill.color, feature))) ?
+                  chroma(M.impl.style.Simple.getValue(pattern.fill.color, feature))
+                  .alpha(M.impl.style.Simple.getValue(pattern.fill.opacity, feature)).css() : "rgba(255, 255, 255, 0)"
               }),
             })
           });
