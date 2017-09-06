@@ -80,6 +80,7 @@ goog.require('M.style.quantification');
   M.style.Choropleth.prototype.apply = function(layer) {
     this.layer_ = layer;
     this.update_();
+    this.layer_.redraw();
   };
 
 

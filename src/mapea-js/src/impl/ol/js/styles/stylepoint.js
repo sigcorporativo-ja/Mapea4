@@ -17,8 +17,10 @@ goog.require('M.impl.style.Simple');
    }   * @api stable
    */
   M.impl.style.Point = (function(options) {
+
+    this.olStyleFn_ = null;
+
     goog.base(this, options);
-    this.olStyleFn_ = this.updateFacadeOptions(options);
   });
   goog.inherits(M.impl.style.Point, M.impl.style.Simple);
 
@@ -30,7 +32,8 @@ goog.require('M.impl.style.Simple');
    * @function
    */
   M.impl.style.Point.prototype.updateFacadeOptions = function(options) {
-    return function(feature, resolution) {
+
+    this.olStyleFn_ = function(feature, resolution) {
       if (!(feature instanceof ol.Feature)) {
         resolution = feature;
         feature = this;
@@ -179,6 +182,6 @@ goog.require('M.impl.style.Simple');
         styles.push(styleIcon);
       }
       return styles;
-    };
+    }
   };
 })();

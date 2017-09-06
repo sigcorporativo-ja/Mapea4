@@ -19,7 +19,7 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Line = (function(options = {}) {
-    this.extends_(options, M.style.Line.DEFAULT);
+    //this.extends_(options, M.style.Line.DEFAULT);
 
     let impl = new M.impl.style.Line(options);
 
