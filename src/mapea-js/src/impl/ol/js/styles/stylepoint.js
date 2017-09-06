@@ -179,6 +179,6 @@ goog.require('M.impl.style.Simple');
         styles.push(styleIcon);
       }
       return styles;
-    }
+    };
   };
 })();
