@@ -21,15 +21,51 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Proportional = (function(attributeName, minRadius = 5, maxRadius = 15, style = new M.style.Point({}), options = {}) {
-    if (M.utils.isNullOrEmpty(attributeName)) {
-      M.Exception('El attribute name no puede ser nulo o vacío');
-    }
+
+    /**
+     * @public
+     * @type {String}
+     * @api stable
+     * @expose
+     */
     this.attributeName_ = attributeName;
-    this.minRadius_ = minRadius < 1 ? 1 : minRadius;
-    this.maxRadius_ = maxRadius < minRadius ? minRadius + 10 : maxRadius;
+    /**
+     * @public
+     * @type {number}
+     * @api stable
+     * @expose
+     */
+    this.minRadius_ = minRadius;
+    /**
+     * @public
+     * @type {number}
+     * @api stable
+     * @expose
+     */
+    this.maxRadius_ = maxRadius;
+    /**
+     * @public
+     * @type {M.Style}
+     * @api stable
+     * @expose
+     */
     this.style_ = style;
+    /**
+     * @public
+     * @type {M.Layer}
+     * @api stable
+     * @expose
+     */
     this.layer_ = null;
 
+    if (M.utils.isNullOrEmpty(attributeName)) {
+      M.exception('El attribute name no puede ser nulo o vacío');
+    }
+
+    if (this.maxRadius_ < this.minRadius_) {
+      this.minRadius_ = maxRadius;
+      this.maxRadius = minRadius;
+    }
     goog.base(this, options, {});
   });
   goog.inherits(M.style.Proportional, M.Style);
@@ -113,6 +149,9 @@ goog.require('M.Style');
    */
   M.style.Proportional.prototype.setMinRadius = function(minRadius) {
     this.minRadius_ = minRadius;
+    if (minRadius >= this.maxRadius_) {
+      this.maxRadius_ = minRadius + 10;
+    }
     this.update_();
     return this;
   };
@@ -137,6 +176,9 @@ goog.require('M.Style');
    */
   M.style.Proportional.prototype.setMaxRadius = function(maxRadius) {
     this.maxRadius_ = maxRadius;
+    if (maxRadius <= this.minRadius_) {
+      this.minRadius_ = maxRadius - 10;
+    }
     this.update_();
     return this;
   };
@@ -157,7 +199,7 @@ goog.require('M.Style');
       let value = feature.getAttribute(attributeName);
       return M.style.Proportional.calcProportion(value, minValue, maxValue, minRadius, maxRadius);
     });
-    this.layer_.setStyle(style);
+    features.forEach(feature => feature.setStyle(style));
   };
 
   /**
