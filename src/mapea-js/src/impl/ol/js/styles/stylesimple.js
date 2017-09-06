@@ -48,7 +48,8 @@ goog.provide('M.impl.style.Simple');
 
     // let g = ol.Observable.prototype.changed;
     // ol.Observable.prototype.changed = function() {};
-    feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
+    let featureCtx = feature.getImpl().getOLFeature();
+    featureCtx.setStyle(this.olStyleFn_.bind(featureCtx));
     // ol.Observable.prototype.changed = g;
   };
 

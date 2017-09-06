@@ -23,7 +23,11 @@ var centrosSubtipo = new M.layer.WFS({
   geometry: 'POINT',
 });
 
-let stylePoint = new M.style.Point({});
+let stylePoint = new M.style.Point({
+  fill: {
+    color: 'yellow'
+  }
+});
 let stylePoint2 = new M.style.Point({
   fill: {
     color: 'red',
@@ -48,12 +52,24 @@ let stylePoint3 = new M.style.Point({
 
 
 // M.style.Proportional con radios bien definidos y estilo por defecto
-let proportional = new M.style.Proportional('nregin', 4, 20);
+let proportional = new M.style.Proportional('nregin', 4, 20, new M.style.Point({
+  fill: {
+    color: 'green',
+    opacity: 0.5
+  },
+  stroke: {
+    color: 'green'
+  }
+}));
 
 // M.style.Proportional con radios mal introducidos y estilo por defecto.
 // En este test se comprueba que el constructor se encarga de comprobar si
 // minRadius < maxRadius y en caso contrario darle la vuelta a los valores
-let proportional2 = new M.style.Proportional('nregin', 30, 20);
+let proportional2 = new M.style.Proportional('nregin', 30, 20, new M.style.Point({
+  stroke: {
+    color: 'black'
+  }
+}));
 
 // M.style.Proportional con radios bien definidos y estilo definido por usuario
 // introducido por parámetro
