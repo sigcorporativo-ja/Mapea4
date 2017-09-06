@@ -17,31 +17,29 @@ goog.provide('M.impl.style.Category');
      * @private
      * @type {M.style.Category}
      */
-
     this.facadeStyleCategory_ = null;
   };
 
   /**
-   *
+   * This function return the AttributeName
    * @function
-   * @param {M.style.Category}
+   * @param {M.style.Category} styleCategory - styleCategory object
    * @returns {String}
    * @api stable
    */
-
   M.impl.style.Category.prototype.getAttributeName = function(styleCategory) {
     return styleCategory.AttributeName_;
   };
 
   /**
-   *
-   *
+   * This function set the AttributeName defined by user
    * @function
-   * @param {M.style.Category|String}
+   * @param {M.style.Category} styleCategory - styleCategory object
+   * @param {String} newAttributeName - newAttributeName is the newAttributeName specified by the user
    * @returns {M.style.Category}
+   * @public
    * @api stable
    */
-
   M.impl.style.Category.prototype.setAttributeName = function(styleCategory, newAttributeName) {
     styleCategory.AttributeName_ = newAttributeName;
     return styleCategory;
@@ -49,13 +47,12 @@ goog.provide('M.impl.style.Category');
   };
 
   /**
-   *
+   * This function return an Array with the diferents Categories
    * @function
-   * @param {M.style.Category}
+   * @param {M.style.Category} styleCategory - styleCategory object
    * @returns {Array<String>}
    * @api stable
    */
-
   M.impl.style.Category.prototype.getCategories = function(styleCategory) {
     let array_value = [];
     let element = null;
@@ -78,15 +75,14 @@ goog.provide('M.impl.style.Category');
     return array_value;
   };
 
-
   /**
    *
    * @function
-   * @param {M.style.Category|String}
+   * @param {M.style.Category} styleCategory - styleCategory object
+   * @param {String} string - string is a specific Category provide by a user
    * @returns {M.style}
    * @api stable
    */
-
   M.impl.style.Category.prototype.getStyleForCategories = function(categoryStyle, string) {
     let layer = categoryStyle.layer_;
     let categories = categoryStyle.getCategories();
@@ -105,13 +101,13 @@ goog.provide('M.impl.style.Category');
 
   /**
    *
-   *
+   * This function set the style of a specified Category defined by user
    * @function
-   * @param {M.style.Category|String|M.Style}
+   * @param {M.style.Category} styleCategory - styleCategory object
+   * @param {String} string - string is a specific Category provide by a user
    * @returns {M.style.Category}
    * @api stable
    */
-
   M.impl.style.Category.prototype.setStyleForCategories = function(categoryStyle, string, style) {
     let categories = categoryStyle.getCategories();
     if (categories.indexOf(string) < 0) {
@@ -130,7 +126,7 @@ goog.provide('M.impl.style.Category');
   };
 
   /**
-   * This function gets the Name
+   * This function get the FacadeObject
    *
    * @function
    * @param {object}
@@ -142,10 +138,10 @@ goog.provide('M.impl.style.Category');
 
 
   /**
-   * This function gets the Name
+   * This function apply the styleCategory object to specified layer
    *
    * @function
-   * @param {M.layer.Vector}
+   * @param {M.layer.Vector} layer - layer is the layer where we want to apply the new Style
    * @returns {M.style.Category}
    * @api stable
    */

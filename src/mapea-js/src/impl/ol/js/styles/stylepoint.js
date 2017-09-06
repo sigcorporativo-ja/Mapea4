@@ -17,9 +17,7 @@ goog.require('M.impl.style.Simple');
    }   * @api stable
    */
   M.impl.style.Point = (function(options) {
-
     this.olStyleFn_ = null;
-
     goog.base(this, options);
   });
   goog.inherits(M.impl.style.Point, M.impl.style.Simple);
@@ -174,7 +172,6 @@ goog.require('M.impl.style.Simple');
           });
         }
       }
-
       if (!M.utils.isNullOrEmpty(style)) {
         styles.push(style);
       }

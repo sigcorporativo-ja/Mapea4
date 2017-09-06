@@ -18,7 +18,6 @@ goog.require('M.Style');
   M.style.Cluster = (function(options = {}, optsVendor = {}) {
     this.options_ = options;
     this.optionsVendor_ = optsVendor;
-
     /**
      * TODO
      */
@@ -60,8 +59,6 @@ goog.require('M.Style');
     this.unapply(this.layer_);
     this.layer_.setStyle(this);
     return this;
-    // this.options_.options.ranges = newRanges;
-    // return this.layer_.setStyle(this);
   };
   /**
    * This function return a specified range
@@ -84,16 +81,6 @@ goog.require('M.Style');
     this.layer_.setStyle(this);
     return this;
   };
-  // let element = this.options_.options.ranges.find(el => (el.min == min && el.max == max));
-  // if (element) {
-  //
-  //   element.style = newRange;
-  //   return this.layer_.setStyle(this);
-  // }
-  // else {
-  //   return false;
-  // }
-
   /**
    * This function set if layer must be animated
    *
@@ -103,16 +90,6 @@ goog.require('M.Style');
   M.style.Cluster.prototype.setAnimated = function(animated) {
     return this.getImpl().setAnimatedImpl(animated, this.layer_, this);
   };
-  /*
-    this.options_.options.animated = animated;
-    if (animated == false) {
-      this.getImpl().clusterLayer.set('animationDuration', undefined);
-    }
-    else {
-      this.getImpl().clusterLayer.set('animationDuration', M.style.Cluster.ANIMATION_DURATION);
-    }
-    return this;
-  };*/
   /**
    * This function return if layer is animated
    *
@@ -141,6 +118,6 @@ goog.require('M.Style');
     M.style.Cluster.ANIMATION_METHOD = "linear";
   }
   else {
-    M.style.Cluster.ANIMATION_METHOD = null;
+    M.style.Cluster.ANIMATION_METHOD = undefined;
   }
 })();

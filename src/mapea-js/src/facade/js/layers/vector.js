@@ -72,7 +72,6 @@ goog.require('M.exception');
 
   /**
    * This function returns the feature with this id
-   *
    * @function
    * @public
    * @param {string|number} id - Id feature

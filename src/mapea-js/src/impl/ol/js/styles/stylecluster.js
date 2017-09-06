@@ -25,7 +25,6 @@ goog.require('ol.geom.convexhull');
     this.vectorCover = null;
     this.optionsVendor = optionsVendor;
     this.options = options;
-
     this.clusterSource = new ol.source.Cluster({
       distance: this.options.distance ? this.options.distance : M.style.Cluster.DEFAULT_DISTANCE,
       source: new ol.source.Vector()
@@ -36,20 +35,13 @@ goog.require('ol.geom.convexhull');
       animationDuration: optionsVendor.animationDuration ? optionsVendor.animationDuration : M.style.Cluster.ANIMATION_DURATION,
       style: this.getStyle.bind(this),
       animationMethod: ol.easing[M.style.Cluster.ANIMATION_METHOD ? M.style.Cluster.ANIMATION_METHOD : M.style.Cluster.ANIMATION_METHOD]
-
-
     });
-
     if (this.options.animated === false) {
       this.clusterLayer.set('animationDuration', undefined);
     }
   };
-
-
-
   /**
    * Apply the style cluster to layer vectorresolution
-
    *
    * @public
    * @function
@@ -63,7 +55,6 @@ goog.require('ol.geom.convexhull');
     if (!M.utils.isArray(this.options.ranges) || (M.utils.isArray(this.options.ranges) && this.options.ranges.length == 0)) {
       this.options.ranges = this.getDefaulStyles();
     }
-
     let features = layer.getImpl().getOL3Layer().getSource().getFeatures();
     this.clusterSource.getSource().addFeatures(features);
     this.clusterLayer.setZIndex(99999);
@@ -75,10 +66,6 @@ goog.require('ol.geom.convexhull');
       this.addSelectedInteraction(map);
     }
   };
-
-
-
-
   /**
    * This function update a set of ranges  defined by user
    *
@@ -88,7 +75,6 @@ goog.require('ol.geom.convexhull');
   M.impl.style.Cluster.prototype.setRangesImpl = function(newRanges, layer, cluster) {
     cluster.options_.options.ranges = newRanges;
     return cluster;
-    //return layer.setStyle(cluster);
   };
 
   /**
@@ -102,7 +88,6 @@ goog.require('ol.geom.convexhull');
     if (element) {
       element.style = newRange;
       return element;
-      //return layer.setStyle(cluster);
     }
     else {
       return false;
@@ -124,7 +109,6 @@ goog.require('ol.geom.convexhull');
     }
     return this;
   };
-
   /**
    * Add selected interaction and layer to see the features of cluster
    *
@@ -243,7 +227,6 @@ goog.require('ol.geom.convexhull');
    * @export
    */
   M.impl.style.Cluster.prototype.getStyle = function(feature, resolution) {
-    //return function(feature, resolution) {
     if (!M.utils.isArray(this.options.ranges) || (M.utils.isArray(this.options.ranges) && this.options.ranges.length == 0)) {
       this.options.ranges = this.getDefaulStyles(this.clusterLayer);
     }
@@ -254,8 +237,6 @@ goog.require('ol.geom.convexhull');
         let styleFeature = feature.get('features')[0].getStyle();
         if (styleFeature) {
           return styleFeature();
-          //return style.getImpl().olStyleFn_(feature, resolution);
-
         }
         else {
           return new ol.style.Style.defaultFunction();
@@ -279,7 +260,6 @@ goog.require('ol.geom.convexhull');
       }
     }
     return style.getImpl().olStyleFn_(feature, resolution);
-    // }
   };
   /**
    * This function return a default ranges to cluster
@@ -375,18 +355,13 @@ goog.require('ol.geom.convexhull');
         }
       });
     }
-
-
     let source = new ol.source.Vector({});
     source.addFeatures(features);
     let vector = new ol.layer.Vector({
       source: source
     });
-
     vector.setZIndex(9999);
     layer.getImpl().setOL3Layer(vector);
-    //layer.getImpl().fire(M.evt.LOAD, [features]);
-
     if (this.options.hoverInteraction) {
       this.removeInteraction(layer, ol.interaction.Hover);
     }

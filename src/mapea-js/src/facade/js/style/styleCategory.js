@@ -1,8 +1,6 @@
 goog.provide('M.style.Category');
 goog.require('M.Style');
 
-
-
 (function() {
   /**   * @classdesc
    * Main constructor of the class. Creates a categoryStyle
@@ -15,7 +13,6 @@ goog.require('M.Style');
    * @param {string|Map<String,M.Style>} userParameters parameters
    * @api stable
    */
-
   M.style.Category = (function(AttributeName_, categoryStyles_) {
     /**
      * TODO
@@ -41,11 +38,10 @@ goog.require('M.Style');
 
   goog.inherits(M.style.Category, M.Style);
 
-
   /**
    * This function apply the styleCategory object to specified layer
    * @function
-   * @param {M.layer.Vector}
+   * @param {M.layer.Vector} layer - layer is the layer where we want to apply the new Style
    * @returns {M.style.Category}
    * @api stable
    */
@@ -53,7 +49,6 @@ goog.require('M.Style');
     this.layer_ = layer;
     return this.getImpl().applyToLayer(layer);
   };
-
 
   /**
    *
@@ -67,27 +62,23 @@ goog.require('M.Style');
   };
 
   /**
-   *
    * This function set the AttributeName defined by user
    * @function
-   * @param {String}
-   * @returns {Array<String>}
+   * @param {String} newAttributeName - newAttributeName is the newAttributeName specified by the user
+   * @returns {M.style.Category}
+   * @private
    * @api stable
    */
   M.style.Category.prototype.setAttributeName = function(newAttributeName) {
     return this.getImpl().setAttributeName(this, newAttributeName);
   };
 
-
-
   /**
    * This function return an Array with the diferents Categories
-   *
    * @function
    * @returns {Array<String>}
    * @api stable
    */
-
   M.style.Category.prototype.getCategories = function() {
     return this.getImpl().getCategories(this);
   };
@@ -96,11 +87,10 @@ goog.require('M.Style');
    * This function return the style of a specified Category defined by user
    *
    * @function
-   * @param {String}
-   *@returns {M.style}
+   * @param {String} string - string is the name of a category value
+   * @returns {M.style}
    * @api stable
    */
-
   M.style.Category.prototype.getStyleForCategories = function(string) {
     return this.getImpl().getStyleForCategories(this, string);
   };
@@ -109,16 +99,15 @@ goog.require('M.Style');
    *
    * This function set the style of a specified Category defined by user
    * @function
-   * @param {String|M.style.Simple}
+   * @param {String} string - string is the name of a category value
+   * @param {M.style.Simple} style - style is the new style to switch
    * @returns {M.style.Category}
    * @api stable
    */
-
   M.style.Category.prototype.setStyleForCategories = function(string, style) {
     return this.getImpl().setStyleForCategories(this, string, style);
   };
 
 
   M.style.Category.prototype.serialize = function() {};
-
 })();
