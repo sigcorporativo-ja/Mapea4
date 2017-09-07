@@ -30,7 +30,6 @@
         overflow: hidden;
       }
 
-
       .m-popup {
         position: fixed;
         bottom: inherit;
@@ -72,6 +71,37 @@
         white-space: nowrap;
         font: 10pt sans-serif;
       }
+
+      #subcategoria {
+        background-color: rgba(55, 126, 235, 0.64);
+        padding: 6px;
+        border: 2px solid black;
+      }
+
+      .panel {
+        display: none;
+        padding: 10px;
+        background-color: #f6f6f6;
+        width: 200px;
+        cursor: pointer;
+      }
+
+      .closePanel {
+        display: none;
+      }
+
+      .openPanel {
+        display: block;
+        position: fixed;
+        bottom: inherit;
+        left: initial;
+        top: 0;
+        right: 0;
+        z-index: 9999;
+        border: 6px solid #5e8fb7;
+        overflow-y: scroll;
+        height: 50%;
+      }
     </style>
 
 
@@ -80,10 +110,50 @@
   <body>
 
     <!-- container -->
+    <div id="PanelSubtipologia" class="closePanel panel">
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA"> CENTRO DE DÍA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA OCUPACIONAL"> CENTRO DE DÍA OCUPACIONAL<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA PARA PERSONAS CON AUTISMO"> CENTRO DE DÍA PARA PERSONAS CON AUTISMO<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA PARA PERSONAS CON DAÑO CEREBRAL"> CENTRO DE DÍA PARA PERSONAS CON DAÑO CEREBRAL<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA PARA PERSONAS CON DISCAPACIDAD FÍSICA"> CENTRO DE DÍA PARA PERSONAS CON DISCAPACIDAD FÍSICA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA PARA PERSONAS CON PARÁLISIS CEREBRAL"> CENTRO DE DÍA PARA PERSONAS CON PARÁLISIS CEREBRAL<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA PARA PERSONAS CON TRASTORNOS DE CONDUCTA"> CENTRO DE DÍA PARA PERSONAS CON TRASTORNOS DE CONDUCTA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE ENCUENTRO Y ACOGIDA">CENTRO DE ENCUENTRO Y ACOGIDA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE TRATAMIENTO AMBULATORIO">CENTRO DE TRATAMIENTO AMBULATORIO<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE TRATAMIENTO AMBULATORIO DE ATENCIÓN EXCLUSIVA AL JUEGO PATOLÓGICO">CENTRO DE TRATAMIENTO AMBULATORIO DE ATENCIÓN EXCLUSIVA AL JUEGO PATOLÓGICO<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE NOCHE"> CENTRO DE NOCHE<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE PARTICIPACIÓN ACTIVA DE PERSONAS MAYORES"> CENTRO DE PARTICIPACIÓN ACTIVA DE PERSONAS MAYORES<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE SERVICIOS SOCIALES COMUNITARIOS"> CENTRO DE SERVICIOS SOCIALES COMUNITARIOS<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="ALBERGUES PARA PERSONAS TRABAJADORAS TEMPORERAS">ALBERGUES PARA PERSONAS TRABAJADORAS TEMPORERAS<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CASA">CASA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CASA DE ACOGIDA"> CASA DE ACOGIDA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CASA HOGAR"> CASA HOGAR<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE ACOGIDA"> CENTRO DE ACOGIDA<br> <input type="checkbox" onclick="subtipologiaFilter()"
+        name="panel" value="CENTRO DE DESINTOXICACIÓN RESIDENCIAL">CENTRO DE DESINTOXICACIÓN RESIDENCIAL<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO RESIDENCIAL"> CENTRO RESIDENCIAL<br> <input type="checkbox" onclick="subtipologiaFilter()"
+        name="panel" value="COMUNIDAD TERAPÉUTICA"> COMUNIDAD TERAPÉUTICA<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="PISO TUTELADO"> PISO TUTELADO<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel"
+        value="RESIDENCIA">RESIDENCIA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA DE PERSONAS CON AUTISMO">RESIDENCIA DE PERSONAS CON AUTISMO<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA DE PERSONAS CON DISCAPACIDAD">      RESIDENCIA DE PERSONAS CON DISCAPACIDAD<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA DE PERSONAS CON DISCAPACIDAD FÍSICA">RESIDENCIA DE PERSONAS CON DISCAPACIDAD FÍSICA<br> <input type="checkbox" onclick="subtipologiaFilter()"
+        name="panel" value="RESIDENCIA DE PERSONAS CON DISCAPACIDAD INTELECTUAL Y TRASTORNOS DE CONDUCTA">RESIDENCIA DE PERSONAS CON DISCAPACIDAD INTELECTUAL Y TRASTORNOS DE CONDUCTA<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel"
+        value="RESIDENCIA DE PERSONAS CON PARÁLISIS CEREBRAL">RESIDENCIA DE PERSONAS CON PARÁLISIS CEREBRAL<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS ADULTAS (RA)"> RESIDENCIA PARA PERSONAS ADULTAS
+      (RA)
+      <br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES AUTÓNOMAS">RESIDENCIA PARA PERSONAS MAYORES AUTÓNOMAS<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES AUTÓNOMAS">RESIDENCIA
+      PARA PERSONAS MAYORES AUTÓNOMAS<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES CON TRASTORNOS DE CONDUCTA">RESIDENCIA PARA PERSONAS MAYORES CON TRASTORNOS DE CONDUCTA<br> <input type="checkbox"
+        onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES EN SITUACIÓN DE DEPENDENCIA">RESIDENCIA PARA PERSONAS MAYORES EN SITUACIÓN DE DEPENDENCIA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA DE APOYO A LA REINSERCIÓN"> VIVIENDA DE APOYO A LA REINSERCIÓN<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA DE APOYO AL TRATAMIENTO"> VIVIENDA DE APOYO AL TRATAMIENTO<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA SUPERVISADA"> VIVIENDA
+      SUPERVISADA
+      <br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA TUTELADA"> VIVIENDA TUTELADA<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO SOCIAL"> CENTRO SOCIAL<br><input type="checkbox"
+        onclick="subtipologiaFilter()" name="panel" value="ENTRO SOCIOCULTURAL GITANO">ENTRO SOCIOCULTURAL GITANO<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="COMEDOR"> COMEDOR<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CONSULTAR A LA COORDINACIÓN"> CONSULTAR A LA COORDINACIÓN<br>
+    </div>
+    <button id="subcategoria" onclick="openPanel()">
+    Subcategorias
+    </button>
     <div id="map" class="map">
       <div id="tooltip" class="tooltip"></div>
     </div>
-    <div id="mapjs" class="container"></div>
+
+    <div id="map"></div>
 
 
 
@@ -106,6 +176,17 @@
 
     <script type="application/javascript">
       M.proxy(true);
+
+      function openPanel() {
+        if (document.getElementById("PanelSubtipologia").className.indexOf("openPanel") >= 0) {
+          document.getElementById("PanelSubtipologia").classList.remove("openPanel");
+          document.getElementById("PanelSubtipologia").classList.add("closePanel");
+        } else {
+          document.getElementById("PanelSubtipologia").classList.add("openPanel");
+        }
+      }
+
+
       var mapajs = M.map({
         'container': 'map',
         "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline", ],
@@ -287,7 +368,7 @@
 
       let sociales = new M.style.Point({
         icon: {
-          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/gasolineras.png',
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/centroeducativo.png',
           scale: 1
         },
       });
@@ -455,6 +536,16 @@
         "CONSULTAR A LA COORDINACIÓN": consulta
       });
 
+      function subtipologiaFilter() {
+        let selected = document.querySelector("#PanelSubtipologia").querySelectorAll("[type=checkbox]:checked");
+        let filter = [];
+        selected.forEach(function(elem) {
+          filter.push(M.filter.EQUAL('subtipologia', elem.value));
+        });
+        centros.setFilter(M.filter.OR(filter));
+
+        centros.setStyle(new M.style.Cluster(options, vendorParameters));
+      }
 
       // CONFIGURACIÓN PARÁMETROS CLUSTER
 
