@@ -126,7 +126,7 @@ goog.require('M.Style');
           feature.setStyle(style);
         }
       }.bind(this));
-      // this.layer_.redraw();
+      this.layer_.redraw();
     }
   };
 })();
