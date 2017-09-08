@@ -241,7 +241,7 @@ goog.require('M.style.Point');
         maxValue = maxValue < posteriorValue ? posteriorValue : maxValue;
         index++;
       }
-    };
+    }
     return [minValue, maxValue];
   };
 

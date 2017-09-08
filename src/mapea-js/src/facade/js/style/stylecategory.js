@@ -13,26 +13,26 @@ goog.require('M.Style');
    * @param {string|Map<String,M.Style>} userParameters parameters
    * @api stable
    */
-  M.style.Category = (function(AttributeName_, categoryStyles_) {
+  M.style.Category = (function(attributeName, categoryStyles) {
     /**
      * TODO
      * @public
      * @type {String}
      */
-    this.AttributeName_ = AttributeName_;
+    this.attributeName_ = attributeName;
     /**
      * TODO
      * @public
      * @type {M.layer.Vector}
      */
-    this.layer = null;
+    this.layer_ = null;
     /**
      * TODO
      * @public
      * @type {Map<String,M.Style>}
      */
-    this.categoryStyles_ = categoryStyles_;
-    var impl = new M.impl.style.Category(AttributeName_, categoryStyles_);
+    this.categoryStyles_ = categoryStyles;
+    var impl = new M.impl.style.Category(attributeName, categoryStyles);
     goog.base(this, this, impl);
   });
 
@@ -45,11 +45,10 @@ goog.require('M.Style');
    * @returns {M.style.Category}
    * @api stable
    */
-  M.style.Category.prototype.apply_ = function(layer) {
+  M.style.Category.prototype.apply = function(layer) {
     this.layer_ = layer;
-    return this.getImpl().applyToLayer(layer);
+    this.update_();
   };
-
   /**
    *
    * This function return the AttributeName
@@ -58,19 +57,21 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Category.prototype.getAttributeName = function() {
-    return this.getImpl().getAttributeName(this);
+    return this.AttributeName_;
   };
 
   /**
    * This function set the AttributeName defined by user
    * @function
-   * @param {String} newAttributeName - newAttributeName is the newAttributeName specified by the user
+   * @param {String} attributeName - newAttributeName is the newAttributeName specified by the user
    * @returns {M.style.Category}
    * @private
    * @api stable
    */
-  M.style.Category.prototype.setAttributeName = function(newAttributeName) {
-    return this.getImpl().setAttributeName(this, newAttributeName);
+  M.style.Category.prototype.setAttributeName = function(attributeName) {
+    this.attributeName = attributeName;
+    this.update_();
+    return this;
   };
 
   /**
@@ -80,7 +81,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Category.prototype.getCategories = function() {
-    return this.getImpl().getCategories(this);
+    return this.categoryStyles_;
   };
 
   /**
@@ -91,8 +92,8 @@ goog.require('M.Style');
    * @returns {M.style}
    * @api stable
    */
-  M.style.Category.prototype.getStyleForCategories = function(string) {
-    return this.getImpl().getStyleForCategories(this, string);
+  M.style.Category.prototype.getStyleForCategory = function(category) {
+    return this.categoryStyles_[category];
   };
 
   /**
@@ -104,10 +105,28 @@ goog.require('M.Style');
    * @returns {M.style.Category}
    * @api stable
    */
-  M.style.Category.prototype.setStyleForCategories = function(string, style) {
-    return this.getImpl().setStyleForCategories(this, string, style);
+  M.style.Category.prototype.setStyleForCategory = function(category, style) {
+    this.categoryStyles_[category] = style;
+    this.update_();
+    return this;
   };
 
-
-  M.style.Category.prototype.serialize = function() {};
+  /**
+   * This function updates the style
+   * @private
+   * @function
+   * @api stable
+   */
+  M.style.Category.prototype.update_ = function() {
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      this.layer_.getFeatures().forEach(function(feature) {
+        let value = feature.getAttribute(this.attributeName_);
+        let style = this.categoryStyles_[value];
+        if (!M.utils.isNullOrEmpty(style)) {
+          feature.setStyle(style);
+        }
+      }.bind(this));
+      this.layer_.redraw();
+    }
+  };
 })();
