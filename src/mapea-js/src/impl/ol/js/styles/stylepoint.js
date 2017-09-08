@@ -187,6 +187,6 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Point.prototype.getCanvasSize = function() {
-    return [200, 100];
+    return [150, 100];
   };
 })();

@@ -61,7 +61,9 @@ goog.require('ol.render');
     let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
       size: canvasSize
     });
-    vectorContext.setStyle(this.styles_[0]);
+    let style = Object.assign(new ol.style.Style({}), this.styles_[0]);
+    style.setText(null);
+    vectorContext.setStyle(style);
     this.drawGeometryToCanvas(vectorContext);
   };
 

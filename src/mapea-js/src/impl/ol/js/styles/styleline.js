@@ -103,6 +103,6 @@ goog.require('M.impl.style.TextPath');
    * @api stable
    */
   M.impl.style.Line.prototype.getCanvasSize = function() {
-    return [540, 450];
+    return [150, 100];
   };
 })();
