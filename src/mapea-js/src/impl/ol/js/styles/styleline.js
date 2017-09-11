@@ -1,6 +1,7 @@
 goog.provide('M.impl.style.Line');
 
 goog.require('M.impl.style.Simple');
+goog.require('M.impl.style.TextPath');
 
 
 /**
@@ -91,5 +92,27 @@ goog.require('M.impl.style.Simple');
       }
       return [style, styleStroke];
     };
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Line.prototype.drawGeometryToCanvas = function(vectorContext) {
+    vectorContext.drawGeometry(new ol.geom.LineString([[10, 10], [30, 100], [80, 10], [130, 90]]));
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Line.prototype.getCanvasSize = function() {
+    return [150, 100];
   };
 })();

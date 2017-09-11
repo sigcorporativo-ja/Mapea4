@@ -35,15 +35,9 @@ goog.provide('M.Style');
      */
     this.layer_ = null;
 
-    if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
-      let ctx = this.canvas_.getContext('2d');
-      let img = new Image();
-      img.onload = function() {
-        ctx.drawImage(img, 0, 0); // Or at whatever offset you like
-      };
-      img.src = this.options_.icon.src;
-    }
     goog.base(this, impl);
+
+    this.updateCanvas();
   });
   goog.inherits(M.Style, M.facade.Base);
 
@@ -142,6 +136,7 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style.prototype.refresh = function() {
+    this.updateCanvas();
     this.apply(this.layer_);
   };
 
@@ -160,6 +155,17 @@ goog.provide('M.Style');
    * TODO
    */
   M.Style.prototype.serialize = function() {};
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.Style.prototype.updateCanvas = function() {
+    this.getImpl().updateCanvas(this.canvas_);
+  };
 
   /**
    * TODO
