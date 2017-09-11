@@ -23,7 +23,7 @@ goog.require('M.style.Point');
    * @param {object}
    * @api stable
    */
-  M.style.Proportional = (function(attributeName, minRadius, maxRadius, style, options) {
+  M.style.Proportional = (function(attributeName, minRadius, maxRadius, style, proportionalFunction, options) {
 
     /**
      * @public
@@ -55,11 +55,13 @@ goog.require('M.style.Point');
      * @api stable
      * @expose
      */
-    this.style_ = style || new M.style.Point({
-      fill: {
-        color: 'green'
-      }
-    });
+    this.style_ = style || new M.style.Point(M.style.Proportional.DEFAULT_STYLE_POINT);
+
+    /**
+     *
+     */
+    this.proportionalFunction_ = (value, minValue, maxValue, minRadius, maxRadius) =>
+      (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius;
 
     /**
      * @public
@@ -77,7 +79,7 @@ goog.require('M.style.Point');
 
     if (this.maxRadius_ < this.minRadius_) {
       this.minRadius_ = maxRadius;
-      this.maxRadius = minRadius;
+      this.maxRadius_ = minRadius;
     }
 
     goog.base(this, options, {});
@@ -205,7 +207,6 @@ goog.require('M.style.Point');
    * @api stable
    */
   M.style.Proportional.prototype.update_ = function() {
-
     let features = this.layer_.getFeatures();
     let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
     let attributeName = this.attributeName_;
@@ -213,8 +214,8 @@ goog.require('M.style.Point');
     let style = this.style_;
     style.set('radius', function(feature) {
       let value = feature.getAttribute(attributeName);
-      return M.style.Proportional.calcProportion_(value, minValue, maxValue, minRadius, maxRadius);
-    });
+      return this.proportionalFunction_(value, minValue, maxValue, minRadius, maxRadius);
+    }.bind(this));
     features.forEach(feature => feature.setStyle(style));
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.layer_.redraw();
@@ -228,7 +229,6 @@ goog.require('M.style.Point');
    * @api stable
    */
   M.style.Proportional.getMinMaxValues_ = function(features, attributeName) {
-    // Remodelar este despropósito
     let [minValue, maxValue] = [undefined, undefined];
     let filteredFeatures = features.filter(feature => !isNaN(feature.getAttribute(attributeName))).map(f => parseInt(f.getAttribute(attributeName)));
     let index = 1;
@@ -246,13 +246,15 @@ goog.require('M.style.Point');
   };
 
   /**
-   * This function calculates the proportion of value using minimum value, maximum value,
-   * minimum radius, maximum value.
-   * @function
-   * @private
-   * @api stable
+   * TODO
    */
-  M.style.Proportional.calcProportion_ = function(value, minValue, maxValue, minRadius, maxRadius) {
-    return (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius;
+  M.style.Proportional.DEFAULT_STYLE_POINT = {
+    fill: {
+      color: 'green',
+      opacity: 0.5
+    },
+    stroke: {
+      color: 'green'
+    }
   };
 })();
