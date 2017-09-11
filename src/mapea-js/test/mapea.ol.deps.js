@@ -401,9 +401,9 @@ goog.addDependency('../../../../src/facade/js/plugin.js', ['M.Plugin', 'M.plugin
 goog.addDependency('../../../../src/facade/js/popup.js', ['M.Popup'], ['M.exception', 'M.facade.Base', 'M.utils'], false);
 goog.addDependency('../../../../src/facade/js/style/statestyle.js', ['M.style.state'], [], false);
 goog.addDependency('../../../../src/facade/js/style/style.js', ['M.Style'], [], false);
-goog.addDependency('../../../../src/facade/js/style/styleCategory.js', ['M.style.Category'], ['M.Style'], false);
 goog.addDependency('../../../../src/facade/js/style/stylealign.js', ['M.style.align'], [], false);
 goog.addDependency('../../../../src/facade/js/style/stylebaseline.js', ['M.style.baseline'], [], false);
+goog.addDependency('../../../../src/facade/js/style/stylecategory.js', ['M.style.Category'], ['M.Style'], false);
 goog.addDependency('../../../../src/facade/js/style/stylechoropleth.js', ['M.style.Choropleth'], ['M.Style', 'M.style.quantification'], false);
 goog.addDependency('../../../../src/facade/js/style/stylecluster.js', ['M.style.Cluster'], ['M.Style'], false);
 goog.addDependency('../../../../src/facade/js/style/stylefeature.js', ['M.style.Feature'], ['M.Style'], false);
