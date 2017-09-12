@@ -37,7 +37,7 @@ goog.require('M.impl.style.TextPath');
         resolution = feature;
         feature = this;
       }
-      let stroke, label, fill;
+      let label;
       let style = new ol.style.Style();
       let styleStroke = new ol.style.Style();
       if (!M.utils.isNullOrEmpty(options.stroke)) {

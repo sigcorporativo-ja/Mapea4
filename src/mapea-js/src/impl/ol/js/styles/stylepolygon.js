@@ -34,7 +34,6 @@ goog.require('M.impl.style.Simple');
         resolution = feature;
         feature = this;
       }
-      let stroke, label, fill;
       let style = new ol.style.Style();
       let stylePattern = new ol.style.Style();
       if (!M.utils.isNullOrEmpty(options.stroke)) {
@@ -103,10 +102,10 @@ goog.require('M.impl.style.Simple');
             }),
           }));
         }
-      };
+      }
       return [style, stylePattern];
-    }
-  }
+    };
+  };
 
 
   /**

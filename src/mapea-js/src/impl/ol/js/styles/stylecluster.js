@@ -1,5 +1,6 @@
 goog.provide('M.impl.style.Cluster');
 
+goog.require('M.impl.Style');
 goog.require('M.impl.layer.AnimatedCluster');
 goog.require('ol.source.Cluster');
 goog.require('M.impl.interaction.SelectCluster');
@@ -41,6 +42,8 @@ goog.require('ol.geom.convexhull');
       this.clusterLayer.set('animationDuration', undefined);
     }
   };
+  goog.inherits(M.impl.style.Cluster, M.impl.Style);
+
   /**
    * Apply the style cluster to layer vectorresolution
    *
@@ -385,5 +388,21 @@ goog.require('ol.geom.convexhull');
         olmap.removeInteraction(i);
       }
     });
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.updateCanvas = function(canvas) {
+    // let canvasSize = this.getCanvasSize();
+    // let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+    //   size: canvasSize
+    // });
+    // vectorContext.setStyle(this.olStyleFn_()[0]);
+    // this.drawGeometryToCanvas(vectorContext);
   };
 })();

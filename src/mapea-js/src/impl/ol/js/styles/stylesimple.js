@@ -16,6 +16,7 @@ goog.require('M.impl.Style');
 
     goog.base(this, options);
   });
+  goog.inherits(M.impl.style.Simple, M.impl.Style);
 
   /**
    * This function apply style options facade to impl
@@ -88,5 +89,4 @@ goog.require('M.impl.Style');
     }
     return attrFeature;
   };
-  goog.inherits(M.impl.style.Simple, M.impl.Style);
 })();
