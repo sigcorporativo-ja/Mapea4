@@ -78,15 +78,21 @@ goog.require('M.impl.style.Simple');
       if (!M.utils.isNullOrEmpty(options.fill)) {
         let fillColorValue = M.impl.style.Simple.getValue(options.fill.color, feature);
         let fillOpacityValue = M.impl.style.Simple.getValue(options.fill.opacity, feature) || 1;
+        let fill;
         if (!M.utils.isNullOrEmpty(fillColorValue)) {
-          style.setFill(new ol.style.Fill({
+          fill = new ol.style.Fill({
             color: chroma(fillColorValue).alpha(fillOpacityValue).css()
-          }));
+          });
         }
         if (!M.utils.isNullOrEmpty(options.fill.pattern)) {
-          stylePattern.setFill(new ol.style.FillPattern({
+          let color = null;
+          if (!M.utils.isNullOrEmpty(options.fill.pattern.color)) {
+            let opacity = M.impl.style.Simple.getValue(options.fill.pattern.opacity, feature) || 1;
+            color = chroma(options.fill.pattern.color).alpha(opacity).css();
+          }
+          style.setFill(new ol.style.FillPattern({
             pattern: (M.impl.style.Simple.getValue(options.fill.pattern.name, feature) || "").toLowerCase(),
-            color: M.impl.style.Simple.getValue(options.fill.pattern.color, feature),
+            color: color,
             size: M.impl.style.Simple.getValue(options.fill.pattern.size, feature),
             spacing: M.impl.style.Simple.getValue(options.fill.pattern.spacing, feature),
             image: (M.impl.style.Simple.getValue(options.fill.pattern.name, feature) == 'Image') ? new ol.style.Icon({
@@ -95,16 +101,11 @@ goog.require('M.impl.style.Simple');
             angle: M.impl.style.Simple.getValue(options.fill.pattern.rotation, feature),
             scale: M.impl.style.Simple.getValue(options.fill.pattern.scale, feature),
             offset: M.impl.style.Simple.getValue(options.fill.pattern.offset, feature),
-            fill: new ol.style.Fill({
-              color: (!M.utils.isNullOrEmpty(M.impl.style.Simple.getValue(options.fill.pattern.fill, feature)) &&
-                  !M.utils.isNullOrEmpty(M.impl.style.Simple.getValue(options.fill.pattern.fill.color, feature))) ?
-                chroma(M.impl.style.Simple.getValue(options.fill.pattern.fill.color, feature))
-                .alpha(M.impl.style.Simple.getValue(options.fill.pattern.fill.opacity, feature)).css() : "rgba(255, 255, 255, 0)"
-            }),
+            fill: fill
           }));
         }
-      };
-      return [style, stylePattern];
+      }
+      return [style];
     }
   }
 
