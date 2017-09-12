@@ -454,7 +454,7 @@ goog.addDependency('../../../../src/impl/ol/js/handlers/featureshandlers.js', ['
 goog.addDependency('../../../../src/impl/ol/js/interactions/hoverinteraction.js', ['ol.interaction.Hover'], ['ol.interaction.Interaction'], false);
 goog.addDependency('../../../../src/impl/ol/js/interactions/selectedclusterinteraction.js', ['M.impl.interaction.SelectCluster'], ['ol.interaction.Select'], false);
 goog.addDependency('../../../../src/impl/ol/js/label.js', ['M.impl.Label'], [], false);
-goog.addDependency('../../../../src/impl/ol/js/layers/cluster.js', ['M.impl.layer.AnimatedCluster'], [], false);
+goog.addDependency('../../../../src/impl/ol/js/layers/animatedcluster.js', ['M.impl.layer.AnimatedCluster'], [], false);
 goog.addDependency('../../../../src/impl/ol/js/layers/draw.js', ['M.impl.layer.Draw'], ['M.exception', 'M.impl.Layer', 'M.impl.Popup', 'M.impl.format.GeoJSON', 'M.utils', 'goog.style', 'ol.layer.Vector', 'ol.source.Vector'], false);
 goog.addDependency('../../../../src/impl/ol/js/layers/geojson.js', ['M.impl.layer.GeoJSON'], ['M.exception', 'M.format.GeoJSON', 'M.impl.Popup', 'M.impl.layer.Vector', 'M.impl.loader.JSONP', 'M.utils', 'goog.style', 'ol.layer.Vector', 'ol.source.Vector'], false);
 goog.addDependency('../../../../src/impl/ol/js/layers/kml.js', ['M.impl.layer.KML'], ['M.exception', 'M.impl.Popup', 'M.impl.format.KML', 'M.impl.layer.Vector', 'M.impl.loader.KML', 'M.utils', 'goog.style', 'ol.layer.Vector', 'ol.source.Vector'], false);
