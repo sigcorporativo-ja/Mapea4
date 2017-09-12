@@ -1,6 +1,6 @@
 goog.provide('M.impl.style.TextPath');
 
-(function() {
+(function () {
 
   /** Internal drawing function called on postcompose
    * @param {ol.eventPoscompose} e postcompose event
@@ -21,9 +21,9 @@ goog.provide('M.impl.style.TextPath');
       // Revert line ?
       if (readable && path1[0] > path1[path1.length - 2]) {
         var path2 = [];
-        for (var k = path1.length - 2; k >= 0; k -= 2) {
-          path2.push(path1[k]);
-          path2.push(path1[k + 1]);
+        for (var h = path1.length - 2; h >= 0; h -= 2) {
+          path2.push(path1[h]);
+          path2.push(path1[h + 1]);
         }
         return path2;
       }
@@ -35,10 +35,12 @@ goog.provide('M.impl.style.TextPath');
     ctx.scale(e.frameState.pixelRatio, e.frameState.pixelRatio);
 
     var features = this.getSource().getFeaturesInExtent(extent);
-    for (var i = 0, f; f = features[i]; i++) {
+    for (var i = 0, f; features[i] != null; i++) {
       {
+        f = features[i];
         var style = this.textPathStyle_(f, e.frameState.viewState.resolution);
-        for (var s, j = 0; s = style[j]; j++) {
+        for (var s, j = 0; style[j] != null; j++) {
+          s = style[j];
           var g = s.getGeometry() || f.getGeometry();
           var c;
           switch (g.getType()) {
@@ -82,7 +84,7 @@ goog.provide('M.impl.style.TextPath');
    *	@param {ol.style.Style|Array.<ol.style.Style>|ol.StyleFunction} style
    *	@param {Number} maxResolution to display text, default: 0
    */
-  ol.layer.Vector.prototype.setTextPathStyle = function(styleParam, maxResolution) {
+  ol.layer.Vector.prototype.setTextPathStyle = function (styleParam, maxResolution) {
     let style = styleParam;
     if (!M.utils.isFunction(styleParam)) {
       if (!M.utils.isArray(styleParam)) {
@@ -100,7 +102,7 @@ goog.provide('M.impl.style.TextPath');
 
     // Force redraw
     this.changed();
-  }
+  };
 
 
   /** Add new properties to ol.style.Text
@@ -108,19 +110,19 @@ goog.provide('M.impl.style.TextPath');
    *	- textOverflow {visible|ellipsis|string}
    *	- minWidth {number} minimum width (px) to draw text, default 0
    */
-  M.impl.style.TextPath = function(options = {}) {
+  M.impl.style.TextPath = function (options = {}) {
 
     ol.style.Text.call(this, options);
-    this.textOverflow_ = typeof(options.textOverflow) != "undefined" ? options.textOverflow : "visible";
+    this.textOverflow_ = typeof (options.textOverflow) != "undefined" ? options.textOverflow : "visible";
     this.minWidth_ = options.minWidth || 0;
-  }
+  };
   ol.inherits(M.impl.style.TextPath, ol.style.Text);
 
-  M.impl.style.TextPath.prototype.getTextOverflow = function() {
+  M.impl.style.TextPath.prototype.getTextOverflow = function () {
     return this.textOverflow_;
   };
 
-  M.impl.style.TextPath.prototype.getMinWidth = function() {
+  M.impl.style.TextPath.prototype.getMinWidth = function () {
     return this.minWidth_;
   };
 
@@ -133,7 +135,7 @@ goog.provide('M.impl.style.TextPath');
  * @param {string} text
  * @param {Array<Number>} path
  */
-CanvasRenderingContext2D.prototype.textPath = function(text, path) {
+CanvasRenderingContext2D.prototype.textPath = function (text, path) {
   var ctx = this;
 
   function dist2D(x1, y1, x2, y2) {
@@ -180,7 +182,7 @@ CanvasRenderingContext2D.prototype.textPath = function(text, path) {
 
   var d = 0;
   for (var i = 2; i < path.length; i += 2) {
-    d += dist2D(path[i - 2], path[i - 1], path[i], path[i + 1])
+    d += dist2D(path[i - 2], path[i - 1], path[i], path[i + 1]);
   }
   if (d < ctx.minWidth) return;
   var nbspace = text.split(" ").length - 1;
@@ -192,7 +194,7 @@ CanvasRenderingContext2D.prototype.textPath = function(text, path) {
       do {
         nbspace = text.split(" ").length - 1;
         text = text.slice(0, text.length - 1);
-      } while (text && d < ctx.measureText(text + overflow).width + (text.length + overflow.length - 1 + nbspace) * letterPadding)
+      } while (text && d < ctx.measureText(text + overflow).width + (text.length + overflow.length - 1 + nbspace) * letterPadding);
       text += overflow;
     }
   }
