@@ -63,7 +63,11 @@ goog.require('ol.render');
     });
     // let style = Object.assign(new ol.style.Style({}), this.olStyleFn_()[0]);
     // style.setText(null);
-    vectorContext.setStyle(this.olStyleFn_()[0]);
+    let applyStyle = this.olStyleFn_()[0];
+    if (!M.utils.isNullOrEmpty(this.olStyleFn_()[1]) && this.olStyleFn_()[1].getImage() instanceof ol.style.FontSymbol) {
+      applyStyle = this.olStyleFn_()[1];
+    }
+    vectorContext.setStyle(applyStyle);
     this.drawGeometryToCanvas(vectorContext);
   };
 
