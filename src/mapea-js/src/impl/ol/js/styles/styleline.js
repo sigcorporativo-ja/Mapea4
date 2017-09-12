@@ -105,8 +105,39 @@ goog.require('M.impl.style.TextPath');
    * @function
    * @api stable
    */
-  M.impl.style.Line.prototype.drawGeometryToCanvas = function(vectorContext) {
+  M.impl.style.Line.prototype.drawGeometryToCanvas = function(vectorContext, canvas, style) {
     vectorContext.drawGeometry(new ol.geom.LineString([[10, 10], [30, 100], [80, 10], [130, 90]]));
+    if (!M.utils.isNullOrEmpty(style)) {
+      var ctx = canvas.getContext("2d");
+      ctx.lineWidth = style.width || 1;
+      ctx.setLineDash([0, 0])
+      ctx.strokeStyle = style.color;
+      ctx.beginPath();
+      ctx.lineTo(10, 10);
+      ctx.lineTo(30, 100);
+      ctx.lineTo(80, 10);
+      ctx.lineTo(130, 90);
+      ctx.stroke();
+    }
+  };
+
+  M.impl.style.Line.prototype.updateCanvas = function(canvas) {
+    let canvasSize = this.getCanvasSize();
+    let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+      size: canvasSize
+    });
+    let opt_style = null;
+    let style = this.olStyleFn_()[1];
+    if (!M.utils.isNullOrEmpty(style) && !M.utils.isNullOrEmpty(style.getStroke())) {
+      opt_style = {
+        color: style.getStroke().getColor(),
+        width: style.getStroke().getWidth()
+      }
+    }
+    // let style = Object.assign(new ol.style.Style({}), this.olStyleFn_()[0]);
+    // style.setText(null);
+    vectorContext.setStyle(this.olStyleFn_()[0]);
+    this.drawGeometryToCanvas(vectorContext, canvas, opt_style);
   };
 
   /**
