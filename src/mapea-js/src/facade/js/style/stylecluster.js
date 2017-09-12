@@ -16,17 +16,16 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster = (function(options = {}, optsVendor = {}) {
-    this.options_ = options;
-    this.optionsVendor_ = optsVendor;
+    this.extends_(options, M.style.Cluster.DEFAULT);
+    this.extends_(optsVendor, M.style.Cluster.DEFAULT_VENDOR);
+
     /**
      * TODO
      */
-    var impl = new M.impl.style.Cluster(this.options_, this.optionsVendor_);
+    var impl = new M.impl.style.Cluster(options, optsVendor);
+
     // calls the super constructor
-    goog.base(this, {
-      options: options,
-      optsVendor: optsVendor
-    }, impl);
+    goog.base(this, options, impl);
   });
   goog.inherits(M.style.Cluster, M.Style);
 
@@ -39,6 +38,7 @@ goog.require('M.Style');
   M.style.Cluster.prototype.unapply = function(layer) {
     this.getImpl().unapply(layer);
   };
+
   /**
    * This function return a set of ranges defined by user
    *
@@ -46,8 +46,9 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.getRanges = function() {
-    return this.options_.options.ranges;
+    return this.options_.ranges;
   };
+
   /**
    * This function update a set of ranges  defined by user
    *
@@ -60,6 +61,7 @@ goog.require('M.Style');
     this.layer_.setStyle(this);
     return this;
   };
+
   /**
    * This function return a specified range
    *
@@ -67,8 +69,9 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.getRange = function(min, max) {
-    return this.options_.options.ranges.find(el => (el.min == min && el.max == max));
+    return this.options_.ranges.find(el => (el.min == min && el.max == max));
   };
+
   /**
    * This function set a specified range
    *
@@ -81,6 +84,7 @@ goog.require('M.Style');
     this.layer_.setStyle(this);
     return this;
   };
+
   /**
    * This function set if layer must be animated
    *
@@ -88,8 +92,9 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.setAnimated = function(animated) {
-    return this.getImpl().setAnimatedImpl(animated, this.layer_, this);
+    return this.getImpl().setAnimated(animated, this.layer_, this);
   };
+
   /**
    * This function return if layer is animated
    *
@@ -97,27 +102,39 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.isAnimated = function() {
-    return this.options_.options.animated;
+    return this.options_.animated;
   };
+
   /**
-   * Distance to calculate clusters
-   *
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
    */
-  M.style.Cluster.DEFAULT_DISTANCE = 60;
+  M.style.Cluster.DEFAULT = {
+    // this.numFeaturesToDoCluster = 0;
+    // this.styleCache = [];
+    // this.olLayerOld = null;
+    // this.vectorCover = null;
+    // this.optionsVendor = optionsVendor;
+    // this.options = options;
+    hoverInteraction: true,
+    displayAmount: true,
+    selectedInteraction: true,
+    distance: 60,
+    animated: true
+  };
+
   /**
-   * Time to animate cluster when users change of zoom or bbox
-   *
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
    */
-  M.style.Cluster.ANIMATION_DURATION = 250;
-  /**
-   * Effect to animate cluster when users change of zoom or bbox
-   * easeIn | easeOut | linear | upAndDown
-   *
-   */
-  if (this.isAnimated == true) {
-    M.style.Cluster.ANIMATION_METHOD = "linear";
-  }
-  else {
-    M.style.Cluster.ANIMATION_METHOD = undefined;
-  }
+  M.style.Cluster.DEFAULT_VENDOR = {
+    animationDuration: 250,
+    animationMethod: "linear"
+  };
 })();

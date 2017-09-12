@@ -11,9 +11,10 @@ goog.provide('M.impl.layer.AnimatedCluster');
  * @param {Mx.parameters.LayerOptions} options custom options for this layer
  * @api stable
  */
-M.impl.layer.AnimatedCluster = function(opt_options) {
-  let options = opt_options || {};
-  ol.layer.Vector.call(this, options);
+M.impl.layer.AnimatedCluster = function(options = {}) {
+  // super
+  goog.base(this, options);
+
   this.oldcluster = new ol.source.Vector();
   this.clusters = [];
   this.animation = {
@@ -28,8 +29,7 @@ M.impl.layer.AnimatedCluster = function(opt_options) {
   this.on('precompose', this.animate, this);
   this.on('postcompose', this.postanimate, this);
 };
-
-ol.inherits(M.impl.layer.AnimatedCluster, ol.layer.Vector);
+goog.inherits(M.impl.layer.AnimatedCluster, ol.layer.Vector);
 
 /**
  * This function sets the map object of the layer
@@ -189,12 +189,12 @@ M.impl.layer.AnimatedCluster.prototype.animate = function(e) {
         }
         // OL3 > v3.14
         if (vectorContext.setStyle) {
-          if (M.utils.isNullOrEmpty(s.getImage().getAnchor())) {
-            s.getImage().normalizedAnchor_ = s.getImage().anchor_;
-          }
-          if (M.utils.isNullOrEmpty(s.getImage().size_)) {
-            s.getImage().size_ = [];
-          }
+          // if (M.utils.isNullOrEmpty(s.getImage().getAnchor())) {
+          //   s.getImage().normalizedAnchor_ = s.getImage().anchor_;
+          // }
+          // if (M.utils.isNullOrEmpty(s.getImage().size_)) {
+          //   s.getImage().size_ = [];
+          // }
           vectorContext.setStyle(s);
           vectorContext.drawGeometry(geo);
         }
