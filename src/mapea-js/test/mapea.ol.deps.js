@@ -380,11 +380,7 @@ goog.addDependency('../../../../src/facade/js/layers/wfs.js', ['M.layer.WFS'], [
 goog.addDependency('../../../../src/facade/js/layers/wmc.js', ['M.layer.WMC'], ['M.Layer', 'M.exception', 'M.utils'], false);
 goog.addDependency('../../../../src/facade/js/layers/wms.js', ['M.layer.WMS'], ['M.Layer', 'M.exception', 'M.utils'], false);
 goog.addDependency('../../../../src/facade/js/layers/wmts.js', ['M.layer.WMTS'], ['M.Layer', 'M.exception', 'M.utils'], false);
-<<<<<<< HEAD
 goog.addDependency('../../../../src/facade/js/map/map.js', ['M.Map'], ['M.Control', 'M.Label', 'M.Layer', 'M.Parameters', 'M.Plugin', 'M.Popup', 'M.control.GetFeatureInfo', 'M.control.LayerSwitcher', 'M.control.Location', 'M.control.Mouse', 'M.control.Navtoolbar', 'M.control.OverviewMap', 'M.control.Panzoom', 'M.control.Panzoombar', 'M.control.Scale', 'M.control.ScaleLine', 'M.control.WMCSelector', 'M.dialog', 'M.exception', 'M.facade.Base', 'M.format.WKT', 'M.handler.Features', 'M.layer.GeoJSON', 'M.layer.KML', 'M.layer.Mapbox', 'M.layer.OSM', 'M.layer.WFS', 'M.layer.WMC', 'M.layer.WMS', 'M.layer.WMTS', 'M.remote', 'M.style.Category', 'M.style.Choropleth', 'M.style.Cluster', 'M.style.Line', 'M.style.Point', 'M.style.Polygon', 'M.style.Proportional', 'M.style.state', 'M.ui.Panel', 'M.utils', 'M.window', 'goog.dom.classlist'], false);
-=======
-goog.addDependency('../../../../src/facade/js/map/map.js', ['M.Map'], ['M.Control', 'M.Label', 'M.Layer', 'M.Parameters', 'M.Plugin', 'M.Popup', 'M.control.GetFeatureInfo', 'M.control.LayerSwitcher', 'M.control.Location', 'M.control.Mouse', 'M.control.Navtoolbar', 'M.control.OverviewMap', 'M.control.Panzoom', 'M.control.Panzoombar', 'M.control.Scale', 'M.control.ScaleLine', 'M.control.WMCSelector', 'M.dialog', 'M.exception', 'M.facade.Base', 'M.format.WKT', 'M.handler.Features', 'M.layer.GeoJSON', 'M.layer.KML', 'M.layer.Mapbox', 'M.layer.OSM', 'M.layer.WFS', 'M.layer.WMC', 'M.layer.WMS', 'M.layer.WMTS', 'M.remote', 'M.style.Category', 'M.style.Choropleth', 'M.style.Cluster', 'M.style.Line', 'M.style.Point', 'M.style.Polygon', 'M.style.state', 'M.ui.Panel', 'M.utils', 'M.window', 'goog.dom.classlist'], false);
->>>>>>> refs/remotes/origin/redmine_87712
 goog.addDependency('../../../../src/facade/js/mapea.js', ['M'], ['M.Map', 'M.exception', 'M.template', 'M.utils'], false);
 goog.addDependency('../../../../src/facade/js/object.js', ['M.Object'], ['M.evt.EventsManager', 'M.evt.Listener'], false);
 goog.addDependency('../../../../src/facade/js/parameters/center.js', ['M.parameter.center'], ['M.exception', 'M.utils'], false);
@@ -417,10 +413,7 @@ goog.addDependency('../../../../src/facade/js/style/styleoverflow.js', ['M.style
 goog.addDependency('../../../../src/facade/js/style/stylepattern.js', ['M.style.pattern'], [], false);
 goog.addDependency('../../../../src/facade/js/style/stylepoint.js', ['M.style.Point'], ['M.style.Simple'], false);
 goog.addDependency('../../../../src/facade/js/style/stylepolygon.js', ['M.style.Polygon'], ['M.style.Simple'], false);
-<<<<<<< HEAD
 goog.addDependency('../../../../src/facade/js/style/styleproportional.js', ['M.style.Proportional'], ['M.Style', 'M.style.Point'], false);
-=======
->>>>>>> refs/remotes/origin/redmine_87712
 goog.addDependency('../../../../src/facade/js/style/stylequantification.js', ['M.style.quantification'], [], false);
 goog.addDependency('../../../../src/facade/js/style/stylesimple.js', ['M.style.Simple'], ['M.style.Feature'], false);
 goog.addDependency('../../../../src/facade/js/ui/panel.js', ['M.ui.Panel'], ['M.exception', 'M.facade.Base', 'M.ui.position', 'M.utils'], false);
@@ -485,19 +478,14 @@ goog.addDependency('../../../../src/impl/ol/js/source/imagewmssource.js', ['M.im
 goog.addDependency('../../../../src/impl/ol/js/source/mapboxsource.js', ['M.impl.source.Mapbox'], ['ol.Attribution', 'ol.source.OSM'], false);
 goog.addDependency('../../../../src/impl/ol/js/source/tilewmssource.js', ['M.impl.source.TileWMS'], ['ol.source.TileWMS'], false);
 goog.addDependency('../../../../src/impl/ol/js/styles/iconstyle.js', ['M.impl.style.Icon'], ['ol.style.Icon'], false);
-<<<<<<< HEAD
-goog.addDependency('../../../../src/impl/ol/js/styles/styleCategory.js', ['M.impl.style.Category'], [], false);
-goog.addDependency('../../../../src/impl/ol/js/styles/stylecluster.js', ['M.impl.style.Cluster'], ['M.impl.interaction.SelectCluster', 'M.impl.layer.AnimatedCluster', 'ol.geom.convexhull', 'ol.interaction.Hover', 'ol.source.Cluster'], false);
-goog.addDependency('../../../../src/impl/ol/js/styles/styleline.js', ['M.impl.style.Line'], ['M.impl.style.Simple'], false);
-=======
 goog.addDependency('../../../../src/impl/ol/js/styles/settextpathstyle.js', ['M.impl.style.TextPath'], [], false);
+goog.addDependency('../../../../src/impl/ol/js/styles/style.js', ['M.impl.Style'], ['ol.render'], false);
 goog.addDependency('../../../../src/impl/ol/js/styles/styleCategory.js', ['M.impl.style.Category'], [], false);
 goog.addDependency('../../../../src/impl/ol/js/styles/stylecluster.js', ['M.impl.style.Cluster'], ['M.impl.interaction.SelectCluster', 'M.impl.layer.AnimatedCluster', 'ol.geom.convexhull', 'ol.interaction.Hover', 'ol.source.Cluster'], false);
 goog.addDependency('../../../../src/impl/ol/js/styles/styleline.js', ['M.impl.style.Line'], ['M.impl.style.Simple', 'M.impl.style.TextPath'], false);
->>>>>>> refs/remotes/origin/redmine_87712
 goog.addDependency('../../../../src/impl/ol/js/styles/stylepoint.js', ['M.impl.style.Point'], ['M.impl.style.Simple'], false);
 goog.addDependency('../../../../src/impl/ol/js/styles/stylepolygon.js', ['M.impl.style.Polygon'], ['M.impl.style.Simple'], false);
-goog.addDependency('../../../../src/impl/ol/js/styles/stylesimple.js', ['M.impl.style.Simple'], [], false);
+goog.addDependency('../../../../src/impl/ol/js/styles/stylesimple.js', ['M.impl.style.Simple'], ['M.impl.Style'], false);
 goog.addDependency('../../../../src/impl/ol/js/utils/envolvedextent.js', ['M.impl.envolvedExtent'], [], false);
 goog.addDependency('../../../../src/impl/ol/js/utils/ol.geom.convexhull.js', ['ol.geom.convexhull'], [], false);
 goog.addDependency('../../../../src/impl/ol/js/utils/utils.js', ['M.impl.utils'], ['goog.style'], false);
