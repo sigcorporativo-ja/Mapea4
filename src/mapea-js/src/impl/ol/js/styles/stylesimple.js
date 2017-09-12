@@ -1,9 +1,10 @@
 goog.provide('M.impl.style.Simple');
 
+goog.require('M.impl.Style');
+
 /**
  * @namespace M.impl.style.Simple
  */
-
 (function() {
   /**
    * Main constructor of the class.
@@ -12,7 +13,10 @@ goog.provide('M.impl.style.Simple');
    */
   M.impl.style.Simple = (function(options = {}) {
     this.updateFacadeOptions(options);
+
+    goog.base(this, options);
   });
+  goog.inherits(M.impl.style.Simple, M.impl.Style);
 
   /**
    * This function apply style options facade to impl
@@ -63,15 +67,22 @@ goog.provide('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Simple.getValue = function(attr, olFeature) {
-    let feature = M.impl.Feature.olFeature2Facade(olFeature);
-    let regexp = /^\{\{([^\}]+)\}\}$/;
+    let templateRegexp = /^\{\{([^\}]+)\}\}$/;
     let attrFeature = attr;
-    if (regexp.test(attr)) {
-      let keyFeature = attr.replace(regexp, '$1');
-      attrFeature = feature.get(keyFeature);
-    }
-    else if (M.utils.isFunction(attr)) {
-      attrFeature = attr(feature);
+    if (templateRegexp.test(attr) || M.utils.isFunction(attr)) {
+      if (!(olFeature instanceof ol.Feature)) {
+        attrFeature = undefined;
+      }
+      else {
+        let feature = M.impl.Feature.olFeature2Facade(olFeature);
+        if (templateRegexp.test(attr)) {
+          let keyFeature = attr.replace(templateRegexp, '$1');
+          attrFeature = feature.getAttribute(keyFeature);
+        }
+        else if (M.utils.isFunction(attr)) {
+          attrFeature = attr(feature);
+        }
+      }
     }
     if (M.utils.isNullOrEmpty(attrFeature)) {
       attrFeature = undefined;

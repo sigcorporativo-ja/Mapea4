@@ -15,7 +15,7 @@
    * @api stable
    */
   //   M.config('MAPEA_URL', 'http://192.168.60.2:8080/mapea');
-  M.config('MAPEA_URL', 'http://localhost:8080/mapea');
+  M.config('MAPEA_URL', 'http://localhost:3030/mapea');
 
   /**
    * The path to the Mapea proxy to send
@@ -25,7 +25,7 @@
    * @public
    * @api stable
    */
-  M.config('PROXY_URL', 'http://localhost:8080/mapea/api/proxy');
+  M.config('PROXY_URL', 'http://localhost:3030/mapea/api/proxy');
 
   /**
    * The path to the Mapea proxy to send
@@ -35,7 +35,7 @@
    * @public
    * @api stable
    */
-  M.config('PROXY_POST_URL', 'http://localhost:8080/mapea/proxyPost');
+  M.config('PROXY_POST_URL', 'http://localhost:3030/mapea/proxyPost');
 
   /**
    * The path to the Mapea templates
@@ -54,7 +54,7 @@
    * @api stable
    */
   //   M.config('THEME_URL', 'http://192.168.60.2:8080/mapea/assets/');
-  M.config('THEME_URL', 'http://localhost:8080/mapea/assets/');
+  M.config('THEME_URL', 'http://localhost:3030/mapea/assets/');
 
   /**
    * The Geosearch URL

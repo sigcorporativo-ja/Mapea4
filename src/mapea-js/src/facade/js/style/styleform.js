@@ -17,7 +17,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.BUBLE = "BUBLE";
+  M.style.form.BUBBLE = "BUBBLE";
 
   /**
    * Marker style form
@@ -62,7 +62,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.SING = "SING";
+  M.style.form.SIGN = "SIGN";
 
   /**
    * Ban style form
