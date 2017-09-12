@@ -8,14 +8,14 @@ goog.require('M.impl.style.Simple');
  * @type {M.style.Polygon}
  */
 
-(function() {
+(function () {
   /**
    * Main constructor of the class.
    * @constructor
    * @implements {M.impl.style.Simple}
    * @api stable
    */
-  M.impl.style.Polygon = function(options) {
+  M.impl.style.Polygon = function (options) {
     goog.base(this, options);
     this.olStyleFn_ = this.updateFacadeOptions(options);
   };
@@ -28,8 +28,8 @@ goog.require('M.impl.style.Simple');
    * @param {object} options - options to style
    * @function
    */
-  M.impl.style.Polygon.prototype.updateFacadeOptions = function(options) {
-    return function(feature, resolution) {
+  M.impl.style.Polygon.prototype.updateFacadeOptions = function (options) {
+    return function (feature, resolution) {
       if (!(feature instanceof ol.Feature)) {
         resolution = feature;
         feature = this;
@@ -113,5 +113,41 @@ goog.require('M.impl.style.Simple');
       }
       return styles;
     };
+  };
+
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Polygon.prototype.drawGeometryToCanvas = function (vectorContext) {
+    let canvasSize = this.getCanvasSize();
+
+    let maxW = Math.floor(canvasSize[0] * 0.2);
+    let maxH = Math.floor(canvasSize[1] * 0.2);
+
+    let minW = (canvasSize[0] - maxW);
+    let minH = (canvasSize[1] - maxH);
+    vectorContext.drawGeometry(new ol.geom.Polygon([[
+      [minW, minH],
+       [minW, maxW],
+       [maxW, maxW],
+       [maxW, minH],
+       [minW, minH]
+    ]]));
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Polygon.prototype.getCanvasSize = function () {
+    return [150, 100];
   };
 })();

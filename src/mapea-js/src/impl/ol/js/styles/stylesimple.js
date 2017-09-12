@@ -1,9 +1,10 @@
 goog.provide('M.impl.style.Simple');
 
+goog.require('M.impl.Style');
+
 /**
  * @namespace M.impl.style.Simple
  */
-
 (function() {
   /**
    * Main constructor of the class.
@@ -12,6 +13,8 @@ goog.provide('M.impl.style.Simple');
    */
   M.impl.style.Simple = (function(options = {}) {
     this.updateFacadeOptions(options);
+
+    goog.base(this, options);
   });
 
   /**
@@ -78,4 +81,5 @@ goog.provide('M.impl.style.Simple');
     }
     return attrFeature;
   };
+  goog.inherits(M.impl.style.Simple, M.impl.Style);
 })();

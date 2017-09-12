@@ -25,9 +25,10 @@ goog.require('M.impl.style.Simple');
   /**
    * This function se options to ol style
    *
-   * @public
+   * @private
    * @param {object} options - options to style
    * @function
+   * @api stable
    */
   M.impl.style.Point.prototype.updateFacadeOptions = function(options) {
 
@@ -180,5 +181,27 @@ goog.require('M.impl.style.Simple');
       }
       return styles;
     };
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Point.prototype.drawGeometryToCanvas = function(vectorContext) {
+    vectorContext.drawGeometry(new ol.geom.Point([50, 50]));
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Point.prototype.getCanvasSize = function() {
+    return [150, 100];
   };
 })();
