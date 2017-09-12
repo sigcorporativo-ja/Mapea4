@@ -46,7 +46,7 @@ goog.require('ol.render');
    */
 
   M.impl.Style.prototype.applyToFeature = function(feature) {
-    feature.getImpl().getOLFeature().setStyle(this.styles_);
+    feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
   };
 
   /**
