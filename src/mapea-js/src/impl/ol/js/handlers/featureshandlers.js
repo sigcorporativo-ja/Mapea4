@@ -48,7 +48,12 @@ goog.require('M.impl.Layer');
     if (!M.utils.isNullOrEmpty(layer) && layer.isVisible() && !M.utils.isNullOrEmpty(layer.getImpl().getOL3Layer())) {
       this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, function(feature, olLayer) {
         if (layer.getImpl().getOL3Layer() === olLayer) {
-          features.push(M.impl.Feature.olFeature2Facade(feature));
+          if (olLayer instanceof M.impl.layer.AnimatedCluster) {
+            features = features.concat(feature.get("features").map(M.impl.Feature.olFeature2Facade));
+          }
+          else {
+            features.push(M.impl.Feature.olFeature2Facade(feature));
+          }
         }
       });
     }
