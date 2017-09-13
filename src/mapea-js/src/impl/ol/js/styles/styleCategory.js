@@ -22,13 +22,12 @@ goog.provide('M.impl.style.Category');
 
 
   M.impl.style.Category.prototype.updateCanvas = function(canvas) {
-    let canvasSize = this.getCanvasSize();
     let array = [];
     let c = canvas.getContext('2d');
     let cat = this.facadeStyleCategory_.categoryStyles_;
     let estilo = null;
     let imagen = null;
-    for (i in cat) {
+    for (let i in cat) {
       let array_s_c = [];
       estilo = cat[i.toString()];
       imagen = estilo.toImage();
@@ -44,7 +43,6 @@ goog.provide('M.impl.style.Category');
   M.impl.style.Category.prototype.drawGeometryToCanvas = function(array, c, attributeName) {
     let length = array.length;
     let cont = 1;
-    let coordinates = this.getCanvasSize();
     let x = c.canvas.width;
     let y = c.canvas.height;
     let categoria = null;

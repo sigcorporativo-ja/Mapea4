@@ -178,7 +178,7 @@ goog.require('M.style.quantification');
         for (let i = 0; i < breakPoints.length; i++) {
           let pareja = [];
           if (i == 0) {
-            pareja.push(0, breakPoints[i])
+            pareja.push(0, breakPoints[i]);
           }
 
           pareja.push(breakPoints[i - 1], breakPoints[i]);
@@ -201,7 +201,6 @@ goog.require('M.style.quantification');
     let x = c.canvas.width;
     let y = c.canvas.height;
     let length = imagenes.length;
-    let imagen = null;
     let pareja_ini = null;
     let pareja_fin = null;
 

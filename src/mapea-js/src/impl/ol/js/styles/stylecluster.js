@@ -86,13 +86,11 @@ goog.require('ol.geom.convexhull');
     }
     let rango = [];
     let imagen = null;
-    array = [];
+    let array = [];
     for (let i = 0; i < cat.length; i++) {
       rango = [cat[i].min, cat[i].max];
       imagen = cat[i].style.toImage();
-      array_r_i = [rango, imagen];
-      array.push(array_r_i);
-      array_r_i = [];
+      array.push([rango, imagen]);
     }
     let num_rangos = array.length;
     c.canvas.height = 80 * num_rangos;

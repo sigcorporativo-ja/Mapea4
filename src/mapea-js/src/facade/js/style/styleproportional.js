@@ -150,7 +150,6 @@ goog.require('M.style.Point');
 
   M.style.Proportional.prototype.updateCanvas = function() {
     if (!M.utils.isNullOrEmpty(this.style_)) {
-      let parejas = [];
       let min_max = [this.getMinRadius(), this.getMaxRadius()];
 
       let estilo_min = this.getStyle().set("radius", min_max[0]);
@@ -168,7 +167,7 @@ goog.require('M.style.Point');
 
 
       c.canvas.height = 80 * 2;
-      this.drawGeometryToCanvas(imagenes, min_max, c, );
+      this.drawGeometryToCanvas(imagenes, min_max, c);
     }
 
 
