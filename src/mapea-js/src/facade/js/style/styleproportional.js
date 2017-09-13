@@ -71,6 +71,14 @@ goog.require('M.style.Point');
      */
     this.layer_ = null;
 
+    /**
+     * @public
+     * @type {Array<M.Feature>}
+     * @api stable
+     * @expose
+     */
+    this.layerFeatures_ = [];
+
     options = options || {};
 
     if (M.utils.isNullOrEmpty(attributeName)) {
@@ -96,6 +104,9 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.apply = function(layer) {
     this.layer_ = layer;
+    this.layerFeatures_ = layer.getFeatures(true);
+    layer.removeFeatures(this.layerFeatures_);
+    this.layerFeatures_.forEach(f => layer.addFeatures(f.getCentroid()));
     this.update_();
   };
 
@@ -173,6 +184,8 @@ goog.require('M.style.Point');
     return this;
   };
 
+  M.style.Proportional.prototype.updateCanvas = function() {};
+
   /**
    * This function get the maximum radius of the style point
    * @function
@@ -207,7 +220,7 @@ goog.require('M.style.Point');
    * @api stable
    */
   M.style.Proportional.prototype.update_ = function() {
-    let features = this.layer_.getFeatures();
+    let features = this.layer_.getFeatures(true);
     let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
     let attributeName = this.attributeName_;
     let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, attributeName);
@@ -218,7 +231,7 @@ goog.require('M.style.Point');
     }.bind(this));
     features.forEach(feature => feature.setStyle(style));
     if (!M.utils.isNullOrEmpty(this.layer_)) {
-      this.layer_.redraw();
+      // this.layer_.redraw();
     }
   };
 
