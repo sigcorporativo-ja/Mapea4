@@ -40,7 +40,6 @@ let estiloSubtipoDefPink = new M.style.Point({
   radius: 15
 });
 
-centrosSubtipo.setStyle(estiloSubtipoDefPink);
 
 
 

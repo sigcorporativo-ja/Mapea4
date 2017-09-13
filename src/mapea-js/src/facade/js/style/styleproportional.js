@@ -146,6 +146,55 @@ goog.require('M.style.Point');
     return this;
   };
 
+
+
+  M.style.Proportional.prototype.updateCanvas = function() {
+    if (!M.utils.isNullOrEmpty(this.style_)) {
+      let c = this.canvas_.getContext('2d');
+      let styles = this.styles_;
+      let parejas = [];
+      let imagen = this.getStyle().toImage();
+      let min_max = [this.getMinRadius(), this.getMaxRadius(), ];
+      let atributo = this.getAttributeName();
+
+      c.canvas.height = 80;
+      this.drawGeometryToCanvas(imagen, min_max, c, atributo);
+    }
+
+
+
+
+  };
+
+
+  M.style.Proportional.prototype.drawGeometryToCanvas = function(imagen, min_max, c, atributo) {
+
+    let x = c.canvas.width;
+    let y = c.canvas.height;
+    c.textAlign = 'letf';
+    c.font = "12px Arial";
+    c.textBaseline = "middle";
+    c.fillText(atributo, 10, 10);
+    var image = new Image();
+    image.height = 100;
+    (function() {
+      image.onload = function() {
+        c.textAlign = 'letf';
+        c.font = "12px Arial";
+        c.textBaseline = "middle";
+        c.fillText("min: " + min_max[0] + "   max: " + min_max[1], x / 2, 1 + image.height / 2);
+        c.drawImage(this, 0, 0);
+      };
+    })();
+
+    image.src = imagen;
+
+
+
+  };
+
+
+
   /**
    * This function get the minimum radius of the style point
    * @function
@@ -220,6 +269,7 @@ goog.require('M.style.Point');
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.layer_.redraw();
     }
+
   };
 
   /**

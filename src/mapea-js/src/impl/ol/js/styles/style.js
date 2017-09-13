@@ -46,7 +46,16 @@ goog.require('ol.render');
    */
 
   M.impl.Style.prototype.applyToFeature = function(feature) {
-    feature.getImpl().getOLFeature().setStyle(this.styles_);
+    let g = ol.Observable.prototype.changed;
+
+    ol.Observable.prototype.changed = function() {};
+
+    feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
+
+    ol.Observable.prototype.changed = g;
+
+
+
   };
 
   /**
@@ -56,14 +65,16 @@ goog.require('ol.render');
    * @function
    * @api stable
    */
+
+
   M.impl.Style.prototype.updateCanvas = function(canvas) {
     let canvasSize = this.getCanvasSize();
     let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
       size: canvasSize
     });
-    let style = Object.assign(new ol.style.Style({}), this.styles_[0]);
-    style.setText(null);
-    vectorContext.setStyle(style);
+    // let style = Object.assign(new ol.style.Style({}), this.styles_[0]);
+    // style.setText(null);
+    vectorContext.setStyle(this.olStyleFn_()[0]);
     this.drawGeometryToCanvas(vectorContext);
   };
 

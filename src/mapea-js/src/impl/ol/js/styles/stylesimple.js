@@ -66,15 +66,17 @@ goog.require('M.impl.Style');
    * @api stable
    */
   M.impl.style.Simple.getValue = function(attr, olFeature) {
-    let feature = M.impl.Feature.olFeature2Facade(olFeature);
     let regexp = /^\{\{([^\}]+)\}\}$/;
     let attrFeature = attr;
-    if (regexp.test(attr)) {
-      let keyFeature = attr.replace(regexp, '$1');
-      attrFeature = feature.get(keyFeature);
-    }
-    else if (M.utils.isFunction(attr)) {
-      attrFeature = attr(feature);
+    if (regexp.test(attr) || M.utils.isFunction(attr)) {
+      let feature = M.impl.Feature.olFeature2Facade(olFeature);
+      if (regexp.test(attr)) {
+        let keyFeature = attr.replace(regexp, '$1');
+        attrFeature = feature.get(keyFeature);
+      }
+      else if (M.utils.isFunction(attr)) {
+        attrFeature = attr(feature);
+      }
     }
     if (M.utils.isNullOrEmpty(attrFeature)) {
       attrFeature = undefined;

@@ -102,6 +102,11 @@ goog.require('M.impl.style.Simple');
       else {
         label = null;
       }
+
+      let radiusValue = M.impl.style.Simple.getValue(radius, feature);
+      if (M.utils.isNullOrEmpty(radiusValue)) {
+        radiusValue = M.style.Point.DEFAULT.radius;
+      }
       if (!M.utils.isNullOrEmpty(stroke) || !M.utils.isNullOrEmpty(radius) || !M.utils.isNullOrEmpty(fill)) {
         style = new ol.style.Style({
           stroke: stroke,
@@ -109,7 +114,8 @@ goog.require('M.impl.style.Simple');
           image: new ol.style.Circle({
             stroke: stroke,
             fill: fill,
-            radius: M.impl.style.Simple.getValue(radius, feature),
+            // radius: M.impl.style.Simple.getValue(radius, feature),
+            radius: radiusValue,
             snapToPixel: snaptopixel
           }),
           text: label
@@ -144,7 +150,8 @@ goog.require('M.impl.style.Simple');
               gradient: M.impl.style.Simple.getValue(icon.gradient, feature),
               glyph: M.impl.style.Simple.getValue(icon.class, feature),
               fontSize: M.impl.style.Simple.getValue(icon.fontsize, feature),
-              radius: M.impl.style.Simple.getValue(icon.radius, feature),
+              // radius: M.impl.style.Simple.getValue(icon.radius, feature),
+              radius: radiusValue,
               rotation: M.impl.style.Simple.getValue(icon.rotation, feature),
               rotateWithView: M.impl.style.Simple.getValue(icon.rotate, feature),
               offsetY: M.impl.style.Simple.getValue(icon.offset[0], feature),
