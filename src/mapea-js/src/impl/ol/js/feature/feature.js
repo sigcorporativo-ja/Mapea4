@@ -231,4 +231,29 @@ goog.provide('M.impl.Feature');
     this.facadeFeature_ = obj;
   };
 
+  /**
+   * This function returns de centroid of feature
+   *
+   * @public
+   * @function
+   * @return {Array<number>}
+   * @api stable
+   */
+  M.impl.Feature.prototype.getCentroid = function() {
+    let olFeature = this.getOLFeature();
+    let geometry = olFeature.getGeometry();
+    let olCentroid;
+    if (geometry.getType() === 'Polygon') {
+      let geomCentroid = geometry.getInteriorPoint();
+      olCentroid = new ol.Feature({
+        geometry: geomCentroid,
+        name: 'centroid'
+      });
+    }
+    else {
+      olCentroid = olFeature;
+    }
+    let centroid = M.impl.Feature.olFeature2Facade(olCentroid);
+    return centroid;
+  };
 })();
