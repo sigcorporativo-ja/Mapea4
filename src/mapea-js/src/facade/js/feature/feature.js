@@ -184,7 +184,6 @@ goog.require('M.utils');
     //a las features no se les pone ningún estilo por defecto porque tiene mas prioridad que el de la capa
   };
 
-
   /**
    * This function returns style feature
    *
@@ -195,5 +194,36 @@ goog.require('M.utils');
    */
   M.Feature.prototype.getStyle = function() {
     return this.style_;
+  };
+
+  /**
+   * This function returns de centroid of feature
+   *
+   * @public
+   * @function
+   * @return {M.Feature}
+   * @api stable
+   */
+  M.Feature.prototype.getCentroid = function() {
+    if (this.getGeometry().type !== "LineString") {
+      let id = this.getId();
+      let attributes = this.getAttributes();
+      let style = new M.style.Point({
+        stroke: {
+          color: '#67af13',
+          width: 2
+        },
+        radius: 6,
+        fill: {
+          color: '#67af13',
+          opacity: 0.2
+        }
+      });
+      let centroid = this.getImpl().getCentroid();
+      centroid.setId(id);
+      centroid.setAttributes(attributes);
+      centroid.setStyle(style);
+      return centroid;
+    }
   };
 })();
