@@ -146,6 +146,75 @@ goog.require('M.style.Point');
     return this;
   };
 
+
+
+  M.style.Proportional.prototype.updateCanvas = function() {
+    if (!M.utils.isNullOrEmpty(this.style_)) {
+      let parejas = [];
+      let min_max = [this.getMinRadius(), this.getMaxRadius()];
+
+      let estilo_min = this.getStyle().set("radius", min_max[0]);
+      let imagen_min = estilo_min.toImage();
+
+
+      let estilo_max = this.getStyle().set("radius", min_max[1]);
+
+
+      let imagen_max = estilo_max.toImage();
+
+      let imagenes = [imagen_min, imagen_max];
+      let c = this.canvas_.getContext('2d');
+
+
+
+      c.canvas.height = 80 * 2;
+      this.drawGeometryToCanvas(imagenes, min_max, c, );
+    }
+
+
+
+
+  };
+
+
+  M.style.Proportional.prototype.drawGeometryToCanvas = function(imagenes, min_max, c) {
+    let length = imagenes.length;
+
+    let x = c.canvas.width;
+    let y = c.canvas.height;
+
+
+    for (let i = 0; i < imagenes.length; i++) {
+      let imagen = imagenes[i];
+      var image = new Image();
+      image.height = 100;
+      (function(min_max) {
+        image.onload = function() {
+          c.textAlign = 'letf';
+          c.font = "12px Arial";
+          c.textBaseline = "middle";
+          if (i == 0) {
+            c.fillText("min: " + min_max[i], x / 2, ((i / length) * y * 0.8) + image.height / 2);
+
+
+          }
+          else {
+            c.fillText("max: " + min_max[i], x / 2, ((i / length) * y * 0.8) + image.height / 2);
+
+
+          }
+          c.drawImage(this, 0, (i / length) * y * 0.8);
+        };
+      })(min_max);
+
+      image.src = imagen;
+    }
+
+
+  };
+
+
+
   /**
    * This function get the minimum radius of the style point
    * @function
@@ -220,6 +289,7 @@ goog.require('M.style.Point');
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.layer_.redraw();
     }
+
   };
 
   /**

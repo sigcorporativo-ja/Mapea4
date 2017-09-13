@@ -42,7 +42,7 @@ var feature = new M.Feature('feature', {
 var feature2 = new M.Feature('feature2', {
   "type": "Feature",
   "properties": {
-    "colegio": "public"
+    "colegio": "concertado"
   },
   "geometry": {
     "type": "Point",
@@ -150,7 +150,7 @@ var azul = new M.style.Point({
     color: 'black',
     width: 2
   },
-  radius: 5
+  radius: 15
 });
 
 var verde = new M.style.Point({
@@ -162,7 +162,7 @@ var verde = new M.style.Point({
     color: 'black',
     width: 2
   },
-  radius: 5
+  radius: 9
 });
 
 
@@ -171,17 +171,14 @@ var verde = new M.style.Point({
 var categoryStyle = new M.style.Category("colegio", {
   "public": rojo,
   "privado": verde,
-  "religiosos": rojo
+  "religiosos": azul,
+  "hibrido": amarillo,
+  "concertado": rosa
 
 });
 
 
-layer.setStyle(categoryStyle);
-
-
-
-
-function GetStyleForCategories() {
+layer.setStyle(categoryStyle);function GetStyleForCategories() {
   let CategoryStyle = document.getElementById('CategoryStyle').value;
   let res = categoryStyle.getStyleForCategories(CategoryStyle);
   console.log(res);

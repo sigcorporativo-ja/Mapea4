@@ -34,36 +34,36 @@ var options = {
   ranges:
 
   [
-      {
-        min: 2,
-        max: 49,
-        style: new M.style.Point({
-          fill: {
-            color: 'red'
-          },
-          radius: 5
-        })
-    },
-      {
-        min: 50,
-        max: 100,
-        style: new M.style.Point({
-          fill: {
-            color: 'blue'
-          },
-          radius: 10,
-        })
-    },
-      {
-        min: 101,
-        max: 12222,
-        style: new M.style.Point({
-          fill: {
-            color: 'pink'
-          },
-          radius: 30
-        })
-    }
+    //   {
+//     min: 2,
+//     max: 49,
+//     style: new M.style.Point({
+//       fill: {
+//         color: 'red'
+//       },
+//       radius: 5
+//     })
+// },
+//   {
+//     min: 50,
+//     max: 100,
+//     style: new M.style.Point({
+//       fill: {
+//         color: 'blue'
+//       },
+//       radius: 10,
+//     })
+// },
+//   {
+//     min: 101,
+//     max: 12222,
+//     style: new M.style.Point({
+//       fill: {
+//         color: 'pink'
+//       },
+//       radius: 30
+//     })
+// }
     ],
 
   animated: true,
@@ -132,7 +132,7 @@ let azul = new M.style.Point({
     color: 'blue',
     width: 1
   },
-  radius: 13
+  radius: 21
 });
 let categoryStyle = new M.style.Category("sector", {
   "Comercio": azul,

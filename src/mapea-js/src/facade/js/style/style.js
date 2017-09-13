@@ -98,8 +98,8 @@ goog.provide('M.Style');
     this.setValue_(this.options_, property, value);
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.getImpl().updateFacadeOptions(this.options_);
-      this.refresh();
     }
+    this.refresh();
     return this;
   };
   /**
@@ -137,8 +137,10 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style.prototype.refresh = function() {
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      this.apply(this.layer_);
+    }
     this.updateCanvas();
-    this.apply(this.layer_);
   };
 
   /**

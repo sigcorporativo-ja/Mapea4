@@ -46,7 +46,16 @@ goog.require('ol.render');
    */
 
   M.impl.Style.prototype.applyToFeature = function(feature) {
+    let g = ol.Observable.prototype.changed;
+
+    ol.Observable.prototype.changed = function() {};
+
     feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
+
+    ol.Observable.prototype.changed = g;
+
+
+
   };
 
   /**
@@ -56,6 +65,8 @@ goog.require('ol.render');
    * @function
    * @api stable
    */
+
+
   M.impl.Style.prototype.updateCanvas = function(canvas) {
     let canvasSize = this.getCanvasSize();
     let vectorContext = ol.render.toContext(canvas.getContext('2d'), {

@@ -20,6 +20,75 @@ goog.provide('M.impl.style.Category');
     this.facadeStyleCategory_ = null;
   };
 
+
+  M.impl.style.Category.prototype.updateCanvas = function(canvas) {
+    let canvasSize = this.getCanvasSize();
+    let array = [];
+    let c = canvas.getContext('2d');
+    let cat = this.facadeStyleCategory_.categoryStyles_;
+    let estilo = null;
+    let imagen = null;
+    for (i in cat) {
+      let array_s_c = [];
+      estilo = cat[i.toString()];
+      imagen = estilo.toImage();
+      array_s_c = [i, imagen, estilo];
+      array.push(array_s_c);
+    }
+    let num_stilos = array.length;
+    c.canvas.height = 80 * num_stilos;
+    this.drawGeometryToCanvas(array, c, this.facadeStyleCategory_.attributeName_);
+  };
+
+
+  M.impl.style.Category.prototype.drawGeometryToCanvas = function(array, c, attributeName) {
+    let length = array.length;
+    let cont = 1;
+    let coordinates = this.getCanvasSize();
+    let x = c.canvas.width;
+    let y = c.canvas.height;
+    let categoria = null;
+    let imagen = null;
+
+    for (let i = 0; i < array.length; i++) {
+      categoria = array[i][0];
+      imagen = array[i][1];
+      var image = new Image();
+      image.height = 100;
+      (function(categoryParam) {
+        image.onload = function() {
+          c.textAlign = 'letf';
+          c.font = "12px Arial";
+          c.textBaseline = "middle";
+          c.drawImage(this, 0, (i / length) * y * 0.5);
+          c.fillText(categoryParam, x / 2, ((i / length) * y * 0.5) + image.height / 2);
+        };
+      })(categoria);
+      image.src = imagen;
+      cont = cont + 1;
+    }
+
+  };
+
+  // M.impl.style.Category.prototype.drawGeometryToCanvas = function(array) {
+  //   // vectorContext.drawGeometry(new ol.geom.Point([50, 50]));
+  //   let length = array.length;
+  //   let cont = 1;
+  //   let coordinates = this.getCanvasSize();
+  //   let x = coordinates[0];
+  //   let y = coordinates[1] * 0.5;
+  //   for (let i = 0; i < array.length; i++) {
+  //
+  //     array[i].drawGeometry(new ol.geom.Point([50, (cont / length) * y]));
+  //     cont = cont + 1;
+  //   }
+  //
+  // };
+
+  M.impl.style.Category.prototype.getCanvasSize = function() {
+    return [200, 300];
+  };
+
   /**
    * This function return the AttributeName
    * @function
@@ -201,6 +270,7 @@ goog.provide('M.impl.style.Category');
                     color: color_random,
                     width: 2
                   },
+                  radius: 5
                 });
               }
               if (type == "LineString") {

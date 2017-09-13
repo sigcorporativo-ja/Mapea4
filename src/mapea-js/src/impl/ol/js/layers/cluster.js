@@ -189,12 +189,14 @@ M.impl.layer.AnimatedCluster.prototype.animate = function(e) {
         }
         // OL3 > v3.14
         if (vectorContext.setStyle) {
-          if (M.utils.isNullOrEmpty(s.getImage().getAnchor())) {
-            s.getImage().normalizedAnchor_ = s.getImage().anchor_;
+          if (!M.utils.isNullOrEmpty(s.getImage())) {
+            if (M.utils.isNullOrEmpty(s.getImage().getAnchor())) {
+              s.getImage().normalizedAnchor_ = s.getImage().anchor_;
+              s.getImage().size_ = [];
+            }
           }
-          if (M.utils.isNullOrEmpty(s.getImage().size_)) {
-            s.getImage().size_ = [];
-          }
+          // if (M.utils.isNullOrEmpty(s.getImage().size_)) {
+          // }
           vectorContext.setStyle(s);
           vectorContext.drawGeometry(geo);
         }

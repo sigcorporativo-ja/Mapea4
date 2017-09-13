@@ -47,7 +47,9 @@ goog.require('M.Style');
    */
   M.style.Category.prototype.apply = function(layer) {
     this.layer_ = layer;
+    // return this.getImpl().applyToLayer(layer);
     this.update_();
+
   };
   /**
    *

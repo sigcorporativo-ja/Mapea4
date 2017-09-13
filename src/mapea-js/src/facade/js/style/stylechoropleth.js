@@ -162,6 +162,77 @@ goog.require('M.style.quantification');
   };
 
 
+  M.style.Choropleth.prototype.updateCanvas = function() {
+    if (!M.utils.isNullOrEmpty(this.styles_)) {
+      let c = this.canvas_.getContext('2d');
+      let styles = this.styles_;
+      let imagenes = [];
+      let parejas = [];
+      for (let i = 0; i < styles.length; i++) {
+        let image = styles[i].toImage();
+        imagenes.push(image);
+      }
+      let breakPoints = this.breakPoints_;
+      if (breakPoints.length > 0) {
+
+        for (let i = 0; i < breakPoints.length; i++) {
+          let pareja = [];
+          if (i == 0) {
+            pareja.push(0, breakPoints[i])
+          }
+
+          pareja.push(breakPoints[i - 1], breakPoints[i]);
+          parejas.push(pareja);
+
+        }
+
+        let num_stilos = imagenes.length;
+        c.canvas.height = 80 * num_stilos;
+        this.drawGeometryToCanvas(imagenes, parejas, c, this.attributeName_);
+      }
+
+
+
+    }
+  };
+
+
+  M.style.Choropleth.prototype.drawGeometryToCanvas = function(imagenes, parejas, c, attributeName) {
+    let x = c.canvas.width;
+    let y = c.canvas.height;
+    let length = imagenes.length;
+    let imagen = null;
+    let pareja_ini = null;
+    let pareja_fin = null;
+
+
+    for (let i = 0; i < imagenes.length; i++) {
+      let pareja = parejas[i];
+      pareja_ini = pareja[0];
+      pareja_fin = pareja[1];
+      var image = new Image();
+      image.height = 100;
+      (function(pareja_ini, pareja_fin) {
+        image.onload = function() {
+          c.textAlign = 'letf';
+          c.font = "12px Arial";
+          c.textBaseline = "middle";
+          if (pareja_ini == 0) {
+            c.fillText("  x  <=  " + pareja_fin.toString(), x / 2, ((i / length) * y * 0.5) + image.height / 2);
+
+          }
+          else {
+            c.fillText(pareja_ini.toString() + "  <  x  <=  " + pareja_fin.toString(), x / 2, ((i / length) * y * 0.5) + image.height / 2);
+
+          }
+
+          c.drawImage(this, 0, (i / length) * y * 0.5);
+        };
+      })(pareja_ini, pareja_fin);
+      image.src = imagenes[i];
+    }
+  };
+
   /**
    * This function gets the numeric features values of layer which attribute
    * is equal to attribute specified by user
@@ -233,6 +304,7 @@ goog.require('M.style.quantification');
         filteredFeatures.forEach(f => f.setStyle(style));
       }
     }
+    this.updateCanvas();
   };
   /**
    * This functions returns a point style by default
