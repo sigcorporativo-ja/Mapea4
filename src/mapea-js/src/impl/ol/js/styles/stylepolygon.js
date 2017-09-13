@@ -102,6 +102,9 @@ goog.require('M.impl.style.Simple');
             fill: fill
           }));
         }
+        else {
+          style.setFill(fill);
+        }
       }
       return [style];
     };
