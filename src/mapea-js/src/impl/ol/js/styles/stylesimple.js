@@ -13,8 +13,7 @@ goog.require('M.impl.Style');
    */
   M.impl.style.Simple = (function(options = {}) {
     this.updateFacadeOptions(options);
-
-    goog.base(this, options);
+    //goog.base(this, options);
   });
 
   /**

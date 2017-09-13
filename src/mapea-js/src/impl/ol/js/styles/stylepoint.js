@@ -37,7 +37,6 @@ goog.require('M.impl.style.Simple');
         resolution = feature;
         feature = this;
       }
-      let stroke, radius, fill, label, icon, snaptopixel;
       let style = new ol.style.Style();
       let styleIcon = new ol.style.Style();
       let styles = [];

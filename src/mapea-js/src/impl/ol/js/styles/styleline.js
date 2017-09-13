@@ -37,7 +37,7 @@ goog.require('M.impl.style.TextPath');
         resolution = feature;
         feature = this;
       }
-      let stroke, label, fill;
+      let label;
       let style = new ol.style.Style();
       let styleStroke = new ol.style.Style();
       if (!M.utils.isNullOrEmpty(options.stroke)) {
@@ -109,8 +109,8 @@ goog.require('M.impl.style.TextPath');
     vectorContext.drawGeometry(new ol.geom.LineString([[10, 10], [30, 100], [80, 10], [130, 90]]));
     if (!M.utils.isNullOrEmpty(style)) {
       var ctx = canvas.getContext("2d");
-      ctx.lineWidth = style.width || 1;
-      ctx.setLineDash([0, 0])
+      ctx.lineWidth = style.width;
+      ctx.setLineDash([0, 0]);
       ctx.strokeStyle = style.color;
       ctx.beginPath();
       ctx.lineTo(10, 10);
@@ -132,7 +132,7 @@ goog.require('M.impl.style.TextPath');
       opt_style = {
         color: style.getStroke().getColor(),
         width: style.getStroke().getWidth()
-      }
+      };
     }
     // let style = Object.assign(new ol.style.Style({}), this.olStyleFn_()[0]);
     // style.setText(null);
