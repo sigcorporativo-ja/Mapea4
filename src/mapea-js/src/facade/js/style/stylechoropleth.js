@@ -163,7 +163,7 @@ goog.require('M.style.quantification');
 
 
   M.style.Choropleth.prototype.updateCanvas = function() {
-    if (!M.utils.isNullOrEmpty(this.styles_)) {
+    if (!M.utils.isNullOrEmpty(this.styles_) && (!M.utils.isString(this.styles_[0]) || !M.utils.isString(this.styles_[1]))) {
       let c = this.canvas_.getContext('2d');
       let styles = this.styles_;
       let imagenes = [];
@@ -273,11 +273,15 @@ goog.require('M.style.quantification');
       let features = layer.getFeatures();
       if (!M.utils.isNullOrEmpty(features)) {
         this.dataValues_ = this.getValues();
-        if (M.utils.isNullOrEmpty(this.styles_)) {
+        if (M.utils.isNullOrEmpty(this.styles_) || (!M.utils.isNullOrEmpty(this.styles_) &&
+            (
+              typeof(this.styles_[0]) === "string" || typeof(this.styles_[1]) === "string"
+            )
+          )) {
           this.breakPoints_ = this.quantification_(this.dataValues_);
           let firstFeature = features[0];
-          let startColor = M.style.Choropleth.START_COLOR_DEFAULT;
-          let endColor = M.style.Choropleth.END_COLOR_DEFAULT;
+          let startColor = this.styles_ && this.styles_[0] ? this.styles_[0] : M.style.Choropleth.START_COLOR_DEFAULT;
+          let endColor = this.styles_ && this.styles_[1] ? this.styles_[1] : M.style.Choropleth.END_COLOR_DEFAULT;
           let numColors = this.breakPoints_.length;
           let scaleColor = M.utils.generateColorScale(startColor, endColor, numColors);
           if (!M.utils.isArray(scaleColor)) {
@@ -339,7 +343,7 @@ goog.require('M.style.quantification');
 
   M.style.Choropleth.DEFAULT_STYLE_LINE = function(c) {
     return new M.style.Line({
-      fill: {
+      stroke: {
         color: c
       }
     });
@@ -360,7 +364,7 @@ goog.require('M.style.quantification');
         opacity: 1
       },
       stroke: {
-        color: 'black',
+        color: c,
         width: 1
       }
     });
@@ -376,6 +380,6 @@ goog.require('M.style.quantification');
    * @constant
    * @api stable
    */
-  M.style.Choropleth.END_COLOR_DEFAULT = 'black';
+  M.style.Choropleth.END_COLOR_DEFAULT = 'brown';
 
 })();
