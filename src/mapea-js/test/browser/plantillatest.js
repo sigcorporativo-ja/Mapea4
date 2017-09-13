@@ -13,131 +13,244 @@ let mapajs = M.map({
 
 
 let points = new M.layer.GeoJSON({
-  name: 'points',
+  name: "points",
   source: {
     "type": "FeatureCollection",
     "features": [
       {
         "type": "Feature",
         "properties": {
-          "id": 23,
-          "fill_color": "#ff0000",
-          "op": 1,
-          "stroke_color": "white",
-          "stroke_width": "2"
+          "alumnos": 400,
+          "colegios": 2
         },
         "geometry": {
           "type": "Point",
           "coordinates": [
-          -5.03173828125,
-          38.762650338334154
+          -6.383056640625,
+          37.3002752813443
         ]
         }
     },
       {
         "type": "Feature",
         "properties": {
-          "id": 10,
-          "fill_color": "blue",
-          "op": "0.4",
-          "stroke_color": "black",
-          "stroke_width": "3"
+          "alumnos": 340,
+          "colegios": 5
         },
         "geometry": {
           "type": "Point",
           "coordinates": [
-          -4.24072265625,
-          38.8824811975508
+          -6.119384765624999,
+          37.60552821745789
         ]
         }
     },
       {
         "type": "Feature",
         "properties": {
-          "id": 15,
-          "fill_color": "blue",
-          "op": "0.4",
-          "stroke_color": "green",
-          "stroke_width": "3"
+          "alumnos": 675,
+          "colegios": 3
         },
         "geometry": {
           "type": "Point",
           "coordinates": [
-          -6.24072265625,
-          38.8824811975508
+          -5.679931640625,
+          37.43997405227057
         ]
         }
     },
       {
         "type": "Feature",
         "properties": {
-          "id": 40,
-          "fill_color": "white",
-          "op": "0.4",
-          "stroke_color": "yellow",
-          "stroke_width": "3"
+          "alumnos": 440,
+          "colegios": 2
         },
         "geometry": {
           "type": "Point",
           "coordinates": [
-          -7.24072265625,
-          38.8824811975508
+          -6.0205078125,
+          37.17782559332976
         ]
         }
     },
       {
         "type": "Feature",
         "properties": {
-          "id": 19,
-          "fill_color": "#00ff99",
-          "op": "0.9",
-          "stroke_color": "yellow",
-          "stroke_width": "6"
+          "alumnos": 520,
+          "colegios": 6
         },
         "geometry": {
           "type": "Point",
           "coordinates": [
-          -3.53759765625,
-          39.2492708462234
+          -5.47119140625,
+          37.84015683604136
+        ]
+        }
+    },
+      {
+        "type": "Feature",
+        "properties": {},
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+          -5.2294921875,
+          37.483576550426996
         ]
         }
     },
       {
         "type": "Feature",
         "properties": {
-          "id": 17,
-          "fill_color": "#3366ff",
-          "op": "0.9",
-          "stroke_color": "red",
-          "stroke_width": "4"
+          "alumnos": 350,
+          "colegios": 4
         },
         "geometry": {
           "type": "Point",
           "coordinates": [
-          -2.96630859375,
-          39.11301365149975
+          -5.4931640625,
+          37.07271048132943
         ]
         }
     },
       {
         "type": "Feature",
         "properties": {
-          "id": 17,
-          "fill_color": "#f0f099",
-          "op": "0.9",
-          "stroke_color": "black",
-          "stroke_width": "4"
+          "alumnos": "860",
+          "colegios": 5
         },
         "geometry": {
           "type": "Point",
           "coordinates": [
-          -3.6474609374999996,
-          38.71980474264237
+          -4.85595703125,
+          37.67512527892127
+        ]
+        }
+    },
+      {
+        "type": "Feature",
+        "properties": {
+          "alumnos": 150,
+          "colegios": 1
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+          -4.954833984374999,
+          37.3002752813443
+        ]
+        }
+    },
+      {
+        "type": "Feature",
+        "properties": {
+          "alumnos": 320,
+          "colegios": 8
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [-7.3564988328828065, 37.678830777560634]
+        }
+    },
+      {
+        "type": "Feature",
+        "properties": {
+          "alumnos": 575,
+          "colegios": 3
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+          -5.11962890625,
+          37.09023980307208
+        ]
+        }
+    },
+      {
+        "type": "Feature",
+        "properties": {
+          "alumnos": 330,
+          "colegios": 4
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+          -5.855712890625,
+          36.97622678464096
+        ]
+        }
+    },
+      {
+        "type": "Feature",
+        "properties": {
+          "alumnos": 360,
+          "colegios": 6
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+          -6.39404296875,
+          36.99377838872517
+        ]
+        }
+    },
+      {
+        "type": "Feature",
+        "properties": {
+          "alumnos": 240,
+          "colegios": 3
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+          -6.602783203124999,
+          37.622933594900864
+        ]
+        }
+    },
+      {
+        "type": "Feature",
+        "properties": {
+          "alumnos": 740,
+          "colegios": 2
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+          -5.82275390625,
+          37.900865092570065
+        ]
+        }
+    },
+      {
+        "type": "Feature",
+        "properties": {
+          "alumnos": 500,
+          "colegios": 1
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+          -5.756835937499999,
+          36.721273880045004
+        ]
+        }
+    },
+      {
+        "type": "Feature",
+        "properties": {
+          "alumnos": 210,
+          "colegios": 4
+        },
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+          -5.3173828125,
+          36.8708321556463
         ]
         }
     }
   ]
-  },
+  }
 });
 let lines = new M.layer.GeoJSON({
   name: "lines",
@@ -376,99 +489,182 @@ let polygons = new M.layer.GeoJSON({
 
 
 
-let stylePoint = new M.style.Point({
-  fill: {
-    color: "{{fill_color}}",
-    op: "{{op}}"
-  },
-  stroke: {
-    color: "{{stroke_color}}",
-    width: "{{stroke_width}}"
-  },
-  radius: function(feature) {
-    let id = feature.getProperties()["id"];
-    let radius = 7;
-    if (id < 20) {
-      radius = id;
-    }
+// let stylePoint = new M.style.Point({
+//   fill: {
+//     color: 'red'
+//   },
+//   radius: 10
+// });
+//
+// let stylePoint2 = new M.style.Point({
+//   fill: {
+//     color: 'red'
+//   },
+//   radius: 10
+// });
 
-    return radius;
-  },
-  'label': {
-    text: '{{text_label}}',
-    font: 'bold italic 19px Comic Sans MS',
-    rotate: false,
-    scale: 0.9,
-    // offset: [10, 20],
-    color: '#2EFEC8',
-    stroke: {
-      color: '{{label_stroke_color}}',
-      width: 10
-    }
-  }
-});
-let styleLine = new M.style.Line({
-  'stroke': {
-    color: '{{stroke_color}}',
-    width: "{{stroke_width}}"
-  },
-  'fill': {
-    color: '{{fill_color}}',
-    opacity: "{{fill_op}}",
-    width: 6
-  },
-  'label': {
-    text: '{{text_label}}',
-    font: 'bold italic 19px Comic Sans MS',
-    rotate: false,
-    scale: 0.9,
-    // offset: [10, 20],
-    color: '#2EFEC8',
-    stroke: {
-      color: '{{label_stroke_color}}',
-      width: 10
-    }
-  }
-});
-let stylePolygon = new M.style.Polygon({
-  'fill': {
-    color: '#6A0888',
-    opacity: 0.5
-  },
-  'stroke': {
-    color: function(feature) {
-      let id = feature.getProperties()["id"];
-      let color = "red";
-      if (id % 2 === 0) {
-        color = "blue";
-      }
-      return color;
-    },
-    width: "{{stroke_width}}"
-  },
-  'label': {
-    text: '{{label_text}}',
-    font: 'bold italic 19px Comic Sans MS',
-    rotate: false,
-    scale: 0.9,
-    // offset: [10, 20],
-    color: '#2EFEC8',
-    stroke: {
-      color: '#FE9A2E',
-      width: 10
-    },
-    rotate: false,
-    rotation: 0.5,
-    align: M.style.align.RIGHT,
-    baseline: M.style.baseline.TOP
-  }
-});
+// let style = new M.style.Point({
+//   // stroke: {
+//   //   color: 'black',
+//   //   width: 15,
+//   //   linedash: [1, 20],
+//   //   linedashoffset: 60,
+//   //   linecap: 'square',
+//   //   linejoin: 'miter',
+//   //   miterlimit: 15
+//   // },
+//   fill: {
+//     color: 'red',
+//     opacity: 0.5
+//   },
+//   // label: {
+//   //   text: 'FEATURE',
+//   //   font: 'bold italic 19px Comic Sans MS',
+//   //   scale: 0.9,
+//   //   offset: [10, 20],
+//   //   color: '#2EFEC8',
+//   //   stroke: {
+//   //     color: 'blue',
+//   //     width: 23,
+//   //     linedash: [1, 20],
+//   //     linedashoffset: 60,
+//   //     linecap: 'square',
+//   //     linejoin: 'miter',
+//   //     miterlimit: 15
+//   //   },
+//   //   rotate: false,
+//   //   rotation: 0.5,
+//   //   align: M.style.align.RIGHT,
+//   //   baseline: M.style.baseline.TOP
+//   // },
+//   radius: 43,
+//   // icon: {
+//   //   gradient: false,
+//   form: M.style.form.TRIANGLE,
+//   //   // class: "g-cartografia-alerta",
+//   //   fontsize: 0.8,
+//   //   radius: 20,
+//   //   rotation: 0.2,
+//   //   rotate: false,
+//   //   offset: [20, 30],
+//   //   color: 'blue',
+//   //   fill: '#8A0829',
+//   //   gradientcolor: 'black'
+//   // }
+// });
+
+// let stylePoint4 = new M.style.Point({
+//   fill: {
+//     color: 'red'
+//   },
+//   radius: 10
+// });
+//
+// let stylePoint5 = new M.style.Point({
+//   radius: 10
+// });
+//
+// let stylePoint6 = new M.style.Point({
+//   fill: {
+//     color: 'red',
+//     opacity: 0.2
+//   },
+//   radius: 10
+// });
 
 
-mapajs.addLayers([points, lines, polygons]);
-let point = points.getFeatures()[0];
-let line = lines.getFeatures()[0];
-let polygon = polygons.getFeatures()[0];
+// let styleLine = new M.style.Line({
+//   'stroke': {
+//     color: '{{stroke_color}}',
+//     width: "{{stroke_width}}"
+//   },
+//   'fill': {
+//     color: '{{fill_color}}',
+//     opacity: "{{fill_op}}",
+//     width: 6
+//   },
+//   'label': {
+//     text: '{{text_label}}',
+//     font: 'bold italic 19px Comic Sans MS',
+//     rotate: false,
+//     scale: 0.9,
+//     // offset: [10, 20],
+//     color: '#2EFEC8',
+//     stroke: {
+//       color: '{{label_stroke_color}}',
+//       width: 10
+//     }
+//   }
+// });
+//
+// let style = new M.style.Polygon({
+//   label: {
+//     text: 'FEATURE',
+//     font: 'bold italic 19px Comic Sans MS',
+//     rotate: false,
+//     scale: 0.9,
+//     offset: [10, 20],
+//     color: '#2EFEC8',
+//     stroke: {
+//       color: '#C8FE2E',
+//       width: 15,
+//       linedash: [1, 20],
+//       linedashoffset: 60,
+//       linecap: 'square',
+//       linejoin: 'bevel',
+//       miterlimit: 15
+//     },
+//     rotation: 0.5,
+//     align: M.style.align.RIGHT,
+//     baseline: M.style.baseline.TOP
+//   },
+//   stroke: {
+//     color: '#C8FE2E',
+//     width: 15,
+//     linedash: [1, 20],
+//     linedashoffset: 60,
+//     linecap: 'square',
+//     linejoin: 'miter',
+//     miterlimit: 15
+//   },
+//   fill: {
+//     color: '#6A0888',
+//     pattern: {
+//       name: M.style.pattern.HATCH,
+//       size: 6,
+//       spacing: 20,
+//       rotation: 3,
+//       offset: [50, 30],
+//       color: 'red',
+//       opacity: 0.5,
+//       scale: 2
+//     }
+//   }
+// });
+//
+// let style = new M.style.Line({
+//   fill: {
+//     color: 'black',
+//     opacity: 0.2,
+//     width: 15
+//   },
+//   stroke: {
+//     color: '#C8FE2E',
+//     width: 50,
+//     linedash: [1, 60],
+//     linedashoffset: 60,
+//     linecap: 'square',
+//     linejoin: 'miter',
+//     miterlimit: 15
+//   }
+// });
+let choropleth = new M.style.Choropleth("alumnos", null, M.style.quantification.JENKS(3));
+mapajs.addLayers([lines]);
+// mapajs.addLayers([lines]);
+// mapajs.addLayers([polygons]);
+// let point = points.getFeatures()[0];
+// let line = lines.getFeatures()[0];
+// let polygon = polygons.getFeatures()[0];
 
 
 function layerSetStyle(layer, style) {

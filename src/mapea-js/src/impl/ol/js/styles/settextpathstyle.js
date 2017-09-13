@@ -1,6 +1,6 @@
 goog.provide('M.impl.style.TextPath');
 
-(function () {
+(function() {
 
   /** Internal drawing function called on postcompose
    * @param {ol.eventPoscompose} e postcompose event
@@ -53,6 +53,7 @@ goog.provide('M.impl.style.TextPath');
             default:
               continue;
           }
+          console.log('drawing coordinates', c);
 
           var st = s.getText();
           var path = getPath(c, st.getRotateWithView());
@@ -84,20 +85,44 @@ goog.provide('M.impl.style.TextPath');
    *	@param {ol.style.Style|Array.<ol.style.Style>|ol.StyleFunction} style
    *	@param {Number} maxResolution to display text, default: 0
    */
-  ol.layer.Vector.prototype.setTextPathStyle = function (styleParam, maxResolution) {
-    let style = styleParam;
+  ol.layer.Vector.prototype.setTextPathStyle = function(style, maxResolution) {
+    // Remove existing style
+    if (style === null) {
+      if (this.textPath_) this.unByKey(this.textPath_);
+      this.textPath_ = null;
+      this.changed();
+      return;
+    }
+
+    /*let style = styleParam;
     if (!M.utils.isFunction(styleParam)) {
       if (!M.utils.isArray(styleParam)) {
         styleParam = [styleParam];
       }
       style = (f) => styleParam;
-    }
+    }*/
 
     // New postcompose
     if (!this.textPath_) {
       this.textPath_ = this.on('postcompose', drawTextPath, this);
     }
+    /*
     this.textPathStyle_ = style;
+    this.textPathMaxResolution_ = Number(maxResolution) || Number.MAX_VALUE;
+
+    // Force redraw
+    this.changed();
+    */
+    // Set textPathStyle
+    if (style === undefined) {
+      style = [new ol.style.Style({
+        text: new ol.style.Text()
+      })];
+    }
+    if (typeof(style) == "function") this.textPathStyle_ = style;
+    else this.textPathStyle_ = function() {
+      return [style];
+    };
     this.textPathMaxResolution_ = Number(maxResolution) || Number.MAX_VALUE;
 
     // Force redraw
@@ -110,19 +135,19 @@ goog.provide('M.impl.style.TextPath');
    *	- textOverflow {visible|ellipsis|string}
    *	- minWidth {number} minimum width (px) to draw text, default 0
    */
-  M.impl.style.TextPath = function (options = {}) {
+  M.impl.style.TextPath = function(options = {}) {
 
     ol.style.Text.call(this, options);
-    this.textOverflow_ = typeof (options.textOverflow) != "undefined" ? options.textOverflow : "visible";
+    this.textOverflow_ = typeof(options.textOverflow) != "undefined" ? options.textOverflow : "visible";
     this.minWidth_ = options.minWidth || 0;
   };
   ol.inherits(M.impl.style.TextPath, ol.style.Text);
 
-  M.impl.style.TextPath.prototype.getTextOverflow = function () {
+  M.impl.style.TextPath.prototype.getTextOverflow = function() {
     return this.textOverflow_;
   };
 
-  M.impl.style.TextPath.prototype.getMinWidth = function () {
+  M.impl.style.TextPath.prototype.getMinWidth = function() {
     return this.minWidth_;
   };
 
@@ -135,7 +160,7 @@ goog.provide('M.impl.style.TextPath');
  * @param {string} text
  * @param {Array<Number>} path
  */
-CanvasRenderingContext2D.prototype.textPath = function (text, path) {
+CanvasRenderingContext2D.prototype.textPath = function(text, path) {
   var ctx = this;
 
   function dist2D(x1, y1, x2, y2) {

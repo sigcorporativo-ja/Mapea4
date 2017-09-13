@@ -52,6 +52,7 @@ goog.provide('M.Style');
   M.Style.prototype.apply = function(layer) {
     this.layer_ = layer;
     this.getImpl().applyToLayer(layer);
+    this.updateCanvas();
   };
 
   /**
@@ -148,7 +149,14 @@ goog.provide('M.Style');
    * @return {String} data url to canvas
    */
   M.Style.prototype.toImage = function() {
-    return this.canvas_.toDataURL('png');
+    let styleImg;
+    if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
+      styleImg = this.options_.icon.src;
+    }
+    else {
+      styleImg = this.canvas_.toDataURL('png');
+    }
+    return styleImg;
   };
 
   /**
