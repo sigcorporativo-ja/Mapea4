@@ -156,13 +156,20 @@ goog.require('M.style.Point');
   };
 
 
-
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
   M.style.Proportional.prototype.updateCanvas = function() {
     if (!M.utils.isNullOrEmpty(this.style_)) {
       let min_max = [this.getMinRadius(), this.getMaxRadius()];
-      let estilo_min = this.getStyle().set("radius", min_max[0]);
+      let sizeAttribute = this.getSizeAttribute_();
+      let estilo_min = this.getStyle().set(sizeAttribute, min_max[0]);
       let imagen_min = estilo_min.toImage();
-      let estilo_max = this.getStyle().set("radius", min_max[1]);
+      let estilo_max = this.getStyle().set(sizeAttribute, min_max[1]);
       let imagen_max = estilo_max.toImage();
       let imagenes = [imagen_min, imagen_max];
       let c = this.canvas_.getContext('2d');
@@ -171,7 +178,13 @@ goog.require('M.style.Point');
     }
   };
 
-
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
   M.style.Proportional.prototype.drawGeometryToCanvas = function(imagenes, min_max, c) {
     let length = imagenes.length;
     let x = c.canvas.width;
@@ -225,8 +238,6 @@ goog.require('M.style.Point');
     return this;
   };
 
-  M.style.Proportional.prototype.updateCanvas = function() {};
-
   /**
    * This function get the maximum radius of the style point
    * @function
@@ -274,7 +285,7 @@ goog.require('M.style.Point');
         let attributeName = this.attributeName_;
         let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, attributeName);
         let style = this.style_;
-        style.set('radius', function(feature) {
+        style.set(this.getSizeAttribute_(), function(feature) {
           let value = feature.getAttribute(attributeName);
           return this.proportionalFunction_(value, minValue, maxValue, minRadius, maxRadius);
         }.bind(this));
@@ -308,7 +319,30 @@ goog.require('M.style.Point');
   };
 
   /**
-   * TODO
+   * This function returns the attribute of style point that controls the size
+   * @function
+   * @private
+   * @return {string} the attribute tha controls the size
+   */
+  M.style.Proportional.prototype.getSizeAttribute_ = function() {
+    let sizeAttribute = 'radius';
+    if (!M.utils.isNullOrEmpty(this.style_.get('icon'))) {
+      if (!M.utils.isNullOrEmpty(this.style_.get('icon.src'))) {
+        sizeAttribute = 'icon.scale';
+      }
+      else {
+        sizeAttribute = 'icon.radius';
+      }
+    }
+    return sizeAttribute;
+  }
+
+  /**
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
    */
   M.style.Proportional.DEFAULT_STYLE_POINT = {
     fill: {
