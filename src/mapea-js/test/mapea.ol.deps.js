@@ -454,7 +454,7 @@ goog.addDependency('../../../../src/impl/ol/js/handlers/featureshandlers.js', ['
 goog.addDependency('../../../../src/impl/ol/js/interactions/hoverinteraction.js', ['ol.interaction.Hover'], ['ol.interaction.Interaction'], false);
 goog.addDependency('../../../../src/impl/ol/js/interactions/selectedclusterinteraction.js', ['M.impl.interaction.SelectCluster'], ['ol.interaction.Select'], false);
 goog.addDependency('../../../../src/impl/ol/js/label.js', ['M.impl.Label'], [], false);
-goog.addDependency('../../../../src/impl/ol/js/layers/cluster.js', ['M.impl.layer.AnimatedCluster'], [], false);
+goog.addDependency('../../../../src/impl/ol/js/layers/animatedcluster.js', ['M.impl.layer.AnimatedCluster'], [], false);
 goog.addDependency('../../../../src/impl/ol/js/layers/draw.js', ['M.impl.layer.Draw'], ['M.exception', 'M.impl.Layer', 'M.impl.Popup', 'M.impl.format.GeoJSON', 'M.utils', 'goog.style', 'ol.layer.Vector', 'ol.source.Vector'], false);
 goog.addDependency('../../../../src/impl/ol/js/layers/geojson.js', ['M.impl.layer.GeoJSON'], ['M.exception', 'M.format.GeoJSON', 'M.impl.Popup', 'M.impl.layer.Vector', 'M.impl.loader.JSONP', 'M.utils', 'goog.style', 'ol.layer.Vector', 'ol.source.Vector'], false);
 goog.addDependency('../../../../src/impl/ol/js/layers/kml.js', ['M.impl.layer.KML'], ['M.exception', 'M.impl.Popup', 'M.impl.format.KML', 'M.impl.layer.Vector', 'M.impl.loader.KML', 'M.utils', 'goog.style', 'ol.layer.Vector', 'ol.source.Vector'], false);
@@ -481,7 +481,7 @@ goog.addDependency('../../../../src/impl/ol/js/styles/iconstyle.js', ['M.impl.st
 goog.addDependency('../../../../src/impl/ol/js/styles/settextpathstyle.js', ['M.impl.style.TextPath'], [], false);
 goog.addDependency('../../../../src/impl/ol/js/styles/style.js', ['M.impl.Style'], ['ol.render'], false);
 goog.addDependency('../../../../src/impl/ol/js/styles/styleCategory.js', ['M.impl.style.Category'], [], false);
-goog.addDependency('../../../../src/impl/ol/js/styles/stylecluster.js', ['M.impl.style.Cluster'], ['M.impl.interaction.SelectCluster', 'M.impl.layer.AnimatedCluster', 'ol.geom.convexhull', 'ol.interaction.Hover', 'ol.source.Cluster'], false);
+goog.addDependency('../../../../src/impl/ol/js/styles/stylecluster.js', ['M.impl.style.Cluster'], ['M.impl.Style', 'M.impl.interaction.SelectCluster', 'M.impl.layer.AnimatedCluster', 'ol.geom.convexhull', 'ol.interaction.Hover', 'ol.source.Cluster'], false);
 goog.addDependency('../../../../src/impl/ol/js/styles/styleline.js', ['M.impl.style.Line'], ['M.impl.style.Simple', 'M.impl.style.TextPath'], false);
 goog.addDependency('../../../../src/impl/ol/js/styles/stylepoint.js', ['M.impl.style.Point'], ['M.impl.style.Simple'], false);
 goog.addDependency('../../../../src/impl/ol/js/styles/stylepolygon.js', ['M.impl.style.Polygon'], ['M.impl.style.Simple'], false);

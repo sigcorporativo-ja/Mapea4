@@ -212,58 +212,12 @@ goog.require('M.exception');
    */
   // REVISION #86837 guardar el style como atributo de la clase
   M.layer.Vector.prototype.setStyle = function(style) {
-
-    //caso style cluster
-    if (style instanceof M.style.Cluster) {
-      /*if (!M.utils.isNullOrEmpty(this.style_) && !this.style_.equals(style)) {
-         if (this.getImpl().getOL3Layer().getSource().getState() === 'ready' && this.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {          this.style_.unapply(this);        }        this.getImpl().on(M.evt.LOAD, function(e) {          this.style_.unapply(this);        }.bind(this));      }*/
-      if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {
-        this.style_ = style;
-        if (this.getImpl().getOL3Layer().getSource().getState() === 'ready' && this.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {
-          style.apply(this);
-        }
-        else {
-          this.getImpl().on(M.evt.LOAD, function(e) {
-            style.apply(this);
-          }.bind(this));
-        }
+    if (style instanceof M.Style) {
+      if (!M.utils.isNullOrEmpty(this.style_)) {
+        this.style_.unapply(this);
       }
-    }
-    else {
-
-
-      if (!M.utils.isNullOrEmpty(this.style_) && !this.style_.equals(style)) {
-
-        if (this.style_ instanceof M.style.Cluster) {
-          if (this.getImpl().getOL3Layer().getSource().getState() === 'ready' && this.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {
-            this.style_.unapply(this);
-          }
-          else {
-            var style_old = this.style_;
-            this.getImpl().on(M.evt.LOAD, function(e) {
-              style_old.unapply(this);
-            }.bind(this));
-          }
-        }
-        else {
-          this.style_.unapply(this);
-        }
-      }
-      if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {
-        this.style_ = style;
-        if (this.getImpl().getOL3Layer().getSource().getState() === 'ready' && this.getImpl().getOL3Layer().getSource().getFeatures().length > 0) {
-
-          style.apply(this);
-
-        }
-        else {
-          this.getImpl().on(M.evt.LOAD, function(e) {
-            style.apply(this);
-          }.bind(this));
-
-        }
-
-      }
+      this.style_ = style;
+      this.style_.apply(this);
     }
   };
 

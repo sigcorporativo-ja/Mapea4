@@ -37,62 +37,69 @@ goog.require('M.impl.style.TextPath');
         resolution = feature;
         feature = this;
       }
-      let label;
+      let stroke = options.stroke;
+      let label = options.label;
+      let fill = options.fill;
       let style = new ol.style.Style();
       let styleStroke = new ol.style.Style();
-      if (!M.utils.isNullOrEmpty(options.stroke)) {
-        let strokeColorValue = M.impl.style.Simple.getValue(options.stroke.color, feature);
-        if (!M.utils.isNullOrEmpty(strokeColorValue)) {
-          style.setStroke(new ol.style.Stroke({
-            color: strokeColorValue,
-            width: M.impl.style.Simple.getValue(options.stroke.width, feature),
-            lineDash: M.impl.style.Simple.getValue(options.stroke.linedash, feature),
-            lineDashOffset: M.impl.style.Simple.getValue(options.stroke.linedashoffset, feature),
-            lineCap: M.impl.style.Simple.getValue(options.stroke.linecap, feature),
-            lineJoin: M.impl.style.Simple.getValue(options.stroke.linejoin, feature),
-            miterLimit: M.impl.style.Simple.getValue(options.stroke.miterlimit, feature)
-          }));
-        }
+      const getValue = M.impl.style.Simple.getValue;
+      if (!M.utils.isNullOrEmpty(stroke)) {
+        style.setStroke(new ol.style.Stroke({
+          color: getValue(stroke.color, feature),
+          width: getValue(stroke.width, feature),
+          lineDash: getValue(stroke.lineDash, feature),
+          lineDashOffset: getValue(stroke.lineDashOffset, feature),
+          lineCap: getValue(stroke.lineCap, feature),
+          lineJoin: getValue(stroke.lineJoin, feature),
+          miterLimit: getValue(stroke.miterLimit, feature)
+        }));
       }
       if (!M.utils.isNullOrEmpty(label)) {
-        style.setText(new ol.style.Text({
-          font: M.impl.style.Simple.getValue(options.label.font, feature),
-          rotateWithView: M.impl.style.Simple.getValue(options.label.rotate, feature),
-          scale: M.impl.style.Simple.getValue(options.label.scale, feature),
-          offsetX: M.impl.style.Simple.getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
-          offsetY: M.impl.style.Simple.getValue(options.label.ofsset ? options.label.offset[1] : undefined, feature),
+        let textPathConfig = {
+          text: getValue(label.text, feature),
+          font: getValue(label.font, feature),
           fill: new ol.style.Fill({
-            color: M.impl.style.Simple.getValue(options.label.color, feature)
+            color: getValue(label.color, feature)
           }),
-          textAlign: M.impl.style.Simple.getValue(options.label.align, feature),
-          textBaseline: (M.impl.style.Simple.getValue(options.label.baseline, feature) || "").toLowerCase(),
-          text: M.impl.style.Simple.getValue(options.label.text, feature),
-          rotation: M.impl.style.Simple.getValue(options.label.rotation, feature)
-        }));
-        if (!M.utils.isNullOrEmpty(options.label.stroke)) {
-          style.getText().setStroke(new ol.style.Stroke({
-            color: M.impl.style.Simple.getValue(options.label.stroke.color, feature),
-            width: M.impl.style.Simple.getValue(options.label.stroke.width, feature),
-            lineCap: M.impl.style.Simple.getValue(options.label.stroke.linecap, feature),
-            lineJoin: M.impl.style.Simple.getValue(options.label.stroke.linejoin, feature),
-            lineDash: M.impl.style.Simple.getValue(options.label.stroke.linedash, feature),
-            lineDashOffset: M.impl.style.Simple.getValue(options.label.stroke.linedashoffset, feature),
-            miterLimit: M.impl.style.Simple.getValue(options.label.stroke.miterlimit, feature)
+          textBaseline: (getValue(label.baseline, feature) || '').toLowerCase(),
+          textAlign: getValue(label.align, feature),
+          rotateWithView: getValue(label.rotate, feature) || false,
+          textOverflow: getValue(label.textOverflow, feature) || 'custom',
+          minWidth: getValue(label.minWidth, feature) || 0
+        };
+
+        let textPathStyle = new M.impl.style.TextPath(textPathConfig);
+
+        if (!M.utils.isNullOrEmpty(label.stroke)) {
+          textPathStyle.setStroke(new ol.style.Stroke({
+            color: getValue(label.stroke.color, feature),
+            width: getValue(label.stroke.width, feature),
+            lineCap: getValue(label.stroke.linecap, feature),
+            lineJoin: getValue(label.stroke.linejoin, feature),
+            lineDash: getValue(label.stroke.linedash, feature),
+            lineDashOffset: getValue(label.stroke.linedashoffset, feature),
+            miterLimit: getValue(label.stroke.miterlimit, feature)
           }));
+        }
+        let applyPath = getValue(label.path, feature);
+
+        // we will use a flag into de options object to set pathstyle or ol.text style
+        if (typeof applyPath === 'boolean' && applyPath) {
+          style.textPath = textPathStyle;
+        }
+        else {
+          style.setText(textPathStyle);
         }
       }
 
-      if (!M.utils.isNullOrEmpty(options.fill)) {
-        let fillColorValue = M.impl.style.Simple.getValue(options.fill.color, feature);
-        let fillOpacityValue = M.impl.style.Simple.getValue(options.fill.opacity, feature) || 1;
-        if (!M.utils.isNullOrEmpty(fillColorValue)) {
-          styleStroke.setStroke(
-            new ol.style.Stroke({
-              color: chroma(fillColorValue).alpha(fillOpacityValue).css(),
-              width: M.impl.style.Simple.getValue(options.fill.width, feature)
-            })
-          );
-        }
+      if (!M.utils.isNullOrEmpty(fill)) {
+        styleStroke.setStroke(
+          new ol.style.Stroke({
+            color: chroma(getValue(fill.color, feature))
+              .alpha(getValue(fill.opacity, feature)).css(),
+            width: getValue(fill.width, feature)
+          })
+        );
       }
       return [style, styleStroke];
     };
