@@ -1499,3 +1499,90 @@ Mx.options.animated;
  * @api stable
  */
 Mx.options.displayAmount;
+
+/**
+ * style icons
+ * @type {object}
+ * @api stable
+ */
+Mx.options.glyphs;
+
+/**
+ * style icons
+ * @type {string}
+ * @api stable
+ */
+Mx.form;
+
+/**
+ * style icons
+ * @type {boolean}
+ * @api stable
+ */
+Mx.gradient;
+
+/**
+ * style icons
+ * @type {string}
+ * @api stable
+ */
+Mx.class;
+
+/**
+ * style icons
+ * @type {number}
+ * @api stable
+ */
+Mx.fontsize;
+
+/**
+ * style icons
+ * @type {number}
+ * @api stable
+ */
+Mx.radius;
+
+
+/**
+ * style icons
+ * @type {number}
+ * @api stable
+ */
+Mx.rotation;
+
+
+/**
+ * style icons
+ * @type {boolean}
+ * @api stable
+ */
+Mx.rotate;
+
+
+/**
+ * style icons
+ * @type {array}
+ * @api stable
+ */
+Mx.offset;
+
+/**
+ * style icons
+ * @type {string}
+ * @api stable
+ */
+Mx.color;
+
+/**
+ * style icons
+ * @type {string}
+ * @api stable
+ */
+Mx.fill;
+
+/**
+ * style icons
+ * @type {string}
+ * @api stable
+ */
+Mx.gradientcolor;
