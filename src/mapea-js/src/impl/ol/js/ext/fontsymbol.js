@@ -428,3 +428,562 @@ ol.style.FontSymbol.prototype.getChecksum = function() {
 
   return this.checksums_[0];
 };
+
+ol.style.FontSymbol.addDefs({
+  "font": "g-cartografia",
+  "name": "g-cartografia",
+  "prefix": "g-cartografia-"
+}, {
+  "g-cartografia-alerta": {
+    "font": "g-cartografia",
+    "code": 59648,
+    "name": "alerta",
+    "search": "alerta"
+  },
+  "g-cartografia-ayuda": {
+    "font": "g-cartografia",
+    "code": 59649,
+    "name": "ayuda",
+    "search": "ayuda"
+  },
+  "g-cartografia-bandera": {
+    "font": "g-cartografia",
+    "code": 59650,
+    "name": "bandera",
+    "search": "bandera"
+  },
+  "g-cartografia-brujula": {
+    "font": "g-cartografia",
+    "code": 59651,
+    "name": "brujula",
+    "search": "brujula"
+  },
+  "g-cartografia-cancelar": {
+    "font": "g-cartografia",
+    "code": 59652,
+    "name": "cancelar",
+    "search": "cancelar"
+  },
+  "g-cartografia-cancelar2": {
+    "font": "g-cartografia",
+    "code": 59653,
+    "name": "cancelar2",
+    "search": "cancelar2"
+  },
+  "g-cartografia-capas": {
+    "font": "g-cartografia",
+    "code": 59654,
+    "name": "capas",
+    "search": "capas"
+  },
+  "g-cartografia-capas2": {
+    "font": "g-cartografia",
+    "code": 59655,
+    "name": "capas2",
+    "search": "capas2"
+  },
+  "g-cartografia-check": {
+    "font": "g-cartografia",
+    "code": 59656,
+    "name": "check",
+    "search": "check"
+  },
+  "g-cartografia-check2": {
+    "font": "g-cartografia",
+    "code": 59657,
+    "name": "check2",
+    "search": "check2"
+  },
+  "g-cartografia-check3": {
+    "font": "g-cartografia",
+    "code": 59658,
+    "name": "check3",
+    "search": "check3"
+  },
+  "g-cartografia-check4": {
+    "font": "g-cartografia",
+    "code": 59659,
+    "name": "check4",
+    "search": "check4"
+  },
+  "g-cartografia-check5": {
+    "font": "g-cartografia",
+    "code": 59660,
+    "name": "check5",
+    "search": "check5"
+  },
+  "g-cartografia-comentarios": {
+    "font": "g-cartografia",
+    "code": 59661,
+    "name": "comentarios",
+    "search": "comentarios"
+  },
+  "g-cartografia-descargar": {
+    "font": "g-cartografia",
+    "code": 59662,
+    "name": "descargar",
+    "search": "descargar"
+  },
+  "g-cartografia-editar": {
+    "font": "g-cartografia",
+    "code": 59663,
+    "name": "editar",
+    "search": "editar"
+  },
+  "g-cartografia-editar2": {
+    "font": "g-cartografia",
+    "code": 59664,
+    "name": "editar2",
+    "search": "editar2"
+  },
+  "g-cartografia-escala": {
+    "font": "g-cartografia",
+    "code": 59665,
+    "name": "escala",
+    "search": "escala"
+  },
+  "g-cartografia-escala2": {
+    "font": "g-cartografia",
+    "code": 59666,
+    "name": "alerta",
+    "search": "alerta"
+  },
+  "g-cartografia-escala3": {
+    "font": "g-cartografia",
+    "code": 59667,
+    "name": "escala3",
+    "search": "escala3"
+  },
+  "g-cartografia-flecha": {
+    "font": "g-cartografia",
+    "code": 59668,
+    "name": "flecha",
+    "search": "flecha"
+  },
+  "g-cartografia-flecha-abajo": {
+    "font": "g-cartografia",
+    "code": 59669,
+    "name": "flecha-abajo",
+    "search": "flecha-abajo"
+  },
+  "g-cartografia-flecha-abajo2": {
+    "font": "g-cartografia",
+    "code": 59670,
+    "name": "flecha-abajo2",
+    "search": "flecha-abajo2"
+  },
+  "g-cartografia-flecha-arriba": {
+    "font": "g-cartografia",
+    "code": 59671,
+    "name": "flecha-arriba",
+    "search": "flecha-arriba"
+  },
+  "g-cartografia-flecha-arriba2": {
+    "font": "g-cartografia",
+    "code": 59672,
+    "name": "alerta",
+    "search": "alerta"
+  },
+  "g-cartografia-flecha-derecha": {
+    "font": "g-cartografia",
+    "code": 59673,
+    "name": "flecha-derecha",
+    "search": "flecha-derecha"
+  },
+  "g-cartografia-flecha-derecha2": {
+    "font": "g-cartografia",
+    "code": 59674,
+    "name": "flecha-derecha2",
+    "search": "flecha-derecha2"
+  },
+  "g-cartografia-flecha-derecha3": {
+    "font": "g-cartografia",
+    "code": 59675,
+    "name": "fleha-derecha3",
+    "search": "fleha-derecha3"
+  },
+  "g-cartografia-flecha-deshacer": {
+    "font": "g-cartografia",
+    "code": 59676,
+    "name": "flecha-deshacer",
+    "search": "flecha-deshacer"
+  },
+  "g-cartografia-flecha-izquierda": {
+    "font": "g-cartografia",
+    "code": 59677,
+    "name": "flecha-izquierda",
+    "search": "flecha-izquierda"
+  },
+  "g-cartografia-flecha-izquierda2": {
+    "font": "g-cartografia",
+    "code": 59678,
+    "name": "flecha-izquierda2",
+    "search": "flecha-izquierda2"
+  },
+  "g-cartografia-flecha-izquierda3": {
+    "font": "g-cartografia",
+    "code": 59679,
+    "name": "flecha-izquierda3",
+    "search": "flecha-izquierda3"
+  },
+  "g-cartografia-flecha-link": {
+    "font": "g-cartografia",
+    "code": 59680,
+    "name": "flecha-link",
+    "search": "flecha-link"
+  },
+  "g-cartografia-flechas-mover": {
+    "font": "g-cartografia",
+    "code": 59681,
+    "name": "flechas-mover",
+    "search": "flechas-mover"
+  },
+  "g-cartografia-gps": {
+    "font": "g-cartografia",
+    "code": 59682,
+    "name": "gps",
+    "search": "gps"
+  },
+  "g-cartografia-gps2": {
+    "font": "g-cartografia",
+    "code": 59683,
+    "name": "gps2",
+    "search": "gps2"
+  },
+  "g-cartografia-gps3": {
+    "font": "g-cartografia",
+    "code": 59684,
+    "name": "gps3",
+    "search": "gps3"
+  },
+  "g-cartografia-gps4": {
+    "font": "g-cartografia",
+    "code": 59685,
+    "name": "gps4",
+    "search": "gps4"
+  },
+  "g-cartografia-guardar": {
+    "font": "g-cartografia",
+    "code": 59686,
+    "name": "guardar",
+    "search": "guardar"
+  },
+  "g-cartografia-herramienta": {
+    "font": "g-cartografia",
+    "code": 59687,
+    "name": "herramienta",
+    "search": "herramienta"
+  },
+  "g-cartografia-impresora": {
+    "font": "g-cartografia",
+    "code": 59688,
+    "name": "impresora",
+    "search": "impresora"
+  },
+  "g-cartografia-info": {
+    "font": "g-cartografia",
+    "code": 59689,
+    "name": "info",
+    "search": "info"
+  },
+  "g-cartografia-linea": {
+    "font": "g-cartografia",
+    "code": 59690,
+    "name": "linea",
+    "search": "linea"
+  },
+  "g-cartografia-lineas": {
+    "font": "g-cartografia",
+    "code": 59691,
+    "name": "lineas",
+    "search": "lineas"
+  },
+  "g-cartografia-lista": {
+    "font": "g-cartografia",
+    "code": 59692,
+    "name": "lista",
+    "search": "lista"
+  },
+  "g-cartografia-localizacion": {
+    "font": "g-cartografia",
+    "code": 59693,
+    "name": "localizacion",
+    "search": "localizacion"
+  },
+  "g-cartografia-localizacion2": {
+    "font": "g-cartografia",
+    "code": 59694,
+    "name": "localizacion2",
+    "search": "localizacion2"
+  },
+  "g-cartografia-localizacion3": {
+    "font": "g-cartografia",
+    "code": 59695,
+    "name": "localizacion3",
+    "search": "localizacion3"
+  },
+  "g-cartografia-localizacion4": {
+    "font": "g-cartografia",
+    "code": 59696,
+    "name": "localizacion4",
+    "search": "localizacion4"
+  },
+  "g-cartografia-mano": {
+    "font": "g-cartografia",
+    "code": 59697,
+    "name": "mano",
+    "search": "mano"
+  },
+  "g-cartografia-mano2": {
+    "font": "g-cartografia",
+    "code": 59698,
+    "name": "mano2",
+    "search": "mano2"
+  },
+  "g-cartografia-mapa": {
+    "font": "g-cartografia",
+    "code": 59699,
+    "name": "mapa",
+    "search": "mapa"
+  },
+  "g-cartografia-mas": {
+    "font": "g-cartografia",
+    "code": 59700,
+    "name": "mas",
+    "search": "mas"
+  },
+  "g-cartografia-mas2": {
+    "font": "g-cartografia",
+    "code": 59701,
+    "name": "mas2",
+    "search": "mas2"
+  },
+  "g-cartografia-medir-area": {
+    "font": "g-cartografia",
+    "code": 59702,
+    "name": "medir-area",
+    "search": "medir-area"
+  },
+  "g-cartografia-medir-linea": {
+    "font": "g-cartografia",
+    "code": 59703,
+    "name": "medir-linea",
+    "search": "medir-linea"
+  },
+  "g-cartografia-menos": {
+    "font": "g-cartografia",
+    "code": 59704,
+    "name": "menos",
+    "search": "menos"
+  },
+  "g-cartografia-menos2": {
+    "font": "g-cartografia",
+    "code": 59705,
+    "name": "alerta",
+    "search": "alerta"
+  },
+  "g-cartografia-menu": {
+    "font": "g-cartografia",
+    "code": 59706,
+    "name": "menos2",
+    "search": "menos2"
+  },
+  "g-cartografia-mundo": {
+    "font": "g-cartografia",
+    "code": 59707,
+    "name": "mundo",
+    "search": "mundo"
+  },
+  "g-cartografia-mundo2": {
+    "font": "g-cartografia",
+    "code": 59708,
+    "name": "mundo2",
+    "search": "mundo2"
+  },
+  "g-cartografia-opciones": {
+    "font": "g-cartografia",
+    "code": 59709,
+    "name": "opciones",
+    "search": "opciones"
+  },
+  "g-cartografia-papelera": {
+    "font": "g-cartografia",
+    "code": 59710,
+    "name": "papelera",
+    "search": "papelera"
+  },
+  "g-cartografia-pin": {
+    "font": "g-cartografia",
+    "code": 59711,
+    "name": "pin",
+    "search": "pin"
+  },
+  "g-cartografia-pin2": {
+    "font": "g-cartografia",
+    "code": 59712,
+    "name": "pin2",
+    "search": "pin2"
+  },
+  "g-cartografia-pin3": {
+    "font": "g-cartografia",
+    "code": 59713,
+    "name": "pin3",
+    "search": "pin3"
+  },
+  "g-cartografia-pin4": {
+    "font": "g-cartografia",
+    "code": 59714,
+    "name": "pin4",
+    "search": "pin4"
+  },
+  "g-cartografia-pin-nuevo": {
+    "font": "g-cartografia",
+    "code": 59715,
+    "name": "pin-nuevo",
+    "search": "pin-nuevo"
+  },
+  "g-cartografia-poligono": {
+    "font": "g-cartografia",
+    "code": 59716,
+    "name": "poligono",
+    "search": "poligono"
+  },
+  "g-cartografia-posicion": {
+    "font": "g-cartografia",
+    "code": 59717,
+    "name": "posicion",
+    "search": "posicion"
+  },
+  "g-cartografia-posicion2": {
+    "font": "g-cartografia",
+    "code": 59718,
+    "name": "posicion2",
+    "search": "posicion2"
+  },
+  "g-cartografia-posicion3": {
+    "font": "g-cartografia",
+    "code": 59719,
+    "name": "posicion3",
+    "search": "posicion3"
+  },
+  "g-cartografia-posicion4": {
+    "font": "g-cartografia",
+    "code": 59720,
+    "name": "posicion4",
+    "search": "posicion4"
+  },
+  "g-cartografia-posicion5": {
+    "font": "g-cartografia",
+    "code": 59721,
+    "name": "posicion5",
+    "search": "posicion5"
+  },
+  "g-cartografia-posicion6": {
+    "font": "g-cartografia",
+    "code": 59722,
+    "name": "posicion6",
+    "search": "posicion6"
+  },
+  "g-cartografia-posicion7": {
+    "font": "g-cartografia",
+    "code": 59723,
+    "name": "posicion7",
+    "search": "posicion7"
+  },
+  "g-cartografia-prismaticos": {
+    "font": "g-cartografia",
+    "code": 59724,
+    "name": "prismaticos",
+    "search": "prismaticos"
+  },
+  "g-cartografia-regla": {
+    "font": "g-cartografia",
+    "code": 59725,
+    "name": "regla",
+    "search": "regla"
+  },
+  "g-cartografia-reglas": {
+    "font": "g-cartografia",
+    "code": 59726,
+    "name": "reglas",
+    "search": "reglas"
+  },
+  "g-cartografia-ruta": {
+    "font": "g-cartografia",
+    "code": 59727,
+    "name": "ruta",
+    "search": "ruta"
+  },
+  "g-cartografia-spinner": {
+    "font": "g-cartografia",
+    "code": 59728,
+    "name": "spinner",
+    "search": "spinner"
+  },
+  "g-cartografia-spinner2": {
+    "font": "g-cartografia",
+    "code": 59729,
+    "name": "spinner2",
+    "search": "spinner2"
+  },
+  "g-cartografia-subir": {
+    "font": "g-cartografia",
+    "code": 59739,
+    "name": "subir",
+    "search": "subir"
+  },
+  "g-cartografia-tamano": {
+    "font": "g-cartografia",
+    "code": 59740,
+    "name": "tamano",
+    "search": "tamano"
+  },
+  "g-cartografia-temperatura": {
+    "font": "g-cartografia",
+    "code": 59741,
+    "name": "temperatura",
+    "search": "temperatura"
+  },
+  "g-cartografia-texto": {
+    "font": "g-cartografia",
+    "code": 59742,
+    "name": "texto",
+    "search": "texto"
+  },
+  "g-cartografia-usuario": {
+    "font": "g-cartografia",
+    "code": 59743,
+    "name": "usuario",
+    "search": "usuario"
+  },
+  "g-cartografia-usuario2": {
+    "font": "g-cartografia",
+    "code": 59744,
+    "name": "usuario2",
+    "search": "usuario2"
+  },
+  "g-cartografia-zoom": {
+    "font": "g-cartografia",
+    "code": 59745,
+    "name": "zoom",
+    "search": "zoom"
+  },
+  "g-cartografia-zoom-extension": {
+    "font": "g-cartografia",
+    "code": 59746,
+    "name": "zoom-extension",
+    "search": "zoom-extension"
+  },
+  "g-cartografia-zoom-mas": {
+    "font": "g-cartografia",
+    "code": 59747,
+    "name": "zoom-mas",
+    "search": "zoom-mas"
+  },
+  "g-cartografia-zoom-menos": {
+    "font": "g-cartografia",
+    "code": 59748,
+    "name": "alerta",
+    "search": "zoom-menos"
+  },
+});
