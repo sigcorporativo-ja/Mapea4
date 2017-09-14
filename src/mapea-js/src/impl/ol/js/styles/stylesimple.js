@@ -35,6 +35,8 @@ goog.require('M.impl.Style');
    * @api stable
    */
   M.impl.style.Simple.prototype.applyToLayer = function(layer) {
+    // we will apply the style on the ol3 layer
+    layer.getImpl().getOL3Layer().setStyle(this.olStyleFn_);
     layer.getFeatures().forEach(this.applyToFeature, this);
   };
 
