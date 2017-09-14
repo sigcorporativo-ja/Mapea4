@@ -219,6 +219,7 @@ goog.require('M.style.Point');
         vectorContext_.drawImage(this, 0, (i / length) * y * 0.8);
       }.bind(image, vectorContext, minMax, i, length, x, y);
       image.src = imagen;
+      y = y + radius * 2 + 9;
     }
   };
 

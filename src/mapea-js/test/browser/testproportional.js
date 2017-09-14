@@ -91,8 +91,7 @@ catch (e) {
   console.log('Excepción capturada: Comprobación de atributo nulo funciona correctamente');
 }
 
-centrosSubtipo.on(M.evt.LOAD, () => centrosSubtipo.setStyle(proportional));
-mapajs.addLayers([centrosSubtipo]);
+// centrosSubtipo.on(M.evt.LOAD, () => centrosSubtipo.setStyle(proportional));mapajs.addLayers([centrosSubtipo]);
 
 function setProportional(stylePoint) {
   let styleProportional = centrosSubtipo.getStyle();

@@ -171,7 +171,9 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Point.prototype.drawGeometryToCanvas = function(vectorContext) {
-    vectorContext.drawGeometry(new ol.geom.Point([50, 50]));
+    let x = this.getCanvasSize()[0];
+    let y = this.getCanvasSize()[1];
+    vectorContext.drawGeometry(new ol.geom.Point([x / 2, y / 2]));
   };
 
   /**
@@ -182,6 +184,7 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Point.prototype.getCanvasSize = function() {
-    return [150, 100];
+    let r = this.olStyleFn_()[0].getImage().getRadius();
+    return [(r * 2) + 1, (r * 2) + 1];
   };
 })();

@@ -121,18 +121,18 @@ goog.require('M.impl.style.Simple');
   M.impl.style.Polygon.prototype.drawGeometryToCanvas = function(vectorContext) {
     let canvasSize = this.getCanvasSize();
 
-    let maxW = Math.floor(canvasSize[0] * 0.2);
-    let maxH = Math.floor(canvasSize[1] * 0.2);
+    let maxW = Math.floor(canvasSize[0]);
+    let maxH = Math.floor(canvasSize[1]);
 
     let minW = (canvasSize[0] - maxW);
     let minH = (canvasSize[1] - maxH);
     vectorContext.drawGeometry(new ol.geom.Polygon([[
-      [minW, minH],
-       [minW, maxW],
-       [maxW, maxW],
-       [maxW, minH],
-       [minW, minH]
-    ]]));
+        [minW, minH],
+         [minW, maxW],
+         [maxW, maxW],
+         [maxW, minH],
+         [minW, minH]
+      ]]));
   };
 
   /**
@@ -143,6 +143,6 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Polygon.prototype.getCanvasSize = function() {
-    return [150, 100];
+    return [25, 15];
   };
 })();
