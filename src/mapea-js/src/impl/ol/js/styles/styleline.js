@@ -68,10 +68,10 @@ goog.require('M.impl.style.TextPath');
           minWidth: getValue(label.minWidth, feature) || 0
         };
 
-        style.setText(new M.impl.style.TextPath(textPathConfig));
+        let textPathStyle = new M.impl.style.TextPath(textPathConfig);
 
         if (!M.utils.isNullOrEmpty(label.stroke)) {
-          style.getText().setStroke(new ol.style.Stroke({
+          textPathStyle.setStroke(new ol.style.Stroke({
             color: getValue(label.stroke.color, feature),
             width: getValue(label.stroke.width, feature),
             lineCap: getValue(label.stroke.linecap, feature),
@@ -80,6 +80,15 @@ goog.require('M.impl.style.TextPath');
             lineDashOffset: getValue(label.stroke.linedashoffset, feature),
             miterLimit: getValue(label.stroke.miterlimit, feature)
           }));
+        }
+        let applyPath = getValue(label.path, feature);
+
+        // we will use a flag into de options object to set pathstyle or ol.text style
+        if (typeof applyPath === 'boolean' && applyPath) {
+          style.textPath = textPathStyle;
+        }
+        else {
+          style.setText(textPathStyle);
         }
       }
 
