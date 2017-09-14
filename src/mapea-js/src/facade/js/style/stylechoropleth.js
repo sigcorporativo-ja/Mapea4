@@ -174,7 +174,6 @@ goog.require('M.style.quantification');
     if (!M.utils.isNullOrEmpty(this.styles_)) {
       let c = this.canvas_.getContext('2d');
       let styles = this.styles_;
-      let imagenes = [];
       let parejas = [];
       let mayor_radius = 0;
 
@@ -212,7 +211,7 @@ goog.require('M.style.quantification');
             pareja.push(0, breakPoints[i]);
           }
           else {
-            pareja.push(breakPoints[i - 1], breakPoints[i])
+            pareja.push(breakPoints[i - 1], breakPoints[i]);
           }
 
           parejas.push(pareja);
@@ -239,17 +238,8 @@ goog.require('M.style.quantification');
    * @api stable
    */
   M.style.Choropleth.prototype.drawGeometryToCanvas = function(styles, parejas, c, mayor_radius) {
-    let x = c.canvas.width;
-
     let pareja_ini = null;
     let pareja_fin = null;
-
-    let cont = 1;
-    // let y = c.canvas.height;
-    let categoria = null;
-    let imagen = null;
-    let eje_imagenes = mayor_radius;
-
     let y = 0;
     let y_text = 0;
     let x_text = mayor_radius * 2 + 10;
@@ -259,10 +249,11 @@ goog.require('M.style.quantification');
       let pareja = parejas[i];
       pareja_ini = pareja[0];
       pareja_fin = pareja[1];
+      var image = new Image();
 
       if (styles[i] instanceof M.style.Point) {
         radius = styles[i].options_.radius;
-        var image = new Image();
+
         y_text = y + radius + 5;
         let x = 0 + mayor_radius - radius;
         (function(x, y, pareja_ini, pareja_fin, y_text, x_text) {
@@ -285,7 +276,6 @@ goog.require('M.style.quantification');
       if (styles[i] instanceof M.style.Line) {
         radius = styles[i].canvas_.height;
         let x_text = styles[i].canvas_.width + 8;
-        var image = new Image();
         y_text = y + radius / 2;
         let x = 0;
         (function(x, y, pareja_ini, pareja_fin, y_text, x_text) {
@@ -306,7 +296,6 @@ goog.require('M.style.quantification');
       if (styles[i] instanceof M.style.Polygon) {
         radius = styles[i].canvas_.height;
         let x_text = styles[i].canvas_.width + 10;
-        var image = new Image();
         y_text = y + radius / 2 + 4;
         let x = 0;
         (function(x, y, pareja_ini, pareja_fin, y_text, x_text) {

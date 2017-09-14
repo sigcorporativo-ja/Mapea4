@@ -97,7 +97,6 @@ goog.require('ol.geom.convexhull');
     let rango = [];
     let estilo = null;
     let array = [];
-    let array_r_i = [];
     let radio = 0;
     for (let i = 0; i < cat.length; i++) {
       rango = [cat[i].min, cat[i].max];
@@ -125,20 +124,19 @@ goog.require('ol.geom.convexhull');
    * @api stable
    */
   M.impl.style.Cluster.prototype.drawGeometryToCanvas = function(array, c, mayor_radius) {
-    let length = array.length;
     let cont = 1;
-    let x = c.canvas.width;
-    // let y = c.canvas.height;
-    let categoria = null;
-    let imagen = null;
-    let eje_imagenes = mayor_radius;
+
 
     let y = 0;
     let y_text = 0;
-    let x_text = mayor_radius * 2 + 10;
     let radius = null;
 
-
+    let array_r_s = null;
+    let estilo = null;
+    let rangos = null;
+    let rango_min = null;
+    let rango_max = null;
+    let cadena = null;
 
     for (let i = 0; i < array.length; i++) {
       estilo = array[i][1];

@@ -61,25 +61,23 @@ goog.provide('M.impl.style.Category');
    * @api stable
    */
   M.impl.style.Category.prototype.drawGeometryToCanvas = function(array, c, mayor_radius) {
-    let length = array.length;
-    let cont = 1;
-    let x = c.canvas.width;
-    // let y = c.canvas.height;
+
     let categoria = null;
     let imagen = null;
-    let eje_imagenes = mayor_radius;
 
     let y = 0;
     let y_text = 0;
     let x_text = mayor_radius * 2 + 10;
     let radius = null;
+    let estilo = null;
     for (let i = 0; i < array.length; i++) {
       categoria = array[i][0];
       imagen = array[i][1];
       estilo = array[i][2];
+      var image = new Image();
+
       if (estilo instanceof M.style.Point) {
         radius = estilo.options_.radius;
-        var image = new Image();
         y_text = y + radius + 5;
         let x = 0 + mayor_radius - radius;
         (function(categoryParam, x, y, x_text, y_text) {
@@ -94,7 +92,6 @@ goog.provide('M.impl.style.Category');
       if (estilo instanceof M.style.Line) {
         radius = estilo.canvas_.height;
         let x_text = estilo.canvas_.width + 8;
-        var image = new Image();
         y_text = y + radius / 2;
         let x = 0;
         (function(categoryParam, x, y, x_text, y_text) {
@@ -109,7 +106,6 @@ goog.provide('M.impl.style.Category');
       if (estilo instanceof M.style.Polygon) {
         radius = estilo.canvas_.height;
         let x_text = estilo.canvas_.width + 10;
-        var image = new Image();
         y_text = y + radius / 2 + 4;
         let x = 0;
         (function(categoryParam, x, y, x_text, y_text) {

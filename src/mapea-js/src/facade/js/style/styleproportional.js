@@ -175,8 +175,8 @@ goog.require('M.style.Point');
 
   M.style.Proportional.prototype.drawGeometryToCanvas = function(imagenes, min_max, c) {
     let length = imagenes.length;
-    let x = c.canvas.width;
     let y = 0;
+    let radius = 9;
     for (let i = 0; i < imagenes.length; i++) {
 
       let x = 0 + min_max[1] - min_max[0];
@@ -197,6 +197,7 @@ goog.require('M.style.Point');
       })(min_max);
 
       image.src = imagen;
+
       y = y + radius * 2 + 9;
 
 
