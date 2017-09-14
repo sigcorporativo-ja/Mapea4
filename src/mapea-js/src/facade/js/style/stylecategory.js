@@ -1,16 +1,20 @@
 goog.provide('M.style.Category');
 goog.require('M.Style');
 
+/**
+ * @namespace M.style.Category
+ */
 (function() {
-  /**   * @classdesc
+  /**
+   * @classdesc
    * Main constructor of the class. Creates a categoryStyle
    * with parameters specified by the user
    * for the implementation
    * provided by the user
-   *
    * @constructor
    * @extends {M.Style}
-   * @param {string|Map<String,M.Style>} userParameters parameters
+   * @param {String}
+   * @param {object}
    * @api stable
    */
   M.style.Category = (function(attributeName, categoryStyles) {
@@ -40,6 +44,7 @@ goog.require('M.Style');
 
   /**
    * This function apply the styleCategory object to specified layer
+   *
    * @function
    * @param {M.layer.Vector} layer - layer is the layer where we want to apply the new Style
    * @returns {M.style.Category}
@@ -52,8 +57,8 @@ goog.require('M.Style');
 
   };
   /**
-   *
    * This function return the AttributeName
+   *
    * @function
    * @returns {String}
    * @api stable
@@ -64,6 +69,7 @@ goog.require('M.Style');
 
   /**
    * This function set the AttributeName defined by user
+   *
    * @function
    * @param {String} attributeName - newAttributeName is the newAttributeName specified by the user
    * @returns {M.style.Category}
@@ -78,6 +84,7 @@ goog.require('M.Style');
 
   /**
    * This function return an Array with the diferents Categories
+   *
    * @function
    * @returns {Array<String>}
    * @api stable
@@ -99,8 +106,8 @@ goog.require('M.Style');
   };
 
   /**
-   *
    * This function set the style of a specified Category defined by user
+   *
    * @function
    * @param {String} string - string is the name of a category value
    * @param {M.style.Simple} style - style is the new style to switch
@@ -115,6 +122,7 @@ goog.require('M.Style');
 
   /**
    * This function updates the style
+   *
    * @private
    * @function
    * @api stable
