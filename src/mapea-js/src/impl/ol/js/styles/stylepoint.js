@@ -3,18 +3,15 @@ goog.provide('M.impl.style.Point');
 goog.require('M.impl.style.Simple');
 
 /**
- * TODO
- * @private
- * @type {M.style.Point}
+ * @namespace M.impl.style.Point
  */
 
 (function() {
   /**
    * Main constructor of the class.
    * @constructor
-   * @implements {
-     M.impl.style.Simple
-   }   * @api stable
+   * @implements {M.impl.style.Simple}
+   * @api stable
    */
   M.impl.style.Point = (function(options) {
     this.olStyleFn_ = null;

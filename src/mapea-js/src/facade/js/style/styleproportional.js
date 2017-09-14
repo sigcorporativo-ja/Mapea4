@@ -26,7 +26,8 @@ goog.require('M.style.Point');
   M.style.Proportional = (function(attributeName, minRadius, maxRadius, style, proportionalFunction, options) {
 
     /**
-     * @public
+     * The name of the attribute to calculate proportionality
+     * @private
      * @type {String}
      * @api stable
      * @expose
@@ -34,7 +35,8 @@ goog.require('M.style.Point');
     this.attributeName_ = attributeName;
 
     /**
-     * @public
+     * The minimum radius of the proportionality
+     * @private
      * @type {number}
      * @api stable
      * @expose
@@ -42,7 +44,8 @@ goog.require('M.style.Point');
     this.minRadius_ = minRadius || 5;
 
     /**
-     * @public
+     * The maximum radius of the proportionality
+     * @private
      * @type {number}
      * @api stable
      * @expose
@@ -50,7 +53,8 @@ goog.require('M.style.Point');
     this.maxRadius_ = maxRadius || 15;
 
     /**
-     * @public
+     * The style point define by user
+     * @private
      * @type {M.Style}
      * @api stable
      * @expose
@@ -58,12 +62,17 @@ goog.require('M.style.Point');
     this.style_ = style || new M.style.Point(M.style.Proportional.DEFAULT_STYLE_POINT);
 
     /**
-     *
+     * the proportionality function
+     * @private
+     * @type {function}
+     * @api stable
+     * @expose
      */
     this.proportionalFunction_ = (value, minValue, maxValue, minRadius, maxRadius) =>
       (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius;
 
     /**
+     * Layer where style is setted
      * @public
      * @type {M.Layer}
      * @api stable
@@ -155,12 +164,11 @@ goog.require('M.style.Point');
     return this;
   };
 
-
   /**
-   * TODO
+   * This function updates the canvas of style
    *
-   * @public
    * @function
+   * @public
    * @api stable
    */
   M.style.Proportional.prototype.updateCanvas = function() {
@@ -181,18 +189,21 @@ goog.require('M.style.Point');
   };
 
   /**
-   * TODO
+   * This function draw the geometry on style canvas
    *
-   * @public
    * @function
+   * @public
+   * @param {Array<Image>} images - array of style images
+   * @param {Array<number>} minMax - array of min radius and max radius
+   * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
    * @api stable
    */
-  M.style.Proportional.prototype.drawGeometryToCanvas = function(imagenes, minMax, vectorContext) {
-    let length = imagenes.length;
+  M.style.Proportional.prototype.drawGeometryToCanvas = function(images, minMax, vectorContext) {
+    let length = images.length;
     let x = vectorContext.canvas.width;
     let y = vectorContext.canvas.height;
-    for (let i = 0; i < imagenes.length; i++) {
-      let imagen = imagenes[i];
+    for (let i = 0; i < images.length; i++) {
+      let imagen = images[i];
       var image = new Image();
       image.height = 100;
       image.onload = function(vectorContext_) {
@@ -268,7 +279,7 @@ goog.require('M.style.Point');
   /**
    * This function updates the style
    * @function
-   * @public
+   * @private
    * @api stable
    */
   M.style.Proportional.prototype.update_ = function() {
@@ -301,6 +312,8 @@ goog.require('M.style.Point');
    * This function gets the min value of feature's atributte.
    * @function
    * @private
+   * @param {Array<M.Feature>} features - array of features
+   * @param {String} attributeName - attributeName of style
    * @api stable
    */
   M.style.Proportional.getMinMaxValues_ = function(features, attributeName) {
@@ -325,7 +338,7 @@ goog.require('M.style.Point');
    * This function returns the attribute of style point that controls the size
    * @function
    * @private
-   * @return {string} the attribute tha controls the size
+   * @return {string} the attribute that controls the size
    */
   M.style.Proportional.prototype.getSizeAttribute_ = function() {
     let sizeAttribute = 'radius';

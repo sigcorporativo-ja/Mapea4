@@ -40,33 +40,25 @@ goog.require('ol.render');
    * This function apply style to feature
    *
    * @public
-   * @param {M.Feature} feature - Feature to apply style
    * @function
+   * @param {M.Feature} feature - Feature to apply style
    * @api stable
    */
-
   M.impl.Style.prototype.applyToFeature = function(feature) {
     let g = ol.Observable.prototype.changed;
-
     ol.Observable.prototype.changed = function() {};
-
     feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
-
     ol.Observable.prototype.changed = g;
-
-
-
   };
 
   /**
-   * TODO
+   * This function updates the canvas of style of canvas
    *
    * @public
    * @function
+   * @param {HTMLCanvasElement} canvas - canvas of style
    * @api stable
    */
-
-
   M.impl.Style.prototype.updateCanvas = function(canvas) {
     let canvasSize = this.getCanvasSize();
     let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
@@ -83,7 +75,7 @@ goog.require('ol.render');
   };
 
   /**
-   * TODO
+   * This function draw the geometry on canvas of style 
    *
    * @public
    * @function
@@ -92,10 +84,11 @@ goog.require('ol.render');
   M.impl.Style.prototype.drawGeometryToCanvas = function(vectorContext) {};
 
   /**
-   * TODO
+   * This function gets the canvas size
    *
    * @public
    * @function
+   * @return {Array<number>} canvas size
    * @api stable
    */
   M.impl.Style.prototype.getCanvasSize = function() {
