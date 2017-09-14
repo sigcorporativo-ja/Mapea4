@@ -165,16 +165,18 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.updateCanvas = function() {
     if (!M.utils.isNullOrEmpty(this.style_)) {
-      let min_max = [this.getMinRadius(), this.getMaxRadius()];
+      let optionsMin = Object.assign({}, this.style_);
+      let optionsMax = Object.assign({}, this.style_);
       let sizeAttribute = this.getSizeAttribute_();
-      let estilo_min = this.getStyle().set(sizeAttribute, min_max[0]);
-      let imagen_min = estilo_min.toImage();
-      let estilo_max = this.getStyle().set(sizeAttribute, min_max[1]);
-      let imagen_max = estilo_max.toImage();
-      let imagenes = [imagen_min, imagen_max];
-      let c = this.canvas_.getContext('2d');
-      c.canvas.height = 80 * 2;
-      this.drawGeometryToCanvas(imagenes, min_max, c);
+      let estiloMin = new M.style.Point(optionsMin);
+      estiloMin.set(sizeAttribute, this.minRadius_);
+      let imagenMin = estiloMin.toImage();
+      let estiloMax = new M.style.Point(optionsMax);
+      estiloMax.set(sizeAttribute, this.maxRadius_);
+      let imagenMax = estiloMax.toImage();
+      let vectorContext = this.canvas_.getContext('2d');
+      vectorContext.canvas.setAttribute('height', 80 * 2);
+      this.drawGeometryToCanvas([imagenMin, imagenMax], [this.getMinRadius(), this.getMaxRadius()], vectorContext);
     }
   };
 
@@ -185,28 +187,26 @@ goog.require('M.style.Point');
    * @function
    * @api stable
    */
-  M.style.Proportional.prototype.drawGeometryToCanvas = function(imagenes, min_max, c) {
+  M.style.Proportional.prototype.drawGeometryToCanvas = function(imagenes, minMax, vectorContext) {
     let length = imagenes.length;
-    let x = c.canvas.width;
-    let y = c.canvas.height;
+    let x = vectorContext.canvas.width;
+    let y = vectorContext.canvas.height;
     for (let i = 0; i < imagenes.length; i++) {
       let imagen = imagenes[i];
       var image = new Image();
       image.height = 100;
-      (function(min_max) {
-        image.onload = function() {
-          c.textAlign = 'letf';
-          c.font = "12px Arial";
-          c.textBaseline = "middle";
-          if (i == 0) {
-            c.fillText("min: " + min_max[i], x / 2, ((i / length) * y * 0.8) + image.height / 2);
-          }
-          else {
-            c.fillText("max: " + min_max[i], x / 2, ((i / length) * y * 0.8) + image.height / 2);
-          }
-          c.drawImage(this, 0, (i / length) * y * 0.8);
-        };
-      })(min_max);
+      image.onload = function(vectorContext_) {
+        vectorContext_.textAlign = 'letf';
+        vectorContext_.font = "12px Arial";
+        vectorContext_.textBaseline = "middle";
+        if (i == 0) {
+          vectorContext_.fillText("min: " + minMax[i], x / 2, ((i / length) * y * 0.8) + this.height / 2);
+        }
+        else {
+          vectorContext_.fillText("max: " + minMax[i], x / 2, ((i / length) * y * 0.8) + this.height / 2);
+        }
+        vectorContext_.drawImage(this, 0, (i / length) * y * 0.8);
+      }.bind(image, vectorContext, minMax, i, length, x, y);
       image.src = imagen;
     }
   };
@@ -279,17 +279,19 @@ goog.require('M.style.Point');
       else {
         this.layerFeatures_ = this.layer_.getFeatures(true);
         this.layer_.removeFeatures(this.layerFeatures_);
-        this.layerFeatures_.forEach(f => this.layer_.addFeatures(f.getCentroid()));
+        let centroids = this.layerFeatures_.map(f => f.getCentroid());
+        this.layer_.addFeatures(centroids);
         let features = this.layer_.getFeatures(true);
         let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
-        let attributeName = this.attributeName_;
-        let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, attributeName);
-        let style = this.style_;
-        style.set(this.getSizeAttribute_(), function(feature) {
-          let value = feature.getAttribute(attributeName);
+        let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, this.attributeName_);
+        this.style_.set(this.getSizeAttribute_(), function(feature) {
+          let value = feature.getAttribute(this.attributeName_);
           return this.proportionalFunction_(value, minValue, maxValue, minRadius, maxRadius);
         }.bind(this));
-        features.forEach(feature => feature.setStyle(style));
+        this.style_.set('zindex', function(feature) {
+          return maxValue - feature.getAttribute(this.attributeName_);
+        }.bind(this));
+        this.layer_.setStyle(this.style_);
         this.layer_.redraw();
       }
     }
@@ -303,7 +305,8 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.getMinMaxValues_ = function(features, attributeName) {
     let [minValue, maxValue] = [undefined, undefined];
-    let filteredFeatures = features.filter(feature => !isNaN(feature.getAttribute(attributeName))).map(f => parseInt(f.getAttribute(attributeName)));
+    let filteredFeatures = features.filter(feature =>
+      !isNaN(feature.getAttribute(attributeName))).map(f => parseInt(f.getAttribute(attributeName)));
     let index = 1;
     if (!M.utils.isNullOrEmpty(filteredFeatures)) {
       minValue = filteredFeatures[0];
