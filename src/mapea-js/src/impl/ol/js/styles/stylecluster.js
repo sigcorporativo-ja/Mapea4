@@ -98,6 +98,7 @@ goog.require('ol.geom.convexhull');
     let estilo = null;
     let array = [];
     let radio = 0;
+    let array_r_s = null;
     for (let i = 0; i < cat.length; i++) {
       rango = [cat[i].min, cat[i].max];
       cat[i].style.set("label", "");
@@ -131,7 +132,6 @@ goog.require('ol.geom.convexhull');
     let y_text = 0;
     let radius = null;
 
-    let array_r_s = null;
     let estilo = null;
     let rangos = null;
     let rango_min = null;
