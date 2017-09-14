@@ -37,7 +37,9 @@ goog.require('M.impl.style.Simple');
         resolution = feature;
         feature = this;
       }
-      let style = new ol.style.Style();
+      let style = new ol.style.Style({
+        zIndex: M.impl.style.Simple.getValue(options.zindex, feature)
+      });
       let styleIcon = new ol.style.Style();
       let styles = [];
       if (!M.utils.isNullOrEmpty(options.stroke)) {
