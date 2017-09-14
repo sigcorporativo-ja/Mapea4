@@ -335,7 +335,7 @@ goog.require('M.style.Point');
       }
     }
     return sizeAttribute;
-  }
+  };
 
   /**
    * Default options for this style
