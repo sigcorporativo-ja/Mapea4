@@ -1,7 +1,9 @@
 goog.provide('M.impl.layer.Vector');
+
 goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.impl.Layer');
+goog.require('M.impl.textpath');
 
 (function() {
   /**
@@ -30,6 +32,16 @@ goog.require('M.impl.Layer');
      * @expose
      */
     this.features_ = [];
+
+    /**
+     * Postcompose event key
+     * @private
+     * @type {string}
+     */
+    this.postComposeEvtKey_ = null;
+
+    // [WARN]
+    //applyOLLayerSetStyleHook();
 
     goog.base(this, options);
   });
@@ -85,6 +97,11 @@ goog.require('M.impl.Layer');
     let olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
 
+    // add support for textpath
+    if (M.utils.isUndefined(CanvasRenderingContext2D.prototype.textPath)) {
+      CanvasRenderingContext2D.prototype.textPath = M.impl.textpath.render;
+    }
+    this.postComposeEvtKey_ = this.ol3Layer.on('postcompose', M.impl.textpath.draw.bind(this.ol3Layer), this);
   };
 
   /**
