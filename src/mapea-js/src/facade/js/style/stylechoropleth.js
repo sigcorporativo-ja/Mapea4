@@ -162,16 +162,47 @@ goog.require('M.style.quantification');
   };
 
 
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+
   M.style.Choropleth.prototype.updateCanvas = function() {
-    if (!M.utils.isNullOrEmpty(this.styles_) && (!M.utils.isString(this.styles_[0]) || !M.utils.isString(this.styles_[1]))) {
+    if (!M.utils.isNullOrEmpty(this.styles_)) {
       let c = this.canvas_.getContext('2d');
       let styles = this.styles_;
       let imagenes = [];
       let parejas = [];
+      let mayor_radius = 0;
+
+
       for (let i = 0; i < styles.length; i++) {
-        let image = styles[i].toImage();
-        imagenes.push(image);
+        let r = styles[i].options_.radius;
+        if (r > mayor_radius) {
+          mayor_radius = r;
+        }
       }
+
+      if (mayor_radius == undefined) {
+        mayor_radius = 5;
+      }
+
+      // for (let i = 0; i < styles.length; i++) {
+      //   let image = styles[i].toImage();
+      //   let r = styles[i].options_.radius;
+      //   if (r > mayor_radius) {
+      //     mayor_radius = r;
+      //   }
+      //   imagenes.push(image);
+      // }
+
+
+
+
+
       let breakPoints = this.breakPoints_;
       if (breakPoints.length > 0) {
 
@@ -180,15 +211,19 @@ goog.require('M.style.quantification');
           if (i == 0) {
             pareja.push(0, breakPoints[i]);
           }
+          else {
+            pareja.push(breakPoints[i - 1], breakPoints[i])
+          }
 
-          pareja.push(breakPoints[i - 1], breakPoints[i]);
           parejas.push(pareja);
 
         }
 
-        let num_stilos = imagenes.length;
-        c.canvas.height = 80 * num_stilos;
-        this.drawGeometryToCanvas(imagenes, parejas, c, this.attributeName_);
+        let num_stilos = styles.length;
+        c.canvas.height = 40 * num_stilos;
+        // this.drawGeometryToCanvas(imagenes, parejas, c, mayor_radius);
+        this.drawGeometryToCanvas(styles, parejas, c, mayor_radius);
+
       }
 
 
@@ -196,40 +231,107 @@ goog.require('M.style.quantification');
     }
   };
 
-
-  M.style.Choropleth.prototype.drawGeometryToCanvas = function(imagenes, parejas, c, attributeName) {
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.style.Choropleth.prototype.drawGeometryToCanvas = function(styles, parejas, c, mayor_radius) {
     let x = c.canvas.width;
-    let y = c.canvas.height;
-    let length = imagenes.length;
+
     let pareja_ini = null;
     let pareja_fin = null;
 
+    let cont = 1;
+    // let y = c.canvas.height;
+    let categoria = null;
+    let imagen = null;
+    let eje_imagenes = mayor_radius;
 
-    for (let i = 0; i < imagenes.length; i++) {
+    let y = 0;
+    let y_text = 0;
+    let x_text = mayor_radius * 2 + 10;
+    let radius = null;
+
+    for (let i = 0; i < styles.length; i++) {
       let pareja = parejas[i];
       pareja_ini = pareja[0];
       pareja_fin = pareja[1];
-      var image = new Image();
-      image.height = 100;
-      (function(pareja_ini, pareja_fin) {
-        image.onload = function() {
-          c.textAlign = 'letf';
-          c.font = "12px Arial";
-          c.textBaseline = "middle";
-          if (pareja_ini == 0) {
-            c.fillText("  x  <=  " + pareja_fin.toString(), x / 2, ((i / length) * y * 0.5) + image.height / 2);
 
-          }
-          else {
-            c.fillText(pareja_ini.toString() + "  <  x  <=  " + pareja_fin.toString(), x / 2, ((i / length) * y * 0.5) + image.height / 2);
+      if (styles[i] instanceof M.style.Point) {
+        radius = styles[i].options_.radius;
+        var image = new Image();
+        y_text = y + radius + 5;
+        let x = 0 + mayor_radius - radius;
+        (function(x, y, pareja_ini, pareja_fin, y_text, x_text) {
+          image.onload = function() {
+            if (pareja_ini == 0) {
+              c.fillText("  x  <=  " + pareja_fin.toString(), x_text, y_text);
+            }
+            else {
+              c.fillText(pareja_ini.toString() + "  <  x  <=  " + pareja_fin.toString(), x_text, y_text);
+            }
+            c.drawImage(this, x, y);
+          };
+        })(x, y, pareja_ini, pareja_fin, y_text, x_text);
+        image.src = styles[i].toImage();
+        y = y + radius * 2 + 9;
 
-          }
+      }
 
-          c.drawImage(this, 0, (i / length) * y * 0.5);
-        };
-      })(pareja_ini, pareja_fin);
-      image.src = imagenes[i];
+
+      if (styles[i] instanceof M.style.Line) {
+        radius = styles[i].canvas_.height;
+        let x_text = styles[i].canvas_.width + 8;
+        var image = new Image();
+        y_text = y + radius / 2;
+        let x = 0;
+        (function(x, y, pareja_ini, pareja_fin, y_text, x_text) {
+          image.onload = function() {
+            if (pareja_ini == 0) {
+              c.fillText("  x  <=  " + pareja_fin.toString(), x_text, y_text);
+            }
+            else {
+              c.fillText(pareja_ini.toString() + "  <  x  <=  " + pareja_fin.toString(), x_text, y_text);
+            }
+            c.drawImage(this, x, y);
+          };
+        })(x, y, pareja_ini, pareja_fin, y_text, x_text);
+        image.src = styles[i].toImage();
+        y = y + radius + 5;
+      }
+
+      if (styles[i] instanceof M.style.Polygon) {
+        radius = styles[i].canvas_.height;
+        let x_text = styles[i].canvas_.width + 10;
+        var image = new Image();
+        y_text = y + radius / 2 + 4;
+        let x = 0;
+        (function(x, y, pareja_ini, pareja_fin, y_text, x_text) {
+          image.onload = function() {
+            if (pareja_ini == 0) {
+              c.fillText("  x  <=  " + pareja_fin.toString(), x_text, y_text);
+            }
+            else {
+              c.fillText(pareja_ini.toString() + "  <  x  <=  " + pareja_fin.toString(), x_text, y_text);
+            }
+            c.drawImage(this, x, y);
+          };
+        })(x, y, pareja_ini, pareja_fin, y_text, x_text);
+        image.src = styles[i].toImage();
+        y = y + radius + 5;
+      }
+
+
+
+
+
+
+
     }
+    c.canvas.height = y + 10;
   };
 
   /**

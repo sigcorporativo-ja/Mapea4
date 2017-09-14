@@ -106,21 +106,30 @@ goog.require('M.impl.style.TextPath');
    * @api stable
    */
   M.impl.style.Line.prototype.drawGeometryToCanvas = function(vectorContext, canvas, style) {
-    vectorContext.drawGeometry(new ol.geom.LineString([[10, 10], [30, 100], [80, 10], [130, 90]]));
+    let x = this.getCanvasSize()[0];
+    let y = this.getCanvasSize()[1];
+    vectorContext.drawGeometry(new ol.geom.LineString([[0, (y / 4)], [x / 4, y / 2], [x / 2, y / 4], [(x * 3 / 4), y / 2]]));
     if (!M.utils.isNullOrEmpty(style)) {
       var ctx = canvas.getContext("2d");
       ctx.lineWidth = style.width;
       ctx.setLineDash([0, 0]);
       ctx.strokeStyle = style.color;
       ctx.beginPath();
-      ctx.lineTo(10, 10);
-      ctx.lineTo(30, 100);
-      ctx.lineTo(80, 10);
-      ctx.lineTo(130, 90);
+      ctx.lineTo(0, (y / 4));
+      ctx.lineTo(x / 4, y / 2);
+      ctx.lineTo(x / 2, y / 4);
+      ctx.lineTo((x * 3 / 4), y / 2);
       ctx.stroke();
     }
   };
 
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
   M.impl.style.Line.prototype.updateCanvas = function(canvas) {
     let canvasSize = this.getCanvasSize();
     let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
@@ -148,6 +157,6 @@ goog.require('M.impl.style.TextPath');
    * @api stable
    */
   M.impl.style.Line.prototype.getCanvasSize = function() {
-    return [150, 100];
+    return [25, 15];
   };
 })();

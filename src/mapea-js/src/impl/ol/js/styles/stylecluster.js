@@ -77,57 +77,96 @@ goog.require('ol.geom.convexhull');
     return cluster;
   };
 
-
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
   M.impl.style.Cluster.prototype.updateCanvas = function(canvas) {
     let c = canvas.getContext('2d');
     let cat = this.options.ranges;
     if (cat.length == 0) {
       cat = this.getDefaulStyles();
     }
+
+
+
+    let mayor_radius = 0;
     let rango = [];
-    let imagen = null;
+    let estilo = null;
     let array = [];
+    let array_r_i = [];
+    let radio = 0;
     for (let i = 0; i < cat.length; i++) {
       rango = [cat[i].min, cat[i].max];
-      imagen = cat[i].style.toImage();
-      array.push([rango, imagen]);
+      cat[i].style.set("label", "");
+      estilo = cat[i].style;
+      radio = estilo.options_.radius;
+      if (radio > mayor_radius) {
+        mayor_radius = radio;
+      }
+      // cat[i].style.options_.label = label;
+      array_r_s = [rango, estilo];
+      array.push(array_r_s);
+      array_r_s = [];
     }
     let num_rangos = array.length;
     c.canvas.height = 80 * num_rangos;
-    this.drawGeometryToCanvas(array, c);
+    this.drawGeometryToCanvas(array, c, mayor_radius);
   };
 
-
-  M.impl.style.Cluster.prototype.drawGeometryToCanvas = function(array, c) {
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.drawGeometryToCanvas = function(array, c, mayor_radius) {
     let length = array.length;
     let cont = 1;
     let x = c.canvas.width;
-    let y = c.canvas.height;
+    // let y = c.canvas.height;
+    let categoria = null;
     let imagen = null;
-    let cadena = "";
-    let rango_max = null;
-    let rango_min = null;
+    let eje_imagenes = mayor_radius;
+
+    let y = 0;
+    let y_text = 0;
+    let x_text = mayor_radius * 2 + 10;
+    let radius = null;
+
+
+
     for (let i = 0; i < array.length; i++) {
-      rango_min = array[i][0][0];
-      rango_max = array[i][0][1];
+      estilo = array[i][1];
+      rangos = array[i][0];
+      rango_min = rangos[0];
+      rango_max = rangos[1];
       cadena = "min: " + rango_min + ", max: " + rango_max;
-      imagen = array[i][1];
       var image = new Image();
-      image.height = 100;
+      radius = estilo.options_.radius;
+
+      y_text = y + radius + 5;
+
+      let x = 0 + mayor_radius - radius;
+
       (function(categoryParam) {
         image.onload = function() {
-          c.textAlign = 'letf';
-          c.font = "12px Arial";
-          c.textBaseline = "middle";
-          c.drawImage(this, 0, (i / length) * y * 0.5);
-          c.fillText(categoryParam, x / 2, ((i / length) * y * 0.5) + image.height / 2);
+
+          c.drawImage(this, x, y);
+          // c.fillText(categoryParam, x / 8, (i / length) * y + 10);
         };
       })(cadena);
       cadena = "";
-      image.src = imagen;
+      image.src = estilo.toImage();
       cont = cont + 1;
-    }
+      y = y + radius * 2 + 9;
 
+    }
+    c.canvas.height = y + 10;
   };
 
 

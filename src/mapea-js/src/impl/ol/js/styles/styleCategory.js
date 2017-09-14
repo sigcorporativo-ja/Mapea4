@@ -20,52 +20,109 @@ goog.provide('M.impl.style.Category');
     this.facadeStyleCategory_ = null;
   };
 
-
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
   M.impl.style.Category.prototype.updateCanvas = function(canvas) {
     let array = [];
     let c = canvas.getContext('2d');
     let cat = this.facadeStyleCategory_.categoryStyles_;
     let estilo = null;
     let imagen = null;
-    for (let i in cat) {
+    let mayor_radius = 0;
+    for (var i in cat) {
       let array_s_c = [];
       estilo = cat[i.toString()];
+      let r = estilo.options_.radius;
+      if (r > mayor_radius) {
+        mayor_radius = r;
+      }
       imagen = estilo.toImage();
       array_s_c = [i, imagen, estilo];
       array.push(array_s_c);
     }
+    if (mayor_radius == 0) {
+      mayor_radius = 5;
+    }
     let num_stilos = array.length;
     c.canvas.height = 80 * num_stilos;
-    this.drawGeometryToCanvas(array, c, this.facadeStyleCategory_.attributeName_);
+    this.drawGeometryToCanvas(array, c, mayor_radius);
   };
 
-
-  M.impl.style.Category.prototype.drawGeometryToCanvas = function(array, c, attributeName) {
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Category.prototype.drawGeometryToCanvas = function(array, c, mayor_radius) {
     let length = array.length;
     let cont = 1;
     let x = c.canvas.width;
-    let y = c.canvas.height;
+    // let y = c.canvas.height;
     let categoria = null;
     let imagen = null;
+    let eje_imagenes = mayor_radius;
 
+    let y = 0;
+    let y_text = 0;
+    let x_text = mayor_radius * 2 + 10;
+    let radius = null;
     for (let i = 0; i < array.length; i++) {
       categoria = array[i][0];
       imagen = array[i][1];
-      var image = new Image();
-      image.height = 100;
-      (function(categoryParam) {
-        image.onload = function() {
-          c.textAlign = 'letf';
-          c.font = "12px Arial";
-          c.textBaseline = "middle";
-          c.drawImage(this, 0, (i / length) * y * 0.5);
-          c.fillText(categoryParam, x / 2, ((i / length) * y * 0.5) + image.height / 2);
-        };
-      })(categoria);
-      image.src = imagen;
-      cont = cont + 1;
+      estilo = array[i][2];
+      if (estilo instanceof M.style.Point) {
+        radius = estilo.options_.radius;
+        var image = new Image();
+        y_text = y + radius + 5;
+        let x = 0 + mayor_radius - radius;
+        (function(categoryParam, x, y, x_text, y_text) {
+          image.onload = function() {
+            c.drawImage(this, x, y);
+            c.fillText(categoryParam, x_text, y_text);
+          };
+        })(categoria, x, y, x_text, y_text);
+        image.src = imagen;
+        y = y + radius * 2 + 9;
+      }
+      if (estilo instanceof M.style.Line) {
+        radius = estilo.canvas_.height;
+        let x_text = estilo.canvas_.width + 8;
+        var image = new Image();
+        y_text = y + radius / 2;
+        let x = 0;
+        (function(categoryParam, x, y, x_text, y_text) {
+          image.onload = function() {
+            c.drawImage(this, x, y);
+            c.fillText(categoryParam, x_text, y_text);
+          };
+        })(categoria, x, y, x_text, y_text);
+        image.src = imagen;
+        y = y + radius + 5;
+      }
+      if (estilo instanceof M.style.Polygon) {
+        radius = estilo.canvas_.height;
+        let x_text = estilo.canvas_.width + 10;
+        var image = new Image();
+        y_text = y + radius / 2 + 4;
+        let x = 0;
+        (function(categoryParam, x, y, x_text, y_text) {
+          image.onload = function() {
+            c.drawImage(this, x, y);
+            c.fillText(categoryParam, x_text, y_text);
+          };
+        })(categoria, x, y, x_text, y_text);
+        image.src = imagen;
+        y = y + radius + 5;
+      }
     }
-
+    c.canvas.height = y + 10;
   };
 
   // M.impl.style.Category.prototype.drawGeometryToCanvas = function(array) {
