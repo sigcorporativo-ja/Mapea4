@@ -199,6 +199,7 @@ goog.require('M.style.Point');
    * @api stable
    */
   M.style.Proportional.prototype.drawGeometryToCanvas = function(images, minMax, vectorContext) {
+    let radius = 0;
     let length = images.length;
     let x = vectorContext.canvas.width;
     let y = vectorContext.canvas.height;
