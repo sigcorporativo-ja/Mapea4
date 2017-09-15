@@ -110,7 +110,6 @@ goog.require('M.impl.style.Simple');
     };
   };
 
-
   /**
    * TODO
    *
@@ -120,10 +119,8 @@ goog.require('M.impl.style.Simple');
    */
   M.impl.style.Polygon.prototype.drawGeometryToCanvas = function(vectorContext) {
     let canvasSize = this.getCanvasSize();
-
     let maxW = Math.floor(canvasSize[0]);
     let maxH = Math.floor(canvasSize[1]);
-
     let minW = (canvasSize[0] - maxW);
     let minH = (canvasSize[1] - maxH);
     vectorContext.drawGeometry(new ol.geom.Polygon([[

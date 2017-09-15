@@ -14,14 +14,23 @@ let mapajs = M.map({
   controls: ['layerswitcher', 'overviewmap'],
 });
 
+// var centrosSubtipo = new M.layer.WFS({
+//   name: "Centros ASSDA - Subtipos",
+//   url: "https://clientes.guadaltel.es/desarrollo/geossigc/wfs?",
+//   namespace: "mapea",
+//   name: "centrosassda_subtipo",
+//   legend: "centrosassda_subtipo",
+//   geometry: 'POINT',
+// });
+
 var centrosSubtipo = new M.layer.WFS({
-  name: "Centros ASSDA - Subtipos",
-  url: "https://clientes.guadaltel.es/desarrollo/geossigc/wfs?",
-  namespace: "mapea",
-  name: "centrosassda_subtipo",
-  legend: "centrosassda_subtipo",
-  geometry: 'POINT',
+  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?",
+  namespace: "tematicos",
+  name: "Provincias",
+  legend: "Provincias",
+  geometry: 'MPOLYGON'
 });
+
 
 let stylePoint = new M.style.Point({
   fill: {
@@ -52,7 +61,7 @@ let stylePoint3 = new M.style.Point({
 
 
 // M.style.Proportional con radios bien definidos y estilo por defecto
-let proportional = new M.style.Proportional('nregin', 4, 20, new M.style.Point({
+let proportional = new M.style.Proportional('u_cod_prov', 4, 20, new M.style.Point({
   fill: {
     color: 'green',
     opacity: 0.5
@@ -91,7 +100,8 @@ catch (e) {
   console.log('Excepción capturada: Comprobación de atributo nulo funciona correctamente');
 }
 
-// centrosSubtipo.on(M.evt.LOAD, () => centrosSubtipo.setStyle(proportional));mapajs.addLayers([centrosSubtipo]);
+centrosSubtipo.on(M.evt.LOAD, () => centrosSubtipo.setStyle(proportional));
+mapajs.addLayers([centrosSubtipo]);
 
 function setProportional(stylePoint) {
   let styleProportional = centrosSubtipo.getStyle();

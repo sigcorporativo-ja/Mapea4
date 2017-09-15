@@ -283,11 +283,9 @@ let points = new M.layer.GeoJSON({
     }
   ]
   }
-}, {
-  style: proportional
 });
 mapajs.addLayers([points]);
-
+// points.setStyle(proportional);
 function setProportional(stylePoint, styleProportional) {
   styleProportional.setStyle(stylePoint);
 }

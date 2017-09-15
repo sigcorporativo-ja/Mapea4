@@ -28,7 +28,6 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Point.prototype.updateFacadeOptions = function(options) {
-
     this.olStyleFn_ = function(feature, resolution) {
       if (!(feature instanceof ol.Feature)) {
         resolution = feature;
@@ -63,7 +62,6 @@ goog.require('M.impl.style.Simple');
           }));
         }
       }
-
       if (!M.utils.isNullOrEmpty(options.label)) {
         let labelText = new ol.style.Text({
           font: M.impl.style.Simple.getValue(options.label.font, feature),
@@ -92,14 +90,12 @@ goog.require('M.impl.style.Simple');
         }
         style.setText(labelText);
       }
-
       style.setImage(new ol.style.Circle({
         fill: style.getFill(),
         stroke: style.getStroke(),
         radius: M.impl.style.Simple.getValue(options.radius, feature),
         snapToPixel: M.impl.style.Simple.getValue(options.snapToPixel, feature)
       }));
-
       if (!M.utils.isNullOrEmpty(options.icon)) {
         if (!M.utils.isNullOrEmpty(options.icon.src)) {
           styleIcon.setImage(new ol.style.Icon({
@@ -171,9 +167,7 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Point.prototype.drawGeometryToCanvas = function(vectorContext) {
-    let x = this.getCanvasSize()[0];
-    let y = this.getCanvasSize()[1];
-    vectorContext.drawGeometry(new ol.geom.Point([x / 2, y / 2]));
+    vectorContext.drawGeometry(new ol.geom.Point([this.getCanvasSize()[0] / 2, this.getCanvasSize()[1] / 2]));
   };
 
   /**

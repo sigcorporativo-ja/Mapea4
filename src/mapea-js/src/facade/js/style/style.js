@@ -152,14 +152,16 @@ goog.provide('M.Style');
    */
   M.Style.prototype.toImage = function() {
     let styleImg;
-    let style = this instanceof M.style.Proportional ? this.getStyle() : this;
-    if (!M.utils.isNullOrEmpty(style.options_.icon) && !M.utils.isNullOrEmpty(style.options_.icon.src)) {
-      styleImg = style.options_.icon.src;
+    if (this instanceof M.style.Simple) {
+      // let style = this instanceof M.style.Proportional ? this.getStyle() : this;
+      if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
+        styleImg = this.options_.icon.src;
+      }
+      else {
+        styleImg = this.canvas_.toDataURL('png');
+      }
+      return styleImg;
     }
-    else {
-      styleImg = style.canvas_.toDataURL('png');
-    }
-    return styleImg;
   };
 
   /**
