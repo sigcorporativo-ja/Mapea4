@@ -24,3 +24,6 @@ Cambiar la capa WFS sobre la que se edita:
 ```
 edicionWFST.setLayer('nombreNuevaCapaWFS');
 ```
+## Ejemplo Funcional
+
+http://jsfiddle.net/sigcJunta/6onxnaow/
