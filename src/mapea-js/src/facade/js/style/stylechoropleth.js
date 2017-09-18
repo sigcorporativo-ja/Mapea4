@@ -279,7 +279,7 @@ goog.require('M.style.quantification');
           // M.exception('TODO el atributo no es un número válido');
         }
         return value;
-      }).filter(value => !M.utils.isNullOrEmpty(value) && !isNaN(value));
+      }.bind(this)).filter(value => !M.utils.isNullOrEmpty(value) && !isNaN(value));
     }
     return values;
   };

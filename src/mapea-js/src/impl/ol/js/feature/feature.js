@@ -250,6 +250,15 @@ goog.provide('M.impl.Feature');
         name: 'centroid'
       });
     }
+    else if (geometry.getType() === 'MultiPolygon') {
+      let center = ol.extent.getCenter(geometry.getExtent());
+      let geom = new ol.geom.Point();
+      geom.setCoordinates(center);
+      olCentroid = new ol.Feature({
+        'geometry': geom,
+        name: 'centroid'
+      });
+    }
     else {
       olCentroid = olFeature;
     }

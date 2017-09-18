@@ -198,28 +198,29 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.drawGeometryToCanvas = function(images, minMax, vectorContext) {
     let radius = 0;
-    let length = images.length;
-    let x = vectorContext.canvas.width;
-    let y = vectorContext.canvas.height;
+    let coordinateX = 0;
+    let coordinateY = 0;
+    let coordXText = minMax[1] * 2 + 10;
+    let coordYText = 0;
     for (let i = 0; i < images.length; i++) {
+      radius = minMax[i];
       let imagen = images[i];
       var image = new Image();
-      image.height = 100;
-      image.onload = function(vectorContext_) {
-        vectorContext_.textAlign = 'letf';
-        vectorContext_.font = "12px Arial";
-        vectorContext_.textBaseline = "middle";
+      coordYText = coordinateY + radius + 5;
+      coordinateX = minMax[1] - radius;
+      image.onload = function(vectorContext_, minMax, coordinateX, coordinateY, coordXText, coordYText) {
         if (i == 0) {
-          vectorContext_.fillText("min: " + minMax[i], x / 2, ((i / length) * y * 0.8) + this.height / 2);
+          vectorContext_.fillText("  min: " + minMax[i], coordXText, coordYText);
         }
         else {
-          vectorContext_.fillText("max: " + minMax[i], x / 2, ((i / length) * y * 0.8) + this.height / 2);
+          vectorContext_.fillText("  max: " + minMax[i], coordXText, coordYText);
         }
-        vectorContext_.drawImage(this, 0, (i / length) * y * 0.8);
-      }.bind(image, vectorContext, minMax, i, length, x, y);
+        vectorContext_.drawImage(this, coordinateX, coordinateY);
+      }.bind(image, vectorContext, minMax, coordinateX, coordinateY, coordXText, coordYText);
       image.src = imagen;
-      y = y + radius * 2 + 9;
+      coordinateY = coordinateY + radius * 2 + 9;
     }
+    vectorContext.canvas.height = coordinateY + 10;
   };
 
   /**
@@ -304,6 +305,7 @@ goog.require('M.style.Point');
         }.bind(this));
         this.layer_.getFeatures().forEach(feature => feature.setStyle(this.style_));
         this.layer_.redraw();
+        this.updateCanvas();
       }
     }
   };
