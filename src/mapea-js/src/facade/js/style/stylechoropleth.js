@@ -172,7 +172,7 @@ goog.require('M.style.quantification');
 
   M.style.Choropleth.prototype.updateCanvas = function() {
     if (!M.utils.isNullOrEmpty(this.styles_)) {
-      let vectorContext = this.canvas_.getContext('2d')
+      let vectorContext = this.canvas_.getContext('2d');
       let styles = this.styles_;
       let coordinates = [];
       let maxRadius = 0;

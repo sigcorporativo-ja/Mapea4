@@ -173,13 +173,11 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.updateCanvas = function() {
     if (!M.utils.isNullOrEmpty(this.style_)) {
-      let optionsMin = Object.assign({}, this.style_);
-      let optionsMax = Object.assign({}, this.style_);
       let sizeAttribute = this.getSizeAttribute_();
-      let estiloMin = new M.style.Point(optionsMin);
+      let estiloMin = this.style_.clone();
       estiloMin.set(sizeAttribute, this.minRadius_);
       let imagenMin = estiloMin.toImage();
-      let estiloMax = new M.style.Point(optionsMax);
+      let estiloMax = this.style_.clone();
       estiloMax.set(sizeAttribute, this.maxRadius_);
       let imagenMax = estiloMax.toImage();
       let vectorContext = this.canvas_.getContext('2d');
@@ -304,7 +302,7 @@ goog.require('M.style.Point');
         this.style_.set('zindex', function(feature) {
           return maxValue - feature.getAttribute(this.attributeName_);
         }.bind(this));
-        this.layer_.setStyle(this.style_);
+        this.layer_.getFeatures().forEach(feature => feature.setStyle(this.style_));
         this.layer_.redraw();
       }
     }
