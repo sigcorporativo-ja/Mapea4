@@ -204,7 +204,7 @@ goog.require('M.style.quantification');
             radius = style.get('radius');
           }
           maxRadius = radius < maxRadius ? maxRadius : radius;
-        })
+        });
       }
       if (this.breakPoints_.length > 0) {
         coordinates = [[0, this.breakPoints_[0]]];
