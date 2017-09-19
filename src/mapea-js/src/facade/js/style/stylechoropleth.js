@@ -129,7 +129,24 @@ goog.require('M.style.quantification');
    */
   M.style.Choropleth.prototype.setQuantification = function(quantification) {
     this.quantification_ = quantification;
-    this.update_();
+    if (!this.styles_.some(style => M.utils.isString(style))) {
+      if (this.styles_.length < this.quantification_().length) {
+        let [startStyle, endStyle] = this.styles_;
+        let startColor = startStyle.get('fill.color');
+        let endColor = endStyle.get('fill.color');
+        if (M.utils.isNullOrEmpty(startColor)) {
+          startColor = startStyle.get('stroke.color');
+        }
+        if (M.utils.isNullOrEmpty(endColor)) {
+          endColor = endStyle.get('stroke.color');
+        }
+        this.styles_ = [startColor, endColor];
+      }
+      else {
+        this.styles_ = this.styles_.slice(0, this.quantification_().length);
+      }
+      this.update_();
+    }
     return this;
   };
 
@@ -327,8 +344,9 @@ goog.require('M.style.quantification');
         let filterLTE = new M.filter.LTE(this.attributeName_, this.breakPoints_[i]);
         filterLTE.execute(features).forEach(f => f.setStyle(this.styles_[i]));
       }
+      this.layer_.redraw();
+      this.updateCanvas();
     }
-    this.updateCanvas();
   };
   /**
    * This functions returns a point style by default
