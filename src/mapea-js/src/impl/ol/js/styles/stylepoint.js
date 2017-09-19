@@ -124,16 +124,15 @@ goog.require('M.impl.style.Simple');
             radius: M.impl.style.Simple.getValue(options.icon.radius, feature),
             rotation: M.impl.style.Simple.getValue(options.icon.rotation, feature),
             rotateWithView: M.impl.style.Simple.getValue(options.icon.rotate, feature),
-            offsetY: M.impl.style.Simple.getValue(options.icon.offset[0], feature),
-            offsetX: M.impl.style.Simple.getValue(options.icon.offset[1], feature),
-            color: M.impl.style.Simple.getValue(options.icon.color, feature),
+            offsetX: M.impl.style.Simple.getValue(options.icon.offset ? options.icon.offset[0] : undefined, feature),
+            offsetY: M.impl.style.Simple.getValue(options.icon.offset ? options.icon.offset[1] : undefined, feature),
             fill: new ol.style.Fill({
               color: M.impl.style.Simple.getValue(options.icon.fill, feature)
             }),
-            stroke: new ol.style.Stroke({
+            stroke: options.icon.gradientcolor ? new ol.style.Stroke({
               color: M.impl.style.Simple.getValue(options.icon.gradientcolor, feature),
               width: 1
-            }),
+            }) : undefined,
             anchor: M.impl.style.Simple.getValue(options.icon.anchor, feature),
             anchorXUnits: M.impl.style.Simple.getValue(options.icon.anchorxunits, feature),
             anchorYUnits: M.impl.style.Simple.getValue(options.icon.anchoryunits, feature),
