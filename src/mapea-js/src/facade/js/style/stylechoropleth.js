@@ -194,11 +194,17 @@ goog.require('M.style.quantification');
       let coordinates = [];
       let maxRadius = 0;
       if (this.styles_.some(style => style instanceof M.style.Point)) {
-        for (let i = 0; i < styles.length; i++) {
-          if (styles[i].get('radius') > maxRadius) {
-            maxRadius = styles[i].get('radius');
+        styles.forEach(function(style) {
+          let icon = style.get('icon');
+          let radius;
+          if (!M.utils.isNullOrEmpty(icon)) {
+            radius = icon.radius;
           }
-        }
+          else {
+            radius = style.get('radius');
+          }
+          maxRadius = radius < maxRadius ? maxRadius : radius;
+        })
       }
       if (this.breakPoints_.length > 0) {
         coordinates = [[0, this.breakPoints_[0]]];
@@ -232,7 +238,13 @@ goog.require('M.style.quantification');
       endLimit = coordinates[i][1];
       let image = new Image();
       if (styles[i] instanceof M.style.Point) {
-        radius = styles[i].get('radius');
+        let icon = styles[i].get('icon');
+        if (!M.utils.isNullOrEmpty(icon)) {
+          radius = icon.radius;
+        }
+        else {
+          radius = styles[i].get('radius');
+        }
         coordYText = coordinateY + radius + 5;
         coordinateX = maxRadius - radius;
         this.drawImage_(vectorContext, image, [coordinateX, coordinateY], [startLimit, endLimit], [coordXText, coordYText], styles[i]);

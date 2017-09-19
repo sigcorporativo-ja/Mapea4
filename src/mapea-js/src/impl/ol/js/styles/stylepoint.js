@@ -177,7 +177,14 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Point.prototype.getCanvasSize = function() {
-    let r = this.olStyleFn_()[0].getImage().getRadius();
+    let image = this.olStyleFn_()[1].getImage();
+    let r;
+    if (image instanceof ol.style.FontSymbol) {
+      r = image.getRadius();
+    }
+    else {
+      r = this.olStyleFn_()[0].getImage().getRadius();
+    }
     return [(r * 2) + 1, (r * 2) + 1];
   };
 })();

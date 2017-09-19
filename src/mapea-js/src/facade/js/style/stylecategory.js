@@ -145,7 +145,14 @@ goog.require('M.Style');
   M.style.Category.prototype.updateCanvas = function() {
     let maxRadius = 0;
     Object.keys(this.categoryStyles_).forEach(function(category) {
-      let radius = this.categoryStyles_[category].get('radius');
+      let radius;
+      let icon = this.categoryStyles_[category].get('icon');
+      if (!M.utils.isNullOrEmpty(icon)) {
+        radius = icon.radius;
+      }
+      else {
+        radius = this.categoryStyles_[category].get('radius');
+      }
       maxRadius = maxRadius < radius ? radius : maxRadius;
     }.bind(this));
     let vectorContext = this.canvas_.getContext('2d');
@@ -175,7 +182,13 @@ goog.require('M.Style');
       let style = category[2];
       var image = new Image();
       if (style instanceof M.style.Point) {
-        radius = style.options_.radius;
+        let icon = style.get('icon');
+        if (!M.utils.isNullOrEmpty(icon)) {
+          radius = icon.radius;
+        }
+        else {
+          radius = style.get('radius');
+        }
         coordYText = coordinateY + radius + 5;
         coordinateX = maxRadius - radius;
         this.drawImage_(vectorContext, image, category, coordinateX, coordinateY, coordXText, coordYText);
