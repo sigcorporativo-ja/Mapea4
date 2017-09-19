@@ -126,7 +126,7 @@ goog.require('goog.style');
    * @api stable
    */
   M.impl.utils.getCentroid = function(geometry) {
-    let centroid, coordinates, medianIdx, points, lineStrings, geometries;
+    let centroid, coordinates, medianIdx, points, lineStrings;
     if (M.utils.isNullOrEmpty(geometry)) {
       return null;
     }
@@ -164,5 +164,5 @@ goog.require('goog.style');
         return null;
     }
     return centroid;
-  }
+  };
 })();

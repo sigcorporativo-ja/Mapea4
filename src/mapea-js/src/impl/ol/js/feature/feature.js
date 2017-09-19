@@ -242,8 +242,7 @@ goog.provide('M.impl.Feature');
   M.impl.Feature.prototype.getCentroid = function() {
     let olFeature = this.getOLFeature();
     let geometry = olFeature.getGeometry();
-    let center = M.impl.utils.getCentroid(geometry)
-    let olCentroid;
+    let center = M.impl.utils.getCentroid(geometry);
     if (!M.utils.isNullOrEmpty(center)) {
       let geom = new ol.geom.Point();
       geom.setCoordinates(center);
