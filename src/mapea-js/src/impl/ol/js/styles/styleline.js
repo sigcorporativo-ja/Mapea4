@@ -45,11 +45,11 @@ goog.require('M.impl.style.TextPath');
         style.setStroke(new ol.style.Stroke({
           color: getValue(stroke.color, feature),
           width: getValue(stroke.width, feature),
-          lineDash: getValue(stroke.lineDash, feature),
-          lineDashOffset: getValue(stroke.lineDashOffset, feature),
-          lineCap: getValue(stroke.lineCap, feature),
-          lineJoin: getValue(stroke.lineJoin, feature),
-          miterLimit: getValue(stroke.miterLimit, feature)
+          lineDash: getValue(stroke.linedash, feature),
+          lineDashOffset: getValue(stroke.linedashoffset, feature),
+          lineCap: getValue(stroke.linecap, feature),
+          lineJoin: getValue(stroke.linejoin, feature),
+          miterLimit: getValue(stroke.miterlimit, feature)
         }));
       }
       if (!M.utils.isNullOrEmpty(label)) {
@@ -62,8 +62,8 @@ goog.require('M.impl.style.TextPath');
           textBaseline: (getValue(label.baseline, feature) || '').toLowerCase(),
           textAlign: getValue(label.align, feature),
           rotateWithView: getValue(label.rotate, feature) || false,
-          textOverflow: getValue(label.textOverflow, feature) || 'custom',
-          minWidth: getValue(label.minWidth, feature) || 0
+          textOverflow: getValue(label.textoverflow, feature) || 'custom',
+          minWidth: getValue(label.minwidth, feature) || 0
         };
         let textPathStyle = new M.impl.style.TextPath(textPathConfig);
         if (!M.utils.isNullOrEmpty(label.stroke)) {
