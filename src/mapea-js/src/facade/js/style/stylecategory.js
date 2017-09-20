@@ -159,6 +159,9 @@ goog.require('M.Style');
         radius = this.categoryStyles_[category].get('radius');
       }
       maxRadius = maxRadius < radius ? radius : maxRadius;
+      if (maxRadius < 25) {
+        maxRadius = 25;
+      }
     }, this);
     let vectorContext = this.canvas_.getContext('2d');
     let styles = Object.keys(this.categoryStyles_).map((categoryName) =>
@@ -193,7 +196,14 @@ goog.require('M.Style');
         }
         else {
           radius = style.get('radius');
-        }
+        } <<
+        << << < HEAD
+          ===
+          === =
+          if ((M.utils.isNullOrEmpty(radius))) {
+            radius = 25;
+          } >>>
+          >>> > refs / remotes / origin / redmine_88517
         coordYText = coordinateY + radius + 5;
         coordinateX = maxRadius - radius;
         this.drawImage_(vectorContext, image, category, coordinateX, coordinateY, coordXText, coordYText);

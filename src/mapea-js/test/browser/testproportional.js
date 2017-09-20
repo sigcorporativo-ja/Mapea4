@@ -58,6 +58,30 @@ let stylePoint3 = new M.style.Point({
   }
 });
 
+let gato = new M.style.Point({
+  fill: {
+    color: 'red'
+  },
+  radius: 5,
+  icon: {
+    src: 'https://cdn3.iconfinder.com/data/icons/free-icons-3/128/cat_6.png',
+    rotation: 0.5,
+    scale: 0.5,
+    opacity: 0.8,
+    anchor: [0.5, 1.9],
+    anchororigin: 'top-left',
+    anchororigin: 'top-left',
+    anchorxunits: 'fraction',
+    anchoryunits: 'fraction',
+    rotate: false,
+    // offset: [10, 0],
+    crossorigin: null,
+    snaptopixel: true,
+    offsetorigin: 'bottom-left',
+    size: [150, 95]
+  }
+});
+
 
 
 // M.style.Proportional con radios bien definidos y estilo por defecto

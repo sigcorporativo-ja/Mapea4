@@ -198,7 +198,11 @@ goog.require('M.style.quantification');
    */
 
   M.style.Choropleth.prototype.updateCanvas = function() {
+
+
     if (!M.utils.isNullOrEmpty(this.styles_)) {
+
+
       let vectorContext = this.canvas_.getContext('2d');
       let styles = this.styles_;
       let coordinates = [];
@@ -214,7 +218,14 @@ goog.require('M.style.quantification');
             radius = style.get('radius');
           }
           maxRadius = radius < maxRadius ? maxRadius : radius;
-        });
+        }); <<
+        << << < HEAD
+          ===
+          === =
+      }
+      if (maxRadius < 25) {
+        maxRadius = 25; >>>
+        >>> > refs / remotes / origin / redmine_88517
       }
       if (this.breakPoints_.length > 0) {
         coordinates = [[0, this.breakPoints_[0]]];
@@ -225,7 +236,9 @@ goog.require('M.style.quantification');
         this.drawGeometryToCanvas(styles, coordinates, vectorContext, maxRadius);
       }
     }
+
   };
+
 
   /**
    * TODO
@@ -242,7 +255,6 @@ goog.require('M.style.quantification');
     let coordYText = 0;
     let coordXText = maxRadius * 2 + 10;
     let radius = null;
-
     for (let i = 0; i < styles.length; i++) {
       startLimit = coordinates[i][0];
       endLimit = coordinates[i][1];
@@ -254,6 +266,9 @@ goog.require('M.style.quantification');
         }
         else {
           radius = styles[i].get('radius');
+        }
+        if ((M.utils.isNullOrEmpty(radius))) {
+          radius = 25;
         }
         coordYText = coordinateY + radius + 5;
         coordinateX = maxRadius - radius;
@@ -277,6 +292,7 @@ goog.require('M.style.quantification');
     }
     vectorContext.canvas.height = coordinateY + 10;
   };
+
 
   /**
    * This function draw the image style on the vector context
