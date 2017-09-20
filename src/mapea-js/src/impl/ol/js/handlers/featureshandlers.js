@@ -21,6 +21,13 @@ goog.require('M.impl.Layer');
      * @type {M.impl.Map}
      */
     this.map_ = null;
+
+    /**
+     * @private
+     * @type {String}
+     * @expose
+     */
+    this.defaultCursor_;
   });
 
   /**
@@ -57,8 +64,35 @@ goog.require('M.impl.Layer');
         }
       });
     }
-
     return features;
+  };
+
+  /**
+   * function adds the event 'click'
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  M.impl.handler.Features.prototype.addCursorPointer = function() {
+    let viewport = this.map_.getMapImpl().getViewport();
+    if (viewport.style.cursor !== 'pointer') {
+      this.defaultCursor_ = viewport.style.cursor;
+    }
+    viewport.style.cursor = 'pointer';
+  };
+
+  /**
+   * function adds the event 'click'
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  M.impl.handler.Features.prototype.removeCursorPointer = function() {
+    this.map_.getMapImpl().getViewport().style.cursor = this.defaultCursor_;
   };
 
   /**
