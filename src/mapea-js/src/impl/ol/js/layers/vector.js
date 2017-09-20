@@ -3,7 +3,7 @@ goog.provide('M.impl.layer.Vector');
 goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.impl.Layer');
-goog.require('M.impl.textpath');
+goog.require('M.impl.renderutils');
 
 (function() {
   /**
@@ -97,11 +97,7 @@ goog.require('M.impl.textpath');
     let olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
 
-    // add support for textpath
-    if (M.utils.isUndefined(CanvasRenderingContext2D.prototype.textPath)) {
-      CanvasRenderingContext2D.prototype.textPath = M.impl.textpath.render;
-    }
-    this.postComposeEvtKey_ = this.ol3Layer.on('postcompose', M.impl.textpath.draw.bind(this.ol3Layer), this);
+    this.postComposeEvtKey_ = this.ol3Layer.on('postcompose', M.impl.renderutils.postRender.bind(this.ol3Layer), this);
   };
 
   /**
