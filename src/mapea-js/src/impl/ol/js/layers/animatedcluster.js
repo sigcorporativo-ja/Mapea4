@@ -85,7 +85,7 @@ M.impl.layer.AnimatedCluster.getClusterForFeature_ = function(feature, clusters)
   return clusters.find(cluster => {
     let clusterFeatures = cluster.get('features');
     if (!M.utils.isNullOrEmpty(clusterFeatures)) {
-      return clusterFeatures.find(clusterFeature => clusterFeature === feature)
+      return clusterFeatures.find(clusterFeature => clusterFeature === feature);
     }
   });
 };
@@ -101,8 +101,6 @@ M.impl.layer.AnimatedCluster.getClusterForFeature_ = function(feature, clusters)
 M.impl.layer.AnimatedCluster.prototype.animate = function(event) {
   let duration = this.get('animationDuration');
   if (!duration) return;
-
-  let viewState = event.frameState.viewState;
 
   // Start a new animation, if change resolution and source has changed
   if (this.animation_.resolution != event.frameState.viewState.resolution && this.sourceChanged) {

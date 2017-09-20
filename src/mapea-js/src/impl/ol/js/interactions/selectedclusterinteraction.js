@@ -145,7 +145,7 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
   if (!cluster || cluster.length == 1) return;
 
   if (!cluster || cluster.length > this.maxFeaturesToSelect) {
-    let extend = M.impl.utils.getFeaturesExtent(cluster)
+    let extend = M.impl.utils.getFeaturesExtent(cluster);
     this.map.setBbox(extend);
     return;
   }

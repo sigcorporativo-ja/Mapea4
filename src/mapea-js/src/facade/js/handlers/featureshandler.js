@@ -198,7 +198,7 @@ goog.require('M.facade.Base');
   M.handler.Features.prototype.removeLayer = function(layer) {
     this.layers_.remove(layer);
     this.selectedFeatures_[layer.name] = null;
-    this.hoverFeatures_[layer.name] = null
+    this.hoverFeatures_[layer.name] = null;
     delete this.selectedFeatures_[layer.name];
     delete this.hoverFeatures_[layer.name];
   };

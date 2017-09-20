@@ -27,7 +27,7 @@ goog.require('M.impl.Layer');
      * @type {String}
      * @expose
      */
-    this.defaultCursor_;
+    this.defaultCursor_ = undefined;
   });
 
   /**

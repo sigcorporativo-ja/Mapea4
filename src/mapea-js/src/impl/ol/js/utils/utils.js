@@ -176,7 +176,7 @@ goog.require('goog.style');
    */
   M.impl.utils.getFeaturesExtent = function(features) {
     let olFeatures = features.map(f => (f instanceof M.Feature) ? f.getImpl().getOLFeature() : f);
-    let extents = features.map((feature) => feature.getGeometry().getExtent().slice(0));
+    let extents = olFeatures.map((feature) => feature.getGeometry().getExtent().slice(0));
     return (extents.length === 0) ? null : extents.reduce((ext1, ext2) => ol.extent.extend(ext1, ext2));
   };
 })();
