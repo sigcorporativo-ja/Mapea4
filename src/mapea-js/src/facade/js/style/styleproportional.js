@@ -23,11 +23,14 @@ goog.require('M.style.Point');
    * @param {object}
    * @api stable
    */
-  M.style.Proportional = (function(attributeName, minRadius, maxRadius, style, proportionalFunction, options) {
+  M.style.Proportional = (function(attributeName, minRadius, maxRadius, style, proportionalFunction, options = {}) {
+    if (M.utils.isNullOrEmpty(attributeName)) {
+      M.exception("No se ha especificado el nombre del atributo.");
+    }
 
     /**
-     * The name of the attribute to calculate proportionality
-     * @private
+     * TODO
+     * @public
      * @type {String}
      * @api stable
      * @expose
@@ -88,12 +91,6 @@ goog.require('M.style.Point');
      */
     this.layerFeatures_ = [];
 
-    options = options || {};
-
-    if (M.utils.isNullOrEmpty(attributeName)) {
-      M.exception('El attribute name no puede ser nulo o vacío');
-    }
-
     if (this.maxRadius_ < this.minRadius_) {
       this.minRadius_ = maxRadius;
       this.maxRadius_ = minRadius;
@@ -113,7 +110,6 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.apply = function(layer) {
     this.layer_ = layer;
-
     this.update_();
   };
 
@@ -244,7 +240,8 @@ goog.require('M.style.Point');
   M.style.Proportional.prototype.setMinRadius = function(minRadius) {
     this.minRadius_ = minRadius;
     if (minRadius >= this.maxRadius_) {
-      this.maxRadius_ = minRadius + 10;
+      // this.maxRadius_ = minRadius + 10;
+      M.exception("No puede establecerse un radio mínimo mayor que el máximo.");
     }
     this.update_();
     return this;
@@ -271,7 +268,8 @@ goog.require('M.style.Point');
   M.style.Proportional.prototype.setMaxRadius = function(maxRadius) {
     this.maxRadius_ = maxRadius;
     if (maxRadius <= this.minRadius_) {
-      this.minRadius_ = maxRadius - 10;
+      // this.minRadius_ = maxRadius - 10;
+      M.exception("No puede establecerse un radio máximo menor que el mínimo.");
     }
     this.update_();
     return this;
@@ -285,7 +283,7 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.update_ = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
-      if (this.layer_.getFeatures().some(f => f.getGeometry().type === 'LineString')) {
+      if (this.layer_.getFeatures().some(f => f.getGeometry().type === M.geom.geojson.type.LINE_STRING)) {
         M.exception('M.style.Proportional no puede aplicarse sobre capas de lineas');
       }
       else {
@@ -328,8 +326,8 @@ goog.require('M.style.Point');
       maxValue = filteredFeatures[0];
       while (index < filteredFeatures.length - 1) {
         let posteriorValue = filteredFeatures[index + 1];
-        minValue = minValue < posteriorValue ? minValue : posteriorValue;
-        maxValue = maxValue < posteriorValue ? posteriorValue : maxValue;
+        minValue = (minValue < posteriorValue) ? minValue : posteriorValue;
+        maxValue = (maxValue < posteriorValue) ? posteriorValue : maxValue;
         index++;
       }
     }

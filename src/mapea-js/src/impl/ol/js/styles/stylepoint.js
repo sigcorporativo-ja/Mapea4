@@ -170,6 +170,27 @@ goog.require('M.impl.style.Simple');
   };
 
   /**
+   * This function updates the canvas of style of canvas
+   *
+   * @public
+   * @function
+   * @param {HTMLCanvasElement} canvas - canvas of style
+   * @api stable
+   */
+  M.impl.style.Point.prototype.updateCanvas = function(canvas) {
+    let canvasSize = this.getCanvasSize();
+    let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+      size: canvasSize
+    });
+    let applyStyle = this.olStyleFn_()[0];
+    if (!M.utils.isNullOrEmpty(this.olStyleFn_()[1]) && this.olStyleFn_()[1].getImage() instanceof ol.style.FontSymbol) {
+      applyStyle = this.olStyleFn_()[1];
+    }
+    vectorContext.setStyle(applyStyle);
+    this.drawGeometryToCanvas(vectorContext);
+  };
+
+  /**
    * TODO
    *
    * @public

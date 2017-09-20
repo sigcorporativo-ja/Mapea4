@@ -18,10 +18,16 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Category = (function(attributeName, categoryStyles, options = {}) {
+    if (M.utils.isNullOrEmpty(attributeName)) {
+      M.exception("No se ha especificado el nombre del atributo.");
+    }
+
     /**
      * TODO
      * @public
      * @type {String}
+     * @api stable
+     * @expose
      */
     this.attributeName_ = attributeName;
 
@@ -40,7 +46,6 @@ goog.require('M.Style');
     this.categoryStyles_ = categoryStyles;
     goog.base(this, options, {});
   });
-
   goog.inherits(M.style.Category, M.Style);
 
   /**
@@ -154,10 +159,10 @@ goog.require('M.Style');
         radius = this.categoryStyles_[category].get('radius');
       }
       maxRadius = maxRadius < radius ? radius : maxRadius;
-    }.bind(this));
+    }, this);
     let vectorContext = this.canvas_.getContext('2d');
-    let styles = Object.keys(this.categoryStyles_).map((style) =>
-      ([style, this.categoryStyles_[style].toImage(), this.categoryStyles_[style]]));
+    let styles = Object.keys(this.categoryStyles_).map((categoryName) =>
+      ([categoryName, this.categoryStyles_[categoryName].toImage(), this.categoryStyles_[categoryName]]));
     vectorContext.canvas.height = 80 * styles.length;
     this.drawGeometryToCanvas(styles, vectorContext, maxRadius);
   };
@@ -208,10 +213,9 @@ goog.require('M.Style');
         this.drawImage_(vectorContext, image, category, coordinateX, coordinateY, coordXText, coordYText);
         coordinateY = coordinateY + radius + 5;
       }
-    }.bind(this));
+    }, this);
     vectorContext.canvas.height = coordinateY + 10;
   };
-
 
   /**
    * This function draw the image style on the vector context

@@ -60,6 +60,7 @@ goog.provide('M.Style');
    *
    */
   M.Style.prototype.unapply = function(layer) {};
+
   /**
    * This function returns the value of the indicated attribute
    *
@@ -93,9 +94,7 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style.prototype.set = function(property, value) {
-
-
-    this.setValue_(this.options_, property, value);
+    M.Style.setValue_(this.options_, property, value);
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.getImpl().updateFacadeOptions(this.options_);
     }
@@ -112,7 +111,7 @@ goog.provide('M.Style');
    * @return {String} value
    * @function
    */
-  M.Style.prototype.setValue_ = function(obj, path, value) {
+  M.Style.setValue_ = function(obj, path, value) {
     let keys = M.utils.isArray(path) ? path : path.split('.');
     let keyLength = keys.length;
     let key = keys[0];
@@ -123,7 +122,7 @@ goog.provide('M.Style');
       if (M.utils.isNullOrEmpty(obj[key])) {
         obj[key] = {};
       }
-      this.setValue_(obj[key], keys.slice(1, keyLength), value);
+      M.Style.setValue_(obj[key], keys.slice(1, keyLength), value);
     }
   };
 

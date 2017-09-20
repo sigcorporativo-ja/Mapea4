@@ -144,8 +144,6 @@ goog.require('M.impl.style.TextPath');
         width: style.getStroke().getWidth()
       };
     }
-    // let style = Object.assign(new ol.style.Style({}), this.olStyleFn_()[0]);
-    // style.setText(null);
     vectorContext.setStyle(this.olStyleFn_()[0]);
     this.drawGeometryToCanvas(vectorContext, canvas, optionsStyle);
   };

@@ -23,13 +23,19 @@ goog.require('M.style.quantification');
    * @api stable
    */
   M.style.Choropleth = (function(attributeName, styles, quantification = M.style.quantification.JENKS(), options = {}) {
-
-    if (!M.utils.isNullOrEmpty(attributeName)) {
-      this.attributeName_ = attributeName;
-    }
-    else {
+    if (M.utils.isNullOrEmpty(attributeName)) {
       M.exception("No se ha especificado el nombre del atributo.");
     }
+
+    /**
+     * TODO
+     * @public
+     * @type {String}
+     * @api stable
+     * @expose
+     */
+    this.attributeName_ = attributeName;
+
     /**
      * @public
      * @type {Array<M.Style>}
@@ -37,6 +43,7 @@ goog.require('M.style.quantification');
      * @expose
      */
     this.styles_ = styles;
+
     /**
      * @public
      * @type {M.quantification|function}
@@ -44,6 +51,7 @@ goog.require('M.style.quantification');
      * @expose
      */
     this.quantification_ = quantification;
+
     /**
      * @public
      * @type {M.layer.Vector}
@@ -51,6 +59,7 @@ goog.require('M.style.quantification');
      * @expose
      */
     this.layer_ = null;
+
     /**
      * @public
      * @type {Array<Number>}
@@ -58,6 +67,7 @@ goog.require('M.style.quantification');
      * @expose
      */
     this.dataValues_ = [];
+
     /**
      * @public
      * @type{Array<Number>}
@@ -298,17 +308,17 @@ goog.require('M.style.quantification');
   M.style.Choropleth.prototype.getValues = function() {
     let values = [];
     if (!M.utils.isNullOrEmpty(this.layer_)) {
-      values = this.layer_.getFeatures().map(function(f) {
-        let value;
+      this.layer_.getFeatures().forEach(function(f) {
         try {
-          value = parseInt(f.getAttribute(this.attributeName_));
+          let value = parseInt(f.getAttribute(this.attributeName_));
+          if (!isNaN(value)) {
+            values.push(value);
+          }
         }
         catch (e) {
-          value = null;
           // M.exception('TODO el atributo no es un número válido');
         }
-        return value;
-      }.bind(this)).filter(value => !M.utils.isNullOrEmpty(value) && !isNaN(value));
+      }, this);
     }
     return values;
   };
@@ -325,10 +335,7 @@ goog.require('M.style.quantification');
       if (!M.utils.isNullOrEmpty(features)) {
         this.dataValues_ = this.getValues();
         if (M.utils.isNullOrEmpty(this.styles_) || (!M.utils.isNullOrEmpty(this.styles_) &&
-            (
-              M.utils.isString(this.styles_[0]) || M.utils.isString(this.styles_[1])
-            )
-          )) {
+            (M.utils.isString(this.styles_[0]) || M.utils.isString(this.styles_[1])))) {
           this.breakPoints_ = this.quantification_(this.dataValues_);
           let firstFeature = features[0];
           let startColor = this.styles_ && this.styles_[0] ? this.styles_[0] : M.style.Choropleth.START_COLOR_DEFAULT;

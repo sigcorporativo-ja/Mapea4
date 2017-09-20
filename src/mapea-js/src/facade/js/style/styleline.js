@@ -8,7 +8,7 @@ goog.require('M.style.Simple');
 
   /**
    * @classdesc
-   * Main constructor of the class. Creates a categoryStyle
+   * TODO Main constructor of the class. Creates a categoryStyle
    * with parameters specified by the user
    * for the implementation
    * provided by the user
@@ -19,21 +19,12 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Line = (function(options = {}) {
-    //this.extends_(options, M.style.Line.DEFAULT);
+    this.extends_(options, M.style.Line.DEFAULT);
 
     let impl = new M.impl.style.Line(options);
-
-    // calls the super constructor
     goog.base(this, options, impl);
   });
   goog.inherits(M.style.Line, M.style.Simple);
-
-  /**
-   * TODO
-   */
-  M.style.Line.prototype.serialize = function() {
-    // TODO
-  };
 
   /**
    * Default options for this style
@@ -44,8 +35,7 @@ goog.require('M.style.Simple');
    */
   M.style.Line.DEFAULT = {
     stroke: {
-      width: 2,
-      color: '#67af13'
+      width: 2
     }
   };
 })();

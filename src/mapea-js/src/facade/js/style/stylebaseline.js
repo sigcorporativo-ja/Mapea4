@@ -18,6 +18,7 @@ goog.provide('M.style.baseline');
    * @api stable
    */
   M.style.baseline.MIDDLE = "MIDDLE";
+
   /**
    * Bottom style baseline
    * @const
@@ -26,6 +27,7 @@ goog.provide('M.style.baseline');
    * @api stable
    */
   M.style.baseline.BOTTOM = "BOTTOM";
+
   /**
    * Alphabetic style baseline
    * @const
@@ -52,5 +54,4 @@ goog.provide('M.style.baseline');
    * @api stable
    */
   M.style.baseline.IDEOGRAPHIC = "IDEOGRAPHIC";
-
 })();

@@ -13,26 +13,16 @@ goog.require('M.style.Simple');
    * @classdesc
    * Creates a style polygon
    * @constructor
-   * @extends {M.style.Simple}   *
+   * @extends {M.style.Simple}
    * @param {Object} options - options style
    * @api stable
    */
   M.style.Polygon = (function(options = {}) {
-
-    //this.extends_(options, M.style.Polygon.DEFAULT);
+    this.extends_(options, M.style.Polygon.DEFAULT);
     var impl = new M.impl.style.Polygon(options);
-    // calls the super constructor
     goog.base(this, options, impl);
   });
   goog.inherits(M.style.Polygon, M.style.Simple);
-
-
-  /**
-   * TODO
-   */
-  M.style.Polygon.prototype.serialize = function() {
-    // TODO
-  };
 
   /**
    * Default options for this style
@@ -41,14 +31,5 @@ goog.require('M.style.Simple');
    * @public
    * @api stable
    */
-  M.style.Polygon.DEFAULT = {
-    stroke: {
-      color: '#67af13',
-      width: 2
-    },
-    fill: {
-      color: '#67af13',
-      opacity: 0.2
-    }
-  };
+  M.style.Polygon.DEFAULT = {};
 })();
