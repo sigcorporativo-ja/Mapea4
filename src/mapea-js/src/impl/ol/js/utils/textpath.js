@@ -177,71 +177,27 @@ goog.require('goog.style');
   /**
    * Draws the textpath style if feature or layer has configured it
    * @public
-   * @see https://github.com/Viglino/ol3-ext/blob/gh-pages/style/settextpathstyle.js#L138
    * @function
    * @param {Object} e received event with framestate
    * @api stable
    */
-  M.impl.textpath.draw = function(e = null) {
-    // Prent drawing at large resolution
-    if (e.frameState.viewState.resolution > this.textPathMaxResolution_) return;
+  M.impl.textpath.draw = function(ctx, textStyle, coords) {
+    let path = getPath_(coords, textStyle.getRotateWithView());
 
-    let extent = e.frameState.extent;
-    let c2p = e.frameState.coordinateToPixelTransform;
-    let getPath_ = M.impl.textpath.getPath.bind(this, c2p);
-
-    let ctx = e.context;
-    ctx.save();
-    ctx.scale(e.frameState.pixelRatio, e.frameState.pixelRatio);
-
-    // gets features in extent
-    this.getSource().getFeaturesInExtent(extent).forEach((feature) => {
-      //let featureStyles = //this.textPathStyle_(feature, e.frameState.viewState.resolution)
-      let selectedStyle = feature.getStyle() != null ? feature.getStyle() : this.getStyle();
-      if (selectedStyle !== null) {
-        selectedStyle = M.impl.textpath.formatStyle(selectedStyle);
-      }
-      else {
-        // there is no styles to apply
-        return;
-      }
-      let styles = selectedStyle(feature, e.frameState.viewState.resolution);
-      styles.forEach((style) => {
-        let geom = (style instanceof M.style.Line ? style.options_.geometry : style.getGeometry()) || feature.getGeometry();
-        let coords;
-        switch (geom.getType()) {
-          case 'LineString':
-            coords = geom.getCoordinates();
-            break;
-          case 'MultiLineString':
-            coords = geom.getLineString(0).getCoordinates();
-            break;
-          default:
-            return false;
-        }
-        let textStyle = (style instanceof M.style.Line) ? style.options_.text : style.textPath;
-        if (textStyle == null || !(textStyle instanceof M.impl.style.TextPath)) {
-          return false;
-        }
-
-        let path = getPath_(coords, textStyle.getRotateWithView());
-
-        ctx.font = textStyle.getFont();
-        ctx.textBaseline = textStyle.getTextBaseline();
-        ctx.textAlign = textStyle.getTextAlign();
-        ctx.lineWidth = textStyle.getStroke() ? (textStyle.getStroke().getWidth() || M.impl.textpath.DEFAULT.lineWidth) : M.impl.textpath.DEFAULT.lineWidth;
-        ctx.strokeStyle = textStyle.getStroke() ? (textStyle.getStroke().getColor() || M.impl.textpath.DEFAULT.lineColor) : M.impl.textpath.DEFAULT.lineColor;
-        ctx.fillStyle = textStyle.getFill() ? textStyle.getFill().getColor() || M.impl.textpath.DEFAULT.fillColor : M.impl.textpath.DEFAULT.fillColor;
-        // New params
-        ctx.textJustify = textStyle.getTextAlign() == 'justify';
-        ctx.textOverflow = textStyle.getTextOverflow ? textStyle.getTextOverflow() : M.impl.textpath.DEFAULT.textOverflow;
-        ctx.minWidth = textStyle.getMinWidth ? textStyle.getMinWidth() : M.impl.textpath.DEFAULT.minWidth;
-        // Draw textpath
-        if (typeof ctx.textPath === 'function') {
-          ctx.textPath(textStyle.getText() || feature.get("name"), path);
-        }
-      });
-    });
+    ctx.font = textStyle.getFont();
+    ctx.textBaseline = textStyle.getTextBaseline();
+    ctx.textAlign = textStyle.getTextAlign();
+    ctx.lineWidth = textStyle.getStroke() ? (textStyle.getStroke().getWidth() || M.impl.textpath.DEFAULT.lineWidth) : M.impl.textpath.DEFAULT.lineWidth;
+    ctx.strokeStyle = textStyle.getStroke() ? (textStyle.getStroke().getColor() || M.impl.textpath.DEFAULT.lineColor) : M.impl.textpath.DEFAULT.lineColor;
+    ctx.fillStyle = textStyle.getFill() ? textStyle.getFill().getColor() || M.impl.textpath.DEFAULT.fillColor : M.impl.textpath.DEFAULT.fillColor;
+    // New params
+    ctx.textJustify = textStyle.getTextAlign() == 'justify';
+    ctx.textOverflow = textStyle.getTextOverflow ? textStyle.getTextOverflow() : M.impl.textpath.DEFAULT.textOverflow;
+    ctx.minWidth = textStyle.getMinWidth ? textStyle.getMinWidth() : M.impl.textpath.DEFAULT.minWidth;
+    // Draw textpath
+    if (typeof ctx.textPath === 'function') {
+      ctx.textPath(textStyle.getText() || feature.get("name"), path);
+    }
 
     ctx.restore();
   };
