@@ -38,6 +38,7 @@ goog.require('M.dialog');
 goog.require('M.Plugin');
 goog.require('M.window');
 
+goog.require('M.style.Chart');
 goog.require('M.style.Point');
 goog.require('M.style.Polygon');
 goog.require('M.style.Line');
