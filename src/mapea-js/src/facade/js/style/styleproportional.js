@@ -202,7 +202,7 @@ goog.require('M.style.Point');
     let coordinateY = 0;
     let coordXText = minMax[1] * 2 + 10;
     let coordYText = 0;
-    for (let i = 0; i < images.length; i++) {
+    for (let i = images.length - 1; i > -1; i--) {
       radius = minMax[i];
       let imagen = images[i];
       var image = new Image();
