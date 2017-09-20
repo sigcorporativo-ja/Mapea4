@@ -2,7 +2,8 @@
   "use strict";
 
   context.GeoJSONTypes = {
-    linestring: 'linestring'
+    linestring: 'linestring',
+    worldpt: 'worldpt'
   };
 
   context.provideGeoJSON = function (types, geojsonType) {
