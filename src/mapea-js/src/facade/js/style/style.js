@@ -167,6 +167,16 @@ goog.provide('M.Style');
 
   /**
    * TODO
+   */
+  M.Style.prototype.clone = function() {
+    let optsClone = JSON.parse(JSON.stringify(this.options_));
+    let implClass = this.getImpl().constructor;
+    let implClone = new implClass(optsClone);
+    return new this.constructor(optsClone, implClone);
+  };
+
+  /**
+   * TODO
    *
    * @public
    * @function

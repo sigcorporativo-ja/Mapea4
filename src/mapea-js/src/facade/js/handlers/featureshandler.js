@@ -36,6 +36,20 @@ goog.require('M.facade.Base');
      */
     this.activated_ = false;
 
+    /**
+     * @private
+     * @type {Object}
+     * @expose
+     */
+    this.selectedFeatures_ = {};
+
+    /**
+     * @private
+     * @type {Object}
+     * @expose
+     */
+    this.hoverFeatures_ = {};
+
     // checks if the implementation has all methods
     if (!M.utils.isFunction(impl.addTo)) {
       M.exception('La implementación usada no posee el método addTo');
@@ -60,6 +74,7 @@ goog.require('M.facade.Base');
   M.handler.Features.prototype.addTo = function(map) {
     this.map_ = map;
     this.map_.on(M.evt.CLICK, this.clickOnMap_, this);
+    this.map_.on(M.evt.MOVE, this.moveOverMap_, this);
     this.getImpl().addTo(this.map_);
     this.fire(M.evt.ADDED_TO_MAP);
   };
@@ -87,6 +102,38 @@ goog.require('M.facade.Base');
             layerImpl.selectFeatures(features, evt.coord, evt);
           }
           layer.fire(M.evt.SELECT_FEATURES, [features, evt]);
+        }
+      }, this);
+    }
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   */
+  M.handler.Features.prototype.moveOverMap_ = function(evt) {
+    if (this.activated_ === true) {
+      let impl = this.getImpl();
+      this.layers_.forEach(function(layer) {
+        let features = impl.getFeaturesByLayer(evt, layer);
+        let layerImpl = layer.getImpl();
+        if (M.utils.isNullOrEmpty(features) && !M.utils.isNullOrEmpty(this.hoverFeatures_[layer.name])) {
+          if (M.utils.isFunction(layerImpl.leaveFeature)) {
+            layerImpl.leaveFeature(features, evt.coord, evt);
+          }
+          layer.fire(M.evt.LEAVE_FEATURE, evt.coord);
+          this.hoverFeatures_[layer.name] = null;
+          this.getImpl().removeCursorPointer();
+        }
+        else if (!M.utils.isNullOrEmpty(features) && M.utils.isNullOrEmpty(this.hoverFeatures_[layer.name])) {
+          if (M.utils.isFunction(layerImpl.hoverFeature)) {
+            layerImpl.hoverFeature(features, evt.coord);
+          }
+          layer.fire(M.evt.HOVER_FEATURE, [features, evt]);
+          this.hoverFeatures_[layer.name] = features;
+          this.getImpl().addCursorPointer();
         }
       }, this);
     }
@@ -134,6 +181,8 @@ goog.require('M.facade.Base');
   M.handler.Features.prototype.addLayer = function(layer) {
     if (!M.utils.includes(this.layers_, layer)) {
       this.layers_.push(layer);
+      this.selectedFeatures_[layer.name] = [];
+      this.hoverFeatures_[layer.name] = null;
     }
   };
 
@@ -148,6 +197,10 @@ goog.require('M.facade.Base');
    */
   M.handler.Features.prototype.removeLayer = function(layer) {
     this.layers_.remove(layer);
+    this.selectedFeatures_[layer.name] = null;
+    this.hoverFeatures_[layer.name] = null
+    delete this.selectedFeatures_[layer.name];
+    delete this.hoverFeatures_[layer.name];
   };
 
   /**

@@ -13,6 +13,21 @@ goog.require('ol.render');
    * @api stable
    */
   M.impl.Style = (function(options = {}) {
+
+    /**
+     * User options for this style
+     * @private
+     * @type {Object}
+     */
+    this.options_ = options;
+
+    /**
+     * Layer which this style is applied
+     * @private
+     * @type {M.layer.Vector}
+     */
+    this.layer_ = null;
+
     this.updateFacadeOptions(options);
   });
 
@@ -33,6 +48,7 @@ goog.require('ol.render');
    * @api stable
    */
   M.impl.Style.prototype.applyToLayer = function(layer) {
+    this.layer_ = layer;
     layer.getFeatures().forEach(this.applyToFeature, this);
   };
 
@@ -84,5 +100,16 @@ goog.require('ol.render');
    */
   M.impl.Style.prototype.getCanvasSize = function() {
     return [100, 100];
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.Style.prototype.clone = function() {
+    return new this.constructor(Object.assign({}, this.options_));
   };
 })();

@@ -4,7 +4,6 @@ goog.require('M.impl.Style');
 goog.require('M.impl.layer.AnimatedCluster');
 goog.require('ol.source.Cluster');
 goog.require('M.impl.interaction.SelectCluster');
-goog.require('ol.interaction.Hover');
 goog.require('ol.geom.convexhull');
 /**
  * @namespace M.style.Cluster
@@ -21,26 +20,63 @@ goog.require('ol.geom.convexhull');
    * @api stable
    */
   M.impl.style.Cluster = function(options, optionsVendor) {
-    this.numFeaturesToDoCluster = 0;
-    this.styleCache = [];
-    this.olLayerOld = null;
-    this.vectorCover = null;
-    this.optionsVendor = optionsVendor;
-    this.options = options;
-    this.clusterSource = new ol.source.Cluster({
-      distance: this.options.distance,
-      source: new ol.source.Vector()
-    });
-    this.clusterLayer = new M.impl.layer.AnimatedCluster({
-      name: 'Cluster',
-      source: this.clusterSource,
-      animationDuration: optionsVendor.animationDuration,
-      style: this.getStyle.bind(this),
-      animationMethod: ol.easing[optionsVendor.animationMethod]
-    });
-    if (this.options.animated === false) {
-      this.clusterLayer.set('animationDuration', undefined);
-    }
+    /**
+     * TODO
+     * @private
+     * @type {M.layer.Vector}
+     * @expose
+     */
+    this.convexHullLayer_ = null;
+
+    goog.base(this, {});
+
+    /**
+     * TODO
+     * @private
+     * @type {ol.layer.Vector}
+     * @expose
+     */
+    this.oldOLLayer_ = null;
+
+    /**
+     * TODO
+     * @private
+     * @type {Object}
+     * @expose
+     */
+    this.optionsVendor_ = optionsVendor;
+
+    /**
+     * TODO
+     * @private
+     * @type {Object}
+     * @expose
+     */
+    this.options_ = options;
+
+    /**
+     * TODO
+     * @private
+     * @type {M.impl.layer.AnimatedCluster}
+     * @expose
+     */
+    this.clusterLayer_ = null;
+
+    /**
+     * TODO
+     * @private
+     * @type {M.impl.interaction.SelectCluster}
+     * @expose
+     */
+    this.selectClusterInteraction_ = null;
+
+    /**
+     * TODO
+     * @private
+     * @type {ol.interaction.Hover}
+     * @expose
+     */
+    this.hoverInteraction_ = null;
   };
   goog.inherits(M.impl.style.Cluster, M.impl.Style);
 
@@ -52,33 +88,73 @@ goog.require('ol.geom.convexhull');
    * @api stable
    * @export
    */
-  M.impl.style.Cluster.prototype.applyToLayer = function(layer) {
-    this.mLayer = layer;
-    let map = layer.getImpl().map;
-    this.numFeaturesToDoCluster = layer.getFeatures().length;
-    if (!M.utils.isArray(this.options.ranges) || (M.utils.isArray(this.options.ranges) && this.options.ranges.length == 0)) {
-      this.options.ranges = this.getDefaulStyles();
+  M.impl.style.Cluster.prototype.applyToLayer = function(layer, map) {
+    this.layer_ = layer;
+    this.updateCanvas();
+
+    let features = layer.getFeatures();
+    if (features.length > 0) {
+      this.clusterize_(features);
     }
-    let features = layer.getImpl().getOL3Layer().getSource().getFeatures();
-    this.clusterSource.getSource().addFeatures(features);
-    this.clusterLayer.setZIndex(99999);
-    layer.getImpl().setOL3Layer(this.clusterLayer);
-    if (this.options.hoverInteraction) {
-      this.addCoverInteraction(map);
-    }
-    if (this.options.selectedInteraction) {
-      this.addSelectedInteraction(map);
+    else {
+      this.layer_.on(M.evt.LOAD, this.clusterize_, this);
     }
   };
+
+  /**
+   * Apply the style cluster to layer vectorresolution
+   *
+   * @private
+   * @function
+   * @api stable
+   * @export
+   */
+  M.impl.style.Cluster.prototype.clusterize_ = function(features) {
+    let olFeatures = features.map(f => f.getImpl().getOLFeature());
+    this.clusterLayer_ = new M.impl.layer.AnimatedCluster({
+      name: 'Cluster',
+      source: new ol.source.Cluster({
+        distance: this.options_.distance,
+        source: new ol.source.Vector({
+          features: olFeatures
+        })
+      }),
+      animationDuration: this.optionsVendor_.animationDuration,
+      style: this.clusterStyleFn_.bind(this),
+      animationMethod: ol.easing[this.optionsVendor_.animationMethod]
+    });
+    if (this.options_.animated === false) {
+      this.clusterLayer_.set('animationDuration', undefined);
+    }
+    this.clusterLayer_.setZIndex(99999);
+    this.oldOLLayer_ = this.layer_.getImpl().getOL3Layer();
+    this.layer_.getImpl().setOL3Layer(this.clusterLayer_);
+
+    if (M.utils.isNullOrEmpty(this.options_.ranges)) {
+      this.options_.ranges = this.getDefaultRanges_();
+    }
+
+    if (this.options_.hoverInteraction !== false) {
+      this.addCoverInteraction_();
+    }
+    if (this.options_.selectInteraction !== false) {
+      this.addSelectInteraction_();
+    }
+  };
+
   /**
    * This function update a set of ranges  defined by user
    *
    * @function
    * @api stable
    */
-  M.impl.style.Cluster.prototype.setRangesImpl = function(newRanges, layer, cluster) {
-    cluster.options_.ranges = newRanges;
-    return cluster;
+  M.impl.style.Cluster.prototype.setRanges = function(newRanges) {
+    if (M.utils.isNullOrEmpty(newRanges)) {
+      this.options_.ranges = this.getDefaultRanges_();
+    }
+    else {
+      this.options_.ranges = newRanges;
+    }
   };
 
   /**
@@ -189,6 +265,7 @@ goog.require('ol.geom.convexhull');
       return false;
     }
   };
+
   /**
    * This function set if layer must be animated
    *
@@ -198,212 +275,214 @@ goog.require('ol.geom.convexhull');
   M.impl.style.Cluster.prototype.setAnimated = function(animated, layer, cluster) {
     cluster.options_.animated = animated;
     if (animated === false) {
-      this.clusterLayer.set('animationDuration', undefined);
+      this.clusterLayer_.set('animationDuration', undefined);
     }
     else {
-      this.clusterLayer.set('animationDuration', this.optionsVendor.animationDuration);
+      this.clusterLayer_.set('animationDuration', this.optionsVendor_.animationDuration);
     }
     return this;
   };
+
   /**
    * Add selected interaction and layer to see the features of cluster
    *
-   * @public
+   * @private
    * @function
    * @api stable
-   * @export
    */
-  M.impl.style.Cluster.prototype.addSelectedInteraction = function(map) {
-    this.selectCluster = new M.impl.interaction.SelectCluster({
+  M.impl.style.Cluster.prototype.addSelectInteraction_ = function() {
+    let map = this.layer_.getImpl().getMap();
+    this.selectClusterInteraction_ = new M.impl.interaction.SelectCluster({
       map: map,
-      maxFeaturesToSelect: this.options.maxFeaturesToSelect || 50,
-      pointRadius: this.optionsVendor.distanceSelectFeatures || 15,
+      maxFeaturesToSelect: this.options_.maxFeaturesToSelect,
+      pointRadius: this.optionsVendor_.distanceSelectFeatures,
       animate: true,
-      style: function(f, res) {
-        var cluster = f.get('features');
-        if (cluster && cluster.length > 1) {
-          return this.getStyle(f, res);
-        }
-        else {
-          let style = new ol.style.Style({
-            image: new ol.style.Circle({
-              stroke: new ol.style.Stroke({
-                color: "rgba(0,0,192,0.5)",
-                width: 2
-              }),
-              fill: new ol.style.Fill({
-                color: "rgba(0,0,192,0.3)"
-              }),
-              radius: 5
-            })
-          });
-          return [style];
-        }
-      }.bind(this)
+      style: this.clusterStyleFn_.bind(this)
+      // style: function(f, res) {
+      //   var cluster = f.get('features');
+      //   // cluster style
+      //   if (cluster && cluster.length > 1) {
+      //     return this.clusterStyleFn_(f, res, true);
+      //   }
+      //   else {
+      //     // feature style
+      //     let style = new ol.style.Style({
+      //       image: new ol.style.Circle({
+      //         stroke: new ol.style.Stroke({
+      //           color: "rgba(0,0,192,0.5)",
+      //           width: 2
+      //         }),
+      //         fill: new ol.style.Fill({
+      //           color: "rgba(0,0,192,0.3)"
+      //         }),
+      //         radius: 5
+      //       })
+      //     });
+      //     return [style];
+      //   }
+      // }.bind(this)
     });
-    this.selectCluster.on('select', this.selectClusterFeature_, this);
-    map.getMapImpl().addInteraction(this.selectCluster);
+    this.selectClusterInteraction_.on('select', this.selectClusterFeature_, this);
+    map.getMapImpl().addInteraction(this.selectClusterInteraction_);
   };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.removeSelectInteraction_ = function() {
+    this.layer_.getImpl().getMap().getMapImpl().removeInteraction(this.selectClusterInteraction_);
+  };
+
   /**
    * Add cover interaction and layer to see the cover
    *
-   * @public
+   * @private
    * @function
    * @api stable
-   * @export
    */
-  M.impl.style.Cluster.prototype.addCoverInteraction = function(map) {
-    let olmap = map.getMapImpl();
-    this.hoverInteraction = new ol.interaction.Hover({
-      cursor: "pointer",
-      layerFilter: function(l) {
-        return l === this.clusterLayer;
-      }.bind(this)
-    });
-    olmap.addInteraction(this.hoverInteraction);
-    this.hoverInteraction.on("enter", function(e) {
-      let h = e.feature.get("convexHull");
-      if (!h) {
-        let cluster = e.feature.get("features");
-        if (cluster && cluster.length) {
-          let c = [];
-          for (var i = 0; i < cluster.length; i++) {
-            let f = cluster[i];
-            c.push(f.getGeometry().getCoordinates());
-          }
-          h = ol.coordinate.convexHull(c);
-          e.feature.get("convexHull", h);
-        }
-      }
-      if (h.length > 2) {
-        let feature = new ol.Feature(new ol.geom.Polygon([h]));
-        let mFeature = M.impl.Feature.olFeature2Facade(feature);
-        if (this.vectorCover == null) {
-          this.vectorCover = new M.layer.Vector({
-            name: "cover",
+  M.impl.style.Cluster.prototype.hoverFeatureFn_ = function(features, evt) {
+    if (!M.utils.isNullOrEmpty(features)) {
+      let convexHull = ol.coordinate.convexHull(features.map(f => f.getImpl().getOLFeature().getGeometry().getCoordinates()));
+      if (convexHull.length > 2) {
+        let convexOlFeature = new ol.Feature(new ol.geom.Polygon([convexHull]));
+        let convexFeature = M.impl.Feature.olFeature2Facade(convexOlFeature);
+        if (M.utils.isNullOrEmpty(this.convexHullLayer_)) {
+          this.convexHullLayer_ = new M.layer.Vector({
+            name: "cluster_cover",
             extract: false
           }, {
-            displayInLayerSwitcher: this.optionsVendor.displayInLayerSwitcherHoverLayer || false
+            displayInLayerSwitcher: false,
+            style: new M.style.Polygon(this.optionsVendor_.convexHullStyle)
           });
-          this.vectorCover.addFeatures(mFeature);
-          map.addLayers(this.vectorCover);
-          this.vectorCover.setZIndex(99990);
+          this.convexHullLayer_.addFeatures(convexFeature);
+          this.layer_.getImpl().getMap().addLayers(this.convexHullLayer_);
+          this.convexHullLayer_.setZIndex(99990);
         }
         else {
-          this.vectorCover.clear();
-          this.vectorCover.addFeatures(mFeature);
+          this.convexHullLayer_.removeFeatures(this.convexHullLayer_.getFeatures());
+          this.convexHullLayer_.addFeatures(convexFeature);
         }
       }
-    }.bind(this));
-    this.hoverInteraction.on("leave", function(e) {
-      if (this.vectorCover != null) {
-        this.vectorCover.clear();
-      }
-    }.bind(this));
+    }
   };
+
   /**
-   * Check if user has defined a individual style
+   * Add cover interaction and layer to see the cover
    *
-   * @public
+   * @private
    * @function
    * @api stable
-   * @export
    */
-  M.impl.style.Cluster.prototype.hasIndividualStyle = function() {
-    let individualStyle = this.options.ranges.find(el => (el.min == 1 && el.max == 1));
-    return individualStyle ? true : false;
+  M.impl.style.Cluster.prototype.leaveFeatureFn_ = function(features, evt) {
+    if (!M.utils.isNullOrEmpty(this.convexHullLayer_)) {
+      this.convexHullLayer_.removeFeatures(this.convexHullLayer_.getFeatures());
+    }
   };
+
+  /**
+   * Add cover interaction and layer to see the cover
+   *
+   * @private
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.addCoverInteraction_ = function() {
+    this.layer_.on(M.evt.HOVER_FEATURE, this.hoverFeatureFn_, this);
+    this.layer_.on(M.evt.LEAVE_FEATURE, this.leaveFeatureFn_, this);
+  };
+
+  /**
+   * Add cover interaction and layer to see the cover
+   *
+   * @private
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.removeCoverInteraction_ = function() {
+    this.layer_.un(M.evt.HOVER_FEATURE, this.hoverFeatureFn_, this);
+    this.layer_.un(M.evt.LEAVE_FEATURE, this.leaveFeatureFn_, this);
+  };
+
   /**
    * This function is a style function to cluster
    * Get a style from ranges of user or default ranges
    *
-   * @public
+   * @private
    * @function
    * @api stable
    * @export
    */
-  M.impl.style.Cluster.prototype.getStyle = function(feature, resolution) {
-    if (!M.utils.isArray(this.options.ranges) || (M.utils.isArray(this.options.ranges) && this.options.ranges.length == 0)) {
-      this.options.ranges = this.getDefaulStyles(this.clusterLayer);
+  M.impl.style.Cluster.prototype.clusterStyleFn_ = function(feature, resolution, selected) {
+    let olStyle;
+    let clusterOlFeatures = feature.get('features');
+    let numFeatures = clusterOlFeatures.length;
+    let range = this.options_.ranges.find(el => (el.min <= numFeatures && el.max >= numFeatures));
+    if (!M.utils.isNullOrEmpty(range)) {
+      let style = range.style.clone();
+      if (selected) {
+        style.set('fill.opacity', 0.33);
+      }
+      else if (this.options_.displayAmount) {
+        style.set('label', this.options_.label);
+        let labelColor = style.get('label.color');
+        if (M.utils.isNullOrEmpty(labelColor)) {
+          let fillColor = style.get('fill.color');
+          if (!M.utils.isNullOrEmpty(fillColor)) {
+            labelColor = M.utils.inverseColor(fillColor);
+          }
+          else {
+            labelColor = '#000';
+          }
+          style.set('label.color', labelColor);
+        }
+      }
+      olStyle = style.getImpl().olStyleFn_(feature, resolution);
     }
-    var size = feature.get('features').length;
-    var style = this.styleCache[size];
-    if (!style) {
-      if (size == 1 && !this.hasIndividualStyle()) {
-        let styleFeature = feature.get('features')[0].getStyle();
-        if (styleFeature) {
-          return styleFeature();
-        }
-        else {
-          return new ol.style.Style.defaultFunction();
-        }
+    else if (numFeatures === 1) {
+      let featureStyleFn = clusterOlFeatures[0].getStyleFunction();
+      if (!M.utils.isNullOrEmpty(featureStyleFn)) {
+        olStyle = featureStyleFn(feature, resolution);
       }
       else {
-        let range = this.options.ranges.find(el => (el.min <= size && el.max >= size));
-        if (range) {
-          let style = range.style;
-          if (this.options.displayAmount) {
-
-
-            style.set('label.text', size.toString());
-            style.set('label.text.color', '#000');
-          }
-          return style.getImpl().olStyleFn_(feature, resolution);
+        let layerStyleFn = this.oldOLLayer_.getStyleFunction();
+        if (!M.utils.isNullOrEmpty(layerStyleFn)) {
+          olStyle = layerStyleFn(feature, resolution);
         }
         else {
-          return new ol.style.Style.defaultFunction();
+          olStyle = new ol.style.Style();
         }
       }
     }
-    return style.getImpl().olStyleFn_(feature, resolution);
+    return olStyle;
   };
+
   /**
    * This function return a default ranges to cluster
    *
-   * @public
+   * @private
    * @function
    * @api stable
    * @export
    */
-  M.impl.style.Cluster.prototype.getDefaulStyles = function() {
-    let isReal = false;
-    let range = this.numFeaturesToDoCluster / 3;
-    let rangeInt = Math.floor(range);
-    if ((range % 1) != 0) {
-      isReal = true;
-    }
-    var ranges = [
-      {
-        min: 2,
-        max: rangeInt,
-        style: new M.style.Point({
-          fill: {
-            color: 'green'
-          },
-          radius: 5
-        })
-      },
-      {
-        min: rangeInt,
-        max: (rangeInt * 2),
-        style: new M.style.Point({
-          fill: {
-            color: 'red'
-          },
-          radius: 10,
-        })
-      },
-      {
-        min: (rangeInt * 2),
-        max: this.numFeaturesToDoCluster + 1,
-        style: new M.style.Point({
-          fill: {
-            color: 'blue'
-          },
-          radius: 15
-        })
-      }
-      ];
+  M.impl.style.Cluster.prototype.getDefaultRanges_ = function() {
+    let breakpoint = Math.floor(this.layer_.getFeatures().length / 3);
+    let ranges = [{
+      min: 2,
+      max: breakpoint,
+      style: new M.style.Point(M.style.Cluster.RANGE_1_DEFAULT)
+      }, {
+      min: breakpoint,
+      max: (breakpoint * 2),
+      style: new M.style.Point(M.style.Cluster.RANGE_2_DEFAULT)
+      }, {
+      min: (breakpoint * 2),
+      max: (breakpoint * 3) + 1,
+      style: new M.style.Point(M.style.Cluster.RANGE_3_DEFAULT)
+    }];
     return ranges;
   };
   /**
@@ -416,16 +495,20 @@ goog.require('ol.geom.convexhull');
    * @api stable
    */
   M.impl.style.Cluster.prototype.selectClusterFeature_ = function(evt) {
-    if (M.utils.isArray(evt.selected) && evt.selected.length == 1 && evt.selected[0].getProperties().features && M.utils.isArray(evt.selected[0].getProperties().features) && evt.selected[0].getProperties().features.length == 1) {
-      let feature = evt.selected[0].getProperties().features[0];
-      let features = [M.impl.Feature.olFeature2Facade(feature)];
-      let layerImpl = this.mLayer.getImpl();
-      if (M.utils.isFunction(layerImpl.selectFeatures)) {
-        layerImpl.selectFeatures(features, feature.getGeometry().getCoordinates(), evt);
-      }
-      this.mLayer.fire(M.evt.SELECT_FEATURES, [features, evt]);
-    }
+    console.log(evt);
+    // if (!M.utils.isNullOrEmpty(evt.selected)) {
+    //   let selectedFeatures = evt.selected[0].get('features');
+    //   if (!M.utils.isNullOrEmpty(selectedFeatures)) {
+    //     let feature = evt.selected[0].getProperties().features[0];
+    //     let features = [M.impl.Feature.olFeature2Facade(feature)];
+    //     let layerImpl = this.mLayer.getImpl();
+    //     if (M.utils.isFunction(layerImpl.selectFeatures)) {
+    //       layerImpl.selectFeatures(features, feature.getGeometry().getCoordinates(), evt);
+    //     }
+    //     this.mLayer.fire(M.evt.SELECT_FEATURES, [features, evt]);
+    // }
   };
+
   /**
    * remove style cluster
    *
@@ -433,53 +516,13 @@ goog.require('ol.geom.convexhull');
    * @function
    * @api stable
    */
-  M.impl.style.Cluster.prototype.unapply = function(layer) {
-    let layerol = this.mLayer.getImpl().getOL3Layer();
-    let featuresCluster = layerol.getSource().getFeatures();
-    let features = [];
-    if (featuresCluster.length == 0) {
-      let feats = layer.getFeatures();
-      feats.forEach(function(f) {
-        features.push(f.impl_.olFeature_);
-      });
+  M.impl.style.Cluster.prototype.unapply = function() {
+    let clusterSource = this.clusterLayer_.getSource();
+    clusterSource.getSource().un(ol.events.EventType.CHANGE, ol.source.Cluster.prototype.refresh_, clusterSource);
 
-    }
-    else {
-      featuresCluster.forEach(function(f) {
-        if (f.getProperties() && M.utils.isArray(f.getProperties()['features'])) {
-          features = features.concat(f.getProperties()['features']);
-        }
-      });
-    }
-    let source = new ol.source.Vector({});
-    source.addFeatures(features);
-    let vector = new ol.layer.Vector({
-      source: source
-    });
-    vector.setZIndex(9999);
-    layer.getImpl().setOL3Layer(vector);
-    if (this.options.hoverInteraction) {
-      this.removeInteraction(layer, ol.interaction.Hover);
-    }
-    if (this.options.selectedInteraction) {
-      this.removeInteraction(layer, M.impl.interaction.SelectCluster);
-    }
-  };
-  /**
-   * remove interactions added to style cluster
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.impl.style.Cluster.prototype.removeInteraction = function(layer, type) {
-    let map = layer.getImpl().map;
-    let olmap = map.getMapImpl();
-    olmap.getInteractions().forEach(function(i) {
-      if (i instanceof type) {
-        olmap.removeInteraction(i);
-      }
-    });
+    this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
+    this.removeCoverInteraction_();
+    this.removeSelectInteraction_();
   };
 
   /**

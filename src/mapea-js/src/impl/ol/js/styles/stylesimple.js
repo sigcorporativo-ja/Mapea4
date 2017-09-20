@@ -48,8 +48,9 @@ goog.require('M.impl.Style');
    * @api stable
    */
   M.impl.style.Simple.prototype.applyToFeature = function(feature) {
-    let featureCtx = feature.getImpl().getOLFeature();
-    featureCtx.setStyle(this.olStyleFn_.bind(featureCtx));
+    // let featureCtx = feature.getImpl().getOLFeature();
+    // featureCtx.setStyle(this.olStyleFn_.bind(featureCtx));
+    feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
   };
 
   /**
@@ -69,7 +70,7 @@ goog.require('M.impl.Style');
         attrFeature = undefined;
       }
       else {
-        let feature = M.impl.Feature.olFeature2Facade(olFeature);
+        let feature = M.impl.Feature.olFeature2Facade(olFeature, false);
         if (templateRegexp.test(attr)) {
           let keyFeature = attr.replace(templateRegexp, '$1');
           attrFeature = feature.getAttribute(keyFeature);

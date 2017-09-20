@@ -207,10 +207,10 @@ goog.require('M.exception');
     if (obj instanceof M.layer.Vector) {}
     return equals;
   };
+
   /**
    * TODO
    */
-  // REVISION #86837 guardar el style como atributo de la clase
   M.layer.Vector.prototype.setStyle = function(style) {
     if (style instanceof M.Style) {
       if (!M.utils.isNullOrEmpty(this.style_)) {

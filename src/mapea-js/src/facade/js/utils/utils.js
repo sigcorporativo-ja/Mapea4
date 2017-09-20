@@ -827,4 +827,27 @@ goog.require('goog.color.alpha');
   M.utils.generateColorScale = function(color1, color2, n_classes) {
     return chroma.scale([color1, color2]).colors(n_classes);
   };
+
+  /**
+   * This function gets the inverse of a color. The inverse of a color
+   * is the diff between the hexadecimal value of white (0xFFFFFF)
+   * and the hexadecimal value of the color.
+   * @function
+   * @public
+   * @param {string} color
+   * @return {string} inverse color in hexadecimal format
+   * @api stable
+   */
+  M.utils.inverseColor = function(color) {
+    let inverseColor;
+
+    if (M.utils.isString(color)) {
+      let hexColor = chroma(color).hex();
+      hexColor = hexColor.replace(/^\#/, '0x');
+      inverseColor = chroma(0xFFFFFF - hexColor).hex();
+    }
+
+    return inverseColor;
+  };
+
 })();

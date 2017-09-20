@@ -56,7 +56,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.setRanges = function(newRanges) {
-    this.getImpl().setRangesImpl(newRanges, this.layer_, this);
+    this.getImpl().setRanges(newRanges);
     this.unapply(this.layer_);
     this.layer_.setStyle(this);
     return this;
@@ -113,17 +113,25 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.DEFAULT = {
-    // this.numFeaturesToDoCluster = 0;
-    // this.styleCache = [];
-    // this.olLayerOld = null;
-    // this.vectorCover = null;
-    // this.optionsVendor = optionsVendor;
-    // this.options = options;
     hoverInteraction: true,
     displayAmount: true,
-    selectedInteraction: true,
+    selectInteraction: true,
     distance: 60,
-    animated: true
+    animated: true,
+    maxFeaturesToSelect: 50,
+    label: {
+      text: function(feature) {
+        let text;
+        let cluseterFeatures = feature.getAttribute('features');
+        if (!M.utils.isNullOrEmpty(cluseterFeatures)) {
+          text = cluseterFeatures.length.toString();
+        }
+        return text;
+      },
+      font: "bold 15px Arial",
+      textBaseline: 'middle',
+      textAlign: "center"
+    }
   };
 
   /**
@@ -135,6 +143,58 @@ goog.require('M.Style');
    */
   M.style.Cluster.DEFAULT_VENDOR = {
     animationDuration: 250,
-    animationMethod: "linear"
+    animationMethod: "linear",
+    distanceSelectFeatures: 15,
+    convexHullStyle: {
+      fill: {
+        color: 'blue',
+        opacity: 0.9
+      },
+      stroke: {
+        color: 'red'
+      }
+    }
+  };
+
+  /**
+   * Default options for range 1 style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.style.Cluster.RANGE_1_DEFAULT = {
+    fill: {
+      color: 'green'
+    },
+    radius: 10
+  };
+
+  /**
+   * Default options for range 2 style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.style.Cluster.RANGE_2_DEFAULT = {
+    fill: {
+      color: 'red'
+    },
+    radius: 15,
+  };
+
+  /**
+   * Default options for range 3 style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.style.Cluster.RANGE_3_DEFAULT = {
+    fill: {
+      color: 'blue'
+    },
+    radius: 20
   };
 })();
