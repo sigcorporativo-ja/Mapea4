@@ -204,8 +204,7 @@ goog.require('M.impl.Layer');
    */
   M.impl.layer.Vector.prototype.getFeaturesExtent = function(skipFilter, filter) {
     let features = this.getFeatures(skipFilter, filter);
-    let extents = features.map((feature) => feature.getImpl().getOLFeature().getGeometry().getExtent().slice(0));
-    return (extents.length === 0) ? null : extents.reduce((ext1, ext2) => ol.extent.extend(ext1, ext2));
+    return M.impl.utils.getFeaturesExtent(features);
   };
 
   /**

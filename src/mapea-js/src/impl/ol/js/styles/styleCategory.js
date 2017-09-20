@@ -1,7 +1,6 @@
 goog.provide('M.impl.style.Category');
 
-
-
+goog.require('M.impl.Style');
 
 (function() {
 
@@ -18,7 +17,10 @@ goog.provide('M.impl.style.Category');
      * @type {M.style.Category}
      */
     this.facadeStyleCategory_ = null;
+
+    goog.base(this, options);
   };
+  goog.inherits(M.impl.style.Category, M.impl.Style);
 
   /**
    * This function return the AttributeName
@@ -222,5 +224,22 @@ goog.provide('M.impl.style.Category');
         ya_filtrada.push(categorias_existentes_aux);
       }
     }
+  };
+
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Category.prototype.updateCanvas = function(canvas) {
+    // let canvasSize = this.getCanvasSize();
+    // let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+    //   size: canvasSize
+    // });
+    // vectorContext.setStyle(this.olStyleFn_()[0]);
+    // this.drawGeometryToCanvas(vectorContext);
   };
 })();

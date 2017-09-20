@@ -161,6 +161,14 @@ goog.require('M.impl.style.Category');
       view: new M.impl.View()
     });
     this.map_.on('click', this.onMapClick_, this);
+    this.map_.addInteraction(new ol.interaction.Interaction({
+      handleEvent: e => {
+        if (e.type === "pointermove") {
+          this.onMapMove_(e);
+        }
+        return true;
+      }
+    }));
   };
   goog.inherits(M.impl.Map, M.Object);
 
@@ -1809,6 +1817,23 @@ goog.require('M.impl.style.Category');
     }
 
     this.facadeMap_.fire(M.evt.CLICK, [{
+      'pixel': pixel,
+      'coord': coord,
+      'vendor': evt
+    }]);
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   */
+  M.impl.Map.prototype.onMapMove_ = function(evt) {
+    let pixel = evt.pixel;
+    let coord = this.map_.getCoordinateFromPixel(pixel);
+
+    this.facadeMap_.fire(M.evt.MOVE, [{
       'pixel': pixel,
       'coord': coord,
       'vendor': evt

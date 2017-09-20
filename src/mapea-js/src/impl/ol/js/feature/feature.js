@@ -52,10 +52,10 @@ goog.provide('M.impl.Feature');
    * @function
    * @api stable
    */
-  M.impl.Feature.prototype.setOLFeature = function(olFeature) {
+  M.impl.Feature.prototype.setOLFeature = function(olFeature, canBeModified) {
     if (!M.utils.isNullOrEmpty(olFeature)) {
       this.olFeature_ = olFeature;
-      if (M.utils.isNullOrEmpty(this.olFeature_.getId())) {
+      if (canBeModified !== false && M.utils.isNullOrEmpty(this.olFeature_.getId())) {
         this.olFeature_.setId(M.utils.generateRandom('mapea_feature_'));
       }
     }
@@ -122,12 +122,11 @@ goog.provide('M.impl.Feature');
    * @return {M.Feature}  facadeFeature - M.Feature
    * @api stable
    */
-  M.impl.Feature.olFeature2Facade = function(olFeature) {
-    //let featureStyle = null;
+  M.impl.Feature.olFeature2Facade = function(olFeature, canBeModified) {
     let facadeFeature = null;
     if (!M.utils.isNullOrEmpty(olFeature)) {
       facadeFeature = new M.Feature();
-      facadeFeature.getImpl().setOLFeature(olFeature);
+      facadeFeature.getImpl().setOLFeature(olFeature, canBeModified);
     }
     return facadeFeature;
   };

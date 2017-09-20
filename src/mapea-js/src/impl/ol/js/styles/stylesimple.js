@@ -47,14 +47,7 @@ goog.require('M.impl.Style');
    * @api stable
    */
   M.impl.style.Simple.prototype.applyToFeature = function(feature) {
-    // Hay que ver como se comporta este método porque no cambia los estilos
-    // de las capas. Sin embargo en cluster este comportamiento es el deseado.
-
-    let g = ol.Observable.prototype.changed;
-    ol.Observable.prototype.changed = function() {};
-    let featureCtx = feature.getImpl().getOLFeature();
-    featureCtx.setStyle(this.olStyleFn_.bind(featureCtx));
-    ol.Observable.prototype.changed = g;
+    feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
   };
 
   /**
@@ -74,7 +67,7 @@ goog.require('M.impl.Style');
         attrFeature = undefined;
       }
       else {
-        let feature = M.impl.Feature.olFeature2Facade(olFeature);
+        let feature = M.impl.Feature.olFeature2Facade(olFeature, false);
         if (templateRegexp.test(attr)) {
           let keyFeature = attr.replace(templateRegexp, '$1');
           attrFeature = feature.getAttribute(keyFeature);
