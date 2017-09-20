@@ -205,22 +205,22 @@ goog.require('M.utils');
    * @api stable
    */
   M.Feature.prototype.getCentroid = function() {
-    if (this.getGeometry().type !== "LineString") {
-      let id = this.getId();
-      let attributes = this.getAttributes();
-      let style = new M.style.Point({
-        stroke: {
-          color: '#67af13',
-          width: 2
-        },
-        radius: 6,
-        fill: {
-          color: '#67af13',
-          opacity: 0.2
-        }
-      });
-      let centroid = this.getImpl().getCentroid();
-      centroid.setId(id);
+    let id = this.getId();
+    let attributes = this.getAttributes();
+    let style = new M.style.Point({
+      stroke: {
+        color: '#67af13',
+        width: 2
+      },
+      radius: 8,
+      fill: {
+        color: '#67af13',
+        opacity: 0.2
+      }
+    });
+    let centroid = this.getImpl().getCentroid();
+    if (!M.utils.isNullOrEmpty(centroid)) {
+      centroid.setId(id + "_centroid");
       centroid.setAttributes(attributes);
       centroid.setStyle(style);
       return centroid;

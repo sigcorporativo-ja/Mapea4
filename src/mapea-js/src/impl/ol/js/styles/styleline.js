@@ -3,12 +3,10 @@ goog.provide('M.impl.style.Line');
 goog.require('M.impl.style.Simple');
 goog.require('M.impl.style.TextPath');
 
-
 /**
- * @classdesc
+ * @namespace M.impl.style.Line
  *
  */
-
 
 (function() {
   /**
@@ -47,11 +45,11 @@ goog.require('M.impl.style.TextPath');
         style.setStroke(new ol.style.Stroke({
           color: getValue(stroke.color, feature),
           width: getValue(stroke.width, feature),
-          lineDash: getValue(stroke.lineDash, feature),
-          lineDashOffset: getValue(stroke.lineDashOffset, feature),
-          lineCap: getValue(stroke.lineCap, feature),
-          lineJoin: getValue(stroke.lineJoin, feature),
-          miterLimit: getValue(stroke.miterLimit, feature)
+          lineDash: getValue(stroke.linedash, feature),
+          lineDashOffset: getValue(stroke.linedashoffset, feature),
+          lineCap: getValue(stroke.linecap, feature),
+          lineJoin: getValue(stroke.linejoin, feature),
+          miterLimit: getValue(stroke.miterlimit, feature)
         }));
       }
       if (!M.utils.isNullOrEmpty(label)) {
@@ -64,12 +62,10 @@ goog.require('M.impl.style.TextPath');
           textBaseline: (getValue(label.baseline, feature) || '').toLowerCase(),
           textAlign: getValue(label.align, feature),
           rotateWithView: getValue(label.rotate, feature) || false,
-          textOverflow: getValue(label.textOverflow, feature) || 'custom',
-          minWidth: getValue(label.minWidth, feature) || 0
+          textOverflow: getValue(label.textoverflow, feature) || 'custom',
+          minWidth: getValue(label.minwidth, feature) || 0
         };
-
         let textPathStyle = new M.impl.style.TextPath(textPathConfig);
-
         if (!M.utils.isNullOrEmpty(label.stroke)) {
           textPathStyle.setStroke(new ol.style.Stroke({
             color: getValue(label.stroke.color, feature),
@@ -82,7 +78,6 @@ goog.require('M.impl.style.TextPath');
           }));
         }
         let applyPath = getValue(label.path, feature);
-
         // we will use a flag into de options object to set pathstyle or ol.text style
         if (typeof applyPath === 'boolean' && applyPath) {
           style.textPath = textPathStyle;
@@ -91,7 +86,6 @@ goog.require('M.impl.style.TextPath');
           style.setText(textPathStyle);
         }
       }
-
       if (!M.utils.isNullOrEmpty(fill)) {
         styleStroke.setStroke(
           new ol.style.Stroke({
@@ -142,18 +136,16 @@ goog.require('M.impl.style.TextPath');
     let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
       size: canvasSize
     });
-    let opt_style = null;
+    let optionsStyle;
     let style = this.olStyleFn_()[1];
     if (!M.utils.isNullOrEmpty(style) && !M.utils.isNullOrEmpty(style.getStroke())) {
-      opt_style = {
+      optionsStyle = {
         color: style.getStroke().getColor(),
         width: style.getStroke().getWidth()
       };
     }
-    // let style = Object.assign(new ol.style.Style({}), this.olStyleFn_()[0]);
-    // style.setText(null);
     vectorContext.setStyle(this.olStyleFn_()[0]);
-    this.drawGeometryToCanvas(vectorContext, canvas, opt_style);
+    this.drawGeometryToCanvas(vectorContext, canvas, optionsStyle);
   };
 
   /**

@@ -23,11 +23,14 @@ goog.require('M.style.Point');
    * @param {object}
    * @api stable
    */
-  M.style.Proportional = (function(attributeName, minRadius, maxRadius, style, proportionalFunction, options) {
+  M.style.Proportional = (function(attributeName, minRadius, maxRadius, style, proportionalFunction, options = {}) {
+    if (M.utils.isNullOrEmpty(attributeName)) {
+      M.exception("No se ha especificado el nombre del atributo.");
+    }
 
     /**
-     * The name of the attribute to calculate proportionality
-     * @private
+     * TODO
+     * @public
      * @type {String}
      * @api stable
      * @expose
@@ -88,12 +91,6 @@ goog.require('M.style.Point');
      */
     this.layerFeatures_ = [];
 
-    options = options || {};
-
-    if (M.utils.isNullOrEmpty(attributeName)) {
-      M.exception('El attribute name no puede ser nulo o vacío');
-    }
-
     if (this.maxRadius_ < this.minRadius_) {
       this.minRadius_ = maxRadius;
       this.maxRadius_ = minRadius;
@@ -113,7 +110,6 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.apply = function(layer) {
     this.layer_ = layer;
-
     this.update_();
   };
 
@@ -173,13 +169,11 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.updateCanvas = function() {
     if (!M.utils.isNullOrEmpty(this.style_)) {
-      let optionsMin = Object.assign({}, this.style_);
-      let optionsMax = Object.assign({}, this.style_);
       let sizeAttribute = this.getSizeAttribute_();
-      let estiloMin = new M.style.Point(optionsMin);
+      let estiloMin = this.style_.clone();
       estiloMin.set(sizeAttribute, this.minRadius_);
       let imagenMin = estiloMin.toImage();
-      let estiloMax = new M.style.Point(optionsMax);
+      let estiloMax = this.style_.clone();
       estiloMax.set(sizeAttribute, this.maxRadius_);
       let imagenMax = estiloMax.toImage();
       let vectorContext = this.canvas_.getContext('2d');
@@ -200,28 +194,29 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.drawGeometryToCanvas = function(images, minMax, vectorContext) {
     let radius = 0;
-    let length = images.length;
-    let x = vectorContext.canvas.width;
-    let y = vectorContext.canvas.height;
-    for (let i = 0; i < images.length; i++) {
+    let coordinateX = 0;
+    let coordinateY = 0;
+    let coordXText = minMax[1] * 2 + 10;
+    let coordYText = 0;
+    for (let i = images.length - 1; i > -1; i--) {
+      radius = minMax[i];
       let imagen = images[i];
       var image = new Image();
-      image.height = 100;
-      image.onload = function(vectorContext_) {
-        vectorContext_.textAlign = 'letf';
-        vectorContext_.font = "12px Arial";
-        vectorContext_.textBaseline = "middle";
+      coordYText = coordinateY + radius + 5;
+      coordinateX = minMax[1] - radius;
+      image.onload = function(vectorContext_, minMax, coordinateX, coordinateY, coordXText, coordYText) {
         if (i == 0) {
-          vectorContext_.fillText("min: " + minMax[i], x / 2, ((i / length) * y * 0.8) + this.height / 2);
+          vectorContext_.fillText("  min: " + minMax[i], coordXText, coordYText);
         }
         else {
-          vectorContext_.fillText("max: " + minMax[i], x / 2, ((i / length) * y * 0.8) + this.height / 2);
+          vectorContext_.fillText("  max: " + minMax[i], coordXText, coordYText);
         }
-        vectorContext_.drawImage(this, 0, (i / length) * y * 0.8);
-      }.bind(image, vectorContext, minMax, i, length, x, y);
+        vectorContext_.drawImage(this, coordinateX, coordinateY);
+      }.bind(image, vectorContext, minMax, coordinateX, coordinateY, coordXText, coordYText);
       image.src = imagen;
-      y = y + radius * 2 + 9;
+      coordinateY = coordinateY + radius * 2 + 9;
     }
+    vectorContext.canvas.height = coordinateY + 10;
   };
 
   /**
@@ -245,7 +240,8 @@ goog.require('M.style.Point');
   M.style.Proportional.prototype.setMinRadius = function(minRadius) {
     this.minRadius_ = minRadius;
     if (minRadius >= this.maxRadius_) {
-      this.maxRadius_ = minRadius + 10;
+      // this.maxRadius_ = minRadius + 10;
+      M.exception("No puede establecerse un radio mínimo mayor que el máximo.");
     }
     this.update_();
     return this;
@@ -272,7 +268,8 @@ goog.require('M.style.Point');
   M.style.Proportional.prototype.setMaxRadius = function(maxRadius) {
     this.maxRadius_ = maxRadius;
     if (maxRadius <= this.minRadius_) {
-      this.minRadius_ = maxRadius - 10;
+      // this.minRadius_ = maxRadius - 10;
+      M.exception("No puede establecerse un radio máximo menor que el mínimo.");
     }
     this.update_();
     return this;
@@ -286,7 +283,7 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.update_ = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
-      if (this.layer_.getFeatures().some(f => f.getGeometry().type === 'LineString')) {
+      if (this.layer_.getFeatures().some(f => f.getGeometry().type === M.geom.geojson.type.LINE_STRING)) {
         M.exception('M.style.Proportional no puede aplicarse sobre capas de lineas');
       }
       else {
@@ -304,8 +301,9 @@ goog.require('M.style.Point');
         this.style_.set('zindex', function(feature) {
           return maxValue - feature.getAttribute(this.attributeName_);
         }.bind(this));
-        this.layer_.setStyle(this.style_);
+        this.layer_.getFeatures().forEach(feature => feature.setStyle(this.style_));
         this.layer_.redraw();
+        this.updateCanvas();
       }
     }
   };
@@ -328,8 +326,8 @@ goog.require('M.style.Point');
       maxValue = filteredFeatures[0];
       while (index < filteredFeatures.length - 1) {
         let posteriorValue = filteredFeatures[index + 1];
-        minValue = minValue < posteriorValue ? minValue : posteriorValue;
-        maxValue = maxValue < posteriorValue ? posteriorValue : maxValue;
+        minValue = (minValue < posteriorValue) ? minValue : posteriorValue;
+        maxValue = (maxValue < posteriorValue) ? posteriorValue : maxValue;
         index++;
       }
     }

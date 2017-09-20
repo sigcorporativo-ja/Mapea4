@@ -72,15 +72,15 @@ goog.require('M.Object');
         }
       }
     }
-    /*if (!M.utils.isNullOrEmpty(src)) {
-      Object.entries(src).forEach(([attr, value]) => {
-        if (M.utils.isNullOrEmpty(dest[attr])) {
-          dest[attr] = value;
-        }
-        else if (M.utils.isObject(dest[attr])) {
-          this.extends_(dest[attr], value);
-        }
-      }, this);
-    }*/
+    // if (!M.utils.isNullOrEmpty(src)) {
+    //   Object.entries(src).forEach(([attr, value]) => {
+    //     if (M.utils.isNullOrEmpty(dest[attr])) {
+    //       dest[attr] = value;
+    //     }
+    //     else if (M.utils.isObject(dest[attr])) {
+    //       this.extends_(dest[attr], value);
+    //     }
+    //   }, this);
+    // }
   };
 })();

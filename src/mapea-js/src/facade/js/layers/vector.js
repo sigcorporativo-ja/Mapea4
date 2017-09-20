@@ -239,10 +239,12 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.Vector.prototype.getLegendURL = function() {
-    let legendUrl;
-    if (!M.utils.isNullOrEmpty(this.style_)) {
+    let legendUrl = this.getImpl().getLegendURL();
+
+    if (legendUrl.indexOf(M.Layer.LEGEND_ERROR) === -1 && !M.utils.isNullOrEmpty(this.style_)) {
       legendUrl = this.style_.toImage();
     }
+
     return legendUrl;
   };
 

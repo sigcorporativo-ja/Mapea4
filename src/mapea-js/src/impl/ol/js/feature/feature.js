@@ -242,18 +242,15 @@ goog.provide('M.impl.Feature');
   M.impl.Feature.prototype.getCentroid = function() {
     let olFeature = this.getOLFeature();
     let geometry = olFeature.getGeometry();
-    let olCentroid;
-    if (geometry.getType() === 'Polygon') {
-      let geomCentroid = geometry.getInteriorPoint();
-      olCentroid = new ol.Feature({
-        geometry: geomCentroid,
+    let center = M.impl.utils.getCentroid(geometry);
+    if (!M.utils.isNullOrEmpty(center)) {
+      let geom = new ol.geom.Point();
+      geom.setCoordinates(center);
+      let olCentroid = new ol.Feature({
+        'geometry': geom,
         name: 'centroid'
       });
+      return M.impl.Feature.olFeature2Facade(olCentroid);
     }
-    else {
-      olCentroid = olFeature;
-    }
-    let centroid = M.impl.Feature.olFeature2Facade(olCentroid);
-    return centroid;
   };
 })();

@@ -16,21 +16,12 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Point = (function(options = {}) {
-    //  this.extends_(options, M.style.Point.DEFAULT);
+    this.extends_(options, M.style.Point.DEFAULT);
 
     var impl = new M.impl.style.Point(options);
-
-    // calls the super constructor
     goog.base(this, options, impl);
   });
   goog.inherits(M.style.Point, M.style.Simple);
-
-  /**
-   * TODO
-   */
-  M.style.Point.prototype.serialize = function() {
-    // TODO
-  };
 
   /**
    * Default options for this style
@@ -40,17 +31,6 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Point.DEFAULT = {
-    stroke: {
-      color: '#67af13',
-      width: 2
-    },
-    radius: 6,
-    fill: {
-      color: '#67af13',
-      opacity: 0.2
-    },
-    label: {
-      offset: [0, 0]
-    }
+    radius: 6
   };
 })();

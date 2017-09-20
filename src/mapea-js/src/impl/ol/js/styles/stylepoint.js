@@ -28,7 +28,6 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Point.prototype.updateFacadeOptions = function(options) {
-
     this.olStyleFn_ = function(feature, resolution) {
       if (!(feature instanceof ol.Feature)) {
         resolution = feature;
@@ -63,7 +62,6 @@ goog.require('M.impl.style.Simple');
           }));
         }
       }
-
       if (!M.utils.isNullOrEmpty(options.label)) {
         let labelText = new ol.style.Text({
           font: M.impl.style.Simple.getValue(options.label.font, feature),
@@ -92,14 +90,12 @@ goog.require('M.impl.style.Simple');
         }
         style.setText(labelText);
       }
-
       style.setImage(new ol.style.Circle({
         fill: style.getFill(),
         stroke: style.getStroke(),
         radius: M.impl.style.Simple.getValue(options.radius, feature),
         snapToPixel: M.impl.style.Simple.getValue(options.snapToPixel, feature)
       }));
-
       if (!M.utils.isNullOrEmpty(options.icon)) {
         if (!M.utils.isNullOrEmpty(options.icon.src)) {
           styleIcon.setImage(new ol.style.Icon({
@@ -128,16 +124,15 @@ goog.require('M.impl.style.Simple');
             radius: M.impl.style.Simple.getValue(options.icon.radius, feature),
             rotation: M.impl.style.Simple.getValue(options.icon.rotation, feature),
             rotateWithView: M.impl.style.Simple.getValue(options.icon.rotate, feature),
-            offsetY: M.impl.style.Simple.getValue(options.icon.offset[0], feature),
-            offsetX: M.impl.style.Simple.getValue(options.icon.offset[1], feature),
-            color: M.impl.style.Simple.getValue(options.icon.color, feature),
+            offsetX: M.impl.style.Simple.getValue(options.icon.offset ? options.icon.offset[0] : undefined, feature),
+            offsetY: M.impl.style.Simple.getValue(options.icon.offset ? options.icon.offset[1] : undefined, feature),
             fill: new ol.style.Fill({
               color: M.impl.style.Simple.getValue(options.icon.fill, feature)
             }),
-            stroke: new ol.style.Stroke({
+            stroke: options.icon.gradientcolor ? new ol.style.Stroke({
               color: M.impl.style.Simple.getValue(options.icon.gradientcolor, feature),
               width: 1
-            }),
+            }) : undefined,
             anchor: M.impl.style.Simple.getValue(options.icon.anchor, feature),
             anchorXUnits: M.impl.style.Simple.getValue(options.icon.anchorxunits, feature),
             anchorYUnits: M.impl.style.Simple.getValue(options.icon.anchoryunits, feature),
@@ -171,9 +166,28 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Point.prototype.drawGeometryToCanvas = function(vectorContext) {
-    let x = this.getCanvasSize()[0];
-    let y = this.getCanvasSize()[1];
-    vectorContext.drawGeometry(new ol.geom.Point([x / 2, y / 2]));
+    vectorContext.drawGeometry(new ol.geom.Point([this.getCanvasSize()[0] / 2, this.getCanvasSize()[1] / 2]));
+  };
+
+  /**
+   * This function updates the canvas of style of canvas
+   *
+   * @public
+   * @function
+   * @param {HTMLCanvasElement} canvas - canvas of style
+   * @api stable
+   */
+  M.impl.style.Point.prototype.updateCanvas = function(canvas) {
+    let canvasSize = this.getCanvasSize();
+    let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+      size: canvasSize
+    });
+    let applyStyle = this.olStyleFn_()[0];
+    if (!M.utils.isNullOrEmpty(this.olStyleFn_()[1]) && this.olStyleFn_()[1].getImage() instanceof ol.style.FontSymbol) {
+      applyStyle = this.olStyleFn_()[1];
+    }
+    vectorContext.setStyle(applyStyle);
+    this.drawGeometryToCanvas(vectorContext);
   };
 
   /**
@@ -184,7 +198,14 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Point.prototype.getCanvasSize = function() {
-    let r = this.olStyleFn_()[0].getImage().getRadius();
+    let image = this.olStyleFn_()[1].getImage();
+    let r;
+    if (image instanceof ol.style.FontSymbol) {
+      r = image.getRadius();
+    }
+    else {
+      r = this.olStyleFn_()[0].getImage().getRadius();
+    }
     return [(r * 2) + 1, (r * 2) + 1];
   };
 })();

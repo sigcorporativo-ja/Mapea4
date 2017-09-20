@@ -1267,9 +1267,9 @@ let lines = new M.layer.GeoJSON({
   }
 });
 
-// mapajs.addLayers(points);
+mapajs.addLayers(points);
 // mapajs.addLayers(polygons);
-mapajs.addLayers(lines);
+// mapajs.addLayers(lines);
 
 //====================================================================
 // Choropleth con styles por defecto segun el cuantificador

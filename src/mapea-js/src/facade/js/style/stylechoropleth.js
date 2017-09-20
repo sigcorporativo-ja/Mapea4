@@ -23,13 +23,19 @@ goog.require('M.style.quantification');
    * @api stable
    */
   M.style.Choropleth = (function(attributeName, styles, quantification = M.style.quantification.JENKS(), options = {}) {
-
-    if (!M.utils.isNullOrEmpty(attributeName)) {
-      this.attributeName_ = attributeName;
-    }
-    else {
+    if (M.utils.isNullOrEmpty(attributeName)) {
       M.exception("No se ha especificado el nombre del atributo.");
     }
+
+    /**
+     * TODO
+     * @public
+     * @type {String}
+     * @api stable
+     * @expose
+     */
+    this.attributeName_ = attributeName;
+
     /**
      * @public
      * @type {Array<M.Style>}
@@ -37,6 +43,7 @@ goog.require('M.style.quantification');
      * @expose
      */
     this.styles_ = styles;
+
     /**
      * @public
      * @type {M.quantification|function}
@@ -44,6 +51,7 @@ goog.require('M.style.quantification');
      * @expose
      */
     this.quantification_ = quantification;
+
     /**
      * @public
      * @type {M.layer.Vector}
@@ -51,6 +59,7 @@ goog.require('M.style.quantification');
      * @expose
      */
     this.layer_ = null;
+
     /**
      * @public
      * @type {Array<Number>}
@@ -58,6 +67,7 @@ goog.require('M.style.quantification');
      * @expose
      */
     this.dataValues_ = [];
+
     /**
      * @public
      * @type{Array<Number>}
@@ -129,7 +139,24 @@ goog.require('M.style.quantification');
    */
   M.style.Choropleth.prototype.setQuantification = function(quantification) {
     this.quantification_ = quantification;
-    this.update_();
+    if (!this.styles_.some(style => M.utils.isString(style))) {
+      if (this.styles_.length < this.quantification_().length) {
+        let [startStyle, endStyle] = this.styles_;
+        let startColor = startStyle.get('fill.color');
+        let endColor = endStyle.get('fill.color');
+        if (M.utils.isNullOrEmpty(startColor)) {
+          startColor = startStyle.get('stroke.color');
+        }
+        if (M.utils.isNullOrEmpty(endColor)) {
+          endColor = endStyle.get('stroke.color');
+        }
+        this.styles_ = [startColor, endColor];
+      }
+      else {
+        this.styles_ = this.styles_.slice(0, this.quantification_().length);
+      }
+      this.update_();
+    }
     return this;
   };
 
@@ -172,61 +199,31 @@ goog.require('M.style.quantification');
 
   M.style.Choropleth.prototype.updateCanvas = function() {
     if (!M.utils.isNullOrEmpty(this.styles_)) {
-      let c = this.canvas_.getContext('2d');
+      let vectorContext = this.canvas_.getContext('2d');
       let styles = this.styles_;
-      let parejas = [];
-      let mayor_radius = 0;
-
-
-      for (let i = 0; i < styles.length; i++) {
-        let r = styles[i].options_.radius;
-        if (r > mayor_radius) {
-          mayor_radius = r;
-        }
-      }
-
-      if (mayor_radius == undefined) {
-        mayor_radius = 5;
-      }
-
-      // for (let i = 0; i < styles.length; i++) {
-      //   let image = styles[i].toImage();
-      //   let r = styles[i].options_.radius;
-      //   if (r > mayor_radius) {
-      //     mayor_radius = r;
-      //   }
-      //   imagenes.push(image);
-      // }
-
-
-
-
-
-      let breakPoints = this.breakPoints_;
-      if (breakPoints.length > 0) {
-
-        for (let i = 0; i < breakPoints.length; i++) {
-          let pareja = [];
-          if (i == 0) {
-            pareja.push(0, breakPoints[i]);
+      let coordinates = [];
+      let maxRadius = 0;
+      if (this.styles_.some(style => style instanceof M.style.Point)) {
+        styles.forEach(function(style) {
+          let icon = style.get('icon');
+          let radius;
+          if (!M.utils.isNullOrEmpty(icon)) {
+            radius = icon.radius;
           }
           else {
-            pareja.push(breakPoints[i - 1], breakPoints[i]);
+            radius = style.get('radius');
           }
-
-          parejas.push(pareja);
-
-        }
-
-        let num_stilos = styles.length;
-        c.canvas.height = 40 * num_stilos;
-        // this.drawGeometryToCanvas(imagenes, parejas, c, mayor_radius);
-        this.drawGeometryToCanvas(styles, parejas, c, mayor_radius);
-
+          maxRadius = radius < maxRadius ? maxRadius : radius;
+        });
       }
-
-
-
+      if (this.breakPoints_.length > 0) {
+        coordinates = [[0, this.breakPoints_[0]]];
+        for (let i = 1; i < this.breakPoints_.length; i++) {
+          coordinates.push([this.breakPoints_[i - 1], this.breakPoints_[i]]);
+        }
+        vectorContext.canvas.height = 40 * styles.length;
+        this.drawGeometryToCanvas(styles, coordinates, vectorContext, maxRadius);
+      }
     }
   };
 
@@ -237,90 +234,67 @@ goog.require('M.style.quantification');
    * @function
    * @api stable
    */
-  M.style.Choropleth.prototype.drawGeometryToCanvas = function(styles, parejas, c, mayor_radius) {
-    let pareja_ini = null;
-    let pareja_fin = null;
-    let y = 0;
-    let y_text = 0;
-    let x_text = mayor_radius * 2 + 10;
+  M.style.Choropleth.prototype.drawGeometryToCanvas = function(styles, coordinates, vectorContext, maxRadius) {
+    let startLimit = null;
+    let endLimit = null;
+    let coordinateX = 0;
+    let coordinateY = 0;
+    let coordYText = 0;
+    let coordXText = maxRadius * 2 + 10;
     let radius = null;
 
     for (let i = 0; i < styles.length; i++) {
-      let pareja = parejas[i];
-      pareja_ini = pareja[0];
-      pareja_fin = pareja[1];
-      var image = new Image();
-
+      startLimit = coordinates[i][0];
+      endLimit = coordinates[i][1];
+      let image = new Image();
       if (styles[i] instanceof M.style.Point) {
-        radius = styles[i].options_.radius;
-
-        y_text = y + radius + 5;
-        let x = 0 + mayor_radius - radius;
-        (function(x, y, pareja_ini, pareja_fin, y_text, x_text) {
-          image.onload = function() {
-            if (pareja_ini == 0) {
-              c.fillText("  x  <=  " + pareja_fin.toString(), x_text, y_text);
-            }
-            else {
-              c.fillText(pareja_ini.toString() + "  <  x  <=  " + pareja_fin.toString(), x_text, y_text);
-            }
-            c.drawImage(this, x, y);
-          };
-        })(x, y, pareja_ini, pareja_fin, y_text, x_text);
-        image.src = styles[i].toImage();
-        y = y + radius * 2 + 9;
-
+        let icon = styles[i].get('icon');
+        if (!M.utils.isNullOrEmpty(icon)) {
+          radius = icon.radius;
+        }
+        else {
+          radius = styles[i].get('radius');
+        }
+        coordYText = coordinateY + radius + 5;
+        coordinateX = maxRadius - radius;
+        this.drawImage_(vectorContext, image, [coordinateX, coordinateY], [startLimit, endLimit], [coordXText, coordYText], styles[i]);
+        coordinateY = coordinateY + radius * 2 + 9;
       }
-
-
       if (styles[i] instanceof M.style.Line) {
         radius = styles[i].canvas_.height;
-        let x_text = styles[i].canvas_.width + 8;
-        y_text = y + radius / 2;
-        let x = 0;
-        (function(x, y, pareja_ini, pareja_fin, y_text, x_text) {
-          image.onload = function() {
-            if (pareja_ini == 0) {
-              c.fillText("  x  <=  " + pareja_fin.toString(), x_text, y_text);
-            }
-            else {
-              c.fillText(pareja_ini.toString() + "  <  x  <=  " + pareja_fin.toString(), x_text, y_text);
-            }
-            c.drawImage(this, x, y);
-          };
-        })(x, y, pareja_ini, pareja_fin, y_text, x_text);
-        image.src = styles[i].toImage();
-        y = y + radius + 5;
+        coordXText = styles[i].canvas_.width + 8;
+        coordYText = coordinateY + radius / 2;
+        this.drawImage_(vectorContext, image, [coordinateX, coordinateY], [startLimit, endLimit], [coordXText, coordYText], styles[i]);
+        coordinateY = coordinateY + radius + 5;
       }
-
       if (styles[i] instanceof M.style.Polygon) {
         radius = styles[i].canvas_.height;
-        let x_text = styles[i].canvas_.width + 10;
-        y_text = y + radius / 2 + 4;
-        let x = 0;
-        (function(x, y, pareja_ini, pareja_fin, y_text, x_text) {
-          image.onload = function() {
-            if (pareja_ini == 0) {
-              c.fillText("  x  <=  " + pareja_fin.toString(), x_text, y_text);
-            }
-            else {
-              c.fillText(pareja_ini.toString() + "  <  x  <=  " + pareja_fin.toString(), x_text, y_text);
-            }
-            c.drawImage(this, x, y);
-          };
-        })(x, y, pareja_ini, pareja_fin, y_text, x_text);
-        image.src = styles[i].toImage();
-        y = y + radius + 5;
+        coordXText = styles[i].canvas_.width + 10;
+        coordYText = coordinateY + radius / 2 + 4;
+        this.drawImage_(vectorContext, image, [coordinateX, coordinateY], [startLimit, endLimit], [coordXText, coordYText], styles[i]);
+        coordinateY = coordinateY + radius + 5;
       }
-
-
-
-
-
-
-
     }
-    c.canvas.height = y + 10;
+    vectorContext.canvas.height = coordinateY + 10;
+  };
+
+  /**
+   * This function draw the image style on the vector context
+   * @private
+   * @function
+   * @api stable
+   */
+  M.style.Choropleth.prototype.drawImage_ = function(vectorContext, image, coordinatesXY, limits, coordXYText, style) {
+    image.onload = function() {
+      if (limits[0] == 0) {
+        vectorContext.fillText("  x  <=  " + limits[1].toString(), coordXYText[0], coordXYText[1]);
+      }
+      else {
+        vectorContext.fillText(limits[0].toString() + "  <  x  <=  " + limits[1].toString(), coordXYText[0], coordXYText[1]);
+      }
+      vectorContext.drawImage(this, coordinatesXY[0], coordinatesXY[1]);
+    };
+    image.src = style.toImage();
   };
 
   /**
@@ -332,21 +306,19 @@ goog.require('M.style.quantification');
    * @api stable
    */
   M.style.Choropleth.prototype.getValues = function() {
-    let layer = this.layer_;
     let values = [];
-    let attributeName = this.attributeName_;
-    if (!M.utils.isNullOrEmpty(layer)) {
-      values = layer.getFeatures().map(function(f) {
-        let value;
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      this.layer_.getFeatures().forEach(function(f) {
         try {
-          value = parseInt(f.getAttribute(attributeName));
+          let value = parseInt(f.getAttribute(this.attributeName_));
+          if (!isNaN(value)) {
+            values.push(value);
+          }
         }
         catch (e) {
-          value = null;
           // M.exception('TODO el atributo no es un número válido');
         }
-        return value;
-      }).filter(v => !M.utils.isNullOrEmpty(v) && !isNaN(v));
+      }, this);
     }
     return values;
   };
@@ -358,16 +330,12 @@ goog.require('M.style.quantification');
    * @api stable
    */
   M.style.Choropleth.prototype.update_ = function() {
-    let layer = this.layer_;
-    if (!M.utils.isNullOrEmpty(layer)) {
-      let features = layer.getFeatures();
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      let features = this.layer_.getFeatures();
       if (!M.utils.isNullOrEmpty(features)) {
         this.dataValues_ = this.getValues();
         if (M.utils.isNullOrEmpty(this.styles_) || (!M.utils.isNullOrEmpty(this.styles_) &&
-            (
-              typeof(this.styles_[0]) === "string" || typeof(this.styles_[1]) === "string"
-            )
-          )) {
+            (M.utils.isString(this.styles_[0]) || M.utils.isString(this.styles_[1])))) {
           this.breakPoints_ = this.quantification_(this.dataValues_);
           let firstFeature = features[0];
           let startColor = this.styles_ && this.styles_[0] ? this.styles_[0] : M.style.Choropleth.START_COLOR_DEFAULT;
@@ -383,7 +351,7 @@ goog.require('M.style.quantification');
           else if (firstFeature.getGeometry().type === "LineString") {
             this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_LINE(c));
           }
-          else {
+          else if (firstFeature.getGeometry().type === "Polygon") {
             this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_POLYGON(c));
           }
         }
@@ -393,12 +361,11 @@ goog.require('M.style.quantification');
       }
       for (let i = this.breakPoints_.length - 1; i > -1; i--) {
         let filterLTE = new M.filter.LTE(this.attributeName_, this.breakPoints_[i]);
-        let filteredFeatures = filterLTE.execute(features);
-        let style = this.styles_[i];
-        filteredFeatures.forEach(f => f.setStyle(style));
+        filterLTE.execute(features).forEach(f => f.setStyle(this.styles_[i]));
       }
+      this.layer_.redraw();
+      this.updateCanvas();
     }
-    this.updateCanvas();
   };
   /**
    * This functions returns a point style by default
@@ -430,7 +397,6 @@ goog.require('M.style.quantification');
    * @return {M.style.Line}
    * @api stable
    */
-
   M.style.Choropleth.DEFAULT_STYLE_LINE = function(c) {
     return new M.style.Line({
       stroke: {
@@ -459,6 +425,7 @@ goog.require('M.style.quantification');
       }
     });
   };
+
   /** Color style by default
    * @constant
    * @api stable

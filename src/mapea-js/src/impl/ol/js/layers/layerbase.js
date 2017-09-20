@@ -70,6 +70,14 @@ goog.provide('M.impl.Layer');
      */
     this.opacity_ = (this.options.opacity || 1);
 
+    /**
+     * Legend URL of this layer
+     * @private
+     * @type {String}
+     * @expose
+     */
+    this.legendUrl_ = M.utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_DEFAULT]);
+
     // calls the super constructor
     goog.base(this);
   });
@@ -206,31 +214,20 @@ goog.provide('M.impl.Layer');
   };
 
   /**
- * This function sets the OL layer
- *
- * @function
- * @api stable
- * @expose
- */
-M.impl.Layer.prototype.setOL3Layer = function(layer) {
-  let olMap = this.map.getMapImpl();
-  //let styleLayer = this.ol3Layer.getStyle();
-  //layer.setStyle(styleLayer);
-  olMap.removeLayer(this.ol3Layer);
-  this.ol3Layer = layer;
-  olMap.addLayer(layer);
-  return this;
-};
-
-  /**
-   * This function gets the created OL layer
+   * This function sets the OL layer
    *
    * @function
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.getLegendURL = function() {
-    return M.utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_DEFAULT]);
+  M.impl.Layer.prototype.setOL3Layer = function(layer) {
+    let olMap = this.map.getMapImpl();
+    //let styleLayer = this.ol3Layer.getStyle();
+    //layer.setStyle(styleLayer);
+    olMap.removeLayer(this.ol3Layer);
+    this.ol3Layer = layer;
+    olMap.addLayer(layer);
+    return this;
   };
 
   /**
@@ -240,7 +237,20 @@ M.impl.Layer.prototype.setOL3Layer = function(layer) {
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setLegendURL = function(legendUrl) {};
+  M.impl.Layer.prototype.getLegendURL = function() {
+    return this.legendUrl_;
+  };
+
+  /**
+   * This function gets the created OL layer
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  M.impl.Layer.prototype.setLegendURL = function(legendUrl) {
+    this.legendUrl_ = legendUrl;
+  };
 
   /**
    * This function gets the max resolution for
