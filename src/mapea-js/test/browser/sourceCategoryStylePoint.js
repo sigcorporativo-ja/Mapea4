@@ -1,6 +1,6 @@
 M.proxy(true);
 var mapajs = M.map({
-  'container': 'mapjs',
+  'container': 'map',
   "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline"],
 });
 
@@ -24,6 +24,28 @@ var style2 = new M.style.Point({
     width: 1
   },
   radius: 20
+});
+
+let gato = new M.style.Point({
+
+  radius: 5,
+  icon: {
+    src: 'https://cdn3.iconfinder.com/data/icons/free-icons-3/128/cat_6.png',
+    rotation: 0.5,
+    scale: 0.5,
+    opacity: 0.8,
+    anchor: [0.5, 1.9],
+    anchororigin: 'top-left',
+    anchororigin: 'top-left',
+    anchorxunits: 'fraction',
+    anchoryunits: 'fraction',
+    rotate: false,
+    // offset: [10, 0],
+    crossorigin: null,
+    snaptopixel: true,
+    offsetorigin: 'bottom-left',
+    size: [150, 95]
+  }
 });
 
 var feature = new M.Feature('feature', {
@@ -169,16 +191,17 @@ var verde = new M.style.Point({
 // constructor del mapa
 
 var categoryStyle = new M.style.Category("colegio", {
-  "public": rojo,
+  "public": amarillo,
   "privado": verde,
-  "religiosos": azul,
-  "hibrido": amarillo,
-  "concertado": rosa
+  "concertado": gato
+
 
 });
 
 
-layer.setStyle(categoryStyle);function GetStyleForCategories() {
+layer.setStyle(categoryStyle);
+
+function GetStyleForCategories() {
   let CategoryStyle = document.getElementById('CategoryStyle').value;
   let res = categoryStyle.getStyleForCategories(CategoryStyle);
   console.log(res);
@@ -215,3 +238,40 @@ function GetCategories() {
   console.log(res);
 
 }
+//
+// var mapajs = M.map({
+//   'container': 'map',
+// });
+
+// var feature = new M.Feature('feature', {
+//   "type": "Feature",
+//   "properties": {
+//     "colegio": "public"
+//   },
+//   "geometry": {
+//     "type": "Point",
+//     "coordinates": [508241.7352,
+//      4169727.5908
+//    ]
+//   }
+// });
+//
+// var verde = new M.style.Point({
+//   fill: {
+//     color: 'green',
+//     width: 15
+//   },
+//   stroke: {
+//     color: 'black',
+//     width: 2
+//   },
+//   radius: 9
+// });
+//
+//
+// var layer = new M.layer.Vector({
+//   name: 'layerVector'
+// });
+//
+// mapajs.addLayers([layer]);
+// layer.addFeatures([feature]);

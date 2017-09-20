@@ -47,6 +47,7 @@ goog.require('M.Style');
    * This function apply the styleCategory object to specified layer
    *
    * @function
+   * @public
    * @param {M.layer.Vector} layer - layer is the layer where we want to apply the new Style
    * @returns {M.style.Category}
    * @api stable
@@ -60,6 +61,7 @@ goog.require('M.Style');
    * This function return the AttributeName
    *
    * @function
+   * @public
    * @returns {String}
    * @api stable
    */
@@ -73,11 +75,11 @@ goog.require('M.Style');
    * @function
    * @param {String} attributeName - newAttributeName is the newAttributeName specified by the user
    * @returns {M.style.Category}
-   * @private
+   * @public
    * @api stable
    */
   M.style.Category.prototype.setAttributeName = function(attributeName) {
-    this.attributeName = attributeName;
+    this.attributeName_ = attributeName;
     this.update_();
     return this;
   };
@@ -91,6 +93,19 @@ goog.require('M.Style');
    */
   M.style.Category.prototype.getCategories = function() {
     return this.categoryStyles_;
+  };
+  /**
+   * This function sets the style categories
+   * @function
+   * @public
+   * @param {object}
+   * @api stable
+   *
+   */
+  M.style.Category.prototype.setCategories = function(categories) {
+    this.categoryStyles_ = categories;
+    this.update_();
+    return this;
   };
 
   /**
@@ -130,8 +145,18 @@ goog.require('M.Style');
   M.style.Category.prototype.updateCanvas = function() {
     let maxRadius = 0;
     Object.keys(this.categoryStyles_).forEach(function(category) {
-      let radius = this.categoryStyles_[category].get('radius');
+      let radius;
+      let icon = this.categoryStyles_[category].get('icon');
+      if (!M.utils.isNullOrEmpty(icon)) {
+        radius = icon.radius;
+      }
+      else {
+        radius = this.categoryStyles_[category].get('radius');
+      }
       maxRadius = maxRadius < radius ? radius : maxRadius;
+      if (maxRadius < 25) {
+        maxRadius = 25;
+      }
     }.bind(this));
     let vectorContext = this.canvas_.getContext('2d');
     let styles = Object.keys(this.categoryStyles_).map((style) =>
@@ -160,7 +185,16 @@ goog.require('M.Style');
       let style = category[2];
       var image = new Image();
       if (style instanceof M.style.Point) {
-        radius = style.options_.radius;
+        let icon = style.get('icon');
+        if (!M.utils.isNullOrEmpty(icon)) {
+          radius = icon.radius;
+        }
+        else {
+          radius = style.get('radius');
+        }
+        if ((M.utils.isNullOrEmpty(radius))) {
+          radius = 25;
+        }
         coordYText = coordinateY + radius + 5;
         coordinateX = maxRadius - radius;
         this.drawImage_(vectorContext, image, category, coordinateX, coordinateY, coordXText, coordYText);
