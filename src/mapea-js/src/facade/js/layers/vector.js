@@ -216,8 +216,8 @@ goog.require('M.exception');
       if (!M.utils.isNullOrEmpty(this.style_)) {
         this.style_.unapply(this);
       }
+      style.apply(this);
       this.style_ = style;
-      this.style_.apply(this);
     }
   };
 

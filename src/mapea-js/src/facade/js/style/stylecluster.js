@@ -22,6 +22,11 @@ goog.require('M.Style');
     /**
      * TODO
      */
+    this.oldStyle_ = null;
+
+    /**
+     * TODO
+     */
     var impl = new M.impl.style.Cluster(options, optsVendor);
 
     // calls the super constructor
@@ -37,6 +42,19 @@ goog.require('M.Style');
    */
   M.style.Cluster.prototype.unapply = function(layer) {
     this.getImpl().unapply(layer);
+  };
+
+  /**
+   * This function apply style
+   *
+   * @public
+   * @param {M.layer.Vector} layer - Layer to apply the styles
+   * @function
+   * @api stable
+   */
+  M.style.Cluster.prototype.apply = function(layer) {
+    this.oldStyle_ = layer.getStyle();
+    goog.base(this, 'apply', layer);
   };
 
   /**
@@ -103,6 +121,24 @@ goog.require('M.Style');
    */
   M.style.Cluster.prototype.isAnimated = function() {
     return this.options_.animated;
+  };
+
+  /**
+   * This function returns data url to canvas
+   *
+   * @function
+   * @protected
+   * @return {String} data url to canvas
+   */
+  M.style.Cluster.prototype.toImage = function() {
+    let base64Img;
+    if (!M.utils.isNullOrEmpty(this.oldStyle_)) {
+      base64Img = this.oldStyle_.toImage();
+    }
+    else {
+      base64Img = goog.base(this, 'toImage', this);
+    }
+    return base64Img;
   };
 
   /**
