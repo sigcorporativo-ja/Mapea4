@@ -12,19 +12,23 @@ goog.require('ol.structs.IHasChecksum');
 
   /**
    * @classdesc
-   * Set chart style for vector features
+   * chart style for vector features
    *
    * @constructor
    * @param {olx.style.FontSymbolOptions=} Options.
-   *	- type {pie|bar}
-   *	- radius {number} chart radius
-   *	- rotation {number}
-   *	- snapToPixel {bool}
-   *	- stroke {ol.style.Stroke} stroke style
-   *	- colors {String|Array<color>} predefined color set "classic","dark","pale","pastel","neon" / array of color string, default classic
-   *	- offsetX {number}
-   *	- offsetY {number}
-   *	- animation {number} step in an animation sequence [0,1]
+   *  - type {pie3d|pie|bar|donut} the chart type
+   *  - radius {number} chart radius
+   *  - rotation {number} determine whether the symbolizer rotates with the map
+   *  - snapToPixel {bool} determine whether the symbolizer should be snapped to a pixel.
+   *  - stroke {ol.style.Stroke} stroke style
+   *  - colors {string|Array<string>} array of colors as string
+   *  - offsetX {number} chart x axis offset
+   *  - offsetY {number} chart y axis offset
+   *  - animation {number} step in an animation sequence [0,1]
+   *  - variables {object|M.style.chart.Variable|string|Array<string>|Array<M.style.chart.Variable>} the chart variables
+   *  - donutRatio {number} the chart 'donut' type ratio
+   *  - data {Array<number>} chart data
+   *  - fill3DColor {string} the pie3d cylinder fill color
    * @extends {ol.style.RegularShape}
    * @implements {ol.structs.IHasChecksum}
    * @api
@@ -47,30 +51,45 @@ goog.require('ol.structs.IHasChecksum');
       this.setScale(options.scale);
     }
 
+    /**
+     * the chart variables
+     * @private
+     * @type {object|M.style.chart.Variable|string|Array<string>|Array<M.style.chart.Variable>}
+     */
     this.variables_ = options.variables || [];
 
     /**
+     * stroke style
      * @private
+     * @type {ol.style.Stroke}
      */
     this.stroke_ = options.stroke || null;
 
     /**
+     * chart radius
      * @private
+     * @type {number}
      */
     this.radius_ = options.radius || 0;
 
     /**
+     * chart 'donut' type ratio
      * @private
+     * @type {number}
      */
     this.donutRatio_ = options.donutRatio || 0;
 
     /**
+     * chart type
      * @private
+     * @type {string}
      */
     this.type_ = options.type || null;
 
     /**
+     * chart axis offsets
      * @private
+     * @type {Array<number>}
      */
     this.offset_ = [
       options.offsetX ? options.offsetX : 0,
@@ -78,7 +97,10 @@ goog.require('ol.structs.IHasChecksum');
     ];
 
     /**
+     * animation config
+     * [WARN] NOT IMPLEMENTED YET
      * @private
+     * @type {object}
      */
     this.animation_ = {
       animate: typeof options.animation === 'number',
@@ -86,26 +108,33 @@ goog.require('ol.structs.IHasChecksum');
     };
 
     /**
+     * chart data
      * @private
+     * @type {Array<number>}
      */
     this.data_ = options.data || null;
 
     /**
+     * chart colors
      * @private
+     * @type {Array<string>}
      */
     this.colors_ = options.scheme instanceof Array ? options.scheme : [];
 
     /**
+     * pie3d type cilynder color
      * @private
+     * @type {string}
      */
     this.fill3DColor_ = options.fill3DColor || '#000';
 
-    // call to render
+    // call to render and updated the ol.style.image canvas
     this.renderChart_();
   };
   ol.inherits(M.impl.style.OLChart, ol.style.RegularShape);
 
   /**
+   * clones the chart
    * @public
    * @function
    * @api stable
@@ -132,7 +161,8 @@ goog.require('ol.structs.IHasChecksum');
   };
 
   /**
-   *
+   * Chart data getter & setter
+   * setter will render the chart
    */
   Object.defineProperty(M.impl.style.OLChart.prototype, 'data', {
     get: function() {
@@ -145,7 +175,8 @@ goog.require('ol.structs.IHasChecksum');
   });
 
   /**
-   *
+   * Chart radius setter & getter
+   * setter will render the chart
    */
   Object.defineProperty(M.impl.style.OLChart.prototype, 'radius', {
     get: function() {
@@ -158,6 +189,7 @@ goog.require('ol.structs.IHasChecksum');
   });
 
   /**
+   * Radius and donut ratio type setter
    * @public
    * @function
    * @api stable
@@ -168,6 +200,7 @@ goog.require('ol.structs.IHasChecksum');
   };
 
   /**
+   * sets the animation step
    * @public
    * @function
    * @api stable
@@ -210,7 +243,8 @@ goog.require('ol.structs.IHasChecksum');
   };
 
   /**
-   * Renders the chart
+   * Renders the chart.
+   * This method is a layer postcompose event callback
    *
    * @function
    * @private
