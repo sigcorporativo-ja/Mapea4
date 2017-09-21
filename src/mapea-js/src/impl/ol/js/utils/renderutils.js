@@ -32,8 +32,6 @@ goog.require('M.impl.textpath');
     if (e.frameState.viewState.resolution > this.textPathMaxResolution_) return;
 
     let extent = e.frameState.extent;
-    let c2p = e.frameState.coordinateToPixelTransform;
-    let getPath_ = M.impl.textpath.getPath.bind(this, c2p);
 
     let ctx = e.context;
     ctx.save();

@@ -218,14 +218,10 @@ goog.require('M.style.quantification');
             radius = style.get('radius');
           }
           maxRadius = radius < maxRadius ? maxRadius : radius;
-        }); <<
-        << << < HEAD
-          ===
-          === =
+        });
       }
       if (maxRadius < 25) {
-        maxRadius = 25; >>>
-        >>> > refs / remotes / origin / redmine_88517
+        maxRadius = 25;
       }
       if (this.breakPoints_.length > 0) {
         coordinates = [[0, this.breakPoints_[0]]];

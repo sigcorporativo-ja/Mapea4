@@ -31,14 +31,14 @@ const extend = (target, ...sourceObs) => {
     if (Object.prototype.hasOwnProperty.call(source, sourceKey) && !Object.prototype.hasOwnProperty.call(target, sourceKey)) {
       target[sourceKey] = source[sourceKey];
     }
-  }))
+  }));
   return to;
 }
 
 /**
  * @namespace M.impl.style.Chart
  */
-(function () {
+(function() {
   /**
    * @classdesc
    * Set chart style for vector features
@@ -57,7 +57,7 @@ const extend = (target, ...sourceObs) => {
     this.olStyleFn_ = null;
 
     // merge default values
-    extend(options, M.style.Chart.DEFAULT)
+    this.extends_(options, M.style.Chart.DEFAULT);
 
     goog.base(this, options);
   };
@@ -134,7 +134,7 @@ const extend = (target, ...sourceObs) => {
                 color: label.fill || '#000'
               })
             })
-          })
+          });
         })).filter(style => style != null);
       }
 

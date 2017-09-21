@@ -29,10 +29,11 @@ goog.require('M.style.chart.Variable');
     if (!M.utils.isNullOrEmpty(variables)) {
       if (variables instanceof Array) {
         options.variables = variables.filter(variable => variable != null).map(variable => this.formatVariable_(variable));
-      } else if (typeof variables === 'string' || typeof variables === 'object') {
+      }
+      else if (typeof variables === 'string' || typeof variables === 'object') {
         options.variables = [this.formatVariable_(variables)];
-      } else {
-        console.warn('invalid variables detected', variables)
+      }
+      else {
         options.variables = [];
       }
     }
@@ -41,16 +42,19 @@ goog.require('M.style.chart.Variable');
     // if scheme is null we will set the default theme
     if (M.utils.isNullOrEmpty(options.scheme)) {
       options.scheme = M.style.Chart.DEFAULT.scheme;
-    // if is a string we will check if its custom (take values from variables) or a existing theme
-    } else if (typeof options.scheme === 'string') {
-    // NOTICE THAT } else if (options.scheme instanceof String) { WONT BE TRUE
+      // if is a string we will check if its custom (take values from variables) or a existing theme
+    }
+    else if (typeof options.scheme === 'string') {
+      // NOTICE THAT } else if (options.scheme instanceof String) { WONT BE TRUE
       if (options.scheme === M.style.chart.schemes.Custom && options.variables.some(variable => variable.fillColor != null)) {
         options.scheme = options.variables.map((variable) => variable.fillColor ? variable.fillColor : '');
-      } else {
+      }
+      else {
         options.scheme = M.style.chart.schemes[options.scheme] || M.style.Chart.DEFAULT.scheme;
       }
-    // if is an array of string we will set it directly
-    } else if (!(options.scheme instanceof Array && options.scheme.every(el => typeof el === 'string'))) {
+      // if is an array of string we will set it directly
+    }
+    else if (!(options.scheme instanceof Array && options.scheme.every(el => typeof el === 'string'))) {
       options.scheme = M.style.Chart.DEFAULT.scheme;
     }
 
@@ -70,11 +74,13 @@ goog.require('M.style.chart.Variable');
     let constructorOptions = {};
     if (variableOb instanceof M.style.chart.Variable) {
       return variableOb;
-    } else if (typeof variableOb === 'string') {
+    }
+    else if (typeof variableOb === 'string') {
       constructorOptions = {
         attribute: variableOb
       };
-    } else {
+    }
+    else {
       constructorOptions = variableOb;
     }
     return new M.style.chart.Variable(constructorOptions);
@@ -87,22 +93,22 @@ goog.require('M.style.chart.Variable');
     // TODO
   };
 
-   /**
-    * Default options for this style
-    * @const
-    * @type {object}
-    * @public
-    * @api stable
-    */
-   M.style.Chart.DEFAULT = {
-     shadow3dColor: '#369',
-     type: M.style.chart.types.BAR,
-     scheme: M.style.chart.schemes.Classic,
-     radius: 20,
-     donutRatio: 0.5,
-     offsetX: 0,
-     offsetY: 0,
-     animationStep: 1
-   };
+  /**
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.style.Chart.DEFAULT = {
+    shadow3dColor: '#369',
+    type: M.style.chart.types.BAR,
+    scheme: M.style.chart.schemes.Classic,
+    radius: 20,
+    donutRatio: 0.5,
+    offsetX: 0,
+    offsetY: 0,
+    animationStep: 1
+  };
 
 })();
