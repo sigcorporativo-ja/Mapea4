@@ -118,7 +118,7 @@ goog.require('goog.style');
 
   /**
    * Parse coordinates to path
-   * @public
+   * @private
    * @function
    * @param {Array<number>} c2p coords to pixel array
    * @param {Array<Array<number>>} coords coordinates
@@ -126,7 +126,7 @@ goog.require('goog.style');
    * @return {Array<number>} builded path
    * @api stable
    */
-  M.impl.textpath.getPath = function(c2p, coords, readable) {
+  M.impl.textpath.getPath_ = function(c2p, coords, readable) {
     var path1 = [];
     coords.forEach((coord) => {
       path1.push(c2p[0] * coord[0] + c2p[1] * coord[1] + c2p[4]);
@@ -182,7 +182,7 @@ goog.require('goog.style');
    * @api stable
    */
   M.impl.textpath.draw = function(ctx, textStyle, coords) {
-    let path = getPath_(coords, textStyle.getRotateWithView());
+    let path = this.getPath_(coords, textStyle.getRotateWithView());
 
     ctx.font = textStyle.getFont();
     ctx.textBaseline = textStyle.getTextBaseline();
@@ -196,7 +196,7 @@ goog.require('goog.style');
     ctx.minWidth = textStyle.getMinWidth ? textStyle.getMinWidth() : M.impl.textpath.DEFAULT.minWidth;
     // Draw textpath
     if (typeof ctx.textPath === 'function') {
-      ctx.textPath(textStyle.getText() || feature.get("name"), path);
+      ctx.textPath(textStyle.getText(), path);
     }
 
     ctx.restore();

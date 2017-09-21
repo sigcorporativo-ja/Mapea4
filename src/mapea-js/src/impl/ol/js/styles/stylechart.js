@@ -4,56 +4,57 @@ goog.require('M.impl.style.Simple');
 goog.require('M.impl.style.OLChart');
 
 /**
- * Converts a single object to extracted feature values object
- * @param {object} options unparsed options object
- * @param {ol.Feature} feature the ol feature
- * @return {object} parsed options with paths replaced with feature values
- * @function
- * @private
- * @api stable
- */
-const formatDataRecursively = (options, feature) => Object.keys(options).reduce((tot, curr, i) => {
-  let _ob = tot;
-  const setVal = (ob, opts, key) => {
-    ob[key] = typeof opts[key] === 'object' && opts[key] != null && !(opts[key] instanceof Array) ? formatDataRecursively(opts[key], feature) : M.impl.style.Simple.getValue(opts[key], feature);
-  };
-  if (typeof tot !== 'object') {
-    _ob = {};
-    if (typeof options[tot] !== 'object') {
-      setVal(_ob, options, tot);
-    }
-  }
-  setVal(_ob, options, curr);
-  return _ob;
-});
-
-/**
- * Object assign hook. Merges the array of source objects into target object.
- * @param {object} target the target ob
- * @param {object|Array<object>} sourceObs array of source obs
- * @return {object} merged target object
- * @function
- * @private
- * @api stable
- */
-const extend = (target, ...sourceObs) => {
-  if (target == null) { // TypeError if undefined or null
-    throw new TypeError('Cannot convert undefined or null to object');
-  }
-
-  let to = Object(target);
-  sourceObs.filter(source => source != null).forEach(source => Object.keys(source).forEach(sourceKey => {
-    if (Object.prototype.hasOwnProperty.call(source, sourceKey) && !Object.prototype.hasOwnProperty.call(target, sourceKey)) {
-      target[sourceKey] = source[sourceKey];
-    }
-  }));
-  return to;
-}
-
-/**
  * @namespace M.impl.style.Chart
  */
 (function() {
+
+  /**
+   * Converts a single object to extracted feature values object
+   * @param {object} options unparsed options object
+   * @param {ol.Feature} feature the ol feature
+   * @return {object} parsed options with paths replaced with feature values
+   * @function
+   * @private
+   * @api stable
+   */
+  const formatDataRecursively = (options, feature) => Object.keys(options).reduce((tot, curr, i) => {
+    let _ob = tot;
+    const setVal = (ob, opts, key) => {
+      ob[key] = typeof opts[key] === 'object' && opts[key] != null && !(opts[key] instanceof Array) ? formatDataRecursively(opts[key], feature) : M.impl.style.Simple.getValue(opts[key], feature);
+    };
+    if (typeof tot !== 'object') {
+      _ob = {};
+      if (typeof options[tot] !== 'object') {
+        setVal(_ob, options, tot);
+      }
+    }
+    setVal(_ob, options, curr);
+    return _ob;
+  });
+
+  /**
+   * Object assign hook. Merges the array of source objects into target object.
+   * @param {object} target the target ob
+   * @param {object|Array<object>} sourceObs array of source obs
+   * @return {object} merged target object
+   * @function
+   * @private
+   * @api stable
+   */
+  const extend = (target, ...sourceObs) => {
+    if (target == null) { // TypeError if undefined or null
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    let to = Object(target);
+    sourceObs.filter(source => source != null).forEach(source => Object.keys(source).forEach(sourceKey => {
+      if (Object.prototype.hasOwnProperty.call(source, sourceKey) && !Object.prototype.hasOwnProperty.call(target, sourceKey)) {
+        target[sourceKey] = source[sourceKey];
+      }
+    }));
+    return to;
+  };
+
   /**
    * @classdesc
    * Set chart style for vector features
@@ -89,7 +90,7 @@ const extend = (target, ...sourceObs) => {
     this.olStyleFn_ = null;
 
     // merge default values
-    this.extends_(options, M.style.Chart.DEFAULT);
+    extend(options, M.style.Chart.DEFAULT);
 
     goog.base(this, options);
   };
