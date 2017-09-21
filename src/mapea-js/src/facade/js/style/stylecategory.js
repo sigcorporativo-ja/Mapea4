@@ -60,7 +60,6 @@ goog.require('M.Style');
   M.style.Category.prototype.apply = function(layer) {
     this.layer_ = layer;
     this.update_();
-    this.updateCanvas();
   };
   /**
    * This function return the AttributeName
@@ -254,6 +253,7 @@ goog.require('M.Style');
         }
       }.bind(this));
       this.layer_.redraw();
+      this.updateCanvas();
     }
   };
 })();
