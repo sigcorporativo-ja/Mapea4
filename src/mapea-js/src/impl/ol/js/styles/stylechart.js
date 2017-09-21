@@ -9,53 +9,6 @@ goog.require('M.impl.style.OLChart');
 (function() {
 
   /**
-   * Converts a single object to extracted feature values object
-   * @param {object} options unparsed options object
-   * @param {ol.Feature} feature the ol feature
-   * @return {object} parsed options with paths replaced with feature values
-   * @function
-   * @private
-   * @api stable
-   */
-  const formatDataRecursively = (options, feature) => Object.keys(options).reduce((tot, curr, i) => {
-    let _ob = tot;
-    const setVal = (ob, opts, key) => {
-      ob[key] = typeof opts[key] === 'object' && opts[key] != null && !(opts[key] instanceof Array) ? formatDataRecursively(opts[key], feature) : M.impl.style.Simple.getValue(opts[key], feature);
-    };
-    if (typeof tot !== 'object') {
-      _ob = {};
-      if (typeof options[tot] !== 'object') {
-        setVal(_ob, options, tot);
-      }
-    }
-    setVal(_ob, options, curr);
-    return _ob;
-  });
-
-  /**
-   * Object assign hook. Merges the array of source objects into target object.
-   * @param {object} target the target ob
-   * @param {object|Array<object>} sourceObs array of source obs
-   * @return {object} merged target object
-   * @function
-   * @private
-   * @api stable
-   */
-  const extend = (target, ...sourceObs) => {
-    if (target == null) { // TypeError if undefined or null
-      throw new TypeError('Cannot convert undefined or null to object');
-    }
-
-    let to = Object(target);
-    sourceObs.filter(source => source != null).forEach(source => Object.keys(source).forEach(sourceKey => {
-      if (Object.prototype.hasOwnProperty.call(source, sourceKey) && !Object.prototype.hasOwnProperty.call(target, sourceKey)) {
-        target[sourceKey] = source[sourceKey];
-      }
-    }));
-    return to;
-  };
-
-  /**
    * @classdesc
    * Set chart style for vector features
    *
@@ -89,15 +42,32 @@ goog.require('M.impl.style.OLChart');
      */
     this.olStyleFn_ = null;
 
+    /**
+     * the style variables
+     * @private
+     * @type {Array<M.style.chart.Variable>}
+     */
+    this.variables_ = options.variables || [];
+
+    /**
+     * the colors scheme
+     * @private
+     * @type {Array<string>}
+     */
+    this.colorsScheme_ = options.scheme || [];
+
     // merge default values
-    extend(options, M.style.Chart.DEFAULT);
+    this.extend_(options, M.style.Chart.DEFAULT);
 
     goog.base(this, options);
   };
   goog.inherits(M.impl.style.Chart, M.impl.style.Simple);
+  
+  /**
+   * @inheritDoc
+   */
+  M.impl.Style.prototype.drawGeometryToCanvas = function(vectorContext) {
 
-  M.impl.style.Chart.prototype.updateCanvas = function(canvas) {
-    // TODO
   };
 
   /**
@@ -109,7 +79,7 @@ goog.require('M.impl.style.OLChart');
         resolution = feature;
         feature = this;
       }
-      let styleOptions = formatDataRecursively(options, feature);
+      let styleOptions = this.formatDataRecursively_(options, feature);
       let data = [];
       options.variables.forEach(variable => {
         let featureData = feature.get(variable.attribute);
@@ -189,6 +159,63 @@ goog.require('M.impl.style.OLChart');
   M.impl.style.Chart.prototype.applyToFeature = function(feature) {
     let featureCtx = feature.getImpl().getOLFeature();
     featureCtx.setStyle(this.olStyleFn_.bind(featureCtx));
+  };
+
+  /**
+   * Converts a single object to extracted feature values object
+   * @param {object} options unparsed options object
+   * @param {ol.Feature} feature the ol feature
+   * @return {object} parsed options with paths replaced with feature values
+   * @function
+   * @private
+   * @api stable
+   */
+  M.impl.style.Chart.prototype.formatDataRecursively_ = (options, feature) => Object.keys(options).reduce((tot, curr, i) => {
+    let _ob = tot;
+    const setVal = (ob, opts, key) => {
+      ob[key] = typeof opts[key] === 'object' && opts[key] != null && !(opts[key] instanceof Array) ? this.formatDataRecursively_(opts[key], feature) : M.impl.style.Simple.getValue(opts[key], feature);
+    };
+    if (typeof tot !== 'object') {
+      _ob = {};
+      if (typeof options[tot] !== 'object') {
+        setVal(_ob, options, tot);
+      }
+    }
+    setVal(_ob, options, curr);
+    return _ob;
+  });
+
+  /**
+   * Object assign hook. Merges the array of source objects into target object.
+   * @param {object} target the target ob
+   * @param {object|Array<object>} sourceObs array of source obs
+   * @return {object} merged target object
+   * @function
+   * @private
+   * @api stable
+   */
+  M.impl.style.Chart.prototype.extend_ = (target, ...sourceObs) => {
+    if (target == null) { // TypeError if undefined or null
+      throw new TypeError('Cannot convert undefined or null to object');
+    }
+
+    let to = Object(target);
+    sourceObs.filter(source => source != null).forEach(source => Object.keys(source).forEach(sourceKey => {
+      if (Object.prototype.hasOwnProperty.call(source, sourceKey) && !Object.prototype.hasOwnProperty.call(target, sourceKey)) {
+        target[sourceKey] = source[sourceKey];
+      }
+    }));
+    return to;
+  };
+
+  /**
+   * Max canvas radius
+   * @const
+   * @type {number}
+   */
+  M.impl.style.Chart.CANVAS_PROPS = {
+    MAX_RADIUS: 25,
+    HEIGHT: 80
   };
 
 
