@@ -5,6 +5,12 @@ goog.require('M.impl.style.OLChart');
 
 /**
  * Converts a single object to extracted feature values object
+ * @param {object} options unparsed options object
+ * @param {ol.Feature} feature the ol feature
+ * @return {object} parsed options with paths replaced with feature values
+ * @function
+ * @private
+ * @api stable
  */
 const formatDataRecursively = (options, feature) => Object.keys(options).reduce((tot, curr, i) => {
   let _ob = tot;
@@ -21,6 +27,15 @@ const formatDataRecursively = (options, feature) => Object.keys(options).reduce(
   return _ob;
 });
 
+/**
+ * Object assign hook. Merges the array of source objects into target object.
+ * @param {object} target the target ob
+ * @param {object|Array<object>} sourceObs array of source obs
+ * @return {object} merged target object
+ * @function
+ * @private
+ * @api stable
+ */
 const extend = (target, ...sourceObs) => {
   if (target == null) { // TypeError if undefined or null
     throw new TypeError('Cannot convert undefined or null to object');
@@ -44,7 +59,24 @@ const extend = (target, ...sourceObs) => {
    * Set chart style for vector features
    *
    * @constructor
-   * @param {object} Options
+   * @param {object} options. (SAME AS M.style.Chart)
+   *  - type {string|M.style.chart.types} the chart type
+   *  - radius {number} the radius of the chart. If chart type is 'bar' type this field
+   *            will limit the max bar height
+   *  - offsetX {number} chart x axis offset
+   *  - offsetY {number} chart y axis offset
+   *  - stroke.
+   *      - color {string} the color of the chart stroke
+   *      - width {number} the width of the chart stroke
+   *  - fill3DColor: {string} the fill color of the PIE_3D cylinder
+   *  - scheme {string|Array<string>|M.style.chart.schemes} the color set of the chart.If
+   *            value is typeof 'string' you must declare this scheme into M.style.chart.schemes
+   *            If you provide less colors than data size the colors will be taken from MOD operator:
+   *              mycolor = userColors[currentArrayIndex % userColors.length]
+   *  - rotateWithView {bool} determine whether the symbolizer rotates with the map.
+   *  - animation {bool} this field is currently ignored [NOT IMPLEMENTED YET]
+   *  - variables {object|M.style.chart.Variable|string|Array<string>|Array<M.style.chart.Variable>} the chart variables
+   *
    * @implements {M.impl.style.Simple}
    * @api
    */

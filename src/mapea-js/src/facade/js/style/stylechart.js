@@ -12,13 +12,29 @@ goog.require('M.style.chart.Variable');
   /**
    * @classdesc
    * Main constructor of the class. Creates a chart style
-   * with parameters specified by the user
-   * for the implementation
+   * with parameters specified by the user for the implementation
    * provided by the user
    *
    * @constructor
    * @extends {M.style.Simple}
-   * @param {object} options parameters
+   * @param {object} options.
+   *  - type {string|M.style.chart.types} the chart type
+   *  - radius {number} the radius of the chart. If chart type is 'bar' type this field
+   *            will limit the max bar height
+   *  - offsetX {number} chart x axis offset
+   *  - offsetY {number} chart y axis offset
+   *  - stroke.
+   *      - color {string} the color of the chart stroke
+   *      - width {number} the width of the chart stroke
+   *  - fill3DColor: {string} the fill color of the PIE_3D cylinder
+   *  - scheme {string|Array<string>|M.style.chart.schemes} the color set of the chart.If
+   *            value is typeof 'string' you must declare this scheme into M.style.chart.schemes
+   *            If you provide less colors than data size the colors will be taken from MOD operator:
+   *              mycolor = userColors[currentArrayIndex % userColors.length]
+   *  - rotateWithView {bool} determine whether the symbolizer rotates with the map.
+   *  - animation {bool} this field is currently ignored [NOT IMPLEMENTED YET]
+   *  - variables {object|M.style.chart.Variable|string|Array<string>|Array<M.style.chart.Variable>} the chart variables
+   *
    * @api stable
    */
   M.style.Chart = (function(options = {}) {
@@ -61,7 +77,12 @@ goog.require('M.style.chart.Variable');
   goog.inherits(M.style.Chart, M.style.Simple);
 
   /**
+   * formats a chart variable to creates a new M.style.chart.Variable
+   *
+   * @param {M.style.chart.Variable|string|object} variableOb a chart variable
    * @private
+   * @function
+   * @api stable
    */
   M.style.Chart.prototype.formatVariable_ = function(variableOb) {
     if (variableOb == null) {
@@ -80,15 +101,9 @@ goog.require('M.style.chart.Variable');
     return new M.style.chart.Variable(constructorOptions);
   };
 
-  /**
-   * TODO
-   */
-  M.style.Chart.prototype.serialize = function() {
-    // TODO
-  };
-
    /**
     * Default options for this style
+    *
     * @const
     * @type {object}
     * @public

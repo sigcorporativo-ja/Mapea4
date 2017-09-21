@@ -9,7 +9,10 @@ goog.provide('ol.structs.IHasChecksum');
 
 
   /**
+   * checksum getter
    * @return {string} The checksum.
+   * @function
+   * @api stable
    */
   ol.structs.IHasChecksum.prototype.getChecksum = function() {
   };
