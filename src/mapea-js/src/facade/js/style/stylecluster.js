@@ -58,6 +58,16 @@ goog.require('M.Style');
   };
 
   /**
+   * This function gets the old style of layer
+   * @public
+   * @function
+   * @return {M.Style} the old style of layer
+   */
+  M.style.Cluster.prototype.getOldStyle = function() {
+    return this.oldStyle_;
+  };
+
+  /**
    * This function return a set of ranges defined by user
    *
    * @function
