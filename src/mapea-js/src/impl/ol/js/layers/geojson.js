@@ -89,7 +89,18 @@ goog.require('goog.style');
 
     goog.base(this, 'addTo', map);
 
-    this.ol3Layer.setStyle(undefined);
+    this.facadeVector_.setStyle(new M.style.Point({
+      fill: {
+        color: 'rgba(255, 255, 255, 0.4)',
+        opacity: 0.4
+      },
+      stroke: {
+        color: "#3399CC",
+        width: 1
+      },
+      radius: 5,
+    }));
+    // this.ol3Layer.setStyle(undefined);
   };
 
   /**
