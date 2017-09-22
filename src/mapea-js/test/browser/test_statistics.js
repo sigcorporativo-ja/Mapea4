@@ -26,6 +26,7 @@ const initializeMap = () => {
   window.map = new M.map({
     container: 'map',
     projection: 'EPSG:4326*d',
+    controls: ['layerswitcher'],
     layers: ['OSM']
   });
 
@@ -216,7 +217,7 @@ const setChartStyle = (chartOptions) => {
   //poLayer.getImpl().getOL3Layer().setStyle(buildPolygonStyles);
   //multiLayer.getImpl().getOL3Layer().setStyle(buildMultiPolygonStyles);
   poLayer.setStyle(chartStyle)
-  multiLayer.setStyle(chartStyle)
+  //multiLayer.setStyle(chartStyle)
 };
 
 const defaultChartOptions = {
