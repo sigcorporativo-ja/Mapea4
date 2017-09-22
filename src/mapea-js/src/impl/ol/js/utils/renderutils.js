@@ -58,7 +58,7 @@ goog.require('M.impl.textpath');
         // add support for textpath
         let textStyle = (style instanceof M.style.Line) ? style.options_.text : style.textPath;
         if (textStyle != null && textStyle instanceof M.impl.style.TextPath) {
-          M.impl.textpath.draw(ctx, textStyle, coords);
+          M.impl.textpath.draw(ctx, e.frameState.coordinateToPixelTransform, textStyle, coords);
         }
 
         // add support for charts

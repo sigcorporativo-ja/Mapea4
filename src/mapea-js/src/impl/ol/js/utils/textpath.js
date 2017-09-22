@@ -118,7 +118,7 @@ goog.require('goog.style');
 
   /**
    * Parse coordinates to path
-   * @public
+   * @private
    * @function
    * @param {Array<number>} c2p coords to pixel array
    * @param {Array<Array<number>>} coords coordinates
@@ -126,7 +126,7 @@ goog.require('goog.style');
    * @return {Array<number>} builded path
    * @api stable
    */
-  M.impl.textpath.getPath = function(c2p, coords, readable) {
+  M.impl.textpath.getPath_ = function(c2p, coords, readable) {
     var path1 = [];
     coords.forEach((coord) => {
       path1.push(c2p[0] * coord[0] + c2p[1] * coord[1] + c2p[4]);
@@ -181,8 +181,8 @@ goog.require('goog.style');
    * @param {Object} e received event with framestate
    * @api stable
    */
-  M.impl.textpath.draw = function(ctx, textStyle, coords) {
-    let path = getPath_(coords, textStyle.getRotateWithView());
+  M.impl.textpath.draw = function(ctx, coord2Pixel, textStyle, coords) {
+    let path = this.getPath_(coord2Pixel, coords, textStyle.getRotateWithView());
 
     ctx.font = textStyle.getFont();
     ctx.textBaseline = textStyle.getTextBaseline();
