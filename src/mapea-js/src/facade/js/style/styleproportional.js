@@ -71,8 +71,8 @@ goog.require('M.style.Point');
      * @api stable
      * @expose
      */
-    this.proportionalFunction_ = (value, minValue, maxValue, minRadius, maxRadius) =>
-      (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius;
+    this.proportionalFunction_ = proportionalFunction || ((value, minValue, maxValue, minRadius, maxRadius) =>
+      (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius);
 
     /**
      * Layer where style is setted
@@ -161,6 +161,84 @@ goog.require('M.style.Point');
   };
 
   /**
+   * This function get the minimum radius of the style point
+   * @function
+   * @public
+   * @return {number} minimum radius of style point
+   * @api stable
+   */
+  M.style.Proportional.prototype.getMinRadius = function() {
+    return this.minRadius_;
+  };
+
+  /**
+   * This function set proportional function
+   * @function
+   * @public
+   * @param {function} proportionalFunction - proportional function
+   * @api stable
+   */
+  M.style.Proportional.prototype.setProportionalFunction = function(proportionalFunction) {
+    this.proportionalFunction_ = proportionalFunction;
+    this.update_();
+  };
+
+  /**
+   * This function get proportional function
+   * @function
+   * @public
+   * @return {number} minimum radius of style point
+   * @api stable
+   */
+  M.style.Proportional.prototype.getProportionalFunction = function() {
+    return this.proportionalFunction_;
+  };
+
+  /**
+   * This function set the minimum radius of the style point
+   * @function
+   * @public
+   * @param {number} minRadius - minimum radius of style point
+   * @api stable
+   */
+  M.style.Proportional.prototype.setMinRadius = function(minRadius) {
+    this.minRadius_ = minRadius;
+    if (minRadius >= this.maxRadius_) {
+      // this.maxRadius_ = minRadius + 10;
+      M.exception("No puede establecerse un radio mínimo mayor que el máximo.");
+    }
+    this.update_();
+    return this;
+  };
+
+  /**
+   * This function get the maximum radius of the style point
+   * @function
+   * @public
+   * @return {number} maximum radius of style point
+   * @api stable
+   */
+  M.style.Proportional.prototype.getMaxRadius = function() {
+    return this.maxRadius_;
+  };
+
+  /**
+   * This function set the maximum radius of the style point
+   * @function
+   * @public
+   * @param {number} minRadius - maximum radius of style point
+   * @api stable
+   */
+  M.style.Proportional.prototype.setMaxRadius = function(maxRadius) {
+    this.maxRadius_ = maxRadius;
+    if (maxRadius <= this.minRadius_) {
+      // this.minRadius_ = maxRadius - 10;
+      M.exception("No puede establecerse un radio máximo menor que el mínimo.");
+    }
+    this.update_();
+    return this;
+  };
+  /**
    * This function updates the canvas of style
    *
    * @function
@@ -219,61 +297,6 @@ goog.require('M.style.Point');
     vectorContext.canvas.height = coordinateY + 10;
   };
 
-  /**
-   * This function get the minimum radius of the style point
-   * @function
-   * @public
-   * @return {number} minimum radius of style point
-   * @api stable
-   */
-  M.style.Proportional.prototype.getMinRadius = function() {
-    return this.minRadius_;
-  };
-
-  /**
-   * This function set the minimum radius of the style point
-   * @function
-   * @public
-   * @param {number} minRadius - minimum radius of style point
-   * @api stable
-   */
-  M.style.Proportional.prototype.setMinRadius = function(minRadius) {
-    this.minRadius_ = minRadius;
-    if (minRadius >= this.maxRadius_) {
-      // this.maxRadius_ = minRadius + 10;
-      M.exception("No puede establecerse un radio mínimo mayor que el máximo.");
-    }
-    this.update_();
-    return this;
-  };
-
-  /**
-   * This function get the maximum radius of the style point
-   * @function
-   * @public
-   * @return {number} maximum radius of style point
-   * @api stable
-   */
-  M.style.Proportional.prototype.getMaxRadius = function() {
-    return this.maxRadius_;
-  };
-
-  /**
-   * This function set the maximum radius of the style point
-   * @function
-   * @public
-   * @param {number} minRadius - maximum radius of style point
-   * @api stable
-   */
-  M.style.Proportional.prototype.setMaxRadius = function(maxRadius) {
-    this.maxRadius_ = maxRadius;
-    if (maxRadius <= this.minRadius_) {
-      // this.minRadius_ = maxRadius - 10;
-      M.exception("No puede establecerse un radio máximo menor que el mínimo.");
-    }
-    this.update_();
-    return this;
-  };
 
   /**
    * This function updates the style
@@ -283,28 +306,26 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.update_ = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
-      if (this.layer_.getFeatures().some(f => f.getGeometry().type === M.geom.geojson.type.LINE_STRING)) {
-        M.exception('M.style.Proportional no puede aplicarse sobre capas de lineas');
+      this.layerFeatures_ = this.layer_.getFeatures(true);
+      this.layer_.removeFeatures(this.layerFeatures_);
+      let centroids = this.layerFeatures_;
+      if (this.layerFeatures_[0].getGeometry().type !== 'Point') {
+        centroids = this.layerFeatures_.map(f => f.getCentroid());
       }
-      else {
-        this.layerFeatures_ = this.layer_.getFeatures(true);
-        this.layer_.removeFeatures(this.layerFeatures_);
-        let centroids = this.layerFeatures_.map(f => f.getCentroid());
-        this.layer_.addFeatures(centroids);
-        let features = this.layer_.getFeatures(true);
-        let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
-        let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, this.attributeName_);
-        this.style_.set(this.getSizeAttribute_(), function(feature) {
-          let value = feature.getAttribute(this.attributeName_);
-          return this.proportionalFunction_(value, minValue, maxValue, minRadius, maxRadius);
-        }.bind(this));
-        this.style_.set('zindex', function(feature) {
-          return maxValue - feature.getAttribute(this.attributeName_);
-        }.bind(this));
-        this.layer_.getFeatures().forEach(feature => feature.setStyle(this.style_));
-        this.layer_.redraw();
-        this.updateCanvas();
-      }
+      this.layer_.addFeatures(centroids);
+      let features = this.layer_.getFeatures(true);
+      let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
+      let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, this.attributeName_);
+      this.style_.set(this.getSizeAttribute_(), function(feature) {
+        let value = feature.getAttribute(this.attributeName_);
+        return this.proportionalFunction_(value, minValue, maxValue, minRadius, maxRadius);
+      }.bind(this));
+      this.style_.set('zindex', function(feature) {
+        return maxValue - feature.getAttribute(this.attributeName_);
+      }.bind(this));
+      this.layer_.getFeatures().forEach(feature => feature.setStyle(this.style_));
+      this.layer_.redraw();
+      this.updateCanvas();
     }
   };
 

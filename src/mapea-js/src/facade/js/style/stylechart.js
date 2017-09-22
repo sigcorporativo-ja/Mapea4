@@ -108,6 +108,20 @@ goog.require('M.style.chart.Variable');
   };
 
   /**
+   * This function updates the canvas of style
+   *
+   * @function
+   * @public
+   * @api stable
+   */
+  M.style.Chart.prototype.updateCanvas = function() {
+    if (M.utils.isNullOrEmpty(this.getImpl())) {
+      return false;
+    }
+    this.getImpl().updateCanvas();
+  };
+
+  /**
    * Default options for this style
    *
    * @const

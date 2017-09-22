@@ -198,11 +198,7 @@ goog.require('M.style.quantification');
    */
 
   M.style.Choropleth.prototype.updateCanvas = function() {
-
-
     if (!M.utils.isNullOrEmpty(this.styles_)) {
-
-
       let vectorContext = this.canvas_.getContext('2d');
       let styles = this.styles_;
       let coordinates = [];
@@ -232,7 +228,6 @@ goog.require('M.style.quantification');
         this.drawGeometryToCanvas(styles, coordinates, vectorContext, maxRadius);
       }
     }
-
   };
 
 
@@ -357,14 +352,25 @@ goog.require('M.style.quantification');
           if (!M.utils.isArray(scaleColor)) {
             scaleColor = [scaleColor];
           }
-          if (firstFeature.getGeometry().type === "Point") {
-            this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_POINT(c));
-          }
-          else if (firstFeature.getGeometry().type === "LineString") {
-            this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_LINE(c));
-          }
-          else if (firstFeature.getGeometry().type === "Polygon") {
-            this.styles_ = scaleColor.map(c => M.style.Choropleth.DEFAULT_STYLE_POLYGON(c));
+          let geometry = firstFeature.getGeometry();
+          const generateStyle = (scale, defaultStyle) => (scale.map(c => defaultStyle(c)));
+          if (!M.utils.isNullOrEmpty(geometry)) {
+            switch (geometry.type) {
+              case M.geom.geojson.type.POINT:
+              case M.geom.geojson.type.MULTI_POINT:
+                this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_POINT);
+                break;
+              case M.geom.geojson.type.LINE_STRING:
+              case M.geom.geojson.type.MULTI_LINE_STRING:
+                this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_LINE);
+                break;
+              case M.geom.geojson.type.POLYGON:
+              case M.geom.geojson.type.MULTI_POLYGON:
+                this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_POLYGON);
+                break;
+              default:
+                return null;
+            }
           }
         }
         else {
@@ -379,6 +385,7 @@ goog.require('M.style.quantification');
       this.updateCanvas();
     }
   };
+
   /**
    * This functions returns a point style by default
    * @function
