@@ -121,7 +121,8 @@ goog.require('M.impl.style.OLChart');
           }.bind(this, context, line, x, y));
           line = word + ' ';
           y += lineHeight;
-        } else {
+        }
+        else {
           line = line + word + ' ';
         }
       });
@@ -152,7 +153,7 @@ goog.require('M.impl.style.OLChart');
       let tmp_image_y = y + fixedProps.item_top_margin;
       let textPosition = wrapText(context, [x, y], text, percentages.max_text_width, fixedProps.text_line_height);
       return [textPosition[0], (textPosition[1] > tmp_image_y ? textPosition[1] : tmp_image_y)];
-    }
+    };
     this.variables_.forEach((variable, i) => {
       let label = !M.utils.isNullOrEmpty(variable.legend) ? variable.legend : variable.attribute;
       let color = !M.utils.isNullOrEmpty(variable.fillColor) ? variable.fillColor : (this.colorsScheme_[i % this.colorsScheme_.length] || this.colorsScheme_[0]);
@@ -316,7 +317,7 @@ goog.require('M.impl.style.OLChart');
   M.impl.style.Chart.CANVAS_PROPS = {
     width: 200, // px
     percentages: {
-      left_right_content: 5 , // %
+      left_right_content: 5, // %
       item_side_margin: 5, // %
       max_text_width: 70, // %
     },
