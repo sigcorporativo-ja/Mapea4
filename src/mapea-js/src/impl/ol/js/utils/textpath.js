@@ -181,13 +181,8 @@ goog.require('goog.style');
    * @param {Object} e received event with framestate
    * @api stable
    */
-<<<<<<< HEAD
   M.impl.textpath.draw = function(ctx, coord2Pixel, textStyle, coords) {
     let path = this.getPath_(coord2Pixel, coords, textStyle.getRotateWithView());
-=======
-  M.impl.textpath.draw = function(ctx, textStyle, coords) {
-    let path = this.getPath_(coords, textStyle.getRotateWithView());
->>>>>>> origin/mapea42_test
 
     ctx.font = textStyle.getFont();
     ctx.textBaseline = textStyle.getTextBaseline();
