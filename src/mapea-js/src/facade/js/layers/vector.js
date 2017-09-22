@@ -217,9 +217,6 @@ goog.require('M.exception');
         this.style_.unapply(this);
       }
       style.apply(this);
-      if (style instanceof M.style.Cluster) {
-        style = style.getOldStyle() ? style.getOldStyle() : style;
-      }
       this.style_ = style;
     }
   };
@@ -231,11 +228,7 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.Vector.prototype.getStyle = function() {
-    let style = this.style_;
-    if (style instanceof M.style.Cluster) {
-      style = style.getOldStyle() ? style.getOldStyle() : style;
-    }
-    return style;
+    return this.style_;
   };
 
   /**
