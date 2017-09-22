@@ -316,6 +316,11 @@ goog.require('M.style.Point');
       let features = this.layer_.getFeatures(true);
       let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
       let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, this.attributeName_);
+      if (!M.utils.isNullOrEmpty(this.style_.get('icon.src'))) {
+        minRadius = minRadius / M.style.Proportional.SCALE_PROPORTION;
+        maxRadius = maxRadius / M.style.Proportional.SCALE_PROPORTION;
+      }
+
       this.style_.set(this.getSizeAttribute_(), function(feature) {
         let value = feature.getAttribute(this.attributeName_);
         return this.proportionalFunction_(value, minValue, maxValue, minRadius, maxRadius);
@@ -390,4 +395,9 @@ goog.require('M.style.Point');
       color: 'green'
     }
   };
+
+  /**
+   * TODO
+   */
+  M.style.Proportional.SCALE_PROPORTION = 20;
 })();
