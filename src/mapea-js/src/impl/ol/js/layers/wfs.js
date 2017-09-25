@@ -83,14 +83,15 @@ goog.require('M.impl.layer.Vector');
   M.impl.layer.WFS.prototype.addTo = function(map) {
     goog.base(this, 'addTo', map);
     // this.ol3Layer.setStyle(M.impl.layer.WFS.STYLE);
+    // this.on(M.evt.LOAD, function() {
+    //   let style = M.Style.createStyleLayer(M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE, this.facadeVector_);
+    //   this.facadeVector_.setStyle(style);
+    // }.bind(this));
+
     this.updateSource_();
     map.getImpl().on(M.evt.CHANGE, function() {
       this.refresh();
     }, this);
-    this.on(M.evt.LOAD, function() {
-      let style = M.Style.createStyleLayer(M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE, this.facadeVector_);
-      this.facadeVector_.setStyle(style);
-    }.bind(this));
   };
 
   /**
@@ -263,22 +264,4 @@ goog.require('M.impl.layer.Vector');
     return equals;
   };
 
-  /**
-   * Style for this layer
-   * @const
-   * @type {ol.style.Style}
-   * @public
-   * @api stable
-   */
-  M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE = {
-    fill: {
-      color: 'rgba(103, 175, 19, 0.2)',
-      opacity: 0.4
-    },
-    stroke: {
-      color: '#67af13',
-      width: 1
-    },
-    radius: 6
-  };
 })();

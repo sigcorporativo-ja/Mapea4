@@ -60,29 +60,29 @@ goog.require('M.impl.renderutils');
     map.on(M.evt.CHANGE_PROJ, this.setProjection_, this);
 
     this.ol3Layer = new ol.layer.Vector({
-      style: new ol.style.Style({
-        fill: new ol.style.Fill({
-          color: 'rgba(0, 158, 0, 0.1)'
-        }),
-        stroke: new ol.style.Stroke({
-          color: '#fcfcfc',
-          width: 2
-        }),
-        image: new ol.style.Circle({
-          radius: 7,
-          fill: new ol.style.Fill({
-            color: '#009E00'
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#fcfcfc',
-            width: 2
-          })
-        })
-      }),
-      zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
+      // style: new ol.style.Style({
+      //   fill: new ol.style.Fill({
+      //     color: 'rgba(0, 158, 0, 0.1)'
+      //   }),
+      //   stroke: new ol.style.Stroke({
+      //     color: '#fcfcfc',
+      //     width: 2
+      //   }),
+      //   image: new ol.style.Circle({
+      //     radius: 7,
+      //     fill: new ol.style.Fill({
+      //       color: '#009E00'
+      //     }),
+      //     stroke: new ol.style.Stroke({
+      //       color: '#fcfcfc',
+      //       width: 2
+      //     })
+      //   })
+      // }),
+      // zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
     });
     this.updateSource_();
-    this.facadeVector_.setStyle(this.facadeVector_.getStyle());
+    // this.facadeVector_.setStyle(this.facadeVector_.getStyle());
 
     // sets its visibility if it is in range
     // if (this.options.visibility != false) {

@@ -37,6 +37,28 @@ goog.require('M.exception');
     if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {
       this.setStyle(style);
     }
+    else {
+      if (this instanceof M.layer.WFS) {
+        this.on(M.evt.LOAD, function() {
+          let style = M.Style.createStyleLayer(M.layer.Vector.DEFAULT_STYLE_WFS, this);
+          this.setStyle(style);
+        }.bind(this));
+      }
+
+      if (this instanceof M.layer.GeoJSON) {
+        if (!M.utils.isNullOrEmpty(this.src)) {
+          this.on(M.evt.LOAD, function() {
+            let style = M.Style.createStyleLayer(M.layer.Vector.DEFAULT_STYLE_GEOJSON, this);
+            this.setStyle(style);
+          }.bind(this));
+        }
+        else {
+          let style = M.Style.createStyleLayer(M.layer.Vector.DEFAULT_STYLE_GEOJSON, this);
+          this.setStyle(style);
+        }
+      }
+    }
+
     impl.on(M.evt.LOAD, (features) => this.fire(M.evt.LOAD, [features]));
   });
   goog.inherits(M.layer.Vector, M.Layer);
@@ -259,16 +281,34 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.layer.Vector.DEFAULT_OPTIONS_STYLE = {
+  M.layer.Vector.DEFAULT_STYLE_GEOJSON = {
     fill: {
-      color: 'rgba(103, 175, 19, 0.4)',
+      color: 'rgba(255, 255, 255, 0.4)',
+      opacity: 0.4
+    },
+    stroke: {
+      color: "#3399CC",
+      width: 1.5
+    },
+    radius: 5,
+  };
+
+  /**
+   * Style for this layer
+   * @const
+   * @type {ol.style.Style}
+   * @public
+   * @api stable
+   */
+  M.layer.Vector.DEFAULT_STYLE_WFS = {
+    fill: {
+      color: 'rgba(103, 175, 19, 0.2)',
       opacity: 0.4
     },
     stroke: {
       color: '#67af13',
       width: 1
     },
-    radius: 5,
+    radius: 6
   };
-
 })();
