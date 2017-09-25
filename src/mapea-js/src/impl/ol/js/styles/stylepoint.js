@@ -166,7 +166,13 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Point.prototype.drawGeometryToCanvas = function(vectorContext) {
-    vectorContext.drawGeometry(new ol.geom.Point([this.getCanvasSize()[0] / 2, this.getCanvasSize()[1] / 2]));
+    if (this.olStyleFn_()[1].getImage() instanceof ol.style.FontSymbol) {
+      vectorContext.drawGeometry(new ol.geom.Point([10, 10]));
+    }
+    else {
+      vectorContext.drawCircle(new ol.geom.Circle([this.getCanvasSize()[0] / 2, this.getCanvasSize()[1] / 2], this.getRadius_()));
+    }
+
   };
 
   /**
@@ -186,6 +192,10 @@ goog.require('M.impl.style.Simple');
     if (!M.utils.isNullOrEmpty(this.olStyleFn_()[1]) && this.olStyleFn_()[1].getImage() instanceof ol.style.FontSymbol) {
       applyStyle = this.olStyleFn_()[1];
     }
+    let stroke = applyStyle.getImage().getStroke();
+    if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
+      stroke.setWidth(3);
+    }
     vectorContext.setStyle(applyStyle);
     this.drawGeometryToCanvas(vectorContext);
   };
@@ -199,10 +209,27 @@ goog.require('M.impl.style.Simple');
    */
   M.impl.style.Point.prototype.getCanvasSize = function() {
     let image = this.olStyleFn_()[1].getImage();
+    let size;
+    if (image instanceof ol.style.FontSymbol) {
+      size = [90, 90];
+    }
+    else {
+      let radius = this.getRadius_(image);
+      size = [(radius * 2) + 4, (radius * 2) + 4];
+    }
+    return size;
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.style.Point.prototype.getRadius_ = function(image) {
     let r;
     if (image instanceof ol.style.Icon) {
-
-
       r = 25;
     }
     else {
@@ -213,7 +240,6 @@ goog.require('M.impl.style.Simple');
         r = this.olStyleFn_()[0].getImage().getRadius();
       }
     }
-
-    return [(r * 2) + 1, (r * 2) + 1];
+    return r;
   };
 })();
