@@ -86,10 +86,10 @@ goog.require('goog.style');
     if (!M.utils.isNullOrEmpty(this.url)) {
       this.loader_ = new M.impl.loader.JSONP(map, this.url, this.formater_);
     }
-
     goog.base(this, 'addTo', map);
-
-    this.ol3Layer.setStyle(undefined);
+    let style = M.Style.createStyleLayer(M.impl.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this.facadeVector_);
+    this.facadeVector_.setStyle(style);
+    // this.ol3Layer.setStyle(undefined);
   };
 
   /**
@@ -262,5 +262,24 @@ goog.require('goog.style');
       equals = equals && (this.extract === obj.extract);
     }
     return equals;
+  };
+
+  /**
+   * options style for this layer
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.impl.layer.GeoJSON.DEFAULT_OPTIONS_STYLE = {
+    fill: {
+      color: 'rgba(255, 255, 255, 0.4)',
+      opacity: 0.4
+    },
+    stroke: {
+      color: "#3399CC",
+      width: 1.5
+    },
+    radius: 5,
   };
 })();

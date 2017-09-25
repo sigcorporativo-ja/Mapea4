@@ -90,6 +90,9 @@ goog.require('ol.geom.convexhull');
    */
   M.impl.style.Cluster.prototype.applyToLayer = function(layer, map) {
     this.layer_ = layer;
+    if (!M.utils.isNullOrEmpty(this.selectClusterInteraction_)) {
+      this.selectClusterInteraction_.clear();
+    }
     this.updateCanvas();
     const isPoint = (f) => (!M.utils.isNullOrEmpty(f.getGeometry()) &&
       ([M.geom.geojson.type.MULTI_POINT, M.geom.geojson.type.POINT].includes(f.getGeometry().type)));

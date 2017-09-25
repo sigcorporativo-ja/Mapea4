@@ -115,10 +115,10 @@ goog.require('M.style.chart.Variable');
    * @api stable
    */
   M.style.Chart.prototype.updateCanvas = function() {
-    if (M.utils.isNullOrEmpty(this.getImpl())) {
+    if (M.utils.isNullOrEmpty(this.getImpl()) || M.utils.isNullOrEmpty(this.canvas_)) {
       return false;
     }
-    this.getImpl().updateCanvas();
+    this.getImpl().updateCanvas(this.canvas_);
   };
 
   /**

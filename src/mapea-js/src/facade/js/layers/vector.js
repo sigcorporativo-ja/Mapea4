@@ -33,6 +33,7 @@ goog.require('M.exception');
     // calls the super constructor
     goog.base(this, parameters, impl);
     let style = options.style;
+
     if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {
       this.setStyle(style);
     }
@@ -137,6 +138,9 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.redraw = function() {
     this.getImpl().redraw();
+    if (!M.utils.isNullOrEmpty(this.getStyle())) {
+      this.getStyle().refresh();
+    }
   };
 
   /**
@@ -246,6 +250,25 @@ goog.require('M.exception');
     }
 
     return legendUrl;
+  };
+
+  /**
+   * options style for this layer
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.layer.Vector.DEFAULT_OPTIONS_STYLE = {
+    fill: {
+      color: 'rgba(103, 175, 19, 0.4)',
+      opacity: 0.4
+    },
+    stroke: {
+      color: '#67af13',
+      width: 1
+    },
+    radius: 5,
   };
 
 })();

@@ -840,7 +840,6 @@ goog.require('goog.color.alpha');
    */
   M.utils.inverseColor = function(color) {
     let inverseColor;
-
     if (M.utils.isString(color)) {
       let hexColor = chroma(color).hex();
       hexColor = hexColor.replace(/^\#/, '0x');
@@ -850,4 +849,22 @@ goog.require('goog.color.alpha');
     return inverseColor;
   };
 
+  /**
+   * This function gets the geometry type of a layer.
+   * @function
+   * @public
+   * @param {M.layer.Vector} layer - layer vector
+   * @return {string} geometry type of layer
+   * @api stable
+   */
+  M.utils.getGeometryType = function(layer) {
+    if (M.utils.isNullOrEmpty(layer) || M.utils.isNullOrEmpty(layer.getFeatures)) {
+      return null;
+    }
+    let firstFeature = layer.getFeatures()[0] || null;
+    if (!M.utils.isNullOrEmpty(firstFeature) && !M.utils.isNullOrEmpty(firstFeature.getGeometry())) {
+      return firstFeature.getGeometry().type;
+    }
+    return null;
+  };
 })();

@@ -62,12 +62,111 @@ goog.require('M.impl.style.OLChart');
     goog.base(this, options);
   };
   goog.inherits(M.impl.style.Chart, M.impl.style.Simple);
-  
+
+  /**
+   * This function updates the canvas of style of canvas
+   *
+   * @public
+   * @function
+   * @param {HTMLCanvasElement} canvas - canvas of style
+   * @api stable
+   */
+  M.impl.style.Chart.prototype.updateCanvas = function(canvas) {
+    if (M.utils.isNullOrEmpty(canvas)) {
+      return false;
+    }
+    let context = canvas.getContext('2d');
+    this.drawGeometryToCanvas(context);
+  };
+
   /**
    * @inheritDoc
    */
-  M.impl.Style.prototype.drawGeometryToCanvas = function(vectorContext) {
+  M.impl.style.Chart.prototype.drawGeometryToCanvas = function(context) {
+    if (M.utils.isNullOrEmpty(context) || M.utils.isNullOrEmpty(context.canvas)) {
+      return null;
+    }
 
+    const fixedProps = M.impl.style.Chart.CANVAS_PROPS.fixedProps;
+    let width = M.impl.style.Chart.CANVAS_PROPS.width;
+
+    context.canvas.setAttribute('width', width);
+    context.width = width;
+
+    let drawStackActions = []; // canvas fn draw stack
+
+    //const props = Object.keys(M.impl.style.Chart.CANVAS_PROPS.percentages).map(key => {
+    let percentages = {};
+    Object.keys(M.impl.style.Chart.CANVAS_PROPS.percentages).forEach(key => percentages[key] = width * (M.impl.style.Chart.CANVAS_PROPS.percentages[key] / 100));
+    // initial x, y content padding
+    let [x0, y0] = [percentages.left_right_content, fixedProps.top_content];
+
+    const wrapText = (context, initialPosition, text, maxWidth, lineHeight) => {
+      let words = text.split(' ');
+      let line = '';
+      let [x, y] = initialPosition;
+      drawStackActions.push(function(buildCtx, fontSize, fontFamily, strokeColor, strokeWidth, textColor) {
+        buildCtx.font = `${fontSize}px ${fontFamily}`;
+        buildCtx.strokeStyle = strokeColor;
+        buildCtx.strokeWidth = strokeWidth;
+        buildCtx.fillStyle = textColor;
+      }.bind(this, context, fixedProps.font_size, fixedProps.font_family, fixedProps.text_stroke_color, fixedProps.text_stroke_width, fixedProps.text_color));
+
+      words.forEach((word, i) => {
+        let metrics = context.measureText(line + word + ' ');
+        if (metrics.width > maxWidth && i > 0) {
+          drawStackActions.push(function(buildCtx, line, x, y) {
+            buildCtx.strokeText(line, x, y);
+            buildCtx.fillText(line, x, y);
+          }.bind(this, context, line, x, y));
+          line = word + ' ';
+          y += lineHeight;
+        }
+        else {
+          line = line + word + ' ';
+        }
+      });
+      drawStackActions.push(function(buildCtx, line, x, y) {
+        buildCtx.strokeText(line, x, y);
+        buildCtx.fillText(line, x, y);
+      }.bind(this, context, line, x, y));
+      return [x, y];
+    };
+
+    const drawVariable = (initialPosition, text, color) => {
+      let [x, y] = initialPosition;
+      y += fixedProps.item_top_margin;
+      drawStackActions.push(function(buildCtx, strokeColor, borderWidth, color, x, y, rectSize) {
+        buildCtx.beginPath();
+        buildCtx.strokeStyle = strokeColor;
+        buildCtx.lineWidth = borderWidth;
+        buildCtx.fillStyle = color;
+        buildCtx.rect(x, y, rectSize, rectSize);
+        buildCtx.closePath();
+        buildCtx.stroke();
+        buildCtx.fill();
+      }.bind(this, context, '#000', fixedProps.rect_border_width, color, x, y, fixedProps.rect_size));
+
+      x += percentages.item_side_margin + fixedProps.rect_size;
+      y += (fixedProps.rect_size / 1.5);
+      // y coord plus bottom padding
+      let tmp_image_y = y + fixedProps.item_top_margin;
+      let textPosition = wrapText(context, [x, y], text, percentages.max_text_width, fixedProps.text_line_height);
+      return [textPosition[0], (textPosition[1] > tmp_image_y ? textPosition[1] : tmp_image_y)];
+    };
+    this.variables_.forEach((variable, i) => {
+      let label = !M.utils.isNullOrEmpty(variable.legend) ? variable.legend : variable.attribute;
+      let color = !M.utils.isNullOrEmpty(variable.fillColor) ? variable.fillColor : (this.colorsScheme_[i % this.colorsScheme_.length] || this.colorsScheme_[0]);
+      [x0, y0] = drawVariable([x0, y0], label, color);
+      x0 = percentages.left_right_content;
+    });
+    y0 += fixedProps.top_content;
+
+    context.canvas.setAttribute('height', y0);
+
+    context.save();
+    drawStackActions.forEach(drawAction => drawAction());
+    context.restore();
   };
 
   /**
@@ -170,20 +269,22 @@ goog.require('M.impl.style.OLChart');
    * @private
    * @api stable
    */
-  M.impl.style.Chart.prototype.formatDataRecursively_ = (options, feature) => Object.keys(options).reduce((tot, curr, i) => {
-    let _ob = tot;
-    const setVal = (ob, opts, key) => {
-      ob[key] = typeof opts[key] === 'object' && opts[key] != null && !(opts[key] instanceof Array) ? this.formatDataRecursively_(opts[key], feature) : M.impl.style.Simple.getValue(opts[key], feature);
-    };
-    if (typeof tot !== 'object') {
-      _ob = {};
-      if (typeof options[tot] !== 'object') {
-        setVal(_ob, options, tot);
+  M.impl.style.Chart.prototype.formatDataRecursively_ = function(options, feature) {
+    return Object.keys(options).reduce((tot, curr, i) => {
+      let _ob = tot;
+      const setVal = (ob, opts, key) => {
+        ob[key] = typeof opts[key] === 'object' && opts[key] != null && !(opts[key] instanceof Array) ? this.formatDataRecursively_(opts[key], feature) : M.impl.style.Simple.getValue(opts[key], feature);
+      };
+      if (typeof tot !== 'object') {
+        _ob = {};
+        if (typeof options[tot] !== 'object') {
+          setVal(_ob, options, tot);
+        }
       }
-    }
-    setVal(_ob, options, curr);
-    return _ob;
-  });
+      setVal(_ob, options, curr);
+      return _ob;
+    });
+  };
 
   /**
    * Object assign hook. Merges the array of source objects into target object.
@@ -194,7 +295,7 @@ goog.require('M.impl.style.OLChart');
    * @private
    * @api stable
    */
-  M.impl.style.Chart.prototype.extend_ = (target, ...sourceObs) => {
+  M.impl.style.Chart.prototype.extend_ = function(target, ...sourceObs) {
     if (target == null) { // TypeError if undefined or null
       throw new TypeError('Cannot convert undefined or null to object');
     }
@@ -214,8 +315,24 @@ goog.require('M.impl.style.OLChart');
    * @type {number}
    */
   M.impl.style.Chart.CANVAS_PROPS = {
-    MAX_RADIUS: 25,
-    HEIGHT: 80
+    width: 200, // px
+    percentages: {
+      left_right_content: 5, // %
+      item_side_margin: 5, // %
+      max_text_width: 70, // %
+    },
+    fixedProps: {
+      rect_border_width: 2,
+      font_size: 10, //px
+      font_family: 'sans-serif',
+      text_stroke_color: '#fff',
+      text_stroke_width: 1,
+      text_color: '#000',
+      top_content: 10, // px
+      item_top_margin: 10, // px
+      text_line_height: 15, // px
+      rect_size: 15, // px
+    }
   };
 
 

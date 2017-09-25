@@ -90,9 +90,7 @@ goog.require('M.style.quantification');
   M.style.Choropleth.prototype.apply = function(layer) {
     this.layer_ = layer;
     this.update_();
-    this.layer_.redraw();
   };
-
 
   /**
    * This function return the attribute name defined by user
@@ -129,7 +127,6 @@ goog.require('M.style.quantification');
     return this.quantification_;
   };
 
-
   /**
    * This function set quantification function defined by user
    * @function
@@ -160,7 +157,6 @@ goog.require('M.style.quantification');
     return this;
   };
 
-
   /**
    * This function returns the styles defined by user
    * @function
@@ -187,7 +183,6 @@ goog.require('M.style.quantification');
     this.update_();
     return this;
   };
-
 
   /**
    * TODO
@@ -229,7 +224,6 @@ goog.require('M.style.quantification');
       }
     }
   };
-
 
   /**
    * TODO
@@ -283,7 +277,6 @@ goog.require('M.style.quantification');
     }
     vectorContext.canvas.height = coordinateY + 10;
   };
-
 
   /**
    * This function draw the image style on the vector context
@@ -344,7 +337,6 @@ goog.require('M.style.quantification');
         if (M.utils.isNullOrEmpty(this.styles_) || (!M.utils.isNullOrEmpty(this.styles_) &&
             (M.utils.isString(this.styles_[0]) || M.utils.isString(this.styles_[1])))) {
           this.breakPoints_ = this.quantification_(this.dataValues_);
-          let firstFeature = features[0];
           let startColor = this.styles_ && this.styles_[0] ? this.styles_[0] : M.style.Choropleth.START_COLOR_DEFAULT;
           let endColor = this.styles_ && this.styles_[1] ? this.styles_[1] : M.style.Choropleth.END_COLOR_DEFAULT;
           let numColors = this.breakPoints_.length;
@@ -352,25 +344,23 @@ goog.require('M.style.quantification');
           if (!M.utils.isArray(scaleColor)) {
             scaleColor = [scaleColor];
           }
-          let geometry = firstFeature.getGeometry();
+          let geometryType = M.utils.getGeometryType(this.layer_);
           const generateStyle = (scale, defaultStyle) => (scale.map(c => defaultStyle(c)));
-          if (!M.utils.isNullOrEmpty(geometry)) {
-            switch (geometry.type) {
-              case M.geom.geojson.type.POINT:
-              case M.geom.geojson.type.MULTI_POINT:
-                this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_POINT);
-                break;
-              case M.geom.geojson.type.LINE_STRING:
-              case M.geom.geojson.type.MULTI_LINE_STRING:
-                this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_LINE);
-                break;
-              case M.geom.geojson.type.POLYGON:
-              case M.geom.geojson.type.MULTI_POLYGON:
-                this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_POLYGON);
-                break;
-              default:
-                return null;
-            }
+          switch (geometryType) {
+            case M.geom.geojson.type.POINT:
+            case M.geom.geojson.type.MULTI_POINT:
+              this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_POINT);
+              break;
+            case M.geom.geojson.type.LINE_STRING:
+            case M.geom.geojson.type.MULTI_LINE_STRING:
+              this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_LINE);
+              break;
+            case M.geom.geojson.type.POLYGON:
+            case M.geom.geojson.type.MULTI_POLYGON:
+              this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_POLYGON);
+              break;
+            default:
+              return null;
           }
         }
         else {
@@ -381,7 +371,6 @@ goog.require('M.style.quantification');
         let filterLTE = new M.filter.LTE(this.attributeName_, this.breakPoints_[i]);
         filterLTE.execute(features).forEach(f => f.setStyle(this.styles_[i]));
       }
-      this.layer_.redraw();
       this.updateCanvas();
     }
   };
