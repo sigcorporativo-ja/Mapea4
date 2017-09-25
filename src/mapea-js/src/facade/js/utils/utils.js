@@ -855,6 +855,7 @@ goog.require('goog.color.alpha');
    * @public
    * @param {M.layer.Vector} layer - layer vector
    * @return {string} geometry type of layer
+   * @api stable
    */
   M.utils.getGeometryType = function(layer) {
     if (M.utils.isNullOrEmpty(layer) || M.utils.isNullOrEmpty(layer.getFeatures)) {
