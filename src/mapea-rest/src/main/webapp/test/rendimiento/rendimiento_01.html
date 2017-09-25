@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+    <link rel="shortcut icon" href="http://www.juntadeandalucia.es/fomentoyvivienda/NodoIDE/Visualizadores/VisualizadorAreasConservacion/imagenes/favicon_verde.ico" />
+    <title>Visualizador Exploca</title>
+
+    <!-- styles -->
+    <link href="https://sigc.desarrollo.guadaltel.es/mapea42_dev/assets/css/mapea.ol.min.css" rel="stylesheet" />
+    <style rel="stylesheet">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: auto;
+      }
+    </style>
+  </head>
+
+  <body>
+
+    <div id="map"></div>
+    <script type="text/javascript" src="https://sigc.desarrollo.guadaltel.es/mapea42_dev/vendor/browser-polyfill.js"></script>
+    <script type="text/javascript" src="https://sigc.desarrollo.guadaltel.es/mapea42_dev/js/mapea.ol.min.js"></script>
+    <!-- configuration -->
+    <script type="text/javascript" src="https://sigc.desarrollo.guadaltel.es/mapea42_dev/js/configuration.js"></script>
+
+    <script type="application/javascript">
+      let mapajs = M.map({
+        container: "map",
+        wmcfile: ["http://sigc.desarrollo.guadaltel.es/mapea/test/demos/rendimiento/wmc.xml"],
+        controls: ["layerswitcher"]
+      });
+
+      let capa = new M.layer.GeoJSON({
+        source: {
+          "crs": {
+            "properties": {
+              "name": "EPSG:25830"
+            },
+            "type": "name"
+          },
+          "features": [{
+            "type": "Feature",
+            "id": "f",
+            "geometry": {
+              "type": "Polygon",
+              "coordinates": [
+                [
+                  [187811.8571096273, 4081466.260144673],
+                  [187811.8571096273, 4231380.3702658685],
+                  [353698.63041960564, 4231380.3702658685],
+                  [353698.63041960564, 4081466.260144673]
+                ]
+              ]
+            },
+            "properties": {
+              "nombre": "envelope"
+            }
+          }],
+          "type": "FeatureCollection"
+        },
+        name: 'prueba'
+      });
+
+      mapajs.addLayers(capa)
+    </script>
+  </body>
+
+</html>
