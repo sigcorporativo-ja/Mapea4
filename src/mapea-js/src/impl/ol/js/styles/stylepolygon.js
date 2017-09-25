@@ -111,6 +111,28 @@ goog.require('M.impl.style.Simple');
   };
 
   /**
+   * This function updates the canvas of style of canvas
+   *
+   * @public
+   * @function
+   * @param {HTMLCanvasElement} canvas - canvas of style
+   * @api stable
+   */
+  M.impl.style.Polygon.prototype.updateCanvas = function(canvas) {
+    let canvasSize = this.getCanvasSize();
+    let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+      size: canvasSize
+    });
+    let applyStyle = this.olStyleFn_()[0];
+    let stroke = applyStyle.getStroke();
+    if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
+      applyStyle.getStroke().setWidth(3);
+    }
+    vectorContext.setStyle(applyStyle);
+    this.drawGeometryToCanvas(vectorContext);
+  };
+
+  /**
    * TODO
    *
    * @public
@@ -124,10 +146,10 @@ goog.require('M.impl.style.Simple');
     let minW = (canvasSize[0] - maxW);
     let minH = (canvasSize[1] - maxH);
     vectorContext.drawGeometry(new ol.geom.Polygon([[
-        [minW, minH],
-         [minW, maxW],
-         [maxW, maxW],
+         [minW, minH],
          [maxW, minH],
+         [maxW, maxH],
+         [minW, maxH],
          [minW, minH]
       ]]));
   };
