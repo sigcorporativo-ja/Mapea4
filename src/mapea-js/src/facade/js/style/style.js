@@ -213,4 +213,28 @@ goog.provide('M.Style');
     let implClone = new implClass(optsClone);
     return new this.constructor(optsClone, implClone);
   };
+
+  /**
+   * TODO
+   */
+  M.Style.createStyleLayer = function(options, layer) {
+    let style;
+    switch (M.utils.getGeometryType(layer)) {
+      case "Point":
+      case "MultiPoint":
+        style = new M.style.Point(options);
+        break;
+      case "LineString":
+      case "MultiLineString":
+        style = new M.style.Line(options);
+        break;
+      case "Polygon":
+      case "MultiPolygon":
+        style = new M.style.Polygon(options);
+        break;
+      default:
+        return new M.style.Point(options);
+    }
+    return style;
+  };
 })();

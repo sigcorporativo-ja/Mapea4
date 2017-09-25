@@ -82,8 +82,9 @@ goog.require('M.impl.layer.Vector');
    */
   M.impl.layer.WFS.prototype.addTo = function(map) {
     goog.base(this, 'addTo', map);
-
-    this.ol3Layer.setStyle(M.impl.layer.WFS.STYLE);
+    let style = M.Style.createStyleLayer(M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE, this.facadeVector_);
+    this.facadeVector_.setStyle(style);
+    // this.ol3Layer.setStyle(M.impl.layer.WFS.STYLE);
     this.updateSource_();
 
     map.getImpl().on(M.evt.CHANGE, function() {
@@ -268,23 +269,15 @@ goog.require('M.impl.layer.Vector');
    * @public
    * @api stable
    */
-  M.impl.layer.WFS.STYLE = new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: 'rgba(103, 175, 19, 0.2)'
-    }),
-    stroke: new ol.style.Stroke({
+  M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE = {
+    fill: {
+      color: 'rgba(103, 175, 19, 0.2)',
+      opacity: 0.4
+    },
+    stroke: {
       color: '#67af13',
-      width: 2
-    }),
-    image: new ol.style.Circle({
-      radius: 5,
-      fill: new ol.style.Fill({
-        color: 'rgba(103, 175, 19, 0.4)'
-      }),
-      stroke: new ol.style.Stroke({
-        color: '#67af13',
-        width: 1
-      })
-    })
-  });
+      width: 1
+    },
+    radius: 6
+  }
 })();
