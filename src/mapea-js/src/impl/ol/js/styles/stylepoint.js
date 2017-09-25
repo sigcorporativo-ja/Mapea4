@@ -211,7 +211,7 @@ goog.require('M.impl.style.Simple');
     let image = this.olStyleFn_()[1].getImage();
     let size;
     if (image instanceof ol.style.FontSymbol) {
-      size = [90, 90]
+      size = [90, 90];
     }
     else {
       let radius = this.getRadius_(image);
