@@ -279,5 +279,5 @@ goog.require('M.impl.layer.Vector');
       width: 1
     },
     radius: 6
-  }
+  };
 })();
