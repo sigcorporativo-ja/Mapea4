@@ -99,7 +99,6 @@ goog.require('M.impl.renderutils');
 
     this.postComposeEvtKey_ = this.ol3Layer.on('postcompose', M.impl.renderutils.postRender.bind(this.ol3Layer), this);
   };
-
   /**
    * This function sets the map object of the layer
    *
@@ -134,7 +133,61 @@ goog.require('M.impl.renderutils');
    * @api stable
    */
   M.impl.layer.Vector.prototype.addFeatures = function(features) {
-    this.features_ = this.features_.concat(features);
+    // this.features_ = this.features_.concat(features);
+    let featNoNull = [];
+    let featNull = [];
+    for (var feat = 0; feat < features.length; feat++) {
+      if ((!M.utils.isNullOrEmpty(features[feat].getStyle()))) {
+        featNoNull.push(features[feat]);
+      }
+      else {
+        featNull.push(features[feat]);
+      }
+    }
+    if (!M.utils.isNullOrEmpty(featNull)) {
+      let style = this.facadeVector_.getStyle();
+      if (style instanceof(M.style.Line) || style instanceof(M.style.Polygon) || style instanceof(M.style.Point)) {
+        let newFeats = [];
+        let featWithNewStyle = null;
+        let f = null;
+        for (let i = 0; i < featNull.length; i++) {
+          f = featNull[i];
+          f.setStyle(style);
+          newFeats.push(f);
+        }
+        this.features_ = this.features_.concat(newFeats);
+        //recorrer featNull y aplicar estilo y despues añadir
+      }
+      else {
+        this.features_ = this.features_.concat(featNull);
+        if (!M.utils.isNullOrEmpty(style)) {
+          if (style instanceof(M.style.Category) || style instanceof(M.style.Choropleth) || style instanceof(M.style.Proportional)) {
+            style.update_();
+          }
+          else {
+            let oldStyle = this.facadeVector_.getStyle().getOldStyle();
+            if (M.utils.isNullOrEmpty(oldStyle)) {
+              let style = new M.style.Point(M.layer.Vector.DEFAULT_OPTIONS_STYLE);
+              oldStyle = style;
+              let cluster = this.facadeVector_.getStyle();
+              cluster.unapply(this.facadeVector_);
+              this.facadeVector_.setStyle(oldStyle);
+              cluster.apply(this.facadeVector_);
+              cluster.oldStyle_ = style;
+            }
+            else {
+              let cluster = this.facadeVector_.getStyle();
+              cluster.unapply(this.facadeVector_);
+              this.facadeVector_.setStyle(oldStyle);
+              cluster.apply(this.facadeVector_);
+            }
+          }
+        }
+      }
+    }
+    if (!M.utils.isNullOrEmpty(featNoNull)) {
+      this.features_ = this.features_.concat(featNoNull);
+    }
     this.redraw();
   };
 
@@ -152,6 +205,14 @@ goog.require('M.impl.renderutils');
     let features = this.features_;
     if (!skipFilter) features = filter.execute(features);
     return features;
+  };
+
+  /**
+   * TODO
+   */
+  M.impl.layer.Vector.prototype.setFeatures = function(features) {
+    this.features_ = features;
+    this.redraw();
   };
 
   /**

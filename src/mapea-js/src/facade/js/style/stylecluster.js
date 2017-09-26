@@ -53,7 +53,10 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.apply = function(layer) {
-    this.oldStyle_ = layer.getStyle();
+    let newStyle = layer.getStyle();
+    if (newStyle instanceof M.style.Cluster == false) {
+      this.oldStyle_ = layer.getStyle();
+    }
     goog.base(this, 'apply', layer);
   };
 
