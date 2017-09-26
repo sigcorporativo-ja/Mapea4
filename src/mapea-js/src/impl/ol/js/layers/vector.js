@@ -89,6 +89,9 @@ goog.require('M.impl.renderutils');
     //   this.setVisible(this.inRange());
     // }
     // sets its z-index
+
+    this.setVisible(this.visibility);
+
     if (this.zIndex_ !== null) {
       this.setZIndex(this.zIndex_);
     }
