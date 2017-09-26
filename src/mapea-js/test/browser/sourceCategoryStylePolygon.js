@@ -144,14 +144,52 @@ layer.addFeatures([feature, feature2, feature3, feature5, feature4]);
 //layer.addFeatures([feature, feature2, feature3, feature4]);
 
 let rojo = new M.style.Polygon({
-  fill: {
-    color: 'red'
-  },
   stroke: {
-    color: 'black',
-    width: 2
+    color: '#C8FE2E',
+    width: 15,
+    linedash: [1, 20],
+    linedashoffset: 60,
+    linecap: 'square',
+    linejoin: 'miter',
+    miterlimit: 15
   },
-
+  label: {
+    text: 'FEATURE',
+    font: 'bold italic 19px Comic Sans MS',
+    rotate: false,
+    scale: 0.9,
+    offset: [10, 20],
+    color: '#2EFEC8',
+    stroke: {
+      color: '#C8FE2E',
+      width: 15,
+      linedash: [1, 20],
+      linedashoffset: 60,
+      linecap: 'square',
+      linejoin: 'miter',
+      miterlimit: 15
+    },
+    rotation: 0.5,
+    align: M.style.align.RIGHT,
+    baseline: M.style.baseline.TOP
+  },
+  fill: {
+    color: '#6A0888',
+    opacity: 0.5,
+    pattern: {
+      name: M.style.pattern.HATCH,
+      size: 6,
+      spacing: 20,
+      rotation: 3,
+      offset: [50, 30],
+      color: 'red',
+      fill: {
+        color: 'blue',
+        opacity: 0.5
+      },
+      scale: 2
+    }
+  }
 });
 
 let amarillo = new M.style.Polygon({
@@ -193,7 +231,7 @@ let verde = new M.style.Polygon({
   },
   stroke: {
     color: 'black',
-    width: 2
+    width: 1
   },
 
 });
@@ -201,7 +239,7 @@ let verde = new M.style.Polygon({
 
 var categoryStyle = new M.style.Category("styleType", {
   "public": verde,
-  "privado": verde,
+  "privado": azul,
   "religiosos": rojo
 });
 

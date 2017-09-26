@@ -194,7 +194,9 @@ goog.require('M.impl.style.Simple');
     }
     let stroke = applyStyle.getImage().getStroke();
     if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
-      stroke.setWidth(3);
+      if (stroke.getWidth() > 3) {
+        stroke.setWidth(3);
+      }
     }
     vectorContext.setStyle(applyStyle);
     this.drawGeometryToCanvas(vectorContext);

@@ -312,7 +312,7 @@ goog.require('M.style.Point');
       if (this.layerFeatures_[0].getGeometry().type !== 'Point') {
         centroids = this.layerFeatures_.map(f => f.getCentroid());
       }
-      this.layer_.addFeatures(centroids);
+      this.layer_.setFeatures(centroids);
       let features = this.layer_.getFeatures(true);
       let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
       let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, this.attributeName_);
@@ -329,7 +329,7 @@ goog.require('M.style.Point');
         return maxValue - feature.getAttribute(this.attributeName_);
       }.bind(this));
       this.layer_.getFeatures().forEach(feature => feature.setStyle(this.style_));
-      this.layer_.redraw();
+      // this.layer_.redraw();
       this.updateCanvas();
     }
   };
