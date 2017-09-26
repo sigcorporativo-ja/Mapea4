@@ -142,29 +142,17 @@ goog.require('M.impl.style.Simple');
    * @api stable
    */
   M.impl.style.Polygon.prototype.drawGeometryToCanvas = function(vectorContext) {
-    let stroke = this.olStyleFn_()[0].getStroke().getWidth();
     let canvasSize = this.getCanvasSize();
-
     let maxW = Math.floor(canvasSize[0]);
     let maxH = Math.floor(canvasSize[1]);
     let minW = (canvasSize[0] - maxW);
     let minH = (canvasSize[1] - maxH);
-    let difmaxW = maxW - stroke;
-    let difmaxH = maxH - stroke;
-    let difminW = minW;
-    let difminH = minH;
     vectorContext.drawGeometry(new ol.geom.Polygon([[
          [minW + 3, minH + 3],
           [maxW - 3, minH + 3],
           [maxW - 3, maxH - 3],
           [minW + 3, maxH - 3],
           [minW + 3, minH + 3]
-        // [minW, minH],
-        // [maxW, minH],
-        // [maxW, maxH],
-        // [minW, maxH],
-        // [minW, minH]
-
       ]]));
   };
 

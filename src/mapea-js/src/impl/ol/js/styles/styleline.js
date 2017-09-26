@@ -117,10 +117,8 @@ goog.require('M.impl.style.TextPath');
     if (!M.utils.isNullOrEmpty(style)) {
       var ctx = canvas.getContext("2d");
       ctx.lineWidth = style.width;
-      // ctx.setLineDash([0, 0]);
       x = vectorContext.context_.canvas.width;
       y = vectorContext.context_.canvas.height;
-      let grosor = style.width;
       ctx.strokeStyle = style.color;
       ctx.beginPath();
       ctx.lineTo(0 + width, 0 + width);

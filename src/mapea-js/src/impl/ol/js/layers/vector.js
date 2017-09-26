@@ -151,7 +151,6 @@ goog.require('M.impl.renderutils');
       let style = this.facadeVector_.getStyle();
       if (style instanceof(M.style.Line) || style instanceof(M.style.Polygon) || style instanceof(M.style.Point)) {
         let newFeats = [];
-        let featWithNewStyle = null;
         let f = null;
         for (let i = 0; i < featNull.length; i++) {
           f = featNull[i];
