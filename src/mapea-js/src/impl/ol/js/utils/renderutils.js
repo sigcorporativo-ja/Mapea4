@@ -37,6 +37,9 @@ goog.require('M.impl.textpath');
     ctx.save();
     ctx.scale(e.frameState.pixelRatio, e.frameState.pixelRatio);
 
+    if (this.getSource() != null && this.getSource().getFeatures().length == 0) {
+      return false;
+    }
     // gets features in extent
     this.getSource().getFeaturesInExtent(extent).forEach((feature) => {
       let selectedStyle = feature.getStyle() != null ? feature.getStyle() : this.getStyle();
@@ -66,6 +69,13 @@ goog.require('M.impl.textpath');
           let imageStyle = style.getImage();
           if (imageStyle instanceof M.impl.style.OLChart) {
             imageStyle.forceRender_(feature, style, e.vectorContext);
+          }
+          else if (imageStyle instanceof M.impl.style.PointCircle ||
+            imageStyle instanceof M.impl.style.PointIcon ||
+            imageStyle instanceof M.impl.style.PointFontSymbol) {
+            if (imageStyle.forceGeometryRender_) {
+              imageStyle.forceRender_(feature, style, e.vectorContext);
+            }
           }
         }
       });

@@ -1,6 +1,9 @@
 goog.provide('M.impl.style.Point');
 
 goog.require('M.impl.style.Simple');
+goog.require('M.impl.style.PointCircle');
+goog.require('M.impl.style.PointIcon');
+goog.require('M.impl.style.PointFontSymbol');
 
 /**
  * @namespace M.impl.style.Point
@@ -18,6 +21,43 @@ goog.require('M.impl.style.Simple');
     goog.base(this, options);
   });
   goog.inherits(M.impl.style.Point, M.impl.style.Simple);
+
+  /**
+   * EMILIO'S TODO
+   */
+  M.impl.style.Point.prototype.toImage = function(canvas) {
+    if (M.utils.isNullOrEmpty(this.olStyleFn_)) {
+      return null;
+    }
+    let style = this.olStyleFn_()[1];
+    let image = null;
+    if (style.getImage && style.getImage() != null && style.getImage() instanceof ol.style.Image) {
+      // see https://github.com/openlayers/openlayers/blob/master/src/ol/style/regularshape.js#L205
+      if (style.getImage() instanceof M.impl.style.PointFontSymbol) {
+        let imageCanvas = style.getImage().getImage();
+        if (imageCanvas != null && imageCanvas) {
+          image = imageCanvas.toDataURL();
+        }
+      }
+      else if (style.getImage() instanceof M.impl.style.PointIcon) {
+        let imageStyle = style.getImage();
+        let ctx = canvas.getContext('2d');
+        //let canvasSize = this.getCanvasSize();
+        // canvasSize[0] / size[0]) * size[0]
+        let [size, scale] = [imageStyle.getSize(), imageStyle.getScale()];
+        ctx.drawImage(imageStyle.getImage(), 0, 0, size[0] * scale, size[1] * scale);
+        image = canvas.toDataURL('png');
+      }
+    }
+    else {
+      style = this.olStyleFn_()[0];
+      let imageCanvas = style.getImage().getImage();
+      if (imageCanvas != null) {
+        image = imageCanvas.toDataURL();
+      }
+    }
+    return image;
+  };
 
   /**
    * This function se options to ol style
@@ -38,10 +78,24 @@ goog.require('M.impl.style.Simple');
       });
       let styleIcon = new ol.style.Style();
       let styles = [];
+
+      let fill;
+      if (!M.utils.isNullOrEmpty(options.fill)) {
+        let fillColorValue = M.impl.style.Simple.getValue(options.fill.color, feature);
+        let fillOpacityValue = M.impl.style.Simple.getValue(options.fill.opacity, feature) || 1;
+        if (!M.utils.isNullOrEmpty(fillColorValue)) {
+          fill = new ol.style.Fill({
+            color: chroma(fillColorValue)
+              .alpha(fillOpacityValue).css()
+          });
+        }
+      }
+
+      let stroke;
       if (!M.utils.isNullOrEmpty(options.stroke)) {
         let strokeColorValue = M.impl.style.Simple.getValue(options.stroke.color, feature);
         if (!M.utils.isNullOrEmpty(strokeColorValue)) {
-          style.setStroke(new ol.style.Stroke({
+          stroke = new ol.style.Stroke({
             color: strokeColorValue,
             width: M.impl.style.Simple.getValue(options.stroke.width, feature),
             lineDash: M.impl.style.Simple.getValue(options.stroke.linedash, feature),
@@ -49,17 +103,7 @@ goog.require('M.impl.style.Simple');
             lineCap: M.impl.style.Simple.getValue(options.stroke.linecap, feature),
             lineJoin: M.impl.style.Simple.getValue(options.stroke.linejoin, feature),
             miterLimit: M.impl.style.Simple.getValue(options.stroke.miterlimit, feature)
-          }));
-        }
-      }
-      if (!M.utils.isNullOrEmpty(options.fill)) {
-        let fillColorValue = M.impl.style.Simple.getValue(options.fill.color, feature);
-        let fillOpacityValue = M.impl.style.Simple.getValue(options.fill.opacity, feature) || 1;
-        if (!M.utils.isNullOrEmpty(fillColorValue)) {
-          style.setFill(new ol.style.Fill({
-            color: chroma(fillColorValue)
-              .alpha(fillOpacityValue).css()
-          }));
+          });
         }
       }
       if (!M.utils.isNullOrEmpty(options.label)) {
@@ -90,15 +134,16 @@ goog.require('M.impl.style.Simple');
         }
         style.setText(labelText);
       }
-      style.setImage(new ol.style.Circle({
-        fill: style.getFill(),
-        stroke: style.getStroke(),
+      style.setImage(new M.impl.style.PointCircle({
+        fill: fill,
+        stroke: stroke,
         radius: M.impl.style.Simple.getValue(options.radius, feature),
-        snapToPixel: M.impl.style.Simple.getValue(options.snapToPixel, feature)
+        snapToPixel: M.impl.style.Simple.getValue(options.snapToPixel, feature),
+        forceGeometryRender: options.forceGeometryRender
       }));
       if (!M.utils.isNullOrEmpty(options.icon)) {
         if (!M.utils.isNullOrEmpty(options.icon.src)) {
-          styleIcon.setImage(new ol.style.Icon({
+          styleIcon.setImage(new M.impl.style.PointIcon({
             anchor: M.impl.style.Simple.getValue(options.icon.anchor, feature),
             anchorXUnits: M.impl.style.Simple.getValue(options.icon.anchorxunits, feature),
             anchorYUnits: M.impl.style.Simple.getValue(options.icon.anchoryunits, feature),
@@ -112,11 +157,12 @@ goog.require('M.impl.style.Simple');
             offset: M.impl.style.Simple.getValue(options.icon.offset, feature),
             crossOrigin: M.impl.style.Simple.getValue(options.icon.crossorigin, feature),
             anchorOrigin: M.impl.style.Simple.getValue(options.icon.anchororigin, feature),
-            size: M.impl.style.Simple.getValue(options.icon.size, feature)
+            size: M.impl.style.Simple.getValue(options.icon.size, feature),
+            forceGeometryRender: options.forceGeometryRender
           }));
         }
         else {
-          styleIcon.setImage(new ol.style.FontSymbol({
+          styleIcon.setImage(new M.impl.style.PointFontSymbol({
             form: M.impl.style.Simple.getValue(options.icon.form, feature).toLowerCase(),
             gradient: M.impl.style.Simple.getValue(options.icon.gradient, feature),
             glyph: M.impl.style.Simple.getValue(options.icon.class, feature),
@@ -144,7 +190,8 @@ goog.require('M.impl.style.Simple');
             offset: M.impl.style.Simple.getValue(options.icon.offset, feature),
             crossOrigin: M.impl.style.Simple.getValue(options.icon.crossorigin, feature),
             anchorOrigin: M.impl.style.Simple.getValue(options.icon.anchororigin, feature),
-            size: M.impl.style.Simple.getValue(options.icon.size, feature)
+            size: M.impl.style.Simple.getValue(options.icon.size, feature),
+            forceGeometryRender: options.forceGeometryRender
           }));
         }
       }
@@ -194,9 +241,7 @@ goog.require('M.impl.style.Simple');
     }
     let stroke = applyStyle.getImage().getStroke();
     if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
-      if (stroke.getWidth() > 3) {
-        stroke.setWidth(3);
-      }
+      stroke.setWidth(3);
     }
     vectorContext.setStyle(applyStyle);
     this.drawGeometryToCanvas(vectorContext);
