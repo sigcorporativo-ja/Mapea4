@@ -32,12 +32,13 @@ goog.require('M.exception');
 
     // calls the super constructor
     goog.base(this, parameters, impl);
-    let style = options.style;
 
+    let style = options.style;
     if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {
-      this.setStyle(style);
+      this.style_ = style;
     }
     impl.on(M.evt.LOAD, (features) => this.fire(M.evt.LOAD, [features]));
+
   });
   goog.inherits(M.layer.Vector, M.Layer);
 

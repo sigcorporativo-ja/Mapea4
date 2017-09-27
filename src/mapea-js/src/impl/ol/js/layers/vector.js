@@ -84,6 +84,19 @@ goog.require('M.impl.renderutils');
     this.updateSource_();
     this.facadeVector_.setStyle(this.facadeVector_.getStyle());
 
+    let style = this.facadeVector_.getStyle();
+    if (!M.utils.isNullOrEmpty(style)) {
+      this.facadeVector_.setStyle(this.facadeVector_.getStyle());
+    }
+    else {
+      if (this instanceof M.impl.layer.WFS) {
+        this.facadeVector_.setStyle(M.Style.createStyleLayer(M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE, this.facadeVector_));
+      }
+      else if (this instanceof M.impl.layer.GeoJSON) {
+        this.facadeVector_.setStyle(M.Style.createStyleLayer(M.impl.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this.facadeVector_));
+      }
+    }
+
     // sets its visibility if it is in range
     // if (this.options.visibility != false) {
     //   this.setVisible(this.inRange());
