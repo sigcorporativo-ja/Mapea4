@@ -140,6 +140,7 @@ goog.require('M.impl.renderutils');
     return true;
   };
 
+
   /**
    * This function add features to layer
    *
@@ -148,63 +149,45 @@ goog.require('M.impl.renderutils');
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  M.impl.layer.Vector.prototype.addFeatures = function(features) {
-    // this.features_ = this.features_.concat(features);
-    let featNoNull = [];
-    let featNull = [];
-    for (var feat = 0; feat < features.length; feat++) {
-      if ((!M.utils.isNullOrEmpty(features[feat].getStyle()))) {
-        featNoNull.push(features[feat]);
-      }
-      else {
-        featNull.push(features[feat]);
-      }
+  M.impl.layer.Vector.prototype.addFeatures = function(features, boolUpdateLayer) {
+
+    if (M.utils.isNullOrEmpty(boolUpdateLayer)) {
+      this.features_ = this.features_.concat(features);
     }
-    if (!M.utils.isNullOrEmpty(featNull)) {
-      let style = this.facadeVector_.getStyle();
-      if (style instanceof(M.style.Line) || style instanceof(M.style.Polygon) || style instanceof(M.style.Point)) {
-        let newFeats = [];
-        let f = null;
-        for (let i = 0; i < featNull.length; i++) {
-          f = featNull[i];
-          f.setStyle(style);
-          newFeats.push(f);
-        }
-        this.features_ = this.features_.concat(newFeats);
-        //recorrer featNull y aplicar estilo y despues añadir
-      }
-      else {
-        this.features_ = this.features_.concat(featNull);
-        if (!M.utils.isNullOrEmpty(style)) {
-          if (style instanceof(M.style.Category) || style instanceof(M.style.Choropleth) || style instanceof(M.style.Proportional)) {
-            style.update_();
-          }
-          else {
-            let oldStyle = this.facadeVector_.getStyle().getOldStyle();
-            if (M.utils.isNullOrEmpty(oldStyle)) {
-              let style = new M.style.Point(M.layer.Vector.DEFAULT_OPTIONS_STYLE);
-              oldStyle = style;
-              let cluster = this.facadeVector_.getStyle();
-              cluster.unapply(this.facadeVector_);
-              this.facadeVector_.setStyle(oldStyle);
-              cluster.apply(this.facadeVector_);
-              cluster.oldStyle_ = style;
-            }
-            else {
-              let cluster = this.facadeVector_.getStyle();
-              cluster.unapply(this.facadeVector_);
-              this.facadeVector_.setStyle(oldStyle);
-              cluster.apply(this.facadeVector_);
-            }
-          }
-        }
-      }
-    }
-    if (!M.utils.isNullOrEmpty(featNoNull)) {
-      this.features_ = this.features_.concat(featNoNull);
+    else {
+      this.updateLayer(features);
     }
     this.redraw();
   };
+
+
+  /**
+   * This function add features to layer
+   *
+   * TODO
+   *
+   */
+  M.impl.layer.Vector.prototype.updateLayer = function(features) {
+    let style = this.facadeVector_.getStyle();
+    if (style instanceof(M.M.style.Simple)) {
+      this.features_ = this.features_.concat(features);
+      this.facadeVector_.setStyle(style);
+    }
+    else {
+      if (style instanceof(M.style.Category) || style instanceof(M.style.Choropleth) || style instanceof(M.style.Proportional) || style instanceof(M.style.Chart)) {
+        this.features_ = this.features_.concat(features);
+        style.apply(this.facadeVector_);
+      }
+      else {
+        let cluster = this.facadeVector_.getStyle();
+        cluster.unapply(this.facadeVector_);
+        this.features_ = this.features_.concat(features);
+        cluster.getOldStyle().apply(this.facadeVector_);
+        cluster.apply(this.facadeVector_);
+      }
+    }
+  };
+
 
   /**
    * This function returns all features or discriminating by the filter

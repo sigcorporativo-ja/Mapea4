@@ -50,12 +50,12 @@ goog.require('M.exception');
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  M.layer.Vector.prototype.addFeatures = function(features) {
+  M.layer.Vector.prototype.addFeatures = function(features, bool) {
     if (!M.utils.isNullOrEmpty(features)) {
       if (!M.utils.isArray(features)) {
         features = [features];
       }
-      this.getImpl().addFeatures(features);
+      this.getImpl().addFeatures(features, bool);
     }
   };
 
