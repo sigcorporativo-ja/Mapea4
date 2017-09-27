@@ -74,6 +74,25 @@ let style3 = new M.style.Line({
     color: 'black',
     width: 20
   },
+  label: {
+    text: "mi Feature",
+    font: "24px Arial",
+    fill: new ol.style.Fill({
+      color: "red"
+    }),
+    stroke: new ol.style.Stroke({
+      color: "#fff",
+      width: 3
+    }),
+    textBaseline: 'middle',
+
+    align: "center",
+
+    rotateWithView: false,
+    textoverflow: 'visible',
+    minwidth: 20,
+    path: true
+  },
   radius: 2
 
 });
@@ -87,8 +106,8 @@ let feature3 = new M.Feature('feature3', {
 
     "coordinates": [
       [439448.9020, 4135936.8778],
-      [432192.7844, 4117738.3979],
-      [432193.7844, 4178501.2712]
+      [432192.7844, 4117738.3979]
+
 
     ]
   }
@@ -189,9 +208,9 @@ var verde = new M.style.Line({
   },
   stroke: {
     color: 'black',
-    width: 2
+    width: 50
   },
-  radius: 5
+  radius: 50
 });
 
 
@@ -204,11 +223,7 @@ var categoryStyle = new M.style.Category("styleType", {
 });
 
 
-layer.setStyle(categoryStyle);
-
-
-
-
+// layer.setStyle(categoryStyle);
 function GetStyleForCategories() {
   let CategoryStyle = document.getElementById('CategoryStyle').value;
   let res = categoryStyle.getStyleForCategories(CategoryStyle);

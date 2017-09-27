@@ -858,13 +858,44 @@ goog.require('goog.color.alpha');
    * @api stable
    */
   M.utils.getGeometryType = function(layer) {
-    if (M.utils.isNullOrEmpty(layer) || M.utils.isNullOrEmpty(layer.getFeatures)) {
+    if (M.utils.isNullOrEmpty(layer) || M.utils.isNullOrEmpty(layer.getFeatures())) {
       return null;
     }
-    let firstFeature = layer.getFeatures()[0] || null;
+    let firstFeature = layer.getFeatures()[0];
     if (!M.utils.isNullOrEmpty(firstFeature) && !M.utils.isNullOrEmpty(firstFeature.getGeometry())) {
       return firstFeature.getGeometry().type;
     }
     return null;
+  };
+
+  /**
+   * This function returns the appropiate style to geomtry layer
+   * with parameter options.
+   * @function
+   * @public
+   * @param {object} options - style options
+   * @param {M.layer.Vector} layer -
+   * @return {M.style.Simple}
+   * @api stable
+   */
+  M.utils.generateStyleLayer = function(options, layer) {
+    let style;
+    switch (M.utils.getGeometryType(layer)) {
+      case "Point":
+      case "MultiPoint":
+        style = new M.style.Point(options);
+        break;
+      case "LineString":
+      case "MultiLineString":
+        style = new M.style.Line(options);
+        break;
+      case "Polygon":
+      case "MultiPolygon":
+        style = new M.style.Polygon(options);
+        break;
+      default:
+        return null;
+    }
+    return style;
   };
 })();

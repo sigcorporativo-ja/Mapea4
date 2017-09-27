@@ -126,8 +126,11 @@ goog.require('M.impl.style.Simple');
     let applyStyle = this.olStyleFn_()[0];
     let stroke = applyStyle.getStroke();
     if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
-      applyStyle.getStroke().setWidth(3);
+      if (stroke.getWidth() > 3) {
+        applyStyle.getStroke().setWidth(3);
+      }
     }
+
     vectorContext.setStyle(applyStyle);
     this.drawGeometryToCanvas(vectorContext);
   };
@@ -146,11 +149,11 @@ goog.require('M.impl.style.Simple');
     let minW = (canvasSize[0] - maxW);
     let minH = (canvasSize[1] - maxH);
     vectorContext.drawGeometry(new ol.geom.Polygon([[
-         [minW, minH],
-         [maxW, minH],
-         [maxW, maxH],
-         [minW, maxH],
-         [minW, minH]
+         [minW + 3, minH + 3],
+          [maxW - 3, minH + 3],
+          [maxW - 3, maxH - 3],
+          [minW + 3, maxH - 3],
+          [minW + 3, minH + 3]
       ]]));
   };
 

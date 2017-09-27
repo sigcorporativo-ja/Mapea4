@@ -60,26 +60,26 @@ goog.require('M.impl.renderutils');
     map.on(M.evt.CHANGE_PROJ, this.setProjection_, this);
 
     this.ol3Layer = new ol.layer.Vector({
-      // style: new ol.style.Style({
-      //   fill: new ol.style.Fill({
-      //     color: 'rgba(0, 158, 0, 0.1)'
-      //   }),
-      //   stroke: new ol.style.Stroke({
-      //     color: '#fcfcfc',
-      //     width: 2
-      //   }),
-      //   image: new ol.style.Circle({
-      //     radius: 7,
-      //     fill: new ol.style.Fill({
-      //       color: '#009E00'
-      //     }),
-      //     stroke: new ol.style.Stroke({
-      //       color: '#fcfcfc',
-      //       width: 2
-      //     })
-      //   })
-      // }),
-      // zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
+      style: new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: 'rgba(0, 158, 0, 0.1)'
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#fcfcfc',
+          width: 2
+        }),
+        image: new ol.style.Circle({
+          radius: 7,
+          fill: new ol.style.Fill({
+            color: '#009E00'
+          }),
+          stroke: new ol.style.Stroke({
+            color: '#fcfcfc',
+            width: 2
+          })
+        })
+      }),
+      zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
     });
     this.updateSource_();
     // this.facadeVector_.setStyle(this.facadeVector_.getStyle());
@@ -89,6 +89,9 @@ goog.require('M.impl.renderutils');
     //   this.setVisible(this.inRange());
     // }
     // sets its z-index
+
+    this.setVisible(this.visibility);
+
     if (this.zIndex_ !== null) {
       this.setZIndex(this.zIndex_);
     }
@@ -99,7 +102,6 @@ goog.require('M.impl.renderutils');
 
     this.postComposeEvtKey_ = this.ol3Layer.on('postcompose', M.impl.renderutils.postRender.bind(this.ol3Layer), this);
   };
-
   /**
    * This function sets the map object of the layer
    *
@@ -125,6 +127,7 @@ goog.require('M.impl.renderutils');
     return true;
   };
 
+
   /**
    * This function add features to layer
    *
@@ -133,10 +136,42 @@ goog.require('M.impl.renderutils');
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  M.impl.layer.Vector.prototype.addFeatures = function(features) {
+  M.impl.layer.Vector.prototype.addFeatures = function(features, update) {
     this.features_ = this.features_.concat(features);
+    if (update) {
+      this.updateLayer_(features);
+    }
     this.redraw();
   };
+
+
+  /**
+   * This function add features to layer
+   *
+   * TODO
+   *
+   */
+  M.impl.layer.Vector.prototype.updateLayer_ = function(features) {
+    let style = this.facadeVector_.getStyle();
+    if (style instanceof(M.style.Simple)) {
+      this.features_ = this.features_.concat(features);
+      this.facadeVector_.setStyle(style);
+    }
+    else {
+      if (style instanceof(M.style.Category) || style instanceof(M.style.Choropleth) || style instanceof(M.style.Proportional) || style instanceof(M.style.Chart)) {
+        this.features_ = this.features_.concat(features);
+        style.apply(this.facadeVector_);
+      }
+      else if (style instanceof M.style.Cluster) {
+        let cluster = this.facadeVector_.getStyle();
+        cluster.unapply(this.facadeVector_);
+        this.features_ = this.features_.concat(features);
+        cluster.getOldStyle().apply(this.facadeVector_);
+        cluster.apply(this.facadeVector_);
+      }
+    }
+  };
+
 
   /**
    * This function returns all features or discriminating by the filter
