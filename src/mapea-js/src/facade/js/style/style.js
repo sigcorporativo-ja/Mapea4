@@ -56,18 +56,22 @@ goog.provide('M.Style');
   };
 
   /**
-   * TODO
+   * This function apply style
    *
+   * @function
+   * @protected
+   * @param {M.layer.Vector} layer - Layer to apply the styles
+   * @api stable
    */
   M.Style.prototype.unapply = function(layer) {};
 
   /**
    * This function returns the value of the indicated attribute
    *
-   * @protected
+   * @function
+   * @public
    * @param {String} attribute - Attribute to know the value
    * @return {Object} Attribute Value
-   * @function
    */
   M.Style.prototype.get = function(attribute) {
     let attrValue;
@@ -146,7 +150,7 @@ goog.provide('M.Style');
    * This function returns data url to canvas
    *
    * @function
-   * @protected
+   * @public
    * @return {String} data url to canvas
    */
   M.Style.prototype.toImage = function() {
@@ -176,17 +180,7 @@ goog.provide('M.Style');
   M.Style.prototype.serialize = function() {};
 
   /**
-   * TODO
-   */
-  M.Style.prototype.clone = function() {
-    let optsClone = JSON.parse(JSON.stringify(this.options_));
-    let implClass = this.getImpl().constructor;
-    let implClone = new implClass(optsClone);
-    return new this.constructor(optsClone, implClone);
-  };
-
-  /**
-   * TODO
+   * This function updates the styles's canvas
    *
    * @public
    * @function
@@ -205,7 +199,12 @@ goog.provide('M.Style');
   };
 
   /**
-   * TODO
+   * This function clones the style
+   *
+   * @public
+   * @return {M.Style}
+   * @function
+   * @api stable
    */
   M.Style.prototype.clone = function() {
     let optsClone = JSON.parse(JSON.stringify(this.options_));

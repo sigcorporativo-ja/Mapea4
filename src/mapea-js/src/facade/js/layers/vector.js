@@ -30,13 +30,21 @@ goog.require('M.exception');
      */
     this.filter_ = null;
 
-    // calls the super constructor
     goog.base(this, parameters, impl);
+    this.on(M.evt.LOAD, function() {
+      let style = options.style;
+      if (M.utils.isNullOrEmpty(style)) {
+        if (this instanceof M.layer.WFS) {
+          style = M.utils.generateStyleLayer(M.layer.WFS.DEFAULT_OPTIONS_STYLE, this);
+        }
+        else if (this instanceof M.layer.GeoJSON) {
+          style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
+        }
+      }
+      this.setStyle(style);
+    }.bind(this));
+    // calls the super constructor
 
-    let style = options.style;
-    if (!M.utils.isNullOrEmpty(style) && style instanceof M.Style) {
-      this.style_ = style;
-    }
     impl.on(M.evt.LOAD, (features) => this.fire(M.evt.LOAD, [features]));
 
   });
@@ -50,12 +58,22 @@ goog.require('M.exception');
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  M.layer.Vector.prototype.addFeatures = function(features, bool) {
+  M.layer.Vector.prototype.addFeatures = function(features, update = false) {
+    let style;
+    if (M.utils.isNullOrEmpty(this.style_)) {
+      if (this instanceof M.layer.WFS) {
+        style = M.utils.generateStyleLayer(M.layer.WFS.DEFAULT_OPTIONS_STYLE, this);
+      }
+      else if (this instanceof M.layer.GeoJSON) {
+        style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
+      }
+    }
+    this.setStyle(style);
     if (!M.utils.isNullOrEmpty(features)) {
       if (!M.utils.isArray(features)) {
         features = [features];
       }
-      this.getImpl().addFeatures(features, bool);
+      this.getImpl().addFeatures(features, update);
     }
   };
 

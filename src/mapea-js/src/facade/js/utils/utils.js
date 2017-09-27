@@ -858,10 +858,10 @@ goog.require('goog.color.alpha');
    * @api stable
    */
   M.utils.getGeometryType = function(layer) {
-    if (M.utils.isNullOrEmpty(layer) || M.utils.isNullOrEmpty(layer.getFeatures)) {
+    if (M.utils.isNullOrEmpty(layer) || M.utils.isNullOrEmpty(layer.getFeatures())) {
       return null;
     }
-    let firstFeature = layer.getFeatures()[0] || null;
+    let firstFeature = layer.getFeatures()[0];
     if (!M.utils.isNullOrEmpty(firstFeature) && !M.utils.isNullOrEmpty(firstFeature.getGeometry())) {
       return firstFeature.getGeometry().type;
     }
@@ -894,7 +894,7 @@ goog.require('goog.color.alpha');
         style = new M.style.Polygon(options);
         break;
       default:
-        return new M.style.Point(options);
+        return null;
     }
     return style;
   };

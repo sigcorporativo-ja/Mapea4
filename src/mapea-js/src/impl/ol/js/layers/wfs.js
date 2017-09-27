@@ -259,22 +259,4 @@ goog.require('M.impl.layer.Vector');
     return equals;
   };
 
-  /**
-   * Style for this layer
-   * @const
-   * @type {ol.style.Style}
-   * @public
-   * @api stable
-   */
-  M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE = {
-    fill: {
-      color: 'rgba(103, 175, 19, 0.2)',
-      opacity: 0.4
-    },
-    stroke: {
-      color: '#67af13',
-      width: 1
-    },
-    radius: 6
-  };
 })();

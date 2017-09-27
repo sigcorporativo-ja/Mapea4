@@ -23,7 +23,11 @@ goog.require('M.impl.style.PointFontSymbol');
   goog.inherits(M.impl.style.Point, M.impl.style.Simple);
 
   /**
-   * EMILIO'S TODO
+   * This function returns data url to canvas
+   *
+   * @function
+   * @public
+   * @return {String} data url to canvas
    */
   M.impl.style.Point.prototype.toImage = function(canvas) {
     if (M.utils.isNullOrEmpty(this.olStyleFn_)) {
@@ -77,8 +81,6 @@ goog.require('M.impl.style.PointFontSymbol');
         zIndex: M.impl.style.Simple.getValue(options.zindex, feature)
       });
       let styleIcon = new ol.style.Style();
-      let styles = [];
-
       let fill;
       if (!M.utils.isNullOrEmpty(options.fill)) {
         let fillColorValue = M.impl.style.Simple.getValue(options.fill.color, feature);
@@ -90,7 +92,6 @@ goog.require('M.impl.style.PointFontSymbol');
           });
         }
       }
-
       let stroke;
       if (!M.utils.isNullOrEmpty(options.stroke)) {
         let strokeColorValue = M.impl.style.Simple.getValue(options.stroke.color, feature);
@@ -195,13 +196,7 @@ goog.require('M.impl.style.PointFontSymbol');
           }));
         }
       }
-      if (!M.utils.isNullOrEmpty(style)) {
-        styles.push(style);
-      }
-      if (!M.utils.isNullOrEmpty(styleIcon)) {
-        styles.push(styleIcon);
-      }
-      return styles;
+      return [style, styleIcon];
     };
   };
 

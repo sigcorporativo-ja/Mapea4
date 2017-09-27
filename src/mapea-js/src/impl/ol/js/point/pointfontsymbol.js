@@ -7,41 +7,22 @@ goog.require('ol.style.FontSymbol');
  * @namespace M.impl.style.PointFontSymbol
  */
 (function() {
-  "use strict";
-
   /**
    * @classdesc
    * chart style for vector features
    *
    * @constructor
-   * @param {olx.style.FontSymbolOptions=} Options.
-   *  - type {pie3d|pie|bar|donut} the chart type
-   *  - radius {number} chart radius
-   *  - rotation {number} determine whether the symbolizer rotates with the map
-   *  - snapToPixel {bool} determine whether the symbolizer should be snapped to a pixel.
-   *  - stroke {ol.style.Stroke} stroke style
-   *  - colors {string|Array<string>} array of colors as string
-   *  - offsetX {number} chart x axis offset
-   *  - offsetY {number} chart y axis offset
-   *  - animation {number} step in an animation sequence [0,1]
-   *  - variables {object|M.style.chart.Variable|string|Array<string>|Array<M.style.chart.Variable>} the chart variables
-   *  - donutRatio {number} the chart 'donut' type ratio
-   *  - data {Array<number>} chart data
-   *  - fill3DColor {string} the pie3d cylinder fill color
-   * @extends {ol.style.RegularShape}
-   * @implements {ol.structs.IHasChecksum}
-   * @api
+   * @param {object} options - Options style PointFontSymbol
+   * @extends {ol.style.FontSymbol}
+   * @api stable
    */
   M.impl.style.PointFontSymbol = function(options = {}) {
-
-    if (!options.anchor_) {
-      options.anchor_ = [];
+    if (!options.anchor) {
+      options.anchor = [];
     }
-
-    if (!options.offset_) {
-      options.offset_ = [];
+    if (!options.offset) {
+      options.offset = [];
     }
-
     // super call
     ol.style.FontSymbol.call(this, {
       glyph: options.glyph,
@@ -58,10 +39,7 @@ goog.require('ol.style.FontSymbol');
       rotation: options.rotation,
       rotateWithView: options.rotateWithView
     });
-
-    // [REV_]
-    this.forceGeometryRender_ = typeof options.forceGeometryRender === 'boolean' ? options.forceGeometryRender : false;
-
+    this.forceGeometryRender_ = M.utils.isBoolean(options.forceGeometryRender) ? options.forceGeometryRender : false;
   };
   ol.inherits(M.impl.style.PointFontSymbol, ol.style.FontSymbol);
 
@@ -89,7 +67,6 @@ goog.require('ol.style.FontSymbol');
   /**
    * Draws in a vector context a "center point" as feature and applies it this chart style.
    * This draw only will be applied to geometries of type POLYGON or MULTI_POLYGON.
-   * [_REV] -> revisar si linestring necesita tratamiento
    *
    * @private
    * @function

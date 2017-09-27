@@ -35,6 +35,8 @@ goog.require('M.Style');
      * TODO
      * @public
      * @type {M.layer.Vector}
+     * @api stable
+     * @expose
      */
     this.layer_ = null;
 
@@ -42,6 +44,8 @@ goog.require('M.Style');
      * TODO
      * @public
      * @type {Map<String,M.Style>}
+     * @api stable
+     * @expose
      */
     this.categoryStyles_ = categoryStyles;
     goog.base(this, options, {});

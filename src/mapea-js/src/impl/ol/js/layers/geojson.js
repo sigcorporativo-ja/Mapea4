@@ -262,22 +262,4 @@ goog.require('goog.style');
     return equals;
   };
 
-  /**
-   * options style for this layer
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  M.impl.layer.GeoJSON.DEFAULT_OPTIONS_STYLE = {
-    fill: {
-      color: 'rgba(255, 255, 255, 0.4)',
-      opacity: 0.4
-    },
-    stroke: {
-      color: "#3399CC",
-      width: 1.5
-    },
-    radius: 5,
-  };
 })();

@@ -7,50 +7,29 @@ goog.require('ol.style.Icon');
  * @namespace M.impl.style.PointIcon
  */
 (function() {
-  "use strict";
-
   /**
    * @classdesc
    * chart style for vector features
    *
    * @constructor
-   * @param {olx.style.FontSymbolOptions=} Options.
-   *  - type {pie3d|pie|bar|donut} the chart type
-   *  - radius {number} chart radius
-   *  - rotation {number} determine whether the symbolizer rotates with the map
-   *  - snapToPixel {bool} determine whether the symbolizer should be snapped to a pixel.
-   *  - stroke {ol.style.Stroke} stroke style
-   *  - colors {string|Array<string>} array of colors as string
-   *  - offsetX {number} chart x axis offset
-   *  - offsetY {number} chart y axis offset
-   *  - animation {number} step in an animation sequence [0,1]
-   *  - variables {object|M.style.chart.Variable|string|Array<string>|Array<M.style.chart.Variable>} the chart variables
-   *  - donutRatio {number} the chart 'donut' type ratio
-   *  - data {Array<number>} chart data
-   *  - fill3DColor {string} the pie3d cylinder fill color
-   * @extends {ol.style.RegularShape}
-   * @implements {ol.structs.IHasChecksum}
-   * @api
+   * @param {object} options - Options style PointIcon
+   * @extends {ol.style.Icon}
+   * @api stable
    */
   M.impl.style.PointIcon = function(options = {}) {
-
     if (!options.anchor) {
       options.anchor = [0, 0];
     }
-
     if (!options.offset) {
       options.offset = [0, 0];
-    }
-    if (!options.size) {
-      //options.size_ = [32, 32];
     }
     // super call
     ol.style.Icon.call(this, {
       anchor: options.anchor.slice(),
-      anchorOrigin: options.anchorOrigin || [],
+      anchorOrigin: options.anchorOrigin,
       anchorXUnits: options.anchorXUnits,
       anchorYUnits: options.anchorYUnits,
-      crossOrigin: options.crossOrigin,
+      crossOrigin: options.crossOrigin || 'Anonymous',
       color: (options.color && options.color.slice) ? options.color.slice() : options.color || undefined,
       src: options.src,
       offset: options.offset.slice(),
@@ -62,10 +41,7 @@ goog.require('ol.style.Icon');
       rotation: options.rotation,
       rotateWithView: options.rotateWithView
     });
-
-    // [REV_]
-    this.forceGeometryRender_ = typeof options.forceGeometryRender === 'boolean' ? options.forceGeometryRender : false;
-
+    this.forceGeometryRender_ = M.utils.isBoolean(options.forceGeometryRender) ? options.forceGeometryRender : false;
   };
   ol.inherits(M.impl.style.PointIcon, ol.style.Icon);
 
@@ -93,7 +69,6 @@ goog.require('ol.style.Icon');
   /**
    * Draws in a vector context a "center point" as feature and applies it this chart style.
    * This draw only will be applied to geometries of type POLYGON or MULTI_POLYGON.
-   * [_REV] -> revisar si linestring necesita tratamiento
    *
    * @private
    * @function

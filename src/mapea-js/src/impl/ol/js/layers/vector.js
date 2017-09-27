@@ -82,20 +82,11 @@ goog.require('M.impl.renderutils');
       zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
     });
     this.updateSource_();
-    this.facadeVector_.setStyle(this.facadeVector_.getStyle());
+    // this.facadeVector_.setStyle(this.facadeVector_.getStyle());
 
-    let style = this.facadeVector_.getStyle();
-    if (!M.utils.isNullOrEmpty(style)) {
-      this.facadeVector_.setStyle(this.facadeVector_.getStyle());
-    }
-    else {
-      if (this instanceof M.impl.layer.WFS) {
-        this.facadeVector_.setStyle(M.utils.generateStyleLayer(M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE, this.facadeVector_));
-      }
-      else if (this instanceof M.impl.layer.GeoJSON) {
-        this.facadeVector_.setStyle(M.utils.generateStyleLayer(M.impl.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this.facadeVector_));
-      }
-    }
+    // if (!M.utils.isNullOrEmpty(style)) {
+    //   this.facadeVector_.setStyle(this.facadeVector_.getStyle());
+    // }
 
     // sets its visibility if it is in range
     // if (this.options.visibility != false) {
@@ -149,13 +140,10 @@ goog.require('M.impl.renderutils');
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  M.impl.layer.Vector.prototype.addFeatures = function(features, boolUpdateLayer) {
-
-    if (M.utils.isNullOrEmpty(boolUpdateLayer)) {
-      this.features_ = this.features_.concat(features);
-    }
-    else {
-      this.updateLayer(features);
+  M.impl.layer.Vector.prototype.addFeatures = function(features, update) {
+    this.features_ = this.features_.concat(features);
+    if (update) {
+      this.updateLayer_(features);
     }
     this.redraw();
   };
@@ -167,9 +155,9 @@ goog.require('M.impl.renderutils');
    * TODO
    *
    */
-  M.impl.layer.Vector.prototype.updateLayer = function(features) {
+  M.impl.layer.Vector.prototype.updateLayer_ = function(features) {
     let style = this.facadeVector_.getStyle();
-    if (style instanceof(M.M.style.Simple)) {
+    if (style instanceof(M.style.Simple)) {
       this.features_ = this.features_.concat(features);
       this.facadeVector_.setStyle(style);
     }
@@ -178,7 +166,7 @@ goog.require('M.impl.renderutils');
         this.features_ = this.features_.concat(features);
         style.apply(this.facadeVector_);
       }
-      else {
+      else if (style instanceof M.style.Cluster) {
         let cluster = this.facadeVector_.getStyle();
         cluster.unapply(this.facadeVector_);
         this.features_ = this.features_.concat(features);
@@ -203,14 +191,6 @@ goog.require('M.impl.renderutils');
     let features = this.features_;
     if (!skipFilter) features = filter.execute(features);
     return features;
-  };
-
-  /**
-   * TODO
-   */
-  M.impl.layer.Vector.prototype.setFeatures = function(features) {
-    this.features_ = features;
-    this.redraw();
   };
 
   /**

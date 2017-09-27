@@ -322,7 +322,6 @@ goog.require('M.style.Point');
         return maxValue - feature.getAttribute(this.attributeName_);
       }.bind(this));
       this.layer_.getFeatures().forEach(feature => feature.setStyle(this.style_));
-      // this.layer_.redraw();
       this.updateCanvas();
     }
   };
