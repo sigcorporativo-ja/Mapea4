@@ -87,10 +87,6 @@ goog.require('M.impl.layer.Vector');
     map.getImpl().on(M.evt.CHANGE, function() {
       this.refresh();
     }, this);
-    this.on(M.evt.LOAD, function() {
-      let style = M.Style.createStyleLayer(M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE, this.facadeVector_);
-      this.facadeVector_.setStyle(style);
-    }.bind(this));
   };
 
   /**

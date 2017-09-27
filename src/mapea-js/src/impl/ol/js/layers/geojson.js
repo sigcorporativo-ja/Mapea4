@@ -87,8 +87,6 @@ goog.require('goog.style');
       this.loader_ = new M.impl.loader.JSONP(map, this.url, this.formater_);
     }
     goog.base(this, 'addTo', map);
-    let style = M.Style.createStyleLayer(M.impl.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this.facadeVector_);
-    this.facadeVector_.setStyle(style);
     // this.ol3Layer.setStyle(undefined);
   };
 
