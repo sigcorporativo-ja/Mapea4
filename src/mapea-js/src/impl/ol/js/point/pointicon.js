@@ -55,7 +55,7 @@ goog.require('ol.style.Icon');
       src: options.src,
       offset: options.offset.slice(),
       offsetOrigin: options.offsetOrigin || [],
-      size: options.size !== null ? options.size.slice() : undefined,
+      size: M.utils.isNullOrEmpty(options.size) ? undefined : options.size.slice(),
       opacity: options.opacity,
       scale: options.scale,
       snapToPixel: options.snapToPixel,
