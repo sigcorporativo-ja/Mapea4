@@ -24,6 +24,13 @@ goog.require('M.style.Simple');
   goog.inherits(M.style.Point, M.style.Simple);
 
   /**
+   * @inheritDoc
+   */
+  M.style.Point.prototype.toImage = function() {
+    return this.getImpl().toImage(this.canvas_);
+  };
+
+  /**
    * Default options for this style
    * @const
    * @type {object}

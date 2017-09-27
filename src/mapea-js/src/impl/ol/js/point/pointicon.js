@@ -34,28 +34,28 @@ goog.require('ol.style.Icon');
    */
   M.impl.style.PointIcon = function(options = {}) {
 
-    if (!options.anchor_) {
-      options.anchor_ = [];
+    if (!options.anchor) {
+      options.anchor = [0, 0];
     }
 
-    if (!options.offset_) {
-      options.offset_ = [];
+    if (!options.offset) {
+      options.offset = [0, 0];
     }
-    if (!options.size_) {
-      options.size_ = [];
+    if (!options.size) {
+      //options.size_ = [32, 32];
     }
     // super call
     ol.style.Icon.call(this, {
-      anchor: options.anchor_.slice(),
-      anchorOrigin: options.anchorOrigin_,
-      anchorXUnits: options.anchorXUnits_,
-      anchorYUnits: options.anchorYUnits_,
-      crossOrigin: options.crossOrigin_,
-      color: (options.color_ && options.color_.slice) ? options.color_.slice() : options.color_ || undefined,
+      anchor: options.anchor.slice(),
+      anchorOrigin: options.anchorOrigin || [],
+      anchorXUnits: options.anchorXUnits,
+      anchorYUnits: options.anchorYUnits,
+      crossOrigin: options.crossOrigin,
+      color: (options.color && options.color.slice) ? options.color.slice() : options.color || undefined,
       src: options.src,
-      offset: options.offset_.slice(),
-      offsetOrigin: options.offsetOrigin_,
-      size: options.size_ !== null ? options.size_.slice() : undefined,
+      offset: options.offset.slice(),
+      offsetOrigin: options.offsetOrigin || [],
+      size: options.size !== null ? options.size.slice() : undefined,
       opacity: options.opacity,
       scale: options.scale,
       snapToPixel: options.snapToPixel,
@@ -103,15 +103,14 @@ goog.require('ol.style.Icon');
     if (feature.getGeometry() == null) {
       return;
     }
-    //console.log('geometry', feature.getGeometry());
-
-    let center = M.impl.utils.getCentroidCoordinate(feature.getGeometry());
-    if (center != null) {
-      let tmpFeature = new ol.Feature({
-        geometry: new ol.geom.Point(center)
-      });
-      ctx.drawFeature(tmpFeature, style);
+    if (this.iconImage_.imageState_ === ol.ImageState.LOADED) {
+      let center = M.impl.utils.getCentroidCoordinate(feature.getGeometry());
+      if (center != null) {
+        let tmpFeature = new ol.Feature({
+          geometry: new ol.geom.Point(center)
+        });
+        ctx.drawFeature(tmpFeature, style);
+      }
     }
   };
-
 })();

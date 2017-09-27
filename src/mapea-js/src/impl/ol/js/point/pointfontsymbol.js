@@ -45,15 +45,15 @@ goog.require('ol.style.FontSymbol');
     // super call
     ol.style.FontSymbol.call(this, {
       glyph: options.glyph,
-      color: options.color_,
-      fontSize: options.fontSize_,
-      stroke: options.stroke_,
-      fill: options.fill_,
-      radius: options.radius_ + (options.stroke_ ? options.stroke_.getWidth() : 0),
-      form: options.form_,
-      gradient: options.gradient_,
-      offsetX: options.offset_[0],
-      offsetY: options.offset_[1],
+      color: options.color,
+      fontSize: options.fontSize,
+      stroke: options.stroke,
+      fill: options.fill,
+      radius: options.radius,
+      form: options.form,
+      gradient: options.gradient,
+      offsetX: options.offset[0],
+      offsetY: options.offset[1],
       opacity: options.opacity,
       rotation: options.rotation,
       rotateWithView: options.rotateWithView
@@ -61,11 +61,9 @@ goog.require('ol.style.FontSymbol');
 
     // [REV_]
     this.forceGeometryRender_ = typeof options.forceGeometryRender === 'boolean' ? options.forceGeometryRender : false;
-    if (this.forceGeometryRender_) {
-      this.renderPoint_();
-    }
+
   };
-  ol.inherits(M.impl.style.PointFontSymbol, ol.style.Icon);
+  ol.inherits(M.impl.style.PointFontSymbol, ol.style.FontSymbol);
 
   /**
    * clones the chart

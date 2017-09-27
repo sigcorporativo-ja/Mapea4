@@ -306,21 +306,14 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.update_ = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
-      this.layerFeatures_ = this.layer_.getFeatures(true);
-      this.layer_.removeFeatures(this.layerFeatures_);
-      let centroids = this.layerFeatures_;
-      if (this.layerFeatures_[0].getGeometry().type !== 'Point') {
-        centroids = this.layerFeatures_.map(f => f.getCentroid());
-      }
-      this.layer_.setFeatures(centroids);
-      let features = this.layer_.getFeatures(true);
+      let features = this.layer_.getFeatures();
       let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
       let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, this.attributeName_);
       if (!M.utils.isNullOrEmpty(this.style_.get('icon.src'))) {
         minRadius = minRadius / M.style.Proportional.SCALE_PROPORTION;
         maxRadius = maxRadius / M.style.Proportional.SCALE_PROPORTION;
       }
-
+      this.style_.set('forceGeometryRender', true);
       this.style_.set(this.getSizeAttribute_(), function(feature) {
         let value = feature.getAttribute(this.attributeName_);
         return this.proportionalFunction_(value, minValue, maxValue, minRadius, maxRadius);

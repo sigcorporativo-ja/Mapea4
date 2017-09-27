@@ -62,12 +62,9 @@ goog.require('M.impl.style.TextPath');
           textBaseline: (getValue(label.baseline, feature) || '').toLowerCase(),
           textAlign: getValue(label.align, feature),
           rotateWithView: getValue(label.rotate, feature) || false,
-          textOverflow: getValue(label.textoverflow, feature) || ' ',
+          textOverflow: getValue(label.textoverflow, feature) || 'custom',
           minWidth: getValue(label.minwidth, feature) || 0
         };
-        if ((getValue(label.textoverflow)) == "hidden") {
-          textPathConfig.textOverflow = '';
-        }
         let textPathStyle = new M.impl.style.TextPath(textPathConfig);
         if (!M.utils.isNullOrEmpty(label.stroke)) {
           textPathStyle.setStroke(new ol.style.Stroke({
@@ -109,22 +106,20 @@ goog.require('M.impl.style.TextPath');
    * @function
    * @api stable
    */
-  M.impl.style.Line.prototype.drawGeometryToCanvas = function(vectorContext, canvas, style, stroke) {
-    let width = style.width;
+  M.impl.style.Line.prototype.drawGeometryToCanvas = function(vectorContext, canvas, style) {
     let x = this.getCanvasSize()[0];
     let y = this.getCanvasSize()[1];
-    vectorContext.drawGeometry(new ol.geom.LineString([[0 + stroke / 2, 0 + stroke / 2], [(x / 3), (y / 2) - stroke / 2], [(2 * x / 3), 0 + stroke / 2], [x - stroke / 2, (y / 2) - stroke / 2]]));
+    vectorContext.drawGeometry(new ol.geom.LineString([[0, 0], [x / 4, y / 2], [x / 2, y / 4], [(x * 3 / 4), y / 2]]));
     if (!M.utils.isNullOrEmpty(style)) {
       var ctx = canvas.getContext("2d");
       ctx.lineWidth = style.width;
-      x = vectorContext.context_.canvas.width;
-      y = vectorContext.context_.canvas.height;
+      ctx.setLineDash([0, 0]);
       ctx.strokeStyle = style.color;
       ctx.beginPath();
-      ctx.lineTo(0 + width, 0 + width);
-      ctx.lineTo((x / 3), (y / 2) - width);
-      ctx.lineTo((2 * x / 3), 0 + (width));
-      ctx.lineTo(x - width, (y / 2) - width);
+      ctx.lineTo(0, 0);
+      ctx.lineTo(x / 4, y / 2);
+      ctx.lineTo(x / 2, y / 4);
+      ctx.lineTo((x * 3 / 4), y / 2);
       ctx.stroke();
     }
   };
@@ -152,12 +147,10 @@ goog.require('M.impl.style.TextPath');
     let applyStyle = this.olStyleFn_()[0];
     let stroke = applyStyle.getStroke();
     if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
-      if (stroke.getWidth() > 3) {
-        applyStyle.getStroke().setWidth(3);
-      }
+      applyStyle.getStroke().setWidth(3);
     }
     vectorContext.setStyle(applyStyle);
-    this.drawGeometryToCanvas(vectorContext, canvas, optionsStyle, applyStyle.getStroke().getWidth());
+    this.drawGeometryToCanvas(vectorContext, canvas, optionsStyle);
   };
 
   /**
