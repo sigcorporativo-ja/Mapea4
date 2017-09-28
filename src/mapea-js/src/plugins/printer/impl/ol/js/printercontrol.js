@@ -3,7 +3,7 @@ goog.provide('P.impl.control.Printer');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the measure conrol.
@@ -12,7 +12,7 @@ goog.provide('P.impl.control.Printer');
    * @extends {ol.control.Control}
    * @api stable
    */
-  M.impl.control.Printer = function () {
+  M.impl.control.Printer = function() {
     /**
      * Facade of the map
      * @private
@@ -31,7 +31,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.addTo = function (map, element) {
+  M.impl.control.Printer.prototype.addTo = function(map, element) {
     this.facadeMap_ = map;
 
     ol.control.Control.call(this, {
@@ -50,9 +50,9 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeLayer = function (layer) {
+  M.impl.control.Printer.prototype.encodeLayer = function(layer) {
     var this_ = this;
-    return (new Promise(function (success, fail) {
+    return (new Promise(function(success, fail) {
       if (layer.type === M.layer.type.WMC) {
         // none
       }
@@ -72,7 +72,7 @@ goog.provide('P.impl.control.Printer');
         success(this_.encodeWFS(layer));
       }
       else if (layer.type === M.layer.type.WMTS) {
-        this_.encodeWMTS(layer).then(function (encodedLayer) {
+        this_.encodeWMTS(layer).then(function(encodedLayer) {
           success(encodedLayer);
         });
       }
@@ -103,7 +103,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeLegend = function (layer) {
+  M.impl.control.Printer.prototype.encodeLegend = function(layer) {
     var encodedLegend = null;
 
     if (layer.displayInLayerSwitcher) {
@@ -120,6 +120,9 @@ goog.provide('P.impl.control.Printer');
           "name": "",
           "icons": [layer.getLegendURL()]
         };
+        if (layer instanceof M.layer.Vector) {
+          delete encodedLegend["classes"][0].icons;
+        }
       }
     }
 
@@ -135,7 +138,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeKML = function (layer) {
+  M.impl.control.Printer.prototype.encodeKML = function(layer) {
     var encodedLayer = null;
 
     var olLayer = layer.getImpl().getOL3Layer();
@@ -151,7 +154,7 @@ goog.provide('P.impl.control.Printer');
     var encodedStyles = {};
     var stylesNames = {};
     var index = 1;
-    features.forEach(function (feature) {
+    features.forEach(function(feature) {
       var geometry = feature.getGeometry();
       var styleId = feature.get("styleUrl");
       if (!M.utils.isNullOrEmpty(styleId)) {
@@ -243,7 +246,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeWMS = function (layer) {
+  M.impl.control.Printer.prototype.encodeWMS = function(layer) {
     var encodedLayer = null;
     var olLayer = layer.getImpl().getOL3Layer();
     var layerUrl = layer.url;
@@ -300,7 +303,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeWFS = function (layer) {
+  M.impl.control.Printer.prototype.encodeWFS = function(layer) {
     var encodedLayer = null;
 
     var projection = this.facadeMap_.getProjection();
@@ -318,7 +321,7 @@ goog.provide('P.impl.control.Printer');
     var encodedStyles = {};
     var stylesNames = {};
     var index = 1;
-    features.forEach(function (feature) {
+    features.forEach(function(feature) {
       var geometry = feature.getGeometry();
       var featureStyle;
       var fStyle = feature.getStyle();
@@ -425,7 +428,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeWMTS = function (layer) {
+  M.impl.control.Printer.prototype.encodeWMTS = function(layer) {
     var zoom = this.facadeMap_.getZoom();
     // var units = this.facadeMap_.getProjection().units;
     var layerImpl = layer.getImpl();
@@ -451,8 +454,8 @@ goog.provide('P.impl.control.Printer');
     /**
      * @see http: //www.mapfish.org/doc/print/protocol.html#layers-params
      */
-    return layer.getImpl().getCapabilities().then(function (capabilities) {
-      var matrixIdsObj = capabilities["Contents"]["TileMatrixSet"].filter(function (tileMatrixSet) {
+    return layer.getImpl().getCapabilities().then(function(capabilities) {
+      var matrixIdsObj = capabilities["Contents"]["TileMatrixSet"].filter(function(tileMatrixSet) {
         return (tileMatrixSet["Identifier"] === matrixSet);
       })[0];
       return {
@@ -476,7 +479,7 @@ goog.provide('P.impl.control.Printer');
         "version": "1.0.0",
         'maxExtent': layerExtent,
         'matrixSet': matrixSet,
-        'matrixIds': matrixIdsObj.TileMatrix.map(function (tileMatrix, i) {
+        'matrixIds': matrixIdsObj.TileMatrix.map(function(tileMatrix, i) {
           return {
             "identifier": tileMatrix["Identifier"],
             "matrixSize": [tileMatrix["MatrixHeight"], tileMatrix["MatrixWidth"]],
@@ -500,7 +503,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeOSM = function (layer) {
+  M.impl.control.Printer.prototype.encodeOSM = function(layer) {
     var encodedLayer = null;
 
     var layerImpl = layer.getImpl();
@@ -540,7 +543,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeMapbox = function (layer) {
+  M.impl.control.Printer.prototype.encodeMapbox = function(layer) {
     var encodedLayer = null;
 
     var layerImpl = layer.getImpl();
@@ -580,7 +583,7 @@ goog.provide('P.impl.control.Printer');
    * @function
    * @api stable
    */
-  M.impl.control.Printer.prototype.destroy = function () {
+  M.impl.control.Printer.prototype.destroy = function() {
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_ = null;
   };
