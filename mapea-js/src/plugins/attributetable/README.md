@@ -5,8 +5,8 @@ puede desacoplarse del lateral.
 
 ## Recursos y uso
 
-- js: [http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.ol.min.js](http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.ol.min.js")
-- css: [http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.min.css](http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.min.css)
+- js: [https://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.ol.min.js](http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.ol.min.js)
+- css: [https://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.min.css](http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.min.css)
 
 Configuración por defecto:
 ```javascript
