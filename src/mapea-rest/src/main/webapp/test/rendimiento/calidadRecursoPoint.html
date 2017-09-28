@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+
+    <!-- styles -->
+    <link href="https://sigc.desarrollo.guadaltel.es/mapea42_dev/assets/css/mapea.ol.min.css" rel="stylesheet" />
+
+    <title>PRUEBA DESARROLLO</title>
+    <style rel="stylesheet">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: scroll;
+      }
+
+      .makidentist:before {
+        content: '\e814';
+        color: 'red'
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="mapjs" class="container"></div>
+    <script type="text/javascript" src="https://sigc.desarrollo.guadaltel.es/mapea42_dev/vendor/browser-polyfill.js"></script>
+    <script type="text/javascript" src="https://sigc.desarrollo.guadaltel.es/mapea42_dev/js/mapea.ol.min.js"></script>
+    <!-- configuration -->
+    <script type="text/javascript" src="https://sigc.desarrollo.guadaltel.es/mapea42_dev/js/configuration.js"></script>
+    <script type="text/javascript" src="calidadRecursoPoint.js"></script>
+
+    <div id="cluster" class="container">
+      <button type="button" onclick="cluster()">cluster</button>
+      <button type="button" onclick="desX()">deshacer</button>
+    </div>
+
+    <div id="cloropleth" class="container">
+      <button type="button" onclick="choropleth()">choropleth</button>
+      <button type="button" onclick="desX()">deshacer</button>
+    </div>
+
+    <div id="categoryStyle" class="container">
+      <button type="button" onclick="categoryStyle()">categoryStyle</button>
+      <button type="button" onclick="desX()">deshacer</button>
+    </div>
+
+    <div id="Proportional" class="container">
+      <button type="button" onclick="Proportional()">Proportional</button>
+      <button type="button" onclick="desX()">deshacer</button>
+    </div>
+
+    <div id="estadistica" class="container">
+      <button type="button" onclick="estadistica()">estadistica</button>
+      <button type="button" onclick="desX()">deshacer</button>
+    </div>
+
+
+
+  </body>
+
+</html>
