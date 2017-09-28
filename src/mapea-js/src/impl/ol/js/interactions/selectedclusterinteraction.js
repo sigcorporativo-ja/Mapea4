@@ -167,10 +167,10 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       let cf = new ol.Feature();
       cluster[i].getKeys().forEach(attr => {
         cf.set(attr, cluster[i].get(attr));
-      })
+      });
       cf.setStyle(cluster[i].getStyle());
-      cf.set('features', [cluster[i]])
-      cf.set('geometry', new ol.geom.Point(p))
+      cf.set('features', [cluster[i]]);
+      cf.set('geometry', new ol.geom.Point(p));
       source.addFeature(cf);
       let lk = new ol.Feature({
         'selectclusterlink': true,
@@ -196,10 +196,10 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       let cf = new ol.Feature();
       cluster[i].getKeys().forEach(attr => {
         cf.set(attr, cluster[i].get(attr));
-      })
+      });
       cf.setStyle(cluster[i].getStyle());
-      cf.set('features', [cluster[i]])
-      cf.set('geometry', new ol.geom.Point(p))
+      cf.set('features', [cluster[i]]);
+      cf.set('geometry', new ol.geom.Point(p));
       source.addFeature(cf);
       let lk = new ol.Feature({
         'selectclusterlink': true,
@@ -258,7 +258,8 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center) { 
         let st = null;
         if (mFeature.getStyleFunction() != null) {
           st = mFeature.getStyleFunction().call(mFeature, res);
-        } else {
+        }
+        else {
           st = stylefn.call(mFeature, res);
         }
         for (let s = 0; s < st.length; s++) {
