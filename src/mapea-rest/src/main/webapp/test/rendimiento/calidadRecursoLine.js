@@ -1,3 +1,5 @@
+M.proxy(true);
+
 var mapajs = M.map({
   'container': 'mapjs',
   "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline", ],
@@ -181,7 +183,7 @@ let categoryStylel = new M.style.Category("jerarquia", {
 
 function categoryStyle() {
   let tiempo_ini = calculafecha();
-  municipios.setStyle(categoryStylep);
+  carreteras.setStyle(categoryStylel);
   let tiempo_fin = calculafecha();
   calculadif(tiempo_ini, tiempo_fin);
 }

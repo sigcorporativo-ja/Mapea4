@@ -1,6 +1,8 @@
+M.proxy(true);
+
 var mapajs = M.map({
   'container': 'mapjs',
-  "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline", ],
+  "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline"],
   "getfeatureinfo": "plain"
 });
 
@@ -15,6 +17,22 @@ var centros = new M.layer.WFS({
 });
 
 
+mapajs.addPlugin(new M.plugin.Printer({
+  "params": {
+    "pages": {
+      "infoSRS": "x",
+      "clientLogo": "http://www.juntadeandalucia.es/economiayhacienda/images/plantilla/logo_cabecera.gif",
+      "creditos": "Impresión generada a través de Mapea"
+    },
+    "layout": {
+      "outputFilename": "mapea_${yyyy-MM-dd_hhmmss}"
+    }
+  }
+}, {
+  "options": {
+    "legend": "true"
+  }
+}));
 
 
 

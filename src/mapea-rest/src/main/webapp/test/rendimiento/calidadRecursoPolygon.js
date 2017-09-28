@@ -251,6 +251,7 @@ function categoryStyle() {
 // ///////////////////////////////////////////////////////////////////////////////////////
 // ///////////////////////////////////////////////////////////////////////////////////////
 
+
 let proportionalpol = new M.style.Proportional('area', 4, 20, new M.style.Point({
   fill: {
     color: 'blue',
@@ -268,7 +269,6 @@ function Proportional() {
   let tiempo_fin = calculafecha();
   calculadif(tiempo_ini, tiempo_fin);
 }
-
 
 function desX() {
   let tiempo_ini = calculafecha();
