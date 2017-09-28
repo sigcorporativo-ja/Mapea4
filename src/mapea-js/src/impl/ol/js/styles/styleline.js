@@ -1,5 +1,6 @@
 goog.provide('M.impl.style.Line');
 
+goog.require('M.impl.style.OLStyle');
 goog.require('M.impl.style.Simple');
 goog.require('M.impl.style.TextPath');
 
@@ -38,8 +39,8 @@ goog.require('M.impl.style.TextPath');
       let stroke = options.stroke;
       let label = options.label;
       let fill = options.fill;
-      let style = new ol.style.Style();
-      let styleStroke = new ol.style.Style();
+      let style = new M.impl.style.OLStyle();
+      let styleStroke = new M.impl.style.OLStyle();
       const getValue = M.impl.style.Simple.getValue;
       if (!M.utils.isNullOrEmpty(stroke)) {
         style.setStroke(new ol.style.Stroke({
@@ -108,11 +109,11 @@ goog.require('M.impl.style.TextPath');
    */
 
   M.impl.style.Line.prototype.drawGeometryToCanvas = function(vectorContext, canvas, style, stroke) {
-    let width = style.width;
     let x = this.getCanvasSize()[0];
     let y = this.getCanvasSize()[1];
     vectorContext.drawGeometry(new ol.geom.LineString([[0 + stroke / 2, 0 + stroke / 2], [(x / 3), (y / 2) - stroke / 2], [(2 * x / 3), 0 + stroke / 2], [x - stroke / 2, (y / 2) - stroke / 2]]));
     if (!M.utils.isNullOrEmpty(style)) {
+      let width = style.width;
       var ctx = canvas.getContext("2d");
       ctx.lineWidth = style.width;
       x = vectorContext.context_.canvas.width;

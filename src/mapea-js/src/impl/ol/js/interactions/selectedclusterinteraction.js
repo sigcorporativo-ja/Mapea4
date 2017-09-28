@@ -164,12 +164,13 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       let a = 2 * Math.PI * i / max;
       if (max == 2 || max == 4) a += Math.PI / 4;
       let p = [center[0] + r * Math.sin(a), center[1] + r * Math.cos(a)];
-      let cf = new ol.Feature({
-        'selectclusterfeature': true,
-        'features': [cluster[i]],
-        geometry: new ol.geom.Point(p)
-      });
+      let cf = new ol.Feature();
+      cluster[i].getKeys().forEach(attr => {
+        cf.set(attr, cluster[i].get(attr));
+      })
       cf.setStyle(cluster[i].getStyle());
+      cf.set('features', [cluster[i]])
+      cf.set('geometry', new ol.geom.Point(p))
       source.addFeature(cf);
       let lk = new ol.Feature({
         'selectclusterlink': true,
@@ -192,12 +193,13 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       let dx = pix * r * Math.sin(a);
       let dy = pix * r * Math.cos(a);
       let p = [center[0] + dx, center[1] + dy];
-      let cf = new ol.Feature({
-        'selectclusterfeature': true,
-        'features': [cluster[i]],
-        geometry: new ol.geom.Point(p)
-      });
+      let cf = new ol.Feature();
+      cluster[i].getKeys().forEach(attr => {
+        cf.set(attr, cluster[i].get(attr));
+      })
       cf.setStyle(cluster[i].getStyle());
+      cf.set('features', [cluster[i]])
+      cf.set('geometry', new ol.geom.Point(p))
       source.addFeature(cf);
       let lk = new ol.Feature({
         'selectclusterlink': true,
@@ -247,12 +249,18 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center) { 
     for (let i = 0; i < features.length; i++)
       if (features[i].get('features')) {
         let feature = features[i];
+        let mFeature = feature.get('features')[0];
         let pt = feature.getGeometry().getCoordinates();
         pt[0] = center[0] + e * (pt[0] - center[0]);
         pt[1] = center[1] + e * (pt[1] - center[1]);
         let geo = new ol.geom.Point(pt);
         // Image style
-        let st = stylefn(feature, res);
+        let st = null;
+        if (mFeature.getStyleFunction() != null) {
+          st = mFeature.getStyleFunction().call(mFeature, res);
+        } else {
+          st = stylefn.call(mFeature, res);
+        }
         for (let s = 0; s < st.length; s++) {
           let imgs = st[s].getImage();
           let sc;

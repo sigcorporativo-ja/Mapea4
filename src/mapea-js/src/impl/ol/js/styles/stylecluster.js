@@ -1,9 +1,10 @@
 goog.provide('M.impl.style.Cluster');
 
 goog.require('M.impl.Style');
+goog.require('M.impl.style.OLStyle');
 goog.require('M.impl.layer.AnimatedCluster');
-goog.require('ol.source.Cluster');
 goog.require('M.impl.interaction.SelectCluster');
+goog.require('ol.source.Cluster');
 goog.require('ol.geom.convexhull');
 /**
  * @namespace M.style.Cluster
@@ -331,6 +332,9 @@ goog.require('ol.geom.convexhull');
   M.impl.style.Cluster.prototype.clusterStyleFn_ = function(feature, resolution, selected) {
     let olStyle;
     let clusterOlFeatures = feature.get('features');
+    if (!clusterOlFeatures) {
+      return new M.impl.style.OLStyle();
+    }
     let numFeatures = clusterOlFeatures.length;
     let range = this.options_.ranges.find(el => (el.min <= numFeatures && el.max >= numFeatures));
     if (!M.utils.isNullOrEmpty(range)) {
@@ -357,15 +361,15 @@ goog.require('ol.geom.convexhull');
     else if (numFeatures === 1) {
       let featureStyleFn = clusterOlFeatures[0].getStyleFunction();
       if (!M.utils.isNullOrEmpty(featureStyleFn)) {
-        olStyle = featureStyleFn(feature, resolution);
+        olStyle = featureStyleFn.call(clusterOlFeatures[0], resolution);
       }
       else {
         let layerStyleFn = this.oldOLLayer_.getStyleFunction();
         if (!M.utils.isNullOrEmpty(layerStyleFn)) {
-          olStyle = layerStyleFn(feature, resolution);
+          olStyle = layerStyleFn(clusterOlFeatures[0], resolution);
         }
         else {
-          olStyle = new ol.style.Style();
+          olStyle = new M.impl.style.OLStyle();
         }
       }
     }
@@ -407,7 +411,7 @@ goog.require('ol.geom.convexhull');
    * @api stable
    */
   M.impl.style.Cluster.prototype.selectClusterFeature_ = function(evt) {
-    console.log(evt);
+    // console.log(evt);
     // if (!M.utils.isNullOrEmpty(evt.selected)) {
     //   let selectedFeatures = evt.selected[0].get('features');
     //   if (!M.utils.isNullOrEmpty(selectedFeatures)) {

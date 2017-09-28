@@ -1,6 +1,7 @@
 goog.provide('M.impl.style.Polygon');
 
 goog.require('M.impl.style.Simple');
+goog.require('M.impl.style.OLStyle');
 
 /**
  * TODO
@@ -34,7 +35,7 @@ goog.require('M.impl.style.Simple');
         resolution = feature;
         feature = this;
       }
-      let style = new ol.style.Style();
+      let style = new M.impl.style.OLStyle();
       if (!M.utils.isNullOrEmpty(options.stroke)) {
         style.setStroke(new ol.style.Stroke({
           color: M.impl.style.Simple.getValue(options.stroke.color, feature),

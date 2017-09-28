@@ -65,19 +65,19 @@ goog.require('M.impl.textpath');
         }
 
         // add support for charts
-        if (feature.getGeometry() != null && (style instanceof ol.style.Style && style.getImage() != null && style.getImage())) {
-          let imageStyle = style.getImage();
-          if (imageStyle instanceof M.impl.style.OLChart) {
-            imageStyle.forceRender_(feature, style, e.vectorContext);
-          }
-          else if (imageStyle instanceof M.impl.style.PointCircle ||
-            imageStyle instanceof M.impl.style.PointIcon ||
-            imageStyle instanceof M.impl.style.PointFontSymbol) {
-            if (imageStyle.forceGeometryRender_) {
-              imageStyle.forceRender_(feature, style, e.vectorContext);
-            }
-          }
-        }
+        // if (feature.getGeometry() != null && (style instanceof ol.style.Style && style.getImage() != null && style.getImage())) {
+        //   let imageStyle = style.getImage();
+        //   if (imageStyle instanceof M.impl.style.OLChart) {
+        //     imageStyle.forceRender_(feature, style, e.vectorContext);
+        //   }
+        //   else if (imageStyle instanceof M.impl.style.PointCircle ||
+        //     imageStyle instanceof M.impl.style.PointIcon ||
+        //     imageStyle instanceof M.impl.style.PointFontSymbol) {
+        //     if (imageStyle.forceGeometryRender_) {
+        //       imageStyle.forceRender_(feature, style, e.vectorContext);
+        //     }
+        //   }
+        // }
       });
     });
 

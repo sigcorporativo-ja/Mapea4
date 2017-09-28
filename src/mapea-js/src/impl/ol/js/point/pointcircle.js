@@ -42,14 +42,14 @@ goog.require('ol.style.Circle');
    * Chart radius setter & getter
    * setter will render the chart
    */
-  Object.defineProperty(M.impl.style.PointCircle.prototype, 'radius', {
-    get: function() {
-      return this.radius_;
-    },
-    set: function(radius) {
-      this.radius_ = radius;
-    }
-  });
+  // Object.defineProperty(M.impl.style.PointCircle.prototype, 'radius', {
+  //   get: function() {
+  //     return this.radius_;
+  //   },
+  //   set: function(radius) {
+  //     this.radius_ = radius;
+  //   }
+  // });
 
   /**
    * Draws in a vector context a "center point" as feature and applies it this chart style.
