@@ -12,8 +12,8 @@ Los cambios no persistidos pueden deshacerse con el botón 'deshacer'.
 
 ## Recursos y uso
 
-- js: [http://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.ol.min.js](http://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.ol.min.js)
-- css: [http://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.min.css](http://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.min.css)
+- js: [https://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.ol.min.js](https://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.ol.min.js)
+- css: [https://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.min.css](https://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.min.css)
 
 Creación del plugin:
 ```
