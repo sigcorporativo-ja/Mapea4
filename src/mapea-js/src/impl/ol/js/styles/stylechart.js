@@ -1,6 +1,8 @@
 goog.provide('M.impl.style.Chart');
 
 goog.require('M.impl.style.Simple');
+
+goog.require('M.impl.style.OLStyle');
 goog.require('M.impl.style.OLChart');
 
 /**
@@ -196,7 +198,7 @@ goog.require('M.impl.style.OLChart');
         styleOptions.stroke = new ol.style.Stroke(options.stroke);
       }
 
-      let styles = [new ol.style.Style({
+      let styles = [new M.impl.style.OLStyle({
         image: new M.impl.style.OLChart(styleOptions)
       })];
 
@@ -223,7 +225,7 @@ goog.require('M.impl.style.OLChart');
             textAlign = label.textAlign || (angle < Math.PI / 2 ? 'left' : 'right');
           }
           let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (label.text || '');
-          return new ol.style.Style({
+          return new M.impl.style.OLStyle({
             text: new ol.style.Text({
               text: typeof text === 'string' ? text : '',
               offsetX: typeof label.offsetX === 'number' ? label.offsetX : (Math.cos(angle) * (radius + radiusIncrement)),

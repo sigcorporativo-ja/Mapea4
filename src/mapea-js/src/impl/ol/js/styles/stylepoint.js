@@ -1,6 +1,7 @@
 goog.provide('M.impl.style.Point');
 
 goog.require('M.impl.style.Simple');
+goog.require('M.impl.style.OLStyle');
 goog.require('M.impl.style.PointCircle');
 goog.require('M.impl.style.PointIcon');
 goog.require('M.impl.style.PointFontSymbol');
@@ -77,10 +78,10 @@ goog.require('M.impl.style.PointFontSymbol');
         resolution = feature;
         feature = this;
       }
-      let style = new ol.style.Style({
+      let style = new M.impl.style.OLStyle({
         zIndex: M.impl.style.Simple.getValue(options.zindex, feature)
       });
-      let styleIcon = new ol.style.Style();
+      let styleIcon = new M.impl.style.OLStyle();
       let fill;
       if (!M.utils.isNullOrEmpty(options.fill)) {
         let fillColorValue = M.impl.style.Simple.getValue(options.fill.color, feature);
