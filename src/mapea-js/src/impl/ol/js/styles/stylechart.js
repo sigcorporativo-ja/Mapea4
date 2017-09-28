@@ -180,7 +180,8 @@ goog.require('M.impl.style.OLChart');
       }
       let styleOptions = this.formatDataRecursively_(options, feature);
       let data = [];
-      options.variables.forEach(variable => {
+      //let variables = this.variables_.map
+      this.variables_.forEach(variable => {
         let featureData = feature.get(variable.attribute);
         data = data.concat(featureData instanceof Array ? featureData : [featureData]).filter(fData => fData != null);
       });

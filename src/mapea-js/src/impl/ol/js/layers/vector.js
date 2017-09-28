@@ -100,7 +100,7 @@ goog.require('M.impl.renderutils');
     let olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
 
-    this.postComposeEvtKey_ = this.ol3Layer.on('postcompose', M.impl.renderutils.postRender.bind(this.ol3Layer), this);
+    //this.postComposeEvtKey_ = this.ol3Layer.on('postcompose', M.impl.renderutils.postRender.bind(this.ol3Layer), this);
   };
   /**
    * This function sets the map object of the layer

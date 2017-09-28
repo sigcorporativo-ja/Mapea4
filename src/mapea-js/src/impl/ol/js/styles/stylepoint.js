@@ -140,7 +140,7 @@ goog.require('M.impl.style.PointFontSymbol');
         stroke: stroke,
         radius: M.impl.style.Simple.getValue(options.radius, feature),
         snapToPixel: M.impl.style.Simple.getValue(options.snapToPixel, feature),
-        forceGeometryRender: options.forceGeometryRender
+        //forceGeometryRender: options.forceGeometryRender
       }));
       if (!M.utils.isNullOrEmpty(options.icon)) {
         if (!M.utils.isNullOrEmpty(options.icon.src)) {
@@ -159,7 +159,7 @@ goog.require('M.impl.style.PointFontSymbol');
             crossOrigin: M.impl.style.Simple.getValue(options.icon.crossorigin, feature),
             anchorOrigin: M.impl.style.Simple.getValue(options.icon.anchororigin, feature),
             size: M.impl.style.Simple.getValue(options.icon.size, feature),
-            forceGeometryRender: options.forceGeometryRender
+            //forceGeometryRender: options.forceGeometryRender
           }));
         }
         else {
@@ -192,7 +192,7 @@ goog.require('M.impl.style.PointFontSymbol');
             crossOrigin: M.impl.style.Simple.getValue(options.icon.crossorigin, feature),
             anchorOrigin: M.impl.style.Simple.getValue(options.icon.anchororigin, feature),
             size: M.impl.style.Simple.getValue(options.icon.size, feature),
-            forceGeometryRender: options.forceGeometryRender
+            //forceGeometryRender: options.forceGeometryRender
           }));
         }
       }

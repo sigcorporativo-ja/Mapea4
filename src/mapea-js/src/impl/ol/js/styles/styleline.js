@@ -108,11 +108,11 @@ goog.require('M.impl.style.TextPath');
    */
 
   M.impl.style.Line.prototype.drawGeometryToCanvas = function(vectorContext, canvas, style, stroke) {
-    let width = style.width;
     let x = this.getCanvasSize()[0];
     let y = this.getCanvasSize()[1];
     vectorContext.drawGeometry(new ol.geom.LineString([[0 + stroke / 2, 0 + stroke / 2], [(x / 3), (y / 2) - stroke / 2], [(2 * x / 3), 0 + stroke / 2], [x - stroke / 2, (y / 2) - stroke / 2]]));
     if (!M.utils.isNullOrEmpty(style)) {
+      let width = style.width;
       var ctx = canvas.getContext("2d");
       ctx.lineWidth = style.width;
       x = vectorContext.context_.canvas.width;
