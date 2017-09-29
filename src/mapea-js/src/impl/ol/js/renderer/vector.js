@@ -44,9 +44,9 @@ goog.provide('M.impl.renderer.vector');
   M.impl.renderer.vector.drawGeometryCentroidAsFeature = function(replayGroup, geometry, style, feature) {
     let centroid = M.impl.utils.getCentroidCoordinate(geometry);
     let geom = new ol.geom.Point(centroid);
-    // let tmpFeature = new ol.Feature({
-    //     geometry: geom
-    // });
+    /*let tmpFeature = new ol.Feature({
+        geometry: geom
+    });*/
     ol.renderer.vector.GEOMETRY_RENDERERS_[geom.getType()](replayGroup, geom, style, feature);
   };
 
