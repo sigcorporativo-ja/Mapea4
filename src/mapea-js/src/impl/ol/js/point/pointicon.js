@@ -41,7 +41,6 @@ goog.require('ol.style.Icon');
       rotation: options.rotation,
       rotateWithView: options.rotateWithView
     });
-    this.forceGeometryRender_ = M.utils.isBoolean(options.forceGeometryRender) ? options.forceGeometryRender : false;
   };
   ol.inherits(M.impl.style.PointIcon, ol.style.Icon);
 
@@ -51,41 +50,23 @@ goog.require('ol.style.Icon');
    * @function
    * @api stable
    */
-  M.impl.style.PointIcon.prototype.clone = function() {};
-
-  /**
-   * Chart radius setter & getter
-   * setter will render the chart
-   */
-  Object.defineProperty(M.impl.style.PointIcon.prototype, 'radius', {
-    get: function() {
-      return this.radius_;
-    },
-    set: function(radius) {
-      this.radius_ = radius;
-    }
-  });
-
-  /**
-   * Draws in a vector context a "center point" as feature and applies it this chart style.
-   * This draw only will be applied to geometries of type POLYGON or MULTI_POLYGON.
-   *
-   * @private
-   * @function
-   * @api stable
-   */
-  M.impl.style.PointIcon.prototype.forceRender_ = function(feature, style, ctx) {
-    if (feature.getGeometry() == null) {
-      return;
-    }
-    if (this.iconImage_.imageState_ === ol.ImageState.LOADED) {
-      let center = M.impl.utils.getCentroidCoordinate(feature.getGeometry());
-      if (center != null) {
-        let tmpFeature = new ol.Feature({
-          geometry: new ol.geom.Point(center)
-        });
-        ctx.drawFeature(tmpFeature, style);
-      }
-    }
+  M.impl.style.PointIcon.prototype.clone = function() {
+    return new M.impl.style.PointIcon({
+      anchor: this.anchor_.slice(),
+      anchorOrigin: this.anchorOrigin_,
+      anchorXUnits: this.anchorXUnits_,
+      anchorYUnits: this.anchorYUnits_,
+      crossOrigin: this.crossOrigin_,
+      color: (this.color_ && this.color_.slice) ? this.color_.slice() : this.color_ || undefined,
+      src: this.getSrc(),
+      offset: this.offset_.slice(),
+      offsetOrigin: this.offsetOrigin_,
+      size: this.size_ !== null ? this.size_.slice() : undefined,
+      opacity: this.getOpacity(),
+      scale: this.getScale(),
+      snapToPixel: this.getSnapToPixel(),
+      rotation: this.getRotation(),
+      rotateWithView: this.getRotateWithView()
+    });
   };
 })();

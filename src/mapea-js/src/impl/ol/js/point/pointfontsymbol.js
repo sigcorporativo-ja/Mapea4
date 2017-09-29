@@ -39,7 +39,6 @@ goog.require('ol.style.FontSymbol');
       rotation: options.rotation,
       rotateWithView: options.rotateWithView
     });
-    this.forceGeometryRender_ = M.utils.isBoolean(options.forceGeometryRender) ? options.forceGeometryRender : false;
   };
   ol.inherits(M.impl.style.PointFontSymbol, ol.style.FontSymbol);
 
@@ -49,42 +48,26 @@ goog.require('ol.style.FontSymbol');
    * @function
    * @api stable
    */
-  M.impl.style.PointFontSymbol.prototype.clone = function() {};
-
-  /**
-   * Chart radius setter & getter
-   * setter will render the chart
-   */
-  Object.defineProperty(M.impl.style.PointFontSymbol.prototype, 'radius', {
-    get: function() {
-      return this.radius_;
-    },
-    set: function(radius) {
-      this.radius_ = radius;
-    }
-  });
-
-  /**
-   * Draws in a vector context a "center point" as feature and applies it this chart style.
-   * This draw only will be applied to geometries of type POLYGON or MULTI_POLYGON.
-   *
-   * @private
-   * @function
-   * @api stable
-   */
-  M.impl.style.PointFontSymbol.prototype.forceRender_ = function(feature, style, ctx) {
-    if (feature.getGeometry() == null) {
-      return;
-    }
-    //console.log('geometry', feature.getGeometry());
-
-    let center = M.impl.utils.getCentroidCoordinate(feature.getGeometry());
-    if (center != null) {
-      let tmpFeature = new ol.Feature({
-        geometry: new ol.geom.Point(center)
-      });
-      ctx.drawFeature(tmpFeature, style);
-    }
+  M.impl.style.PointFontSymbol.prototype.clone = function() {
+    let style = new ol.style.FontSymbol({
+      glyph: "",
+      color: this.color_,
+      fontSize: this.fontSize_,
+      stroke: this.stroke_,
+      fill: this.fill_,
+      radius: this.radius_ + (this.stroke_ ? this.stroke_.getWidth():0),
+      form: this.form_,
+      gradient: this.gradient_,
+      offsetX: this.offset_[0],
+      offsetY: this.offset_[1],
+      opacity: this.getOpacity(),
+      rotation: this.getRotation(),
+      rotateWithView: this.getRotateWithView()
+    });
+    style.setScale(this.getScale());
+    style.glyph_ = this.glyph_;
+    style.renderMarker_();
+    return style;
   };
 
 })();

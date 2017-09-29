@@ -57,6 +57,10 @@ goog.require('M.impl.style.PointFontSymbol');
     }
     else {
       style = this.olStyleFn_()[0];
+      if (style.getImage() != null && style.getImage().getStroke() != null) {
+        style.getImage().setStroke(3); // TODO @albertoibiza parameterize this value
+        style.getImage().render_();
+      }
       let imageCanvas = style.getImage().getImage();
       if (imageCanvas != null) {
         image = imageCanvas.toDataURL();
@@ -289,4 +293,6 @@ goog.require('M.impl.style.PointFontSymbol');
     }
     return r;
   };
+
+
 })();
