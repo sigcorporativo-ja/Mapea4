@@ -50,7 +50,7 @@ goog.require('M.impl.style.PointFontSymbol');
         let ctx = canvas.getContext('2d');
         //let canvasSize = this.getCanvasSize();
         // canvasSize[0] / size[0]) * size[0]
-        let [size, scale] = [imageStyle.getSize(), imageStyle.getScale()];
+        // let [size, scale] = [imageStyle.getSize(), imageStyle.getScale()];
         ctx.drawImage(imageStyle.getImage(), 0, 0, ctx.canvas.height, ctx.canvas.width);
         image = canvas.toDataURL('png');
       }
