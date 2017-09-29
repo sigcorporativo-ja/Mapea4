@@ -408,7 +408,8 @@ goog.require('M.style.quantification');
   M.style.Choropleth.DEFAULT_STYLE_LINE = function(c) {
     return new M.style.Line({
       stroke: {
-        color: c
+        color: c,
+        width: 1
       }
     });
   };
