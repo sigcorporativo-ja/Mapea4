@@ -1507,6 +1507,15 @@ Mx.options.displayAmount;
  */
 Mx.options.glyphs;
 
+
+
+/**
+ * chart variables
+ * @type {Object}
+ * @api stable
+ */
+Mx.options.variables;
+
 /**
  * style icons
  * @type {string}
@@ -1586,3 +1595,103 @@ Mx.fill;
  * @api stable
  */
 Mx.gradientcolor;
+
+
+/**
+ * Object literal representing a Event in Mapea
+ * @typedef {{
+ *     stroke: (Mx.ChartOptions.stroke),
+ *     scheme: (Mx.ChartOptions.scheme),
+ *     variables: (Mx.ChartOptions.variables)
+ * }}
+ * @api stable
+ */
+Mx.ChartOptions;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.ChartOptions.stroke;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartOptions.radius;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartOptions.offsetX;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartOptions.offsetY;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.ChartOptions.fill3DColor;
+
+/**
+ * @type {Array<string>|Object}
+ * @api stable
+ */
+Mx.ChartOptions.scheme;
+
+/**
+ * @type {boolean}
+ * @api stable
+ */
+Mx.ChartOptions.rotateWithView;
+
+/**
+ * @type {boolean}
+ * @api stable
+ */
+Mx.ChartOptions.animation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.ChartOptions.variables;
+
+/**
+ * Object literal representing a Event in Mapea
+ * @typedef {{
+ *     attribute: (Mx.ChartVariableOptions.attribute),
+ *     label: (Mx.ChartVariableOptions.label)
+ * }}
+ * @api stable
+ */
+Mx.ChartVariableOptions;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.ChartVariableOptions.attribute;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.ChartVariableOptions.label;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartVariableOptions.fill;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.ChartVariableOptions.legend;

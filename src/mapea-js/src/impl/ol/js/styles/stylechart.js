@@ -15,7 +15,7 @@ goog.require('M.impl.style.OLChart');
    * Set chart style for vector features
    *
    * @constructor
-   * @param {object} options. (SAME AS M.style.Chart)
+   * @param {Mx.ChartOptions} options. (SAME AS M.style.Chart)
    *  - type {string|M.style.chart.types} the chart type
    *  - radius {number} the radius of the chart. If chart type is 'bar' type this field
    *            will limit the max bar height
@@ -260,7 +260,7 @@ goog.require('M.impl.style.OLChart');
    */
   M.impl.style.Chart.prototype.applyToFeature = function(feature) {
     let featureCtx = feature.getImpl().getOLFeature();
-    featureCtx.setStyle(this.olStyleFn_.bind(featureCtx));
+    featureCtx.setStyle(this.olStyleFn_.bind(this, featureCtx));
   };
 
   /**

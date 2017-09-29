@@ -25,6 +25,7 @@ goog.require('M.style.Simple');
 
   /**
    * @inheritDoc
+   * @api stable
    */
   M.style.Point.prototype.toImage = function() {
     return this.getImpl().toImage(this.canvas_);

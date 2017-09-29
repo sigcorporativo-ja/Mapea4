@@ -8,7 +8,7 @@ goog.provide('M.style.chart.Variable');
    * @classdesc
    * Main constructor of the class. Creates a chart variable
    *
-   * @param {object} options.
+   * @param {Mx.ChartVariableOptions} options.
    *  - attribute {string} the feature property name where data is stored
    *  - label {number}
    *    - text {string|Function} data label displayed. If this property is a

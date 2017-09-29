@@ -1,5 +1,8 @@
 goog.provide('M.style.align');
 
+/**
+ * @namespace M.style.align
+ */
 (function() {
   /**
    * Left style alignment

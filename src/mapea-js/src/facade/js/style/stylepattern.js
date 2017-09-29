@@ -1,7 +1,9 @@
 goog.provide('M.style.pattern');
 
+/**
+ * @namespace M.style.pattern
+ */
 (function() {
-
   /**
    * Hatch style pattern
    * @const

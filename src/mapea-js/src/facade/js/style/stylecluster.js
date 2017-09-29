@@ -20,13 +20,11 @@ goog.require('M.Style');
     this.extends_(optsVendor, M.style.Cluster.DEFAULT_VENDOR);
 
     /**
-     * TODO
+     * @private
+     * @type {Object}
      */
     this.oldStyle_ = null;
 
-    /**
-     * TODO
-     */
     var impl = new M.impl.style.Cluster(options, optsVendor);
 
     // calls the super constructor
@@ -65,6 +63,7 @@ goog.require('M.Style');
    * @public
    * @function
    * @return {M.Style} the old style of layer
+   * @api stable
    */
   M.style.Cluster.prototype.getOldStyle = function() {
     return this.oldStyle_;
@@ -73,7 +72,9 @@ goog.require('M.Style');
   /**
    * This function return a set of ranges defined by user
    *
+   * @public
    * @function
+   * @return {Array<number>} ranges stablished by user
    * @api stable
    */
   M.style.Cluster.prototype.getRanges = function() {
@@ -83,7 +84,9 @@ goog.require('M.Style');
   /**
    * This function update a set of ranges  defined by user
    *
+   * @public
    * @function
+   * @param {Array<number>} newRanges
    * @api stable
    */
   M.style.Cluster.prototype.setRanges = function(newRanges) {
@@ -96,7 +99,10 @@ goog.require('M.Style');
   /**
    * This function return a specified range
    *
+   * @public
    * @function
+   * @param {number} min as minimal value in the interval
+   * @param {number} max as max value in the interval
    * @api stable
    */
   M.style.Cluster.prototype.getRange = function(min, max) {
@@ -106,7 +112,11 @@ goog.require('M.Style');
   /**
    * This function set a specified range
    *
+   * @public
    * @function
+   * @param {number} min as range minimal value to be overwritten
+   * @param {number} max as range max value to be overwritten
+   * @param {number} newRange as the new range
    * @api stable
    */
   M.style.Cluster.prototype.updateRange = function(min, max, newRange) {
@@ -119,7 +129,9 @@ goog.require('M.Style');
   /**
    * This function set if layer must be animated
    *
+   * @public
    * @function
+   * @param {boolean} animated defining if layer must be animated
    * @api stable
    */
   M.style.Cluster.prototype.setAnimated = function(animated) {
@@ -129,7 +141,9 @@ goog.require('M.Style');
   /**
    * This function return if layer is animated
    *
+   * @public
    * @function
+   * @return {boolean} A flag indicating if layer is currently being animated
    * @api stable
    */
   M.style.Cluster.prototype.isAnimated = function() {
@@ -139,8 +153,8 @@ goog.require('M.Style');
   /**
    * This function returns data url to canvas
    *
-   * @function
    * @protected
+   * @function
    * @return {String} data url to canvas
    */
   M.style.Cluster.prototype.toImage = function() {

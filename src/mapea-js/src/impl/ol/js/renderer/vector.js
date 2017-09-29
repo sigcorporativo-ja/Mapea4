@@ -5,6 +5,13 @@ goog.provide('M.impl.renderer.vector');
  */
 (function() {
 
+  /**
+   * @private
+   * @param {ol.render.ReplayGroup} replayGroup Replay group.
+   * @param {ol.geom.Circle} geometry Geometry.
+   * @param {ol.style.Style} style Style.
+   * @param {ol.Feature} feature Feature.
+   */
   M.impl.renderer.vector.renderPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
     if (style instanceof M.impl.style.OLStyle && style.getImage() != null) {
       M.impl.renderer.vector.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
@@ -14,6 +21,13 @@ goog.provide('M.impl.renderer.vector');
     }
   };
 
+  /**
+   * @private
+   * @param {ol.render.ReplayGroup} replayGroup Replay group.
+   * @param {ol.geom.Circle} geometry Geometry.
+   * @param {ol.style.Style} style Style.
+   * @param {ol.Feature} feature Feature.
+   */
   M.impl.renderer.vector.renderMultiPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
     if (style instanceof M.impl.style.OLStyle && style.getImage() != null) {
       M.impl.renderer.vector.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
@@ -23,6 +37,13 @@ goog.provide('M.impl.renderer.vector');
     }
   };
 
+  /**
+   * @private
+   * @param {ol.render.ReplayGroup} replayGroup Replay group.
+   * @param {ol.geom.Circle} geometry Geometry.
+   * @param {ol.style.Style} style Style.
+   * @param {ol.Feature} feature Feature.
+   */
   M.impl.renderer.vector.renderLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
     if (style instanceof M.impl.style.OLStyle && style.getImage() != null) {
       M.impl.renderer.vector.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
@@ -32,6 +53,13 @@ goog.provide('M.impl.renderer.vector');
     }
   };
 
+  /**
+   * @private
+   * @param {ol.render.ReplayGroup} replayGroup Replay group.
+   * @param {ol.geom.Circle} geometry Geometry.
+   * @param {ol.style.Style} style Style.
+   * @param {ol.Feature} feature Feature.
+   */
   M.impl.renderer.vector.renderMultiLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
     if (style instanceof M.impl.style.OLStyle && style.getImage() != null) {
       M.impl.renderer.vector.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
@@ -41,6 +69,13 @@ goog.provide('M.impl.renderer.vector');
     }
   };
 
+  /**
+   * @private
+   * @param {ol.render.ReplayGroup} replayGroup Replay group.
+   * @param {ol.geom.Circle} geometry Geometry.
+   * @param {ol.style.Style} style Style.
+   * @param {ol.Feature} feature Feature.
+   */
   M.impl.renderer.vector.drawGeometryCentroidAsFeature = function(replayGroup, geometry, style, feature) {
     let centroid = M.impl.utils.getCentroidCoordinate(geometry);
     let geom = new ol.geom.Point(centroid);

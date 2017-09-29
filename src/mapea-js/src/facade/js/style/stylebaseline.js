@@ -1,5 +1,8 @@
 goog.provide('M.style.baseline');
 
+/**
+ * @namespace M.style.baseline
+ */
 (function() {
   /**
    * Top style baseline

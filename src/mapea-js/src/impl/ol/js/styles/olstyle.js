@@ -19,8 +19,9 @@ goog.require( 'ol.style.Style' );
 
   /**
    * Clones the style.
+   * @public
    * @return {M.impl.style.OLStyle} The cloned style.
-   * @api
+   * @api stable
    */
   M.impl.style.OLStyle.prototype.clone = function () {
     var geometry = this.getGeometry();

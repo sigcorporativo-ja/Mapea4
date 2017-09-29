@@ -1,5 +1,8 @@
 goog.provide('M.style.overflow');
 
+/**
+ * @namespace M.style.overflow
+ */
 (function() {
   /**
    * Hidden style overflow

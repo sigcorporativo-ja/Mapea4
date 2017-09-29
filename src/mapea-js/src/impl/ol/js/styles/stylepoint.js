@@ -29,6 +29,7 @@ goog.require('M.impl.style.PointFontSymbol');
    * @function
    * @public
    * @return {String} data url to canvas
+   * @api stable
    */
   M.impl.style.Point.prototype.toImage = function(canvas) {
     if (M.utils.isNullOrEmpty(this.olStyleFn_)) {

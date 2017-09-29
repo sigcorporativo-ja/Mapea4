@@ -17,7 +17,7 @@ goog.require('M.style.chart.Variable');
    *
    * @constructor
    * @extends {M.style.Simple}
-   * @param {object} options.
+   * @param {Mx.ChartOptions} options.
    *  - type {string|M.style.chart.types} the chart type
    *  - radius {number} the radius of the chart. If chart type is 'bar' type this field
    *            will limit the max bar height

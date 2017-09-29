@@ -1,5 +1,8 @@
 goog.provide('M.style.state');
 
+/**
+ * @namespace M.style.state
+ */
 (function() {
   /**
    * Default style status

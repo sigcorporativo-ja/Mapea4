@@ -107,7 +107,6 @@ goog.require('M.impl.style.TextPath');
    * @function
    * @api stable
    */
-
   M.impl.style.Line.prototype.drawGeometryToCanvas = function(vectorContext, canvas, style, stroke) {
     let x = this.getCanvasSize()[0];
     let y = this.getCanvasSize()[1];
@@ -135,7 +134,6 @@ goog.require('M.impl.style.TextPath');
    * @function
    * @api stable
    */
-
   M.impl.style.Line.prototype.updateCanvas = function(canvas) {
     let canvasSize = this.getCanvasSize();
     let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
