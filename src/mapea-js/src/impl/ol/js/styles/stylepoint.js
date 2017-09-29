@@ -233,6 +233,9 @@ goog.require('M.impl.style.PointFontSymbol');
       size: canvasSize
     });
     let applyStyle = this.olStyleFn_()[0];
+    if (!M.utils.isNullOrEmpty(applyStyle.getText())) {
+      applyStyle.setText(null);
+    }
     if (!M.utils.isNullOrEmpty(this.olStyleFn_()[1]) && this.olStyleFn_()[1].getImage() instanceof ol.style.FontSymbol) {
       applyStyle = this.olStyleFn_()[1];
     }
