@@ -130,8 +130,8 @@ goog.require('M.impl.style.OLStyle');
     }
     let stroke = applyStyle.getStroke();
     if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
-      if (stroke.getWidth() > 3) {
-        applyStyle.getStroke().setWidth(3);
+      if (stroke.getWidth() > this.DEFAULT_WIDTH_POLYGON) {
+        applyStyle.getStroke().setWidth(this.DEFAULT_WIDTH_POLYGON);
       }
     }
 
@@ -171,4 +171,6 @@ goog.require('M.impl.style.OLStyle');
   M.impl.style.Polygon.prototype.getCanvasSize = function() {
     return [25, 15];
   };
+
+  M.impl.style.Polygon.prototype.DEFAULT_WIDTH_POLYGON = 3;
 })();

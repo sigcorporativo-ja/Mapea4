@@ -160,12 +160,12 @@ goog.provide('M.Style');
     if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
       image.crossOrigin = "Anonymous";
       let can = this.canvas_;
-      image.src = this.options_.icon.src;
       image.onload = function() {
         var c = can;
         var ctx = c.getContext("2d");
         ctx.drawImage(this, 0, 0, 50, 50);
       };
+      image.src = this.options_.icon.src;
       styleImg = this.canvas_.toDataURL('png');
     }
     else {

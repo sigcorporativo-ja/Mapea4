@@ -150,8 +150,8 @@ goog.require('M.impl.style.TextPath');
     let applyStyle = this.olStyleFn_()[0];
     let stroke = applyStyle.getStroke();
     if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
-      if (stroke.getWidth() > 3) {
-        applyStyle.getStroke().setWidth(3);
+      if (stroke.getWidth() > this.DEFAULT_WIDTH_LINE) {
+        applyStyle.getStroke().setWidth(this.DEFAULT_WIDTH_LINE);
       }
     }
     vectorContext.setStyle(applyStyle);
@@ -168,4 +168,7 @@ goog.require('M.impl.style.TextPath');
   M.impl.style.Line.prototype.getCanvasSize = function() {
     return [25, 15];
   };
+
+
+  M.impl.style.Line.prototype.DEFAULT_WIDTH_LINE = 3;
 })();

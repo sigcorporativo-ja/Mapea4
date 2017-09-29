@@ -51,14 +51,16 @@ goog.require('M.impl.style.PointFontSymbol');
         //let canvasSize = this.getCanvasSize();
         // canvasSize[0] / size[0]) * size[0]
         let [size, scale] = [imageStyle.getSize(), imageStyle.getScale()];
-        ctx.drawImage(imageStyle.getImage(), 0, 0, size[0] * scale, size[1] * scale);
+        ctx.drawImage(imageStyle.getImage(), 0, 0, ctx.canvas.height, ctx.canvas.width);
         image = canvas.toDataURL('png');
       }
     }
     else {
       style = this.olStyleFn_()[0];
       if (style.getImage() != null && style.getImage().getStroke() != null) {
-        style.getImage().setStroke(3); // TODO @albertoibiza parameterize this value
+        if (style.getImage().getStroke().getWidth() > this.DEFAULT_WIDTH_POINT) {
+          style.getImage().getStroke().setWidth(this.DEFAULT_WIDTH_POINT); // TODO @albertoibiza parameterize this value
+        }
         style.getImage().render_();
       }
       let imageCanvas = style.getImage().getImage();
@@ -294,5 +296,6 @@ goog.require('M.impl.style.PointFontSymbol');
     return r;
   };
 
+  M.impl.style.Point.prototype.DEFAULT_WIDTH_POINT = 3;
 
 })();
