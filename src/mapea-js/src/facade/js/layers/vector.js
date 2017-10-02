@@ -224,94 +224,12 @@ goog.require('M.exception');
    * TODO
    */
   M.layer.Vector.prototype.setStyle = function(style) {
-<<<<<<< HEAD
-    let type = M.utils.getGeometryType(this);
-
-    if (M.utils.isNullOrEmpty(style)) {
-      if (this instanceof M.layer.WFS) {
-        switch (type) {
-
-          case "Point":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "MultiPoint":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "Circle":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "LineString":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "LinearRing":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "MultiLineString":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "Polygon":
-            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "MultiPolygon":
-            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-        }
-      }
-      else {
-        switch (type) {
-          case "Point":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "MultiPoint":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "Circle":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "LineString":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "LinearRing":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "MultiLineString":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "Polygon":
-            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "MultiPolygon":
-            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-
-        }
-
-      }
-    }
-    if (style instanceof M.style.Cluster) {
-      if (type == "Point" || type == "MultiPoint") {
-        if (style instanceof M.Style) {
-          if (!M.utils.isNullOrEmpty(this.style_)) {
-            this.style_.unapply(this);
-          }
-          style.apply(this);
-          this.style_ = style;
-        }
-=======
     if (style instanceof M.Style) {
       if (!M.utils.isNullOrEmpty(this.style_)) {
         this.style_.unapply(this);
->>>>>>> refs/remotes/origin/redmine_89837_
       }
-    }
-    else {
-      if (style instanceof M.Style) {
-        if (!M.utils.isNullOrEmpty(this.style_)) {
-          this.style_.unapply(this);
-        }
-        style.apply(this);
-        this.style_ = style;
-      }
+      style.apply(this);
+      this.style_ = style;
     }
   };
 
