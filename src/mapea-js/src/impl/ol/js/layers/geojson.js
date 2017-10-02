@@ -50,6 +50,13 @@ goog.require('goog.style');
     /**
      *
      * @private
+     * @type {Boolean}
+     */
+    this.loaded_ = false;
+
+    /**
+     *
+     * @private
      * @type {Array<String>}
      */
     this.hiddenAttributes_ = [];
@@ -116,6 +123,7 @@ goog.require('goog.style');
       srcOptions = {
         format: this.formater_,
         loader: this.loader_.getLoaderFn(function(features) {
+          this_.loaded_ = true;
           this_.facadeVector_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
         }),
@@ -127,6 +135,7 @@ goog.require('goog.style');
       let features = this.formater_.read(this.source, this.map.getProjection());
       this.ol3Layer.setSource(new ol.source.Vector({
         loader: (function(extent, resolution, projection) {
+          this_.loaded_ = true;
           // removes previous features
           this_.facadeVector_.clear();
           this_.facadeVector_.addFeatures(features);
@@ -245,6 +254,16 @@ goog.require('goog.style');
     this.options = null;
     this.map = null;
   };
+
+  /**
+   * TODO
+   * @function
+   * @api stable
+   */
+  M.impl.layer.GeoJSON.prototype.isLoaded = function() {
+    return this.loaded_;
+  };
+
 
   /**
    * This function checks if an object is equals

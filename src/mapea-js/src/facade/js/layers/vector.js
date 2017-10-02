@@ -30,23 +30,13 @@ goog.require('M.exception');
      */
     this.filter_ = null;
 
-    goog.base(this, parameters, impl);
-    this.on(M.evt.LOAD, function() {
-      let style = options.style;
-      if (M.utils.isNullOrEmpty(style)) {
-        if (this instanceof M.layer.WFS) {
-          style = M.utils.generateStyleLayer(M.layer.WFS.DEFAULT_OPTIONS_STYLE, this);
-        }
-        else if (this instanceof M.layer.GeoJSON) {
-          style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
-        }
-      }
-      this.setStyle(style);
-    }.bind(this));
     // calls the super constructor
+    goog.base(this, parameters, impl);
+
+    this.style_ = options.style;
+    this.setStyle(this.style_);
 
     impl.on(M.evt.LOAD, (features) => this.fire(M.evt.LOAD, [features]));
-
   });
   goog.inherits(M.layer.Vector, M.Layer);
 
@@ -59,16 +49,6 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.Vector.prototype.addFeatures = function(features, update = false) {
-    let style;
-    if (M.utils.isNullOrEmpty(this.style_)) {
-      if (this instanceof M.layer.WFS) {
-        style = M.utils.generateStyleLayer(M.layer.WFS.DEFAULT_OPTIONS_STYLE, this);
-      }
-      else if (this instanceof M.layer.GeoJSON) {
-        style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
-      }
-    }
-    this.setStyle(style);
     if (!M.utils.isNullOrEmpty(features)) {
       if (!M.utils.isArray(features)) {
         features = [features];
@@ -244,70 +224,6 @@ goog.require('M.exception');
    * TODO
    */
   M.layer.Vector.prototype.setStyle = function(style) {
-
-    if (M.utils.isNullOrEmpty(style)) {
-      let type = M.utils.getGeometryType(this);
-      if (this instanceof M.layer.WFS) {
-        switch (type) {
-
-          case "Point":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "MultiPoint":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "Circle":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "LineString":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "LinearRing":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "MultiLineString":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "Polygon":
-            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-          case "MultiPolygon":
-            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_WFS);
-            break;
-        }
-      }
-      else {
-        switch (type) {
-          case "Point":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "MultiPoint":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "Circle":
-            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "LineString":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "LinearRing":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "MultiLineString":
-            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "Polygon":
-            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-          case "MultiPolygon":
-            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
-            break;
-
-        }
-
-      }
-    }
-
     if (style instanceof M.Style) {
       if (!M.utils.isNullOrEmpty(this.style_)) {
         this.style_.unapply(this);
@@ -361,24 +277,5 @@ goog.require('M.exception');
       width: 1.5
     },
     radius: 5,
-  };
-
-  /**
-   * Style for this layer
-   * @const
-   * @type {ol.style.Style}
-   * @public
-   * @api stable
-   */
-  M.layer.Vector.DEFAULT_STYLE_WFS = {
-    fill: {
-      color: 'rgba(103, 175, 19, 0.2)',
-      opacity: 0.4
-    },
-    stroke: {
-      color: '#67af13',
-      width: 1
-    },
-    radius: 6
   };
 })();

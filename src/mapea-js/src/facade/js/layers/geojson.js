@@ -137,6 +137,28 @@ goog.require('M.exception');
     return equals;
   };
 
+  M.layer.GeoJSON.prototype.setStyle = function(style) {
+    const applyStyleFn = function() {
+      if (M.utils.isNullOrEmpty(style)) {
+        style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
+      }
+      if (style instanceof M.Style) {
+        if (!M.utils.isNullOrEmpty(this.style_)) {
+          this.style_.unapply(this);
+        }
+        style.apply(this);
+        this.style_ = style;
+      }
+    };
+
+    if (this.getImpl().isLoaded()) {
+      applyStyleFn.bind(this)();
+    }
+    else {
+      this.on(M.evt.LOAD, applyStyleFn, this);
+    }
+  };
+
   /**
    * Template for this controls
    * @const

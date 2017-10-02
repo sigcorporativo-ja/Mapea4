@@ -62,6 +62,13 @@ goog.require('M.impl.layer.Vector');
      */
     this.service_ = null;
 
+    /**
+     *
+     * @private
+     * @type {Boolean}
+     */
+    this.loaded_ = false;
+
     // GetFeature output format parameter
     if (M.utils.isNullOrEmpty(this.options.getFeatureOutputFormat)) {
       this.options.getFeatureOutputFormat = 'application/json'; // by default
@@ -142,6 +149,7 @@ goog.require('M.impl.layer.Vector');
       this.ol3Layer.setSource(new ol.source.Vector({
         format: this.formater_.getImpl(),
         loader: this.loader_.getLoaderFn(function(features) {
+          this.loaded_ = true;
           this_.facadeVector_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
         }),
@@ -151,6 +159,7 @@ goog.require('M.impl.layer.Vector');
     else {
       ol3LayerSource.set("format", this.formater_);
       ol3LayerSource.set("loader", this.loader_.getLoaderFn(function(features) {
+        this.loaded_ = true;
         this.facadeVector_.addFeatures(features);
         this.fire(M.evt.LOAD, [features]);
       }));
@@ -240,6 +249,15 @@ goog.require('M.impl.layer.Vector');
       this.ol3Layer = null;
     }
     this.map = null;
+  };
+
+  /**
+   * TODO
+   * @function
+   * @api stable
+   */
+  M.impl.layer.WFS.prototype.isLoaded = function() {
+    return this.loaded_;
   };
 
   /**
