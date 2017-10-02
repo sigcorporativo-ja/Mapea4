@@ -271,6 +271,7 @@ goog.require('ol.geom.convexhull');
           });
           this.convexHullLayer_.addFeatures(convexFeature);
           this.layer_.getImpl().getMap().addLayers(this.convexHullLayer_);
+          this.convexHullLayer_.setStyle(new M.style.Polygon(this.optionsVendor_.convexHullStyle));
           this.convexHullLayer_.setZIndex(99990);
         }
         else {
