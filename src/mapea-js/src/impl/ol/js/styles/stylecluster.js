@@ -61,7 +61,16 @@ goog.require('ol.geom.convexhull');
      * @type {M.impl.layer.AnimatedCluster}
      * @expose
      */
-    this.clusterLayer_ = null;
+    this.clusterLayer_ = new M.impl.layer.AnimatedCluster({
+      name: 'Cluster',
+      source: new ol.source.Cluster({
+        distance: this.options_.distance,
+        source: new ol.source.Vector()
+      }),
+      animationDuration: this.optionsVendor_.animationDuration,
+      style: this.clusterStyleFn_.bind(this),
+      animationMethod: ol.easing[this.optionsVendor_.animationMethod]
+    });
 
     /**
      * TODO
@@ -435,7 +444,6 @@ goog.require('ol.geom.convexhull');
   M.impl.style.Cluster.prototype.unapply = function() {
     let clusterSource = this.clusterLayer_.getSource();
     clusterSource.getSource().un(ol.events.EventType.CHANGE, ol.source.Cluster.prototype.refresh_, clusterSource);
-
     this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
     this.removeCoverInteraction_();
     this.removeSelectInteraction_();
