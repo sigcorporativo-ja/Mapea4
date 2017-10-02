@@ -95,9 +95,7 @@ goog.require('ol.geom.convexhull');
       this.selectClusterInteraction_.clear();
     }
     this.updateCanvas();
-    const isPoint = (f) => (!M.utils.isNullOrEmpty(f.getGeometry()) &&
-      ([M.geom.geojson.type.MULTI_POINT, M.geom.geojson.type.POINT].includes(f.getGeometry().type)));
-    let features = layer.getFeatures().filter((feature) => isPoint(feature));
+    let features = layer.getFeatures();
     if (features.length > 0) {
       this.clusterize_(features);
     }

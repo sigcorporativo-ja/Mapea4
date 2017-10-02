@@ -244,9 +244,9 @@ goog.require('M.exception');
    * TODO
    */
   M.layer.Vector.prototype.setStyle = function(style) {
+    let type = M.utils.getGeometryType(this);
 
     if (M.utils.isNullOrEmpty(style)) {
-      let type = M.utils.getGeometryType(this);
       if (this instanceof M.layer.WFS) {
         switch (type) {
 
@@ -307,13 +307,25 @@ goog.require('M.exception');
 
       }
     }
-
-    if (style instanceof M.Style) {
-      if (!M.utils.isNullOrEmpty(this.style_)) {
-        this.style_.unapply(this);
+    if (style instanceof M.style.Cluster) {
+      if (type == "Point" || type == "MultiPoint") {
+        if (style instanceof M.Style) {
+          if (!M.utils.isNullOrEmpty(this.style_)) {
+            this.style_.unapply(this);
+          }
+          style.apply(this);
+          this.style_ = style;
+        }
       }
-      style.apply(this);
-      this.style_ = style;
+    }
+    else {
+      if (style instanceof M.Style) {
+        if (!M.utils.isNullOrEmpty(this.style_)) {
+          this.style_.unapply(this);
+        }
+        style.apply(this);
+        this.style_ = style;
+      }
     }
   };
 
