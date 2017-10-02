@@ -245,9 +245,7 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.setStyle = function(style) {
 
-
     if (M.utils.isNullOrEmpty(style)) {
-
       let type = M.utils.getGeometryType(this);
 
       if (type == "Point") {
@@ -260,11 +258,8 @@ goog.require('M.exception');
 
       if (type == "Polygon") {
         style = new M.style.Polygon(M.style.Line.DEFAULT);
-
       }
     }
-
-
     if (style instanceof M.Style) {
       if (!M.utils.isNullOrEmpty(this.style_)) {
         this.style_.unapply(this);
