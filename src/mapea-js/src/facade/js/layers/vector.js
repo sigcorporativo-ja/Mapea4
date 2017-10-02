@@ -245,22 +245,69 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.setStyle = function(style) {
 
-
     if (M.utils.isNullOrEmpty(style)) {
       let type = M.utils.getGeometryType(this);
+      if (this instanceof M.layer.WFS) {
+        switch (type) {
 
-      if (type == "Point") {
-        style = new M.style.Point(M.style.Point.DEFAULT);
+          case "Point":
+            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_WFS);
+            break;
+          case "MultiPoint":
+            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_WFS);
+            break;
+          case "Circle":
+            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_WFS);
+            break;
+          case "LineString":
+            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_WFS);
+            break;
+          case "LinearRing":
+            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_WFS);
+            break;
+          case "MultiLineString":
+            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_WFS);
+            break;
+          case "Polygon":
+            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_WFS);
+            break;
+          case "MultiPolygon":
+            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_WFS);
+            break;
+        }
       }
+      else {
+        switch (type) {
+          case "Point":
+            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
+            break;
+          case "MultiPoint":
+            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
+            break;
+          case "Circle":
+            style = new M.style.Point(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
+            break;
+          case "LineString":
+            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
+            break;
+          case "LinearRing":
+            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
+            break;
+          case "MultiLineString":
+            style = new M.style.Line(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
+            break;
+          case "Polygon":
+            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
+            break;
+          case "MultiPolygon":
+            style = new M.style.Polygon(M.layer.Vector.DEFAULT_STYLE_GEOJSON);
+            break;
 
-      if (type == "LineString") {
-        style = new M.style.Line(M.style.Line.DEFAULT);
-      }
+        }
 
-      if (type == "Polygon") {
-        style = new M.style.Polygon(M.style.Line.DEFAULT);
       }
     }
+
     if (style instanceof M.Style) {
       if (!M.utils.isNullOrEmpty(this.style_)) {
         this.style_.unapply(this);
