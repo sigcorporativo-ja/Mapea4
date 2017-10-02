@@ -245,6 +245,7 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.setStyle = function(style) {
 
+
     if (M.utils.isNullOrEmpty(style)) {
       let type = M.utils.getGeometryType(this);
 
