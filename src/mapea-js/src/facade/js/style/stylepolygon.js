@@ -18,7 +18,12 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Polygon = (function(options = {}) {
-    this.extends_(options, M.style.Polygon.DEFAULT);
+    if (M.utils.isNullOrEmpty(options)) {
+      options = M.style.Polygon.DEFAULT;
+    }
+    else {
+      this.extends_(options, M.style.Polygon.DEFAULT);
+    }
     var impl = new M.impl.style.Polygon(options);
     goog.base(this, options, impl);
   });
@@ -31,5 +36,14 @@ goog.require('M.style.Simple');
    * @public
    * @api stable
    */
-  M.style.Polygon.DEFAULT = {};
+  M.style.Polygon.DEFAULT = {
+    fill: {
+      color: 'rgba(255, 255, 255, 0.4)',
+      opacity: 0.4
+    },
+    stroke: {
+      color: "#3399CC",
+      width: 1.5
+    }
+  };
 })();

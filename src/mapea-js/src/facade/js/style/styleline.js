@@ -19,8 +19,12 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Line = (function(options = {}) {
-    this.extends_(options, M.style.Line.DEFAULT);
-
+    if (M.utils.isNullOrEmpty(options)) {
+      options = M.style.Line.DEFAULT;
+    }
+    else {
+      this.extends_(options, M.style.Line.DEFAULT);
+    }
     let impl = new M.impl.style.Line(options);
     goog.base(this, options, impl);
   });
@@ -34,8 +38,13 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Line.DEFAULT = {
+    fill: {
+      color: 'rgba(255, 255, 255, 0.4)',
+      opacity: 0.4
+    },
     stroke: {
-      width: 2
+      color: "#3399CC",
+      width: 1.5
     }
   };
 })();

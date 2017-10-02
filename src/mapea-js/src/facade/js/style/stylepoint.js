@@ -16,8 +16,12 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Point = (function(options = {}) {
-    this.extends_(options, M.style.Point.DEFAULT);
-
+    if (M.utils.isNullOrEmpty(options)) {
+      options = M.style.Point.DEFAULT;
+    }
+    else {
+      this.extends_(options, M.style.Point.DEFAULT);
+    }
     var impl = new M.impl.style.Point(options);
     goog.base(this, options, impl);
   });
@@ -39,6 +43,14 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Point.DEFAULT = {
-    radius: 6
+    fill: {
+      color: 'rgba(255, 255, 255, 0.4)',
+      opacity: 0.4
+    },
+    stroke: {
+      color: "#3399CC",
+      width: 1.5
+    },
+    radius: 5,
   };
 })();
