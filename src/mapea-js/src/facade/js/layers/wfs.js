@@ -194,6 +194,34 @@ goog.require('M.geom');
   };
 
   /**
+   * TODO
+   *
+   * @function
+   * @api stable
+   */
+  M.layer.WFS.prototype.setStyle = function(style) {
+    const applyStyleFn = function() {
+      if (M.utils.isNullOrEmpty(style)) {
+        style = M.utils.generateStyleLayer(M.layer.WFS.DEFAULT_OPTIONS_STYLE, this);
+      }
+      if (style instanceof M.Style) {
+        if (!M.utils.isNullOrEmpty(this.style_)) {
+          this.style_.unapply(this);
+        }
+        style.apply(this);
+        this.style_ = style;
+      }
+    };
+
+    if (this.getImpl().isLoaded()) {
+      applyStyleFn.bind(this)();
+    }
+    else {
+      this.on(M.evt.LOAD, applyStyleFn, this);
+    }
+  };
+
+  /**
    * This function checks if an object is equals
    * to this layer
    *

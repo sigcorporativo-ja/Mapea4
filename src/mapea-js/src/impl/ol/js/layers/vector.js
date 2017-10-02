@@ -40,6 +40,9 @@ goog.require('M.impl.renderutils');
      */
     this.postComposeEvtKey_ = null;
 
+    /*TODO*/
+    this.load_ = false;
+
     // [WARN]
     //applyOLLayerSetStyleHook();
 
@@ -59,28 +62,29 @@ goog.require('M.impl.renderutils');
     this.map = map;
     map.on(M.evt.CHANGE_PROJ, this.setProjection_, this);
 
-    this.ol3Layer = new ol.layer.Vector({
-      style: new ol.style.Style({
-        fill: new ol.style.Fill({
-          color: 'rgba(0, 158, 0, 0.1)'
-        }),
-        stroke: new ol.style.Stroke({
-          color: '#fcfcfc',
-          width: 2
-        }),
-        image: new ol.style.Circle({
-          radius: 7,
-          fill: new ol.style.Fill({
-            color: '#009E00'
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#fcfcfc',
-            width: 2
-          })
-        })
-      }),
-      zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
-    });
+    this.ol3Layer = new ol.layer.Vector();
+    // this.ol3Layer = new ol.layer.Vector({
+    //   style: new ol.style.Style({
+    //     fill: new ol.style.Fill({
+    //       color: 'rgba(0, 158, 0, 0.1)'
+    //     }),
+    //     stroke: new ol.style.Stroke({
+    //       color: '#fcfcfc',
+    //       width: 2
+    //     }),
+    //     image: new ol.style.Circle({
+    //       radius: 7,
+    //       fill: new ol.style.Fill({
+    //         color: '#009E00'
+    //       }),
+    //       stroke: new ol.style.Stroke({
+    //         color: '#fcfcfc',
+    //         width: 2
+    //       })
+    //     })
+    //   }),
+    //   zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
+    // });
     this.updateSource_();
     // this.facadeVector_.setStyle(this.facadeVector_.getStyle());
 
@@ -329,4 +333,12 @@ goog.require('M.impl.renderutils');
     this.getOL3Layer().getSource().clear();
   };
 
+  /**
+   * TODO
+   * @function
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.isLoaded = function() {
+    return true;
+  };
 })();
