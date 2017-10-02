@@ -1,4 +1,4 @@
-goog.provide( 'M.impl.style.OLStyle' );
+goog.provide( 'M.impl.style.CentroidStyle' );
 
 goog.require( 'ol.style.Style' );
 
@@ -12,23 +12,23 @@ goog.require( 'ol.style.Style' );
    * @param {olx.style.StyleOptions=} opt_options Style options.
    * @api
    */
-  M.impl.style.OLStyle = function ( opt_options = {} ) {
+  M.impl.style.CentroidStyle = function ( opt_options = {} ) {
     ol.style.Style.call( this, opt_options );
   };
-  ol.inherits( M.impl.style.OLStyle, ol.style.Style );
+  ol.inherits( M.impl.style.CentroidStyle, ol.style.Style );
 
   /**
    * Clones the style.
    * @public
-   * @return {M.impl.style.OLStyle} The cloned style.
+   * @return {M.impl.style.CentroidStyle} The cloned style.
    * @api stable
    */
-  M.impl.style.OLStyle.prototype.clone = function () {
+  M.impl.style.CentroidStyle.prototype.clone = function () {
     var geometry = this.getGeometry();
     if ( geometry && geometry.clone ) {
       geometry = geometry.clone();
     }
-    return new M.impl.style.OLStyle({
+    return new M.impl.style.CentroidStyle({
       geometry: geometry,
       fill: this.getFill() ? this.getFill().clone() : undefined,
       image: this.getImage() ? this.getImage().clone() : undefined,

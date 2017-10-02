@@ -1,7 +1,7 @@
 goog.provide('M.impl.style.Polygon');
 
 goog.require('M.impl.style.Simple');
-goog.require('M.impl.style.OLStyle');
+goog.require('M.impl.style.CentroidStyle');
 
 /**
  * TODO
@@ -35,7 +35,7 @@ goog.require('M.impl.style.OLStyle');
         resolution = feature;
         feature = this;
       }
-      let style = new M.impl.style.OLStyle();
+      let style = new M.impl.style.CentroidStyle();
       if (!M.utils.isNullOrEmpty(options.stroke)) {
         style.setStroke(new ol.style.Stroke({
           color: M.impl.style.Simple.getValue(options.stroke.color, feature),

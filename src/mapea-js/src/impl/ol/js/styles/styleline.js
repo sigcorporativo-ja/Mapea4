@@ -1,6 +1,6 @@
 goog.provide('M.impl.style.Line');
 
-goog.require('M.impl.style.OLStyle');
+goog.require('M.impl.style.CentroidStyle');
 goog.require('M.impl.style.Simple');
 goog.require('M.impl.style.TextPath');
 
@@ -39,8 +39,8 @@ goog.require('M.impl.style.TextPath');
       let stroke = options.stroke;
       let label = options.label;
       let fill = options.fill;
-      let style = new M.impl.style.OLStyle();
-      let styleStroke = new M.impl.style.OLStyle();
+      let style = new M.impl.style.CentroidStyle();
+      let styleStroke = new M.impl.style.CentroidStyle();
       const getValue = M.impl.style.Simple.getValue;
       if (!M.utils.isNullOrEmpty(stroke)) {
         style.setStroke(new ol.style.Stroke({

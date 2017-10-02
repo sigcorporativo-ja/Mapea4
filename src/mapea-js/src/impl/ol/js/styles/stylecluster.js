@@ -1,7 +1,7 @@
 goog.provide('M.impl.style.Cluster');
 
 goog.require('M.impl.Style');
-goog.require('M.impl.style.OLStyle');
+goog.require('M.impl.style.CentroidStyle');
 goog.require('M.impl.layer.AnimatedCluster');
 goog.require('M.impl.interaction.SelectCluster');
 goog.require('ol.source.Cluster');
@@ -332,7 +332,7 @@ goog.require('ol.geom.convexhull');
     let olStyle;
     let clusterOlFeatures = feature.get('features');
     if (!clusterOlFeatures) {
-      return new M.impl.style.OLStyle();
+      return new M.impl.style.CentroidStyle();
     }
     let numFeatures = clusterOlFeatures.length;
     let range = this.options_.ranges.find(el => (el.min <= numFeatures && el.max >= numFeatures));
@@ -368,7 +368,7 @@ goog.require('ol.geom.convexhull');
           olStyle = layerStyleFn(clusterOlFeatures[0], resolution);
         }
         else {
-          olStyle = new M.impl.style.OLStyle();
+          olStyle = new M.impl.style.CentroidStyle();
         }
       }
     }

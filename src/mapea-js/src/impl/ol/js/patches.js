@@ -121,7 +121,7 @@ ol.control.OverviewMap.prototype.handleToggle_ = function() {
  * @param {ol.Feature} feature Feature.
  */
 M.impl.patches.renderPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
-  if (style instanceof M.impl.style.OLStyle && style.getImage() != null) {
+  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
     M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
   }
   else {
@@ -137,7 +137,7 @@ M.impl.patches.renderPolygonGeometry_ = function(replayGroup, geometry, style, f
  * @param {ol.Feature} feature Feature.
  */
 M.impl.patches.renderMultiPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
-  if (style instanceof M.impl.style.OLStyle && style.getImage() != null) {
+  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
     M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
   }
   else {
@@ -153,7 +153,7 @@ M.impl.patches.renderMultiPolygonGeometry_ = function(replayGroup, geometry, sty
  * @param {ol.Feature} feature Feature.
  */
 M.impl.patches.renderLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
-  if (style instanceof M.impl.style.OLStyle && style.getImage() != null) {
+  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
     M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
   }
   else {
@@ -169,7 +169,7 @@ M.impl.patches.renderLineStringGeometry_ = function(replayGroup, geometry, style
  * @param {ol.Feature} feature Feature.
  */
 M.impl.patches.renderMultiLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
-  if (style instanceof M.impl.style.OLStyle && style.getImage() != null) {
+  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
     M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
   }
   else {
