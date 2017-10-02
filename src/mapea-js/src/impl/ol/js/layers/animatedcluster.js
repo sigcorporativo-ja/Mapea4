@@ -141,11 +141,12 @@ M.impl.layer.AnimatedCluster.prototype.animate = function(event) {
       // Draw feature
       let olStyles = this.getStyle()(cluster, event.frameState.viewState.resolution);
       let geo = new ol.geom.Point(ptFrom);
-
-      olStyles.forEach(function(olStyle) {
-        vectorContext.setStyle(olStyle);
-        vectorContext.drawGeometry(geo);
-      });
+      if (!M.utils.isNullOrEmpty(olStyles)) {
+        olStyles.forEach(function(olStyle) {
+          vectorContext.setStyle(olStyle);
+          vectorContext.drawGeometry(geo);
+        });
+      }
     }, this);
 
     event.context.restore();
