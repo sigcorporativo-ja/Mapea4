@@ -23,6 +23,9 @@ goog.require('ol.style.Icon');
     if (!options.offset) {
       options.offset = [0, 0];
     }
+    if (!options.imgSize) {
+      options.imgSize = [25, 25];
+    }
     // super call
     ol.style.Icon.call(this, {
       anchor: options.anchor.slice(),
@@ -35,6 +38,7 @@ goog.require('ol.style.Icon');
       offset: options.offset.slice(),
       offsetOrigin: options.offsetOrigin || [],
       size: M.utils.isNullOrEmpty(options.size) ? undefined : options.size.slice(),
+      imgSize: options.imgSize,
       opacity: options.opacity,
       scale: options.scale,
       snapToPixel: options.snapToPixel,
