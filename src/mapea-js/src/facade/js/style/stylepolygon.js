@@ -21,13 +21,13 @@ goog.require('M.style.Simple');
     if (M.utils.isNullOrEmpty(options)) {
       options = M.style.Polygon.DEFAULT_NULL;
     }
-    else {
-      this.extends_(options, M.style.Polygon.DEFAULT);
-    }
+
     var impl = new M.impl.style.Polygon(options);
     goog.base(this, options, impl);
   });
   goog.inherits(M.style.Polygon, M.style.Simple);
+
+
 
 
   /**
@@ -38,18 +38,6 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Polygon.DEFAULT_NULL = {
-
-  };
-
-
-  /**
-   * Default options for this style
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  M.style.Polygon.DEFAULT = {
     fill: {
       color: 'rgba(255, 255, 255, 0.4)',
       opacity: 0.4

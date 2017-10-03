@@ -22,13 +22,14 @@ goog.require('M.style.Simple');
     if (M.utils.isNullOrEmpty(options)) {
       options = M.style.Line.DEFAULT_NULL;
     }
-    else {
-      this.extends_(options, M.style.Line.DEFAULT);
-    }
+
     let impl = new M.impl.style.Line(options);
     goog.base(this, options, impl);
   });
   goog.inherits(M.style.Line, M.style.Simple);
+
+
+
 
   /**
    * Default options for this style
@@ -38,22 +39,6 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Line.DEFAULT_NULL = {
-
-    stroke: {
-      color: "#3399CC",
-      width: 1.5
-    }
-  };
-
-
-  /**
-   * Default options for this style
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  M.style.Line.DEFAULT = {
     fill: {
       color: 'rgba(255, 255, 255, 0.4)',
       opacity: 0.4
