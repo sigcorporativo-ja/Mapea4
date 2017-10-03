@@ -149,13 +149,16 @@ goog.require('M.impl.style.TextPath');
     }
     let applyStyle = this.olStyleFn_()[0];
     let stroke = applyStyle.getStroke();
+    let width;
     if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
+      width = stroke.getWidth();
       if (stroke.getWidth() > this.DEFAULT_WIDTH_LINE) {
-        applyStyle.getStroke().setWidth(this.DEFAULT_WIDTH_LINE);
+        width = this.DEFAULT_WIDTH_LINE;
       }
+      applyStyle.getStroke().setWidth(width);
+      vectorContext.setStyle(applyStyle);
     }
-    vectorContext.setStyle(applyStyle);
-    this.drawGeometryToCanvas(vectorContext, canvas, optionsStyle, applyStyle.getStroke().getWidth());
+    this.drawGeometryToCanvas(vectorContext, canvas, optionsStyle, width);
   };
 
   /**

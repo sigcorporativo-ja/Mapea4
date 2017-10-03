@@ -181,7 +181,7 @@ goog.require('M.Style');
     selectInteraction: true,
     distance: 60,
     animated: true,
-    maxFeaturesToSelect: 50,
+    maxFeaturesToSelect: 15,
     label: {
       text: function(feature) {
         let text;
