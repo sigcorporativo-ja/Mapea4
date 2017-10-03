@@ -305,7 +305,14 @@ goog.provide('P.impl.control.Printer');
    */
   M.impl.control.Printer.prototype.encodeWFS = function(layer) {
     var encodedLayer = null;
-    if (!(layer.getStyle() instanceof M.style.Chart)) {
+    let continuePrint = true;
+    if (layer.getStyle() instanceof M.style.Chart) {
+      continuePrint = false;
+    }
+    else if (layer.getStyle() instanceof M.style.Cluster && layer.getStyle().getOldStyle() instanceof M.style.Chart) {
+      continuePrint = false;
+    }
+    if (continuePrint) {
       var projection = this.facadeMap_.getProjection();
       var olLayer = layer.getImpl().getOL3Layer();
       var features = olLayer.getSource().getFeatures();
