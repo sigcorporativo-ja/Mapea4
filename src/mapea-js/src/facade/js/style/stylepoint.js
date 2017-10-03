@@ -15,9 +15,9 @@ goog.require('M.style.Simple');
    * @param {Object} options - options style
    * @api stable
    */
-  M.style.Point = (function(options = {}) {
+  M.style.Point = (function(options) {
     if (M.utils.isNullOrEmpty(options)) {
-      options = M.style.Point.DEFAULT;
+      options = M.style.Point.DEFAULT_NULL;
     }
     else {
       this.extends_(options, M.style.Point.DEFAULT);
@@ -43,6 +43,18 @@ goog.require('M.style.Simple');
    * @api stable
    */
   M.style.Point.DEFAULT = {
+
+    radius: 5,
+  };
+
+  /**
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.style.Point.DEFAULT_NULL = {
     fill: {
       color: 'rgba(255, 255, 255, 0.4)',
       opacity: 0.4
@@ -53,4 +65,7 @@ goog.require('M.style.Simple');
     },
     radius: 5,
   };
+
+
+
 })();

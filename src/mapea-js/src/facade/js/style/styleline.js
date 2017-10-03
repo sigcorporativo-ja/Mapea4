@@ -18,9 +18,9 @@ goog.require('M.style.Simple');
    * @param {options} userParameters parameters
    * @api stable
    */
-  M.style.Line = (function(options = {}) {
+  M.style.Line = (function(options) {
     if (M.utils.isNullOrEmpty(options)) {
-      options = M.style.Line.DEFAULT;
+      options = M.style.Line.DEFAULT_NULL;
     }
     else {
       this.extends_(options, M.style.Line.DEFAULT);
@@ -29,6 +29,22 @@ goog.require('M.style.Simple');
     goog.base(this, options, impl);
   });
   goog.inherits(M.style.Line, M.style.Simple);
+
+  /**
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.style.Line.DEFAULT_NULL = {
+
+    stroke: {
+      color: "#3399CC",
+      width: 1.5
+    }
+  };
+
 
   /**
    * Default options for this style

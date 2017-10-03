@@ -17,9 +17,9 @@ goog.require('M.style.Simple');
    * @param {Object} options - options style
    * @api stable
    */
-  M.style.Polygon = (function(options = {}) {
+  M.style.Polygon = (function(options) {
     if (M.utils.isNullOrEmpty(options)) {
-      options = M.style.Polygon.DEFAULT;
+      options = M.style.Polygon.DEFAULT_NULL;
     }
     else {
       this.extends_(options, M.style.Polygon.DEFAULT);
@@ -28,6 +28,19 @@ goog.require('M.style.Simple');
     goog.base(this, options, impl);
   });
   goog.inherits(M.style.Polygon, M.style.Simple);
+
+
+  /**
+   * Default options for this style
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.style.Polygon.DEFAULT_NULL = {
+
+  };
+
 
   /**
    * Default options for this style
