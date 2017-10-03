@@ -1695,3 +1695,63 @@ Mx.ChartVariableOptions.fill;
  * @api stable
  */
 Mx.ChartVariableOptions.legend;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.chart.types.DONUT;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.chart.types.PIE_3D;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.chart.types.PIE;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.chart.types.BAR;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Custom;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Classic;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Dark;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Pale;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Pastel;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Neon;
