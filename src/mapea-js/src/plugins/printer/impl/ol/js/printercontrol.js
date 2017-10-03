@@ -305,117 +305,123 @@ goog.provide('P.impl.control.Printer');
    */
   M.impl.control.Printer.prototype.encodeWFS = function(layer) {
     var encodedLayer = null;
+    if (!(layer.getStyle() instanceof M.style.Chart)) {
+      var projection = this.facadeMap_.getProjection();
+      var olLayer = layer.getImpl().getOL3Layer();
+      var features = olLayer.getSource().getFeatures();
+      var layerName = layer.name;
+      var layerOpacity = olLayer.getOpacity();
+      var layerStyle = olLayer.getStyle();
+      var geoJSONFormat = new ol.format.GeoJSON();
+      var bbox = this.facadeMap_.getBbox();
+      bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
+      var resolution = this.facadeMap_.getMapImpl().getView().getResolution();
 
-    var projection = this.facadeMap_.getProjection();
-    var olLayer = layer.getImpl().getOL3Layer();
-    var features = olLayer.getSource().getFeatures();
-    var layerName = layer.name;
-    var layerOpacity = olLayer.getOpacity();
-    var layerStyle = olLayer.getStyle();
-    var geoJSONFormat = new ol.format.GeoJSON();
-    var bbox = this.facadeMap_.getBbox();
-    bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-    var resolution = this.facadeMap_.getMapImpl().getView().getResolution();
+      var encodedFeatures = [];
+      var encodedStyles = {};
+      var stylesNames = {};
+      var index = 1;
+      features.forEach(function(feature) {
+        var geometry = feature.getGeometry();
+        var featureStyle;
+        var fStyle = feature.getStyle();
 
-    var encodedFeatures = [];
-    var encodedStyles = {};
-    var stylesNames = {};
-    var index = 1;
-    features.forEach(function(feature) {
-      var geometry = feature.getGeometry();
-      var featureStyle;
-      var fStyle = feature.getStyle();
-
-      if (!M.utils.isNullOrEmpty(fStyle)) {
-        featureStyle = fStyle;
-      }
-      else if (!M.utils.isNullOrEmpty(layerStyle)) {
-        featureStyle = layerStyle;
-      }
-
-      if (featureStyle instanceof Function) {
-        featureStyle = featureStyle.call(featureStyle, feature, resolution);
-      }
-
-      if (featureStyle instanceof Array) {
-        featureStyle = featureStyle[0];
-      }
-
-      if (!M.utils.isNullOrEmpty(featureStyle)) {
-        var image = featureStyle.getImage();
-        var imgSize = M.utils.isNullOrEmpty(image) ? [0, 0] : (image.getImageSize() || [24, 24]);
-        var text = featureStyle.getText();
-        var stroke = M.utils.isNullOrEmpty(image) ? featureStyle.getStroke() : (image.getStroke && image.getStroke());
-        var fill = M.utils.isNullOrEmpty(image) ? featureStyle.getFill() : (image.getFill && image.getFill());
-
-        var style = {
-          "fillColor": M.utils.isNullOrEmpty(fill) ? "" : M.utils.rgbToHex(fill.getColor()),
-          "fillOpacity": M.utils.isNullOrEmpty(fill) ? "" : M.utils.getOpacityFromRgba(fill.getColor()),
-          "strokeColor": M.utils.isNullOrEmpty(stroke) ? "" : M.utils.rgbToHex(stroke.getColor()),
-          "strokeOpacity": M.utils.isNullOrEmpty(stroke) ? "" : M.utils.getOpacityFromRgba(stroke.getColor()),
-          "strokeWidth": M.utils.isNullOrEmpty(stroke) ? "" : (stroke.getWidth && stroke.getWidth()),
-          "pointRadius": M.utils.isNullOrEmpty(image) ? "" : (image.getRadius && image.getRadius()),
-          "externalGraphic": M.utils.isNullOrEmpty(image) ? "" : (image.getSrc && image.getSrc()),
-          "graphicHeight": imgSize[0],
-          "graphicWidth": imgSize[1],
-        };
-        if (!M.utils.isNullOrEmpty(text)) {
-          style = Object.assign(style, {
-            "label": text.getText(),
-            "fontColor": M.utils.isNullOrEmpty(text.getFill()) ? "" : M.utils.rgbToHex(text.getFill().getColor()),
-            //fuente a mano ya que ol3: text.getFont() -->"bold 13px Helvetica, sans-serif"
-            "fontSize": "11px",
-            "fontFamily": "Helvetica, sans-serif",
-            "fontWeight": "bold",
-            //
-            "labelAlign": text.getTextAlign(),
-            "labelXOffset": text.getOffsetX(),
-            "labelYOffset": text.getOffsetY(),
-            //no pinta la línea
-            "labelOutlineColor": M.utils.isNullOrEmpty(text.getStroke()) ? "" : M.utils.rgbToHex(text.getStroke().getColor()),
-            "labelOutlineWidth": M.utils.isNullOrEmpty(text.getStroke()) ? "" : text.getStroke().getWidth()
-          });
+        if (!M.utils.isNullOrEmpty(fStyle)) {
+          featureStyle = fStyle;
+        }
+        else if (!M.utils.isNullOrEmpty(layerStyle)) {
+          featureStyle = layerStyle;
         }
 
-        if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
-          var styleStr = JSON.stringify(style);
-          var styleName = stylesNames[styleStr];
-          if (M.utils.isUndefined(styleName)) {
-            styleName = index;
-            stylesNames[styleStr] = styleName;
-            encodedStyles[styleName] = style;
-            index++;
-          }
-          var geoJSONFeature;
-          if (projection.code !== "EPSG:3857" && this.facadeMap_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
-            geoJSONFeature = geoJSONFormat.writeFeatureObject(feature, {
-              'featureProjection': projection.code,
-              'dataProjection': 'EPSG:3857',
+        if (featureStyle instanceof Function) {
+          featureStyle = featureStyle.call(featureStyle, feature, resolution);
+        }
+
+        if (featureStyle instanceof Array) {
+          featureStyle = featureStyle[0];
+        }
+
+        if (!M.utils.isNullOrEmpty(featureStyle)) {
+          var image = featureStyle.getImage();
+          var imgSize = M.utils.isNullOrEmpty(image) ? [0, 0] : (image.getImageSize() || [24, 24]);
+          var text = featureStyle.getText();
+          var stroke = M.utils.isNullOrEmpty(image) ? featureStyle.getStroke() : (image.getStroke && image.getStroke());
+          var fill = M.utils.isNullOrEmpty(image) ? featureStyle.getFill() : (image.getFill && image.getFill());
+
+          var style = {
+            "fillColor": M.utils.isNullOrEmpty(fill) ? "" : M.utils.rgbToHex(fill.getColor()),
+            "fillOpacity": M.utils.isNullOrEmpty(fill) ? "" : M.utils.getOpacityFromRgba(fill.getColor()),
+            "strokeColor": M.utils.isNullOrEmpty(stroke) ? "" : M.utils.rgbToHex(stroke.getColor()),
+            "strokeOpacity": M.utils.isNullOrEmpty(stroke) ? "" : M.utils.getOpacityFromRgba(stroke.getColor()),
+            "strokeWidth": M.utils.isNullOrEmpty(stroke) ? "" : (stroke.getWidth && stroke.getWidth()),
+            "pointRadius": M.utils.isNullOrEmpty(image) ? "" : (image.getRadius && image.getRadius()),
+            "externalGraphic": M.utils.isNullOrEmpty(image) ? "" : (image.getSrc && image.getSrc()),
+            "graphicHeight": imgSize[0],
+            "graphicWidth": imgSize[1],
+          };
+          if (!M.utils.isNullOrEmpty(text)) {
+            let colorFill = text.getFill();
+            if (!M.utils.isNullOrEmpty(colorFill)) {
+              colorFill = colorFill.getColor();
+            }
+            style = Object.assign(style, {
+              "label": text.getText(),
+              "fontColor": M.utils.isNullOrEmpty(text.getFill()) ? "" : M.utils.rgbToHex(text.getFill().getColor()),
+              //fuente a mano ya que ol3: text.getFont() -->"bold 13px Helvetica, sans-serif"
+              "fontSize": "11px",
+              "fontFamily": "Helvetica, sans-serif",
+              "fontWeight": "bold",
+              //
+              "labelAlign": text.getTextAlign(),
+              "labelXOffset": text.getOffsetX(),
+              "labelYOffset": text.getOffsetY(),
+              "fillColor": M.utils.isNullOrEmpty(colorFill) ? '#000000' : M.utils.rgbToHex(colorFill) || '#000000',
+              "fillOpacity": M.utils.isNullOrEmpty(colorFill) ? 0 : M.utils.getOpacityFromRgba(colorFill) || 0,
+              //no pinta la línea
+              "labelOutlineColor": M.utils.isNullOrEmpty(text.getStroke()) ? "" : M.utils.rgbToHex(text.getStroke().getColor()),
+              "labelOutlineWidth": M.utils.isNullOrEmpty(text.getStroke()) ? "" : text.getStroke().getWidth()
             });
           }
-          else {
-            geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
+
+          if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
+            var styleStr = JSON.stringify(style);
+            var styleName = stylesNames[styleStr];
+            if (M.utils.isUndefined(styleName)) {
+              styleName = index;
+              stylesNames[styleStr] = styleName;
+              encodedStyles[styleName] = style;
+              index++;
+            }
+            var geoJSONFeature;
+            if (projection.code !== "EPSG:3857" && this.facadeMap_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+              geoJSONFeature = geoJSONFormat.writeFeatureObject(feature, {
+                'featureProjection': projection.code,
+                'dataProjection': 'EPSG:3857',
+              });
+            }
+            else {
+              geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
+            }
+            geoJSONFeature.properties = {
+              "_gx_style": styleName
+            };
+            encodedFeatures.push(geoJSONFeature);
           }
-          geoJSONFeature.properties = {
-            "_gx_style": styleName
-          };
-          encodedFeatures.push(geoJSONFeature);
         }
-      }
-    }, this);
+      }, this);
 
-    encodedLayer = {
-      type: 'Vector',
-      styles: encodedStyles,
-      styleProperty: '_gx_style',
-      geoJson: {
-        type: "FeatureCollection",
-        features: encodedFeatures
-      },
-      name: layerName,
-      opacity: layerOpacity
-    };
-
+      encodedLayer = {
+        type: 'Vector',
+        styles: encodedStyles,
+        styleProperty: '_gx_style',
+        geoJson: {
+          type: "FeatureCollection",
+          features: encodedFeatures
+        },
+        name: layerName,
+        opacity: layerOpacity
+      };
+    }
     return encodedLayer;
   };
 

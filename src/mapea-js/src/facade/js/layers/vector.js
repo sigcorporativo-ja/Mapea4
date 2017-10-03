@@ -71,15 +71,6 @@ goog.require('M.exception');
     return this.getImpl().getFeatures(skipFilter, this.filter_);
   };
 
-
-  /**
-   * TODO
-   */
-  M.layer.Vector.prototype.setFeatures = function(features) {
-    this.getImpl().setFeatures(features);
-  };
-
-
   /**
    * This function returns the feature with this id
    * @function
