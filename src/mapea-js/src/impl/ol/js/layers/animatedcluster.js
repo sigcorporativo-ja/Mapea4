@@ -143,6 +143,18 @@ M.impl.layer.AnimatedCluster.prototype.animate = function(event) {
       let geo = new ol.geom.Point(ptFrom);
       if (!M.utils.isNullOrEmpty(olStyles)) {
         olStyles.forEach(function(olStyle) {
+          let styleImage = olStyle.getImage();
+          if (!M.utils.isNullOrEmpty(styleImage)) {
+            if (styleImage.getOrigin() == null) {
+              styleImage.origin_ = [];
+            }
+            if (styleImage.getAnchor() == null) {
+              styleImage.normalizedAnchor_ = [];
+            }
+            if (styleImage.getSize() == null) {
+              styleImage.size_ = [];
+            }
+          }
           vectorContext.setStyle(olStyle);
           vectorContext.drawGeometry(geo);
         });

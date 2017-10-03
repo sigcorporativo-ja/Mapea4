@@ -17,27 +17,25 @@ goog.require('ol.style.Icon');
    * @api stable
    */
   M.impl.style.PointIcon = function(options = {}) {
-    if (!options.anchor) {
-      options.anchor = [0, 0];
-    }
-    if (!options.offset) {
-      options.offset = [0, 0];
-    }
-    if (!options.imgSize) {
-      options.imgSize = [25, 25];
-    }
+    // if (!options.anchor) {
+    //   options.anchor = [0, 0];
+    // }
+    // if (!options.offset) {
+    //   options.offset = [0, 0];
+    // }
+
     // super call
     ol.style.Icon.call(this, {
-      anchor: options.anchor.slice(),
+      anchor: !options.anchor ? undefined : options.anchor.slice(),
       anchorOrigin: options.anchorOrigin,
       anchorXUnits: options.anchorXUnits,
       anchorYUnits: options.anchorYUnits,
       crossOrigin: options.crossOrigin || 'Anonymous',
       color: (options.color && options.color.slice) ? options.color.slice() : options.color || undefined,
       src: options.src,
-      offset: options.offset.slice(),
-      offsetOrigin: options.offsetOrigin || [],
-      size: M.utils.isNullOrEmpty(options.size) ? undefined : options.size.slice(),
+      offset: !options.offset ? undefined : options.offset.slice(),
+      offsetOrigin: options.offsetOrigin,
+      size: !options.size ? undefined : options.size.slice(),
       imgSize: options.imgSize,
       opacity: options.opacity,
       scale: options.scale,
