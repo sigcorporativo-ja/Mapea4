@@ -356,37 +356,93 @@ goog.provide('P.impl.control.Printer');
           var fill = M.utils.isNullOrEmpty(image) ? featureStyle.getFill() : (image.getFill && image.getFill());
 
           var style = {
-            "fillColor": M.utils.isNullOrEmpty(fill) ? "" : M.utils.rgbToHex(fill.getColor()),
-            "fillOpacity": M.utils.isNullOrEmpty(fill) ? "" : M.utils.getOpacityFromRgba(fill.getColor()),
-            "strokeColor": M.utils.isNullOrEmpty(stroke) ? "" : M.utils.rgbToHex(stroke.getColor()),
-            "strokeOpacity": M.utils.isNullOrEmpty(stroke) ? "" : M.utils.getOpacityFromRgba(stroke.getColor()),
-            "strokeWidth": M.utils.isNullOrEmpty(stroke) ? "" : (stroke.getWidth && stroke.getWidth()),
+            "fillColor": M.utils.isNullOrEmpty(fill) ? "#000000" : M.utils.rgbToHex(fill.getColor()),
+            "fillOpacity": M.utils.isNullOrEmpty(fill) ? 0 : M.utils.getOpacityFromRgba(fill.getColor()),
+            "strokeColor": M.utils.isNullOrEmpty(stroke) ? "#000000" : M.utils.rgbToHex(stroke.getColor()),
+            "strokeOpacity": M.utils.isNullOrEmpty(stroke) ? 0 : M.utils.getOpacityFromRgba(stroke.getColor()),
+            "strokeWidth": M.utils.isNullOrEmpty(stroke) ? 0 : (stroke.getWidth && stroke.getWidth()),
             "pointRadius": M.utils.isNullOrEmpty(image) ? "" : (image.getRadius && image.getRadius()),
             "externalGraphic": M.utils.isNullOrEmpty(image) ? "" : (image.getSrc && image.getSrc()),
             "graphicHeight": imgSize[0],
             "graphicWidth": imgSize[1],
           };
           if (!M.utils.isNullOrEmpty(text)) {
-            let colorFill = text.getFill();
-            if (!M.utils.isNullOrEmpty(colorFill)) {
-              colorFill = colorFill.getColor();
+            let tAlign = text.getTextAlign();
+            let tBLine = text.getTextBaseline();
+            let align = "";
+            if (!M.utils.isNullOrEmpty(tAlign)) {
+              tAlign = tAlign.toUpperCase();
+              if (tAlign === M.style.align.LEFT) {
+                tAlign = 'l';
+              }
+              else if (tAlign === M.style.align.RIGHT) {
+                tAlign = 'r';
+              }
+              else if (tAlign === M.style.align.CENTER) {
+                tAlign = 'c';
+              }
+              else {
+                tAlign = '';
+              }
+            }
+            if (!M.utils.isNullOrEmpty(tBLine)) {
+              tBLine = tBLine.toUpperCase();
+              if (tBLine === M.style.baseline.BOTTOM) {
+                tBLine = 'b';
+              }
+              else if (tBLine === M.style.baseline.MIDDLE) {
+                tBLine = 'm';
+              }
+              else if (tBLine === M.style.baseline.TOP) {
+                tBLine = 't';
+              }
+              else {
+                tBLine = '';
+              }
+            }
+            if (!M.utils.isNullOrEmpty(tAlign) && !M.utils.isNullOrEmpty(tBLine)) {
+              align = tAlign.concat(tBLine);
+            }
+            let font = text.getFont();
+            let fontWeight = "";
+            let fontSize = "";
+            let fontFamily = "";
+            let fontStyle = "";
+            if (!M.utils.isNullOrEmpty(font)) {
+              if (font.toLowerCase().indexOf('bold') < -1) {
+                fontWeight = 'normal';
+                font = font.replace('normal', '').trim();
+              }
+              else {
+                font = font.replace('bold', '').trim();
+              }
+              let posSize = font.toLowerCase().indexOf('px');
+              if (posSize > -1) {
+                fontSize = font.substring(0, posSize + 2).replace(' ', '');
+                font = font.replace(fontSize, '').trim();
+              }
+              if (font.toLowerCase().indexOf('italic') > -1) {
+                fontStyle = 'italic';
+                font = font.replace('italic', '').trim();
+              }
+              if (!M.utils.isNullOrEmpty(font)) {
+                fontFamily = font;
+              }
             }
             style = Object.assign(style, {
               "label": text.getText(),
               "fontColor": M.utils.isNullOrEmpty(text.getFill()) ? "" : M.utils.rgbToHex(text.getFill().getColor()),
-              //fuente a mano ya que ol3: text.getFont() -->"bold 13px Helvetica, sans-serif"
-              "fontSize": "11px",
-              "fontFamily": "Helvetica, sans-serif",
-              "fontWeight": "bold",
-              //
-              "labelAlign": text.getTextAlign(),
+              "fontSize": fontSize || "11px",
+              "fontFamily": fontFamily || "Helvetica, sans-serif",
+              "fontStyle": fontStyle || "normal",
+              "fontWeight": fontWeight || "bold",
               "labelXOffset": text.getOffsetX(),
               "labelYOffset": text.getOffsetY(),
-              "fillColor": M.utils.isNullOrEmpty(colorFill) ? '#000000' : M.utils.rgbToHex(colorFill) || '#000000',
-              "fillOpacity": M.utils.isNullOrEmpty(colorFill) ? 0 : M.utils.getOpacityFromRgba(colorFill) || 0,
-              //no pinta la línea
-              "labelOutlineColor": M.utils.isNullOrEmpty(text.getStroke()) ? "" : M.utils.rgbToHex(text.getStroke().getColor()),
-              "labelOutlineWidth": M.utils.isNullOrEmpty(text.getStroke()) ? "" : text.getStroke().getWidth()
+              "fillColor": style.fillColor || "#FF0000",
+              "fillOpacity": style.fillOpacity || 0,
+              "labelOutlineColor ": M.utils.isNullOrEmpty(text.getStroke()) ? "" : M.utils.rgbToHex(text.getStroke().getColor() || "#FF0000"),
+              "labelOutlineWidth": M.utils.isNullOrEmpty(text.getStroke()) ? "" : text.getStroke().getWidth(),
+              "labelAlign": align,
             });
           }
 

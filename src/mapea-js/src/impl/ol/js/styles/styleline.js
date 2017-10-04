@@ -58,7 +58,7 @@ goog.require('M.impl.style.TextPath');
           text: getValue(label.text, feature),
           font: getValue(label.font, feature),
           fill: new ol.style.Fill({
-            color: getValue(label.color, feature)
+            color: getValue(label.color || '#000000', feature)
           }),
           textBaseline: (getValue(label.baseline, feature) || '').toLowerCase(),
           textAlign: getValue(label.align, feature),

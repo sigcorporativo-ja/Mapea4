@@ -123,7 +123,7 @@ goog.require('M.impl.style.PointFontSymbol');
           offsetX: M.impl.style.Simple.getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
           offsetY: M.impl.style.Simple.getValue(options.label.ofsset ? options.label.offset[1] : undefined, feature),
           fill: new ol.style.Fill({
-            color: M.impl.style.Simple.getValue(options.label.color, feature)
+            color: M.impl.style.Simple.getValue(options.label.color || '#000000', feature)
           }),
           textAlign: M.impl.style.Simple.getValue(options.label.align, feature),
           textBaseline: (M.impl.style.Simple.getValue(options.label.baseline, feature) || "").toLowerCase(),
