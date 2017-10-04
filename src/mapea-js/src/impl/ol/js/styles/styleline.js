@@ -148,6 +148,9 @@ goog.require('M.impl.style.TextPath');
       };
     }
     let applyStyle = this.olStyleFn_()[0];
+    if (!M.utils.isNullOrEmpty(applyStyle.getText())) {
+      applyStyle.setText(null);
+    }
     let stroke = applyStyle.getStroke();
     let width;
     if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
