@@ -142,7 +142,9 @@ goog.require('M.exception');
       if (M.utils.isNullOrEmpty(style)) {
         style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
       }
-      if (style instanceof M.Style) {
+      let isCluster = style instanceof M.style.Cluster;
+      let isPoint = [M.geom.geojson.type.POINT, M.geom.geojson.type.MULTI_POINT].includes(M.utils.getGeometryType(this));
+      if (style instanceof M.Style && (!isCluster || isPoint)) {
         if (!M.utils.isNullOrEmpty(this.style_)) {
           this.style_.unapply(this);
         }

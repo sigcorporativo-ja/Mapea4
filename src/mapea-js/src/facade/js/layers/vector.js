@@ -215,7 +215,9 @@ goog.require('M.exception');
    * TODO
    */
   M.layer.Vector.prototype.setStyle = function(style) {
-    if (style instanceof M.Style) {
+    let isCluster = style instanceof M.style.Cluster;
+    let isPoint = [M.geom.geojson.type.POINT, M.geom.geojson.type.MULTI_POINT].includes(M.utils.getGeometryType(this));
+    if (style instanceof M.Style && (!isCluster || isPoint)) {
       if (!M.utils.isNullOrEmpty(this.style_)) {
         this.style_.unapply(this);
       }
