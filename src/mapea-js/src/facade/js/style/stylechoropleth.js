@@ -310,7 +310,7 @@ goog.require('M.style.quantification');
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.layer_.getFeatures().forEach(function(f) {
         try {
-          let value = parseInt(f.getAttribute(this.attributeName_));
+          let value = parseFloat(f.getAttribute(this.attributeName_));
           if (!isNaN(value)) {
             values.push(value);
           }
