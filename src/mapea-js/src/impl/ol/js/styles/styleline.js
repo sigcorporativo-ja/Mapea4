@@ -101,6 +101,34 @@ goog.require('M.impl.style.TextPath');
   };
 
   /**
+   * This function apply style to layer
+   * @public
+   * @function
+   * @param {M.layer.Vector} layer - Layer
+   * @api stable
+   */
+  M.impl.style.Line.prototype.applyToLayer = function(layer) {
+    goog.base(this, 'applyToLayer', layer);
+
+    let olLayer = layer.getImpl().getOL3Layer();
+    if (!M.utils.isNullOrEmpty(olLayer)) {
+      this.postComposeEvtKey_ = olLayer.on('postcompose', M.impl.renderutils.postRender, olLayer);
+    }
+  };
+
+  /**
+   * This function apply style
+   *
+   * @function
+   * @protected
+   * @param {M.layer.Vector} layer - Layer to apply the styles
+   * @api stable
+   */
+  M.impl.style.Line.prototype.unapply = function(layer) {
+    ol.Observable.unByKey(this.postComposeEvtKey_);
+  };
+
+  /**
    * TODO
    *
    * @public

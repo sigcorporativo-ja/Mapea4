@@ -28,8 +28,17 @@ goog.require('M.style.Simple');
   });
   goog.inherits(M.style.Line, M.style.Simple);
 
-
-
+  /**
+   * This function apply style
+   *
+   * @function
+   * @protected
+   * @param {M.layer.Vector} layer - Layer to apply the styles
+   * @api stable
+   */
+  M.style.Line.prototype.unapply = function(layer) {
+    this.getImpl().unapply(layer);
+  };
 
   /**
    * Default options for this style
