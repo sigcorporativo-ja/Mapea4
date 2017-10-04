@@ -319,7 +319,7 @@ goog.require('M.style.Point');
         return this.proportionalFunction_(value, minValue, maxValue, minRadius, maxRadius);
       }.bind(this));
       this.style_.set('zindex', function(feature) {
-        return maxValue - feature.getAttribute(this.attributeName_);
+        return maxValue - parseFloat(feature.getAttribute(this.attributeName_));
       }.bind(this));
       this.layer_.getFeatures().forEach(feature => feature.setStyle(this.style_));
       this.updateCanvas();
