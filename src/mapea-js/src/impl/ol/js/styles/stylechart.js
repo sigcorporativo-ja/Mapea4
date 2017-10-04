@@ -185,6 +185,8 @@ goog.require('M.impl.style.OLChart');
       //let variables = this.variables_.map
       this.variables_.forEach(variable => {
         let featureData = feature.get(variable.attribute);
+        // TODO revisar
+        featureData = parseFloat(featureData);
         data = data.concat(featureData instanceof Array ? featureData : [featureData]).filter(fData => fData != null);
       });
 
