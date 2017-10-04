@@ -1454,6 +1454,13 @@ Mx.optionsVendor.distanceSelectFeatures;
 Mx.optionsVendor.displayInLayerSwitcherHoverLayer;
 
 /**
+ * convexHullStyle (options)
+ * @type {object}
+ * @api stable
+ */
+Mx.optionsVendor.convexHullStyle;
+
+/**
  * ranges (options)
  * @type {Array}
  * @api stable
