@@ -1762,3 +1762,81 @@ M.style.chart.schemes.Pastel;
  * @api stable
  */
 M.style.chart.schemes.Neon;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.FontSymbolOptions.type;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.radius;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.rotation;
+
+/**
+ * @type {bool}
+ * @api stable
+ */
+Mx.FontSymbolOptions.snapToPixel;
+
+/**
+ * @type {ol.style.Stroke}
+ * @api stable
+ */
+Mx.FontSymbolOptions.stroke;
+
+/**
+ * @type {string|Array<string>}
+ * @api stable
+ */
+Mx.FontSymbolOptions.colors;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.offsetX;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.offsetY;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.animation;
+
+/**
+ * @type {object|M.style.chart.Variable|string|Array<string>|Array<M.style.chart.Variable>}
+ * @api stable
+ */
+Mx.FontSymbolOptions.variables;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.donutRatio;
+
+/**
+ * @type {Array<number>}
+ * @api stable
+ */
+Mx.FontSymbolOptions.data;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.FontSymbolOptions.fill3DColor;
