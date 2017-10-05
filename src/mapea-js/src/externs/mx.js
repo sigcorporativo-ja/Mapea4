@@ -1840,3 +1840,9 @@ Mx.FontSymbolOptions.data;
  * @api stable
  */
 Mx.FontSymbolOptions.fill3DColor;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.style.Point.zindex;
