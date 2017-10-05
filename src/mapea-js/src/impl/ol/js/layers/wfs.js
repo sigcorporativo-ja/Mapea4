@@ -234,22 +234,22 @@ goog.require('M.impl.layer.Vector');
     return defaultValue;
   };
 
-  /**
-   * This function destroys this layer, cleaning the HTML
-   * and unregistering all events
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.impl.layer.WFS.prototype.destroy = function() {
-    var olMap = this.map.getMapImpl();
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
-      olMap.removeLayer(this.ol3Layer);
-      this.ol3Layer = null;
-    }
-    this.map = null;
-  };
+  // /**
+  //  * This function destroys this layer, cleaning the HTML
+  //  * and unregistering all events
+  //  *
+  //  * @public
+  //  * @function
+  //  * @api stable
+  //  */
+  // M.impl.layer.WFS.prototype.destroy = function() {
+  //   var olMap = this.map.getMapImpl();
+  //   if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+  //     olMap.removeLayer(this.ol3Layer);
+  //     this.ol3Layer = null;
+  //   }
+  //   this.map = null;
+  // };
 
   /**
    * TODO

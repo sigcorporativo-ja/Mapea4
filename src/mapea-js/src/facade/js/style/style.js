@@ -120,6 +120,9 @@ goog.provide('M.Style');
     let keyLength = keys.length;
     let key = keys[0];
     if (keyLength === 1) { // base case
+      if (M.utils.isObject(value)) {
+        value = Object.assign({}, value);
+      }
       obj[key] = value;
     }
     else if (keyLength > 1) { // recursive case

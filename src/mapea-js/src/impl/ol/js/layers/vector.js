@@ -310,4 +310,21 @@ goog.require('M.impl.renderutils');
   M.impl.layer.Vector.prototype.isLoaded = function() {
     return true;
   };
+
+  /**
+   * This function destroys this layer, cleaning the HTML
+   * and unregistering all events
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.destroy = function() {
+    var olMap = this.map.getMapImpl();
+    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+      this.ol3Layer = null;
+    }
+    this.map = null;
+  };
 })();

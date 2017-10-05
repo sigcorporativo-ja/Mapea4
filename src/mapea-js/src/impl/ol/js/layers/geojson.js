@@ -236,24 +236,24 @@ goog.require('goog.style');
     return featuresTemplate;
   };
 
-  /**
-   * This function destroys this layer, cleaning the HTML
-   * and unregistering all events
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.impl.layer.GeoJSON.prototype.destroy = function() {
-    var olMap = this.map.getMapImpl();
-
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
-      olMap.removeLayer(this.ol3Layer);
-      this.ol3Layer = null;
-    }
-    this.options = null;
-    this.map = null;
-  };
+  // /**
+  //  * This function destroys this layer, cleaning the HTML
+  //  * and unregistering all events
+  //  *
+  //  * @public
+  //  * @function
+  //  * @api stable
+  //  */
+  // M.impl.layer.GeoJSON.prototype.destroy = function() {
+  //   var olMap = this.map.getMapImpl();
+  //
+  //   if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+  //     olMap.removeLayer(this.ol3Layer);
+  //     this.ol3Layer = null;
+  //   }
+  //   this.options = null;
+  //   this.map = null;
+  // };
 
   /**
    * TODO

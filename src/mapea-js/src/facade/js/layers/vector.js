@@ -207,7 +207,9 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.equals = function(obj) {
     var equals = false;
-    if (obj instanceof M.layer.Vector) {}
+    if (obj instanceof M.layer.Vector) {
+      equals = this.name === obj.name;
+    }
     return equals;
   };
 

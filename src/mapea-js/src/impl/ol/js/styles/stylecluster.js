@@ -438,6 +438,7 @@ goog.require('ol.geom.convexhull');
       this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
       this.removeCoverInteraction_();
       this.removeSelectInteraction_();
+      this.layer_.getImpl().getMap().removeLayers(this.convexHullLayer_);
     }
     else {
       this.layer_.un(M.evt.LOAD, this.clusterize_, this);
