@@ -177,23 +177,26 @@ goog.require('M.utils');
    * @api stable
    */
   M.Feature.prototype.setStyle = function(style) {
-    let type = this.getGeometry().type;
     if (!M.utils.isNullOrEmpty(style) && style instanceof M.style.Feature) {
       this.style_ = style;
       this.style_.applyToFeature(this);
     }
     else {
-      if (type === M.geom.geojson.type.POINT || type === M.geom.geojson.type.MULTI_POINT) {
-        style = new M.style.Point();
+      let geom = this.getGeometry();
+      if (!M.utils.isNullOrEmpty(geom)) {
+        let type = geom.type;
+        if (type === M.geom.geojson.type.POINT || type === M.geom.geojson.type.MULTI_POINT) {
+          style = new M.style.Point();
+        }
+        if (type === M.geom.geojson.type.LINE_STRING || type === M.geom.geojson.type.MULTI_LINE_STRING) {
+          style = new M.style.Line();
+        }
+        if (type === M.geom.geojson.type.POLYGON || type === M.geom.geojson.type.MULTI_POLYGON) {
+          style = new M.style.Polygon();
+        }
+        this.style_ = style;
+        this.style_.applyToFeature(this);
       }
-      if (type === M.geom.geojson.type.LINE_STRING || type === M.geom.geojson.type.MULTI_LINE_STRING) {
-        style = new M.style.Line();
-      }
-      if (type === M.geom.geojson.type.POLYGON || type === M.geom.geojson.type.MULTI_POLYGON) {
-        style = new M.style.Polygon();
-      }
-      this.style_ = style;
-      this.style_.applyToFeature(this);
     }
   };
 
