@@ -467,7 +467,7 @@ goog.require('M.style.Proportional');
       let layers = this.getLayers(layersParam);
       layers.forEach(function(layer) {
         // KML and WFS layers handler its features
-        if ((layer instanceof M.layer.Vector) && !(layer instanceof M.layer.KML) && !(layer instanceof M.layer.WFS)) {
+        if ((layer instanceof M.layer.Vector) /*&& !(layer instanceof M.layer.KML) && !(layer instanceof M.layer.WFS)*/ ) {
           this.featuresHandler_.removeLayer(layer);
         }
       }, this);
