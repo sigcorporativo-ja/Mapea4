@@ -286,11 +286,13 @@ goog.require('M.style.quantification');
    */
   M.style.Choropleth.prototype.drawImage_ = function(vectorContext, image, coordinatesXY, limits, coordXYText, style) {
     image.onload = function() {
-      if (limits[0] == 0) {
-        vectorContext.fillText("  x  <=  " + limits[1].toString(), coordXYText[0], coordXYText[1]);
+      let startLimit = M.style.Choropleth.CALC_CANVAS_NUMBER_(limits[0]);
+      let endLimit = M.style.Choropleth.CALC_CANVAS_NUMBER_(limits[1]);
+      if (startLimit == 0) {
+        vectorContext.fillText("  x  <=  " + endLimit.toString(), coordXYText[0], coordXYText[1]);
       }
       else {
-        vectorContext.fillText(limits[0].toString() + "  <  x  <=  " + limits[1].toString(), coordXYText[0], coordXYText[1]);
+        vectorContext.fillText(startLimit.toString() + "  <  x  <=  " + endLimit.toString(), coordXYText[0], coordXYText[1]);
       }
       vectorContext.drawImage(this, coordinatesXY[0], coordinatesXY[1]);
     };
@@ -447,5 +449,23 @@ goog.require('M.style.quantification');
    * @api stable
    */
   M.style.Choropleth.END_COLOR_DEFAULT = 'brown';
+
+  /**
+   * Accuracy of numbers on canvas
+   * @constant
+   * @api stable
+   */
+  M.style.Choropleth.ACCURACY_NUMBER_CANVAS = 2;
+
+  /**
+   * Returns the calculation of the numbers of the canvas
+   * with a given precision
+   *  @function
+   * @api stable
+   */
+  M.style.Choropleth.CALC_CANVAS_NUMBER_ = function(number) {
+    let powPrecision = Math.pow(10, M.style.Choropleth.ACCURACY_NUMBER_CANVAS);
+    return Math.round(number * powPrecision) / powPrecision;
+  };
 
 })();
