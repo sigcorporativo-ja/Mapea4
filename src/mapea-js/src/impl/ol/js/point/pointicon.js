@@ -30,7 +30,7 @@ goog.require('ol.style.Icon');
       anchorOrigin: options.anchorOrigin,
       anchorXUnits: options.anchorXUnits,
       anchorYUnits: options.anchorYUnits,
-      crossOrigin: options.crossOrigin || 'Anonymous',
+      crossOrigin: options.crossOrigin || null,
       color: (options.color && options.color.slice) ? options.color.slice() : options.color || undefined,
       src: options.src,
       offset: !options.offset ? undefined : options.offset.slice(),
