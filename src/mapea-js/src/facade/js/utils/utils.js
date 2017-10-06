@@ -696,7 +696,7 @@ goog.require('goog.color.alpha');
   M.utils.rgbaToHex = function(rgbaColor) {
     var hexColor;
     try {
-      hexColor = chroma(rgbaColor).hex()
+      hexColor = chroma(rgbaColor).hex();
     }
     catch (err) {}
     return hexColor;
