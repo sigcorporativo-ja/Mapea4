@@ -201,6 +201,17 @@ goog.require('M.utils');
   };
 
   /**
+   * This function return if two features are equals
+   * @public
+   * @function
+   * @param {M.Feature} feature
+   * @return {bool} returns the result of comparing two features
+   */
+  M.Feature.prototype.equals = function(feature) {
+    return this.getId() === feature.getId();
+  };
+
+  /**
    * This function returns style feature
    *
    * @public
