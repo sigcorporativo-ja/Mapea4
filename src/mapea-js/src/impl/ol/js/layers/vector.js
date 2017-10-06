@@ -110,37 +110,39 @@ goog.require('M.impl.renderutils');
    * @api stable
    */
   M.impl.layer.Vector.prototype.addFeatures = function(features, update) {
-    this.features_ = this.features_.concat(features);
+    features.forEach(function(newFeature) {
+      let feature = this.features_.find(feature => feature.equals(newFeature));
+      if (M.utils.isNullOrEmpty(feature)) {
+        this.features_.push(newFeature);
+      }
+    }.bind(this));
     if (update) {
-      this.updateLayer_(features);
+      this.updateLayer_();
     }
     this.redraw();
   };
 
 
   /**
-   * This function add features to layer
-   *
-   * TODO
-   *
+   * This function add features to layer and redraw with a layer style
+   * @function
+   * @private
+   * @api stable
    */
-  M.impl.layer.Vector.prototype.updateLayer_ = function(features) {
+  M.impl.layer.Vector.prototype.updateLayer_ = function() {
     let style = this.facadeVector_.getStyle();
     if (style instanceof(M.style.Simple)) {
-      this.features_ = this.features_.concat(features);
       this.facadeVector_.setStyle(style);
     }
     else {
-      if (style instanceof(M.style.Category) || style instanceof(M.style.Choropleth) || style instanceof(M.style.Proportional) || style instanceof(M.style.Chart)) {
-        this.features_ = this.features_.concat(features);
-        style.apply(this.facadeVector_);
-      }
-      else if (style instanceof M.style.Cluster) {
+      if (style instanceof M.style.Cluster) {
         let cluster = this.facadeVector_.getStyle();
         cluster.unapply(this.facadeVector_);
-        this.features_ = this.features_.concat(features);
         cluster.getOldStyle().apply(this.facadeVector_);
         cluster.apply(this.facadeVector_);
+      }
+      else {
+        style.apply(this.facadeVector_);
       }
     }
   };
@@ -172,8 +174,7 @@ goog.require('M.impl.renderutils');
    * @api stable
    */
   M.impl.layer.Vector.prototype.getFeatureById = function(id) {
-    let feature = this.getOL3Layer().getSource().getFeatureById(id);
-    return M.impl.Feature.olFeature2Facade(feature);
+    return this.features_.find(feature => feature.getId() === id);
   };
 
   /**
