@@ -693,18 +693,12 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.rgbToHex = function(rgbColor) {
+  M.utils.rgbaToHex = function(rgbaColor) {
     var hexColor;
-
-    if (goog.color.isValidColor(rgbColor)) {
-      hexColor = goog.color.parse(rgbColor).hex;
+    try {
+      hexColor = chroma(rgbaColor).hex()
     }
-    else {
-      try {
-        hexColor = goog.color.alpha.parse(rgbColor).hex;
-      }
-      catch (err) {}
-    }
+    catch (err) {}
     return hexColor;
   };
 
