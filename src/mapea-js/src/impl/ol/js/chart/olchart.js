@@ -128,6 +128,13 @@ goog.require('ol.structs.IHasChecksum');
      */
     this.fill3DColor_ = options.fill3DColor || '#000';
 
+    /**
+     * rotate with the view of map
+     * @private
+     * @type {bool}
+     */
+    this.rotateWithView_ = options.rotateWithView || false;
+
     // call to render and updated the ol.style.image canvas
     this.renderChart_();
   };
@@ -153,7 +160,8 @@ goog.require('ol.structs.IHasChecksum');
       offsetX: this.offset_[0],
       offsetY: this.offset_[1],
       animation: this.animation_,
-      fill3DColor: this.fill3DColor_
+      fill3DColor: this.fill3DColor_,
+      rotateWithView: this.rotateWithView_
     });
     newInstance.setScale(this.getScale());
     newInstance.setOpacity(this.getOpacity());
