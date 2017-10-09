@@ -121,7 +121,7 @@ goog.require('M.impl.style.PointFontSymbol');
           rotateWithView: M.impl.style.Simple.getValue(options.label.rotate, feature),
           scale: M.impl.style.Simple.getValue(options.label.scale, feature),
           offsetX: M.impl.style.Simple.getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
-          offsetY: M.impl.style.Simple.getValue(options.label.ofsset ? options.label.offset[1] : undefined, feature),
+          offsetY: M.impl.style.Simple.getValue(options.label.offset ? options.label.offset[1] : undefined, feature),
           fill: new ol.style.Fill({
             color: M.impl.style.Simple.getValue(options.label.color || '#000000', feature)
           }),
