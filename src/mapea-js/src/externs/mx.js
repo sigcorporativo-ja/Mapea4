@@ -1846,3 +1846,9 @@ Mx.FontSymbolOptions.fill3DColor;
  * @api stable
  */
 Mx.style.Point.zindex;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.Point.offsetorigin;
