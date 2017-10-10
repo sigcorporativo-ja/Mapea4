@@ -167,7 +167,6 @@ goog.require('M.impl.style.PointFontSymbol');
             crossOrigin: M.impl.style.Simple.getValue(options.icon.crossorigin, feature),
             anchorOrigin: M.impl.style.Simple.getValue(options.icon.anchororigin, feature),
             size: M.impl.style.Simple.getValue(options.icon.size, feature),
-            //forceGeometryRender: options.forceGeometryRender
           }));
         }
         else {
