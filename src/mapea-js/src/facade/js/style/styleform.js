@@ -99,5 +99,5 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.NONE = "";
+  M.style.form.NONE = null;
 })();
