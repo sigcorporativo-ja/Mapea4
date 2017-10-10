@@ -168,7 +168,15 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       cluster[i].getKeys().forEach(attr => {
         cf.set(attr, cluster[i].get(attr));
       });
-      cf.setStyle(cluster[i].getStyle());
+      let [style, styleIcon] = cluster[i].getStyle()();
+      let styleIconClone = styleIcon.clone();
+      let styleImage = styleIconClone.getImage()
+      styleImage.anchorOrigin_ = "top-left";
+      styleImage.anchorXUnits_ = "fraction";
+      styleImage.anchorYUnits_ = "fraction";
+      styleImage.anchor_ = [0.5, 0.5];
+      styleImage.offset_ = [0, 0];
+      cf.setStyle([style, styleIconClone]);
       cf.set('features', [cluster[i]]);
       cf.set('geometry', new ol.geom.Point(p));
       source.addFeature(cf);
@@ -197,7 +205,15 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       cluster[i].getKeys().forEach(attr => {
         cf.set(attr, cluster[i].get(attr));
       });
-      cf.setStyle(cluster[i].getStyle());
+      let [style, styleIcon] = cluster[i].getStyle()();
+      let styleIconClone = styleIcon.clone();
+      let styleImage = styleIconClone.getImage()
+      styleImage.anchorOrigin_ = "top-left";
+      styleImage.anchorXUnits_ = "fraction";
+      styleImage.anchorYUnits_ = "fraction";
+      styleImage.anchor_ = [0.5, 0.5];
+      styleImage.offset_ = [0, 0];
+      cf.setStyle([style, styleIconClone]);
       cf.set('features', [cluster[i]]);
       cf.set('geometry', new ol.geom.Point(p));
       source.addFeature(cf);
@@ -263,7 +279,16 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center) { 
           st = stylefn.call(mFeature, res);
         }
         for (let s = 0; s < st.length; s++) {
-          let imgs = st[s].getImage();
+          let style = st[s];
+          if (style.getImage() instanceof M.impl.style.PointIcon) {
+            style = st[s].clone();
+            style.getImage().anchorOrigin_ = "top-left";
+            style.getImage().anchorXUnits_ = "fraction";
+            style.getImage().anchorYUnits_ = "fraction";
+            style.getImage().anchor_ = [0.5, 0.5];
+            style.getImage().offset_ = [0, 0];
+          }
+          let imgs = style.getImage();
           let sc;
           if (imgs) {
             sc = imgs.getScale();
@@ -271,7 +296,7 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center) { 
           }
           // OL3 > v3.14
           if (vectorContext.setStyle) {
-            vectorContext.setStyle(st[s]);
+            vectorContext.setStyle(style);
             vectorContext.drawGeometry(geo);
           }
           // older version
