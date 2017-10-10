@@ -207,7 +207,6 @@ goog.require('M.impl.style.PointFontSymbol');
       return [style, styleIcon];
     };
   };
-
   /**
    * TODO
    *
