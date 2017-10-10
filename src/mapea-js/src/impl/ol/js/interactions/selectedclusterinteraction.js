@@ -170,7 +170,7 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       });
       let [style, styleIcon] = cluster[i].getStyle()();
       let styleIconClone = styleIcon.clone();
-      let styleImage = styleIconClone.getImage()
+      let styleImage = styleIconClone.getImage();
       if (styleImage) {
         styleImage.anchorOrigin_ = "top-left";
         styleImage.anchorXUnits_ = "fraction";
@@ -209,7 +209,7 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       });
       let [style, styleIcon] = cluster[i].getStyle()();
       let styleIconClone = styleIcon.clone();
-      let styleImage = styleIconClone.getImage()
+      let styleImage = styleIconClone.getImage();
       styleImage.anchorOrigin_ = "top-left";
       styleImage.anchorXUnits_ = "fraction";
       styleImage.anchorYUnits_ = "fraction";
