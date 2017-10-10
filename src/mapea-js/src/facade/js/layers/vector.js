@@ -247,11 +247,9 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.getLegendURL = function() {
     let legendUrl = this.getImpl().getLegendURL();
-
-    if (legendUrl.indexOf(M.Layer.LEGEND_ERROR) === -1 && !M.utils.isNullOrEmpty(this.style_)) {
+    if (legendUrl.indexOf(M.Layer.LEGEND_DEFAULT) !== -1 && legendUrl.indexOf(M.Layer.LEGEND_ERROR) === -1 && !M.utils.isNullOrEmpty(this.style_)) {
       legendUrl = this.style_.toImage();
     }
-
     return legendUrl;
   };
 
