@@ -90,4 +90,14 @@ goog.provide('M.style.form');
    * @api stable
    */
   M.style.form.SQUARE = "SQUARE";
+
+
+  /**
+   * Square style form
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
+   */
+  M.style.form.NONE = "";
 })();

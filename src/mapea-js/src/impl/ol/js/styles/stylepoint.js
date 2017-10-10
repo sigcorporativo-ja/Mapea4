@@ -172,7 +172,7 @@ goog.require('M.impl.style.PointFontSymbol');
         }
         else {
           styleIcon.setImage(new M.impl.style.PointFontSymbol({
-            form: M.impl.style.Simple.getValue(options.icon.form, feature).toLowerCase(),
+            form: M.utils.isNullOrEmpty(M.impl.style.Simple.getValue(options.icon.form, feature)) ? "" : M.impl.style.Simple.getValue(options.icon.form, feature).toLowerCase(),
             gradient: M.impl.style.Simple.getValue(options.icon.gradient, feature),
             glyph: M.impl.style.Simple.getValue(options.icon.class, feature),
             fontSize: M.impl.style.Simple.getValue(options.icon.fontsize, feature),
