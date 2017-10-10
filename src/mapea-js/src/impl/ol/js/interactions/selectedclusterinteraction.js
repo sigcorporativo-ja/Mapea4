@@ -171,11 +171,13 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       let [style, styleIcon] = cluster[i].getStyle()();
       let styleIconClone = styleIcon.clone();
       let styleImage = styleIconClone.getImage()
-      styleImage.anchorOrigin_ = "top-left";
-      styleImage.anchorXUnits_ = "fraction";
-      styleImage.anchorYUnits_ = "fraction";
-      styleImage.anchor_ = [0.5, 0.5];
-      styleImage.offset_ = [0, 0];
+      if (styleImage) {
+        styleImage.anchorOrigin_ = "top-left";
+        styleImage.anchorXUnits_ = "fraction";
+        styleImage.anchorYUnits_ = "fraction";
+        styleImage.anchor_ = [0.5, 0.5];
+        styleImage.offset_ = [0, 0];
+      }
       cf.setStyle([style, styleIconClone]);
       cf.set('features', [cluster[i]]);
       cf.set('geometry', new ol.geom.Point(p));
