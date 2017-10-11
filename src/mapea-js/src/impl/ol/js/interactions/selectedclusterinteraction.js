@@ -172,11 +172,9 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       let styleIconClone = styleIcon.clone();
       let styleImage = styleIconClone.getImage();
       if (styleImage) {
-        styleImage.anchorOrigin_ = "top-left";
-        styleImage.anchorXUnits_ = "fraction";
-        styleImage.anchorYUnits_ = "fraction";
-        styleImage.anchor_ = [0.5, 0.5];
-        styleImage.offset_ = [0, 0];
+        if (!styleImage.size_) {
+          styleImage.size_ = [42, 42];
+        }
       }
       cf.setStyle([style, styleIconClone]);
       cf.set('features', [cluster[i]]);
@@ -210,11 +208,11 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       let [style, styleIcon] = cluster[i].getStyle()();
       let styleIconClone = styleIcon.clone();
       let styleImage = styleIconClone.getImage();
-      styleImage.anchorOrigin_ = "top-left";
-      styleImage.anchorXUnits_ = "fraction";
-      styleImage.anchorYUnits_ = "fraction";
-      styleImage.anchor_ = [0.5, 0.5];
-      styleImage.offset_ = [0, 0];
+      if (styleImage) {
+        if (!styleImage.size_) {
+          styleImage.size_ = [42, 42];
+        }
+      }
       cf.setStyle([style, styleIconClone]);
       cf.set('features', [cluster[i]]);
       cf.set('geometry', new ol.geom.Point(p));
@@ -284,11 +282,9 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center) { 
           let style = st[s];
           if (style.getImage() instanceof M.impl.style.PointIcon) {
             style = st[s].clone();
-            style.getImage().anchorOrigin_ = "top-left";
-            style.getImage().anchorXUnits_ = "fraction";
-            style.getImage().anchorYUnits_ = "fraction";
-            style.getImage().anchor_ = [0.5, 0.5];
-            style.getImage().offset_ = [0, 0];
+            if (!style.getImage().size_) {
+              style.getImage().size_ = [42, 42];
+            }
           }
           let imgs = style.getImage();
           let sc;
