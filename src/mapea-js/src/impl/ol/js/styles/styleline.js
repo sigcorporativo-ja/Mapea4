@@ -3,6 +3,7 @@ goog.provide('M.impl.style.Line');
 goog.require('M.impl.style.CentroidStyle');
 goog.require('M.impl.style.Simple');
 goog.require('M.impl.style.TextPath');
+goog.require('ol.geometry.Cspline');
 
 /**
  * @namespace M.impl.style.Line
