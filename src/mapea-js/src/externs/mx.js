@@ -1859,3 +1859,9 @@ Mx.style.Point.offsetorigin;
  * @api stable
  */
 Mx.style.Line.textPath;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.Line.smooth;
