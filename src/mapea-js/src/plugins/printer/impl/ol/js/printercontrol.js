@@ -352,6 +352,9 @@ goog.provide('P.impl.control.Printer');
           var image = featureStyle.getImage();
           var imgSize = M.utils.isNullOrEmpty(image) ? [0, 0] : (image.getImageSize() || [24, 24]);
           var text = featureStyle.getText();
+          if (M.utils.isNullOrEmpty(text) && !M.utils.isNullOrEmpty(featureStyle.textPath)) {
+            text = featureStyle.textPath;
+          }
           var stroke = M.utils.isNullOrEmpty(image) ? featureStyle.getStroke() : (image.getStroke && image.getStroke());
           var fill = M.utils.isNullOrEmpty(image) ? featureStyle.getFill() : (image.getFill && image.getFill());
 
@@ -404,38 +407,27 @@ goog.provide('P.impl.control.Printer');
               align = tAlign.concat(tBLine);
             }
             let font = text.getFont();
-            let fontWeight = "";
-            let fontSize = "";
-            let fontFamily = "";
-            let fontStyle = "";
+            let fontWeight = !M.utils.isNullOrEmpty(font) && font.indexOf("bold") > -1 ? "bold" : "normal";
+            let fontSize = "11px";
             if (!M.utils.isNullOrEmpty(font)) {
-              if (font.toLowerCase().indexOf('bold') < -1) {
-                fontWeight = 'normal';
-                font = font.replace('normal', '').trim();
-              }
-              else {
-                font = font.replace('bold', '').trim();
-              }
-              let posSize = font.toLowerCase().indexOf('px');
-              if (posSize > -1) {
-                fontSize = font.substring(0, posSize + 2).replace(' ', '');
-                font = font.replace(fontSize, '').trim();
-              }
-              if (font.toLowerCase().indexOf('italic') > -1) {
-                fontStyle = 'italic';
-                font = font.replace('italic', '').trim();
-              }
-              if (!M.utils.isNullOrEmpty(font)) {
-                fontFamily = font;
+              let px = font.substr(0, font.indexOf("px"));
+              if (!M.utils.isNullOrEmpty(px)) {
+                let space = px.lastIndexOf(" ");
+                if (space > -1) {
+                  fontSize = px.substr(space, px.length).trim().concat("px")
+                }
+                else {
+                  fontSize = px.concat("px");
+                }
               }
             }
             style = Object.assign(style, {
               "label": text.getText(),
               "fontColor": M.utils.isNullOrEmpty(text.getFill()) ? "" : M.utils.rgbToHex(text.getFill().getColor()),
-              "fontSize": fontSize || "11px",
-              "fontFamily": fontFamily || "Helvetica, sans-serif",
-              "fontStyle": fontStyle || "normal",
-              "fontWeight": fontWeight || "bold",
+              "fontSize": fontSize,
+              "fontFamily": "Helvetica, sans-serif",
+              "fontStyle": "normal",
+              "fontWeight": fontWeight,
               "labelXOffset": text.getOffsetX(),
               "labelYOffset": text.getOffsetY(),
               "fillColor": style.fillColor || "#FF0000",
