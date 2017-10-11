@@ -226,19 +226,24 @@ goog.require('M.impl.style.OLChart');
           if (M.utils.isNullOrEmpty(textAlign)) {
             textAlign = label.textAlign || (angle < Math.PI / 2 ? 'left' : 'right');
           }
-          let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (label.text || '');
+          const getValue = M.impl.style.Simple.getValue;
+          let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
+          text = styleOptions.type !== M.style.chart.types.BAR && text === '0' ? '' : text;
           return new M.impl.style.CentroidStyle({
             text: new ol.style.Text({
-              text: typeof text === 'string' ? text : '',
-              offsetX: typeof label.offsetX === 'number' ? label.offsetX : (Math.cos(angle) * (radius + radiusIncrement)),
-              offsetY: typeof label.offsetY === 'number' ? label.offsetY : (Math.sin(angle) * (radius + radiusIncrement)),
+              text: typeof text === 'string' ? `${text}` : '',
+              offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX) : (Math.cos(angle) * (radius + radiusIncrement)),
+              offsetY: typeof label.offsetY === 'number' ? getValue(label.offsetY) : (Math.sin(angle) * (radius + radiusIncrement)),
               textAlign: textAlign,
-              textBaseline: label.textBaseline || 'middle',
-              stroke: label.stroke ? new ol.style.Stroke(label.stroke) : undefined,
-              font: label.font,
-              scale: typeof label.scale === 'number' ? label.scale : undefined,
+              textBaseline: getValue(label.textBaseline) || 'middle',
+              stroke: label.stroke ? new ol.style.Stroke({
+                color: getValue(label.stroke.color) || '#000',
+                width: getValue(label.stroke.width) || 1
+              }) : undefined,
+              font: getValue(label.font),
+              scale: typeof label.scale === 'number' ? getValue(label.scale) : undefined,
               fill: new ol.style.Fill({
-                color: label.fill || '#000'
+                color: getValue(label.fill) || '#000'
               })
             })
           });
