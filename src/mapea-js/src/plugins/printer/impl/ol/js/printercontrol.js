@@ -414,7 +414,7 @@ goog.provide('P.impl.control.Printer');
               if (!M.utils.isNullOrEmpty(px)) {
                 let space = px.lastIndexOf(" ");
                 if (space > -1) {
-                  fontSize = px.substr(space, px.length).trim().concat("px")
+                  fontSize = px.substr(space, px.length).trim().concat("px");
                 }
                 else {
                   fontSize = px.concat("px");
