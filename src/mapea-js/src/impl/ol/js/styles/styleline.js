@@ -39,6 +39,7 @@ goog.require('M.impl.style.TextPath');
       let stroke = options.stroke;
       let label = options.label;
       let fill = options.fill;
+      let geometry = options.geometry;
       let style = new M.impl.style.CentroidStyle();
       let styleStroke = new M.impl.style.CentroidStyle();
       const getValue = M.impl.style.Simple.getValue;
@@ -63,8 +64,9 @@ goog.require('M.impl.style.TextPath');
           textBaseline: (getValue(label.baseline, feature) || '').toLowerCase(),
           textAlign: getValue(label.align, feature),
           rotateWithView: getValue(label.rotate, feature) || false,
-          textOverflow: getValue(label.textoverflow, feature) || 'custom',
-          minWidth: getValue(label.minwidth, feature) || 0
+          textOverflow: "",
+          minWidth: getValue(label.minwidth, feature) || 0,
+          geometry: getValue(label.geometry, feature)
         };
         let textPathStyle = new M.impl.style.TextPath(textPathConfig);
         if (!M.utils.isNullOrEmpty(label.stroke)) {
@@ -82,6 +84,9 @@ goog.require('M.impl.style.TextPath');
         // we will use a flag into de options object to set pathstyle or ol.text style
         if (typeof applyPath === 'boolean' && applyPath) {
           style.textPath = textPathStyle;
+          if (!M.utils.isNullOrEmpty(label.smooth) && M.utils.isFunction(feature.getGeometry)) {
+            style.setGeometry(feature.getGeometry().cspline());
+          }
         }
         else {
           style.setText(textPathStyle);
