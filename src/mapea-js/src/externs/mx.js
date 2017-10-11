@@ -1852,3 +1852,10 @@ Mx.style.Point.zindex;
  * @api stable
  */
 Mx.style.Point.offsetorigin;
+
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.Line.textPath;
