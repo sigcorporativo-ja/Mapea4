@@ -168,7 +168,7 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       cluster[i].getKeys().forEach(attr => {
         cf.set(attr, cluster[i].get(attr));
       });
-      let [style, styleIcon] = cluster[i].getStyle()();
+      let [style, styleIcon] = cluster[i].getStyle()(cluster[i], pix);
       let styleIconClone = styleIcon.clone();
       let styleImage = styleIconClone.getImage();
       if (styleImage) {
@@ -205,7 +205,7 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       cluster[i].getKeys().forEach(attr => {
         cf.set(attr, cluster[i].get(attr));
       });
-      let [style, styleIcon] = cluster[i].getStyle()();
+      let [style, styleIcon] = cluster[i].getStyle()(cluster[i], pix);
       let styleIconClone = styleIcon.clone();
       let styleImage = styleIconClone.getImage();
       if (styleImage) {

@@ -209,6 +209,14 @@ goog.require('ol.geom.convexhull');
       pointRadius: this.optionsVendor_.distanceSelectFeatures,
       animate: true,
       style: this.clusterStyleFn_.bind(this)
+      // style: function(feature, resolution) {
+      //   let style = this.clusterStyleFn_(feature, resolution, true);
+      //   if (feature.get('features').length < 2) {
+      //     feature = feature.get('features')[0];
+      //     style = this.layer_.getStyle().getOldStyle().getImpl().olStyleFn_(feature, resolution);
+      //   }
+      //   return style;
+      // }.bind(this),
       // style: function(f, res) {
       //   var cluster = f.get('features');
       //   // cluster style
@@ -216,20 +224,22 @@ goog.require('ol.geom.convexhull');
       //     return this.clusterStyleFn_(f, res, true);
       //   }
       //   else {
-      //     // feature style
-      //     let style = new ol.style.Style({
-      //       image: new ol.style.Circle({
-      //         stroke: new ol.style.Stroke({
-      //           color: "rgba(0,0,192,0.5)",
-      //           width: 2
-      //         }),
-      //         fill: new ol.style.Fill({
-      //           color: "rgba(0,0,192,0.3)"
-      //         }),
-      //         radius: 5
-      //       })
-      //     });
-      //     return [style];
+      //     //   // feature style
+      //     //   let style = new ol.style.Style({
+      //     //     image: new ol.style.Circle({
+      //     //       stroke: new ol.style.Stroke({
+      //     //         color: "rgba(0,0,192,0.5)",
+      //     //         width: 2
+      //     //       }),
+      //     //       fill: new ol.style.Fill({
+      //     //         color: "rgba(0,0,192,0.3)"
+      //     //       }),
+      //     //       radius: 5
+      //     //     })
+      //     //   });
+      //     //   return [style];
+      //     // }
+      //     return this.layer_.getStyle().getOldStyle().getImpl().olStyleFn_(f, res);
       //   }
       // }.bind(this)
     });
