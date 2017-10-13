@@ -32,15 +32,19 @@ goog.require('P.impl.control.WFSTBase');
     var olLayer = layerImpl.getOL3Layer();
     let olStyle = olLayer.getStyle()()[0];
     let [olFill, olStroke] = [olStyle.getFill(), olStyle.getStroke()];
+    let image = new ol.style.Circle({
+      fill: olFill,
+      radius: 5,
+      stroke: olStroke
+    });
+    if (olStyle.getImage()) {
+      image = olStyle.getImage();
+    }
     this.interaction_ = new ol.interaction.Draw({
       'source': olLayer.getSource(),
       'type': M.geom.parseWFS(this.layer_.geometry),
       'style': new ol.style.Style({
-        image: new ol.style.Circle({
-          fill: olFill,
-          radius: 5,
-          stroke: olStroke
-        }),
+        image: image,
         fill: olFill,
         stroke: olStroke || new ol.style.Stroke({
           fill: {
