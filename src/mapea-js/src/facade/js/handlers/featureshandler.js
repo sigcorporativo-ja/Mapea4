@@ -88,20 +88,23 @@ goog.require('M.facade.Base');
   M.handler.Features.prototype.clickOnMap_ = function(evt) {
     if (this.activated_ === true) {
       let impl = this.getImpl();
+
       this.layers_.forEach(function(layer) {
-        let features = impl.getFeaturesByLayer(evt, layer);
-        let layerImpl = layer.getImpl();
-        if (M.utils.isNullOrEmpty(features)) {
-          if (M.utils.isFunction(layerImpl.unselectFeatures)) {
-            layerImpl.unselectFeatures(features, evt.coord);
+        if (layer.name != "cluster_cover") {
+          let features = impl.getFeaturesByLayer(evt, layer);
+          let layerImpl = layer.getImpl();
+          if (M.utils.isNullOrEmpty(features)) {
+            if (M.utils.isFunction(layerImpl.unselectFeatures)) {
+              layerImpl.unselectFeatures(features, evt.coord);
+            }
+            layer.fire(M.evt.UNSELECT_FEATURES, evt.coord);
           }
-          layer.fire(M.evt.UNSELECT_FEATURES, evt.coord);
-        }
-        else {
-          if (M.utils.isFunction(layerImpl.selectFeatures)) {
-            layerImpl.selectFeatures(features, evt.coord, evt);
+          else {
+            if (M.utils.isFunction(layerImpl.selectFeatures)) {
+              layerImpl.selectFeatures(features, evt.coord, evt);
+            }
+            layer.fire(M.evt.SELECT_FEATURES, [features, evt]);
           }
-          layer.fire(M.evt.SELECT_FEATURES, [features, evt]);
         }
       }, this);
     }
