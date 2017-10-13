@@ -1481,11 +1481,11 @@ Mx.options.distance;
  */
 Mx.options.hoverInteraction;
 /**
- * selectedInteraction (options)
+ * selectInteraction (options)
  * @type {boolean}
  * @api stable
  */
-Mx.options.selectedInteraction;
+Mx.options.selectInteraction;
 
 /**
  * maxFeaturesToSelect (options)
