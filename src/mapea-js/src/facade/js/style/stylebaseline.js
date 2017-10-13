@@ -11,7 +11,7 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.TOP = "TOP";
+  M.style.baseline.TOP = "top";
 
   /**
    * Middle style baseline
@@ -20,7 +20,7 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.MIDDLE = "MIDDLE";
+  M.style.baseline.MIDDLE = "middle";
 
   /**
    * Bottom style baseline
@@ -29,7 +29,7 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.BOTTOM = "BOTTOM";
+  M.style.baseline.BOTTOM = "bottom";
 
   /**
    * Alphabetic style baseline
@@ -38,7 +38,7 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.ALPHABETIC = "ALPHABETIC";
+  M.style.baseline.ALPHABETIC = "alphabetic";
 
   /**
    * Hanging style baseline
@@ -47,7 +47,7 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.HANGING = "HANGING";
+  M.style.baseline.HANGING = "hanging";
 
   /**
    * Ideographic style baseline
@@ -56,5 +56,5 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.IDEOGRAPHIC = "IDEOGRAPHIC";
+  M.style.baseline.IDEOGRAPHIC = "ideographic";
 })();

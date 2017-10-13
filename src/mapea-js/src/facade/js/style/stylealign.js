@@ -11,7 +11,7 @@ goog.provide('M.style.align');
    * @public
    * @api stable
    */
-  M.style.align.LEFT = "LEFT";
+  M.style.align.LEFT = "left";
 
   /**
    * Center style alignment
@@ -20,7 +20,7 @@ goog.provide('M.style.align');
    * @public
    * @api stable
    */
-  M.style.align.CENTER = "CENTER";
+  M.style.align.CENTER = "center";
 
   /**
    * Right style alignment
@@ -29,7 +29,7 @@ goog.provide('M.style.align');
    * @public
    * @api stable
    */
-  M.style.align.RIGHT = "RIGHT";
+  M.style.align.RIGHT = "right";
 
   /**
    * Justify style alignment
@@ -38,6 +38,6 @@ goog.provide('M.style.align');
    * @public
    * @api stable
    */
-  M.style.align.JUSTIFY = "JUSTIFY";
+  M.style.align.JUSTIFY = "justify";
 
 })();
