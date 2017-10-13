@@ -186,11 +186,7 @@ goog.require('M.impl.renderutils');
    * @api stable
    */
   M.impl.layer.Vector.prototype.removeFeatures = function(features) {
-    let copyFeatures = [...this.features_];
-    features.forEach(function(feature) {
-      copyFeatures.splice(copyFeatures.indexOf(feature), 1);
-    }.bind(this));
-    this.features_ = copyFeatures;
+    this.features_ = this.features_.filter(f => !(features.includes(f)));
     this.redraw();
   };
 
