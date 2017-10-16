@@ -1865,3 +1865,9 @@ Mx.style.Line.textPath;
  * @api stable
  */
 Mx.style.Line.smooth;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.Point.anchororigin;
