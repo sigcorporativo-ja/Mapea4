@@ -42,6 +42,9 @@ goog.require('M.style.chart.Variable');
     let variables = options.variables || null;
 
     // vars parsing
+    if (!Object.values(M.style.chart.types).includes(options.type)) {
+      options.type = M.style.Chart.DEFAULT.type;
+    }
     if (!M.utils.isNullOrEmpty(variables)) {
       if (variables instanceof Array) {
         options.variables = variables.filter(variable => variable != null).map(variable => this.formatVariable_(variable));
@@ -131,7 +134,7 @@ goog.require('M.style.chart.Variable');
    */
   M.style.Chart.DEFAULT = {
     shadow3dColor: '#369',
-    type: M.style.chart.types.BAR,
+    type: M.style.chart.types.PIE,
     scheme: M.style.chart.schemes.Classic,
     radius: 20,
     donutRatio: 0.5,
