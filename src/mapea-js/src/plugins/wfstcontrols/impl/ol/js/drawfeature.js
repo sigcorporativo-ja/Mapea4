@@ -33,7 +33,7 @@ goog.require('P.impl.control.WFSTBase');
     let olStyle = olLayer.getStyle()()[0];
     let [olFill, olStroke] = [olStyle.getFill(), olStyle.getStroke()];
     let image = new ol.style.Circle({
-      fill: olFill,
+      fill: olFill || olStroke,
       radius: 5,
       stroke: olStroke
     });
@@ -83,7 +83,7 @@ goog.require('P.impl.control.WFSTBase');
    */
   M.impl.control.DrawFeature.prototype.deactivate = function() {
     if (M.utils.isNullOrEmpty(this.interaction_)) {
-      this.createInteractionModify_();
+      this.createInteraction_();
     }
     var olMap = this.facadeMap_.getMapImpl();
     olMap.removeInteraction(this.interaction_);
