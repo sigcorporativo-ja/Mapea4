@@ -350,36 +350,9 @@ goog.require('ol.geom.convexhull');
       olStyle = style.getImpl().olStyleFn_(feature, resolution);
     }
     else if (numFeatures === 1) {
-      olStyle = this.getSingleFeatureStyle_(clusterOlFeatures[0], resolution);
+      olStyle = clusterOlFeatures[0].getStyleFunction()(clusterOlFeatures[0], resolution);
     }
     return olStyle;
-  };
-
-  /**
-   * TODO
-   *
-   * @private
-   * @function
-   * @api stable
-   * @export
-   */
-  M.impl.style.Cluster.prototype.getSingleFeatureStyle_ = function(feature, resolution) {
-    let singleFeatureStyle;
-    // let featureStyleFn = feature.getStyleFunction();
-    // if (!M.utils.isNullOrEmpty(featureStyleFn)) {
-    //   singleFeatureStyle = featureStyleFn.call(feature, resolution);
-    // }
-    // else {
-    //   let layerStyleFn = this.oldOLLayer_.getStyleFunction();
-    //   if (!M.utils.isNullOrEmpty(layerStyleFn)) {
-    //     singleFeatureStyle = layerStyleFn(feature, resolution);
-    //   }
-    //   else {
-    //     singleFeatureStyle = new M.impl.style.CentroidStyle();
-    //   }
-    // }
-    singleFeatureStyle = this.layer_.getStyle().getOldStyle().getImpl().olStyleFn_(feature, resolution);
-    return singleFeatureStyle;
   };
 
   /**
