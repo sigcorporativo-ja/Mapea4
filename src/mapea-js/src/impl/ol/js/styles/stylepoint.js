@@ -117,6 +117,8 @@ goog.require('M.impl.style.PointFontSymbol');
         }
       }
       if (!M.utils.isNullOrEmpty(options.label)) {
+        let align = M.impl.style.Simple.getValue(options.label.align, feature);
+        let baseline = M.impl.style.Simple.getValue(options.label.baseline, feature);
         let labelText = new ol.style.Text({
           font: M.impl.style.Simple.getValue(options.label.font, feature),
           rotateWithView: M.impl.style.Simple.getValue(options.label.rotate, feature),
@@ -126,8 +128,8 @@ goog.require('M.impl.style.PointFontSymbol');
           fill: new ol.style.Fill({
             color: M.impl.style.Simple.getValue(options.label.color || '#000000', feature)
           }),
-          textAlign: M.impl.style.Simple.getValue(options.label.align, feature),
-          textBaseline: (M.impl.style.Simple.getValue(options.label.baseline, feature) || "").toLowerCase(),
+          textAlign: Object.values(M.style.align).includes(align) ? align : 'center',
+          textBaseline: Object.values(M.style.baseline).includes(baseline) ? baseline : 'top',
           text: M.impl.style.Simple.getValue(options.label.text, feature),
           rotation: M.impl.style.Simple.getValue(options.label.rotation, feature)
         });

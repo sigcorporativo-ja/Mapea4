@@ -223,24 +223,6 @@ goog.require('ol.geom.convexhull');
       //   if (cluster && cluster.length > 1) {
       //     return this.clusterStyleFn_(f, res, true);
       //   }
-      //   else {
-      //     //   // feature style
-      //     //   let style = new ol.style.Style({
-      //     //     image: new ol.style.Circle({
-      //     //       stroke: new ol.style.Stroke({
-      //     //         color: "rgba(0,0,192,0.5)",
-      //     //         width: 2
-      //     //       }),
-      //     //       fill: new ol.style.Fill({
-      //     //         color: "rgba(0,0,192,0.3)"
-      //     //       }),
-      //     //       radius: 5
-      //     //     })
-      //     //   });
-      //     //   return [style];
-      //     // }
-      //     return this.layer_.getStyle().getOldStyle().getImpl().olStyleFn_(f, res);
-      //   }
       // }.bind(this)
     });
     this.selectClusterInteraction_.on('select', this.selectClusterFeature_, this);
@@ -368,21 +350,36 @@ goog.require('ol.geom.convexhull');
       olStyle = style.getImpl().olStyleFn_(feature, resolution);
     }
     else if (numFeatures === 1) {
-      let featureStyleFn = clusterOlFeatures[0].getStyleFunction();
-      if (!M.utils.isNullOrEmpty(featureStyleFn)) {
-        olStyle = featureStyleFn.call(clusterOlFeatures[0], resolution);
-      }
-      else {
-        let layerStyleFn = this.oldOLLayer_.getStyleFunction();
-        if (!M.utils.isNullOrEmpty(layerStyleFn)) {
-          olStyle = layerStyleFn(clusterOlFeatures[0], resolution);
-        }
-        else {
-          olStyle = new M.impl.style.CentroidStyle();
-        }
-      }
+      olStyle = this.getSingleFeatureStyle_(clusterOlFeatures[0], resolution);
     }
     return olStyle;
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   * @api stable
+   * @export
+   */
+  M.impl.style.Cluster.prototype.getSingleFeatureStyle_ = function(feature, resolution) {
+    let singleFeatureStyle;
+    // let featureStyleFn = feature.getStyleFunction();
+    // if (!M.utils.isNullOrEmpty(featureStyleFn)) {
+    //   singleFeatureStyle = featureStyleFn.call(feature, resolution);
+    // }
+    // else {
+    //   let layerStyleFn = this.oldOLLayer_.getStyleFunction();
+    //   if (!M.utils.isNullOrEmpty(layerStyleFn)) {
+    //     singleFeatureStyle = layerStyleFn(feature, resolution);
+    //   }
+    //   else {
+    //     singleFeatureStyle = new M.impl.style.CentroidStyle();
+    //   }
+    // }
+    singleFeatureStyle = this.layer_.getStyle().getOldStyle().getImpl().olStyleFn_(feature, resolution);
+    return singleFeatureStyle;
   };
 
   /**
