@@ -374,7 +374,6 @@ goog.provide('P.impl.control.Printer');
             let tBLine = text.getTextBaseline();
             let align = "";
             if (!M.utils.isNullOrEmpty(tAlign)) {
-              tAlign = tAlign.toUpperCase();
               if (tAlign === M.style.align.LEFT) {
                 tAlign = 'l';
               }
@@ -389,7 +388,6 @@ goog.provide('P.impl.control.Printer');
               }
             }
             if (!M.utils.isNullOrEmpty(tBLine)) {
-              tBLine = tBLine.toUpperCase();
               if (tBLine === M.style.baseline.BOTTOM) {
                 tBLine = 'b';
               }
