@@ -16,4 +16,15 @@ goog.require('M.style.Feature');
     goog.base(this, options, impl);
   });
   goog.inherits(M.style.Simple, M.style.Feature);
+
+  /**
+   * @inheritDoc
+   */
+  M.style.Simple.prototype.apply = function(layer) {
+    this.layer_ = layer;
+    this.getImpl().applyToLayer(layer);
+    layer.getFeatures().forEach(feature => feature.setStyle(this));
+    this.updateCanvas();
+  };
+
 })();
