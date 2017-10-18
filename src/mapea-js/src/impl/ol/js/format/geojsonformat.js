@@ -153,3 +153,34 @@ M.impl.format.GeoJSON.prototype.write = function(features) {
     return this.writeFeatureObject(feature.getImpl().getOLFeature());
   }.bind(this));
 };
+
+/**
+ * This function read Features
+ *
+ * @public
+ * @function
+ * @param {object} geojson GeoJSON to parsed as a
+ * M.Feature array
+ * @return {Array<M.Feature>}
+ * @api estable
+ */
+M.impl.format.GeoJSON.prototype.read = function(geojson, geojsonFeatures, projection) {
+  let features = [];
+  let dstProj = projection.code;
+  if (M.utils.isNullOrEmpty(dstProj)) {
+    if (!M.utils.isNullOrEmpty(projection.featureProjection)) {
+      dstProj = ol.proj.get(projection.featureProjection.getCode());
+    }
+    else {
+      dstProj = ol.proj.get(projection.getCode());
+    }
+  }
+  let srcProj = this.readProjectionFromObject(geojson);
+  features = geojsonFeatures.map(function(geojsonFeature) {
+    let id = geojsonFeature.id;
+    let feature = new M.Feature(id, geojsonFeature);
+    feature.getImpl().getOLFeature().getGeometry().transform(srcProj, dstProj);
+    return feature;
+  });
+  return features;
+};

@@ -75,22 +75,7 @@ goog.require('M.Feature');
       else if (geojson.type === "Feature") {
         geojsonFeatures = [geojson];
       }
-      let dstProj = projection.code;
-      if (M.utils.isNullOrEmpty(dstProj)) {
-        if (!M.utils.isNullOrEmpty(projection.featureProjection)) {
-          dstProj = ol.proj.get(projection.featureProjection.getCode());
-        }
-        else {
-          dstProj = ol.proj.get(projection.getCode());
-        }
-      }
-      let srcProj = this.getImpl().readProjectionFromObject(geojson);
-      features = geojsonFeatures.map(function(geojsonFeature) {
-        let id = geojsonFeature.id;
-        let feature = new M.Feature(id, geojsonFeature);
-        feature.getImpl().getOLFeature().getGeometry().transform(srcProj, dstProj);
-        return feature;
-      });
+      features = this.getImpl().read(geojson, geojsonFeatures, projection);
     }
     return features;
   };
