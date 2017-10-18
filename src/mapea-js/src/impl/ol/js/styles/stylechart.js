@@ -280,7 +280,7 @@ goog.require('M.impl.style.OLChart');
               text: typeof text === 'string' ? `${text}` : '',
               // offsetX: styles[0].getImage().getImage().width * -1 /*- radiusIncrement*/ ,
               // offsetY: acumSum,
-              offsetX: styleOptions.offsetX + styles[0].getImage().getImage().width * -1,
+              offsetX: styleOptions.offsetX + styles[0].getImage().getImage().width * -1 + radiusIncrement,
               offsetY: styleOptions.offsetY + acumSum,
               textAlign: 'left',
               textBaseline: 'top',
@@ -291,7 +291,7 @@ goog.require('M.impl.style.OLChart');
                 width: getValue(label.stroke.width, feature) || 1
               }) : undefined,
               //tener en cuenta que puede indicarse
-              font: /^([1-9])[0-9]*px ./.test(font) ? font : `10px ${font}`,
+              font: /^([1-9])[0-9]*px ./.test(font) ? font : `9px ${font}`,
               //font: `12px ${font}`,
               scale: typeof label.scale === 'number' ? getValue(label.scale, feature) : undefined,
               fill: new ol.style.Fill({
