@@ -51,8 +51,6 @@ goog.require('M.impl.Style');
    * @api stable
    */
   M.impl.style.Simple.prototype.applyToFeature = function(feature) {
-    // let featureCtx = feature.getImpl().getOLFeature();
-    // featureCtx.setStyle(this.olStyleFn_.bind(featureCtx));
     feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
   };
 
