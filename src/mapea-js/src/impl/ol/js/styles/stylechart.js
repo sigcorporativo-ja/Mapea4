@@ -250,7 +250,58 @@ goog.require('M.impl.style.OLChart');
           });
         })).filter(style => style != null);
       }
-
+      else if (styleOptions.type === M.style.chart.types.BAR) {
+        let acumSum = null;
+        styles = styles.concat(styleOptions.data.map((dataValue, i) => {
+          let variable = styleOptions.variables.length === styleOptions.data.length ? styleOptions.variables[i] : styleOptions.variables[0];
+          let label = variable.label || {};
+          let radius = label.radius ? label.radius : styleOptions.radius;
+          let radiusIncrement = typeof label.radiusIncrement === 'number' ? label.radiusIncrement : 3;
+          if (!variable.label) {
+            return null;
+          }
+          const getValue = M.impl.style.Simple.getValue;
+          let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
+          text = styleOptions.type !== M.style.chart.types.BAR && text === '0' ? '' : text;
+          if (M.utils.isNullOrEmpty(text)) {
+            return null;
+          }
+          //  radius = text.length * 12;
+          if (M.utils.isNullOrEmpty(acumSum)) {
+            // acumSum = styles[0].getImage().getImage().height;
+            acumSum = 10;
+          }
+          else {
+            acumSum -= 12 + 5;
+          }
+          let font = getValue(label.font, feature);
+          return new M.impl.style.CentroidStyle({
+            text: new ol.style.Text({
+              text: typeof text === 'string' ? `${text}` : '',
+              // offsetX: styles[0].getImage().getImage().width * -1 /*- radiusIncrement*/ ,
+              // offsetY: acumSum,
+              offsetX: styleOptions.offsetX + styles[0].getImage().getImage().width * -1,
+              offsetY: styleOptions.offsetY + acumSum,
+              textAlign: 'left',
+              textBaseline: 'top',
+              stroke: label.stroke ? new ol.style.Stroke({
+                // color: getValue(label.stroke.color, feature) || '#000',
+                //color: variable.fillColor_,
+                color: 'black',
+                width: getValue(label.stroke.width, feature) || 1
+              }) : undefined,
+              //tener en cuenta que puede indicarse
+              font: /^([1-9])[0-9]*px ./.test(font) ? font : `10px ${font}`,
+              //font: `12px ${font}`,
+              scale: typeof label.scale === 'number' ? getValue(label.scale, feature) : undefined,
+              fill: new ol.style.Fill({
+                //color: getValue(label.fill, feature) || 'black',
+                color: variable.fillColor_
+              })
+            })
+          });
+        })).filter(style => style != null);
+      }
       return styles;
     };
   };
@@ -347,4 +398,4 @@ goog.require('M.impl.style.OLChart');
   };
 
 
-})();
+})();;
