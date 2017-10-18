@@ -38,10 +38,11 @@ goog.require('M.exception');
    * @api stable
    */
   M.control.LayerSwitcher.prototype.createView = function(map) {
-    return M.template.compile(M.control.LayerSwitcher.TEMPLATE, {
-      'jsonp': true,
-      'vars': M.control.LayerSwitcher.getTemplateVariables_(map)
-    });
+    return M.control.LayerSwitcher.getTemplateVariables_(map).then(templateVars =>
+      M.template.compile(M.control.LayerSwitcher.TEMPLATE, {
+        'jsonp': true,
+        'vars': templateVars
+      }));
   };
 
   /**
@@ -92,20 +93,31 @@ goog.require('M.exception');
    * Gets the variables of the template to compile
    */
   M.control.LayerSwitcher.getTemplateVariables_ = function(map) {
-    // gets base layers and overlay layers
-    var baseLayers = map.getBaseLayers();
-    var overlayLayers = map.getLayers().filter(function(layer) {
-      let isTransparent = (layer.transparent === true);
-      let displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
-      let isNotWMC = (layer.type !== M.layer.type.WMC);
-      let isNotWMSFull = !((layer.type === M.layer.type.WMS) && M.utils.isNullOrEmpty(layer.name));
-      return (isTransparent && isNotWMC && isNotWMSFull && displayInLayerSwitcher);
-    }).reverse();
+    return new Promise(function(success, fail) {
+      // gets base layers and overlay layers
+      let baseLayers = map.getBaseLayers();
+      let overlayLayers = map.getLayers().filter(function(layer) {
+        let isTransparent = (layer.transparent === true);
+        let displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
+        let isNotWMC = (layer.type !== M.layer.type.WMC);
+        let isNotWMSFull = !((layer.type === M.layer.type.WMS) && M.utils.isNullOrEmpty(layer.name));
+        return (isTransparent && isNotWMC && isNotWMSFull && displayInLayerSwitcher);
+      }).reverse();
 
-    return {
-      'baseLayers': baseLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_),
-      'overlayLayers': overlayLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_)
-    };
+      let baseLayersPromise = Promise.all(baseLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_));
+      let overlayLayersPromise = Promise.all(overlayLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_));
+      baseLayersPromise.then(parsedBaseLayers => {
+        overlayLayersPromise.then(parsedOverlayLayers => success({
+          'baseLayers': parsedBaseLayers,
+          'overlayLayers': parsedOverlayLayers
+        }));
+      });
+
+      // success({
+      //   'baseLayers': baseLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_),
+      //   'overlayLayers': overlayLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_)
+      // });
+    });
   };
 
   /**
@@ -123,15 +135,36 @@ goog.require('M.exception');
     if (M.utils.isNullOrEmpty(layerTitle)) {
       layerTitle = 'Servicio WMS';
     }
-    return {
-      'base': (layer.transparent === false),
-      'visible': (layer.isVisible() === true),
-      'id': layer.name,
-      'title': layerTitle,
-      'legend': layer.getLegendURL(),
-      'outOfRange': !layer.inRange(),
-      'opacity': layer.getOpacity()
-    };
+    // return new Promise((success, fail) => success({
+    //   'base': (layer.transparent === false),
+    //   'visible': (layer.isVisible() === true),
+    //   'id': layer.name,
+    //   'title': layerTitle,
+    //   'legend': layer.getLegendURL(),
+    //   'outOfRange': !layer.inRange(),
+    //   'opacity': layer.getOpacity()
+    // }));
+    return new Promise((success, fail) => {
+      let layerVarTemplate = {
+        'base': (layer.transparent === false),
+        'visible': (layer.isVisible() === true),
+        'id': layer.name,
+        'title': layerTitle,
+        'outOfRange': !layer.inRange(),
+        'opacity': layer.getOpacity()
+      };
+      let legendUrl = layer.getLegendURL();
+      if (legendUrl instanceof Promise) {
+        legendUrl.then(url => {
+          layerVarTemplate['legend'] = url;
+          success(layerVarTemplate);
+        })
+      }
+      else {
+        layerVarTemplate['legend'] = legendUrl;
+        success(layerVarTemplate);
+      }
+    });
   };
 
   /**

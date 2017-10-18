@@ -29,6 +29,15 @@ goog.provide('M.Style');
     this.canvas_ = document.createElement('canvas');
 
     /**
+     * The updateCanvas promise to manage
+     * asynchronous request with icon images
+     *
+     * @private
+     * @type {Promirse}
+     */
+    this.updateCanvasPromise_ = null;
+
+    /**
      * Layer which this style is applied
      * @private
      * @type {M.layer.Vector}
@@ -37,7 +46,7 @@ goog.provide('M.Style');
 
     goog.base(this, impl);
 
-    this.updateCanvas();
+    // this.updateCanvas();
   });
   goog.inherits(M.Style, M.facade.Base);
 
@@ -157,24 +166,30 @@ goog.provide('M.Style');
    * @return {String} data url to canvas
    */
   M.Style.prototype.toImage = function() {
-    let image = new Image();
+    let styleImgB64;
 
-    let styleImg;
-    if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
-      image.crossOrigin = "Anonymous";
-      let can = this.canvas_;
-      image.onload = function() {
-        var c = can;
-        var ctx = c.getContext("2d");
-        ctx.drawImage(this, 0, 0, 50, 50);
-      };
-      image.src = this.options_.icon.src;
-      styleImg = this.canvas_.toDataURL('png');
+    if (M.utils.isNullOrEmpty(this.updateCanvasPromise_)) {
+      if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
+        let image = new Image();
+        image.crossOrigin = "Anonymous";
+        let can = this.canvas_;
+        image.onload = function() {
+          var c = can;
+          var ctx = c.getContext("2d");
+          ctx.drawImage(this, 0, 0, 50, 50);
+        };
+        image.src = this.options_.icon.src;
+        styleImgB64 = this.canvas_.toDataURL('png');
+      }
+      else {
+        styleImgB64 = this.canvas_.toDataURL('png');
+      }
     }
     else {
-      styleImg = this.canvas_.toDataURL('png');
+      styleImgB64 = this.updateCanvasPromise_.then(() => this.canvas_.toDataURL('png'));
     }
-    return styleImg;
+
+    return styleImgB64;
   };
 
   /**
@@ -190,7 +205,7 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style.prototype.updateCanvas = function() {
-    this.getImpl().updateCanvas(this.canvas_);
+    this.updateCanvasPromise_ = this.getImpl().updateCanvas(this.canvas_);
   };
 
   /**

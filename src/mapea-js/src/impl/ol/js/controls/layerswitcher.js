@@ -9,7 +9,7 @@ goog.require('M.impl.Control');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layerswitcher
@@ -20,7 +20,7 @@ goog.require('M.impl.Control');
    * @extends {ol.control.Control}
    * @api stable
    */
-  M.impl.control.LayerSwitcher = function () {
+  M.impl.control.LayerSwitcher = function() {
     this.mouseoutTimeId = null;
     this.panel = null;
     this.facadeMap_ = null;
@@ -36,7 +36,7 @@ goog.require('M.impl.Control');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.LayerSwitcher.prototype.addTo = function (map, element) {
+  M.impl.control.LayerSwitcher.prototype.addTo = function(map, element) {
     this.facadeMap_ = map;
     var olMap = map.getMapImpl();
 
@@ -63,14 +63,14 @@ goog.require('M.impl.Control');
    * @function
    * @api stable
    */
-  M.impl.control.LayerSwitcher.prototype.clickLayer = function (evt) {
+  M.impl.control.LayerSwitcher.prototype.clickLayer = function(evt) {
     evt = (evt || window.event);
     if (!M.utils.isNullOrEmpty(evt.target)) {
       let layerName = evt.target.getAttribute('data-layer-name');
       if (!M.utils.isNullOrEmpty(layerName)) {
         evt.stopPropagation();
         let layer;
-        this.facadeMap_.getLayers().some(function (l) {
+        this.facadeMap_.getLayers().some(function(l) {
           if (l.name === layerName) {
             layer = l;
             return true;
@@ -107,15 +107,17 @@ goog.require('M.impl.Control');
    * @function
    * @api stable
    */
-  M.impl.control.LayerSwitcher.prototype.renderPanel = function () {
-    var this_ = this;
-    M.template.compile(M.control.LayerSwitcher.TEMPLATE, {
-      'jsonp': true,
-      'vars': M.control.LayerSwitcher.getTemplateVariables_(this.facadeMap_)
-    }).then(function (html) {
-      this_.registerImgErrorEvents_(html);
-      var newPanel = html.querySelector('div#'.concat(M.impl.control.LayerSwitcher.PANEL_ID));
-      this_.panel.innerHTML = newPanel.innerHTML;
+  M.impl.control.LayerSwitcher.prototype.renderPanel = function() {
+    let this_ = this;
+    M.control.LayerSwitcher.getTemplateVariables_(this.facadeMap_).then(templateVars =>
+      M.template.compile(M.control.LayerSwitcher.TEMPLATE, {
+        'jsonp': true,
+        'vars': templateVars
+      })
+    ).then((html) => {
+      this.registerImgErrorEvents_(html);
+      let newPanel = html.querySelector('div#'.concat(M.impl.control.LayerSwitcher.PANEL_ID));
+      this.panel.innerHTML = newPanel.innerHTML;
     });
   };
 
@@ -127,7 +129,7 @@ goog.require('M.impl.Control');
    * @function
    * @api stable
    */
-  M.impl.control.LayerSwitcher.prototype.registerEvents = function () {
+  M.impl.control.LayerSwitcher.prototype.registerEvents = function() {
     if (!M.utils.isNullOrEmpty(this.facadeMap_)) {
       var olMap = this.facadeMap_.getMapImpl();
 
@@ -144,7 +146,7 @@ goog.require('M.impl.Control');
    * @function
    * @api stable
    */
-  M.impl.control.LayerSwitcher.prototype.unregisterEvents = function () {
+  M.impl.control.LayerSwitcher.prototype.unregisterEvents = function() {
     if (!M.utils.isNullOrEmpty(this.facadeMap_)) {
       var olMap = this.facadeMap_.getMapImpl();
 
@@ -157,14 +159,14 @@ goog.require('M.impl.Control');
   /**
    * TODO
    */
-  M.impl.control.LayerSwitcher.prototype.registerViewEvents_ = function (view) {
+  M.impl.control.LayerSwitcher.prototype.registerViewEvents_ = function(view) {
     view.on('change:resolution', this.renderPanel, this);
   };
 
   /**
    * TODO
    */
-  M.impl.control.LayerSwitcher.prototype.registerLayersEvents_ = function (layers) {
+  M.impl.control.LayerSwitcher.prototype.registerLayersEvents_ = function(layers) {
     layers.forEach(this.registerLayerEvents_, this);
     layers.on('remove', this.renderPanel, this);
     layers.on('add', this.onAddLayer_, this);
@@ -173,7 +175,7 @@ goog.require('M.impl.Control');
   /**
    * TODO
    */
-  M.impl.control.LayerSwitcher.prototype.registerLayerEvents_ = function (layer) {
+  M.impl.control.LayerSwitcher.prototype.registerLayerEvents_ = function(layer) {
     layer.on('change:visible', this.renderPanel, this);
     // layer.on('change:opacity', this.renderPanel, this);
     layer.on('change:extent', this.renderPanel, this);
@@ -182,14 +184,14 @@ goog.require('M.impl.Control');
   /**
    * TODO
    */
-  M.impl.control.LayerSwitcher.prototype.unregisterViewEvents_ = function (view) {
+  M.impl.control.LayerSwitcher.prototype.unregisterViewEvents_ = function(view) {
     view.un('change:resolution', this.renderPanel, this);
   };
 
   /**
    * TODO
    */
-  M.impl.control.LayerSwitcher.prototype.unregisterLayersEvents_ = function (layers) {
+  M.impl.control.LayerSwitcher.prototype.unregisterLayersEvents_ = function(layers) {
     layers.forEach(this.registerLayerEvents_, this);
     layers.un('remove', this.renderPanel, this);
     layers.un('add', this.onAddLayer_, this);
@@ -198,7 +200,7 @@ goog.require('M.impl.Control');
   /**
    * TODO
    */
-  M.impl.control.LayerSwitcher.prototype.unregisterLayerEvents_ = function (layer) {
+  M.impl.control.LayerSwitcher.prototype.unregisterLayerEvents_ = function(layer) {
     layer.un('change:visible', this.renderPanel, this);
     //layer.un('change:opacity', this.renderPanel, this);
     layer.un('change:extent', this.renderPanel, this);
@@ -207,7 +209,7 @@ goog.require('M.impl.Control');
   /**
    * TODO
    */
-  M.impl.control.LayerSwitcher.prototype.onViewChange_ = function (evt) {
+  M.impl.control.LayerSwitcher.prototype.onViewChange_ = function(evt) {
     // removes listener from previous view
     this.unregisterViewEvents_(evt.oldValue);
 
@@ -219,7 +221,7 @@ goog.require('M.impl.Control');
   /**
    * TODO
    */
-  M.impl.control.LayerSwitcher.prototype.onAddLayer_ = function (evt) {
+  M.impl.control.LayerSwitcher.prototype.onAddLayer_ = function(evt) {
     this.registerLayerEvents_(evt.element);
     this.renderPanel();
   };
@@ -227,13 +229,13 @@ goog.require('M.impl.Control');
   /**
    * TODO
    */
-  M.impl.control.LayerSwitcher.prototype.registerImgErrorEvents_ = function (html) {
+  M.impl.control.LayerSwitcher.prototype.registerImgErrorEvents_ = function(html) {
     var imgElements = html.querySelectorAll('img');
-    Array.prototype.forEach.call(imgElements, function (imgElem) {
-      goog.events.listen(imgElem, goog.events.EventType.ERROR, function (evt) {
+    Array.prototype.forEach.call(imgElements, function(imgElem) {
+      goog.events.listen(imgElem, goog.events.EventType.ERROR, function(evt) {
         var layerName = evt.target.getAttribute('data-layer-name');
         var legendErrorUrl = M.utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_ERROR]);
-        var layer = this.facadeMap_.getLayers().filter(function (l) {
+        var layer = this.facadeMap_.getLayers().filter(function(l) {
           return (l.name === layerName);
         })[0];
         if (!M.utils.isNullOrEmpty(layer)) {
@@ -248,7 +250,7 @@ goog.require('M.impl.Control');
    * Set the map instance the control is associated with.
    * @param {ol.Map} map The map instance.
    */
-  M.impl.control.LayerSwitcher.prototype.setMap = function (map) {
+  M.impl.control.LayerSwitcher.prototype.setMap = function(map) {
     goog.base(this, 'setMap', map);
     this.renderPanel();
   };
