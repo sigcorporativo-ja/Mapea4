@@ -148,8 +148,8 @@ goog.provide('M.Style');
   M.Style.prototype.refresh = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.apply(this.layer_);
+      this.updateCanvas();
     }
-    this.updateCanvas();
   };
 
   /**
