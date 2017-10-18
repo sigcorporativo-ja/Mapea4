@@ -38,7 +38,7 @@ goog.require('M.impl.Style');
     let olLayer = layer.getImpl().getOL3Layer();
     if (!M.utils.isNullOrEmpty(olLayer)) {
       olLayer.setStyle(this.olStyleFn_);
-      layer.getFeatures().forEach(this.applyToFeature, this);
+      // layer.getFeatures().forEach(this.applyToFeature, this);
     }
   };
 
