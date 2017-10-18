@@ -252,7 +252,9 @@ goog.require('M.impl.style.OLChart');
       }
       else if (styleOptions.type === M.style.chart.types.BAR) {
         let acumSum = null;
-        styles = styles.concat(styleOptions.data.map((dataValue, i) => {
+        styles = styles.concat(styleOptions.data.sort(function(num, numNext) {
+          return num - numNext
+        }).map((dataValue, i) => {
           let variable = styleOptions.variables.length === styleOptions.data.length ? styleOptions.variables[i] : styleOptions.variables[0];
           let label = variable.label || {};
           let radius = label.radius ? label.radius : styleOptions.radius;
@@ -269,10 +271,10 @@ goog.require('M.impl.style.OLChart');
           //  radius = text.length * 12;
           if (M.utils.isNullOrEmpty(acumSum)) {
             // acumSum = styles[0].getImage().getImage().height;
-            acumSum = 10;
+            acumSum = 9;
           }
           else {
-            acumSum -= 12 + 5;
+            acumSum -= 9 + 5;
           }
           let font = getValue(label.font, feature);
           return new M.impl.style.CentroidStyle({
