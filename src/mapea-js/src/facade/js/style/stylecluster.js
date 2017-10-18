@@ -194,9 +194,10 @@ goog.require('M.Style');
         }
         return text;
       },
+      color: '#fff',
       font: "bold 15px Arial",
-      textBaseline: 'middle',
-      textAlign: "center"
+      baseline: 'middle',
+      align: "center"
     }
   };
 
@@ -231,9 +232,13 @@ goog.require('M.Style');
    */
   M.style.Cluster.RANGE_1_DEFAULT = {
     fill: {
-      color: 'green'
+      color: '#81c89a'
     },
-    radius: 10
+    stroke: {
+      color: '#6eb988',
+      width: 3
+    },
+    radius: 15
   };
 
   /**
@@ -245,9 +250,13 @@ goog.require('M.Style');
    */
   M.style.Cluster.RANGE_2_DEFAULT = {
     fill: {
-      color: 'red'
+      color: '#85b9d2'
     },
-    radius: 15,
+    stroke: {
+      color: '#6da4be',
+      width: 3
+    },
+    radius: 20,
   };
 
   /**
@@ -259,8 +268,12 @@ goog.require('M.Style');
    */
   M.style.Cluster.RANGE_3_DEFAULT = {
     fill: {
-      color: 'blue'
+      color: '#938fcf'
     },
-    radius: 20
+    stroke: {
+      color: '#827ec5',
+      width: 3
+    },
+    radius: 25
   };
 })();
