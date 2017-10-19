@@ -175,6 +175,8 @@ goog.require('M.impl.style.OLChart');
    * @inheritDoc
    */
   M.impl.style.Chart.prototype.updateFacadeOptions = function(options) {
+    options.rotateWithView = false;
+
     this.olStyleFn_ = (feature, resolution) => {
       if (!(feature instanceof ol.Feature)) {
         resolution = feature;
@@ -233,8 +235,8 @@ goog.require('M.impl.style.OLChart');
           return new M.impl.style.CentroidStyle({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
-              offsetX: (Math.cos(angle) * (radius + radiusIncrement)) + styleOptions.offsetX,
-              offsetY: (Math.sin(angle) * (radius + radiusIncrement)) + styleOptions.offsetY,
+              offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX, feature) : (Math.cos(angle) * (radius + radiusIncrement)),
+              offsetY: typeof label.offsetY === 'number' ? getValue(label.offsetY, feature) : (Math.sin(angle) * (radius + radiusIncrement)),
               textAlign: getValue(textAlign, feature),
               textBaseline: getValue(label.textBaseline, feature) || 'middle',
               stroke: label.stroke ? new ol.style.Stroke({
@@ -251,6 +253,7 @@ goog.require('M.impl.style.OLChart');
         })).filter(style => style != null);
       }
       else if (styleOptions.type === M.style.chart.types.BAR) {
+        let height = 0;
         let acumSum = null;
         styles = styles.concat(styleOptions.data.sort(function(num, numNext) {
           return num - numNext
@@ -268,33 +271,34 @@ goog.require('M.impl.style.OLChart');
           if (M.utils.isNullOrEmpty(text)) {
             return null;
           }
-          //  radius = text.length * 12;
-          if (M.utils.isNullOrEmpty(acumSum)) {
-            // acumSum = styles[0].getImage().getImage().height;
-            acumSum = 9;
+          let font = getValue(label.font, feature);
+          let sizeFont = /^([1-9])[0-9]*px/.exec(font);
+          if (!M.utils.isNullOrEmpty(sizeFont)) {
+            sizeFont = sizeFont[0];
+            sizeFont = sizeFont.substring(0, sizeFont.length - 2);
           }
           else {
-            acumSum -= 9 + 5;
+            sizeFont = 9;
           }
-          let font = getValue(label.font, feature);
+          if (M.utils.isNullOrEmpty(acumSum)) {
+            acumSum = (styles[0].getImage().getImage().height / 2) - 6;
+          }
+          else {
+            acumSum -= sizeFont + 6;
+          }
+          height = height + sizeFont + 6;
           return new M.impl.style.CentroidStyle({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
-              // offsetX: styles[0].getImage().getImage().width * -1 /*- radiusIncrement*/ ,
-              // offsetY: acumSum,
-              offsetX: styleOptions.offsetX + styles[0].getImage().getImage().width * -1,
-              offsetY: styleOptions.offsetY + acumSum,
-              textAlign: 'left',
-              textBaseline: 'top',
-              stroke: label.stroke ? new ol.style.Stroke({
-                // color: getValue(label.stroke.color, feature) || '#000',
-                //color: variable.fillColor_,
-                color: 'black',
-                width: getValue(label.stroke.width, feature) || 1
-              }) : undefined,
+              // hay que sumar lo del 50
+              offsetY: acumSum + styleOptions.offsetY || 0,
+              offsetX: -(styles[0].getImage().getImage().width / 2) - 1 + styleOptions.offsetX || 0,
+              textBaseline: 'middle',
+              rotateWithView: false,
+              textAlign: 'center',
+              stroke: label.stroke ? new ol.style.Stroke({}) : undefined,
               //tener en cuenta que puede indicarse
               font: /^([1-9])[0-9]*px ./.test(font) ? font : `9px ${font}`,
-              //font: `12px ${font}`,
               scale: typeof label.scale === 'number' ? getValue(label.scale, feature) : undefined,
               fill: new ol.style.Fill({
                 //color: getValue(label.fill, feature) || 'black',
@@ -303,6 +307,21 @@ goog.require('M.impl.style.OLChart');
             })
           });
         })).filter(style => style != null);
+        styles.push(new ol.style.Style({
+          image: new ol.style.Icon(({
+            // hay que sumar en 50 del offset
+            anchor: [-(styles[0].getImage().getImage().width / 2) + 10 + styleOptions.offsetX, (styles[0].getImage().getImage().height / 2) + styleOptions.offsetY],
+            anchorOrigin: 'bottom-right',
+            offsetOrigin: 'bottom-left',
+            anchorXUnits: 'pixels',
+            anchorYUnits: 'pixels',
+            rotateWithView: false,
+            // imagen blanca
+            src: 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" width="' + styles[0].getImage().getImage().width / 2 + '" height="' + height + '"><rect width="' + styles[0].getImage().getImage().width / 2 + '" height="' + height + '" fill="rgba(255, 255, 255, 0.75)" stroke-width="0" stroke="rgba(0, 0, 0, 0.34)"/></svg>'),
+            // tamaño del cuadro blanco
+            size: [styles[0].getImage().getImage().width / 2, height]
+          }))
+        }))
       }
       return styles;
     };
