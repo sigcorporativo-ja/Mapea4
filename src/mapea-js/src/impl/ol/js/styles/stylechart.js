@@ -175,6 +175,8 @@ goog.require('M.impl.style.OLChart');
    * @inheritDoc
    */
   M.impl.style.Chart.prototype.updateFacadeOptions = function(options) {
+    options.rotateWithView = false;
+
     this.olStyleFn_ = (feature, resolution) => {
       if (!(feature instanceof ol.Feature)) {
         resolution = feature;
@@ -233,8 +235,8 @@ goog.require('M.impl.style.OLChart');
           return new M.impl.style.CentroidStyle({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
-              offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX, feature) : (Math.cos(angle) * (radius + radiusIncrement)),
-              offsetY: typeof label.offsetY === 'number' ? getValue(label.offsetY, feature) : (Math.sin(angle) * (radius + radiusIncrement)),
+              offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX, feature) : (Math.cos(angle) * (radius + radiusIncrement) + styleOptions.offsetX || 0),
+              offsetY: typeof label.offsetY === 'number' ? getValue(label.offsetY, feature) : (Math.sin(angle) * (radius + radiusIncrement) + styleOptions.offsetY || 0),
               textAlign: getValue(textAlign, feature),
               textBaseline: getValue(label.textBaseline, feature) || 'middle',
               stroke: label.stroke ? new ol.style.Stroke({
@@ -250,7 +252,62 @@ goog.require('M.impl.style.OLChart');
           });
         })).filter(style => style != null);
       }
-
+      else if (styleOptions.type === M.style.chart.types.BAR) {
+        let height = 0;
+        let acumSum = null;
+        styles = styles.concat(styleOptions.data.sort(function(num, numNext) {
+          return num - numNext;
+        }).map((dataValue, i) => {
+          let variable = styleOptions.variables.length === styleOptions.data.length ? styleOptions.variables[i] : styleOptions.variables[0];
+          let label = variable.label || {};
+          if (!variable.label) {
+            return null;
+          }
+          const getValue = M.impl.style.Simple.getValue;
+          let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
+          text = text === '0' ? '' : text;
+          if (M.utils.isNullOrEmpty(text)) {
+            return null;
+          }
+          let font = getValue(label.font, feature);
+          let sizeFont = 9;
+          if (M.utils.isNullOrEmpty(acumSum)) {
+            acumSum = (styles[0].getImage().getImage().height / 2) - 6;
+          }
+          else {
+            acumSum -= sizeFont + 6;
+          }
+          height = height + sizeFont + 6;
+          return new M.impl.style.CentroidStyle({
+            text: new ol.style.Text({
+              text: typeof text === 'string' ? `${text}` : '',
+              offsetY: acumSum + styleOptions.offsetY || 0,
+              offsetX: -(styles[0].getImage().getImage().width / 2) - 1 + styleOptions.offsetX || 0,
+              textBaseline: 'middle',
+              rotateWithView: false,
+              textAlign: 'center',
+              stroke: label.stroke ? new ol.style.Stroke({}) : undefined,
+              font: `9px ${font}`,
+              scale: typeof label.scale === 'number' ? getValue(label.scale, feature) : undefined,
+              fill: new ol.style.Fill({
+                color: variable.fillColor_
+              })
+            })
+          });
+        })).filter(style => style != null);
+        styles.push(new ol.style.Style({
+          image: new ol.style.Icon(({
+            anchor: [-(styles[0].getImage().getImage().width / 2) + 10 + styleOptions.offsetX, (styles[0].getImage().getImage().height / 2) + styleOptions.offsetY],
+            anchorOrigin: 'bottom-right',
+            offsetOrigin: 'bottom-left',
+            anchorXUnits: 'pixels',
+            anchorYUnits: 'pixels',
+            rotateWithView: false,
+            src: 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" width="' + styles[0].getImage().getImage().width / 2 + '" height="' + height + '"><rect width="' + styles[0].getImage().getImage().width / 2 + '" height="' + height + '" fill="rgba(255, 255, 255, 0.75)" stroke-width="0" stroke="rgba(0, 0, 0, 0.34)"/></svg>'),
+            size: [styles[0].getImage().getImage().width / 2, height]
+          }))
+        }));
+      }
       return styles;
     };
   };
