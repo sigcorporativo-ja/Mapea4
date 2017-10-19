@@ -272,14 +272,7 @@ goog.require('M.impl.style.OLChart');
             return null;
           }
           let font = getValue(label.font, feature);
-          let sizeFont = /^([1-9])[0-9]*px/.exec(font);
-          if (!M.utils.isNullOrEmpty(sizeFont)) {
-            sizeFont = sizeFont[0];
-            sizeFont = sizeFont.substring(0, sizeFont.length - 2);
-          }
-          else {
-            sizeFont = 9;
-          }
+          let sizeFont = 9;
           if (M.utils.isNullOrEmpty(acumSum)) {
             acumSum = (styles[0].getImage().getImage().height / 2) - 6;
           }
@@ -290,18 +283,15 @@ goog.require('M.impl.style.OLChart');
           return new M.impl.style.CentroidStyle({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
-              // hay que sumar lo del 50
               offsetY: acumSum + styleOptions.offsetY || 0,
               offsetX: -(styles[0].getImage().getImage().width / 2) - 1 + styleOptions.offsetX || 0,
               textBaseline: 'middle',
               rotateWithView: false,
               textAlign: 'center',
               stroke: label.stroke ? new ol.style.Stroke({}) : undefined,
-              //tener en cuenta que puede indicarse
-              font: /^([1-9])[0-9]*px ./.test(font) ? font : `9px ${font}`,
+              font: `9px ${font}`,
               scale: typeof label.scale === 'number' ? getValue(label.scale, feature) : undefined,
               fill: new ol.style.Fill({
-                //color: getValue(label.fill, feature) || 'black',
                 color: variable.fillColor_
               })
             })
@@ -309,16 +299,13 @@ goog.require('M.impl.style.OLChart');
         })).filter(style => style != null);
         styles.push(new ol.style.Style({
           image: new ol.style.Icon(({
-            // hay que sumar en 50 del offset
             anchor: [-(styles[0].getImage().getImage().width / 2) + 10 + styleOptions.offsetX, (styles[0].getImage().getImage().height / 2) + styleOptions.offsetY],
             anchorOrigin: 'bottom-right',
             offsetOrigin: 'bottom-left',
             anchorXUnits: 'pixels',
             anchorYUnits: 'pixels',
             rotateWithView: false,
-            // imagen blanca
             src: 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" width="' + styles[0].getImage().getImage().width / 2 + '" height="' + height + '"><rect width="' + styles[0].getImage().getImage().width / 2 + '" height="' + height + '" fill="rgba(255, 255, 255, 0.75)" stroke-width="0" stroke="rgba(0, 0, 0, 0.34)"/></svg>'),
-            // tamaño del cuadro blanco
             size: [styles[0].getImage().getImage().width / 2, height]
           }))
         }))
