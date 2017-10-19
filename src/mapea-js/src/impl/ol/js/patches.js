@@ -185,7 +185,10 @@ M.impl.patches.renderMultiLineStringGeometry_ = function(replayGroup, geometry, 
  * @param {ol.Feature} feature Feature.
  */
 M.impl.patches.drawGeometryCentroidAsFeature = function(replayGroup, geometry, style, feature) {
-  let centroid = M.impl.utils.getCentroidCoordinate(geometry);
+  let parser = new jsts.io.OL3Parser();
+  let jstsGeom = parser.read(feature.getGeometry());
+  let centroid = Object.values(jstsGeom.getCentroid().getCoordinates()[0]).filter(c => c != undefined);
+  // let centroid = M.impl.utils.getCentroidCoordinate(geometry);
   let geom = new ol.geom.Point(centroid);
   ol.renderer.vector.GEOMETRY_RENDERERS_[geom.getType()](replayGroup, geom, style, feature);
 };
