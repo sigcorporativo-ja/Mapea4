@@ -261,6 +261,6 @@ goog.require('M.geom');
       color: '#67af13',
       width: 1
     },
-    radius: 6
+    radius: 5
   };
 })();
