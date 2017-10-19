@@ -233,8 +233,8 @@ goog.require('M.impl.style.OLChart');
           return new M.impl.style.CentroidStyle({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
-              offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX, feature) : (Math.cos(angle) * (radius + radiusIncrement)),
-              offsetY: typeof label.offsetY === 'number' ? getValue(label.offsetY, feature) : (Math.sin(angle) * (radius + radiusIncrement)),
+              offsetX: (Math.cos(angle) * (radius + radiusIncrement)) + styleOptions.offsetX,
+              offsetY: (Math.sin(angle) * (radius + radiusIncrement)) + styleOptions.offsetY,
               textAlign: getValue(textAlign, feature),
               textBaseline: getValue(label.textBaseline, feature) || 'middle',
               stroke: label.stroke ? new ol.style.Stroke({
@@ -264,7 +264,7 @@ goog.require('M.impl.style.OLChart');
           }
           const getValue = M.impl.style.Simple.getValue;
           let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
-          text = styleOptions.type !== M.style.chart.types.BAR && text === '0' ? '' : text;
+          text = text === '0' ? '' : text;
           if (M.utils.isNullOrEmpty(text)) {
             return null;
           }
@@ -282,7 +282,7 @@ goog.require('M.impl.style.OLChart');
               text: typeof text === 'string' ? `${text}` : '',
               // offsetX: styles[0].getImage().getImage().width * -1 /*- radiusIncrement*/ ,
               // offsetY: acumSum,
-              offsetX: styleOptions.offsetX + styles[0].getImage().getImage().width * -1 + radiusIncrement,
+              offsetX: styleOptions.offsetX + styles[0].getImage().getImage().width * -1,
               offsetY: styleOptions.offsetY + acumSum,
               textAlign: 'left',
               textBaseline: 'top',
