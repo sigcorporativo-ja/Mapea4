@@ -235,8 +235,8 @@ goog.require('M.impl.style.OLChart');
           return new M.impl.style.CentroidStyle({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
-              offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX, feature) : (Math.cos(angle) * (radius + radiusIncrement)),
-              offsetY: typeof label.offsetY === 'number' ? getValue(label.offsetY, feature) : (Math.sin(angle) * (radius + radiusIncrement)),
+              offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX, feature) : (Math.cos(angle) * (radius + radiusIncrement) + styleOptions.offsetX || 0),
+              offsetY: typeof label.offsetY === 'number' ? getValue(label.offsetY, feature) : (Math.sin(angle) * (radius + radiusIncrement) + styleOptions.offsetY || 0),
               textAlign: getValue(textAlign, feature),
               textBaseline: getValue(label.textBaseline, feature) || 'middle',
               stroke: label.stroke ? new ol.style.Stroke({
@@ -256,12 +256,10 @@ goog.require('M.impl.style.OLChart');
         let height = 0;
         let acumSum = null;
         styles = styles.concat(styleOptions.data.sort(function(num, numNext) {
-          return num - numNext
+          return num - numNext;
         }).map((dataValue, i) => {
           let variable = styleOptions.variables.length === styleOptions.data.length ? styleOptions.variables[i] : styleOptions.variables[0];
           let label = variable.label || {};
-          let radius = label.radius ? label.radius : styleOptions.radius;
-          let radiusIncrement = typeof label.radiusIncrement === 'number' ? label.radiusIncrement : 3;
           if (!variable.label) {
             return null;
           }
@@ -308,7 +306,7 @@ goog.require('M.impl.style.OLChart');
             src: 'data:image/svg+xml;base64,' + btoa('<svg xmlns="http://www.w3.org/2000/svg" width="' + styles[0].getImage().getImage().width / 2 + '" height="' + height + '"><rect width="' + styles[0].getImage().getImage().width / 2 + '" height="' + height + '" fill="rgba(255, 255, 255, 0.75)" stroke-width="0" stroke="rgba(0, 0, 0, 0.34)"/></svg>'),
             size: [styles[0].getImage().getImage().width / 2, height]
           }))
-        }))
+        }));
       }
       return styles;
     };
@@ -406,4 +404,4 @@ goog.require('M.impl.style.OLChart');
   };
 
 
-})();;
+})();
