@@ -340,27 +340,6 @@ goog.require('M.style.quantification');
   };
 
   /**
-   * This function draw the image style on the vector context
-   * @private
-   * @function
-   * @api stable
-   */
-  M.style.Choropleth.prototype.drawImage_ = function(vectorContext, image, coordinatesXY, limits, coordXYText, style) {
-    image.onload = function() {
-      let startLimit = M.style.Choropleth.CALC_CANVAS_NUMBER_(limits[0]);
-      let endLimit = M.style.Choropleth.CALC_CANVAS_NUMBER_(limits[1]);
-      if (startLimit == 0) {
-        vectorContext.fillText("  x  <=  " + endLimit.toString(), coordXYText[0], coordXYText[1]);
-      }
-      else {
-        vectorContext.fillText(startLimit.toString() + "  <  x  <=  " + endLimit.toString(), coordXYText[0], coordXYText[1]);
-      }
-      vectorContext.drawImage(this, coordinatesXY[0], coordinatesXY[1]);
-    };
-    image.src = style.toImage();
-  };
-
-  /**
    * This function gets the numeric features values of layer which attribute
    * is equal to attribute specified by user
    * @function
