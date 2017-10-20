@@ -88,7 +88,7 @@ goog.provide('P.impl.control.ModifyFeature');
     let olStyle = olLayer.getStyle()()[0];
     let [olFill, olStroke] = [olStyle.getFill(), olStyle.getStroke()];
     let olStrokeClone = olStroke.clone();
-    olStrokeClone.setColor(chroma(olStroke.getColor()).alpha(0.33).css());
+    olStrokeClone.setColor(M.utils.getRgba(olStroke.getColor()));
     let image = new ol.style.Circle({
       fill: olFill || olStrokeClone,
       radius: 5,
