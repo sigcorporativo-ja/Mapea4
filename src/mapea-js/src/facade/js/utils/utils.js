@@ -912,4 +912,18 @@ goog.require('goog.color.alpha');
     }
     return style;
   };
+
+  /**
+   * This function returns a color as string with opacity
+   * @function
+   * @public
+   * @param {string}
+   * @param {number}
+   * @return {string}
+   * @api stable
+   */
+  M.utils.getRgba = function(color, opacity) {
+    return chroma(color).alpha(opacity).css();
+  };
+
 })();
