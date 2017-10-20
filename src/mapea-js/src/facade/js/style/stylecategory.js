@@ -154,7 +154,7 @@ goog.require('M.Style');
     // this.updateCanvasPromise_ = new Promise((success, fail) => {
     let maxRadius = 0;
     Object.keys(this.categoryStyles_).forEach(function(category) {
-      let radius;
+      let radius = 0;
       let icon = this.categoryStyles_[category].get('icon');
       if (!M.utils.isNullOrEmpty(icon)) {
         radius = icon.radius;
@@ -249,7 +249,7 @@ goog.require('M.Style');
       };
       image.src = style.toImage();
     }
-  }
+  };
 
   /**
    * TODO
@@ -277,7 +277,7 @@ goog.require('M.Style');
     }, this);
 
     callbackFn();
-  }
+  };
 
   /**
    * This function updates the style
