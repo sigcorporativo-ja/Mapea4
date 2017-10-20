@@ -1855,7 +1855,7 @@ Mx.style.Point.offsetorigin;
 
 
 /**
- * @type {string}
+ * @type {bool}
  * @api stable
  */
 Mx.style.Line.textPath;
@@ -1871,3 +1871,21 @@ Mx.style.Line.smooth;
  * @api stable
  */
 Mx.style.Point.anchororigin;
+
+/**
+ * @type {function}
+ * @api stable
+ */
+Mx.jsts.io.OL3Parser
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.Line.textoverflow;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.style.Line.minwidth;
