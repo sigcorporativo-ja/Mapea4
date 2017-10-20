@@ -130,7 +130,7 @@ goog.require('M.exception');
     var equals = false;
 
     if (obj instanceof M.layer.GeoJSON) {
-      equals = equals && (this.name === obj.name);
+      equals = this.name === obj.name;
       equals = equals && (this.extract === obj.extract);
     }
 
