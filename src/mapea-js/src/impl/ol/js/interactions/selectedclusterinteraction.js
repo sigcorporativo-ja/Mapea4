@@ -309,7 +309,8 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center) { 
     if (e > 1.0) {
       ol.Observable.unByKey(this.listenerKey_);
       this.overlayLayer_.setVisible(true);
-      this.overlayLayer_.changed();
+      // text on chart style not show
+      // this.overlayLayer_.changed();
       return;
     }
     // tell OL3 to continue postcompose animation
