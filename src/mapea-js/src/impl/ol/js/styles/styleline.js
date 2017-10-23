@@ -66,7 +66,9 @@ goog.require('ol.geometry.Cspline');
           rotateWithView: getValue(label.rotate, feature) || false,
           textOverflow: getValue(label.textoverflow, feature) || '',
           minWidth: getValue(label.minwidth, feature) || 0,
-          geometry: getValue(label.geometry, feature)
+          geometry: getValue(label.geometry, feature),
+          offsetX: M.impl.style.Simple.getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
+          offsetY: M.impl.style.Simple.getValue(options.label.offset ? options.label.offset[1] : undefined, feature),
         };
         let textPathStyle = new M.impl.style.TextPath(textPathConfig);
         if (!M.utils.isNullOrEmpty(label.stroke)) {
