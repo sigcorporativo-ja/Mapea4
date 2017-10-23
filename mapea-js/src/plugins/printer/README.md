@@ -16,4 +16,9 @@ mapajs.addPlugin(new M.plugin.Printer());
 
 ## Ejemplo funcional
 
-[JSFiddle](http://jsfiddle.net/sigcJunta/b6d4hd53/)
+[JSFiddle](http://jsfiddle.net/sigcJunta/b6d4hd53/)  
+
+## Observaciones  
+Los json que Mapea envía al servidor Geoprint deben cumplir con las siguientes condiciones:  
+* Los colores se indican en formato hexadecimal de seis dígitos, sin dígito para transparencia.
+* No contener atributos de estilo vacíos.
