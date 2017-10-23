@@ -917,8 +917,8 @@ goog.require('goog.color.alpha');
    * This function returns a color as string with opacity
    * @function
    * @public
-   * @param {string}
-   * @param {number}
+   * @param {string} color
+   * @param {number} opacity
    * @return {string}
    * @api stable
    */
