@@ -12,6 +12,15 @@ goog.provide('M.impl.layer.AnimatedCluster');
  * @api stable
  */
 M.impl.layer.AnimatedCluster = function(options = {}) {
+
+  /**
+   * TODO
+   * @private
+   * @type {ol.style.StyleFunction}
+   * @expose
+   */
+  this.styleCluster_ = options.style;
+
   // super
   goog.base(this, options);
 
@@ -230,4 +239,16 @@ M.impl.layer.AnimatedCluster.prototype.postanimate = function(e) {
     e.context.restore();
     this.clip_ = false;
   }
+};
+
+/**
+ * This function sets the map object of the layer
+ *
+ * @public
+ * @function
+ * @param {M.impl.Map} map
+ * @api stable
+ */
+M.impl.layer.AnimatedCluster.prototype.setStyle = function(style) {
+  goog.base(this, 'setStyle', this.styleCluster_);
 };
