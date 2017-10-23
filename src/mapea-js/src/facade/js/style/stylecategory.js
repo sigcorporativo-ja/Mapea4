@@ -13,8 +13,8 @@ goog.require('M.Style');
    * provided by the user
    * @constructor
    * @extends {M.Style}
-   * @param {String}
-   * @param {object}
+   * @param {String} attributeName
+   * @param {Map<String,M.Style>} categoryStyles
    * @api stable
    */
   M.style.Category = (function(attributeName, categoryStyles, options = {}) {
@@ -81,9 +81,9 @@ goog.require('M.Style');
    * This function set the AttributeName defined by user
    *
    * @function
+   * @public
    * @param {String} attributeName - newAttributeName is the newAttributeName specified by the user
    * @returns {M.style.Category}
-   * @public
    * @api stable
    */
   M.style.Category.prototype.setAttributeName = function(attributeName) {
@@ -96,17 +96,21 @@ goog.require('M.Style');
    * This function return an Array with the diferents Categories
    *
    * @function
+   * @public
    * @returns {Array<String>}
    * @api stable
    */
   M.style.Category.prototype.getCategories = function() {
     return this.categoryStyles_;
   };
+
   /**
-   * This function sets the style categories
+   * This function sets the object categories
+   *
    * @function
    * @public
-   * @param {object}
+   * @param {Map<String,M.style>} categories
+   * @return {M.style.styleCategory}
    * @api stable
    *
    */
@@ -120,6 +124,7 @@ goog.require('M.Style');
    * This function return the style of a specified Category defined by user
    *
    * @function
+   * @public
    * @param {String} string - string is the name of a category value
    * @returns {M.style}
    * @api stable
@@ -132,7 +137,8 @@ goog.require('M.Style');
    * This function set the style of a specified Category defined by user
    *
    * @function
-   * @param {String} string - string is the name of a category value
+   * @public
+   * @param {String} category - category is the name of a category value
    * @param {M.style.Simple} style - style is the new style to switch
    * @returns {M.style.Category}
    * @api stable
@@ -178,9 +184,9 @@ goog.require('M.Style');
    *
    * @function
    * @public
-   * @param {Array<Image>} images - array of style images
-   * @param {Array<number>} minMax - array of min radius and max radius
+   * @param {Array<Style>} styles - array of styles
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
+   * @param {Integer} maxRadius - number representing the maxRadius
    * @api stable
    */
   M.style.Category.prototype.drawGeometryToCanvas = function(styles, vectorContext, maxRadius) {
@@ -228,8 +234,8 @@ goog.require('M.Style');
 
   /**
    * This function draw the image style on the vector context
-   * @private
    * @function
+   * @private
    * @api stable
    */
   M.style.Category.prototype.drawImage_ = function(vectorContext, image, category, coordinateX, coordinateY, coordXText, coordYText) {
@@ -243,8 +249,9 @@ goog.require('M.Style');
   /**
    * This function updates the style
    *
-   * @private
    * @function
+   * @private
+   * @return {M.style.styleCategory}
    * @api stable
    */
   M.style.Category.prototype.update_ = function() {

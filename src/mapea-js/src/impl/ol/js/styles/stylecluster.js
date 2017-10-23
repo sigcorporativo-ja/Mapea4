@@ -1,5 +1,4 @@
 goog.provide('M.impl.style.Cluster');
-
 goog.require('M.impl.Style');
 goog.require('M.impl.style.CentroidStyle');
 goog.require('M.impl.layer.AnimatedCluster');
@@ -22,7 +21,7 @@ goog.require('ol.geom.convexhull');
    */
   M.impl.style.Cluster = function(options, optionsVendor) {
     /**
-     * TODO
+     *
      * @private
      * @type {M.layer.Vector}
      * @expose
@@ -32,7 +31,7 @@ goog.require('ol.geom.convexhull');
     goog.base(this, {});
 
     /**
-     * TODO
+     *
      * @private
      * @type {ol.layer.Vector}
      * @expose
@@ -40,7 +39,7 @@ goog.require('ol.geom.convexhull');
     this.oldOLLayer_ = null;
 
     /**
-     * TODO
+     *
      * @private
      * @type {Object}
      * @expose
@@ -48,7 +47,7 @@ goog.require('ol.geom.convexhull');
     this.optionsVendor_ = optionsVendor;
 
     /**
-     * TODO
+     *
      * @private
      * @type {Object}
      * @expose
@@ -56,7 +55,7 @@ goog.require('ol.geom.convexhull');
     this.options_ = options;
 
     /**
-     * TODO
+     *
      * @private
      * @type {M.impl.layer.AnimatedCluster}
      * @expose
@@ -64,7 +63,7 @@ goog.require('ol.geom.convexhull');
     this.clusterLayer_ = null;
 
     /**
-     * TODO
+     *
      * @private
      * @type {M.impl.interaction.SelectCluster}
      * @expose
@@ -72,7 +71,7 @@ goog.require('ol.geom.convexhull');
     this.selectClusterInteraction_ = null;
 
     /**
-     * TODO
+     *
      * @private
      * @type {ol.interaction.Hover}
      * @expose
@@ -84,8 +83,10 @@ goog.require('ol.geom.convexhull');
   /**
    * Apply the style cluster to layer vectorresolution
    *
-   * @public
    * @function
+   * @public
+   * @param {M.layer.Vector} layer layer where the user apply the cluster
+   * @param {M.Map} map
    * @api stable
    * @export
    */
@@ -107,8 +108,9 @@ goog.require('ol.geom.convexhull');
   /**
    * Apply the style cluster to layer vectorresolution
    *
-   * @private
    * @function
+   * @private
+   * @param {Array<Feature>} features features to clusterize
    * @api stable
    * @export
    */
@@ -149,6 +151,9 @@ goog.require('ol.geom.convexhull');
    * This function update a set of ranges  defined by user
    *
    * @function
+   * @public
+   * @param {Array<Object>} newRanges as new Ranges
+   * @return {M.style.Cluster}
    * @api stable
    */
   M.impl.style.Cluster.prototype.setRanges = function(newRanges) {
@@ -164,6 +169,13 @@ goog.require('ol.geom.convexhull');
    * This function set a specified range
    *
    * @function
+   * @public
+   * @param {number} min as range minimal value to be overwritten
+   * @param {number} max as range max value to be overwritten
+   * @param {number} newRange as the new range
+   * @param {M.layer.Vector} layer is the Cluster layer
+   * @param {M.style.Cluster} cluster as the cluster to update his range
+   * @return {M.style.Cluster}
    * @api stable
    */
   M.impl.style.Cluster.prototype.updateRangeImpl = function(min, max, newRange, layer, cluster) {
@@ -181,8 +193,14 @@ goog.require('ol.geom.convexhull');
    * This function set if layer must be animated
    *
    * @function
+   * @public
+   * @param {boolean} animated defining if layer must be animated
+   * @param {M.layer.Vector} layer is the Cluster layer
+   * @param {M.style.Cluster} Cluster is the Cluster being chamge the animation
+   * @return {M.style.Cluster}
    * @api stable
    */
+
   M.impl.style.Cluster.prototype.setAnimated = function(animated, layer, cluster) {
     cluster.options_.animated = animated;
     if (animated === false) {
@@ -197,8 +215,8 @@ goog.require('ol.geom.convexhull');
   /**
    * Add selected interaction and layer to see the features of cluster
    *
-   * @private
    * @function
+   * @private
    * @api stable
    */
   M.impl.style.Cluster.prototype.addSelectInteraction_ = function() {
@@ -209,31 +227,16 @@ goog.require('ol.geom.convexhull');
       pointRadius: this.optionsVendor_.distanceSelectFeatures,
       animate: true,
       style: this.clusterStyleFn_.bind(this)
-      // style: function(feature, resolution) {
-      //   let style = this.clusterStyleFn_(feature, resolution, true);
-      //   if (feature.get('features').length < 2) {
-      //     feature = feature.get('features')[0];
-      //     style = this.layer_.getStyle().getOldStyle().getImpl().olStyleFn_(feature, resolution);
-      //   }
-      //   return style;
-      // }.bind(this),
-      // style: function(f, res) {
-      //   var cluster = f.get('features');
-      //   // cluster style
-      //   if (cluster && cluster.length > 1) {
-      //     return this.clusterStyleFn_(f, res, true);
-      //   }
-      // }.bind(this)
     });
     this.selectClusterInteraction_.on('select', this.selectClusterFeature_, this);
     map.getMapImpl().addInteraction(this.selectClusterInteraction_);
   };
 
   /**
-   * TODO
+   * Remove selected interaction and layer to see the features of cluster
    *
-   * @private
    * @function
+   * @private
    * @api stable
    */
   M.impl.style.Cluster.prototype.removeSelectInteraction_ = function() {
@@ -243,8 +246,10 @@ goog.require('ol.geom.convexhull');
   /**
    * Add cover interaction and layer to see the cover
    *
-   * @private
    * @function
+   * @private
+   * @param {Array<Features>} features
+   * @param {M.evt.EventsManager} evt
    * @api stable
    */
   M.impl.style.Cluster.prototype.hoverFeatureFn_ = function(features, evt) {
@@ -276,9 +281,10 @@ goog.require('ol.geom.convexhull');
 
   /**
    * Add cover interaction and layer to see the cover
-   *
-   * @private
    * @function
+   * @private
+   * @param {Array<Features>} features
+   * @param {M.evt.EventsManager} evt
    * @api stable
    */
   M.impl.style.Cluster.prototype.leaveFeatureFn_ = function(features, evt) {
@@ -290,8 +296,8 @@ goog.require('ol.geom.convexhull');
   /**
    * Add cover interaction and layer to see the cover
    *
-   * @private
    * @function
+   * @private
    * @api stable
    */
   M.impl.style.Cluster.prototype.addCoverInteraction_ = function() {
@@ -302,8 +308,8 @@ goog.require('ol.geom.convexhull');
   /**
    * Add cover interaction and layer to see the cover
    *
-   * @private
    * @function
+   * @private
    * @api stable
    */
   M.impl.style.Cluster.prototype.removeCoverInteraction_ = function() {
@@ -315,8 +321,12 @@ goog.require('ol.geom.convexhull');
    * This function is a style function to cluster
    * Get a style from ranges of user or default ranges
    *
-   * @private
    * @function
+   * @private
+   * @param {M.Feature} feature
+   * @param {float} resolution
+   * @param {M.impl.interaction.SelectCluster} selected
+   * @return {object}
    * @api stable
    * @export
    */
@@ -358,8 +368,9 @@ goog.require('ol.geom.convexhull');
   /**
    * This function return a default ranges to cluster
    *
-   * @private
    * @function
+   * @private
+   * @return {Array<Ranges>}
    * @api stable
    * @export
    */
@@ -385,30 +396,16 @@ goog.require('ol.geom.convexhull');
    * the first feature is cluster (evt.selected)
    *This feature has a propertie called (features), this
    *
-   * @private
    * @function
+   * @private
    * @api stable
    */
-  M.impl.style.Cluster.prototype.selectClusterFeature_ = function(evt) {
-    // console.log(evt);
-    // if (!M.utils.isNullOrEmpty(evt.selected)) {
-    //   let selectedFeatures = evt.selected[0].get('features');
-    //   if (!M.utils.isNullOrEmpty(selectedFeatures)) {
-    //     let feature = evt.selected[0].getProperties().features[0];
-    //     let features = [M.impl.Feature.olFeature2Facade(feature)];
-    //     let layerImpl = this.mLayer.getImpl();
-    //     if (M.utils.isFunction(layerImpl.selectFeatures)) {
-    //       layerImpl.selectFeatures(features, feature.getGeometry().getCoordinates(), evt);
-    //     }
-    //     this.mLayer.fire(M.evt.SELECT_FEATURES, [features, evt]);
-    // }
-  };
+  M.impl.style.Cluster.prototype.selectClusterFeature_ = function(evt) {};
 
   /**
-   * remove style cluster
-   *
-   * @public
+   * This function remove the style to specified layer
    * @function
+   * @public
    * @api stable
    */
   M.impl.style.Cluster.prototype.unapply = function() {
@@ -426,18 +423,11 @@ goog.require('ol.geom.convexhull');
   };
 
   /**
-   * TODO
-   *
+   * This function
    * @public
+   * @param {object} canvas
    * @function
    * @api stable
    */
-  M.impl.style.Cluster.prototype.updateCanvas = function(canvas) {
-    // let canvasSize = this.getCanvasSize();
-    // let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
-    //   size: canvasSize
-    // });
-    // vectorContext.setStyle(this.olStyleFn_()[0]);
-    // this.drawGeometryToCanvas(vectorContext);
-  };
+  M.impl.style.Cluster.prototype.updateCanvas = function(canvas) {};
 })();

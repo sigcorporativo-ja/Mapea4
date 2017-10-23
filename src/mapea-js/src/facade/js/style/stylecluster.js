@@ -33,21 +33,22 @@ goog.require('M.Style');
   goog.inherits(M.style.Cluster, M.Style);
 
   /**
-   * This function apply the style to specified layer
-   *
+   * This function unapply the style to specified layer
    * @function
+   * @public
+   * @param {M.layer.Vector} layer layer to unapply his style
    * @api stable
    */
   M.style.Cluster.prototype.unapply = function(layer) {
-    this.getImpl().unapply(layer);
+    this.getImpl().unapply();
   };
 
   /**
-   * This function apply style
+   * This function apply style to specified layer
    *
-   * @public
-   * @param {M.layer.Vector} layer - Layer to apply the styles
    * @function
+   * @public
+   * @param {M.layer.Vector} layer - Layer to apply the style
    * @api stable
    */
   M.style.Cluster.prototype.apply = function(layer) {
@@ -63,8 +64,8 @@ goog.require('M.Style');
 
   /**
    * This function gets the old style of layer
-   * @public
    * @function
+   * @public
    * @return {M.Style} the old style of layer
    * @api stable
    */
@@ -75,9 +76,9 @@ goog.require('M.Style');
   /**
    * This function return a set of ranges defined by user
    *
-   * @public
    * @function
-   * @return {Array<number>} ranges stablished by user
+   * @public
+   * @return {Array<Object>} ranges stablished by user
    * @api stable
    */
   M.style.Cluster.prototype.getRanges = function() {
@@ -87,9 +88,10 @@ goog.require('M.Style');
   /**
    * This function update a set of ranges  defined by user
    *
-   * @public
    * @function
-   * @param {Array<number>} newRanges
+   * @public
+   * @param {Array<Object>} newRanges as new Ranges
+   * @return {M.style.Cluster}
    * @api stable
    */
   M.style.Cluster.prototype.setRanges = function(newRanges) {
@@ -102,10 +104,10 @@ goog.require('M.Style');
   /**
    * This function return a specified range
    *
-   * @public
-   * @function
+   * @function   * @public
    * @param {number} min as minimal value in the interval
    * @param {number} max as max value in the interval
+   * @return {Object}
    * @api stable
    */
   M.style.Cluster.prototype.getRange = function(min, max) {
@@ -115,11 +117,12 @@ goog.require('M.Style');
   /**
    * This function set a specified range
    *
-   * @public
    * @function
+   * @public
    * @param {number} min as range minimal value to be overwritten
    * @param {number} max as range max value to be overwritten
    * @param {number} newRange as the new range
+   * @return {M.style.Cluster}
    * @api stable
    */
   M.style.Cluster.prototype.updateRange = function(min, max, newRange) {
@@ -132,9 +135,10 @@ goog.require('M.Style');
   /**
    * This function set if layer must be animated
    *
-   * @public
    * @function
+   * @public
    * @param {boolean} animated defining if layer must be animated
+   * @return {M.style.Cluster}
    * @api stable
    */
   M.style.Cluster.prototype.setAnimated = function(animated) {
@@ -144,8 +148,8 @@ goog.require('M.Style');
   /**
    * This function return if layer is animated
    *
-   * @public
    * @function
+   * @public
    * @return {boolean} A flag indicating if layer is currently being animated
    * @api stable
    */
@@ -156,8 +160,7 @@ goog.require('M.Style');
   /**
    * This function returns data url to canvas
    *
-   * @protected
-   * @function
+   * @function   * @protected
    * @return {String} data url to canvas
    */
   M.style.Cluster.prototype.toImage = function() {
