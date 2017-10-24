@@ -328,6 +328,7 @@ goog.require('M.style.Point');
       coordXText = maxImage.width + 5;
       coordYText = maxImage.height / 2;
       if (/^https?\:\/\//i.test(maxImage.src)) {
+        this.canvas_.height = 80 + 40 + 10;
         vectorContext.fillText(`  max: ${maxValue}`, 85, 40);
         vectorContext.drawImage(maxImage, 0, 0, 80, 80);
       }
