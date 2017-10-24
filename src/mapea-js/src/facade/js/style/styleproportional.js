@@ -238,6 +238,7 @@ goog.require('M.style.Point');
     this.update_();
     return this;
   };
+
   /**
    * This function updates the canvas of style
    *
@@ -246,67 +247,104 @@ goog.require('M.style.Point');
    * @api stable
    */
   M.style.Proportional.prototype.updateCanvas = function() {
-    if (!M.utils.isNullOrEmpty(this.layer_)) {
-      let style = !M.utils.isNullOrEmpty(this.style_) ? this.style_ : this.layer_.getStyle();
-      if (style instanceof M.style.Simple) {
-        let featureStyle = style.clone();
-        if (!(featureStyle instanceof M.style.Point)) {
-          featureStyle = new M.style.Point(featureStyle.options_);
+    this.updateCanvasPromise_ = new Promise((success, fail) => {
+      if (!M.utils.isNullOrEmpty(this.layer_)) {
+        let style = !M.utils.isNullOrEmpty(this.style_) ? this.style_ : this.layer_.getStyle();
+
+        if (style instanceof M.style.Simple) {
+          let featureStyle = style.clone();
+          if (!(featureStyle instanceof M.style.Point)) {
+            featureStyle = new M.style.Point(featureStyle.options_);
+          }
+          let sizeAttribute = M.style.Proportional.getSizeAttribute_(featureStyle);
+
+          let styleMax = featureStyle.clone();
+          let styleMin = featureStyle.clone();
+          let maxRadius = this.getMaxRadius();
+          let minRadius = this.getMinRadius();
+          styleMax.set(sizeAttribute, maxRadius);
+          styleMin.set(sizeAttribute, minRadius);
+
+          this.loadCanvasImage_(maxRadius, styleMax.toImage(), (canvasImageMax) => {
+            this.loadCanvasImage_(minRadius, styleMin.toImage(), (canvasImageMin) => {
+              this.drawGeometryToCanvas(canvasImageMax, canvasImageMin, success);
+            });
+          });
         }
-        let sizeAttribute = M.style.Proportional.getSizeAttribute_(featureStyle);
-        let estiloMin = featureStyle.clone();
-        estiloMin.set(sizeAttribute, this.minRadius_);
-        let imagenMin = estiloMin.toImage();
-        let estiloMax = featureStyle.clone();
-        estiloMax.set(sizeAttribute, this.maxRadius_);
-        let imagenMax = estiloMax.toImage();
-        let vectorContext = this.canvas_.getContext('2d');
-        vectorContext.canvas.setAttribute('height', 80 * 2);
-        this.drawGeometryToCanvas([imagenMin, imagenMax], [this.getMinRadius(), this.getMaxRadius()], vectorContext);
+        else if (!M.utils.isNullOrEmpty(style)) {
+          this.canvas_ = style.canvas_;
+          success();
+        }
       }
-      else if (!M.utils.isNullOrEmpty(style)) {
-        this.canvas_ = style.canvas_;
-      }
-    }
+    });
   };
 
   /**
-   * This function draw the geometry on style canvas
+   * TODO
    *
    * @function
    * @public
-   * @param {Array<Image>} images - array of style images
-   * @param {Array<number>} minMax - array of min radius and max radius
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
    * @api stable
    */
-  M.style.Proportional.prototype.drawGeometryToCanvas = function(images, minMax, vectorContext) {
-    let radius = 0;
-    let coordinateX = 0;
-    let coordinateY = 0;
-    let coordXText = minMax[1] * 2 + 10;
-    let coordYText = 0;
-    for (let i = images.length - 1; i > -1; i--) {
-      radius = minMax[i];
-      let imagen = images[i];
-      var image = new Image();
-      coordYText = coordinateY + radius + 5;
-      coordinateX = minMax[1] - radius;
-      image.onload = function(vectorContext_, minMax, coordinateX, coordinateY, coordXText, coordYText) {
-        if (i == 0) {
-          vectorContext_.fillText("  min: " + minMax[i], coordXText, coordYText);
-        }
-        else {
-          vectorContext_.fillText("  max: " + minMax[i], coordXText, coordYText);
-        }
-        vectorContext_.drawImage(this, coordinateX, coordinateY);
-      }.bind(image, vectorContext, minMax, coordinateX, coordinateY, coordXText, coordYText);
-      image.src = imagen;
-      coordinateY = coordinateY + radius * 2 + 9;
-    }
-    vectorContext.canvas.height = coordinateY + 10;
+  M.style.Proportional.prototype.loadCanvasImage_ = function(value, url, callbackFn) {
+    let image = new Image();
+    image.crossOrigin = 'Anonymous';
+    image.onload = function() {
+      callbackFn({
+        'image': this,
+        'value': value
+      });
+    };
+    image.onerror = function() {
+      callbackFn({
+        'value': value
+      });
+    };
+    image.src = url;
   };
 
+  /**
+   * TODO
+   *
+   * @function
+   * @public
+   * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
+   * @api stable
+   */
+  M.style.Proportional.prototype.drawGeometryToCanvas = function(canvasImageMax, canvasImageMin, callbackFn) {
+    let maxImage = canvasImageMax['image'];
+    let minImage = canvasImageMin['image'];
+
+    this.canvas_.height = maxImage.height + 5 + minImage.height + 5;
+    let vectorContext = this.canvas_.getContext('2d');
+    vectorContext.textBaseline = "middle";
+
+    // MAX VALUE
+    let maxValue = canvasImageMax['value'];
+    let coordXText = 0;
+    let coordYText = 0;
+    if (!M.utils.isNullOrEmpty(maxImage)) {
+      coordXText = maxImage.width + 5;
+      coordYText = maxImage.height / 2;
+      vectorContext.fillText(`  max: ${maxValue}`, coordXText, coordYText);
+      vectorContext.drawImage(maxImage, 0, 0);
+    }
+
+    // MIN VALUE
+    let minValue = canvasImageMin['value'];
+    if (!M.utils.isNullOrEmpty(minImage)) {
+      let coordinateX = 0;
+      if (!M.utils.isNullOrEmpty(maxImage)) {
+        coordinateX = (maxImage.width / 2) - (minImage.width / 2);
+      }
+      let coordinateY = maxImage.height + 5;
+      coordYText = coordinateY + (minImage.height / 2);
+      vectorContext.fillText(`  min: ${minValue}`, coordXText, coordYText);
+      vectorContext.drawImage(minImage, coordinateX, coordinateY);
+    }
+    callbackFn();
+  };
 
   /**
    * This function updates the style

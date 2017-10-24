@@ -52,7 +52,7 @@ goog.require('M.impl.style.PointFontSymbol');
         // let [size, scale] = [imageStyle.getSize(), imageStyle.getScale()];
         // ctx.drawImage(imageStyle.getImage(), 0, 0, ctx.canvas.height, ctx.canvas.width);
         if (!M.utils.isNullOrEmpty(imageStyle)) {
-          image = imageStyle.getImage().src;
+          image = imageStyle.getSrc();
         }
       }
     }

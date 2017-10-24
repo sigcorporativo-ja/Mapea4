@@ -157,93 +157,85 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Category.prototype.updateCanvas = function() {
-    let maxRadius = 0;
-    Object.keys(this.categoryStyles_).forEach(function(category) {
-      let radius;
-      let icon = this.categoryStyles_[category].get('icon');
-      if (!M.utils.isNullOrEmpty(icon)) {
-        radius = icon.radius;
-      }
-      else {
-        radius = this.categoryStyles_[category].get('radius');
-      }
-      maxRadius = maxRadius < radius ? radius : maxRadius;
-      if (maxRadius < 25) {
-        maxRadius = 25;
-      }
-    }, this);
-    let vectorContext = this.canvas_.getContext('2d');
-    let styles = Object.keys(this.categoryStyles_).map((categoryName) =>
-      ([categoryName, this.categoryStyles_[categoryName].toImage(), this.categoryStyles_[categoryName]]));
-    vectorContext.canvas.height = 80 * styles.length;
-    this.drawGeometryToCanvas(styles, vectorContext, maxRadius);
+    let canvasImages = [];
+    this.updateCanvasPromise_ = new Promise((success, fail) =>
+      this.loadCanvasImages_(0, canvasImages, success));
   };
 
   /**
-   * This function draw the geometry on style canvas
+   * TODO
+   *
+   * @function
+   * @private
+   * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
+   */
+  M.style.Category.prototype.loadCanvasImages_ = function(currentIndex, canvasImages, callbackFn) {
+    let categories = this.getCategories();
+    let categoryNames = Object.keys(categories);
+
+    // base case
+    if (currentIndex === categoryNames.length) {
+      this.drawGeometryToCanvas(canvasImages, callbackFn);
+    }
+    // recursive case
+    else {
+      let category = categoryNames[currentIndex];
+      let style = this.getStyleForCategory(category);
+      let image = new Image();
+      image.crossOrigin = 'Anonymous';
+      let scope_ = this;
+      image.onload = function() {
+        canvasImages.push({
+          'image': this,
+          'categoryName': category
+        });
+        scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
+      };
+      image.onerror = function() {
+        canvasImages.push({
+          'categoryName': category
+        });
+        scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
+      };
+      image.src = style.toImage();
+    }
+  };
+
+  /**
+   * TODO
    *
    * @function
    * @public
-   * @param {Array<Style>} styles - array of styles
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
-   * @param {Integer} maxRadius - number representing the maxRadius
    * @api stable
    */
-  M.style.Category.prototype.drawGeometryToCanvas = function(styles, vectorContext, maxRadius) {
-    let coordinateX = 0;
-    let coordinateY = 0;
-    let coordXText = maxRadius * 2 + 10;
-    let coordYText = 0;
-    styles.forEach(function(category) {
-      let radius = null;
-      let style = category[2];
-      var image = new Image();
-      if (style instanceof M.style.Point) {
-        let icon = style.get('icon');
-        if (!M.utils.isNullOrEmpty(icon)) {
-          radius = icon.radius;
-        }
-        else {
-          radius = style.get('radius');
-        }
-        if (M.utils.isNullOrEmpty(radius)) {
-          radius = 25;
-        }
-        coordYText = coordinateY + radius + 5;
-        coordinateX = maxRadius - radius;
-        this.drawImage_(vectorContext, image, category, coordinateX, coordinateY, coordXText, coordYText);
-        coordinateY = coordinateY + radius * 2 + 9;
-      }
-      if (style instanceof M.style.Line) {
-        radius = style.canvas_.height;
-        coordXText = style.canvas_.width + 8;
-        coordYText = coordinateY + radius / 2;
-        this.drawImage_(vectorContext, image, category, coordinateX, coordinateY, coordXText, coordYText);
-        coordinateY = coordinateY + radius + 5;
-      }
-      if (style instanceof M.style.Polygon) {
-        radius = style.canvas_.height;
-        coordXText = style.canvas_.width + 10;
-        coordYText = coordinateY + radius / 2 + 4;
-        this.drawImage_(vectorContext, image, category, coordinateX, coordinateY, coordXText, coordYText);
-        coordinateY = coordinateY + radius + 5;
-      }
-    }, this);
-    vectorContext.canvas.height = coordinateY + 10;
-  };
+  M.style.Category.prototype.drawGeometryToCanvas = function(canvasImages, callbackFn) {
+    let heights = canvasImages.map(canvasImage => canvasImage['image'].height);
+    let widths = canvasImages.map(canvasImage => canvasImage['image'].width);
 
-  /**
-   * This function draw the image style on the vector context
-   * @function
-   * @private
-   * @api stable
-   */
-  M.style.Category.prototype.drawImage_ = function(vectorContext, image, category, coordinateX, coordinateY, coordXText, coordYText) {
-    image.onload = function() {
-      vectorContext.drawImage(this, coordinateX, coordinateY);
-      vectorContext.fillText(category[0], coordXText, coordYText);
-    };
-    image.src = category[1];
+    let vectorContext = this.canvas_.getContext('2d');
+    vectorContext.canvas.height = heights.reduce((acc, h) => acc + h + 5);
+    vectorContext.textBaseline = "middle";
+
+    let maxWidth = Math.max.apply(widths, widths);
+    canvasImages.forEach((canvasImage, index) => {
+      let image = canvasImage['image'];
+      let categoryName = canvasImage['categoryName'];
+      let coordinateY = 0;
+      let prevHeights = heights.slice(0, index);
+      if (!M.utils.isNullOrEmpty(prevHeights)) {
+        coordinateY = prevHeights.reduce((acc, h) => acc + h + 5);
+        coordinateY += 5;
+      }
+      let imageHeight = 0;
+      if (!M.utils.isNullOrEmpty(image)) {
+        imageHeight = image.height;
+        vectorContext.drawImage(image, 0, coordinateY);
+      }
+      vectorContext.fillText(categoryName, maxWidth + 5, coordinateY + (imageHeight / 2));
+    }, this);
+
+    callbackFn();
   };
 
   /**

@@ -194,33 +194,16 @@ goog.require('M.style.quantification');
 
   M.style.Choropleth.prototype.updateCanvas = function() {
     if (!M.utils.isNullOrEmpty(this.styles_)) {
-      let vectorContext = this.canvas_.getContext('2d');
-      let styles = this.styles_;
-      let coordinates = [];
-      let maxRadius = 0;
-      if (this.styles_.some(style => style instanceof M.style.Point)) {
-        styles.forEach(function(style) {
-          let icon = style.get('icon');
-          let radius;
-          if (!M.utils.isNullOrEmpty(icon)) {
-            radius = icon.radius;
-          }
-          else {
-            radius = style.get('radius');
-          }
-          maxRadius = radius < maxRadius ? maxRadius : radius;
-        });
-      }
-      if (maxRadius < 25) {
-        maxRadius = 25;
-      }
       if (this.breakPoints_.length > 0) {
         coordinates = [[0, this.breakPoints_[0]]];
         for (let i = 1; i < this.breakPoints_.length; i++) {
           coordinates.push([this.breakPoints_[i - 1], this.breakPoints_[i]]);
         }
-        vectorContext.canvas.height = 40 * styles.length;
-        this.drawGeometryToCanvas(styles, coordinates, vectorContext, maxRadius);
+
+        let vectorContext = this.canvas_.getContext('2d');
+        let canvasImages = [];
+        this.updateCanvasPromise_ = new Promise((success, fail) =>
+          this.loadCanvasImages_(0, canvasImages, success));
       }
     }
   };
@@ -228,75 +211,87 @@ goog.require('M.style.quantification');
   /**
    * TODO
    *
-   * @public
    * @function
-   * @api stable
+   * @private
+   * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
    */
-  M.style.Choropleth.prototype.drawGeometryToCanvas = function(styles, coordinates, vectorContext, maxRadius) {
-    let startLimit = null;
-    let endLimit = null;
-    let coordinateX = 0;
-    let coordinateY = 0;
-    let coordYText = 0;
-    let coordXText = maxRadius * 2 + 10;
-    let radius = null;
-    for (let i = 0; i < styles.length; i++) {
-      startLimit = coordinates[i][0];
-      endLimit = coordinates[i][1];
-      let image = new Image();
-      if (styles[i] instanceof M.style.Point) {
-        let icon = styles[i].get('icon');
-        if (!M.utils.isNullOrEmpty(icon)) {
-          radius = icon.radius;
-        }
-        else {
-          radius = styles[i].get('radius');
-        }
-        if ((M.utils.isNullOrEmpty(radius))) {
-          radius = 25;
-        }
-        coordYText = coordinateY + radius + 5;
-        coordinateX = maxRadius - radius;
-        this.drawImage_(vectorContext, image, [coordinateX, coordinateY], [startLimit, endLimit], [coordXText, coordYText], styles[i]);
-        coordinateY = coordinateY + radius * 2 + 9;
-      }
-      if (styles[i] instanceof M.style.Line) {
-        radius = styles[i].canvas_.height;
-        coordXText = styles[i].canvas_.width + 8;
-        coordYText = coordinateY + radius / 2;
-        this.drawImage_(vectorContext, image, [coordinateX, coordinateY], [startLimit, endLimit], [coordXText, coordYText], styles[i]);
-        coordinateY = coordinateY + radius + 5;
-      }
-      if (styles[i] instanceof M.style.Polygon) {
-        radius = styles[i].canvas_.height;
-        coordXText = styles[i].canvas_.width + 10;
-        coordYText = coordinateY + radius / 2 + 4;
-        this.drawImage_(vectorContext, image, [coordinateX, coordinateY], [startLimit, endLimit], [coordXText, coordYText], styles[i]);
-        coordinateY = coordinateY + radius + 5;
-      }
+  M.style.Choropleth.prototype.loadCanvasImages_ = function(currentIndex, canvasImages, callbackFn) {
+    // base case
+    if (currentIndex === this.styles_.length) {
+      this.drawGeometryToCanvas(canvasImages, callbackFn);
     }
-    vectorContext.canvas.height = coordinateY + 10;
+    // recursive case
+    else {
+      let startLimit = -1;
+      if (currentIndex > 0) {
+        startLimit = this.breakPoints_[currentIndex - 1];
+      }
+      let endLimit = this.breakPoints_[currentIndex];
+      let image = new Image();
+      image.crossOrigin = 'Anonymous';
+      let scope_ = this;
+      image.onload = function() {
+        canvasImages.push({
+          'image': this,
+          'startLimit': M.style.Choropleth.CALC_CANVAS_NUMBER_(startLimit),
+          'endLimit': M.style.Choropleth.CALC_CANVAS_NUMBER_(endLimit)
+        });
+        scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
+      };
+      image.onerror = function() {
+        canvasImages.push({
+          'startLimit': M.style.Choropleth.CALC_CANVAS_NUMBER_(startLimit),
+          'endLimit': M.style.Choropleth.CALC_CANVAS_NUMBER_(endLimit)
+        });
+        scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
+      };
+      image.src = this.styles_[currentIndex].toImage();
+    }
   };
 
   /**
-   * This function draw the image style on the vector context
-   * @private
+   * TODO
+   *
    * @function
+   * @public
+   * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
    * @api stable
    */
-  M.style.Choropleth.prototype.drawImage_ = function(vectorContext, image, coordinatesXY, limits, coordXYText, style) {
-    image.onload = function() {
-      let startLimit = M.style.Choropleth.CALC_CANVAS_NUMBER_(limits[0]);
-      let endLimit = M.style.Choropleth.CALC_CANVAS_NUMBER_(limits[1]);
-      if (startLimit == 0) {
-        vectorContext.fillText("  x  <=  " + endLimit.toString(), coordXYText[0], coordXYText[1]);
+  M.style.Choropleth.prototype.drawGeometryToCanvas = function(canvasImages, callbackFn) {
+    let heights = canvasImages.map(canvasImage => canvasImage['image'].height);
+    let widths = canvasImages.map(canvasImage => canvasImage['image'].width);
+
+    let vectorContext = this.canvas_.getContext('2d');
+    vectorContext.canvas.height = heights.reduce((acc, h) => acc + h + 5);
+    vectorContext.textBaseline = "middle";
+
+    let maxWidth = Math.max.apply(widths, widths);
+
+    canvasImages.forEach((canvasImage, index) => {
+      let image = canvasImage['image'];
+      let startLimit = canvasImage['startLimit'];
+      let endLimit = canvasImage['endLimit'];
+
+      let coordinateY = 0;
+      let prevHeights = heights.slice(0, index);
+      if (!M.utils.isNullOrEmpty(prevHeights)) {
+        coordinateY = prevHeights.reduce((acc, h) => acc + h + 5);
+        coordinateY += 5;
+      }
+      let imageHeight = 0;
+      if (!M.utils.isNullOrEmpty(image)) {
+        imageHeight = image.height;
+        vectorContext.drawImage(image, 0, coordinateY);
+      }
+      if (startLimit < 0) {
+        vectorContext.fillText(` x  <=  ${endLimit}`, maxWidth + 5, coordinateY + (imageHeight / 2));
       }
       else {
-        vectorContext.fillText(startLimit.toString() + "  <  x  <=  " + endLimit.toString(), coordXYText[0], coordXYText[1]);
+        vectorContext.fillText(`${startLimit} <  x  <=  ${endLimit}`, maxWidth + 5, coordinateY + (imageHeight / 2));
       }
-      vectorContext.drawImage(this, coordinatesXY[0], coordinatesXY[1]);
-    };
-    image.src = style.toImage();
+    }, this);
+
+    callbackFn();
   };
 
   /**
