@@ -195,12 +195,6 @@ goog.require('M.style.quantification');
   M.style.Choropleth.prototype.updateCanvas = function() {
     if (!M.utils.isNullOrEmpty(this.styles_)) {
       if (this.breakPoints_.length > 0) {
-        coordinates = [[0, this.breakPoints_[0]]];
-        for (let i = 1; i < this.breakPoints_.length; i++) {
-          coordinates.push([this.breakPoints_[i - 1], this.breakPoints_[i]]);
-        }
-
-        let vectorContext = this.canvas_.getContext('2d');
         let canvasImages = [];
         this.updateCanvasPromise_ = new Promise((success, fail) =>
           this.loadCanvasImages_(0, canvasImages, success));

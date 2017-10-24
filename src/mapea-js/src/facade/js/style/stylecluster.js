@@ -104,7 +104,8 @@ goog.require('M.Style');
   /**
    * This function return a specified range
    *
-   * @function   * @public
+   * @function
+   * @public
    * @param {number} min as minimal value in the interval
    * @param {number} max as max value in the interval
    * @return {Object}

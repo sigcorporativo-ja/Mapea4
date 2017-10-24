@@ -108,7 +108,6 @@ goog.require('M.impl.Control');
    * @api stable
    */
   M.impl.control.LayerSwitcher.prototype.renderPanel = function() {
-    let this_ = this;
     M.control.LayerSwitcher.getTemplateVariables_(this.facadeMap_).then(templateVars =>
       M.template.compile(M.control.LayerSwitcher.TEMPLATE, {
         'jsonp': true,

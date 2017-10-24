@@ -158,7 +158,7 @@ goog.require('M.exception');
         legendUrl.then(url => {
           layerVarTemplate['legend'] = url;
           success(layerVarTemplate);
-        })
+        });
       }
       else {
         layerVarTemplate['legend'] = legendUrl;
