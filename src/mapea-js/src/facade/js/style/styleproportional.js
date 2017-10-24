@@ -327,8 +327,14 @@ goog.require('M.style.Point');
     if (!M.utils.isNullOrEmpty(maxImage)) {
       coordXText = maxImage.width + 5;
       coordYText = maxImage.height / 2;
-      vectorContext.fillText(`  max: ${maxValue}`, coordXText, coordYText);
-      vectorContext.drawImage(maxImage, 0, 0);
+      if (/^https?\:\/\//i.test(maxImage.src)) {
+        vectorContext.fillText(`  max: ${maxValue}`, 85, 40);
+        vectorContext.drawImage(maxImage, 0, 0, 80, 80);
+      }
+      else {
+        vectorContext.fillText(`  max: ${maxValue}`, coordXText, coordYText);
+        vectorContext.drawImage(maxImage, 0, 0);
+      }
     }
 
     // MIN VALUE
@@ -340,8 +346,14 @@ goog.require('M.style.Point');
       }
       let coordinateY = maxImage.height + 5;
       coordYText = coordinateY + (minImage.height / 2);
-      vectorContext.fillText(`  min: ${minValue}`, coordXText, coordYText);
-      vectorContext.drawImage(minImage, coordinateX, coordinateY);
+      if (/^https?\:\/\//i.test(minImage.src)) {
+        vectorContext.fillText(`  min: ${minValue}`, 85, 105);
+        vectorContext.drawImage(minImage, 20, 85, 40, 40);
+      }
+      else {
+        vectorContext.fillText(`  min: ${minValue}`, coordXText, coordYText);
+        vectorContext.drawImage(minImage, coordinateX, coordinateY);
+      }
     }
     callbackFn();
   };
