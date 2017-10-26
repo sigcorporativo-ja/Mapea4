@@ -38,7 +38,7 @@ goog.require('M.style.quantification');
 
     /**
      * @public
-     * @type {Array<M.Style>}
+     * @type {Array<M.style.Simple>}
      * @api stable
      * @expose
      */
@@ -51,14 +51,6 @@ goog.require('M.style.quantification');
      * @expose
      */
     this.quantification_ = quantification;
-
-    /**
-     * @public
-     * @type {M.layer.Vector}
-     * @api stable
-     * @expose
-     */
-    this.layer_ = null;
 
     /**
      * @public

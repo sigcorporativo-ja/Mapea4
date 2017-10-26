@@ -75,15 +75,6 @@ goog.require('M.style.Point');
       (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius);
 
     /**
-     * Layer where style is setted
-     * @public
-     * @type {M.Layer}
-     * @api stable
-     * @expose
-     */
-    this.layer_ = null;
-
-    /**
      * @public
      * @type {Array<M.Feature>}
      * @api stable
