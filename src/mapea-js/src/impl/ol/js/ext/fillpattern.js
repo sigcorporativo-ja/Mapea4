@@ -104,9 +104,9 @@ ol.style.FillPattern = function(options) {
     }
 
     if (pat.lines)
-      for (var j = 0; j < pat.lines.length; j++)
+      for (let i = 0; i < pat.lines.length; i++) {
         for (var r = 0; r < pat.repeat.length; r++) {
-          var li = pat.lines[j];
+          var li = pat.lines[i];
           ctx.beginPath();
           ctx.moveTo(li[0] + pat.repeat[r][0], li[1] + pat.repeat[r][1]);
           for (var k = 2; k < li.length; k += 2) {
@@ -120,6 +120,7 @@ ol.style.FillPattern = function(options) {
           //ctx.strokeRect(0,0,canvas.width,canvas.height);
           ctx.restore();
         }
+      }
     pattern = ctx.createPattern(canvas, 'repeat');
     if (options.offset) {
       var offset = options.offset;
@@ -167,15 +168,14 @@ ol.style.FillPattern.prototype.getImage = function() {
  *	@param {olx.style.FillPatternOption}
  */
 ol.style.FillPattern.prototype.getPattern_ = function(options) {
-  var pat = ol.style.FillPattern.prototype.patterns[options.pattern.toLowerCase()] ||
+  var pat = ol.style.FillPattern.prototype.patterns[options.pattern] ||
     ol.style.FillPattern.prototype.patterns.dot;
-  var d = Math.round(options.spacing) || 10;
-  var size = null;
+  let d = Math.round(options.spacing) || 10;
   switch (options.pattern) {
     case 'dot':
     case 'circle':
       {
-        size = options.size === 0 ? 0 : options.size / 2 || 2;
+        let size = options.size === 0 ? 0 : options.size / 2 || 2;
         if (!options.angle) {
           pat.width = pat.height = d;
           pat.circles = [[d / 2, d / 2, size]];
@@ -209,7 +209,7 @@ ol.style.FillPattern.prototype.getPattern_ = function(options) {
     case 'tile':
     case 'square':
       {
-        size = options.size === 0 ? 0 : options.size / 2 || 2;
+        let size = options.size === 0 ? 0 : options.size / 2 || 2;
         if (!options.angle) {
           pat.width = pat.height = d;
           pat.lines = [[d / 2 - size, d / 2 - size, d / 2 + size, d / 2 - size, d / 2 + size, d / 2 + size, d / 2 - size, d / 2 + size, d / 2 - size, d / 2 - size]];
@@ -223,50 +223,48 @@ ol.style.FillPattern.prototype.getPattern_ = function(options) {
         break;
       }
     case 'cross':
-      { // Limit angle to 0 | 45
-        if (options.angle) options.angle = 45;
-      }
-      break;
     case 'hatch':
-      {
-        var a = Math.round(((options.angle || 0) - 90) % 360);
-        if (a > 180) a -= 360;
-        a *= Math.PI / 180;
-        var cos = Math.cos(a);
-        var sin = Math.sin(a);
-        if (Math.abs(sin) < 0.0001) {
-          pat.width = pat.height = d;
-          pat.lines = [[0, 0.5, d, 0.5]];
-          pat.repeat = [[0, 0], [0, d]];
+      // Limit angle to 0 | 45
+      if (options.pattern === 'cross' && options.angle) {
+        options.angle = 45;
+      }
+      var a = Math.round(((options.angle || 0) - 90) % 360);
+      if (a > 180) a -= 360;
+      a *= Math.PI / 180;
+      var cos = Math.cos(a);
+      var sin = Math.sin(a);
+      if (Math.abs(sin) < 0.0001) {
+        pat.width = pat.height = d;
+        pat.lines = [[0, 0.5, d, 0.5]];
+        pat.repeat = [[0, 0], [0, d]];
+      }
+      else if (Math.abs(cos) < 0.0001) {
+        pat.width = pat.height = d;
+        pat.lines = [[0.5, 0, 0.5, d]];
+        pat.repeat = [[0, 0], [d, 0]];
+        if (options.pattern == 'cross') {
+          pat.lines.push([0, 0.5, d, 0.5]);
+          pat.repeat.push([0, d]);
         }
-        else if (Math.abs(cos) < 0.0001) {
-          pat.width = pat.height = d;
-          pat.lines = [[0.5, 0, 0.5, d]];
-          pat.repeat = [[0, 0], [d, 0]];
-          if (options.pattern == 'cross') {
-            pat.lines.push([0, 0.5, d, 0.5]);
-            pat.repeat.push([0, d]);
-          }
+      }
+      else {
+        var w = pat.width = Math.round(Math.abs(d / sin)) || 1;
+        var h = pat.height = Math.round(Math.abs(d / cos)) || 1;
+        if (options.pattern == 'cross') {
+          pat.lines = [[-w, -h, 2 * w, 2 * h], [2 * w, -h, -w, 2 * h]];
+          pat.repeat = [[0, 0]];
+        }
+        else if (cos * sin > 0) {
+          pat.lines = [[-w, -h, 2 * w, 2 * h]];
+          pat.repeat = [[0, 0], [w, 0], [0, h]];
         }
         else {
-          var w = pat.width = Math.round(Math.abs(d / sin)) || 1;
-          var h = pat.height = Math.round(Math.abs(d / cos)) || 1;
-          if (options.pattern == 'cross') {
-            pat.lines = [[-w, -h, 2 * w, 2 * h], [2 * w, -h, -w, 2 * h]];
-            pat.repeat = [[0, 0]];
-          }
-          else if (cos * sin > 0) {
-            pat.lines = [[-w, -h, 2 * w, 2 * h]];
-            pat.repeat = [[0, 0], [w, 0], [0, h]];
-          }
-          else {
-            pat.lines = [[2 * w, -h, -w, 2 * h]];
-            pat.repeat = [[0, 0], [-w, 0], [0, h]];
-          }
-
+          pat.lines = [[2 * w, -h, -w, 2 * h]];
+          pat.repeat = [[0, 0], [-w, 0], [0, h]];
         }
-        pat.stroke = options.size === 0 ? 0 : options.size || 4;
+
       }
+      pat.stroke = options.size === 0 ? 0 : options.size || 4;
       break;
     default:
       break;

@@ -1889,3 +1889,71 @@ Mx.style.Line.textoverflow;
  * @api stable
  */
 Mx.style.Line.minwidth;
+
+/**
+ * Style parameters
+ */
+
+/**
+ * @type {Array<number>}
+ * @api stable
+ */
+Mx.style.linedash;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.style.linedashoffset;
+
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.anchorxunits;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.anchoryunits;
+
+/**
+ * @type {bool}
+ * @api stable
+ */
+Mx.style.snaptopixel;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.crossorigin;
+
+/**
+ * @type {string}
+ */
+Mx.style.linejoin;
+
+/**
+ * @type {string}
+ */
+Mx.style.linecap;
+
+/**
+ * @type {number}
+ */
+Mx.style.miterlimit;
+
+/**
+ * @type {string}
+ */
+Mx.style.align;
+
+/**
+ * @type {string}
+ */
+Mx.style.baseline;
+
+Mx.style.spacing;

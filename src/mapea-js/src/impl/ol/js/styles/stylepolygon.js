@@ -59,7 +59,7 @@ goog.require('M.impl.style.CentroidStyle');
           fill: new ol.style.Fill({
             color: M.impl.style.Simple.getValue(options.label.color || '#000000', feature)
           }),
-          ttextAlign: Object.values(M.style.align).includes(align) ? align : 'center',
+          textAlign: Object.values(M.style.align).includes(align) ? align : 'center',
           textBaseline: Object.values(M.style.baseline).includes(baseline) ? baseline : 'top',
           text: M.impl.style.Simple.getValue(options.label.text, feature),
           rotation: M.impl.style.Simple.getValue(options.label.rotation, feature)
@@ -86,6 +86,17 @@ goog.require('M.impl.style.CentroidStyle');
           });
         }
         if (!M.utils.isNullOrEmpty(options.fill.pattern)) {
+          let fillColorPatternrValue;
+          let fillOpacityPatternValue;
+          let fillPattern = null;
+          if (!M.utils.isNullOrEmpty(options.fill.pattern.fill)) {
+            fillColorPatternValue = M.impl.style.Simple.getValue(options.fill.pattern.fill.color, feature);
+            fillOpacityPatternValue = M.impl.style.Simple.getValue(options.fill.pattern.fill.opacity, feature) || 1;
+            fillPattern = new ol.style.Fill({
+              color: chroma(fillColorPatternValue).alpha(fillOpacityPatternValue).css()
+            });
+          }
+
           let color = null;
           if (!M.utils.isNullOrEmpty(options.fill.pattern.color)) {
             let opacity = M.impl.style.Simple.getValue(options.fill.pattern.opacity, feature) || 1;
@@ -102,7 +113,7 @@ goog.require('M.impl.style.CentroidStyle');
             angle: M.impl.style.Simple.getValue(options.fill.pattern.rotation, feature),
             scale: M.impl.style.Simple.getValue(options.fill.pattern.scale, feature),
             offset: M.impl.style.Simple.getValue(options.fill.pattern.offset, feature),
-            fill: fill
+            fill: fillPattern,
           }));
         }
         else {
