@@ -1,6 +1,6 @@
 goog.provide('M.style.Chart');
 
-goog.require('M.style.Simple');
+goog.require('M.style.Feature');
 goog.require('M.style.chart');
 goog.require('M.style.chart.Variable');
 
@@ -81,7 +81,7 @@ goog.require('M.style.chart.Variable');
     // calls the super constructor
     goog.base(this, options, impl);
   });
-  goog.inherits(M.style.Chart, M.style.Simple);
+  goog.inherits(M.style.Chart, M.style.Feature);
 
   /**
    * formats a chart variable to creates a new M.style.chart.Variable

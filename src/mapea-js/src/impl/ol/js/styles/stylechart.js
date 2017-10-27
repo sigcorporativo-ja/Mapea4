@@ -1,6 +1,6 @@
 goog.provide('M.impl.style.Chart');
 
-goog.require('M.impl.style.Simple');
+goog.require('M.impl.style.Feature');
 
 goog.require('M.impl.style.CentroidStyle');
 goog.require('M.impl.style.OLChart');
@@ -63,7 +63,7 @@ goog.require('M.impl.style.OLChart');
 
     goog.base(this, options);
   };
-  goog.inherits(M.impl.style.Chart, M.impl.style.Simple);
+  goog.inherits(M.impl.style.Chart, M.impl.style.Feature);
 
   /**
    * This function updates the canvas of style of canvas
