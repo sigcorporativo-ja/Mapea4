@@ -239,7 +239,6 @@ goog.require('M.impl.Control');
         })[0];
         if (!M.utils.isNullOrEmpty(layer)) {
           layer.setLegendURL(legendErrorUrl);
-          this.renderPanel();
         }
       }, false, this);
     }, this);
