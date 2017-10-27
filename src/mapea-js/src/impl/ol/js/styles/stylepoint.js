@@ -172,7 +172,7 @@ goog.require('M.impl.style.PointFontSymbol');
             size: M.impl.style.Simple.getValue(options.icon.size, feature),
           }));
         }
-        else {
+        else if (!M.utils.isNullOrEmpty(options.icon.form)) {
           styleIcon.setImage(new M.impl.style.PointFontSymbol({
             form: M.utils.isNullOrEmpty(M.impl.style.Simple.getValue(options.icon.form, feature)) ? "" : M.impl.style.Simple.getValue(options.icon.form, feature).toLowerCase(),
             gradient: M.impl.style.Simple.getValue(options.icon.gradient, feature),
