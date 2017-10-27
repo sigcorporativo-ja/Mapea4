@@ -86,17 +86,15 @@ goog.require('M.impl.style.CentroidStyle');
           });
         }
         if (!M.utils.isNullOrEmpty(options.fill.pattern)) {
-          let fillColorPatternrValue;
-          let fillOpacityPatternValue;
-          let fillPattern = null;
+          let fillColorPatternValue = "#000";
+          let fillOpacityPatternValue = 1;
           if (!M.utils.isNullOrEmpty(options.fill.pattern.fill)) {
             fillColorPatternValue = M.impl.style.Simple.getValue(options.fill.pattern.fill.color, feature);
-            fillOpacityPatternValue = M.impl.style.Simple.getValue(options.fill.pattern.fill.opacity, feature) || 1;
-            fillPattern = new ol.style.Fill({
-              color: chroma(fillColorPatternValue).alpha(fillOpacityPatternValue).css()
-            });
+            fillOpacityPatternValue = M.impl.style.Simple.getValue(options.fill.pattern.fill.opacity, feature);
           }
-
+          let fillPattern = new ol.style.Fill({
+            color: chroma(fillColorPatternValue).alpha(fillOpacityPatternValue).css()
+          });
           let color = null;
           if (!M.utils.isNullOrEmpty(options.fill.pattern.color)) {
             let opacity = M.impl.style.Simple.getValue(options.fill.pattern.opacity, feature) || 1;
