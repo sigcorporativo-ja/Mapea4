@@ -301,8 +301,8 @@ goog.require('ol.geom.convexhull');
    * @api stable
    */
   M.impl.style.Cluster.prototype.addCoverInteraction_ = function() {
-    this.layer_.on(M.evt.HOVER_FEATURE, this.hoverFeatureFn_, this);
-    this.layer_.on(M.evt.LEAVE_FEATURE, this.leaveFeatureFn_, this);
+    this.layer_.on(M.evt.HOVER_FEATURES, this.hoverFeatureFn_, this);
+    this.layer_.on(M.evt.LEAVE_FEATURES, this.leaveFeatureFn_, this);
   };
 
   /**

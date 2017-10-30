@@ -145,7 +145,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.HOVER_FEATURE = 'hover:feature';
+  M.evt.HOVER_FEATURES = 'hover:features';
 
   /**
    * Event type
@@ -154,7 +154,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.LEAVE_FEATURE = 'leave:feature';
+  M.evt.LEAVE_FEATURES = 'leave:features';
 
   /**
    * Event type
@@ -240,8 +240,8 @@ goog.provide('M.evt.Listener');
       M.evt.DESTROY,
       M.evt.UNSELECT_FEATURES,
       M.evt.SELECT_FEATURES,
-      M.evt.HOVER_FEATURE,
-      M.evt.LEAVE_FEATURE,
+      M.evt.HOVER_FEATURES,
+      M.evt.LEAVE_FEATURES,
       M.evt.LOAD,
       M.evt.COMPLETED,
       M.evt.CHANGE,

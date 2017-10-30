@@ -938,7 +938,7 @@ goog.require('goog.color.alpha');
   M.utils.setEquals = function(array, array2) {
     let equals = false;
     if (array.length === array2.length) {
-      equals = array.every(e => array2.some(e2 => e2.equals(e)));
+      equals = array.every(e =>array2.some(e2 => e2.equals(e)));
     }
     return equals;
   };

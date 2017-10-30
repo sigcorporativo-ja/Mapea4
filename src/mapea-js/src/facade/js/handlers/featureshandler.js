@@ -41,14 +41,14 @@ goog.require('M.facade.Base');
      * @type {Object}
      * @expose
      */
-    this.selectedFeatures_ = {};
+    this.prevSelectedFeatures_ = {};
 
     /**
      * @private
      * @type {Object}
      * @expose
      */
-    this.hoverFeatures_ = {};
+    this.prevHoverFeatures_ = {};
 
     // checks if the implementation has all methods
     if (!M.utils.isFunction(impl.addTo)) {
@@ -91,22 +91,22 @@ goog.require('M.facade.Base');
 
       this.layers_.forEach(function(layer) {
         if (layer.name != "cluster_cover") {
-          let features = impl.getFeaturesByLayer(evt, layer);
-          let layerImpl = layer.getImpl();
-          let selectedFeatures = this.selectedFeatures_[layer.name];
-          if (M.utils.isNullOrEmpty(features) && !M.utils.isNullOrEmpty(selectedFeatures)) {
-            if (M.utils.isFunction(layerImpl.unselectFeatures)) {
-              layerImpl.unselectFeatures(features, evt.coord);
-            }
-            layer.fire(M.evt.UNSELECT_FEATURES, [selectedFeatures, evt.coord]);
+          let clickedFeatures = impl.getFeaturesByLayer(evt, layer);
+          let prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
+          // no features selected then unselect prev selected features
+          if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
+            this.unselectFeatures_(prevFeatures, layer, evt);
           }
-          else if (!M.utils.isNullOrEmpty(features)) {
-            if (!M.utils.setEquals(selectedFeatures, features)) {
-              if (M.utils.isFunction(layerImpl.selectFeatures)) {
-                layerImpl.selectFeatures(features, evt.coord, evt);
-              }
-              this.selectedFeatures_[layer.name] = (features);
-              layer.fire(M.evt.SELECT_FEATURES, [features, evt]);
+          else if (clickedFeatures.length > 0) {
+            let newFeatures = clickedFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
+            let diffFeatures = prevFeatures.filter(f => !clickedFeatures.some(pf => pf.equals(f)));
+            // unselect prev selected features which have not been selected this time
+            if (diffFeatures.length > 0) {
+              this.unselectFeatures_(diffFeatures, layer, evt);
+            }
+            // select new selected features
+            if (newFeatures.length > 0) {
+              this.selectFeatures_(newFeatures, layer, evt);
             }
           }
         }
@@ -123,27 +123,87 @@ goog.require('M.facade.Base');
   M.handler.Features.prototype.moveOverMap_ = function(evt) {
     if (this.activated_ === true) {
       let impl = this.getImpl();
+
       this.layers_.forEach(function(layer) {
-        let features = impl.getFeaturesByLayer(evt, layer);
-        let layerImpl = layer.getImpl();
-        if (M.utils.isNullOrEmpty(features) && !M.utils.isNullOrEmpty(this.hoverFeatures_[layer.name])) {
-          if (M.utils.isFunction(layerImpl.leaveFeature)) {
-            layerImpl.leaveFeature(features, evt.coord, evt);
-          }
-          layer.fire(M.evt.LEAVE_FEATURE, evt.coord);
-          this.hoverFeatures_[layer.name] = null;
-          this.getImpl().removeCursorPointer();
+        let hoveredFeatures = impl.getFeaturesByLayer(evt, layer);
+        let prevFeatures = [...this.prevHoverFeatures_[layer.name]];
+        // no features selected then unselect prev selected features
+        if (hoveredFeatures.length === 0 && prevFeatures.length > 0) {
+          this.leaveFeatures_(prevFeatures, layer, evt);
         }
-        else if (!M.utils.isNullOrEmpty(features) && M.utils.isNullOrEmpty(this.hoverFeatures_[layer.name])) {
-          if (M.utils.isFunction(layerImpl.hoverFeature)) {
-            layerImpl.hoverFeature(features, evt.coord);
+        else if (hoveredFeatures.length > 0) {
+          let newFeatures = hoveredFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
+          let diffFeatures = prevFeatures.filter(f => !hoveredFeatures.some(pf => pf.equals(f)));
+          // unselect prev selected features which have not been selected this time
+          if (diffFeatures.length > 0) {
+            this.leaveFeatures_(diffFeatures, layer, evt);
           }
-          layer.fire(M.evt.HOVER_FEATURE, [features, evt]);
-          this.hoverFeatures_[layer.name] = features;
-          this.getImpl().addCursorPointer();
+          // select new selected features
+          if (newFeatures.length > 0) {
+            this.hoverFeatures_(newFeatures, layer, evt);
+          }
         }
       }, this);
     }
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   * @api stable
+   */
+  M.handler.Features.prototype.selectFeatures_ = function(features, layer, evt) {
+    this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name].concat(features);
+    let layerImpl = layer.getImpl();
+    if (M.utils.isFunction(layerImpl.selectFeatures)) {
+      layerImpl.selectFeatures(features, evt.coord, evt);
+    }
+    layer.fire(M.evt.SELECT_FEATURES, [features, evt]);
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   * @api stable
+   */
+  M.handler.Features.prototype.unselectFeatures_ = function(features, layer, evt) {
+    // removes unselected features
+    this.prevSelectedFeatures_[layer.name] =
+      this.prevSelectedFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
+    let layerImpl = layer.getImpl();
+    if (M.utils.isFunction(layerImpl.unselectFeatures)) {
+      layerImpl.unselectFeatures(features, evt.coord);
+    }
+    layer.fire(M.evt.UNSELECT_FEATURES, [features, evt.coord]);
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   * @api stable
+   */
+  M.handler.Features.prototype.hoverFeatures_ = function(features, layer, evt) {
+    this.prevHoverFeatures_[layer.name] = this.prevHoverFeatures_[layer.name].concat(features);
+    layer.fire(M.evt.HOVER_FEATURES, [features, evt]);
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   * @api stable
+   */
+  M.handler.Features.prototype.leaveFeatures_ = function(features, layer, evt) {
+    this.prevHoverFeatures_[layer.name] =
+      this.prevHoverFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
+    layer.fire(M.evt.LEAVE_FEATURES, [features, evt.coord]);
   };
 
   /**
@@ -188,8 +248,8 @@ goog.require('M.facade.Base');
   M.handler.Features.prototype.addLayer = function(layer) {
     if (!M.utils.includes(this.layers_, layer)) {
       this.layers_.push(layer);
-      this.selectedFeatures_[layer.name] = [];
-      this.hoverFeatures_[layer.name] = null;
+      this.prevSelectedFeatures_[layer.name] = [];
+      this.prevHoverFeatures_[layer.name] = [];
     }
   };
 
@@ -204,10 +264,10 @@ goog.require('M.facade.Base');
    */
   M.handler.Features.prototype.removeLayer = function(layer) {
     this.layers_.remove(layer);
-    this.selectedFeatures_[layer.name] = null;
-    this.hoverFeatures_[layer.name] = null;
-    delete this.selectedFeatures_[layer.name];
-    delete this.hoverFeatures_[layer.name];
+    this.prevSelectedFeatures_[layer.name] = null;
+    this.prevHoverFeatures_[layer.name] = null;
+    delete this.prevSelectedFeatures_[layer.name];
+    delete this.prevHoverFeatures_[layer.name];
   };
 
   /**
