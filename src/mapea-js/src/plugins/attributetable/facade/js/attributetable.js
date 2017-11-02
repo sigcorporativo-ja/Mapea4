@@ -40,25 +40,32 @@ goog.inherits(M.plugin.AttributeTable, M.Plugin);
  * @api stable
  */
 M.plugin.AttributeTable.prototype.addTo = function(map) {
-  this.facadeMap_ = map;
-  this.control_ = new M.control.AttributeTableControl(this.numPages_);
-  this.panel_ = new M.ui.Panel("M.plugin.AttributeTable.NAME", {
-    'collapsible': true,
-    'className': 'm-attributetable',
-    'collapsedButtonClass': 'g-cartografia-localizacion4',
-    'position': M.ui.position.TR,
-    'tooltip': 'Tabla de atributos'
-  });
-  this.panel_.addControls(this.control_);
-  this.panel_.on(M.evt.SHOW, function(evt) {
-    if (map.getWFS().length === 0 && map.getKML().length === 0 && map.getLayers().filter(function(layer) {
-        return layer.type === "GeoJSON";
-      }) === 0) {
-      this.panel_.collapse();
-      M.dialog.info("No existen capas consultables.");
-    }
+  map.on(M.evt.ADDED_LAYER, () => {
+    this.destroy();
+    add.bind(this)();
   }, this);
-  map.addPanels(this.panel_);
+  const add = () => {
+    this.facadeMap_ = map;
+    this.control_ = new M.control.AttributeTableControl(this.numPages_);
+    this.panel_ = new M.ui.Panel(M.plugin.AttributeTable.NAME, {
+      'collapsible': true,
+      'className': 'm-attributetable',
+      'collapsedButtonClass': 'g-cartografia-localizacion4',
+      'position': M.ui.position.TR,
+      'tooltip': 'Tabla de atributos'
+    });
+    this.panel_.addControls(this.control_);
+    this.panel_.on(M.evt.SHOW, function(evt) {
+      if (map.getWFS().length === 0 && map.getKML().length === 0 && map.getLayers().filter(function(layer) {
+          return layer.type === "GeoJSON";
+        }) === 0) {
+        this.panel_.collapse();
+        M.dialog.info("No existen capas consultables.");
+      }
+    }, this);
+    map.addPanels(this.panel_);
+  }
+  add();
 };
 
 /**
@@ -69,7 +76,7 @@ M.plugin.AttributeTable.prototype.addTo = function(map) {
  * @api stable
  */
 M.plugin.AttributeTable.prototype.destroy = function() {
-  this.map_.removeControls([this.control_]);
+  this.facadeMap_.removeControls([this.control_]);
    [this.control_, this.panel_, this.facadeMap_] = [null, null, null];
 };
 
