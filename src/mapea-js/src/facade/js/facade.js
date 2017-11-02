@@ -65,20 +65,13 @@ goog.require('M.Object');
    * @api stable
    */
   M.facade.Base.prototype.extends_ = function(dest = {}, src = {}) {
-    // if (!M.utils.isNullOrEmpty(src)) {
-    //   for (let key in src) {
-    //     if (!Object.prototype.hasOwnProperty.call(dest, key)) {
-    //       dest[key] = src[key];
-    //     }
-    //   }
-    // }
     if (!M.utils.isNullOrEmpty(src)) {
-      Object.entries(src).forEach(([attr, value]) => {
-        if (M.utils.isNullOrEmpty(dest[attr])) {
-          dest[attr] = value;
+      Object.keys(src).forEach(key => {
+        if (M.utils.isNullOrEmpty(dest[key])) {
+          dest[key] = src[key];
         }
-        else if (M.utils.isObject(dest[attr])) {
-          this.extends_(dest[attr], value);
+        else if (M.utils.isObject(dest[key])) {
+          this.extends_(dest[key], src[key]);
         }
       }, this);
     }
