@@ -254,7 +254,17 @@ goog.require('ol.geom.convexhull');
    */
   M.impl.style.Cluster.prototype.hoverFeatureFn_ = function(features, evt) {
     if (!M.utils.isNullOrEmpty(features)) {
-      let convexHull = ol.coordinate.convexHull(features.map(f => f.getImpl().getOLFeature().getGeometry().getCoordinates()));
+      let hoveredFeatures = [];
+      features.forEach(hoveredFeature => {
+        if (hoveredFeature instanceof M.ClusteredFeature) {
+          hoveredFeatures = hoveredFeatures.concat(hoveredFeature.getAttribute("features"));
+        }
+        else {
+          hoveredFeatures.push(hoveredFeature);
+        }
+      });
+
+      let convexHull = ol.coordinate.convexHull(hoveredFeatures.map(f => f.getImpl().getOLFeature().getGeometry().getCoordinates()));
       if (convexHull.length > 2) {
         let convexOlFeature = new ol.Feature(new ol.geom.Polygon([convexHull]));
         let convexFeature = M.impl.Feature.olFeature2Facade(convexOlFeature);

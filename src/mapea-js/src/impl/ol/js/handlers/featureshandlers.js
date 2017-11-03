@@ -1,5 +1,6 @@
 goog.provide('M.impl.handler.Features');
 
+goog.require('M.ClusteredFeature');
 goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.impl.Layer');
@@ -53,15 +54,28 @@ goog.require('M.impl.Layer');
     let features = [];
 
     if (!M.utils.isNullOrEmpty(layer) && layer.isVisible() && !M.utils.isNullOrEmpty(layer.getImpl().getOL3Layer())) {
-      this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, function(feature, olLayer) {
-        if (layer.getImpl().getOL3Layer() === olLayer) {
-          if (olLayer instanceof M.impl.layer.AnimatedCluster) {
-            features = features.concat(feature.get("features").map(M.impl.Feature.olFeature2Facade));
+      let olLayer = layer.getImpl().getOL3Layer();
+      this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, function(feature, layerFrom) {
+        if ((layerFrom instanceof M.impl.layer.AnimatedCluster) && !M.utils.isNullOrEmpty(feature.get("features"))) {
+          let clusteredFeatures = feature.get("features").map(M.impl.Feature.olFeature2Facade);
+          if (clusteredFeatures.length === 1) {
+            features.push(clusteredFeatures[0]);
           }
           else {
-            features.push(M.impl.Feature.olFeature2Facade(feature));
+            features.push(new M.ClusteredFeature(clusteredFeatures, {
+              "key1": feature.get("features"),
+              "ke2": feature.get("features"),
+              "key3": feature.get("features"),
+              "key4": feature.get("features")
+            }));
           }
         }
+        else {
+          features.push(M.impl.Feature.olFeature2Facade(feature));
+        }
+        // return true;
+      }, {
+        layerFilter: l => l === olLayer
       });
     }
     return features;

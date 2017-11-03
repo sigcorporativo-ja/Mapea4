@@ -90,24 +90,22 @@ goog.require('M.facade.Base');
       let impl = this.getImpl();
 
       this.layers_.forEach(function(layer) {
-        if (layer.name != "cluster_cover") {
-          let clickedFeatures = impl.getFeaturesByLayer(evt, layer);
-          let prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
-          // no features selected then unselect prev selected features
-          if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
-            this.unselectFeatures_(prevFeatures, layer, evt);
+        let clickedFeatures = impl.getFeaturesByLayer(evt, layer);
+        let prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
+        // no features selected then unselect prev selected features
+        if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
+          this.unselectFeatures_(prevFeatures, layer, evt);
+        }
+        else if (clickedFeatures.length > 0) {
+          let newFeatures = clickedFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
+          let diffFeatures = prevFeatures.filter(f => !clickedFeatures.some(pf => pf.equals(f)));
+          // unselect prev selected features which have not been selected this time
+          if (diffFeatures.length > 0) {
+            this.unselectFeatures_(diffFeatures, layer, evt);
           }
-          else if (clickedFeatures.length > 0) {
-            let newFeatures = clickedFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
-            let diffFeatures = prevFeatures.filter(f => !clickedFeatures.some(pf => pf.equals(f)));
-            // unselect prev selected features which have not been selected this time
-            if (diffFeatures.length > 0) {
-              this.unselectFeatures_(diffFeatures, layer, evt);
-            }
-            // select new selected features
-            if (newFeatures.length > 0) {
-              this.selectFeatures_(newFeatures, layer, evt);
-            }
+          // select new selected features
+          if (newFeatures.length > 0) {
+            this.selectFeatures_(newFeatures, layer, evt);
           }
         }
       }, this);
@@ -132,7 +130,7 @@ goog.require('M.facade.Base');
           this.leaveFeatures_(prevFeatures, layer, evt);
         }
         else if (hoveredFeatures.length > 0) {
-          let newFeatures = hoveredFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
+          let newFeatures = hoveredFeatures.filter(f => (f instanceof M.Feature) && !prevFeatures.some(pf => pf.equals(f)));
           let diffFeatures = prevFeatures.filter(f => !hoveredFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
           if (diffFeatures.length > 0) {
@@ -191,6 +189,7 @@ goog.require('M.facade.Base');
   M.handler.Features.prototype.hoverFeatures_ = function(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] = this.prevHoverFeatures_[layer.name].concat(features);
     layer.fire(M.evt.HOVER_FEATURES, [features, evt]);
+    this.getImpl().addCursorPointer();
   };
 
   /**
@@ -204,6 +203,7 @@ goog.require('M.facade.Base');
     this.prevHoverFeatures_[layer.name] =
       this.prevHoverFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
     layer.fire(M.evt.LEAVE_FEATURES, [features, evt.coord]);
+    this.getImpl().removeCursorPointer();
   };
 
   /**
