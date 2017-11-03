@@ -46,6 +46,7 @@ goog.require('M.style.Cluster');
 goog.require('M.style.Choropleth');
 goog.require('M.style.Category');
 goog.require('M.style.Proportional');
+// goog.require('M.style.Heatmap');
 (function() {
   /**
    * @classdesc
@@ -383,6 +384,18 @@ goog.require('M.style.Proportional');
     }
 
     return this.getImpl().getBaseLayers().sort(M.Map.LAYER_SORT);
+  };
+
+  /**
+   * This function adds layers specified by the user
+   *
+   * @function
+   * @returns {M.handler.Feature}
+   * @public
+   * @api stable
+   */
+  M.Map.prototype.getFeatureHandler = function() {
+    return this.featuresHandler_;
   };
 
   /**

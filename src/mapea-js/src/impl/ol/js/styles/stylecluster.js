@@ -222,6 +222,7 @@ goog.require('ol.geom.convexhull');
   M.impl.style.Cluster.prototype.addSelectInteraction_ = function() {
     let map = this.layer_.getImpl().getMap();
     this.selectClusterInteraction_ = new M.impl.interaction.SelectCluster({
+      fLayer: this.layer_,
       map: map,
       maxFeaturesToSelect: this.options_.maxFeaturesToSelect,
       pointRadius: this.optionsVendor_.distanceSelectFeatures,
@@ -254,7 +255,17 @@ goog.require('ol.geom.convexhull');
    */
   M.impl.style.Cluster.prototype.hoverFeatureFn_ = function(features, evt) {
     if (!M.utils.isNullOrEmpty(features)) {
-      let convexHull = ol.coordinate.convexHull(features.map(f => f.getImpl().getOLFeature().getGeometry().getCoordinates()));
+      let hoveredFeatures = [];
+      features.forEach(hoveredFeature => {
+        if (hoveredFeature instanceof M.ClusteredFeature) {
+          hoveredFeatures = hoveredFeatures.concat(hoveredFeature.getAttribute("features"));
+        }
+        else {
+          hoveredFeatures.push(hoveredFeature);
+        }
+      });
+
+      let convexHull = ol.coordinate.convexHull(hoveredFeatures.map(f => f.getImpl().getOLFeature().getGeometry().getCoordinates()));
       if (convexHull.length > 2) {
         let convexOlFeature = new ol.Feature(new ol.geom.Polygon([convexHull]));
         let convexFeature = M.impl.Feature.olFeature2Facade(convexOlFeature);
@@ -400,7 +411,13 @@ goog.require('ol.geom.convexhull');
    * @private
    * @api stable
    */
-  M.impl.style.Cluster.prototype.selectClusterFeature_ = function(evt) {};
+  M.impl.style.Cluster.prototype.selectClusterFeature_ = function(evt) {
+    // if (!M.utils.isNullOrEmpty(evt.selected)) {
+    //   let olFeatures = evt.selected[0].get("features");
+    //   let features = olFeatures.map(M.impl.Feature.olFeature2Facade);
+    //   this.layer_.fire(M.evt.SELECT_FEATURES, [features, evt]);
+    // }
+  };
 
   /**
    * This function remove the style to specified layer

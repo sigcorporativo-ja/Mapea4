@@ -23,6 +23,7 @@ M.impl.interaction.SelectCluster = function(options) {
   this.animationDuration = options.animationDuration || 500;
   this.selectCluster_ = (options.selectCluster !== false);
   this.maxFeaturesToSelect = options.maxFeaturesToSelect;
+  this.facadeLayer_ = options.fLayer;
 
   // Create a new overlay layer for
   let overlay = this.overlayLayer_ = new ol.layer.Vector({
@@ -127,6 +128,7 @@ M.impl.interaction.SelectCluster.prototype.getLayer = function() {
  */
 M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Nothing selected
   if (!e.selected.length) {
+
     this.clear();
     return;
   }
@@ -142,7 +144,15 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
 
   let cluster = feature.get('features');
   // Not a cluster (or just one feature)
-  if (!cluster || cluster.length == 1) return;
+  if (!cluster || cluster.length == 1) {
+    let features = cluster.map(M.impl.Feature.olFeature2Facade);
+    this.map.getFeatureHandler().selectFeatures(features, this.facadeLayer_, {
+      'pixel': e.mapBrowserEvent.pixel,
+      'coord': e.mapBrowserEvent.coordinate,
+      'vendor': e
+    });
+    return;
+  }
 
   if (!cluster || cluster.length > this.maxFeaturesToSelect) {
     let extend = M.impl.utils.getFeaturesExtent(cluster);
