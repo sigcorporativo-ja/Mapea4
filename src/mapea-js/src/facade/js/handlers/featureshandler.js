@@ -94,18 +94,18 @@ goog.require('M.facade.Base');
         let prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
         // no features selected then unselect prev selected features
         if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
-          this.unselectFeatures_(prevFeatures, layer, evt);
+          this.unselectFeatures(prevFeatures, layer, evt);
         }
         else if (clickedFeatures.length > 0) {
           let newFeatures = clickedFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
           let diffFeatures = prevFeatures.filter(f => !clickedFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
           if (diffFeatures.length > 0) {
-            this.unselectFeatures_(diffFeatures, layer, evt);
+            this.unselectFeatures(diffFeatures, layer, evt);
           }
           // select new selected features
           if (newFeatures.length > 0) {
-            this.selectFeatures_(newFeatures, layer, evt);
+            this.selectFeatures(newFeatures, layer, evt);
           }
         }
       }, this);
@@ -148,11 +148,11 @@ goog.require('M.facade.Base');
   /**
    * TODO
    *
-   * @private
+   * @public
    * @function
    * @api stable
    */
-  M.handler.Features.prototype.selectFeatures_ = function(features, layer, evt) {
+  M.handler.Features.prototype.selectFeatures = function(features, layer, evt) {
     this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name].concat(features);
     let layerImpl = layer.getImpl();
     if (M.utils.isFunction(layerImpl.selectFeatures)) {
@@ -164,11 +164,11 @@ goog.require('M.facade.Base');
   /**
    * TODO
    *
-   * @private
+   * @public
    * @function
    * @api stable
    */
-  M.handler.Features.prototype.unselectFeatures_ = function(features, layer, evt) {
+  M.handler.Features.prototype.unselectFeatures = function(features, layer, evt) {
     // removes unselected features
     this.prevSelectedFeatures_[layer.name] =
       this.prevSelectedFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
