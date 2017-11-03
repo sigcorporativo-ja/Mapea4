@@ -64,7 +64,7 @@ M.plugin.AttributeTable.prototype.addTo = function(map) {
       }
     }, this);
     map.addPanels(this.panel_);
-  }
+  };
   add();
 };
 
