@@ -62,11 +62,12 @@ goog.require('M.impl.Layer');
             features.push(clusteredFeatures[0]);
           }
           else {
+            let styleCluster = layer.getStyle();
             features.push(new M.ClusteredFeature(clusteredFeatures, {
-              "key1": feature.get("features"),
-              "ke2": feature.get("features"),
-              "key3": feature.get("features"),
-              "key4": feature.get("features")
+              "ranges": styleCluster.getRanges(),
+              "hoverInteraction": styleCluster.getOptions()["hoverInteraction"],
+              "maxFeaturesToSelect": styleCluster.getOptions()["maxFeaturesToSelect"],
+              "distance": styleCluster.getOptions()["distance"]
             }));
           }
         }

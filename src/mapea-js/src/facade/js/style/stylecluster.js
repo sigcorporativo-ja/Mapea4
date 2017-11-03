@@ -86,6 +86,17 @@ goog.require('M.Style');
   };
 
   /**
+   * This function returns the options of style cluster
+   * @function
+   * @public
+   * @return {object} options of style cluster
+   * @api stable
+   */
+  M.style.Cluster.prototype.getOptions = function() {
+    return this.options_;
+  };
+
+  /**
    * This function update a set of ranges  defined by user
    *
    * @function

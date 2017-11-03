@@ -124,7 +124,9 @@ centros.on(M.evt.SELECT_FEATURES, (features, evt) => {
   let popupText;
   let f = features[0];
   if (f instanceof M.ClusteredFeature) {
-    popupText = `${f.getAttribute("features").length} features`;
+    popupText = `${f.getAttribute("features").length} features </br>`;
+    popupText += `Nº maximo de features a seleccionar: ${f.getAttribute("maxFeaturesToSelect")}</br>`;
+    popupText += `Hover Interaction: ${f.getAttribute("hoverInteraction")}`;
   }
   else {
     popupText = f.getId();
