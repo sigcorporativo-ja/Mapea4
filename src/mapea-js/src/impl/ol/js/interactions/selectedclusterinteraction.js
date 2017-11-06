@@ -26,7 +26,7 @@ M.impl.interaction.SelectCluster = function(options) {
   this.facadeLayer_ = options.fLayer;
 
   // Create a new overlay layer for
-  let overlay = this.overlayLayer_ = new ol.layer.Vector({
+  this.overlayLayer_ = new ol.layer.Vector({
     source: new ol.source.Vector({
       features: new ol.Collection(),
       useSpatialIndex: true
@@ -37,6 +37,7 @@ M.impl.interaction.SelectCluster = function(options) {
     displayInLayerSwitcher: false,
     style: options.featureStyle
   });
+  let overlay = this.overlayLayer_;
 
   // Add the overlay to selection
   if (options.layers) {
@@ -234,8 +235,9 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       source.addFeature(lk);
     }
   }
-
-  if (this.animate) this.animateCluster_(center);
+  if (this.animate) this.animateCluster_(center, () => {
+    this.overlayLayer_.getSource().refresh();
+  });
 };
 
 /**
@@ -245,7 +247,7 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
  * @function
  * @api stable
  */
-M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center) { // Stop animation (if one is running)
+M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center, callbackFn) { // Stop animation (if one is running)
   if (this.listenerKey_) {
     this.overlayLayer_.setVisible(true);
     ol.Observable.unByKey(this.listenerKey_);
@@ -319,6 +321,7 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center) { 
     if (e > 1.0) {
       ol.Observable.unByKey(this.listenerKey_);
       this.overlayLayer_.setVisible(true);
+      callbackFn();
       // text on chart style not show
       // this.overlayLayer_.changed();
       return;
