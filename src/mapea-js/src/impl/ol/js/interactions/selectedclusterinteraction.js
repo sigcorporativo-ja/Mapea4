@@ -140,7 +140,7 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
 
   // Clic out of the cluster => close it
   let source = this.overlayLayer_.getSource();
-  source.clear();
+  // source.clear();
 
   let cluster = feature.get('features');
   // Not a cluster (or just one feature)
