@@ -76,7 +76,14 @@ goog.require('M.impl.Layer');
         }
         // return true;
       }, {
-        layerFilter: l => l === olLayer
+        layerFilter: l => {
+          let passFilter = false;
+          if (layer.getStyle() instanceof M.style.Cluster && layer.getStyle().getOptions().selectInteraction) {
+            passFilter = (l === layer.getStyle().getImpl().selectClusterInteraction_.overlayLayer_);
+          }
+          passFilter = passFilter || l === olLayer;
+          return passFilter;
+        }
       });
     }
     return features;

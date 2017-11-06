@@ -142,12 +142,12 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
   let cluster = feature.get('features');
   // Not a cluster (or just one feature)
   if (!cluster || cluster.length == 1) {
-    let features = cluster.map(M.impl.Feature.olFeature2Facade);
-    this.map.getFeatureHandler().selectFeatures(features, this.facadeLayer_, {
-      'pixel': e.mapBrowserEvent.pixel,
-      'coord': e.mapBrowserEvent.coordinate,
-      'vendor': e
-    });
+    // let features = cluster.map(M.impl.Feature.olFeature2Facade);
+    // this.map.getFeatureHandler().selectFeatures(features, this.facadeLayer_, {
+    //   'pixel': e.mapBrowserEvent.pixel,
+    //   'coord': e.mapBrowserEvent.coordinate,
+    //   'vendor': e
+    // });
     return;
   }
 
