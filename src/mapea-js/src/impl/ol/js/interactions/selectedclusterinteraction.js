@@ -138,10 +138,6 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
   // It's one of ours
   if (feature.get('selectclusterfeature')) return;
 
-  // Clic out of the cluster => close it
-  let source = this.overlayLayer_.getSource();
-  // source.clear();
-
   let cluster = feature.get('features');
   // Not a cluster (or just one feature)
   if (!cluster || cluster.length == 1) {
@@ -159,6 +155,10 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
     this.map.setBbox(extend);
     return;
   }
+
+  // Clic out of the cluster => close it
+  let source = this.overlayLayer_.getSource();
+  source.clear();
 
   // Remove cluster from selection
   if (!this.selectCluster_) this.getFeatures().clear();
