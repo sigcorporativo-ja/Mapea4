@@ -188,6 +188,7 @@ goog.require('M.Style');
         });
         scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
       };
+      style.updateCanvas();
       image.src = style.toImage();
     }
   };
@@ -221,7 +222,7 @@ goog.require('M.Style');
       let imageHeight = 0;
       if (!M.utils.isNullOrEmpty(image)) {
         imageHeight = image.height;
-        vectorContext.drawImage(image, 0, coordinateY);
+        vectorContext.drawImage(image, (maxWidth - image.width) / 2, coordinateY);
       }
       vectorContext.fillText(categoryName, maxWidth + 5, coordinateY + (imageHeight / 2));
     }, this);
