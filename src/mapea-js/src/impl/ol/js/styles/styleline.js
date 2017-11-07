@@ -188,11 +188,20 @@ goog.require('ol.geometry.Cspline');
     }
     let stroke = applyStyle.getStroke();
     let width;
-    if (!M.utils.isNullOrEmpty(stroke) && !M.utils.isNullOrEmpty(stroke.getWidth())) {
-      width = stroke.getWidth();
-      if (stroke.getWidth() > this.DEFAULT_WIDTH_LINE) {
-        width = this.DEFAULT_WIDTH_LINE;
+    if (!M.utils.isNullOrEmpty(stroke)) {
+      if (!M.utils.isNullOrEmpty(stroke.getWidth())) {
+        width = stroke.getWidth();
+        if (stroke.getWidth() > this.DEFAULT_WIDTH_LINE) {
+          width = this.DEFAULT_WIDTH_LINE;
+        }
       }
+      else {
+        width = 1;
+      }
+      optionsStyle = {
+        color: applyStyle.getStroke().getColor(),
+        width: width
+      };
       applyStyle.getStroke().setWidth(width);
       vectorContext.setStyle(applyStyle);
     }

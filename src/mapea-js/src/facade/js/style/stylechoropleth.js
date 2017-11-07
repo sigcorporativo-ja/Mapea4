@@ -231,6 +231,7 @@ goog.require('M.style.quantification');
         });
         scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
       };
+      this.styles_[currentIndex].updateCanvas();
       image.src = this.styles_[currentIndex].toImage();
     }
   };
