@@ -61,7 +61,7 @@ goog.require('M.impl.style.CentroidStyle');
           }),
           textAlign: Object.values(M.style.align).includes(align) ? align : 'center',
           textBaseline: Object.values(M.style.baseline).includes(baseline) ? baseline : 'top',
-          text: M.impl.style.Simple.getValue(options.label.text, feature),
+          text: String(M.impl.style.Simple.getValue(options.label.text, feature)),
           rotation: M.impl.style.Simple.getValue(options.label.rotation, feature)
         }));
         if (!M.utils.isNullOrEmpty(options.label.stroke)) {
