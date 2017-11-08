@@ -73,7 +73,8 @@ goog.require('M.impl.Layer');
         }
         else {
           if (!feature.getProperties().hasOwnProperty('selectclusterlink')) {
-            features.push(M.impl.Feature.olFeature2Facade(feature));
+            let mFeature = layer.getFeatureById(feature.getId());
+            features.push(mFeature);
           }
         }
         // return true;
