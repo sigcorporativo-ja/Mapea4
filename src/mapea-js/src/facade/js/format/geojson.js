@@ -43,7 +43,7 @@ goog.require('M.Feature');
    * @param {Array<M.Feature>} features features array to parsed
    * as a GeoJSON FeatureCollection
    * @return {Array<Object>}
-   * @api estable
+   * @api stable
    */
   M.format.GeoJSON.prototype.write = function(features) {
     if (!M.utils.isArray(features)) {
@@ -60,7 +60,7 @@ goog.require('M.Feature');
    * @param {object} geojson GeoJSON to parsed as a
    * M.Feature array
    * @return {Array<M.Feature>}
-   * @api estable
+   * @api stable
    */
   M.format.GeoJSON.prototype.read = function(geojson, projection) {
     var features = [];
