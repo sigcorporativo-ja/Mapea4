@@ -160,7 +160,7 @@ goog.require('M.impl.style.Cluster');
       renderer: renderer,
       view: new M.impl.View()
     });
-    this.map_.on('click', this.onMapClick_, this);
+    this.map_.on('singleclick', this.onMapClick_, this);
     this.map_.addInteraction(new ol.interaction.Interaction({
       handleEvent: e => {
         if (e.type === "pointermove") {
