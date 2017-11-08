@@ -72,7 +72,9 @@ goog.require('M.impl.Layer');
           }
         }
         else {
-          features.push(M.impl.Feature.olFeature2Facade(feature));
+          if (!feature.getProperties().hasOwnProperty('selectclusterlink')) {
+            features.push(M.impl.Feature.olFeature2Facade(feature));
+          }
         }
         // return true;
       }, {
