@@ -2016,6 +2016,7 @@ goog.require('M.style.Proportional');
    * @api stable
    */
   M.Map.prototype.addLabel = function(labelParam, coordParam) {
+    let panMapIfOutOfView = labelParam.panMapIfOutOfView === undefined ? true : labelParam.panMapIfOutOfView;
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(labelParam)) {
       M.exception('No ha especificado ninguna proyección');
@@ -2056,12 +2057,12 @@ goog.require('M.style.Proportional');
         if (M.utils.isNullOrEmpty(newCenter)) {
           newCenter = initCenter;
         }
-        var label = new M.Label(text, newCenter);
+        var label = new M.Label(text, newCenter, panMapIfOutOfView);
         this_.getImpl().addLabel(label);
       });
     }
     else {
-      var label = new M.Label(text, coord);
+      var label = new M.Label(text, coord, panMapIfOutOfView);
       this.getImpl().addLabel(label);
     }
 
