@@ -56,7 +56,7 @@ goog.require('ol.geometry.Cspline');
       }
       if (!M.utils.isNullOrEmpty(label)) {
         let textPathConfig = {
-          text: String(getValue(label.text, feature)),
+          text: getValue(label.text, feature) === undefined ? undefined : String(getValue(label.text, feature)),
           font: getValue(label.font, feature),
           fill: new ol.style.Fill({
             color: getValue(label.color || '#000000', feature)

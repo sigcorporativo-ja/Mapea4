@@ -117,6 +117,7 @@ goog.require('M.impl.style.PointFontSymbol');
         }
       }
       if (!M.utils.isNullOrEmpty(options.label)) {
+        let textLabel = M.impl.style.Simple.getValue(options.label.text, feature);
         let align = M.impl.style.Simple.getValue(options.label.align, feature);
         let baseline = M.impl.style.Simple.getValue(options.label.baseline, feature);
         let labelText = new ol.style.Text({
@@ -130,7 +131,7 @@ goog.require('M.impl.style.PointFontSymbol');
           }),
           textAlign: Object.values(M.style.align).includes(align) ? align : 'center',
           textBaseline: Object.values(M.style.baseline).includes(baseline) ? baseline : 'top',
-          text: String(M.impl.style.Simple.getValue(options.label.text, feature)),
+          text: textLabel === undefined ? undefined : String(textLabel),
           rotation: M.impl.style.Simple.getValue(options.label.rotation, feature)
         });
         if (!M.utils.isNullOrEmpty(options.label.stroke)) {
