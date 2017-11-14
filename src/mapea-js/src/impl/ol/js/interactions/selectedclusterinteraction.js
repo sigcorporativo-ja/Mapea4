@@ -187,6 +187,7 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
           styleImage.size_ = [42, 42];
         }
       }
+      cf.setId(cluster[i].getId());
       cf.setStyle([style, styleIconClone]);
       cf.set('features', [cluster[i]]);
       cf.set('geometry', new ol.geom.Point(p));

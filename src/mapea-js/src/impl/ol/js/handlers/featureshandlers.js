@@ -57,7 +57,7 @@ goog.require('M.impl.Layer');
       let olLayer = layer.getImpl().getOL3Layer();
       this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, function(feature, layerFrom) {
         if ((layerFrom instanceof M.impl.layer.AnimatedCluster) && !M.utils.isNullOrEmpty(feature.get("features"))) {
-          let clusteredFeatures = feature.get("features").map(M.impl.Feature.olFeature2Facade);
+          let clusteredFeatures = feature.get("features").map(f => M.impl.handler.Features.getFacadeFeature_(f, layer));
           if (clusteredFeatures.length === 1) {
             features.push(clusteredFeatures[0]);
           }
@@ -73,8 +73,7 @@ goog.require('M.impl.Layer');
         }
         else {
           if (!feature.getProperties().hasOwnProperty('selectclusterlink')) {
-            let mFeature = layer.getFeatureById(feature.getId());
-            features.push(mFeature);
+            features.push(M.impl.handler.Features.getFacadeFeature_(feature, layer));
           }
         }
         // return true;
@@ -118,6 +117,25 @@ goog.require('M.impl.Layer');
    */
   M.impl.handler.Features.prototype.removeCursorPointer = function() {
     this.map_.getMapImpl().getViewport().style.cursor = this.defaultCursor_;
+  };
+
+  /**
+   * function adds the event 'click'
+   *
+   * @private
+   * @function
+   * @export
+   */
+  M.impl.handler.Features.getFacadeFeature_ = function(feature, layer) {
+    let mFeature;
+    let featureId = feature.getId();
+    if (!M.utils.isNullOrEmpty(featureId)) {
+      mFeature = layer.getFeatureById(featureId);
+    }
+    if (M.utils.isNullOrEmpty(mFeature)) {
+      mFeature = M.impl.Feature.olFeature2Facade(feature);
+    }
+    return mFeature;
   };
 
   /**
