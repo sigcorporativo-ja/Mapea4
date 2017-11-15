@@ -23,7 +23,7 @@ goog.require('M.style.Feature');
   M.style.Simple.prototype.apply = function(layer) {
     this.layer_ = layer;
     this.getImpl().applyToLayer(layer);
-    layer.getFeatures().forEach(feature => feature.setStyle(this));
+    layer.getFeatures().forEach(feature => feature.setStyle(this.clone()));
     this.updateCanvas();
   };
 
