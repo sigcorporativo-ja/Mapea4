@@ -111,6 +111,9 @@ goog.provide('M.Style');
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.getImpl().updateFacadeOptions(this.options_);
     }
+    if (!M.utils.isNullOrEmpty(this.feature_)) {
+      this.applyToFeature(this.feature_);
+    }
     this.refresh();
     return this;
   };

@@ -13,6 +13,14 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Feature = (function(options, impl) {
+
+    /**
+     * Feature where the style is applied
+     * @private
+     * @type {M.Feature}
+     */
+    this.feature_ = null;
+
     goog.base(this, options, impl);
   });
   goog.inherits(M.style.Feature, M.Style);
@@ -26,6 +34,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Feature.prototype.applyToFeature = function(feature) {
+    this.feature_ = feature;
     this.getImpl().applyToFeature(feature);
   };
 })();
