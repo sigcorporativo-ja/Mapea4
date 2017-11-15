@@ -279,8 +279,10 @@ goog.require('ol.geom.convexhull');
           });
           this.convexHullLayer_.addFeatures(convexFeature);
           this.layer_.getImpl().getMap().addLayers(this.convexHullLayer_);
+          this.layer_.getImpl().getMap().getMapImpl().getView().on('change:resolution', this.clearConvexHull, this);
           this.convexHullLayer_.setStyle(new M.style.Polygon(this.optionsVendor_.convexHullStyle));
           this.convexHullLayer_.setZIndex(99990);
+
         }
         else {
           this.convexHullLayer_.removeFeatures(this.convexHullLayer_.getFeatures());
@@ -412,6 +414,7 @@ goog.require('ol.geom.convexhull');
    * @api stable
    */
   M.impl.style.Cluster.prototype.selectClusterFeature_ = function(evt) {
+    this.clearConvexHull();
     // if (!M.utils.isNullOrEmpty(evt.selected)) {
     //   let olFeatures = evt.selected[0].get("features");
     //   let features = olFeatures.map(M.impl.Feature.olFeature2Facade);
@@ -433,9 +436,20 @@ goog.require('ol.geom.convexhull');
       this.removeCoverInteraction_();
       this.removeSelectInteraction_();
       this.layer_.getImpl().getMap().removeLayers(this.convexHullLayer_);
+      this.layer_.getImpl().getMap().getMapImpl().getView().on('change:resolution', this.clearConvexHull, this);
     }
     else {
       this.layer_.un(M.evt.LOAD, this.clusterize_, this);
+    }
+  };
+
+  /**
+   *
+   */
+  M.impl.style.Cluster.prototype.clearConvexHull = function() {
+    if (this.convexHullLayer_ !== null) {
+      this.layer_.getImpl().getMap().removeLayers(this.convexHullLayer_);
+      this.convexHullLayer_ = null;
     }
   };
 
