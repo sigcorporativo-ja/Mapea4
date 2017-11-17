@@ -16,8 +16,8 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster = (function(options = {}, optsVendor = {}) {
-    this.extends_(options, M.style.Cluster.DEFAULT);
-    this.extends_(optsVendor, M.style.Cluster.DEFAULT_VENDOR);
+    M.utils.extends(options, M.style.Cluster.DEFAULT);
+    M.utils.extends(optsVendor, M.style.Cluster.DEFAULT_VENDOR);
 
     /**
      * @private

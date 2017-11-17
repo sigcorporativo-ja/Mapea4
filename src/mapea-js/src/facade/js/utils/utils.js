@@ -926,4 +926,47 @@ goog.require('goog.color.alpha');
     return chroma(color).alpha(opacity).css();
   };
 
+  /**
+   * This function set implementation of this control
+   *
+   * @public
+   * @function
+   * @param {M.Map} impl to add the plugin
+   * @api stable
+   */
+  M.utils.extends = function(dest = {}, src = {}) {
+    // if (!M.utils.isNullOrEmpty(src)) {
+    //   for (let key in src) {
+    //     if (!Object.prototype.hasOwnProperty.call(dest, key)) {
+    //       dest[key] = src[key];
+    //     }
+    //   }
+    // }
+    if (!M.utils.isNullOrEmpty(src)) {
+      Object.entries(src).forEach(([attr, value]) => {
+        if (M.utils.isNullOrEmpty(dest[attr])) {
+          dest[attr] = value;
+        }
+        else if (M.utils.isObject(dest[attr])) {
+          M.utils.extends(dest[attr], value);
+        }
+      }, this);
+    }
+    return dest;
+  };
+
+  /**
+   * TODO
+   */
+  M.utils.generateIntervals = function(array, breaks) {
+    let intervals = [...array];
+    if (array.length < breaks) {
+      let step = (array[0] + array[1]) / (breaks - 1);
+      for (let i = 1; i < breaks - 1; i++) {
+        intervals[i] = step * i;
+      }
+      intervals = [...intervals, array[1]];
+    }
+    return intervals;
+  };
 })();
