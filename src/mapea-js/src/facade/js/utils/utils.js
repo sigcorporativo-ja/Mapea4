@@ -938,8 +938,51 @@ goog.require('goog.color.alpha');
   M.utils.setEquals = function(array, array2) {
     let equals = false;
     if (array.length === array2.length) {
-      equals = array.every(e =>array2.some(e2 => e2.equals(e)));
+      equals = array.every(e => array2.some(e2 => e2.equals(e)));
     }
     return equals;
+  };
+
+  /**
+   * This function set implementation of this control
+   *
+   * @public
+   * @function
+   * @param {M.Map} impl to add the plugin
+   * @api stable
+   */
+  M.utils.extends = function(dest = {}, src = {}) {
+    if (!M.utils.isNullOrEmpty(src)) {
+      Object.entries(src).forEach(([attr, value]) => {
+        if (M.utils.isNullOrEmpty(dest[attr])) {
+          dest[attr] = value;
+        }
+        else if (M.utils.isObject(dest[attr])) {
+          M.utils.extends(dest[attr], value);
+        }
+      }, this);
+    }
+    return dest;
+  };
+
+  /**
+   * This function returns an array whith breaks between head and tail of an array
+   * @function
+   * @public
+   * @param {array} array
+   * @param {number} breaks
+   * @return {array}
+   * @api stable
+   */
+  M.utils.generateIntervals = function(array, breaks) {
+    let intervals = [...array];
+    if (array.length < breaks) {
+      let step = (array[0] + array[1]) / (breaks - 1);
+      for (let i = 1; i < breaks - 1; i++) {
+        intervals[i] = step * i;
+      }
+      intervals = [...intervals, array[1]];
+    }
+    return intervals;
   };
 })();

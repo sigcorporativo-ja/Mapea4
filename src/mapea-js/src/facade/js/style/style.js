@@ -231,7 +231,8 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style.prototype.clone = function() {
-    let optsClone = JSON.parse(JSON.stringify(this.options_));
+    let optsClone = {};
+    M.utils.extends(optsClone, this.options_);
     let implClass = this.getImpl().constructor;
     let implClone = new implClass(optsClone);
     return new this.constructor(optsClone, implClone);

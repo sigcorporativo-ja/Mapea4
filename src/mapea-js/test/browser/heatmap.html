@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+
+    <title>PRUEBA DESARROLLO</title>
+    <style rel="stylesheet">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: scroll;
+      }
+
+      .makidentist:before {
+        content: '\e814';
+        color: 'red'
+      }
+
+      #style-builder {
+        width: 25vw;
+        background-color: white;
+        position: absolute;
+        margin-top: -10px;
+        z-index: 9999;
+        margin-left: 35%;
+        border: 1px solid black;
+        box-shadow: 0px 4px 11px black;
+        padding: 25px 5px 5px 5px;
+        transform: translateY(-100%);
+        transition-property: transform;
+        transition-duration: 0.4s;
+        transition-delay: 0s;
+        transition-timing-function: cubic-bezier(0, .24, .24, 1);
+      }
+
+      .panel>div {
+        display: flex;
+        flex-flow: column;
+      }
+
+      #style-builder[opened] {
+        transform: translateY(0);
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      #style-builder>.display-handler {
+        text-align: center;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: -34px;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        justify-content: center;
+      }
+
+      #style-builder>.display-handler>span {
+        font-family: sans-serif;
+        background-color: #0067ff;
+        color: white;
+        padding: 5px 15px 10px 15px;
+        border-bottom-left-radius: 10px;
+        border-bottom-right-radius: 10px;
+        cursor: pointer;
+      }
+
+      #apply-button {
+        background-color: #0067ff;
+        color: white;
+        padding: 5px 15px;
+        font-family: sans-serif;
+        border: none;
+        border-radius: 5px;
+        margin-top: 5px;
+      }
+    </style>
+
+    <!-- styles -->
+    <link href="../../src/impl/ol/assets/css/custom.css" rel="stylesheet" />
+    <link href="../../src/impl/ol/assets/css/ol3.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/fonts.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/popup.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/dialog.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/controls/getfeatureinfo.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/controls/layerswitcher.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/controls/location.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/controls/scale.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/controls/wmcselector.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/controls/mouse.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/panel.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/animations.css" rel="stylesheet" />
+    <link href="../../src/facade/assets/css/mapea.css" rel="stylesheet" />
+    <link href="../../src/plugins/geosearch/facade/assets/css/geosearch.css" rel="stylesheet" />
+    <link href="../../src/plugins/geosearch/impl/ol/assets/css/geosearch.css" rel="stylesheet" />
+    <link href="../../src/plugins/geosearchbylocation/facade/assets/css/geosearchbylocation.css" rel="stylesheet" />
+    <link href="../../src/plugins/measurebar/facade/assets/css/measurebar.css" rel="stylesheet" />
+    <link href="../../src/plugins/printer/facade/assets/css/printer.css" rel="stylesheet" />
+    <link href="../../src/plugins/wfstcontrols/facade/assets/css/wfstcontrols.css" rel="stylesheet" />
+    <link href="../../src/plugins/streetview/facade/assets/css/streetview.css" rel="stylesheet" />
+    <link href="../../src/plugins/searchstreet/facade/assets/css/searchstreet.css" rel="stylesheet" />
+    <link href="../../src/plugins/attributetable/facade/assets/css/attributetable.css" rel="stylesheet" />
+    <!-- <link rel="stylesheet" href="../../build/core/assets/css/mapea.ol.min.css"> -->
+  </head>
+
+  <body>
+    <div class="panel" id="style-builder" opened="true">
+      <div>
+        <label>Attribute</label>
+        <input type="text" id="attribute" value="">
+      </div>
+      <div>
+        <label>Gradient</label>
+        <input type="text" id="gradient" value="">
+      </div>
+      <div>
+        <label>BlurSize</label>
+        <input type="number" id="blursize" value="10" min="5" max="40">
+      </div>
+      <div>
+        <label>Opacity</label>
+        <input type="number" id="opacity" step="0.1" value="0.5" min="0" max="1">
+      </div>
+      <div>
+        <label>Radius</label>
+        <input type="number" id="radius" value="10" min="5" max="40">
+      </div>
+      <div class="display-handler">
+        <span data-role="show" class="hidden" onclick="eventHandlers.toggleStyleBuilder()">Mostrar</span>
+        <span data-role="hide" onclick="eventHandlers.toggleStyleBuilder()">Ocultar</span>
+      </div>
+      <button type="button" id="apply-button" onclick="eventHandlers.setStyle()">Aplicar</button>
+      <p>Nota: En el campo gradient se deben poner los colores (en hexadecimal o palabra literal en inglés) separados por comas</p>
+    </div>
+    <div id="map" class="container"></div>
+
+
+    <script type="text/javascript" src="../../libraries/babel-polyfill/browser-polyfill.js"></script>
+    <script type="text/javascript" src="../../libraries/proj4/proj4.js"></script>
+    <script type="text/javascript" src="../../node_modules/jsts/dist/jsts.min.js"></script>
+    <script type="text/javascript" src="../../libraries/chroma-js/js/chroma.min.js"></script>
+    <script type="text/javascript" src="../../libraries/draggabilly/js/draggabilly.pkgd.min.js"></script>
+
+
+    <!-- libraries -->
+    <script type="text/javascript" src="../../libraries/closure/closure/goog/base.js"></script>
+    <script type="text/javascript" src="../mapea.ol.deps.js"></script>
+    <script type="text/javascript" src="dependencies.js"></script>
+    <script type="text/javascript" src="../configuration_filtered.js"></script>
+
+
+
+    <!-- prueba -->
+    <script type="text/javascript" src="heatmap.js"></script>
+  </body>
+
+</html>

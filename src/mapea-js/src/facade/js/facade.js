@@ -56,24 +56,4 @@ goog.require('M.Object');
     this.impl_ = impl;
   };
 
-  /**
-   * This function set implementation of this control
-   *
-   * @public
-   * @function
-   * @param {M.Map} impl to add the plugin
-   * @api stable
-   */
-  M.facade.Base.prototype.extends_ = function(dest = {}, src = {}) {
-    if (!M.utils.isNullOrEmpty(src)) {
-      Object.keys(src).forEach(key => {
-        if (M.utils.isNullOrEmpty(dest[key])) {
-          dest[key] = src[key];
-        }
-        else if (M.utils.isObject(dest[key])) {
-          this.extends_(dest[key], src[key]);
-        }
-      }, this);
-    }
-  };
 })();
