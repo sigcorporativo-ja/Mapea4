@@ -240,11 +240,15 @@ goog.require('M.Style');
    */
   M.style.Category.prototype.update_ = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
+      let styleOther = this.categoryStyles_['other'];
       this.layer_.getFeatures().forEach(function(feature) {
         let value = feature.getAttribute(this.attributeName_);
         let style = this.categoryStyles_[value];
         if (!M.utils.isNullOrEmpty(style)) {
           feature.setStyle(style);
+        }
+        else if (!M.utils.isNullOrEmpty(styleOther)) {
+          feature.setStyle(styleOther);
         }
       }.bind(this));
       this.updateCanvas();
