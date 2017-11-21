@@ -182,6 +182,7 @@ goog.require('M.impl.style.OLChart');
         resolution = feature;
         feature = this;
       }
+      const getValue = M.impl.style.Simple.getValue;
       let styleOptions = this.formatDataRecursively_(options, feature);
       let data = [];
       //let variables = this.variables_.map
@@ -228,7 +229,6 @@ goog.require('M.impl.style.OLChart');
           if (M.utils.isNullOrEmpty(textAlign)) {
             textAlign = label.textAlign || (angle < Math.PI / 2 ? 'left' : 'right');
           }
-          const getValue = M.impl.style.Simple.getValue;
           let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
           text = styleOptions.type !== M.style.chart.types.BAR && text === '0' ? '' : text;
           let font = getValue(label.font, feature);
@@ -307,6 +307,39 @@ goog.require('M.impl.style.OLChart');
             size: [styles[0].getImage().getImage().width / 2, height]
           }))
         }));
+      }
+      if (!M.utils.isNullOrEmpty(options.label)) {
+        let styleLabel = new ol.style.Style();
+        let textLabel = getValue(options.label.text, feature);
+        let align = getValue(options.label.align, feature);
+        let baseline = getValue(options.label.baseline, feature);
+        let labelText = new ol.style.Text({
+          font: getValue(options.label.font, feature),
+          rotateWithView: getValue(options.label.rotate, feature),
+          scale: getValue(options.label.scale, feature),
+          offsetX: getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
+          offsetY: getValue(options.label.offset ? options.label.offset[1] : undefined, feature),
+          fill: new ol.style.Fill({
+            color: getValue(options.label.color || '#000000', feature)
+          }),
+          textAlign: Object.values(M.style.align).includes(align) ? align : 'center',
+          textBaseline: Object.values(M.style.baseline).includes(baseline) ? baseline : 'top',
+          text: textLabel === undefined ? undefined : String(textLabel),
+          rotation: getValue(options.label.rotation, feature)
+        });
+        if (!M.utils.isNullOrEmpty(options.label.stroke)) {
+          labelText.setStroke(new ol.style.Stroke({
+            color: getValue(options.label.stroke.color, feature),
+            width: getValue(options.label.stroke.width, feature),
+            lineCap: getValue(options.label.stroke.linecap, feature),
+            lineJoin: getValue(options.label.stroke.linejoin, feature),
+            lineDash: getValue(options.label.stroke.linedash, feature),
+            lineDashOffset: getValue(options.label.stroke.linedashoffset, feature),
+            miterLimit: getValue(options.label.stroke.miterlimit, feature)
+          }));
+        }
+        styleLabel.setText(labelText);
+        styles.push(styleLabel);
       }
       return styles;
     };
