@@ -158,11 +158,11 @@ goog.require('goog.style');
    * @api stable
    */
   M.impl.layer.GeoJSON.prototype.selectFeatures = function(features, coord, evt) {
-    if (this.extract === true) {
+    var feature = features[0];
+    if (!(feature instanceof M.ClusteredFeature) && (this.extract === true)) {
       // unselects previous features
       this.unselectFeatures();
 
-      var feature = features[0];
       if (!M.utils.isNullOrEmpty(feature)) {
         let clickFn = feature.getAttribute('vendor.mapea.click');
         if (M.utils.isFunction(clickFn)) {
@@ -208,30 +208,32 @@ goog.require('goog.style');
     };
 
     features.forEach(function(feature) {
-      var properties = feature.getAttributes();
-      var attributes = [];
-      for (var key in properties) {
-        let addAttribute = true;
-        // adds the attribute just if it is not in
-        // hiddenAttributes_ or it is in showAttributes_
-        if (!M.utils.isNullOrEmpty(this.showAttributes_)) {
-          addAttribute = M.utils.includes(this.showAttributes_, key);
+      if (!(feature instanceof M.ClusteredFeature)) {
+        var properties = feature.getAttributes();
+        var attributes = [];
+        for (var key in properties) {
+          let addAttribute = true;
+          // adds the attribute just if it is not in
+          // hiddenAttributes_ or it is in showAttributes_
+          if (!M.utils.isNullOrEmpty(this.showAttributes_)) {
+            addAttribute = M.utils.includes(this.showAttributes_, key);
+          }
+          else if (!M.utils.isNullOrEmpty(this.hiddenAttributes_)) {
+            addAttribute = !M.utils.includes(this.hiddenAttributes_, key);
+          }
+          if (addAttribute) {
+            attributes.push({
+              'key': M.utils.beautifyAttributeName(key),
+              'value': properties[key]
+            });
+          }
         }
-        else if (!M.utils.isNullOrEmpty(this.hiddenAttributes_)) {
-          addAttribute = !M.utils.includes(this.hiddenAttributes_, key);
-        }
-        if (addAttribute) {
-          attributes.push({
-            'key': M.utils.beautifyAttributeName(key),
-            'value': properties[key]
-          });
-        }
+        var featureTemplate = {
+          'id': feature.getId(),
+          'attributes': attributes
+        };
+        featuresTemplate.features.push(featureTemplate);
       }
-      var featureTemplate = {
-        'id': feature.getId(),
-        'attributes': attributes
-      };
-      featuresTemplate.features.push(featureTemplate);
     }, this);
     return featuresTemplate;
   };
