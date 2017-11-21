@@ -145,7 +145,7 @@ goog.require('goog.style');
       this.facadeVector_.addFeatures(features);
       //this_.fire(M.evt.LOAD, [features]);
 
-      this.fire(M.evt.LOAD, [features]);
+
     }
   };
 
