@@ -390,7 +390,7 @@ goog.require('M.style.Point');
   M.style.Proportional.getMinMaxValues_ = function(features, attributeName) {
     let [minValue, maxValue] = [undefined, undefined];
     let filteredFeatures = features.filter(feature =>
-      !isNaN(feature.getAttribute(attributeName))).map(f => parseInt(f.getAttribute(attributeName)));
+      ![NaN, undefined, null].includes(feature.getAttribute(attributeName))).map(f => parseInt(f.getAttribute(attributeName)));
     let index = 1;
     if (!M.utils.isNullOrEmpty(filteredFeatures)) {
       minValue = filteredFeatures[0];
@@ -443,6 +443,9 @@ goog.require('M.style.Point');
         maxRadius = options.maxRadius / M.style.Proportional.SCALE_PROPORTION;
       }
       let value = feature.getAttribute(this.attributeName_);
+      if (value == null) {
+        console.warn(`Warning: ${this.attributeName_} value is null or empty.`)
+      }
       let radius = this.proportionalFunction_(value, options.minValue, options.maxValue,
         minRadius, maxRadius);
       let zindex = options.maxValue - parseFloat(feature.getAttribute(this.attributeName_));
