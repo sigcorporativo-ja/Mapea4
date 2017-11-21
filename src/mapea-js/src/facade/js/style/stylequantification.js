@@ -18,7 +18,7 @@ goog.provide('M.style.quantification');
 
     return function jenks(data, n_classes = n_classes_param) {
       let uniqueData = M.style.quantification.uniqueArray_(data);
-      n_classes = uniqueData.length < n_classes ? uniqueData.length : n_classes;
+      n_classes = uniqueData.length < n_classes ? uniqueData.length - 1 : n_classes;
       // sort data in numerical order, since this is expected
       // by the matrices function
       data.sort(function(a, b) {
