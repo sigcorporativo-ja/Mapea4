@@ -388,18 +388,21 @@ goog.require('ol.geom.convexhull');
    * @export
    */
   M.impl.style.Cluster.prototype.getDefaultRanges_ = function() {
-    let breakpoint = Math.floor(this.layer_.getFeatures().length / 3);
+    let numFeatures = this.layer_.getFeatures().length;
+    let breakpoint = Math.floor(numFeatures / 3);
+    // min value is 3 in order to get valid clusters ranges
+    breakpoint = Math.max(breakpoint, 3);
     let ranges = [{
       min: 2,
       max: breakpoint,
       style: new M.style.Point(M.style.Cluster.RANGE_1_DEFAULT)
       }, {
       min: breakpoint,
-      max: (breakpoint * 2),
+      max: breakpoint * 2,
       style: new M.style.Point(M.style.Cluster.RANGE_2_DEFAULT)
       }, {
-      min: (breakpoint * 2),
-      max: (breakpoint * 3) + 1,
+      min: breakpoint * 2,
+      max: numFeatures + 1,
       style: new M.style.Point(M.style.Cluster.RANGE_3_DEFAULT)
     }];
     return ranges;
