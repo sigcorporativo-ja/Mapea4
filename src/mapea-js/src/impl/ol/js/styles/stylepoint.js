@@ -53,6 +53,12 @@ goog.require('M.impl.style.PointFontSymbol');
         // ctx.drawImage(imageStyle.getImage(), 0, 0, ctx.canvas.height, ctx.canvas.width);
         if (!M.utils.isNullOrEmpty(imageStyle)) {
           image = imageStyle.getSrc();
+          if (!image.startsWith(window.location.origin)) {
+            let proxyImageURL = M.utils.concatUrlPaths([M.config.PROXY_URL, "/image"]);
+            image = M.utils.addParameters(proxyImageURL, {
+              "url": image
+            });
+          }
         }
       }
     }
