@@ -183,7 +183,7 @@ goog.require('M.Style');
     let styleImpl = this.getImpl();
     styleImpl.unapply(this.layer_);
     styleImpl.setOptions(this.options_, this.vendorOptions_);
-    styleImpl.applyToLayer(this.layer_)
+    styleImpl.applyToLayer(this.layer_);
   };
 
   /**

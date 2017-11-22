@@ -444,7 +444,7 @@ goog.require('M.style.Point');
       }
       let value = feature.getAttribute(this.attributeName_);
       if (value == null) {
-        console.warn(`Warning: ${this.attributeName_} value is null or empty.`)
+        console.warn(`Warning: ${this.attributeName_} value is null or empty.`);
       }
       let radius = this.proportionalFunction_(value, options.minValue, options.maxValue,
         minRadius, maxRadius);
