@@ -1,6 +1,6 @@
 // Definimos el mapa
 let mapajs = M.map({
-  container: "map",
+  container: "mapjs",
   controls: ['mouse', 'layerswitcher', 'panzoombar'],
   layers: ['MAPBOX*mapbox.streets'],
   projection: 'EPSG:3857*m',

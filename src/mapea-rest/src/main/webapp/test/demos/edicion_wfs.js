@@ -1,6 +1,6 @@
 // Definimos el mapa
 let mapajs = M.map({
-  container: "map",
+  container: "mapjs",
   controls: ['mouse', 'layerswitcher', 'panzoombar'],
   layers: [new M.layer.WMTS({
     name: 'IGNBaseTodo',
