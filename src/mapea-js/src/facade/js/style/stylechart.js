@@ -125,6 +125,15 @@ goog.require('M.style.chart.Variable');
   };
 
   /**
+   * @inheritDoc
+   */
+  M.style.Chart.prototype.apply = function(layer) {
+    this.layer_ = layer;
+    layer.getFeatures().forEach(feature => feature.setStyle(this.clone()));
+    this.updateCanvas();
+  };
+
+  /**
    * Default options for this style
    *
    * @const
