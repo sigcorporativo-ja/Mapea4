@@ -1,6 +1,6 @@
 goog.provide('M.impl.style.Heatmap');
 goog.require('M.impl.Style');
-goog.require('ol.layer.Heatmap');
+goog.require('M.impl.layer.Heatmap');
 
 (function() {
   /**
@@ -83,10 +83,10 @@ goog.require('ol.layer.Heatmap');
    * @api stable
    */
   M.impl.style.Heatmap.prototype.createHeatmapLayer_ = function(olFeatures) {
-    this.heatmapLayer_ = new ol.layer.Heatmap(this.opt_options_);
-    this.heatmapLayer_.setSource(new ol.source.Vector({
+    this.opt_options_.source = new ol.source.Vector({
       features: olFeatures,
-    }));
+    });
+    this.heatmapLayer_ = new M.impl.layer.Heatmap(this.opt_options_);
   };
 
   /**
