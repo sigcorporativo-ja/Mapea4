@@ -40,15 +40,15 @@ goog.require('M.Style');
     if (!M.utils.isNullOrEmpty(options.gradient) && !M.utils.isArray(options.gradient)) {
       options.gradient = [options.gradient];
     }
+    this.options_.gradient = options.gradient || M.style.Heatmap.DEFAULT_OPTIONS.gradient;
 
-    if (options.gradient.length < 2) {
+    if (this.options_.gradient.length < 2) {
       let inverseColor = M.utils.inverseColor(options.gradient[0]);
-      options.gradient.push(inverseColor);
+      this.options_.gradient.push(inverseColor);
     }
 
-    this.options_.gradient = options.gradient;
-    this.options_.blur = options.blur;
-    this.options_.radius = options.radius;
+    this.options_.blur = options.blur || M.style.Heatmap.DEFAULT_OPTIONS.blur;
+    this.options_.radius = options.radius || M.style.Heatmap.DEFAULT_OPTIONS.radius;
     this.options_.weight = this.attribute;
 
     /**
