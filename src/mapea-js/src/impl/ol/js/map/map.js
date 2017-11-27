@@ -44,6 +44,7 @@ goog.require('M.impl.style.Line');
 goog.require('M.impl.style.Polygon');
 goog.require('M.impl.style.Cluster');
 goog.require('M.impl.style.Heatmap');
+goog.require('M.impl.layer.Heatmap');
 
 (function() {
   /**
