@@ -38,6 +38,14 @@ goog.require('M.dialog');
 goog.require('M.Plugin');
 goog.require('M.window');
 
+goog.require('M.style.Chart');
+goog.require('M.style.Point');
+goog.require('M.style.Polygon');
+goog.require('M.style.Line');
+goog.require('M.style.Cluster');
+goog.require('M.style.Choropleth');
+goog.require('M.style.Category');
+goog.require('M.style.Proportional');
 (function() {
   /**
    * @classdesc
@@ -195,6 +203,19 @@ goog.require('M.window');
     }, {
       'displayInLayerSwitcher': false
     });
+
+    this.drawLayer_.setStyle(new M.style.Point({
+      fill: {
+        color: '#009e00'
+      },
+      stroke: {
+        color: '#fcfcfc',
+        width: 2
+      },
+      radius: 7
+    }));
+
+    this.drawLayer_.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999);
     this.addLayers(this.drawLayer_);
 
     // projection
@@ -368,6 +389,18 @@ goog.require('M.window');
    * This function adds layers specified by the user
    *
    * @function
+   * @returns {M.handler.Feature}
+   * @public
+   * @api stable
+   */
+  M.Map.prototype.getFeatureHandler = function() {
+    return this.featuresHandler_;
+  };
+
+  /**
+   * This function adds layers specified by the user
+   *
+   * @function
    * @param {string|Object|Array<String>|Array<Object>} layersParam
    * @returns {M.Map}
    * @api stable
@@ -446,7 +479,7 @@ goog.require('M.window');
       let layers = this.getLayers(layersParam);
       layers.forEach(function(layer) {
         // KML and WFS layers handler its features
-        if ((layer instanceof M.layer.Vector) && !(layer instanceof M.layer.KML) && !(layer instanceof M.layer.WFS)) {
+        if ((layer instanceof M.layer.Vector) /*&& !(layer instanceof M.layer.KML) && !(layer instanceof M.layer.WFS)*/ ) {
           this.featuresHandler_.removeLayer(layer);
         }
       }, this);
@@ -1982,6 +2015,7 @@ goog.require('M.window');
    * @api stable
    */
   M.Map.prototype.addLabel = function(labelParam, coordParam) {
+    let panMapIfOutOfView = labelParam.panMapIfOutOfView === undefined ? true : labelParam.panMapIfOutOfView;
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(labelParam)) {
       M.exception('No ha especificado ninguna proyección');
@@ -2022,12 +2056,12 @@ goog.require('M.window');
         if (M.utils.isNullOrEmpty(newCenter)) {
           newCenter = initCenter;
         }
-        var label = new M.Label(text, newCenter);
+        var label = new M.Label(text, newCenter, panMapIfOutOfView);
         this_.getImpl().addLabel(label);
       });
     }
     else {
-      var label = new M.Label(text, coord);
+      var label = new M.Label(text, coord, panMapIfOutOfView);
       this.getImpl().addLabel(label);
     }
 
@@ -2374,25 +2408,6 @@ goog.require('M.window');
       this.getImpl().refresh();
     }
     this.getLayers().forEach(function(layer) {
-      layer.refresh();
-    });
-    return this;
-  };
-
-  /**
-   * This function refresh the state of this map instance,
-   * this is, all its layers.
-   *
-   * @function
-   * @api stable
-   * @returns {M.Map} the instance
-   */
-  M.Map.prototype.refresh = function () {
-    // checks if the implementation has refresh method
-    if (!M.utils.isUndefined(this.getImpl().refresh) && M.utils.isFunction(this.getImpl().refresh)) {
-      this.getImpl().refresh();
-    }
-    this.getLayers().forEach(function (layer) {
       layer.refresh();
     });
     return this;

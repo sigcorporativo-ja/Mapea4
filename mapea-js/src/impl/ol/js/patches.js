@@ -112,3 +112,90 @@ ol.control.OverviewMap.prototype.handleToggle_ = function() {
     }
   }.bind(this), this.toggleDelay_);
 };
+
+/**
+ * @private
+ * @param {ol.render.ReplayGroup} replayGroup Replay group.
+ * @param {ol.geom.Circle} geometry Geometry.
+ * @param {ol.style.Style} style Style.
+ * @param {ol.Feature} feature Feature.
+ */
+M.impl.patches.renderPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
+  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
+    M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
+  }
+  else {
+    ol.renderer.vector.renderPolygonGeometry_(replayGroup, geometry, style, feature);
+  }
+};
+
+/**
+ * @private
+ * @param {ol.render.ReplayGroup} replayGroup Replay group.
+ * @param {ol.geom.Circle} geometry Geometry.
+ * @param {ol.style.Style} style Style.
+ * @param {ol.Feature} feature Feature.
+ */
+M.impl.patches.renderMultiPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
+  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
+    M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
+  }
+  else {
+    ol.renderer.vector.renderMultiPolygonGeometry_(replayGroup, geometry, style, feature);
+  }
+};
+
+/**
+ * @private
+ * @param {ol.render.ReplayGroup} replayGroup Replay group.
+ * @param {ol.geom.Circle} geometry Geometry.
+ * @param {ol.style.Style} style Style.
+ * @param {ol.Feature} feature Feature.
+ */
+M.impl.patches.renderLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
+  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
+    M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
+  }
+  else {
+    ol.renderer.vector.renderLineStringGeometry_(replayGroup, geometry, style, feature);
+  }
+};
+
+/**
+ * @private
+ * @param {ol.render.ReplayGroup} replayGroup Replay group.
+ * @param {ol.geom.Circle} geometry Geometry.
+ * @param {ol.style.Style} style Style.
+ * @param {ol.Feature} feature Feature.
+ */
+M.impl.patches.renderMultiLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
+  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
+    M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
+  }
+  else {
+    ol.renderer.vector.renderMultiLineStringGeometry_(replayGroup, geometry, style, feature);
+  }
+};
+
+/**
+ * @private
+ * @param {ol.render.ReplayGroup} replayGroup Replay group.
+ * @param {ol.geom.Circle} geometry Geometry.
+ * @param {ol.style.Style} style Style.
+ * @param {ol.Feature} feature Feature.
+ */
+M.impl.patches.drawGeometryCentroidAsFeature = function(replayGroup, geometry, style, feature) {
+  let parser = new jsts.io.OL3Parser();
+  let jstsGeom = parser.read(feature.getGeometry());
+  let centroid = Object.values(jstsGeom.getCentroid().getCoordinates()[0]).filter(c => c != undefined);
+  // let centroid = M.impl.utils.getCentroidCoordinate(geometry);
+  let geom = new ol.geom.Point(centroid);
+  ol.renderer.vector.GEOMETRY_RENDERERS_[geom.getType()](replayGroup, geom, style, feature);
+};
+
+Object.assign(ol.renderer.vector.GEOMETRY_RENDERERS_, {
+  'LineString': M.impl.patches.renderLineStringGeometry_,
+  'Polygon': M.impl.patches.renderPolygonGeometry_,
+  'MultiPolygon': M.impl.patches.renderMultiPolygonGeometry_,
+  'MultiLineString': M.impl.patches.renderMultiLineStringGeometry_
+});
