@@ -45,6 +45,6 @@ M.impl.layer.Heatmap = function(options = {}) {
       this.styleCache_[index] = style;
     }
     return style;
-  }.bind(this))
+  }.bind(this));
 };
 goog.inherits(M.impl.layer.Heatmap, ol.layer.Heatmap);
