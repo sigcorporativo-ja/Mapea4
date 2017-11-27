@@ -953,12 +953,19 @@ goog.require('goog.color.alpha');
    */
   M.utils.extends = function(dest = {}, src = {}) {
     if (!M.utils.isNullOrEmpty(src)) {
-      Object.entries(src).forEach(([attr, value]) => {
-        if (M.utils.isNullOrEmpty(dest[attr])) {
-          dest[attr] = value;
+      Object.keys(src).forEach(key => {
+        let value = src[key];
+        if (M.utils.isArray(value)) {
+          value = [...value];
         }
-        else if (M.utils.isObject(dest[attr])) {
-          M.utils.extends(dest[attr], value);
+        else if (M.utils.isObject(value)) {
+          value = M.utils.extends({}, value);
+        }
+        if (M.utils.isNullOrEmpty(dest[key])) {
+          dest[key] = value;
+        }
+        else if (M.utils.isObject(dest[key])) {
+          M.utils.extends(dest[key], value);
         }
       }, this);
     }

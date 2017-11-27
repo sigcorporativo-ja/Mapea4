@@ -438,7 +438,7 @@ goog.require('M.style.Point');
   M.style.Proportional.prototype.calculateStyle_ = function(feature, options, style) {
     if (!M.utils.isNullOrEmpty(style)) {
       let [minRadius, maxRadius] = [options.minRadius, options.maxRadius];
-      if (!M.utils.isNullOrEmpty(style.get('icon.scale'))) {
+      if (!M.utils.isNullOrEmpty(style.get('icon.src'))) {
         minRadius = options.minRadius / M.style.Proportional.SCALE_PROPORTION;
         maxRadius = options.maxRadius / M.style.Proportional.SCALE_PROPORTION;
       }
