@@ -44,7 +44,7 @@ goog.require('M.style.Point');
      * @api stable
      * @expose
      */
-    this.minRadius_ = minRadius || 5;
+    this.minRadius_ = parseInt(minRadius) || 5;
 
     /**
      * The maximum radius of the proportionality
@@ -53,7 +53,7 @@ goog.require('M.style.Point');
      * @api stable
      * @expose
      */
-    this.maxRadius_ = maxRadius || 15;
+    this.maxRadius_ = parseInt(maxRadius) || 15;
 
     /**
      * The style point define by user
@@ -193,7 +193,7 @@ goog.require('M.style.Point');
    * @api stable
    */
   M.style.Proportional.prototype.setMinRadius = function(minRadius) {
-    this.minRadius_ = minRadius;
+    this.minRadius_ = parseInt(minRadius);
     if (minRadius >= this.maxRadius_) {
       // this.maxRadius_ = minRadius + 10;
       M.exception("No puede establecerse un radio mínimo mayor que el máximo.");
@@ -221,7 +221,7 @@ goog.require('M.style.Point');
    * @api stable
    */
   M.style.Proportional.prototype.setMaxRadius = function(maxRadius) {
-    this.maxRadius_ = maxRadius;
+    this.maxRadius_ = parseInt(maxRadius);
     if (maxRadius <= this.minRadius_) {
       // this.minRadius_ = maxRadius - 10;
       M.exception("No puede establecerse un radio máximo menor que el mínimo.");
