@@ -148,9 +148,14 @@ div.search-panel > button.m-input-search.shown {
    cursor: pointer
 }
 
-div#m-autcomplete > div:hover {
+div#m-autcomplete > div.selected {
    background-color: #F7F4F4;
+   font-weight: bold;
 }
+div.result.autocomplete:hover {
+   padding-left: 15px!important;
+}
+
 
 .m-control.m-searchstreet-container.shown.m-searching, .m-control.m-searchstreetgeosearch-container.shown.m-searching {
    overflow-y: inherit !important;

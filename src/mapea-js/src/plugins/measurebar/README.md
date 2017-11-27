@@ -6,8 +6,8 @@ Manteniendo pulsado SHIFT, la línea/área de edición se dibuja a mano alzada.
 
 ## Recursos y uso
 
-- js: [http://mapea4-sigc.juntadeandalucia.es/plugins/measurebar/measurebar.ol.min.js](http://mapea4-sigc.juntadeandalucia.es/plugins/measurebar/measurebar.ol.min.js)
-- css: [http://mapea4-sigc.juntadeandalucia.es/plugins/measurebar/measurebar.min.css](http://mapea4-sigc.juntadeandalucia.es/plugins/measurebar/measurebar.min.css)
+- js: [https://mapea4-sigc.juntadeandalucia.es/plugins/measurebar/measurebar.ol.min.js](https://mapea4-sigc.juntadeandalucia.es/plugins/measurebar/measurebar.ol.min.js)
+- css: [https://mapea4-sigc.juntadeandalucia.es/plugins/measurebar/measurebar.min.css](https://mapea4-sigc.juntadeandalucia.es/plugins/measurebar/measurebar.min.css)
 
 Configuración por defecto:
 ```

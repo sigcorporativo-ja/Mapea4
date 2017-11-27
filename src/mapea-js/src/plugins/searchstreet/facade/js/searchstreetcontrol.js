@@ -227,8 +227,8 @@ goog.require('goog.dom');
       this.clear_ = this.element_.getElementsByTagName("button")["m-searchstreet-clear-btn"];
 
       // events
-      goog.events.listen(this.input_, goog.events.EventType.KEYUP,
-         this.searchClick_, false, this);
+      //JGL20170816: traslado gestión evento a autocomplete
+      //goog.events.listen(this.input_, goog.events.EventType.KEYUP, this.searchClick_, false, this);
       goog.events.listen(this.button_, goog.events.EventType.CLICK, this.searchClick_, false, this);
       goog.events.listen(this.clear_, goog.events.EventType.CLICK, this.clearSearchs_, false, this);
 
@@ -288,8 +288,7 @@ goog.require('goog.dom');
       evt.preventDefault();
 
       if ((evt.type !== goog.events.EventType.KEYUP) || (evt.keyCode === 13)) {
-         goog.dom.classlist.remove(this.resultsAutocomplete_,
-            M.control.Searchstreet.MINIMUM);
+         goog.dom.classlist.remove(this.resultsAutocomplete_, M.control.Searchstreet.MINIMUM);
          goog.dom.removeChildren(this.resultsAutocomplete_, this.resultsAutocomplete_.querySelector("div#m-searching-result-autocomplete"));
          // gets the query
          var query = this.input_.value;
@@ -334,9 +333,7 @@ goog.require('goog.dom');
       goog.dom.appendChild(this.resultsContainer_, this.searchingResult_);
       // adds the class
       goog.dom.classlist.add(this.element_, M.control.Searchstreet.SEARCHING_CLASS);
-      goog.dom.classlist.add(this.resultsContainer_,
-         M.control.Searchstreet.MINIMUM);
-
+      goog.dom.classlist.add(this.resultsContainer_, M.control.Searchstreet.MINIMUM);
       var normalizar = M.utils.addParameters(M.config.SEARCHSTREET_NORMALIZAR, {
          cadena: query
       });
@@ -418,14 +415,12 @@ goog.require('goog.dom');
                   this_.provincia_ = M.utils.beautifyString(provincia);
                   processor.call(this_, results);
                   goog.dom.classlist.remove(this_.element_, M.control.Searchstreet.SEARCHING_CLASS);
-                  goog.dom.classlist.remove(this_.resultsContainer_,
-                     M.control.Searchstreet.MINIMUM);
+                  goog.dom.classlist.remove(this_.resultsContainer_, M.control.Searchstreet.MINIMUM);
                }
                else {
                   processor.call(this_, results);
                   goog.dom.classlist.remove(this_.element_, M.control.Searchstreet.SEARCHING_CLASS);
-                  goog.dom.classlist.remove(this_.resultsContainer_,
-                     M.control.Searchstreet.MINIMUM);
+                  goog.dom.classlist.remove(this_.resultsContainer_, M.control.Searchstreet.MINIMUM);
                }
             }
          });
@@ -468,8 +463,7 @@ goog.require('goog.dom');
                         this_.provincia_ = M.utils.beautifyString(provincia);
                         processor.call(this_, results);
                         goog.dom.classlist.remove(this_.element_, M.control.Searchstreet.SEARCHING_CLASS);
-                        goog.dom.classlist.remove(this_.resultsContainer_,
-                           M.control.Searchstreet.MINIMUM);
+                        goog.dom.classlist.remove(this_.resultsContainer_, M.control.Searchstreet.MINIMUM);
                      }
                   }
                }
@@ -519,8 +513,7 @@ goog.require('goog.dom');
             this_.eventList_(resultsTemplateVars.docs);
          }
          goog.dom.classlist.remove(this_.element_, M.control.Searchstreet.SEARCHING_CLASS);
-         goog.dom.classlist.remove(this_.resultsContainer_,
-            M.control.Searchstreet.MINIMUM);
+         goog.dom.classlist.remove(this_.resultsContainer_, M.control.Searchstreet.MINIMUM);
 
          // results buntton
          var btnResults = this_.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
@@ -689,8 +682,7 @@ goog.require('goog.dom');
     * @function
     */
    M.control.Searchstreet.prototype.clearSearchs_ = function() {
-      goog.dom.classlist.remove(this.element_,
-         "shown");
+      goog.dom.classlist.remove(this.element_, "shown");
       this.facadeMap_.removePopup();
       this.getImpl().removePoints_();
       this.input_.value = "";
