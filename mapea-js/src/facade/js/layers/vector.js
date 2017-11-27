@@ -1,9 +1,7 @@
 goog.provide('M.layer.Vector');
-
 goog.require('M.Layer');
 goog.require('M.utils');
 goog.require('M.exception');
-
 (function() {
   /**
    * @classdesc
@@ -21,7 +19,10 @@ goog.require('M.exception');
     if (M.utils.isUndefined(M.impl.layer.Vector)) {
       M.exception('La implementación usada no puede crear capas Vector');
     }
-
+    /**
+     * TODO
+     */
+    this.style_ = null;
     /**
      * Filter
      * @private
@@ -31,6 +32,9 @@ goog.require('M.exception');
 
     // calls the super constructor
     goog.base(this, parameters, impl);
+
+    this.style_ = options.style;
+    this.setStyle(this.style_);
 
     impl.on(M.evt.LOAD, (features) => this.fire(M.evt.LOAD, [features]));
   });
@@ -44,12 +48,12 @@ goog.require('M.exception');
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  M.layer.Vector.prototype.addFeatures = function(features) {
+  M.layer.Vector.prototype.addFeatures = function(features, update = false) {
     if (!M.utils.isNullOrEmpty(features)) {
       if (!M.utils.isArray(features)) {
         features = [features];
       }
-      this.getImpl().addFeatures(features);
+      this.getImpl().addFeatures(features, update);
     }
   };
 
@@ -69,7 +73,6 @@ goog.require('M.exception');
 
   /**
    * This function returns the feature with this id
-   *
    * @function
    * @public
    * @param {string|number} id - Id feature
@@ -134,6 +137,9 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.redraw = function() {
     this.getImpl().redraw();
+    if (!M.utils.isNullOrEmpty(this.getStyle())) {
+      this.getStyle().refresh();
+    }
   };
 
   /**
@@ -201,8 +207,49 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.equals = function(obj) {
     var equals = false;
-    if (obj instanceof M.layer.Vector) {}
+    if (obj instanceof M.layer.Vector) {
+      equals = this.name === obj.name;
+    }
     return equals;
   };
 
+  /**
+   * TODO
+   */
+  M.layer.Vector.prototype.setStyle = function(style) {
+    let isCluster = style instanceof M.style.Cluster;
+    let isPoint = [M.geom.geojson.type.POINT, M.geom.geojson.type.MULTI_POINT].includes(M.utils.getGeometryType(this));
+    if (style instanceof M.Style && (!isCluster || isPoint)) {
+      if (!M.utils.isNullOrEmpty(this.style_)) {
+        this.style_.unapply(this);
+      }
+      style.apply(this);
+      this.style_ = style;
+    }
+  };
+
+  /**
+   * This function return style vector
+   *
+   * TODO
+   * @api stable
+   */
+  M.layer.Vector.prototype.getStyle = function() {
+    return this.style_;
+  };
+
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @function
+   * @api stable
+   */
+  M.layer.Vector.prototype.getLegendURL = function() {
+    let legendUrl = this.getImpl().getLegendURL();
+    if (legendUrl.indexOf(M.Layer.LEGEND_DEFAULT) !== -1 && legendUrl.indexOf(M.Layer.LEGEND_ERROR) === -1 && !M.utils.isNullOrEmpty(this.style_)) {
+      legendUrl = this.style_.toImage();
+    }
+    return legendUrl;
+  };
 })();

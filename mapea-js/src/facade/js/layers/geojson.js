@@ -130,11 +130,35 @@ goog.require('M.exception');
     var equals = false;
 
     if (obj instanceof M.layer.GeoJSON) {
-      equals = equals && (this.name === obj.name);
+      equals = this.name === obj.name;
       equals = equals && (this.extract === obj.extract);
     }
 
     return equals;
+  };
+
+  M.layer.GeoJSON.prototype.setStyle = function(style) {
+    const applyStyleFn = function() {
+      if (M.utils.isNullOrEmpty(style)) {
+        style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
+      }
+      let isCluster = style instanceof M.style.Cluster;
+      let isPoint = [M.geom.geojson.type.POINT, M.geom.geojson.type.MULTI_POINT].includes(M.utils.getGeometryType(this));
+      if (style instanceof M.Style && (!isCluster || isPoint)) {
+        if (!M.utils.isNullOrEmpty(this.style_)) {
+          this.style_.unapply(this);
+        }
+        style.apply(this);
+        this.style_ = style;
+      }
+    };
+
+    if (this.getImpl().isLoaded()) {
+      applyStyleFn.bind(this)();
+    }
+    else {
+      this.on(M.evt.LOAD, applyStyleFn, this);
+    }
   };
 
   /**
@@ -145,4 +169,23 @@ goog.require('M.exception');
    * @api stable
    */
   M.layer.GeoJSON.POPUP_TEMPLATE = 'geojson_popup.html';
+
+  /**
+   * Options style by default
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE = {
+    fill: {
+      color: 'rgba(255, 255, 255, 0.4)',
+      opacity: 0.4
+    },
+    stroke: {
+      color: "#3399CC",
+      width: 1.5
+    },
+    radius: 5,
+  };
 })();

@@ -55,4 +55,5 @@ goog.require('M.Object');
   M.facade.Base.prototype.setImpl = function(impl) {
     this.impl_ = impl;
   };
+
 })();

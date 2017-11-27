@@ -382,6 +382,7 @@ module.exports = function(grunt) {
                 externs: [
                            "src/externs/proj4x.js",
                            "src/externs/handlebarsx.js",
+                           "src/externs/chromax.js",
                            "src/externs/mapea-olx.js",
                            "src/externs/mx.js",
                            "libraries/ol/externs/bingmaps.js",
@@ -477,6 +478,7 @@ module.exports = function(grunt) {
       core: {
         src: [
                'node_modules/jsts/dist/jsts.min.js',
+               'libraries/chroma-js/js/chroma.min.js',
                'libraries/proj4/proj4.js',
                'build/core/js/mapea-<%= pkg.version %>.ol.min.js'
             ],
@@ -617,10 +619,14 @@ module.exports = function(grunt) {
                   }, { // handlebars
               path: 'libraries/handlebars',
               prefix: '../'
-                  }, { // proj4js
+            }, {
+              //chromajs
+              path: 'libraries/chroma-js',
+              prefix: '../'
+            }, { // proj4js
               path: 'libraries/proj4',
               prefix: '../'
-                  }, { // plugins
+            }, { // plugins
               path: 'src/plugins',
               prefix: '../mapea/plugins'
                   }],
@@ -666,6 +672,9 @@ module.exports = function(grunt) {
                }, { // proj4js
             path: 'libraries/proj4',
             prefix: '../../../proj4'
+          }, { // chromajs
+            path: 'libraries/chroma-js',
+            prefix: '../../../chroma-js'
                }, { // leaflet src
             path: 'libraries/leaflet',
             prefix: '../../../../libraries/leaflet'
@@ -694,7 +703,7 @@ module.exports = function(grunt) {
                }, { // proj4js
             path: 'libraries/proj4',
             prefix: '../../../proj4'
-               }, { // ol3 externs
+          }, { // ol3 externs
             path: 'externs/ol',
             prefix: '../../../../externs/ol'
                }, { // ol3 src
@@ -732,8 +741,6 @@ module.exports = function(grunt) {
   grunt.registerTask('clean-target', ['clean:build', 'mkdir']);
   grunt.registerTask('css-core', ['copy:assets', 'cssmin:core']);
   grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'concat:core', 'copy:configuration', 'copy:core']);
-  //grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'copy:configuration']);
-  //grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'concat:deps', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'copy:configuration']);
   grunt.registerTask('css-plugins', ['copy:plugins', 'cssmin:plugins']);
   grunt.registerTask('js-plugins', ['jshint:plugins', 'generate-symbols-plugins', 'generate-exports-plugins', 'compile-plugins', 'clean:plugins-css', 'copy:pluginsDist', 'concat:plugins']);
   grunt.registerTask('templates', ['copy:templates']);

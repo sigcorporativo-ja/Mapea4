@@ -36,6 +36,20 @@ goog.require('M.facade.Base');
      */
     this.activated_ = false;
 
+    /**
+     * @private
+     * @type {Object}
+     * @expose
+     */
+    this.prevSelectedFeatures_ = {};
+
+    /**
+     * @private
+     * @type {Object}
+     * @expose
+     */
+    this.prevHoverFeatures_ = {};
+
     // checks if the implementation has all methods
     if (!M.utils.isFunction(impl.addTo)) {
       M.exception('La implementación usada no posee el método addTo');
@@ -60,6 +74,7 @@ goog.require('M.facade.Base');
   M.handler.Features.prototype.addTo = function(map) {
     this.map_ = map;
     this.map_.on(M.evt.CLICK, this.clickOnMap_, this);
+    this.map_.on(M.evt.MOVE, this.moveOverMap_, this);
     this.getImpl().addTo(this.map_);
     this.fire(M.evt.ADDED_TO_MAP);
   };
@@ -73,23 +88,122 @@ goog.require('M.facade.Base');
   M.handler.Features.prototype.clickOnMap_ = function(evt) {
     if (this.activated_ === true) {
       let impl = this.getImpl();
+
       this.layers_.forEach(function(layer) {
-        let features = impl.getFeaturesByLayer(evt, layer);
-        let layerImpl = layer.getImpl();
-        if (M.utils.isNullOrEmpty(features)) {
-          if (M.utils.isFunction(layerImpl.unselectFeatures)) {
-            layerImpl.unselectFeatures(features, evt.coord);
-          }
-          layer.fire(M.evt.UNSELECT_FEATURES, evt.coord);
+        let clickedFeatures = impl.getFeaturesByLayer(evt, layer);
+        let prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
+        // no features selected then unselect prev selected features
+        if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
+          this.unselectFeatures(prevFeatures, layer, evt);
         }
-        else {
-          if (M.utils.isFunction(layerImpl.selectFeatures)) {
-            layerImpl.selectFeatures(features, evt.coord, evt);
+        else if (clickedFeatures.length > 0) {
+          let newFeatures = clickedFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
+          let diffFeatures = prevFeatures.filter(f => !clickedFeatures.some(pf => pf.equals(f)));
+          // unselect prev selected features which have not been selected this time
+          if (diffFeatures.length > 0) {
+            this.unselectFeatures(diffFeatures, layer, evt);
           }
-          layer.fire(M.evt.SELECT_FEATURES, [features, evt]);
+          // select new selected features
+          if (newFeatures.length > 0) {
+            this.selectFeatures(newFeatures, layer, evt);
+          }
         }
       }, this);
     }
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   */
+  M.handler.Features.prototype.moveOverMap_ = function(evt) {
+    if (this.activated_ === true) {
+      let impl = this.getImpl();
+
+      this.layers_.forEach(function(layer) {
+        let hoveredFeatures = impl.getFeaturesByLayer(evt, layer);
+        let prevFeatures = [...this.prevHoverFeatures_[layer.name]];
+        // no features selected then unselect prev selected features
+        if (hoveredFeatures.length === 0 && prevFeatures.length > 0) {
+          this.leaveFeatures_(prevFeatures, layer, evt);
+        }
+        else if (hoveredFeatures.length > 0) {
+          let newFeatures = hoveredFeatures.filter(f => (f instanceof M.Feature) && !prevFeatures.some(pf => pf.equals(f)));
+          let diffFeatures = prevFeatures.filter(f => !hoveredFeatures.some(pf => pf.equals(f)));
+          // unselect prev selected features which have not been selected this time
+          if (diffFeatures.length > 0) {
+            this.leaveFeatures_(diffFeatures, layer, evt);
+          }
+          // select new selected features
+          if (newFeatures.length > 0) {
+            this.hoverFeatures_(newFeatures, layer, evt);
+          }
+        }
+      }, this);
+    }
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.handler.Features.prototype.selectFeatures = function(features, layer, evt) {
+    this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name].concat(features);
+    let layerImpl = layer.getImpl();
+    if (M.utils.isFunction(layerImpl.selectFeatures)) {
+      layerImpl.selectFeatures(features, evt.coord, evt);
+    }
+    layer.fire(M.evt.SELECT_FEATURES, [features, evt]);
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.handler.Features.prototype.unselectFeatures = function(features, layer, evt) {
+    // removes unselected features
+    this.prevSelectedFeatures_[layer.name] =
+      this.prevSelectedFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
+    let layerImpl = layer.getImpl();
+    if (M.utils.isFunction(layerImpl.unselectFeatures)) {
+      layerImpl.unselectFeatures(features, evt.coord);
+    }
+    layer.fire(M.evt.UNSELECT_FEATURES, [features, evt.coord]);
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   * @api stable
+   */
+  M.handler.Features.prototype.hoverFeatures_ = function(features, layer, evt) {
+    this.prevHoverFeatures_[layer.name] = this.prevHoverFeatures_[layer.name].concat(features);
+    layer.fire(M.evt.HOVER_FEATURES, [features, evt]);
+    this.getImpl().addCursorPointer();
+  };
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   * @api stable
+   */
+  M.handler.Features.prototype.leaveFeatures_ = function(features, layer, evt) {
+    this.prevHoverFeatures_[layer.name] =
+      this.prevHoverFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
+    layer.fire(M.evt.LEAVE_FEATURES, [features, evt.coord]);
+    this.getImpl().removeCursorPointer();
   };
 
   /**
@@ -134,6 +248,8 @@ goog.require('M.facade.Base');
   M.handler.Features.prototype.addLayer = function(layer) {
     if (!M.utils.includes(this.layers_, layer)) {
       this.layers_.push(layer);
+      this.prevSelectedFeatures_[layer.name] = [];
+      this.prevHoverFeatures_[layer.name] = [];
     }
   };
 
@@ -148,6 +264,10 @@ goog.require('M.facade.Base');
    */
   M.handler.Features.prototype.removeLayer = function(layer) {
     this.layers_.remove(layer);
+    this.prevSelectedFeatures_[layer.name] = null;
+    this.prevHoverFeatures_[layer.name] = null;
+    delete this.prevSelectedFeatures_[layer.name];
+    delete this.prevHoverFeatures_[layer.name];
   };
 
   /**

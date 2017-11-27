@@ -6,7 +6,7 @@ goog.require('M.exception');
 goog.require('goog.dom.classlist');
 
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Label
@@ -17,9 +17,9 @@ goog.require('goog.dom.classlist');
    * @extends {M.facade.Base}
    * @api stable
    */
-  M.Label = (function (text, coordOpts) {
+  M.Label = (function(text, coordOpts, panMapIfOutOfView) {
     // implementation of this control
-    var impl = new M.impl.Label(text, coordOpts);
+    var impl = new M.impl.Label(text, coordOpts, panMapIfOutOfView);
     // calls the super constructor
     goog.base(this, impl);
   });
@@ -33,7 +33,7 @@ goog.require('goog.dom.classlist');
    * @api stable
    * @export
    */
-  M.Label.prototype.hide = function () {
+  M.Label.prototype.hide = function() {
     this.getImpl().hide();
   };
 
@@ -46,7 +46,7 @@ goog.require('goog.dom.classlist');
    * @api stable
    * @export
    */
-  M.Label.prototype.show = function (map) {
+  M.Label.prototype.show = function(map) {
     this.getImpl().show(map);
   };
 
@@ -59,7 +59,7 @@ goog.require('goog.dom.classlist');
    * @api stable
    * @export
    */
-  M.Label.prototype.getPopup = function () {
+  M.Label.prototype.getPopup = function() {
     return this.getImpl().getPopup();
   };
 
@@ -69,7 +69,7 @@ goog.require('goog.dom.classlist');
    * @function
    * @api stable
    */
-  M.Label.prototype.getCoordinate = function () {
+  M.Label.prototype.getCoordinate = function() {
     return this.getImpl().getCoordinate();
   };
 
@@ -79,7 +79,7 @@ goog.require('goog.dom.classlist');
    * @function
    * @api stable
    */
-  M.Label.prototype.setCoordinate = function (coord) {
+  M.Label.prototype.setCoordinate = function(coord) {
     this.getImpl().setCoordinate(coord);
   };
 

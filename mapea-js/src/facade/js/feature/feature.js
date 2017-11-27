@@ -1,6 +1,6 @@
 goog.provide('M.Feature');
 goog.require('M.facade.Base');
-
+goog.require('M.utils');
 (function() {
   /**
    * @classdesc
@@ -13,7 +13,14 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.Feature = (function(id, geojson, style) {
-    this.style_ = style;
+
+    /**
+     * Style of feature
+     * @private
+     * @type {M.style.Feature}
+     */
+
+    this.style_ = null;
 
     /**
      * GeoJSON format
@@ -29,6 +36,8 @@ goog.require('M.facade.Base');
      */
     var impl = new M.impl.Feature(id, geojson, style);
     goog.base(this, impl);
+
+    this.setStyle(style);
   });
   goog.inherits(M.Feature, M.facade.Base);
 
@@ -159,4 +168,89 @@ goog.require('M.facade.Base');
     return this.getImpl().setAttribute(attribute, value);
   };
 
+  /**
+   * This function set style feature
+   *
+   * @public
+   * @function
+   * @param {M.style.Feature}
+   * @api stable
+   */
+  M.Feature.prototype.setStyle = function(style) {
+    if (!M.utils.isNullOrEmpty(style) && style instanceof M.style.Feature) {
+      this.style_ = style;
+      this.style_.applyToFeature(this);
+    }
+    else {
+      let geom = this.getGeometry();
+      if (!M.utils.isNullOrEmpty(geom)) {
+        let type = geom.type;
+        if (type === M.geom.geojson.type.POINT || type === M.geom.geojson.type.MULTI_POINT) {
+          style = new M.style.Point();
+        }
+        if (type === M.geom.geojson.type.LINE_STRING || type === M.geom.geojson.type.MULTI_LINE_STRING) {
+          style = new M.style.Line();
+        }
+        if (type === M.geom.geojson.type.POLYGON || type === M.geom.geojson.type.MULTI_POLYGON) {
+          style = new M.style.Polygon();
+        }
+        this.style_ = style;
+        this.style_.applyToFeature(this);
+      }
+    }
+  };
+
+  /**
+   * This function return if two features are equals
+   * @public
+   * @function
+   * @param {M.Feature} feature
+   * @return {bool} returns the result of comparing two features
+   */
+  M.Feature.prototype.equals = function(feature) {
+    return this.getId() === feature.getId();
+  };
+
+  /**
+   * This function returns style feature
+   *
+   * @public
+   * @function
+   * @return {M.style.Feature} returns the style feature
+   * @api stable
+   */
+  M.Feature.prototype.getStyle = function() {
+    return this.style_;
+  };
+
+  /**
+   * This function returns de centroid of feature
+   *
+   * @public
+   * @function
+   * @return {M.Feature}
+   * @api stable
+   */
+  M.Feature.prototype.getCentroid = function() {
+    let id = this.getId();
+    let attributes = this.getAttributes();
+    let style = new M.style.Point({
+      stroke: {
+        color: '#67af13',
+        width: 2
+      },
+      radius: 8,
+      fill: {
+        color: '#67af13',
+        opacity: 0.2
+      }
+    });
+    let centroid = this.getImpl().getCentroid();
+    if (!M.utils.isNullOrEmpty(centroid)) {
+      centroid.setId(id + "_centroid");
+      centroid.setAttributes(attributes);
+      centroid.setStyle(style);
+      return centroid;
+    }
+  };
 })();
