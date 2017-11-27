@@ -4,7 +4,7 @@ goog.require('M.format.GeoJSON');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
   /**
    * @classdesc TODO
    * control
@@ -14,7 +14,7 @@ goog.require('M.format.GeoJSON');
    * @extends {M.Object}
    * @api stable
    */
-  M.impl.loader.KML = function (map, url, format) {
+  M.impl.loader.KML = function(map, url, format) {
     /**
      * TODO
      * @private
@@ -48,11 +48,11 @@ goog.require('M.format.GeoJSON');
    * @function
    * @api stable
    */
-  M.impl.loader.KML.prototype.getLoaderFn = function (callback) {
+  M.impl.loader.KML.prototype.getLoaderFn = function(callback) {
     var loaderScope = this;
-    return (function (extent, resolution, projection) {
+    return (function(extent, resolution, projection) {
       var sourceScope = this;
-      loaderScope.loadInternal_(projection).then(function (response) {
+      loaderScope.loadInternal_(projection).then(function(response) {
         callback.apply(sourceScope, response);
       });
     });
@@ -64,22 +64,27 @@ goog.require('M.format.GeoJSON');
    * @private
    * @function
    */
-  M.impl.loader.KML.prototype.loadInternal_ = function (projection) {
+  M.impl.loader.KML.prototype.loadInternal_ = function(projection) {
     var this_ = this;
-    return (new Promise(function (success, fail) {
-      M.remote.get(this_.url_).then(function (response) {
+    return (new Promise(function(success, fail) {
+      M.remote.get(this_.url_).then(function(response) {
         if (!M.utils.isNullOrEmpty(response.text)) {
           var features = this_.format_.readFeatures(response.text, {
             featureProjection: projection
           });
           var screenOverlay = this_.format_.getScreenOverlay();
-          success.call(this, [features.map(f => new M.Feature(f.getId(), {
-            geometry: {
-              coordinates: f.getGeometry().getCoordinates(),
-              type: f.getGeometry().getType()
-            },
-            properties: f.getProperties()
-          }, f.getStyle())), screenOverlay]);
+          success.call(this, [
+            features.map(olFeature => {
+              let feature = new M.Feature(olFeature.getId(), {
+                geometry: {
+                  coordinates: olFeature.getGeometry().getCoordinates(),
+                  type: olFeature.getGeometry().getType()
+                },
+                properties: olFeature.getProperties()
+              });
+              feature.getImpl().getOLFeature().setStyle(olFeature.getStyle());
+              return feature;
+            }), screenOverlay]);
         }
         else {
           M.exception('No hubo respuesta del KML');
