@@ -62,6 +62,13 @@ goog.require('M.impl.layer.Vector');
      */
     this.service_ = null;
 
+    /**
+     *
+     * @private
+     * @type {Boolean}
+     */
+    this.loaded_ = false;
+
     // GetFeature output format parameter
     if (M.utils.isNullOrEmpty(this.options.getFeatureOutputFormat)) {
       this.options.getFeatureOutputFormat = 'application/json'; // by default
@@ -82,10 +89,13 @@ goog.require('M.impl.layer.Vector');
    */
   M.impl.layer.WFS.prototype.addTo = function(map) {
     goog.base(this, 'addTo', map);
+    // this.ol3Layer.setStyle(M.impl.layer.WFS.STYLE);
+    // this.on(M.evt.LOAD, function() {
+    //   let style = M.Style.createStyleLayer(M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE, this.facadeVector_);
+    //   this.facadeVector_.setStyle(style);
+    // }.bind(this));
 
-    this.ol3Layer.setStyle(M.impl.layer.WFS.STYLE);
     this.updateSource_();
-
     map.getImpl().on(M.evt.CHANGE, function() {
       this.refresh();
     }, this);
@@ -139,6 +149,7 @@ goog.require('M.impl.layer.Vector');
       this.ol3Layer.setSource(new ol.source.Vector({
         format: this.formater_.getImpl(),
         loader: this.loader_.getLoaderFn(function(features) {
+          this_.loaded_ = true;
           this_.facadeVector_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
         }),
@@ -148,6 +159,7 @@ goog.require('M.impl.layer.Vector');
     else {
       ol3LayerSource.set("format", this.formater_);
       ol3LayerSource.set("loader", this.loader_.getLoaderFn(function(features) {
+        this.loaded_ = true;
         this.facadeVector_.addFeatures(features);
         this.fire(M.evt.LOAD, [features]);
       }));
@@ -222,21 +234,30 @@ goog.require('M.impl.layer.Vector');
     return defaultValue;
   };
 
+  // /**
+  //  * This function destroys this layer, cleaning the HTML
+  //  * and unregistering all events
+  //  *
+  //  * @public
+  //  * @function
+  //  * @api stable
+  //  */
+  // M.impl.layer.WFS.prototype.destroy = function() {
+  //   var olMap = this.map.getMapImpl();
+  //   if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+  //     olMap.removeLayer(this.ol3Layer);
+  //     this.ol3Layer = null;
+  //   }
+  //   this.map = null;
+  // };
+
   /**
-   * This function destroys this layer, cleaning the HTML
-   * and unregistering all events
-   *
-   * @public
+   * TODO
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.destroy = function() {
-    var olMap = this.map.getMapImpl();
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
-      olMap.removeLayer(this.ol3Layer);
-      this.ol3Layer = null;
-    }
-    this.map = null;
+  M.impl.layer.WFS.prototype.isLoaded = function() {
+    return this.loaded_;
   };
 
   /**
@@ -261,30 +282,4 @@ goog.require('M.impl.layer.Vector');
     return equals;
   };
 
-  /**
-   * Style for this layer
-   * @const
-   * @type {ol.style.Style}
-   * @public
-   * @api stable
-   */
-  M.impl.layer.WFS.STYLE = new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: 'rgba(103, 175, 19, 0.2)'
-    }),
-    stroke: new ol.style.Stroke({
-      color: '#67af13',
-      width: 2
-    }),
-    image: new ol.style.Circle({
-      radius: 5,
-      fill: new ol.style.Fill({
-        color: 'rgba(103, 175, 19, 0.4)'
-      }),
-      stroke: new ol.style.Stroke({
-        color: '#67af13',
-        width: 1
-      })
-    })
-  });
 })();

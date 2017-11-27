@@ -145,6 +145,24 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
+  M.evt.HOVER_FEATURES = 'hover:features';
+
+  /**
+   * Event type
+   * @public
+   * @type {string}
+   * @api stable
+   * @expose
+   */
+  M.evt.LEAVE_FEATURES = 'leave:features';
+
+  /**
+   * Event type
+   * @public
+   * @type {string}
+   * @api stable
+   * @expose
+   */
   M.evt.LOAD = 'load';
 
   /**
@@ -194,6 +212,15 @@ goog.provide('M.evt.Listener');
 
   /**
    * Event type
+   * @public
+   * @type {string}
+   * @api stable
+   * @expose
+   */
+  M.evt.MOVE = 'move';
+
+  /**
+   * Event type
    * @private
    * @type {array<string>}
    */
@@ -213,12 +240,15 @@ goog.provide('M.evt.Listener');
       M.evt.DESTROY,
       M.evt.UNSELECT_FEATURES,
       M.evt.SELECT_FEATURES,
+      M.evt.HOVER_FEATURES,
+      M.evt.LEAVE_FEATURES,
       M.evt.LOAD,
       M.evt.COMPLETED,
       M.evt.CHANGE,
       M.evt.CHANGE_WMC,
       M.evt.CHANGE_PROJ,
-      M.evt.CLICK
+      M.evt.CLICK,
+      M.evt.MOVE
    ];
 
   /**

@@ -39,7 +39,7 @@ goog.provide('M.format.WKT');
    * @param {Array<M.Feature>} features features array to parsed
    * as a GeoJSON FeatureCollection
    * @return {Array<Object>}
-   * @api estable
+   * @api stable
    */
   M.format.WKT.prototype.write = function(geomtry) {
     return this.getImpl().write(geomtry);

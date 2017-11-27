@@ -3,7 +3,7 @@ goog.provide('P.impl.control.ClearFeature');
 /**
  * @namespace M.impl.control
  */
-(function() {
+(function () {
   /**
    * @classdesc
    * Main constructor of the class. Creates a ClearFeature
@@ -14,7 +14,7 @@ goog.provide('P.impl.control.ClearFeature');
    * @extends {M.impl.Control}
    * @api stable
    */
-  M.impl.control.ClearFeature = function(layer) {
+  M.impl.control.ClearFeature = function (layer) {
     /**
      * Layer for use in control
      * @private
@@ -34,7 +34,7 @@ goog.provide('P.impl.control.ClearFeature');
    * @param {function} element - Template of this control
    * @api stable
    */
-  M.impl.control.ClearFeature.prototype.addTo = function(map, element) {
+  M.impl.control.ClearFeature.prototype.addTo = function (map, element) {
     this.facadeMap_ = map;
     goog.base(this, 'addTo', map, element);
   };
@@ -46,7 +46,7 @@ goog.provide('P.impl.control.ClearFeature');
    * @function
    * @api stable
    */
-  M.impl.control.ClearFeature.prototype.clear = function() {
+  M.impl.control.ClearFeature.prototype.clear = function () {
     var drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
     if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
       drawfeatureCtrl.getImpl().modifiedFeatures.length = 0;
@@ -77,7 +77,7 @@ goog.provide('P.impl.control.ClearFeature');
    * @function
    * @api stable
    */
-  M.impl.control.ClearFeature.prototype.destroy = function() {
+  M.impl.control.ClearFeature.prototype.destroy = function () {
     this.layer_ = null;
     this.facadeMap_.getMapImpl().removeControl(this);
   };
