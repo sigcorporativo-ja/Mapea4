@@ -18,7 +18,7 @@ goog.provide('M.style.quantification');
 
     return function jenks(data, n_classes = n_classes_param) {
       let uniqueData = M.style.quantification.uniqueArray_(data);
-      n_classes = uniqueData.length < n_classes ? uniqueData.length - 1 : n_classes;
+      n_classes = uniqueData.length <= n_classes ? uniqueData.length - 1 : n_classes;
       // sort data in numerical order, since this is expected
       // by the matrices function
       data.sort(function(a, b) {
@@ -50,7 +50,7 @@ goog.provide('M.style.quantification');
     n_classes_param = n_classes_param || M.style.quantification.DEFAULT_CLASES_QUANTILE;
     return function quantile(data, n_classes = n_classes_param) {
       let uniqueData = M.style.quantification.uniqueArray_(data);
-      n_classes = uniqueData.length < n_classes ? uniqueData.length : n_classes;
+      n_classes = uniqueData.length <= n_classes ? uniqueData.length - 1 : n_classes;
       let numData = data.length;
       data.sort((a, b) => a - b);
       let [min, max] = [data[0], data[numData - 1]];
