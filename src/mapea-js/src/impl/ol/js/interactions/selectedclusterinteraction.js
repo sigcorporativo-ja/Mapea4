@@ -181,16 +181,17 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       cluster[i].getKeys().forEach(attr => {
         cf.set(attr, cluster[i].get(attr));
       });
-      let [style, styleIcon] = cluster[i].getStyle()(cluster[i], pix);
-      let styleIconClone = styleIcon.clone();
-      let styleImage = styleIconClone.getImage();
+      let clonedStyles = cluster[i].getStyle()(cluster[i], pix).map(s => s.clone());
+      // let [style, styleIcon] = cluster[i].getStyle()(cluster[i], pix);
+      // let styleIconClone = styleIcon.clone();
+      let styleImage = clonedStyles[1].getImage();
       if (styleImage) {
         if (!styleImage.size_) {
           styleImage.size_ = [42, 42];
         }
       }
       cf.setId(cluster[i].getId());
-      cf.setStyle([style, styleIconClone]);
+      cf.setStyle(clonedStyles);
       cf.set('features', [cluster[i]]);
       cf.set('geometry', new ol.geom.Point(p));
       source.addFeature(cf);
@@ -219,15 +220,16 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
       cluster[i].getKeys().forEach(attr => {
         cf.set(attr, cluster[i].get(attr));
       });
-      let [style, styleIcon] = cluster[i].getStyle()(cluster[i], pix);
-      let styleIconClone = styleIcon.clone();
-      let styleImage = styleIconClone.getImage();
+      let clonedStyles = cluster[i].getStyle()(cluster[i], pix).map(s => s.clone());
+      // let [style, styleIcon] = cluster[i].getStyle()(cluster[i], pix);
+      // let styleIconClone = styleIcon.clone();
+      let styleImage = clonedStyles[1].getImage();
       if (styleImage) {
         if (!styleImage.size_) {
           styleImage.size_ = [42, 42];
         }
       }
-      cf.setStyle([style, styleIconClone]);
+      cf.setStyle(clonedStyles);
       cf.set('features', [cluster[i]]);
       cf.set('geometry', new ol.geom.Point(p));
       source.addFeature(cf);
