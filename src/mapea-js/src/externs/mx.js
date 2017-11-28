@@ -1501,6 +1501,20 @@ Mx.options.maxFeaturesToSelect;
 Mx.options.animated;
 
 /**
+ * animated (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.options.animationDuration;
+
+/**
+ * animated (options)
+ * @type {string}
+ * @api stable
+ */
+Mx.options.animationMethod;
+
+/**
  * displayAmount (options)
  * @type {boolean}
  * @api stable
