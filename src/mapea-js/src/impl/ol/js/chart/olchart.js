@@ -348,7 +348,7 @@ goog.require('ol.structs.IHasChecksum');
           context.strokeStyle = strokeStyle;
           context.lineWidth = strokeWidth;
         }
-        this.data_.forEach((data, i) => {
+        this.data_.sort((num, numNext) => num - numNext).forEach((data, i) => {
           context.beginPath();
           context.fillStyle = this.colors_[i % this.colors_.length];
           x = x0 + start;
