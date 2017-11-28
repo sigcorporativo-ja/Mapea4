@@ -153,7 +153,9 @@ goog.require('ol.structs.IHasChecksum');
       colors: this.colors_,
       rotation: this.getRotation(),
       scale: this.getScale(),
-      data: this.getData(),
+      // data: this.getData(),
+      donutRatio: this.donutRatio_,
+      data: this.data_,
       snapToPixel: this.getSnapToPixel(),
       stroke: this.stroke_,
       scheme: this.colors_,
@@ -348,7 +350,7 @@ goog.require('ol.structs.IHasChecksum');
           context.strokeStyle = strokeStyle;
           context.lineWidth = strokeWidth;
         }
-        this.data_.forEach((data, i) => {
+        this.data_.sort((num, numNext) => num - numNext).forEach((data, i) => {
           context.beginPath();
           context.fillStyle = this.colors_[i % this.colors_.length];
           x = x0 + start;

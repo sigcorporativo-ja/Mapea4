@@ -255,9 +255,7 @@ goog.require('M.impl.style.OLChart');
       else if (styleOptions.type === M.style.chart.types.BAR) {
         let height = 0;
         let acumSum = null;
-        styles = styles.concat(styleOptions.data.sort(function(num, numNext) {
-          return num - numNext;
-        }).map((dataValue, i) => {
+        styles = styles.concat(styleOptions.data.map((dataValue, i) => {
           let variable = styleOptions.variables.length === styleOptions.data.length ? styleOptions.variables[i] : styleOptions.variables[0];
           let label = variable.label || {};
           if (!variable.label) {
@@ -290,11 +288,12 @@ goog.require('M.impl.style.OLChart');
               font: `9px ${font}`,
               scale: typeof label.scale === 'number' ? getValue(label.scale, feature) : undefined,
               fill: new ol.style.Fill({
-                color: variable.fillColor_
+                color: styleOptions.scheme[i % styleOptions.scheme.length]
               })
             })
           });
         })).filter(style => style != null);
+        height = Math.max(height, 1);
         styles.push(new ol.style.Style({
           image: new ol.style.Icon(({
             anchor: [-(styles[0].getImage().getImage().width / 2) + 10 + styleOptions.offsetX, (styles[0].getImage().getImage().height / 2) + styleOptions.offsetY],

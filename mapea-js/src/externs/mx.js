@@ -1501,6 +1501,20 @@ Mx.options.maxFeaturesToSelect;
 Mx.options.animated;
 
 /**
+ * animated (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.options.animationDuration;
+
+/**
+ * animated (options)
+ * @type {string}
+ * @api stable
+ */
+Mx.options.animationMethod;
+
+/**
  * displayAmount (options)
  * @type {boolean}
  * @api stable
@@ -1684,6 +1698,12 @@ Mx.ChartVariableOptions;
  * @api stable
  */
 Mx.ChartVariableOptions.attribute;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartVariableOptions.radiusIncrement;
 
 /**
  * @type {Object}
