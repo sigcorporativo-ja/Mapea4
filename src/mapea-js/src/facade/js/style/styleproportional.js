@@ -456,7 +456,10 @@ goog.require('M.style.Point');
   };
 
   /**
-   * TODO
+   * This constant defines the scale proportion for iconstyle in styleproportional.
+   * @constant
+   * @public
+   * @api stable
    */
   M.style.Proportional.SCALE_PROPORTION = 20;
 })();
