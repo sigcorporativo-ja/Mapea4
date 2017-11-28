@@ -293,6 +293,7 @@ goog.require('M.impl.style.OLChart');
             })
           });
         })).filter(style => style != null);
+        height = Math.max(height, 1);
         styles.push(new ol.style.Style({
           image: new ol.style.Icon(({
             anchor: [-(styles[0].getImage().getImage().width / 2) + 10 + styleOptions.offsetX, (styles[0].getImage().getImage().height / 2) + styleOptions.offsetY],
