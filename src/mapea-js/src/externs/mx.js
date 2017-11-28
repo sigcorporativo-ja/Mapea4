@@ -1700,6 +1700,12 @@ Mx.ChartVariableOptions;
 Mx.ChartVariableOptions.attribute;
 
 /**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartVariableOptions.radiusIncrement;
+
+/**
  * @type {Object}
  * @api stable
  */

@@ -276,7 +276,6 @@ goog.require('M.impl.style.OLChart');
             acumSum -= sizeFont + 6;
           }
           height = height + sizeFont + 6;
-          console.log(text, variable.fillColor_);
           return new M.impl.style.CentroidStyle({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
