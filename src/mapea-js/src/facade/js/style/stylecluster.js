@@ -229,11 +229,12 @@ goog.require('M.Style');
     distanceSelectFeatures: 15,
     convexHullStyle: {
       fill: {
-        color: 'blue',
-        opacity: 0.9
+        color: '#fff',
+        opacity: 0.25
       },
       stroke: {
-        color: 'red'
+        // color: '#425f82'
+        color: '#7b98bc'
       }
     }
   };
