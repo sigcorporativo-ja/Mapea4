@@ -130,7 +130,7 @@ goog.require('goog.style');
     // TODO: manage multiples features
     var feature = features[0];
 
-    if (this.extract === true) {
+    if (!(feature instanceof M.ClusteredFeature) && (this.extract === true)) {
       var featureName = feature.getAttribute('name');
       var featureDesc = feature.getAttribute('description');
       var featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();

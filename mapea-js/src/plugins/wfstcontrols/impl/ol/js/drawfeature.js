@@ -30,11 +30,28 @@ goog.require('P.impl.control.WFSTBase');
   M.impl.control.DrawFeature.prototype.createInteraction_ = function() {
     var layerImpl = this.layer_.getImpl();
     var olLayer = layerImpl.getOL3Layer();
-
+    let olStyle = olLayer.getStyle()()[0];
+    let [olFill, olStroke] = [olStyle.getFill(), olStyle.getStroke()];
+    let image = new ol.style.Circle({
+      fill: olFill || olStroke,
+      radius: 5,
+      stroke: olStroke
+    });
+    if (olStyle.getImage()) {
+      image = olStyle.getImage();
+    }
     this.interaction_ = new ol.interaction.Draw({
       'source': olLayer.getSource(),
       'type': M.geom.parseWFS(this.layer_.geometry),
-      'style': olLayer.getStyle(),
+      'style': new ol.style.Style({
+        image: image,
+        fill: olFill,
+        stroke: olStroke || new ol.style.Stroke({
+          fill: {
+            color: '#000'
+          }
+        }),
+      }),
     });
 
     this.interaction_.on('drawend', function(event) {
@@ -54,6 +71,22 @@ goog.require('P.impl.control.WFSTBase');
    */
   M.impl.control.DrawFeature.prototype.updateLayerFeatures_ = function() {
     this.facadeMap_.getMapImpl().removeInteraction(this.interaction_);
+    this.interaction_ = null;
+  };
+
+  /**
+   * This function deactivate control
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.control.DrawFeature.prototype.deactivate = function() {
+    if (M.utils.isNullOrEmpty(this.interaction_)) {
+      this.createInteraction_();
+    }
+    var olMap = this.facadeMap_.getMapImpl();
+    olMap.removeInteraction(this.interaction_);
     this.interaction_ = null;
   };
 })();

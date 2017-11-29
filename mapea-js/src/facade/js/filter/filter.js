@@ -116,7 +116,7 @@ goog.provide('M.filter');
    */
   M.filter.LT = function (nameAtt, value) {
     return new M.filter.Function(function (feature) {
-      return feature.getAttribute(nameAtt) < value;
+      return feature.getAttribute(nameAtt) != null && feature.getAttribute(nameAtt) < value;
     }, {
       cqlFilter: `${nameAtt} < '${value}'`
     });
@@ -132,7 +132,7 @@ goog.provide('M.filter');
    */
   M.filter.GT = function (nameAtt, value) {
     return new M.filter.Function(function (feature) {
-      return feature.getAttribute(nameAtt) > value;
+      return feature.getAttribute(nameAtt) != null && feature.getAttribute(nameAtt) > value;
     }, {
       cqlFilter: `${nameAtt} > '${value}'`
     });
@@ -148,7 +148,7 @@ goog.provide('M.filter');
    */
   M.filter.LTE = function (nameAtt, value) {
     return new M.filter.Function(function (feature) {
-      return feature.getAttribute(nameAtt) <= value;
+      return feature.getAttribute(nameAtt) != null && feature.getAttribute(nameAtt) <= value;
     }, {
       cqlFilter: `${nameAtt} <= '${value}'`
     });
@@ -164,7 +164,7 @@ goog.provide('M.filter');
    */
   M.filter.GTE = function (nameAtt, value) {
     return new M.filter.Function(function (feature) {
-      return feature.getAttribute(nameAtt) >= value;
+      return feature.getAttribute(nameAtt) != null && feature.getAttribute(nameAtt) >= value;
     }, {
       cqlFilter: `${nameAtt} >= '${value}'`
     });
