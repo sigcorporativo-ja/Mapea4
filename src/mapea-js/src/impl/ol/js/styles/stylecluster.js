@@ -373,7 +373,11 @@ goog.require('ol.geom.convexhull');
       olStyle = style.getImpl().olStyleFn_(feature, resolution);
     }
     else if (numFeatures === 1) {
-      olStyle = clusterOlFeatures[0].getStyle()(clusterOlFeatures[0], resolution);
+      let clusterOlFeatureStyle = clusterOlFeatures[0].getStyle();
+      if (!clusterOlFeatureStyle) {
+        clusterOlFeatureStyle = this.oldOLLayer_.getStyle();
+      }
+      olStyle = clusterOlFeatureStyle(clusterOlFeatures[0], resolution);
     }
     return olStyle;
   };
