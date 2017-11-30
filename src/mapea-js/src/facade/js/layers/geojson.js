@@ -137,7 +137,7 @@ goog.require('M.exception');
     return equals;
   };
 
-  M.layer.GeoJSON.prototype.setStyle = function(style) {
+  M.layer.GeoJSON.prototype.setStyle = function(style, applyToFeature = false) {
     const applyStyleFn = function() {
       if (M.utils.isNullOrEmpty(style)) {
         style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
@@ -148,7 +148,7 @@ goog.require('M.exception');
         if (!M.utils.isNullOrEmpty(this.style_)) {
           this.style_.unapply(this);
         }
-        style.apply(this);
+        style.apply(this, applyToFeature);
         this.style_ = style;
       }
     };
