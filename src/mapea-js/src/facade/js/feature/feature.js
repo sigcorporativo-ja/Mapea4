@@ -181,23 +181,23 @@ goog.require('M.utils');
       this.style_ = style;
       this.style_.applyToFeature(this);
     }
-    else {
-      let geom = this.getGeometry();
-      if (!M.utils.isNullOrEmpty(geom)) {
-        let type = geom.type;
-        if (type === M.geom.geojson.type.POINT || type === M.geom.geojson.type.MULTI_POINT) {
-          style = new M.style.Point();
-        }
-        if (type === M.geom.geojson.type.LINE_STRING || type === M.geom.geojson.type.MULTI_LINE_STRING) {
-          style = new M.style.Line();
-        }
-        if (type === M.geom.geojson.type.POLYGON || type === M.geom.geojson.type.MULTI_POLYGON) {
-          style = new M.style.Polygon();
-        }
-        this.style_ = style;
-        this.style_.applyToFeature(this);
-      }
-    }
+    // else if (applyDefault === true) {
+    //   let geom = this.getGeometry();
+    //   if (!M.utils.isNullOrEmpty(geom)) {
+    //     let type = geom.type;
+    //     if (type === M.geom.geojson.type.POINT || type === M.geom.geojson.type.MULTI_POINT) {
+    //       style = new M.style.Point();
+    //     }
+    //     if (type === M.geom.geojson.type.LINE_STRING || type === M.geom.geojson.type.MULTI_LINE_STRING) {
+    //       style = new M.style.Line();
+    //     }
+    //     if (type === M.geom.geojson.type.POLYGON || type === M.geom.geojson.type.MULTI_POLYGON) {
+    //       style = new M.style.Polygon();
+    //     }
+    //     this.style_ = style;
+    //     this.style_.applyToFeature(this);
+    //   }
+    // }
   };
 
   /**
