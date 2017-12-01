@@ -375,7 +375,7 @@ goog.require('M.style.Point');
             style = this.layer_.getStyle().clone();
           }
         }
-        featureStyle = style;
+        let featureStyle = style;
         if (!(featureStyle instanceof M.style.Point)) {
           featureStyle = new M.style.Point(featureStyle.options_);
         }
