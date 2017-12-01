@@ -362,8 +362,20 @@ goog.require('M.style.Point');
       let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
       let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, this.attributeName_);
       features.forEach(function(feature) {
-        let style = !M.utils.isNullOrEmpty(this.style_) ? this.style_.clone() : feature.getStyle().clone();
-        let featureStyle = style;
+        let style;
+        if (!M.utils.isNullOrEmpty(this.style_)) {
+          style = this.style_.clone();
+        }
+        else {
+          let featureStyle = feature.getStyle();
+          if (!M.utils.isNullOrEmpty(featureStyle)) {
+            style = featureStyle.clone();
+          }
+          else {
+            style = this.layer_.getStyle().clone();
+          }
+        }
+        featureStyle = style;
         if (!(featureStyle instanceof M.style.Point)) {
           featureStyle = new M.style.Point(featureStyle.options_);
         }
