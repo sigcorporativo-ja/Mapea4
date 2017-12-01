@@ -284,7 +284,6 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center, ca
   if (!features.length) return;
 
   this.overlayLayer_.setVisible(false);
-  let style = this.overlayLayer_.getStyle();
   let duration = this.animationDuration || 500;
   let start = new Date().getTime();
 
