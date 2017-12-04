@@ -24,6 +24,7 @@ M.impl.interaction.SelectCluster = function(options) {
   this.selectCluster_ = (options.selectCluster !== false);
   this.maxFeaturesToSelect = options.maxFeaturesToSelect;
   this.facadeLayer_ = options.fLayer;
+  this.style_ = options.style;
 
   // Create a new overlay layer for
   this.overlayLayer_ = new ol.layer.Vector({
@@ -142,12 +143,6 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
   let cluster = feature.get('features');
   // Not a cluster (or just one feature)
   if (!cluster || cluster.length == 1) {
-    // let features = cluster.map(M.impl.Feature.olFeature2Facade);
-    // this.map.getFeatureHandler().selectFeatures(features, this.facadeLayer_, {
-    //   'pixel': e.mapBrowserEvent.pixel,
-    //   'coord': e.mapBrowserEvent.coordinate,
-    //   'vendor': e
-    // });
     return;
   }
 
@@ -164,85 +159,111 @@ M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Noth
   source.clear();
 
   // Remove cluster from selection
-  if (!this.selectCluster_) this.getFeatures().clear();
+  if (!this.selectCluster_) {
+    this.getFeatures().clear();
+  }
 
   let center = feature.getGeometry().getCoordinates();
-  // Pixel size in map unit
-  let pix = this.getMap().getView().getResolution();
-  let r = pix * this.pointRadius * (0.5 + cluster.length / 4);
-  // Draw on a circle
+  let resolution = this.getMap().getView().getResolution();
+  let radiusInPixels = resolution * this.pointRadius * (0.5 + cluster.length / 4);
+
   if (!this.spiral || cluster.length <= this.circleMaxObjects) {
-    let max = Math.min(cluster.length, this.circleMaxObjects);
-    for (let i = 0; i < max; i++) {
-      let a = 2 * Math.PI * i / max;
-      if (max == 2 || max == 4) a += Math.PI / 4;
-      let p = [center[0] + r * Math.sin(a), center[1] + r * Math.cos(a)];
-      let cf = new ol.Feature();
-      cluster[i].getKeys().forEach(attr => {
-        cf.set(attr, cluster[i].get(attr));
-      });
-      let clonedStyles = cluster[i].getStyle()(cluster[i], pix).map(s => s.clone());
-      // let [style, styleIcon] = cluster[i].getStyle()(cluster[i], pix);
-      // let styleIconClone = styleIcon.clone();
-      let styleImage = clonedStyles[1].getImage();
-      if (styleImage) {
-        if (!styleImage.size_) {
-          styleImage.size_ = [42, 42];
-        }
-      }
-      cf.setId(cluster[i].getId());
-      cf.setStyle(clonedStyles);
-      cf.set('features', [cluster[i]]);
-      cf.set('geometry', new ol.geom.Point(p));
-      source.addFeature(cf);
-      let lk = new ol.Feature({
-        'selectclusterlink': true,
-        geometry: new ol.geom.LineString([center, p])
-      });
-      source.addFeature(lk);
-    }
+    this.drawFeaturesAndLinsInCircle_(cluster, resolution, radiusInPixels, center);
   }
-  // Draw on a spiral
   else { // Start angle
-    let a = 0;
-    let r;
-    let d = 2 * this.pointRadius;
-    let max = Math.min(this.maxObjects, cluster.length);
-    // Feature on a spiral
-    for (let i = 0; i < max; i++) { // New radius => increase d in one turn
-      r = d / 2 + d * a / (2 * Math.PI);
-      // Angle
-      a = a + (d + 0.1) / r;
-      let dx = pix * r * Math.sin(a);
-      let dy = pix * r * Math.cos(a);
-      let p = [center[0] + dx, center[1] + dy];
-      let cf = new ol.Feature();
-      cluster[i].getKeys().forEach(attr => {
-        cf.set(attr, cluster[i].get(attr));
-      });
-      let clonedStyles = cluster[i].getStyle()(cluster[i], pix).map(s => s.clone());
-      // let [style, styleIcon] = cluster[i].getStyle()(cluster[i], pix);
-      // let styleIconClone = styleIcon.clone();
-      let styleImage = clonedStyles[1].getImage();
-      if (styleImage) {
-        if (!styleImage.size_) {
+    this.drawFeaturesAndLinsInSpiral_(cluster, resolution, center);
+  }
+  if (this.animate) {
+    this.animateCluster_(center, () => this.overlayLayer_.getSource().refresh());
+  }
+};
+
+
+/**
+ * TODO
+ *
+ * @private
+ * @function
+ */
+M.impl.interaction.SelectCluster.prototype.drawFeaturesAndLinsInCircle_ = function(cluster, resolution, radiusInPixels, center) {
+  let max = Math.min(cluster.length, this.circleMaxObjects);
+  for (let i = 0; i < max; i++) {
+    let a = 2 * Math.PI * i / max;
+    if (max == 2 || max == 4) a += Math.PI / 4;
+    let newPoint = [center[0] + radiusInPixels * Math.sin(a), center[1] + radiusInPixels * Math.cos(a)];
+    this.drawAnimatedFeatureAndLink_(cluster[i], resolution, center, newPoint);
+  }
+};
+
+/**
+ * TODO
+ *
+ * @private
+ * @function
+ */
+M.impl.interaction.SelectCluster.prototype.drawFeaturesAndLinsInSpiral_ = function(cluster, resolution, center) {
+  let a = 0;
+  let r;
+  let d = 2 * this.pointRadius;
+  let max = Math.min(this.maxObjects, cluster.length);
+  // Feature on a spiral
+  for (let i = 0; i < max; i++) { // New radius => increase d in one turn
+    r = d / 2 + d * a / (2 * Math.PI);
+    // Angle
+    a = a + (d + 0.1) / r;
+    let dx = resolution * r * Math.sin(a);
+    let dy = resolution * r * Math.cos(a);
+    let newPoint = [center[0] + dx, center[1] + dy];
+    this.drawAnimatedFeatureAndLink_(cluster[i], resolution, center, newPoint);
+  }
+};
+
+/**
+ * TODO
+ *
+ * @private
+ * @function
+ */
+M.impl.interaction.SelectCluster.prototype.drawAnimatedFeatureAndLink_ = function(clusterFeature, resolution, center, newPoint) {
+  let cf = new ol.Feature();
+  clusterFeature.getKeys().forEach(attr => {
+    cf.set(attr, clusterFeature.get(attr));
+  });
+
+  let clusterStyleFn = clusterFeature.getStyle();
+  if (!clusterStyleFn) {
+    clusterStyleFn = this.facadeLayer_.getStyle().getImpl().oldOLLayer_.getStyle();
+  }
+  let olClusterStyles = clusterStyleFn(clusterFeature, resolution);
+  let clonedStyles = olClusterStyles.map ? olClusterStyles.map(s => s.clone()) : [olClusterStyles.clone()];
+  if (!M.utils.isNullOrEmpty(clonedStyles)) {
+    clonedStyles.forEach(function(olStyle) {
+      let styleImage = olStyle.getImage();
+      if (!M.utils.isNullOrEmpty(styleImage)) {
+        if (styleImage.getOrigin() == null) {
+          styleImage.origin_ = [];
+        }
+        if (styleImage.getAnchor() == null) {
+          styleImage.normalizedAnchor_ = [];
+        }
+        if (styleImage.getSize() == null) {
           styleImage.size_ = [42, 42];
         }
       }
-      cf.setStyle(clonedStyles);
-      cf.set('features', [cluster[i]]);
-      cf.set('geometry', new ol.geom.Point(p));
-      source.addFeature(cf);
-      let lk = new ol.Feature({
-        'selectclusterlink': true,
-        geometry: new ol.geom.LineString([center, p])
-      });
-      source.addFeature(lk);
-    }
+    });
   }
-  if (this.animate) this.animateCluster_(center, () => {
-    this.overlayLayer_.getSource().refresh();
+
+  cf.setId(clusterFeature.getId());
+  cf.setStyle(clonedStyles);
+  cf.set('features', [clusterFeature]);
+  cf.set('geometry', new ol.geom.Point(newPoint));
+  this.overlayLayer_.getSource().addFeature(cf);
+
+  let lk = new ol.Feature({
+    'selectclusterlink': true,
+    geometry: new ol.geom.LineString([center, newPoint])
   });
+  this.overlayLayer_.getSource().addFeature(lk);
 };
 
 /**
@@ -263,12 +284,6 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center, ca
   if (!features.length) return;
 
   this.overlayLayer_.setVisible(false);
-  let style = this.overlayLayer_.getStyle();
-  let stylefn = (typeof(style) == 'function') ? style : style.length ? function() {
-    return style;
-  } : function() {
-    return [style];
-  };
   let duration = this.animationDuration || 500;
   let start = new Date().getTime();
 
@@ -287,21 +302,13 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center, ca
         pt[0] = center[0] + e * (pt[0] - center[0]);
         pt[1] = center[1] + e * (pt[1] - center[1]);
         let geo = new ol.geom.Point(pt);
-        // Image style
-        let st = null;
-        if (mFeature.getStyleFunction() != null) {
-          st = mFeature.getStyleFunction().call(mFeature, res);
-        }
-        else {
-          st = stylefn.call(mFeature, res);
-        }
-        for (let s = 0; s < st.length; s++) {
-          let style = st[s];
-          if (style.getImage() instanceof M.impl.style.PointIcon) {
-            style = st[s].clone();
-            if (!style.getImage().size_) {
-              style.getImage().size_ = [42, 42];
-            }
+
+        // draw links
+        let st2 = this.overlayLayer_.getStyle()(mFeature, res).map(s => s.clone());
+        for (let s = 0; s < st2.length; s++) {
+          let style = st2[s];
+          if (!style.getImage().size_) {
+            style.getImage().size_ = [42, 42];
           }
           let imgs = style.getImage();
           let sc;
@@ -309,17 +316,41 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center, ca
             sc = imgs.getScale();
             imgs.setScale(ratio); // setImageStyle don't check retina
           }
+          vectorContext.setStyle(style);
+          vectorContext.drawLineString(new ol.geom.LineString([center, pt]));
+        }
+
+        // Image style
+        let clusterStyleFn = mFeature.getStyle();
+        if (!clusterStyleFn) {
+          clusterStyleFn = this.facadeLayer_.getStyle().getImpl().oldOLLayer_.getStyle();
+        }
+        let olClusterStyles = clusterStyleFn(mFeature, res);
+        let st = olClusterStyles.map ? olClusterStyles.map(s => s.clone()) : [olClusterStyles.clone()];
+        for (let s = 0; s < st.length; s++) {
+          let style = st[s];
+          let imgs = style.getImage();
+
+          let sc;
+          if (imgs) {
+            sc = imgs.getScale();
+            imgs.setScale(ratio); // setImageStyle don't check retina
+            if (imgs.getOrigin() == null) {
+              imgs.origin_ = [];
+            }
+            if (imgs.getAnchor() == null) {
+              imgs.normalizedAnchor_ = [];
+            }
+            if (imgs.getSize() == null) {
+              imgs.size_ = [42, 42];
+            }
+          }
           // OL3 > v3.14
-          if (vectorContext.setStyle) {
-            vectorContext.setStyle(style);
-            vectorContext.drawGeometry(geo);
-          }
-          // older version
-          else {
-            vectorContext.setImageStyle(imgs);
-            vectorContext.drawPointGeometry(geo);
-          }
-          if (imgs) imgs.setScale(sc);
+          // if (vectorContext.setStyle) {
+          vectorContext.setStyle(style);
+          vectorContext.drawGeometry(geo);
+          // }
+          // if (imgs) imgs.setScale(sc);
         }
       }
     // Stop animation and restore cluster visibility
