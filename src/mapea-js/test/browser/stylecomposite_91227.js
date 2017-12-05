@@ -213,7 +213,7 @@ function addproportional() {
 function removeproportional() {
   let style = ayuntamientos.getStyle();
   if (!(style instanceof M.style.Proportional) && (style instanceof M.style.Composite)) {
-    style.remove(styleoveproportional);
+    style.remove(styleproportional);
   }
   else {
     ayuntamientos.setStyle(null, true);
@@ -233,7 +233,7 @@ function addcategory() {
 function removecategory() {
   let style = ayuntamientos.getStyle();
   if (!(style instanceof M.style.Category) && (style instanceof M.style.Composite)) {
-    style.remove(styleovecategory);
+    style.remove(stylecategory);
   }
   else {
     ayuntamientos.setStyle(null, true);
@@ -253,7 +253,7 @@ function addchoropleth() {
 function removechoropleth() {
   let style = ayuntamientos.getStyle();
   if (!(style instanceof M.style.Choropleth) && (style instanceof M.style.Composite)) {
-    style.remove(styleovechoropleth);
+    style.remove(stylechoropleth);
   }
   else {
     ayuntamientos.setStyle(null, true);
@@ -273,7 +273,7 @@ function addcluster() {
 function removecluster() {
   let style = ayuntamientos.getStyle();
   if (!(style instanceof M.style.Cluster) && (style instanceof M.style.Composite)) {
-    style.remove(styleovecluster);
+    style.remove(stylecluster);
   }
   else {
     ayuntamientos.setStyle(null, true);
@@ -293,7 +293,7 @@ function addsimple() {
 function removesimple() {
   let style = ayuntamientos.getStyle();
   if (!(style instanceof M.style.Simple) && (style instanceof M.style.Composite)) {
-    style.remove(styleovesimple);
+    style.remove(stylesimple);
   }
   else {
     ayuntamientos.setStyle(null, true);
@@ -313,7 +313,7 @@ function addchart() {
 function removechart() {
   let style = ayuntamientos.getStyle();
   if (!(style instanceof M.style.Chart) && (style instanceof M.style.Composite)) {
-    style.remove(styleovechart);
+    style.remove(stylechart);
   }
   else {
     ayuntamientos.setStyle(null, true);
