@@ -992,4 +992,16 @@ goog.require('goog.color.alpha');
     }
     return intervals;
   };
+
+  /**
+   * This functions returns the order style
+   * @function
+   * @public
+   * @param {M.Style}
+   * @return {number}
+   * @api stable
+   */
+  M.utils.styleComparator = function(style, style2) {
+    return style.ORDER - style2.ORDER;
+  };
 })();

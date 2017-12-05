@@ -29,4 +29,10 @@ goog.require('M.style.Feature');
     this.updateCanvas();
   };
 
+  /**
+   * TODO
+   */
+  Object.defineProperty(M.style.Simple.prototype, "ORDER", {
+    value: 1
+  });
 })();

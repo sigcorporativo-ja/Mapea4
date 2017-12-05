@@ -1,6 +1,6 @@
 goog.provide('M.style.Choropleth');
 
-goog.require('M.Style');
+goog.require('M.style.Composite');
 goog.require('M.style.quantification');
 
 /**
@@ -42,7 +42,7 @@ goog.require('M.style.quantification');
      * @api stable
      * @expose
      */
-    this.styles_ = styles;
+    this.choroplethStyles_ = styles;
 
     /**
      * @public
@@ -70,7 +70,7 @@ goog.require('M.style.quantification');
 
     goog.base(this, options, {});
   });
-  goog.inherits(M.style.Choropleth, M.Style);
+  goog.inherits(M.style.Choropleth, M.style.Composite);
 
   /**
    * This function apply the style to specified layer
@@ -79,7 +79,7 @@ goog.require('M.style.quantification');
    * @param {M.Layer.Vector} layer - Layer where to apply choropleth style
    * @api stable
    */
-  M.style.Choropleth.prototype.apply = function(layer) {
+  M.style.Choropleth.prototype.applyInternal_ = function(layer) {
     this.layer_ = layer;
     this.update_();
   };
@@ -128,9 +128,9 @@ goog.require('M.style.quantification');
    */
   M.style.Choropleth.prototype.setQuantification = function(quantification) {
     this.quantification_ = quantification;
-    if (!this.styles_.some(style => M.utils.isString(style))) {
-      if (this.styles_.length < this.quantification_().length) {
-        let [startStyle, endStyle] = this.styles_;
+    if (!this.choroplethStyles_.some(style => M.utils.isString(style))) {
+      if (this.choroplethStyles_.length < this.quantification_().length) {
+        let [startStyle, endStyle] = this.choroplethStyles_;
         let startColor = startStyle.get('fill.color');
         let endColor = endStyle.get('fill.color');
         if (M.utils.isNullOrEmpty(startColor)) {
@@ -139,10 +139,10 @@ goog.require('M.style.quantification');
         if (M.utils.isNullOrEmpty(endColor)) {
           endColor = endStyle.get('stroke.color');
         }
-        this.styles_ = [startColor, endColor];
+        this.choroplethStyles_ = [startColor, endColor];
       }
       else {
-        this.styles_ = this.styles_.slice(0, this.quantification_().length);
+        this.choroplethStyles_ = this.choroplethStyles_.slice(0, this.quantification_().length);
       }
       this.update_();
     }
@@ -157,7 +157,7 @@ goog.require('M.style.quantification');
    * @api stable
    */
   M.style.Choropleth.prototype.getStyles = function() {
-    return this.styles_;
+    return this.choroplethStyles_;
   };
 
   /**
@@ -171,7 +171,7 @@ goog.require('M.style.quantification');
     if (!M.utils.isArray(styles)) {
       styles = [styles];
     }
-    this.styles_ = styles;
+    this.choroplethStyles_ = styles;
     this.update_();
     return this;
   };
@@ -185,7 +185,7 @@ goog.require('M.style.quantification');
    */
 
   M.style.Choropleth.prototype.updateCanvas = function() {
-    if (!M.utils.isNullOrEmpty(this.styles_)) {
+    if (!M.utils.isNullOrEmpty(this.choroplethStyles_)) {
       if (this.breakPoints_.length > 0) {
         let canvasImages = [];
         this.updateCanvasPromise_ = new Promise((success, fail) =>
@@ -203,7 +203,7 @@ goog.require('M.style.quantification');
    */
   M.style.Choropleth.prototype.loadCanvasImages_ = function(currentIndex, canvasImages, callbackFn) {
     // base case
-    if (currentIndex === this.styles_.length) {
+    if (currentIndex === this.choroplethStyles_.length) {
       this.drawGeometryToCanvas(canvasImages, callbackFn);
     }
     // recursive case
@@ -231,8 +231,8 @@ goog.require('M.style.quantification');
         });
         scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
       };
-      this.styles_[currentIndex].updateCanvas();
-      image.src = this.styles_[currentIndex].toImage();
+      this.choroplethStyles_[currentIndex].updateCanvas();
+      image.src = this.choroplethStyles_[currentIndex].toImage();
     }
   };
 
@@ -318,11 +318,11 @@ goog.require('M.style.quantification');
       let features = this.layer_.getFeatures();
       if (!M.utils.isNullOrEmpty(features)) {
         this.dataValues_ = this.getValues();
-        if (M.utils.isNullOrEmpty(this.styles_) || (!M.utils.isNullOrEmpty(this.styles_) &&
-            (M.utils.isString(this.styles_[0]) || M.utils.isString(this.styles_[1])))) {
+        if (M.utils.isNullOrEmpty(this.choroplethStyles_) || (!M.utils.isNullOrEmpty(this.choroplethStyles_) &&
+            (M.utils.isString(this.choroplethStyles_[0]) || M.utils.isString(this.choroplethStyles_[1])))) {
           this.breakPoints_ = this.quantification_(this.dataValues_);
-          let startColor = this.styles_ && this.styles_[0] ? this.styles_[0] : M.style.Choropleth.START_COLOR_DEFAULT;
-          let endColor = this.styles_ && this.styles_[1] ? this.styles_[1] : M.style.Choropleth.END_COLOR_DEFAULT;
+          let startColor = this.choroplethStyles_ && this.choroplethStyles_[0] ? this.choroplethStyles_[0] : M.style.Choropleth.START_COLOR_DEFAULT;
+          let endColor = this.choroplethStyles_ && this.choroplethStyles_[1] ? this.choroplethStyles_[1] : M.style.Choropleth.END_COLOR_DEFAULT;
           let numColors = this.breakPoints_.length;
           let scaleColor = M.utils.generateColorScale(startColor, endColor, numColors);
           if (!M.utils.isArray(scaleColor)) {
@@ -333,27 +333,27 @@ goog.require('M.style.quantification');
           switch (geometryType) {
             case M.geom.geojson.type.POINT:
             case M.geom.geojson.type.MULTI_POINT:
-              this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_POINT);
+              this.choroplethStyles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_POINT);
               break;
             case M.geom.geojson.type.LINE_STRING:
             case M.geom.geojson.type.MULTI_LINE_STRING:
-              this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_LINE);
+              this.choroplethStyles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_LINE);
               break;
             case M.geom.geojson.type.POLYGON:
             case M.geom.geojson.type.MULTI_POLYGON:
-              this.styles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_POLYGON);
+              this.choroplethStyles_ = generateStyle(scaleColor, M.style.Choropleth.DEFAULT_STYLE_POLYGON);
               break;
             default:
               return null;
           }
         }
         else {
-          this.breakPoints_ = this.quantification_(this.dataValues_, this.styles_.length);
+          this.breakPoints_ = this.quantification_(this.dataValues_, this.choroplethStyles_.length);
         }
       }
       for (let i = this.breakPoints_.length - 1; i > -1; i--) {
         let filterLTE = new M.filter.LTE(this.attributeName_, this.breakPoints_[i]);
-        filterLTE.execute(features).forEach(f => f.setStyle(this.styles_[i]));
+        filterLTE.execute(features).forEach(f => f.setStyle(this.choroplethStyles_[i]));
       }
       this.updateCanvas();
     }
@@ -450,4 +450,21 @@ goog.require('M.style.quantification');
     return Math.round(number * powPrecision) / powPrecision;
   };
 
+  /**
+   * @inheritDoc
+   */
+  M.style.Choropleth.prototype.add = function(styles) {
+    if (!M.utils.isArray(styles)) {
+      styles = [styles];
+    }
+    styles = styles.filter(style => style instanceof M.style.Cluster || style instanceof M.style.Proportional);
+    goog.base(this, "add", styles);
+  };
+
+  /**
+   * TODO
+   */
+  Object.defineProperty(M.style.Choropleth.prototype, "ORDER", {
+    value: 2
+  });
 })();

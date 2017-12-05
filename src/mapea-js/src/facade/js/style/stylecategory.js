@@ -1,5 +1,5 @@
 goog.provide('M.style.Category');
-goog.require('M.Style');
+goog.require('M.style.Composite');
 
 /**
  * @namespace M.style.Category
@@ -41,7 +41,7 @@ goog.require('M.Style');
     this.categoryStyles_ = categoryStyles;
     goog.base(this, options, {});
   });
-  goog.inherits(M.style.Category, M.Style);
+  goog.inherits(M.style.Category, M.style.Composite);
 
   /**
    * This function apply the styleCategory object to specified layer
@@ -52,7 +52,7 @@ goog.require('M.Style');
    * @returns {M.style.Category}
    * @api stable
    */
-  M.style.Category.prototype.apply = function(layer) {
+  M.style.Category.prototype.applyInternal_ = function(layer) {
     this.layer_ = layer;
     this.update_();
   };
@@ -254,4 +254,22 @@ goog.require('M.Style');
       this.updateCanvas();
     }
   };
+
+  /**
+   * @inheritDoc
+   */
+  M.style.Category.prototype.add = function(styles) {
+    if (!M.utils.isArray(styles)) {
+      styles = [styles];
+    }
+    styles = styles.filter(style => style instanceof M.style.Cluster || style instanceof M.style.Proportional);
+    goog.base(this, "add", styles);
+  };
+
+  /**
+   * TODO
+   */
+  Object.defineProperty(M.style.Category.prototype, "ORDER", {
+    value: 2
+  });
 })();

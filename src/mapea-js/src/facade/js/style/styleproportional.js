@@ -116,7 +116,7 @@ goog.require('M.style.Point');
     let style = feature.getStyle();
     if (!M.utils.isNullOrEmpty(style)) {
       this.oldStyles_[feature.getId()] = feature.getStyle();
-      if (!(style instanceof M.style.Point)) {
+      if (!(style instanceof M.style.Point) && style instanceof M.style.Simple) {
         style = new M.style.Point(feature.getStyle().options_);
       }
       let newStyle = this.calculateStyle_(feature, {
