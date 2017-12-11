@@ -11,9 +11,9 @@ goog.require("P.plugin.Measurebar");
 goog.require("P.impl.plugin.Measurebar");
 goog.require("P.plugin.Printer");
 goog.require("P.impl.control.Printer");
-// goog.require("P.plugin.AttributeTable");
-// goog.require("P.control.AttributeTableControl");
-// goog.require("P.impl.control.AttributeTableControl");
+goog.require("P.plugin.AttributeTable");
+goog.require("P.control.AttributeTableControl");
+goog.require("P.impl.control.AttributeTableControl");
 goog.require("P.plugin.Streetview");
 goog.require("P.impl.plugin.Streetview");
 goog.require("P.impl.plugin.WFSTControls");
@@ -43,5 +43,25 @@ goog.require("M.filter.Spatial");
 goog.require("M.filter.spatial");
 goog.require("M.filter");
 
-//     image: new
+// styles
+goog.require('M.Style');
+goog.require('M.style.Feature');
+goog.require('M.style.Simple');
+goog.require('M.style.Polygon');
+goog.require('M.impl.style.Polygon');
+goog.require('M.style.Line');
+goog.require('M.impl.style.Line');
+goog.require('M.style.Point');
+goog.require('M.impl.style.Point');
+goog.require('M.style.align');
+goog.require('M.style.baseline');
+goog.require('M.style.pattern');
+goog.require('M.style.form');
+
+// ext
+goog.require('ol.style.FillPattern');
+goog.require('ol.style.FontSymbol');
+goog.require('ol.geometry.Cspline');
+
+// image: new
 goog.require("goog.events");

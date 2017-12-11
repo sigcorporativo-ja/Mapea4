@@ -194,6 +194,36 @@ goog.require('M.geom');
   };
 
   /**
+   * TODO
+   *
+   * @function
+   * @api stable
+   */
+  M.layer.WFS.prototype.setStyle = function(style, applyToFeature = false) {
+    const applyStyleFn = function() {
+      if (M.utils.isNullOrEmpty(style)) {
+        style = M.utils.generateStyleLayer(M.layer.WFS.DEFAULT_OPTIONS_STYLE, this);
+      }
+      let isCluster = style instanceof M.style.Cluster;
+      let isPoint = [M.geom.geojson.type.POINT, M.geom.geojson.type.MULTI_POINT].includes(M.utils.getGeometryType(this));
+      if (style instanceof M.Style && (!isCluster || isPoint)) {
+        if (!M.utils.isNullOrEmpty(this.style_)) {
+          this.style_.unapply(this);
+        }
+        style.apply(this, applyToFeature);
+        this.style_ = style;
+      }
+    };
+
+    if (this.getImpl().isLoaded()) {
+      applyStyleFn.bind(this)();
+    }
+    else {
+      this.on(M.evt.LOAD, applyStyleFn, this);
+    }
+  };
+
+  /**
    * This function checks if an object is equals
    * to this layer
    *
@@ -213,5 +243,24 @@ goog.require('M.geom');
     }
 
     return equals;
+  };
+
+  /**
+   * Style options by default for this layer
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.layer.WFS.DEFAULT_OPTIONS_STYLE = {
+    fill: {
+      color: 'rgba(103, 175, 19, 0.2)',
+      opacity: 0.4
+    },
+    stroke: {
+      color: '#67af13',
+      width: 1
+    },
+    radius: 5
   };
 })();

@@ -102,6 +102,14 @@ goog.require('P.plugin.Autocomplete');
       'position': M.ui.position.TL,
       'tooltip': 'Buscador de calles y geobúsquedas'
     });
+    //JGL20170816: foco al input al desplegar panel
+    this_.panel_.on(M.evt.ADDED_TO_MAP, function(html) {
+      this_.panel_._buttonPanel.addEventListener("click", function(evt) {
+        if (!this_.panel_._collapsed) {
+          this_.control_.input_.focus();
+        }
+      });
+    });
     this.panel_.addControls(this.control_);
     this.map_.addPanels(this.panel_);
   };

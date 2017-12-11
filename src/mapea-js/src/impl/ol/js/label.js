@@ -3,7 +3,7 @@ goog.provide('M.impl.Label');
 /**
  * @namespace M.impl.control
  */
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Label
@@ -13,7 +13,7 @@ goog.provide('M.impl.Label');
    * @param {array} coordOpts - Coordinate to display popup
    * @api stable
    */
-  M.impl.Label = function (text, coordOpts) {
+  M.impl.Label = function(text, coordOpts, panMapIfOutOfView) {
     /**
      * Text to show
      * @private
@@ -41,6 +41,14 @@ goog.provide('M.impl.Label');
      * @type {M.Map}
      */
     this.facadeMap_ = null;
+
+    /**
+     * Flag to indicate if map does pan or not
+     * @private
+     * @type {boolean}
+     * @api stable
+     */
+    this.panMapIfOutOfView = panMapIfOutOfView;
   };
 
   /**
@@ -51,7 +59,7 @@ goog.provide('M.impl.Label');
    * @param {M.Map} map - Map where show popup
    * @api stable
    */
-  M.impl.Label.prototype.show = function (map) {
+  M.impl.Label.prototype.show = function(map) {
     this.facadeMap_ = map;
     M.template.compile(M.Label.POPUP_TEMPLATE, {
       'jsonp': true,
@@ -59,13 +67,15 @@ goog.provide('M.impl.Label');
         'info': this.text_
       },
       'parseToHtml': false
-    }).then(function (htmlAsText) {
+    }).then(function(htmlAsText) {
       map.removePopup();
-      this.popup_ = new M.Popup();
+      this.popup_ = new M.Popup({
+        'panMapIfOutOfView': this.panMapIfOutOfView
+      });
       this.popup_.addTab({
         'icon': 'g-cartografia-comentarios',
         'title': 'Información',
-        'content': htmlAsText
+        'content': htmlAsText,
       });
       map.addPopup(this.popup_, this.coord_);
     }.bind(this));
@@ -78,7 +88,7 @@ goog.provide('M.impl.Label');
    * @function
    * @api stable
    */
-  M.impl.Label.prototype.hide = function () {
+  M.impl.Label.prototype.hide = function() {
     this.facadeMap_.removePopup();
   };
 
@@ -90,7 +100,7 @@ goog.provide('M.impl.Label');
    * @returns {M.Popup} popup created
    * @api stable
    */
-  M.impl.Label.prototype.getPopup = function () {
+  M.impl.Label.prototype.getPopup = function() {
     return this.popup_;
   };
 
@@ -100,7 +110,7 @@ goog.provide('M.impl.Label');
    * @function
    * @api stable
    */
-  M.impl.Label.prototype.getCoordinate = function () {
+  M.impl.Label.prototype.getCoordinate = function() {
     let coord = this.coord_;
     if (M.utils.isNullOrEmpty(coord)) {
       coord = this.getPopup().getCoordinate();
@@ -114,7 +124,7 @@ goog.provide('M.impl.Label');
    * @function
    * @api stable
    */
-  M.impl.Label.prototype.setCoordinate = function (coord) {
+  M.impl.Label.prototype.setCoordinate = function(coord) {
     this.coord_ = coord;
     let popup = this.getPopup();
     if (!M.utils.isNullOrEmpty(popup)) {

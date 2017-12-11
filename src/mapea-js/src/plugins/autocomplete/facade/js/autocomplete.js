@@ -1,8 +1,8 @@
-goog.provide('P.plugin.Autocomplete');
+goog.provide("P.plugin.Autocomplete");
 
-goog.require('goog.dom.classlist');
+goog.require("goog.dom.classlist");
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -13,7 +13,7 @@ goog.require('goog.dom.classlist');
    * @param {Mx.parameters.Autocomplete} parameters - Autocomplete parameters
    * @api stable
    */
-  M.plugin.Autocomplete = (function (parameters) {
+  M.plugin.Autocomplete = (function(parameters) {
 
     parameters = (parameters || {});
 
@@ -59,7 +59,6 @@ goog.require('goog.dom.classlist');
      * @type {number}
      */
     this.minLength_ = M.config.AUTOCOMPLETE_MINLENGTH;
-
     /**
      * Input searchstreet
      *
@@ -67,7 +66,6 @@ goog.require('goog.dom.classlist');
      * @type {HTMLElement}
      */
     this.target_ = parameters.target;
-
     /**
      * Container autocomplete
      *
@@ -75,7 +73,69 @@ goog.require('goog.dom.classlist');
      * @type {HTMLElement}
      */
     this.resultsContainer_ = parameters.html.querySelector("div#m-autocomplete-results");
+    //JGL20170816: control de selección por teclado
+    var this_ = this;
+    this.target_.addEventListener("keydown", function onKeyDown(e) {
+      let lista = this_.resultsContainer_.querySelectorAll("div.autocomplete");
+      let selectedResult = this_.resultsContainer_.querySelector(".selected");
+      if (e.keyCode === 13) {
+        let controls = this_.map_.getControls();
+        for (let i = 0, ilen = controls.length; i < ilen; i++) {
+          if (controls[i].name_ === "searchstreet") {
+            if (this.value.indexOf(",") < 0) {
+              this_.searchMunicipality_(this.value);
+            } else {
+              controls[i].searchClick_(e);
+              controls[i].completed = false;
+            }
+          } else if (controls[i].name_ === "searchstreetgeosearch") {
+            if (!M.utils.isNullOrEmpty(selectedResult) && (this.value.indexOf(",") < 0)) {
+              this_.searchMunicipality_(this.value);
+            } else {
+              controls[i].ctrlSearchstreet.searchClick_(e);
+              controls[i].ctrlSearchstreet.completed = false;
+              controls[i].ctrlGeosearch.searchClick_(e);
+            }
+          }
+        }
+        selectedResult = null;
+      } else if (lista.length > 0) {
+        let idxSelectedResult = -1;
+        for (let i = 0; i < lista.length; i++) {
+          if (lista[i].classList.contains("selected")) {
+            idxSelectedResult = i;
+            selectedResult = lista[i];
+          }
+        }
+        if (e.keyCode === 40) {
+          if (idxSelectedResult == -1) {
+            selectedResult = lista[0];
+            selectedResult.classList.add("selected");
+          } else if (idxSelectedResult < lista.length - 1) {
+            //console.log(idxSelectedResult,lista.length);
+            lista[idxSelectedResult].classList.remove("selected");
+            selectedResult = lista[idxSelectedResult + 1];
+            selectedResult.classList.add("selected");
+          }
 
+        } else if (e.keyCode === 38) {
+          if (idxSelectedResult == lista.length) {
+            selectedResult = lista[lista.length];
+            selectedResult.classList.add("selected");
+          } else if (idxSelectedResult >= 1) {
+            lista[idxSelectedResult].classList.remove("selected");
+            selectedResult = lista[idxSelectedResult - 1];
+            selectedResult.classList.add("selected");
+          }
+        }
+
+        if (!M.utils.isNullOrEmpty(selectedResult)) {
+          this.value = selectedResult.innerHTML.trim();
+          var divCont = document.getElementById("m-autcomplete");
+          divCont.scrollTop = selectedResult.offsetTop;
+        }
+      }
+    });
 
     /**
      * Delay time
@@ -131,7 +191,7 @@ goog.require('goog.dom.classlist');
      * @private
      * @type {HTMLElement}
      */
-    this.searchingResult_ = this.resultsContainer_.querySelector('div#m-autocomplete-results > div#m-searching-result-autocomplete');
+    this.searchingResult_ = this.resultsContainer_.querySelector("div#m-autocomplete-results > div#m-searching-result-autocomplete");
 
     goog.base(this);
   });
@@ -145,7 +205,7 @@ goog.require('goog.dom.classlist');
    * @param {M.Map} map - Facade map
    * @api stable
    */
-  M.plugin.Autocomplete.prototype.addTo = function (map) {
+  M.plugin.Autocomplete.prototype.addTo = function(map) {
     this.map_ = map;
     goog.dom.classlist.add(this.target_, M.plugin.Autocomplete.CLASS);
     goog.dom.removeChildren(this.resultsContainer_, this.searchingResult_);
@@ -163,7 +223,7 @@ goog.require('goog.dom.classlist');
    * @param {goog.events.BrowserEvent}
    *        evt - Keypress event
    */
-  M.plugin.Autocomplete.prototype.hiddenAutocomplete_ = function (evt) {
+  M.plugin.Autocomplete.prototype.hiddenAutocomplete_ = function(evt) {
     if (evt.keyCode === 27) {
       this.cancelSearch_(evt);
     }
@@ -178,7 +238,7 @@ goog.require('goog.dom.classlist');
    * @param {goog.events.BrowserEvent}
    *        evt - Keypress event
    */
-  M.plugin.Autocomplete.prototype.keyPress_ = function (evt) {
+  M.plugin.Autocomplete.prototype.keyPress_ = function(evt) {
     evt.preventDefault();
 
     if (!M.utils.isNullOrEmpty(this.timeoutKey_)) {
@@ -187,11 +247,10 @@ goog.require('goog.dom.classlist');
 
     var query = this.target_.value.trim();
     if (query.length >= this.minLength_) {
-      this.timeoutKey_ = setTimeout(goog.bind(function () {
-        if (query.indexOf(',') != -1) {
+      this.timeoutKey_ = setTimeout(goog.bind(function() {
+        if (query.indexOf(",") != -1) {
           this.busqMunicipio_ = true;
-        }
-        else {
+        } else {
           this.busqMunicipio_ = false;
           this.busqMunicipioClick_ = false;
         }
@@ -209,7 +268,7 @@ goog.require('goog.dom.classlist');
    * @param {goog.events.BrowserEvent}
    *        evt - Click event
    */
-  M.plugin.Autocomplete.prototype.search_ = function (query, evt) {
+  M.plugin.Autocomplete.prototype.search_ = function(query, evt) {
     var this_ = this;
     this.evt = evt;
     var searchUrl;
@@ -221,8 +280,8 @@ goog.require('goog.dom.classlist');
 
     searchUrl = this.formatContent_(searchUrl, " ", "%20");
     this.searchTime_ = Date.now();
-    (function (searchTime) {
-      M.remote.get(searchUrl).then(function (response) {
+    (function(searchTime) {
+      M.remote.get(searchUrl).then(function(response) {
         if (searchTime === this_.searchTime_) {
           var results = JSON.parse(response.text);
           results = this_.parseResultsForTemplate_(results);
@@ -236,12 +295,14 @@ goog.require('goog.dom.classlist');
             if (!M.utils.isUndefined(results.docs[0])) {
               M.template.compile(
                 M.plugin.Autocomplete.RESULTAUTOCOMPLETE, {
-                  'jsonp': true,
-                  'vars': results
+                  "jsonp": true,
+                  "vars": results
                 }).then(
-                function (html) {
+                function(html) {
                   this_.resultsContainer_.innerHTML = html.innerHTML;
-                  this_.addEvents_(this_.resultsContainer_.querySelectorAll("div.autocomplete"));
+                  let divResultsAutocomplete = this_.resultsContainer_.querySelectorAll("div.autocomplete");
+                  this_.addEvents_(divResultsAutocomplete);
+                  this_.target_.focus();
                   /*
                    * In case the municipality not searched, to verify that searchstreet is completed,
                    * in affirmative case to change to false the attribute completed of searchstreet
@@ -253,7 +314,7 @@ goog.require('goog.dom.classlist');
                      *  in negative case, to assign the event to the results
                      */
                     if (this_.busqMunicipioClick_ === true) {
-                      this_.target_.value = query.slice(0, -1);
+                      //this_.target_.value = query.slice(0, -1);
                       this_.resultsContainer_.innerHTML = "";
                       if (!M.utils.isUndefined(this_.evt)) {
                         for (var i = 0, ilen = controls.length; i < ilen; i++) {
@@ -261,35 +322,30 @@ goog.require('goog.dom.classlist');
                             controls[i].ctrlSearchstreet.searchClick_(this_.evt);
                             controls[i].ctrlSearchstreet.completed = false;
                             controls[i].ctrlGeosearch.searchClick_(this_.evt);
-                          }
-                          else if (controls[i].name_ === "searchstreet") {
+                          } else if (controls[i].name_ === "searchstreet") {
                             controls[i].searchClick_(this_.evt);
                             controls[i].completed = false;
                           }
                         }
                         this_.busqMunicipioClick_ = false;
                       }
-                    }
-                    else {
+                    } else {
                       var autocompleteResults = this_.resultsContainer_.querySelectorAll("div.autocomplete");
                       for (var m = 0, ilen2 = controls.length; m < ilen2; m++) {
                         if (controls[m].name_ === "searchstreetgeosearch") {
                           if (controls[m].ctrlSearchstreet.completed === true) {
                             controls[m].ctrlSearchstreet.completed = false;
                             this_.resultsContainer_.innerHTML = "";
-                          }
-                          else {
+                          } else {
                             for (var h = 0, ilen3 = autocompleteResults.length; h < ilen3; h++) {
                               this_.evtClickMunicipaly_(autocompleteResults[h]);
                             }
                           }
-                        }
-                        else if (controls[m].name_ === "searchstreet") {
+                        } else if (controls[m].name_ === "searchstreet") {
                           if (controls[m].completed === true) {
                             controls[m].completed = false;
                             this_.resultsContainer_.innerHTML = "";
-                          }
-                          else {
+                          } else {
                             for (var j = 0, ilen5 = autocompleteResults.length; j < ilen5; j++) {
                               this_.evtClickMunicipaly_(autocompleteResults[j]);
                             }
@@ -297,16 +353,14 @@ goog.require('goog.dom.classlist');
                         }
                       }
                     }
-                  }
-                  else {
+                  } else {
                     for (var y = 0, ilen4 = controls.length; y < ilen4; y++) {
                       if (controls[y].name_ === "searchstreet") {
                         if (controls[y].completed === true) {
                           this_.resultsContainer_.innerHTML = "";
                           controls[y].completed = false;
                         }
-                      }
-                      else if (controls[y].name_ === "searchstreetgeosearch") {
+                      } else if (controls[y].name_ === "searchstreetgeosearch") {
                         if (controls[y].ctrlSearchstreet.completed === true) {
                           this_.resultsContainer_.innerHTML = "";
                           controls[y].ctrlSearchstreet.completed = false;
@@ -315,24 +369,20 @@ goog.require('goog.dom.classlist');
                     }
                   }
                 });
-            }
-            else {
+            } else {
               for (var r = 0, ilen4 = controls.length; r < ilen4; r++) {
                 if (controls[r].name_ === "searchstreet") {
                   controls[r].completed = false;
-                }
-                else if (controls[r].name_ === "searchstreetgeosearch") {
+                } else if (controls[r].name_ === "searchstreetgeosearch") {
                   controls[r].ctrlSearchstreet.completed = false;
                 }
               }
             }
-          }
-          else {
+          } else {
             for (var g = 0, ilen6 = controls.length; g < ilen6; g++) {
               if (controls[g].name_ === "searchstreet") {
                 controls[g].completed = false;
-              }
-              else if (controls[g].name_ === "searchstreetgeosearch") {
+              } else if (controls[g].name_ === "searchstreetgeosearch") {
                 controls[g].ctrlSearchstreet.completed = false;
               }
             }
@@ -352,9 +402,9 @@ goog.require('goog.dom.classlist');
    * @param {HTMLElement} element - HTML element to add the event
    * @function
    */
-  M.plugin.Autocomplete.prototype.evtClickMunicipaly_ = function (element) {
+  M.plugin.Autocomplete.prototype.evtClickMunicipaly_ = function(element) {
     var this_ = this;
-    goog.events.listen(element, goog.events.EventType.CLICK, function (e) {
+    goog.events.listen(element, goog.events.EventType.CLICK, function(e) {
       this_.clickMunicipaly_();
     }, false, this);
   };
@@ -367,7 +417,7 @@ goog.require('goog.dom.classlist');
    * @function
    * @return {object} ResultsTemplateVar - parse results
    */
-  M.plugin.Autocomplete.prototype.parseResultsForTemplate_ = function (results) {
+  M.plugin.Autocomplete.prototype.parseResultsForTemplate_ = function(results) {
     var docs = results.autocompletarDireccionMunicipioResponse.autocompletarDireccionMunicipioReturn.autocompletarDireccionMunicipioReturn;
     var doscsTemp = [];
     if (this.busqMunicipio_ === true) {
@@ -380,12 +430,10 @@ goog.require('goog.dom.classlist');
           doscsTemp.push(info[0] + " " + info[1] + ", " + info[3] + " (" + info[info.length - 1] + ")");
         }
         docs = doscsTemp;
-      }
-      else {
+      } else {
         this.resultsContainer_.innerHTML = "";
       }
-    }
-    else if (docs instanceof Array === false) {
+    } else if (docs instanceof Array === false) {
       doscsTemp.push(docs);
       docs = doscsTemp;
       if (!M.utils.isUndefined(docs[0])) {
@@ -393,15 +441,14 @@ goog.require('goog.dom.classlist');
           docs[x] = this.formatContent_(docs[x], ",", " ");
         }
       }
-    }
-    else {
+    } else {
       for (var j = 0, ilen2 = docs.length; j < ilen2; j++) {
         docs[j] = this.formatContent_(docs[j], ",", " ");
       }
     }
     var resultsTemplateVar = null;
     resultsTemplateVar = {
-      'docs': docs
+      "docs": docs
     };
     return resultsTemplateVar;
   };
@@ -413,7 +460,7 @@ goog.require('goog.dom.classlist');
    * @Param {array} results - Array of HTML elements
    * @function
    */
-  M.plugin.Autocomplete.prototype.addEvents_ = function (results) {
+  M.plugin.Autocomplete.prototype.addEvents_ = function(results) {
     for (var i = 0, ilen = results.length; i < ilen; i++) {
       this.addEventSearchMunicipality_(results[i]);
     }
@@ -426,9 +473,25 @@ goog.require('goog.dom.classlist');
    * @param {HTMLElement} result - HTML element to add the event
    * @function
    */
-  M.plugin.Autocomplete.prototype.addEventSearchMunicipality_ = function (result) {
-    goog.events.listen(result, goog.events.EventType.CLICK, function (e) {
-      this.searchMunicipality_(result.innerHTML, e);
+  M.plugin.Autocomplete.prototype.addEventSearchMunicipality_ = function(result) {
+    goog.events.listen(result, goog.events.EventType.CLICK, function(e) {
+      this.target_.value = result.innerHTML.trim();
+      if (!M.utils.isNullOrEmpty(this.locality_)) {
+        let controls = this.map_.getControls();
+        this.resultsContainer_.innerHTML = "";
+        controls.forEach(function(control) {
+          if (control.name_ === "searchstreet") {
+            control.searchClick_(e);
+            control.completed = false;
+          } else if (control.name_ === "searchstreetgeosearch") {
+            control.ctrlSearchstreet.searchClick_(e);
+            control.ctrlSearchstreet.completed = false;
+            control.ctrlGeosearch.searchClick_(e);
+          }
+        });
+      } else {
+        this.searchMunicipality_(result.innerHTML, e);
+      }
     }, false, this);
   };
 
@@ -441,7 +504,7 @@ goog.require('goog.dom.classlist');
    *        evt - keypress event
    * @function
    */
-  M.plugin.Autocomplete.prototype.searchMunicipality_ = function (content, evt) {
+  M.plugin.Autocomplete.prototype.searchMunicipality_ = function(content, evt) {
     this.busqMunicipio_ = true;
     this.search_(content.trim() + ",", evt);
   };
@@ -452,7 +515,7 @@ goog.require('goog.dom.classlist');
    * @private
    * @function
    */
-  M.plugin.Autocomplete.prototype.clickMunicipaly_ = function () {
+  M.plugin.Autocomplete.prototype.clickMunicipaly_ = function() {
     this.busqMunicipioClick_ = true;
   };
 
@@ -466,8 +529,8 @@ goog.require('goog.dom.classlist');
    * @Param {string} replace - String to replace
    * @returns {string} Format content
    */
-  M.plugin.Autocomplete.prototype.formatContent_ = function (str, find, replace) {
-    return str.replace(new RegExp(find, 'g'), replace);
+  M.plugin.Autocomplete.prototype.formatContent_ = function(str, find, replace) {
+    return str.replace(new RegExp(find, "g"), replace);
   };
 
   /**
@@ -478,23 +541,21 @@ goog.require('goog.dom.classlist');
    * @param {goog.events.BrowserEvent}
    *        evt - Keypress event
    */
-  M.plugin.Autocomplete.prototype.cancelSearch_ = function (evt) {
+  M.plugin.Autocomplete.prototype.cancelSearch_ = function(evt) {
     clearTimeout(this.timeoutKey_);
     if (this.minLength_ <= this.target_.value.length && evt.keyCode !== 13 && evt.keyCode !== 27) {
       if (!M.utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector("#m-searchstreet-results>div"))) {
-        goog.dom.classlist.add(this.resultsContainer_, 'results-panel-content');
-        goog.dom.classlist.remove(this.resultsContainer_, 'results-panel');
-      }
-      else {
-        goog.dom.classlist.add(this.resultsContainer_, 'results-panel');
+        goog.dom.classlist.add(this.resultsContainer_, "results-panel-content");
+        goog.dom.classlist.remove(this.resultsContainer_, "results-panel");
+      } else {
+        goog.dom.classlist.add(this.resultsContainer_, "results-panel");
       }
       goog.dom.appendChild(this.resultsContainer_, this.searchingResult_);
       goog.dom.classlist.add(this.resultsContainer_.parentElement,
         M.plugin.Autocomplete.SEARCHING_CLASS);
       goog.dom.classlist.add(this.resultsContainer_,
         M.plugin.Autocomplete.MINIMUM);
-    }
-    else {
+    } else {
       this.searchTime_ = 0;
       goog.dom.classlist.remove(this.resultsContainer_.parentElement,
         M.plugin.Autocomplete.SEARCHING_CLASS);
@@ -512,7 +573,7 @@ goog.require('goog.dom.classlist');
    * @function
    * @api stable
    */
-  M.plugin.Autocomplete.prototype.destroy = function () {
+  M.plugin.Autocomplete.prototype.destroy = function() {
     this.map_.removeControls(this);
     this.map_ = null;
     this.locality_ = "";
@@ -537,7 +598,7 @@ goog.require('goog.dom.classlist');
    * @public
    * @api stable
    */
-  M.plugin.Autocomplete.CLASS = 'm-plugin-autocomplete';
+  M.plugin.Autocomplete.CLASS = "m-plugin-autocomplete";
 
   /**
    * Class searching
@@ -546,7 +607,7 @@ goog.require('goog.dom.classlist');
    * @public
    * @api stable
    */
-  M.plugin.Autocomplete.SEARCHING_CLASS = 'm-searching';
+  M.plugin.Autocomplete.SEARCHING_CLASS = "m-searching";
 
   /**
    * Template for this plugin - results
@@ -564,7 +625,7 @@ goog.require('goog.dom.classlist');
    * @public
    * @api stable
    */
-  M.plugin.Autocomplete.MINIMUM = 'minimum';
+  M.plugin.Autocomplete.MINIMUM = "minimum";
 
   /**
    * This function compare if pluging recieved by param is instance of M.plugin.Autocomplete
@@ -574,11 +635,10 @@ goog.require('goog.dom.classlist');
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.Autocomplete.prototype.equals = function (plugin) {
+  M.plugin.Autocomplete.prototype.equals = function(plugin) {
     if (plugin instanceof M.plugin.Autocomplete) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   };

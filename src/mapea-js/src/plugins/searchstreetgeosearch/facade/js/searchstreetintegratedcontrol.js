@@ -72,8 +72,8 @@ goog.require('P.impl.control.Searchstreet');
     this.clear_ = this.element_.getElementsByTagName("button")["m-searchstreetgeosearch-clear-btn"];
 
     // events
-    goog.events.listen(this.input_, goog.events.EventType.KEYUP,
-      this.searchClick_, false, this);
+    //JGL20170818: traslado gestión evento a autocomplete
+    //goog.events.listen(this.input_, goog.events.EventType.KEYUP, this.searchClick_, false, this);
     goog.events.listen(this.button_, goog.events.EventType.CLICK, this.searchClick_, false, this);
     goog.events.listen(this.clear_, goog.events.EventType.CLICK, this.clearSearchs_, false, this);
 

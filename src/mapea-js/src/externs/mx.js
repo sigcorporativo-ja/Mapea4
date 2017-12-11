@@ -1437,3 +1437,543 @@ Mx.jsts.io.GeoJSONReader;
  * @api stable
  */
 Mx.jtsGeom.disjoint;
+
+
+/**
+ * distanceSelectFeatures (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.optionsVendor.distanceSelectFeatures;
+
+/**
+ * displayInLayerSwitcherHoverLayer (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.optionsVendor.displayInLayerSwitcherHoverLayer;
+
+/**
+ * convexHullStyle (options)
+ * @type {object}
+ * @api stable
+ */
+Mx.optionsVendor.convexHullStyle;
+
+/**
+ * ranges (options)
+ * @type {Array}
+ * @api stable
+ */
+Mx.options.ranges;
+
+/**
+ * distance (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.options.distance;
+
+/**
+ * hoverInteraction (options)
+ * @type {boolean}
+ * @api stable
+ */
+Mx.options.hoverInteraction;
+/**
+ * selectInteraction (options)
+ * @type {boolean}
+ * @api stable
+ */
+Mx.options.selectInteraction;
+
+/**
+ * maxFeaturesToSelect (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.options.maxFeaturesToSelect;
+/**
+ * animated (options)
+ * @type {boolean}
+ * @api stable
+ */
+Mx.options.animated;
+
+/**
+ * animated (options)
+ * @type {number}
+ * @api stable
+ */
+Mx.options.animationDuration;
+
+/**
+ * animated (options)
+ * @type {string}
+ * @api stable
+ */
+Mx.options.animationMethod;
+
+/**
+ * displayAmount (options)
+ * @type {boolean}
+ * @api stable
+ */
+Mx.options.displayAmount;
+
+/**
+ * style icons
+ * @type {object}
+ * @api stable
+ */
+Mx.options.glyphs;
+
+
+
+/**
+ * chart variables
+ * @type {Object}
+ * @api stable
+ */
+Mx.options.variables;
+
+/**
+ * style icons
+ * @type {string}
+ * @api stable
+ */
+Mx.form;
+
+/**
+ * style icons
+ * @type {boolean}
+ * @api stable
+ */
+Mx.gradient;
+
+/**
+ * style icons
+ * @type {string}
+ * @api stable
+ */
+Mx.class;
+
+/**
+ * style icons
+ * @type {number}
+ * @api stable
+ */
+Mx.fontsize;
+
+/**
+ * style icons
+ * @type {number}
+ * @api stable
+ */
+Mx.radius;
+
+
+/**
+ * style icons
+ * @type {number}
+ * @api stable
+ */
+Mx.rotation;
+
+
+/**
+ * style icons
+ * @type {boolean}
+ * @api stable
+ */
+Mx.rotate;
+
+
+/**
+ * style icons
+ * @type {array}
+ * @api stable
+ */
+Mx.offset;
+
+/**
+ * style icons
+ * @type {string}
+ * @api stable
+ */
+Mx.color;
+
+/**
+ * style icons
+ * @type {string}
+ * @api stable
+ */
+Mx.fill;
+
+/**
+ * style icons
+ * @type {string}
+ * @api stable
+ */
+Mx.gradientcolor;
+
+
+/**
+ * Object literal representing a Event in Mapea
+ * @typedef {{
+ *     stroke: (Mx.ChartOptions.stroke),
+ *     scheme: (Mx.ChartOptions.scheme),
+ *     variables: (Mx.ChartOptions.variables)
+ * }}
+ * @api stable
+ */
+Mx.ChartOptions;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.ChartOptions.stroke;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartOptions.radius;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartOptions.offsetX;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartOptions.offsetY;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.ChartOptions.fill3DColor;
+
+/**
+ * @type {Array<string>|Object}
+ * @api stable
+ */
+Mx.ChartOptions.scheme;
+
+/**
+ * @type {boolean}
+ * @api stable
+ */
+Mx.ChartOptions.rotateWithView;
+
+/**
+ * @type {boolean}
+ * @api stable
+ */
+Mx.ChartOptions.animation;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.ChartOptions.variables;
+
+/**
+ * Object literal representing a Event in Mapea
+ * @typedef {{
+ *     attribute: (Mx.ChartVariableOptions.attribute),
+ *     label: (Mx.ChartVariableOptions.label)
+ * }}
+ * @api stable
+ */
+Mx.ChartVariableOptions;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.ChartVariableOptions.attribute;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartVariableOptions.radiusIncrement;
+
+/**
+ * @type {Object}
+ * @api stable
+ */
+Mx.ChartVariableOptions.label;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.ChartVariableOptions.fill;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.ChartVariableOptions.legend;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.chart.types.DONUT;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.chart.types.PIE_3D;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.chart.types.PIE;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.chart.types.BAR;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Custom;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Classic;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Dark;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Pale;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Pastel;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+M.style.chart.schemes.Neon;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.FontSymbolOptions.type;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.radius;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.rotation;
+
+/**
+ * @type {bool}
+ * @api stable
+ */
+Mx.FontSymbolOptions.snapToPixel;
+
+/**
+ * @type {ol.style.Stroke}
+ * @api stable
+ */
+Mx.FontSymbolOptions.stroke;
+
+/**
+ * @type {string|Array<string>}
+ * @api stable
+ */
+Mx.FontSymbolOptions.colors;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.offsetX;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.offsetY;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.animation;
+
+/**
+ * @type {object|M.style.chart.Variable|string|Array<string>|Array<M.style.chart.Variable>}
+ * @api stable
+ */
+Mx.FontSymbolOptions.variables;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.FontSymbolOptions.donutRatio;
+
+/**
+ * @type {Array<number>}
+ * @api stable
+ */
+Mx.FontSymbolOptions.data;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.FontSymbolOptions.fill3DColor;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.style.Point.zindex;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.Point.offsetorigin;
+
+
+/**
+ * @type {bool}
+ * @api stable
+ */
+Mx.style.Line.textPath;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.Line.smooth;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.Point.anchororigin;
+
+/**
+ * @type {function}
+ * @api stable
+ */
+Mx.jsts.io.OL3Parser
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.Line.textoverflow;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.style.Line.minwidth;
+
+/**
+ * Style parameters
+ */
+
+/**
+ * @type {Array<number>}
+ * @api stable
+ */
+Mx.style.linedash;
+
+/**
+ * @type {number}
+ * @api stable
+ */
+Mx.style.linedashoffset;
+
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.anchorxunits;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.anchoryunits;
+
+/**
+ * @type {bool}
+ * @api stable
+ */
+Mx.style.snaptopixel;
+
+/**
+ * @type {string}
+ * @api stable
+ */
+Mx.style.crossorigin;
+
+/**
+ * @type {string}
+ */
+Mx.style.linejoin;
+
+/**
+ * @type {string}
+ */
+Mx.style.linecap;
+
+/**
+ * @type {number}
+ */
+Mx.style.miterlimit;
+
+/**
+ * @type {string}
+ */
+Mx.style.align;
+
+/**
+ * @type {string}
+ */
+Mx.style.baseline;
+
+Mx.style.spacing;

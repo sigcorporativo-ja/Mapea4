@@ -29,7 +29,7 @@
     * @public
     * @api stable
     */
-   M.config('PROXY_URL', '${mapea.proxy.url}');
+   M.config('PROXY_URL', location.protocol + '${mapea.proxy.url}');
 
    /**
     * The path to the Mapea proxy to send
@@ -39,7 +39,7 @@
     * @public
     * @api stable
     */
-   M.config('PROXY_POST_URL', '${mapea.proxy_post.url}');
+   M.config('PROXY_POST_URL', location.protocol + '${mapea.proxy_post.url}');
 
    /**
     * The path to the Mapea templates
@@ -57,7 +57,7 @@
     * @public
     * @api stable
     */
-   M.config('THEME_URL', '${mapea.theme.url}');
+   M.config('THEME_URL', location.protocol + '${mapea.theme.url}');
 
    /**
     * The Geosearch URL

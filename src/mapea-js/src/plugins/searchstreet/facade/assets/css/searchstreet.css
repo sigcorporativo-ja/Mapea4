@@ -148,8 +148,12 @@ div.search-panel > button.m-input-search.shown {
    cursor: pointer
 }
 
-div#m-autcomplete > div:hover {
+div#m-autcomplete > div.selected {
    background-color: #F7F4F4;
+   font-weight: bold;
+}
+div.result.autocomplete:hover {
+   padding-left: 15px!important;
 }
 
 .m-control.m-searchstreet-container.shown.m-searching, .m-control.m-searchstreetgeosearch-container.shown.m-searching {
@@ -263,13 +267,7 @@ width: calc(100vw - 20px);
    cursor: pointer;
 }
 
-.results-panel > div.results > div.result:hover {
-   background-color: rgba(0, 0, 0, 0.04);
-   box-sizing: border-box;
-   /*box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
-   -webkit-transform: scale(1.01);
-   transform: scale(1.01);*/
-}
+
 
 
 /*********************

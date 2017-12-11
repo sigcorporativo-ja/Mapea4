@@ -1,7 +1,7 @@
 goog.provide('P.plugin.Searchstreet');
 goog.require('P.plugin.Autocomplete');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -12,7 +12,7 @@ goog.require('P.plugin.Autocomplete');
    * @param {Mx.parameters.Searchstreet} parameters - Searchstreet parameters
    * @api stable
    */
-  M.plugin.Searchstreet = (function (parameters) {
+  M.plugin.Searchstreet = (function(parameters) {
     parameters = (parameters || {});
 
     /**
@@ -86,7 +86,7 @@ goog.require('P.plugin.Autocomplete');
    *        map - Facade map
    * @api stable
    */
-  M.plugin.Searchstreet.prototype.addTo = function (map) {
+  M.plugin.Searchstreet.prototype.addTo = function(map) {
     var this_ = this;
     this.map_ = map;
 
@@ -98,7 +98,7 @@ goog.require('P.plugin.Autocomplete');
       codigo: this.locality_
     });
     M.remote.get(comCodIne).then(
-      function (response) {
+      function(response) {
         var results;
         try {
           if (!M.utils.isNullOrEmpty(response.text)) {
@@ -110,7 +110,7 @@ goog.require('P.plugin.Autocomplete');
             }
           }
           this_.control_ = new M.control.Searchstreet(this_.url_, this_.locality_);
-          this_.control_.on(M.evt.ADDED_TO_MAP, function () {
+          this_.control_.on(M.evt.ADDED_TO_MAP, function() {
             this_.fire(M.evt.ADDED_TO_MAP);
             this_.autocompletador_ = new M.plugin.Autocomplete({
               'locality': this_.locality_,
@@ -125,10 +125,17 @@ goog.require('P.plugin.Autocomplete');
             'position': M.ui.position.TL,
             'tooltip': 'Buscador de calles'
           });
+          //JGL20170816: foco al input al desplegar panel
+          this_.panel_.on(M.evt.ADDED_TO_MAP, function(html) {
+            this_.panel_._buttonPanel.addEventListener("click", function(evt) {
+              if (!this_.panel_._collapsed) {
+                this_.control_.input_.focus();
+              }
+            });
+          });
           this_.panel_.addControls(this_.control_);
           this_.map_.addPanels(this_.panel_);
-        }
-        catch (err) {
+        } catch (err) {
           M.exception('La respuesta no es un JSON válido: ' + err);
         }
       });
@@ -141,7 +148,7 @@ goog.require('P.plugin.Autocomplete');
    * @function
    * @api stable
    */
-  M.plugin.Searchstreet.prototype.destroy = function () {
+  M.plugin.Searchstreet.prototype.destroy = function() {
     this.map_.removeControls([this.control_]);
     this.autocompletador_.destroy();
     this.name = null;
@@ -161,11 +168,10 @@ goog.require('P.plugin.Autocomplete');
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.Searchstreet.prototype.equals = function (plugin) {
+  M.plugin.Searchstreet.prototype.equals = function(plugin) {
     if (plugin instanceof M.plugin.Searchstreet) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
   };

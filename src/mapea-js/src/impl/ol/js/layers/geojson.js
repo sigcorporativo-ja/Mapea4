@@ -50,6 +50,13 @@ goog.require('goog.style');
     /**
      *
      * @private
+     * @type {Boolean}
+     */
+    this.loaded_ = false;
+
+    /**
+     *
+     * @private
      * @type {Array<String>}
      */
     this.hiddenAttributes_ = [];
@@ -86,10 +93,9 @@ goog.require('goog.style');
     if (!M.utils.isNullOrEmpty(this.url)) {
       this.loader_ = new M.impl.loader.JSONP(map, this.url, this.formater_);
     }
-
     goog.base(this, 'addTo', map);
 
-    this.ol3Layer.setStyle(undefined);
+    // this.ol3Layer.setStyle(undefined);
   };
 
   /**
@@ -117,6 +123,7 @@ goog.require('goog.style');
       srcOptions = {
         format: this.formater_,
         loader: this.loader_.getLoaderFn(function(features) {
+          this_.loaded_ = true;
           this_.facadeVector_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
         }),
@@ -128,6 +135,7 @@ goog.require('goog.style');
       let features = this.formater_.read(this.source, this.map.getProjection());
       this.ol3Layer.setSource(new ol.source.Vector({
         loader: (function(extent, resolution, projection) {
+          this_.loaded_ = true;
           // removes previous features
           this_.facadeVector_.clear();
           this_.facadeVector_.addFeatures(features);
@@ -135,7 +143,9 @@ goog.require('goog.style');
         })
       }));
       this.facadeVector_.addFeatures(features);
-      this.fire(M.evt.LOAD, [features]);
+      //this_.fire(M.evt.LOAD, [features]);
+
+
     }
   };
 
@@ -148,11 +158,11 @@ goog.require('goog.style');
    * @api stable
    */
   M.impl.layer.GeoJSON.prototype.selectFeatures = function(features, coord, evt) {
-    if (this.extract === true) {
+    var feature = features[0];
+    if (!(feature instanceof M.ClusteredFeature) && (this.extract === true)) {
       // unselects previous features
       this.unselectFeatures();
 
-      var feature = features[0];
       if (!M.utils.isNullOrEmpty(feature)) {
         let clickFn = feature.getAttribute('vendor.mapea.click');
         if (M.utils.isFunction(clickFn)) {
@@ -198,52 +208,64 @@ goog.require('goog.style');
     };
 
     features.forEach(function(feature) {
-      var properties = feature.getAttributes();
-      var attributes = [];
-      for (var key in properties) {
-        let addAttribute = true;
-        // adds the attribute just if it is not in
-        // hiddenAttributes_ or it is in showAttributes_
-        if (!M.utils.isNullOrEmpty(this.showAttributes_)) {
-          addAttribute = M.utils.includes(this.showAttributes_, key);
+      if (!(feature instanceof M.ClusteredFeature)) {
+        var properties = feature.getAttributes();
+        var attributes = [];
+        for (var key in properties) {
+          let addAttribute = true;
+          // adds the attribute just if it is not in
+          // hiddenAttributes_ or it is in showAttributes_
+          if (!M.utils.isNullOrEmpty(this.showAttributes_)) {
+            addAttribute = M.utils.includes(this.showAttributes_, key);
+          }
+          else if (!M.utils.isNullOrEmpty(this.hiddenAttributes_)) {
+            addAttribute = !M.utils.includes(this.hiddenAttributes_, key);
+          }
+          if (addAttribute) {
+            attributes.push({
+              'key': M.utils.beautifyAttributeName(key),
+              'value': properties[key]
+            });
+          }
         }
-        else if (!M.utils.isNullOrEmpty(this.hiddenAttributes_)) {
-          addAttribute = !M.utils.includes(this.hiddenAttributes_, key);
-        }
-        if (addAttribute) {
-          attributes.push({
-            'key': M.utils.beautifyAttributeName(key),
-            'value': properties[key]
-          });
-        }
+        var featureTemplate = {
+          'id': feature.getId(),
+          'attributes': attributes
+        };
+        featuresTemplate.features.push(featureTemplate);
       }
-      var featureTemplate = {
-        'id': feature.getId(),
-        'attributes': attributes
-      };
-      featuresTemplate.features.push(featureTemplate);
     }, this);
     return featuresTemplate;
   };
 
+  // /**
+  //  * This function destroys this layer, cleaning the HTML
+  //  * and unregistering all events
+  //  *
+  //  * @public
+  //  * @function
+  //  * @api stable
+  //  */
+  // M.impl.layer.GeoJSON.prototype.destroy = function() {
+  //   var olMap = this.map.getMapImpl();
+  //
+  //   if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+  //     olMap.removeLayer(this.ol3Layer);
+  //     this.ol3Layer = null;
+  //   }
+  //   this.options = null;
+  //   this.map = null;
+  // };
+
   /**
-   * This function destroys this layer, cleaning the HTML
-   * and unregistering all events
-   *
-   * @public
+   * TODO
    * @function
    * @api stable
    */
-  M.impl.layer.GeoJSON.prototype.destroy = function() {
-    var olMap = this.map.getMapImpl();
-
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
-      olMap.removeLayer(this.ol3Layer);
-      this.ol3Layer = null;
-    }
-    this.options = null;
-    this.map = null;
+  M.impl.layer.GeoJSON.prototype.isLoaded = function() {
+    return this.loaded_;
   };
+
 
   /**
    * This function checks if an object is equals
@@ -261,4 +283,5 @@ goog.require('goog.style');
     }
     return equals;
   };
+
 })();

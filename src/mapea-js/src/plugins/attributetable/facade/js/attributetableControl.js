@@ -123,14 +123,10 @@ M.control.AttributeTableControl.prototype.renderPanel_ = function(name) {
   let features = this.layer_.getFeatures();
   if (!M.utils.isNullOrEmpty(features)) {
     var headerAtt = Object.keys(features[0].getAttributes());
-    let geomPos = headerAtt.indexOf("geometry");
-    headerAtt.splice(geomPos, 1);
+
     var attributes = [];
     features.forEach(function(feature) {
       let properties = Object.values(feature.getAttributes());
-      if (geomPos !== -1) {
-        properties.splice(geomPos, 1);
-      }
       if (!M.utils.isNullOrEmpty(properties)) {
         attributes.push(properties);
       }

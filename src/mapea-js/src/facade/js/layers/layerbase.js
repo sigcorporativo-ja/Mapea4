@@ -7,7 +7,7 @@ goog.require('M.exception');
 goog.require('M.facade.Base');
 goog.require('M.parameter.layer');
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -19,7 +19,7 @@ goog.require('M.parameter.layer');
    * provided by the user
    * @api stable
    */
-  M.Layer = (function (userParameters, impl) {
+  M.Layer = (function(userParameters, impl) {
     // calls the super constructor
     goog.base(this, impl);
 
@@ -59,11 +59,11 @@ goog.require('M.parameter.layer');
    * 'options' the layer options
    */
   Object.defineProperty(M.Layer.prototype, "options", {
-    get: function () {
+    get: function() {
       return this.getImpl().options;
     },
     // defining new type is not allowed
-    set: function (newOptions) {
+    set: function(newOptions) {
       this.getImpl().options = newOptions;
     }
   });
@@ -73,11 +73,11 @@ goog.require('M.parameter.layer');
    * layer
    */
   Object.defineProperty(M.Layer.prototype, "url", {
-    get: function () {
+    get: function() {
       return this.getImpl().url;
     },
     // defining new type is not allowed
-    set: function (newUrl) {
+    set: function(newUrl) {
       this.getImpl().url = newUrl;
     }
   });
@@ -86,11 +86,11 @@ goog.require('M.parameter.layer');
    * 'name' the layer name
    */
   Object.defineProperty(M.Layer.prototype, "name", {
-    get: function () {
+    get: function() {
       return this.getImpl().name;
     },
     // defining new type is not allowed
-    set: function (newName) {
+    set: function(newName) {
       this.getImpl().name = newName;
     }
   });
@@ -99,11 +99,11 @@ goog.require('M.parameter.layer');
    * 'transparent' the layer transparence
    */
   Object.defineProperty(M.Layer.prototype, "transparent", {
-    get: function () {
+    get: function() {
       return this.getImpl().transparent;
     },
     // defining new type is not allowed
-    set: function (newTransparent) {
+    set: function(newTransparent) {
       if (!M.utils.isNullOrEmpty(newTransparent)) {
         if (M.utils.isString(newTransparent)) {
           this.getImpl().transparent = (M.utils.normalize(newTransparent) === 'true');
@@ -122,11 +122,11 @@ goog.require('M.parameter.layer');
    * 'displayInLayerSwitcher' the layer transparence
    */
   Object.defineProperty(M.Layer.prototype, "displayInLayerSwitcher", {
-    get: function () {
+    get: function() {
       return this.getImpl().displayInLayerSwitcher;
     },
     // defining new type is not allowed
-    set: function (newDisplayInLayerSwitcher) {
+    set: function(newDisplayInLayerSwitcher) {
       if (!M.utils.isNullOrEmpty(newDisplayInLayerSwitcher)) {
         if (M.utils.isString(newDisplayInLayerSwitcher)) {
           this.getImpl().displayInLayerSwitcher = (M.utils.normalize(newDisplayInLayerSwitcher) === 'true');
@@ -148,7 +148,7 @@ goog.require('M.parameter.layer');
    * @api stable
    * @export
    */
-  M.Layer.prototype.isVisible = function () {
+  M.Layer.prototype.isVisible = function() {
     // checks if the implementation can manage this method
     if (M.utils.isUndefined(this.getImpl().isVisible)) {
       M.exception('La implementación usada no posee el método isVisible');
@@ -164,7 +164,7 @@ goog.require('M.parameter.layer');
    * @api stable
    * @export
    */
-  M.Layer.prototype.isQueryable = function () {
+  M.Layer.prototype.isQueryable = function() {
     // checks if the implementation can manage this method
     if (M.utils.isUndefined(this.getImpl().isQueryable)) {
       M.exception('La implementación usada no posee el método isQueryable');
@@ -180,7 +180,7 @@ goog.require('M.parameter.layer');
    * @api stable
    * @export
    */
-  M.Layer.prototype.setVisible = function (visibility) {
+  M.Layer.prototype.setVisible = function(visibility) {
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(visibility)) {
       M.exception('No ha especificado ningún parámetro de visibilidad');
@@ -208,7 +208,7 @@ goog.require('M.parameter.layer');
    * @api stable
    * @export
    */
-  M.Layer.prototype.inRange = function () {
+  M.Layer.prototype.inRange = function() {
     // checks if the implementation can manage this method
     if (M.utils.isUndefined(this.getImpl().inRange)) {
       M.exception('La implementación usada no posee el método inRange');
@@ -224,7 +224,7 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.getLegendURL = function () {
+  M.Layer.prototype.getLegendURL = function() {
     return this.getImpl().getLegendURL();
   };
 
@@ -235,7 +235,10 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.setLegendURL = function (legendUrl) {
+  M.Layer.prototype.setLegendURL = function(legendUrl) {
+    if (M.utils.isNullOrEmpty(legendUrl)) {
+      legendUrl = M.utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_DEFAULT]);
+    }
     this.getImpl().setLegendURL(legendUrl);
   };
 
@@ -245,7 +248,7 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.getZIndex = function () {
+  M.Layer.prototype.getZIndex = function() {
     return this.getImpl().getZIndex();
   };
 
@@ -255,7 +258,7 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.setZIndex = function (zIndex) {
+  M.Layer.prototype.setZIndex = function(zIndex) {
     this.getImpl().setZIndex(zIndex);
   };
 
@@ -265,7 +268,7 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.getOpacity = function () {
+  M.Layer.prototype.getOpacity = function() {
     return this.getImpl().getOpacity();
   };
 
@@ -275,7 +278,7 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.setOpacity = function (opacity) {
+  M.Layer.prototype.setOpacity = function(opacity) {
     this.getImpl().setOpacity(opacity);
   };
 
@@ -287,7 +290,7 @@ goog.require('M.parameter.layer');
    * @api stable
    * @export
    */
-  M.Layer.prototype.refresh = function () {
+  M.Layer.prototype.refresh = function() {
     // checks if the implementation can manage this method
     if (!M.utils.isUndefined(this.getImpl().refresh) && M.utils.isFunction(this.getImpl().refresh)) {
       this.getImpl().refresh();
@@ -300,7 +303,7 @@ goog.require('M.parameter.layer');
    * @function
    * @export
    */
-  M.Layer.prototype.generateName_ = (function () {
+  M.Layer.prototype.generateName_ = (function() {
     this.name = M.utils.generateRandom('layer_', '_'.concat(this.type));
   });
 

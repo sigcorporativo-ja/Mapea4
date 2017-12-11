@@ -1,7 +1,9 @@
 goog.provide('M.impl.layer.Vector');
+
 goog.require('M.utils');
 goog.require('M.exception');
 goog.require('M.impl.Layer');
+goog.require('M.impl.renderutils');
 
 (function() {
   /**
@@ -31,6 +33,19 @@ goog.require('M.impl.Layer');
      */
     this.features_ = [];
 
+    /**
+     * Postcompose event key
+     * @private
+     * @type {string}
+     */
+    this.postComposeEvtKey_ = null;
+
+    /*TODO*/
+    this.load_ = false;
+
+    // [WARN]
+    //applyOLLayerSetStyleHook();
+
     goog.base(this, options);
   });
   goog.inherits(M.impl.layer.Vector, M.impl.Layer);
@@ -47,36 +62,11 @@ goog.require('M.impl.Layer');
     this.map = map;
     map.on(M.evt.CHANGE_PROJ, this.setProjection_, this);
 
-    this.ol3Layer = new ol.layer.Vector({
-      visible: this.visibility && (this.options.visibility !== false),
-      style: new ol.style.Style({
-        fill: new ol.style.Fill({
-          color: 'rgba(0, 158, 0, 0.1)'
-        }),
-        stroke: new ol.style.Stroke({
-          color: '#fcfcfc',
-          width: 2
-        }),
-        image: new ol.style.Circle({
-          radius: 7,
-          fill: new ol.style.Fill({
-            color: '#009E00'
-          }),
-          stroke: new ol.style.Stroke({
-            color: '#fcfcfc',
-            width: 2
-          })
-        })
-      }),
-      zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
-    });
+    this.ol3Layer = new ol.layer.Vector();
     this.updateSource_();
 
-    // sets its visibility if it is in range
-    // if (this.options.visibility != false) {
-    //   this.setVisible(this.inRange());
-    // }
-    // sets its z-index
+    this.setVisible(this.visibility);
+
     if (this.zIndex_ !== null) {
       this.setZIndex(this.zIndex_);
     }
@@ -85,7 +75,6 @@ goog.require('M.impl.Layer');
     let olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
   };
-
   /**
    * This function sets the map object of the layer
    *
@@ -111,6 +100,7 @@ goog.require('M.impl.Layer');
     return true;
   };
 
+
   /**
    * This function add features to layer
    *
@@ -119,10 +109,44 @@ goog.require('M.impl.Layer');
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  M.impl.layer.Vector.prototype.addFeatures = function(features) {
-    this.features_ = this.features_.concat(features);
+  M.impl.layer.Vector.prototype.addFeatures = function(features, update) {
+    features.forEach(function(newFeature) {
+      let feature = this.features_.find(feature => feature.equals(newFeature));
+      if (M.utils.isNullOrEmpty(feature)) {
+        this.features_.push(newFeature);
+      }
+    }.bind(this));
+    if (update) {
+      this.updateLayer_();
+    }
     this.redraw();
   };
+
+
+  /**
+   * This function add features to layer and redraw with a layer style
+   * @function
+   * @private
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.updateLayer_ = function() {
+    let style = this.facadeVector_.getStyle();
+    if (style instanceof(M.style.Simple)) {
+      this.facadeVector_.setStyle(style);
+    }
+    else {
+      if (style instanceof M.style.Cluster) {
+        let cluster = this.facadeVector_.getStyle();
+        cluster.unapply(this.facadeVector_);
+        cluster.getOldStyle().apply(this.facadeVector_);
+        cluster.apply(this.facadeVector_);
+      }
+      else {
+        style.apply(this.facadeVector_);
+      }
+    }
+  };
+
 
   /**
    * This function returns all features or discriminating by the filter
@@ -150,8 +174,7 @@ goog.require('M.impl.Layer');
    * @api stable
    */
   M.impl.layer.Vector.prototype.getFeatureById = function(id) {
-    let feature = this.getOL3Layer().getSource().getFeatureById(id);
-    return M.impl.Feature.olFeature2Facade(feature);
+    return this.features_.find(feature => feature.getId() === id);
   };
 
   /**
@@ -163,11 +186,7 @@ goog.require('M.impl.Layer');
    * @api stable
    */
   M.impl.layer.Vector.prototype.removeFeatures = function(features) {
-    let copyFeatures = [...this.features_];
-    features.forEach(function(feature) {
-      copyFeatures.splice(copyFeatures.indexOf(feature), 1);
-    }.bind(this));
-    this.features_ = copyFeatures;
+    this.features_ = this.features_.filter(f => !(features.includes(f)));
     this.redraw();
   };
 
@@ -203,8 +222,7 @@ goog.require('M.impl.Layer');
    */
   M.impl.layer.Vector.prototype.getFeaturesExtent = function(skipFilter, filter) {
     let features = this.getFeatures(skipFilter, filter);
-    let extents = features.map((feature) => feature.getImpl().getOLFeature().getGeometry().getExtent().slice(0));
-    return (extents.length === 0) ? null : extents.reduce((ext1, ext2) => ol.extent.extend(ext1, ext2));
+    return M.impl.utils.getFeaturesExtent(features);
   };
 
   /**
@@ -281,4 +299,29 @@ goog.require('M.impl.Layer');
     this.getOL3Layer().getSource().clear();
   };
 
+  /**
+   * TODO
+   * @function
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.isLoaded = function() {
+    return true;
+  };
+
+  /**
+   * This function destroys this layer, cleaning the HTML
+   * and unregistering all events
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.impl.layer.Vector.prototype.destroy = function() {
+    var olMap = this.map.getMapImpl();
+    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+      this.ol3Layer = null;
+    }
+    this.map = null;
+  };
 })();

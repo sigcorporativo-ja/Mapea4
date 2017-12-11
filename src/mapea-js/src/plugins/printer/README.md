@@ -6,8 +6,8 @@ plantilla necesite. Las plantillas 'imagen apaisada' e 'imagen cuadrada' no nece
 
 ## Recursos y uso
 
-- js: [http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.ol.min.js](http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.ol.min.js)
-- css: [http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css](http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css)
+- js: [https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.ol.min.js](https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.ol.min.js)
+- css: [https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css](https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css)
 
 Configuración por defecto sin parámetros:
 ```
@@ -16,4 +16,9 @@ mapajs.addPlugin(new M.plugin.Printer());
 
 ## Ejemplo funcional
 
-[JSFiddle](http://jsfiddle.net/sigcJunta/b6d4hd53/)
+[JSFiddle](http://jsfiddle.net/sigcJunta/b6d4hd53/)  
+
+## Observaciones  
+Los json que Mapea envía al servidor Geoprint deben cumplir con las siguientes condiciones:  
+* Los colores se indican en formato hexadecimal de seis dígitos, sin dígito para transparencia.
+* No contener atributos de estilo vacíos.
