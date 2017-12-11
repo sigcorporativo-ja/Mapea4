@@ -1,5 +1,5 @@
 goog.provide('M.style.Cluster');
-goog.require('M.Style');
+goog.require('M.style.Composite');
 /**
  * @namespace M.style.Cluster
  */
@@ -30,7 +30,14 @@ goog.require('M.Style');
     // calls the super constructor
     goog.base(this, options, impl);
   });
-  goog.inherits(M.style.Cluster, M.Style);
+  goog.inherits(M.style.Cluster, M.style.Composite);
+
+  /**
+   * @inheritDoc
+   */
+  M.style.Cluster.prototype.unapplySoft = function(layer) {
+    this.getImpl().unapply();
+  };
 
   /**
    * This function unapply the style to specified layer
@@ -40,7 +47,18 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Cluster.prototype.unapply = function(layer) {
-    this.getImpl().unapply();
+    this.unapplySoft(layer);
+    this.layer_ = null;
+  };
+
+  /**
+   * @inheritDoc
+   */
+  M.style.Cluster.prototype.add = function(styles) {
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      this.unapplySoft(this.layer_);
+    }
+    goog.base(this, 'add', styles);
   };
 
   /**
@@ -51,15 +69,10 @@ goog.require('M.Style');
    * @param {M.layer.Vector} layer - Layer to apply the style
    * @api stable
    */
-  M.style.Cluster.prototype.apply = function(layer) {
-    let newStyle = layer.getStyle();
-    if (!(newStyle instanceof M.style.Cluster)) {
-      this.oldStyle_ = newStyle;
-    }
-    else {
-      this.oldStyle_ = newStyle.getOldStyle();
-    }
-    goog.base(this, 'apply', layer);
+  M.style.Cluster.prototype.applyInternal_ = function(layer) {
+    this.layer_ = layer;
+    this.getImpl().applyToLayer(layer);
+    this.updateCanvas();
   };
 
   /**
@@ -172,7 +185,8 @@ goog.require('M.Style');
   /**
    * This function returns data url to canvas
    *
-   * @function   * @protected
+   * @function
+   * @protected
    * @return {String} data url to canvas
    */
   M.style.Cluster.prototype.toImage = function() {
@@ -292,4 +306,14 @@ goog.require('M.Style');
     },
     radius: 25
   };
+
+  /**
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
+   */
+  Object.defineProperty(M.style.Cluster.prototype, "ORDER", {
+    value: 4
+  });
 })();

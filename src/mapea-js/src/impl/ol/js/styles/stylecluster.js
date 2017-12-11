@@ -446,12 +446,14 @@ goog.require('ol.geom.convexhull');
       this.layer_.getImpl().getMap().getMapImpl().getView().un('change:resolution', this.clearConvexHull, this);
     }
     else {
-      this.layer_.un(M.evt.LOAD, this.clusterize_, this);
+      if (!M.utils.isNullOrEmpty(this.layer_)) {
+        this.layer_.un(M.evt.LOAD, this.clusterize_, this);
+      }
     }
   };
 
   /**
-   *
+   * TODO
    */
   M.impl.style.Cluster.prototype.clearConvexHull = function() {
     if (this.convexHullLayer_ !== null) {

@@ -1,6 +1,6 @@
 goog.provide('M.style.Proportional');
 
-goog.require('M.Style');
+goog.require('M.style.Composite');
 goog.require('M.style.Point');
 
 /**
@@ -74,14 +74,6 @@ goog.require('M.style.Point');
     this.proportionalFunction_ = proportionalFunction || ((value, minValue, maxValue, minRadius, maxRadius) =>
       (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius);
 
-    /**
-     * @public
-     * @type {Array<M.Feature>}
-     * @api stable
-     * @expose
-     */
-    this.layerFeatures_ = [];
-
     if (this.maxRadius_ < this.minRadius_) {
       this.minRadius_ = maxRadius;
       this.maxRadius_ = minRadius;
@@ -90,7 +82,7 @@ goog.require('M.style.Point');
     goog.base(this, options, {});
   });
 
-  goog.inherits(M.style.Proportional, M.Style);
+  goog.inherits(M.style.Proportional, M.style.Composite);
 
   /**
    * This function apply the style to specified layer
@@ -99,9 +91,66 @@ goog.require('M.style.Point');
    * @param {M.Layer.Vector} layer - Layer where to apply choropleth style
    * @api stable
    */
-  M.style.Proportional.prototype.apply = function(layer) {
+  M.style.Proportional.prototype.applyInternal_ = function(layer) {
     this.layer_ = layer;
     this.update_();
+  };
+
+  /**
+   * This function apply the style to specified layer
+   * @function
+   * @public
+   * @param {M.Layer.Vector} layer - Layer where to apply choropleth style
+   * @api stable
+   */
+  M.style.Proportional.prototype.applyToFeature = function(feature, resolution) {
+    let style = feature.getStyle() ? feature.getStyle() : this.layer_.getStyle();
+    if (!M.utils.isNullOrEmpty(style)) {
+      if (!(style instanceof M.style.Point) && style instanceof M.style.Simple) {
+        style = new M.style.Point(style.options_);
+      }
+      else if (style instanceof M.style.Composite) {
+        style = new M.style.Point(style.getOldStyle().options_);
+      }
+      let newStyle = this.calculateStyle_(feature, {
+        minRadius: this.minRadius_,
+        maxRadius: this.maxRadius_,
+        minValue: this.minValue_,
+        maxValue: this.maxValue_,
+      }, style);
+      feature.setStyle(newStyle);
+    }
+  };
+
+  /**
+   * This function updates the style
+   * @function
+   * @private
+   * @api stable
+   */
+  M.style.Proportional.prototype.update_ = function() {
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      this.oldStyle_ = this.layer_.getStyle() instanceof M.style.Composite ? this.layer_.getStyle().getOldStyle() : this.layer_.getStyle();
+       [this.minValue_, this.maxValue_] = M.style.Proportional.getMinMaxValues_(this.layer_.getFeatures(), this.attributeName_);
+      this.layer_.getFeatures().forEach(feature => this.applyToFeature(feature, 1));
+      let newStyle = this.oldStyle_.clone();
+      if (newStyle instanceof M.style.Simple) {
+        if (!(newStyle instanceof M.style.Point)) {
+          newStyle = new M.style.Point(newStyle.options_);
+        }
+        newStyle.set('zindex', (feature) => (this.maxValue_ - parseFloat(feature.getAttribute(this.attributeName_))));
+        newStyle.set(M.style.Proportional.getSizeAttribute_(newStyle), (feature) => {
+          let proportion = M.style.Proportional.SCALE_PROPORTION;
+          let value = feature.getAttribute(this.attributeName_);
+          let radius = this.proportionalFunction_(value, this.minValue_, this.maxValue_, this.minRadius_, this.maxRadius_);
+          if (M.style.Proportional.getSizeAttribute_(this.oldStyle_) === 'icon.scale') {
+            radius = this.proportionalFunction_(value, this.minValue_, this.maxValue_, this.minRadius_ / proportion, this.maxRadius_ / proportion);
+          }
+          return radius;
+        });
+        this.updateCanvas();
+      }
+    }
   };
 
   /**
@@ -351,47 +400,6 @@ goog.require('M.style.Point');
   };
 
   /**
-   * This function updates the style
-   * @function
-   * @private
-   * @api stable
-   */
-  M.style.Proportional.prototype.update_ = function() {
-    if (!M.utils.isNullOrEmpty(this.layer_)) {
-      let features = this.layer_.getFeatures();
-      let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
-      let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, this.attributeName_);
-      features.forEach(function(feature) {
-        let style;
-        if (!M.utils.isNullOrEmpty(this.style_)) {
-          style = this.style_.clone();
-        }
-        else {
-          let featureStyle = feature.getStyle();
-          if (!M.utils.isNullOrEmpty(featureStyle)) {
-            style = featureStyle.clone();
-          }
-          else {
-            style = this.layer_.getStyle().clone();
-          }
-        }
-        let featureStyle = style;
-        if (!(featureStyle instanceof M.style.Point)) {
-          featureStyle = new M.style.Point(featureStyle.options_);
-        }
-        style = this.calculateStyle_(feature, {
-          minRadius: minRadius,
-          maxRadius: maxRadius,
-          minValue: minValue,
-          maxValue: maxValue,
-        }, featureStyle);
-        feature.setStyle(style);
-      }, this);
-      this.updateCanvas();
-    }
-  };
-
-  /**
    * This function gets the min value of feature's atributte.
    * @function
    * @private
@@ -449,6 +457,7 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.calculateStyle_ = function(feature, options, style) {
     if (!M.utils.isNullOrEmpty(style)) {
+      style = style.clone();
       let [minRadius, maxRadius] = [options.minRadius, options.maxRadius];
       if (!M.utils.isNullOrEmpty(style.get('icon.src'))) {
         minRadius = options.minRadius / M.style.Proportional.SCALE_PROPORTION;
@@ -474,4 +483,14 @@ goog.require('M.style.Point');
    * @api stable
    */
   M.style.Proportional.SCALE_PROPORTION = 20;
+
+  /**
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
+   */
+  Object.defineProperty(M.style.Proportional.prototype, "ORDER", {
+    value: 3
+  });
 })();
