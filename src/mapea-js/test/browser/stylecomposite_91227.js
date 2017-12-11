@@ -20,7 +20,6 @@ let ayuntamientos = new M.layer.WFS({
 map.addLayers(ayuntamientos);
 
 let styleproportional = new M.style.Proportional("ogc_fid");
-
 let stylecategory = new M.style.Category("cod_mun", {
   "04015": new M.style.Point({
     fill: {
@@ -35,18 +34,14 @@ let stylecategory = new M.style.Category("cod_mun", {
     radius: 15
   })
 });
-
 let stylechoropleth = new M.style.Choropleth("ogc_fid", null, M.style.quantification.JENKS(2));;
-
 let stylecluster = new M.style.Cluster();
-
 let stylesimple = new M.style.Point({
   fill: {
     color: 'red'
   },
   radius: 15
 });
-
 let stylechart = new M.style.Chart({
   type: 'pie',
   donutRatio: 0.5,
@@ -205,3 +200,122 @@ let gato = new M.style.Point({
 
 // cluster + choropleth
 // let stylecomposite = stylecluster.add(stylechoropleth);
+function addproportional() {
+  let style = ayuntamientos.getStyle();
+  if (M.utils.isNullOrEmpty(style) || !(style instanceof M.style.Composite) || !(style instanceof M.style.Composite)) {
+    ayuntamientos.setStyle(styleproportional);
+  }
+  else {
+    style.add(styleproportional);
+  }
+}
+
+function removeproportional() {
+  let style = ayuntamientos.getStyle();
+  if (!(style instanceof M.style.Proportional) && (style instanceof M.style.Composite)) {
+    style.remove(styleproportional);
+  }
+  else {
+    ayuntamientos.setStyle(null, true);
+  }
+}
+
+function addcategory() {
+  let style = ayuntamientos.getStyle();
+  if (M.utils.isNullOrEmpty(style) || !(style instanceof M.style.Composite)) {
+    ayuntamientos.setStyle(stylecategory);
+  }
+  else {
+    style.add(stylecategory);
+  }
+}
+
+function removecategory() {
+  let style = ayuntamientos.getStyle();
+  if (!(style instanceof M.style.Category) && (style instanceof M.style.Composite)) {
+    style.remove(stylecategory);
+  }
+  else {
+    ayuntamientos.setStyle(null, true);
+  }
+}
+
+function addchoropleth() {
+  let style = ayuntamientos.getStyle();
+  if (M.utils.isNullOrEmpty(style) || !(style instanceof M.style.Composite)) {
+    ayuntamientos.setStyle(stylechoropleth);
+  }
+  else {
+    style.add(stylechoropleth);
+  }
+}
+
+function removechoropleth() {
+  let style = ayuntamientos.getStyle();
+  if (!(style instanceof M.style.Choropleth) && (style instanceof M.style.Composite)) {
+    style.remove(stylechoropleth);
+  }
+  else {
+    ayuntamientos.setStyle(null, true);
+  }
+}
+
+function addcluster() {
+  let style = ayuntamientos.getStyle();
+  if (M.utils.isNullOrEmpty(style) || !(style instanceof M.style.Composite)) {
+    ayuntamientos.setStyle(stylecluster);
+  }
+  else {
+    style.add(stylecluster);
+  }
+}
+
+function removecluster() {
+  let style = ayuntamientos.getStyle();
+  if (!(style instanceof M.style.Cluster) && (style instanceof M.style.Composite)) {
+    style.remove(stylecluster);
+  }
+  else {
+    ayuntamientos.setStyle(null, true);
+  }
+}
+
+function addsimple() {
+  let style = ayuntamientos.getStyle();
+  if (M.utils.isNullOrEmpty(style) || !(style instanceof M.style.Composite)) {
+    ayuntamientos.setStyle(stylesimple, true);
+  }
+  else {
+    style.add(stylesimple);
+  }
+}
+
+function removesimple() {
+  let style = ayuntamientos.getStyle();
+  if (!(style instanceof M.style.Simple) && (style instanceof M.style.Composite)) {
+    style.remove(stylesimple);
+  }
+  else {
+    ayuntamientos.setStyle(null, true);
+  }
+}
+
+function addchart() {
+  let style = ayuntamientos.getStyle();
+  if (M.utils.isNullOrEmpty(style) || !(style instanceof M.style.Composite)) {
+    ayuntamientos.setStyle(stylechart);
+  }
+  else {
+    style.add(stylechart);
+  }
+}
+
+function removechart() {
+  let style = ayuntamientos.getStyle();
+  if (!(style instanceof M.style.Chart) && (style instanceof M.style.Composite)) {
+    style.remove(stylechart);
+  }
+  else {
+    ayuntamientos.setStyle(null, true);
+  }
+}
