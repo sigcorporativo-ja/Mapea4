@@ -74,15 +74,6 @@ goog.require('M.style.Point');
     this.proportionalFunction_ = proportionalFunction || ((value, minValue, maxValue, minRadius, maxRadius) =>
       (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius);
 
-    /**
-     * old styles of feature
-     * @private
-     * @type {object}
-     * @api stable
-     *
-     */
-    this.oldStyles_ = {};
-
     if (this.maxRadius_ < this.minRadius_) {
       this.minRadius_ = maxRadius;
       this.maxRadius_ = minRadius;
@@ -113,11 +104,13 @@ goog.require('M.style.Point');
    * @api stable
    */
   M.style.Proportional.prototype.applyToFeature = function(feature, resolution) {
-    let style = feature.getStyle();
+    let style = feature.getStyle() ? feature.getStyle() : this.layer_.getStyle();
     if (!M.utils.isNullOrEmpty(style)) {
-      this.oldStyles_[feature.getId()] = feature.getStyle();
       if (!(style instanceof M.style.Point) && style instanceof M.style.Simple) {
-        style = new M.style.Point(feature.getStyle().options_);
+        style = new M.style.Point(style.options_);
+      }
+      else if (style instanceof M.style.Composite) {
+        style = new M.style.Point(style.getOldStyle().options_);
       }
       let newStyle = this.calculateStyle_(feature, {
         minRadius: this.minRadius_,
@@ -129,38 +122,15 @@ goog.require('M.style.Point');
     }
   };
 
-
   /**
-   *  TODO
-   */
-  M.style.Proportional.prototype.unapplyInternal_ = function(layer) {
-    if (!M.utils.isNullOrEmpty(layer)) {
-      this.layer_ = null;
-      layer.getFeatures().forEach(feature => this.unapplyToFeature(feature));
-      layer.setStyle(this.oldStyle_);
-    }
-  };
-
-  /**
-   * TODO
-   */
-  M.style.Proportional.prototype.unapplyToFeature = function(feature) {
-    let oldStyle = this.oldStyles_[feature.getId()];
-    if (!M.utils.isNullOrEmpty(oldStyle)) {
-      feature.setStyle(oldStyle);
-      delete this.oldStyles_[feature.getId()];
-    }
-    else {
-      feature.setStyle(null);
-    }
-  };
-
-  /**
-   * TODO
+   * This function updates the style
+   * @function
+   * @private
+   * @api stable
    */
   M.style.Proportional.prototype.update_ = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
-      this.oldStyle_ = this.layer_.getStyle();
+      this.oldStyle_ = this.layer_.getStyle() instanceof M.style.Composite ? this.layer_.getStyle().getOldStyle() : this.layer_.getStyle();
        [this.minValue_, this.maxValue_] = M.style.Proportional.getMinMaxValues_(this.layer_.getFeatures(), this.attributeName_);
       this.layer_.getFeatures().forEach(feature => this.applyToFeature(feature, 1));
       let newStyle = this.oldStyle_.clone();
@@ -178,7 +148,6 @@ goog.require('M.style.Point');
           }
           return radius
         });
-        this.layer_.setStyle(newStyle);
         this.updateCanvas();
       }
     }
@@ -516,7 +485,10 @@ goog.require('M.style.Point');
   M.style.Proportional.SCALE_PROPORTION = 20;
 
   /**
-   * TODO
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
    */
   Object.defineProperty(M.style.Proportional.prototype, "ORDER", {
     value: 3

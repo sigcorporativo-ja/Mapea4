@@ -30,7 +30,10 @@ goog.require('M.style.Feature');
   };
 
   /**
-   * TODO
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
    */
   Object.defineProperty(M.style.Simple.prototype, "ORDER", {
     value: 1

@@ -462,7 +462,10 @@ goog.require('M.style.quantification');
   };
 
   /**
-   * TODO
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
    */
   Object.defineProperty(M.style.Choropleth.prototype, "ORDER", {
     value: 2

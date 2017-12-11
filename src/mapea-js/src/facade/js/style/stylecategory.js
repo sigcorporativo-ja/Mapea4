@@ -267,7 +267,10 @@ goog.require('M.style.Composite');
   };
 
   /**
-   * TODO
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
    */
   Object.defineProperty(M.style.Category.prototype, "ORDER", {
     value: 2

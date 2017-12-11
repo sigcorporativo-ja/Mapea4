@@ -33,11 +33,7 @@ goog.require('M.style.Composite');
   goog.inherits(M.style.Cluster, M.style.Composite);
 
   /**
-   * This function unapply the style to specified layer
-   * @function
-   * @public
-   * @param {M.layer.Vector} layer layer to unapply his style
-   * @api stable
+   * @inheritDoc
    */
   M.style.Cluster.prototype.unapplySoft = function(layer) {
     this.getImpl().unapply();
@@ -74,13 +70,6 @@ goog.require('M.style.Composite');
    * @api stable
    */
   M.style.Cluster.prototype.applyInternal_ = function(layer) {
-    let newStyle = layer.getStyle();
-    if (!(newStyle instanceof M.style.Cluster)) {
-      this.oldStyle_ = newStyle;
-    }
-    else {
-      this.oldStyle_ = newStyle.getOldStyle();
-    }
     this.layer_ = layer;
     this.getImpl().applyToLayer(layer);
     this.updateCanvas();
@@ -196,7 +185,8 @@ goog.require('M.style.Composite');
   /**
    * This function returns data url to canvas
    *
-   * @function   * @protected
+   * @function
+   * @protected
    * @return {String} data url to canvas
    */
   M.style.Cluster.prototype.toImage = function() {
@@ -318,7 +308,10 @@ goog.require('M.style.Composite');
   };
 
   /**
-   * TODO
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
    */
   Object.defineProperty(M.style.Cluster.prototype, "ORDER", {
     value: 4
