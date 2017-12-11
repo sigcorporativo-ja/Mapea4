@@ -146,7 +146,7 @@ goog.require('M.style.Point');
           if (M.style.Proportional.getSizeAttribute_(this.oldStyle_) === 'icon.scale') {
             radius = this.proportionalFunction_(value, this.minValue_, this.maxValue_, this.minRadius_ / proportion, this.maxRadius_ / proportion);
           }
-          return radius
+          return radius;
         });
         this.updateCanvas();
       }
