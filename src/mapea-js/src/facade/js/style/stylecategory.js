@@ -263,7 +263,7 @@ goog.require('M.style.Composite');
       styles = [styles];
     }
     styles = styles.filter(style => style instanceof M.style.Cluster || style instanceof M.style.Proportional);
-    goog.base(this, "add", styles);
+    return goog.base(this, "add", styles);
   };
 
   /**

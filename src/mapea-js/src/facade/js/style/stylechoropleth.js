@@ -156,7 +156,7 @@ goog.require('M.style.quantification');
    * @return {Array(M.Style)|null} returns the styles defined by user
    * @api stable
    */
-  M.style.Choropleth.prototype.getStyles = function() {
+  M.style.Choropleth.prototype.getChoroplethStyles = function() {
     return this.choroplethStyles_;
   };
 
@@ -458,7 +458,7 @@ goog.require('M.style.quantification');
       styles = [styles];
     }
     styles = styles.filter(style => style instanceof M.style.Cluster || style instanceof M.style.Proportional);
-    goog.base(this, "add", styles);
+    return goog.base(this, "add", styles);
   };
 
   /**
