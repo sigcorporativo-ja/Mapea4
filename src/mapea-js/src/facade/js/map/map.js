@@ -46,6 +46,8 @@ goog.require('M.style.Cluster');
 goog.require('M.style.Choropleth');
 goog.require('M.style.Category');
 goog.require('M.style.Proportional');
+goog.require('M.style.Heatmap');
+
 (function() {
   /**
    * @classdesc
