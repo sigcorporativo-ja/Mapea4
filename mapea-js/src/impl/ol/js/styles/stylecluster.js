@@ -231,6 +231,7 @@ goog.require('ol.geom.convexhull');
     });
     this.selectClusterInteraction_.on('select', this.selectClusterFeature_, this);
     map.getMapImpl().addInteraction(this.selectClusterInteraction_);
+    map.getMapImpl().on('change:view', () => this.selectClusterInteraction_.refreshViewEvents());
   };
 
   /**
@@ -326,8 +327,8 @@ goog.require('ol.geom.convexhull');
    * @api stable
    */
   M.impl.style.Cluster.prototype.removeCoverInteraction_ = function() {
-    this.layer_.un(M.evt.HOVER_FEATURES, this.hoverFeatureFn_, this);
-    this.layer_.un(M.evt.LEAVE_FEATURES, this.leaveFeatureFn_, this);
+    this.layer_.un(M.evt.HOVER_FEATURE, this.hoverFeatureFn_, this);
+    this.layer_.un(M.evt.LEAVE_FEATURE, this.leaveFeatureFn_, this);
   };
 
   /**
@@ -468,4 +469,28 @@ goog.require('ol.geom.convexhull');
    * @api stable
    */
   M.impl.style.Cluster.prototype.updateCanvas = function(canvas) {};
+
+  /**
+   * TODO
+   * @public
+   * @param {object} canvas
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.activateChangeEvent = function() {
+    let clusterSource = this.clusterLayer_.getSource();
+    clusterSource.getSource().on(ol.events.EventType.CHANGE, ol.source.Cluster.prototype.refresh_, clusterSource);
+  };
+
+  /**
+   * TODO
+   * @public
+   * @param {object} canvas
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.deactivateChangeEvent = function() {
+    let clusterSource = this.clusterLayer_.getSource();
+    clusterSource.getSource().un(ol.events.EventType.CHANGE, ol.source.Cluster.prototype.refresh_, clusterSource);
+  };
 })();

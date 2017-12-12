@@ -128,6 +128,19 @@ M.impl.interaction.SelectCluster.prototype.getLayer = function() {
  * @function
  * @api stable
  */
+M.impl.interaction.SelectCluster.prototype.refreshViewEvents = function() {
+  if (this.getMap() && this.getMap().getView()) {
+    this.getMap().getView().on('change:resolution', this.clear, this);
+  }
+};
+
+/**
+ * TODO
+ *
+ * @public
+ * @function
+ * @api stable
+ */
 M.impl.interaction.SelectCluster.prototype.selectCluster = function(e) { // Nothing selected
   if (!e.selected.length) {
 
