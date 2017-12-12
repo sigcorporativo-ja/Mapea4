@@ -1977,3 +1977,8 @@ Mx.style.align;
 Mx.style.baseline;
 
 Mx.style.spacing;
+
+/**
+ * @type {number}
+ */
+Mx.style.ORDER;
