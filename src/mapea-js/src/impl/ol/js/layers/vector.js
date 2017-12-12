@@ -131,11 +131,11 @@ goog.require('M.impl.renderutils');
    */
   M.impl.layer.Vector.prototype.updateLayer_ = function() {
     let style = this.facadeVector_.getStyle();
-    if (style instanceof(M.style.Simple)) {
-      this.facadeVector_.setStyle(style);
-    }
-    else {
-      if (style instanceof M.style.Cluster) {
+    if (!M.utils.isNullOrEmpty(style)) {
+      if (style instanceof(M.style.Simple)) {
+        this.facadeVector_.setStyle(style);
+      }
+      else if (style instanceof M.style.Cluster) {
         let cluster = this.facadeVector_.getStyle();
         cluster.unapply(this.facadeVector_);
         cluster.getOldStyle().apply(this.facadeVector_);
