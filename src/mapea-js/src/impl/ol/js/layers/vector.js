@@ -271,9 +271,22 @@ goog.require('M.impl.renderutils');
    * @function
    */
   M.impl.layer.Vector.prototype.setProjection_ = function(oldProj, newProj) {
-    let srcProj = ol.proj.get(oldProj.code);
-    let dstProj = ol.proj.get(newProj.code);
-    this.facadeVector_.getFeatures().forEach(f => f.getImpl().getOLFeature().getGeometry().transform(srcProj, dstProj));
+    if (oldProj.code !== newProj.code) {
+      let srcProj = ol.proj.get(oldProj.code);
+      let dstProj = ol.proj.get(newProj.code);
+
+      let style = this.facadeVector_.getStyle();
+      if (style instanceof M.style.Cluster) {
+        style.getImpl().deactivateChangeEvent();
+      }
+
+      this.facadeVector_.getFeatures().forEach(f =>
+        f.getImpl().getOLFeature().getGeometry().transform(srcProj, dstProj));
+
+      if (style instanceof M.style.Cluster) {
+        style.getImpl().activateChangeEvent();
+      }
+    }
   };
 
   /**
