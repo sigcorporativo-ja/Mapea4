@@ -40,18 +40,6 @@ goog.require('M.style.Composite');
   };
 
   /**
-   * This function unapply the style to specified layer
-   * @function
-   * @public
-   * @param {M.layer.Vector} layer layer to unapply his style
-   * @api stable
-   */
-  M.style.Cluster.prototype.unapply = function(layer) {
-    this.unapplySoft(layer);
-    this.layer_ = null;
-  };
-
-  /**
    * @inheritDoc
    */
   M.style.Cluster.prototype.add = function(styles) {

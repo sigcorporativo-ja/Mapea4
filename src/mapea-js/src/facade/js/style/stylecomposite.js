@@ -146,6 +146,18 @@ goog.require('M.Style');
   M.style.Composite.prototype.unapplySoft = function(layer) {};
 
   /**
+   * This function unapply the style to specified layer
+   * @function
+   * @public
+   * @param {M.layer.Vector} layer layer to unapply his style
+   * @api stable
+   */
+  M.style.Composite.prototype.unapply = function(layer) {
+    this.unapplyInternal(layer);
+    this.layer_ = null;
+  };
+
+  /**
    * This function update internally the style composite.
    * @function
    * @private
