@@ -43,6 +43,8 @@ goog.require('M.impl.renderutils');
     /*TODO*/
     this.load_ = false;
 
+    this.loaded_ = false;
+
     // [WARN]
     //applyOLLayerSetStyleHook();
 
@@ -86,6 +88,8 @@ goog.require('M.impl.renderutils');
       this.ol3Layer.setSource(new ol.source.Vector());
     }
     this.redraw();
+    this.loaded_ = true;
+    this.fire(M.evt.LOAD, [this.features_]);
   };
 
   /**
@@ -305,7 +309,7 @@ goog.require('M.impl.renderutils');
    * @api stable
    */
   M.impl.layer.Vector.prototype.isLoaded = function() {
-    return true;
+    return this.loaded_;
   };
 
   /**

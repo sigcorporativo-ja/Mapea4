@@ -20,11 +20,16 @@ goog.require('M.style.Feature');
   /**
    * @inheritDoc
    */
-  M.style.Simple.prototype.apply = function(layer, applyToFeature) {
+  M.style.Simple.prototype.apply = function(layer, applyToFeature, isNullStyle) {
     this.layer_ = layer;
     this.getImpl().applyToLayer(layer);
     if (applyToFeature === true) {
-      layer.getFeatures().forEach(feature => feature.setStyle(this.clone()));
+      if (isNullStyle) {
+        layer.getFeatures().forEach(feature => feature.setStyle(null));
+      }
+      else {
+        layer.getFeatures().forEach(feature => feature.setStyle(this.clone()));
+      }
     }
     this.updateCanvas();
   };
