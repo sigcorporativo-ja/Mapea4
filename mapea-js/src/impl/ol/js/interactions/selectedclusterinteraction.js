@@ -249,22 +249,6 @@ M.impl.interaction.SelectCluster.prototype.drawAnimatedFeatureAndLink_ = functio
   }
   let olClusterStyles = clusterStyleFn(clusterFeature, resolution);
   let clonedStyles = olClusterStyles.map ? olClusterStyles.map(s => s.clone()) : [olClusterStyles.clone()];
-  if (!M.utils.isNullOrEmpty(clonedStyles)) {
-    clonedStyles.forEach(function(olStyle) {
-      let styleImage = olStyle.getImage();
-      if (!M.utils.isNullOrEmpty(styleImage)) {
-        if (styleImage.getOrigin() == null) {
-          styleImage.origin_ = [];
-        }
-        if (styleImage.getAnchor() == null) {
-          styleImage.normalizedAnchor_ = [];
-        }
-        if (styleImage.getSize() == null) {
-          styleImage.size_ = [42, 42];
-        }
-      }
-    });
-  }
 
   cf.setId(clusterFeature.getId());
   cf.setStyle(clonedStyles);
