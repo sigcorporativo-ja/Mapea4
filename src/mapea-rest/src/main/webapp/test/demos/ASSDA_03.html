@@ -6,19 +6,19 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="mapea" content="yes">
-    <title>ASSDA 02</title>
+    <title>ASSDA 03</title>
 
     <!-- styles -->
-    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/assets/css/mapea.ol.min.css" rel="stylesheet" />
-    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/geosearchbylocation/geosearchbylocation.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/assets/css/mapea.ol.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/geosearchbylocation/geosearchbylocation.min.css" rel="stylesheet" />
 
 
-    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/wfstcontrols/wfstcontrols.min.css" rel="stylesheet" />
-    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/geosearch/geosearch.min.css" rel="stylesheet" />
-    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/printer/printer.min.css" rel="stylesheet" />
-    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/measurebar/measurebar.min.css" rel="stylesheet" />
-    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/streetview/streetview.min.css" rel="stylesheet" />
-    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/attributetable/attributetable.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/wfstcontrols/wfstcontrols.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/geosearch/geosearch.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/printer/printer.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/measurebar/measurebar.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/streetview/streetview.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/attributetable/attributetable.min.css" rel="stylesheet" />
 
 
     <style rel="stylesheet">
@@ -134,43 +134,39 @@
       <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA DE PERSONAS CON AUTISMO">RESIDENCIA DE PERSONAS CON AUTISMO<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA DE PERSONAS CON DISCAPACIDAD">      RESIDENCIA DE PERSONAS CON DISCAPACIDAD<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA DE PERSONAS CON DISCAPACIDAD FÍSICA">RESIDENCIA DE PERSONAS CON DISCAPACIDAD FÍSICA<br> <input type="checkbox" onclick="subtipologiaFilter()"
         name="panel" value="RESIDENCIA DE PERSONAS CON DISCAPACIDAD INTELECTUAL Y TRASTORNOS DE CONDUCTA">RESIDENCIA DE PERSONAS CON DISCAPACIDAD INTELECTUAL Y TRASTORNOS DE CONDUCTA<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel"
         value="RESIDENCIA DE PERSONAS CON PARÁLISIS CEREBRAL">RESIDENCIA DE PERSONAS CON PARÁLISIS CEREBRAL<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS ADULTAS (RA)"> RESIDENCIA PARA PERSONAS ADULTAS
-      (RA)
-      <br>
+      (RA)<br>
       <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES AUTÓNOMAS">RESIDENCIA PARA PERSONAS MAYORES AUTÓNOMAS<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES AUTÓNOMAS">RESIDENCIA
       PARA PERSONAS MAYORES AUTÓNOMAS<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES CON TRASTORNOS DE CONDUCTA">RESIDENCIA PARA PERSONAS MAYORES CON TRASTORNOS DE CONDUCTA<br> <input type="checkbox"
         onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES EN SITUACIÓN DE DEPENDENCIA">RESIDENCIA PARA PERSONAS MAYORES EN SITUACIÓN DE DEPENDENCIA<br>
       <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA DE APOYO A LA REINSERCIÓN"> VIVIENDA DE APOYO A LA REINSERCIÓN<br>
       <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA DE APOYO AL TRATAMIENTO"> VIVIENDA DE APOYO AL TRATAMIENTO<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA SUPERVISADA"> VIVIENDA
-      SUPERVISADA
-      <br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA TUTELADA"> VIVIENDA TUTELADA<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO SOCIAL"> CENTRO SOCIAL<br><input type="checkbox"
+      SUPERVISADA<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA TUTELADA"> VIVIENDA TUTELADA<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO SOCIAL"> CENTRO SOCIAL<br><input type="checkbox"
         onclick="subtipologiaFilter()" name="panel" value="ENTRO SOCIOCULTURAL GITANO">ENTRO SOCIOCULTURAL GITANO<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="COMEDOR"> COMEDOR<br>
       <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CONSULTAR A LA COORDINACIÓN"> CONSULTAR A LA COORDINACIÓN<br>
     </div>
     <button id="subcategoria" onclick="openPanel()">
-    Subcategorias
-    </button>
+  Subcategorias
+  </button>
     <div id="map" class="map">
       <div id="tooltip" class="tooltip"></div>
     </div>
 
     <div id="map"></div>
 
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/vendor/browser-polyfill.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/js/mapea.ol.min.js"></script>
 
-
-    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/vendor/browser-polyfill.js"></script>
-    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/js/mapea.ol.min.js"></script>
-
-    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/geosearchbylocation/geosearchbylocation.ol.min.js"></script>
-    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/wfstcontrols/wfstcontrols.ol.min.js"></script>
-    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/geosearch/geosearch.ol.min.js"></script>
-    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/printer/printer.ol.min.js"></script>
-    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/measurebar/measurebar.ol.min.js"></script>
-    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/attributetable/attributetable.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/geosearchbylocation/geosearchbylocation.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/wfstcontrols/wfstcontrols.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/geosearch/geosearch.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/printer/printer.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/measurebar/measurebar.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/attributetable/attributetable.ol.min.js"></script>
 
 
 
     <!-- configuration -->
-    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/js/configuration.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/js/configuration.js"></script>
 
 
 
