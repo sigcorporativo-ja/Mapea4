@@ -471,9 +471,6 @@ goog.require('ol.geom.convexhull');
    * @api stable
    */
   M.impl.style.Cluster.prototype.updateCanvas = function(canvas) {};
-<<<<<<< HEAD
-})();
-=======
 
   /**
    * TODO
@@ -499,4 +496,3 @@ goog.require('ol.geom.convexhull');
     clusterSource.getSource().un(ol.events.EventType.CHANGE, ol.source.Cluster.prototype.refresh_, clusterSource);
   };
 })();
->>>>>>> development
