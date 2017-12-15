@@ -223,35 +223,38 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.setStyle = function(style, applyToFeature = false) {
     this.oldStyle_ = this.style_;
-    this.style_ = style;
     let isNullStyle = false;
     if (style === null) {
       isNullStyle = true;
     }
-    const applyStyleFn = function() {
-      if (M.utils.isNullOrEmpty(this.style_)) {
-        if (this instanceof M.layer.WFS) {
-          this.style_ = M.utils.generateStyleLayer(M.layer.WFS.DEFAULT_OPTIONS_STYLE, this);
+    const applyStyleFn = (style) => {
+      const applyStyle = () => {
+        if (M.utils.isNullOrEmpty(style)) {
+          if (this instanceof M.layer.WFS) {
+            style = M.utils.generateStyleLayer(M.layer.WFS.DEFAULT_OPTIONS_STYLE, this);
+          }
+          else {
+            style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
+          }
         }
-        else {
-          this.style_ = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
+        let isCluster = style instanceof M.style.Cluster;
+        let isPoint = [M.geom.geojson.type.POINT, M.geom.geojson.type.MULTI_POINT].includes(M.utils.getGeometryType(this));
+        if (style instanceof M.Style && (!isCluster || isPoint)) {
+          if (!M.utils.isNullOrEmpty(this.oldStyle_)) {
+            this.oldStyle_.unapply(this);
+          }
+          style.apply(this, applyToFeature, isNullStyle);
+          this.style_ = style;
         }
-      }
-      let isCluster = this.style_ instanceof M.style.Cluster;
-      let isPoint = [M.geom.geojson.type.POINT, M.geom.geojson.type.MULTI_POINT].includes(M.utils.getGeometryType(this));
-      if (this.style_ instanceof M.Style && (!isCluster || isPoint)) {
-        if (!M.utils.isNullOrEmpty(this.oldStyle_)) {
-          this.oldStyle_.unapply(this);
-        }
-        this.style_.apply(this, applyToFeature, isNullStyle);
-      }
+      };
+      return applyStyle;
     };
 
     if (this.getImpl().isLoaded()) {
-      applyStyleFn.bind(this)();
+      applyStyleFn(style).bind(this)();
     }
     else {
-      this.on(M.evt.LOAD, applyStyleFn, this);
+      this.on(M.evt.LOAD, applyStyleFn(style), this);
     }
   };
 
