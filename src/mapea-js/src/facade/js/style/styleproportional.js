@@ -361,7 +361,6 @@ goog.require('M.style.Point');
     vectorContext.textBaseline = "middle";
 
     // MAX VALUE
-    let maxValue = canvasImageMax['value'];
     let coordXText = 0;
     let coordYText = 0;
     if (!M.utils.isNullOrEmpty(maxImage)) {
@@ -369,17 +368,16 @@ goog.require('M.style.Point');
       coordYText = maxImage.height / 2;
       if (/^https?\:\/\//i.test(maxImage.src)) {
         this.canvas_.height = 80 + 40 + 10;
-        vectorContext.fillText(`  max: ${maxValue}`, 85, 40);
+        vectorContext.fillText(`  max: ${this.maxValue_}`, 85, 40);
         vectorContext.drawImage(maxImage, 0, 0, 80, 80);
       }
       else {
-        vectorContext.fillText(`  max: ${maxValue}`, coordXText, coordYText);
+        vectorContext.fillText(`  max: ${this.maxValue_}`, coordXText, coordYText);
         vectorContext.drawImage(maxImage, 0, 0);
       }
     }
 
     // MIN VALUE
-    let minValue = canvasImageMin['value'];
     if (!M.utils.isNullOrEmpty(minImage)) {
       let coordinateX = 0;
       if (!M.utils.isNullOrEmpty(maxImage)) {
@@ -388,11 +386,11 @@ goog.require('M.style.Point');
       let coordinateY = maxImage.height + 5;
       coordYText = coordinateY + (minImage.height / 2);
       if (/^https?\:\/\//i.test(minImage.src)) {
-        vectorContext.fillText(`  min: ${minValue}`, 85, 105);
+        vectorContext.fillText(`  min: ${this.minValue_}`, 85, 105);
         vectorContext.drawImage(minImage, 20, 85, 40, 40);
       }
       else {
-        vectorContext.fillText(`  min: ${minValue}`, coordXText, coordYText);
+        vectorContext.fillText(`  min: ${this.minValue_}`, coordXText, coordYText);
         vectorContext.drawImage(minImage, coordinateX, coordinateY);
       }
     }
