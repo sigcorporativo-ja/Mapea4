@@ -288,7 +288,7 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center, ca
   function animate(event) {
     let vectorContext = event.vectorContext;
     // Retina device
-    let ratio = event.frameState.pixelRatio;
+    // let ratio = event.frameState.pixelRatio;
     let res = event.target.getView().getResolution();
     let e = ol.easing.easeOut((event.frameState.time - start) / duration);
     for (let i = 0; i < features.length; i++)
@@ -308,10 +308,10 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center, ca
             style.getImage().size_ = [42, 42];
           }
           let imgs = style.getImage();
-          let sc;
+          // let sc;
           if (imgs) {
-            sc = imgs.getScale();
-            imgs.setScale(ratio); // setImageStyle don't check retina
+            // sc = imgs.getScale();
+            // imgs.setScale(ratio); // setImageStyle don't check retina
           }
           vectorContext.setStyle(style);
           vectorContext.drawLineString(new ol.geom.LineString([center, pt]));
@@ -328,10 +328,10 @@ M.impl.interaction.SelectCluster.prototype.animateCluster_ = function(center, ca
           let style = st[s];
           let imgs = style.getImage();
 
-          let sc;
+          // let sc;
           if (imgs) {
-            sc = imgs.getScale();
-            imgs.setScale(ratio); // setImageStyle don't check retina
+            // sc = imgs.getScale();
+            // imgs.setScale(ratio); // setImageStyle don't check retina
             if (imgs.getOrigin() == null) {
               imgs.origin_ = [];
             }
