@@ -31,6 +31,7 @@ goog.require('M.impl.layer.Heatmap');
      */
     this.opt_options_ = M.utils.extends(options, vendorOptions);
 
+    this.opt_options_.zIndex = 999999;
     /**
      * @private
      * @type {ol.layer.Vector}
