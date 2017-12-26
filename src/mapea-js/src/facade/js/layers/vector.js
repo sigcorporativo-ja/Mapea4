@@ -246,6 +246,12 @@ goog.require('M.exception');
           style.apply(this, applyToFeature, isNullStyle);
           this.style_ = style;
         }
+        if (!M.utils.isNullOrEmpty(this.getImpl().getMap())) {
+          let layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
+          if (!M.utils.isNullOrEmpty(layerswitcher)) {
+            layerswitcher.render();
+          }
+        }
       };
       return applyStyle;
     };
