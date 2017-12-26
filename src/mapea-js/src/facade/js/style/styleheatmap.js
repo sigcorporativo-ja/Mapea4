@@ -47,10 +47,11 @@ goog.require('M.Style');
       this.options_.gradient.push(inverseColor);
     }
 
-    this.options_.blur = options.blur || M.style.Heatmap.DEFAULT_OPTIONS.blur;
-    this.options_.radius = options.radius || M.style.Heatmap.DEFAULT_OPTIONS.radius;
+    this.options_.blur = parseFloat(options.blur) || M.style.Heatmap.DEFAULT_OPTIONS.blur;
+    this.options_.radius = parseFloat(options.radius) || M.style.Heatmap.DEFAULT_OPTIONS.radius;
     this.options_.weight = this.attribute;
 
+    vendorOptions.opacity = isNaN(vendorOptions.opacity) ? 1 : parseFloat(vendorOptions.opacity);
     /**
      * @private
      * @type {object}
