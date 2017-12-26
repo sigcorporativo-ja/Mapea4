@@ -130,6 +130,9 @@ goog.require('M.style.Point');
    */
   M.style.Proportional.prototype.update_ = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
+      if (!M.utils.isNullOrEmpty(this.style_)) {
+        this.layer_.setStyle(this.style_, true);
+      }
       this.oldStyle_ = this.layer_.getStyle() instanceof M.style.Composite ? this.layer_.getStyle().getOldStyle() : this.layer_.getStyle();
        [this.minValue_, this.maxValue_] = M.style.Proportional.getMinMaxValues_(this.layer_.getFeatures(), this.attributeName_);
       this.layer_.getFeatures().forEach(feature => this.applyToFeature(feature, 1));
