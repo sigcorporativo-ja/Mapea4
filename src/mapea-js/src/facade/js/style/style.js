@@ -161,6 +161,12 @@ goog.provide('M.Style');
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.apply(this.layer_);
       this.updateCanvas();
+      if (!M.utils.isNullOrEmpty(this.layer_.getImpl().getMap())) {
+        let layerswitcher = this.layer_.getImpl().getMap().getControls('layerswitcher')[0];
+        if (!M.utils.isNullOrEmpty(layerswitcher)) {
+          layerswitcher.render();
+        }
+      }
     }
   };
 

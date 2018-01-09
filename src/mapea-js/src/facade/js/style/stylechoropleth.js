@@ -105,6 +105,7 @@ goog.require('M.style.quantification');
   M.style.Choropleth.prototype.setAttributeName = function(attributeName) {
     this.attributeName_ = attributeName;
     this.update_();
+    this.refresh();
     return this;
   };
 
@@ -145,6 +146,7 @@ goog.require('M.style.quantification');
         this.choroplethStyles_ = this.choroplethStyles_.slice(0, this.quantification_().length);
       }
       this.update_();
+      this.refresh();
     }
     return this;
   };
@@ -173,6 +175,7 @@ goog.require('M.style.quantification');
     }
     this.choroplethStyles_ = styles;
     this.update_();
+    this.refresh();
     return this;
   };
 

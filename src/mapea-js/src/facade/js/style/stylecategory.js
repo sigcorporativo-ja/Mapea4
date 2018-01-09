@@ -80,6 +80,7 @@ goog.require('M.style.Composite');
   M.style.Category.prototype.setAttributeName = function(attributeName) {
     this.attributeName_ = attributeName;
     this.update_();
+    this.refresh();
     return this;
   };
 
@@ -108,6 +109,7 @@ goog.require('M.style.Composite');
   M.style.Category.prototype.setCategories = function(categories) {
     this.categoryStyles_ = categories;
     this.update_();
+    this.refresh();
     return this;
   };
 
@@ -137,6 +139,7 @@ goog.require('M.style.Composite');
   M.style.Category.prototype.setStyleForCategory = function(category, style) {
     this.categoryStyles_[category] = style;
     this.update_();
+    this.refresh();
     return this;
   };
 
