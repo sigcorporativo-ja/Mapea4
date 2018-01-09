@@ -144,6 +144,13 @@ goog.require('M.exception');
     //   'outOfRange': !layer.inRange(),
     //   'opacity': layer.getOpacity()
     // }));
+    let isIcon = false;
+    if (layer instanceof M.layer.Vector) {
+      let style = layer.getStyle();
+      if (style instanceof M.style.Point && !M.utils.isNullOrEmpty(style.get('icon.src'))) {
+        isIcon = true;
+      }
+    }
     return new Promise((success, fail) => {
       let layerVarTemplate = {
         'base': (layer.transparent === false),
@@ -151,7 +158,8 @@ goog.require('M.exception');
         'id': layer.name,
         'title': layerTitle,
         'outOfRange': !layer.inRange(),
-        'opacity': layer.getOpacity()
+        'opacity': layer.getOpacity(),
+        'isIcon': isIcon
       };
       let legendUrl = layer.getLegendURL();
       if (legendUrl instanceof Promise) {
