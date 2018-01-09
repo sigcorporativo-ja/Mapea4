@@ -23,7 +23,11 @@ goog.require('ol.layer.Heatmap');
           .map(feature => feature.get(options.weight))
           .filter(weight => weight != null)
           .reduce((current, next) => Math.max(current, next));
-
+        this.maxWeight_ = maxWeight;
+        this.minWeight_ = features
+          .map(feature => feature.get(options.weight))
+          .filter(weight => weight != null)
+          .reduce((current, next) => Math.min(current, next));
         weightFunction = function(feature) {
           let value;
           if (feature instanceof ol.Feature) {
@@ -60,4 +64,12 @@ goog.require('ol.layer.Heatmap');
     }.bind(this));
   };
   goog.inherits(M.impl.layer.Heatmap, ol.layer.Heatmap);
+
+  M.impl.layer.Heatmap.prototype.getMinWeight = function() {
+    return this.minWeight_;
+  };
+
+  M.impl.layer.Heatmap.prototype.getMaxWeight = function() {
+    return this.maxWeight_;
+  };
 })();

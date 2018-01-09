@@ -196,6 +196,7 @@ goog.require('M.Style');
    * @api stable
    */
   M.style.Heatmap.prototype.drawGeometryToCanvas = function() {
+    let [minWeight, maxWeight] = [this.getImpl().getMinWeight(), this.getImpl().getMaxWeight()];
     let ctx = this.canvas_.getContext('2d');
     let gradient = ctx.createLinearGradient(0.000, 150.000, 200.000, 150.000);
     let intervals = M.utils.generateIntervals([0, 1], this.options_.gradient.length);
@@ -204,8 +205,8 @@ goog.require('M.Style');
     ctx.fillRect(0, 20, 200.000, 30.000);
     ctx.fillStyle = "#000";
     ctx.font = "10px sans-serif";
-    ctx.fillText('0', 0, 60);
-    ctx.fillText('1', 199, 60);
+    ctx.fillText(minWeight, 0, 60);
+    ctx.fillText(maxWeight, 199, 60);
   };
 
   /**

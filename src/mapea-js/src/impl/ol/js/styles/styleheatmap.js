@@ -104,4 +104,26 @@ goog.require('M.impl.layer.Heatmap');
   M.impl.style.Heatmap.prototype.setOptions = function(options, vendorOptions) {
     this.opt_options_ = M.utils.extends(options, vendorOptions);
   };
+
+  /**
+   * This function
+   * @public
+   * @function
+   * @return {number}
+   */
+  M.impl.style.Heatmap.prototype.getMinWeight = function() {
+    return this.heatmapLayer_.getMinWeight();
+  };
+
+  /**
+   * This function
+   * @public
+   * @function
+   * @return {number}
+   */
+  M.impl.style.Heatmap.prototype.getMaxWeight = function() {
+    return this.heatmapLayer_.getMaxWeight();
+  };
+
+
 })();
