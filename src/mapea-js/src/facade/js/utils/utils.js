@@ -1001,6 +1001,6 @@ goog.require('goog.color.alpha');
     return new Promise((resolve, reject) => {
       image.onload = () => resolve(image);
       image.src = url;
-    })
+    });
   };
 })();
