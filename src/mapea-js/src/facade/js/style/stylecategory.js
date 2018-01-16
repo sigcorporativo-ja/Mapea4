@@ -192,7 +192,15 @@ goog.require('M.style.Composite');
         scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
       };
       style.updateCanvas();
-      image.src = style.toImage();
+      if (style.get('icon.src')) {
+        M.utils.getImageSize(style.get('icon.src')).then((img) => {
+          image.width = style.get('icon.scale') ? img.width * style.get('icon.scale') : img.width;
+          image.height = style.get('icon.scale') ? img.height * style.get('icon.scale') : img.height;
+          image.src = style.toImage();
+        });
+      } else {
+        image.src = style.toImage();
+      }
     }
   };
 
@@ -225,7 +233,7 @@ goog.require('M.style.Composite');
       let imageHeight = 0;
       if (!M.utils.isNullOrEmpty(image)) {
         imageHeight = image.height;
-        vectorContext.drawImage(image, (maxWidth - image.width) / 2, coordinateY);
+        vectorContext.drawImage(image, (maxWidth - image.width) / 2, coordinateY, image.width, image.height);
       }
       vectorContext.fillText(categoryName, maxWidth + 5, coordinateY + (imageHeight / 2));
     }, this);
@@ -249,8 +257,7 @@ goog.require('M.style.Composite');
         let style = this.categoryStyles_[value];
         if (!M.utils.isNullOrEmpty(style)) {
           feature.setStyle(style);
-        }
-        else if (!M.utils.isNullOrEmpty(styleOther)) {
+        } else if (!M.utils.isNullOrEmpty(styleOther)) {
           feature.setStyle(styleOther);
         }
       }.bind(this));
