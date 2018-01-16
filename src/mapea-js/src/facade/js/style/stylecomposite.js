@@ -95,6 +95,7 @@ goog.require('M.Style');
    * @function
    * @public
    * @return {Array<M.Style>} array styles
+   * @api stable
    */
   M.style.Composite.prototype.getStyles = function() {
     return this.styles_;
@@ -106,6 +107,7 @@ goog.require('M.Style');
    * @function
    * @public
    * @return {M.Style} array styles
+   * @api stable
    */
   M.style.Composite.prototype.getOldStyle = function() {
     return this.oldStyle_;
@@ -169,8 +171,7 @@ goog.require('M.Style');
     styles.forEach(style => {
       if (style instanceof M.style.Composite) {
         style.applyInternal_(layer);
-      }
-      else if (style instanceof M.Style) {
+      } else if (style instanceof M.Style) {
         style.apply(layer, true);
       }
     });
