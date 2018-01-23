@@ -327,8 +327,8 @@ goog.require('ol.geom.convexhull');
    * @api stable
    */
   M.impl.style.Cluster.prototype.removeCoverInteraction_ = function() {
-    this.layer_.un(M.evt.HOVER_FEATURES, this.hoverFeatureFn_, this);
-    this.layer_.un(M.evt.LEAVE_FEATURES, this.leaveFeatureFn_, this);
+    this.layer_.un(M.evt.HOVER_FEATURE, this.hoverFeatureFn_, this);
+    this.layer_.un(M.evt.LEAVE_FEATURE, this.leaveFeatureFn_, this);
   };
 
   /**
@@ -445,6 +445,7 @@ goog.require('ol.geom.convexhull');
       this.removeSelectInteraction_();
       this.layer_.getImpl().getMap().removeLayers(this.convexHullLayer_);
       this.layer_.getImpl().getMap().getMapImpl().getView().un('change:resolution', this.clearConvexHull, this);
+      this.layer_.redraw();
     }
     else {
       this.layer_.un(M.evt.LOAD, this.clusterize_, this);

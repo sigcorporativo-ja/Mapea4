@@ -138,7 +138,13 @@ goog.require('M.exception');
   M.layer.Vector.prototype.redraw = function() {
     this.getImpl().redraw();
     if (!M.utils.isNullOrEmpty(this.getStyle())) {
-      this.getStyle().refresh();
+      let style = this.getStyle();
+      if (!(style instanceof M.style.Cluster)) {
+        style.refresh();
+      }
+      else {
+        style.getOldStyle().refresh();
+      }
     }
   };
 
