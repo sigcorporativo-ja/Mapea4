@@ -213,7 +213,7 @@ goog.require('M.geom');
         style.apply(this, applyToFeature);
         this.style_ = style;
       }
-    }
+    };
     if (this.getImpl().isLoaded()) {
       applyStyleFn.bind(this)();
     }
