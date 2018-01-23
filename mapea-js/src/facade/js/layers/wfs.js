@@ -213,13 +213,12 @@ goog.require('M.geom');
         style.apply(this, applyToFeature);
         this.style_ = style;
       }
-    };
-
+    }
     if (this.getImpl().isLoaded()) {
       applyStyleFn.bind(this)();
     }
     else {
-      this.on(M.evt.LOAD, applyStyleFn, this);
+      this.once(M.evt.LOAD, applyStyleFn, this);
     }
   };
 

@@ -279,14 +279,15 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.EventsManager.prototype.add = function(eventType, listener, optThis) {
+  M.evt.EventsManager.prototype.add = function(eventType, listener, optThis, once = false) {
     if (!M.utils.isNullOrEmpty(eventType) && (_eventTypes.indexOf(eventType) !== -1) && M.utils.isFunction(listener)) {
       if (M.utils.isNullOrEmpty(this.events_[eventType])) {
         this.events_[eventType] = [];
       }
       if (this.indexOf(eventType, listener, optThis) === -1) {
-        var evtListener = new M.evt.Listener(listener, optThis);
+        var evtListener = new M.evt.Listener(listener, optThis, once);
         this.events_[eventType].push(evtListener);
+        return evtListener.getEventKey();
       }
     }
   };
@@ -316,10 +317,13 @@ goog.provide('M.evt.Listener');
    * @api stable
    */
   M.evt.EventsManager.prototype.fire = function(eventType, args) {
-    var evtListeners = this.events_[eventType];
+    var evtListeners = [].concat(this.events_[eventType]);
     if (!M.utils.isNullOrEmpty(evtListeners)) {
       evtListeners.forEach(function(evtListener) {
         evtListener.fire(args);
+        if (evtListener.isOnce() === true) {
+          this.remove(eventType, evtListener.getEventKey());
+        }
       }, this);
     }
   };
@@ -353,7 +357,7 @@ goog.provide('M.evt.Listener');
    * @param {Object} impl implementation object
    * @api stable
    */
-  M.evt.Listener = (function(listener, scope) {
+  M.evt.Listener = (function(listener, scope, once = false) {
     /**
      * TODO
      *
@@ -369,6 +373,16 @@ goog.provide('M.evt.Listener');
      * @type {Object}
      */
     this._scope = scope;
+
+    /**
+     * TODO
+     */
+    this.eventKey_ = M.utils.generateRandom();
+
+    /**
+     * TODO
+     */
+    this.once_ = once;
   });
 
   /**
@@ -392,7 +406,36 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
+  M.evt.Listener.prototype.getEventKey = function() {
+    return this.eventKey_;
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  M.evt.Listener.prototype.isOnce = function() {
+    return this.once_;
+  };
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
   M.evt.Listener.prototype.has = function(listener, scope) {
-    return ((this._listener === listener) && (this._scope === scope));
+    let has = false;
+    if (M.utils.isFunction(listener)) {
+      has = this._listener === listener && this._scope === scope;
+    }
+    else {
+      has = this.eventKey_ === listener;
+    }
+    return has;
   };
 })();
