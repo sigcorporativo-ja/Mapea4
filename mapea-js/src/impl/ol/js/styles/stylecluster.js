@@ -443,7 +443,7 @@ goog.require('ol.geom.convexhull');
       this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
       this.removeCoverInteraction_();
       this.removeSelectInteraction_();
-      this.layer_.getImpl().getMap().removeLayers(this.convexHullLayer_);
+      this.clearConvexHull();
       this.layer_.getImpl().getMap().getMapImpl().getView().un('change:resolution', this.clearConvexHull, this);
       this.layer_.redraw();
     }
