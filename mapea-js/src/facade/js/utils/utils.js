@@ -992,4 +992,20 @@ goog.require('goog.color.alpha');
     }
     return intervals;
   };
+
+  /**
+   * This functions returns the width and height of a image from src
+   * @function
+   * @public
+   * @param {string} url
+   * @return {Array<number>}
+   * @api stable
+   */
+  M.utils.getImageSize = function(url) {
+    let image = new Image();
+    return new Promise((resolve, reject) => {
+      image.onload = () => resolve(image);
+      image.src = url;
+    });
+  };
 })();
