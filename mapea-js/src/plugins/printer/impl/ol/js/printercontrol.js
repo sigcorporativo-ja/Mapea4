@@ -345,10 +345,18 @@ goog.provide('P.impl.control.Printer');
         }
 
         if (featureStyle instanceof Array) {
-          featureStyle = featureStyle[0];
+          //JGL20180118: prioridad al estilo que tiene SRC
+          if (featureStyle.length>1){
+             featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage()) && featureStyle[1].getImage().getSrc) ? 
+                          featureStyle[1] : featureStyle[0];
+          }else{
+            featureStyle = featureStyle[0]; 
+          }
+          
         }
 
         if (!M.utils.isNullOrEmpty(featureStyle)) {
+          //console.log(featureStyle);
           var image = featureStyle.getImage();
           var imgSize = M.utils.isNullOrEmpty(image) ? [0, 0] : (image.getImageSize() || [24, 24]);
           var text = featureStyle.getText();
@@ -357,10 +365,11 @@ goog.provide('P.impl.control.Printer');
           }
           var stroke = M.utils.isNullOrEmpty(image) ? featureStyle.getStroke() : (image.getStroke && image.getStroke());
           var fill = M.utils.isNullOrEmpty(image) ? featureStyle.getFill() : (image.getFill && image.getFill());
-
+          
+          //JGL20180118: fillOpacity=1 por defecto
           var style = {
             "fillColor": M.utils.isNullOrEmpty(fill) ? "#000000" : M.utils.rgbaToHex(fill.getColor()),
-            "fillOpacity": M.utils.isNullOrEmpty(fill) ? 0 : M.utils.getOpacityFromRgba(fill.getColor()),
+            "fillOpacity": M.utils.isNullOrEmpty(fill) ? 1 : M.utils.getOpacityFromRgba(fill.getColor()),
             "strokeColor": M.utils.isNullOrEmpty(stroke) ? "#000000" : M.utils.rgbaToHex(stroke.getColor()),
             "strokeOpacity": M.utils.isNullOrEmpty(stroke) ? 0 : M.utils.getOpacityFromRgba(stroke.getColor()),
             "strokeWidth": M.utils.isNullOrEmpty(stroke) ? 0 : (stroke.getWidth && stroke.getWidth()),
@@ -369,6 +378,7 @@ goog.provide('P.impl.control.Printer');
             "graphicHeight": imgSize[0],
             "graphicWidth": imgSize[1],
           };
+          //console.log(style);
           if (!M.utils.isNullOrEmpty(text)) {
             let tAlign = text.getTextAlign();
             let tBLine = text.getTextBaseline();
@@ -421,7 +431,7 @@ goog.provide('P.impl.control.Printer');
             }
             style = Object.assign(style, {
               "label": text.getText(),
-              "fontColor": M.utils.isNullOrEmpty(text.getFill()) ? "" : M.utils.rgbToHex(text.getFill().getColor()),
+              "fontColor": M.utils.isNullOrEmpty(text.getFill()) ? "#000000" : M.utils.rgbToHex(text.getFill().getColor()),
               "fontSize": fontSize,
               "fontFamily": "Helvetica, sans-serif",
               "fontStyle": "normal",
@@ -429,7 +439,7 @@ goog.provide('P.impl.control.Printer');
               "labelXOffset": text.getOffsetX(),
               "labelYOffset": text.getOffsetY(),
               "fillColor": style.fillColor || "#FF0000",
-              "fillOpacity": style.fillOpacity || 0,
+              "fillOpacity": style.fillOpacity || 1, //JGL20180118: fillOpacity=1 por defecto
               "labelOutlineColor ": M.utils.isNullOrEmpty(text.getStroke()) ? "" : M.utils.rgbToHex(text.getStroke().getColor() || "#FF0000"),
               "labelOutlineWidth": M.utils.isNullOrEmpty(text.getStroke()) ? "" : text.getStroke().getWidth(),
               "labelAlign": align,
