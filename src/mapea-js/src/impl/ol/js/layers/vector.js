@@ -205,7 +205,9 @@ goog.require('M.impl.renderutils');
     let olLayer = this.getOL3Layer();
     if (!M.utils.isNullOrEmpty(olLayer)) {
       let olSource = olLayer.getSource();
-
+      if (olSource instanceof ol.source.Cluster) {
+        olSource = olSource.getSource();
+      }
       // remove all features from ol vector
       let olFeatures = [...olSource.getFeatures()];
       olFeatures.forEach(olSource.removeFeature, olSource);

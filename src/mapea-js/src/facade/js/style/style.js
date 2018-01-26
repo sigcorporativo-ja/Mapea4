@@ -155,7 +155,10 @@ goog.provide('M.Style');
    * @return {String} data url to canvas
    * @api stable
    */
-  M.Style.prototype.refresh = function() {
+  M.Style.prototype.refresh = function(layer = null) {
+    if(!M.utils.isNullOrEmpty(layer)){
+      this.layer_ = layer; 
+    }
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.apply(this.layer_);
       this.updateCanvas();

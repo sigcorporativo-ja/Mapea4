@@ -18,7 +18,7 @@ goog.require('M.evt.Listener');
       /**
        * Callback for events managed by the
        * facade object
-       * 
+       *
        * @private
        * @type {M.evt.EventsManager}
        */
@@ -33,8 +33,19 @@ goog.require('M.evt.Listener');
     * @api stable
     */
    M.Object.prototype.on = function (eventType, listener, optThis) {
-      this.eventsManager_.add(eventType, listener, optThis);
+      return this.eventsManager_.add(eventType, listener, optThis);
    };
+
+     /**
+      * Sets the callback when the instace is loaded
+      *
+      * @public
+      * @function
+      * @api stable
+      */
+    M.Object.prototype.once = function (eventType, listener, optThis) {
+        return this.eventsManager_.add(eventType, listener, optThis, true);
+    };
 
    /**
     * Sets the callback when the instace is loaded

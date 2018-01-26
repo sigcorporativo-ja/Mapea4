@@ -144,24 +144,42 @@ goog.require('M.impl.layer.Vector');
     }
     this.loader_ = new M.impl.loader.WFS(this.map, this.service_, this.formater_);
 
+    let isCluster = (this.facadeVector_.getStyle() instanceof M.style.Cluster);
     var ol3LayerSource = this.ol3Layer.getSource();
     if ((forceNewSource === true) || M.utils.isNullOrEmpty(ol3LayerSource)) {
-      this.ol3Layer.setSource(new ol.source.Vector({
+      let newSource = new ol.source.Vector({
         format: this.formater_.getImpl(),
         loader: this.loader_.getLoaderFn(function(features) {
           this_.loaded_ = true;
           this_.facadeVector_.addFeatures(features);
           this_.fire(M.evt.LOAD, [features]);
+          this_.facadeVector_.redraw();
         }),
         strategy: ol.loadingstrategy.all
-      }));
+      });
+      if (isCluster) {
+        let distance = this.facadeVector_.getStyle().getOptions().distance;
+        let clusterSource = new ol.source.Cluster({
+          distance: distance,
+          source: newSource
+        });
+        this.ol3Layer.setStyle(this.facadeVector_.getStyle().getImpl().olStyleFn_);
+        this.ol3Layer.setSource(clusterSource);
+      }
+      else {
+        this.ol3Layer.setSource(newSource);
+      }
     }
     else {
+      if (isCluster) {
+        ol3LayerSource = ol3LayerSource.getSource();
+      }
       ol3LayerSource.set("format", this.formater_);
       ol3LayerSource.set("loader", this.loader_.getLoaderFn(function(features) {
         this.loaded_ = true;
         this.facadeVector_.addFeatures(features);
         this.fire(M.evt.LOAD, [features]);
+        this_.facadeVector_.redraw();
       }));
       ol3LayerSource.set("strategy", ol.loadingstrategy.all);
       ol3LayerSource.changed();
