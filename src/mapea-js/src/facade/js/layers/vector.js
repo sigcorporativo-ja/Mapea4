@@ -126,6 +126,7 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.refresh = function() {
     this.getImpl().refresh(true);
+    this.redraw();
   };
 
   /**
@@ -143,7 +144,11 @@ goog.require('M.exception');
         style.refresh();
       }
       else {
-        style.getOldStyle().refresh(this);
+        let oldStyle = style.getOldStyle();
+        if (!M.utils.isNullOrEmpty(oldStyle)) {
+          oldStyle.refresh(this);
+        }
+
       }
     }
   };
