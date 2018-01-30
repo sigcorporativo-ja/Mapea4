@@ -134,11 +134,13 @@ goog.provide('M.Style');
     if (keyLength === 1) { // base case
       if (M.utils.isArray(value)) {
         value = [...value];
-      } else if (M.utils.isObject(value)) {
+      }
+      else if (M.utils.isObject(value)) {
         value = Object.assign({}, value);
       }
       obj[key] = value;
-    } else if (keyLength > 1) { // recursive case
+    }
+    else if (keyLength > 1) { // recursive case
       if (M.utils.isNullOrEmpty(obj[key])) {
         obj[key] = {};
       }
@@ -156,8 +158,8 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style.prototype.refresh = function(layer = null) {
-    if(!M.utils.isNullOrEmpty(layer)){
-      this.layer_ = layer; 
+    if (!M.utils.isNullOrEmpty(layer)) {
+      this.layer_ = layer;
     }
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.apply(this.layer_);
@@ -180,7 +182,25 @@ goog.provide('M.Style');
    */
   M.Style.prototype.toImage = function() {
     let styleImgB64;
-    if (!M.utils.isNullOrEmpty(this.updateCanvasPromise_)) {
+
+    if (M.utils.isNullOrEmpty(this.updateCanvasPromise_)) {
+      if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
+        let image = new Image();
+        image.crossOrigin = "Anonymous";
+        let can = this.canvas_;
+        image.onload = function() {
+          var c = can;
+          var ctx = c.getContext("2d");
+          ctx.drawImage(this, 0, 0, 50, 50);
+        };
+        image.src = this.options_.icon.src;
+        styleImgB64 = this.canvas_.toDataURL('png');
+      }
+      else {
+        styleImgB64 = this.canvas_.toDataURL('png');
+      }
+    }
+    else {
       styleImgB64 = this.updateCanvasPromise_.then(() => this.canvas_.toDataURL('png'));
     }
 
