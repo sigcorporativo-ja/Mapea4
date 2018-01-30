@@ -173,8 +173,24 @@ goog.provide('M.Style');
    */
   M.Style.prototype.toImage = function() {
     let styleImgB64;
-
-    if (!M.utils.isNullOrEmpty(this.updateCanvasPromise_)) {
+    if (M.utils.isNullOrEmpty(this.updateCanvasPromise_)) {
+      if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
+        let image = new Image();
+        image.crossOrigin = "Anonymous";
+        let can = this.canvas_;
+        image.onload = function() {
+          var c = can;
+          var ctx = c.getContext("2d");
+          ctx.drawImage(this, 0, 0, 50, 50);
+        };
+        image.src = this.options_.icon.src;
+        styleImgB64 = this.canvas_.toDataURL('png');
+      }
+      else {
+        styleImgB64 = this.canvas_.toDataURL('png');
+      }
+    }
+    else {
       styleImgB64 = this.updateCanvasPromise_.then(() => this.canvas_.toDataURL('png'));
     }
 
