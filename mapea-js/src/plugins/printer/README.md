@@ -10,8 +10,26 @@ plantilla necesite. Las plantillas 'imagen apaisada' e 'imagen cuadrada' no nece
 - css: [https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css](https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css)
 
 Configuración por defecto sin parámetros:
-```
+```javascript
 mapajs.addPlugin(new M.plugin.Printer());
+```
+Establecimiento de parámetros y valores seleccionados por defecto en los selectores:
+```javascript
+mapajs.addPlugin(new M.plugin.Printer({
+  "params": {
+    "pages": {
+      "creditos": "Impresión generada a través de Mapea"
+    },
+    "layout": {
+      "outputFilename": "mapea_${yyyy-MM-dd_hhmmss}"
+    },
+  },
+  'options': {
+      'layout': 'imagen apaisada',
+      'format': 'png',
+      'dpi': '127'
+    } 
+}));
 ```
 
 ## Ejemplo funcional
