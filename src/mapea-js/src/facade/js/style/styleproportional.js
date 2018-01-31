@@ -80,6 +80,9 @@ goog.require('M.style.Point');
     }
 
     goog.base(this, options, {});
+    if (!M.utils.isNullOrEmpty(this.style_)) {
+      this.styles_.push(this.style_);
+    }
   });
 
   goog.inherits(M.style.Proportional, M.style.Composite);
@@ -131,7 +134,7 @@ goog.require('M.style.Point');
   M.style.Proportional.prototype.update_ = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       if (!M.utils.isNullOrEmpty(this.style_)) {
-        this.layer_.setStyle(this.style_, true);
+        // this.layer_.setStyle(this.style_, true);
       }
       this.oldStyle_ = this.layer_.getStyle() instanceof M.style.Composite ? this.layer_.getStyle().getOldStyle() : this.layer_.getStyle();
        [this.minValue_, this.maxValue_] = M.style.Proportional.getMinMaxValues_(this.layer_.getFeatures(), this.attributeName_);
@@ -185,8 +188,10 @@ goog.require('M.style.Point');
    * @function
    * @public
    * @return {M.style.Point} style point of each feature
+   * @deprecated
    */
   M.style.Proportional.prototype.getStyle = function() {
+    console.warn('Deprecated function: Use getStyles instead.')
     return this.style_;
   };
 
