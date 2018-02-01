@@ -1,7 +1,7 @@
 var fs = require('fs-extra');
 var path = require('path');
 var exec = require('child_process').exec;
-
+var execSync = require('child_process').execSync;
 var externs = require('./utilities/build-externs');
 
 var ROOT = path.join(__dirname, '..');
@@ -20,7 +20,7 @@ module.exports = function(grunt) {
          var implRootDir = path.join(ROOT, impl.dir);
 
          // npm install
-         exec('npm install', {
+         exec('../../node/node ../../node/npm/bin/npm-cli.js install', {
             cwd: implRootDir
          }, function(err, stdout, stderr) {
             console.log(stdout);
