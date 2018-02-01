@@ -191,7 +191,7 @@ goog.require('M.style.Point');
    * @deprecated
    */
   M.style.Proportional.prototype.getStyle = function() {
-    console.warn('Deprecated function: Use getStyles instead.')
+    console.warn('Deprecated function: Use getStyles instead.');
     return this.style_;
   };
 
