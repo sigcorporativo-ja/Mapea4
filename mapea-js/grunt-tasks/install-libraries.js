@@ -20,7 +20,7 @@ module.exports = function(grunt) {
          var implRootDir = path.join(ROOT, impl.dir);
 
          // npm install
-         exec('npm install', {
+         exec('../../node/node ../../node/npm/bin/npm-cli.js install', {
             cwd: implRootDir
          }, function(err, stdout, stderr) {
             console.log(stdout);
