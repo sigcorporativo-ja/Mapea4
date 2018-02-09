@@ -23,6 +23,7 @@ goog.require('M.style.Simple');
       options = M.style.Line.DEFAULT_NULL;
     }
 
+    options = M.utils.extends({}, options);
     let impl = new M.impl.style.Line(options);
     goog.base(this, options, impl);
   });
