@@ -20,8 +20,9 @@ goog.require('M.style.Simple');
       options = M.style.Point.DEFAULT_NULL;
     }
     else {
-      M.utils.extends(options, M.style.Point.DEFAULT);
+      options = M.utils.extends(options, M.style.Point.DEFAULT);
     }
+    options = M.utils.extends({}, options);
     var impl = new M.impl.style.Point(options);
     goog.base(this, options, impl);
   });
