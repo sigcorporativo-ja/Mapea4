@@ -21,7 +21,7 @@ goog.require('M.style.Simple');
     if (M.utils.isNullOrEmpty(options)) {
       options = M.style.Polygon.DEFAULT_NULL;
     }
-
+    options = M.utils.extends({}, options);
     var impl = new M.impl.style.Polygon(options);
     goog.base(this, options, impl);
   });

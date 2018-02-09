@@ -22,7 +22,7 @@ goog.require('M.style.Simple');
     if (M.utils.isNullOrEmpty(options)) {
       options = M.style.Line.DEFAULT_NULL;
     }
-
+    options = M.utils.extends({}, options);
     let impl = new M.impl.style.Line(options);
     goog.base(this, options, impl);
   });
