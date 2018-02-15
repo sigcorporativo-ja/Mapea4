@@ -159,7 +159,21 @@ goog.require('M.exception');
   M.layer.Vector.prototype.setFilter = function(filter) {
     if (M.utils.isNullOrEmpty(filter) || (filter instanceof M.Filter)) {
       this.filter_ = filter;
+      let style = this.getStyle();
+      if (style instanceof M.style.Cluster) {
+        // deactivate change cluster event
+        style.getImpl().deactivateChangeEvent();
+      }
       this.redraw();
+      if (style instanceof M.style.Cluster) {
+        // activate change cluster event
+        style.getImpl().activateChangeEvent();
+
+        // Se refresca el estilo para actualizar los cambios del filtro
+        // ya que al haber activado el evento change de source cluster tras aplicar el filter
+        // no se actualiza automaticamente
+        style.refresh();
+      }
     }
     else {
       M.dialog.error("El filtro indicado no es correcto");
