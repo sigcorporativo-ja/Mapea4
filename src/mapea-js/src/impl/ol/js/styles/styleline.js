@@ -39,7 +39,7 @@ goog.require('ol.geometry.Cspline');
       }
       let stroke = options.stroke;
       let label = options.label;
-      let fill = options.fill;
+      // let fill = options.fill;
       let style = new M.impl.style.CentroidStyle();
       let styleStroke = new M.impl.style.CentroidStyle();
       const getValue = M.impl.style.Simple.getValue;
@@ -94,15 +94,20 @@ goog.require('ol.geometry.Cspline');
           style.setText(textPathStyle);
         }
       }
-      if (!M.utils.isNullOrEmpty(fill)) {
-        styleStroke.setStroke(
-          new ol.style.Stroke({
-            color: chroma(getValue(fill.color, feature))
-              .alpha(getValue(fill.opacity, feature)).css(),
-            width: getValue(fill.width, feature)
-          })
-        );
+      let fill;
+      if (!M.utils.isNullOrEmpty(options.fill)) {
+        let fillColorValue = M.impl.style.Simple.getValue(options.fill.color, feature);
+        let fillOpacityValue = M.impl.style.Simple.getValue(options.fill.opacity, feature) || 1;
+        let widthValue = M.impl.style.Simple.getValue(options.fill.width, feature);
+        if (!M.utils.isNullOrEmpty(fillColorValue)) {
+          fill = new ol.style.Stroke({
+            color: chroma(fillColorValue)
+              .alpha(fillOpacityValue).css(),
+            width: widthValue
+          });
+        }
       }
+      styleStroke.setStroke(fill);
       return [style, styleStroke];
     };
   };
