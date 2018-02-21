@@ -96,6 +96,7 @@ goog.require('M.Style');
    */
   M.style.Heatmap.prototype.setAttributeName = function(attribute) {
     this.attribute = attribute;
+    this.options_.weight = this.attribute;
     this.update_();
   };
 
