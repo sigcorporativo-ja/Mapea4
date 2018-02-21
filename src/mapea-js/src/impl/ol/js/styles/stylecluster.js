@@ -132,7 +132,10 @@ goog.require('ol.geom.convexhull');
       this.clusterLayer_.set('animationDuration', undefined);
     }
     this.clusterLayer_.setZIndex(99999);
-    this.oldOLLayer_ = this.layer_.getImpl().getOL3Layer();
+    let ol3Layer = this.layer_.getImpl().getOL3Layer();
+    if (!(ol3Layer instanceof M.impl.layer.AnimatedCluster)) {
+      this.oldOLLayer_ = ol3Layer;
+    }
     this.layer_.getImpl().setOL3Layer(this.clusterLayer_);
 
     if (M.utils.isNullOrEmpty(this.options_.ranges)) {
@@ -445,7 +448,7 @@ goog.require('ol.geom.convexhull');
       this.removeSelectInteraction_();
       this.clearConvexHull();
       this.layer_.getImpl().getMap().getMapImpl().getView().un('change:resolution', this.clearConvexHull, this);
-      this.layer_.redraw();
+      // this.layer_.redraw();
     }
     else {
       if (!M.utils.isNullOrEmpty(this.layer_)) {
