@@ -312,7 +312,7 @@ goog.require('M.style.Point');
     vectorContext.textBaseline = "middle";
 
     // MAX VALUE
-    let maxValue = canvasImageMax['value'];
+
     let coordXText = 0;
     let coordYText = 0;
     if (!M.utils.isNullOrEmpty(maxImage)) {
@@ -320,17 +320,17 @@ goog.require('M.style.Point');
       coordYText = maxImage.height / 2;
       if (/^https?\:\/\//i.test(maxImage.src)) {
         this.canvas_.height = 80 + 40 + 10;
-        vectorContext.fillText(`  max: ${maxValue}`, 85, 40);
+        vectorContext.fillText(`  max: ${this.maxValue_}`, 85, 40);
         vectorContext.drawImage(maxImage, 0, 0, 80, 80);
       }
       else {
-        vectorContext.fillText(`  max: ${maxValue}`, coordXText, coordYText);
+        vectorContext.fillText(`  max: ${this.maxValue_}`, coordXText, coordYText);
         vectorContext.drawImage(maxImage, 0, 0);
       }
     }
 
     // MIN VALUE
-    let minValue = canvasImageMin['value'];
+
     if (!M.utils.isNullOrEmpty(minImage)) {
       let coordinateX = 0;
       if (!M.utils.isNullOrEmpty(maxImage)) {
@@ -339,11 +339,11 @@ goog.require('M.style.Point');
       let coordinateY = maxImage.height + 5;
       coordYText = coordinateY + (minImage.height / 2);
       if (/^https?\:\/\//i.test(minImage.src)) {
-        vectorContext.fillText(`  min: ${minValue}`, 85, 105);
+        vectorContext.fillText(`  min: ${this.minValue_}`, 85, 105);
         vectorContext.drawImage(minImage, 20, 85, 40, 40);
       }
       else {
-        vectorContext.fillText(`  min: ${minValue}`, coordXText, coordYText);
+        vectorContext.fillText(`  min: ${this.minValue_}`, coordXText, coordYText);
         vectorContext.drawImage(minImage, coordinateX, coordinateY);
       }
     }
@@ -360,7 +360,7 @@ goog.require('M.style.Point');
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       let features = this.layer_.getFeatures();
       let [minRadius, maxRadius] = [this.minRadius_, this.maxRadius_];
-      let [minValue, maxValue] = M.style.Proportional.getMinMaxValues_(features, this.attributeName_);
+      [this.minValue_, this.maxValue_] = M.style.Proportional.getMinMaxValues_(features, this.attributeName_);
       features.forEach(function(feature) {
         let style;
         if (!M.utils.isNullOrEmpty(this.style_)) {
@@ -382,8 +382,8 @@ goog.require('M.style.Point');
         style = this.calculateStyle_(feature, {
           minRadius: minRadius,
           maxRadius: maxRadius,
-          minValue: minValue,
-          maxValue: maxValue,
+          minValue: this.minValue_,
+          maxValue: this.maxValue_,
         }, featureStyle);
         feature.setStyle(style);
       }, this);
