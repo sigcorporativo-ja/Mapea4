@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
 import javax.ws.rs.DefaultValue;
@@ -177,10 +179,14 @@ public class Proxy {
 		int statusCode = httpget.getStatusCode();
 		response.setStatusCode(statusCode);
 		if (statusCode == HttpStatus.SC_OK) {
+			String encoding = this.getResponseEncoding(httpget);
+			if (encoding == null) {
+				encoding = "UTF-8";
+			}
 			InputStream responseStream = httpget.getResponseBodyAsStream();
 			byte[] data = IOUtils.toByteArray(responseStream);
 			response.setData(data);
-			String responseContent = new String(data, "UTF-8");
+			String responseContent = new String(data, encoding);
 			response.setContent(responseContent);
 		}
 		response.setHeaders(httpget.getResponseHeaders());
@@ -292,5 +298,26 @@ public class Proxy {
 	 */
 	private ProxyResponse error(String url, Exception exception) {
 		return error(url, exception.getLocalizedMessage());
+	}
+
+	/**
+	 * Gets the encoding of a response
+	 */
+	private String getResponseEncoding(GetMethod httpget) {
+		String regexp = ".*charset\\=([^;]+).*";
+		Boolean isCharset = null;
+		String encoding = null;
+		Header[] headerResponse = httpget.getResponseHeaders("Content-Type");
+		for (Header header : headerResponse) {
+			String contentType = header.getValue();
+			if (!contentType.isEmpty()) {
+				isCharset = Pattern.matches(regexp, contentType);
+				if (isCharset) {
+					encoding = contentType.replaceAll(regexp, "$1");
+					break;
+				}
+			}
+		}
+		return encoding;
 	}
 }
