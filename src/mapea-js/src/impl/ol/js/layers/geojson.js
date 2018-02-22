@@ -107,8 +107,23 @@ goog.require('goog.style');
    * @api stable
    */
   M.impl.layer.GeoJSON.prototype.refresh = function() {
+    let features = this.formater_.write(this.facadeVector_.getFeatures());
+    let codeProjection = this.map.getProjection().code.split(":")[1];
+    let source = {
+      type: "FeatureCollection",
+      features: features,
+      crs: {
+        properties: {
+          code: codeProjection
+        },
+        type: "EPSG"
+      }
+    };
+    this.facadeVector_.setSource(source);
     this.updateSource_();
   };
+
+
 
   /**
    * This function sets the map object of the layer
