@@ -164,6 +164,7 @@ goog.require('M.exception');
    */
   M.layer.GeoJSON.prototype.setSource = function(source) {
     this.source = source;
+    this.getImpl().refresh(source);
   };
 
   M.layer.GeoJSON.prototype.setStyle = function(style, applyToFeature = false) {

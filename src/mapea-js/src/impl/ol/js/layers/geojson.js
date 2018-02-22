@@ -106,10 +106,10 @@ goog.require('goog.style');
    * @param {M.Map} map
    * @api stable
    */
-  M.impl.layer.GeoJSON.prototype.refresh = function() {
+  M.impl.layer.GeoJSON.prototype.refresh = function(source = null) {
     let features = this.formater_.write(this.facadeVector_.getFeatures());
     let codeProjection = this.map.getProjection().code.split(":")[1];
-    let source = {
+    let newSource = {
       type: "FeatureCollection",
       features: features,
       crs: {
@@ -119,7 +119,10 @@ goog.require('goog.style');
         type: "EPSG"
       }
     };
-    this.facadeVector_.setSource(source);
+    if (M.utils.isObject(source)) {
+      newSource = source;
+    }
+    this.source = newSource;
     this.updateSource_();
   };
 
