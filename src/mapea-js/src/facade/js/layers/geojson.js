@@ -55,6 +55,21 @@ goog.require('M.exception');
 
       // extract
       this.extract = parameters.extract;
+      //crs
+      if (!M.utils.isNullOrEmpty(parameters.crs)) {
+        if (M.utils.isNullOrEmpty(this.source)) {
+          this.source = {
+            "type": "FeatureCollection",
+            "features": []
+          };
+        }
+        this.source['crs'] = {
+          "type": "EPSG",
+          "properties": {
+            "code": parameters.crs
+          }
+        };
+      }
     }
 
     if (M.utils.isNullOrEmpty(this.extract)) {
@@ -137,6 +152,18 @@ goog.require('M.exception');
     return equals;
   };
 
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @function
+   * @api stable
+   */
+  M.layer.GeoJSON.prototype.setSource = function(source) {
+    this.source = source;
+    this.getImpl().refresh(source);
+  };
+
   M.layer.GeoJSON.prototype.setStyle = function(style, applyToFeature = false) {
     const applyStyleFn = function() {
       if (M.utils.isNullOrEmpty(style)) {
@@ -157,7 +184,7 @@ goog.require('M.exception');
       applyStyleFn.bind(this)();
     }
     else {
-      this.on(M.evt.LOAD, applyStyleFn, this);
+      this.once(M.evt.LOAD, applyStyleFn, this);
     }
   };
 
