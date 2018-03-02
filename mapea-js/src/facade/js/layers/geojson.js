@@ -55,6 +55,21 @@ goog.require('M.exception');
 
       // extract
       this.extract = parameters.extract;
+      //crs
+      if (!M.utils.isNullOrEmpty(parameters.crs)) {
+        if (M.utils.isNullOrEmpty(this.source)) {
+          this.source = {
+            "type": "FeatureCollection",
+            "features": []
+          };
+        }
+        this.source['crs'] = {
+          "type": "EPSG",
+          "properties": {
+            "code": parameters.crs
+          }
+        };
+      }
     }
 
     if (M.utils.isNullOrEmpty(this.extract)) {
