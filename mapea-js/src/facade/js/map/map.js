@@ -204,16 +204,7 @@ goog.require('M.style.Proportional');
       'displayInLayerSwitcher': false
     });
 
-    this.drawLayer_.setStyle(new M.style.Point({
-      fill: {
-        color: '#009e00'
-      },
-      stroke: {
-        color: '#fcfcfc',
-        width: 2
-      },
-      radius: 7
-    }));
+    this.drawLayer_.setStyle(new M.style.Point(M.Map.prototype.DRAWLAYER_STYLE));
 
     this.drawLayer_.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999);
     this.addLayers(this.drawLayer_);
@@ -2429,5 +2420,24 @@ goog.require('M.style.Proportional');
 
     // equals
     return 0;
+  };
+
+  /**
+   * Draw layer style options.
+   *
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.Map.DRAWLAYER_STYLE = {
+    fill: {
+      color: '#009e00'
+    },
+    stroke: {
+      color: '#fcfcfc',
+      width: 2
+    },
+    radius: 7
   };
 })();
