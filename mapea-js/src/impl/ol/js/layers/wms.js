@@ -83,7 +83,12 @@ goog.require('ol.extent');
      * @type {string}
      * @expose
      */
-    this.legendUrl_ = null;
+     if(this.options.params && this.options.params.layerLegend){
+        this.legendUrl_ = this.options.params.layerLegend.href;
+     }
+     else{
+        this.legendUrl_ = null;
+     }
 
     /**
      * Current projection
@@ -192,14 +197,17 @@ goog.require('ol.extent');
       this.addSingleLayer_();
     }
 
-    this.legendUrl_ = M.utils.addParameters(this.url, {
-      'SERVICE': "WMS",
-      'VERSION': this.version,
-      'REQUEST': "GetLegendGraphic",
-      'LAYER': this.name,
-      'FORMAT': "image/png",
-      'EXCEPTIONS': "image/png"
-    });
+     if(M.utils.isNullOrEmpty(this.legendUrl_))
+     {
+      this.legendUrl_ = M.utils.addParameters(this.url, {
+       'SERVICE': "WMS",
+       'VERSION': this.version,
+       'REQUEST': "GetLegendGraphic",
+        'LAYER': this.name,
+        'FORMAT': "image/png",
+        'EXCEPTIONS': "image/png"
+      });
+     }
   };
 
   /**
