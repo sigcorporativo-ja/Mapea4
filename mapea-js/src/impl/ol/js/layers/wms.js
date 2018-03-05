@@ -83,13 +83,8 @@ goog.require('ol.extent');
      * @type {string}
      * @expose
      */
-     if(this.options.params && this.options.params.layerLegend){
-        this.legendUrl_ = this.options.params.layerLegend.href;
-     }
-     else{
-        this.legendUrl_ = null;
-     }
-
+     this.legendUrl_ = null;
+   
     /**
      * Current projection
      * @private
@@ -197,8 +192,7 @@ goog.require('ol.extent');
       this.addSingleLayer_();
     }
 
-     if(M.utils.isNullOrEmpty(this.legendUrl_))
-     {
+
       this.legendUrl_ = M.utils.addParameters(this.url, {
        'SERVICE': "WMS",
        'VERSION': this.version,
@@ -207,7 +201,7 @@ goog.require('ol.extent');
         'FORMAT': "image/png",
         'EXCEPTIONS': "image/png"
       });
-     }
+     
   };
 
   /**
