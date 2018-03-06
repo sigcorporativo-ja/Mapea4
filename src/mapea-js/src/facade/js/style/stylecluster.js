@@ -189,6 +189,23 @@ goog.require('M.style.Composite');
   };
 
   /**
+   * This function updates the style of the
+   * layer
+   *
+   * @public
+   * @function
+   * @return {String} data url to canvas
+   * @api stable
+   */
+  M.style.Cluster.prototype.refresh = function() {
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      this.unapply(this.layer_);
+      this.apply(this.layer_);
+      this.updateCanvas();
+    }
+  };
+
+  /**
    * Default options for this style
    * @const
    * @type {object}
