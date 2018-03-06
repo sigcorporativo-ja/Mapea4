@@ -143,7 +143,9 @@ goog.require('M.exception');
         style.refresh();
       }
       else {
-        style.getOldStyle().refresh();
+        if (style.getOldStyle() instanceof M.Style) {
+          style.getOldStyle().refresh();
+        }
       }
     }
   };
@@ -161,18 +163,11 @@ goog.require('M.exception');
       this.filter_ = filter;
       let style = this.getStyle();
       if (style instanceof M.style.Cluster) {
-        // deactivate change cluster event
-        style.getImpl().deactivateChangeEvent();
-      }
-      this.redraw();
-      if (style instanceof M.style.Cluster) {
-        // activate change cluster event
-        style.getImpl().activateChangeEvent();
-
-        // Se refresca el estilo para actualizar los cambios del filtro
-        // ya que al haber activado el evento change de source cluster tras aplicar el filter
-        // no se actualiza automaticamente
+        style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
         style.refresh();
+      }
+      else {
+        this.redraw();
       }
     }
     else {

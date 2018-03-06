@@ -494,4 +494,25 @@ goog.require('ol.geom.convexhull');
     let clusterSource = this.clusterLayer_.getSource();
     clusterSource.getSource().un(ol.events.EventType.CHANGE, ol.source.Cluster.prototype.refresh_, clusterSource);
   };
+
+  /**
+   * TODO
+   * @public
+   * @param {object} canvas
+   * @function
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.deactivateTemporarilyChangeEvent = function(callback, callbackArguments) {
+    this.deactivateChangeEvent();
+    if (M.utils.isFunction(callback)) {
+      if (callbackArguments == null) {
+        callback();
+      }
+      else {
+        callback(...callbackArguments);
+      }
+    }
+  };
+
+
 })();
