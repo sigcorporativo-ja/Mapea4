@@ -119,7 +119,14 @@ goog.require('M.impl.renderutils');
     if (update) {
       this.updateLayer_();
     }
-    this.redraw();
+    let style = this.facadeVector_.getStyle();
+    if (style instanceof M.style.Cluster) {
+      style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
+      style.refresh();
+    }
+    else {
+      this.redraw();
+    }
   };
 
 
@@ -187,7 +194,14 @@ goog.require('M.impl.renderutils');
    */
   M.impl.layer.Vector.prototype.removeFeatures = function(features) {
     this.features_ = this.features_.filter(f => !(features.includes(f)));
-    this.redraw();
+    let style = this.facadeVector_.getStyle();
+    if (style instanceof M.style.Cluster) {
+      style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
+      style.refresh();
+    }
+    else {
+      this.redraw();
+    }
   };
 
   /**
