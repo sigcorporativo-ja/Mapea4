@@ -92,8 +92,7 @@ ol.control.OverviewMap.prototype.handleToggle_ = function() {
   setTimeout(function() {
     if (this.collapsed_) {
       ol.dom.replaceNode(this.collapseLabel_, this.label_);
-    }
-    else {
+    } else {
       ol.dom.replaceNode(this.label_, this.collapseLabel_);
     }
     this.collapsed_ = !this.collapsed_;
@@ -114,6 +113,28 @@ ol.control.OverviewMap.prototype.handleToggle_ = function() {
 };
 
 /**
+ * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
+ * @private
+ */
+ol.interaction.Pointer.prototype.updateTrackedPointers_ = function(mapBrowserEvent) {
+  if (this.isPointerDraggingEvent_(mapBrowserEvent)) {
+    var event = mapBrowserEvent.pointerEvent;
+
+    var id = event.pointerId.toString();
+    if (mapBrowserEvent.type == ol.MapBrowserEventType.POINTERUP) {
+      delete this.trackedPointers_[id];
+    } else if (mapBrowserEvent.type ==
+      ol.MapBrowserEventType.POINTERDOWN) {
+      this.trackedPointers_[id] = event;
+    } else if (id in this.trackedPointers_) {
+      // update only when there was a pointerdown event for this pointer
+      this.trackedPointers_[id] = event;
+    }
+    this.targetPointers = ol.obj.getValues(this.trackedPointers_);
+  }
+};
+
+/**
  * @private
  * @param {ol.render.ReplayGroup} replayGroup Replay group.
  * @param {ol.geom.Circle} geometry Geometry.
@@ -123,8 +144,7 @@ ol.control.OverviewMap.prototype.handleToggle_ = function() {
 M.impl.patches.renderPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
   if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
     M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
-  }
-  else {
+  } else {
     ol.renderer.vector.renderPolygonGeometry_(replayGroup, geometry, style, feature);
   }
 };
@@ -139,8 +159,7 @@ M.impl.patches.renderPolygonGeometry_ = function(replayGroup, geometry, style, f
 M.impl.patches.renderMultiPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
   if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
     M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
-  }
-  else {
+  } else {
     ol.renderer.vector.renderMultiPolygonGeometry_(replayGroup, geometry, style, feature);
   }
 };
@@ -155,8 +174,7 @@ M.impl.patches.renderMultiPolygonGeometry_ = function(replayGroup, geometry, sty
 M.impl.patches.renderLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
   if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
     M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
-  }
-  else {
+  } else {
     ol.renderer.vector.renderLineStringGeometry_(replayGroup, geometry, style, feature);
   }
 };
@@ -171,8 +189,7 @@ M.impl.patches.renderLineStringGeometry_ = function(replayGroup, geometry, style
 M.impl.patches.renderMultiLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
   if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
     M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
-  }
-  else {
+  } else {
     ol.renderer.vector.renderMultiLineStringGeometry_(replayGroup, geometry, style, feature);
   }
 };
