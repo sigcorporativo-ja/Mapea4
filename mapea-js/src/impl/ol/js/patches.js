@@ -114,6 +114,30 @@ ol.control.OverviewMap.prototype.handleToggle_ = function() {
 };
 
 /**
+ * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
+ * @private
+ */
+ol.interaction.Pointer.prototype.updateTrackedPointers_ = function(mapBrowserEvent) {
+  if (this.isPointerDraggingEvent_(mapBrowserEvent)) {
+    var event = mapBrowserEvent.pointerEvent;
+
+    var id = event.pointerId.toString();
+    if (mapBrowserEvent.type == ol.MapBrowserEventType.POINTERUP) {
+      delete this.trackedPointers_[id];
+    }
+    else if (mapBrowserEvent.type ==
+      ol.MapBrowserEventType.POINTERDOWN) {
+      this.trackedPointers_[id] = event;
+    }
+    else if (id in this.trackedPointers_) {
+      // update only when there was a pointerdown event for this pointer
+      this.trackedPointers_[id] = event;
+    }
+    this.targetPointers = ol.obj.getValues(this.trackedPointers_);
+  }
+};
+
+/**
  * @private
  * @param {ol.render.ReplayGroup} replayGroup Replay group.
  * @param {ol.geom.Circle} geometry Geometry.
