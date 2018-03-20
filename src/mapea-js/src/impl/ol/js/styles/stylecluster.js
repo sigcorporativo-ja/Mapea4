@@ -140,6 +140,7 @@ goog.require('ol.geom.convexhull');
 
     if (M.utils.isNullOrEmpty(this.options_.ranges)) {
       this.options_.ranges = this.getDefaultRanges_();
+      this.options_.label.color = "#fff";
     }
 
     if (this.options_.hoverInteraction !== false) {
@@ -162,6 +163,7 @@ goog.require('ol.geom.convexhull');
   M.impl.style.Cluster.prototype.setRanges = function(newRanges) {
     if (M.utils.isNullOrEmpty(newRanges)) {
       this.options_.ranges = this.getDefaultRanges_();
+      this.options_.label.color = "#fff";
     }
     else {
       this.options_.ranges = newRanges;

@@ -228,7 +228,7 @@ goog.require('M.style.Composite');
         }
         return text;
       },
-      color: '#fff',
+      // color: '#fff',
       font: "bold 15px Arial",
       baseline: 'middle',
       align: "center"
