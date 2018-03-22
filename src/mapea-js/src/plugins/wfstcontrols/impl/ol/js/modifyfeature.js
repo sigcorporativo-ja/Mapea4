@@ -86,16 +86,23 @@ goog.provide('P.impl.control.ModifyFeature');
     var layerImpl = this.layer_.getImpl();
     var olLayer = layerImpl.getOL3Layer();
     let olStyle = olLayer.getStyle()()[0];
+    let styleImage = olStyle.getImage();
     let [olFill, olStroke] = [olStyle.getFill(), olStyle.getStroke()];
-    let olStrokeClone = olStroke.clone();
-    olStrokeClone.setColor(M.utils.getRgba(olStroke.getColor()));
-    let image = new ol.style.Circle({
-      fill: olFill || olStrokeClone,
-      radius: 5,
-      stroke: olStroke
-    });
-    if (olStyle.getImage()) {
-      image = olStyle.getImage();
+
+    if (styleImage != null) {
+      olStroke = styleImage.getStroke();
+    }
+
+    let olStrokeClone = olStroke == null ? null : olStroke.clone();
+    if (olStrokeClone != null) {
+      olStrokeClone.setColor(M.utils.getRgba(olStroke.getColor()));
+    }
+    if (styleImage == null) {
+      styleImage = new ol.style.Circle({
+        fill: olFill || olStrokeClone,
+        radius: 5,
+        stroke: olStroke
+      });
     }
     var layerFeatures = new ol.Collection(olLayer.getSource().getFeatures());
     layerFeatures.forEach(function(feature) {
@@ -109,7 +116,7 @@ goog.provide('P.impl.control.ModifyFeature');
         return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
       },
       style: new ol.style.Style({
-        image: image,
+        image: styleImage,
       })
     });
     this.modify.on('modifyend', function(evt) {
