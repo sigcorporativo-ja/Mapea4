@@ -147,7 +147,8 @@ goog.require('goog.dom.classes');
       // sets default values
       describeFeatureType.properties.forEach(function (property) {
         if (!M.utils.isGeometryType(property.localType)) {
-          feature.set(property.name, layerImpl.getDefaultValue(property.localType));
+          let valueToAdd = feature.getProperties()[property.name] || layerImpl.getDefaultValue(property.localType);
+          feature.set(property.name, valueToAdd);
         }
       });
     });
