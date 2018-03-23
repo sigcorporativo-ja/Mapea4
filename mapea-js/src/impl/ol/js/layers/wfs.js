@@ -248,6 +248,9 @@ goog.require('M.impl.layer.Vector');
     else if (type == "int" || type == "number" || type == "float" || type == "double" || type == "decimal" || type == "short" || type == "byte" || type == "integer" || type == "long" || type == "negativeInteger" || type == "nonNegativeInteger" || type == "nonPositiveInteger" || type == "positiveInteger" || type == "unsignedLong" || type == "unsignedInt" || type == "unsignedShort" || type == "unsignedByte") {
       defaultValue = 0;
     }
+    else if (type == "hexBinary") {
+      defaultValue = null;
+    }
     else {
       defaultValue = "-";
     }
