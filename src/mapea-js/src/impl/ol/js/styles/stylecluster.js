@@ -415,6 +415,7 @@ goog.require('ol.geom.convexhull');
       max: numFeatures + 1,
       style: new M.style.Point(M.style.Cluster.RANGE_3_DEFAULT)
     }];
+    this.options_.ranges = ranges;
     return ranges;
   };
   /**

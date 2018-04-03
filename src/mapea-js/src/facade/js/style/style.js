@@ -174,6 +174,18 @@ goog.provide('M.Style');
   };
 
   /**
+   * This functions gets the options style.
+   *
+   * @function
+   * @public
+   * @return {object}
+   * @api stable
+   */
+  M.Style.prototype.getOptions = function() {
+    return this.options_;
+  };
+
+  /**
    * This function returns data url to canvas
    *
    * @function
