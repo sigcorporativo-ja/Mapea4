@@ -107,6 +107,7 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style.prototype.set = function(property, value) {
+    let oldValue = this.get(property);
     M.Style.setValue_(this.options_, property, value);
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.getImpl().updateFacadeOptions(this.options_);
@@ -114,6 +115,7 @@ goog.provide('M.Style');
     if (!M.utils.isNullOrEmpty(this.feature_)) {
       this.applyToFeature(this.feature_);
     }
+    this.fire(M.evt.CHANGE, [property, oldValue, value]);
     this.refresh();
     return this;
   };

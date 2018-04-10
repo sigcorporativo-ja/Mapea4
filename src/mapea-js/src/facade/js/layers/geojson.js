@@ -191,6 +191,7 @@ goog.require('M.exception');
           layerswitcher.render();
         }
       }
+      this.fire(M.evt.CHANGE_STYLE, [style, this]);
     };
 
     if (this.getImpl().isLoaded()) {
