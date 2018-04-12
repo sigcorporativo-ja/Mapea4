@@ -270,6 +270,7 @@ goog.require('M.exception');
           }
           style.apply(this, applyToFeature, isNullStyle);
           this.style_ = style;
+          this.fire(M.evt.CHANGE_STYLE, [style, this]);
         }
         if (!M.utils.isNullOrEmpty(this.getImpl().getMap())) {
           let layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];

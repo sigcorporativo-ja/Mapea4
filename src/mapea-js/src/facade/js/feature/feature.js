@@ -185,6 +185,7 @@ goog.require('M.utils');
       this.style_ = null;
       this.getImpl().clearStyle();
     }
+    this.fire(M.evt.CHANGE_STYLE, [style, this]);
     // else if (applyDefault === true) {
     //   let geom = this.getGeometry();
     //   if (!M.utils.isNullOrEmpty(geom)) {
