@@ -95,7 +95,7 @@ goog.require('M.exception');
   M.control.LayerSwitcher.getTemplateVariables_ = function(map) {
     return new Promise(function(success, fail) {
       // gets base layers and overlay layers
-      let baseLayers = map.getBaseLayers();
+      let baseLayers = map.getBaseLayers().filter(layer => layer.displayInLayerSwitcher === true);
       let overlayLayers = map.getLayers().filter(function(layer) {
         let isTransparent = (layer.transparent === true);
         let displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
