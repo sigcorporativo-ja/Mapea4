@@ -14,7 +14,7 @@ goog.require('ol.tilegrid.TileGrid');
 goog.require('ol.extent');
 
 
-(function () {
+(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -25,7 +25,7 @@ goog.require('ol.extent');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.WMS = (function (options) {
+  M.impl.layer.WMS = (function(options) {
     /**
      * The WMS layers instances from capabilities
      * @private
@@ -125,15 +125,15 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.setVisible = function (visibility) {
+  M.impl.layer.WMS.prototype.setVisible = function(visibility) {
     this.visibility = visibility;
     if (this.inRange() === true) {
       // if this layer is base then it hides all base layers
       if ((visibility === true) && (this.transparent !== true)) {
         // hides all base layers
-        this.map.getBaseLayers().filter(function (layer) {
+        this.map.getBaseLayers().filter(function(layer) {
           return (!layer.equals(this) && layer.isVisible());
-        }).forEach(function (layer) {
+        }).forEach(function(layer) {
           layer.setVisible(false);
         });
 
@@ -162,7 +162,7 @@ goog.require('ol.extent');
    * @api stable
    * @expose
    */
-  M.impl.layer.WMS.prototype.isQueryable = function () {
+  M.impl.layer.WMS.prototype.isQueryable = function() {
     return (this.options.queryable !== false);
   };
 
@@ -174,7 +174,7 @@ goog.require('ol.extent');
    * @param {M.impl.Map} map
    * @api stable
    */
-  M.impl.layer.WMS.prototype.addTo = function (map) {
+  M.impl.layer.WMS.prototype.addTo = function(map) {
     this.map = map;
 
     // calculates the resolutions from scales
@@ -192,14 +192,16 @@ goog.require('ol.extent');
       this.addSingleLayer_();
     }
 
-    this.legendUrl_ = M.utils.addParameters(this.url, {
-      'SERVICE': "WMS",
-      'VERSION': this.version,
-      'REQUEST': "GetLegendGraphic",
-      'LAYER': this.name,
-      'FORMAT': "image/png",
-      'EXCEPTIONS': "image/png"
-    });
+    if (this.legendUrl_ === M.utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_DEFAULT])) {
+      this.legendUrl_ = M.utils.addParameters(this.url, {
+        'SERVICE': "WMS",
+        'VERSION': this.version,
+        'REQUEST': "GetLegendGraphic",
+        'LAYER': this.name,
+        'FORMAT': "image/png",
+        'EXCEPTIONS': "image/png"
+      });
+    }
   };
 
   /**
@@ -210,12 +212,12 @@ goog.require('ol.extent');
    * @param {Array<Number>} resolutions
    * @api stable
    */
-  M.impl.layer.WMS.prototype.setResolutions = function (resolutions) {
+  M.impl.layer.WMS.prototype.setResolutions = function(resolutions) {
     this.resolutions_ = resolutions;
     if ((this.tiled === true) && !M.utils.isNullOrEmpty(this.ol3Layer)) {
       // gets the extent
       var this_ = this;
-      this.getMaxExtent_().then(function (olExtent) {
+      this.getMaxExtent_().then(function(olExtent) {
         var layerParams = {};
         var optParams = this_.options.params;
         if (!M.utils.isNullOrEmpty(optParams)) {
@@ -274,12 +276,12 @@ goog.require('ol.extent');
    * @private
    * @function
    */
-  M.impl.layer.WMS.prototype.addSingleLayer_ = function () {
+  M.impl.layer.WMS.prototype.addSingleLayer_ = function() {
     // gets resolutions of the map
     var resolutions = this.map.getResolutions();
 
     // gets the extent
-    this.getMaxExtent_().then(function (olExtent) {
+    this.getMaxExtent_().then(function(olExtent) {
       var tileGrid;
 
       if (M.utils.isNullOrEmpty(resolutions) && !M.utils.isNullOrEmpty(this.resolutions_)) {
@@ -372,9 +374,9 @@ goog.require('ol.extent');
    * @private
    * @function
    */
-  M.impl.layer.WMS.prototype.addAllLayers_ = function () {
-    this.getCapabilities().then(function (getCapabilities) {
-      getCapabilities.getLayers().forEach(function (layer) {
+  M.impl.layer.WMS.prototype.addAllLayers_ = function() {
+    this.getCapabilities().then(function(getCapabilities) {
+      getCapabilities.getLayers().forEach(function(layer) {
         var wmsLayer = new M.layer.WMS({
           'url': this.url,
           'name': layer.name,
@@ -394,7 +396,7 @@ goog.require('ol.extent');
 
       // updates the z-index of the layers
       var baseLayersIdx = this.layers.length;
-      this.layers.forEach(function (layer) {
+      this.layers.forEach(function(layer) {
         layer.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WMS] + baseLayersIdx);
         baseLayersIdx++;
       });
@@ -409,18 +411,18 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getExtent = function () {
+  M.impl.layer.WMS.prototype.getExtent = function() {
     var olProjection = ol.proj.get(this.map.getProjection().code);
 
     // creates the promise
-    this.extentPromise = new Promise(function (success, fail) {
+    this.extentPromise = new Promise(function(success, fail) {
       if (!M.utils.isNullOrEmpty(this.extent_)) {
         this.extent_ = ol.proj.transformExtent(this.extent_, this.extentProj_, olProjection);
         this.extentProj_ = olProjection;
         success(this.extent_);
       }
       else {
-        this.getCapabilities().then(function (getCapabilities) {
+        this.getCapabilities().then(function(getCapabilities) {
           this.extent_ = getCapabilities.getLayerExtent(this.name);
           this.extentProj_ = olProjection;
           success(this.extent_);
@@ -438,7 +440,7 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getMinResolution = function () {
+  M.impl.layer.WMS.prototype.getMinResolution = function() {
     return this.options.minResolution;
   };
 
@@ -450,7 +452,7 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getMaxResolution = function () {
+  M.impl.layer.WMS.prototype.getMaxResolution = function() {
     return this.options.maxResolution;
   };
 
@@ -462,7 +464,7 @@ goog.require('ol.extent');
    * @param {ol.Projection} projection - Projection map
    * @api stable
    */
-  M.impl.layer.WMS.prototype.updateMinMaxResolution = function (projection) {
+  M.impl.layer.WMS.prototype.updateMinMaxResolution = function(projection) {
     if (!M.utils.isNullOrEmpty(this.options.minResolution)) {
       this.options.minResolution = M.utils.getResolutionFromScale(this.options.minScale, projection.units);
       this.ol3Layer.setMinResolution(this.options.minResolution);
@@ -482,7 +484,7 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getNumZoomLevels = function () {
+  M.impl.layer.WMS.prototype.getNumZoomLevels = function() {
     return this.options.numZoomLevels;
   };
 
@@ -494,7 +496,7 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getLayers = function () {
+  M.impl.layer.WMS.prototype.getLayers = function() {
     return this.layers;
   };
 
@@ -506,17 +508,17 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getCapabilities = function () {
+  M.impl.layer.WMS.prototype.getCapabilities = function() {
     // creates the promise
     if (M.utils.isNullOrEmpty(this.getCapabilitiesPromise)) {
       var layerUrl = this.url;
       var layerVersion = this.version;
       var projection = this.map.getProjection();
-      this.getCapabilitiesPromise = new Promise(function (success, fail) {
+      this.getCapabilitiesPromise = new Promise(function(success, fail) {
         // gest the capabilities URL
         var wmsGetCapabilitiesUrl = M.utils.getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
         // gets the getCapabilities response
-        M.remote.get(wmsGetCapabilitiesUrl).then(function (response) {
+        M.remote.get(wmsGetCapabilitiesUrl).then(function(response) {
           var getCapabilitiesDocument = response.xml;
           var getCapabilitiesParser = new M.impl.format.WMSCapabilities();
           var getCapabilities = getCapabilitiesParser.read(getCapabilitiesDocument);
@@ -535,9 +537,9 @@ goog.require('ol.extent');
    * @private
    * @function
    */
-  M.impl.layer.WMS.prototype.getMaxExtent_ = function () {
+  M.impl.layer.WMS.prototype.getMaxExtent_ = function() {
     var extent = this.map.getMaxExtent();
-    return (new Promise(function (success, fail) {
+    return (new Promise(function(success, fail) {
       if (!M.utils.isNullOrEmpty(extent)) {
         if (!M.utils.isArray(extent)) {
           extent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
@@ -545,7 +547,7 @@ goog.require('ol.extent');
         success.call(this, extent);
       }
       else {
-        M.impl.envolvedExtent.calculate(this.map, this).then(function (extent) {
+        M.impl.envolvedExtent.calculate(this.map, this).then(function(extent) {
           let maxExtent = this.map.getMaxExtent();
           if (!M.utils.isNullOrEmpty(maxExtent)) {
             if (!M.utils.isArray(maxExtent)) {
@@ -569,7 +571,7 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getLegendURL = function () {
+  M.impl.layer.WMS.prototype.getLegendURL = function() {
     return this.legendUrl_;
   };
 
@@ -580,7 +582,7 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.setLegendURL = function (legendUrl) {
+  M.impl.layer.WMS.prototype.setLegendURL = function(legendUrl) {
     this.legendUrl_ = legendUrl;
   };
 
@@ -593,7 +595,7 @@ goog.require('ol.extent');
    * @api stable
    * @export
    */
-  M.impl.layer.WMS.prototype.refresh = function () {
+  M.impl.layer.WMS.prototype.refresh = function() {
     var ol3Layer = this.getOL3Layer();
     if (!M.utils.isNullOrEmpty(ol3Layer)) {
       ol3Layer.getSource().changed();
@@ -608,7 +610,7 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.destroy = function () {
+  M.impl.layer.WMS.prototype.destroy = function() {
     var olMap = this.map.getMapImpl();
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
@@ -628,7 +630,7 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.equals = function (obj) {
+  M.impl.layer.WMS.prototype.equals = function(obj) {
     var equals = false;
 
     if (obj instanceof M.impl.layer.WMS) {
