@@ -184,6 +184,11 @@ goog.require('ol.geom.convexhull');
     if (!M.utils.isNullOrEmpty(this.options_) && !M.utils.isNullOrEmpty(this.options_["ranges"])) {
       let ranges = cloneOptions["ranges"];
       if (ranges.length > 0) {
+        ranges = ranges.sort((range, range2) => {
+          let min = range["min"];
+          let min2 = range2["min"];
+          return min - min2;
+        });
         let lastRange = ranges.pop();
         if (M.utils.isNullOrEmpty(lastRange["max"])) {
           let numFeatures = this.layer_.getFeatures().length;
