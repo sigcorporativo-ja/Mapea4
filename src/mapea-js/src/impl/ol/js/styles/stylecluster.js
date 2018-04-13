@@ -92,6 +92,7 @@ goog.require('ol.geom.convexhull');
    */
   M.impl.style.Cluster.prototype.applyToLayer = function(layer, map) {
     this.layer_ = layer;
+    this.options_ = this.updateLastRange_();
     if (!M.utils.isNullOrEmpty(this.selectClusterInteraction_)) {
       this.selectClusterInteraction_.clear();
     }
@@ -169,6 +170,31 @@ goog.require('ol.geom.convexhull');
       this.options_.ranges = newRanges;
     }
   };
+
+  /**
+   * This function add the max limit to the last range of cluster options if not exists
+   *
+   * @function
+   * @public
+   * @return {object}
+   * @api stable
+   */
+  M.impl.style.Cluster.prototype.updateLastRange_ = function() {
+    let cloneOptions = M.utils.extends({}, this.options_);
+    if (!M.utils.isNullOrEmpty(this.options_) && !M.utils.isNullOrEmpty(this.options_["ranges"])) {
+      let ranges = cloneOptions["ranges"];
+      if (ranges.length > 0) {
+        let lastRange = ranges.pop();
+        if (M.utils.isNullOrEmpty(lastRange["max"])) {
+          let numFeatures = this.layer_.getFeatures().length;
+          lastRange["max"] = numFeatures;
+        }
+        cloneOptions["ranges"].push(lastRange);
+      }
+    }
+    return cloneOptions;
+  };
+
 
   /**
    * This function set a specified range
