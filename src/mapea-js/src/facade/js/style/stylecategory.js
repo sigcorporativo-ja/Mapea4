@@ -198,7 +198,8 @@ goog.require('M.style.Composite');
           image.height = style.get('icon.scale') ? img.height * style.get('icon.scale') : img.height;
           image.src = style.toImage();
         });
-      } else {
+      }
+      else {
         image.src = style.toImage();
       }
     }
@@ -251,13 +252,17 @@ goog.require('M.style.Composite');
    */
   M.style.Category.prototype.update_ = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
+      if (M.utils.isNullOrEmpty(this.categoryStyles_) || Object.keys(this.categoryStyles_).length === 0) {
+        this.categoryStyles_ = this.generateRandomCategories_();
+      }
       let styleOther = this.categoryStyles_['other'];
       this.layer_.getFeatures().forEach(function(feature) {
         let value = feature.getAttribute(this.attributeName_);
         let style = this.categoryStyles_[value];
         if (!M.utils.isNullOrEmpty(style)) {
           feature.setStyle(style);
-        } else if (!M.utils.isNullOrEmpty(styleOther)) {
+        }
+        else if (!M.utils.isNullOrEmpty(styleOther)) {
           feature.setStyle(styleOther);
         }
       }.bind(this));
@@ -274,6 +279,27 @@ goog.require('M.style.Composite');
     }
     styles = styles.filter(style => style instanceof M.style.Cluster || style instanceof M.style.Proportional);
     return goog.base(this, "add", styles);
+  };
+
+  /**
+   * This function updates the style
+   *
+   * @function
+   * @private
+   * @return {object}
+   * @api stable
+   */
+  M.style.Category.prototype.generateRandomCategories_ = function() {
+    let categories = {};
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      this.layer_.getFeatures().forEach(feature => {
+        let value = feature.getAttribute(this.attributeName_);
+        if (!categories.hasOwnProperty(value)) {
+          categories[value] = M.utils.generateRandomStyle(feature);
+        }
+      });
+    }
+    return categories;
   };
 
   /**
