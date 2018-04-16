@@ -1003,4 +1003,67 @@ goog.require('goog.color.alpha');
       image.src = url;
     });
   };
+
+  /**
+   * This functions returns random simple style
+   * @function
+   * @public
+   * @param {M.Feature} feature
+   * @return {M.style.Simple}
+   * @api stable
+   */
+  M.utils.generateRandomStyle = function(feature) {
+    let radius = Math.random() * 15 + 8;
+    let fillColor = chroma.random().hex();
+    let strokeColor = chroma.random().hex();
+    let strokeWidth = Math.random() * 7 + 2;
+    let geometry = feature.getGeometry().type;
+    let style;
+    let options;
+    switch (geometry) {
+      case "Point":
+      case "MultiPoint":
+          options = {
+          radius: radius,
+          fill: {
+            color: fillColor
+          },
+          stroke: {
+            color: strokeColor,
+            width: strokeWidth
+          }
+        };
+        style = new M.style.Point(options);
+        break;
+      case "LineString":
+      case "MultiLineString":
+        options = {
+        fill: {
+          color: fillColor
+        },
+        stroke: {
+          color: strokeColor,
+          width: strokeWidth
+        }
+      };
+        style = new M.style.Line(options);
+        break;
+      case "Polygon":
+      case "MultiPolygon":
+        options = {
+        fill: {
+          color: fillColor
+        },
+        stroke: {
+          color: strokeColor,
+          width: strokeWidth
+        }
+      };
+        style = new M.style.Polygon(options);
+        break;
+      default:
+        style = null;
+    }
+    return style;
+  };
 })();
