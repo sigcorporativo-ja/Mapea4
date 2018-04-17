@@ -548,15 +548,17 @@ goog.require('ol.extent');
       }
       else {
         M.impl.envolvedExtent.calculate(this.map, this).then(function(extent) {
-          let maxExtent = this.map.getMaxExtent();
-          if (!M.utils.isNullOrEmpty(maxExtent)) {
-            if (!M.utils.isArray(maxExtent)) {
-              maxExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
+          if (!M.utils.isNullOrEmpty(this.map)) {
+            let maxExtent = this.map.getMaxExtent();
+            if (!M.utils.isNullOrEmpty(maxExtent)) {
+              if (!M.utils.isArray(maxExtent)) {
+                maxExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
+              }
+              success.call(this, maxExtent);
             }
-            success.call(this, maxExtent);
-          }
-          else {
-            success.call(this, extent);
+            else {
+              success.call(this, extent);
+            }
           }
         }.bind(this));
       }

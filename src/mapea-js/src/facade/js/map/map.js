@@ -569,6 +569,8 @@ goog.require('M.style.Heatmap');
          to select WMC */
       var addedWmcLayers = this.getWMC();
       if (addedWmcLayers.length > 1) {
+        // en el futuro se debería implementar el metodo render en control WMCSelector
+        this.removeControls("wmcselector");
         this.addControls(new M.control.WMCSelector());
       }
 
@@ -600,6 +602,14 @@ goog.require('M.style.Heatmap');
       if (wmcLayers.length > 0) {
         // removes the layers
         this.getImpl().removeWMC(wmcLayers);
+      }
+      this.removeControls("wmcselector");
+      if (this.getWMC().length > 1) {
+        this.addControls(new M.control.WMCSelector());
+      }
+      let selectedWMC = this.getWMC().filter(wmc => wmc.selected === true)[0];
+      if (M.utils.isNullOrEmpty(selectedWMC) && this.getWMC().length > 0) {
+        this.getWMC()[0].select();
       }
     }
     return this;
