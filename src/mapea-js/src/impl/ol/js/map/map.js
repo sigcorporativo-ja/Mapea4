@@ -208,7 +208,7 @@ goog.require('M.impl.style.Heatmap');
   M.impl.Map.prototype.getBaseLayers = function() {
     var baseLayers = this.getLayers().filter(function(layer) {
       var isBaseLayer = false;
-      if ((layer.type === M.layer.type.WMS) || (layer.type === M.layer.type.OSM) || (layer.type === M.layer.type.Mapbox)) {
+      if ((layer.type === M.layer.type.WMS) || (layer.type === M.layer.type.OSM) || (layer.type === M.layer.type.Mapbox) || (layer.type === M.layer.type.WMTS)) {
         isBaseLayer = (layer.transparent !== true);
       }
       return isBaseLayer;
@@ -823,14 +823,37 @@ goog.require('M.impl.style.Heatmap');
    * @api stable
    */
   M.impl.Map.prototype.addWMTS = function(layers) {
+    // cehcks if exists a base layer
+    var baseLayers = this.getBaseLayers();
+    var existsBaseLayer = (baseLayers.length > 0);
+
     layers.forEach(function(layer) {
       // checks if layer is WMTS and was added to the map
       if (layer.type == M.layer.type.WMTS) {
         if (!M.utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
+          /* if the layer is a base layer then
+                 sets its visibility */
+          if (layer.transparent !== true) {
+            layer.setVisible(!existsBaseLayer);
+            existsBaseLayer = true;
+            if (layer.isVisible()) {
+              this.updateResolutionsFromBaseLayer();
+            }
+            layer.getImpl().setZIndex(0);
+          }
+        }
+        else {
           var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.WMTS];
           layer.getImpl().setZIndex(zIndex);
+
+          // recalculates resolution if there are not
+          // any base layer
+          if (!existsBaseLayer) {
+            this.updateResolutionsFromBaseLayer();
+          }
+
         }
       }
     }, this);
