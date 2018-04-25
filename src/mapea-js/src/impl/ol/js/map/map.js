@@ -348,7 +348,7 @@ goog.require('M.impl.style.Heatmap');
       // checks if layer is WMC and was added to the map
       if (layer.type == M.layer.type.WMC) {
         if (!M.utils.includes(this.layers_, layer)) {
-          layer.getImpl().setZIndex();
+          layer.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WMC]);
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
         }
@@ -452,8 +452,10 @@ goog.require('M.impl.style.Heatmap');
         if (!M.utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
-          var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.KML];
-          layer.getImpl().setZIndex(zIndex);
+          if (layer.getZIndex() == null) {
+            var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.KML];
+            layer.setZIndex(zIndex);
+          }
         }
       }
     }, this);
@@ -590,11 +592,13 @@ goog.require('M.impl.style.Heatmap');
             if (layer.isVisible()) {
               this.updateResolutionsFromBaseLayer();
             }
-            layer.getImpl().setZIndex(0);
+            layer.setZIndex(M.impl.Map.Z_INDEX_BASELAYER);
           }
           else {
-            var zIndex = this.layers_.length + layer.getImpl().getZIndex();
-            layer.getImpl().setZIndex(zIndex);
+            if (layer.getZIndex() == null) {
+              var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.WMS];
+              layer.setZIndex(zIndex);
+            }
             // recalculates resolution if there are not
             // any base layer
             if (!existsBaseLayer) {
@@ -721,8 +725,11 @@ goog.require('M.impl.style.Heatmap');
         if (!M.utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
-          var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.WFS];
-          layer.getImpl().setZIndex(zIndex);
+          layer.setZIndex(layer.getZIndex());
+          if (layer.getZIndex() == null) {
+            var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.WFS];
+            layer.setZIndex(zIndex);
+          }
         }
       }
     }, this);
@@ -819,7 +826,7 @@ goog.require('M.impl.style.Heatmap');
    *
    * @function
    * @param {Array<M.layer.WMTS>} layers
-   * @returns {M.impl.Map}
+   * @returns {M.impl.Map}º
    * @api stable
    */
   M.impl.Map.prototype.addWMTS = function(layers) {
@@ -841,19 +848,21 @@ goog.require('M.impl.style.Heatmap');
             if (layer.isVisible()) {
               this.updateResolutionsFromBaseLayer();
             }
-            layer.getImpl().setZIndex(0);
+            layer.setZIndex(M.impl.MAP.Z_INDEX_BASELAYER);
           }
-        }
-        else {
-          var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.WMTS];
-          layer.getImpl().setZIndex(zIndex);
+          else {
+            if (layer.getZIndex() == null) {
+              var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.WMTS];
+              layer.setZIndex(zIndex);
+            }
 
-          // recalculates resolution if there are not
-          // any base layer
-          if (!existsBaseLayer) {
-            this.updateResolutionsFromBaseLayer();
+            // recalculates resolution if there are not
+            // any base layer
+            if (!existsBaseLayer) {
+              this.updateResolutionsFromBaseLayer();
+            }
+
           }
-
         }
       }
     }, this);
@@ -1016,11 +1025,14 @@ goog.require('M.impl.style.Heatmap');
           if (layer.isVisible()) {
             this.updateResolutionsFromBaseLayer();
           }
-          layer.getImpl().setZIndex(0);
+          layer.setZIndex(M.impl.Map.Z_INDEX_BASELAYER);
         }
         else {
-          var zIndex = this.layers_.length + layer.getImpl().getZIndex();
-          layer.getImpl().setZIndex(zIndex);
+          layer.setZIndex(layer.getZIndex());
+          if (layer.getZIndex() == null) {
+            var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[layer.type];
+            layer.setZIndex(zIndex);
+          }
           // recalculates resolution if there are not
           // any base layer
           if (!existsBaseLayer) {
@@ -1872,11 +1884,13 @@ goog.require('M.impl.style.Heatmap');
    * @api stable
    */
   M.impl.Map.Z_INDEX = {};
+  M.impl.Map.Z_INDEX_BASELAYER = 0;
   M.impl.Map.Z_INDEX[M.layer.type.WMC] = 1;
   M.impl.Map.Z_INDEX[M.layer.type.WMS] = 1000;
   M.impl.Map.Z_INDEX[M.layer.type.WMTS] = 2000;
-  M.impl.Map.Z_INDEX[M.layer.type.Mapbox] = 2000;
   M.impl.Map.Z_INDEX[M.layer.type.OSM] = 2000;
   M.impl.Map.Z_INDEX[M.layer.type.KML] = 3000;
   M.impl.Map.Z_INDEX[M.layer.type.WFS] = 9999;
+  M.impl.Map.Z_INDEX[M.layer.type.Vector] = 9999;
+  M.impl.Map.Z_INDEX[M.layer.type.GeoJSON] = 9999;
 })();

@@ -52,6 +52,13 @@ goog.require('M.parameter.layer');
      * @expose
      */
     this.transparent = parameter.transparent;
+
+    /**
+     * @private
+     * @type {number}
+     * @expose
+     */
+    this.zindex_ = null;
   });
   goog.inherits(M.Layer, M.facade.Base);
 
@@ -249,7 +256,7 @@ goog.require('M.parameter.layer');
    * @api stable
    */
   M.Layer.prototype.getZIndex = function() {
-    return this.getImpl().getZIndex();
+    return this.zindex_;
   };
 
   /**
@@ -259,6 +266,7 @@ goog.require('M.parameter.layer');
    * @api stable
    */
   M.Layer.prototype.setZIndex = function(zIndex) {
+    this.zindex_ = zIndex;
     this.getImpl().setZIndex(zIndex);
   };
 

@@ -41,6 +41,23 @@ goog.require('M.exception');
   goog.inherits(M.layer.Vector, M.Layer);
 
   /**
+   * 'type' This property indicates if
+   * the layer was selected
+   */
+  Object.defineProperty(M.layer.Vector.prototype, "type", {
+    get: function() {
+      return M.layer.type.Vector;
+    },
+    // defining new type is not allowed
+    set: function(newType) {
+      if (!M.utils.isUndefined(newType) &&
+        !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.Vector)) {
+        M.exception('El tipo de capa debe ser \''.concat(M.layer.type.Vector).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
+      }
+    }
+  });
+
+  /**
    * This function add features to layer
    *
    * @function
