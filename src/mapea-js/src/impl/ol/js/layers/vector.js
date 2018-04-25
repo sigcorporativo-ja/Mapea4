@@ -69,10 +69,10 @@ goog.require('M.impl.renderutils');
 
     this.setVisible(this.visibility);
 
-    if (this.zIndex_ !== null) {
-      this.setZIndex(this.zIndex_);
-    }
-    this.setZIndex(999999);
+    // if (this.zIndex_ !== null) {
+    //   this.setZIndex(this.zIndex_);
+    // }
+    // this.setZIndex(999999);
 
     let olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
