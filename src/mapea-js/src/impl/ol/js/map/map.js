@@ -1214,10 +1214,11 @@ goog.require('M.impl.style.Heatmap');
    * @public
    * @function
    * @param {Mx.Extent} bbox the bbox
+   * @param {Object} vendorOpts vendor options
    * @returns {M.impl.Map}
    * @api stable
    */
-  M.impl.Map.prototype.setBbox = function(bbox) {
+  M.impl.Map.prototype.setBbox = function(bbox, vendorOpts) {
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(bbox)) {
       M.exception('No ha especificado ningún bbox');
@@ -1234,7 +1235,7 @@ goog.require('M.impl.style.Heatmap');
       extent = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
     }
     var olMap = this.getMapImpl();
-    olMap.getView().fit(extent);
+    olMap.getView().fit(extent, vendorOpts);
 
     return this;
   };
@@ -1427,7 +1428,9 @@ goog.require('M.impl.style.Heatmap');
     });
 
     if (!M.utils.isNullOrEmpty(this.userBbox_)) {
-      this.facadeMap_.setBbox(this.userBbox_);
+      this.facadeMap_.setBbox(this.userBbox_, {
+        'nearest': true
+      });
     }
 
     return this;
@@ -1532,12 +1535,17 @@ goog.require('M.impl.style.Heatmap');
 
     // recalculates bbox
     if (!M.utils.isNullOrEmpty(prevBbox)) {
-      this.facadeMap_.setBbox(ol.proj.transformExtent([
+      if (!M.utils.isArray(prevBbox)) {
+        prevBbox = [
             prevBbox.x.min,
             prevBbox.y.min,
             prevBbox.x.max,
             prevBbox.y.max,
-         ], olPrevProjection, olProjection));
+         ];
+      }
+      this.facadeMap_.setBbox(ol.proj.transformExtent(prevBbox, olPrevProjection, olProjection), {
+        'nearest': true
+      });
     }
 
     // recalculates center

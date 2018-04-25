@@ -1469,10 +1469,11 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    * @param {String|Array<String>|Array<Number>|Mx.Extent} bboxParam the bbox
+   * @param {Object} vendorOpts vendor options
    * @returns {M.Map}
    * @api stable
    */
-  M.Map.prototype.setBbox = function(bboxParam) {
+  M.Map.prototype.setBbox = function(bboxParam, vendorOpts) {
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(bboxParam)) {
       M.exception('No ha especificado ningún bbox');
@@ -1486,7 +1487,7 @@ goog.require('M.style.Heatmap');
     try {
       // parses the parameter
       var bbox = M.parameter.maxExtent(bboxParam);
-      this.getImpl().setBbox(bbox);
+      this.getImpl().setBbox(bbox, vendorOpts);
     }
     catch (err) {
       M.dialog.error('El formato del parámetro bbox no es el correcto');
