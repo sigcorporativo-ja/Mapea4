@@ -116,7 +116,9 @@ goog.require('M.evt.EventsManager');
         // load layers
         this.loadLayers(context);
         if (!M.utils.isNullOrEmpty(bbox)) {
-          this.map.setBbox(bbox);
+          this.map.setBbox(bbox, {
+            'nearest': true
+          });
         }
         this.map.fire(M.evt.CHANGE_WMC, this);
       }.bind(this));
