@@ -1951,6 +1951,8 @@ goog.require('M.style.Heatmap');
         }));
       }
     }
+
+    return this;
   };
 
   /**
@@ -2207,6 +2209,8 @@ goog.require('M.style.Heatmap');
       panel.destroy();
       this._panels.remove(panel);
     }
+
+    return this;
   };
 
   /**
