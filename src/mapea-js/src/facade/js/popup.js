@@ -103,10 +103,12 @@ goog.require('M.facade.Base');
           'tabs': this.tabs_
         }
       }).then(function (html) {
+        if (this_.tabs_.length > 0) {
         this_.element_ = html;
         this_.addEvents(html);
         this_.getImpl().addTo(map, html);
         this_.show(coordinate);
+      }
       });
     }
     else {
@@ -130,10 +132,12 @@ goog.require('M.facade.Base');
           'tabs': this.tabs_
         }
       }).then(function (html) {
+        if (this_.tabs_.length > 0) {
         this_.element_ = html;
         this_.addEvents(html);
         this_.getImpl().setContainer(html);
         this_.show(this_.coord_);
+      }
       });
     }
   };
