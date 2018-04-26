@@ -370,7 +370,16 @@ goog.require('M.impl.style.Heatmap');
     var wmcMapLayers = this.getWMC(layers);
     wmcMapLayers.forEach(function(wmcLayer) {
       // TODO removing the WMC layer with ol3
-      this.layers_.remove(wmcLayer);
+      if (wmcLayer.isLoaded() === true) {
+        this.layers_.remove(wmcLayer);
+        this.facadeMap_.removeWMS(wmcLayer.layers);
+      }
+      else {
+        wmcLayer.on(M.evt.LOAD, () => {
+          this.layers_.remove(wmcLayer);
+          this.facadeMap_.removeWMS(wmcLayer.layers);
+        });
+      }
     }, this);
 
     return this;

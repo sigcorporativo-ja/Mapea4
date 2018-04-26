@@ -163,6 +163,18 @@ goog.require('M.evt.EventsManager');
   };
 
   /**
+   * This function set facade class vector
+   *
+   * @function
+   * @param {object} obj - Facade vector
+   * @api stable
+   */
+  M.impl.layer.WMC.prototype.setFacadeObj = function(obj) {
+    this.facadeLayer_ = obj;
+  };
+
+
+  /**
    * This function gets the envolved extent for
    * this WMC
    *
