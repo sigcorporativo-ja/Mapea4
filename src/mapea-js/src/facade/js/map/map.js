@@ -2365,7 +2365,7 @@ goog.require('M.style.Heatmap');
     }
 
     if (!M.utils.isNullOrEmpty(this.popup_)) {
-      this.removePopup(this.popup_);
+      this.removePopup();
     }
     this.popup_ = popup;
     this.popup_.addTo(this, coordinate);
