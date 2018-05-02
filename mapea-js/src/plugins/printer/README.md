@@ -39,4 +39,12 @@ mapajs.addPlugin(new M.plugin.Printer({
 ## Observaciones  
 Los json que Mapea envía al servidor Geoprint deben cumplir con las siguientes condiciones:  
 * Los colores se indican en formato hexadecimal de seis dígitos, sin dígito para transparencia.
-* No contener atributos de estilo vacíos.
+* No contener atributos de estilo vacíos.  
+
+## Tabla de compatibilidad de versiones   
+En caso de utilizar un core de Mapea con número de versión explícito, debe cumplirse la siguiente relación:  
+
+versión plugin | versión Mapea | 
+--- | --- |
+1.0.0 | <= 4.1.0 
+1.1.0 | >= 4.2.0
