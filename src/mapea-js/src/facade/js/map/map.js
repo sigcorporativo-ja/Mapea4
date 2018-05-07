@@ -206,9 +206,7 @@ goog.require('M.style.Heatmap');
       'displayInLayerSwitcher': false
     });
 
-
-
-    this.drawLayer_.setStyle(new M.style.Point(M.Map.prototype.DRAWLAYER_STYLE));
+    this.drawLayer_.setStyle(new M.style.Point(M.Map.DRAWLAYER_STYLE));
 
     this.drawLayer_.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999);
     this.addLayers(this.drawLayer_);

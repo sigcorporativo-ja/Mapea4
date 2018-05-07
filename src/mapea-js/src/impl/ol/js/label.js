@@ -78,7 +78,7 @@ goog.provide('M.impl.Label');
         'content': htmlAsText,
       });
       map.addPopup(this.popup_, this.coord_);
-      this.popup_.on(M.evt.DESTROY, () => this.facadeMap_.removeLabel());
+      // this.popup_.on(M.evt.DESTROY, () => this.facadeMap_.removeLabel());
     }.bind(this));
   };
 
