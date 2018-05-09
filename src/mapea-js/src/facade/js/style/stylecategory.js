@@ -295,7 +295,7 @@ goog.require('M.style.Composite');
       this.layer_.getFeatures().forEach(feature => {
         let value = feature.getAttribute(this.attributeName_);
         if (!categories.hasOwnProperty(value)) {
-          categories[value] = M.utils.generateRandomStyle(feature);
+          categories[value] = M.utils.generateRandomStyle(feature, M.style.Category.RANDOM_RADIUS_OPTION, M.style.Category.RANDOM_STROKE_WIDTH_OPTION, M.style.Category.RANDOM_STROKE_COLOR_OPTION);
         }
       });
     }
@@ -311,4 +311,15 @@ goog.require('M.style.Composite');
   Object.defineProperty(M.style.Category.prototype, "ORDER", {
     value: 2
   });
+
+  /**
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
+   */
+  M.style.Category.RANDOM_RADIUS_OPTION = 10;
+  M.style.Category.RANDOM_STROKE_WIDTH_OPTION = 3;
+  M.style.Category.RANDOM_STROKE_COLOR_OPTION = "black";
+
 })();

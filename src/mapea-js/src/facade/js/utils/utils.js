@@ -1012,11 +1012,11 @@ goog.require('goog.color.alpha');
    * @return {M.style.Simple}
    * @api stable
    */
-  M.utils.generateRandomStyle = function(feature) {
-    let radius = Math.random() * 15 + 8;
+  M.utils.generateRandomStyle = function(feature, radiusParam, strokeWidthParam, strokeColorParam) {
+    let radius = radiusParam;
     let fillColor = chroma.random().hex();
-    let strokeColor = chroma.random().hex();
-    let strokeWidth = Math.random() * 7 + 2;
+    let strokeColor = strokeColorParam;
+    let strokeWidth = strokeWidthParam;
     let geometry = feature.getGeometry().type;
     let style;
     let options;
