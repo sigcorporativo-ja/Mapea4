@@ -313,13 +313,27 @@ goog.require('M.style.Composite');
   });
 
   /**
-   * This constant defines the order of style.
+   * This constant defines the radius of random category style.
    * @constant
    * @public
    * @api stable
    */
   M.style.Category.RANDOM_RADIUS_OPTION = 10;
-  M.style.Category.RANDOM_STROKE_WIDTH_OPTION = 3;
+
+  /**
+   * This constant defines the stroke width of random category style.
+   * @constant
+   * @public
+   * @api stable
+   */
+  M.style.Category.RANDOM_STROKE_WIDTH_OPTION = 1;
+
+  /**
+   * This constant defines the stroke color of random category style.
+   * @constant
+   * @public
+   * @api stable
+   */
   M.style.Category.RANDOM_STROKE_COLOR_OPTION = "black";
 
 })();
