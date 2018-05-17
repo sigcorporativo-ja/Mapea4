@@ -213,4 +213,14 @@ goog.require('M.exception');
    M.layer.WMC.prototype.isLoaded = function () {
       return this.loaded_;
    };
+
+   /**
+    * This function returns if the layer is loaded
+    *
+    * @function
+    * @api stable
+    */
+   M.layer.WMC.prototype.setLoaded = function (loaded) {
+      this.loaded_ = loaded;
+   };
 })();

@@ -370,17 +370,21 @@ goog.require('M.impl.style.Heatmap');
     var wmcMapLayers = this.getWMC(layers);
     wmcMapLayers.forEach(function(wmcLayer) {
       // TODO removing the WMC layer with ol3
-      if (wmcLayer.isLoaded() === true) {
+      if (wmcLayer.selected === true && wmcLayer.isLoaded() === false) {
+        wmcLayer.on(M.evt.LOAD, () => {
+          wmcLayer.setLoaded(false);
+          this.layers_.remove(wmcLayer);
+          this.facadeMap_.removeWMS(wmcLayer.layers);
+          this.facadeMap_.refreshWMCSelectorControl();
+        });
+      }
+      else {
+        wmcLayer.setLoaded(false);
         this.layers_.remove(wmcLayer);
         this.facadeMap_.removeWMS(wmcLayer.layers);
       }
-      else {
-        wmcLayer.on(M.evt.LOAD, () => {
-          this.layers_.remove(wmcLayer);
-          this.facadeMap_.removeWMS(wmcLayer.layers);
-        });
-      }
     }, this);
+    this.facadeMap_.refreshWMCSelectorControl();
 
     return this;
   };
@@ -1091,6 +1095,11 @@ goog.require('M.impl.style.Heatmap');
   M.impl.Map.prototype.getControls = function(filters) {
     var foundControls = [];
 
+    let panelControls = this.facadeMap_.getPanels().map(p => p.getControls());
+    if (panelControls.length > 0) {
+      panelControls = panelControls.reduce((acc, controls) => acc.concat(controls));
+    }
+    const controlsToSearch = this.controls_.concat(panelControls);
     // parse to Array
     if (M.utils.isNullOrEmpty(filters)) {
       filters = [];
@@ -1099,11 +1108,11 @@ goog.require('M.impl.style.Heatmap');
       filters = [filters];
     }
     if (filters.length === 0) {
-      foundControls = this.controls_;
+      foundControls = controlsToSearch;
     }
     else {
       filters.forEach(function(filterControl) {
-        foundControls = foundControls.concat(this.controls_.filter(function(control) {
+        foundControls = foundControls.concat(controlsToSearch.filter(function(control) {
           var controlMatched = false;
 
           if (!M.utils.includes(foundControls, control)) {
@@ -1121,7 +1130,14 @@ goog.require('M.impl.style.Heatmap');
         }));
       }, this);
     }
-    return foundControls;
+    let nonRepeatFoundControls = [];
+    foundControls.forEach(control => {
+      let controlNames = nonRepeatFoundControls.map(c => c.name);
+      if (!controlNames.includes(control.name)) {
+        nonRepeatFoundControls.push(control);
+      }
+    });
+    return nonRepeatFoundControls;
   };
 
   /**

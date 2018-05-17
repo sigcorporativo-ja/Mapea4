@@ -566,18 +566,35 @@ goog.require('M.style.Heatmap');
       /* checks if it should create the WMC control
          to select WMC */
       var addedWmcLayers = this.getWMC();
+      let wmcSelected = addedWmcLayers.filter(wmc => wmc.selected === true)[0];
+      if (wmcSelected == null) {
+        addedWmcLayers[0].select();
+      }
       if (addedWmcLayers.length > 1) {
-        // en el futuro se debería implementar el metodo render en control WMCSelector
         this.removeControls("wmcselector");
         this.addControls(new M.control.WMCSelector());
       }
-
-      // select the first WMC
-      if (addedWmcLayers.length > 0) {
-        addedWmcLayers[0].select();
-      }
     }
     return this;
+  };
+
+  // /**
+  //  * TODO
+  //  * @function
+  //  * @public
+  //  */
+  M.Map.prototype.refreshWMCSelectorControl = function() {
+    this.removeControls("wmcselector");
+    if (this.getWMC().length === 1) {
+      this.getWMC()[0].select();
+    }
+    else if (this.getWMC().length > 1) {
+      this.addControls(new M.control.WMCSelector());
+      let wmcSelected = this.getWMC().filter(wmc => wmc.selected === true)[0];
+      if (wmcSelected == null) {
+        this.getWMC()[0].select();
+      }
+    }
   };
 
   /**
@@ -600,14 +617,6 @@ goog.require('M.style.Heatmap');
       if (wmcLayers.length > 0) {
         // removes the layers
         this.getImpl().removeWMC(wmcLayers);
-      }
-      this.removeControls("wmcselector");
-      if (this.getWMC().length > 1) {
-        this.addControls(new M.control.WMCSelector());
-      }
-      let selectedWMC = this.getWMC().filter(wmc => wmc.selected === true)[0];
-      if (M.utils.isNullOrEmpty(selectedWMC) && this.getWMC().length > 0) {
-        this.getWMC()[0].select();
       }
     }
     return this;
