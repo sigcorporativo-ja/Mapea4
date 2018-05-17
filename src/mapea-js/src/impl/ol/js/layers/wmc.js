@@ -160,6 +160,7 @@ goog.require('M.evt.EventsManager');
 
     // updates the z-index of the layers
     this.layers.forEach((layer, i) => layer.setZIndex(this.getZIndex() + i));
+    this.facadeLayer_.fire(M.evt.LOAD, [this.layers]);
   };
 
   /**
