@@ -281,18 +281,21 @@ goog.require('M.facade.Base');
       // CLICK EVENTS
       goog.events.listen(headerElement, [
             goog.events.EventType.MOUSEUP
-         ], function (evt) {
+         ], function(evt) {
         evt.preventDefault();
         // COLLAPSED --> DEFAULT
-        if (this.status_ === M.Popup.status.COLLAPSED) {
-          this.setStatus_(M.Popup.status.DEFAULT);
-        }
-        // DEFAULT --> FULL
-        else if (this.status_ === M.Popup.status.DEFAULT) {
-          this.setStatus_(M.Popup.status.FULL);
-        }
-        else {
-          this.setStatus_(M.Popup.status.COLLAPSED);
+        if (this.tabs_.length <= 1) {
+
+          if (this.status_ === M.Popup.status.COLLAPSED) {
+            this.setStatus_(M.Popup.status.DEFAULT);
+          }
+          // DEFAULT --> FULL
+          else if (this.status_ === M.Popup.status.DEFAULT) {
+            this.setStatus_(M.Popup.status.FULL);
+          }
+          else {
+            this.setStatus_(M.Popup.status.COLLAPSED);
+          }
         }
       }, false, this);
     }
