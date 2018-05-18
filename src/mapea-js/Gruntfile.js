@@ -492,7 +492,13 @@ module.exports = function(grunt) {
         dest: 'build/plugins/attributetable/attributetable.ol.min.js',
       }
     },
-
+    'remove-comments': {
+      core: {
+        src: [
+          'node_modules/jsts/dist/jsts.min.js'
+        ]
+      }
+    },
     'generate-symbols-plugins': {
       build: {
         jsdoc: {
@@ -740,7 +746,7 @@ module.exports = function(grunt) {
 
   grunt.registerTask('clean-target', ['clean:build', 'mkdir']);
   grunt.registerTask('css-core', ['copy:assets', 'cssmin:core']);
-  grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'concat:core', 'copy:configuration', 'copy:core']);
+  grunt.registerTask('js-core', ['bower:core', 'jshint:core', 'jsdoc', 'closure-libraries-wrapper', 'install-libraries', 'generate-symbols', 'generate-exports', 'generate-externs', 'compile-core', 'remove-comments', 'concat:core', 'copy:configuration', 'copy:core']);
   grunt.registerTask('css-plugins', ['copy:plugins', 'cssmin:plugins']);
   grunt.registerTask('js-plugins', ['jshint:plugins', 'generate-symbols-plugins', 'generate-exports-plugins', 'compile-plugins', 'clean:plugins-css', 'copy:pluginsDist', 'concat:plugins']);
   grunt.registerTask('templates', ['copy:templates']);

@@ -144,14 +144,20 @@ goog.require('goog.style');
         },
         'parseToHtml': false
       }).then(function(htmlAsText) {
-        this_.popup_ = new M.Popup();
         this_.tabPopup_ = {
           'icon': 'g-cartografia-comentarios',
           'title': featureName,
           'content': htmlAsText
         };
-        this_.popup_.addTab(this_.tabPopup_);
-        this_.map.addPopup(this_.popup_, featureCoord);
+        const popup = this_.map.getPopup();
+        if (M.utils.isNullOrEmpty(popup)) {
+          this_.popup_ = new M.Popup();
+          this_.popup_.addTab(this_.tabPopup_);
+          this_.map.addPopup(this_.popup_, featureCoord);
+        }
+        else {
+          popup.addTab(this_.tabPopup_);
+        }
       });
     }
   };

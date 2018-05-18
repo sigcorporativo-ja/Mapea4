@@ -152,7 +152,6 @@
   min-width: 150px;
 }
 
-
 /**********************
       TABS
 **********************/
@@ -192,7 +191,6 @@
   height: 18px;
   background-color: #fff;
 }
-
 
 /**********************
       MOBILE
@@ -299,8 +297,7 @@
     /*font-size: 36px;*/
   }
   .m-popup.m-collapsed {
-    /*top: 90vh;*/
-    top: 93vh;
+    top: 92%;
   }
   .m-popup.m-collapsed.m-has-tabs>div.m-content>div.m-header>a.m-popup-closer {
     display: none;
@@ -363,7 +360,6 @@
   }
 }
 
-
 /**********************
       GEOJSON
 **********************/
@@ -397,7 +393,6 @@
 .m-popup>div.m-content>div.m-body>div.m-geojson-content>div.result>table td.value, .m-popup>div.m-content>div.m-body>div.m-geojson-content>div.result>table td.key {
   white-space: nowrap;
 }
-
 
 /****************************
  SAFARI HACKS

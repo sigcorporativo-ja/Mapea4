@@ -181,6 +181,11 @@ goog.require('M.utils');
       this.style_ = style;
       this.style_.applyToFeature(this);
     }
+    else if (M.utils.isNullOrEmpty(style)) {
+      this.style_ = null;
+      this.getImpl().clearStyle();
+    }
+    this.fire(M.evt.CHANGE_STYLE, [style, this]);
     // else if (applyDefault === true) {
     //   let geom = this.getGeometry();
     //   if (!M.utils.isNullOrEmpty(geom)) {
@@ -221,6 +226,18 @@ goog.require('M.utils');
    */
   M.Feature.prototype.getStyle = function() {
     return this.style_;
+  };
+
+  /**
+   * This function clear style feature
+   *
+   * @public
+   * @function
+   * @return {M.style.Feature} returns the style feature
+   * @api stable
+   */
+  M.Feature.prototype.clearStyle = function() {
+    this.setStyle(null);
   };
 
   /**

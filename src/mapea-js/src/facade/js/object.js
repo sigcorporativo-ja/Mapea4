@@ -47,6 +47,17 @@ goog.require('M.evt.Listener');
       return this.eventsManager_.add(eventType, listener, optThis, true);
    };
 
+     /**
+      * Sets the callback when the instace is loaded
+      *
+      * @public
+      * @function
+      * @api stable
+      */
+    M.Object.prototype.once = function (eventType, listener, optThis) {
+        return this.eventsManager_.add(eventType, listener, optThis, true);
+    };
+
    /**
     * Sets the callback when the instace is loaded
     *

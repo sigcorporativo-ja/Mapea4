@@ -24,16 +24,14 @@ goog.require('goog.color.alpha');
 
     if (M.utils.isNull(obj)) {
       nullOrEmpty = true;
-    }
-    else if (M.utils.isArray(obj)) {
+    } else if (M.utils.isArray(obj)) {
       nullOrEmpty = true;
       if (obj.length > 0) {
         nullOrEmpty = !obj.some(function(objElem) {
           return !M.utils.isNullOrEmpty(objElem);
         });
       }
-    }
-    else if ((typeof obj === 'string') && (obj.trim().length === 0)) {
+    } else if ((typeof obj === 'string') && (obj.trim().length === 0)) {
       nullOrEmpty = true;
     }
 
@@ -51,11 +49,9 @@ goog.require('goog.color.alpha');
     if (!M.utils.isBoolean(obj) && (typeof obj !== 'number')) {
       if (M.utils.isUndefined(obj)) {
         isNull = true;
-      }
-      else if (!obj) {
+      } else if (!obj) {
         isNull = true;
-      }
-      else if (obj === null) {
+      } else if (obj === null) {
         isNull = true;
       }
     }
@@ -198,8 +194,7 @@ goog.require('goog.color.alpha');
     var requestUrl = url;
     if (requestUrl.indexOf('?') === -1) {
       requestUrl += '?';
-    }
-    else if (requestUrl.charAt(requestUrl.length - 1) !== '?') {
+    } else if (requestUrl.charAt(requestUrl.length - 1) !== '?') {
       requestUrl += '&';
     }
 
@@ -213,8 +208,7 @@ goog.require('goog.color.alpha');
       }
       // removes the last '&'
       requestParams = requestParams.substring(0, requestParams.length - 1);
-    }
-    else if (M.utils.isString(params)) {
+    } else if (M.utils.isString(params)) {
       requestParams = params;
     }
     requestUrl += requestParams;
@@ -326,12 +320,10 @@ goog.require('goog.color.alpha');
     if (M.utils.isArray(extent)) {
       wExtent = (extent[2] - extent[0]);
       hExtent = (extent[3] - extent[1]);
-    }
-    else if (M.utils.isObject(extent)) {
+    } else if (M.utils.isObject(extent)) {
       wExtent = (extent.x.max - extent.x.min);
       hExtent = (extent.y.max - extent.y.min);
-    }
-    else if (M.utils.isString(extent)) {
+    } else if (M.utils.isString(extent)) {
       extent = extent.split(",");
       wExtent = (extent[2] - extent[0]);
       hExtent = (extent[3] - extent[1]);
@@ -582,8 +574,7 @@ goog.require('goog.color.alpha');
     var k;
     if (n >= 0) {
       k = n;
-    }
-    else {
+    } else {
       k = len + n;
       if (k < 0) {
         k = 0;
@@ -611,11 +602,9 @@ goog.require('goog.color.alpha');
     for (var prop in source) {
       if (M.utils.isUndefined(target[prop])) {
         target[prop] = source[prop];
-      }
-      else if (M.utils.isObject(target[prop])) {
+      } else if (M.utils.isObject(target[prop])) {
         M.utils.extend(target[prop], source[prop], override);
-      }
-      else if ((override === true)) {
+      } else if ((override === true)) {
         target[prop] = source[prop];
       }
     }
@@ -697,12 +686,10 @@ goog.require('goog.color.alpha');
     var hexColor;
     if (goog.color.isValidColor(rgbColor)) {
       hexColor = goog.color.parse(rgbColor).hex;
-    }
-    else {
+    } else {
       try {
         hexColor = goog.color.alpha.parse(rgbColor).hex;
-      }
-      catch (err) {}
+      } catch (err) {}
     }
     return hexColor;
   };
@@ -717,8 +704,7 @@ goog.require('goog.color.alpha');
     var hexColor;
     try {
       hexColor = chroma(rgbaColor).hex();
-    }
-    catch (err) {}
+    } catch (err) {}
     return hexColor;
   };
 
@@ -736,8 +722,7 @@ goog.require('goog.color.alpha');
       opacity = rgbaColor.replace(rgbaRegExp, '$2');
       try {
         opacity = parseFloat(opacity);
-      }
-      catch (err) {}
+      } catch (err) {}
     }
 
     return opacity;
@@ -957,14 +942,12 @@ goog.require('goog.color.alpha');
         let value = src[key];
         if (M.utils.isArray(value)) {
           value = [...value];
-        }
-        else if (M.utils.isObject(value)) {
+        } else if (M.utils.isObject(value)) {
           value = M.utils.extends({}, value);
         }
         if (M.utils.isNullOrEmpty(dest[key])) {
           dest[key] = value;
-        }
-        else if (M.utils.isObject(dest[key])) {
+        } else if (M.utils.isObject(dest[key])) {
           M.utils.extends(dest[key], value);
         }
       }, this);
@@ -991,5 +974,96 @@ goog.require('goog.color.alpha');
       intervals = [...intervals, array[1]];
     }
     return intervals;
+  };
+
+  /**
+   * This functions returns the order style
+   * @function
+   * @public
+   * @param {M.Style}
+   * @return {number}
+   * @api stable
+   */
+  M.utils.styleComparator = function(style, style2) {
+    return style.ORDER - style2.ORDER;
+  };
+
+  /**
+   * This functions returns the width and height of a image from src
+   * @function
+   * @public
+   * @param {string} url
+   * @return {Array<number>}
+   * @api stable
+   */
+  M.utils.getImageSize = function(url) {
+    let image = new Image();
+    return new Promise((resolve, reject) => {
+      image.onload = () => resolve(image);
+      image.src = url;
+    });
+  };
+
+  /**
+   * This functions returns random simple style
+   * @function
+   * @public
+   * @param {M.Feature} feature
+   * @return {M.style.Simple}
+   * @api stable
+   */
+  M.utils.generateRandomStyle = function(feature, radiusParam, strokeWidthParam, strokeColorParam) {
+    let radius = radiusParam;
+    let fillColor = chroma.random().hex();
+    let strokeColor = strokeColorParam;
+    let strokeWidth = strokeWidthParam;
+    let geometry = feature.getGeometry().type;
+    let style;
+    let options;
+    switch (geometry) {
+      case "Point":
+      case "MultiPoint":
+          options = {
+          radius: radius,
+          fill: {
+            color: fillColor
+          },
+          stroke: {
+            color: strokeColor,
+            width: strokeWidth
+          }
+        };
+        style = new M.style.Point(options);
+        break;
+      case "LineString":
+      case "MultiLineString":
+        options = {
+        fill: {
+          color: fillColor
+        },
+        stroke: {
+          color: strokeColor,
+          width: strokeWidth
+        }
+      };
+        style = new M.style.Line(options);
+        break;
+      case "Polygon":
+      case "MultiPolygon":
+        options = {
+        fill: {
+          color: fillColor
+        },
+        stroke: {
+          color: strokeColor,
+          width: strokeWidth
+        }
+      };
+        style = new M.style.Polygon(options);
+        break;
+      default:
+        style = null;
+    }
+    return style;
   };
 })();

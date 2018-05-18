@@ -1,5 +1,5 @@
 goog.provide('M.style.Category');
-goog.require('M.Style');
+goog.require('M.style.Composite');
 
 /**
  * @namespace M.style.Category
@@ -41,7 +41,7 @@ goog.require('M.Style');
     this.categoryStyles_ = categoryStyles;
     goog.base(this, options, {});
   });
-  goog.inherits(M.style.Category, M.Style);
+  goog.inherits(M.style.Category, M.style.Composite);
 
   /**
    * This function apply the styleCategory object to specified layer
@@ -52,7 +52,7 @@ goog.require('M.Style');
    * @returns {M.style.Category}
    * @api stable
    */
-  M.style.Category.prototype.apply = function(layer) {
+  M.style.Category.prototype.applyInternal_ = function(layer) {
     this.layer_ = layer;
     this.update_();
   };
@@ -80,6 +80,7 @@ goog.require('M.Style');
   M.style.Category.prototype.setAttributeName = function(attributeName) {
     this.attributeName_ = attributeName;
     this.update_();
+    this.refresh();
     return this;
   };
 
@@ -108,6 +109,7 @@ goog.require('M.Style');
   M.style.Category.prototype.setCategories = function(categories) {
     this.categoryStyles_ = categories;
     this.update_();
+    this.refresh();
     return this;
   };
 
@@ -137,6 +139,7 @@ goog.require('M.Style');
   M.style.Category.prototype.setStyleForCategory = function(category, style) {
     this.categoryStyles_[category] = style;
     this.update_();
+    this.refresh();
     return this;
   };
 
@@ -189,7 +192,16 @@ goog.require('M.Style');
         scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
       };
       style.updateCanvas();
-      image.src = style.toImage();
+      if (style.get('icon.src')) {
+        M.utils.getImageSize(style.get('icon.src')).then((img) => {
+          image.width = style.get('icon.scale') ? img.width * style.get('icon.scale') : img.width;
+          image.height = style.get('icon.scale') ? img.height * style.get('icon.scale') : img.height;
+          image.src = style.toImage();
+        });
+      }
+      else {
+        image.src = style.toImage();
+      }
     }
   };
 
@@ -222,7 +234,7 @@ goog.require('M.Style');
       let imageHeight = 0;
       if (!M.utils.isNullOrEmpty(image)) {
         imageHeight = image.height;
-        vectorContext.drawImage(image, (maxWidth - image.width) / 2, coordinateY);
+        vectorContext.drawImage(image, (maxWidth - image.width) / 2, coordinateY, image.width, image.height);
       }
       vectorContext.fillText(categoryName, maxWidth + 5, coordinateY + (imageHeight / 2));
     }, this);
@@ -240,6 +252,9 @@ goog.require('M.Style');
    */
   M.style.Category.prototype.update_ = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
+      if (M.utils.isNullOrEmpty(this.categoryStyles_) || Object.keys(this.categoryStyles_).length === 0) {
+        this.categoryStyles_ = this.generateRandomCategories_();
+      }
       let styleOther = this.categoryStyles_['other'];
       this.layer_.getFeatures().forEach(function(feature) {
         let value = feature.getAttribute(this.attributeName_);
@@ -254,4 +269,71 @@ goog.require('M.Style');
       this.updateCanvas();
     }
   };
+
+  /**
+   * @inheritDoc
+   */
+  M.style.Category.prototype.add = function(styles) {
+    if (!M.utils.isArray(styles)) {
+      styles = [styles];
+    }
+    styles = styles.filter(style => style instanceof M.style.Cluster || style instanceof M.style.Proportional);
+    return goog.base(this, "add", styles);
+  };
+
+  /**
+   * This function updates the style
+   *
+   * @function
+   * @private
+   * @return {object}
+   * @api stable
+   */
+  M.style.Category.prototype.generateRandomCategories_ = function() {
+    let categories = {};
+    if (!M.utils.isNullOrEmpty(this.layer_)) {
+      this.layer_.getFeatures().forEach(feature => {
+        let value = feature.getAttribute(this.attributeName_);
+        if (!categories.hasOwnProperty(value)) {
+          categories[value] = M.utils.generateRandomStyle(feature, M.style.Category.RANDOM_RADIUS_OPTION, M.style.Category.RANDOM_STROKE_WIDTH_OPTION, M.style.Category.RANDOM_STROKE_COLOR_OPTION);
+        }
+      });
+    }
+    return categories;
+  };
+
+  /**
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
+   */
+  Object.defineProperty(M.style.Category.prototype, "ORDER", {
+    value: 2
+  });
+
+  /**
+   * This constant defines the radius of random category style.
+   * @constant
+   * @public
+   * @api stable
+   */
+  M.style.Category.RANDOM_RADIUS_OPTION = 10;
+
+  /**
+   * This constant defines the stroke width of random category style.
+   * @constant
+   * @public
+   * @api stable
+   */
+  M.style.Category.RANDOM_STROKE_WIDTH_OPTION = 1;
+
+  /**
+   * This constant defines the stroke color of random category style.
+   * @constant
+   * @public
+   * @api stable
+   */
+  M.style.Category.RANDOM_STROKE_COLOR_OPTION = "black";
+
 })();
