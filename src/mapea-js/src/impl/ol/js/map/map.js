@@ -383,8 +383,8 @@ goog.require('M.impl.style.Heatmap');
         this.layers_.remove(wmcLayer);
         this.facadeMap_.removeWMS(wmcLayer.layers);
       }
+      this.facadeMap_.refreshWMCSelectorControl();
     }, this);
-    this.facadeMap_.refreshWMCSelectorControl();
 
     return this;
   };
