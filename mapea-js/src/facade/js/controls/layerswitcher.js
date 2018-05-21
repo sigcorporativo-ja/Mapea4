@@ -95,24 +95,26 @@ goog.require('M.exception');
   M.control.LayerSwitcher.getTemplateVariables_ = function(map) {
     return new Promise(function(success, fail) {
       // gets base layers and overlay layers
-      let baseLayers = map.getBaseLayers();
-      let overlayLayers = map.getLayers().filter(function(layer) {
-        let isTransparent = (layer.transparent === true);
-        let displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
-        let isNotWMC = (layer.type !== M.layer.type.WMC);
-        let isNotWMSFull = !((layer.type === M.layer.type.WMS) && M.utils.isNullOrEmpty(layer.name));
-        return (isTransparent && isNotWMC && isNotWMSFull && displayInLayerSwitcher);
-      }).reverse();
+      if (!M.utils.isNullOrEmpty(map)) {
 
-      let baseLayersPromise = Promise.all(baseLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_));
-      let overlayLayersPromise = Promise.all(overlayLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_));
-      baseLayersPromise.then(parsedBaseLayers => {
-        overlayLayersPromise.then(parsedOverlayLayers => success({
-          'baseLayers': parsedBaseLayers,
-          'overlayLayers': parsedOverlayLayers
-        }));
-      });
+        let baseLayers = map.getBaseLayers().filter(layer => layer.displayInLayerSwitcher === true);
+        let overlayLayers = map.getLayers().filter(function(layer) {
+          let isTransparent = (layer.transparent === true);
+          let displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
+          let isNotWMC = (layer.type !== M.layer.type.WMC);
+          let isNotWMSFull = !((layer.type === M.layer.type.WMS) && M.utils.isNullOrEmpty(layer.name));
+          return (isTransparent && isNotWMC && isNotWMSFull && displayInLayerSwitcher);
+        }).reverse();
 
+        let baseLayersPromise = Promise.all(baseLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_));
+        let overlayLayersPromise = Promise.all(overlayLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_));
+        baseLayersPromise.then(parsedBaseLayers => {
+          overlayLayersPromise.then(parsedOverlayLayers => success({
+            'baseLayers': parsedBaseLayers,
+            'overlayLayers': parsedOverlayLayers
+          }));
+        });
+      }
       // success({
       //   'baseLayers': baseLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_),
       //   'overlayLayers': overlayLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_)
@@ -144,6 +146,13 @@ goog.require('M.exception');
     //   'outOfRange': !layer.inRange(),
     //   'opacity': layer.getOpacity()
     // }));
+    let isIcon = false;
+    if (layer instanceof M.layer.Vector) {
+      let style = layer.getStyle();
+      if (style instanceof M.style.Point && !M.utils.isNullOrEmpty(style.get('icon.src'))) {
+        isIcon = true;
+      }
+    }
     return new Promise((success, fail) => {
       let layerVarTemplate = {
         'base': (layer.transparent === false),
@@ -151,7 +160,8 @@ goog.require('M.exception');
         'id': layer.name,
         'title': layerTitle,
         'outOfRange': !layer.inRange(),
-        'opacity': layer.getOpacity()
+        'opacity': layer.getOpacity(),
+        'isIcon': isIcon
       };
       let legendUrl = layer.getLegendURL();
       if (legendUrl instanceof Promise) {

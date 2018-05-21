@@ -204,15 +204,22 @@ goog.require('M.impl.style.OLChart');
       }
 
       let styles = [new M.impl.style.CentroidStyle({
+        geometry: (olFeature) => {
+          let geometry = olFeature.getGeometry();
+          if (olFeature.getGeometry() instanceof ol.geom.MultiPolygon) {
+            geometry = geometry.getPolygons()[0].getInteriorPoint();
+          }
+          return geometry;
+        },
         image: new M.impl.style.OLChart(styleOptions)
       })];
 
       /*****
         [WARN] Chart text style won't be rendered for multipolygon geom types
       *****/
-      let geomTypes = Object.keys(ol.geom.GeometryType).map(k => ol.geom.GeometryType[k]);
-      let validGeom = feature.getGeometry() != null && geomTypes.includes(feature.getGeometry().getType()) && feature.getGeometry().getType() !== ol.geom.GeometryType.MULTI_POLYGON;
-      if (validGeom && (options.variables.length === 1 || options.variables.length === data.length) && styleOptions.type !== M.style.chart.types.BAR) {
+      // let geomTypes = Object.keys(ol.geom.GeometryType).map(k => ol.geom.GeometryType[k]);
+      // let validGeom = feature.getGeometry() != null && geomTypes.includes(feature.getGeometry().getType()) && feature.getGeometry().getType() !== ol.geom.GeometryType.MULTI_POLYGON;
+      if ((options.variables.length === 1 || options.variables.length === data.length) && styleOptions.type !== M.style.chart.types.BAR) {
         let acumSum = 0;
         let sum = styleOptions.data.reduce((tot, curr) => tot + curr);
         styles = styles.concat(styleOptions.data.map((dataValue, i) => {

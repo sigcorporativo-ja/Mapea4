@@ -35,7 +35,7 @@
                   <span data-layer-name="{{id}}" class="g-cartografia-cancelar m-layerswitcher-remove"></span>
                 </div>
                 <div class="legend">
-                  <img data-layer-name="{{id}}" src="{{legend}}"></img>
+                  <img data-layer-name="{{id}}" src="{{legend}}" {{#if isIcon}} width="32px" height="32px"{{/if}}></img>
                 </div>
               </li>
             {{/each}}
