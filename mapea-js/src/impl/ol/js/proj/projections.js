@@ -5,7 +5,7 @@ goog.require('ol.proj.Projection');
 goog.require('ol.proj.Units');
 
 
-(function (window) {
+(function(window) {
   // EPSG:25830
   proj4.defs("EPSG:25830", "+proj=utm +zone=30 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs");
   var prj25830 = new ol.proj.Projection({
@@ -75,4 +75,8 @@ goog.require('ol.proj.Units');
   ol.proj.projections.add('urn:ogc:def:crs:EPSG::32628', prj32628);
   ol.proj.projections.add('http://www.opengis.net/gml/srs/epsg.xml#32628', prj32628);
   ol.proj.addProjection(prj32628);
+
+  //EPSG:4326
+  proj4.defs("urn:ogc:def:crs:EPSG::4326", "+proj=longlat +datum=WGS84 +no_defs");
+  proj4.defs("urn:ogc:def:crs:OGC:1.3:CRS84", "+proj=longlat +datum=WGS84 +no_defs");
 })(window || {});

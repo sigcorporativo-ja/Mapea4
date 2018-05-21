@@ -107,6 +107,7 @@ goog.provide('M.Style');
    * @api stable
    */
   M.Style.prototype.set = function(property, value) {
+    let oldValue = this.get(property);
     M.Style.setValue_(this.options_, property, value);
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.getImpl().updateFacadeOptions(this.options_);
@@ -114,6 +115,7 @@ goog.provide('M.Style');
     if (!M.utils.isNullOrEmpty(this.feature_)) {
       this.applyToFeature(this.feature_);
     }
+    this.fire(M.evt.CHANGE, [property, oldValue, value]);
     this.refresh();
     return this;
   };
@@ -157,11 +159,32 @@ goog.provide('M.Style');
    * @return {String} data url to canvas
    * @api stable
    */
-  M.Style.prototype.refresh = function() {
+  M.Style.prototype.refresh = function(layer = null) {
+    if (!M.utils.isNullOrEmpty(layer)) {
+      this.layer_ = layer;
+    }
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.apply(this.layer_);
       this.updateCanvas();
+      if (!M.utils.isNullOrEmpty(this.layer_.getImpl().getMap())) {
+        let layerswitcher = this.layer_.getImpl().getMap().getControls('layerswitcher')[0];
+        if (!M.utils.isNullOrEmpty(layerswitcher)) {
+          layerswitcher.render();
+        }
+      }
     }
+  };
+
+  /**
+   * This functions gets the options style.
+   *
+   * @function
+   * @public
+   * @return {object}
+   * @api stable
+   */
+  M.Style.prototype.getOptions = function() {
+    return this.options_;
   };
 
   /**
@@ -173,6 +196,7 @@ goog.provide('M.Style');
    */
   M.Style.prototype.toImage = function() {
     let styleImgB64;
+
     if (M.utils.isNullOrEmpty(this.updateCanvasPromise_)) {
       if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
         let image = new Image();

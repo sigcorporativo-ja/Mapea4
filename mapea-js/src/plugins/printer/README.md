@@ -10,26 +10,8 @@ plantilla necesite. Las plantillas 'imagen apaisada' e 'imagen cuadrada' no nece
 - css: [https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css](https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css)
 
 Configuración por defecto sin parámetros:
-```javascript
-mapajs.addPlugin(new M.plugin.Printer());
 ```
-Establecimiento de parámetros y valores seleccionados por defecto en los selectores:
-```javascript
-mapajs.addPlugin(new M.plugin.Printer({
-  "params": {
-    "pages": {
-      "creditos": "Impresión generada a través de Mapea"
-    },
-    "layout": {
-      "outputFilename": "mapea_${yyyy-MM-dd_hhmmss}"
-    },
-  },
-  'options': {
-      'layout': 'imagen apaisada',
-      'format': 'png',
-      'dpi': '127'
-    } 
-}));
+mapajs.addPlugin(new M.plugin.Printer());
 ```
 
 ## Ejemplo funcional
@@ -39,12 +21,4 @@ mapajs.addPlugin(new M.plugin.Printer({
 ## Observaciones  
 Los json que Mapea envía al servidor Geoprint deben cumplir con las siguientes condiciones:  
 * Los colores se indican en formato hexadecimal de seis dígitos, sin dígito para transparencia.
-* No contener atributos de estilo vacíos.  
-
-## Tabla de compatibilidad de versiones   
-En caso de utilizar un core de Mapea con número de versión explícito, debe cumplirse la siguiente relación:  
-
-versión plugin | versión Mapea | 
---- | --- |
-1.0.0 | <= 4.1.0 
-1.1.0 | >= 4.2.0
+* No contener atributos de estilo vacíos.
