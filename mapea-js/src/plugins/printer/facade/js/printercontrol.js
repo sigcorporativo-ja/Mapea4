@@ -447,7 +447,7 @@ goog.require('goog.style');
    */
   M.control.Printer.prototype.encodeLayers = function () {
     var layers = this.map_.getLayers().filter(function (layer) {
-      return ((layer.isVisible() === true) && (layer.inRange() === true));
+      return ((layer.isVisible() === true) && (layer.inRange() === true) && layer.name !== "cluster_cover");
     });
     var numLayersToProc = layers.length;
 

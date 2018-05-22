@@ -60,6 +60,16 @@ goog.require('M.exception');
             this.name = M.config.predefinedWMC.names[predefinedIdx];
          }
       }
+
+      /**
+       * 'loaded' This property indicates if the layers is loaded and all its layers.
+       * @type {bool}
+       * @private
+       * @api stable
+       */
+      this.loaded_ = false;
+
+      this.once(M.evt.LOAD, ()=> this.loaded_ = true);
    });
    goog.inherits(M.layer.WMC, M.Layer);
 
@@ -192,5 +202,25 @@ goog.require('M.exception');
       }
 
       return equals;
+   };
+
+   /**
+    * This function returns if the layer is loaded
+    *
+    * @function
+    * @api stable
+    */
+   M.layer.WMC.prototype.isLoaded = function () {
+      return this.loaded_;
+   };
+
+   /**
+    * This function returns if the layer is loaded
+    *
+    * @function
+    * @api stable
+    */
+   M.layer.WMC.prototype.setLoaded = function (loaded) {
+      this.loaded_ = loaded;
    };
 })();

@@ -346,13 +346,14 @@ goog.provide('P.impl.control.Printer');
 
         if (featureStyle instanceof Array) {
           //JGL20180118: prioridad al estilo que tiene SRC
-          if (featureStyle.length>1){
-             featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage()) && featureStyle[1].getImage().getSrc) ? 
-                          featureStyle[1] : featureStyle[0];
-          }else{
-            featureStyle = featureStyle[0]; 
+          if (featureStyle.length > 1) {
+            featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage()) && featureStyle[1].getImage().getSrc) ?
+              featureStyle[1] : featureStyle[0];
           }
-          
+          else {
+            featureStyle = featureStyle[0];
+          }
+
         }
 
         if (!M.utils.isNullOrEmpty(featureStyle)) {
@@ -365,7 +366,7 @@ goog.provide('P.impl.control.Printer');
           }
           var stroke = M.utils.isNullOrEmpty(image) ? featureStyle.getStroke() : (image.getStroke && image.getStroke());
           var fill = M.utils.isNullOrEmpty(image) ? featureStyle.getFill() : (image.getFill && image.getFill());
-          
+
           //JGL20180118: fillOpacity=1 por defecto
           var style = {
             "fillColor": M.utils.isNullOrEmpty(fill) ? "#000000" : M.utils.rgbaToHex(fill.getColor()),
