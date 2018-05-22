@@ -104,7 +104,7 @@ div.search-panel > input.m-input-search {
 
 @media only screen and (min-width: 769px) {
    div.search-panel > input.m-input-search {
-      /*min-width: 278px;*/
+      min-width: 278px;
    }
 }
 
@@ -396,7 +396,7 @@ width: calc(100vw - 20px);
    right: -40px;
    background-color: #a15bd7;
    color: #fff;
-   /*z-index: 999999;*/
+   z-index: 999999;
    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
 }
 

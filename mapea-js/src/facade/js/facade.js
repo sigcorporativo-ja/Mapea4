@@ -56,18 +56,4 @@ goog.require('M.Object');
     this.impl_ = impl;
   };
 
-  /**
-   * This function destroy this object and
-   * its implementation
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.facade.Base.prototype.destroy = function() {
-    if (!M.utils.isNullOrEmpty(this.impl_) && M.utils.isFunction(this.impl_.destroy)) {
-      this.impl_.destroy();
-    }
-  };
-
 })();

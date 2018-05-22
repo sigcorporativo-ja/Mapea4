@@ -104,7 +104,7 @@ div.search-panel > input.m-input-search {
 
 @media only screen and (min-width: 769px) {
    div.search-panel > input.m-input-search {
-      /*min-width: 278px;*/
+      min-width: 278px;
    }
 }
 
@@ -399,7 +399,7 @@ width: calc(100vw - 20px);
 }
 
 .m-areas > div.m-area > div.m-panel.m-geosearch > button.m-panel-btn, .m-areas > div.m-area > div.m-panel.m-searchstreetgeosearch > button.m-panel-btn, .m-areas > div.m-area > div.m-panel.m-searchstreet > button.m-panel-btn {
-   position: static;
+   position: absolute;
    right: -40px;
    background-color: #a15bd7;
    color: #fff;

@@ -92,7 +92,6 @@ goog.require('ol.geom.convexhull');
    */
   M.impl.style.Cluster.prototype.applyToLayer = function(layer, map) {
     this.layer_ = layer;
-    this.options_ = this.updateLastRange_();
     if (!M.utils.isNullOrEmpty(this.selectClusterInteraction_)) {
       this.selectClusterInteraction_.clear();
     }
@@ -133,15 +132,11 @@ goog.require('ol.geom.convexhull');
       this.clusterLayer_.set('animationDuration', undefined);
     }
     this.clusterLayer_.setZIndex(99999);
-    let ol3Layer = this.layer_.getImpl().getOL3Layer();
-    if (!(ol3Layer instanceof M.impl.layer.AnimatedCluster)) {
-      this.oldOLLayer_ = ol3Layer;
-    }
+    this.oldOLLayer_ = this.layer_.getImpl().getOL3Layer();
     this.layer_.getImpl().setOL3Layer(this.clusterLayer_);
 
     if (M.utils.isNullOrEmpty(this.options_.ranges)) {
       this.options_.ranges = this.getDefaultRanges_();
-      // this.options_.label.color = "#fff";
     }
 
     if (this.options_.hoverInteraction !== false) {
@@ -164,42 +159,11 @@ goog.require('ol.geom.convexhull');
   M.impl.style.Cluster.prototype.setRanges = function(newRanges) {
     if (M.utils.isNullOrEmpty(newRanges)) {
       this.options_.ranges = this.getDefaultRanges_();
-      // this.options_.label.color = "#fff";
     }
     else {
       this.options_.ranges = newRanges;
     }
   };
-
-  /**
-   * This function add the max limit to the last range of cluster options if not exists
-   *
-   * @function
-   * @public
-   * @return {object}
-   * @api stable
-   */
-  M.impl.style.Cluster.prototype.updateLastRange_ = function() {
-    let cloneOptions = M.utils.extends({}, this.options_);
-    if (!M.utils.isNullOrEmpty(this.options_) && !M.utils.isNullOrEmpty(this.options_["ranges"])) {
-      let ranges = cloneOptions["ranges"];
-      if (ranges.length > 0) {
-        ranges = ranges.sort((range, range2) => {
-          let min = range["min"];
-          let min2 = range2["min"];
-          return min - min2;
-        });
-        let lastRange = ranges.pop();
-        if (M.utils.isNullOrEmpty(lastRange["max"])) {
-          let numFeatures = this.layer_.getFeatures().length;
-          lastRange["max"] = numFeatures;
-        }
-        cloneOptions["ranges"].push(lastRange);
-      }
-    }
-    return cloneOptions;
-  };
-
 
   /**
    * This function set a specified range
@@ -446,7 +410,6 @@ goog.require('ol.geom.convexhull');
       max: numFeatures + 1,
       style: new M.style.Point(M.style.Cluster.RANGE_3_DEFAULT)
     }];
-    this.options_.ranges = ranges;
     return ranges;
   };
   /**
@@ -485,14 +448,12 @@ goog.require('ol.geom.convexhull');
       this.layer_.redraw();
     }
     else {
-      if (!M.utils.isNullOrEmpty(this.layer_)) {
-        this.layer_.un(M.evt.LOAD, this.clusterize_, this);
-      }
+      this.layer_.un(M.evt.LOAD, this.clusterize_, this);
     }
   };
 
   /**
-   * TODO
+   *
    */
   M.impl.style.Cluster.prototype.clearConvexHull = function() {
     if (this.convexHullLayer_ !== null) {
@@ -552,6 +513,5 @@ goog.require('ol.geom.convexhull');
       }
     }
   };
-
 
 })();

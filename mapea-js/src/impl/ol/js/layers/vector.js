@@ -43,8 +43,6 @@ goog.require('M.impl.renderutils');
     /*TODO*/
     this.load_ = false;
 
-    this.loaded_ = false;
-
     // [WARN]
     //applyOLLayerSetStyleHook();
 
@@ -69,10 +67,10 @@ goog.require('M.impl.renderutils');
 
     this.setVisible(this.visibility);
 
-    // if (this.zIndex_ !== null) {
-    //   this.setZIndex(this.zIndex_);
-    // }
-    // this.setZIndex(999999);
+    if (this.zIndex_ !== null) {
+      this.setZIndex(this.zIndex_);
+    }
+    this.setZIndex(999999);
 
     let olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
@@ -88,8 +86,6 @@ goog.require('M.impl.renderutils');
       this.ol3Layer.setSource(new ol.source.Vector());
     }
     this.redraw();
-    this.loaded_ = true;
-    this.fire(M.evt.LOAD, [this.features_]);
   };
 
   /**
@@ -142,11 +138,11 @@ goog.require('M.impl.renderutils');
    */
   M.impl.layer.Vector.prototype.updateLayer_ = function() {
     let style = this.facadeVector_.getStyle();
-    if (!M.utils.isNullOrEmpty(style)) {
-      if (style instanceof(M.style.Simple)) {
-        this.facadeVector_.setStyle(style);
-      }
-      else if (style instanceof M.style.Cluster) {
+    if (style instanceof(M.style.Simple)) {
+      this.facadeVector_.setStyle(style);
+    }
+    else {
+      if (style instanceof M.style.Cluster) {
         let cluster = this.facadeVector_.getStyle();
         cluster.unapply(this.facadeVector_);
         cluster.getOldStyle().apply(this.facadeVector_);
@@ -338,7 +334,7 @@ goog.require('M.impl.renderutils');
    * @api stable
    */
   M.impl.layer.Vector.prototype.isLoaded = function() {
-    return this.loaded_;
+    return true;
   };
 
   /**

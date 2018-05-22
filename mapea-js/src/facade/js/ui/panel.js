@@ -180,9 +180,7 @@ goog.require('M.facade.Base');
    * @api stable
    */
   M.ui.Panel.prototype.destroy = function () {
-    if(this._element != null) {
-      this._areaContainer.removeChild(this._element);
-    }
+    this._areaContainer.removeChild(this._element);
     this._controlsContainer = null;
   };
 

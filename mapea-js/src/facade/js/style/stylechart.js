@@ -151,10 +151,5 @@ goog.require('M.style.chart.Variable');
     offsetY: 0,
     animationStep: 1
   };
-  /**
-   * TODO
-   */
-  Object.defineProperty(M.style.Chart.prototype, "ORDER", {
-    value: 1
-  });
+
 })();

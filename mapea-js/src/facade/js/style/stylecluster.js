@@ -1,5 +1,5 @@
 goog.provide('M.style.Cluster');
-goog.require('M.style.Composite');
+goog.require('M.Style');
 /**
  * @namespace M.style.Cluster
  */
@@ -30,23 +30,17 @@ goog.require('M.style.Composite');
     // calls the super constructor
     goog.base(this, options, impl);
   });
-  goog.inherits(M.style.Cluster, M.style.Composite);
+  goog.inherits(M.style.Cluster, M.Style);
 
   /**
-   * @inheritDoc
+   * This function unapply the style to specified layer
+   * @function
+   * @public
+   * @param {M.layer.Vector} layer layer to unapply his style
+   * @api stable
    */
-  M.style.Cluster.prototype.unapplySoft = function(layer) {
+  M.style.Cluster.prototype.unapply = function(layer) {
     this.getImpl().unapply();
-  };
-
-  /**
-   * @inheritDoc
-   */
-  M.style.Cluster.prototype.add = function(styles) {
-    if (!M.utils.isNullOrEmpty(this.layer_)) {
-      this.unapplySoft(this.layer_);
-    }
-    goog.base(this, 'add', styles);
   };
 
   /**
@@ -57,10 +51,15 @@ goog.require('M.style.Composite');
    * @param {M.layer.Vector} layer - Layer to apply the style
    * @api stable
    */
-  M.style.Cluster.prototype.applyInternal_ = function(layer) {
-    this.layer_ = layer;
-    this.getImpl().applyToLayer(layer);
-    this.updateCanvas();
+  M.style.Cluster.prototype.apply = function(layer) {
+    let newStyle = layer.getStyle();
+    if (!(newStyle instanceof M.style.Cluster)) {
+      this.oldStyle_ = newStyle;
+    }
+    else {
+      this.oldStyle_ = newStyle.getOldStyle();
+    }
+    goog.base(this, 'apply', layer);
   };
 
   /**
@@ -173,8 +172,7 @@ goog.require('M.style.Composite');
   /**
    * This function returns data url to canvas
    *
-   * @function
-   * @protected
+   * @function   * @protected
    * @return {String} data url to canvas
    */
   M.style.Cluster.prototype.toImage = function() {
@@ -311,14 +309,4 @@ goog.require('M.style.Composite');
     },
     radius: 25
   };
-
-  /**
-   * This constant defines the order of style.
-   * @constant
-   * @public
-   * @api stable
-   */
-  Object.defineProperty(M.style.Cluster.prototype, "ORDER", {
-    value: 4
-  });
 })();

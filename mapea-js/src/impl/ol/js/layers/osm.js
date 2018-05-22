@@ -234,7 +234,7 @@ goog.require('ol.source.OSM');
         if (data instanceof ol.control.Attribution) {
           this.map.getImpl().getMapImpl().removeControl(data);
         }
-      }, this);
+      });
     }
     this.map = null;
   };
