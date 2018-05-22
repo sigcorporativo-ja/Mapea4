@@ -20,13 +20,27 @@ goog.require('M.style.Feature');
   /**
    * @inheritDoc
    */
-  M.style.Simple.prototype.apply = function(layer, applyToFeature) {
+  M.style.Simple.prototype.apply = function(layer, applyToFeature, isNullStyle) {
     this.layer_ = layer;
     this.getImpl().applyToLayer(layer);
     if (applyToFeature === true) {
-      layer.getFeatures().forEach(feature => feature.setStyle(this.clone()));
+      if (isNullStyle) {
+        layer.getFeatures().forEach(feature => feature.setStyle(null));
+      }
+      else {
+        layer.getFeatures().forEach(feature => feature.setStyle(this.clone()));
+      }
     }
     this.updateCanvas();
   };
 
+  /**
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
+   */
+  Object.defineProperty(M.style.Simple.prototype, "ORDER", {
+    value: 1
+  });
 })();

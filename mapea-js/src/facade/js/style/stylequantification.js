@@ -13,10 +13,10 @@ goog.provide('M.style.quantification');
    * @api stable
    */
 
-  M.style.quantification.JENKS = function(n_classes_param) {
+  M.style.quantification.JENKS = function jenks(n_classes_param) {
     n_classes_param = n_classes_param || M.style.quantification.DEFAULT_CLASES_JENKS;
 
-    return function jenks(data, n_classes = n_classes_param) {
+    const jenksFn = function jenks(data, n_classes = n_classes_param) {
       let uniqueData = M.style.quantification.uniqueArray_(data);
       n_classes = uniqueData.length <= n_classes ? uniqueData.length - 1 : n_classes;
       // sort data in numerical order, since this is expected
@@ -36,7 +36,14 @@ goog.provide('M.style.quantification');
       let break_points = breaks.slice(1, breaks.length);
       return break_points;
     };
+
+    Object.defineProperty(jenksFn, "name", {
+      value: "jenks"
+    });
+
+    return jenksFn;
   };
+
 
   /** This function returns a quantile quantification function
    * @function
@@ -45,10 +52,9 @@ goog.provide('M.style.quantification');
    * @return {function}
    * @api stable
    */
-
   M.style.quantification.QUANTILE = function(n_classes_param) {
     n_classes_param = n_classes_param || M.style.quantification.DEFAULT_CLASES_QUANTILE;
-    return function quantile(data, n_classes = n_classes_param) {
+    const quantileFn = function quantile(data, n_classes = n_classes_param) {
       let uniqueData = M.style.quantification.uniqueArray_(data);
       n_classes = uniqueData.length <= n_classes ? uniqueData.length - 1 : n_classes;
       let numData = data.length;
@@ -69,7 +75,17 @@ goog.provide('M.style.quantification');
       breaks.push(max);
       return breaks;
     };
+
+    Object.defineProperty(quantileFn, "name", {
+      value: "quantile"
+    });
+
+    return quantileFn;
   };
+
+  Object.defineProperty(M.style.quantification.QUANTILE, "name", {
+    value: "quantile"
+  });
 
   /**
    *  Compute the matrices required for Jenks breaks. These matrices
