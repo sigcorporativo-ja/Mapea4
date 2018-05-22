@@ -3,7 +3,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>es.juntadeandalucia.mapea</groupId>
    <artifactId>mapea-parent</artifactId>
-   <version>4.2.0</version>
+   <version>4.3.0</version>
    <packaging>pom</packaging>
    <name>Mapea 4 PARENT</name>
    <description>Herramienta para desarrollo de mapas interactivos de forma sencilla</description>
