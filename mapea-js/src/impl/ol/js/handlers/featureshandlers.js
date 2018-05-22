@@ -63,9 +63,6 @@ goog.require('M.impl.Layer');
           }
           else {
             let styleCluster = layer.getStyle();
-            if (!(styleCluster instanceof M.style.Cluster)) {
-              styleCluster = styleCluster.getStyles().find(style => style instanceof M.style.Cluster);
-            }
             features.push(new M.ClusteredFeature(clusteredFeatures, {
               "ranges": styleCluster.getRanges(),
               "hoverInteraction": styleCluster.getOptions()["hoverInteraction"],

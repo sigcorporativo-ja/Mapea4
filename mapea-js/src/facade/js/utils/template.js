@@ -29,12 +29,12 @@ goog.require('M.exception');
     * @api stable
     */
    M.template.compile = function(templatePath, options) {
-      let templateVars = {};
+      var templateVars;
       var parseToHtml;
       var jsonp;
       var scope;
       if (!M.utils.isUndefined(options)) {
-         templateVars = M.utils.extends(templateVars, options.vars);
+         templateVars = options.vars;
          parseToHtml = options.parseToHtml;
          jsonp = options.jsonp;
          scope = options.scope;

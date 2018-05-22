@@ -161,14 +161,10 @@ goog.require('M.exception');
    */
   M.layer.GeoJSON.prototype.setSource = function(source) {
     this.source = source;
-    this.getImpl().refresh(source);
+    this.getImpl().setSource(source);
   };
 
   M.layer.GeoJSON.prototype.setStyle = function(style, applyToFeature = false) {
-    let isNullStyle = false;
-    if (style === null) {
-      isNullStyle = true;
-    }
     const applyStyleFn = function() {
       if (M.utils.isNullOrEmpty(style)) {
         style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
@@ -179,16 +175,9 @@ goog.require('M.exception');
         if (!M.utils.isNullOrEmpty(this.style_)) {
           this.style_.unapply(this);
         }
-        style.apply(this, applyToFeature, isNullStyle);
+        style.apply(this, applyToFeature);
         this.style_ = style;
       }
-      if (!M.utils.isNullOrEmpty(this.getImpl().getMap())) {
-        let layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
-        if (!M.utils.isNullOrEmpty(layerswitcher)) {
-          layerswitcher.render();
-        }
-      }
-      this.fire(M.evt.CHANGE_STYLE, [style, this]);
     };
 
     if (this.getImpl().isLoaded()) {

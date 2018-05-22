@@ -51,9 +51,6 @@ goog.require('M.exception');
          // gets the options
          layerObj.options = getOptions(userParam);
 
-         // gets transparent
-         layerObj.transparent = getTransparent(userParam);
-
          return layerObj;
       });
 
@@ -203,46 +200,5 @@ goog.require('M.exception');
          M.exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
       }
       return options;
-   };
-
-   /**
-    * Parses the parameter in order to get the transparence
-    * @private
-    * @function
-    */
-   var getTransparent = function(parameter) {
-      var transparent, params;
-      if (M.utils.isString(parameter)) {
-         // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>
-         if (/^WMS\*[^\*]+\*[^\*]+\*[^\*]+\*(true|false)/i.test(parameter)) {
-            params = parameter.split(/\*/);
-            transparent = params[4].trim();
-         }
-         // <WMS_FULL>*<URL>(*<TILED>)?
-         else if (/^WMS_FULL\*[^\*]+(\*(true|false))?/i.test(parameter)) {
-            params = parameter.split(/\*/);
-            transparent = true;
-         }
-         // <URL>*<NAME>*<TITLE>*<TRANSPARENCE>
-         else if (/^[^\*]+\*[^\*]+\*[^\*]+\*(true|false)/i.test(parameter)) {
-            params = parameter.split(/\*/);
-            transparent = params[3].trim();
-         }
-         // <URL>*<NAME>*<TRANSPARENCE>
-         else if (/^[^\*]+\*[^\*]+\*(true|false)/i.test(parameter)) {
-            params = parameter.split(/\*/);
-            transparent = params[2].trim();
-         }
-      }
-      else if (M.utils.isObject(parameter)) {
-         transparent = M.utils.normalize(parameter.transparent);
-      }
-      else {
-         M.exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
-      }
-      if (!M.utils.isNullOrEmpty(transparent)) {
-         transparent = /^1|(true)$/i.test(transparent);
-      }
-      return transparent;
    };
 })();

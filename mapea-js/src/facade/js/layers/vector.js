@@ -41,23 +41,6 @@ goog.require('M.exception');
   goog.inherits(M.layer.Vector, M.Layer);
 
   /**
-   * 'type' This property indicates if
-   * the layer was selected
-   */
-  Object.defineProperty(M.layer.Vector.prototype, "type", {
-    get: function() {
-      return M.layer.type.Vector;
-    },
-    // defining new type is not allowed
-    set: function(newType) {
-      if (!M.utils.isUndefined(newType) &&
-        !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.Vector)) {
-        M.exception('El tipo de capa debe ser \''.concat(M.layer.type.Vector).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
-      }
-    }
-  });
-
-  /**
    * This function add features to layer
    *
    * @function
@@ -143,7 +126,6 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.refresh = function() {
     this.getImpl().refresh(true);
-    this.redraw();
   };
 
   /**
@@ -161,11 +143,9 @@ goog.require('M.exception');
         style.refresh();
       }
       else {
-        let oldStyle = style.getOldStyle();
-        if (!M.utils.isNullOrEmpty(oldStyle)) {
-          oldStyle.refresh(this);
+        if (style.getOldStyle() instanceof M.Style) {
+          style.getOldStyle().refresh();
         }
-
       }
     }
   };
@@ -183,18 +163,11 @@ goog.require('M.exception');
       this.filter_ = filter;
       let style = this.getStyle();
       if (style instanceof M.style.Cluster) {
-        // deactivate change cluster event
-        style.getImpl().deactivateChangeEvent();
-      }
-      this.redraw();
-      if (style instanceof M.style.Cluster) {
-        // activate change cluster event
-        style.getImpl().activateChangeEvent();
-
-        // Se refresca el estilo para actualizar los cambios del filtro
-        // ya que al haber activado el evento change de source cluster tras aplicar el filter
-        // no se actualiza automaticamente
+        style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
         style.refresh();
+      }
+      else {
+        this.redraw();
       }
     }
     else {
@@ -256,54 +229,17 @@ goog.require('M.exception');
   };
 
   /**
-   * This function sets the style to layer
-   *
-   * @function
-   * @public
-   * @param {M.Style}
-   * @param {bool}
+   * TODO
    */
   M.layer.Vector.prototype.setStyle = function(style, applyToFeature = false) {
-    this.oldStyle_ = this.style_;
-    let isNullStyle = false;
-    if (style === null) {
-      isNullStyle = true;
-    }
-    const applyStyleFn = (style) => {
-      const applyStyle = () => {
-        if (M.utils.isNullOrEmpty(style)) {
-          if (this instanceof M.layer.WFS) {
-            style = M.utils.generateStyleLayer(M.layer.WFS.DEFAULT_OPTIONS_STYLE, this);
-          }
-          else {
-            style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
-          }
-        }
-        let isCluster = style instanceof M.style.Cluster;
-        let isPoint = [M.geom.geojson.type.POINT, M.geom.geojson.type.MULTI_POINT].includes(M.utils.getGeometryType(this));
-        if (style instanceof M.Style && (!isCluster || isPoint)) {
-          if (!M.utils.isNullOrEmpty(this.oldStyle_)) {
-            this.oldStyle_.unapply(this);
-          }
-          style.apply(this, applyToFeature, isNullStyle);
-          this.style_ = style;
-          this.fire(M.evt.CHANGE_STYLE, [style, this]);
-        }
-        if (!M.utils.isNullOrEmpty(this.getImpl().getMap())) {
-          let layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
-          if (!M.utils.isNullOrEmpty(layerswitcher)) {
-            layerswitcher.render();
-          }
-        }
-      };
-      return applyStyle;
-    };
-
-    if (this.getImpl().isLoaded()) {
-      applyStyleFn(style).bind(this)();
-    }
-    else {
-      this.once(M.evt.LOAD, applyStyleFn(style), this);
+    let isCluster = style instanceof M.style.Cluster;
+    let isPoint = [M.geom.geojson.type.POINT, M.geom.geojson.type.MULTI_POINT].includes(M.utils.getGeometryType(this));
+    if (style instanceof M.Style && (!isCluster || isPoint)) {
+      if (!M.utils.isNullOrEmpty(this.style_)) {
+        this.style_.unapply(this);
+      }
+      style.apply(this, applyToFeature);
+      this.style_ = style;
     }
   };
 
@@ -315,18 +251,6 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.getStyle = function() {
     return this.style_;
-  };
-
-  /**
-   * This function remove the style layer and style of all features
-   *
-   * @function
-   * @public
-   * @api stable
-   */
-  M.layer.Vector.prototype.clearStyle = function() {
-    this.setStyle(null);
-    this.getFeatures().forEach(feature => feature.clearStyle());
   };
 
   /**

@@ -17,7 +17,6 @@ goog.require('M.exception');
    /**
     * 72 (A sensible default)
     * @const {Number}
-    * @api stable
     */
    M.DOTS_PER_INCH = 72;
 

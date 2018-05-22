@@ -208,15 +208,6 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.CHANGE_STYLE = 'change:style';
-
-  /**
-   * Event type
-   * @public
-   * @type {string}
-   * @api stable
-   * @expose
-   */
   M.evt.CLICK = 'click';
 
   /**
@@ -256,7 +247,6 @@ goog.provide('M.evt.Listener');
       M.evt.CHANGE,
       M.evt.CHANGE_WMC,
       M.evt.CHANGE_PROJ,
-      M.evt.CHANGE_STYLE,
       M.evt.CLICK,
       M.evt.MOVE
    ];

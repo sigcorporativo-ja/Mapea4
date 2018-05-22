@@ -252,16 +252,4 @@ goog.provide('M.impl.Feature');
       return M.impl.Feature.olFeature2Facade(olCentroid);
     }
   };
-
-  /**
-   * This function clear the style of feature
-   *
-   * @public
-   * @function
-   * @return {Array<number>}
-   * @api stable
-   */
-  M.impl.Feature.prototype.clearStyle = function() {
-    this.olFeature_.setStyle(null);
-  };
 })();

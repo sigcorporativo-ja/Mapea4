@@ -24,3 +24,11 @@ mapajs.addPlugin(new M.plugin.Geosearchbylocation({
 ## Ejemplo funcional
 
 [JSFiddle](http://jsfiddle.net/sigcJunta/hwq8at6e/)
+
+## Tabla de compatibilidad de versiones   
+En caso de utilizar un core de Mapea con número de versión explícito, debe cumplirse la siguiente relación:  
+
+versión plugin | versión Mapea | 
+--- | --- |
+1.0.0 | <= 4.0.0 
+1.1.0 | >= 4.1.0

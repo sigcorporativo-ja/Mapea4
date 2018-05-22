@@ -2,7 +2,7 @@ goog.provide('M.layer.type');
 
 goog.require('M.layer');
 
-(function() {
+(function () {
   'use strict';
 
   /**
@@ -87,21 +87,12 @@ goog.require('M.layer');
   M.layer.type.GeoJSON = 'GeoJSON';
 
   /**
-   * Vector type
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.layer.type.Vector = 'Vector';
-
-  /**
    * Parses the type
    * @private
    * @function
    * @param {string} rawType the type to be parsed
    */
-  M.layer.type.parse = function(rawType) {
+  M.layer.type.parse = function (rawType) {
     var type = M.utils.normalize(rawType, true);
     if (type === 'WMS_FULL') {
       type = M.layer.type.WMS;
@@ -110,7 +101,7 @@ goog.require('M.layer');
       type = M.layer.type.WFS;
     }
     else {
-      type = Object.keys(M.layer.type).find(function(knowType) {
+      type = Object.keys(M.layer.type).find(function (knowType) {
         let knowTypeVal = M.layer.type[knowType];
         return (M.utils.isString(knowTypeVal) && (M.utils.normalize(knowTypeVal, true) === type));
       });
@@ -124,7 +115,7 @@ goog.require('M.layer');
    * @function
    * @param {string} rawType the type to be parsed
    */
-  M.layer.type.know = function(type) {
+  M.layer.type.know = function (type) {
     var knowTypes = [M.layer.type.WMC,
          M.layer.type.KML,
          M.layer.type.WMS,

@@ -46,8 +46,6 @@ goog.require('M.style.Cluster');
 goog.require('M.style.Choropleth');
 goog.require('M.style.Category');
 goog.require('M.style.Proportional');
-goog.require('M.style.Heatmap');
-
 (function() {
   /**
    * @classdesc
@@ -206,7 +204,7 @@ goog.require('M.style.Heatmap');
       'displayInLayerSwitcher': false
     });
 
-    this.drawLayer_.setStyle(new M.style.Point(M.Map.DRAWLAYER_STYLE));
+    this.drawLayer_.setStyle(new M.style.Point(M.Map.prototype.DRAWLAYER_STYLE));
 
     this.drawLayer_.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999);
     this.addLayers(this.drawLayer_);
@@ -566,35 +564,16 @@ goog.require('M.style.Heatmap');
       /* checks if it should create the WMC control
          to select WMC */
       var addedWmcLayers = this.getWMC();
-      let wmcSelected = addedWmcLayers.filter(wmc => wmc.selected === true)[0];
-      if (wmcSelected == null) {
-        addedWmcLayers[0].select();
-      }
       if (addedWmcLayers.length > 1) {
-        this.removeControls("wmcselector");
         this.addControls(new M.control.WMCSelector());
+      }
+
+      // select the first WMC
+      if (addedWmcLayers.length > 0) {
+        addedWmcLayers[0].select();
       }
     }
     return this;
-  };
-
-  // /**
-  //  * TODO
-  //  * @function
-  //  * @public
-  //  */
-  M.Map.prototype.refreshWMCSelectorControl = function() {
-    this.removeControls("wmcselector");
-    if (this.getWMC().length === 1) {
-      this.getWMC()[0].select();
-    }
-    else if (this.getWMC().length > 1) {
-      this.addControls(new M.control.WMCSelector());
-      let wmcSelected = this.getWMC().filter(wmc => wmc.selected === true)[0];
-      if (wmcSelected == null) {
-        this.getWMC()[0].select();
-      }
-    }
   };
 
   /**
@@ -1486,11 +1465,10 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    * @param {String|Array<String>|Array<Number>|Mx.Extent} bboxParam the bbox
-   * @param {Object} vendorOpts vendor options
    * @returns {M.Map}
    * @api stable
    */
-  M.Map.prototype.setBbox = function(bboxParam, vendorOpts) {
+  M.Map.prototype.setBbox = function(bboxParam) {
     // checks if the param is null or empty
     if (M.utils.isNullOrEmpty(bboxParam)) {
       M.exception('No ha especificado ningún bbox');
@@ -1504,7 +1482,7 @@ goog.require('M.style.Heatmap');
     try {
       // parses the parameter
       var bbox = M.parameter.maxExtent(bboxParam);
-      this.getImpl().setBbox(bbox, vendorOpts);
+      this.getImpl().setBbox(bbox);
     }
     catch (err) {
       M.dialog.error('El formato del parámetro bbox no es el correcto');
@@ -1958,8 +1936,6 @@ goog.require('M.style.Heatmap');
         }));
       }
     }
-
-    return this;
   };
 
   /**
@@ -2216,8 +2192,6 @@ goog.require('M.style.Heatmap');
       panel.destroy();
       this._panels.remove(panel);
     }
-
-    return this;
   };
 
   /**
@@ -2376,7 +2350,7 @@ goog.require('M.style.Heatmap');
     }
 
     if (!M.utils.isNullOrEmpty(this.popup_)) {
-      this.removePopup();
+      this.removePopup(this.popup_);
     }
     this.popup_ = popup;
     this.popup_.addTo(this, coordinate);

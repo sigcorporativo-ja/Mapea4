@@ -39,7 +39,6 @@ goog.require('ol.geometry.Cspline');
       }
       let stroke = options.stroke;
       let label = options.label;
-      // let fill = options.fill;
       let style = new M.impl.style.CentroidStyle();
       let styleStroke = new M.impl.style.CentroidStyle();
       const getValue = M.impl.style.Simple.getValue;

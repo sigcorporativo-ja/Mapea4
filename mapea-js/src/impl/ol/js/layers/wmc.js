@@ -6,7 +6,7 @@ goog.require('M.impl.Layer');
 goog.require('M.impl.format.WMC.v110');
 goog.require('M.evt.EventsManager');
 
-(function() {
+(function () {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC layer
@@ -17,7 +17,7 @@ goog.require('M.evt.EventsManager');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.WMC = (function(options) {
+  M.impl.layer.WMC = (function (options) {
     /**
      * Indicates if the layer was selected
      * @private
@@ -66,7 +66,7 @@ goog.require('M.evt.EventsManager');
    * @param {M.impl.Map} map
    * @api stable
    */
-  M.impl.layer.WMC.prototype.addTo = function(map) {
+  M.impl.layer.WMC.prototype.addTo = function (map) {
     this.map = map;
   };
 
@@ -78,20 +78,20 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.select = function() {
+  M.impl.layer.WMC.prototype.select = function () {
     if (this.selected === false) {
       var bbox = this.map.getBbox();
 
       // unselect layers
-      this.map.getWMC().forEach(function(wmcLayer) {
+      this.map.getWMC().forEach(function (wmcLayer) {
         wmcLayer.unselect();
       });
 
       this.selected = true;
 
       // loads the layers from this WMC if it is not cached
-      this.loadContextPromise = new Promise(function(success, fail) {
-        M.remote.get(this.url).then(function(response) {
+      this.loadContextPromise = new Promise(function (success, fail) {
+        M.remote.get(this.url).then(function (response) {
           var proj;
           if (this.map._defaultProj === false) {
             proj = this.map.getProjection().code;
@@ -104,7 +104,7 @@ goog.require('M.evt.EventsManager');
           success.call(this, context);
         }.bind(this));
       }.bind(this));
-      this.loadContextPromise.then(function(context) {
+      this.loadContextPromise.then(function (context) {
         // set projection with the wmc
         if (this.map._defaultProj) {
           var olproj = ol.proj.get(context.projection);
@@ -116,9 +116,7 @@ goog.require('M.evt.EventsManager');
         // load layers
         this.loadLayers(context);
         if (!M.utils.isNullOrEmpty(bbox)) {
-          this.map.setBbox(bbox, {
-            'nearest': true
-          });
+          this.map.setBbox(bbox);
         }
         this.map.fire(M.evt.CHANGE_WMC, this);
       }.bind(this));
@@ -133,7 +131,7 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.unselect = function() {
+  M.impl.layer.WMC.prototype.unselect = function () {
     if (this.selected === true) {
       this.selected = false;
 
@@ -152,28 +150,19 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.loadLayers = function(context) {
+  M.impl.layer.WMC.prototype.loadLayers = function (context) {
     this.layers = context.layers;
     this.maxExtent = context.maxExtent;
 
     this.map.addWMS(this.layers, true);
 
     // updates the z-index of the layers
-    this.layers.forEach((layer, i) => layer.setZIndex(this.getZIndex() + i));
-    this.facadeLayer_.fire(M.evt.LOAD, [this.layers]);
+    var baseLayersIdx = this.layers.length;
+    this.layers.forEach(function (layer) {
+      layer.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WMC] + baseLayersIdx);
+      baseLayersIdx++;
+    });
   };
-
-  /**
-   * This function set facade class vector
-   *
-   * @function
-   * @param {object} obj - Facade vector
-   * @api stable
-   */
-  M.impl.layer.WMC.prototype.setFacadeObj = function(obj) {
-    this.facadeLayer_ = obj;
-  };
-
 
   /**
    * This function gets the envolved extent for
@@ -183,12 +172,12 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.getMaxExtent = function() {
+  M.impl.layer.WMC.prototype.getMaxExtent = function () {
     var this_ = this;
     var olProjection = ol.proj.get(this.map.getProjection().code);
-    var promise = new Promise(function(success, fail) {
+    var promise = new Promise(function (success, fail) {
       if (M.utils.isNullOrEmpty(this_.maxExtent)) {
-        this_.loadContextPromise.then(function(context) {
+        this_.loadContextPromise.then(function (context) {
           this_.maxExtent = context.maxExtent;
           if (M.utils.isNullOrEmpty(this_.extentProj_)) {
             this_.extentProj_ = M.parameter.projection(M.config.DEFAULT_PROJ).code;
@@ -214,7 +203,7 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.getLayers = function() {
+  M.impl.layer.WMC.prototype.getLayers = function () {
     return this.layers;
   };
 
@@ -226,7 +215,7 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.destroy = function() {
+  M.impl.layer.WMC.prototype.destroy = function () {
     if (!M.utils.isNullOrEmpty(this.layers)) {
       this.map.removeLayers(this.layers);
     }
@@ -242,7 +231,7 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.equals = function(obj) {
+  M.impl.layer.WMC.prototype.equals = function (obj) {
     var equals = false;
 
     if (obj instanceof M.impl.layer.WMC) {

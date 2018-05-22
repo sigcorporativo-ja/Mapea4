@@ -47,9 +47,6 @@ goog.require('M.exception');
       // legend
       this.legend = parameters.legend;
 
-      //transparent
-      this.transparent = parameters.transparent;
-
       // options
       this.options = options;
    });
