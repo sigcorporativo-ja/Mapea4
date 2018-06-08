@@ -33,7 +33,8 @@ goog.require('M.Style');
   M.style.Composite.prototype.apply = function(layer) {
     this.layer_ = layer;
     if (!M.utils.isNullOrEmpty(layer)) {
-      this.oldStyle_ = layer.getStyle();
+      let style = layer.getStyle();
+      this.oldStyle_ = style instanceof M.style.Cluster ? style.getOldStyle() : style;
       this.updateInternal_(layer);
     }
   };
@@ -171,7 +172,8 @@ goog.require('M.Style');
     styles.forEach(style => {
       if (style instanceof M.style.Composite) {
         style.applyInternal_(layer);
-      } else if (style instanceof M.Style) {
+      }
+      else if (style instanceof M.Style) {
         style.apply(layer, true);
       }
     });
