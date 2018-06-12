@@ -292,7 +292,7 @@
      * @public
      * @api stable
      */
-    'TOOLS': 'history,measurebar,getfeatureinfo'.split(','),
+    'TOOLS': 'history,measurebar,measurelength,measureclear,measurearea,getfeatureinfo'.split(','),
 
     /**
      * TODO
