@@ -232,12 +232,12 @@ goog.require('M.impl.renderutils');
       let olFeatures = [...olSource.getFeatures()];
       olFeatures.forEach(olSource.removeFeature, olSource);
 
+      let features = this.facadeVector_.getFeatures();
+      olSource.addFeatures(features.map(M.impl.Feature.facade2OLFeature));
+
       if (style instanceof M.style.Cluster) {
         style.getImpl().activateChangeEvent();
       }
-
-      let features = this.facadeVector_.getFeatures();
-      olSource.addFeatures(features.map(M.impl.Feature.facade2OLFeature));
     }
   };
 
