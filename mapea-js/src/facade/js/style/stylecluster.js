@@ -46,7 +46,7 @@ goog.require('M.style.Composite');
     if (!M.utils.isNullOrEmpty(this.layer_)) {
       this.unapplySoft(this.layer_);
     }
-    goog.base(this, 'add', styles);
+    return goog.base(this, 'add', styles);
   };
 
   /**
