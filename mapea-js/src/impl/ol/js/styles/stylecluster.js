@@ -476,13 +476,13 @@ goog.require('ol.geom.convexhull');
   M.impl.style.Cluster.prototype.unapply = function() {
     if (!M.utils.isNullOrEmpty(this.clusterLayer_)) {
       let clusterSource = this.clusterLayer_.getSource();
-      clusterSource.getSource().un(ol.events.EventType.CHANGE, ol.source.Cluster.prototype.refresh_, clusterSource);
       this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
       this.removeCoverInteraction_();
       this.removeSelectInteraction_();
       this.clearConvexHull();
       this.layer_.getImpl().getMap().getMapImpl().getView().un('change:resolution', this.clearConvexHull, this);
       this.layer_.redraw();
+      clusterSource.getSource().un(ol.events.EventType.CHANGE, ol.source.Cluster.prototype.refresh_, clusterSource);
     }
     else {
       if (!M.utils.isNullOrEmpty(this.layer_)) {

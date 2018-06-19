@@ -155,19 +155,19 @@ goog.require('M.exception');
    */
   M.layer.Vector.prototype.redraw = function() {
     this.getImpl().redraw();
-    if (!M.utils.isNullOrEmpty(this.getStyle())) {
-      let style = this.getStyle();
-      if (!(style instanceof M.style.Cluster)) {
-        style.refresh();
-      }
-      else {
-        let oldStyle = style.getOldStyle();
-        if (!M.utils.isNullOrEmpty(oldStyle)) {
-          oldStyle.refresh(this);
-        }
-
-      }
-    }
+    // if (!M.utils.isNullOrEmpty(this.getStyle())) {
+    //   let style = this.getStyle();
+    //   if (!(style instanceof M.style.Cluster)) {
+    //     style.refresh();
+    //   }
+    //   else {
+    //     let oldStyle = style.getOldStyle();
+    //     if (!M.utils.isNullOrEmpty(oldStyle)) {
+    //       oldStyle.refresh(this);
+    //     }
+    //
+    //   }
+    // }
   };
 
   /**

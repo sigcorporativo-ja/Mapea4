@@ -218,16 +218,26 @@ goog.require('M.impl.renderutils');
   M.impl.layer.Vector.prototype.redraw = function() {
     let olLayer = this.getOL3Layer();
     if (!M.utils.isNullOrEmpty(olLayer)) {
+      let style = this.facadeVector_.getStyle();
       let olSource = olLayer.getSource();
       if (olSource instanceof ol.source.Cluster) {
         olSource = olSource.getSource();
       }
+
+      if (style instanceof M.style.Cluster) {
+        style.getImpl().deactivateChangeEvent();
+      }
+
       // remove all features from ol vector
       let olFeatures = [...olSource.getFeatures()];
       olFeatures.forEach(olSource.removeFeature, olSource);
 
       let features = this.facadeVector_.getFeatures();
       olSource.addFeatures(features.map(M.impl.Feature.facade2OLFeature));
+
+      if (style instanceof M.style.Cluster) {
+        style.getImpl().activateChangeEvent();
+      }
     }
   };
 
