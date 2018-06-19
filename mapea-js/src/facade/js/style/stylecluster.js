@@ -199,8 +199,9 @@ goog.require('M.style.Composite');
    */
   M.style.Cluster.prototype.refresh = function() {
     if (!M.utils.isNullOrEmpty(this.layer_)) {
+      let layer = this.layer_;
       this.unapply(this.layer_);
-      this.apply(this.layer_);
+      this.apply(layer);
       this.updateCanvas();
     }
   };
