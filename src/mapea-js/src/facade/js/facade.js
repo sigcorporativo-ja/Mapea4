@@ -1,8 +1,7 @@
-goog.provide('M.facade.Base');
+import Object from "./object.js";
+import Utils from "./utils/utils.js"
 
-goog.require('M.Object');
-
-(function() {
+export class Base extends Object {
   /**
    * @classdesc
    * Main facade Object. This class creates a facede
@@ -14,7 +13,12 @@ goog.require('M.Object');
    * @extends {M.Object}
    * @api stable
    */
-  M.facade.Base = (function(impl) {
+
+  constructor(impl) {
+
+    // calls the super constructor
+    super();
+
     /**
      * Implementation of this object
      * @private
@@ -22,14 +26,11 @@ goog.require('M.Object');
      */
     this.impl_ = impl;
 
-    if (!M.utils.isNullOrEmpty(this.impl_) && M.utils.isFunction(this.impl_.setFacadeObj)) {
-      this.impl_.setFacadeObj(this);
+    if (!Utils.isNullOrEmpty(this.impl_) && Utils.isFunction(this.impl_.facadeObj)) {
+      this.impl_.facadeObj = this;
     }
 
-    // calls the super constructor
-    goog.base(this);
-  });
-  goog.inherits(M.facade.Base, M.Object);
+  };
 
   /**
    * This function provides the implementation
@@ -40,7 +41,7 @@ goog.require('M.Object');
    * @returns {Object}
    * @api stable
    */
-  M.facade.Base.prototype.getImpl = function() {
+  get Impl() {
     return this.impl_;
   };
 
@@ -52,8 +53,8 @@ goog.require('M.Object');
    * @param {M.Map} impl to add the plugin
    * @api stable
    */
-  M.facade.Base.prototype.setImpl = function(impl) {
-    this.impl_ = impl;
+  set Impl(value) {
+    this.impl_ = value;
   };
 
   /**
@@ -64,8 +65,8 @@ goog.require('M.Object');
    * @function
    * @api stable
    */
-  M.facade.Base.prototype.destroy = function() {
-    if (!M.utils.isNullOrEmpty(this.impl_) && M.utils.isFunction(this.impl_.destroy)) {
+  destroy() {
+    if (!Utils.isNullOrEmpty(this.impl_) && Utils.isFunction(this.impl_.destroy)) {
       this.impl_.destroy();
     }
   };
