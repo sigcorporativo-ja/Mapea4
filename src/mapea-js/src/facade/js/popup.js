@@ -95,18 +95,17 @@ export class Popup extends Base {
   addTo(map, coordinate) {
     this.map_ = map;
     if (Utils.isNullOrEmpty(this.element_)) {
-      let this_ = this;
       Template.compile(Popup.TEMPLATE, {
         'jsonp': true,
         'vars': {
           'tabs': this.tabs_
         }
       }).then((html) => {
-        if (this_.tabs_.length > 0) {
-          this_.element_ = html;
-          this_.addEvents(html);
-          this_.impl.addTo(map, html);
-          this_.show(coordinate);
+        if (this.tabs_.length > 0) {
+          this.element_ = html;
+          this.addEvents(html);
+          this.impl.addTo(map, html);
+          this.show(coordinate);
         }
       });
     } else {
@@ -123,18 +122,17 @@ export class Popup extends Base {
    */
   update() {
     if (!Utils.isNullOrEmpty(this.map_)) {
-      let this_ = this;
       Template.compile(Popup.TEMPLATE, {
         'jsonp': true,
         'vars': {
           'tabs': this.tabs_
         }
       }).then(function (html) {
-        if (this_.tabs_.length > 0) {
-          this_.element_ = html;
-          this_.addEvents(html);
-          this_.impl.Container = html;
-          this_.show(this_.coord_);
+        if (this.tabs_.length > 0) {
+          this.element_ = html;
+          this.addEvents(html);
+          this.impl.Container = html;
+          this.show(this.coord_);
         }
       });
     }
