@@ -30,7 +30,7 @@ export class Base extends Object {
       this.impl_.facadeObj = this;
     }
 
-  };
+  }
 
   /**
    * This function provides the implementation
@@ -43,7 +43,7 @@ export class Base extends Object {
    */
   get impl() {
     return this.impl_;
-  };
+  }
 
   /**
    * This function set implementation of this control
@@ -55,7 +55,7 @@ export class Base extends Object {
    */
   set impl(value) {
     this.impl_ = value;
-  };
+  }
 
   /**
    * This function destroy this object and
@@ -71,4 +71,4 @@ export class Base extends Object {
     }
   };
 
-})();
+}
