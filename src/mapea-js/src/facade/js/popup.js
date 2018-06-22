@@ -48,7 +48,7 @@ export class Popup extends Base {
 
     let impl = new Impl(options);
 
-  };
+  }
   // goog.inherits(M.Popup, M.facade.Base);
 
   /**
@@ -59,7 +59,7 @@ export class Popup extends Base {
    */
   get tabs() {
     return this.tabs_;
-  };
+  }
 
   /**
    * TODO
@@ -70,7 +70,7 @@ export class Popup extends Base {
   removeTab(tabToRemove) {
     this.tabs_ = this.tabs_.filter(tab => tab.content !== tabToRemove.content);
     this.update();
-  };
+  }
   /**
    * TODO
    * @public
@@ -84,7 +84,7 @@ export class Popup extends Base {
     }
     this.tabs_.push(tab);
     this.update();
-  };
+  }
 
   /**
    * TODO
@@ -112,7 +112,7 @@ export class Popup extends Base {
       this.impl.addTo(map, this.element_);
       this.show(coordinate);
     }
-  };
+  }
 
   /**
    * TODO
@@ -136,7 +136,7 @@ export class Popup extends Base {
         }
       });
     }
-  };
+  }
 
   /**
    * TODO
@@ -150,7 +150,7 @@ export class Popup extends Base {
       this.fire(Evt.SHOW);
     }.bind(this));
     // this.setStatus_(M.Popup.status.COLLAPSED);
-  };
+  }
 
   /**
    * TODO
@@ -163,7 +163,7 @@ export class Popup extends Base {
       Evt.preventDefault();
     }
     this.impl.hide();
-  };
+  }
 
   /**
    * TODO
@@ -177,7 +177,7 @@ export class Popup extends Base {
       this.Content_ = tab.content;
       this.show(this.coord_);
     }
-  };
+  }
 
   /**
    * TODO
@@ -186,7 +186,7 @@ export class Popup extends Base {
    */
   set Content_(value) {
     this.impl.Content = value;
-  };
+  }
 
   /**
    * TODO
@@ -195,7 +195,7 @@ export class Popup extends Base {
    */
   get Content() {
     return this.impl.getContent();
-  };
+  }
 
   /**
    * TODO
@@ -283,8 +283,7 @@ if (this.tabs_.length <= 1) {
   }
 }
 }, false, this);
-}
-};
+
 
 /**
  * TODO
@@ -303,7 +302,7 @@ set Status_(status) {
       this.impl.centerByStatus(status, this.coord_);
     }
   }
-};
+}
 
 /**
  * TODO
@@ -374,7 +373,7 @@ manageCollapsiblePopup_(touchstartY, touchendY) {
   } else {
     this.Status_(this.status_);
   }
-};
+}
 
 
 /**
@@ -385,7 +384,7 @@ manageCollapsiblePopup_(touchstartY, touchendY) {
  */
 get Coordinate() {
   return this.coord_;
-};
+}
 
 /**
  * TODO
@@ -398,7 +397,7 @@ set Coordinate(coord) {
   if (!Utils.isNullOrEmpty(this.element_)) {
     this.impl.show(coord);
   }
-};
+}
 
 /**
  * TODO
