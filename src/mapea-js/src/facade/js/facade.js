@@ -41,7 +41,7 @@ export class Base extends Object {
    * @returns {Object}
    * @api stable
    */
-  get Impl() {
+  get impl() {
     return this.impl_;
   };
 
@@ -53,7 +53,7 @@ export class Base extends Object {
    * @param {M.Map} impl to add the plugin
    * @api stable
    */
-  set Impl(value) {
+  set impl(value) {
     this.impl_ = value;
   };
 
