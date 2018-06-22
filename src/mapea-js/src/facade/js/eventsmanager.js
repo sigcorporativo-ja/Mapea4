@@ -1,7 +1,6 @@
-goog.provide('M.evt.EventsManager');
-goog.provide('M.evt.Listener');
+import Utils from('./utils/utils.js');
 
-(function() {
+export class EventsManager {
   'use strict';
 
   /**
@@ -11,7 +10,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.ADDED_TO_MAP = 'added:map';
+  Evt.ADDED_TO_MAP = 'added:map';
 
   /**
    * Event type
@@ -20,7 +19,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.ADDED_TO_PANEL = 'added:panel';
+  Evt.ADDED_TO_PANEL = 'added:panel';
   /**
    * Event type
    * @public
@@ -28,7 +27,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.ADDED_LAYER = 'added:layer';
+  Evt.ADDED_LAYER = 'added:layer';
 
   /**
    * Event type
@@ -37,7 +36,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.ADDED_WMC = 'added:wmc';
+  Evt.ADDED_WMC = 'added:wmc';
 
   /**
    * Event type
@@ -46,7 +45,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.ADDED_KML = 'added:kml';
+  Evt.ADDED_KML = 'added:kml';
 
   /**
    * Event type
@@ -55,7 +54,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.ADDED_WMS = 'added:wms';
+  Evt.ADDED_WMS = 'added:wms';
 
   /**
    * Event type
@@ -64,7 +63,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.ADDED_WFS = 'added:wfs';
+  Evt.ADDED_WFS = 'added:wfs';
 
   /**
    * Event type
@@ -73,7 +72,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.ADDED_WMTS = 'added:wmts';
+  Evt.ADDED_WMTS = 'added:wmts';
 
   /**
    * Event type
@@ -82,7 +81,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.ACTIVATED = 'activated';
+  Evt.ACTIVATED = 'activated';
 
   /**
    * Event type
@@ -91,7 +90,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.DEACTIVATED = 'deactivated';
+  Evt.DEACTIVATED = 'deactivated';
 
   /**
    * Event type
@@ -100,7 +99,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.SHOW = 'show';
+  Evt.SHOW = 'show';
 
   /**
    * Event type
@@ -109,7 +108,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.HIDE = 'hide';
+  Evt.HIDE = 'hide';
 
   /**
    * Event type
@@ -118,7 +117,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.DESTROY = 'destroy';
+  Evt.DESTROY = 'destroy';
 
   /**
    * Event type
@@ -127,7 +126,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.SELECT_FEATURES = 'select:features';
+  Evt.SELECT_FEATURES = 'select:features';
 
   /**
    * Event type
@@ -136,7 +135,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.UNSELECT_FEATURES = 'unselect:features';
+  Evt.UNSELECT_FEATURES = 'unselect:features';
 
   /**
    * Event type
@@ -145,7 +144,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.HOVER_FEATURES = 'hover:features';
+  Evt.HOVER_FEATURES = 'hover:features';
 
   /**
    * Event type
@@ -154,7 +153,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.LEAVE_FEATURES = 'leave:features';
+  Evt.LEAVE_FEATURES = 'leave:features';
 
   /**
    * Event type
@@ -163,7 +162,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.LOAD = 'load';
+  Evt.LOAD = 'load';
 
   /**
    * Event type
@@ -172,7 +171,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.COMPLETED = 'completed';
+  Evt.COMPLETED = 'completed';
 
   /**
    * Event type
@@ -181,7 +180,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.CHANGE = 'change';
+  Evt.CHANGE = 'change';
 
   /**
    * Event type
@@ -190,7 +189,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.CHANGE_WMC = 'change:wmc';
+  Evt.CHANGE_WMC = 'change:wmc';
 
   /**
    * Event type
@@ -199,7 +198,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.CHANGE_PROJ = 'change:proj';
+  Evt.CHANGE_PROJ = 'change:proj';
 
   /**
    * Event type
@@ -208,7 +207,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.CHANGE_STYLE = 'change:style';
+  Evt.CHANGE_STYLE = 'change:style';
 
   /**
    * Event type
@@ -217,7 +216,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.CLICK = 'click';
+  Evt.CLICK = 'click';
 
   /**
    * Event type
@@ -226,7 +225,7 @@ goog.provide('M.evt.Listener');
    * @api stable
    * @expose
    */
-  M.evt.MOVE = 'move';
+  Evt.MOVE = 'move';
 
   /**
    * Event type
@@ -234,31 +233,31 @@ goog.provide('M.evt.Listener');
    * @type {array<string>}
    */
   var _eventTypes = [
-      M.evt.ADDED_TO_MAP,
-      M.evt.ADDED_TO_PANEL,
-      M.evt.ADDED_LAYER,
-      M.evt.ADDED_WMC,
-      M.evt.ADDED_KML,
-      M.evt.ADDED_WMS,
-      M.evt.ADDED_WFS,
-      M.evt.ADDED_WMTS,
-      M.evt.ACTIVATED,
-      M.evt.DEACTIVATED,
-      M.evt.SHOW,
-      M.evt.HIDE,
-      M.evt.DESTROY,
-      M.evt.UNSELECT_FEATURES,
-      M.evt.SELECT_FEATURES,
-      M.evt.HOVER_FEATURES,
-      M.evt.LEAVE_FEATURES,
-      M.evt.LOAD,
-      M.evt.COMPLETED,
-      M.evt.CHANGE,
-      M.evt.CHANGE_WMC,
-      M.evt.CHANGE_PROJ,
-      M.evt.CHANGE_STYLE,
-      M.evt.CLICK,
-      M.evt.MOVE
+      Evt.ADDED_TO_MAP,
+      Evt.ADDED_TO_PANEL,
+      Evt.ADDED_LAYER,
+      Evt.ADDED_WMC,
+      Evt.ADDED_KML,
+      Evt.ADDED_WMS,
+      Evt.ADDED_WFS,
+      Evt.ADDED_WMTS,
+      Evt.ACTIVATED,
+      Evt.DEACTIVATED,
+      Evt.SHOW,
+      Evt.HIDE,
+      Evt.DESTROY,
+      Evt.UNSELECT_FEATURES,
+      Evt.SELECT_FEATURES,
+      Evt.HOVER_FEATURES,
+      Evt.LEAVE_FEATURES,
+      Evt.LOAD,
+      Evt.COMPLETED,
+      Evt.CHANGE,
+      Evt.CHANGE_WMC,
+      Evt.CHANGE_PROJ,
+      Evt.CHANGE_STYLE,
+      Evt.CLICK,
+      Evt.MOVE
    ];
 
   /**
@@ -271,7 +270,7 @@ goog.provide('M.evt.Listener');
    * @param {Object} impl implementation object
    * @api stable
    */
-  M.evt.EventsManager = (function() {
+  export class EventsManager {
     /**
      * Callback for events managed by the
      * facade object
@@ -282,98 +281,108 @@ goog.provide('M.evt.Listener');
     this.events_ = {};
   });
 
-  /**
-   * Sets the callback when the instace is loaded
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.evt.EventsManager.prototype.add = function(eventType, listener, optThis, once = false) {
-    if (!M.utils.isNullOrEmpty(eventType) && (_eventTypes.indexOf(eventType) !== -1) && M.utils.isFunction(listener)) {
-      if (M.utils.isNullOrEmpty(this.events_[eventType])) {
-        this.events_[eventType] = [];
-      }
-      if (this.indexOf(eventType, listener, optThis) === -1) {
-        var evtListener = new M.evt.Listener(listener, optThis, once);
-        this.events_[eventType].push(evtListener);
-        return evtListener.getEventKey();
-      }
-    }
-  };
 
-  /**
-   * Sets the callback when the instace is loaded
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.evt.EventsManager.prototype.remove = function(eventType, listener, optThis) {
-    var listeners = this.events_[eventType];
-    if (!M.utils.isNullOrEmpty(listeners)) {
-      var index = this.indexOf(eventType, listener, optThis);
-      if (index !== -1) {
-        listeners.splice(index, 1);
+get eventsManager() {
+  return this.events_;
+}
+
+/**
+ * Sets the callback when the instace is loaded
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+add(eventType, listener, optThis, once = false) {
+  if (!Utils.isNullOrEmpty(eventType) && (_eventTypes.indexOf(eventType) !== -1) && Utils.isFunction(listener)) {
+    if (Utils.isNullOrEmpty(this.events_[eventType])) {
+      this.events_[eventType] = [];
+    }
+    if (this.indexOf(eventType, listener, optThis) === -1) {
+      let evtListener = new Listener(listener, optThis, once);
+      this.events_[eventType].push(evtListener);
+      return evtListener.eventKey();
+    }
+  }
+}
+
+/**
+ * Sets the callback when the instace is loaded
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+remove(eventType, listener, optThis) {
+  let listeners = this.events_[eventType];
+  if (!Utils.isNullOrEmpty(listeners)) {
+    let index = this.indexOf(eventType, listener, optThis);
+    if (index !== -1) {
+      listeners.splice(index, 1);
+    }
+  }
+}
+
+/**
+ * Sets the callback when the instace is loaded
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+fire(eventType, args) {
+  let evtListeners = [].concat(this.events_[eventType]);
+  if (!Utils.isNullOrEmpty(evtListeners)) {
+    evtListeners.forEach(evtListener => {
+      evtListener.fire(args);
+      if (evtListener.isOnce() === true) {
+        this.remove(eventType, evtListener.getEventKey());
       }
-    }
-  };
+    }, this);
+  }
+}
 
-  /**
-   * Sets the callback when the instace is loaded
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.evt.EventsManager.prototype.fire = function(eventType, args) {
-    var evtListeners = [].concat(this.events_[eventType]);
-    if (!M.utils.isNullOrEmpty(evtListeners)) {
-      evtListeners.forEach(function(evtListener) {
-        evtListener.fire(args);
-        if (evtListener.isOnce() === true) {
-          this.remove(eventType, evtListener.getEventKey());
-        }
-      }, this);
-    }
-  };
-
-  /**
-   * Sets the callback when the instace is loaded
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.evt.EventsManager.prototype.indexOf = function(eventType, listener, optThis) {
-    var index = -1;
-    var evtListeners = this.events_[eventType];
-    if (!M.utils.isNullOrEmpty(evtListeners)) {
-      for (var i = 0, ilen = evtListeners.length; i < ilen; i++) {
-        if (evtListeners[i].has(listener, optThis)) {
-          index = i;
-          break;
-        }
+/**
+ * Sets the callback when the instace is loaded
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+indexOf(eventType, listener, optThis) {
+  let index = -1;
+  let evtListeners = this.events_[eventType];
+  if (!Utils.isNullOrEmpty(evtListeners)) {
+    evtListeners.forEach((element, i) => {
+      if (evtListeners[i].has(listener, optThis)) {
+        index = i;
+        break;
       }
-    }
-    return index;
-  };
+    });
 
+  }
+}
+return index;
+}
+
+/**
+ * @classdesc
+ * TODO
+ *
+ * @constructor
+ * @param {Object} impl implementation object
+ * @api stable
+ */
+export class Lister {
   /**
-   * @classdesc
    * TODO
    *
-   * @constructor
-   * @param {Object} impl implementation object
-   * @api stable
+   * @private
+   * @type {function}
    */
-  M.evt.Listener = (function(listener, scope, once = false) {
-    /**
-     * TODO
-     *
-     * @private
-     * @type {function}
-     */
+
+  constructor(listener, scope, once = false) {
+
     this._listener = listener;
 
     /**
@@ -387,13 +396,13 @@ goog.provide('M.evt.Listener');
     /**
      * TODO
      */
-    this.eventKey_ = M.utils.generateRandom();
+    this.eventKey_ = Utils.generateRandom();
 
     /**
      * TODO
      */
     this.once_ = once;
-  });
+  }
 
   /**
    * TODO
@@ -402,12 +411,12 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.Listener.prototype.fire = function(args) {
-    if (!M.utils.isArray(args)) {
+  fire(args) {
+    if (!Utils.isArray(args)) {
       args = [args];
     }
     this._listener.apply(this._scope, args);
-  };
+  }
 
   /**
    * TODO
@@ -416,9 +425,9 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.Listener.prototype.getEventKey = function() {
+  get eventKey() {
     return this.eventKey_;
-  };
+  }
 
   /**
    * TODO
@@ -427,9 +436,9 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.Listener.prototype.isOnce = function() {
+  isOnce() {
     return this.once_;
-  };
+  }
 
   /**
    * TODO
@@ -438,14 +447,13 @@ goog.provide('M.evt.Listener');
    * @function
    * @api stable
    */
-  M.evt.Listener.prototype.has = function(listener, scope) {
+  has(listener, scope) {
     let has = false;
-    if (M.utils.isFunction(listener)) {
+    if (Utils.isFunction(listener)) {
       has = this._listener === listener && this._scope === scope;
-    }
-    else {
+    } else {
       has = this.eventKey_ === listener;
     }
     return has;
-  };
-})();
+  }
+}
