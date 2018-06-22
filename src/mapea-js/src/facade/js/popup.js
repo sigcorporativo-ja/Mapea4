@@ -497,4 +497,4 @@ export class Tab {
      */
     this.content = options.content;
   }
-};
+}
