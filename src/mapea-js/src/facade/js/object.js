@@ -19,8 +19,13 @@ class Object {
    * @private
    * @type {M.evt.EventsManager}
    */
-  this.eventsManager = new EvtListener();
+  this.eventsManager_ = new EvtListener();
 });
+
+// TODO 
+get eventsManager() {
+  return this.eventsManager_;
+}
 
 /**
  * Sets the callback when the instace is loaded
