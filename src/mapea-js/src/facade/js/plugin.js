@@ -20,7 +20,8 @@ export class Plugin extends Base {
 
     this.impl_ = this
   }
-});
+}
+
 /**
  * This function provides the implementation
  * of the object
@@ -55,7 +56,7 @@ addTo(map) {
     // executes load callback
     this.fire(Evt.ADDED_TO_MAP);
   }
-};
+}
 
 /**
  * This function creates the HTML view for this control
@@ -65,4 +66,4 @@ addTo(map) {
  * @api stable
  */
 createView(map) {}
-};
+}
