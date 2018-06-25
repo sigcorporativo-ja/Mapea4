@@ -1,11 +1,11 @@
-goog.provide('M.ui.Panel');
+import Position from('./position.js');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import Base from('../facade.js');
+import Object from('../object.js')
 
-goog.require('M.ui.position');
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.facade.Base');
 
-(function () {
+export class Panel extends Object {
   /**
    * @classdesc
    * TODO
@@ -16,7 +16,13 @@ goog.require('M.facade.Base');
    * @extends {M.Object}
    * @api stable
    */
-  M.ui.Panel = (function (name, options) {
+
+
+  constructor(name, options) {
+
+    // calls the super constructor
+    super();
+
     options = (options || {});
 
     /**
@@ -32,14 +38,14 @@ goog.require('M.facade.Base');
      * @type {M.Map}
      * @expose
      */
-    this._map = null;
+    this.map_ = null;
 
     /**
      * @private
      * @type {array}
      * @expose
      */
-    this._controls = [];
+    this.controls_ = [];
 
 
 
@@ -48,26 +54,26 @@ goog.require('M.facade.Base');
      * @type {HTMLElement}
      * @expose
      */
-    this._buttonPanel = null;
+    this.buttonPanel_ = null;
 
     /**
      * @private
      * @type {boolean}
      * @expose
      */
-    this._collapsible = false;
-    if (!M.utils.isNullOrEmpty(options.collapsible)) {
-      this._collapsible = options.collapsible;
+    this.collapsible_ = false;
+    if (Utils.isNullOrEmpty(options.collapsible)) {
+      this.collapsible_ = options.collapsible;
     }
 
     /**
      * @public
-     * @type {M.ui.position}
+     * @type {Position}
      * @api stable
      * @expose
      */
-    this.position = M.ui.position.TL;
-    if (!M.utils.isNullOrEmpty(options.position)) {
+    this.position = Position.TL;
+    if (Utils.isNullOrEmpty(options.position)) {
       this.position = options.position;
     }
 
@@ -76,9 +82,9 @@ goog.require('M.facade.Base');
      * @type {boolean}
      * @expose
      */
-    this._collapsed = this._collapsible;
-    if (!M.utils.isNullOrEmpty(options.collapsed)) {
-      this._collapsed = (options.collapsed && (this._collapsible === true));
+    this.collapsed_ = this.collapsible_;
+    if (Utils.isNullOrEmpty(options.collapsed)) {
+      this.collapsed_ = (options.collapsed && (this.collapsible_ === true));
     }
 
     /**
@@ -86,9 +92,9 @@ goog.require('M.facade.Base');
      * @type {boolean}
      * @expose
      */
-    this._multiActivation = false;
-    if (!M.utils.isNullOrEmpty(options.multiActivation)) {
-      this._multiActivation = options.multiActivation;
+    this.multiActivation_ = false;
+    if (Utils.isNullOrEmpty(options.multiActivation)) {
+      this.multiActivation_ = options.multiActivation;
     }
 
     /**
@@ -96,9 +102,9 @@ goog.require('M.facade.Base');
      * @type {string}
      * @expose
      */
-    this._className = null;
-    if (!M.utils.isNullOrEmpty(options.className)) {
-      this._className = options.className;
+    this.className_ = null;
+    if (Utils.isNullOrEmpty(options.className)) {
+      this.className_ = options.className;
     }
 
     /**
@@ -106,15 +112,13 @@ goog.require('M.facade.Base');
      * @type {string}
      * @expose
      */
-    this._collapsedButtonClass = null;
-    if (!M.utils.isNullOrEmpty(options.collapsedButtonClass)) {
-      this._collapsedButtonClass = options.collapsedButtonClass;
-    }
-    else if ((this.position === M.ui.position.TL) || (this.position === M.ui.position.BL)) {
-      this._collapsedButtonClass = 'g-cartografia-flecha-derecha';
-    }
-    else if ((this.position === M.ui.position.TR) || (this.position === M.ui.position.BR)) {
-      this._collapsedButtonClass = 'g-cartografia-flecha-izquierda';
+    this.collapsed_ButtonClass = null;
+    if (!Utils.isNullOrEmpty(options.collapsedButtonClass)) {
+      this.collapsed_ButtonClass = options.collapsedButtonClass;
+    } else if ((this.position === Position.TL) || (this.position === Position.BL)) {
+      this.collapsed_ButtonClass = 'g-cartografia-flecha-derecha';
+    } else if ((this.position === Position.TR) || (this.position === Position.BR)) {
+      this.collapsed_ButtonClass = 'g-cartografia-flecha-izquierda';
     }
 
     /**
@@ -122,15 +126,13 @@ goog.require('M.facade.Base');
      * @type {string}
      * @expose
      */
-    this._openedButtonClass = null;
-    if (!M.utils.isNullOrEmpty(options.openedButtonClass)) {
-      this._openedButtonClass = options.openedButtonClass;
-    }
-    else if ((this.position === M.ui.position.TL) || (this.position === M.ui.position.BL)) {
-      this._openedButtonClass = 'g-cartografia-flecha-izquierda';
-    }
-    else if ((this.position === M.ui.position.TR) || (this.position === M.ui.position.BR)) {
-      this._openedButtonClass = 'g-cartografia-flecha-derecha';
+    this.openedButtonClass_ = null;
+    if (!Utils.isNullOrEmpty(options.openedButtonClass)) {
+      this.openedButtonClass_ = options.openedButtonClass;
+    } else if ((this.position === Position.TL) || (this.position === Position.BL)) {
+      this.openedButtonClass_ = 'g-cartografia-flecha-izquierda';
+    } else if ((this.position === Position.TR) || (this.position === Position.BR)) {
+      this.openedButtonClass_ = 'g-cartografia-flecha-derecha';
     }
 
     /**
@@ -138,7 +140,7 @@ goog.require('M.facade.Base');
      * @type {HTMLElement}
      * @expose
      */
-    this._element = null;
+    this.element_ = null;
 
     /**
      * TODO
@@ -146,29 +148,26 @@ goog.require('M.facade.Base');
      * @type {HTMLElement}
      * @expose
      */
-    this._areaContainer = null;
+    this.areaContainer_ = null;
 
     /**
      * @private
      * @type {HTMLElement}
      * @expose
      */
-    this._controlsContainer = null;
+    this.controls_Container = null;
 
     /**
      * @private
      * @type {String}
      * @expose
      */
-    this._tooltip = null;
-    if (!M.utils.isNullOrEmpty(options.tooltip)) {
-      this._tooltip = options.tooltip;
+    this.tooltip_ = null;
+    if (!Utils.isNullOrEmpty(options.tooltip)) {
+      this.tooltip_ = options.tooltip;
     }
+  }
 
-    // calls the super constructor
-    goog.base(this);
-  });
-  goog.inherits(M.ui.Panel, M.Object);
 
   /**
    * TODO
@@ -179,12 +178,12 @@ goog.require('M.facade.Base');
    @param {HTMLElement} html area
    * @api stable
    */
-  M.ui.Panel.prototype.destroy = function () {
-    if(this._element != null) {
-      this._areaContainer.removeChild(this._element);
+  destroy() {
+    if (this.element_ != null) {
+      this.areaContainer_.removeChild(this.element_);
     }
-    this._controlsContainer = null;
-  };
+    this.controls_Container = null;
+  }
 
   /**
    * TODO
@@ -194,52 +193,49 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype.addTo = function (map, areaContainer) {
-    this._map = map;
-    this._areaContainer = areaContainer;
-    var this_ = this;
-    M.template.compile(M.ui.Panel.TEMPLATE, {
+  addTo(map, areaContainer) {
+    this.map_ = map;
+    this.areaContainer_ = areaContainer;
+    Template.compile(Panel.TEMPLATE, {
       'jsonp': true
-    }).then(function (html) {
-      this_._element = html;
-      if (!M.utils.isNullOrEmpty(this_._tooltip)) {
-        this_._element.setAttribute("title", this_._tooltip);
+    }).then((html) => {
+      this.element_ = html;
+      if (!Utils.isNullOrEmpty(this.tooltip_)) {
+        this.element_.setAttribute("title", this.tooltip_);
       }
-      this_._buttonPanel = html.querySelector('button.m-panel-btn');
-      if (!M.utils.isNullOrEmpty(this_._className)) {
-        this_._className.split(/\s+/).forEach(function (className) {
-          goog.dom.classlist.add(html, className);
+      this.buttonPanel_ = html.querySelector('button.m-panel-btn');
+      if (!Utils.isNullOrEmpty(this.className_)) {
+        this.className_.split(/\s+/).forEach(className => {
+          html.classList.add(className);
         });
       }
 
-      if (this_._collapsed === true) {
-        this_._collapse(html, this_._buttonPanel);
-      }
-      else {
-        this_._open(html, this_._buttonPanel);
+      if (this.collapsed_ === true) {
+        this._collapse(html, this.buttonPanel_);
+      } else {
+        this._open(html, this.buttonPanel_);
       }
 
-      if (this_._collapsible !== true) {
+      if (this.collapsible_ !== true) {
         goog.dom.classlist.add(html, 'no-collapsible');
       }
 
-      this_._controlsContainer = html.querySelector('div.m-panel-controls');
-      goog.dom.appendChild(areaContainer, html);
+      this.controls_Container = html.querySelector('div.m-panel-controls');
+      html.appendChild(areaContainer);
 
-      goog.events.listen(this_._buttonPanel, goog.events.EventType.CLICK, function (evt) {
+      this.buttonPanel_.addEventListener('click', evt => {
         evt.preventDefault();
-        if (this._collapsed === false) {
-          this._collapse(html, this_._buttonPanel);
+        if (this.collapsed_ === false) {
+          this._collapse(html, this.buttonPanel_);
+        } else {
+          this._open(html, this.buttonPanel_);
         }
-        else {
-          this._open(html, this_._buttonPanel);
-        }
-      }, false, this_);
+      }, false, this);
 
-      this_.addControls(this_._controls);
-      this_.fire(M.evt.ADDED_TO_MAP, html);
+      this.addControls(this.controls_);
+      this.fire(Evt.ADDED_TOmap_, html);
     });
-  };
+  }
 
   /**
    * TODO
@@ -247,14 +243,14 @@ goog.require('M.facade.Base');
    * @private
    * @function
    */
-  M.ui.Panel.prototype._collapse = function (html) {
-    goog.dom.classlist.remove(html, 'opened');
-    goog.dom.classlist.remove(this._buttonPanel, this._openedButtonClass);
-    goog.dom.classlist.add(html, 'collapsed');
-    goog.dom.classlist.add(this._buttonPanel, this._collapsedButtonClass);
-    this._collapsed = true;
-    this.fire(M.evt.HIDE);
-  };
+  _collapse(html) {
+    html.classlist.remove('opened');
+    this.buttonPanel_.classlist.remove(this.openedButtonClass_);
+    html.classlist.add('collapsed');
+    this.buttonPanel_.classlist.add(this.collapsed_ButtonClass);
+    this.collapsed_ = true;
+    this.fire(Evt.HIDE);
+  }
 
   /**
    * TODO
@@ -262,14 +258,14 @@ goog.require('M.facade.Base');
    * @private
    * @function
    */
-  M.ui.Panel.prototype._open = function (html) {
-    goog.dom.classlist.remove(html, 'collapsed');
-    goog.dom.classlist.remove(this._buttonPanel, this._collapsedButtonClass);
-    goog.dom.classlist.add(html, 'opened');
-    goog.dom.classlist.add(this._buttonPanel, this._openedButtonClass);
-    this._collapsed = false;
-    this.fire(M.evt.SHOW);
-  };
+  _open(html) {
+    html.classlist.remove('collapsed');
+    this.buttonPanel_.classlist.remove(this.collapsed_ButtonClass);
+    html.classlist.add('opened');
+    this.buttonPanel_.classlist.add(this.openedButtonClass_);
+    this.collapsed_ = false;
+    this.fire(Evt.SHOW);
+  }
 
   /**
    * Call private method _open
@@ -277,9 +273,9 @@ goog.require('M.facade.Base');
    * @public
    * @function
    */
-  M.ui.Panel.prototype.open = function () {
-    this._open(this._element);
-  };
+  open() {
+    this._open(this.element_);
+  }
 
   /**
    * Call private method _collapse
@@ -287,9 +283,9 @@ goog.require('M.facade.Base');
    * @public
    * @function
    */
-  M.ui.Panel.prototype.collapse = function () {
-    this._collapse(this._element);
-  };
+  collapse() {
+    this._collapse(this.element_);
+  }
 
 
   /**
@@ -300,9 +296,9 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype.getControls = function () {
-    return this._controls;
-  };
+  get Controls() {
+    return this.controls_;
+  }
 
   /**
    * TODO
@@ -312,27 +308,27 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype.addControls = function (controls) {
-    if (!M.utils.isNullOrEmpty(controls)) {
-      if (!M.utils.isArray(controls)) {
+  addControls(controls) {
+    if (!Utils.isNullOrEmpty(controls)) {
+      if (!Utils.isArray(controls)) {
         controls = [controls];
       }
-      controls.forEach(function (control) {
-        if (control instanceof M.Control) {
+      controls.forEach((control) => {
+        if (control instanceof ControlBase) {
           if (!this.hasControl(control)) {
-            this._controls.push(control);
+            this.controls_.push(control);
             control.setPanel(this);
-            control.on(M.evt.DESTROY, this._removeControl, this);
+            control.on(Evt.DESTROY, this._removeControl, this);
           }
-          if (!M.utils.isNullOrEmpty(this._controlsContainer)) {
-            control.on(M.evt.ADDED_TO_MAP, this._moveControlView, this);
-            this._map.addControls(control);
+          if (!Utils.isNullOrEmpty(this.controls_Container)) {
+            control.on(Evt.ADDED_TOmap_, this._moveControlView, this);
+            this.map_.addControls(control);
           }
-          control.on(M.evt.ACTIVATED, this._manageActivation, this);
+          control.on(Evt.ACTIVATED, this._manageActivation, this);
         }
       }, this);
     }
-  };
+  }
 
   /**
    * TODO
@@ -342,20 +338,17 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype.hasControl = function (controlParam) {
+  hasControl(controlParam) {
     var hasControl = false;
-    if (!M.utils.isNullOrEmpty(controlParam)) {
-      if (M.utils.isString(controlParam)) {
-        for (var i = 0, ilen = this._controls.length; i < ilen && !hasControl; i++) {
-          hasControl = (this._controls[i].name === controlParam);
-        }
-      }
-      else if (controlParam instanceof M.Control) {
-        hasControl = M.utils.includes(this._controls, controlParam);
+    if (!Utils.isNullOrEmpty(controlParam)) {
+      if (Utils.isString(controlParam)) {
+        hasControl = this.controls_.filter(control => control.name === controlParam)[0] != null;
+      } else if (controlParam instanceof ControlBase) {
+        hasControl = Utils.includes(this.controls_, controlParam);
       }
     }
     return hasControl;
-  };
+  }
 
   /**
    * TODO
@@ -365,24 +358,24 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype.removeControls = function (controls) {
-    if (!M.utils.isNullOrEmpty(controls)) {
-      if (!M.utils.isArray(controls)) {
+  removeControls(controls) {
+    if (!Utils.isNullOrEmpty(controls)) {
+      if (!Utils.isArray(controls)) {
         controls = [controls];
       }
-      controls.forEach(function (control) {
-        if ((control instanceof M.Control) && this.hasControl(control)) {
-          this._controls.remove(control);
-          control.setPanel(null);
+      controls.forEach((control) => {
+        if ((control instanceof ControlBase) && this.hasControl(control)) {
+          this.controls_.remove(control);
+          control.panel = null;
         }
       }, this);
       // if this panel hasn't any controls then it's removed
       // from the map
-      if (this._controls.length === 0) {
-        this._map.removePanel(this);
+      if (this.controls_.length === 0) {
+        this.map_.removePanel(this);
       }
     }
-  };
+  }
 
   /**
    * TODO
@@ -392,15 +385,15 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype._removeControl = function (controlsParam) {
-    var controls = this._map.getControls(controlsParam);
-    controls.forEach(function (control) {
-      var index = this._controls.indexOf(control);
-      if (index !== -1) {
-        this._controls.splice(index, 1);
-      }
-    });
-  };
+  _removeControl(controlsParam) {
+    let controls = this.map_.controls(controlsParam);
+    controls.forEach(control => {
+        let index = this.controls_.indexOf(control);
+        if (index !== -1) {
+          this.controls_.splice(index, 1);
+        });
+    }
+  }
 
   /**
    * TODO
@@ -410,14 +403,13 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype.removeClassName = function (className) {
-    if (!M.utils.isNullOrEmpty(this._element)) {
-      goog.dom.classlist.remove(this._element, className);
+  removeClassName = function (className) {
+    if (!Utils.isNullOrEmpty(this.element_)) {
+      this.element_.classlist.remove(className);
+    } else {
+      this.className_ = this.className_.replace(new RegExp('\s*' + className + '\s*'), '');
     }
-    else {
-      this._className = this._className.replace(new RegExp('\s*' + className + '\s*'), '');
-    }
-  };
+  }
 
   /**
    * TODO
@@ -427,14 +419,13 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype.addClassName = function (className) {
-    if (!M.utils.isNullOrEmpty(this._element)) {
-      goog.dom.classlist.add(this._element, className);
+  addClassName(className) {
+    if (!Utils.isNullOrEmpty(this.element_)) {
+      this.element_.classlist.add(className);
+    } else {
+      this.className_ = this.className_.concat(' ').concat(className);
     }
-    else {
-      this._className = this._className.concat(' ').concat(className);
-    }
-  };
+  }
 
   /**
    * TODO
@@ -444,13 +435,13 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype._moveControlView = function (control) {
-    var controlElem = control.getElement();
-    if (!M.utils.isNullOrEmpty(this._controlsContainer)) {
-      goog.dom.appendChild(this._controlsContainer, controlElem);
+  _moveControlView(control) {
+    let controlElem = control.element();
+    if (!Utils.isNullOrEmpty(this.controls_Container)) {
+      this.controls_Container.appendChild(controlElem);
     }
-    control.fire(M.evt.ADDED_TO_PANEL);
-  };
+    control.fire(Evt.ADDED_TO_PANEL);
+  }
 
   /**
    * TODO
@@ -460,15 +451,15 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype._manageActivation = function (control) {
-    if (this._multiActivation !== true) {
-      this._controls.forEach(function (panelControl) {
+  _manageActivation(control) {
+    if (this.multiActivation_ !== true) {
+      this.controls_.forEach(panelControl => {
         if (!panelControl.equals(control) && panelControl.activated) {
           panelControl.deactivate();
         }
       });
     }
-  };
+  }
 
   /**
    * TODO
@@ -478,13 +469,13 @@ goog.require('M.facade.Base');
    * @param {array<M.Control>} controls
    * @api stable
    */
-  M.ui.Panel.prototype.equals = function (obj) {
+  equals(obj) {
     var equals = false;
-    if (obj instanceof M.ui.Panel) {
+    if (obj instanceof Panel) {
       equals = (obj.name === this.name);
     }
     return equals;
-  };
+  }
 
   /**
    * Returns the template panel
@@ -494,9 +485,9 @@ goog.require('M.facade.Base');
    * @api stable
    * @returns {HTMLElement}
    */
-  M.ui.Panel.prototype.getTemplatePanel = function () {
-    return this._element;
-  };
+  get templatePanel() {
+    return this.element_;
+  }
 
   /**
    * Returns is collapsed
@@ -506,9 +497,9 @@ goog.require('M.facade.Base');
    * @api stable
    * @returns {Boolean}
    */
-  M.ui.Panel.prototype.isCollapsed = function () {
-    return this._collapsed;
-  };
+  isCollapsed() {
+    return this.collapsed_;
+  }
 
   /**
    * Template for this controls - button
@@ -517,5 +508,5 @@ goog.require('M.facade.Base');
    * @public
    * @api stable
    */
-  M.ui.Panel.TEMPLATE = 'panel.html';
-})();
+  Panel.TEMPLATE = 'panel.html';
+}
