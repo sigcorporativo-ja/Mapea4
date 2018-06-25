@@ -1,10 +1,9 @@
-goog.provide('M.filter.Spatial');
-goog.require('M.filter.Function');
-
+import FilterFunction from('./filterfunction.js');
+import Utils from('../utils/utils.js');
 /**
  * @namespace M.filter
  */
-(function () {
+export class FilterSpatial extends FilterSpatial {
 
   /**
    * Creates a Filter Spatial to filter features
@@ -13,17 +12,17 @@ goog.require('M.filter.Function');
    * TODO @param {object} options
    * @api stable
    */
-  M.filter.Spatial = (function (filterFunctionParam, options) {
+  constructor(filterFunctionParam, options) {
+    //TODO
+    super(this, filterFunction, options);
 
-    let filterFunction = function (feature, index) {
+
+    let filterFunction = (feature, index) => {
       let geometry = null;
-      if (!M.utils.isNullOrEmpty(feature)) {
-        geometry = feature.getGeometry();
+      if (!Utils.isNullOrEmpty(feature)) {
+        geometry = feature.geometry();
       }
       return filterFunctionParam(geometry, index);
-    };
-
-    goog.base(this, filterFunction, options);
-  });
-  goog.inherits(M.filter.Spatial, M.filter.Function);
-})();
+    }
+  }
+}

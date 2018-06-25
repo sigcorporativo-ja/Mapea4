@@ -1,14 +1,16 @@
-goog.provide('M.filter.Function');
-goog.require('M.Filter');
+import Filter from('./filter.js'):
+import Utils from('../utils/utils.js');
 
-(function () {
+export class FilterFunction extends Filter {
   /**
    * Creates a Filter Function to filter features
    *
    * @param {function} filterFunction - Function to execute
    * @api stable
    */
-  M.filter.Function = (function (filterFunction, options) {
+  constructor(filterFunction, options) {
+    super();
+
     options = (options || {});
 
     /**
@@ -24,11 +26,11 @@ goog.require('M.Filter');
      * @type {String}
      */
     this.cqlFilter_ = '';
-    if (!M.utils.isNullOrEmpty(options.cqlFilter)) {
+    if (Utils.isNullOrEmpty(options.cqlFilter)) {
       this.cqlFilter_ = options.cqlFilter;
     }
-  });
-  goog.inherits(M.filter.Function, M.Filter);
+  }
+
 
   /**
    * This function set a function filter
@@ -37,9 +39,9 @@ goog.require('M.Filter');
    * @function
    * @api stable
    */
-  M.filter.Function.prototype.setFunction = function (filterFunction) {
+  set function(filterFunction) {
     this.filterFunction_ = filterFunction;
-  };
+  }
 
   /**
    * This function get a function filter
@@ -49,9 +51,9 @@ goog.require('M.Filter');
    * @return {M.filter.Function} filter to execute
    * @api stable
    */
-  M.filter.Function.prototype.getFunctionFilter = function () {
+  get functionFilter() {
     return this.filterFunction_;
-  };
+  }
 
   /**
    * This function execute a function filter
@@ -62,9 +64,9 @@ goog.require('M.Filter');
    * @return {Array<M.Feature>} features to passed filter
    * @api stable
    */
-  M.filter.Function.prototype.execute = function (features) {
+  execute(features) {
     return features.filter(this.filterFunction_);
-  };
+  }
 
   /**
    * This function return CQL
@@ -74,7 +76,7 @@ goog.require('M.Filter');
    * @api stable
    * @return {string} CQL
    */
-  M.filter.Function.prototype.toCQL = function () {
+  toCQL() {
     return this.cqlFilter_;
-  };
-})();
+  }
+}
