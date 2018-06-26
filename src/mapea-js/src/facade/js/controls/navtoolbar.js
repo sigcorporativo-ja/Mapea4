@@ -18,7 +18,7 @@ export class Navtoolbar extends ControlBase {
    */
   constructor {
     // calls the super constructor
-    super(this, impl, M.control.Navtoolbar.NAME);
+    super(this, impl, Navtoolbar.NAME);
 
     if (Utils.isUndefined(NavtoolbarImpl)) {
       Exception('La implementación usada no puede crear controles Navtoolbar');

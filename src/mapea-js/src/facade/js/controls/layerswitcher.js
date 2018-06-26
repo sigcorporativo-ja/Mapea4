@@ -23,7 +23,7 @@ export class LayerSwitcher extends ControlBase {
    */
   constructor() {
     // calls the super constructor
-    super(this, impl, M.control.LayerSwitcher.NAME);
+    super(this, impl, LayerSwitcher.NAME);
 
     if (Utils.isUndefined(LayerSwitcherImpl)) {
       Exception('La implementación usada no puede crear controles LayerSwitcher');

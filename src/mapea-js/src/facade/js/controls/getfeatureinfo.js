@@ -42,7 +42,7 @@ export class GetFeatureInfo extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return Template.compile(M.control.GetFeatureInfo.TEMPLATE, {
+    return Template.compile(GetFeatureInfo.TEMPLATE, {
       'jsonp': true
     });
   }
