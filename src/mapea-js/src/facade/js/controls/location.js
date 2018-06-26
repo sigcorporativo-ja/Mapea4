@@ -1,10 +1,10 @@
-goog.provide('M.control.Location');
+import ControlBase from('./controlbase.js');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import Template from('../utils/template.js');
+import LocationImpl from('../../../impl/js/controls/location.js');
 
-goog.require('M.Control');
-goog.require('M.utils');
-goog.require('M.exception');
-
-(function () {
+export class Location extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Location
@@ -15,19 +15,18 @@ goog.require('M.exception');
    * @extends {M.Control}
    * @api stable
    */
-  M.control.Location = (function (tracking, highAccuracy) {
+  constructor(tracking, highAccuracy) {
+    // calls the super constructor
+    super(this, impl, Location.NAME);
+
     tracking = tracking !== undefined ? tracking : true;
     highAccuracy = highAccuracy !== undefined ? highAccuracy : false;
-    if (M.utils.isUndefined(M.impl.control.Location)) {
-      M.exception('La implementación usada no puede crear controles Location');
+    if (Utils.isUndefined(LocationImpl)) {
+      Exception('La implementación usada no puede crear controles Location');
     }
     // implementation of this control
-    var impl = new M.impl.control.Location(tracking, highAccuracy, 60000);
-
-    // calls the super constructor
-    goog.base(this, impl, M.control.Location.NAME);
-  });
-  goog.inherits(M.control.Location, M.Control);
+    let impl = new LocationImpl(tracking, highAccuracy, 60000);
+  }
 
   /**
    * This function creates the view to the specified map
@@ -38,11 +37,11 @@ goog.require('M.exception');
    * @returns {Promise} HTML template
    * @api stable
    */
-  M.control.Location.prototype.createView = function (map) {
-    return M.template.compile(M.control.Location.TEMPLATE, {
+  createView(map) {
+    return Template.compile(Location.TEMPLATE, {
       'jsonp': true
     });
-  };
+  }
 
   /**
    * This function returns the HTML button control.
@@ -54,9 +53,9 @@ goog.require('M.exception');
    * @api stable
    * @export
    */
-  M.control.Location.prototype.getActivationButton = function (element) {
+  get activationButton(element) {
     return element.querySelector('button#m-location-button');
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -68,14 +67,14 @@ goog.require('M.exception');
    * @returns {boolean} equals - Returns if they are equal or not
    * @api stable
    */
-  M.control.Location.prototype.equals = function (obj) {
-    var equals = (obj instanceof M.control.Location);
+  equals(obj) {
+    let equals = (obj instanceof Location);
     return equals;
-  };
+  }
 
-  M.control.Location.prototype.setTracking = function (tracking) {
-    this.getImpl().setTracking(tracking);
-  };
+  set tracking(tracking) {
+    this.impl().tracking = tracking;
+  }
 
   /**
    * Name to identify this control
@@ -84,7 +83,7 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.control.Location.NAME = 'location';
+  Location.NAME = 'location';
 
   /**
    * Template for this controls - button
@@ -93,5 +92,5 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.control.Location.TEMPLATE = 'location.html';
-})();
+  Location.TEMPLATE = 'location.html';
+}

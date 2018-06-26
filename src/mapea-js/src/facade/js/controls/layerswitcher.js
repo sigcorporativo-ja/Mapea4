@@ -1,32 +1,37 @@
-goog.provide('M.control.LayerSwitcher');
+import ControlBase from('./controlbase.js');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import Template from('../utils/template.js');
+import LayerBase from('../layers/layerbase.js');
+import LayerType from('../layers/layertype.js')
+import Map from('../map/Map.js');
+import Vector from('../layers/vector.js');
+import StylePoint from('../style/stylepoint.js')
+import LayerSwitcherImpl from('../../../impl/js/controls/layerswitcher.js');
 
-goog.require('M.Control');
-goog.require('M.utils');
-goog.require('M.exception');
-
-(function() {
+export class LayerSwitcher extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
    * control to provides a popup with information about the place
-   * where the user has clicked inside the map.
+   * where the user has clicked inside the Map.
    *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
    * @api stable
    */
-  M.control.LayerSwitcher = (function() {
-    if (M.utils.isUndefined(M.impl.control.LayerSwitcher)) {
-      M.exception('La implementación usada no puede crear controles LayerSwitcher');
+  constructor() {
+    // calls the super constructor
+    super(this, impl, M.control.LayerSwitcher.NAME);
+
+    if (Utils.isUndefined(LayerSwitcherImpl)) {
+      Exception('La implementación usada no puede crear controles LayerSwitcher');
     }
     // implementation of this control
-    var impl = new M.impl.control.LayerSwitcher();
+    let impl = new LayerSwitcherImpl();
 
-    // calls the super constructor
-    goog.base(this, impl, M.control.LayerSwitcher.NAME);
-  });
-  goog.inherits(M.control.LayerSwitcher, M.Control);
+  }
 
   /**
    * This function creates the view to the specified map
@@ -37,13 +42,13 @@ goog.require('M.exception');
    * @returns {Promise} html response
    * @api stable
    */
-  M.control.LayerSwitcher.prototype.createView = function(map) {
-    return M.control.LayerSwitcher.getTemplateVariables_(map).then(templateVars =>
-      M.template.compile(M.control.LayerSwitcher.TEMPLATE, {
+  createView(map) {
+    return LayerSwitcher.templateVariables_(map).then(templateVars =>
+      Template.compile(LayerSwitcher.TEMPLATE, {
         'jsonp': true,
         'vars': templateVars
       }));
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -52,10 +57,10 @@ goog.require('M.exception');
    * @function
    * @api stable
    */
-  M.control.LayerSwitcher.prototype.equals = function(obj) {
-    var equals = (obj instanceof M.control.LayerSwitcher);
+  equals(obj) {
+    let equals = (obj instanceof LayerSwitcher);
     return equals;
-  };
+  }
 
   /**
    * This function registers events on map and layers to render
@@ -64,9 +69,9 @@ goog.require('M.exception');
    * @function
    * @api stable
    */
-  M.control.LayerSwitcher.prototype.render = function() {
-    this.getImpl().renderPanel();
-  };
+  render() {
+    this.impl().renderPanel();
+  }
 
   /**
    * This function registers events on map and layers to render
@@ -75,9 +80,9 @@ goog.require('M.exception');
    * @function
    * @api stable
    */
-  M.control.LayerSwitcher.prototype.registerEvents = function() {
-    this.getImpl().registerEvents();
-  };
+  registerEvents() {
+    this.impl().registerEvents();
+  }
 
   /**
    * Unegisters events for map and layers from the layerswitcher
@@ -85,29 +90,29 @@ goog.require('M.exception');
    * @function
    * @api stable
    */
-  M.control.LayerSwitcher.prototype.unregisterEvents = function() {
-    this.getImpl().unregisterEvents();
-  };
+  unregisterEvents() {
+    this.impl().unregisterEvents();
+  }
 
   /**
    * Gets the variables of the template to compile
    */
-  M.control.LayerSwitcher.getTemplateVariables_ = function(map) {
-    return new Promise(function(success, fail) {
+  get templateVariables_(map) {
+    return new Promise((success, fail) => {
       // gets base layers and overlay layers
-      if (!M.utils.isNullOrEmpty(map)) {
+      if (!Utils.isNullOrEmpty(map)) {
 
-        let baseLayers = map.getBaseLayers().filter(layer => layer.displayInLayerSwitcher === true);
-        let overlayLayers = map.getLayers().filter(function(layer) {
-          let isTransparent = (layer.transparent === true);
-          let displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
-          let isNotWMC = (layer.type !== M.layer.type.WMC);
-          let isNotWMSFull = !((layer.type === M.layer.type.WMS) && M.utils.isNullOrEmpty(layer.name));
+        let baseLayers = Map.baseLayers().filter(layer => LayerBase.displayInLayerSwitcher === true);
+        let overlayLayers = Map.layers().filter((layer) => {
+          let isTransparent = (LayerBase.transparent === true);
+          let displayInLayerSwitcher = (LayerBase.displayInLayerSwitcher === true);
+          let isNotWMC = (LayerType !== LayerType.WMC);
+          let isNotWMSFull = !((LayerType === LayerType.WMS) && Utils.isNullOrEmpty(LayerBase.name));
           return (isTransparent && isNotWMC && isNotWMSFull && displayInLayerSwitcher);
         }).reverse();
 
-        let baseLayersPromise = Promise.all(baseLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_));
-        let overlayLayersPromise = Promise.all(overlayLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_));
+        let baseLayersPromise = Promise.all(baseLayers.map(LayerSwitcher.parseLayerForTemplate_));
+        let overlayLayersPromise = Promise.all(overlayLayers.map(LayerSwitcher.parseLayerForTemplate_));
         baseLayersPromise.then(parsedBaseLayers => {
           overlayLayersPromise.then(parsedOverlayLayers => success({
             'baseLayers': parsedBaseLayers,
@@ -120,7 +125,7 @@ goog.require('M.exception');
       //   'overlayLayers': overlayLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_)
       // });
     });
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -129,53 +134,52 @@ goog.require('M.exception');
    * @private
    * @function
    */
-  M.control.LayerSwitcher.parseLayerForTemplate_ = function(layer) {
-    var layerTitle = layer.legend;
-    if (M.utils.isNullOrEmpty(layerTitle)) {
-      layerTitle = layer.name;
+  static parseLayerForTemplate_(layer) {
+    let layerTitle = LayerBase.legend;
+    if (Utils.isNullOrEmpty(layerTitle)) {
+      layerTitle = LayerBase.name;
     }
-    if (M.utils.isNullOrEmpty(layerTitle)) {
+    if (Utils.isNullOrEmpty(layerTitle)) {
       layerTitle = 'Servicio WMS';
     }
     // return new Promise((success, fail) => success({
-    //   'base': (layer.transparent === false),
-    //   'visible': (layer.isVisible() === true),
-    //   'id': layer.name,
+    //   'base': (LayerBase.transparent === false),
+    //   'visible': (LayerBase.isVisible() === true),
+    //   'id': LayerBase.name,
     //   'title': layerTitle,
-    //   'legend': layer.getLegendURL(),
-    //   'outOfRange': !layer.inRange(),
-    //   'opacity': layer.getOpacity()
+    //   'legend': LayerBase.getLegendURL(),
+    //   'outOfRange': !LayerBase.inRange(),
+    //   'opacity': LayerBase.getOpacity()
     // }));
     let isIcon = false;
-    if (layer instanceof M.layer.Vector) {
-      let style = layer.getStyle();
-      if (style instanceof M.style.Point && !M.utils.isNullOrEmpty(style.get('icon.src'))) {
+    if (layer instanceof Vector) {
+      let style = LayerBase.style();
+      if (style instanceof StylePoint && !Utils.isNullOrEmpty(style.get('icon.src'))) {
         isIcon = true;
       }
     }
     return new Promise((success, fail) => {
       let layerVarTemplate = {
-        'base': (layer.transparent === false),
-        'visible': (layer.isVisible() === true),
-        'id': layer.name,
+        'base': (LayerBase.transparent === false),
+        'visible': (LayerBase.isVisible() === true),
+        'id': LayerBase.name,
         'title': layerTitle,
-        'outOfRange': !layer.inRange(),
-        'opacity': layer.getOpacity(),
+        'outOfRange': !LayerBase.inRange(),
+        'opacity': LayerBase.opacity(),
         'isIcon': isIcon
       };
-      let legendUrl = layer.getLegendURL();
+      let legendUrl = LayerBase.legendURL();
       if (legendUrl instanceof Promise) {
         legendUrl.then(url => {
           layerVarTemplate['legend'] = url;
           success(layerVarTemplate);
         });
-      }
-      else {
+      } else {
         layerVarTemplate['legend'] = legendUrl;
         success(layerVarTemplate);
       }
     });
-  };
+  }
 
   /**
    * Template for this controls - button
@@ -184,7 +188,7 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.control.LayerSwitcher.NAME = 'layerswitcher';
+  LayerSwitcher.NAME = 'layerswitcher';
 
   /**
    * Template for this controls - button
@@ -193,5 +197,5 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.control.LayerSwitcher.TEMPLATE = 'layerswitcher.html';
-})();
+  LayerSwitcher.TEMPLATE = 'layerswitcher.html';
+}

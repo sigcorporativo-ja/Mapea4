@@ -1,75 +1,73 @@
-goog.provide('M.control.Navtoolbar');
+import ControlBase from('./controlbase.js');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import Template from('../utils/template.js');
+import NavtoolbarImpl from('../../../impl/js/controls/navtoolbar.js');
 
-goog.require('M.Control');
-goog.require('M.utils');
-goog.require('M.exception');
+export class Navtoolbar extends ControlBase {
+  /**
+   * @classdesc
+   * Main constructor of the class. Creates a GetFeatureInfo
+   * control to provides a popup with information about the place
+   * where the user has clicked inside the map.
+   *
+   * @constructor
+   * @param {String} format format response
+   * @extends {M.Control}
+   * @api stable
+   */
+  constructor {
+    // calls the super constructor
+    super(this, impl, M.control.Navtoolbar.NAME);
 
-(function() {
-   /**
-    * @classdesc
-    * Main constructor of the class. Creates a GetFeatureInfo
-    * control to provides a popup with information about the place
-    * where the user has clicked inside the map.
-    *
-    * @constructor
-    * @param {String} format format response
-    * @extends {M.Control}
-    * @api stable
-    */
-   M.control.Navtoolbar = (function() {
-      if (M.utils.isUndefined(M.impl.control.Navtoolbar)) {
-         M.exception('La implementación usada no puede crear controles Navtoolbar');
-      }
-      // implementation of this control
-      var impl = new M.impl.control.Navtoolbar();
+    if (Utils.isUndefined(NavtoolbarImpl)) {
+      Exception('La implementación usada no puede crear controles Navtoolbar');
+    }
+    // implementation of this control
+    let impl = new NavtoolbarImpl();
+  }
+  /**
+   * This function creates the view to the specified map
+   *
+   * @public
+   * @function
+   * @param {M.Map} map map to add the control
+   * @returns {Promise} html response
+   * @api stable
+   */
+  createView(map) {
+    return Template.compile(Navtoolbar.TEMPLATE, {
+      'jsonp': true
+    });
+  }
 
-      // calls the super constructor
-      goog.base(this, impl, M.control.Navtoolbar.NAME);
-   });
-   goog.inherits(M.control.Navtoolbar, M.Control);
+  /**
+   * This function checks if an object is equals
+   * to this control
+   *
+   * @function
+   * @api stable
+   */
+  equals(obj) {
+    let equals = (obj instanceof Navtoolbar);
+    return equals;
+  };
 
-   /**
-    * This function creates the view to the specified map
-    *
-    * @public
-    * @function
-    * @param {M.Map} map map to add the control
-    * @returns {Promise} html response
-    * @api stable
-    */
-   M.control.Navtoolbar.prototype.createView = function(map) {
-      return M.template.compile(M.control.Navtoolbar.TEMPLATE, {
-         'jsonp': true
-      });
-   };
+  /**
+   * Template for this controls - button
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
+   */
+  Navtoolbar.NAME = 'navtoolbar';
 
-   /**
-    * This function checks if an object is equals
-    * to this control
-    *
-    * @function
-    * @api stable
-    */
-   M.control.Navtoolbar.prototype.equals = function(obj) {
-      var equals = (obj instanceof M.control.Navtoolbar);
-      return equals;
-   };
-
-   /**
-    * Template for this controls - button
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.control.Navtoolbar.NAME = 'navtoolbar';
-
-   /**
-    * Template for this controls - button
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.control.Navtoolbar.TEMPLATE = 'navtoolbar.html';
-})();
+  /**
+   * Template for this controls - button
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
+   */
+  Navtoolbar.TEMPLATE = 'navtoolbar.html';
+}
