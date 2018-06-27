@@ -1,575 +1,528 @@
-goog.provide('M.Parameters');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import Layer from('./layers.js');
+import Projection from('./projection.js');
+import maxExtent from('./maxExtent.js');
+import Resolutions from('./resolutions.js');
+import Zoom from('./zoom.js');
+import Center from('./center.js');
 
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.parameter.layer');
-goog.require('M.parameter.projection');
-goog.require("M.parameter.maxExtent");
-goog.require("M.parameter.resolutions");
-goog.require("M.parameter.zoom");
-goog.require("M.parameter.center");
+export class Parameter {
+  'use strict';
 
-(function(document) {
-   'use strict';
+  constructor(userParameters) {
+    if (Utils.isNullOrEmpty(userParameters)) {
+      Exception('No ha especificado ningún parámetro');
+    }
 
-   /**
-    * @classdesc
-    * Main constructor of the class. Creates the parsed parameters
-    * with parameters specified by the user
-    *
-    * @constructor
-    * @param {string|Mx.parameters.Map} userParameters parameters
-    * provided by the user
-    * @api stable
-    */
-   M.Parameters = (function(userParameters) {
-      if (M.utils.isNullOrEmpty(userParameters)) {
-         M.exception('No ha especificado ningún parámetro');
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.container = parseContainer(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.layers = parseLayers(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.wmc = parseWMC(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.wms = parseWMS(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.wmts = parseWMTS(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.kml = parseKML(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.controls = parseControls(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.getfeatureinfo = parseGetFeatureInfo(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.maxExtent = parseMaxExtent(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.bbox = parseBbox(userParameters);
+
+    /**
+     * @public
+     * @type {Number}
+     * @api stable
+     */
+    this.zoom = parseZoom(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.center = parseCenter(userParameters);
+
+    /**
+     * @public
+     * @type {String|Array<String>|Array<Number>}
+     * @api stable
+     */
+    this.resolutions = parseResolutions(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.projection = parseProjection(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.label = parseLabel(userParameters);
+
+    /**
+     * @public
+     * @type {Object}
+     * @api stable
+     */
+    this.ticket = parseTicket(userParameters);
+  }
+
+  /**
+   * This function parses a container parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} userParameters parameters
+   * especified by the user
+   * @returns {Object} container of the map
+   */
+  parseContainer(userParameters) {
+    let container;
+
+    if (Utils.isString(userParameters)) {
+      container = document.getElementById(userParameters);
+    } else if (Utils.isObject(userParameters)) {
+      if (!Utils.isNullOrEmpty(userParameters.id)) {
+        container = document.getElementById(userParameters.id);
+      } else if (!Utils.isNullOrEmpty(userParameters.container)) {
+        container = parseContainer(userParameters.container);
+      } else {
+        Exception('No ha especificado ningún parámetro contenedor');
       }
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof userParameters));
+    }
 
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.container = parseContainer(userParameters);
+    if (Utils.isNullOrEmpty(container)) {
+      Exception('No existe ningún contenedor con el id especificado');
+    }
 
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.layers = parseLayers(userParameters);
+    return container;
+  }
 
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.wmc = parseWMC(userParameters);
+  /**
+   * This function parses a layer parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {string|Object|Array<string|Object>} layers specified by the user
+   */
+  parseLayers(parameter) {
+    let layers;
 
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.wms = parseWMS(userParameters);
+    if (Utils.isString(parameter)) {
+      layers = Utils.getParameterValue('layers', parameter);
+    } else if (Utils.isObject(parameter)) {
+      layers = parameter.layers;
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
+    }
 
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.wmts = parseWMTS(userParameters);
+    return layers;
+  }
 
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.kml = parseKML(userParameters);
+  /**
+   * This function parses a wmc parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {string|Object|Array<string|Object>} WMC layers
+   */
+  parseWMC(parameter) {
+    let wmc;
 
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.controls = parseControls(userParameters);
-
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.getfeatureinfo = parseGetFeatureInfo(userParameters);
-
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.maxExtent = parseMaxExtent(userParameters);
-
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.bbox = parseBbox(userParameters);
-
-      /**
-       * @public
-       * @type {Number}
-       * @api stable
-       */
-      this.zoom = parseZoom(userParameters);
-
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.center = parseCenter(userParameters);
-
-      /**
-       * @public
-       * @type {String|Array<String>|Array<Number>}
-       * @api stable
-       */
-      this.resolutions = parseResolutions(userParameters);
-
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.projection = parseProjection(userParameters);
-
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.label = parseLabel(userParameters);
-
-      /**
-       * @public
-       * @type {Object}
-       * @api stable
-       */
-      this.ticket = parseTicket(userParameters);
-   });
-
-   /**
-    * This function parses a container parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} userParameters parameters
-    * especified by the user
-    * @returns {Object} container of the map
-    */
-   var parseContainer = function(userParameters) {
-      var container;
-
-      if (M.utils.isString(userParameters)) {
-         container = document.getElementById(userParameters);
+    if (Utils.isString(parameter)) {
+      wmc = Utils.parameterValue('wmc', parameter);
+      if (Utils.isNullOrEmpty(wmc)) {
+        wmc = Utils.parameterValue('wmcfile', parameter);
       }
-      else if (M.utils.isObject(userParameters)) {
-         if (!M.utils.isNullOrEmpty(userParameters.id)) {
-            container = document.getElementById(userParameters.id);
-         }
-         else if (!M.utils.isNullOrEmpty(userParameters.container)) {
-            container = parseContainer(userParameters.container);
-         }
-         else {
-            M.exception('No ha especificado ningún parámetro contenedor');
-         }
+      if (Utils.isNullOrEmpty(wmc)) {
+        wmc = Utils.parameterValue('wmcfiles', parameter);
       }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof userParameters));
+    } else if (Utils.isObject(parameter)) {
+      wmc = parameter.wmc;
+      if (Utils.isNullOrEmpty(wmc)) {
+        wmc = parameter.wmcfile;
       }
+      if (Utils.isNullOrEmpty(wmc)) {
+        wmc = parameter.wmcfiles;
+      }
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
+    }
+    return wmc;
+  }
 
-      if (M.utils.isNullOrEmpty(container)) {
-         M.exception('No existe ningún contenedor con el id especificado');
-      }
+  /**
+   * This function parses a wms parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {string|Object|Array<string|Object>} WMS layers
+   */
+  parseWMS(parameter) {
+    let wms;
 
-      return container;
-   };
+    if (Utils.isString(parameter)) {
+      wms = Utils.parameterValue('wms', parameter);
+    } else if (Utils.isObject(parameter)) {
+      wms = parameter.wms;
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
+    }
 
-   /**
-    * This function parses a layer parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {string|Object|Array<string|Object>} layers specified by the user
-    */
-   var parseLayers = function(parameter) {
-      var layers;
+    return wms;
+  }
+  /**
+   * This function parses a wmts parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {string|Object|Array<string|Object>} WMTS layers
+   */
+  parseWMTS(parameter) {
+    let wmts;
 
-      if (M.utils.isString(parameter)) {
-         layers = M.utils.getParameterValue('layers', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         layers = parameter.layers;
-      }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
-      }
+    if (Utils.isString(parameter)) {
+      wmts = Utils.parameterValue('wmts', parameter);
+    } else if (Utils.isObject(parameter)) {
+      wmts = parameter.wmts;
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
+    }
 
-      return layers;
-   };
+    return wmts;
+  }
 
-   /**
-    * This function parses a wmc parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {string|Object|Array<string|Object>} WMC layers
-    */
-   var parseWMC = function(parameter) {
-      var wmc;
+  /**
+   * This function parses a kml parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {string|Object|Array<string|Object>} KML layers
+   */
+  parseKML(parameter) {
+    let kml;
 
-      if (M.utils.isString(parameter)) {
-         wmc = M.utils.getParameterValue('wmc', parameter);
-         if (M.utils.isNullOrEmpty(wmc)) {
-            wmc = M.utils.getParameterValue('wmcfile', parameter);
-         }
-         if (M.utils.isNullOrEmpty(wmc)) {
-            wmc = M.utils.getParameterValue('wmcfiles', parameter);
-         }
-      }
-      else if (M.utils.isObject(parameter)) {
-         wmc = parameter.wmc;
-         if (M.utils.isNullOrEmpty(wmc)) {
-            wmc = parameter.wmcfile;
-         }
-         if (M.utils.isNullOrEmpty(wmc)) {
-            wmc = parameter.wmcfiles;
-         }
-      }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
-      }
-      return wmc;
-   };
+    if (Utils.isString(parameter)) {
+      kml = Utils.parameterValue('kml', parameter);
+    } else if (Utils.isObject(parameter)) {
+      kml = parameter.kml;
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
+    }
 
-   /**
-    * This function parses a wms parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {string|Object|Array<string|Object>} WMS layers
-    */
-   var parseWMS = function(parameter) {
-      var wms;
+    return kml;
+  }
 
-      if (M.utils.isString(parameter)) {
-         wms = M.utils.getParameterValue('wms', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         wms = parameter.wms;
-      }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
-      }
+  /**
+   * This function parses a controls parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {string|Object|Array<string|Object>} WMS layers
+   */
+  parseControls(parameter) {
+    let controls;
 
-      return wms;
-   };
+    if (Utils.isString(parameter)) {
+      controls = Utils.parameterValue('controls', parameter);
+    } else if (Utils.isObject(parameter)) {
+      controls = parameter.controls;
+    } else {
+      Exception('El tipo del parámetro controls no es válido: ' + (typeof parameter));
+    }
 
-   /**
-    * This function parses a wmts parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {string|Object|Array<string|Object>} WMTS layers
-    */
-   var parseWMTS = function(parameter) {
-      var wmts;
+    return controls;
+  }
 
-      if (M.utils.isString(parameter)) {
-         wmts = M.utils.getParameterValue('wmts', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         wmts = parameter.wmts;
-      }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
-      }
+  /**
+   * This function parses a controls parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {string|Object|Array<string|Object>} WMS layers
+   */
+  parseGetFeatureInfo(parameter) {
+    let getFeatureInfo;
 
-      return wmts;
-   };
+    if (Utils.isString(parameter)) {
+      getFeatureInfo = Utils.parameterValue('getfeatureinfo', parameter);
+    } else if (Utils.isObject(parameter)) {
+      getFeatureInfo = parameter.getfeatureinfo;
+      if (!Utils.isUndefined(getFeatureInfo) && Utils.isNullOrEmpty(getFeatureInfo)) {
+        getFeatureInfo = 'plain';
+      }
+    } else {
+      Exception('El tipo del parámetro controls no es válido: ' + (typeof parameter));
+    }
 
-   /**
-    * This function parses a kml parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {string|Object|Array<string|Object>} KML layers
-    */
-   var parseKML = function(parameter) {
-      var kml;
+    return getFeatureInfo;
+  }
 
-      if (M.utils.isString(parameter)) {
-         kml = M.utils.getParameterValue('kml', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         kml = parameter.kml;
-      }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
-      }
+  /**
+   * This function parses a maxExtent parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {String|Array<String>|Array<Number>|Mx.Extent} maximum extent
+   * established by the user
+   */
+  parseMaxExtent(parameter) {
+    let maxExtent;
 
-      return kml;
-   };
+    if (Utils.isString(parameter)) {
+      maxExtent = Utils.parameterValue('maxExtent', parameter);
+      if (Utils.isNullOrEmpty(maxExtent)) {
+        maxExtent = Utils.parameterValue('maxextent', parameter);
+      }
+    } else if (Utils.isObject(parameter)) {
+      maxExtent = parameter.maxExtent;
+      if (Utils.isNullOrEmpty(maxExtent)) {
+        maxExtent = parameter.maxextent;
+      }
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
+    }
+    return maxExtent;
+  }
 
-   /**
-    * This function parses a controls parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {string|Object|Array<string|Object>} WMS layers
-    */
-   var parseControls = function(parameter) {
-      var controls;
+  /**
+   * This function parses a bbox parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {String|Array<String>|Array<Number>|Mx.Extent} bbox
+   * established by the user
+   */
+  parseBbox(parameter) {
+    let bbox;
 
-      if (M.utils.isString(parameter)) {
-         controls = M.utils.getParameterValue('controls', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         controls = parameter.controls;
-      }
-      else {
-         M.exception('El tipo del parámetro controls no es válido: ' + (typeof parameter));
-      }
+    if (Utils.isString(parameter)) {
+      bbox = Utils.parameterValue('bbox', parameter);
+    } else if (Utils.isObject(parameter)) {
+      bbox = parameter.bbox;
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
+    }
 
-      return controls;
-   };
+    return bbox;
+  };
 
-   /**
-    * This function parses a controls parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {string|Object|Array<string|Object>} WMS layers
-    */
-   var parseGetFeatureInfo = function(parameter) {
-      var getFeatureInfo;
+  parseZoom(parameter) {
+    let zoom;
 
-      if (M.utils.isString(parameter)) {
-         getFeatureInfo = M.utils.getParameterValue('getfeatureinfo', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         getFeatureInfo = parameter.getfeatureinfo;
-         if (!M.utils.isUndefined(getFeatureInfo) && M.utils.isNullOrEmpty(getFeatureInfo)) {
-            getFeatureInfo = 'plain';
-         }
-      }
-      else {
-         M.exception('El tipo del parámetro controls no es válido: ' + (typeof parameter));
-      }
+    if (Utils.isString(parameter)) {
+      zoom = Utils.parameterValue('zoom', parameter);
+    } else if (Utils.isObject(parameter)) {
+      zoom = parameter.zoom;
+    } else {
+      Exception('El tipo del parámetro zoom no es válido: ' + (typeof parameter));
+    }
 
-      return getFeatureInfo;
-   };
+    return zoom;
+  }
 
-   /**
-    * This function parses a maxExtent parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {String|Array<String>|Array<Number>|Mx.Extent} maximum extent
-    * established by the user
-    */
-   var parseMaxExtent = function(parameter) {
-      var maxExtent;
+  parseCenter(parameter) {
+    let center;
 
-      if (M.utils.isString(parameter)) {
-         maxExtent = M.utils.getParameterValue('maxExtent', parameter);
-         if (M.utils.isNullOrEmpty(maxExtent)) {
-            maxExtent = M.utils.getParameterValue('maxextent', parameter);
-         }
-      }
-      else if (M.utils.isObject(parameter)) {
-         maxExtent = parameter.maxExtent;
-         if (M.utils.isNullOrEmpty(maxExtent)) {
-            maxExtent = parameter.maxextent;
-         }
-      }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
-      }
-      return maxExtent;
-   };
+    if (Utils.isString(parameter)) {
+      center = Utils.parameterValue('center', parameter);
+    } else if (Utils.isObject(parameter)) {
+      center = parameter.center;
+    } else {
+      Exception('El tipo del parámetro center no es válido: ' + (typeof parameter));
+    }
 
-   /**
-    * This function parses a bbox parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {String|Array<String>|Array<Number>|Mx.Extent} bbox
-    * established by the user
-    */
-   var parseBbox = function(parameter) {
-      var bbox;
+    return center;
+  }
 
-      if (M.utils.isString(parameter)) {
-         bbox = M.utils.getParameterValue('bbox', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         bbox = parameter.bbox;
-      }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
-      }
+  /**
+   * This function parses a ticket parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {String} ticket
+   * established by the user
+   */
+  parseTicket(parameter) {
+    let ticket;
 
-      return bbox;
-   };
+    if (Utils.isString(parameter)) {
+      ticket = Utils.parameterValue('ticket', parameter);
+    } else if (Utils.isObject(parameter)) {
+      ticket = parameter.ticket;
+    } else {
+      Exception('El tipo del parámetro ticket no es válido: ' + (typeof parameter));
+    }
 
-   var parseZoom = function(parameter) {
-      var zoom;
+    return ticket;
+  }
 
-      if (M.utils.isString(parameter)) {
-         zoom = M.utils.getParameterValue('zoom', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         zoom = parameter.zoom;
-      }
-      else {
-         M.exception('El tipo del parámetro zoom no es válido: ' + (typeof parameter));
-      }
+  /**
+   * This function parses a resolutions parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {String|Array<String>|Array<Number> resolutions}
+   * established by the user
+   */
+  parseResolutions(parameter) {
+    let resolutions;
 
-      return zoom;
-   };
+    if (Utils.isString(parameter)) {
+      resolutions = Utils.parameterValue('resolutions', parameter);
+    } else if (Utils.isObject(parameter)) {
+      resolutions = parameter.resolutions;
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
+    }
 
-   var parseCenter = function(parameter) {
-      var center;
+    return resolutions;
+  }
 
-      if (M.utils.isString(parameter)) {
-         center = M.utils.getParameterValue('center', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         center = parameter.center;
-      }
-      else {
-         M.exception('El tipo del parámetro center no es válido: ' + (typeof parameter));
-      }
+  /**
+   * This function parses a projection parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {String|Array<String>|Array<Number>|Mx.Extent} bbox
+   * established by the user
+   */
+  parseProjection(parameter) {
+    let projection;
 
-      return center;
-   };
+    if (Utils.isString(parameter)) {
+      projection = Utils.parameterValue('projection', parameter);
+    } else if (Utils.isObject(parameter)) {
+      projection = parameter.projection;
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
+    }
 
-   /**
-    * This function parses a ticket parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {String} ticket
-    * established by the user
-    */
-   var parseTicket = function(parameter) {
-      var ticket;
+    return projection;
+  }
 
-      if (M.utils.isString(parameter)) {
-         ticket = M.utils.getParameterValue('ticket', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         ticket = parameter.ticket;
-      }
-      else {
-         M.exception('El tipo del parámetro ticket no es válido: ' + (typeof parameter));
-      }
+  /**
+   * This function parses a projection parameter in a legible
+   * parameter to Mapea and checks posible errors
+   *
+   * @private
+   * @function
+   * @param {string|Mx.parameters.Map} parameter parameters
+   * especified by the user
+   * @returns {String|Array<String>|Array<Number>|Mx.Extent} bbox
+   * established by the user
+   */
+  parseLabel(parameter) {
+    let label;
 
-      return ticket;
-   };
+    if (Utils.isString(parameter)) {
+      label = Utils.parameterValue('label', parameter);
+    } else if (Utils.isObject(parameter)) {
+      label = parameter.label;
+    } else {
+      Exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
+    }
 
-   /**
-    * This function parses a resolutions parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {String|Array<String>|Array<Number> resolutions
-    * established by the user
-    */
-   var parseResolutions = function(parameter) {
-      var resolutions;
-
-      if (M.utils.isString(parameter)) {
-         resolutions = M.utils.getParameterValue('resolutions', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         resolutions = parameter.resolutions;
-      }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
-      }
-
-      return resolutions;
-   };
-
-   /**
-    * This function parses a projection parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {String|Array<String>|Array<Number>|Mx.Extent} bbox
-    * established by the user
-    */
-   var parseProjection = function(parameter) {
-      var projection;
-
-      if (M.utils.isString(parameter)) {
-         projection = M.utils.getParameterValue('projection', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         projection = parameter.projection;
-      }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
-      }
-
-      return projection;
-   };
-
-   /**
-    * This function parses a projection parameter in a legible
-    * parameter to Mapea and checks posible errors
-    *
-    * @private
-    * @function
-    * @param {string|Mx.parameters.Map} parameter parameters
-    * especified by the user
-    * @returns {String|Array<String>|Array<Number>|Mx.Extent} bbox
-    * established by the user
-    */
-   var parseLabel = function(parameter) {
-      var label;
-
-      if (M.utils.isString(parameter)) {
-         label = M.utils.getParameterValue('label', parameter);
-      }
-      else if (M.utils.isObject(parameter)) {
-         label = parameter.label;
-      }
-      else {
-         M.exception('El tipo del parámetro container no es válido: ' + (typeof parameter));
-      }
-
-      return label;
-   };
-})((window && window.document) || {});
+    return label;
+  }
+}

@@ -1,9 +1,8 @@
-goog.provide('M.parameter.osm');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import Map from('../map/map.js');
 
-goog.require('M.utils');
-goog.require('M.exception');
-
-(function () {
+export class OSM {
   'use strict';
 
   /**
@@ -16,59 +15,59 @@ goog.require('M.exception');
    * @function
    * @api stable
    */
-  M.parameter.osm = function (userParameters) {
-    var layers = [];
+  constructor(userParameters) {
+    let layers = [];
 
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(userParameters)) {
+    if (Utils.isNullOrEmpty(userParameters)) {
       userParameters = {
-        'type': M.layer.type.OSM,
+        'type': Layer.type.OSM,
         'name': 'osm'
       };
     }
 
     // checks if the parameter is an array
-    var userParametersArray = userParameters;
-    if (!M.utils.isArray(userParametersArray)) {
+    let userParametersArray = userParameters;
+    if (!Utils.isArray(userParametersArray)) {
       userParametersArray = [userParametersArray];
     }
 
-    layers = userParametersArray.map(function (userParam) {
-      var layerObj = {};
+    layers = userParametersArray.Map((userParam) => {
+      let layerObj = {};
 
       // gets the layer type
-      layerObj.type = M.layer.type.OSM;
+      layerObj.type = Layer.type.OSM;
 
       // gets the name
-      layerObj.name = getName(userParam);
+      layerObj.name = name(userParam);
 
       // gets the transparent
-      layerObj.transparent = getTransparent(userParam);
+      layerObj.transparent = transparent(userParam);
 
       // gets the legend
-      layerObj.legend = getLegend(userParam);
+      layerObj.legend = legend(userParam);
 
       return layerObj;
     });
 
-    if (!M.utils.isArray(userParameters)) {
+    if (!Utils.isArray(userParameters)) {
       layers = layers[0];
     }
 
     return layers;
-  };
+  }
 
   /**
    * Parses the parameter in order to get the layer name
    * @private
    * @function
    */
-  var getName = function (parameter) {
-    var name;
-    if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.name)) {
+  static get name(parameter) {
+    let name;
+    if (Utils.isObject(parameter) && !Utils.isNullOrEmpty(parameter.name)) {
       name = parameter.name.trim();
     }
-    if (!M.utils.isNullOrEmpty(name) && (M.utils.isUrl(name) || /^(true|false)$/i.test(name))) {
+    if (!Utils.isNullOrEmpty(name) && (Utils.isUrl(name) || /^(true|false)$/i.test(name))) {
       name = null;
     }
     return name;
@@ -79,51 +78,47 @@ goog.require('M.exception');
    * @private
    * @function
    */
-  var getTransparent = function (parameter) {
-    var transparent, params;
-    if (M.utils.isString(parameter)) {
+  static get transparent(parameter) {
+    let transparent, params;
+    if (Utils.isString(parameter)) {
       // <OSM>*<TRANSPARENT>(*<TITLE>)?
       if (/^OSM\*[^\*]+(\*[^\*]+)?/i.test(parameter)) {
         params = parameter.split(/\*/);
         transparent = params[1].trim();
       }
+    } else if (Utils.isObject(parameter) && !Utils.isNullOrEmpty(parameter.transparent)) {
+      transparent = Utils.normalize(parameter.transparent);
+    } else if (!Utils.isObject(parameter)) {
+      Exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
     }
-    else if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.transparent)) {
-      transparent = M.utils.normalize(parameter.transparent);
-    }
-    else if (!M.utils.isObject(parameter)) {
-      M.exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
-    }
-    if (!M.utils.isNullOrEmpty(transparent)) {
+    if (!Utils.isNullOrEmpty(transparent)) {
       transparent = /^1|(true)$/i.test(transparent);
     }
     return transparent;
-  };
+  }
 
   /**
    * Parses the parameter in order to get the layer legend
    * @private
    * @function
    */
-  var getLegend = function (parameter) {
-    var legend, params;
-    if (M.utils.isString(parameter)) {
+  static get legend(parameter) {
+    let legend, params;
+    if (Utils.isString(parameter)) {
       // <OSM>*(<TRANSPARENT>)?*<TITLE>
       if (/^OSM\*([^\*]+)?\*[^\*]+/i.test(parameter)) {
         params = parameter.split(/\*/);
         legend = params[2].trim();
       }
-    }
-    else if (M.utils.isObject(parameter) && !M.utils.isNullOrEmpty(parameter.legend)) {
+    } else if (Utils.isObject(parameter) && !Utils.isNullOrEmpty(parameter.legend)) {
       legend = parameter.legend.trim();
-    }
-    else if (!M.utils.isObject(parameter)) {
-      M.exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
+    } else if (!Utils.isObject(parameter)) {
+      Exception('El parámetro no es de un tipo soportado: ' + (typeof parameter));
     }
 
-    if (M.utils.isUrl(legend) || /^(true|false)$/i.test(legend)) {
+    if (Utils.isUrl(legend) || /^(true|false)$/i.test(legend)) {
       legend = null;
     }
     return legend;
-  };
-})();
+  }
+}

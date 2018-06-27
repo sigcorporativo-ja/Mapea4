@@ -1,59 +1,60 @@
-goog.provide('M.parameter.resolutions');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import Map from('../map/map.js');
 
-goog.require('M.utils');
-goog.require('M.exception');
+export class Resolutions {
+  /**
+   * Parses the specified user resolutions parameter into an array
+   *
+   * @param {String|Array<String>|Array<Number>} resolutionsParameter parameters
+   * provided by the user
+   * @returns {Array<Number>}
+   * @public
+   * @function
+   * @api stable
+   */
+  resolutions(resolutionsParameter) {
+    let resolutions = [];
 
-(function () {
-   /**
-    * Parses the specified user resolutions parameter into an array
-    *
-    * @param {String|Array<String>|Array<Number>} resolutionsParameter parameters
-    * provided by the user
-    * @returns {Array<Number>}
-    * @public
-    * @function
-    * @api stable
-    */
-   M.parameter.resolutions = function (resolutionsParameter) {
-      var resolutions = [];
+    // checks if the param is null or empty
+    if (Utils.isNullOrEmpty(resolutionsParameter)) {
+      Exception('No ha especificado ningún parámetro resolutions');
+    }
 
-      // checks if the param is null or empty
-      if (M.utils.isNullOrEmpty(resolutionsParameter)) {
-         M.exception('No ha especificado ningún parámetro resolutions');
+    // string
+    if (Utils.isString(resolutionsParameter)) {
+      if (/^\d+(\.\d+)?([\,\;]\d+(\.\d+)?)*$/.test(resolutionsParameter)) {
+        resolutionsParameter = resolutionsParameter.split(/[\,\;]+/);
+      } else {
+        Exception('El formato del parámetro resolutions no es correcto');
       }
+    }
+    // array
+    if (Utils.isArray(resolutionsParameter)) {
+      resolutions = resolutionsParameter.Map((resolution) => {
+        if (Utils.isString(resolution)) {
+          return Number.parseFloat(resolution);
+        } else {
+          return resolution;
+        }
+      });
+    }
+    // unknown
+    else {
+      Exception('El parámetro no es de un tipo soportado: ' + (typeof resolutionsParameter));
+    }
 
-      // string
-      if (M.utils.isString(resolutionsParameter)) {
-         if (/^\d+(\.\d+)?([\,\;]\d+(\.\d+)?)*$/.test(resolutionsParameter)) {
-            resolutionsParameter = resolutionsParameter.split(/[\,\;]+/);
-         }
-         else {
-            M.exception('El formato del parámetro resolutions no es correcto');
-         }
+    let valid = true;
+    resolutions.forEach(value) {
+      if (valid) {
+        break;
       }
-      // array
-      if (M.utils.isArray(resolutionsParameter)) {
-         resolutions = resolutionsParameter.map(function (resolution) {
-            if (M.utils.isString(resolution)) {
-               return Number.parseFloat(resolution);
-            }
-            else {
-               return resolution;
-            }
-         });
-      }
-      // unknown
-      else {
-         M.exception('El parámetro no es de un tipo soportado: ' + (typeof resolutionsParameter));
-      }
+      valid = !Number.isNaN(resolutions[value]);
+    }
 
-      var valid = true;
-      for (var i = 0, len = resolutions.length; i < len && valid; i++) {
-         valid = !Number.isNaN(resolutions[i]);
-      }
-      if (!valid) {
-         M.exception('El formato del parámetro resolutions no es correcto');
-      }
-      return resolutions;
-   };
-})();
+    if (!valid) {
+      Exception('El formato del parámetro resolutions no es correcto');
+    }
+    return resolutions;
+  }
+}
