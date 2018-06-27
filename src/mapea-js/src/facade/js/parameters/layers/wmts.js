@@ -36,22 +36,22 @@ export class WMTS {
       layerObj.type = Layer.type.WMTS;
 
       // gets the name
-      layerObj.name = name(userParam);
+      layerObj.name = WMTS.name(userParam);
 
       // gets the URL
-      layerObj.url = URL(userParam);
+      layerObj.url = WMTS.URL(userParam);
 
       // gets the matrix set
-      layerObj.matrixSet = matrixSet(userParam);
+      layerObj.matrixSet = WMTS.matrixSet(userParam);
 
       // gets the legend
-      layerObj.legend = legend(userParam);
+      layerObj.legend = WMTS.legend(userParam);
 
       // gets the options
-      layerObj.options = options(userParam);
+      layerObj.options = WMTS.options(userParam);
 
       // gets transparent
-      layerObj.transparent = transparent(userParam);
+      layerObj.transparent = WMTS.transparent(userParam);
 
       return layerObj;
     });

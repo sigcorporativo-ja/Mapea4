@@ -1,4 +1,4 @@
-import Utils from('../utils/utils.js');
+KML.import Utils from('../utils/utils.js');
 import Exception from('../exception/exception.js');
 import Map from('../map/map.js');
 
@@ -33,19 +33,19 @@ export class KML {
       let layerObj = {};
 
       // gets the layer type
-      layerObj.type = M.layer.type.KML;
+      layerObj.type = Layer.type.KML;
 
       // gets the name
-      layerObj.name = name(userParam);
+      layerObj.name = KML.name(userParam);
 
       // gets the URL
-      layerObj.url = URL(userParam);
+      layerObj.url = KML.URL(userParam);
 
       // gets the extract
-      layerObj.extract = extract(userParam);
+      layerObj.extract = KML.extract(userParam);
 
       // gets the options
-      layerObj.options = options(userParam);
+      layerObj.options = KML.options(userParam);
 
       return layerObj;
     });

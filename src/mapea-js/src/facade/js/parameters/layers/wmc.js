@@ -36,13 +36,13 @@ export class WMC {
       layerObj.type = Layer.type.WMC;
 
       // gets the name
-      layerObj.name = name(userParam);
+      layerObj.name = WMC.name(userParam);
 
       // gets the URL
-      layerObj.url = URL(userParam);
+      layerObj.url = WMC.URL(userParam);
 
       // gets the options
-      layerObj.options = options(userParam);
+      layerObj.options = WMC.options(userParam);
 
       return layerObj;
     });

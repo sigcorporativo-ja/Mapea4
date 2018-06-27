@@ -36,28 +36,28 @@ export class WMS {
       layerObj.type = Layer.type.WMS;
 
       // gets the name
-      layerObj.name = name(userParam);
+      layerObj.name = WMS.name(userParam);
 
       // gets the URL
-      layerObj.url = URL(userParam);
+      layerObj.url = WMS.URL(userParam);
 
       // gets the legend
-      layerObj.legend = legend(userParam);
+      layerObj.legend = WMS.legend(userParam);
 
       // gets the transparence
-      layerObj.transparent = transparent(userParam);
+      layerObj.transparent = WMS.transparent(userParam);
 
       // gets the tiled
-      layerObj.tiled = tiled(userParam);
+      layerObj.tiled = WMS.tiled(userParam);
 
       // gets the CQL filter
-      layerObj.cql = CQL(userParam);
+      layerObj.cql = WMS.CQL(userParam);
 
       // gets the version
-      layerObj.version = version(userParam);
+      layerObj.version = WMS.version(userParam);
 
       // gets the options
-      layerObj.options = options(userParam);
+      layerObj.options = WMS.options(userParam);
 
       return layerObj;
     });

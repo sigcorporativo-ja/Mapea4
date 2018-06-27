@@ -33,22 +33,22 @@ export class Mapbox {
       let layerObj = {};
 
       // gets the layer type
-      layerObj.type = M.layer.type.Mapbox;
+      layerObj.type = Layer.type.Mapbox;
 
       // gets the name
-      layerObj.url = URL(userParam);
+      layerObj.url = Mapbox.URL(userParam);
 
       // gets the name
-      layerObj.name = name(userParam);
+      layerObj.name = Mapbox.name(userParam);
 
       // gets the transparent
-      layerObj.transparent = transparent(userParam);
+      layerObj.transparent = Mapbox.transparent(userParam);
 
       // gets the accessToken
-      layerObj.accessToken = accessToken(userParam);
+      layerObj.accessToken = Mapbox.accessToken(userParam);
 
       // gets the legend
-      layerObj.legend = legend(userParam);
+      layerObj.legend = Mapbox.legend(userParam);
 
       return layerObj;
     });

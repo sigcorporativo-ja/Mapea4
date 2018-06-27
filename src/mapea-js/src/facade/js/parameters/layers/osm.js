@@ -39,13 +39,13 @@ export class OSM {
       layerObj.type = Layer.type.OSM;
 
       // gets the name
-      layerObj.name = name(userParam);
+      layerObj.name = OSM.name(userParam);
 
       // gets the transparent
-      layerObj.transparent = transparent(userParam);
+      layerObj.transparent = OSM.transparent(userParam);
 
       // gets the legend
-      layerObj.legend = legend(userParam);
+      layerObj.legend = OSM.legend(userParam);
 
       return layerObj;
     });

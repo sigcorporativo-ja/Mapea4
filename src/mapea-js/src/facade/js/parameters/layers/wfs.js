@@ -36,31 +36,31 @@ export class WFS {
       layerObj.type = Layer.type.WFS;
 
       // gets the name
-      layerObj.name = name(userParam);
+      layerObj.name = WFS.name(userParam);
 
       // gets the URL
-      layerObj.url = URL(userParam);
+      layerObj.url = WFS.URL(userParam);
 
       // gets the name
-      layerObj.namespace = namespace(userParam);
+      layerObj.namespace = WFS.namespace(userParam);
 
       // gets the legend
-      layerObj.legend = legend(userParam);
+      layerObj.legend = WFS.legend(userParam);
 
       // gets the CQL filter
-      layerObj.cql = CQL(userParam);
+      layerObj.cql = WFS.CQL(userParam);
 
       // gets the geometry
-      layerObj.geometry = geometry(userParam);
+      layerObj.geometry = WFS.geometry(userParam);
 
       // gets the ids
-      layerObj.ids = Ids(userParam);
+      layerObj.ids = WFS.Ids(userParam);
 
       // gets the version
-      layerObj.version = version(userParam);
+      layerObj.version = WFS.version(userParam);
 
       // gets the options
-      layerObj.options = options(userParam);
+      layerObj.options = WFS.options(userParam);
 
       // format specified by the user when create object WFS
       layerObj.outputFormat = userParameters.outputFormat;
@@ -100,7 +100,7 @@ export class WFS {
    * @private
    * @function
    */
-  static name(parameter) {
+  static get name(parameter) {
     let name, params, namespaceName;
     if (Utils.isString(parameter)) {
       if (/^WFS(T)?\*.+/i.test(parameter)) {
