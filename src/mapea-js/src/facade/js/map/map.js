@@ -1,54 +1,40 @@
-goog.provide('M.Map');
+import Base from "../facade";
+import Utils from "../utils/utils";
+import MapImpl from "../../impl/ol/js/map/map";
+import Exception from "../exception/exception";
+import Parameters from "../parameters/parameters";
+import LayerParameter from "../parameters/layers";
+import MaxExtentParameter from "../parameters/maxExtent";
+import ZoomParameter from "../parameters/zoom";
+import ResolutionsParameter from "../parameters/resolutions";
+import ProjectionParameter from "../parameters/projection";
+import Evt from "../events/events";
+import FeaturesHandler from "../handlers/featureshandler";
+import Vector from "../layers/vector";
+import Point from "..styles/point";
+import Config from "configuration";
+import Dialog from "../dialog";
+import GetFeatureInfo from "../controls/getfeatureinfo";
+import WMCSelector from "../controls/wmcselector";
+import LayerSwitcher from "../controls/layerswitcher";
+import Location from "../controls/location";
+import Navtoolbar from "../controls/navtoolbar";
+import Scale from "../controls/scale";
+import ScaleLine from "../controls/scaleline";
+import Mouse from "../controls/mouse";
+import OverviewMap from "../controls/overviewmap";
+import Panzoom from "../controls/panzoom";
+import Panzoombar from "../controls/panzoombar";
+import Layer from "../layers/layerbase";
+import LayerType from "../layers/layertype";
+import KML from "../layers/kml";
+import WFS from "../layers/wfs";
+import WMC from "../layers/wmc";
+import WMS from "../layers/wms";
+import WMTS from "../layers/wmts";
 
-goog.require('goog.dom.classlist');
+export default class Map extends Base {
 
-goog.require('M.facade.Base');
-goog.require('M.exception');
-goog.require('M.utils');
-goog.require('M.Layer');
-goog.require('M.remote');
-goog.require('M.Parameters');
-goog.require('M.style.state');
-goog.require('M.ui.Panel');
-goog.require('M.layer.WMC');
-goog.require('M.layer.WMS');
-goog.require('M.layer.WMTS');
-goog.require('M.layer.KML');
-goog.require('M.layer.WFS');
-goog.require('M.layer.OSM');
-goog.require('M.layer.Mapbox');
-goog.require('M.layer.GeoJSON');
-goog.require('M.Control');
-goog.require('M.control.WMCSelector');
-goog.require('M.control.Scale');
-goog.require('M.control.ScaleLine');
-goog.require('M.control.Panzoombar');
-goog.require('M.control.Panzoom');
-goog.require('M.control.LayerSwitcher');
-goog.require('M.control.Mouse');
-goog.require('M.control.Navtoolbar');
-goog.require('M.control.OverviewMap');
-goog.require('M.control.Location');
-goog.require('M.control.GetFeatureInfo');
-goog.require('M.handler.Features');
-goog.require('M.format.WKT');
-goog.require('M.Label');
-goog.require('M.Popup');
-goog.require('M.dialog');
-goog.require('M.Plugin');
-goog.require('M.window');
-
-goog.require('M.style.Chart');
-goog.require('M.style.Point');
-goog.require('M.style.Polygon');
-goog.require('M.style.Line');
-goog.require('M.style.Cluster');
-goog.require('M.style.Choropleth');
-goog.require('M.style.Category');
-goog.require('M.style.Proportional');
-goog.require('M.style.Heatmap');
-
-(function() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Map
@@ -62,42 +48,53 @@ goog.require('M.style.Heatmap');
    * provided by the user
    * @api stable
    */
-  M.Map = (function(userParameters, options) {
+  constructor(userParameters, options) {
+
+    // calls the super constructor
+    let impl = new MapImpl(params.container, (options || {}));
+    super(this, impl);
+    impl.setFacadeMap(this);
+    // sets flag if the map impl has been completed
+    impl.on(Evt.COMPLETED, () => {
+      this.finishedMapImpl_ = true;
+      this.checkCompleted_();
+    });
+
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(userParameters)) {
-      M.exception('No ha especificado ningún parámetro');
+    if (Utils.isNullOrEmpty(userParameters)) {
+      Exception('No ha especificado ningún parámetro');
     }
 
     // checks if the implementation can create maps
-    if (M.utils.isUndefined(M.impl.Map)) {
-      M.exception('La implementación usada no posee un constructor');
+    if (Utils.isUndefined(MapImpl)) {
+      Exception('La implementación usada no posee un constructor');
     }
 
     /**
      * @private
-     * @type {array<M.ui.Panel>}
+     * @type {array<Panel>}
      * @expose
      */
-    this._panels = [];
+    this.panels_ = [];
 
     /**
      * @private
-     * @type {array<M.Plugin>}
+     * @type {array<Plugin>}
      * @expose
      */
-    this._plugins = [];
+    this.plugins_ = [];
 
     /**
      * @private
      * @type {HTMLElement}
      * @expose
      */
-    this._areasContainer = null;
+    this.areasContainer_ = null;
 
     /**
      * The added popup
      * @private
-     * @type {M.Popup}
+     * @type {Popup}
      */
     this.popup_ = null;
 
@@ -109,7 +106,7 @@ goog.require('M.style.Heatmap');
      * @api stable
      * @expose
      */
-    this._defaultProj = true;
+    this.defaultProj_ = true;
 
     /**
      * @public
@@ -125,68 +122,55 @@ goog.require('M.style.Heatmap');
      * @private
      * @type {Number}
      */
-    this._userZoom = null;
+    this.userZoom_ = null;
 
     /**
      * TODO
      * @private
      * @type {Boolean}
      */
-    this._finishedInitCenter = true;
+    this.finishedInitCenter_ = true;
 
     /**
      * TODO
      * @private
      * @type {Boolean}
      */
-    this._finishedMaxExtent = true;
+    this.finishedMaxExtent_ = true;
 
     /**
      * TODO
      * @private
      * @type {Boolean}
      */
-    this._finishedMapImpl = false;
+    this.finishedMapImpl_ = false;
 
     /**
      * TODO
      * @private
      * @type {Boolean}
      */
-    this._finishedMap = false;
+    this.finishedMap_ = false;
 
     /**
      * Feature Center
      * @private
-     * @type {M.Feature}
+     * @type {Feature}
      */
     this.centerFeature_ = null;
 
     /**
      * Draw layer
      * @private
-     * @type {M.layer.Vector}
+     * @type {Vector}
      */
     this.drawLayer_ = null;
 
-    var this_ = this;
-
     // parses parameters to build the new map
-    var params = new M.Parameters(userParameters);
+    let params = new Parameters(userParameters);
 
     // adds class to the container
-    goog.dom.classlist.add(params.container, 'm-mapea-container');
-
-    // calls the super constructor
-    var impl = new M.impl.Map(params.container, (options || {}));
-    impl.setFacadeMap(this);
-    // sets flag if the map impl has been completed
-    impl.on(M.evt.COMPLETED, function() {
-      this_._finishedMapImpl = true;
-      this_._checkCompleted();
-    });
-
-    goog.base(this, impl);
+    params.container.classList.add('m-mapea-container');
 
     // creates main panels
     this.createMainPanels_();
@@ -196,66 +180,66 @@ goog.require('M.style.Heatmap');
      * @private
      * @type {M.handler.Features}
      */
-    this.featuresHandler_ = new M.handler.Features();
+    this.featuresHandler_ = new FeaturesHandler();
     this.featuresHandler_.addTo(this);
     this.featuresHandler_.activate();
 
-    this.drawLayer_ = new M.layer.Vector({
+    this.drawLayer_ = new Vector({
       'name': '__draw__'
     }, {
       'displayInLayerSwitcher': false
     });
 
-    this.drawLayer_.setStyle(new M.style.Point(M.Map.DRAWLAYER_STYLE));
+    this.drawLayer_.setStyle(new Point(Map.DRAWLAYER_STYLE));
 
-    this.drawLayer_.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999);
+    this.drawLayer_.setZIndex(MapImpl.Z_INDEX[LayerType.WFS] + 999);
     this.addLayers(this.drawLayer_);
 
     // projection
-    if (!M.utils.isNullOrEmpty(params.projection)) {
+    if (!Utils.isNullOrEmpty(params.projection)) {
       this.setProjection(params.projection);
     }
     else { // default projection
-      this.setProjection(M.config.DEFAULT_PROJ, true);
+      this.setProjection(Config.DEFAULT_PROJ, true);
     }
 
     // bbox
-    if (!M.utils.isNullOrEmpty(params.bbox)) {
+    if (!Utils.isNullOrEmpty(params.bbox)) {
       this.setBbox(params.bbox);
     }
 
     // resolutions
-    if (!M.utils.isNullOrEmpty(params.resolutions)) {
+    if (!Utils.isNullOrEmpty(params.resolutions)) {
       this.setResolutions(params.resolutions);
     }
 
     // layers
-    if (!M.utils.isNullOrEmpty(params.layers)) {
+    if (!Utils.isNullOrEmpty(params.layers)) {
       this.addLayers(params.layers);
     }
 
     // wmc
-    if (!M.utils.isNullOrEmpty(params.wmc)) {
+    if (!Utils.isNullOrEmpty(params.wmc)) {
       this.addWMC(params.wmc);
     }
 
     // wms
-    if (!M.utils.isNullOrEmpty(params.wms)) {
+    if (!Utils.isNullOrEmpty(params.wms)) {
       this.addWMS(params.wms);
     }
 
     // wmts
-    if (!M.utils.isNullOrEmpty(params.wmts)) {
+    if (!Utils.isNullOrEmpty(params.wmts)) {
       this.addWMTS(params.wmts);
     }
 
     // kml
-    if (!M.utils.isNullOrEmpty(params.kml)) {
+    if (!Utils.isNullOrEmpty(params.kml)) {
       this.addKML(params.kml);
     }
 
     // controls
-    if (!M.utils.isNullOrEmpty(params.controls)) {
+    if (!Utils.isNullOrEmpty(params.controls)) {
       this.addControls(params.controls);
     }
     else { // default controls
@@ -263,101 +247,100 @@ goog.require('M.style.Heatmap');
     }
 
     // getfeatureinfo
-    if (!M.utils.isNullOrEmpty(params.getfeatureinfo)) {
+    if (!Utils.isNullOrEmpty(params.getfeatureinfo)) {
       if (params.getfeatureinfo !== "plain" && params.getfeatureinfo !== "html" && params.getfeatureinfo !== "gml") {
-        M.dialog.error("El formato solicitado para la información no está disponible. Inténtelo utilizando gml, plain o html.");
+        Dialog.error("El formato solicitado para la información no está disponible. Inténtelo utilizando gml, plain o html.");
       }
       else {
-        var getFeatureInfo = new M.control.GetFeatureInfo(params.getfeatureinfo);
+        let getFeatureInfo = new GetFeatureInfo(params.getfeatureinfo);
         this.addControls(getFeatureInfo);
       }
     }
 
     // default WMC
-    if (M.utils.isNullOrEmpty(params.wmc) && M.utils.isNullOrEmpty(params.layers)) {
-      this.addWMC(M.config.predefinedWMC.predefinedNames[0]);
+    if (Utils.isNullOrEmpty(params.wmc) && Utils.isNullOrEmpty(params.layers)) {
+      this.addWMC(Config.predefinedWMC.predefinedNames[0]);
     }
 
     // maxExtent
-    if (!M.utils.isNullOrEmpty(params.maxExtent)) {
-      let zoomToMaxExtent = M.utils.isNullOrEmpty(params.zoom) && M.utils.isNullOrEmpty(params.bbox);
+    if (!Utils.isNullOrEmpty(params.maxExtent)) {
+      let zoomToMaxExtent = Utils.isNullOrEmpty(params.zoom) && Utils.isNullOrEmpty(params.bbox);
       this.setMaxExtent(params.maxExtent, zoomToMaxExtent);
     }
 
     // center
-    if (!M.utils.isNullOrEmpty(params.center)) {
+    if (!Utils.isNullOrEmpty(params.center)) {
       this.setCenter(params.center);
     }
     else {
-      this._finishedInitCenter = false;
-      this.getInitCenter_().then(function(initCenter) {
+      this.finishedInitCenter_ = false;
+      this.getInitCenter_().then((initCenter) => {
         // checks if the user stablished a center while it was
         // calculated
-        let newCenter = this_.getCenter();
-        if (M.utils.isNullOrEmpty(newCenter)) {
+        let newCenter = this.getCenter();
+        if (Utils.isNullOrEmpty(newCenter)) {
           newCenter = initCenter;
-          this_.setCenter(newCenter);
+          this.setCenter(newCenter);
         }
 
-        this_._finishedInitCenter = true;
-        this_._checkCompleted();
+        this.finishedInitCenter_ = true;
+        this.checkCompleted_();
       });
     }
 
     // zoom
-    if (!M.utils.isNullOrEmpty(params.zoom)) {
+    if (!Utils.isNullOrEmpty(params.zoom)) {
       this.setZoom(params.zoom);
     }
 
     // label
-    if (!M.utils.isNullOrEmpty(params.label)) {
+    if (!Utils.isNullOrEmpty(params.label)) {
       this.addLabel(params.label);
     }
 
     // initial zoom
-    if (M.utils.isNullOrEmpty(params.bbox) && M.utils.isNullOrEmpty(params.zoom) && M.utils.isNullOrEmpty(params.center)) {
+    if (Utils.isNullOrEmpty(params.bbox) && Utils.isNullOrEmpty(params.zoom) && Utils.isNullOrEmpty(params.center)) {
       this.zoomToMaxExtent(true);
     }
 
     //ticket
-    if (!M.utils.isNullOrEmpty(params.ticket)) {
+    if (!Utils.isNullOrEmpty(params.ticket)) {
       this.setTicket(params.ticket);
     }
-  });
-  goog.inherits(M.Map, M.facade.Base);
+  }
 
   /**
    * This function gets the layers added to the map
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @returns {Array<M.Layer>}
+   * @returns {Array<Layer>}
    * @api stable
    */
-  M.Map.prototype.getLayers = function(layersParam) {
+  getLayers(layersParam) {
     // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.getLayers)) {
-      M.exception('La implementación usada no posee el método getLayers');
+    if (Utils.isUndefined(MapImpl.prototype.getLayers)) {
+      Exception('La implementación usada no posee el método getLayers');
     }
 
-    var layers;
+    let layers;
 
     // parses parameters to Array
-    if (M.utils.isNull(layersParam)) {
+    if (Utils.isNull(layersParam)) {
       layersParam = [];
     }
-    else if (!M.utils.isArray(layersParam)) {
+    else if (!Utils.isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
-    // gets the parameters as M.Layer objects to filter
-    var filters = [];
+    // gets the parameters as Layer objects to filter
+    let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(M.parameter.layer);
+      filters = layersParam.map(LayerParameter);
     }
 
     // gets the layers
-    layers = this.getImpl().getLayers(filters).sort(M.Map.LAYER_SORT);
+    layers = this.getImpl().getLayers(filters).sort(Map.LAYER_SORT);
 
     return layers;
   };
@@ -366,16 +349,16 @@ goog.require('M.style.Heatmap');
    * This function gets the base layers added to the map
    *
    * @function
-   * @returns {Array<M.Layer>}
+   * @returns {Array<Layer>}
    * @api stable
    */
-  M.Map.prototype.getBaseLayers = function() {
+  getBaseLayers() {
     // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.getBaseLayers)) {
-      M.exception('La implementación usada no posee el método getBaseLayers');
+    if (Utils.isUndefined(MapImpl.prototype.getBaseLayers)) {
+      Exception('La implementación usada no posee el método getBaseLayers');
     }
 
-    return this.getImpl().getBaseLayers().sort(M.Map.LAYER_SORT);
+    return this.getImpl().getBaseLayers().sort(Map.LAYER_SORT);
   };
 
   /**
@@ -386,7 +369,7 @@ goog.require('M.style.Heatmap');
    * @public
    * @api stable
    */
-  M.Map.prototype.getFeatureHandler = function() {
+  getFeatureHandler() {
     return this.featuresHandler_;
   };
 
@@ -395,61 +378,60 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {string|Object|Array<String>|Array<Object>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.addLayers = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  addLayers(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.addLayers)) {
-        M.exception('La implementación usada no posee el método addLayers');
+      if (Utils.isUndefined(MapImpl.prototype.addLayers)) {
+        Exception('La implementación usada no posee el método addLayers');
       }
 
       // parses parameters to Array
-      if (!M.utils.isArray(layersParam)) {
+      if (!Utils.isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
-      // gets the parameters as M.Layer objects to add
-      var layers = layersParam.map(function(layerParam) {
+      // gets the parameters as Layer objects to add
+      let layers = layersParam.map(layerParam => {
         let layer;
 
-        if (layerParam instanceof M.Layer) {
+        if (layerParam instanceof Layer) {
           layer = layerParam;
         }
         else {
           try {
-            var parameter = M.parameter.layer(layerParam);
-            if (!M.utils.isNullOrEmpty(parameter.type)) {
+            let parameter = LayerParameter(layerParam);
+            if (!Utils.isNullOrEmpty(parameter.type)) {
               layer = new M.layer[parameter.type](layerParam);
             }
             else {
-              M.dialog.error('No se ha especificado un tipo válido para la capa');
+              Dialog.error('No se ha especificado un tipo válido para la capa');
             }
           }
           catch (err) {
-            M.dialog.error('El formato de la capa (' + layerParam + ') no se reconoce');
+            Dialog.error('El formato de la capa (' + layerParam + ') no se reconoce');
           }
         }
 
         // KML and WFS layers handler its features
-        if ((layer instanceof M.layer.Vector) && !(layer instanceof M.layer.KML) && !(layer instanceof M.layer.WFS)) {
+        if ((layer instanceof Vector) && !(layer instanceof KML) && !(layer instanceof WFS)) {
           this.featuresHandler_.addLayer(layer);
         }
 
         return layer;
-      }, this);
+      });
 
       // adds the layers
 
       this.getImpl().addLayers(layers);
-      this.fire(M.evt.ADDED_LAYER, [layers]);
+      this.fire(Evt.ADDED_LAYER, [layers]);
 
 
     }
     return this;
   };
-
 
   /**
 
@@ -458,24 +440,24 @@ goog.require('M.style.Heatmap');
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * specified by the user
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.removeLayers = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  removeLayers(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.removeLayers)) {
-        M.exception('La implementación usada no posee el método removeLayers');
+      if (Utils.isUndefined(MapImpl.prototype.removeLayers)) {
+        Exception('La implementación usada no posee el método removeLayers');
       }
 
       // gets the layers to remove
       let layers = this.getLayers(layersParam);
-      layers.forEach(function(layer) {
+      layers.forEach(layer => {
         // KML and WFS layers handler its features
-        if ((layer instanceof M.layer.Vector) /*&& !(layer instanceof M.layer.KML) && !(layer instanceof M.layer.WFS)*/ ) {
+        if (layer instanceof Vector) {
           this.featuresHandler_.removeLayer(layer);
         }
-      }, this);
+      });
 
       // removes the layers
       this.getImpl().removeLayers(layers);
@@ -489,35 +471,35 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @returns {Array<M.layer.WMC>}
+   * @returns {Array<WMC>}
    * @api stable
    */
-  M.Map.prototype.getWMC = function(layersParam) {
+  getWMC(layersParam) {
     // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.getWMC)) {
-      M.exception('La implementación usada no posee el método getWMC');
+    if (Utils.isUndefined(MapImpl.prototype.getWMC)) {
+      Exception('La implementación usada no posee el método getWMC');
     }
 
-    var layers;
+    let layers;
 
     // parses parameters to Array
-    if (M.utils.isNull(layersParam)) {
+    if (Utils.isNull(layersParam)) {
       layersParam = [];
     }
-    else if (!M.utils.isArray(layersParam)) {
+    else if (!Utils.isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
-    // gets the parameters as M.Layer objects to filter
-    var filters = [];
+    // gets the parameters as Layer objects to filter
+    let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(function(layerParam) {
-        return M.parameter.layer(layerParam, M.layer.type.WMC);
+      filters = layersParam.map((layerParam) => {
+        return LayerParameter(layerParam, LayerType.WMC);
       });
     }
 
     // gets the layers
-    layers = this.getImpl().getWMC(filters).sort(M.Map.LAYER_SORT);
+    layers = this.getImpl().getWMC(filters).sort(Map.LAYER_SORT);
 
     return layers;
   };
@@ -527,69 +509,69 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.addWMC = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  addWMC(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.addWMC)) {
-        M.exception('La implementación usada no posee el método addWMC');
+      if (Utils.isUndefined(MapImpl.prototype.addWMC)) {
+        Exception('La implementación usada no posee el método addWMC');
       }
 
       // parses parameters to Array
-      if (!M.utils.isArray(layersParam)) {
+      if (!Utils.isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
-      // gets the parameters as M.layer.WMC objects to add
-      var wmcLayers = [];
+      // gets the parameters as WMC objects to add
+      let wmcLayers = [];
       layersParam.forEach(function(layerParam) {
-        if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMC)) {
+        if (Utils.isObject(layerParam) && (layerParam instanceof WMC)) {
           wmcLayers.push(layerParam);
         }
-        else if (!(layerParam instanceof M.Layer)) {
+        else if (!(layerParam instanceof Layer)) {
           try {
-            wmcLayers.push(new M.layer.WMC(layerParam, layerParam.options));
+            wmcLayers.push(new WMC(layerParam, layerParam.options));
           }
           catch (err) {
-            M.dialog.error(err);
+            Dialog.error(err);
           }
         }
       });
 
       // adds the layers
       this.getImpl().addWMC(wmcLayers);
-      this.fire(M.evt.ADDED_LAYER, [wmcLayers]);
-      this.fire(M.evt.ADDED_WMC, [wmcLayers]);
+      this.fire(Evt.ADDED_LAYER, [wmcLayers]);
+      this.fire(Evt.ADDED_WMC, [wmcLayers]);
 
       /* checks if it should create the WMC control
          to select WMC */
-      var addedWmcLayers = this.getWMC();
+      let addedWmcLayers = this.getWMC();
       let wmcSelected = addedWmcLayers.filter(wmc => wmc.selected === true)[0];
       if (wmcSelected == null) {
         addedWmcLayers[0].select();
       }
       if (addedWmcLayers.length > 1) {
         this.removeControls("wmcselector");
-        this.addControls(new M.control.WMCSelector());
+        this.addControls(new WMCSelector());
       }
     }
     return this;
   };
 
-  // /**
-  //  * TODO
-  //  * @function
-  //  * @public
-  //  */
-  M.Map.prototype.refreshWMCSelectorControl = function() {
+  /**
+   * TODO
+   * @function
+   * @public
+   */
+  refreshWMCSelectorControl() {
     this.removeControls("wmcselector");
     if (this.getWMC().length === 1) {
       this.getWMC()[0].select();
     }
     else if (this.getWMC().length > 1) {
-      this.addControls(new M.control.WMCSelector());
+      this.addControls(new WMCSelector());
       let wmcSelected = this.getWMC().filter(wmc => wmc.selected === true)[0];
       if (wmcSelected == null) {
         this.getWMC()[0].select();
@@ -602,18 +584,18 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.removeWMC = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  removeWMC(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.removeWMC)) {
-        M.exception('La implementación usada no posee el método removeWMC');
+      if (Utils.isUndefined(MapImpl.prototype.removeWMC)) {
+        Exception('La implementación usada no posee el método removeWMC');
       }
 
       // gets the layers
-      var wmcLayers = this.getWMC(layersParam);
+      let wmcLayers = this.getWMC(layersParam);
       if (wmcLayers.length > 0) {
         // removes the layers
         this.getImpl().removeWMC(wmcLayers);
@@ -627,35 +609,35 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @returns {Array<M.layer.KML>}
+   * @returns {Array<KML>}
    * @api stable
    */
-  M.Map.prototype.getKML = function(layersParam) {
+  getKML(layersParam) {
     // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.getKML)) {
-      M.exception('La implementación usada no posee el método getKML');
+    if (Utils.isUndefined(MapImpl.prototype.getKML)) {
+      Exception('La implementación usada no posee el método getKML');
     }
 
-    var layers;
+    let layers;
 
     // parses parameters to Array
-    if (M.utils.isNull(layersParam)) {
+    if (Utils.isNull(layersParam)) {
       layersParam = [];
     }
-    else if (!M.utils.isArray(layersParam)) {
+    else if (!Utils.isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
-    // gets the parameters as M.Layer objects to filter
-    var filters = [];
+    // gets the parameters as Layer objects to filter
+    let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(function(layerParam) {
-        return M.parameter.layer(layerParam, M.layer.type.KML);
+      filters = layersParam.map(layerParam => {
+        return LayerParameter(layerParam, LayerType.KML);
       });
     }
 
     // gets the layers
-    layers = this.getImpl().getKML(filters).sort(M.Map.LAYER_SORT);
+    layers = this.getImpl().getKML(filters).sort(Map.LAYER_SORT);
 
     return layers;
   };
@@ -665,41 +647,41 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.KML>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.addKML = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  addKML(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.addKML)) {
-        M.exception('La implementación usada no posee el método addKML');
+      if (Utils.isUndefined(MapImpl.prototype.addKML)) {
+        Exception('La implementación usada no posee el método addKML');
       }
 
       // parses parameters to Array
-      if (!M.utils.isArray(layersParam)) {
+      if (!Utils.isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
-      // gets the parameters as M.layer.KML objects to add
-      var kmlLayers = [];
-      layersParam.forEach(function(layerParam) {
+      // gets the parameters as KML objects to add
+      let kmlLayers = [];
+      layersParam.forEach(layerParam => {
         let kmlLayer;
-        if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.KML)) {
+        if (Utils.isObject(layerParam) && (layerParam instanceof KML)) {
           kmlLayer = layerParam;
         }
-        else if (!(layerParam instanceof M.Layer)) {
-          kmlLayer = new M.layer.KML(layerParam, layerParam.options);
+        else if (!(layerParam instanceof Layer)) {
+          kmlLayer = new KML(layerParam, layerParam.options);
         }
         if (kmlLayer.extract === true) {
           this.featuresHandler_.addLayer(kmlLayer);
         }
         kmlLayers.push(kmlLayer);
-      }, this);
+      });
 
       // adds the layers
       this.getImpl().addKML(kmlLayers);
-      this.fire(M.evt.ADDED_LAYER, [kmlLayers]);
-      this.fire(M.evt.ADDED_KML, [kmlLayers]);
+      this.fire(Evt.ADDED_LAYER, [kmlLayers]);
+      this.fire(Evt.ADDED_KML, [kmlLayers]);
     }
     return this;
   };
@@ -709,24 +691,22 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.KML>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.removeKML = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  removeKML(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.removeKML)) {
-        M.exception('La implementación usada no posee el método removeKML');
+      if (Utils.isUndefined(MapImpl.prototype.removeKML)) {
+        Exception('La implementación usada no posee el método removeKML');
       }
 
       // gets the layers
-      var kmlLayers = this.getKML(layersParam);
+      let kmlLayers = this.getKML(layersParam);
       if (kmlLayers.length > 0) {
-        kmlLayers.forEach(
-          function(layer) {
-            this.featuresHandler_.removeLayer(layer);
-          }.bind(this)
-        );
+        kmlLayers.forEach(layer => {
+          this.featuresHandler_.removeLayer(layer);
+        });
         // removes the layers
         this.getImpl().removeKML(kmlLayers);
       }
@@ -739,35 +719,35 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMC>} layersParam
-   * @returns {Array<M.layer.WMS>} layers from the map
+   * @returns {Array<WMS>} layers from the map
    * @api stable
    */
-  M.Map.prototype.getWMS = function(layersParam) {
+  getWMS(layersParam) {
     // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.getWMS)) {
-      M.exception('La implementación usada no posee el método getWMS');
+    if (Utils.isUndefined(MapImpl.prototype.getWMS)) {
+      Exception('La implementación usada no posee el método getWMS');
     }
 
-    var layers;
+    let layers;
 
     // parses parameters to Array
-    if (M.utils.isNull(layersParam)) {
+    if (Utils.isNull(layersParam)) {
       layersParam = [];
     }
-    else if (!M.utils.isArray(layersParam)) {
+    else if (!Utils.isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
-    // gets the parameters as M.Layer objects to filter
-    var filters = [];
+    // gets the parameters as Layer objects to filter
+    let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(function(layerParam) {
-        return M.parameter.layer(layerParam, M.layer.type.WMS);
+      filters = layersParam.map(layerParam => {
+        return LayerParameter(layerParam, LayerType.WMS);
       });
     }
 
     // gets the layers
-    layers = this.getImpl().getWMS(filters).sort(M.Map.LAYER_SORT);
+    layers = this.getImpl().getWMS(filters).sort(Map.LAYER_SORT);
 
     return layers;
   };
@@ -777,36 +757,36 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMS>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.addWMS = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  addWMS(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.addWMS)) {
-        M.exception('La implementación usada no posee el método addWMS');
+      if (Utils.isUndefined(MapImpl.prototype.addWMS)) {
+        Exception('La implementación usada no posee el método addWMS');
       }
 
       // parses parameters to Array
-      if (!M.utils.isArray(layersParam)) {
+      if (!Utils.isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
-      // gets the parameters as M.layer.WMS objects to add
-      var wmsLayers = [];
-      layersParam.forEach(function(layerParam) {
-        if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMS)) {
+      // gets the parameters as WMS objects to add
+      let wmsLayers = [];
+      layersParam.forEach(layerParam => {
+        if (Utils.isObject(layerParam) && (layerParam instanceof WMS)) {
           wmsLayers.push(layerParam);
         }
-        else if (!(layerParam instanceof M.Layer)) {
-          wmsLayers.push(new M.layer.WMS(layerParam, layerParam.options));
+        else if (!(layerParam instanceof Layer)) {
+          wmsLayers.push(new WMS(layerParam, layerParam.options));
         }
       });
 
       // adds the layers
       this.getImpl().addWMS(wmsLayers);
-      this.fire(M.evt.ADDED_LAYER, [wmsLayers]);
-      this.fire(M.evt.ADDED_WMS, [wmsLayers]);
+      this.fire(Evt.ADDED_LAYER, [wmsLayers]);
+      this.fire(Evt.ADDED_WMS, [wmsLayers]);
     }
     return this;
   };
@@ -816,18 +796,18 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMS>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.removeWMS = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  removeWMS(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.removeWMS)) {
-        M.exception('La implementación usada no posee el método removeWMS');
+      if (Utils.isUndefined(MapImpl.prototype.removeWMS)) {
+        Exception('La implementación usada no posee el método removeWMS');
       }
 
       // gets the layers
-      var wmsLayers = this.getWMS(layersParam);
+      let wmsLayers = this.getWMS(layersParam);
       if (wmsLayers.length > 0) {
         // removes the layers
         this.getImpl().removeWMS(wmsLayers);
@@ -841,35 +821,35 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @returns {Array<M.layer.WFS>} layers from the map
+   * @returns {Array<WFS>} layers from the map
    * @api stable
    */
-  M.Map.prototype.getWFS = function(layersParam) {
+  getWFS(layersParam) {
     // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.getWFS)) {
-      M.exception('La implementación usada no posee el método getWFS');
+    if (Utils.isUndefined(MapImpl.prototype.getWFS)) {
+      Exception('La implementación usada no posee el método getWFS');
     }
 
-    var layers;
+    let layers;
 
     // parses parameters to Array
-    if (M.utils.isNull(layersParam)) {
+    if (Utils.isNull(layersParam)) {
       layersParam = [];
     }
-    else if (!M.utils.isArray(layersParam)) {
+    else if (!Utils.isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
-    // gets the parameters as M.Layer objects to filter
-    var filters = [];
+    // gets the parameters as Layer objects to filter
+    let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(function(layerParam) {
-        return M.parameter.layer(layerParam, M.layer.type.WFS);
+      filters = layersParam.map(layerParam => {
+        return LayerParameter(layerParam, LayerType.WFS);
       });
     }
 
     // gets the layers
-    layers = this.getImpl().getWFS(filters).sort(M.Map.LAYER_SORT);
+    layers = this.getImpl().getWFS(filters).sort(Map.LAYER_SORT);
 
     return layers;
   };
@@ -879,44 +859,44 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.WFS>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.addWFS = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  addWFS(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.addWFS)) {
-        M.exception('La implementación usada no posee el método addWFS');
+      if (Utils.isUndefined(MapImpl.prototype.addWFS)) {
+        Exception('La implementación usada no posee el método addWFS');
       }
 
       // parses parameters to Array
-      if (!M.utils.isArray(layersParam)) {
+      if (!Utils.isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
-      // gets the parameters as M.layer.WFS objects to add
-      var wfsLayers = [];
-      layersParam.forEach(function(layerParam) {
+      // gets the parameters as WFS objects to add
+      let wfsLayers = [];
+      layersParam.forEach(layerParam => {
         let wfsLayer;
-        if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WFS)) {
+        if (Utils.isObject(layerParam) && (layerParam instanceof WFS)) {
           wfsLayer = layerParam;
         }
-        else if (!(layerParam instanceof M.Layer)) {
+        else if (!(layerParam instanceof Layer)) {
           try {
-            wfsLayer = new M.layer.WFS(layerParam, layerParam.options);
+            wfsLayer = new WFS(layerParam, layerParam.options);
           }
           catch (err) {
-            M.dialog.error(err);
+            Dialog.error(err);
           }
         }
         this.featuresHandler_.addLayer(wfsLayer);
         wfsLayers.push(wfsLayer);
-      }, this);
+      });
 
       // adds the layers
       this.getImpl().addWFS(wfsLayers);
-      this.fire(M.evt.ADDED_LAYER, [wfsLayers]);
-      this.fire(M.evt.ADDED_WFS, [wfsLayers]);
+      this.fire(Evt.ADDED_LAYER, [wfsLayers]);
+      this.fire(Evt.ADDED_WFS, [wfsLayers]);
     }
     return this;
   };
@@ -926,24 +906,22 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.WFS>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.removeWFS = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  removeWFS(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.removeWFS)) {
-        M.exception('La implementación usada no posee el método removeWFS');
+      if (Utils.isUndefined(MapImpl.prototype.removeWFS)) {
+        Exception('La implementación usada no posee el método removeWFS');
       }
 
       // gets the layers
-      var wfsLayers = this.getWFS(layersParam);
+      let wfsLayers = this.getWFS(layersParam);
       if (wfsLayers.length > 0) {
-        wfsLayers.forEach(
-          function(layer) {
-            this.featuresHandler_.removeLayer(layer);
-          }.bind(this)
-        );
+        wfsLayers.forEach(layer => {
+          this.featuresHandler_.removeLayer(layer);
+        });
         // removes the layers
         this.getImpl().removeWFS(wfsLayers);
       }
@@ -956,35 +934,35 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMTS>} layersParam
-   * @returns {Array<M.layer.WMTS>} layers from the map
+   * @returns {Array<WMTS>} layers from the map
    * @api stable
    */
-  M.Map.prototype.getWMTS = function(layersParam) {
+  getWMTS(layersParam) {
     // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.getWMTS)) {
-      M.exception('La implementación usada no posee el método getWMTS');
+    if (Utils.isUndefined(MapImpl.prototype.getWMTS)) {
+      Exception('La implementación usada no posee el método getWMTS');
     }
 
-    var layers;
+    let layers;
 
     // parses parameters to Array
-    if (M.utils.isNull(layersParam)) {
+    if (Utils.isNull(layersParam)) {
       layersParam = [];
     }
-    else if (!M.utils.isArray(layersParam)) {
+    else if (!Utils.isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
-    // gets the parameters as M.Layer objects to filter
-    var filters = [];
+    // gets the parameters as Layer objects to filter
+    let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(function(layerParam) {
-        return M.parameter.layer(layerParam, M.layer.type.WMTS);
+      filters = layersParam.map(layerParam => {
+        return LayerParameter(layerParam, LayerType.WMTS);
       });
     }
 
     // gets the layers
-    layers = this.getImpl().getWMTS(filters).sort(M.Map.LAYER_SORT);
+    layers = this.getImpl().getWMTS(filters).sort(Map.LAYER_SORT);
 
     return layers;
   };
@@ -994,36 +972,36 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMTS>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.addWMTS = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  addWMTS(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.addWMTS)) {
-        M.exception('La implementación usada no posee el método addWMTS');
+      if (Utils.isUndefined(MapImpl.prototype.addWMTS)) {
+        Exception('La implementación usada no posee el método addWMTS');
       }
 
       // parses parameters to Array
-      if (!M.utils.isArray(layersParam)) {
+      if (!Utils.isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
-      // gets the parameters as M.layer.WMS objects to add
-      var wmtsLayers = [];
-      layersParam.forEach(function(layerParam) {
-        if (M.utils.isObject(layerParam) && (layerParam instanceof M.layer.WMTS)) {
+      // gets the parameters as WMS objects to add
+      let wmtsLayers = [];
+      layersParam.forEach(layerParam => {
+        if (Utils.isObject(layerParam) && (layerParam instanceof WMTS)) {
           wmtsLayers.push(layerParam);
         }
-        else if (!(layerParam instanceof M.Layer)) {
-          wmtsLayers.push(new M.layer.WMTS(layerParam, layerParam.options));
+        else if (!(layerParam instanceof Layer)) {
+          wmtsLayers.push(new WMTS(layerParam, layerParam.options));
         }
       });
 
       // adds the layers
       this.getImpl().addWMTS(wmtsLayers);
-      this.fire(M.evt.ADDED_LAYER, [wmtsLayers]);
-      this.fire(M.evt.ADDED_WMTS, [wmtsLayers]);
+      this.fire(Evt.ADDED_LAYER, [wmtsLayers]);
+      this.fire(Evt.ADDED_WMTS, [wmtsLayers]);
     }
     return this;
   };
@@ -1033,18 +1011,18 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMTS>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.removeWMTS = function(layersParam) {
-    if (!M.utils.isNullOrEmpty(layersParam)) {
+  removeWMTS(layersParam) {
+    if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.removeWMTS)) {
-        M.exception('La implementación usada no posee el método removeWMTS');
+      if (Utils.isUndefined(MapImpl.prototype.removeWMTS)) {
+        Exception('La implementación usada no posee el método removeWMTS');
       }
 
       // gets the layers
-      var wmtsLayers = this.getWMTS(layersParam);
+      let wmtsLayers = this.getWMTS(layersParam);
       if (wmtsLayers.length > 0) {
         // removes the layers
         this.getImpl().removeWMTS(wmtsLayers);
@@ -1061,30 +1039,30 @@ goog.require('M.style.Heatmap');
    * @returns {Array<M.layer.MBtiles>} layers from the map
    * @api stable
    */
-  M.Map.prototype.getMBtiles = function(layersParam) {
+  getMBtiles(layersParam) {
     // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.getMBtiles)) {
-      M.exception('La implementación usada no posee el método getMBtiles');
+    if (Utils.isUndefined(MapImpl.prototype.getMBtiles)) {
+      Exception('La implementación usada no posee el método getMBtiles');
     }
 
-    var layers;
+    let layers;
 
     // parses parameters to Array
-    if (M.utils.isNull(layersParam)) {
+    if (Utils.isNull(layersParam)) {
       layersParam = [];
     }
-    else if (!M.utils.isArray(layersParam)) {
+    else if (!Utils.isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
-    // gets the parameters as M.Layer objects to filter
-    var filters = [];
+    // gets the parameters as Layer objects to filter
+    let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(M.parameter.layer);
+      filters = layersParam.map(LayerParameter);
     }
 
     // gets the layers
-    layers = this.getImpl().getMBtiles(filters).sort(M.Map.LAYER_SORT);
+    layers = this.getImpl().getMBtiles(filters).sort(Map.LAYER_SORT);
 
     return layers;
   };
@@ -1094,10 +1072,10 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.addMBtiles = function(layersParam) {
+  addMBtiles(layersParam) {
     // TODO
   };
 
@@ -1106,10 +1084,10 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.removeMBtiles = function(layersParam) {
+  removeMBtiles(layersParam) {
     // TODO
   };
 
@@ -1119,25 +1097,25 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    * @param {string|Array<String>} controlsParam
-   * @returns {Array<M.Control>}
+   * @returns {Array<Control>}
    * @api stable
    */
-  M.Map.prototype.getControls = function(controlsParam) {
+  getControls(controlsParam) {
     // checks if the implementation can manage layers
-    if (M.utils.isUndefined(M.impl.Map.prototype.getControls)) {
-      M.exception('La implementación usada no posee el método getControls');
+    if (Utils.isUndefined(MapImpl.prototype.getControls)) {
+      Exception('La implementación usada no posee el método getControls');
     }
 
     // parses parameters to Array
-    if (M.utils.isNull(controlsParam)) {
+    if (Utils.isNull(controlsParam)) {
       controlsParam = [];
     }
-    else if (!M.utils.isArray(controlsParam)) {
+    else if (!Utils.isArray(controlsParam)) {
       controlsParam = [controlsParam];
     }
 
     // gets the controls
-    var controls = this.getImpl().getControls(controlsParam);
+    let controls = this.getImpl().getControls(controlsParam);
 
     return controls;
   };
@@ -1148,186 +1126,185 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    * @param {string|Object|Array<String>|Array<Object>} controlsParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.addControls = function(controlsParam) {
-    if (!M.utils.isNullOrEmpty(controlsParam)) {
+  //TODO mig
+  addControls(controlsParam) {
+    if (!Utils.isNullOrEmpty(controlsParam)) {
       // checks if the implementation can manage layers
-      if (M.utils.isUndefined(M.impl.Map.prototype.addControls)) {
-        M.exception('La implementación usada no posee el método addControls');
+      if (Utils.isUndefined(MapImpl.prototype.addControls)) {
+        Exception('La implementación usada no posee el método addControls');
       }
 
       // parses parameters to Array
-      if (!M.utils.isArray(controlsParam)) {
+      if (!Utils.isArray(controlsParam)) {
         controlsParam = [controlsParam];
       }
 
-      // gets the parameters as M.Control to add them
-      var controls = [];
-      for (var i = 0, ilen = controlsParam.length; i < ilen; i++) {
-        var controlParam = controlsParam[i];
-        var control;
-        var panel;
-        if (M.utils.isString(controlParam)) {
-          controlParam = M.utils.normalize(controlParam);
+      // gets the parameters as Control to add them
+      let controls = [];
+      //for (let i = 0, ilen = controlsParam.length; i < ilen; i++) {
+      controlsParam.forEach(controlParam => {
+        let control;
+        let panel;
+        if (Utils.isString(controlParam)) {
+          controlParam = Utils.normalize(controlParam);
           switch (controlParam) {
-            case M.control.Scale.NAME:
-              control = new M.control.Scale();
+            case Scale.NAME:
+              control = new Scale();
               panel = this.getPanels('map-info')[0];
-              if (M.utils.isNullOrEmpty(panel)) {
-                panel = new M.ui.Panel('map-info', {
+              if (Utils.isNullOrEmpty(panel)) {
+                panel = new Panel('map-info', {
                   "collapsible": false,
                   "className": "m-map-info",
-                  "position": M.ui.position.BR
+                  "position": UI.position.BR
                 });
-                panel.on(M.evt.ADDED_TO_MAP, function(html) {
+                panel.on(Evt.ADDED_TO_MAP, html => {
                   if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
-                    goog.dom.classlist.add(this.getControls(["scaleline"])[0].getImpl().getElement(),
-                      "ol-scale-line-up");
+                    this.getControls(["scaleline"])[0].getImpl().getElement().classlist.add("ol-scale-line-up");
                   }
-                }, this);
+                });
               }
               panel.addClassName('m-with-scale');
               break;
-            case M.control.ScaleLine.NAME:
-              control = new M.control.ScaleLine();
-              panel = new M.ui.Panel(M.control.ScaleLine.NAME, {
+            case ScaleLine.NAME:
+              control = new ScaleLine();
+              panel = new Panel(ScaleLine.NAME, {
                 "collapsible": false,
                 "className": "m-scaleline",
-                "position": M.ui.position.BL,
+                "position": UI.position.BL,
                 "tooltip": "Línea de escala"
               });
-              panel.on(M.evt.ADDED_TO_MAP, function(html) {
+              panel.on(Evt.ADDED_TO_MAP, html => {
                 if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
-                  goog.dom.classlist.add(this.getControls(["scaleline"])[0].getImpl().getElement(),
-                    "ol-scale-line-up");
+                  this.getControls(["scaleline"])[0].getImpl().getElement().classlist.add("ol-scale-line-up");
                 }
-              }, this);
+              });
               break;
-            case M.control.Panzoombar.NAME:
-              control = new M.control.Panzoombar();
-              panel = new M.ui.Panel(M.control.Panzoombar.NAME, {
+            case Panzoombar.NAME:
+              control = new Panzoombar();
+              panel = new Panel(Panzoombar.NAME, {
                 "collapsible": false,
                 "className": "m-panzoombar",
-                "position": M.ui.position.TL,
+                "position": UI.position.TL,
                 "tooltip": "Nivel de zoom"
               });
               break;
-            case M.control.Panzoom.NAME:
-              control = new M.control.Panzoom();
-              panel = new M.ui.Panel(M.control.Panzoom.NAME, {
+            case Panzoom.NAME:
+              control = new Panzoom();
+              panel = new Panel(Panzoom.NAME, {
                 "collapsible": false,
                 "className": "m-panzoom",
-                "position": M.ui.position.TL
+                "position": UI.position.TL
               });
               break;
-            case M.control.LayerSwitcher.NAME:
-              control = new M.control.LayerSwitcher();
+            case LayerSwitcher.NAME:
+              control = new LayerSwitcher();
               /* closure a function in order to keep
                * the control value in the scope*/
               (function(layerswitcherCtrl) {
-                panel = new M.ui.Panel(M.control.LayerSwitcher.NAME, {
+                panel = new Panel(LayerSwitcher.NAME, {
                   "collapsible": true,
                   "className": "m-layerswitcher",
                   "collapsedButtonClass": "g-cartografia-capas2",
-                  "position": M.ui.position.TR,
+                  "position": UI.position.TR,
                   "tooltip": "Selector de capas"
                 });
                 // enables touch scroll
-                panel.on(M.evt.ADDED_TO_MAP, function(html) {
-                  M.utils.enableTouchScroll(html.querySelector('.m-panel-controls'));
-                }, this);
+                panel.on(Evt.ADDED_TO_MAP, html => {
+                  Utils.enableTouchScroll(html.querySelector('.m-panel-controls'));
+                });
                 // renders and registers events
-                panel.on(M.evt.SHOW, function(evt) {
+                panel.on(Evt.SHOW, evt => {
                   layerswitcherCtrl.registerEvents();
                   layerswitcherCtrl.render();
-                }, this);
+                });
                 // unregisters events
-                panel.on(M.evt.HIDE, function(evt) {
+                panel.on(Evt.HIDE, evt => {
                   layerswitcherCtrl.unregisterEvents();
-                }, this);
+                });
               })(control);
               break;
-            case M.control.Mouse.NAME:
-              control = new M.control.Mouse();
+            case Mouse.NAME:
+              control = new Mouse();
               panel = this.getPanels('map-info')[0];
-              if (M.utils.isNullOrEmpty(panel)) {
-                panel = new M.ui.Panel('map-info', {
+              if (Utils.isNullOrEmpty(panel)) {
+                panel = new Panel('map-info', {
                   "collapsible": false,
                   "className": "m-map-info",
-                  "position": M.ui.position.BR,
+                  "position": UI.position.BR,
                   "tooltip": "Coordenadas del puntero"
                 });
               }
               panel.addClassName('m-with-mouse');
               break;
-            case M.control.Navtoolbar.NAME:
-              control = new M.control.Navtoolbar();
+            case Navtoolbar.NAME:
+              control = new Navtoolbar();
               break;
-            case M.control.OverviewMap.NAME:
-              control = new M.control.OverviewMap({
+            case OverviewMap.NAME:
+              control = new OverviewMap({
                 'toggleDelay': 400
               });
               panel = this.getPanels('map-info')[0];
-              if (M.utils.isNullOrEmpty(panel)) {
-                panel = new M.ui.Panel('map-info', {
+              if (Utils.isNullOrEmpty(panel)) {
+                panel = new Panel('map-info', {
                   "collapsible": false,
                   "className": "m-map-info",
-                  "position": M.ui.position.BR
+                  "position": UI.position.BR
                 });
               }
               panel.addClassName('m-with-overviewmap');
               break;
-            case M.control.Location.NAME:
-              control = new M.control.Location();
-              panel = new M.ui.Panel(M.control.Location.NAME, {
+            case Location.NAME:
+              control = new Location();
+              panel = new Panel(Location.NAME, {
                 "collapsible": false,
                 "className": 'm-location',
-                "position": M.ui.position.BR
+                "position": UI.position.BR
               });
               break;
-            case M.control.GetFeatureInfo.NAME:
-              control = new M.control.GetFeatureInfo();
+            case GetFeatureInfo.NAME:
+              control = new GetFeatureInfo();
               break;
             default:
-              let getControlsAvailable = M.utils.concatUrlPaths([M.config.MAPEA_URL, '/api/actions/controls']);
-              M.dialog.error('El control "'.concat(controlParam).concat('" no está definido. Consulte los controles disponibles <a href="' + getControlsAvailable + '" target="_blank">aquí</a>'));
+              let getControlsAvailable = Utils.concatUrlPaths([Config.MAPEA_URL, '/api/actions/controls']);
+              Dialog.error('El control "'.concat(controlParam).concat('" no está definido. Consulte los controles disponibles <a href="' + getControlsAvailable + '" target="_blank">aquí</a>'));
               break;
           }
         }
-        else if (controlParam instanceof M.Control) {
+        else if (controlParam instanceof Control) {
           control = controlParam;
-          if (control instanceof M.control.WMCSelector) {
+          if (control instanceof WMCSelector) {
             panel = this.getPanels('map-info')[0];
-            if (M.utils.isNullOrEmpty(panel)) {
-              panel = new M.ui.Panel('map-info', {
+            if (Utils.isNullOrEmpty(panel)) {
+              panel = new Panel('map-info', {
                 "collapsible": false,
                 "className": "m-map-info",
-                "position": M.ui.position.BR
+                "position": UI.position.BR
               });
-              panel.on(M.evt.ADDED_TO_MAP, function(html) {
+              panel.on(Evt.ADDED_TO_MAP, html => {
                 if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
                   goog.dom.classlist.add(this.getControls(["scaleline"])[0].getImpl().getElement(),
                     "ol-scale-line-up");
                 }
-              }, this);
+              });
             }
             panel.addClassName('m-with-wmcselector');
           }
         }
         else {
-          M.exception('El control "'.concat(controlParam).concat('" no es un control válido.'));
+          Exception('El control "'.concat(controlParam).concat('" no es un control válido.'));
         }
 
         // checks if it has to be added into a main panel
-        if (M.config.panels.TOOLS.indexOf(control.name) !== -1) {
-          if (M.utils.isNullOrEmpty(this.panel.TOOLS)) {
-            this.panel.TOOLS = new M.ui.Panel('tools', {
+        if (Config.panels.TOOLS.indexOf(control.name) !== -1) {
+          if (Utils.isNullOrEmpty(this.panel.TOOLS)) {
+            this.panel.TOOLS = new Panel('tools', {
               "collapsible": true,
               "className": 'm-tools',
               "collapsedButtonClass": 'g-cartografia-herramienta',
-              "position": M.ui.position.TL,
+              "position": UI.position.TL,
               "tooltip": "Panel de herramientas"
             });
             //               this.addPanels([this.panel.TOOLS]);
@@ -1337,13 +1314,13 @@ goog.require('M.style.Heatmap');
           //            }
           panel = this.panel.TOOLS;
         }
-        else if (M.config.panels.EDITION.indexOf(control.name) !== -1) {
-          if (M.utils.isNullOrEmpty(this.panel.EDITION)) {
-            this.panel.EDITION = new M.ui.Panel('edit', {
+        else if (Config.panels.EDITION.indexOf(control.name) !== -1) {
+          if (Utils.isNullOrEmpty(this.panel.EDITION)) {
+            this.panel.EDITION = new Panel('edit', {
               "collapsible": true,
               "className": 'm-edition',
               "collapsedButtonClass": 'g-cartografia-editar',
-              "position": M.ui.position.TL,
+              "position": UI.position.TL,
               "tooltip": "Herramientas de edición"
             });
             //               this.addPanels([this.panel.EDITION]);
@@ -1354,7 +1331,7 @@ goog.require('M.style.Heatmap');
           panel = this.panel.EDITION;
         }
 
-        if (!M.utils.isNullOrEmpty(panel) && !panel.hasControl(control)) {
+        if (!Utils.isNullOrEmpty(panel) && !panel.hasControl(control)) {
           panel.addControls(control);
           this.addPanels(panel);
         }
@@ -1362,7 +1339,7 @@ goog.require('M.style.Heatmap');
           control.addTo(this);
           controls.push(control);
         }
-      }
+      });
       this.getImpl().addControls(controls);
     }
     return this;
@@ -1374,30 +1351,30 @@ goog.require('M.style.Heatmap');
    * @function
    * @param {string|Array<string>} controlsParam
    * specified by the user
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.removeControls = function(controlsParam) {
+  removeControls(controlsParam) {
     // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(controlsParam)) {
-      M.exception('No ha especificado ningún control a eliminar');
+    if (Utils.isNullOrEmpty(controlsParam)) {
+      Exception('No ha especificado ningún control a eliminar');
     }
 
     // checks if the implementation can manage controls
-    if (M.utils.isUndefined(M.impl.Map.prototype.removeControls)) {
-      M.exception('La implementación usada no posee el método removeControls');
+    if (Utils.isUndefined(MapImpl.prototype.removeControls)) {
+      Exception('La implementación usada no posee el método removeControls');
     }
 
     // gets the contros to remove
-    var controls = this.getControls(controlsParam);
+    let controls = this.getControls(controlsParam);
     controls = [].concat(controls);
     if (controls.length > 0) {
       // removes controls from their panels
-      controls.forEach(function(control) {
-        if (!M.utils.isNullOrEmpty(control.getPanel())) {
+      controls.forEach(control => {
+        if (!Utils.isNullOrEmpty(control.getPanel())) {
           control.getPanel().removeControls(control);
         }
-      }, this);
+      });
       // removes the controls
       this.getImpl().removeControls(controls);
     }
@@ -1414,14 +1391,14 @@ goog.require('M.style.Heatmap');
    * @returns {Mx.Extent}
    * @api stable
    */
-  M.Map.prototype.getMaxExtent = function() {
+  getMaxExtent() {
     // checks if the implementation can set the maxExtent
-    if (M.utils.isUndefined(M.impl.Map.prototype.getMaxExtent)) {
-      M.exception('La implementación usada no posee el método getMaxExtent');
+    if (Utils.isUndefined(MapImpl.prototype.getMaxExtent)) {
+      Exception('La implementación usada no posee el método getMaxExtent');
     }
 
     // parses the parameter
-    var maxExtent = this.getImpl().getMaxExtent();
+    let maxExtent = this.getImpl().getMaxExtent();
 
     return maxExtent;
   };
@@ -1434,27 +1411,27 @@ goog.require('M.style.Heatmap');
    * @function
    * @param {String|Array<String>|Array<Number>|Mx.Extent} maxExtentParam the extent max
    * @param {Boolean} zoomToExtent - Set bbox
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.setMaxExtent = function(maxExtentParam, zoomToExtent) {
+  setMaxExtent(maxExtentParam, zoomToExtent) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(maxExtentParam)) {
-      M.exception('No ha especificado ningún maxExtent');
+    if (Utils.isNullOrEmpty(maxExtentParam)) {
+      Exception('No ha especificado ningún maxExtent');
     }
 
     // checks if the implementation can set the maxExtent
-    if (M.utils.isUndefined(M.impl.Map.prototype.setMaxExtent)) {
-      M.exception('La implementación usada no posee el método setMaxExtent');
+    if (Utils.isUndefined(MapImpl.prototype.setMaxExtent)) {
+      Exception('La implementación usada no posee el método setMaxExtent');
     }
 
     // parses the parameter
     try {
-      var maxExtent = M.parameter.maxExtent(maxExtentParam);
+      let maxExtent = MaxExtentParameter(maxExtentParam);
       this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
     }
     catch (err) {
-      M.dialog.error(err);
+      Dialog.error(err);
     }
     return this;
   };
@@ -1468,13 +1445,13 @@ goog.require('M.style.Heatmap');
    * @returns {Mx.Extent}
    * @api stable
    */
-  M.Map.prototype.getBbox = function() {
+  getBbox() {
     // checks if the implementation can set the maxExtent
-    if (M.utils.isUndefined(M.impl.Map.prototype.getBbox)) {
-      M.exception('La implementación usada no posee el método getBbox');
+    if (Utils.isUndefined(MapImpl.prototype.getBbox)) {
+      Exception('La implementación usada no posee el método getBbox');
     }
 
-    var bbox = this.getImpl().getBbox();
+    let bbox = this.getImpl().getBbox();
 
     return bbox;
   };
@@ -1487,27 +1464,27 @@ goog.require('M.style.Heatmap');
    * @function
    * @param {String|Array<String>|Array<Number>|Mx.Extent} bboxParam the bbox
    * @param {Object} vendorOpts vendor options
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.setBbox = function(bboxParam, vendorOpts) {
+  setBbox(bboxParam, vendorOpts) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(bboxParam)) {
-      M.exception('No ha especificado ningún bbox');
+    if (Utils.isNullOrEmpty(bboxParam)) {
+      Exception('No ha especificado ningún bbox');
     }
 
     // checks if the implementation can set the maxExtent
-    if (M.utils.isUndefined(M.impl.Map.prototype.setBbox)) {
-      M.exception('La implementación usada no posee el método setBbox');
+    if (Utils.isUndefined(MapImpl.prototype.setBbox)) {
+      Exception('La implementación usada no posee el método setBbox');
     }
 
     try {
       // parses the parameter
-      var bbox = M.parameter.maxExtent(bboxParam);
+      let bbox = MaxExtentParameter(bboxParam);
       this.getImpl().setBbox(bbox, vendorOpts);
     }
     catch (err) {
-      M.dialog.error('El formato del parámetro bbox no es el correcto');
+      Dialog.error('El formato del parámetro bbox no es el correcto');
     }
     return this;
   };
@@ -1521,13 +1498,13 @@ goog.require('M.style.Heatmap');
    * @returns {Number}
    * @api stable
    */
-  M.Map.prototype.getZoom = function() {
+  getZoom() {
     // checks if the implementation can get the zoom
-    if (M.utils.isUndefined(M.impl.Map.prototype.getZoom)) {
-      M.exception('La implementación usada no posee el método getZoom');
+    if (Utils.isUndefined(MapImpl.prototype.getZoom)) {
+      Exception('La implementación usada no posee el método getZoom');
     }
 
-    var zoom = this.getImpl().getZoom();
+    let zoom = this.getImpl().getZoom();
 
     return zoom;
   };
@@ -1539,28 +1516,28 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    * @param {String|Number} zoomParam the zoom
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.setZoom = function(zoomParam) {
+  setZoom(zoomParam) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(zoomParam)) {
-      M.exception('No ha especificado ningún zoom');
+    if (Utils.isNullOrEmpty(zoomParam)) {
+      Exception('No ha especificado ningún zoom');
     }
 
     // checks if the implementation can set the zoom
-    if (M.utils.isUndefined(M.impl.Map.prototype.setZoom)) {
-      M.exception('La implementación usada no posee el método setZoom');
+    if (Utils.isUndefined(MapImpl.prototype.setZoom)) {
+      Exception('La implementación usada no posee el método setZoom');
     }
 
     try {
       // parses the parameter
-      var zoom = M.parameter.zoom(zoomParam);
-      this._userZoom = zoom;
+      let zoom = ZoomParameter(zoomParam);
+      this.userZoom_ = zoom;
       this.getImpl().setZoom(zoom);
     }
     catch (err) {
-      M.dialog.error(err);
+      Dialog.error(err);
     }
 
     return this;
@@ -1576,13 +1553,13 @@ goog.require('M.style.Heatmap');
    * @returns {Array<Number>}
    * @api stable
    */
-  M.Map.prototype.getCenter = function() {
+  getCenter() {
     // checks if the implementation can get the center
-    if (M.utils.isUndefined(M.impl.Map.prototype.getCenter)) {
-      M.exception('La implementación usada no posee el método getCenter');
+    if (Utils.isUndefined(MapImpl.prototype.getCenter)) {
+      Exception('La implementación usada no posee el método getCenter');
     }
 
-    var center = this.getImpl().getCenter();
+    let center = this.getImpl().getCenter();
 
     return center;
   };
@@ -1594,28 +1571,28 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    * @param {String|Array<String>|Array<Number>|Mx.Center} centerParam the new center
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.setCenter = function(centerParam) {
+  setCenter(centerParam) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(centerParam)) {
-      M.exception('No ha especificado ningún center');
+    if (Utils.isNullOrEmpty(centerParam)) {
+      Exception('No ha especificado ningún center');
     }
 
     // checks if the implementation can set the center
-    if (M.utils.isUndefined(M.impl.Map.prototype.setCenter)) {
-      M.exception('La implementación usada no posee el método setCenter');
+    if (Utils.isUndefined(MapImpl.prototype.setCenter)) {
+      Exception('La implementación usada no posee el método setCenter');
     }
 
     // parses the parameter
     try {
-      let center = M.parameter.center(centerParam);
+      let center = Parameter.center(centerParam);
       this.getImpl().setCenter(center);
       if (center.draw === true) {
         this.drawLayer_.clear();
 
-        this.centerFeature_ = new M.Feature("__mapeacenter__", {
+        this.centerFeature_ = new Feature("__mapeacenter__", {
           "type": "Feature",
           "geometry": {
             "type": "Point",
@@ -1623,10 +1600,10 @@ goog.require('M.style.Heatmap');
           },
           "properties": {
             "vendor": {
-              "mapea": {
+              "mapea": { // TODO mig
                 "click": goog.bind(function(evt) {
-                  var label = this.getLabel();
-                  if (!M.utils.isNullOrEmpty(label)) {
+                  let label = this.getLabel();
+                  if (!Utils.isNullOrEmpty(label)) {
                     label.show(this);
                   }
                 }, this)
@@ -1638,7 +1615,7 @@ goog.require('M.style.Heatmap');
       }
     }
     catch (err) {
-      M.dialog.error(err);
+      Dialog.error(err);
     }
 
     return this;
@@ -1651,7 +1628,7 @@ goog.require('M.style.Heatmap');
    * @private
    * @function
    */
-  M.Map.prototype.getFeatureCenter = function() {
+  getFeatureCenter() {
     return this.centerFeature_;
   };
 
@@ -1663,7 +1640,7 @@ goog.require('M.style.Heatmap');
    * @function
    * @api stable
    */
-  M.Map.prototype.removeCenter = function() {
+  removeCenter() {
     this.removeFeatures(this.centerFeature_);
     this.centerFeature_ = null;
     this.zoomToMaxExtent();
@@ -1678,13 +1655,13 @@ goog.require('M.style.Heatmap');
    * @returns {Array<Number>}
    * @api stable
    */
-  M.Map.prototype.getResolutions = function() {
+  getResolutions() {
     // checks if the implementation can set the maxExtent
-    if (M.utils.isUndefined(M.impl.Map.prototype.getResolutions)) {
-      M.exception('La implementación usada no posee el método getResolutions');
+    if (Utils.isUndefined(MapImpl.prototype.getResolutions)) {
+      Exception('La implementación usada no posee el método getResolutions');
     }
 
-    var resolutions = this.getImpl().getResolutions();
+    let resolutions = this.getImpl().getResolutions();
 
     return resolutions;
   };
@@ -1696,22 +1673,22 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    * @param {String|Array<String>|Array<Number>} resolutionsParam the resolutions
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.setResolutions = function(resolutionsParam) {
+  setResolutions(resolutionsParam) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(resolutionsParam)) {
-      M.exception('No ha especificado ninguna resolución');
+    if (Utils.isNullOrEmpty(resolutionsParam)) {
+      Exception('No ha especificado ninguna resolución');
     }
 
     // checks if the implementation can set the setResolutions
-    if (M.utils.isUndefined(M.impl.Map.prototype.setResolutions)) {
-      M.exception('La implementación usada no posee el método setResolutions');
+    if (Utils.isUndefined(MapImpl.prototype.setResolutions)) {
+      Exception('La implementación usada no posee el método setResolutions');
     }
 
     // parses the parameter
-    var resolutions = M.parameter.resolutions(resolutionsParam);
+    let resolutions = ResolutionsParameter(resolutionsParam);
 
     this.getImpl().setResolutions(resolutions);
 
@@ -1727,13 +1704,13 @@ goog.require('M.style.Heatmap');
    * @returns {Mx.Projection}
    * @api stable
    */
-  M.Map.prototype.getScale = function() {
+  getScale() {
     // checks if the implementation has the method
-    if (M.utils.isUndefined(M.impl.Map.prototype.getScale)) {
-      M.exception('La implementación usada no posee el método getScale');
+    if (Utils.isUndefined(MapImpl.prototype.getScale)) {
+      Exception('La implementación usada no posee el método getScale');
     }
 
-    var scale = this.getImpl().getScale();
+    let scale = this.getImpl().getScale();
 
     return scale;
   };
@@ -1747,13 +1724,13 @@ goog.require('M.style.Heatmap');
    * @returns {Mx.Projection}
    * @api stable
    */
-  M.Map.prototype.getProjection = function() {
+  getProjection() {
     // checks if the implementation has the method
-    if (M.utils.isUndefined(M.impl.Map.prototype.getProjection)) {
-      M.exception('La implementación usada no posee el método getProjection');
+    if (Utils.isUndefined(MapImpl.prototype.getProjection)) {
+      Exception('La implementación usada no posee el método getProjection');
     }
 
-    var projection = this.getImpl().getProjection();
+    let projection = this.getImpl().getProjection();
 
     return projection;
   };
@@ -1765,32 +1742,32 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    * @param {String|Mx.Projection} projection the bbox
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.setProjection = function(projection, asDefault) {
+  setProjection(projection, asDefault) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(projection)) {
-      M.exception('No ha especificado ninguna proyección');
+    if (Utils.isNullOrEmpty(projection)) {
+      Exception('No ha especificado ninguna proyección');
     }
 
     // checks if the implementation can set the projection
-    if (M.utils.isUndefined(M.impl.Map.prototype.setProjection)) {
-      M.exception('La implementación usada no posee el método setProjection');
+    if (Utils.isUndefined(MapImpl.prototype.setProjection)) {
+      Exception('La implementación usada no posee el método setProjection');
     }
 
     // parses the parameter
     try {
       let oldProj = this.getProjection();
-      projection = M.parameter.projection(projection);
+      projection = ProjectionParameter(projection);
       this.getImpl().setProjection(projection);
-      this._defaultProj = (this._defaultProj && (asDefault === true));
-      this.fire(M.evt.CHANGE_PROJ, [oldProj, projection]);
+      this.defaultProj_ = (this.defaultProj_ && (asDefault === true));
+      this.fire(Evt.CHANGE_PROJ, [oldProj, projection]);
     }
     catch (err) {
-      M.dialog.error(err);
+      Dialog.error(err);
       if (String(err).indexOf("El formato del parámetro projection no es correcto") >= 0) {
-        this.setProjection(M.config.DEFAULT_PROJ, true);
+        this.setProjection(Config.DEFAULT_PROJ, true);
       }
     }
 
@@ -1803,30 +1780,30 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    * @param {Mx.Plugin} plugin the plugin to add to the map
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.getPlugins = function(names) {
+  getPlugins(names) {
     // parses parameters to Array
-    if (M.utils.isNull(names)) {
+    if (Utils.isNull(names)) {
       names = [];
     }
-    else if (!M.utils.isArray(names)) {
+    else if (!Utils.isArray(names)) {
       names = [names];
     }
 
-    var plugins = [];
+    let plugins = [];
 
     // parse to Array
     if (names.length === 0) {
-      plugins = this._plugins;
+      plugins = this.plugins_;
     }
     else {
-      names.forEach(function(name) {
-        plugins = plugins.concat(this._plugins.filter(function(plugin) {
+      names.forEach(name => {
+        plugins = plugins.concat(this.plugins_.filter(plugin => {
           return (name === plugin.name);
         }));
-      }, this);
+      });
     }
     return plugins;
   };
@@ -1838,21 +1815,21 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    * @param {Mx.Plugin} plugin the plugin to add to the map
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.addPlugin = function(plugin) {
+  addPlugin(plugin) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(plugin)) {
-      M.exception('No ha especificado ningún plugin');
+    if (Utils.isNullOrEmpty(plugin)) {
+      Exception('No ha especificado ningún plugin');
     }
 
     // checks if the plugin can be added to the map
-    if (M.utils.isUndefined(plugin.addTo)) {
-      M.exception('El plugin no puede añadirse al mapa');
+    if (Utils.isUndefined(plugin.addTo)) {
+      Exception('El plugin no puede añadirse al mapa');
     }
 
-    this._plugins.push(plugin);
+    this.plugins_.push(plugin);
     plugin.addTo(this);
 
     return this;
@@ -1862,26 +1839,26 @@ goog.require('M.style.Heatmap');
    * This function removes the specified plugins from the map
    *
    * @function
-   * @param {Array<M.Plugin>} plugins specified by the user
-   * @returns {M.Map}
+   * @param {Array<Plugin>} plugins specified by the user
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.removePlugins = function(plugins) {
+  removePlugins(plugins) {
     // checks if the parameter is null or empty
-    if (M.utils.isNullOrEmpty(plugins)) {
-      M.exception('No ha especificado ningún plugin a eliminar');
+    if (Utils.isNullOrEmpty(plugins)) {
+      Exception('No ha especificado ningún plugin a eliminar');
     }
-    if (!M.utils.isArray(plugins)) {
+    if (!Utils.isArray(plugins)) {
       plugins = [plugins];
     }
 
     plugins = [].concat(plugins);
     if (plugins.length > 0) {
       // removes controls from their panels
-      plugins.forEach(function(plugin) {
+      plugins.forEach(plugin => {
         plugin.destroy();
-        this._plugins.remove(plugin);
-      }, this);
+        this.plugins_.remove(plugin);
+      });
     }
 
     return this;
@@ -1896,10 +1873,10 @@ goog.require('M.style.Heatmap');
    * @returns {Promise}
    * @api stable
    */
-  M.Map.prototype.getEnvolvedExtent = function() {
+  getEnvolvedExtent() {
     // checks if the implementation can set the maxExtent
-    if (M.utils.isUndefined(M.impl.Map.prototype.getEnvolvedExtent)) {
-      M.exception('La implementación usada no posee el método getEnvolvedExtent');
+    if (Utils.isUndefined(MapImpl.prototype.getEnvolvedExtent)) {
+      Exception('La implementación usada no posee el método getEnvolvedExtent');
     }
 
     return this.getImpl().getEnvolvedExtent();
@@ -1911,26 +1888,25 @@ goog.require('M.style.Heatmap');
    *
    * @public
    * @function
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.zoomToMaxExtent = function(keepUserZoom) {
+  zoomToMaxExtent(keepUserZoom) {
     // zoom to maxExtent if no zoom was specified
-    var maxExtent = this.getMaxExtent();
-    if (!M.utils.isNullOrEmpty(maxExtent)) {
+    let maxExtent = this.getMaxExtent();
+    if (!Utils.isNullOrEmpty(maxExtent)) {
       this.setBbox(maxExtent);
     }
     else {
       /* if no maxExtent was provided then
        calculates the envolved extent */
-      var this_ = this;
-      this._finishedMaxExtent = false;
-      this.getEnvolvedExtent().then(function(extent) {
-        if ((keepUserZoom !== true) || (M.utils.isNullOrEmpty(this_._userZoom))) {
-          this_.setBbox(extent);
+      this.finishedMaxExtent_ = false;
+      this.getEnvolvedExtent().then(extent => {
+        if ((keepUserZoom !== true) || (Utils.isNullOrEmpty(this.userZoom_))) {
+          this.setBbox(extent);
         }
-        this_._finishedMaxExtent = true;
-        this_._checkCompleted();
+        this.finishedMaxExtent_ = true;
+        this.checkCompleted_();
       });
     }
 
@@ -1945,15 +1921,15 @@ goog.require('M.style.Heatmap');
    * @param {String} ticket ticket user
    * @api stable
    */
-  M.Map.prototype.setTicket = function(ticket) {
-    if (!M.utils.isNullOrEmpty(ticket)) {
-      if (M.config.PROXY_POST_URL.indexOf("ticket=") == -1) {
-        M.config('PROXY_POST_URL', M.utils.addParameters(M.config.PROXY_POST_URL, {
+  setTicket(ticket) {
+    if (!Utils.isNullOrEmpty(ticket)) {
+      if (Config.PROXY_POST_URL.indexOf("ticket=") == -1) {
+        Config('PROXY_POST_URL', Utils.addParameters(Config.PROXY_POST_URL, {
           'ticket': ticket
         }));
       }
-      if (M.config.PROXY_URL.indexOf("ticket=") == -1) {
-        M.config('PROXY_URL', M.utils.addParameters(M.config.PROXY_URL, {
+      if (Config.PROXY_URL.indexOf("ticket=") == -1) {
+        Config('PROXY_URL', Utils.addParameters(Config.PROXY_URL, {
           'ticket': ticket
         }));
       }
@@ -1968,18 +1944,17 @@ goog.require('M.style.Heatmap');
    *
    * @private
    * @function
-   * @returns {M.Map}
+   * @returns {Map}
    */
-  M.Map.prototype.getInitCenter_ = function() {
-    var this_ = this;
-    return new Promise(function(success, fail) {
-      var center = this_.getCenter();
-      if (!M.utils.isNullOrEmpty(center)) {
+  getInitCenter_() {
+    return new Promise((success, fail) => {
+      let center = this.getCenter();
+      if (!Utils.isNullOrEmpty(center)) {
         success(center);
       }
       else {
-        var maxExtent = this_.getMaxExtent();
-        if (!M.utils.isNullOrEmpty(maxExtent)) {
+        let maxExtent = this.getMaxExtent();
+        if (!Utils.isNullOrEmpty(maxExtent)) {
           // obtener centro del maxExtent
           center = {
             'x': ((maxExtent.x.max + maxExtent.x.min) / 2),
@@ -1988,7 +1963,7 @@ goog.require('M.style.Heatmap');
           success(center);
         }
         else {
-          this_.getEnvolvedExtent().then(function(extent) {
+          this.getEnvolvedExtent().then(extent => {
             // obtener centrol del extent
             center = {
               'x': ((extent[0] + extent[2]) / 2),
@@ -1998,7 +1973,6 @@ goog.require('M.style.Heatmap');
           });
         }
       }
-
     });
   };
 
@@ -2008,13 +1982,13 @@ goog.require('M.style.Heatmap');
    *
    * @public
    * @function
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.destroy = function() {
+  destroy() {
     // checks if the implementation can provide the implementation map
-    if (M.utils.isUndefined(M.impl.Map.prototype.destroy)) {
-      M.exception('La implementación usada no posee el método destroy');
+    if (Utils.isUndefined(MapImpl.prototype.destroy)) {
+      Exception('La implementación usada no posee el método destroy');
     }
 
     this.getImpl().destroy();
@@ -2029,54 +2003,53 @@ goog.require('M.style.Heatmap');
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @api stable
    */
-  M.Map.prototype.addLabel = function(labelParam, coordParam) {
+  addLabel(labelParam, coordParam) {
     let panMapIfOutOfView = labelParam.panMapIfOutOfView === undefined ? true : labelParam.panMapIfOutOfView;
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(labelParam)) {
-      M.exception('No ha especificado ninguna proyección');
+    if (Utils.isNullOrEmpty(labelParam)) {
+      Exception('No ha especificado ninguna proyección');
     }
 
     // checks if the implementation can add labels
-    if (M.utils.isUndefined(M.impl.Map.prototype.addLabel)) {
-      M.exception('La implementación usada no posee el método addLabel');
+    if (Utils.isUndefined(MapImpl.prototype.addLabel)) {
+      Exception('La implementación usada no posee el método addLabel');
     }
 
-    var text = null;
-    var coord = null;
+    let text = null;
+    let coord = null;
 
     // object
-    if (M.utils.isObject(labelParam)) {
-      text = M.utils.escapeJSCode(labelParam.text);
+    if (Utils.isObject(labelParam)) {
+      text = Utils.escapeJSCode(labelParam.text);
       coord = labelParam.coord;
     }
     // string
     else {
-      text = M.utils.escapeJSCode(labelParam);
+      text = Utils.escapeJSCode(labelParam);
       coord = coordParam;
     }
 
-    if (M.utils.isNullOrEmpty(coord)) {
+    if (Utils.isNullOrEmpty(coord)) {
       coord = this.getCenter();
     }
     else {
-      coord = M.parameter.center(coord);
+      coord = Parameter.center(coord);
     }
 
-    if (M.utils.isNullOrEmpty(coord)) {
-      let this_ = this;
-      this.getInitCenter_().then(function(initCenter) {
+    if (Utils.isNullOrEmpty(coord)) {
+      this.getInitCenter_().then(initCenter => {
         // checks if the user stablished a center while it was
         // calculated
-        let newCenter = this_.getCenter();
-        if (M.utils.isNullOrEmpty(newCenter)) {
+        let newCenter = this.getCenter();
+        if (Utils.isNullOrEmpty(newCenter)) {
           newCenter = initCenter;
         }
-        var label = new M.Label(text, newCenter, panMapIfOutOfView);
-        this_.getImpl().addLabel(label);
+        let label = new Label(text, newCenter, panMapIfOutOfView);
+        this.getImpl().addLabel(label);
       });
     }
     else {
-      var label = new M.Label(text, coord, panMapIfOutOfView);
+      let label = new Label(text, coord, panMapIfOutOfView);
       this.getImpl().addLabel(label);
     }
 
@@ -2089,10 +2062,10 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.getLabel = function() {
+  getLabel() {
     return this.getImpl().getLabel();
   };
 
@@ -2102,10 +2075,10 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @returns {M.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.Map.prototype.removeLabel = function() {
+  removeLabel() {
     return this.getImpl().removeLabel();
   };
 
@@ -2116,13 +2089,13 @@ goog.require('M.style.Heatmap');
    * @param {Array<Mx.Point>|Mx.Point} points
    * @api stable
    */
-  M.Map.prototype.drawPoints = function(points) {
+  drawPoints(points) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(points)) {
-      M.exception('No ha especificado ningún punto');
+    if (Utils.isNullOrEmpty(points)) {
+      Exception('No ha especificado ningún punto');
     }
 
-    if (!M.utils.isArray(points)) {
+    if (!Utils.isArray(points)) {
       points = [points];
     }
 
@@ -2135,15 +2108,15 @@ goog.require('M.style.Heatmap');
         },
         "properties": {}
       };
-      if (M.utils.isFunction(point.click)) {
+      if (Utils.isFunction(point.click)) {
         gj.properties.vendor = {
           "mapea": {
             "click": point.click
           }
         };
       }
-      return new M.Feature(null, gj);
-    }, this);
+      return new Feature(null, gj);
+    });
     this.drawLayer_.addFeatures(features);
   };
 
@@ -2151,10 +2124,10 @@ goog.require('M.style.Heatmap');
    * TODO
    *
    * @function
-   * @param {Array<M.Feature>|M.Feature} features
+   * @param {Array<Feature>|Feature} features
    * @api stable
    */
-  M.Map.prototype.drawFeatures = function(features) {
+  drawFeatures(features) {
     this.drawLayer_.addFeatures(features);
     return this;
   };
@@ -2163,10 +2136,10 @@ goog.require('M.style.Heatmap');
    * TODO
    *
    * @function
-   * @param {Array<M.Feature>|M.Feature} features
+   * @param {Array<Feature>|Feature} features
    * @api stable
    */
-  M.Map.prototype.removeFeatures = function(features) {
+  removeFeatures(features) {
     this.drawLayer_.removeFeatures(features);
     return this;
   };
@@ -2176,28 +2149,28 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @api stable
-   * @returns {M.Map}
+   * @returns {Map}
    */
-  M.Map.prototype.addPanels = function(panels) {
-    if (!M.utils.isNullOrEmpty(panels)) {
-      if (!M.utils.isArray(panels)) {
+  addPanels(panels) {
+    if (!Utils.isNullOrEmpty(panels)) {
+      if (!Utils.isArray(panels)) {
         panels = [panels];
       }
-      panels.forEach(function(panel) {
-        var isIncluded = false;
-        for (var i = 0, ilen = this._panels.length; i < ilen; i++) {
-          if (this._panels[i].equals(panel)) {
+      panels.forEach(panel => {
+        let isIncluded = false;
+        for (let i = 0, ilen = this.panels_.length; i < ilen; i++) {
+          if (this.panels_[i].equals(panel)) {
             isIncluded = true;
             break;
           }
         }
-        if ((panel instanceof M.ui.Panel) && !isIncluded) {
-          this._panels.push(panel);
-          var queryArea = 'div.m-area'.concat(panel.position);
-          var areaContainer = this._areasContainer.querySelector(queryArea);
+        if ((panel instanceof Panel) && !isIncluded) {
+          this.panels_.push(panel);
+          let queryArea = 'div.m-area'.concat(panel.position);
+          let areaContainer = this.areasContainer_.querySelector(queryArea);
           panel.addTo(this, areaContainer);
         }
-      }, this);
+      });
     }
     return this;
   };
@@ -2208,13 +2181,13 @@ goog.require('M.style.Heatmap');
    * @function
    * @api stable
    */
-  M.Map.prototype.removePanel = function(panel) {
+  removePanel(panel) {
     if (panel.getControls().length > 0) {
-      M.exception('Debe eliminar los controles del panel previamente');
+      Exception('Debe eliminar los controles del panel previamente');
     }
-    if (panel instanceof M.ui.Panel) {
+    if (panel instanceof Panel) {
       panel.destroy();
-      this._panels.remove(panel);
+      this.panels_.remove(panel);
     }
 
     return this;
@@ -2225,28 +2198,25 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @api stable
-   * @returns {array<M.ui.Panel>}
+   * @returns {array<Panel>}
    */
-  M.Map.prototype.getPanels = function(names) {
-    var panels = [];
+  getPanels(names) {
+    let panels = [];
 
     // parses parameters to Array
-    if (M.utils.isNullOrEmpty(names)) {
-      panels = this._panels;
+    if (Utils.isNullOrEmpty(names)) {
+      panels = this.panels_;
     }
     else {
-      if (!M.utils.isArray(names)) {
+      if (!Utils.isArray(names)) {
         names = [names];
       }
-      for (var i = 0, ilen = names.length; i < ilen; i++) {
-        var name = names[i];
-        for (var e = 0, elen = this._panels.length; e < elen; e++) {
-          if (this._panels[e].name === name) {
-            panels.push(this._panels[e]);
-            break;
-          }
+      names.forEach(name => {
+        let panel = this.panels_.filter(panel => panel["name"] === name);
+        if (!Utils.isNullOrEmpty(panel)) {
+          panels.push(panel);
         }
-      }
+      });
     }
 
     return panels;
@@ -2258,39 +2228,39 @@ goog.require('M.style.Heatmap');
    * @private
    * @function
    */
-  M.Map.prototype.createMainPanels_ = function() {
+  createMainPanels_() {
     // areas container
-    this._areasContainer = goog.dom.createElement('div');
-    goog.dom.classlist.add(this._areasContainer, 'm-areas');
+    this.areasContainer_ = document.createElement('div');
+    this.areasContainer_.classlist.add('m-areas');
 
     // top-left area
-    var tlArea = goog.dom.createElement('div');
-    goog.dom.classlist.add(tlArea, 'm-area');
-    goog.dom.classlist.add(tlArea, 'm-top');
-    goog.dom.classlist.add(tlArea, 'm-left');
+    let tlArea = document.createElement('div');
+    tlArea.classlist.add('m-area');
+    tlArea.classlist.add('m-top');
+    tlArea.classlist.add('m-left');
     // top-right area
-    var trArea = goog.dom.createElement('div');
-    goog.dom.classlist.add(trArea, 'm-area');
-    goog.dom.classlist.add(trArea, 'm-top');
-    goog.dom.classlist.add(trArea, 'm-right');
+    let trArea = document.createElement('div');
+    trArea.classlist.add('m-area');
+    trArea.classlist.add('m-top');
+    trArea.classlist.add('m-right');
 
     // bottom-left area
-    var blArea = goog.dom.createElement('div');
-    goog.dom.classlist.add(blArea, 'm-area');
-    goog.dom.classlist.add(blArea, 'm-bottom');
-    goog.dom.classlist.add(blArea, 'm-left');
+    let blArea = document.createElement('div');
+    blArea.classlist.add('m-area');
+    blArea.classlist.add('m-bottom');
+    blArea.classlist.add('m-left');
     // bottom-right area
-    var brArea = goog.dom.createElement('div');
-    goog.dom.classlist.add(brArea, 'm-area');
-    goog.dom.classlist.add(brArea, 'm-bottom');
-    goog.dom.classlist.add(brArea, 'm-right');
+    let brArea = goog.dom.createElement('div');
+    brArea.classlist.add('m-area');
+    brArea.classlist.add('m-bottom');
+    brArea.classlist.add('m-right');
 
-    goog.dom.appendChild(this._areasContainer, tlArea);
-    goog.dom.appendChild(this._areasContainer, trArea);
-    goog.dom.appendChild(this._areasContainer, blArea);
-    goog.dom.appendChild(this._areasContainer, brArea);
+    this.areasContainer_.appendChild(tlArea);
+    this.areasContainer_.appendChild(trArea);
+    this.areasContainer_.appendChild(blArea);
+    this.areasContainer_.appendChild(brArea);
 
-    goog.dom.appendChild(this.getContainer(), this._areasContainer);
+    this.getContainer().appendChild(this.areasContainer_);
   };
 
   /**
@@ -2301,10 +2271,9 @@ goog.require('M.style.Heatmap');
    * @api stable
    * @returns {Object} core map used by the implementation
    */
-  M.Map.prototype.getContainer = function() {
-    // checks if the implementation can provides the container
-    if (M.utils.isUndefined(M.impl.Map.prototype.getContainer)) {
-      M.exception('La implementación usada no posee el método getContainer');
+  getContainer() {    // checks if the implementation can provides the container
+    if (Utils.isUndefined(MapImpl.prototype.getContainer)) {
+      Exception('La implementación usada no posee el método getContainer');
     }
     return this.getImpl().getContainer();
   };
@@ -2317,10 +2286,10 @@ goog.require('M.style.Heatmap');
    * @api stable
    * @returns {Object} core map used by the implementation
    */
-  M.Map.prototype.getMapImpl = function() {
+  getMapImpl() {
     // checks if the implementation can add points
-    if (M.utils.isUndefined(M.impl.Map.prototype.getMapImpl)) {
-      M.exception('La implementación usada no posee el método getMapImpl');
+    if (Utils.isUndefined(MapImpl.prototype.getMapImpl)) {
+      Exception('La implementación usada no posee el método getMapImpl');
     }
     return this.getImpl().getMapImpl();
   };
@@ -2330,9 +2299,9 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @api stable
-   * @returns {M.Popup} core map used by the implementation
+   * @returns {Popup} core map used by the implementation
    */
-  M.Map.prototype.getPopup = function() {
+  getPopup() {
     return this.popup_;
   };
 
@@ -2341,15 +2310,15 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @api stable
-   * @returns {M.Map} core map used by the implementation
+   * @returns {Map} core map used by the implementation
    */
-  M.Map.prototype.removePopup = function() {
+  removePopup() {
     // checks if the implementation can add popups
-    if (M.utils.isUndefined(M.impl.Map.prototype.removePopup)) {
-      M.exception('La implementación usada no posee el método removePopup');
+    if (Utils.isUndefined(MapImpl.prototype.removePopup)) {
+      Exception('La implementación usada no posee el método removePopup');
     }
 
-    if (!M.utils.isNullOrEmpty(this.popup_)) {
+    if (!Utils.isNullOrEmpty(this.popup_)) {
       this.getImpl().removePopup(this.popup_);
       this.popup_.destroy();
       this.popup_ = null;
@@ -2363,19 +2332,19 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @api stable
-   * @returns {M.Map} core map used by the implementation
+   * @returns {Map} core map used by the implementation
    */
-  M.Map.prototype.addPopup = function(popup, coordinate) {
+  addPopup(popup, coordinate) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(popup)) {
-      M.exception('No ha especificado ningún popup');
+    if (Utils.isNullOrEmpty(popup)) {
+      Exception('No ha especificado ningún popup');
     }
 
-    if (!(popup instanceof M.Popup)) {
-      M.exception('El popup especificado no es válido');
+    if (!(popup instanceof Popup)) {
+      Exception('El popup especificado no es válido');
     }
 
-    if (!M.utils.isNullOrEmpty(this.popup_)) {
+    if (!Utils.isNullOrEmpty(this.popup_)) {
       this.removePopup();
     }
     this.popup_ = popup;
@@ -2390,10 +2359,10 @@ goog.require('M.style.Heatmap');
    * @public
    * @function
    */
-  M.Map.prototype._checkCompleted = function() {
-    if (this._finishedInitCenter && this._finishedMaxExtent && this._finishedMapImpl) {
-      this.fire(M.evt.COMPLETED);
-      this._finishedMap = true;
+  checkCompleted_() {
+    if (this.finishedInitCenter_ && this.finishedMaxExtent_ && this.finishedMapImpl_) {
+      this.fire(Evt.COMPLETED);
+      this.finishedMap_ = true;
     }
   };
 
@@ -2404,10 +2373,10 @@ goog.require('M.style.Heatmap');
    * @function
    * @api stable
    */
-  M.Map.prototype.on = function(eventType, listener, optThis) {
-    goog.base(this, 'on', eventType, listener, optThis);
-    if ((eventType === M.evt.COMPLETED) && (this._finishedMap === true)) {
-      this.fire(M.evt.COMPLETED);
+  on(eventType, listener, optThis) {
+    super.on(eventType, listener, optThis);
+    if ((eventType === Evt.COMPLETED) && (this.finishedMap_ === true)) {
+      this.fire(Evt.COMPLETED);
     }
   };
 
@@ -2417,14 +2386,14 @@ goog.require('M.style.Heatmap');
    *
    * @function
    * @api stable
-   * @returns {M.Map} the instance
+   * @returns {Map} the instance
    */
-  M.Map.prototype.refresh = function() {
+  refresh() {
     // checks if the implementation has refresh method
-    if (!M.utils.isUndefined(this.getImpl().refresh) && M.utils.isFunction(this.getImpl().refresh)) {
+    if (!Utils.isUndefined(this.getImpl().refresh) && Utils.isFunction(this.getImpl().refresh)) {
       this.getImpl().refresh();
     }
-    this.getLayers().forEach(function(layer) {
+    this.getLayers().forEach(layer => {
       layer.refresh();
     });
     return this;
@@ -2436,8 +2405,8 @@ goog.require('M.style.Heatmap');
    * @function
    * @api stable
    */
-  M.Map.LAYER_SORT = function(layer1, layer2) {
-    if (!M.utils.isNullOrEmpty(layer1) && !M.utils.isNullOrEmpty(layer2)) {
+  static LAYER_SORT(layer1, layer2) {
+    if (!Utils.isNullOrEmpty(layer1) && !Utils.isNullOrEmpty(layer2)) {
       let z1 = layer1.getZIndex();
       let z2 = layer2.getZIndex();
 
@@ -2456,14 +2425,30 @@ goog.require('M.style.Heatmap');
    * @public
    * @api stable
    */
-  M.Map.DRAWLAYER_STYLE = {
-    fill: {
-      color: '#009e00'
-    },
-    stroke: {
-      color: '#fcfcfc',
-      width: 2
-    },
-    radius: 7
-  };
-})();
+  static get DRAWLAYER_STYLE() {
+    return Map.DRAWLAYER_STYLE_;
+  }
+
+  /**
+   * Draw layer style options.
+   *
+   * @const
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  static set DRAWLAYER_STYLE(value) {
+    Map.DRAWLAYER_STYLE_ = value
+  }
+}
+
+Map.DRAWLAYER_STYLE_ = {
+  fill: {
+    color: '#009e00'
+  },
+  stroke: {
+    color: '#fcfcfc',
+    width: 2
+  },
+  radius: 7
+};
