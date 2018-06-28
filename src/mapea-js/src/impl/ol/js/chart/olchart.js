@@ -1,14 +1,9 @@
-goog.provide('M.impl.style.OLChart');
+import Utils "facade/js/utils/utils";
+import UtilsImpl "./utils/utils";
+import Chart "facade/js/style/Chart";
+import RegularShape from "ol/style/RegularShape"
 
-goog.require('goog.style');
-goog.require('ol.style.Circle');
-goog.require('ol.structs.IHasChecksum');
-
-/**
- * @namespace M.impl.style.OLChart
- */
-(function() {
-  "use strict";
+export default class OLChart extends RegularShape {
 
   /**
    * @classdesc
@@ -30,15 +25,14 @@ goog.require('ol.structs.IHasChecksum');
    *  - data {Array<number>} chart data
    *  - fill3DColor {string} the pie3d cylinder fill color
    * @extends {ol.style.RegularShape}
-   * @implements {ol.structs.IHasChecksum}
    * @api
    */
-  M.impl.style.OLChart = function(options = {}) {
+  constructor(options = {}) {
 
-    let strokeWidth = !M.utils.isNullOrEmpty(options.stroke) ? options.stroke.getWidth() : 0;
+    let strokeWidth = !Utils.isNullOrEmpty(options.stroke) ? options.stroke.getWidth() : 0;
 
     // super call
-    ol.style.RegularShape.call(this, {
+    super({
       radius: (typeof options.radius === 'number' ? options.radius : 0) + strokeWidth,
       fill: new ol.style.Fill({
         color: [0, 0, 0]
@@ -104,7 +98,7 @@ goog.require('ol.structs.IHasChecksum');
      */
     this.animation_ = {
       animate: typeof options.animation === 'number',
-      step: (typeof options.animation === 'number') ? options.animation : M.style.Chart.DEFAULT.animationStep
+      step: (typeof options.animation === 'number') ? options.animation : Chart.DEFAULT.animationStep
     };
 
     /**
@@ -138,7 +132,6 @@ goog.require('ol.structs.IHasChecksum');
     // call to render and updated the ol.style.image canvas
     this.renderChart_();
   };
-  ol.inherits(M.impl.style.OLChart, ol.style.RegularShape);
 
   /**
    * clones the chart
@@ -146,8 +139,8 @@ goog.require('ol.structs.IHasChecksum');
    * @function
    * @api stable
    */
-  M.impl.style.OLChart.prototype.clone = function() {
-    let newInstance = new M.impl.style.OLChart({
+  clone() {
+    let newInstance = new OLChart({
       type: this.type_,
       radius: this.radius_,
       colors: this.colors_,
@@ -174,29 +167,28 @@ goog.require('ol.structs.IHasChecksum');
    * Chart data getter & setter
    * setter will render the chart
    */
-  Object.defineProperty(M.impl.style.OLChart.prototype, 'data', {
-    get: function() {
-      return this.data_;
-    },
-    set: function(data) {
-      this.data_ = data;
-      this.renderChart_();
-    }
-  });
+
+  get data() {
+    return this.data_;
+  }
+
+  set data(data) {
+    this.data_ = data;
+    this.renderChart_();
+  }
 
   /**
    * Chart radius setter & getter
    * setter will render the chart
    */
-  Object.defineProperty(M.impl.style.OLChart.prototype, 'radius', {
-    get: function() {
-      return this.radius_;
-    },
-    set: function(radius) {
-      this.radius_ = radius;
-      this.renderChart_();
-    }
-  });
+  get radius() {
+    return this.radius_;
+  }
+
+  set radius(radius) {
+    this.radius_ = radius;
+    this.renderChart_();
+  }
 
   /**
    * Radius and donut ratio type setter
@@ -204,7 +196,7 @@ goog.require('ol.structs.IHasChecksum');
    * @function
    * @api stable
    */
-  M.impl.style.OLChart.prototype.setRadius = function(radius, ratio) {
+  setRadius(radius, ratio) {
     this.donutRatio_ = ratio || this.donutRatio_;
     this.radius = radius;
   };
@@ -215,7 +207,7 @@ goog.require('ol.structs.IHasChecksum');
    * @function
    * @api stable
    */
-  M.impl.style.OLChart.prototype.setAnimation = function(step) {
+  setAnimation(step) {
     if (step === false) {
       if (this.animation_.animate == false) {
         return;
@@ -235,7 +227,7 @@ goog.require('ol.structs.IHasChecksum');
   /**
    * @inheritDoc
    */
-  M.impl.style.OLChart.prototype.getChecksum = function() {
+  getChecksum() {
     let fillChecksum;
     let strokeChecksum = (this.stroke_ !== null) ? this.stroke_.getChecksum() : '-';
     let recalculate = (this.checksums_ === null) ||
@@ -260,7 +252,7 @@ goog.require('ol.structs.IHasChecksum');
    * @private
    * @api stable
    */
-  M.impl.style.OLChart.prototype.renderChart_ = function(atlasManager) {
+  renderChart_(atlasManager) {
     let strokeStyle;
     let strokeWidth = 0;
 
@@ -275,7 +267,7 @@ goog.require('ol.structs.IHasChecksum');
     context.lineJoin = 'round';
 
     let sum = 0;
-    if (!M.utils.isNullOrEmpty(this.data_) && this.data_.length > 0) {
+    if (!Utils.isNullOrEmpty(this.data_) && this.data_.length > 0) {
       sum = this.data_.reduce((tot, curr) => tot + curr);
     }
     context.setTransform(1, 0, 0, 1, 0, 0);
@@ -284,9 +276,9 @@ goog.require('ol.structs.IHasChecksum');
     let step = this.animation_.animate ? this.animation_.step : 1;
     let center;
     switch (this.type_) {
-      case M.style.chart.types.DONUT:
-      case M.style.chart.types.PIE_3D:
-      case M.style.chart.types.PIE:
+      case Chart.types.DONUT:
+      case Chart.types.PIE_3D:
+      case Chart.types.PIE:
         let angle;
         let angle0 = Math.PI * (step - 1.5);
         center = canvas.width / 2;
@@ -295,7 +287,7 @@ goog.require('ol.structs.IHasChecksum');
           context.lineWidth = strokeWidth;
         }
         context.save();
-        if (this.type_ === M.style.chart.types.PIE_3D) {
+        if (this.type_ === Chart.types.PIE_3D) {
           context.translate(0, center * 0.3);
           context.scale(1, 0.7);
           context.beginPath();
@@ -306,7 +298,7 @@ goog.require('ol.structs.IHasChecksum');
             context.stroke();
           }
         }
-        else if (this.type_ === M.style.chart.types.DONUT) {
+        else if (this.type_ === Chart.types.DONUT) {
           context.save();
           context.beginPath();
           context.rect(0, 0, 2 * center, 2 * center);
@@ -326,7 +318,7 @@ goog.require('ol.structs.IHasChecksum');
           }
           angle0 = angle;
         });
-        if (this.type_ === M.style.chart.types.DONUT) {
+        if (this.type_ === Chart.types.DONUT) {
           context.restore();
           context.beginPath();
           context.strokeStyle = strokeStyle;
@@ -338,7 +330,7 @@ goog.require('ol.structs.IHasChecksum');
         }
         context.restore();
         break;
-        // case M.style.chart.types.BAR:
+        // case Chart.types.BAR:
       default:
         let max = Math.max.apply(null, this.data_) || 0;
         let start = Math.min(5, 2 * this.radius_ / this.data_.length);
@@ -379,13 +371,11 @@ goog.require('ol.structs.IHasChecksum');
    * @function
    * @api stable
    */
-  M.impl.style.OLChart.prototype.forceRender_ = function(feature, style, ctx) {
+  forceRender_(feature, style, ctx) {
     if (feature.getGeometry() == null) {
       return;
     }
-    //console.log('geometry', feature.getGeometry());
-
-    let center = M.impl.utils.getCentroidCoordinate(feature.getGeometry());
+    let center = UtilsImpl.getCentroidCoordinate(feature.getGeometry());
     if (center != null) {
       let tmpFeature = new ol.Feature({
         geometry: new ol.geom.Point(center)
@@ -393,5 +383,4 @@ goog.require('ol.structs.IHasChecksum');
       ctx.drawFeature(tmpFeature, style);
     }
   };
-
-})();
+}
