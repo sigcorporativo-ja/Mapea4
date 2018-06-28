@@ -41,7 +41,7 @@
          </resource>
       </resources>
       <filters>
-         <filter>${user.dir}/src/main/filters/${environment}.properties</filter>
+         <filter>${basedir}/../mapea-parent/src/main/filters/${environment}.properties</filter>
       </filters>
       <plugins>
          <plugin>
