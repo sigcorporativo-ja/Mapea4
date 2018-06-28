@@ -1,9 +1,8 @@
-goog.provide('M.layer.type');
+import LayerBase from('./layerbase.js');
+import Utils from('../utils/utils.js');
 
-goog.require('M.layer');
+export class LayerType {
 
-(function() {
-  'use strict';
 
   /**
    * WMC type
@@ -12,7 +11,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.WMC = 'WMC';
+  LayerType.WMC = 'WMC';
 
   /**
    * KML type
@@ -21,7 +20,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.KML = 'KML';
+  LayerType.KML = 'KML';
 
   /**
    * WMS type
@@ -30,7 +29,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.WMS = 'WMS';
+  LayerType.WMS = 'WMS';
 
   /**
    * WFS type
@@ -39,7 +38,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.WFS = 'WFS';
+  LayerType.WFS = 'WFS';
 
   /**
    * WMTS type
@@ -48,7 +47,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.WMTS = 'WMTS';
+  LayerType.WMTS = 'WMTS';
 
   /**
    * MBtiles type
@@ -57,7 +56,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.MBtiles = 'MBtiles';
+  LayerType.MBtiles = 'MBtiles';
 
   /**
    * OSM type
@@ -66,7 +65,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.OSM = 'OSM';
+  LayerType.OSM = 'OSM';
 
   /**
    * Mapbox type
@@ -75,7 +74,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.Mapbox = 'Mapbox';
+  LayerType.Mapbox = 'Mapbox';
 
   /**
    * GeoJSON type
@@ -84,7 +83,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.GeoJSON = 'GeoJSON';
+  LayerType.GeoJSON = 'GeoJSON';
 
   /**
    * Vector type
@@ -93,7 +92,7 @@ goog.require('M.layer');
    * @public
    * @api stable
    */
-  M.layer.type.Vector = 'Vector';
+  LayerType.Vector = 'Vector';
 
   /**
    * Parses the type
@@ -101,22 +100,20 @@ goog.require('M.layer');
    * @function
    * @param {string} rawType the type to be parsed
    */
-  M.layer.type.parse = function(rawType) {
-    var type = M.utils.normalize(rawType, true);
+  static parse(rawType) {
+    let type = Utils.normalize(rawType, true);
     if (type === 'WMS_FULL') {
-      type = M.layer.type.WMS;
-    }
-    else if (type === 'WFST') {
-      type = M.layer.type.WFS;
-    }
-    else {
-      type = Object.keys(M.layer.type).find(function(knowType) {
-        let knowTypeVal = M.layer.type[knowType];
-        return (M.utils.isString(knowTypeVal) && (M.utils.normalize(knowTypeVal, true) === type));
+      type = LayerType.WMS;
+    } else if (type === 'WFST') {
+      type = LayerType.WFS;
+    } else {
+      type = Object.keys(LayerType).find((knowType) => {
+        let knowTypeVal = LayerType[knowType];
+        return (Utils.isString(knowTypeVal) && (Utils.normalize(knowTypeVal, true) === type));
       });
     }
-    return M.layer.type[type];
-  };
+    return LayerType[type];
+  }
 
   /**
    * Parses the type
@@ -124,14 +121,14 @@ goog.require('M.layer');
    * @function
    * @param {string} rawType the type to be parsed
    */
-  M.layer.type.know = function(type) {
-    var knowTypes = [M.layer.type.WMC,
-         M.layer.type.KML,
-         M.layer.type.WMS,
-         M.layer.type.WFS,
-         M.layer.type.WMTS,
-         M.layer.type.MBtiles
+  static know(type) {
+    let knowTypes = [LayerType.WMC,
+         LayerType.KML,
+         LayerType.WMS,
+         LayerType.WFS,
+         LayerType.WMTS,
+         LayerType.MBtiles
       ];
-    return (knowTypes.indexOf(M.layer.type.parse(type)) !== -1);
-  };
-})();
+    return (knowTypes.indexOf(LayerType.parse(type)) !== -1);
+  }
+}

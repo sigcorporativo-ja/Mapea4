@@ -1,13 +1,10 @@
-goog.provide('M.Layer');
-goog.provide('M.layer');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import Layer from('../parameters/layers.js');
+import Base from('../facade.js');
+import Config from('../../../configuration.js');
 
-
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.facade.Base');
-goog.require('M.parameter.layer');
-
-(function() {
+export class LayerBase extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -19,11 +16,12 @@ goog.require('M.parameter.layer');
    * provided by the user
    * @api stable
    */
-  M.Layer = (function(userParameters, impl) {
+  constructor(userParameters, impl) {
     // calls the super constructor
-    goog.base(this, impl);
+    super(this, impl);
 
-    var parameter = M.parameter.layer(userParameters);
+    //This layer is of parameters.
+    let parameter = Layer(userParameters);
 
     /**
      * @private
@@ -59,94 +57,81 @@ goog.require('M.parameter.layer');
      * @expose
      */
     this.zindex_ = null;
-  });
-  goog.inherits(M.Layer, M.facade.Base);
+  }
 
   /**
    * 'options' the layer options
    */
-  Object.defineProperty(M.Layer.prototype, "options", {
-    get: function() {
-      return this.getImpl().options;
-    },
-    // defining new type is not allowed
-    set: function(newOptions) {
-      this.getImpl().options = newOptions;
-    }
-  });
+  static get options() {
+    return this.impl().options;
+  }
+
+  static set options(newOptions) {
+    this.impl().options = newOptions;
+  }
 
   /**
    * 'url' The service URL of the
    * layer
    */
-  Object.defineProperty(M.Layer.prototype, "url", {
-    get: function() {
-      return this.getImpl().url;
-    },
-    // defining new type is not allowed
-    set: function(newUrl) {
-      this.getImpl().url = newUrl;
-    }
-  });
+  static get url() {
+    return this.impl().url;
+  }
+
+  static set url(newUrl) {
+    this.impl().url = newUrl;
+  }
+
 
   /**
    * 'name' the layer name
    */
-  Object.defineProperty(M.Layer.prototype, "name", {
-    get: function() {
-      return this.getImpl().name;
-    },
-    // defining new type is not allowed
-    set: function(newName) {
-      this.getImpl().name = newName;
-    }
-  });
+  static get name() {
+    return this.impl().name;
+  }
+
+  static set name(newName) {
+    this.impl().name = newName;
+  }
 
   /**
    * 'transparent' the layer transparence
    */
-  Object.defineProperty(M.Layer.prototype, "transparent", {
-    get: function() {
-      return this.getImpl().transparent;
-    },
-    // defining new type is not allowed
-    set: function(newTransparent) {
-      if (!M.utils.isNullOrEmpty(newTransparent)) {
-        if (M.utils.isString(newTransparent)) {
-          this.getImpl().transparent = (M.utils.normalize(newTransparent) === 'true');
-        }
-        else {
-          this.getImpl().transparent = newTransparent;
-        }
+
+  static get transparent() {
+    return this.impl().transparent;
+  }
+
+  static set transparent(newTransparent) {
+    if (!Utils.isNullOrEmpty(newTransparent)) {
+      if (Utils.isString(newTransparent)) {
+        this.impl().transparent = (Utils.normalize(newTransparent) === 'true');
+      } else {
+        this.impl().transparent = newTransparent;
       }
-      else {
-        this.getImpl().transparent = true;
-      }
+    } else {
+      this.impl().transparent = true;
     }
-  });
+  }
 
   /**
    * 'displayInLayerSwitcher' the layer transparence
    */
-  Object.defineProperty(M.Layer.prototype, "displayInLayerSwitcher", {
-    get: function() {
-      return this.getImpl().displayInLayerSwitcher;
-    },
-    // defining new type is not allowed
-    set: function(newDisplayInLayerSwitcher) {
-      if (!M.utils.isNullOrEmpty(newDisplayInLayerSwitcher)) {
-        if (M.utils.isString(newDisplayInLayerSwitcher)) {
-          this.getImpl().displayInLayerSwitcher = (M.utils.normalize(newDisplayInLayerSwitcher) === 'true');
-        }
-        else {
-          this.getImpl().displayInLayerSwitcher = newDisplayInLayerSwitcher;
-        }
+  static get displayInLayerSwitcher() {
+    return this.impl().displayInLayerSwitcher;
+  }
+
+  static set displayInLayerSwitcher(newDisplayInLayerSwitcher) {
+    if (!Utils.isNullOrEmpty(newDisplayInLayerSwitcher)) {
+      if (Utils.isString(newDisplayInLayerSwitcher)) {
+        this.impl().displayInLayerSwitcher = (Utils.normalize(newDisplayInLayerSwitcher) === 'true');
+      } else {
+        this.impl().displayInLayerSwitcher = newDisplayInLayerSwitcher;
       }
-      else {
-        this.getImpl().displayInLayerSwitcher = true;
-      }
+    } else {
+      this.impl().displayInLayerSwitcher = true;
     }
-  });
+  }
 
   /**
    * This function indicates if the layer is visible
@@ -155,14 +140,14 @@ goog.require('M.parameter.layer');
    * @api stable
    * @export
    */
-  M.Layer.prototype.isVisible = function() {
+  isVisible() {
     // checks if the implementation can manage this method
-    if (M.utils.isUndefined(this.getImpl().isVisible)) {
-      M.exception('La implementación usada no posee el método isVisible');
+    if (Utils.isUndefined(this.impl().isVisible)) {
+      Exception('La implementación usada no posee el método isVisible');
     }
 
-    return this.getImpl().isVisible();
-  };
+    return this.impl().isVisible();
+  }
 
   /**
    * This function indicates if the layer is visible
@@ -171,14 +156,14 @@ goog.require('M.parameter.layer');
    * @api stable
    * @export
    */
-  M.Layer.prototype.isQueryable = function() {
+  isQueryable() {
     // checks if the implementation can manage this method
-    if (M.utils.isUndefined(this.getImpl().isQueryable)) {
-      M.exception('La implementación usada no posee el método isQueryable');
+    if (Utils.isUndefined(this.impl().isQueryable)) {
+      Exception('La implementación usada no posee el método isQueryable');
     }
 
-    return this.getImpl().isQueryable();
-  };
+    return this.impl().isQueryable();
+  }
 
   /**
    * This function sets the visibility of this layer
@@ -187,26 +172,26 @@ goog.require('M.parameter.layer');
    * @api stable
    * @export
    */
-  M.Layer.prototype.setVisible = function(visibility) {
+  set visible(visibility) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(visibility)) {
-      M.exception('No ha especificado ningún parámetro de visibilidad');
+    if (Utils.isNullOrEmpty(visibility)) {
+      Exception('No ha especificado ningún parámetro de visibilidad');
     }
 
     // checks if the param is boolean or string
-    if (!M.utils.isString(visibility) && !M.utils.isBoolean(visibility)) {
-      M.exception('No ha especificado ningún parámetro de visibilidad');
+    if (!Utils.isString(visibility) && !Utils.isBoolean(visibility)) {
+      Exception('No ha especificado ningún parámetro de visibilidad');
     }
 
     // checks if the implementation can manage this method
-    if (M.utils.isUndefined(this.getImpl().setVisible)) {
-      M.exception('La implementación usada no posee el método setVisible');
+    if (Utils.isUndefined(this.impl().setVisible)) {
+      Exception('La implementación usada no posee el método setVisible');
     }
 
     visibility = /^1|(true)$/i.test(visibility);
 
-    this.getImpl().setVisible(visibility);
-  };
+    this.impl().visible = visibility;
+  }
 
   /**
    * This function indicates if the layer is in range
@@ -215,14 +200,14 @@ goog.require('M.parameter.layer');
    * @api stable
    * @export
    */
-  M.Layer.prototype.inRange = function() {
+  inRange() {
     // checks if the implementation can manage this method
-    if (M.utils.isUndefined(this.getImpl().inRange)) {
-      M.exception('La implementación usada no posee el método inRange');
+    if (Utils.isUndefined(this.impl().inRange)) {
+      Exception('La implementación usada no posee el método inRange');
     }
 
-    return this.getImpl().inRange();
-  };
+    return this.impl().inRange();
+  }
 
   /**
    * This function checks if an object is equals
@@ -231,9 +216,9 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.getLegendURL = function() {
-    return this.getImpl().getLegendURL();
-  };
+  get legendURL() {
+    return this.impl().legendURL();
+  }
 
   /**
    * This function checks if an object is equals
@@ -242,12 +227,12 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.setLegendURL = function(legendUrl) {
-    if (M.utils.isNullOrEmpty(legendUrl)) {
-      legendUrl = M.utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_DEFAULT]);
+  set legendURL(legendUrl) {
+    if (Utils.isNullOrEmpty(legendUrl)) {
+      legendUrl = Utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_DEFAULT]);
     }
-    this.getImpl().setLegendURL(legendUrl);
-  };
+    this.impl().legendURL = legendUrl;
+  }
 
   /**
    * This function gets the z-index of this layer
@@ -255,9 +240,9 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.getZIndex = function() {
+  get ZIndex() {
     return this.zindex_;
-  };
+  }
 
   /**
    * This function sets the z-index for this layer
@@ -265,10 +250,10 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.setZIndex = function(zIndex) {
+  set ZIndex(zIndex) {
     this.zindex_ = zIndex;
-    this.getImpl().setZIndex(zIndex);
-  };
+    this.impl().ZIndex = zIndex;
+  }
 
   /**
    * This function gets the opacity of this layer
@@ -276,9 +261,9 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.getOpacity = function() {
-    return this.getImpl().getOpacity();
-  };
+  get opacity() {
+    return this.impl().opacity();
+  }
 
   /**
    * This function sets the opacity of this layer
@@ -286,9 +271,9 @@ goog.require('M.parameter.layer');
    * @function
    * @api stable
    */
-  M.Layer.prototype.setOpacity = function(opacity) {
-    this.getImpl().setOpacity(opacity);
-  };
+  set opacity(opacity) {
+    this.impl().opacity = opacity;
+  }
 
   /**
    * This function refreshes the state of this
@@ -298,12 +283,12 @@ goog.require('M.parameter.layer');
    * @api stable
    * @export
    */
-  M.Layer.prototype.refresh = function() {
+  refresh() {
     // checks if the implementation can manage this method
-    if (!M.utils.isUndefined(this.getImpl().refresh) && M.utils.isFunction(this.getImpl().refresh)) {
-      this.getImpl().refresh();
+    if (!Utils.isUndefined(this.impl().refresh) && Utils.isFunction(this.impl().refresh)) {
+      this.impl().refresh();
     }
-  };
+  }
 
   /**
    * This function auto-generates a name for this layer
@@ -311,9 +296,9 @@ goog.require('M.parameter.layer');
    * @function
    * @export
    */
-  M.Layer.prototype.generateName_ = (function() {
-    this.name = M.utils.generateRandom('layer_', '_'.concat(this.type));
-  });
+  generateName_() {
+    this.name = Utils.generateRandom('layer_', '_'.concat(this.type));
+  }
 
   /**
    * Image PNG for legend default
@@ -322,7 +307,7 @@ goog.require('M.parameter.layer');
    * @public
    * @api stable
    */
-  M.Layer.LEGEND_DEFAULT = '/img/legend-default.png';
+  LayerBase.LEGEND_DEFAULT = '/img/legend-default.png';
 
   /**
    * Image PNG for legend default
@@ -331,5 +316,5 @@ goog.require('M.parameter.layer');
    * @public
    * @api stable
    */
-  M.Layer.LEGEND_ERROR = '/img/legend-error.png';
-})();
+  LayerBase.LEGEND_ERROR = '/img/legend-error.png';
+}

@@ -1,137 +1,128 @@
-goog.provide('M.layer.WMTS');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import LayerBase from('./layerbase.js');
+import WMTSImpl from('../../../impl/js/layers/wmts.js');
+import Layer from('../parameters/layers.js');
+import LayerType from('./layertype.js');
 
-goog.require('M.Layer');
-goog.require('M.utils');
-goog.require('M.exception');
+export class WMTS extends LayerBase {
+  /**
+   * @classdesc
+   * Main constructor of the class. Creates a WMTS layer
+   * with parameters specified by the user
+   *
+   * @constructor
+   * @extends {M.Layer}
+   * @param {string|Mx.parameters.WMTS} userParameters parameters
+   * @param {Mx.parameters.LayerOptions} options provided by the user
+   * @api stable
+   */
+  constructor(userParameters, options) {
+    // calls the super constructor
+    super(this, parameters, impl);
+    // checks if the implementation can create WMTS layers
+    if (Utils.isUndefined(WMTSImpl)) {
+      Exception('La implementación usada no puede crear capas WMTS');
+    }
 
-(function () {
-   /**
-    * @classdesc
-    * Main constructor of the class. Creates a WMTS layer
-    * with parameters specified by the user
-    *
-    * @constructor
-    * @extends {M.Layer}
-    * @param {string|Mx.parameters.WMTS} userParameters parameters
-    * @param {Mx.parameters.LayerOptions} options provided by the user
-    * @api stable
-    */
-   M.layer.WMTS = (function (userParameters, options) {
-      // checks if the implementation can create WMTS layers
-      if (M.utils.isUndefined(M.impl.layer.WMTS)) {
-         M.exception('La implementación usada no puede crear capas WMTS');
-      }
+    // checks if the param is null or empty
+    if (Utils.isNullOrEmpty(userParameters)) {
+      Exception('No ha especificado ningún parámetro');
+    }
 
-      // checks if the param is null or empty
-      if (M.utils.isNullOrEmpty(userParameters)) {
-         M.exception('No ha especificado ningún parámetro');
-      }
+    options = (options || {});
 
-      options = (options || {});
+    /**
+     * Implementation of this layer
+     * @public
+     * @type {M.layer.WMTS}
+     */
+    let impl = new WMTSImpl(options);
 
-      /**
-       * Implementation of this layer
-       * @public
-       * @type {M.layer.WMTS}
-       */
-      var impl = new M.impl.layer.WMTS(options);
+    //This Layer is of parameters.
+    let parameters = Layer(userParameters, LayerType.WMTS);
 
-      var parameters = M.parameter.layer(userParameters, M.layer.type.WMTS);
 
-      // calls the super constructor
-      goog.base(this, parameters, impl);
+    // matrixSet
+    this.matrixSet = parameters.matrixSet;
 
-      // matrixSet
-      this.matrixSet = parameters.matrixSet;
+    // legend
+    this.legend = parameters.legend;
 
-      // legend
-      this.legend = parameters.legend;
+    //transparent
+    this.transparent = parameters.transparent;
 
-      //transparent
-      this.transparent = parameters.transparent;
+    // options
+    this.options = options;
+  }
 
-      // options
-      this.options = options;
-   });
-   goog.inherits(M.layer.WMTS, M.Layer);
+  /**
+   * 'type' This property indicates if
+   * the layer was selected
+   */
+  get type() {
+    return LayerType.WMTS;
+  }
+  set type(newType) {
+    if (!Utils.isUndefined(newType) &&
+      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMTS)) {
+      Exception('El tipo de capa debe ser \''.concat(LayerType.WMTS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
+    }
+  }
+  /**
+   * 'matrixSet' the layer matrix set
+   */
+  get matrixSet() {
+    return this.impl().matrixSet;
+  }
 
-   /**
-    * 'type' This property indicates if
-    * the layer was selected
-    */
-   Object.defineProperty(M.layer.WMTS.prototype, "type", {
-      get: function () {
-         return M.layer.type.WMTS;
-      },
-      // defining new type is not allowed
-      set: function (newType) {
-         if (!M.utils.isUndefined(newType) &&
-            !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.WMTS)) {
-            M.exception('El tipo de capa debe ser \''.concat(M.layer.type.WMTS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
-         }
-      }
-   });
+  set matrixSet(newMatrixSet) {
+    this.impl().matrixSet = newMatrixSet;
+  }
 
-   /**
-    * 'matrixSet' the layer matrix set
-    */
-   Object.defineProperty(M.layer.WMTS.prototype, "matrixSet", {
-      get: function () {
-         return this.getImpl().matrixSet;
-      },
-      // defining new type is not allowed
-      set: function (newMatrixSet) {
-         this.getImpl().matrixSet = newMatrixSet;
-      }
-   });
+  /**
+   * 'legend' the layer name
+   */
+  get legend() {
+    return this.impl().legend;
+  }
 
-   /**
-    * 'legend' the layer name
-    */
-   Object.defineProperty(M.layer.WMTS.prototype, "legend", {
-      get: function () {
-         return this.getImpl().legend;
-      },
-      // defining new type is not allowed
-      set: function (newLegend) {
-         if (M.utils.isNullOrEmpty(newLegend)) {
-            this.getImpl().legend = this.name;
-         }
-         else {
-            this.getImpl().legend = newLegend;
-         }
-      }
-   });
+  set legend(newLegend) {
+    if (Utils.isNullOrEmpty(newLegend)) {
+      this.impl().legend = this.name;
+    } else {
+      this.impl().legend = newLegend;
+    }
+  }
 
-   /**
-    * 'options' the layer options
-    */
-   Object.defineProperty(M.layer.WMTS.prototype, "options", {
-      get: function () {
-         return this.getImpl().options;
-      },
-      // defining new type is not allowed
-      set: function (newOptions) {
-         this.getImpl().options = newOptions;
-      }
-   });
+  /**
+   * 'options' the layer options
+   */
 
-   /**
-    * This function checks if an object is equals
-    * to this layer
-    *
-    * @function
-    * @api stable
-    */
-   M.layer.WMTS.prototype.equals = function (obj) {
-      var equals = false;
+  get options() {
+    return this.impl().options;
+  }
 
-      if (obj instanceof M.layer.WMS) {
-         equals = (this.url === obj.url);
-         equals = equals && (this.name === obj.name);
-         equals = equals && (this.matrixSet === obj.matrixSet);
-      }
+  set options(newOptions) {
+    this.impl().options = newOptions;
+  }
 
-      return equals;
-   };
-})();
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @function
+   * @api stable
+   */
+  equals(obj) {
+    let equals = false;
+
+    if (obj instanceof WMTS) {
+      equals = (this.url === obj.url);
+      equals = equals && (this.name === obj.name);
+      equals = equals && (this.matrixSet === obj.matrixSet);
+    }
+
+    return equals;
+  }
+}

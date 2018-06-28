@@ -1,10 +1,12 @@
-goog.provide('M.layer.Mapbox');
+import LayerBase from('./layerbase.js');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import MapboxImpl from('../../../impl/js/layers/mapbox.js');
+import LayerType from('./layertype.js');
+import Layer from('../parameters/layers.js');
+import Config from('../../../configuration.js');
 
-goog.require('M.Layer');
-goog.require('M.utils');
-goog.require('M.exception');
-
-(function () {
+export class Mapbox extends LayerBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Mapbox layer
@@ -16,15 +18,18 @@ goog.require('M.exception');
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  M.layer.Mapbox = (function (userParameters, options) {
+  constructor(userParameters, options) {
+    // calls the super constructor
+    super(this, parameters, impl);
+
     // checks if the implementation can create Mapbox
-    if (M.utils.isUndefined(M.impl.layer.Mapbox)) {
-      M.exception('La implementación usada no puede crear capas Mapbox');
+    if (Utils.isUndefined(MapboxImpl)) {
+      Exception('La implementación usada no puede crear capas Mapbox');
     }
 
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(userParameters)) {
-      M.exception('No ha especificado ningún parámetro');
+    if (Utils.isNullOrEmpty(userParameters)) {
+      Exception('No ha especificado ningún parámetro');
     }
 
     options = (options || {});
@@ -34,22 +39,20 @@ goog.require('M.exception');
      * @public
      * @type {M.layer.WMS}
      */
-    var impl = new M.impl.layer.Mapbox(userParameters, options);
-
-    var parameters = M.parameter.layer(userParameters, M.layer.type.Mapbox);
+    let impl = new MapboxImpl(userParameters, options);
+    //This layer is of parameters.
+    let parameters = Layer(userParameters, LayerType.Mapbox);
 
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(parameters.name)) {
-      M.exception('No ha especificado ningún nombre');
+    if (Utils.isNullOrEmpty(parameters.name)) {
+      Exception('No ha especificado ningún nombre');
     }
 
-    // calls the super constructor
-    goog.base(this, parameters, impl);
 
     this.name = parameters.name;
 
     this.legend = parameters.legend;
-    if (M.utils.isNullOrEmpty(parameters.legend)) {
+    if (Utils.isNullOrEmpty(parameters.legend)) {
       this.legend = parameters.name;
     }
 
@@ -61,78 +64,69 @@ goog.require('M.exception');
 
     // options
     this.options = options;
-  });
-  goog.inherits(M.layer.Mapbox, M.Layer);
+  }
 
   /**
    * 'url' The service URL of the
    * layer
    */
-  Object.defineProperty(M.layer.Mapbox.prototype, "url", {
-    get: function () {
-      return this.getImpl().url;
-    },
-    // defining new type is not allowed
-    set: function (newUrl) {
-      if (!M.utils.isNullOrEmpty(newUrl)) {
-        this.getImpl().url = newUrl;
-      }
-      else {
-        this.getImpl().url = M.config.MAPBOX_URL;
-      }
+  get url() {
+    return this.impl().url;
+  }
+
+  set url(newUrl) {
+    if (!Utils.isNullOrEmpty(newUrl)) {
+      this.impl().url = newUrl;
+    } else {
+      this.impl().url = Config.MAPBOX_URL;
     }
-  });
+  }
 
   /**
    * 'tiled' the layer name
    */
-  Object.defineProperty(M.layer.Mapbox.prototype, "transparent", {
-    get: function () {
-      return this.getImpl().transparent;
-    },
-    set: function (newTransparent) {
-      if (!M.utils.isNullOrEmpty(newTransparent)) {
-        this.getImpl().transparent = newTransparent;
-      }
-      else {
-        this.getImpl().transparent = false;
-      }
+  get transparent() {
+    return this.impl().transparent;
+  }
+
+  set transparent(newTransparent) {
+    if (!Utils.isNullOrEmpty(newTransparent)) {
+      this.impl().transparent = newTransparent;
+    } else {
+      this.impl().transparent = false;
     }
-  });
+  }
 
   /**
    * 'tiled' the layer name
    */
-  Object.defineProperty(M.layer.Mapbox.prototype, "accessToken", {
-    get: function () {
-      return this.getImpl().accessToken;
-    },
-    set: function (newAccessToken) {
-      if (!M.utils.isNullOrEmpty(newAccessToken)) {
-        this.getImpl().accessToken = newAccessToken;
-      }
-      else {
-        this.getImpl().accessToken = M.config.MAPBOX_TOKEN_VALUE;
-      }
+  get accessToken() {
+    return this.impl().accessToken;
+  }
+
+  set accessToken(newAccessToken) {
+    if (!Utils.isNullOrEmpty(newAccessToken)) {
+      this.impl().accessToken = newAccessToken;
+    } else {
+      this.impl().accessToken = Config.MAPBOX_TOKEN_VALUE;
     }
-  });
+  }
 
   /**
    * 'type' This property indicates if
    * the layer was selected
    */
-  Object.defineProperty(M.layer.Mapbox.prototype, "type", {
-    get: function () {
-      return M.layer.type.Mapbox;
-    },
-    // defining new type is not allowed
-    set: function (newType) {
-      if (!M.utils.isUndefined(newType) &&
-        !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.Mapbox)) {
-        M.exception('El tipo de capa debe ser \''.concat(M.layer.type.Mapbox).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
-      }
+
+  get type() {
+    return LayerType.Mapbox;
+  }
+
+  set type() {
+    if (!Utils.isUndefined(newType) &&
+      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.Mapbox)) {
+      Exception('El tipo de capa debe ser \''.concat(LayerType.Mapbox).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
-  });
+  }
 
   /**
    * This function checks if an object is equals
@@ -141,14 +135,14 @@ goog.require('M.exception');
    * @function
    * @api stable
    */
-  M.layer.Mapbox.prototype.equals = function (obj) {
-    var equals = false;
+  equals(obj) {
+    let equals = false;
 
-    if (obj instanceof M.layer.Mapbox) {
+    if (obj instanceof Mapbox) {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
       equals = equals && (this.options === obj.options);
     }
     return equals;
-  };
-})();
+  }
+}

@@ -1,10 +1,12 @@
-goog.provide('M.layer.GeoJSON');
+import Vector from('./vector.js');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import GeoJSONImpl from('../../../impl/js/layers/geojson.js');
+import Cluster from('../style/stylecluster.js');
+import LayerType from('./layertype.js');
+import Geojson from('../geom/geojson.js');
 
-goog.require('M.layer.Vector');
-goog.require('M.utils');
-goog.require('M.exception');
-
-(function() {
+export class GeoJSON extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -16,15 +18,18 @@ goog.require('M.exception');
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  M.layer.GeoJSON = (function(parameters, options = {}) {
+  constructor(parameters, options = {}) {
+    // calls the super constructor
+    super(this, this, options, impl);
+
     // checks if the implementation can create KML layers
-    if (M.utils.isUndefined(M.impl.layer.GeoJSON)) {
-      M.exception('La implementación usada no puede crear capas GeoJSON');
+    if (Utils.isUndefined(GeoJSONImpl)) {
+      Exception('La implementación usada no puede crear capas GeoJSON');
     }
 
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(parameters)) {
-      M.exception('No ha especificado ningún parámetro');
+    if (Utils.isNullOrEmpty(parameters)) {
+      Exception('No ha especificado ningún parámetro');
     }
 
     /**
@@ -32,18 +37,14 @@ goog.require('M.exception');
      * @public
      * @type {M.impl.layer.GeoJSON}
      */
-    var impl = new M.impl.layer.GeoJSON(parameters, options);
+    let impl = new GeoJSONImpl(parameters, options);
 
-    // calls the super constructor
-    goog.base(this, this, options, impl);
 
-    if (M.utils.isString(parameters)) {
+    if (Utils.isString(parameters)) {
       this.url = parameters;
-    }
-    else if (M.utils.isArray(parameters)) {
+    } else if (Utils.isArray(parameters)) {
       this.source = parameters;
-    }
-    else {
+    } else {
       // url
       this.url = parameters.url;
 
@@ -56,8 +57,8 @@ goog.require('M.exception');
       // extract
       this.extract = parameters.extract;
       //crs
-      if (!M.utils.isNullOrEmpty(parameters.crs)) {
-        if (M.utils.isNullOrEmpty(this.source)) {
+      if (!Utils.isNullOrEmpty(parameters.crs)) {
+        if (Utils.isNullOrEmpty(this.source)) {
           this.source = {
             "type": "FeatureCollection",
             "features": []
@@ -72,67 +73,62 @@ goog.require('M.exception');
       }
     }
 
-    if (M.utils.isNullOrEmpty(this.extract)) {
+    if (Utils.isNullOrEmpty(this.extract)) {
       this.extract = true; // by default
     }
 
     // options
     this.options = options;
-  });
-  goog.inherits(M.layer.GeoJSON, M.layer.Vector);
+  }
 
   /**
    * 'type' This property indicates if
    * the layer was selected
    */
-  Object.defineProperty(M.layer.GeoJSON.prototype, "type", {
-    get: function() {
-      return M.layer.type.GeoJSON;
-    },
-    // defining new type is not allowed
-    set: function(newType) {
-      if (!M.utils.isUndefined(newType) &&
-        !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.GeoJSON)) {
-        M.exception('El tipo de capa debe ser \''.concat(M.layer.type.GeoJSON).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
-      }
+  get type() {
+    return LayerType.GeoJSON;
+  }
+
+  set type(newType) {
+    if (!Utils.isUndefined(newType) &&
+      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.GeoJSON)) {
+      Exception('El tipo de capa debe ser \''.concat(LayerType.GeoJSON).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
-  });
+  }
 
   /**
    * 'extract' the features properties
    */
-  Object.defineProperty(M.layer.GeoJSON.prototype, "source", {
-    get: function() {
-      return this.getImpl().source;
-    },
-    // defining new type is not allowed
-    set: function(newSource) {
-      this.getImpl().source = newSource;
-    }
-  });
+
+  //TODO
+
+  get source() {
+    return this.impl.source;
+  }
+
+  set source(newSource) {
+    this.impl().source = newSource;
+  }
+
 
   /**
    * 'extract' the features properties
    */
-  Object.defineProperty(M.layer.GeoJSON.prototype, "extract", {
-    get: function() {
-      return this.getImpl().extract;
-    },
-    // defining new type is not allowed
-    set: function(newExtract) {
-      if (!M.utils.isNullOrEmpty(newExtract)) {
-        if (M.utils.isString(newExtract)) {
-          this.getImpl().extract = (M.utils.normalize(newExtract) === 'true');
-        }
-        else {
-          this.getImpl().extract = newExtract;
-        }
+  get extract() {
+    return this.impl().extract;
+  }
+
+  set extract(newExtract) {
+    if (!Utils.isNullOrEmpty(newExtract)) {
+      if (Utils.isString(newExtract)) {
+        this.impl().extract = (Utils.normalize(newExtract) === 'true');
+      } else {
+        this.impl().extract = newExtract;
       }
-      else {
-        this.getImpl().extract = true;
-      }
+    } else {
+      this.impl().extract = true;
     }
-  });
+  }
 
   /**
    * This function checks if an object is equals
@@ -141,16 +137,16 @@ goog.require('M.exception');
    * @function
    * @api stable
    */
-  M.layer.GeoJSON.prototype.equals = function(obj) {
-    var equals = false;
+  equals(obj) {
+    let equals = false;
 
-    if (obj instanceof M.layer.GeoJSON) {
+    if (obj instanceof GeoJSON) {
       equals = this.name === obj.name;
       equals = equals && (this.extract === obj.extract);
     }
 
     return equals;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -159,45 +155,44 @@ goog.require('M.exception');
    * @function
    * @api stable
    */
-  M.layer.GeoJSON.prototype.setSource = function(source) {
+  set source(source) {
     this.source = source;
-    this.getImpl().refresh(source);
-  };
+    this.impl().refresh(source);
+  }
 
-  M.layer.GeoJSON.prototype.setStyle = function(style, applyToFeature = false) {
+  set style(style, applyToFeature = false) {
     let isNullStyle = false;
     if (style === null) {
       isNullStyle = true;
     }
-    const applyStyleFn = function() {
-      if (M.utils.isNullOrEmpty(style)) {
-        style = M.utils.generateStyleLayer(M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE, this);
+    const applyStyleFn = () => {
+      if (Utils.isNullOrEmpty(style)) {
+        style = Utils.generateStyleLayer(GeoJSON.DEFAULT_OPTIONS_STYLE, this);
       }
-      let isCluster = style instanceof M.style.Cluster;
-      let isPoint = [M.geom.geojson.type.POINT, M.geom.geojson.type.MULTI_POINT].includes(M.utils.getGeometryType(this));
-      if (style instanceof M.Style && (!isCluster || isPoint)) {
-        if (!M.utils.isNullOrEmpty(this.style_)) {
+      let isCluster = style instanceof Cluster;
+      let isPoint = [Geojson.POINT, Geojson.MULTI_POINT].includes(Utils.geometryType(this));
+      if (style instanceof Style && (!isCluster || isPoint)) {
+        if (!Utils.isNullOrEmpty(this.style_)) {
           this.style_.unapply(this);
         }
         style.apply(this, applyToFeature, isNullStyle);
         this.style_ = style;
       }
-      if (!M.utils.isNullOrEmpty(this.getImpl().getMap())) {
-        let layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
-        if (!M.utils.isNullOrEmpty(layerswitcher)) {
+      if (!Utils.isNullOrEmpty(this.impl().map())) {
+        let layerswitcher = this.impl().map().controls('layerswitcher')[0];
+        if (!Utils.isNullOrEmpty(layerswitcher)) {
           layerswitcher.render();
         }
       }
-      this.fire(M.evt.CHANGE_STYLE, [style, this]);
+      this.fire(Evt.CHANGE_STYLE, [style, this]);
     };
 
-    if (this.getImpl().isLoaded()) {
+    if (this.impl().isLoaded()) {
       applyStyleFn.bind(this)();
+    } else {
+      this.once(Evt.LOAD, applyStyleFn, this);
     }
-    else {
-      this.once(M.evt.LOAD, applyStyleFn, this);
-    }
-  };
+  }
 
   /**
    * Template for this controls
@@ -206,7 +201,7 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.layer.GeoJSON.POPUP_TEMPLATE = 'geojson_popup.html';
+  GeoJSON.POPUP_TEMPLATE = 'geojson_popup.html';
 
   /**
    * Options style by default
@@ -215,7 +210,7 @@ goog.require('M.exception');
    * @public
    * @api stable
    */
-  M.layer.GeoJSON.DEFAULT_OPTIONS_STYLE = {
+  GeoJSON.DEFAULT_OPTIONS_STYLE = {
     fill: {
       color: 'rgba(255, 255, 255, 0.4)',
       opacity: 0.4
@@ -226,4 +221,4 @@ goog.require('M.exception');
     },
     radius: 5,
   };
-})();
+}

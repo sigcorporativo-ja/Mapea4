@@ -1,12 +1,13 @@
-goog.provide('M.layer.WFS');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import LayerBase from('./layerbase.js');
+import Vector from('./vector.js');
+import WFSImpl from('../../../impl/js/layers/wfs.js');
+import LayerType from('./layertype.js');
+import Layer from('../parameters/layers.js');
+import Geom from('../geom/geom.js');
 
-goog.require('M.Layer');
-goog.require('M.layer.Vector');
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.geom');
-
-(function() {
+export class WFS extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -18,21 +19,23 @@ goog.require('M.geom');
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  M.layer.WFS = (function(userParameters, options = {}, impl = new M.impl.layer.WFS(options)) {
+  constructor(userParameters, options = {}, impl = new WFSImpl(options)) {
+    // calls the super constructor
+    super(this, parameters, options, impl);
+
     // checks if the implementation can create WFS layers
-    if (M.utils.isUndefined(M.impl.layer.WFS)) {
-      M.exception('La implementación usada no puede crear capas WFS');
+    if (Utils.isUndefined(WFSImpl)) {
+      Exception('La implementación usada no puede crear capas WFS');
     }
 
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(userParameters)) {
-      M.exception('No ha especificado ningún parámetro');
+    if (Utils.isNullOrEmpty(userParameters)) {
+      Exception('No ha especificado ningún parámetro');
     }
 
-    var parameters = M.parameter.layer(userParameters, M.layer.type.WFS);
+    //This layer is of parameters.
+    let parameters = Layer(userParameters, LayerType.WFS);
 
-    // calls the super constructor
-    goog.base(this, parameters, options, impl);
 
     // namespace
     this.namespace = parameters.namespace;
@@ -54,125 +57,104 @@ goog.require('M.geom');
 
     // options
     this.options = options;
-  });
-  goog.inherits(M.layer.WFS, M.layer.Vector);
+  }
 
   /**
    * 'type' This property indicates if
    * the layer was selected
    */
-  Object.defineProperty(M.layer.WFS.prototype, "type", {
-    get: function() {
-      return M.layer.type.WFS;
-    },
-    // defining new type is not allowed
-    set: function(newType) {
-      if (!M.utils.isUndefined(newType) && !M.utils.isNullOrEmpty(newType) && (newType !== M.layer.type.WFS)) {
-        M.exception('El tipo de capa debe ser \''.concat(M.layer.type.WFS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
-      }
+  get type() {
+    return LayerType.WFS;
+  }
+
+  set type(newType) {
+    if (!Utils.isUndefined(newType) && !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WFS)) {
+      Exception('El tipo de capa debe ser \''.concat(LayerType.WFS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
-  });
+  }
 
   /**
    * 'namespace' the layer name
    */
-  Object.defineProperty(M.layer.WFS.prototype, "namespace", {
-    get: function() {
-      return this.getImpl().namespace;
-    },
-    // defining new type is not allowed
-    set: function(newNamespace) {
-      this.getImpl().namespace = newNamespace;
-    }
-  });
+  get namespace() {
+    return this.impl().namespace;
+  }
 
+  set namespace(newNamespace) {
+    this.impl().namespace = newNamespace;
+  }
   /**
    * 'legend' the layer name
    */
-  Object.defineProperty(M.layer.WFS.prototype, "legend", {
-    get: function() {
-      return this.getImpl().legend;
-    },
-    // defining new type is not allowed
-    set: function(newLegend) {
-      if (M.utils.isNullOrEmpty(newLegend)) {
-        this.getImpl().legend = this.name;
-      }
-      else {
-        this.getImpl().legend = newLegend;
-      }
+  get legend() {
+    return this.impl().legend;
+  }
+
+  set legend(newLegend) {
+    if (Utils.isNullOrEmpty(newLegend)) {
+      this.impl().legend = this.name;
+    } else {
+      this.impl().legend = newLegend;
     }
-  });
+  }
 
   /**
    * 'cql' the layer name
    */
-  Object.defineProperty(M.layer.WFS.prototype, "cql", {
-    get: function() {
-      return this.getImpl().cql;
-    },
-    // defining new type is not allowed
-    set: function(newCQL) {
-      this.getImpl().cql = newCQL;
-    }
-  });
+  get cql() {
+    return this.impl().cql;
+  }
+
+  set cql(newCQL) {
+    this.impl().cql = newCQL;
+  }
 
   /**
    * 'geometry' the layer name
    */
-  Object.defineProperty(M.layer.WFS.prototype, "geometry", {
-    get: function() {
-      return this.getImpl().geometry;
-    },
-    // defining new type is not allowed
-    set: function(newGeometry) {
-      if (!M.utils.isNullOrEmpty(newGeometry)) {
-        var parsedGeom = M.geom.parse(newGeometry);
-        if (M.utils.isNullOrEmpty(parsedGeom)) {
-          M.exception('El tipo de capa WFS <b>' + newGeometry + '</b> no se reconoce. Los tipos disponibles son: POINT, LINE, POLYGON, MPOINT, MLINE, MPOLYGON');
-        }
-        this.getImpl().geometry = parsedGeom;
+  get geometry() {
+    return this.impl().geometry;
+  }
+
+  set geometry(newGeometry) {
+    if (!Utils.isNullOrEmpty(newGeometry)) {
+      var parsedGeom = Geom.parse(newGeometry);
+      if (Utils.isNullOrEmpty(parsedGeom)) {
+        Exception('El tipo de capa WFS <b>' + newGeometry + '</b> no se reconoce. Los tipos disponibles son: POINT, LINE, POLYGON, MPOINT, MLINE, MPOLYGON');
       }
+      this.impl().geometry = parsedGeom;
     }
-  });
+  }
 
   /**
    * 'ids' the layer name
    */
-  Object.defineProperty(M.layer.WFS.prototype, "ids", {
-    get: function() {
-      return this.getImpl().ids;
-    },
-    // defining new type is not allowed
-    set: function(newIds) {
-      if (M.utils.isNullOrEmpty(newIds)) {
-        this.getImpl().ids = this.ids;
-      }
-      else {
-        this.getImpl().ids = newIds;
-      }
+  get ids() {
+    return this.impl().ids;
+  }
+
+  set ids(newIds) {
+    if (Utils.isNullOrEmpty(newIds)) {
+      this.impl().ids = this.ids;
+    } else {
+      this.impl().ids = newIds;
     }
-  });
+  }
 
   /**
    * 'version' the layer name
    */
-  Object.defineProperty(M.layer.WFS.prototype, "version", {
-    get: function() {
-      return this.getImpl().version;
-    },
+  get version() {
+    return this.impl().version;
+  }
 
-    // defining new type is not allowed
-    set: function(newVersion) {
-      if (!M.utils.isNullOrEmpty(newVersion)) {
-        this.getImpl().version = newVersion;
-      }
-      else {
-        this.getImpl().version = '1.0.0'; // default value
-      }
+  set version(newVersion) {
+    if (!Utils.isNullOrEmpty(newVersion)) {
+      this.impl().version = newVersion;
+    } else {
+      this.impl().version = '1.0.0'; // default value
     }
-  });
-
+  }
   /**
    * This function checks if an object is equals
    * to this layer
@@ -180,18 +162,18 @@ goog.require('M.geom');
    * @function
    * @api stable
    */
-  M.layer.WFS.prototype.setCQL = function(newCQL) {
-    this.getImpl().getDescribeFeatureType().then(function(describeFeatureType) {
-      if (!M.utils.isNullOrEmpty(newCQL)) {
-        var geometryName = describeFeatureType.geometryName;
+  set CQL(newCQL) {
+    this.impl().describeFeatureType().then((describeFeatureType) => {
+      if (!Utils.isNullOrEmpty(newCQL)) {
+        let geometryName = describeFeatureType.geometryName;
         // if exist, replace {{geometryName}} with the value geometryName
         newCQL = newCQL.replace(/{{geometryName}}/g, geometryName);
       }
-      if (this.getImpl().cql !== newCQL) {
-        this.getImpl().setCQL(newCQL);
+      if (this.impl().cql !== newCQL) {
+        this.impl().setCQL(newCQL);
       }
     }.bind(this));
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -200,10 +182,10 @@ goog.require('M.geom');
    * @function
    * @api stable
    */
-  M.layer.WFS.prototype.equals = function(obj) {
-    var equals = false;
+  equals(obj) {
+    let equals = false;
 
-    if (obj instanceof M.layer.WFS) {
+    if (obj instanceof WFS) {
       equals = (this.url === obj.url);
       equals = equals && (this.namespace === obj.namespace);
       equals = equals && (this.name === obj.name);
@@ -213,7 +195,7 @@ goog.require('M.geom');
     }
 
     return equals;
-  };
+  }
 
   /**
    * Style options by default for this layer
@@ -222,7 +204,7 @@ goog.require('M.geom');
    * @public
    * @api stable
    */
-  M.layer.WFS.DEFAULT_OPTIONS_STYLE = {
+  WFS.DEFAULT_OPTIONS_STYLE = {
     fill: {
       color: 'rgba(103, 175, 19, 0.2)',
       opacity: 0.4
@@ -233,4 +215,4 @@ goog.require('M.geom');
     },
     radius: 5
   };
-})();
+}
