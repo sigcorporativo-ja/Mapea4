@@ -1,7 +1,7 @@
 /**
  * @namespace M.filter
  */
-export class FilterAbstract {
+export class Abstract {
 
   /**
    * Abstract class

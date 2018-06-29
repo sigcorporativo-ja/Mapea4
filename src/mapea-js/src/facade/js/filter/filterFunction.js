@@ -1,7 +1,7 @@
 import Filter from('./filter.js'):
 import Utils from('../utils/utils.js');
 
-export class FilterFunction extends Filter {
+export class Function extends Filter {
   /**
    * Creates a Filter Function to filter features
    *

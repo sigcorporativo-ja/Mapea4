@@ -1,20 +1,20 @@
-import FilterSpatial from('./filterspatial.js');
+import Spatial from('./filterspatial.js');
 import Utils from('../utils/utils.js');
 import Vector from('../layers/vector.js');
 import Feature from('../feature/feature.js');
 
-export class FilterModule {
+export class Module {
   /**
    * This function creates a spatial filter to know which features contain another feature or layer
    *
    * @function
    * @param {M.layer.Vector|object} param - Layer or geometry on which the query is performed
-   * @return {FilterSpatial} Space filter
+   * @return {Spatial} Space filter
    * @api stable
    */
   static CONTAIN(param) {
-    let geometries = FilterSpatial.parseParamToGeometries(param);
-    return new FilterSpatial((geometryToFilter, index) => {
+    let geometries = Spatial.parseParamToGeometries(param);
+    return new Spatial((geometryToFilter, index) => {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
       return geometries.some(geom => {
@@ -22,7 +22,7 @@ export class FilterModule {
         return jtsGeomToFilter.contains(jtsGeom);
       });
     }, {
-      cqlFilter: FilterSpatial.toCQLFilter_("CONTAINS", geometries)
+      cqlFilter: Spatial.toCQLFilter_("CONTAINS", geometries)
     });
   }
 
@@ -31,12 +31,12 @@ export class FilterModule {
    *
    * @function
    * @param {M.layer.Vector|object} param - Layer or geometry on which the query is performed
-   * @return {FilterSpatial} Space filter
+   * @return {Spatial} Space filter
    * @api stable
    */
   static DISJOINT(param) {
-    let geometries = FilterSpatial.parseParamToGeometries(param);
-    return new FilterSpatial((geometryToFilter, index) => {
+    let geometries = Spatial.parseParamToGeometries(param);
+    return new Spatial((geometryToFilter, index) => {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
       return geometries.some(geom => {
@@ -44,7 +44,7 @@ export class FilterModule {
         return jtsGeomToFilter.disjoint(jtsGeom);
       });
     }, {
-      cqlFilter: FilterSpatial.toCQLFilter_("DISJOINT", geometries)
+      cqlFilter: Spatial.toCQLFilter_("DISJOINT", geometries)
     });
   }
 
@@ -53,12 +53,12 @@ export class FilterModule {
    *
    * @function
    * @param {M.layer.Vector|object} param - Layer or geometry on which the query is performed
-   * @return {FilterSpatial} Space filter
+   * @return {Spatial} Space filter
    * @api stable
    */
   static WITHIN(param) {
-    let geometries = FilterSpatial.parseParamToGeometries(param);
-    return new FilterSpatial((geometryToFilter, index) => {
+    let geometries = Spatial.parseParamToGeometries(param);
+    return new Spatial((geometryToFilter, index) => {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
       return geometries.some(geom => {
@@ -66,7 +66,7 @@ export class FilterModule {
         return jtsGeomToFilter.within(jtsGeom);
       });
     }, {
-      cqlFilter: FilterSpatial.toCQLFilter_("WITHIN", geometries)
+      cqlFilter: Spatial.toCQLFilter_("WITHIN", geometries)
     });
   }
 
@@ -75,12 +75,12 @@ export class FilterModule {
    *
    * @function
    * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param - Layer or geometry on which the query is performed
-   * @return {FilterSpatial} Space filter
+   * @return {Spatial} Space filter
    * @api stable
    */
   static INTERSECT(param) {
-    let geometries = FilterSpatial.parseParamToGeometries(param);
-    return new FilterSpatial((geometryToFilter, index) => {
+    let geometries = Spatial.parseParamToGeometries(param);
+    return new Spatial((geometryToFilter, index) => {
       let geojsonParser = new jsts.io.GeoJSONReader();
       let jtsGeomToFilter = geojsonParser.read(geometryToFilter);
       return geometries.some(geom => {
@@ -88,7 +88,7 @@ export class FilterModule {
         return jtsGeomToFilter.intersects(jtsGeom);
       });
     }, {
-      cqlFilter: FilterSpatial.toCQLFilter_("INTERSECTS", geometries)
+      cqlFilter: Spatial.toCQLFilter_("INTERSECTS", geometries)
     });
   }
 
@@ -97,7 +97,7 @@ export class FilterModule {
    *
    * @function
    * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param - Layer or geometry on which the query is performed
-   * @return {FilterSpatial} Space filter
+   * @return {Spatial} Space filter
    * @api stable
    */
   static parseParamToGeometries(param) {
@@ -128,7 +128,7 @@ export class FilterModule {
    * @private
    * @function
    * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param - Layer or geometry on which the query is performed
-   * @return {FilterSpatial} Space filter
+   * @return {Spatial} Space filter
    */
   static toCQLFilter_(operation, geometries) {
     let cqlFilter = "";
