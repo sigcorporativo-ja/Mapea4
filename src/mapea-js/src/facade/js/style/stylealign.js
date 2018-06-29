@@ -1,9 +1,4 @@
-goog.provide('M.style.align');
-
-/**
- * @namespace M.style.align
- */
-(function() {
+export class Align {
   /**
    * Left style alignment
    * @const
@@ -11,7 +6,7 @@ goog.provide('M.style.align');
    * @public
    * @api stable
    */
-  M.style.align.LEFT = "left";
+  Align.LEFT = "left";
 
   /**
    * Center style alignment
@@ -20,7 +15,7 @@ goog.provide('M.style.align');
    * @public
    * @api stable
    */
-  M.style.align.CENTER = "center";
+  Align.CENTER = "center";
 
   /**
    * Right style alignment
@@ -29,7 +24,7 @@ goog.provide('M.style.align');
    * @public
    * @api stable
    */
-  M.style.align.RIGHT = "right";
+  Align.RIGHT = "right";
 
   /**
    * Justify style alignment
@@ -38,6 +33,6 @@ goog.provide('M.style.align');
    * @public
    * @api stable
    */
-  M.style.align.JUSTIFY = "justify";
+  Align.JUSTIFY = "justify";
 
-})();
+}

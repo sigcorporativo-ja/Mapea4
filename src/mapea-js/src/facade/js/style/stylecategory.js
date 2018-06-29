@@ -1,10 +1,11 @@
-goog.provide('M.style.Category');
-goog.require('M.style.Composite');
+import Composite from('./Composite.js');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import Map from('../map/map.js');
+import Proportional from('./styleproportional.js');
+import Cluster from('./stylecluster.js');
 
-/**
- * @namespace M.style.Category
- */
-(function() {
+export class Category extends Composite {
   /**
    * @classdesc
    * Main constructor of the class. Creates a categoryStyle
@@ -17,9 +18,10 @@ goog.require('M.style.Composite');
    * @param {Map<String,M.Style>} categoryStyles
    * @api stable
    */
-  M.style.Category = (function(attributeName, categoryStyles, options = {}) {
-    if (M.utils.isNullOrEmpty(attributeName)) {
-      M.exception("No se ha especificado el nombre del atributo.");
+  constructor(attributeName, categoryStyles, options = {}) {
+    super(this, options, {});
+    if (Utils.isNullOrEmpty(attributeName)) {
+      Exception("No se ha especificado el nombre del atributo.");
     }
 
     /**
@@ -39,12 +41,10 @@ goog.require('M.style.Composite');
      * @expose
      */
     this.categoryStyles_ = categoryStyles;
-    goog.base(this, options, {});
-  });
-  goog.inherits(M.style.Category, M.style.Composite);
+  }
 
   /**
-   * This function apply the styleCategory object to specified layer
+   * This function apply the Category object to specified layer
    *
    * @function
    * @public
@@ -52,10 +52,10 @@ goog.require('M.style.Composite');
    * @returns {M.style.Category}
    * @api stable
    */
-  M.style.Category.prototype.applyInternal_ = function(layer) {
+  applyInternal_(layer) {
     this.layer_ = layer;
     this.update_();
-  };
+  }
   /**
    * This function return the AttributeName
    *
@@ -64,9 +64,9 @@ goog.require('M.style.Composite');
    * @returns {String}
    * @api stable
    */
-  M.style.Category.prototype.getAttributeName = function() {
+  get attributeName() {
     return this.attributeName_;
-  };
+  }
 
   /**
    * This function set the AttributeName defined by user
@@ -77,12 +77,12 @@ goog.require('M.style.Composite');
    * @returns {M.style.Category}
    * @api stable
    */
-  M.style.Category.prototype.setAttributeName = function(attributeName) {
+  set attributeName(attributeName) {
     this.attributeName_ = attributeName;
     this.update_();
     this.refresh();
     return this;
-  };
+  }
 
   /**
    * This function return an Array with the diferents Categories
@@ -92,9 +92,9 @@ goog.require('M.style.Composite');
    * @returns {Array<String>}
    * @api stable
    */
-  M.style.Category.prototype.getCategories = function() {
+  get categories() {
     return this.categoryStyles_;
-  };
+  }
 
   /**
    * This function sets the object categories
@@ -102,16 +102,16 @@ goog.require('M.style.Composite');
    * @function
    * @public
    * @param {Map<String,M.style>} categories
-   * @return {M.style.styleCategory}
+   * @return {M.style.Category}
    * @api stable
    *
    */
-  M.style.Category.prototype.setCategories = function(categories) {
+  set categories(categories) {
     this.categoryStyles_ = categories;
     this.update_();
     this.refresh();
     return this;
-  };
+  }
 
   /**
    * This function return the style of a specified Category defined by user
@@ -122,9 +122,9 @@ goog.require('M.style.Composite');
    * @returns {M.style}
    * @api stable
    */
-  M.style.Category.prototype.getStyleForCategory = function(category) {
+  get styleForCategory(category) {
     return this.categoryStyles_[category];
-  };
+  }
 
   /**
    * This function set the style of a specified Category defined by user
@@ -136,12 +136,12 @@ goog.require('M.style.Composite');
    * @returns {M.style.Category}
    * @api stable
    */
-  M.style.Category.prototype.setStyleForCategory = function(category, style) {
+  set styleForCategory(category, style) {
     this.categoryStyles_[category] = style;
     this.update_();
     this.refresh();
     return this;
-  };
+  }
 
   /**
    * This function updates the canvas of style
@@ -150,11 +150,11 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  M.style.Category.prototype.updateCanvas = function() {
+  updateCanvas() {
     let canvasImages = [];
     this.updateCanvasPromise_ = new Promise((success, fail) =>
       this.loadCanvasImages_(0, canvasImages, success));
-  };
+  }
 
   /**
    * TODO
@@ -163,7 +163,7 @@ goog.require('M.style.Composite');
    * @private
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
    */
-  M.style.Category.prototype.loadCanvasImages_ = function(currentIndex, canvasImages, callbackFn) {
+  loadCanvasImages_(currentIndex, canvasImages, callbackFn) {
     let categories = this.getCategories();
     let categoryNames = Object.keys(categories);
 
@@ -174,36 +174,35 @@ goog.require('M.style.Composite');
     // recursive case
     else {
       let category = categoryNames[currentIndex];
-      let style = this.getStyleForCategory(category);
+      let style = this.styleForCategory(category);
       let image = new Image();
       image.crossOrigin = 'Anonymous';
       let scope_ = this;
-      image.onload = function() {
+      image.onload = () => {
         canvasImages.push({
           'image': this,
           'categoryName': category
         });
         scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
-      };
-      image.onerror = function() {
+      }
+      image.onerror = () => {
         canvasImages.push({
           'categoryName': category
         });
         scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
-      };
+      }
       style.updateCanvas();
       if (style.get('icon.src')) {
-        M.utils.getImageSize(style.get('icon.src')).then((img) => {
+        Utils.getImageSize(style.get('icon.src')).then((img) => {
           image.width = style.get('icon.scale') ? img.width * style.get('icon.scale') : img.width;
           image.height = style.get('icon.scale') ? img.height * style.get('icon.scale') : img.height;
           image.src = style.toImage();
         });
-      }
-      else {
+      } else {
         image.src = style.toImage();
       }
     }
-  };
+  }
 
   /**
    * TODO
@@ -213,9 +212,9 @@ goog.require('M.style.Composite');
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
    * @api stable
    */
-  M.style.Category.prototype.drawGeometryToCanvas = function(canvasImages, callbackFn) {
-    let heights = canvasImages.map(canvasImage => canvasImage['image'].height);
-    let widths = canvasImages.map(canvasImage => canvasImage['image'].width);
+  drawGeometryToCanvas(canvasImages, callbackFn) {
+    let heights = canvasImages.Map(canvasImage => canvasImage['image'].height);
+    let widths = canvasImages.Map(canvasImage => canvasImage['image'].width);
 
     let vectorContext = this.canvas_.getContext('2d');
     vectorContext.canvas.height = heights.reduce((acc, h) => acc + h + 5);
@@ -227,12 +226,12 @@ goog.require('M.style.Composite');
       let categoryName = canvasImage['categoryName'];
       let coordinateY = 0;
       let prevHeights = heights.slice(0, index);
-      if (!M.utils.isNullOrEmpty(prevHeights)) {
+      if (!Utils.isNullOrEmpty(prevHeights)) {
         coordinateY = prevHeights.reduce((acc, h) => acc + h + 5);
         coordinateY += 5;
       }
       let imageHeight = 0;
-      if (!M.utils.isNullOrEmpty(image)) {
+      if (!Utils.isNullOrEmpty(image)) {
         imageHeight = image.height;
         vectorContext.drawImage(image, (maxWidth - image.width) / 2, coordinateY, image.width, image.height);
       }
@@ -240,46 +239,45 @@ goog.require('M.style.Composite');
     }, this);
 
     callbackFn();
-  };
+  }
 
   /**
    * This function updates the style
    *
    * @function
    * @private
-   * @return {M.style.styleCategory}
+   * @return {M.style.Category}
    * @api stable
    */
-  M.style.Category.prototype.update_ = function() {
-    if (!M.utils.isNullOrEmpty(this.layer_)) {
-      if (M.utils.isNullOrEmpty(this.categoryStyles_) || Object.keys(this.categoryStyles_).length === 0) {
+  update_() {
+    if (!Utils.isNullOrEmpty(this.layer_)) {
+      if (Utils.isNullOrEmpty(this.categoryStyles_) || Object.keys(this.categoryStyles_).length === 0) {
         this.categoryStyles_ = this.generateRandomCategories_();
       }
       let styleOther = this.categoryStyles_['other'];
-      this.layer_.getFeatures().forEach(function(feature) {
-        let value = feature.getAttribute(this.attributeName_);
+      this.layer_.features().forEach((feature) => {
+        let value = feature.attribute(this.attributeName_);
         let style = this.categoryStyles_[value];
-        if (!M.utils.isNullOrEmpty(style)) {
-          feature.setStyle(style);
-        }
-        else if (!M.utils.isNullOrEmpty(styleOther)) {
-          feature.setStyle(styleOther);
+        if (!Utils.isNullOrEmpty(style)) {
+          feature.style = style;
+        } else if (!Utils.isNullOrEmpty(styleOther)) {
+          feature.style = styleOther;
         }
       }.bind(this));
       this.updateCanvas();
     }
-  };
+  }
 
   /**
    * @inheritDoc
    */
-  M.style.Category.prototype.add = function(styles) {
-    if (!M.utils.isArray(styles)) {
+  add(styles) {
+    if (!Utils.isArray(styles)) {
       styles = [styles];
     }
-    styles = styles.filter(style => style instanceof M.style.Cluster || style instanceof M.style.Proportional);
-    return goog.base(this, "add", styles);
-  };
+    styles = styles.filter(style => style instanceof Cluster || style instanceof Proportional);
+    return return super.add(styles);
+  }
 
   /**
    * This function updates the style
@@ -289,18 +287,18 @@ goog.require('M.style.Composite');
    * @return {object}
    * @api stable
    */
-  M.style.Category.prototype.generateRandomCategories_ = function() {
+  generateRandomCategories_() {
     let categories = {};
-    if (!M.utils.isNullOrEmpty(this.layer_)) {
-      this.layer_.getFeatures().forEach(feature => {
+    if (!Utils.isNullOrEmpty(this.layer_)) {
+      this.layer_.features().forEach(feature => {
         let value = feature.getAttribute(this.attributeName_);
         if (!categories.hasOwnProperty(value)) {
-          categories[value] = M.utils.generateRandomStyle(feature, M.style.Category.RANDOM_RADIUS_OPTION, M.style.Category.RANDOM_STROKE_WIDTH_OPTION, M.style.Category.RANDOM_STROKE_COLOR_OPTION);
+          categories[value] = Utils.generateRandomStyle(feature, Category.RANDOM_RADIUS_OPTION, Category.RANDOM_STROKE_WIDTH_OPTION, Category.RANDOM_STROKE_COLOR_OPTION);
         }
       });
     }
     return categories;
-  };
+  }
 
   /**
    * This constant defines the order of style.
@@ -308,8 +306,10 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  Object.defineProperty(M.style.Category.prototype, "ORDER", {
-    value: 2
+
+
+  Object.defineProperty(Category.prototype, "ORDER", {
+    value: 1
   });
 
   /**
@@ -318,7 +318,7 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  M.style.Category.RANDOM_RADIUS_OPTION = 10;
+  Category.RANDOM_RADIUS_OPTION = 10;
 
   /**
    * This constant defines the stroke width of random category style.
@@ -326,7 +326,7 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  M.style.Category.RANDOM_STROKE_WIDTH_OPTION = 1;
+  Category.RANDOM_STROKE_WIDTH_OPTION = 1;
 
   /**
    * This constant defines the stroke color of random category style.
@@ -334,6 +334,6 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  M.style.Category.RANDOM_STROKE_COLOR_OPTION = "black";
+  Category.RANDOM_STROKE_COLOR_OPTION = "black";
 
-})();
+}

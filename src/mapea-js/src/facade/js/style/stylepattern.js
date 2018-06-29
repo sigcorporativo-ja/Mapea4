@@ -1,9 +1,4 @@
-goog.provide('M.style.pattern');
-
-/**
- * @namespace M.style.pattern
- */
-(function() {
+export class Pattern {
   /**
    * Hatch style pattern
    * @const
@@ -11,7 +6,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.HATCH = "HATCH";
+  Pattern.HATCH = "HATCH";
 
   /**
    * Cross style pattern
@@ -20,7 +15,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.CROSS = "CROSS";
+  Pattern.CROSS = "CROSS";
 
   /**
    * Dot style pattern
@@ -29,7 +24,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.DOT = "DOT";
+  Pattern.DOT = "DOT";
 
   /**
    * Cirlce style pattern
@@ -38,7 +33,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.CIRCLE = "CIRCLE";
+  Pattern.CIRCLE = "CIRCLE";
 
   /**
    * Square style pattern
@@ -47,7 +42,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.SQUARE = "SQUARE";
+  Pattern.SQUARE = "SQUARE";
 
   /**
    * Tile style pattern
@@ -56,7 +51,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.TILE = "TILE";
+  Pattern.TILE = "TILE";
 
   /**
    * Woven style pattern
@@ -65,7 +60,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.WOVEN = "WOVEN";
+  Pattern.WOVEN = "WOVEN";
 
   /**
    * Crosses style pattern
@@ -74,7 +69,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.CROSSES = "CROSSES";
+  Pattern.CROSSES = "CROSSES";
 
   /**
    * Caps style pattern
@@ -83,7 +78,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.CAPS = "CAPS";
+  Pattern.CAPS = "CAPS";
 
   /**
    * Nylon style pattern
@@ -92,7 +87,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.NYLON = "NYLON";
+  Pattern.NYLON = "NYLON";
 
   /**
    * Hexagon style pattern
@@ -101,7 +96,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.HEXAGON = "HEXAGON";
+  Pattern.HEXAGON = "HEXAGON";
 
   /**
    * Cementery style pattern
@@ -110,7 +105,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.CEMETRY = "CEMETRY";
+  Pattern.CEMETRY = "CEMETRY";
 
   /**
    * Sand style pattern
@@ -119,7 +114,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.SAND = "SAND";
+  Pattern.SAND = "SAND";
 
   /**
    * Conglomerate style pattern
@@ -128,7 +123,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.CONGLOMERATE = "CONGLOMERATE";
+  Pattern.CONGLOMERATE = "CONGLOMERATE";
 
   /**
    * Gravel style pattern
@@ -137,7 +132,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.GRAVEL = "GRAVEL";
+  Pattern.GRAVEL = "GRAVEL";
 
   /**
    * Brick style pattern
@@ -146,7 +141,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.BRICK = "BRICK";
+  Pattern.BRICK = "BRICK";
 
   /**
    * Dolomite style pattern
@@ -155,7 +150,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.DOLOMITE = "DOLOMITE";
+  Pattern.DOLOMITE = "DOLOMITE";
 
   /**
    * Coal style pattern
@@ -164,7 +159,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.COAL = "COAL";
+  Pattern.COAL = "COAL";
 
   /**
    * Brevvia style pattern
@@ -173,7 +168,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.BRECCIA = "BRECCIA";
+  Pattern.BRECCIA = "BRECCIA";
 
   /**
    * Clay style pattern
@@ -182,7 +177,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.CLAY = "CLAY";
+  Pattern.CLAY = "CLAY";
 
   /**
    * Flooded style pattern
@@ -191,7 +186,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.FLOODED = "FLOODED";
+  Pattern.FLOODED = "FLOODED";
 
   /**
    * Chaos style pattern
@@ -200,7 +195,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.CHAOS = "CHAOS";
+  Pattern.CHAOS = "CHAOS";
 
   /**
    * Grass style pattern
@@ -209,7 +204,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.GRASS = "GRASS";
+  Pattern.GRASS = "GRASS";
 
   /**
    * Swamp style pattern
@@ -218,7 +213,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.SWAMP = "SWAMP";
+  Pattern.SWAMP = "SWAMP";
 
   /**
    * Wave style pattern
@@ -227,7 +222,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.WAVE = "WAVE";
+  Pattern.WAVE = "WAVE";
 
   /**
    * Vine style pattern
@@ -236,7 +231,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.VINE = "VINE";
+  Pattern.VINE = "VINE";
 
   /**
    * Forest style pattern
@@ -245,7 +240,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.FOREST = "FOREST";
+  Pattern.FOREST = "FOREST";
 
   /**
    * Scrub style pattern
@@ -254,7 +249,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.SCRUB = "SCRUB";
+  Pattern.SCRUB = "SCRUB";
 
   /**
    * Tree style pattern
@@ -263,7 +258,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.TREE = "TREE";
+  Pattern.TREE = "TREE";
 
   /**
    * Pine style pattern
@@ -272,7 +267,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.PINE = "PINE";
+  Pattern.PINE = "PINE";
 
   /**
    * Pines style pattern
@@ -281,7 +276,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.PINES = "PINES";
+  Pattern.PINES = "PINES";
 
   /**
    * Rock style pattern
@@ -290,7 +285,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.ROCK = "ROCK";
+  Pattern.ROCK = "ROCK";
 
   /**
    * Rocks style pattern
@@ -299,7 +294,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.ROCKS = "ROCKS";
+  Pattern.ROCKS = "ROCKS";
 
   /**
    * Character style pattern
@@ -308,7 +303,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.CHARACTER = "CHARACTER";
+  Pattern.CHARACTER = "CHARACTER";
 
   /**
    * Icon style pattern
@@ -317,7 +312,7 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.ICON = "ICON";
+  Pattern.ICON = "ICON";
 
   /**
    * Image style pattern
@@ -326,5 +321,5 @@ goog.provide('M.style.pattern');
    * @public
    * @api stable
    */
-  M.style.pattern.IMAGE = "IMAGE";
-})();
+  Pattern.IMAGE = "IMAGE";
+}

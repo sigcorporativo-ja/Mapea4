@@ -1,9 +1,11 @@
-goog.provide('M.style.Cluster');
-goog.require('M.style.Composite');
+import Composite from('./stylecomposite.js');
+import Utils from('../utils/utils.js');
+import ClusterImpl from('../../../impl/js/style/stylecluster.js');
+
 /**
- * @namespace M.style.Cluster
+ * @namespace Cluster
  */
-(function() {
+export class Cluster extends Composite {
   /**
    * @classdesc
    * Main constructor of the class. Creates a style cluster
@@ -15,9 +17,11 @@ goog.require('M.style.Composite');
    * @param {object} specified parameters for class claster depends on its implementation
    * @api stable
    */
-  M.style.Cluster = (function(options = {}, optsVendor = {}) {
-    M.utils.extends(options, M.style.Cluster.DEFAULT);
-    M.utils.extends(optsVendor, M.style.Cluster.DEFAULT_VENDOR);
+  constructor(options = {}, optsVendor = {}) {
+    // calls the super constructor
+    super(this, options, impl);
+    Utils.extends(options, Cluster.DEFAULT);
+    Utils.extends(optsVendor, Cluster.DEFAULT_VENDOR);
 
     /**
      * @private
@@ -25,29 +29,26 @@ goog.require('M.style.Composite');
      */
     this.oldStyle_ = null;
 
-    var impl = new M.impl.style.Cluster(options, optsVendor);
+    var impl = new ClusterImpl(options, optsVendor);
 
-    // calls the super constructor
-    goog.base(this, options, impl);
-  });
-  goog.inherits(M.style.Cluster, M.style.Composite);
+  }
 
   /**
    * @inheritDoc
    */
-  M.style.Cluster.prototype.unapplySoft = function(layer) {
-    this.getImpl().unapply();
-  };
+  unapplySoft(layer) {
+    this.impl().unapply();
+  }
 
   /**
    * @inheritDoc
    */
-  M.style.Cluster.prototype.add = function(styles) {
-    if (!M.utils.isNullOrEmpty(this.layer_)) {
+  add(styles) {
+    if (!Utils.isNullOrEmpty(this.layer_)) {
       this.unapplySoft(this.layer_);
     }
-    return goog.base(this, 'add', styles);
-  };
+    return return super.add(styles);
+  }
 
   /**
    * This function apply style to specified layer
@@ -57,11 +58,11 @@ goog.require('M.style.Composite');
    * @param {M.layer.Vector} layer - Layer to apply the style
    * @api stable
    */
-  M.style.Cluster.prototype.applyInternal_ = function(layer) {
+  applyInternal_(layer) {
     this.layer_ = layer;
-    this.getImpl().applyToLayer(layer);
+    this.impl().applyToLayer(layer);
     this.updateCanvas();
-  };
+  }
 
   /**
    * This function gets the old style of layer
@@ -70,9 +71,9 @@ goog.require('M.style.Composite');
    * @return {M.Style} the old style of layer
    * @api stable
    */
-  M.style.Cluster.prototype.getOldStyle = function() {
+  get oldStyle() {
     return this.oldStyle_;
-  };
+  }
 
   /**
    * This function return a set of ranges defined by user
@@ -82,9 +83,9 @@ goog.require('M.style.Composite');
    * @return {Array<Object>} ranges stablished by user
    * @api stable
    */
-  M.style.Cluster.prototype.getRanges = function() {
+  get ranges() {
     return this.options_.ranges;
-  };
+  }
 
   /**
    * This function returns the options of style cluster
@@ -93,9 +94,9 @@ goog.require('M.style.Composite');
    * @return {object} options of style cluster
    * @api stable
    */
-  M.style.Cluster.prototype.getOptions = function() {
+  get options() {
     return this.options_;
-  };
+  }
 
   /**
    * This function update a set of ranges  defined by user
@@ -103,15 +104,15 @@ goog.require('M.style.Composite');
    * @function
    * @public
    * @param {Array<Object>} newRanges as new Ranges
-   * @return {M.style.Cluster}
+   * @return {Cluster}
    * @api stable
    */
-  M.style.Cluster.prototype.setRanges = function(newRanges) {
-    this.getImpl().setRanges(newRanges);
+  set ranges(newRanges) {
+    this.impl().ranges = newRanges;
     this.unapply(this.layer_);
-    this.layer_.setStyle(this);
+    this.layer_.style = this;
     return this;
-  };
+  }
 
   /**
    * This function return a specified range
@@ -123,9 +124,9 @@ goog.require('M.style.Composite');
    * @return {Object}
    * @api stable
    */
-  M.style.Cluster.prototype.getRange = function(min, max) {
+  get range(min, max) {
     return this.options_.ranges.find(el => (el.min == min && el.max == max));
-  };
+  }
 
   /**
    * This function set a specified range
@@ -135,15 +136,15 @@ goog.require('M.style.Composite');
    * @param {number} min as range minimal value to be overwritten
    * @param {number} max as range max value to be overwritten
    * @param {number} newRange as the new range
-   * @return {M.style.Cluster}
+   * @return {Cluster}
    * @api stable
    */
-  M.style.Cluster.prototype.updateRange = function(min, max, newRange) {
-    this.getImpl().updateRangeImpl(min, max, newRange, this.layer_, this);
+  updateRange(min, max, newRange) {
+    this.impl().updateRangeImpl(min, max, newRange, this.layer_, this);
     this.unapply(this.layer_);
-    this.layer_.setStyle(this);
+    this.layer_.style = this;
     return this;
-  };
+  }
 
   /**
    * This function set if layer must be animated
@@ -151,12 +152,12 @@ goog.require('M.style.Composite');
    * @function
    * @public
    * @param {boolean} animated defining if layer must be animated
-   * @return {M.style.Cluster}
+   * @return {Cluster}
    * @api stable
    */
-  M.style.Cluster.prototype.setAnimated = function(animated) {
-    return this.getImpl().setAnimated(animated, this.layer_, this);
-  };
+  set animated(animated) {
+    return this.impl().setAnimated(animated, this.layer_, this);
+  }
 
   /**
    * This function return if layer is animated
@@ -166,9 +167,9 @@ goog.require('M.style.Composite');
    * @return {boolean} A flag indicating if layer is currently being animated
    * @api stable
    */
-  M.style.Cluster.prototype.isAnimated = function() {
+  isAnimated() {
     return this.options_.animated;
-  };
+  }
 
   /**
    * This function returns data url to canvas
@@ -177,16 +178,15 @@ goog.require('M.style.Composite');
    * @protected
    * @return {String} data url to canvas
    */
-  M.style.Cluster.prototype.toImage = function() {
+  toImage() {
     let base64Img;
-    if (!M.utils.isNullOrEmpty(this.oldStyle_)) {
+    if (!Utils.isNullOrEmpty(this.oldStyle_)) {
       base64Img = this.oldStyle_.toImage();
-    }
-    else {
-      base64Img = goog.base(this, 'toImage', this);
+    } else {
+      base64Img = super(this, 'toImage', this);
     }
     return base64Img;
-  };
+  }
 
   /**
    * This function updates the style of the
@@ -197,14 +197,14 @@ goog.require('M.style.Composite');
    * @return {String} data url to canvas
    * @api stable
    */
-  M.style.Cluster.prototype.refresh = function() {
-    if (!M.utils.isNullOrEmpty(this.layer_)) {
+  refresh() {
+    if (!Utils.isNullOrEmpty(this.layer_)) {
       let layer = this.layer_;
       this.unapply(this.layer_);
       this.apply(layer);
       this.updateCanvas();
     }
-  };
+  }
 
   /**
    * Default options for this style
@@ -213,7 +213,7 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  M.style.Cluster.DEFAULT = {
+  Cluster.DEFAULT = {
     hoverInteraction: true,
     displayAmount: true,
     selectInteraction: true,
@@ -221,10 +221,10 @@ goog.require('M.style.Composite');
     animated: true,
     maxFeaturesToSelect: 15,
     label: {
-      text: function(feature) {
+      text: (feature) => {
         let text;
-        let cluseterFeatures = feature.getAttribute('features');
-        if (!M.utils.isNullOrEmpty(cluseterFeatures)) {
+        let cluseterFeatures = feature.attribute('features');
+        if (!Utils.isNullOrEmpty(cluseterFeatures)) {
           text = cluseterFeatures.length.toString();
         }
         return text;
@@ -243,7 +243,7 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  M.style.Cluster.DEFAULT_VENDOR = {
+  Cluster.DEFAULT_VENDOR = {
     animationDuration: 250,
     animationMethod: "linear",
     distanceSelectFeatures: 15,
@@ -266,7 +266,7 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  M.style.Cluster.RANGE_1_DEFAULT = {
+  Cluster.RANGE_1_DEFAULT = {
     fill: {
       color: '#81c89a'
     },
@@ -284,7 +284,7 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  M.style.Cluster.RANGE_2_DEFAULT = {
+  Cluster.RANGE_2_DEFAULT = {
     fill: {
       color: '#85b9d2'
     },
@@ -302,7 +302,7 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  M.style.Cluster.RANGE_3_DEFAULT = {
+  Cluster.RANGE_3_DEFAULT = {
     fill: {
       color: '#938fcf'
     },
@@ -319,7 +319,9 @@ goog.require('M.style.Composite');
    * @public
    * @api stable
    */
-  Object.defineProperty(M.style.Cluster.prototype, "ORDER", {
-    value: 4
+
+
+  Object.defineProperty(Cluster.prototype, "ORDER", {
+    value: 1
   });
-})();
+}

@@ -1,9 +1,4 @@
-goog.provide('M.style.textoverflow');
-
-/**
- * @namespace M.style.textoverflow
- */
-(function() {
+export class Textoverflow {
   /**
    * Left style textoverflow
    * @const
@@ -11,7 +6,7 @@ goog.provide('M.style.textoverflow');
    * @public
    * @api stable
    */
-  M.style.textoverflow.ELLIPSIS = "ellipsis";
+  Textoverflow.ELLIPSIS = "ellipsis";
 
   /**
    * Center style textoverflow
@@ -20,7 +15,7 @@ goog.provide('M.style.textoverflow');
    * @public
    * @api stable
    */
-  M.style.textoverflow.VISIBLE = "visible";
+  Textoverflow.VISIBLE = "visible";
 
   /**
    * Right style textoverflow
@@ -29,6 +24,6 @@ goog.provide('M.style.textoverflow');
    * @public
    * @api stable
    */
-  M.style.textoverflow.HIDDEN = "";
+  Textoverflow.HIDDEN = "";
 
-})();
+}

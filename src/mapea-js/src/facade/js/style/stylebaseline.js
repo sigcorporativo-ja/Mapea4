@@ -1,9 +1,4 @@
-goog.provide('M.style.baseline');
-
-/**
- * @namespace M.style.baseline
- */
-(function() {
+export class Baseline {
   /**
    * Top style baseline
    * @const
@@ -11,7 +6,7 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.TOP = "top";
+  Baseline.TOP = "top";
 
   /**
    * Middle style baseline
@@ -20,7 +15,7 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.MIDDLE = "middle";
+  Baseline.MIDDLE = "middle";
 
   /**
    * Bottom style baseline
@@ -29,7 +24,7 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.BOTTOM = "bottom";
+  Baseline.BOTTOM = "bottom";
 
   /**
    * Alphabetic style baseline
@@ -38,7 +33,7 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.ALPHABETIC = "alphabetic";
+  Baseline.ALPHABETIC = "alphabetic";
 
   /**
    * Hanging style baseline
@@ -47,7 +42,7 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.HANGING = "hanging";
+  Baseline.HANGING = "hanging";
 
   /**
    * Ideographic style baseline
@@ -56,5 +51,5 @@ goog.provide('M.style.baseline');
    * @public
    * @api stable
    */
-  M.style.baseline.IDEOGRAPHIC = "ideographic";
-})();
+  Baseline.IDEOGRAPHIC = "ideographic";
+}

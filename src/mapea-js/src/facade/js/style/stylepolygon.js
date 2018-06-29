@@ -1,13 +1,10 @@
-goog.provide('M.style.Polygon');
-goog.require('M.style.Simple');
-
-
-goog.require('M.style.Simple');
+import Simple from("./stylesimple.js");
+import PolygonImpl from('../../../impl/js/style/stylepolygon.js');
 
 /**
  * @namespace M.style.Polygon
  */
-(function() {
+export class Polygon extends Simple {
 
   /**
    * @classdesc
@@ -17,15 +14,14 @@ goog.require('M.style.Simple');
    * @param {Object} options - options style
    * @api stable
    */
-  M.style.Polygon = (function(options) {
-    if (M.utils.isNullOrEmpty(options)) {
-      options = M.style.Polygon.DEFAULT_NULL;
+  constructor(options) {
+    if (Utils.isNullOrEmpty(options)) {
+      options = Polygon.DEFAULT_NULL;
     }
-    options = M.utils.extends({}, options);
-    var impl = new M.impl.style.Polygon(options);
-    goog.base(this, options, impl);
-  });
-  goog.inherits(M.style.Polygon, M.style.Simple);
+    options = Utils.extends({}, options);
+    let impl = new PolygonImpl(options);
+    super(this, options, impl);
+  }
 
 
 
@@ -37,7 +33,7 @@ goog.require('M.style.Simple');
    * @public
    * @api stable
    */
-  M.style.Polygon.DEFAULT_NULL = {
+  Polygon.DEFAULT_NULL = {
     fill: {
       color: 'rgba(255, 255, 255, 0.4)',
       opacity: 0.4
@@ -47,4 +43,4 @@ goog.require('M.style.Simple');
       width: 1.5
     }
   };
-})();
+}

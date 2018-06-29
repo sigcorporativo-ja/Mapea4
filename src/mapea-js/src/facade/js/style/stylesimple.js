@@ -1,38 +1,31 @@
-goog.provide('M.style.Simple');
+import Feature from('./stylefeature.js');
 
-goog.require('M.style.Feature');
-
-/**
- * @namespace M.style.Simple
- */
-(function() {
+export class Simple extends Feature {
 
   /**
    * Abstract class
    *
    * @api stable
    */
-  M.style.Simple = (function(options, impl) {
-    goog.base(this, options, impl);
-  });
-  goog.inherits(M.style.Simple, M.style.Feature);
+  constructor(options, impl) {
+    super(this, options, impl);
+  }
 
   /**
    * @inheritDoc
    */
-  M.style.Simple.prototype.apply = function(layer, applyToFeature, isNullStyle) {
+  apply(layer, applyToFeature, isNullStyle) {
     this.layer_ = layer;
-    this.getImpl().applyToLayer(layer);
+    this.impl().applyToLayer(layer);
     if (applyToFeature === true) {
       if (isNullStyle) {
-        layer.getFeatures().forEach(feature => feature.setStyle(null));
-      }
-      else {
-        layer.getFeatures().forEach(feature => feature.setStyle(this.clone()));
+        layer.features().forEach(feature => feature.style = null);
+      } else {
+        layer.features().forEach(feature => feature.style = this.clone());
       }
     }
     this.updateCanvas();
-  };
+  }
 
   /**
    * This constant defines the order of style.
@@ -43,4 +36,4 @@ goog.require('M.style.Feature');
   Object.defineProperty(M.style.Simple.prototype, "ORDER", {
     value: 1
   });
-})();
+}

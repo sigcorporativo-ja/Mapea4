@@ -1,9 +1,4 @@
-goog.provide('M.style.state');
-
-/**
- * @namespace M.style.state
- */
-(function() {
+export class State {
   /**
    * Default style status
    * @const
@@ -11,7 +6,7 @@ goog.provide('M.style.state');
    * @public
    * @api stable
    */
-  M.style.state.DEFAULT = 'default';
+  State.DEFAULT = 'default';
 
   /**
    * New style status
@@ -20,7 +15,7 @@ goog.provide('M.style.state');
    * @public
    * @api stable
    */
-  M.style.state.NEW = 'new';
+  State.NEW = 'new';
 
   /**
    * Selected style status
@@ -29,5 +24,5 @@ goog.provide('M.style.state');
    * @public
    * @api stable
    */
-  M.style.state.SELECTED = 'selected';
-})();
+  State.SELECTED = 'selected';
+}

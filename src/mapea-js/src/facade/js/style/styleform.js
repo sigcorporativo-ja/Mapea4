@@ -1,6 +1,4 @@
-goog.provide('M.style.form');
-
-(function() {
+export class Form {
   /**
    * Circle style form
    * @const
@@ -8,7 +6,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.CIRCLE = "CIRCLE";
+  Form.CIRCLE = "CIRCLE";
 
   /**
    * Buble style form
@@ -17,7 +15,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.BUBBLE = "BUBBLE";
+  Form.BUBBLE = "BUBBLE";
 
   /**
    * Marker style form
@@ -26,7 +24,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.MARKER = "MARKER";
+  Form.MARKER = "MARKER";
 
   /**
    * Shield style form
@@ -35,7 +33,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.SHIELD = "SHIELD";
+  Form.SHIELD = "SHIELD";
 
   /**
    * Blazon style form
@@ -44,7 +42,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.BLAZON = "BLAZON";
+  Form.BLAZON = "BLAZON";
 
   /**
    * Triangle style form
@@ -53,7 +51,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.TRIANGLE = "TRIANGLE";
+  Form.TRIANGLE = "TRIANGLE";
 
   /**
    * Sing style form
@@ -62,7 +60,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.SIGN = "SIGN";
+  Form.SIGN = "SIGN";
 
   /**
    * Ban style form
@@ -71,7 +69,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.BAN = "BAN";
+  Form.BAN = "BAN";
 
   /**
    * Lozenge style form
@@ -80,7 +78,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.LOZENGE = "LOZENGE";
+  Form.LOZENGE = "LOZENGE";
 
   /**
    * Square style form
@@ -89,7 +87,7 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.SQUARE = "SQUARE";
+  Form.SQUARE = "SQUARE";
 
 
   /**
@@ -99,5 +97,5 @@ goog.provide('M.style.form');
    * @public
    * @api stable
    */
-  M.style.form.NONE = null;
-})();
+  Form.NONE = null;
+}

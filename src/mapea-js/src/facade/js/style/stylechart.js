@@ -1,13 +1,14 @@
-goog.provide('M.style.Chart');
+import Feature from('./stylefeature.js');
+import SChartVar from('../chart/variable.js');
+import SChartSTypes from('../chart/types.js');
+import Utils from('../utils/utils.js');
+import ChartImpl from('../../../impl/js/style/stylechart.js');
 
-goog.require('M.style.Feature');
-goog.require('M.style.chart');
-goog.require('M.style.chart.Variable');
 
 /**
- * @namespace M.style.Chart
+ * @namespace Chart
  */
-(function() {
+export class Chart extends Feature {
 
   /**
    * @classdesc
@@ -18,7 +19,7 @@ goog.require('M.style.chart.Variable');
    * @constructor
    * @extends {M.style.Simple}
    * @param {Mx.ChartOptions} options.
-   *  - type {string|M.style.chart.types} the chart type
+   *  - type {string|Chart.types} the chart type
    *  - radius {number} the radius of the chart. If chart type is 'bar' type this field
    *            will limit the max bar height
    *  - offsetX {number} chart x axis offset
@@ -27,88 +28,80 @@ goog.require('M.style.chart.Variable');
    *      - color {string} the color of the chart stroke
    *      - width {number} the width of the chart stroke
    *  - fill3DColor: {string} the fill color of the PIE_3D cylinder
-   *  - scheme {string|Array<string>|M.style.chart.schemes} the color set of the chart.If
-   *            value is typeof 'string' you must declare this scheme into M.style.chart.schemes
+   *  - scheme {string|Array<string>|Chart.schemes} the color set of the chart.If
+   *            value is typeof 'string' you must declare this scheme into Chart.schemes
    *            If you provide less colors than data size the colors will be taken from MOD operator:
    *              mycolor = userColors[currentArrayIndex % userColors.length]
    *  - rotateWithView {bool} determine whether the symbolizer rotates with the map.
    *  - animation {bool} this field is currently ignored [NOT IMPLEMENTED YET]
-   *  - variables {object|M.style.chart.Variable|string|Array<string>|Array<M.style.chart.Variable>} the chart variables
+   *  - variables {object|Chart.Variable|string|Array<string>|Array<Chart.Variable>} the chart variables
    *
    * @api stable
    */
-  M.style.Chart = (function(options = {}) {
+  constructor(options = {}) {
+    // calls the super constructor
+    super(this, options, impl);
 
     let variables = options.variables || null;
 
     // vars parsing
-    if (!Object.values(M.style.chart.types).includes(options.type)) {
-      options.type = M.style.Chart.DEFAULT.type;
+    if (!Object.values(SChartSTypes).includes(options.type)) {
+      options.type = Chart.DEFAULT.type;
     }
-    if (!M.utils.isNullOrEmpty(variables)) {
+    if (!Utils.isNullOrEmpty(variables)) {
       if (variables instanceof Array) {
         options.variables = variables.filter(variable => variable != null).map(variable => this.formatVariable_(variable));
-      }
-      else if (typeof variables === 'string' || typeof variables === 'object') {
+      } else if (typeof variables === 'string' || typeof variables === 'object') {
         options.variables = [this.formatVariable_(variables)];
-      }
-      else {
+      } else {
         options.variables = [];
       }
     }
 
     // scheme parsing
     // if scheme is null we will set the default theme
-    if (M.utils.isNullOrEmpty(options.scheme)) {
-      options.scheme = M.style.Chart.DEFAULT.scheme;
+    if (Utils.isNullOrEmpty(options.scheme)) {
+      options.scheme = Chart.DEFAULT.scheme;
       // if is a string we will check if its custom (take values from variables) or a existing theme
-    }
-    else if (typeof options.scheme === 'string') {
+    } else if (typeof options.scheme === 'string') {
       // NOTICE THAT } else if (options.scheme instanceof String) { WONT BE TRUE
-      if (options.scheme === M.style.chart.schemes.Custom && options.variables.some(variable => variable.fillColor != null)) {
+      if (options.scheme === Chart.schemes.Custom && options.variables.some(variable => variable.fillColor != null)) {
         options.scheme = options.variables.map((variable) => variable.fillColor ? variable.fillColor : '');
-      }
-      else {
-        options.scheme = M.style.chart.schemes[options.scheme] || M.style.Chart.DEFAULT.scheme;
+      } else {
+        options.scheme = Chart.schemes[options.scheme] || Chart.DEFAULT.scheme;
       }
       // if is an array of string we will set it directly
-    }
-    else if (!(options.scheme instanceof Array && options.scheme.every(el => typeof el === 'string'))) {
-      options.scheme = M.style.Chart.DEFAULT.scheme;
+    } else if (!(options.scheme instanceof Array && options.scheme.every(el => typeof el === 'string'))) {
+      options.scheme = Chart.DEFAULT.scheme;
     }
 
-    let impl = new M.impl.style.Chart(options);
-    // calls the super constructor
-    goog.base(this, options, impl);
-  });
-  goog.inherits(M.style.Chart, M.style.Feature);
+    let impl = new ChartImpl(options);
+  }
 
   /**
-   * formats a chart variable to creates a new M.style.chart.Variable
+   * formats a chart variable to creates a new Chart.Variable
    *
-   * @param {M.style.chart.Variable|string|object} variableOb a chart variable
+   * @param {Chart.Variable|string|object} variableOb a chart variable
    * @private
    * @function
    * @api stable
    */
-  M.style.Chart.prototype.formatVariable_ = function(variableOb) {
+  formatVariable_(variableOb) {
     if (variableOb == null) {
       return null;
     }
     let constructorOptions = {};
-    if (variableOb instanceof M.style.chart.Variable) {
+    if (variableOb instanceof SChartVar) {
       return variableOb;
-    }
-    else if (typeof variableOb === 'string') {
+    } else if (typeof variableOb === 'string') {
       constructorOptions = {
         attribute: variableOb
       };
-    }
-    else {
+    } else {
       constructorOptions = variableOb;
     }
-    return new M.style.chart.Variable(constructorOptions);
-  };
+    return new SChartVar(constructorOptions);
+  }
 
   /**
    * This function updates the canvas of style
@@ -117,21 +110,21 @@ goog.require('M.style.chart.Variable');
    * @public
    * @api stable
    */
-  M.style.Chart.prototype.updateCanvas = function() {
-    if (M.utils.isNullOrEmpty(this.getImpl()) || M.utils.isNullOrEmpty(this.canvas_)) {
+  updateCanvas() {
+    if (Utils.isNullOrEmpty(this.impl()) || Utils.isNullOrEmpty(this.canvas_)) {
       return false;
     }
-    this.getImpl().updateCanvas(this.canvas_);
-  };
+    this.impl().updateCanvas(this.canvas_);
+  }
 
   /**
    * @inheritDoc
    */
-  M.style.Chart.prototype.apply = function(layer) {
+  apply(layer) {
     this.layer_ = layer;
-    layer.getFeatures().forEach(feature => feature.setStyle(this.clone()));
+    layer.features().forEach(feature => feature.style = this.clone());
     this.updateCanvas();
-  };
+  }
 
   /**
    * Default options for this style
@@ -141,10 +134,10 @@ goog.require('M.style.chart.Variable');
    * @public
    * @api stable
    */
-  M.style.Chart.DEFAULT = {
+  Chart.DEFAULT = {
     shadow3dColor: '#369',
-    type: M.style.chart.types.PIE,
-    scheme: M.style.chart.schemes.Classic,
+    type: Chart.types.PIE,
+    scheme: Chart.schemes.Classic,
     radius: 20,
     donutRatio: 0.5,
     offsetX: 0,
@@ -154,7 +147,9 @@ goog.require('M.style.chart.Variable');
   /**
    * TODO
    */
-  Object.defineProperty(M.style.Chart.prototype, "ORDER", {
+
+
+  Object.defineProperty(Chart.prototype, "ORDER", {
     value: 1
   });
-})();
+}

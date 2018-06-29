@@ -1,8 +1,11 @@
-goog.provide('M.style.Heatmap');
-goog.require('M.Style');
+import Style from('./style.js');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import HeatmapImpl from('../../../impl/js/style/styleheatmap.js');
 
 
-(function() {
+
+export class Heatmap extends Style {
   /**
    * @classdesc
    * Main constructor of the class. Creates a style heatmap
@@ -17,12 +20,15 @@ goog.require('M.Style');
    * @param {object} vendorOptions - vendorOptions style
    * @api stable
    */
-  M.style.Heatmap = (function(attribute, options = {}, vendorOptions = {}) {
-    if (!(M.utils.isString(attribute) || M.utils.isFunction(attribute))) {
-      M.exception('Attribute parameter can not be empty (string or function)');
+  constructor(attribute, options = {}, vendorOptions = {}) {
+    // calls the super constructor
+    super(this, options, impl);
+
+    if (!(Utils.isString(attribute) || Utils.isFunction(attribute))) {
+      Exception('Attribute parameter can not be empty (string or function)');
     }
 
-    M.utils.extends(options, M.style.DEFAULT_OPTIONS);
+    Utils.extends(options, Style.DEFAULT_OPTIONS);
 
     /**
      * @public
@@ -37,18 +43,18 @@ goog.require('M.Style');
      */
     this.options_ = options;
 
-    if (!M.utils.isNullOrEmpty(options.gradient) && !M.utils.isArray(options.gradient)) {
+    if (!Utils.isNullOrEmpty(options.gradient) && !Utils.isArray(options.gradient)) {
       options.gradient = [options.gradient];
     }
-    this.options_.gradient = options.gradient || M.style.Heatmap.DEFAULT_OPTIONS.gradient;
+    this.options_.gradient = options.gradient || Heatmap.DEFAULT_OPTIONS.gradient;
 
     if (this.options_.gradient.length < 2) {
-      let inverseColor = M.utils.inverseColor(options.gradient[0]);
+      let inverseColor = Utils.inverseColor(options.gradient[0]);
       this.options_.gradient.push(inverseColor);
     }
 
-    this.options_.blur = parseFloat(options.blur) || M.style.Heatmap.DEFAULT_OPTIONS.blur;
-    this.options_.radius = parseFloat(options.radius) || M.style.Heatmap.DEFAULT_OPTIONS.radius;
+    this.options_.blur = parseFloat(options.blur) || Heatmap.DEFAULT_OPTIONS.blur;
+    this.options_.radius = parseFloat(options.radius) || Heatmap.DEFAULT_OPTIONS.radius;
     this.options_.weight = this.attribute;
 
     vendorOptions.opacity = isNaN(vendorOptions.opacity) ? 1 : parseFloat(vendorOptions.opacity);
@@ -58,11 +64,8 @@ goog.require('M.Style');
      */
     this.vendorOptions_ = vendorOptions;
 
-    let impl = new M.impl.style.Heatmap(attribute, this.options_, this.vendorOptions_);
-    // calls the super constructor
-    goog.base(this, options, impl);
-  });
-  goog.inherits(M.style.Heatmap, M.Style);
+    let impl = new HeatmapImpl(attribute, this.options_, this.vendorOptions_);
+  }
 
   /**
    * This function remove the style to specified layer
@@ -71,10 +74,10 @@ goog.require('M.Style');
    * @param {M.Layer.Vector} layer - Layer where to apply choropleth style
    * @api stable
    */
-  M.style.Heatmap.prototype.unapply = function(layer) {
+  unapply(layer) {
     this.layer_ = null;
-    this.getImpl().unapply(layer);
-  };
+    this.impl().unapply(layer);
+  }
 
   /**
    * This function returns the attribute of heatmap style
@@ -83,9 +86,9 @@ goog.require('M.Style');
    * @return {string|function}
    * @api stable
    */
-  M.style.Heatmap.prototype.getAttributeName = function() {
+  get attributeName() {
     return this.attribute;
-  };
+  }
 
   /**
    * This function sets the attribute of heatmap style
@@ -94,11 +97,11 @@ goog.require('M.Style');
    * @param {string|function} attribute - The attribute of heatmap style
    * @api stable
    */
-  M.style.Heatmap.prototype.setAttributeName = function(attribute) {
+  set attributeName(attribute) {
     this.attribute = attribute;
     this.options_.weight = this.attribute;
     this.update_();
-  };
+  }
 
   /**
    * This function returns the gradient of heatmap style
@@ -107,9 +110,9 @@ goog.require('M.Style');
    * @return {Array<string>}
    * @api stable
    */
-  M.style.Heatmap.prototype.getGradient = function() {
+  get gradient() {
     return this.options_.gradient;
-  };
+  }
 
   /**
    * This function sets the gradient of heatmap style
@@ -118,17 +121,17 @@ goog.require('M.Style');
    * @param {Array<string>} gradient
    * @api stable
    */
-  M.style.Heatmap.prototype.setGradient = function(gradient) {
-    if (!M.utils.isArray(gradient)) {
+  set gradient(gradient) {
+    if (!Utils.isArray(gradient)) {
       gradient = [gradient];
     }
     if (gradient.length < 2) {
-      let inverseColor = M.utils.inverseColor(gradient[0]);
+      let inverseColor = Utils.inverseColor(gradient[0]);
       gradient.push(inverseColor);
     }
     this.options_.gradient = gradient;
     this.update_();
-  };
+  }
 
   /**
    * This function returns the radius of heatmap style
@@ -137,9 +140,9 @@ goog.require('M.Style');
    * @return {number}
    * @api stable
    */
-  M.style.Heatmap.prototype.getRadius = function() {
+  get radius() {
     return this.options_.radius;
-  };
+  }
 
   /**
    * This function sets the radius of heatmap style
@@ -148,10 +151,10 @@ goog.require('M.Style');
    * @param {number} radius
    * @api stable
    */
-  M.style.Heatmap.prototype.setRadius = function(radius) {
+  set radius(radius) {
     this.options_.radius = radius;
     this.update_();
-  };
+  }
 
   /**
    * This function returns the blur of heatmap style
@@ -160,9 +163,9 @@ goog.require('M.Style');
    * @return {number}
    * @api stable
    */
-  M.style.Heatmap.prototype.getBlurSize = function() {
+  get blurSize() {
     return this.options_.blur;
-  };
+  }
 
   /**
    * This function sets the blur of heatmap style
@@ -171,22 +174,22 @@ goog.require('M.Style');
    * @param {number} blur
    * @api stable
    */
-  M.style.Heatmap.prototype.setBlurSize = function(blur) {
+  set blurSize(blur) {
     this.options_.blur = blur;
     this.update_();
-  };
+  }
 
   /**
    * This function updates the style heatmap
    * @private
    * @function
    */
-  M.style.Heatmap.prototype.update_ = function() {
-    let styleImpl = this.getImpl();
+  update_() {
+    let styleImpl = this.impl();
     styleImpl.unapply(this.layer_);
     styleImpl.setOptions(this.options_, this.vendorOptions_);
     styleImpl.applyToLayer(this.layer_);
-  };
+  }
 
   /**
    * This function draws the style on the canvas
@@ -196,11 +199,11 @@ goog.require('M.Style');
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
    * @api stable
    */
-  M.style.Heatmap.prototype.drawGeometryToCanvas = function() {
-    let [minWeight, maxWeight] = [this.getImpl().getMinWeight(), this.getImpl().getMaxWeight()];
+  drawGeometryToCanvas() {
+    let [minWeight, maxWeight] = [this.impl().getMinWeight(), this.impl().getMaxWeight()];
     let ctx = this.canvas_.getContext('2d');
     let gradient = ctx.createLinearGradient(0.000, 150.000, 200.000, 150.000);
-    let intervals = M.utils.generateIntervals([0, 1], this.options_.gradient.length);
+    let intervals = Utils.generateIntervals([0, 1], this.options_.gradient.length);
     this.options_.gradient.forEach((color, i) => gradient.addColorStop(intervals[i], color));
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 20, 200.000, 30.000);
@@ -208,7 +211,7 @@ goog.require('M.Style');
     ctx.font = "10px sans-serif";
     ctx.fillText(minWeight, 0, 60);
     ctx.fillText(maxWeight, 199, 60);
-  };
+  }
 
   /**
    * This function updates the canvas of style
@@ -217,9 +220,9 @@ goog.require('M.Style');
    * @public
    * @api stable
    */
-  M.style.Heatmap.prototype.updateCanvas = function() {
+  updateCanvas() {
     this.drawGeometryToCanvas();
-  };
+  }
 
   /**
    * Default options of style heatmap
@@ -228,9 +231,9 @@ goog.require('M.Style');
    * @param {object}
    * @api stable
    */
-  M.style.Heatmap.DEFAULT_OPTIONS = {
+  Heatmap.DEFAULT_OPTIONS = {
     gradient: ['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
     blur: 15,
     radius: 10,
-  };
-})();
+  }
+}

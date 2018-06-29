@@ -1,9 +1,4 @@
-goog.provide('M.style.overflow');
-
-/**
- * @namespace M.style.overflow
- */
-(function() {
+export class Overflow {
   /**
    * Hidden style overflow
    * @const
@@ -11,7 +6,7 @@ goog.provide('M.style.overflow');
    * @public
    * @api stable
    */
-  M.style.overflow.HIDDEN = "HIDDEN";
+  Overflow.HIDDEN = "HIDDEN";
 
   /**
    * Visible style overflow
@@ -20,7 +15,7 @@ goog.provide('M.style.overflow');
    * @public
    * @api stable
    */
-  M.style.overflow.VISIBLE = "VISIBLE";
+  Overflow.VISIBLE = "VISIBLE";
 
   /**
    * Ellipsis style overflow
@@ -29,7 +24,7 @@ goog.provide('M.style.overflow');
    * @public
    * @api stable
    */
-  M.style.overflow.ELLIPSIS = "ELLIPSIS";
+  Overflow.ELLIPSIS = "ELLIPSIS";
 
   /**
    * Custom style overflow
@@ -38,6 +33,6 @@ goog.provide('M.style.overflow');
    * @public
    * @api stable
    */
-  M.style.overflow.CUSTOM = "CUSTOM";
+  Overflow.CUSTOM = "CUSTOM";
 
-})();
+}

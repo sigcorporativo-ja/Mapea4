@@ -1,10 +1,11 @@
-goog.provide('M.Style');
+import Base from(.. / facade.js);
+import Utils from('../utils/utils.js');
 
 /**
  * @namespace M.Style
  */
 
-(function() {
+export class Style extends Base {
   /**   * Rec. options que es el json del estilo   */
 
   /**
@@ -12,7 +13,8 @@ goog.provide('M.Style');
    *
    * @api stable
    */
-  M.Style = (function(options, impl) {
+  constructor(options, impl) {
+    super(this, impl);
     /**
      * User options for this style
      * @private
@@ -44,11 +46,9 @@ goog.provide('M.Style');
      */
     this.layer_ = null;
 
-    goog.base(this, impl);
 
     // this.updateCanvas();
-  });
-  goog.inherits(M.Style, M.facade.Base);
+  }
 
   /**
    * This function apply style
@@ -58,11 +58,11 @@ goog.provide('M.Style');
    * @function
    * @api stable
    */
-  M.Style.prototype.apply = function(layer) {
+  apply(layer) {
     this.layer_ = layer;
-    this.getImpl().applyToLayer(layer);
+    this.impl().applyToLayer(layer);
     this.updateCanvas();
-  };
+  }
 
   /**
    * This function apply style
@@ -72,7 +72,7 @@ goog.provide('M.Style');
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @api stable
    */
-  M.Style.prototype.unapply = function(layer) {};
+  unapply(layer) {}
 
   /**
    * This function returns the value of the indicated attribute
@@ -82,19 +82,19 @@ goog.provide('M.Style');
    * @param {String} attribute - Attribute to know the value
    * @return {Object} Attribute Value
    */
-  M.Style.prototype.get = function(attribute) {
+  get(attribute) {
     let attrValue;
     attrValue = this.options_[attribute];
-    if (M.utils.isNullOrEmpty(attrValue)) {
+    if (Utils.isNullOrEmpty(attrValue)) {
       // we look up the attribute by its path. Example: getAttribute('foo.bar.attr')
       // --> return feature.properties.foo.bar.attr value
       let attrPath = attribute.split('.');
       if (attrPath.length > 1) {
-        attrValue = attrPath.reduce((obj, attr) => !M.utils.isNullOrEmpty(obj) ? ((obj instanceof M.Style) ? obj.get(attr) : obj[attr]) : undefined, this);
+        attrValue = attrPath.reduce((obj, attr) => !Utils.isNullOrEmpty(obj) ? ((obj instanceof Style) ? obj.get(attr) : obj[attr]) : undefined, this);
       }
     }
     return attrValue;
-  };
+  }
 
   /**
    * This function set value to property and apply new property
@@ -106,13 +106,13 @@ goog.provide('M.Style');
    * @function
    * @api stable
    */
-  M.Style.prototype.set = function(property, value) {
+  set(property, value) {
     let oldValue = this.get(property);
-    M.Style.setValue_(this.options_, property, value);
-    if (!M.utils.isNullOrEmpty(this.layer_)) {
-      this.getImpl().updateFacadeOptions(this.options_);
+    Style.setValue_(this.options_, property, value);
+    if (!Utils.isNullOrEmpty(this.layer_)) {
+      this.impl().updateFacadeOptions(this.options_);
     }
-    if (!M.utils.isNullOrEmpty(this.feature_)) {
+    if (!Utils.isNullOrEmpty(this.feature_)) {
       this.applyToFeature(this.feature_);
     }
     this.fire(M.evt.CHANGE, [property, oldValue, value]);
@@ -129,26 +129,24 @@ goog.provide('M.Style');
    * @return {String} value
    * @function
    */
-  M.Style.setValue_ = function(obj, path, value) {
-    let keys = M.utils.isArray(path) ? path : path.split('.');
+  static setValue_(obj, path, value) {
+    let keys = Utils.isArray(path) ? path : path.split('.');
     let keyLength = keys.length;
     let key = keys[0];
     if (keyLength === 1) { // base case
-      if (M.utils.isArray(value)) {
+      if (Utils.isArray(value)) {
         value = [...value];
-      }
-      else if (M.utils.isObject(value)) {
+      } else if (Utils.isObject(value)) {
         value = Object.assign({}, value);
       }
       obj[key] = value;
-    }
-    else if (keyLength > 1) { // recursive case
-      if (M.utils.isNullOrEmpty(obj[key])) {
+    } else if (keyLength > 1) { // recursive case
+      if (Utils.isNullOrEmpty(obj[key])) {
         obj[key] = {};
       }
-      M.Style.setValue_(obj[key], keys.slice(1, keyLength), value);
+      Style.setValue_(obj[key], keys.slice(1, keyLength), value);
     }
-  };
+  }
 
   /**
    * This function updates the style of the
@@ -159,22 +157,21 @@ goog.provide('M.Style');
    * @return {String} data url to canvas
    * @api stable
    */
-  M.Style.prototype.refresh = function(layer = null) {
-    if (!M.utils.isNullOrEmpty(layer)) {
+  refresh(layer = null) {
+    if (!Utils.isNullOrEmpty(layer)) {
       this.layer_ = layer;
     }
-    if (!M.utils.isNullOrEmpty(this.layer_)) {
+    if (!Utils.isNullOrEmpty(this.layer_)) {
       this.apply(this.layer_);
       this.updateCanvas();
-      if (!M.utils.isNullOrEmpty(this.layer_.getImpl().getMap())) {
-        let layerswitcher = this.layer_.getImpl().getMap().getControls('layerswitcher')[0];
-        if (!M.utils.isNullOrEmpty(layerswitcher)) {
+      if (!Utils.isNullOrEmpty(this.layer_.impl().map())) {
+        let layerswitcher = this.layer_.impl().map().controls('layerswitcher')[0];
+        if (!Utils.isNullOrEmpty(layerswitcher)) {
           layerswitcher.render();
         }
       }
     }
-  };
-
+  }
   /**
    * This functions gets the options style.
    *
@@ -183,9 +180,9 @@ goog.provide('M.Style');
    * @return {object}
    * @api stable
    */
-  M.Style.prototype.getOptions = function() {
+  get options() {
     return this.options_;
-  };
+  }
 
   /**
    * This function returns data url to canvas
@@ -194,37 +191,35 @@ goog.provide('M.Style');
    * @public
    * @return {String} data url to canvas
    */
-  M.Style.prototype.toImage = function() {
+  toImage() {
     let styleImgB64;
 
-    if (M.utils.isNullOrEmpty(this.updateCanvasPromise_)) {
-      if (!M.utils.isNullOrEmpty(this.options_.icon) && !M.utils.isNullOrEmpty(this.options_.icon.src)) {
+    if (Utils.isNullOrEmpty(this.updateCanvasPromise_)) {
+      if (!Utils.isNullOrEmpty(this.options_.icon) && !Utils.isNullOrEmpty(this.options_.icon.src)) {
         let image = new Image();
         image.crossOrigin = "Anonymous";
         let can = this.canvas_;
-        image.onload = function() {
-          var c = can;
-          var ctx = c.getContext("2d");
+        image.onload = () => {
+          let c = can;
+          let ctx = c.getContext("2d");
           ctx.drawImage(this, 0, 0, 50, 50);
-        };
+        }
         image.src = this.options_.icon.src;
         styleImgB64 = this.canvas_.toDataURL('png');
-      }
-      else {
+      } else {
         styleImgB64 = this.canvas_.toDataURL('png');
       }
-    }
-    else {
+    } else {
       styleImgB64 = this.updateCanvasPromise_.then(() => this.canvas_.toDataURL('png'));
     }
 
     return styleImgB64;
-  };
+  }
 
   /**
    * TODO
    */
-  M.Style.prototype.serialize = function() {};
+  serialize() {};
 
   /**
    * This function updates the styles's canvas
@@ -233,17 +228,17 @@ goog.provide('M.Style');
    * @function
    * @api stable
    */
-  M.Style.prototype.updateCanvas = function() {
-    this.updateCanvasPromise_ = this.getImpl().updateCanvas(this.canvas_);
-  };
+  updateCanvas() {
+    this.updateCanvasPromise_ = this.impl().updateCanvas(this.canvas_);
+  }
 
   /**
    * TODO
    *
    */
-  M.Style.prototype.equals = function(style) {
+  equals(style) {
     return (this.constructor === style.constructor);
-  };
+  }
 
   /**
    * This function clones the style
@@ -253,12 +248,13 @@ goog.provide('M.Style');
    * @function
    * @api stable
    */
-  M.Style.prototype.clone = function() {
+
+  clone() {
     let optsClone = {};
-    M.utils.extends(optsClone, this.options_);
-    let implClass = this.getImpl().constructor;
+    Utils.extends(optsClone, this.options_);
+    let implClass = this.impl().constructor;
     let implClone = new implClass(optsClone);
     return new this.constructor(optsClone, implClone);
-  };
+  }
 
-})();
+}

@@ -1,11 +1,8 @@
-goog.provide('M.style.Point');
+import Simple from("./stylesimple.js");
+import Utils from('../utils/utils.js');
+import PointImpl from('../../../impl/js/style/point.js');
 
-goog.require('M.style.Simple');
-
-/**
- * @namespace M.style.Point
- */
-(function() {
+export class Point extends Simple {
 
   /**
    * @classdesc
@@ -15,26 +12,24 @@ goog.require('M.style.Simple');
    * @param {Object} options - options style
    * @api stable
    */
-  M.style.Point = (function(options) {
-    if (M.utils.isNullOrEmpty(options)) {
-      options = M.style.Point.DEFAULT_NULL;
+  constructor(options) {
+    super(this, options, impl);
+    if (Utils.isNullOrEmpty(options)) {
+      options = Point.DEFAULT_NULL;
+    } else {
+      options = Utils.extends(options, Point.DEFAULT);
     }
-    else {
-      options = M.utils.extends(options, M.style.Point.DEFAULT);
-    }
-    options = M.utils.extends({}, options);
-    var impl = new M.impl.style.Point(options);
-    goog.base(this, options, impl);
-  });
-  goog.inherits(M.style.Point, M.style.Simple);
+    options = Utils.extends({}, options);
+    let impl = new PointImpl(options);
+  }
 
   /**
    * @inheritDoc
    * @api stable
    */
-  M.style.Point.prototype.toImage = function() {
-    return this.getImpl().toImage(this.canvas_);
-  };
+  toImage() {
+    return this.impl().toImage(this.canvas_);
+  }
 
   /**
    * Default options for this style
@@ -43,7 +38,7 @@ goog.require('M.style.Simple');
    * @public
    * @api stable
    */
-  M.style.Point.DEFAULT = {
+  Point.DEFAULT = {
 
     radius: 5,
   };
@@ -55,7 +50,7 @@ goog.require('M.style.Simple');
    * @public
    * @api stable
    */
-  M.style.Point.DEFAULT_NULL = {
+  Point.DEFAULT_NULL = {
     fill: {
       color: 'rgba(255, 255, 255, 0.4)',
       opacity: 0.4
@@ -66,7 +61,4 @@ goog.require('M.style.Simple');
     },
     radius: 5,
   };
-
-
-
-})();
+}

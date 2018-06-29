@@ -1,10 +1,11 @@
-goog.provide('M.style.Line');
-goog.require('M.style.Simple');
+import Simple from('./stylesimple.js');
+import Utils from('../utils/utils.js');
+import LineImpl from('../../../impl/js/style/styleline.js');
 
 /**
- * @namespace M.style.Line
+ * @namespace Line
  */
-(function() {
+export class Line extends Simple {
 
   /**
    * @classdesc
@@ -18,15 +19,14 @@ goog.require('M.style.Simple');
    * @param {options} userParameters parameters
    * @api stable
    */
-  M.style.Line = (function(options) {
-    if (M.utils.isNullOrEmpty(options)) {
-      options = M.style.Line.DEFAULT_NULL;
+  constructor(options) {
+    super(this, options, impl);
+    if (Utils.isNullOrEmpty(options)) {
+      options = Line.DEFAULT_NULL;
     }
-    options = M.utils.extends({}, options);
-    let impl = new M.impl.style.Line(options);
-    goog.base(this, options, impl);
-  });
-  goog.inherits(M.style.Line, M.style.Simple);
+    options = Utils.extends({}, options);
+    let impl = new LineImpl(options);
+  }
 
   /**
    * This function apply style
@@ -36,9 +36,9 @@ goog.require('M.style.Simple');
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @api stable
    */
-  M.style.Line.prototype.unapply = function(layer) {
-    this.getImpl().unapply(layer);
-  };
+  unapply(layer) {
+    this.impl().unapply(layer);
+  }
 
   /**
    * Default options for this style
@@ -47,7 +47,7 @@ goog.require('M.style.Simple');
    * @public
    * @api stable
    */
-  M.style.Line.DEFAULT_NULL = {
+  Line.DEFAULT_NULL = {
     fill: {
       color: 'rgba(255, 255, 255, 0.4)',
       opacity: 0.4
@@ -57,4 +57,4 @@ goog.require('M.style.Simple');
       width: 1.5
     }
   };
-})();
+}
