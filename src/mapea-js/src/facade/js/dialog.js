@@ -1,8 +1,7 @@
-goog.provide('M.dialog');
+import Utils from("./utils/utils.js");
+import Template from("./utils/template.js");
 
-goog.require('M.utils');
-
-(function () {
+export class Dialog {
   /**
    * TODO
    *
@@ -11,29 +10,29 @@ goog.require('M.utils');
    * @api stable
    * @returns {Promise}
    */
-  M.dialog.show = function (message, title, severity) {
-    return M.template.compile('dialog.html', {
+  static show(message, title, severity) {
+    return Template.compile('dialog.html', {
       'jsonp': true,
       'vars': {
         'message': message,
         'title': title,
         'severity': severity
       }
-    }).then(function (html) {
+    }).then((html) => {
       // removes previous dialogs
-      M.dialog.remove();
+      Dialog.remove();
 
       // append new dialog
-      var mapeaContainer = document.querySelector('div.m-mapea-container');
+      let mapeaContainer = document.querySelector('div.m-mapea-container');
 
       // adds listener to close the dialog
-      var okButton = html.querySelector('div.m-button > button');
-      goog.events.listen(okButton, goog.events.EventType.CLICK, function (evt) {
-        goog.dom.removeNode(html);
+      let okButton = html.querySelector('div.m-button > button');
+      okButton.addEventListener("click", evt => {
+        okButton.removeNode(html);
       });
-      goog.dom.appendChild(mapeaContainer, html);
+      mapeaContainer.appendChild(html);
     });
-  };
+  }
 
   /**
    * TODO
@@ -42,12 +41,12 @@ goog.require('M.utils');
    * @function
    * @api stable
    */
-  M.dialog.remove = function () {
-    var dialogs = document.querySelectorAll('div.m-dialog');
-    Array.prototype.forEach.call(dialogs, function (dialog) {
-      goog.dom.removeNode(dialog);
+  static remove() {
+    let dialogs = document.querySelectorAll('div.m-dialog');
+    Array.prototype.forEach.call(dialogs, dialog => {
+      dialogs.removeNode(dialog);
     });
-  };
+  }
 
   /**
    * TODO
@@ -59,12 +58,12 @@ goog.require('M.utils');
    * @api stable
    * @returns {Promise}
    */
-  M.dialog.info = function (message, title) {
-    if (M.utils.isNullOrEmpty(title)) {
+  static info(message, title) {
+    if (Utils.isNullOrEmpty(title)) {
       title = 'INFORMACIÓN';
     }
-    return M.dialog.show(message, title, 'info');
-  };
+    return Dialog.show(message, title, 'info');
+  }
 
   /**
    * TODO
@@ -76,12 +75,12 @@ goog.require('M.utils');
    * @api stable
    * @returns {Promise}
    */
-  M.dialog.error = function (message, title) {
-    if (M.utils.isNullOrEmpty(title)) {
+  static error(message, title) {
+    if (Utils.isNullOrEmpty(title)) {
       title = 'ERROR';
     }
-    return M.dialog.show(message, title, 'error');
-  };
+    return Dialog.show(message, title, 'error');
+  }
 
   /**
    * TODO
@@ -93,10 +92,10 @@ goog.require('M.utils');
    * @api stable
    * @returns {Promise}
    */
-  M.dialog.success = function (message, title) {
-    if (M.utils.isNullOrEmpty(title)) {
+  static success(message, title) {
+    if (Utils.isNullOrEmpty(title)) {
       title = 'ÉXITO';
     }
-    return M.dialog.show(message, title, 'success');
-  };
-})();
+    return Dialog.show(message, title, 'success');
+  }
+}
