@@ -1,11 +1,8 @@
-goog.provide('M.impl.handler.Features');
+import ClusteredFeature from "facade/js/feature/clusteredfeature";
+import Utils from "facade/js/utils/utils";
+import AnimatedCluster from "../layers/animatedcluster";
 
-goog.require('M.ClusteredFeature');
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.impl.Layer');
-
-(function() {
+export default class Features {
   /**
    * @classdesc
    * Main constructor of the class. Creates a KML layer
@@ -15,7 +12,7 @@ goog.require('M.impl.Layer');
    * @param {ol.Map} options custom options for this layer
    * @api stable
    */
-  M.impl.handler.Features = (function(options = {}) {
+  constructor(options = {}) {
     /**
      * OpenLayers map
      * @private
@@ -29,7 +26,7 @@ goog.require('M.impl.Layer');
      * @expose
      */
     this.defaultCursor_ = undefined;
-  });
+  }
 
   /**
    * This function destroys this layer, cleaning the HTML
@@ -39,9 +36,9 @@ goog.require('M.impl.Layer');
    * @function
    * @api stable
    */
-  M.impl.handler.Features.prototype.addTo = function(map) {
+  addTo(map) {
     this.map_ = map;
-  };
+  }
 
   /**
    * TODO
@@ -50,23 +47,23 @@ goog.require('M.impl.Layer');
    * @function
    * @api stable
    */
-  M.impl.handler.Features.prototype.getFeaturesByLayer = function(evt, layer) {
+  getFeaturesByLayer(evt, layer) {
     let features = [];
 
-    if (!M.utils.isNullOrEmpty(layer) && layer.isVisible() && !M.utils.isNullOrEmpty(layer.getImpl().getOL3Layer())) {
+    if (!Utils.isNullOrEmpty(layer) && layer.isVisible() && !Utils.isNullOrEmpty(layer.getImpl().getOL3Layer())) {
       let olLayer = layer.getImpl().getOL3Layer();
-      this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, function(feature, layerFrom) {
-        if ((layerFrom instanceof M.impl.layer.AnimatedCluster) && !M.utils.isNullOrEmpty(feature.get("features"))) {
-          let clusteredFeatures = feature.get("features").map(f => M.impl.handler.Features.getFacadeFeature_(f, layer));
+      this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, (feature, layerFrom) => {
+        if ((layerFrom instanceof AnimatedCluster) && !Utils.isNullOrEmpty(feature.get("features"))) {
+          let clusteredFeatures = feature.get("features").map(f => Features.getFacadeFeature_(f, layer));
           if (clusteredFeatures.length === 1) {
             features.push(clusteredFeatures[0]);
           }
           else {
             let styleCluster = layer.getStyle();
-            if (!(styleCluster instanceof M.style.Cluster)) {
-              styleCluster = styleCluster.getStyles().find(style => style instanceof M.style.Cluster);
+            if (!(styleCluster instanceof Cluster)) {
+              styleCluster = styleCluster.getStyles().find(style => style instanceof Cluster);
             }
-            features.push(new M.ClusteredFeature(clusteredFeatures, {
+            features.push(new ClusteredFeature(clusteredFeatures, {
               "ranges": styleCluster.getRanges(),
               "hoverInteraction": styleCluster.getOptions()["hoverInteraction"],
               "maxFeaturesToSelect": styleCluster.getOptions()["maxFeaturesToSelect"],
@@ -76,14 +73,13 @@ goog.require('M.impl.Layer');
         }
         else {
           if (!feature.getProperties().hasOwnProperty('selectclusterlink')) {
-            features.push(M.impl.handler.Features.getFacadeFeature_(feature, layer));
+            features.push(Features.getFacadeFeature_(feature, layer));
           }
         }
-        // return true;
       }, {
         layerFilter: l => {
           let passFilter = false;
-          if (layer.getStyle() instanceof M.style.Cluster && layer.getStyle().getOptions().selectInteraction) {
+          if (layer.getStyle() instanceof Cluster && layer.getStyle().getOptions().selectInteraction) {
             passFilter = (l === layer.getStyle().getImpl().selectClusterInteraction_.overlayLayer_);
           }
           passFilter = passFilter || l === olLayer;
@@ -102,7 +98,7 @@ goog.require('M.impl.Layer');
    * @api stable
    * @export
    */
-  M.impl.handler.Features.prototype.addCursorPointer = function() {
+  addCursorPointer() {
     let viewport = this.map_.getMapImpl().getViewport();
     if (viewport.style.cursor !== 'pointer') {
       this.defaultCursor_ = viewport.style.cursor;
@@ -118,7 +114,7 @@ goog.require('M.impl.Layer');
    * @api stable
    * @export
    */
-  M.impl.handler.Features.prototype.removeCursorPointer = function() {
+  removeCursorPointer() {
     this.map_.getMapImpl().getViewport().style.cursor = this.defaultCursor_;
   };
 
@@ -129,14 +125,14 @@ goog.require('M.impl.Layer');
    * @function
    * @export
    */
-  M.impl.handler.Features.getFacadeFeature_ = function(feature, layer) {
+  static getFacadeFeature_(feature, layer) {
     let mFeature;
     let featureId = feature.getId();
-    if (!M.utils.isNullOrEmpty(featureId)) {
+    if (!Utils.isNullOrEmpty(featureId)) {
       mFeature = layer.getFeatureById(featureId);
     }
-    if (M.utils.isNullOrEmpty(mFeature)) {
-      mFeature = M.impl.Feature.olFeature2Facade(feature);
+    if (Utils.isNullOrEmpty(mFeature)) {
+      mFeature = Feature.olFeature2Facade(feature);
     }
     return mFeature;
   };
@@ -149,9 +145,9 @@ goog.require('M.impl.Layer');
    * @function
    * @api stable
    */
-  M.impl.handler.Features.prototype.destroy = function() {
+  destroy() {
     // unlisten event
     this.map_.un('click', this.onMapClick_, this);
     this.map_ = null;
   };
-})();
+}
