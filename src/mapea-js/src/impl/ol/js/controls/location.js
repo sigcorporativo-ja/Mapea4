@@ -1,12 +1,19 @@
-goog.provide('M.impl.control.Location');
-
-goog.require('M.impl.Control');
-goog.require('ol.Geolocation');
+import Control from "./controlbase";
+import Feature from "../feature/feature";
+import Utils from 'facade/js/utils/utils';
+import OLFeature from "ol/Feature";
+import OLStyle from "ol/style/Style";
+import OLFill from "ol/style/Fill";
+import OLStroke from "ol/style/Stroke";
+import OLCircle from "ol/style/Circle";
+import OLGeolaction from "ol/Geolocation";
+import OLProj from "ol/proj";
+import OLPoint from "ol/geom/Point";
 
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class Location extends Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Location
@@ -17,7 +24,7 @@ goog.require('ol.Geolocation');
    * @api stable
    */
 
-  M.impl.control.Location = function(tracking, highAccuracy, maximumAge) {
+  constructor(tracking, highAccuracy, maximumAge) {
     /**
      * Helper class for providing HTML5 Geolocation
      * @private
@@ -30,7 +37,7 @@ goog.require('ol.Geolocation');
      * @private
      * @type {ol.Feature}
      */
-    this.accuracyFeature_ = M.impl.Feature.olFeature2Facade(new ol.Feature());
+    this.accuracyFeature_ = Feature.olFeature2Facade(new OLFeature());
 
     this.tracking_ = tracking;
     this.highAccuracy_ = highAccuracy;
@@ -42,11 +49,10 @@ goog.require('ol.Geolocation');
      * @private
      * @type {ol.Feature}
      */
-    this.positionFeature_ = M.impl.Feature.olFeature2Facade(new ol.Feature({
-      'style': M.impl.control.Location.POSITION_STYLE
+    this.positionFeature_ = Feature.olFeature2Facade(new OLFeature({
+      'style': Location.POSITION_STYLE
     }));
-  };
-  goog.inherits(M.impl.control.Location, M.impl.Control);
+  }
 
   /**
    * This function paints a point on the map with your location
@@ -55,13 +61,13 @@ goog.require('ol.Geolocation');
    * @function
    * @api stable
    */
-  M.impl.control.Location.prototype.activate = function() {
+  activate() {
 
-    goog.dom.classlist.add(this.element, 'm-locating');
+    this.element.classlist.add('m-locating');
 
-    if (M.utils.isNullOrEmpty(this.geolocation_)) {
-      var proj = ol.proj.get(this.facadeMap_.getProjection().code);
-      this.geolocation_ = new ol.Geolocation({
+    if (Utils.isNullOrEmpty(this.geolocation_)) {
+      let proj = ol.proj.get(this.facadeMap_.getProjection().code);
+      this.geolocation_ = new OLGeolocation({
         projection: proj,
         tracking: this.tracking_,
         trackingOptions: {
@@ -69,30 +75,30 @@ goog.require('ol.Geolocation');
           maximumAge: this.maximumAge_
         }
       });
-      this.geolocation_.on('change:accuracyGeometry', function(evt) {
-        var accuracyGeom = evt.target.get(evt.key);
+      this.geolocation_.on('change:accuracyGeometry', evt => {
+        let accuracyGeom = evt.target.get(evt.key);
         this.accuracyFeature_.getImpl().getOLFeature().setGeometry(accuracyGeom);
-      }, this);
-      this.geolocation_.on('change:position', function(evt) {
-        var newCoord = evt.target.get(evt.key);
-        var newPosition = M.utils.isNullOrEmpty(newCoord) ?
-          null : new ol.geom.Point(newCoord);
+      });
+      this.geolocation_.on('change:position', evt => {
+        let newCoord = evt.target.get(evt.key);
+        let newPosition = Utils.isNullOrEmpty(newCoord) ?
+          null : new OLPoint(newCoord);
         this.positionFeature_.getImpl().getOLFeature().setGeometry(newPosition);
         this.facadeMap_.setCenter(newCoord);
-        if (goog.dom.classlist.contains(this.element, 'm-locating')) {
-          this.facadeMap_.setZoom(12); //solo 1a vez
+        if (this.element.classlist.contains('m-locating')) {
+          this.facadeMap_.setZoom(Location.ZOOM); //solo 1a vez
         }
-        goog.dom.classlist.remove(this.element, 'm-locating');
-        goog.dom.classlist.add(this.element, 'm-located');
+        this.element.classlist.remove('m-locating');
+        this.element.classlist.add('m-located');
 
         this.geolocation_.setTracking(this.tracking_);
-      }, this);
+      });
 
     }
 
     this.geolocation_.setTracking(true);
     this.facadeMap_.drawFeatures([this.accuracyFeature_, this.positionFeature_]);
-  };
+  }
 
   /**
    * This function remove the drawn location
@@ -100,15 +106,15 @@ goog.require('ol.Geolocation');
    * @private
    * @function
    */
-  M.impl.control.Location.prototype.removePositions_ = function() {
-    if (!M.utils.isNullOrEmpty(this.accuracyFeature_)) {
+  removePositions_() {
+    if (!Utils.isNullOrEmpty(this.accuracyFeature_)) {
       this.facadeMap_.removeFeatures([this.accuracyFeature_]);
     }
-    if (!M.utils.isNullOrEmpty(this.positionFeature_)) {
+    if (!Utils.isNullOrEmpty(this.positionFeature_)) {
       this.facadeMap_.removeFeatures([this.positionFeature_]);
     }
     this.geolocation_.setTracking(false);
-  };
+  }
 
   /**
    * This function remove the drawn location and restores the style button
@@ -117,16 +123,18 @@ goog.require('ol.Geolocation');
    * @function
    * @api stable
    */
-  M.impl.control.Location.prototype.deactivate = function() {
+  deactivate() {
     this.removePositions_();
-    goog.dom.classlist.remove(this.element, 'm-located');
-  };
+    this.element.classlist.remove('m-located');
+  }
 
-  M.impl.control.Location.prototype.setTracking = function(tracking) {
-    console.log(tracking);
+  /**
+   * TODO
+   */
+  setTracking(tracking) {
     this.tracking_ = tracking;
     this.geolocation_.setTracking(tracking);
-  };
+  }
 
   /**
    * This function destroys this control and cleaning the HTML
@@ -135,28 +143,67 @@ goog.require('ol.Geolocation');
    * @function
    * @api stable
    */
-  M.impl.control.Location.prototype.destroy = function() {
+  destroy() {
     this.removePositions_();
-    goog.base(this, 'destroy');
-  };
+    super.destroy();
+  }
 
   /**
-   * Style for location
-   * @const
-   * @type {ol.style.Style}
-   * @public
-   * @api stable
+   * TODO
    */
-  M.impl.control.Location.POSITION_STYLE = new ol.style.Style({
-    image: new ol.style.Circle({
-      radius: 6,
-      fill: new ol.style.Fill({
-        color: '#3399CC'
-      }),
-      stroke: new ol.style.Stroke({
-        color: '#fff',
-        width: 2
-      })
+  static get POSITION_STYLE() {
+    return Location.POSITION_STYLE_;
+  }
+
+  /**
+   * TODO
+   */
+  static set POSITION_STYLE(value) {
+    return Location.POSITION_STYLE_ = value;
+  }
+
+  /**
+   * TODO
+   */
+  static get ZOOM() {
+    return Location.ZOOM_;
+  }
+
+  /**
+   * TODO
+   */
+  static set ZOOM(value) {
+    return Location.ZOOM_ = value;
+  }
+
+
+}
+
+/**
+ * Style for location
+ * @const
+ * @type {ol.style.Style}
+ * @public
+ * @api stable
+ */
+Location.POSITION_STYLE_ = new OLStyle({
+  image: new OLCircle({
+    radius: 6,
+    fill: new OLFill({
+      color: '#3399CC'
+    }),
+    stroke: new OLStroke({
+      color: '#fff',
+      width: 2
     })
-  });
-})();
+  })
+});
+
+/**
+ * Zoom Location
+ * @const
+ * @type {number}
+ * @public
+ * @api stable
+ */
+Location.ZOOM_ = 12;

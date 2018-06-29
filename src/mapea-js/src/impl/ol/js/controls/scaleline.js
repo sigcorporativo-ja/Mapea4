@@ -1,63 +1,60 @@
-goog.provide('M.impl.control.ScaleLine');
-
-goog.require('ol.control.ScaleLine');
+import OLScaleLine from "ol/control/ScaleLine";
 
 /**
  * @namespace M.impl.control
  */
-(function() {
-   /**
-    * @classdesc
-    * Main constructor of the class. Creates a WMC selector
-    * control
-    *
-    * @constructor
-    * @extends {ol.control.Control}
-    * @api stable
-    */
-   M.impl.control.ScaleLine = function() {
-      this.facadeMap_ = null;
-      goog.base(this);
-   };
-   goog.inherits(M.impl.control.ScaleLine, ol.control.ScaleLine);
+export default class ScaleLine extends OLScaleLine {
+  /**
+   * @classdesc
+   * Main constructor of the class. Creates a WMC selector
+   * control
+   *
+   * @constructor
+   * @extends {ol.control.Control}
+   * @api stable
+   */
+  constructor() {
+    super();
+    this.facadeMap_ = null;
+  }
 
-   /**
-    * This function adds the control to the specified map
-    *
-    * @public
-    * @function
-    * @param {M.Map} map to add the plugin
-    * @param {function} template template of this control
-    * @api stable
-    */
-   M.impl.control.ScaleLine.prototype.addTo = function(map, element) {
-      this.facadeMap_ = map;
-      map.getMapImpl().addControl(this);
-   };
+  /**
+   * This function adds the control to the specified map
+   *
+   * @public
+   * @function
+   * @param {M.Map} map to add the plugin
+   * @param {function} template template of this control
+   * @api stable
+   */
+  addTo(map, element) {
+    this.facadeMap_ = map;
+    map.getMapImpl().addControl(this);
+  }
 
-   /**
-    * TODO
-    *
-    * @public
-    * @function
-    * @api stable
-    * @export
-    */
-   M.impl.control.ScaleLine.prototype.getElement = function() {
-      return this.element;
-   };
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  getElement() {
+    return this.element;
+  }
 
-   /**
-    * This function destroys this control, cleaning the HTML
-    * and unregistering all events
-    *
-    * @public
-    * @function
-    * @api stable
-    * @export
-    */
-   M.impl.control.ScaleLine.prototype.destroy = function() {
-      this.facadeMap_.getMapImpl().removeControl(this);
-      this.facadeMap_ = null;
-   };
-})();
+  /**
+   * This function destroys this control, cleaning the HTML
+   * and unregistering all events
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  destroy() {
+    this.facadeMap_.getMapImpl().removeControl(this);
+    this.facadeMap_ = null;
+  }
+}

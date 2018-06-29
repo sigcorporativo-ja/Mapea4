@@ -1,11 +1,9 @@
-goog.provide('M.impl.control.WMCSelector');
-
-goog.require('M.impl.Control');
+import Control from "./controlbase";
 
 /**
  * @namespace M.impl.control
  */
-(function () {
+export default class WMCSelector extends Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
@@ -15,8 +13,9 @@ goog.require('M.impl.Control');
    * @extends {ol.control.Control}
    * @api stable
    */
-  M.impl.control.WMCSelector = function () {};
-  goog.inherits(M.impl.control.WMCSelector, M.impl.Control);
+  constructor() {
+    super();
+  }
 
   /**
    * This function adds the control to the specified map
@@ -27,13 +26,12 @@ goog.require('M.impl.Control');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.WMCSelector.prototype.addTo = function (map, element) {
-    var select = element.getElementsByTagName('select')[0];
-    select.addEventListener('change', function (e) {
-      var selectedWMCLayer = map.getWMC(e.target.options[e.target.selectedIndex].text)[0];
+  addTo(map, element) {
+    let select = element.getElementsByTagName('select')[0];
+    select.addEventListener('change', e => {
+      let selectedWMCLayer = map.getWMC(e.target.options[e.target.selectedIndex].text)[0];
       selectedWMCLayer.select();
     });
-
-    goog.base(this, 'addTo', map, element);
-  };
-})();
+    super.addTo(map, element);
+  }
+}
