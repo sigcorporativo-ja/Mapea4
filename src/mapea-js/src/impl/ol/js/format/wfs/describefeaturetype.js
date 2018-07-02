@@ -1,11 +1,9 @@
-goog.provide('M.impl.format.DescribeFeatureType');
-
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.impl.format.DescribeFeatureTypeXML');
+import Utils from "facade/js/utils/utils";
+import exception from "facade/js/exception/exception";
+import DescribeFeatureTypeXML from "./describefeaturexml";
 
 
-(function () {
+export default class DescribeFeatureType {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -16,7 +14,7 @@ goog.require('M.impl.format.DescribeFeatureTypeXML');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.format.DescribeFeatureType = (function (typeName, outputFormat, projection) {
+  constructor(typeName, outputFormat, projection) {
 
     /**
      * TOOD
@@ -44,12 +42,12 @@ goog.require('M.impl.format.DescribeFeatureTypeXML');
      * @private
      * @type {ol.format.GML2 | ol.format.GML3}
      */
-    this.gmlFormatter_ = new M.impl.format.DescribeFeatureTypeXML({
+    this.gmlFormatter_ = new DescribeFeatureTypeXML({
       "outputFormat": outputFormat,
       "featureType": typeName,
       "srsName": this.projection_.code
     });
-  });
+  }
 
   /**
    * This function sets the map object of the layer
@@ -59,10 +57,10 @@ goog.require('M.impl.format.DescribeFeatureTypeXML');
    * @param {M.Map} map
    * @api stable
    */
-  M.impl.format.DescribeFeatureType.prototype.read = function (response) {
-    var describeFeatureType = {};
+  read(response) {
+    let describeFeatureType = {};
 
-    var describeFeatureTypeResponse;
+    let describeFeatureTypeResponse;
     if (/json/gi.test(this.outputFormat_)) {
       try {
         describeFeatureTypeResponse = JSON.parse(response.text);
@@ -77,18 +75,18 @@ goog.require('M.impl.format.DescribeFeatureTypeXML');
     describeFeatureType.featureNS = describeFeatureTypeResponse.targetNamespace;
     describeFeatureType.featurePrefix = describeFeatureTypeResponse.targetPrefix;
 
-    describeFeatureTypeResponse.featureTypes.some(function (featureType) {
+    describeFeatureTypeResponse.featureTypes.some(featureType => {
       if (featureType.typeName === this.typeName_) {
         describeFeatureType.properties = featureType.properties;
-        describeFeatureType.properties.some(function (prop) {
-          if (M.utils.isGeometryType(prop.localType)) {
+        describeFeatureType.properties.some(prop => {
+          if (Utils.isGeometryType(prop.localType)) {
             describeFeatureType.geometryName = prop.name;
             return true;
           }
         });
         return true;
       }
-    }, this);
+    });
     return describeFeatureType;
-  };
-})();
+  }
+}

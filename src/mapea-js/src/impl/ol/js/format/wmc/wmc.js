@@ -1,59 +1,59 @@
-goog.provide('M.impl.format.WMC');
+import Utils from "facade/js/utils/utils";
+import XML from "../xml";
+import exception from "facade/js/exception/exception";
 
-goog.require('M.impl.format.XML');
-
-/**
- * @classdesc
- * Main constructor of the class. Creates a WMC formater
- *
- * @constructor
- * @param {Mx.parameters.LayerOptions} options custom options for this formater
- * @extends {ol.format.XML}
- * @api stable
- */
-M.impl.format.WMC = function (options) {
+export default class WMC extends XML {
   /**
-   * WMC version
-   * @private
-   * @type {string}
+   * @classdesc
+   * Main constructor of the class. Creates a WMC formater
+   *
+   * @constructor
+   * @param {Mx.parameters.LayerOptions} options custom options for this formater
+   * @extends {ol.format.XML}
+   * @api stable
    */
-  this.version = null;
+  constructor(options) {
+    super(options);
+    /**
+     * WMC version
+     * @private
+     * @type {string}
+     */
+    this.version = null;
 
-  /**
-   * Parser of an specified WMC version
-   * @private
-   * @type {ol.format.XML}
-   */
-  this.parser = null;
-
-  goog.base(this, options);
-};
-goog.inherits(M.impl.format.WMC, M.impl.format.XML);
-
-/**
- * @private
- * @function
- * @param {Document} data Document.
- * @return {Object} WMC object.
- * @api stable
- */
-M.impl.format.WMC.prototype.readFromDocument = function (data) {
-  if (data.nodeType !== goog.dom.NodeType.DOCUMENT) {
-    M.excetion('doc.nodeType should be DOCUMENT');
+    /**
+     * Parser of an specified WMC version
+     * @private
+     * @type {ol.format.XML}
+     */
+    this.parser = null;
   }
 
-  var root = data.documentElement;
-  this.version = root.getAttribute("version");
-  if (!this.version) {
-    this.version = M.impl.format.WMC.DEFAULT_VERSION;
-  }
+  /**
+   * @private
+   * @function
+   * @param {Document} data Document.
+   * @return {Object} WMC object.
+   * @api stable
+   */
+  readFromDocument(data) {
+    if (data.nodeType !== 9) {
+      exception('doc.nodeType should be DOCUMENT');
+    }
 
-  var paerserVersion = 'v'.concat(M.utils.normalize(this.version).replace(/\./g, ""));
-  this.parser = new M.impl.format.WMC[paerserVersion](this.options);
+    let root = data.documentElement;
+    this.version = root.getAttribute("version");
+    if (!this.version) {
+      this.version = WMC.DEFAULT_VERSION;
+    }
 
-  var context = this.parser.read(data);
+    let parserVersion = 'v'.concat(Utils.normalize(this.version).replace(/\./g, ""));
+    this.parser = new WMC[parserVersion](this.options);
 
-  return context;
-};
+    let context = this.parser.read(data);
 
-M.impl.format.WMC.DEFAULT_VERSION = '1.0.0';
+    return context;
+  };
+}
+
+WMC.DEFAULT_VERSION = '1.0.0';
