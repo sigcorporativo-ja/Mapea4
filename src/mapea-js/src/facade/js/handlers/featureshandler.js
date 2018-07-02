@@ -1,10 +1,10 @@
 import Utils from('./utils/utils.js');
 import Exception from('./exception/exception.js');
 import Base from('./facade.js');
-import FeatureshandlerImpl from('../../../impl/js/handlers/featureshandler.js');
+import HandlerImpl from('../../../impl/js/handlers/featureshandler.js');
 import Feature from('../feature/feature.js');
 
-export class Featureshandler extends Base {
+export class Handler extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -14,7 +14,8 @@ export class Featureshandler extends Base {
    * @extends {M.facade.Base}
    * @api stable
    */
-  constructor(options = {}, impl = new FeatureshandlerImpl(options)) {
+  constructor(options = {}, impl = new HandlerImpl(options)) {
+
     // calls the super constructor
     super(this, impl);
 
