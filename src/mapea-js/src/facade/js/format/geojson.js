@@ -1,18 +1,24 @@
-import Feature from('../feature/feature.js');
-import Base from('../facade.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import GeoJSONImpl from('../../../impl/js/format/geojsonformat.js');
+goog.provide('M.format.GeoJSON');
 
-export class GeoJSON extends Base {
+goog.require('M.Feature');
 
-  constructor(options) {
-    // calls the super constructor
-    super(this, impl);
+(function () {
 
+  /**
+   * @classdesc
+   * Main constructor of the class. Creates a layer
+   * with parameters specified by the user
+   *
+   * @constructor
+   * @extends {M.facade.Base}
+   * @param {string|Object} userParameters parameters
+   * provided by the user
+   * @api stable
+   */
+  M.format.GeoJSON = (function (options) {
     // checks if the implementation can create format GeoJSON
-    if (Utils.isUndefined(GeoJSONImpl)) {
-      Exception('La implementación usada no puede M.impl.format.GeoJSON');
+    if (M.utils.isUndefined(M.impl.format.GeoJSON)) {
+      M.exception('La implementación usada no puede M.impl.format.GeoJSON');
     }
 
     options = (options || {});
@@ -22,9 +28,12 @@ export class GeoJSON extends Base {
      * @public
      * @type {M.impl.format.GeoJSON}
      */
-    let impl = new GeoJSONImpl(options);
+    var impl = new M.impl.format.GeoJSON(options);
 
-  }
+    // calls the super constructor
+    goog.base(this, impl);
+  });
+  goog.inherits(M.format.GeoJSON, M.facade.Base);
 
   /**
    * TODO
@@ -36,12 +45,12 @@ export class GeoJSON extends Base {
    * @return {Array<Object>}
    * @api stable
    */
-  write(features) {
-    if (!Utils.isArray(features)) {
+  M.format.GeoJSON.prototype.write = function (features) {
+    if (!M.utils.isArray(features)) {
       features = [features];
     }
-    return this.impl().write(features);
-  }
+    return this.getImpl().write(features);
+  };
 
   /**
    * This function read Features
@@ -53,10 +62,10 @@ export class GeoJSON extends Base {
    * @return {Array<M.Feature>}
    * @api stable
    */
-  read(geojson, projection) {
-    let features = [];
-    if (!Utils.isNullOrEmpty(geojson)) {
-      if (Utils.isString(geojson)) {
+  M.format.GeoJSON.prototype.read = function (geojson, projection) {
+    var features = [];
+    if (!M.utils.isNullOrEmpty(geojson)) {
+      if (M.utils.isString(geojson)) {
         geojson = JSON.parse(geojson);
       }
       let geojsonFeatures = [];
@@ -65,8 +74,8 @@ export class GeoJSON extends Base {
       } else if (geojson.type === "Feature") {
         geojsonFeatures = [geojson];
       }
-      features = this.impl().read(geojson, geojsonFeatures, projection);
+      features = this.getImpl().read(geojson, geojsonFeatures, projection);
     }
     return features;
-  }
-}
+  };
+})();
