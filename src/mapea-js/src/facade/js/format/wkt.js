@@ -1,22 +1,14 @@
-goog.provide('M.format.WKT');
+import Base from('../facade.js');
+import Utils from('../utils/utils.js');
+import Exception from('../exception/exception.js');
+import WKTImpl from('../../../impl/js/format/wkt.js');
 
-(function() {
+export class WKT extends Base {
 
-  /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
-   *
-   * @constructor
-   * @extends {M.facade.Base}
-   * @param {string|Object} userParameters parameters
-   * provided by the user
-   * @api stable
-   */
-  M.format.WKT = (function(options = {}) {
+  constructor(options = {}) {
     // checks if the implementation can create format GeoJSON
-    if (M.utils.isUndefined(M.impl.format.WKT)) {
-      M.exception('La implementación usada no puede M.impl.format.WKT');
+    if (Utils.isUndefined(WKTImpl)) {
+      Exception('La implementación usada no puede M.impl.format.WKT');
     }
 
     /**
@@ -24,12 +16,11 @@ goog.provide('M.format.WKT');
      * @public
      * @type {M.impl.format.WKT}
      */
-    var impl = new M.impl.format.WKT(options);
+    var impl = new WKTImpl(options);
 
     // calls the super constructor
-    goog.base(this, impl);
-  });
-  goog.inherits(M.format.WKT, M.facade.Base);
+    super(this, impl);
+  }
 
   /**
    * TODO
@@ -41,7 +32,7 @@ goog.provide('M.format.WKT');
    * @return {Array<Object>}
    * @api stable
    */
-  M.format.WKT.prototype.write = function(geomtry) {
-    return this.getImpl().write(geomtry);
-  };
-})();
+  write(geomtry) {
+    return this.impl().write(geomtry);
+  }
+}
