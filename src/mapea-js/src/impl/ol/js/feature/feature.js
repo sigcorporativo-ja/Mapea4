@@ -1,6 +1,18 @@
-goog.provide('M.impl.Feature');
+import FormatGeoJSON from "../format/geojson";
+import Utils from "facade/js/utils/utils";
+import OLPoint from "ol/geom/Point";
+import OLCircle from "ol/geom/Circle";
+import OLFeature from "ol/geom/Feature";
+import OLPolygon from "ol/geom/Polygon";
+import OLGeometry from "ol/geom/Geometry";
+import OLLineString from "ol/geom/LineString";
+import OLMultiPoint from "ol/geom/MultiPoint";
+import OLMultiPolygon from "ol/geom/MultiPolygon";
+import OLMultiLineString from "ol/geom/MultiLineString";
+import FacadeFeature from "facade/js/feature/feature";
+import ImplUtils from "../utils/utils";
 
-(function() {
+export default class Feature {
   /**
    * @classdesc
    * Main constructor of the class. Create a Feature
@@ -11,28 +23,25 @@ goog.provide('M.impl.Feature');
    * @param {Object} geojson - geojson to feature
    * @api stable
    */
-  M.impl.Feature = (function(id, geojson, style) {
+  constructor(id, geojson, style) {
     this.facadeFeature_ = null;
-    this.formatter_ = new M.impl.format.GeoJSON();
-    if (!M.utils.isNullOrEmpty(geojson)) {
-      if (M.utils.isNullOrEmpty(geojson.type)) {
+    this.formatter_ = new FormatGeoJSON();
+    if (!Utils.isNullOrEmpty(geojson)) {
+      if (Utils.isNullOrEmpty(geojson.type)) {
         geojson.type = "Feature";
       }
       this.olFeature_ = this.formatter_.readFeature(geojson);
     }
     else {
-      this.olFeature_ = new ol.Feature();
+      this.olFeature_ = new OLFeature();
     }
-    if (!M.utils.isNullOrEmpty(id)) {
+    if (!Utils.isNullOrEmpty(id)) {
       this.olFeature_.setId(id);
     }
-    else if (M.utils.isNullOrEmpty(this.olFeature_.getId())) {
-      this.olFeature_.setId(M.utils.generateRandom('mapea_feature_'));
+    else if (Utils.isNullOrEmpty(this.olFeature_.getId())) {
+      this.olFeature_.setId(Utils.generateRandom('mapea_feature_'));
     }
-    // if (!M.utils.isNullOrEmpty(style)) {
-    //   this.getOLFeature().setStyle(style);
-    // }
-  });
+  }
 
   /**
    * This function returns the openlayers object of the features
@@ -41,9 +50,9 @@ goog.provide('M.impl.Feature');
    * @return {ol.Feature} returns the openlayers object of the features
    * @api stable
    */
-  M.impl.Feature.prototype.getOLFeature = function() {
+  getOLFeature() {
     return this.olFeature_;
-  };
+  }
 
   /**
    * This function set the openlayers object of the features
@@ -52,14 +61,14 @@ goog.provide('M.impl.Feature');
    * @function
    * @api stable
    */
-  M.impl.Feature.prototype.setOLFeature = function(olFeature, canBeModified) {
-    if (!M.utils.isNullOrEmpty(olFeature)) {
+  setOLFeature(olFeature, canBeModified) {
+    if (!Utils.isNullOrEmpty(olFeature)) {
       this.olFeature_ = olFeature;
-      if (canBeModified !== false && M.utils.isNullOrEmpty(this.olFeature_.getId())) {
-        this.olFeature_.setId(M.utils.generateRandom('mapea_feature_'));
+      if (canBeModified !== false && Utils.isNullOrEmpty(this.olFeature_.getId())) {
+        this.olFeature_.setId(Utils.generateRandom('mapea_feature_'));
       }
     }
-  };
+  }
 
   /**
    * This function return attributes feature
@@ -68,10 +77,10 @@ goog.provide('M.impl.Feature');
    * @function
    * @api stable
    */
-  M.impl.Feature.prototype.getAttributes = function() {
+  getAttributes() {
     let properties = this.olFeature_.getProperties();
     let geometry = properties.geometry;
-    if (!M.utils.isNullOrEmpty(geometry) && geometry instanceof ol.geom.Geometry) {
+    if (!Utils.isNullOrEmpty(geometry) && geometry instanceof OLGeometry) {
       delete properties.geometry;
     }
     return properties;
@@ -85,7 +94,7 @@ goog.provide('M.impl.Feature');
    * @return {string} ID to feature
    * @api stable
    */
-  M.impl.Feature.prototype.getId = function() {
+  getId() {
     return this.olFeature_.getId();
   };
 
@@ -97,7 +106,7 @@ goog.provide('M.impl.Feature');
    * @param {string} id - ID to feature
    * @api stable
    */
-  M.impl.Feature.prototype.setId = function(id) {
+  setId(id) {
     this.olFeature_.setId(id);
   };
 
@@ -109,9 +118,9 @@ goog.provide('M.impl.Feature');
    * @param {Object} attributes - attributes to feature
    * @api stable
    */
-  M.impl.Feature.prototype.setAttributes = function(attributes) {
+  setAttributes(attributes) {
     this.olFeature_.setProperties(attributes);
-  };
+  }
 
   /**
    * This funcion transform ol.Feature to M.Feature
@@ -122,14 +131,14 @@ goog.provide('M.impl.Feature');
    * @return {M.Feature}  facadeFeature - M.Feature
    * @api stable
    */
-  M.impl.Feature.olFeature2Facade = function(olFeature, canBeModified) {
+  static olFeature2Facade(olFeature, canBeModified) {
     let facadeFeature = null;
-    if (!M.utils.isNullOrEmpty(olFeature)) {
-      facadeFeature = new M.Feature();
+    if (!Utils.isNullOrEmpty(olFeature)) {
+      facadeFeature = new FacadeFeature();
       facadeFeature.getImpl().setOLFeature(olFeature, canBeModified);
     }
     return facadeFeature;
-  };
+  }
 
   /**
    * This funcion transform M.Feature to ol.Feature
@@ -140,9 +149,9 @@ goog.provide('M.impl.Feature');
    * @return {ol.Feature} olFeature - ol.Feature
    * @api stable
    */
-  M.impl.Feature.facade2OLFeature = function(feature) {
+  static facade2OLFeature(feature) {
     return feature.getImpl().getOLFeature();
-  };
+  }
 
   /**
    * This function returns the value of the indicated attribute
@@ -153,9 +162,9 @@ goog.provide('M.impl.Feature');
    * @return  {string|number|object} returns the value of the indicated attribute
    * @api stable
    */
-  M.impl.Feature.prototype.getAttribute = function(attribute) {
+  getAttribute(attribute) {
     return this.olFeature_.get(attribute);
-  };
+  }
 
   /**
    * This function set value of the indicated attribute
@@ -166,9 +175,9 @@ goog.provide('M.impl.Feature');
    * @return  {string|number|object} returns the value of the indicated attribute
    * @api stable
    */
-  M.impl.Feature.prototype.setAttribute = function(attribute, value) {
+  setAttribute(attribute, value) {
     return this.olFeature_.set(attribute, value);
-  };
+  }
 
   /**
    * This function return geometry feature
@@ -179,9 +188,35 @@ goog.provide('M.impl.Feature');
    * @return {object} Geometry feature
    * @api stable
    */
-  M.impl.Feature.prototype.getGeometry = function(geojson) {
-    return new ol.geom[geojson.geometry.type](geojson.geometry.coordinates);
-  };
+  getGeometry(geojson) {
+    let geometry;
+    let type = geojson.geometry.type;
+    if (type === "circle") {
+      geometry = new OLCircle(geojson.geometry.coordinates);
+    }
+    else if (type === "geometry") {
+      geometry = new OLGeometry(geojson.geometry.coordinates);
+    }
+    else if (type === "linestring") {
+      geometry = new OLLineString(geojson.geometry.coordinates);
+    }
+    else if (type === "multilinestring") {
+      geometry = new OLMultiLineString(geojson.geometry.coordinates);
+    }
+    else if (type === "multipoint") {
+      geometry = new OLMultiPoint(geojson.geometry.coordinates);
+    }
+    else if (type === "multipolygon") {
+      geometry = new OLMultiPolygon(geojson.geometry.coordinates);
+    }
+    else if (type === "point") {
+      geometry = new OLPoint(geojson.geometry.coordinates);
+    }
+    else if (type === "polygon") {
+      geometry = new OLPolygon(geojson.geometry.coordinates);
+    }
+    return geometry;
+  }
 
   /**
    * This function set geometry feature
@@ -191,33 +226,33 @@ goog.provide('M.impl.Feature');
    * @param {object} Geometry - GeoJSON Feature
    * @api stable
    */
-  M.impl.Feature.prototype.setGeometry = function(geometry) {
+  setGeometry(geometry) {
     let type = geometry.type.toLowerCase();
     if (type === "circle") {
-      this.olFeature_.setGeometry(new ol.geom.Circle(geometry.coordinates));
+      this.olFeature_.setGeometry(new OLCircle(geometry.coordinates));
     }
     else if (type === "geometry") {
-      this.olFeature_.setGeometry(new ol.geom.Geometry(geometry.coordinates));
+      this.olFeature_.setGeometry(new OLGeometry(geometry.coordinates));
     }
     else if (type === "linestring") {
-      this.olFeature_.setGeometry(new ol.geom.LineString(geometry.coordinates));
+      this.olFeature_.setGeometry(new OLLineString(geometry.coordinates));
     }
     else if (type === "multilinestring") {
-      this.olFeature_.setGeometry(new ol.geom.MultiLineString(geometry.coordinates));
+      this.olFeature_.setGeometry(new OLMultiLineString(geometry.coordinates));
     }
     else if (type === "multipoint") {
-      this.olFeature_.setGeometry(new ol.geom.MultiPoint(geometry.coordinates));
+      this.olFeature_.setGeometry(new OLMultiPoint(geometry.coordinates));
     }
     else if (type === "multipolygon") {
-      this.olFeature_.setGeometry(new ol.geom.MultiPolygon(geometry.coordinates));
+      this.olFeature_.setGeometry(new OLMultiPolygon(geometry.coordinates));
     }
     else if (type === "point") {
-      this.olFeature_.setGeometry(new ol.geom.Point(geometry.coordinates));
+      this.olFeature_.setGeometry(new OLPoint(geometry.coordinates));
     }
     else if (type === "polygon") {
-      this.olFeature_.setGeometry(new ol.geom.Polygon(geometry.coordinates));
+      this.olFeature_.setGeometry(new OLPolygon(geometry.coordinates));
     }
-  };
+  }
 
   /**
    * This function set facade class vector
@@ -226,9 +261,9 @@ goog.provide('M.impl.Feature');
    * @param {object} obj - Facade vector
    * @api stable
    */
-  M.impl.Feature.prototype.setFacadeObj = function(obj) {
+  setFacadeObj(obj) {
     this.facadeFeature_ = obj;
-  };
+  }
 
   /**
    * This function returns de centroid of feature
@@ -238,20 +273,20 @@ goog.provide('M.impl.Feature');
    * @return {Array<number>}
    * @api stable
    */
-  M.impl.Feature.prototype.getCentroid = function() {
+  getCentroid() {
     let olFeature = this.getOLFeature();
     let geometry = olFeature.getGeometry();
-    let center = M.impl.utils.getCentroid(geometry);
-    if (!M.utils.isNullOrEmpty(center)) {
-      let geom = new ol.geom.Point();
+    let center = ImplUtils.getCentroid(geometry);
+    if (!Utils.isNullOrEmpty(center)) {
+      let geom = new OLPoint();
       geom.setCoordinates(center);
-      let olCentroid = new ol.Feature({
+      let olCentroid = new OLFeature({
         'geometry': geom,
         name: 'centroid'
       });
-      return M.impl.Feature.olFeature2Facade(olCentroid);
+      return Feature.olFeature2Facade(olCentroid);
     }
-  };
+  }
 
   /**
    * This function clear the style of feature
@@ -261,7 +296,7 @@ goog.provide('M.impl.Feature');
    * @return {Array<number>}
    * @api stable
    */
-  M.impl.Feature.prototype.clearStyle = function() {
+  clearStyle() {
     this.olFeature_.setStyle(null);
-  };
-})();
+  }
+}
