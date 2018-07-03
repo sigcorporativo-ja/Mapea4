@@ -1,7 +1,7 @@
 import Object from "./object.js";
 import Utils from "./utils/utils.js"
 
-export class Base extends Object {
+export default class Base extends Object {
   /**
    * @classdesc
    * Main facade Object. This class creates a facede
@@ -13,7 +13,6 @@ export class Base extends Object {
    * @extends {M.Object}
    * @api stable
    */
-
   constructor(impl) {
 
     // calls the super constructor
@@ -69,6 +68,5 @@ export class Base extends Object {
     if (!Utils.isNullOrEmpty(this.impl_) && Utils.isFunction(this.impl_.destroy)) {
       this.impl_.destroy();
     }
-  };
-
+  }
 }
