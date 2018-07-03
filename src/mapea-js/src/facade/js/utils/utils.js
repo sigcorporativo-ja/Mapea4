@@ -1,15 +1,14 @@
-goog.provide('M.utils');
-
-goog.require('M.polyfills');
-goog.require('M.geom.wkt.type');
-goog.require('goog.color');
-goog.require('goog.color.alpha');
+import Polyfills from('./polyfills.js');
+import WKT from('../geom/wkt.js');
+import StylePoint from('../style/stylepoint.js');
+import StyleLine from('../style/styleline.js');
+import StylePolygon from('../style/stylepolygon.js');
 
 /**
- * @namespace M.utils
+ * @namespace Utils
  */
-(function() {
-  'use strict';
+
+export class Utils {
 
   /**
    * This function checks if the obj is null or empty
@@ -19,16 +18,16 @@ goog.require('goog.color.alpha');
    * @returns {boolean}
    * @api stable
    */
-  M.utils.isNullOrEmpty = function(obj) {
-    var nullOrEmpty = false;
+  static isNullOrEmpty(obj) {
+    let nullOrEmpty = false;
 
-    if (M.utils.isNull(obj)) {
+    if (Utils.isNull(obj)) {
       nullOrEmpty = true;
-    } else if (M.utils.isArray(obj)) {
+    } else if (Utils.isArray(obj)) {
       nullOrEmpty = true;
       if (obj.length > 0) {
-        nullOrEmpty = !obj.some(function(objElem) {
-          return !M.utils.isNullOrEmpty(objElem);
+        nullOrEmpty = !obj.some((objElem) => {
+          return !Utils.isNullOrEmpty(objElem);
         });
       }
     } else if ((typeof obj === 'string') && (obj.trim().length === 0)) {
@@ -36,18 +35,18 @@ goog.require('goog.color.alpha');
     }
 
     return nullOrEmpty;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.isNull = function(obj) {
+  static isNull(obj) {
     var isNull = false;
 
-    if (!M.utils.isBoolean(obj) && (typeof obj !== 'number')) {
-      if (M.utils.isUndefined(obj)) {
+    if (!Utils.isBoolean(obj) && (typeof obj !== 'number')) {
+      if (Utils.isUndefined(obj)) {
         isNull = true;
       } else if (!obj) {
         isNull = true;
@@ -57,125 +56,125 @@ goog.require('goog.color.alpha');
     }
 
     return isNull;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.isArray = function(obj) {
+  static isArray(obj) {
     var isArray = false;
-    if (!M.utils.isNull(obj)) {
+    if (!Utils.isNull(obj)) {
       isArray = (Object.prototype.toString.call(obj) === Object.prototype.toString
         .call([]));
     }
     return isArray;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.isFunction = function(obj) {
-    var isFunction = false;
-    if (!M.utils.isNull(obj)) {
-      isFunction = ((typeof obj === 'function') && !M.utils.isUndefined(obj.call));
+  static isFunction(obj) {
+    let isFunction = false;
+    if (!Utils.isNull(obj)) {
+      isFunction = ((typeof obj === 'function') && !Utils.isUndefined(obj.call));
     }
     return isFunction;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.isObject = function(obj) {
-    var isObject = false;
-    if (!M.utils.isNull(obj)) {
-      isObject = ((typeof obj === 'object') && !M.utils.isUndefined(obj.toString));
+  static isObject(obj) {
+    let isObject = false;
+    if (!Utils.isNull(obj)) {
+      isObject = ((typeof obj === 'object') && !Utils.isUndefined(obj.toString));
     }
     return isObject;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.isString = function(obj) {
-    var isString = false;
-    if (!M.utils.isNull(obj)) {
+  static isString(obj) {
+    let isString = false;
+    if (!Utils.isNull(obj)) {
       isString = (typeof obj === 'string');
     }
     return isString;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.isBoolean = function(obj) {
-    var isBoolean = false;
-    if ((obj !== null) && !M.utils.isUndefined(obj)) {
+  static isBoolean(obj) {
+    let isBoolean = false;
+    if ((obj !== null) && !Utils.isUndefined(obj)) {
       isBoolean = (typeof obj === 'boolean');
     }
     return isBoolean;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.isUrl = function(obj) {
+  static isUrl(obj) {
     var isUrl = false;
-    if (!M.utils.isNull(obj) && M.utils.isString(obj)) {
+    if (!Utils.isNull(obj) && Utils.isString(obj)) {
       isUrl = /(https?\:\/\/[^\*]+)/.test(obj);
     }
     return isUrl;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.isUndefined = function(obj) {
+  isUndefined(obj) {
     return (typeof obj === 'undefined');
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.normalize = function(stringToNormalize, upperCase) {
-    var normalizedString = stringToNormalize;
-    if (!M.utils.isNullOrEmpty(normalizedString) && M.utils.isString(normalizedString)) {
+  static normalize(stringToNormalize, upperCase) {
+    let normalizedString = stringToNormalize;
+    if (!Utils.isNullOrEmpty(normalizedString) && Utils.isString(normalizedString)) {
       normalizedString = normalizedString.trim();
       normalizedString = upperCase ? normalizedString.toUpperCase() : normalizedString.toLowerCase();
     }
     return normalizedString;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.getParameterValue = function(paramName, url) {
-    var parameterValue = null;
+  static get parameterValue(paramName, url) {
+    let parameterValue = null;
 
     paramName = paramName.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
 
-    var parameters = url;
-    var idxQuery = parameters.indexOf('?');
+    let parameters = url;
+    let idxQuery = parameters.indexOf('?');
     if (idxQuery != -1) {
       parameters = parameters.substring(idxQuery);
-      var regex = new RegExp("[\\?&]" + paramName + "=([^&#]*)");
+      let regex = new RegExp("[\\?&]" + paramName + "=([^&#]*)");
       parameterValue = regex.exec(parameters);
       if (parameterValue !== null) {
         parameterValue = decodeURIComponent(parameterValue[1].replace(/\+/g, " "));
@@ -183,23 +182,23 @@ goog.require('goog.color.alpha');
     }
 
     return parameterValue;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.addParameters = function(url, params) {
-    var requestUrl = url;
+  static addParameters(url, params) {
+    let requestUrl = url;
     if (requestUrl.indexOf('?') === -1) {
       requestUrl += '?';
     } else if (requestUrl.charAt(requestUrl.length - 1) !== '?') {
       requestUrl += '&';
     }
 
-    var requestParams = '';
-    if (M.utils.isObject(params)) {
+    let requestParams = '';
+    if (Utils.isObject(params)) {
       for (var param in params) {
         requestParams += param;
         requestParams += '=';
@@ -208,24 +207,24 @@ goog.require('goog.color.alpha');
       }
       // removes the last '&'
       requestParams = requestParams.substring(0, requestParams.length - 1);
-    } else if (M.utils.isString(params)) {
+    } else if (Utils.isString(params)) {
       requestParams = params;
     }
     requestUrl += requestParams;
 
     return requestUrl;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.generateRandom = function(prefix, sufix) {
-    var random = '';
+  static generateRandom(prefix, sufix) {
+    let random = '';
 
     // adds prefix
-    if (!M.utils.isNullOrEmpty(prefix)) {
+    if (!Utils.isNullOrEmpty(prefix)) {
       random = prefix;
     }
 
@@ -233,56 +232,56 @@ goog.require('goog.color.alpha');
     random = random.concat(Math.random()).replace(/0\./, '');
 
     // adds sufix
-    if (!M.utils.isNullOrEmpty(sufix)) {
+    if (!Utils.isNullOrEmpty(sufix)) {
       random = random.concat(sufix);
     }
 
     return random;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.getWMSGetCapabilitiesUrl = function(serverUrl, version) {
-    var wmsGetCapabilitiesUrl = serverUrl;
+  static get WMSGetCapabilitiesUrl(serverUrl, version) {
+    let wmsGetCapabilitiesUrl = serverUrl;
 
     // request
-    wmsGetCapabilitiesUrl = M.utils.addParameters(wmsGetCapabilitiesUrl, 'request=GetCapabilities');
+    wmsGetCapabilitiesUrl = Utils.addParameters(wmsGetCapabilitiesUrl, 'request=GetCapabilities');
     // service
-    wmsGetCapabilitiesUrl = M.utils.addParameters(wmsGetCapabilitiesUrl, 'service=WMS');
+    wmsGetCapabilitiesUrl = Utils.addParameters(wmsGetCapabilitiesUrl, 'service=WMS');
 
     // PATCH: En mapea 3 no se manda luego aquí tampoco. Hay servicios que dan error....
     //      // version
-    //      wmsGetCapabilitiesUrl = M.utils.addParameters(wmsGetCapabilitiesUrl, {
+    //      wmsGetCapabilitiesUrl = Utils.addParameters(wmsGetCapabilitiesUrl, {
     //         'version': version
     //      });
 
     return wmsGetCapabilitiesUrl;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.getWMTSGetCapabilitiesUrl = function(serverUrl, version) {
-    var wmtsGetCapabilitiesUrl = serverUrl;
+  static get WMTSGetCapabilitiesUrl(serverUrl, version) {
+    let wmtsGetCapabilitiesUrl = serverUrl;
 
     // request
-    wmtsGetCapabilitiesUrl = M.utils.addParameters(wmtsGetCapabilitiesUrl, 'request=GetCapabilities');
+    wmtsGetCapabilitiesUrl = Utils.addParameters(wmtsGetCapabilitiesUrl, 'request=GetCapabilities');
     // service
-    wmtsGetCapabilitiesUrl = M.utils.addParameters(wmtsGetCapabilitiesUrl, 'service=WMTS');
+    wmtsGetCapabilitiesUrl = Utils.addParameters(wmtsGetCapabilitiesUrl, 'service=WMTS');
     // version
-    if (!M.utils.isNullOrEmpty(version)) {
-      wmtsGetCapabilitiesUrl = M.utils.addParameters(wmtsGetCapabilitiesUrl, {
+    if (!Utils.isNullOrEmpty(version)) {
+      wmtsGetCapabilitiesUrl = Utils.addParameters(wmtsGetCapabilitiesUrl, {
         'version': version
       });
     }
 
     return wmtsGetCapabilitiesUrl;
-  };
+  }
 
   /**
    * This function generates the resolution array
@@ -296,12 +295,12 @@ goog.require('goog.color.alpha');
    * @returns {Array<Number>} the resolutions
    * @api stable
    */
-  M.utils.generateResolutionsFromScales = function(maxScale, minScale, zoomLevels, units) {
-    var minResolution = M.utils.getResolutionFromScale(maxScale, units);
-    var maxResolution = M.utils.getResolutionFromScale(minScale, units);
+  static generateResolutionsFromScales(maxScale, minScale, zoomLevels, units) {
+    let minResolution = Utils.getResolutionFromScale(maxScale, units);
+    let maxResolution = Utils.getResolutionFromScale(minScale, units);
 
-    return M.utils.fillResolutions(minResolution, maxResolution, zoomLevels);
-  };
+    return Utils.fillResolutions(minResolution, maxResolution, zoomLevels);
+  }
 
   /**
    * This function generates the resolution array
@@ -315,28 +314,28 @@ goog.require('goog.color.alpha');
    * @returns {Array<Number>} the resolutions
    * @api stable
    */
-  M.utils.generateResolutionsFromExtent = function(extent, size, zoomLevels, units) {
+  static generateResolutionsFromExtent(extent, size, zoomLevels, units) {
     let [wExtent, hExtent] = [null, null];
-    if (M.utils.isArray(extent)) {
+    if (Utils.isArray(extent)) {
       wExtent = (extent[2] - extent[0]);
       hExtent = (extent[3] - extent[1]);
-    } else if (M.utils.isObject(extent)) {
+    } else if (Utils.isObject(extent)) {
       wExtent = (extent.x.max - extent.x.min);
       hExtent = (extent.y.max - extent.y.min);
-    } else if (M.utils.isString(extent)) {
+    } else if (Utils.isString(extent)) {
       extent = extent.split(",");
       wExtent = (extent[2] - extent[0]);
       hExtent = (extent[3] - extent[1]);
     }
-    var wResolution = wExtent / size[0];
-    var hResolution = hExtent / size[1];
+    let wResolution = wExtent / size[0];
+    let hResolution = hExtent / size[1];
 
-    var maxResolution = Math.max(wResolution, hResolution);
+    let maxResolution = Math.max(wResolution, hResolution);
 
-    var resolutions = M.utils.fillResolutions(null, maxResolution, zoomLevels);
+    let resolutions = Utils.fillResolutions(null, maxResolution, zoomLevels);
 
     return resolutions;
-  };
+  }
 
   /**
    * This function generates the resolution array
@@ -349,7 +348,7 @@ goog.require('goog.color.alpha');
    * @returns {Array<Number>} the resolutions
    * @api stable
    */
-  M.utils.fillResolutions = function(minResolution, maxResolution, numZoomLevels) {
+  static fillResolutions(minResolution, maxResolution, numZoomLevels) {
     var resolutions = new Array(numZoomLevels);
 
     minResolution = Number.parseFloat(minResolution);
@@ -359,19 +358,19 @@ goog.require('goog.color.alpha');
     // the base for exponential scaling that starts at
     // maxResolution and ends at minResolution in numZoomLevels
     // steps.
-    var base = 2;
+    let base = 2;
     if (!Number.isNaN(minResolution)) {
       base = Math.pow((maxResolution / minResolution), (1 / (numZoomLevels - 1)));
     }
-    for (var i = 0; i < numZoomLevels; i++) {
+    numZoomLevels.forEach(value => {
       resolutions[i] = maxResolution / Math.pow(base, i);
-    }
+    });
     //sort resolutions array descendingly
-    resolutions.sort(function(a, b) {
+    resolutions.sort((a, b) => {
       return (b - a);
     });
     return resolutions;
-  };
+  }
 
   /**
    * This function calculates the resolution
@@ -383,18 +382,18 @@ goog.require('goog.color.alpha');
    * @returns {Number} the resolution for the specified scale
    * @api stable
    */
-  M.utils.getResolutionFromScale = function(scale, units) {
-    var resolution;
-    if (!M.utils.isNullOrEmpty(scale)) {
-      if (M.utils.isNull(units)) {
+  static get resolutionFromScale(scale, units) {
+    let resolution;
+    if (!Utils.isNullOrEmpty(scale)) {
+      if (Utils.isNull(units)) {
         units = "degrees";
       }
       // normalize scale
-      var normScale = (scale > 1.0) ? (1.0 / scale) : scale;
+      let normScale = (scale > 1.0) ? (1.0 / scale) : scale;
       resolution = 1 / (normScale * M.INCHES_PER_UNIT[units] * M.DOTS_PER_INCH);
     }
     return resolution;
-  };
+  }
 
   /**
    * This function calculates the scale
@@ -406,49 +405,49 @@ goog.require('goog.color.alpha');
    * @returns {Number} the scale for the specified resolution
    * @api stable
    */
-  M.utils.getScaleFromResolution = function(resolution, units) {
-    if (M.utils.isNullOrEmpty(units)) {
+  static get scaleFromResolution(resolution, units) {
+    if (Utils.isNullOrEmpty(units)) {
       units = "degrees";
     }
 
-    var scale = resolution * M.INCHES_PER_UNIT[units] * M.DOTS_PER_INCH;
+    let scale = resolution * M.INCHES_PER_UNIT[units] * M.DOTS_PER_INCH;
 
     return scale;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.stringToHtml = function(htmlTxt) {
-    var html;
+  static stringToHtml(htmlTxt) {
+    let html;
 
-    if (!M.utils.isNullOrEmpty(htmlTxt)) {
-      var div = document.createElement('div');
+    if (!Utils.isNullOrEmpty(htmlTxt)) {
+      let div = document.createElement('div');
       div.innerHTML = htmlTxt;
       html = div.children[0];
     }
 
     return html;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.utils.htmlToString = function(html) {
-    var text;
+  static htmlToString(html) {
+    let text;
 
-    if (!M.utils.isNullOrEmpty(html)) {
-      var div = document.createElement('div');
-      goog.dom.appendChild(div, html);
+    if (!Utils.isNullOrEmpty(html)) {
+      let div = document.createElement('div');
+      div.appendChild(html);
       text = div.innerHTML;
     }
 
     return text;
-  };
+  }
 
   /**
    * formated String
@@ -458,8 +457,8 @@ goog.require('goog.color.alpha');
    * @returns {String} beautifyString formated String
    * @api stable
    */
-  M.utils.beautifyString = function(text) {
-    var beautifyString;
+  static beautifyString(text) {
+    let beautifyString;
 
     // 1 to lower case
     beautifyString = text.toLowerCase();
@@ -477,17 +476,16 @@ goog.require('goog.color.alpha');
     beautifyString = beautifyString.replace(/\s+/, " ");
 
     // 6 to camel case
-    beautifyString = beautifyString.replace(/(\s\w)+/g, function(match) {
+    beautifyString = beautifyString.replace(/(\s\w)+/g, (match) => {
       return match.toUpperCase();
     });
 
     // 7 common words to lower case
-    beautifyString = beautifyString.replace(/\s+(de|del|las?|el|los?|un|unas?|unos?|y|a|al|en)\s+/ig, function(match) {
-      return match.toLowerCase();
-    });
+    return match.toLowerCase();
+    beautifyString = beautifyString.replace(/\s+(de|del|las?|el|los?|un|unas?|unos?|y|a|al|en)\s+/ig, (match) => {});
 
     return beautifyString;
-  };
+  }
 
 
   /**
@@ -498,14 +496,14 @@ goog.require('goog.color.alpha');
    * @returns {Number} formated String
    * @api stable
    */
-  M.utils.beautifyAttribute = function(attributeName) {
-    var beautifyString = attributeName;
+  static beautifyAttribute(attributeName) {
+    let beautifyString = attributeName;
 
     if (beautifyString) {
       //OpenLayers.String.trim
       beautifyString = beautifyString.trim();
       if (beautifyString.length > 0) {
-        var idxPoints = beautifyString.indexOf(":");
+        let idxPoints = beautifyString.indexOf(":");
         if (idxPoints != -1) {
           idxPoints++;
           beautifyString = beautifyString.substring(idxPoints, beautifyString.length);
@@ -513,7 +511,7 @@ goog.require('goog.color.alpha');
       }
     }
     return beautifyString;
-  };
+  }
 
   /**
    * formated String
@@ -523,12 +521,12 @@ goog.require('goog.color.alpha');
    * @returns {Number} formated String
    * @api stable
    */
-  M.utils.beautifyAttributeName = function(rawAttributeName) {
-    var attributeName = M.utils.normalize(rawAttributeName);
-    attributeName = attributeName.replace(/_(\w)/g, function(match, group) {
+  static beautifyAttributeName(rawAttributeName) {
+    let attributeName = Utils.normalize(rawAttributeName);
+    attributeName = attributeName.replace(/_(\w)/g, (match, group) => {
       return ' '.concat(group.toUpperCase());
     });
-    attributeName = attributeName.replace(/^\w/, function(match) {
+    attributeName = attributeName.replace(/^\w/, (match) => {
       return match.toUpperCase();
     });
     return attributeName;
@@ -542,13 +540,13 @@ goog.require('goog.color.alpha');
    * @returns {Number} formated String
    * @api stable
    */
-  M.utils.concatUrlPaths = function(paths) {
-    var finalUrl = null;
-    if (!M.utils.isNullOrEmpty(paths)) {
+  static concatUrlPaths(paths) {
+    let finalUrl = null;
+    if (!Utils.isNullOrEmpty(paths)) {
       finalUrl = paths[0];
       finalUrl = finalUrl.replace(/\/+\s*$/, '');
-      for (var i = 1, ilen = paths.length; i < ilen; i++) {
-        var path = paths[i];
+      for (let i = 1, ilen = paths.length; i < ilen; i++) {
+        let path = paths[i];
         if (path.indexOf('/') !== 0) {
           finalUrl = finalUrl.concat('/');
         }
@@ -556,7 +554,7 @@ goog.require('goog.color.alpha');
       }
     }
     return finalUrl;
-  };
+  }
 
   /**
    *
@@ -564,14 +562,14 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.includes = function(array, searchElement, fromIndex) {
-    var O = Object(array);
-    var len = parseInt(O.length) || 0;
+  static includes(array, searchElement, fromIndex) {
+    let O = Object(array);
+    let len = parseInt(O.length) || 0;
     if (len === 0) {
       return false;
     }
-    var n = parseInt(arguments[2]) || 0;
-    var k;
+    let n = parseInt(arguments[2]) || 0;
+    let k;
     if (n >= 0) {
       k = n;
     } else {
@@ -580,7 +578,7 @@ goog.require('goog.color.alpha');
         k = 0;
       }
     }
-    var currentElement;
+    let currentElement;
     while (k < len) {
       currentElement = O[k];
       if (searchElement === currentElement || Object.equals(searchElement, currentElement) ||
@@ -590,7 +588,7 @@ goog.require('goog.color.alpha');
       k++;
     }
     return false;
-  };
+  }
 
   /**
    *
@@ -598,18 +596,18 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.extend = function(target, source, override) {
-    for (var prop in source) {
-      if (M.utils.isUndefined(target[prop])) {
+  static extend(target, source, override) {
+    for (let prop in source) {
+      if (Utils.isUndefined(target[prop])) {
         target[prop] = source[prop];
-      } else if (M.utils.isObject(target[prop])) {
-        M.utils.extend(target[prop], source[prop], override);
+      } else if (Utils.isObject(target[prop])) {
+        Utils.extend(target[prop], source[prop], override);
       } else if ((override === true)) {
         target[prop] = source[prop];
       }
     }
     return target;
-  };
+  }
 
   /**
    * TODO
@@ -617,8 +615,8 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.escapeXSS = function(xssValue) {
-    var validValue;
+  static escapeXSS(xssValue) {
+    let validValue;
 
     // & --> &amp;
     validValue = xssValue.replace(/\&/g, '&amp;');
@@ -639,7 +637,7 @@ goog.require('goog.color.alpha');
     validValue = validValue.replace(/\//g, '&#x2F;');
 
     return validValue;
-  };
+  }
 
   /**
    * TODO
@@ -647,14 +645,14 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.escapeJSCode = function(jsCode) {
-    var validValue;
+  static escapeJSCode(jsCode) {
+    let validValue;
 
     validValue = jsCode.replace(/(<\s*script[^\>]*\>)+[^<]*(<\s*\/\s*script[^\>]*\>)+/ig, '');
     validValue = validValue.replace(/((\"|\')\s*\+\s*)?\s*eval\s*\(.*\)\s*(\+\s*(\"|\'))?/ig, '');
 
     return validValue;
-  };
+  }
 
   /**
    * TODO
@@ -662,19 +660,19 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.enableTouchScroll = function(elem) {
-    if ('ontouchstart' in goog.global) {
-      var scrollStartPos = 0;
+  static enableTouchScroll(elem) {
+    if ('ontouchstart' in document) {
+      let scrollStartPos = 0;
 
-      goog.events.listen(elem, goog.events.EventType.TOUCHSTART, function(evt) {
+      elem.addEventListener('touchstart', (evt) => {
         scrollStartPos = this.scrollTop + evt.getBrowserEvent().touches[0].pageY;
       });
 
-      goog.events.listen(elem, goog.events.EventType.TOUCHMOVE, function(evt) {
+      elem.addEventListener('touchmove', (evt) => {
         this.scrollTop = scrollStartPos - evt.getBrowserEvent().touches[0].pageY;
       });
     }
-  };
+  }
 
   /**
    * TODO
@@ -682,17 +680,13 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.rgbToHex = function(rgbColor) {
-    var hexColor;
-    if (goog.color.isValidColor(rgbColor)) {
-      hexColor = goog.color.parse(rgbColor).hex;
-    } else {
-      try {
-        hexColor = goog.color.alpha.parse(rgbColor).hex;
-      } catch (err) {}
-    }
+  static rgbToHex(rgbColor) {
+    let hexColor;
+    try {
+      hexColor = chroma(rgbColor).hex();
+    } catch (err) {}
     return hexColor;
-  };
+  }
 
   /**
    * TODO
@@ -700,13 +694,13 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.rgbaToHex = function(rgbaColor) {
-    var hexColor;
+  static rgbaToHex(rgbaColor) {
+    let hexColor;
     try {
       hexColor = chroma(rgbaColor).hex();
     } catch (err) {}
     return hexColor;
-  };
+  }
 
   /**
    * TODO
@@ -714,10 +708,10 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.getOpacityFromRgba = function(rgbaColor) {
-    var opacity;
+  static get opacityFromRgba(rgbaColor) {
+    let opacity;
 
-    var rgbaRegExp = /^rgba\s*\((\s*\d+\s*\,){3}\s*([\d\.]+)\s*\)$/;
+    let rgbaRegExp = /^rgba\s*\((\s*\d+\s*\,){3}\s*([\d\.]+)\s*\)$/;
     if (rgbaRegExp.test(rgbaColor)) {
       opacity = rgbaColor.replace(rgbaRegExp, '$2');
       try {
@@ -726,7 +720,7 @@ goog.require('goog.color.alpha');
     }
 
     return opacity;
-  };
+  }
 
   /**
    * TODO
@@ -734,12 +728,12 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.sameUrl = function(url1, url2) {
+  static sameUrl(url1, url2) {
     url1 = url1.replace(/^(.+)\/$/, '$1').replace(/^(.+)\?$/, '$1');
     url2 = url2.replace(/^(.+)\/$/, '$1').replace(/^(.+)\?$/, '$1');
 
     return url1.toLowerCase() === url2.toLowerCase();
-  };
+  }
 
   /**
    * TODO
@@ -747,19 +741,19 @@ goog.require('goog.color.alpha');
    * @function
    * @api stable
    */
-  M.utils.isGeometryType = function(type) {
-    var geometricTypes = [
-         M.geom.wkt.type.GEOMETRY.toLowerCase(),
+  static isGeometryType(type) {
+    let geometricTypes = [
+         WKT.type.GEOMETRY.toLowerCase(),
          "GeometryPropertyType".toLowerCase(),
-         M.geom.wkt.type.POINT.toLowerCase(),
-         M.geom.wkt.type.LINE_STRING.toLowerCase(),
-         M.geom.wkt.type.LINEAR_RING.toLowerCase(),
-         M.geom.wkt.type.POLYGON.toLowerCase(),
-         M.geom.wkt.type.MULTI_POINT.toLowerCase(),
-         M.geom.wkt.type.MULTI_LINE_STRING.toLowerCase(),
-         M.geom.wkt.type.MULTI_POLYGON.toLowerCase(),
-         M.geom.wkt.type.GEOMETRY_COLLECTION.toLowerCase(),
-         M.geom.wkt.type.CIRCLE.toLowerCase(),
+         WKT.type.POINT.toLowerCase(),
+         WKT.type.LINE_STRING.toLowerCase(),
+         WKT.type.LINEAR_RING.toLowerCase(),
+         WKT.type.POLYGON.toLowerCase(),
+         WKT.type.MULTI_POINT.toLowerCase(),
+         WKT.type.MULTI_LINE_STRING.toLowerCase(),
+         WKT.type.MULTI_POLYGON.toLowerCase(),
+         WKT.type.GEOMETRY_COLLECTION.toLowerCase(),
+         WKT.type.CIRCLE.toLowerCase(),
          "pointpropertytype",
          "polygonpropertytype",
          "linestringpropertytype",
@@ -780,7 +774,7 @@ goog.require('goog.color.alpha');
       ];
     type = type.toLowerCase();
     return (geometricTypes.indexOf(type) !== -1);
-  };
+  }
 
   /**
    * This function decodes html entities into
@@ -791,11 +785,11 @@ goog.require('goog.color.alpha');
    * @returns {String} text decoded
    * @api stable
    */
-  M.utils.decodeHtml = function(encodedHtml) {
+  static decodeHtml(encodedHtml) {
     let txtarea = document.createElement("textarea");
     txtarea.innerHTML = encodedHtml;
     return txtarea.value;
-  };
+  }
 
   /**
    * This function gets text content from
@@ -806,15 +800,15 @@ goog.require('goog.color.alpha');
    * @returns {String} text contained by the HTML tags
    * @api stable
    */
-  M.utils.getTextFromHtml = function(html) {
+  static get textFromHtml(html) {
     let htmlText = html;
-    if (!M.utils.isString(html) && html.outerHTML) {
+    if (!Utils.isString(html) && html.outerHTML) {
       htmlText = html.outerHTML;
     }
     let divElement = document.createElement("DIV");
     divElement.innerHTML = htmlText;
     return divElement.textContent || divElement.innerText || "";
-  };
+  }
 
   /**
    * This function gets an array scale color in hexadecimal format
@@ -823,9 +817,9 @@ goog.require('goog.color.alpha');
    * @return {Array<string>} array scale color in hexadecimal format
    * @api stable
    */
-  M.utils.generateColorScale = function(color1, color2, n_classes) {
+  static generateColorScale(color1, color2, n_classes) {
     return chroma.scale([color1, color2]).colors(n_classes);
-  };
+  }
 
   /**
    * This function gets the inverse of a color. The inverse of a color
@@ -837,16 +831,16 @@ goog.require('goog.color.alpha');
    * @return {string} inverse color in hexadecimal format
    * @api stable
    */
-  M.utils.inverseColor = function(color) {
+  static inverseColor(color) {
     let inverseColor;
-    if (M.utils.isString(color)) {
+    if (Utils.isString(color)) {
       let hexColor = chroma(color).hex();
       hexColor = hexColor.replace(/^\#/, '0x');
       inverseColor = chroma(0xFFFFFF - hexColor).hex();
     }
 
     return inverseColor;
-  };
+  }
 
   /**
    * This function gets the geometry type of a layer.
@@ -856,16 +850,16 @@ goog.require('goog.color.alpha');
    * @return {string} geometry type of layer
    * @api stable
    */
-  M.utils.getGeometryType = function(layer) {
-    if (M.utils.isNullOrEmpty(layer) || M.utils.isNullOrEmpty(layer.getFeatures())) {
+  static get geometryType(layer) {
+    if (Utils.isNullOrEmpty(layer) || Utils.isNullOrEmpty(layer.getFeatures())) {
       return null;
     }
-    let firstFeature = layer.getFeatures()[0];
-    if (!M.utils.isNullOrEmpty(firstFeature) && !M.utils.isNullOrEmpty(firstFeature.getGeometry())) {
-      return firstFeature.getGeometry().type;
+    let firstFeature = layer.features()[0];
+    if (!Utils.isNullOrEmpty(firstFeature) && !Utils.isNullOrEmpty(firstFeature.geometry())) {
+      return firstFeature.geometry().type;
     }
     return null;
-  };
+  }
 
   /**
    * This function returns the appropiate style to geomtry layer
@@ -877,26 +871,26 @@ goog.require('goog.color.alpha');
    * @return {M.style.Simple}
    * @api stable
    */
-  M.utils.generateStyleLayer = function(options, layer) {
+  static generateStyleLayer(options, layer) {
     let style;
-    switch (M.utils.getGeometryType(layer)) {
+    switch (Utils.geometryType(layer)) {
       case "Point":
       case "MultiPoint":
-        style = new M.style.Point(options);
+        style = new StylePoint(options);
         break;
       case "LineString":
       case "MultiLineString":
-        style = new M.style.Line(options);
+        style = new StyleLine(options);
         break;
       case "Polygon":
       case "MultiPolygon":
-        style = new M.style.Polygon(options);
+        style = new StylePolygon(options);
         break;
       default:
         return null;
     }
     return style;
-  };
+  }
 
   /**
    * This function returns a color as string with opacity
@@ -907,9 +901,9 @@ goog.require('goog.color.alpha');
    * @return {string}
    * @api stable
    */
-  M.utils.getRgba = function(color, opacity) {
+  static get rgba(color, opacity) {
     return chroma(color).alpha(opacity).css();
-  };
+  }
 
   /**
    * This function returns if two sets are equals
@@ -920,13 +914,13 @@ goog.require('goog.color.alpha');
    * @return {bool}
    * @api stable
    */
-  M.utils.setEquals = function(array, array2) {
+  static set equals(array, array2) {
     let equals = false;
     if (array.length === array2.length) {
       equals = array.every(e => array2.some(e2 => e2.equals(e)));
     }
     return equals;
-  };
+  }
 
   /**
    * This function set implementation of this control
@@ -936,24 +930,24 @@ goog.require('goog.color.alpha');
    * @param {M.Map} impl to add the plugin
    * @api stable
    */
-  M.utils.extends = function(dest = {}, src = {}) {
-    if (!M.utils.isNullOrEmpty(src)) {
+  static extends(dest = {}, src = {}) {
+    if (!Utils.isNullOrEmpty(src)) {
       Object.keys(src).forEach(key => {
         let value = src[key];
-        if (M.utils.isArray(value)) {
+        if (Utils.isArray(value)) {
           value = [...value];
-        } else if (M.utils.isObject(value)) {
-          value = M.utils.extends({}, value);
+        } else if (Utils.isObject(value)) {
+          value = Utils.extends({}, value);
         }
-        if (M.utils.isNullOrEmpty(dest[key])) {
+        if (Utils.isNullOrEmpty(dest[key])) {
           dest[key] = value;
-        } else if (M.utils.isObject(dest[key])) {
-          M.utils.extends(dest[key], value);
+        } else if (Utils.isObject(dest[key])) {
+          Utils.extends(dest[key], value);
         }
       }, this);
     }
     return dest;
-  };
+  }
 
   /**
    * This function returns an array whith breaks between head and tail of an array
@@ -964,80 +958,67 @@ goog.require('goog.color.alpha');
    * @return {array}
    * @api stable
    */
-  M.utils.generateIntervals = function(array, breaks) {
+  static generateIntervals(array, breaks) {
     let intervals = [...array];
     if (array.length < breaks) {
       let step = (array[0] + array[1]) / (breaks - 1);
-      for (let i = 1; i < breaks - 1; i++) {
-        intervals[i] = step * i;
-      }
-      intervals = [...intervals, array[1]];
-    }
-    return intervals;
-  };
+      breaks.forEach(value) {
+        intervals[value] = step * value;
+      });
+    intervals = [...intervals, array[1]];
+  }
+  return intervals;
+}
 
-  /**
-   * This functions returns the order style
-   * @function
-   * @public
-   * @param {M.Style}
-   * @return {number}
-   * @api stable
-   */
-  M.utils.styleComparator = function(style, style2) {
-    return style.ORDER - style2.ORDER;
-  };
+/**
+ * This functions returns the order style
+ * @function
+ * @public
+ * @param {M.Style}
+ * @return {number}
+ * @api stable
+ */
+static styleComparator(style, style2) {
+  return style.ORDER - style2.ORDER;
+}
 
-  /**
-   * This functions returns the width and height of a image from src
-   * @function
-   * @public
-   * @param {string} url
-   * @return {Array<number>}
-   * @api stable
-   */
-  M.utils.getImageSize = function(url) {
-    let image = new Image();
-    return new Promise((resolve, reject) => {
-      image.onload = () => resolve(image);
-      image.src = url;
-    });
-  };
+/**
+ * This functions returns the width and height of a image from src
+ * @function
+ * @public
+ * @param {string} url
+ * @return {Array<number>}
+ * @api stable
+ */
+static get imageSize(url) {
+  let image = new Image();
+  return new Promise((resolve, reject) => {
+    image.onload = () => resolve(image);
+    image.src = url;
+  });
+}
 
-  /**
-   * This functions returns random simple style
-   * @function
-   * @public
-   * @param {M.Feature} feature
-   * @return {M.style.Simple}
-   * @api stable
-   */
-  M.utils.generateRandomStyle = function(feature, radiusParam, strokeWidthParam, strokeColorParam) {
-    let radius = radiusParam;
-    let fillColor = chroma.random().hex();
-    let strokeColor = strokeColorParam;
-    let strokeWidth = strokeWidthParam;
-    let geometry = feature.getGeometry().type;
-    let style;
-    let options;
-    switch (geometry) {
-      case "Point":
-      case "MultiPoint":
-          options = {
-          radius: radius,
-          fill: {
-            color: fillColor
-          },
-          stroke: {
-            color: strokeColor,
-            width: strokeWidth
-          }
-        };
-        style = new M.style.Point(options);
-        break;
-      case "LineString":
-      case "MultiLineString":
-        options = {
+/**
+ * This functions returns random simple style
+ * @function
+ * @public
+ * @param {M.Feature} feature
+ * @return {M.style.Simple}
+ * @api stable
+ */
+static generateRandomStyle(feature, radiusParam, strokeWidthParam, strokeColorParam) {
+  let radius = radiusParam;
+  let fillColor = chroma.random().hex();
+  let strokeColor = strokeColorParam;
+  let strokeWidth = strokeWidthParam;
+  let geometry = feature.geometry().type;
+  let style;
+  let options;
+  switch (geometry) {
+    case "Point":
+    case "MultiPoint":
+      options = {
+        radius: radius,
         fill: {
           color: fillColor
         },
@@ -1046,11 +1027,11 @@ goog.require('goog.color.alpha');
           width: strokeWidth
         }
       };
-        style = new M.style.Line(options);
-        break;
-      case "Polygon":
-      case "MultiPolygon":
-        options = {
+      style = new StylePoint(options);
+      break;
+    case "LineString":
+    case "MultiLineString":
+      options = {
         fill: {
           color: fillColor
         },
@@ -1059,11 +1040,24 @@ goog.require('goog.color.alpha');
           width: strokeWidth
         }
       };
-        style = new M.style.Polygon(options);
-        break;
-      default:
-        style = null;
-    }
-    return style;
-  };
-})();
+      style = new StyleLine(options);
+      break;
+    case "Polygon":
+    case "MultiPolygon":
+      options = {
+        fill: {
+          color: fillColor
+        },
+        stroke: {
+          color: strokeColor,
+          width: strokeWidth
+        }
+      };
+      style = new StylePolygon(options);
+      break;
+    default:
+      style = null;
+  }
+  return style;
+}
+}
