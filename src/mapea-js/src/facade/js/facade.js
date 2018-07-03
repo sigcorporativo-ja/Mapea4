@@ -1,5 +1,5 @@
-import Object from "./object.js";
-import Utils from "./utils/utils.js"
+import Object from "./object";
+import Utils from "./utils/utils"
 
 export default class Base extends Object {
   /**
@@ -40,19 +40,6 @@ export default class Base extends Object {
    * @returns {Object}
    * @api stable
    */
-  get impl() {
-    return this.impl_;
-  }
-
-  /**
-   * This function provides the implementation
-   * of the object
-   *
-   * @public
-   * @function
-   * @returns {Object}
-   * @api stable
-   */
   getImpl() {
     return this.impl_;
   }
@@ -65,7 +52,7 @@ export default class Base extends Object {
    * @param {M.Map} impl to add the plugin
    * @api stable
    */
-  set impl(value) {
+  setImpl(value) {
     this.impl_ = value;
   }
 
