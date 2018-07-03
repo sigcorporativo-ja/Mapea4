@@ -1,9 +1,14 @@
-goog.provide('M.impl.loader.JSONP');
+import FacadeObject from "facade/js/object.js";
+import FacadeRemote from "facade/js/utils/remote";
+import Exception from "facade/js/exception/exception";
+import Utils from "facade/js/utils/utils";
+
+
 
 /**
  * @namespace M.impl.control
  */
-(function() {
+export class JSONP extends FacadeObject {
   /**
    * @classdesc TODO
    * control
@@ -13,7 +18,9 @@ goog.provide('M.impl.loader.JSONP');
    * @extends {M.Object}
    * @api stable
    */
-  M.impl.loader.JSONP = function(map, url, format) {
+  constructor(map, url, format) {
+    super(this);
+
     /**
      * TODO
      * @private
@@ -34,10 +41,7 @@ goog.provide('M.impl.loader.JSONP');
      * @type {M.format.GeoJSON}
      */
     this.format_ = format;
-
-    goog.base(this);
-  };
-  goog.inherits(M.impl.loader.JSONP, M.Object);
+  }
 
   /**
    * This function destroys this control, cleaning the HTML
@@ -47,15 +51,15 @@ goog.provide('M.impl.loader.JSONP');
    * @function
    * @api stable
    */
-  M.impl.loader.JSONP.prototype.getLoaderFn = function(callback) {
-    var loaderScope = this;
-    return (function(extent, resolution, projection) {
-      var sourceScope = this;
-      loaderScope.loadInternal_(projection).then(function(response) {
+  get loaderFn(callback) {
+    let loaderScope = this;
+    return ((extent, resolution, projection) => {
+      let sourceScope = this;
+      loaderScope.loadInternal_(projection).then((response) => {
         callback.apply(sourceScope, response);
       });
     });
-  };
+  }
 
   /**
    * TODO
@@ -63,19 +67,18 @@ goog.provide('M.impl.loader.JSONP');
    * @private
    * @function
    */
-  M.impl.loader.JSONP.prototype.loadInternal_ = function(projection) {
-    return (new Promise(function(success, fail) {
-      M.remote.get(this.url_).then(function(response) {
-        if (!M.utils.isNullOrEmpty(response.text)) {
-          var features = this.format_.read(response.text, {
+  loadInternal_(projection) {
+    return (new Promise((success, fail) => {
+      Remote.get(this.url_).then((response) => {
+        if (!Utils.isNullOrEmpty(response.text)) {
+          let features = this.format_.read(response.text, {
             featureProjection: projection
           });
           success.call(this, [features]);
-        }
-        else {
-          M.exception('No hubo respuesta del servicio');
+        } else {
+          Exception('No hubo respuesta del servicio');
         }
       }.bind(this));
     }.bind(this)));
-  };
-})();
+  }
+}

@@ -1,11 +1,12 @@
-goog.provide('M.impl.loader.WFS');
-goog.require('M.format.GeoJSON');
-
-
+import FacadeObject from "facade/js/object.js";
+import FacadeRemote from "facade/js/utils/remote";
+import Utils from "facade/js/utils/utils";
+import Exception from "facade/js/exception/exception";
+import Dialog from "facade/js/dialog";
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class WFS extends FacadeObject {
   /**
    * @classdesc TODO
    * control
@@ -15,7 +16,9 @@ goog.require('M.format.GeoJSON');
    * @extends {M.Object}
    * @api stable
    */
-  M.impl.loader.WFS = function(map, service, format) {
+  constructor(map, service, format) {
+    super(this);
+
     /**
      * TODO
      * @private
@@ -37,9 +40,7 @@ goog.require('M.format.GeoJSON');
      */
     this.format_ = format;
 
-    goog.base(this);
-  };
-  goog.inherits(M.impl.loader.WFS, M.Object);
+  }
 
   /**
    * This function destroys this control, cleaning the HTML
@@ -49,13 +50,12 @@ goog.require('M.format.GeoJSON');
    * @function
    * @api stable
    */
-  M.impl.loader.WFS.prototype.getLoaderFn = function(callback) {
-    var this_ = this;
-    return (function(extent, resolution, projection) {
-      var requestUrl = this_.getRequestUrl_(extent, projection);
-      this_.loadInternal_(requestUrl, projection).then(callback.bind(this));
+  get loaderFn(callback) {
+    return ((extent, resolution, projection) => {
+      let requestUrl = this.getRequestUrl_(extent, projection);
+      this.loadInternal_(requestUrl, projection).then(callback.bind(this));
     });
-  };
+  }
 
   /**
    * TODO
@@ -63,27 +63,24 @@ goog.require('M.format.GeoJSON');
    * @private
    * @function
    */
-  M.impl.loader.WFS.prototype.loadInternal_ = function(url, projection) {
-    return (new Promise(function(success, fail) {
-      M.remote.get(url).then(function(response) {
-        if (!M.utils.isNullOrEmpty(response.text) && response.text.indexOf("ServiceExceptionReport") < 0) {
+  loadInternal_(url, projection) {
+    return (new Promise((success, fail) => {
+      FacadeRemote.get(url).then((response) => {
+        if (!Utils.isNullOrEmpty(response.text) && response.text.indexOf("ServiceExceptionReport") < 0) {
           let features = this.format_.read(response.text, projection);
           success(features);
-        }
-        else {
+        } else {
           if (response.code === 401) {
-            M.dialog.error('Ha ocurrido un error al cargar la capa: Usuario no autorizado.');
-          }
-          else if (response.text.indexOf("featureId and cql_filter") >= 0) {
-            M.dialog.error('FeatureID y CQL son mutuamente excluyentes. Indicar sólo un tipo de filtrado.');
-          }
-          else {
-            M.exception('No hubo respuesta en la operación GetFeature');
+            Dialog.error('Ha ocurrido un error al cargar la capa: Usuario no autorizado.');
+          } else if (response.text.indexOf("featureId and cql_filter") >= 0) {
+            Dialog.error('FeatureID y CQL son mutuamente excluyentes. Indicar sólo un tipo de filtrado.');
+          } else {
+            Exception('No hubo respuesta en la operación GetFeature');
           }
         }
       }.bind(this));
     }.bind(this)));
-  };
+  }
 
   /**
    * TODO
@@ -91,7 +88,7 @@ goog.require('M.format.GeoJSON');
    * @private
    * @function
    */
-  M.impl.loader.WFS.prototype.getRequestUrl_ = function(extent, projection) {
+  get requestUrl_(extent, projection) {
     // var mapBbox = this.map_.getBbox();
     // var minExtent = [
     //    Math.min(Math.abs(extent[0]), mapBbox.x.min),
@@ -101,6 +98,6 @@ goog.require('M.format.GeoJSON');
     // ];
 
     // return this.service_.getFeatureUrl(minExtent, projection);
-    return this.service_.getFeatureUrl(null, projection);
-  };
-})();
+    return this.service_.featureUrl(null, projection);
+  }
+}

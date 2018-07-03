@@ -1,10 +1,15 @@
-goog.provide('M.impl.loader.KML');
-goog.require('M.format.GeoJSON');
+import FacadeGeoJSON from "facade/js/format/geojson";
+import FacadeObject from "facade/js/object.js";
+import FacadeRemote from "facade/js/utils/remote";
+import Utils from "facade/js/utils/utils";
+import FacadeFeature from "facade/js/feature/feature";
+import Exception from "facade/js/exception/exception";
+
 
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class KML extends FacadeObject {
   /**
    * @classdesc TODO
    * control
@@ -14,7 +19,9 @@ goog.require('M.format.GeoJSON');
    * @extends {M.Object}
    * @api stable
    */
-  M.impl.loader.KML = function(map, url, format) {
+  constructor(map, url, format) {
+    super(this);
+
     /**
      * TODO
      * @private
@@ -36,9 +43,7 @@ goog.require('M.format.GeoJSON');
      */
     this.format_ = format;
 
-    goog.base(this);
-  };
-  goog.inherits(M.impl.loader.KML, M.Object);
+  }
 
   /**
    * This function destroys this control, cleaning the HTML
@@ -48,15 +53,15 @@ goog.require('M.format.GeoJSON');
    * @function
    * @api stable
    */
-  M.impl.loader.KML.prototype.getLoaderFn = function(callback) {
-    var loaderScope = this;
-    return (function(extent, resolution, projection) {
-      var sourceScope = this;
-      loaderScope.loadInternal_(projection).then(function(response) {
+  get loaderFn(callback) {
+    let loaderScope = this;
+    return ((extent, resolution, projection) => {
+      let sourceScope = this;
+      loaderScope.loadInternal_(projection).then((response) => {
         callback.apply(sourceScope, response);
       });
     });
-  };
+  }
 
   /**
    * TODO
@@ -64,33 +69,32 @@ goog.require('M.format.GeoJSON');
    * @private
    * @function
    */
-  M.impl.loader.KML.prototype.loadInternal_ = function(projection) {
-    var this_ = this;
-    return (new Promise(function(success, fail) {
-      M.remote.get(this_.url_).then(function(response) {
-        if (!M.utils.isNullOrEmpty(response.text)) {
-          var features = this_.format_.readFeatures(response.text, {
+  loadInternal_(projection) {
+    let this_ = this;
+    return (new Promise((success, fail) => {
+      FacadeRemote.get(this_.url_).then((response) => {
+        if (!Utils.isNullOrEmpty(response.text)) {
+          let features = this_.format_.readFeatures(response.text, {
             featureProjection: projection
           });
-          var screenOverlay = this_.format_.getScreenOverlay();
+          let screenOverlay = this_.format_.getScreenOverlay();
           success.call(this, [
             features.map(olFeature => {
-              let feature = new M.Feature(olFeature.getId(), {
+              let feature = new FacadeFeature(olFeature.id(), {
                 geometry: {
                   coordinates: olFeature.getGeometry().getCoordinates(),
                   type: olFeature.getGeometry().getType()
                 },
                 properties: olFeature.getProperties()
               });
-              feature.getImpl().getOLFeature().setStyle(olFeature.getStyle());
+              feature.impl().OLFeature().style = olFeature.style();
               return feature;
             }), screenOverlay]);
-        }
-        else {
-          M.exception('No hubo respuesta del KML');
+        } else {
+          Exception('No hubo respuesta del KML');
         }
       });
     }));
-  };
+  }
 
-})();
+}
