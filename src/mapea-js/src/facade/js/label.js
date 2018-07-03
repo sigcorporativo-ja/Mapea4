@@ -1,8 +1,9 @@
-import Base from('./facade.js');
-import Utils from('./utils/utils.js');
-import Exception from('./exception/exception.js');
+import Base from './facade';
+import Utils from './utils/utils';
+import Exception from './exception/exception';
+import LabelImpl from '.../.../.../impl/ol/js/label';
 
-export class Label extends Base {
+export default class Label extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Label
@@ -14,10 +15,12 @@ export class Label extends Base {
    * @api stable
    */
   constructor(text, coordOpts, panMapIfOutOfView) {
-    // calls the super constructor
-    super();
+
     // implementation of this control
-    let impl = new Label(text, coordOpts, panMapIfOutOfView);
+    let impl = new LabelImpl(text, coordOpts, panMapIfOutOfView);
+
+    // calls the super constructor
+    super(impl);
   }
 
   /**
@@ -29,8 +32,8 @@ export class Label extends Base {
    * @export
    */
   hide() {
-    this.impl().hide();
-  };
+    this.getImpl().hide();
+  }
 
   /**
    * This function displays the popup with information
@@ -42,8 +45,8 @@ export class Label extends Base {
    * @export
    */
   show(map) {
-    this.impl().show(map);
-  };
+    this.getImpl().show(map);
+  }
 
   /**
    * This function return popup created
@@ -54,9 +57,9 @@ export class Label extends Base {
    * @api stable
    * @export
    */
-  get popup() {
-    return this.impl().popup();
-  };
+  getPopup() {
+    return this.getImpl().getPopup();
+  }
 
   /**
    * TODO
@@ -64,9 +67,9 @@ export class Label extends Base {
    * @function
    * @api stable
    */
-  get coordinate() {
-    return this.impl().coordinate();
-  };
+  getCoordinate() {
+    return this.getImpl().getCoordinate();
+  }
 
   /**
    * TODO
@@ -74,9 +77,9 @@ export class Label extends Base {
    * @function
    * @api stable
    */
-  set coordinate(coord) {
-    this.impl().coordinate = coord;
-  };
+  setCoordinate(coord) {
+    this.getImpl().coordinate = coord;
+  }
 
   /**
    * Template popup for this controls
@@ -86,4 +89,4 @@ export class Label extends Base {
    * @api stable
    */
   Label.POPUP_TEMPLATE = 'label_popup.html';
-};
+}
