@@ -1,4 +1,4 @@
-export class Filter {
+export default class Filter {
   /**
    * This function joins the filters so that all the filters are fulfilled
    *

@@ -1,9 +1,9 @@
-import Function from('./stylefunction.js');
-import Utils from('../utils/utils.js');
+import Function from './stylefunction';
+import Utils from '../utils/utils';
 /**
  * @namespace M.filter
  */
-export class Spatial extends Spatial {
+export default class Spatial extends Function {
 
   /**
    * Creates a Filter Spatial to filter features
@@ -20,7 +20,7 @@ export class Spatial extends Spatial {
     let Function = (feature, index) => {
       let geometry = null;
       if (!Utils.isNullOrEmpty(feature)) {
-        geometry = feature.geometry();
+        geometry = feature.getGeometry();
       }
       return FunctionParam(geometry, index);
     }

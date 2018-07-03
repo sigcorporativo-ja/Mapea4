@@ -1,7 +1,4 @@
-/**
- * @namespace M.filter
- */
-export class Abstract {
+export default class Abstract {
 
   /**
    * Abstract class
@@ -17,7 +14,7 @@ export class Abstract {
    * @protected
    * @function
    */
-  get FunctionFilter() {}
+  getFunctionFilter() {}
 
   /**
    * This function execute a function filter

@@ -1,9 +1,10 @@
-import Spatial from('./filterspatial.js');
-import Utils from('../utils/utils.js');
-import Vector from('../layers/vector.js');
-import Feature from('../feature/feature.js');
+import Spatial from './filterspatial';
+import Utils from '../utils/utils';
+import Vector from '../layers/vector';
+import Feature from '../feature/feature';
+import WKT from '../format/wkt';
 
-export class Module {
+export default class Module {
   /**
    * This function creates a spatial filter to know which features contain another feature or layer
    *
@@ -103,7 +104,7 @@ export class Module {
   static parseParamToGeometries(param) {
     let geometries = [];
     if (param instanceof Vector) {
-      geometries = [...param.features().map(feature => feature.geometry())];
+      geometries = [...param.getFeatures().map(feature => feature.getGeometry())];
     } else {
       if (!Utils.isArray(param)) {
         param = [param];
@@ -111,7 +112,7 @@ export class Module {
       geometries = param.map(p => {
         let geom;
         if (p instanceof Feature) {
-          geom = p.geometry();
+          geom = p.getGeometry();
         } else if (Utils.isObject(p)) {
           geom = p;
         }
@@ -132,7 +133,7 @@ export class Module {
    */
   static toCQLFilter_(operation, geometries) {
     let cqlFilter = "";
-    let wktFormat = new M.format.WKT();
+    let wktFormat = WKT();
     geometries.forEach(value) {
       if (value !== 0) {
         // es un OR porque se hace una interseccion completa con todas

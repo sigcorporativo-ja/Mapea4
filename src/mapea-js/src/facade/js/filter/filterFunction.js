@@ -1,7 +1,7 @@
-import Filter from('./filter.js'):
-import Utils from('../utils/utils.js');
+import Filter from './filter':
+import Utils from '../utils/utils';
 
-export class Function extends Filter {
+export default class Function extends Filter {
   /**
    * Creates a Filter Function to filter features
    *
@@ -9,7 +9,6 @@ export class Function extends Filter {
    * @api stable
    */
   constructor(filterFunction, options) {
-    super();
 
     options = (options || {});
 
@@ -39,7 +38,7 @@ export class Function extends Filter {
    * @function
    * @api stable
    */
-  set function(filterFunction) {
+  setFunction(filterFunction) {
     this.filterFunction_ = filterFunction;
   }
 
@@ -51,7 +50,7 @@ export class Function extends Filter {
    * @return {M.filter.Function} filter to execute
    * @api stable
    */
-  get functionFilter() {
+  getFunctionFilter() {
     return this.filterFunction_;
   }
 
