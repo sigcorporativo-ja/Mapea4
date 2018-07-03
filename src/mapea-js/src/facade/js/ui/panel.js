@@ -1,11 +1,12 @@
-import Position from('./position.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Base from('../facade.js');
-import Object from('../object.js')
+import Position from './position';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Base from '../facade';
+import Object from '../object';
+import Evt from '../event/eventsmanager';
 
 
-export class Panel extends Object {
+export default class Panel extends Object {
   /**
    * @classdesc
    * TODO
@@ -217,7 +218,7 @@ export class Panel extends Object {
       }
 
       if (this.collapsible_ !== true) {
-        goog.dom.classlist.add(html, 'no-collapsible');
+        html.classlist.add('no-collapsible');
       }
 
       this.controls_Container = html.querySelector('div.m-panel-controls');
@@ -296,7 +297,7 @@ export class Panel extends Object {
    * @param {array<M.Control>} controls
    * @api stable
    */
-  get Controls() {
+  getControls() {
     return this.controls_;
   }
 
@@ -313,7 +314,7 @@ export class Panel extends Object {
       if (!Utils.isArray(controls)) {
         controls = [controls];
       }
-      controls.forEach((control) => {
+      controls.forEach(control => {
         if (control instanceof ControlBase) {
           if (!this.hasControl(control)) {
             this.controls_.push(control);
@@ -363,7 +364,7 @@ export class Panel extends Object {
       if (!Utils.isArray(controls)) {
         controls = [controls];
       }
-      controls.forEach((control) => {
+      controls.forEach(control => {
         if ((control instanceof ControlBase) && this.hasControl(control)) {
           this.controls_.remove(control);
           control.panel = null;
@@ -485,7 +486,7 @@ export class Panel extends Object {
    * @api stable
    * @returns {HTMLElement}
    */
-  get templatePanel() {
+  getTemplatePanel() {
     return this.element_;
   }
 
