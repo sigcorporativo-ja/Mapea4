@@ -45,6 +45,19 @@ export default class Base extends Object {
   }
 
   /**
+   * This function provides the implementation
+   * of the object
+   *
+   * @public
+   * @function
+   * @returns {Object}
+   * @api stable
+   */
+  getImpl() {
+    return this.impl_;
+  }
+
+  /**
    * This function set implementation of this control
    *
    * @public
