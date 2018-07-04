@@ -1,7 +1,7 @@
-import Utils from("./utils/utils.js");
-import Template from("./utils/template.js");
+import Utils from "./utils/utils";
+import Template from "./utils/template";
 
-export class Dialog {
+export default class Dialog {
   /**
    * TODO
    *
