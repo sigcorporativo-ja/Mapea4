@@ -20,7 +20,7 @@ export default class KML extends FacadeObject {
    * @api stable
    */
   constructor(map, url, format) {
-    super(this);
+    super();
 
     /**
      * TODO
@@ -53,7 +53,7 @@ export default class KML extends FacadeObject {
    * @function
    * @api stable
    */
-  get loaderFn(callback) {
+  getLoaderFn(callback) {
     let loaderScope = this;
     return ((extent, resolution, projection) => {
       let sourceScope = this;
@@ -80,14 +80,14 @@ export default class KML extends FacadeObject {
           let screenOverlay = this_.format_.getScreenOverlay();
           success.call(this, [
             features.map(olFeature => {
-              let feature = new FacadeFeature(olFeature.id(), {
+              let feature = new FacadeFeature(olFeature.getId(), {
                 geometry: {
                   coordinates: olFeature.getGeometry().getCoordinates(),
                   type: olFeature.getGeometry().getType()
                 },
                 properties: olFeature.getProperties()
               });
-              feature.impl().OLFeature().style = olFeature.style();
+              feature.getImpl().getOLFeature().style = olFeature.getStyle();
               return feature;
             }), screenOverlay]);
         } else {

@@ -1,4 +1,4 @@
-import FacadeObject from "facade/js/object.js";
+import FacadeObject from "facade/js/object";
 import FacadeRemote from "facade/js/utils/remote";
 import Exception from "facade/js/exception/exception";
 import Utils from "facade/js/utils/utils";
@@ -8,7 +8,7 @@ import Utils from "facade/js/utils/utils";
 /**
  * @namespace M.impl.control
  */
-export class JSONP extends FacadeObject {
+export default class JSONP extends FacadeObject {
   /**
    * @classdesc TODO
    * control
@@ -19,7 +19,7 @@ export class JSONP extends FacadeObject {
    * @api stable
    */
   constructor(map, url, format) {
-    super(this);
+    super();
 
     /**
      * TODO
@@ -51,7 +51,7 @@ export class JSONP extends FacadeObject {
    * @function
    * @api stable
    */
-  get loaderFn(callback) {
+  getLoaderFn(callback) {
     let loaderScope = this;
     return ((extent, resolution, projection) => {
       let sourceScope = this;

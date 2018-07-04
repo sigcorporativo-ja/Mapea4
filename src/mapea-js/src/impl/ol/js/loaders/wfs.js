@@ -17,7 +17,7 @@ export default class WFS extends FacadeObject {
    * @api stable
    */
   constructor(map, service, format) {
-    super(this);
+    super();
 
     /**
      * TODO
@@ -50,7 +50,7 @@ export default class WFS extends FacadeObject {
    * @function
    * @api stable
    */
-  get loaderFn(callback) {
+  getLoaderFn(callback) {
     return ((extent, resolution, projection) => {
       let requestUrl = this.getRequestUrl_(extent, projection);
       this.loadInternal_(requestUrl, projection).then(callback.bind(this));
@@ -78,8 +78,8 @@ export default class WFS extends FacadeObject {
             Exception('No hubo respuesta en la operación GetFeature');
           }
         }
-      }.bind(this));
-    }.bind(this)));
+      });
+    }));
   }
 
   /**
@@ -88,7 +88,7 @@ export default class WFS extends FacadeObject {
    * @private
    * @function
    */
-  get requestUrl_(extent, projection) {
+  getRequestUrl_(extent, projection) {
     // var mapBbox = this.map_.getBbox();
     // var minExtent = [
     //    Math.min(Math.abs(extent[0]), mapBbox.x.min),
