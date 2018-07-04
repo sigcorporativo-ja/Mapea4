@@ -1,4 +1,4 @@
-export class WKT {
+export default class WKT {
   WKT.type_ = {
     "GEOMETRY": "Geometry",
     "POINT": "Point",
@@ -12,7 +12,7 @@ export class WKT {
     "CIRCLE": "Circle"
   };
 
-  static get type() {
+  static getType() {
     return WKT.type_ = {
       "GEOMETRY": "Geometry",
       "POINT": "Point",

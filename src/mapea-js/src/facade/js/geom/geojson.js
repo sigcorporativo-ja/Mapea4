@@ -1,4 +1,4 @@
-export class Geojson {
+export default class Geojson {
   Geojson.type_ = {
     "POINT": "Point",
     "MULTI_POINT": "MultiPoint",
@@ -8,7 +8,7 @@ export class Geojson {
     "GEOMETRY_COLLECTION": "GeometryCollection"
   };
 
-  static get type() {
+  static getType() {
     return WFS.type_ = {
       "POINT": "Point",
       "MULTI_POINT": "MultiPoint",

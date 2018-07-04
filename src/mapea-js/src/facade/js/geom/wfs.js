@@ -1,11 +1,11 @@
-export class WFS {
+export default class WFS {
   WFS.type_ = {
     "POINT": "POINT",
     "LINE": "LINE",
     "POINT": "POINT",
   };
 
-  static get type() {
+  static getType() {
     return WFS.type_ = {
       "POINT": "POINT",
       "LINE": "LINE",

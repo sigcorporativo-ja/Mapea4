@@ -1,9 +1,9 @@
-import Utils from('./utils/utils.js');
-import WMS from('./wms.js');
-import Geojson from('./geojson.js');
-import WFS from('./wfs.js');
+import Utils from './utils/utils';
+import WMS from './wms';
+import Geojson from './geojson';
+import WFS from './wfs';
 
-export class Geom {
+export default class Geom {
   /**
    * Parses the geometry
    * @public
