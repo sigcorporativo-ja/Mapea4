@@ -1,11 +1,11 @@
-import Composite from('./stylecomposite.js');
-import Point from("./stylepoint.js");
-import Simple from("./stylesimple.js");
+import Composite from './stylecomposite';
+import Point from "./stylepoint";
+import Simple from "./stylesimple";
 
 /**
  * @namespace Proportional
  */
-export class Proportional extends Composite {
+export default class Proportional extends Composite {
 
 
   /**
@@ -23,7 +23,7 @@ export class Proportional extends Composite {
    * @api stable
    */
   constructor(attributeName, minRadius, maxRadius, style, proportionalFunction, options = {}) {
-    super(this, options, {});
+    super(options, {});
 
     if (Utils.isNullOrEmpty(attributeName)) {
       Exception("No se ha especificado el nombre del atributo.");
@@ -132,9 +132,9 @@ export class Proportional extends Composite {
       if (!Utils.isNullOrEmpty(this.style_)) {
         // this.layer_.setStyle(this.style_, true);
       }
-      this.oldStyle_ = this.layer_.style() instanceof Composite ? this.layer_.style().oldStyle() : this.layer_.style();
-       [this.minValue_, this.maxValue_] = Proportional.minMaxValues_(this.layer_.features(), this.attributeName_);
-      this.layer_.features().forEach(feature => this.applyToFeature(feature, 1));
+      this.oldStyle_ = this.layer_.style() instanceof Composite ? this.layer_.style().getOldStyle() : this.layer_.style();
+       [this.minValue_, this.maxValue_] = Proportional.getMinMaxValues_(this.layer_.getFeatures(), this.attributeName_);
+      this.layer_.getFeatures().forEach(feature => this.applyToFeature(feature, 1));
       let newStyle = this.oldStyle_.clone();
       if (newStyle instanceof Simple) {
         if (!(newStyle instanceof Point)) {
@@ -144,9 +144,9 @@ export class Proportional extends Composite {
         newStyle.set(Proportional.sizeAttribute_(newStyle), (feature) => {
           let proportion = Proportional.SCALE_PROPORTION;
           let value = feature.attribute(this.attributeName_);
-          let radius = this.proportionalFunction_(value, this.minValue_, this.maxValue_, this.minRadius_, this.maxRadius_);
+          let radius = this.getProportionalFunction_(value, this.minValue_, this.maxValue_, this.minRadius_, this.maxRadius_);
           if (Proportional.sizeAttribute_(this.oldStyle_) === 'icon.scale') {
-            radius = this.proportionalFunction_(value, this.minValue_, this.maxValue_, this.minRadius_ / proportion, this.maxRadius_ / proportion);
+            radius = this.getProportionalFunction_(value, this.minValue_, this.maxValue_, this.minRadius_ / proportion, this.maxRadius_ / proportion);
           }
           return radius;
         });
@@ -162,7 +162,7 @@ export class Proportional extends Composite {
    * @return {String} attribute name of Style
    * @api stable
    */
-  get attributeName()) {
+  getAttributeName()) {
   return this.attributeName_;
 }
 
@@ -173,7 +173,7 @@ export class Proportional extends Composite {
  * @param {String} attributeName - attribute name to set
  * @api stable
  */
-set attributeName(attributeName) {
+setAttributeName(attributeName) {
   this.attributeName_ = attributeName;
   this.update_();
   return this;
@@ -186,7 +186,7 @@ set attributeName(attributeName) {
  * @return {Point} style point of each feature
  * @deprecated
  */
-get style() {
+getStyle() {
   console.warn('Deprecated function: Use getStyles instead.');
   return this.style_;
 }
@@ -198,7 +198,7 @@ get style() {
  * @param {Point} style - style point to set
  * @api stable
  */
-set style(style) {
+setStyle(style) {
   this.style_ = style;
   this.update_();
   return this;
@@ -211,7 +211,7 @@ set style(style) {
  * @return {number} minimum radius of style point
  * @api stable
  */
-get minRadius() {
+getMinRadius() {
   return this.minRadius_;
 }
 
@@ -222,7 +222,7 @@ get minRadius() {
  * @param {function} proportionalFunction - proportional function
  * @api stable
  */
-set proportionalFunction(proportionalFunction) {
+setProportionalFunction(proportionalFunction) {
   this.proportionalFunction_ = proportionalFunction;
   this.update_();
 }
@@ -234,7 +234,7 @@ set proportionalFunction(proportionalFunction) {
  * @return {number} minimum radius of style point
  * @api stable
  */
-get proportionalFunction() {
+getProportionalFunction() {
   return this.proportionalFunction_;
 }
 
@@ -245,7 +245,7 @@ get proportionalFunction() {
  * @param {number} minRadius - minimum radius of style point
  * @api stable
  */
-set minRadius(minRadius) {
+setMinRadius(minRadius) {
   this.minRadius_ = parseInt(minRadius);
   if (minRadius >= this.maxRadius_) {
     // this.maxRadius_ = minRadius + 10;
@@ -262,7 +262,7 @@ set minRadius(minRadius) {
  * @return {number} maximum radius of style point
  * @api stable
  */
-get maxRadius() {
+getMaxRadius() {
   return this.maxRadius_;
 }
 
@@ -273,7 +273,7 @@ get maxRadius() {
  * @param {number} minRadius - maximum radius of style point
  * @api stable
  */
-set maxRadius(maxRadius) {
+setMaxRadius(maxRadius) {
   this.maxRadius_ = parseInt(maxRadius);
   if (maxRadius <= this.minRadius_) {
     // this.minRadius_ = maxRadius - 10;
@@ -300,12 +300,12 @@ updateCanvas() {
         if (!(featureStyle instanceof Point)) {
           featureStyle = new Point(featureStyle.options_);
         }
-        let sizeAttribute = Proportional.sizeAttribute_(featureStyle);
+        let sizeAttribute = Proportional.getSizeAttribute_(featureStyle);
 
         let styleMax = featureStyle.clone();
         let styleMin = featureStyle.clone();
-        let maxRadius = this.maxRadius();
-        let minRadius = this.minRadius();
+        let maxRadius = this.getMaxRadius();
+        let minRadius = this.getM inRadius();
         styleMax.set(sizeAttribute, maxRadius);
         styleMin.set(sizeAttribute, minRadius);
 
@@ -408,7 +408,7 @@ drawGeometryToCanvas(canvasImageMax, canvasImageMin, callbackFn) {
  * @param {String} attributeName - attributeName of style
  * @api stable
  */
-get minMaxValues_(features, attributeName) {
+getMinMaxValues_(features, attributeName) {
   let [minValue, maxValue] = [undefined, undefined];
   let filteredFeatures = features.filter(feature =>
     ![NaN, undefined, null].includes(feature.getAttribute(attributeName))).map(f => parseInt(f.getAttribute(attributeName)));
@@ -433,7 +433,7 @@ get minMaxValues_(features, attributeName) {
  * @return {string} the attribute that controls the size
  * @api stable
  */
-get sizeAttribute_(style) {
+getSizeAttribute_(style) {
   let sizeAttribute = 'radius';
   if (!Utils.isNullOrEmpty(style.get('icon'))) {
     if (!Utils.isNullOrEmpty(style.get('icon.src'))) {

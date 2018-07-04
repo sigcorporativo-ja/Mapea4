@@ -1,4 +1,4 @@
-export class Quantification {
+export default class Quantification {
 
   /** This function returns a jenks quantification function
    * @function
@@ -21,7 +21,7 @@ export class Quantification {
       });
 
       // get our basic matrices
-      let matrices = Quantification.matrices_(data, n_classes);
+      let matrices = Quantification.getMatrices_(data, n_classes);
       // we only need lower class limits here
       let lower_class_limits = matrices.lower_class_limits;
 
@@ -85,7 +85,7 @@ export class Quantification {
    * @api stable
    *
    */
-  static get matrices_(data, n_classes) {
+  static getMatrices_(data, n_classes) {
 
     // in the original implementation, these matrices are referred to
     // as `LC` and `OP`

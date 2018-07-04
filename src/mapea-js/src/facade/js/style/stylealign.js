@@ -1,4 +1,4 @@
-export class Align {
+export default class Align {
   /**
    * Left style alignment
    * @const

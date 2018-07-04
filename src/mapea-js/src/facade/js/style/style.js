@@ -1,11 +1,12 @@
-import Base from(.. / facade.js);
-import Utils from('../utils/utils.js');
+import Base from '../facade'
+import Utils from '../utils/utils';
+import Evt from '../events/eventsmanager';
 
 /**
  * @namespace M.Style
  */
 
-export class Style extends Base {
+export default class Style extends Base {
   /**   * Rec. options que es el json del estilo   */
 
   /**
@@ -14,7 +15,7 @@ export class Style extends Base {
    * @api stable
    */
   constructor(options, impl) {
-    super(this, impl);
+    super(impl);
     /**
      * User options for this style
      * @private
@@ -60,7 +61,7 @@ export class Style extends Base {
    */
   apply(layer) {
     this.layer_ = layer;
-    this.impl().applyToLayer(layer);
+    this.getImpl().applyToLayer(layer);
     this.updateCanvas();
   }
 
@@ -110,12 +111,12 @@ export class Style extends Base {
     let oldValue = this.get(property);
     Style.setValue_(this.options_, property, value);
     if (!Utils.isNullOrEmpty(this.layer_)) {
-      this.impl().updateFacadeOptions(this.options_);
+      this.getImpl().updateFacadeOptions(this.options_);
     }
     if (!Utils.isNullOrEmpty(this.feature_)) {
       this.applyToFeature(this.feature_);
     }
-    this.fire(M.evt.CHANGE, [property, oldValue, value]);
+    this.fire(Evt.CHANGE, [property, oldValue, value]);
     this.refresh();
     return this;
   };
@@ -164,8 +165,8 @@ export class Style extends Base {
     if (!Utils.isNullOrEmpty(this.layer_)) {
       this.apply(this.layer_);
       this.updateCanvas();
-      if (!Utils.isNullOrEmpty(this.layer_.impl().map())) {
-        let layerswitcher = this.layer_.impl().map().controls('layerswitcher')[0];
+      if (!Utils.isNullOrEmpty(this.layer_.getImpl().getMap())) {
+        let layerswitcher = this.layer_.getImpl().getMap().getControls('layerswitcher')[0];
         if (!Utils.isNullOrEmpty(layerswitcher)) {
           layerswitcher.render();
         }
@@ -180,7 +181,7 @@ export class Style extends Base {
    * @return {object}
    * @api stable
    */
-  get options() {
+  getOptions() {
     return this.options_;
   }
 
@@ -229,7 +230,7 @@ export class Style extends Base {
    * @api stable
    */
   updateCanvas() {
-    this.updateCanvasPromise_ = this.impl().updateCanvas(this.canvas_);
+    this.updateCanvasPromise_ = this.getImpl().updateCanvas(this.canvas_);
   }
 
   /**
@@ -252,7 +253,7 @@ export class Style extends Base {
   clone() {
     let optsClone = {};
     Utils.extends(optsClone, this.options_);
-    let implClass = this.impl().constructor;
+    let implClass = this.getImpl().constructor;
     let implClone = new implClass(optsClone);
     return new this.constructor(optsClone, implClone);
   }

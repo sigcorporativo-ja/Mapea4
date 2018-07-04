@@ -1,14 +1,14 @@
-import Feature from('./stylefeature.js');
-import SChartVar from('../chart/variable.js');
-import SChartSTypes from('../chart/types.js');
-import Utils from('../utils/utils.js');
-import ChartImpl from('../../../impl/js/style/stylechart.js');
+import Feature from './stylefeature';
+import SChartVar from '../chart/variable';
+import SChartSTypes from '../chart/types';
+import Utils from '../utils/utils';
+import ChartImpl from '../../../impl/js/style/stylechart';
 
 
 /**
  * @namespace Chart
  */
-export class Chart extends Feature {
+export default class Chart extends Feature {
 
   /**
    * @classdesc
@@ -40,7 +40,7 @@ export class Chart extends Feature {
    */
   constructor(options = {}) {
     // calls the super constructor
-    super(this, options, impl);
+    super(options, impl);
 
     let variables = options.variables || null;
 
@@ -111,10 +111,10 @@ export class Chart extends Feature {
    * @api stable
    */
   updateCanvas() {
-    if (Utils.isNullOrEmpty(this.impl()) || Utils.isNullOrEmpty(this.canvas_)) {
+    if (Utils.isNullOrEmpty(this.getImpl()) || Utils.isNullOrEmpty(this.canvas_)) {
       return false;
     }
-    this.impl().updateCanvas(this.canvas_);
+    this.getImpl().updateCanvas(this.canvas_);
   }
 
   /**

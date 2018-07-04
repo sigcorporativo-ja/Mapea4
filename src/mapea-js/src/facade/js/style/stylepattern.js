@@ -1,4 +1,4 @@
-export class Pattern {
+export default class Pattern {
   /**
    * Hatch style pattern
    * @const

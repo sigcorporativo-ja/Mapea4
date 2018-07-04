@@ -1,9 +1,9 @@
-import Style from('./style.js');
-import Utils from('../utils/utils.js');
-import Cluster from('./stylecluster.js');
-import Proportional from('./styleproportional.js');
+import Style from './style';
+import Utils from '../utils/utils';
+import Cluster from './stylecluster';
+import Proportional from './styleproportional';
 
-export class Composite extends Style {
+export default class Composite extends Style {
 
   /**
    * Abstract class
@@ -12,7 +12,7 @@ export class Composite extends Style {
    */
   constructor(options, impl) {
     // calls the super constructor
-    super(this, options, impl);
+    super(options, impl);
 
     /**
      * Array of styles.
@@ -98,7 +98,7 @@ export class Composite extends Style {
    * @return {Array<M.Style>} array styles
    * @api stable
    */
-  get styles() {
+  getStyles() {
     return this.styles_;
   }
 
@@ -110,7 +110,7 @@ export class Composite extends Style {
    * @return {M.Style} array styles
    * @api stable
    */
-  get oldStyle() {
+  getOldStyle() {
     return this.oldStyle_;
   }
 

@@ -1,10 +1,10 @@
-import Simple from("./stylesimple.js");
-import PolygonImpl from('../../../impl/js/style/stylepolygon.js');
+import Simple from "./stylesimple";
+import PolygonImpl from '../../../impl/js/style/stylepolygon';
 
 /**
  * @namespace M.style.Polygon
  */
-export class Polygon extends Simple {
+export default class Polygon extends Simple {
 
   /**
    * @classdesc

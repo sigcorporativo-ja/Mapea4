@@ -1,11 +1,11 @@
-import Simple from('./stylesimple.js');
-import Utils from('../utils/utils.js');
-import LineImpl from('../../../impl/js/style/styleline.js');
+import Simple from './stylesimple';
+import Utils from '../utils/utils';
+import LineImpl from '../../../impl/js/style/styleline';
 
 /**
  * @namespace Line
  */
-export class Line extends Simple {
+export default class Line extends Simple {
 
   /**
    * @classdesc
@@ -20,12 +20,14 @@ export class Line extends Simple {
    * @api stable
    */
   constructor(options) {
-    super(this, options, impl);
+
+    let impl = new LineImpl(options);
+
+    super(options, impl);
     if (Utils.isNullOrEmpty(options)) {
       options = Line.DEFAULT_NULL;
     }
     options = Utils.extends({}, options);
-    let impl = new LineImpl(options);
   }
 
   /**
@@ -37,7 +39,7 @@ export class Line extends Simple {
    * @api stable
    */
   unapply(layer) {
-    this.impl().unapply(layer);
+    this.getImpl().unapply(layer);
   }
 
   /**

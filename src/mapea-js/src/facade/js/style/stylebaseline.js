@@ -1,4 +1,4 @@
-export class Baseline {
+export default class Baseline {
   /**
    * Top style baseline
    * @const

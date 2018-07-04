@@ -1,4 +1,4 @@
-export class State {
+export default class State {
   /**
    * Default style status
    * @const

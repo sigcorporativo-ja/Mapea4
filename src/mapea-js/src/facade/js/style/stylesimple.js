@@ -1,4 +1,4 @@
-import Feature from('./stylefeature.js');
+import Feature from './stylefeature';
 
 export class Simple extends Feature {
 
@@ -8,7 +8,7 @@ export class Simple extends Feature {
    * @api stable
    */
   constructor(options, impl) {
-    super(this, options, impl);
+    super(options, impl);
   }
 
   /**
@@ -21,7 +21,7 @@ export class Simple extends Feature {
       if (isNullStyle) {
         layer.features().forEach(feature => feature.style = null);
       } else {
-        layer.features().forEach(feature => feature.style = this.clone());
+        layer.getFeatures().forEach(feature => feature.style = this.clone());
       }
     }
     this.updateCanvas();

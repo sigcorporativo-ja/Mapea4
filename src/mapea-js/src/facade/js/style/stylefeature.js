@@ -4,8 +4,7 @@ import Style from('./style.js');
  * @namespace M.style.Feature
  */
 
-export class Feature
- extends Style() {
+export default class Feature extends Style() {
 
   /**
    * Abstract class
@@ -13,7 +12,7 @@ export class Feature
    * @api stable
    */
   constructor(options, impl) {
-    super(this, options, impl);
+    super(options, impl);
 
     /**
      * Feature where the style is applied
@@ -34,6 +33,6 @@ export class Feature
    */
   applyToFeature(feature) {
     this.feature_ = feature;
-    this.impl().applyToFeature(feature);
+    this.getImpl().applyToFeature(feature);
   }
 }

@@ -1,4 +1,4 @@
-export class Form {
+export default class Form {
   /**
    * Circle style form
    * @const

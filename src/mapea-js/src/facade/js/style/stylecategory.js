@@ -1,11 +1,11 @@
-import Composite from('./Composite.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Map from('../map/map.js');
-import Proportional from('./styleproportional.js');
-import Cluster from('./stylecluster.js');
+import Composite from './Composite';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Map from '../map/map';
+import Proportional from './styleproportional';
+import Cluster from './stylecluster';
 
-export class Category extends Composite {
+export default class Category extends Composite {
   /**
    * @classdesc
    * Main constructor of the class. Creates a categoryStyle
@@ -64,7 +64,7 @@ export class Category extends Composite {
    * @returns {String}
    * @api stable
    */
-  get attributeName() {
+  getAttributeName() {
     return this.attributeName_;
   }
 
@@ -77,7 +77,7 @@ export class Category extends Composite {
    * @returns {M.style.Category}
    * @api stable
    */
-  set attributeName(attributeName) {
+  setAttributeName(attributeName) {
     this.attributeName_ = attributeName;
     this.update_();
     this.refresh();
@@ -92,7 +92,7 @@ export class Category extends Composite {
    * @returns {Array<String>}
    * @api stable
    */
-  get categories() {
+  getCategories() {
     return this.categoryStyles_;
   }
 
@@ -106,7 +106,7 @@ export class Category extends Composite {
    * @api stable
    *
    */
-  set categories(categories) {
+  setCategories(categories) {
     this.categoryStyles_ = categories;
     this.update_();
     this.refresh();
@@ -122,7 +122,7 @@ export class Category extends Composite {
    * @returns {M.style}
    * @api stable
    */
-  get styleForCategory(category) {
+  getStyleForCategory(category) {
     return this.categoryStyles_[category];
   }
 
@@ -136,7 +136,7 @@ export class Category extends Composite {
    * @returns {M.style.Category}
    * @api stable
    */
-  set styleForCategory(category, style) {
+  setStyleForCategory(category, style) {
     this.categoryStyles_[category] = style;
     this.update_();
     this.refresh();
@@ -174,7 +174,7 @@ export class Category extends Composite {
     // recursive case
     else {
       let category = categoryNames[currentIndex];
-      let style = this.styleForCategory(category);
+      let style = this.getStyleForCategory(category);
       let image = new Image();
       image.crossOrigin = 'Anonymous';
       let scope_ = this;
@@ -213,8 +213,8 @@ export class Category extends Composite {
    * @api stable
    */
   drawGeometryToCanvas(canvasImages, callbackFn) {
-    let heights = canvasImages.Map(canvasImage => canvasImage['image'].height);
-    let widths = canvasImages.Map(canvasImage => canvasImage['image'].width);
+    let heights = canvasImages.map(canvasImage => canvasImage['image'].height);
+    let widths = canvasImages.map(canvasImage => canvasImage['image'].width);
 
     let vectorContext = this.canvas_.getContext('2d');
     vectorContext.canvas.height = heights.reduce((acc, h) => acc + h + 5);
@@ -290,7 +290,7 @@ export class Category extends Composite {
   generateRandomCategories_() {
     let categories = {};
     if (!Utils.isNullOrEmpty(this.layer_)) {
-      this.layer_.features().forEach(feature => {
+      this.layer_.getFeatures().forEach(feature => {
         let value = feature.getAttribute(this.attributeName_);
         if (!categories.hasOwnProperty(value)) {
           categories[value] = Utils.generateRandomStyle(feature, Category.RANDOM_RADIUS_OPTION, Category.RANDOM_STROKE_WIDTH_OPTION, Category.RANDOM_STROKE_COLOR_OPTION);

@@ -1,4 +1,4 @@
-export class Textoverflow {
+export default class Textoverflow {
   /**
    * Left style textoverflow
    * @const

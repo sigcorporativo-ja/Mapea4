@@ -1,8 +1,8 @@
-import Simple from("./stylesimple.js");
-import Utils from('../utils/utils.js');
-import PointImpl from('../../../impl/js/style/point.js');
+import Simple from "./stylesimple";
+import Utils from '../utils/utils';
+import PointImpl from '../../../impl/js/style/point';
 
-export class Point extends Simple {
+export default class Point extends Simple {
 
   /**
    * @classdesc
@@ -13,14 +13,17 @@ export class Point extends Simple {
    * @api stable
    */
   constructor(options) {
-    super(this, options, impl);
+
+    let impl = new PointImpl(options);
+
+    super(options, impl);
+
     if (Utils.isNullOrEmpty(options)) {
       options = Point.DEFAULT_NULL;
     } else {
       options = Utils.extends(options, Point.DEFAULT);
     }
     options = Utils.extends({}, options);
-    let impl = new PointImpl(options);
   }
 
   /**
@@ -28,7 +31,7 @@ export class Point extends Simple {
    * @api stable
    */
   toImage() {
-    return this.impl().toImage(this.canvas_);
+    return this.getImpl().toImage(this.canvas_);
   }
 
   /**

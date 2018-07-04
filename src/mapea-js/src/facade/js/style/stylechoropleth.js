@@ -1,17 +1,17 @@
-import Composite from('./stylecomposite.js');
-import Quantification from('./stylequantification');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Style from('./style.js');
-import GeomJson from("../geom/geojson.js");
-import Filter from("../filter/filter.js");
-import Cluster from('./stylecluster.js');
-import Proportional from('./styleproportional.js');
+import Composite from './stylecomposite';
+import Quantification from './stylequantification';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Style from './style';
+import GeomJson from "../geom/geojson";
+import Filter from "../filter/filter";
+import Cluster from './stylecluster.js';
+import Proportional from './styleproportional';
 
 /**
  * @namespace Choropleth
  */
-export class Choropleth extends Style {
+export default class Choropleth extends Style {
 
 
   /**
@@ -28,7 +28,7 @@ export class Choropleth extends Style {
    * @api stable
    */
   constructor(attributeName, styles, quantification = Quantification.JENKS(), options = {}) {
-    super(this, options, {});
+    super(options, {});
     if (Utils.isNullOrEmpty(attributeName)) {
       Exception("No se ha especificado el nombre del atributo.");
     }
@@ -95,7 +95,7 @@ export class Choropleth extends Style {
    * @return {String} attribute name of Style
    * @api stable
    */
-  get attributeName() {
+  getAttributeName() {
     return this.attributeName_;
   }
 
@@ -106,7 +106,7 @@ export class Choropleth extends Style {
    * @param {String} attributeName - attribute name to set
    * @api stable
    */
-  set attributeName(attributeName) {
+  setAttributeName(attributeName) {
     this.attributeName_ = attributeName;
     this.update_();
     this.refresh();
@@ -120,7 +120,7 @@ export class Choropleth extends Style {
    * @return {Style.quantification|function} quantification function of style
    * @api stable
    */
-  get quantification() {
+  getQuantification() {
     return this.quantification_;
   }
 
@@ -131,7 +131,7 @@ export class Choropleth extends Style {
    * @param {Style.quantification|function} quantification - quantification function of style
    * @api stable
    */
-  set quantification(quantification) {
+  setQuantification(quantification) {
     this.quantification_ = quantification;
     if (!this.choroplethStyles_.some(style => Utils.isString(style))) {
       if (this.choroplethStyles_.length < this.quantification_().length) {
@@ -161,7 +161,7 @@ export class Choropleth extends Style {
    * @return {Array(Style)|null} returns the styles defined by user
    * @api stable
    */
-  get choroplethStyles() {
+  getChoroplethStyles() {
     return this.choroplethStyles_;
   }
 
@@ -172,7 +172,7 @@ export class Choropleth extends Style {
    * @param {Array<Style.Point>|Array<Style.Line>|Array<Style.Polygon>} styles - styles defined by user
    * @api stable
    */
-  set styles(styles) {
+  setStyles(styles) {
     if (!Utils.isArray(styles)) {
       styles = [styles];
     }
@@ -284,7 +284,7 @@ export class Choropleth extends Style {
     }, this);
 
     callbackFn();
-  };
+  }
 
   /**
    * This function gets the numeric features values of layer which attribute
@@ -294,10 +294,10 @@ export class Choropleth extends Style {
    * @return {Array<number>} numeric features values of layer
    * @api stable
    */
-  get values() {
+  getValues() {
     let values = [];
     if (!Utils.isNullOrEmpty(this.layer_)) {
-      this.layer_.features().forEach((f) => {
+      this.layer_.getFeatures().forEach((f) => {
         try {
           let value = parseFloat(f.getAttribute(this.attributeName_));
           if (!isNaN(value)) {

@@ -1,11 +1,11 @@
-import Style from('./style.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import HeatmapImpl from('../../../impl/js/style/styleheatmap.js');
+import Style from './style';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import HeatmapImpl from '../../../impl/js/style/styleheatmap';
 
 
 
-export class Heatmap extends Style {
+export default class Heatmap extends Style {
   /**
    * @classdesc
    * Main constructor of the class. Creates a style heatmap
@@ -21,8 +21,11 @@ export class Heatmap extends Style {
    * @api stable
    */
   constructor(attribute, options = {}, vendorOptions = {}) {
+
+    let impl = new HeatmapImpl(attribute, this.options_, this.vendorOptions_);
+
     // calls the super constructor
-    super(this, options, impl);
+    super(options, impl);
 
     if (!(Utils.isString(attribute) || Utils.isFunction(attribute))) {
       Exception('Attribute parameter can not be empty (string or function)');
@@ -64,7 +67,6 @@ export class Heatmap extends Style {
      */
     this.vendorOptions_ = vendorOptions;
 
-    let impl = new HeatmapImpl(attribute, this.options_, this.vendorOptions_);
   }
 
   /**
@@ -76,7 +78,7 @@ export class Heatmap extends Style {
    */
   unapply(layer) {
     this.layer_ = null;
-    this.impl().unapply(layer);
+    this.getImpl().unapply(layer);
   }
 
   /**
@@ -86,7 +88,7 @@ export class Heatmap extends Style {
    * @return {string|function}
    * @api stable
    */
-  get attributeName() {
+  getAttributeName() {
     return this.attribute;
   }
 
@@ -97,7 +99,7 @@ export class Heatmap extends Style {
    * @param {string|function} attribute - The attribute of heatmap style
    * @api stable
    */
-  set attributeName(attribute) {
+  setAttributeName(attribute) {
     this.attribute = attribute;
     this.options_.weight = this.attribute;
     this.update_();
@@ -110,7 +112,7 @@ export class Heatmap extends Style {
    * @return {Array<string>}
    * @api stable
    */
-  get gradient() {
+  getGradient() {
     return this.options_.gradient;
   }
 
@@ -121,7 +123,7 @@ export class Heatmap extends Style {
    * @param {Array<string>} gradient
    * @api stable
    */
-  set gradient(gradient) {
+  setGradient(gradient) {
     if (!Utils.isArray(gradient)) {
       gradient = [gradient];
     }
@@ -140,7 +142,7 @@ export class Heatmap extends Style {
    * @return {number}
    * @api stable
    */
-  get radius() {
+  getRadius() {
     return this.options_.radius;
   }
 
@@ -151,7 +153,7 @@ export class Heatmap extends Style {
    * @param {number} radius
    * @api stable
    */
-  set radius(radius) {
+  setRadius(radius) {
     this.options_.radius = radius;
     this.update_();
   }
@@ -163,7 +165,7 @@ export class Heatmap extends Style {
    * @return {number}
    * @api stable
    */
-  get blurSize() {
+  getBlurSize() {
     return this.options_.blur;
   }
 
@@ -174,7 +176,7 @@ export class Heatmap extends Style {
    * @param {number} blur
    * @api stable
    */
-  set blurSize(blur) {
+  setBlurSize(blur) {
     this.options_.blur = blur;
     this.update_();
   }
@@ -185,7 +187,7 @@ export class Heatmap extends Style {
    * @function
    */
   update_() {
-    let styleImpl = this.impl();
+    let styleImpl = this.getImpl();
     styleImpl.unapply(this.layer_);
     styleImpl.setOptions(this.options_, this.vendorOptions_);
     styleImpl.applyToLayer(this.layer_);
@@ -200,7 +202,7 @@ export class Heatmap extends Style {
    * @api stable
    */
   drawGeometryToCanvas() {
-    let [minWeight, maxWeight] = [this.impl().getMinWeight(), this.impl().getMaxWeight()];
+    let [minWeight, maxWeight] = [this.getImpl().getMinWeight(), this.getImpl().getMaxWeight()];
     let ctx = this.canvas_.getContext('2d');
     let gradient = ctx.createLinearGradient(0.000, 150.000, 200.000, 150.000);
     let intervals = Utils.generateIntervals([0, 1], this.options_.gradient.length);

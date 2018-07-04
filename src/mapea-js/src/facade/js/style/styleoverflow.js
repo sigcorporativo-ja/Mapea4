@@ -1,4 +1,4 @@
-export class Overflow {
+export default class Overflow {
   /**
    * Hidden style overflow
    * @const

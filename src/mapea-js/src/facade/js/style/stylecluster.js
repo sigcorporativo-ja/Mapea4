@@ -1,11 +1,11 @@
-import Composite from('./stylecomposite.js');
-import Utils from('../utils/utils.js');
-import ClusterImpl from('../../../impl/js/style/stylecluster.js');
+import Composite from './stylecomposite';
+import Utils from '../utils/utils';
+import ClusterImpl from '../../../impl/js/style/stylecluster';
 
 /**
  * @namespace Cluster
  */
-export class Cluster extends Composite {
+export default class Cluster extends Composite {
   /**
    * @classdesc
    * Main constructor of the class. Creates a style cluster
@@ -18,8 +18,10 @@ export class Cluster extends Composite {
    * @api stable
    */
   constructor(options = {}, optsVendor = {}) {
+    var impl = new ClusterImpl(options, optsVendor);
+
     // calls the super constructor
-    super(this, options, impl);
+    super(options, impl);
     Utils.extends(options, Cluster.DEFAULT);
     Utils.extends(optsVendor, Cluster.DEFAULT_VENDOR);
 
@@ -29,7 +31,6 @@ export class Cluster extends Composite {
      */
     this.oldStyle_ = null;
 
-    var impl = new ClusterImpl(options, optsVendor);
 
   }
 
@@ -37,7 +38,7 @@ export class Cluster extends Composite {
    * @inheritDoc
    */
   unapplySoft(layer) {
-    this.impl().unapply();
+    this.getImpl().unapply();
   }
 
   /**
@@ -60,7 +61,7 @@ export class Cluster extends Composite {
    */
   applyInternal_(layer) {
     this.layer_ = layer;
-    this.impl().applyToLayer(layer);
+    this.getImpl().applyToLayer(layer);
     this.updateCanvas();
   }
 
@@ -71,7 +72,7 @@ export class Cluster extends Composite {
    * @return {M.Style} the old style of layer
    * @api stable
    */
-  get oldStyle() {
+  getOldStyle() {
     return this.oldStyle_;
   }
 
@@ -83,7 +84,7 @@ export class Cluster extends Composite {
    * @return {Array<Object>} ranges stablished by user
    * @api stable
    */
-  get ranges() {
+  getRanges() {
     return this.options_.ranges;
   }
 
@@ -94,7 +95,7 @@ export class Cluster extends Composite {
    * @return {object} options of style cluster
    * @api stable
    */
-  get options() {
+  getOptions() {
     return this.options_;
   }
 
@@ -107,8 +108,8 @@ export class Cluster extends Composite {
    * @return {Cluster}
    * @api stable
    */
-  set ranges(newRanges) {
-    this.impl().ranges = newRanges;
+  setRanges(newRanges) {
+    this.getImpl().ranges = newRanges;
     this.unapply(this.layer_);
     this.layer_.style = this;
     return this;
@@ -124,7 +125,7 @@ export class Cluster extends Composite {
    * @return {Object}
    * @api stable
    */
-  get range(min, max) {
+  getRange(min, max) {
     return this.options_.ranges.find(el => (el.min == min && el.max == max));
   }
 
@@ -140,7 +141,7 @@ export class Cluster extends Composite {
    * @api stable
    */
   updateRange(min, max, newRange) {
-    this.impl().updateRangeImpl(min, max, newRange, this.layer_, this);
+    this.getImpl().updateRangeImpl(min, max, newRange, this.layer_, this);
     this.unapply(this.layer_);
     this.layer_.style = this;
     return this;
@@ -155,8 +156,8 @@ export class Cluster extends Composite {
    * @return {Cluster}
    * @api stable
    */
-  set animated(animated) {
-    return this.impl().setAnimated(animated, this.layer_, this);
+  setAnimated(animated) {
+    return this.getImpl().setAnimated(animated, this.layer_, this);
   }
 
   /**
