@@ -1,25 +1,19 @@
-import Base from('../facade.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import WKTImpl from('../../../impl/js/format/wkt.js');
+import Base from '../facade';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import WKTImpl from '../../../impl/js/format/wkt';
 
-export class WKT extends Base {
+export default class WKT extends Base {
 
   constructor(options = {}) {
+    var impl = new WKTImpl(options);
+    // calls the super constructor
+    super(this, impl);
     // checks if the implementation can create format GeoJSON
     if (Utils.isUndefined(WKTImpl)) {
       Exception('La implementación usada no puede M.impl.format.WKT');
     }
 
-    /**
-     * Implementation of this formatter
-     * @public
-     * @type {M.impl.format.WKT}
-     */
-    var impl = new WKTImpl(options);
-
-    // calls the super constructor
-    super(this, impl);
   }
 
   /**
@@ -33,6 +27,6 @@ export class WKT extends Base {
    * @api stable
    */
   write(geomtry) {
-    return this.impl().write(geomtry);
+    return this.getImpl().write(geomtry);
   }
 }

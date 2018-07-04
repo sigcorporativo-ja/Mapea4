@@ -1,14 +1,16 @@
-import Feature from('../feature/feature.js');
-import Base from('../facade.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import GeoJSONImpl from('../../../impl/js/format/geojsonformat.js');
+import Feature from '../feature/feature';
+import Base from '../facade';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import GeoJSONImpl from '../../../impl/js/format/geojsonformat';
 
-export class GeoJSON extends Base {
+export default class GeoJSON extends Base {
 
   constructor(options) {
+    let impl = new GeoJSONImpl(options);
+
     // calls the super constructor
-    super(this, impl);
+    super(impl);
 
     // checks if the implementation can create format GeoJSON
     if (Utils.isUndefined(GeoJSONImpl)) {
@@ -22,7 +24,6 @@ export class GeoJSON extends Base {
      * @public
      * @type {M.impl.format.GeoJSON}
      */
-    let impl = new GeoJSONImpl(options);
 
   }
 
@@ -40,7 +41,7 @@ export class GeoJSON extends Base {
     if (!Utils.isArray(features)) {
       features = [features];
     }
-    return this.impl().write(features);
+    return this.getImpl().write(features);
   }
 
   /**
@@ -65,7 +66,7 @@ export class GeoJSON extends Base {
       } else if (geojson.type === "Feature") {
         geojsonFeatures = [geojson];
       }
-      features = this.impl().read(geojson, geojsonFeatures, projection);
+      features = this.getImpl().read(geojson, geojsonFeatures, projection);
     }
     return features;
   }
