@@ -1,7 +1,7 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
 
-export class Center {
+export default class Center {
   /**
    * Parses the specified user center parameter into an object
    *

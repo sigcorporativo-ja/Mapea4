@@ -1,7 +1,7 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
 
-export class Zoom {
+export default class Zoom {
   /**
    * Parses the specified user zoom parameter into a number
    *

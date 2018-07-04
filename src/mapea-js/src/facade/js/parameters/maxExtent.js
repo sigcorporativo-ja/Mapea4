@@ -1,8 +1,7 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
 
-export class maxExtent {
-  'use strict';
+export default class maxExtent {
 
   /**
    * Parses the specified user maxExtent parameter into an object

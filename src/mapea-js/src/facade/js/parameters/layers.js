@@ -1,16 +1,15 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import WMC from('./layers/wmc.js');
-import WMS from('./layers/wms.js');
-import WMTS from('./layers/wmts.js');
-import WFS from('./layers/wfs.js');
-import KML from('./layers/kml.js');
-import OSM from('./layers/osm.js');
-import Mapbox from('./layers/mapbox.js');
-import Map from('../map/map.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import WMC from './layers/wmc';
+import WMS from './layers/wms';
+import WMTS from './layers/wmts';
+import WFS from './layers/wfs';
+import KML from './layers/kml';
+import OSM from './layers/osm';
+import Mapbox from './layers/mapbox';
+import Map from '../map/map';
 
-export class Layer {
-  'use strict';
+export default class Layer {
 
   /**
    * Parses the specified user layer parameters to a object
@@ -68,7 +67,7 @@ export class Layer {
    * @private
    * @function
    */
-  let getType = (parameter, forcedType) => {
+  getType(parameter, forcedType) {
     let type;
     if (Utils.isString(parameter)) {
       if (/^\s*osm\s*$/i.test(parameter)) {

@@ -1,9 +1,8 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Map from('../map/map.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Map from '../map/map';
 
-export class WFS {
-  'use strict';
+export default class WFS {
 
   /**
    * Parses the specified user layer WFS parameters to a object
@@ -29,7 +28,7 @@ export class WFS {
       userParametersArray = [userParametersArray];
     }
 
-    layers = userParametersArray.Map((userParam) => {
+    layers = userParametersArray.map((userParam) => {
       let layerObj = {};
 
       // gets the layer type
@@ -42,19 +41,19 @@ export class WFS {
       layerObj.url = WFS.URL(userParam);
 
       // gets the name
-      layerObj.namespace = WFS.namespace(userParam);
+      layerObj.namespace = WFS.getNamespace(userParam);
 
       // gets the legend
-      layerObj.legend = WFS.legend(userParam);
+      layerObj.legend = WFS.getLegend(userParam);
 
       // gets the CQL filter
-      layerObj.cql = WFS.CQL(userParam);
+      layerObj.cql = WFS.getCQL(userParam);
 
       // gets the geometry
-      layerObj.geometry = WFS.geometry(userParam);
+      layerObj.geometry = WFS.getGeometry(userParam);
 
       // gets the ids
-      layerObj.ids = WFS.Ids(userParam);
+      layerObj.ids = WFS.getIds(userParam);
 
       // gets the version
       layerObj.version = WFS.version(userParam);
@@ -80,7 +79,7 @@ export class WFS {
    * @private
    * @function
    */
-  static get URL(parameter) {
+  static getURL(parameter) {
     let url;
     if (Utils.isString(parameter)) {
       let urlMatches = parameter.match(/^([^\*]*\*)*(https?\:\/\/[^\*]+)([^\*]*\*?)*$/i);
@@ -100,7 +99,7 @@ export class WFS {
    * @private
    * @function
    */
-  static get name(parameter) {
+  static getName(parameter) {
     let name, params, namespaceName;
     if (Utils.isString(parameter)) {
       if (/^WFS(T)?\*.+/i.test(parameter)) {
@@ -138,7 +137,7 @@ export class WFS {
    * @private
    * @function
    */
-  static get namespace(parameter) {
+  static getNamespace(parameter) {
     let namespace, params, namespaceName;
     if (Utils.isString(parameter)) {
       if (/^WFS(T)?\*.+/i.test(parameter)) {
@@ -172,7 +171,7 @@ export class WFS {
    * @private
    * @function
    */
-  static get legend = function (parameter) {
+  static getLegend(parameter) {
     let legend, params;
     if (Utils.isString(parameter)) {
       // <WFS(T)?>*<TITLE>*<URL>...
@@ -202,7 +201,7 @@ export class WFS {
    * @private
    * @function
    */
-  static get CQL(parameter) {
+  static getCQL(parameter) {
     let cql, params;
     if (Utils.isString(parameter)) {
       // URL*NAMESPACE:NAME*TITLE*CQL
@@ -232,7 +231,7 @@ export class WFS {
    * @private
    * @function
    */
-  static get geometry(parameter) {
+  static getGeometry(parameter) {
     let geometry, params;
     if (Utils.isString(parameter)) {
       if (/^WFS(T)?\*.+/i.test(parameter)) {
@@ -263,7 +262,7 @@ export class WFS {
    * @private
    * @function
    */
-  static get Ids(parameter) {
+  static getIds(parameter) {
     let ids, params;
     if (Utils.isString(parameter)) {
       if (/^WFS(T)?\*.+/i.test(parameter)) {
@@ -299,7 +298,7 @@ export class WFS {
    * @private
    * @function
    */
-  get version(parameter) {
+  static getVersion(parameter) {
     let version;
     if (Utils.isString(parameter)) {
       if (/(\d\.\d\.\d)$/.test(parameter)) {
@@ -318,7 +317,7 @@ export class WFS {
    * @private
    * @function
    */
-  static get options(parameter) {
+  static getOptions(parameter) {
     let options;
     if (Utils.isString(parameter)) {
       // TODO ver como se pone el parámetro

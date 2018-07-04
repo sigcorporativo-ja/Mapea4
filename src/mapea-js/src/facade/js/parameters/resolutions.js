@@ -1,8 +1,8 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Map from('../map/map.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Map from '../map/map';
 
-export class Resolutions {
+export default class Resolutions {
   /**
    * Parses the specified user resolutions parameter into an array
    *
@@ -31,7 +31,7 @@ export class Resolutions {
     }
     // array
     if (Utils.isArray(resolutionsParameter)) {
-      resolutions = resolutionsParameter.Map((resolution) => {
+      resolutions = resolutionsParameter.map((resolution) => {
         if (Utils.isString(resolution)) {
           return Number.parseFloat(resolution);
         } else {

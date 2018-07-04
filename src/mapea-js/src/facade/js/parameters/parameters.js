@@ -1,14 +1,13 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Layer from('./layers.js');
-import Projection from('./projection.js');
-import maxExtent from('./maxExtent.js');
-import Resolutions from('./resolutions.js');
-import Zoom from('./zoom.js');
-import Center from('./center.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Layer from './layers';
+import Projection from './projection';
+import maxExtent from './maxExtent';
+import Resolutions from './resolutions';
+import Zoom from './zoom';
+import Center from './center';
 
-export class Parameter {
-  'use strict';
+export default class Parameter {
 
   constructor(userParameters) {
     if (Utils.isNullOrEmpty(userParameters)) {
@@ -200,12 +199,12 @@ export class Parameter {
     let wmc;
 
     if (Utils.isString(parameter)) {
-      wmc = Utils.parameterValue('wmc', parameter);
+      wmc = Utils.getParameterValue('wmc', parameter);
       if (Utils.isNullOrEmpty(wmc)) {
-        wmc = Utils.parameterValue('wmcfile', parameter);
+        wmc = Utils.getParameterValue('wmcfile', parameter);
       }
       if (Utils.isNullOrEmpty(wmc)) {
-        wmc = Utils.parameterValue('wmcfiles', parameter);
+        wmc = Utils.getParameterValue('wmcfiles', parameter);
       }
     } else if (Utils.isObject(parameter)) {
       wmc = parameter.wmc;
@@ -235,7 +234,7 @@ export class Parameter {
     let wms;
 
     if (Utils.isString(parameter)) {
-      wms = Utils.parameterValue('wms', parameter);
+      wms = Utils.getParameterValue('wms', parameter);
     } else if (Utils.isObject(parameter)) {
       wms = parameter.wms;
     } else {
@@ -258,7 +257,7 @@ export class Parameter {
     let wmts;
 
     if (Utils.isString(parameter)) {
-      wmts = Utils.parameterValue('wmts', parameter);
+      wmts = Utils.getParameterValue('wmts', parameter);
     } else if (Utils.isObject(parameter)) {
       wmts = parameter.wmts;
     } else {
@@ -282,7 +281,7 @@ export class Parameter {
     let kml;
 
     if (Utils.isString(parameter)) {
-      kml = Utils.parameterValue('kml', parameter);
+      kml = Utils.getParameterValue('kml', parameter);
     } else if (Utils.isObject(parameter)) {
       kml = parameter.kml;
     } else {
@@ -306,7 +305,7 @@ export class Parameter {
     let controls;
 
     if (Utils.isString(parameter)) {
-      controls = Utils.parameterValue('controls', parameter);
+      controls = Utils.getParameterValue('controls', parameter);
     } else if (Utils.isObject(parameter)) {
       controls = parameter.controls;
     } else {
@@ -330,7 +329,7 @@ export class Parameter {
     let getFeatureInfo;
 
     if (Utils.isString(parameter)) {
-      getFeatureInfo = Utils.parameterValue('getfeatureinfo', parameter);
+      getFeatureInfo = Utils.getParameterValue('getfeatureinfo', parameter);
     } else if (Utils.isObject(parameter)) {
       getFeatureInfo = parameter.getfeatureinfo;
       if (!Utils.isUndefined(getFeatureInfo) && Utils.isNullOrEmpty(getFeatureInfo)) {
@@ -358,9 +357,9 @@ export class Parameter {
     let maxExtent;
 
     if (Utils.isString(parameter)) {
-      maxExtent = Utils.parameterValue('maxExtent', parameter);
+      maxExtent = Utils.getParameterValue('maxExtent', parameter);
       if (Utils.isNullOrEmpty(maxExtent)) {
-        maxExtent = Utils.parameterValue('maxextent', parameter);
+        maxExtent = Utils.getParameterValue('maxextent', parameter);
       }
     } else if (Utils.isObject(parameter)) {
       maxExtent = parameter.maxExtent;
@@ -388,7 +387,7 @@ export class Parameter {
     let bbox;
 
     if (Utils.isString(parameter)) {
-      bbox = Utils.parameterValue('bbox', parameter);
+      bbox = Utils.getParameterValue('bbox', parameter);
     } else if (Utils.isObject(parameter)) {
       bbox = parameter.bbox;
     } else {
@@ -402,7 +401,7 @@ export class Parameter {
     let zoom;
 
     if (Utils.isString(parameter)) {
-      zoom = Utils.parameterValue('zoom', parameter);
+      zoom = Utils.getParameterValue('zoom', parameter);
     } else if (Utils.isObject(parameter)) {
       zoom = parameter.zoom;
     } else {
@@ -416,7 +415,7 @@ export class Parameter {
     let center;
 
     if (Utils.isString(parameter)) {
-      center = Utils.parameterValue('center', parameter);
+      center = Utils.getParameterValue('center', parameter);
     } else if (Utils.isObject(parameter)) {
       center = parameter.center;
     } else {
@@ -441,7 +440,7 @@ export class Parameter {
     let ticket;
 
     if (Utils.isString(parameter)) {
-      ticket = Utils.parameterValue('ticket', parameter);
+      ticket = Utils.getParameterValue('ticket', parameter);
     } else if (Utils.isObject(parameter)) {
       ticket = parameter.ticket;
     } else {
@@ -466,7 +465,7 @@ export class Parameter {
     let resolutions;
 
     if (Utils.isString(parameter)) {
-      resolutions = Utils.parameterValue('resolutions', parameter);
+      resolutions = Utils.getParameterValue('resolutions', parameter);
     } else if (Utils.isObject(parameter)) {
       resolutions = parameter.resolutions;
     } else {
@@ -489,9 +488,8 @@ export class Parameter {
    */
   parseProjection(parameter) {
     let projection;
-
     if (Utils.isString(parameter)) {
-      projection = Utils.parameterValue('projection', parameter);
+      projection = Utils.getParameterValue('projection', parameter);
     } else if (Utils.isObject(parameter)) {
       projection = parameter.projection;
     } else {
@@ -516,7 +514,7 @@ export class Parameter {
     let label;
 
     if (Utils.isString(parameter)) {
-      label = Utils.parameterValue('label', parameter);
+      label = Utils.getParameterValue('label', parameter);
     } else if (Utils.isObject(parameter)) {
       label = parameter.label;
     } else {

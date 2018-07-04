@@ -1,9 +1,9 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Map from('../map/map.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Map from '../map/map';
 
-export class WMS {
-  'use strict';
+export default class WMS {
+
 
   /**
    * Parses the specified user layer WMS parameters to a object
@@ -36,28 +36,28 @@ export class WMS {
       layerObj.type = Layer.type.WMS;
 
       // gets the name
-      layerObj.name = WMS.name(userParam);
+      layerObj.name = WMS.getName(userParam);
 
       // gets the URL
-      layerObj.url = WMS.URL(userParam);
+      layerObj.url = WMS.getURL(userParam);
 
       // gets the legend
-      layerObj.legend = WMS.legend(userParam);
+      layerObj.legend = WMS.getLegend(userParam);
 
       // gets the transparence
-      layerObj.transparent = WMS.transparent(userParam);
+      layerObj.transparent = WMS.getTransparent(userParam);
 
       // gets the tiled
-      layerObj.tiled = WMS.tiled(userParam);
+      layerObj.tiled = WMS.getTiled(userParam);
 
       // gets the CQL filter
-      layerObj.cql = WMS.CQL(userParam);
+      layerObj.cql = WMS.getCQL(userParam);
 
       // gets the version
-      layerObj.version = WMS.version(userParam);
+      layerObj.version = WMS.getVersion(userParam);
 
       // gets the options
-      layerObj.options = WMS.options(userParam);
+      layerObj.options = WMS.getOptions(userParam);
 
       return layerObj;
     });
@@ -74,7 +74,7 @@ export class WMS {
    * @private
    * @function
    */
-  static get URL(parameter) {
+  static getURL(parameter) {
     let url;
     if (Utils.isString(parameter)) {
       let urlMatches = parameter.match(/^([^\*]*\*)*(https?\:\/\/[^\*]+)([^\*]*\*?)*$/i);
@@ -94,7 +94,7 @@ export class WMS {
    * @private
    * @function
    */
-  static get name(parameter) {
+  static getName(parameter) {
     let name, params;
     if (Utils.isString(parameter)) {
       if (/^WMS\*.+/i.test(parameter)) {
@@ -131,7 +131,7 @@ export class WMS {
    * @private
    * @function
    */
-  static get legend(parameter) {
+  static getLegend(parameter) {
     let legend, params;
     if (Utils.isString(parameter)) {
       // <WMS>*<TITLE>
@@ -161,7 +161,7 @@ export class WMS {
    * @private
    * @function
    */
-  static get transparent(parameter) {
+  static getTransparent(parameter) {
     let transparent, params;
     if (Utils.isString(parameter)) {
       // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>
@@ -200,7 +200,7 @@ export class WMS {
    * @private
    * @function
    */
-  static get tiled(parameter) {
+  static getTiled(parameter) {
     let tiled, params;
     if (Utils.isString(parameter)) {
       // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>*<TILED>
@@ -239,7 +239,7 @@ export class WMS {
    * @private
    * @function
    */
-  static get CQL(parameter) {
+  static getCQL(parameter) {
     let cql, params;
     if (Utils.isString(parameter)) {
       // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>*<TILED>
@@ -286,7 +286,7 @@ export class WMS {
    * @private
    * @function
    */
-  static get version(parameter) {
+  static getVersion(parameter) {
     let version;
     if (Utils.isString(parameter)) {
       if (/(\d\.\d\.\d)$/.test(parameter)) {
@@ -305,7 +305,7 @@ export class WMS {
    * @private
    * @function
    */
-  static get options(parameter) {
+  static getOptions(parameter) {
     let options;
     if (Utils.isString(parameter)) {
       // TODO ver como se pone el parámetro

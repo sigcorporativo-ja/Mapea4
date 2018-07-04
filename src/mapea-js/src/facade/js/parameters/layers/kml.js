@@ -1,9 +1,8 @@
-KML.import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Map from('../map/map.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Map from '../map/map';
 
-export class KML {
-  'use strict';
+export default class KML {
 
   /**
    * Parses the specified user layer KML parameters to a object
@@ -29,7 +28,7 @@ export class KML {
       userParametersArray = [userParametersArray];
     }
 
-    layers = userParametersArray.Map((userParam) => {
+    layers = userParametersArray.map((userParam) => {
       let layerObj = {};
 
       // gets the layer type
@@ -42,7 +41,7 @@ export class KML {
       layerObj.url = KML.URL(userParam);
 
       // gets the extract
-      layerObj.extract = KML.extract(userParam);
+      layerObj.extract = KML.getExtract(userParam);
 
       // gets the options
       layerObj.options = KML.options(userParam);
@@ -62,7 +61,7 @@ export class KML {
    * @private
    * @function
    */
-  static get URL(parameter) {
+  static getURL(parameter) {
     let url;
     if (Utils.isString(parameter)) {
       // v3 <KML>*<NAME>*<DIR>*<FILENAME>*<EXTRACT>
@@ -88,7 +87,7 @@ export class KML {
    * @private
    * @function
    */
-  static get name(parameter) {
+  static getName(parameter) {
     let name, params;
     if (Utils.isString(parameter)) {
       if (/^KML\*.+/i.test(parameter)) {
@@ -124,7 +123,7 @@ export class KML {
    * @private
    * @function
    */
-  static get extract(parameter) {
+  static getExtract(parameter) {
     let extract, params;
     if (Utils.isString(parameter)) {
       // <KML>*<NAME>*<URL>(*<FILENAME>)?*<EXTRACT>
@@ -161,7 +160,7 @@ export class KML {
    * @private
    * @function
    */
-  static get options(parameter) {
+  static getOptions(parameter) {
     let options;
     if (Utils.isString(parameter)) {
       // TODO ver como se pone el parámetro

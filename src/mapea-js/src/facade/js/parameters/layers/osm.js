@@ -1,9 +1,8 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Map from('../map/map.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Map from '../map/map';
 
-export class OSM {
-  'use strict';
+export default class OSM {
 
   /**
    * Parses the specified user layer KML parameters to a object
@@ -32,7 +31,7 @@ export class OSM {
       userParametersArray = [userParametersArray];
     }
 
-    layers = userParametersArray.Map((userParam) => {
+    layers = userParametersArray.map((userParam) => {
       let layerObj = {};
 
       // gets the layer type
@@ -42,10 +41,10 @@ export class OSM {
       layerObj.name = OSM.name(userParam);
 
       // gets the transparent
-      layerObj.transparent = OSM.transparent(userParam);
+      layerObj.transparent = OSM.getTransparent(userParam);
 
       // gets the legend
-      layerObj.legend = OSM.legend(userParam);
+      layerObj.legend = OSM.getLegend(userParam);
 
       return layerObj;
     });
@@ -62,7 +61,7 @@ export class OSM {
    * @private
    * @function
    */
-  static get name(parameter) {
+  static getName(parameter) {
     let name;
     if (Utils.isObject(parameter) && !Utils.isNullOrEmpty(parameter.name)) {
       name = parameter.name.trim();
@@ -71,14 +70,14 @@ export class OSM {
       name = null;
     }
     return name;
-  };
+  }
 
   /**
    * Parses the parameter in order to get the layer name
    * @private
    * @function
    */
-  static get transparent(parameter) {
+  static getTransparent(parameter) {
     let transparent, params;
     if (Utils.isString(parameter)) {
       // <OSM>*<TRANSPARENT>(*<TITLE>)?
@@ -102,7 +101,7 @@ export class OSM {
    * @private
    * @function
    */
-  static get legend(parameter) {
+  static getLegend(parameter) {
     let legend, params;
     if (Utils.isString(parameter)) {
       // <OSM>*(<TRANSPARENT>)?*<TITLE>

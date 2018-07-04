@@ -1,9 +1,8 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Map from('../map/map.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Map from '../map/map';
 
-export class Mapbox {
-  'use strict';
+export default class Mapbox {
 
   /**
    * Parses the specified user layer Mapbox parameters to a object
@@ -42,13 +41,13 @@ export class Mapbox {
       layerObj.name = Mapbox.name(userParam);
 
       // gets the transparent
-      layerObj.transparent = Mapbox.transparent(userParam);
+      layerObj.transparent = Mapbox.getTransparent(userParam);
 
       // gets the accessToken
-      layerObj.accessToken = Mapbox.accessToken(userParam);
+      layerObj.accessToken = Mapbox.getAccessToken(userParam);
 
       // gets the legend
-      layerObj.legend = Mapbox.legend(userParam);
+      layerObj.legend = Mapbox.getLegend(userParam);
 
       return layerObj;
     });
@@ -65,7 +64,7 @@ export class Mapbox {
    * @private
    * @function
    */
-  static get URL(parameter) {
+  static getURL(parameter) {
     let url;
     if (Utils.isString(parameter)) {
       url = null; // URL by string type no supported
@@ -82,7 +81,7 @@ export class Mapbox {
    * @private
    * @function
    */
-  static get accessToken(parameter) {
+  static getAccessToken(parameter) {
     let accessToken;
     if (Utils.isString(parameter)) {
       accessToken = null; // accessToken by string type no supported
@@ -99,7 +98,7 @@ export class Mapbox {
    * @private
    * @function
    */
-  static get name(parameter) {
+  static getName(parameter) {
     var name, params;
     if (Utils.isString(parameter)) {
       if (/^MAPBOX\*.+/i.test(parameter)) {
@@ -124,14 +123,14 @@ export class Mapbox {
       name = null;
     }
     return name;
-  };
+  }
 
   /**
    * Parses the parameter in order to get the layer name
    * @private
    * @function
    */
-  static get transparent(parameter) {
+  static getTransparent(parameter) {
     let transparent, params;
     if (Utils.isString(parameter)) {
       if (/^MAPBOX\*.+/i.test(parameter)) {
@@ -162,7 +161,7 @@ export class Mapbox {
    * @private
    * @function
    */
-  static get legend(parameter) {
+  static getLegend(parameter) {
     let legend, params;
     if (Utils.isString(parameter)) {
       if (/^MAPBOX\*.+/i.test(parameter)) {

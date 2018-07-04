@@ -1,8 +1,7 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
 
-class Projection {
-  'use strict';
+export default class Projection {
 
   projection(projectionParameter) {
     let projection = {

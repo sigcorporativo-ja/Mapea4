@@ -1,9 +1,9 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Map from('../map/map.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Map from '../map/map';
 
-export class WMTS {
-  'use strict';
+export default class WMTS {
+
 
   /**
    * Parses the specified user layer WMTS parameters to a object
@@ -29,29 +29,29 @@ export class WMTS {
       userParametersArray = [userParametersArray];
     }
 
-    layers = userParametersArray.Map((userParam) => {
+    layers = userParametersArray.map((userParam) => {
       let layerObj = {};
 
       // gets the layer type
       layerObj.type = Layer.type.WMTS;
 
       // gets the name
-      layerObj.name = WMTS.name(userParam);
+      layerObj.name = WMTS.getName(userParam);
 
       // gets the URL
-      layerObj.url = WMTS.URL(userParam);
+      layerObj.url = WMTS.getURL(userParam);
 
       // gets the matrix set
-      layerObj.matrixSet = WMTS.matrixSet(userParam);
+      layerObj.matrixSet = WMTS.getMatrixSet(userParam);
 
       // gets the legend
-      layerObj.legend = WMTS.legend(userParam);
+      layerObj.legend = WMTS.getLegend(userParam);
 
       // gets the options
-      layerObj.options = WMTS.options(userParam);
+      layerObj.options = WMTS.getOptions(userParam);
 
       // gets transparent
-      layerObj.transparent = WMTS.transparent(userParam);
+      layerObj.transparent = WMTS.getTransparent(userParam);
 
       return layerObj;
     });
@@ -68,7 +68,7 @@ export class WMTS {
    * @private
    * @function
    */
-  static get URL(parameter) {
+  static getURL(parameter) {
     let url;
     if (Utils.isString(parameter)) {
       let urlMatches = parameter.match(/^([^\*]*\*)*(https?\:\/\/[^\*]+)([^\*]*\*?)*$/i);
@@ -88,7 +88,7 @@ export class WMTS {
    * @private
    * @function
    */
-  static get name(parameter) {
+  static getName(parameter) {
     let name, params;
     if (Utils.isString(parameter)) {
       if (/^WMTS\*.+/i.test(parameter)) {
@@ -120,7 +120,7 @@ export class WMTS {
    * @private
    * @function
    */
-  static get matrixSet(parameter) {
+  static getMatrixSet(parameter) {
     let matrixSet, params;
     if (Utils.isString(parameter)) {
       // <WMTS>*<URL>*<NAME>*<MATRIXSET>
@@ -150,7 +150,7 @@ export class WMTS {
    * @private
    * @function
    */
-  static get legend(parameter) {
+  static getLegend(parameter) {
     let legend, params;
     if (Utils.isString(parameter)) {
       if (/^WMTS\*.+/i.test(parameter)) {
@@ -182,7 +182,7 @@ export class WMTS {
    * @private
    * @function
    */
-  static get options(parameter) {
+  static getOptions(parameter) {
     let options;
     if (Utils.isString(parameter)) {
       // TODO ver como se pone el parámetro
@@ -199,7 +199,7 @@ export class WMTS {
    * @private
    * @function
    */
-  static get transparent(parameter) {
+  static getTransparent(parameter) {
     let transparent, params;
     if (Utils.isString(parameter)) {
       // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>

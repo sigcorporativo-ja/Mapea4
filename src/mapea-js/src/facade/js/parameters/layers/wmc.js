@@ -1,9 +1,8 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Map from('../map/map.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Map from '../map/map';
 
-export class WMC {
-  'use strict';
+export default class WMC {
 
   /**
    * Parses the specified user layer WMC parameters to a object
@@ -29,20 +28,20 @@ export class WMC {
       userParametersArray = [userParametersArray];
     }
 
-    layers = userParametersArray.Map((userParam) => {
+    layers = userParametersArray.map((userParam) => {
       let layerObj = {};
 
       // gets the layer type
       layerObj.type = Layer.type.WMC;
 
       // gets the name
-      layerObj.name = WMC.name(userParam);
+      layerObj.name = WMC.getName(userParam);
 
       // gets the URL
-      layerObj.url = WMC.URL(userParam);
+      layerObj.url = WMC.getURL(userParam);
 
       // gets the options
-      layerObj.options = WMC.options(userParam);
+      layerObj.options = WMC.getOptions(userParam);
 
       return layerObj;
     });
@@ -59,7 +58,7 @@ export class WMC {
    * @private
    * @function
    */
-  static get URL(parameter) {
+  static getURL(parameter) {
     let url;
     if (Utils.isString(parameter)) {
       var urlMatches = parameter.match(/^([^\*]*\*)*(https?\:\/\/[^\*]+)([^\*]*\*?)*$/i);
@@ -79,7 +78,7 @@ export class WMC {
    * @private
    * @function
    */
-  static get name(parameter, type) {
+  static getName(parameter, type) {
     let name, params;
     if (Utils.isString(parameter)) {
       // <WMC>*<URL>*<NAME>
@@ -118,7 +117,7 @@ export class WMC {
    * @private
    * @function
    */
-  static get options(parameter) {
+  static getOptions(parameter) {
     let options;
     if (Utils.isString(parameter)) {
       // TODO ver como se pone el parámetro
