@@ -108,7 +108,7 @@ export default class Popup extends Base {
   removeTab(tabToRemove) {
     this.tabs_ = this.tabs_.filter(tab => tab.content !== tabToRemove.content);
     this.update();
-  };
+  }
 
   /**
    * TODO
@@ -118,12 +118,12 @@ export default class Popup extends Base {
    */
   addTab(tabOptions) {
     let tab = tabOptions;
-    if (!(tab instanceof Popup.Tab)) {
-      tab = new Popup.Tab(tabOptions);
+    if (!(tab instanceof Tab)) {
+      tab = new Tab(tabOptions);
     }
     this.tabs_.push(tab);
     this.update();
-  };
+  }
 
   /**
    * TODO
@@ -152,7 +152,7 @@ export default class Popup extends Base {
       this.getImpl().addTo(map, this.element_);
       this.show(coordinate);
     }
-  };
+  }
 
   /**
    * TODO
@@ -176,7 +176,7 @@ export default class Popup extends Base {
         }
       });
     }
-  };
+  }
 
   /**
    * TODO
@@ -188,8 +188,8 @@ export default class Popup extends Base {
     this.coord_ = coord;
     this.getImpl().show(this.coord_, () => {
       this.fire(EventsManager.SHOW);
-    }.bind(this));
-  };
+    });
+  }
 
   /**
    * TODO
@@ -202,7 +202,7 @@ export default class Popup extends Base {
       evt.preventDefault();
     }
     this.getImpl().hide();
-  };
+  }
 
   /**
    * TODO
@@ -216,7 +216,7 @@ export default class Popup extends Base {
       this.setContent_(tab.content);
       this.show(this.coord_);
     }
-  };
+  }
 
   /**
    * TODO
@@ -225,7 +225,7 @@ export default class Popup extends Base {
    */
   setContent_(content) {
     this.getImpl().setContent(content);
-  };
+  }
 
   /**
    * TODO
@@ -234,7 +234,7 @@ export default class Popup extends Base {
    */
   getContent() {
     return this.getImpl().getContent();
-  };
+  }
 
   /**
    * TODO
@@ -343,7 +343,7 @@ export default class Popup extends Base {
         this.getImpl().centerByStatus(status, this.coord_);
       }
     }
-  };
+  }
 
   /**
    * TODO
@@ -420,8 +420,7 @@ export default class Popup extends Base {
     else {
       this.setStatus_(this.status_);
     }
-  };
-
+  }
 
   /**
    * TODO
@@ -431,7 +430,7 @@ export default class Popup extends Base {
    */
   getCoordinate() {
     return this.coord_;
-  };
+  }
 
   /**
    * TODO
@@ -444,7 +443,7 @@ export default class Popup extends Base {
     if (!Utils.isNullOrEmpty(this.element_)) {
       this.getImpl().show(coord);
     }
-  };
+  }
 
   /**
    * TODO
