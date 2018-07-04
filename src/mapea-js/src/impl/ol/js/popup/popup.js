@@ -1,9 +1,9 @@
-import OlUtils from('../utils/utils.js');
-import OlOverlay from('ol/Overlay');
-import FacadePopup from('../../../facade/js/popup/popup.js');
-import FacadeWindow from('../../../facade/js/utils/window.js');
+import OlUtils from '../utils/utils';
+import OlOverlay from 'ol/Overlay';
+import FacadePopup from '../../../facade/js/popup/popup';
+import FacadeWindow from '../../../facade/js/utils/window';
 
-export class Popup extends OlOverlay {
+export default class Popup extends OlOverlay {
 
   /**
    * OpenLayers 3 Popup Overlay.
@@ -78,7 +78,7 @@ export class Popup extends OlOverlay {
     // container
     this.container = html;
 
-    this.content = this.contentFromContainer_(html);
+    this.content = this.getContentFromContainer_(html);
 
     // Apply workaround to enable scrolling of content div on touch devices
     OlUtils.enableTouchScroll(this.content);
@@ -88,7 +88,7 @@ export class Popup extends OlOverlay {
       stopEvent: true
     });
 
-    map.mapImpl().addOverlay(this);
+    map.getMapImpl().addOverlay(this);
   }
 
   /**
@@ -120,7 +120,7 @@ export class Popup extends OlOverlay {
    * @api stable
    */
   centerByStatus(status, coord) {
-    let resolution = this.map().view().resolution();
+    let resolution = this.getMap().getView().getResolution();
     let newCoord = [].concat(coord);
     if (status === FacadePopup.status.COLLAPSED) {
       newCoord[1] -= 0.1 * FacadeWindow.HEIGHT * resolution;
@@ -144,7 +144,7 @@ export class Popup extends OlOverlay {
   /**
    * @private
    */
-  get contentFromContainer_(html) {
+  getContentFromContainer_(html) {
     return html.querySelector('div.m-body');
   }
 
@@ -158,17 +158,17 @@ export class Popup extends OlOverlay {
       this.isAnimating_ = true;
       if (FacadeWindow.WIDTH > 768) {
         let tabHeight = 30; // 30px for tabs
-        let popupElement = this.element();
+        let popupElement = this.getElement();
         let popupWidth = popupElement.clientWidth + 20;
         let popupHeight = popupElement.clientHeight + 20 + tabHeight;
-        let mapSize = this.map().size();
+        let mapSize = this.getMap().getSize();
 
-        center = this.map().view().center();
+        center = this.getMap().getView().getCenter();
         let tailHeight = 20;
         let tailOffsetLeft = 60;
         let tailOffsetRight = popupWidth - tailOffsetLeft;
-        let popOffset = this.offset();
-        let popPx = this.map().pixelFromCoordinate(coord);
+        let popOffset = this.getOffset();
+        let popPx = this.getMap().getPixelFromCoordinate(coord);
 
         if (!OlUtils.isNullOrEmpty(popPx)) {
           let fromLeft = (popPx[0] - tailOffsetLeft);
@@ -177,7 +177,7 @@ export class Popup extends OlOverlay {
           let fromTop = popPx[1] - popupHeight + popOffset[1];
           let fromBottom = mapSize[1] - (popPx[1] + tailHeight) - popOffset[1];
 
-          let curPix = this.map().pixelFromCoordinate(center);
+          let curPix = this.getMap().getPixelFromCoordinate(center);
           let newPx = curPix.slice();
 
           if (fromRight < 0) {
@@ -195,11 +195,11 @@ export class Popup extends OlOverlay {
           //if (this.ani && this.ani_opts) {
           if (!OlUtils.isNullOrEmpty(this.ani_opts) && !OlUtils.isNullOrEmpty(this.ani_opts.source)) {
             this.ani_opts.source = center;
-            this.map().view().animate(this.ani_opts);
+            this.getMap().getView().animate(this.ani_opts);
           }
 
           if (newPx[0] !== curPix[0] || newPx[1] !== curPix[1]) {
-            this.map().view().center(this.map().coordinateFromPixel(newPx));
+            this.getMap().getView().setcenter(this.getMap().getCoordinateFromPixel(newPx));
           }
         }
       }
@@ -207,7 +207,7 @@ export class Popup extends OlOverlay {
       this.isAnimating_ = false;
     }.bind(this));
 
-    return this.map().view().center();
+    return this.getMap().getView().getCenter();
   }
 
   /**
@@ -215,66 +215,66 @@ export class Popup extends OlOverlay {
    */
   panIntoSynchronizedAnim_() {
     return (new Promise((success, fail) => {
-      /* if the popup is animating then it waits for the animation
-      in order to execute the next animation */
-      if (this.isAnimating_ === true) {
-        // gets the duration of the animation
-        let aniDuration = 300;
-        if (!OlUtils.isNullOrEmpty(this.ani_opts)) {
-          aniDuration = this.ani_opts['duration'];
+        /* if the popup is animating then it waits for the animation
+        in order to execute the next animation */
+        if (this.isAnimating_ === true) {
+          // gets the duration of the animation
+          let aniDuration = 300;
+          if (!OlUtils.isNullOrEmpty(this.ani_opts)) {
+            aniDuration = this.ani_opts['duration'];
+          }
+          setTimeout(success, aniDuration);
+        } else {
+          /* if there is not any animation then it starts
+          a new one */
+          success();
         }
-        setTimeout(success, aniDuration);
-      } else {
-        /* if there is not any animation then it starts
-        a new one */
-        success();
-      }
-    }.bind(this)));
-  }
+      });
+    }
 
-  /**
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  hide() {
-    this.facadeMap_.removePopup();
-  }
+    /**
+     *
+     * @public
+     * @function
+     * @api stable
+     */
+    hide() {
+      this.facadeMap_.removePopup();
+    }
 
-  /**
-   * change text popup
-   * @public
-   * @function
-   * @param {text} new text.
-   * @api stable
-   */
-  set container(html) {
-    this.element(html);
-    //      this.container.innerHTML = html.innerHTML;
-    this.content = this.contentFromContainer_(html);
-    OlUtils.enableTouchScroll(this.content);
-  }
+    /**
+     * change text popup
+     * @public
+     * @function
+     * @param {text} new text.
+     * @api stable
+     */
+    setContainer(html) {
+      this.element(html);
+      //      this.container.innerHTML = html.innerHTML;
+      this.content = this.getContentFromContainer_(html);
+      OlUtils.enableTouchScroll(this.content);
+    }
 
-  /**
-   * change text popup
-   * @public
-   * @function
-   * @param {text} new text.
-   * @api stable
-   */
-  set content(content) {
-    this.content.innerHTML = content;
-  }
+    /**
+     * change text popup
+     * @public
+     * @function
+     * @param {text} new text.
+     * @api stable
+     */
+    setContent(content) {
+      this.content.innerHTML = content;
+    }
 
-  /**
-   * change text popup
-   * @public
-   * @function
-   * @param {text} new text.
-   * @api stable
-   */
-  get content() {
-    return this.content;
+    /**
+     * change text popup
+     * @public
+     * @function
+     * @param {text} new text.
+     * @api stable
+     */
+    getContent() {
+      return this.content;
+    }
   }
-}
