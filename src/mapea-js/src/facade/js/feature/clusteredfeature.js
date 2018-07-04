@@ -1,10 +1,10 @@
-import Feature from('./feature.js');
-import Utils from('../utils/utils.js');
+import Feature from './feature';
+import Utils from '../utils/utils';
 
-export class ClusteredFeature extends Feature {
+export default class ClusteredFeature extends Feature {
 
   constructor(features, attributes) {
-    super(this, Utils.generateRandom('_mapea_cluster_'));
+    super(Utils.generateRandom('_mapea_cluster_'));
 
     this.setAttributes(attributes);
     this.setAttribute("features", features);

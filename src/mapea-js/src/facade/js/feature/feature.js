@@ -1,14 +1,18 @@
-import Base from("../facade.js");
-import Utils from('../utils/utils.js');
-import GeoJSON from("../format/geojson.js");
-import Dialog from("../dialog.js");
-import FeatureImpl from('../../../impl/js/format/feature.js');
-import StyleFeature from("../style/stylefeature.js");
-import StylePoint from("../style/stylepoint.js");
+import Base from "../facade";
+import Utils from '../utils/utils';
+import GeoJSON from "../format/geojson";
+import Dialog from "../dialog";
+import FeatureImpl from '../../../impl/js/format/feature';
+import StyleFeature from "../style/stylefeature";
+import StylePoint from "../style/stylepoint";
+import Evt from "../event/eventsmanager";
 
-export class Feature extends Base {
+export default class Feature extends Base {
 
   constructor(id, geojson, style) {
+    let impl = new FeatureImpl(id, geojson, style);
+
+    super(impl);
 
     /**
      * Style of feature
@@ -30,8 +34,6 @@ export class Feature extends Base {
      * @public
      * @type {M.impl.Feature}
      */
-    let impl = new FeatureImpl(id, geojson, style);
-    super(this, impl);
 
     this.style = style;
   }
@@ -44,8 +46,8 @@ export class Feature extends Base {
    * @param {string} id - ID to feature
    * @api stable
    */
-  set id(id) {
-    this.impl().setId(id);
+  setId(id) {
+    this.getImpl().setId(id);
   }
 
   /**
@@ -56,8 +58,8 @@ export class Feature extends Base {
    * @return {string} ID to feature
    * @api stable
    */
-  get id() {
-    return this.impl().id();
+  getId() {
+    return this.getImpl().getId();
   }
 
   /**
@@ -68,8 +70,8 @@ export class Feature extends Base {
    * @return {object} Geometry feature
    * @api stable
    */
-  get geometry() {
-    return this.geoJSON().geometry;
+  getGeometry() {
+    return this.getGeoJSON().geometry;
   }
 
   /**
@@ -80,8 +82,8 @@ export class Feature extends Base {
    * @param {object} Geometry feature
    * @api stable
    */
-  set geometry(geometry) {
-    this.impl().geometry = geometry;
+  setGeometry(geometry) {
+    this.getImpl().setGeometry(geometry);
   }
 
   /**
@@ -92,7 +94,7 @@ export class Feature extends Base {
    * @return {Object} geojson feature
    * @api stable
    */
-  get geoJSON() {
+  getGeoJSON() {
     return this.formatGeoJSON_.write(this)[0];
   }
 
@@ -104,8 +106,8 @@ export class Feature extends Base {
    * @return {Object} attributes feature
    * @api stable
    */
-  get attributes() {
-    return this.impl().attributes();
+  getAttributes() {
+    return this.getImpl().getAttributes();
   }
 
   /**
@@ -116,9 +118,9 @@ export class Feature extends Base {
    * @param {Object} attributes - attributes to feature
    * @api stable
    */
-  set attributes(attributes) {
+  setAttributes(attributes) {
     if (typeof attributes === "object") {
-      this.impl().setAttributes(attributes);
+      this.getImpl().setAttributes(attributes);
     } else {
       Dialog.info("No se han especificado correctamente los atributos.");
     }
@@ -133,10 +135,10 @@ export class Feature extends Base {
    * @return  {string|number|object} returns the value of the indicated attribute
    * @api stable
    */
-  get attribute(attribute) {
+  getAttribute(attribute) {
     let attrValue;
 
-    attrValue = this.impl().attribute(attribute);
+    attrValue = this.getImpl().getAttribute(attribute);
     if (Utils.isNullOrEmpty(attrValue)) {
       // we look up the attribute by its path. Example: getAttribute('foo.bar.attr')
       // --> return feature.properties.foo.bar.attr value
@@ -158,8 +160,8 @@ export class Feature extends Base {
    * @return  {string|number|object} returns the value of the indicated attribute
    * @api stable
    */
-  set attribute(attribute, value) {
-    return this.impl().attribute(attribute, value);
+  setAttribute(attribute, value) {
+    return this.getImpl().setAttribute(attribute, value);
   }
 
   /**
@@ -170,13 +172,13 @@ export class Feature extends Base {
    * @param {M.style.Feature}
    * @api stable
    */
-  set style(style) {
+  setStyle(style) {
     if (!Utils.isNullOrEmpty(style) && style instanceof StyleFeature) {
       this.style_ = style;
       this.style_.applyToFeature(this);
     } else if (Utils.isNullOrEmpty(style)) {
       this.style_ = null;
-      this.impl().clearStyle();
+      this.getImpl().clearStyle();
     }
     this.fire(Evt.CHANGE_STYLE, [style, this]);
     // else if (applyDefault === true) {
@@ -217,7 +219,7 @@ export class Feature extends Base {
    * @return {M.style.Feature} returns the style feature
    * @api stable
    */
-  get style() {
+  getStyle() {
     return this.style_;
   }
 
@@ -241,9 +243,9 @@ export class Feature extends Base {
    * @return {M.Feature}
    * @api stable
    */
-  get centroid() {
-    let id = this.id();
-    let attributes = this.attributes();
+  getCentroid() {
+    let id = this.getId();
+    let attributes = this.getAttributes();
     let style = new StylePoint({
       stroke: {
         color: '#67af13',
@@ -254,8 +256,8 @@ export class Feature extends Base {
         color: '#67af13',
         opacity: 0.2
       }
-    let centroid = this.impl().centroid();
-  });
+      let centroid = this.getImpl().getCentroid();
+    });
     if (!M.utils.isNullOrEmpty(centroid)) {
       centroid.id(id + "_centroid");
       centroid.attributes(attributes);
