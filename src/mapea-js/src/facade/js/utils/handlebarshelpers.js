@@ -1,10 +1,7 @@
 import Handlebars from "handlebars";
-import Utils from("../utils/utils.js");
 
-/**
- * @namespace M.Handlebars.helpers
- */
-export class Helpers {
+const helpers = () => {
+
   /**
    * Helpers for Handlebars wich compares if the
    * first arguments is greater than the second one
@@ -14,7 +11,7 @@ export class Helpers {
       return options.fn(this);
     }
     return options.inverse(this);
-  });
+  })
 
   /**
    * Helpers for Handlebars wich compares if the
@@ -25,7 +22,7 @@ export class Helpers {
       return options.fn(this);
     }
     return options.inverse(this);
-  });
+  })
 
   /**
    * Helpers for Handlebars wich compares if the
@@ -36,16 +33,8 @@ export class Helpers {
       return options.fn(this);
     }
     return options.inverse(this);
-  });
-
-  /**
-   * Helpers for Handlebars wich compares if the
-   * first arguments is greater than the second one
-   */
-  Handlebars.registerHelper('oneword', (arg1, options) => {
-    if (!/\s/g.test(Utils.getTextFromHtml(arg1))) {
-      return options.fn(this);
-    }
-    return options.inverse(this);
-  });
+  })
 }
+
+// Exec the register helpers
+helpers();
