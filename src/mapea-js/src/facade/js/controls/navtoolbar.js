@@ -1,10 +1,10 @@
-import ControlBase from('./controlbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Template from('../utils/template.js');
-import NavtoolbarImpl from('../../../impl/js/controls/navtoolbar.js');
+import ControlBase from './controlbase';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Template from '../utils/template';
+import NavtoolbarImpl from '../../../impl/js/controls/navtoolbar';
 
-export class Navtoolbar extends ControlBase {
+export default class Navtoolbar extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -17,14 +17,15 @@ export class Navtoolbar extends ControlBase {
    * @api stable
    */
   constructor {
+    // implementation of this control
+    let impl = new NavtoolbarImpl();
+
     // calls the super constructor
-    super(this, impl, Navtoolbar.NAME);
+    super(impl, Navtoolbar.NAME);
 
     if (Utils.isUndefined(NavtoolbarImpl)) {
       Exception('La implementación usada no puede crear controles Navtoolbar');
     }
-    // implementation of this control
-    let impl = new NavtoolbarImpl();
   }
   /**
    * This function creates the view to the specified map
@@ -51,7 +52,7 @@ export class Navtoolbar extends ControlBase {
   equals(obj) {
     let equals = (obj instanceof Navtoolbar);
     return equals;
-  };
+  }
 
   /**
    * Template for this controls - button

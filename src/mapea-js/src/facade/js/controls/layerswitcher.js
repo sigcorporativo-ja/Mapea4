@@ -1,15 +1,15 @@
-import ControlBase from('./controlbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Template from('../utils/template.js');
-import LayerBase from('../layers/layerbase.js');
-import LayerType from('../layers/layertype.js')
-import Map from('../map/Map.js');
-import Vector from('../layers/vector.js');
-import StylePoint from('../style/stylepoint.js')
-import LayerSwitcherImpl from('../../../impl/js/controls/layerswitcher.js');
+import ControlBase from './controlbase';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Template from '../utils/template';
+import LayerBase from '../layers/layerbase';
+import LayerType from '../layers/layertype';
+import Map from '../map/map';
+import Vector from '../layers/vector';
+import StylePoint from '../style/stylepoint';
+import LayerSwitcherImpl from '../../../impl/js/controls/layerswitcher';
 
-export class LayerSwitcher extends ControlBase {
+export default class LayerSwitcher extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -22,14 +22,14 @@ export class LayerSwitcher extends ControlBase {
    * @api stable
    */
   constructor() {
+    // implementation of this control
+    let impl = new LayerSwitcherImpl();
     // calls the super constructor
-    super(this, impl, LayerSwitcher.NAME);
+    super(impl, LayerSwitcher.NAME);
 
     if (Utils.isUndefined(LayerSwitcherImpl)) {
       Exception('La implementación usada no puede crear controles LayerSwitcher');
     }
-    // implementation of this control
-    let impl = new LayerSwitcherImpl();
 
   }
 
@@ -70,7 +70,7 @@ export class LayerSwitcher extends ControlBase {
    * @api stable
    */
   render() {
-    this.impl().renderPanel();
+    this.getImpl().renderPanel();
   }
 
   /**
@@ -81,7 +81,7 @@ export class LayerSwitcher extends ControlBase {
    * @api stable
    */
   registerEvents() {
-    this.impl().registerEvents();
+    this.getImpl().registerEvents();
   }
 
   /**
@@ -91,19 +91,19 @@ export class LayerSwitcher extends ControlBase {
    * @api stable
    */
   unregisterEvents() {
-    this.impl().unregisterEvents();
+    this.getImpl().unregisterEvents();
   }
 
   /**
    * Gets the variables of the template to compile
    */
-  get templateVariables_(map) {
+  getTemplateVariables_(map) {
     return new Promise((success, fail) => {
       // gets base layers and overlay layers
       if (!Utils.isNullOrEmpty(map)) {
 
-        let baseLayers = Map.baseLayers().filter(layer => LayerBase.displayInLayerSwitcher === true);
-        let overlayLayers = Map.layers().filter((layer) => {
+        let baseLayers = Map.getBaseLayers().filter(layer => LayerBase.displayInLayerSwitcher === true);
+        let overlayLayers = Map.getLayers().filter((layer) => {
           let isTransparent = (LayerBase.transparent === true);
           let displayInLayerSwitcher = (LayerBase.displayInLayerSwitcher === true);
           let isNotWMC = (LayerType !== LayerType.WMC);
@@ -165,10 +165,10 @@ export class LayerSwitcher extends ControlBase {
         'id': LayerBase.name,
         'title': layerTitle,
         'outOfRange': !LayerBase.inRange(),
-        'opacity': LayerBase.opacity(),
+        'opacity': LayerBase.getOpacity(),
         'isIcon': isIcon
       };
-      let legendUrl = LayerBase.legendURL();
+      let legendUrl = LayerBase.getLegendURL();
       if (legendUrl instanceof Promise) {
         legendUrl.then(url => {
           layerVarTemplate['legend'] = url;

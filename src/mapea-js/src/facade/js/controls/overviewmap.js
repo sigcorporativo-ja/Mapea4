@@ -1,10 +1,10 @@
-import ControlBase from('./controlbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Template from('../utils/template.js');
-import OverviewMapImpl from('../../../impl/js/controls/OverviewMap.js');
+import ControlBase from './controlbase';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Template from '../utils/template';
+import OverviewMapImpl from '../../../impl/js/controls/OverviewMap';
 
-export class OverviewMap extends ControlBase {
+export default class OverviewMap extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -17,6 +17,8 @@ export class OverviewMap extends ControlBase {
    * @api stable
    */
   constructor(options) {
+    // implementation of this control
+    let impl = new OverviewMapImpl(options);
     // calls the super constructor
     super(this, impl, OverviewMap.NAME);
 
@@ -26,8 +28,6 @@ export class OverviewMap extends ControlBase {
 
     options = (options || {});
 
-    // implementation of this control
-    let impl = new OverviewMapImpl(options);
 
   }
 

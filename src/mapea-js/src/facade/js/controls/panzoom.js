@@ -1,10 +1,10 @@
-import ControlBase from('./controlbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Template from('../utils/template.js');
-import PanzoomImpl from('../../../impl/js/controls/Panzoom.js');
+import ControlBase from './controlbase';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Template from '../utils/template';
+import PanzoomImpl from '../../../impl/js/controls/Panzoom');
 
-export class Panzoom extends ControlBase {
+export default class Panzoom extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -17,14 +17,15 @@ export class Panzoom extends ControlBase {
    * @api stable
    */
   constructor() {
+    // implementation of this control
+    let impl = new PanzoomImpl();
+
     // calls the super constructor
-    super(this, impl, Panzoom.NAME);
+    super(impl, Panzoom.NAME);
 
     if (Utils.isUndefined(PanzoomImpl)) {
       Exception('La implementación usada no puede crear controles Panzoom');
     }
-    // implementation of this control
-    let impl = new PanzoomImpl();
   }
 
   /**

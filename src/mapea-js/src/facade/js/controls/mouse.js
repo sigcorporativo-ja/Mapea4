@@ -1,10 +1,10 @@
-import ControlBase from('./controlbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Template from('../utils/template.js');
-import MouseImpl from('../../../impl/js/controls/mouse.js');
+import ControlBase from './controlbase';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Template from '../utils/template';
+import MouseImpl from '../../../impl/js/controls/mouse';
 
-export class Mouse extends ControlBase {
+export default class Mouse extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -17,14 +17,15 @@ export class Mouse extends ControlBase {
    * @api stable
    */
   constructor() {
+    // implementation of this control
+    let impl = new MouseImpl();
+
     // calls the super constructor
-    super(this, impl, Mouse.NAME);
+    super(impl, Mouse.NAME);
 
     if (Utils.isUndefined(MouseImpl)) {
       Exception('La implementación usada no puede crear controles Mouse');
     }
-    // implementation of this control
-    let impl = new MouseImpl();
   }
 
   /**

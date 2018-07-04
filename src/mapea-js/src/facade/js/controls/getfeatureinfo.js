@@ -1,10 +1,10 @@
-import ControlBase from('./controlbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Template from('../utils/template.js');
-import GetFeatureInfoImpl from('../../../impl/js/controls/getfeatureinfo.js');
+import ControlBase from './controlbase';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Template from '../utils/template';
+import GetFeatureInfoImpl from '../../../impl/js/controls/getfeatureinfo';
 
-export class GetFeatureInfo extends ControlBase {
+export default class GetFeatureInfo extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -18,18 +18,16 @@ export class GetFeatureInfo extends ControlBase {
    * @api stable
    */
   constructor(format, options) {
+    // implementation of this control
+    let impl = new GetFeatureInfoImpl(format, options);
     // calls the super constructor
-    super(this, impl, GetFeatureInfo.NAME);
+    super(impl, GetFeatureInfo.NAME);
 
     if (Utils.isUndefined(GetFeatureInfoImpl)) {
       Exception('La implementación usada no puede crear controles GetFeatureInfo');
     }
 
     options = (options || {});
-
-    // implementation of this control
-    let impl = new GetFeatureInfoImpl(format, options);
-
   }
 
   /**
@@ -57,7 +55,7 @@ export class GetFeatureInfo extends ControlBase {
    * @api stable
    * @export
    */
-  get activationButton(element) {
+  getActivationButton(element) {
     return element.querySelector('button#m-getfeatureinfo-button');
   }
 

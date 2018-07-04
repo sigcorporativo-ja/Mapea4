@@ -1,10 +1,10 @@
-import ControlBase from('./controlbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Template from('../utils/template.js');
-import ScaleImpl from('../../../impl/js/controls/Scale.js');
+import ControlBase from './controlbase';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Template from '../utils/template';
+import ScaleImpl from '../../../impl/js/controls/scale');
 
-export class Scale extends ControlBase {
+export default class Scale extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -17,14 +17,15 @@ export class Scale extends ControlBase {
    * @api stable
    */
   constructor() {
+    // implementation of this control
+    let impl = new ScaleImpl();
+
     // calls the super constructor
-    super(this, impl, Scale.NAME);
+    super(impl, Scale.NAME);
 
     if (Utils.isUndefined(ScaleImpl)) {
       Exception('La implementación usada no puede crear controles Scale');
     }
-    // implementation of this control
-    let impl = new ScaleImpl();
 
   }
 

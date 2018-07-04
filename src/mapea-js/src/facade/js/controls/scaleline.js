@@ -1,10 +1,10 @@
-import ControlBase from('./controlbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Template from('../utils/template.js');
-import ScalelineImpl from('../../../impl/js/controls/Scaleline.js');
+import ControlBase from './controlbase';
+import Utils from '../utils/utils');
+import Exception from '../exception/exception';
+import Template from '../utils/template';
+import ScalelineImpl from '../../../impl/js/controls/scaleline';
 
-export class ScaleLine extends ControlBase {
+export default class ScaleLine extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -17,14 +17,15 @@ export class ScaleLine extends ControlBase {
    * @api stable
    */
   constructor() {
+    // implementation of this control
+    let impl = new ScaleLineImpl();
+
     // calls the super constructor
-    super(this, impl, ScaleLine.NAME);
+    super(impl, ScaleLine.NAME);
 
     if (Utils.isUndefined(ScaleLineImpl)) {
       Exception('La implementación usada no puede crear controles ScaleLine');
     }
-    // implementation of this control
-    let impl = new ScaleLineImpl();
 
   }
 

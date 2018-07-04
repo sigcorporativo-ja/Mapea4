@@ -1,8 +1,9 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Base from('../facade.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Base from '../facade.js';
+import Evt from '../event/eventsmanager';
 
-export class ControlBase extends Base {
+export default class ControlBase extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -15,7 +16,7 @@ export class ControlBase extends Base {
   constructor(impl, name) {
 
     // calls the super constructor
-    super(this, impl);
+    super(impl);
 
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(impl.addTo)) {
@@ -86,7 +87,7 @@ export class ControlBase extends Base {
    * @param {M.Map} impl to add the plugin
    * @api stable
    */
-  set impl(impl) {
+  setImpl(impl) {
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(impl.addTo)) {
       Exception('La implementación usada no posee el método addTo');
@@ -111,7 +112,7 @@ export class ControlBase extends Base {
    */
   addTo(map) {
     this.map_ = map;
-    let impl = this.impl();
+    let impl = this.getImpl();
     let view = this.createView(map);
     if (view instanceof Promise) { // the view is a promise
       view.then((html) => {
@@ -147,7 +148,7 @@ export class ControlBase extends Base {
    */
   manageActivation(html) {
     this.element_ = html;
-    this.activationBtn_ = this.activationButton(this.element_);
+    this.activationBtn_ = this.getActivationButton(this.element_);
     if (!Utils.isNullOrEmpty(this.activationBtn_)) {
       this.activationBtn_.addEventListener('click', (evt) => {
         evt.preventDefault();
@@ -171,7 +172,7 @@ export class ControlBase extends Base {
    * @api stable
    * @export
    */
-  get activationButton(html) {}
+  getActivationButton(html) {}
 
   /**
    * function adds the event 'click'
@@ -186,7 +187,7 @@ export class ControlBase extends Base {
       this.element_.classlist.add('activated');
     }
     if (!Utils.isUndefined(this.impl().activate)) {
-      this.impl().activate();
+      this.getImpl().activate();
     }
     this.activated = true;
     this.fire(Evt.ACTIVATED);
@@ -204,8 +205,8 @@ export class ControlBase extends Base {
     if (!Utils.isNullOrEmpty(this.element_)) {
       this.element_.classlist.remove('activated');
     }
-    if (!Utils.isUndefined(this.impl().deactivate)) {
-      this.impl().deactivate();
+    if (!Utils.isUndefined(this.getImpl().deactivate)) {
+      this.getImpl().deactivate();
     }
     this.activated = false;
     this.fire(Evt.DEACTIVATED);
@@ -219,8 +220,8 @@ export class ControlBase extends Base {
    * @api stable
    * @export
    */
-  get element() {
-    return this.impl().element();
+  getElement() {
+    return this.getImpl().getElement();
   }
 
 
@@ -233,7 +234,7 @@ export class ControlBase extends Base {
    * @api stable
    * @export
    */
-  set panel(panel) {
+  setPanel(panel) {
     this.panel_ = panel;
   }
 
@@ -246,7 +247,7 @@ export class ControlBase extends Base {
    * @api stable
    * @export
    */
-  get panel() {
+  getPanel() {
     return this.panel_;
   }
 

@@ -1,10 +1,10 @@
-import ControlBase from('./controlbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Template from('../utils/template.js');
-import LocationImpl from('../../../impl/js/controls/location.js');
+import ControlBase from './controlbase';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Template from '../utils/template';
+import LocationImpl from '../../../impl/js/controls/location';
 
-export class Location extends ControlBase {
+export default class Location extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Location
@@ -16,16 +16,17 @@ export class Location extends ControlBase {
    * @api stable
    */
   constructor(tracking, highAccuracy) {
+    // implementation of this control
+    let impl = new LocationImpl(tracking, highAccuracy, 60000);
+
     // calls the super constructor
-    super(this, impl, Location.NAME);
+    super(impl, Location.NAME);
 
     tracking = tracking !== undefined ? tracking : true;
     highAccuracy = highAccuracy !== undefined ? highAccuracy : false;
     if (Utils.isUndefined(LocationImpl)) {
       Exception('La implementación usada no puede crear controles Location');
     }
-    // implementation of this control
-    let impl = new LocationImpl(tracking, highAccuracy, 60000);
   }
 
   /**
@@ -53,7 +54,7 @@ export class Location extends ControlBase {
    * @api stable
    * @export
    */
-  get activationButton(element) {
+  getActivationButton(element) {
     return element.querySelector('button#m-location-button');
   }
 
@@ -72,8 +73,8 @@ export class Location extends ControlBase {
     return equals;
   }
 
-  set tracking(tracking) {
-    this.impl().tracking = tracking;
+  setTracking(tracking) {
+    this.getImpl().tracking = tracking;
   }
 
   /**

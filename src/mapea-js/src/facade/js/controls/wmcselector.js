@@ -1,11 +1,11 @@
-import ControlBase from('./controlbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Template from('../utils/template.js');
-import WMCSelectorImpl from('../../../impl/js/controls/wmcselector.js');
-import Map from('../maps/maps.js');
+import ControlBase from './controlbase';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Template from '../utils/template';
+import WMCSelectorImpl from '../../../impl/js/controls/wmcselector';
+import Map from '../map/map';
 
-export class WMCSelector extends ControlBase {
+export default class WMCSelector extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMCSelector
@@ -16,16 +16,17 @@ export class WMCSelector extends ControlBase {
    * @api stable
    */
   constructor() {
+    // implementation of this control
+    let impl = new WMCSelectorImpl();
+
     // calls the super constructor
-    super(this, impl, 'wmcselector');
+    super(impl, 'wmcselector');
 
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(WMCSelectorImpl)) {
       Exception('La implementación usada no puede crear controles WMCSelector');
     }
 
-    // implementation of this control
-    let impl = new WMCSelectorImpl();
 
   }
 
