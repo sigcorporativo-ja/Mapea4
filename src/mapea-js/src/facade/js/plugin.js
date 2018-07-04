@@ -1,7 +1,7 @@
 import Base from "./facade";
 import Utils from "./utils/utils";
 import Exception from "./exception/exception"
-import Evt from "./event/eventsmanager";
+import EventsManager from "./event/eventsmanager";
 
 export default class Plugin extends Base {
   /**
@@ -15,56 +15,53 @@ export default class Plugin extends Base {
    * @api stable
    */
   constructor(impl) {
-
     // calls the super constructor
-    super()
-
-    this.impl_ = this
-  }
-}
-
-/**
- * This function provides the implementation
- * of the object
- *
- * @public
- * @function
- * @param {Object} map the map to add the plugin
- * @api stable
- */
-addTo(map) {
-  // checks if the parameter is null or empty
-  if (Utils.isNullOrEmpty(map)) {
-    Exception('No ha especificado ningún mapa');
+    super(impl);
   }
 
-  // checks if the implementation can add itself into the map
-  let impl = this.getImpl();
-  if (Utils.isUndefined(impl.addTo)) {
-    Exception('La implementación usada no posee el método addTo');
-  }
+  /**
+   * This function provides the implementation
+   * of the object
+   *
+   * @public
+   * @function
+   * @param {Object} map the map to add the plugin
+   * @api stable
+   */
+  addTo(map) {
+    // checks if the parameter is null or empty
+    if (Utils.isNullOrEmpty(map)) {
+      Exception('No ha especificado ningún mapa');
+    }
 
-  let view = this.createView(map);
-  // checks if the view is a promise
-  if (view instanceof Promise) {
-    view.then(html => {
-      impl.addTo(map, html);
+    // checks if the implementation can add itself into the map
+    let impl = this.getImpl();
+    if (Utils.isUndefined(impl.addTo)) {
+      Exception('La implementación usada no posee el método addTo');
+    }
+
+    let view = this.createView(map);
+    // checks if the view is a promise
+    if (view instanceof Promise) {
+      view.then(html => {
+        impl.addTo(map, html);
+        // executes load callback
+        this.fire(EventsManager.ADDED_TO_MAP);
+      });
+    }
+    else { // view is an HTML or text
+      impl.addTo(map, view);
       // executes load callback
-      this.fire(Evt.ADDED_TO_MAP);
-    });
-  } else { // view is an HTML or text
-    impl.addTo(map, view);
-    // executes load callback
-    this.fire(Evt.ADDED_TO_MAP);
+      this.fire(EventsManager.ADDED_TO_MAP);
+    }
   }
-}
 
-/**
- * This function creates the HTML view for this control
- * @public
- * @function
- * @param {M.Map} map to add the plugin
- * @api stable
- */
-createView(map) {}
+  /**
+   * This function creates the HTML view for this control
+   * @public
+   * @function
+   * @param {M.Map} map to add the plugin
+   * @api stable
+   */
+  createView(map) {}
 }
