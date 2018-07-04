@@ -1,10 +1,10 @@
-import Utils from('./utils/utils.js');
-import Exception from('./exception/exception.js');
-import Base from('./facade.js');
-import HandlerImpl from('../../../impl/js/handlers/featureshandler.js');
-import Feature from('../feature/feature.js');
+import Utils from './utils/utils';
+import Exception from './exception/exception';
+import Base from './facade';
+import HandlerImpl from '../../../impl/js/handlers/featureshandler';
+import Feature from '../feature/feature';
 
-export class Handler extends Base {
+export default class Handler extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -75,7 +75,7 @@ export class Handler extends Base {
     this.map_ = map;
     this.map_.on(Evt.CLICK, this.clickOnMap_, this);
     this.map_.on(Evt.MOVE, this.moveOverMap_, this);
-    this.impl().addTo(this.map_);
+    this.getImpl().addTo(this.map_);
     this.fire(Evt.ADDED_TO_MAP);
   }
 
@@ -87,10 +87,10 @@ export class Handler extends Base {
    */
   clickOnMap_(evt) {
     if (this.activated_ === true) {
-      let impl = this.impl();
+      let impl = this.getImpl();
 
       this.layers_.forEach((layer) => {
-        let clickedFeatures = impl.featuresByLayer(evt, layer);
+        let clickedFeatures = impl.getFeaturesByLayer(evt, layer);
         let prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
         // no features selected then unselect prev selected features
         if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
@@ -119,10 +119,10 @@ export class Handler extends Base {
    */
   moveOverMap_(evt) {
     if (this.activated_ === true) {
-      let impl = this.impl();
+      let impl = this.getImpl();
 
       this.layers_.forEach((layer) => {
-        let hoveredFeatures = impl.featuresByLayer(evt, layer);
+        let hoveredFeatures = impl.getFeaturesByLayer(evt, layer);
         let prevFeatures = [...this.prevHoverFeatures_[layer.name]];
         // no features selected then unselect prev selected features
         if (hoveredFeatures.length === 0 && prevFeatures.length > 0) {
@@ -152,7 +152,7 @@ export class Handler extends Base {
    */
   selectFeatures(features, layer, evt) {
     this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name].concat(features);
-    let layerImpl = layer.impl();
+    let layerImpl = layer.getImpl();
     if (Utils.isFunction(layerImpl.selectFeatures)) {
       layerImpl.selectFeatures(features, evt.coord, evt);
     }
@@ -170,7 +170,7 @@ export class Handler extends Base {
     // removes unselected features
     this.prevSelectedFeatures_[layer.name] =
       this.prevSelectedFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
-    let layerImpl = layer.impl();
+    let layerImpl = layer.getImpl();
     if (Utils.isFunction(layerImpl.unselectFeatures)) {
       layerImpl.unselectFeatures(features, evt.coord);
     }
@@ -187,7 +187,7 @@ export class Handler extends Base {
   hoverFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] = this.prevHoverFeatures_[layer.name].concat(features);
     layer.fire(Evt.HOVER_FEATURES, [features, evt]);
-    this.impl().addCursorPointer();
+    this.getImpl().addCursorPointer();
   }
 
   /**
@@ -201,7 +201,7 @@ export class Handler extends Base {
     this.prevHoverFeatures_[layer.name] =
       this.prevHoverFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
     layer.fire(Evt.LEAVE_FEATURES, [features, evt.coord]);
-    this.impl().removeCursorPointer();
+    this.getImpl().removeCursorPointer();
   }
 
   /**
@@ -278,7 +278,7 @@ export class Handler extends Base {
    */
   destroy() {
     // TODO
-    // this.impl().destroy();
+    // this.getImpl().destroy();
     // this.fire(M.evt.DESTROY);
   }
 }
