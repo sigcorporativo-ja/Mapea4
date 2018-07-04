@@ -1,12 +1,12 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import LayerBase from('./layerbase.js');
-import WMSImpl from('../../../impl/js/layers/wms.js');
-import Layer from('../parameters/layers.js');
-import LayerType from('./layertype.js');
-import Config from('../../../configuration.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import LayerBase from './layerbase';
+import WMSImpl from '../../../impl/js/layers/wms';
+import Layer from '../parameters/layers';
+import LayerType from './layertype';
+import Config from '../../../configuration';
 
-export class WMS extends LayerBase() {
+export default class WMS extends LayerBase() {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -19,8 +19,14 @@ export class WMS extends LayerBase() {
    * @api stable
    */
   constructor(userParameters, options, implParam) {
+
+    let impl = implParam;
+    if (Utils.isNullOrEmpty(impl)) {
+      impl = new WMSImpl(options);
+    }
+
     // calls the super constructor
-    super(this, parameters, impl);
+    super(parameters, impl);
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(WMSImpl)) {
       Exception('La implementación usada no puede crear capas WMS');
@@ -38,10 +44,6 @@ export class WMS extends LayerBase() {
      * @public
      * @type {M.layer.WMS}
      */
-    let impl = implParam;
-    if (Utils.isNullOrEmpty(impl)) {
-      impl = new WMSImpl(options);
-    }
 
     //This Layer is of parameters.
     let parameters = Layer(userParameters, LayerType.WMS);
@@ -72,23 +74,23 @@ export class WMS extends LayerBase() {
    * 'url' The service URL of the
    * layer
    */
-  get url() {
-    return this.impl().url;
+  getUrl() {
+    return this.getImpl().url;
   }
-  set url(newUrl) {
-    this.impl().url = newUrl;
+  setUrl(newUrl) {
+    this.getImpl().url = newUrl;
     this._updateNoCache();
   }
 
   /**
    * 'name' the layer name
    */
-  get name() {
-    return this.impl().name;
+  getName() {
+    return this.getImpl().name;
   }
 
-  set name(newName) {
-    this.impl().name = newName;
+  setName(newName) {
+    this.getImpl().name = newName;
     this._updateNoCache();
   }
 
@@ -96,11 +98,11 @@ export class WMS extends LayerBase() {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  getType() {
     return LayerType.WMS;
   }
 
-  set type(newType) {
+  setType(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -110,74 +112,74 @@ export class WMS extends LayerBase() {
   /**
    * 'legend' the layer name
    */
-  get legend() {
-    return this.impl().legend;
+  getLegend() {
+    return this.getImpl().legend;
   }
 
-  set legend(newLegend) {
+  setLegend(newLegend) {
 
     if (Utils.isNullOrEmpty(newLegend)) {
-      this.impl().legend = this.name;
+      this.getImpl().legend = this.name;
     } else {
-      this.impl().legend = newLegend;
+      this.getImpl().legend = newLegend;
     }
   }
 
   /**
    * 'tiled' the layer name
    */
-  get tiled() {
-    return this.impl().tiled;
+  getTiled() {
+    return this.getImpl().tiled;
   }
 
-  set tiled(newTiled) {
+  setTiled(newTiled) {
     if (!Utils.isNullOrEmpty(newTiled)) {
       if (Utils.isString(newTiled)) {
-        this.impl().tiled = (Utils.normalize(newTiled) === 'true');
+        this.getImpl().tiled = (Utils.normalize(newTiled) === 'true');
       } else {
-        this.impl().tiled = newTiled;
+        this.getImpl().tiled = newTiled;
       }
     } else {
-      this.impl().tiled = true;
+      this.getImpl().tiled = true;
     }
   }
 
   /**
    * 'cql' the CQL filter
    */
-  get cql() {
-    return this.impl().cql;
+  getCql() {
+    return this.getImpl().cql;
   }
 
-  set cql(newCql) {
-    this.impl().cql = newCql;
+  setCql(newCql) {
+    this.getImpl().cql = newCql;
   }
 
   /**
    * 'version' the service version
    * default value is 1.3.0
    */
-  get version() {
-    return this.impl().version;
+  getVersion() {
+    return this.getImpl().version;
   }
 
-  set version(newVersion) {
+  setVersion(newVersion) {
     if (!Utils.isNullOrEmpty(newVersion)) {
-      this.impl().version = newVersion;
+      this.getImpl().version = newVersion;
     } else {
-      this.impl().version = '1.1.0'; // default value
+      this.getImpl().version = '1.1.0'; // default value
     }
   }
 
   /**
    * 'options' the layer options
    */
-  get options() {
-    return this.impl().options;
+  getOptions() {
+    return this.getImpl().options;
   }
 
-  set options(newOptions) {
-    this.impl().options = newOptions;
+  setOptions(newOptions) {
+    this.getImpl().options = newOptions;
   }
 
   /**
@@ -186,7 +188,7 @@ export class WMS extends LayerBase() {
    * @function
    * @api stable
    */
-  get noChacheUrl() {
+  getNoChacheUrl() {
     return this._noCacheUrl;
   }
 
@@ -196,7 +198,7 @@ export class WMS extends LayerBase() {
    * @function
    * @api stable
    */
-  get noChacheName() {
+  getNoChacheName() {
     return this._noCacheName;
   }
 
@@ -209,7 +211,7 @@ export class WMS extends LayerBase() {
    * @api stable
    */
   updateMinMaxResolution(projection) {
-    return this.impl().updateMinMaxResolution(projection);
+    return this.getImpl().updateMinMaxResolution(projection);
   }
 
   /**

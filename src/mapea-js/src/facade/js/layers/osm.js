@@ -1,10 +1,10 @@
-import LayerBase from('./layerbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import OSMImpl from('../../../impl/js/layers/osm.js');
-import LayerType from('./layertype.js');
+import LayerBase from './layerbase';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import OSMImpl from '../../../impl/js/layers/osm';
+import LayerType from './layertype';
 
-export class OSM extends LayerBase {
+export default class OSM extends LayerBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -17,8 +17,9 @@ export class OSM extends LayerBase {
    * @api stable
    */
   constructor(userParameters, options) {
+    let impl = new OSMImpl(userParameters, options);
     // calls the super constructor
-    super(this, parameters, impl);
+    super(parameters, impl);
 
     // checks if the implementation can create OSM
     if (Utils.isUndefined(OSMImpl)) {
@@ -37,7 +38,6 @@ export class OSM extends LayerBase {
      * @public
      * @type {M.layer.WMS}
      */
-    let impl = new OSMImpl(userParameters, options);
 
     //This layer is of parameters.
     let parameters = Layer(userParameters, LayerType.OSM);
@@ -64,15 +64,15 @@ export class OSM extends LayerBase {
   /**
    * 'transparent' the layer name
    */
-  get transparent() {
-    return this.impl().transparent;
+  getTransparent() {
+    return this.getImpl().transparent;
   }
 
-  set transparent(newTransparent) {
+  setTransparent(newTransparent) {
     if (!Utils.isNullOrEmpty(newTransparent)) {
-      this.impl().transparent = newTransparent;
+      this.getImpl().transparent = newTransparent;
     } else {
-      this.impl().transparent = false;
+      this.getImpl().transparent = false;
     }
   }
 
@@ -80,11 +80,11 @@ export class OSM extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  getType() {
     return LayerType.OSM;
   }
 
-  set type(newType) {
+  setType(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.OSM)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.OSM).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

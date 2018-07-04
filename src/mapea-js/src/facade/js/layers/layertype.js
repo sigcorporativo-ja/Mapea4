@@ -1,7 +1,7 @@
-import LayerBase from('./layerbase.js');
-import Utils from('../utils/utils.js');
+import LayerBase from './layerbase';
+import Utils from '../utils/utils';
 
-export class LayerType {
+export default class LayerType {
 
 
   /**

@@ -1,13 +1,13 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import LayerBase from('./layerbase.js');
-import Vector from('./vector.js');
-import WFSImpl from('../../../impl/js/layers/wfs.js');
-import LayerType from('./layertype.js');
-import Layer from('../parameters/layers.js');
-import Geom from('../geom/geom.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import LayerBase from './layerbase';
+import Vector from '../vector ';
+import WFSImpl from '../../../impl/js/layers/wfs';
+import LayerType from './layertype';
+import Layer from '../parameters/layers';
+import Geom from '../geom/geom';
 
-export class WFS extends Vector {
+export default class WFS extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -21,7 +21,7 @@ export class WFS extends Vector {
    */
   constructor(userParameters, options = {}, impl = new WFSImpl(options)) {
     // calls the super constructor
-    super(this, parameters, options, impl);
+    super(parameters, options, impl);
 
     // checks if the implementation can create WFS layers
     if (Utils.isUndefined(WFSImpl)) {
@@ -63,11 +63,11 @@ export class WFS extends Vector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  getType() {
     return LayerType.WFS;
   }
 
-  set type(newType) {
+  setType(newType) {
     if (!Utils.isUndefined(newType) && !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WFS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WFS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
@@ -76,83 +76,83 @@ export class WFS extends Vector {
   /**
    * 'namespace' the layer name
    */
-  get namespace() {
-    return this.impl().namespace;
+  getNamespace() {
+    return this.getImpl().namespace;
   }
 
-  set namespace(newNamespace) {
-    this.impl().namespace = newNamespace;
+  setNamespace(newNamespace) {
+    this.getImpl().namespace = newNamespace;
   }
   /**
    * 'legend' the layer name
    */
-  get legend() {
-    return this.impl().legend;
+  getLegend() {
+    return this.getImpl().legend;
   }
 
-  set legend(newLegend) {
+  setLegend(newLegend) {
     if (Utils.isNullOrEmpty(newLegend)) {
-      this.impl().legend = this.name;
+      this.getImpl().legend = this.name;
     } else {
-      this.impl().legend = newLegend;
+      this.getImpl().legend = newLegend;
     }
   }
 
   /**
    * 'cql' the layer name
    */
-  get cql() {
-    return this.impl().cql;
+  getCql() {
+    return this.getImpl().cql;
   }
 
-  set cql(newCQL) {
-    this.impl().cql = newCQL;
+  setCql(newCQL) {
+    this.getImpl().cql = newCQL;
   }
 
   /**
    * 'geometry' the layer name
    */
-  get geometry() {
-    return this.impl().geometry;
+  getGeometry() {
+    return this.getImpl().geometry;
   }
 
-  set geometry(newGeometry) {
+  setGeometry(newGeometry) {
     if (!Utils.isNullOrEmpty(newGeometry)) {
       var parsedGeom = Geom.parse(newGeometry);
       if (Utils.isNullOrEmpty(parsedGeom)) {
         Exception('El tipo de capa WFS <b>' + newGeometry + '</b> no se reconoce. Los tipos disponibles son: POINT, LINE, POLYGON, MPOINT, MLINE, MPOLYGON');
       }
-      this.impl().geometry = parsedGeom;
+      this.getImpl().geometry = parsedGeom;
     }
   }
 
   /**
    * 'ids' the layer name
    */
-  get ids() {
-    return this.impl().ids;
+  getIds() {
+    return this.getImpl().ids;
   }
 
-  set ids(newIds) {
+  setIds(newIds) {
     if (Utils.isNullOrEmpty(newIds)) {
-      this.impl().ids = this.ids;
+      this.getImpl().ids = this.ids;
     } else {
-      this.impl().ids = newIds;
+      this.getImpl().ids = newIds;
     }
   }
 
   /**
    * 'version' the layer name
    */
-  get version() {
-    return this.impl().version;
+  getVersion() {
+    return this.getImpl().version;
   }
 
-  set version(newVersion) {
+  setVersion(newVersion) {
     if (!Utils.isNullOrEmpty(newVersion)) {
-      this.impl().version = newVersion;
+      this.getImpl().version = newVersion;
     } else {
-      this.impl().version = '1.0.0'; // default value
+      this.getImpl().version = '1.0.0'; // default value
     }
   }
   /**
@@ -162,17 +162,17 @@ export class WFS extends Vector {
    * @function
    * @api stable
    */
-  set CQL(newCQL) {
-    this.impl().describeFeatureType().then((describeFeatureType) => {
+  setCQL(newCQL) {
+    this.getImpl().describeFeatureType().then((describeFeatureType) => {
       if (!Utils.isNullOrEmpty(newCQL)) {
         let geometryName = describeFeatureType.geometryName;
         // if exist, replace {{geometryName}} with the value geometryName
         newCQL = newCQL.replace(/{{geometryName}}/g, geometryName);
       }
-      if (this.impl().cql !== newCQL) {
-        this.impl().setCQL(newCQL);
+      if (this.getImpl().cql !== newCQL) {
+        this.getImpl().setCQL(newCQL);
       }
-    }.bind(this));
+    });
   }
 
   /**

@@ -1,10 +1,10 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import Layer from('../parameters/layers.js');
-import Base from('../facade.js');
-import Config from('../../../configuration.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import Layer from '../parameters/layers';
+import Base from '../facade';
+import Config from '../../../configuration';
 
-export class LayerBase extends Base {
+export default class LayerBase extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -18,7 +18,7 @@ export class LayerBase extends Base {
    */
   constructor(userParameters, impl) {
     // calls the super constructor
-    super(this, impl);
+    super(impl);
 
     //This layer is of parameters.
     let parameter = Layer(userParameters);
@@ -62,23 +62,23 @@ export class LayerBase extends Base {
   /**
    * 'options' the layer options
    */
-  static get options() {
-    return this.impl().options;
+  static getOptions() {
+    return this.getImpl().options;
   }
 
-  static set options(newOptions) {
-    this.impl().options = newOptions;
+  static setOptions(newOptions) {
+    this.getImpl().options = newOptions;
   }
 
   /**
    * 'url' The service URL of the
    * layer
    */
-  static get url() {
+  static getUrl() {
     return this.impl().url;
   }
 
-  static set url(newUrl) {
+  static setUrl(newUrl) {
     this.impl().url = newUrl;
   }
 
@@ -86,11 +86,11 @@ export class LayerBase extends Base {
   /**
    * 'name' the layer name
    */
-  static get name() {
+  static getName() {
     return this.impl().name;
   }
 
-  static set name(newName) {
+  static setName(newName) {
     this.impl().name = newName;
   }
 
@@ -98,38 +98,38 @@ export class LayerBase extends Base {
    * 'transparent' the layer transparence
    */
 
-  static get transparent() {
+  static getTransparent() {
     return this.impl().transparent;
   }
 
-  static set transparent(newTransparent) {
+  static setTransparent(newTransparent) {
     if (!Utils.isNullOrEmpty(newTransparent)) {
       if (Utils.isString(newTransparent)) {
-        this.impl().transparent = (Utils.normalize(newTransparent) === 'true');
+        this.getImpl().transparent = (Utils.normalize(newTransparent) === 'true');
       } else {
-        this.impl().transparent = newTransparent;
+        this.getImpl().transparent = newTransparent;
       }
     } else {
-      this.impl().transparent = true;
+      this.getImpl().transparent = true;
     }
   }
 
   /**
    * 'displayInLayerSwitcher' the layer transparence
    */
-  static get displayInLayerSwitcher() {
-    return this.impl().displayInLayerSwitcher;
+  static getDisplayInLayerSwitcher() {
+    return this.getImpl().displayInLayerSwitcher;
   }
 
-  static set displayInLayerSwitcher(newDisplayInLayerSwitcher) {
+  static setDisplayInLayerSwitcher(newDisplayInLayerSwitcher) {
     if (!Utils.isNullOrEmpty(newDisplayInLayerSwitcher)) {
       if (Utils.isString(newDisplayInLayerSwitcher)) {
-        this.impl().displayInLayerSwitcher = (Utils.normalize(newDisplayInLayerSwitcher) === 'true');
+        this.getImpl().displayInLayerSwitcher = (Utils.normalize(newDisplayInLayerSwitcher) === 'true');
       } else {
-        this.impl().displayInLayerSwitcher = newDisplayInLayerSwitcher;
+        this.getImpl().displayInLayerSwitcher = newDisplayInLayerSwitcher;
       }
     } else {
-      this.impl().displayInLayerSwitcher = true;
+      this.getImpl().displayInLayerSwitcher = true;
     }
   }
 
@@ -142,11 +142,11 @@ export class LayerBase extends Base {
    */
   isVisible() {
     // checks if the implementation can manage this method
-    if (Utils.isUndefined(this.impl().isVisible)) {
+    if (Utils.isUndefined(this.getImpl().isVisible)) {
       Exception('La implementación usada no posee el método isVisible');
     }
 
-    return this.impl().isVisible();
+    return this.getImpl().isVisible();
   }
 
   /**
@@ -158,11 +158,11 @@ export class LayerBase extends Base {
    */
   isQueryable() {
     // checks if the implementation can manage this method
-    if (Utils.isUndefined(this.impl().isQueryable)) {
+    if (Utils.isUndefined(this.getImpl().isQueryable)) {
       Exception('La implementación usada no posee el método isQueryable');
     }
 
-    return this.impl().isQueryable();
+    return this.getImpl().isQueryable();
   }
 
   /**
@@ -172,7 +172,7 @@ export class LayerBase extends Base {
    * @api stable
    * @export
    */
-  set visible(visibility) {
+  setVisible(visibility) {
     // checks if the param is null or empty
     if (Utils.isNullOrEmpty(visibility)) {
       Exception('No ha especificado ningún parámetro de visibilidad');
@@ -184,13 +184,13 @@ export class LayerBase extends Base {
     }
 
     // checks if the implementation can manage this method
-    if (Utils.isUndefined(this.impl().setVisible)) {
+    if (Utils.isUndefined(this.getImpl().setVisible)) {
       Exception('La implementación usada no posee el método setVisible');
     }
 
     visibility = /^1|(true)$/i.test(visibility);
 
-    this.impl().visible = visibility;
+    this.getImpl().visible = visibility;
   }
 
   /**
@@ -202,11 +202,11 @@ export class LayerBase extends Base {
    */
   inRange() {
     // checks if the implementation can manage this method
-    if (Utils.isUndefined(this.impl().inRange)) {
+    if (Utils.isUndefined(this.getImpl().inRange)) {
       Exception('La implementación usada no posee el método inRange');
     }
 
-    return this.impl().inRange();
+    return this.getImpl().inRange();
   }
 
   /**
@@ -216,8 +216,8 @@ export class LayerBase extends Base {
    * @function
    * @api stable
    */
-  get legendURL() {
-    return this.impl().legendURL();
+  getLegendURL() {
+    return this.getImpl().getLegendURL();
   }
 
   /**
@@ -227,11 +227,11 @@ export class LayerBase extends Base {
    * @function
    * @api stable
    */
-  set legendURL(legendUrl) {
+  setLegendURL(legendUrl) {
     if (Utils.isNullOrEmpty(legendUrl)) {
-      legendUrl = Utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_DEFAULT]);
+      legendUrl = Utils.concatUrlPaths([Config.THEME_URL, LayerBase.LEGEND_DEFAULT]);
     }
-    this.impl().legendURL = legendUrl;
+    this.getImpl().setLegendURL(legendUrl);
   }
 
   /**
@@ -240,8 +240,8 @@ export class LayerBase extends Base {
    * @function
    * @api stable
    */
-  get ZIndex() {
-    return this.zindex_;
+  getZIndex() {
+    return this.getImpl().getZIndex_;
   }
 
   /**
@@ -250,9 +250,8 @@ export class LayerBase extends Base {
    * @function
    * @api stable
    */
-  set ZIndex(zIndex) {
-    this.zindex_ = zIndex;
-    this.impl().ZIndex = zIndex;
+  setZIndex(zIndex) {
+    this.getImpl().setZIndex(zIndex);
   }
 
   /**
@@ -261,8 +260,8 @@ export class LayerBase extends Base {
    * @function
    * @api stable
    */
-  get opacity() {
-    return this.impl().opacity();
+  getOpacity() {
+    return this.getImpl().getOpacity();
   }
 
   /**
@@ -272,7 +271,7 @@ export class LayerBase extends Base {
    * @api stable
    */
   set opacity(opacity) {
-    this.impl().opacity = opacity;
+    this.getImpl().opacity = opacity;
   }
 
   /**
@@ -285,8 +284,8 @@ export class LayerBase extends Base {
    */
   refresh() {
     // checks if the implementation can manage this method
-    if (!Utils.isUndefined(this.impl().refresh) && Utils.isFunction(this.impl().refresh)) {
-      this.impl().refresh();
+    if (!Utils.isUndefined(this.getImpl().refresh) && Utils.isFunction(this.getImpl().refresh)) {
+      this.getImpl().refresh();
     }
   }
 

@@ -1,12 +1,12 @@
-import Vector from('./vector.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import KMLImpl from('../../../impl/js/layers/kml.js');
-import LayerType from('./layertype.js');
-import Layer from('../parameters/layers.js');
+import Vector from './vector';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import KMLImpl from '../../../impl/js/layers/kml';
+import LayerType from './layertype';
+import Layer from '../parameters/layers';
 
 
-export class KML extends Vector {
+export default class KML extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -19,10 +19,13 @@ export class KML extends Vector {
    * @api stable
    */
   constructor(userParameters, options = {}) {
+    let impl = new KMLImpl(options);
+
     // calls the super constructor
-    super(this, parameters, options, impl);
+    super(parameters, options, impl);
+
     // checks if the implementation can create KML layers
-    if (Utils.isUndefined(M.impl.layer.KML)) {
+    if (Utils.isUndefined(KMLImpl)) {
       Exception('La implementación usada no puede crear capas KML');
     }
 
@@ -36,7 +39,6 @@ export class KML extends Vector {
      * @public
      * @type {M.layer.KML}
      */
-    let impl = new KMLImpl(options);
 
     //This layer is of parameters.
     let parameters = Layer(userParameters, LayerType.KML);
@@ -53,11 +55,11 @@ export class KML extends Vector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  static get type() {
+  static getType() {
     return LayerType.KML;
   }
 
-  static set type(newType) {
+  static setType(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.KML)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.KML).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -68,31 +70,31 @@ export class KML extends Vector {
    * 'transparent' the layer name
    */
 
-  static get extract() {
-    return this.impl().extract;
+  static getExtract() {
+    return this.getImpl().extract;
   }
 
   static set extract(newExtract) {
     if (!Utils.isNullOrEmpty(newExtract)) {
       if (Utils.isString(newExtract)) {
-        this.impl().extract = (Utils.normalize(newExtract) === 'true');
+        this.getImpl().extract = (Utils.normalize(newExtract) === 'true');
       } else {
-        this.impl().extract = newExtract;
+        this.getImpl().extract = newExtract;
       }
     } else {
-      this.impl().extract = true;
+      this.getImpl().extract = true;
     }
   }
 
   /**
    * 'options' the layer options
    */
-  static get options() {
-    return this.impl().options;
+  static getOptions() {
+    return this.getImpl().options;
   }
 
-  static set options(newOptions) {
-    this.impl().options = newOptions;
+  static setOptions(newOptions) {
+    this.getImpl().options = newOptions;
   }
 
   /**

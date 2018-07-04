@@ -1,12 +1,13 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import LayerBase from('./layerbase.js');
-import LayerType from('./layertype.js');
-import WMCImpl from('../../../impl/js/layers/wmc.js');
-import Layer from('../parameters/layers.js');
-import Config from('../../../configuration.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import LayerBase from './layerbase';
+import LayerType from './layertype';
+import WMCImpl from '../../../impl/js/layers/wmc';
+import Layer from '../parameters/layers';
+import Config from '../../../configuration';
+import Evt from '../event/eventsmanager';
 
-export class WMC extends LayerBase {
+export default class WMC extends LayerBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC layer
@@ -20,8 +21,11 @@ export class WMC extends LayerBase {
    * @api stable
    */
   constructor(userParameters, options) {
+
+    let impl = new WMCImpl(options);
+
     // calls the super constructor
-    super(this, parameters, impl);
+    super(parameters, impl);
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(WMCImpl)) {
       Exception('La implementación usada no puede crear capas WMC');
@@ -41,7 +45,6 @@ export class WMC extends LayerBase {
      * @public
      * @type {M.layer.WMC}
      */
-    let impl = new WMCImpl(options);
 
 
     // options
@@ -78,23 +81,23 @@ export class WMC extends LayerBase {
    * the layer was selected
    */
 
-  get selected() {
-    return this.impl().selected;
+  getSelected() {
+    return this.getImpl().selected;
   }
 
-  set selected(newSelectedValue) {
-    this.impl().selected = newSelectedValue;
+  setSelected(newSelectedValue) {
+    this.getImpl().selected = newSelectedValue;
   }
 
   /**
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  getType() {
     return LayerType.WMC;
   }
 
-  set type(newType) {
+  setType(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMC)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMC).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -104,45 +107,45 @@ export class WMC extends LayerBase {
   /**
    * The layers provided by the WMC file
    */
-  get layers() {
-    return this.impl().layers;
+  getLayers() {
+    return this.getImpl().layers;
   }
 
-  set layers(newLayers) {
-    this.impl().layers = newLayers;
+  setLayers(newLayers) {
+    this.getImpl().layers = newLayers;
   }
 
   /**
    * Projection provided by the WMC file
    */
-  get projection() {
-    return this.impl().projection;
+  getProjection() {
+    return this.getImpl().projection;
   }
 
-  set projection(newProjection) {
-    this.impl().projection = newProjection;
+  setProjection(newProjection) {
+    this.getImpl().projection = newProjection;
   }
 
   /**
    * Max extent provided by the WMC file
    */
-  get maxExtent() {
-    return this.impl().maxExtent;
+  getMaxExtent() {
+    return this.getImpl().maxExtent;
   }
 
-  set maxExtent(newMaxExtent) {
-    this.impl().maxExtent = newMaxExtent;
+  setMaxExtent(newMaxExtent) {
+    this.getImpl().maxExtent = newMaxExtent;
   }
 
   /**
    * 'options' resolutions specified by the user
    */
-  get options() {
-    return this.impl().options;
+  getOptions() {
+    return this.getImpl().options;
   }
 
-  set options(newOptions) {
-    this.impl().options = newOptions;
+  setOptions(newOptions) {
+    this.getImpl().options = newOptions;
   }
 
   /**
@@ -154,11 +157,11 @@ export class WMC extends LayerBase {
    */
   select() {
     // checks if the implementation can manage select method
-    if (Utils.isUndefined(this.impl().select)) {
+    if (Utils.isUndefined(this.getImpl().select)) {
       Exception('La implementación usada no posee el método select');
     }
 
-    this.impl().select();
+    this.getImpl().select();
   }
 
 
@@ -172,11 +175,11 @@ export class WMC extends LayerBase {
    */
   unselect() {
     // checks if the implementation can manage select method
-    if (Utils.isUndefined(this.impl().unselect)) {
+    if (Utils.isUndefined(this.getImpl().unselect)) {
       Exception('La implementación usada no posee el método unselect');
     }
 
-    this.impl().unselect();
+    this.getImpl().unselect();
   }
 
   /**

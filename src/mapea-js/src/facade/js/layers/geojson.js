@@ -1,12 +1,12 @@
-import Vector from('./vector.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import GeoJSONImpl from('../../../impl/js/layers/geojson.js');
-import Cluster from('../style/stylecluster.js');
-import LayerType from('./layertype.js');
-import Geojson from('../geom/geojson.js');
+import Vector from './vector';
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import GeoJSONImpl from '../../../impl/js/layers/geojson';
+import Cluster from '../style/stylecluster';
+import LayerType from './layertype';
+import Geojson from '../geom/geojson';
 
-export class GeoJSON extends Vector {
+export default class GeoJSON extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -19,8 +19,11 @@ export class GeoJSON extends Vector {
    * @api stable
    */
   constructor(parameters, options = {}) {
+
+    let impl = new GeoJSONImpl(parameters, options);
+
     // calls the super constructor
-    super(this, this, options, impl);
+    super(options, impl);
 
     // checks if the implementation can create KML layers
     if (Utils.isUndefined(GeoJSONImpl)) {
@@ -37,7 +40,6 @@ export class GeoJSON extends Vector {
      * @public
      * @type {M.impl.layer.GeoJSON}
      */
-    let impl = new GeoJSONImpl(parameters, options);
 
 
     if (Utils.isString(parameters)) {
@@ -85,11 +87,11 @@ export class GeoJSON extends Vector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  getType() {
     return LayerType.GeoJSON;
   }
 
-  set type(newType) {
+  setType(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.GeoJSON)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.GeoJSON).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -102,31 +104,31 @@ export class GeoJSON extends Vector {
 
   //TODO
 
-  get source() {
+  getSource() {
     return this.impl.source;
   }
 
-  set source(newSource) {
-    this.impl().source = newSource;
+  setSource(newSource) {
+    this.getImpl().source = newSource;
   }
 
 
   /**
    * 'extract' the features properties
    */
-  get extract() {
-    return this.impl().extract;
+  getExtract() {
+    return this.getImpl().extract;
   }
 
-  set extract(newExtract) {
+  setExtract(newExtract) {
     if (!Utils.isNullOrEmpty(newExtract)) {
       if (Utils.isString(newExtract)) {
-        this.impl().extract = (Utils.normalize(newExtract) === 'true');
+        this.getImpl().extract = (Utils.normalize(newExtract) === 'true');
       } else {
-        this.impl().extract = newExtract;
+        this.getImpl().extract = newExtract;
       }
     } else {
-      this.impl().extract = true;
+      this.getImpl().extract = true;
     }
   }
 
@@ -155,12 +157,12 @@ export class GeoJSON extends Vector {
    * @function
    * @api stable
    */
-  set source(source) {
+  setSource(source) {
     this.source = source;
-    this.impl().refresh(source);
+    this.getImpl().refresh(source);
   }
 
-  set style(style, applyToFeature = false) {
+  setStyle(style, applyToFeature = false) {
     let isNullStyle = false;
     if (style === null) {
       isNullStyle = true;
@@ -170,7 +172,7 @@ export class GeoJSON extends Vector {
         style = Utils.generateStyleLayer(GeoJSON.DEFAULT_OPTIONS_STYLE, this);
       }
       let isCluster = style instanceof Cluster;
-      let isPoint = [Geojson.POINT, Geojson.MULTI_POINT].includes(Utils.geometryType(this));
+      let isPoint = [Geojson.POINT, Geojson.MULTI_POINT].includes(Utils.getGeometryType(this));
       if (style instanceof Style && (!isCluster || isPoint)) {
         if (!Utils.isNullOrEmpty(this.style_)) {
           this.style_.unapply(this);
@@ -178,8 +180,8 @@ export class GeoJSON extends Vector {
         style.apply(this, applyToFeature, isNullStyle);
         this.style_ = style;
       }
-      if (!Utils.isNullOrEmpty(this.impl().map())) {
-        let layerswitcher = this.impl().map().controls('layerswitcher')[0];
+      if (!Utils.isNullOrEmpty(this.getImpl().getMap())) {
+        let layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
         if (!Utils.isNullOrEmpty(layerswitcher)) {
           layerswitcher.render();
         }
@@ -187,7 +189,7 @@ export class GeoJSON extends Vector {
       this.fire(Evt.CHANGE_STYLE, [style, this]);
     };
 
-    if (this.impl().isLoaded()) {
+    if (this.getImpl().isLoaded()) {
       applyStyleFn.bind(this)();
     } else {
       this.once(Evt.LOAD, applyStyleFn, this);

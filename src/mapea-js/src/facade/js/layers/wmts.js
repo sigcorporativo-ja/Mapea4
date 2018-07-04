@@ -1,11 +1,11 @@
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import LayerBase from('./layerbase.js');
-import WMTSImpl from('../../../impl/js/layers/wmts.js');
-import Layer from('../parameters/layers.js');
-import LayerType from('./layertype.js');
+import Utils from '../utils/utils';
+import Exception from '../exception/exception';
+import LayerBase from './layerbase';
+import WMTSImpl from '../../../impl/js/layers/wmts';
+import Layer from '../parameters/layers';
+import LayerType from './layertype';
 
-export class WMTS extends LayerBase {
+export default class WMTS extends LayerBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMTS layer
@@ -18,8 +18,11 @@ export class WMTS extends LayerBase {
    * @api stable
    */
   constructor(userParameters, options) {
+    let impl = new WMTSImpl(options);
+
     // calls the super constructor
-    super(this, parameters, impl);
+    super(parameters, impl);
+
     // checks if the implementation can create WMTS layers
     if (Utils.isUndefined(WMTSImpl)) {
       Exception('La implementación usada no puede crear capas WMTS');
@@ -37,7 +40,6 @@ export class WMTS extends LayerBase {
      * @public
      * @type {M.layer.WMTS}
      */
-    let impl = new WMTSImpl(options);
 
     //This Layer is of parameters.
     let parameters = Layer(userParameters, LayerType.WMTS);
@@ -60,10 +62,10 @@ export class WMTS extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  getType() {
     return LayerType.WMTS;
   }
-  set type(newType) {
+  setType(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMTS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMTS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -72,26 +74,26 @@ export class WMTS extends LayerBase {
   /**
    * 'matrixSet' the layer matrix set
    */
-  get matrixSet() {
-    return this.impl().matrixSet;
+  getMatrixSet() {
+    return this.getImpl().matrixSet;
   }
 
-  set matrixSet(newMatrixSet) {
-    this.impl().matrixSet = newMatrixSet;
+  setMatrixSet(newMatrixSet) {
+    this.getImpl().matrixSet = newMatrixSet;
   }
 
   /**
    * 'legend' the layer name
    */
-  get legend() {
-    return this.impl().legend;
+  getLegend() {
+    return this.getImpl().legend;
   }
 
-  set legend(newLegend) {
+  setLegend(newLegend) {
     if (Utils.isNullOrEmpty(newLegend)) {
-      this.impl().legend = this.name;
+      this.getImpl().legend = this.name;
     } else {
-      this.impl().legend = newLegend;
+      this.getImpl().legend = newLegend;
     }
   }
 
@@ -99,12 +101,12 @@ export class WMTS extends LayerBase {
    * 'options' the layer options
    */
 
-  get options() {
-    return this.impl().options;
+  getOptions() {
+    return this.getImpl().options;
   }
 
-  set options(newOptions) {
-    this.impl().options = newOptions;
+  setOptions(newOptions) {
+    this.getImpl().options = newOptions;
   }
 
   /**
