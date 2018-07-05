@@ -1,20 +1,15 @@
-goog.provide('M.impl.layer.Draw');
+import Layer from "./layerbase";
+import Utils from "facade/js/utils/utils";
+import Exception from "facade/js/exception/exception";
+import Popup from "../popup";
+import GeoJSON from "../ ol.layer.Vectorrmat/geojson";
+import Map from "../map/map";
+import Exception from "facade/js/ol.style.Circleeption/exception";
 
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.impl.Layer');
-goog.require('M.impl.format.GeoJSON');
-goog.require('M.impl.Popup');
-
-goog.require('ol.layer.Vector');
-goog.require('ol.source.Vector');
-
-goog.require('goog.style');
-
-(function () {
+export default class Draw extends LayerBase {
   /**
    * @classdesc
-   * Main constructor of the class. Creates a KML layer
+   * Main constol.style.Stroke of the class. Creates a KML layer
    * with parameters specified by the user
    *
    * @constructor
@@ -22,13 +17,14 @@ goog.require('goog.style');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.Draw = (function () {
+  constructor() {
+    super();
     /**
      * Currently drawn feature coordinate.
      * @private
      * @type {M.impl.format.GeoJSON}
      */
-    this.geojsonFormatter_ = new M.impl.format.GeoJSON();
+    this.geojsonFormatter_ = new GeoJSON();
 
     /**
      * Name of the layer
@@ -45,9 +41,7 @@ goog.require('goog.style');
     this.selectedFeatures_ = [];
 
     // calls the super constructor
-    goog.base(this);
-  });
-  goog.inherits(M.impl.layer.Draw, M.impl.Layer);
+  }
 
   /**
    * This function sets the map object of the layer
@@ -57,7 +51,7 @@ goog.require('goog.style');
    * @param {M.impl.Map} map
    * @api stable
    */
-  M.impl.layer.Draw.prototype.addTo = function (map) {
+  addTo(map) {
     this.map = map;
 
     this.ol3Layer = new ol.layer.Vector({
@@ -81,15 +75,15 @@ goog.require('goog.style');
           })
         })
       }),
-      zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 999
+      zIndex: Map.Z_INDEX["WFS"] + 999
     });
     // sets its visibility if it is in range
     if (this.options.visibility !== false) {
       this.setVisible(this.inRange());
     }
-    var olMap = this.map.getMapImpl();
+    let olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -99,14 +93,14 @@ goog.require('goog.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.Draw.prototype.selectFeatures = function (features) {
+  selectFeatures(features) {
     this.selectedFeatures_ = features;
 
     // TODO: manage multiples features
-    if (M.utils.isFunction(this.selectedFeatures_[0].click)) {
+    if (Utils.isFunction(this.selectedFeatures_[0].click)) {
       this.selectedFeatures_[0].click();
     }
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -117,12 +111,12 @@ goog.require('goog.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.Draw.prototype.unselectFeatures = function () {
+  unselectFeatures() {
     if (this.selectedFeatures_.length > 0) {
       this.selectedFeatures_.length = 0;
       this.map.removePopup();
     }
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -133,17 +127,17 @@ goog.require('goog.style');
    * @param {Array<Mx.Point>} coordinate
    * @api stable
    */
-  M.impl.layer.Draw.prototype.drawPoints = function (points) {
+  drawPoints(points) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(points)) {
-      M.exception('No ha especificado ningún punto');
+    if (Utils.isNullOrEmpty(points)) {
+      Exception('No ha especificado ningún punto');
     }
-    if (!M.utils.isArray(points)) {
+    if (!Utils.isArray(points)) {
       points = [points];
     }
-    var geojsons = this.pointsToGeoJSON_(points);
+    let geojsons = this.pointsToGeoJSON_(points);
     this.drawGeoJSON(geojsons);
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -154,181 +148,181 @@ goog.require('goog.style');
    * @param {Array<Mx.Point>} coordinate
    * @api stable
    */
-  M.impl.layer.Draw.prototype.drawGeoJSON = function (geojsons) {
+  drawGeoJSON(geojsons) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(geojsons)) {
-      M.exception('No ha especificado ningún GeoJSON');
+    if (Utils.isNullOrEmpty(geojsons)) {
+      Exception('No ha especificado ningún GeoJSON');
     }
-    if (!M.utils.isArray(geojsons)) {
+    if (!Utils.isArray(geojsons)) {
       geojsons = [geojsons];
     }
 
     // gets the projection
-    var projection = ol.proj.get(this.map.getProjection().code);
+    let projection = ol.proj.get(this.map.getProjection().code);
 
-    var features = [];
-    geojsons.forEach(function (geojson) {
-      var formattedFeatures = this.geojsonFormatter_.readFeatures(geojson, {
-        'dataProjection': projection
-      });
-      features = features.concat(formattedFeatures);
-    }, this);
+    let features = [];
+    geojsons.forEach(geojson => {
+        let formattedFeatures = this.geojsonFormatter_.readFeatures(geojson, {
+          'dataProjection': projection
+        });
+        features = features.concat(formattedFeatures);
+      };
 
-    this.ol3Layer.getSource().addFeatures(features);
-  };
-
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   *
-   * @public
-   * @function
-   * @param {Array<Mx.Point>} coordinate
-   * @api stable
-   */
-  M.impl.layer.Draw.prototype.drawFeatures = function (features) {
-    // checks if the param is null or empty
-    if (!M.utils.isNullOrEmpty(features)) {
-      if (!M.utils.isArray(features)) {
-        features = [features];
-      }
       this.ol3Layer.getSource().addFeatures(features);
     }
-  };
 
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   *
-   * @public
-   * @function
-   * @param {Array<Mx.Point>} coordinate
-   * @api stable
-   */
-  M.impl.layer.Draw.prototype.removeFeatures = function (features) {
-    // checks if the param is null or empty
-    if (!M.utils.isNullOrEmpty(features)) {
-      if (!M.utils.isArray(features)) {
-        features = [features];
+    /**
+     * This function checks if an object is equals
+     * to this layer
+     *
+     * @public
+     * @function
+     * @param {Array<Mx.Point>} coordinate
+     * @api stable
+     */
+    drawFeatures(features) {
+      // checks if the param is null or empty
+      if (!Utils.isNullOrEmpty(features)) {
+        if (!Utils.isArray(features)) {
+          features = [features];
+        }
+        this.ol3Layer.getSource().addFeatures(features);
       }
-      var olSource = this.ol3Layer.getSource();
+    }
 
-      features.forEach(function (feature) {
-        try {
-          this.removeFeature(feature);
+    /**
+     * This function checks if an object is equals
+     * to this layer
+     *
+     * @public
+     * @function
+     * @param {Array<Mx.Point>} coordinate
+     * @api stable
+     */
+    removeFeatures(features) {
+      // checks if the param is null or empty
+      if (!Utils.isNullOrEmpty(features)) {
+        if (!Utils.isArray(features)) {
+          features = [features];
         }
-        catch (err) {
-          // the feature does not exist in the source
-        }
-      }, olSource);
-    }
-  };
+        let olSource = this.ol3Layer.getSource();
 
-
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   *
-   * @public
-   * @function
-   * @param {ol.Coordinate} coordinate
-   * @api stable
-   */
-  M.impl.layer.Draw.prototype.getPoints = function (coordinate) {
-    var features = [];
-    var drawSource = this.ol3Layer.getSource();
-
-    if (!M.utils.isNullOrEmpty(coordinate)) {
-      features = drawSource.getFeaturesAtCoordinate(coordinate);
-    }
-    else {
-      features = drawSource.getFeatures();
+        features.forEach(feature => {
+          try {
+            olSource.removeFeature(feature);
+          }
+          catch (err) {
+            console.log(err);
+            // the feature does not exist in the source
+          }
+        });
+      }
     }
 
-    return this.featuresToPoints_(features);
-  };
+    /**
+     * This function checks if an object is equals
+     * to this layer
+     *
+     * @public
+     * @function
+     * @param {ol.Coordinate} coordinate
+     * @api stable
+     */
+    getPoints(coordinate) {
+      let features = [];
+      let drawSource = this.ol3Layer.getSource();
 
-  /**
-   * This function destroys this layer, cleaning the HTML
-   * and unregistering all events
-   *
-   * @public
-   * @function
-   * @api stable
-   */
-  M.impl.layer.Draw.prototype.destroy = function () {
-    var olMap = this.map.getMapImpl();
+      if (!Utils.isNullOrEmpty(coordinate)) {
+        features = drawSource.getFeaturesAtCoordinate(coordinate);
+      }
+      else {
+        features = drawSource.getFeatures();
+      }
 
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
-      olMap.removeLayer(this.ol3Layer);
-      this.ol3Layer = null;
+      return this.featuresToPoints_(features);
     }
-    this.options = null;
-    this.map = null;
-  };
 
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   *
-   * @function
-   * @api stable
-   */
-  M.impl.layer.Draw.prototype.equals = function (obj) {
-    var equals = false;
+    /**
+     * This function destroys this layer, cleaning the HTML
+     * and unregistering all events
+     *
+     * @public
+     * @function
+     * @api stable
+     */
+    destroy() {
+      let olMap = this.map.getMapImpl();
 
-    if (obj instanceof M.impl.layer.Draw) {
-      equals = equals && (this.name === obj.name);
+      if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+        olMap.removeLayer(this.ol3Layer);
+        this.ol3Layer = null;
+      }
+      this.options = null;
+      this.map = null;
     }
-    return equals;
-  };
 
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   *
-   * @private
-   * @function
-   */
-  M.impl.layer.Draw.prototype.pointsToGeoJSON_ = function (points) {
-    var geojsons = [];
+    /**
+     * This function checks if an object is equals
+     * to this layer
+     *
+     * @function
+     * @api stable
+     */
+    equals(obj) {
+      let equals = false;
 
-    // gets the projection
-    var projection = ol.proj.get(this.map.getProjection().code);
+      if (obj instanceof Draw) {
+        equals = equals && (this.name === obj.name);
+      }
+      return equals;
+    }
 
-    geojsons = points.map(function (point) {
-      // properties
-      var geojsonProperties = point.data;
+    /**
+     * This function checks if an object is equals
+     * to this layer
+     *
+     * @private
+     * @function
+     */
+    pointsToGeoJSON_(points) {
+      let geojsons = [];
 
-      // geometry
-      var pointGeom = new ol.geom.Point([point.x, point.y]);
-      var geojsonGeom = this.geojsonFormatter_.writeGeometryObject(pointGeom, {
-        'dataProjection': projection
+      // gets the projection
+      let projection = ol.proj.get(this.map.getProjection().code);
+
+      geojsons = points.map(point => {
+        // properties
+        let geojsonProperties = point.data;
+
+        // geometry
+        let pointGeom = new ol.geom.Point([point.x, point.y]);
+        let geojsonGeom = this.geojsonFormatter_.writeGeometryObject(pointGeom, {
+          'dataProjection': projection
+        });
+
+        // return geojson
+        return {
+          "type": "Feature",
+          "geometry": geojsonGeom,
+          "properties": geojsonProperties,
+          "click": point.click,
+          "showPopup": point.showPopup
+        };
       });
 
-      // return geojson
-      return {
-        "type": "Feature",
-        "geometry": geojsonGeom,
-        "properties": geojsonProperties,
-        "click": point.click,
-        "showPopup": point.showPopup
-      };
-    }, this);
+      return geojsons;
+    }
 
-    return geojsons;
-  };
+    /**
+     * This function checks if an object is equals
+     * to this layer
+     *
+     * @private
+     * @function
+     */
+    featuresToPoints_(points) {
+      let features = [];
 
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   *
-   * @private
-   * @function
-   */
-  M.impl.layer.Draw.prototype.featuresToPoints_ = function (points) {
-    var features = [];
-
-    return features;
-  };
-})();
+      return features;
+    }
+  }
