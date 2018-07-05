@@ -1,51 +1,17 @@
-goog.provide('M.impl');
-goog.provide('M.impl.Map');
+import Object from "facade/js/object";
+import LayerType from "facade/js/layers/layertype";
+import LayerBase from "facade/js/layers/layerbase";
+import Utils from "../utils/utils";
+import View from "../view/view";
+import EnvolvedExtent from "../utils/envolvedextent";
+import Utils from "../utils/utils";
+import EventsManager from "facade/js/event/eventsmanager";
+import FacadeWMS from "facade/js/layers/wms";
+import ControlBase from "facade/js/controls/controlbase";
+import FacadePanzoombar from "facade/js/controls/panzoombar";
+import Exception from "facade/js/exception/exception";
 
-goog.require('M');
-goog.require('M.layer.type');
-goog.require('M.impl.Layer');
-goog.require('M.impl.layer.WMC');
-goog.require('M.impl.layer.WMS');
-goog.require('M.impl.layer.KML');
-goog.require('M.impl.layer.WFS');
-goog.require('M.impl.layer.WMTS');
-goog.require('M.impl.layer.OSM');
-goog.require('M.impl.layer.GeoJSON');
-goog.require('M.impl.layer.Mapbox');
-goog.require('M.impl.layer.Draw');
-goog.require('M.impl.utils');
-goog.require('M.impl.View');
-goog.require('M.impl.projections');
-goog.require('M.impl.envolvedExtent');
-goog.require('M.impl.control.WMCSelector');
-goog.require('M.impl.control.Scale');
-goog.require('M.impl.control.ScaleLine');
-goog.require('M.impl.control.Panzoombar');
-goog.require('M.impl.control.Panzoom');
-goog.require('M.impl.control.LayerSwitcher');
-goog.require('M.impl.control.Mouse');
-goog.require('M.impl.control.Navtoolbar');
-goog.require('M.impl.control.OverviewMap');
-goog.require('M.impl.control.Location');
-goog.require('M.impl.control.GetFeatureInfo');
-goog.require('M.impl.Label');
-goog.require('M.impl.handler.Features');
-goog.require('M.impl.Popup');
-goog.require('M.impl.patches');
-goog.require('M.impl.format.GeoJSON');
-goog.require('M.impl.format.WKT');
-
-goog.require('ol.renderer.Type');
-goog.require('ol.Map');
-
-goog.require('M.impl.style.Chart');
-goog.require('M.impl.style.Point');
-goog.require('M.impl.style.Line');
-goog.require('M.impl.style.Polygon');
-goog.require('M.impl.style.Cluster');
-goog.require('M.impl.style.Heatmap');
-
-(function() {
+export default class Map extends Object {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Map
@@ -57,9 +23,8 @@ goog.require('M.impl.style.Heatmap');
    * @param {Mx.parameters.MapOptions} options
    * @api stable
    */
-  M.impl.Map = function(div, options) {
-    goog.base(this);
-
+  constructor(div, options) {
+    super();
     /**
      * Facade map to implement
      * @private
@@ -145,8 +110,8 @@ goog.require('M.impl.style.Heatmap');
     this._resolutionsBaseLayer = false;
 
     // gets the renderer
-    var renderer = ol.renderer.Type.CANVAS;
-    if (!M.utils.isNullOrEmpty(this.options_.renderer)) {
+    let renderer = ol.renderer.Type.CANVAS;
+    if (!Utils.isNullOrEmpty(this.options_.renderer)) {
       renderer = this.options_.renderer;
     }
 
@@ -159,7 +124,7 @@ goog.require('M.impl.style.Heatmap');
       controls: [],
       target: div.id,
       renderer: renderer,
-      view: new M.impl.View()
+      view: new View()
     });
     this.map_.on('singleclick', this.onMapClick_, this);
     this.map_.addInteraction(new ol.interaction.Interaction({
@@ -170,9 +135,7 @@ goog.require('M.impl.style.Heatmap');
         return true;
       }
     }));
-  };
-  goog.inherits(M.impl.Map, M.Object);
-
+  }
   /**
    * This function gets the layers added to the map
    *
@@ -182,19 +145,19 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Array<M.Layer>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getLayers = function(filters) {
-    var wmcLayers = this.getWMC(filters);
-    var kmlLayers = this.getKML(filters);
-    var wmsLayers = this.getWMS(filters);
-    var wfsLayers = this.getWFS(filters);
-    var wmtsLayers = this.getWMTS(filters);
-    var mbtilesLayers = this.getMBtiles(filters);
-    var unknowLayers = this.getUnknowLayers_(filters);
+  getLayers(filters) {
+    let wmcLayers = this.getWMC(filters);
+    let kmlLayers = this.getKML(filters);
+    let wmsLayers = this.getWMS(filters);
+    let wfsLayers = this.getWFS(filters);
+    let wmtsLayers = this.getWMTS(filters);
+    let mbtilesLayers = this.getMBtiles(filters);
+    let unknowLayers = this.getUnknowLayers_(filters);
 
     return wmcLayers.concat(kmlLayers).concat(wmsLayers)
       .concat(wfsLayers).concat(wmtsLayers)
       .concat(mbtilesLayers).concat(unknowLayers);
-  };
+  }
 
   /**
    * This function gets the layers added to the map
@@ -205,17 +168,17 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Array<M.Layer>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getBaseLayers = function() {
-    var baseLayers = this.getLayers().filter(function(layer) {
-      var isBaseLayer = false;
-      if ((layer.type === M.layer.type.WMS) || (layer.type === M.layer.type.OSM) || (layer.type === M.layer.type.Mapbox) || (layer.type === M.layer.type.WMTS)) {
+  getBaseLayers() {
+    let baseLayers = this.getLayers().filter(layer => {
+      let isBaseLayer = false;
+      if ((layer.type === LayerType.WMS) || (layer.type === LayerType.OSM) || (layer.type === LayerType.Mapbox) || (layer.type === LayerType.WMTS)) {
         isBaseLayer = (layer.transparent !== true);
       }
       return isBaseLayer;
     });
 
     return baseLayers;
-  };
+  }
 
   /**
    * This function adds layers specified by the user
@@ -223,44 +186,45 @@ goog.require('M.impl.style.Heatmap');
    * @public
    * @function
    * @param {Array<Object>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    */
-  M.impl.Map.prototype.addLayers = function(layers) {
+  addLayers(layers) {
     // gets the layers with type defined and undefined
-    var unknowLayers = layers.filter(function(layer) {
-      return !M.layer.type.know(layer.type);
+    let unknowLayers = layers.filter(layer => {
+      return !LayerType.know(layer.type);
     });
-    var knowLayers = layers.filter(function(layer) {
-      return M.layer.type.know(layer.type);
+
+    let knowLayers = layers.filter(layer => {
+      return LayerType.know(layer.type);
     });
 
     this.addUnknowLayers_(unknowLayers);
-    this.facadeMap_.addWMC(knowLayers.filter(layer => (layer.type === M.layer.type.WMC)));
-    this.facadeMap_.addMBtiles(knowLayers.filter(layer => (layer.type === M.layer.type.MBtiles)));
-    this.facadeMap_.addWMS(knowLayers.filter(layer => (layer.type === M.layer.type.WMS)));
-    this.facadeMap_.addWMTS(knowLayers.filter(layer => (layer.type === M.layer.type.WMTS)));
-    this.facadeMap_.addKML(knowLayers.filter(layer => (layer.type === M.layer.type.KML)));
-    this.facadeMap_.addWFS(knowLayers.filter(layer => (layer.type === M.layer.type.WFS)));
+    this.facadeMap_.addWMC(knowLayers.filter(layer => (layer.type === LayerType.WMC)));
+    this.facadeMap_.addMBtiles(knowLayers.filter(layer => (layer.type === LayerType.MBtiles)));
+    this.facadeMap_.addWMS(knowLayers.filter(layer => (layer.type === LayerType.WMS)));
+    this.facadeMap_.addWMTS(knowLayers.filter(layer => (layer.type === LayerType.WMTS)));
+    this.facadeMap_.addKML(knowLayers.filter(layer => (layer.type === LayerType.KML)));
+    this.facadeMap_.addWFS(knowLayers.filter(layer => (layer.type === LayerType.WFS)));
 
     return this;
-  };
+  }
 
   /**
    * This function removes the layers from the map
    *
    * @function
    * @param {Array<Object>} layers to remove
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeLayers = function(layers) {
+  removeLayers(layers) {
 
     // gets the layers with type defined and undefined
-    var unknowLayers = layers.filter(function(layer) {
-      return !M.layer.type.know(layer.type);
+    let unknowLayers = layers.filter(layer => {
+      return !LayerType.know(layer.type);
     });
-    var knowLayers = layers.filter(function(layer) {
-      return M.layer.type.know(layer.type);
+    let knowLayers = layers.filter(layer {
+      return LayerType.know(layer.type);
     });
 
     if (knowLayers.length > 0) {
@@ -277,7 +241,7 @@ goog.require('M.impl.style.Heatmap');
     }
 
     return this;
-  };
+  }
 
   /**
    * This function gets the WMC layers added to the map
@@ -287,45 +251,43 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Array<M.layer.WMC>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getWMC = function(filters) {
-    var foundLayers = [];
+  getWMC(filters) {
+    let foundLayers = [];
 
     // get all wmcLayers
-    var wmcLayers = this.layers_.filter(function(layer) {
-      return (layer.type === M.layer.type.WMC);
+    let wmcLayers = this.layers_.filter(layer => {
+      return (layer.type === LayerType.WMC);
     });
 
     // parse to Array
-    if (M.utils.isNullOrEmpty(filters)) {
+    if (Utils.isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!M.utils.isArray(filters)) {
+    if (!Utils.isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wmcLayers;
-    }
-    else {
-      filters.forEach(function(filterLayer) {
-        foundLayers = foundLayers.concat(wmcLayers.filter(function(wmcLayer) {
-          var layerMatched = true;
+    } else {
+      filters.forEach(filterLayer => {
+        foundLayers = foundLayers.concat(wmcLayers.filter((wmcLayer) => {
+          let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmcLayer)) {
             // type
-            if (!M.utils.isNullOrEmpty(filterLayer.type)) {
+            if (!Utils.isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === wmcLayer.type));
             }
             // URL
-            if (!M.utils.isNullOrEmpty(filterLayer.url)) {
+            if (!Utils.isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === wmcLayer.url));
             }
             // name
-            if (!M.utils.isNullOrEmpty(filterLayer.name)) {
+            if (!Utils.isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wmcLayer.name));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -333,22 +295,22 @@ goog.require('M.impl.style.Heatmap');
       }, this);
     }
     return foundLayers;
-  };
+  }
 
   /**
    * This function adds the WMC layers to the map
    *
    * @function
    * @param {Array<M.impl.layer.WMC>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.addWMC = function(layers) {
-    layers.forEach(function(layer, zIndex) {
+  addWMC(layers) {
+    layers.forEach((layer, zIndex) => {
       // checks if layer is WMC and was added to the map
-      if (layer.type == M.layer.type.WMC) {
-        if (!M.utils.includes(this.layers_, layer)) {
-          layer.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WMC]);
+      if (layer.type == LayerType.WMC) {
+        if (!Utils.includes(this.layers_, layer)) {
+          layer.setZIndex(Map.Z_INDEX[LayerType.WMC]);
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
         }
@@ -356,29 +318,28 @@ goog.require('M.impl.style.Heatmap');
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function removes the WMC layers to the map
    *
    * @function
    * @param {Array<M.layer.WMC>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeWMC = function(layers) {
-    var wmcMapLayers = this.getWMC(layers);
-    wmcMapLayers.forEach(function(wmcLayer) {
+  removeWMC(layers) {
+    let wmcMapLayers = this.getWMC(layers);
+    wmcMapLayers.forEach((wmcLayer) => {
       // TODO removing the WMC layer with ol3
       if (wmcLayer.selected === true && wmcLayer.isLoaded() === false) {
-        wmcLayer.on(M.evt.LOAD, () => {
+        wmcLayer.on(EventsManager.LOAD, () => {
           wmcLayer.setLoaded(false);
           this.layers_.remove(wmcLayer);
           this.facadeMap_.removeWMS(wmcLayer.layers);
           this.facadeMap_.refreshWMCSelectorControl();
         });
-      }
-      else {
+      } else {
         wmcLayer.setLoaded(false);
         this.layers_.remove(wmcLayer);
         this.facadeMap_.removeWMS(wmcLayer.layers);
@@ -387,7 +348,7 @@ goog.require('M.impl.style.Heatmap');
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function gets the KML layers added to the map
@@ -397,49 +358,47 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Array<M.layer.KML>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getKML = function(filters) {
-    var foundLayers = [];
+  getKML(filters) {
+    let foundLayers = [];
 
     // get all kmlLayers
-    var kmlLayers = this.layers_.filter(function(layer) {
-      return (layer.type === M.layer.type.KML);
+    let kmlLayers = this.layers_.filter((layer) => {
+      return (layer.type === LayerType.KML);
     });
 
     // parse to Array
-    if (M.utils.isNullOrEmpty(filters)) {
+    if (Utils.isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!M.utils.isArray(filters)) {
+    if (!Utils.isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = kmlLayers;
-    }
-    else {
-      filters.forEach(function(filterLayer) {
-        var filteredKMLLayers = kmlLayers.filter(function(kmlLayer) {
-          var layerMatched = true;
+    } else {
+      filters.forEach(filterLayer => {
+        let filteredKMLLayers = kmlLayers.filter(kmlLayer => {
+          let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(kmlLayer)) {
             // type
-            if (!M.utils.isNullOrEmpty(filterLayer.type)) {
+            if (!Utils.isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === kmlLayer.type));
             }
             // URL
-            if (!M.utils.isNullOrEmpty(filterLayer.url)) {
+            if (!Utils.isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === kmlLayer.url));
             }
             // name
-            if (!M.utils.isNullOrEmpty(filterLayer.name)) {
+            if (!Utils.isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === kmlLayer.name));
             }
             // extract
-            if (!M.utils.isNullOrEmpty(filterLayer.extract)) {
+            if (!Utils.isNullOrEmpty(filterLayer.extract)) {
               layerMatched = (layerMatched && (filterLayer.extract === kmlLayer.extract));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -448,25 +407,25 @@ goog.require('M.impl.style.Heatmap');
       }, this);
     }
     return foundLayers;
-  };
+  }
 
   /**
    * This function adds the KML layers to the map
    *
    * @function
    * @param {Array<M.layer.KML>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.addKML = function(layers) {
-    layers.forEach(function(layer) {
+  addKML(layers) {
+    layers.forEach(layer => {
       // checks if layer is WMC and was added to the map
-      if (layer.type === M.layer.type.KML) {
-        if (!M.utils.includes(this.layers_, layer)) {
+      if (layer.type === LayerType.KML) {
+        if (!Utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
           if (layer.getZIndex() == null) {
-            var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.KML];
+            var zIndex = this.layers_.length + Map.Z_INDEX[LayerType.KML];
             layer.setZIndex(zIndex);
           }
         }
@@ -474,99 +433,96 @@ goog.require('M.impl.style.Heatmap');
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function removes the KML layers to the map
    *
    * @function
    * @param {Array<M.layer.KML>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeKML = function(layers) {
-    var kmlMapLayers = this.getKML(layers);
-    kmlMapLayers.forEach(function(kmlLayer) {
+  removeKML(layers) {
+    let kmlMapLayers = this.getKML(layers);
+    kmlMapLayers.forEach(kmlLayer => {
       this.layers_.remove(kmlLayer);
       kmlLayer.getImpl().destroy();
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function gets the WMS layers added to the map
    *
    * @function
    * @param {Array<M.Layer>} filters to apply to the search
-   * @returns {Array<M.layer.WMS>} layers from the map
+   * @returns {Array<FacadeWMS>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getWMS = function(filters) {
-    var foundLayers = [];
+  getWMS(filters) {
+    let foundLayers = [];
 
     // get all wmsLayers
-    var wmsLayers = this.layers_.filter(function(layer) {
-      return (layer.type === M.layer.type.WMS);
+    let wmsLayers = this.layers_.filter(layer => {
+      return (layer.type === LayerType.WMS);
     });
 
     // parse to Array
-    if (M.utils.isNullOrEmpty(filters)) {
+    if (Utils.isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!M.utils.isArray(filters)) {
+    if (!Utils.isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wmsLayers;
-    }
-    else {
-      filters.forEach(function(filterLayer) {
-        var filteredWMSLayers = wmsLayers.filter(function(wmsLayer) {
-          var layerMatched = true;
+    } else {
+      filters.forEach(filterLayer => {
+        let filteredWMSLayers = wmsLayers.filter(wmsLayer => {
+          let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmsLayer)) {
-            // if instanceof M.layer.WMS check if it is the same
-            if (filterLayer instanceof M.layer.WMS) {
+            // if instanceof FacadeWMS check if it is the same
+            if (filterLayer instanceof FacadeWMS) {
               layerMatched = (filterLayer === wmsLayer);
-            }
-            else {
+            } else {
               // type
-              if (!M.utils.isNullOrEmpty(filterLayer.type)) {
+              if (!Utils.isNullOrEmpty(filterLayer.type)) {
                 layerMatched = (layerMatched && (filterLayer.type === wmsLayer.type));
               }
               // URL
-              if (!M.utils.isNullOrEmpty(filterLayer.url)) {
+              if (!Utils.isNullOrEmpty(filterLayer.url)) {
                 layerMatched = (layerMatched && (filterLayer.url === wmsLayer.url));
               }
               // name
-              if (!M.utils.isNullOrEmpty(filterLayer.name)) {
+              if (!Utils.isNullOrEmpty(filterLayer.name)) {
                 layerMatched = (layerMatched && (filterLayer.name === wmsLayer.name));
               }
               // legend
-              if (!M.utils.isNullOrEmpty(filterLayer.legend)) {
+              if (!Utils.isNullOrEmpty(filterLayer.legend)) {
                 layerMatched = (layerMatched && (filterLayer.legend === wmsLayer.legend));
               }
               // transparent
-              if (!M.utils.isNullOrEmpty(filterLayer.transparent)) {
+              if (!Utils.isNullOrEmpty(filterLayer.transparent)) {
                 layerMatched = (layerMatched && (filterLayer.transparent === wmsLayer.transparent));
               }
               // tiled
-              if (!M.utils.isNullOrEmpty(filterLayer.tiled)) {
+              if (!Utils.isNullOrEmpty(filterLayer.tiled)) {
                 layerMatched = (layerMatched && (filterLayer.tiled === wmsLayer.tiled));
               }
               // cql
-              if (!M.utils.isNullOrEmpty(filterLayer.cql)) {
+              if (!Utils.isNullOrEmpty(filterLayer.cql)) {
                 layerMatched = (layerMatched && (filterLayer.cql === wmsLayer.cql));
               }
               // version
-              if (!M.utils.isNullOrEmpty(filterLayer.version)) {
+              if (!Utils.isNullOrEmpty(filterLayer.version)) {
                 layerMatched = (layerMatched && (filterLayer.version === wmsLayer.version));
               }
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -575,25 +531,25 @@ goog.require('M.impl.style.Heatmap');
       }, this);
     }
     return foundLayers;
-  };
+  }
 
   /**
    * This function adds the WMS layers to the map
    *
    * @function
-   * @param {Array<M.layer.WMS>} layers
-   * @returns {M.impl.Map}
+   * @param {Array<FacadeWMS>} layers
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.addWMS = function(layers) {
+  addWMS(layers) {
     // cehcks if exists a base layer
-    var baseLayers = this.getBaseLayers();
-    var existsBaseLayer = (baseLayers.length > 0);
+    let baseLayers = this.getBaseLayers();
+    let existsBaseLayer = (baseLayers.length > 0);
 
-    layers.forEach(function(layer) {
+    layers.forEach(layer => {
       // checks if layer is WMC and was added to the map
-      if (layer.type == M.layer.type.WMS) {
-        if (!M.utils.includes(this.layers_, layer)) {
+      if (layer.type == LayerType.WMS) {
+        if (!Utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
 
@@ -605,11 +561,10 @@ goog.require('M.impl.style.Heatmap');
             if (layer.isVisible()) {
               this.updateResolutionsFromBaseLayer();
             }
-            layer.setZIndex(M.impl.Map.Z_INDEX_BASELAYER);
-          }
-          else {
+            layer.setZIndex(Map.Z_INDEX_BASELAYER);
+          } else {
             if (layer.getZIndex() == null) {
-              var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.WMS];
+              var zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMS];
               layer.setZIndex(zIndex);
             }
             // recalculates resolution if there are not
@@ -622,25 +577,25 @@ goog.require('M.impl.style.Heatmap');
       }
     }, this);
     return this;
-  };
+  }
 
   /**
    * This function removes the WMS layers to the map
    *
    * @function
-   * @param {Array<M.layer.WMS>} layers
-   * @returns {M.impl.Map}
+   * @param {Array<FacadeWMS>} layers
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeWMS = function(layers) {
-    var wmsMapLayers = this.getWMS(layers);
-    wmsMapLayers.forEach(function(wmsLayer) {
+  removeWMS(layers) {
+    let wmsMapLayers = this.getWMS(layers);
+    wmsMapLayers.forEach(wmsLayer => {
       this.layers_.remove(wmsLayer);
       wmsLayer.getImpl().destroy();
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function gets the WFS layers added to the map
@@ -650,69 +605,67 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Array<M.layer.WFS>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getWFS = function(filters) {
-    var foundLayers = [];
+  getWFS(filters) {
+    let foundLayers = [];
 
     // get all wfsLayers
-    var wfsLayers = this.layers_.filter(function(layer) {
-      return (layer.type === M.layer.type.WFS);
+    let wfsLayers = this.layers_.filter(layer => {
+      return (layer.type === LayerType.WFS);
     });
 
     // parse to Array
-    if (M.utils.isNullOrEmpty(filters)) {
+    if (Utils.isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!M.utils.isArray(filters)) {
+    if (!Utils.isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wfsLayers;
-    }
-    else {
-      filters.forEach(function(filterLayer) {
-        var filteredWFSLayers = wfsLayers.filter(function(wfsLayer) {
-          var layerMatched = true;
+    } else {
+      filters.forEach(filterLayer => {
+        let filteredWFSLayers = wfsLayers.filter((wfsLayer) => {
+          let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wfsLayer)) {
             // type
-            if (!M.utils.isNullOrEmpty(filterLayer.type)) {
+            if (!Utils.isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === wfsLayer.type));
             }
             // URL
-            if (!M.utils.isNullOrEmpty(filterLayer.url)) {
+            if (!Utils.isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === wfsLayer.url));
             }
             // name
-            if (!M.utils.isNullOrEmpty(filterLayer.name)) {
+            if (!Utils.isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wfsLayer.name));
             }
             // namespace
-            if (!M.utils.isNullOrEmpty(filterLayer.namespace)) {
+            if (!Utils.isNullOrEmpty(filterLayer.namespace)) {
               layerMatched = (layerMatched && (filterLayer.namespace === wfsLayer.namespace));
             }
             // legend
-            if (!M.utils.isNullOrEmpty(filterLayer.legend)) {
+            if (!Utils.isNullOrEmpty(filterLayer.legend)) {
               layerMatched = (layerMatched && (filterLayer.legend === wfsLayer.legend));
             }
             // cql
-            if (!M.utils.isNullOrEmpty(filterLayer.cql)) {
+            if (!Utils.isNullOrEmpty(filterLayer.cql)) {
               layerMatched = (layerMatched && (filterLayer.cql === wfsLayer.cql));
             }
             // geometry
-            if (!M.utils.isNullOrEmpty(filterLayer.geometry)) {
+            if (!Utils.isNullOrEmpty(filterLayer.geometry)) {
               layerMatched = (layerMatched && (filterLayer.geometry === wfsLayer.geometry));
             }
             // ids
-            if (!M.utils.isNullOrEmpty(filterLayer.ids)) {
+            if (!Utils.isNullOrEmpty(filterLayer.ids)) {
               layerMatched = (layerMatched && (filterLayer.ids === wfsLayer.ids));
             }
             // version
-            if (!M.utils.isNullOrEmpty(filterLayer.version)) {
+            if (!Utils.isNullOrEmpty(filterLayer.version)) {
               layerMatched = (layerMatched && (filterLayer.version === wfsLayer.version));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -721,26 +674,26 @@ goog.require('M.impl.style.Heatmap');
       }, this);
     }
     return foundLayers;
-  };
+  }
 
   /**
    * This function adds the WFS layers to the map
    *
    * @function
    * @param {Array<M.layer.WFS>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.addWFS = function(layers) {
-    layers.forEach(function(layer) {
+  addWFS(layers) {
+    layers.forEach(layer => {
       // checks if layer is WFS and was added to the map
-      if (layer.type == M.layer.type.WFS) {
-        if (!M.utils.includes(this.layers_, layer)) {
+      if (layer.type == LayerType.WFS) {
+        if (!Utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
           layer.setZIndex(layer.getZIndex());
           if (layer.getZIndex() == null) {
-            var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.WFS];
+            var zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WFS];
             layer.setZIndex(zIndex);
           }
         }
@@ -748,25 +701,25 @@ goog.require('M.impl.style.Heatmap');
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function removes the WFS layers to the map
    *
    * @function
    * @param {Array<M.layer.WFS>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeWFS = function(layers) {
-    var wfsMapLayers = this.getWFS(layers);
-    wfsMapLayers.forEach(function(wfsLayer) {
+  removeWFS(layers) {
+    let wfsMapLayers = this.getWFS(layers);
+    wfsMapLayers.forEach(wfsLayer => {
       this.layers_.remove(wfsLayer);
       wfsLayer.getImpl().destroy();
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function gets the WMTS layers added to the map
@@ -776,54 +729,52 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Array<M.layer.WMTS>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getWMTS = function(filters) {
-    var foundLayers = [];
+  getWMTS(filters) {
+    let foundLayers = [];
 
     // get all kmlLayers
-    var wmtsLayers = this.layers_.filter(function(layer) {
-      return (layer.type === M.layer.type.WMTS);
+    let wmtsLayers = this.layers_.filter(layer => {
+      return (layer.type === LayerType.WMTS);
     });
 
     // parse to Array
-    if (M.utils.isNullOrEmpty(filters)) {
+    if (Utils.isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!M.utils.isArray(filters)) {
+    if (!Utils.isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wmtsLayers;
-    }
-    else {
-      filters.forEach(function(filterLayer) {
+    } else {
+      filters.forEach(filterLayer => {
         // TODO ERROR DE RECURSIVIDAD: var l = map.getLayers(); map.getWMS(l);
-        var filteredWMTSLayers = wmtsLayers.filter(function(wmtsLayer) {
-          var layerMatched = true;
+        let filteredWMTSLayers = wmtsLayers.filter(wmtsLayer => {
+          let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmtsLayer)) {
             // type
-            if (!M.utils.isNullOrEmpty(filterLayer.type)) {
+            if (!Utils.isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === wmtsLayer.type));
             }
             // URL
-            if (!M.utils.isNullOrEmpty(filterLayer.url)) {
+            if (!Utils.isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === wmtsLayer.url));
             }
             // name
-            if (!M.utils.isNullOrEmpty(filterLayer.name)) {
+            if (!Utils.isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wmtsLayer.name));
             }
             // matrixSet
-            if (!M.utils.isNullOrEmpty(filterLayer.matrixSet)) {
+            if (!Utils.isNullOrEmpty(filterLayer.matrixSet)) {
               layerMatched = (layerMatched && (filterLayer.matrixSet === wmtsLayer.matrixSet));
             }
             // legend
-            if (!M.utils.isNullOrEmpty(filterLayer.legend)) {
+            if (!Utils.isNullOrEmpty(filterLayer.legend)) {
               layerMatched = (layerMatched && (filterLayer.legend === wmtsLayer.legend));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -832,25 +783,25 @@ goog.require('M.impl.style.Heatmap');
       }, this);
     }
     return foundLayers;
-  };
+  }
 
   /**
    * This function adds the WMTS layers to the map
    *
    * @function
    * @param {Array<M.layer.WMTS>} layers
-   * @returns {M.impl.Map}º
+   * @returns {Map}º
    * @api stable
    */
-  M.impl.Map.prototype.addWMTS = function(layers) {
+  addWMTS(layers) {
     // cehcks if exists a base layer
-    var baseLayers = this.getBaseLayers();
-    var existsBaseLayer = (baseLayers.length > 0);
+    let baseLayers = this.getBaseLayers();
+    let existsBaseLayer = (baseLayers.length > 0);
 
-    layers.forEach(function(layer) {
+    layers.forEach(layer => {
       // checks if layer is WMTS and was added to the map
-      if (layer.type == M.layer.type.WMTS) {
-        if (!M.utils.includes(this.layers_, layer)) {
+      if (layer.type == LayerType.WMTS) {
+        if (!Utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
           /* if the layer is a base layer then
@@ -861,11 +812,10 @@ goog.require('M.impl.style.Heatmap');
             if (layer.isVisible()) {
               this.updateResolutionsFromBaseLayer();
             }
-            layer.setZIndex(M.impl.MAP.Z_INDEX_BASELAYER);
-          }
-          else {
+            layer.setZIndex(Map.Z_INDEX_BASELAYER);
+          } else {
             if (layer.getZIndex() == null) {
-              var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[M.layer.type.WMTS];
+              let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMTS];
               layer.setZIndex(zIndex);
             }
 
@@ -880,25 +830,25 @@ goog.require('M.impl.style.Heatmap');
       }
     }, this);
     return this;
-  };
+  }
 
   /**
    * This function removes the WMTS layers to the map
    *
    * @function
    * @param {Array<M.layer.WMTS>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeWMTS = function(layers) {
-    var wmtsMapLayers = this.getWMTS(layers);
-    wmtsMapLayers.forEach(function(wmtsLayer) {
+  removeWMTS(layers) {
+    let wmtsMapLayers = this.getWMTS(layers);
+    wmtsMapLayers.forEach(wmtsLayer => {
       this.layers_.remove(wmtsLayer);
       wmtsLayer.getImpl().destroy();
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function gets the MBtiles layers added to the map
@@ -908,50 +858,50 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Array<M.layer.MBtiles>} layers from the map
    * @api stable
    */
-  M.impl.Map.prototype.getMBtiles = function(filters) {
-    var foundLayers = [];
+  getMBtiles(filters) {
+    let foundLayers = [];
 
     return foundLayers;
-  };
+  }
 
   /**
    * This function adds the MBtiles layers to the map
    *
    * @function
    * @param {Array<M.layer.MBtiles>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.addMBtiles = function(layers) {
-    layers.forEach(function(layer) {
+  addMBtiles(layers) {
+    layers.forEach(layer => {
       // checks if layer is MBtiles and was added to the map
-      if ((layer.type == M.layer.type.MBtiles) &&
-        !M.utils.includes(this.layers_, layer)) {
+      if ((layer.type == LayerType.MBtiles) &&
+        !Utils.includes(this.layers_, layer)) {
         // TODO creating and adding the MBtiles layer with ol3
         this.layers_.push(layer);
       }
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function removes the MBtiles layers to the map
    *
    * @function
    * @param {Array<M.layer.MBtiles>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeMBtiles = function(layers) {
-    var mbtilesMapLayers = this.getMBtiles(layers);
-    mbtilesMapLayers.forEach(function(mbtilesLayer) {
+  removeMBtiles(layers) {
+    let mbtilesMapLayers = this.getMBtiles(layers);
+    mbtilesMapLayers.forEach(mbtilesLayer => {
       // TODO removing the MBtiles layer with ol3
       this.layers_.remove(mbtilesLayer);
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function gets the WMS layers added to the map
@@ -959,49 +909,46 @@ goog.require('M.impl.style.Heatmap');
    * @private
    * @function
    * @param {Array<M.Layer>} filters to apply to the search
-   * @returns {Array<M.layer.WMS>} layers from the map
+   * @returns {Array<FacadeWMS>} layers from the map
    */
-  M.impl.Map.prototype.getUnknowLayers_ = function(filters) {
-    var foundLayers = [];
+  getUnknowLayers_(filters) {
+    let foundLayers = [];
 
     // get all wmsLayers
-    var unknowLayers = this.layers_.filter(function(layer) {
-      return !M.layer.type.know(layer.type);
+    let unknowLayers = this.layers_.filter(layer => {
+      return !LayerType.know(layer.type);
     });
 
     // parse to Array
-    if (M.utils.isNullOrEmpty(filters)) {
+    if (Utils.isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!M.utils.isArray(filters)) {
+    if (!Utils.isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = unknowLayers;
-    }
-    else {
-      filters.forEach(function(filterLayer) {
-        var filteredUnknowLayers = unknowLayers.filter(function(unknowLayer) {
-          var layerMatched = true;
+    } else {
+      filters.forEach(filterLayer => {
+        let filteredUnknowLayers = unknowLayers.filter(unknowLayer => {
+          let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(unknowLayer)) {
-            // if instanceof M.layer.WMS check if it is the same
-            if (filterLayer instanceof M.Layer) {
+            // if instanceof FacadeWMS check if it is the same
+            if (filterLayer instanceof LayerBase) {
               layerMatched = filterLayer.equals(unknowLayer);
-            }
-            else {
+            } else {
               // type
-              if (!M.utils.isNullOrEmpty(filterLayer.type)) {
+              if (!Utils.isNullOrEmpty(filterLayer.type)) {
                 layerMatched = (layerMatched && (filterLayer.type === unknowLayer.type));
               }
               // name
-              if (!M.utils.isNullOrEmpty(filterLayer.name)) {
+              if (!Utils.isNullOrEmpty(filterLayer.name)) {
                 layerMatched = (layerMatched && (filterLayer.name === unknowLayer.name));
               }
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -1010,7 +957,7 @@ goog.require('M.impl.style.Heatmap');
       }, this);
     }
     return foundLayers;
-  };
+  }
 
   /**
    * This function adds layers specified by the user
@@ -1018,15 +965,15 @@ goog.require('M.impl.style.Heatmap');
    * @private
    * @function
    * @param {Array<Object>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    */
-  M.impl.Map.prototype.addUnknowLayers_ = function(layers) {
+  addUnknowLayers_(layers) {
     // cehcks if exists a base layer
-    var existsBaseLayer = this.getBaseLayers().length > 0;
+    let existsBaseLayer = this.getBaseLayers().length > 0;
 
     // adds layers
-    layers.forEach(function(layer) {
-      if (!M.utils.includes(this.layers_, layer)) {
+    layers.forEach(layer => {
+      if (!Utils.includes(this.layers_, layer)) {
         layer.getImpl().addTo(this.facadeMap_);
         this.layers_.push(layer);
 
@@ -1038,12 +985,11 @@ goog.require('M.impl.style.Heatmap');
           if (layer.isVisible()) {
             this.updateResolutionsFromBaseLayer();
           }
-          layer.setZIndex(M.impl.Map.Z_INDEX_BASELAYER);
-        }
-        else {
+          layer.setZIndex(Map.Z_INDEX_BASELAYER);
+        } else {
           layer.setZIndex(layer.getZIndex());
           if (layer.getZIndex() == null) {
-            var zIndex = this.layers_.length + M.impl.Map.Z_INDEX[layer.type];
+            var zIndex = this.layers_.length + Map.Z_INDEX[layer.type];
             layer.setZIndex(zIndex);
           }
           // recalculates resolution if there are not
@@ -1056,7 +1002,7 @@ goog.require('M.impl.style.Heatmap');
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function removes the layers from the map
@@ -1064,25 +1010,24 @@ goog.require('M.impl.style.Heatmap');
    * @private
    * @function
    * @param {Array<Object>} layers to remove
-   * @returns {M.impl.Map}
+   * @returns {Map}
    */
-  M.impl.Map.prototype.removeUnknowLayers_ = function(layers) {
+  removeUnknowLayers_(layers) {
     // removes unknow layers
-    layers.forEach(function(layer) {
-      if (M.utils.includes(this.layers_, layer)) {
+    layers.forEach(layer => {
+      if (Utils.includes(this.layers_, layer)) {
         this.layers_.remove(layer);
         layer.getImpl().destroy();
         if (layer.transparent !== true) {
           // it was base layer so sets the visibility of the first one
-          var baseLayers = this.facadeMap_.getBaseLayers();
+          let baseLayers = this.facadeMap_.getBaseLayers();
           if (baseLayers.length > 0) {
             baseLayers[0].setVisible(true);
           }
         }
       }
     }, this);
-  };
-
+  }
   /**
    * This function adds controls specified by the user
    *
@@ -1092,8 +1037,8 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Array<M.Control>}
    * @api stable
    */
-  M.impl.Map.prototype.getControls = function(filters) {
-    var foundControls = [];
+  getControls(filters) {
+    let foundControls = [];
 
     let panelControls = this.facadeMap_.getPanels().map(p => p.getControls());
     if (panelControls.length > 0) {
@@ -1101,28 +1046,25 @@ goog.require('M.impl.style.Heatmap');
     }
     const controlsToSearch = this.controls_.concat(panelControls);
     // parse to Array
-    if (M.utils.isNullOrEmpty(filters)) {
+    if (Utils.isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!M.utils.isArray(filters)) {
+    if (!Utils.isArray(filters)) {
       filters = [filters];
     }
     if (filters.length === 0) {
       foundControls = controlsToSearch;
-    }
-    else {
-      filters.forEach(function(filterControl) {
-        foundControls = foundControls.concat(controlsToSearch.filter(function(control) {
-          var controlMatched = false;
+    } else {
+      filters.forEach(filterControl => {
+        foundControls = foundControls.concat(controlsToSearch.filter(control => {
+          let controlMatched = false;
 
-          if (!M.utils.includes(foundControls, control)) {
-            if (M.utils.isString(filterControl)) {
+          if (!Utils.includes(foundControls, control)) {
+            if (Utils.isString(filterControl)) {
               controlMatched = (filterControl === control.name);
-            }
-            else if (filterControl instanceof M.Control) {
+            } else if (filterControl instanceof ControlBase) {
               controlMatched = (filterControl === control);
-            }
-            else if (M.utils.isObject(filterControl)) {
+            } else if (Utils.isObject(filterControl)) {
               controlMatched = (filterControl.name === control.name);
             }
           }
@@ -1138,7 +1080,7 @@ goog.require('M.impl.style.Heatmap');
       }
     });
     return nonRepeatFoundControls;
-  };
+  }
 
   /**
    * This function adds controls specified by the user
@@ -1146,39 +1088,39 @@ goog.require('M.impl.style.Heatmap');
    * @public
    * @function
    * @param {M.Control} controls
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.addControls = function(controls) {
-    controls.forEach(function(control) {
-      if (control instanceof M.control.Panzoombar) {
+  addControls(controls) {
+    controls.forEach(control => {
+      if (control instanceof FacadePanzoombar) {
         this.facadeMap_.addControls('panzoom');
       }
-      if (!M.utils.includes(this.controls_, control)) {
+      if (!Utils.includes(this.controls_, control)) {
         this.controls_.push(control);
       }
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function removes the controls from the map
    *
    * @function
    * @param {String|Array<String>} layers
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.removeControls = function(controls) {
-    var mapControls = this.getControls(controls);
-    mapControls.forEach(function(control) {
+  removeControls(controls) {
+    let mapControls = this.getControls(controls);
+    mapControls.forEach(control => {
       control.destroy();
       this.controls_.remove(control);
     }, this);
 
     return this;
-  };
+  }
 
   /**
    * This function sets the maximum extent for this
@@ -1188,18 +1130,18 @@ goog.require('M.impl.style.Heatmap');
    * @function
    * @param {Mx.Extent} maxExtent the extent max
    * @param {Boolean} zoomToExtent - Set bbox
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.setMaxExtent = function(maxExtent, zoomToExtent) {
+  setMaxExtent(maxExtent, zoomToExtent) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(maxExtent)) {
-      M.exception('No ha especificado ningún maxExtent');
+    if (Utils.isNullOrEmpty(maxExtent)) {
+      Exception('No ha especificado ningún maxExtent');
     }
 
     // set the extent by ol
-    var olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
-    var olMap = this.getMapImpl();
+    let olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
+    let olMap = this.getMapImpl();
     //      var minZoom = olMap.getView().
     olMap.getView().set('extent', olExtent);
     this.updateResolutionsFromBaseLayer();
@@ -1209,7 +1151,7 @@ goog.require('M.impl.style.Heatmap');
     }
 
     return this;
-  };
+  }
 
   /**
    * This function gets the maximum extent for this
@@ -1220,12 +1162,12 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Mx.Extent}
    * @api stable
    */
-  M.impl.Map.prototype.getMaxExtent = function() {
-    var extent;
-    var olMap = this.getMapImpl();
-    var olExtent = olMap.getView().get('extent');
+  getMaxExtent() {
+    let extent;
+    let olMap = this.getMapImpl();
+    let olExtent = olMap.getView().get('extent');
 
-    if (!M.utils.isNullOrEmpty(olExtent)) {
+    if (!Utils.isNullOrEmpty(olExtent)) {
       extent = {
         'x': {
           'min': olExtent[0],
@@ -1236,13 +1178,12 @@ goog.require('M.impl.style.Heatmap');
           'max': olExtent[3]
         }
       };
-    }
-    else {
+    } else {
       extent = this.envolvedMaxExtent_;
     }
 
     return extent;
-  };
+  }
 
   /**
    * This function sets current extent (bbox) for this
@@ -1252,30 +1193,29 @@ goog.require('M.impl.style.Heatmap');
    * @function
    * @param {Mx.Extent} bbox the bbox
    * @param {Object} vendorOpts vendor options
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.setBbox = function(bbox, vendorOpts) {
+  setBbox(bbox, vendorOpts) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(bbox)) {
-      M.exception('No ha especificado ningún bbox');
+    if (Utils.isNullOrEmpty(bbox)) {
+      Exception('No ha especificado ningún bbox');
     }
 
     this.userBbox_ = bbox;
 
     // set the extent by ol
-    var extent;
-    if (M.utils.isArray(bbox)) {
+    let extent;
+    if (Utils.isArray(bbox)) {
       extent = bbox;
-    }
-    else if (M.utils.isObject(bbox)) {
+    } else if (Utils.isObject(bbox)) {
       extent = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
     }
-    var olMap = this.getMapImpl();
+    let olMap = this.getMapImpl();
     olMap.getView().fit(extent, vendorOpts);
 
     return this;
-  };
+  }
 
   /**
    * This function gets the current extent (bbox) of this
@@ -1286,15 +1226,15 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Mx.Extent}
    * @api stable
    */
-  M.impl.Map.prototype.getBbox = function() {
-    var bbox = null;
+  getBbox() {
+    let bbox = null;
 
-    var olMap = this.getMapImpl();
-    var view = olMap.getView();
-    if (!M.utils.isNullOrEmpty(view.getCenter())) {
+    let olMap = this.getMapImpl();
+    let view = olMap.getView();
+    if (!Utils.isNullOrEmpty(view.getCenter())) {
       var olExtent = view.calculateExtent(olMap.getSize());
 
-      if (!M.utils.isNullOrEmpty(olExtent)) {
+      if (!Utils.isNullOrEmpty(olExtent)) {
         bbox = {
           x: {
             min: olExtent[0],
@@ -1308,7 +1248,7 @@ goog.require('M.impl.style.Heatmap');
       }
     }
     return bbox;
-  };
+  }
 
   /**
    * This function sets current zoom for this
@@ -1317,20 +1257,20 @@ goog.require('M.impl.style.Heatmap');
    * @public
    * @function
    * @param {Number} zoom the new zoom
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.setZoom = function(zoom) {
+  setZoom(zoom) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(zoom)) {
-      M.exception('No ha especificado ningún zoom');
+    if (Utils.isNullOrEmpty(zoom)) {
+      Exception('No ha especificado ningún zoom');
     }
 
     // set the zoom by ol
     this.getMapImpl().getView().setUserZoom(zoom);
 
     return this;
-  };
+  }
 
   /**
    * This function gets the current zoom of this
@@ -1341,7 +1281,7 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Number}
    * @api stable
    */
-  M.impl.Map.prototype.getZoom = function() {
+  getZoom() {
     let resolution = this.getMapImpl().getView().getResolution();
     let resolutions = this.getResolutions();
     let zoom = null;
@@ -1352,7 +1292,7 @@ goog.require('M.impl.style.Heatmap');
       }
     }
     return zoom;
-  };
+  }
 
   /**
    * This function sets current center for this
@@ -1361,20 +1301,20 @@ goog.require('M.impl.style.Heatmap');
    * @public
    * @function
    * @param {Object} center the new center
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.setCenter = function(center) {
+  setCenter(center) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(center)) {
-      M.exception('No ha especificado ningún center');
+    if (Utils.isNullOrEmpty(center)) {
+      Exception('No ha especificado ningún center');
     }
 
     // set the zoom by ol
-    var olCenter = [center.x, center.y];
-    var olView = this.getMapImpl().getView();
-    var srcCenter = olView.getCenter();
-    if (!M.utils.isNullOrEmpty(srcCenter)) {
+    let olCenter = [center.x, center.y];
+    let olView = this.getMapImpl().getView();
+    let srcCenter = olView.getCenter();
+    if (!Utils.isNullOrEmpty(srcCenter)) {
       this.getMapImpl().getView().animate({
         duration: 250,
         source: srcCenter
@@ -1382,7 +1322,7 @@ goog.require('M.impl.style.Heatmap');
     }
     olView.setCenter(olCenter);
     return this;
-  };
+  }
 
   /**
    * This function gets the current center of this
@@ -1393,17 +1333,17 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Object}
    * @api stable
    */
-  M.impl.Map.prototype.getCenter = function() {
-    var center = null;
-    var olCenter = this.getMapImpl().getView().getCenter();
-    if (!M.utils.isNullOrEmpty(olCenter)) {
+  getCenter() {
+    let center = null;
+    let olCenter = this.getMapImpl().getView().getCenter();
+    if (!Utils.isNullOrEmpty(olCenter)) {
       center = {
         'x': olCenter[0],
         'y': olCenter[1]
       };
     }
     return center;
-  };
+  }
 
   /**
    * This function gets the current resolutions of this
@@ -1414,12 +1354,12 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Array<Number>}
    * @api stable
    */
-  M.impl.Map.prototype.getResolutions = function() {
-    var olMap = this.getMapImpl();
-    var resolutions = olMap.getView().getResolutions();
+  getResolutions() {
+    let olMap = this.getMapImpl();
+    let resolutions = olMap.getView().getResolutions();
 
     return resolutions;
-  };
+  }
 
   /**
    * This function sets current resolutions for this
@@ -1428,28 +1368,28 @@ goog.require('M.impl.style.Heatmap');
    * @public
    * @function
    * @param {Array<Number>} resolutions the resolutions
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.setResolutions = function(resolutions, optional) {
+  setResolutions(resolutions, optional) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(resolutions)) {
-      M.exception('No ha especificado ninguna resolución');
+    if (Utils.isNullOrEmpty(resolutions)) {
+      Exception('No ha especificado ninguna resolución');
     }
 
-    if (M.utils.isNullOrEmpty(optional)) {
+    if (Utils.isNullOrEmpty(optional)) {
       this.userResolutions_ = resolutions;
     }
 
     // gets the projection
-    var projection = ol.proj.get(this.getProjection().code);
+    let projection = ol.proj.get(this.getProjection().code);
 
     // sets the resolutions
-    var olMap = this.getMapImpl();
-    var oldViewProperties = olMap.getView().getProperties();
-    var userZoom = olMap.getView().getUserZoom();
+    let olMap = this.getMapImpl();
+    let oldViewProperties = olMap.getView().getProperties();
+    let userZoom = olMap.getView().getUserZoom();
 
-    var newView = new M.impl.View({
+    let newView = new M.impl.View({
       'projection': projection
     });
     newView.setProperties(oldViewProperties);
@@ -1459,19 +1399,19 @@ goog.require('M.impl.style.Heatmap');
     olMap.setView(newView);
 
     // sets the resolutions for each layer
-    var layers = this.getWMS();
-    layers.forEach(function(layer) {
+    let layers = this.getWMS();
+    layers.forEach(layer => {
       layer.getImpl().setResolutions(resolutions);
     });
 
-    if (!M.utils.isNullOrEmpty(this.userBbox_)) {
+    if (!Utils.isNullOrEmpty(this.userBbox_)) {
       this.facadeMap_.setBbox(this.userBbox_, {
         'nearest': true
       });
     }
 
     return this;
-  };
+  }
 
   /**
    * This function gets current scale for this
@@ -1482,28 +1422,26 @@ goog.require('M.impl.style.Heatmap');
    * @returns {number}
    * @api stable
    */
-  M.impl.Map.prototype.getScale = function() {
-    var olMap = this.getMapImpl();
+  getScale() {
+    let olMap = this.getMapImpl();
 
-    var resolution = olMap.getView().getResolution();
-    var units = this.getProjection().units;
+    let resolution = olMap.getView().getResolution();
+    let units = this.getProjection().units;
 
-    var scale = M.utils.getScaleFromResolution(resolution, units);
+    let scale = Utils.getScaleFromResolution(resolution, units);
 
-    if (!M.utils.isNullOrEmpty(scale)) {
+    if (!Utils.isNullOrEmpty(scale)) {
       if (scale >= 1000 && scale <= 950000) {
         scale = Math.round(scale / 1000) * 1000;
-      }
-      else if (scale >= 950000) {
+      } else if (scale >= 950000) {
         scale = Math.round(scale / 1000000) * 1000000;
-      }
-      else {
+      } else {
         scale = Math.round(scale);
       }
     }
 
     return scale;
-  };
+  }
 
   /**
    * This function sets current projection for this
@@ -1512,55 +1450,55 @@ goog.require('M.impl.style.Heatmap');
    * @public
    * @function
    * @param {Mx.Projection} bbox the bbox
-   * @returns {M.impl.Map}
+   * @returns {Map}
    * @api stable
    */
-  M.impl.Map.prototype.setProjection = function(projection) {
+  setProjection(projection) {
     // checks if the param is null or empty
-    if (M.utils.isNullOrEmpty(projection)) {
-      M.exception('No ha especificado ninguna projection');
+    if (Utils.isNullOrEmpty(projection)) {
+      Exception('No ha especificado ninguna projection');
     }
 
     // gets the current view and modifies its projection
-    var olProjection = ol.proj.get(projection.code);
-    if (M.utils.isNullOrEmpty(olProjection)) {
+    let olProjection = ol.proj.get(projection.code);
+    if (Utils.isNullOrEmpty(olProjection)) {
       olProjection = new ol.proj.Projection(projection);
     }
 
     // gets previous data
-    var olPrevProjection = ol.proj.get(this.getProjection().code);
-    var prevBbox = this.facadeMap_.getBbox();
-    var prevMaxExtent = this.facadeMap_.getMaxExtent();
-    var prevCenter = this.facadeMap_.getCenter();
-    var resolutions = this.facadeMap_.getResolutions();
+    let olPrevProjection = ol.proj.get(this.getProjection().code);
+    let prevBbox = this.facadeMap_.getBbox();
+    let prevMaxExtent = this.facadeMap_.getMaxExtent();
+    let prevCenter = this.facadeMap_.getCenter();
+    let resolutions = this.facadeMap_.getResolutions();
 
-    var olMap = this.getMapImpl();
-    var oldViewProperties = olMap.getView().getProperties();
-    var userZoom = olMap.getView().getUserZoom();
-    var resolution = olMap.getView().getResolution();
+    let olMap = this.getMapImpl();
+    let oldViewProperties = olMap.getView().getProperties();
+    let userZoom = olMap.getView().getUserZoom();
+    let resolution = olMap.getView().getResolution();
 
     // sets the new view
-    var newView = new M.impl.View({
+    let newView = new View({
       'projection': olProjection
     });
     newView.setProperties(oldViewProperties);
     newView.setUserZoom(userZoom);
-    if (!M.utils.isNullOrEmpty(resolutions)) {
+    if (!Utils.isNullOrEmpty(resolutions)) {
       newView.setResolutions(resolutions);
     }
-    if (!M.utils.isNullOrEmpty(resolution)) {
+    if (!Utils.isNullOrEmpty(resolution)) {
       newView.setResolution(resolution);
     }
     olMap.setView(newView);
 
     // updates min, max resolutions of all WMS layers
-    this.facadeMap_.getWMS().forEach(function(layer) {
+    this.facadeMap_.getWMS().forEach(layer => {
       layer.updateMinMaxResolution(projection);
     });
 
     // recalculates maxExtent
-    if (!M.utils.isNullOrEmpty(prevMaxExtent)) {
-      if (!M.utils.isArray(prevMaxExtent)) {
+    if (!Utils.isNullOrEmpty(prevMaxExtent)) {
+      if (!Utils.isArray(prevMaxExtent)) {
         prevMaxExtent = [prevMaxExtent.x.min,
                prevMaxExtent.y.min,
                prevMaxExtent.x.max,
@@ -1571,8 +1509,8 @@ goog.require('M.impl.style.Heatmap');
     }
 
     // recalculates bbox
-    if (!M.utils.isNullOrEmpty(prevBbox)) {
-      if (!M.utils.isArray(prevBbox)) {
+    if (!Utils.isNullOrEmpty(prevBbox)) {
+      if (!Utils.isArray(prevBbox)) {
         prevBbox = [
             prevBbox.x.min,
             prevBbox.y.min,
@@ -1586,9 +1524,9 @@ goog.require('M.impl.style.Heatmap');
     }
 
     // recalculates center
-    if (!M.utils.isNullOrEmpty(prevCenter)) {
+    if (!Utils.isNullOrEmpty(prevCenter)) {
       let draw = false;
-      if (!M.utils.isNullOrEmpty(this.facadeMap_.getFeatureCenter())) {
+      if (!Utils.isNullOrEmpty(this.facadeMap_.getFeatureCenter())) {
         draw = true;
       }
       this.facadeMap_.setCenter(ol.proj.transform([
@@ -1602,28 +1540,28 @@ goog.require('M.impl.style.Heatmap');
 
     // reprojects popup
     let popup = this.facadeMap_.getPopup();
-    if (!M.utils.isNullOrEmpty(popup)) {
+    if (!Utils.isNullOrEmpty(popup)) {
       let coord = popup.getCoordinate();
-      if (!M.utils.isNullOrEmpty(coord)) {
+      if (!Utils.isNullOrEmpty(coord)) {
         coord = ol.proj.transform(coord, olPrevProjection, olProjection);
         popup.setCoordinate(coord);
       }
     }
 
     // reprojects label
-    var label = this.facadeMap_.getLabel();
-    if (!M.utils.isNullOrEmpty(label)) {
+    let label = this.facadeMap_.getLabel();
+    if (!Utils.isNullOrEmpty(label)) {
       let coord = label.getCoordinate();
-      if (!M.utils.isNullOrEmpty(coord)) {
+      if (!Utils.isNullOrEmpty(coord)) {
         coord = ol.proj.transform(coord, olPrevProjection, olProjection);
         label.setCoordinate(coord);
       }
     }
 
-    this.fire(M.evt.CHANGE);
+    this.fire(EventsManager.CHANGE);
 
     return this;
-  };
+  }
 
   /**
    * This function gets the current projection of this
@@ -1634,20 +1572,20 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Mx.Projection}
    * @api stable
    */
-  M.impl.Map.prototype.getProjection = function() {
-    var olMap = this.getMapImpl();
-    var olProjection = olMap.getView().getProjection();
+  getProjection() {
+    let olMap = this.getMapImpl();
+    let olProjection = olMap.getView().getProjection();
 
-    var projection = null;
+    let projection = null;
 
-    if (!M.utils.isNullOrEmpty(olProjection)) {
+    if (!Utils.isNullOrEmpty(olProjection)) {
       projection = {
         code: olProjection.getCode(),
         units: olProjection.getUnits()
       };
     }
     return projection;
-  };
+  }
 
   /**
    * This function provides ol3 map used by this instance
@@ -1657,9 +1595,9 @@ goog.require('M.impl.style.Heatmap');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.getMapImpl = function() {
+  getMapImpl() {
     return this.map_;
-  };
+  }
 
   /**
    * This function adds a popup and removes the previous
@@ -1671,14 +1609,14 @@ goog.require('M.impl.style.Heatmap');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.removePopup = function(popup) {
-    if (!M.utils.isNullOrEmpty(popup)) {
-      var olPopup = popup.getImpl();
-      var olMap = this.getMapImpl();
+  removePopup(popup) {
+    if (!Utils.isNullOrEmpty(popup)) {
+      let olPopup = popup.getImpl();
+      let olMap = this.getMapImpl();
       olMap.removeOverlay(olPopup);
     }
     return this;
-  };
+  }
 
   /**
    * This function gets the envolved extent of this
@@ -1689,12 +1627,12 @@ goog.require('M.impl.style.Heatmap');
    * @returns {Promise}
    * @api stable
    */
-  M.impl.Map.prototype.getEnvolvedExtent = function() {
-    return M.impl.envolvedExtent.calculate(this).then(function(extent) {
+  getEnvolvedExtent() {
+    return EnvolvedExtent.calculate(this).then(extent => {
       this.envolvedMaxExtent_ = extent;
       return this.envolvedMaxExtent_;
-    }.bind(this));
-  };
+    });
+  }
 
   /**
    * This function destroys this map, cleaning the HTML
@@ -1704,7 +1642,7 @@ goog.require('M.impl.style.Heatmap');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.destroy = function() {
+  destroy() {
     this.layers_.length = 0;
     this.controls_.length = 0;
 
@@ -1713,7 +1651,7 @@ goog.require('M.impl.style.Heatmap');
 
     this.map_.setTarget(null);
     this.map_ = null;
-  };
+  }
 
   /**
    * Updates the resolutions for this map calculated
@@ -1724,34 +1662,34 @@ goog.require('M.impl.style.Heatmap');
    * @returns {M.Map}
    * @api stable
    */
-  M.impl.Map.prototype.updateResolutionsFromBaseLayer = function() {
-    var resolutions = [];
+  updateResolutionsFromBaseLayer() {
+    let resolutions = [];
 
     // zoom levels
-    var zoomLevels = 16;
+    let zoomLevels = 16;
 
     // units
-    var units = this.getProjection().units;
+    let units = this.getProjection().units;
 
     // size
-    var size = this.getMapImpl().getSize();
+    let size = this.getMapImpl().getSize();
 
-    var baseLayer = this.getBaseLayers().filter(function(bl) {
+    let baseLayer = this.getBaseLayers().filter(bl => {
       return bl.isVisible();
     })[0];
 
     // gets min/max resolutions from base layer
-    var maxResolution = null;
-    var minResolution = null;
-    if (!M.utils.isNullOrEmpty(baseLayer)) {
+    let maxResolution = null;
+    let minResolution = null;
+    if (!Utils.isNullOrEmpty(baseLayer)) {
       minResolution = baseLayer.getImpl().getMinResolution();
       maxResolution = baseLayer.getImpl().getMaxResolution();
       zoomLevels = baseLayer.getImpl().getNumZoomLevels();
     }
 
     if (this.userResolutions_ === null) {
-      if (!M.utils.isNullOrEmpty(minResolution) && !M.utils.isNullOrEmpty(maxResolution)) {
-        resolutions = M.utils.fillResolutions(minResolution, maxResolution, zoomLevels);
+      if (!Utils.isNullOrEmpty(minResolution) && !Utils.isNullOrEmpty(maxResolution)) {
+        resolutions = Utils.fillResolutions(minResolution, maxResolution, zoomLevels);
         this.setResolutions(resolutions, true);
 
         this._resolutionsBaseLayer = true;
@@ -1761,14 +1699,13 @@ goog.require('M.impl.style.Heatmap');
         // fires the completed event
         if (this._calculatedResolutions === false) {
           this._calculatedResolutions = true;
-          this.fire(M.evt.COMPLETED);
+          this.fire(EventsManager.COMPLETED);
         }
-      }
-      else {
-        M.impl.envolvedExtent.calculate(this).then(function(extent) {
+      } else {
+        EnvolvedExtent.calculate(this).then(extent => {
           if (!this._resolutionsBaseLayer && (this.userResolutions_ === null)) {
 
-            resolutions = M.utils.generateResolutionsFromExtent(extent, size, zoomLevels, units);
+            resolutions = Utils.generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
 
             this._resolutionsEnvolvedExtent = true;
@@ -1778,13 +1715,13 @@ goog.require('M.impl.style.Heatmap');
             // fires the completed event
             if (this._calculatedResolutions === false) {
               this._calculatedResolutions = true;
-              this.fire(M.evt.COMPLETED);
+              this.fire(EventsManager.COMPLETED);
             }
           }
-        }.bind(this));
+        });
       }
     }
-  };
+  }
 
   /**
    * This function adds a popup and removes the previous
@@ -1796,11 +1733,11 @@ goog.require('M.impl.style.Heatmap');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.addLabel = function(label) {
+  addLabel(label) {
     this.label = label;
     label.show(this.facadeMap_);
     return this;
-  };
+  }
 
   /**
    * This function adds a popup and removes the previous
@@ -1812,10 +1749,9 @@ goog.require('M.impl.style.Heatmap');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.getLabel = function() {
+  getLabel() {
     return this.label;
-
-  };
+  }
 
   /**
    * This function provides ol3 map used by this instance
@@ -1825,13 +1761,13 @@ goog.require('M.impl.style.Heatmap');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.removeLabel = function() {
-    if (!M.utils.isNullOrEmpty(this.label)) {
-      var popup = this.label.getPopup();
+  removeLabel() {
+    if (!Utils.isNullOrEmpty(this.label)) {
+      let popup = this.label.getPopup();
       this.removePopup(popup);
       this.label = null;
     }
-  };
+  }
 
   /**
    * This function refresh the state of this map instance,
@@ -1839,12 +1775,12 @@ goog.require('M.impl.style.Heatmap');
    *
    * @function
    * @api stable
-   * @returns {M.impl.Map} the instance
+   * @returns {Map} the instance
    */
-  M.impl.Map.prototype.refresh = function() {
+  refresh = function () {
     this.map_.updateSize();
     return this;
-  };
+  }
 
   /**
    * This function provides the core map used by the
@@ -1854,9 +1790,9 @@ goog.require('M.impl.style.Heatmap');
    * @api stable
    * @returns {Object} core map used by the implementation
    */
-  M.impl.Map.prototype.getContainer = function() {
+  getContainer() {
     return this.map_.overlayContainerStopEvent_;
-  };
+  }
 
   /**
    * This function sets the facade map to implement
@@ -1865,9 +1801,9 @@ goog.require('M.impl.style.Heatmap');
    * @function
    * @api stable
    */
-  M.impl.Map.prototype.setFacadeMap = function(facadeMap) {
+  setFacadeMap(facadeMap) {
     this.facadeMap_ = facadeMap;
-  };
+  }
 
   /**
    * TODO
@@ -1875,22 +1811,22 @@ goog.require('M.impl.style.Heatmap');
    * @private
    * @function
    */
-  M.impl.Map.prototype.onMapClick_ = function(evt) {
+  onMapClick_(evt) {
     let pixel = evt.pixel;
     let coord = this.map_.getCoordinateFromPixel(pixel);
 
     // hides the label if it was added
     let label = this.facadeMap_.getLabel();
-    if (!M.utils.isNullOrEmpty(label)) {
+    if (!Utils.isNullOrEmpty(label)) {
       label.hide();
     }
 
-    this.facadeMap_.fire(M.evt.CLICK, [{
+    this.facadeMap_.fire(EventsManager.CLICK, [{
       'pixel': pixel,
       'coord': coord,
       'vendor': evt
     }]);
-  };
+  }
 
   /**
    * TODO
@@ -1898,16 +1834,16 @@ goog.require('M.impl.style.Heatmap');
    * @private
    * @function
    */
-  M.impl.Map.prototype.onMapMove_ = function(evt) {
+  onMapMove_(evt) {
     let pixel = evt.pixel;
     let coord = this.map_.getCoordinateFromPixel(pixel);
 
-    this.facadeMap_.fire(M.evt.MOVE, [{
+    this.facadeMap_.fire(EventsManager.MOVE, [{
       'pixel': pixel,
       'coord': coord,
       'vendor': evt
     }]);
-  };
+  }
 
   /**
    * Z-INDEX for the layers
@@ -1916,14 +1852,14 @@ goog.require('M.impl.style.Heatmap');
    * @public
    * @api stable
    */
-  M.impl.Map.Z_INDEX = {};
-  M.impl.Map.Z_INDEX_BASELAYER = 0;
-  M.impl.Map.Z_INDEX[M.layer.type.WMC] = 1;
-  M.impl.Map.Z_INDEX[M.layer.type.WMS] = 1000;
-  M.impl.Map.Z_INDEX[M.layer.type.WMTS] = 2000;
-  M.impl.Map.Z_INDEX[M.layer.type.OSM] = 2000;
-  M.impl.Map.Z_INDEX[M.layer.type.KML] = 3000;
-  M.impl.Map.Z_INDEX[M.layer.type.WFS] = 9999;
-  M.impl.Map.Z_INDEX[M.layer.type.Vector] = 9999;
-  M.impl.Map.Z_INDEX[M.layer.type.GeoJSON] = 9999;
-})();
+  Map.Z_INDEX = {};
+  Map.Z_INDEX_BASELAYER = 0;
+  Map.Z_INDEX[LayerType.WMC] = 1;
+  Map.Z_INDEX[LayerType.WMS] = 1000;
+  Map.Z_INDEX[LayerType.WMTS] = 2000;
+  Map.Z_INDEX[LayerType.OSM] = 2000;
+  Map.Z_INDEX[LayerType.KML] = 3000;
+  Map.Z_INDEX[LayerType.WFS] = 9999;
+  Map.Z_INDEX[LayerType.Vector] = 9999;
+  Map.Z_INDEX[LayerType.GeoJSON] = 9999;
+}
