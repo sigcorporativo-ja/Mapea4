@@ -1,9 +1,13 @@
-goog.provide('M.impl.Label');
+import Template from "facade/js/utils/template";
+import FLabel from "facade/js/label";
+import FPopup from "facade/js/popup/popup";
+import Utils from "facade/js/utils/utils";
 
 /**
  * @namespace M.impl.control
  */
-(function() {
+
+export default class Label {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Label
@@ -13,7 +17,7 @@ goog.provide('M.impl.Label');
    * @param {array} coordOpts - Coordinate to display popup
    * @api stable
    */
-  M.impl.Label = function(text, coordOpts, panMapIfOutOfView) {
+  constructor(text, coordOpts, panMapIfOutOfView) {
     /**
      * Text to show
      * @private
@@ -49,7 +53,7 @@ goog.provide('M.impl.Label');
      * @api stable
      */
     this.panMapIfOutOfView = panMapIfOutOfView;
-  };
+  }
 
   /**
    * This function displays the popup with information
@@ -59,17 +63,17 @@ goog.provide('M.impl.Label');
    * @param {M.Map} map - Map where show popup
    * @api stable
    */
-  M.impl.Label.prototype.show = function(map) {
+  show(map) {
     this.facadeMap_ = map;
-    M.template.compile(M.Label.POPUP_TEMPLATE, {
+    Template.compile(FLabel.POPUP_TEMPLATE, {
       'jsonp': true,
       'vars': {
         'info': this.text_
       },
       'parseToHtml': false
-    }).then(function(htmlAsText) {
+    }).then(htmlAsText => {
       map.removePopup();
-      this.popup_ = new M.Popup({
+      this.popup_ = new FPopup({
         'panMapIfOutOfView': this.panMapIfOutOfView
       });
       this.popup_.addTab({
@@ -79,8 +83,8 @@ goog.provide('M.impl.Label');
       });
       map.addPopup(this.popup_, this.coord_);
       // this.popup_.on(M.evt.DESTROY, () => this.facadeMap_.removeLabel());
-    }.bind(this));
-  };
+    });
+  }
 
   /**
    * This function hidden the popup with information
@@ -89,9 +93,9 @@ goog.provide('M.impl.Label');
    * @function
    * @api stable
    */
-  M.impl.Label.prototype.hide = function() {
+  hide() {
     this.facadeMap_.removePopup();
-  };
+  }
 
   /**
    * This function return popup created
@@ -101,9 +105,9 @@ goog.provide('M.impl.Label');
    * @returns {M.Popup} popup created
    * @api stable
    */
-  M.impl.Label.prototype.getPopup = function() {
+  getPopup() {
     return this.popup_;
-  };
+  }
 
   /**
    * TODO
@@ -111,13 +115,13 @@ goog.provide('M.impl.Label');
    * @function
    * @api stable
    */
-  M.impl.Label.prototype.getCoordinate = function() {
+  getCoordinate() {
     let coord = this.coord_;
-    if (M.utils.isNullOrEmpty(coord)) {
+    if (Utils.isNullOrEmpty(coord)) {
       coord = this.getPopup().getCoordinate();
     }
     return coord;
-  };
+  }
 
   /**
    * TODO
@@ -125,11 +129,11 @@ goog.provide('M.impl.Label');
    * @function
    * @api stable
    */
-  M.impl.Label.prototype.setCoordinate = function(coord) {
+  setCoordinate(coord) {
     this.coord_ = coord;
     let popup = this.getPopup();
-    if (!M.utils.isNullOrEmpty(popup)) {
+    if (!Utils.isNullOrEmpty(popup)) {
       popup.setCoordinate(coord);
     }
-  };
-})();
+  }
+}
