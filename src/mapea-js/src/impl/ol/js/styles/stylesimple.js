@@ -1,21 +1,20 @@
-goog.provide('M.impl.style.Simple');
-
-goog.require('M.impl.Style');
+import Style from "./style";
+import Utils from "../utils/utils";
+import Feature from "../feature/feature";
 
 /**
  * @namespace M.impl.style.Simple
  */
-(function() {
+export default class Simple extends Style {
   /**
    * Main constructor of the class.
    * @constructor
    * @api stable
    */
-  M.impl.style.Simple = (function(options = {}) {
+  constructor(options = {}) {
     this.updateFacadeOptions(options);
     //goog.base(this, options);
-  });
-  goog.inherits(M.impl.style.Simple, M.impl.Style);
+  }
 
   /**
    * This function apply style options facade to impl
@@ -24,7 +23,7 @@ goog.require('M.impl.Style');
    * @param {Object} options
    * @api stable
    */
-  M.impl.style.Simple.prototype.updateFacadeOptions = function(options = {}) {};
+  updateFacadeOptions(options = {}) {}
 
   /**
    * This function apply style to layer
@@ -33,14 +32,14 @@ goog.require('M.impl.Style');
    * @param {M.layer.Vector} layer - Layer
    * @api stable
    */
-  M.impl.style.Simple.prototype.applyToLayer = function(layer) {
+  applyToLayer(layer) {
     // we will apply the style on the ol3 layer
     let olLayer = layer.getImpl().getOL3Layer();
-    if (!M.utils.isNullOrEmpty(olLayer)) {
+    if (!Utils.isNullOrEmpty(olLayer)) {
       olLayer.setStyle(this.olStyleFn_);
       // layer.getFeatures().forEach(this.applyToFeature, this);
     }
-  };
+  }
 
   /**
    * This function apply style to feature
@@ -50,9 +49,9 @@ goog.require('M.impl.Style');
    * @function
    * @api stable
    */
-  M.impl.style.Simple.prototype.applyToFeature = function(feature) {
+  applyToFeature(feature) {
     feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
-  };
+  }
 
   /**
    * This function get the value of the feature which key match with
@@ -63,27 +62,25 @@ goog.require('M.impl.Style');
    * @param {M.Feature}  feature - Feature
    * @api stable
    */
-  M.impl.style.Simple.getValue = function(attr, olFeature) {
+  getValue(attr, olFeature) {
     let templateRegexp = /^\{\{([^\}]+)\}\}$/;
     let attrFeature = attr;
-    if (templateRegexp.test(attr) || M.utils.isFunction(attr)) {
+    if (templateRegexp.test(attr) || Utils.isFunction(attr)) {
       if (!(olFeature instanceof ol.Feature)) {
         attrFeature = undefined;
-      }
-      else {
-        let feature = M.impl.Feature.olFeature2Facade(olFeature, false);
+      } else {
+        let feature = Feature.olFeature2Facade(olFeature, false);
         if (templateRegexp.test(attr)) {
           let keyFeature = attr.replace(templateRegexp, '$1');
           attrFeature = feature.getAttribute(keyFeature);
-        }
-        else if (M.utils.isFunction(attr)) {
+        } else if (Utils.isFunction(attr)) {
           attrFeature = attr(feature);
         }
       }
     }
-    if (M.utils.isNullOrEmpty(attrFeature)) {
+    if (Utils.isNullOrEmpty(attrFeature)) {
       attrFeature = undefined;
     }
     return attrFeature;
-  };
-})();
+  }
+}

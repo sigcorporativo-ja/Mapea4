@@ -1,18 +1,17 @@
-goog.provide('M.impl.style.Feature');
-goog.require('M.impl.Style');
+import Style from "./style";
 
 /**
  * @namespace M.impl.style.Feature
  */
 
-(function() {
+export default class Feature extends Style {
 
   /**
    *
    * @api stable
    */
-  M.impl.style.Feature = (function(options, impl) {
-    goog.base(this, options, impl);
-  });
-  goog.inherits(M.impl.style.Feature, M.impl.Style);
-})();
+  constructor(options, impl) {
+    super(this, options, impl);
+  }
+
+}
