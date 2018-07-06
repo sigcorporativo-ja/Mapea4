@@ -1,12 +1,7 @@
-goog.provide('M.impl.style.PointFontSymbol');
-
-goog.require('goog.style');
-goog.require('ol.style.FontSymbol');
-
 /**
  * @namespace M.impl.style.PointFontSymbol
  */
-(function() {
+export default class PointFontSymbol extends ol.style.FontSymbol {
   /**
    * @classdesc
    * chart style for vector features
@@ -16,7 +11,7 @@ goog.require('ol.style.FontSymbol');
    * @extends {ol.style.FontSymbol}
    * @api stable
    */
-  M.impl.style.PointFontSymbol = function(options = {}) {
+  constructor(options = {}) {
     if (!options.anchor) {
       options.anchor = [];
     }
@@ -39,23 +34,22 @@ goog.require('ol.style.FontSymbol');
       rotation: options.rotation,
       rotateWithView: options.rotateWithView
     });
-  };
-  ol.inherits(M.impl.style.PointFontSymbol, ol.style.FontSymbol);
+  }
 
   /**
-   * clones the chart
+   * clones the style
    * @public
    * @function
    * @api stable
    */
-  M.impl.style.PointFontSymbol.prototype.clone = function() {
-    let style = new ol.style.FontSymbol({
+  clone() {
+    let style = new PointFontSymbol({
       glyph: "",
       color: this.color_,
       fontSize: this.fontSize_,
       stroke: this.stroke_,
       fill: this.fill_,
-      radius: this.radius_ + (this.stroke_ ? this.stroke_.getWidth():0),
+      radius: this.radius_ + (this.stroke_ ? this.stroke_.getWidth() : 0),
       form: this.form_,
       gradient: this.gradient_,
       offsetX: this.offset_[0],
@@ -68,6 +62,5 @@ goog.require('ol.style.FontSymbol');
     style.glyph_ = this.glyph_;
     style.renderMarker_();
     return style;
-  };
-
-})();
+  }
+}
