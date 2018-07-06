@@ -1,76 +1,76 @@
-goog.provide('M.impl.utils');
+import Feature from "facade/js/feature/feature";
+import WKT from "facade/js/geom/wkt";
 
-goog.require('goog.style');
 
 /**
- * @namespace M.impl.utils
+ * @namespace Utils
  */
-(function() {
+export default class Utils {
 
   /**
    *
    * @function
    * @api stable
    */
-  M.impl.utils.generateResolutions = function(projection, extent, minZoom, maxZoom) {
-    var generatedResolutions, defaultMaxZoom = 28;
+  static generateResolutions(projection, extent, minZoom, maxZoom) {
+    let generatedResolutions, defaultMaxZoom = 28;
 
     // extent
-    if (M.utils.isNullOrEmpty(extent)) {
+    if (Utils.isNullOrEmpty(extent)) {
       extent = projection.getExtent();
     }
     // size
-    var size = ol.extent.getWidth(extent) / 256;
+    let size = ol.extent.getWidth(extent) / 256;
 
     // zoom levels
-    var zoomLevels;
-    if (M.utils.isNullOrEmpty(minZoom)) {
+    let zoomLevels;
+    if (Utils.isNullOrEmpty(minZoom)) {
       minZoom = ol.DEFAULT_MIN_ZOOM;
     }
-    if (M.utils.isNullOrEmpty(maxZoom)) {
+    if (Utils.isNullOrEmpty(maxZoom)) {
       maxZoom = defaultMaxZoom;
     }
     zoomLevels = maxZoom - minZoom;
 
     generatedResolutions = new Array(zoomLevels);
-    for (var i = 0; i < zoomLevels; i++) {
+    for (let i = 0; i < zoomLevels; i++) {
       generatedResolutions[i] = size / Math.pow(2, i);
     }
 
     return generatedResolutions;
-  };
+  }
 
   /**
    *
    * @function
    * @api stable
    */
-  M.impl.utils.addOverlayImage = function(overlayImage, map) {
-    var mapSize = map.getMapImpl().getSize();
+  static addOverlayImage(overlayImage, map) {
+    let mapSize = map.getMapImpl().getSize();
 
-    var screenXY = overlayImage['screenXY'];
-    var screenXUnits = overlayImage['screenXUnits'];
-    var screenYUnits = overlayImage['screenYUnits'];
-    var overlayXY = overlayImage['overlayXY'];
-    var overlayXUnits = overlayImage['overlayXUnits'];
-    var overlayYUnits = overlayImage['overlayYUnits'];
-    var size = overlayImage['size'];
-    var src = overlayImage['src'];
+    let screenXY = overlayImage['screenXY'];
+    let screenXUnits = overlayImage['screenXUnits'];
+    let screenYUnits = overlayImage['screenYUnits'];
+    let overlayXY = overlayImage['overlayXY'];
+    let overlayXUnits = overlayImage['overlayXUnits'];
+    let overlayYUnits = overlayImage['overlayYUnits'];
+    let size = overlayImage['size'];
+    let src = overlayImage['src'];
 
     // src
-    var img = goog.dom.createDom('img', {
-      'src': src
-    });
+    let img = document.createElement("img");
+    img.src = src;
+
     // size
-    goog.style.setWidth(img, size[0]);
-    goog.style.setHeight(img, size[1]);
+    img.style.width = size[0];
+    img.style.height = size[1];
 
     // position
-    var offsetX = overlayXY[0];
+    let offsetX = overlayXY[0];
     if (overlayXUnits === ol.style.IconAnchorUnits.FRACTION) {
       offsetX = offsetX * size[0];
     }
-    var offsetY = overlayXY[1];
+    let offsetY = overlayXY[1];
     if (overlayYUnits === ol.style.IconAnchorUnits.FRACTION) {
       offsetY = (size[1] - (offsetY * size[1]));
     }
@@ -83,14 +83,15 @@ goog.require('goog.style');
     if (screenYUnits === ol.style.IconAnchorUnits.FRACTION) {
       top = (mapSize[1] - (top * mapSize[1])) - offsetY;
     }
-    goog.style.setPosition(img, left, top);
+    img.style.top = top;
+    img.style.left = left;
 
     // parent
     var container = map.getMapImpl().getOverlayContainerStopEvent();
     container.appendChild(img);
 
     return img;
-  };
+  }
 
 
   /**
@@ -101,9 +102,9 @@ goog.require('goog.style');
    * @return {number} Height.
    * @api stable
    */
-  M.impl.utils.getExtentHeight = function(extent) {
+  static getExtentHeight(extent) {
     return extent[3] - extent[1];
-  };
+  }
 
   /**
    * Get the width of an extent.
@@ -113,9 +114,9 @@ goog.require('goog.style');
    * @return {number} Width.
    * @api stable
    */
-  M.impl.utils.getExtentWidth = function(extent) {
+  static getExtentWidth(extent) {
     return extent[2] - extent[0];
-  };
+  }
 
   /**
    * Calcs the geometry center
@@ -125,9 +126,9 @@ goog.require('goog.style');
    * @return {Array<number>} center coordinates
    * @api stable
    */
-  M.impl.utils.getCentroid = function(geometry) {
+  static getCentroid(geometry) {
     let centroid, coordinates, medianIdx, points, lineStrings;
-    if (M.utils.isNullOrEmpty(geometry)) {
+    if (Utils.isNullOrEmpty(geometry)) {
       return null;
     }
     switch (geometry.getType()) {
@@ -141,21 +142,21 @@ goog.require('goog.style');
         centroid = coordinates[medianIdx];
         break;
       case "Polygon":
-        centroid = M.impl.utils.getCentroid(geometry.getInteriorPoint());
+        centroid = Utils.getCentroid(geometry.getInteriorPoint());
         break;
       case "MultiPoint":
         points = geometry.getPoints();
         medianIdx = Math.floor(points.length / 2);
-        centroid = M.impl.utils.getCentroid(points[medianIdx]);
+        centroid = Utils.getCentroid(points[medianIdx]);
         break;
       case "MultiLineString":
         lineStrings = geometry.getLineStrings();
         medianIdx = Math.floor(lineStrings.length / 2);
-        centroid = M.impl.utils.getCentroid(lineStrings[medianIdx]);
+        centroid = Utils.getCentroid(lineStrings[medianIdx]);
         break;
       case "MultiPolygon":
         points = geometry.getInteriorPoints();
-        centroid = M.impl.utils.getCentroid(points);
+        centroid = Utils.getCentroid(points);
         break;
       case "Circle":
         centroid = geometry.getCenter();
@@ -164,7 +165,7 @@ goog.require('goog.style');
         return null;
     }
     return centroid;
-  };
+  }
 
   /**
    * Get the width of an extent.
@@ -174,11 +175,11 @@ goog.require('goog.style');
    * @return {number} Width.
    * @api stable
    */
-  M.impl.utils.getFeaturesExtent = function(features) {
-    let olFeatures = features.map(f => (f instanceof M.Feature) ? f.getImpl().getOLFeature() : f);
+  static getFeaturesExtent(features) {
+    let olFeatures = features.map(f => (f instanceof Feature) ? f.getImpl().getOLFeature() : f);
     let extents = olFeatures.map((feature) => feature.getGeometry().getExtent().slice(0));
     return (extents.length === 0) ? null : extents.reduce((ext1, ext2) => ol.extent.extend(ext1, ext2));
-  };
+  }
   /**
    * Get the coordinate of centroid
    * @public
@@ -187,51 +188,46 @@ goog.require('goog.style');
    * @return {Arra<number>}
    * @api stable
    */
-  M.impl.utils.getCentroidCoordinate = function(geometry) {
-    var centroid, coordinates, medianIdx, points, lineStrings, geometries;
+  static getCentroidCoordinate(geometry) {
+    let centroid, coordinates, medianIdx, points, lineStrings, geometries;
 
     // POINT
-    if (geometry.getType() === M.geom.wkt.type.POINT) {
+    if (geometry.getType() === Wkt.type.POINT) {
       centroid = geometry.getCoordinates();
     }
     // LINE
-    else if (geometry.getType() === M.geom.wkt.type.LINE_STRING) {
+    else if (geometry.getType() === WKT.type.LINE_STRING) {
       coordinates = geometry.getCoordinates();
       medianIdx = Math.floor(coordinates.length / 2);
       centroid = coordinates[medianIdx];
-    }
-    else if (geometry.getType() === M.geom.wkt.type.LINEAR_RING) {
+    } else if (geometry.getType() === WKT.type.LINEAR_RING) {
       coordinates = geometry.getCoordinates();
       medianIdx = Math.floor(coordinates.length / 2);
       centroid = coordinates[medianIdx];
     }
     // POLYGON
-    else if (geometry.getType() === M.geom.wkt.type.POLYGON) {
-      centroid = M.impl.utils.getCentroidCoordinate(geometry.getInteriorPoint());
+    else if (geometry.getType() === WKT.type.POLYGON) {
+      centroid = Utils.getCentroidCoordinate(geometry.getInteriorPoint());
     }
     // MULTI
-    else if (geometry.getType() === M.geom.wkt.type.MULTI_POINT) {
+    else if (geometry.getType() === WKT.type.MULTI_POINT) {
       points = geometry.getPoints();
       medianIdx = Math.floor(points.length / 2);
-      centroid = M.impl.utils.getCentroidCoordinate(points[medianIdx]);
-    }
-    else if (geometry.getType() === M.geom.wkt.type.MULTI_LINE_STRING) {
+      centroid = Utils.getCentroidCoordinate(points[medianIdx]);
+    } else if (geometry.getType() === WKT.type.MULTI_LINE_STRING) {
       lineStrings = geometry.getLineStrings();
       medianIdx = Math.floor(lineStrings.length / 2);
-      centroid = M.impl.utils.getCentroidCoordinate(lineStrings[medianIdx]);
-    }
-    else if (geometry.getType() === M.geom.wkt.type.MULTI_POLYGON) {
+      centroid = Utils.getCentroidCoordinate(lineStrings[medianIdx]);
+    } else if (geometry.getType() === WKT.type.MULTI_POLYGON) {
       points = geometry.getInteriorPoints();
-      centroid = M.impl.utils.getCentroidCoordinate(points);
-    }
-    else if (geometry.getType() === M.geom.wkt.type.CIRCLE) {
+      centroid = Utils.getCentroidCoordinate(points);
+    } else if (geometry.getType() === WKT.type.CIRCLE) {
       centroid = geometry.getCenter();
-    }
-    else if (geometry.getType() === M.geom.wkt.type.GEOMETRY_COLLECTION) {
+    } else if (geometry.getType() === WKT.type.GEOMETRY_COLLECTION) {
       geometries = geometry.getGeometries();
       medianIdx = Math.floor(geometries.length / 2);
-      centroid = M.impl.utils.getCentroidCoordinate(geometries[medianIdx]);
+      centroid = Utils.getCentroidCoordinate(geometries[medianIdx]);
     }
     return centroid;
-  };
-})();
+  }
+}

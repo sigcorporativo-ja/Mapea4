@@ -1,12 +1,10 @@
-goog.provide('M.impl.renderutils');
-
-goog.require('goog.style');
-goog.require('M.impl.textpath');
-
+import TextPath from "./textpath";
+import Utils from "facade/js/utils/utils";
+import StyleLine from "facade/js/style/styleline";
 /**
  * @namespace M.impl.postrenderer
  */
-(function() {
+export default class RenderUtils {
 
   /**
    * Post render event method.<br />
@@ -21,11 +19,11 @@ goog.require('M.impl.textpath');
    * @param {Object} e received event with framestate
    * @api stable
    */
-  M.impl.renderutils.postRender = function(e = null) {
+  constructor(e = null) {
 
     // add support for textpath
-    if (M.utils.isUndefined(CanvasRenderingContext2D.prototype.textPath)) {
-      CanvasRenderingContext2D.prototype.textPath = M.impl.textpath.render;
+    if (Utils.isUndefined(CanvasRenderingContext2D.prototype.textPath)) {
+      CanvasRenderingContext2D.prototype.textPath = Textpath.render;
     }
 
     // Prevent drawing at large resolution
@@ -48,7 +46,7 @@ goog.require('M.impl.textpath');
         styles = [styles];
       }
       styles.forEach((style) => {
-        let geom = (style instanceof M.style.Line ? style.options_.geometry : style.getGeometry()) || feature.getGeometry();
+        let geom = (style instanceof StyleLine ? style.options_.geometry : style.getGeometry()) || feature.getGeometry();
         let coords;
         switch (geom.getType()) {
           case 'MultiLineString':
@@ -59,9 +57,9 @@ goog.require('M.impl.textpath');
         }
 
         // add support for textpath
-        let textStyle = (style instanceof M.style.Line) ? style.options_.text : style.textPath;
-        if (textStyle != null && textStyle instanceof M.impl.style.TextPath) {
-          M.impl.textpath.draw(ctx, e.frameState.coordinateToPixelTransform, textStyle, coords);
+        let textStyle = (style instanceof StyleLine) ? style.options_.text : style.textPath;
+        if (textStyle != null && textStyle instanceof TextPath) {
+          TextPath.draw(ctx, e.frameState.coordinateToPixelTransform, textStyle, coords);
         }
 
         // add support for charts
@@ -80,9 +78,6 @@ goog.require('M.impl.textpath');
         // }
       });
     });
-
     ctx.restore();
-  };
-
-
-})();
+  }
+}

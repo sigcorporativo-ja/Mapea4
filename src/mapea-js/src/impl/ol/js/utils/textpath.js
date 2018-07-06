@@ -1,11 +1,7 @@
-goog.provide('M.impl.textpath');
-
-goog.require('goog.style');
-
 /**
- * @namespace M.impl.textpath
+ * @namespace TextPath
  */
-(function() {
+export default class TextPath {
 
   /**
    * Canvas textpath render method. Draws text along path
@@ -16,9 +12,9 @@ goog.require('goog.style');
    * @param {Array<Number>} path
    * @api stable
    */
-  M.impl.textpath.render = function(text, path) {
+  static render(text, path) {
     // canvas context
-    var ctx = this;
+    let ctx = this;
 
     let di = 0;
     let dpos = 0;
@@ -88,8 +84,7 @@ goog.require('goog.style');
         if (ctx.textJustify) {
           start = 0;
           letterPadding = (d - ctx.measureText(text).width) / (text.length - 1 + nbspace);
-        }
-        else {
+        } else {
           start = d - ctx.measureText(text).width - (text.length + nbspace) * letterPadding;
           if (ctx.textAlign === 'center') {
             start /= 2;
@@ -114,7 +109,7 @@ goog.require('goog.style');
       ctx.restore();
       start += wl + letterPadding * (letter === ' ' ? 2 : 1);
     }
-  };
+  }
 
   /**
    * Parse coordinates to path
@@ -126,23 +121,22 @@ goog.require('goog.style');
    * @return {Array<number>} builded path
    * @api stable
    */
-  M.impl.textpath.getPath_ = function(c2p, coords, readable) {
-    var path1 = [];
+  static getPath_(c2p, coords, readable) {
+    let path1 = [];
     coords.forEach((coord) => {
       path1.push(c2p[0] * coord[0] + c2p[1] * coord[1] + c2p[4]);
       path1.push(c2p[2] * coord[0] + c2p[3] * coord[1] + c2p[5]);
     });
     // Revert line ?
     if (readable && path1[0] > path1[path1.length - 2]) {
-      var path2 = [];
+      let path2 = [];
       for (var h = path1.length - 2; h >= 0; h -= 2) {
         path2.push(path1[h]);
         path2.push(path1[h + 1]);
       }
       return path2;
-    }
-    else return path1;
-  };
+    } else return path1;
+  }
 
   /**
    * Enclose a ol.style into an style function
@@ -152,7 +146,7 @@ goog.require('goog.style');
    * @return {function} style enclosed in a function
    * @api stable
    */
-  M.impl.textpath.formatStyle = function(style) {
+  static formatStyle(style) {
     if (style == null) {
       return null;
     }
@@ -162,16 +156,15 @@ goog.require('goog.style');
         text: new ol.style.Text()
       })];
     }
-    if (typeof(style) == 'function') {
+    if (typeof (style) == 'function') {
       formattedStyle = style;
-    }
-    else {
-      formattedStyle = function() {
+    } else {
+      formattedStyle = function () {
         return [style];
       };
     }
     return formattedStyle;
-  };
+  }
 
 
   /**
@@ -181,26 +174,26 @@ goog.require('goog.style');
    * @param {Object} e received event with framestate
    * @api stable
    */
-  M.impl.textpath.draw = function(ctx, coord2Pixel, textStyle, coords) {
+  static draw(ctx, coord2Pixel, textStyle, coords) {
     let path = this.getPath_(coord2Pixel, coords, textStyle.getRotateWithView());
 
     ctx.font = textStyle.getFont();
     ctx.textBaseline = textStyle.getTextBaseline();
     ctx.textAlign = textStyle.getTextAlign();
-    ctx.lineWidth = textStyle.getStroke() ? (textStyle.getStroke().getWidth() || M.impl.textpath.DEFAULT.lineWidth) : M.impl.textpath.DEFAULT.lineWidth;
-    ctx.strokeStyle = textStyle.getStroke() ? (textStyle.getStroke().getColor() || M.impl.textpath.DEFAULT.lineColor) : M.impl.textpath.DEFAULT.lineColor;
-    ctx.fillStyle = textStyle.getFill() ? textStyle.getFill().getColor() || M.impl.textpath.DEFAULT.fillColor : M.impl.textpath.DEFAULT.fillColor;
+    ctx.lineWidth = textStyle.getStroke() ? (textStyle.getStroke().getWidth() || TextPath.DEFAULT.lineWidth) : TextPath.DEFAULT.lineWidth;
+    ctx.strokeStyle = textStyle.getStroke() ? (textStyle.getStroke().getColor() || TextPath.DEFAULT.lineColor) : TextPath.DEFAULT.lineColor;
+    ctx.fillStyle = textStyle.getFill() ? textStyle.getFill().getColor() || TextPath.DEFAULT.fillColor : TextPath.DEFAULT.fillColor;
     // New params
     ctx.textJustify = textStyle.getTextAlign() == 'justify';
-    ctx.textOverflow = textStyle.getTextOverflow ? textStyle.getTextOverflow() : M.impl.textpath.DEFAULT.textOverflow;
-    ctx.minWidth = textStyle.getMinWidth ? textStyle.getMinWidth() : M.impl.textpath.DEFAULT.minWidth;
+    ctx.textOverflow = textStyle.getTextOverflow ? textStyle.getTextOverflow() : TextPath.DEFAULT.textOverflow;
+    ctx.minWidth = textStyle.getMinWidth ? textStyle.getMinWidth() : TextPath.DEFAULT.minWidth;
     // Draw textpath
     if (typeof ctx.textPath === 'function') {
       ctx.textPath(textStyle.getText(), path);
     }
 
     ctx.restore();
-  };
+  }
 
   /**
    * Default textpath style values
@@ -209,7 +202,7 @@ goog.require('goog.style');
    * @public
    * @api stable
    */
-  M.impl.textpath.DEFAULT = {
+  TextPath.DEFAULT = {
     lineWidth: 0,
     lineColor: '#fff',
     fillColor: '#000',
@@ -217,4 +210,4 @@ goog.require('goog.style');
     minWidth: 0
   };
 
-})();
+}
