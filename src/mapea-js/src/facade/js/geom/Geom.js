@@ -1,7 +1,6 @@
-import Utils from './utils/utils';
-import WMS from './wms';
-import Geojson from './geojson';
-import WFS from './wfs';
+import Utils from '../util/Utils';
+import WKT from './WKT';
+import WFS from './WFS';
 
 export default class Geom {
   /**
@@ -11,7 +10,7 @@ export default class Geom {
    * @param {string} rawType the type to be parsed
    * @api stable
    */
-  parse(rawGeom) {
+  static parse(rawGeom) {
     let parsedGeom = Utils.normalize(rawGeom, true);
     return WFS.type[parsedGeom];
   }
@@ -23,7 +22,7 @@ export default class Geom {
    * @param {string} rawType the type to be parsed
    * @api stable
    */
-  parseWFS(wfsType) {
+  static parseWFS(wfsType) {
     let parsedWFS;
     if (wfsType === WFS.type.POINT) {
       parsedWFS = WKT.type.POINT;
