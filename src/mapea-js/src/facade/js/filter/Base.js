@@ -1,4 +1,4 @@
-export default class Abstract {
+export default class Base {
 
   /**
    * Abstract class

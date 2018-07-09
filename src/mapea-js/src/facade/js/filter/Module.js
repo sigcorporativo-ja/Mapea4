@@ -1,8 +1,9 @@
-import Spatial from './filterspatial';
-import Utils from '../utils/utils';
-import Vector from '../layers/vector';
-import Feature from '../feature/feature';
-import WKT from '../format/wkt';
+import Spatial from './Spatial';
+import Utils from '../util/Utils';
+import Vector from '../layer/Vector';
+import Feature from '../feature/Feature';
+import WKT from '../format/WKT';
+import jsts from "jsts";
 
 export default class Module {
   /**
@@ -23,7 +24,7 @@ export default class Module {
         return jtsGeomToFilter.contains(jtsGeom);
       });
     }, {
-      cqlFilter: Spatial.toCQLFilter_("CONTAINS", geometries)
+      cqlFilter: Module.toCQLFilter_("CONTAINS", geometries)
     });
   }
 
@@ -45,7 +46,7 @@ export default class Module {
         return jtsGeomToFilter.disjoint(jtsGeom);
       });
     }, {
-      cqlFilter: Spatial.toCQLFilter_("DISJOINT", geometries)
+      cqlFilter: Module.toCQLFilter_("DISJOINT", geometries)
     });
   }
 
@@ -67,7 +68,7 @@ export default class Module {
         return jtsGeomToFilter.within(jtsGeom);
       });
     }, {
-      cqlFilter: Spatial.toCQLFilter_("WITHIN", geometries)
+      cqlFilter: Module.toCQLFilter_("WITHIN", geometries)
     });
   }
 
@@ -89,7 +90,7 @@ export default class Module {
         return jtsGeomToFilter.intersects(jtsGeom);
       });
     }, {
-      cqlFilter: Spatial.toCQLFilter_("INTERSECTS", geometries)
+      cqlFilter: Module.toCQLFilter_("INTERSECTS", geometries)
     });
   }
 
@@ -133,7 +134,7 @@ export default class Module {
    */
   static toCQLFilter_(operation, geometries) {
     let cqlFilter = "";
-    let wktFormat = WKT();
+    let wktFormat = new WKT();
     geometries.forEach(value) {
       if (value !== 0) {
         // es un OR porque se hace una interseccion completa con todas

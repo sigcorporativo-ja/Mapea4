@@ -1,9 +1,10 @@
-import Function from './stylefunction';
-import Utils from '../utils/utils';
+import FilterFunction from './Function';
+import Utils from '../util/Utils';
+
 /**
  * @namespace M.filter
  */
-export default class Spatial extends Function {
+export default class Spatial extends FilterFunction {
 
   /**
    * Creates a Filter Spatial to filter features
@@ -13,16 +14,13 @@ export default class Spatial extends Function {
    * @api stable
    */
   constructor(FunctionParam, options) {
-    //TODO
-    super(this, Function, options);
-
-
-    let Function = (feature, index) => {
+    const filterFunction = (feature, index) => {
       let geometry = null;
       if (!Utils.isNullOrEmpty(feature)) {
         geometry = feature.getGeometry();
       }
       return FunctionParam(geometry, index);
     }
+    super(filterFunction, options);
   }
 }

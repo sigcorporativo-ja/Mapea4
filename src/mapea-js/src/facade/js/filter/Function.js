@@ -1,16 +1,14 @@
-import Filter from './filter':
-import Utils from '../utils/utils';
+import BaseFilter from './Base':
+import Utils from '../util/Utils';
 
-export default class Function extends Filter {
+export default class Function extends BaseFilter {
   /**
    * Creates a Filter Function to filter features
    *
    * @param {function} filterFunction - Function to execute
    * @api stable
    */
-  constructor(filterFunction, options) {
-
-    options = (options || {});
+  constructor(filterFunction, options = {}) {
 
     /**
      * Function to execute
@@ -29,7 +27,6 @@ export default class Function extends Filter {
       this.cqlFilter_ = options.cqlFilter;
     }
   }
-
 
   /**
    * This function set a function filter

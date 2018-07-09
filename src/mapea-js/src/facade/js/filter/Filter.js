@@ -1,3 +1,5 @@
+import FilterFunction from "./Function";
+
 export default class Filter {
   /**
    * This function joins the filters so that all the filters are fulfilled
@@ -16,7 +18,7 @@ export default class Filter {
         cqlFilter += ' AND ';
       }
     });
-    return new Filter.Function(feature => {
+    return new FilterFunction(feature => {
       return filters.every(filter => {
         return filter.functionFilter()(feature);
       });
@@ -42,7 +44,7 @@ export default class Filter {
         cqlFilter += ' OR ';
       }
     });
-    return new Filter.Function(feature => {
+    return new FilterFunction(feature => {
       return filters.some(filter => {
         return filter.functionFilter()(feature);
       });
@@ -60,7 +62,7 @@ export default class Filter {
    * @api stable
    */
   static NOT(filter) {
-    return new Filter.Function(feature => {
+    return new FilterFunction(feature => {
       return !filter.functionFilter()(feature);
     }, {
       cqlFilter: `NOT ${filter.toCQL()}`
@@ -77,7 +79,7 @@ export default class Filter {
    * @api stable
    */
   static EQUAL(nameAtt, value) {
-    return new Filter.Function(feature => {
+    return new FilterFunction(feature => {
       return Object.is(feature.getAttribute(nameAtt), value);
     }, {
       cqlFilter: `${nameAtt}='${value}'`
@@ -94,7 +96,7 @@ export default class Filter {
    * @api stable
    */
   static LIKE(nameAtt, value) {
-    return new Filter.Function(feature => {
+    return new FilterFunction(feature => {
       return (feature.getAttribute(nameAtt)).toString().match(new RegExp(value));
     }, {
       cqlFilter: `${nameAtt} LIKE '%${value}%'`
@@ -110,7 +112,7 @@ export default class Filter {
    * @api stable
    */
   static LT(nameAtt, value) {
-    return new Filter.Function(feature => {
+    return new FilterFunction(feature => {
       return feature.getAttribute(nameAtt) != null && feature.getAttribute(nameAtt) < value;
     }, {
       cqlFilter: `${nameAtt} < '${value}'`
@@ -126,7 +128,7 @@ export default class Filter {
    * @api stable
    */
   static GT(nameAtt, value) {
-    return new Filter.Function(feature => {
+    return new FilterFunction(feature => {
       return feature.getAttribute(nameAtt) != null && feature.getAttribute(nameAtt) > value;
     }, {
       cqlFilter: `${nameAtt} > '${value}'`
@@ -142,7 +144,7 @@ export default class Filter {
    * @api stable
    */
   static LTE(nameAtt, value) {
-    return new Filter.Function(feature => {
+    return new FilterFunction(feature => {
       return feature.getAttribute(nameAtt) != null && feature.getAttribute(nameAtt) <= value;
     }, {
       cqlFilter: `${nameAtt} <= '${value}'`
@@ -158,11 +160,10 @@ export default class Filter {
    * @api stable
    */
   static GTE(nameAtt, value) {
-    return new Filter.Function(feature => {
+    return new FilterFunction(feature => {
       return feature.getAttribute(nameAtt) != null && feature.getAttribute(nameAtt) >= value;
     }, {
       cqlFilter: `${nameAtt} >= '${value}'`
     });
-  };
-
+  }
 }
