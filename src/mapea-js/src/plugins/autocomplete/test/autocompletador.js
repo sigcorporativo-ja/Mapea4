@@ -1,5 +1,2 @@
-goog.provide("pruebaPlugin2");
-
-goog.require("M");
-goog.require("M.impl");
-goog.require("P.plugin.Autocomplete");
+import Map from "facade/js/map/map";
+import Autocomplete from "plugins/autcomplete/facade/js/autocomplete";
