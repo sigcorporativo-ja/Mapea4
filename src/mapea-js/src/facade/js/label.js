@@ -1,7 +1,8 @@
 import Base from './facade';
-import Utils from './utils/utils';
+import Utils from './util/Util';
 import Exception from './exception/exception';
-import LabelImpl from '.../.../.../impl/ol/js/label';
+import LabelImpl from '../../impl/ol/js/Label';
+
 
 export default class Label extends Base {
   /**
