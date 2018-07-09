@@ -1,9 +1,13 @@
-goog.provide('P.plugin.Geosearch');
+import GeosearchControl from "./geosearchcontrol";
+import GeosearchLayer from "./geosearchlayer";
+import Plugin from "facade/js/plugin";
+import Config from "../../../configuration";
+import Utils from "facade/js/utils/utils";
+import EventsManager from "facade/js/event/eventsmanager";
+import Panel from "facade/js/ui/panel";
+import Position from "facade/js/ui/position";
 
-goog.require('P.control.Geosearch');
-goog.require('P.layer.Geosearch');
-
-(function() {
+export default Geosearch extends Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -14,7 +18,9 @@ goog.require('P.layer.Geosearch');
    * @param {Object} impl implementation object
    * @api stable
    */
-  M.plugin.Geosearch = (function(parameters) {
+  constructor(parameters) {
+    super();
+
     parameters = (parameters || {});
 
     /**
@@ -44,15 +50,15 @@ goog.require('P.layer.Geosearch');
      * @type {string}
      * @api stable
      */
-    this.name = M.plugin.Geosearch.NAME;
+    this.name = Geosearch.NAME;
 
     /**
      * Facade of the map
      * @private
      * @type {String}
      */
-    this.url_ = M.config.GEOSEARCH_URL;
-    if (!M.utils.isNullOrEmpty(parameters.url)) {
+    this.url_ = Config.GEOSEARCH_URL;
+    if (!Utils.isNullOrEmpty(parameters.url)) {
       this.url_ = parameters.url;
     }
 
@@ -61,8 +67,8 @@ goog.require('P.layer.Geosearch');
      * @private
      * @type {String}
      */
-    this.core_ = M.config.GEOSEARCH_CORE;
-    if (!M.utils.isNullOrEmpty(parameters.core)) {
+    this.core_ = Config.GEOSEARCH_CORE;
+    if (!Utils.isNullOrEmpty(parameters.core)) {
       this.core_ = parameters.core;
     }
 
@@ -71,8 +77,8 @@ goog.require('P.layer.Geosearch');
      * @private
      * @type {String}
      */
-    this.handler_ = M.config.GEOSEARCH_HANDLER;
-    if (!M.utils.isNullOrEmpty(parameters.handler)) {
+    this.handler_ = Config.GEOSEARCH_HANDLER;
+    if (!Utils.isNullOrEmpty(parameters.handler)) {
       this.handler_ = parameters.handler;
     }
 
@@ -83,9 +89,7 @@ goog.require('P.layer.Geosearch');
      */
     this.searchParameters_ = parameters.params || {};
 
-    goog.base(this);
-  });
-  goog.inherits(M.plugin.Geosearch, M.Plugin);
+  }
 
   /**
    * This function provides the implementation
@@ -96,25 +100,24 @@ goog.require('P.layer.Geosearch');
    * @param {Object} map the map to add the plugin
    * @api stable
    */
-  M.plugin.Geosearch.prototype.addTo = function(map) {
+  addTo(map) {
     this.map_ = map;
 
-    goog.dom.classlist.add(map._areasContainer.getElementsByClassName("m-top m-right")[0],
-      "top-extra");
+    map._areasContainer.getElementsByClassName("m-top m-right")[0].classList.add("top-extra");
 
-    this.control_ = new M.control.Geosearch(this.url_, this.core_,
+    this.control_ = new GeosearchControl(this.url_, this.core_,
       this.handler_, this.searchParameters_);
-    this.control_.on(M.evt.ADD_TO_MAP, this.onLoadCallback_, this);
-    this.panel_ = new M.ui.Panel('geosearch', {
+    this.control_.on(EventsManager.ADD_TO_MAP, this.onLoadCallback_, this);
+    this.panel_ = new Panel('geosearch', {
       'collapsible': true,
       'className': 'm-geosearch',
       'collapsedButtonClass': 'g-cartografia-zoom',
-      'position': M.ui.position.TL,
+      'position': Position.TL,
       'tooltip': 'Geobúsquedas'
     });
     this.panel_.addControls(this.control_);
     this.map_.addPanels(this.panel_);
-  };
+  }
 
   /**
    * This function provides the input search
@@ -124,13 +127,13 @@ goog.require('P.layer.Geosearch');
    * @returns {HTMLElement} the input that executes the search
    * @api stable
    */
-  M.plugin.Geosearch.prototype.getInput = function() {
-    var inputSearch = null;
-    if (!M.utils.isNullOrEmpty(this.control_)) {
+  getInput() {
+    let inputSearch = null;
+    if (!Utils.isNullOrEmpty(this.control_)) {
       inputSearch = this.control_.getInput();
     }
     return inputSearch;
-  };
+  }
 
   /**
    * This function destroys this plugin
@@ -139,7 +142,7 @@ goog.require('P.layer.Geosearch');
    * @function
    * @api stable
    */
-  M.plugin.Geosearch.prototype.destroy = function() {
+  destroy() {
     this.map_.removeControls([this.control_]);
     this.map_ = null;
     this.control_ = null;
@@ -148,24 +151,24 @@ goog.require('P.layer.Geosearch');
     this.core_ = null;
     this.handler_ = null;
     this.searchParameters_ = null;
-  };
+  }
 
   /**
-   * This function compare if pluging recieved by param is instance of  M.plugin.Geosearch
+   * This function compare if pluging recieved by param is instance of  Geosearch
    *
    * @public
    * @function
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.Geosearch.prototype.equals = function(plugin) {
-    if (plugin instanceof M.plugin.Geosearch) {
+  equals(plugin) {
+    if (plugin instanceof Geosearch) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-  };
+  }
 
-  M.plugin.Geosearch.NAME = "geosearch";
-})();
+}
+
+Geosearch.NAME = "geosearch";

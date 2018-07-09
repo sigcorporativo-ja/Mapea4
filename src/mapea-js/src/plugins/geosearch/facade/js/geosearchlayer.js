@@ -1,6 +1,9 @@
-goog.provide('P.layer.Geosearch');
+import GeosearchLayerImpl from "impl/ol/js/geosearchlayer";
+import Utils from "facade/js/utils/utils";
+import Exception from "facade/js/exception/exception";
+import Vector from "facade/js/layers/vector";
 
-(function() {
+export default class GeosearchLayer extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -12,16 +15,14 @@ goog.provide('P.layer.Geosearch');
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  M.layer.Geosearch = (function(parameters = {}, options = {}, impl = new M.impl.layer.Geosearch()) {
-    // checks if the implementation can create KML layers
-    if (M.utils.isUndefined(M.impl.layer.Geosearch)) {
-      M.exception('La implementación usada no puede crear capas Geosearch');
-    }
-
+  constructor(parameters = {}, options = {}, impl = GeosearchLayerImpl()) {
     // calls the super constructor
-    goog.base(this, this, options, impl);
-  });
-  goog.inherits(M.layer.Geosearch, M.layer.Vector);
+    super(options, impl);
+    // checks if the implementation can create KML layers
+    if (Utils.isUndefined(GeosearchLayerImpl)) {
+      Exception('La implementación usada no puede crear capas Geosearch');
+    }
+  }
 
   /**
    * This function checks if an object is equals
@@ -32,9 +33,9 @@ goog.provide('P.layer.Geosearch');
    * @param {object} obj - Object to compare
    * @api stable
    */
-  M.layer.Geosearch.prototype.equals = function(obj) {
-    var equals = false;
-    if (obj instanceof M.layer.Geosearch) {}
+  equals(obj) {
+    let equals = false;
+    if (obj instanceof GeosearchLayer) {}
     return equals;
-  };
-})();
+  }
+}
