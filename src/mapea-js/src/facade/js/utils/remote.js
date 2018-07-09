@@ -1,7 +1,7 @@
-import Utils from("../utils/utils.js");
-import Exception from("../exception/exception.js");
-import M from("../mapea.js");
-import Config from("../../../configuration.js");
+import Utils from "./Utils";
+import Exception from "../exception/exception";
+import M from "../mapea.js";
+import Config from "configuration";
 
 /**
  * @namespace Remote
@@ -25,7 +25,8 @@ export class Remote {
 
     if (useProxy === true) {
       req = Remote.jsonp_(url, data, options);
-    } else {
+    }
+    else {
       req = Remote.ajax_(url, data, Remote.method.GET, false);
     }
 
@@ -104,10 +105,11 @@ export class Remote {
       let xhr;
       if (window.XMLHttpRequest) {
         xhr = new XMLHttpRequest();
-      } else if (window.ActiveXObject) {
+      }
+      else if (window.ActiveXObject) {
         xhr = new ActiveXObject("Microsoft.XMLHTTP");
       }
-      xhr.onreadystatechange = function () {
+      xhr.onreadystatechange = function() {
         if (xhr.readyState == 4) {
           let response = new Remote.Response();
           response.parseXmlHttp(xhr);
@@ -245,16 +247,17 @@ export class Remote {
         else if (/xml/i.test(contentType)) {
           this.xml = goog.dom.xml.loadXml(this.text);
         }
-      } catch (err) {
+      }
+      catch (err) {
         this.xml = null;
         this.error = true;
       }
     }
 
     // adds headers
-    Object.keys(proxyResponse.headers).forEach((head) => {
+    Object.keys(proxyResponse.headers).forEach(head => {
       this.headers[head] = proxyResponse.headers[head];
-    }, this);
+    });
   }
 
   /**

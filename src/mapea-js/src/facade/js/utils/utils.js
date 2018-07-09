@@ -1,13 +1,12 @@
-import Polyfills from('./polyfills.js');
-import WKT from('../geom/wkt.js');
-import StylePoint from('../style/stylepoint.js');
-import StyleLine from('../style/styleline.js');
-import StylePolygon from('../style/stylepolygon.js');
+import WKT from '../geom/WKT';
+import StylePoint from '../style/Point';
+import StyleLine from '../style/Line';
+import StylePolygon from '../style/Polygon';
+import M from "../mapea";
 
 /**
  * @namespace Utils
  */
-
 export class Utils {
 
   /**
@@ -23,14 +22,14 @@ export class Utils {
 
     if (Utils.isNull(obj)) {
       nullOrEmpty = true;
-    } else if (Utils.isArray(obj)) {
+    }
+    else if (Utils.isArray(obj)) {
       nullOrEmpty = true;
       if (obj.length > 0) {
-        nullOrEmpty = !obj.some((objElem) => {
-          return !Utils.isNullOrEmpty(objElem);
-        });
+        nullOrEmpty = !obj.some((objElem) => !Utils.isNullOrEmpty(objElem));
       }
-    } else if ((typeof obj === 'string') && (obj.trim().length === 0)) {
+    }
+    else if (typeof obj === 'string' && obj.trim().length === 0) {
       nullOrEmpty = true;
     }
 
@@ -43,14 +42,16 @@ export class Utils {
    * @api stable
    */
   static isNull(obj) {
-    var isNull = false;
+    let isNull = false;
 
-    if (!Utils.isBoolean(obj) && (typeof obj !== 'number')) {
+    if (!Utils.isBoolean(obj) && typeof obj !== 'number') {
       if (Utils.isUndefined(obj)) {
         isNull = true;
-      } else if (!obj) {
+      }
+      else if (!obj) {
         isNull = true;
-      } else if (obj === null) {
+      }
+      else if (obj === null) {
         isNull = true;
       }
     }
@@ -64,7 +65,7 @@ export class Utils {
    * @api stable
    */
   static isArray(obj) {
-    var isArray = false;
+    let isArray = false;
     if (!Utils.isNull(obj)) {
       isArray = (Object.prototype.toString.call(obj) === Object.prototype.toString
         .call([]));
@@ -80,7 +81,7 @@ export class Utils {
   static isFunction(obj) {
     let isFunction = false;
     if (!Utils.isNull(obj)) {
-      isFunction = ((typeof obj === 'function') && !Utils.isUndefined(obj.call));
+      isFunction = (typeof obj === 'function' && !Utils.isUndefined(obj.call));
     }
     return isFunction;
   }
@@ -93,7 +94,7 @@ export class Utils {
   static isObject(obj) {
     let isObject = false;
     if (!Utils.isNull(obj)) {
-      isObject = ((typeof obj === 'object') && !Utils.isUndefined(obj.toString));
+      isObject = (typeof obj === 'object' && !Utils.isUndefined(obj.toString));
     }
     return isObject;
   }
@@ -118,7 +119,7 @@ export class Utils {
    */
   static isBoolean(obj) {
     let isBoolean = false;
-    if ((obj !== null) && !Utils.isUndefined(obj)) {
+    if (obj !== null && !Utils.isUndefined(obj)) {
       isBoolean = (typeof obj === 'boolean');
     }
     return isBoolean;
@@ -130,7 +131,7 @@ export class Utils {
    * @api stable
    */
   static isUrl(obj) {
-    var isUrl = false;
+    let isUrl = false;
     if (!Utils.isNull(obj) && Utils.isString(obj)) {
       isUrl = /(https?\:\/\/[^\*]+)/.test(obj);
     }
@@ -165,7 +166,7 @@ export class Utils {
    * @function
    * @api stable
    */
-  static get parameterValue(paramName, url) {
+  static getParameterValue(paramName, url) {
     let parameterValue = null;
 
     paramName = paramName.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -193,13 +194,14 @@ export class Utils {
     let requestUrl = url;
     if (requestUrl.indexOf('?') === -1) {
       requestUrl += '?';
-    } else if (requestUrl.charAt(requestUrl.length - 1) !== '?') {
+    }
+    else if (requestUrl.charAt(requestUrl.length - 1) !== '?') {
       requestUrl += '&';
     }
 
     let requestParams = '';
     if (Utils.isObject(params)) {
-      for (var param in params) {
+      for (let param in params) {
         requestParams += param;
         requestParams += '=';
         requestParams += encodeURIComponent(params[param]);
@@ -207,7 +209,8 @@ export class Utils {
       }
       // removes the last '&'
       requestParams = requestParams.substring(0, requestParams.length - 1);
-    } else if (Utils.isString(params)) {
+    }
+    else if (Utils.isString(params)) {
       requestParams = params;
     }
     requestUrl += requestParams;
@@ -244,7 +247,7 @@ export class Utils {
    * @function
    * @api stable
    */
-  static get WMSGetCapabilitiesUrl(serverUrl, version) {
+  static getWMSGetCapabilitiesUrl(serverUrl, version) {
     let wmsGetCapabilitiesUrl = serverUrl;
 
     // request
@@ -266,7 +269,7 @@ export class Utils {
    * @function
    * @api stable
    */
-  static get WMTSGetCapabilitiesUrl(serverUrl, version) {
+  static getWMTSGetCapabilitiesUrl(serverUrl, version) {
     let wmtsGetCapabilitiesUrl = serverUrl;
 
     // request
@@ -319,10 +322,12 @@ export class Utils {
     if (Utils.isArray(extent)) {
       wExtent = (extent[2] - extent[0]);
       hExtent = (extent[3] - extent[1]);
-    } else if (Utils.isObject(extent)) {
+    }
+    else if (Utils.isObject(extent)) {
       wExtent = (extent.x.max - extent.x.min);
       hExtent = (extent.y.max - extent.y.min);
-    } else if (Utils.isString(extent)) {
+    }
+    else if (Utils.isString(extent)) {
       extent = extent.split(",");
       wExtent = (extent[2] - extent[0]);
       hExtent = (extent[3] - extent[1]);
@@ -349,7 +354,7 @@ export class Utils {
    * @api stable
    */
   static fillResolutions(minResolution, maxResolution, numZoomLevels) {
-    var resolutions = new Array(numZoomLevels);
+    let resolutions = new Array(numZoomLevels);
 
     minResolution = Number.parseFloat(minResolution);
     maxResolution = Number.parseFloat(maxResolution);
@@ -382,7 +387,7 @@ export class Utils {
    * @returns {Number} the resolution for the specified scale
    * @api stable
    */
-  static get resolutionFromScale(scale, units) {
+  static getResolutionFromScale(scale, units) {
     let resolution;
     if (!Utils.isNullOrEmpty(scale)) {
       if (Utils.isNull(units)) {
@@ -405,7 +410,7 @@ export class Utils {
    * @returns {Number} the scale for the specified resolution
    * @api stable
    */
-  static get scaleFromResolution(resolution, units) {
+  static getScaleFromResolution(resolution, units) {
     if (Utils.isNullOrEmpty(units)) {
       units = "degrees";
     }
@@ -572,7 +577,8 @@ export class Utils {
     let k;
     if (n >= 0) {
       k = n;
-    } else {
+    }
+    else {
       k = len + n;
       if (k < 0) {
         k = 0;
@@ -600,9 +606,11 @@ export class Utils {
     for (let prop in source) {
       if (Utils.isUndefined(target[prop])) {
         target[prop] = source[prop];
-      } else if (Utils.isObject(target[prop])) {
+      }
+      else if (Utils.isObject(target[prop])) {
         Utils.extend(target[prop], source[prop], override);
-      } else if ((override === true)) {
+      }
+      else if ((override === true)) {
         target[prop] = source[prop];
       }
     }
@@ -684,7 +692,8 @@ export class Utils {
     let hexColor;
     try {
       hexColor = chroma(rgbColor).hex();
-    } catch (err) {}
+    }
+    catch (err) {}
     return hexColor;
   }
 
@@ -698,7 +707,8 @@ export class Utils {
     let hexColor;
     try {
       hexColor = chroma(rgbaColor).hex();
-    } catch (err) {}
+    }
+    catch (err) {}
     return hexColor;
   }
 
@@ -708,7 +718,7 @@ export class Utils {
    * @function
    * @api stable
    */
-  static get opacityFromRgba(rgbaColor) {
+  static getOpacityFromRgba(rgbaColor) {
     let opacity;
 
     let rgbaRegExp = /^rgba\s*\((\s*\d+\s*\,){3}\s*([\d\.]+)\s*\)$/;
@@ -716,7 +726,8 @@ export class Utils {
       opacity = rgbaColor.replace(rgbaRegExp, '$2');
       try {
         opacity = parseFloat(opacity);
-      } catch (err) {}
+      }
+      catch (err) {}
     }
 
     return opacity;
@@ -800,7 +811,7 @@ export class Utils {
    * @returns {String} text contained by the HTML tags
    * @api stable
    */
-  static get textFromHtml(html) {
+  static getTextFromHtml(html) {
     let htmlText = html;
     if (!Utils.isString(html) && html.outerHTML) {
       htmlText = html.outerHTML;
@@ -850,7 +861,7 @@ export class Utils {
    * @return {string} geometry type of layer
    * @api stable
    */
-  static get geometryType(layer) {
+  static getGeometryType(layer) {
     if (Utils.isNullOrEmpty(layer) || Utils.isNullOrEmpty(layer.getFeatures())) {
       return null;
     }
@@ -901,7 +912,7 @@ export class Utils {
    * @return {string}
    * @api stable
    */
-  static get rgba(color, opacity) {
+  static getRgba(color, opacity) {
     return chroma(color).alpha(opacity).css();
   }
 
@@ -914,7 +925,7 @@ export class Utils {
    * @return {bool}
    * @api stable
    */
-  static set equals(array, array2) {
+  static setEquals(array, array2) {
     let equals = false;
     if (array.length === array2.length) {
       equals = array.every(e => array2.some(e2 => e2.equals(e)));
@@ -936,12 +947,14 @@ export class Utils {
         let value = src[key];
         if (Utils.isArray(value)) {
           value = [...value];
-        } else if (Utils.isObject(value)) {
+        }
+        else if (Utils.isObject(value)) {
           value = Utils.extends({}, value);
         }
         if (Utils.isNullOrEmpty(dest[key])) {
           dest[key] = value;
-        } else if (Utils.isObject(dest[key])) {
+        }
+        else if (Utils.isObject(dest[key])) {
           Utils.extends(dest[key], value);
         }
       }, this);
@@ -962,102 +975,102 @@ export class Utils {
     let intervals = [...array];
     if (array.length < breaks) {
       let step = (array[0] + array[1]) / (breaks - 1);
-      breaks.forEach(value) {
+      breaks.forEach(value => {
         intervals[value] = step * value;
       });
-    intervals = [...intervals, array[1]];
+      intervals = [...intervals, array[1]];
+    }
+    return intervals;
   }
-  return intervals;
-}
 
-/**
- * This functions returns the order style
- * @function
- * @public
- * @param {M.Style}
- * @return {number}
- * @api stable
- */
-static styleComparator(style, style2) {
-  return style.ORDER - style2.ORDER;
-}
-
-/**
- * This functions returns the width and height of a image from src
- * @function
- * @public
- * @param {string} url
- * @return {Array<number>}
- * @api stable
- */
-static get imageSize(url) {
-  let image = new Image();
-  return new Promise((resolve, reject) => {
-    image.onload = () => resolve(image);
-    image.src = url;
-  });
-}
-
-/**
- * This functions returns random simple style
- * @function
- * @public
- * @param {M.Feature} feature
- * @return {M.style.Simple}
- * @api stable
- */
-static generateRandomStyle(feature, radiusParam, strokeWidthParam, strokeColorParam) {
-  let radius = radiusParam;
-  let fillColor = chroma.random().hex();
-  let strokeColor = strokeColorParam;
-  let strokeWidth = strokeWidthParam;
-  let geometry = feature.geometry().type;
-  let style;
-  let options;
-  switch (geometry) {
-    case "Point":
-    case "MultiPoint":
-      options = {
-        radius: radius,
-        fill: {
-          color: fillColor
-        },
-        stroke: {
-          color: strokeColor,
-          width: strokeWidth
-        }
-      };
-      style = new StylePoint(options);
-      break;
-    case "LineString":
-    case "MultiLineString":
-      options = {
-        fill: {
-          color: fillColor
-        },
-        stroke: {
-          color: strokeColor,
-          width: strokeWidth
-        }
-      };
-      style = new StyleLine(options);
-      break;
-    case "Polygon":
-    case "MultiPolygon":
-      options = {
-        fill: {
-          color: fillColor
-        },
-        stroke: {
-          color: strokeColor,
-          width: strokeWidth
-        }
-      };
-      style = new StylePolygon(options);
-      break;
-    default:
-      style = null;
+  /**
+   * This functions returns the order style
+   * @function
+   * @public
+   * @param {M.Style}
+   * @return {number}
+   * @api stable
+   */
+  static styleComparator(style, style2) {
+    return style.ORDER - style2.ORDER;
   }
-  return style;
-}
+
+  /**
+   * This functions returns the width and height of a image from src
+   * @function
+   * @public
+   * @param {string} url
+   * @return {Array<number>}
+   * @api stable
+   */
+  static getImageSize(url) {
+    let image = new Image();
+    return new Promise((resolve, reject) => {
+      image.onload = () => resolve(image);
+      image.src = url;
+    });
+  }
+
+  /**
+   * This functions returns random simple style
+   * @function
+   * @public
+   * @param {M.Feature} feature
+   * @return {M.style.Simple}
+   * @api stable
+   */
+  static generateRandomStyle(feature, radiusParam, strokeWidthParam, strokeColorParam) {
+    let radius = radiusParam;
+    let fillColor = chroma.random().hex();
+    let strokeColor = strokeColorParam;
+    let strokeWidth = strokeWidthParam;
+    let geometry = feature.geometry().type;
+    let style;
+    let options;
+    switch (geometry) {
+      case "Point":
+      case "MultiPoint":
+        options = {
+          radius: radius,
+          fill: {
+            color: fillColor
+          },
+          stroke: {
+            color: strokeColor,
+            width: strokeWidth
+          }
+        };
+        style = new StylePoint(options);
+        break;
+      case "LineString":
+      case "MultiLineString":
+        options = {
+          fill: {
+            color: fillColor
+          },
+          stroke: {
+            color: strokeColor,
+            width: strokeWidth
+          }
+        };
+        style = new StyleLine(options);
+        break;
+      case "Polygon":
+      case "MultiPolygon":
+        options = {
+          fill: {
+            color: fillColor
+          },
+          stroke: {
+            color: strokeColor,
+            width: strokeWidth
+          }
+        };
+        style = new StylePolygon(options);
+        break;
+      default:
+        style = null;
+    }
+    return style;
+  }
 }
