@@ -1,10 +1,10 @@
-import Position from './position';
-import Utils from '../utils/utils';
+import Position from './Position';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Base from '../facade';
-import Object from '../object';
-import Evt from '../event/eventsmanager';
-
+import Base from '../Base';
+import Object from '../Object';
+import EvtManager from '../event/Manager';
+import panelTemplate from "templates/panel.html";
 
 export default class Panel extends Object {
   /**
@@ -17,14 +17,10 @@ export default class Panel extends Object {
    * @extends {M.Object}
    * @api stable
    */
-
-
-  constructor(name, options) {
+  constructor(name, options = {}) {
 
     // calls the super constructor
     super();
-
-    options = (options || {});
 
     /**
      * @public
@@ -47,8 +43,6 @@ export default class Panel extends Object {
      * @expose
      */
     this.controls_ = [];
-
-
 
     /**
      * @private
@@ -116,9 +110,11 @@ export default class Panel extends Object {
     this.collapsed_ButtonClass = null;
     if (!Utils.isNullOrEmpty(options.collapsedButtonClass)) {
       this.collapsed_ButtonClass = options.collapsedButtonClass;
-    } else if ((this.position === Position.TL) || (this.position === Position.BL)) {
+    }
+    else if ((this.position === Position.TL) || (this.position === Position.BL)) {
       this.collapsed_ButtonClass = 'g-cartografia-flecha-derecha';
-    } else if ((this.position === Position.TR) || (this.position === Position.BR)) {
+    }
+    else if ((this.position === Position.TR) || (this.position === Position.BR)) {
       this.collapsed_ButtonClass = 'g-cartografia-flecha-izquierda';
     }
 
@@ -130,9 +126,11 @@ export default class Panel extends Object {
     this.openedButtonClass_ = null;
     if (!Utils.isNullOrEmpty(options.openedButtonClass)) {
       this.openedButtonClass_ = options.openedButtonClass;
-    } else if ((this.position === Position.TL) || (this.position === Position.BL)) {
+    }
+    else if ((this.position === Position.TL) || (this.position === Position.BL)) {
       this.openedButtonClass_ = 'g-cartografia-flecha-izquierda';
-    } else if ((this.position === Position.TR) || (this.position === Position.BR)) {
+    }
+    else if ((this.position === Position.TR) || (this.position === Position.BR)) {
       this.openedButtonClass_ = 'g-cartografia-flecha-derecha';
     }
 
@@ -169,7 +167,6 @@ export default class Panel extends Object {
     }
   }
 
-
   /**
    * TODO
    *
@@ -197,45 +194,44 @@ export default class Panel extends Object {
   addTo(map, areaContainer) {
     this.map_ = map;
     this.areaContainer_ = areaContainer;
-    Template.compile(Panel.TEMPLATE, {
-      'jsonp': true
-    }).then((html) => {
-      this.element_ = html;
-      if (!Utils.isNullOrEmpty(this.tooltip_)) {
-        this.element_.setAttribute("title", this.tooltip_);
+    this.element_ = Template.compile(panelTemplate);
+
+    if (!Utils.isNullOrEmpty(this.tooltip_)) {
+      this.element_.setAttribute("title", this.tooltip_);
+    }
+    this.buttonPanel_ = html.querySelector('button.m-panel-btn');
+    if (!Utils.isNullOrEmpty(this.className_)) {
+      this.className_.split(/\s+/).forEach(className => {
+        html.classList.add(className);
+      });
+    }
+
+    if (this.collapsed_ === true) {
+      this.collapse_(html, this.buttonPanel_);
+    }
+    else {
+      this.open_(html, this.buttonPanel_);
+    }
+
+    if (this.collapsible_ !== true) {
+      html.classlist.add('no-collapsible');
+    }
+
+    this.controls_Container = html.querySelector('div.m-panel-controls');
+    html.appendChild(areaContainer);
+
+    this.buttonPanel_.addEventListener('click', evt => {
+      evt.preventDefault();
+      if (this.collapsed_ === false) {
+        this.collapse_(html, this.buttonPanel_);
       }
-      this.buttonPanel_ = html.querySelector('button.m-panel-btn');
-      if (!Utils.isNullOrEmpty(this.className_)) {
-        this.className_.split(/\s+/).forEach(className => {
-          html.classList.add(className);
-        });
+      else {
+        this.open_(html, this.buttonPanel_);
       }
-
-      if (this.collapsed_ === true) {
-        this._collapse(html, this.buttonPanel_);
-      } else {
-        this._open(html, this.buttonPanel_);
-      }
-
-      if (this.collapsible_ !== true) {
-        html.classlist.add('no-collapsible');
-      }
-
-      this.controls_Container = html.querySelector('div.m-panel-controls');
-      html.appendChild(areaContainer);
-
-      this.buttonPanel_.addEventListener('click', evt => {
-        evt.preventDefault();
-        if (this.collapsed_ === false) {
-          this._collapse(html, this.buttonPanel_);
-        } else {
-          this._open(html, this.buttonPanel_);
-        }
-      }, false, this);
-
-      this.addControls(this.controls_);
-      this.fire(Evt.ADDED_TOmap_, html);
     });
+
+    this.addControls(this.controls_);
+    this.fire(EvtManager.ADDED_TO_MAP, html);
   }
 
   /**
@@ -244,13 +240,21 @@ export default class Panel extends Object {
    * @private
    * @function
    */
-  _collapse(html) {
+  collapse_(html) {
     html.classlist.remove('opened');
     this.buttonPanel_.classlist.remove(this.openedButtonClass_);
     html.classlist.add('collapsed');
     this.buttonPanel_.classlist.add(this.collapsed_ButtonClass);
     this.collapsed_ = true;
-    this.fire(Evt.HIDE);
+    this.fire(EvtManager.
+      /**
+       * Template for this controls - button
+       * @const
+       * @type {string}
+       * @public
+       * @api stable
+       */
+      Panel.TEMPLATE = 'panel.html'; HIDE);
   }
 
   /**
@@ -259,35 +263,34 @@ export default class Panel extends Object {
    * @private
    * @function
    */
-  _open(html) {
+  open_(html) {
     html.classlist.remove('collapsed');
     this.buttonPanel_.classlist.remove(this.collapsed_ButtonClass);
     html.classlist.add('opened');
     this.buttonPanel_.classlist.add(this.openedButtonClass_);
     this.collapsed_ = false;
-    this.fire(Evt.SHOW);
+    this.fire(EvtManager.SHOW);
   }
 
   /**
-   * Call private method _open
+   * Call private method open_
    *
    * @public
    * @function
    */
   open() {
-    this._open(this.element_);
+    this.open_(this.element_);
   }
 
   /**
-   * Call private method _collapse
+   * Call private method collapse_
    *
    * @public
    * @function
    */
   collapse() {
-    this._collapse(this.element_);
+    this.collapse_(this.element_);
   }
-
 
   /**
    * TODO
@@ -319,13 +322,13 @@ export default class Panel extends Object {
           if (!this.hasControl(control)) {
             this.controls_.push(control);
             control.setPanel(this);
-            control.on(Evt.DESTROY, this._removeControl, this);
+            control.on(EvtManager.DESTROY, this.removeControl_, this);
           }
           if (!Utils.isNullOrEmpty(this.controls_Container)) {
-            control.on(Evt.ADDED_TOmap_, this._moveControlView, this);
+            control.on(EvtManager.ADDED_TO_MAP, this.moveControlView_, this);
             this.map_.addControls(control);
           }
-          control.on(Evt.ACTIVATED, this._manageActivation, this);
+          control.on(EvtManager.ACTIVATED, this.manageActivation_, this);
         }
       }, this);
     }
@@ -344,7 +347,8 @@ export default class Panel extends Object {
     if (!Utils.isNullOrEmpty(controlParam)) {
       if (Utils.isString(controlParam)) {
         hasControl = this.controls_.filter(control => control.name === controlParam)[0] != null;
-      } else if (controlParam instanceof ControlBase) {
+      }
+      else if (controlParam instanceof ControlBase) {
         hasControl = Utils.includes(this.controls_, controlParam);
       }
     }
@@ -386,7 +390,7 @@ export default class Panel extends Object {
    * @param {array<M.Control>} controls
    * @api stable
    */
-  _removeControl(controlsParam) {
+  removeControl_(controlsParam) {
     let controls = this.map_.controls(controlsParam);
     controls.forEach(control => {
         let index = this.controls_.indexOf(control);
@@ -404,10 +408,11 @@ export default class Panel extends Object {
    * @param {array<M.Control>} controls
    * @api stable
    */
-  removeClassName = function (className) {
+  removeClassName = function(className) {
     if (!Utils.isNullOrEmpty(this.element_)) {
       this.element_.classlist.remove(className);
-    } else {
+    }
+    else {
       this.className_ = this.className_.replace(new RegExp('\s*' + className + '\s*'), '');
     }
   }
@@ -423,7 +428,8 @@ export default class Panel extends Object {
   addClassName(className) {
     if (!Utils.isNullOrEmpty(this.element_)) {
       this.element_.classlist.add(className);
-    } else {
+    }
+    else {
       this.className_ = this.className_.concat(' ').concat(className);
     }
   }
@@ -436,12 +442,12 @@ export default class Panel extends Object {
    * @param {array<M.Control>} controls
    * @api stable
    */
-  _moveControlView(control) {
+  moveControlView_(control) {
     let controlElem = control.element();
     if (!Utils.isNullOrEmpty(this.controls_Container)) {
       this.controls_Container.appendChild(controlElem);
     }
-    control.fire(Evt.ADDED_TO_PANEL);
+    control.fire(EvtManager.ADDED_TO_PANEL);
   }
 
   /**
@@ -452,7 +458,7 @@ export default class Panel extends Object {
    * @param {array<M.Control>} controls
    * @api stable
    */
-  _manageActivation(control) {
+  manageActivation_(control) {
     if (this.multiActivation_ !== true) {
       this.controls_.forEach(panelControl => {
         if (!panelControl.equals(control) && panelControl.activated) {
@@ -501,13 +507,4 @@ export default class Panel extends Object {
   isCollapsed() {
     return this.collapsed_;
   }
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  Panel.TEMPLATE = 'panel.html';
 }
