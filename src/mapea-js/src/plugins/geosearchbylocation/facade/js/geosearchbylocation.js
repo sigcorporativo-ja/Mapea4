@@ -1,8 +1,12 @@
-goog.provide('P.plugin.Geosearchbylocation');
+import geosearchbylocationcontrol from "./geosearchbylocationcontrol";
+import Plugin from "facade/js/plugin";
+import Config from "../../../configuration";
+import Utils from "facade/js/utils/utils";
+import Panel from "facade/js/ui/panel";
+import Position from "facade/js/ui/position";
+import Location from "facade/js/controls/location";
 
-goog.require('P.control.Geosearchbylocation');
-
-(function () {
+export default class Geosearchbylocation extends Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a Control
@@ -13,7 +17,10 @@ goog.require('P.control.Geosearchbylocation');
    * @param {Mx.parameters.Geosearchbylocation} parameters - Geosearchbylocation parameters
    * @api stable
    */
-  M.plugin.Geosearchbylocation = (function (parameters) {
+  constructor(parameters) {
+    // call super
+    super();
+
     parameters = (parameters || {});
 
     /**
@@ -22,15 +29,15 @@ goog.require('P.control.Geosearchbylocation');
      * @type {string}
      * @api stable
      */
-    this.name = M.plugin.Geosearchbylocation.NAME;
+    this.name = Geosearchbylocation.NAME;
 
     /**
      * URL for the query
      * @private
      * @type {string}
      */
-    this.url_ = M.config.GEOSEARCH_URL;
-    if (!M.utils.isNullOrEmpty(parameters.url)) {
+    this.url_ = Config.GEOSEARCH_URL;
+    if (!Utils.isNullOrEmpty(parameters.url)) {
       this.url_ = parameters.url;
     }
 
@@ -39,8 +46,8 @@ goog.require('P.control.Geosearchbylocation');
      * @private
      * @type {string}
      */
-    this.core_ = M.config.GEOSEARCH_CORE;
-    if (!M.utils.isNullOrEmpty(parameters.core)) {
+    this.core_ = Config.GEOSEARCH_CORE;
+    if (!Utils.isNullOrEmpty(parameters.core)) {
       this.core_ = parameters.core;
     }
 
@@ -49,8 +56,8 @@ goog.require('P.control.Geosearchbylocation');
      * @private
      * @type {string}
      */
-    this.handler_ = M.config.GEOSEARCH_HANDLER;
-    if (!M.utils.isNullOrEmpty(parameters.handler)) {
+    this.handler_ = Config.GEOSEARCH_HANDLER;
+    if (!Utils.isNullOrEmpty(parameters.handler)) {
       this.handler_ = parameters.handler;
     }
 
@@ -59,8 +66,8 @@ goog.require('P.control.Geosearchbylocation');
      * @private
      * @type {number}
      */
-    this.distance_ = M.config.GEOSEARCH_DISTANCE;
-    if (!M.utils.isNullOrEmpty(parameters.distance)) {
+    this.distance_ = Config.GEOSEARCH_DISTANCE;
+    if (!Utils.isNullOrEmpty(parameters.distance)) {
       this.distance_ = parameters.distance;
     }
 
@@ -69,14 +76,14 @@ goog.require('P.control.Geosearchbylocation');
      * @private
      * @type {string}
      */
-    this.spatialField_ = M.config.GEOSEARCH_SPATIAL_FIELD;
+    this.spatialField_ = Config.GEOSEARCH_SPATIAL_FIELD;
 
     /**
      * Number of responses allowed
      * @private
      * @type {number}
      */
-    this.rows_ = M.config.GEOSEARCHBYLOCATION_ROWS;
+    this.rows_ = Config.GEOSEARCHBYLOCATION_ROWS;
 
     /**
      * Facade of the map
@@ -100,10 +107,7 @@ goog.require('P.control.Geosearchbylocation');
      */
     this.panel_ = null;
 
-    // call super
-    goog.base(this);
-  });
-  goog.inherits(M.plugin.Geosearchbylocation, M.Plugin);
+  }
 
   /**
    * @inheritdoc
@@ -112,38 +116,40 @@ goog.require('P.control.Geosearchbylocation');
    * @param {M.Map} map - Map to add the plugin
    * @api stable
    */
-  M.plugin.Geosearchbylocation.prototype.addTo = function (map) {
+  addTo(map) {
     this.map_ = map;
-    this.controlGeo = new M.control.Geosearchbylocation(this.url_,
+    this.controlGeo = new GeosearchbylocationControl(this.url_,
       this.core_, this.handler_, this.distance_, this.spatialField_, this.rows_);
 
-    this.panel_ = new M.ui.Panel(M.plugin.Geosearchbylocation.NAME, {
+    this.panel_ = new Panel(Geosearchbylocation.NAME, {
       'collapsible': false,
       'className': 'm-geosearchbylocation',
-      'position': M.ui.position.BR
+      'position': Position.BR
     });
     // sets the className depending on other panels
-    var locationPanel = map.getPanels([M.control.Location.NAME])[0];
+    var locationPanel = map.getPanels([Location.NAME])[0];
     var streetViewPanel;
-    if (!M.utils.isNullOrEmpty(M.plugin.Streetview)) {
+
+    // TODO
+    if (!Utils.isNullOrEmpty(M.plugin.Streetview)) {
       streetViewPanel = map.getPanels([M.plugin.Streetview.NAME])[0];
     }
-    if (!M.utils.isNullOrEmpty(locationPanel) && !M.utils.isNullOrEmpty(streetViewPanel)) {
+
+
+    if (!Utils.isNullOrEmpty(locationPanel) && !Utils.isNullOrEmpty(streetViewPanel)) {
       locationPanel.addClassName('m-with-geosearchbylocation');
       streetViewPanel.addClassName('m-with-geosearchbylocation');
       this.panel_.addClassName('m-with-location m-with-streetview');
-    }
-    else if (!M.utils.isNullOrEmpty(locationPanel)) {
+    } else if (!Utils.isNullOrEmpty(locationPanel)) {
       locationPanel.addClassName('m-with-geosearchbylocation');
       this.panel_.addClassName('m-with-location');
-    }
-    else if (!M.utils.isNullOrEmpty(streetViewPanel)) {
+    } else if (!Utils.isNullOrEmpty(streetViewPanel)) {
       streetViewPanel.addClassName('m-with-geosearchbylocation');
       this.panel_.addClassName('m-with-streetview');
     }
     this.panel_.addControls(this.controlGeo);
     this.map_.addPanels(this.panel_);
-  };
+  }
 
   /**
    * This function destroys this plugin
@@ -152,7 +158,7 @@ goog.require('P.control.Geosearchbylocation');
    * @function
    * @api stable
    */
-  M.plugin.Geosearchbylocation.prototype.destroy = function () {
+  destroy() {
     this.map_.removeControls([this.controlGeo]);
     this.controlGeo = null;
     this.name = null;
@@ -165,17 +171,7 @@ goog.require('P.control.Geosearchbylocation');
     this.map_ = null;
     this.controlGeo = null;
     this.panel_ = null;
-  };
-
-  /**
-   * Name of this control
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.plugin.Geosearchbylocation.NAME = 'geosearchbylocation';
-
+  }
   /**
    * This function compare if pluging recieved by param is instance of  M.plugin.Geosearchbylocation
    *
@@ -184,12 +180,22 @@ goog.require('P.control.Geosearchbylocation');
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.Geosearchbylocation.prototype.equals = function (plugin) {
-    if (plugin instanceof M.plugin.Geosearchbylocation) {
+  equals(plugin) {
+    if (plugin instanceof Geosearchbylocation) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-  };
-})();
+  }
+}
+
+
+/**
+ * Name of this control
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+
+M.plugin.Geosearchbylocation.NAME = 'geosearchbylocation';
