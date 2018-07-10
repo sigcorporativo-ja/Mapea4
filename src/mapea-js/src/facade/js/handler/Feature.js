@@ -1,10 +1,11 @@
-import Utils from './utils/utils';
+import Utils from './util/Utils';
 import Exception from './exception/exception';
-import Base from './facade';
-import HandlerImpl from '../../../impl/js/handlers/featureshandler';
-import Feature from '../feature/feature';
+import Base from './Base';
+import HandlerImpl from '../../../impl/ol/js/handlers/featureshandler';
+import Feature from '../feature/Feature';
+import EvtManaManager from "../event/Manager";
 
-export default class Handler extends Base {
+export default class Feature extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -17,7 +18,7 @@ export default class Handler extends Base {
   constructor(options = {}, impl = new HandlerImpl(options)) {
 
     // calls the super constructor
-    super(this, impl);
+    super(impl);
 
     /**
      * @private
@@ -73,10 +74,10 @@ export default class Handler extends Base {
    */
   addTo(map) {
     this.map_ = map;
-    this.map_.on(Evt.CLICK, this.clickOnMap_, this);
-    this.map_.on(Evt.MOVE, this.moveOverMap_, this);
+    this.map_.on(EvtManaManager.CLICK, this.clickOnMap_, this);
+    this.map_.on(EvtManaManager.MOVE, this.moveOverMap_, this);
     this.getImpl().addTo(this.map_);
-    this.fire(Evt.ADDED_TO_MAP);
+    this.fire(EvtManaManager.ADDED_TO_MAP);
   }
 
   /**
@@ -139,7 +140,7 @@ export default class Handler extends Base {
             this.hoverFeatures_(newFeatures, layer, evt);
           }
         }
-      }, this);
+      });
     }
   }
 
@@ -156,7 +157,7 @@ export default class Handler extends Base {
     if (Utils.isFunction(layerImpl.selectFeatures)) {
       layerImpl.selectFeatures(features, evt.coord, evt);
     }
-    layer.fire(Evt.SELECT_FEATURES, [features, evt]);
+    layer.fire(EvtManaManager.SELECT_FEATURES, [features, evt]);
   }
 
   /**
@@ -174,7 +175,7 @@ export default class Handler extends Base {
     if (Utils.isFunction(layerImpl.unselectFeatures)) {
       layerImpl.unselectFeatures(features, evt.coord);
     }
-    layer.fire(Evt.UNSELECT_FEATURES, [features, evt.coord]);
+    layer.fire(EvtManaManager.UNSELECT_FEATURES, [features, evt.coord]);
   }
 
   /**
@@ -186,7 +187,7 @@ export default class Handler extends Base {
    */
   hoverFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] = this.prevHoverFeatures_[layer.name].concat(features);
-    layer.fire(Evt.HOVER_FEATURES, [features, evt]);
+    layer.fire(EvtManaManager.HOVER_FEATURES, [features, evt]);
     this.getImpl().addCursorPointer();
   }
 
@@ -200,7 +201,7 @@ export default class Handler extends Base {
   leaveFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] =
       this.prevHoverFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
-    layer.fire(Evt.LEAVE_FEATURES, [features, evt.coord]);
+    layer.fire(EvtManaManager.LEAVE_FEATURES, [features, evt.coord]);
     this.getImpl().removeCursorPointer();
   }
 
@@ -215,7 +216,7 @@ export default class Handler extends Base {
   activate() {
     if (this.activated_ === false) {
       this.activated_ = true;
-      this.fire(Evt.ACTIVATED);
+      this.fire(EvtManaManager.ACTIVATED);
     }
   }
 
@@ -230,7 +231,7 @@ export default class Handler extends Base {
   deactivate() {
     if (this.activated_ === true) {
       this.activated_ = false;
-      this.fire(Evt.DEACTIVATED);
+      this.fire(EvtManaManager.DEACTIVATED);
     }
   }
 
