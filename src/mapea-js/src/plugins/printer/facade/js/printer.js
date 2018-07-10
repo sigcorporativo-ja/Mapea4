@@ -1,8 +1,11 @@
-goog.provide('P.plugin.Printer');
+import Plugin from "facade/js/plugin";
+import Config from "../../../configuration";
+import Utils from "facade/js/utils/utils";
+import Panel from "facade/js/ui/panel";
+import Position from "facade/js/ui/position";
+import EventsManager from "facade/js/event/eventsmanager";
 
-goog.require('P.control.Printer');
-
-(function () {
+export default class Printer extends Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -13,7 +16,10 @@ goog.require('P.control.Printer');
    * @param {Object} impl implementation object
    * @api stable
    */
-  M.plugin.Printer = (function (parameters) {
+  constructor(parameters) {
+
+    super(null, Printer.NAME);
+
     parameters = (parameters || {});
 
     /**
@@ -43,15 +49,15 @@ goog.require('P.control.Printer');
      * @type {string}
      * @api stable
      */
-    this.name = M.plugin.Printer.NAME;
+    this.name = Printer.NAME;
 
     /**
      * Facade of the map
      * @private
      * @type {String}
      */
-    this.url_ = M.config.geoprint.URL;
-    if (!M.utils.isNullOrEmpty(parameters.url)) {
+    this.url_ = Config.geoprint.URL;
+    if (!Utils.isNullOrEmpty(parameters.url)) {
       this.url_ = parameters.url;
     }
 
@@ -61,7 +67,7 @@ goog.require('P.control.Printer');
      * @type {String}
      */
     this.params_ = {};
-    if (!M.utils.isNullOrEmpty(parameters.params)) {
+    if (!Utils.isNullOrEmpty(parameters.params)) {
       this.params_ = parameters.params;
     }
 
@@ -71,13 +77,11 @@ goog.require('P.control.Printer');
      * @type {String}
      */
     this.options_ = {};
-    if (!M.utils.isNullOrEmpty(parameters.options)) {
+    if (!Utils.isNullOrEmpty(parameters.options)) {
       this.options_ = parameters.options;
     }
 
-    goog.base(this, null, M.plugin.Printer.NAME);
-  });
-  goog.inherits(M.plugin.Printer, M.Plugin);
+  }
 
   /**
    * This function provides the implementation
@@ -88,29 +92,28 @@ goog.require('P.control.Printer');
    * @param {Object} map the map to add the plugin
    * @api stable
    */
-  M.plugin.Printer.prototype.addTo = function (map) {
+  addTo(map) {
     this.map_ = map;
 
-    this.control_ = new M.control.Printer(this.url_, this.params_,
+    this.control_ = new Printer(this.url_, this.params_,
       this.options_);
-    this.panel_ = new M.ui.Panel('printer', {
+    this.panel_ = new Panel('printer', {
       'collapsible': true,
       'className': 'm-printer',
       'collapsedButtonClass': 'g-cartografia-impresora',
-      'position': M.ui.position.TR,
+      'position': Position.TR,
       'tooltip': 'Impresión del mapa'
     });
-    this.panel_.on(M.evt.ADDED_TO_MAP, function (html) {
-      M.utils.enableTouchScroll(html);
+    this.panel_.on(EventsManager.ADDED_TO_MAP, html => {
+      Utils.enableTouchScroll(html);
     });
     this.panel_.addControls(this.control_);
     this.map_.addPanels(this.panel_);
 
-    var this_ = this;
-    this.control_.on(M.evt.ADDED_TO_MAP, function () {
-      this_.fire(M.evt.ADDED_TO_MAP);
+    this.control_.on(EventsManager.ADDED_TO_MAP, function () {
+      this.fire(EventsManager.ADDED_TO_MAP);
     });
-  };
+  }
 
   /**
    * This function destroys this plugin
@@ -119,7 +122,7 @@ goog.require('P.control.Printer');
    * @function
    * @api stable
    */
-  M.plugin.Printer.prototype.destroy = function () {
+  destroy() {
     this.map_.removeControls([this.control_]);
     this.map_ = null;
     this.control_ = null;
@@ -128,7 +131,7 @@ goog.require('P.control.Printer');
     this.params_ = null;
     this.options_ = null;
     this.name = null;
-  };
+  }
 
   /**
    * This function compare if pluging recieved by param is instance of   M.plugin.Printer
@@ -138,14 +141,13 @@ goog.require('P.control.Printer');
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.Printer.prototype.equals = function (plugin) {
-    if (plugin instanceof M.plugin.Printer) {
+  equals(plugin) {
+    if (plugin instanceof Printer) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-  };
+  }
 
   /**
    * Name to identify this plugin
@@ -154,5 +156,6 @@ goog.require('P.control.Printer');
    * @public
    * @api stable
    */
-  M.plugin.Printer.NAME = "printer";
-})();
+}
+
+Printer.NAME = "printer";
