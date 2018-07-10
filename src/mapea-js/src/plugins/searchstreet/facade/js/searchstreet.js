@@ -1,7 +1,15 @@
-goog.provide('P.plugin.Searchstreet');
-goog.require('P.plugin.Autocomplete');
+import Autocomplete from "plugins/autocomplete/facade/js/autocomplete";
+import Plugin from "facade/js/plugin";
+import Config from "../../../configuration";
+import Utils from "facade/js/utils/utils";
+import Remote from "facade/js/utils/remote";
+import Dialog from "facade/js/dialog";
+import EventsManager from "facade/js/event/eventsmanager";
+import Panel from "facade/js/ui/panel";
+import Position from "facade/js/ui/position";
+import Exception from "facade/js/exception/exception";
 
-(function() {
+export default class Searchstreet extends Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -12,7 +20,9 @@ goog.require('P.plugin.Autocomplete');
    * @param {Mx.parameters.Searchstreet} parameters - Searchstreet parameters
    * @api stable
    */
-  M.plugin.Searchstreet = (function(parameters) {
+  constructor(parameters) {
+    super();
+
     parameters = (parameters || {});
 
     /**
@@ -60,7 +70,7 @@ goog.require('P.plugin.Autocomplete');
      * @private
      * @type {string}
      */
-    this.url_ = M.config.SEARCHSTREET_URL;
+    this.url_ = Config.SEARCHSTREET_URL;
 
     /**
      * INE code to specify the search
@@ -69,13 +79,11 @@ goog.require('P.plugin.Autocomplete');
      * @type {number}
      */
     this.locality_ = "";
-    if (!M.utils.isNullOrEmpty(parameters.locality)) {
+    if (!Utils.isNullOrEmpty(parameters.locality)) {
       this.locality_ = parameters.locality;
     }
 
-    goog.base(this);
-  });
-  goog.inherits(M.plugin.Searchstreet, M.Plugin);
+  }
 
   /**
    * @inheritdoc
@@ -86,48 +94,46 @@ goog.require('P.plugin.Autocomplete');
    *        map - Facade map
    * @api stable
    */
-  M.plugin.Searchstreet.prototype.addTo = function(map) {
-    var this_ = this;
+  addTo(map) {
     this.map_ = map;
 
-    goog.dom.classlist.add(map._areasContainer.getElementsByClassName("m-top m-right")[0],
-      "top-extra");
+    map._areasContainer.getElementsByClassName("m-top m-right")[0].classList.add("top-extra");
 
     // Checks if the received INE code is correct.
-    var comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
+    let comCodIne = Utils.addParameters(Config.SEARCHSTREET_URLCOMPROBARINE, {
       codigo: this.locality_
     });
-    M.remote.get(comCodIne).then(
-      function(response) {
-        var results;
+    Remote.get(comCodIne).then(
+      response => {
+        let results;
         try {
-          if (!M.utils.isNullOrEmpty(response.text)) {
+          if (!Utils.isNullOrEmpty(response.text)) {
             results = JSON.parse(response.text);
-            if (!M.utils.isNullOrEmpty(this_.locality_) && M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
+            if (!Utils.isNullOrEmpty(this_.locality_) && Utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
               // If not correct, value empty
-              M.dialog.error("El código del municipio '" + this_.locality_ + "' no es válido");
+              Dialog.error("El código del municipio '" + this_.locality_ + "' no es válido");
               this_.locality_ = "";
             }
           }
-          this_.control_ = new M.control.Searchstreet(this_.url_, this_.locality_);
-          this_.control_.on(M.evt.ADDED_TO_MAP, function() {
-            this_.fire(M.evt.ADDED_TO_MAP);
-            this_.autocompletador_ = new M.plugin.Autocomplete({
+          this_.control_ = new Searchstreet(this_.url_, this_.locality_);
+          this_.control_.on(EventsManager.ADDED_TO_MAP, () => {
+            this_.fire(EventsManager.ADDED_TO_MAP);
+            this_.autocompletador_ = new Autocomplete({
               'locality': this_.locality_,
               'target': this_.control_.getInput(),
               'html': this_.control_.getHtml()
             });
             this_.map_.addPlugin(this_.autocompletador_);
           }, this);
-          this_.panel_ = new M.ui.Panel('searchstreet', {
+          this_.panel_ = new Panel('searchstreet', {
             'collapsible': true,
             'className': 'm-searchstreet',
-            'position': M.ui.position.TL,
+            'position': Position.TL,
             'tooltip': 'Buscador de calles'
           });
           //JGL20170816: foco al input al desplegar panel
-          this_.panel_.on(M.evt.ADDED_TO_MAP, function(html) {
-            this_.panel_._buttonPanel.addEventListener("click", function(evt) {
+          this_.panel_.on(EventsManager.ADDED_TO_MAP, html => {
+            this_.panel_._buttonPanel.addEventListener("click", evt => {
               if (!this_.panel_._collapsed) {
                 this_.control_.input_.focus();
               }
@@ -136,7 +142,7 @@ goog.require('P.plugin.Autocomplete');
           this_.panel_.addControls(this_.control_);
           this_.map_.addPanels(this_.panel_);
         } catch (err) {
-          M.exception('La respuesta no es un JSON válido: ' + err);
+          Exception('La respuesta no es un JSON válido: ' + err);
         }
       });
   };
@@ -148,7 +154,7 @@ goog.require('P.plugin.Autocomplete');
    * @function
    * @api stable
    */
-  M.plugin.Searchstreet.prototype.destroy = function() {
+  destroy() {
     this.map_.removeControls([this.control_]);
     this.autocompletador_.destroy();
     this.name = null;
@@ -158,7 +164,7 @@ goog.require('P.plugin.Autocomplete');
     this.panel_ = null;
     this.url_ = null;
     this.locality_ = null;
-  };
+  }
 
   /**
    * This function compare if pluging recieved by param is instance of M.plugin.Searchstreet
@@ -168,11 +174,11 @@ goog.require('P.plugin.Autocomplete');
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.Searchstreet.prototype.equals = function(plugin) {
-    if (plugin instanceof M.plugin.Searchstreet) {
+  equals(plugin) {
+    if (plugin instanceof Searchstreet) {
       return true;
     } else {
       return false;
     }
-  };
-})();
+  }
+}

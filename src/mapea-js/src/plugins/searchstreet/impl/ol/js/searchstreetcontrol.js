@@ -1,9 +1,12 @@
-goog.provide('P.impl.control.Searchstreet');
+import FeatureImpl from "impl/ol/js/feature/feature";
+import Utils from "facade/js/utils/utils";
+import Template from "facade/js/utils/template";
+import Popup from "facade/js/popup";
 
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class SearchstreetControl extends ol.control.Control {
   /**
    * @classdesc Main constructor of the Searchstreet control.
    *
@@ -11,7 +14,7 @@ goog.provide('P.impl.control.Searchstreet');
    * @extends {ol.control.Control}
    * @api stable
    */
-  M.impl.control.Searchstreet = function() {
+  constructor() {
     /**
      * Facade of the map
      *
@@ -36,8 +39,7 @@ goog.provide('P.impl.control.Searchstreet');
      * @type {HTMLElement}
      */
     this.element_ = null;
-  };
-  goog.inherits(M.impl.control.Searchstreet, ol.control.Control);
+  }
 
   /**
    * This function adds the control to the specified map
@@ -48,7 +50,7 @@ goog.provide('P.impl.control.Searchstreet');
    * @param {HTMLElement} element - Template of this control
    * @api stable
    */
-  M.impl.control.Searchstreet.prototype.addTo = function(map, element) {
+  addTo(map, element) {
     this.facadeMap_ = map;
     this.element_ = element;
 
@@ -57,7 +59,7 @@ goog.provide('P.impl.control.Searchstreet');
       'target': null
     });
     map.getMapImpl().addControl(this);
-  };
+  }
 
   /**
    * This function draw points on the map
@@ -67,8 +69,8 @@ goog.provide('P.impl.control.Searchstreet');
    * @param {array} results - Results query results
    * @api stable
    */
-  M.impl.control.Searchstreet.prototype.drawPoints = function(results) {
-    var positionFeature = null;
+  drawPoints(results) {
+    let positionFeature = null;
     for (var i = 0, ilen = results.length; i < ilen; i++) {
       positionFeature = new ol.Feature();
       positionFeature.setStyle(new ol.style.Style({
@@ -88,14 +90,14 @@ goog.provide('P.impl.control.Searchstreet');
          ] ? new ol.geom.Point([
             results[i].coordinateX, results[i].coordinateY
          ]) : null);
-      var feature = results[i];
+      let feature = results[i];
       this.addEventClickFeature(feature, positionFeature);
 
-      this.facadeMap_.drawFeatures([M.impl.Feature.olFeature2Facade(positionFeature)]);
+      this.facadeMap_.drawFeatures([FeatureImpl.olFeature2Facade(positionFeature)]);
       this.listPoints.push([positionFeature]);
     }
     this.zoomResults();
-  };
+  }
 
   /**
    * This function zooms results
@@ -104,18 +106,18 @@ goog.provide('P.impl.control.Searchstreet');
    * @function
    * @api stable
    */
-  M.impl.control.Searchstreet.prototype.zoomResults = function() {
+  zoomResults() {
     // var features = this.facadeMap_.getImpl().getDrawLayer().getOL3Layer().getSource().getFeatures();
-    var features = this.listPoints[0];
-    var bbox = ol.extent.boundingExtent(features
-      .filter(function(feature) {
-        return (!M.utils.isNullOrEmpty(feature.getGeometry()));
+    let features = this.listPoints[0];
+    let bbox = ol.extent.boundingExtent(features
+      .filter(feature => {
+        return (!Utils.isNullOrEmpty(feature.getGeometry()));
       })
-      .map(function(feature) {
+      .map(feature => {
         return feature.getGeometry().getFirstCoordinate();
       }));
     this.facadeMap_.setBbox(bbox);
-  };
+  }
 
 
   /**
@@ -127,18 +129,16 @@ goog.provide('P.impl.control.Searchstreet');
    * @param {ol.Feature} result - Feature
    * @api stable
    */
-  M.impl.control.Searchstreet.prototype.addEventClickFeature = function(element, result) {
+  addEventClickFeature(element, result) {
     this.facadeMap_.removePopup();
-    var this_ = this;
-    if (M.utils.isNullOrEmpty(result)) {
+    if (Utils.isNullOrEmpty(result)) {
       this.showPopup_(element, false);
       this.facadeMap_.setBbox([element.coordinateX, element.coordinateY, element.coordinateX, element.coordinateY]);
-    }
-    else if (result instanceof ol.Feature) {
+    } else if (result instanceof ol.Feature) {
       result.set("vendor", {
         "mapea": {
-          "click": function(evt) {
-            this_.showPopup_(element);
+          "click": function (evt) {
+            this.showPopup_(element);
           }
         }
       });
@@ -153,9 +153,8 @@ goog.provide('P.impl.control.Searchstreet');
    * @param {object} feature - Specific result query response
    * @param {boolean} noPanMapIfOutOfView
    */
-  M.impl.control.Searchstreet.prototype.showPopup_ = function(feature, noPanMapIfOutOfView) {
-    var this_ = this;
-    M.template.compile(M.impl.control.Searchstreet.POPUP_TEMPLATE, {
+  showPopup_(feature, noPanMapIfOutOfView) {
+    Template.compile(SearchstreetControl.POPUP_TEMPLATE, {
       'jsonp': true,
       'vars': {
         'tVia': feature.streetType,
@@ -165,49 +164,45 @@ goog.provide('P.impl.control.Searchstreet');
         'prov': feature.cityName
       },
       'parseToHtml': false
-    }).then(function(htmlAsText) {
-      var popupContent = {
+    }).then(function (htmlAsText) {
+      let popupContent = {
         'icon': 'g-cartografia-zoom',
         'title': 'Searchstreet',
         'content': htmlAsText
       };
 
-      this_.popup_ = this_.facadeMap_.getPopup();
-      if (!M.utils.isNullOrEmpty(this_.popup_)) {
-        var hasExternalContent = this_.popup_.getTabs().some(function(tab) {
+      this.popup_ = this.facadeMap_.getPopup();
+      if (!Utils.isNullOrEmpty(this.popup_)) {
+        let hasExternalContent = this.popup_.getTabs().some(tab => {
           return (tab['title'] !== 'Searchstreet');
         });
         if (!hasExternalContent) {
-          this_.facadeMap_.removePopup();
-          if (M.utils.isUndefined(noPanMapIfOutOfView)) {
-            this_.popup_ = new M.Popup();
-          }
-          else {
-            this_.popup_ = new M.Popup({
+          this.facadeMap_.removePopup();
+          if (Utils.isUndefined(noPanMapIfOutOfView)) {
+            this.popup_ = new Popup();
+          } else {
+            this.popup_ = new Popup({
               'panMapIfOutOfView': noPanMapIfOutOfView
             });
           }
-          this_.popup_.addTab(popupContent);
-          this_.facadeMap_.addPopup(this_.popup_, [feature.coordinateX, feature.coordinateY]);
+          this.popup_.addTab(popupContent);
+          this.facadeMap_.addPopup(this.popup_, [feature.coordinateX, feature.coordinateY]);
+        } else {
+          this.popup_.addTab(popupContent);
         }
-        else {
-          this_.popup_.addTab(popupContent);
-        }
-      }
-      else {
-        if (M.utils.isUndefined(noPanMapIfOutOfView)) {
-          this_.popup_ = new M.Popup();
-        }
-        else {
-          this_.popup_ = new M.Popup({
+      } else {
+        if (Utils.isUndefined(noPanMapIfOutOfView)) {
+          this.popup_ = new Popup();
+        } else {
+          this.popup_ = new Popup({
             'panMapIfOutOfView': noPanMapIfOutOfView
           });
         }
-        this_.popup_.addTab(popupContent);
-        this_.facadeMap_.addPopup(this_.popup_, [feature.coordinateX, feature.coordinateY]);
+        this.popup_.addTab(popupContent);
+        this.facadeMap_.addPopup(this.popup_, [feature.coordinateX, feature.coordinateY]);
       }
     });
-  };
+  }
 
   /**
    * This function return HTML template
@@ -217,9 +212,9 @@ goog.provide('P.impl.control.Searchstreet');
    * @api stable
    * @returns {HTMLElement} HTML template
    */
-  M.impl.control.Searchstreet.prototype.getElement = function() {
+  getElement() {
     return this.element_;
-  };
+  }
 
 
   /**
@@ -228,12 +223,12 @@ goog.provide('P.impl.control.Searchstreet');
    * @private
    * @function
    */
-  M.impl.control.Searchstreet.prototype.removePoints_ = function() {
+  removePoints_() {
     for (var i = 0, ilen = this.listPoints.length; i < ilen; i++) {
-      this.facadeMap_.removeFeatures(this.listPoints[i].map(M.impl.Feature.olFeature2Facade));
+      this.facadeMap_.removeFeatures(this.listPoints[i].map(FeatureImpl.olFeature2Facade));
     }
     this.listPoints = [];
-  };
+  }
 
 
   /**
@@ -243,24 +238,25 @@ goog.provide('P.impl.control.Searchstreet');
    * @function
    * @api stable
    */
-  M.impl.control.Searchstreet.prototype.destroy = function() {
-    goog.dom.classlist.remove(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
-      "top-extra");
+  destroy() {
+    this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0].classList.remove("top-extra");
     this.removePoints_();
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_.getImpl().removePopup();
     this.facadeMap_ = null;
     this.listPoints = null;
     this.element_ = null;
-  };
+  }
 
-  /**
-   * Template for popup
-   *
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.impl.control.Searchstreet.POPUP_TEMPLATE = "searchstreetpopup.html";
-})();
+}
+
+/**
+ * Template for popup
+ *
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+
+SearchstreetControl.POPUP_TEMPLATE = "searchstreetpopup.html";
