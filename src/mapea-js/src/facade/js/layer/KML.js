@@ -1,12 +1,11 @@
-import Vector from './vector';
-import Utils from '../utils/utils';
+import LayerVector from './Vector';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import KMLImpl from '../../../impl/js/layers/kml';
-import LayerType from './layertype';
-import Layer from '../parameters/layers';
+import KMLImpl from '../../../impl/ol/js/layer/KML';
+import LayerType from './Type';
+import * as parameter from '../parameter/parameter';
 
-
-export default class KML extends Vector {
+export default class KML extends LayerVector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -19,7 +18,15 @@ export default class KML extends Vector {
    * @api stable
    */
   constructor(userParameters, options = {}) {
+    /**
+     * Implementation of this layer
+     * @public
+     * @type {M.layer.KML}
+     */
     let impl = new KMLImpl(options);
+
+    //This layer is of parameters.
+    let parameters = parameter.layer(userParameters, LayerType.KML);
 
     // calls the super constructor
     super(parameters, options, impl);
@@ -34,16 +41,6 @@ export default class KML extends Vector {
       Exception('No ha especificado ningún parámetro');
     }
 
-    /**
-     * Implementation of this layer
-     * @public
-     * @type {M.layer.KML}
-     */
-
-    //This layer is of parameters.
-    let parameters = Layer(userParameters, LayerType.KML);
-
-
     // extract
     this.extract = parameters.extract;
 
@@ -55,11 +52,11 @@ export default class KML extends Vector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  static getType() {
+  get type() {
     return LayerType.KML;
   }
 
-  static setType(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.KML)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.KML).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -70,18 +67,20 @@ export default class KML extends Vector {
    * 'transparent' the layer name
    */
 
-  static getExtract() {
+  get extract() {
     return this.getImpl().extract;
   }
 
-  static set extract(newExtract) {
+  set extract(newExtract) {
     if (!Utils.isNullOrEmpty(newExtract)) {
       if (Utils.isString(newExtract)) {
         this.getImpl().extract = (Utils.normalize(newExtract) === 'true');
-      } else {
+      }
+      else {
         this.getImpl().extract = newExtract;
       }
-    } else {
+    }
+    else {
       this.getImpl().extract = true;
     }
   }
@@ -89,11 +88,11 @@ export default class KML extends Vector {
   /**
    * 'options' the layer options
    */
-  static getOptions() {
+  get options() {
     return this.getImpl().options;
   }
 
-  static setOptions(newOptions) {
+  set options(newOptions) {
     this.getImpl().options = newOptions;
   }
 
@@ -115,13 +114,4 @@ export default class KML extends Vector {
 
     return equals;
   }
-
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  KML.POPUP_TEMPLATE = 'kml_popup.html';
 }

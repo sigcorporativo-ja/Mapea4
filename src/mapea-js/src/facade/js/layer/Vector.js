@@ -1,17 +1,16 @@
-import Utils from '../utils/utils';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerBase from './layerbase';
-import VectorImpl from '../../../impl/js/layers/vector';
-import LayerType from './layertype';
-import Dialog from "../dialog";
-import Filter from "../filter/filter";
-import Cluster from '../style/stylecluster';
-import WFS from "./wfs";
-import Geojson from '../geom/geojson';
-import GeoJSON from './geojson';
-import Style from '../style/style';
-import Evt from '../event/eventsmanager';
-
+import LayerBase from './Base';
+import VectorImpl from '../../../impl/ol/js/layer/Vector';
+import LayerType from './Type';
+import * as dialog from "../dialog";
+import FilterBase from "../filter/Base";
+import StyleCluster from '../style/Cluster';
+import LayerWFS from "./WFS";
+import GeomGeoJSON from '../geom/GeoJSON';
+import LayerGeoJSON from './GeoJSON';
+import StyleBase from '../style/Base';
+import EvtManager from '../event/Manager';
 
 export default class Vector extends LayerBase {
   /**
@@ -33,10 +32,12 @@ export default class Vector extends LayerBase {
     if (Utils.isUndefined(VectorImpl)) {
       Exception('La implementación usada no puede crear capas Vector');
     }
+
     /**
      * TODO
      */
-    this.style_ = null;
+    this.style_ = options.style;
+
     /**
      * Filter
      * @private
@@ -44,22 +45,20 @@ export default class Vector extends LayerBase {
      */
     this.filter_ = null;
 
+    this.setStyle(this.style_);
 
-    this.style_ = options.style;
-    this.style = this.style_;
-
-    impl.on(Evt.LOAD, (features) => this.fire(Evt.LOAD, [features]));
+    impl.on(EvtManager.LOAD, (features) => this.fire(EvtManager.LOAD, [features]));
   }
 
   /**
    * 'type' This property indicates if
    * the layer was selected
    */
-  getType() {
+  get type() {
     return LayerType.Vector;
   }
 
-  setType(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.Vector)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Vector).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -109,8 +108,9 @@ export default class Vector extends LayerBase {
     let feature = null;
     if (!Utils.isNullOrEmpty(id)) {
       feature = this.getImpl().getFeatureById(id);
-    } else {
-      Dialog.error("No se ha indicado un ID para obtener el feature");
+    }
+    else {
+      dialog.error("No se ha indicado un ID para obtener el feature");
     }
     return feature;
   }
@@ -187,15 +187,15 @@ export default class Vector extends LayerBase {
    * @api stable
    */
   setFilter(filter) {
-    if (Utils.isNullOrEmpty(filter) || (filter instanceof Filter)) {
+    if (Utils.isNullOrEmpty(filter) || (filter instanceof FilterBase)) {
       this.filter_ = filter;
       let style = this.style();
-      if (style instanceof Cluster) {
+      if (style instanceof StyleCluster) {
         // deactivate change cluster event
         style.getImpl().deactivateChangeEvent();
       }
       this.redraw();
-      if (style instanceof Cluster) {
+      if (style instanceof StyleCluster) {
         // activate change cluster event
         style.getImpl().activateChangeEvent();
 
@@ -204,8 +204,9 @@ export default class Vector extends LayerBase {
         // no se actualiza automaticamente
         style.refresh();
       }
-    } else {
-      Dialog.error("El filtro indicado no es correcto");
+    }
+    else {
+      dialog.error("El filtro indicado no es correcto");
     }
   }
 
@@ -279,21 +280,22 @@ export default class Vector extends LayerBase {
     const applyStyleFn = (style) => {
       const applyStyle = () => {
         if (Utils.isNullOrEmpty(style)) {
-          if (this instanceof WFS) {
+          if (this instanceof LayerWFS) {
             style = Utils.generateStyleLayer(LayerBase.WFS.DEFAULT_OPTIONS_STYLE, this);
-          } else {
+          }
+          else {
             style = Utils.generateStyleLayer(GeoJSON.DEFAULT_OPTIONS_STYLE, this);
           }
         }
-        let isCluster = style instanceof Cluster;
-        let isPoint = [Geojson.POINT, Geojson.MULTI_POINT].includes(Utils.geometryType(this));
+        let isCluster = style instanceof StyleCluster;
+        let isPoint = [GeomGeoJSON.type.POINT, GeomGeoJSON.type.MULTI_POINT].includes(Utils.geometryType(this));
         if (style instanceof Style && (!isCluster || isPoint)) {
           if (!Utils.isNullOrEmpty(this.oldStyle_)) {
             this.oldStyle_.unapply(this);
           }
           style.apply(this, applyToFeature, isNullStyle);
           this.style_ = style;
-          this.fire(Evt.CHANGE_STYLE, [style, this]);
+          this.fire(EvtManager.CHANGE_STYLE, [style, this]);
         }
         if (!Utils.isNullOrEmpty(this.getImpl().getMap())) {
           let layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
@@ -307,8 +309,9 @@ export default class Vector extends LayerBase {
 
     if (this.getImpl().isLoaded()) {
       applyStyleFn(style).bind(this)();
-    } else {
-      this.once(Evt.LOAD, applyStyleFn(style), this);
+    }
+    else {
+      this.once(EvtManager.LOAD, applyStyleFn(style), this);
     }
   }
 

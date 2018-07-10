@@ -1,10 +1,10 @@
-import LayerBase from('./layerbase.js');
-import Utils from('../utils/utils.js');
-import Exception from('../exception/exception.js');
-import MapboxImpl from('../../../impl/js/layers/mapbox.js');
-import LayerType from('./layertype.js');
-import Layer from('../parameters/layers.js');
-import Config from('../../../configuration.js');
+import LayerBase from './Base';
+import Utils from '../util/Utils';
+import Exception from '../exception/exception';
+import MapboxImpl from '../../../impl/ol/js/layer/Mapbox';
+import LayerType from './Type';
+import * as parameter from '../parameter/parameter';
+import Config from 'configuration';
 
 export default class Mapbox extends LayerBase {
   /**
@@ -18,9 +18,17 @@ export default class Mapbox extends LayerBase {
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  constructor(userParameters, options) {
+  constructor(userParameters, options = {}) {
 
+    /**
+     * Implementation of this layer
+     * @public
+     * @type {M.layer.WMS}
+     */
     let impl = new MapboxImpl(userParameters, options);
+
+    //This layer is of parameters.
+    let parameters = parameter.layer(userParameters, LayerType.Mapbox);
 
     // calls the super constructor
     super(parameters, impl);
@@ -35,21 +43,10 @@ export default class Mapbox extends LayerBase {
       Exception('No ha especificado ningún parámetro');
     }
 
-    options = (options || {});
-
-    /**
-     * Implementation of this layer
-     * @public
-     * @type {M.layer.WMS}
-     */
-    //This layer is of parameters.
-    let parameters = Layer(userParameters, LayerType.Mapbox);
-
     // checks if the param is null or empty
     if (Utils.isNullOrEmpty(parameters.name)) {
       Exception('No ha especificado ningún nombre');
     }
-
 
     this.name = parameters.name;
 
@@ -72,44 +69,47 @@ export default class Mapbox extends LayerBase {
    * 'url' The service URL of the
    * layer
    */
-  getUrl() {
+  get url() {
     return this.getImpl().url;
   }
 
-  setUrl(newUrl) {
+  set url(newUrl) {
     if (!Utils.isNullOrEmpty(newUrl)) {
       this.getImpl().url = newUrl;
-    } else {
+    }
+    else {
       this.getImpl().url = Config.MAPBOX_URL;
     }
   }
 
   /**
-   * 'tiled' the layer name
+   * 'transparent'
    */
-  getTransparent() {
+  get transparent() {
     return this.getImpl().transparent;
   }
 
-  setTransparent(newTransparent) {
+  set transparent(newTransparent) {
     if (!Utils.isNullOrEmpty(newTransparent)) {
       this.getImpl().transparent = newTransparent;
-    } else {
+    }
+    else {
       this.getImpl().transparent = false;
     }
   }
 
   /**
-   * 'tiled' the layer name
+   * 'accessToken' 
    */
-  getAccessToken() {
+  get accessToken() {
     return this.getImpl().accessToken;
   }
 
-  setAccessToken(newAccessToken) {
+  set accessToken(newAccessToken) {
     if (!Utils.isNullOrEmpty(newAccessToken)) {
       this.getImpl().accessToken = newAccessToken;
-    } else {
+    }
+    else {
       this.getImpl().accessToken = Config.MAPBOX_TOKEN_VALUE;
     }
   }
@@ -118,12 +118,11 @@ export default class Mapbox extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-
-  getType() {
+  get type() {
     return LayerType.Mapbox;
   }
 
-  setType() {
+  set type() {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.Mapbox)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Mapbox).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

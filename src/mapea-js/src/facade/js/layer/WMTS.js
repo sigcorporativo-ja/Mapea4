@@ -1,9 +1,9 @@
-import Utils from '../utils/utils';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerBase from './layerbase';
-import WMTSImpl from '../../../impl/js/layers/wmts';
-import Layer from '../parameters/layers';
-import LayerType from './layertype';
+import LayerBase from './Base';
+import WMTSImpl from '../../../impl/ol/js/layer/WMTS';
+import * as parameter from '../parameter/parameter';
+import LayerType from './Type';
 
 export default class WMTS extends LayerBase {
   /**
@@ -17,8 +17,16 @@ export default class WMTS extends LayerBase {
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  constructor(userParameters, options) {
+  constructor(userParameters, options = {}) {
+    /**
+     * Implementation of this layer
+     * @public
+     * @type {M.layer.WMTS}
+     */
     let impl = new WMTSImpl(options);
+
+    //This Layer is of parameters.
+    let parameters = parameter.layer(userParameters, LayerType.WMTS);
 
     // calls the super constructor
     super(parameters, impl);
@@ -32,18 +40,6 @@ export default class WMTS extends LayerBase {
     if (Utils.isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
-
-    options = (options || {});
-
-    /**
-     * Implementation of this layer
-     * @public
-     * @type {M.layer.WMTS}
-     */
-
-    //This Layer is of parameters.
-    let parameters = Layer(userParameters, LayerType.WMTS);
-
 
     // matrixSet
     this.matrixSet = parameters.matrixSet;
@@ -62,10 +58,10 @@ export default class WMTS extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  getType() {
+  get type() {
     return LayerType.WMTS;
   }
-  setType(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMTS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMTS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -74,25 +70,26 @@ export default class WMTS extends LayerBase {
   /**
    * 'matrixSet' the layer matrix set
    */
-  getMatrixSet() {
+  get matrixSet() {
     return this.getImpl().matrixSet;
   }
 
-  setMatrixSet(newMatrixSet) {
+  set matrixSet(newMatrixSet) {
     this.getImpl().matrixSet = newMatrixSet;
   }
 
   /**
    * 'legend' the layer name
    */
-  getLegend() {
+  get legend() {
     return this.getImpl().legend;
   }
 
-  setLegend(newLegend) {
+  set legend(newLegend) {
     if (Utils.isNullOrEmpty(newLegend)) {
       this.getImpl().legend = this.name;
-    } else {
+    }
+    else {
       this.getImpl().legend = newLegend;
     }
   }
@@ -101,11 +98,11 @@ export default class WMTS extends LayerBase {
    * 'options' the layer options
    */
 
-  getOptions() {
+  get options() {
     return this.getImpl().options;
   }
 
-  setOptions(newOptions) {
+  set options(newOptions) {
     this.getImpl().options = newOptions;
   }
 

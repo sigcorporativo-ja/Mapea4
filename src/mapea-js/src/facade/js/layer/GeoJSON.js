@@ -1,12 +1,13 @@
-import Vector from './vector';
-import Utils from '../utils/utils';
+import LayerVector from './Vector';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import GeoJSONImpl from '../../../impl/js/layers/geojson';
-import Cluster from '../style/stylecluster';
-import LayerType from './layertype';
-import Geojson from '../geom/geojson';
+import GeoJSONImpl from '../../../impl/ol/js/layer/GeoJSON';
+import StyleCluster from '../style/Cluster';
+import LayerType from './Type';
+import GeomGeojson from '../geom/GeoJSON';
+import EvtManager from "../event/Manager";
 
-export default class GeoJSON extends Vector {
+export default class GeoJSON extends LayerVector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -20,6 +21,11 @@ export default class GeoJSON extends Vector {
    */
   constructor(parameters, options = {}) {
 
+    /**
+     * Implementation of this layer
+     * @public
+     * @type {M.impl.layer.GeoJSON}
+     */
     let impl = new GeoJSONImpl(parameters, options);
 
     // calls the super constructor
@@ -35,18 +41,13 @@ export default class GeoJSON extends Vector {
       Exception('No ha especificado ningún parámetro');
     }
 
-    /**
-     * Implementation of this layer
-     * @public
-     * @type {M.impl.layer.GeoJSON}
-     */
-
-
     if (Utils.isString(parameters)) {
       this.url = parameters;
-    } else if (Utils.isArray(parameters)) {
+    }
+    else if (Utils.isArray(parameters)) {
       this.source = parameters;
-    } else {
+    }
+    else {
       // url
       this.url = parameters.url;
 
@@ -87,11 +88,11 @@ export default class GeoJSON extends Vector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  getType() {
+  get type() {
     return LayerType.GeoJSON;
   }
 
-  setType(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.GeoJSON)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.GeoJSON).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -101,33 +102,31 @@ export default class GeoJSON extends Vector {
   /**
    * 'extract' the features properties
    */
-
-  //TODO
-
-  getSource() {
+  get source() {
     return this.impl.source;
   }
 
-  setSource(newSource) {
+  set source(newSource) {
     this.getImpl().source = newSource;
   }
-
 
   /**
    * 'extract' the features properties
    */
-  getExtract() {
+  get extract() {
     return this.getImpl().extract;
   }
 
-  setExtract(newExtract) {
+  set extract(newExtract) {
     if (!Utils.isNullOrEmpty(newExtract)) {
       if (Utils.isString(newExtract)) {
         this.getImpl().extract = (Utils.normalize(newExtract) === 'true');
-      } else {
+      }
+      else {
         this.getImpl().extract = newExtract;
       }
-    } else {
+    }
+    else {
       this.getImpl().extract = true;
     }
   }
@@ -171,8 +170,8 @@ export default class GeoJSON extends Vector {
       if (Utils.isNullOrEmpty(style)) {
         style = Utils.generateStyleLayer(GeoJSON.DEFAULT_OPTIONS_STYLE, this);
       }
-      let isCluster = style instanceof Cluster;
-      let isPoint = [Geojson.POINT, Geojson.MULTI_POINT].includes(Utils.getGeometryType(this));
+      let isCluster = style instanceof StyleCluster;
+      let isPoint = [GeomGeojson.type.POINT, GeomGeojson.type.MULTI_POINT].includes(Utils.getGeometryType(this));
       if (style instanceof Style && (!isCluster || isPoint)) {
         if (!Utils.isNullOrEmpty(this.style_)) {
           this.style_.unapply(this);
@@ -186,41 +185,34 @@ export default class GeoJSON extends Vector {
           layerswitcher.render();
         }
       }
-      this.fire(Evt.CHANGE_STYLE, [style, this]);
+      this.fire(EvtManager.CHANGE_STYLE, [style, this]);
     };
 
     if (this.getImpl().isLoaded()) {
       applyStyleFn.bind(this)();
-    } else {
-      this.once(Evt.LOAD, applyStyleFn, this);
+    }
+    else {
+      this.once(EvtManager.LOAD, applyStyleFn, this);
     }
   }
 
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  GeoJSON.POPUP_TEMPLATE = 'geojson_popup.html';
-
-  /**
-   * Options style by default
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  GeoJSON.DEFAULT_OPTIONS_STYLE = {
-    fill: {
-      color: 'rgba(255, 255, 255, 0.4)',
-      opacity: 0.4
-    },
-    stroke: {
-      color: "#3399CC",
-      width: 1.5
-    },
-    radius: 5,
-  };
 }
+
+/**
+ * Options style by default
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+GeoJSON.DEFAULT_OPTIONS_STYLE = {
+  fill: {
+    color: 'rgba(255, 255, 255, 0.4)',
+    opacity: 0.4
+  },
+  stroke: {
+    color: "#3399CC",
+    width: 1.5
+  },
+  radius: 5,
+};

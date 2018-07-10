@@ -1,8 +1,9 @@
-import LayerBase from './layerbase';
-import Utils from '../utils/utils';
+import LayerBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import OSMImpl from '../../../impl/js/layers/osm';
-import LayerType from './layertype';
+import OSMImpl from '../../../impl/ol/js/layer/OSM';
+import LayerType from './Type';
+import * as parameter from '../parameter/parameter';
 
 export default class OSM extends LayerBase {
   /**
@@ -16,8 +17,17 @@ export default class OSM extends LayerBase {
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  constructor(userParameters, options) {
+  constructor(userParameters, options = {}) {
+    /**
+     * Implementation of this layer
+     * @public
+     * @type {M.layer.WMS}
+     */
     let impl = new OSMImpl(userParameters, options);
+
+    //This layer is of parameters.
+    let parameters = parameter.layer(userParameters, LayerType.OSM);
+
     // calls the super constructor
     super(parameters, impl);
 
@@ -31,21 +41,9 @@ export default class OSM extends LayerBase {
       userParameters = "OSM";
     }
 
-    options = (options || {});
-
-    /**
-     * Implementation of this layer
-     * @public
-     * @type {M.layer.WMS}
-     */
-
-    //This layer is of parameters.
-    let parameters = Layer(userParameters, LayerType.OSM);
-
     if (Utils.isNullOrEmpty(parameters.name)) {
       parameters.name = 'osm';
     }
-
 
     this.name = parameters.name;
 
@@ -64,14 +62,15 @@ export default class OSM extends LayerBase {
   /**
    * 'transparent' the layer name
    */
-  getTransparent() {
+  get transparent() {
     return this.getImpl().transparent;
   }
 
-  setTransparent(newTransparent) {
+  set transparent(newTransparent) {
     if (!Utils.isNullOrEmpty(newTransparent)) {
       this.getImpl().transparent = newTransparent;
-    } else {
+    }
+    else {
       this.getImpl().transparent = false;
     }
   }
@@ -80,18 +79,16 @@ export default class OSM extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  getType() {
+  get type() {
     return LayerType.OSM;
   }
 
-  setType(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.OSM)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.OSM).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
-
-
 
   /**
    * This function checks if an object is equals

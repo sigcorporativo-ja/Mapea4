@@ -1,12 +1,12 @@
-import Utils from '../utils/utils';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerBase from './layerbase';
-import WMSImpl from '../../../impl/js/layers/wms';
-import Layer from '../parameters/layers';
-import LayerType from './layertype';
-import Config from '../../../configuration';
+import LayerBase from './Base';
+import WMSImpl from '../../../impl/ol/js/layer/WMS';
+import * as parameter from '../parameter/parameter';
+import LayerType from './Type';
+import Config from 'configuration';
 
-export default class WMS extends LayerBase() {
+export default class WMS extends LayerBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -18,15 +18,13 @@ export default class WMS extends LayerBase() {
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  constructor(userParameters, options, implParam) {
-
-    let impl = implParam;
-    if (Utils.isNullOrEmpty(impl)) {
-      impl = new WMSImpl(options);
-    }
+  constructor(userParameters, options = {}, implParam = new WMSImpl(options)) {
+    //This Layer is of parameters.
+    let parameters = parameter.layer(userParameters, LayerType.WMS);
 
     // calls the super constructor
     super(parameters, impl);
+
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(WMSImpl)) {
       Exception('La implementación usada no puede crear capas WMS');
@@ -36,18 +34,6 @@ export default class WMS extends LayerBase() {
     if (Utils.isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
-
-    options = (options || {});
-
-    /**
-     * Implementation of this layer
-     * @public
-     * @type {M.layer.WMS}
-     */
-
-    //This Layer is of parameters.
-    let parameters = Layer(userParameters, LayerType.WMS);
-
 
     // legend
     this.legend = parameters.legend;
@@ -74,10 +60,10 @@ export default class WMS extends LayerBase() {
    * 'url' The service URL of the
    * layer
    */
-  getUrl() {
+  get url() {
     return this.getImpl().url;
   }
-  setUrl(newUrl) {
+  set url(newUrl) {
     this.getImpl().url = newUrl;
     this._updateNoCache();
   }
@@ -85,11 +71,11 @@ export default class WMS extends LayerBase() {
   /**
    * 'name' the layer name
    */
-  getName() {
+  get name() {
     return this.getImpl().name;
   }
 
-  setName(newName) {
+  set name(newName) {
     this.getImpl().name = newName;
     this._updateNoCache();
   }
@@ -98,11 +84,11 @@ export default class WMS extends LayerBase() {
    * 'type' This property indicates if
    * the layer was selected
    */
-  getType() {
+  get type() {
     return LayerType.WMS;
   }
 
-  setType(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -112,15 +98,16 @@ export default class WMS extends LayerBase() {
   /**
    * 'legend' the layer name
    */
-  getLegend() {
+  get legend() {
     return this.getImpl().legend;
   }
 
-  setLegend(newLegend) {
+  set legend(newLegend) {
 
     if (Utils.isNullOrEmpty(newLegend)) {
       this.getImpl().legend = this.name;
-    } else {
+    }
+    else {
       this.getImpl().legend = newLegend;
     }
   }
@@ -128,18 +115,20 @@ export default class WMS extends LayerBase() {
   /**
    * 'tiled' the layer name
    */
-  getTiled() {
+  get tiled() {
     return this.getImpl().tiled;
   }
 
-  setTiled(newTiled) {
+  set tiled(newTiled) {
     if (!Utils.isNullOrEmpty(newTiled)) {
       if (Utils.isString(newTiled)) {
         this.getImpl().tiled = (Utils.normalize(newTiled) === 'true');
-      } else {
+      }
+      else {
         this.getImpl().tiled = newTiled;
       }
-    } else {
+    }
+    else {
       this.getImpl().tiled = true;
     }
   }
@@ -147,11 +136,11 @@ export default class WMS extends LayerBase() {
   /**
    * 'cql' the CQL filter
    */
-  getCql() {
+  get cql() {
     return this.getImpl().cql;
   }
 
-  setCql(newCql) {
+  set cql(newCql) {
     this.getImpl().cql = newCql;
   }
 
@@ -159,14 +148,15 @@ export default class WMS extends LayerBase() {
    * 'version' the service version
    * default value is 1.3.0
    */
-  getVersion() {
+  get version() {
     return this.getImpl().version;
   }
 
-  setVersion(newVersion) {
+  set version(newVersion) {
     if (!Utils.isNullOrEmpty(newVersion)) {
       this.getImpl().version = newVersion;
-    } else {
+    }
+    else {
       this.getImpl().version = '1.1.0'; // default value
     }
   }
@@ -174,11 +164,11 @@ export default class WMS extends LayerBase() {
   /**
    * 'options' the layer options
    */
-  getOptions() {
+  get options() {
     return this.getImpl().options;
   }
 
-  setOptions(newOptions) {
+  set options(newOptions) {
     this.getImpl().options = newOptions;
   }
 
@@ -188,7 +178,7 @@ export default class WMS extends LayerBase() {
    * @function
    * @api stable
    */
-  getNoChacheUrl() {
+  getNoCacheUrl() {
     return this._noCacheUrl;
   }
 
@@ -198,7 +188,7 @@ export default class WMS extends LayerBase() {
    * @function
    * @api stable
    */
-  getNoChacheName() {
+  getNoCacheName() {
     return this._noCacheName;
   }
 

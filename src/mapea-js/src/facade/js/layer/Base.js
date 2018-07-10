@@ -1,8 +1,8 @@
-import Utils from '../utils/utils';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Layer from '../parameters/layers';
-import Base from '../facade';
-import Config from '../../../configuration';
+import * as parameter from '../parameter/parameter';
+import Base from '../Base';
+import Config from 'configuration';
 
 export default class LayerBase extends Base {
   /**
@@ -21,7 +21,7 @@ export default class LayerBase extends Base {
     super(impl);
 
     //This layer is of parameters.
-    let parameter = Layer(userParameters);
+    let parameter = parameter.layer(userParameters);
 
     /**
      * @private
@@ -62,11 +62,11 @@ export default class LayerBase extends Base {
   /**
    * 'options' the layer options
    */
-  static getOptions() {
+  get options() {
     return this.getImpl().options;
   }
 
-  static setOptions(newOptions) {
+  set options(newOptions) {
     this.getImpl().options = newOptions;
   }
 
@@ -74,42 +74,42 @@ export default class LayerBase extends Base {
    * 'url' The service URL of the
    * layer
    */
-  static getUrl() {
+  get url() {
     return this.impl().url;
   }
 
-  static setUrl(newUrl) {
+  set url(newUrl) {
     this.impl().url = newUrl;
   }
-
 
   /**
    * 'name' the layer name
    */
-  static getName() {
+  get name() {
     return this.impl().name;
   }
 
-  static setName(newName) {
+  set name(newName) {
     this.impl().name = newName;
   }
 
   /**
    * 'transparent' the layer transparence
    */
-
-  static getTransparent() {
+  get transparent() {
     return this.impl().transparent;
   }
 
-  static setTransparent(newTransparent) {
+  set transparent(newTransparent) {
     if (!Utils.isNullOrEmpty(newTransparent)) {
       if (Utils.isString(newTransparent)) {
         this.getImpl().transparent = (Utils.normalize(newTransparent) === 'true');
-      } else {
+      }
+      else {
         this.getImpl().transparent = newTransparent;
       }
-    } else {
+    }
+    else {
       this.getImpl().transparent = true;
     }
   }
@@ -117,18 +117,20 @@ export default class LayerBase extends Base {
   /**
    * 'displayInLayerSwitcher' the layer transparence
    */
-  static getDisplayInLayerSwitcher() {
+  get displayInLayerSwitcher() {
     return this.getImpl().displayInLayerSwitcher;
   }
 
-  static setDisplayInLayerSwitcher(newDisplayInLayerSwitcher) {
+  set displayInLayerSwitcher(newDisplayInLayerSwitcher) {
     if (!Utils.isNullOrEmpty(newDisplayInLayerSwitcher)) {
       if (Utils.isString(newDisplayInLayerSwitcher)) {
         this.getImpl().displayInLayerSwitcher = (Utils.normalize(newDisplayInLayerSwitcher) === 'true');
-      } else {
+      }
+      else {
         this.getImpl().displayInLayerSwitcher = newDisplayInLayerSwitcher;
       }
-    } else {
+    }
+    else {
       this.getImpl().displayInLayerSwitcher = true;
     }
   }
@@ -241,7 +243,7 @@ export default class LayerBase extends Base {
    * @api stable
    */
   getZIndex() {
-    return this.getImpl().getZIndex_;
+    return this.zindex_;
   }
 
   /**
@@ -251,6 +253,7 @@ export default class LayerBase extends Base {
    * @api stable
    */
   setZIndex(zIndex) {
+    this.zindex_ = zIndex
     this.getImpl().setZIndex(zIndex);
   }
 
@@ -270,7 +273,7 @@ export default class LayerBase extends Base {
    * @function
    * @api stable
    */
-  set opacity(opacity) {
+  setOpacity(opacity) {
     this.getImpl().opacity = opacity;
   }
 
@@ -298,22 +301,22 @@ export default class LayerBase extends Base {
   generateName_() {
     this.name = Utils.generateRandom('layer_', '_'.concat(this.type));
   }
-
-  /**
-   * Image PNG for legend default
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  LayerBase.LEGEND_DEFAULT = '/img/legend-default.png';
-
-  /**
-   * Image PNG for legend default
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  LayerBase.LEGEND_ERROR = '/img/legend-error.png';
 }
+
+/**
+ * Image PNG for legend default
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+LayerBase.LEGEND_DEFAULT = '/img/legend-default.png';
+
+/**
+ * Image PNG for legend default
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+LayerBase.LEGEND_ERROR = '/img/legend-error.png';

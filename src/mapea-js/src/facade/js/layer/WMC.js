@@ -1,11 +1,11 @@
-import Utils from '../utils/utils';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerBase from './layerbase';
-import LayerType from './layertype';
-import WMCImpl from '../../../impl/js/layers/wmc';
-import Layer from '../parameters/layers';
-import Config from '../../../configuration';
-import Evt from '../event/eventsmanager';
+import LayerBase from './Base';
+import LayerType from './Type';
+import WMCImpl from '../../../impl/ol/js/layer/WMC';
+import * as parameter from '../parameter/parameter';
+import Config from 'configuration';
+import EvtManager from '../event/Manager';
 
 export default class WMC extends LayerBase {
   /**
@@ -22,10 +22,19 @@ export default class WMC extends LayerBase {
    */
   constructor(userParameters, options) {
 
+    /**
+     * Implementation of this layer
+     * @public
+     * @type {M.layer.WMC}
+     */
     let impl = new WMCImpl(options);
+
+    //This Layer is of parameters
+    let parameters = parameter.layer(userParameters, LayerType.WMC);
 
     // calls the super constructor
     super(parameters, impl);
+
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(WMCImpl)) {
       Exception('La implementación usada no puede crear capas WMC');
@@ -36,17 +45,6 @@ export default class WMC extends LayerBase {
       Exception('No ha especificado ningún parámetro');
     }
 
-    options = (options || {});
-    //This Layer is of parameters
-    let parameters = Layer(userParameters, LayerType.WMC);
-
-    /**
-     * Implementation of this layer
-     * @public
-     * @type {M.layer.WMC}
-     */
-
-
     // options
     this.options = options;
 
@@ -56,10 +54,11 @@ export default class WMC extends LayerBase {
     }
     // checks if it is predefined context
     else if (Utils.isNullOrEmpty(this.url) && !Utils.isNullOrEmpty(this.name)) {
-      var predefinedIdx = Config.predefinedWMC.predefinedNames.indexOf(this.name);
+      let predefinedIdx = Config.predefinedWMC.predefinedNames.indexOf(this.name);
       if (predefinedIdx === -1) {
         Exception('El contexto predefinido \'' + this.name + '\' no existe');
-      } else {
+      }
+      else {
         this.url = Config.predefinedWMC.urls[predefinedIdx];
         this.name = Config.predefinedWMC.names[predefinedIdx];
       }
@@ -73,7 +72,7 @@ export default class WMC extends LayerBase {
      */
     this.loaded_ = false;
 
-    this.once(Evt.LOAD, () => this.loaded_ = true);
+    this.once(EvtManager.LOAD, () => this.loaded_ = true);
   }
 
   /**
@@ -81,11 +80,11 @@ export default class WMC extends LayerBase {
    * the layer was selected
    */
 
-  getSelected() {
+  get selected() {
     return this.getImpl().selected;
   }
 
-  setSelected(newSelectedValue) {
+  set selected(newSelectedValue) {
     this.getImpl().selected = newSelectedValue;
   }
 
@@ -93,11 +92,11 @@ export default class WMC extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  getType() {
+  get type() {
     return LayerType.WMC;
   }
 
-  setType(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMC)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMC).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -107,44 +106,44 @@ export default class WMC extends LayerBase {
   /**
    * The layers provided by the WMC file
    */
-  getLayers() {
+  get layers() {
     return this.getImpl().layers;
   }
 
-  setLayers(newLayers) {
+  set layers(newLayers) {
     this.getImpl().layers = newLayers;
   }
 
   /**
    * Projection provided by the WMC file
    */
-  getProjection() {
+  get projection() {
     return this.getImpl().projection;
   }
 
-  setProjection(newProjection) {
+  set projection(newProjection) {
     this.getImpl().projection = newProjection;
   }
 
   /**
    * Max extent provided by the WMC file
    */
-  getMaxExtent() {
+  get maxExtent() {
     return this.getImpl().maxExtent;
   }
 
-  setMaxExtent(newMaxExtent) {
+  set maxExtent(newMaxExtent) {
     this.getImpl().maxExtent = newMaxExtent;
   }
 
   /**
    * 'options' resolutions specified by the user
    */
-  getOptions() {
+  get options() {
     return this.getImpl().options;
   }
 
-  setOptions(newOptions) {
+  set options(newOptions) {
     this.getImpl().options = newOptions;
   }
 
@@ -163,8 +162,6 @@ export default class WMC extends LayerBase {
 
     this.getImpl().select();
   }
-
-
 
   /**
    * This function unselect this WMC layer and

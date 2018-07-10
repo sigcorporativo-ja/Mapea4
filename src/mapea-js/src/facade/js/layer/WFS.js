@@ -1,11 +1,11 @@
-import Utils from '../utils/utils';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerBase from './layerbase';
-import Vector from '../vector ';
-import WFSImpl from '../../../impl/js/layers/wfs';
-import LayerType from './layertype';
-import Layer from '../parameters/layers';
-import Geom from '../geom/geom';
+import LayerBase from './Base';
+import Vector from '../Vector ';
+import WFSImpl from '../../../impl/ol/js/layer/WFS';
+import LayerType from './Type';
+import * as parameter from '../parameter/parameter';
+import Geom from '../geom/Geom';
 
 export default class WFS extends Vector {
   /**
@@ -20,6 +20,9 @@ export default class WFS extends Vector {
    * @api stable
    */
   constructor(userParameters, options = {}, impl = new WFSImpl(options)) {
+    //This layer is of parameters.
+    let parameters = parameter.layer(userParameters, LayerType.WFS);
+
     // calls the super constructor
     super(parameters, options, impl);
 
@@ -32,10 +35,6 @@ export default class WFS extends Vector {
     if (Utils.isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
-
-    //This layer is of parameters.
-    let parameters = Layer(userParameters, LayerType.WFS);
-
 
     // namespace
     this.namespace = parameters.namespace;
@@ -63,11 +62,11 @@ export default class WFS extends Vector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  getType() {
+  get type() {
     return LayerType.WFS;
   }
 
-  setType(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) && !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WFS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WFS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
@@ -76,24 +75,25 @@ export default class WFS extends Vector {
   /**
    * 'namespace' the layer name
    */
-  getNamespace() {
+  get namespace() {
     return this.getImpl().namespace;
   }
 
-  setNamespace(newNamespace) {
+  set namespace(newNamespace) {
     this.getImpl().namespace = newNamespace;
   }
   /**
    * 'legend' the layer name
    */
-  getLegend() {
+  get legend() {
     return this.getImpl().legend;
   }
 
-  setLegend(newLegend) {
+  set legend(newLegend) {
     if (Utils.isNullOrEmpty(newLegend)) {
       this.getImpl().legend = this.name;
-    } else {
+    }
+    else {
       this.getImpl().legend = newLegend;
     }
   }
@@ -101,24 +101,24 @@ export default class WFS extends Vector {
   /**
    * 'cql' the layer name
    */
-  getCql() {
+  get cql() {
     return this.getImpl().cql;
   }
 
-  setCql(newCQL) {
+  set cql(newCQL) {
     this.getImpl().cql = newCQL;
   }
 
   /**
    * 'geometry' the layer name
    */
-  getGeometry() {
+  get geometry() {
     return this.getImpl().geometry;
   }
 
-  setGeometry(newGeometry) {
+  set geometry(newGeometry) {
     if (!Utils.isNullOrEmpty(newGeometry)) {
-      var parsedGeom = Geom.parse(newGeometry);
+      let1 parsedGeom = Geom.parse(newGeometry);
       if (Utils.isNullOrEmpty(parsedGeom)) {
         Exception('El tipo de capa WFS <b>' + newGeometry + '</b> no se reconoce. Los tipos disponibles son: POINT, LINE, POLYGON, MPOINT, MLINE, MPOLYGON');
       }
@@ -129,14 +129,15 @@ export default class WFS extends Vector {
   /**
    * 'ids' the layer name
    */
-  getIds() {
+  get ids() {
     return this.getImpl().ids;
   }
 
-  setIds(newIds) {
+  set ids(newIds) {
     if (Utils.isNullOrEmpty(newIds)) {
       this.getImpl().ids = this.ids;
-    } else {
+    }
+    else {
       this.getImpl().ids = newIds;
     }
   }
@@ -144,14 +145,15 @@ export default class WFS extends Vector {
   /**
    * 'version' the layer name
    */
-  getVersion() {
+  get version() {
     return this.getImpl().version;
   }
 
-  setVersion(newVersion) {
+  set version(newVersion) {
     if (!Utils.isNullOrEmpty(newVersion)) {
       this.getImpl().version = newVersion;
-    } else {
+    }
+    else {
       this.getImpl().version = '1.0.0'; // default value
     }
   }
@@ -196,23 +198,23 @@ export default class WFS extends Vector {
 
     return equals;
   }
-
-  /**
-   * Style options by default for this layer
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  WFS.DEFAULT_OPTIONS_STYLE = {
-    fill: {
-      color: 'rgba(103, 175, 19, 0.2)',
-      opacity: 0.4
-    },
-    stroke: {
-      color: '#67af13',
-      width: 1
-    },
-    radius: 5
-  };
 }
+
+/**
+ * Style options by default for this layer
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+WFS.DEFAULT_OPTIONS_STYLE = {
+  fill: {
+    color: 'rgba(103, 175, 19, 0.2)',
+    opacity: 0.4
+  },
+  stroke: {
+    color: '#67af13',
+    width: 1
+  },
+  radius: 5
+};
