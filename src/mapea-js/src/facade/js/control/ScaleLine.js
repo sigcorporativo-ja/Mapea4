@@ -1,10 +1,11 @@
-import ControlBase from './controlbase';
-import Utils from '../utils/utils';
+import ControlBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../utils/template';
-import MouseImpl from '../../../impl/js/controls/mouse';
+import Template from '../util/Template';
+import ScalelineImpl from '../../../impl/ol/js/control/ScaleLine';
+import scalelineTemplate from "templates/scaleline.html";
 
-export default class Mouse extends ControlBase {
+export default class ScaleLine extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -18,13 +19,13 @@ export default class Mouse extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new MouseImpl();
+    let impl = new ScaleLineImpl();
 
     // calls the super constructor
-    super(impl, Mouse.NAME);
+    super(impl, ScaleLine.NAME);
 
-    if (Utils.isUndefined(MouseImpl)) {
-      Exception('La implementación usada no puede crear controles Mouse');
+    if (Utils.isUndefined(ScaleLineImpl)) {
+      Exception('La implementación usada no puede crear controles ScaleLine');
     }
   }
 
@@ -38,9 +39,7 @@ export default class Mouse extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return Template.compile(Mouse.TEMPLATE, {
-      'jsonp': true
-    });
+    return Template.compile(scalelineTemplate);
   }
 
   /**
@@ -51,7 +50,7 @@ export default class Mouse extends ControlBase {
    * @api stable
    */
   equals(obj) {
-    let equals = (obj instanceof Mouse);
+    let equals = (obj instanceof ScaleLine);
     return equals;
   }
 
@@ -62,14 +61,5 @@ export default class Mouse extends ControlBase {
    * @public
    * @api stable
    */
-  Mouse.NAME = 'mouse';
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  Mouse.TEMPLATE = 'mouse.html';
+  ScaleLine.NAME = 'scaleline';
 }

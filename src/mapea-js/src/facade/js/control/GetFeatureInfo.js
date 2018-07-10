@@ -1,9 +1,9 @@
-import ControlBase from './controlbase';
-import Utils from '../utils/utils';
+import ControlBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../utils/template';
-import GetFeatureInfoImpl from '../../../impl/js/controls/getfeatureinfo';
-
+import Template from '../util/Template';
+import GetFeatureInfoImpl from '../../../impl/ol/js/control/GetFeatureInfo';
+import getfeatureinfoTemplate from "templates/getfeatureinfo.html";
 export default class GetFeatureInfo extends ControlBase {
   /**
    * @classdesc
@@ -17,7 +17,7 @@ export default class GetFeatureInfo extends ControlBase {
    * @extends {M.Control}
    * @api stable
    */
-  constructor(format, options) {
+  constructor(format, options = {}) {
     // implementation of this control
     let impl = new GetFeatureInfoImpl(format, options);
     // calls the super constructor
@@ -26,8 +26,6 @@ export default class GetFeatureInfo extends ControlBase {
     if (Utils.isUndefined(GetFeatureInfoImpl)) {
       Exception('La implementación usada no puede crear controles GetFeatureInfo');
     }
-
-    options = (options || {});
   }
 
   /**
@@ -40,9 +38,7 @@ export default class GetFeatureInfo extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return Template.compile(GetFeatureInfo.TEMPLATE, {
-      'jsonp': true
-    });
+    return Template.compile(getfeatureinfoTemplate);
   }
 
   /**
@@ -94,22 +90,4 @@ export default class GetFeatureInfo extends ControlBase {
    * @api stable
    */
   GetFeatureInfo.POPUP_TITLE = 'Información';
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  GetFeatureInfo.TEMPLATE = 'getfeatureinfo.html';
-
-  /**
-   * Template for this controls - popup
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  GetFeatureInfo.POPUP_TEMPLATE = 'getfeatureinfo_popup.html';
 }

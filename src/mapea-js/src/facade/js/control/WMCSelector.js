@@ -1,9 +1,9 @@
-import ControlBase from './controlbase';
-import Utils from '../utils/utils';
+import ControlBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../utils/template';
-import WMCSelectorImpl from '../../../impl/js/controls/wmcselector';
-import Map from '../map/map';
+import Template from '../util/Template';
+import WMCSelectorImpl from '../../../impl/ol/js/control/WMCSelector';
+import wmcselectorTemplate from "templates/wmcselector.html";
 
 export default class WMCSelector extends ControlBase {
   /**
@@ -20,7 +20,7 @@ export default class WMCSelector extends ControlBase {
     let impl = new WMCSelectorImpl();
 
     // calls the super constructor
-    super(impl, 'wmcselector');
+    super(impl, WMCSelector.NAME);
 
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(WMCSelectorImpl)) {
@@ -40,10 +40,9 @@ export default class WMCSelector extends ControlBase {
    */
   createView(map) {
     // compiles the template
-    return Template.compile(WMCSelector.TEMPLATE, {
-      'jsonp': true,
+    return Template.compile(wmcselectorTemplate, {
       'vars': {
-        'layers': Map.WMC()
+        'layers': map.getWMC()
       }
     });
   }
@@ -64,11 +63,11 @@ export default class WMCSelector extends ControlBase {
   }
 
   /**
-   * Template for this controls
+   * Name for this controls
    * @const
    * @type {string}
    * @public
    * @api stable
    */
-  WMCSelector.TEMPLATE = 'wmcselector.html';
+  WMCSelector.NAME = 'wmcselector';
 }

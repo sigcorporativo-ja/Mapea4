@@ -1,8 +1,9 @@
-import ControlBase from './controlbase';
-import Utils from '../utils/utils';
+import ControlBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../utils/template';
-import OverviewMapImpl from '../../../impl/js/controls/OverviewMap';
+import Template from '../util/Template';
+import OverviewMapImpl from '../../../impl/ol/js/control/OverviewMap';
+import overviewmapTemplate from "templates/overviewmap.html";
 
 export default class OverviewMap extends ControlBase {
   /**
@@ -16,19 +17,15 @@ export default class OverviewMap extends ControlBase {
    * @extends {M.Control}
    * @api stable
    */
-  constructor(options) {
+  constructor(options = {}) {
     // implementation of this control
     let impl = new OverviewMapImpl(options);
     // calls the super constructor
-    super(this, impl, OverviewMap.NAME);
+    super(impl, OverviewMap.NAME);
 
     if (Utils.isUndefined(OverviewMapImpl)) {
       Exception('La implementación usada no puede crear controles OverviewMap');
     }
-
-    options = (options || {});
-
-
   }
 
   /**
@@ -41,9 +38,7 @@ export default class OverviewMap extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return Template.compile(OverviewMap.TEMPLATE, {
-      'jsonp': true
-    });
+    return Template.compile(overviewmapTemplate);
   }
 
   /**
@@ -66,13 +61,4 @@ export default class OverviewMap extends ControlBase {
    * @api stable
    */
   OverviewMap.NAME = 'overviewmap';
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  OverviewMap.TEMPLATE = 'overviewmap.html';
 }

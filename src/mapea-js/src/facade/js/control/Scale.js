@@ -1,10 +1,11 @@
-import ControlBase from './controlbase';
-import Utils from '../utils/utils';
+import ControlBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../utils/template';
-import NavtoolbarImpl from '../../../impl/js/controls/navtoolbar';
+import Template from '../util/Template';
+import ScaleImpl from '../../../impl/ol/js/control/Scale';
+import scaleTemplate from "templates/scale.html"
 
-export default class Navtoolbar extends ControlBase {
+export default class Scale extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -16,17 +17,18 @@ export default class Navtoolbar extends ControlBase {
    * @extends {M.Control}
    * @api stable
    */
-  constructor {
+  constructor() {
     // implementation of this control
-    let impl = new NavtoolbarImpl();
+    let impl = new ScaleImpl();
 
     // calls the super constructor
-    super(impl, Navtoolbar.NAME);
+    super(impl, Scale.NAME);
 
-    if (Utils.isUndefined(NavtoolbarImpl)) {
-      Exception('La implementación usada no puede crear controles Navtoolbar');
+    if (Utils.isUndefined(ScaleImpl)) {
+      Exception('La implementación usada no puede crear controles Scale');
     }
   }
+
   /**
    * This function creates the view to the specified map
    *
@@ -37,9 +39,7 @@ export default class Navtoolbar extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return Template.compile(Navtoolbar.TEMPLATE, {
-      'jsonp': true
-    });
+    return Template.compile(scaleTemplate);
   }
 
   /**
@@ -50,7 +50,7 @@ export default class Navtoolbar extends ControlBase {
    * @api stable
    */
   equals(obj) {
-    let equals = (obj instanceof Navtoolbar);
+    let equals = (obj instanceof Scale);
     return equals;
   }
 
@@ -61,14 +61,5 @@ export default class Navtoolbar extends ControlBase {
    * @public
    * @api stable
    */
-  Navtoolbar.NAME = 'navtoolbar';
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  Navtoolbar.TEMPLATE = 'navtoolbar.html';
+  Scale.NAME = 'scale';
 }

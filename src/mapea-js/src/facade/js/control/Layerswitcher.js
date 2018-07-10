@@ -1,13 +1,15 @@
-import ControlBase from './controlbase';
-import Utils from '../utils/utils';
+import ControlBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../utils/template';
-import LayerBase from '../layers/layerbase';
-import LayerType from '../layers/layertype';
-import Map from '../map/map';
-import Vector from '../layers/vector';
-import StylePoint from '../style/stylepoint';
-import LayerSwitcherImpl from '../../../impl/js/controls/layerswitcher';
+import Template from '../util/Template';
+import LayerBase from '../layer/Base';
+import LayerType from '../layer/Type';
+import Map from '../Map';
+import Vector from '../layer/Vector';
+import StylePoint from '../style/Point';
+import LayerSwitcherImpl from '../../../impl/ol/js/control/Layerswitcher';
+import EvtManager from '../event/Manager';
+import layerswitcherTemplate from "templates/layerswitcher.html";
 
 export default class LayerSwitcher extends ControlBase {
   /**
@@ -30,7 +32,20 @@ export default class LayerSwitcher extends ControlBase {
     if (Utils.isUndefined(LayerSwitcherImpl)) {
       Exception('La implementación usada no puede crear controles LayerSwitcher');
     }
+  }
 
+  /**
+   * @inheritDoc
+   */
+  addTo(map) {
+    this.map_ = map;
+    let impl = this.getImpl();
+    let view = this.createView(map);
+    view.then(html => {
+      this.manageActivation(html);
+      impl.addTo(map, html);
+      this.fire(EvtManager.ADDED_TO_MAP);
+    });
   }
 
   /**
@@ -43,11 +58,9 @@ export default class LayerSwitcher extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return LayerSwitcher.templateVariables_(map).then(templateVars =>
-      Template.compile(LayerSwitcher.TEMPLATE, {
-        'jsonp': true,
-        'vars': templateVars
-      }));
+    return LayerSwitcher.templateVariables_(map).then(templateVars => {
+      Template.compile(layerswitcherTemplate, templateVars);
+    });
   }
 
   /**
@@ -174,7 +187,8 @@ export default class LayerSwitcher extends ControlBase {
           layerVarTemplate['legend'] = url;
           success(layerVarTemplate);
         });
-      } else {
+      }
+      else {
         layerVarTemplate['legend'] = legendUrl;
         success(layerVarTemplate);
       }
@@ -189,13 +203,4 @@ export default class LayerSwitcher extends ControlBase {
    * @api stable
    */
   LayerSwitcher.NAME = 'layerswitcher';
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  LayerSwitcher.TEMPLATE = 'layerswitcher.html';
 }

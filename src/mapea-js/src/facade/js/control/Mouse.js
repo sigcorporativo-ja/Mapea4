@@ -1,10 +1,11 @@
-import ControlBase from './controlbase';
-import Utils from '../utils/utils';
+import ControlBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../utils/template';
-import ScaleImpl from '../../../impl/js/controls/scale');
+import Template from '../util/Template';
+import MouseImpl from '../../../impl/ol/js/control/Mouse';
+import mouseTemplate from "templates/mouse.html";
 
-export default class Scale extends ControlBase {
+export default class Mouse extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -18,15 +19,14 @@ export default class Scale extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new ScaleImpl();
+    let impl = new MouseImpl();
 
     // calls the super constructor
-    super(impl, Scale.NAME);
+    super(impl, Mouse.NAME);
 
-    if (Utils.isUndefined(ScaleImpl)) {
-      Exception('La implementación usada no puede crear controles Scale');
+    if (Utils.isUndefined(MouseImpl)) {
+      Exception('La implementación usada no puede crear controles Mouse');
     }
-
   }
 
   /**
@@ -39,9 +39,7 @@ export default class Scale extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return Template.compile(Scale.TEMPLATE, {
-      'jsonp': true
-    });
+    return Template.compile(mouseTemplate);
   }
 
   /**
@@ -52,7 +50,7 @@ export default class Scale extends ControlBase {
    * @api stable
    */
   equals(obj) {
-    let equals = (obj instanceof Scale);
+    let equals = (obj instanceof Mouse);
     return equals;
   }
 
@@ -63,14 +61,5 @@ export default class Scale extends ControlBase {
    * @public
    * @api stable
    */
-  Scale.NAME = 'scale';
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  Scale.TEMPLATE = 'scale.html';
+  Mouse.NAME = 'mouse';
 }

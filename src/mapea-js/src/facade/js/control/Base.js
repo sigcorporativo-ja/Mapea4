@@ -1,7 +1,7 @@
-import Utils from '../utils/utils';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Base from '../facade.js';
-import Evt from '../event/eventsmanager';
+import Base from '../Base';
+import EvtManager from '../event/Manager';
 
 export default class ControlBase extends Base {
   /**
@@ -118,12 +118,13 @@ export default class ControlBase extends Base {
       view.then((html) => {
         this.manageActivation(html);
         impl.addTo(map, html);
-        this.fire(Evt.ADDED_TO_MAP);
+        this.fire(EvtManager.ADDED_TO_MAP);
       });
-    } else { // view is an HTML or text or null
+    }
+    else { // view is an HTML or text or null
       this.manageActivation(view);
       impl.addTo(map, view);
-      this.fire(Evt.ADDED_TO_MAP);
+      this.fire(EvtManager.ADDED_TO_MAP);
     }
   }
 
@@ -155,11 +156,12 @@ export default class ControlBase extends Base {
         if (!this.activated) {
           this.activate();
           this.activated = true;
-        } else {
+        }
+        else {
           this.deactivate();
           this.activated = false;
         }
-      }, false, this);
+      }, false);
     }
   }
 
@@ -190,7 +192,7 @@ export default class ControlBase extends Base {
       this.getImpl().activate();
     }
     this.activated = true;
-    this.fire(Evt.ACTIVATED);
+    this.fire(EvtManager.ACTIVATED);
   }
 
   /**
@@ -209,7 +211,7 @@ export default class ControlBase extends Base {
       this.getImpl().deactivate();
     }
     this.activated = false;
-    this.fire(Evt.DEACTIVATED);
+    this.fire(EvtManager.DEACTIVATED);
   }
 
   /**
@@ -259,8 +261,5 @@ export default class ControlBase extends Base {
    * @api stable
    * @export
    */
-  destroy() {
-    // this.getImpl().destroy();
-    // this.fire(M.evt.DESTROY);
-  }
+  destroy() {}
 }

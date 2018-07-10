@@ -1,10 +1,11 @@
-import ControlBase from './controlbase';
-import Utils from '../utils/utils';
+import ControlBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../utils/template';
-import PanzoomImpl from '../../../impl/js/controls/Panzoom');
+import Template from '../util/Template';
+import PanzoombarImpl from '../../../impl/ol/js/control/Panzoombar';
+import panzoombarTemplate from "templates/panzoombar.html";
 
-export default class Panzoom extends ControlBase {
+export default class Panzoombar extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -18,13 +19,13 @@ export default class Panzoom extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new PanzoomImpl();
+    let impl = new PanzoombarImpl();
 
     // calls the super constructor
-    super(impl, Panzoom.NAME);
+    super(impl, Panzoombar.NAME);
 
-    if (Utils.isUndefined(PanzoomImpl)) {
-      Exception('La implementación usada no puede crear controles Panzoom');
+    if (Utils.isUndefined(PanzoombarImpl)) {
+      Exception('La implementación usada no puede crear controles Panzoombar');
     }
   }
 
@@ -38,9 +39,7 @@ export default class Panzoom extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return Template.compile(Panzoom.TEMPLATE, {
-      'jsonp': true
-    });
+    return Template.compile(panzoombarTemplate);
   }
 
   /**
@@ -51,7 +50,7 @@ export default class Panzoom extends ControlBase {
    * @api stable
    */
   equals(obj) {
-    let equals = (obj instanceof Panzoom);
+    let equals = (obj instanceof Panzoombar);
     return equals;
   }
 
@@ -62,14 +61,5 @@ export default class Panzoom extends ControlBase {
    * @public
    * @api stable
    */
-  Panzoom.NAME = 'panzoom';
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  Panzoom.TEMPLATE = 'panzoom.html';
+  Panzoombar.NAME = 'panzoombar';
 }

@@ -1,8 +1,9 @@
-import ControlBase from './controlbase';
-import Utils from '../utils/utils';
+import ControlBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../utils/template';
-import LocationImpl from '../../../impl/js/controls/location';
+import Template from '../util/Template';
+import LocationImpl from '../../../impl/ol/js/control/Location';
+import locationTemplate from "templates/location.html";
 
 export default class Location extends ControlBase {
   /**
@@ -15,18 +16,16 @@ export default class Location extends ControlBase {
    * @extends {M.Control}
    * @api stable
    */
-  constructor(tracking, highAccuracy) {
+  constructor(tracking = true, highAccuracy = false) {
+    if (Utils.isUndefined(LocationImpl)) {
+      Exception('La implementación usada no puede crear controles Location');
+    }
+
     // implementation of this control
     let impl = new LocationImpl(tracking, highAccuracy, 60000);
 
     // calls the super constructor
     super(impl, Location.NAME);
-
-    tracking = tracking !== undefined ? tracking : true;
-    highAccuracy = highAccuracy !== undefined ? highAccuracy : false;
-    if (Utils.isUndefined(LocationImpl)) {
-      Exception('La implementación usada no puede crear controles Location');
-    }
   }
 
   /**
@@ -39,9 +38,7 @@ export default class Location extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return Template.compile(Location.TEMPLATE, {
-      'jsonp': true
-    });
+    return Template.compile(locationTemplate);
   }
 
   /**
@@ -73,6 +70,9 @@ export default class Location extends ControlBase {
     return equals;
   }
 
+  /**
+   * TODO
+   */
   setTracking(tracking) {
     this.getImpl().tracking = tracking;
   }
@@ -85,13 +85,4 @@ export default class Location extends ControlBase {
    * @api stable
    */
   Location.NAME = 'location';
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  Location.TEMPLATE = 'location.html';
 }

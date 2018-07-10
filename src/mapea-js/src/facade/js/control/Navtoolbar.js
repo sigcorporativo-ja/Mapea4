@@ -1,10 +1,11 @@
-import ControlBase from './controlbase';
-import Utils from '../utils/utils');
+import ControlBase from './Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../utils/template';
-import ScalelineImpl from '../../../impl/js/controls/scaleline';
+import Template from '../util/Template';
+import NavtoolbarImpl from '../../../impl/ol/js/control/Navtoolbar';
+import navtoolbarTemplate from "templates/navtoolbar.html";
 
-export default class ScaleLine extends ControlBase {
+export default class Navtoolbar extends ControlBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -18,17 +19,15 @@ export default class ScaleLine extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new ScaleLineImpl();
+    let impl = new NavtoolbarImpl();
 
     // calls the super constructor
-    super(impl, ScaleLine.NAME);
+    super(impl, Navtoolbar.NAME);
 
-    if (Utils.isUndefined(ScaleLineImpl)) {
-      Exception('La implementación usada no puede crear controles ScaleLine');
+    if (Utils.isUndefined(NavtoolbarImpl)) {
+      Exception('La implementación usada no puede crear controles Navtoolbar');
     }
-
   }
-
   /**
    * This function creates the view to the specified map
    *
@@ -39,9 +38,7 @@ export default class ScaleLine extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return Template.compile(ScaleLine.TEMPLATE, {
-      'jsonp': true
-    });
+    return Template.compile(navtoolbarTemplate);
   }
 
   /**
@@ -52,7 +49,7 @@ export default class ScaleLine extends ControlBase {
    * @api stable
    */
   equals(obj) {
-    let equals = (obj instanceof ScaleLine);
+    let equals = (obj instanceof Navtoolbar);
     return equals;
   }
 
@@ -63,14 +60,5 @@ export default class ScaleLine extends ControlBase {
    * @public
    * @api stable
    */
-  ScaleLine.NAME = 'scaleline';
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  ScaleLine.TEMPLATE = 'scaleline.html';
+  Navtoolbar.NAME = 'navtoolbar';
 }
