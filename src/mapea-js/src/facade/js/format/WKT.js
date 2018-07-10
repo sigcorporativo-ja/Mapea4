@@ -1,19 +1,28 @@
-import Base from '../facade';
-import Utils from '../utils/utils';
+import Base from '../Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import WKTImpl from '../../../impl/js/format/wkt';
+import WKTImpl from '../../../impl/ol/js/format/WKT';
 
 export default class WKT extends Base {
-
+  /**
+   * @classdesc
+   * Main constructor of the class. Creates a layer
+   * with parameters specified by the user
+   *
+   * @constructor
+   * @extends {M.facade.Base}
+   * @param {string|Object} userParameters parameters
+   * provided by the user
+   * @api stable
+   */
   constructor(options = {}) {
-    var impl = new WKTImpl(options);
+    let impl = new WKTImpl(options);
     // calls the super constructor
-    super(this, impl);
+    super(impl);
     // checks if the implementation can create format GeoJSON
     if (Utils.isUndefined(WKTImpl)) {
       Exception('La implementación usada no puede M.impl.format.WKT');
     }
-
   }
 
   /**

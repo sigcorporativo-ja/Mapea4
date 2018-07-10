@@ -1,12 +1,27 @@
-import Feature from '../feature/feature';
-import Base from '../facade';
-import Utils from '../utils/utils';
+import Feature from '../feature/Feature';
+import Base from '../Base';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import GeoJSONImpl from '../../../impl/js/format/geojsonformat';
+import GeoJSONImpl from '../../../impl/js/ol/format/GeoJSON';
 
 export default class GeoJSON extends Base {
-
-  constructor(options) {
+  /**
+   * @classdesc
+   * Main constructor of the class. Creates a layer
+   * with parameters specified by the user
+   *
+   * @constructor
+   * @extends {M.facade.Base}
+   * @param {string|Object} userParameters parameters
+   * provided by the user
+   * @api stable
+   */
+  constructor(options = {}) {
+    /**
+     * Implementation of this formatter
+     * @public
+     * @type {M.impl.format.GeoJSON}
+     */
     let impl = new GeoJSONImpl(options);
 
     // calls the super constructor
@@ -16,15 +31,6 @@ export default class GeoJSON extends Base {
     if (Utils.isUndefined(GeoJSONImpl)) {
       Exception('La implementación usada no puede M.impl.format.GeoJSON');
     }
-
-    options = (options || {});
-
-    /**
-     * Implementation of this formatter
-     * @public
-     * @type {M.impl.format.GeoJSON}
-     */
-
   }
 
   /**
