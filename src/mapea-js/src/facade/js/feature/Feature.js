@@ -1,17 +1,30 @@
-import Base from "../facade";
-import Utils from '../utils/utils';
-import GeoJSON from "../format/geojson";
-import Dialog from "../dialog";
-import FeatureImpl from '../../../impl/js/format/feature';
-import StyleFeature from "../style/stylefeature";
-import StylePoint from "../style/stylepoint";
-import Evt from "../event/eventsmanager";
+import Base from "../Base";
+import Utils from '../util/Utils';
+import GeoJSON from "../format/GeoJSON";
+import * as dialog from "../dialog";
+import FeatureImpl from '../../../impl/ol/js/feature/Feature';
+import StyleFeature from "../style/Feature";
+import StylePoint from "../style/Point";
+import EvtManager from "../event/Manager";
 
 export default class Feature extends Base {
-
+  /**
+   * @classdesc
+   * Main constructor of the class. Create a Feature
+   *
+   * @constructor
+   * @extends {M.facade.Base}
+   * @param {string} id - id to feature
+   * @param {Object} geojson - geojson to feature
+   * @api stable
+   */
   constructor(id, geojson, style) {
+    /**
+     * Implementation of feature
+     * @public
+     * @type {M.impl.Feature}
+     */
     let impl = new FeatureImpl(id, geojson, style);
-
     super(impl);
 
     /**
@@ -19,7 +32,6 @@ export default class Feature extends Base {
      * @private
      * @type {M.style.Feature}
      */
-
     this.style_ = null;
 
     /*** GeoJSON format
@@ -29,13 +41,7 @@ export default class Feature extends Base {
      */
     this.formatGeoJSON_ = new GeoJSON();
 
-    /**
-     * Implementation of feature
-     * @public
-     * @type {M.impl.Feature}
-     */
-
-    this.style = style;
+    this.setStyle(style);
   }
 
   /**
@@ -122,7 +128,7 @@ export default class Feature extends Base {
     if (typeof attributes === "object") {
       this.getImpl().setAttributes(attributes);
     } else {
-      Dialog.info("No se han especificado correctamente los atributos.");
+      dialog.info("No se han especificado correctamente los atributos.");
     }
   }
 
@@ -144,7 +150,7 @@ export default class Feature extends Base {
       // --> return feature.properties.foo.bar.attr value
       let attrPath = attribute.split('.');
       if (attrPath.length > 1) {
-        attrValue = attrPath.reduce((obj, attr) => !M.utils.isNullOrEmpty(obj) ? ((obj instanceof Feature) ? obj.getAttribute(attr) : obj[attr]) : undefined, this);
+        attrValue = attrPath.reduce((obj, attr) => !Utils.isNullOrEmpty(obj) ? ((obj instanceof Feature) ? obj.getAttribute(attr) : obj[attr]) : undefined, this);
       }
     }
 
@@ -180,24 +186,7 @@ export default class Feature extends Base {
       this.style_ = null;
       this.getImpl().clearStyle();
     }
-    this.fire(Evt.CHANGE_STYLE, [style, this]);
-    // else if (applyDefault === true) {
-    //   let geom = this.getGeometry();
-    //   if (!M.utils.isNullOrEmpty(geom)) {
-    //     let type = geom.type;
-    //     if (type === M.geom.geojson.type.POINT || type === M.geom.geojson.type.MULTI_POINT) {
-    //       style = new M.style.Point();
-    //     }
-    //     if (type === M.geom.geojson.type.LINE_STRING || type === M.geom.geojson.type.MULTI_LINE_STRING) {
-    //       style = new M.style.Line();
-    //     }
-    //     if (type === M.geom.geojson.type.POLYGON || type === M.geom.geojson.type.MULTI_POLYGON) {
-    //       style = new M.style.Polygon();
-    //     }
-    //     this.style_ = style;
-    //     this.style_.applyToFeature(this);
-    //   }
-    // }
+    this.fire(EvtManager.CHANGE_STYLE, [style, this]);
   };
 
   /**
@@ -232,7 +221,7 @@ export default class Feature extends Base {
    * @api stable
    */
   clearStyle() {
-    this.style = null;
+    this.setStyle(null);
   }
 
   /**
@@ -258,7 +247,7 @@ export default class Feature extends Base {
       }
       let centroid = this.getImpl().getCentroid();
     });
-    if (!M.utils.isNullOrEmpty(centroid)) {
+    if (!Utils.isNullOrEmpty(centroid)) {
       centroid.id(id + "_centroid");
       centroid.attributes(attributes);
       centroid.style = style;

@@ -1,11 +1,19 @@
-import Feature from './feature';
-import Utils from '../utils/utils';
+import Feature from './Feature';
+import Utils from '../util/Utils';
 
-export default class ClusteredFeature extends Feature {
-
+export default class Clustered extends Feature {
+  /**
+   * @classdesc
+   * Main constructor of the class. Create a clustered Feature
+   *
+   * @constructor
+   * @extends {M.Feature}
+   * @param {Array<M.Feature>} features - array of features
+   * @param {Object} attributes - attributes
+   * @api stable
+   */
   constructor(features, attributes) {
     super(Utils.generateRandom('_mapea_cluster_'));
-
     this.setAttributes(attributes);
     this.setAttribute("features", features);
   }
