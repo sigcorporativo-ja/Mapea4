@@ -1,15 +1,6 @@
-import OLSelect from "ol/interaction/Select";
-import OLSourceVector from "ol/source/Vector";
-import OLLayerVector from "ol/layer/Vector";
-import OLCollection from "ol/Collection";
-import OLFeature from "ol/Feature";
-import OLPoint from "ol/geom/Point";
-import OLLineString from "ol/geom/LineString";
-import OLObservable from "ol/Observable";
-import Utils from "../utils/utils";
-import { easeOut } from "ol/easing";
+import Utils from "../util/Utils";
 
-export default class SelectCluster extends OLSelect {
+export default class SelectCluster extends ol.interaction.Select {
 
   /**
    * @classdesc
@@ -20,8 +11,7 @@ export default class SelectCluster extends OLSelect {
    * @param {Object} options - ranges defined by user
    * @api stable
    */
-  constructor(options) {
-    options = options || {};
+  constructor(options = {}) {
 
     this.map = options.map;
     this.pointRadius = options.pointRadius || 12;
@@ -36,9 +26,9 @@ export default class SelectCluster extends OLSelect {
     this.style_ = options.style;
 
     // Create a new overlay layer for
-    this.overlayLayer_ = new OLLayerVector({
-      source: new OLSourceVector({
-        features: new OLCollection(),
+    this.overlayLayer_ = new ol.layer.Vector({
+      source: new ol.source.Vector({
+        features: new ol.Collection(),
         useSpatialIndex: true
       }),
       name: 'Cluster overlay',
@@ -76,7 +66,7 @@ export default class SelectCluster extends OLSelect {
     };
     this.filter_ = options.filter;
 
-    OLSelect.call(this, options);
+    ol.interaction.Select.call(this, options);
     this.on("select", this.selectCluster, this);
   }
 
@@ -97,14 +87,14 @@ export default class SelectCluster extends OLSelect {
       this.getMap().removeLayer(this.overlayLayer_);
     }
 
-    OLSelect.prototype.setMap.call(this, map);
+    ol.interaction.Select.prototype.setMap.call(this, map);
     this.overlayLayer_.setMap(map);
     // map.addLayer(this.overlayLayer_);
 
     if (map && map.getView()) {
       map.getView().on('change:resolution', this.clear, this);
     }
-  };
+  }
 
   /**
    * TODO
@@ -116,7 +106,7 @@ export default class SelectCluster extends OLSelect {
   clear() {
     this.getFeatures().clear();
     this.overlayLayer_.getSource().clear();
-  };
+  }
 
   /**
    * TODO
@@ -127,7 +117,7 @@ export default class SelectCluster extends OLSelect {
    */
   getLayer() {
     return this.overlayLayer_;
-  };
+  }
 
   /**
    * TODO
@@ -140,7 +130,7 @@ export default class SelectCluster extends OLSelect {
     if (this.getMap() && this.getMap().getView()) {
       this.getMap().getView().on('change:resolution', this.clear, this);
     }
-  };
+  }
 
   /**
    * TODO
@@ -196,7 +186,7 @@ export default class SelectCluster extends OLSelect {
     if (this.animate) {
       this.animateCluster_(center, () => this.overlayLayer_.getSource().refresh());
     }
-  };
+  }
 
 
   /**
@@ -213,7 +203,7 @@ export default class SelectCluster extends OLSelect {
       let newPoint = [center[0] + radiusInPixels * Math.sin(a), center[1] + radiusInPixels * Math.cos(a)];
       this.drawAnimatedFeatureAndLink_(cluster[i], resolution, center, newPoint);
     }
-  };
+  }
 
   /**
    * TODO
@@ -236,7 +226,7 @@ export default class SelectCluster extends OLSelect {
       let newPoint = [center[0] + dx, center[1] + dy];
       this.drawAnimatedFeatureAndLink_(cluster[i], resolution, center, newPoint);
     }
-  };
+  }
 
   /**
    * TODO
@@ -245,7 +235,7 @@ export default class SelectCluster extends OLSelect {
    * @function
    */
   drawAnimatedFeatureAndLink_(clusterFeature, resolution, center, newPoint) {
-    let cf = new OLFeature();
+    let cf = new ol.Feature();
     clusterFeature.getKeys().forEach(attr => {
       cf.set(attr, clusterFeature.get(attr));
     });
@@ -260,15 +250,15 @@ export default class SelectCluster extends OLSelect {
     cf.setId(clusterFeature.getId());
     cf.setStyle(clonedStyles);
     cf.set('features', [clusterFeature]);
-    cf.set('geometry', new OLPoint(newPoint));
+    cf.set('geometry', new ol.geom.Point(newPoint));
     this.overlayLayer_.getSource().addFeature(cf);
 
-    let lk = new OLFeature({
+    let lk = new ol.Feature({
       'selectclusterlink': true,
-      geometry: new OLLineString([center, newPoint])
+      geometry: new ol.geom.LineString([center, newPoint])
     });
     this.overlayLayer_.getSource().addFeature(lk);
-  };
+  }
 
   /**
    * TODO
@@ -281,7 +271,7 @@ export default class SelectCluster extends OLSelect {
     // Stop animation (if one is running)
     if (this.listenerKey_) {
       this.overlayLayer_.setVisible(true);
-      OLObservable.unByKey(this.listenerKey_);
+      ol.Observable.unByKey(this.listenerKey_);
     }
 
     // Features to animate
@@ -298,7 +288,7 @@ export default class SelectCluster extends OLSelect {
       // Retina device
       // let ratio = event.frameState.pixelRatio;
       let res = event.target.getView().getResolution();
-      let e = easeOut((event.frameState.time - start) / duration);
+      let e = ol.easing.easeOut((event.frameState.time - start) / duration);
       for (let i = 0; i < features.length; i++)
         if (features[i].get('features')) {
           let feature = features[i];
@@ -306,7 +296,7 @@ export default class SelectCluster extends OLSelect {
           let pt = feature.getGeometry().getCoordinates();
           pt[0] = center[0] + e * (pt[0] - center[0]);
           pt[1] = center[1] + e * (pt[1] - center[1]);
-          let geo = new OLPoint(pt);
+          let geo = new ol.geom.Point(pt);
 
           // draw links
           let st2 = this.overlayLayer_.getStyle()(mFeature, res).map(s => s.clone());
@@ -322,7 +312,7 @@ export default class SelectCluster extends OLSelect {
               // imgs.setScale(ratio); // setImageStyle don't check retina
             }
             vectorContext.setStyle(style);
-            vectorContext.drawLineString(new OLLineString([center, pt]));
+            vectorContext.drawLineString(new ol.geom.LineString([center, pt]));
           }
 
           // Image style
@@ -360,7 +350,7 @@ export default class SelectCluster extends OLSelect {
         }
       // Stop animation and restore cluster visibility
       if (e > 1.0) {
-        OLObservable.unByKey(this.listenerKey_);
+        ol.Observable.unByKey(this.listenerKey_);
         this.overlayLayer_.setVisible(true);
         callbackFn();
         // text on chart style not show
@@ -374,5 +364,5 @@ export default class SelectCluster extends OLSelect {
     // Start a new postcompose animation
     this.listenerKey_ = this.getMap().on('postcompose', animate, this);
     //select.getMap().renderSync();
-  };
+  }
 }
