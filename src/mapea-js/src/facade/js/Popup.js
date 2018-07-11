@@ -1,10 +1,10 @@
-import Utils from "./utils/utils";
+import Utils from "./util/Utils";
 import Exception from "./exception/exception";
-import Base from "./facade";
-import PopupImpl from "impl/ol/js/popup/popup";
-import Template from "./utils/template";
-import EventsManager from "./events/eventsmanager";
-import MWindow from "./utils/window";
+import Base from "./Base";
+import PopupImpl from "impl/ol/js/Popup";
+import Template from "./util/Template";
+import EventsManager from "./event/Manager";
+import MWindow from "./util/Window";
 import Config from "configuration";
 
 class Tab {
