@@ -1,7 +1,7 @@
-import Object from "./object.js";
-import Utils from "./utils/utils.js"
+import Object from "./Object";
+import Utils from "./util/Utils"
 
-export class Base extends Object {
+export default class Base extends Object {
   /**
    * @classdesc
    * Main facade Object. This class creates a facede
@@ -13,7 +13,6 @@ export class Base extends Object {
    * @extends {M.Object}
    * @api stable
    */
-
   constructor(impl) {
 
     // calls the super constructor
@@ -30,7 +29,7 @@ export class Base extends Object {
       this.impl_.facadeObj = this;
     }
 
-  };
+  }
 
   /**
    * This function provides the implementation
@@ -41,9 +40,9 @@ export class Base extends Object {
    * @returns {Object}
    * @api stable
    */
-  get Impl() {
+  getImpl() {
     return this.impl_;
-  };
+  }
 
   /**
    * This function set implementation of this control
@@ -53,9 +52,9 @@ export class Base extends Object {
    * @param {M.Map} impl to add the plugin
    * @api stable
    */
-  set Impl(value) {
+  setImpl(value) {
     this.impl_ = value;
-  };
+  }
 
   /**
    * This function destroy this object and
@@ -69,6 +68,5 @@ export class Base extends Object {
     if (!Utils.isNullOrEmpty(this.impl_) && Utils.isFunction(this.impl_.destroy)) {
       this.impl_.destroy();
     }
-  };
-
-})();
+  }
+}
