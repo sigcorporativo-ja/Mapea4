@@ -1,11 +1,9 @@
-goog.provide('P.impl.control.SearchstreetIntegrated');
-
-goog.require('P.impl.control.Searchstreet');
+import GeosearchImpl from "plugins/impl/ol/js/geosearch";
 
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class SearchstreetIntegratedControl extends GeosearchImpl {
   /**
    * @classdesc Main constructor of the SearchstreetIntegrated control.
    *
@@ -13,10 +11,9 @@ goog.require('P.impl.control.Searchstreet');
    * @extends {M.impl.control.Searchstreet}
    * @api stable
    */
-  M.impl.control.SearchstreetIntegrated = function() {
-    goog.base(this);
+  constructor {
+    super();
   };
-  goog.inherits(M.impl.control.SearchstreetIntegrated, M.impl.control.Searchstreet);
 
   /**
    * This function replaces the addTo of Searchstreet, not to add control
@@ -27,7 +24,7 @@ goog.require('P.impl.control.Searchstreet');
    * @param {HTMLElement} template - Template SearchstreetGeosearch control
    * @api stable
    */
-  M.impl.control.SearchstreetIntegrated.prototype.addTo = function(map, element) {
+  addTo(map, element) {
     this.facadeMap_ = map;
     this.element_ = element;
 
@@ -35,7 +32,7 @@ goog.require('P.impl.control.Searchstreet');
       'element': element,
       'target': null
     });
-  };
+  }
 
   /**
    * This function cancels the zoom function of searchstreet
@@ -44,5 +41,5 @@ goog.require('P.impl.control.Searchstreet');
    * @function
    * @api stable
    */
-  M.impl.control.SearchstreetIntegrated.prototype.zoomResults = function() {};
-})();
+  zoomResults() {};
+}

@@ -1,9 +1,9 @@
-goog.provide('P.impl.control.SearchstreetGeosearch');
+import Utils from "facade/js/utils/Utils";
 
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class SearchstreetGeosearch extends ol.control.Control {
   /**
    * @classdesc Main constructor of the SearchstreetGeosearch control.
    *
@@ -11,7 +11,7 @@ goog.provide('P.impl.control.SearchstreetGeosearch');
    * @extends {ol.control.Control}
    * @api stable
    */
-  M.impl.control.SearchstreetGeosearch = function() {
+  constructor() {
     /**
      * Facade of the map
      *
@@ -28,8 +28,7 @@ goog.provide('P.impl.control.SearchstreetGeosearch');
      */
     this.element_ = null;
 
-  };
-  goog.inherits(M.impl.control.SearchstreetGeosearch, ol.control.Control);
+  }
 
   /**
    * This function adds the control to the specified map
@@ -40,7 +39,7 @@ goog.provide('P.impl.control.SearchstreetGeosearch');
    * @param {HTMLElement} element - Template of this control
    * @api stable
    */
-  M.impl.control.SearchstreetGeosearch.prototype.addTo = function(map, element) {
+  addTo(map, element) {
     this.facadeMap_ = map;
     this.element_ = element;
 
@@ -49,7 +48,7 @@ goog.provide('P.impl.control.SearchstreetGeosearch');
       'target': null
     });
     map.getMapImpl().addControl(this);
-  };
+  }
 
   /**
    * This function return HTML template
@@ -59,9 +58,9 @@ goog.provide('P.impl.control.SearchstreetGeosearch');
    * @api stable
    * @returns {HTMLElement}
    */
-  M.impl.control.SearchstreetGeosearch.prototype.getElement = function() {
+  getElement() {
     return this.element_;
-  };
+  }
 
   /**
    * This function zoom results
@@ -70,12 +69,12 @@ goog.provide('P.impl.control.SearchstreetGeosearch');
    * @function
    * @api stable
    */
-  M.impl.control.SearchstreetGeosearch.prototype.zoomResults = function() {
+  zoomResults() {
     let bbox = this.facadeMap_.getControls().find(c => c.name_ === "searchstreetgeosearch").ctrlGeosearch.getImpl().layer_.getFeaturesExtent();
-    if (!M.utils.isNullOrEmpty(bbox)) {
+    if (!Utils.isNullOrEmpty(bbox)) {
       this.facadeMap_.setBbox(bbox);
     }
-  };
+  }
 
   /**
    * This function destroys this control and clearing the HTML
@@ -84,13 +83,11 @@ goog.provide('P.impl.control.SearchstreetGeosearch');
    * @function
    * @api stable
    */
-  M.impl.control.SearchstreetGeosearch.prototype.destroy = function() {
-    goog.dom.classlist.remove(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
-      "top-extra");
+  destroy() {
+    this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0].classList.remove("top-extra");
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_.getImpl().removePopup();
     this.facadeMap_ = null;
     this.element_ = null;
-  };
-
-})();
+  }
+}
