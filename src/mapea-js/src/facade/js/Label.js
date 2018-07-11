@@ -1,12 +1,9 @@
-goog.provide('M.Label');
+import Base from './Base';
+import Utils from './util/Util';
+import Exception from './exception/exception';
+import LabelImpl from '../../impl/ol/js/Label';
 
-goog.require('M.facade.Base');
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('goog.dom.classlist');
-
-
-(function() {
+export default class Label extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Label
@@ -17,13 +14,14 @@ goog.require('goog.dom.classlist');
    * @extends {M.facade.Base}
    * @api stable
    */
-  M.Label = (function(text, coordOpts, panMapIfOutOfView) {
+  constructor(text, coordOpts, panMapIfOutOfView) {
+
     // implementation of this control
-    var impl = new M.impl.Label(text, coordOpts, panMapIfOutOfView);
+    let impl = new LabelImpl(text, coordOpts, panMapIfOutOfView);
+
     // calls the super constructor
-    goog.base(this, impl);
-  });
-  goog.inherits(M.Label, M.facade.Base);
+    super(impl);
+  }
 
   /**
    * This function remove the popup with information
@@ -33,9 +31,9 @@ goog.require('goog.dom.classlist');
    * @api stable
    * @export
    */
-  M.Label.prototype.hide = function() {
+  hide() {
     this.getImpl().hide();
-  };
+  }
 
   /**
    * This function displays the popup with information
@@ -46,9 +44,9 @@ goog.require('goog.dom.classlist');
    * @api stable
    * @export
    */
-  M.Label.prototype.show = function(map) {
+  show(map) {
     this.getImpl().show(map);
-  };
+  }
 
   /**
    * This function return popup created
@@ -59,9 +57,9 @@ goog.require('goog.dom.classlist');
    * @api stable
    * @export
    */
-  M.Label.prototype.getPopup = function() {
+  getPopup() {
     return this.getImpl().getPopup();
-  };
+  }
 
   /**
    * TODO
@@ -69,9 +67,9 @@ goog.require('goog.dom.classlist');
    * @function
    * @api stable
    */
-  M.Label.prototype.getCoordinate = function() {
+  getCoordinate() {
     return this.getImpl().getCoordinate();
-  };
+  }
 
   /**
    * TODO
@@ -79,9 +77,9 @@ goog.require('goog.dom.classlist');
    * @function
    * @api stable
    */
-  M.Label.prototype.setCoordinate = function(coord) {
-    this.getImpl().setCoordinate(coord);
-  };
+  setCoordinate(coord) {
+    this.getImpl().coordinate = coord;
+  }
 
   /**
    * Template popup for this controls
@@ -90,5 +88,5 @@ goog.require('goog.dom.classlist');
    * @public
    * @api stable
    */
-  M.Label.POPUP_TEMPLATE = 'label_popup.html';
-})();
+  Label.POPUP_TEMPLATE = 'label_popup.html';
+}
