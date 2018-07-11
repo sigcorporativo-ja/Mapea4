@@ -1,5 +1,5 @@
-import EventsManager from './event/eventsmanager';
-import Utils from './utils/utils';
+import EventsManager from './event/Manager';
+import Utils from './util/Utils';
 
 /**
  * @classdesc
