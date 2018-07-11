@@ -1,9 +1,8 @@
-import OlUtils from '../utils/utils';
-import OlOverlay from 'ol/Overlay';
-import FacadePopup from '../../../facade/js/popup/popup';
-import FacadeWindow from '../../../facade/js/utils/window';
+import UtilsImpl from '../util/Utils';
+import FacadePopup from 'facade/js/Popup';
+import FacadeWindow from 'facade/js/util/Window';
 
-export default class Popup extends OlOverlay {
+export default class Popup extends ol.Overlay {
 
   /**
    * OpenLayers 3 Popup Overlay.
@@ -11,8 +10,7 @@ export default class Popup extends OlOverlay {
    * @extends {ol.Overlay}
    * @api stable
    */
-  constructor(opt_options) {
-    let options = opt_options || {};
+  constructor(opt_options = {}) {
 
     /**
      * Flag to indicate if map does pan or not
@@ -24,17 +22,6 @@ export default class Popup extends OlOverlay {
     if (this.panMapIfOutOfView === undefined) {
       this.panMapIfOutOfView = true;
     }
-
-    /**
-     * Animation
-     * @private
-     * @type {ol.animation}
-     * @api stable
-     */
-    // this.ani = options.ani;
-    // if (this.ani === undefined) {
-    //   this.ani = ol.animation.pan;
-    // }
 
     /**
      * Animation options
@@ -81,9 +68,9 @@ export default class Popup extends OlOverlay {
     this.content = this.getContentFromContainer_(html);
 
     // Apply workaround to enable scrolling of content div on touch devices
-    OlUtils.enableTouchScroll(this.content);
+    UtilsImpl.enableTouchScroll(this.content);
 
-    OlOverlay.call(this, {
+    ol.Overlay.call(this, {
       element: this.container,
       stopEvent: true
     });
@@ -105,7 +92,7 @@ export default class Popup extends OlOverlay {
       this.panIntoView_(coord);
     }
     this.content.scrollTop = 0;
-    if (OlUtils.isFunction(callback)) {
+    if (UtilsImpl.isFunction(callback)) {
       callback();
     }
     return this;
@@ -124,9 +111,11 @@ export default class Popup extends OlOverlay {
     let newCoord = [].concat(coord);
     if (status === FacadePopup.status.COLLAPSED) {
       newCoord[1] -= 0.1 * FacadeWindow.HEIGHT * resolution;
-    } else if (status === FacadePopup.status.DEFAULT) {
+    }
+    else if (status === FacadePopup.status.DEFAULT) {
       newCoord[1] -= 0.275 * FacadeWindow.HEIGHT * resolution;
-    } else { // FULL state no effects
+    }
+    else { // FULL state no effects
       return;
     }
 
@@ -136,7 +125,7 @@ export default class Popup extends OlOverlay {
       'y': newCoord[1]
     });
     // if the center was drawn then draw it again
-    if (!OlUtils.isNullOrEmpty(featureCenter)) {
+    if (!UtilsImpl.isNullOrEmpty(featureCenter)) {
       this.facadeMap_.drawFeatures([featureCenter]);
     }
   }
@@ -170,7 +159,7 @@ export default class Popup extends OlOverlay {
         let popOffset = this.getOffset();
         let popPx = this.getMap().getPixelFromCoordinate(coord);
 
-        if (!OlUtils.isNullOrEmpty(popPx)) {
+        if (!UtilsImpl.isNullOrEmpty(popPx)) {
           let fromLeft = (popPx[0] - tailOffsetLeft);
           let fromRight = mapSize[0] - (popPx[0] + tailOffsetRight);
 
@@ -182,18 +171,20 @@ export default class Popup extends OlOverlay {
 
           if (fromRight < 0) {
             newPx[0] -= fromRight;
-          } else if (fromLeft < 0) {
+          }
+          else if (fromLeft < 0) {
             newPx[0] += fromLeft;
           }
 
           if (fromTop < 0) {
             newPx[1] += fromTop;
-          } else if (fromBottom < 0) {
+          }
+          else if (fromBottom < 0) {
             newPx[1] -= fromBottom;
           }
 
           //if (this.ani && this.ani_opts) {
-          if (!OlUtils.isNullOrEmpty(this.ani_opts) && !OlUtils.isNullOrEmpty(this.ani_opts.source)) {
+          if (!UtilsImpl.isNullOrEmpty(this.ani_opts) && !UtilsImpl.isNullOrEmpty(this.ani_opts.source)) {
             this.ani_opts.source = center;
             this.getMap().getView().animate(this.ani_opts);
           }
@@ -214,67 +205,69 @@ export default class Popup extends OlOverlay {
    * @private
    */
   panIntoSynchronizedAnim_() {
-    return (new Promise((success, fail) => {
-        /* if the popup is animating then it waits for the animation
-        in order to execute the next animation */
-        if (this.isAnimating_ === true) {
-          // gets the duration of the animation
-          let aniDuration = 300;
-          if (!OlUtils.isNullOrEmpty(this.ani_opts)) {
-            aniDuration = this.ani_opts['duration'];
-          }
-          setTimeout(success, aniDuration);
-        } else {
-          /* if there is not any animation then it starts
-          a new one */
-          success();
+    return new Promise((success, fail) => {
+      /* if the popup is animating then it waits for the animation
+      in order to execute the next animation */
+      if (this.isAnimating_ === true) {
+        // gets the duration of the animation
+        let aniDuration = 300;
+        if (!UtilsImpl.isNullOrEmpty(this.ani_opts)) {
+          aniDuration = this.ani_opts['duration'];
         }
-      });
-    }
+        setTimeout(success, aniDuration);
+      }
+      else {
 
-    /**
-     *
-     * @public
-     * @function
-     * @api stable
-     */
-    hide() {
-      this.facadeMap_.removePopup();
-    }
-
-    /**
-     * change text popup
-     * @public
-     * @function
-     * @param {text} new text.
-     * @api stable
-     */
-    setContainer(html) {
-      this.element(html);
-      //      this.container.innerHTML = html.innerHTML;
-      this.content = this.getContentFromContainer_(html);
-      OlUtils.enableTouchScroll(this.content);
-    }
-
-    /**
-     * change text popup
-     * @public
-     * @function
-     * @param {text} new text.
-     * @api stable
-     */
-    setContent(content) {
-      this.content.innerHTML = content;
-    }
-
-    /**
-     * change text popup
-     * @public
-     * @function
-     * @param {text} new text.
-     * @api stable
-     */
-    getContent() {
-      return this.content;
-    }
+        /* if there is not any animation then it starts
+        a new one */
+        success();
+      }
+    });
   }
+
+  /**
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  hide() {
+    this.facadeMap_.removePopup();
+  }
+
+  /**
+   * change text popup
+   * @public
+   * @function
+   * @param {text} new text.
+   * @api stable
+   */
+  setContainer(html) {
+    this.element(html);
+    //      this.container.innerHTML = html.innerHTML;
+    this.content = this.getContentFromContainer_(html);
+    UtilsImpl.enableTouchScroll(this.content);
+  }
+
+  /**
+   * change text popup
+   * @public
+   * @function
+   * @param {text} new text.
+   * @api stable
+   */
+  setContent(content) {
+    this.content.innerHTML = content;
+  }
+
+  /**
+   * change text popup
+   * @public
+   * @function
+   * @param {text} new text.
+   * @api stable
+   */
+  getContent() {
+    return this.content;
+  }
+}
