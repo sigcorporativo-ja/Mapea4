@@ -1,5 +1,5 @@
-import Object from "./object";
-import Utils from "./utils/utils"
+import Object from "./Object";
+import Utils from "./util/Utils"
 
 export default class Base extends Object {
   /**
