@@ -1,7 +1,7 @@
-import Base from "./facade";
-import Utils from "./utils/utils";
+import Base from "./Base";
+import Utils from "./util/Utils";
 import Exception from "./exception/exception"
-import EventsManager from "./event/eventsmanager";
+import EventManager from "./event/Manager";
 
 export default class Plugin extends Base {
   /**
@@ -46,13 +46,13 @@ export default class Plugin extends Base {
       view.then(html => {
         impl.addTo(map, html);
         // executes load callback
-        this.fire(EventsManager.ADDED_TO_MAP);
+        this.fire(EventManager.ADDED_TO_MAP);
       });
     }
     else { // view is an HTML or text
       impl.addTo(map, view);
       // executes load callback
-      this.fire(EventsManager.ADDED_TO_MAP);
+      this.fire(EventManager.ADDED_TO_MAP);
     }
   }
 
