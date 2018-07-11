@@ -1,8 +1,8 @@
-import ClusteredFeature from "facade/js/feature/clusteredfeature";
-import Utils from "facade/js/utils/utils";
-import AnimatedCluster from "../layers/animatedcluster";
+import ClusteredFeature from "facade/js/feature/Clustered";
+import Utils from "facade/js/util/Utils";
+import AnimatedCluster from "../layer/AnimatedCluster";
 
-export default class Features {
+export default class Feature {
   /**
    * @classdesc
    * Main constructor of the class. Creates a KML layer
@@ -88,7 +88,7 @@ export default class Features {
       });
     }
     return features;
-  };
+  }
 
   /**
    * function adds the event 'click'
@@ -104,7 +104,7 @@ export default class Features {
       this.defaultCursor_ = viewport.style.cursor;
     }
     viewport.style.cursor = 'pointer';
-  };
+  }
 
   /**
    * function adds the event 'click'
@@ -116,7 +116,7 @@ export default class Features {
    */
   removeCursorPointer() {
     this.map_.getMapImpl().getViewport().style.cursor = this.defaultCursor_;
-  };
+  }
 
   /**
    * function adds the event 'click'
@@ -135,7 +135,7 @@ export default class Features {
       mFeature = Feature.olFeature2Facade(feature);
     }
     return mFeature;
-  };
+  }
 
   /**
    * This function destroys this layer, cleaning the HTML
@@ -149,5 +149,5 @@ export default class Features {
     // unlisten event
     this.map_.un('click', this.onMapClick_, this);
     this.map_ = null;
-  };
+  }
 }
