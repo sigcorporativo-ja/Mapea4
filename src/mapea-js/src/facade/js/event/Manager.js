@@ -1,5 +1,5 @@
-import Utils from './utils/utils';
-import EventListener from './eventlistener'
+import Utils from './util/Utils';
+import EventListener from './Listener'
 
 export default class EventsManager {
   /**
