@@ -1,5 +1,5 @@
 import Handlebars from "handlebars";
-import Utils from "../util/Utils";
+import Utils from "../Utils";
 
 /**
  * @namespace M.template

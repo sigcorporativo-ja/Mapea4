@@ -1,6 +1,6 @@
 import Utils from "./Utils";
 import Exception from "../exception/exception";
-import M from "../mapea.js";
+import M from "../mapea";
 import Config from "configuration";
 
 /**
