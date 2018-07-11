@@ -1,7 +1,13 @@
-goog.provide('M.Feature');
-goog.require('M.facade.Base');
-goog.require('M.utils');
-(function() {
+import Base from "../Base";
+import Utils from '../util/Utils';
+import GeoJSON from "../format/GeoJSON";
+import * as dialog from "../dialog";
+import FeatureImpl from '../../../impl/ol/js/feature/Feature';
+import StyleFeature from "../style/Feature";
+import StylePoint from "../style/Point";
+import EvtManager from "../event/Manager";
+
+export default class Feature extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Create a Feature
@@ -12,34 +18,31 @@ goog.require('M.utils');
    * @param {Object} geojson - geojson to feature
    * @api stable
    */
-  M.Feature = (function(id, geojson, style) {
+  constructor(id, geojson, style) {
+    /**
+     * Implementation of feature
+     * @public
+     * @type {M.impl.Feature}
+     */
+    let impl = new FeatureImpl(id, geojson, style);
+    super(impl);
 
     /**
      * Style of feature
      * @private
      * @type {M.style.Feature}
      */
-
     this.style_ = null;
 
-    /**
-     * GeoJSON format
+    /*** GeoJSON format
+
      * @private
      * @type {M.format.GeoJSON}
      */
-    this.formatGeoJSON_ = new M.format.GeoJSON();
-
-    /**
-     * Implementation of feature
-     * @public
-     * @type {M.impl.Feature}
-     */
-    var impl = new M.impl.Feature(id, geojson, style);
-    goog.base(this, impl);
+    this.formatGeoJSON_ = new GeoJSON();
 
     this.setStyle(style);
-  });
-  goog.inherits(M.Feature, M.facade.Base);
+  }
 
   /**
    * This function set id
@@ -49,9 +52,9 @@ goog.require('M.utils');
    * @param {string} id - ID to feature
    * @api stable
    */
-  M.Feature.prototype.setId = function(id) {
+  setId(id) {
     this.getImpl().setId(id);
-  };
+  }
 
   /**
    * This function return id feature
@@ -61,9 +64,9 @@ goog.require('M.utils');
    * @return {string} ID to feature
    * @api stable
    */
-  M.Feature.prototype.getId = function() {
+  getId() {
     return this.getImpl().getId();
-  };
+  }
 
   /**
    * This function return geometry feature
@@ -73,9 +76,9 @@ goog.require('M.utils');
    * @return {object} Geometry feature
    * @api stable
    */
-  M.Feature.prototype.getGeometry = function() {
+  getGeometry() {
     return this.getGeoJSON().geometry;
-  };
+  }
 
   /**
    * This function set geometry feature
@@ -85,9 +88,9 @@ goog.require('M.utils');
    * @param {object} Geometry feature
    * @api stable
    */
-  M.Feature.prototype.setGeometry = function(geometry) {
+  setGeometry(geometry) {
     this.getImpl().setGeometry(geometry);
-  };
+  }
 
   /**
    * This function return geojson feature
@@ -97,9 +100,9 @@ goog.require('M.utils');
    * @return {Object} geojson feature
    * @api stable
    */
-  M.Feature.prototype.getGeoJSON = function() {
+  getGeoJSON() {
     return this.formatGeoJSON_.write(this)[0];
-  };
+  }
 
   /**
    * This function return attributes feature
@@ -109,9 +112,9 @@ goog.require('M.utils');
    * @return {Object} attributes feature
    * @api stable
    */
-  M.Feature.prototype.getAttributes = function() {
+  getAttributes() {
     return this.getImpl().getAttributes();
-  };
+  }
 
   /**
    * This function set attributes feature
@@ -121,14 +124,13 @@ goog.require('M.utils');
    * @param {Object} attributes - attributes to feature
    * @api stable
    */
-  M.Feature.prototype.setAttributes = function(attributes) {
+  setAttributes(attributes) {
     if (typeof attributes === "object") {
       this.getImpl().setAttributes(attributes);
+    } else {
+      dialog.info("No se han especificado correctamente los atributos.");
     }
-    else {
-      M.dialog.info("No se han especificado correctamente los atributos.");
-    }
-  };
+  }
 
   /**
    * This function returns the value of the indicated attribute
@@ -139,21 +141,21 @@ goog.require('M.utils');
    * @return  {string|number|object} returns the value of the indicated attribute
    * @api stable
    */
-  M.Feature.prototype.getAttribute = function(attribute) {
+  getAttribute(attribute) {
     let attrValue;
 
     attrValue = this.getImpl().getAttribute(attribute);
-    if (M.utils.isNullOrEmpty(attrValue)) {
+    if (Utils.isNullOrEmpty(attrValue)) {
       // we look up the attribute by its path. Example: getAttribute('foo.bar.attr')
       // --> return feature.properties.foo.bar.attr value
       let attrPath = attribute.split('.');
       if (attrPath.length > 1) {
-        attrValue = attrPath.reduce((obj, attr) => !M.utils.isNullOrEmpty(obj) ? ((obj instanceof M.Feature) ? obj.getAttribute(attr) : obj[attr]) : undefined, this);
+        attrValue = attrPath.reduce((obj, attr) => !Utils.isNullOrEmpty(obj) ? ((obj instanceof Feature) ? obj.getAttribute(attr) : obj[attr]) : undefined, this);
       }
     }
 
     return attrValue;
-  };
+  }
 
   /**
    * This function set value the value of the indicated attribute
@@ -164,9 +166,9 @@ goog.require('M.utils');
    * @return  {string|number|object} returns the value of the indicated attribute
    * @api stable
    */
-  M.Feature.prototype.setAttribute = function(attribute, value) {
+  setAttribute(attribute, value) {
     return this.getImpl().setAttribute(attribute, value);
-  };
+  }
 
   /**
    * This function set style feature
@@ -176,33 +178,15 @@ goog.require('M.utils');
    * @param {M.style.Feature}
    * @api stable
    */
-  M.Feature.prototype.setStyle = function(style) {
-    if (!M.utils.isNullOrEmpty(style) && style instanceof M.style.Feature) {
+  setStyle(style) {
+    if (!Utils.isNullOrEmpty(style) && style instanceof StyleFeature) {
       this.style_ = style;
       this.style_.applyToFeature(this);
-    }
-    else if (M.utils.isNullOrEmpty(style)) {
+    } else if (Utils.isNullOrEmpty(style)) {
       this.style_ = null;
       this.getImpl().clearStyle();
     }
-    this.fire(M.evt.CHANGE_STYLE, [style, this]);
-    // else if (applyDefault === true) {
-    //   let geom = this.getGeometry();
-    //   if (!M.utils.isNullOrEmpty(geom)) {
-    //     let type = geom.type;
-    //     if (type === M.geom.geojson.type.POINT || type === M.geom.geojson.type.MULTI_POINT) {
-    //       style = new M.style.Point();
-    //     }
-    //     if (type === M.geom.geojson.type.LINE_STRING || type === M.geom.geojson.type.MULTI_LINE_STRING) {
-    //       style = new M.style.Line();
-    //     }
-    //     if (type === M.geom.geojson.type.POLYGON || type === M.geom.geojson.type.MULTI_POLYGON) {
-    //       style = new M.style.Polygon();
-    //     }
-    //     this.style_ = style;
-    //     this.style_.applyToFeature(this);
-    //   }
-    // }
+    this.fire(EvtManager.CHANGE_STYLE, [style, this]);
   };
 
   /**
@@ -212,9 +196,9 @@ goog.require('M.utils');
    * @param {M.Feature} feature
    * @return {bool} returns the result of comparing two features
    */
-  M.Feature.prototype.equals = function(feature) {
-    return this.getId() === feature.getId();
-  };
+  equals(feature) {
+    return this.id() === feature.id();
+  }
 
   /**
    * This function returns style feature
@@ -224,9 +208,9 @@ goog.require('M.utils');
    * @return {M.style.Feature} returns the style feature
    * @api stable
    */
-  M.Feature.prototype.getStyle = function() {
+  getStyle() {
     return this.style_;
-  };
+  }
 
   /**
    * This function clear style feature
@@ -236,9 +220,9 @@ goog.require('M.utils');
    * @return {M.style.Feature} returns the style feature
    * @api stable
    */
-  M.Feature.prototype.clearStyle = function() {
+  clearStyle() {
     this.setStyle(null);
-  };
+  }
 
   /**
    * This function returns de centroid of feature
@@ -248,10 +232,10 @@ goog.require('M.utils');
    * @return {M.Feature}
    * @api stable
    */
-  M.Feature.prototype.getCentroid = function() {
+  getCentroid() {
     let id = this.getId();
     let attributes = this.getAttributes();
-    let style = new M.style.Point({
+    let style = new StylePoint({
       stroke: {
         color: '#67af13',
         width: 2
@@ -261,13 +245,13 @@ goog.require('M.utils');
         color: '#67af13',
         opacity: 0.2
       }
+      let centroid = this.getImpl().getCentroid();
     });
-    let centroid = this.getImpl().getCentroid();
-    if (!M.utils.isNullOrEmpty(centroid)) {
-      centroid.setId(id + "_centroid");
-      centroid.setAttributes(attributes);
-      centroid.setStyle(style);
+    if (!Utils.isNullOrEmpty(centroid)) {
+      centroid.id(id + "_centroid");
+      centroid.attributes(attributes);
+      centroid.style = style;
       return centroid;
     }
-  };
-})();
+  }
+}

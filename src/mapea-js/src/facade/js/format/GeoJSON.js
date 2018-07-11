@@ -1,9 +1,10 @@
-goog.provide('M.format.GeoJSON');
+import Feature from '../feature/Feature';
+import Base from '../Base';
+import Utils from '../util/Utils';
+import Exception from '../exception/exception';
+import GeoJSONImpl from '../../../impl/js/ol/format/GeoJSON';
 
-goog.require('M.Feature');
-
-(function() {
-
+export default class GeoJSON extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -15,25 +16,22 @@ goog.require('M.Feature');
    * provided by the user
    * @api stable
    */
-  M.format.GeoJSON = (function(options) {
-    // checks if the implementation can create format GeoJSON
-    if (M.utils.isUndefined(M.impl.format.GeoJSON)) {
-      M.exception('La implementación usada no puede M.impl.format.GeoJSON');
-    }
-
-    options = (options || {});
-
+  constructor(options = {}) {
     /**
      * Implementation of this formatter
      * @public
      * @type {M.impl.format.GeoJSON}
      */
-    var impl = new M.impl.format.GeoJSON(options);
+    let impl = new GeoJSONImpl(options);
 
     // calls the super constructor
-    goog.base(this, impl);
-  });
-  goog.inherits(M.format.GeoJSON, M.facade.Base);
+    super(impl);
+
+    // checks if the implementation can create format GeoJSON
+    if (Utils.isUndefined(GeoJSONImpl)) {
+      Exception('La implementación usada no puede M.impl.format.GeoJSON');
+    }
+  }
 
   /**
    * TODO
@@ -45,12 +43,12 @@ goog.require('M.Feature');
    * @return {Array<Object>}
    * @api stable
    */
-  M.format.GeoJSON.prototype.write = function(features) {
-    if (!M.utils.isArray(features)) {
+  write(features) {
+    if (!Utils.isArray(features)) {
       features = [features];
     }
     return this.getImpl().write(features);
-  };
+  }
 
   /**
    * This function read Features
@@ -62,21 +60,20 @@ goog.require('M.Feature');
    * @return {Array<M.Feature>}
    * @api stable
    */
-  M.format.GeoJSON.prototype.read = function(geojson, projection) {
-    var features = [];
-    if (!M.utils.isNullOrEmpty(geojson)) {
-      if (M.utils.isString(geojson)) {
+  read(geojson, projection) {
+    let features = [];
+    if (!Utils.isNullOrEmpty(geojson)) {
+      if (Utils.isString(geojson)) {
         geojson = JSON.parse(geojson);
       }
       let geojsonFeatures = [];
       if (geojson.type === "FeatureCollection") {
         geojsonFeatures = geojson.features;
-      }
-      else if (geojson.type === "Feature") {
+      } else if (geojson.type === "Feature") {
         geojsonFeatures = [geojson];
       }
       features = this.getImpl().read(geojson, geojsonFeatures, projection);
     }
     return features;
-  };
-})();
+  }
+}
