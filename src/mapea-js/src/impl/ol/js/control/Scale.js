@@ -1,6 +1,6 @@
-import Control from "./controlbase";
-import OLControl from "ol/control/Control";
-import Utils from "facade/js/utils/utils";
+import Control from "./Control";
+import Utils from "facade/js/util/Utils";
+
 /**
  * @namespace M.impl.control
  */
@@ -33,7 +33,7 @@ export default class Scale extends Control {
     let scaleId = 'm-scale-span';
     this.scaleContainer_ = element.querySelector('#'.concat(scaleId));
 
-    OLControl.call(this, {
+    ol.control.Control.call(this, {
       'element': element,
       'render': this.render,
       'target': null

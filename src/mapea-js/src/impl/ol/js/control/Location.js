@@ -1,14 +1,6 @@
-import Control from "./controlbase";
+import Control from "./Control";
 import Feature from "../feature/feature";
 import Utils from 'facade/js/utils/utils';
-import OLFeature from "ol/Feature";
-import OLStyle from "ol/style/Style";
-import OLFill from "ol/style/Fill";
-import OLStroke from "ol/style/Stroke";
-import OLCircle from "ol/style/Circle";
-import OLGeolaction from "ol/Geolocation";
-import OLProj from "ol/proj";
-import OLPoint from "ol/geom/Point";
 
 /**
  * @namespace M.impl.control
@@ -37,7 +29,7 @@ export default class Location extends Control {
      * @private
      * @type {ol.Feature}
      */
-    this.accuracyFeature_ = Feature.olFeature2Facade(new OLFeature());
+    this.accuracyFeature_ = Feature.olFeature2Facade(new ol.Feature());
 
     this.tracking_ = tracking;
     this.highAccuracy_ = highAccuracy;
@@ -49,7 +41,7 @@ export default class Location extends Control {
      * @private
      * @type {ol.Feature}
      */
-    this.positionFeature_ = Feature.olFeature2Facade(new OLFeature({
+    this.positionFeature_ = Feature.olFeature2Facade(new ol.Feature({
       'style': Location.POSITION_STYLE
     }));
   }
@@ -67,7 +59,7 @@ export default class Location extends Control {
 
     if (Utils.isNullOrEmpty(this.geolocation_)) {
       let proj = ol.proj.get(this.facadeMap_.getProjection().code);
-      this.geolocation_ = new OLGeolocation({
+      this.geolocation_ = new ol.Geolocation({
         projection: proj,
         tracking: this.tracking_,
         trackingOptions: {
@@ -82,7 +74,7 @@ export default class Location extends Control {
       this.geolocation_.on('change:position', evt => {
         let newCoord = evt.target.get(evt.key);
         let newPosition = Utils.isNullOrEmpty(newCoord) ?
-          null : new OLPoint(newCoord);
+          null : new ol.geom.Point(newCoord);
         this.positionFeature_.getImpl().getOLFeature().setGeometry(newPosition);
         this.facadeMap_.setCenter(newCoord);
         if (this.element.classlist.contains('m-locating')) {
@@ -147,36 +139,6 @@ export default class Location extends Control {
     this.removePositions_();
     super.destroy();
   }
-
-  /**
-   * TODO
-   */
-  static get POSITION_STYLE() {
-    return Location.POSITION_STYLE_;
-  }
-
-  /**
-   * TODO
-   */
-  static set POSITION_STYLE(value) {
-    return Location.POSITION_STYLE_ = value;
-  }
-
-  /**
-   * TODO
-   */
-  static get ZOOM() {
-    return Location.ZOOM_;
-  }
-
-  /**
-   * TODO
-   */
-  static set ZOOM(value) {
-    return Location.ZOOM_ = value;
-  }
-
-
 }
 
 /**
@@ -186,13 +148,13 @@ export default class Location extends Control {
  * @public
  * @api stable
  */
-Location.POSITION_STYLE_ = new OLStyle({
-  image: new OLCircle({
+Location.POSITION_STYLE_ = new ol.style.Style({
+  image: new ol.style.Circle({
     radius: 6,
-    fill: new OLFill({
+    fill: new ol.style.Fill({
       color: '#3399CC'
     }),
-    stroke: new OLStroke({
+    stroke: new ol.style.Stroke({
       color: '#fff',
       width: 2
     })

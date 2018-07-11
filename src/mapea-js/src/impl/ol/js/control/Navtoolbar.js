@@ -1,10 +1,7 @@
-import OLZoomSlider from "ol/control/ZoomSlider";
-
 /**
  * @namespace M.impl.control
  */
-export default class Panzoombar extends OLZoomSlider {
-
+export default class Navtoolbar {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
@@ -15,8 +12,7 @@ export default class Panzoombar extends OLZoomSlider {
    * @api stable
    */
   constructor() {
-    super();
-    this.facadeMap_ = null;
+    this.element_ = null;
   }
 
   /**
@@ -29,12 +25,11 @@ export default class Panzoombar extends OLZoomSlider {
    * @api stable
    */
   addTo(map, element) {
-    this.facadeMap_ = map;
-    map.getMapImpl().addControl(this);
+    this.element_ = element;
   }
 
   /**
-   * TODO
+   * function remove the event 'click'
    *
    * @public
    * @function
@@ -42,7 +37,7 @@ export default class Panzoombar extends OLZoomSlider {
    * @export
    */
   getElement() {
-    return this.element;
+    return this.element_;
   }
 
   /**
@@ -54,8 +49,5 @@ export default class Panzoombar extends OLZoomSlider {
    * @api stable
    * @export
    */
-  destroy() {
-    this.facadeMap_.getMapImpl().removeControl(this);
-    this.facadeMap_ = null;
-  }
+  destroy() {}
 }

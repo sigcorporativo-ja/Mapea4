@@ -1,4 +1,4 @@
-import Control from "./controlbase";
+import Control from "./Control";
 
 /**
  * @namespace M.impl.control

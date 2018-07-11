@@ -1,6 +1,8 @@
-import Control from "./controlbase";
-import Utils from "facade/js/utils/utils";
-import WFSFormat from "ol/format/WFS";
+import Control from "./Control";
+import Utils from "facade/js/util/Utils";
+import Popup from "facade/js/Popup";
+import getfeatureinfoPopupTemplate from "templates/getfeatureinfo_popup.html";
+
 /**
  * @namespace M.impl.control
  */
@@ -28,6 +30,7 @@ export default class GetFeatureInfo extends Control {
    */
   constructor(format, options) {
     super();
+
     /**
      * Format response
      * @public
@@ -48,7 +51,7 @@ export default class GetFeatureInfo extends Control {
      * @api stable
      */
     this.buffer = options.buffer;
-  };
+  }
 
   /**
    * This function adds the event singleclick to the specified map
@@ -59,7 +62,7 @@ export default class GetFeatureInfo extends Control {
    */
   activate() {
     this.addOnClickEvent_();
-  };
+  }
 
   /**
    * This function remove the event singleclick to the specified map
@@ -70,7 +73,7 @@ export default class GetFeatureInfo extends Control {
    */
   deactivate() {
     this.deleteOnClickEvent_();
-  };
+  }
 
   /**
    * This function adds the event singleclick to the specified map
@@ -90,7 +93,7 @@ export default class GetFeatureInfo extends Control {
       this.userFormat = "text/html";
     }
     olMap.on('singleclick', this.buildUrl_, this);
-  };
+  }
 
   /**
    * This function builds the query URL and show results
@@ -129,7 +132,7 @@ export default class GetFeatureInfo extends Control {
     else {
       Dialog.info('No existen capas consultables');
     }
-  };
+  }
 
   /**
    * This function remove the event singleclick to the specified map
@@ -140,7 +143,7 @@ export default class GetFeatureInfo extends Control {
   deleteOnClickEvent_() {
     let olMap = this.facadeMap_.getMapImpl();
     olMap.un('singleclick', this.buildUrl_, this);
-  };
+  }
 
   /**
    * This function specifies whether the information is valid
@@ -199,7 +202,7 @@ export default class GetFeatureInfo extends Control {
         }
         break;
       case "application/vnd.ogc.gml": // ol.format.GML (http://openlayers.org/en/v3.9.0/apidoc/ol.format.GML.html)
-        let formater = new WFSFormat();
+        let formater = new ol.format.WFS();
         let features = formater.readFeatures(info);
         res = (features.length > 0);
         break;
@@ -210,7 +213,7 @@ export default class GetFeatureInfo extends Control {
         break;
     }
     return res;
-  };
+  }
 
   /**
    * This function formats the response
@@ -261,7 +264,7 @@ export default class GetFeatureInfo extends Control {
         break;
     }
     return formatedInfo;
-  };
+  }
 
   /**
    * This function indicates whether the format is accepted by the layer - Specific format text/html
@@ -278,7 +281,7 @@ export default class GetFeatureInfo extends Control {
       unsupported = regExs.msUnsupportedFormat.test(info);
     }
     return unsupported;
-  };
+  }
 
   /**
    * This function return formatted information. Specific Geoserver
@@ -335,7 +338,7 @@ export default class GetFeatureInfo extends Control {
     html += "</tbody></table></div>";
 
     return html;
-  };
+  }
 
   /**
    * This function return formatted information. Specific Mapserver
@@ -404,7 +407,7 @@ export default class GetFeatureInfo extends Control {
     }
 
     return html;
-  };
+  }
 
   /**
    * This function displays information in a popup
@@ -416,45 +419,42 @@ export default class GetFeatureInfo extends Control {
    * @param {olMap} olMap - Map
 
    */
-  showInfoFromURL_(layerNamesUrls,
-    coordinate, olMap) {
-    let infos = [];
-    let formato = String(this.userFormat);
-    let contFull = 0;
-    let loadingInfoTab;
-    let popup;
-    Template.compile(GetFeatureInfo.POPUP_TEMPLATE, {
-      'jsonp': true,
+  showInfoFromURL_(layerNamesUrls, coordinate, olMap) {
+    let htmlAsText = Template.compile(getfeatureinfoPopupTemplate, {
       'vars': {
         'info': GetFeatureInfo.LOADING_MESSAGE
       },
       'parseToHtml': false
-    }).then(htmlAsText => {
-      popup = this.facadeMap_.getPopup();
-      loadingInfoTab = {
-        'icon': 'g-cartografia-info',
-        'title': GetFeatureInfo.POPUP_TITLE,
-        'content': htmlAsText
-      };
-      if (Utils.isNullOrEmpty(popup)) {
+    });
+
+    let infos = [];
+    let formato = String(this.userFormat);
+    let contFull = 0;
+    let loadingInfoTab = {
+      'icon': 'g-cartografia-info',
+      'title': GetFeatureInfo.POPUP_TITLE,
+      'content': htmlAsText
+    };
+    let popup = this.facadeMap_.getPopup();
+
+    if (Utils.isNullOrEmpty(popup)) {
+      popup = new Popup();
+      popup.addTab(loadingInfoTab);
+      this.facadeMap_.addPopup(popup, coordinate);
+    }
+    else {
+      // removes popup if all contents are getfeatureinfo
+      let hasExternalContent = popup.getTabs().some(tab => tab['title'] !== GetFeatureInfo.POPUP_TITLE);
+      if (!hasExternalContent) {
+        this.facadeMap_.removePopup();
         popup = new Popup();
         popup.addTab(loadingInfoTab);
         this.facadeMap_.addPopup(popup, coordinate);
       }
       else {
-        // removes popup if all contents are getfeatureinfo
-        let hasExternalContent = popup.getTabs().some(tab => tab['title'] !== GetFeatureInfo.POPUP_TITLE);
-        if (!hasExternalContent) {
-          this.facadeMap_.removePopup();
-          popup = new Popup();
-          popup.addTab(loadingInfoTab);
-          this.facadeMap_.addPopup(popup, coordinate);
-        }
-        else {
-          popup.addTab(loadingInfoTab);
-        }
+        popup.addTab(loadingInfoTab);
       }
-    });
+    }
     layerNamesUrls.forEach(layerNameUrl => {
       let url = layerNameUrl['url'];
       let layerName = layerNameUrl['layer'];
@@ -489,14 +489,6 @@ export default class GetFeatureInfo extends Control {
         }
       });
     });
-  };
-
-  get LOADING_MESSAGE() {
-    return GetFeatureInfo.LOADING_MESSAGE_;
-  }
-
-  set LOADING_MESSAGE(value) {
-    return GetFeatureInfo.LOADING_MESSAGE_ = value;
   }
 }
 

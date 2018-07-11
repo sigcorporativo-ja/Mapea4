@@ -1,12 +1,10 @@
-import View from '../view/view';
-import Evt from "facade/js/event/event";
-import OLProj from "ol/proj";
-import OLOverviewMap from "ol/control/OverviewMap";
+import View from '../View';
+import EvtManager from "facade/js/event/Manager";
 
 /**
  * @namespace M.impl.control
  */
-export default class OverviewMap extends OLOverviewMap {
+export default class OverviewMap extends ol.control.OverviewMap {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
@@ -64,17 +62,17 @@ export default class OverviewMap extends OLOverviewMap {
     map.getLayers().forEach(layer => {
       let olLayer = layer.getImpl().getOL3Layer();
       if (Utils.isNullOrEmpty(olLayer)) {
-        layer.getImpl().on(Evt.ADDED_TO_MAP, this.addLayer_, this);
+        layer.getImpl().on(EvtManager.ADDED_TO_MAP, this.addLayer_, this);
       }
       else {
         olLayers.push(olLayer);
       }
     });
 
-    OLOverviewMap.call(this, {
+    ol.control.OverviewMap.call(this, {
       'layers': olLayers,
       'view': new View({
-        'projection': OLProj.get(map.getProjection().code),
+        'projection': ol.proj.get(map.getProjection().code),
         'resolutions': map.getResolutions()
       })
     });
@@ -118,7 +116,7 @@ export default class OverviewMap extends OLOverviewMap {
    * @function
    */
   addLayer_(layer) {
-    layer.un(Evt.ADDED_TO_MAP, this.addLayer_, this);
+    layer.un(EvtManager.ADDED_TO_MAP, this.addLayer_, this);
     this.getOverviewMap().addLayer(layer.getOL3Layer());
   }
 

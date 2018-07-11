@@ -1,9 +1,7 @@
-goog.provide('M.impl.control.Navtoolbar');
-
 /**
  * @namespace M.impl.control
  */
-export default class Navtoolbar {
+export default class ScaleLine extends ol.control.ScaleLine {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
@@ -14,7 +12,8 @@ export default class Navtoolbar {
    * @api stable
    */
   constructor() {
-    this.element_ = null;
+    super();
+    this.facadeMap_ = null;
   }
 
   /**
@@ -27,11 +26,12 @@ export default class Navtoolbar {
    * @api stable
    */
   addTo(map, element) {
-    this.element_ = element;
+    this.facadeMap_ = map;
+    map.getMapImpl().addControl(this);
   }
 
   /**
-   * function remove the event 'click'
+   * TODO
    *
    * @public
    * @function
@@ -39,7 +39,7 @@ export default class Navtoolbar {
    * @export
    */
   getElement() {
-    return this.element_;
+    return this.element;
   }
 
   /**
@@ -51,5 +51,8 @@ export default class Navtoolbar {
    * @api stable
    * @export
    */
-  destroy() {}
+  destroy() {
+    this.facadeMap_.getMapImpl().removeControl(this);
+    this.facadeMap_ = null;
+  }
 }

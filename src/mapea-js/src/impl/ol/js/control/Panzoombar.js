@@ -1,8 +1,7 @@
-import OLControl from 'ol/control/Control';
 /**
  * @namespace M.impl.control
  */
-export default class Control extends OLControl {
+export default class Panzoombar extends ol.control.ZoomSlider {
 
   /**
    * @classdesc
@@ -14,13 +13,9 @@ export default class Control extends OLControl {
    * @api stable
    */
   constructor() {
-    /**
-     * @private
-     * @type {string}
-     * @expose
-     */
+    super();
     this.facadeMap_ = null;
-  };
+  }
 
   /**
    * This function adds the control to the specified map
@@ -30,16 +25,23 @@ export default class Control extends OLControl {
    * @param {M.Map} map to add the plugin
    * @param {function} template template of this control
    * @api stable
-   * @export
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    OLControl.call(this, {
-      'element': element,
-      'target': null
-    });
     map.getMapImpl().addControl(this);
-  };
+  }
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  getElement() {
+    return this.element;
+  }
 
   /**
    * This function destroys this control, cleaning the HTML
@@ -53,17 +55,5 @@ export default class Control extends OLControl {
   destroy() {
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_ = null;
-  };
-
-  /**
-   * function remove the event 'click'
-   *
-   * @public
-   * @function
-   * @api stable
-   * @export
-   */
-  getElement() {
-    return this.element;
-  };
+  }
 }

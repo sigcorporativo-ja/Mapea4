@@ -1,9 +1,7 @@
-import OLZoom from "ol/control/Zoom";
-
 /**
  * @namespace M.impl.control
  */
-export default class Panzoom extends OLZoom {
+export default class Control extends ol.control.Control {
 
   /**
    * @classdesc
@@ -15,7 +13,11 @@ export default class Panzoom extends OLZoom {
    * @api stable
    */
   constructor() {
-    super();
+    /**
+     * @private
+     * @type {string}
+     * @expose
+     */
     this.facadeMap_ = null;
   }
 
@@ -27,22 +29,15 @@ export default class Panzoom extends OLZoom {
    * @param {M.Map} map to add the plugin
    * @param {function} template template of this control
    * @api stable
+   * @export
    */
   addTo(map, element) {
     this.facadeMap_ = map;
+    ol.control.Control.call(this, {
+      'element': element,
+      'target': null
+    });
     map.getMapImpl().addControl(this);
-  }
-
-  /**
-   * TODO
-   *
-   * @public
-   * @function
-   * @api stable
-   * @export
-   */
-  getElement() {
-    return this.element;
   }
 
   /**
@@ -57,5 +52,17 @@ export default class Panzoom extends OLZoom {
   destroy() {
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_ = null;
+  }
+
+  /**
+   * function remove the event 'click'
+   *
+   * @public
+   * @function
+   * @api stable
+   * @export
+   */
+  getElement() {
+    return this.element;
   }
 }

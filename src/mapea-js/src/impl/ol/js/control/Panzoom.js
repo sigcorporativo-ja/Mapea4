@@ -1,9 +1,8 @@
-import OLScaleLine from "ol/control/ScaleLine";
-
 /**
  * @namespace M.impl.control
  */
-export default class ScaleLine extends OLScaleLine {
+export default class Panzoom extends ol.control.Zoom {
+
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector

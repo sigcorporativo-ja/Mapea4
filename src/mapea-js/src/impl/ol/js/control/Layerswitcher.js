@@ -1,10 +1,7 @@
-import OLControl from 'ol/control/Control';
-import Utils from 'facade/js/utils/utils';
-import LayerSwitcherFacade from 'facade/js/controls/layerswitcher';
-import Layer from 'facade/js/layers/layerbase';
-
-goog.require('M.impl.Control');
-
+import Utils from 'facade/js/util/Utils';
+import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
+import Layer from 'facade/js/layer/Base';
+import Control from "./Control"
 /**
  * @namespace M.impl.control
  */
@@ -47,7 +44,7 @@ export default class LayerSwitcher extends Control {
     // change slider event
     this.panel.addEventListener("input", this.clickLayer, false);
 
-    OLControl.call(this, {
+    ol.control.Control.call(this, {
       'element': element,
       'target': null
     });
@@ -100,12 +97,10 @@ export default class LayerSwitcher extends Control {
    * @api stable
    */
   renderPanel() {
-    LayerSwitcherFacade.getTemplateVariables_(this.facadeMap_).then(templateVars =>
-      M.template.compile(LayerSwitcherFacade.TEMPLATE, {
-        'jsonp': true,
+    LayerSwitcherFacade.getTemplateVariables_(this.facadeMap_).then(templateVars => {
+      let html = Template.compile(LayerSwitcherFacade.TEMPLATE, {
         'vars': templateVars
-      })
-    ).then((html) => {
+      });
       this.registerImgErrorEvents_(html);
       let newPanel = html.querySelector('div#'.concat(LayerSwitcher.PANEL_ID));
       this.panel.innerHTML = newPanel.innerHTML;
@@ -240,20 +235,6 @@ export default class LayerSwitcher extends Control {
   setMap(map) {
     super.setMap(map);
     this.renderPanel();
-  };
-
-  /**
-   * TODO
-   */
-  static get PANEL_ID() {
-    return LayerSwitcher.PANEL_ID_;
-  }
-
-  /**
-   * TODO
-   */
-  static set PANEL_ID_(value) {
-    LayerSwitcher.PANEL_ID_ = value;
   }
 }
 
