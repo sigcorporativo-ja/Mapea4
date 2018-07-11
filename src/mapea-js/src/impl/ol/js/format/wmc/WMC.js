@@ -1,6 +1,6 @@
-import Utils from "facade/js/utils/utils";
-import XML from "../xml";
-import exception from "facade/js/exception/exception";
+import Utils from "facade/js/util/Utils";
+import XML from "../XML";
+import Exception from "facade/js/exception/exception";
 
 export default class WMC extends XML {
   /**
@@ -38,7 +38,7 @@ export default class WMC extends XML {
    */
   readFromDocument(data) {
     if (data.nodeType !== 9) {
-      exception('doc.nodeType should be DOCUMENT');
+      Exception('doc.nodeType should be DOCUMENT');
     }
 
     let root = data.documentElement;

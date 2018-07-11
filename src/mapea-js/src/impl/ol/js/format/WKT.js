@@ -1,7 +1,6 @@
-import OLWKT from "ol/format/WKT";
-import GeoJSON from "./geojsonformat";
+import GeoJSON from "./GeoJSON";
 
-export default class WKT extends OLWKT {
+export default class WKT extends ol.format.WKT {
 
   /**
    * @classdesc
@@ -15,7 +14,7 @@ export default class WKT extends OLWKT {
   constructor(options = {}) {
     super(options);
     this.gjFormat_ = new GeoJSON();
-  };
+  }
 
   /**
    * @inheritDoc
@@ -29,6 +28,5 @@ export default class WKT extends OLWKT {
     }
     wktGeom = this.writeGeometryText(olGeometry);
     return wktGeom;
-  };
-
+  }
 }

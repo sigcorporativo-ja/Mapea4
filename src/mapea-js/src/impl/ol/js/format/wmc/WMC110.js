@@ -1,9 +1,7 @@
-import WMC from "./wmc";
-import Utils from "facade/js/utils/utils";
-import WMS from "facade/js/layer/wms";
-import XML from "../xml";
-import OLProj from "ol/proj";
-import OLXML from "ol/xml";
+import WMC from "./WMC";
+import Utils from "facade/js/util/Utils";
+import WMS from "facade/js/layer/WMS";
+import XML from "../XML";
 
 export default class WMCV110 extends XML {
   /**
@@ -237,9 +235,9 @@ export default class WMCV110 extends XML {
     let projDst = this.options.projection;
     let projSrc = obj.projection;
     if (!Utils.isNullOrEmpty(projDst) && !Utils.isNullOrEmpty(projSrc) && (projDst !== projSrc)) {
-      projSrc = OLProj.get(projSrc);
-      projDst = OLProj.get(projDst);
-      extent = OLProj.transformExtent(extent, projSrc, projDst);
+      projSrc = ol.proj.get(projSrc);
+      projDst = ol.proj.get(projDst);
+      extent = ol.proj.transformExtent(extent, projSrc, projDst);
     }
     obj[maxExtent] = extent;
   }
@@ -361,7 +359,7 @@ export default class WMCV110 extends XML {
    */
   read_sld_StyledLayerDescriptor(sld, node) {
     let body = 'body';
-    sld[body] = OLXML.getAllTextContent(node);
+    sld[body] = ol.xml.getAllTextContent(node);
   }
 
   /**
@@ -474,7 +472,7 @@ export default class WMCV110 extends XML {
    */
   read_sld_FeatureTypeStyle(sld, node) {
     let body = 'body';
-    sld[body] = OLXML.getAllTextContent(node);
+    sld[body] = ol.xml.getAllTextContent(node);
   }
 
   /**

@@ -1,9 +1,6 @@
-import OLWMSCapabilities from "ol/format/WMSCapabilities";
-import OLXSD from "ol/xsd";
-import OLXML from "ol/xml";
-import Utils from "facade/js/utils/utils";
+import Utils from "facade/js/util/Utils";
 
-export default class WMSCapabilities extends OLWMSCapabilities {
+export default class WMSCapabilities extends ol.format.WMSCapabilities {
 
   /**
    * @classdesc
@@ -26,7 +23,6 @@ export default class WMSCapabilities extends OLWMSCapabilities {
      * @type {Number}
      */
     this.minScale_ = Number.POSITIVE_INFINITY;
-
   }
 
   /**
@@ -36,8 +32,8 @@ export default class WMSCapabilities extends OLWMSCapabilities {
    * @return {Object|undefined} Layer object.
    */
   static readScaleHint_(node, objectStack) {
-    let minScale = OLXSD.readDecimalString(node.getAttribute('min'));
-    let maxScale = OLXSD.readDecimalString(node.getAttribute('max'));
+    let minScale = ol.xsd.readDecimalString(node.getAttribute('min'));
+    let maxScale = ol.xsd.readDecimalString(node.getAttribute('max'));
 
     return {
       'minScale': minScale,
@@ -54,7 +50,7 @@ export default class WMSCapabilities extends OLWMSCapabilities {
   static readLayer_(node, objectStack) {
     let parentLayerObject = objectStack[objectStack.length - 1];
 
-    let layerObject = OLXML.pushParseAndPop({}, OLWMSCapabilities.LAYER_PARSERS_, node, objectStack);
+    let layerObject = ol.xml.pushParseAndPop({}, ol.format.WMSCapabilities.LAYER_PARSERS_, node, objectStack);
 
     if (!layerObject) {
       return undefined;
@@ -66,38 +62,38 @@ export default class WMSCapabilities extends OLWMSCapabilities {
     let fixedWidthProp = 'fixedWidth';
     let fixedHeightProp = 'fixedHeight';
 
-    let queryable = OLXSD.readBooleanString(node.getAttribute('queryable'));
+    let queryable = ol.xsd.readBooleanString(node.getAttribute('queryable'));
     if (queryable === undefined) {
       queryable = parentLayerObject[queryableProp];
     }
     layerObject[queryableProp] = queryable !== undefined ? queryable : false;
 
-    let cascaded = OLXSD.readNonNegativeIntegerString(
+    let cascaded = ol.xsd.readNonNegativeIntegerString(
       node.getAttribute('cascaded'));
     if (cascaded === undefined) {
       cascaded = parentLayerObject[cascadedProp];
     }
     layerObject[cascadedProp] = cascaded;
 
-    let opaque = OLXSD.readBooleanString(node.getAttribute('opaque'));
+    let opaque = ol.xsd.readBooleanString(node.getAttribute('opaque'));
     if (opaque === undefined) {
       opaque = parentLayerObject[opaqueProp];
     }
     layerObject[opaqueProp] = opaque !== undefined ? opaque : false;
 
-    let noSubsets = OLXSD.readBooleanString(node.getAttribute('noSubsets'));
+    let noSubsets = ol.xsd.readBooleanString(node.getAttribute('noSubsets'));
     if (noSubsets === undefined) {
       noSubsets = parentLayerObject[noSubsetsProp];
     }
     layerObject[noSubsetsProp] = noSubsets !== undefined ? noSubsets : false;
 
-    let fixedWidth = OLXSD.readDecimalString(node.getAttribute('fixedWidth'));
+    let fixedWidth = ol.xsd.readDecimalString(node.getAttribute('fixedWidth'));
     if (!fixedWidth) {
       fixedWidth = parentLayerObject[fixedWidthProp];
     }
     layerObject[fixedWidthProp] = fixedWidth;
 
-    let fixedHeight = OLXSD.readDecimalString(node.getAttribute('fixedHeight'));
+    let fixedHeight = ol.xsd.readDecimalString(node.getAttribute('fixedHeight'));
     if (!fixedHeight) {
       fixedHeight = parentLayerObject[fixedHeightProp];
     }
@@ -152,10 +148,10 @@ export default class WMSCapabilities extends OLWMSCapabilities {
    */
   static readBoundingBox_(node, objectStack) {
     let extent = [
-        OLXSD.readDecimalString(node.getAttribute('minx')),
-        OLXSD.readDecimalString(node.getAttribute('miny')),
-        OLXSD.readDecimalString(node.getAttribute('maxx')),
-        OLXSD.readDecimalString(node.getAttribute('maxy'))
+        ol.xsd.readDecimalString(node.getAttribute('minx')),
+        ol.xsd.readDecimalString(node.getAttribute('miny')),
+        ol.xsd.readDecimalString(node.getAttribute('maxx')),
+        ol.xsd.readDecimalString(node.getAttribute('maxy'))
       ];
 
     // CRS
@@ -166,8 +162,8 @@ export default class WMSCapabilities extends OLWMSCapabilities {
 
     // resolutions
     let resolutions = [
-        OLXSD.readDecimalString(node.getAttribute('resx')),
-        OLXSD.readDecimalString(node.getAttribute('resy'))
+        ol.xsd.readDecimalString(node.getAttribute('resx')),
+        ol.xsd.readDecimalString(node.getAttribute('resy'))
       ];
 
     return {
@@ -186,10 +182,10 @@ export default class WMSCapabilities extends OLWMSCapabilities {
   static readLatLonBoundingBox_(node, objectStack) {
     // extent
     let extent = [
-        OLXSD.readDecimalString(node.getAttribute('minx')),
-        OLXSD.readDecimalString(node.getAttribute('miny')),
-        OLXSD.readDecimalString(node.getAttribute('maxx')),
-        OLXSD.readDecimalString(node.getAttribute('maxy'))
+        ol.xsd.readDecimalString(node.getAttribute('minx')),
+        ol.xsd.readDecimalString(node.getAttribute('miny')),
+        ol.xsd.readDecimalString(node.getAttribute('maxx')),
+        ol.xsd.readDecimalString(node.getAttribute('maxy'))
       ];
 
     return {
@@ -198,27 +194,27 @@ export default class WMSCapabilities extends OLWMSCapabilities {
     };
   }
 
-  OLWMSCapabilities.LAYER_PARSERS_ = OLXML.makeStructureNS(OLWMSCapabilities.NAMESPACE_URIS_, {
-    'Name': OLXML.makeObjectPropertySetter(OLXSD.readString),
-    'Title': OLXML.makeObjectPropertySetter(OLXSD.readString),
-    'Abstract': OLXML.makeObjectPropertySetter(OLXSD.readString),
-    'KeywordList': OLXML.makeObjectPropertySetter(OLWMSCapabilities.readKeywordList_),
-    'CRS': OLXML.makeObjectPropertyPusher(OLXSD.readString),
-    'SRS': OLXML.makeObjectPropertyPusher(OLXSD.readString),
-    'EX_GeographicBoundingBox': OLXML.makeObjectPropertySetter(OLWMSCapabilities.readEXGeographicBoundingBox_),
-    'BoundingBox': OLXML.makeObjectPropertyPusher(WMSCapabilities.readBoundingBox_),
-    'LatLonBoundingBox': OLXML.makeObjectPropertyPusher(WMSCapabilities.readLatLonBoundingBox_),
-    'Dimension': OLXML.makeObjectPropertyPusher(OLWMSCapabilities.readDimension_),
-    'Attribution': OLXML.makeObjectPropertySetter(OLWMSCapabilities.readAttribution_),
-    'AuthorityURL': OLXML.makeObjectPropertyPusher(OLWMSCapabilities.readAuthorityURL_),
-    'Identifier': OLXML.makeObjectPropertyPusher(OLXSD.readString),
-    'MetadataURL': OLXML.makeObjectPropertyPusher(OLWMSCapabilities.readMetadataURL_),
-    'DataURL': OLXML.makeObjectPropertyPusher(OLWMSCapabilities.readFormatOnlineresource_),
-    'FeatureListURL': OLXML.makeObjectPropertyPusher(OLWMSCapabilities.readFormatOnlineresource_),
-    'Style': OLXML.makeObjectPropertyPusher(OLWMSCapabilities.readStyle_),
-    'MinScaleDenominator': OLXML.makeObjectPropertySetter(OLXSD.readDecimal),
-    'MaxScaleDenominator': OLXML.makeObjectPropertySetter(OLXSD.readDecimal),
-    'Layer': OLXML.makeObjectPropertyPusher(WMSCapabilities.readLayer_),
-    'ScaleHint': OLXML.makeObjectPropertyPusher(WMSCapabilities.readScaleHint_)
+  ol.format.WMSCapabilities.LAYER_PARSERS_ = ol.xml.makeStructureNS(ol.format.WMSCapabilities.NAMESPACE_URIS_, {
+    'Name': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+    'Title': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+    'Abstract': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+    'KeywordList': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readKeywordList_),
+    'CRS': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
+    'SRS': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
+    'EX_GeographicBoundingBox': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readEXGeographicBoundingBox_),
+    'BoundingBox': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readBoundingBox_),
+    'LatLonBoundingBox': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLatLonBoundingBox_),
+    'Dimension': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readDimension_),
+    'Attribution': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readAttribution_),
+    'AuthorityURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readAuthorityURL_),
+    'Identifier': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
+    'MetadataURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readMetadataURL_),
+    'DataURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
+    'FeatureListURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
+    'Style': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readStyle_),
+    'MinScaleDenominator': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
+    'MaxScaleDenominator': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
+    'Layer': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLayer_),
+    'ScaleHint': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readScaleHint_)
   });
 }

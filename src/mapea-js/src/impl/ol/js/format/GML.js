@@ -1,6 +1,4 @@
-import OLGML from "ol/format/GML";
-
-export default class GML extends OLGML {
+export default class GML extends ol.format.GML {
   /**
    * @classdesc
    * Feature format for reading and writing data in the GeoJSON format.

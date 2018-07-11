@@ -1,9 +1,7 @@
-import OLXML from "ol/format/XML";
-import olxml from "ol/xml";
-import Utils from "facade/js/utils/utils";
-import exception from "facade/js/exception/exception";
+import Utils from "facade/js/util/Utils";
+import Exception from "facade/js/exception/exception";
 
-export default class XML extends OLXML {
+export default class XML extends ol.format.XML {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC formater
@@ -44,7 +42,6 @@ export default class XML extends OLXML {
      * @type {Mx.parameters.LayerOptions}
      */
     this.options = options;
-
   }
 
 
@@ -57,11 +54,11 @@ export default class XML extends OLXML {
    */
   read(data) {
     if (Utils.isString(data)) {
-      data = olxml.parse(data);
+      data = ol.xml.parse(data);
     }
 
     if (data.nodeType !== 9) {
-      exception('doc.nodeType should be DOCUMENT');
+      Exception('doc.nodeType should be DOCUMENT');
     }
 
     let context = {};

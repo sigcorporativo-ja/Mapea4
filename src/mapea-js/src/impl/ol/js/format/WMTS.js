@@ -1,6 +1,4 @@
-import OLWMTSCapabilities from "ol/format/WMTSCapabilities";
-import OLWMTS from "ol/source/WMTS";
-import Utils from "facade/js/utils/utils";
+import Utils from "facade/js/util/Utils";
 
 export default class WMTSCapabilities {
 
@@ -13,13 +11,13 @@ export default class WMTSCapabilities {
    * @extends {ol.format.XML}
    * @api stable
    */
-  constructor(options) {
+  constructor(options = {}) {
     /**
      * Parser of an specified WMC version
      * @private
      * @type {ol.format.XML}
      */
-    this.parser = new OLWMTSCapabilities();
+    this.parser = new ol.format.WMTSCapabilities();
 
     /**
      * Parsed capabilities
@@ -33,7 +31,6 @@ export default class WMTSCapabilities {
      * @private
      * @type {Mx.parameters.LayerOptions}
      */
-    this.options = (options || {});
   }
 
   /**
@@ -114,7 +111,7 @@ export default class WMTSCapabilities {
    * @api stable
    */
   getOptionsFromCapabilities(layerName, matrixSet) {
-    let options = OLWMTS.optionsFromCapabilities(this.capabilities, {
+    let options = ol.source.WMTS.optionsFromCapabilities(this.capabilities, {
       'layer': layerName,
       'matrixSet': matrixSet
     });

@@ -1,5 +1,5 @@
-import XML from "../xml";
-import Utils from "facade/js/utils/utils";
+import XML from "../XML";
+import Utils from "facade/js/util/Utils";
 import Dialog from "facade/js/dialog";
 
 export default class DescribeFeatureTypeXML extends XML {
@@ -36,7 +36,6 @@ export default class DescribeFeatureTypeXML extends XML {
      * @type {boolean}
      */
     this.serviceException_ = false;
-
   }
 
   /**
