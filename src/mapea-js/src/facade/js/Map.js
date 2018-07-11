@@ -1,40 +1,35 @@
-import Base from "../facade";
-import Utils from "../utils/utils";
-import MapImpl from "../../impl/ol/js/map/map";
+import Base from "../Base";
+import Utils from "../util/Utils";
+import MapImpl from "../../impl/ol/js/Map";
 import Exception from "../exception/exception";
-import Parameters from "../parameters/parameters";
-import LayerParameter from "../parameters/layers";
-import MaxExtentParameter from "../parameters/maxExtent";
-import ZoomParameter from "../parameters/zoom";
-import ResolutionsParameter from "../parameters/resolutions";
-import ProjectionParameter from "../parameters/projection";
-import EventsManager from "../events/eventsmanager";
-import FeaturesHandler from "../handlers/featureshandler";
-import Vector from "../layers/vector";
-import Point from "..styles/point";
+import Parameters from "../parameter/Parameters";
+import * as parameter from "../parameter/parameter";
+import EventsManager from "../event/Manager";
+import FeaturesHandler from "../handler/Feature";
+import Point from "..style/Point";
 import Config from "configuration";
 import Dialog from "../dialog";
-import GetFeatureInfo from "../controls/getfeatureinfo";
-import WMCSelector from "../controls/wmcselector";
-import LayerSwitcher from "../controls/layerswitcher";
-import Location from "../controls/location";
-import Navtoolbar from "../controls/navtoolbar";
-import Scale from "../controls/scale";
-import ScaleLine from "../controls/scaleline";
-import Mouse from "../controls/mouse";
-import OverviewMap from "../controls/overviewmap";
-import Panzoom from "../controls/panzoom";
-import Panzoombar from "../controls/panzoombar";
-import Layer from "../layers/layerbase";
-import LayerType from "../layers/layertype";
-import KML from "../layers/kml";
-import WFS from "../layers/wfs";
-import WMC from "../layers/wmc";
-import WMS from "../layers/wms";
-import WMTS from "../layers/wmts";
+import GetFeatureInfo from "../control/GetFeatureInfo";
+import WMCSelector from "../control/WMCSelector";
+import LayerSwitcher from "../control/Layerswitcher";
+import Location from "../control/Location";
+import Navtoolbar from "../control/Navtoolbar";
+import Scale from "../control/Scale";
+import ScaleLine from "../control/ScaleLine";
+import Mouse from "../control/Mouse";
+import OverviewMap from "../control/OverviewMap";
+import Panzoom from "../control/Panzoom";
+import Panzoombar from "../control/Panzoombar";
+import Layer from "../layer/Base";
+import LayerType from "../layer/Type";
+import Vector from "../layer/Vector";
+import KML from "../layer/KML";
+import WFS from "../layer/WFS";
+import WMC from "../layer/WMC";
+import WMS from "../layer/WMS";
+import WMTS from "../layer/WMTS";
 
 export default class Map extends Base {
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a Map
@@ -337,7 +332,7 @@ export default class Map extends Base {
     // gets the parameters as Layer objects to filter
     let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(LayerParameter);
+      filters = layersParam.map(parameter.layer);
     }
 
     // gets the layers
@@ -403,7 +398,7 @@ export default class Map extends Base {
         }
         else {
           try {
-            let parameter = LayerParameter(layerParam);
+            let parameter = parameter.layer(layerParam);
             if (!Utils.isNullOrEmpty(parameter.type)) {
               switch (parameter.type) {
                 case "WFS":
@@ -522,7 +517,7 @@ export default class Map extends Base {
     let filters = [];
     if (layersParam.length > 0) {
       filters = layersParam.map((layerParam) => {
-        return LayerParameter(layerParam, LayerType.WMC);
+        return parameter.layer(layerParam, LayerType.WMC);
       });
     }
 
@@ -660,7 +655,7 @@ export default class Map extends Base {
     let filters = [];
     if (layersParam.length > 0) {
       filters = layersParam.map(layerParam => {
-        return LayerParameter(layerParam, LayerType.KML);
+        return parameter.layer(layerParam, LayerType.KML);
       });
     }
 
@@ -770,7 +765,7 @@ export default class Map extends Base {
     let filters = [];
     if (layersParam.length > 0) {
       filters = layersParam.map(layerParam => {
-        return LayerParameter(layerParam, LayerType.WMS);
+        return parameter.layer(layerParam, LayerType.WMS);
       });
     }
 
@@ -872,7 +867,7 @@ export default class Map extends Base {
     let filters = [];
     if (layersParam.length > 0) {
       filters = layersParam.map(layerParam => {
-        return LayerParameter(layerParam, LayerType.WFS);
+        return parameter.layer(layerParam, LayerType.WFS);
       });
     }
 
@@ -985,7 +980,7 @@ export default class Map extends Base {
     let filters = [];
     if (layersParam.length > 0) {
       filters = layersParam.map(layerParam => {
-        return LayerParameter(layerParam, LayerType.WMTS);
+        return parameter.layer(layerParam, LayerType.WMTS);
       });
     }
 
@@ -1086,7 +1081,7 @@ export default class Map extends Base {
     // gets the parameters as Layer objects to filter
     let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(LayerParameter);
+      filters = layersParam.map(parameter.layer);
     }
 
     // gets the layers
@@ -1454,7 +1449,7 @@ export default class Map extends Base {
 
     // parses the parameter
     try {
-      let maxExtent = MaxExtentParameter(maxExtentParam);
+      let maxExtent = parameter.maxExtent(maxExtentParam);
       this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
     }
     catch (err) {
@@ -1507,7 +1502,7 @@ export default class Map extends Base {
 
     try {
       // parses the parameter
-      let bbox = MaxExtentParameter(bboxParam);
+      let bbox = parameter.maxExtent(bboxParam);
       this.getImpl().setBbox(bbox, vendorOpts);
     }
     catch (err) {
@@ -1559,7 +1554,7 @@ export default class Map extends Base {
 
     try {
       // parses the parameter
-      let zoom = ZoomParameter(zoomParam);
+      let zoom = parameter.zoom(zoomParam);
       this.userZoom_ = zoom;
       this.getImpl().setZoom(zoom);
     }
@@ -1715,7 +1710,7 @@ export default class Map extends Base {
     }
 
     // parses the parameter
-    let resolutions = ResolutionsParameter(resolutionsParam);
+    let resolutions = parameter.resolutions(resolutionsParam);
 
     this.getImpl().setResolutions(resolutions);
 
@@ -1786,7 +1781,7 @@ export default class Map extends Base {
     // parses the parameter
     try {
       let oldProj = this.getProjection();
-      projection = ProjectionParameter(projection);
+      projection = parameter.projection(projection);
       this.getImpl().setProjection(projection);
       this.defaultProj_ = (this.defaultProj_ && (asDefault === true));
       this.fire(EventsManager.CHANGE_PROJ, [oldProj, projection]);
