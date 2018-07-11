@@ -1,16 +1,7 @@
-import FormatGeoJSON from "../format/geojson";
-import Utils from "facade/js/utils/utils";
-import OLPoint from "ol/geom/Point";
-import OLCircle from "ol/geom/Circle";
-import OLFeature from "ol/geom/Feature";
-import OLPolygon from "ol/geom/Polygon";
-import OLGeometry from "ol/geom/Geometry";
-import OLLineString from "ol/geom/LineString";
-import OLMultiPoint from "ol/geom/MultiPoint";
-import OLMultiPolygon from "ol/geom/MultiPolygon";
-import OLMultiLineString from "ol/geom/MultiLineString";
-import FacadeFeature from "facade/js/feature/feature";
-import ImplUtils from "../utils/utils";
+import FormatGeoJSON from "../format/GeoJSON";
+import Utils from "facade/js/util/Utils";
+import FacadeFeature from "facade/js/feature/Feature";
+import ImplUtils from "../util/Utils";
 
 export default class Feature {
   /**
@@ -33,7 +24,7 @@ export default class Feature {
       this.olFeature_ = this.formatter_.readFeature(geojson);
     }
     else {
-      this.olFeature_ = new OLFeature();
+      this.olFeature_ = new ol.Feature();
     }
     if (!Utils.isNullOrEmpty(id)) {
       this.olFeature_.setId(id);
@@ -80,7 +71,7 @@ export default class Feature {
   getAttributes() {
     let properties = this.olFeature_.getProperties();
     let geometry = properties.geometry;
-    if (!Utils.isNullOrEmpty(geometry) && geometry instanceof OLGeometry) {
+    if (!Utils.isNullOrEmpty(geometry) && geometry instanceof ol.geom.Geometry) {
       delete properties.geometry;
     }
     return properties;
@@ -192,28 +183,28 @@ export default class Feature {
     let geometry;
     let type = geojson.geometry.type;
     if (type === "circle") {
-      geometry = new OLCircle(geojson.geometry.coordinates);
+      geometry = new ol.geom.Circle(geojson.geometry.coordinates);
     }
     else if (type === "geometry") {
-      geometry = new OLGeometry(geojson.geometry.coordinates);
+      geometry = new ol.geom.Geometry(geojson.geometry.coordinates);
     }
     else if (type === "linestring") {
-      geometry = new OLLineString(geojson.geometry.coordinates);
+      geometry = new ol.geom.LineString(geojson.geometry.coordinates);
     }
     else if (type === "multilinestring") {
-      geometry = new OLMultiLineString(geojson.geometry.coordinates);
+      geometry = new ol.geom.MultiLineString(geojson.geometry.coordinates);
     }
     else if (type === "multipoint") {
-      geometry = new OLMultiPoint(geojson.geometry.coordinates);
+      geometry = new ol.geom.MultiPoint(geojson.geometry.coordinates);
     }
     else if (type === "multipolygon") {
-      geometry = new OLMultiPolygon(geojson.geometry.coordinates);
+      geometry = new ol.geom.MultiPolygon(geojson.geometry.coordinates);
     }
     else if (type === "point") {
-      geometry = new OLPoint(geojson.geometry.coordinates);
+      geometry = new ol.geom.Point(geojson.geometry.coordinates);
     }
     else if (type === "polygon") {
-      geometry = new OLPolygon(geojson.geometry.coordinates);
+      geometry = new ol.geom.Polygon(geojson.geometry.coordinates);
     }
     return geometry;
   }
@@ -229,28 +220,28 @@ export default class Feature {
   setGeometry(geometry) {
     let type = geometry.type.toLowerCase();
     if (type === "circle") {
-      this.olFeature_.setGeometry(new OLCircle(geometry.coordinates));
+      this.olFeature_.setGeometry(new ol.geom.Circle(geometry.coordinates));
     }
     else if (type === "geometry") {
-      this.olFeature_.setGeometry(new OLGeometry(geometry.coordinates));
+      this.olFeature_.setGeometry(new ol.geom.Geometry(geometry.coordinates));
     }
     else if (type === "linestring") {
-      this.olFeature_.setGeometry(new OLLineString(geometry.coordinates));
+      this.olFeature_.setGeometry(new ol.geom.LineString(geometry.coordinates));
     }
     else if (type === "multilinestring") {
-      this.olFeature_.setGeometry(new OLMultiLineString(geometry.coordinates));
+      this.olFeature_.setGeometry(new ol.geom.MultiLineString(geometry.coordinates));
     }
     else if (type === "multipoint") {
-      this.olFeature_.setGeometry(new OLMultiPoint(geometry.coordinates));
+      this.olFeature_.setGeometry(new ol.geom.MultiPoint(geometry.coordinates));
     }
     else if (type === "multipolygon") {
-      this.olFeature_.setGeometry(new OLMultiPolygon(geometry.coordinates));
+      this.olFeature_.setGeometry(new ol.geom.MultiPolygon(geometry.coordinates));
     }
     else if (type === "point") {
-      this.olFeature_.setGeometry(new OLPoint(geometry.coordinates));
+      this.olFeature_.setGeometry(new ol.geom.Point(geometry.coordinates));
     }
     else if (type === "polygon") {
-      this.olFeature_.setGeometry(new OLPolygon(geometry.coordinates));
+      this.olFeature_.setGeometry(new ol.geom.Polygon(geometry.coordinates));
     }
   }
 
@@ -278,9 +269,9 @@ export default class Feature {
     let geometry = olFeature.getGeometry();
     let center = ImplUtils.getCentroid(geometry);
     if (!Utils.isNullOrEmpty(center)) {
-      let geom = new OLPoint();
+      let geom = new ol.geom.Point();
       geom.setCoordinates(center);
-      let olCentroid = new OLFeature({
+      let olCentroid = new ol.Feature({
         'geometry': geom,
         name: 'centroid'
       });
