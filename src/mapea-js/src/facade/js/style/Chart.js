@@ -1,15 +1,13 @@
-import Feature from './stylefeature';
-import SChartVar from '../chart/variable';
-import SChartSTypes from '../chart/types';
-import Utils from '../utils/utils';
+import StyleFeature from './Feature';
+import ChartVariable from '../chart/Variable';
+import * as ChartTypes from '../chart/types';
+import Utils from '../util/Utils';
 import ChartImpl from '../../../impl/js/style/stylechart';
-
 
 /**
  * @namespace Chart
  */
-export default class Chart extends Feature {
-
+export default class Chart extends StyleFeature {
   /**
    * @classdesc
    * Main constructor of the class. Creates a chart style
@@ -39,21 +37,21 @@ export default class Chart extends Feature {
    * @api stable
    */
   constructor(options = {}) {
-    // calls the super constructor
-    super(options, impl);
 
     let variables = options.variables || null;
 
     // vars parsing
-    if (!Object.values(SChartSTypes).includes(options.type)) {
+    if (!Object.values(ChartTypes.types).includes(options.type)) {
       options.type = Chart.DEFAULT.type;
     }
     if (!Utils.isNullOrEmpty(variables)) {
       if (variables instanceof Array) {
         options.variables = variables.filter(variable => variable != null).map(variable => this.formatVariable_(variable));
-      } else if (typeof variables === 'string' || typeof variables === 'object') {
-        options.variables = [this.formatVariable_(variables)];
-      } else {
+      }
+      else if (typeof variables === 'string' || typeof variables === 'object') {
+        options.variables = [Chart.formatVariable_(variables)];
+      }
+      else {
         options.variables = [];
       }
     }
@@ -63,19 +61,24 @@ export default class Chart extends Feature {
     if (Utils.isNullOrEmpty(options.scheme)) {
       options.scheme = Chart.DEFAULT.scheme;
       // if is a string we will check if its custom (take values from variables) or a existing theme
-    } else if (typeof options.scheme === 'string') {
+    }
+    else if (typeof options.scheme === 'string') {
       // NOTICE THAT } else if (options.scheme instanceof String) { WONT BE TRUE
-      if (options.scheme === Chart.schemes.Custom && options.variables.some(variable => variable.fillColor != null)) {
+      if (options.scheme === ChartTypes.schemes.Custom && options.variables.some(variable => variable.fillColor != null)) {
         options.scheme = options.variables.map((variable) => variable.fillColor ? variable.fillColor : '');
-      } else {
-        options.scheme = Chart.schemes[options.scheme] || Chart.DEFAULT.scheme;
+      }
+      else {
+        options.scheme = ChartTypes.schemes[options.scheme] || Chart.DEFAULT.scheme;
       }
       // if is an array of string we will set it directly
-    } else if (!(options.scheme instanceof Array && options.scheme.every(el => typeof el === 'string'))) {
+    }
+    else if (!(options.scheme instanceof Array && options.scheme.every(el => typeof el === 'string'))) {
       options.scheme = Chart.DEFAULT.scheme;
     }
 
     let impl = new ChartImpl(options);
+    // calls the super constructor
+    super(options, impl);
   }
 
   /**
@@ -86,21 +89,23 @@ export default class Chart extends Feature {
    * @function
    * @api stable
    */
-  formatVariable_(variableOb) {
+  static formatVariable_(variableOb) {
     if (variableOb == null) {
       return null;
     }
     let constructorOptions = {};
-    if (variableOb instanceof SChartVar) {
+    if (variableOb instanceof ChartVariable) {
       return variableOb;
-    } else if (typeof variableOb === 'string') {
+    }
+    else if (typeof variableOb === 'string') {
       constructorOptions = {
         attribute: variableOb
       };
-    } else {
+    }
+    else {
       constructorOptions = variableOb;
     }
-    return new SChartVar(constructorOptions);
+    return new ChartVariable(constructorOptions);
   }
 
   /**
@@ -111,10 +116,9 @@ export default class Chart extends Feature {
    * @api stable
    */
   updateCanvas() {
-    if (Utils.isNullOrEmpty(this.getImpl()) || Utils.isNullOrEmpty(this.canvas_)) {
-      return false;
+    if (!(Utils.isNullOrEmpty(this.getImpl()) && Utils.isNullOrEmpty(this.canvas_))) {
+      this.getImpl().updateCanvas(this.canvas_);
     }
-    this.getImpl().updateCanvas(this.canvas_);
   }
 
   /**
@@ -127,29 +131,31 @@ export default class Chart extends Feature {
   }
 
   /**
-   * Default options for this style
-   *
-   * @const
-   * @type {object}
+   * This constant defines the order of style.
+   * @constant
    * @public
    * @api stable
    */
-  Chart.DEFAULT = {
-    shadow3dColor: '#369',
-    type: Chart.types.PIE,
-    scheme: Chart.schemes.Classic,
-    radius: 20,
-    donutRatio: 0.5,
-    offsetX: 0,
-    offsetY: 0,
-    animationStep: 1
-  };
-  /**
-   * TODO
-   */
-
-
-  Object.defineProperty(Chart.prototype, "ORDER", {
-    value: 1
-  });
+  get ORDER() {
+    return 1;
+  }
 }
+
+/**
+ * Default options for this style
+ *
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+Chart.DEFAULT = {
+  shadow3dColor: '#369',
+  type: Chart.types.PIE,
+  scheme: Chart.schemes.Classic,
+  radius: 20,
+  donutRatio: 0.5,
+  offsetX: 0,
+  offsetY: 0,
+  animationStep: 1
+};

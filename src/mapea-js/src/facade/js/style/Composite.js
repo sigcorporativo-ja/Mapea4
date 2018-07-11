@@ -1,9 +1,9 @@
-import Style from './style';
-import Utils from '../utils/utils';
-import Cluster from './stylecluster';
-import Proportional from './styleproportional';
+import StyleBase from './Base';
+import Utils from '../util/Utils';
+import StyleCluster from './Cluster';
+import StyleProportional from './Proportional';
 
-export default class Composite extends Style {
+export default class Composite extends StyleBase {
 
   /**
    * Abstract class
@@ -19,7 +19,6 @@ export default class Composite extends Style {
      * @type {Array<M.Style>}
      */
     this.styles_ = [];
-
   }
 
   /**
@@ -34,7 +33,7 @@ export default class Composite extends Style {
     this.layer_ = layer;
     if (!Utils.isNullOrEmpty(layer)) {
       let style = layer.style();
-      this.oldStyle_ = style instanceof Cluster ? style.oldStyle() : style;
+      this.oldStyle_ = style instanceof StyleCluster ? style.oldStyle() : style;
       this.updateInternal_(layer);
     }
   }
@@ -55,8 +54,8 @@ export default class Composite extends Style {
       styles = [styles];
     }
     styles = styles.filter(style => style.constructor !== this.constructor);
-    if (!Utils.isNullOrEmpty(styles.find(style => !(style instanceof Cluster || style instanceof Proportional)))) {
-      this.styles_ = this.styles_.filter(style => style instanceof Cluster || style instanceof Proportional);
+    if (!Utils.isNullOrEmpty(styles.find(style => !(style instanceof StyleCluster || style instanceof StyleProportional)))) {
+      this.styles_ = this.styles_.filter(style => style instanceof StyleCluster || style instanceof StyleProportional);
     }
     styles.forEach(style => {
       this.styles_ = this.styles_.filter(s => s.constructor !== style.constructor);
@@ -173,7 +172,8 @@ export default class Composite extends Style {
     styles.forEach(style => {
       if (style instanceof Composite) {
         style.applyInternal_(layer);
-      } else if (style instanceof Style) {
+      }
+      else if (style instanceof StyleBase) {
         style.apply(layer, true);
       }
     });

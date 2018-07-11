@@ -1,11 +1,9 @@
-import Style from './style';
-import Utils from '../utils/utils';
+import StyleBase from './Base';
+import Util from '../util/Utils';
 import Exception from '../exception/exception';
-import HeatmapImpl from '../../../impl/js/style/styleheatmap';
+import HeatmapImpl from '../../../impl/ol/js/style/Heatmap';
 
-
-
-export default class Heatmap extends Style {
+export default class Heatmap extends StyleBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a style heatmap
@@ -22,23 +20,40 @@ export default class Heatmap extends Style {
    */
   constructor(attribute, options = {}, vendorOptions = {}) {
 
-    let impl = new HeatmapImpl(attribute, this.options_, this.vendorOptions_);
-
-    // calls the super constructor
-    super(options, impl);
-
     if (!(Utils.isString(attribute) || Utils.isFunction(attribute))) {
       Exception('Attribute parameter can not be empty (string or function)');
     }
 
-    Utils.extends(options, Style.DEFAULT_OPTIONS);
+    Utils.extends(options, Heatmap.DEFAULT_OPTIONS);
+
+    if (!Utils.isNullOrEmpty(options.gradient) && !Utils.isArray(options.gradient)) {
+      options.gradient = [options.gradient];
+    }
+
+    options.gradient = options.gradient || Heatmap.DEFAULT_OPTIONS.gradient;
+
+    if (options.gradient.length < 2) {
+      let inverseColor = Utils.inverseColor(options.gradient[0]);
+      options.gradient.push(inverseColor);
+    }
+
+    options.blur = Utils.isNullOrEmpty(options.blur) ? Heatmap.DEFAULT_OPTIONS.blur : parseFloat(options.blur);
+    options.radius = Utils.isNullOrEmpty(options.radius) ? Heatmap.DEFAULT_OPTIONS.radius : parseFloat(options.radius);
+    options.weight = attribute;
+    vendorOptions.opacity = isNaN(vendorOptions.opacity) ? 1 : parseFloat(vendorOptions.opacity);
+
+
+    let impl = new HeatmapImpl(attribute, options, vendorOptions);
+
+    // calls the super constructor
+    super(options, impl);
 
     /**
      * @public
      * @type {string|function}
      * @api stable
      */
-    this.attribute = attribute;
+    this.attribute_ = attribute;
 
     /**
      * @private
@@ -46,27 +61,11 @@ export default class Heatmap extends Style {
      */
     this.options_ = options;
 
-    if (!Utils.isNullOrEmpty(options.gradient) && !Utils.isArray(options.gradient)) {
-      options.gradient = [options.gradient];
-    }
-    this.options_.gradient = options.gradient || Heatmap.DEFAULT_OPTIONS.gradient;
-
-    if (this.options_.gradient.length < 2) {
-      let inverseColor = Utils.inverseColor(options.gradient[0]);
-      this.options_.gradient.push(inverseColor);
-    }
-
-    this.options_.blur = parseFloat(options.blur) || Heatmap.DEFAULT_OPTIONS.blur;
-    this.options_.radius = parseFloat(options.radius) || Heatmap.DEFAULT_OPTIONS.radius;
-    this.options_.weight = this.attribute;
-
-    vendorOptions.opacity = isNaN(vendorOptions.opacity) ? 1 : parseFloat(vendorOptions.opacity);
     /**
      * @private
      * @type {object}
      */
     this.vendorOptions_ = vendorOptions;
-
   }
 
   /**
@@ -89,7 +88,7 @@ export default class Heatmap extends Style {
    * @api stable
    */
   getAttributeName() {
-    return this.attribute;
+    return this.attribute_;
   }
 
   /**
@@ -100,8 +99,8 @@ export default class Heatmap extends Style {
    * @api stable
    */
   setAttributeName(attribute) {
-    this.attribute = attribute;
-    this.options_.weight = this.attribute;
+    this.attribute_ = attribute;
+    this.options_.weight = this.attribute_;
     this.update_();
   }
 
@@ -225,17 +224,17 @@ export default class Heatmap extends Style {
   updateCanvas() {
     this.drawGeometryToCanvas();
   }
+}
 
-  /**
-   * Default options of style heatmap
-   * @constant
-   * @public
-   * @param {object}
-   * @api stable
-   */
-  Heatmap.DEFAULT_OPTIONS = {
-    gradient: ['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
-    blur: 15,
-    radius: 10,
-  }
+/**
+ * Default options of style heatmap
+ * @constant
+ * @public
+ * @param {object}
+ * @api stable
+ */
+Heatmap.DEFAULT_OPTIONS = {
+  gradient: ['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
+  blur: 15,
+  radius: 10,
 }

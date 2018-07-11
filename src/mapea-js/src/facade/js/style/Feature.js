@@ -1,10 +1,10 @@
-import Style from('./style.js');
+import StyleBase from './Base';
 
 /**
  * @namespace M.style.Feature
  */
 
-export default class Feature extends Style() {
+export default class Feature extends StyleBase {
 
   /**
    * Abstract class
@@ -20,7 +20,6 @@ export default class Feature extends Style() {
      * @type {M.Feature}
      */
     this.feature_ = null;
-
   }
 
   /**

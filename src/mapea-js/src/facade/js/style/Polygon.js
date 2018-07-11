@@ -1,5 +1,5 @@
-import Simple from "./stylesimple";
-import PolygonImpl from '../../../impl/js/style/stylepolygon';
+import Simple from "./Simple";
+import PolygonImpl from '../../../impl/ol/js/style/Polygon';
 
 /**
  * @namespace M.style.Polygon
@@ -22,25 +22,22 @@ export default class Polygon extends Simple {
     let impl = new PolygonImpl(options);
     super(this, options, impl);
   }
-
-
-
-
-  /**
-   * Default options for this style
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  Polygon.DEFAULT_NULL = {
-    fill: {
-      color: 'rgba(255, 255, 255, 0.4)',
-      opacity: 0.4
-    },
-    stroke: {
-      color: "#3399CC",
-      width: 1.5
-    }
-  };
 }
+
+/**
+ * Default options for this style
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+Polygon.DEFAULT_NULL = {
+  fill: {
+    color: 'rgba(255, 255, 255, 0.4)',
+    opacity: 0.4
+  },
+  stroke: {
+    color: "#3399CC",
+    width: 1.5
+  }
+};

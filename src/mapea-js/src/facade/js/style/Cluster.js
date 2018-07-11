@@ -1,6 +1,6 @@
-import Composite from './stylecomposite';
-import Utils from '../utils/utils';
-import ClusterImpl from '../../../impl/js/style/stylecluster';
+import Composite from './Composite';
+import Utils from '../util/Utils';
+import ClusterImpl from '../../../impl/js/ol/style/Cluster';
 
 /**
  * @namespace Cluster
@@ -18,10 +18,11 @@ export default class Cluster extends Composite {
    * @api stable
    */
   constructor(options = {}, optsVendor = {}) {
-    var impl = new ClusterImpl(options, optsVendor);
+    let impl = new ClusterImpl(options, optsVendor);
 
     // calls the super constructor
     super(options, impl);
+
     Utils.extends(options, Cluster.DEFAULT);
     Utils.extends(optsVendor, Cluster.DEFAULT_VENDOR);
 
@@ -30,8 +31,6 @@ export default class Cluster extends Composite {
      * @type {Object}
      */
     this.oldStyle_ = null;
-
-
   }
 
   /**
@@ -48,7 +47,7 @@ export default class Cluster extends Composite {
     if (!Utils.isNullOrEmpty(this.layer_)) {
       this.unapplySoft(this.layer_);
     }
-    return return super.add(styles);
+    return super.add(styles);
   }
 
   /**
@@ -183,8 +182,9 @@ export default class Cluster extends Composite {
     let base64Img;
     if (!Utils.isNullOrEmpty(this.oldStyle_)) {
       base64Img = this.oldStyle_.toImage();
-    } else {
-      base64Img = super(this, 'toImage', this);
+    }
+    else {
+      base64Img = super.toImage();
     }
     return base64Img;
   }
@@ -208,121 +208,119 @@ export default class Cluster extends Composite {
   }
 
   /**
-   * Default options for this style
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  Cluster.DEFAULT = {
-    hoverInteraction: true,
-    displayAmount: true,
-    selectInteraction: true,
-    distance: 60,
-    animated: true,
-    maxFeaturesToSelect: 15,
-    label: {
-      text: (feature) => {
-        let text;
-        let cluseterFeatures = feature.attribute('features');
-        if (!Utils.isNullOrEmpty(cluseterFeatures)) {
-          text = cluseterFeatures.length.toString();
-        }
-        return text;
-      },
-      color: '#fff',
-      font: "bold 15px Arial",
-      baseline: 'middle',
-      align: "center"
-    }
-  };
-
-  /**
-   * Default options for this style
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  Cluster.DEFAULT_VENDOR = {
-    animationDuration: 250,
-    animationMethod: "linear",
-    distanceSelectFeatures: 15,
-    convexHullStyle: {
-      fill: {
-        color: '#fff',
-        opacity: 0.25
-      },
-      stroke: {
-        // color: '#425f82'
-        color: '#7b98bc'
-      }
-    }
-  };
-
-  /**
-   * Default options for range 1 style
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  Cluster.RANGE_1_DEFAULT = {
-    fill: {
-      color: '#81c89a'
-    },
-    stroke: {
-      color: '#6eb988',
-      width: 3
-    },
-    radius: 15
-  };
-
-  /**
-   * Default options for range 2 style
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  Cluster.RANGE_2_DEFAULT = {
-    fill: {
-      color: '#85b9d2'
-    },
-    stroke: {
-      color: '#6da4be',
-      width: 3
-    },
-    radius: 20,
-  };
-
-  /**
-   * Default options for range 3 style
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  Cluster.RANGE_3_DEFAULT = {
-    fill: {
-      color: '#938fcf'
-    },
-    stroke: {
-      color: '#827ec5',
-      width: 3
-    },
-    radius: 25
-  };
-
-  /**
    * This constant defines the order of style.
    * @constant
    * @public
    * @api stable
    */
-
-
-  Object.defineProperty(Cluster.prototype, "ORDER", {
-    value: 1
-  });
+  get ORDER() {
+    return 1;
+  }
 }
+
+/**
+ * Default options for this style
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+Cluster.DEFAULT = {
+  hoverInteraction: true,
+  displayAmount: true,
+  selectInteraction: true,
+  distance: 60,
+  animated: true,
+  maxFeaturesToSelect: 15,
+  label: {
+    text: (feature) => {
+      let text;
+      let cluseterFeatures = feature.attribute('features');
+      if (!Utils.isNullOrEmpty(cluseterFeatures)) {
+        text = cluseterFeatures.length.toString();
+      }
+      return text;
+    },
+    color: '#fff',
+    font: "bold 15px Arial",
+    baseline: 'middle',
+    align: "center"
+  }
+};
+
+/**
+ * Default options for this style
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+Cluster.DEFAULT_VENDOR = {
+  animationDuration: 250,
+  animationMethod: "linear",
+  distanceSelectFeatures: 15,
+  convexHullStyle: {
+    fill: {
+      color: '#fff',
+      opacity: 0.25
+    },
+    stroke: {
+      // color: '#425f82'
+      color: '#7b98bc'
+    }
+  }
+};
+
+/**
+ * Default options for range 1 style
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+Cluster.RANGE_1_DEFAULT = {
+  fill: {
+    color: '#81c89a'
+  },
+  stroke: {
+    color: '#6eb988',
+    width: 3
+  },
+  radius: 15
+};
+
+/**
+ * Default options for range 2 style
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+Cluster.RANGE_2_DEFAULT = {
+  fill: {
+    color: '#85b9d2'
+  },
+  stroke: {
+    color: '#6da4be',
+    width: 3
+  },
+  radius: 20,
+};
+
+/**
+ * Default options for range 3 style
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+Cluster.RANGE_3_DEFAULT = {
+  fill: {
+    color: '#938fcf'
+  },
+  stroke: {
+    color: '#827ec5',
+    width: 3
+  },
+  radius: 25
+};

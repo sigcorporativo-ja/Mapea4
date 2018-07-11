@@ -1,19 +1,20 @@
-import Composite from './stylecomposite';
-import Quantification from './stylequantification';
-import Utils from '../utils/utils';
+import StyleComposite from './Composite';
+import StyleQuantification from './Quantification';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Style from './style';
-import GeomJson from "../geom/geojson";
-import Filter from "../filter/filter";
-import Cluster from './stylecluster.js';
-import Proportional from './styleproportional';
+import StyleBase from './Base';
+import GeomGeoJSON from "../geom/GeoJSON";
+import Filter from "../filter/Filter";
+import StyleCluster from './Cluster';
+import StyleProportional from './Proportional';
+import StylePolygon from "./Polygon";
+import StyleLine from "./Line";
+import StylePoint from "./Point";
 
 /**
  * @namespace Choropleth
  */
 export default class Choropleth extends Style {
-
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a style choropleth
@@ -27,7 +28,7 @@ export default class Choropleth extends Style {
    * @param {object}
    * @api stable
    */
-  constructor(attributeName, styles, quantification = Quantification.JENKS(), options = {}) {
+  constructor(attributeName, styles, quantification = StyleQuantification.JENKS(), options = {}) {
     super(options, {});
     if (Utils.isNullOrEmpty(attributeName)) {
       Exception("No se ha especificado el nombre del atributo.");
@@ -145,7 +146,8 @@ export default class Choropleth extends Style {
           endColor = endStyle.get('stroke.color');
         }
         this.choroplethStyles_ = [startColor, endColor];
-      } else {
+      }
+      else {
         this.choroplethStyles_ = this.choroplethStyles_.slice(0, this.quantification_().length);
       }
       this.update_();
@@ -278,7 +280,8 @@ export default class Choropleth extends Style {
       }
       if (startLimit < 0) {
         vectorContext.fillText(` x  <=  ${endLimit}`, maxWidth + 5, coordinateY + (imageHeight / 2));
-      } else {
+      }
+      else {
         vectorContext.fillText(`${startLimit} <  x  <=  ${endLimit}`, maxWidth + 5, coordinateY + (imageHeight / 2));
       }
     }, this);
@@ -303,7 +306,8 @@ export default class Choropleth extends Style {
           if (!isNaN(value)) {
             values.push(value);
           }
-        } catch (e) {
+        }
+        catch (e) {
           // Exception('TODO el atributo no es un número válido');
         }
       }, this);
@@ -335,22 +339,23 @@ export default class Choropleth extends Style {
           let geometryType = Utils.geometryType(this.layer_);
           const generateStyle = (scale, defaultStyle) => (scale.map(c => defaultStyle(c)));
           switch (geometryType) {
-            case GeomJson.POINT:
-            case GeomJson.MULTI_POINT:
+            case GeomGeoJSON.POINT:
+            case GeomGeoJSON.MULTI_POINT:
               this.choroplethStyles_ = generateStyle(scaleColor, Choropleth.DEFAULT_STYLE_POINT);
               break;
-            case GeomJson.LINE_STRING:
-            case GeomJson.MULTI_LINE_STRING:
+            case GeomGeoJSON.LINE_STRING:
+            case GeomGeoJSON.MULTI_LINE_STRING:
               this.choroplethStyles_ = generateStyle(scaleColor, Choropleth.DEFAULT_STYLE_LINE);
               break;
-            case GeomJson.POLYGON:
-            case GeomJson.MULTI_POLYGON:
+            case GeomGeoJSON.POLYGON:
+            case GeomGeoJSON.MULTI_POLYGON:
               this.choroplethStyles_ = generateStyle(scaleColor, Choropleth.DEFAULT_STYLE_POLYGON);
               break;
             default:
               return null;
           }
-        } else {
+        }
+        else {
           this.breakPoints_ = this.quantification_(this.dataValues_, this.choroplethStyles_.length);
         }
       }
@@ -371,7 +376,7 @@ export default class Choropleth extends Style {
    * @api stable
    */
   static DEFAULT_STYLE_POINT(c) {
-    return new Style.Point({
+    return new StylePoint({
       fill: {
         color: c,
         opacity: 1
@@ -393,7 +398,7 @@ export default class Choropleth extends Style {
    * @api stable
    */
   static DEFAULT_STYLE_LINE(c) {
-    return new Style.Line({
+    return new StyleLine({
       stroke: {
         color: c,
         width: 1
@@ -410,7 +415,7 @@ export default class Choropleth extends Style {
    * @api stable
    */
   static DEFAULT_STYLE_POLYGON(c) {
-    return new Style.Polygon({
+    return new StylePolygon({
       fill: {
         color: c,
         opacity: 1
@@ -421,26 +426,6 @@ export default class Choropleth extends Style {
       }
     });
   }
-
-  /** Color style by default
-   * @constant
-   * @api stable
-   */
-  Choropleth.START_COLOR_DEFAULT = 'red';
-
-  /**
-   * Color style by default
-   * @constant
-   * @api stable
-   */
-  Choropleth.END_COLOR_DEFAULT = 'brown';
-
-  /**
-   * Accuracy of numbers on canvas
-   * @constant
-   * @api stable
-   */
-  Choropleth.ACCURACY_NUMBER_CANVAS = 2;
 
   /**
    * Returns the calculation of the numbers of the canvas
@@ -460,8 +445,8 @@ export default class Choropleth extends Style {
     if (!Utils.isArray(styles)) {
       styles = [styles];
     }
-    styles = styles.filter(style => style instanceof Cluster || style instanceof Proportional);
-    return return super.add(styles);
+    styles = styles.filter(style => style instanceof StyleCluster || style instanceof StyleProportional);
+    return super.add(styles);
   }
 
   /**
@@ -470,9 +455,27 @@ export default class Choropleth extends Style {
    * @public
    * @api stable
    */
-
-  Object.defineProperty(Choropleth.prototype, "ORDER", {
-    value: 1
-  });
-
+  get ORDER() {
+    return 1;
+  }
 }
+
+/** Color style by default
+ * @constant
+ * @api stable
+ */
+Choropleth.START_COLOR_DEFAULT = 'red';
+
+/**
+ * Color style by default
+ * @constant
+ * @api stable
+ */
+Choropleth.END_COLOR_DEFAULT = 'brown';
+
+/**
+ * Accuracy of numbers on canvas
+ * @constant
+ * @api stable
+ */
+Choropleth.ACCURACY_NUMBER_CANVAS = 2;

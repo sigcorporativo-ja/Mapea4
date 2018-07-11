@@ -1,9 +1,8 @@
 import Composite from './Composite';
-import Utils from '../utils/utils';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import Map from '../map/map';
-import Proportional from './styleproportional';
-import Cluster from './stylecluster';
+import StyleProportional from './Proportional';
+import StyleCluster from './Cluster';
 
 export default class Category extends Composite {
   /**
@@ -19,7 +18,7 @@ export default class Category extends Composite {
    * @api stable
    */
   constructor(attributeName, categoryStyles, options = {}) {
-    super(this, options, {});
+    super(options, {});
     if (Utils.isNullOrEmpty(attributeName)) {
       Exception("No se ha especificado el nombre del atributo.");
     }
@@ -41,6 +40,16 @@ export default class Category extends Composite {
      * @expose
      */
     this.categoryStyles_ = categoryStyles;
+  }
+
+  /**
+   * This constant defines the order of style.
+   * @constant
+   * @public
+   * @api stable
+   */
+  get ORDER() {
+    return 1;
   }
 
   /**
@@ -198,7 +207,8 @@ export default class Category extends Composite {
           image.height = style.get('icon.scale') ? img.height * style.get('icon.scale') : img.height;
           image.src = style.toImage();
         });
-      } else {
+      }
+      else {
         image.src = style.toImage();
       }
     }
@@ -236,7 +246,7 @@ export default class Category extends Composite {
         vectorContext.drawImage(image, (maxWidth - image.width) / 2, coordinateY, image.width, image.height);
       }
       vectorContext.fillText(categoryName, maxWidth + 5, coordinateY + (imageHeight / 2));
-    }, this);
+    });
 
     callbackFn();
   }
@@ -260,7 +270,8 @@ export default class Category extends Composite {
         let style = this.categoryStyles_[value];
         if (!Utils.isNullOrEmpty(style)) {
           feature.style = style;
-        } else if (!Utils.isNullOrEmpty(styleOther)) {
+        }
+        else if (!Utils.isNullOrEmpty(styleOther)) {
           feature.style = styleOther;
         }
       }.bind(this));
@@ -275,8 +286,8 @@ export default class Category extends Composite {
     if (!Utils.isArray(styles)) {
       styles = [styles];
     }
-    styles = styles.filter(style => style instanceof Cluster || style instanceof Proportional);
-    return return super.add(styles);
+    styles = styles.filter(style => style instanceof StyleCluster || style instanceof StyleProportional);
+    return super.add(styles);
   }
 
   /**
@@ -299,41 +310,28 @@ export default class Category extends Composite {
     }
     return categories;
   }
-
-  /**
-   * This constant defines the order of style.
-   * @constant
-   * @public
-   * @api stable
-   */
-
-
-  Object.defineProperty(Category.prototype, "ORDER", {
-    value: 1
-  });
-
-  /**
-   * This constant defines the radius of random category style.
-   * @constant
-   * @public
-   * @api stable
-   */
-  Category.RANDOM_RADIUS_OPTION = 10;
-
-  /**
-   * This constant defines the stroke width of random category style.
-   * @constant
-   * @public
-   * @api stable
-   */
-  Category.RANDOM_STROKE_WIDTH_OPTION = 1;
-
-  /**
-   * This constant defines the stroke color of random category style.
-   * @constant
-   * @public
-   * @api stable
-   */
-  Category.RANDOM_STROKE_COLOR_OPTION = "black";
-
 }
+
+/**
+ * This constant defines the radius of random category style.
+ * @constant
+ * @public
+ * @api stable
+ */
+Category.RANDOM_RADIUS_OPTION = 10;
+
+/**
+ * This constant defines the stroke width of random category style.
+ * @constant
+ * @public
+ * @api stable
+ */
+Category.RANDOM_STROKE_WIDTH_OPTION = 1;
+
+/**
+ * This constant defines the stroke color of random category style.
+ * @constant
+ * @public
+ * @api stable
+ */
+Category.RANDOM_STROKE_COLOR_OPTION = "black";

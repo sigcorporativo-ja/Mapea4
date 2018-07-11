@@ -1,6 +1,6 @@
-import Simple from './stylesimple';
-import Utils from '../utils/utils';
-import LineImpl from '../../../impl/js/style/styleline';
+import Simple from './Simple';
+import Utils from '../util/Utils';
+import StyleLineImpl from '../../../impl/ol/js/style/styleline';
 
 /**
  * @namespace Line
@@ -20,14 +20,13 @@ export default class Line extends Simple {
    * @api stable
    */
   constructor(options) {
-
-    let impl = new LineImpl(options);
-
-    super(options, impl);
     if (Utils.isNullOrEmpty(options)) {
       options = Line.DEFAULT_NULL;
     }
     options = Utils.extends({}, options);
+
+    let impl = new StyleLineImpl(options);
+    super(options, impl);
   }
 
   /**
@@ -41,22 +40,22 @@ export default class Line extends Simple {
   unapply(layer) {
     this.getImpl().unapply(layer);
   }
-
-  /**
-   * Default options for this style
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  Line.DEFAULT_NULL = {
-    fill: {
-      color: 'rgba(255, 255, 255, 0.4)',
-      opacity: 0.4
-    },
-    stroke: {
-      color: "#3399CC",
-      width: 1.5
-    }
-  };
 }
+
+/**
+ * Default options for this style
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+Line.DEFAULT_NULL = {
+  fill: {
+    color: 'rgba(255, 255, 255, 0.4)',
+    opacity: 0.4
+  },
+  stroke: {
+    color: "#3399CC",
+    width: 1.5
+  }
+};

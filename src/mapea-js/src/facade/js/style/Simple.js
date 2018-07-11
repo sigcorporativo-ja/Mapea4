@@ -1,4 +1,4 @@
-import Feature from './stylefeature';
+import StyleFeature from './Feature';
 
 export class Simple extends Feature {
 
@@ -16,11 +16,12 @@ export class Simple extends Feature {
    */
   apply(layer, applyToFeature, isNullStyle) {
     this.layer_ = layer;
-    this.impl().applyToLayer(layer);
+    this.getImpl().applyToLayer(layer);
     if (applyToFeature === true) {
       if (isNullStyle) {
         layer.features().forEach(feature => feature.style = null);
-      } else {
+      }
+      else {
         layer.getFeatures().forEach(feature => feature.style = this.clone());
       }
     }
@@ -33,7 +34,7 @@ export class Simple extends Feature {
    * @public
    * @api stable
    */
-  Object.defineProperty(M.style.Simple.prototype, "ORDER", {
-    value: 1
-  });
+  get ORDER() {
+    return 1;
+  }
 }

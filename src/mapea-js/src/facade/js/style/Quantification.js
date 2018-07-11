@@ -230,15 +230,15 @@ export default class Quantification {
     });
     return uniqueArray;
   }
-
-  /**
-   * @constant
-   * @api stable
-   */
-  Quantification.DEFAULT_CLASES_JENKS = 5;
-  /**
-   * @constant
-   * @api stable
-   */
-  Quantification.DEFAULT_CLASES_QUANTILE = 5;
 }
+
+/**
+ * @constant
+ * @api stable
+ */
+Quantification.DEFAULT_CLASES_JENKS = 5;
+/**
+ * @constant
+ * @api stable
+ */
+Quantification.DEFAULT_CLASES_QUANTILE = 5;

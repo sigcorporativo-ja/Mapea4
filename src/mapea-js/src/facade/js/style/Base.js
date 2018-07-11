@@ -1,13 +1,12 @@
-import Base from '../facade'
-import Utils from '../utils/utils';
-import Evt from '../events/eventsmanager';
+import Base from '../Base'
+import Utils from '../util/Utils';
+import EvtManager from '../event/Manager';
 
 /**
  * @namespace M.Style
  */
-
-export default class Style extends Base {
-  /**   * Rec. options que es el json del estilo   */
+export default class StyleBase extends Base {
+  /* Rec. options que es el json del estilo   */
 
   /**
    * Abstract class
@@ -15,7 +14,9 @@ export default class Style extends Base {
    * @api stable
    */
   constructor(options, impl) {
+    // call super constructor
     super(impl);
+
     /**
      * User options for this style
      * @private
@@ -46,9 +47,6 @@ export default class Style extends Base {
      * @type {M.layer.Vector}
      */
     this.layer_ = null;
-
-
-    // this.updateCanvas();
   }
 
   /**
@@ -109,14 +107,14 @@ export default class Style extends Base {
    */
   set(property, value) {
     let oldValue = this.get(property);
-    Style.setValue_(this.options_, property, value);
+    StyleBase.setValue_(this.options_, property, value);
     if (!Utils.isNullOrEmpty(this.layer_)) {
       this.getImpl().updateFacadeOptions(this.options_);
     }
     if (!Utils.isNullOrEmpty(this.feature_)) {
       this.applyToFeature(this.feature_);
     }
-    this.fire(Evt.CHANGE, [property, oldValue, value]);
+    this.fire(EvtManager.CHANGE, [property, oldValue, value]);
     this.refresh();
     return this;
   };
@@ -137,15 +135,17 @@ export default class Style extends Base {
     if (keyLength === 1) { // base case
       if (Utils.isArray(value)) {
         value = [...value];
-      } else if (Utils.isObject(value)) {
+      }
+      else if (Utils.isObject(value)) {
         value = Object.assign({}, value);
       }
       obj[key] = value;
-    } else if (keyLength > 1) { // recursive case
+    }
+    else if (keyLength > 1) { // recursive case
       if (Utils.isNullOrEmpty(obj[key])) {
         obj[key] = {};
       }
-      Style.setValue_(obj[key], keys.slice(1, keyLength), value);
+      StyleBase.setValue_(obj[key], keys.slice(1, keyLength), value);
     }
   }
 
@@ -207,10 +207,12 @@ export default class Style extends Base {
         }
         image.src = this.options_.icon.src;
         styleImgB64 = this.canvas_.toDataURL('png');
-      } else {
+      }
+      else {
         styleImgB64 = this.canvas_.toDataURL('png');
       }
-    } else {
+    }
+    else {
       styleImgB64 = this.updateCanvasPromise_.then(() => this.canvas_.toDataURL('png'));
     }
 
@@ -249,7 +251,6 @@ export default class Style extends Base {
    * @function
    * @api stable
    */
-
   clone() {
     let optsClone = {};
     Utils.extends(optsClone, this.options_);
@@ -257,5 +258,4 @@ export default class Style extends Base {
     let implClone = new implClass(optsClone);
     return new this.constructor(optsClone, implClone);
   }
-
 }
