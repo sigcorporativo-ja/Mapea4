@@ -1,10 +1,9 @@
-goog.provide('M.Control');
+import Utils from '../util/Utils';
+import Exception from '../exception/exception';
+import Base from '../Base';
+import EvtManager from '../event/Manager';
 
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.facade.Base');
-
-(function () {
+export default class ControlBase extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -14,19 +13,23 @@ goog.require('M.facade.Base');
    * @extends {M.facade.Base}
    * @api stable
    */
-  M.Control = (function (impl, name) {
+  constructor(impl, name) {
+
+    // calls the super constructor
+    super(impl);
+
     // checks if the implementation can create WMC layers
-    if (M.utils.isUndefined(impl.addTo)) {
-      M.exception('La implementación usada no posee el método addTo');
+    if (Utils.isUndefined(impl.addTo)) {
+      Exception('La implementación usada no posee el método addTo');
     }
 
     // checks if the implementation can create WMC layers
-    if (M.utils.isUndefined(impl.getElement)) {
-      M.exception('La implementación usada no posee el método getElement');
+    if (Utils.isUndefined(impl.element)) {
+      Exception('La implementación usada no posee el método getElement');
     }
 
     // checks if the implementation can create default controls
-    if (M.utils.isUndefined(impl.isByDefault)) {
+    if (Utils.isUndefined(impl.isByDefault)) {
       impl.isByDefault = true;
     }
 
@@ -74,10 +77,7 @@ goog.require('M.facade.Base');
      */
     this.panel_ = null;
 
-    // calls the super constructor
-    goog.base(this, impl);
-  });
-  goog.inherits(M.Control, M.facade.Base);
+  }
 
   /**
    * This function set implementation of this control
@@ -87,21 +87,19 @@ goog.require('M.facade.Base');
    * @param {M.Map} impl to add the plugin
    * @api stable
    */
-  M.Control.prototype.setImpl = function (impl) {
+  setImpl(impl) {
     // checks if the implementation can create WMC layers
-    if (M.utils.isUndefined(impl.addTo)) {
-      M.exception('La implementación usada no posee el método addTo');
+    if (Utils.isUndefined(impl.addTo)) {
+      Exception('La implementación usada no posee el método addTo');
     }
-    if (M.utils.isUndefined(impl.getElement)) {
-      M.exception('La implementación usada no posee el método getElement');
+    if (Utils.isUndefined(impl.getElement)) {
+      Exception('La implementación usada no posee el método getElement');
     }
     // checks if the implementation can create default controls
-    if (M.utils.isUndefined(impl.isByDefault)) {
+    if (Utils.isUndefined(impl.isByDefault)) {
       impl.isByDefault = true;
     }
-
-    goog.base(this, 'setImpl', impl);
-  };
+  }
 
   /**
    * This function adds the control to the specified map
@@ -112,24 +110,23 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.Control.prototype.addTo = function (map) {
+  addTo(map) {
     this.map_ = map;
-    var impl = this.getImpl();
-    var view = this.createView(map);
+    let impl = this.getImpl();
+    let view = this.createView(map);
     if (view instanceof Promise) { // the view is a promise
-      var this_ = this;
-      view.then(function (html) {
-        this_.manageActivation(html);
+      view.then((html) => {
+        this.manageActivation(html);
         impl.addTo(map, html);
-        this_.fire(M.evt.ADDED_TO_MAP);
+        this.fire(EvtManager.ADDED_TO_MAP);
       });
     }
     else { // view is an HTML or text or null
       this.manageActivation(view);
       impl.addTo(map, view);
-      this.fire(M.evt.ADDED_TO_MAP);
+      this.fire(EvtManager.ADDED_TO_MAP);
     }
-  };
+  }
 
   /**
    * This function creates the HTML view for this control
@@ -139,7 +136,7 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.Control.prototype.createView = function (map) {};
+  createView(map) {}
 
   /**
    * TODO
@@ -150,11 +147,11 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.Control.prototype.manageActivation = function (html) {
+  manageActivation(html) {
     this.element_ = html;
     this.activationBtn_ = this.getActivationButton(this.element_);
-    if (!M.utils.isNullOrEmpty(this.activationBtn_)) {
-      goog.events.listen(this.activationBtn_, goog.events.EventType.CLICK, function (evt) {
+    if (!Utils.isNullOrEmpty(this.activationBtn_)) {
+      this.activationBtn_.addEventListener('click', (evt) => {
         evt.preventDefault();
         if (!this.activated) {
           this.activate();
@@ -164,9 +161,9 @@ goog.require('M.facade.Base');
           this.deactivate();
           this.activated = false;
         }
-      }, false, this);
+      }, false);
     }
-  };
+  }
 
   /**
    * TODO
@@ -177,7 +174,7 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.Control.prototype.getActivationButton = function (html) {};
+  getActivationButton(html) {}
 
   /**
    * function adds the event 'click'
@@ -187,16 +184,16 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.Control.prototype.activate = function () {
-    if (!M.utils.isNullOrEmpty(this.element_)) {
-      goog.dom.classlist.add(this.element_, 'activated');
+  activate() {
+    if (!Utils.isNullOrEmpty(this.element_)) {
+      this.element_.classlist.add('activated');
     }
-    if (!M.utils.isUndefined(this.getImpl().activate)) {
+    if (!Utils.isUndefined(this.impl().activate)) {
       this.getImpl().activate();
     }
     this.activated = true;
-    this.fire(M.evt.ACTIVATED);
-  };
+    this.fire(EvtManager.ACTIVATED);
+  }
 
   /**
    * function remove the event 'click'
@@ -206,16 +203,16 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.Control.prototype.deactivate = function () {
-    if (!M.utils.isNullOrEmpty(this.element_)) {
-      goog.dom.classlist.remove(this.element_, 'activated');
+  deactivate() {
+    if (!Utils.isNullOrEmpty(this.element_)) {
+      this.element_.classlist.remove('activated');
     }
-    if (!M.utils.isUndefined(this.getImpl().deactivate)) {
+    if (!Utils.isUndefined(this.getImpl().deactivate)) {
       this.getImpl().deactivate();
     }
     this.activated = false;
-    this.fire(M.evt.DEACTIVATED);
-  };
+    this.fire(EvtManager.DEACTIVATED);
+  }
 
   /**
    * function remove the event 'click'
@@ -225,9 +222,10 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.Control.prototype.getElement = function () {
+  getElement() {
     return this.getImpl().getElement();
-  };
+  }
+
 
   /**
    * Sets the panel of the control
@@ -238,9 +236,9 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.Control.prototype.setPanel = function (panel) {
+  setPanel(panel) {
     this.panel_ = panel;
-  };
+  }
 
   /**
    * Gets the panel of the control
@@ -251,9 +249,9 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.Control.prototype.getPanel = function () {
+  getPanel() {
     return this.panel_;
-  };
+  }
 
   /**
    * Destroys the control
@@ -263,8 +261,5 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.Control.prototype.destroy = function () {
-    // this.getImpl().destroy();
-    // this.fire(M.evt.DESTROY);
-  };
-})();
+  destroy() {}
+}
