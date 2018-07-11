@@ -1,18 +1,18 @@
-goog.provide('M.style.Feature');
-goog.require('M.Style');
+import StyleBase from './Base';
 
 /**
  * @namespace M.style.Feature
  */
 
-(function() {
+export default class Feature extends StyleBase {
 
   /**
    * Abstract class
    *
    * @api stable
    */
-  M.style.Feature = (function(options, impl) {
+  constructor(options, impl) {
+    super(options, impl);
 
     /**
      * Feature where the style is applied
@@ -20,10 +20,7 @@ goog.require('M.Style');
      * @type {M.Feature}
      */
     this.feature_ = null;
-
-    goog.base(this, options, impl);
-  });
-  goog.inherits(M.style.Feature, M.Style);
+  }
 
   /**
    * This function apply style to feature
@@ -33,8 +30,8 @@ goog.require('M.Style');
    * @function
    * @api stable
    */
-  M.style.Feature.prototype.applyToFeature = function(feature) {
+  applyToFeature(feature) {
     this.feature_ = feature;
     this.getImpl().applyToFeature(feature);
-  };
-})();
+  }
+}

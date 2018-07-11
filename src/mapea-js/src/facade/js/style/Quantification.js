@@ -1,9 +1,4 @@
-goog.provide('M.style.quantification');
-
-/**
- * @namespace M.style.quantification
- */
-(function() {
+export default class Quantification {
 
   /** This function returns a jenks quantification function
    * @function
@@ -13,25 +8,25 @@ goog.provide('M.style.quantification');
    * @api stable
    */
 
-  M.style.quantification.JENKS = function jenks(n_classes_param) {
-    n_classes_param = n_classes_param || M.style.quantification.DEFAULT_CLASES_JENKS;
+  static JENKS(n_classes_param) {
+    n_classes_param = n_classes_param || Quantification.DEFAULT_CLASES_JENKS;
 
-    const jenksFn = function jenks(data, n_classes = n_classes_param) {
-      let uniqueData = M.style.quantification.uniqueArray_(data);
+    const jenksFn = (data, n_classes = n_classes_param) => {
+      let uniqueData = Quantification.uniqueArray_(data);
       n_classes = uniqueData.length <= n_classes ? uniqueData.length - 1 : n_classes;
       // sort data in numerical order, since this is expected
       // by the matrices function
-      data.sort(function(a, b) {
+      data.sort((a, b) => {
         return a - b;
       });
 
       // get our basic matrices
-      let matrices = M.style.quantification.getMatrices_(data, n_classes);
+      let matrices = Quantification.getMatrices_(data, n_classes);
       // we only need lower class limits here
       let lower_class_limits = matrices.lower_class_limits;
 
       // extract n_classes out of the computed matrices
-      let breaks = M.style.quantification.jenksBreaks_(data, lower_class_limits, n_classes);
+      let breaks = Quantification.jenksBreaks_(data, lower_class_limits, n_classes);
       // No cogemos el minimo
       let break_points = breaks.slice(1, breaks.length);
       return break_points;
@@ -42,7 +37,7 @@ goog.provide('M.style.quantification');
     });
 
     return jenksFn;
-  };
+  }
 
 
   /** This function returns a quantile quantification function
@@ -52,10 +47,10 @@ goog.provide('M.style.quantification');
    * @return {function}
    * @api stable
    */
-  M.style.quantification.QUANTILE = function(n_classes_param) {
-    n_classes_param = n_classes_param || M.style.quantification.DEFAULT_CLASES_QUANTILE;
-    const quantileFn = function quantile(data, n_classes = n_classes_param) {
-      let uniqueData = M.style.quantification.uniqueArray_(data);
+  QUANTILE(n_classes_param) {
+    n_classes_param = n_classes_param || Quantification.DEFAULT_CLASES_QUANTILE;
+    const quantileFn = (data, n_classes = n_classes_param) => {
+      let uniqueData = Quantification.uniqueArray_(data);
       n_classes = uniqueData.length <= n_classes ? uniqueData.length - 1 : n_classes;
       let numData = data.length;
       data.sort((a, b) => a - b);
@@ -68,8 +63,8 @@ goog.provide('M.style.quantification');
 
       // Calculamos los puntos de ruptura multiplicando por el valor
       // del salto desde i = 1, 2, .. numero de clases - 1
-      for (var i = 1; i < n_classes; i++) {
-        let break_point = step * i;
+      n_classes.forEach(value) {
+        let break_point = step * value;
         breaks.push(break_point);
       }
       breaks.push(max);
@@ -79,13 +74,8 @@ goog.provide('M.style.quantification');
     Object.defineProperty(quantileFn, "name", {
       value: "quantile"
     });
-
     return quantileFn;
   };
-
-  Object.defineProperty(M.style.quantification.QUANTILE, "name", {
-    value: "quantile"
-  });
 
   /**
    *  Compute the matrices required for Jenks breaks. These matrices
@@ -95,7 +85,7 @@ goog.provide('M.style.quantification');
    * @api stable
    *
    */
-  M.style.quantification.getMatrices_ = function(data, n_classes) {
+  static getMatrices_(data, n_classes) {
 
     // in the original implementation, these matrices are referred to
     // as `LC` and `OP`
@@ -190,7 +180,7 @@ goog.provide('M.style.quantification');
       lower_class_limits: lower_class_limits,
       variance_combinations: variance_combinations
     };
-  };
+  }
 
   /**
    * This function take the calculated matrices
@@ -200,7 +190,7 @@ goog.provide('M.style.quantification');
    * @api stable
    */
 
-  M.style.quantification.jenksBreaks_ = function(data, lower_class_limits, n_classes) {
+  static jenksBreaks_(data, lower_class_limits, n_classes) {
 
     let k = data.length - 1;
     let kclass = [];
@@ -220,7 +210,7 @@ goog.provide('M.style.quantification');
     }
 
     return kclass;
-  };
+  }
 
   /**
    * This function takes an array and creates a unique element array with it.
@@ -231,24 +221,24 @@ goog.provide('M.style.quantification');
    * @api stable
    */
 
-  M.style.quantification.uniqueArray_ = function(array) {
+  static uniqueArray_(array) {
     let uniqueArray = [];
-    array.forEach(function(elem) {
+    array.forEach((elem) => {
       if (uniqueArray.indexOf(elem) === -1) {
         uniqueArray.push(elem);
       }
     });
     return uniqueArray;
-  };
+  }
+}
 
-  /**
-   * @constant
-   * @api stable
-   */
-  M.style.quantification.DEFAULT_CLASES_JENKS = 5;
-  /**
-   * @constant
-   * @api stable
-   */
-  M.style.quantification.DEFAULT_CLASES_QUANTILE = 5;
-})();
+/**
+ * @constant
+ * @api stable
+ */
+Quantification.DEFAULT_CLASES_JENKS = 5;
+/**
+ * @constant
+ * @api stable
+ */
+Quantification.DEFAULT_CLASES_QUANTILE = 5;

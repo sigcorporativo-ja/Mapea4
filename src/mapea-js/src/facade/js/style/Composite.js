@@ -1,26 +1,25 @@
-goog.provide('M.style.Composite');
+import StyleBase from './Base';
+import Utils from '../util/Utils';
+import StyleCluster from './Cluster';
+import StyleProportional from './Proportional';
 
-goog.require('M.Style');
-
-(function() {
+export default class Composite extends StyleBase {
 
   /**
    * Abstract class
    * @constructor
    * @api stable
    */
-  M.style.Composite = (function(options, impl) {
+  constructor(options, impl) {
+    // calls the super constructor
+    super(options, impl);
 
     /**
      * Array of styles.
      * @type {Array<M.Style>}
      */
     this.styles_ = [];
-
-    // calls the super constructor
-    goog.base(this, options, impl);
-  });
-  goog.inherits(M.style.Composite, M.Style);
+  }
 
   /**
    * This function apply style
@@ -30,14 +29,14 @@ goog.require('M.Style');
    * @function
    * @api stable
    */
-  M.style.Composite.prototype.apply = function(layer) {
+  apply(layer) {
     this.layer_ = layer;
-    if (!M.utils.isNullOrEmpty(layer)) {
-      let style = layer.getStyle();
-      this.oldStyle_ = style instanceof M.style.Cluster ? style.getOldStyle() : style;
+    if (!Utils.isNullOrEmpty(layer)) {
+      let style = layer.style();
+      this.oldStyle_ = style instanceof StyleCluster ? style.oldStyle() : style;
       this.updateInternal_(layer);
     }
-  };
+  }
 
   /**
    * This function adds styles of style Composite
@@ -48,25 +47,25 @@ goog.require('M.Style');
    * @returns {M.style.Composite}
    * @api stable
    */
-  M.style.Composite.prototype.add = function(styles) {
+  add(styles) {
     let layer = this.layer_;
     this.unapplyInternal(this.layer_);
-    if (!M.utils.isArray(styles)) {
+    if (!Utils.isArray(styles)) {
       styles = [styles];
     }
     styles = styles.filter(style => style.constructor !== this.constructor);
-    if (!M.utils.isNullOrEmpty(styles.find(style => !(style instanceof M.style.Cluster || style instanceof M.style.Proportional)))) {
-      this.styles_ = this.styles_.filter(style => style instanceof M.style.Cluster || style instanceof M.style.Proportional);
+    if (!Utils.isNullOrEmpty(styles.find(style => !(style instanceof StyleCluster || style instanceof StyleProportional)))) {
+      this.styles_ = this.styles_.filter(style => style instanceof StyleCluster || style instanceof StyleProportional);
     }
     styles.forEach(style => {
       this.styles_ = this.styles_.filter(s => s.constructor !== style.constructor);
     });
     this.styles_ = this.styles_.concat(styles);
-    if (!M.utils.isNullOrEmpty(layer)) {
+    if (!Utils.isNullOrEmpty(layer)) {
       this.updateInternal_(layer);
     }
     return this;
-  };
+  }
 
   /**
    * This function remove styles of style Composite
@@ -77,18 +76,18 @@ goog.require('M.Style');
    * @returns {M.style.Composite}
    * @api stable
    */
-  M.style.Composite.prototype.remove = function(styles) {
+  remove(styles) {
     let layer = this.layer_;
-    if (!M.utils.isArray(styles)) {
+    if (!Utils.isArray(styles)) {
       styles = [styles];
     }
-    if (!M.utils.isNullOrEmpty(this.layer_)) {
+    if (!Utils.isNullOrEmpty(this.layer_)) {
       this.unapplyInternal(this.layer_);
     }
     this.styles_ = this.styles_.filter(style => !styles.includes(style));
     layer.setStyle(this.oldStyle_, true);
     layer.setStyle(this);
-  };
+  }
 
   /**
    * This function returns the array of styles.
@@ -98,9 +97,9 @@ goog.require('M.Style');
    * @return {Array<M.Style>} array styles
    * @api stable
    */
-  M.style.Composite.prototype.getStyles = function() {
+  getStyles() {
     return this.styles_;
-  };
+  }
 
   /**
    * This function returns the old style of layer..
@@ -110,9 +109,9 @@ goog.require('M.Style');
    * @return {M.Style} array styles
    * @api stable
    */
-  M.style.Composite.prototype.getOldStyle = function() {
+  getOldStyle() {
     return this.oldStyle_;
-  };
+  }
 
   /**
    * This function clears the style Composite
@@ -120,9 +119,9 @@ goog.require('M.Style');
    * @public
    * @api stable
    */
-  M.style.Composite.prototype.clear = function() {
+  clear() {
     this.remove(this.styles_);
-  };
+  }
 
   /**
    * This function updates the style
@@ -130,14 +129,14 @@ goog.require('M.Style');
    * @private
    * @api stable
    */
-  M.style.Composite.prototype.unapplyInternal = function(layer) {
-    let styles = this.styles_.concat(this).sort((style, style2) => M.utils.styleComparator(style2, style));
+  unapplyInternal(layer) {
+    let styles = this.styles_.concat(this).sort((style, style2) => Utils.styleComparator(style2, style));
     styles.forEach(style => {
-      if (style instanceof M.style.Composite) {
+      if (style instanceof Composite) {
         style.unapplySoft(layer);
       }
     });
-  };
+  }
 
   /**
    * This function unapply the style to specified layer
@@ -146,7 +145,7 @@ goog.require('M.Style');
    * @param {M.layer.Vector} layer layer to unapply his style
    * @api stable
    */
-  M.style.Composite.prototype.unapplySoft = function(layer) {};
+  unapplySoft(layer) {}
 
   /**
    * This function unapply the style to specified layer
@@ -155,10 +154,10 @@ goog.require('M.Style');
    * @param {M.layer.Vector} layer layer to unapply his style
    * @api stable
    */
-  M.style.Composite.prototype.unapply = function(layer) {
+  unapply(layer) {
     this.unapplyInternal(layer);
     this.layer_ = null;
-  };
+  }
 
   /**
    * This function update internally the style composite.
@@ -167,15 +166,16 @@ goog.require('M.Style');
    * @param {M.layer.Vector} layer layer to update the style
    * @api stable
    */
-  M.style.Composite.prototype.updateInternal_ = function(layer) {
-    let styles = this.styles_.concat(this).sort((style, style2) => M.utils.styleComparator(style, style2));
+
+  updateInternal_(layer) {
+    let styles = this.styles_.concat(this).sort((style, style2) => Utils.styleComparator(style, style2));
     styles.forEach(style => {
-      if (style instanceof M.style.Composite) {
+      if (style instanceof Composite) {
         style.applyInternal_(layer);
       }
-      else if (style instanceof M.Style) {
+      else if (style instanceof StyleBase) {
         style.apply(layer, true);
       }
     });
-  };
-})();
+  }
+}
