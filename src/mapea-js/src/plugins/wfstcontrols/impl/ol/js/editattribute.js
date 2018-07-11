@@ -1,11 +1,20 @@
-goog.provide('P.impl.control.EditAttribute');
+import WFSTBase from "./wfstcontrolbase";
+import EventsManager from "facade/js/event/Eventsmanager";
+import Utils from "facade/js/utils/Utils";
+import Geom from "facade/js/geom/Geom";
+import ControlImpl from "impl/ol/js/controls/Controlbase";
+import Dialog from "facade/js/Dialog";
+import Template from "facade/js/utils/Template";
+import FEditattribute from "../../../facade/js/editattribute";
+import Popup from "facade/js/popup";
+import Remote from "facade/js/utils/Remote";
+import WFSImpl from "impl/ol/js/layers/WFS";
 
-goog.require('goog.events');
 
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class EditAttribute extends ControlImpl {
   /**
    * @classdesc
    * Main constructor of the class. Creates a EditAttribute
@@ -16,7 +25,9 @@ goog.require('goog.events');
    * @extends {M.impl.Control}
    * @api stable
    */
-  M.impl.control.EditAttribute = function(layer) {
+  constructor(layer) {
+    super();
+
     /**
      * Layer for use in control
      * @private
@@ -32,9 +43,7 @@ goog.require('goog.events');
      */
     this.editFeature = null;
 
-    goog.base(this);
-  };
-  goog.inherits(M.impl.control.EditAttribute, M.impl.Control);
+  }
 
   /**
    * This function active control
@@ -43,10 +52,10 @@ goog.require('goog.events');
    * @function
    * @api stable
    */
-  M.impl.control.EditAttribute.prototype.activate = function() {
-    this.layer_.on(M.evt.SELECT_FEATURES, this.showEditPopup_, this);
-    this.layer_.on(M.evt.UNSELECT_FEATURES, this.unselectFeature_, this);
-  };
+  activate() {
+    this.layer_.on(EventsManager.SELECT_FEATURES, this.showEditPopup_, this);
+    this.layer_.on(EventsManager.UNSELECT_FEATURES, this.unselectFeature_, this);
+  }
 
   /**
    * This function deactivate control
@@ -55,10 +64,10 @@ goog.require('goog.events');
    * @function
    * @api stable
    */
-  M.impl.control.EditAttribute.prototype.deactivate = function() {
-    this.layer_.un(M.evt.SELECT_FEATURES, this.showEditPopup_, this);
-    this.layer_.un(M.evt.UNSELECT_FEATURES, this.unselectFeature_, this);
-  };
+  deactivate() {
+    this.layer_.un(EventsManager.SELECT_FEATURES, this.showEditPopup_, this);
+    this.layer_.un(EventsManager.UNSELECT_FEATURES, this.unselectFeature_, this);
+  }
 
   /**
    * This function displays the popup to edit attributes
@@ -68,83 +77,79 @@ goog.require('goog.events');
    * @param {ol.Feature} features - Feature to edit attributes
    * @param {array} coordinate - Coordinated to show popup
    */
-  M.impl.control.EditAttribute.prototype.showEditPopup_ = function(features, evt) {
+  showEditPopup_(features, evt) {
     this.unselectFeature_();
 
     this.editFeature = features[0].getImpl().getOLFeature();
     let coordinate = evt.coord;
 
     // avoid editing new features
-    if (M.utils.isNullOrEmpty(this.editFeature.getId())) {
+    if (Utils.isNullOrEmpty(this.editFeature.getId())) {
       this.editFeature = null;
-      M.dialog.info('Debe guardar el elemento previamente');
-    }
-    else {
-      this.editFeature.setStyle(M.impl.control.EditAttribute.SELECTED_STYLE);
+      Dialog.info('Debe guardar el elemento previamente');
+    } else {
+      this.editFeature.setStyle(EditAttribute.SELECTED_STYLE);
 
-      var templateVar = {
+      let templateVar = {
         'properties': []
       };
-      Object.keys(this.editFeature.getProperties()).filter(function(propName) {
+      Object.keys(this.editFeature.getProperties()).filter(propName => {
         return (propName !== 'geometry');
-      }).forEach(function(propName) {
+      }).forEach(propName => {
         templateVar.properties.push({
           'key': propName,
           'value': this.editFeature.get(propName),
           // 'type': p.localType
         });
       }, this);
-      var this_ = this;
-      M.template.compile(M.control.EditAttribute.TEMPLATE_POPUP, {
+      Template.compile(FEditattribute.TEMPLATE_POPUP, {
         'jsonp': true,
         'vars': templateVar,
         'parseToHtml': false
-      }).then(function(htmlAsText) {
-        var popupContent = {
+      }).then(htmlAsText => {
+        let popupContent = {
           'icon': 'g-cartografia-texto',
-          'title': M.control.EditAttribute.POPUP_TITLE,
+          'title': FEditattribute.POPUP_TITLE,
           'content': htmlAsText
         };
-        this_.popup_ = this_.facadeMap_.getPopup();
-        if (!M.utils.isNullOrEmpty(this_.popup_)) {
-          var hasExternalContent = this_.popup_.getTabs().some(function(tab) {
-            return (tab['title'] !== M.control.EditAttribute.POPUP_TITLE);
+        this.popup_ = this.facadeMap_.getPopup();
+        if (!Utils.isNullOrEmpty(this.popup_)) {
+          let hasExternalContent = this.popup_.getTabs().some(function (tab) {
+            return (tab['title'] !== FEditattribute.POPUP_TITLE);
           });
           if (!hasExternalContent) {
-            this_.facadeMap_.removePopup();
-            this_.popup_ = new M.Popup();
-            this_.popup_.addTab(popupContent);
-            this_.facadeMap_.addPopup(this_.popup_, coordinate);
+            this.facadeMap_.removePopup();
+            this.popup_ = new Popup();
+            this.popup_.addTab(popupContent);
+            this.facadeMap_.addPopup(this.popup_, coordinate);
+          } else {
+            this.popup_.addTab(popupContent);
           }
-          else {
-            this_.popup_.addTab(popupContent);
-          }
-        }
-        else {
-          this_.popup_ = new M.Popup();
-          this_.popup_.addTab(popupContent);
-          this_.facadeMap_.addPopup(this_.popup_, coordinate);
+        } else {
+          this.popup_ = new Popup();
+          this.popup_.addTab(popupContent);
+          this.facadeMap_.addPopup(this.popup_, coordinate);
         }
 
         // adds save button events on show
-        this_.popup_.on(M.evt.SHOW, function() {
-          var popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
-          if (!M.utils.isNullOrEmpty(popupButton)) {
-            goog.events.listen(popupButton, goog.events.EventType.CLICK, this.saveAttributes_, false, this);
+        this.popup_.on(EventsManager.SHOW, function () {
+          let popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
+          if (!Utils.isNullOrEmpty(popupButton)) {
+            popupButton.addEventListener("click", this.saveAttributes_);
           }
-        }, this_);
+        }, this);
 
         // removes events on destroy
-        this_.popup_.on(M.evt.DESTROY, function() {
-          var popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
-          if (!M.utils.isNullOrEmpty(popupButton)) {
-            goog.events.unlisten(popupButton, goog.events.EventType.CLICK, this.saveAttributes_, false, this);
+        this.popup_.on(EventsManager.DESTROY, function () {
+          let popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
+          if (!Utils.isNullOrEmpty(popupButton)) {
+            popupButton.removeEventListener("click", this.saveAttributes_);
           }
           this.unselectFeature_();
-        }, this_);
+        }, this);
       });
     }
-  };
+  }
 
   /**
    * This function save changes
@@ -154,39 +159,39 @@ goog.require('goog.events');
    * @param {goog.events.Event} evt - Event click
    * @api stable
    */
-  M.impl.control.EditAttribute.prototype.saveAttributes_ = function(evt) {
+  saveAttributes_(evt) {
 
     //JGL 20163105: para evitar que se envié en la petición WFST el bbox
     this.editFeature.unset("bbox", true);
     //
     // add class css
-    var popupContentHtml = this.popup_.getContent();
-    var popupButton = evt.target;
-    var featureProps = this.editFeature.getProperties();
+    let popupContentHtml = this.popup_.getContent();
+    let popupButton = evt.target;
+    let featureProps = this.editFeature.getProperties();
 
 
-    goog.dom.classes.add(popupButton, 'm-savefeature-saving');
+    popupButton.classList.add('m-savefeature-saving');
 
     // updates the properties from the inputs
     // with key of property as id
-    Object.keys(featureProps).forEach(function(p) {
-      var inputPopup = popupContentHtml.querySelector('input#' + p);
+    Object.keys(featureProps).forEach(p => {
+      let inputPopup = popupContentHtml.querySelector('input#' + p);
       if (inputPopup !== null) {
-        var value = popupContentHtml.querySelector('input#' + p).value;
+        let value = popupContentHtml.querySelector('input#' + p).value;
         this.editFeature.set(p, value, true);
       }
     }, this);
 
-    this.layer_.getImpl().getDescribeFeatureType().then(function(describeFeatureType) {
-      var editFeatureGeomName = this.editFeature.getGeometryName();
-      var editFeatureGeom = this.editFeature.getGeometry();
+    this.layer_.getImpl().getDescribeFeatureType().then(function (describeFeatureType) {
+      let editFeatureGeomName = this.editFeature.getGeometryName();
+      let editFeatureGeom = this.editFeature.getGeometry();
       this.editFeature.setGeometryName(describeFeatureType.geometryName);
       this.editFeature.setGeometry(editFeatureGeom);
       this.editFeature.unset(editFeatureGeomName);
 
-      var projectionCode = this.facadeMap_.getProjection().code;
-      var formatWFS = new ol.format.WFS();
-      var wfstRequestXml = formatWFS.writeTransaction(null, [this.editFeature], null, {
+      let projectionCode = this.facadeMap_.getProjection().code;
+      let formatWFS = new ol.format.WFS();
+      let wfstRequestXml = formatWFS.writeTransaction(null, [this.editFeature], null, {
         'featureNS': describeFeatureType.featureNS,
         'featurePrefix': describeFeatureType.featurePrefix,
         'featureType': this.layer_.name,
@@ -194,22 +199,22 @@ goog.require('goog.events');
         'gmlOptions': {
           'srsName': projectionCode
         }
-      });
-      var wfstRequestText = goog.dom.xml.serialize(wfstRequestXml);
+      })
+
+      let wfstRequestText = wfstRequestXml.serializeToString(doc);
 
       // closes the popup
       this.facadeMap_.removePopup(this.popup_);
-      M.remote.post(this.layer_.url, wfstRequestText).then(function(response) {
-        goog.dom.classes.remove(popupButton, 'm-savefeature-saving');
+      Remote.post(this.layer_.url, wfstRequestText).then(response => {
+        popupButton.classList.remove('m-savefeature-saving');
         if (response.code === 200) {
-          M.dialog.success('Se ha guardado correctamente el elemento');
-        }
-        else {
-          M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
+          Dialog.success('Se ha guardado correctamente el elemento');
+        } else {
+          Dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
         }
       });
-    }.bind(this));
-  };
+    });
+  }
 
   /**
    * This function unselect feature and remove popup
@@ -218,13 +223,13 @@ goog.require('goog.events');
    * @function
    * @api stable
    */
-  M.impl.control.EditAttribute.prototype.unselectFeature_ = function() {
+  unselectFeature_() {
     if (this.editFeature !== null) {
-      this.editFeature.setStyle(M.impl.layer.WFS.STYLE);
+      this.editFeature.setStyle(WFS.STYLE);
       this.editFeature = null;
       this.facadeMap_.removePopup();
     }
-  };
+  }
 
   /**
    * This function destroys this control and cleaning the HTML
@@ -233,12 +238,12 @@ goog.require('goog.events');
    * @function
    * @api stable
    */
-  M.impl.control.EditAttribute.prototype.destroy = function() {
-    goog.base(this, 'destroy');
-    if (!M.utils.isNull(this.facadeMap_) && !M.utils.isNull(this.facadeMap_.getPopup())) {
+  destroy() {
+    super('destroy');
+    if (!Utils.isNull(this.facadeMap_) && !Utils.isNull(this.facadeMap_.getPopup())) {
       this.facadeMap_.removePopup();
     }
-  };
+  }
 
 
   /**
@@ -248,7 +253,7 @@ goog.require('goog.events');
    * @public
    * @api stable
    */
-  M.impl.control.EditAttribute.SELECTED_STYLE = new ol.style.Style({
+  EditAttribute.SELECTED_STYLE = new ol.style.Style({
     fill: new ol.style.Fill({
       color: 'rgba(175, 127, 19, 0.2)'
     }),
@@ -263,4 +268,4 @@ goog.require('goog.events');
       })
     })
   });
-})();
+}
