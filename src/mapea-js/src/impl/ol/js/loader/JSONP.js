@@ -1,15 +1,12 @@
-import FacadeGeoJSON from "facade/js/format/geojson";
-import FacadeObject from "facade/js/object.js";
-import FacadeRemote from "facade/js/utils/remote";
-import Utils from "facade/js/utils/utils";
-import FacadeFeature from "facade/js/feature/feature";
+import Object from "facade/js/Object";
+import Remote from "facade/js/util/Remote";
 import Exception from "facade/js/exception/exception";
-
+import Utils from "facade/js/util/Utils";
 
 /**
  * @namespace M.impl.control
  */
-export default class KML extends FacadeObject {
+export default class JSONP extends Object {
   /**
    * @classdesc TODO
    * control
@@ -39,10 +36,9 @@ export default class KML extends FacadeObject {
     /**
      * TODO
      * @private
-     * @type {M.impl.format.GeoJSON}
+     * @type {M.format.GeoJSON}
      */
     this.format_ = format;
-
   }
 
   /**
@@ -70,31 +66,18 @@ export default class KML extends FacadeObject {
    * @function
    */
   loadInternal_(projection) {
-    let this_ = this;
-    return (new Promise((success, fail) => {
-      FacadeRemote.get(this_.url_).then((response) => {
+    return new Promise((success, fail) => {
+      Remote.get(this.url_).then((response) => {
         if (!Utils.isNullOrEmpty(response.text)) {
-          let features = this_.format_.readFeatures(response.text, {
+          let features = this.format_.read(response.text, {
             featureProjection: projection
           });
-          let screenOverlay = this_.format_.getScreenOverlay();
-          success.call(this, [
-            features.map(olFeature => {
-              let feature = new FacadeFeature(olFeature.getId(), {
-                geometry: {
-                  coordinates: olFeature.getGeometry().getCoordinates(),
-                  type: olFeature.getGeometry().getType()
-                },
-                properties: olFeature.getProperties()
-              });
-              feature.getImpl().getOLFeature().style = olFeature.getStyle();
-              return feature;
-            }), screenOverlay]);
-        } else {
-          Exception('No hubo respuesta del KML');
+          success.call(this, [features]);
+        }
+        else {
+          Exception('No hubo respuesta del servicio');
         }
       });
-    }));
+    });
   }
-
 }

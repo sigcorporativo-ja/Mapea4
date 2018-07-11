@@ -1,12 +1,12 @@
-import FacadeObject from "facade/js/object.js";
-import FacadeRemote from "facade/js/utils/remote";
-import Utils from "facade/js/utils/utils";
+import Object from "facade/js/Object";
+import Remote from "facade/js/util/Remote";
+import Utils from "facade/js/util/Utils";
 import Exception from "facade/js/exception/exception";
 import Dialog from "facade/js/dialog";
 /**
  * @namespace M.impl.control
  */
-export default class WFS extends FacadeObject {
+export default class WFS extends Object {
   /**
    * @classdesc TODO
    * control
@@ -39,7 +39,6 @@ export default class WFS extends FacadeObject {
      * @type {M.impl.format.GeoJSON | M.impl.format.GML}
      */
     this.format_ = format;
-
   }
 
   /**
@@ -64,22 +63,25 @@ export default class WFS extends FacadeObject {
    * @function
    */
   loadInternal_(url, projection) {
-    return (new Promise((success, fail) => {
-      FacadeRemote.get(url).then((response) => {
+    return new Promise((success, fail) => {
+      Remote.get(url).then(response => {
         if (!Utils.isNullOrEmpty(response.text) && response.text.indexOf("ServiceExceptionReport") < 0) {
           let features = this.format_.read(response.text, projection);
           success(features);
-        } else {
+        }
+        else {
           if (response.code === 401) {
             Dialog.error('Ha ocurrido un error al cargar la capa: Usuario no autorizado.');
-          } else if (response.text.indexOf("featureId and cql_filter") >= 0) {
+          }
+          else if (response.text.indexOf("featureId and cql_filter") >= 0) {
             Dialog.error('FeatureID y CQL son mutuamente excluyentes. Indicar sólo un tipo de filtrado.');
-          } else {
+          }
+          else {
             Exception('No hubo respuesta en la operación GetFeature');
           }
         }
       });
-    }));
+    });
   }
 
   /**
