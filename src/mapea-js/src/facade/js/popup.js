@@ -1,10 +1,8 @@
-goog.provide('M.Popup');
+import Utils from "./utils/utils.js"
+import Exception from "./exception/exception.js"
+import Base from "./facade.js"
 
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.facade.Base');
-
-(function () {
+export class Popup extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -14,7 +12,11 @@ goog.require('M.facade.Base');
    * @extends {M.facade.Base}
    * @api stable
    */
-  M.Popup = (function (options) {
+  constructor(options) {
+
+    // calls the super constructor
+    super();
+
     /**
      * TODO
      * @private
@@ -41,14 +43,13 @@ goog.require('M.facade.Base');
      * @private
      * @type {string}
      */
-    this.status_ = M.Popup.status.COLLAPSED;
+    // this.status_ = M.Popup.status.COLLAPSED;
+    this.status_ = Popup.status.COLLAPSED;
 
-    var impl = new M.impl.Popup(options);
+    let impl = new Impl(options);
 
-    // calls the super constructor
-    goog.base(this, impl);
-  });
-  goog.inherits(M.Popup, M.facade.Base);
+  };
+  // goog.inherits(M.Popup, M.facade.Base);
 
   /**
    * TODO
@@ -56,7 +57,7 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.Popup.prototype.getTabs = function () {
+  get tabs() {
     return this.tabs_;
   };
 
@@ -66,10 +67,8 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.Popup.prototype.removeTab = function (tabToRemove) {
-    this.tabs_ = this.tabs_.filter(function (tab) {
-      return (tab.content !== tabToRemove.content);
-    });
+  removeTab(tabToRemove) {
+    this.tabs_ = this.tabs_.filter(tab => tab.content !== tabToRemove.content);
     this.update();
   };
   /**
@@ -78,10 +77,10 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.Popup.prototype.addTab = function (tabOptions) {
-    var tab = tabOptions;
-    if (!(tab instanceof M.Popup.Tab)) {
-      tab = new M.Popup.Tab(tabOptions);
+  addTab(tabOptions) {
+    let tab = tabOptions;
+    if (!(tab instanceof Tab)) {
+      tab = new Tab(tabOptions);
     }
     this.tabs_.push(tab);
     this.update();
@@ -93,26 +92,25 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.Popup.prototype.addTo = function (map, coordinate) {
+  addTo(map, coordinate) {
     this.map_ = map;
-    if (M.utils.isNullOrEmpty(this.element_)) {
-      var this_ = this;
-      M.template.compile(M.Popup.TEMPLATE, {
+    if (Utils.isNullOrEmpty(this.element_)) {
+      let this_ = this;
+      Template.compile(Popup.TEMPLATE, {
         'jsonp': true,
         'vars': {
           'tabs': this.tabs_
         }
-      }).then(function (html) {
+      }).then((html) => {
         if (this_.tabs_.length > 0) {
-        this_.element_ = html;
-        this_.addEvents(html);
-        this_.getImpl().addTo(map, html);
-        this_.show(coordinate);
-      }
+          this_.element_ = html;
+          this_.addEvents(html);
+          this_.impl.addTo(map, html);
+          this_.show(coordinate);
+        }
       });
-    }
-    else {
-      this.getImpl().addTo(map, this.element_);
+    } else {
+      this.impl.addTo(map, this.element_);
       this.show(coordinate);
     }
   };
@@ -123,21 +121,21 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.Popup.prototype.update = function () {
-    if (!M.utils.isNullOrEmpty(this.map_)) {
-      var this_ = this;
-      M.template.compile(M.Popup.TEMPLATE, {
+  update() {
+    if (!Utils.isNullOrEmpty(this.map_)) {
+      let this_ = this;
+      Template.compile(Popup.TEMPLATE, {
         'jsonp': true,
         'vars': {
           'tabs': this.tabs_
         }
       }).then(function (html) {
         if (this_.tabs_.length > 0) {
-        this_.element_ = html;
-        this_.addEvents(html);
-        this_.getImpl().setContainer(html);
-        this_.show(this_.coord_);
-      }
+          this_.element_ = html;
+          this_.addEvents(html);
+          this_.impl.Container = html;
+          this_.show(this_.coord_);
+        }
       });
     }
   };
@@ -148,10 +146,10 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.Popup.prototype.show = function (coord) {
+  show(coord) {
     this.coord_ = coord;
-    this.getImpl().show(this.coord_, function () {
-      this.fire(M.evt.SHOW);
+    this.impl.show(this.coord_, () => {
+      this.fire(Evt.SHOW);
     }.bind(this));
     // this.setStatus_(M.Popup.status.COLLAPSED);
   };
@@ -162,11 +160,11 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.Popup.prototype.hide = function (evt) {
-    if (!M.utils.isNullOrEmpty(evt)) {
-      evt.preventDefault();
+  hide(evt) {
+    if (!Utils.isNullOrEmpty(evt)) {
+      Evt.preventDefault();
     }
-    this.getImpl().hide();
+    this.impl.hide();
   };
 
   /**
@@ -175,10 +173,10 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.Popup.prototype.switchTab = function (index) {
+  switchTab(index) {
     if (this.tabs_.length > index) {
-      var tab = this.tabs_[index];
-      this.setContent_(tab.content);
+      let tab = this.tabs_[index];
+      this.Content_ = tab.content;
       this.show(this.coord_);
     }
   };
@@ -188,8 +186,8 @@ goog.require('M.facade.Base');
    * @private
    * @function
    */
-  M.Popup.prototype.setContent_ = function (content) {
-    this.getImpl().setContent(content);
+  set Content_(value) {
+    this.impl.Content = value;
   };
 
   /**
@@ -197,8 +195,8 @@ goog.require('M.facade.Base');
    * @private
    * @function
    */
-  M.Popup.prototype.getContent = function () {
-    return this.getImpl().getContent();
+  get Content() {
+    return this.impl.getContent();
   };
 
   /**
@@ -206,286 +204,272 @@ goog.require('M.facade.Base');
    * @private
    * @function
    */
-  M.Popup.prototype.addEvents = function (html) {
+  addEvents(html) {
     // adds tabs events
-    var touchstartY;
-    var tabs = html.querySelectorAll('div.m-tab');
-    Array.prototype.forEach.call(tabs, function (tab) {
-      goog.events.listen(tab, [
-            goog.events.EventType.CLICK,
-            goog.events.EventType.TOUCHEND
-         ], function (evt) {
-        evt.preventDefault();
-        // 5px tolerance
-        var touchendY = evt.clientY;
-        if ((evt.type === goog.events.EventType.CLICK) || (Math.abs(touchstartY - touchendY) < 5)) {
-          // remove m-activated from all tabs
-          Array.prototype.forEach.call(tabs, function (addedTab) {
-            goog.dom.classlist.remove(addedTab, 'm-activated');
-          });
-          goog.dom.classlist.add(tab, 'm-activated');
-          var index = tab.getAttribute('data-index');
-          this.switchTab(index);
-        }
-      }, false, this);
-    }, this);
+    let touchstartY;
+    let tabs = html.querySelectorAll('div.m-tab');
+    Array.forEach.call(tabs, (tab) => {
 
-    // adds close event
-    var closeBtn = html.querySelector('a.m-popup-closer');
-    goog.events.listen(closeBtn, [
-         goog.events.EventType.CLICK,
-         goog.events.EventType.TOUCHEND
-      ], this.hide, false, this);
+      tab.addEventListener('click', evt, false),
+        tab.addEventListener('touchend', evt, false)
+    }(evt) => {
+      Evt.preventDefault();
+      // 5px tolerance
+      let touchendY = Evt.clientY;
+      if ((Evt.type === "click") || (Math.abs(touchstartY - touchendY) < 5)) {
+        // remove m-activated from all tabs
+        Array.forEach.call(tabs, (addedTab) => {
+          tab.classList.add(addedTab)
+        });
+        tab.classList.add('m-activated');
+        let index = tab.Attribute('data-index');
+        this.switchTab(index);
+      }
+    }, false, this);
+  }, this);
 
-    // mobile events
-    var headerElement = html.querySelector('div.m-tabs');
-    if (M.utils.isNullOrEmpty(headerElement)) {
-      headerElement = html.querySelector('div.m-content > div.m-header');
+// adds close event
+let closeBtn = html.querySelector('a.m-popup-closer');
+closeBtn.addEventListener("click", this.hide, false);
+closeBtn.addEventListener("touchend", this.hide, false);
+// mobile events
+let headerElement = html.querySelector('div.m-tabs');
+if (Utils.isNullOrEmpty(headerElement)) {
+  headerElement = html.querySelector('div.m-content > div.m-header');
+}
+if (!Utils.isNullOrEmpty(headerElement)) {
+  let topPosition;
+  headerElement.addEventListener("touchstart", (evt) => {
+    evt.preventDefault();
+    touchstartY = Evt.clientY;
+    if (this.status_ === Popup.status.COLLAPSED) {
+      topPosition = 0.9 * window.HEIGHT;
+    } else if (this.status_ === Popup.status.DEFAULT) {
+      topPosition = 0.45 * window.HEIGHT;
+    } else if (this.status_ === Popup.status.FULL) {
+      topPosition = 0;
     }
-    if (!M.utils.isNullOrEmpty(headerElement)) {
-      var topPosition;
-      goog.events.listen(headerElement, [
-            goog.events.EventType.TOUCHSTART
-         ], function (evt) {
-        evt.preventDefault();
-        touchstartY = evt.clientY;
-        if (this.status_ === M.Popup.status.COLLAPSED) {
-          topPosition = 0.9 * M.window.HEIGHT;
-        }
-        else if (this.status_ === M.Popup.status.DEFAULT) {
-          topPosition = 0.45 * M.window.HEIGHT;
-        }
-        else if (this.status_ === M.Popup.status.FULL) {
-          topPosition = 0;
-        }
-        goog.dom.classlist.add(html, 'm-no-animation');
-      }, false, this);
+    html.classList.add(html, 'm-no-animation');
+  }, false, this), false);
 
-      goog.events.listen(headerElement, [
-            goog.events.EventType.TOUCHMOVE
-         ], function (evt) {
-        evt.preventDefault();
-        var touchY = evt.clientY;
-        var translatedPixels = touchY - touchstartY;
-        goog.style.setStyle(html, 'top', (topPosition + translatedPixels) + 'px');
-      }, false, this);
 
-      goog.events.listen(headerElement, [
-            goog.events.EventType.TOUCHEND
-         ], function (evt) {
-        evt.preventDefault();
-        var touchendY = evt.clientY;
-        this.manageCollapsiblePopup_(touchstartY, touchendY);
-      }, false, this);
+headerElement.addEventListener('touchmove', (evt) => {
+  Evt.preventDefault();
+  let touchY = evt.clientY;
+  let translatedPixels = touchY - touchstartY;
+  Style.setStyle(html, 'top', (topPosition + translatedPixels) + 'px');
+}, false, this);
 
-      // CLICK EVENTS
-      goog.events.listen(headerElement, [
-            goog.events.EventType.MOUSEUP
-         ], function(evt) {
-        evt.preventDefault();
-        // COLLAPSED --> DEFAULT
-        if (this.tabs_.length <= 1) {
 
-          if (this.status_ === M.Popup.status.COLLAPSED) {
-            this.setStatus_(M.Popup.status.DEFAULT);
-          }
-          // DEFAULT --> FULL
-          else if (this.status_ === M.Popup.status.DEFAULT) {
-            this.setStatus_(M.Popup.status.FULL);
-          }
-          else {
-            this.setStatus_(M.Popup.status.COLLAPSED);
-          }
-        }
-      }, false, this);
+headerElement.addEventListener("touchend", (evt) => {
+Evt.preventDefault();
+let touchendY = Evt.clientY;
+this.manageCollapsiblePopup_(touchstartY, touchendY);
+}, false, this);)
+
+// CLICK EVENTS
+headerElement.addEventListener("mouseup", (evt) => {
+  Evt.preventDefault(), false);
+
+// COLLAPSED --> DEFAULT
+if (this.tabs_.length <= 1) {
+
+  if (this.status_ === Popup.status.COLLAPSED) {
+    this.Status_ = Popup.status.DEFAULT;
+  }
+  // DEFAULT --> FULL
+  else if (this.status_ === Popup.status.DEFAULT) {
+    this.Status_ = Popup.status.FULL;
+  } else {
+    this.Status_Popup.status.COLLAPSED;
+  }
+}
+}, false, this);
+}
+};
+
+/**
+ * TODO
+ * @private
+ * @function
+ */
+set Status_(status) {
+  if (status !== this.status_) {
+    status.classlist.remove(this.element_, this.status_);
+    this.status_ = status;
+    status.classlist.add(this.element_, this.status_);
+    status.style.setStyle(this.element_, 'top', '');
+    status.classlist.remove(this.element_, 'm-no-animation');
+    // mobile center
+    if (window.WIDTH <= config.MOBILE_WIDTH) {
+      this.impl.centerByStatus(status, this.coord_);
     }
-  };
+  }
+};
 
-  /**
-   * TODO
-   * @private
-   * @function
-   */
-  M.Popup.prototype.setStatus_ = function (status) {
-    if (status !== this.status_) {
-      goog.dom.classlist.remove(this.element_, this.status_);
-      this.status_ = status;
-      goog.dom.classlist.add(this.element_, this.status_);
-      goog.style.setStyle(this.element_, 'top', '');
-      goog.dom.classlist.remove(this.element_, 'm-no-animation');
-      // mobile center
-      if (M.window.WIDTH <= M.config.MOBILE_WIDTH) {
-        this.getImpl().centerByStatus(status, this.coord_);
+/**
+ * TODO
+ * @private
+ * @function
+ */
+manageCollapsiblePopup_(touchstartY, touchendY) {
+  let touchPerc = (touchendY * 100) / window.HEIGHT;
+  let distanceTouch = Math.abs(touchstartY - touchendY);
+  let distanceTouchPerc = (distanceTouch * 100) / window.HEIGHT;
+  // 10% tolerance
+  if (distanceTouchPerc > 10) {
+
+    /*
+     * manages collapsing events depending on
+     * the current position of the popup header and the direction
+     *
+     * These are the thresholds:
+     *  _____________     ____________
+     * |     0%      |       FULL
+     * |-------------|
+     * |             |
+     * |     45%     |
+     * |             | 2
+     * |-------------|   ------------
+     * |             | 1      DEFAULT
+     * |             |
+     * |             |
+     * |-------------|   ------------
+     * |     85%     |      COLLAPSED
+     * |_____________|
+     *
+     */
+    if (this.status_ === Popup.status.COLLAPSED) {
+      // 2
+      if (touchPerc < 45) {
+        this.Status_ = Popup.status.FULL;
+      }
+      // 1
+      else if (touchPerc < 85) {
+        this.Status_ = Popup.status.DEFAULT;
+      } else {
+        this.Status_ = Popup.status.COLLAPSED;
+      }
+    } else if (this.status_ === Popup.status.DEFAULT) {
+      // 1
+      if (touchPerc > 45) {
+        this.Status_ = Popup.status.COLLAPSED;
+      }
+      // 2
+      else if (touchPerc < 45) {
+        this.Status_ = Popup.status.FULL;
+      } else {
+        this.Status_ = Popup.status.DEFAULT;
+      }
+    } else if (this.status_ === Popup.status.FULL) {
+      // 1
+      if (touchPerc > 45) {
+        this.Status_ = Popup.status.COLLAPSED;
+      }
+      // 2
+      else if (touchPerc > 0) {
+        this.Status_ = Popup.status.DEFAULT;
+      } else {
+        this.Status_ = Popup.status.FULL;
       }
     }
-  };
-
-  /**
-   * TODO
-   * @private
-   * @function
-   */
-  M.Popup.prototype.manageCollapsiblePopup_ = function (touchstartY, touchendY) {
-    var touchPerc = (touchendY * 100) / M.window.HEIGHT;
-    var distanceTouch = Math.abs(touchstartY - touchendY);
-    var distanceTouchPerc = (distanceTouch * 100) / M.window.HEIGHT;
-    // 10% tolerance
-    if (distanceTouchPerc > 10) {
-
-      /*
-       * manages collapsing events depending on
-       * the current position of the popup header and the direction
-       *
-       * These are the thresholds:
-       *  _____________     ____________
-       * |     0%      |       FULL
-       * |-------------|
-       * |             |
-       * |     45%     |
-       * |             | 2
-       * |-------------|   ------------
-       * |             | 1      DEFAULT
-       * |             |
-       * |             |
-       * |-------------|   ------------
-       * |     85%     |      COLLAPSED
-       * |_____________|
-       *
-       */
-      if (this.status_ === M.Popup.status.COLLAPSED) {
-        // 2
-        if (touchPerc < 45) {
-          this.setStatus_(M.Popup.status.FULL);
-        }
-        // 1
-        else if (touchPerc < 85) {
-          this.setStatus_(M.Popup.status.DEFAULT);
-        }
-        else {
-          this.setStatus_(M.Popup.status.COLLAPSED);
-        }
-      }
-      else if (this.status_ === M.Popup.status.DEFAULT) {
-        // 1
-        if (touchPerc > 45) {
-          this.setStatus_(M.Popup.status.COLLAPSED);
-        }
-        // 2
-        else if (touchPerc < 45) {
-          this.setStatus_(M.Popup.status.FULL);
-        }
-        else {
-          this.setStatus_(M.Popup.status.DEFAULT);
-        }
-      }
-      else if (this.status_ === M.Popup.status.FULL) {
-        // 1
-        if (touchPerc > 45) {
-          this.setStatus_(M.Popup.status.COLLAPSED);
-        }
-        // 2
-        else if (touchPerc > 0) {
-          this.setStatus_(M.Popup.status.DEFAULT);
-        }
-        else {
-          this.setStatus_(M.Popup.status.FULL);
-        }
-      }
-    }
-    else {
-      this.setStatus_(this.status_);
-    }
-  };
+  } else {
+    this.Status_(this.status_);
+  }
+};
 
 
-  /**
-   * TODO
-   * @public
-   * @function
-   * @api stable
-   */
-  M.Popup.prototype.getCoordinate = function () {
-    return this.coord_;
-  };
+/**
+ * TODO
+ * @public
+ * @function
+ * @api stable
+ */
+get Coordinate() {
+  return this.coord_;
+};
 
-  /**
-   * TODO
-   * @public
-   * @function
-   * @api stable
-   */
-  M.Popup.prototype.setCoordinate = function (coord) {
-    this.coord_ = coord;
-    if (!M.utils.isNullOrEmpty(this.element_)) {
-      this.getImpl().show(coord);
-    }
-  };
+/**
+ * TODO
+ * @public
+ * @function
+ * @api stable
+ */
+set Coordinate(coord) {
+  this.coord_ = coord;
+  if (!Utils.isNullOrEmpty(this.element_)) {
+    this.impl.show(coord);
+  }
+};
 
-  /**
-   * TODO
-   * @public
-   * @function
-   * @api stable
-   */
-  M.Popup.prototype.destroy = function () {
-    this.tabs_.length = 0;
-    this.coord_ = null;
-    this.fire(M.evt.DESTROY);
-  };
+/**
+ * TODO
+ * @public
+ * @function
+ * @api stable
+ */
+destroy() {
+  this.tabs_.length = 0;
+  this.coord_ = null;
+  this.fire(Evt.DESTROY);
+};
 
-  /**
-   * Template for popup
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.Popup.TEMPLATE = 'popup.html';
+/**
+ * Template for popup
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Popup.TEMPLATE = 'popup.html';
 
-  /**
-   * status of this popup
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  M.Popup.status = {};
+/**
+ * status of this popup
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+Popup.status = {};
+*/
 
-  /**
-   * collapsed status of this popup
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.Popup.status.COLLAPSED = 'm-collapsed';
+/**
+ * collapsed status of this popup
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Popup.status.COLLAPSED = 'm-collapsed';
 
-  /**
-   * default status of this popup
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.Popup.status.DEFAULT = 'm-default';
+/**
+ * default status of this popup
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Popup.status.DEFAULT = 'm-default';
 
-  /**
-   * full status of this popup
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.Popup.status.FULL = 'm-full';
+/**
+ * full status of this popup
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Popup.status.FULL = 'm-full';
 
-  /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
-   *
-   * @constructor
-   */
-  M.Popup.Tab = (function (options) {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ *
+ * @constructor
+ */
+export class Tab {
+
+  constructor(options) {
+
     options = (options || {});
 
     /**
@@ -514,5 +498,5 @@ goog.require('M.facade.Base');
      * @expose
      */
     this.content = options.content;
-  });
-})();
+  }
+};
