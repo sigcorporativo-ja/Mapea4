@@ -1,10 +1,11 @@
-goog.provide('M.handler.Features');
+import Utils from './util/Utils';
+import Exception from './exception/exception';
+import Base from './Base';
+import HandlerImpl from '../../../impl/ol/js/handlers/featureshandler';
+import Feature from '../feature/Feature';
+import EvtManaManager from "../event/Manager";
 
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.facade.Base');
-
-(function() {
+export default class Feature extends Base {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -14,7 +15,11 @@ goog.require('M.facade.Base');
    * @extends {M.facade.Base}
    * @api stable
    */
-  M.handler.Features = (function(options = {}, impl = new M.impl.handler.Features(options)) {
+  constructor(options = {}, impl = new HandlerImpl(options)) {
+
+    // calls the super constructor
+    super(impl);
+
     /**
      * @private
      * @type {M.Map}
@@ -51,17 +56,13 @@ goog.require('M.facade.Base');
     this.prevHoverFeatures_ = {};
 
     // checks if the implementation has all methods
-    if (!M.utils.isFunction(impl.addTo)) {
-      M.exception('La implementación usada no posee el método addTo');
+    if (!Utils.isFunction(impl.addTo)) {
+      Exception('La implementación usada no posee el método addTo');
     }
-    if (!M.utils.isFunction(impl.getFeaturesByLayer)) {
-      M.exception('La implementación usada no posee el método getFeaturesByLayer');
+    if (!Utils.isFunction(impl.getFeaturesByLayer)) {
+      Exception('La implementación usada no posee el método getFeaturesByLayer');
     }
-    // calls the super constructor
-    goog.base(this, impl);
-  });
-  goog.inherits(M.handler.Features, M.facade.Base);
-
+  }
   /**
    * This function adds the control to the specified map
    *
@@ -71,13 +72,13 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.handler.Features.prototype.addTo = function(map) {
+  addTo(map) {
     this.map_ = map;
-    this.map_.on(M.evt.CLICK, this.clickOnMap_, this);
-    this.map_.on(M.evt.MOVE, this.moveOverMap_, this);
+    this.map_.on(EvtManaManager.CLICK, this.clickOnMap_, this);
+    this.map_.on(EvtManaManager.MOVE, this.moveOverMap_, this);
     this.getImpl().addTo(this.map_);
-    this.fire(M.evt.ADDED_TO_MAP);
-  };
+    this.fire(EvtManaManager.ADDED_TO_MAP);
+  }
 
   /**
    * TODO
@@ -85,18 +86,17 @@ goog.require('M.facade.Base');
    * @private
    * @function
    */
-  M.handler.Features.prototype.clickOnMap_ = function(evt) {
+  clickOnMap_(evt) {
     if (this.activated_ === true) {
       let impl = this.getImpl();
 
-      this.layers_.forEach(function(layer) {
+      this.layers_.forEach((layer) => {
         let clickedFeatures = impl.getFeaturesByLayer(evt, layer);
         let prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
         // no features selected then unselect prev selected features
         if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
           this.unselectFeatures(prevFeatures, layer, evt);
-        }
-        else if (clickedFeatures.length > 0) {
+        } else if (clickedFeatures.length > 0) {
           let newFeatures = clickedFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
           let diffFeatures = prevFeatures.filter(f => !clickedFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
@@ -110,7 +110,7 @@ goog.require('M.facade.Base');
         }
       }, this);
     }
-  };
+  }
 
   /**
    * TODO
@@ -118,19 +118,18 @@ goog.require('M.facade.Base');
    * @private
    * @function
    */
-  M.handler.Features.prototype.moveOverMap_ = function(evt) {
+  moveOverMap_(evt) {
     if (this.activated_ === true) {
       let impl = this.getImpl();
 
-      this.layers_.forEach(function(layer) {
+      this.layers_.forEach((layer) => {
         let hoveredFeatures = impl.getFeaturesByLayer(evt, layer);
         let prevFeatures = [...this.prevHoverFeatures_[layer.name]];
         // no features selected then unselect prev selected features
         if (hoveredFeatures.length === 0 && prevFeatures.length > 0) {
           this.leaveFeatures_(prevFeatures, layer, evt);
-        }
-        else if (hoveredFeatures.length > 0) {
-          let newFeatures = hoveredFeatures.filter(f => (f instanceof M.Feature) && !prevFeatures.some(pf => pf.equals(f)));
+        } else if (hoveredFeatures.length > 0) {
+          let newFeatures = hoveredFeatures.filter(f => (f instanceof Feature) && !prevFeatures.some(pf => pf.equals(f)));
           let diffFeatures = prevFeatures.filter(f => !hoveredFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
           if (diffFeatures.length > 0) {
@@ -141,9 +140,9 @@ goog.require('M.facade.Base');
             this.hoverFeatures_(newFeatures, layer, evt);
           }
         }
-      }, this);
+      });
     }
-  };
+  }
 
   /**
    * TODO
@@ -152,14 +151,14 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.handler.Features.prototype.selectFeatures = function(features, layer, evt) {
+  selectFeatures(features, layer, evt) {
     this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name].concat(features);
     let layerImpl = layer.getImpl();
-    if (M.utils.isFunction(layerImpl.selectFeatures)) {
+    if (Utils.isFunction(layerImpl.selectFeatures)) {
       layerImpl.selectFeatures(features, evt.coord, evt);
     }
-    layer.fire(M.evt.SELECT_FEATURES, [features, evt]);
-  };
+    layer.fire(EvtManaManager.SELECT_FEATURES, [features, evt]);
+  }
 
   /**
    * TODO
@@ -168,16 +167,16 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.handler.Features.prototype.unselectFeatures = function(features, layer, evt) {
+  unselectFeatures(features, layer, evt) {
     // removes unselected features
     this.prevSelectedFeatures_[layer.name] =
       this.prevSelectedFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
     let layerImpl = layer.getImpl();
-    if (M.utils.isFunction(layerImpl.unselectFeatures)) {
+    if (Utils.isFunction(layerImpl.unselectFeatures)) {
       layerImpl.unselectFeatures(features, evt.coord);
     }
-    layer.fire(M.evt.UNSELECT_FEATURES, [features, evt.coord]);
-  };
+    layer.fire(EvtManaManager.UNSELECT_FEATURES, [features, evt.coord]);
+  }
 
   /**
    * TODO
@@ -186,11 +185,11 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.handler.Features.prototype.hoverFeatures_ = function(features, layer, evt) {
+  hoverFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] = this.prevHoverFeatures_[layer.name].concat(features);
-    layer.fire(M.evt.HOVER_FEATURES, [features, evt]);
+    layer.fire(EvtManaManager.HOVER_FEATURES, [features, evt]);
     this.getImpl().addCursorPointer();
-  };
+  }
 
   /**
    * TODO
@@ -199,12 +198,12 @@ goog.require('M.facade.Base');
    * @function
    * @api stable
    */
-  M.handler.Features.prototype.leaveFeatures_ = function(features, layer, evt) {
+  leaveFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] =
       this.prevHoverFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
-    layer.fire(M.evt.LEAVE_FEATURES, [features, evt.coord]);
+    layer.fire(EvtManaManager.LEAVE_FEATURES, [features, evt.coord]);
     this.getImpl().removeCursorPointer();
-  };
+  }
 
   /**
    * function adds the event 'click'
@@ -214,12 +213,12 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.handler.Features.prototype.activate = function() {
+  activate() {
     if (this.activated_ === false) {
       this.activated_ = true;
-      this.fire(M.evt.ACTIVATED);
+      this.fire(EvtManaManager.ACTIVATED);
     }
-  };
+  }
 
   /**
    * function remove the event 'click'
@@ -229,12 +228,12 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.handler.Features.prototype.deactivate = function() {
+  deactivate() {
     if (this.activated_ === true) {
       this.activated_ = false;
-      this.fire(M.evt.DEACTIVATED);
+      this.fire(EvtManaManager.DEACTIVATED);
     }
-  };
+  }
 
   /**
    * Sets the panel of the control
@@ -245,13 +244,13 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.handler.Features.prototype.addLayer = function(layer) {
-    if (!M.utils.includes(this.layers_, layer)) {
+  addLayer(layer) {
+    if (!Utils.includes(this.layers_, layer)) {
       this.layers_.push(layer);
       this.prevSelectedFeatures_[layer.name] = [];
       this.prevHoverFeatures_[layer.name] = [];
     }
-  };
+  }
 
   /**
    * Gets the panel of the control
@@ -262,13 +261,13 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.handler.Features.prototype.removeLayer = function(layer) {
+  removeLayer(layer) {
     this.layers_.remove(layer);
     this.prevSelectedFeatures_[layer.name] = null;
     this.prevHoverFeatures_[layer.name] = null;
     delete this.prevSelectedFeatures_[layer.name];
     delete this.prevHoverFeatures_[layer.name];
-  };
+  }
 
   /**
    * Destroys the handler
@@ -278,9 +277,9 @@ goog.require('M.facade.Base');
    * @api stable
    * @export
    */
-  M.handler.Features.prototype.destroy = function() {
+  destroy() {
     // TODO
     // this.getImpl().destroy();
     // this.fire(M.evt.DESTROY);
-  };
-})();
+  }
+}
