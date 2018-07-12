@@ -1,5 +1,5 @@
-import Utils from "facade/js/utils/utils";
-import WMS from "facade/js/layers/wms";
+import Utils from "facade/js/util/Utils";
+import WMS from "facade/js/layer/WMS";
 
 /**
  * @namespace M.impl.GetCapabilities
@@ -79,18 +79,18 @@ export default class GetCapabilities {
         // base case
         if (Utils.isNullOrEmpty(layerName) || (layer.Name === layerName)) {
           // if the layer supports the SRS
-          var srsArray = [];
+          let srsArray = [];
           if (!Utils.isNullOrEmpty(layer.SRS)) {
             srsArray = layer.SRS;
           } else if (!Utils.isNullOrEmpty(layer.CRS)) {
             srsArray = layer.CRS;
           }
           if (srsArray.indexOf(this.projection_.code) !== -1) {
-            var matchedBbox = null;
-            var bboxes = layer.BoundingBox;
+            let matchedBbox = null;
+            let bboxes = layer.BoundingBox;
             for (i = 0, ilen = bboxes.length;
               (i < ilen) && (matchedBbox === null); i++) {
-              var bbox = bboxes[i];
+              let bbox = bboxes[i];
               if (bbox.crs === this.projection_.code) {
                 matchedBbox = bbox;
               }
@@ -100,8 +100,8 @@ export default class GetCapabilities {
             }
             extent = matchedBbox.extent;
             if (matchedBbox.crs !== this.projection_.code) {
-              var projSrc = ol.proj.get(matchedBbox.crs);
-              var projDest = ol.proj.get(this.projection_.code);
+              let projSrc = ol.proj.get(matchedBbox.crs);
+              let projDest = ol.proj.get(this.projection_.code);
               extent = ol.proj.transformExtent(extent, projSrc, projDest);
             }
           }

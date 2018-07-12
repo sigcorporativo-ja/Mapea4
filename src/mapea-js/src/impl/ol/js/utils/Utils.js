@@ -1,5 +1,5 @@
-import Feature from "facade/js/feature/feature";
-import WKT from "facade/js/geom/wkt";
+import Feature from "facade/js/feature/Feature";
+import WKT from "facade/js/geom/WKT";
 
 
 /**
@@ -74,12 +74,12 @@ export default class Utils {
     if (overlayYUnits === ol.style.IconAnchorUnits.FRACTION) {
       offsetY = (size[1] - (offsetY * size[1]));
     }
-    goog.style.setStyle(img, 'position', 'absolute');
-    var left = screenXY[0];
+    img.style.position = "absolute";
+    let left = screenXY[0];
     if (screenXUnits === ol.style.IconAnchorUnits.FRACTION) {
       left = (left * mapSize[0]) - offsetX;
     }
-    var top = screenXY[1];
+    let top = screenXY[1];
     if (screenYUnits === ol.style.IconAnchorUnits.FRACTION) {
       top = (mapSize[1] - (top * mapSize[1])) - offsetY;
     }
@@ -87,7 +87,7 @@ export default class Utils {
     img.style.left = left;
 
     // parent
-    var container = map.getMapImpl().getOverlayContainerStopEvent();
+    let container = map.getMapImpl().getOverlayContainerStopEvent();
     container.appendChild(img);
 
     return img;
@@ -180,6 +180,8 @@ export default class Utils {
     let extents = olFeatures.map((feature) => feature.getGeometry().getExtent().slice(0));
     return (extents.length === 0) ? null : extents.reduce((ext1, ext2) => ol.extent.extend(ext1, ext2));
   }
+
+
   /**
    * Get the coordinate of centroid
    * @public
@@ -192,7 +194,7 @@ export default class Utils {
     let centroid, coordinates, medianIdx, points, lineStrings, geometries;
 
     // POINT
-    if (geometry.getType() === Wkt.type.POINT) {
+    if (geometry.getType() === WKT.type.POINT) {
       centroid = geometry.getCoordinates();
     }
     // LINE

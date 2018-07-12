@@ -1,4 +1,4 @@
-import Utils from "facade/js/utils/utils";
+import Utils from "facade/js/util/Utils";
 
 /**
  * @namespace M.impl.envolvedExtent
@@ -71,7 +71,7 @@ export default class EnvolvedExtent {
         });
       } else {
         EnvolvedExtent.calculateFromProjection(map).then(extent => {
-          if (Utils.isNullOrEmpty(M.impl.envolvedExtent.extentwmc_)) {
+          if (Utils.isNullOrEmpty(EnvolvedExtent.extentwmc_)) {
             success(extent);
           } else {
             success(EnvolvedExtent.extentwmc_);
@@ -79,7 +79,7 @@ export default class EnvolvedExtent {
         });
       }
     });
-  };
+  }
 
   /**
    * Calculates the extension from WMC
@@ -107,7 +107,7 @@ export default class EnvolvedExtent {
    */
   static calculateFromProjection(map) {
     return new Promise((success, fail) => {
-      var projExtent = ol.proj.get(map.getProjection().code).getExtent();
+      let projExtent = ol.proj.get(map.getProjection().code).getExtent();
       if (Utils.isNullOrEmpty(projExtent)) {
         projExtent = [-180, -90, 180, 90];
       }
@@ -175,5 +175,5 @@ export default class EnvolvedExtent {
       extent[2] = Math.max(extent[2], newExtent.x.max);
       extent[3] = Math.max(extent[3], newExtent.y.max);
     }
-  };
+  }
 }

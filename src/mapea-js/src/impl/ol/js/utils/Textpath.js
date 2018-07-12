@@ -13,6 +13,7 @@ export default class TextPath {
    * @api stable
    */
   static render(text, path) {
+
     // canvas context
     let ctx = this;
 
@@ -123,7 +124,7 @@ export default class TextPath {
    */
   static getPath_(c2p, coords, readable) {
     let path1 = [];
-    coords.forEach((coord) => {
+    coords.forEach(coord => {
       path1.push(c2p[0] * coord[0] + c2p[1] * coord[1] + c2p[4]);
       path1.push(c2p[2] * coord[0] + c2p[3] * coord[1] + c2p[5]);
     });
@@ -159,9 +160,9 @@ export default class TextPath {
     if (typeof (style) == 'function') {
       formattedStyle = style;
     } else {
-      formattedStyle = function () {
+      formattedStyle = () => {
         return [style];
-      };
+      }
     }
     return formattedStyle;
   }
@@ -194,20 +195,19 @@ export default class TextPath {
 
     ctx.restore();
   }
-
-  /**
-   * Default textpath style values
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  TextPath.DEFAULT = {
-    lineWidth: 0,
-    lineColor: '#fff',
-    fillColor: '#000',
-    textOverflow: '',
-    minWidth: 0
-  };
-
 }
+
+/**
+ * Default textpath style values
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+TextPath.DEFAULT = {
+  lineWidth: 0,
+  lineColor: '#fff',
+  fillColor: '#000',
+  textOverflow: '',
+  minWidth: 0
+};

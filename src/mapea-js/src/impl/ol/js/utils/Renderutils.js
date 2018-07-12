@@ -1,6 +1,6 @@
-import TextPath from "./textpath";
-import Utils from "facade/js/utils/utils";
-import StyleLine from "facade/js/style/styleline";
+import TextPath from "./Textpath";
+import Utils from "facade/js/util/Utils";
+import Line from "facade/js/style/Line";
 /**
  * @namespace M.impl.postrenderer
  */
@@ -39,13 +39,13 @@ export default class RenderUtils {
       return false;
     }
     // gets features in extent
-    this.getSource().getFeaturesInExtent(extent).forEach((feature) => {
+    this.getSource().getFeaturesInExtent(extent).forEach(feature => {
       let selectedStyle = feature.getStyle() != null ? feature.getStyle() : this.getStyle();
       let styles = typeof selectedStyle === 'function' ? selectedStyle(feature, e.frameState.viewState.resolution) : selectedStyle;
       if (!(styles instanceof Array)) {
         styles = [styles];
       }
-      styles.forEach((style) => {
+      styles.forEach(style => {
         let geom = (style instanceof StyleLine ? style.options_.geometry : style.getGeometry()) || feature.getGeometry();
         let coords;
         switch (geom.getType()) {
@@ -57,7 +57,7 @@ export default class RenderUtils {
         }
 
         // add support for textpath
-        let textStyle = (style instanceof StyleLine) ? style.options_.text : style.textPath;
+        let textStyle = (style instanceof Line) ? style.options_.text : style.textPath;
         if (textStyle != null && textStyle instanceof TextPath) {
           TextPath.draw(ctx, e.frameState.coordinateToPixelTransform, textStyle, coords);
         }
