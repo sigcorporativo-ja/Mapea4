@@ -1,11 +1,12 @@
-import Utils from "facade/js/util/utils";
-import ImplMap from "../map/map";
-import LayerBase from "./layerbase";
-import FacadeMapbox from "facade/js/layer/mapbox";
-import SourceMapbox from "../source/mapbox";
-import LayerType from "facade/js/layer/layertype";
+import Utils from "facade/js/util/Utils";
+import ImplMap from "../Map";
+import Layer from "./Layer";
+import FacadeMapbox from "facade/js/layer/Mapbox";
+import SourceMapbox from "../source/Mapbox";
+import FacadeOSM from "facade/js/layer/OSM";
+import LayerType from "facade/js/layer/Type";
 
-export default class OSM extends LayerBase {
+export default class OSM extends Layer {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer

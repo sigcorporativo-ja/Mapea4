@@ -1,14 +1,14 @@
-import Vector from "./vector";
-import Utils from "facade/js/utils/utils";
+import Vector from "./Vector";
+import Utils from "facade/js/util/Utils";
 import Exception from "facade/js/exception/exception";
-import LoaderKML from "../loader/kml";
-import Popup from "facade/js/popup";
-import FormatKML from "../format/kml";
-import EventsManager from "facade/js/event/eventsmanager";
-import ImplUtils from "../util/utils";
-import ClusteredFeature from "facade/js/feature/clusteredfeature";
-import Template from "facade/js/utils/templates";
-import FacadeKML from "facade/js/layer/kml";
+import LoaderKML from "../loader/KML";
+import Popup from "facade/js/Popup";
+import FormatKML from "../format/KML";
+import EventsManager from "facade/js/event/Manager";
+import ImplUtils from "../util/Utils";
+import ClusteredFeature from "facade/js/feature/Clustered";
+import Template from "facade/js/util/Template";
+import popupKMLTemplate from "templates/kml_popup.html";
 
 export default class KML extends Vector {
   /**
@@ -130,29 +130,27 @@ export default class KML extends Vector {
       let featureDesc = feature.getAttribute('description');
       let featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();
 
-      Template.compile(FacadeKML.POPUP_TEMPLATE, {
-        'jsonp': true,
+      let htmlAsText = Template.compile(popupKMLTemplate, {
         'vars': {
           'name': featureName,
           'desc': featureDesc
         },
         'parseToHtml': false
-      }).then(htmlAsText => {
-        this.tabPopup_ = {
-          'icon': 'g-cartografia-comentarios',
-          'title': featureName,
-          'content': htmlAsText
-        };
-        const popup = this.map.getPopup();
-        if (Utils.isNullOrEmpty(popup)) {
-          this.popup_ = new Popup();
-          this.popup_.addTab(this.tabPopup_);
-          this.map.addPopup(this.popup_, featureCoord);
-        }
-        else {
-          popup.addTab(this.tabPopup_);
-        }
       });
+      this.tabPopup_ = {
+        'icon': 'g-cartografia-comentarios',
+        'title': featureName,
+        'content': htmlAsText
+      };
+      const popup = this.map.getPopup();
+      if (Utils.isNullOrEmpty(popup)) {
+        this.popup_ = new Popup();
+        this.popup_.addTab(this.tabPopup_);
+        this.map.addPopup(this.popup_, featureCoord);
+      }
+      else {
+        popup.addTab(this.tabPopup_);
+      }
     }
   }
 

@@ -1,9 +1,9 @@
-import Utils from "facade/js/util/utils";
-import ImplUtils from "../util/utils";
-import EventsManager from "facade/js/event/eventsmanager";
-import StyleCluster from "facade/js/style/cluster";
-import Style from "facade/js/style/style";
-import Feature from "../feature/feature";
+import Utils from "facade/js/util/Utils";
+import ImplUtils from "../util/Utils";
+import EventsManager from "facade/js/event/Manager";
+import StyleCluster from "facade/js/style/Cluster";
+import Style from "facade/js/style/Style";
+import Feature from "../feature/Feature";
 
 export default class Vector extends LayerBase {
   /**
@@ -43,14 +43,22 @@ export default class Vector extends LayerBase {
      */
     this.postComposeEvtKey_ = null;
 
-    /*TODO*/
+    /**
+     * Property that sets if the
+     * layer is loaded
+     *
+     * @private
+     * @type {bool}
+     */
     this.load_ = false;
 
+    /**
+     * TODO
+     */
     this.loaded_ = false;
 
     // [WARN]
     //applyOLLayerSetStyleHook();
-
   }
 
   /**

@@ -1,6 +1,6 @@
-import Utils from "facade/js/util/utils";
+import Utils from "facade/js/util/Utils";
 import Config from "configuration";
-import Object from "facade/js/object";
+import Object from "facade/js/Object";
 
 export default class LayerBase extends Object {
   /**

@@ -1,8 +1,8 @@
-import Utils from "facade/js/util/utils";
-import LayerBase from "./layerbase";
+import Utils from "facade/js/util/Utils";
+import LayerBase from "./Layer";
 import Config from "configuration";
-import GetCapabilities from "../util/wmscapabilitiesutil";
-import Remote from "facade/js/util/remote";
+import GetCapabilities from "../util/WMSCapabilities";
+import Remote from "facade/js/util/Remote";
 
 export default class WMTS extends LayerBase {
   /**
@@ -15,7 +15,7 @@ export default class WMTS extends LayerBase {
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  constructor(options) {
+  constructor(options = {}) {
 
     // calls the super constructor
     super(options);

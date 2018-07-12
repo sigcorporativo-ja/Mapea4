@@ -1,12 +1,12 @@
-import Utils from "facade/js/utils/utils";
-import GeoJSONFormat from "../format/geojson";
-import JSONPLoader from "../loaders/jsonp";
-import Vector from "./vector";
-import EventsManager from "facade/js/events/eventsmanager";
-import FacadeGeoJSON from "facade/js/layers/geojson";
-import ClusteredFeature from "facade/js/feature/clusteredfeature";
-import Popup from "facade/js/popup";
-import Template from "facade/js/utils/template";
+import Utils from "facade/js/util/Utils";
+import GeoJSONFormat from "../format/GeoJSON";
+import JSONPLoader from "../loader/JSONP";
+import Vector from "./Vector";
+import EventsManager from "facade/js/event/Manager";
+import ClusteredFeature from "facade/js/feature/Clustered";
+import Popup from "facade/js/Popup";
+import Template from "facade/js/util/Template";
+import geojsonPopupTemplate from "templates/geojson_popup.html";
 
 export default class GeoJSON extends Vector {
   /**
@@ -193,27 +193,24 @@ export default class GeoJSON extends Vector {
           clickFn(evt, feature);
         }
         else {
-          Template.compile(FacadeGeoJSON.POPUP_TEMPLATE, {
-              'jsonp': true,
-              'vars': this.parseFeaturesForTemplate_(features),
-              'parseToHtml': false
-            })
-            .then(htmlAsText => {
-              let featureTabOpts = {
-                'icon': 'g-cartografia-pin',
-                'title': this.name,
-                'content': htmlAsText
-              };
-              let popup = this.map.getPopup();
-              if (Utils.isNullOrEmpty(popup)) {
-                popup = new Popup();
-                popup.addTab(featureTabOpts);
-                this.map.addPopup(popup, coord);
-              }
-              else {
-                popup.addTab(featureTabOpts);
-              }
-            });
+          let htmlAsText = Template.compile(geojsonPopupTemplate, {
+            'vars': this.parseFeaturesForTemplate_(features),
+            'parseToHtml': false
+          });
+          let featureTabOpts = {
+            'icon': 'g-cartografia-pin',
+            'title': this.name,
+            'content': htmlAsText
+          };
+          let popup = this.map.getPopup();
+          if (Utils.isNullOrEmpty(popup)) {
+            popup = new Popup();
+            popup.addTab(featureTabOpts);
+            this.map.addPopup(popup, coord);
+          }
+          else {
+            popup.addTab(featureTabOpts);
+          }
         }
       }
     }
@@ -260,7 +257,7 @@ export default class GeoJSON extends Vector {
       }
     });
     return featuresTemplate;
-  };
+  }
 
   // /**
   //  * This function destroys this layer, cleaning the HTML

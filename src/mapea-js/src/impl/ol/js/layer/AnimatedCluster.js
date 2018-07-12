@@ -1,4 +1,4 @@
-import Utils from "facade/js/utils/utils";
+import Utils from "facade/js/util/Utils";
 
 export default class AnimatedCluster extends ol.layer.Vector {
   /**
@@ -13,6 +13,7 @@ export default class AnimatedCluster extends ol.layer.Vector {
    */
   constructor(options = {}) {
     super(options);
+
     /**
      * TODO
      * @private
@@ -68,7 +69,6 @@ export default class AnimatedCluster extends ol.layer.Vector {
    * @api stable
    */
   saveCluster_() {
-    // console.log(this.oldCluster_.getFeatues().length, this.getSource().getFeatues().length);
     this.oldCluster_.clear();
     if (!this.get('animationDuration')) return;
 

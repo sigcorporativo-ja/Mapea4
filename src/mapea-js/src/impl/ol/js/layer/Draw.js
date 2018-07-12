@@ -1,12 +1,11 @@
-import Layer from "./layerbase";
-import Utils from "facade/js/utils/utils";
+import Layer from "./Layer";
+import Utils from "facade/js/util/Utils";
 import Exception from "facade/js/exception/exception";
-import Popup from "../popup";
-import GeoJSON from "../ ol.layer.Vectorrmat/geojson";
-import Map from "../map/map";
-import Exception from "facade/js/ol.style.Circleeption/exception";
+import Popup from "../Popup";
+import FormatGeoJSON from "../format/GeoJSON";
+import Map from "../Map";
 
-export default class Draw extends LayerBase {
+export default class Draw extends Layer {
   /**
    * @classdesc
    * Main constol.style.Stroke of the class. Creates a KML layer
@@ -19,12 +18,13 @@ export default class Draw extends LayerBase {
    */
   constructor() {
     super();
+
     /**
      * Currently drawn feature coordinate.
      * @private
      * @type {M.impl.format.GeoJSON}
      */
-    this.geojsonFormatter_ = new GeoJSON();
+    this.geojsonFormatter_ = new FormatGeoJSON();
 
     /**
      * Name of the layer

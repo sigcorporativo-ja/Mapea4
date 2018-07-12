@@ -1,13 +1,13 @@
-import Utils from "facade/js/util/utils";
-import ImplMap from "../map/map";
-import FacadeOSM from "facade/js/layer/osm";
-import FacadeMapbox from "facade/js/layer/mapbox";
-import SourceMapbox from "../source/mapbox";
-import envolvedExtent from "../util/envolvedextent";
-import LayerBase from "./layerbase";
-import LayerType from "facade/js/layer/layertype";
+import Utils from "facade/js/util/Utils";
+import ImplMap from "../Map";
+import FacadeOSM from "facade/js/layer/OSM";
+import FacadeMapbox from "facade/js/layer/Mapbox";
+import SourceMapbox from "../source/Mapbox";
+import EnvolvedExtent from "../util/EnvolvedExtent";
+import Layer from "./Layer";
+import LayerType from "facade/js/layer/Type";
 
-export default class Mapbox extends LayerBase {
+export default class Mapbox extends Layer {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -152,7 +152,7 @@ export default class Mapbox extends LayerBase {
           success.call(this, extent);
         }
         else {
-          envolvedExtent.calculate(this.map, this).then(success);
+          EnvolvedExtent.calculate(this.map, this).then(success);
         }
       });
       // resolve the promise

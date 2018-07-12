@@ -1,12 +1,12 @@
-import FormatWMC from "../format/wmc/wmc110";
-import Utils from "facade/js/util/utils";
-import Projection from "facade/js/parameter/projection";
+import FormatWMC from "../format/wmc/WMC110";
+import Utils from "facade/js/util/Utils";
+import * as parameter from "facade/js/parameter/parameter";
 import Config from "configuration";
-import Remote from "facade/js/util/remote";
-import EventsManager from "facade/js/event/eventsmanager";
-import LayerBase from "./layerbase";
+import Remote from "facade/js/util/Remote";
+import EventsManager from "facade/js/event/Manager";
+import Layer from "./Layer";
 
-export default class WMC extends LayerBase {
+export default class WMC extends Layer {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC layer
@@ -190,7 +190,7 @@ export default class WMC extends LayerBase {
         this_.loadContextPromise.then(context => {
           this_.maxExtent = context.maxExtent;
           if (Utils.isNullOrEmpty(this_.extentProj_)) {
-            this_.extentProj_ = Projection(Config.DEFAULT_PROJ).code;
+            this_.extentProj_ = parameter.projection(Config.DEFAULT_PROJ).code;
           }
           this_.maxExtent = ol.proj.transformExtent(this_.maxExtent, this_.extentProj_, olProjection);
           this_.extentProj_ = olProjection;

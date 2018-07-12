@@ -1,12 +1,14 @@
-import Utils from "facade/js/util/utils";
-import ImplMap from "../map/map";
-import LayerBase from "./layerbase";
-import LayerType from "facade/js/layer/layertype";
+import Utils from "facade/js/util/Utils";
+import ImplMap from "../Map";
+import LayerBase from "./Layer";
+import LayerType from "facade/js/layer/Type";
 import Config from "configuration";
-import GetCapabilities from "../util/wmscapabilitiesutil";
-import FormatWMS from "../format/wms/wms";
-import TileWMS from "../source/tilewms";
-import ImageWMS from "../source/imagewms";
+import GetCapabilities from "../util/WMSCapabilities";
+import FormatWMS from "../format/WMS";
+import TileWMS from "../source/TileWMS";
+import ImageWMS from "../source/ImageWMS";
+import Remote from "facade/js/util/Remote";
+import EnvolvedExtent from "../util/EnvolvedExtent";
 
 export default class WMS extends LayerBase {
   /**
@@ -144,7 +146,7 @@ export default class WMS extends LayerBase {
         this.ol3Layer.setVisible(visibility);
       }
     }
-  };
+  }
 
   /**
    * This function indicates if the layer is queryable
@@ -193,7 +195,7 @@ export default class WMS extends LayerBase {
         'EXCEPTIONS': "image/png"
       });
     }
-  };
+  }
 
   /**
    * This function sets the resolutions for this layer
@@ -508,7 +510,7 @@ export default class WMS extends LayerBase {
         // gest the capabilities URL
         let wmsGetCapabilitiesUrl = Utils.getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
         // gets the getCapabilities response
-        M.remote.get(wmsGetCapabilitiesUrl).then(response => {
+        Remote.get(wmsGetCapabilitiesUrl).then(response => {
           let getCapabilitiesDocument = response.xml;
           let getCapabilitiesParser = new FormatWMS();
           let getCapabilities = getCapabilitiesParser.read(getCapabilitiesDocument);
@@ -537,7 +539,7 @@ export default class WMS extends LayerBase {
         success.call(this, extent);
       }
       else {
-        M.impl.envolvedExtent.calculate(this.map, this).then((extent) => {
+        EnvolvedExtent.calculate(this.map, this).then((extent) => {
           if (!Utils.isNullOrEmpty(this.map)) {
             let maxExtent = this.map.getMaxExtent();
             if (!Utils.isNullOrEmpty(maxExtent)) {
@@ -624,7 +626,7 @@ export default class WMS extends LayerBase {
    */
   equals(obj) {
     let equals = false;
-    if (obj instanceof M.impl.layer.WMS) {
+    if (obj instanceof WMS) {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
       equals = equals && (this.cql === obj.cql);

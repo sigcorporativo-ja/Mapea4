@@ -1,5 +1,5 @@
-import Feature from "facade/js/feature/feature";
-import Simple from "../style/simple";
+import Feature from "facade/js/feature/Feature";
+import Simple from "../style/Simple";
 
 export default class Heatmap extends ol.layer.Heatmap {
   /**

@@ -1,11 +1,11 @@
-import Utils from "facade/js/util/utils";
-import ServiceWFS from "../service/wfs";
-import FormatGeoJSON from "facade/js/format/geojson";
-import FormatImplGeoJSON from "../js/format/geojson";
-import FormatGML from "../format/gml";
-import LoaderWFS from "../format/wfs";
-import EventsManager from "facade/js/event/eventsmanager";
-import StyleCluster from "facade/js/style/cluster";
+import Utils from "facade/js/util/Utils";
+import ServiceWFS from "../service/WFS";
+import FormatGeoJSON from "facade/js/format/GeoJSON";
+import FormatImplGeoJSON from "../js/format/GeoJSON";
+import FormatGML from "../format/GML";
+import LoaderWFS from "../format/WFS";
+import EventsManager from "facade/js/event/Manager";
+import StyleCluster from "facade/js/style/Cluster";
 
 export default class WFS extends Vector {
   /**
