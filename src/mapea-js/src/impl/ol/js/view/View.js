@@ -8,10 +8,10 @@ export default class View extends ol.View {
    * @api stable
    */
   constructor(opt_options) {
+
     super(opt_options);
 
     this.userZoom_ = null;
-
   }
 
 
