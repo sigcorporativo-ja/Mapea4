@@ -1,4 +1,4 @@
-import UtilsImpl from '../util/Utils';
+import Utils from 'facade/js/util/Utils';
 import FacadePopup from 'facade/js/Popup';
 import FacadeWindow from 'facade/js/util/Window';
 
@@ -68,7 +68,7 @@ export default class Popup extends ol.Overlay {
     this.content = this.getContentFromContainer_(html);
 
     // Apply workaround to enable scrolling of content div on touch devices
-    UtilsImpl.enableTouchScroll(this.content);
+    Utils.enableTouchScroll(this.content);
 
     ol.Overlay.call(this, {
       element: this.container,
@@ -92,7 +92,7 @@ export default class Popup extends ol.Overlay {
       this.panIntoView_(coord);
     }
     this.content.scrollTop = 0;
-    if (UtilsImpl.isFunction(callback)) {
+    if (Utils.isFunction(callback)) {
       callback();
     }
     return this;
@@ -111,11 +111,9 @@ export default class Popup extends ol.Overlay {
     let newCoord = [].concat(coord);
     if (status === FacadePopup.status.COLLAPSED) {
       newCoord[1] -= 0.1 * FacadeWindow.HEIGHT * resolution;
-    }
-    else if (status === FacadePopup.status.DEFAULT) {
+    } else if (status === FacadePopup.status.DEFAULT) {
       newCoord[1] -= 0.275 * FacadeWindow.HEIGHT * resolution;
-    }
-    else { // FULL state no effects
+    } else { // FULL state no effects
       return;
     }
 
@@ -125,7 +123,7 @@ export default class Popup extends ol.Overlay {
       'y': newCoord[1]
     });
     // if the center was drawn then draw it again
-    if (!UtilsImpl.isNullOrEmpty(featureCenter)) {
+    if (!Utils.isNullOrEmpty(featureCenter)) {
       this.facadeMap_.drawFeatures([featureCenter]);
     }
   }
@@ -159,7 +157,7 @@ export default class Popup extends ol.Overlay {
         let popOffset = this.getOffset();
         let popPx = this.getMap().getPixelFromCoordinate(coord);
 
-        if (!UtilsImpl.isNullOrEmpty(popPx)) {
+        if (!Utils.isNullOrEmpty(popPx)) {
           let fromLeft = (popPx[0] - tailOffsetLeft);
           let fromRight = mapSize[0] - (popPx[0] + tailOffsetRight);
 
@@ -171,20 +169,18 @@ export default class Popup extends ol.Overlay {
 
           if (fromRight < 0) {
             newPx[0] -= fromRight;
-          }
-          else if (fromLeft < 0) {
+          } else if (fromLeft < 0) {
             newPx[0] += fromLeft;
           }
 
           if (fromTop < 0) {
             newPx[1] += fromTop;
-          }
-          else if (fromBottom < 0) {
+          } else if (fromBottom < 0) {
             newPx[1] -= fromBottom;
           }
 
           //if (this.ani && this.ani_opts) {
-          if (!UtilsImpl.isNullOrEmpty(this.ani_opts) && !UtilsImpl.isNullOrEmpty(this.ani_opts.source)) {
+          if (!Utils.isNullOrEmpty(this.ani_opts) && !Utils.isNullOrEmpty(this.ani_opts.source)) {
             this.ani_opts.source = center;
             this.getMap().getView().animate(this.ani_opts);
           }
@@ -196,7 +192,7 @@ export default class Popup extends ol.Overlay {
       }
       // the animation ended
       this.isAnimating_ = false;
-    }.bind(this));
+    });
 
     return this.getMap().getView().getCenter();
   }
@@ -211,12 +207,11 @@ export default class Popup extends ol.Overlay {
       if (this.isAnimating_ === true) {
         // gets the duration of the animation
         let aniDuration = 300;
-        if (!UtilsImpl.isNullOrEmpty(this.ani_opts)) {
+        if (!Utils.isNullOrEmpty(this.ani_opts)) {
           aniDuration = this.ani_opts['duration'];
         }
         setTimeout(success, aniDuration);
-      }
-      else {
+      } else {
 
         /* if there is not any animation then it starts
         a new one */
@@ -246,7 +241,7 @@ export default class Popup extends ol.Overlay {
     this.element(html);
     //      this.container.innerHTML = html.innerHTML;
     this.content = this.getContentFromContainer_(html);
-    UtilsImpl.enableTouchScroll(this.content);
+    Utils.enableTouchScroll(this.content);
   }
 
   /**
