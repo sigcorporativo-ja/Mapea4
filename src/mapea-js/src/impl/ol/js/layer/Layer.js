@@ -1,6 +1,8 @@
-goog.provide('M.impl.Layer');
+import Utils from "facade/js/util/Utils";
+import Config from "configuration";
+import Object from "facade/js/Object";
 
-(function() {
+export default class LayerBase extends Object {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -12,7 +14,11 @@ goog.provide('M.impl.Layer');
    * provided by the user
    * @api stable
    */
-  M.impl.Layer = (function(options) {
+  constructor(options = {}) {
+
+    // calls the super constructor
+    super();
+
     /**
      * The map instance
      * @private
@@ -35,7 +41,7 @@ goog.provide('M.impl.Layer');
      * @type {Mx.parameters.LayerOptions}
      * @expose
      */
-    this.options = (options || {});
+    this.options = options;
 
     /**
      * Indicates the visibility of the layer
@@ -43,7 +49,7 @@ goog.provide('M.impl.Layer');
      * @type {Boolean}
      * @expose
      */
-    this.visibility = (this.options.visibility !== false);
+    this.visibility = this.options.visibility !== false;
 
     /**
      * Indicates if the layer is displayed in
@@ -52,7 +58,7 @@ goog.provide('M.impl.Layer');
      * @type {Boolean}
      * @expose
      */
-    this.displayInLayerSwitcher = (this.options.displayInLayerSwitcher !== false);
+    this.displayInLayerSwitcher = this.options.displayInLayerSwitcher !== false;
 
     /**
      * Layer z-index
@@ -68,7 +74,7 @@ goog.provide('M.impl.Layer');
      * @type {Number}
      * @expose
      */
-    this.opacity_ = (this.options.opacity || 1);
+    this.opacity_ = this.options.opacity || 1;
 
     /**
      * Legend URL of this layer
@@ -76,12 +82,9 @@ goog.provide('M.impl.Layer');
      * @type {String}
      * @expose
      */
-    this.legendUrl_ = M.utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_DEFAULT]);
+    this.legendUrl_ = Utils.concatUrlPaths([Config.THEME_URL, LayerBase.LEGEND_DEFAULT]);
 
-    // calls the super constructor
-    goog.base(this);
-  });
-  goog.inherits(M.impl.Layer, M.Object);
+  }
 
   /**
    * This function indicates if the layer is visible
@@ -90,16 +93,16 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.isVisible = function() {
-    var visible = false;
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+  isVisible() {
+    let visible = false;
+    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       visible = this.ol3Layer.getVisible();
     }
     else {
       visible = this.visibility;
     }
     return visible;
-  };
+  }
 
   /**
    * This function indicates if the layer is queryable
@@ -108,9 +111,9 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.isQueryable = function() {
+  isQueryable() {
     return false;
-  };
+  }
 
   /**
    * This function indicates if the layer is in range
@@ -119,17 +122,17 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.inRange = function() {
-    var inRange = false;
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
-      var resolution = this.map.getMapImpl().getView().getResolution();
-      var maxResolution = this.ol3Layer.getMaxResolution();
-      var minResolution = this.ol3Layer.getMinResolution();
+  inRange() {
+    let inRange = false;
+    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+      let resolution = this.map.getMapImpl().getView().getResolution();
+      let maxResolution = this.ol3Layer.getMaxResolution();
+      let minResolution = this.ol3Layer.getMinResolution();
 
       inRange = ((resolution >= minResolution) && (resolution <= maxResolution));
     }
     return inRange;
-  };
+  }
 
   /**
    * This function sets the visibility of this layer
@@ -138,13 +141,13 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setVisible = function(visibility) {
+  setVisible(visibility) {
     this.visibility = visibility;
 
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       this.ol3Layer.setVisible(visibility);
     }
-  };
+  }
 
   /**
    * This function sets the visibility of this layer
@@ -153,12 +156,12 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.getZIndex = function() {
-    if (!M.utils.isNullOrEmpty(this.getOL3Layer())) {
+  getZIndex() {
+    if (!Utils.isNullOrEmpty(this.getOL3Layer())) {
       this.zIndex_ = this.getOL3Layer().getZIndex();
     }
     return this.zIndex_;
-  };
+  }
 
   /**
    * This function sets the visibility of this layer
@@ -167,12 +170,12 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setZIndex = function(zIndex) {
+  setZIndex(zIndex) {
     this.zIndex_ = zIndex;
-    if (!M.utils.isNullOrEmpty(this.getOL3Layer())) {
+    if (!Utils.isNullOrEmpty(this.getOL3Layer())) {
       this.getOL3Layer().setZIndex(zIndex);
     }
-  };
+  }
 
   /**
    * This function sets the visibility of this layer
@@ -181,12 +184,12 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.getOpacity = function() {
-    if (!M.utils.isNullOrEmpty(this.getOL3Layer())) {
+  getOpacity() {
+    if (!Utils.isNullOrEmpty(this.getOL3Layer())) {
       this.opacity_ = this.getOL3Layer().getOpacity();
     }
     return this.opacity_;
-  };
+  }
 
   /**
    * This function sets the visibility of this layer
@@ -195,12 +198,12 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setOpacity = function(opacity) {
+  setOpacity(opacity) {
     this.opacity_ = opacity;
-    if (!M.utils.isNullOrEmpty(this.getOL3Layer())) {
+    if (!Utils.isNullOrEmpty(this.getOL3Layer())) {
       this.getOL3Layer().setOpacity(opacity);
     }
-  };
+  }
 
   /**
    * This function gets the created OL layer
@@ -209,9 +212,9 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.getOL3Layer = function() {
+  getOL3Layer() {
     return this.ol3Layer;
-  };
+  }
 
   /**
    * This function sets the OL layer
@@ -220,13 +223,13 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setOL3Layer = function(layer) {
+  setOL3Layer(layer) {
     let olMap = this.map.getMapImpl();
     olMap.removeLayer(this.ol3Layer);
     this.ol3Layer = layer;
     olMap.addLayer(layer);
     return this;
-  };
+  }
 
   /**
    * This function gets the created OL layer
@@ -235,9 +238,9 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.getMap = function() {
+  getMap() {
     return this.map;
-  };
+  }
 
   /**
    * This function gets the created OL layer
@@ -246,15 +249,13 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setOL3Layer = function(layer) {
+  setOL3Layer(layer) {
     let olMap = this.map.getMapImpl();
-    //let styleLayer = this.ol3Layer.getStyle();
-    //layer.setStyle(styleLayer);
     olMap.removeLayer(this.ol3Layer);
     this.ol3Layer = layer;
     olMap.addLayer(layer);
     return this;
-  };
+  }
 
   /**
    * This function gets the created OL layer
@@ -263,9 +264,9 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.getLegendURL = function() {
+  getLegendURL() {
     return this.legendUrl_;
-  };
+  }
 
   /**
    * This function gets the created OL layer
@@ -274,9 +275,9 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.setLegendURL = function(legendUrl) {
+  setLegendURL(legendUrl) {
     this.legendUrl_ = legendUrl;
-  };
+  }
 
   /**
    * This function gets the max resolution for
@@ -286,9 +287,9 @@ goog.provide('M.impl.Layer');
    * @function
    * @api stable
    */
-  M.impl.Layer.prototype.getNumZoomLevels = function() {
+  getNumZoomLevels() {
     return 16; // 16 zoom levels by default
-  };
+  }
 
   /**
    * This function exectues an unselect feature
@@ -298,7 +299,7 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.unselectFeatures = function(features, coord, evt) {};
+  unselectFeatures(features, coord, evt) {}
 
   /**
    * This function exectues a select feature
@@ -307,5 +308,5 @@ goog.provide('M.impl.Layer');
    * @api stable
    * @expose
    */
-  M.impl.Layer.prototype.selectFeatures = function(features, coord, evt) {};
-})();
+  selectFeatures(features, coord, evt) {}
+}

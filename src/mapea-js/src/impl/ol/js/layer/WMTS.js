@@ -1,15 +1,10 @@
-goog.provide('M.impl.layer.WMTS');
+import Utils from "facade/js/util/Utils";
+import LayerBase from "./Layer";
+import Config from "configuration";
+import GetCapabilities from "../util/WMSCapabilities";
+import Remote from "facade/js/util/Remote";
 
-goog.require('M.impl.format.WMTSCapabilities');
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.impl.Layer');
-
-goog.require('ol.layer.Tile');
-goog.require('ol.source.WMTS');
-goog.require('ol.extent');
-
-(function() {
+export default class WMTS extends LayerBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMTS layer
@@ -20,18 +15,18 @@ goog.require('ol.extent');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.WMTS = (function(options) {
+  constructor(options = {}) {
+
+    // calls the super constructor
+    super(options);
+
     /**
      * Options from the GetCapabilities
      * @private
      * @type {M.impl.format.WMTSCapabilities}
      */
     this.capabilitiesOptions = null;
-
-    // calls the super constructor
-    goog.base(this, options);
-  });
-  goog.inherits(M.impl.layer.WMTS, M.impl.Layer);
+  }
 
   /**
    * This function sets the map object of the layer
@@ -41,22 +36,19 @@ goog.require('ol.extent');
    * @param {M.impl.Map} map
    * @api stable
    */
-  M.impl.layer.WMTS.prototype.addTo = function(map) {
+  addTo(map) {
     this.map = map;
 
     // calculates the resolutions from scales
-    if (!M.utils.isNull(this.options) && !M.utils.isNull(this.options.minScale) && !M.utils.isNull(this.options.maxScale)) {
-      var units = this.map.getMapImpl().getView().getProjection().getUnits();
-      this.options.minResolution = M.utils.getResolutionFromScale(this.options.minScale, units);
-      this.options.maxResolution = M.utils.getResolutionFromScale(this.options.maxScale, units);
+    if (!Utils.isNull(this.options) && !Utils.isNull(this.options.minScale) && !Utils.isNull(this.options.maxScale)) {
+      let units = this.map.getMapImpl().getView().getProjection().getUnits();
+      this.options.minResolution = Utils.getResolutionFromScale(this.options.minScale, units);
+      this.options.maxResolution = Utils.getResolutionFromScale(this.options.maxScale, units);
     }
 
     // adds layer from capabilities
-    var this_ = this;
-    this.getCapabilitiesOptions_().then(function(capabilitiesOptions) {
-      this_.addLayer_(capabilitiesOptions);
-    });
-  };
+    this.getCapabilitiesOptions_().then(capabilitiesOptions => this.addLayer_(capabilitiesOptions));
+  }
 
   /**
    * This function sets the resolutions for this layer
@@ -66,29 +58,29 @@ goog.require('ol.extent');
    * @param {Array<Number>} resolutions
    * @api stable
    */
-  M.impl.layer.WMTS.prototype.setResolutions = function(resolutions) {
+  setResolutions(resolutions) {
     // gets the projection
-    var projection = ol.proj.get(this.map.getProjection().code);
+    let projection = ol.proj.get(this.map.getProjection().code);
 
     // gets the extent
-    var extent = this.map.getMaxExtent();
-    var olExtent;
-    if (!M.utils.isNullOrEmpty(extent)) {
+    let extent = this.map.getMaxExtent();
+    let olExtent;
+    if (!Utils.isNullOrEmpty(extent)) {
       olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
     }
     else {
       olExtent = projection.getExtent();
     }
 
-    if (!M.utils.isNull(this.capabilitiesParser)) {
+    if (!Utils.isNull(this.capabilitiesParser)) {
       // gets matrix
-      var matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
-      var matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
+      let matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
+      let matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
 
       // gets format
-      var format = this.capabilitiesParser.getFormat(this.name);
+      let format = this.capabilitiesParser.getFormat(this.name);
 
-      var newSource = new ol.source.WMTS({
+      let newSource = new ol.source.WMTS({
         url: this.url,
         layer: this.name,
         matrixSet: matrixSet,
@@ -105,21 +97,19 @@ goog.require('ol.extent');
     }
     else {
       // adds layer from capabilities
-      var this_ = this;
-      this.getCapabilities_().then(function(capabilitiesParser) {
-        console.log(capabilitiesParser);
-        this_.capabilitiesParser = capabilitiesParser;
+      this.getCapabilities_().then(capabilitiesParser => {
+        this.capabilitiesParser = capabilitiesParser;
 
         // gets matrix
-        var matrixSet = this_.capabilitiesParser.getMatrixSet(this_.name);
-        var matrixIds = this_.capabilitiesParser.getMatrixIds(this_.name);
+        let matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
+        let matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
 
         // gets format
-        var format = this_.capabilitiesParser.getFormat(this_.name);
+        let format = this.capabilitiesParser.getFormat(this.name);
 
-        var newSource = new ol.source.WMTS({
-          url: this_.url,
-          layer: this_.name,
+        let newSource = new ol.source.WMTS({
+          url: this.url,
+          layer: this.name,
           matrixSet: matrixSet,
           format: format,
           projection: projection,
@@ -130,10 +120,10 @@ goog.require('ol.extent');
           }),
           extent: olExtent
         });
-        this_.ol3Layer.setSource(newSource);
+        this.ol3Layer.setSource(newSource);
       });
     }
-  };
+  }
 
   /**
    * This function sets the visibility of this layer
@@ -141,35 +131,33 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMTS.prototype.setVisible = function(visibility) {
+  setVisible(visibility) {
     this.visibility = visibility;
     if (this.inRange() === true) {
       // if this layer is base then it hides all base layers
       if ((visibility === true) && (this.transparent !== true)) {
         // hides all base layers
-        this.map.getBaseLayers().filter(function(layer) {
-          return (!layer.equals(this) && layer.isVisible());
-        }).forEach(function(layer) {
-          layer.setVisible(false);
-        });
+        this.map.getBaseLayers()
+          .filter(layer => !layer.equals(this) && layer.isVisible())
+          .forEach(layer => layer.setVisible(false));
 
         // set this layer visible
-        if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+        if (!Utils.isNullOrEmpty(this.ol3Layer)) {
           this.ol3Layer.setVisible(visibility);
         }
 
         // updates resolutions and keep the bbox
-        var oldBbox = this.map.getBbox();
+        let oldBbox = this.map.getBbox();
         this.map.getImpl().updateResolutionsFromBaseLayer();
-        if (!M.utils.isNullOrEmpty(oldBbox)) {
+        if (!Utils.isNullOrEmpty(oldBbox)) {
           this.map.setBbox(oldBbox);
         }
       }
-      else if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+      else if (!Utils.isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }
     }
-  };
+  }
 
   /**
    * This function add this layer as unique layer
@@ -177,10 +165,10 @@ goog.require('ol.extent');
    * @private
    * @function
    */
-  M.impl.layer.WMTS.prototype.addLayer_ = function(capabilitiesOptions) {
+  addLayer_(capabilitiesOptions) {
     // gets resolutions from defined min/max resolutions
-    var minResolution = this.options.minResolution;
-    var maxResolution = this.options.maxResolution;
+    let minResolution = this.options.minResolution;
+    let maxResolution = this.options.maxResolution;
     capabilitiesOptions.format = this.options.format || capabilitiesOptions.format;
 
     this.ol3Layer = new ol.layer.Tile({
@@ -202,8 +190,8 @@ goog.require('ol.extent');
     // activates animation always for WMTS layers
     this.ol3Layer.set("animated", true);
 
-    this.fire(M.evt.ADDED_TO_MAP, this);
-  };
+    this.fire(EventsManager.ADDED_TO_MAP, this);
+  }
 
   /**
    * This function gets the capabilities
@@ -212,24 +200,24 @@ goog.require('ol.extent');
    * @private
    * @function
    */
-  M.impl.layer.WMTS.prototype.getCapabilitiesOptions_ = function() {
+  getCapabilitiesOptions_() {
     // name
-    var layerName = this.name;
+    let layerName = this.name;
     // matrix set
-    var matrixSet = this.matrixSet;
-    if (M.utils.isNullOrEmpty(matrixSet)) {
+    let matrixSet = this.matrixSet;
+    if (Utils.isNullOrEmpty(matrixSet)) {
       /* if no matrix set was specified then
          it supposes the matrix set has the name
          of the projection*/
       matrixSet = this.map.getProjection().code;
     }
-    return this.getCapabilities().then(function(parsedCapabilities) {
+    return this.getCapabilities().then(parsedCapabilities => {
       return ol.source.WMTS.optionsFromCapabilities(parsedCapabilities, {
         'layer': layerName,
         'matrixSet': matrixSet
       });
     });
-  };
+  }
 
   /**
    * TODO
@@ -238,18 +226,17 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMTS.prototype.getCapabilities = function() {
-    var getCapabilitiesUrl = M.utils.getWMTSGetCapabilitiesUrl(this.url);
-    var parser = new ol.format.WMTSCapabilities();
-    var this_ = this;
-    return (new Promise(function(success, fail) {
-      M.remote.get(getCapabilitiesUrl).then(function(response) {
-        var getCapabilitiesDocument = response.xml;
-        var parsedCapabilities = parser.read(getCapabilitiesDocument);
-        success.call(this_, parsedCapabilities);
+  getCapabilities() {
+    let getCapabilitiesUrl = Utils.getWMTSGetCapabilitiesUrl(this.url);
+    let parser = new ol.format.WMTSCapabilities();
+    return new Promise((success, fail) => {
+      Remote.get(getCapabilitiesUrl).then(response => {
+        let getCapabilitiesDocument = response.xml;
+        let parsedCapabilities = parser.read(getCapabilitiesDocument);
+        success.call(this, parsedCapabilities);
       });
-    }));
-  };
+    });
+  }
 
   /**
    * This function gets the min resolution for
@@ -259,9 +246,9 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMTS.prototype.getMinResolution = function() {
+  getMinResolution() {
     return this.options.minResolution;
-  };
+  }
 
   /**
    * This function gets the max resolution for
@@ -271,9 +258,9 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMTS.prototype.getMaxResolution = function() {
+  getMaxResolution() {
     return this.options.maxResolution;
-  };
+  }
 
   /**
    * This function destroys this layer, cleaning the HTML
@@ -283,14 +270,14 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMTS.prototype.destroy = function() {
-    var olMap = this.map.getMapImpl();
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+  destroy() {
+    let olMap = this.map.getMapImpl();
+    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }
     this.map = null;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -299,15 +286,15 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMTS.prototype.equals = function(obj) {
-    var equals = false;
+  equals(obj) {
+    let equals = false;
 
-    if (obj instanceof M.impl.layer.WMTS) {
+    if (obj instanceof WMTS) {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
       equals = equals && (this.matrixSet === obj.matrixSet);
     }
 
     return equals;
-  };
-})();
+  }
+}

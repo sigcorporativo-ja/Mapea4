@@ -1,19 +1,13 @@
-goog.provide('M.impl.layer.WFS');
+import Utils from "facade/js/util/Utils";
+import ServiceWFS from "../service/WFS";
+import FormatGeoJSON from "facade/js/format/GeoJSON";
+import FormatImplGeoJSON from "../js/format/GeoJSON";
+import FormatGML from "../format/GML";
+import LoaderWFS from "../format/WFS";
+import EventsManager from "facade/js/event/Manager";
+import StyleCluster from "facade/js/style/Cluster";
 
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.impl.Layer');
-goog.require('M.impl.service.WFS');
-goog.require('M.impl.format.GML');
-goog.require('M.format.GeoJSON');
-goog.require('M.impl.loader.WFS');
-
-goog.require('ol.layer.Vector');
-goog.require('ol.source.Vector');
-
-goog.require('M.impl.layer.Vector');
-
-(function() {
+export default class WFS extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -24,15 +18,10 @@ goog.require('M.impl.layer.Vector');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.WFS = (function(options) {
+  constructor(options = {}) {
 
-    /**
-     * WFS layer options
-     * @private
-     * @type {Mx.parameters.WFSOptions}
-     * @expose
-     */
-    this.options = options || {};
+    // calls the super constructor
+    super(options);
 
     /**
      *
@@ -70,14 +59,10 @@ goog.require('M.impl.layer.Vector');
     this.loaded_ = false;
 
     // GetFeature output format parameter
-    if (M.utils.isNullOrEmpty(this.options.getFeatureOutputFormat)) {
+    if (Utils.isNullOrEmpty(this.options.getFeatureOutputFormat)) {
       this.options.getFeatureOutputFormat = 'application/json'; // by default
     }
-
-    // calls the super constructor
-    goog.base(this, this.options);
-  });
-  goog.inherits(M.impl.layer.WFS, M.impl.layer.Vector);
+  }
 
   /**
    * This function sets the map object of the layer
@@ -87,19 +72,11 @@ goog.require('M.impl.layer.Vector');
    * @param {M.Map} map
    * @api stable
    */
-  M.impl.layer.WFS.prototype.addTo = function(map) {
-    goog.base(this, 'addTo', map);
-    // this.ol3Layer.setStyle(M.impl.layer.WFS.STYLE);
-    // this.on(M.evt.LOAD, function() {
-    //   let style = M.Style.createStyleLayer(M.impl.layer.WFS.DEFAULT_OPTIONS_STYLE, this.facadeVector_);
-    //   this.facadeVector_.setStyle(style);
-    // }.bind(this));
-
+  addTo(map) {
+    super.addTo(map);
     this.updateSource_();
-    map.getImpl().on(M.evt.CHANGE, function() {
-      this.refresh();
-    }, this);
-  };
+    map.getImpl().on(EventsManager.CHANGE, () => this.refresh());
+  }
 
   /**
    * This function sets the map object of the layer
@@ -109,12 +86,12 @@ goog.require('M.impl.layer.Vector');
    * @param {Boolean} forceNewSource
    * @api stable
    */
-  M.impl.layer.WFS.prototype.refresh = function(forceNewSource) {
+  refresh(forceNewSource) {
     if (forceNewSource) {
       this.facadeVector_.removeFeatures(this.facadeVector_.getFeatures(true));
     }
     this.updateSource_(forceNewSource);
-  };
+  }
 
   /**
    * This function sets the map object of the layer
@@ -122,10 +99,8 @@ goog.require('M.impl.layer.Vector');
    * @private
    * @function
    */
-  M.impl.layer.WFS.prototype.updateSource_ = function(forceNewSource) {
-    var this_ = this;
-
-    this.service_ = new M.impl.service.WFS({
+  updateSource_(forceNewSource) {
+    this.service_ = new ServiceWFS({
       'url': this.url,
       'namespace': this.namespace,
       'name': this.name,
@@ -137,25 +112,25 @@ goog.require('M.impl.layer.Vector');
       'describeFeatureTypeOutputFormat': this.options.describeFeatureTypeOutputFormat,
     }, this.options.vendor);
     if (/json/gi.test(this.options.getFeatureOutputFormat)) {
-      this.formater_ = new M.format.GeoJSON({
+      this.formater_ = new FormatGeoJSON({
         'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
       });
     }
     else {
-      this.formater_ = new M.impl.format.GML(this.name, this.version, this.map.getProjection());
+      this.formater_ = new FormatGML(this.name, this.version, this.map.getProjection());
     }
-    this.loader_ = new M.impl.loader.WFS(this.map, this.service_, this.formater_);
+    this.loader_ = new LoaderWFS(this.map, this.service_, this.formater_);
 
-    let isCluster = (this.facadeVector_.getStyle() instanceof M.style.Cluster);
-    var ol3LayerSource = this.ol3Layer.getSource();
-    if ((forceNewSource === true) || M.utils.isNullOrEmpty(ol3LayerSource)) {
+    let isCluster = (this.facadeVector_.getStyle() instanceof StyleCluster);
+    let ol3LayerSource = this.ol3Layer.getSource();
+    if (forceNewSource === true || Utils.isNullOrEmpty(ol3LayerSource)) {
       let newSource = new ol.source.Vector({
         format: this.formater_.getImpl(),
-        loader: this.loader_.getLoaderFn(function(features) {
-          this_.loaded_ = true;
-          this_.facadeVector_.addFeatures(features);
-          this_.fire(M.evt.LOAD, [features]);
-          this_.facadeVector_.redraw();
+        loader: this.loader_.getLoaderFn(features => {
+          this.loaded_ = true;
+          this.facadeVector_.addFeatures(features);
+          this.fire(EventsManager.LOAD, [features]);
+          this.facadeVector_.redraw();
         }),
         strategy: ol.loadingstrategy.all
       });
@@ -177,16 +152,16 @@ goog.require('M.impl.layer.Vector');
         ol3LayerSource = ol3LayerSource.getSource();
       }
       ol3LayerSource.set("format", this.formater_);
-      ol3LayerSource.set("loader", this.loader_.getLoaderFn(function(features) {
+      ol3LayerSource.set("loader", this.loader_.getLoaderFn(features => {
         this.loaded_ = true;
         this.facadeVector_.addFeatures(features);
-        this.fire(M.evt.LOAD, [features]);
-        this_.facadeVector_.redraw();
+        this.fire(EventsManager.LOAD, [features]);
+        this.facadeVector_.redraw();
       }));
       ol3LayerSource.set("strategy", ol.loadingstrategy.all);
       ol3LayerSource.changed();
     }
-  };
+  }
 
   /**
    * This function destroys this layer, cleaning the HTML
@@ -196,10 +171,10 @@ goog.require('M.impl.layer.Vector');
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.setCQL = function(newCQL) {
+  setCQL(newCQL) {
     this.cql = newCQL;
     this.refresh(true);
-  };
+  }
 
   /**
    * TODO
@@ -208,21 +183,21 @@ goog.require('M.impl.layer.Vector');
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.getDescribeFeatureType = function() {
-    if (M.utils.isNullOrEmpty(this.describeFeatureType_)) {
-      this.describeFeatureType_ = this.service_.getDescribeFeatureType().then(function(describeFeatureType) {
-        if (!M.utils.isNullOrEmpty(describeFeatureType)) {
-          this.formater_ = new M.impl.format.GeoJSON({
+  getDescribeFeatureType() {
+    if (Utils.isNullOrEmpty(this.describeFeatureType_)) {
+      this.describeFeatureType_ = this.service_.getDescribeFeatureType().then(describeFeatureType => {
+        if (!Utils.isNullOrEmpty(describeFeatureType)) {
+          this.formater_ = new FormatImplGeoJSON({
             'geometryName': describeFeatureType.geometryName,
             'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
           });
         }
         return describeFeatureType;
-      }.bind(this));
+      });
     }
 
     return this.describeFeatureType_;
-  };
+  }
 
   /**
    * TODO
@@ -231,8 +206,8 @@ goog.require('M.impl.layer.Vector');
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.getDefaultValue = function(type) {
-    var defaultValue;
+  getDefaultValue(type) {
+    let defaultValue;
     if (type == "dateTime") {
       defaultValue = '0000-00-00T00:00:00';
     }
@@ -255,7 +230,7 @@ goog.require('M.impl.layer.Vector');
       defaultValue = "-";
     }
     return defaultValue;
-  };
+  }
 
   // /**
   //  * This function destroys this layer, cleaning the HTML
@@ -265,9 +240,9 @@ goog.require('M.impl.layer.Vector');
   //  * @function
   //  * @api stable
   //  */
-  // M.impl.layer.WFS.prototype.destroy = function() {
-  //   var olMap = this.map.getMapImpl();
-  //   if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+  // destroy() {
+  //   let olMap = this.map.getMapImpl();
+  //   if (!Utils.isNullOrEmpty(this.ol3Layer)) {
   //     olMap.removeLayer(this.ol3Layer);
   //     this.ol3Layer = null;
   //   }
@@ -279,9 +254,9 @@ goog.require('M.impl.layer.Vector');
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.isLoaded = function() {
+  isLoaded() {
     return this.loaded_;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -290,10 +265,10 @@ goog.require('M.impl.layer.Vector');
    * @function
    * @api stable
    */
-  M.impl.layer.WFS.prototype.equals = function(obj) {
-    var equals = false;
+  equals(obj) {
+    let equals = false;
 
-    if (obj instanceof M.layer.WFS) {
+    if (obj instanceof WFS) {
       equals = (this.url === obj.url);
       equals = equals && (this.namespace === obj.namespace);
       equals = equals && (this.name === obj.name);
@@ -303,6 +278,5 @@ goog.require('M.impl.layer.Vector');
     }
 
     return equals;
-  };
-
-})();
+  }
+}

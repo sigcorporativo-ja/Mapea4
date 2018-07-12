@@ -1,20 +1,16 @@
-goog.provide('M.impl.layer.WMS');
+import Utils from "facade/js/util/Utils";
+import ImplMap from "../Map";
+import LayerBase from "./Layer";
+import LayerType from "facade/js/layer/Type";
+import Config from "configuration";
+import GetCapabilities from "../util/WMSCapabilities";
+import FormatWMS from "../format/WMS";
+import TileWMS from "../source/TileWMS";
+import ImageWMS from "../source/ImageWMS";
+import Remote from "facade/js/util/Remote";
+import EnvolvedExtent from "../util/EnvolvedExtent";
 
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.impl.Layer');
-goog.require('M.impl.format.WMSCapabilities');
-goog.require('M.impl.GetCapabilities');
-goog.require('M.impl.source.TileWMS');
-goog.require('M.impl.source.ImageWMS');
-
-goog.require('ol.layer.Tile');
-goog.require('ol.layer.Image');
-goog.require('ol.tilegrid.TileGrid');
-goog.require('ol.extent');
-
-
-(function() {
+export default class WMS extends LayerBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -25,7 +21,11 @@ goog.require('ol.extent');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.WMS = (function(options) {
+  constructor(options = {}) {
+
+    // calls the super constructor
+    super(options);
+
     /**
      * The WMS layers instances from capabilities
      * @private
@@ -39,7 +39,6 @@ goog.require('ol.extent');
      * @type {object}
      * @expose
      */
-    this.options = options || {};
 
     /**
      * WMS layer options
@@ -98,26 +97,22 @@ goog.require('ol.extent');
     }
 
     // tiled
-    if (M.utils.isNullOrEmpty(this.tiled)) {
+    if (Utils.isNullOrEmpty(this.tiled)) {
       this.tiled = (this.options.singleTile !== true);
     }
 
     // number of zoom levels
-    if (M.utils.isNullOrEmpty(this.options.numZoomLevels)) {
+    if (Utils.isNullOrEmpty(this.options.numZoomLevels)) {
       this.options.numZoomLevels = 16; // by default
     }
 
     // animated
-    if (M.utils.isNullOrEmpty(this.options.animated)) {
+    if (Utils.isNullOrEmpty(this.options.animated)) {
       this.options.animated = false; // by default
     }
 
-    // calls the super constructor
-    goog.base(this, this.options);
-
-    this.zIndex_ = M.impl.Map.Z_INDEX[M.layer.type.WMS];
-  });
-  goog.inherits(M.impl.layer.WMS, M.impl.Layer);
+    this.zIndex_ = ImplMap.Z_INDEX[LayerType.WMS];
+  }
 
   /**
    * This function sets the visibility of this layer
@@ -125,35 +120,33 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.setVisible = function(visibility) {
+  setVisible(visibility) {
     this.visibility = visibility;
     if (this.inRange() === true) {
       // if this layer is base then it hides all base layers
       if ((visibility === true) && (this.transparent !== true)) {
         // hides all base layers
-        this.map.getBaseLayers().filter(function(layer) {
-          return (!layer.equals(this) && layer.isVisible());
-        }).forEach(function(layer) {
-          layer.setVisible(false);
-        });
+        this.map.getBaseLayers()
+          .filter(layer => !layer.equals(this) && layer.isVisible())
+          .forEach(layer => layer.setVisible(false));
 
         // set this layer visible
-        if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+        if (!Utils.isNullOrEmpty(this.ol3Layer)) {
           this.ol3Layer.setVisible(visibility);
         }
 
         // updates resolutions and keep the bbox
-        var oldBbox = this.map.getBbox();
+        let oldBbox = this.map.getBbox();
         this.map.getImpl().updateResolutionsFromBaseLayer();
-        if (!M.utils.isNullOrEmpty(oldBbox)) {
+        if (!Utils.isNullOrEmpty(oldBbox)) {
           this.map.setBbox(oldBbox);
         }
       }
-      else if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+      else if (!Utils.isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }
     }
-  };
+  }
 
   /**
    * This function indicates if the layer is queryable
@@ -162,9 +155,9 @@ goog.require('ol.extent');
    * @api stable
    * @expose
    */
-  M.impl.layer.WMS.prototype.isQueryable = function() {
+  isQueryable() {
     return (this.options.queryable !== false);
-  };
+  }
 
   /**
    * This function sets the map object of the layer
@@ -174,26 +167,26 @@ goog.require('ol.extent');
    * @param {M.impl.Map} map
    * @api stable
    */
-  M.impl.layer.WMS.prototype.addTo = function(map) {
+  addTo(map) {
     this.map = map;
 
     // calculates the resolutions from scales
-    if (!M.utils.isNull(this.options) && !M.utils.isNull(this.options.minScale) && !M.utils.isNull(this.options.maxScale)) {
-      var units = this.map.getProjection().units;
-      this.options.minResolution = M.utils.getResolutionFromScale(this.options.minScale, units);
-      this.options.maxResolution = M.utils.getResolutionFromScale(this.options.maxScale, units);
+    if (!Utils.isNull(this.options) && !Utils.isNull(this.options.minScale) && !Utils.isNull(this.options.maxScale)) {
+      let units = this.map.getProjection().units;
+      this.options.minResolution = Utils.getResolutionFromScale(this.options.minScale, units);
+      this.options.maxResolution = Utils.getResolutionFromScale(this.options.maxScale, units);
     }
 
     // checks if it is a WMS_FULL
-    if (M.utils.isNullOrEmpty(this.name)) { // WMS_FULL (add all wms layers)
+    if (Utils.isNullOrEmpty(this.name)) { // WMS_FULL (add all wms layers)
       this.addAllLayers_();
     }
     else { // just one WMS layer
       this.addSingleLayer_();
     }
 
-    if (this.legendUrl_ === M.utils.concatUrlPaths([M.config.THEME_URL, M.Layer.LEGEND_DEFAULT])) {
-      this.legendUrl_ = M.utils.addParameters(this.url, {
+    if (this.legendUrl_ === Utils.concatUrlPaths([Config.THEME_URL, LayerBase.LEGEND_DEFAULT])) {
+      this.legendUrl_ = Utils.addParameters(this.url, {
         'SERVICE': "WMS",
         'VERSION': this.version,
         'REQUEST': "GetLegendGraphic",
@@ -202,7 +195,7 @@ goog.require('ol.extent');
         'EXCEPTIONS': "image/png"
       });
     }
-  };
+  }
 
   /**
    * This function sets the resolutions for this layer
@@ -212,16 +205,15 @@ goog.require('ol.extent');
    * @param {Array<Number>} resolutions
    * @api stable
    */
-  M.impl.layer.WMS.prototype.setResolutions = function(resolutions) {
+  setResolutions(resolutions) {
     this.resolutions_ = resolutions;
-    if ((this.tiled === true) && !M.utils.isNullOrEmpty(this.ol3Layer)) {
+    if ((this.tiled === true) && !Utils.isNullOrEmpty(this.ol3Layer)) {
       // gets the extent
-      var this_ = this;
-      this.getMaxExtent_().then(function(olExtent) {
-        var layerParams = {};
-        var optParams = this_.options.params;
-        if (!M.utils.isNullOrEmpty(optParams)) {
-          for (var key in optParams) {
+      this.getMaxExtent_().then(olExtent => {
+        let layerParams = {};
+        let optParams = this.options.params;
+        if (!Utils.isNullOrEmpty(optParams)) {
+          for (let key in optParams) {
             if (optParams.hasOwnProperty(key)) {
               layerParams[key.toUpperCase()] = optParams[key];
             }
@@ -231,19 +223,19 @@ goog.require('ol.extent');
         }
         else {
           layerParams = {
-            'LAYERS': this_.name,
+            'LAYERS': this.name,
             'TILED': true,
-            'VERSION': this_.version,
-            'TRANSPARENT': this_.transparent,
+            'VERSION': this.version,
+            'TRANSPARENT': this.transparent,
             'FORMAT': 'image/png'
           };
         }
 
 
-        var newSource;
-        if (this_.tiled === true) {
-          newSource = new M.impl.source.TileWMS({
-            url: this_.url,
+        let newSource;
+        if (this.tiled === true) {
+          newSource = new TileWMS({
+            url: this.url,
             params: layerParams,
             tileGrid: new ol.tilegrid.TileGrid({
               resolutions: resolutions,
@@ -251,24 +243,24 @@ goog.require('ol.extent');
               origin: ol.extent.getBottomLeft(olExtent)
             }),
             extent: olExtent,
-            minResolution: this_.options.minResolution,
-            maxResolution: this_.options.maxResolution,
+            minResolution: this.options.minResolution,
+            maxResolution: this.options.maxResolution,
             opacity: this.opacity_,
             zIndex: this.zIndex_
           });
         }
         else {
-          newSource = new M.impl.source.ImageWMS({
-            url: this_.url,
+          newSource = new ImageWMS({
+            url: this.url,
             params: layerParams,
             resolutions: resolutions
           });
         }
-        this_.ol3Layer.setSource(newSource);
-        this_.ol3Layer.setExtent(olExtent);
+        this.ol3Layer.setSource(newSource);
+        this.ol3Layer.setExtent(olExtent);
       });
     }
-  };
+  }
 
   /**
    * This function add this layer as unique layer
@@ -276,20 +268,20 @@ goog.require('ol.extent');
    * @private
    * @function
    */
-  M.impl.layer.WMS.prototype.addSingleLayer_ = function() {
+  addSingleLayer_() {
     // gets resolutions of the map
-    var resolutions = this.map.getResolutions();
+    let resolutions = this.map.getResolutions();
 
     // gets the extent
     this.getMaxExtent_().then(function(olExtent) {
-      var tileGrid;
+      let tileGrid;
 
-      if (M.utils.isNullOrEmpty(resolutions) && !M.utils.isNullOrEmpty(this.resolutions_)) {
+      if (Utils.isNullOrEmpty(resolutions) && !Utils.isNullOrEmpty(this.resolutions_)) {
         resolutions = this.resolutions_;
       }
 
       // gets the tileGrid
-      if (!M.utils.isNullOrEmpty(resolutions)) {
+      if (!Utils.isNullOrEmpty(resolutions)) {
         tileGrid = new ol.tilegrid.TileGrid({
           resolutions: resolutions,
           extent: olExtent,
@@ -297,10 +289,10 @@ goog.require('ol.extent');
         });
       }
 
-      var layerParams = {};
-      var optParams = this.options.params;
-      if (!M.utils.isNullOrEmpty(optParams)) {
-        for (var key in optParams) {
+      let layerParams = {};
+      let optParams = this.options.params;
+      if (!Utils.isNullOrEmpty(optParams)) {
+        for (let key in optParams) {
           if (optParams.hasOwnProperty(key)) {
             layerParams[key.toUpperCase()] = optParams[key];
           }
@@ -321,7 +313,7 @@ goog.require('ol.extent');
       if (this.tiled === true) {
         this.ol3Layer = new ol.layer.Tile({
           visible: this.visibility && (this.options.visibility !== false),
-          source: new M.impl.source.TileWMS({
+          source: new TileWMS({
             url: this.url,
             params: layerParams,
             tileGrid: tileGrid
@@ -336,7 +328,7 @@ goog.require('ol.extent');
       else {
         this.ol3Layer = new ol.layer.Image({
           visible: this.visibility && (this.options.visibility !== false),
-          source: new M.impl.source.ImageWMS({
+          source: new ImageWMS({
             url: this.url,
             params: layerParams
           }),
@@ -365,8 +357,8 @@ goog.require('ol.extent');
       // activates animation for base layers or animated parameters
       let animated = ((this.transparent === false) || (this.options.animated === true));
       this.ol3Layer.set("animated", animated);
-    }.bind(this));
-  };
+    });
+  }
 
   /**
    * This function adds all layers defined int the server
@@ -374,17 +366,17 @@ goog.require('ol.extent');
    * @private
    * @function
    */
-  M.impl.layer.WMS.prototype.addAllLayers_ = function() {
-    this.getCapabilities().then(function(getCapabilities) {
-      getCapabilities.getLayers().forEach(function(layer) {
-        var wmsLayer = new M.layer.WMS({
+  addAllLayers_() {
+    this.getCapabilities().then(getCapabilities => {
+      getCapabilities.getLayers().forEach(layer => {
+        let wmsLayer = new FacadeWMS({
           'url': this.url,
           'name': layer.name,
           'version': layer.version,
           'tiled': this.tiled
         }, this.options);
         this.layers.push(wmsLayer);
-      }, this);
+      });
 
       // if no base layers was specified then it stablishes
       // the first layer as base
@@ -395,13 +387,13 @@ goog.require('ol.extent');
       this.map.addWMS(this.layers);
 
       // updates the z-index of the layers
-      var baseLayersIdx = this.layers.length;
-      this.layers.forEach(function(layer) {
-        layer.setZIndex(M.impl.Map.Z_INDEX[M.layer.type.WMS] + baseLayersIdx);
+      let baseLayersIdx = this.layers.length;
+      this.layers.forEach(layer => {
+        layer.setZIndex(ImplMap.Z_INDEX[LayerType.WMS] + baseLayersIdx);
         baseLayersIdx++;
       });
-    }.bind(this));
-  };
+    });
+  }
 
   /**
    * This function gets the envolved extent for
@@ -411,26 +403,26 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getExtent = function() {
-    var olProjection = ol.proj.get(this.map.getProjection().code);
+  getExtent() {
+    let olProjection = ol.proj.get(this.map.getProjection().code);
 
     // creates the promise
-    this.extentPromise = new Promise(function(success, fail) {
-      if (!M.utils.isNullOrEmpty(this.extent_)) {
+    this.extentPromise = new Promise((success, fail) => {
+      if (!Utils.isNullOrEmpty(this.extent_)) {
         this.extent_ = ol.proj.transformExtent(this.extent_, this.extentProj_, olProjection);
         this.extentProj_ = olProjection;
         success(this.extent_);
       }
       else {
-        this.getCapabilities().then(function(getCapabilities) {
+        this.getCapabilities().then(getCapabilities => {
           this.extent_ = getCapabilities.getLayerExtent(this.name);
           this.extentProj_ = olProjection;
           success(this.extent_);
-        }.bind(this));
+        });
       }
-    }.bind(this));
+    });
     return this.extentPromise;
-  };
+  }
 
   /**
    * This function gets the min resolution for
@@ -440,9 +432,9 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getMinResolution = function() {
+  getMinResolution() {
     return this.options.minResolution;
-  };
+  }
 
   /**
    * This function gets the max resolution for
@@ -452,9 +444,9 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getMaxResolution = function() {
+  getMaxResolution() {
     return this.options.maxResolution;
-  };
+  }
 
   /**
    * Update minimum and maximum resolution WMS layers
@@ -464,17 +456,17 @@ goog.require('ol.extent');
    * @param {ol.Projection} projection - Projection map
    * @api stable
    */
-  M.impl.layer.WMS.prototype.updateMinMaxResolution = function(projection) {
-    if (!M.utils.isNullOrEmpty(this.options.minResolution)) {
-      this.options.minResolution = M.utils.getResolutionFromScale(this.options.minScale, projection.units);
+  updateMinMaxResolution(projection) {
+    if (!Utils.isNullOrEmpty(this.options.minResolution)) {
+      this.options.minResolution = Utils.getResolutionFromScale(this.options.minScale, projection.units);
       this.ol3Layer.setMinResolution(this.options.minResolution);
     }
 
-    if (!M.utils.isNullOrEmpty(this.options.maxResolution)) {
-      this.options.maxResolution = M.utils.getResolutionFromScale(this.options.maxScale, projection.units);
+    if (!Utils.isNullOrEmpty(this.options.maxResolution)) {
+      this.options.maxResolution = Utils.getResolutionFromScale(this.options.maxScale, projection.units);
       this.ol3Layer.setMaxResolution(this.options.maxResolution);
     }
-  };
+  }
 
   /**
    * This function gets the max resolution for
@@ -484,9 +476,9 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getNumZoomLevels = function() {
+  getNumZoomLevels() {
     return this.options.numZoomLevels;
-  };
+  }
 
   /**
    * This function gets the layers loaded from this
@@ -496,9 +488,9 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getLayers = function() {
+  getLayers() {
     return this.layers;
-  };
+  }
 
   /**
    * This function destroys this layer, cleaning the HTML
@@ -508,28 +500,28 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getCapabilities = function() {
+  getCapabilities() {
     // creates the promise
-    if (M.utils.isNullOrEmpty(this.getCapabilitiesPromise)) {
-      var layerUrl = this.url;
-      var layerVersion = this.version;
-      var projection = this.map.getProjection();
-      this.getCapabilitiesPromise = new Promise(function(success, fail) {
+    if (Utils.isNullOrEmpty(this.getCapabilitiesPromise)) {
+      let layerUrl = this.url;
+      let layerVersion = this.version;
+      let projection = this.map.getProjection();
+      this.getCapabilitiesPromise = new Promise((success, fail) => {
         // gest the capabilities URL
-        var wmsGetCapabilitiesUrl = M.utils.getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
+        let wmsGetCapabilitiesUrl = Utils.getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
         // gets the getCapabilities response
-        M.remote.get(wmsGetCapabilitiesUrl).then(function(response) {
-          var getCapabilitiesDocument = response.xml;
-          var getCapabilitiesParser = new M.impl.format.WMSCapabilities();
-          var getCapabilities = getCapabilitiesParser.read(getCapabilitiesDocument);
+        Remote.get(wmsGetCapabilitiesUrl).then(response => {
+          let getCapabilitiesDocument = response.xml;
+          let getCapabilitiesParser = new FormatWMS();
+          let getCapabilities = getCapabilitiesParser.read(getCapabilitiesDocument);
 
-          var getCapabilitiesUtils = new M.impl.GetCapabilities(getCapabilities, layerUrl, projection);
+          let getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
           success(getCapabilitiesUtils);
         });
       });
     }
     return this.getCapabilitiesPromise;
-  };
+  }
 
   /**
    * TODO
@@ -537,21 +529,21 @@ goog.require('ol.extent');
    * @private
    * @function
    */
-  M.impl.layer.WMS.prototype.getMaxExtent_ = function() {
-    var extent = this.map.getMaxExtent();
-    return (new Promise(function(success, fail) {
-      if (!M.utils.isNullOrEmpty(extent)) {
-        if (!M.utils.isArray(extent)) {
+  getMaxExtent_() {
+    let extent = this.map.getMaxExtent();
+    return new Promise((success, fail) => {
+      if (!Utils.isNullOrEmpty(extent)) {
+        if (!Utils.isArray(extent)) {
           extent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
         }
         success.call(this, extent);
       }
       else {
-        M.impl.envolvedExtent.calculate(this.map, this).then(function(extent) {
-          if (!M.utils.isNullOrEmpty(this.map)) {
+        EnvolvedExtent.calculate(this.map, this).then((extent) => {
+          if (!Utils.isNullOrEmpty(this.map)) {
             let maxExtent = this.map.getMaxExtent();
-            if (!M.utils.isNullOrEmpty(maxExtent)) {
-              if (!M.utils.isArray(maxExtent)) {
+            if (!Utils.isNullOrEmpty(maxExtent)) {
+              if (!Utils.isArray(maxExtent)) {
                 maxExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
               }
               success.call(this, maxExtent);
@@ -560,10 +552,10 @@ goog.require('ol.extent');
               success.call(this, extent);
             }
           }
-        }.bind(this));
+        });
       }
-    }.bind(this)));
-  };
+    });
+  }
 
   /**
    * This function destroys this layer, cleaning the HTML
@@ -573,9 +565,9 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.getLegendURL = function() {
+  getLegendURL() {
     return this.legendUrl_;
-  };
+  }
 
   /**
    * TODO
@@ -584,9 +576,9 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.setLegendURL = function(legendUrl) {
+  setLegendURL(legendUrl) {
     this.legendUrl_ = legendUrl;
-  };
+  }
 
   /**
    * This function refreshes the state of this
@@ -597,12 +589,12 @@ goog.require('ol.extent');
    * @api stable
    * @export
    */
-  M.impl.layer.WMS.prototype.refresh = function() {
-    var ol3Layer = this.getOL3Layer();
-    if (!M.utils.isNullOrEmpty(ol3Layer)) {
+  refresh() {
+    let ol3Layer = this.getOL3Layer();
+    if (!Utils.isNullOrEmpty(ol3Layer)) {
       ol3Layer.getSource().changed();
     }
-  };
+  }
 
   /**
    * This function destroys this layer, cleaning the HTML
@@ -612,18 +604,18 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.destroy = function() {
-    var olMap = this.map.getMapImpl();
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+  destroy() {
+    let olMap = this.map.getMapImpl();
+    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }
-    if (!M.utils.isNullOrEmpty(this.layers)) {
+    if (!Utils.isNullOrEmpty(this.layers)) {
       this.layers.map(this.map.removeLayers, this.map);
       this.layers.length = 0;
     }
     this.map = null;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -632,10 +624,9 @@ goog.require('ol.extent');
    * @function
    * @api stable
    */
-  M.impl.layer.WMS.prototype.equals = function(obj) {
-    var equals = false;
-
-    if (obj instanceof M.impl.layer.WMS) {
+  equals(obj) {
+    let equals = false;
+    if (obj instanceof WMS) {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
       equals = equals && (this.cql === obj.cql);
@@ -643,7 +634,10 @@ goog.require('ol.extent');
     }
 
     return equals;
-  };
+  }
+}
 
-  M.impl.layer.WMS.LEGEND_IMAGE = null;
-})();
+/**
+ * TODO
+ */
+WMS.LEGEND_IMAGE = null;

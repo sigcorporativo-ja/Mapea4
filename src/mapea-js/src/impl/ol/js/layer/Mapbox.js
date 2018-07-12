@@ -1,12 +1,13 @@
-goog.provide('M.impl.layer.OSM');
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.impl.Layer');
+import Utils from "facade/js/util/Utils";
+import ImplMap from "../Map";
+import FacadeOSM from "facade/js/layer/OSM";
+import FacadeMapbox from "facade/js/layer/Mapbox";
+import SourceMapbox from "../source/Mapbox";
+import EnvolvedExtent from "../util/EnvolvedExtent";
+import Layer from "./Layer";
+import LayerType from "facade/js/layer/Type";
 
-goog.require('ol.layer.Tile');
-goog.require('ol.source.OSM');
-
-(function () {
+export default class Mapbox extends Layer {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -17,9 +18,10 @@ goog.require('ol.source.OSM');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.OSM = (function (userParameters, options) {
-    // check for null options
-    options = options || {};
+  constructor(userParameters, options) {
+
+    // calls the super constructor
+    super(options);
 
     /**
      * Layer resolutions
@@ -31,6 +33,7 @@ goog.require('ol.source.OSM');
     //Añadir plugin attributions
     this.hasAttributtion = false;
 
+    //Tiene alguna capa que necesite el attributions
     this.haveOSMorMapboxLayer = false;
 
     // sets visibility
@@ -38,12 +41,8 @@ goog.require('ol.source.OSM');
       this.visibility = false;
     }
 
-    // calls the super constructor
-    goog.base(this, options);
-
-    this.zIndex_ = M.impl.Map.Z_INDEX[M.layer.type.OSM];
-  });
-  goog.inherits(M.impl.layer.OSM, M.impl.Layer);
+    this.zIndex_ = ImplMap.Z_INDEX[LayerType.Mapbox];
+  }
 
   /**
    * This function sets the visibility of this layer
@@ -51,35 +50,35 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.OSM.prototype.setVisible = function (visibility) {
+  setVisible(visibility) {
     this.visibility = visibility;
     if (this.inRange() === true) {
       // if this layer is base then it hides all base layers
       if ((visibility === true) && (this.transparent !== true)) {
         // hides all base layers
-        this.map.getBaseLayers().forEach(function (layer) {
+        this.map.getBaseLayers().forEach(layer => {
           if (!layer.equals(this) && layer.isVisible()) {
             layer.setVisible(false);
           }
         });
 
         // set this layer visible
-        if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+        if (!Utils.isNullOrEmpty(this.ol3Layer)) {
           this.ol3Layer.setVisible(visibility);
         }
 
         // updates resolutions and keep the bbox
-        var oldBbox = this.map.getBbox();
+        let oldBbox = this.map.getBbox();
         this.map.getImpl().updateResolutionsFromBaseLayer();
-        if (!M.utils.isNullOrEmpty(oldBbox)) {
+        if (!Utils.isNullOrEmpty(oldBbox)) {
           this.map.setBbox(oldBbox);
         }
       }
-      else if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+      else if (!Utils.isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }
     }
-  };
+  }
 
   /**
    * This function sets the map object of the layer
@@ -89,20 +88,24 @@ goog.require('ol.source.OSM');
    * @param {M.impl.Map} map
    * @api stable
    */
-  M.impl.layer.OSM.prototype.addTo = function (map) {
+  addTo(map) {
     this.map = map;
 
     this.ol3Layer = new ol.layer.Tile({
-      source: new ol.source.OSM()
+      source: new SourceMapbox({
+        'url': this.url,
+        'name': this.name,
+        'accessToken': this.accessToken
+      })
     });
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
-    this.map.getImpl().getMapImpl().getControls().getArray().forEach(function (cont) {
+    this.map.getMapImpl().getControls().getArray().forEach(cont => {
       if (cont instanceof ol.control.Attribution) {
         this.hasAttributtion = true;
       }
-    }, this);
+    });
     if (!this.hasAttributtion) {
       this.map.getMapImpl().addControl(new ol.control.Attribution({
         className: 'ol-attribution ol-unselectable ol-control ol-collapsed m-attribution'
@@ -111,7 +114,7 @@ goog.require('ol.source.OSM');
     }
 
     // recalculate resolutions
-    this.resolutions_ = M.utils.generateResolutionsFromExtent(this.getExtent(), this.map.getMapImpl().getSize(), 16, this.map.getProjection().units);
+    this.resolutions_ = Utils.generateResolutionsFromExtent(this.getExtent(), this.map.getMapImpl().getSize(), 16, this.map.getProjection().units);
 
     // sets its visibility if it is in range
     if (this.isVisible() && !this.inRange()) {
@@ -127,7 +130,7 @@ goog.require('ol.source.OSM');
     // activates animation for base layers or animated parameters
     let animated = ((this.transparent === false) || (this.options.animated === true));
     this.ol3Layer.set("animated", animated);
-  };
+  }
 
   /**
    * This function sets the resolutions for this layer
@@ -137,36 +140,47 @@ goog.require('ol.source.OSM');
    * @param {Array<Number>} resolutions
    * @api stable
    */
-  M.impl.layer.OSM.prototype.setResolutions = function (resolutions) {
+  setResolutions(resolutions) {
     this.resolutions_ = resolutions;
 
-    if ((this.tiled === true) && !M.utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       // gets the extent
-      var this_ = this;
-      (new Promise(function (success, fail) {
+      let promise = new Promise((success, fail) => {
         // gets the extent
-        var extent = this_.map.getMaxExtent();
-        if (!M.utils.isNullOrEmpty(extent)) {
-          success.call(this_, extent);
+        let extent = this.map.getMaxExtent();
+        if (!Utils.isNullOrEmpty(extent)) {
+          success.call(this, extent);
         }
         else {
-          M.impl.envolvedExtent.calculate(this_.map, this_).then(success);
+          EnvolvedExtent.calculate(this.map, this).then(success);
         }
-      })).then(function (extent) {
-        var olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
+      });
+      // resolve the promise
+      promise.then(extent => {
+        let olExtent;
+        if (Utils.isArray(extent)) {
+          olExtent = extent;
+        }
+        else {
+          olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
+        }
 
-        var newSource = new ol.source.OSM({
-          tileGrid: new ol.tilegrid.TileGrid({
+        let newSource = new SourceMapbox({
+          'url': this.url,
+          'name': this.name,
+          'accessToken': this.accessToken,
+          'tileGrid': new ol.tilegrid.TileGrid({
             resolutions: resolutions,
             extent: olExtent,
             origin: ol.extent.getBottomLeft(olExtent)
           }),
-          extent: olExtent
+          'extent': olExtent,
+          attributionControl: true
         });
-        this_.ol3Layer.setSource(newSource);
+        this.ol3Layer.setSource(newSource);
       });
     }
-  };
+  }
 
   /**
    * This function gets the envolved extent for
@@ -176,13 +190,22 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.OSM.prototype.getExtent = function () {
-    var extent = null;
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+  getExtent() {
+    let extent = null;
+    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       extent = ol.proj.get(this.map.getProjection().code).getExtent();
     }
-    return extent;
-  };
+    return {
+      "x": {
+        "min": extent[0],
+        "max": extent[2]
+      },
+      "y": {
+        "min": extent[1],
+        "max": extent[3]
+      }
+    };
+  }
 
   /**
    * This function gets the min resolution for
@@ -192,9 +215,9 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.OSM.prototype.getMinResolution = function () {
+  getMinResolution() {
     return this.resolutions_[0];
-  };
+  }
 
   /**
    * This function gets the max resolution for
@@ -204,9 +227,9 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.OSM.prototype.getMaxResolution = function () {
+  getMaxResolution() {
     return this.resolutions_[this.resolutions_.length - 1];
-  };
+  }
 
   /**
    * This function destroys this layer, cleaning the HTML
@@ -216,28 +239,28 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.OSM.prototype.destroy = function () {
-    var olMap = this.map.getMapImpl();
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+  destroy() {
+    let olMap = this.map.getMapImpl();
+    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }
 
-    this.map.getLayers().forEach(function (lay) {
-      if (lay instanceof M.layer.OSM || lay instanceof M.layer.Mapbox) {
+    this.map.getLayers().forEach(layer => {
+      if (layer instanceof FacadeMapbox || layer instanceof FacadeOSM) {
         this.haveOSMorMapboxLayer = true;
       }
-    }, this);
+    });
 
     if (!this.haveOSMorMapboxLayer) {
-      this.map.getImpl().getMapImpl().getControls().getArray().forEach(function (data) {
+      this.map.getImpl().getMapImpl().getControls().getArray().forEach(data => {
         if (data instanceof ol.control.Attribution) {
           this.map.getImpl().getMapImpl().removeControl(data);
         }
-      }, this);
+      });
     }
     this.map = null;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -246,14 +269,14 @@ goog.require('ol.source.OSM');
    * @function
    * @api stable
    */
-  M.impl.layer.OSM.prototype.equals = function (obj) {
-    var equals = false;
+  equals(obj) {
+    let equals = false;
 
-    if (obj instanceof M.impl.layer.OSM) {
+    if (obj instanceof Mapbox) {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
     }
 
     return equals;
-  };
-})();
+  }
+}

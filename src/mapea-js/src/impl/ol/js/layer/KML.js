@@ -1,19 +1,16 @@
-goog.provide('M.impl.layer.KML');
+import Vector from "./Vector";
+import Utils from "facade/js/util/Utils";
+import Exception from "facade/js/exception/exception";
+import LoaderKML from "../loader/KML";
+import Popup from "facade/js/Popup";
+import FormatKML from "../format/KML";
+import EventsManager from "facade/js/event/Manager";
+import ImplUtils from "../util/Utils";
+import ClusteredFeature from "facade/js/feature/Clustered";
+import Template from "facade/js/util/Template";
+import popupKMLTemplate from "templates/kml_popup.html";
 
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.impl.layer.Vector');
-goog.require('M.impl.loader.KML');
-goog.require('M.impl.Popup');
-goog.require('M.impl.format.KML');
-goog.require('M.impl.layer.Vector');
-
-goog.require('ol.layer.Vector');
-goog.require('ol.source.Vector');
-
-goog.require('goog.style');
-
-(function() {
+export default class KML extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a KML layer
@@ -24,7 +21,11 @@ goog.require('goog.style');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.KML = (function(options) {
+  constructor(options) {
+
+    // calls the super constructor
+    super(options);
+
     /**
      * Popup showed
      * @private
@@ -45,12 +46,7 @@ goog.require('goog.style');
      * @type {HTMLElement}
      */
     this.screenOverlayImg_ = null;
-
-    // calls the super constructor
-    goog.base(this, options);
-  });
-  goog.inherits(M.impl.layer.KML, M.impl.layer.Vector);
-
+  }
 
   /**
    * This function sets the visibility of this layer
@@ -58,23 +54,23 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.impl.layer.KML.prototype.setVisible = function(visibility) {
+  setVisible(visibility) {
     this.visibility = visibility;
 
     // layer
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       this.ol3Layer.setVisible(visibility);
     }
 
     // screen overlay
-    if (!M.utils.isNullOrEmpty(this.screenOverlayImg_)) {
-      var display = 'none';
+    if (!Utils.isNullOrEmpty(this.screenOverlayImg_)) {
+      let display = 'none';
       if (visibility === true) {
         display = 'inherit';
       }
-      goog.style.setStyle(this.screenOverlayImg_, 'display', display);
+      this.screenOverlayImg_.style['display'] = display;
     }
-  };
+  }
 
   /**
    * This function sets the map object of the layer
@@ -84,24 +80,23 @@ goog.require('goog.style');
    * @param {M.impl.Map} map
    * @api stable
    */
-  M.impl.layer.KML.prototype.addTo = function(map) {
-    goog.base(this, 'addTo', map);
+  addTo(map) {
+    super.addTo(map);
 
-    var formater = new M.impl.format.KML();
-    var loader = new M.impl.loader.KML(map, this.url, formater);
-    var this_ = this;
+    let formater = new FormatKML();
+    let loader = new LoaderKML(map, this.url, formater);
     this.ol3Layer = new ol.layer.Vector({
       source: new ol.source.Vector({
         url: this.url,
         format: formater,
-        loader: loader.getLoaderFn(function(features, screenOverlay) {
+        loader: loader.getLoaderFn(features, screenOverlay => {
           // removes previous features
-          this_.facadeVector_.clear();
-          this_.facadeVector_.addFeatures(features);
-          this_.fire(M.evt.LOAD, [features]);
-          if (!M.utils.isNullOrEmpty(screenOverlay)) {
-            var screenOverLayImg = M.impl.utils.addOverlayImage(screenOverlay, map);
-            this_.setScreenOverlayImg(screenOverLayImg);
+          this.facadeVector_.clear();
+          this.facadeVector_.addFeatures(features);
+          this.fire(EventsManager.LOAD, [features]);
+          if (!Utils.isNullOrEmpty(screenOverlay)) {
+            let screenOverLayImg = ImplUtils.addOverlayImage(screenOverlay, map);
+            this.setScreenOverlayImg(screenOverLayImg);
           }
         })
       })
@@ -114,9 +109,9 @@ goog.require('goog.style');
     if (this.zIndex_ !== null) {
       this.setZIndex(this.zIndex_);
     }
-    var olMap = this.map.getMapImpl();
+    let olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -126,41 +121,38 @@ goog.require('goog.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.KML.prototype.selectFeatures = function(features, coord, evt) {
+  selectFeatures(features, coord, evt) {
     // TODO: manage multiples features
-    var feature = features[0];
+    let feature = features[0];
 
-    if (!(feature instanceof M.ClusteredFeature) && (this.extract === true)) {
-      var featureName = feature.getAttribute('name');
-      var featureDesc = feature.getAttribute('description');
-      var featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();
+    if (!(feature instanceof ClusteredFeature) && (this.extract === true)) {
+      let featureName = feature.getAttribute('name');
+      let featureDesc = feature.getAttribute('description');
+      let featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();
 
-      var this_ = this;
-      M.template.compile(M.layer.KML.POPUP_TEMPLATE, {
-        'jsonp': true,
+      let htmlAsText = Template.compile(popupKMLTemplate, {
         'vars': {
           'name': featureName,
           'desc': featureDesc
         },
         'parseToHtml': false
-      }).then(function(htmlAsText) {
-        this_.tabPopup_ = {
-          'icon': 'g-cartografia-comentarios',
-          'title': featureName,
-          'content': htmlAsText
-        };
-        const popup = this_.map.getPopup();
-        if (M.utils.isNullOrEmpty(popup)) {
-          this_.popup_ = new M.Popup();
-          this_.popup_.addTab(this_.tabPopup_);
-          this_.map.addPopup(this_.popup_, featureCoord);
-        }
-        else {
-          popup.addTab(this_.tabPopup_);
-        }
       });
+      this.tabPopup_ = {
+        'icon': 'g-cartografia-comentarios',
+        'title': featureName,
+        'content': htmlAsText
+      };
+      const popup = this.map.getPopup();
+      if (Utils.isNullOrEmpty(popup)) {
+        this.popup_ = new Popup();
+        this.popup_.addTab(this.tabPopup_);
+        this.map.addPopup(this.popup_, featureCoord);
+      }
+      else {
+        popup.addTab(this.tabPopup_);
+      }
     }
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -171,12 +163,12 @@ goog.require('goog.style');
    * @param {ol.Feature} feature
    * @api stable
    */
-  M.impl.layer.KML.prototype.unselectFeatures = function() {
-    if (!M.utils.isNullOrEmpty(this.popup_)) {
+  unselectFeatures() {
+    if (!Utils.isNullOrEmpty(this.popup_)) {
       this.popup_.hide();
       this.popup_ = null;
     }
-  };
+  }
 
   /**
    * Sets the screen overlay image for this KML
@@ -185,9 +177,9 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.impl.layer.KML.prototype.setScreenOverlayImg = function(screenOverlayImg) {
+  setScreenOverlayImg(screenOverlayImg) {
     this.screenOverlayImg_ = screenOverlayImg;
-  };
+  }
 
   /**
    * This function destroys this layer, cleaning the HTML
@@ -197,19 +189,18 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.impl.layer.KML.prototype.destroy = function() {
-    var olMap = this.map.getMapImpl();
+  destroy() {
+    let olMap = this.map.getMapImpl();
 
-    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }
 
     this.removePopup();
-
     this.options = null;
     this.map = null;
-  };
+  }
 
   /**
    * This function destroys KML popup
@@ -218,8 +209,8 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.impl.layer.KML.prototype.removePopup = function() {
-    if (!M.utils.isNullOrEmpty(this.popup_)) {
+  removePopup() {
+    if (!Utils.isNullOrEmpty(this.popup_)) {
       if (this.popup_.getTabs().length > 1) {
         this.popup_.removeTab(this.tabPopup_);
       }
@@ -227,7 +218,7 @@ goog.require('goog.style');
         this.map.removePopup();
       }
     }
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -236,14 +227,14 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.impl.layer.KML.prototype.equals = function(obj) {
-    var equals = false;
+  equals(obj) {
+    let equals = false;
 
-    if (obj instanceof M.impl.layer.KML) {
+    if (obj instanceof KML) {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
       equals = equals && (this.extract === obj.extract);
     }
     return equals;
-  };
-})();
+  }
+}

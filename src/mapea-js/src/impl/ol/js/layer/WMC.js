@@ -1,12 +1,12 @@
-goog.provide('M.impl.layer.WMC');
+import FormatWMC from "../format/wmc/WMC110";
+import Utils from "facade/js/util/Utils";
+import * as parameter from "facade/js/parameter/parameter";
+import Config from "configuration";
+import Remote from "facade/js/util/Remote";
+import EventsManager from "facade/js/event/Manager";
+import Layer from "./Layer";
 
-goog.require('M.utils');
-goog.require('M.exception');
-goog.require('M.impl.Layer');
-goog.require('M.impl.format.WMC.v110');
-goog.require('M.evt.EventsManager');
-
-(function() {
+export default class WMC extends Layer {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC layer
@@ -17,7 +17,11 @@ goog.require('M.evt.EventsManager');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.layer.WMC = (function(options) {
+  constructor(options) {
+
+    // calls the super constructor
+    super(options);
+
     /**
      * Indicates if the layer was selected
      * @private
@@ -53,10 +57,7 @@ goog.require('M.evt.EventsManager');
      */
     this.extentProj_ = null;
 
-    // calls the super constructor
-    goog.base(this, options);
-  });
-  goog.inherits(M.impl.layer.WMC, M.impl.Layer);
+  }
 
   /**
    * This function sets the map object of the layer
@@ -66,9 +67,9 @@ goog.require('M.evt.EventsManager');
    * @param {M.impl.Map} map
    * @api stable
    */
-  M.impl.layer.WMC.prototype.addTo = function(map) {
+  addTo(map) {
     this.map = map;
-  };
+  }
 
   /**
    * This function select this WMC layer and
@@ -78,36 +79,34 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.select = function() {
+  select() {
     if (this.selected === false) {
-      var bbox = this.map.getBbox();
+      let bbox = this.map.getBbox();
 
       // unselect layers
-      this.map.getWMC().forEach(function(wmcLayer) {
-        wmcLayer.unselect();
-      });
+      this.map.getWMC().forEach(wmcLayer => wmcLayer.unselect());
 
       this.selected = true;
 
       // loads the layers from this WMC if it is not cached
-      this.loadContextPromise = new Promise(function(success, fail) {
-        M.remote.get(this.url).then(function(response) {
-          var proj;
+      this.loadContextPromise = new Promise((success, fail) => {
+        Remote.get(this.url).then(response => {
+          let proj;
           if (this.map._defaultProj === false) {
             proj = this.map.getProjection().code;
           }
-          var wmcDocument = response.xml;
-          var formater = new M.impl.format.WMC({
+          let wmcDocument = response.xml;
+          let formater = new FormatWMC({
             'projection': proj
           });
-          var context = formater.readFromDocument(wmcDocument);
+          let context = formater.readFromDocument(wmcDocument);
           success.call(this, context);
-        }.bind(this));
-      }.bind(this));
-      this.loadContextPromise.then(function(context) {
+        });
+      });
+      this.loadContextPromise.then(context => {
         // set projection with the wmc
         if (this.map._defaultProj) {
-          var olproj = ol.proj.get(context.projection);
+          let olproj = ol.proj.get(context.projection);
           this.map.setProjection({
             "code": olproj.getCode(),
             "units": olproj.getUnits()
@@ -115,15 +114,15 @@ goog.require('M.evt.EventsManager');
         }
         // load layers
         this.loadLayers(context);
-        if (!M.utils.isNullOrEmpty(bbox)) {
+        if (!Utils.isNullOrEmpty(bbox)) {
           this.map.setBbox(bbox, {
             'nearest': true
           });
         }
-        this.map.fire(M.evt.CHANGE_WMC, this);
-      }.bind(this));
+        this.map.fire(EventsManager.CHANGE_WMC, this);
+      });
     }
-  };
+  }
 
   /**
    * This function unselect this WMC layer and
@@ -133,16 +132,16 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.unselect = function() {
+  unselect() {
     if (this.selected === true) {
       this.selected = false;
 
       // removes all loaded layers
-      if (!M.utils.isNullOrEmpty(this.layers)) {
+      if (!Utils.isNullOrEmpty(this.layers)) {
         this.map.removeLayers(this.layers);
       }
     }
-  };
+  }
 
   /**
    * This function load all layers of the WMC and
@@ -152,7 +151,7 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.loadLayers = function(context) {
+  loadLayers(context) {
     this.layers = context.layers;
     this.maxExtent = context.maxExtent;
 
@@ -160,8 +159,8 @@ goog.require('M.evt.EventsManager');
 
     // updates the z-index of the layers
     this.layers.forEach((layer, i) => layer.setZIndex(this.getZIndex() + i));
-    this.facadeLayer_.fire(M.evt.LOAD, [this.layers]);
-  };
+    this.facadeLayer_.fire(EventsManager.LOAD, [this.layers]);
+  }
 
   /**
    * This function set facade class vector
@@ -170,9 +169,9 @@ goog.require('M.evt.EventsManager');
    * @param {object} obj - Facade vector
    * @api stable
    */
-  M.impl.layer.WMC.prototype.setFacadeObj = function(obj) {
+  setFacadeObj(obj) {
     this.facadeLayer_ = obj;
-  };
+  }
 
 
   /**
@@ -183,15 +182,15 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.getMaxExtent = function() {
-    var this_ = this;
-    var olProjection = ol.proj.get(this.map.getProjection().code);
-    var promise = new Promise(function(success, fail) {
-      if (M.utils.isNullOrEmpty(this_.maxExtent)) {
-        this_.loadContextPromise.then(function(context) {
+  getMaxExtent() {
+    let this_ = this;
+    let olProjection = ol.proj.get(this.map.getProjection().code);
+    let promise = new Promise((success, fail) => {
+      if (Utils.isNullOrEmpty(this_.maxExtent)) {
+        this_.loadContextPromise.then(context => {
           this_.maxExtent = context.maxExtent;
-          if (M.utils.isNullOrEmpty(this_.extentProj_)) {
-            this_.extentProj_ = M.parameter.projection(M.config.DEFAULT_PROJ).code;
+          if (Utils.isNullOrEmpty(this_.extentProj_)) {
+            this_.extentProj_ = parameter.projection(Config.DEFAULT_PROJ).code;
           }
           this_.maxExtent = ol.proj.transformExtent(this_.maxExtent, this_.extentProj_, olProjection);
           this_.extentProj_ = olProjection;
@@ -204,7 +203,7 @@ goog.require('M.evt.EventsManager');
       }
     });
     return promise;
-  };
+  }
 
   /**
    * This function gets layers loaded from
@@ -214,9 +213,9 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.getLayers = function() {
+  getLayers() {
     return this.layers;
-  };
+  }
 
   /**
    * This function destroys this layer, cleaning the HTML
@@ -226,14 +225,14 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.destroy = function() {
-    if (!M.utils.isNullOrEmpty(this.layers)) {
+  destroy() {
+    if (!Utils.isNullOrEmpty(this.layers)) {
       this.map.removeLayers(this.layers);
     }
     this.map = null;
     this.layers.length = 0;
     this.wmcDocument = null;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -242,14 +241,14 @@ goog.require('M.evt.EventsManager');
    * @function
    * @api stable
    */
-  M.impl.layer.WMC.prototype.equals = function(obj) {
-    var equals = false;
+  equals(obj) {
+    let equals = false;
 
-    if (obj instanceof M.impl.layer.WMC) {
+    if (obj instanceof WMC) {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
     }
 
     return equals;
-  };
-})();
+  }
+}
