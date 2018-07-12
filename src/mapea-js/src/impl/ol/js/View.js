@@ -14,7 +14,6 @@ export default class View extends ol.View {
     this.userZoom_ = null;
   }
 
-
   /**
    * Zoom to a specific zoom level from user
    * @param {number} zoom Zoom level.
