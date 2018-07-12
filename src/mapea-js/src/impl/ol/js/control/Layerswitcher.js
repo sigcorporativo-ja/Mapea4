@@ -1,6 +1,6 @@
 import Utils from 'facade/js/util/Utils';
 import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
-import Layer from 'facade/js/layer/Base';
+import Layer from 'facade/js/layer/Layer';
 import Control from "./Control"
 /**
  * @namespace M.impl.control

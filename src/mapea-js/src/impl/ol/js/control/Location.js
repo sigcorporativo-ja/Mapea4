@@ -1,6 +1,6 @@
 import Control from "./Control";
-import Feature from "../feature/feature";
-import Utils from 'facade/js/utils/utils';
+import Feature from "../feature/Feature";
+import Utils from 'facade/js/utils/Utils';
 
 /**
  * @namespace M.impl.control
