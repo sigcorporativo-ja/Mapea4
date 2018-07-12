@@ -1,8 +1,8 @@
-goog.provide('M.impl.style.Heatmap');
-goog.require('M.impl.Style');
-goog.require('M.impl.layer.Heatmap');
+import Style from "./Style";
+import Heatmap from "../layer/Heatmap";
+import Utils from "facade/js/util/Utils";
 
-(function() {
+export default class HeatMap extends Style {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Heatmap
@@ -12,7 +12,9 @@ goog.require('M.impl.layer.Heatmap');
    * @param {Object} options - config options of user
    * @api stable
    */
-  M.impl.style.Heatmap = function(attribute, options, vendorOptions) {
+  constructor(attribute, options, vendorOptions) {
+
+    super({});
 
     /**
      * @private
@@ -29,7 +31,7 @@ goog.require('M.impl.layer.Heatmap');
      * @private
      * @type {object}
      */
-    this.opt_options_ = M.utils.extends(options, vendorOptions);
+    this.opt_options_ = Utils.extends(options, vendorOptions);
 
     this.opt_options_.zIndex = 999999;
     /**
@@ -39,9 +41,7 @@ goog.require('M.impl.layer.Heatmap');
      */
     this.oldOLLayer_ = null;
 
-    goog.base(this, {});
-  };
-  goog.inherits(M.impl.style.Heatmap, M.impl.Style);
+  }
 
   /**
    * This function apply the style to specified layer
@@ -50,9 +50,9 @@ goog.require('M.impl.layer.Heatmap');
    * @param{M.layer.Vector}
    * @api stable
    */
-  M.impl.style.Heatmap.prototype.applyToLayer = function(layer) {
+  applyToLayer(layer) {
     this.layer_ = layer;
-    if (!M.utils.isNullOrEmpty(layer)) {
+    if (!Utils.isNullOrEmpty(layer)) {
       let ol3Layer = this.layer_.getImpl().getOL3Layer();
       if (!(ol3Layer instanceof ol.layer.Heatmap)) {
         this.oldOLLayer_ = ol3Layer;
@@ -63,7 +63,7 @@ goog.require('M.impl.layer.Heatmap');
       this.createHeatmapLayer_(olFeatures);
       this.layer_.getImpl().setOL3Layer(this.heatmapLayer_);
     }
-  };
+  }
 
   /**
    * This function remove the style to specified layer
@@ -71,15 +71,15 @@ goog.require('M.impl.layer.Heatmap');
    * @public
    * @api stable
    */
-  M.impl.style.Heatmap.prototype.unapply = function(layer) {
-    if (!M.utils.isNullOrEmpty(this.oldOLLayer_)) {
+  unapply(layer) {
+    if (!Utils.isNullOrEmpty(this.oldOLLayer_)) {
       this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
       this.layer_.redraw();
       this.layer_ = null;
       this.oldOLLayer_ = null;
       this.heatmapLayer_ = null;
     }
-  };
+  }
 
   /**
    * This function creates a heatmap layer
@@ -87,12 +87,12 @@ goog.require('M.impl.layer.Heatmap');
    * @private
    * @api stable
    */
-  M.impl.style.Heatmap.prototype.createHeatmapLayer_ = function(olFeatures) {
+  createHeatmapLayer_(olFeatures) {
     this.opt_options_.source = new ol.source.Vector({
       features: olFeatures,
     });
-    this.heatmapLayer_ = new M.impl.layer.Heatmap(this.opt_options_);
-  };
+    this.heatmapLayer_ = new Heatmap(this.opt_options_);
+  }
 
   /**
    * This function
@@ -101,9 +101,9 @@ goog.require('M.impl.layer.Heatmap');
    * @param {object} vendorOptions
    * @function
    */
-  M.impl.style.Heatmap.prototype.setOptions = function(options, vendorOptions) {
-    this.opt_options_ = M.utils.extends(options, vendorOptions);
-  };
+  setOptions(options, vendorOptions) {
+    this.opt_options_ = Utils.extends(options, vendorOptions);
+  }
 
   /**
    * This function
@@ -111,9 +111,9 @@ goog.require('M.impl.layer.Heatmap');
    * @function
    * @return {number}
    */
-  M.impl.style.Heatmap.prototype.getMinWeight = function() {
+  getMinWeight() {
     return this.heatmapLayer_.getMinWeight();
-  };
+  }
 
   /**
    * This function
@@ -121,9 +121,7 @@ goog.require('M.impl.layer.Heatmap');
    * @function
    * @return {number}
    */
-  M.impl.style.Heatmap.prototype.getMaxWeight = function() {
+  getMaxWeight() {
     return this.heatmapLayer_.getMaxWeight();
-  };
-
-
-})();
+  }
+}

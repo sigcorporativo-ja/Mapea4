@@ -1,18 +1,14 @@
-goog.provide('M.impl.Style');
-
-goog.require('ol.render');
-
 /**
  * @namespace M.impl.Style
  */
 
-(function() {
+export default class Style {
   /**
    * Main constructor of the class.
    * @constructor
    * @api stable
    */
-  M.impl.Style = (function(options = {}) {
+  constructor(options = {}) {
 
     /**
      * User options for this style
@@ -29,7 +25,7 @@ goog.require('ol.render');
     this.layer_ = null;
 
     this.updateFacadeOptions(options);
-  });
+  }
 
   /**
    * This function apply style options facade to impl
@@ -38,7 +34,7 @@ goog.require('ol.render');
    * @param {Object} options
    * @api stable
    */
-  M.impl.Style.prototype.updateFacadeOptions = function(options = {}) {};
+  updateFacadeOptions(options = {}) {}
 
   /**
    * This function apply style to layer
@@ -47,10 +43,10 @@ goog.require('ol.render');
    * @param {M.layer.Vector} layer - Layer
    * @api stable
    */
-  M.impl.Style.prototype.applyToLayer = function(layer) {
+  applyToLayer(layer) {
     this.layer_ = layer;
     layer.getFeatures().forEach(this.applyToFeature, this);
-  };
+  }
 
   /**
    * This function apply style to feature
@@ -60,9 +56,9 @@ goog.require('ol.render');
    * @param {M.Feature} feature - Feature to apply style
    * @api stable
    */
-  M.impl.Style.prototype.applyToFeature = function(feature) {
+  applyToFeature(feature) {
     feature.getImpl().getOLFeature().setStyle(this.olStyleFn_);
-  };
+  }
 
   /**
    * This function updates the canvas of style of canvas
@@ -72,14 +68,14 @@ goog.require('ol.render');
    * @param {HTMLCanvasElement} canvas - canvas of style
    * @api stable
    */
-  M.impl.Style.prototype.updateCanvas = function(canvas) {
+  updateCanvas(canvas) {
     let canvasSize = this.getCanvasSize();
     let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
       size: canvasSize
     });
     vectorContext.setStyle(this.olStyleFn_()[0]);
     this.drawGeometryToCanvas(vectorContext);
-  };
+  }
 
   /**
    * This function draw the geometry on canvas of style
@@ -88,7 +84,7 @@ goog.require('ol.render');
    * @function
    * @api stable
    */
-  M.impl.Style.prototype.drawGeometryToCanvas = function(vectorContext) {};
+  drawGeometryToCanvas(vectorContext) {}
 
   /**
    * This function gets the canvas size
@@ -98,9 +94,9 @@ goog.require('ol.render');
    * @return {Array<number>} canvas size
    * @api stable
    */
-  M.impl.Style.prototype.getCanvasSize = function() {
+  getCanvasSize() {
     return [100, 100];
-  };
+  }
 
   /**
    * TODO
@@ -109,7 +105,7 @@ goog.require('ol.render');
    * @function
    * @api stable
    */
-  M.impl.Style.prototype.clone = function() {
-    return new this.constructor(Object.assign({}, this.options_));
-  };
-})();
+  clone() {
+    return new Style(Object.assign({}, this.options_));
+  }
+}

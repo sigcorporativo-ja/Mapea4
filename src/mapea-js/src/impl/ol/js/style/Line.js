@@ -1,27 +1,25 @@
-goog.provide('M.impl.style.Line');
-
-goog.require('M.impl.style.CentroidStyle');
-goog.require('M.impl.style.Simple');
-goog.require('M.impl.style.TextPath');
-goog.require('ol.geometry.Cspline');
+import Centroid from "./Centroid";
+import Path from "./Path";
+import Simple from "./Simple";
+import Utils from "facade/js/util/Utils";
+import Render from "../util/Render";
 
 /**
  * @namespace M.impl.style.Line
  *
  */
 
-(function() {
+export default class Line extends Simple {
   /**
    * Main constructor of the class.
    * @constructor
    * @implements {M.impl.style.Simple}
    * @api stable
    */
-  M.impl.style.Line = function(options) {
-    goog.base(this, options);
+  constructor(options) {
+    super(options);
     this.olStyleFn_ = this.updateFacadeOptions(options);
-  };
-  goog.inherits(M.impl.style.Line, M.impl.style.Simple);
+  }
 
   /**
    * This function se options to ol style
@@ -31,8 +29,8 @@ goog.require('ol.geometry.Cspline');
    * @function
    * @api stable
    */
-  M.impl.style.Line.prototype.updateFacadeOptions = function(options) {
-    return function(feature, resolution) {
+  updateFacadeOptions(options) {
+    return (feature, resolution) => {
       if (!(feature instanceof ol.Feature)) {
         resolution = feature;
         feature = this;
@@ -40,10 +38,10 @@ goog.require('ol.geometry.Cspline');
       let stroke = options.stroke;
       let label = options.label;
       // let fill = options.fill;
-      let style = new M.impl.style.CentroidStyle();
-      let styleStroke = new M.impl.style.CentroidStyle();
-      const getValue = M.impl.style.Simple.getValue;
-      if (!M.utils.isNullOrEmpty(stroke)) {
+      let style = new Centroid();
+      let styleStroke = new Centroid();
+      const getValue = Simple.getValue;
+      if (!Utils.isNullOrEmpty(stroke)) {
         style.setStroke(new ol.style.Stroke({
           color: getValue(stroke.color, feature),
           width: getValue(stroke.width, feature),
@@ -54,7 +52,7 @@ goog.require('ol.geometry.Cspline');
           miterLimit: getValue(stroke.miterlimit, feature)
         }));
       }
-      if (!M.utils.isNullOrEmpty(label)) {
+      if (!Utils.isNullOrEmpty(label)) {
         let textPathConfig = {
           text: getValue(label.text, feature) === undefined ? undefined : String(getValue(label.text, feature)),
           font: getValue(label.font, feature),
@@ -67,11 +65,11 @@ goog.require('ol.geometry.Cspline');
           textOverflow: getValue(label.textoverflow, feature) || '',
           minWidth: getValue(label.minwidth, feature) || 0,
           geometry: getValue(label.geometry, feature),
-          offsetX: M.impl.style.Simple.getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
-          offsetY: M.impl.style.Simple.getValue(options.label.offset ? options.label.offset[1] : undefined, feature),
+          offsetX: getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
+          offsetY: getValue(options.label.offset ? options.label.offset[1] : undefined, feature),
         };
-        let textPathStyle = new M.impl.style.TextPath(textPathConfig);
-        if (!M.utils.isNullOrEmpty(label.stroke)) {
+        let textPathStyle = new Path(textPathConfig);
+        if (!Utils.isNullOrEmpty(label.stroke)) {
           textPathStyle.setStroke(new ol.style.Stroke({
             color: getValue(label.stroke.color, feature),
             width: getValue(label.stroke.width, feature),
@@ -86,7 +84,7 @@ goog.require('ol.geometry.Cspline');
         // we will use a flag into de options object to set pathstyle or ol.text style
         if (typeof applyPath === 'boolean' && applyPath) {
           style.textPath = textPathStyle;
-          if (!M.utils.isNullOrEmpty(label.smooth) && label.smooth === true && M.utils.isFunction(feature.getGeometry)) {
+          if (!Utils.isNullOrEmpty(label.smooth) && label.smooth === true && Utils.isFunction(feature.getGeometry)) {
             style.setGeometry(feature.getGeometry().cspline());
           }
         }
@@ -95,11 +93,11 @@ goog.require('ol.geometry.Cspline');
         }
       }
       let fill;
-      if (!M.utils.isNullOrEmpty(options.fill)) {
-        let fillColorValue = M.impl.style.Simple.getValue(options.fill.color, feature);
-        let fillOpacityValue = M.impl.style.Simple.getValue(options.fill.opacity, feature) || 1;
-        let widthValue = M.impl.style.Simple.getValue(options.fill.width, feature);
-        if (!M.utils.isNullOrEmpty(fillColorValue)) {
+      if (!Utils.isNullOrEmpty(options.fill)) {
+        let fillColorValue = Simple.getValue(options.fill.color, feature);
+        let fillOpacityValue = Simple.getValue(options.fill.opacity, feature) || 1;
+        let widthValue = Simple.getValue(options.fill.width, feature);
+        if (!Utils.isNullOrEmpty(fillColorValue)) {
           fill = new ol.style.Stroke({
             color: chroma(fillColorValue)
               .alpha(fillOpacityValue).css(),
@@ -110,7 +108,7 @@ goog.require('ol.geometry.Cspline');
       styleStroke.setStroke(fill);
       return [style, styleStroke];
     };
-  };
+  }
 
   /**
    * This function apply style to layer
@@ -119,14 +117,14 @@ goog.require('ol.geometry.Cspline');
    * @param {M.layer.Vector} layer - Layer
    * @api stable
    */
-  M.impl.style.Line.prototype.applyToLayer = function(layer) {
-    goog.base(this, 'applyToLayer', layer);
+  applyToLayer(layer) {
+    super('applyToLayer', layer);
 
     let olLayer = layer.getImpl().getOL3Layer();
-    if (!M.utils.isNullOrEmpty(olLayer)) {
-      this.postComposeEvtKey_ = olLayer.on('postcompose', M.impl.renderutils.postRender, olLayer);
+    if (!Utils.isNullOrEmpty(olLayer)) {
+      this.postComposeEvtKey_ = olLayer.on('postcompose', Render.postRender, olLayer);
     }
-  };
+  }
 
   /**
    * This function apply style
@@ -136,9 +134,9 @@ goog.require('ol.geometry.Cspline');
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @api stable
    */
-  M.impl.style.Line.prototype.unapply = function(layer) {
+  unapply(layer) {
     ol.Observable.unByKey(this.postComposeEvtKey_);
-  };
+  }
 
   /**
    * TODO
@@ -147,11 +145,11 @@ goog.require('ol.geometry.Cspline');
    * @function
    * @api stable
    */
-  M.impl.style.Line.prototype.drawGeometryToCanvas = function(vectorContext, canvas, style, stroke) {
+  drawGeometryToCanvas(vectorContext, canvas, style, stroke) {
     let x = this.getCanvasSize()[0];
     let y = this.getCanvasSize()[1];
     vectorContext.drawGeometry(new ol.geom.LineString([[0 + stroke / 2, 0 + stroke / 2], [(x / 3), (y / 2) - stroke / 2], [(2 * x / 3), 0 + stroke / 2], [x - stroke / 2, (y / 2) - stroke / 2]]));
-    if (!M.utils.isNullOrEmpty(style)) {
+    if (!Utils.isNullOrEmpty(style)) {
       let width = style.width;
       var ctx = canvas.getContext("2d");
       ctx.lineWidth = style.width;
@@ -165,7 +163,7 @@ goog.require('ol.geometry.Cspline');
       ctx.lineTo(x - width, (y / 2) - width);
       ctx.stroke();
     }
-  };
+  }
 
   /**
    * TODO
@@ -174,30 +172,30 @@ goog.require('ol.geometry.Cspline');
    * @function
    * @api stable
    */
-  M.impl.style.Line.prototype.updateCanvas = function(canvas) {
+  updateCanvas(canvas) {
     let canvasSize = this.getCanvasSize();
     let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
       size: canvasSize
     });
     let optionsStyle;
     let style = this.olStyleFn_()[1];
-    if (!M.utils.isNullOrEmpty(style) && !M.utils.isNullOrEmpty(style.getStroke())) {
+    if (!Utils.isNullOrEmpty(style) && !Utils.isNullOrEmpty(style.getStroke())) {
       optionsStyle = {
         color: style.getStroke().getColor(),
         width: 1
       };
     }
     let applyStyle = this.olStyleFn_()[0];
-    if (!M.utils.isNullOrEmpty(applyStyle.getText())) {
+    if (!Utils.isNullOrEmpty(applyStyle.getText())) {
       applyStyle.setText(null);
     }
     let stroke = applyStyle.getStroke();
     let width;
-    if (!M.utils.isNullOrEmpty(stroke)) {
-      if (!M.utils.isNullOrEmpty(stroke.getWidth())) {
+    if (!Utils.isNullOrEmpty(stroke)) {
+      if (!Utils.isNullOrEmpty(stroke.getWidth())) {
         width = stroke.getWidth();
-        if (stroke.getWidth() > this.DEFAULT_WIDTH_LINE) {
-          width = this.DEFAULT_WIDTH_LINE;
+        if (stroke.getWidth() > Line.DEFAULT_WIDTH_LINE) {
+          width = Line.DEFAULT_WIDTH_LINE;
         }
       }
       else {
@@ -211,7 +209,7 @@ goog.require('ol.geometry.Cspline');
       vectorContext.setStyle(applyStyle);
     }
     this.drawGeometryToCanvas(vectorContext, canvas, optionsStyle, width);
-  };
+  }
 
   /**
    * TODO
@@ -220,10 +218,9 @@ goog.require('ol.geometry.Cspline');
    * @function
    * @api stable
    */
-  M.impl.style.Line.prototype.getCanvasSize = function() {
+  getCanvasSize() {
     return [25, 15];
-  };
+  }
+}
 
-
-  M.impl.style.Line.prototype.DEFAULT_WIDTH_LINE = 3;
-})();
+Line.DEFAULT_WIDTH_LINE = 3;

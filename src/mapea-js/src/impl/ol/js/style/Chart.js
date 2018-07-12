@@ -1,14 +1,16 @@
-goog.provide('M.impl.style.Chart');
-
-goog.require('M.impl.style.Feature');
-
-goog.require('M.impl.style.CentroidStyle');
-goog.require('M.impl.style.OLChart');
+import StyleCentroid from "./Centroid";
+import OLChart from "../chart/OLChart";
+import Feature from "./Feature";
+import Utils from "facade/js/util/Utils";
+import Simple from "./Simple";
+import Baseline from "facade/js/style/Baseline";
+import Align from "facade/js/Align";
+import FacadeChart from "facade/js/style/Chart";
 
 /**
- * @namespace M.impl.style.Chart
+ * @namespace Chart
  */
-(function() {
+export default class Chart extends Feature {
 
   /**
    * @classdesc
@@ -36,8 +38,12 @@ goog.require('M.impl.style.OLChart');
    * @implements {M.impl.style.Simple}
    * @api
    */
-  M.impl.style.Chart = function(options = {}) {
+  constructor(options = {}) {
 
+    // merge default values
+    Chart.extend_(options, FacadeChart.DEFAULT);
+
+    super(options);
     /**
      * the ol style function
      * @private
@@ -57,13 +63,7 @@ goog.require('M.impl.style.OLChart');
      * @type {Array<string>}
      */
     this.colorsScheme_ = options.scheme || [];
-
-    // merge default values
-    this.extend_(options, M.style.Chart.DEFAULT);
-
-    goog.base(this, options);
-  };
-  goog.inherits(M.impl.style.Chart, M.impl.style.Feature);
+  }
 
   /**
    * This function updates the canvas of style of canvas
@@ -73,33 +73,33 @@ goog.require('M.impl.style.OLChart');
    * @param {HTMLCanvasElement} canvas - canvas of style
    * @api stable
    */
-  M.impl.style.Chart.prototype.updateCanvas = function(canvas) {
-    if (M.utils.isNullOrEmpty(canvas)) {
+  updateCanvas(canvas) {
+    if (Utils.isNullOrEmpty(canvas)) {
       return false;
     }
     let context = canvas.getContext('2d');
     this.drawGeometryToCanvas(context);
-  };
+  }
 
   /**
    * @inheritDoc
    */
-  M.impl.style.Chart.prototype.drawGeometryToCanvas = function(context) {
-    if (M.utils.isNullOrEmpty(context) || M.utils.isNullOrEmpty(context.canvas)) {
+  drawGeometryToCanvas(context) {
+    if (Utils.isNullOrEmpty(context) || Utils.isNullOrEmpty(context.canvas)) {
       return null;
     }
 
-    const fixedProps = M.impl.style.Chart.CANVAS_PROPS.fixedProps;
-    let width = M.impl.style.Chart.CANVAS_PROPS.width;
+    const fixedProps = Chart.CANVAS_PROPS.fixedProps;
+    let width = Chart.CANVAS_PROPS.width;
 
     context.canvas.setAttribute('width', width);
     context.width = width;
 
     let drawStackActions = []; // canvas fn draw stack
 
-    //const props = Object.keys(M.impl.style.Chart.CANVAS_PROPS.percentages).map(key => {
+    //const props = Object.keys(Chart.CANVAS_PROPS.percentages).map(key => {
     let percentages = {};
-    Object.keys(M.impl.style.Chart.CANVAS_PROPS.percentages).forEach(key => percentages[key] = width * (M.impl.style.Chart.CANVAS_PROPS.percentages[key] / 100));
+    Object.keys(Chart.CANVAS_PROPS.percentages).forEach(key => percentages[key] = width * (Chart.CANVAS_PROPS.percentages[key] / 100));
     // initial x, y content padding
     let [x0, y0] = [percentages.left_right_content, fixedProps.top_content];
 
@@ -107,20 +107,20 @@ goog.require('M.impl.style.OLChart');
       let words = text.split(' ');
       let line = '';
       let [x, y] = initialPosition;
-      drawStackActions.push(function(buildCtx, fontSize, fontFamily, strokeColor, strokeWidth, textColor) {
+      drawStackActions.push((buildCtx, fontSize, fontFamily, strokeColor, strokeWidth, textColor) => {
         buildCtx.font = `${fontSize}px ${fontFamily}`;
         buildCtx.strokeStyle = strokeColor;
         buildCtx.strokeWidth = strokeWidth;
         buildCtx.fillStyle = textColor;
-      }.bind(this, context, fixedProps.font_size, fixedProps.font_family, fixedProps.text_stroke_color, fixedProps.text_stroke_width, fixedProps.text_color));
+      });
 
       words.forEach((word, i) => {
         let metrics = context.measureText(line + word + ' ');
         if (metrics.width > maxWidth && i > 0) {
-          drawStackActions.push(function(buildCtx, line, x, y) {
+          drawStackActions.push((buildCtx, line, x, y) => {
             buildCtx.strokeText(line, x, y);
             buildCtx.fillText(line, x, y);
-          }.bind(this, context, line, x, y));
+          });
           line = word + ' ';
           y += lineHeight;
         }
@@ -128,7 +128,7 @@ goog.require('M.impl.style.OLChart');
           line = line + word + ' ';
         }
       });
-      drawStackActions.push(function(buildCtx, line, x, y) {
+      drawStackActions.push((buildCtx, line, x, y) => {
         buildCtx.strokeText(line, x, y);
         buildCtx.fillText(line, x, y);
       }.bind(this, context, line, x, y));
@@ -138,7 +138,7 @@ goog.require('M.impl.style.OLChart');
     const drawVariable = (initialPosition, text, color) => {
       let [x, y] = initialPosition;
       y += fixedProps.item_top_margin;
-      drawStackActions.push(function(buildCtx, strokeColor, borderWidth, color, x, y, rectSize) {
+      drawStackActions.push((buildCtx, strokeColor, borderWidth, color, x, y, rectSize) => {
         buildCtx.beginPath();
         buildCtx.strokeStyle = strokeColor;
         buildCtx.lineWidth = borderWidth;
@@ -147,7 +147,7 @@ goog.require('M.impl.style.OLChart');
         buildCtx.closePath();
         buildCtx.stroke();
         buildCtx.fill();
-      }.bind(this, context, '#000', fixedProps.rect_border_width, color, x, y, fixedProps.rect_size));
+      });
 
       x += percentages.item_side_margin + fixedProps.rect_size;
       y += (fixedProps.rect_size / 1.5);
@@ -157,8 +157,8 @@ goog.require('M.impl.style.OLChart');
       return [textPosition[0], (textPosition[1] > tmp_image_y ? textPosition[1] : tmp_image_y)];
     };
     this.variables_.forEach((variable, i) => {
-      let label = !M.utils.isNullOrEmpty(variable.legend) ? variable.legend : variable.attribute;
-      let color = !M.utils.isNullOrEmpty(variable.fillColor) ? variable.fillColor : (this.colorsScheme_[i % this.colorsScheme_.length] || this.colorsScheme_[0]);
+      let label = !Utils.isNullOrEmpty(variable.legend) ? variable.legend : variable.attribute;
+      let color = !Utils.isNullOrEmpty(variable.fillColor) ? variable.fillColor : (this.colorsScheme_[i % this.colorsScheme_.length] || this.colorsScheme_[0]);
       [x0, y0] = drawVariable([x0, y0], label, color);
       x0 = percentages.left_right_content;
     });
@@ -169,12 +169,12 @@ goog.require('M.impl.style.OLChart');
     context.save();
     drawStackActions.forEach(drawAction => drawAction());
     context.restore();
-  };
+  }
 
   /**
    * @inheritDoc
    */
-  M.impl.style.Chart.prototype.updateFacadeOptions = function(options) {
+  updateFacadeOptions(options) {
     options.rotateWithView = false;
 
     this.olStyleFn_ = (feature, resolution) => {
@@ -182,7 +182,7 @@ goog.require('M.impl.style.OLChart');
         resolution = feature;
         feature = this;
       }
-      const getValue = M.impl.style.Simple.getValue;
+      const getValue = Simple.getValue;
       let styleOptions = this.formatDataRecursively_(options, feature);
       let data = [];
       //let variables = this.variables_.map
@@ -199,11 +199,11 @@ goog.require('M.impl.style.OLChart');
 
       styleOptions.data = data;
 
-      if (!M.utils.isNullOrEmpty(options.stroke)) {
+      if (!Utils.isNullOrEmpty(options.stroke)) {
         styleOptions.stroke = new ol.style.Stroke(options.stroke);
       }
 
-      let styles = [new M.impl.style.CentroidStyle({
+      let styles = [new StyleCentroid({
         geometry: (olFeature) => {
           let geometry = olFeature.getGeometry();
           if (olFeature.getGeometry() instanceof ol.geom.MultiPolygon) {
@@ -211,7 +211,7 @@ goog.require('M.impl.style.OLChart');
           }
           return geometry;
         },
-        image: new M.impl.style.OLChart(styleOptions)
+        image: new OLChart(styleOptions)
       })];
 
       /*****
@@ -233,13 +233,13 @@ goog.require('M.impl.style.OLChart');
           }
           let radiusIncrement = typeof label.radiusIncrement === 'number' ? label.radiusIncrement : 3;
           let textAlign = typeof label.textAlign === 'function' ? label.textAlign(angle) : null;
-          if (M.utils.isNullOrEmpty(textAlign)) {
+          if (Utils.isNullOrEmpty(textAlign)) {
             textAlign = label.textAlign || (angle < Math.PI / 2 ? 'left' : 'right');
           }
           let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
-          text = styleOptions.type !== M.style.chart.types.BAR && text === '0' ? '' : text;
+          text = styleOptions.type !== Chart.types.BAR && text === '0' ? '' : text;
           let font = getValue(label.font, feature);
-          return new M.impl.style.CentroidStyle({
+          return new StyleCentroid({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
               offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX, feature) : (Math.cos(angle) * (radius + radiusIncrement) + styleOptions.offsetX || 0),
@@ -259,7 +259,7 @@ goog.require('M.impl.style.OLChart');
           });
         })).filter(style => style != null);
       }
-      else if (styleOptions.type === M.style.chart.types.BAR) {
+      else if (styleOptions.type === Chart.types.BAR) {
         let height = 0;
         let acumSum = null;
         styles = styles.concat(styleOptions.data.map((dataValue, i) => {
@@ -268,22 +268,22 @@ goog.require('M.impl.style.OLChart');
           if (!variable.label) {
             return null;
           }
-          const getValue = M.impl.style.Simple.getValue;
+          const getValue = Simple.getValue;
           let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
           text = text === '0' ? '' : text;
-          if (M.utils.isNullOrEmpty(text)) {
+          if (Utils.isNullOrEmpty(text)) {
             return null;
           }
           let font = getValue(label.font, feature);
           let sizeFont = 9;
-          if (M.utils.isNullOrEmpty(acumSum)) {
+          if (Utils.isNullOrEmpty(acumSum)) {
             acumSum = (styles[0].getImage().getImage().height / 2) - 6;
           }
           else {
             acumSum -= sizeFont + 6;
           }
           height = height + sizeFont + 6;
-          return new M.impl.style.CentroidStyle({
+          return new StyleCentroid({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
               offsetY: acumSum + styleOptions.offsetY || 0,
@@ -314,7 +314,7 @@ goog.require('M.impl.style.OLChart');
           }))
         }));
       }
-      if (!M.utils.isNullOrEmpty(options.label)) {
+      if (!Utils.isNullOrEmpty(options.label)) {
         let styleLabel = new ol.style.Style();
         let textLabel = getValue(options.label.text, feature);
         let align = getValue(options.label.align, feature);
@@ -328,12 +328,12 @@ goog.require('M.impl.style.OLChart');
           fill: new ol.style.Fill({
             color: getValue(options.label.color || '#000000', feature)
           }),
-          textAlign: Object.values(M.style.align).includes(align) ? align : 'center',
-          textBaseline: Object.values(M.style.baseline).includes(baseline) ? baseline : 'top',
+          textAlign: Object.values(Align).includes(align) ? align : 'center',
+          textBaseline: Object.values(Baseline).includes(baseline) ? baseline : 'top',
           text: textLabel === undefined ? undefined : String(textLabel),
           rotation: getValue(options.label.rotation, feature)
         });
-        if (!M.utils.isNullOrEmpty(options.label.stroke)) {
+        if (!Utils.isNullOrEmpty(options.label.stroke)) {
           labelText.setStroke(new ol.style.Stroke({
             color: getValue(options.label.stroke.color, feature),
             width: getValue(options.label.stroke.width, feature),
@@ -349,23 +349,23 @@ goog.require('M.impl.style.OLChart');
       }
       return styles;
     };
-  };
+  }
 
   /**
    * @inheritDoc
    */
-  M.impl.style.Chart.prototype.applyToLayer = function(layer) {
+  applyToLayer(layer) {
     // in this case, the style only must be applied to features, never to the layer
     layer.getFeatures().forEach(this.applyToFeature, this);
-  };
+  }
 
   /**
    * @inheritDoc
    */
-  M.impl.style.Chart.prototype.applyToFeature = function(feature) {
+  applyToFeature(feature) {
     let featureCtx = feature.getImpl().getOLFeature();
     featureCtx.setStyle(this.olStyleFn_.bind(this, featureCtx));
-  };
+  }
 
   /**
    * Converts a single object to extracted feature values object
@@ -376,7 +376,7 @@ goog.require('M.impl.style.OLChart');
    * @private
    * @api stable
    */
-  M.impl.style.Chart.prototype.formatDataRecursively_ = function(options, feature) {
+  formatDataRecursively_(options, feature) {
     return Object.keys(options).reduce((tot, curr, i) => {
       let _ob = tot;
       const setVal = (ob, opts, key) => {
@@ -391,7 +391,7 @@ goog.require('M.impl.style.OLChart');
       setVal(_ob, options, curr);
       return _ob;
     });
-  };
+  }
 
   /**
    * Object assign hook. Merges the array of source objects into target object.
@@ -402,7 +402,7 @@ goog.require('M.impl.style.OLChart');
    * @private
    * @api stable
    */
-  M.impl.style.Chart.prototype.extend_ = function(target, ...sourceObs) {
+  static extend_(target, ...sourceObs) {
     if (target == null) { // TypeError if undefined or null
       throw new TypeError('Cannot convert undefined or null to object');
     }
@@ -414,33 +414,31 @@ goog.require('M.impl.style.OLChart');
       }
     }));
     return to;
-  };
+  }
+}
 
-  /**
-   * Max canvas radius
-   * @const
-   * @type {number}
-   */
-  M.impl.style.Chart.CANVAS_PROPS = {
-    width: 200, // px
-    percentages: {
-      left_right_content: 5, // %
-      item_side_margin: 5, // %
-      max_text_width: 70, // %
-    },
-    fixedProps: {
-      rect_border_width: 2,
-      font_size: 10, //px
-      font_family: 'sans-serif',
-      text_stroke_color: '#fff',
-      text_stroke_width: 1,
-      text_color: '#000',
-      top_content: 10, // px
-      item_top_margin: 10, // px
-      text_line_height: 15, // px
-      rect_size: 15, // px
-    }
-  };
-
-
-})();
+/**
+ * Max canvas radius
+ * @const
+ * @type {number}
+ */
+Chart.CANVAS_PROPS = {
+  width: 200, // px
+  percentages: {
+    left_right_content: 5, // %
+    item_side_margin: 5, // %
+    max_text_width: 70, // %
+  },
+  fixedProps: {
+    rect_border_width: 2,
+    font_size: 10, //px
+    font_family: 'sans-serif',
+    text_stroke_color: '#fff',
+    text_stroke_width: 1,
+    text_color: '#000',
+    top_content: 10, // px
+    item_top_margin: 10, // px
+    text_line_height: 15, // px
+    rect_size: 15, // px
+  }
+};

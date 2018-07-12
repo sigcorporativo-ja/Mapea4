@@ -1,10 +1,8 @@
-goog.provide('M.impl.style.TextPath');
-
 /**
  * @namespace M.impl.style.TextPath
  */
-(function() {
-  "use strict";
+
+export default class Path extends ol.style.Text {
 
   /**
    * @classdesc
@@ -15,10 +13,11 @@ goog.provide('M.impl.style.TextPath');
    * @param {Object} options - style options
    * @api stable
    */
-  M.impl.style.TextPath = function(options = {}) {
+
+  constructor(options = {}) {
 
     // super constructor call
-    ol.style.Text.call(this, options);
+    ol.style.Text.call(options);
 
     /**
      * The textOverflow style property.
@@ -26,7 +25,7 @@ goog.provide('M.impl.style.TextPath');
      * @private
      * @type {string}
      */
-    this.textOverflow_ = typeof(options.textOverflow) !== 'undefined' ? options.textOverflow : '';
+    this.textOverflow_ = typeof (options.textOverflow) !== 'undefined' ? options.textOverflow : '';
 
     /**
      * The minWidth style property
@@ -35,9 +34,7 @@ goog.provide('M.impl.style.TextPath');
      * @type {number}
      */
     this.minWidth_ = options.minWidth || 0;
-  };
-  ol.inherits(M.impl.style.TextPath, ol.style.Text);
-
+  }
   /**
    * TextOverflow property getter
    * @public
@@ -45,9 +42,9 @@ goog.provide('M.impl.style.TextPath');
    * @return {number} textOverflow property
    * @api stable
    */
-  M.impl.style.TextPath.prototype.getTextOverflow = function() {
+  getTextOverflow() {
     return this.textOverflow_;
-  };
+  }
 
   /**
    * MinWidth property getter
@@ -56,7 +53,7 @@ goog.provide('M.impl.style.TextPath');
    * @return {number} minWidth property
    * @api stable
    */
-  M.impl.style.TextPath.prototype.getMinWidth = function() {
+  getMinWidth() {
     return this.minWidth_;
-  };
-})();
+  }
+}

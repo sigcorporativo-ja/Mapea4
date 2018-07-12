@@ -1,8 +1,4 @@
-goog.provide( 'M.impl.style.CentroidStyle' );
-
-goog.require( 'ol.style.Style' );
-
-(function () {
+export default class Centroid extends ol.style.Style {
 
   /**
    * @classdesc custom root styles
@@ -12,10 +8,9 @@ goog.require( 'ol.style.Style' );
    * @param {olx.style.StyleOptions=} opt_options Style options.
    * @api
    */
-  M.impl.style.CentroidStyle = function ( opt_options = {} ) {
-    ol.style.Style.call( this, opt_options );
-  };
-  ol.inherits( M.impl.style.CentroidStyle, ol.style.Style );
+  constructor(opt_options = {}) {
+    ol.style.Style.call(opt_options);
+  }
 
   /**
    * Clones the style.
@@ -23,12 +18,13 @@ goog.require( 'ol.style.Style' );
    * @return {M.impl.style.CentroidStyle} The cloned style.
    * @api stable
    */
-  M.impl.style.CentroidStyle.prototype.clone = function () {
-    var geometry = this.getGeometry();
-    if ( geometry && geometry.clone ) {
+  clone() {
+    let geometry = this.getGeometry();
+    if (geometry && geometry.clone) {
       geometry = geometry.clone();
     }
-    return new M.impl.style.CentroidStyle({
+    return new Centroid({
+
       geometry: geometry,
       fill: this.getFill() ? this.getFill().clone() : undefined,
       image: this.getImage() ? this.getImage().clone() : undefined,
@@ -38,4 +34,4 @@ goog.require( 'ol.style.Style' );
     });
   };
 
-})();
+}
