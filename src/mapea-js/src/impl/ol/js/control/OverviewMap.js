@@ -1,11 +1,10 @@
-goog.provide('M.impl.control.OverviewMap');
-
-goog.require('ol.control.OverviewMap');
+import View from '../View';
+import EvtManager from "facade/js/event/Manager";
 
 /**
  * @namespace M.impl.control
  */
-(function () {
+export default class OverviewMap extends ol.control.OverviewMap {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
@@ -15,14 +14,14 @@ goog.require('ol.control.OverviewMap');
    * @extends {ol.control.Control}
    * @api stable
    */
-  M.impl.control.OverviewMap = function (options) {
+  constructor(options) {
     /**
      * @private
      * @type {number}
      * @expose
      */
     this.toggleDelay_ = 0;
-    if (!M.utils.isNullOrEmpty(options.toggleDelay)) {
+    if (!Utils.isNullOrEmpty(options.toggleDelay)) {
       this.toggleDelay_ = options.toggleDelay;
     }
 
@@ -32,7 +31,7 @@ goog.require('ol.control.OverviewMap');
      * @expose
      */
     this.collapsedButtonClass_ = 'g-cartografia-mundo';
-    if (!M.utils.isNullOrEmpty(options.collapsedButtonClass)) {
+    if (!Utils.isNullOrEmpty(options.collapsedButtonClass)) {
       this.collapsedButtonClass_ = options.collapsedButtonClass;
     }
 
@@ -42,12 +41,11 @@ goog.require('ol.control.OverviewMap');
      * @expose
      */
     this.openedButtonClass_ = 'g-cartografia-flecha-derecha2';
-    if (!M.utils.isNullOrEmpty(options.openedButtonClass)) {
+    if (!Utils.isNullOrEmpty(options.openedButtonClass)) {
       this.openedButtonClass_ = options.openedButtonClass;
     }
     this.facadeMap_ = null;
-  };
-  goog.inherits(M.impl.control.OverviewMap, ol.control.OverviewMap);
+  }
 
   /**
    * This function adds the control to the specified map
@@ -58,36 +56,46 @@ goog.require('ol.control.OverviewMap');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.OverviewMap.prototype.addTo = function (map, element) {
+  addTo(map, element) {
     this.facadeMap_ = map;
     let olLayers = [];
     map.getLayers().forEach(layer => {
       let olLayer = layer.getImpl().getOL3Layer();
-      if (M.utils.isNullOrEmpty(olLayer)) {
-        layer.getImpl().on(M.evt.ADDED_TO_MAP, this.addLayer_, this);
+      if (Utils.isNullOrEmpty(olLayer)) {
+        layer.getImpl().on(EvtManager.ADDED_TO_MAP, this.addLayer_, this);
       }
       else {
         olLayers.push(olLayer);
       }
-    }, this);
+    });
 
     ol.control.OverviewMap.call(this, {
       'layers': olLayers,
-      'view': new M.impl.View({
+      'view': new View({
         'projection': ol.proj.get(map.getProjection().code),
         'resolutions': map.getResolutions()
       })
     });
 
-    var button = this.element.querySelector('button');
+    let button = this.element.querySelector('button');
     if (this.collapsed_ === true) {
-      goog.dom.classlist.toggle(button, this.collapsedButtonClass_);
+      if (button.classlist, contains(this.collapsedButtonClass_)) {
+        button.classlist.remove(this.collapsedButtonClass_);
+      }
+      else {
+        button.classlist.add(this.collapsedButtonClass_);
+      }
     }
     else {
-      goog.dom.classlist.toggle(button, this.openedButtonClass_);
+      if (button.classlist, contains(this.this.openedButtonClass_)) {
+        button.classlist.remove(this.this.openedButtonClass_);
+      }
+      else {
+        button.classlist.add(this.this.openedButtonClass_);
+      }
     }
     map.getMapImpl().addControl(this);
-  };
+  }
 
   /**
    * function remove the event 'click'
@@ -97,9 +105,9 @@ goog.require('ol.control.OverviewMap');
    * @api stable
    * @export
    */
-  M.impl.control.OverviewMap.prototype.getElement = function () {
+  getElement() {
     return this.element;
-  };
+  }
 
   /**
    * function remove the event 'click'
@@ -107,11 +115,10 @@ goog.require('ol.control.OverviewMap');
    * @private
    * @function
    */
-  M.impl.control.OverviewMap.prototype.addLayer_ = function (layer) {
-    console.log(layer);
-    layer.un(M.evt.ADDED_TO_MAP, this.addLayer_, this);
+  addLayer_(layer) {
+    layer.un(EvtManager.ADDED_TO_MAP, this.addLayer_, this);
     this.getOverviewMap().addLayer(layer.getOL3Layer());
-  };
+  }
 
 
   /**
@@ -123,8 +130,8 @@ goog.require('ol.control.OverviewMap');
    * @api stable
    * @export
    */
-  M.impl.control.OverviewMap.prototype.destroy = function () {
+  destroy() {
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_ = null;
-  };
-})();
+  }
+}

@@ -1,14 +1,14 @@
-goog.provide('M.impl.control.GetFeatureInfo');
-
-goog.require('M.impl.Control');
-goog.require('ol.format.GML');
+import Control from "./Control";
+import Utils from "facade/js/util/Utils";
+import Popup from "facade/js/Popup";
+import getfeatureinfoPopupTemplate from "templates/getfeatureinfo_popup.html";
 
 /**
  * @namespace M.impl.control
  */
-(function () {
+export default class GetFeatureInfo extends Control {
 
-  var regExs = {
+  let regExs = {
     gsResponse: /^results[\w\s\S]*\'http\:/i,
     msNewFeature: /feature(\s*)(\w+)(\s*)\:/i,
     gsNewFeature: /\#newfeature\#/,
@@ -28,7 +28,9 @@ goog.require('ol.format.GML');
    * @extends {M.impl.Control}
    * @api stable
    */
-  M.impl.control.GetFeatureInfo = function (format, options) {
+  constructor(format, options) {
+    super();
+
     /**
      * Format response
      * @public
@@ -38,7 +40,7 @@ goog.require('ol.format.GML');
     this.userFormat = format;
 
     this.featureCount = options.featureCount;
-    if (M.utils.isNullOrEmpty(this.featureCount)) {
+    if (Utils.isNullOrEmpty(this.featureCount)) {
       this.featureCount = 10;
     }
 
@@ -49,8 +51,7 @@ goog.require('ol.format.GML');
      * @api stable
      */
     this.buffer = options.buffer;
-  };
-  goog.inherits(M.impl.control.GetFeatureInfo, M.impl.Control);
+  }
 
   /**
    * This function adds the event singleclick to the specified map
@@ -59,9 +60,9 @@ goog.require('ol.format.GML');
    * @function
    * @api stable
    */
-  M.impl.control.GetFeatureInfo.prototype.activate = function () {
+  activate() {
     this.addOnClickEvent_();
-  };
+  }
 
   /**
    * This function remove the event singleclick to the specified map
@@ -70,9 +71,9 @@ goog.require('ol.format.GML');
    * @function
    * @api stable
    */
-  M.impl.control.GetFeatureInfo.prototype.deactivate = function () {
+  deactivate() {
     this.deleteOnClickEvent_();
-  };
+  }
 
   /**
    * This function adds the event singleclick to the specified map
@@ -80,19 +81,19 @@ goog.require('ol.format.GML');
    * @private
    * @function
    */
-  M.impl.control.GetFeatureInfo.prototype.addOnClickEvent_ = function () {
-    var olMap = this.facadeMap_.getMapImpl();
-    if ((M.utils.normalize(this.userFormat) === "plain") || (M.utils.normalize(this.userFormat) === "text/plain")) {
+  addOnClickEvent_() {
+    let olMap = this.facadeMap_.getMapImpl();
+    if ((Utils.normalize(this.userFormat) === "plain") || (Utils.normalize(this.userFormat) === "text/plain")) {
       this.userFormat = "text/plain";
     }
-    else if ((M.utils.normalize(this.userFormat) === "gml") || (M.utils.normalize(this.userFormat) === "application/vnd.ogc.gml")) {
+    else if ((Utils.normalize(this.userFormat) === "gml") || (Utils.normalize(this.userFormat) === "application/vnd.ogc.gml")) {
       this.userFormat = "application/vnd.ogc.gml";
     }
     else {
       this.userFormat = "text/html";
     }
     olMap.on('singleclick', this.buildUrl_, this);
-  };
+  }
 
   /**
    * This function builds the query URL and show results
@@ -101,14 +102,14 @@ goog.require('ol.format.GML');
    * @function
    * @param {ol.MapBrowserPointerEvent} evt - Browser point event
    */
-  M.impl.control.GetFeatureInfo.prototype.buildUrl_ = function (evt) {
-    var olMap = this.facadeMap_.getMapImpl();
-    var viewResolution = olMap.getView().getResolution();
-    var srs = this.facadeMap_.getProjection().code;
-    var layerNamesUrls = [];
-    this.facadeMap_.getWMS().forEach(function (layer) {
-      var olLayer = layer.getImpl().getOL3Layer();
-      if (layer.isVisible() && layer.isQueryable() && !M.utils.isNullOrEmpty(olLayer)) {
+  buildUrl_(evt) {
+    let olMap = this.facadeMap_.getMapImpl();
+    let viewResolution = olMap.getView().getResolution();
+    let srs = this.facadeMap_.getProjection().code;
+    let layerNamesUrls = [];
+    this.facadeMap_.getWMS().forEach(layer => {
+      let olLayer = layer.getImpl().getOL3Layer();
+      if (layer.isVisible() && layer.isQueryable() && !Utils.isNullOrEmpty(olLayer)) {
         let getFeatureInfoParams = {
           'INFO_FORMAT': this.userFormat,
           'FEATURE_COUNT': this.featureCount,
@@ -116,7 +117,7 @@ goog.require('ol.format.GML');
         if (!/buffer/i.test(layer.url)) {
           getFeatureInfoParams['Buffer'] = this.buffer;
         }
-        var url = olLayer.getSource().getGetFeatureInfoUrl(evt.coordinate, viewResolution, srs, getFeatureInfoParams);
+        let url = olLayer.getSource().getGetFeatureInfoUrl(evt.coordinate, viewResolution, srs, getFeatureInfoParams);
         layerNamesUrls.push({
           /** @type {String} */
           'layer': layer.name,
@@ -129,9 +130,9 @@ goog.require('ol.format.GML');
       this.showInfoFromURL_(layerNamesUrls, evt.coordinate, olMap);
     }
     else {
-      M.dialog.info('No existen capas consultables');
+      Dialog.info('No existen capas consultables');
     }
-  };
+  }
 
   /**
    * This function remove the event singleclick to the specified map
@@ -139,10 +140,10 @@ goog.require('ol.format.GML');
    * @private
    * @function
    */
-  M.impl.control.GetFeatureInfo.prototype.deleteOnClickEvent_ = function () {
-    var olMap = this.facadeMap_.getMapImpl();
+  deleteOnClickEvent_() {
+    let olMap = this.facadeMap_.getMapImpl();
     olMap.un('singleclick', this.buildUrl_, this);
-  };
+  }
 
   /**
    * This function specifies whether the information is valid
@@ -153,46 +154,46 @@ goog.require('ol.format.GML');
    * @private
    * @function
    */
-  M.impl.control.GetFeatureInfo.prototype.insert_ = function (info, formato) {
-    var res = false;
+  insert_(info, formato) {
+    let res = false;
     switch (formato) {
       case "text/html": // ex
-        var infoContainer = document.createElement("div");
+        let infoContainer = document.createElement("div");
         infoContainer.innerHTML = info;
 
         // content
-        var content = "";
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('body'), function (element) {
+        let content = "";
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('body'), element => {
           content += element.innerHTML.trim();
         });
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('div'), function (element) {
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('div'), element => {
           content += element.innerHTML.trim();
         });
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('table'), function (element) {
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('table'), element => {
           content += element.innerHTML.trim();
         });
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('b'), function (element) {
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('b'), element => {
           content += element.innerHTML.trim();
         });
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('span'), function (element) {
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('span'), element => {
           content += element.innerHTML.trim();
         });
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('input'), function (element) {
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('input'), element => {
           content += element.innerHTML.trim();
         });
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('a'), function (element) {
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('a'), element => {
           content += element.innerHTML.trim();
         });
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('img'), function (element) {
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('img'), element => {
           content += element.innerHTML.trim();
         });
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('p'), function (element) {
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('p'), element => {
           content += element.innerHTML.trim();
         });
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('ul'), function (element) {
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('ul'), element => {
           content += element.innerHTML.trim();
         });
-        Array.prototype.forEach.call(infoContainer.querySelectorAll('li'), function (element) {
+        Array.prototype.forEach.call(infoContainer.querySelectorAll('li'), element => {
           content += element.innerHTML.trim();
         });
 
@@ -201,8 +202,8 @@ goog.require('ol.format.GML');
         }
         break;
       case "application/vnd.ogc.gml": // ol.format.GML (http://openlayers.org/en/v3.9.0/apidoc/ol.format.GML.html)
-        var formater = new ol.format.WFS();
-        var features = formater.readFeatures(info);
+        let formater = new ol.format.WFS();
+        let features = formater.readFeatures(info);
         res = (features.length > 0);
         break;
       case "text/plain": // exp reg
@@ -212,7 +213,7 @@ goog.require('ol.format.GML');
         break;
     }
     return res;
-  };
+  }
 
   /**
    * This function formats the response
@@ -224,28 +225,28 @@ goog.require('ol.format.GML');
    * @private
    * @function
    */
-  M.impl.control.GetFeatureInfo.prototype.formatInfo_ = function (info, formato, layerName) {
-    var formatedInfo = null;
+  formatInfo_(info, formato, layerName) {
+    let formatedInfo = null;
     switch (formato) {
       case "text/html": // ex
         formatedInfo = info;
         break;
       case "application/vnd.ogc.gml": // ol.format.GML (http://openlayers.org/en/v3.9.0/apidoc/ol.format.GML.html)
-        // var formater = new ol.format.GML();
-        // var feature = formater.readFeatures(info)[0];
-        var formater = new ol.format.WFS();
-        var features = formater.readFeatures(info);
+        // let formater = new ol.format.GML();
+        // let feature = formater.readFeatures(info)[0];
+        let formater = new ol.format.WFS();
+        let features = formater.readFeatures(info);
         formatedInfo = "";
-        features.forEach(function (feature) {
-          var attr = feature.getKeys();
+        features.forEach((feature) => {
+          let attr = feature.getKeys();
           formatedInfo += "<div class=\"divinfo\">";
-          formatedInfo += "<table class=\"mapea-table\"><tbody><tr><td class=\"header\" colspan=\"3\">" + M.utils.beautifyAttribute(layerName) + "</td></tr>";
-          for (var i = 0, ilen = attr.length; i < ilen; i++) {
-            var attrName = attr[i];
-            var attrValue = feature.get(attrName);
+          formatedInfo += "<table class=\"mapea-table\"><tbody><tr><td class=\"header\" colspan=\"3\">" + Utils.beautifyAttribute(layerName) + "</td></tr>";
+          for (let i = 0, ilen = attr.length; i < ilen; i++) {
+            let attrName = attr[i];
+            let attrValue = feature.get(attrName);
 
             formatedInfo += '<tr><td class="key"><b>';
-            formatedInfo += M.utils.beautifyAttribute(attrName);
+            formatedInfo += Utils.beautifyAttribute(attrName);
             formatedInfo += '</b></td><td class="value">';
             formatedInfo += attrValue;
             formatedInfo += "</td></tr>";
@@ -263,7 +264,7 @@ goog.require('ol.format.GML');
         break;
     }
     return formatedInfo;
-  };
+  }
 
   /**
    * This function indicates whether the format is accepted by the layer - Specific format text/html
@@ -274,13 +275,13 @@ goog.require('ol.format.GML');
    * @private
    * @function
    */
-  M.impl.control.GetFeatureInfo.prototype.unsupportedFormat_ = function (info, formato) {
-    var unsupported = false;
+  unsupportedFormat_(info, formato) {
+    let unsupported = false;
     if (formato === "text/html") {
       unsupported = regExs.msUnsupportedFormat.test(info);
     }
     return unsupported;
-  };
+  }
 
   /**
    * This function return formatted information. Specific Geoserver
@@ -291,28 +292,28 @@ goog.require('ol.format.GML');
    * @param {string} layername - Layer name
    * @returns {string} html - Information formated
    */
-  M.impl.control.GetFeatureInfo.prototype.txtToHtml_Geoserver_ = function (info, layerName) {
+  txtToHtml_Geoserver_(info, layerName) {
     // get layer name from the header
-    // var layerName = info.replace(/[\w\s\S]*\:(\w*)\'\:[\s\S\w]*/i, "$1");
+    // let layerName = info.replace(/[\w\s\S]*\:(\w*)\'\:[\s\S\w]*/i, "$1");
 
     // remove header
     info = info.replace(/[\w\s\S]*\'\:/i, "");
 
     info = info.replace(/---(\-*)(\n+)---(\-*)/g, "#newfeature#");
 
-    var attrValuesString = info.split("\n");
+    let attrValuesString = info.split("\n");
 
-    var html = "<div class=\"divinfo\">";
+    let html = "<div class=\"divinfo\">";
 
     // build the table
-    html += "<table class=\"mapea-table\"><tbody><tr><td class=\"header\" colspan=\"3\">" + M.utils.beautifyAttribute(layerName) + "</td></tr>";
+    html += "<table class=\"mapea-table\"><tbody><tr><td class=\"header\" colspan=\"3\">" + Utils.beautifyAttribute(layerName) + "</td></tr>";
 
-    for (var i = 0, ilen = attrValuesString.length; i < ilen; i++) {
-      var attrValueString = attrValuesString[i].trim();
+    for (let i = 0, ilen = attrValuesString.length; i < ilen; i++) {
+      let attrValueString = attrValuesString[i].trim();
       if (attrValueString.indexOf("=") != -1) {
-        var attrValue = attrValueString.split("=");
-        var attr = attrValue[0].trim();
-        var value = "-";
+        let attrValue = attrValueString.split("=");
+        let attr = attrValue[0].trim();
+        let value = "-";
         if (attrValue.length > 1) {
           value = attrValue[1].trim();
           if (value.length === 0 || value === "null") {
@@ -322,7 +323,7 @@ goog.require('ol.format.GML');
 
         if (regExs.gsGeometry.test(attr) === false) {
           html += '<tr><td class="key"><b>';
-          html += M.utils.beautifyAttribute(attr);
+          html += Utils.beautifyAttribute(attr);
           html += '</b></td><td class="value">';
           html += value;
           html += "</td></tr>";
@@ -330,14 +331,14 @@ goog.require('ol.format.GML');
       }
       else if (regExs.gsNewFeature.test(attrValueString)) {
         // set new header
-        html += "<tr><td class=\"header\" colspan=\"3\">" + M.utils.beautifyAttribute(layerName) + "</td></tr>";
+        html += "<tr><td class=\"header\" colspan=\"3\">" + Utils.beautifyAttribute(layerName) + "</td></tr>";
       }
     }
 
     html += "</tbody></table></div>";
 
     return html;
-  };
+  }
 
   /**
    * This function return formatted information. Specific Mapserver
@@ -347,12 +348,12 @@ goog.require('ol.format.GML');
    * @param {string} info - Information to formatting
    * @returns {string} html - Information formated
    */
-  M.impl.control.GetFeatureInfo.prototype.txtToHtml_Mapserver_ = function (info) {
+  txtToHtml_Mapserver_(info) {
     // remove header
     info = info.replace(/[\w\s\S]*(layer)/i, "$1");
 
     // get layer name
-    var layerName = info.replace(/layer(\s*)\'(\w+)\'[\w\s\S]*/i, "$2");
+    let layerName = info.replace(/layer(\s*)\'(\w+)\'[\w\s\S]*/i, "$2");
 
     // remove layer name
     info = info.replace(/layer(\s*)\'(\w+)\'([\w\s\S]*)/i, "$3");
@@ -366,18 +367,17 @@ goog.require('ol.format.GML');
     // replace the equal (=) with (;)
     info = info.replace(/\=/g, ';');
 
-    var attrValuesString = info.split("\n");
+    let attrValuesString = info.split("\n");
 
-    var html = "";
-    var htmlHeader = "<table class=\"mapea-table\"><tbody><tr><td class=\"header\" colspan=\"3\">" + M.utils.beautifyAttribute(layerName) + "</td></tr>";
+    let html = "";
+    let htmlHeader = "<table class=\"mapea-table\"><tbody><tr><td class=\"header\" colspan=\"3\">" + Utils.beautifyAttribute(layerName) + "</td></tr>";
 
-    for (var i = 0, ilen = attrValuesString.length; i < ilen; i++) {
-      var attrValueString = attrValuesString[i].trim();
-      var nextAttrValueString = attrValuesString[i] ? attrValuesString[i]
-        .trim() : "";
-      var attrValue = attrValueString.split(";");
-      var attr = attrValue[0].trim();
-      var value = "-";
+    for (let i = 0, ilen = attrValuesString.length; i < ilen; i++) {
+      let attrValueString = attrValuesString[i].trim();
+      let nextAttrValueString = attrValuesString[i] ? attrValuesString[i].trim() : "";
+      let attrValue = attrValueString.split(";");
+      let attr = attrValue[0].trim();
+      let value = "-";
       if (attrValue.length > 1) {
         value = attrValue[1].trim();
         if (value.length === 0) {
@@ -389,12 +389,12 @@ goog.require('ol.format.GML');
         if (regExs.msNewFeature.test(attr)) {
           if ((nextAttrValueString.length > 0) && !regExs.msNewFeature.test(nextAttrValueString)) {
             // set new header
-            html += "<tr><td class=\"header\" colspan=\"3\">" + M.utils.beautifyAttribute(layerName) + "</td><td></td></tr>";
+            html += "<tr><td class=\"header\" colspan=\"3\">" + Utils.beautifyAttribute(layerName) + "</td><td></td></tr>";
           }
         }
         else {
           html += '<tr><td class="key"><b>';
-          html += M.utils.beautifyAttribute(attr);
+          html += Utils.beautifyAttribute(attr);
           html += '</b></td><td class="value">';
           html += value;
           html += "</td></tr>";
@@ -407,7 +407,7 @@ goog.require('ol.format.GML');
     }
 
     return html;
-  };
+  }
 
   /**
    * This function displays information in a popup
@@ -419,90 +419,84 @@ goog.require('ol.format.GML');
    * @param {olMap} olMap - Map
 
    */
-  M.impl.control.GetFeatureInfo.prototype.showInfoFromURL_ = function (layerNamesUrls,
-    coordinate, olMap) {
-    var infos = [];
-    var formato = String(this.userFormat);
-    var contFull = 0;
-    var this_ = this;
-    var loadingInfoTab;
-    var popup;
-    M.template.compile(M.control.GetFeatureInfo.POPUP_TEMPLATE, {
-      'jsonp': true,
+  showInfoFromURL_(layerNamesUrls, coordinate, olMap) {
+    let htmlAsText = Template.compile(getfeatureinfoPopupTemplate, {
       'vars': {
-        'info': M.impl.control.GetFeatureInfo.LOADING_MESSAGE
+        'info': GetFeatureInfo.LOADING_MESSAGE
       },
       'parseToHtml': false
-    }).then(function (htmlAsText) {
-      popup = this_.facadeMap_.getPopup();
-      loadingInfoTab = {
-        'icon': 'g-cartografia-info',
-        'title': M.control.GetFeatureInfo.POPUP_TITLE,
-        'content': htmlAsText
-      };
-      if (M.utils.isNullOrEmpty(popup)) {
-        popup = new M.Popup();
+    });
+
+    let infos = [];
+    let formato = String(this.userFormat);
+    let contFull = 0;
+    let loadingInfoTab = {
+      'icon': 'g-cartografia-info',
+      'title': GetFeatureInfo.POPUP_TITLE,
+      'content': htmlAsText
+    };
+    let popup = this.facadeMap_.getPopup();
+
+    if (Utils.isNullOrEmpty(popup)) {
+      popup = new Popup();
+      popup.addTab(loadingInfoTab);
+      this.facadeMap_.addPopup(popup, coordinate);
+    }
+    else {
+      // removes popup if all contents are getfeatureinfo
+      let hasExternalContent = popup.getTabs().some(tab => tab['title'] !== GetFeatureInfo.POPUP_TITLE);
+      if (!hasExternalContent) {
+        this.facadeMap_.removePopup();
+        popup = new Popup();
         popup.addTab(loadingInfoTab);
-        this_.facadeMap_.addPopup(popup, coordinate);
+        this.facadeMap_.addPopup(popup, coordinate);
       }
       else {
-        // removes popup if all contents are getfeatureinfo
-        var hasExternalContent = popup.getTabs().some(function (tab) {
-          return (tab['title'] !== M.control.GetFeatureInfo.POPUP_TITLE);
-        });
-        if (!hasExternalContent) {
-          this_.facadeMap_.removePopup();
-          popup = new M.Popup();
-          popup.addTab(loadingInfoTab);
-          this_.facadeMap_.addPopup(popup, coordinate);
-        }
-        else {
-          popup.addTab(loadingInfoTab);
-        }
+        popup.addTab(loadingInfoTab);
       }
-    });
-    layerNamesUrls.forEach(function (layerNameUrl) {
-      var url = layerNameUrl['url'];
-      var layerName = layerNameUrl['layer'];
-      M.remote.get(url).then(function (response) {
-        popup = this_.facadeMap_.getPopup();
-        if ((response.code === 200) && (response.error === false)) {
-          var info = response.text;
-          if (this_.insert_(info, formato) === true) {
-            var formatedInfo = this_.formatInfo_(info, formato, layerName);
+    }
+    layerNamesUrls.forEach(layerNameUrl => {
+      let url = layerNameUrl['url'];
+      let layerName = layerNameUrl['layer'];
+      Remote.get(url).then(response => {
+        popup = this.facadeMap_.getPopup();
+        if (response.code === 200 && response.error === false) {
+          let info = response.text;
+          if (this.insert_(info, formato) === true) {
+            let formatedInfo = this.formatInfo_(info, formato, layerName);
             infos.push(formatedInfo);
           }
-          else if (this_.unsupportedFormat_(info, formato)) {
+          else if (this.unsupportedFormat_(info, formato)) {
             infos.push('La capa <b>' + layerName + '</b> no soporta el formato <i>' + formato + '</i>');
           }
         }
-        if (layerNamesUrls.length === ++contFull && !M.utils.isNullOrEmpty(popup)) {
+        if (layerNamesUrls.length === ++contFull && !Utils.isNullOrEmpty(popup)) {
           popup.removeTab(loadingInfoTab);
           if (infos.join('') === "") {
             popup.addTab({
               'icon': 'g-cartografia-info',
-              'title': M.control.GetFeatureInfo.POPUP_TITLE,
+              'title': GetFeatureInfo.POPUP_TITLE,
               'content': 'No hay información asociada.'
             });
           }
           else {
             popup.addTab({
               'icon': 'g-cartografia-info',
-              'title': M.control.GetFeatureInfo.POPUP_TITLE,
+              'title': GetFeatureInfo.POPUP_TITLE,
               'content': infos.join('')
             });
           }
         }
       });
     });
-  };
+  }
+}
 
-  /**
-   * Loading message
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.impl.control.GetFeatureInfo.LOADING_MESSAGE = 'Obteniendo información...';
-})();
+/**
+ * Loading message
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+GetFeatureInfo.LOADING_MESSAGE_ = 'Obteniendo información...';
