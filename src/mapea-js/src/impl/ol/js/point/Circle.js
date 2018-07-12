@@ -1,7 +1,7 @@
 /**
  * @namespace M.impl.style.PointCircle
  */
-export default class PointCircle extends ol.style.Circle {
+export default class Circle extends ol.style.Circle {
   /**
    * @classdesc
    * chart style for vector features
@@ -30,7 +30,7 @@ export default class PointCircle extends ol.style.Circle {
    * @api stable
    */
   clone() {
-    let style = new PointCircle({
+    let style = new Circle({
       fill: this.getFill() ? this.getFill().clone() : undefined,
       stroke: this.getStroke() ? this.getStroke().clone() : undefined,
       radius: this.getRadius(),

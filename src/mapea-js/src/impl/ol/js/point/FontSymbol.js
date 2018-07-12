@@ -1,7 +1,7 @@
 /**
  * @namespace M.impl.style.PointFontSymbol
  */
-export default class PointFontSymbol extends ol.style.FontSymbol {
+export default class FontSymbol extends ol.style.FontSymbol {
   /**
    * @classdesc
    * chart style for vector features
@@ -43,7 +43,7 @@ export default class PointFontSymbol extends ol.style.FontSymbol {
    * @api stable
    */
   clone() {
-    let style = new PointFontSymbol({
+    let style = new FontSymbol({
       glyph: "",
       color: this.color_,
       fontSize: this.fontSize_,

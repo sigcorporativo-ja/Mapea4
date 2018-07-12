@@ -1,12 +1,7 @@
-goog.provide('M.impl.style.PointIcon');
-
-goog.require('goog.style');
-goog.require('ol.style.Icon');
-
 /**
  * @namespace M.impl.style.PointIcon
  */
-export default class PointCircle extends ol.style.Icon {
+export default class Icon extends ol.style.Icon {
   /**
    * @classdesc
    * chart style for vector features
@@ -44,8 +39,8 @@ export default class PointCircle extends ol.style.Icon {
    * @function
    * @api stable
    */
-  M.impl.style.PointIcon.prototype.clone = function() {
-    return new PointIcon({
+  clone() {
+    return new Icon({
       anchor: this.anchor_.slice(),
       anchorOrigin: this.anchorOrigin_,
       anchorXUnits: this.anchorXUnits_,
