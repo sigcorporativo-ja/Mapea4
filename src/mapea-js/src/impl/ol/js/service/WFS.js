@@ -1,11 +1,8 @@
-goog.provide('M.impl.service.WFS');
+import Featuretype from "../format/wfs/DescribeFeatureType";
+import Utils from 'facade/js/util/Utils';
+import Remote from 'facade/js/util/Remote';
 
-goog.require('M.impl.format.DescribeFeatureType');
-goog.require('M.utils');
-goog.require('M.exception');
-
-
-(function () {
+export default class WFS {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -16,7 +13,7 @@ goog.require('M.exception');
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  M.impl.service.WFS = (function (layerParameters, vendorOpts) {
+  constructor(layerParameters, vendorOpts) {
 
     /**
      *
@@ -45,7 +42,7 @@ goog.require('M.exception');
      * @type {String}
      */
     this.typeName_ = this.name_;
-    if (!M.utils.isNullOrEmpty(this.namespace_)) {
+    if (!Utils.isNullOrEmpty(this.namespace_)) {
       this.typeName_ = this.namespace_.concat(':').concat(this.name_);
     }
 
@@ -84,7 +81,7 @@ goog.require('M.exception');
      * @type {String}
      */
     this.getFeatureOutputFormat_ = layerParameters.getFeatureOutputFormat;
-    if (M.utils.isNullOrEmpty(this.getFeatureOutputFormat_)) {
+    if (Utils.isNullOrEmpty(this.getFeatureOutputFormat_)) {
       this.getFeatureOutputFormat_ = 'application/json'; // by default
     }
 
@@ -103,7 +100,7 @@ goog.require('M.exception');
      * @type {Object}
      */
     this.getFeatureVendor_ = {};
-    if (!M.utils.isNullOrEmpty(vendorOpts) && !M.utils.isNullOrEmpty(vendorOpts.getFeature)) {
+    if (!Utils.isNullOrEmpty(vendorOpts) && !Utils.isNullOrEmpty(vendorOpts.getFeature)) {
       this.getFeatureVendor_ = vendorOpts.getFeature;
     }
 
@@ -114,10 +111,10 @@ goog.require('M.exception');
      * @type {Object}
      */
     this.describeFeatureTypeVendor_ = {};
-    if (!M.utils.isNullOrEmpty(vendorOpts) && !M.utils.isNullOrEmpty(vendorOpts.describeFeatureType)) {
+    if (!Utils.isNullOrEmpty(vendorOpts) && !Utils.isNullOrEmpty(vendorOpts.describeFeatureType)) {
       this.describeFeatureTypeVendor_ = vendorOpts.describeFeatureType;
     }
-  });
+  }
 
   /**
    * This function sets the map object of the layer
@@ -127,26 +124,26 @@ goog.require('M.exception');
    * @param {M.Map} map
    * @api stable
    */
-  M.impl.service.WFS.prototype.getDescribeFeatureType = function () {
+  getDescribeFeatureType() {
     // TODO
-    var describeFeatureParams = {
+    let describeFeatureParams = {
       'service': 'WFS',
       'version': this.version_,
       'request': 'DescribeFeatureType',
       'typename': this.typeName_,
     };
-    if (!M.utils.isNullOrEmpty(this.describeFeatureTypeOutputFormat_)) {
+    if (!Utils.isNullOrEmpty(this.describeFeatureTypeOutputFormat_)) {
       describeFeatureParams['outputFormat'] = this.describeFeatureTypeOutputFormat_;
     }
 
-    var describeFeatureTypeUrl = M.utils.addParameters(M.utils.addParameters(this.url_, describeFeatureParams), this.describeFeatureTypeVendor_);
-    var describeFeatureTypeFormat = new M.impl.format.DescribeFeatureType(this.name_, this.describeFeatureTypeOutputFormat_, this.projection_);
-    return new Promise(function (success, fail) {
-      M.remote.get(describeFeatureTypeUrl).then(function (response) {
+    let describeFeatureTypeUrl = Utils.addParameters(Utils.addParameters(this.url_, describeFeatureParams), this.describeFeatureTypeVendor_);
+    let describeFeatureTypeFormat = new Featuretype(this.name_, this.describeFeatureTypeOutputFormat_, this.projection_);
+    return new Promise((success, fail) => {
+      Remote.get(describeFeatureTypeUrl).then(response => {
         success(describeFeatureTypeFormat.read(response));
       });
     });
-  };
+  }
 
   /**
    * This function gets the full URL of a GetFeature
@@ -160,27 +157,27 @@ goog.require('M.exception');
    *
    * @api stable
    */
-  M.impl.service.WFS.prototype.getFeatureUrl = function (extent, projection) {
-    var getFeatureParams = {
+
+  getFeatureUrl(extent, projection) {
+    let getFeatureParams = {
       'service': 'WFS',
       'version': this.version_,
       'request': 'GetFeature',
       'typename': this.typeName_,
-      'outputFormat': this.getFeatureOutputFormat_,
+      0 'outputFormat': this.getFeatureOutputFormat_,
       'srsname': projection.getCode()
     };
-    if (!M.utils.isNullOrEmpty(this.ids_)) {
-      getFeatureParams['featureId'] = this.ids_.map(function (id) {
+    if (!Utils.isNullOrEmpty(this.ids_)) {
+      getFeatureParams['featureId'] = this.ids_.map(id => {
         return this.name_.concat('.').concat(id);
       }, this);
     }
-    if (!M.utils.isNullOrEmpty(this.cql_)) {
+    if (!Utils.isNullOrEmpty(this.cql_)) {
       getFeatureParams['CQL_FILTER'] = this.cql_;
-    }
-    else if (!M.utils.isNullOrEmpty(extent)) {
+    } else if (!Utils.isNullOrEmpty(extent)) {
       getFeatureParams['bbox'] = extent.join(',') + ',' + projection.getCode();
     }
 
-    return M.utils.addParameters(M.utils.addParameters(this.url_, getFeatureParams), this.getFeatureVendor_);
-  };
-})();
+    return Utils.addParameters(Utils.addParameters(this.url_, getFeatureParams), this.getFeatureVendor_);
+  }
+}
