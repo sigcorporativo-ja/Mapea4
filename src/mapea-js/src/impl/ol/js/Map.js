@@ -1,14 +1,13 @@
-import Object from "facade/js/object";
-import LayerType from "facade/js/layers/layertype";
-import LayerBase from "facade/js/layers/layerbase";
-import Utils from "../utils/utils";
-import View from "../view/view";
-import EnvolvedExtent from "../utils/envolvedextent";
-import Utils from "../utils/utils";
-import EventsManager from "facade/js/event/eventsmanager";
-import FacadeWMS from "facade/js/layers/wms";
-import ControlBase from "facade/js/controls/controlbase";
-import FacadePanzoombar from "facade/js/controls/panzoombar";
+import Object from "facade/js/Object";
+import LayerType from "facade/js/layer/Type";
+import LayerBase from "facade/js/layer/Layer";
+import Utils from "facade/js/util/Utils";
+import View from "../View";
+import EnvolvedExtent from "../util/EnvolvedExtent";
+import EventsManager from "facade/js/event/Manager";
+import FacadeWMS from "facade/js/layer/WMS";
+import Control from "facade/js/control/Control";
+import FacadePanzoombar from "facade/js/control/Panzoombar";
 import Exception from "facade/js/exception/exception";
 
 export default class Map extends Object {
@@ -23,7 +22,8 @@ export default class Map extends Object {
    * @param {Mx.parameters.MapOptions} options
    * @api stable
    */
-  constructor(div, options) {
+  constructor(div, options = {}) {
+
     super();
     /**
      * Facade map to implement
@@ -45,13 +45,6 @@ export default class Map extends Object {
      * @type {Array<M.Control>}
      */
     this.controls_ = [];
-
-    /**
-     * MBtiles layers added to the map
-     * @private
-     * @type {Mx.parameters.MapOptions}
-     */
-    this.options_ = (options || {});
 
     /**
      * Flag to indicate if the initial zoom was calculated
@@ -93,21 +86,21 @@ export default class Map extends Object {
      * @private
      * @type {Boolean}
      */
-    this._calculatedResolutions = false;
+    this.calculatedResolutions_ = false;
 
     /**
      * calculated resolution form envolved extent
      * @private
      * @type {Boolean}
      */
-    this._resolutionsEnvolvedExtent = false;
+    this.resolutionsEnvolvedExtent_ = false;
 
     /**
      * calculated resolution form base layer
      * @private
      * @type {Boolean}
      */
-    this._resolutionsBaseLayer = false;
+    this.resolutionsBaseLayer_ = false;
 
     // gets the renderer
     let renderer = ol.renderer.Type.CANVAS;
@@ -269,7 +262,8 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = wmcLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
         foundLayers = foundLayers.concat(wmcLayers.filter((wmcLayer) => {
           let layerMatched = true;
@@ -287,7 +281,8 @@ export default class Map extends Object {
             if (!Utils.isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wmcLayer.name));
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
@@ -339,7 +334,8 @@ export default class Map extends Object {
           this.facadeMap_.removeWMS(wmcLayer.layers);
           this.facadeMap_.refreshWMCSelectorControl();
         });
-      } else {
+      }
+      else {
         wmcLayer.setLoaded(false);
         this.layers_.remove(wmcLayer);
         this.facadeMap_.removeWMS(wmcLayer.layers);
@@ -376,7 +372,8 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = kmlLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
         let filteredKMLLayers = kmlLayers.filter(kmlLayer => {
           let layerMatched = true;
@@ -398,7 +395,8 @@ export default class Map extends Object {
             if (!Utils.isNullOrEmpty(filterLayer.extract)) {
               layerMatched = (layerMatched && (filterLayer.extract === kmlLayer.extract));
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
@@ -425,7 +423,7 @@ export default class Map extends Object {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
           if (layer.getZIndex() == null) {
-            var zIndex = this.layers_.length + Map.Z_INDEX[LayerType.KML];
+            let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.KML];
             layer.setZIndex(zIndex);
           }
         }
@@ -479,7 +477,8 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = wmsLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
         let filteredWMSLayers = wmsLayers.filter(wmsLayer => {
           let layerMatched = true;
@@ -488,7 +487,8 @@ export default class Map extends Object {
             // if instanceof FacadeWMS check if it is the same
             if (filterLayer instanceof FacadeWMS) {
               layerMatched = (filterLayer === wmsLayer);
-            } else {
+            }
+            else {
               // type
               if (!Utils.isNullOrEmpty(filterLayer.type)) {
                 layerMatched = (layerMatched && (filterLayer.type === wmsLayer.type));
@@ -522,7 +522,8 @@ export default class Map extends Object {
                 layerMatched = (layerMatched && (filterLayer.version === wmsLayer.version));
               }
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
@@ -562,9 +563,10 @@ export default class Map extends Object {
               this.updateResolutionsFromBaseLayer();
             }
             layer.setZIndex(Map.Z_INDEX_BASELAYER);
-          } else {
+          }
+          else {
             if (layer.getZIndex() == null) {
-              var zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMS];
+              let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMS];
               layer.setZIndex(zIndex);
             }
             // recalculates resolution if there are not
@@ -575,7 +577,7 @@ export default class Map extends Object {
           }
         }
       }
-    }, this);
+    });
     return this;
   }
 
@@ -592,7 +594,7 @@ export default class Map extends Object {
     wmsMapLayers.forEach(wmsLayer => {
       this.layers_.remove(wmsLayer);
       wmsLayer.getImpl().destroy();
-    }, this);
+    });
 
     return this;
   }
@@ -623,7 +625,8 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = wfsLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
         let filteredWFSLayers = wfsLayers.filter((wfsLayer) => {
           let layerMatched = true;
@@ -665,13 +668,14 @@ export default class Map extends Object {
             if (!Utils.isNullOrEmpty(filterLayer.version)) {
               layerMatched = (layerMatched && (filterLayer.version === wfsLayer.version));
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
         });
         foundLayers = foundLayers.concat(filteredWFSLayers);
-      }, this);
+      });
     }
     return foundLayers;
   }
@@ -693,12 +697,12 @@ export default class Map extends Object {
           this.layers_.push(layer);
           layer.setZIndex(layer.getZIndex());
           if (layer.getZIndex() == null) {
-            var zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WFS];
+            let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WFS];
             layer.setZIndex(zIndex);
           }
         }
       }
-    }, this);
+    });
 
     return this;
   }
@@ -716,7 +720,7 @@ export default class Map extends Object {
     wfsMapLayers.forEach(wfsLayer => {
       this.layers_.remove(wfsLayer);
       wfsLayer.getImpl().destroy();
-    }, this);
+    });
 
     return this;
   }
@@ -747,9 +751,10 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = wmtsLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
-        // TODO ERROR DE RECURSIVIDAD: var l = map.getLayers(); map.getWMS(l);
+        // TODO ERROR DE RECURSIVIDAD: let l = map.getLayers(); map.getWMS(l);
         let filteredWMTSLayers = wmtsLayers.filter(wmtsLayer => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
@@ -774,13 +779,14 @@ export default class Map extends Object {
             if (!Utils.isNullOrEmpty(filterLayer.legend)) {
               layerMatched = (layerMatched && (filterLayer.legend === wmtsLayer.legend));
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
         });
         foundLayers = foundLayers.concat(filteredWMTSLayers);
-      }, this);
+      });
     }
     return foundLayers;
   }
@@ -813,7 +819,8 @@ export default class Map extends Object {
               this.updateResolutionsFromBaseLayer();
             }
             layer.setZIndex(Map.Z_INDEX_BASELAYER);
-          } else {
+          }
+          else {
             if (layer.getZIndex() == null) {
               let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMTS];
               layer.setZIndex(zIndex);
@@ -828,7 +835,7 @@ export default class Map extends Object {
           }
         }
       }
-    }, this);
+    });
     return this;
   }
 
@@ -845,7 +852,7 @@ export default class Map extends Object {
     wmtsMapLayers.forEach(wmtsLayer => {
       this.layers_.remove(wmtsLayer);
       wmtsLayer.getImpl().destroy();
-    }, this);
+    });
 
     return this;
   }
@@ -880,7 +887,7 @@ export default class Map extends Object {
         // TODO creating and adding the MBtiles layer with ol3
         this.layers_.push(layer);
       }
-    }, this);
+    });
 
     return this;
   }
@@ -898,7 +905,7 @@ export default class Map extends Object {
     mbtilesMapLayers.forEach(mbtilesLayer => {
       // TODO removing the MBtiles layer with ol3
       this.layers_.remove(mbtilesLayer);
-    }, this);
+    });
 
     return this;
   }
@@ -929,7 +936,8 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = unknowLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
         let filteredUnknowLayers = unknowLayers.filter(unknowLayer => {
           let layerMatched = true;
@@ -938,7 +946,8 @@ export default class Map extends Object {
             // if instanceof FacadeWMS check if it is the same
             if (filterLayer instanceof LayerBase) {
               layerMatched = filterLayer.equals(unknowLayer);
-            } else {
+            }
+            else {
               // type
               if (!Utils.isNullOrEmpty(filterLayer.type)) {
                 layerMatched = (layerMatched && (filterLayer.type === unknowLayer.type));
@@ -948,13 +957,14 @@ export default class Map extends Object {
                 layerMatched = (layerMatched && (filterLayer.name === unknowLayer.name));
               }
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
         });
         foundLayers = foundLayers.concat(filteredUnknowLayers);
-      }, this);
+      });
     }
     return foundLayers;
   }
@@ -986,10 +996,11 @@ export default class Map extends Object {
             this.updateResolutionsFromBaseLayer();
           }
           layer.setZIndex(Map.Z_INDEX_BASELAYER);
-        } else {
+        }
+        else {
           layer.setZIndex(layer.getZIndex());
           if (layer.getZIndex() == null) {
-            var zIndex = this.layers_.length + Map.Z_INDEX[layer.type];
+            let zIndex = this.layers_.length + Map.Z_INDEX[layer.type];
             layer.setZIndex(zIndex);
           }
           // recalculates resolution if there are not
@@ -999,7 +1010,7 @@ export default class Map extends Object {
           }
         }
       }
-    }, this);
+    });
 
     return this;
   }
@@ -1026,7 +1037,7 @@ export default class Map extends Object {
           }
         }
       }
-    }, this);
+    });
   }
   /**
    * This function adds controls specified by the user
@@ -1054,7 +1065,8 @@ export default class Map extends Object {
     }
     if (filters.length === 0) {
       foundControls = controlsToSearch;
-    } else {
+    }
+    else {
       filters.forEach(filterControl => {
         foundControls = foundControls.concat(controlsToSearch.filter(control => {
           let controlMatched = false;
@@ -1062,15 +1074,17 @@ export default class Map extends Object {
           if (!Utils.includes(foundControls, control)) {
             if (Utils.isString(filterControl)) {
               controlMatched = (filterControl === control.name);
-            } else if (filterControl instanceof ControlBase) {
+            }
+            else if (filterControl instanceof Control) {
               controlMatched = (filterControl === control);
-            } else if (Utils.isObject(filterControl)) {
+            }
+            else if (Utils.isObject(filterControl)) {
               controlMatched = (filterControl.name === control.name);
             }
           }
           return controlMatched;
         }));
-      }, this);
+      });
     }
     let nonRepeatFoundControls = [];
     foundControls.forEach(control => {
@@ -1099,7 +1113,7 @@ export default class Map extends Object {
       if (!Utils.includes(this.controls_, control)) {
         this.controls_.push(control);
       }
-    }, this);
+    });
 
     return this;
   }
@@ -1117,7 +1131,7 @@ export default class Map extends Object {
     mapControls.forEach(control => {
       control.destroy();
       this.controls_.remove(control);
-    }, this);
+    });
 
     return this;
   }
@@ -1142,7 +1156,7 @@ export default class Map extends Object {
     // set the extent by ol
     let olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
     let olMap = this.getMapImpl();
-    //      var minZoom = olMap.getView().
+    //      let minZoom = olMap.getView().
     olMap.getView().set('extent', olExtent);
     this.updateResolutionsFromBaseLayer();
 
@@ -1178,7 +1192,8 @@ export default class Map extends Object {
           'max': olExtent[3]
         }
       };
-    } else {
+    }
+    else {
       extent = this.envolvedMaxExtent_;
     }
 
@@ -1208,7 +1223,8 @@ export default class Map extends Object {
     let extent;
     if (Utils.isArray(bbox)) {
       extent = bbox;
-    } else if (Utils.isObject(bbox)) {
+    }
+    else if (Utils.isObject(bbox)) {
       extent = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
     }
     let olMap = this.getMapImpl();
@@ -1232,7 +1248,7 @@ export default class Map extends Object {
     let olMap = this.getMapImpl();
     let view = olMap.getView();
     if (!Utils.isNullOrEmpty(view.getCenter())) {
-      var olExtent = view.calculateExtent(olMap.getSize());
+      let olExtent = view.calculateExtent(olMap.getSize());
 
       if (!Utils.isNullOrEmpty(olExtent)) {
         bbox = {
@@ -1285,7 +1301,7 @@ export default class Map extends Object {
     let resolution = this.getMapImpl().getView().getResolution();
     let resolutions = this.getResolutions();
     let zoom = null;
-    for (var i = 0, ilen = resolutions.length; i < ilen; i++) {
+    for (let i = 0, ilen = resolutions.length; i < ilen; i++) {
       if (resolutions[i] <= resolution) {
         zoom = i;
         break;
@@ -1389,7 +1405,7 @@ export default class Map extends Object {
     let oldViewProperties = olMap.getView().getProperties();
     let userZoom = olMap.getView().getUserZoom();
 
-    let newView = new M.impl.View({
+    let newView = new View({
       'projection': projection
     });
     newView.setProperties(oldViewProperties);
@@ -1433,9 +1449,11 @@ export default class Map extends Object {
     if (!Utils.isNullOrEmpty(scale)) {
       if (scale >= 1000 && scale <= 950000) {
         scale = Math.round(scale / 1000) * 1000;
-      } else if (scale >= 950000) {
+      }
+      else if (scale >= 950000) {
         scale = Math.round(scale / 1000000) * 1000000;
-      } else {
+      }
+      else {
         scale = Math.round(scale);
       }
     }
@@ -1692,29 +1710,30 @@ export default class Map extends Object {
         resolutions = Utils.fillResolutions(minResolution, maxResolution, zoomLevels);
         this.setResolutions(resolutions, true);
 
-        this._resolutionsBaseLayer = true;
+        this.resolutionsBaseLayer_ = true;
 
         // checks if it was the first time to
         // calculate resolutions in that case
         // fires the completed event
-        if (this._calculatedResolutions === false) {
-          this._calculatedResolutions = true;
+        if (this.calculatedResolutions_ === false) {
+          this.calculatedResolutions_ = true;
           this.fire(EventsManager.COMPLETED);
         }
-      } else {
+      }
+      else {
         EnvolvedExtent.calculate(this).then(extent => {
-          if (!this._resolutionsBaseLayer && (this.userResolutions_ === null)) {
+          if (!this.resolutionsBaseLayer_ && (this.userResolutions_ === null)) {
 
             resolutions = Utils.generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
 
-            this._resolutionsEnvolvedExtent = true;
+            this.resolutionsEnvolvedExtent_ = true;
 
             // checks if it was the first time to
             // calculate resolutions in that case
             // fires the completed event
-            if (this._calculatedResolutions === false) {
-              this._calculatedResolutions = true;
+            if (this.calculatedResolutions_ === false) {
+              this.calculatedResolutions_ = true;
               this.fire(EventsManager.COMPLETED);
             }
           }
@@ -1777,7 +1796,7 @@ export default class Map extends Object {
    * @api stable
    * @returns {Map} the instance
    */
-  refresh = function () {
+  refresh = function() {
     this.map_.updateSize();
     return this;
   }
@@ -1844,22 +1863,21 @@ export default class Map extends Object {
       'vendor': evt
     }]);
   }
-
-  /**
-   * Z-INDEX for the layers
-   * @const
-   * @type {Object}
-   * @public
-   * @api stable
-   */
-  Map.Z_INDEX = {};
-  Map.Z_INDEX_BASELAYER = 0;
-  Map.Z_INDEX[LayerType.WMC] = 1;
-  Map.Z_INDEX[LayerType.WMS] = 1000;
-  Map.Z_INDEX[LayerType.WMTS] = 2000;
-  Map.Z_INDEX[LayerType.OSM] = 2000;
-  Map.Z_INDEX[LayerType.KML] = 3000;
-  Map.Z_INDEX[LayerType.WFS] = 9999;
-  Map.Z_INDEX[LayerType.Vector] = 9999;
-  Map.Z_INDEX[LayerType.GeoJSON] = 9999;
 }
+/**
+ * Z-INDEX for the layers
+ * @const
+ * @type {Object}
+ * @public
+ * @api stable
+ */
+Map.Z_INDEX = {};
+Map.Z_INDEX_BASELAYER = 0;
+Map.Z_INDEX[LayerType.WMC] = 1;
+Map.Z_INDEX[LayerType.WMS] = 1000;
+Map.Z_INDEX[LayerType.WMTS] = 2000;
+Map.Z_INDEX[LayerType.OSM] = 2000;
+Map.Z_INDEX[LayerType.KML] = 3000;
+Map.Z_INDEX[LayerType.WFS] = 9999;
+Map.Z_INDEX[LayerType.Vector] = 9999;
+Map.Z_INDEX[LayerType.GeoJSON] = 9999;
