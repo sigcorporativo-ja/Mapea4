@@ -1,12 +1,7 @@
-goog.provide('M.impl.style.PointIcon');
-
-goog.require('goog.style');
-goog.require('ol.style.Icon');
-
 /**
  * @namespace M.impl.style.PointIcon
  */
-(function() {
+export default class Icon extends ol.style.Icon {
   /**
    * @classdesc
    * chart style for vector features
@@ -16,14 +11,7 @@ goog.require('ol.style.Icon');
    * @extends {ol.style.Icon}
    * @api stable
    */
-  M.impl.style.PointIcon = function(options = {}) {
-    // if (!options.anchor) {
-    //   options.anchor = [0, 0];
-    // }
-    // if (!options.offset) {
-    //   options.offset = [0, 0];
-    // }
-
+  constructor(options = {}) {
     // super call
     ol.style.Icon.call(this, {
       anchor: !options.anchor ? undefined : options.anchor.slice(),
@@ -43,17 +31,16 @@ goog.require('ol.style.Icon');
       rotation: options.rotation,
       rotateWithView: options.rotateWithView
     });
-  };
-  ol.inherits(M.impl.style.PointIcon, ol.style.Icon);
+  }
 
   /**
-   * clones the chart
+   * clones the style
    * @public
    * @function
    * @api stable
    */
-  M.impl.style.PointIcon.prototype.clone = function() {
-    return new M.impl.style.PointIcon({
+  clone() {
+    return new Icon({
       anchor: this.anchor_.slice(),
       anchorOrigin: this.anchorOrigin_,
       anchorXUnits: this.anchorXUnits_,
@@ -70,5 +57,5 @@ goog.require('ol.style.Icon');
       rotation: this.getRotation(),
       rotateWithView: this.getRotateWithView()
     });
-  };
-})();
+  }
+}
