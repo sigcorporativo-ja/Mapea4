@@ -1,4 +1,4 @@
-import Utils from "../utils/utils";
+import Utils from "facade/js/util/Utils";
 
 export default class TileWMS extends ol.source.TileWMS {
 
@@ -11,11 +11,13 @@ export default class TileWMS extends ol.source.TileWMS {
    * @param {olx.source.TileWMSOptions=} opt_options Tile WMS options.
    * @api stable
    */
+
   constructor(opt_options) {
+
+    let options = opt_options || {};
 
     super(options);
 
-    let options = opt_options || {};
     if (Utils.isNullOrEmpty(options.tileLoadFunction)) {
       options.tileLoadFunction = TileWMS.tileLoadFunction.bind(this);
     }
@@ -27,12 +29,13 @@ export default class TileWMS extends ol.source.TileWMS {
    * @function
    * @api stable
    */
+
   changed() {
     if (!Utils.isNullOrEmpty(this.tileCache)) {
       this.tileCache.clear();
     }
     // super changed
-    super(this, 'changed');
+    super.changed();
   }
 
   /**
@@ -41,6 +44,7 @@ export default class TileWMS extends ol.source.TileWMS {
    * @function
    * @api stable
    */
+
   tileLoadFunction(imageTile, src) {
     imageTile.getImage().src = src + "&_=" + this.revision_;
   }

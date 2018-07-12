@@ -1,4 +1,4 @@
-import Utils from "../utils/utils";
+import Utils from "facade/js/util/Utils";
 
 export default class ImageWMS extends ol.source.ImageWMS {
   /**
@@ -12,9 +12,11 @@ export default class ImageWMS extends ol.source.ImageWMS {
    * @api stable
    */
   constructor(opt_options) {
-    super(options);
 
     let options = opt_options || {};
+
+    super(options);
+
     if (Utils.isNullOrEmpty(options.imageLoadFunction)) {
       options.imageLoadFunction = ImageWMS.imageLoadFunction.bind(this);
     }

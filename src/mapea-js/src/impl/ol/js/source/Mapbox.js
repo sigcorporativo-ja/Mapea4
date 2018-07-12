@@ -1,5 +1,5 @@
-import Config from "../../../../configuration";
-import Utils from "../utils/utils";
+import Config from "configuration";
+import Utils from "facade/js/util/Utils";
 
 export default class Mapbox extends ol.source.OSM {
 
@@ -13,6 +13,7 @@ export default class Mapbox extends ol.source.OSM {
    * @param {olx.source.OSMOptions=} opt_options Open Street Map options.
    * @api stable
    */
+
   constructor(opt_options) {
     // appends
     super({
@@ -26,6 +27,7 @@ export default class Mapbox extends ol.source.OSM {
      * @type {object}
      * @expose
      */
+
     this.options = opt_options || {};
 
     let attributions;
@@ -40,8 +42,6 @@ export default class Mapbox extends ol.source.OSM {
     url += '/{z}/{x}/{y}.';
     url += this.options.extension !== undefined ?
       this.options.extension : Config.MAPBOX_EXTENSION;
-
-
   }
 
 
@@ -50,6 +50,7 @@ export default class Mapbox extends ol.source.OSM {
    * @param {string} url URL.
    * @api stable
    */
+
   setUrl(url) {
     let accessToken = this.options.accessToken;
     let urlFunction = ol.TileUrlFunction.createFromTemplates(
@@ -70,6 +71,7 @@ export default class Mapbox extends ol.source.OSM {
    * @type {ol.Attribution}
    * @api
    */
+
   Mapbox.ATTRIBUTION = new ol.Attribution({
     html: '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a>'
   });
