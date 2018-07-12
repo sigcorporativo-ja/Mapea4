@@ -1,6 +1,4 @@
-import ImplControl from "impl/ol/js/contols/controlbase";
-
-export default class AttributeTableControl extends ImplControl {
+export default class AttributeTableControl extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the AttributeTableControl.

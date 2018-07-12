@@ -1,14 +1,6 @@
-import Control from "facade/js/controls/controlbase";
-import Utils from "facade/js/utils/utils";
-import Exception from "facade/js/exception/exception";
-import AttributeTableImpl from "../impl/ol/js/attributetableControl";
-import Template from "facade/js/utils/template";
-import Config from "../../../configuration";
-import Window from "facade/js/utils/window";
-import Dialog from "facade/js/dialog";
-import LayerBase from "facade/js/layers/layerbase";
+import AttributeTableImpl from "impl/ol/js/attributetable";
 
-export default class AttributeTableControl extends Control {
+export default class AttributeTableControl extends M.control {
 
   /**
    * @classdesc
@@ -37,7 +29,7 @@ export default class AttributeTableControl extends Control {
       sortType: null
     };
 
-    if (Utils.isUndefined(AttributeTableImpl)) {
+    if (M.utils.isUndefined(AttributeTableImpl)) {
       WKT('La implementación usada no puede crear controles AttributeTableControl');
     }
   }
@@ -69,7 +61,7 @@ export default class AttributeTableControl extends Control {
             panel.style.removeProperty("top");
           }
 
-          if (Window.WIDTH >= Config.MOBILE_WIDTH) {
+          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
             if (this.getPanel().isCollapsed()) {
               this.deactivateDraggable_();
             } else {
@@ -117,18 +109,18 @@ export default class AttributeTableControl extends Control {
    * @return {Promise}
    */
   renderPanel_(name) {
-    if (!Utils.isNullOrEmpty(name)) {
+    if (!M.utils.isNullOrEmpty(name)) {
       this.layer_ = this.hasLayer_(name)[0];
     }
 
     let features = this.layer_.getFeatures();
-    if (!Utils.isNullOrEmpty(features)) {
+    if (!M.utils.isNullOrEmpty(features)) {
       let headerAtt = Object.keys(features[0].getAttributes());
 
       let attributes = [];
       features.forEach(feature => {
         let properties = Object.values(feature.getAttributes());
-        if (!Utils.isNullOrEmpty(properties)) {
+        if (!M.utils.isNullOrEmpty(properties)) {
           attributes.push(properties);
         }
       });
@@ -138,29 +130,29 @@ export default class AttributeTableControl extends Control {
     }
     return new Promise((success, fail) => {
       let params = {};
-      if (!Utils.isUndefined(headerAtt)) {
+      if (!M.utils.isUndefined(headerAtt)) {
         params = {
           headerAtt: headerAtt,
           legend: this.layer_.legend,
           pages: this.pageResults_(attributes),
-          attributes: (Utils.isNullOrEmpty(attributes)) ? false : attributes.slice(this.pages_.element, this.pages_.element + this.numPages_)
+          attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes.slice(this.pages_.element, this.pages_.element + this.numPages_)
         };
       }
-      Template.compile('tableData.html', {
+      M.template.compile('tableData.html', {
         'jsonp': true,
         'vars': params
       }).then(html => {
         let content = this.areaTable_.querySelector("table");
-        if (!Utils.isNullOrEmpty(content)) {
+        if (!M.utils.isNullOrEmpty(content)) {
           this.areaTable_.removeChild(this.areaTable_.querySelector("#m-attributetable-content-attributes"));
         }
         let notResult = this.areaTable_.querySelector(".m-attributetable-notResult");
-        if (!Utils.isNullOrEmpty(notResult)) {
+        if (!M.utils.isNullOrEmpty(notResult)) {
           //notResult.parentElement.removeChild(notResult);
           this.areaTable_.removeChild(this.areaTable_.querySelector("#m-attributetable-content-attributes"));
         }
         this.areaTable_.appendChild(html);
-        if (Utils.isNullOrEmpty(html.querySelector('div.m-attributetable-notResult'))) {
+        if (M.utils.isNullOrEmpty(html.querySelector('div.m-attributetable-notResult'))) {
           this.areaTable_.querySelector('#m-attributetable-next').addEventListener('click', this.nextPage_);
           html.querySelector('#m-attributetable-previous').addEventListener('click', this.previousPage_);
           html.querySelector('input[value=selectAll]').addEventListener('click', this.selectAll);
@@ -190,12 +182,12 @@ export default class AttributeTableControl extends Control {
    */
   hasLayer_(layerSearch) {
     let layersFind = [];
-    if (Utils.isNullOrEmpty(layerSearch) || (!Utils.isArray(layerSearch) && !Utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
+    if (M.utils.isNullOrEmpty(layerSearch) || (!M.utils.isArray(layerSearch) && !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
       Dialog.error("El parametro para el método hasLayer no es correcto.", "Error");
       return layersFind;
     }
 
-    if (Utils.isString(layerSearch)) {
+    if (M.utils.isString(layerSearch)) {
       this.facadeMap_.getLayers().forEach(lay => {
         if (lay.name == layerSearch) {
           layersFind.push(lay);
@@ -203,14 +195,14 @@ export default class AttributeTableControl extends Control {
       });
     }
 
-    if (layerSearch instanceof LayerBase) {
+    if (layerSearch instanceof M.Layer) {
       this.facadeMap_.getLayers().forEach(lay => {
         if (lay.equals(layerSearch)) {
           layersFind.push(lay);
         }
       });
     }
-    if (Utils.isArray(layerSearch)) {
+    if (M.utils.isArray(layerSearch)) {
       this.facadeMap_.getLayers().forEach(lay => {
         if (layerSearch.indexOf(lay.name) >= 0) {
           layersFind.push(lay);
@@ -315,7 +307,7 @@ export default class AttributeTableControl extends Control {
    */
   hasNext_(html) {
     let element = this.template_;
-    if (!Utils.isNullOrEmpty(html)) element = html;
+    if (!M.utils.isNullOrEmpty(html)) element = html;
     if (this.pages_.actual < this.pages_.total) {
       element.querySelector('#m-attributetable-next').classlist.remove('m-attributetable-hidden');
     }
@@ -329,7 +321,7 @@ export default class AttributeTableControl extends Control {
    */
   hasPrevious_(html) {
     let element = this.template_;
-    if (!Utils.isNullOrEmpty(html)) element = html;
+    if (!M.utils.isNullOrEmpty(html)) element = html;
     if (this.pages_.actual <= this.pages_.total && this.pages_.actual !== 1) {
       element.querySelector('#m-attributetable-previous').classlist.remove('m-attributetable-hidden');
     }
@@ -405,7 +397,7 @@ export default class AttributeTableControl extends Control {
    * @api stable
    */
   activateDraggable_() {
-    if (Utils.isNullOrEmpty(this.draggable_)) {
+    if (M.utils.isNullOrEmpty(this.draggable_)) {
       this.setFixed_();
       let panel = this.getPanel().getTemplatePanel();
       this.draggable_ = new Draggabilly(panel, {

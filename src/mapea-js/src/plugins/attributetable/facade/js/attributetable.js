@@ -1,12 +1,4 @@
-import Plugin from "facade/js/plugin";
-import Control from "./attributetablecontrol";
-import EventsManager from "facade/js/event/eventsmanager";
-import Utils from "facade/js/utils/utils";
-import Panel from "facade/js/ui/panel";
-import Dialog from "facade/js/dialog";
-import Position from "facade/js/ui/position";
-
-export default class AttributeTable extends Plugin {
+export default class AttributeTable extends M.plugin {
 
   /**
    * @classdesc
@@ -25,7 +17,7 @@ export default class AttributeTable extends Plugin {
 
     parameters = (parameters || {});
 
-    this.numPages_ = parseInt((!Utils.isNullOrEmpty(parameters.pages) && parameters.pages >= 1 && parameters.pages % 1 === 0) ? parameters.pages : M.config.ATTRIBUTETABLE_PAGES);
+    this.numPages_ = parseInt((!M.utils.isNullOrEmpty(parameters.pages) && parameters.pages >= 1 && parameters.pages % 1 === 0) ? parameters.pages : M.config.ATTRIBUTETABLE_PAGES);
 
     /**
      * Name of this control
@@ -45,23 +37,23 @@ export default class AttributeTable extends Plugin {
    * @api stable
    */
   addTo(map) {
-    map.on(EventsManager.ADDED_LAYER, () => {
+    map.on(M.evt.ADDED_LAYER, () => {
       this.destroy();
       add(this);
     });
 
     const add = (plugin) => {
       plugin.facadeMap_ = map;
-      plugin.control_ = new Control(plugin.numPages_);
-      plugin.panel_ = new Panel(AttributeTable.NAME, {
+      plugin.control_ = new M.control.AttributeTableControl(plugin.numPages_);
+      plugin.panel_ = new M.ui.Panel(AttributeTable.NAME, {
         'collapsible': true,
         'className': 'm-attributetable',
         'collapsedButtonClass': 'g-cartografia-localizacion4',
-        'position': Position.TR,
+        'position': M.ui.position.TR,
         'tooltip': 'Tabla de atributos'
       });
       plugin.panel_.addControls(plugin.control_);
-      plugin.panel_.on(EventsManager.SHOW, evt => {
+      plugin.panel_.on(M.evt.SHOW, evt => {
         if (map.getWFS().length === 0 && map.getKML().length === 0 && map.getLayers()
           .filter(layer => layer.type === "GeoJSON") === 0) {
           plugin.panel_.collapse();
