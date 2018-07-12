@@ -2,6 +2,7 @@ import Template from "facade/js/util/Template";
 import FacadeLabel from "facade/js/Label";
 import FacadePopup from "facade/js/Popup";
 import Utils from "facade/js/util/Utils";
+import labelPopupTemplate from "templates/label_popup.html";
 
 /**
  * @namespace M.impl.control
@@ -65,25 +66,22 @@ export default class Label {
    */
   show(map) {
     this.facadeMap_ = map;
-    Template.compile(FacadeLabel.POPUP_TEMPLATE, {
-      'jsonp': true,
+    let htmlAsText = Template.compile(labelPopupTemplate, {
       'vars': {
         'info': this.text_
       },
       'parseToHtml': false
-    }).then(htmlAsText => {
-      map.removePopup();
-      this.popup_ = new FacadePopup({
-        'panMapIfOutOfView': this.panMapIfOutOfView
-      });
-      this.popup_.addTab({
-        'icon': 'g-cartografia-comentarios',
-        'title': 'Información',
-        'content': htmlAsText,
-      });
-      map.addPopup(this.popup_, this.coord_);
-      // this.popup_.on(M.evt.DESTROY, () => this.facadeMap_.removeLabel());
     });
+    map.removePopup();
+    this.popup_ = new FacadePopup({
+      'panMapIfOutOfView': this.panMapIfOutOfView
+    });
+    this.popup_.addTab({
+      'icon': 'g-cartografia-comentarios',
+      'title': 'Información',
+      'content': htmlAsText,
+    });
+    map.addPopup(this.popup_, this.coord_);
   }
 
   /**
