@@ -1,7 +1,7 @@
-import Object from "facade/js/object";
-import Utils from "facade/js/util/utils";
-import Config from "configuration";
-import FacadeLayer from "facade/js/layer/layerbase";
+import Object from "facade/js/Object";
+import Utils from "facade/js/util/Utils";
+import Config from "Configuration";
+import FacadeLayer from "facade/js/layer/Layer";
 
 export default class Layer extends Object {
   /**
@@ -116,8 +116,7 @@ export default class Layer extends Object {
       let lMap = this.map.getMapImpl();
       if ((visibility === true) && !lMap.hasLayer(this.leafletLayer)) {
         lMap.addLayer(this.leafletLayer);
-      }
-      else if ((visibility !== true) && lMap.hasLayer(this.leafletLayer)) {
+      } else if ((visibility !== true) && lMap.hasLayer(this.leafletLayer)) {
         lMap.removeLayer(this.leafletLayer);
       }
     }
@@ -219,7 +218,7 @@ export default class Layer extends Object {
    * @api stable
    * @expose
    */
-  unselectFeatures(features, coord) {};
+  unselectFeatures(features, coord) {}
 
   /**
    * This function exectues a select feature
@@ -228,5 +227,5 @@ export default class Layer extends Object {
    * @api stable
    * @expose
    */
-  selectFeatures(features, coord) {};
+  selectFeatures(features, coord) {}
 }
