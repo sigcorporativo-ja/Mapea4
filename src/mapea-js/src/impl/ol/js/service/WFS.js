@@ -1,6 +1,6 @@
-import OlDFeaturetype from "../format/wfs/describefeaturetype";
-import Utils from '../utils/utils';
-import Remote from 'facade/js/utils/remote';
+import Featuretype from "../format/wfs/DescribeFeatureType";
+import Utils from 'facade/js/util/Utils';
+import Remote from 'facade/js/util/Remote';
 
 export default class WFS {
   /**
@@ -137,9 +137,9 @@ export default class WFS {
     }
 
     let describeFeatureTypeUrl = Utils.addParameters(Utils.addParameters(this.url_, describeFeatureParams), this.describeFeatureTypeVendor_);
-    let describeFeatureTypeFormat = new OlDFeaturetype(this.name_, this.describeFeatureTypeOutputFormat_, this.projection_);
+    let describeFeatureTypeFormat = new Featuretype(this.name_, this.describeFeatureTypeOutputFormat_, this.projection_);
     return new Promise((success, fail) => {
-      Remote.get(describeFeatureTypeUrl).then((response) => {
+      Remote.get(describeFeatureTypeUrl).then(response => {
         success(describeFeatureTypeFormat.read(response));
       });
     });
@@ -168,7 +168,7 @@ export default class WFS {
       'srsname': projection.getCode()
     };
     if (!Utils.isNullOrEmpty(this.ids_)) {
-      getFeatureParams['featureId'] = this.ids_.map((id) => {
+      getFeatureParams['featureId'] = this.ids_.map(id => {
         return this.name_.concat('.').concat(id);
       }, this);
     }
