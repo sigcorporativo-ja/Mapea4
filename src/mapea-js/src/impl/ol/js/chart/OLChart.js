@@ -1,9 +1,8 @@
-import Utils "facade/js/utils/utils";
-import UtilsImpl "./utils/utils";
-import Chart "facade/js/style/Chart";
-import RegularShape from "ol/style/RegularShape"
+import Utils from "facade/js/util/Utils";
+import UtilsImpl from "./utils/Utils";
+import Chart from "facade/js/style/Chart";
 
-export default class OLChart extends RegularShape {
+export default class OLChart extends ol.style.RegularShape {
 
   /**
    * @classdesc
@@ -131,7 +130,7 @@ export default class OLChart extends RegularShape {
 
     // call to render and updated the ol.style.image canvas
     this.renderChart_();
-  };
+  }
 
   /**
    * clones the chart
@@ -161,13 +160,12 @@ export default class OLChart extends RegularShape {
     newInstance.setScale(this.getScale());
     newInstance.setOpacity(this.getOpacity());
     return newInstance;
-  };
+  }
 
   /**
    * Chart data getter & setter
    * setter will render the chart
    */
-
   get data() {
     return this.data_;
   }
@@ -199,7 +197,7 @@ export default class OLChart extends RegularShape {
   setRadius(radius, ratio) {
     this.donutRatio_ = ratio || this.donutRatio_;
     this.radius = radius;
-  };
+  }
 
   /**
    * sets the animation step
@@ -213,8 +211,7 @@ export default class OLChart extends RegularShape {
         return;
       }
       this.animation_.animate = false;
-    }
-    else {
+    } else {
       if (this.animation_.step == step) {
         return;
       }
@@ -222,7 +219,7 @@ export default class OLChart extends RegularShape {
       this.animation_.step = step;
     }
     this.renderChart_();
-  };
+  }
 
   /**
    * @inheritDoc
@@ -242,7 +239,7 @@ export default class OLChart extends RegularShape {
       this.checksums_ = [checksum, strokeChecksum, fillChecksum, this.radius_, this.data_.join('|')];
     }
     return this.checksums_[0];
-  };
+  }
 
   /**
    * Renders the chart.
@@ -297,8 +294,7 @@ export default class OLChart extends RegularShape {
           if (strokeStyle) {
             context.stroke();
           }
-        }
-        else if (this.type_ === Chart.types.DONUT) {
+        } else if (this.type_ === Chart.types.DONUT) {
           context.save();
           context.beginPath();
           context.rect(0, 0, 2 * center, 2 * center);
@@ -360,7 +356,7 @@ export default class OLChart extends RegularShape {
     let anchor = this.getAnchor();
     anchor[0] = center - this.offset_[0];
     anchor[1] = center - this.offset_[1];
-  };
+  }
 
   /**
    * Draws in a vector context a "center point" as feature and applies it this chart style.
@@ -382,5 +378,5 @@ export default class OLChart extends RegularShape {
       });
       ctx.drawFeature(tmpFeature, style);
     }
-  };
+  }
 }
