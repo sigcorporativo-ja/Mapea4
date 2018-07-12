@@ -1,7 +1,7 @@
-import Template from "facade/js/utils/template";
-import FLabel from "facade/js/label";
-import FPopup from "facade/js/popup/popup";
-import Utils from "facade/js/utils/utils";
+import Template from "facade/js/util/Template";
+import FacadeLabel from "facade/js/Label";
+import FacadePopup from "facade/js/Popup";
+import Utils from "facade/js/util/Utils";
 
 /**
  * @namespace M.impl.control
@@ -65,7 +65,7 @@ export default class Label {
    */
   show(map) {
     this.facadeMap_ = map;
-    Template.compile(FLabel.POPUP_TEMPLATE, {
+    Template.compile(FacadeLabel.POPUP_TEMPLATE, {
       'jsonp': true,
       'vars': {
         'info': this.text_
@@ -73,7 +73,7 @@ export default class Label {
       'parseToHtml': false
     }).then(htmlAsText => {
       map.removePopup();
-      this.popup_ = new FPopup({
+      this.popup_ = new FacadePopup({
         'panMapIfOutOfView': this.panMapIfOutOfView
       });
       this.popup_.addTab({
@@ -116,7 +116,6 @@ export default class Label {
    * @api stable
    */
   getCoordinate() {
-    let coord = this.coord_;
     if (Utils.isNullOrEmpty(coord)) {
       coord = this.getPopup().getCoordinate();
     }
@@ -130,7 +129,6 @@ export default class Label {
    * @api stable
    */
   setCoordinate(coord) {
-    this.coord_ = coord;
     let popup = this.getPopup();
     if (!Utils.isNullOrEmpty(popup)) {
       popup.setCoordinate(coord);
