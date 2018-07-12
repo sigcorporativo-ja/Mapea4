@@ -1,6 +1,6 @@
-import Style from "./style";
-import Utils from "../utils/utils";
-import Feature from "../feature/feature";
+import Style from "./Style";
+import Utils from "facade/js/util/Utils";
+import Feature from "../feature/Feature";
 
 /**
  * @namespace M.impl.style.Simple
@@ -13,7 +13,6 @@ export default class Simple extends Style {
    */
   constructor(options = {}) {
     this.updateFacadeOptions(options);
-    //goog.base(this, options);
   }
 
   /**
@@ -68,12 +67,14 @@ export default class Simple extends Style {
     if (templateRegexp.test(attr) || Utils.isFunction(attr)) {
       if (!(olFeature instanceof ol.Feature)) {
         attrFeature = undefined;
-      } else {
+      }
+      else {
         let feature = Feature.olFeature2Facade(olFeature, false);
         if (templateRegexp.test(attr)) {
           let keyFeature = attr.replace(templateRegexp, '$1');
           attrFeature = feature.getAttribute(keyFeature);
-        } else if (Utils.isFunction(attr)) {
+        }
+        else if (Utils.isFunction(attr)) {
           attrFeature = attr(feature);
         }
       }

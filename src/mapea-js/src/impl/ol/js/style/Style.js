@@ -106,6 +106,6 @@ export default class Style {
    * @api stable
    */
   clone() {
-    return new this.constructor(Object.assign({}, this.options_));
+    return new Style(Object.assign({}, this.options_));
   }
 }

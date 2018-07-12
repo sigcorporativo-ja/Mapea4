@@ -1,11 +1,11 @@
-import StyleFeature from "./stylefeature";
-import Centroid from "./olstyle";
-import OlChart from "../chart/olchart";
-import Feature from "./stylefeature";
-import Utils from "../utils/utils";
-import Simple from "./stylesimple";
-import Baseline from "facade/js/style/stylebaseline";
-import Align from "facade/js/stylealign";
+import StyleCentroid from "./Centroid";
+import OLChart from "../chart/OLChart";
+import Feature from "./Feature";
+import Utils from "facade/js/util/Utils";
+import Simple from "./Simple";
+import Baseline from "facade/js/style/Baseline";
+import Align from "facade/js/Align";
+import FacadeChart from "facade/js/style/Chart";
 
 /**
  * @namespace Chart
@@ -40,6 +40,9 @@ export default class Chart extends Feature {
    */
   constructor(options = {}) {
 
+    // merge default values
+    Chart.extend_(options, FacadeChart.DEFAULT);
+
     super(options);
     /**
      * the ol style function
@@ -60,10 +63,6 @@ export default class Chart extends Feature {
      * @type {Array<string>}
      */
     this.colorsScheme_ = options.scheme || [];
-
-    // merge default values
-    this.extend_(options, M.style.Chart.DEFAULT);
-
   }
 
   /**
@@ -124,7 +123,8 @@ export default class Chart extends Feature {
           });
           line = word + ' ';
           y += lineHeight;
-        } else {
+        }
+        else {
           line = line + word + ' ';
         }
       });
@@ -203,7 +203,7 @@ export default class Chart extends Feature {
         styleOptions.stroke = new ol.style.Stroke(options.stroke);
       }
 
-      let styles = [new Centroid({
+      let styles = [new StyleCentroid({
         geometry: (olFeature) => {
           let geometry = olFeature.getGeometry();
           if (olFeature.getGeometry() instanceof ol.geom.MultiPolygon) {
@@ -239,7 +239,7 @@ export default class Chart extends Feature {
           let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
           text = styleOptions.type !== Chart.types.BAR && text === '0' ? '' : text;
           let font = getValue(label.font, feature);
-          return new Centroid({
+          return new StyleCentroid({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
               offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX, feature) : (Math.cos(angle) * (radius + radiusIncrement) + styleOptions.offsetX || 0),
@@ -258,7 +258,8 @@ export default class Chart extends Feature {
             })
           });
         })).filter(style => style != null);
-      } else if (styleOptions.type === Chart.types.BAR) {
+      }
+      else if (styleOptions.type === Chart.types.BAR) {
         let height = 0;
         let acumSum = null;
         styles = styles.concat(styleOptions.data.map((dataValue, i) => {
@@ -277,11 +278,12 @@ export default class Chart extends Feature {
           let sizeFont = 9;
           if (Utils.isNullOrEmpty(acumSum)) {
             acumSum = (styles[0].getImage().getImage().height / 2) - 6;
-          } else {
+          }
+          else {
             acumSum -= sizeFont + 6;
           }
           height = height + sizeFont + 6;
-          return new Centroid({
+          return new StyleCentroid({
             text: new ol.style.Text({
               text: typeof text === 'string' ? `${text}` : '',
               offsetY: acumSum + styleOptions.offsetY || 0,
@@ -400,7 +402,7 @@ export default class Chart extends Feature {
    * @private
    * @api stable
    */
-  extend_(target, ...sourceObs) {
+  static extend_(target, ...sourceObs) {
     if (target == null) { // TypeError if undefined or null
       throw new TypeError('Cannot convert undefined or null to object');
     }
@@ -413,32 +415,30 @@ export default class Chart extends Feature {
     }));
     return to;
   }
-
-  /**
-   * Max canvas radius
-   * @const
-   * @type {number}
-   */
-  Chart.CANVAS_PROPS = {
-    width: 200, // px
-    percentages: {
-      left_right_content: 5, // %
-      item_side_margin: 5, // %
-      max_text_width: 70, // %
-    },
-    fixedProps: {
-      rect_border_width: 2,
-      font_size: 10, //px
-      font_family: 'sans-serif',
-      text_stroke_color: '#fff',
-      text_stroke_width: 1,
-      text_color: '#000',
-      top_content: 10, // px
-      item_top_margin: 10, // px
-      text_line_height: 15, // px
-      rect_size: 15, // px
-    }
-  };
-
-
 }
+
+/**
+ * Max canvas radius
+ * @const
+ * @type {number}
+ */
+Chart.CANVAS_PROPS = {
+  width: 200, // px
+  percentages: {
+    left_right_content: 5, // %
+    item_side_margin: 5, // %
+    max_text_width: 70, // %
+  },
+  fixedProps: {
+    rect_border_width: 2,
+    font_size: 10, //px
+    font_family: 'sans-serif',
+    text_stroke_color: '#fff',
+    text_stroke_width: 1,
+    text_color: '#000',
+    top_content: 10, // px
+    item_top_margin: 10, // px
+    text_line_height: 15, // px
+    rect_size: 15, // px
+  }
+};

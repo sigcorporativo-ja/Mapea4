@@ -1,7 +1,9 @@
-import Centroid from "./olstyle";
-import Path from "./stylepath";
-import Simple from "./stylesimple";
-import Utils from "../utils/utils";
+import Centroid from "./Centroid";
+import Path from "./Path";
+import Simple from "./Simple";
+import Utils from "facade/js/util/Utils";
+import Render from "../util/Render";
+
 /**
  * @namespace M.impl.style.Line
  *
@@ -63,8 +65,8 @@ export default class Line extends Simple {
           textOverflow: getValue(label.textoverflow, feature) || '',
           minWidth: getValue(label.minwidth, feature) || 0,
           geometry: getValue(label.geometry, feature),
-          offsetX: M.impl.style.Simple.getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
-          offsetY: M.impl.style.Simple.getValue(options.label.offset ? options.label.offset[1] : undefined, feature),
+          offsetX: getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
+          offsetY: getValue(options.label.offset ? options.label.offset[1] : undefined, feature),
         };
         let textPathStyle = new Path(textPathConfig);
         if (!Utils.isNullOrEmpty(label.stroke)) {
@@ -85,7 +87,8 @@ export default class Line extends Simple {
           if (!Utils.isNullOrEmpty(label.smooth) && label.smooth === true && Utils.isFunction(feature.getGeometry)) {
             style.setGeometry(feature.getGeometry().cspline());
           }
-        } else {
+        }
+        else {
           style.setText(textPathStyle);
         }
       }
@@ -119,7 +122,7 @@ export default class Line extends Simple {
 
     let olLayer = layer.getImpl().getOL3Layer();
     if (!Utils.isNullOrEmpty(olLayer)) {
-      this.postComposeEvtKey_ = olLayer.on('postcompose', M.impl.renderutils.postRender, olLayer);
+      this.postComposeEvtKey_ = olLayer.on('postcompose', Render.postRender, olLayer);
     }
   }
 
@@ -191,10 +194,11 @@ export default class Line extends Simple {
     if (!Utils.isNullOrEmpty(stroke)) {
       if (!Utils.isNullOrEmpty(stroke.getWidth())) {
         width = stroke.getWidth();
-        if (stroke.getWidth() > this.DEFAULT_WIDTH_LINE) {
-          width = this.DEFAULT_WIDTH_LINE;
+        if (stroke.getWidth() > Line.DEFAULT_WIDTH_LINE) {
+          width = Line.DEFAULT_WIDTH_LINE;
         }
-      } else {
+      }
+      else {
         width = 1;
       }
       optionsStyle = {
@@ -217,6 +221,6 @@ export default class Line extends Simple {
   getCanvasSize() {
     return [25, 15];
   }
-
-  Line.prototype.DEFAULT_WIDTH_LINE = 3;
 }
+
+Line.DEFAULT_WIDTH_LINE = 3;

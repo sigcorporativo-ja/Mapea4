@@ -1,8 +1,8 @@
-import Simple from "./stylesimple";
-import Centroid from "./olstyle";
-import Utils from "../utils/utils";
-import Baseline from "facade/js/style/stylebaseline";
-import Align from "facade/js/stylealign";
+import Simple from "./Simple";
+import Centroid from "./Centroid";
+import Utils from "facade/js/util/Utils";
+import Baseline from "facade/js/style/Baseline";
+import Align from "facade/js/Align";
 
 /**
  * TODO
@@ -18,7 +18,7 @@ export default class Polygon extends Simple {
    * @api stable
    */
   constructor(options) {
-    super(this, options);
+    super(options);
     this.olStyleFn_ = this.updateFacadeOptions(options);
   }
 
@@ -105,7 +105,8 @@ export default class Polygon extends Simple {
             offset: Simple.getValue(options.fill.pattern.offset, feature),
             fill: fill
           }));
-        } else {
+        }
+        else {
           style.setFill(fill);
         }
       }
@@ -132,8 +133,8 @@ export default class Polygon extends Simple {
     }
     let stroke = applyStyle.getStroke();
     if (!Utils.isNullOrEmpty(stroke) && !Utils.isNullOrEmpty(stroke.getWidth())) {
-      if (stroke.getWidth() > this.DEFAULT_WIDTH_POLYGON) {
-        applyStyle.getStroke().setWidth(this.DEFAULT_WIDTH_POLYGON);
+      if (stroke.getWidth() > Polygon.DEFAULT_WIDTH_POLYGON) {
+        applyStyle.getStroke().setWidth(Polygon.DEFAULT_WIDTH_POLYGON);
       }
     }
 
@@ -174,5 +175,5 @@ export default class Polygon extends Simple {
     return [25, 15];
   }
 
-  Polygon.prototype.DEFAULT_WIDTH_POLYGON = 3;
 }
+Polygon.DEFAULT_WIDTH_POLYGON = 3;

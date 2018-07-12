@@ -1,6 +1,6 @@
-import Style from "./style";
-import Heatmap from "../layers/heatmap";
-import Utils from "../utils/utils";
+import Style from "./Style";
+import Heatmap from "../layer/Heatmap";
+import Utils from "facade/js/util/Utils";
 
 export default class HeatMap extends Style {
   /**

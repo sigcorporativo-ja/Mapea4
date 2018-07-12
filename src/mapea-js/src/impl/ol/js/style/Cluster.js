@@ -1,14 +1,15 @@
-import Style from "./style";
-import Utils from "../utils/utils";
-import EventsManager from "facade/js/event/eventsmanager";
-import AnimatedCluster from "../layers/animatedcluster";
-import SelectCluster from "../interactions/selectedclusterinteraction";
-import Centroid from "./olstyle";
-import ClusteredFeature from "facade/js/feature/clusteredfeature";
-import Vector from "facade/js/layers/vector";
-import Polygon from "facade/js/style/stylepolygon";
-import Feature from "../feature/feature";
-import Point from "facade/js/style/stylepoint";
+import Style from "./Style";
+import Utils from "facade/js/util/Utils";
+import EventsManager from "facade/js/event/Manager";
+import AnimatedCluster from "../layer/AnimatedCluster";
+import SelectCluster from "../interaction/SelectedCluster";
+import Centroid from "./Centroid";
+import ClusteredFeature from "facade/js/feature/Clustered";
+import LayerVector from "facade/js/layer/Vector";
+import Polygon from "facade/js/style/Polygon";
+import Feature from "../feature/Feature";
+import StylePoint from "facade/js/style/Point";
+import FacadeCluster from "facade/js/style/Cluster";
 
 /**
  * @namespace M.style.Cluster
@@ -106,7 +107,8 @@ export default Cluster extends Style {
     let features = layer.getFeatures();
     if (features.length > 0) {
       this.clusterize_(features);
-    } else {
+    }
+    else {
       this.layer_.on(EventsManager.LOAD, this.clusterize_, this);
     }
   }
@@ -170,7 +172,8 @@ export default Cluster extends Style {
     if (Utils.isNullOrEmpty(newRanges)) {
       this.options_.ranges = this.getDefaultRanges_();
       // this.options_.label.color = "#fff";
-    } else {
+    }
+    else {
       this.options_.ranges = newRanges;
     }
   }
@@ -223,7 +226,8 @@ export default Cluster extends Style {
     if (element) {
       element.style = newRange;
       return element;
-    } else {
+    }
+    else {
       return false;
     }
   }
@@ -244,7 +248,8 @@ export default Cluster extends Style {
     cluster.options_.animated = animated;
     if (animated === false) {
       this.clusterLayer_.set('animationDuration', undefined);
-    } else {
+    }
+    else {
       this.clusterLayer_.set('animationDuration', this.optionsVendor_.animationDuration);
     }
     return this;
@@ -298,7 +303,8 @@ export default Cluster extends Style {
       features.forEach(hoveredFeature => {
         if (hoveredFeature instanceof ClusteredFeature) {
           hoveredFeatures = hoveredFeatures.concat(hoveredFeature.getAttribute("features"));
-        } else {
+        }
+        else {
           hoveredFeatures.push(hoveredFeature);
         }
       });
@@ -308,7 +314,7 @@ export default Cluster extends Style {
         let convexOlFeature = new ol.Feature(new ol.geom.Polygon([convexHull]));
         let convexFeature = Feature.olFeature2Facade(convexOlFeature);
         if (Utils.isNullOrEmpty(this.convexHullLayer_)) {
-          this.convexHullLayer_ = new Vector({
+          this.convexHullLayer_ = new LayerVector({
             name: "cluster_cover",
             extract: false
           }, {
@@ -321,7 +327,8 @@ export default Cluster extends Style {
           this.convexHullLayer_.setStyle(new Polygon(this.optionsVendor_.convexHullStyle));
           this.convexHullLayer_.setZIndex(99990);
 
-        } else {
+        }
+        else {
           this.convexHullLayer_.removeFeatures(this.convexHullLayer_.getFeatures());
           this.convexHullLayer_.addFeatures(convexFeature);
         }
@@ -392,21 +399,24 @@ export default Cluster extends Style {
       let style = range.style.clone();
       if (selected) {
         style.set('fill.opacity', 0.33);
-      } else if (this.options_.displayAmount) {
+      }
+      else if (this.options_.displayAmount) {
         style.set('label', this.options_.label);
         let labelColor = style.get('label.color');
         if (Utils.isNullOrEmpty(labelColor)) {
           let fillColor = style.get('fill.color');
           if (!Utils.isNullOrEmpty(fillColor)) {
             labelColor = Utils.inverseColor(fillColor);
-          } else {
+          }
+          else {
             labelColor = '#000';
           }
           style.set('label.color', labelColor);
         }
       }
       olStyle = style.getImpl().olStyleFn_(feature, resolution);
-    } else if (numFeatures === 1) {
+    }
+    else if (numFeatures === 1) {
       let clusterOlFeatureStyle = clusterOlFeatures[0].getStyle();
       if (!clusterOlFeatureStyle) {
         clusterOlFeatureStyle = this.oldOLLayer_.getStyle();
@@ -433,15 +443,15 @@ export default Cluster extends Style {
     let ranges = [{
       min: 2,
       max: breakpoint,
-      style: new Point(M.style.Cluster.RANGE_1_DEFAULT)
+      style: new StylePoint(Cluster.RANGE_1_DEFAULT)
       }, {
       min: breakpoint,
       max: breakpoint * 2,
-      style: new Point(M.style.Cluster.RANGE_2_DEFAULT)
+      style: new StylePoint(Cluster.RANGE_2_DEFAULT)
       }, {
       min: breakpoint * 2,
       max: numFeatures + 1,
-      style: new Point(M.style.Cluster.RANGE_3_DEFAULT)
+      style: new StylePoint(Cluster.RANGE_3_DEFAULT)
     }];
     this.options_.ranges = ranges;
     return ranges;
@@ -480,7 +490,8 @@ export default Cluster extends Style {
       this.layer_.getImpl().getMap().getMapImpl().getView().un('change:resolution', this.clearConvexHull, this);
       this.layer_.redraw();
       clusterSource.getSource().un(ol.events.EventType.CHANGE, ol.source.Cluster.prototype.refresh_, clusterSource);
-    } else {
+    }
+    else {
       if (!Utils.isNullOrEmpty(this.layer_)) {
         this.layer_.un(EventsManager.LOAD, this.clusterize_, this);
       }
@@ -542,7 +553,8 @@ export default Cluster extends Style {
     if (Utils.isFunction(callback)) {
       if (callbackArguments == null) {
         callback();
-      } else {
+      }
+      else {
         callback(...callbackArguments);
       }
     }

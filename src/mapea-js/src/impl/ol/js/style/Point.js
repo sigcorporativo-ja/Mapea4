@@ -1,12 +1,11 @@
-import Simple from "./stylesimple";
-import Centroid from "./olstyle";
-import Utils from "../utils/utils";
-import PCircle from "../point/pointcircle";
-import PFontsSymbol from "../point/pointfontsymbol";
-import PIcon from "../point/pointicon";
-import Config from "../../../../configuration";
-import Baseline from "facade/js/style/stylebaseline";
-import Align from "facade/js/stylealign";
+import Simple from "./Simple";
+import Centroid from "./Centroid";
+import Utils from "facade/js/utils/Utils";
+import PointFontSymbol from "../point/FontSymbol";
+import PointIcon from "../point/Icon";
+import Config from "configuration";
+import Baseline from "facade/js/style/Baseline";
+import Align from "facade/js/Align";
 
 /**
  * @namespace Point
@@ -40,12 +39,13 @@ export default class Point extends Simple {
     let image = null;
     if (style.getImage && style.getImage() != null && style.getImage() instanceof ol.style.Image) {
       // see https://github.com/openlayers/openlayers/blob/master/src/ol/style/regularshape.js#L205
-      if (style.getImage() instanceof PFontsSymbol) {
+      if (style.getImage() instanceof PointFontsSymbol) {
         let imageCanvas = style.getImage().getImage();
         if (imageCanvas != null && imageCanvas) {
           image = imageCanvas.toDataURL();
         }
-      } else if (style.getImage() instanceof PIcon) {
+      }
+      else if (style.getImage() instanceof PointIcon) {
         let imageStyle = style.getImage();
         //let canvasSize = this.getCanvasSize();
         // canvasSize[0] / size[0]) * size[0]
@@ -61,11 +61,12 @@ export default class Point extends Simple {
           }
         }
       }
-    } else {
+    }
+    else {
       style = this.olStyleFn_()[0];
       if (style.getImage() != null && style.getImage().getStroke() != null) {
-        if (style.getImage().getStroke().getWidth() > this.DEFAULT_WIDTH_POINT) {
-          style.getImage().getStroke().setWidth(this.DEFAULT_WIDTH_POINT); // TODO @albertoibiza parameterize this value
+        if (style.getImage().getStroke().getWidth() > Point.DEFAULT_WIDTH_POINT) {
+          style.getImage().getStroke().setWidth(Point.DEFAULT_WIDTH_POINT); // TODO @albertoibiza parametrize this value
         }
         style.getImage().render_();
       }
@@ -152,7 +153,7 @@ export default class Point extends Simple {
         }
         style.setText(labelText);
       }
-      style.setImage(new PIcon({
+      style.setImage(new PointIcon({
         fill: fill,
         stroke: stroke,
         radius: Simple.getValue(options.radius, feature),
@@ -161,7 +162,7 @@ export default class Point extends Simple {
       }));
       if (!Utils.isNullOrEmpty(options.icon)) {
         if (!Utils.isNullOrEmpty(options.icon.src)) {
-          styleIcon.setImage(new PIcon({
+          styleIcon.setImage(new PointIcon({
             anchor: Simple.getValue(options.icon.anchor, feature),
             anchorXUnits: Simple.getValue(options.icon.anchorxunits, feature),
             anchorYUnits: Simple.getValue(options.icon.anchoryunits, feature),
@@ -177,7 +178,8 @@ export default class Point extends Simple {
             anchorOrigin: Simple.getValue(options.icon.anchororigin, feature),
             size: Simple.getValue(options.icon.size, feature),
           }));
-        } else if (!Utils.isNullOrEmpty(options.icon.form)) {
+        }
+        else if (!Utils.isNullOrEmpty(options.icon.form)) {
           styleIcon.setImage(new PointFontSymbol({
             form: Utils.isNullOrEmpty(Simple.getValue(options.icon.form, feature)) ? "" : Simple.getValue(options.icon.form, feature).toLowerCase(),
             gradient: Simple.getValue(options.icon.gradient, feature),
@@ -224,7 +226,8 @@ export default class Point extends Simple {
   drawGeometryToCanvas(vectorContext) {
     if (this.olStyleFn_()[1].getImage() instanceof ol.style.FontSymbol) {
       vectorContext.drawGeometry(new ol.geom.Point([10, 10]));
-    } else {
+    }
+    else {
       vectorContext.drawCircle(new ol.geom.Circle([this.getCanvasSize()[0] / 2, this.getCanvasSize()[1] / 2], this.getRadius_()));
     }
 
@@ -270,7 +273,8 @@ export default class Point extends Simple {
     let size;
     if (image instanceof ol.style.FontSymbol) {
       size = [90, 90];
-    } else {
+    }
+    else {
       let radius = this.getRadius_(image);
       size = [(radius * 2) + 4, (radius * 2) + 4];
     }
@@ -288,16 +292,16 @@ export default class Point extends Simple {
     let r;
     if (image instanceof ol.style.Icon) {
       r = 25;
-    } else {
+    }
+    else {
       if (image instanceof ol.style.FontSymbol) {
         r = image.getRadius();
-      } else {
+      }
+      else {
         r = this.olStyleFn_()[0].getImage().getRadius();
       }
     }
     return r;
   }
-
-  Point.prototype.DEFAULT_WIDTH_POINT = 3;
-
 }
+Point.DEFAULT_WIDTH_POINT = 3;
