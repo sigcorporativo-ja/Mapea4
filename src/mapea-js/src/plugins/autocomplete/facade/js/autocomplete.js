@@ -1,10 +1,4 @@
-import Utils from "facade/js/utils/utils";
-import Config from "../../../configuration";
-import Plugin from "facade/js/plugin";
-import Remote from "facade/js/utils/remote";
-import Template from "facade/js/utils/template";
-
-export default class Autocomplete extends Plugin {
+export default class Autocomplete extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -44,7 +38,7 @@ export default class Autocomplete extends Plugin {
      * @type {number}
      */
     this.locality_ = "";
-    if (!Utils.isNullOrEmpty(parameters.locality)) {
+    if (!M.utils.isNullOrEmpty(parameters.locality)) {
       this.locality_ = parameters.locality;
     }
 
@@ -54,7 +48,7 @@ export default class Autocomplete extends Plugin {
      * @private
      * @type {string}
      */
-    this.url_ = Config.SEARCHSTREET_URLCODINEAUTOCOMPLETE;
+    this.url_ = M.config.SEARCHSTREET_URLCODINEAUTOCOMPLETE;
 
     /**
      * Minimum number of characters to start autocomplete
@@ -62,7 +56,7 @@ export default class Autocomplete extends Plugin {
      * @private
      * @type {number}
      */
-    this.minLength_ = Config.AUTOCOMPLETE_MINLENGTH;
+    this.minLength_ = M.config.AUTOCOMPLETE_MINLENGTH;
     /**
      * Input searchstreet
      *
@@ -132,7 +126,7 @@ export default class Autocomplete extends Plugin {
           }
         }
 
-        if (!Utils.isNullOrEmpty(selectedResult)) {
+        if (!M.utils.isNullOrEmpty(selectedResult)) {
           this.value = selectedResult.innerHTML.trim();
           let divCont = document.getElementById("m-autcomplete");
           divCont.scrollTop = selectedResult.offsetTop;
@@ -146,7 +140,7 @@ export default class Autocomplete extends Plugin {
      * @private
      * @type {number}
      */
-    this.delayTime_ = Config.AUTOCOMPLETE_DELAYTIME;
+    this.delayTime_ = M.config.AUTOCOMPLETE_DELAYTIME;
 
     /**
      * Time out Key
@@ -162,7 +156,7 @@ export default class Autocomplete extends Plugin {
      * @private
      * @type {number}
      */
-    this.limit_ = Config.AUTOCOMPLETE_LIMIT;
+    this.limit_ = M.config.AUTOCOMPLETE_LIMIT;
 
     /**
      * Timestamp of the search to abort old requests
@@ -241,7 +235,7 @@ export default class Autocomplete extends Plugin {
   keyPress_(evt) {
     evt.preventDefault();
 
-    if (!Utils.isNullOrEmpty(this.timeoutKey_)) {
+    if (!M.utils.isNullOrEmpty(this.timeoutKey_)) {
       this.cancelSearch_(evt);
     }
 
@@ -270,7 +264,7 @@ export default class Autocomplete extends Plugin {
  */
 search_(query, evt) {
   let searchUrl;
-  searchUrl = Utils.addParameters(this.url_, {
+  searchUrl = M.utils.addParameters(this.url_, {
     input: query.trim(),
     limit: this.limit_,
     codine: this.locality_
@@ -279,7 +273,7 @@ search_(query, evt) {
   searchUrl = this.formatContent_(searchUrl, " ", "%20");
   this.searchTime_ = Date.now();
   ((searchTime) => {
-    Remote.get(searchUrl).then(response => {
+    M.Remote.get(searchUrl).then(response => {
       if (searchTime === this.searchTime_) {
         let results = JSON.parse(response.text);
         results = this.parseResultsForTemplate_(results);
@@ -291,7 +285,7 @@ search_(query, evt) {
         if (!Utils.isUndefined(results.docs)) {
           // If the result is indefinite, it will not continue autocompleting
           if (!Utils.isUndefined(results.docs[0])) {
-            Template.compile(
+            M.Template.compile(
               Autocomplete.RESULTAUTOCOMPLETE, {
                 "jsonp": true,
                 "vars": results
@@ -313,7 +307,7 @@ search_(query, evt) {
                 if (this.busqMunicipioClick_ === true) {
                   //this.target_.value = query.slice(0, -1);
                   this.resultsContainer_.innerHTML = "";
-                  if (!Utils.isUndefined(this.evt)) {
+                  if (!M.utils.isUndefined(this.evt)) {
                     controls.forEach(value => {
                       if (value.name_ === "searchstreetgeosearch") {
                         value.ctrlSearchstreet.searchClick_(this.evt);
@@ -430,7 +424,7 @@ parseResultsForTemplate_(results) {
   } else if (docs instanceof Array === false) {
     doscsTemp.push(docs);
     docs = doscsTemp;
-    if (!Utils.isUndefined(docs[0])) {
+    if (!M.utils.isUndefined(docs[0])) {
       for (var x = 0, ilen3 = docs.length; x < ilen3; x++) {
         docs[x] = this.formatContent_(docs[x], ",", " ");
       }
@@ -471,7 +465,7 @@ addEventSearchMunicipality_(result) {
   result.addEventListener("click", () {
 
     this.target_.value = result.innerHTML.trim();
-    if (!Utils.isNullOrEmpty(this.locality_)) {
+    if (!M.utils.isNullOrEmpty(this.locality_)) {
       let controls = this.map_.getControls();
       this.resultsContainer_.innerHTML = "";
       controls.forEach(control => {
@@ -539,7 +533,7 @@ formatContent_(str, find, replace) {
 cancelSearch_(evt) {
   clearTimeout(this.timeoutKey_);
   if (this.minLength_ <= this.target_.value.length && evt.keyCode !== 13 && evt.keyCode !== 27) {
-    if (!Utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector("#m-searchstreet-results>div"))) {
+    if (!M.utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector("#m-searchstreet-results>div"))) {
       this.resultsContainer_.classList.add("results-panel-content");
       this.resultsContainer_.classList.remove("results-panel");
     } else {
