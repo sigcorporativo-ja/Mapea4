@@ -1,4 +1,4 @@
-import Utils from './util/Utils';
+import Utils from '../util/Utils';
 
 export default class EventListener {
   /**

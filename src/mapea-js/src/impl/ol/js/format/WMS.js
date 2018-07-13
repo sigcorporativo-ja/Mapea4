@@ -193,28 +193,28 @@ export default class WMSCapabilities extends ol.format.WMSCapabilities {
       'extent': extent
     };
   }
-
-  ol.format.WMSCapabilities.LAYER_PARSERS_ = ol.xml.makeStructureNS(ol.format.WMSCapabilities.NAMESPACE_URIS_, {
-    'Name': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-    'Title': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-    'Abstract': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-    'KeywordList': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readKeywordList_),
-    'CRS': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
-    'SRS': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
-    'EX_GeographicBoundingBox': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readEXGeographicBoundingBox_),
-    'BoundingBox': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readBoundingBox_),
-    'LatLonBoundingBox': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLatLonBoundingBox_),
-    'Dimension': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readDimension_),
-    'Attribution': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readAttribution_),
-    'AuthorityURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readAuthorityURL_),
-    'Identifier': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
-    'MetadataURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readMetadataURL_),
-    'DataURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
-    'FeatureListURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
-    'Style': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readStyle_),
-    'MinScaleDenominator': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
-    'MaxScaleDenominator': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
-    'Layer': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLayer_),
-    'ScaleHint': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readScaleHint_)
-  });
 }
+
+ol.format.WMSCapabilities.LAYER_PARSERS_ = ol.xml.makeStructureNS(ol.format.WMSCapabilities.NAMESPACE_URIS_, {
+  'Name': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  'Title': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  'Abstract': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  'KeywordList': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readKeywordList_),
+  'CRS': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
+  'SRS': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
+  'EX_GeographicBoundingBox': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readEXGeographicBoundingBox_),
+  'BoundingBox': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readBoundingBox_),
+  'LatLonBoundingBox': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLatLonBoundingBox_),
+  'Dimension': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readDimension_),
+  'Attribution': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readAttribution_),
+  'AuthorityURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readAuthorityURL_),
+  'Identifier': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
+  'MetadataURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readMetadataURL_),
+  'DataURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
+  'FeatureListURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
+  'Style': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readStyle_),
+  'MinScaleDenominator': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
+  'MaxScaleDenominator': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
+  'Layer': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLayer_),
+  'ScaleHint': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readScaleHint_)
+});

@@ -1,7 +1,7 @@
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerBase from './Base';
-import WMSImpl from '../../../impl/ol/js/layer/WMS';
+import LayerBase from './Layer';
+import WMSImpl from 'impl/ol/js/layer/WMS';
 import * as parameter from '../parameter/parameter';
 import LayerType from './Type';
 import Config from 'configuration';

@@ -2,7 +2,6 @@
  * @namespace TextPath
  */
 export default class TextPath {
-
   /**
    * Canvas textpath render method. Draws text along path
    * @public
@@ -13,9 +12,9 @@ export default class TextPath {
    * @api stable
    */
   static render(text, path) {
-
     // canvas context
-    let ctx = this;
+    let newText = text;
+    const ctx = this;
 
     let di = 0;
     let dpos = 0;
@@ -23,35 +22,39 @@ export default class TextPath {
 
     // gets dist between two points
     const dist2D = (x1, y1, x2, y2) => {
-      let [dx, dy] = [x2 - x1, y2 - y1];
-      return Math.sqrt(dx * dx + dy * dy);
+      const [dx, dy] = [x2 - x1, y2 - y1];
+      return Math.sqrt((dx * dx) + (dy * dy));
     };
 
-    const getPoint = (path, dl) => {
+    const getPoint = (newPath, dl) => {
       if (!di || (dpos + di < dl)) {
         // we need to max the performance
-        for (; pos < path.length;) {
-          di = dist2D(path[pos - 2], path[pos - 1], path[pos], path[pos + 1]);
+        for (; pos < newPath.length;) {
+          di = dist2D(newPath[pos - 2], newPath[pos - 1], newPath[pos], newPath[pos + 1]);
           if (dpos + di > dl) {
             break;
           }
           pos += 2;
-          if (pos >= path.length) {
+          if (pos >= newPath.length) {
             break;
           }
           dpos += di;
         }
       }
 
-      let dt = dl - dpos;
+      const dt = dl - dpos;
 
-      if (pos >= path.length) {
-        pos = path.length - 2;
+      if (pos >= newPath.length) {
+        pos = newPath.length - 2;
       }
 
-      let x = !dt ? path[pos - 2] : (path[pos - 2] + (path[pos] - path[pos - 2]) * dt / di);
-      let y = !dt ? path[pos - 1] : (path[pos - 1] + (path[pos + 1] - path[pos - 1]) * dt / di);
-      let a = Math.atan2(path[pos + 1] - path[pos - 1], path[pos] - path[pos - 2]);
+      const x = !dt ? newPath[pos - 2] :
+        (newPath[pos - 2] + (((newPath[pos] - newPath[pos - 2]) * dt) / di));
+
+      const y = !dt ? newPath[pos - 1] :
+        (newPath[pos - 1] + (((newPath[pos + 1] - newPath[pos - 1]) * dt) / di));
+
+      const a = Math.atan2(newPath[pos + 1] - newPath[pos - 1], newPath[pos] - newPath[pos - 2]);
 
       return [x, y, a];
     };
@@ -67,26 +70,28 @@ export default class TextPath {
     if (d < ctx.minWidth) {
       return;
     }
-    let nbspace = text.split(' ').length - 1;
+    let nbspace = newText.split(' ').length - 1;
 
-    if (ctx.textOverflow !== 'visible' && (d < ctx.measureText(text).width + (text.length - 1 + nbspace) * letterPadding)) {
-      let overflow = (ctx.textOverflow === 'ellipsis') ? '\u2026' : ctx.textOverflow;
+    if (ctx.textOverflow !== 'visible' && (d < ctx.measureText(newText).width + ((newText.length - (1 + nbspace)) * letterPadding))) {
+      const overflow = (ctx.textOverflow === 'ellipsis') ? '\u2026' : ctx.textOverflow;
       do {
-        nbspace = text.split(' ').length - 1;
-        text = text.slice(0, text.length - 1);
-      } while (text && d < ctx.measureText(text + overflow).width + (text.length + overflow.length - 1 + nbspace) * letterPadding);
-      text += overflow;
+        nbspace = newText.split(' ').length - 1;
+        newText = newText.slice(0, newText.length - 1);
+      } while (newText && d < ctx.measureText(newText + overflow).width +
+        ((newText.length + (overflow.length - 1) + nbspace) * letterPadding));
+      newText += overflow;
     }
     switch (ctx.textJustify || ctx.textAlign) {
-      case true: //justify
+      case true: // justify
       case 'center':
       case 'end':
       case 'right':
         if (ctx.textJustify) {
           start = 0;
-          letterPadding = (d - ctx.measureText(text).width) / (text.length - 1 + nbspace);
-        } else {
-          start = d - ctx.measureText(text).width - (text.length + nbspace) * letterPadding;
+          letterPadding = (d - ctx.measureText(newText).width) / (text.length - (1 + nbspace));
+        }
+        else {
+          start = d - ctx.measureText(newText).width - ((newText.length + nbspace) * letterPadding);
           if (ctx.textAlign === 'center') {
             start /= 2;
           }
@@ -95,10 +100,10 @@ export default class TextPath {
       default:
         break;
     }
-    for (let t = 0; t < text.length; t++) {
-      let letter = text[t];
-      let wl = ctx.measureText(letter).width;
-      let p = getPoint(path, start + wl / 2);
+    for (let t = 0; t < newText.length; t += 1) {
+      const letter = newText[t];
+      const wl = ctx.measureText(letter).width;
+      const p = getPoint(path, start + (wl / 2));
       ctx.save();
       ctx.textAlign = 'center';
       ctx.translate(p[0], p[1]);
@@ -108,7 +113,7 @@ export default class TextPath {
       }
       ctx.fillText(letter, 0, 0);
       ctx.restore();
-      start += wl + letterPadding * (letter === ' ' ? 2 : 1);
+      start += wl + (letterPadding * (letter === ' ' ? 2 : 1));
     }
   }
 
@@ -123,20 +128,21 @@ export default class TextPath {
    * @api stable
    */
   static getPath_(c2p, coords, readable) {
-    let path1 = [];
-    coords.forEach(coord => {
-      path1.push(c2p[0] * coord[0] + c2p[1] * coord[1] + c2p[4]);
-      path1.push(c2p[2] * coord[0] + c2p[3] * coord[1] + c2p[5]);
+    const path1 = [];
+    coords.forEach((coord) => {
+      path1.push((c2p[0] * coord[0]) + (c2p[1] * coord[1]) + c2p[4]);
+      path1.push((c2p[2] * coord[0]) + (c2p[3] * coord[1]) + c2p[5]);
     });
     // Revert line ?
     if (readable && path1[0] > path1[path1.length - 2]) {
-      let path2 = [];
-      for (var h = path1.length - 2; h >= 0; h -= 2) {
+      const path2 = [];
+      for (let h = path1.length - 2; h >= 0; h -= 2) {
         path2.push(path1[h]);
         path2.push(path1[h + 1]);
       }
       return path2;
-    } else return path1;
+    }
+    return path1;
   }
 
   /**
@@ -148,21 +154,24 @@ export default class TextPath {
    * @api stable
    */
   static formatStyle(style) {
-    if (style == null) {
+    let newStyle = style;
+    if (newStyle == null) {
       return null;
     }
+
     let formattedStyle = null;
-    if (typeof style === 'undefined') {
-      style = [new ol.style.Style({
-        text: new ol.style.Text()
+    if (typeof newStyle === 'undefined') {
+      newStyle = [new ol.style.Style({
+        text: new ol.style.Text(),
       })];
     }
-    if (typeof (style) == 'function') {
-      formattedStyle = style;
-    } else {
+    if (typeof newStyle === 'function') {
+      formattedStyle = newStyle;
+    }
+    else {
       formattedStyle = () => {
-        return [style];
-      }
+        return [newStyle];
+      };
     }
     return formattedStyle;
   }
@@ -176,17 +185,29 @@ export default class TextPath {
    * @api stable
    */
   static draw(ctx, coord2Pixel, textStyle, coords) {
-    let path = this.getPath_(coord2Pixel, coords, textStyle.getRotateWithView());
+    const path = this.getPath_(coord2Pixel, coords, textStyle.getRotateWithView());
 
     ctx.font = textStyle.getFont();
     ctx.textBaseline = textStyle.getTextBaseline();
     ctx.textAlign = textStyle.getTextAlign();
-    ctx.lineWidth = textStyle.getStroke() ? (textStyle.getStroke().getWidth() || TextPath.DEFAULT.lineWidth) : TextPath.DEFAULT.lineWidth;
-    ctx.strokeStyle = textStyle.getStroke() ? (textStyle.getStroke().getColor() || TextPath.DEFAULT.lineColor) : TextPath.DEFAULT.lineColor;
-    ctx.fillStyle = textStyle.getFill() ? textStyle.getFill().getColor() || TextPath.DEFAULT.fillColor : TextPath.DEFAULT.fillColor;
+
+    ctx.lineWidth = textStyle.getStroke() ?
+      (textStyle.getStroke().getWidth() || TextPath.DEFAULT.lineWidth) :
+      TextPath.DEFAULT.lineWidth;
+
+    ctx.strokeStyle = textStyle.getStroke() ?
+      (textStyle.getStroke().getColor() || TextPath.DEFAULT.lineColor) :
+      TextPath.DEFAULT.lineColor;
+
+    ctx.fillStyle = textStyle.getFill() ?
+      textStyle.getFill().getColor() || TextPath.DEFAULT.fillColor :
+      TextPath.DEFAULT.fillColor;
     // New params
-    ctx.textJustify = textStyle.getTextAlign() == 'justify';
-    ctx.textOverflow = textStyle.getTextOverflow ? textStyle.getTextOverflow() : TextPath.DEFAULT.textOverflow;
+    ctx.textJustify = textStyle.getTextAlign() === 'justify';
+
+    ctx.textOverflow = textStyle.getTextOverflow ?
+      textStyle.getTextOverflow() :
+      TextPath.DEFAULT.textOverflow;
     ctx.minWidth = textStyle.getMinWidth ? textStyle.getMinWidth() : TextPath.DEFAULT.minWidth;
     // Draw textpath
     if (typeof ctx.textPath === 'function') {
@@ -209,5 +230,5 @@ TextPath.DEFAULT = {
   lineColor: '#fff',
   fillColor: '#000',
   textOverflow: '',
-  minWidth: 0
+  minWidth: 0,
 };

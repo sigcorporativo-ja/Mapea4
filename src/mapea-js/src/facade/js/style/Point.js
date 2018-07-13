@@ -1,6 +1,6 @@
 import Simple from "./Simple";
 import Utils from '../util/Utils';
-import StylePointImpl from '../../../impl/ol/js/style/Point';
+import StylePointImpl from 'impl/ol/js/style/Point';
 
 export default class Point extends Simple {
   /**

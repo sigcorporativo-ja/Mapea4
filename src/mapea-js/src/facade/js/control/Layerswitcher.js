@@ -1,13 +1,13 @@
-import ControlBase from './Base';
+import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import LayerBase from '../layer/Base';
+import LayerBase from '../layer/Layer';
 import LayerType from '../layer/Type';
 import Map from '../Map';
 import Vector from '../layer/Vector';
 import StylePoint from '../style/Point';
-import LayerSwitcherImpl from '../../../impl/ol/js/control/Layerswitcher';
+import LayerSwitcherImpl from 'impl/ol/js/control/Layerswitcher';
 import EvtManager from '../event/Manager';
 import layerswitcherTemplate from "templates/layerswitcher.html";
 
@@ -194,13 +194,13 @@ export default class LayerSwitcher extends ControlBase {
       }
     });
   }
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  LayerSwitcher.NAME = 'layerswitcher';
 }
+
+/**
+ * Template for this controls - button
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+LayerSwitcher.NAME = 'layerswitcher';

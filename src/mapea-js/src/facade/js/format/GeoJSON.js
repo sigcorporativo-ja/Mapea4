@@ -2,7 +2,7 @@ import Feature from '../feature/Feature';
 import Base from '../Base';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import GeoJSONImpl from '../../../impl/js/ol/format/GeoJSON';
+import GeoJSONImpl from 'impl/ol/js/format/GeoJSON';
 
 export default class GeoJSON extends Base {
   /**

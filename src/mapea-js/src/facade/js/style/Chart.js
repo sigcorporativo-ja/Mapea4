@@ -2,7 +2,7 @@ import StyleFeature from './Feature';
 import ChartVariable from '../chart/Variable';
 import * as ChartTypes from '../chart/types';
 import Utils from '../util/Utils';
-import ChartImpl from '../../../impl/js/style/stylechart';
+import ChartImpl from 'impl/js/style/stylechart';
 
 /**
  * @namespace Chart

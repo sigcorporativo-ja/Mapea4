@@ -1,7 +1,7 @@
 import StyleBase from './Base';
 import Util from '../util/Utils';
 import Exception from '../exception/exception';
-import HeatmapImpl from '../../../impl/ol/js/style/Heatmap';
+import HeatmapImpl from 'impl/ol/js/style/Heatmap';
 
 export default class Heatmap extends StyleBase {
   /**

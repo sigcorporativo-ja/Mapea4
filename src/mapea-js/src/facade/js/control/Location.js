@@ -1,8 +1,8 @@
-import ControlBase from './Base';
+import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import LocationImpl from '../../../impl/ol/js/control/Location';
+import LocationImpl from 'impl/ol/js/control/Location';
 import locationTemplate from "templates/location.html";
 
 export default class Location extends ControlBase {
@@ -76,13 +76,13 @@ export default class Location extends ControlBase {
   setTracking(tracking) {
     this.getImpl().tracking = tracking;
   }
-
-  /**
-   * Name to identify this control
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  Location.NAME = 'location';
 }
+
+/**
+ * Name to identify this control
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Location.NAME = 'location';

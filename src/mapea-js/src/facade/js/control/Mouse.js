@@ -1,8 +1,8 @@
-import ControlBase from './Base';
+import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import MouseImpl from '../../../impl/ol/js/control/Mouse';
+import MouseImpl from 'impl/ol/js/control/Mouse';
 import mouseTemplate from "templates/mouse.html";
 
 export default class Mouse extends ControlBase {
@@ -53,13 +53,13 @@ export default class Mouse extends ControlBase {
     let equals = (obj instanceof Mouse);
     return equals;
   }
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  Mouse.NAME = 'mouse';
 }
+
+/**
+ * Template for this controls - button
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Mouse.NAME = 'mouse';

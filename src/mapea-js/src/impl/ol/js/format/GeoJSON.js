@@ -1,5 +1,5 @@
 import Utils from "facade/js/util/Utils";
-import Feature from "facade/js/feature/feature";
+import Feature from "facade/js/feature/Feature";
 
 export default class GeoJSON extends ol.format.GeoJSON {
   /**
@@ -168,12 +168,11 @@ export default class GeoJSON extends ol.format.GeoJSON {
     }
     let srcProj = this.readProjectionFromObject(geojson);
     features = geojsonFeatures.map(geojsonFeature => {
-        let id = geojsonFeature.id;
-        let feature = new Feature(id, geojsonFeature);
-        feature.getImpl().getOLFeature().getGeometry().transform(srcProj, dstProj);
-        return feature;
-      };
-      return features;
-    }
+      let id = geojsonFeature.id;
+      let feature = new Feature(id, geojsonFeature);
+      feature.getImpl().getOLFeature().getGeometry().transform(srcProj, dstProj);
+      return feature;
+    });
+    return features;
   }
 }

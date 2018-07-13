@@ -1,8 +1,8 @@
-import ControlBase from './Base';
+import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import ScalelineImpl from '../../../impl/ol/js/control/ScaleLine';
+import ScalelineImpl from 'impl/ol/js/control/ScaleLine';
 import scalelineTemplate from "templates/scaleline.html";
 
 export default class ScaleLine extends ControlBase {
@@ -53,13 +53,13 @@ export default class ScaleLine extends ControlBase {
     let equals = (obj instanceof ScaleLine);
     return equals;
   }
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  ScaleLine.NAME = 'scaleline';
 }
+
+/**
+ * Template for this controls - button
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+ScaleLine.NAME = 'scaleline';

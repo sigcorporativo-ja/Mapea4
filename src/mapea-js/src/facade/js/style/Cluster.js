@@ -1,6 +1,6 @@
 import Composite from './Composite';
 import Utils from '../util/Utils';
-import ClusterImpl from '../../../impl/js/ol/style/Cluster';
+import ClusterImpl from 'impl/ol/js/style/Cluster';
 
 /**
  * @namespace Cluster

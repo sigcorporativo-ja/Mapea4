@@ -2,8 +2,8 @@ import Object from "facade/js/Object";
 import LayerType from "facade/js/layer/Type";
 import LayerBase from "facade/js/layer/Layer";
 import Utils from "facade/js/util/Utils";
-import View from "../View";
-import EnvolvedExtent from "../util/EnvolvedExtent";
+import View from "./View";
+import EnvolvedExtent from "./util/EnvolvedExtent";
 import EventsManager from "facade/js/event/Manager";
 import FacadeWMS from "facade/js/layer/WMS";
 import Control from "facade/js/control/Control";
@@ -216,7 +216,7 @@ export default class Map extends Object {
     let unknowLayers = layers.filter(layer => {
       return !LayerType.know(layer.type);
     });
-    let knowLayers = layers.filter(layer {
+    let knowLayers = layers.filter(layer => {
       return LayerType.know(layer.type);
     });
 
@@ -1796,7 +1796,7 @@ export default class Map extends Object {
    * @api stable
    * @returns {Map} the instance
    */
-  refresh = function() {
+  refresh() {
     this.map_.updateSize();
     return this;
   }

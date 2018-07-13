@@ -164,7 +164,7 @@ export default class WFS {
       'version': this.version_,
       'request': 'GetFeature',
       'typename': this.typeName_,
-      0 'outputFormat': this.getFeatureOutputFormat_,
+      'outputFormat': this.getFeatureOutputFormat_,
       'srsname': projection.getCode()
     };
     if (!Utils.isNullOrEmpty(this.ids_)) {
@@ -174,7 +174,8 @@ export default class WFS {
     }
     if (!Utils.isNullOrEmpty(this.cql_)) {
       getFeatureParams['CQL_FILTER'] = this.cql_;
-    } else if (!Utils.isNullOrEmpty(extent)) {
+    }
+    else if (!Utils.isNullOrEmpty(extent)) {
       getFeatureParams['bbox'] = extent.join(',') + ',' + projection.getCode();
     }
 

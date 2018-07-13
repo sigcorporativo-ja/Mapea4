@@ -1,7 +1,7 @@
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerBase from './Base';
-import VectorImpl from '../../../impl/ol/js/layer/Vector';
+import LayerBase from './Layer';
+import VectorImpl from 'impl/ol/js/layer/Vector';
 import LayerType from './Type';
 import * as dialog from "../dialog";
 import FilterBase from "../filter/Base";
@@ -9,7 +9,7 @@ import StyleCluster from '../style/Cluster';
 import LayerWFS from "./WFS";
 import GeomGeoJSON from '../geom/GeoJSON';
 import LayerGeoJSON from './GeoJSON';
-import StyleBase from '../style/Base';
+import StyleBase from '../style/Style';
 import EvtManager from '../event/Manager';
 
 export default class Vector extends LayerBase {

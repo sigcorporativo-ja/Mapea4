@@ -1,8 +1,8 @@
-import ControlBase from './Base';
+import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import OverviewMapImpl from '../../../impl/ol/js/control/OverviewMap';
+import OverviewMapImpl from 'impl/ol/js/control/OverviewMap';
 import overviewmapTemplate from "templates/overviewmap.html";
 
 export default class OverviewMap extends ControlBase {
@@ -52,13 +52,13 @@ export default class OverviewMap extends ControlBase {
     let equals = (obj instanceof OverviewMap);
     return equals;
   }
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  OverviewMap.NAME = 'overviewmap';
 }
+
+/**
+ * Template for this controls - button
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+OverviewMap.NAME = 'overviewmap';

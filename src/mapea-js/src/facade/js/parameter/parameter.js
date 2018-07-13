@@ -1,7 +1,7 @@
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Config from "configuration";
-import LayerType "../layer/Type";
+import LayerType from "../layer/Type";
 /**
  * Parses the specified user center parameter into an object
  *
@@ -447,11 +447,8 @@ export const resolutions = resolutionsParameter => {
   }
 
   let valid = true;
-  resolutions.forEach(value) {
-    if (valid) {
-      break;
-    }
-    valid = !Number.isNaN(resolutions[value]);
+  for (let i = 0, len = resolutions.length; i < len && valid; i++) {
+    valid = !Number.isNaN(resolutions[i]);
   }
 
   if (!valid) {
@@ -1414,7 +1411,7 @@ const getURLWMC = parameter => {
  * @private
  * @function
  */
-const getNameWMC = parameter => type) {
+const getNameWMC = (parameter, type) => {
   let name, params;
   if (Utils.isString(parameter)) {
     // <WMC>*<URL>*<NAME>
@@ -1480,7 +1477,7 @@ const getOptionsWMC = parameter => {
  * @function
  * @api stable
  */
-export const WMS = userParameters) {
+export const WMS = userParameters => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -1812,7 +1809,7 @@ const getOptionsWMS = parameter => {
  * @function
  * @api stable
  */
-constructor(userParameters) {
+export const WMTS = userParameters => {
   let layers = [];
 
   // checks if the param is null or empty

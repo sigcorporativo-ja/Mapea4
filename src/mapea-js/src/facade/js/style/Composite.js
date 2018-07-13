@@ -1,4 +1,4 @@
-import StyleBase from './Base';
+import StyleBase from './Style';
 import Utils from '../util/Utils';
 import StyleCluster from './Cluster';
 import StyleProportional from './Proportional';

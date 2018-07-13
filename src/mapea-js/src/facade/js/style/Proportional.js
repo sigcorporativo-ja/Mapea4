@@ -304,7 +304,7 @@ export default class Proportional extends StyleComposite {
           let styleMax = featureStyle.clone();
           let styleMin = featureStyle.clone();
           let maxRadius = this.getMaxRadius();
-          let minRadius = this.getM inRadius();
+          let minRadius = this.getMinRadius();
           styleMax.set(sizeAttribute, maxRadius);
           styleMin.set(sizeAttribute, minRadius);
 

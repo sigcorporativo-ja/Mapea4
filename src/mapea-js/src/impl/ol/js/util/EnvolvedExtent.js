@@ -4,21 +4,6 @@ import Utils from "facade/js/util/Utils";
  * @namespace M.impl.envolvedExtent
  */
 export default class EnvolvedExtent {
-
-  /**
-   * The map instance
-   * @private
-   * @type {M.impl.Map}
-   */
-  EnvolvedExtent.calculating = false;
-
-  /**
-   * Extent from wmc
-   * @private
-   * @type {ol.Extent}
-   */
-  EnvolvedExtent.extentwmc_ = null;
-
   /**
    * This function calculates the envolved extent
    * of the whole map.
@@ -51,7 +36,8 @@ export default class EnvolvedExtent {
       });
       if (baseLayers.length > 0) {
         wmsLayers.push(baseLayers[0]);
-      } else {
+      }
+      else {
         // if no base layers were specified then calculates the
         // envolved max extent for all WMS layers
         wmsLayers = map.getWMS();
@@ -61,19 +47,23 @@ export default class EnvolvedExtent {
           EnvolvedExtent.extentwmc_ = extent;
           success(extent);
         });
-      } else if (wmsLayers.length > 0) {
+      }
+      else if (wmsLayers.length > 0) {
         EnvolvedExtent.calculateFromWMS(wmsLayers).then(extent => {
           if (Utils.isNullOrEmpty(EnvolvedExtent.extentwmc_)) {
             success(extent);
-          } else {
+          }
+          else {
             success(EnvolvedExtent.extentwmc_);
           }
         });
-      } else {
+      }
+      else {
         EnvolvedExtent.calculateFromProjection(map).then(extent => {
           if (Utils.isNullOrEmpty(EnvolvedExtent.extentwmc_)) {
             success(extent);
-          } else {
+          }
+          else {
             success(EnvolvedExtent.extentwmc_);
           }
         });
@@ -144,11 +134,13 @@ export default class EnvolvedExtent {
           let extent = wmsLayer.getImpl().getExtent();
           if (extent instanceof Promise) {
             extent.then(updateExtent);
-          } else {
+          }
+          else {
             updateExtent(extent);
           }
         }
-      } else {
+      }
+      else {
         success(envolvedExtent);
       }
     });
@@ -169,7 +161,8 @@ export default class EnvolvedExtent {
       extent[1] = Math.min(extent[1], newExtent[1]);
       extent[2] = Math.max(extent[2], newExtent[2]);
       extent[3] = Math.max(extent[3], newExtent[3]);
-    } else if (Utils.isObject(newExtent)) {
+    }
+    else if (Utils.isObject(newExtent)) {
       extent[0] = Math.min(extent[0], newExtent.x.min);
       extent[1] = Math.min(extent[1], newExtent.y.min);
       extent[2] = Math.max(extent[2], newExtent.x.max);
@@ -177,3 +170,18 @@ export default class EnvolvedExtent {
     }
   }
 }
+
+
+/**
+ * The map instance
+ * @private
+ * @type {M.impl.Map}
+ */
+EnvolvedExtent.calculating = false;
+
+/**
+ * Extent from wmc
+ * @private
+ * @type {ol.Extent}
+ */
+EnvolvedExtent.extentwmc_ = null;

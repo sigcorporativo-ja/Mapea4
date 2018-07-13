@@ -1,8 +1,8 @@
-import ControlBase from './Base';
+import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import NavtoolbarImpl from '../../../impl/ol/js/control/Navtoolbar';
+import NavtoolbarImpl from 'impl/ol/js/control/Navtoolbar';
 import navtoolbarTemplate from "templates/navtoolbar.html";
 
 export default class Navtoolbar extends ControlBase {
@@ -52,13 +52,13 @@ export default class Navtoolbar extends ControlBase {
     let equals = (obj instanceof Navtoolbar);
     return equals;
   }
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  Navtoolbar.NAME = 'navtoolbar';
 }
+
+/**
+ * Template for this controls - button
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Navtoolbar.NAME = 'navtoolbar';

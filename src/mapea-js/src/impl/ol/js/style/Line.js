@@ -118,7 +118,7 @@ export default class Line extends Simple {
    * @api stable
    */
   applyToLayer(layer) {
-    super('applyToLayer', layer);
+    super.applyToLayer(layer);
 
     let olLayer = layer.getImpl().getOL3Layer();
     if (!Utils.isNullOrEmpty(olLayer)) {

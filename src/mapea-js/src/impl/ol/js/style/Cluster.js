@@ -15,7 +15,7 @@ import FacadeCluster from "facade/js/style/Cluster";
  * @namespace M.style.Cluster
  */
 
-export default Cluster extends Style {
+export default class Cluster extends Style {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Cluster

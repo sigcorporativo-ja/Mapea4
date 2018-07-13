@@ -1,8 +1,8 @@
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerBase from './Base';
+import LayerBase from './Layer';
 import LayerType from './Type';
-import WMCImpl from '../../../impl/ol/js/layer/WMC';
+import WMCImpl from 'impl/ol/js/layer/WMC';
 import * as parameter from '../parameter/parameter';
 import Config from 'configuration';
 import EvtManager from '../event/Manager';

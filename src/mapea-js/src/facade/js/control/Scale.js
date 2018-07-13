@@ -1,8 +1,8 @@
-import ControlBase from './Base';
+import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import ScaleImpl from '../../../impl/ol/js/control/Scale';
+import ScaleImpl from 'impl/ol/js/control/Scale';
 import scaleTemplate from "templates/scale.html"
 
 export default class Scale extends ControlBase {
@@ -53,13 +53,13 @@ export default class Scale extends ControlBase {
     let equals = (obj instanceof Scale);
     return equals;
   }
-
-  /**
-   * Template for this controls - button
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  Scale.NAME = 'scale';
 }
+
+/**
+ * Template for this controls - button
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Scale.NAME = 'scale';

@@ -1,7 +1,7 @@
-import LayerBase from './Base';
+import LayerBase from './Layer';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import MapboxImpl from '../../../impl/ol/js/layer/Mapbox';
+import MapboxImpl from 'impl/ol/js/layer/Mapbox';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 import Config from 'configuration';
@@ -99,7 +99,7 @@ export default class Mapbox extends LayerBase {
   }
 
   /**
-   * 'accessToken' 
+   * 'accessToken'
    */
   get accessToken() {
     return this.getImpl().accessToken;

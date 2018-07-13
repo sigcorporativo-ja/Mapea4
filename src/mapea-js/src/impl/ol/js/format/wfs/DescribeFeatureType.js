@@ -1,5 +1,5 @@
 import Utils from "facade/js/util/Utils";
-import DescribeFeatureTypeXML from "./describefeaturetypexml";
+import DescribeFeatureTypeXML from "./DescribeFeatureTypeXML";
 
 export default class DescribeFeatureType {
   /**

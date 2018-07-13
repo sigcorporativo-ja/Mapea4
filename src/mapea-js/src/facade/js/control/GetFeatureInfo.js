@@ -1,8 +1,8 @@
-import ControlBase from './Base';
+import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import GetFeatureInfoImpl from '../../../impl/ol/js/control/GetFeatureInfo';
+import GetFeatureInfoImpl from 'impl/ol/js/control/GetFeatureInfo';
 import getfeatureinfoTemplate from "templates/getfeatureinfo.html";
 export default class GetFeatureInfo extends ControlBase {
   /**
@@ -73,21 +73,22 @@ export default class GetFeatureInfo extends ControlBase {
     return equals;
 
   }
-  /**
-   * Name to identify this control
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  GetFeatureInfo.NAME = 'getfeatureinfo';
-
-  /**
-   * Title for the popup
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  GetFeatureInfo.POPUP_TITLE = 'Información';
 }
+
+/**
+ * Name to identify this control
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+GetFeatureInfo.NAME = 'getfeatureinfo';
+
+/**
+ * Title for the popup
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+GetFeatureInfo.POPUP_TITLE = 'Información';

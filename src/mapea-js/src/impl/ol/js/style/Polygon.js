@@ -2,7 +2,7 @@ import Simple from "./Simple";
 import Centroid from "./Centroid";
 import Utils from "facade/js/util/Utils";
 import Baseline from "facade/js/style/Baseline";
-import Align from "facade/js/Align";
+import Align from "facade/js/style/Align";
 
 /**
  * TODO

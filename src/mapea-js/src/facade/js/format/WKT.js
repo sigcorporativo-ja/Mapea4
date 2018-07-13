@@ -1,7 +1,7 @@
 import Base from '../Base';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import WKTImpl from '../../../impl/ol/js/format/WKT';
+import WKTImpl from 'impl/ol/js/format/WKT';
 
 export default class WKT extends Base {
   /**

@@ -2,7 +2,7 @@ import Base from "../Base";
 import Utils from '../util/Utils';
 import GeoJSON from "../format/GeoJSON";
 import * as dialog from "../dialog";
-import FeatureImpl from '../../../impl/ol/js/feature/Feature';
+import FeatureImpl from 'impl/ol/js/feature/Feature';
 import StyleFeature from "../style/Feature";
 import StylePoint from "../style/Point";
 import EvtManager from "../event/Manager";
@@ -127,7 +127,8 @@ export default class Feature extends Base {
   setAttributes(attributes) {
     if (typeof attributes === "object") {
       this.getImpl().setAttributes(attributes);
-    } else {
+    }
+    else {
       dialog.info("No se han especificado correctamente los atributos.");
     }
   }
@@ -182,7 +183,8 @@ export default class Feature extends Base {
     if (!Utils.isNullOrEmpty(style) && style instanceof StyleFeature) {
       this.style_ = style;
       this.style_.applyToFeature(this);
-    } else if (Utils.isNullOrEmpty(style)) {
+    }
+    else if (Utils.isNullOrEmpty(style)) {
       this.style_ = null;
       this.getImpl().clearStyle();
     }
@@ -245,8 +247,8 @@ export default class Feature extends Base {
         color: '#67af13',
         opacity: 0.2
       }
-      let centroid = this.getImpl().getCentroid();
     });
+    let centroid = this.getImpl().getCentroid();
     if (!Utils.isNullOrEmpty(centroid)) {
       centroid.id(id + "_centroid");
       centroid.attributes(attributes);

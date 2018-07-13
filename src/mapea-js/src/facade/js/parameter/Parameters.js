@@ -151,8 +151,7 @@ const parseContainer = userParameters => {
       container = document.getElementById(userParameters.id);
     }
     else if (!Utils.isNullOrEmpty(userParameters.container)) {
-      container =
-        const parseContainer = userParameters.container => ;
+      container = parseContainer(userParameters.container);
     }
     else {
       Exception('No ha especificado ningún parámetro contenedor');

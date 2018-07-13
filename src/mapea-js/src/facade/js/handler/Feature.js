@@ -1,8 +1,8 @@
-import Utils from './util/Utils';
-import Exception from './exception/exception';
-import Base from './Base';
-import HandlerImpl from '../../../impl/ol/js/handlers/featureshandler';
-import Feature from '../feature/Feature';
+import Utils from '../util/Utils';
+import Exception from '../exception/exception';
+import Base from '../Base';
+import HandlerImpl from 'impl/ol/js/handler/Feature';
+import FacadeFeature from '../feature/Feature';
 import EvtManaManager from "../event/Manager";
 
 export default class Feature extends Base {
@@ -96,7 +96,8 @@ export default class Feature extends Base {
         // no features selected then unselect prev selected features
         if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
           this.unselectFeatures(prevFeatures, layer, evt);
-        } else if (clickedFeatures.length > 0) {
+        }
+        else if (clickedFeatures.length > 0) {
           let newFeatures = clickedFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
           let diffFeatures = prevFeatures.filter(f => !clickedFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
@@ -128,8 +129,9 @@ export default class Feature extends Base {
         // no features selected then unselect prev selected features
         if (hoveredFeatures.length === 0 && prevFeatures.length > 0) {
           this.leaveFeatures_(prevFeatures, layer, evt);
-        } else if (hoveredFeatures.length > 0) {
-          let newFeatures = hoveredFeatures.filter(f => (f instanceof Feature) && !prevFeatures.some(pf => pf.equals(f)));
+        }
+        else if (hoveredFeatures.length > 0) {
+          let newFeatures = hoveredFeatures.filter(f => (f instanceof FacadeFeature) && !prevFeatures.some(pf => pf.equals(f)));
           let diffFeatures = prevFeatures.filter(f => !hoveredFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
           if (diffFeatures.length > 0) {

@@ -1,6 +1,6 @@
 import Simple from './Simple';
 import Utils from '../util/Utils';
-import StyleLineImpl from '../../../impl/ol/js/style/styleline';
+import StyleLineImpl from 'impl/ol/js/style/Line';
 
 /**
  * @namespace Line

@@ -1,9 +1,9 @@
 import Utils from "facade/js/util/Utils";
 import ServiceWFS from "../service/WFS";
 import FormatGeoJSON from "facade/js/format/GeoJSON";
-import FormatImplGeoJSON from "../js/format/GeoJSON";
+import FormatImplGeoJSON from "../format/GeoJSON";
 import FormatGML from "../format/GML";
-import LoaderWFS from "../format/WFS";
+import LoaderWFS from "../loader/WFS";
 import EventsManager from "facade/js/event/Manager";
 import StyleCluster from "facade/js/style/Cluster";
 

@@ -2,7 +2,7 @@ import WKT from '../geom/WKT';
 import StylePoint from '../style/Point';
 import StyleLine from '../style/Line';
 import StylePolygon from '../style/Polygon';
-import M from "../mapea";
+import M from "../Mapea";
 
 /**
  * @namespace Utils

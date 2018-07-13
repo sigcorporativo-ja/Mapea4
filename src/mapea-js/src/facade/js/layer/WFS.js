@@ -1,8 +1,8 @@
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerBase from './Base';
-import Vector from '../Vector ';
-import WFSImpl from '../../../impl/ol/js/layer/WFS';
+import LayerBase from './Layer';
+import Vector from './Vector';
+import WFSImpl from 'impl/ol/js/layer/WFS';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 import Geom from '../geom/Geom';
@@ -118,7 +118,7 @@ export default class WFS extends Vector {
 
   set geometry(newGeometry) {
     if (!Utils.isNullOrEmpty(newGeometry)) {
-      let1 parsedGeom = Geom.parse(newGeometry);
+      let parsedGeom = Geom.parse(newGeometry);
       if (Utils.isNullOrEmpty(parsedGeom)) {
         Exception('El tipo de capa WFS <b>' + newGeometry + '</b> no se reconoce. Los tipos disponibles son: POINT, LINE, POLYGON, MPOINT, MLINE, MPOLYGON');
       }

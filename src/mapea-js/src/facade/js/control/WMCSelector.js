@@ -1,8 +1,8 @@
-import ControlBase from './Base';
+import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import WMCSelectorImpl from '../../../impl/ol/js/control/WMCSelector';
+import WMCSelectorImpl from 'impl/ol/js/control/WMCSelector';
 import wmcselectorTemplate from "templates/wmcselector.html";
 
 export default class WMCSelector extends ControlBase {
@@ -26,8 +26,6 @@ export default class WMCSelector extends ControlBase {
     if (Utils.isUndefined(WMCSelectorImpl)) {
       Exception('La implementación usada no puede crear controles WMCSelector');
     }
-
-
   }
 
   /**
@@ -61,13 +59,13 @@ export default class WMCSelector extends ControlBase {
     }
     return equals;
   }
-
-  /**
-   * Name for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  WMCSelector.NAME = 'wmcselector';
 }
+
+/**
+ * Name for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+WMCSelector.NAME = 'wmcselector';

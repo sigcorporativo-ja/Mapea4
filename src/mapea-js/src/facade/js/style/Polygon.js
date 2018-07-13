@@ -1,5 +1,5 @@
 import Simple from "./Simple";
-import PolygonImpl from '../../../impl/ol/js/style/Polygon';
+import PolygonImpl from 'impl/ol/js/style/Polygon';
 
 /**
  * @namespace M.style.Polygon

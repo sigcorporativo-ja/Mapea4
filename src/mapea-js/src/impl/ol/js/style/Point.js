@@ -1,11 +1,11 @@
 import Simple from "./Simple";
 import Centroid from "./Centroid";
-import Utils from "facade/js/utils/Utils";
+import Utils from "facade/js/util/Utils";
 import PointFontSymbol from "../point/FontSymbol";
 import PointIcon from "../point/Icon";
 import Config from "configuration";
 import Baseline from "facade/js/style/Baseline";
-import Align from "facade/js/Align";
+import Align from "facade/js/style/Align";
 
 /**
  * @namespace Point

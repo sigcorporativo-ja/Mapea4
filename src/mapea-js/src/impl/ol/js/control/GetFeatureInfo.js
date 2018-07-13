@@ -7,16 +7,6 @@ import getfeatureinfoPopupTemplate from "templates/getfeatureinfo_popup.html";
  * @namespace M.impl.control
  */
 export default class GetFeatureInfo extends Control {
-
-  let regExs = {
-    gsResponse: /^results[\w\s\S]*\'http\:/i,
-    msNewFeature: /feature(\s*)(\w+)(\s*)\:/i,
-    gsNewFeature: /\#newfeature\#/,
-    gsGeometry: /geom$/i,
-    msGeometry: /boundedby$/i,
-    msUnsupportedFormat: /error(.*)unsupported(.*)info\_format/i
-  };
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a GetFeatureInfo
@@ -255,7 +245,7 @@ export default class GetFeatureInfo extends Control {
         });
         break;
       case "text/plain": // exp reg
-        if (regExs.gsResponse.test(info)) {
+        if (GetFeatureInfo.regExs.gsResponse.test(info)) {
           formatedInfo = this.txtToHtml_Geoserver_(info, layerName);
         }
         else {
@@ -278,7 +268,7 @@ export default class GetFeatureInfo extends Control {
   unsupportedFormat_(info, formato) {
     let unsupported = false;
     if (formato === "text/html") {
-      unsupported = regExs.msUnsupportedFormat.test(info);
+      unsupported = GetFeatureInfo.regExs.msUnsupportedFormat.test(info);
     }
     return unsupported;
   }
@@ -321,7 +311,7 @@ export default class GetFeatureInfo extends Control {
           }
         }
 
-        if (regExs.gsGeometry.test(attr) === false) {
+        if (GetFeatureInfo.regExs.gsGeometry.test(attr) === false) {
           html += '<tr><td class="key"><b>';
           html += Utils.beautifyAttribute(attr);
           html += '</b></td><td class="value">';
@@ -329,7 +319,7 @@ export default class GetFeatureInfo extends Control {
           html += "</td></tr>";
         }
       }
-      else if (regExs.gsNewFeature.test(attrValueString)) {
+      else if (GetFeatureInfo.regExs.gsNewFeature.test(attrValueString)) {
         // set new header
         html += "<tr><td class=\"header\" colspan=\"3\">" + Utils.beautifyAttribute(layerName) + "</td></tr>";
       }
@@ -386,8 +376,8 @@ export default class GetFeatureInfo extends Control {
       }
 
       if (attr.length > 0) {
-        if (regExs.msNewFeature.test(attr)) {
-          if ((nextAttrValueString.length > 0) && !regExs.msNewFeature.test(nextAttrValueString)) {
+        if (GetFeatureInfo.regExs.msNewFeature.test(attr)) {
+          if ((nextAttrValueString.length > 0) && !GetFeatureInfo.regExs.msNewFeature.test(nextAttrValueString)) {
             // set new header
             html += "<tr><td class=\"header\" colspan=\"3\">" + Utils.beautifyAttribute(layerName) + "</td><td></td></tr>";
           }
@@ -500,3 +490,12 @@ export default class GetFeatureInfo extends Control {
  * @api stable
  */
 GetFeatureInfo.LOADING_MESSAGE_ = 'Obteniendo información...';
+
+GetFeatureInfo.regExs = {
+  gsResponse: /^results[\w\s\S]*\'http\:/i,
+  msNewFeature: /feature(\s*)(\w+)(\s*)\:/i,
+  gsNewFeature: /\#newfeature\#/,
+  gsGeometry: /geom$/i,
+  msGeometry: /boundedby$/i,
+  msUnsupportedFormat: /error(.*)unsupported(.*)info\_format/i
+};

@@ -30,7 +30,7 @@ export default class ImageWMS extends ol.source.ImageWMS {
    */
   changed() {
     // super changed
-    super(this, 'changed');
+    super.changed();
   }
 
   /**
