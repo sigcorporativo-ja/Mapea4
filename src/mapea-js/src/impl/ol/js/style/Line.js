@@ -2,7 +2,7 @@ import Centroid from "./Centroid";
 import Path from "./Path";
 import Simple from "./Simple";
 import Utils from "facade/js/util/Utils";
-import Render from "../util/Render";
+import Render from "../util/render";
 
 /**
  * @namespace M.impl.style.Line

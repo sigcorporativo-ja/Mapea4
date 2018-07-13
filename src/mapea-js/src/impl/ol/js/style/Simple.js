@@ -1,6 +1,6 @@
-import Style from "./Style";
-import Utils from "facade/js/util/Utils";
-import Feature from "../feature/Feature";
+import Utils from 'facade/js/util/Utils';
+import Style from './Style';
+import Feature from '../feature/Feature';
 
 /**
  * @namespace M.impl.style.Simple
@@ -12,17 +12,9 @@ export default class Simple extends Style {
    * @api stable
    */
   constructor(options = {}) {
+    super(options);
     this.updateFacadeOptions(options);
   }
-
-  /**
-   * This function apply style options facade to impl
-   * @private
-   * @function
-   * @param {Object} options
-   * @api stable
-   */
-  updateFacadeOptions(options = {}) {}
 
   /**
    * This function apply style to layer
@@ -33,7 +25,7 @@ export default class Simple extends Style {
    */
   applyToLayer(layer) {
     // we will apply the style on the ol3 layer
-    let olLayer = layer.getImpl().getOL3Layer();
+    const olLayer = layer.getImpl().getOL3Layer();
     if (!Utils.isNullOrEmpty(olLayer)) {
       olLayer.setStyle(this.olStyleFn_);
       // layer.getFeatures().forEach(this.applyToFeature, this);
@@ -61,17 +53,17 @@ export default class Simple extends Style {
    * @param {M.Feature}  feature - Feature
    * @api stable
    */
-  getValue(attr, olFeature) {
-    let templateRegexp = /^\{\{([^\}]+)\}\}$/;
+  static getValue(attr, olFeature) {
+    const templateRegexp = /^\{\{([^}]+)\}\}$/;
     let attrFeature = attr;
     if (templateRegexp.test(attr) || Utils.isFunction(attr)) {
       if (!(olFeature instanceof ol.Feature)) {
         attrFeature = undefined;
       }
       else {
-        let feature = Feature.olFeature2Facade(olFeature, false);
+        const feature = Feature.olFeature2Facade(olFeature, false);
         if (templateRegexp.test(attr)) {
-          let keyFeature = attr.replace(templateRegexp, '$1');
+          const keyFeature = attr.replace(templateRegexp, '$1');
           attrFeature = feature.getAttribute(keyFeature);
         }
         else if (Utils.isFunction(attr)) {

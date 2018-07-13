@@ -1,7 +1,3 @@
-/**
- * @namespace M.impl.Style
- */
-
 export default class Style {
   /**
    * Main constructor of the class.
@@ -9,7 +5,6 @@ export default class Style {
    * @api stable
    */
   constructor(options = {}) {
-
     /**
      * User options for this style
      * @private
@@ -34,7 +29,9 @@ export default class Style {
    * @param {Object} options
    * @api stable
    */
+  /* eslint-disable */
   updateFacadeOptions(options = {}) {}
+  /* eslint-enable */
 
   /**
    * This function apply style to layer
@@ -69,9 +66,9 @@ export default class Style {
    * @api stable
    */
   updateCanvas(canvas) {
-    let canvasSize = this.getCanvasSize();
-    let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
-      size: canvasSize
+    const canvasSize = Style.getCanvasSize();
+    const vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+      size: canvasSize,
     });
     vectorContext.setStyle(this.olStyleFn_()[0]);
     this.drawGeometryToCanvas(vectorContext);
@@ -84,7 +81,9 @@ export default class Style {
    * @function
    * @api stable
    */
+  /* eslint-disable */
   drawGeometryToCanvas(vectorContext) {}
+  /* eslint-enable */
 
   /**
    * This function gets the canvas size
@@ -94,7 +93,7 @@ export default class Style {
    * @return {Array<number>} canvas size
    * @api stable
    */
-  getCanvasSize() {
+  static getCanvasSize() {
     return [100, 100];
   }
 

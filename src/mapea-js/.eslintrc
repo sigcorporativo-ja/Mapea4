@@ -10,7 +10,8 @@
     "ActiveXObject": true,
     "jsts": true,
     "chroma": true,
-    "document": true
+    "document": true,
+    "window": true
   },
   "rules": {
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],

@@ -13,7 +13,10 @@ if (env === "development") {
   plugins.push(HotModuleReplacementPlugin);
   devServer = {
     hot: true,
-    open: true
+    open: true,
+    watchOptions: {
+      poll: 1000
+    }
   }
   devtool = "eval-source-map";
 }

@@ -1,4 +1,4 @@
-import Utils from "facade/js/util/Utils";
+import Utils from 'facade/js/util/Utils';
 
 /**
  * @namespace M.impl.envolvedExtent
@@ -22,16 +22,16 @@ export default class EnvolvedExtent {
    * @returns {Mx.Extent}
    * @api stable
    */
-  static calculate(map, opt_this) {
-    return new Promise((success, fail) => {
+  static calculate(map) {
+    return new Promise((success) => {
       // get max extent from the selected WMC
-      let selectedWMC = map.getWMC().filter(wmcLayer => {
+      const selectedWMC = map.getWMC().filter((wmcLayer) => {
         return (wmcLayer.selected === true);
       })[0];
       // get max extent from WMS layers
       // if a base layer was specified then it calculates its maxExtent
       let wmsLayers = [];
-      let baseLayers = map.getBaseLayers().filter(baseLayer => {
+      const baseLayers = map.getBaseLayers().filter((baseLayer) => {
         return baseLayer.isVisible();
       });
       if (baseLayers.length > 0) {
@@ -43,28 +43,28 @@ export default class EnvolvedExtent {
         wmsLayers = map.getWMS();
       }
       if (!Utils.isNullOrEmpty(selectedWMC)) {
-        EnvolvedExtent.calculateFromWMC(selectedWMC).then(extent => {
-          EnvolvedExtent.extentwmc_ = extent;
+        EnvolvedExtent.calculateFromWMC(selectedWMC).then((extent) => {
+          EnvolvedExtent.extentwmc = extent;
           success(extent);
         });
       }
       else if (wmsLayers.length > 0) {
-        EnvolvedExtent.calculateFromWMS(wmsLayers).then(extent => {
-          if (Utils.isNullOrEmpty(EnvolvedExtent.extentwmc_)) {
+        EnvolvedExtent.calculateFromWMS(wmsLayers).then((extent) => {
+          if (Utils.isNullOrEmpty(EnvolvedExtent.extentwmc)) {
             success(extent);
           }
           else {
-            success(EnvolvedExtent.extentwmc_);
+            success(EnvolvedExtent.extentwmc);
           }
         });
       }
       else {
-        EnvolvedExtent.calculateFromProjection(map).then(extent => {
-          if (Utils.isNullOrEmpty(EnvolvedExtent.extentwmc_)) {
+        EnvolvedExtent.calculateFromProjection(map).then((extent) => {
+          if (Utils.isNullOrEmpty(EnvolvedExtent.extentwmc)) {
             success(extent);
           }
           else {
-            success(EnvolvedExtent.extentwmc_);
+            success(EnvolvedExtent.extentwmc);
           }
         });
       }
@@ -80,8 +80,8 @@ export default class EnvolvedExtent {
    * @api stable
    */
   static calculateFromWMC(wmcLayer) {
-    return new Promise((success, fail) => {
-      wmcLayer.getImpl().getMaxExtent().then(extent => {
+    return new Promise((success) => {
+      wmcLayer.getImpl().getMaxExtent().then((extent) => {
         success(extent);
       });
     });
@@ -100,8 +100,12 @@ export default class EnvolvedExtent {
       let projExtent = ol.proj.get(map.getProjection().code).getExtent();
       if (Utils.isNullOrEmpty(projExtent)) {
         projExtent = [-180, -90, 180, 90];
+        success(projExtent);
       }
-      success(projExtent);
+      else {
+        const err = new Error('Error en calculateFromProjection. Modulo EnvolvedExtent.');
+        fail(err);
+      }
     });
   }
 
@@ -116,22 +120,26 @@ export default class EnvolvedExtent {
    * @api stable
    */
   static calculateFromWMS(wmsLayers) {
-    let promise = new Promise((success, fail) => {
+    const promise = new Promise((success, fail) => {
       let index = 0;
-      let wmsLayersLength = wmsLayers.length;
+      const wmsLayersLength = wmsLayers.length;
       let envolvedExtent = [Infinity, Infinity, -Infinity, -Infinity];
-      let updateExtent = (extent) => {
-        EnvolvedExtent.updateExtent_(envolvedExtent, extent);
+      const updateExtent = (extent) => {
+        envolvedExtent = EnvolvedExtent.updateExtent(envolvedExtent, extent);
         if (index === (wmsLayersLength - 1)) {
           success(envolvedExtent);
         }
-        index++;
+        else {
+          const err = new Error('Error en calculateFromWMC. Modulo EnvolvedExtent.');
+          fail(err);
+        }
+        index += 1;
       };
 
       if (!Utils.isNullOrEmpty(wmsLayers)) {
-        for (var i = 0; i < wmsLayersLength; i++) {
-          let wmsLayer = wmsLayers[i];
-          let extent = wmsLayer.getImpl().getExtent();
+        for (let i = 0; i < wmsLayersLength; i += 1) {
+          const wmsLayer = wmsLayers[i];
+          const extent = wmsLayer.getImpl().getExtent();
           if (extent instanceof Promise) {
             extent.then(updateExtent);
           }
@@ -155,19 +163,21 @@ export default class EnvolvedExtent {
    * @function
    * @param {Mx.GetCapabilities} capabilities
    */
-  static updateExtent_(extent, newExtent) {
+  static updateExtent(extent, newExtent) {
+    const extentVariable = extent;
     if (Utils.isArray(newExtent)) {
-      extent[0] = Math.min(extent[0], newExtent[0]);
-      extent[1] = Math.min(extent[1], newExtent[1]);
-      extent[2] = Math.max(extent[2], newExtent[2]);
-      extent[3] = Math.max(extent[3], newExtent[3]);
+      extentVariable[0] = Math.min(extentVariable[0], newExtent[0]);
+      extentVariable[1] = Math.min(extentVariable[1], newExtent[1]);
+      extentVariable[2] = Math.max(extentVariable[2], newExtent[2]);
+      extentVariable[3] = Math.max(extentVariable[3], newExtent[3]);
     }
     else if (Utils.isObject(newExtent)) {
-      extent[0] = Math.min(extent[0], newExtent.x.min);
-      extent[1] = Math.min(extent[1], newExtent.y.min);
-      extent[2] = Math.max(extent[2], newExtent.x.max);
-      extent[3] = Math.max(extent[3], newExtent.y.max);
+      extentVariable[0] = Math.min(extentVariable[0], newExtent.x.min);
+      extentVariable[1] = Math.min(extentVariable[1], newExtent.y.min);
+      extentVariable[2] = Math.max(extentVariable[2], newExtent.x.max);
+      extentVariable[3] = Math.max(extentVariable[3], newExtent.y.max);
     }
+    return extentVariable;
   }
 }
 
@@ -184,4 +194,4 @@ EnvolvedExtent.calculating = false;
  * @private
  * @type {ol.Extent}
  */
-EnvolvedExtent.extentwmc_ = null;
+EnvolvedExtent.extentwmc = null;
