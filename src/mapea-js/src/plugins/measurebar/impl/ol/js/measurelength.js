@@ -1,6 +1,6 @@
 import Measure from "./measurebase";
-import FMeasureLength from "../../../js/measurelength";
-import FMeasureArea from "../../../js/measurearea";
+import FacadeMeasureLength from "../../../js/measurelength";
+import FacadeMeasureArea from "../../../js/measurearea";
 /**
  * @classdesc
  * Main constructor of the class. Creates a MeasureLength
@@ -21,14 +21,14 @@ export default class MeasureLength extends Measure {
      * @private
      * @type {string}
      */
-    this.helpMsg_ = FMeasure.HELP_MESSAGE;
+    this.helpMsg_ = FacadeMeasure.HELP_MESSAGE;
 
     /**
      * Help message
      * @private
      * @type {string}
      */
-    this.helpMsgContinue_ = FMeasureLength.HELP_KEEP_MESSAGE;
+    this.helpMsgContinue_ = FacadeMeasureLength.HELP_KEEP_MESSAGE;
 
   }
 

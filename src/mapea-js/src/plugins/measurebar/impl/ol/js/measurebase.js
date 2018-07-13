@@ -1,6 +1,6 @@
 import Control from "impl/ol/js/controls/controlbase";
-import FMeasureArea from "../../../js/measurearea";
-import FMeasureLength from "../../../js/measurelength";
+import FacadeMeasureArea from "../../../js/measurearea";
+import FacadeMeasureLength from "../../../js/measurelength";
 import MeasureArea from "./measurearea"
 import Utils from "facade/js/utils/utils";
 import Template from "facade/js/utils/template";
@@ -14,7 +14,7 @@ import Template from "facade/js/utils/template";
  * @extends {M.impl.Control}
  * @api stable
  */
-export default class Measure extends Control {
+export default class Measure extends M.impl.Control {
 
   constructor(type) {
 
@@ -118,7 +118,7 @@ export default class Measure extends Control {
     // if it is measure length then deactivate measure area
     if (this instanceof MeasureLength) {
       var measureArea = this.facadeMap_.getControls().filter(control => {
-        return (control instanceof FMeasureArea);
+        return (control instanceof FacadeMeasureArea);
       })[0];
       if (measureArea) {
         measureArea.deactivate();
@@ -127,7 +127,7 @@ export default class Measure extends Control {
     // if it is measure area then deactivate measure length
     else if (this instanceof MeasureArea) {
       var measureLength = this.facadeMap_.getControls().filter(control => {
-        return (control instanceof FMeasureLength);
+        return (control instanceof FacadeMeasureLength);
       })[0];
 
       if (measureLength) {
@@ -237,7 +237,7 @@ export default class Measure extends Control {
    * @return {Promise} Template tooltip
    */
   createHelpTooltip_() {
-    return M.template.compile(M.control.Measure.POINTER_TOOLTIP_TEMPLATE, {
+    return M.Template.compile(FacadeMeasure.POINTER_TOOLTIP_TEMPLATE, {
       'jsonp': true
     }).then(helpTooltipElement => {
       this.helpTooltip_ = new ol.Overlay({
@@ -256,7 +256,7 @@ export default class Measure extends Control {
    * @function
    */
   createMeasureTooltip_() {
-    Template.compile(FMeasure.MEASURE_TOOLTIP_TEMPLATE, {
+    M.Template.compile(FacadeMeasure.MEASURE_TOOLTIP_TEMPLATE, {
       'jsonp': true
     }).then(measureTooltipElement => {
       if (!Utils.isNullOrEmpty(this.measureTooltip_)) {

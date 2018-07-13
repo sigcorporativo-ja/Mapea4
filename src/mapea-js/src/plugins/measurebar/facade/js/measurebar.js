@@ -1,9 +1,8 @@
 import MeasureLength from "./measurelength"
 import MeasureArea from "./measurearea"
 import MeasureClear from "./measureclear"
-import Plugin from "facade/js/plugin";
 
-export default class Measurebar extends Plugin {
+export default class Measurebar extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin

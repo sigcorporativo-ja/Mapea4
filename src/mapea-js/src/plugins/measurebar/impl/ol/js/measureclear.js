@@ -1,6 +1,3 @@
-import Control from "impl/ol/js/controls/controlbase";
-import Utils from "facade/js/utils/utils";
-
 /**
  * @classdesc
  * Main constructor of the class. Creates a MeasureClear
@@ -10,7 +7,7 @@ import Utils from "facade/js/utils/utils";
  * @extends {M.impl.Control}
  * @api stable
  */
-export default class MeasureClear extends Control {
+export default class MeasureClear extends M.Control {
 
   constructor(measureLengthControl, measureAreaControl) {
     /**
@@ -63,10 +60,10 @@ export default class MeasureClear extends Control {
    * @api stable
    */
   onClick() {
-    if (!Utils.isNullOrEmpty(this.measureLengthControl_)) {
+    if (!M.utils.isNullOrEmpty(this.measureLengthControl_)) {
       this.measureLengthControl_.clear();
     }
-    if (!Utils.isNullOrEmpty(this.measureAreaControl_)) {
+    if (!M.utils.isNullOrEmpty(this.measureAreaControl_)) {
       this.measureAreaControl_.clear();
     }
   }

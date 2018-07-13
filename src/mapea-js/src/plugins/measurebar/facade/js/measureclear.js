@@ -1,7 +1,3 @@
-import Control from "facade/js/controls/controlbase";
-import Utils from "facade/js/utils/utils";
-import Exception from "facade/js/exception/exception";
-import Template from "facade/js/utils/template";
 import MeasureClearImpl from "../../impl/ol/js/measureclear";
 
 
@@ -17,7 +13,7 @@ import MeasureClearImpl from "../../impl/ol/js/measureclear";
  * @api stable
  */
 
-export default class MeasureClear extends Control {
+export default class MeasureClear extends M.Control {
 
   constructor(measureLengthControl, measureAreaControl) {
     // implementation of this control
@@ -27,7 +23,7 @@ export default class MeasureClear extends Control {
     super(impl, MeasureClear.NAME);
 
     // checks if the implementation can create MeasureClear
-    if (Utils.isUndefined(MeasureClearImpl)) {
+    if (M.utils.isUndefined(MeasureClearImpl)) {
       Exception('La implementación usada no puede crear controles MeasureClear');
     }
 
@@ -43,7 +39,7 @@ export default class MeasureClear extends Control {
    * @api stable
    */
   createView(map) {
-    return Template.compile(MeasureClear.TEMPLATE, {
+    return M.Template.compile(MeasureClear.TEMPLATE, {
       'jsonp': true
     });
   }

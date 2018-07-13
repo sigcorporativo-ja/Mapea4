@@ -1,8 +1,4 @@
-import Control from "facade/js/controls/controlbase";
-import Template from "facade/js/utils/template";
-
-
-export default class Measure extends Control {
+export default class Measure extends M.Control {
 
   /**
    * @classdesc
@@ -36,7 +32,7 @@ export default class Measure extends Control {
    * @api stable
    */
   createView(map) {
-    return Template.compile(this.template_, {
+    return M.Template.compile(this.template_, {
       'jsonp': true
     });
   }

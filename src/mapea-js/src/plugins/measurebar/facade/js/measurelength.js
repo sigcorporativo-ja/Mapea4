@@ -1,6 +1,4 @@
 import Measure from "./measurebase";
-import Utils from "facade/js/utils/utils";
-import Exception from "facade/js/exception/exception";
 import MeasureLenghtImpl from "../../impl/ol/js/measurelength";
 
 /**
@@ -23,7 +21,7 @@ export default class MeasureLength extends Measure {
     super(impl, MeasureLength.TEMPLATE);
 
     // checks if the implementation can create WMC layers
-    if (Utils.isUndefined(MeasureLengthImpl)) {
+    if (M.utils.isUndefined(MeasureLengthImpl)) {
       Exception('La implementación usada no puede crear controles MeasureLength');
     }
   }

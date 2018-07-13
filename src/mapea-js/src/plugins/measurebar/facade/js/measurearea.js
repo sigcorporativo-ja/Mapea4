@@ -1,6 +1,4 @@
 import Measure from "./measurebase";
-import Utils from "facade/js/utils/utils";
-import Exception from "facade/js/exception/exception";
 import MeasureAreaImpl from "../../impl/ol/js/measurearea";
 
 export default class MeasureArea extends Measure {
@@ -14,7 +12,7 @@ export default class MeasureArea extends Measure {
     super(impl, MeasureArea.TEMPLATE);
 
     // checks if the implementation can create WMC layers
-    if (Utils.isUndefined(MeasureAreaImpl)) {
+    if (M.utils.isUndefined(MeasureAreaImpl)) {
       Exception('La implementación usada no puede crear controles MeasureArea');
     }
 
