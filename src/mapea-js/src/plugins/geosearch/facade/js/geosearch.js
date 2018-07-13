@@ -1,13 +1,4 @@
-import GeosearchControl from "./geosearchcontrol";
-import GeosearchLayer from "./geosearchlayer";
-import Plugin from "facade/js/plugin";
-import Config from "../../../configuration";
-import Utils from "facade/js/utils/utils";
-import EventsManager from "facade/js/event/eventsmanager";
-import Panel from "facade/js/ui/panel";
-import Position from "facade/js/ui/position";
-
-export default Geosearch extends Plugin {
+export default Geosearch extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -57,8 +48,8 @@ export default Geosearch extends Plugin {
      * @private
      * @type {String}
      */
-    this.url_ = Config.GEOSEARCH_URL;
-    if (!Utils.isNullOrEmpty(parameters.url)) {
+    this.url_ = M.config.GEOSEARCH_URL;
+    if (!M.utils.isNullOrEmpty(parameters.url)) {
       this.url_ = parameters.url;
     }
 
@@ -67,8 +58,8 @@ export default Geosearch extends Plugin {
      * @private
      * @type {String}
      */
-    this.core_ = Config.GEOSEARCH_CORE;
-    if (!Utils.isNullOrEmpty(parameters.core)) {
+    this.core_ = M.config.GEOSEARCH_CORE;
+    if (!M.utils.isNullOrEmpty(parameters.core)) {
       this.core_ = parameters.core;
     }
 
@@ -77,8 +68,8 @@ export default Geosearch extends Plugin {
      * @private
      * @type {String}
      */
-    this.handler_ = Config.GEOSEARCH_HANDLER;
-    if (!Utils.isNullOrEmpty(parameters.handler)) {
+    this.handler_ = M.config.GEOSEARCH_HANDLER;
+    if (!M.utils.isNullOrEmpty(parameters.handler)) {
       this.handler_ = parameters.handler;
     }
 
@@ -107,12 +98,12 @@ export default Geosearch extends Plugin {
 
     this.control_ = new GeosearchControl(this.url_, this.core_,
       this.handler_, this.searchParameters_);
-    this.control_.on(EventsManager.ADD_TO_MAP, this.onLoadCallback_, this);
-    this.panel_ = new Panel('geosearch', {
+    this.control_.on(M.evt.ADD_TO_MAP, this.onLoadCallback_, this);
+    this.panel_ = new M.ui.Panel('geosearch', {
       'collapsible': true,
       'className': 'm-geosearch',
       'collapsedButtonClass': 'g-cartografia-zoom',
-      'position': Position.TL,
+      'position': M.ui.Position.TL,
       'tooltip': 'Geobúsquedas'
     });
     this.panel_.addControls(this.control_);
@@ -129,7 +120,7 @@ export default Geosearch extends Plugin {
    */
   getInput() {
     let inputSearch = null;
-    if (!Utils.isNullOrEmpty(this.control_)) {
+    if (!M.utils.isNullOrEmpty(this.control_)) {
       inputSearch = this.control_.getInput();
     }
     return inputSearch;

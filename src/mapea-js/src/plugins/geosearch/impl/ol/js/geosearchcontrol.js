@@ -1,10 +1,7 @@
-import Geosearchlayer from "./geosearchlayer";
-import ImplControl from "impl/ol/js/controls/controbase";
-import Utils from "facade/js/utils/utils";
 /**
  * @namespace M.impl.control
  */
-export default class GeosearchControl extends ImplControl {
+export default class GeosearchControl extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the measure conrol.
@@ -155,7 +152,7 @@ export default class GeosearchControl extends ImplControl {
    * @api stable
    */
   hideHelp() {
-    if (!Utils.isNullOrEmpty(this.helpHtml_)) {
+    if (!M.utils.isNullOrEmpty(this.helpHtml_)) {
       this.facadeMap_.getMapImpl().getTargetElement().removeChild(this.helpHtml_);
       this.helpHtml_ = null;
     }
@@ -171,7 +168,7 @@ export default class GeosearchControl extends ImplControl {
    */
   showHelp(helpHtml) {
     let overlayContainer = this.facadeMap_.getMapImpl().getTargetElement();
-    if (!Utils.isNullOrEmpty(this.helpHtml_)) {
+    if (!M.utils.isNullOrEmpty(this.helpHtml_)) {
       overlayContainer.removeChild(this.helpHtml_);
     }
     this.helpHtml_ = helpHtml;

@@ -1,15 +1,6 @@
-import GeoUtils from "./utils";
 import GeoStyle from "./geosearchstyle";
-import Vector from "impl/ol/js/layers/vector";
-import Utils from "facade/js/utils/utils";
-import Style from "facade/js/style/style";
-import FeatureImpl from "impl/ol/js/feature/feature";
-import Template from "facade/js/utils/template";
-import FPopup from "facade/js/popup";
-import EventsManager from "facade/js/event/eventsmanager";
-import WKT from "facade/js/geom/wkt";
 
-export default class GeosearchLayer extends Vector {
+export default class GeosearchLayer extends M.impl.layer.Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -26,9 +17,9 @@ export default class GeosearchLayer extends Vector {
     /**
      * Currently drawn feature coordinate.
      * @private
-     * @type {ol.format.WKT}
+     * @type {ol.format.M.geom.wkt}
      */
-    this.wktFormatter_ = new ol.format.WKT();
+    this.wktFormatter_ = new ol.format.M.geom.wkt();
 
     /**
      * Popup showed
@@ -85,10 +76,10 @@ export default class GeosearchLayer extends Vector {
     let projection = ol.proj.get(this.map.getProjection().code);
 
     let docs = [];
-    if (!Utils.isNullOrEmpty(results.spatial_response)) {
+    if (!M.utils.isNullOrEmpty(results.spatial_response)) {
       docs = results.spatial_response.docs;
     }
-    if (Utils.isNullOrEmpty(docs)) {
+    if (M.utils.isNullOrEmpty(docs)) {
       docs = results.response.docs;
     }
 
@@ -98,11 +89,11 @@ export default class GeosearchLayer extends Vector {
       });
       feature.setId(doc.solrid);
       feature.setProperties(doc);
-      GeosearchLayer.setStyleFeature_(feature, Style.state.DEFAULT);
+      GeosearchLayer.setStyleFeature_(feature, M.style.state.DEFAULT);
 
       this.wrapComplexFeature_(feature);
 
-      return FeatureImpl.olFeature2Facade(feature);
+      return M.impl.Feature.olFeature2Facade(feature);
     }, this);
 
     this.facadeVector_.addFeatures(features);
@@ -120,9 +111,9 @@ export default class GeosearchLayer extends Vector {
     let projection = ol.proj.get(this.map.getProjection().code);
 
     let docs;
-    if (!Utils.isNullOrEmpty(results.spatial_response)) {
+    if (!M.utils.isNullOrEmpty(results.spatial_response)) {
       docs = results.spatial_response.docs;
-    } else if (!Utils.isNullOrEmpty(results.response)) {
+    } else if (!M.utils.isNullOrEmpty(results.response)) {
       docs = results.response.docs;
     }
 
@@ -132,9 +123,9 @@ export default class GeosearchLayer extends Vector {
       });
       feature.setId(doc.solrid);
       feature.setProperties(doc);
-      GeosearchLayer.setStyleFeature_(feature, Style.state.NEW);
+      GeosearchLayer.setStyleFeature_(feature, M.style.state.NEW);
 
-      return FeatureImpl.olFeature2Facade(feature);
+      return M.impl.Feature.olFeature2Facade(feature);
     }, this);
 
     this.facadeVector_.addFeatures(features);
@@ -170,12 +161,12 @@ export default class GeosearchLayer extends Vector {
     this.selectedFeatures_ = features;
 
     // gets olFeatures
-    features = features.map(FeatureImpl.facade2OLFeature);
+    features = features.map(M.impl.Feature.facade2OLFeature);
 
-    GeosearchLayer.setStyleFeature_(features, Style.state.SELECTED);
+    GeosearchLayer.setStyleFeature_(features, M.style.state.SELECTED);
 
     let featureForTemplate = this.parseFeaturesForTemplate_(features);
-    Template.compile(GeosearchLayer.POPUP_RESULT, {
+    M.Template.compile(GeosearchLayer.POPUP_RESULT, {
         'jsonp': true,
         'vars': featureForTemplate,
         'parseToHtml': false
@@ -187,8 +178,8 @@ export default class GeosearchLayer extends Vector {
           'content': htmlAsText
         };
         let popup = this.map.getPopup();
-        if (Utils.isNullOrEmpty(popup)) {
-          popup = new FPopup({
+        if (M.utils.isNullOrEmpty(popup)) {
+          popup = new M.Popup({
             'panMapIfOutOfView': !noPanMapIfOutOfView,
             'ani': null
           });
@@ -198,7 +189,7 @@ export default class GeosearchLayer extends Vector {
           popup.addTab(featureTabOpts);
         }
         // removes events on destroy
-        popup.on(EventsManager.DESTROY, () => {
+        popup.on(M.evt.DESTROY, () => {
           this.internalUnselectFeatures_(true);
         }, this);
       });
@@ -218,7 +209,7 @@ export default class GeosearchLayer extends Vector {
     this.selectedFeatures_ = [feature];
 
     let featureGeom = feature.getImpl().getOLFeature().getGeometry();
-    let coord = GeoUtils.getCentroidCoordinate(featureGeom);
+    let coord = M.impl.utils.getCentroidCoordinate(featureGeom);
 
     this.unselectFeatures();
     this.selectFeatures([feature], coord, null, true);
@@ -243,9 +234,9 @@ export default class GeosearchLayer extends Vector {
       let properties = feature.getProperties();
       let attributes = [];
       for (var key in properties) {
-        if (!Utils.includes(hiddenAttributes, key.toLowerCase())) {
+        if (!M.utils.includes(hiddenAttributes, key.toLowerCase())) {
           attributes.push({
-            'key': Utils.beautifyAttributeName(key),
+            'key': M.utils.beautifyAttributeName(key),
             'value': properties[key]
           });
         }
@@ -268,9 +259,9 @@ export default class GeosearchLayer extends Vector {
    */
   wrapComplexFeature_(feature) {
     let featureGeom = feature.getGeometry();
-    if ((featureGeom.getType() === WKT.type.POLYGON) || (featureGeom.getType() === WKT.type.MULTI_POLYGON)) {
+    if ((featureGeom.getType() === M.geom.wkt.type.POLYGON) || (featureGeom.getType() === M.geom.wkt.type.MULTI_POLYGON)) {
       let centroid;
-      if (featureGeom.getType() === WKT.type.POLYGON) {
+      if (featureGeom.getType() === M.geom.wkt.type.POLYGON) {
         centroid = featureGeom.getInteriorPoint();
       } else {
         centroid = featureGeom.getInteriorPoints();
@@ -304,7 +295,7 @@ export default class GeosearchLayer extends Vector {
   internalUnselectFeatures_(keepPopup) {
     if (this.selectedFeatures_.length > 0) {
       // sets the style
-      GeosearchLayer.setStyleFeature_(this.selectedFeatures_.map(FeatureImpl.facade2OLFeature), Style.state.DEFAULT);
+      GeosearchLayer.setStyleFeature_(this.selectedFeatures_.map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
       this.selectedFeatures_.length = 0;
 
       // removes the popup just when event destroy was not fired
@@ -324,7 +315,7 @@ export default class GeosearchLayer extends Vector {
    * @api stable
    */
   setNewResultsAsDefault() {
-    GeosearchLayer.setStyleFeature_(this.facadeVector_.getFeatures().map(FeatureImpl.facade2OLFeature), Style.state.DEFAULT);
+    GeosearchLayer.setStyleFeature_(this.facadeVector_.getFeatures().map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
   }
 
   /**
@@ -337,7 +328,7 @@ export default class GeosearchLayer extends Vector {
    */
   destroy() {
     let olMap = this.map.getMapImpl();
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }
@@ -375,14 +366,14 @@ export default class GeosearchLayer extends Vector {
   static setStyleFeature_(features, state) {
     GeoStyle.init();
 
-    if (!Utils.isArray(features)) {
+    if (!M.utils.isArray(features)) {
       features = [features];
     }
 
     features.forEach(feature => {
       // gets the geometry type
       let geometryType = feature.getGeometry().getType();
-      if (Utils.isNullOrEmpty(state) || (state === Style.state.DEFAULT)) {
+      if (M.utils.isNullOrEmpty(state) || (state === Style.state.DEFAULT)) {
         feature.setStyle(GeoStyle.DEFAULT[geometryType]);
       } else if (state === Style.state.NEW) {
         feature.setStyle(GeoStyle.NEW[geometryType]);

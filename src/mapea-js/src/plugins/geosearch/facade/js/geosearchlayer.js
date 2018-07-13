@@ -1,9 +1,6 @@
 import GeosearchLayerImpl from "impl/ol/js/geosearchlayer";
-import Utils from "facade/js/utils/utils";
-import Exception from "facade/js/exception/exception";
-import Vector from "facade/js/layers/vector";
 
-export default class GeosearchLayer extends Vector {
+export default class GeosearchLayer extends M.layer.Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -19,8 +16,8 @@ export default class GeosearchLayer extends Vector {
     // calls the super constructor
     super(options, impl);
     // checks if the implementation can create KML layers
-    if (Utils.isUndefined(GeosearchLayerImpl)) {
-      Exception('La implementación usada no puede crear capas Geosearch');
+    if (M.utils.isUndefined(GeosearchLayerImpl)) {
+      M.exception('La implementación usada no puede crear capas Geosearch');
     }
   }
 
