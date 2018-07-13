@@ -1,13 +1,7 @@
-import geosearchControlImpl from "geosearch/impl/ol/js/geosearchcontrol";
-import Utils from "facade/js/utils/utils";
-import FeatureImpl from "impl/ol/js/feature/feature";
-import Template from "facade/js/utils/template";
-import Popup from "facade/js/popup";
-
 /**
  * @namespace M.impl.control
  */
-export default class GeosearchbylocationControl extends geosearchControlImpl {
+export default class GeosearchbylocationControl extends M.impl.control.Geosearch {
 
   /**
    * @classdesc
@@ -52,7 +46,7 @@ export default class GeosearchbylocationControl extends geosearchControlImpl {
 
     super('setMap', map);
 
-    if (Utils.isNullOrEmpty(map)) {
+    if (M.utils.isNullOrEmpty(map)) {
       this.facadeMap_.getImpl().removeFeatures([this.positionFeature_]);
     } else {
       this.map = map;
@@ -72,7 +66,7 @@ export default class GeosearchbylocationControl extends geosearchControlImpl {
       projection: this.facadeMap_.getMapImpl().getView().getProjection()
     });
     geolocation.setTracking(true);
-    this.positionFeature_ = FeatureImpl.olFeature2Facade(new ol.Feature());
+    this.positionFeature_ = M.impl.Feature.olFeature2Facade(new ol.Feature());
     this.positionFeature_.getImpl().getOLFeature().setStyle(new ol.style.Style({
       image: new ol.style.Circle({
         radius: 6,
@@ -87,7 +81,7 @@ export default class GeosearchbylocationControl extends geosearchControlImpl {
     }));
     let coordinates;
     this.positionFeature_.click = function (evt) {
-      Template.compile(GeosearchbylocationControl.POPUP_LOCATION, {
+      M.Template.compile(GeosearchbylocationControl.POPUP_LOCATION, {
         'jsonp': true,
         'vars': {
           'valorX': coordinates[0],
@@ -101,8 +95,8 @@ export default class GeosearchbylocationControl extends geosearchControlImpl {
           'content': htmlAsText
         };
         this_.popup_ = this_.facadeMap_.getPopup();
-        if (Utils.isNullOrEmpty(this_.popup_)) {
-          this_.popup_ = new Popup();
+        if (M.utils.isNullOrEmpty(this_.popup_)) {
+          this_.popup_ = new M.Popup();
           this_.popup_.addTab(positionTabOpts);
           this_.facadeMap_.addPopup(this_.popup_, coordinates);
         } else {

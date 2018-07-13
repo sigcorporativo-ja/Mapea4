@@ -1,11 +1,6 @@
-import GeosearchControl from "geosearch/facade/js/geosearchcontrol";
-import Utils from "facade/js/utils/utils";
-import Exception from "facade/js/exception/exception";
 import GeosearchbylocationImpl from "../../impl/ol/js/geosearchbylocation";
-import Template from "facade/js/utils/template";
-import Remote from "facade/js/utils/remote";
 
-export default class GeosearchbylocationControl extends GeosearchControl {
+export default class GeosearchbylocationControl extends M.control.GeosearchControl {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Geosearchbylocation
@@ -70,7 +65,7 @@ export default class GeosearchbylocationControl extends GeosearchControl {
      * @private
      * @type {string}
      */
-    this.searchUrl_ = Utils.concatUrlPaths([url, core, handler]);
+    this.searchUrl_ = M.utils.concatUrlPaths([url, core, handler]);
 
     /**
      * Facade Map
@@ -87,8 +82,8 @@ export default class GeosearchbylocationControl extends GeosearchControl {
     this.resultsScrollContainer_ = null;
 
     // checks if the implementation can create Geosearchbylocation Control
-    if (Utils.isUndefined(GeosearchbylocationImpl)) {
-      Exception('La implementación usada no puede crear controles Geosearchbylocation');
+    if (M.utils.isUndefined(GeosearchbylocationImpl)) {
+      M.Exception('La implementación usada no puede crear controles Geosearchbylocation');
     }
 
 
@@ -126,7 +121,7 @@ export default class GeosearchbylocationControl extends GeosearchControl {
    */
   createView(map) {
     this.facadeMap_ = map;
-    return Template.compile(GeosearchbylocationControl.TEMPLATE, {
+    return M.Template.compile(GeosearchbylocationControl.TEMPLATE, {
       'jsonp': true
     });
   }
@@ -153,7 +148,7 @@ export default class GeosearchbylocationControl extends GeosearchControl {
    */
   activate() {
     this.element_.classList.add('activated');
-    this.element_.classlist.add(GeosearchControl.SEARCHING_CLASS);
+    this.element_.classlist.add(M.control.Geosearch.SEARCHING_CLASS);
     this.getImpl().locate().then(coor => {
       var pointGeom = new ol.geom.Point(coor);
       var format = new ol.format.WKT();
@@ -196,7 +191,7 @@ export default class GeosearchbylocationControl extends GeosearchControl {
    */
   searchFrom_(coorTrans, coor) {
     let searchUrl = null;
-    searchUrl = Utils.addParameters(this.searchUrl_, {
+    searchUrl = M.utils.addParameters(this.searchUrl_, {
       'wt': 'json',
       'pt': coorTrans,
       'q': '*:*',
@@ -211,14 +206,14 @@ export default class GeosearchbylocationControl extends GeosearchControl {
     /* uses closure to keep the search time and it checks
      if the response is about the last executed search */
     (searchTime => {
-      Remote.get(searchUrl).then(response => {
+      M.Remote.get(searchUrl).then(response => {
         // if searchTime was updated by this promise then this is the last
         if (searchTime === this.searchTime_) {
           let results;
           try {
             results = JSON.parse(response.text);
           } catch (err) {
-            Exception('La respuesta no es un JSON válido: ' + err);
+            M.Exception('La respuesta no es un JSON válido: ' + err);
           }
           this.showResults_(results);
           this.drawLocation_(coor);
@@ -270,13 +265,13 @@ export default class GeosearchbylocationControl extends GeosearchControl {
   showList_() {
     if (this.showList === true) {
       let resultsTemplateVars = this.parseResultsForTemplate_(this.results);
-      Template.compile(GeosearchbylocationControl.RESULTS_TEMPLATE, {
+      M.Template.compile(GeosearchbylocationControl.RESULTS_TEMPLATE, {
         'jsonp': true,
         'vars': resultsTemplateVars
       }).then(html => {
         this.resultsContainer_ = html;
         this.resultsScrollContainer_ = this.resultsContainer_.querySelector("div#m-geosearchbylocation-results-scroll");
-        Utils.enableTouchScroll(this.resultsScrollContainer_);
+        M.utils.enableTouchScroll(this.resultsScrollContainer_);
         this.getImpl().addResultsContainer(this.resultsContainer_);
         var resultsHtmlElements = this.resultsContainer_.getElementsByClassName("result");
         for (var i = 0, ilen = resultsHtmlElements.length; i < ilen; i++) {
