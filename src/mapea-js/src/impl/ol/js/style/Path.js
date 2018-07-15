@@ -3,7 +3,6 @@
  */
 
 export default class Path extends ol.style.Text {
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a M.impl.style.TextPath style
@@ -15,17 +14,17 @@ export default class Path extends ol.style.Text {
    */
 
   constructor(options = {}) {
-
     // super constructor call
-    ol.style.Text.call(options);
+    super(options);
 
     /**
      * The textOverflow style property.
-     * TextOverflow forces changes on text at rendering phase when text size is bigger than feature geometry size
+     * TextOverflow forces changes on text at rendering phase when text size
+     * is bigger than feature geometry size
      * @private
      * @type {string}
      */
-    this.textOverflow_ = typeof (options.textOverflow) !== 'undefined' ? options.textOverflow : '';
+    this.textOverflow_ = typeof options.textOverflow !== 'undefined' ? options.textOverflow : '';
 
     /**
      * The minWidth style property

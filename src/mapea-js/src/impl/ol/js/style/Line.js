@@ -1,8 +1,8 @@
-import Centroid from "./Centroid";
-import Path from "./Path";
-import Simple from "./Simple";
-import Utils from "facade/js/util/Utils";
-import Render from "../util/render";
+import Utils from 'facade/js/util/Utils';
+import Centroid from './Centroid';
+import Path from './Path';
+import Simple from './Simple';
+import Render from '../util/render';
 
 /**
  * @namespace M.impl.style.Line
@@ -30,62 +30,66 @@ export default class Line extends Simple {
    * @api stable
    */
   updateFacadeOptions(options) {
-    return (feature, resolution) => {
-      if (!(feature instanceof ol.Feature)) {
-        resolution = feature;
-        feature = this;
+    return (feature) => {
+      let featureVariable = feature;
+      if (!(featureVariable instanceof ol.Feature)) {
+        featureVariable = this;
       }
-      let stroke = options.stroke;
-      let label = options.label;
-      // let fill = options.fill;
-      let style = new Centroid();
-      let styleStroke = new Centroid();
+      const stroke = options.stroke;
+      const label = options.label;
+      // const fill = options.fill;
+      const style = new Centroid();
+      const styleStroke = new Centroid();
       const getValue = Simple.getValue;
       if (!Utils.isNullOrEmpty(stroke)) {
         style.setStroke(new ol.style.Stroke({
-          color: getValue(stroke.color, feature),
-          width: getValue(stroke.width, feature),
-          lineDash: getValue(stroke.linedash, feature),
-          lineDashOffset: getValue(stroke.linedashoffset, feature),
-          lineCap: getValue(stroke.linecap, feature),
-          lineJoin: getValue(stroke.linejoin, feature),
-          miterLimit: getValue(stroke.miterlimit, feature)
+          color: getValue(stroke.color, featureVariable),
+          width: getValue(stroke.width, featureVariable),
+          lineDash: getValue(stroke.linedash, featureVariable),
+          lineDashOffset: getValue(stroke.linedashoffset, featureVariable),
+          lineCap: getValue(stroke.linecap, featureVariable),
+          lineJoin: getValue(stroke.linejoin, featureVariable),
+          miterLimit: getValue(stroke.miterlimit, featureVariable),
         }));
       }
       if (!Utils.isNullOrEmpty(label)) {
-        let textPathConfig = {
-          text: getValue(label.text, feature) === undefined ? undefined : String(getValue(label.text, feature)),
-          font: getValue(label.font, feature),
+        const textPathConfig = {
+          text: getValue(label.text, featureVariable) === undefined ?
+            undefined : String(getValue(label.text, featureVariable)),
+          font: getValue(label.font, featureVariable),
           fill: new ol.style.Fill({
-            color: getValue(label.color || '#000000', feature)
+            color: getValue(label.color || '#000000', featureVariable),
           }),
-          textBaseline: (getValue(label.baseline, feature) || '').toLowerCase(),
-          textAlign: getValue(label.align, feature),
-          rotateWithView: getValue(label.rotate, feature) || false,
-          textOverflow: getValue(label.textoverflow, feature) || '',
-          minWidth: getValue(label.minwidth, feature) || 0,
-          geometry: getValue(label.geometry, feature),
-          offsetX: getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
-          offsetY: getValue(options.label.offset ? options.label.offset[1] : undefined, feature),
+          textBaseline: (getValue(label.baseline, featureVariable) || '').toLowerCase(),
+          textAlign: getValue(label.align, featureVariable),
+          rotateWithView: getValue(label.rotate, featureVariable) || false,
+          textOverflow: getValue(label.textoverflow, featureVariable) || '',
+          minWidth: getValue(label.minwidth, featureVariable) || 0,
+          geometry: getValue(label.geometry, featureVariable),
+          offsetX: getValue(options.label.offset ? options.label.offset[0] :
+            undefined, featureVariable),
+          offsetY: getValue(options.label.offset ? options.label.offset[1] :
+            undefined, featureVariable),
         };
-        let textPathStyle = new Path(textPathConfig);
+        const textPathStyle = new Path(textPathConfig);
         if (!Utils.isNullOrEmpty(label.stroke)) {
           textPathStyle.setStroke(new ol.style.Stroke({
-            color: getValue(label.stroke.color, feature),
-            width: getValue(label.stroke.width, feature),
-            lineCap: getValue(label.stroke.linecap, feature),
-            lineJoin: getValue(label.stroke.linejoin, feature),
-            lineDash: getValue(label.stroke.linedash, feature),
-            lineDashOffset: getValue(label.stroke.linedashoffset, feature),
-            miterLimit: getValue(label.stroke.miterlimit, feature)
+            color: getValue(label.stroke.color, featureVariable),
+            width: getValue(label.stroke.width, featureVariable),
+            lineCap: getValue(label.stroke.linecap, featureVariable),
+            lineJoin: getValue(label.stroke.linejoin, featureVariable),
+            lineDash: getValue(label.stroke.linedash, featureVariable),
+            lineDashOffset: getValue(label.stroke.linedashoffset, featureVariable),
+            miterLimit: getValue(label.stroke.miterlimit, featureVariable),
           }));
         }
-        let applyPath = getValue(label.path, feature);
+        const applyPath = getValue(label.path, featureVariable);
         // we will use a flag into de options object to set pathstyle or ol.text style
         if (typeof applyPath === 'boolean' && applyPath) {
           style.textPath = textPathStyle;
-          if (!Utils.isNullOrEmpty(label.smooth) && label.smooth === true && Utils.isFunction(feature.getGeometry)) {
-            style.setGeometry(feature.getGeometry().cspline());
+          if (!Utils.isNullOrEmpty(label.smooth) && label.smooth === true &&
+            Utils.isFunction(featureVariable.getGeometry)) {
+            style.setGeometry(featureVariable.getGeometry().cspline());
           }
         }
         else {
@@ -94,14 +98,14 @@ export default class Line extends Simple {
       }
       let fill;
       if (!Utils.isNullOrEmpty(options.fill)) {
-        let fillColorValue = Simple.getValue(options.fill.color, feature);
-        let fillOpacityValue = Simple.getValue(options.fill.opacity, feature) || 1;
-        let widthValue = Simple.getValue(options.fill.width, feature);
+        const fillColorValue = Simple.getValue(options.fill.color, featureVariable);
+        const fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable) || 1;
+        const widthValue = Simple.getValue(options.fill.width, featureVariable);
         if (!Utils.isNullOrEmpty(fillColorValue)) {
           fill = new ol.style.Stroke({
             color: chroma(fillColorValue)
               .alpha(fillOpacityValue).css(),
-            width: widthValue
+            width: widthValue,
           });
         }
       }
@@ -120,7 +124,7 @@ export default class Line extends Simple {
   applyToLayer(layer) {
     super.applyToLayer(layer);
 
-    let olLayer = layer.getImpl().getOL3Layer();
+    const olLayer = layer.getImpl().getOL3Layer();
     if (!Utils.isNullOrEmpty(olLayer)) {
       this.postComposeEvtKey_ = olLayer.on('postcompose', Render.postRender, olLayer);
     }
@@ -134,7 +138,7 @@ export default class Line extends Simple {
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @api stable
    */
-  unapply(layer) {
+  unapply() {
     ol.Observable.unByKey(this.postComposeEvtKey_);
   }
 
@@ -145,21 +149,24 @@ export default class Line extends Simple {
    * @function
    * @api stable
    */
-  drawGeometryToCanvas(vectorContext, canvas, style, stroke) {
-    let x = this.getCanvasSize()[0];
-    let y = this.getCanvasSize()[1];
-    vectorContext.drawGeometry(new ol.geom.LineString([[0 + stroke / 2, 0 + stroke / 2], [(x / 3), (y / 2) - stroke / 2], [(2 * x / 3), 0 + stroke / 2], [x - stroke / 2, (y / 2) - stroke / 2]]));
+  static drawGeometryToCanvas(vectorContext, canvas, style, stroke) {
+    let x = Line.getCanvasSize()[0];
+    let y = Line.getCanvasSize()[1];
+    vectorContext.drawGeometry(new ol.geom.LineString([[0 + (stroke / 2), 0 + (stroke / 2)],
+      [(x / 3), (y / 2) - (stroke / 2)],
+      [(2 * x) / 3, 0 + (stroke / 2)],
+      [x - (stroke / 2), (y / 2) - (stroke / 2)]]));
     if (!Utils.isNullOrEmpty(style)) {
-      let width = style.width;
-      var ctx = canvas.getContext("2d");
+      const width = style.width;
+      const ctx = canvas.getContext('2d');
       ctx.lineWidth = style.width;
-      x = vectorContext.context_.canvas.width;
-      y = vectorContext.context_.canvas.height;
+      x = vectorContext.getContext('2d').canvas.width;
+      y = vectorContext.getContext('2d').canvas.height;
       ctx.strokeStyle = style.color;
       ctx.beginPath();
       ctx.lineTo(0 + width, 0 + width);
       ctx.lineTo((x / 3), (y / 2) - width);
-      ctx.lineTo((2 * x / 3), 0 + (width));
+      ctx.lineTo(((2 * x) / 3), 0 + (width));
       ctx.lineTo(x - width, (y / 2) - width);
       ctx.stroke();
     }
@@ -173,23 +180,23 @@ export default class Line extends Simple {
    * @api stable
    */
   updateCanvas(canvas) {
-    let canvasSize = this.getCanvasSize();
-    let vectorContext = ol.render.toContext(canvas.getContext('2d'), {
-      size: canvasSize
+    const canvasSize = Line.getCanvasSize();
+    const vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+      size: canvasSize,
     });
     let optionsStyle;
-    let style = this.olStyleFn_()[1];
+    const style = this.olStyleFn_()[1];
     if (!Utils.isNullOrEmpty(style) && !Utils.isNullOrEmpty(style.getStroke())) {
       optionsStyle = {
         color: style.getStroke().getColor(),
-        width: 1
+        width: 1,
       };
     }
-    let applyStyle = this.olStyleFn_()[0];
+    const applyStyle = this.olStyleFn_()[0];
     if (!Utils.isNullOrEmpty(applyStyle.getText())) {
       applyStyle.setText(null);
     }
-    let stroke = applyStyle.getStroke();
+    const stroke = applyStyle.getStroke();
     let width;
     if (!Utils.isNullOrEmpty(stroke)) {
       if (!Utils.isNullOrEmpty(stroke.getWidth())) {
@@ -203,22 +210,21 @@ export default class Line extends Simple {
       }
       optionsStyle = {
         color: applyStyle.getStroke().getColor(),
-        width: width
+        width,
       };
       applyStyle.getStroke().setWidth(width);
       vectorContext.setStyle(applyStyle);
     }
-    this.drawGeometryToCanvas(vectorContext, canvas, optionsStyle, width);
+    Line.drawGeometryToCanvas(vectorContext, canvas, optionsStyle, width);
   }
 
   /**
    * TODO
-   *
    * @public
    * @function
    * @api stable
    */
-  getCanvasSize() {
+  static getCanvasSize() {
     return [25, 15];
   }
 }

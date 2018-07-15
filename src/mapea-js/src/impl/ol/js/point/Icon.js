@@ -13,13 +13,14 @@ export default class Icon extends ol.style.Icon {
    */
   constructor(options = {}) {
     // super call
-    ol.style.Icon.call(this, {
+    super({
       anchor: !options.anchor ? undefined : options.anchor.slice(),
       anchorOrigin: options.anchorOrigin,
       anchorXUnits: options.anchorXUnits,
       anchorYUnits: options.anchorYUnits,
       crossOrigin: options.crossOrigin || null,
-      color: (options.color && options.color.slice) ? options.color.slice() : options.color || undefined,
+      color: (options.color && options.color.slice) ?
+        options.color.slice() : options.color || undefined,
       src: options.src,
       offset: !options.offset ? undefined : options.offset.slice(),
       offsetOrigin: options.offsetOrigin,
@@ -29,7 +30,7 @@ export default class Icon extends ol.style.Icon {
       scale: options.scale,
       snapToPixel: options.snapToPixel,
       rotation: options.rotation,
-      rotateWithView: options.rotateWithView
+      rotateWithView: options.rotateWithView,
     });
   }
 
@@ -55,7 +56,7 @@ export default class Icon extends ol.style.Icon {
       scale: this.getScale(),
       snapToPixel: this.getSnapToPixel(),
       rotation: this.getRotation(),
-      rotateWithView: this.getRotateWithView()
+      rotateWithView: this.getRotateWithView(),
     });
   }
 }

@@ -1,5 +1,4 @@
 export default class Centroid extends ol.style.Style {
-
   /**
    * @classdesc custom root styles
    *
@@ -9,7 +8,7 @@ export default class Centroid extends ol.style.Style {
    * @api
    */
   constructor(opt_options = {}) {
-    ol.style.Style.call(opt_options);
+    super(opt_options);
   }
 
   /**
@@ -24,14 +23,12 @@ export default class Centroid extends ol.style.Style {
       geometry = geometry.clone();
     }
     return new Centroid({
-
-      geometry: geometry,
+      geometry,
       fill: this.getFill() ? this.getFill().clone() : undefined,
       image: this.getImage() ? this.getImage().clone() : undefined,
       stroke: this.getStroke() ? this.getStroke().clone() : undefined,
       text: this.getText() ? this.getText().clone() : undefined,
-      zIndex: this.getZIndex()
+      zIndex: this.getZIndex(),
     });
-  };
-
+  }
 }

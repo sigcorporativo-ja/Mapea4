@@ -1,7 +1,7 @@
-import Object from "facade/js/Object";
-import Remote from "facade/js/util/Remote";
-import Exception from "facade/js/exception/exception";
-import Utils from "facade/js/util/Utils";
+import Object from 'facade/js/Object';
+import Remote from 'facade/js/util/Remote';
+import Exception from 'facade/js/exception/exception';
+import Utils from 'facade/js/util/Utils';
 
 /**
  * @namespace M.impl.control
@@ -50,11 +50,9 @@ export default class JSONP extends Object {
    * @api stable
    */
   getLoaderFn(callback) {
-    let loaderScope = this;
     return ((extent, resolution, projection) => {
-      let sourceScope = this;
-      loaderScope.loadInternal_(projection).then((response) => {
-        callback.apply(sourceScope, response);
+      this.loadInternal_(projection).then((response) => {
+        callback.apply(this, response);
       });
     });
   }
@@ -66,11 +64,11 @@ export default class JSONP extends Object {
    * @function
    */
   loadInternal_(projection) {
-    return new Promise((success, fail) => {
+    return new Promise((success) => {
       Remote.get(this.url_).then((response) => {
         if (!Utils.isNullOrEmpty(response.text)) {
-          let features = this.format_.read(response.text, {
-            featureProjection: projection
+          const features = this.format_.read(response.text, {
+            featureProjection: projection,
           });
           success.call(this, [features]);
         }

@@ -1,7 +1,6 @@
-import Utils from "facade/js/util/Utils";
+import Utils from 'facade/js/util/Utils';
 
 export default class TileWMS extends ol.source.TileWMS {
-
   /**
    * @classdesc
    * Layer source for tile data from WMS servers.
@@ -12,14 +11,13 @@ export default class TileWMS extends ol.source.TileWMS {
    * @api stable
    */
 
-  constructor(opt_options) {
+  constructor(optOptions = {}) {
+    super(optOptions);
 
-    let options = opt_options || {};
-
-    super(options);
-
-    if (Utils.isNullOrEmpty(options.tileLoadFunction)) {
-      options.tileLoadFunction = TileWMS.tileLoadFunction.bind(this);
+    if (Utils.isNullOrEmpty(optOptions.tileLoadFunction)) {
+      /* eslint-disable */
+      optOptions.tileLoadFunction = TileWMS.tileLoadFunction.bind(this);
+      /* eslint-enable */
     }
   }
 
@@ -46,6 +44,8 @@ export default class TileWMS extends ol.source.TileWMS {
    */
 
   tileLoadFunction(imageTile, src) {
-    imageTile.getImage().src = src + "&_=" + this.revision_;
+    /* eslint-disable */
+    imageTile.getImage().src = `${src}&_= ${this.revision_}`;
+    /* eslint-enable */
   }
 }
