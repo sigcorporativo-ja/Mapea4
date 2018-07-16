@@ -1,17 +1,12 @@
-import EventsManager from "facade/js/event/Eventsmanager";
-import Utils from "facade/js/utils/Utils";
-import ControlImpl from "impl/ol/js/controls/Controlbase";
 import FDrawFeature from "../../../facade/js/drawfeature";
 import FModifyFeature from "../../../facade/js/modifyfeature";
 import FDeleteFeature from "../../../facade/js/deletefeature";
 import FClearFeature from "../../../facade/js/clearfeature";
-import Remote from "facade/js/utils/Remote";
-import Dialog from "facade/js/Dialog";
 
 /**
  * @namespace M.impl.control
  */
-export default class SaveFeature extends ControlImpl {
+export default class SaveFeature extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Savefeature
@@ -60,27 +55,27 @@ export default class SaveFeature extends ControlImpl {
       let saveFeaturesDelete = null;
 
       let drawfeatureCtrl = this.facadeMap_.getControls(FDrawFeature.NAME)[0];
-      if (!Utils.isNullOrEmpty(drawfeatureCtrl)) {
+      if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
         saveFeaturesDraw = drawfeatureCtrl.getImpl().modifiedFeatures;
         SaveFeature.applyDescribeFeatureType.bind(this)(saveFeaturesDraw, describeFeatureType);
       }
       var modifyfeatureCtrl = this.facadeMap_.getControls(FModifyFeature.NAME)[0];
-      if (!Utils.isNullOrEmpty(modifyfeatureCtrl)) {
+      if (!M.utils.isNullOrEmpty(modifyfeatureCtrl)) {
         saveFeaturesModify = modifyfeatureCtrl.getImpl().modifiedFeatures;
         SaveFeature.applyDescribeFeatureType.bind(this)(saveFeaturesModify, describeFeatureType);
       }
       var deletefeatureCtrl = this.facadeMap_.getControls(FDeleteFeature.NAME)[0];
-      if (!Utils.isNullOrEmpty(deletefeatureCtrl)) {
+      if (!M.utils.isNullOrEmpty(deletefeatureCtrl)) {
         saveFeaturesDelete = deletefeatureCtrl.getImpl().modifiedFeatures;
         SaveFeature.applyDescribeFeatureType.bind(this)(saveFeaturesDelete, describeFeatureType);
       }
       //JGL 20163105: para evitar que se envié en la petición WFST el bbox
-      if (!Utils.isNullOrEmpty(saveFeaturesModify)) {
+      if (!M.utils.isNullOrEmpty(saveFeaturesModify)) {
         saveFeaturesModify.forEach(feature => {
           feature.unset('bbox');
         });
       }
-      if (!Utils.isNullOrEmpty(saveFeaturesDraw)) {
+      if (!M.utils.isNullOrEmpty(saveFeaturesDraw)) {
         saveFeaturesDraw.forEach(feature => {
           feature.unset('bbox');
         });
@@ -99,16 +94,16 @@ export default class SaveFeature extends ControlImpl {
       });
 
       var wfstRequestText = goog.dom.xml.serialize(wfstRequestXml);
-      Remote.post(this.layer_.url, wfstRequestText).then(function (response) {
+      M.Remote.post(this.layer_.url, wfstRequestText).then(function (response) {
         // clears layer
         let clearCtrl = this.facadeMap_.getControls(FClearFeature.NAME)[0];
         clearCtrl.getImpl().clear();
         if (response.code === 200 && response.text.indexOf("ExceptionText") === -1 && response.text.indexOf("<error><descripcion>") === -1) {
-          Dialog.success('Se ha guardado correctamente');
+          M.dialog.success('Se ha guardado correctamente');
         } else if (response.code === 401) {
-          Dialog.error('Ha ocurrido un error al guardar: Usuario no autorizado');
+          M.dialog.error('Ha ocurrido un error al guardar: Usuario no autorizado');
         } else {
-          Dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
+          M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
         }
       });
     });
@@ -148,7 +143,7 @@ export default class SaveFeature extends ControlImpl {
 
       // sets default values
       describeFeatureType.properties.forEach(property => {
-        if (!Utils.isGeometryType(property.localType)) {
+        if (!M.utils.isGeometryType(property.localType)) {
           let valueToAdd = feature.getProperties()[property.name] || layerImpl.getDefaultValue(property.localType);
           feature.set(property.name, valueToAdd);
         }

@@ -1,10 +1,6 @@
-import Control from "facade/js/controls/Controlbase";
-import Utils from "facade/js/utils/Utils";
-import Exception from "facade/js/exception/exception";
-import Template from "facade/js/utils/Template";
 import ClearFeatureImpl from "../.../impl/ol/js/clearfeature";
 
-export default class ClearFeature extends Control {
+export default class ClearFeature extends M.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a ClearFeature
@@ -22,8 +18,8 @@ export default class ClearFeature extends Control {
     // calls the super constructor
     super(impl, ClearFeature.NAME);
 
-    if (Utils.isUndefined(ClearFeatureImpl)) {
-      Exception('La implementación usada no puede crear controles ClearFeature');
+    if (M.utils.isUndefined(ClearFeatureImpl)) {
+      M.exception('La implementación usada no puede crear controles ClearFeature');
     }
   }
 
@@ -37,7 +33,7 @@ export default class ClearFeature extends Control {
    * @api stable
    */
   createView(map) {
-    return Template.compile(ClearFeature.TEMPLATE, {
+    return M.Template.compile(ClearFeature.TEMPLATE, {
       'jsonp': true
     });
   }

@@ -1,10 +1,6 @@
-import Control from "facade/js/controls/Controlbase";
-import Utils from "facade/js/utils/Utils";
-import Exception from "facade/js/exception/exception";
 import ModifyFeatureImpl from "../.../impl/ol/js/modifyfeature";
-import Template from "facade/js/utils/Template";
 
-export default class ModifyFeature extends Control {
+export default class ModifyFeature extends M.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a ModifyFeature
@@ -30,8 +26,8 @@ export default class ModifyFeature extends Control {
     this.name = ModifyFeature.NAME;
     this.modify = null;
 
-    if (Utils.isUndefined(ModifyFeatureImpl)) {
-      Exception('La implementación usada no puede crear controles ModifyFeature');
+    if (M.utils.isUndefined(ModifyFeatureImpl)) {
+      M.exception('La implementación usada no puede crear controles ModifyFeature');
     }
   }
 
@@ -45,7 +41,7 @@ export default class ModifyFeature extends Control {
    * @api stable
    */
   createView(map) {
-    return Template.compile(ModifyFeature.TEMPLATE, {
+    return M.Template.compile(ModifyFeature.TEMPLATE, {
       'jsonp': true
     });
   }

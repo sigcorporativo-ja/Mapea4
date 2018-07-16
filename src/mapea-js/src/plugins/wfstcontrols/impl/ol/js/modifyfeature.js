@@ -1,11 +1,7 @@
-import EventsManager from "facade/js/event/Eventsmanager";
-import Utils from "facade/js/utils/Utils";
-import ControlImpl from "impl/ol/js/controls/Controlbase";
-
 /**
  * @namespace M.impl.control
  */
-export default class ModifyFeature extends ControlImpl {
+export default class ModifyFeature extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a ModifyFeature
@@ -53,7 +49,7 @@ export default class ModifyFeature extends ControlImpl {
    * @api stable
    */
   activate() {
-    if (Utils.isNullOrEmpty(this.modify)) {
+    if (M.utils.isNullOrEmpty(this.modify)) {
       this.createInteractionModify_();
     }
     this.modify.setActive(true);
@@ -67,7 +63,7 @@ export default class ModifyFeature extends ControlImpl {
    * @api stable
    */
   deactivate() {
-    if (Utils.isNullOrEmpty(this.modify)) {
+    if (M.utils.isNullOrEmpty(this.modify)) {
       this.createInteractionModify_();
     }
     let olMap = this.facadeMap_.getMapImpl();
@@ -95,7 +91,7 @@ export default class ModifyFeature extends ControlImpl {
 
     let olStrokeClone = olStroke == null ? null : olStroke.clone();
     if (olStrokeClone != null) {
-      olStrokeClone.setColor(Utils.getRgba(olStroke.getColor()));
+      olStrokeClone.setColor(M.utils.getRgba(olStroke.getColor()));
     }
     if (styleImage == null) {
       styleImage = new ol.style.Circle({
@@ -131,7 +127,7 @@ export default class ModifyFeature extends ControlImpl {
     olMap.addInteraction(this.modify);
 
     // updates features from refresh
-    this.layer_.on(EventsManager.LOAD, this.updateLayerFeatures_, this);
+    this.layer_.on(M.evt.LOAD, this.updateLayerFeatures_, this);
   }
 
   /**

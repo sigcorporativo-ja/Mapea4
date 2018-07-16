@@ -1,10 +1,4 @@
-import Control from "facade/js/controls/Controlbase";
-import Utils from "facade/js/utils/Utils";
-import Exception from "facade/js/exception/exception";
-import EditAttributeImpl from "../.../impl/ol/js/editattribute";
-import Template from "facade/js/utils/Template";
-
-export default class EditAttribute extends Control {
+export default class EditAttribute extends M.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a EditAttribute
@@ -30,8 +24,8 @@ export default class EditAttribute extends Control {
      */
     this.name = EditAttribute.NAME;
 
-    if (Utils.isUndefined(EditAttributeImpl)) {
-      Exception('La implementación usada no puede crear controles EditAttribute');
+    if (M.utils.isUndefined(EditAttributeImpl)) {
+      M.exception('La implementación usada no puede crear controles EditAttribute');
     }
   }
 
@@ -46,7 +40,7 @@ export default class EditAttribute extends Control {
    * @api stable
    */
   createView(map) {
-    return Template.compile(EditAttribute.TEMPLATE, {
+    return M.Template.compile(EditAttribute.TEMPLATE, {
       'jsonp': true
     });
   }

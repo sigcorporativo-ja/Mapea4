@@ -1,11 +1,6 @@
-import Control from "facade/js/controls/Controlbase";
-import Utils from "facade/js/utils/Utils";
-import Exception from "facade/js/exception/exception";
 import DrawFeatureImpl from "../.../impl/ol/js/drawfeature";
-import Template from "facade/js/utils/Template";
 
-
-export default class DrawFeature extends Control {
+export default class DrawFeature extends M.Control {
   /**
    * @classdesc Main constructor of the class. Creates a DrawFeature
    * control to draw features on the map.
@@ -29,8 +24,8 @@ export default class DrawFeature extends Control {
      */
     this.name = DrawFeature.NAME;
 
-    if (Utils.isUndefined(DrawFeatureImpl)) {
-      Exception('La implementación usada no puede crear controles DrawFeature');
+    if (M.utils.isUndefined(DrawFeatureImpl)) {
+      M.Exception('La implementación usada no puede crear controles DrawFeature');
     }
   }
 
@@ -44,7 +39,7 @@ export default class DrawFeature extends Control {
    * @api stable
    */
   createView(map) {
-    return Template.compile(DrawFeature.TEMPLATE, {
+    return M.Template.compile(DrawFeature.TEMPLATE, {
       'jsonp': true
     });
   }

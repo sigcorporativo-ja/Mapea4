@@ -1,10 +1,6 @@
-import Control from "facade/js/controls/Controlbase";
-import Utils from "facade/js/utils/Utils";
-import Exception from "facade/js/exception/exception";
 import SaveFeatureImpl from "../.../impl/ol/js/savefeature";
-import Template from "facade/js/utils/Template";
 
-export default class SaveFeature extends Control {
+export default class SaveFeature extends M.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a SaveFeature
@@ -29,8 +25,8 @@ export default class SaveFeature extends Control {
 
     this.name = SaveFeature.NAME;
 
-    if (Utils.isUndefined(SaveFeatureImpl)) {
-      Exception('La implementación usada no puede crear controles SaveFeature');
+    if (M.utils.isUndefined(SaveFeatureImpl)) {
+      M.exception('La implementación usada no puede crear controles SaveFeature');
     }
   }
 
@@ -45,7 +41,7 @@ export default class SaveFeature extends Control {
    */
   createView(map) {
     this.facadeMap_ = map;
-    return Template.compile(SaveFeature.TEMPLATE, {
+    return M.Template.compile(SaveFeature.TEMPLATE, {
       'jsonp': true
     });
   }

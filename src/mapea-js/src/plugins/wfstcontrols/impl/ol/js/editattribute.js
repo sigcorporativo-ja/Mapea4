@@ -1,20 +1,10 @@
 import WFSTBase from "./wfstcontrolbase";
-import EventsManager from "facade/js/event/Eventsmanager";
-import Utils from "facade/js/utils/Utils";
-import Geom from "facade/js/geom/Geom";
-import ControlImpl from "impl/ol/js/controls/Controlbase";
-import Dialog from "facade/js/Dialog";
-import Template from "facade/js/utils/Template";
 import FEditattribute from "../../../facade/js/editattribute";
-import Popup from "facade/js/popup";
-import Remote from "facade/js/utils/Remote";
-import WFSImpl from "impl/ol/js/layers/WFS";
-
 
 /**
  * @namespace M.impl.control
  */
-export default class EditAttribute extends ControlImpl {
+export default class EditAttribute extends M.impl.control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a EditAttribute
@@ -53,8 +43,8 @@ export default class EditAttribute extends ControlImpl {
    * @api stable
    */
   activate() {
-    this.layer_.on(EventsManager.SELECT_FEATURES, this.showEditPopup_, this);
-    this.layer_.on(EventsManager.UNSELECT_FEATURES, this.unselectFeature_, this);
+    this.layer_.on(M.evt.SELECT_FEATURES, this.showEditPopup_, this);
+    this.layer_.on(M.evt.UNSELECT_FEATURES, this.unselectFeature_, this);
   }
 
   /**
@@ -65,8 +55,8 @@ export default class EditAttribute extends ControlImpl {
    * @api stable
    */
   deactivate() {
-    this.layer_.un(EventsManager.SELECT_FEATURES, this.showEditPopup_, this);
-    this.layer_.un(EventsManager.UNSELECT_FEATURES, this.unselectFeature_, this);
+    this.layer_.un(M.evt.SELECT_FEATURES, this.showEditPopup_, this);
+    this.layer_.un(M.evt.UNSELECT_FEATURES, this.unselectFeature_, this);
   }
 
   /**
@@ -84,9 +74,9 @@ export default class EditAttribute extends ControlImpl {
     let coordinate = evt.coord;
 
     // avoid editing new features
-    if (Utils.isNullOrEmpty(this.editFeature.getId())) {
+    if (M.utils.isNullOrEmpty(this.editFeature.getId())) {
       this.editFeature = null;
-      Dialog.info('Debe guardar el elemento previamente');
+      M.dialog.info('Debe guardar el elemento previamente');
     } else {
       this.editFeature.setStyle(EditAttribute.SELECTED_STYLE);
 
@@ -102,7 +92,7 @@ export default class EditAttribute extends ControlImpl {
           // 'type': p.localType
         });
       }, this);
-      Template.compile(FEditattribute.TEMPLATE_POPUP, {
+      M.Template.compile(FEditattribute.TEMPLATE_POPUP, {
         'jsonp': true,
         'vars': templateVar,
         'parseToHtml': false
@@ -113,36 +103,36 @@ export default class EditAttribute extends ControlImpl {
           'content': htmlAsText
         };
         this.popup_ = this.facadeMap_.getPopup();
-        if (!Utils.isNullOrEmpty(this.popup_)) {
+        if (!M.utils.isNullOrEmpty(this.popup_)) {
           let hasExternalContent = this.popup_.getTabs().some(function (tab) {
             return (tab['title'] !== FEditattribute.POPUP_TITLE);
           });
           if (!hasExternalContent) {
             this.facadeMap_.removePopup();
-            this.popup_ = new Popup();
+            this.popup_ = new M.Popup();
             this.popup_.addTab(popupContent);
             this.facadeMap_.addPopup(this.popup_, coordinate);
           } else {
             this.popup_.addTab(popupContent);
           }
         } else {
-          this.popup_ = new Popup();
+          this.popup_ = new M.Popup();
           this.popup_.addTab(popupContent);
           this.facadeMap_.addPopup(this.popup_, coordinate);
         }
 
         // adds save button events on show
-        this.popup_.on(EventsManager.SHOW, function () {
+        this.popup_.on(M.evt.SHOW, function () {
           let popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
-          if (!Utils.isNullOrEmpty(popupButton)) {
+          if (!M.utils.isNullOrEmpty(popupButton)) {
             popupButton.addEventListener("click", this.saveAttributes_);
           }
         }, this);
 
         // removes events on destroy
-        this.popup_.on(EventsManager.DESTROY, function () {
+        this.popup_.on(M.evt.DESTROY, function () {
           let popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
-          if (!Utils.isNullOrEmpty(popupButton)) {
+          if (!M.utils.isNullOrEmpty(popupButton)) {
             popupButton.removeEventListener("click", this.saveAttributes_);
           }
           this.unselectFeature_();
@@ -205,12 +195,12 @@ export default class EditAttribute extends ControlImpl {
 
       // closes the popup
       this.facadeMap_.removePopup(this.popup_);
-      Remote.post(this.layer_.url, wfstRequestText).then(response => {
+      M.Remote.post(this.layer_.url, wfstRequestText).then(response => {
         popupButton.classList.remove('m-savefeature-saving');
         if (response.code === 200) {
-          Dialog.success('Se ha guardado correctamente el elemento');
+          M.dialog.success('Se ha guardado correctamente el elemento');
         } else {
-          Dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
+          M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
         }
       });
     });
@@ -240,7 +230,7 @@ export default class EditAttribute extends ControlImpl {
    */
   destroy() {
     super('destroy');
-    if (!Utils.isNull(this.facadeMap_) && !Utils.isNull(this.facadeMap_.getPopup())) {
+    if (!M.utils.isNull(this.facadeMap_) && !M.utils.isNull(this.facadeMap_.getPopup())) {
       this.facadeMap_.removePopup();
     }
   }

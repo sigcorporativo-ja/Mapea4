@@ -4,9 +4,6 @@ import DeleteFeature from "./deletefeature";
 import ClearFeature from "./clearfeature";
 import SaveFeature from "./savefeature";
 import EditAttribute from "./editattribute";
-import Plugin from "facade/js/Plugin";
-import Utils from "facade/js/utils/Utils";
-import Dialog from "facade/js/Dialog";
 
 /**
  * @classdesc
@@ -18,7 +15,7 @@ import Dialog from "facade/js/Dialog";
  * @param {array} controls - Array of controls to be added
  * @api stable
  */
-export default class WFSTControls extends Plugin {
+export default class WFSTControls extends M.Plugin {
 
   constructor(controls, layername) {
 
@@ -107,14 +104,14 @@ export default class WFSTControls extends Plugin {
    */
   addTo(map) {
     this.map_ = map;
-    let wfslayer = Utils.isNullOrEmpty(this.map_.getWFS({
+    let wfslayer = M.utils.isNullOrEmpty(this.map_.getWFS({
       'name': this.layername_
     })[0]) ? this.map_.getWFS()[0] : this.map_.getWFS({
       'name': this.layername_
     })[0];
 
-    if (Utils.isNullOrEmpty(wfslayer)) {
-      Dialog.error('Los controles <b>' + this.controls.join(',') + '</b> no se pueden añadir al mapa porque no existe una capa WFS cargada.');
+    if (M.utils.isNullOrEmpty(wfslayer)) {
+      M.dialog.error('Los controles <b>' + this.controls.join(',') + '</b> no se pueden añadir al mapa porque no existe una capa WFS cargada.');
     } else {
       let addSave = false;
       let addClear = false;
@@ -192,16 +189,16 @@ export default class WFSTControls extends Plugin {
     let wfslayer = this.map_.getWFS({
       'name': this.layername_
     })[0];
-    if (Utils.isNullOrEmpty(wfslayer)) {
-      Dialog.error('Los capa <b>' + layername + '</b> no es una capa WFS cargada.');
+    if (M.utils.isNullOrEmpty(wfslayer)) {
+      M.dialog.error('Los capa <b>' + layername + '</b> no es una capa WFS cargada.');
     } else {
       let objControls = [];
-      if (!Utils.isNullOrEmpty(this.drawfeature_)) objControls.push(this.drawfeature_);
-      if (!Utils.isNullOrEmpty(this.modifyfeature_)) objControls.push(this.modifyfeature_);
-      if (!Utils.isNullOrEmpty(this.deletefeature_)) objControls.push(this.deletefeature_);
-      if (!Utils.isNullOrEmpty(this.clearfeature_)) objControls.push(this.clearfeature_);
-      if (!Utils.isNullOrEmpty(this.savefeature_)) objControls.push(this.savefeature_);
-      if (!Utils.isNullOrEmpty(this.editattibute_)) objControls.push(this.editattibute_);
+      if (!M.utils.isNullOrEmpty(this.drawfeature_)) objControls.push(this.drawfeature_);
+      if (!M.utils.isNullOrEmpty(this.modifyfeature_)) objControls.push(this.modifyfeature_);
+      if (!M.utils.isNullOrEmpty(this.deletefeature_)) objControls.push(this.deletefeature_);
+      if (!M.utils.isNullOrEmpty(this.clearfeature_)) objControls.push(this.clearfeature_);
+      if (!M.utils.isNullOrEmpty(this.savefeature_)) objControls.push(this.savefeature_);
+      if (!M.utils.isNullOrEmpty(this.editattibute_)) objControls.push(this.editattibute_);
 
       //let ctrlActivo = null;
       //objControls.forEach(function (ctrl){if (ctrl.activated) ctrlActivo = ctrl});

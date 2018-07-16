@@ -1,10 +1,6 @@
-import Control from "facade/js/controls/Controlbase";
-import Utils from "facade/js/utils/Utils";
-import Exception from "facade/js/exception/exception";
 import DeleteFeatureImpl from "../.../impl/ol/js/deletefeature";
-import Template from "facade/js/utils/Template";
 
-export default class DeleteFeature extends Control {
+export default class DeleteFeature extends M.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a DeleteFeature
@@ -24,8 +20,8 @@ export default class DeleteFeature extends Control {
 
     this.name = DeleteFeature.NAME;
 
-    if (Utils.isUndefined(DeleteFeatureImpl)) {
-      Exception('La implementación usada no puede crear controles DeleteFeature');
+    if (M.utils.isUndefined(DeleteFeatureImpl)) {
+      M.exception('La implementación usada no puede crear controles DeleteFeature');
     }
   }
 
@@ -39,7 +35,7 @@ export default class DeleteFeature extends Control {
    * @api stable
    */
   createView(map) {
-    return Template.compile(DeleteFeature.TEMPLATE, {
+    return M.Template.compile(DeleteFeature.TEMPLATE, {
       'jsonp': true
     });
   }

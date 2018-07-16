@@ -1,12 +1,9 @@
 import WFSTBase from "./wfstcontrolbase";
-import ControlImpl from "impl/ol/js/controls/Controlbase";
-import EventsManager from "facade/js/event/Eventsmanager";
-import Utils from "facade/js/utils/Utils";
 
 /**
  * @namespace M.impl.control
  */
-export default class DeleteFeature extends ControlImpl {
+export default class DeleteFeature extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a DeleteFeature
@@ -46,7 +43,7 @@ export default class DeleteFeature extends ControlImpl {
    * @api stable
    */
   activate() {
-    this.layer_.on(EventsManager.SELECT_FEATURES, this.removeFeature_, this);
+    this.layer_.on(M.evt.SELECT_FEATURES, this.removeFeature_, this);
   }
 
   /**
@@ -57,7 +54,7 @@ export default class DeleteFeature extends ControlImpl {
    * @api stable
    */
   deactivate() {
-    this.layer_.un(EventsManager.SELECT_FEATURES, this.removeFeature_, this);
+    this.layer_.un(M.evt.SELECT_FEATURES, this.removeFeature_, this);
   }
 
   /**
@@ -74,12 +71,12 @@ export default class DeleteFeature extends ControlImpl {
     olLayer.getSource().removeFeature(feature);
 
     // prevents saving new features
-    if (!Utils.isNullOrEmpty(feature.getId())) {
+    if (!M.utils.isNullOrEmpty(feature.getId())) {
       this.modifiedFeatures.push(feature);
     } else {
       // removes the created feature from the drawfeature control
       let drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
-      if (!Utils.isNullOrEmpty(drawfeatureCtrl)) {
+      if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
         let drawnFeatures = drawfeatureCtrl.getImpl().modifiedFeatures;
         let idx = drawnFeatures.indexOf(feature);
         drawnFeatures.splice(idx, 1);

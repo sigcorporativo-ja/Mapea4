@@ -1,9 +1,7 @@
-import ControlImpl from "impl/ol/js/controls/Controlbase";
-
 /**
  * @namespace M.impl.control
  */
-export default class ClearFeature extends ControlImpl {
+export default class ClearFeature extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a ClearFeature

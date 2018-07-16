@@ -1,7 +1,4 @@
 import WFSTBase from "./wfstcontrolbase";
-import EventsManager from "facade/js/event/Eventsmanager";
-import Utils from "facade/js/utils/Utils";
-import Geom from "facade/js/geom/Geom";
 
 /**
  * @namespace M.impl.control
@@ -42,7 +39,7 @@ export default class DrawFeature extends WFSTBase {
     }
     this.interaction_ = new ol.interaction.Draw({
       'source': olLayer.getSource(),
-      'type': Geom.parseWFS(this.layer_.geometry),
+      'type': M.geom.parseWFS(this.layer_.geometry),
       'style': new ol.style.Style({
         image: image,
         fill: olFill,
@@ -60,7 +57,7 @@ export default class DrawFeature extends WFSTBase {
     }, this);
 
     // updates features from refresh
-    this.layer_.on(EventsManager.LOAD, this.updateLayerFeatures_, this);
+    this.layer_.on(M.evt.LOAD, this.updateLayerFeatures_, this);
   }
 
   /**
@@ -82,7 +79,7 @@ export default class DrawFeature extends WFSTBase {
    * @api stable
    */
   deactivate() {
-    if (Utils.isNullOrEmpty(this.interaction_)) {
+    if (M.utils.isNullOrEmpty(this.interaction_)) {
       this.createInteraction_();
     }
     let olMap = this.facadeMap_.getMapImpl();

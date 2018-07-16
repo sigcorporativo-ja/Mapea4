@@ -1,10 +1,7 @@
-import ControlImpl from "impl/ol/js/controls/Controlbase";
-import Utils from "facade/js/utils/Utils";
-
 /**
  * @namespace M.impl.control
  */
-export default class WFSTBase extends ControlImpl {
+export default class WFSTBase extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the class.
@@ -68,7 +65,7 @@ export default class WFSTBase extends ControlImpl {
    * @api stable
    */
   activate() {
-    if (Utils.isNullOrEmpty(this.interaction_)) {
+    if (M.utils.isNullOrEmpty(this.interaction_)) {
       this.createInteraction_();
       this.facadeMap_.getMapImpl().addInteraction(this.interaction_);
       this.interaction_.setActive(true);
@@ -85,7 +82,7 @@ export default class WFSTBase extends ControlImpl {
    * @api stable
    */
   deactivate() {
-    if (Utils.isNullOrEmpty(this.interaction_)) {
+    if (M.utils.isNullOrEmpty(this.interaction_)) {
       this.createInteraction_();
       this.facadeMap_.getMapImpl().addInteraction(this.interaction_);
       this.interaction_.setActive(false);
