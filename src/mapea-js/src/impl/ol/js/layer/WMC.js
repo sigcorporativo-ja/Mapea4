@@ -1,10 +1,10 @@
-import FormatWMC from "../format/wmc/WMC110";
-import Utils from "facade/js/util/Utils";
-import * as parameter from "facade/js/parameter/parameter";
-import Config from "configuration";
-import Remote from "facade/js/util/Remote";
-import EventsManager from "facade/js/event/Manager";
-import Layer from "./Layer";
+import Utils from 'facade/js/util/Utils';
+import * as parameter from 'facade/js/parameter/parameter';
+import Config from 'configuration';
+import Remote from 'facade/js/util/Remote';
+import EventsManager from 'facade/js/event/Manager';
+import FormatWMC from '../format/wmc/WMC110';
+import Layer from './Layer';
 
 export default class WMC extends Layer {
   /**
@@ -18,7 +18,6 @@ export default class WMC extends Layer {
    * @api stable
    */
   constructor(options) {
-
     // calls the super constructor
     super(options);
 
@@ -56,7 +55,6 @@ export default class WMC extends Layer {
      * @type {ol.Projection}
      */
     this.extentProj_ = null;
-
   }
 
   /**
@@ -81,7 +79,7 @@ export default class WMC extends Layer {
    */
   select() {
     if (this.selected === false) {
-      let bbox = this.map.getBbox();
+      const bbox = this.map.getBbox();
 
       // unselect layers
       this.map.getWMC().forEach(wmcLayer => wmcLayer.unselect());
@@ -90,33 +88,33 @@ export default class WMC extends Layer {
 
       // loads the layers from this WMC if it is not cached
       this.loadContextPromise = new Promise((success, fail) => {
-        Remote.get(this.url).then(response => {
+        Remote.get(this.url).then((response) => {
           let proj;
           if (this.map._defaultProj === false) {
             proj = this.map.getProjection().code;
           }
-          let wmcDocument = response.xml;
-          let formater = new FormatWMC({
-            'projection': proj
+          const wmcDocument = response.xml;
+          const formater = new FormatWMC({
+            projection: proj,
           });
-          let context = formater.readFromDocument(wmcDocument);
+          const context = formater.readFromDocument(wmcDocument);
           success.call(this, context);
         });
       });
-      this.loadContextPromise.then(context => {
+      this.loadContextPromise.then((context) => {
         // set projection with the wmc
         if (this.map._defaultProj) {
-          let olproj = ol.proj.get(context.projection);
+          const olproj = ol.proj.get(context.projection);
           this.map.setProjection({
-            "code": olproj.getCode(),
-            "units": olproj.getUnits()
+            code: olproj.getCode(),
+            units: olproj.getUnits(),
           }, true);
         }
         // load layers
         this.loadLayers(context);
         if (!Utils.isNullOrEmpty(bbox)) {
           this.map.setBbox(bbox, {
-            'nearest': true
+            nearest: true,
           });
         }
         this.map.fire(EventsManager.CHANGE_WMC, this);
@@ -183,23 +181,22 @@ export default class WMC extends Layer {
    * @api stable
    */
   getMaxExtent() {
-    let this_ = this;
-    let olProjection = ol.proj.get(this.map.getProjection().code);
-    let promise = new Promise((success, fail) => {
-      if (Utils.isNullOrEmpty(this_.maxExtent)) {
-        this_.loadContextPromise.then(context => {
-          this_.maxExtent = context.maxExtent;
-          if (Utils.isNullOrEmpty(this_.extentProj_)) {
-            this_.extentProj_ = parameter.projection(Config.DEFAULT_PROJ).code;
+    const olProjection = ol.proj.get(this.map.getProjection().code);
+    const promise = new Promise((success, fail) => {
+      if (Utils.isNullOrEmpty(this.maxExtent)) {
+        this.loadContextPromise.then((context) => {
+          this.maxExtent = context.maxExtent;
+          if (Utils.isNullOrEmpty(this.extentProj_)) {
+            this.extentProj_ = parameter.projection(Config.DEFAULT_PROJ).code;
           }
-          this_.maxExtent = ol.proj.transformExtent(this_.maxExtent, this_.extentProj_, olProjection);
-          this_.extentProj_ = olProjection;
-          success(this_.maxExtent);
+          this.maxExtent = ol.proj.transformExtent(this.maxExtent, this.extentProj_, olProjection);
+          this.extentProj_ = olProjection;
+          success(this.maxExtent);
         });
       }
       else {
-        this_.extentProj_ = olProjection;
-        success(this_.maxExtent);
+        this.extentProj_ = olProjection;
+        success(this.maxExtent);
       }
     });
     return promise;
