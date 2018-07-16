@@ -1,8 +1,7 @@
-import Utils from "facade/js/util/Utils";
-import LayerBase from "./Layer";
-import Config from "configuration";
-import GetCapabilities from "../util/WMSCapabilities";
-import Remote from "facade/js/util/Remote";
+import Utils from 'facade/js/util/Utils';
+import Remote from 'facade/js/util/Remote';
+import EventsManager from 'facade/js/event/Manager';
+import LayerBase from './Layer';
 
 export default class WMTS extends LayerBase {
   /**
@@ -16,7 +15,6 @@ export default class WMTS extends LayerBase {
    * @api stable
    */
   constructor(options = {}) {
-
     // calls the super constructor
     super(options);
 
@@ -40,14 +38,16 @@ export default class WMTS extends LayerBase {
     this.map = map;
 
     // calculates the resolutions from scales
-    if (!Utils.isNull(this.options) && !Utils.isNull(this.options.minScale) && !Utils.isNull(this.options.maxScale)) {
-      let units = this.map.getMapImpl().getView().getProjection().getUnits();
+    if (!Utils.isNull(this.options) &&
+      !Utils.isNull(this.options.minScale) && !Utils.isNull(this.options.maxScale)) {
+      const units = this.map.getMapImpl().getView().getProjection().getUnits();
       this.options.minResolution = Utils.getResolutionFromScale(this.options.minScale, units);
       this.options.maxResolution = Utils.getResolutionFromScale(this.options.maxScale, units);
     }
 
     // adds layer from capabilities
-    this.getCapabilitiesOptions_().then(capabilitiesOptions => this.addLayer_(capabilitiesOptions));
+    this.getCapabilitiesOptions_()
+      .then(capabilitiesOptions => this.addLayer_(capabilitiesOptions));
   }
 
   /**
@@ -60,10 +60,10 @@ export default class WMTS extends LayerBase {
    */
   setResolutions(resolutions) {
     // gets the projection
-    let projection = ol.proj.get(this.map.getProjection().code);
+    const projection = ol.proj.get(this.map.getProjection().code);
 
     // gets the extent
-    let extent = this.map.getMaxExtent();
+    const extent = this.map.getMaxExtent();
     let olExtent;
     if (!Utils.isNullOrEmpty(extent)) {
       olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
@@ -74,51 +74,51 @@ export default class WMTS extends LayerBase {
 
     if (!Utils.isNull(this.capabilitiesParser)) {
       // gets matrix
-      let matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
-      let matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
+      const matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
+      const matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
 
       // gets format
-      let format = this.capabilitiesParser.getFormat(this.name);
+      const format = this.capabilitiesParser.getFormat(this.name);
 
-      let newSource = new ol.source.WMTS({
+      const newSource = new ol.source.WMTS({
         url: this.url,
         layer: this.name,
-        matrixSet: matrixSet,
-        format: format,
-        projection: projection,
+        matrixSet,
+        format,
+        projection,
         tileGrid: new ol.tilegrid.WMTS({
           origin: ol.extent.getBottomLeft(olExtent),
-          resolutions: resolutions,
-          matrixIds: matrixIds
+          resolutions,
+          matrixIds,
         }),
-        extent: olExtent
+        extent: olExtent,
       });
       this.ol3Layer.setSource(newSource);
     }
     else {
       // adds layer from capabilities
-      this.getCapabilities_().then(capabilitiesParser => {
+      this.getCapabilities_().then((capabilitiesParser) => {
         this.capabilitiesParser = capabilitiesParser;
 
         // gets matrix
-        let matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
-        let matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
+        const matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
+        const matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
 
         // gets format
-        let format = this.capabilitiesParser.getFormat(this.name);
+        const format = this.capabilitiesParser.getFormat(this.name);
 
-        let newSource = new ol.source.WMTS({
+        const newSource = new ol.source.WMTS({
           url: this.url,
           layer: this.name,
-          matrixSet: matrixSet,
-          format: format,
-          projection: projection,
+          matrixSet,
+          format,
+          projection,
           tileGrid: new ol.tilegrid.WMTS({
             origin: ol.extent.getBottomLeft(olExtent),
-            resolutions: resolutions,
-            matrixIds: matrixIds
+            resolutions,
+            matrixIds,
           }),
-          extent: olExtent
+          extent: olExtent,
         });
         this.ol3Layer.setSource(newSource);
       });
@@ -147,7 +147,7 @@ export default class WMTS extends LayerBase {
         }
 
         // updates resolutions and keep the bbox
-        let oldBbox = this.map.getBbox();
+        const oldBbox = this.map.getBbox();
         this.map.getImpl().updateResolutionsFromBaseLayer();
         if (!Utils.isNullOrEmpty(oldBbox)) {
           this.map.setBbox(oldBbox);
@@ -167,19 +167,20 @@ export default class WMTS extends LayerBase {
    */
   addLayer_(capabilitiesOptions) {
     // gets resolutions from defined min/max resolutions
-    let minResolution = this.options.minResolution;
-    let maxResolution = this.options.maxResolution;
-    capabilitiesOptions.format = this.options.format || capabilitiesOptions.format;
+    const capabilitiesOptionsVariable = capabilitiesOptions;
+    const minResolution = this.options.minResolution;
+    const maxResolution = this.options.maxResolution;
+    capabilitiesOptionsVariable.format = this.options.format || capabilitiesOptions.format;
 
     this.ol3Layer = new ol.layer.Tile({
       visible: this.options.visibility,
-      source: new ol.source.WMTS(capabilitiesOptions),
-      minResolution: minResolution,
-      maxResolution: maxResolution
+      source: new ol.source.WMTS(capabilitiesOptionsVariable),
+      minResolution,
+      maxResolution,
     });
 
     // keeps z-index values before ol resets
-    let zIndex = this.zIndex_;
+    const zIndex = this.zIndex_;
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
     // sets its z-index
@@ -188,7 +189,7 @@ export default class WMTS extends LayerBase {
     }
 
     // activates animation always for WMTS layers
-    this.ol3Layer.set("animated", true);
+    this.ol3Layer.set('animated', true);
 
     this.fire(EventsManager.ADDED_TO_MAP, this);
   }
@@ -202,19 +203,20 @@ export default class WMTS extends LayerBase {
    */
   getCapabilitiesOptions_() {
     // name
-    let layerName = this.name;
+    const layerName = this.name;
     // matrix set
     let matrixSet = this.matrixSet;
     if (Utils.isNullOrEmpty(matrixSet)) {
       /* if no matrix set was specified then
          it supposes the matrix set has the name
-         of the projection*/
+         of the projection
+         */
       matrixSet = this.map.getProjection().code;
     }
-    return this.getCapabilities().then(parsedCapabilities => {
+    return this.getCapabilities().then((parsedCapabilities) => {
       return ol.source.WMTS.optionsFromCapabilities(parsedCapabilities, {
-        'layer': layerName,
-        'matrixSet': matrixSet
+        layer: layerName,
+        matrixSet,
       });
     });
   }
@@ -227,12 +229,12 @@ export default class WMTS extends LayerBase {
    * @api stable
    */
   getCapabilities() {
-    let getCapabilitiesUrl = Utils.getWMTSGetCapabilitiesUrl(this.url);
-    let parser = new ol.format.WMTSCapabilities();
+    const getCapabilitiesUrl = Utils.getWMTSGetCapabilitiesUrl(this.url);
+    const parser = new ol.format.WMTSCapabilities();
     return new Promise((success, fail) => {
-      Remote.get(getCapabilitiesUrl).then(response => {
-        let getCapabilitiesDocument = response.xml;
-        let parsedCapabilities = parser.read(getCapabilitiesDocument);
+      Remote.get(getCapabilitiesUrl).then((response) => {
+        const getCapabilitiesDocument = response.xml;
+        const parsedCapabilities = parser.read(getCapabilitiesDocument);
         success.call(this, parsedCapabilities);
       });
     });
@@ -271,7 +273,7 @@ export default class WMTS extends LayerBase {
    * @api stable
    */
   destroy() {
-    let olMap = this.map.getMapImpl();
+    const olMap = this.map.getMapImpl();
     if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;

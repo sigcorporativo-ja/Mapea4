@@ -1,6 +1,6 @@
-import Utils from "facade/js/util/Utils";
-import Config from "configuration";
-import Object from "facade/js/Object";
+import Utils from 'facade/js/util/Utils';
+import Config from 'configuration';
+import Object from 'facade/js/Object';
 
 export default class LayerBase extends Object {
   /**
@@ -15,7 +15,6 @@ export default class LayerBase extends Object {
    * @api stable
    */
   constructor(options = {}) {
-
     // calls the super constructor
     super();
 
@@ -83,7 +82,6 @@ export default class LayerBase extends Object {
      * @expose
      */
     this.legendUrl_ = Utils.concatUrlPaths([Config.THEME_URL, LayerBase.LEGEND_DEFAULT]);
-
   }
 
   /**
@@ -110,10 +108,13 @@ export default class LayerBase extends Object {
    * @function
    * @api stable
    * @expose
+   *
    */
+  /* eslint-disable */
   isQueryable() {
     return false;
   }
+  /* eslint-enable */
 
   /**
    * This function indicates if the layer is in range
@@ -125,9 +126,9 @@ export default class LayerBase extends Object {
   inRange() {
     let inRange = false;
     if (!Utils.isNullOrEmpty(this.ol3Layer)) {
-      let resolution = this.map.getMapImpl().getView().getResolution();
-      let maxResolution = this.ol3Layer.getMaxResolution();
-      let minResolution = this.ol3Layer.getMinResolution();
+      const resolution = this.map.getMapImpl().getView().getResolution();
+      const maxResolution = this.ol3Layer.getMaxResolution();
+      const minResolution = this.ol3Layer.getMinResolution();
 
       inRange = ((resolution >= minResolution) && (resolution <= maxResolution));
     }
@@ -224,7 +225,7 @@ export default class LayerBase extends Object {
    * @expose
    */
   setOL3Layer(layer) {
-    let olMap = this.map.getMapImpl();
+    const olMap = this.map.getMapImpl();
     olMap.removeLayer(this.ol3Layer);
     this.ol3Layer = layer;
     olMap.addLayer(layer);
@@ -240,21 +241,6 @@ export default class LayerBase extends Object {
    */
   getMap() {
     return this.map;
-  }
-
-  /**
-   * This function gets the created OL layer
-   *
-   * @function
-   * @api stable
-   * @expose
-   */
-  setOL3Layer(layer) {
-    let olMap = this.map.getMapImpl();
-    olMap.removeLayer(this.ol3Layer);
-    this.ol3Layer = layer;
-    olMap.addLayer(layer);
-    return this;
   }
 
   /**
@@ -287,6 +273,7 @@ export default class LayerBase extends Object {
    * @function
    * @api stable
    */
+  /* eslint-disable */
   getNumZoomLevels() {
     return 16; // 16 zoom levels by default
   }
@@ -309,4 +296,5 @@ export default class LayerBase extends Object {
    * @expose
    */
   selectFeatures(features, coord, evt) {}
+  /* eslint-enable */
 }
