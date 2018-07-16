@@ -1,13 +1,7 @@
 import SearchstreetIntegratedControlImpl from "../../impl/ol/js/searchstreetintegratedcontrol"
 import SearchstreetGeosearchControl from "./searchstreetgeosearchcontrol";
-import Searchstreet from "plugins/searchstreet/facade/js/searchstreet";
-import Utils from "facade/js/utils/Utils";
-import Exception from "facade/js/exception/exception";
-import EventsManager from "facade/js/event/Eventsmanager";
-import Remote from "facade/js/utils/Remote";
-import Dialog from "facade/js/Dialog";
 
-export default class SearchstreetIntegrated extends Searchstreet {
+export default class SearchstreetIntegrated extends M.control.Searchstreet {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Searchstreet control that allows searches of streets
@@ -32,8 +26,8 @@ export default class SearchstreetIntegrated extends Searchstreet {
 
     super(url, locality);
 
-    if (Utils.isUndefined(SearchstreetIntegratedControlImpl)) {
-      Exception('La implementación usada no puede crear controles SearchstreetIntegrated');
+    if (M.utils.isUndefined(SearchstreetIntegratedControlImpl)) {
+      M.exception('La implementación usada no puede crear controles SearchstreetIntegrated');
     }
   }
 
@@ -64,7 +58,7 @@ export default class SearchstreetIntegrated extends Searchstreet {
    */
   addEvents(html) {
     this.element_ = html;
-    this.on(EventsManager.COMPLETED, function () {
+    this.on(M.evt.COMPLETED, function () {
       goog.dom.classlist.add(this.element_,
         "shown");
     }, this);
@@ -86,27 +80,27 @@ export default class SearchstreetIntegrated extends Searchstreet {
     this.resultsGeosearch_ = this.element_.getElementsByTagName('div')["m-geosearch-results"];
     this.searchingResult_ = this.element_.querySelector('div#m-searchstreet-results > div#m-searching-result-searchstreet');
 
-    if (!Utils.isUndefined(this.codIne_)) {
+    if (!M.utils.isUndefined(this.codIne_)) {
       this.searchTime_ = Date.now();
-      var searchCodIne = Utils.addParameters(this.searchCodIne_, {
+      var searchCodIne = M.utils.addParameters(this.searchCodIne_, {
         codigo: this.codIne_
       });
       ((searchTime) => {
-        Remote.get(searchCodIne).then(
+        M.Remote.get(searchCodIne).then(
           (response) => {
             let results;
             try {
-              if (!Utils.isNullOrEmpty(response.text)) {
+              if (!M.utils.isNullOrEmpty(response.text)) {
                 results = JSON.parse(response.text);
-                if (Utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
-                  Dialog.error("El código del municipio '" + this.codIne_ + "' no es válido");
+                if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
+                  M.dialog.error("El código del municipio '" + this.codIne_ + "' no es válido");
                 } else {
                   this.getMunProv_(results);
                   this.element_.getElementsByTagName("span")["codIne"].innerHTML = "Búsquedas en " + this.municipio_ + "  (" + this.provincia_ + ")";
                 }
               }
             } catch (err) {
-              Exception('La respuesta no es un JSON válido: ' + err);
+              M.exception('La respuesta no es un JSON válido: ' + err);
             }
           });
       })(this.searchTime_);
@@ -151,13 +145,13 @@ export default class SearchstreetIntegrated extends Searchstreet {
       this.resultsAutocomplete_.removeChildren(this.resultsAutocomplete_.querySelector("div#m-searching-result-autocomplete"));
       // gets the query
       let query = this.input_.value;
-      if (!Utils.isNullOrEmpty(query)) {
+      if (!M.utils.isNullOrEmpty(query)) {
         if (query.length < this.minAutocomplete_) {
           this.completed = false;
         } else {
           this.completed = true;
         }
-        if (!Utils.isUndefined(this.codIne_) && !Utils.isNullOrEmpty(this.codIne_)) {
+        if (!M.utils.isUndefined(this.codIne_) && !M.utils.isNullOrEmpty(this.codIne_)) {
           // It does not take into account the municipality if indicated
           let pos = query.indexOf(",");
           if (query.indexOf(",") > -1) {
@@ -183,7 +177,7 @@ export default class SearchstreetIntegrated extends Searchstreet {
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle("hidden");
-    if (Utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector("div#m-geosearch-results.hidden"))) {
+    if (M.utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector("div#m-geosearch-results.hidden"))) {
       this.resultsContainer_.parentElement.classList.toggle("hidden");
     }
   }

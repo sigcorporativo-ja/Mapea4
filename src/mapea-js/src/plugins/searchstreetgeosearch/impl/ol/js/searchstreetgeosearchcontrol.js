@@ -1,5 +1,3 @@
-import Utils from "facade/js/utils/Utils";
-
 /**
  * @namespace M.impl.control
  */
@@ -71,7 +69,7 @@ export default class SearchstreetGeosearch extends ol.control.Control {
    */
   zoomResults() {
     let bbox = this.facadeMap_.getControls().find(c => c.name_ === "searchstreetgeosearch").ctrlGeosearch.getImpl().layer_.getFeaturesExtent();
-    if (!Utils.isNullOrEmpty(bbox)) {
+    if (!M.utils.isNullOrEmpty(bbox)) {
       this.facadeMap_.setBbox(bbox);
     }
   }

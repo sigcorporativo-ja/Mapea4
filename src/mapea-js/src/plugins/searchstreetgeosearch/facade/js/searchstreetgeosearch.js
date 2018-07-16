@@ -1,12 +1,4 @@
-import Autocomplete from "plugins/autocomplete/facade/js/autocomplete";
-import Plugin from "facade/js/Plugin";
-import EventsManager from "facade/js/event/Eventsmanager";
-import Utils from "facade/js/utils/Utils";
-import Remote from "facade/js/utils/Remote";
-import Panel from "facade/js/ui/Panel";
-import Position from "facade/js/ui/Position";
-
-export default class SearchstreetGeosearch extends Plugin {
+export default class SearchstreetGeosearch extends M.Plugin {
   /**
    * @classdesc Main facade plugin object. This class creates a plugin
    *            object which has an implementation Object
@@ -77,20 +69,20 @@ export default class SearchstreetGeosearch extends Plugin {
 
     map._areasContainer.getElementsByClassName("m-top m-right")[0].classList.add("top-extra");
 
-    this.control_.on(EventsManager.ADDED_TO_MAP, () => {
-      this.fire(EventsManager.ADDED_TO_MAP);
+    this.control_.on(M.evt.ADDED_TO_MAP, () => {
+      this.fire(M.evt.ADDED_TO_MAP);
 
       // Checks if the received INE code is correct.
-      let comCodIne = Utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
+      let comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
         codigo: this.locality_
       });
-      Remote.get(comCodIne).then(
+      M.Remote.get(comCodIne).then(
         (response) => {
           let results = JSON.parse(response.text);
-          if (Utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
+          if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
             this.locality_ = "";
           }
-          let autocompletador = new Autocomplete({
+          let autocompletador = new M.plugin.Autocomplete({
             'locality': this.locality_,
             'target': this.control_.getInput(),
             'html': this.control_.getHtml()
@@ -98,14 +90,14 @@ export default class SearchstreetGeosearch extends Plugin {
           this.map_.addPlugin(autocompletador);
         });
     }, this);
-    this.panel_ = new Panel('SearchstreetGeosearch', {
+    this.panel_ = new M.ui.Panel('SearchstreetGeosearch', {
       'collapsible': true,
       'className': 'm-geosearch',
-      'position': Position.TL,
+      'position': M.ui.Position.TL,
       'tooltip': 'Buscador de calles y geobúsquedas'
     });
     //JGL20170816: foco al input al desplegar panel
-    this.panel_.on(EventsManager.ADDED_TO_MAP, html => {
+    this.panel_.on(M.evt.ADDED_TO_MAP, html => {
       this.panel_._buttonPanel.addEventListener("click", evt => {
         if (!this.panel_._collapsed) {
           this.control_.input_.focus();

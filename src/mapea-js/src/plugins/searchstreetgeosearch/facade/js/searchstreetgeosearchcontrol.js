@@ -1,13 +1,8 @@
-import Control from "facade/js/controls/Controlbase";
-import Utils from "facade/js/utils/Utils";
-import Exception from "facade/js/exception/exception";
 import SearchstreetIntegrated from "./searchstreetintegrated"
 import GeosearchIntegrated from "./geosearchintegrated";
-import EventsManager from "facade/js/event/Eventsmanager";
 import SearchstreetGeosearchControlImpl from "../../impl/ol/js/searchstreetgeosearchcontrol";
-import Template from "facade/js/utils/Template";
 
-export default class SearchstreetGeosearchControl extends Control {
+export default class SearchstreetGeosearchControl extends M.Control {
   /**
    * @classdesc Main constructor of the class. Creates a SearchstreetGeosearch
    * control to search streets and geosearchs
@@ -24,8 +19,8 @@ export default class SearchstreetGeosearchControl extends Control {
     super(impl, this.name_);
 
     // checks if the implementation can create SearchstreetGeosearch
-    if (Utils.isUndefined(SearchstreetGeosearchControlImpl)) {
-      Exception('La implementación usada no puede crear controles SearchStreetGeosearch');
+    if (M.utils.isUndefined(SearchstreetGeosearchControlImpl)) {
+      M.exception('La implementación usada no puede crear controles SearchStreetGeosearch');
     }
 
     /**
@@ -42,7 +37,7 @@ export default class SearchstreetGeosearchControl extends Control {
      * @private
      * @type {number}
      */
-    if (!Utils.isNullOrEmpty(parameters.locality)) {
+    if (!M.utils.isNullOrEmpty(parameters.locality)) {
       this.locality_ = parameters.locality;
     }
 
@@ -152,12 +147,12 @@ export default class SearchstreetGeosearchControl extends Control {
       view.then(html => {
         impl.addTo(map, html);
         this.html = html;
-        this.fire(EventsManager.ADDED_TO_MAP);
+        this.fire(M.evt.ADDED_TO_MAP);
       });
     }
 
-    this.on(EventsManager.ADDED_TO_MAP, evt => {
-      if (Utils.isUndefined(this.locality_)) {
+    this.on(M.evt.ADDED_TO_MAP, evt => {
+      if (M.utils.isUndefined(this.locality_)) {
         this.ctrlSearchstreet = new SearchstreetIntegrated(this.urlSearchstret_);
       } else {
         this.ctrlSearchstreet = new SearchstreetIntegrated(this.urlSearchstret_, this.locality_);
@@ -174,7 +169,7 @@ export default class SearchstreetGeosearchControl extends Control {
 
       let completados = false;
 
-      this.ctrlSearchstreet.on(EventsManager.COMPLETED, () => {
+      this.ctrlSearchstreet.on(M.evt.COMPLETED, () => {
         if (completados === true) {
           this.element_.classList.add("shown");
           completados = false;
@@ -183,7 +178,7 @@ export default class SearchstreetGeosearchControl extends Control {
         completados = true;
       }, this);
 
-      this.ctrlGeosearch.on(EventsManager.COMPLETED, () => {
+      this.ctrlGeosearch.on(M.evt.COMPLETED, () => {
         if (completados === true) {
           this.element_.classList.add("shown");
           completados = false;
@@ -206,7 +201,7 @@ export default class SearchstreetGeosearchControl extends Control {
    */
   createView(map) {
     let promise = new Promise((success, fail) => {
-      Template.compile(SearchstreetGeosearch.TEMPLATE, {
+      M.Template.compile(SearchstreetGeosearch.TEMPLATE, {
         'jsonp': true
       }).then(
         (html) => {

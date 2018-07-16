@@ -1,10 +1,7 @@
-import GeosearchImpl from "plugins/impl/ol/js/geosearch";
-import GeosearchLayerImpl from "plugins/impl/ol/js/geosearchlayer";
-
 /**
  * @namespace M.impl.control
  */
-export default class GeosearchIntegrated extends GeosearchImpl {
+export default class GeosearchIntegrated extends M.impl.control.Geosearch {
   /**
    * @classdesc
    * Main constructor of the GeosearchIntegrated control.

@@ -1,12 +1,6 @@
-import GeosearchImpl from "plugins/geosearch/impl/ol/js/Geosearch";
 import GeosearchIntegratedImpl from "../../impl/ol/js/GeosearchIntegrated";
-import Geosearch from "plugins/geosearch/facade/js/Geosearch";
-import Utils from "facade/js/utils/Utils";
-import Exception from "facade/js/exception/exception";
-import EventsManager from "facade/js/event/Eventsmanager";
-import Template from "facade/js/utils/Template";
 
-export default class GeosearchIntegrated extends Geosearch {
+export default class GeosearchIntegrated extends M.control.Geosearch {
   /**
    * @classdesc Main constructor of the class. Creates a GeosearchIntegrated
    * control.
@@ -25,8 +19,8 @@ export default class GeosearchIntegrated extends Geosearch {
 
     super(url, core, handler, searchParameters);
 
-    if (Utils.isUndefined(M.impl.control.GeosearchIntegrated)) {
-      Exception('La implementación usada no puede crear controles GeosearchIntegrated');
+    if (M.utils.isUndefined(GeosearchIntegratedImpl)) {
+      M.exception('La implementación usada no puede crear controles GeosearchIntegrated');
     }
   }
 
@@ -58,7 +52,7 @@ export default class GeosearchIntegrated extends Geosearch {
   addEvents(html) {
     this.element_ = html;
 
-    this.on(EventsManager.COMPLETED, () => {
+    this.on(M.evt.COMPLETED, () => {
       this.element_.classList.add("shown");
     }, this);
     // input search
@@ -79,7 +73,7 @@ export default class GeosearchIntegrated extends Geosearch {
 
     // results container
     this.resultsContainer_ = this.element_.getElementsByTagName('div')["m-geosearch-results"];
-    Utils.enableTouchScroll(this.resultsContainer_);
+    M.utils.enableTouchScroll(this.resultsContainer_);
     this.searchingResult_ = this.element_.querySelector('div#m-geosearch-results > div#m-searching-result-geosearch');
     // goog.dom.removeChildren(this.resultsContainer_, this.searchingResult_);
   }
@@ -99,7 +93,7 @@ export default class GeosearchIntegrated extends Geosearch {
     this.drawNewResults(results);
 
     let resultsTemplateVars = this.parseResultsForTemplate_(results, true);
-    Template.compile(Geosearch.RESULTS_TEMPLATE, {
+    M.Template.compile(M.control.Geosearch.RESULTS_TEMPLATE, {
       'jsonp': true,
       'vars': resultsTemplateVars
     }).then(html => {
@@ -117,7 +111,7 @@ export default class GeosearchIntegrated extends Geosearch {
       spanNumFound.innerHTML = this_.results_.length;
 
 
-      this_.element_.classList.remove(Geosearch.SEARCHING_CLASS);
+      this_.element_.classList.remove(M.control.Geosearch.SEARCHING_CLASS);
       this_.resultsContainer_.removeChild(this_.searchingResult_);
       // disables scroll if gets all results
       this_.checkScrollSearch_(results);
@@ -136,7 +130,7 @@ export default class GeosearchIntegrated extends Geosearch {
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle("hidden");
-    if (Utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector("div#m-searchstreet-results.hidden"))) {
+    if (M.utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector("div#m-searchstreet-results.hidden"))) {
       this.resultsContainer_.parentElement.classList.toggle("hidden");
     }
   }
