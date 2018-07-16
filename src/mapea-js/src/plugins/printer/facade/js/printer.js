@@ -1,11 +1,4 @@
-import Plugin from "facade/js/plugin";
-import Config from "../../../configuration";
-import Utils from "facade/js/utils/utils";
-import Panel from "facade/js/ui/panel";
-import Position from "facade/js/ui/position";
-import EventsManager from "facade/js/event/eventsmanager";
-
-export default class Printer extends Plugin {
+export default class Printer extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -56,8 +49,8 @@ export default class Printer extends Plugin {
      * @private
      * @type {String}
      */
-    this.url_ = Config.geoprint.URL;
-    if (!Utils.isNullOrEmpty(parameters.url)) {
+    this.url_ = M.config.geoprint.URL;
+    if (!M.utils.isNullOrEmpty(parameters.url)) {
       this.url_ = parameters.url;
     }
 
@@ -67,7 +60,7 @@ export default class Printer extends Plugin {
      * @type {String}
      */
     this.params_ = {};
-    if (!Utils.isNullOrEmpty(parameters.params)) {
+    if (!M.utils.isNullOrEmpty(parameters.params)) {
       this.params_ = parameters.params;
     }
 
@@ -77,7 +70,7 @@ export default class Printer extends Plugin {
      * @type {String}
      */
     this.options_ = {};
-    if (!Utils.isNullOrEmpty(parameters.options)) {
+    if (!M.utils.isNullOrEmpty(parameters.options)) {
       this.options_ = parameters.options;
     }
 
@@ -97,21 +90,21 @@ export default class Printer extends Plugin {
 
     this.control_ = new Printer(this.url_, this.params_,
       this.options_);
-    this.panel_ = new Panel('printer', {
+    this.panel_ = new M.ui.Panel('printer', {
       'collapsible': true,
       'className': 'm-printer',
       'collapsedButtonClass': 'g-cartografia-impresora',
-      'position': Position.TR,
+      'position': M.ui.Position.TR,
       'tooltip': 'Impresión del mapa'
     });
-    this.panel_.on(EventsManager.ADDED_TO_MAP, html => {
-      Utils.enableTouchScroll(html);
+    this.panel_.on(M.evt.ADDED_TO_MAP, html => {
+      M.utils.enableTouchScroll(html);
     });
     this.panel_.addControls(this.control_);
     this.map_.addPanels(this.panel_);
 
-    this.control_.on(EventsManager.ADDED_TO_MAP, function () {
-      this.fire(EventsManager.ADDED_TO_MAP);
+    this.control_.on(M.evt.ADDED_TO_MAP, function () {
+      this.fire(M.evt.ADDED_TO_MAP);
     });
   }
 

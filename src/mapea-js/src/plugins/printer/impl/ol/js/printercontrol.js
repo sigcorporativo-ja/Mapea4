@@ -1,17 +1,7 @@
-import Control from "impl/ol/js/controls/controlbase";
-import LayerType from "facade/js/layers/layertype";
-import Utils from "facade/js/utils/utils";
-import LayerBase from "facade/js/layers/layerbase";
-import Chart from "facade/js/style/stylechart";
-import Cluster from "facade/js/style/stylecluster";
-import Align from "facade/js/style/stylealign";
-import Baseline from "facade/js/style/stylebaseline";
-import Config from "../../../configuration";
-
 /**
  * @namespace M.impl.control
  */
-export deafult class PrinterControl extends Control {
+export deafult class PrinterControl extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the measure conrol.
@@ -59,30 +49,30 @@ export deafult class PrinterControl extends Control {
    */
   encodeLayer(layer) {
     return (new Promise((success, fail) => {
-      if (layer.type === LayerType.WMC) {
+      if (layer.type === M.layer.type.WMC) {
         // none
-      } else if (layer.type === LayerType.KML) {
+      } else if (layer.type === M.layer.type.KML) {
         success(this.encodeKML(layer));
-      } else if (layer.type === LayerType.WMS) {
+      } else if (layer.type === M.layer.type.WMS) {
         success(this.encodeWMS(layer));
-      } else if (layer.type === LayerType.WFS) {
+      } else if (layer.type === M.layer.type.WFS) {
         success(this.encodeWFS(layer));
-      } else if (layer.type === LayerType.GeoJSON) {
+      } else if (layer.type === M.layer.type.GeoJSON) {
         /*se reutiliza el codificador WFS ya, aunque ya está en geojson,
           el proceso a realizar es el mismo y recodificar en geojson no
           penaliza*/
         success(this.encodeWFS(layer));
-      } else if (layer.type === LayerType.WMTS) {
+      } else if (layer.type === M.layer.type.WMTS) {
         this.encodeWMTS(layer).then(encodedLayer => {
           success(encodedLayer);
         });
-      } else if (layer.type === LayerType.MBtiles) {
+      } else if (layer.type === M.layer.type.MBtiles) {
         // none
-      } else if (layer.type === LayerType.OSM) {
+      } else if (layer.type === M.layer.type.OSM) {
         success(this.encodeOSM(layer));
-      } else if (layer.type === LayerType.Mapbox) {
+      } else if (layer.type === M.layer.type.Mapbox) {
         success(this.encodeMapbox(layer));
-      } else if (Utils.isNullOrEmpty(layer.type) && layer instanceof M.layer.Vector) {
+      } else if (M.utils.isNullOrEmpty(layer.type) && layer instanceof M.layer.Vector) {
         success(this.encodeWFS(layer));
       } else {
         success(this.encodeWFS(layer));
@@ -108,10 +98,10 @@ export deafult class PrinterControl extends Control {
         "classes": []
       };
 
-      let regExpImgDefault = new RegExp('.*' + LayerBase.LEGEND_DEFAULT + '$');
-      var regExpImgError = new RegExp('.*' + LayerBase.LEGEND_ERROR + '$');
+      let regExpImgDefault = new RegExp('.*' + M.layer.LEGEND_DEFAULT + '$');
+      var regExpImgError = new RegExp('.*' + M.layer.LEGEND_ERROR + '$');
       var legendURL = layer.getLegendURL();
-      if (!Utils.isNullOrEmpty(legendURL) && !regExpImgDefault.test(legendURL) && !regExpImgDefault.test(regExpImgError)) {
+      if (!M.utils.isNullOrEmpty(legendURL) && !regExpImgDefault.test(legendURL) && !regExpImgDefault.test(regExpImgError)) {
         encodedLegend["classes"][0] = {
           "name": "",
           "icons": [layer.getLegendURL()]
@@ -153,17 +143,17 @@ export deafult class PrinterControl extends Control {
     features.forEach(feature => {
       let geometry = feature.getGeometry();
       let styleId = feature.get("styleUrl");
-      if (!Utils.isNullOrEmpty(styleId)) {
+      if (!M.utils.isNullOrEmpty(styleId)) {
         styleId = styleId.replace('\#', '');
       }
       let styleFn = feature.getStyle();
-      if (!Utils.isNullOrEmpty(styleFn)) {
+      if (!M.utils.isNullOrEmpty(styleFn)) {
         let featureStyle = styleFn.call(feature, resolution)[0];
-        if (!Utils.isNullOrEmpty(featureStyle)) {
+        if (!M.utils.isNullOrEmpty(featureStyle)) {
 
           let img = featureStyle.getImage();
           let imgSize = img.getImageSize();
-          if (Utils.isNullOrEmpty(imgSize)) {
+          if (M.utils.isNullOrEmpty(imgSize)) {
             imgSize = [64, 64];
           }
           let stroke = featureStyle.getStroke();
@@ -176,10 +166,10 @@ export deafult class PrinterControl extends Control {
             "strokeWidth": stroke.getWidth()
           };
           let text = (featureStyle.getText && featureStyle.getText());
-          if (!Utils.isNullOrEmpty(text)) {
+          if (!M.utils.isNullOrEmpty(text)) {
             style = Object.assign(style, {
-              "label": Utils.isNullOrEmpty(text.getText()) ? feature.get("name") : text.getText(),
-              "fontColor": Utils.isNullOrEmpty(text.getFill()) ? "" : Utils.rgbToHex(Utils.isArray(text.getFill().getColor()) ?
+              "label": M.utils.isNullOrEmpty(text.getText()) ? feature.get("name") : text.getText(),
+              "fontColor": M.utils.isNullOrEmpty(text.getFill()) ? "" : M.utils.rgbToHex(M.utils.isArray(text.getFill().getColor()) ?
                 "rgba(" + text.getFill().getColor().toString() + ")" :
                 text.getFill().getColor()),
               //text.getFont() -->"bold 13px Helvetica, sans-serif"
@@ -191,18 +181,18 @@ export deafult class PrinterControl extends Control {
               "labelXOffset": text.getOffsetX(),
               "labelYOffset": text.getOffsetY(),
               //no pinta la línea
-              "labelOutlineColor": Utils.isNullOrEmpty(text.getStroke()) ? "" : Utils.rgbToHex(Utils.isArray(text.getStroke().getColor()) ?
+              "labelOutlineColor": M.utils.isNullOrEmpty(text.getStroke()) ? "" : M.utils.rgbToHex(M.utils.isArray(text.getStroke().getColor()) ?
                 "rgba(" + text.getStroke().getColor().toString() + ")" :
                 text.getStroke().getColor()),
-              "labelOutlineWidth": Utils.isNullOrEmpty(text.getStroke()) ? "" : text.getStroke().getWidth()
+              "labelOutlineWidth": M.utils.isNullOrEmpty(text.getStroke()) ? "" : text.getStroke().getWidth()
             });
           }
 
 
-          if (!Utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
+          if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
             let styleStr = JSON.stringify(style);
             let styleName = stylesNames[styleStr];
-            if (Utils.isUndefined(styleName)) {
+            if (M.utils.isUndefined(styleName)) {
               styleName = index;
               stylesNames[styleStr] = styleName;
               encodedStyles[styleName] = style;
@@ -267,7 +257,7 @@ export deafult class PrinterControl extends Control {
     *************************************/
     let noChacheName = layer.getNoChacheName();
     let noChacheUrl = layer.getNoChacheUrl();
-    if (!Utils.isNullOrEmpty(noChacheName) && !Utils.isNullOrEmpty(noChacheUrl)) {
+    if (!M.utils.isNullOrEmpty(noChacheName) && !M.utils.isNullOrEmpty(noChacheUrl)) {
       encodedLayer['layers'] = [noChacheName];
       encodedLayer['baseURL'] = noChacheUrl;
     }
@@ -302,9 +292,9 @@ export deafult class PrinterControl extends Control {
   encodeWFS(layer) {
     let encodedLayer = null;
     let continuePrint = true;
-    if (layer.getStyle() instanceof Chart) {
+    if (layer.getStyle() instanceof M.style.Chart) {
       continuePrint = false;
-    } else if (layer.getStyle() instanceof Cluster && layer.getStyle().getOldStyle() instanceof Chart) {
+    } else if (layer.getStyle() instanceof M.style.Cluster && layer.getStyle().getOldStyle() instanceof M.style.Chart) {
       continuePrint = false;
     }
     if (continuePrint) {
@@ -328,9 +318,9 @@ export deafult class PrinterControl extends Control {
         let featureStyle;
         let fStyle = feature.getStyle();
 
-        if (!Utils.isNullOrEmpty(fStyle)) {
+        if (!M.utils.isNullOrEmpty(fStyle)) {
           featureStyle = fStyle;
-        } else if (!Utils.isNullOrEmpty(layerStyle)) {
+        } else if (!M.utils.isNullOrEmpty(layerStyle)) {
           featureStyle = layerStyle;
         }
 
@@ -341,7 +331,7 @@ export deafult class PrinterControl extends Control {
         if (featureStyle instanceof Array) {
           //JGL20180118: prioridad al estilo que tiene SRC
           if (featureStyle.length > 1) {
-            featureStyle = (!Utils.isNullOrEmpty(featureStyle[1].getImage()) && featureStyle[1].getImage().getSrc) ?
+            featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage()) && featureStyle[1].getImage().getSrc) ?
               featureStyle[1] : featureStyle[0];
           } else {
             featureStyle = featureStyle[0];
@@ -349,65 +339,65 @@ export deafult class PrinterControl extends Control {
 
         }
 
-        if (!Utils.isNullOrEmpty(featureStyle)) {
+        if (!M.utils.isNullOrEmpty(featureStyle)) {
           //console.log(featureStyle);
           var image = featureStyle.getImage();
-          var imgSize = Utils.isNullOrEmpty(image) ? [0, 0] : (image.getImageSize() || [24, 24]);
+          var imgSize = M.utils.isNullOrEmpty(image) ? [0, 0] : (image.getImageSize() || [24, 24]);
           var text = featureStyle.getText();
-          if (Utils.isNullOrEmpty(text) && !Utils.isNullOrEmpty(featureStyle.textPath)) {
+          if (M.utils.isNullOrEmpty(text) && !M.utils.isNullOrEmpty(featureStyle.textPath)) {
             text = featureStyle.textPath;
           }
-          var stroke = Utils.isNullOrEmpty(image) ? featureStyle.getStroke() : (image.getStroke && image.getStroke());
-          var fill = Utils.isNullOrEmpty(image) ? featureStyle.getFill() : (image.getFill && image.getFill());
+          var stroke = M.utils.isNullOrEmpty(image) ? featureStyle.getStroke() : (image.getStroke && image.getStroke());
+          var fill = M.utils.isNullOrEmpty(image) ? featureStyle.getFill() : (image.getFill && image.getFill());
 
           //JGL20180118: fillOpacity=1 por defecto
           var style = {
-            "fillColor": Utils.isNullOrEmpty(fill) ? "#000000" : Utils.rgbaToHex(fill.getColor()),
-            "fillOpacity": Utils.isNullOrEmpty(fill) ? 1 : Utils.getOpacityFromRgba(fill.getColor()),
-            "strokeColor": Utils.isNullOrEmpty(stroke) ? "#000000" : Utils.rgbaToHex(stroke.getColor()),
-            "strokeOpacity": Utils.isNullOrEmpty(stroke) ? 0 : Utils.getOpacityFromRgba(stroke.getColor()),
-            "strokeWidth": Utils.isNullOrEmpty(stroke) ? 0 : (stroke.getWidth && stroke.getWidth()),
-            "pointRadius": Utils.isNullOrEmpty(image) ? "" : (image.getRadius && image.getRadius()),
-            "externalGraphic": Utils.isNullOrEmpty(image) ? "" : (image.getSrc && image.getSrc()),
+            "fillColor": M.utils.isNullOrEmpty(fill) ? "#000000" : M.utils.rgbaToHex(fill.getColor()),
+            "fillOpacity": M.utils.isNullOrEmpty(fill) ? 1 : M.utils.getOpacityFromRgba(fill.getColor()),
+            "strokeColor": M.utils.isNullOrEmpty(stroke) ? "#000000" : M.utils.rgbaToHex(stroke.getColor()),
+            "strokeOpacity": M.utils.isNullOrEmpty(stroke) ? 0 : M.utils.getOpacityFromRgba(stroke.getColor()),
+            "strokeWidth": M.utils.isNullOrEmpty(stroke) ? 0 : (stroke.getWidth && stroke.getWidth()),
+            "pointRadius": M.utils.isNullOrEmpty(image) ? "" : (image.getRadius && image.getRadius()),
+            "externalGraphic": M.utils.isNullOrEmpty(image) ? "" : (image.getSrc && image.getSrc()),
             "graphicHeight": imgSize[0],
             "graphicWidth": imgSize[1],
           };
           //console.log(style);
-          if (!Utils.isNullOrEmpty(text)) {
+          if (!M.utils.isNullOrEmpty(text)) {
             let tAlign = text.getTextAlign();
             let tBLine = text.getTextBaseline();
             let align = "";
-            if (!Utils.isNullOrEmpty(tAlign)) {
-              if (tAlign === Align.LEFT) {
+            if (!M.utils.isNullOrEmpty(tAlign)) {
+              if (tAlign === M.style.align.LEFT) {
                 tAlign = 'l';
-              } else if (tAlign === Align.RIGHT) {
+              } else if (tAlign === M.style.align.RIGHT) {
                 tAlign = 'r';
-              } else if (tAlign === Align.CENTER) {
+              } else if (tAlign === M.style.align.CENTER) {
                 tAlign = 'c';
               } else {
                 tAlign = '';
               }
             }
-            if (!Utils.isNullOrEmpty(tBLine)) {
-              if (tBLine === Baseline.BOTTOM) {
+            if (!M.utils.isNullOrEmpty(tBLine)) {
+              if (tBLine === M.style.baseline.BOTTOM) {
                 tBLine = 'b';
-              } else if (tBLine === Baseline.MIDDLE) {
+              } else if (tBLine === M.style.baseline.MIDDLE) {
                 tBLine = 'm';
-              } else if (tBLine === Baseline.TOP) {
+              } else if (tBLine === M.style.baseline.TOP) {
                 tBLine = 't';
               } else {
                 tBLine = '';
               }
             }
-            if (!Utils.isNullOrEmpty(tAlign) && !Utils.isNullOrEmpty(tBLine)) {
+            if (!M.utils.isNullOrEmpty(tAlign) && !M.utils.isNullOrEmpty(tBLine)) {
               align = tAlign.concat(tBLine);
             }
             let font = text.getFont();
-            let fontWeight = !Utils.isNullOrEmpty(font) && font.indexOf("bold") > -1 ? "bold" : "normal";
+            let fontWeight = !M.utils.isNullOrEmpty(font) && font.indexOf("bold") > -1 ? "bold" : "normal";
             let fontSize = "11px";
-            if (!Utils.isNullOrEmpty(font)) {
+            if (!M.utils.isNullOrEmpty(font)) {
               let px = font.substr(0, font.indexOf("px"));
-              if (!Utils.isNullOrEmpty(px)) {
+              if (!M.utils.isNullOrEmpty(px)) {
                 let space = px.lastIndexOf(" ");
                 if (space > -1) {
                   fontSize = px.substr(space, px.length).trim().concat("px");
@@ -418,7 +408,7 @@ export deafult class PrinterControl extends Control {
             }
             style = Object.assign(style, {
               "label": text.getText(),
-              "fontColor": Utils.isNullOrEmpty(text.getFill()) ? "#000000" : Utils.rgbToHex(text.getFill().getColor()),
+              "fontColor": M.utils.isNullOrEmpty(text.getFill()) ? "#000000" : M.utils.rgbToHex(text.getFill().getColor()),
               "fontSize": fontSize,
               "fontFamily": "Helvetica, sans-serif",
               "fontStyle": "normal",
@@ -427,23 +417,23 @@ export deafult class PrinterControl extends Control {
               "labelYOffset": text.getOffsetY(),
               "fillColor": style.fillColor || "#FF0000",
               "fillOpacity": style.fillOpacity || 1, //JGL20180118: fillOpacity=1 por defecto
-              "labelOutlineColor ": Utils.isNullOrEmpty(text.getStroke()) ? "" : Utils.rgbToHex(text.getStroke().getColor() || "#FF0000"),
-              "labelOutlineWidth": Utils.isNullOrEmpty(text.getStroke()) ? "" : text.getStroke().getWidth(),
+              "labelOutlineColor ": M.utils.isNullOrEmpty(text.getStroke()) ? "" : M.utils.rgbToHex(text.getStroke().getColor() || "#FF0000"),
+              "labelOutlineWidth": M.utils.isNullOrEmpty(text.getStroke()) ? "" : text.getStroke().getWidth(),
               "labelAlign": align,
             });
           }
 
-          if (!Utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
+          if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
             var styleStr = JSON.stringify(style);
             var styleName = stylesNames[styleStr];
-            if (Utils.isUndefined(styleName)) {
+            if (M.utils.isUndefined(styleName)) {
               styleName = index;
               stylesNames[styleStr] = styleName;
               encodedStyles[styleName] = style;
               index++;
             }
             var geoJSONFeature;
-            if (projection.code !== "EPSG:3857" && this.facadeMap_.getLayers().some(layer => (layer.type === LayerType.OSM || layer.type === LayerType.Mapbox))) {
+            if (projection.code !== "EPSG:3857" && this.facadeMap_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
               geoJSONFeature = geoJSONFormat.writeFeatureObject(feature, {
                 'featureProjection': projection.code,
                 'dataProjection': 'EPSG:3857',
@@ -606,7 +596,7 @@ export deafult class PrinterControl extends Control {
     let layerSource = olLayer.getSource();
     let tileGrid = layerSource.getTileGrid();
 
-    let layerUrl = Utils.concatUrlPaths([Config.MAPBOX_URL, layer.name]);
+    let layerUrl = M.utils.concatUrlPaths([M.config.MAPBOX_URL, layer.name]);
     let layerOpacity = olLayer.getOpacity();
     let layerExtent = tileGrid.getExtent();
 
@@ -614,7 +604,7 @@ export deafult class PrinterControl extends Control {
     let resolutions = tileGrid.getResolutions();
 
     let customParams = {};
-    customParams[Config.MAPBOX_TOKEN_NAME] = Config.MAPBOX_TOKEN_VALUE;
+    customParams[M.config.MAPBOX_TOKEN_NAME] = M.config.MAPBOX_TOKEN_VALUE;
     encodedLayer = {
       'opacity': layerOpacity,
       'baseURL': layerUrl,
