@@ -1,9 +1,8 @@
-import FacadeGeoJSON from "facade/js/format/GeoJSON";
-import Object from "facade/js/Object";
-import Remote from "facade/js/util/Remote";
-import Utils from "facade/js/util/Utils";
-import FacadeFeature from "facade/js/feature/Feature";
-import Exception from "facade/js/exception/exception";
+import Object from 'facade/js/Object';
+import Remote from 'facade/js/util/Remote';
+import Utils from 'facade/js/util/Utils';
+import FacadeFeature from 'facade/js/feature/Feature';
+import Exception from 'facade/js/exception/exception';
 
 /**
  * @namespace M.impl.control
@@ -20,7 +19,6 @@ export default class KML extends Object {
    */
   constructor(map, url, format) {
     super();
-
     /**
      * TODO
      * @private
@@ -52,9 +50,9 @@ export default class KML extends Object {
    * @api stable
    */
   getLoaderFn(callback) {
-    let loaderScope = this;
+    const loaderScope = this;
     return ((extent, resolution, projection) => {
-      let sourceScope = this;
+      const sourceScope = this;
       loaderScope.loadInternal_(projection).then((response) => {
         callback.apply(sourceScope, response);
       });
@@ -69,20 +67,20 @@ export default class KML extends Object {
    */
   loadInternal_(projection) {
     return new Promise((success, fail) => {
-      Remote.get(this.url_).then(response => {
+      Remote.get(this.url_).then((response) => {
         if (!Utils.isNullOrEmpty(response.text)) {
-          let features = this.format_.readFeatures(response.text, {
-            featureProjection: projection
+          const features = this.format_.readFeatures(response.text, {
+            featureProjection: projection,
           });
-          let screenOverlay = this.format_.getScreenOverlay();
+          const screenOverlay = this.format_.getScreenOverlay();
           success.call(this, [
-            features.map(olFeature => {
-              let feature = new FacadeFeature(olFeature.getId(), {
+            features.map((olFeature) => {
+              const feature = new FacadeFeature(olFeature.getId(), {
                 geometry: {
                   coordinates: olFeature.getGeometry().getCoordinates(),
-                  type: olFeature.getGeometry().getType()
+                  type: olFeature.getGeometry().getType(),
                 },
-                properties: olFeature.getProperties()
+                properties: olFeature.getProperties(),
               });
               feature.getImpl().getOLFeature().style = olFeature.getStyle();
               return feature;

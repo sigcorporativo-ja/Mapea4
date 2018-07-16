@@ -12,13 +12,15 @@ export default class FontSymbol extends ol.style.FontSymbol {
    * @api stable
    */
   constructor(options = {}) {
+    // super call
+    super();
+    const optionsC = options;
     if (!options.anchor) {
-      options.anchor = [];
+      optionsC.anchor = [];
     }
     if (!options.offset) {
-      options.offset = [];
+      optionsC.offset = [];
     }
-    // super call
     ol.style.FontSymbol.call(this, {
       glyph: options.glyph,
       color: options.color,
@@ -32,7 +34,7 @@ export default class FontSymbol extends ol.style.FontSymbol {
       offsetY: options.offset[1],
       opacity: options.opacity,
       rotation: options.rotation,
-      rotateWithView: options.rotateWithView
+      rotateWithView: options.rotateWithView,
     });
   }
 
@@ -43,8 +45,8 @@ export default class FontSymbol extends ol.style.FontSymbol {
    * @api stable
    */
   clone() {
-    let style = new FontSymbol({
-      glyph: "",
+    const style = new FontSymbol({
+      glyph: '',
       color: this.color_,
       fontSize: this.fontSize_,
       stroke: this.stroke_,
@@ -56,7 +58,7 @@ export default class FontSymbol extends ol.style.FontSymbol {
       offsetY: this.offset_[1],
       opacity: this.getOpacity(),
       rotation: this.getRotation(),
-      rotateWithView: this.getRotateWithView()
+      rotateWithView: this.getRotateWithView(),
     });
     style.setScale(this.getScale());
     style.glyph_ = this.glyph_;

@@ -1,11 +1,13 @@
-import Utils from "facade/js/util/Utils";
-import ServiceWFS from "../service/WFS";
-import FormatGeoJSON from "facade/js/format/GeoJSON";
-import FormatImplGeoJSON from "../format/GeoJSON";
-import FormatGML from "../format/GML";
-import LoaderWFS from "../loader/WFS";
-import EventsManager from "facade/js/event/Manager";
-import StyleCluster from "facade/js/style/Cluster";
+import StyleCluster from 'facade/js/style/Cluster';
+import FormatGeoJSON from 'facade/js/format/GeoJSON';
+import Utils from 'facade/js/util/Utils';
+import EventsManager from 'facade/js/event/Manager';
+import ServiceWFS from '../service/WFS';
+import FormatImplGeoJSON from '../format/GeoJSON';
+import FormatGML from '../format/GML';
+import LoaderWFS from '../loader/WFS';
+import Vector from './Vector';
+
 
 export default class WFS extends Vector {
   /**
@@ -19,10 +21,8 @@ export default class WFS extends Vector {
    * @api stable
    */
   constructor(options = {}) {
-
     // calls the super constructor
     super(options);
-
     /**
      *
      * @private
@@ -101,19 +101,19 @@ export default class WFS extends Vector {
    */
   updateSource_(forceNewSource) {
     this.service_ = new ServiceWFS({
-      'url': this.url,
-      'namespace': this.namespace,
-      'name': this.name,
-      'version': this.version,
-      'ids': this.ids,
-      'cql': this.cql,
-      'projection': this.map.getProjection(),
-      'getFeatureOutputFormat': this.options.getFeatureOutputFormat,
-      'describeFeatureTypeOutputFormat': this.options.describeFeatureTypeOutputFormat,
+      url: this.url,
+      namespace: this.namespace,
+      name: this.name,
+      version: this.version,
+      ids: this.ids,
+      cql: this.cql,
+      projection: this.map.getProjection(),
+      getFeatureOutputFormat: this.options.getFeatureOutputFormat,
+      describeFeatureTypeOutputFormat: this.options.describeFeatureTypeOutputFormat,
     }, this.options.vendor);
     if (/json/gi.test(this.options.getFeatureOutputFormat)) {
       this.formater_ = new FormatGeoJSON({
-        'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
+        defaultDataProjection: ol.proj.get(this.map.getProjection().code),
       });
     }
     else {
@@ -121,26 +121,26 @@ export default class WFS extends Vector {
     }
     this.loader_ = new LoaderWFS(this.map, this.service_, this.formater_);
 
-    let isCluster = (this.facadeVector_.getStyle() instanceof StyleCluster);
+    const isCluster = (this.facadeVector_.getStyle() instanceof StyleCluster);
     let ol3LayerSource = this.ol3Layer.getSource();
     if (forceNewSource === true || Utils.isNullOrEmpty(ol3LayerSource)) {
-      let newSource = new ol.source.Vector({
+      const newSource = new ol.source.Vector({
         format: this.formater_.getImpl(),
-        loader: this.loader_.getLoaderFn(features => {
+        loader: this.loader_.getLoaderFn((features) => {
           this.loaded_ = true;
           this.facadeVector_.addFeatures(features);
           this.fire(EventsManager.LOAD, [features]);
           this.facadeVector_.redraw();
         }),
-        strategy: ol.loadingstrategy.all
+        strategy: ol.loadingstrategy.all,
       });
       if (isCluster) {
-        let distance = this.facadeVector_.getStyle().getOptions().distance;
-        let clusterSource = new ol.source.Cluster({
-          distance: distance,
-          source: newSource
+        const distance = this.facadeVector_.getStyle().getOptions().distance;
+        const clusterSource = new ol.source.Cluster({
+          distance,
+          source: newSource,
         });
-        this.ol3Layer.setStyle(this.facadeVector_.getStyle().getImpl().olStyleFn_);
+        this.ol3Layer.setStyle(this.facadeVector.getStyle().getImpl().olStyleFn_);
         this.ol3Layer.setSource(clusterSource);
       }
       else {
@@ -151,14 +151,14 @@ export default class WFS extends Vector {
       if (isCluster) {
         ol3LayerSource = ol3LayerSource.getSource();
       }
-      ol3LayerSource.set("format", this.formater_);
-      ol3LayerSource.set("loader", this.loader_.getLoaderFn(features => {
+      ol3LayerSource.set('format', this.formater_);
+      ol3LayerSource.set('loader', this.loader_.getLoaderFn((features) => {
         this.loaded_ = true;
         this.facadeVector_.addFeatures(features);
         this.fire(EventsManager.LOAD, [features]);
         this.facadeVector_.redraw();
       }));
-      ol3LayerSource.set("strategy", ol.loadingstrategy.all);
+      ol3LayerSource.set('strategy', ol.loadingstrategy.all);
       ol3LayerSource.changed();
     }
   }
@@ -185,15 +185,16 @@ export default class WFS extends Vector {
    */
   getDescribeFeatureType() {
     if (Utils.isNullOrEmpty(this.describeFeatureType_)) {
-      this.describeFeatureType_ = this.service_.getDescribeFeatureType().then(describeFeatureType => {
-        if (!Utils.isNullOrEmpty(describeFeatureType)) {
-          this.formater_ = new FormatImplGeoJSON({
-            'geometryName': describeFeatureType.geometryName,
-            'defaultDataProjection': ol.proj.get(this.map.getProjection().code)
-          });
-        }
-        return describeFeatureType;
-      });
+      this.describeFeatureType_ =
+        this.service_.getDescribeFeatureType().then((describeFeatureType) => {
+          if (!Utils.isNullOrEmpty(describeFeatureType)) {
+            this.formater_ = new FormatImplGeoJSON({
+              geometryName: describeFeatureType.geometryName,
+              defaultDataProjection: ol.proj.get(this.map.getProjection().code),
+            });
+          }
+          return describeFeatureType;
+        });
     }
 
     return this.describeFeatureType_;
@@ -206,28 +207,28 @@ export default class WFS extends Vector {
    * @function
    * @api stable
    */
-  getDefaultValue(type) {
+  static getDefaultValue(type) {
     let defaultValue;
-    if (type == "dateTime") {
+    if (type === 'dateTime') {
       defaultValue = '0000-00-00T00:00:00';
     }
-    else if (type == "date") {
+    else if (type === 'date') {
       defaultValue = '0000-00-00';
     }
-    else if (type == "time") {
+    else if (type === 'time') {
       defaultValue = '00:00:00';
     }
-    else if (type == "duration") {
+    else if (type === 'duration') {
       defaultValue = 'P0Y';
     }
-    else if (type == "int" || type == "number" || type == "float" || type == "double" || type == "decimal" || type == "short" || type == "byte" || type == "integer" || type == "long" || type == "negativeInteger" || type == "nonNegativeInteger" || type == "nonPositiveInteger" || type == "positiveInteger" || type == "unsignedLong" || type == "unsignedInt" || type == "unsignedShort" || type == "unsignedByte") {
+    else if (type === 'int' || type === 'number' || type === 'float' || type === 'double' || type === 'decimal' || type === 'short' || type === 'byte' || type === 'integer' || type === 'long' || type === 'negativeInteger' || type === 'nonNegativeInteger' || type === 'nonPositiveInteger' || type === 'positiveInteger' || type === 'unsignedLong' || type === 'unsignedInt' || type === 'unsignedShort' || type === 'unsignedByte') {
       defaultValue = 0;
     }
-    else if (type == "hexBinary") {
+    else if (type === 'hexBinary') {
       defaultValue = null;
     }
     else {
-      defaultValue = "-";
+      defaultValue = '-';
     }
     return defaultValue;
   }

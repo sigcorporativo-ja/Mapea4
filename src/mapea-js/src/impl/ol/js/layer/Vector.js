@@ -1,11 +1,12 @@
-import Utils from "facade/js/util/Utils";
-import ImplUtils from "../util/Utils";
-import EventsManager from "facade/js/event/Manager";
-import StyleCluster from "facade/js/style/Cluster";
-import Style from "facade/js/style/Style";
-import Feature from "../feature/Feature";
+import StyleCluster from 'facade/js/style/Cluster';
+import Utils from 'facade/js/util/Utils';
+import EventsManager from 'facade/js/event/Manager';
+import Style from 'facade/js/style/Style';
+import Layer from './Layer';
+import ImplUtils from '../util/Utils';
+import Feature from '../feature/Feature';
 
-export default class Vector extends LayerBase {
+export default class Vector extends Layer {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Vector layer
@@ -17,9 +18,7 @@ export default class Vector extends LayerBase {
    * @api stable
    */
   constructor(options) {
-
     super(options);
-
     /**
      * The facade layer instance
      * @private
@@ -58,7 +57,7 @@ export default class Vector extends LayerBase {
     this.loaded_ = false;
 
     // [WARN]
-    //applyOLLayerSetStyleHook();
+    // applyOLLayerSetStyleHook();
   }
 
   /**
@@ -83,7 +82,7 @@ export default class Vector extends LayerBase {
     // }
     // this.setZIndex(999999);
 
-    let olMap = this.map.getMapImpl();
+    const olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
   }
   /**
@@ -108,11 +107,12 @@ export default class Vector extends LayerBase {
    * @api stable
    * @expose
    */
-  inRange() {
+  /* eslint-disable */
+  static inRange() {
     // vectors are always in range
     return true;
   }
-
+  /* eslint-enable */
 
   /**
    * This function add features to layer
@@ -123,16 +123,16 @@ export default class Vector extends LayerBase {
    * @api stable
    */
   addFeatures(features, update) {
-    features.forEach(newFeature => {
-      let feature = this.features_.find(feature => feature.equals(newFeature));
-      if (Utils.isNullOrEmpty(feature)) {
+    features.forEach((newFeature) => {
+      this.features_.find(feature => feature.equals(newFeature));
+      if (Utils.isNul(newFeature)) {
         this.features_.push(newFeature);
       }
     });
     if (update) {
       this.updateLayer_();
     }
-    let style = this.facadeVector_.getStyle();
+    const style = this.facadeVector_.getStyle();
     if (style instanceof StyleCluster) {
       style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
       style.refresh();
@@ -150,13 +150,13 @@ export default class Vector extends LayerBase {
    * @api stable
    */
   updateLayer_() {
-    let style = this.facadeVector_.getStyle();
+    const style = this.facadeVector_.getStyle();
     if (!Utils.isNullOrEmpty(style)) {
       if (style instanceof Style) {
         this.facadeVector_.setStyle(style);
       }
       else if (style instanceof StyleCluster) {
-        let cluster = this.facadeVector_.getStyle();
+        const cluster = this.facadeVector_.getStyle();
         cluster.unapply(this.facadeVector_);
         cluster.getOldStyle().apply(this.facadeVector_);
         cluster.apply(this.facadeVector_);
@@ -190,7 +190,8 @@ export default class Vector extends LayerBase {
    * @function
    * @public
    * @param {string|number} id - Id feature
-   * @return {null|M.feature} feature - Returns the feature with that id if it is found, in case it is not found or does not indicate the id returns null
+   * @return {null|M.feature} feature - Returns the feature with that id if it is found,
+    in case it is not found or does not indicate the id returns null
    * @api stable
    */
   getFeatureById(id) {
@@ -207,7 +208,7 @@ export default class Vector extends LayerBase {
    */
   removeFeatures(features) {
     this.features_ = this.features_.filter(f => !(features.includes(f)));
-    let style = this.facadeVector_.getStyle();
+    const style = this.facadeVector_.getStyle();
     if (style instanceof StyleCluster) {
       style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
       style.refresh();
@@ -225,9 +226,9 @@ export default class Vector extends LayerBase {
    * @api stable
    */
   redraw() {
-    let olLayer = this.getOL3Layer();
+    const olLayer = this.getOL3Layer();
     if (!Utils.isNullOrEmpty(olLayer)) {
-      let style = this.facadeVector_.getStyle();
+      const style = this.facadeVector_.getStyle();
       let olSource = olLayer.getSource();
       if (olSource instanceof ol.source.Cluster) {
         olSource = olSource.getSource();
@@ -238,10 +239,10 @@ export default class Vector extends LayerBase {
       }
 
       // remove all features from ol vector
-      let olFeatures = [...olSource.getFeatures()];
+      const olFeatures = [...olSource.getFeatures()];
       olFeatures.forEach(olSource.removeFeature, olSource);
 
-      let features = this.facadeVector_.getFeatures();
+      const features = this.facadeVector_.getFeatures();
       olSource.addFeatures(features.map(Feature.facade2OLFeature));
 
       if (style instanceof StyleCluster) {
@@ -260,7 +261,7 @@ export default class Vector extends LayerBase {
    * @api stable
    */
   getFeaturesExtent(skipFilter, filter) {
-    let features = this.getFeatures(skipFilter, filter);
+    const features = this.getFeatures(skipFilter, filter);
     return ImplUtils.getFeaturesExtent(features);
   }
 
@@ -271,15 +272,17 @@ export default class Vector extends LayerBase {
    * @param {ol.Feature} feature
    * @api stable
    */
+  /* eslint-disable*/
   selectFeatures(features, coord, evt) {
-    let feature = features[0];
+    const feature = features[0];
     if (!Utils.isNullOrEmpty(feature)) {
-      let clickFn = feature.getAttribute('vendor.mapea.click');
+      const clickFn = feature.getAttribute('vendor.mapea.click');
       if (Utils.isFunction(clickFn)) {
         clickFn(evt, feature);
       }
     }
   }
+  /* eslint-enable */
 
   /**
    * TODO
@@ -291,7 +294,6 @@ export default class Vector extends LayerBase {
   unselectFeatures() {
     this.map.removePopup();
   }
-
   /**
    * This function set facade class vector
    *
@@ -311,16 +313,16 @@ export default class Vector extends LayerBase {
    */
   setProjection_(oldProj, newProj) {
     if (oldProj.code !== newProj.code) {
-      let srcProj = ol.proj.get(oldProj.code);
-      let dstProj = ol.proj.get(newProj.code);
+      const srcProj = ol.proj.get(oldProj.code);
+      const dstProj = ol.proj.get(newProj.code);
 
-      let style = this.facadeVector_.getStyle();
+      const style = this.facadeVector_.getStyle();
       if (style instanceof StyleCluster) {
         style.getImpl().deactivateChangeEvent();
       }
 
-      this.facadeVector_.getFeatures()
-        .forEach(feature => feature.getImpl().getOLFeature().getGeometry().transform(srcProj, dstProj));
+      this.facadeVector_.getFeatures().forEach(feature => feature.getImpl()
+        .getOLFeature().getGeometry().transform(srcProj, dstProj));
 
       if (style instanceof StyleCluster) {
         style.getImpl().activateChangeEvent();
@@ -338,7 +340,7 @@ export default class Vector extends LayerBase {
    */
   equals(obj) {
     let equals = false;
-    if (obj instanceof Vector) {
+    if (obj instanceof Vector && this.constructor === obj.constructor) {
       equals = true;
     }
     return equals;
@@ -371,7 +373,7 @@ export default class Vector extends LayerBase {
    * @api stable
    */
   destroy() {
-    let olMap = this.map.getMapImpl();
+    const olMap = this.map.getMapImpl();
     if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
