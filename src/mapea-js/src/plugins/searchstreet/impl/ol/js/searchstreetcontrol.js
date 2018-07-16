@@ -1,8 +1,3 @@
-import FeatureImpl from "impl/ol/js/feature/feature";
-import Utils from "facade/js/utils/utils";
-import Template from "facade/js/utils/template";
-import Popup from "facade/js/popup";
-
 /**
  * @namespace M.impl.control
  */
@@ -93,7 +88,7 @@ export default class SearchstreetControl extends ol.control.Control {
       let feature = results[i];
       this.addEventClickFeature(feature, positionFeature);
 
-      this.facadeMap_.drawFeatures([FeatureImpl.olFeature2Facade(positionFeature)]);
+      this.facadeMap_.drawFeatures([M.impl.Feature.olFeature2Facade(positionFeature)]);
       this.listPoints.push([positionFeature]);
     }
     this.zoomResults();
@@ -111,7 +106,7 @@ export default class SearchstreetControl extends ol.control.Control {
     let features = this.listPoints[0];
     let bbox = ol.extent.boundingExtent(features
       .filter(feature => {
-        return (!Utils.isNullOrEmpty(feature.getGeometry()));
+        return (!M.utils.isNullOrEmpty(feature.getGeometry()));
       })
       .map(feature => {
         return feature.getGeometry().getFirstCoordinate();
@@ -131,7 +126,7 @@ export default class SearchstreetControl extends ol.control.Control {
    */
   addEventClickFeature(element, result) {
     this.facadeMap_.removePopup();
-    if (Utils.isNullOrEmpty(result)) {
+    if (M.utils.isNullOrEmpty(result)) {
       this.showPopup_(element, false);
       this.facadeMap_.setBbox([element.coordinateX, element.coordinateY, element.coordinateX, element.coordinateY]);
     } else if (result instanceof ol.Feature) {
@@ -154,7 +149,7 @@ export default class SearchstreetControl extends ol.control.Control {
    * @param {boolean} noPanMapIfOutOfView
    */
   showPopup_(feature, noPanMapIfOutOfView) {
-    Template.compile(SearchstreetControl.POPUP_TEMPLATE, {
+    M.Template.compile(SearchstreetControl.POPUP_TEMPLATE, {
       'jsonp': true,
       'vars': {
         'tVia': feature.streetType,
@@ -172,16 +167,16 @@ export default class SearchstreetControl extends ol.control.Control {
       };
 
       this.popup_ = this.facadeMap_.getPopup();
-      if (!Utils.isNullOrEmpty(this.popup_)) {
+      if (!M.utils.isNullOrEmpty(this.popup_)) {
         let hasExternalContent = this.popup_.getTabs().some(tab => {
           return (tab['title'] !== 'Searchstreet');
         });
         if (!hasExternalContent) {
           this.facadeMap_.removePopup();
-          if (Utils.isUndefined(noPanMapIfOutOfView)) {
-            this.popup_ = new Popup();
+          if (M.utils.isUndefined(noPanMapIfOutOfView)) {
+            this.popup_ = new M.Popup();
           } else {
-            this.popup_ = new Popup({
+            this.popup_ = new M.Popup({
               'panMapIfOutOfView': noPanMapIfOutOfView
             });
           }
@@ -191,10 +186,10 @@ export default class SearchstreetControl extends ol.control.Control {
           this.popup_.addTab(popupContent);
         }
       } else {
-        if (Utils.isUndefined(noPanMapIfOutOfView)) {
-          this.popup_ = new Popup();
+        if (M.utils.isUndefined(noPanMapIfOutOfView)) {
+          this.popup_ = new M.Popup();
         } else {
-          this.popup_ = new Popup({
+          this.popup_ = new M.Popup({
             'panMapIfOutOfView': noPanMapIfOutOfView
           });
         }
@@ -225,7 +220,7 @@ export default class SearchstreetControl extends ol.control.Control {
    */
   removePoints_() {
     for (var i = 0, ilen = this.listPoints.length; i < ilen; i++) {
-      this.facadeMap_.removeFeatures(this.listPoints[i].map(FeatureImpl.olFeature2Facade));
+      this.facadeMap_.removeFeatures(this.listPoints[i].map(M.impl.Feature.olFeature2Facade));
     }
     this.listPoints = [];
   }

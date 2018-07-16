@@ -1,15 +1,4 @@
-import Autocomplete from "plugins/autocomplete/facade/js/autocomplete";
-import Plugin from "facade/js/plugin";
-import Config from "../../../configuration";
-import Utils from "facade/js/utils/utils";
-import Remote from "facade/js/utils/remote";
-import Dialog from "facade/js/dialog";
-import EventsManager from "facade/js/event/eventsmanager";
-import Panel from "facade/js/ui/panel";
-import Position from "facade/js/ui/position";
-import Exception from "facade/js/exception/exception";
-
-export default class Searchstreet extends Plugin {
+export default class Searchstreet extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -70,7 +59,7 @@ export default class Searchstreet extends Plugin {
      * @private
      * @type {string}
      */
-    this.url_ = Config.SEARCHSTREET_URL;
+    this.url_ = M.config.SEARCHSTREET_URL;
 
     /**
      * INE code to specify the search
@@ -79,7 +68,7 @@ export default class Searchstreet extends Plugin {
      * @type {number}
      */
     this.locality_ = "";
-    if (!Utils.isNullOrEmpty(parameters.locality)) {
+    if (!M.utils.isNullOrEmpty(parameters.locality)) {
       this.locality_ = parameters.locality;
     }
 
@@ -100,39 +89,39 @@ export default class Searchstreet extends Plugin {
     map._areasContainer.getElementsByClassName("m-top m-right")[0].classList.add("top-extra");
 
     // Checks if the received INE code is correct.
-    let comCodIne = Utils.addParameters(Config.SEARCHSTREET_URLCOMPROBARINE, {
+    let comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
       codigo: this.locality_
     });
-    Remote.get(comCodIne).then(
+    M.Remote.get(comCodIne).then(
       response => {
         let results;
         try {
-          if (!Utils.isNullOrEmpty(response.text)) {
+          if (!M.utils.isNullOrEmpty(response.text)) {
             results = JSON.parse(response.text);
-            if (!Utils.isNullOrEmpty(this_.locality_) && Utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
+            if (!M.utils.isNullOrEmpty(this_.locality_) && M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
               // If not correct, value empty
-              Dialog.error("El código del municipio '" + this_.locality_ + "' no es válido");
+              M.Dialog.error("El código del municipio '" + this_.locality_ + "' no es válido");
               this_.locality_ = "";
             }
           }
           this_.control_ = new Searchstreet(this_.url_, this_.locality_);
-          this_.control_.on(EventsManager.ADDED_TO_MAP, () => {
-            this_.fire(EventsManager.ADDED_TO_MAP);
-            this_.autocompletador_ = new Autocomplete({
+          this_.control_.on(M.evt.ADDED_TO_MAP, () => {
+            this_.fire(M.evt.ADDED_TO_MAP);
+            this_.autocompletador_ = new M.plugin.Autocomplete({
               'locality': this_.locality_,
               'target': this_.control_.getInput(),
               'html': this_.control_.getHtml()
             });
             this_.map_.addPlugin(this_.autocompletador_);
           }, this);
-          this_.panel_ = new Panel('searchstreet', {
+          this_.panel_ = new M.ui.Panel('searchstreet', {
             'collapsible': true,
             'className': 'm-searchstreet',
-            'position': Position.TL,
+            'position': M.ui.Position.TL,
             'tooltip': 'Buscador de calles'
           });
           //JGL20170816: foco al input al desplegar panel
-          this_.panel_.on(EventsManager.ADDED_TO_MAP, html => {
+          this_.panel_.on(M.evt.ADDED_TO_MAP, html => {
             this_.panel_._buttonPanel.addEventListener("click", evt => {
               if (!this_.panel_._collapsed) {
                 this_.control_.input_.focus();
@@ -142,7 +131,7 @@ export default class Searchstreet extends Plugin {
           this_.panel_.addControls(this_.control_);
           this_.map_.addPanels(this_.panel_);
         } catch (err) {
-          Exception('La respuesta no es un JSON válido: ' + err);
+          M.exception('La respuesta no es un JSON válido: ' + err);
         }
       });
   };
