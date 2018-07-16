@@ -1,14 +1,6 @@
-import Control from "facade/js/controls/controlbase";
-import Utils from "facade/js/utils/utils";
-import Exception from "facade/js/exception/exception";
-import Config from "../../../configuration";
 import PrinterControlImpl from "../../impl/ol/js/printercontrol";
-import Template from "facade/js/utils/template";
-import Remote from "facade/js/utils/remote";
-import Dialog from "facade/js/dialog";
-import LayerType from "facade/js/layers/layertype";
 
-export default class PrinterControl extends Control {
+export default class PrinterControl extends M.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMCSelector
@@ -25,16 +17,16 @@ export default class PrinterControl extends Control {
     super(impl);
 
     // checks if the implementation can manage this control
-    if (Utils.isUndefined(PrinterControlImpl)) {
-      Exception('La implementación usada no puede crear controles Printer');
+    if (M.utils.isUndefined(PrinterControlImpl)) {
+      M.Exception('La implementación usada no puede crear controles Printer');
     }
 
-    if (Utils.isUndefined(PrinterControlImpl.prototype.encodeLayer)) {
-      Exception('La implementación usada no posee el método encodeLayer');
+    if (M.utils.isUndefined(PrinterControlImpl.prototype.encodeLayer)) {
+      M.Exception('La implementación usada no posee el método encodeLayer');
     }
 
-    if (Utils.isUndefined(PrinterControlImpl.prototype.encodeLegend)) {
-      Exception('La implementación usada no posee el método encodeLegend');
+    if (M.utils.isUndefined(PrinterControlImpl.prototype.encodeLegend)) {
+      M.Exception('La implementación usada no posee el método encodeLegend');
     }
 
     /**
@@ -115,24 +107,24 @@ export default class PrinterControl extends Control {
     this.options_ = options || {};
     // gets default values
     // layout
-    if (Utils.isNullOrEmpty(this.options_.layout)) {
-      this.options_.layout = Config.geoprint.TEMPLATE;
+    if (M.utils.isNullOrEmpty(this.options_.layout)) {
+      this.options_.layout = M.config.geoprint.TEMPLATE;
     }
     // dpi
-    if (Utils.isNullOrEmpty(this.options_.dpi)) {
-      this.options_.dpi = Config.geoprint.DPI;
+    if (M.utils.isNullOrEmpty(this.options_.dpi)) {
+      this.options_.dpi = M.config.geoprint.DPI;
     }
     // format
-    if (Utils.isNullOrEmpty(this.options_.format)) {
-      this.options_.format = Config.geoprint.FORMAT;
+    if (M.utils.isNullOrEmpty(this.options_.format)) {
+      this.options_.format = M.config.geoprint.FORMAT;
     }
     // force scale
-    if (Utils.isNullOrEmpty(this.options_.forceScale)) {
-      this.options_.forceScale = Config.geoprint.FORCE_SCALE;
+    if (M.utils.isNullOrEmpty(this.options_.forceScale)) {
+      this.options_.forceScale = M.config.geoprint.FORCE_SCALE;
     }
     // legend
-    if (Utils.isNullOrEmpty(this.options_.legend)) {
-      this.options_.legend = Config.geoprint.LEGEND;
+    if (M.utils.isNullOrEmpty(this.options_.legend)) {
+      this.options_.legend = M.config.geoprint.LEGEND;
     }
 
   }
@@ -176,7 +168,7 @@ export default class PrinterControl extends Control {
         }
         // forceScale
         capabilities.forceScale = this.options_.forceScale;
-        Template.compile(Printer.TEMPLATE, {
+        M.Template.compile(Printer.TEMPLATE, {
           'jsonp': true,
           'vars': capabilities
         }).then(html => {
@@ -286,7 +278,7 @@ export default class PrinterControl extends Control {
 
     // queue
     this.queueContainer_ = this.element_.querySelector('.queue > ul.queue-container');
-    Utils.enableTouchScroll(this.queueContainer_);
+    M.utils.enableTouchScroll(this.queueContainer_);
   }
 
   /**
@@ -298,10 +290,10 @@ export default class PrinterControl extends Control {
    * @api stable
    */
   getCapabilities() {
-    if (Utils.isNullOrEmpty(this.capabilitiesPromise_)) {
+    if (M.utils.isNullOrEmpty(this.capabilitiesPromise_)) {
       this.capabilitiesPromise_ = new Promise((success, fail) => {
-        let capabilitiesUrl = Utils.concatUrlPaths([this.url_, 'info.json']);
-        Remote.get(capabilitiesUrl).then((response) => {
+        let capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'info.json']);
+        M.Remote.get(capabilitiesUrl).then((response) => {
           let capabilities = {};
           try {
             capabilities = JSON.parse(response.text);
@@ -369,14 +361,14 @@ export default class PrinterControl extends Control {
 
     this.getCapabilities().then(capabilities => {
       this.getPrintData().then(printData => {
-        let printUrl = Utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
+        let printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
 
         // append child
         let queueEl = this.createQueueElement();
         this.queueContainer_.appendChild(queueEl);
         queueEl.classList.add(Printer.LOADING_CLASS);
 
-        Remote.post(printUrl, printData).then((response) => {
+        M.Remote.post(printUrl, printData).then((response) => {
           queueEl.classList.remove(queueEl, Printer.LOADING_CLASS);
 
           if (response.error !== true) {
@@ -389,7 +381,7 @@ export default class PrinterControl extends Control {
             queueEl.setAttribute(Printer.DOWNLOAD_ATTR_NAME, downloadUrl);
             queueEl.addEventListener("click", this.dowloadPrint);
           } else {
-            Dialog.error('Se ha producido un error en la impresión');
+            M.Dialog.error('Se ha producido un error en la impresión');
           }
         });
       });
@@ -411,7 +403,7 @@ export default class PrinterControl extends Control {
     let dpi = this.dpi_.value;
     let outputFormat = this.format_;
 
-    let printData = Utils.extend({
+    let printData = M.utils.extend({
       'units': projection.units,
       'srs': projection.code,
       'layout': layout,
@@ -425,7 +417,7 @@ export default class PrinterControl extends Control {
       if (this.options_.legend === true) {
         printData.legends = this.encodeLegends();
       }
-      if (projection.code !== "EPSG:3857" && this.map_.getLayers().some(layer => (layer.type === LayerType.OSM || layer.type === LayerType.Mapbox))) {
+      if (projection.code !== "EPSG:3857" && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
         printData.srs = 'EPSG:3857';
       }
       return printData;
@@ -473,11 +465,11 @@ export default class PrinterControl extends Control {
     let encodedPages = [];
     let projection = this.map_.getProjection();
 
-    if (!Utils.isArray(this.params_.pages)) {
+    if (!M.utils.isArray(this.params_.pages)) {
       this.params_.pages = [this.params_.pages];
     }
     this.params_.pages.forEach(page => {
-      let encodedPage = Utils.extend({
+      let encodedPage = M.utils.extend({
         'title': title,
         'printTitle': title,
         'printDescription': description,
@@ -487,7 +479,7 @@ export default class PrinterControl extends Control {
       if (this.forceScale_ === false) {
         let bbox = this.map_.getBbox();
         encodedPage.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-        if (projection.code !== "EPSG:3857" && this.map_.getLayers().some(layer => (layer.type === LayerType.OSM || layer.type === LayerType.Mapbox))) {
+        if (projection.code !== "EPSG:3857" && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
           encodedPage.bbox = ol.proj.transformExtent(encodedPage.bbox, projection.code, 'EPSG:3857');
         }
       } else if (this.forceScale_ === true) {
@@ -536,7 +528,7 @@ export default class PrinterControl extends Control {
   createQueueElement() {
     let queueElem = document.createElement('li');
     let title = this.inputTitle_.value;
-    if (Utils.isNullOrEmpty(title)) {
+    if (M.utils.isNullOrEmpty(title)) {
       title = Printer.NO_TITLE;
     }
     queueElem.innerHTML = title;
@@ -555,7 +547,7 @@ export default class PrinterControl extends Control {
     event.preventDefault();
 
     let downloadUrl = this.getAttribute(Printer.DOWNLOAD_ATTR_NAME);
-    if (!Utils.isNullOrEmpty(downloadUrl)) {
+    if (!M.utils.isNullOrEmpty(downloadUrl)) {
       window.open(downloadUrl, '_blank');
     }
   }
@@ -577,7 +569,7 @@ export default class PrinterControl extends Control {
 }
 
 /**
- * Template for this controls
+ * M.Template for this controls
  * @const
  * @type {string}
  * @public
@@ -586,7 +578,7 @@ export default class PrinterControl extends Control {
 Printer.TEMPLATE = 'printer.html';
 
 /**
- * Template for this controls
+ * M.Template for this controls
  * @const
  * @type {string}
  * @public
@@ -595,7 +587,7 @@ Printer.TEMPLATE = 'printer.html';
 Printer.LOADING_CLASS = 'printing';
 
 /**
- * Template for this controls
+ * M.Template for this controls
  * @const
  * @type {string}
  * @public
@@ -604,7 +596,7 @@ Printer.LOADING_CLASS = 'printing';
 Printer.DOWNLOAD_ATTR_NAME = 'data-donwload-url-print';
 
 /**
- * Template for this controls
+ * M.Template for this controls
  * @const
  * @type {string}
  * @public
