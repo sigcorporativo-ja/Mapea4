@@ -140,7 +140,7 @@ export default class Cluster extends Composite {
    * @api stable
    */
   updateRange(min, max, newRange) {
-    this.getImpl().updateRangeImpl(min, max, newRange, this.layer_, this);
+    ClusterImpl.updateRangeImpl(min, max, newRange, this.layer_, this);
     this.unapply(this.layer_);
     this.layer_.style = this;
     return this;

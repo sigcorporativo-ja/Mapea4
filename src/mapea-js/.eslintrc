@@ -19,6 +19,15 @@
     "import/no-unresolved": "off",
     "brace-style": ["error", "stroustrup"],
     "prefer-destructuring": "off",
-    "arrow-body-style": "off"
+    "arrow-body-style": "off",
+    "no-unused-vars": ["error", {
+      "vars": "all",
+      "args": "none"
+    }],
+    "class-methods-use-this": ["error", {
+     "exceptMethods": [
+      "updateCanvas"
+     ]
+     }]
   }
 }

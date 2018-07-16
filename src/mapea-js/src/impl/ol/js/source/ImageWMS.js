@@ -1,4 +1,4 @@
-import Utils from "facade/js/util/Utils";
+import Utils from 'facade/js/util/Utils';
 
 export default class ImageWMS extends ol.source.ImageWMS {
   /**
@@ -8,12 +8,11 @@ export default class ImageWMS extends ol.source.ImageWMS {
    * @constructor
    * @fires ol.source.ImageEvent
    * @extends {ol.source.Image}
-   * @param {olx.source.ImageWMSOptions=} opt_options Options.
+   * @param {olx.source.ImageWMSOptions=} optOptions Options.
    * @api stable
    */
-  constructor(opt_options) {
-
-    let options = opt_options || {};
+  constructor(optOptions = {}) {
+    const options = optOptions;
 
     super(options);
 
@@ -40,6 +39,7 @@ export default class ImageWMS extends ol.source.ImageWMS {
    * @api stable
    */
   imageLoadFunction(image, src) {
-    image.getImage().src = src + "&_=" + this.revision_;
+    const imageVariable = image;
+    imageVariable.getImage().src = `${src}&_=${this.revision_}`;
   }
 }

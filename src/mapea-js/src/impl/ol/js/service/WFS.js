@@ -1,6 +1,6 @@
-import Featuretype from "../format/wfs/DescribeFeatureType";
-import Utils from 'facade/js/util/Utils';
 import Remote from 'facade/js/util/Remote';
+import Utils from 'facade/js/util/Utils';
+import Featuretype from '../format/wfs/DescribeFeatureType';
 
 export default class WFS {
   /**
@@ -14,7 +14,6 @@ export default class WFS {
    * @api stable
    */
   constructor(layerParameters, vendorOpts) {
-
     /**
      *
      * @private
@@ -126,21 +125,24 @@ export default class WFS {
    */
   getDescribeFeatureType() {
     // TODO
-    let describeFeatureParams = {
-      'service': 'WFS',
-      'version': this.version_,
-      'request': 'DescribeFeatureType',
-      'typename': this.typeName_,
+    const describeFeatureParams = {
+      service: 'WFS',
+      version: this.version_,
+      request: 'DescribeFeatureType',
+      typename: this.typeName_,
     };
     if (!Utils.isNullOrEmpty(this.describeFeatureTypeOutputFormat_)) {
-      describeFeatureParams['outputFormat'] = this.describeFeatureTypeOutputFormat_;
+      describeFeatureParams.outputFormat = this.describeFeatureTypeOutputFormat_;
     }
 
-    let describeFeatureTypeUrl = Utils.addParameters(Utils.addParameters(this.url_, describeFeatureParams), this.describeFeatureTypeVendor_);
-    let describeFeatureTypeFormat = new Featuretype(this.name_, this.describeFeatureTypeOutputFormat_, this.projection_);
+    const params = Utils.addParameters(this.url_, describeFeatureParams);
+    const describeFeatureTypeUrl = Utils
+      .addParameters(params, this.describeFeatureTypeVendor_);
+    const descFTypeOForm = this.describeFeatureTypeOutputFormat_;
+    const descrFTypeFormat = new Featuretype(this.name_, descFTypeOForm, this.projection_);
     return new Promise((success, fail) => {
-      Remote.get(describeFeatureTypeUrl).then(response => {
-        success(describeFeatureTypeFormat.read(response));
+      Remote.get(describeFeatureTypeUrl).then((response) => {
+        success(descrFTypeFormat.read(response));
       });
     });
   }
@@ -159,26 +161,27 @@ export default class WFS {
    */
 
   getFeatureUrl(extent, projection) {
-    let getFeatureParams = {
-      'service': 'WFS',
-      'version': this.version_,
-      'request': 'GetFeature',
-      'typename': this.typeName_,
-      'outputFormat': this.getFeatureOutputFormat_,
-      'srsname': projection.getCode()
+    const getFeatureParams = {
+      service: 'WFS',
+      version: this.version_,
+      request: 'GetFeature',
+      typename: this.typeName_,
+      outputFormat: this.getFeatureOutputFormat_,
+      srsname: projection.getCode(),
     };
     if (!Utils.isNullOrEmpty(this.ids_)) {
-      getFeatureParams['featureId'] = this.ids_.map(id => {
+      getFeatureParams.featureId = this.ids_.map((id) => {
         return this.name_.concat('.').concat(id);
-      }, this);
+      });
     }
     if (!Utils.isNullOrEmpty(this.cql_)) {
-      getFeatureParams['CQL_FILTER'] = this.cql_;
+      getFeatureParams.CQL_FILTER = this.cql_;
     }
     else if (!Utils.isNullOrEmpty(extent)) {
-      getFeatureParams['bbox'] = extent.join(',') + ',' + projection.getCode();
+      getFeatureParams.bbox = `${extent.join(',')},${projection.getCode()}`;
     }
 
-    return Utils.addParameters(Utils.addParameters(this.url_, getFeatureParams), this.getFeatureVendor_);
+    return Utils
+      .addParameters(Utils.addParameters(this.url_, getFeatureParams), this.getFeatureVendor_);
   }
 }

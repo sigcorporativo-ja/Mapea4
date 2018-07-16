@@ -17,6 +17,16 @@ export default class Simple extends Style {
   }
 
   /**
+   * This function gets the ol style function of impl
+   * @public
+   * @function
+   * @api stable
+   */
+  get olStyleFn() {
+    return this.olStyleFn_;
+  }
+
+  /**
    * This function apply style to layer
    * @public
    * @function
