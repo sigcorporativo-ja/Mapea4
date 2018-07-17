@@ -1,6 +1,7 @@
-import XML from "../XML";
-import Utils from "facade/js/util/Utils";
-import Dialog from "facade/js/dialog";
+/* eslint-disable */
+
+import Dialog from 'facade/js/dialog';
+import XML from '../XML';
 
 export default class DescribeFeatureTypeXML extends XML {
   /**
@@ -46,17 +47,18 @@ export default class DescribeFeatureTypeXML extends XML {
    * @api stable
    */
   read_root(context, node) {
-    var root = node.documentElement;
+    const root = node.documentElement;
 
     if (/ServiceExceptionReport/i.test(root.localName)) {
       this.serviceException_ = true;
     }
     else {
       this.rootPrefix = root.prefix;
-      context["elementFormDefault"] = root.getAttribute("elementFormDefault");
-      context["targetNamespace"] = root.getAttribute("targetNamespace");
-      context["targetPrefix"] = root.getAttribute("targetPrefix");
-      context["featureTypes"] = [];
+      const contextVar = context;
+      contextVar.elementFormDefault = root.getAttribute('elementFormDefault');
+      contextVar.elementFormDefault = root.getAttribute('targetNamespace');
+      contextVar.targetPrefix = root.getAttribute('targetPrefix');
+      contextVar.featureTypes = [];
     }
     this.runChildNodes(context, root);
   }
@@ -69,7 +71,7 @@ export default class DescribeFeatureTypeXML extends XML {
    * @api stable
    */
   read_ogc_ServiceException(context, node) {
-    Dialog.error('Error en el DescribeFeatureType: ' + node.textContent.trim());
+    Dialog.error(`Error en el DescribeFeatureType: ${node.textContent.trim()} `);
   }
 
   /**
@@ -103,8 +105,8 @@ export default class DescribeFeatureTypeXML extends XML {
    */
   read_xsd_complexType(context, node) {
     this.readingFeatureType_ = true;
-    context["featureTypes"].push({
-      "properties": []
+    context.featureTypes.push({
+      properties: [],
     });
     this.runChildNodes(context, node);
     this.readingFeatureType_ = false;
@@ -132,6 +134,7 @@ export default class DescribeFeatureTypeXML extends XML {
     this.runChildNodes(context, node);
   }
 
+
   /**
    * @private
    * @function
@@ -152,18 +155,21 @@ export default class DescribeFeatureTypeXML extends XML {
    */
   read_xsd_element(context, node) {
     if (this.readingFeatureType_ === true) {
-      context["featureTypes"][this.featureTypeIdx_]["properties"].push({
-        "name": node.getAttribute("name"),
-        "maxOccurs": node.getAttribute("maxOccurs"),
-        "minOccurs": node.getAttribute("minOccurs"),
-        "nillable": node.getAttribute("nillable"),
-        "type": node.getAttribute("type"),
-        "localType": node.getAttribute("type").replace(/^\w+\:/g, '')
+      context.featureTypes[this.featureTypeIdx_].properties.push({
+        name: node.getAttribute('name'),
+        maxOccurs: node.getAttribute('maxOccurs'),
+        minOccurs: node.getAttribute('minOccurs'),
+        nillable: node.getAttribute('nillable'),
+        type: node.getAttribute('type'),
+        localType: node.getAttribute('type').replace(/^\w+:/g, ''),
       });
     }
     else {
-      context["featureTypes"][this.featureTypeIdx_]["typeName"] = node.getAttribute("name");
-      this.featureTypeIdx_++;
+      const contextVar = context;
+      contextVar.featureTypes[this.featureTypeIdx_].typeName = node.getAttribute('name');
+      this.featureTypeIdx_ += 1;
     }
   }
 }
+
+/* eslint-enable */

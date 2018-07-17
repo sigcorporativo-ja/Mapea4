@@ -1,14 +1,13 @@
-import Vector from "./Vector";
-import Utils from "facade/js/util/Utils";
-import Exception from "facade/js/exception/exception";
-import LoaderKML from "../loader/KML";
-import Popup from "facade/js/Popup";
-import FormatKML from "../format/KML";
-import EventsManager from "facade/js/event/Manager";
-import ImplUtils from "../util/Utils";
-import ClusteredFeature from "facade/js/feature/Clustered";
-import Template from "facade/js/util/Template";
-import popupKMLTemplate from "templates/kml_popup.html";
+import Template from 'facade/js/util/Template';
+import popupKMLTemplate from 'templates/kml_popup';
+import Popup from 'facade/js/Popup';
+import Utils from 'facade/js/util/Utils';
+import ClusteredFeature from 'facade/js/feature/Clustered';
+import EventsManager from 'facade/js/event/Manager';
+import Vector from './Vector';
+import LoaderKML from '../loader/KML';
+import FormatKML from '../format/KML';
+import ImplUtils from '../util/Utils';
 
 export default class KML extends Vector {
   /**
@@ -22,7 +21,6 @@ export default class KML extends Vector {
    * @api stable
    */
   constructor(options) {
-
     // calls the super constructor
     super(options);
 
@@ -68,7 +66,7 @@ export default class KML extends Vector {
       if (visibility === true) {
         display = 'inherit';
       }
-      this.screenOverlayImg_.style['display'] = display;
+      this.screenOverlayImg_.style[display] = display;
     }
   }
 
@@ -83,23 +81,23 @@ export default class KML extends Vector {
   addTo(map) {
     super.addTo(map);
 
-    let formater = new FormatKML();
-    let loader = new LoaderKML(map, this.url, formater);
+    const formater = new FormatKML();
+    const loader = new LoaderKML(map, this.url, formater);
     this.ol3Layer = new ol.layer.Vector({
       source: new ol.source.Vector({
         url: this.url,
         format: formater,
-        loader: loader.getLoaderFn(features, screenOverlay => {
+        loader: loader.getLoaderFn((features, screenOverlay) => {
           // removes previous features
           this.facadeVector_.clear();
           this.facadeVector_.addFeatures(features);
           this.fire(EventsManager.LOAD, [features]);
           if (!Utils.isNullOrEmpty(screenOverlay)) {
-            let screenOverLayImg = ImplUtils.addOverlayImage(screenOverlay, map);
+            const screenOverLayImg = ImplUtils.addOverlayImage(screenOverlay, map);
             this.setScreenOverlayImg(screenOverLayImg);
           }
-        })
-      })
+        }),
+      }),
     });
     // sets its visibility if it is in range
     if (this.options.visibility !== false) {
@@ -109,7 +107,7 @@ export default class KML extends Vector {
     if (this.zIndex_ !== null) {
       this.setZIndex(this.zIndex_);
     }
-    let olMap = this.map.getMapImpl();
+    const olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
   }
 
@@ -123,24 +121,24 @@ export default class KML extends Vector {
    */
   selectFeatures(features, coord, evt) {
     // TODO: manage multiples features
-    let feature = features[0];
+    const feature = features[0];
 
     if (!(feature instanceof ClusteredFeature) && (this.extract === true)) {
-      let featureName = feature.getAttribute('name');
-      let featureDesc = feature.getAttribute('description');
-      let featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();
+      const featureName = feature.getAttribute('name');
+      const featureDesc = feature.getAttribute('description');
+      const featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();
 
-      let htmlAsText = Template.compile(popupKMLTemplate, {
-        'vars': {
-          'name': featureName,
-          'desc': featureDesc
+      const htmlAsText = Template.compile(popupKMLTemplate, {
+        vars: {
+          name: featureName,
+          desc: featureDesc,
         },
-        'parseToHtml': false
+        parseToHtml: false,
       });
       this.tabPopup_ = {
-        'icon': 'g-cartografia-comentarios',
-        'title': featureName,
-        'content': htmlAsText
+        icon: 'g-cartografia-comentarios',
+        title: featureName,
+        content: htmlAsText,
       };
       const popup = this.map.getPopup();
       if (Utils.isNullOrEmpty(popup)) {
@@ -190,7 +188,7 @@ export default class KML extends Vector {
    * @api stable
    */
   destroy() {
-    let olMap = this.map.getMapImpl();
+    const olMap = this.map.getMapImpl();
 
     if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);

@@ -1,4 +1,4 @@
-import Utils from "facade/js/util/Utils";
+import Utils from 'facade/js/util/Utils';
 
 export default class KML extends ol.format.KML {
   /**
@@ -7,12 +7,12 @@ export default class KML extends ol.format.KML {
    *
    * @constructor
    * @extends {ol.format.KML}
-   * @param {olx.format.KMLOptions=} opt_options Options.
+   * @param {olx.format.KMLOptions=} optOptions Options.
    * @api stabl
    */
-  constructor(opt_options = {}) {
+  constructor(optOptions = {}) {
     super();
-    let options = opt_options ? opt_options : {};
+    const options = optOptions || {};
 
     // anonymous by default
     if (!options.crossOriginIcons_) {
@@ -32,8 +32,8 @@ export default class KML extends ol.format.KML {
    * @private
    * @return {Object} Icon object.
    */
-  static readOverlayXY_(node, objectStack) {
-    let overlayObject = KML.readOverlay_(node) || null;
+  static readOverlayXY(node, objectStack) {
+    const overlayObject = KML.readOverlay(node) || null;
     return overlayObject;
   }
 
@@ -43,8 +43,8 @@ export default class KML extends ol.format.KML {
    * @private
    * @return {Object} Icon object.
    */
-  static readScreenXY_(node, objectStack) {
-    let screenObject = KML.readOverlay_(node) || null;
+  static readScreenXY(node, objectStack) {
+    const screenObject = KML.readOverlay(node) || null;
     return screenObject;
   }
 
@@ -54,23 +54,23 @@ export default class KML extends ol.format.KML {
    * @private
    * @return {Array.<ol.style.Style>} Style.
    */
-  static readStyle_(node, objectStack) {
-    let styleObject = ol.xml.pushParseAndPop({}, KML.STYLE_PARSERS_, node, objectStack);
+  static readStyle(node, objectStack) {
+    const styleObject = ol.xml.pushParseAndPop({}, KML.STYLE_PARSERS_, node, objectStack);
     if (!styleObject) {
       return null;
     }
-    let fillStyle = 'fillStyle' in styleObject ? styleObject['fillStyle'] : ol.format.KML.DEFAULT_FILL_STYLE_;
-    let fill = styleObject['fill'];
+    let fillStyle = 'fillStyle' in styleObject ? styleObject.fillStyle : ol.format.KML.DEFAULT_FILL_STYLE_;
+    const fill = styleObject.fill;
     if (fill !== undefined && !fill) {
       fillStyle = null;
     }
-    let imageStyle = 'imageStyle' in styleObject ? styleObject['imageStyle'] : ol.format.KML.DEFAULT_IMAGE_STYLE_;
-    if (imageStyle == ol.format.KML.DEFAULT_NO_IMAGE_STYLE_) {
+    let imageStyle = 'imageStyle' in styleObject ? styleObject.imageStyle : ol.format.KML.DEFAULT_IMAGE_STYLE_;
+    if (imageStyle === ol.format.KML.DEFAULT_NO_IMAGE_STYLE_) {
       imageStyle = undefined;
     }
-    let textStyle = 'textStyle' in styleObject ? styleObject['textStyle'] : ol.format.KML.DEFAULT_TEXT_STYLE_;
-    let strokeStyle = 'strokeStyle' in styleObject ? styleObject['strokeStyle'] : ol.format.KML.DEFAULT_STROKE_STYLE_;
-    let outline = styleObject['outline'];
+    const textStyle = 'textStyle' in styleObject ? styleObject.textStyle : ol.format.KML.DEFAULT_TEXT_STYLE_;
+    let strokeStyle = 'strokeStyle' in styleObject ? styleObject.strokeStyle : ol.format.KML.DEFAULT_STROKE_STYLE_;
+    const outline = styleObject.outline;
     if (outline !== undefined && !outline) {
       strokeStyle = null;
     }
@@ -79,7 +79,7 @@ export default class KML extends ol.format.KML {
       image: imageStyle,
       stroke: strokeStyle,
       text: textStyle,
-      zIndex: undefined // FIXME
+      zIndex: undefined, // FIXME
     })];
   }
 
@@ -89,8 +89,8 @@ export default class KML extends ol.format.KML {
    * @private
    * @return {Object} Icon object.
    */
-  static readRotationXY_(node, objectStack) {
-    let rotationObject = KML.readOverlay_(node) || null;
+  static readRotationXY(node, objectStack) {
+    const rotationObject = KML.readOverlay(node) || null;
     return rotationObject;
   }
 
@@ -100,8 +100,8 @@ export default class KML extends ol.format.KML {
    * @private
    * @return {Object} Icon object.
    */
-  static readSize_(node, objectStack) {
-    let sizeObject = KML.readOverlay_(node) || null;
+  static readSize(node, objectStack) {
+    const sizeObject = KML.readOverlay(node) || null;
     return sizeObject;
   }
 
@@ -110,18 +110,18 @@ export default class KML extends ol.format.KML {
    * @param {Array.<*>} objectStack Object stack.
    * @private
    */
-  readSharedStyle_(node, objectStack) {
-    let id = node.getAttribute('id');
+  readSharedStyle(node, objectStack) {
+    const id = node.getAttribute('id');
     if (id !== null) {
-      let style = KML.readStyle_(node, objectStack);
+      const style = KML.readStyle(node, objectStack);
       if (style) {
         let styleUri;
         if (node.baseURI) {
-          let url = new URL('#' + id, node.baseURI);
+          const url = new URL(`#${id}`, node.baseURI);
           styleUri = url.href;
         }
         else {
-          styleUri = '#' + id;
+          styleUri = `#${id}`;
         }
         this.sharedStyles_[styleUri] = style;
       }
@@ -133,20 +133,22 @@ export default class KML extends ol.format.KML {
    * @param {Array.<*>} objectStack Object stack.
    * @private
    */
-  static PairDataParser_(node, objectStack) {
-    let pairObject = ol.xml.pushParseAndPop({}, KML.PAIR_PARSERS_, node, objectStack);
+  static pairDataParser(node, objectStack) {
+    const pairObject = ol.xml.pushParseAndPop({}, KML.PAIR_PARSERS_, node, objectStack);
     if (!pairObject) {
       return;
     }
-    let key = pairObject['key'];
-    if (key && key == 'normal') {
-      let styleUrl = pairObject['styleUrl'];
+    const key = pairObject.key;
+    if (key && key === 'normal') {
+      const styleUrl = pairObject.styleUrl;
       if (styleUrl) {
-        objectStack[objectStack.length - 1] = styleUrl;
+        const objectStackVar = objectStack;
+        objectStackVar[objectStack.length - 1] = styleUrl;
       }
-      let Style = pairObject['Style'];
+      const Style = pairObject.Style;
       if (Style) {
-        objectStack[objectStack.length - 1] = Style;
+        const objectStackVar = objectStack;
+        objectStackVar[objectStack.length - 1] = Style;
       }
     }
   }
@@ -157,7 +159,7 @@ export default class KML extends ol.format.KML {
    * @private
    * @return {Array.<ol.style.Style>|string|undefined} StyleMap.
    */
-  static readStyleMapValue_(node, objectStack) {
+  static readStyleMapValue(node, objectStack) {
     return ol.xml.pushParseAndPop(undefined, KML.STYLE_MAP_PARSERS_, node, objectStack);
   }
 
@@ -169,30 +171,32 @@ export default class KML extends ol.format.KML {
    * @param {Array.<*>} objectStack Object stack.
    * @private
    */
-  static IconStyleParser_(node, objectStack) {
+  static IconStyleParser(node, objectStack) {
     // FIXME refreshMode
     // FIXME refreshInterval
     // FIXME viewRefreshTime
     // FIXME viewBoundScale
     // FIXME viewFormat
     // FIXME httpQuery
-    let object = ol.xml.pushParseAndPop({}, ol.format.KML.ICON_STYLE_PARSERS_, node, objectStack);
+    const object = ol.xml.pushParseAndPop({}, ol.format.KML.ICON_STYLE_PARSERS_, node, objectStack);
     if (!object) {
       return;
     }
-    let styleObject = objectStack[objectStack.length - 1];
-    let IconObject = 'Icon' in object ? object['Icon'] : {};
-    let drawIcon = (!('Icon' in object) || Object.keys(IconObject).length > 0);
+    const styleObject = objectStack[objectStack.length - 1];
+    const IconObject = 'Icon' in object ? object.Icon : {};
+    const drawIcon = (!('Icon' in object) || Object.keys(IconObject).length > 0);
     let src;
-    let href = IconObject['href'];
+    const href = IconObject.href;
     if (href) {
       src = href;
     }
     else if (drawIcon) {
       src = ol.format.KML.DEFAULT_IMAGE_STYLE_SRC_;
     }
-    let anchor, anchorXUnits, anchorYUnits;
-    let hotSpot = object['hotSpot'];
+    let anchor;
+    let anchorXUnits;
+    let anchorYUnits;
+    const hotSpot = object.hotSpot;
     if (hotSpot) {
       anchor = [hotSpot.x, hotSpot.y];
       anchorXUnits = hotSpot.xunits;
@@ -210,54 +214,54 @@ export default class KML extends ol.format.KML {
     }
 
     let offset;
-    let x = IconObject['x'];
-    let y = /** @type {number|undefined} */
-      (IconObject['y']);
+    const x = IconObject.x;
+    const y = /** @type {number|undefined} */
+      (IconObject.y);
     if (x !== undefined && y !== undefined) {
       offset = [x, y];
     }
 
     let size;
-    let w = IconObject['w'];
-    let h = IconObject['h'];
+    const w = IconObject.w;
+    const h = IconObject.h;
     if (w !== undefined && h !== undefined) {
       size = [w, h];
     }
 
     let rotation;
-    let heading =
-      (object['heading']);
+    const heading =
+      (object.heading);
     if (heading !== undefined) {
       rotation = (heading * Math.PI) / 180;
     }
 
-    let scale = object['scale'];
+    let scale = object.scale;
     if (drawIcon) {
-      if (src == ol.format.KML.DEFAULT_IMAGE_STYLE_SRC_) {
+      if (src === ol.format.KML.DEFAULT_IMAGE_STYLE_SRC_) {
         size = ol.format.KML.DEFAULT_IMAGE_STYLE_SIZE_;
         if (scale === undefined) {
           scale = ol.format.KML.DEFAULT_IMAGE_SCALE_MULTIPLIER_;
         }
       }
 
-      let imageStyle = new ol.style.Icon({
-        anchor: anchor,
+      const imageStyle = new ol.style.Icon({
+        anchor,
         anchorOrigin: ol.style.IconOrigin.BOTTOM_LEFT,
-        anchorXUnits: anchorXUnits,
-        anchorYUnits: anchorYUnits,
+        anchorXUnits,
+        anchorYUnits,
         crossOrigin: null, // PATCH: before 'anonymous'
-        offset: offset,
+        offset,
         offsetOrigin: ol.style.IconOrigin.BOTTOM_LEFT,
-        rotation: rotation,
-        scale: scale,
-        size: size,
-        src: src
+        rotation,
+        scale,
+        size,
+        src,
       });
-      styleObject['imageStyle'] = imageStyle;
+      styleObject.imageStyle = imageStyle;
     }
     else {
       // handle the case when we explicitly want to draw no icon.
-      styleObject['imageStyle'] = ol.format.KML.DEFAULT_NO_IMAGE_STYLE_;
+      styleObject.imageStyle = ol.format.KML.DEFAULT_NO_IMAGE_STYLE_;
     }
   }
 
@@ -267,44 +271,47 @@ export default class KML extends ol.format.KML {
    * @private
    * @return {ol.Feature|undefined} Feature.
    */
-  readPlacemark_(node, objectStack) {
-    let object = ol.xml.pushParseAndPop({
-        'geometry': null
-      },
-      KML.PLACEMARK_PARSERS_, node, objectStack);
+  readPlacemark(node, objectStack) {
+    const object = ol.xml.pushParseAndPop({
+      geometry: null,
+    }, KML.PLACEMARK_PARSERS_, node, objectStack);
     if (!object) {
       return undefined;
     }
-    let feature = new ol.Feature();
-    let id = node.getAttribute('id');
+    const feature = new ol.Feature();
+    const id = node.getAttribute('id');
     if (id !== null) {
       feature.setId(id);
     }
-    let options = objectStack[0];
+    const options = objectStack[0];
 
-    let geometry = object['geometry'];
+    const geometry = object.geometry;
     if (geometry) {
       ol.format.Feature.transformWithOptions(geometry, false, options);
     }
     feature.setGeometry(geometry);
-    delete object['geometry'];
+    delete object.geometry;
 
     if (this.extractStyles_) {
-      let style = object['Style'];
-      let styleUrl = object['styleUrl'];
-      let styleFunction = ol.format.KML.createFeatureStyleFunction_(
-        style, styleUrl, this.defaultStyle_, this.sharedStyles_,
-        this.showPointNames_);
+      const style = object.Style;
+      const styleUrl = object.styleUrl;
+      const styleFunction = ol.format.KML.createFeatureStyleFunction_(
+        style,
+        styleUrl,
+        this.defaultStyle_,
+        this.sharedStyles_,
+        this.showPointNames,
+      );
       feature.setStyle(styleFunction);
     }
-    delete object['Style'];
+    delete object.Style;
     // we do not remove the styleUrl property from the object, so it
     // gets stored on feature when setProperties is called
 
     feature.setProperties(object);
 
     // fixes #3: decodes name to remove HTML entities
-    feature.set("name", Utils.decodeHtml(feature.get("name")));
+    feature.set('name', Utils.decodeHtml(feature.get('name')));
 
     return feature;
   }
@@ -314,17 +321,18 @@ export default class KML extends ol.format.KML {
    * @param {Array.<*>} objectStack Object stack.
    * @private
    */
-  static PlacemarkStyleMapParser_(node, objectStack) {
-    let styleMapValue = KML.readStyleMapValue_(node, objectStack);
+
+  static placemarkStyleMapParser(node, objectStack) {
+    const styleMapValue = KML.readStyleMapValue(node, objectStack);
     if (!styleMapValue) {
       return;
     }
-    let placemarkObject = objectStack[objectStack.length - 1];
+    const placemarkObject = objectStack[objectStack.length - 1];
     if (Array.isArray(styleMapValue)) {
-      placemarkObject['Style'] = styleMapValue;
+      placemarkObject.Style = styleMapValue;
     }
     else if (typeof styleMapValue === 'string') {
-      placemarkObject['styleUrl'] = styleMapValue;
+      placemarkObject.styleUrl = styleMapValue;
     }
     else {
       ol.asserts.assert(false, 38); // `styleMapValue` has an unknown type
@@ -336,22 +344,22 @@ export default class KML extends ol.format.KML {
    * @param {Array.<*>} objectStack Object stack.
    * @private
    */
-  readSharedStyleMap_(node, objectStack) {
-    let id = node.getAttribute('id');
+  readSharedStyleMap(node, objectStack) {
+    const id = node.getAttribute('id');
     if (id === null) {
       return;
     }
-    let styleMapValue = KML.readStyleMapValue_(node, objectStack);
+    const styleMapValue = KML.readStyleMapValue(node, objectStack);
     if (!styleMapValue) {
       return;
     }
     let styleUri;
     if (node.baseURI) {
-      let url = new URL('#' + id, node.baseURI);
+      const url = new URL(`#${id}`, node.baseURI);
       styleUri = url.href;
     }
     else {
-      styleUri = '#' + id;
+      styleUri = `#${id}`;
     }
     this.sharedStyles_[styleUri] = styleMapValue;
   }
@@ -361,22 +369,22 @@ export default class KML extends ol.format.KML {
    * @param {Array.<*>} objectStack Object stack.
    * @private
    */
-  static readOverlay_(node, objectStack) {
+  static readOverlay(node, objectStack) {
     // x, y
-    let x = ol.xsd.readDecimalString(node.getAttribute('x'));
-    let y = ol.xsd.readDecimalString(node.getAttribute('y'));
+    const x = ol.xsd.readDecimalString(node.getAttribute('x'));
+    const y = ol.xsd.readDecimalString(node.getAttribute('y'));
 
     // xunits
-    let xunits = node.getAttribute('xunits');
+    const xunits = node.getAttribute('xunits');
 
     // yunits
-    let yunits = node.getAttribute('yunits');
+    const yunits = node.getAttribute('yunits');
 
     return {
-      'x': x,
-      'y': y,
-      'xunits': xunits,
-      'yunits': yunits
+      x,
+      y,
+      xunits,
+      yunits,
     };
   }
 
@@ -385,25 +393,26 @@ export default class KML extends ol.format.KML {
    * @param {Array.<*>} objectStack Object stack.
    * @private
    */
-  readScreenOverlay_(node, objectStack) {
-    let screenOverlayObject = ol.xml.pushParseAndPop({}, KML.SCREEN_OVERLAY_PARSERS_, node, objectStack);
+  readScreenOverlay(node, objectStack) {
+    const screenOverlayObject =
+      ol.xml.pushParseAndPop({}, KML.SCREEN_OVERLAY_PARSERS_, node, objectStack);
 
     if (!screenOverlayObject) {
       return;
     }
 
-    let iconAttr = 'Icon';
-    let hrefAttr = 'href';
-    let overlayXYAttr = 'overlayXY';
-    let screenXYAttr = 'screenXY';
-    let rotationXYAttr = 'rotationXY';
-    let sizeAttr = 'size';
-    let xUnitsAttr = 'xunits';
-    let yUnitsAttr = 'yunits';
+    const iconAttr = 'Icon';
+    const hrefAttr = 'href';
+    const overlayXYAttr = 'overlayXY';
+    const screenXYAttr = 'screenXY';
+    const rotationXYAttr = 'rotationXY';
+    const sizeAttr = 'size';
+    const xUnitsAttr = 'xunits';
+    const yUnitsAttr = 'yunits';
 
     // src
     let src;
-    let IconObject = screenOverlayObject[iconAttr];
+    const IconObject = screenOverlayObject[iconAttr];
     if (!Utils.isNullOrEmpty(IconObject)) {
       src = IconObject[hrefAttr];
     }
@@ -412,8 +421,10 @@ export default class KML extends ol.format.KML {
     }
 
     // overlayXY (offset)
-    let overlayXY, overlayXUnits, overlayYUnits;
-    let overlayXYObject = screenOverlayObject[overlayXYAttr];
+    let overlayXY;
+    let overlayXUnits;
+    let overlayYUnits;
+    const overlayXYObject = screenOverlayObject[overlayXYAttr];
     if (!Utils.isNullOrEmpty(overlayXYObject)) {
       overlayXY = [overlayXYObject.x, overlayXYObject.y];
       overlayXUnits = overlayXYObject[xUnitsAttr];
@@ -421,8 +432,10 @@ export default class KML extends ol.format.KML {
     }
 
     // screenXY (anchor)
-    let screenXY, screenXUnits, screenYUnits;
-    let screenXYObject = screenOverlayObject[screenXYAttr];
+    let screenXY;
+    let screenXUnits;
+    let screenYUnits;
+    const screenXYObject = screenOverlayObject[screenXYAttr];
     if (!Utils.isNullOrEmpty(screenXYObject)) {
       screenXY = [screenXYObject.x, screenXYObject.y];
       screenXUnits = screenXYObject[xUnitsAttr];
@@ -440,8 +453,10 @@ export default class KML extends ol.format.KML {
     }
 
     // rotation
-    let rotationXY, rotationXUnits, rotationYUnits;
-    let rotationObject = screenOverlayObject[rotationXYAttr];
+    let rotationXY;
+    let rotationXUnits;
+    let rotationYUnits;
+    const rotationObject = screenOverlayObject[rotationXYAttr];
     if (!Utils.isNullOrEmpty(rotationObject)) {
       rotationXY = (rotationObject.x * Math.PI) / 180;
       rotationXUnits = rotationObject[xUnitsAttr];
@@ -449,8 +464,10 @@ export default class KML extends ol.format.KML {
     }
 
     // size
-    let size, sizeXUnits, sizeYUnits;
-    let sizeObject = screenOverlayObject[sizeAttr];
+    let size;
+    let sizeXUnits;
+    let sizeYUnits;
+    const sizeObject = screenOverlayObject[sizeAttr];
     if (!Utils.isNullOrEmpty(sizeObject)) {
       size = [sizeObject.x, sizeObject.y];
       sizeXUnits = sizeObject[xUnitsAttr];
@@ -458,15 +475,15 @@ export default class KML extends ol.format.KML {
     }
 
     this.screenOverlay_ = {
-      'screenXY': screenXY,
-      'screenXUnits': screenXUnits,
-      'screenYUnits': screenYUnits,
-      'overlayXY': overlayXY,
-      'overlayXUnits': overlayXUnits,
-      'overlayYUnits': overlayYUnits,
-      'rotationXY': rotationXY,
-      'size': size,
-      'src': src
+      screenXY,
+      screenXUnits,
+      screenYUnits,
+      overlayXY,
+      overlayXUnits,
+      overlayYUnits,
+      rotationXY,
+      size,
+      src,
     };
   }
 
@@ -476,17 +493,17 @@ export default class KML extends ol.format.KML {
    * @private
    * @return {Array.<ol.Feature>|undefined} Features.
    */
-  readDocumentOrFolder_(node, objectStack) {
+  readDocumentOrFolder(node, objectStack) {
     // FIXME use scope somehow
-    let parsersNS = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
-      'Document': ol.xml.makeArrayExtender(this.readDocumentOrFolder_, this),
-      'Folder': ol.xml.makeArrayExtender(this.readDocumentOrFolder_, this),
-      'Placemark': ol.xml.makeArrayPusher(this.readPlacemark_, this),
-      'ScreenOverlay': this.readScreenOverlay_.bind(this),
-      'Style': this.readSharedStyle_.bind(this),
-      'StyleMap': this.readSharedStyleMap_.bind(this)
+    const parsersNS = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
+      Document: ol.xml.makeArrayExtender(this.readDocumentOrFolder, this),
+      Folder: ol.xml.makeArrayExtender(this.readDocumentOrFolder, this),
+      Placemark: ol.xml.makeArrayPusher(this.readPlacemark, this),
+      ScreenOverlay: this.readScreenOverlay.bind(this),
+      Style: this.readSharedStyle.bind(this),
+      StyleMap: this.readSharedStyleMap.bind(this),
     });
-    let features = ol.xml.pushParseAndPop([], parsersNS, node, objectStack, this) || undefined;
+    const features = ol.xml.pushParseAndPop([], parsersNS, node, objectStack, this) || undefined;
     return features;
   }
 
@@ -508,10 +525,10 @@ export default class KML extends ol.format.KML {
  * @private
  */
 KML.OVERLAY_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.GX_NAMESPACE_URIS_, {
-  'x': ol.xml.makeObjectPropertyPusher(ol.xsd.readDecimal),
-  'y': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
-  'xunits': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
-  'yunits': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal)
+  x: ol.xml.makeObjectPropertyPusher(ol.xsd.readDecimal),
+  y: ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
+  xunits: ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
+  yunits: ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
 });
 
 /**
@@ -520,11 +537,11 @@ KML.OVERLAY_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.GX_NAMESPACE_URIS_, 
  * @private
  */
 KML.SCREEN_OVERLAY_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
-  'Icon': ol.xml.makeObjectPropertySetter(ol.format.KML.readIcon_),
-  'overlayXY': ol.xml.makeObjectPropertySetter(KML.readOverlayXY_),
-  'screenXY': ol.xml.makeObjectPropertySetter(KML.readScreenXY_),
-  'rotationXY': ol.xml.makeObjectPropertySetter(KML.readRotationXY_),
-  'size': ol.xml.makeObjectPropertySetter(KML.readSize_)
+  Icon: ol.xml.makeObjectPropertySetter(ol.format.KML.readIcon_),
+  overlayXY: ol.xml.makeObjectPropertySetter(KML.readOverlayXY),
+  screenXY: ol.xml.makeObjectPropertySetter(KML.readScreenXY),
+  rotationXY: ol.xml.makeObjectPropertySetter(KML.readRotationXY),
+  size: ol.xml.makeObjectPropertySetter(KML.readSize),
 });
 
 
@@ -534,10 +551,10 @@ KML.SCREEN_OVERLAY_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URI
  * @private
  */
 KML.STYLE_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
-  'IconStyle': KML.IconStyleParser_,
-  'LabelStyle': ol.format.KML.LabelStyleParser_,
-  'LineStyle': ol.format.KML.LineStyleParser_,
-  'PolyStyle': ol.format.KML.PolyStyleParser_
+  IconStyle: KML.IconStyleParser,
+  LabelStyle: ol.format.KML.LabelStyleParser_,
+  LineStyle: ol.format.KML.LineStyleParser_,
+  PolyStyle: ol.format.KML.PolyStyleParser_,
 });
 
 /**
@@ -546,9 +563,9 @@ KML.STYLE_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
  * @private
  */
 KML.PAIR_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
-  'Style': ol.xml.makeObjectPropertySetter(KML.readStyle_),
-  'key': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-  'styleUrl': ol.xml.makeObjectPropertySetter(ol.format.KML.readURI_)
+  Style: ol.xml.makeObjectPropertySetter(KML.readStyle),
+  key: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  styleUrl: ol.xml.makeObjectPropertySetter(ol.format.KML.readURI_),
 });
 
 /**
@@ -557,30 +574,25 @@ KML.PAIR_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
  * @private
  */
 KML.PLACEMARK_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
-  'ExtendedData': ol.format.KML.ExtendedDataParser_,
-  'Region': ol.format.KML.RegionParser_,
-  'MultiGeometry': ol.xml.makeObjectPropertySetter(
-    ol.format.KML.readMultiGeometry_, 'geometry'),
-  'LineString': ol.xml.makeObjectPropertySetter(
-    ol.format.KML.readLineString_, 'geometry'),
-  'LinearRing': ol.xml.makeObjectPropertySetter(
-    ol.format.KML.readLinearRing_, 'geometry'),
-  'Point': ol.xml.makeObjectPropertySetter(
-    ol.format.KML.readPoint_, 'geometry'),
-  'Polygon': ol.xml.makeObjectPropertySetter(
-    ol.format.KML.readPolygon_, 'geometry'),
-  'Style': ol.xml.makeObjectPropertySetter(KML.readStyle_),
-  'StyleMap': KML.PlacemarkStyleMapParser_,
-  'address': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-  'description': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-  'name': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-  'open': ol.xml.makeObjectPropertySetter(ol.xsd.readBoolean),
-  'phoneNumber': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-  'styleUrl': ol.xml.makeObjectPropertySetter(ol.format.KML.readURI_),
-  'visibility': ol.xml.makeObjectPropertySetter(ol.xsd.readBoolean)
+  ExtendedData: ol.format.KML.ExtendedDataParser_,
+  Region: ol.format.KML.RegionParser_,
+  MultiGeometry: ol.xml.makeObjectPropertySetter(ol.format.KML.readMultiGeometry_, 'geometry'),
+  LineString: ol.xml.makeObjectPropertySetter(ol.format.KML.readLineString_, 'geometry'),
+  LinearRing: ol.xml.makeObjectPropertySetter(ol.format.KML.readLinearRing_, 'geometry'),
+  Point: ol.xml.makeObjectPropertySetter(ol.format.KML.readPoint_, 'geometry'),
+  Polygon: ol.xml.makeObjectPropertySetter(ol.format.KML.readPolygon_, 'geometry'),
+  Style: ol.xml.makeObjectPropertySetter(KML.readStyle),
+  StyleMap: KML.placemarkStyleMapParser,
+  address: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  description: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  name: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  open: ol.xml.makeObjectPropertySetter(ol.xsd.readBoolean),
+  phoneNumber: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  styleUrl: ol.xml.makeObjectPropertySetter(ol.format.KML.readURI_),
+  visibility: ol.xml.makeObjectPropertySetter(ol.xsd.readBoolean),
 }, ol.xml.makeStructureNS(ol.format.KML.GX_NAMESPACE_URIS_, {
-  'MultiTrack': ol.xml.makeObjectPropertySetter(ol.format.KML.readGxMultiTrack_, 'geometry'),
-  'Track': ol.xml.makeObjectPropertySetter(ol.format.KML.readGxTrack_, 'geometry')
+  MultiTrack: ol.xml.makeObjectPropertySetter(ol.format.KML.readGxMultiTrack_, 'geometry'),
+  Track: ol.xml.makeObjectPropertySetter(ol.format.KML.readGxTrack_, 'geometry'),
 }));
 
 /**
@@ -589,7 +601,7 @@ KML.PLACEMARK_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
  * @private
  */
 KML.STYLE_MAP_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
-  'Pair': KML.PairDataParser_
+  Pair: KML.pairDataParser,
 });
 
 /**
@@ -598,8 +610,8 @@ KML.STYLE_MAP_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
  * @private
  */
 ol.format.KML.STYLE_PARSERS_ = ol.xml.makeStructureNS(ol.format.KML.NAMESPACE_URIS_, {
-  'IconStyle': KML.IconStyleParser_,
-  'LabelStyle': ol.format.KML.LabelStyleParser_,
-  'LineStyle': ol.format.KML.LineStyleParser_,
-  'PolyStyle': ol.format.KML.PolyStyleParser_
+  IconStyle: KML.IconStyleParser,
+  LabelStyle: ol.format.KML.LabelStyleParser_,
+  LineStyle: ol.format.KML.LineStyleParser_,
+  PolyStyle: ol.format.KML.PolyStyleParser_,
 });

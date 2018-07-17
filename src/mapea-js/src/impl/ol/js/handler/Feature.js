@@ -1,6 +1,7 @@
-import ClusteredFeature from "facade/js/feature/Clustered";
-import Utils from "facade/js/util/Utils";
-import AnimatedCluster from "../layer/AnimatedCluster";
+import ClusteredFeature from 'facade/js/feature/Clustered';
+import Cluster from 'facade/js/layer/Cluster';
+import Utils from 'facade/js/util/Utils';
+import AnimatedCluster from '../layer/AnimatedCluster';
 
 export default class Feature {
   /**
@@ -48,13 +49,14 @@ export default class Feature {
    * @api stable
    */
   getFeaturesByLayer(evt, layer) {
-    let features = [];
+    const features = [];
 
-    if (!Utils.isNullOrEmpty(layer) && layer.isVisible() && !Utils.isNullOrEmpty(layer.getImpl().getOL3Layer())) {
-      let olLayer = layer.getImpl().getOL3Layer();
+    if (!Utils.isNullOrEmpty(layer) && layer.isVisible() &&
+      !Utils.isNullOrEmpty(layer.getImpl().getOL3Layer())) {
+      const olLayer = layer.getImpl().getOL3Layer();
       this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, (feature, layerFrom) => {
-        if ((layerFrom instanceof AnimatedCluster) && !Utils.isNullOrEmpty(feature.get("features"))) {
-          let clusteredFeatures = feature.get("features").map(f => Features.getFacadeFeature_(f, layer));
+        if ((layerFrom instanceof AnimatedCluster) && !Utils.isNullOrEmpty(feature.get('features'))) {
+          const clusteredFeatures = feature.get('features').map(f => this.getFacadeFeature_(f, layer));
           if (clusteredFeatures.length === 1) {
             features.push(clusteredFeatures[0]);
           }
@@ -64,27 +66,26 @@ export default class Feature {
               styleCluster = styleCluster.getStyles().find(style => style instanceof Cluster);
             }
             features.push(new ClusteredFeature(clusteredFeatures, {
-              "ranges": styleCluster.getRanges(),
-              "hoverInteraction": styleCluster.getOptions()["hoverInteraction"],
-              "maxFeaturesToSelect": styleCluster.getOptions()["maxFeaturesToSelect"],
-              "distance": styleCluster.getOptions()["distance"]
+              ranges: styleCluster.getRanges(),
+              hoverInteraction: styleCluster.getOptions().hoverInteraction,
+              maxFeaturesToSelect: styleCluster.getOptions().maxFeaturesToSelect,
+              distance: styleCluster.getOptions().distance,
             }));
           }
         }
-        else {
-          if (!feature.getProperties().hasOwnProperty('selectclusterlink')) {
-            features.push(Features.getFacadeFeature_(feature, layer));
-          }
+        else if (!Object.prototype.hasOwnProperty.call(feature.getProperties(), 'selectclusterlink')) {
+          features.push(this.getFacadeFeature_(feature, layer));
         }
       }, {
-        layerFilter: l => {
+        layerFilter: (l) => {
           let passFilter = false;
-          if (layer.getStyle() instanceof Cluster && layer.getStyle().getOptions().selectInteraction) {
-            passFilter = (l === layer.getStyle().getImpl().selectClusterInteraction_.overlayLayer_);
+          if (layer.getStyle() instanceof Cluster &&
+            layer.getStyle().getOptions().selectInteraction) {
+            passFilter = (l === layer.getStyle().getImpl().selectClusterInteraction.overlayLayer);
           }
           passFilter = passFilter || l === olLayer;
           return passFilter;
-        }
+        },
       });
     }
     return features;
@@ -99,7 +100,7 @@ export default class Feature {
    * @export
    */
   addCursorPointer() {
-    let viewport = this.map_.getMapImpl().getViewport();
+    const viewport = this.map_.getMapImpl().getViewport();
     if (viewport.style.cursor !== 'pointer') {
       this.defaultCursor_ = viewport.style.cursor;
     }
@@ -127,7 +128,7 @@ export default class Feature {
    */
   static getFacadeFeature_(feature, layer) {
     let mFeature;
-    let featureId = feature.getId();
+    const featureId = feature.getId();
     if (!Utils.isNullOrEmpty(featureId)) {
       mFeature = layer.getFeatureById(featureId);
     }

@@ -140,7 +140,7 @@ export default class WFS extends Vector {
           distance,
           source: newSource,
         });
-        this.ol3Layer.setStyle(this.facadeVector.getStyle().getImpl().olStyleFn_);
+        this.ol3Layer.setStyle(this.facadeVector.getStyle().getImpl().olStyleFn);
         this.ol3Layer.setSource(clusterSource);
       }
       else {
