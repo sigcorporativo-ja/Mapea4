@@ -1,6 +1,6 @@
+import Utils from 'facade/js/util/Utils';
+import EvtManager from 'facade/js/event/Manager';
 import View from '../View';
-import EvtManager from "facade/js/event/Manager";
-
 /**
  * @namespace M.impl.control
  */
@@ -15,6 +15,7 @@ export default class OverviewMap extends ol.control.OverviewMap {
    * @api stable
    */
   constructor(options) {
+    super({});
     /**
      * @private
      * @type {number}
@@ -58,9 +59,9 @@ export default class OverviewMap extends ol.control.OverviewMap {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    let olLayers = [];
-    map.getLayers().forEach(layer => {
-      let olLayer = layer.getImpl().getOL3Layer();
+    const olLayers = [];
+    map.getLayers().forEach((layer) => {
+      const olLayer = layer.getImpl().getOL3Layer();
       if (Utils.isNullOrEmpty(olLayer)) {
         layer.getImpl().on(EvtManager.ADDED_TO_MAP, this.addLayer_, this);
       }
@@ -68,32 +69,30 @@ export default class OverviewMap extends ol.control.OverviewMap {
         olLayers.push(olLayer);
       }
     });
-
     ol.control.OverviewMap.call(this, {
-      'layers': olLayers,
-      'view': new View({
-        'projection': ol.proj.get(map.getProjection().code),
-        'resolutions': map.getResolutions()
-      })
+      layers: olLayers,
+      view: new View({
+        projection: ol.proj.get(map.getProjection().code),
+        resolutions: map.getResolutions(),
+      }),
     });
 
-    let button = this.element.querySelector('button');
+    const button = this.element.querySelector('button');
     if (this.collapsed_ === true) {
-      if (button.classlist, contains(this.collapsedButtonClass_)) {
+      if (button.classlist.contains(this.collapsedButtonClass_)) {
         button.classlist.remove(this.collapsedButtonClass_);
       }
       else {
         button.classlist.add(this.collapsedButtonClass_);
       }
     }
-    else {
-      if (button.classlist, contains(this.this.openedButtonClass_)) {
-        button.classlist.remove(this.this.openedButtonClass_);
-      }
-      else {
-        button.classlist.add(this.this.openedButtonClass_);
-      }
+    else if (button.classlist.contains(this.openedButtonClass_)) {
+      button.classlist.remove(this.openedButtonClass_);
     }
+    else {
+      button.classlist.add(this.openedButtonClass_);
+    }
+
     map.getMapImpl().addControl(this);
   }
 

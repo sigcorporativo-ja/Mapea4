@@ -1,7 +1,10 @@
 import Utils from 'facade/js/util/Utils';
+import Template from 'facade/js/util/Template';
 import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
 import Layer from 'facade/js/layer/Layer';
-import Control from "./Control"
+import Config from 'configuration';
+import Control from './Control';
+
 /**
  * @namespace M.impl.control
  */
@@ -33,20 +36,20 @@ export default class LayerSwitcher extends Control {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    let olMap = map.getMapImpl();
+    const olMap = map.getMapImpl();
 
     // panel
     this.panel = element.getElementsByTagName('div')[LayerSwitcher.PANEL_ID];
 
     // click layer event
-    this.panel.addEventListener("click", this.clickLayer, false);
+    this.panel.addEventListener('click', this.clickLayer, false);
 
     // change slider event
-    this.panel.addEventListener("input", this.clickLayer, false);
+    this.panel.addEventListener('input', this.clickLayer, false);
 
     ol.control.Control.call(this, {
-      'element': element,
-      'target': null
+      element,
+      target: null,
     });
     olMap.addControl(this);
   }
@@ -58,19 +61,19 @@ export default class LayerSwitcher extends Control {
    * @function
    * @api stable
    */
-  clickLayer(evt) {
-    evt = (evt || window.event);
+  clickLayer(evtParameter) {
+    const evt = (evtParameter || window.event);
     if (!Utils.isNullOrEmpty(evt.target)) {
-      let layerName = evt.target.getAttribute('data-layer-name');
+      const layerName = evt.target.getAttribute('data-layer-name');
       if (!Utils.isNullOrEmpty(layerName)) {
         evt.stopPropagation();
-        let layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
         // checkbox
         if (evt.target.classlist.contains('m-check')) {
           /* sets the layer visibility only if
              the layer is not base layer and visible */
           if (layer.transparent === true || !layer.isVisible()) {
-            let opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
+            const opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
             if (!Utils.isNullOrEmpty(opacity)) {
               layer.setOpacity(opacity.value);
             }
@@ -97,12 +100,12 @@ export default class LayerSwitcher extends Control {
    * @api stable
    */
   renderPanel() {
-    LayerSwitcherFacade.getTemplateVariables_(this.facadeMap_).then(templateVars => {
-      let html = Template.compile(LayerSwitcherFacade.TEMPLATE, {
-        'vars': templateVars
+    LayerSwitcherFacade.getTemplateVariables(this.facadeMap_).then((templateVars) => {
+      const html = Template.compile(LayerSwitcherFacade.TEMPLATE, {
+        vars: templateVars,
       });
       this.registerImgErrorEvents_(html);
-      let newPanel = html.querySelector('div#'.concat(LayerSwitcher.PANEL_ID));
+      const newPanel = html.querySelector('div#'.concat(LayerSwitcher.PANEL_ID));
       this.panel.innerHTML = newPanel.innerHTML;
     });
   }
@@ -117,13 +120,13 @@ export default class LayerSwitcher extends Control {
    */
   registerEvents() {
     if (!Utils.isNullOrEmpty(this.facadeMap_)) {
-      let olMap = this.facadeMap_.getMapImpl();
+      const olMap = this.facadeMap_.getMapImpl();
 
       this.registerViewEvents_(olMap.getView());
       this.registerLayersEvents_(olMap.getLayers());
       olMap.on('change:view', this.onViewChange_, this);
     }
-  };
+  }
 
   /**
    * Unegisters events for map and layers from the layerswitcher
@@ -134,20 +137,20 @@ export default class LayerSwitcher extends Control {
    */
   unregisterEvents() {
     if (!Utils.isNullOrEmpty(this.facadeMap_)) {
-      let olMap = this.facadeMap_.getMapImpl();
+      const olMap = this.facadeMap_.getMapImpl();
 
       this.unregisterViewEvents_(olMap.getView());
       this.unregisterLayersEvents_(olMap.getLayers());
       olMap.un('change:view', this.onViewChange_, this);
     }
-  };
+  }
 
   /**
    * TODO
    */
   registerViewEvents_(view) {
     view.on('change:resolution', this.renderPanel, this);
-  };
+  }
 
   /**
    * TODO
@@ -156,7 +159,7 @@ export default class LayerSwitcher extends Control {
     layers.forEach(this.registerLayerEvents_, this);
     layers.on('remove', this.renderPanel, this);
     layers.on('add', this.onAddLayer_, this);
-  };
+  }
 
   /**
    * TODO
@@ -165,14 +168,14 @@ export default class LayerSwitcher extends Control {
     layer.on('change:visible', this.renderPanel, this);
     // layer.on('change:opacity', this.renderPanel, this);
     layer.on('change:extent', this.renderPanel, this);
-  };
+  }
 
   /**
    * TODO
    */
   unregisterViewEvents_(view) {
     view.un('change:resolution', this.renderPanel, this);
-  };
+  }
 
   /**
    * TODO
@@ -181,7 +184,7 @@ export default class LayerSwitcher extends Control {
     layers.forEach(this.registerLayerEvents_, this);
     layers.un('remove', this.renderPanel, this);
     layers.un('add', this.onAddLayer_, this);
-  };
+  }
 
   /**
    * TODO
@@ -199,7 +202,7 @@ export default class LayerSwitcher extends Control {
     this.unregisterViewEvents_(evt.oldValue);
 
     // attaches listeners to the new view
-    let olMap = this.facadeMap_.getMapImpl();
+    const olMap = this.facadeMap_.getMapImpl();
     this.registerViewEvents_(olMap.getView());
   }
 
@@ -215,16 +218,16 @@ export default class LayerSwitcher extends Control {
    * TODO
    */
   registerImgErrorEvents_(html) {
-    let imgElements = html.querySelectorAll('img');
-    Array.prototype.forEach.call(imgElements, imgElem => {
-      imgElem.addEventListener("error", evt => {
-        let layerName = evt.target.getAttribute('data-layer-name');
-        let legendErrorUrl = Utils.concatUrlPaths([Config.THEME_URL, Layer.LEGEND_ERROR]);
-        let layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+    const imgElements = html.querySelectorAll('img');
+    Array.prototype.forEach.call(imgElements, (imgElem) => {
+      imgElem.addEventListener('error', (evt) => {
+        const layerName = evt.target.getAttribute('data-layer-name');
+        const legendErrorUrl = Utils.concatUrlPaths([Config.THEME_URL, Layer.LEGEND_ERROR]);
+        const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
         if (!Utils.isNullOrEmpty(layer)) {
           layer.setLegendURL(legendErrorUrl);
         }
-      }, false);
+      });
     });
   }
 
@@ -245,4 +248,4 @@ export default class LayerSwitcher extends Control {
  * @public
  * @api stable
  */
-LayerSwitcher.PANEL_ID_ = 'm-layerswitcher-panel';
+LayerSwitcher.PANEL_ID = 'm-layerswitcher-panel';

@@ -49,5 +49,7 @@ export default class Navtoolbar {
    * @api stable
    * @export
    */
+  /* eslint-disable */
   destroy() {}
+  /* eslint-enable */
 }

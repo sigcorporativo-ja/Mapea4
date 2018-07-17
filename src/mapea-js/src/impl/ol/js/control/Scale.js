@@ -1,5 +1,5 @@
-import Control from "./Control";
-import Utils from "facade/js/util/Utils";
+import Utils from 'facade/js/util/Utils';
+import Control from './Control';
 
 /**
  * @namespace M.impl.control
@@ -15,6 +15,7 @@ export default class Scale extends Control {
    * @api stable
    */
   constructor() {
+    super();
     this.facadeMap_ = null;
   }
 
@@ -30,13 +31,13 @@ export default class Scale extends Control {
   addTo(map, element) {
     this.facadeMap_ = map;
 
-    let scaleId = 'm-scale-span';
+    const scaleId = 'm-scale-span';
     this.scaleContainer_ = element.querySelector('#'.concat(scaleId));
 
     ol.control.Control.call(this, {
-      'element': element,
-      'render': this.render,
-      'target': null
+      element,
+      render: this.render,
+      target: null,
     });
     map.getMapImpl().addControl(this);
   }
@@ -48,17 +49,18 @@ export default class Scale extends Control {
    * @api
    */
   render(mapEvent) {
-    let frameState = mapEvent.frameState;
+    const frameState = mapEvent.frameState;
     if (!Utils.isNullOrEmpty(frameState)) {
-      Scale.updateElement_(frameState.viewState, this.scaleContainer_, this.facadeMap_);
+      Scale.updateElement(frameState.viewState, this.scaleContainer_, this.facadeMap_);
     }
   }
 
   /**
    * @private
    */
-  static updateElement_(viewState, container, map) {
-    container.innerHTML = map.getScale();
+  static updateElement(viewState, container, map) {
+    const containerVariable = container;
+    containerVariable.innerHTML = map.getScale();
   }
 
   /**

@@ -110,11 +110,10 @@ export default class LayerSwitcher extends ControlBase {
   /**
    * Gets the variables of the template to compile
    */
-  getTemplateVariables_(map) {
+  static getTemplateVariables(map) {
     return new Promise((success, fail) => {
       // gets base layers and overlay layers
       if (!Utils.isNullOrEmpty(map)) {
-
         let baseLayers = Map.getBaseLayers().filter(layer => LayerBase.displayInLayerSwitcher === true);
         let overlayLayers = Map.getLayers().filter((layer) => {
           let isTransparent = (LayerBase.transparent === true);

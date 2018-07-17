@@ -13,6 +13,7 @@ export default class Control extends ol.control.Control {
    * @api stable
    */
   constructor() {
+    super({});
     /**
      * @private
      * @type {string}
@@ -34,8 +35,8 @@ export default class Control extends ol.control.Control {
   addTo(map, element) {
     this.facadeMap_ = map;
     ol.control.Control.call(this, {
-      'element': element,
-      'target': null
+      element,
+      target: null,
     });
     map.getMapImpl().addControl(this);
   }

@@ -1,4 +1,4 @@
-import EvtManager from "facade/js/event/Manager";
+import EvtManager from 'facade/js/event/Manager';
 
 /**
  * @namespace M.impl.control
@@ -14,6 +14,7 @@ export default class Mouse extends ol.control.MousePosition {
    * @api stable
    */
   constructor() {
+    super({});
     this.facadeMap_ = null;
   }
 
@@ -28,16 +29,16 @@ export default class Mouse extends ol.control.MousePosition {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    OLMousePosition.call(this, {
-      'coordinateFormat': ol.coordinate.createStringXY(4),
-      'projection': map.getProjection().code,
-      'undefinedHTML': '',
-      'className': 'm-mouse-position g-cartografia-flecha'
+    ol.control.MousePosition.call(this, {
+      coordinateFormat: ol.coordinate.createStringXY(4),
+      projection: map.getProjection().code,
+      undefinedHTML: '',
+      className: 'm-mouse-position g-cartografia-flecha',
     });
     map.getMapImpl().addControl(this);
 
     // update projection mouse
-    map.getImpl().on(Evt.CHANGE, () => {
+    map.getImpl().on(EvtManager.CHANGE, () => {
       this.setProjection(ol.proj.get(map.getProjection().code));
     });
   }
