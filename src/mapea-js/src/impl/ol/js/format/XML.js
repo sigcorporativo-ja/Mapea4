@@ -62,7 +62,7 @@ export default class XML extends ol.format.XML {
     }
 
     let context = {};
-    this.read_root(context, data);
+    this.readRoot(context, data);
     return context;
   }
 
@@ -73,7 +73,7 @@ export default class XML extends ol.format.XML {
    * @return {Object} parsed object.
    * @api stable
    */
-  read_root(context, node) {
+  readRoot(context, node) {
     let root = node.documentElement;
     this.rootPrefix = root.prefix;
     context["version"] = root.getAttribute("version");

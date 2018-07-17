@@ -1,6 +1,6 @@
-import Utils from "facade/js/util/Utils";
-import XML from "../XML";
-import Exception from "facade/js/exception/exception";
+import Exception from 'facade/js/exception/exception';
+import Utils from 'facade/js/util/Utils';
+import XML from '../XML';
 
 export default class WMC extends XML {
   /**
@@ -41,19 +41,19 @@ export default class WMC extends XML {
       Exception('doc.nodeType should be DOCUMENT');
     }
 
-    let root = data.documentElement;
-    this.version = root.getAttribute("version");
+    const root = data.documentElement;
+    this.version = root.getAttribute('version');
     if (!this.version) {
       this.version = WMC.DEFAULT_VERSION;
     }
 
-    let parserVersion = 'v'.concat(Utils.normalize(this.version).replace(/\./g, ""));
+    const parserVersion = 'v'.concat(Utils.normalize(this.version).replace(/\./g, ''));
     this.parser = new WMC[parserVersion](this.options);
 
-    let context = this.parser.read(data);
+    const context = this.parser.read(data);
 
     return context;
-  };
+  }
 }
 
 WMC.DEFAULT_VERSION = '1.0.0';

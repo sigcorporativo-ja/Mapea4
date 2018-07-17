@@ -1,7 +1,6 @@
-import Utils from "facade/js/util/Utils";
+import Utils from 'facade/js/util/Utils';
 
 export default class WMSCapabilities extends ol.format.WMSCapabilities {
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC formater
@@ -32,14 +31,14 @@ export default class WMSCapabilities extends ol.format.WMSCapabilities {
    * @return {Object|undefined} Layer object.
    */
   static readScaleHint_(node, objectStack) {
-    let minScale = ol.xsd.readDecimalString(node.getAttribute('min'));
-    let maxScale = ol.xsd.readDecimalString(node.getAttribute('max'));
+    const minScale = ol.xsd.readDecimalString(node.getAttribute('min'));
+    const maxScale = ol.xsd.readDecimalString(node.getAttribute('max'));
 
     return {
-      'minScale': minScale,
-      'maxScale': maxScale
+      minScale,
+      maxScale,
     };
-  };
+  }
 
   /**
    * @private
@@ -48,19 +47,21 @@ export default class WMSCapabilities extends ol.format.WMSCapabilities {
    * @return {Object|undefined} Layer object.
    */
   static readLayer_(node, objectStack) {
-    let parentLayerObject = objectStack[objectStack.length - 1];
+    const parentLayerObject = objectStack[objectStack.length - 1];
 
-    let layerObject = ol.xml.pushParseAndPop({}, ol.format.WMSCapabilities.LAYER_PARSERS_, node, objectStack);
+    const layerObject = ol.xml.pushParseAndPop({
+
+    }, ol.format.WMSCapabilities.LAYER_PARSERS_, node, objectStack);
 
     if (!layerObject) {
       return undefined;
     }
-    let queryableProp = 'queryable';
-    let cascadedProp = 'cascaded';
-    let opaqueProp = 'opaque';
-    let noSubsetsProp = 'noSubsets';
-    let fixedWidthProp = 'fixedWidth';
-    let fixedHeightProp = 'fixedHeight';
+    const queryableProp = 'queryable';
+    const cascadedProp = 'cascaded';
+    const opaqueProp = 'opaque';
+    const noSubsetsProp = 'noSubsets';
+    const fixedWidthProp = 'fixedWidth';
+    const fixedHeightProp = 'fixedHeight';
 
     let queryable = ol.xsd.readBooleanString(node.getAttribute('queryable'));
     if (queryable === undefined) {
@@ -68,8 +69,7 @@ export default class WMSCapabilities extends ol.format.WMSCapabilities {
     }
     layerObject[queryableProp] = queryable !== undefined ? queryable : false;
 
-    let cascaded = ol.xsd.readNonNegativeIntegerString(
-      node.getAttribute('cascaded'));
+    let cascaded = ol.xsd.readNonNegativeIntegerString(node.getAttribute('cascaded'));
     if (cascaded === undefined) {
       cascaded = parentLayerObject[cascadedProp];
     }
@@ -100,8 +100,8 @@ export default class WMSCapabilities extends ol.format.WMSCapabilities {
     layerObject[fixedHeightProp] = fixedHeight;
 
     // See 7.2.4.8
-    let addKeys = ['Style', 'CRS', 'AuthorityURL'];
-    addKeys.forEach(key => {
+    const addKeys = ['Style', 'CRS', 'AuthorityURL'];
+    addKeys.forEach((key) => {
       if (key in parentLayerObject) {
         let childValue = goog.object.setIfUndefined(layerObject, key, []);
         childValue = childValue.concat(parentLayerObject[key]);
@@ -109,36 +109,39 @@ export default class WMSCapabilities extends ol.format.WMSCapabilities {
       }
     });
 
-    let replaceKeys = ['EX_GeographicBoundingBox', 'BoundingBox', 'Dimension',
-         'Attribution', 'MinScaleDenominator', 'MaxScaleDenominator', 'ScaleHint',
-         'SRS', 'LatLonBoundingBox'];
-    replaceKeys.forEach(key => {
+    const replaceKeys = ['EX_GeographicBoundingBox', 'BoundingBox', 'Dimension',
+      'Attribution', 'MinScaleDenominator', 'MaxScaleDenominator', 'ScaleHint',
+      'SRS', 'LatLonBoundingBox'];
+    replaceKeys.forEach((key) => {
       if (!(key in layerObject)) {
-        let parentValue = parentLayerObject[key];
+        const parentValue = parentLayerObject[key];
         layerObject[key] = parentValue;
       }
     });
 
     // replaces the BoundingBox by LatLonBoundinBox
-    let latLonBoundingBoxProp = 'LatLonBoundingBox';
-    let boundingBoxProp = 'BoundingBox';
-    if (Utils.isNullOrEmpty(layerObject[boundingBoxProp]) && !Utils.isNullOrEmpty(layerObject[latLonBoundingBoxProp])) {
+    const latLonBoundingBoxProp = 'LatLonBoundingBox';
+    const boundingBoxProp = 'BoundingBox';
+    if (Utils.isNullOrEmpty(layerObject[boundingBoxProp]) &&
+      !Utils.isNullOrEmpty(layerObject[latLonBoundingBoxProp])) {
       layerObject[boundingBoxProp] = layerObject[latLonBoundingBoxProp];
     }
 
     // replaces the maxScale by ScaleHint
-    let maxScaleDenominatorProp = 'MaxScaleDenominator';
-    if (Utils.isNullOrEmpty(layerObject[maxScaleDenominatorProp]) && !Utils.isNullOrEmpty(layerObject.ScaleHint)) {
+    const maxScaleDenominatorProp = 'MaxScaleDenominator';
+    if (Utils.isNullOrEmpty(layerObject[maxScaleDenominatorProp]) &&
+      !Utils.isNullOrEmpty(layerObject.ScaleHint)) {
       layerObject[maxScaleDenominatorProp] = layerObject.ScaleHint[0].maxScale;
     }
 
     // replaces the minScale by ScaleHint
-    let minScaleDenominatorProp = 'MinScaleDenominator';
-    if (Utils.isNullOrEmpty(layerObject[minScaleDenominatorProp]) && !Utils.isNullOrEmpty(layerObject.ScaleHint)) {
+    const minScaleDenominatorProp = 'MinScaleDenominator';
+    if (Utils.isNullOrEmpty(layerObject[minScaleDenominatorProp]) &&
+      !Utils.isNullOrEmpty(layerObject.ScaleHint)) {
       layerObject[minScaleDenominatorProp] = layerObject.ScaleHint[0].minScale;
     }
     return layerObject;
-  };
+  }
 
   /**
    * @private
@@ -147,12 +150,12 @@ export default class WMSCapabilities extends ol.format.WMSCapabilities {
    * @return {Object} Bounding box object.
    */
   static readBoundingBox_(node, objectStack) {
-    let extent = [
-        ol.xsd.readDecimalString(node.getAttribute('minx')),
-        ol.xsd.readDecimalString(node.getAttribute('miny')),
-        ol.xsd.readDecimalString(node.getAttribute('maxx')),
-        ol.xsd.readDecimalString(node.getAttribute('maxy'))
-      ];
+    const extent = [
+      ol.xsd.readDecimalString(node.getAttribute('minx')),
+      ol.xsd.readDecimalString(node.getAttribute('miny')),
+      ol.xsd.readDecimalString(node.getAttribute('maxx')),
+      ol.xsd.readDecimalString(node.getAttribute('maxy')),
+    ];
 
     // CRS
     let crs = node.getAttribute('CRS');
@@ -161,15 +164,15 @@ export default class WMSCapabilities extends ol.format.WMSCapabilities {
     }
 
     // resolutions
-    let resolutions = [
-        ol.xsd.readDecimalString(node.getAttribute('resx')),
-        ol.xsd.readDecimalString(node.getAttribute('resy'))
-      ];
+    const resolutions = [
+      ol.xsd.readDecimalString(node.getAttribute('resx')),
+      ol.xsd.readDecimalString(node.getAttribute('resy')),
+    ];
 
     return {
-      'crs': crs,
-      'extent': extent,
-      'res': resolutions
+      crs,
+      extent,
+      res: resolutions,
     };
   }
 
@@ -181,40 +184,40 @@ export default class WMSCapabilities extends ol.format.WMSCapabilities {
    */
   static readLatLonBoundingBox_(node, objectStack) {
     // extent
-    let extent = [
-        ol.xsd.readDecimalString(node.getAttribute('minx')),
-        ol.xsd.readDecimalString(node.getAttribute('miny')),
-        ol.xsd.readDecimalString(node.getAttribute('maxx')),
-        ol.xsd.readDecimalString(node.getAttribute('maxy'))
-      ];
+    const extent = [
+      ol.xsd.readDecimalString(node.getAttribute('minx')),
+      ol.xsd.readDecimalString(node.getAttribute('miny')),
+      ol.xsd.readDecimalString(node.getAttribute('maxx')),
+      ol.xsd.readDecimalString(node.getAttribute('maxy')),
+    ];
 
     return {
-      'crs': 'EPSG:4326',
-      'extent': extent
+      crs: 'EPSG:4326',
+      extent,
     };
   }
 }
 
 ol.format.WMSCapabilities.LAYER_PARSERS_ = ol.xml.makeStructureNS(ol.format.WMSCapabilities.NAMESPACE_URIS_, {
-  'Name': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-  'Title': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-  'Abstract': ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-  'KeywordList': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readKeywordList_),
-  'CRS': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
-  'SRS': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
-  'EX_GeographicBoundingBox': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readEXGeographicBoundingBox_),
-  'BoundingBox': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readBoundingBox_),
-  'LatLonBoundingBox': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLatLonBoundingBox_),
-  'Dimension': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readDimension_),
-  'Attribution': ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readAttribution_),
-  'AuthorityURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readAuthorityURL_),
-  'Identifier': ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
-  'MetadataURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readMetadataURL_),
-  'DataURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
-  'FeatureListURL': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
-  'Style': ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readStyle_),
-  'MinScaleDenominator': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
-  'MaxScaleDenominator': ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
-  'Layer': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLayer_),
-  'ScaleHint': ol.xml.makeObjectPropertyPusher(WMSCapabilities.readScaleHint_)
+  Name: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  Title: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  Abstract: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
+  KeywordList: ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readKeywordList_),
+  CRS: ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
+  SRS: ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
+  EX_GeographicBoundingBox: ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readEXGeographicBoundingBox_),
+  BoundingBox: ol.xml.makeObjectPropertyPusher(WMSCapabilities.readBoundingBox_),
+  LatLonBoundingBox: ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLatLonBoundingBox_),
+  Dimension: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readDimension_),
+  Attribution: ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readAttribution_),
+  AuthorityURL: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readAuthorityURL_),
+  Identifier: ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
+  MetadataURL: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readMetadataURL_),
+  DataURL: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
+  FeatureListURL: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
+  Style: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readStyle_),
+  MinScaleDenominator: ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
+  MaxScaleDenominator: ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
+  Layer: ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLayer_),
+  ScaleHint: ol.xml.makeObjectPropertyPusher(WMSCapabilities.readScaleHint_)
 });

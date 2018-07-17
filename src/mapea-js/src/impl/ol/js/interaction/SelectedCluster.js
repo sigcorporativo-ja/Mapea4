@@ -1,7 +1,6 @@
-import Utils from "../util/Utils";
+import Utils from '../util/Utils';
 
 export default class SelectCluster extends ol.interaction.Select {
-
   /**
    * @classdesc
    * Main constructor of the class. Creates interaction SelectCluster
@@ -12,6 +11,7 @@ export default class SelectCluster extends ol.interaction.Select {
    * @api stable
    */
   constructor(options = {}) {
+    super();
 
     this.map = options.map;
     this.pointRadius = options.pointRadius || 12;
@@ -29,21 +29,22 @@ export default class SelectCluster extends ol.interaction.Select {
     this.overlayLayer_ = new ol.layer.Vector({
       source: new ol.source.Vector({
         features: new ol.Collection(),
-        useSpatialIndex: true
+        useSpatialIndex: true,
       }),
       name: 'Cluster overlay',
       updateWhileAnimating: true,
       updateWhileInteracting: true,
       displayInLayerSwitcher: false,
-      style: options.featureStyle
+      style: options.featureStyle,
     });
-    let overlay = this.overlayLayer_;
+    const overlay = this.overlayLayer_;
 
     // Add the overlay to selection
     if (options.layers) {
-      if (typeof(options.layers) == "function") {
-        let fn = options.layers;
-        options.layers = (layer) => {
+      if (typeof (options.layers) === 'function') {
+        const fn = options.layers;
+        const optionsVariable = options;
+        optionsVariable.layers = (layer) => {
           return (layer === overlay || fn(layer));
         };
       }
@@ -54,23 +55,25 @@ export default class SelectCluster extends ol.interaction.Select {
 
     // Don't select links
     if (options.filter) {
-      let fn = options.filter;
-      options.filter = (f, l) => {
-        if (!l && f.get("selectclusterlink")) return false;
-        else return fn(f, l);
+      const fn = options.filter;
+      const optionsVariable = options;
+      optionsVariable.filter = (f, l) => {
+        if (!l && f.get('selectclusterlink')) return false;
+        return fn(f, l);
       };
     }
-    else options.filter = (f, l) => {;
-      if (!l && f.get("selectclusterlink")) return false;
-      else return true;
-    };
-    this.filter_ = options.filter;
+    else {
+      const optionsVariable = options;
+      optionsVariable.filter = (f, l) => {
+        if (!l && f.get('selectclusterlink')) return false;
+        return true;
+      };
+      this.filter_ = options.filter;
 
-    ol.interaction.Select.call(this, options);
-    this.on("select", this.selectCluster, this);
+      ol.interaction.Select.call(this, options);
+      this.on('select', this.selectCluster, this);
+    }
   }
-
-
 
   /**
    * TODO
@@ -79,6 +82,7 @@ export default class SelectCluster extends ol.interaction.Select {
    * @function
    * @api stable
    */
+
   setMap(map) {
     if (this.getMap()) {
       if (this.getMap().getView()) {
@@ -146,26 +150,26 @@ export default class SelectCluster extends ol.interaction.Select {
       return;
     }
     // Get selection
-    let feature = e.selected[0];
+    const feature = e.selected[0];
     // It's one of ours
     if (feature.get('selectclusterfeature')) return;
 
-    let cluster = feature.get('features');
+    const cluster = feature.get('features');
     // Not a cluster (or just one feature)
-    if (!cluster || cluster.length == 1) {
+    if (!cluster || cluster.length === 1) {
       return;
     }
 
     if (!cluster || cluster.length > this.maxFeaturesToSelect) {
       if (this.facadeLayer_.getImpl().getNumZoomLevels() - this.map.getZoom() !== 1) {
-        let extend = Utils.getFeaturesExtent(cluster);
+        const extend = Utils.getFeaturesExtent(cluster);
         this.map.setBbox(extend);
         return;
       }
     }
 
     // Clic out of the cluster => close it
-    let source = this.overlayLayer_.getSource();
+    const source = this.overlayLayer_.getSource();
     source.clear();
 
     // Remove cluster from selection
@@ -173,9 +177,9 @@ export default class SelectCluster extends ol.interaction.Select {
       this.getFeatures().clear();
     }
 
-    let center = feature.getGeometry().getCoordinates();
-    let resolution = this.getMap().getView().getResolution();
-    let radiusInPixels = resolution * this.pointRadius * (0.5 + cluster.length / 4);
+    const center = feature.getGeometry().getCoordinates();
+    const resolution = this.getMap().getView().getResolution();
+    const radiusInPixels = resolution * this.pointRadius * (0.5 + (cluster.length / 4));
 
     if (!this.spiral || cluster.length <= this.circleMaxObjects) {
       this.drawFeaturesAndLinsInCircle_(cluster, resolution, radiusInPixels, center);
@@ -196,11 +200,12 @@ export default class SelectCluster extends ol.interaction.Select {
    * @function
    */
   drawFeaturesAndLinsInCircle_(cluster, resolution, radiusInPixels, center) {
-    let max = Math.min(cluster.length, this.circleMaxObjects);
-    for (let i = 0; i < max; i++) {
-      let a = 2 * Math.PI * i / max;
-      if (max == 2 || max == 4) a += Math.PI / 4;
-      let newPoint = [center[0] + radiusInPixels * Math.sin(a), center[1] + radiusInPixels * Math.cos(a)];
+    const max = Math.min(cluster.length, this.circleMaxObjects);
+    for (let i = 0; i < max; i += 1) {
+      let a = (2 * Math.PI) * (i / max);
+      if (max === 2 || max === 4) a += Math.PI / 4;
+      const newPoint = [center[0] + (radiusInPixels * Math.sin(a)),
+        center[1] + (radiusInPixels * Math.cos(a))];
       this.drawAnimatedFeatureAndLink_(cluster[i], resolution, center, newPoint);
     }
   }
@@ -214,16 +219,16 @@ export default class SelectCluster extends ol.interaction.Select {
   drawFeaturesAndLinsInSpiral_(cluster, resolution, center) {
     let a = 0;
     let r;
-    let d = 2 * this.pointRadius;
-    let max = Math.min(this.maxObjects, cluster.length);
+    const d = 2 * this.pointRadius;
+    const max = Math.min(this.maxObjects, cluster.length);
     // Feature on a spiral
-    for (let i = 0; i < max; i++) { // New radius => increase d in one turn
-      r = d / 2 + d * a / (2 * Math.PI);
+    for (let i = 0; i < max; i += 1) { // New radius => increase d in one turn
+      r = (d / 2) + ((d * a) / (2 * Math.PI));
       // Angle
-      a = a + (d + 0.1) / r;
-      let dx = resolution * r * Math.sin(a);
-      let dy = resolution * r * Math.cos(a);
-      let newPoint = [center[0] + dx, center[1] + dy];
+      a += ((d + 0.1) / r);
+      const dx = resolution * r * Math.sin(a);
+      const dy = resolution * r * Math.cos(a);
+      const newPoint = [center[0] + dx, center[1] + dy];
       this.drawAnimatedFeatureAndLink_(cluster[i], resolution, center, newPoint);
     }
   }
@@ -235,17 +240,18 @@ export default class SelectCluster extends ol.interaction.Select {
    * @function
    */
   drawAnimatedFeatureAndLink_(clusterFeature, resolution, center, newPoint) {
-    let cf = new ol.Feature();
-    clusterFeature.getKeys().forEach(attr => {
+    const cf = new ol.Feature();
+    clusterFeature.getKeys().forEach((attr) => {
       cf.set(attr, clusterFeature.get(attr));
     });
 
     let clusterStyleFn = clusterFeature.getStyle();
     if (!clusterStyleFn) {
-      clusterStyleFn = this.facadeLayer_.getStyle().getImpl().oldOLLayer_.getStyle();
+      clusterStyleFn = this.facadeLayer_.getStyle().getImpl().oldOLLayer.getStyle();
     }
-    let olClusterStyles = clusterStyleFn(clusterFeature, resolution);
-    let clonedStyles = olClusterStyles.map ? olClusterStyles.map(s => s.clone()) : [olClusterStyles.clone()];
+    const olClusterStyles = clusterStyleFn(clusterFeature, resolution);
+    const clonedStyles =
+      olClusterStyles.map ? olClusterStyles.map(s => s.clone()) : [olClusterStyles.clone()];
 
     cf.setId(clusterFeature.getId());
     cf.setStyle(clonedStyles);
@@ -253,9 +259,9 @@ export default class SelectCluster extends ol.interaction.Select {
     cf.set('geometry', new ol.geom.Point(newPoint));
     this.overlayLayer_.getSource().addFeature(cf);
 
-    let lk = new ol.Feature({
-      'selectclusterlink': true,
-      geometry: new ol.geom.LineString([center, newPoint])
+    const lk = new ol.Feature({
+      selectclusterlink: true,
+      geometry: new ol.geom.LineString([center, newPoint]),
     });
     this.overlayLayer_.getSource().addFeature(lk);
   }
@@ -275,37 +281,37 @@ export default class SelectCluster extends ol.interaction.Select {
     }
 
     // Features to animate
-    let features = this.overlayLayer_.getSource().getFeatures();
+    const features = this.overlayLayer_.getSource().getFeatures();
     if (!features.length) return;
 
     this.overlayLayer_.setVisible(false);
-    let duration = this.animationDuration || 500;
-    let start = new Date().getTime();
+    const duration = this.animationDuration || 500;
+    const start = new Date().getTime();
 
     // Animate function
     const animate = (event) => {
-      let vectorContext = event.vectorContext;
+      const vectorContext = event.vectorContext;
       // Retina device
       // let ratio = event.frameState.pixelRatio;
-      let res = event.target.getView().getResolution();
-      let e = ol.easing.easeOut((event.frameState.time - start) / duration);
-      for (let i = 0; i < features.length; i++)
+      const res = event.target.getView().getResolution();
+      const e = ol.easing.easeOut((event.frameState.time - start) / duration);
+      for (let i = 0; i < features.length; i += 1) {
         if (features[i].get('features')) {
-          let feature = features[i];
-          let mFeature = feature.get('features')[0];
-          let pt = feature.getGeometry().getCoordinates();
-          pt[0] = center[0] + e * (pt[0] - center[0]);
-          pt[1] = center[1] + e * (pt[1] - center[1]);
-          let geo = new ol.geom.Point(pt);
+          const feature = features[i];
+          const mFeature = feature.get('features')[0];
+          const pt = feature.getGeometry().getCoordinates();
+          pt[0] = (center[0] + e) * (pt[0] - center[0]);
+          pt[1] = (center[1] + e) * (pt[1] - center[1]);
+          const geo = new ol.geom.Point(pt);
 
           // draw links
-          let st2 = this.overlayLayer_.getStyle()(mFeature, res).map(s => s.clone());
-          for (let s = 0; s < st2.length; s++) {
-            let style = st2[s];
-            if (!style.getImage().size_) {
-              style.getImage().size_ = [42, 42];
+          const st2 = this.overlayLayer_.getStyle()(mFeature, res).map(s => s.clone());
+          for (let s = 0; s < st2.length; s += 1) {
+            const style = st2[s];
+            if (!style.getImage().size) {
+              style.getImage().size = [42, 42];
             }
-            let imgs = style.getImage();
+            const imgs = style.getImage();
             // let sc;
             if (imgs) {
               // sc = imgs.getScale();
@@ -318,26 +324,27 @@ export default class SelectCluster extends ol.interaction.Select {
           // Image style
           let clusterStyleFn = mFeature.getStyle();
           if (!clusterStyleFn) {
-            clusterStyleFn = this.facadeLayer_.getStyle().getImpl().oldOLLayer_.getStyle();
+            clusterStyleFn = this.facadeLayer_.getStyle().getImpl().oldOLLayer.getStyle();
           }
-          let olClusterStyles = clusterStyleFn(mFeature, res);
-          let st = olClusterStyles.map ? olClusterStyles.map(s => s.clone()) : [olClusterStyles.clone()];
-          for (let s = 0; s < st.length; s++) {
-            let style = st[s];
-            let imgs = style.getImage();
+          const olClusterStyles = clusterStyleFn(mFeature, res);
+          const st =
+            olClusterStyles.map ? olClusterStyles.map(s => s.clone()) : [olClusterStyles.clone()];
+          for (let s = 0; s < st.length; s += 1) {
+            const style = st[s];
+            const imgs = style.getImage();
 
             // let sc;
             if (imgs) {
               // sc = imgs.getScale();
               // imgs.setScale(ratio); // setImageStyle don't check retina
               if (imgs.getOrigin() == null) {
-                imgs.origin_ = [];
+                imgs.origin = [];
               }
               if (imgs.getAnchor() == null) {
-                imgs.normalizedAnchor_ = [];
+                imgs.normalizedAnchor = [];
               }
               if (imgs.getSize() == null) {
-                imgs.size_ = [42, 42];
+                imgs.size = [42, 42];
               }
             }
             // OL3 > v3.14
@@ -348,21 +355,23 @@ export default class SelectCluster extends ol.interaction.Select {
             // if (imgs) imgs.setScale(sc);
           }
         }
-      // Stop animation and restore cluster visibility
-      if (e > 1.0) {
-        ol.Observable.unByKey(this.listenerKey_);
-        this.overlayLayer_.setVisible(true);
-        callbackFn();
-        // text on chart style not show
-        // this.overlayLayer_.changed();
-        return;
+        // Stop animation and restore cluster visibility
+        if (e > 1.0) {
+          ol.Observable.unByKey(this.listenerKey_);
+          this.overlayLayer_.setVisible(true);
+          callbackFn();
+          // text on chart style not show
+          // this.overlayLayer_.changed();
+          return;
+        }
+        // tell OL3 to continue postcompose animation
+        const eventVariable = event;
+        eventVariable.frameState.animate = true;
       }
-      // tell OL3 to continue postcompose animation
-      event.frameState.animate = true;
-    }
 
-    // Start a new postcompose animation
-    this.listenerKey_ = this.getMap().on('postcompose', animate, this);
-    //select.getMap().renderSync();
+      // Start a new postcompose animation
+      this.listenerKey_ = this.getMap().on('postcompose', animate, this);
+      // select.getMap().renderSync();
+    };
   }
 }
