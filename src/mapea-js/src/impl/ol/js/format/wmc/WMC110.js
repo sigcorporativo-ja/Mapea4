@@ -1,23 +1,13 @@
-import WMC from "./WMC";
-import Utils from "facade/js/util/Utils";
-import WMS from "facade/js/layer/WMS";
-import XML from "../XML";
-
+import Utils from 'facade/js/util/Utils';
+import WMS from 'facade/js/layer/WMS';
+import XML from '../XML';
+/* eslint-disable*/
 export default class WMCV110 extends XML {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC formater
    * for version 1.0.0
-   *
-   * @constructor
-   * @param {Mx.parameters.LayerOptions} options custom options for this formater
-   * @extends {M.impl.format.XML}
-   * @api stable
    */
-  constructor(options) {
-    super(options);
-  }
-
   /**
    * Read a sld:MinScaleDenominator node.
    *
@@ -28,7 +18,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_sld_MinScaleDenominator(layerInfo, node) {
-    layerInfo['options']['minScale'] = parseFloat(this.getChildValue(node));
+    layerInfo['options']['minScale'] = parseFloat(XML.getChildValue(node));
   }
 
   /**
@@ -91,7 +81,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_ol_units(obj, node) {
-    obj['units'] = this.getChildValue(node);
+    obj['units'] = XML.getChildValue(node);
   }
 
   /**
@@ -113,7 +103,7 @@ export default class WMCV110 extends XML {
    */
   read_ol_groupDisplayLayerSwitcher(layerInfo, node) {
     layerInfo['options']['groupDisplayLayerSwitcher'] =
-      (this.getChildValue(node));
+      (XML.getChildValue(node));
   }
 
   /**
@@ -123,7 +113,7 @@ export default class WMCV110 extends XML {
    */
   read_ol_orderInsideGroupDisplayLayerSwitcher(layerInfo, node) {
     layerInfo['options']['orderInsideGroupDisplayLayerSwitcher'] =
-      this.getChildValue(node);
+      XML.getChildValue(node);
   }
 
   /**
@@ -136,7 +126,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_sld_MaxScaleDenominator(layerInfo, node) {
-    layerInfo['options']['maxScale'] = parseFloat(this.getChildValue(node));
+    layerInfo['options']['maxScale'] = parseFloat(XML.getChildValue(node));
   }
 
   /**
@@ -250,7 +240,7 @@ export default class WMCV110 extends XML {
   read_ol_transparent(layerInfo, node) {
     let transparent = 'transparent';
     let params = 'params';
-    layerInfo[params][transparent] = this.getChildValue(node);
+    layerInfo[params][transparent] = XML.getChildValue(node);
   }
 
   /**
@@ -261,7 +251,7 @@ export default class WMCV110 extends XML {
   read_ol_numZoomLevels(layerInfo, node) {
     let options = 'options';
     let numZoomLevels = 'numZoomLevels';
-    layerInfo[options][numZoomLevels] = parseInt(this.getChildValue(node));
+    layerInfo[options][numZoomLevels] = parseInt(XML.getChildValue(node));
   }
 
   /**
@@ -270,7 +260,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_ol_opacity(layerInfo, node) {
-    layerInfo['options']['opacity'] = parseFloat(this.getChildValue(node));
+    layerInfo['options']['opacity'] = parseFloat(XML.getChildValue(node));
   }
 
   /**
@@ -279,7 +269,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_ol_singleTile(layerInfo, node) {
-    layerInfo['options']['singleTile'] = (this.getChildValue(node) == "true");
+    layerInfo['options']['singleTile'] = (XML.getChildValue(node) == "true");
   }
 
   /**
@@ -288,7 +278,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_ol_isBaseLayer(layerInfo, node) {
-    layerInfo['options']['isBaseLayer'] = (this.getChildValue(node) == "true");
+    layerInfo['options']['isBaseLayer'] = (XML.getChildValue(node) == "true");
   }
 
   /**
@@ -297,7 +287,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_ol_displayInLayerSwitcher(layerInfo, node) {
-    let nodeValue = Utils.normalize(this.getChildValue(node));
+    let nodeValue = Utils.normalize(XML.getChildValue(node));
     layerInfo['options']['displayInLayerSwitcher'] = (nodeValue == "true");
   }
 
@@ -326,7 +316,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_Format(layerInfo, node) {
-    let format = this.getChildValue(node);
+    let format = XML.getChildValue(node);
     layerInfo['formats'].push(format);
     if (node.getAttribute("current") == "1") {
       layerInfo['params']['format'] = format;
@@ -381,7 +371,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_Name(obj, node) {
-    let nameValue = this.getChildValue(node);
+    let nameValue = XML.getChildValue(node);
     if (nameValue) {
       let nameAttr = 'name';
       obj[nameAttr] = nameValue;
@@ -394,7 +384,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_Title(obj, node) {
-    let title = this.getChildValue(node);
+    let title = XML.getChildValue(node);
     if (title) {
       let titleAttr = 'title';
       obj[titleAttr] = title;
@@ -425,7 +415,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_Abstract(obj, node) {
-    let abst = this.getChildValue(node);
+    let abst = XML.getChildValue(node);
     if (abst) {
       let abstProp = 'abstract';
       obj[abstProp] = abst;
@@ -493,7 +483,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_Keyword(keywords, node) {
-    keywords.push(this.getChildValue(node));
+    keywords.push(XML.getChildValue(node));
   }
 
   /**
@@ -551,7 +541,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_ContactPerson(primaryPerson, node) {
-    let person = this.getChildValue(node);
+    let person = XML.getChildValue(node);
     if (person) {
       let personAttr = 'person';
       primaryPerson[personAttr] = person;
@@ -564,7 +554,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_ContactOrganization(primaryPerson, node) {
-    let organization = this.getChildValue(node);
+    let organization = XML.getChildValue(node);
     if (organization) {
       let organizationAttr = 'organization';
       primaryPerson[organizationAttr] = organization;
@@ -577,7 +567,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_ContactPosition(contact, node) {
-    let position = this.getChildValue(node);
+    let position = XML.getChildValue(node);
     if (position) {
       let positionAttr = 'position';
       contact[positionAttr] = position;
@@ -602,7 +592,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_AddressType(contactAddress, node) {
-    let type = this.getChildValue(node);
+    let type = XML.getChildValue(node);
     if (type) {
       let typeAttr = 'type';
       contactAddress[typeAttr] = type;
@@ -615,7 +605,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_Address(contactAddress, node) {
-    let address = this.getChildValue(node);
+    let address = XML.getChildValue(node);
     if (address) {
       let addressAttr = 'address';
       contactAddress[addressAttr] = address;
@@ -628,7 +618,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_City(contactAddress, node) {
-    let city = this.getChildValue(node);
+    let city = XML.getChildValue(node);
     if (city) {
       let cityAttr = 'city';
       contactAddress[cityAttr] = city;
@@ -641,7 +631,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_StateOrProvince(contactAddress, node) {
-    let stateOrProvince = this.getChildValue(node);
+    let stateOrProvince = XML.getChildValue(node);
     if (stateOrProvince) {
       let stateOrProvinceAttr = 'stateOrProvince';
       contactAddress[stateOrProvinceAttr] = stateOrProvince;
@@ -654,7 +644,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_PostCode(contactAddress, node) {
-    let postcode = this.getChildValue(node);
+    let postcode = XML.getChildValue(node);
     if (postcode) {
       let postcodeAttr = 'postcode';
       contactAddress[postcodeAttr] = postcode;
@@ -667,7 +657,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_Country(contactAddress, node) {
-    let country = this.getChildValue(node);
+    let country = XML.getChildValue(node);
     if (country) {
       let countryAttr = 'country';
       contactAddress[countryAttr] = country;
@@ -680,7 +670,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_ContactVoiceTelephone(contact, node) {
-    let phone = this.getChildValue(node);
+    let phone = XML.getChildValue(node);
     if (phone) {
       let phoneAttr = 'phone';
       contact[phoneAttr] = phone;
@@ -693,7 +683,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_ContactFacsimileTelephone(contact, node) {
-    let fax = this.getChildValue(node);
+    let fax = XML.getChildValue(node);
     if (fax) {
       let faxAttr = 'fax';
       contact[faxAttr] = fax;
@@ -706,7 +696,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_ContactElectronicMailAddress(contact, node) {
-    let email = this.getChildValue(node);
+    let email = XML.getChildValue(node);
     if (email) {
       let emailAttr = 'email';
       contact[emailAttr] = email;
@@ -752,7 +742,7 @@ export default class WMCV110 extends XML {
       'current': node.getAttribute("current") === "1",
       'default': node.getAttribute("default") || ""
     };
-    let values = this.getChildValue(node);
+    let values = XML.getChildValue(node);
 
     let valuesAttr = 'values';
     dim[valuesAttr] = values.split(",");
@@ -760,4 +750,5 @@ export default class WMCV110 extends XML {
     let nameAttr = 'name';
     dimensions[dim[nameAttr]] = dim;
   }
+  /* eslint-enable */
 }

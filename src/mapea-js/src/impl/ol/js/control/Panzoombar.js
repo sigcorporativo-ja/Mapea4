@@ -2,7 +2,6 @@
  * @namespace M.impl.control
  */
 export default class Panzoombar extends ol.control.ZoomSlider {
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
@@ -13,7 +12,7 @@ export default class Panzoombar extends ol.control.ZoomSlider {
    * @api stable
    */
   constructor() {
-    super();
+    super({});
     this.facadeMap_ = null;
   }
 

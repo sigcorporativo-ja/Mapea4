@@ -2,7 +2,6 @@
  * @namespace M.impl.control
  */
 export default class Panzoom extends ol.control.Zoom {
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector

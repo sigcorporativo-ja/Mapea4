@@ -1,5 +1,5 @@
-import Utils from "facade/js/util/Utils";
-import DescribeFeatureTypeXML from "./DescribeFeatureTypeXML";
+import Utils from 'facade/js/util/Utils';
+import DescribeFeatureTypeXML from './DescribeFeatureTypeXML';
 
 export default class DescribeFeatureType {
   /**
@@ -13,7 +13,6 @@ export default class DescribeFeatureType {
    * @api stable
    */
   constructor(typeName, outputFormat, projection) {
-
     /**
      * TOOD
      * @private
@@ -41,9 +40,9 @@ export default class DescribeFeatureType {
      * @type {ol.format.GML2 | ol.format.GML3}
      */
     this.gmlFormatter_ = new DescribeFeatureTypeXML({
-      "outputFormat": outputFormat,
-      "featureType": typeName,
-      "srsName": this.projection_.code
+      outputFormat,
+      featureType: typeName,
+      srsName: this.projection_.code,
     });
   }
 
@@ -56,14 +55,16 @@ export default class DescribeFeatureType {
    * @api stable
    */
   read(response) {
-    let describeFeatureType = {};
+    const describeFeatureType = {};
 
     let describeFeatureTypeResponse;
     if (/json/gi.test(this.outputFormat_)) {
       try {
         describeFeatureTypeResponse = JSON.parse(response.text);
       }
-      catch (err) {}
+      catch (err) {
+        throw err;
+      }
     }
 
     if (!describeFeatureTypeResponse) {
@@ -73,17 +74,17 @@ export default class DescribeFeatureType {
     describeFeatureType.featureNS = describeFeatureTypeResponse.targetNamespace;
     describeFeatureType.featurePrefix = describeFeatureTypeResponse.targetPrefix;
 
-    describeFeatureTypeResponse.featureTypes.some(featureType => {
+    describeFeatureTypeResponse.featureTypes.some((featureType) => {
       if (featureType.typeName === this.typeName_) {
         describeFeatureType.properties = featureType.properties;
-        describeFeatureType.properties.some(prop => {
+        describeFeatureType.properties.some((prop) => {
           if (Utils.isGeometryType(prop.localType)) {
             describeFeatureType.geometryName = prop.name;
-            return true;
           }
+          return Utils.isGeometryType(prop.localType);
         });
-        return true;
       }
+      return featureType.typeName === this.typeName_;
     });
     return describeFeatureType;
   }

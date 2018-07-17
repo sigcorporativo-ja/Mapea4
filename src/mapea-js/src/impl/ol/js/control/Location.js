@@ -1,6 +1,6 @@
-import Control from "./Control";
-import Feature from "../feature/Feature";
 import Utils from 'facade/js/util/Utils';
+import Control from './Control';
+import Feature from '../feature/Feature';
 
 /**
  * @namespace M.impl.control
@@ -17,6 +17,7 @@ export default class Location extends Control {
    */
 
   constructor(tracking, highAccuracy, maximumAge) {
+    super();
     /**
      * Helper class for providing HTML5 Geolocation
      * @private
@@ -42,7 +43,7 @@ export default class Location extends Control {
      * @type {ol.Feature}
      */
     this.positionFeature_ = Feature.olFeature2Facade(new ol.Feature({
-      'style': Location.POSITION_STYLE
+      style: Location.POSITION_STYLE,
     }));
   }
 
@@ -54,38 +55,36 @@ export default class Location extends Control {
    * @api stable
    */
   activate() {
-
     this.element.classlist.add('m-locating');
 
     if (Utils.isNullOrEmpty(this.geolocation_)) {
-      let proj = ol.proj.get(this.facadeMap_.getProjection().code);
+      const proj = ol.proj.get(this.facadeMap_.getProjection().code);
       this.geolocation_ = new ol.Geolocation({
         projection: proj,
         tracking: this.tracking_,
         trackingOptions: {
           enableHighAccuracy: this.highAccuracy_,
-          maximumAge: this.maximumAge_
-        }
+          maximumAge: this.maximumAge_,
+        },
       });
-      this.geolocation_.on('change:accuracyGeometry', evt => {
-        let accuracyGeom = evt.target.get(evt.key);
+      this.geolocation_.on('change:accuracyGeometry', (evt) => {
+        const accuracyGeom = evt.target.get(evt.key);
         this.accuracyFeature_.getImpl().getOLFeature().setGeometry(accuracyGeom);
       });
-      this.geolocation_.on('change:position', evt => {
-        let newCoord = evt.target.get(evt.key);
-        let newPosition = Utils.isNullOrEmpty(newCoord) ?
+      this.geolocation_.on('change:position', (evt) => {
+        const newCoord = evt.target.get(evt.key);
+        const newPosition = Utils.isNullOrEmpty(newCoord) ?
           null : new ol.geom.Point(newCoord);
         this.positionFeature_.getImpl().getOLFeature().setGeometry(newPosition);
         this.facadeMap_.setCenter(newCoord);
         if (this.element.classlist.contains('m-locating')) {
-          this.facadeMap_.setZoom(Location.ZOOM); //solo 1a vez
+          this.facadeMap_.setZoom(Location.ZOOM); // solo 1a vez
         }
         this.element.classlist.remove('m-locating');
         this.element.classlist.add('m-located');
 
         this.geolocation_.setTracking(this.tracking_);
       });
-
     }
 
     this.geolocation_.setTracking(true);
@@ -148,17 +147,17 @@ export default class Location extends Control {
  * @public
  * @api stable
  */
-Location.POSITION_STYLE_ = new ol.style.Style({
+Location.POSITION_STYLE = new ol.style.Style({
   image: new ol.style.Circle({
     radius: 6,
     fill: new ol.style.Fill({
-      color: '#3399CC'
+      color: '#3399CC',
     }),
     stroke: new ol.style.Stroke({
       color: '#fff',
-      width: 2
-    })
-  })
+      width: 2,
+    }),
+  }),
 });
 
 /**
@@ -168,4 +167,4 @@ Location.POSITION_STYLE_ = new ol.style.Style({
  * @public
  * @api stable
  */
-Location.ZOOM_ = 12;
+Location.ZOOM = 12;

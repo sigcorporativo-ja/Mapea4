@@ -1,12 +1,12 @@
-import Utils from "facade/js/util/Utils";
-import GeoJSONFormat from "../format/GeoJSON";
-import JSONPLoader from "../loader/JSONP";
-import Vector from "./Vector";
-import EventsManager from "facade/js/event/Manager";
-import ClusteredFeature from "facade/js/feature/Clustered";
-import Popup from "facade/js/Popup";
-import Template from "facade/js/util/Template";
-import geojsonPopupTemplate from "templates/geojson_popup.html";
+import Utils from 'facade/js/util/Utils';
+import EventsManager from 'facade/js/event/Manager';
+import ClusteredFeature from 'facade/js/feature/Clustered';
+import Popup from 'facade/js/Popup';
+import Template from 'facade/js/util/Template';
+import geojsonPopupTemplate from 'templates/geojson_popup';
+import GeoJSONFormat from '../format/GeoJSON';
+import JSONPLoader from '../loader/JSONP';
+import Vector from './Vector';
 
 export default class GeoJSON extends Vector {
   /**
@@ -20,7 +20,6 @@ export default class GeoJSON extends Vector {
    * @api stable
    */
   constructor(parameters, options) {
-
     // calls the super constructor
     super(options);
 
@@ -83,7 +82,7 @@ export default class GeoJSON extends Vector {
    */
   addTo(map) {
     this.formater_ = new GeoJSONFormat({
-      'defaultDataProjection': ol.proj.get(map.getProjection().code)
+      defaultDataProjection: ol.proj.get(map.getProjection().code),
     });
     if (!Utils.isNullOrEmpty(this.url)) {
       this.loader_ = new JSONPLoader(map, this.url, this.formater_);
@@ -91,7 +90,7 @@ export default class GeoJSON extends Vector {
     super.addTo(map);
 
     // this.ol3Layer.setStyle(undefined);
-  };
+  }
 
   /**
    * This function sets the map object of the layer
@@ -102,26 +101,24 @@ export default class GeoJSON extends Vector {
    * @api stable
    */
   refresh(source = null) {
-    let features = this.formater_.write(this.facadeVector_.getFeatures());
-    let codeProjection = this.map.getProjection().code.split(":")[1];
+    const features = this.formater_.write(this.facadeVector_.getFeatures());
+    const codeProjection = this.map.getProjection().code.split(':')[1];
     let newSource = {
-      type: "FeatureCollection",
-      features: features,
+      type: 'FeatureCollection',
+      features,
       crs: {
         properties: {
-          code: codeProjection
+          code: codeProjection,
         },
-        type: "EPSG"
-      }
+        type: 'EPSG',
+      },
     };
     if (Utils.isObject(source)) {
       newSource = source;
     }
     this.source = newSource;
     this.updateSource_();
-  };
-
-
+  }
 
   /**
    * This function sets the map object of the layer
@@ -136,7 +133,7 @@ export default class GeoJSON extends Vector {
     if (!Utils.isNullOrEmpty(this.map)) {
       this.updateSource_();
     }
-  };
+  }
 
   /**
    * This function sets the map object of the layer
@@ -149,17 +146,17 @@ export default class GeoJSON extends Vector {
     if (!Utils.isNullOrEmpty(this.url)) {
       srcOptions = {
         format: this.formater_,
-        loader: this.loader_.getLoaderFn(features => {
+        loader: this.loader_.getLoaderFn((features) => {
           this.loaded_ = true;
           this.facadeVector_.addFeatures(features);
           this.fire(EventsManager.LOAD, [features]);
         }),
-        strategy: ol.loadingstrategy.all
+        strategy: ol.loadingstrategy.all,
       };
       this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
     }
     else if (!Utils.isNullOrEmpty(this.source)) {
-      let features = this.formater_.read(this.source, this.map.getProjection());
+      const features = this.formater_.read(this.source, this.map.getProjection());
       this.ol3Layer.setSource(new ol.source.Vector({
         loader: (extent, resolution, projection) => {
           this.loaded_ = true;
@@ -167,7 +164,7 @@ export default class GeoJSON extends Vector {
           this.facadeVector_.clear();
           this.facadeVector_.addFeatures(features);
           this.fire(EventsManager.LOAD, [features]);
-        }
+        },
       }));
       this.facadeVector_.addFeatures(features);
     }
@@ -182,25 +179,25 @@ export default class GeoJSON extends Vector {
    * @api stable
    */
   selectFeatures(features, coord, evt) {
-    let feature = features[0];
+    const feature = features[0];
     if (!(feature instanceof ClusteredFeature) && (this.extract === true)) {
       // unselects previous features
       this.unselectFeatures();
 
       if (!Utils.isNullOrEmpty(feature)) {
-        let clickFn = feature.getAttribute('vendor.mapea.click');
+        const clickFn = feature.getAttribute('vendor.mapea.click');
         if (Utils.isFunction(clickFn)) {
           clickFn(evt, feature);
         }
         else {
-          let htmlAsText = Template.compile(geojsonPopupTemplate, {
-            'vars': this.parseFeaturesForTemplate_(features),
-            'parseToHtml': false
+          const htmlAsText = Template.compile(geojsonPopupTemplate, {
+            vars: this.parseFeaturesForTemplate_(features),
+            parseToHtml: false,
           });
-          let featureTabOpts = {
-            'icon': 'g-cartografia-pin',
-            'title': this.name,
-            'content': htmlAsText
+          const featureTabOpts = {
+            icon: 'g-cartografia-pin',
+            title: this.name,
+            content: htmlAsText,
           };
           let popup = this.map.getPopup();
           if (Utils.isNullOrEmpty(popup)) {
@@ -224,15 +221,16 @@ export default class GeoJSON extends Vector {
    * @function
    */
   parseFeaturesForTemplate_(features) {
-    let featuresTemplate = {
-      'features': []
+    const featuresTemplate = {
+      features: [],
     };
 
-    features.forEach(feature => {
+    features.forEach((feature) => {
       if (!(feature instanceof ClusteredFeature)) {
-        let properties = feature.getAttributes();
-        let attributes = [];
-        for (let key in properties) {
+        const properties = feature.getAttributes();
+        const propertyKeys = Object.keys(properties);
+        const attributes = [];
+        propertyKeys.forEach((key) => {
           let addAttribute = true;
           // adds the attribute just if it is not in
           // hiddenAttributes_ or it is in showAttributes_
@@ -244,14 +242,14 @@ export default class GeoJSON extends Vector {
           }
           if (addAttribute) {
             attributes.push({
-              'key': Utils.beautifyAttributeName(key),
-              'value': properties[key]
+              key: Utils.beautifyAttributeName(key),
+              value: properties[key],
             });
           }
-        }
-        let featureTemplate = {
-          'id': feature.getId(),
-          'attributes': attributes
+        });
+        const featureTemplate = {
+          id: feature.getId(),
+          attributes,
         };
         featuresTemplate.features.push(featureTemplate);
       }
@@ -303,5 +301,4 @@ export default class GeoJSON extends Vector {
     }
     return equals;
   }
-
 }

@@ -1,5 +1,5 @@
-import Utils from "facade/js/util/Utils";
-import Exception from "facade/js/exception/exception";
+import Utils from 'facade/js/util/Utils';
+import Exception from 'facade/js/exception/exception';
 
 export default class XML extends ol.format.XML {
   /**
@@ -27,13 +27,13 @@ export default class XML extends ol.format.XML {
      * @type {Object}
      */
     this.namespaces = {
-      "ol": "http://openlayers.org/context",
-      "wmc": "http://www.opengis.net/context",
-      "sld": "http://www.opengis.net/sld",
-      "xlink": "http://www.w3.org/1999/xlink",
-      "xsi": "http://www.w3.org/2001/XMLSchema-instance",
-      "xsd": "http://www.w3.org/2001/XMLSchema",
-      "ogc": "http://www.opengis.net/ogc"
+      ol: 'http://openlayers.org/context',
+      wmc: 'http://www.opengis.net/context',
+      sld: 'http://www.opengis.net/sld',
+      xlink: 'http://www.w3.org/1999/xlink',
+      xsi: 'http://www.w3.org/2001/XMLSchema-instance',
+      xsd: 'http://www.w3.org/2001/XMLSchema',
+      ogc: 'http://www.opengis.net/ogc',
     };
 
     /**
@@ -53,16 +53,17 @@ export default class XML extends ol.format.XML {
    * @api stable
    */
   read(data) {
+    let dataVariable;
     if (Utils.isString(data)) {
-      data = ol.xml.parse(data);
+      dataVariable = ol.xml.parse(data);
     }
 
     if (data.nodeType !== 9) {
       Exception('doc.nodeType should be DOCUMENT');
     }
 
-    let context = {};
-    this.readRoot(context, data);
+    const context = {};
+    this.read_root(context, dataVariable);
     return context;
   }
 
@@ -73,11 +74,12 @@ export default class XML extends ol.format.XML {
    * @return {Object} parsed object.
    * @api stable
    */
-  readRoot(context, node) {
-    let root = node.documentElement;
+  read_root(context, node) {
+    const contextVariable = context;
+    const root = node.documentElement;
     this.rootPrefix = root.prefix;
-    context["version"] = root.getAttribute("version");
-    this.runChildNodes(context, root);
+    contextVariable.version = root.getAttribute('version');
+    this.runChildNodes(contextVariable, root);
   }
 
   /**
@@ -88,14 +90,17 @@ export default class XML extends ol.format.XML {
    * @api stable
    */
   runChildNodes(obj, node) {
-    let children = node.childNodes;
-    let childNode, processor, prefix, local;
-    for (let i = 0, len = children.length; i < len; ++i) {
+    const children = node.childNodes;
+    let childNode;
+    let processor;
+    let prefix;
+    let local;
+    for (let i = 0, len = children.length; i < len; i += 1) {
       childNode = children[i];
-      if (childNode.nodeType == 1) {
+      if (childNode.nodeType === 1) {
         prefix = this.getNamespacePrefix(childNode.namespaceURI);
-        local = childNode.nodeName.split(":").pop();
-        processor = this["read_" + prefix + "_" + local];
+        local = childNode.nodeName.split(':').pop();
+        processor = this[`read_${prefix}_${local}`];
         if (processor) {
           processor.apply(this, [obj, childNode]);
         }
@@ -118,8 +123,10 @@ export default class XML extends ol.format.XML {
       prefix = this.namespaces[this.defaultPrefix];
     }
     else {
-      for (prefix in this.namespaces) {
-        if (this.namespaces[prefix] == uri) {
+      const keys = Object.keys(this.namespaces);
+      for (let i = 0; i < keys.length; i += 1) {
+        prefix = keys[i];
+        if (this.namespaces[prefix] === uri) {
           break;
         }
       }
@@ -132,14 +139,16 @@ export default class XML extends ol.format.XML {
    * @function
    * @api stable
    */
-  getChildValue(node, def) {
-    let value = def || "";
+  static getChildValue(node, def) {
+    let value = def || '';
     if (node) {
       for (let child = node.firstChild; child; child = child.nextSibling) {
         switch (child.nodeType) {
           case 3: // text node
           case 4: // cdata section
             value += child.nodeValue;
+            break;
+          default:
         }
       }
     }
@@ -158,12 +167,12 @@ export default class XML extends ol.format.XML {
    * @api stable
    */
   getAttributeNS(node, uri, name) {
-    let attributeValue = "";
+    let attributeValue = '';
     if (node.getAttributeNS) {
-      attributeValue = node.getAttributeNS(uri, name) || "";
+      attributeValue = node.getAttributeNS(uri, name) || '';
     }
     else {
-      let attributeNode = this.getAttributeNodeNS(node, uri, name);
+      const attributeNode = this.getAttributeNodeNS(node, uri, name);
       if (attributeNode) {
         attributeValue = attributeNode.nodeValue;
       }
