@@ -74,6 +74,7 @@ export default class XML extends ol.format.XML {
    * @return {Object} parsed object.
    * @api stable
    */
+
   read_root(context, node) {
     const contextVariable = context;
     const root = node.documentElement;

@@ -7,9 +7,8 @@ export default class View extends ol.View {
    * @param {olx.ViewOptions=} opt_options View options.
    * @api stable
    */
-  constructor(opt_options) {
-
-    super(opt_options);
+  constructor(options) {
+    super(options);
 
     this.userZoom_ = null;
   }

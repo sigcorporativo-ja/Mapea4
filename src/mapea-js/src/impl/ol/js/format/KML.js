@@ -454,24 +454,24 @@ export default class KML extends ol.format.KML {
 
     // rotation
     let rotationXY;
-    let rotationXUnits;
-    let rotationYUnits;
+    // let rotationXUnits;
+    // let rotationYUnits;
     const rotationObject = screenOverlayObject[rotationXYAttr];
     if (!Utils.isNullOrEmpty(rotationObject)) {
       rotationXY = (rotationObject.x * Math.PI) / 180;
-      rotationXUnits = rotationObject[xUnitsAttr];
-      rotationYUnits = rotationObject[yUnitsAttr];
+      // rotationYUnits = rotationObject[yUnitsAttr];
+      //    rotationXUnits = rotationObject[xUnitsAttr];
     }
 
     // size
     let size;
-    let sizeXUnits;
-    let sizeYUnits;
+    // let sizeXUnits;
+    // let sizeYUnits;
     const sizeObject = screenOverlayObject[sizeAttr];
     if (!Utils.isNullOrEmpty(sizeObject)) {
       size = [sizeObject.x, sizeObject.y];
-      sizeXUnits = sizeObject[xUnitsAttr];
-      sizeYUnits = sizeObject[yUnitsAttr];
+      // sizeXUnits = sizeObject[xUnitsAttr];
+      // sizeYUnits = sizeObject[yUnitsAttr];
     }
 
     this.screenOverlay_ = {

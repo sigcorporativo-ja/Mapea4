@@ -2,7 +2,6 @@
  * @namespace M.impl.control
  */
 export default class Control extends ol.control.Control {
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector

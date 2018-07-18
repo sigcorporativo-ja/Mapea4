@@ -3,15 +3,14 @@ import FacadePopup from 'facade/js/Popup';
 import FacadeWindow from 'facade/js/util/Window';
 
 export default class Popup extends ol.Overlay {
-
   /**
    * OpenLayers 3 Popup Overlay.
    * @constructor
    * @extends {ol.Overlay}
    * @api stable
    */
-  constructor(opt_options = {}) {
-
+  constructor(options = {}) {
+    super();
     /**
      * Flag to indicate if map does pan or not
      * @private
@@ -32,7 +31,7 @@ export default class Popup extends ol.Overlay {
     this.ani_opts = options.ani_opts;
     if (this.ani_opts === undefined) {
       this.ani_opts = {
-        'duration': 250
+        duration: 250,
       };
     }
 
@@ -65,14 +64,14 @@ export default class Popup extends ol.Overlay {
     // container
     this.container = html;
 
-    this.content = this.getContentFromContainer_(html);
+    this.content = this.getContentFromContainer(html);
 
     // Apply workaround to enable scrolling of content div on touch devices
     Utils.enableTouchScroll(this.content);
 
     ol.Overlay.call(this, {
       element: this.container,
-      stopEvent: true
+      stopEvent: true,
     });
 
     map.getMapImpl().addOverlay(this);
@@ -107,20 +106,22 @@ export default class Popup extends ol.Overlay {
    * @api stable
    */
   centerByStatus(status, coord) {
-    let resolution = this.getMap().getView().getResolution();
-    let newCoord = [].concat(coord);
+    const resolution = this.getMap().getView().getResolution();
+    const newCoord = [].concat(coord);
     if (status === FacadePopup.status.COLLAPSED) {
       newCoord[1] -= 0.1 * FacadeWindow.HEIGHT * resolution;
-    } else if (status === FacadePopup.status.DEFAULT) {
+    }
+    else if (status === FacadePopup.status.DEFAULT) {
       newCoord[1] -= 0.275 * FacadeWindow.HEIGHT * resolution;
-    } else { // FULL state no effects
+    }
+    else { // FULL state no effects
       return;
     }
 
-    let featureCenter = this.facadeMap_.getFeatureCenter();
+    const featureCenter = this.facadeMap_.getFeatureCenter();
     this.facadeMap_.setCenter({
-      'x': newCoord[0],
-      'y': newCoord[1]
+      x: newCoord[0],
+      y: newCoord[1],
     });
     // if the center was drawn then draw it again
     if (!Utils.isNullOrEmpty(featureCenter)) {
@@ -131,7 +132,7 @@ export default class Popup extends ol.Overlay {
   /**
    * @private
    */
-  getContentFromContainer_(html) {
+  static getContentFromContainer(html) {
     return html.querySelector('div.m-body');
   }
 
@@ -144,42 +145,44 @@ export default class Popup extends ol.Overlay {
     this.panIntoSynchronizedAnim_().then(() => {
       this.isAnimating_ = true;
       if (FacadeWindow.WIDTH > 768) {
-        let tabHeight = 30; // 30px for tabs
-        let popupElement = this.getElement();
-        let popupWidth = popupElement.clientWidth + 20;
-        let popupHeight = popupElement.clientHeight + 20 + tabHeight;
-        let mapSize = this.getMap().getSize();
+        const tabHeight = 30; // 30px for tabs
+        const popupElement = this.getElement();
+        const popupWidth = popupElement.clientWidth + 20;
+        const popupHeight = popupElement.clientHeight + 20 + tabHeight;
+        const mapSize = this.getMap().getSize();
 
-        center = this.getMap().getView().getCenter();
-        let tailHeight = 20;
-        let tailOffsetLeft = 60;
-        let tailOffsetRight = popupWidth - tailOffsetLeft;
-        let popOffset = this.getOffset();
-        let popPx = this.getMap().getPixelFromCoordinate(coord);
+        const center = this.getMap().getView().getCenter();
+        const tailHeight = 20;
+        const tailOffsetLeft = 60;
+        const tailOffsetRight = popupWidth - tailOffsetLeft;
+        const popOffset = this.getOffset();
+        const popPx = this.getMap().getPixelFromCoordinate(coord);
 
         if (!Utils.isNullOrEmpty(popPx)) {
-          let fromLeft = (popPx[0] - tailOffsetLeft);
-          let fromRight = mapSize[0] - (popPx[0] + tailOffsetRight);
+          const fromLeft = (popPx[0] - tailOffsetLeft);
+          const fromRight = mapSize[0] - (popPx[0] + tailOffsetRight);
 
-          let fromTop = popPx[1] - popupHeight + popOffset[1];
-          let fromBottom = mapSize[1] - (popPx[1] + tailHeight) - popOffset[1];
+          const fromTop = popPx[1] - (popupHeight + popOffset[1]);
+          const fromBottom = mapSize[1] - (popPx[1] + tailHeight) - popOffset[1];
 
-          let curPix = this.getMap().getPixelFromCoordinate(center);
-          let newPx = curPix.slice();
+          const curPix = this.getMap().getPixelFromCoordinate(center);
+          const newPx = curPix.slice();
 
           if (fromRight < 0) {
             newPx[0] -= fromRight;
-          } else if (fromLeft < 0) {
+          }
+          else if (fromLeft < 0) {
             newPx[0] += fromLeft;
           }
 
           if (fromTop < 0) {
             newPx[1] += fromTop;
-          } else if (fromBottom < 0) {
+          }
+          else if (fromBottom < 0) {
             newPx[1] -= fromBottom;
           }
 
-          //if (this.ani && this.ani_opts) {
+          // if (this.ani && this.ani_opts) {
           if (!Utils.isNullOrEmpty(this.ani_opts) && !Utils.isNullOrEmpty(this.ani_opts.source)) {
             this.ani_opts.source = center;
             this.getMap().getView().animate(this.ani_opts);
@@ -208,11 +211,11 @@ export default class Popup extends ol.Overlay {
         // gets the duration of the animation
         let aniDuration = 300;
         if (!Utils.isNullOrEmpty(this.ani_opts)) {
-          aniDuration = this.ani_opts['duration'];
+          aniDuration = this.ani_opts.duration;
         }
         setTimeout(success, aniDuration);
-      } else {
-
+      }
+      else {
         /* if there is not any animation then it starts
         a new one */
         success();
@@ -240,7 +243,7 @@ export default class Popup extends ol.Overlay {
   setContainer(html) {
     this.element(html);
     //      this.container.innerHTML = html.innerHTML;
-    this.content = this.getContentFromContainer_(html);
+    this.content = Popup.getContentFromContainer(html);
     Utils.enableTouchScroll(this.content);
   }
 
