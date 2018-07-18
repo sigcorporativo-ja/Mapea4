@@ -1,14 +1,14 @@
-import Object from "facade/js/Object";
-import LayerType from "facade/js/layer/Type";
-import LayerBase from "facade/js/layer/Layer";
-import Utils from "facade/js/util/Utils";
-import View from "./View";
-import EnvolvedExtent from "./util/EnvolvedExtent";
-import EventsManager from "facade/js/event/Manager";
-import FacadeWMS from "facade/js/layer/WMS";
-import Control from "facade/js/control/Control";
-import FacadePanzoombar from "facade/js/control/Panzoombar";
-import Exception from "facade/js/exception/exception";
+import Object from 'facade/js/Object';
+import FacadePanzoombar from 'facade/js/control/Panzoombar';
+import LayerType from 'facade/js/layer/Type';
+import Control from 'facade/js/control/Control';
+import FacadeWMS from 'facade/js/layer/WMS';
+import EventsManager from 'facade/js/event/Manager';
+import LayerBase from 'facade/js/layer/Layer';
+import Exception from 'facade/js/exception/exception';
+import Utils from 'facade/js/util/Utils';
+import View from './View';
+import EnvolvedExtent from './util/EnvolvedExtent';
 
 export default class Map extends Object {
   /**
@@ -23,7 +23,6 @@ export default class Map extends Object {
    * @api stable
    */
   constructor(div, options = {}) {
-
     super();
     /**
      * Facade map to implement
@@ -116,17 +115,17 @@ export default class Map extends Object {
     this.map_ = new ol.Map({
       controls: [],
       target: div.id,
-      renderer: renderer,
-      view: new View()
+      renderer,
+      view: new View(),
     });
     this.map_.on('singleclick', this.onMapClick_, this);
     this.map_.addInteraction(new ol.interaction.Interaction({
-      handleEvent: e => {
-        if (e.type === "pointermove") {
+      handleEvent: (e) => {
+        if (e.type === 'pointermove') {
           this.onMapMove_(e);
         }
         return true;
-      }
+      },
     }));
   }
   /**
@@ -139,17 +138,19 @@ export default class Map extends Object {
    * @api stable
    */
   getLayers(filters) {
-    let wmcLayers = this.getWMC(filters);
-    let kmlLayers = this.getKML(filters);
-    let wmsLayers = this.getWMS(filters);
-    let wfsLayers = this.getWFS(filters);
-    let wmtsLayers = this.getWMTS(filters);
-    let mbtilesLayers = this.getMBtiles(filters);
-    let unknowLayers = this.getUnknowLayers_(filters);
+    const wmcLayers = this.getWMC(filters);
+    const kmlLayers = this.getKML(filters);
+    const wmsLayers = this.getWMS(filters);
+    const wfsLayers = this.getWFS(filters);
+    const wmtsLayers = this.getWMTS(filters);
+    const mbtilesLayers = Map.getMBtiles(filters);
+    const unknowLayers = this.getUnknowLayers_(filters);
 
     return wmcLayers.concat(kmlLayers).concat(wmsLayers)
-      .concat(wfsLayers).concat(wmtsLayers)
-      .concat(mbtilesLayers).concat(unknowLayers);
+      .concat(wfsLayers)
+      .concat(wmtsLayers)
+      .concat(mbtilesLayers)
+      .concat(unknowLayers);
   }
 
   /**
@@ -162,14 +163,14 @@ export default class Map extends Object {
    * @api stable
    */
   getBaseLayers() {
-    let baseLayers = this.getLayers().filter(layer => {
+    const baseLayers = this.getLayers().filter((layer) => {
       let isBaseLayer = false;
-      if ((layer.type === LayerType.WMS) || (layer.type === LayerType.OSM) || (layer.type === LayerType.Mapbox) || (layer.type === LayerType.WMTS)) {
+      if ((layer.type === LayerType.WMS) || (layer.type === LayerType.OSM) ||
+        (layer.type === LayerType.Mapbox) || (layer.type === LayerType.WMTS)) {
         isBaseLayer = (layer.transparent !== true);
       }
       return isBaseLayer;
     });
-
     return baseLayers;
   }
 
@@ -183,11 +184,11 @@ export default class Map extends Object {
    */
   addLayers(layers) {
     // gets the layers with type defined and undefined
-    let unknowLayers = layers.filter(layer => {
+    const unknowLayers = layers.filter((layer) => {
       return !LayerType.know(layer.type);
     });
 
-    let knowLayers = layers.filter(layer => {
+    const knowLayers = layers.filter((layer) => {
       return LayerType.know(layer.type);
     });
 
@@ -211,12 +212,11 @@ export default class Map extends Object {
    * @api stable
    */
   removeLayers(layers) {
-
     // gets the layers with type defined and undefined
-    let unknowLayers = layers.filter(layer => {
+    const unknowLayers = layers.filter((layer) => {
       return !LayerType.know(layer.type);
     });
-    let knowLayers = layers.filter(layer => {
+    const knowLayers = layers.filter((layer) => {
       return LayerType.know(layer.type);
     });
 
@@ -245,26 +245,27 @@ export default class Map extends Object {
    * @api stable
    */
   getWMC(filters) {
+    let filtersVar;
     let foundLayers = [];
 
     // get all wmcLayers
-    let wmcLayers = this.layers_.filter(layer => {
+    const wmcLayers = this.layers_.filter((layer) => {
       return (layer.type === LayerType.WMC);
     });
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filters = [];
+      filtersVar = [];
     }
     if (!Utils.isArray(filters)) {
-      filters = [filters];
+      filtersVar = [filters];
     }
 
-    if (filters.length === 0) {
+    if (filtersVar.length === 0) {
       foundLayers = wmcLayers;
     }
     else {
-      filters.forEach(filterLayer => {
+      filtersVar.forEach((filterLayer) => {
         foundLayers = foundLayers.concat(wmcLayers.filter((wmcLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
@@ -303,7 +304,7 @@ export default class Map extends Object {
   addWMC(layers) {
     layers.forEach((layer, zIndex) => {
       // checks if layer is WMC and was added to the map
-      if (layer.type == LayerType.WMC) {
+      if (layer.type === LayerType.WMC) {
         if (!Utils.includes(this.layers_, layer)) {
           layer.setZIndex(Map.Z_INDEX[LayerType.WMC]);
           layer.getImpl().addTo(this.facadeMap_);
@@ -324,7 +325,7 @@ export default class Map extends Object {
    * @api stable
    */
   removeWMC(layers) {
-    let wmcMapLayers = this.getWMC(layers);
+    const wmcMapLayers = this.getWMC(layers);
     wmcMapLayers.forEach((wmcLayer) => {
       // TODO removing the WMC layer with ol3
       if (wmcLayer.selected === true && wmcLayer.isLoaded() === false) {
@@ -356,26 +357,27 @@ export default class Map extends Object {
    */
   getKML(filters) {
     let foundLayers = [];
+    let filtersVar;
 
     // get all kmlLayers
-    let kmlLayers = this.layers_.filter((layer) => {
+    const kmlLayers = this.layers_.filter((layer) => {
       return (layer.type === LayerType.KML);
     });
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filters = [];
+      filtersVar = [];
     }
     if (!Utils.isArray(filters)) {
-      filters = [filters];
+      filtersVar = [filters];
     }
 
-    if (filters.length === 0) {
+    if (filtersVar.length === 0) {
       foundLayers = kmlLayers;
     }
     else {
-      filters.forEach(filterLayer => {
-        let filteredKMLLayers = kmlLayers.filter(kmlLayer => {
+      filtersVar.forEach((filterLayer) => {
+        const filteredKMLLayers = kmlLayers.filter((kmlLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(kmlLayer)) {
@@ -416,14 +418,14 @@ export default class Map extends Object {
    * @api stable
    */
   addKML(layers) {
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       // checks if layer is WMC and was added to the map
       if (layer.type === LayerType.KML) {
         if (!Utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
           if (layer.getZIndex() == null) {
-            let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.KML];
+            const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.KML];
             layer.setZIndex(zIndex);
           }
         }
@@ -442,8 +444,8 @@ export default class Map extends Object {
    * @api stable
    */
   removeKML(layers) {
-    let kmlMapLayers = this.getKML(layers);
-    kmlMapLayers.forEach(kmlLayer => {
+    const kmlMapLayers = this.getKML(layers);
+    kmlMapLayers.forEach((kmlLayer) => {
       this.layers_.remove(kmlLayer);
       kmlLayer.getImpl().destroy();
     }, this);
@@ -461,26 +463,27 @@ export default class Map extends Object {
    */
   getWMS(filters) {
     let foundLayers = [];
+    let filtersVar;
 
     // get all wmsLayers
-    let wmsLayers = this.layers_.filter(layer => {
+    const wmsLayers = this.layers_.filter((layer) => {
       return (layer.type === LayerType.WMS);
     });
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filters = [];
+      filtersVar = [];
     }
     if (!Utils.isArray(filters)) {
-      filters = [filters];
+      filtersVar = [filters];
     }
 
-    if (filters.length === 0) {
+    if (filtersVar.length === 0) {
       foundLayers = wmsLayers;
     }
     else {
-      filters.forEach(filterLayer => {
-        let filteredWMSLayers = wmsLayers.filter(wmsLayer => {
+      filtersVar.forEach((filterLayer) => {
+        const filteredWMSLayers = wmsLayers.filter((wmsLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmsLayer)) {
@@ -544,12 +547,12 @@ export default class Map extends Object {
    */
   addWMS(layers) {
     // cehcks if exists a base layer
-    let baseLayers = this.getBaseLayers();
+    const baseLayers = this.getBaseLayers();
     let existsBaseLayer = (baseLayers.length > 0);
 
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       // checks if layer is WMC and was added to the map
-      if (layer.type == LayerType.WMS) {
+      if (layer.type === LayerType.WMS) {
         if (!Utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
@@ -566,7 +569,7 @@ export default class Map extends Object {
           }
           else {
             if (layer.getZIndex() == null) {
-              let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMS];
+              const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMS];
               layer.setZIndex(zIndex);
             }
             // recalculates resolution if there are not
@@ -590,8 +593,8 @@ export default class Map extends Object {
    * @api stable
    */
   removeWMS(layers) {
-    let wmsMapLayers = this.getWMS(layers);
-    wmsMapLayers.forEach(wmsLayer => {
+    const wmsMapLayers = this.getWMS(layers);
+    wmsMapLayers.forEach((wmsLayer) => {
       this.layers_.remove(wmsLayer);
       wmsLayer.getImpl().destroy();
     });
@@ -609,26 +612,27 @@ export default class Map extends Object {
    */
   getWFS(filters) {
     let foundLayers = [];
+    let filtersVar;
 
     // get all wfsLayers
-    let wfsLayers = this.layers_.filter(layer => {
+    const wfsLayers = this.layers_.filter((layer) => {
       return (layer.type === LayerType.WFS);
     });
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filters = [];
+      filtersVar = [];
     }
     if (!Utils.isArray(filters)) {
-      filters = [filters];
+      filtersVar = [filters];
     }
 
-    if (filters.length === 0) {
+    if (filtersVar.length === 0) {
       foundLayers = wfsLayers;
     }
     else {
-      filters.forEach(filterLayer => {
-        let filteredWFSLayers = wfsLayers.filter((wfsLayer) => {
+      filtersVar.forEach((filterLayer) => {
+        const filteredWFSLayers = wfsLayers.filter((wfsLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wfsLayer)) {
@@ -689,15 +693,15 @@ export default class Map extends Object {
    * @api stable
    */
   addWFS(layers) {
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       // checks if layer is WFS and was added to the map
-      if (layer.type == LayerType.WFS) {
+      if (layer.type === LayerType.WFS) {
         if (!Utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
           layer.setZIndex(layer.getZIndex());
           if (layer.getZIndex() == null) {
-            let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WFS];
+            const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WFS];
             layer.setZIndex(zIndex);
           }
         }
@@ -716,8 +720,8 @@ export default class Map extends Object {
    * @api stable
    */
   removeWFS(layers) {
-    let wfsMapLayers = this.getWFS(layers);
-    wfsMapLayers.forEach(wfsLayer => {
+    const wfsMapLayers = this.getWFS(layers);
+    wfsMapLayers.forEach((wfsLayer) => {
       this.layers_.remove(wfsLayer);
       wfsLayer.getImpl().destroy();
     });
@@ -735,27 +739,28 @@ export default class Map extends Object {
    */
   getWMTS(filters) {
     let foundLayers = [];
+    let filtersVar;
 
     // get all kmlLayers
-    let wmtsLayers = this.layers_.filter(layer => {
+    const wmtsLayers = this.layers_.filter((layer) => {
       return (layer.type === LayerType.WMTS);
     });
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filters = [];
+      filtersVar = [];
     }
     if (!Utils.isArray(filters)) {
-      filters = [filters];
+      filtersVar = [filters];
     }
 
-    if (filters.length === 0) {
+    if (filtersVar.length === 0) {
       foundLayers = wmtsLayers;
     }
     else {
-      filters.forEach(filterLayer => {
+      filtersVar.forEach((filterLayer) => {
         // TODO ERROR DE RECURSIVIDAD: let l = map.getLayers(); map.getWMS(l);
-        let filteredWMTSLayers = wmtsLayers.filter(wmtsLayer => {
+        const filteredWMTSLayers = wmtsLayers.filter((wmtsLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmtsLayer)) {
@@ -801,12 +806,12 @@ export default class Map extends Object {
    */
   addWMTS(layers) {
     // cehcks if exists a base layer
-    let baseLayers = this.getBaseLayers();
+    const baseLayers = this.getBaseLayers();
     let existsBaseLayer = (baseLayers.length > 0);
 
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       // checks if layer is WMTS and was added to the map
-      if (layer.type == LayerType.WMTS) {
+      if (layer.type === LayerType.WMTS) {
         if (!Utils.includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
@@ -822,7 +827,7 @@ export default class Map extends Object {
           }
           else {
             if (layer.getZIndex() == null) {
-              let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMTS];
+              const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMTS];
               layer.setZIndex(zIndex);
             }
 
@@ -831,7 +836,6 @@ export default class Map extends Object {
             if (!existsBaseLayer) {
               this.updateResolutionsFromBaseLayer();
             }
-
           }
         }
       }
@@ -848,8 +852,8 @@ export default class Map extends Object {
    * @api stable
    */
   removeWMTS(layers) {
-    let wmtsMapLayers = this.getWMTS(layers);
-    wmtsMapLayers.forEach(wmtsLayer => {
+    const wmtsMapLayers = this.getWMTS(layers);
+    wmtsMapLayers.forEach((wmtsLayer) => {
       this.layers_.remove(wmtsLayer);
       wmtsLayer.getImpl().destroy();
     });
@@ -865,9 +869,8 @@ export default class Map extends Object {
    * @returns {Array<M.layer.MBtiles>} layers from the map
    * @api stable
    */
-  getMBtiles(filters) {
-    let foundLayers = [];
-
+  static getMBtiles(filters) {
+    const foundLayers = [];
     return foundLayers;
   }
 
@@ -880,9 +883,9 @@ export default class Map extends Object {
    * @api stable
    */
   addMBtiles(layers) {
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       // checks if layer is MBtiles and was added to the map
-      if ((layer.type == LayerType.MBtiles) &&
+      if ((layer.type === LayerType.MBtiles) &&
         !Utils.includes(this.layers_, layer)) {
         // TODO creating and adding the MBtiles layer with ol3
         this.layers_.push(layer);
@@ -901,8 +904,8 @@ export default class Map extends Object {
    * @api stable
    */
   removeMBtiles(layers) {
-    let mbtilesMapLayers = this.getMBtiles(layers);
-    mbtilesMapLayers.forEach(mbtilesLayer => {
+    const mbtilesMapLayers = Map.getMBtiles(layers);
+    mbtilesMapLayers.forEach((mbtilesLayer) => {
       // TODO removing the MBtiles layer with ol3
       this.layers_.remove(mbtilesLayer);
     });
@@ -920,26 +923,27 @@ export default class Map extends Object {
    */
   getUnknowLayers_(filters) {
     let foundLayers = [];
+    let filtersVar;
 
     // get all wmsLayers
-    let unknowLayers = this.layers_.filter(layer => {
+    const unknowLayers = this.layers_.filter((layer) => {
       return !LayerType.know(layer.type);
     });
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filters = [];
+      filtersVar = [];
     }
     if (!Utils.isArray(filters)) {
-      filters = [filters];
+      filtersVar = [filters];
     }
 
-    if (filters.length === 0) {
+    if (filtersVar.length === 0) {
       foundLayers = unknowLayers;
     }
     else {
-      filters.forEach(filterLayer => {
-        let filteredUnknowLayers = unknowLayers.filter(unknowLayer => {
+      filtersVar.forEach((filterLayer) => {
+        const filteredUnknowLayers = unknowLayers.filter((unknowLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(unknowLayer)) {
@@ -982,7 +986,7 @@ export default class Map extends Object {
     let existsBaseLayer = this.getBaseLayers().length > 0;
 
     // adds layers
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       if (!Utils.includes(this.layers_, layer)) {
         layer.getImpl().addTo(this.facadeMap_);
         this.layers_.push(layer);
@@ -1000,7 +1004,7 @@ export default class Map extends Object {
         else {
           layer.setZIndex(layer.getZIndex());
           if (layer.getZIndex() == null) {
-            let zIndex = this.layers_.length + Map.Z_INDEX[layer.type];
+            const zIndex = this.layers_.length + Map.Z_INDEX[layer.type];
             layer.setZIndex(zIndex);
           }
           // recalculates resolution if there are not
@@ -1025,13 +1029,13 @@ export default class Map extends Object {
    */
   removeUnknowLayers_(layers) {
     // removes unknow layers
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       if (Utils.includes(this.layers_, layer)) {
         this.layers_.remove(layer);
         layer.getImpl().destroy();
         if (layer.transparent !== true) {
           // it was base layer so sets the visibility of the first one
-          let baseLayers = this.facadeMap_.getBaseLayers();
+          const baseLayers = this.facadeMap_.getBaseLayers();
           if (baseLayers.length > 0) {
             baseLayers[0].setVisible(true);
           }
@@ -1049,6 +1053,7 @@ export default class Map extends Object {
    * @api stable
    */
   getControls(filters) {
+    let filtersVar;
     let foundControls = [];
 
     let panelControls = this.facadeMap_.getPanels().map(p => p.getControls());
@@ -1058,17 +1063,17 @@ export default class Map extends Object {
     const controlsToSearch = this.controls_.concat(panelControls);
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filters = [];
+      filtersVar = [];
     }
     if (!Utils.isArray(filters)) {
-      filters = [filters];
+      filtersVar = [filters];
     }
-    if (filters.length === 0) {
+    if (filtersVar.length === 0) {
       foundControls = controlsToSearch;
     }
     else {
-      filters.forEach(filterControl => {
-        foundControls = foundControls.concat(controlsToSearch.filter(control => {
+      filtersVar.forEach((filterControl) => {
+        foundControls = foundControls.concat(controlsToSearch.filter((control) => {
           let controlMatched = false;
 
           if (!Utils.includes(foundControls, control)) {
@@ -1086,9 +1091,9 @@ export default class Map extends Object {
         }));
       });
     }
-    let nonRepeatFoundControls = [];
-    foundControls.forEach(control => {
-      let controlNames = nonRepeatFoundControls.map(c => c.name);
+    const nonRepeatFoundControls = [];
+    foundControls.forEach((control) => {
+      const controlNames = nonRepeatFoundControls.map(c => c.name);
       if (!controlNames.includes(control.name)) {
         nonRepeatFoundControls.push(control);
       }
@@ -1106,7 +1111,7 @@ export default class Map extends Object {
    * @api stable
    */
   addControls(controls) {
-    controls.forEach(control => {
+    controls.forEach((control) => {
       if (control instanceof FacadePanzoombar) {
         this.facadeMap_.addControls('panzoom');
       }
@@ -1127,12 +1132,11 @@ export default class Map extends Object {
    * @api stable
    */
   removeControls(controls) {
-    let mapControls = this.getControls(controls);
-    mapControls.forEach(control => {
+    const mapControls = this.getControls(controls);
+    mapControls.forEach((control) => {
       control.destroy();
       this.controls_.remove(control);
     });
-
     return this;
   }
 
@@ -1154,8 +1158,8 @@ export default class Map extends Object {
     }
 
     // set the extent by ol
-    let olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
-    let olMap = this.getMapImpl();
+    const olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
+    const olMap = this.getMapImpl();
     //      let minZoom = olMap.getView().
     olMap.getView().set('extent', olExtent);
     this.updateResolutionsFromBaseLayer();
@@ -1178,19 +1182,19 @@ export default class Map extends Object {
    */
   getMaxExtent() {
     let extent;
-    let olMap = this.getMapImpl();
-    let olExtent = olMap.getView().get('extent');
+    const olMap = this.getMapImpl();
+    const olExtent = olMap.getView().get('extent');
 
     if (!Utils.isNullOrEmpty(olExtent)) {
       extent = {
-        'x': {
-          'min': olExtent[0],
-          'max': olExtent[2]
+        x: {
+          min: olExtent[0],
+          max: olExtent[2],
         },
-        'y': {
-          'min': olExtent[1],
-          'max': olExtent[3]
-        }
+        y: {
+          min: olExtent[1],
+          max: olExtent[3],
+        },
       };
     }
     else {
@@ -1227,7 +1231,7 @@ export default class Map extends Object {
     else if (Utils.isObject(bbox)) {
       extent = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
     }
-    let olMap = this.getMapImpl();
+    const olMap = this.getMapImpl();
     olMap.getView().fit(extent, vendorOpts);
 
     return this;
@@ -1245,21 +1249,21 @@ export default class Map extends Object {
   getBbox() {
     let bbox = null;
 
-    let olMap = this.getMapImpl();
-    let view = olMap.getView();
+    const olMap = this.getMapImpl();
+    const view = olMap.getView();
     if (!Utils.isNullOrEmpty(view.getCenter())) {
-      let olExtent = view.calculateExtent(olMap.getSize());
+      const olExtent = view.calculateExtent(olMap.getSize());
 
       if (!Utils.isNullOrEmpty(olExtent)) {
         bbox = {
           x: {
             min: olExtent[0],
-            max: olExtent[2]
+            max: olExtent[2],
           },
           y: {
             min: olExtent[1],
-            max: olExtent[3]
-          }
+            max: olExtent[3],
+          },
         };
       }
     }
@@ -1298,10 +1302,10 @@ export default class Map extends Object {
    * @api stable
    */
   getZoom() {
-    let resolution = this.getMapImpl().getView().getResolution();
-    let resolutions = this.getResolutions();
+    const resolution = this.getMapImpl().getView().getResolution();
+    const resolutions = this.getResolutions();
     let zoom = null;
-    for (let i = 0, ilen = resolutions.length; i < ilen; i++) {
+    for (let i = 0, ilen = resolutions.length; i < ilen; i += 1) {
       if (resolutions[i] <= resolution) {
         zoom = i;
         break;
@@ -1327,13 +1331,13 @@ export default class Map extends Object {
     }
 
     // set the zoom by ol
-    let olCenter = [center.x, center.y];
-    let olView = this.getMapImpl().getView();
-    let srcCenter = olView.getCenter();
+    const olCenter = [center.x, center.y];
+    const olView = this.getMapImpl().getView();
+    const srcCenter = olView.getCenter();
     if (!Utils.isNullOrEmpty(srcCenter)) {
       this.getMapImpl().getView().animate({
         duration: 250,
-        source: srcCenter
+        source: srcCenter,
       });
     }
     olView.setCenter(olCenter);
@@ -1351,11 +1355,11 @@ export default class Map extends Object {
    */
   getCenter() {
     let center = null;
-    let olCenter = this.getMapImpl().getView().getCenter();
+    const olCenter = this.getMapImpl().getView().getCenter();
     if (!Utils.isNullOrEmpty(olCenter)) {
       center = {
-        'x': olCenter[0],
-        'y': olCenter[1]
+        x: olCenter[0],
+        y: olCenter[1],
       };
     }
     return center;
@@ -1371,8 +1375,8 @@ export default class Map extends Object {
    * @api stable
    */
   getResolutions() {
-    let olMap = this.getMapImpl();
-    let resolutions = olMap.getView().getResolutions();
+    const olMap = this.getMapImpl();
+    const resolutions = olMap.getView().getResolutions();
 
     return resolutions;
   }
@@ -1398,15 +1402,15 @@ export default class Map extends Object {
     }
 
     // gets the projection
-    let projection = ol.proj.get(this.getProjection().code);
+    const projection = ol.proj.get(this.getProjection().code);
 
     // sets the resolutions
-    let olMap = this.getMapImpl();
-    let oldViewProperties = olMap.getView().getProperties();
-    let userZoom = olMap.getView().getUserZoom();
+    const olMap = this.getMapImpl();
+    const oldViewProperties = olMap.getView().getProperties();
+    const userZoom = olMap.getView().getUserZoom();
 
-    let newView = new View({
-      'projection': projection
+    const newView = new View({
+      projection,
     });
     newView.setProperties(oldViewProperties);
     newView.setResolutions(resolutions);
@@ -1415,14 +1419,14 @@ export default class Map extends Object {
     olMap.setView(newView);
 
     // sets the resolutions for each layer
-    let layers = this.getWMS();
-    layers.forEach(layer => {
+    const layers = this.getWMS();
+    layers.forEach((layer) => {
       layer.getImpl().setResolutions(resolutions);
     });
 
     if (!Utils.isNullOrEmpty(this.userBbox_)) {
       this.facadeMap_.setBbox(this.userBbox_, {
-        'nearest': true
+        nearest: true,
       });
     }
 
@@ -1439,10 +1443,10 @@ export default class Map extends Object {
    * @api stable
    */
   getScale() {
-    let olMap = this.getMapImpl();
+    const olMap = this.getMapImpl();
 
-    let resolution = olMap.getView().getResolution();
-    let units = this.getProjection().units;
+    const resolution = olMap.getView().getResolution();
+    const units = this.getProjection().units;
 
     let scale = Utils.getScaleFromResolution(resolution, units);
 
@@ -1484,20 +1488,20 @@ export default class Map extends Object {
     }
 
     // gets previous data
-    let olPrevProjection = ol.proj.get(this.getProjection().code);
+    const olPrevProjection = ol.proj.get(this.getProjection().code);
     let prevBbox = this.facadeMap_.getBbox();
     let prevMaxExtent = this.facadeMap_.getMaxExtent();
-    let prevCenter = this.facadeMap_.getCenter();
-    let resolutions = this.facadeMap_.getResolutions();
+    const prevCenter = this.facadeMap_.getCenter();
+    const resolutions = this.facadeMap_.getResolutions();
 
-    let olMap = this.getMapImpl();
-    let oldViewProperties = olMap.getView().getProperties();
-    let userZoom = olMap.getView().getUserZoom();
-    let resolution = olMap.getView().getResolution();
+    const olMap = this.getMapImpl();
+    const oldViewProperties = olMap.getView().getProperties();
+    const userZoom = olMap.getView().getUserZoom();
+    const resolution = olMap.getView().getResolution();
 
     // sets the new view
-    let newView = new View({
-      'projection': olProjection
+    const newView = new View({
+      projection: olProjection,
     });
     newView.setProperties(oldViewProperties);
     newView.setUserZoom(userZoom);
@@ -1510,7 +1514,7 @@ export default class Map extends Object {
     olMap.setView(newView);
 
     // updates min, max resolutions of all WMS layers
-    this.facadeMap_.getWMS().forEach(layer => {
+    this.facadeMap_.getWMS().forEach((layer) => {
       layer.updateMinMaxResolution(projection);
     });
 
@@ -1518,26 +1522,30 @@ export default class Map extends Object {
     if (!Utils.isNullOrEmpty(prevMaxExtent)) {
       if (!Utils.isArray(prevMaxExtent)) {
         prevMaxExtent = [prevMaxExtent.x.min,
-               prevMaxExtent.y.min,
-               prevMaxExtent.x.max,
-               prevMaxExtent.y.max
-            ];
+          prevMaxExtent.y.min,
+          prevMaxExtent.x.max,
+          prevMaxExtent.y.max,
+        ];
       }
-      this.facadeMap_.setMaxExtent(ol.proj.transformExtent(prevMaxExtent, olPrevProjection, olProjection));
+      this.facadeMap_.setMaxExtent(ol.proj.transformExtent(
+        prevMaxExtent,
+        olPrevProjection,
+        olProjection,
+      ));
     }
 
     // recalculates bbox
     if (!Utils.isNullOrEmpty(prevBbox)) {
       if (!Utils.isArray(prevBbox)) {
         prevBbox = [
-            prevBbox.x.min,
-            prevBbox.y.min,
-            prevBbox.x.max,
-            prevBbox.y.max,
-         ];
+          prevBbox.x.min,
+          prevBbox.y.min,
+          prevBbox.x.max,
+          prevBbox.y.max,
+        ];
       }
       this.facadeMap_.setBbox(ol.proj.transformExtent(prevBbox, olPrevProjection, olProjection), {
-        'nearest': true
+        nearest: true,
       });
     }
 
@@ -1547,17 +1555,17 @@ export default class Map extends Object {
       if (!Utils.isNullOrEmpty(this.facadeMap_.getFeatureCenter())) {
         draw = true;
       }
-      this.facadeMap_.setCenter(ol.proj.transform([
-            prevCenter.x,
-            prevCenter.y,
-         ], olPrevProjection, olProjection) + "*" + draw);
+      this.facadeMap_.setCenter(`${ol.proj.transform([
+        prevCenter.x,
+        prevCenter.y,
+      ], olPrevProjection, olProjection)}*${draw}`);
     }
 
     // recalculates resolutions
     this.updateResolutionsFromBaseLayer();
 
     // reprojects popup
-    let popup = this.facadeMap_.getPopup();
+    const popup = this.facadeMap_.getPopup();
     if (!Utils.isNullOrEmpty(popup)) {
       let coord = popup.getCoordinate();
       if (!Utils.isNullOrEmpty(coord)) {
@@ -1567,7 +1575,7 @@ export default class Map extends Object {
     }
 
     // reprojects label
-    let label = this.facadeMap_.getLabel();
+    const label = this.facadeMap_.getLabel();
     if (!Utils.isNullOrEmpty(label)) {
       let coord = label.getCoordinate();
       if (!Utils.isNullOrEmpty(coord)) {
@@ -1591,15 +1599,15 @@ export default class Map extends Object {
    * @api stable
    */
   getProjection() {
-    let olMap = this.getMapImpl();
-    let olProjection = olMap.getView().getProjection();
+    const olMap = this.getMapImpl();
+    const olProjection = olMap.getView().getProjection();
 
     let projection = null;
 
     if (!Utils.isNullOrEmpty(olProjection)) {
       projection = {
         code: olProjection.getCode(),
-        units: olProjection.getUnits()
+        units: olProjection.getUnits(),
       };
     }
     return projection;
@@ -1629,8 +1637,8 @@ export default class Map extends Object {
    */
   removePopup(popup) {
     if (!Utils.isNullOrEmpty(popup)) {
-      let olPopup = popup.getImpl();
-      let olMap = this.getMapImpl();
+      const olPopup = popup.getImpl();
+      const olMap = this.getMapImpl();
       olMap.removeOverlay(olPopup);
     }
     return this;
@@ -1646,7 +1654,7 @@ export default class Map extends Object {
    * @api stable
    */
   getEnvolvedExtent() {
-    return EnvolvedExtent.calculate(this).then(extent => {
+    return EnvolvedExtent.calculate(this).then((extent) => {
       this.envolvedMaxExtent_ = extent;
       return this.envolvedMaxExtent_;
     });
@@ -1687,12 +1695,12 @@ export default class Map extends Object {
     let zoomLevels = 16;
 
     // units
-    let units = this.getProjection().units;
+    const units = this.getProjection().units;
 
     // size
-    let size = this.getMapImpl().getSize();
+    const size = this.getMapImpl().getSize();
 
-    let baseLayer = this.getBaseLayers().filter(bl => {
+    const baseLayer = this.getBaseLayers().filter((bl) => {
       return bl.isVisible();
     })[0];
 
@@ -1721,9 +1729,8 @@ export default class Map extends Object {
         }
       }
       else {
-        EnvolvedExtent.calculate(this).then(extent => {
+        EnvolvedExtent.calculate(this).then((extent) => {
           if (!this.resolutionsBaseLayer_ && (this.userResolutions_ === null)) {
-
             resolutions = Utils.generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
 
@@ -1782,7 +1789,7 @@ export default class Map extends Object {
    */
   removeLabel() {
     if (!Utils.isNullOrEmpty(this.label)) {
-      let popup = this.label.getPopup();
+      const popup = this.label.getPopup();
       this.removePopup(popup);
       this.label = null;
     }
@@ -1831,19 +1838,19 @@ export default class Map extends Object {
    * @function
    */
   onMapClick_(evt) {
-    let pixel = evt.pixel;
-    let coord = this.map_.getCoordinateFromPixel(pixel);
+    const pixel = evt.pixel;
+    const coord = this.map_.getCoordinateFromPixel(pixel);
 
     // hides the label if it was added
-    let label = this.facadeMap_.getLabel();
+    const label = this.facadeMap_.getLabel();
     if (!Utils.isNullOrEmpty(label)) {
       label.hide();
     }
 
     this.facadeMap_.fire(EventsManager.CLICK, [{
-      'pixel': pixel,
-      'coord': coord,
-      'vendor': evt
+      pixel,
+      coord,
+      vendor: evt,
     }]);
   }
 
@@ -1854,13 +1861,13 @@ export default class Map extends Object {
    * @function
    */
   onMapMove_(evt) {
-    let pixel = evt.pixel;
-    let coord = this.map_.getCoordinateFromPixel(pixel);
+    const pixel = evt.pixel;
+    const coord = this.map_.getCoordinateFromPixel(pixel);
 
     this.facadeMap_.fire(EventsManager.MOVE, [{
-      'pixel': pixel,
-      'coord': coord,
-      'vendor': evt
+      pixel,
+      coord,
+      vendor: evt,
     }]);
   }
 }
