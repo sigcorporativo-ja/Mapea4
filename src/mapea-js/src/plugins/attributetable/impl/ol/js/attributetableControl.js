@@ -1,47 +1,46 @@
-goog.provide('P.impl.control.AttributeTableControl');
+export default class AttributeTableControl extends M.impl.Control {
+  /**
+   * @classdesc
+   * Main constructor of the AttributeTableControl.
+   *
+   * @constructor
+   * @extends {M.impl.Control}
+   * @api stable
+   */
+  constructor() {
+    super();
+  }
+  /**
+   * This function adds the control to the specified map
+   *
+   * @public
+   * @function
+   * @param {M.Map} map to add the plugin
+   * @param {HTMLElement} html of the plugin
+   * @api stable
+   */
+  addTo(map, html) {
+    super('addTo', map, html);
+  }
 
-/**
- * @classdesc
- * Main constructor of the AttributeTableControl.
- *
- * @constructor
- * @extends {M.impl.Control}
- * @api stable
- */
-M.impl.control.AttributeTableControl = function () {
-  goog.base(this);
-};
-goog.inherits(M.impl.control.AttributeTableControl, M.impl.Control);
+  /**
+   * This function destroys this control
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  destroy() {
+    this.facadeMap_.getMapImpl().removeControl(this);
+  }
 
-/**
- * This function adds the control to the specified map
- *
- * @public
- * @function
- * @param {M.Map} map to add the plugin
- * @param {HTMLElement} html of the plugin
- * @api stable
- */
-M.impl.control.AttributeTableControl.prototype.addTo = function (map, html) {
-  goog.base(this, 'addTo', map, html);
-};
+  /**
+   * LayerSwitcher panel id
+   * @const
+   * @type {string}
+   * @public
+   * @api stable
+   */
+}
 
-/**
- * This function destroys this control
- *
- * @public
- * @function
- * @api stable
- */
-M.impl.control.AttributeTableControl.destroy = function () {
-  this.facadeMap_.getMapImpl().removeControl(this);
-};
-
-/**
- * LayerSwitcher panel id
- * @const
- * @type {string}
- * @public
- * @api stable
- */
-M.impl.control.AttributeTableControl.PANEL_ID = 'm-attibutetable-panel';
+AttributeTableControl.PANEL_ID = 'm-attibutetable-panel';
