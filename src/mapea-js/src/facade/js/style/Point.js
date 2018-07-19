@@ -1,6 +1,6 @@
-import Simple from "./Simple";
-import Utils from '../util/Utils';
 import StylePointImpl from 'impl/ol/js/style/Point';
+import Simple from './Simple';
+import Utils from '../util/Utils';
 
 export default class Point extends Simple {
   /**
@@ -11,7 +11,8 @@ export default class Point extends Simple {
    * @param {Object} options - options style
    * @api stable
    */
-  constructor(options) {
+  constructor(optionsVar) {
+    let options = optionsVar;
     if (Utils.isNullOrEmpty(options)) {
       options = Point.DEFAULT_NULL;
     }
@@ -20,8 +21,7 @@ export default class Point extends Simple {
     }
     options = Utils.extends({}, options);
 
-    let impl = new StylePointImpl(options);
-
+    const impl = new StylePointImpl(options);
     super(options, impl);
   }
 
@@ -55,11 +55,11 @@ Point.DEFAULT = {
 Point.DEFAULT_NULL = {
   fill: {
     color: 'rgba(255, 255, 255, 0.4)',
-    opacity: 0.4
+    opacity: 0.4,
   },
   stroke: {
-    color: "#3399CC",
-    width: 1.5
+    color: '#3399CC',
+    width: 1.5,
   },
   radius: 5,
 };

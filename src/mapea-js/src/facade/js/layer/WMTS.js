@@ -1,7 +1,7 @@
+import WMTSImpl from 'impl/ol/js/layer/WMTS';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
-import WMTSImpl from 'impl/ol/js/layer/WMTS';
 import * as parameter from '../parameter/parameter';
 import LayerType from './Type';
 
@@ -23,10 +23,10 @@ export default class WMTS extends LayerBase {
      * @public
      * @type {M.layer.WMTS}
      */
-    let impl = new WMTSImpl(options);
+    const impl = new WMTSImpl(options);
 
-    //This Layer is of parameters.
-    let parameters = parameter.layer(userParameters, LayerType.WMTS);
+    // This Layer is of parameters.
+    const parameters = parameter.layer(userParameters, LayerType.WMTS);
 
     // calls the super constructor
     super(parameters, impl);
@@ -47,7 +47,7 @@ export default class WMTS extends LayerBase {
     // legend
     this.legend = parameters.legend;
 
-    //transparent
+    // transparent
     this.transparent = parameters.transparent;
 
     // options
@@ -58,10 +58,10 @@ export default class WMTS extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  static get type() {
     return LayerType.WMTS;
   }
-  set type(newType) {
+  static set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMTS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMTS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

@@ -1,6 +1,6 @@
+import ClusterImpl from 'impl/ol/js/style/Cluster';
 import Composite from './Composite';
 import Utils from '../util/Utils';
-import ClusterImpl from 'impl/ol/js/style/Cluster';
 
 /**
  * @namespace Cluster
@@ -18,7 +18,7 @@ export default class Cluster extends Composite {
    * @api stable
    */
   constructor(options = {}, optsVendor = {}) {
-    let impl = new ClusterImpl(options, optsVendor);
+    const impl = new ClusterImpl(options, optsVendor);
 
     // calls the super constructor
     super(options, impl);
@@ -125,7 +125,7 @@ export default class Cluster extends Composite {
    * @api stable
    */
   getRange(min, max) {
-    return this.options_.ranges.find(el => (el.min == min && el.max == max));
+    return this.options_.ranges.find(el => (el.min === min && el.max === max));
   }
 
   /**
@@ -200,7 +200,7 @@ export default class Cluster extends Composite {
    */
   refresh() {
     if (!Utils.isNullOrEmpty(this.layer_)) {
-      let layer = this.layer_;
+      const layer = this.layer_;
       this.unapply(this.layer_);
       this.apply(layer);
       this.updateCanvas();
@@ -213,7 +213,7 @@ export default class Cluster extends Composite {
    * @public
    * @api stable
    */
-  get ORDER() {
+  static get ORDER() {
     return 1;
   }
 }
@@ -235,17 +235,17 @@ Cluster.DEFAULT = {
   label: {
     text: (feature) => {
       let text;
-      let cluseterFeatures = feature.attribute('features');
+      const cluseterFeatures = feature.attribute('features');
       if (!Utils.isNullOrEmpty(cluseterFeatures)) {
         text = cluseterFeatures.length.toString();
       }
       return text;
     },
     color: '#fff',
-    font: "bold 15px Arial",
+    font: 'bold 15px Arial',
     baseline: 'middle',
-    align: "center"
-  }
+    align: 'center',
+  },
 };
 
 /**
@@ -257,18 +257,18 @@ Cluster.DEFAULT = {
  */
 Cluster.DEFAULT_VENDOR = {
   animationDuration: 250,
-  animationMethod: "linear",
+  animationMethod: 'linear',
   distanceSelectFeatures: 15,
   convexHullStyle: {
     fill: {
       color: '#fff',
-      opacity: 0.25
+      opacity: 0.25,
     },
     stroke: {
       // color: '#425f82'
-      color: '#7b98bc'
-    }
-  }
+      color: '#7b98bc',
+    },
+  },
 };
 
 /**
@@ -280,13 +280,13 @@ Cluster.DEFAULT_VENDOR = {
  */
 Cluster.RANGE_1_DEFAULT = {
   fill: {
-    color: '#81c89a'
+    color: '#81c89a',
   },
   stroke: {
     color: '#6eb988',
-    width: 3
+    width: 3,
   },
-  radius: 15
+  radius: 15,
 };
 
 /**
@@ -298,11 +298,11 @@ Cluster.RANGE_1_DEFAULT = {
  */
 Cluster.RANGE_2_DEFAULT = {
   fill: {
-    color: '#85b9d2'
+    color: '#85b9d2',
   },
   stroke: {
     color: '#6da4be',
-    width: 3
+    width: 3,
   },
   radius: 20,
 };
@@ -316,11 +316,11 @@ Cluster.RANGE_2_DEFAULT = {
  */
 Cluster.RANGE_3_DEFAULT = {
   fill: {
-    color: '#938fcf'
+    color: '#938fcf',
   },
   stroke: {
     color: '#827ec5',
-    width: 3
+    width: 3,
   },
-  radius: 25
+  radius: 25,
 };

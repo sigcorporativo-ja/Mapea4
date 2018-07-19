@@ -1,16 +1,11 @@
 import StyleFeature from './Feature';
 
-export class Simple extends Feature {
-
+export default class Simple extends StyleFeature {
   /**
    * Abstract class
    *
    * @api stable
    */
-  constructor(options, impl) {
-    super(options, impl);
-  }
-
   /**
    * @inheritDoc
    */
@@ -19,10 +14,16 @@ export class Simple extends Feature {
     this.getImpl().applyToLayer(layer);
     if (applyToFeature === true) {
       if (isNullStyle) {
-        layer.features().forEach(feature => feature.style = null);
+        layer.features().forEach((featureVar) => {
+          const feature = featureVar;
+          feature.style = null;
+        });
       }
       else {
-        layer.getFeatures().forEach(feature => feature.style = this.clone());
+        layer.getFeatures().forEach((featureVar) => {
+          const feature = featureVar;
+          feature.style = this.clone();
+        });
       }
     }
     this.updateCanvas();
@@ -34,7 +35,7 @@ export class Simple extends Feature {
    * @public
    * @api stable
    */
-  get ORDER() {
+  static get ORDER() {
     return 1;
   }
 }

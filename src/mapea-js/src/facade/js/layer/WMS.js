@@ -1,10 +1,10 @@
+import WMSImpl from 'impl/ol/js/layer/WMS';
+import Config from 'configuration';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
-import WMSImpl from 'impl/ol/js/layer/WMS';
 import * as parameter from '../parameter/parameter';
 import LayerType from './Type';
-import Config from 'configuration';
 
 export default class WMS extends LayerBase {
   /**
@@ -18,9 +18,9 @@ export default class WMS extends LayerBase {
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  constructor(userParameters, options = {}, implParam = new WMSImpl(options)) {
-    //This Layer is of parameters.
-    let parameters = parameter.layer(userParameters, LayerType.WMS);
+  constructor(userParameters, options = {}, impl = new WMSImpl(options)) {
+    // This Layer is of parameters.
+    const parameters = parameter.layer(userParameters, LayerType.WMS);
 
     // calls the super constructor
     super(parameters, impl);
@@ -84,11 +84,11 @@ export default class WMS extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  static get type() {
     return LayerType.WMS;
   }
 
-  set type(newType) {
+  static set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -103,7 +103,6 @@ export default class WMS extends LayerBase {
   }
 
   set legend(newLegend) {
-
     if (Utils.isNullOrEmpty(newLegend)) {
       this.getImpl().legend = this.name;
     }
@@ -211,7 +210,7 @@ export default class WMS extends LayerBase {
    * @function
    */
   _updateNoCache() {
-    let tiledIdx = M.config.tileMappgins.tiledNames.indexOf(this.name);
+    const tiledIdx = M.config.tileMappgins.tiledNames.indexOf(this.name);
     if ((tiledIdx !== -1) && Utils.sameUrl(Config.tileMappgins.tiledUrls[tiledIdx], this.url)) {
       this._noCacheUrl = Config.tileMappgins.urls[tiledIdx];
       this._noCacheName = Config.tileMappgins.names[tiledIdx];
