@@ -1,7 +1,4 @@
-goog.provide('P.plugin.Searchstreet');
-goog.require('P.plugin.Autocomplete');
-
-(function() {
+export default class Searchstreet extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -12,7 +9,9 @@ goog.require('P.plugin.Autocomplete');
    * @param {Mx.parameters.Searchstreet} parameters - Searchstreet parameters
    * @api stable
    */
-  M.plugin.Searchstreet = (function(parameters) {
+  constructor(parameters) {
+    super();
+
     parameters = (parameters || {});
 
     /**
@@ -73,9 +72,7 @@ goog.require('P.plugin.Autocomplete');
       this.locality_ = parameters.locality;
     }
 
-    goog.base(this);
-  });
-  goog.inherits(M.plugin.Searchstreet, M.Plugin);
+  }
 
   /**
    * @inheritdoc
@@ -86,31 +83,29 @@ goog.require('P.plugin.Autocomplete');
    *        map - Facade map
    * @api stable
    */
-  M.plugin.Searchstreet.prototype.addTo = function(map) {
-    var this_ = this;
+  addTo(map) {
     this.map_ = map;
 
-    goog.dom.classlist.add(map._areasContainer.getElementsByClassName("m-top m-right")[0],
-      "top-extra");
+    map._areasContainer.getElementsByClassName("m-top m-right")[0].classList.add("top-extra");
 
     // Checks if the received INE code is correct.
-    var comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
+    let comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
       codigo: this.locality_
     });
-    M.remote.get(comCodIne).then(
-      function(response) {
-        var results;
+    M.Remote.get(comCodIne).then(
+      response => {
+        let results;
         try {
           if (!M.utils.isNullOrEmpty(response.text)) {
             results = JSON.parse(response.text);
             if (!M.utils.isNullOrEmpty(this_.locality_) && M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
               // If not correct, value empty
-              M.dialog.error("El código del municipio '" + this_.locality_ + "' no es válido");
+              M.Dialog.error("El código del municipio '" + this_.locality_ + "' no es válido");
               this_.locality_ = "";
             }
           }
-          this_.control_ = new M.control.Searchstreet(this_.url_, this_.locality_);
-          this_.control_.on(M.evt.ADDED_TO_MAP, function() {
+          this_.control_ = new Searchstreet(this_.url_, this_.locality_);
+          this_.control_.on(M.evt.ADDED_TO_MAP, () => {
             this_.fire(M.evt.ADDED_TO_MAP);
             this_.autocompletador_ = new M.plugin.Autocomplete({
               'locality': this_.locality_,
@@ -122,12 +117,12 @@ goog.require('P.plugin.Autocomplete');
           this_.panel_ = new M.ui.Panel('searchstreet', {
             'collapsible': true,
             'className': 'm-searchstreet',
-            'position': M.ui.position.TL,
+            'position': M.ui.Position.TL,
             'tooltip': 'Buscador de calles'
           });
           //JGL20170816: foco al input al desplegar panel
-          this_.panel_.on(M.evt.ADDED_TO_MAP, function(html) {
-            this_.panel_._buttonPanel.addEventListener("click", function(evt) {
+          this_.panel_.on(M.evt.ADDED_TO_MAP, html => {
+            this_.panel_._buttonPanel.addEventListener("click", evt => {
               if (!this_.panel_._collapsed) {
                 this_.control_.input_.focus();
               }
@@ -148,7 +143,7 @@ goog.require('P.plugin.Autocomplete');
    * @function
    * @api stable
    */
-  M.plugin.Searchstreet.prototype.destroy = function() {
+  destroy() {
     this.map_.removeControls([this.control_]);
     this.autocompletador_.destroy();
     this.name = null;
@@ -158,7 +153,7 @@ goog.require('P.plugin.Autocomplete');
     this.panel_ = null;
     this.url_ = null;
     this.locality_ = null;
-  };
+  }
 
   /**
    * This function compare if pluging recieved by param is instance of M.plugin.Searchstreet
@@ -168,11 +163,11 @@ goog.require('P.plugin.Autocomplete');
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.Searchstreet.prototype.equals = function(plugin) {
-    if (plugin instanceof M.plugin.Searchstreet) {
+  equals(plugin) {
+    if (plugin instanceof Searchstreet) {
       return true;
     } else {
       return false;
     }
-  };
-})();
+  }
+}
