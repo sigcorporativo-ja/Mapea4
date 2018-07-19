@@ -1,6 +1,8 @@
 import StyleComposite from './Composite';
-import StylePoint from "./Point";
-import StyleSimple from "./Simple";
+import StylePoint from './Point';
+import StyleSimple from './Simple';
+import Utils from '../util/Utils';
+import Exception from '../exception/exception';
 
 /**
  * @namespace Proportional
@@ -24,7 +26,7 @@ export default class Proportional extends StyleComposite {
     super(options, {});
 
     if (Utils.isNullOrEmpty(attributeName)) {
-      Exception("No se ha especificado el nombre del atributo.");
+      Exception('No se ha especificado el nombre del atributo.');
     }
 
     /**
@@ -43,7 +45,7 @@ export default class Proportional extends StyleComposite {
      * @api stable
      * @expose
      */
-    this.minRadius_ = parseInt(minRadius) || 5;
+    this.minRadius_ = parseInt(minRadius, 10) || 5;
 
     /**
      * The maximum radius of the proportionality
@@ -52,7 +54,7 @@ export default class Proportional extends StyleComposite {
      * @api stable
      * @expose
      */
-    this.maxRadius_ = parseInt(maxRadius) || 15;
+    this.maxRadius_ = parseInt(maxRadius, 10) || 15;
 
     /**
      * The style point define by user
@@ -70,8 +72,9 @@ export default class Proportional extends StyleComposite {
      * @api stable
      * @expose
      */
-    this.proportionalFunction_ = proportionalFunction || ((value, minValue, maxValue, minRadius, maxRadius) =>
-      (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius);
+    this.proportionalFunction_ =
+      proportionalFunction || ((value, minValue, maxValue) =>
+        (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius);
 
     if (this.maxRadius_ < this.minRadius_) {
       this.minRadius_ = maxRadius;
@@ -110,7 +113,7 @@ export default class Proportional extends StyleComposite {
       else if (style instanceof StyleComposite) {
         style = new StylePoint(style.getOldStyle().getOptions());
       }
-      let newStyle = this.calculateStyle_(feature, {
+      const newStyle = this.calculateStyle_(feature, {
         minRadius: this.minRadius_,
         maxRadius: this.maxRadius_,
         minValue: this.minValue_,
@@ -131,21 +134,35 @@ export default class Proportional extends StyleComposite {
       if (!Utils.isNullOrEmpty(this.style_)) {
         // this.layer_.setStyle(this.style_, true);
       }
-      this.oldStyle_ = this.layer_.style() instanceof StyleComposite ? this.layer_.style().getOldStyle() : this.layer_.style();
-       [this.minValue_, this.maxValue_] = Proportional.getMinMaxValues_(this.layer_.getFeatures(), this.attributeName_);
+      this.oldStyle_ = this.layer_.style() instanceof StyleComposite ? this.layer_.style()
+        .getOldStyle() : this.layer_.style();
+      [this.minValue_, this.maxValue_] = Proportional.getMinMaxValues_(this.layer_
+        .getFeatures(), this.attributeName_);
       this.layer_.getFeatures().forEach(feature => this.applyToFeature(feature, 1));
       let newStyle = this.oldStyle_.clone();
       if (newStyle instanceof StyleSimple) {
         if (!(newStyle instanceof StylePoint)) {
           newStyle = new StylePoint(newStyle.getOptions());
         }
-        newStyle.set('zindex', (feature) => (this.maxValue_ - parseFloat(feature.getAttribute(this.attributeName_))));
+        newStyle.set('zindex', feature => (this.maxValue_ - parseFloat(feature.getAttribute(this.attributeName_))));
         newStyle.set(Proportional.sizeAttribute_(newStyle), (feature) => {
-          let proportion = Proportional.SCALE_PROPORTION;
-          let value = feature.attribute(this.attributeName_);
-          let radius = this.getProportionalFunction_(value, this.minValue_, this.maxValue_, this.minRadius_, this.maxRadius_);
+          const proportion = Proportional.SCALE_PROPORTION;
+          const value = feature.attribute(this.attributeName_);
+          let radius = this.getProportionalFunction_(
+            value,
+            this.minValue_,
+            this.maxValue_,
+            this.minRadius_,
+            this.maxRadius_,
+          );
           if (Proportional.sizeAttribute_(this.oldStyle_) === 'icon.scale') {
-            radius = this.getProportionalFunction_(value, this.minValue_, this.maxValue_, this.minRadius_ / proportion, this.maxRadius_ / proportion);
+            radius = this.getProportionalFunction_(
+              value,
+              this.minValue_,
+              this.maxValue_,
+              this.minRadius_ / proportion,
+              this.maxRadius_ / proportion,
+            );
           }
           return radius;
         });
@@ -185,6 +202,9 @@ export default class Proportional extends StyleComposite {
    * @return {StylePoint} style point of each feature
    * @deprecated
    */
+
+  /* eslint no-console: ["error", {allow: ["warn", "error"]}] */
+
   getStyle() {
     console.warn('Deprecated function: Use getStyles instead.');
     return this.style_;
@@ -245,10 +265,10 @@ export default class Proportional extends StyleComposite {
    * @api stable
    */
   setMinRadius(minRadius) {
-    this.minRadius_ = parseInt(minRadius);
+    this.minRadius_ = parseInt(minRadius, 10);
     if (minRadius >= this.maxRadius_) {
       // this.maxRadius_ = minRadius + 10;
-      Exception("No puede establecerse un radio mínimo mayor que el máximo.");
+      Exception('No puede establecerse un radio mínimo mayor que el máximo.');
     }
     this.update_();
     return this;
@@ -273,10 +293,10 @@ export default class Proportional extends StyleComposite {
    * @api stable
    */
   setMaxRadius(maxRadius) {
-    this.maxRadius_ = parseInt(maxRadius);
+    this.maxRadius_ = parseInt(maxRadius, 10);
     if (maxRadius <= this.minRadius_) {
       // this.minRadius_ = maxRadius - 10;
-      Exception("No puede establecerse un radio máximo menor que el mínimo.");
+      Exception('No puede establecerse un radio máximo menor que el mínimo.');
     }
     this.update_();
     return this;
@@ -292,19 +312,19 @@ export default class Proportional extends StyleComposite {
   updateCanvas() {
     this.updateCanvasPromise_ = new Promise((success, fail) => {
       if (!Utils.isNullOrEmpty(this.layer_)) {
-        let style = !Utils.isNullOrEmpty(this.style_) ? this.style_ : this.layer_.style();
+        const style = !Utils.isNullOrEmpty(this.style_) ? this.style_ : this.layer_.style();
 
         if (style instanceof StyleSimple) {
           let featureStyle = style.clone();
           if (!(featureStyle instanceof StylePoint)) {
             featureStyle = new StylePoint(featureStyle.getOptions());
           }
-          let sizeAttribute = Proportional.getSizeAttribute_(featureStyle);
+          const sizeAttribute = Proportional.getSizeAttribute_(featureStyle);
 
-          let styleMax = featureStyle.clone();
-          let styleMin = featureStyle.clone();
-          let maxRadius = this.getMaxRadius();
-          let minRadius = this.getMinRadius();
+          const styleMax = featureStyle.clone();
+          const styleMin = featureStyle.clone();
+          const maxRadius = this.getMaxRadius();
+          const minRadius = this.getMinRadius();
           styleMax.set(sizeAttribute, maxRadius);
           styleMin.set(sizeAttribute, minRadius);
 
@@ -331,20 +351,21 @@ export default class Proportional extends StyleComposite {
    * @api stable
    */
   loadCanvasImage_(value, url, callbackFn) {
-    let image = new Image();
+    const image = new Image();
     image.crossOrigin = 'Anonymous';
     image.onload = () => {
       callbackFn({
-        'image': this,
-        'value': value
+        image: this,
+        value,
       });
-    }
-    image.onerror = () => {
-      callbackFn({
-        'value': value
-      });
-    }
-    image.src = url;
+
+      image.onerror = () => {
+        callbackFn({
+          value,
+        });
+      };
+      image.src = url;
+    };
   }
 
   /**
@@ -355,13 +376,14 @@ export default class Proportional extends StyleComposite {
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
    * @api stable
    */
+
   drawGeometryToCanvas(canvasImageMax, canvasImageMin, callbackFn) {
-    let maxImage = canvasImageMax['image'];
-    let minImage = canvasImageMin['image'];
+    const maxImage = canvasImageMax.image;
+    const minImage = canvasImageMin.image;
 
     this.canvas_.height = maxImage.height + 5 + minImage.height + 5;
-    let vectorContext = this.canvas_.getContext('2d');
-    vectorContext.textBaseline = "middle";
+    const vectorContext = this.canvas_.getContext('2d');
+    vectorContext.textBaseline = 'middle';
 
     // MAX VALUE
 
@@ -370,7 +392,7 @@ export default class Proportional extends StyleComposite {
     if (!Utils.isNullOrEmpty(maxImage)) {
       coordXText = maxImage.width + 5;
       coordYText = maxImage.height / 2;
-      if (/^https?\:\/\//i.test(maxImage.src)) {
+      if (/^https?:\/\//i.test(maxImage.src)) {
         this.canvas_.height = 80 + 40 + 10;
         vectorContext.fillText(`  max: ${this.maxValue_}`, 85, 40);
         vectorContext.drawImage(maxImage, 0, 0, 80, 80);
@@ -388,9 +410,9 @@ export default class Proportional extends StyleComposite {
       if (!Utils.isNullOrEmpty(maxImage)) {
         coordinateX = (maxImage.width / 2) - (minImage.width / 2);
       }
-      let coordinateY = maxImage.height + 5;
+      const coordinateY = maxImage.height + 5;
       coordYText = coordinateY + (minImage.height / 2);
-      if (/^https?\:\/\//i.test(minImage.src)) {
+      if (/^https?:\/\//i.test(minImage.src)) {
         vectorContext.fillText(`  min: ${this.minValue_}`, 85, 105);
         vectorContext.drawImage(minImage, 20, 85, 40, 40);
       }
@@ -410,19 +432,21 @@ export default class Proportional extends StyleComposite {
    * @param {String} attributeName - attributeName of style
    * @api stable
    */
-  getMinMaxValues_(features, attributeName) {
+  static getMinMaxValues_(features, attributeName) {
     let [minValue, maxValue] = [undefined, undefined];
-    let filteredFeatures = features.filter(feature =>
-      ![NaN, undefined, null].includes(feature.getAttribute(attributeName))).map(f => parseInt(f.getAttribute(attributeName)));
+    const filteredFeatures =
+      features.filter((feature) => {
+        return ![NaN, undefined, null].includes(feature.getAttribute(attributeName));
+      }).map(f => parseInt(f.getAttribute(attributeName), 10));
     let index = 1;
     if (!Utils.isNullOrEmpty(filteredFeatures)) {
       minValue = filteredFeatures[0];
       maxValue = filteredFeatures[0];
       while (index < filteredFeatures.length - 1) {
-        let posteriorValue = filteredFeatures[index + 1];
+        const posteriorValue = filteredFeatures[index + 1];
         minValue = (minValue < posteriorValue) ? minValue : posteriorValue;
         maxValue = (maxValue < posteriorValue) ? posteriorValue : maxValue;
-        index++;
+        index += 1;
       }
     }
     return [minValue, maxValue];
@@ -435,7 +459,7 @@ export default class Proportional extends StyleComposite {
    * @return {string} the attribute that controls the size
    * @api stable
    */
-  getSizeAttribute_(style) {
+  static getSizeAttribute_(style) {
     let sizeAttribute = 'radius';
     if (!Utils.isNullOrEmpty(style.get('icon'))) {
       if (!Utils.isNullOrEmpty(style.get('icon.src'))) {
@@ -458,7 +482,8 @@ export default class Proportional extends StyleComposite {
    * @return {StyleSimple} the proportional style of feature
    * @api stable
    */
-  calculateStyle_(feature, options, style) {
+  calculateStyle_(feature, options, styleVar) {
+    let style = styleVar;
     if (!Utils.isNullOrEmpty(style)) {
       style = style.clone();
       let [minRadius, maxRadius] = [options.minRadius, options.maxRadius];
@@ -466,13 +491,18 @@ export default class Proportional extends StyleComposite {
         minRadius = options.minRadius / Proportional.SCALE_PROPORTION;
         maxRadius = options.maxRadius / Proportional.SCALE_PROPORTION;
       }
-      let value = feature.getAttribute(this.attributeName_);
+      const value = feature.getAttribute(this.attributeName_);
       if (value == null) {
         console.warn(`Warning: ${this.attributeName_} value is null or empty.`);
       }
-      let radius = this.proportionalFunction_(value, options.minValue, options.maxValue,
-        minRadius, maxRadius);
-      let zindex = options.maxValue - parseFloat(feature.getAttribute(this.attributeName_));
+      const radius = this.proportionalFunction_(
+        value,
+        options.minValue,
+        options.maxValue,
+        minRadius,
+        maxRadius,
+      );
+      const zindex = options.maxValue - parseFloat(feature.getAttribute(this.attributeName_));
       style.set(Proportional.sizeAttribute_(style), radius);
       style.set('zindex', zindex);
     }
@@ -485,7 +515,7 @@ export default class Proportional extends StyleComposite {
    * @public
    * @api stable
    */
-  get ORDER() {
+  static get ORDER() {
     return 1;
   }
 }

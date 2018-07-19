@@ -4,7 +4,6 @@ import StyleCluster from './Cluster';
 import StyleProportional from './Proportional';
 
 export default class Composite extends StyleBase {
-
   /**
    * Abstract class
    * @constructor
@@ -32,7 +31,7 @@ export default class Composite extends StyleBase {
   apply(layer) {
     this.layer_ = layer;
     if (!Utils.isNullOrEmpty(layer)) {
-      let style = layer.style();
+      const style = layer.style();
       this.oldStyle_ = style instanceof StyleCluster ? style.oldStyle() : style;
       this.updateInternal_(layer);
     }
@@ -47,17 +46,20 @@ export default class Composite extends StyleBase {
    * @returns {M.style.Composite}
    * @api stable
    */
-  add(styles) {
-    let layer = this.layer_;
+  add(stylesPara) {
+    let styles = stylesPara;
+    const layer = this.layer_;
     this.unapplyInternal(this.layer_);
     if (!Utils.isArray(styles)) {
       styles = [styles];
     }
     styles = styles.filter(style => style.constructor !== this.constructor);
-    if (!Utils.isNullOrEmpty(styles.find(style => !(style instanceof StyleCluster || style instanceof StyleProportional)))) {
-      this.styles_ = this.styles_.filter(style => style instanceof StyleCluster || style instanceof StyleProportional);
+    if (!Utils.isNullOrEmpty(styles.find(style => !(style instanceof StyleCluster ||
+        style instanceof StyleProportional)))) {
+      this.styles_ = this.styles_.filter(style => style instanceof StyleCluster ||
+        style instanceof StyleProportional);
     }
-    styles.forEach(style => {
+    styles.forEach((style) => {
       this.styles_ = this.styles_.filter(s => s.constructor !== style.constructor);
     });
     this.styles_ = this.styles_.concat(styles);
@@ -76,8 +78,9 @@ export default class Composite extends StyleBase {
    * @returns {M.style.Composite}
    * @api stable
    */
-  remove(styles) {
-    let layer = this.layer_;
+  remove(stylesPara) {
+    let styles = stylesPara;
+    const layer = this.layer_;
     if (!Utils.isArray(styles)) {
       styles = [styles];
     }
@@ -130,8 +133,9 @@ export default class Composite extends StyleBase {
    * @api stable
    */
   unapplyInternal(layer) {
-    let styles = this.styles_.concat(this).sort((style, style2) => Utils.styleComparator(style2, style));
-    styles.forEach(style => {
+    const styles = this.styles_.concat(this).sort((style, style2) =>
+      Utils.styleComparator(style2, style));
+    styles.forEach((style) => {
       if (style instanceof Composite) {
         style.unapplySoft(layer);
       }
@@ -145,7 +149,7 @@ export default class Composite extends StyleBase {
    * @param {M.layer.Vector} layer layer to unapply his style
    * @api stable
    */
-  unapplySoft(layer) {}
+  static unapplySoft(layer) {}
 
   /**
    * This function unapply the style to specified layer
@@ -168,8 +172,9 @@ export default class Composite extends StyleBase {
    */
 
   updateInternal_(layer) {
-    let styles = this.styles_.concat(this).sort((style, style2) => Utils.styleComparator(style, style2));
-    styles.forEach(style => {
+    const styles = this.styles_.concat(this).sort((style, style2) =>
+      Utils.styleComparator(style, style2));
+    styles.forEach((style) => {
       if (style instanceof Composite) {
         style.applyInternal_(layer);
       }

@@ -6,7 +6,7 @@ export default class Align {}
  * @public
  * @api stable
  */
-Align.LEFT = "left";
+Align.LEFT = 'left';
 
 /**
  * Center style alignment
@@ -15,7 +15,7 @@ Align.LEFT = "left";
  * @public
  * @api stable
  */
-Align.CENTER = "center";
+Align.CENTER = 'center';
 
 /**
  * Right style alignment
@@ -24,7 +24,7 @@ Align.CENTER = "center";
  * @public
  * @api stable
  */
-Align.RIGHT = "right";
+Align.RIGHT = 'right';
 
 /**
  * Justify style alignment
@@ -33,4 +33,4 @@ Align.RIGHT = "right";
  * @public
  * @api stable
  */
-Align.JUSTIFY = "justify";
+Align.JUSTIFY = 'justify';

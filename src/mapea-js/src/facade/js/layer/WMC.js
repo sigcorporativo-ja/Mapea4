@@ -1,10 +1,10 @@
+import Config from 'configuration';
+import WMCImpl from 'impl/ol/js/layer/WMC';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import LayerType from './Type';
-import WMCImpl from 'impl/ol/js/layer/WMC';
 import * as parameter from '../parameter/parameter';
-import Config from 'configuration';
 import EvtManager from '../event/Manager';
 
 export default class WMC extends LayerBase {
@@ -21,16 +21,15 @@ export default class WMC extends LayerBase {
    * @api stable
    */
   constructor(userParameters, options) {
-
     /**
      * Implementation of this layer
      * @public
      * @type {M.layer.WMC}
      */
-    let impl = new WMCImpl(options);
+    const impl = new WMCImpl(options);
 
-    //This Layer is of parameters
-    let parameters = parameter.layer(userParameters, LayerType.WMC);
+    // This Layer is of parameters
+    const parameters = parameter.layer(userParameters, LayerType.WMC);
 
     // calls the super constructor
     super(parameters, impl);
@@ -54,9 +53,9 @@ export default class WMC extends LayerBase {
     }
     // checks if it is predefined context
     else if (Utils.isNullOrEmpty(this.url) && !Utils.isNullOrEmpty(this.name)) {
-      let predefinedIdx = Config.predefinedWMC.predefinedNames.indexOf(this.name);
+      const predefinedIdx = Config.predefinedWMC.predefinedNames.indexOf(this.name);
       if (predefinedIdx === -1) {
-        Exception('El contexto predefinido \'' + this.name + '\' no existe');
+        Exception(`El contexto predefinido '${this.name}'no existe`);
       }
       else {
         this.url = Config.predefinedWMC.urls[predefinedIdx];
@@ -72,7 +71,9 @@ export default class WMC extends LayerBase {
      */
     this.loaded_ = false;
 
-    this.once(EvtManager.LOAD, () => this.loaded_ = true);
+    this.once(EvtManager.LOAD, () => {
+      this.loaded = true;
+    });
   }
 
   /**
@@ -92,11 +93,11 @@ export default class WMC extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  static get type() {
     return LayerType.WMC;
   }
 
-  set type(newType) {
+  static set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMC)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMC).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

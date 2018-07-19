@@ -1,11 +1,11 @@
-import Base from '../Base'
+import Base from '../Base';
 import Utils from '../util/Utils';
 import EvtManager from '../event/Manager';
 
 /**
  * @namespace M.Style
  */
-export default class StyleBase extends Base {
+export default class Style extends Base {
   /* Rec. options que es el json del estilo   */
 
   /**
@@ -71,7 +71,7 @@ export default class StyleBase extends Base {
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @api stable
    */
-  unapply(layer) {}
+  static unapply(layer) {}
 
   /**
    * This function returns the value of the indicated attribute
@@ -87,13 +87,17 @@ export default class StyleBase extends Base {
     if (Utils.isNullOrEmpty(attrValue)) {
       // we look up the attribute by its path. Example: getAttribute('foo.bar.attr')
       // --> return feature.properties.foo.bar.attr value
-      let attrPath = attribute.split('.');
+      const attrPath = attribute.split('.');
       if (attrPath.length > 1) {
-        attrValue = attrPath.reduce((obj, attr) => !Utils.isNullOrEmpty(obj) ? ((obj instanceof Style) ? obj.get(attr) : obj[attr]) : undefined, this);
+        attrValue = attrPath.reduce((obj, attr) => {
+          const attrValue2 = obj instanceof Style ? obj.get(attr) : obj[attr];
+          return !Utils.isNullOrEmpty(obj) ? attrValue2 : undefined;
+        });
       }
     }
     return attrValue;
   }
+
 
   /**
    * This function set value to property and apply new property
@@ -105,9 +109,10 @@ export default class StyleBase extends Base {
    * @function
    * @api stable
    */
+
   set(property, value) {
-    let oldValue = this.get(property);
-    StyleBase.setValue_(this.options_, property, value);
+    const oldValue = this.get(property);
+    Style.setValue(this.options_, property, value);
     if (!Utils.isNullOrEmpty(this.layer_)) {
       this.getImpl().updateFacadeOptions(this.options_);
     }
@@ -117,7 +122,8 @@ export default class StyleBase extends Base {
     this.fire(EvtManager.CHANGE, [property, oldValue, value]);
     this.refresh();
     return this;
-  };
+  }
+
   /**
    * This function set value to property
    *
@@ -128,10 +134,12 @@ export default class StyleBase extends Base {
    * @return {String} value
    * @function
    */
-  static setValue_(obj, path, value) {
-    let keys = Utils.isArray(path) ? path : path.split('.');
-    let keyLength = keys.length;
-    let key = keys[0];
+  static setValue(objPara, path, valueVar) {
+    let value = valueVar;
+    const obj = objPara;
+    const keys = Utils.isArray(path) ? path : path.split('.');
+    const keyLength = keys.length;
+    const key = keys[0];
     if (keyLength === 1) { // base case
       if (Utils.isArray(value)) {
         value = [...value];
@@ -145,7 +153,7 @@ export default class StyleBase extends Base {
       if (Utils.isNullOrEmpty(obj[key])) {
         obj[key] = {};
       }
-      StyleBase.setValue_(obj[key], keys.slice(1, keyLength), value);
+      Style.setValue(obj[key], keys.slice(1, keyLength), value);
     }
   }
 
@@ -166,7 +174,7 @@ export default class StyleBase extends Base {
       this.apply(this.layer_);
       this.updateCanvas();
       if (!Utils.isNullOrEmpty(this.layer_.getImpl().getMap())) {
-        let layerswitcher = this.layer_.getImpl().getMap().getControls('layerswitcher')[0];
+        const layerswitcher = this.layer_.getImpl().getMap().getControls('layerswitcher')[0];
         if (!Utils.isNullOrEmpty(layerswitcher)) {
           layerswitcher.render();
         }
@@ -196,15 +204,16 @@ export default class StyleBase extends Base {
     let styleImgB64;
 
     if (Utils.isNullOrEmpty(this.updateCanvasPromise_)) {
-      if (!Utils.isNullOrEmpty(this.options_.icon) && !Utils.isNullOrEmpty(this.options_.icon.src)) {
-        let image = new Image();
-        image.crossOrigin = "Anonymous";
-        let can = this.canvas_;
+      if (!Utils.isNullOrEmpty(this.options_.icon) &&
+        !Utils.isNullOrEmpty(this.options_.icon.src)) {
+        const image = new Image();
+        image.crossOrigin = 'Anonymous';
+        const can = this.canvas_;
         image.onload = () => {
-          let c = can;
-          let ctx = c.getContext("2d");
+          const c = can;
+          const ctx = c.getContext('2d');
           ctx.drawImage(this, 0, 0, 50, 50);
-        }
+        };
         image.src = this.options_.icon.src;
         styleImgB64 = this.canvas_.toDataURL('png');
       }
@@ -222,7 +231,7 @@ export default class StyleBase extends Base {
   /**
    * TODO
    */
-  serialize() {};
+  static serialize() {}
 
   /**
    * This function updates the styles's canvas
@@ -252,10 +261,10 @@ export default class StyleBase extends Base {
    * @api stable
    */
   clone() {
-    let optsClone = {};
+    const optsClone = {};
     Utils.extends(optsClone, this.options_);
-    let implClass = this.getImpl().constructor;
-    let implClone = new implClass(optsClone);
+    const implClass = this.getImpl().constructor;
+    const implClone = implClass(optsClone);
     return new this.constructor(optsClone, implClone);
   }
 }
