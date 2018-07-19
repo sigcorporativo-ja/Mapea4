@@ -1,8 +1,7 @@
+import WFSImpl from 'impl/ol/js/layer/WFS';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerBase from './Layer';
 import Vector from './Vector';
-import WFSImpl from 'impl/ol/js/layer/WFS';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 import Geom from '../geom/Geom';
@@ -20,8 +19,8 @@ export default class WFS extends Vector {
    * @api stable
    */
   constructor(userParameters, options = {}, impl = new WFSImpl(options)) {
-    //This layer is of parameters.
-    let parameters = parameter.layer(userParameters, LayerType.WFS);
+    // This layer is of parameters.
+    const parameters = parameter.layer(userParameters, LayerType.WFS);
 
     // calls the super constructor
     super(parameters, options, impl);
@@ -62,12 +61,13 @@ export default class WFS extends Vector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  static get type() {
     return LayerType.WFS;
   }
 
-  set type(newType) {
-    if (!Utils.isUndefined(newType) && !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WFS)) {
+  static set type(newType) {
+    if (!Utils.isUndefined(newType) && !Utils.isNullOrEmpty(newType) &&
+      (newType !== LayerType.WFS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WFS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
@@ -118,9 +118,9 @@ export default class WFS extends Vector {
 
   set geometry(newGeometry) {
     if (!Utils.isNullOrEmpty(newGeometry)) {
-      let parsedGeom = Geom.parse(newGeometry);
+      const parsedGeom = Geom.parse(newGeometry);
       if (Utils.isNullOrEmpty(parsedGeom)) {
-        Exception('El tipo de capa WFS <b>' + newGeometry + '</b> no se reconoce. Los tipos disponibles son: POINT, LINE, POLYGON, MPOINT, MLINE, MPOLYGON');
+        Exception(`El tipo de capa WFS <b>${newGeometry}</b> no se reconoce. Los tipos disponibles son: POINT, LINE, POLYGON, MPOINT, MLINE, MPOLYGON`);
       }
       this.getImpl().geometry = parsedGeom;
     }
@@ -164,10 +164,11 @@ export default class WFS extends Vector {
    * @function
    * @api stable
    */
-  setCQL(newCQL) {
+  setCQL(newCQLparam) {
+    let newCQL = newCQLparam;
     this.getImpl().describeFeatureType().then((describeFeatureType) => {
       if (!Utils.isNullOrEmpty(newCQL)) {
-        let geometryName = describeFeatureType.geometryName;
+        const geometryName = describeFeatureType.geometryName;
         // if exist, replace {{geometryName}} with the value geometryName
         newCQL = newCQL.replace(/{{geometryName}}/g, geometryName);
       }
@@ -210,11 +211,11 @@ export default class WFS extends Vector {
 WFS.DEFAULT_OPTIONS_STYLE = {
   fill: {
     color: 'rgba(103, 175, 19, 0.2)',
-    opacity: 0.4
+    opacity: 0.4,
   },
   stroke: {
     color: '#67af13',
-    width: 1
+    width: 1,
   },
-  radius: 5
+  radius: 5,
 };

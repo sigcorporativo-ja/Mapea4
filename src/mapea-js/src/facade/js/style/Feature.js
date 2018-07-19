@@ -5,7 +5,6 @@ import StyleBase from './Style';
  */
 
 export default class Feature extends StyleBase {
-
   /**
    * Abstract class
    *

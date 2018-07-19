@@ -3,7 +3,7 @@
  */
 export default class Window {
   static listen_() {
-    window.addEventListener("resize", e => {
+    window.addEventListener('resize', (e) => {
       Window.WIDTH = e.target.innerWidth;
       Window.HEIGHT = e.target.innerHeight;
     });

@@ -9,7 +9,6 @@ export default class Response {
    * @api stable
    */
   constructor(xmlHttpResponse) {
-
     /**
      * @public
      * @type {string}
@@ -55,21 +54,22 @@ export default class Response {
    * @api stable
    */
   parseXmlHttp(xmlHttpResponse) {
-    this.text = xmlHttpResponse['responseText'];
-    this.xml = xmlHttpResponse['responseXML'];
-    this.code = xmlHttpResponse['status'];
-    this.error = (xmlHttpResponse['statusText'] !== 'OK');
+    this.text = xmlHttpResponse.responseText;
+    this.xml = xmlHttpResponse.responseXML;
+    this.code = xmlHttpResponse.status;
+    this.error = (xmlHttpResponse.statusText !== 'OK');
 
     let headers = xmlHttpResponse.getAllResponseHeaders();
     headers = headers.split('\n');
     headers.forEach((head) => {
-      head = head.trim();
-      let headName = head.replace(/^([^\:]+)\:(.+)$/, '$1').trim();
-      let headValue = head.replace(/^([^\:]+)\:(.+)$/, '$2').trim();
+      let headParameter = head;
+      headParameter = headParameter.trim();
+      const headName = headParameter.replace(/^([^:]+):(.+)$/, '$1').trim();
+      const headValue = headParameter.replace(/^([^:]+):(.+)$/, '$2').trim();
       if (headName !== '') {
         this.headers[headName] = headValue;
       }
-    }, this);
+    });
   }
 
   /**
@@ -90,7 +90,7 @@ export default class Response {
       try {
         // it uses DOMParser for html responses
         // google XML parser in other case
-        let contentType = proxyResponse.headers['Content-Type'];
+        const contentType = proxyResponse.headers['Content-Type'];
         if ((typeof DOMParser !== 'undefined') && /text\/html/i.test(contentType)) {
           this.xml = (new DOMParser()).parseFromString(this.text, 'text/html');
         }
@@ -106,9 +106,8 @@ export default class Response {
     }
 
     // adds headers
-    Object.keys(proxyResponse.headers).forEach(head => {
+    Object.keys(proxyResponse.headers).forEach((head) => {
       this.headers[head] = proxyResponse.headers[head];
     });
   }
-
 }

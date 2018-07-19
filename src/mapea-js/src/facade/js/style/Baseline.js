@@ -6,7 +6,7 @@ export default class Baseline {}
  * @public
  * @api stable
  */
-Baseline.TOP = "top";
+Baseline.TOP = 'top';
 
 /**
  * Middle style baseline
@@ -15,7 +15,7 @@ Baseline.TOP = "top";
  * @public
  * @api stable
  */
-Baseline.MIDDLE = "middle";
+Baseline.MIDDLE = 'middle';
 
 /**
  * Bottom style baseline
@@ -24,7 +24,7 @@ Baseline.MIDDLE = "middle";
  * @public
  * @api stable
  */
-Baseline.BOTTOM = "bottom";
+Baseline.BOTTOM = 'bottom';
 
 /**
  * Alphabetic style baseline
@@ -33,7 +33,7 @@ Baseline.BOTTOM = "bottom";
  * @public
  * @api stable
  */
-Baseline.ALPHABETIC = "alphabetic";
+Baseline.ALPHABETIC = 'alphabetic';
 
 /**
  * Hanging style baseline
@@ -42,7 +42,7 @@ Baseline.ALPHABETIC = "alphabetic";
  * @public
  * @api stable
  */
-Baseline.HANGING = "hanging";
+Baseline.HANGING = 'hanging';
 
 /**
  * Ideographic style baseline
@@ -51,4 +51,4 @@ Baseline.HANGING = "hanging";
  * @public
  * @api stable
  */
-Baseline.IDEOGRAPHIC = "ideographic";
+Baseline.IDEOGRAPHIC = 'ideographic';

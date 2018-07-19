@@ -11,7 +11,10 @@
     "jsts": true,
     "chroma": true,
     "document": true,
-    "window": true
+    "window": true,
+    "DOMParser": true,
+    "XMLHttpRequest": true,
+    "Image": true
   },
   "rules": {
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],

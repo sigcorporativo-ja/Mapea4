@@ -1,12 +1,11 @@
+import StyleLineImpl from 'impl/ol/js/style/Line';
 import Simple from './Simple';
 import Utils from '../util/Utils';
-import StyleLineImpl from 'impl/ol/js/style/Line';
 
 /**
  * @namespace Line
  */
 export default class Line extends Simple {
-
   /**
    * @classdesc
    * TODO Main constructor of the class. Creates a categoryStyle
@@ -19,13 +18,14 @@ export default class Line extends Simple {
    * @param {options} userParameters parameters
    * @api stable
    */
-  constructor(options) {
+  constructor(optionsVar) {
+    let options = optionsVar;
     if (Utils.isNullOrEmpty(options)) {
       options = Line.DEFAULT_NULL;
     }
     options = Utils.extends({}, options);
 
-    let impl = new StyleLineImpl(options);
+    const impl = new StyleLineImpl(options);
     super(options, impl);
   }
 
@@ -52,10 +52,10 @@ export default class Line extends Simple {
 Line.DEFAULT_NULL = {
   fill: {
     color: 'rgba(255, 255, 255, 0.4)',
-    opacity: 0.4
+    opacity: 0.4,
   },
   stroke: {
-    color: "#3399CC",
-    width: 1.5
-  }
+    color: '#3399CC',
+    width: 1.5,
+  },
 };

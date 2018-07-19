@@ -1,10 +1,10 @@
-import Handlebars from "handlebars";
-import Utils from "./Utils";
+import Handlebars from 'handlebars';
+import Utils from './Utils';
 
 /**
  * @namespace M.template
  */
-export class Template {
+export default class Template {
   /**
    * This function gets a template by its name and
    * compiles with the specified variables
@@ -19,16 +19,16 @@ export class Template {
     let template;
     let templateVars = {};
     let parseToHtml;
-    let jsonp;
-    let scope;
+    // let jsonp;
+    // let scope;
     if (!Utils.isUndefined(options)) {
       templateVars = Utils.extends(templateVars, options.vars);
       parseToHtml = options.parseToHtml;
-      jsonp = options.jsonp;
-      scope = options.scope;
+      // jsonp = options.jsonp;
+      // scope = options.scope;
     }
-    let templateFn = Handlebars.compile(string);
-    let htmlText = templateFn.call(null, templateVars);
+    const templateFn = Handlebars.compile(string);
+    const htmlText = templateFn.call(null, templateVars);
     if (parseToHtml !== false) {
       template = Utils.stringToHtml(htmlText);
     }

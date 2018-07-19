@@ -1,12 +1,11 @@
-import Utils from "./Utils";
-import Exception from "../exception/exception";
-import M from "../Mapea";
-import Config from "configuration";
+import Config from 'configuration';
+import Utils from './Utils';
+import M from '../Mapea';
 import Response from './Response';
 /**
  * @namespace Remote
  */
-export class Remote {
+export default class Remote {
   /**
    * This function gets a resource throw a
    * HTTP GET method and checks if the request
@@ -21,7 +20,8 @@ export class Remote {
   static get(url, data, options) {
     let req;
 
-    let useProxy = ((Utils.isNullOrEmpty(options) || (options.jsonp !== false)) && M.proxy_ !== false);
+    const useProxy = ((Utils.isNullOrEmpty(options) || (options.jsonp !== false)) &&
+      M.proxy_ !== false);
 
     if (useProxy === true) {
       req = Remote.jsonp_(url, data, options);
@@ -47,7 +47,8 @@ export class Remote {
     return Remote.ajax_(url, data, Remote.method.POST);
   }
 
-  static jsonp_(url, data, options) {
+  static jsonp_(urlVar, data, options) {
+    let url = urlVar;
     if (!Utils.isNullOrEmpty(data)) {
       url = Utils.addParameters(url, data);
     }
@@ -57,15 +58,15 @@ export class Remote {
     }
 
     // creates a random name to avoid clonflicts
-    let jsonpHandlerName = Utils.generateRandom('mapea_jsonp_handler_');
+    const jsonpHandlerName = Utils.generateRandom('mapea_jsonp_handler_');
     url = Utils.addParameters(url, {
-      'callback': jsonpHandlerName
+      callback: jsonpHandlerName,
     });
 
-    let req = new Promise((success, fail) => {
-      let userCallback = success;
+    const req = new Promise((success, fail) => {
+      const userCallback = success;
       // get the promise of the script tag
-      let scriptTagPromise = new Promise((scriptTagSuccess) => {
+      const scriptTagPromise = new Promise((scriptTagSuccess) => {
         window[jsonpHandlerName] = scriptTagSuccess;
       });
       /* when the script tag was executed remove
@@ -78,7 +79,7 @@ export class Remote {
         // remove the script tag from the html
         Remote.removeScriptTag_(jsonpHandlerName);
 
-        let response = new Response();
+        const response = new Response();
         response.parseProxy(proxyResponse);
 
         userCallback(response);
@@ -91,7 +92,9 @@ export class Remote {
     return req;
   }
 
-  static ajax_(url, data, method, useProxy) {
+  static ajax_(urlVar, dataVar, method, useProxy) {
+    let url = urlVar;
+    let data = dataVar;
     if ((useProxy !== false) && (M.proxy_ === true)) {
       url = Remote.manageProxy_(url, method);
     }
@@ -107,11 +110,11 @@ export class Remote {
         xhr = new XMLHttpRequest();
       }
       else if (window.ActiveXObject) {
-        xhr = new ActiveXObject("Microsoft.XMLHTTP");
+        xhr = new ActiveXObject('Microsoft.XMLHTTP');
       }
-      xhr.onreadystatechange = function() {
-        if (xhr.readyState == 4) {
-          let response = new Response();
+      xhr.onreadystatechange = () => {
+        if (xhr.readyState === 4) {
+          const response = new Response();
           response.parseXmlHttp(xhr);
           success(response);
         }
@@ -129,23 +132,23 @@ export class Remote {
     }
 
     proxyUrl = Utils.addParameters(proxyUrl, {
-      'url': url
+      url,
     });
 
     return proxyUrl;
   }
 
   static createScriptTag_(proxyUrl, jsonpHandlerName) {
-    let scriptTag = document.createElement("script");
-    scriptTag.type = "text/javascript";
+    const scriptTag = document.createElement('script');
+    scriptTag.type = 'text/javascript';
     scriptTag.id = jsonpHandlerName;
     scriptTag.src = proxyUrl;
-    scriptTag.setAttribute("async", "");
+    scriptTag.setAttribute('async', '');
     window.document.body.appendChild(scriptTag);
   }
 
   static removeScriptTag_(jsonpHandlerName) {
-    let scriptTag = document.getElementById(jsonpHandlerName);
+    const scriptTag = document.getElementById(jsonpHandlerName);
     scriptTag.parentNode.removeChild(scriptTag);
   }
 }
