@@ -1,8 +1,8 @@
-goog.provide('P.impl.plugin.Measurebar');
+import MeasureLength from "./measurelength"
+import MeasureArea from "./measurearea"
+import MeasureClear from "./measureclear"
+import MeasureBar from "../../../js/measurebar";
 
-goog.require('P.impl.control.MeasureLength');
-goog.require('P.impl.control.MeasureArea');
-goog.require('P.impl.control.MeasureClear');
-goog.require('P.plugin.Measurebar');
+export default class MeasureBar {}
 
 // this file it is just used in order to imports

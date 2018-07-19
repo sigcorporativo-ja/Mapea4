@@ -1,6 +1,4 @@
-goog.provide('P.impl.control.MeasureArea');
-
-goog.require('P.impl.control.Measure');
+import Measure from "./measurebase";
 
 /**
  * @classdesc
@@ -11,54 +9,55 @@ goog.require('P.impl.control.Measure');
  * @extends {M.impl.control.Measure}
  * @api stable
  */
-M.impl.control.MeasureArea = function() {
-   /**
-    * Help message
-    * @private
-    * @type {string}
-    */
-   this.helpMsg_ = M.control.Measure.HELP_MESSAGE;
+export default class MeasureArea extends Measure {
 
-   /**
-    * Help message
-    * @private
-    * @type {string}
-    */
-   this.helpMsgContinue_ = M.control.MeasureArea.HELP_KEEP_MESSAGE;
+  constructor() {
+    super('Polygon');
+    /**
+     * Help message
+     * @private
+     * @type {string}
+     */
+    this.helpMsg_ = Measure.HELP_MESSAGE;
 
-   goog.base(this, 'Polygon');
-};
-goog.inherits(M.impl.control.MeasureArea, M.impl.control.Measure);
+    /**
+     * Help message
+     * @private
+     * @type {string}
+     */
+    this.helpMsgContinue_ = MeasureArea.HELP_KEEP_MESSAGE;
 
+  }
 
-/**
- * This function add tooltip with extent of the area
- * @public
- * @param {ol.geom.SimpleGeometry} geometry - Object geometry
- * @return {string} output - Indicate the extent of the area
- * @api stable
- */
-M.impl.control.MeasureArea.prototype.formatGeometry = function(geometry) {
-   var area = geometry.getArea();
-   var output;
-   if (area > 10000) {
+  /**
+   * This function add tooltip with extent of the area
+   * @public
+   * @param {ol.geom.SimpleGeometry} geometry - Object geometry
+   * @return {string} output - Indicate the extent of the area
+   * @api stable
+   */
+  formatGeometry(geometry) {
+    let area = geometry.getArea();
+    let output;
+    if (area > 10000) {
       output = (Math.round(area / 1000000 * 100) / 100) +
-         ' ' + 'km<sup>2</sup>';
-   }
-   else {
+        ' ' + 'km<sup>2</sup>';
+    } else {
       output = (Math.round(area * 100) / 100) +
-         ' ' + 'm<sup>2</sup>';
-   }
-   return output;
-};
+        ' ' + 'm<sup>2</sup>';
+    }
+    return output;
+  }
 
-/**
- * This function returns coordinates to tooltip
- * @public
- * @param {ol.geom.Geometry} geometry - Object geometry
- * @return {array} coordinates to tooltip
- * @api stable
- */
-M.impl.control.MeasureArea.prototype.getTooltipCoordinate = function(geometry) {
-   return geometry.getInteriorPoint().getCoordinates();
-};
+  /**
+   * This function returns coordinates to tooltip
+   * @public
+   * @param {ol.geom.Geometry} geometry - Object geometry
+   * @return {array} coordinates to tooltip
+   * @api stable
+   */
+  getTooltipCoordinate(geometry) {
+    return geometry.getInteriorPoint().getCoordinates();
+  }
+
+}

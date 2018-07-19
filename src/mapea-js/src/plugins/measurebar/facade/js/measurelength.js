@@ -1,6 +1,5 @@
-goog.provide('P.control.MeasureLength');
-
-goog.require('P.control.Measure');
+import Measure from "./measurebase";
+import MeasureLenghtImpl from "../../impl/ol/js/measurelength";
 
 /**
  * @classdesc
@@ -11,37 +10,40 @@ goog.require('P.control.Measure');
  * @extends {M.control.Measure}
  * @api stable
  */
-M.control.MeasureLength = (function() {
-   // checks if the implementation can create WMC layers
-   if (M.utils.isUndefined(M.impl.control.MeasureLength)) {
-      M.exception('La implementación usada no puede crear controles MeasureLength');
-   }
 
-   // implementation of this control
-   var impl = new M.impl.control.MeasureLength();
+export default class MeasureLength extends Measure {
 
-   // calls the super constructor
-   goog.base(this, impl, M.control.MeasureLength.TEMPLATE);
-});
-goog.inherits(M.control.MeasureLength, M.control.Measure);
+  constructor() {
+    // implementation of this control
+    let impl = new MeasureLengthImpl();
 
-/**
- * This function checks if an object is equals
- * to this control
- *
- * @public
- * @function
- * @param {*} obj - Object to compare
- * @returns {boolean} equals - Returns if they are equal or not
- * @api stable
- */
-M.control.MeasureLength.prototype.equals = function(obj) {
-   var equals = false;
-   if (obj instanceof M.control.MeasureLength) {
+    // calls the super constructor
+    super(impl, MeasureLength.TEMPLATE);
+
+    // checks if the implementation can create WMC layers
+    if (M.utils.isUndefined(MeasureLengthImpl)) {
+      Exception('La implementación usada no puede crear controles MeasureLength');
+    }
+  }
+
+  /**
+   * This function checks if an object is equals
+   * to this control
+   *
+   * @public
+   * @function
+   * @param {*} obj - Object to compare
+   * @returns {boolean} equals - Returns if they are equal or not
+   * @api stable
+   */
+  equals(obj) {
+    let equals = false;
+    if (obj instanceof MeasureLength) {
       equals = (this.name === obj.name);
-   }
-   return equals;
-};
+    }
+    return equals;
+  }
+}
 
 /**
  * Template for this controls
@@ -50,7 +52,7 @@ M.control.MeasureLength.prototype.equals = function(obj) {
  * @public
  * @api stable
  */
-M.control.MeasureLength.TEMPLATE = 'measurelength.html';
+MeasureLength.TEMPLATE = 'measurelength.html';
 
 /**
  * Help message
@@ -59,4 +61,4 @@ M.control.MeasureLength.TEMPLATE = 'measurelength.html';
  * @public
  * @api stable
  */
-M.control.MeasureLength.HELP_KEEP_MESSAGE = 'Click para continuar dibujando la línea';
+MeasureLength.HELP_KEEP_MESSAGE = 'Click para continuar dibujando la línea';
