@@ -1,4 +1,4 @@
-import Object from 'facade/js/Object';
+import MObject from 'facade/js/Object';
 import Remote from 'facade/js/util/Remote';
 import Utils from 'facade/js/util/Utils';
 import FacadeFeature from 'facade/js/feature/Feature';
@@ -7,7 +7,7 @@ import Exception from 'facade/js/exception/exception';
 /**
  * @namespace M.impl.control
  */
-export default class KML extends Object {
+export default class KML extends MObject {
   /**
    * @classdesc TODO
    * control

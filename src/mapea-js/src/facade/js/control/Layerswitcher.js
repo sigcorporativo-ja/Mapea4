@@ -7,7 +7,7 @@ import LayerType from '../layer/Type';
 import Map from '../Map';
 import Vector from '../layer/Vector';
 import StylePoint from '../style/Point';
-import LayerSwitcherImpl from 'impl/ol/js/control/Layerswitcher';
+import LayerSwitcherImpl from 'impl/control/Layerswitcher';
 import EvtManager from '../event/Manager';
 import layerswitcherTemplate from "templates/layerswitcher.html";
 

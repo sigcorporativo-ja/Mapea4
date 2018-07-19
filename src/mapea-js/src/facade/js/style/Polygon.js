@@ -1,4 +1,4 @@
-import PolygonImpl from 'impl/ol/js/style/Polygon';
+import PolygonImpl from 'impl/style/Polygon';
 import Simple from './Simple';
 import Utils from '../util/Utils';
 

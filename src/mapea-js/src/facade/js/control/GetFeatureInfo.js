@@ -2,7 +2,7 @@ import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import GetFeatureInfoImpl from 'impl/ol/js/control/GetFeatureInfo';
+import GetFeatureInfoImpl from 'impl/control/GetFeatureInfo';
 import getfeatureinfoTemplate from "templates/getfeatureinfo.html";
 export default class GetFeatureInfo extends ControlBase {
   /**

@@ -1,15 +1,15 @@
-import Object from "facade/js/Object";
+import MObject from "facade/js/Object";
 import Utils from "facade/js/util/Utils";
 import Config from "Configuration";
 import Exception from "facade/js/exception/Exception";
 import LayerType from "facade/js/layer/Type";
-import WMS from "facade/js/layer/WMS";
+// import WMS from "facade/js/layer/WMS";
 import WFS from "facade/js/layer/WFS";
 import WMC from "facade/js/layer/WMC";
 import Panzoombar from "facade/js/control/Panzoombar";
 import Control from "facade/js/control/Control";
 
-export default class Map extends Object {
+export default class Map extends MObject {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Map
@@ -204,7 +204,8 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = wmcLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
         foundLayers = foundLayers.concat(wmcLayers.filter((wmcLayer) => {
           let layerMatched = true;
@@ -222,7 +223,8 @@ export default class Map extends Object {
             if (!Utils.isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wmcLayer.name));
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
@@ -298,7 +300,8 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = kmlLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
         let filteredKMLLayers = kmlLayers.filter(kmlLayer => {
           let layerMatched = true;
@@ -320,7 +323,8 @@ export default class Map extends Object {
             if (!Utils.isNullOrEmpty(filterLayer.extract)) {
               layerMatched = (layerMatched && (filterLayer.extract === kmlLayer.extract));
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
@@ -404,7 +408,8 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = wmsLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
         let filteredWMSLayers = wmsLayers.filter(wmsLayer => {
           let layerMatched = true;
@@ -413,7 +418,8 @@ export default class Map extends Object {
             // if instanceof WMS check if it is the same
             if (filterLayer instanceof WMS) {
               layerMatched = (filterLayer === wmsLayer);
-            } else {
+            }
+            else {
               // type
               if (!Utils.isNullOrEmpty(filterLayer.type)) {
                 layerMatched = (layerMatched && (filterLayer.type === wmsLayer.type));
@@ -447,7 +453,8 @@ export default class Map extends Object {
                 layerMatched = (layerMatched && (filterLayer.version === wmsLayer.version));
               }
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
@@ -487,7 +494,8 @@ export default class Map extends Object {
               this.updateResolutionsFromBaseLayer();
             }
             layer.getImpl().setZIndex(0);
-          } else {
+          }
+          else {
             let zIndex = this.layers_.length + layer.getImpl().getZIndex();
             layer.getImpl().setZIndex(zIndex);
           }
@@ -539,7 +547,8 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = wfsLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
         let filteredWFSLayers = wfsLayers.filter(wfsLayer => {
           let layerMatched = true;
@@ -581,7 +590,8 @@ export default class Map extends Object {
             if (!Utils.isNullOrEmpty(filterLayer.version)) {
               layerMatched = (layerMatched && (filterLayer.version === wfsLayer.version));
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
@@ -659,7 +669,8 @@ export default class Map extends Object {
 
     if (filters.length === 0) {
       foundLayers = wmtsLayers;
-    } else {
+    }
+    else {
       filters.forEach(filterLayer => {
         // TODO ERROR DE RECURSIVIDAD: let l = map.getLayers(); map.getWMS(l);
         let filteredWMTSLayers = wmtsLayers.filter(wmtsLayer => {
@@ -686,7 +697,8 @@ export default class Map extends Object {
             if (!Utils.isNullOrEmpty(filterLayer.legend)) {
               layerMatched = (layerMatched && (filterLayer.legend === wmtsLayer.legend));
             }
-          } else {
+          }
+          else {
             layerMatched = false;
           }
           return layerMatched;
@@ -811,7 +823,8 @@ export default class Map extends Object {
     }
     if (filters.length === 0) {
       foundControls = this.controls_;
-    } else {
+    }
+    else {
       filters.forEach((filterControl) => {
         foundControls = foundControls.concat(this.controls_.filter((control) => {
           let controlMatched = false;
@@ -819,9 +832,11 @@ export default class Map extends Object {
           if (!Utils.includes(foundControls, control)) {
             if (Utils.isString(filterControl)) {
               controlMatched = (filterControl === control.name);
-            } else if (filterControl instanceof Control) {
+            }
+            else if (filterControl instanceof Control) {
               controlMatched = (filterControl === control);
-            } else if (Utils.isObject(filterControl)) {
+            }
+            else if (Utils.isObject(filterControl)) {
               controlMatched = (filterControl.name === control.name);
             }
           }
@@ -952,7 +967,8 @@ export default class Map extends Object {
             [bbox[0], bbox[1]],
             [bbox[2], bbox[3]]
          ];
-    } else if (Utils.isObject(bbox)) {
+    }
+    else if (Utils.isObject(bbox)) {
       extent = [
             [bbox.x.min, bbox.y.min],
             [bbox.x.max, bbox.y.max]
@@ -1058,7 +1074,8 @@ export default class Map extends Object {
     let lCenter;
     try {
       lCenter = this.getMapImpl().getCenter();
-    } catch (err) {
+    }
+    catch (err) {
       // if map is not loaded throw an error
     }
     if (!Utils.isNullOrEmpty(lCenter)) {

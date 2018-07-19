@@ -2,7 +2,7 @@ import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import LocationImpl from 'impl/ol/js/control/Location';
+import LocationImpl from 'impl/control/Location';
 import locationTemplate from "templates/location.html";
 
 export default class Location extends ControlBase {

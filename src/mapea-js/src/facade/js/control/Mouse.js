@@ -2,7 +2,7 @@ import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import MouseImpl from 'impl/ol/js/control/Mouse';
+import MouseImpl from 'impl/control/Mouse';
 import mouseTemplate from "templates/mouse.html";
 
 export default class Mouse extends ControlBase {

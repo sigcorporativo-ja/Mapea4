@@ -336,7 +336,7 @@ export default class Choropleth extends Style {
           if (!Utils.isArray(scaleColor)) {
             scaleColor = [scaleColor];
           }
-          let geometryType = Utils.geometryType(this.layer_);
+          let geometryType = Utils.getGeometryType(this.layer_);
           const generateStyle = (scale, defaultStyle) => (scale.map(c => defaultStyle(c)));
           switch (geometryType) {
             case GeomGeoJSON.POINT:

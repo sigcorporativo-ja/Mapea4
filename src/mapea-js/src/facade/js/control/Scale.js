@@ -2,7 +2,7 @@ import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import ScaleImpl from 'impl/ol/js/control/Scale';
+import ScaleImpl from 'impl/control/Scale';
 import scaleTemplate from "templates/scale.html"
 
 export default class Scale extends ControlBase {

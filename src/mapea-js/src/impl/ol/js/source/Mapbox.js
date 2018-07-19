@@ -33,7 +33,8 @@ export default class Mapbox extends ol.source.OSM {
     let attributions;
     if (this.options.attributions !== undefined) {
       attributions = this.options.attributions;
-    } else {
+    }
+    else {
       attributions = [Mapbox.ATTRIBUTION];
     }
 
@@ -63,16 +64,15 @@ export default class Mapbox extends ol.source.OSM {
     });
     this.urls = [url];
   }
-
-  /**
-   * The attribution containing a link to the OpenStreetMap Copyright and License
-   * page.
-   * @const
-   * @type {ol.Attribution}
-   * @api
-   */
-
-  Mapbox.ATTRIBUTION = new ol.Attribution({
-    html: '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a>'
-  });
 }
+
+/**
+ * The attribution containing a link to the OpenStreetMap Copyright and License
+ * page.
+ * @const
+ * @type {ol.Attribution}
+ * @api
+ */
+// Mapbox.ATTRIBUTION = new ol.Attribution({
+//   html: '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a>'
+// });

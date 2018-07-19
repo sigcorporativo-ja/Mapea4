@@ -20,7 +20,7 @@ export default class EventsManager {
      * @private
      * @type {Object}
      */
-    return this.events_ = {};
+    this.events_ = {};
   }
 
   /**
@@ -38,7 +38,7 @@ export default class EventsManager {
       if (this.indexOf(eventType, listener, optThis) === -1) {
         let EventsManagerListener = new EventListener(listener, optThis, once);
         this.events_[eventType].push(EventsManagerListener);
-        return EventsManagerListener.eventKey();
+        return EventsManagerListener.getEventKey();
       }
     }
   }
@@ -70,10 +70,10 @@ export default class EventsManager {
   fire(eventType, args) {
     let EventsManagerListeners = [].concat(this.events_[eventType]);
     if (!Utils.isNullOrEmpty(EventsManagerListeners)) {
-      EventsManagerListeners.forEach(EventsManagerListener => {
-        EventsManagerListener.fire(args);
-        if (EventsManagerListener.isOnce() === true) {
-          this.remove(eventType, EventListener.getEventKey());
+      EventsManagerListeners.forEach(EventManagerListener => {
+        EventManagerListener.fire(args);
+        if (EventManagerListener.isOnce() === true) {
+          this.remove(eventType, EventManagerListener.getEventKey());
         }
       });
     }

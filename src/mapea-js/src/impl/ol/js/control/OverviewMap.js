@@ -79,18 +79,18 @@ export default class OverviewMap extends ol.control.OverviewMap {
 
     const button = this.element.querySelector('button');
     if (this.collapsed_ === true) {
-      if (button.classlist.contains(this.collapsedButtonClass_)) {
-        button.classlist.remove(this.collapsedButtonClass_);
+      if (button.classList.contains(this.collapsedButtonClass_)) {
+        button.classList.remove(this.collapsedButtonClass_);
       }
       else {
-        button.classlist.add(this.collapsedButtonClass_);
+        button.classList.add(this.collapsedButtonClass_);
       }
     }
-    else if (button.classlist.contains(this.openedButtonClass_)) {
-      button.classlist.remove(this.openedButtonClass_);
+    else if (button.classList.contains(this.openedButtonClass_)) {
+      button.classList.remove(this.openedButtonClass_);
     }
     else {
-      button.classlist.add(this.openedButtonClass_);
+      button.classList.add(this.openedButtonClass_);
     }
 
     map.getMapImpl().addControl(this);

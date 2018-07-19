@@ -1,4 +1,4 @@
-import WMTSImpl from 'impl/ol/js/layer/WMTS';
+import WMTSImpl from 'impl/layer/WMTS';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';

@@ -1,5 +1,5 @@
 import ClusteredFeature from 'facade/js/feature/Clustered';
-import Cluster from 'facade/js/layer/Cluster';
+import Cluster from 'facade/js/style/Cluster';
 import Utils from 'facade/js/util/Utils';
 import AnimatedCluster from '../layer/AnimatedCluster';
 

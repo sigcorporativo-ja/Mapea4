@@ -2,7 +2,7 @@ import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import ScalelineImpl from 'impl/ol/js/control/ScaleLine';
+import ScalelineImpl from 'impl/control/ScaleLine';
 import scalelineTemplate from "templates/scaleline.html";
 
 export default class ScaleLine extends ControlBase {

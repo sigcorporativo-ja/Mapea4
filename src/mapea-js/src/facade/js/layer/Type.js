@@ -31,13 +31,14 @@ export default class LayerType {
    * @param {string} rawType the type to be parsed
    */
   static know(type) {
-    let knowTypes = [LayerType.WMC,
-         LayerType.KML,
-         LayerType.WMS,
-         LayerType.WFS,
-         LayerType.WMTS,
-         LayerType.MBtiles
-      ];
+    const knowTypes = [
+      LayerType.WMC,
+      LayerType.KML,
+      LayerType.WMS,
+      LayerType.WFS,
+      LayerType.WMTS,
+      LayerType.MBtiles,
+    ];
     return (knowTypes.indexOf(LayerType.parse(type)) !== -1);
   }
 }

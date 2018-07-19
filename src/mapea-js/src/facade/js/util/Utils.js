@@ -1,14 +1,14 @@
 import WKT from '../geom/WKT';
-import StylePoint from '../style/Point';
-import StyleLine from '../style/Line';
-import StylePolygon from '../style/Polygon';
+// import StylePoint from '../style/Point';
+// import StyleLine from '../style/Line';
+// import StylePolygon from '../style/Polygon';
 import M from "../Mapea";
+import './polyfills';
 
 /**
  * @namespace Utils
  */
-export class Utils {
-
+export default class Utils {
   /**
    * This function checks if the obj is null or empty
    *
@@ -143,7 +143,7 @@ export class Utils {
    * @function
    * @api stable
    */
-  isUndefined(obj) {
+  static isUndefined(obj) {
     return (typeof obj === 'undefined');
   }
 
@@ -354,7 +354,7 @@ export class Utils {
    * @api stable
    */
   static fillResolutions(minResolution, maxResolution, numZoomLevels) {
-    let resolutions = new Array(numZoomLevels);
+    var resolutions = new Array(numZoomLevels);
 
     minResolution = Number.parseFloat(minResolution);
     maxResolution = Number.parseFloat(maxResolution);
@@ -363,20 +363,19 @@ export class Utils {
     // the base for exponential scaling that starts at
     // maxResolution and ends at minResolution in numZoomLevels
     // steps.
-    let base = 2;
+    var base = 2;
     if (!Number.isNaN(minResolution)) {
       base = Math.pow((maxResolution / minResolution), (1 / (numZoomLevels - 1)));
     }
-    numZoomLevels.forEach(value => {
+    for (var i = 0; i < numZoomLevels; i++) {
       resolutions[i] = maxResolution / Math.pow(base, i);
-    });
+    }
     //sort resolutions array descendingly
-    resolutions.sort((a, b) => {
+    resolutions.sort(function(a, b) {
       return (b - a);
     });
     return resolutions;
-  }
-
+  };
   /**
    * This function calculates the resolution
    * for a provided scale
@@ -884,7 +883,7 @@ export class Utils {
    */
   static generateStyleLayer(options, layer) {
     let style;
-    switch (Utils.geometryType(layer)) {
+    switch (Utils.getGeometryType(layer)) {
       case "Point":
       case "MultiPoint":
         style = new StylePoint(options);

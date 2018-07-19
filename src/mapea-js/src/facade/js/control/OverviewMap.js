@@ -2,7 +2,7 @@ import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import OverviewMapImpl from 'impl/ol/js/control/OverviewMap';
+import OverviewMapImpl from 'impl/control/OverviewMap';
 import overviewmapTemplate from "templates/overviewmap.html";
 
 export default class OverviewMap extends ControlBase {

@@ -153,6 +153,8 @@ export default class Remote {
   }
 }
 
+
+Remote.method = {};
 /**
  * HTTP method GET
  * @const

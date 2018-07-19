@@ -9,8 +9,7 @@ import Utils from './util/Utils';
  * @constructor
  * @api stable
  */
-export default class Object {
-
+export default class MObject {
   constructor() {
     /**
      * Callback for events managed by the

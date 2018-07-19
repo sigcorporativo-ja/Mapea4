@@ -1,5 +1,3 @@
-goog.provide('ol.style.FontSymbol');
-
 /*	Copyright (c) 2015 Jean-Marc VIGLINO,
 	released under the CeCILL-B license (French BSD license)
 	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
@@ -22,7 +20,7 @@ goog.provide('ol.style.FontSymbol');
  * @implements {ol.structs.IHasChecksum}
  * @api
  */
-ol.style.FontSymbol = function(options = {}) {
+export default ol.style.FontSymbol = function(options = {}) {
   var strokeWidth = 0;
   if (options.stroke) strokeWidth = options.stroke.getWidth();
   ol.style.RegularShape.call(this, {

@@ -1,6 +1,6 @@
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import * as parameter from '../parameter/parameter';
+import * as parserParameter from '../parameter/parameter';
 import Base from '../Base';
 import Config from 'configuration';
 
@@ -20,8 +20,8 @@ export default class LayerBase extends Base {
     // calls the super constructor
     super(impl);
 
-    //This layer is of parameters.
-    let parameter = parameter.layer(userParameters);
+    // This layer is of parameters.
+    const parameter = parserParameter.layer(userParameters);
 
     /**
      * @private
@@ -75,29 +75,29 @@ export default class LayerBase extends Base {
    * layer
    */
   get url() {
-    return this.impl().url;
+    return this.getImpl().url;
   }
 
   set url(newUrl) {
-    this.impl().url = newUrl;
+    this.getImpl().url = newUrl;
   }
 
   /**
    * 'name' the layer name
    */
   get name() {
-    return this.impl().name;
+    return this.getImpl().name;
   }
 
   set name(newName) {
-    this.impl().name = newName;
+    this.getImpl().name = newName;
   }
 
   /**
    * 'transparent' the layer transparence
    */
   get transparent() {
-    return this.impl().transparent;
+    return this.getImpl().transparent;
   }
 
   set transparent(newTransparent) {

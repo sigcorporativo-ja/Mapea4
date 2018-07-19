@@ -69,7 +69,7 @@ export default class LayerSwitcher extends Control {
         evt.stopPropagation();
         const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
         // checkbox
-        if (evt.target.classlist.contains('m-check')) {
+        if (evt.target.classList.contains('m-check')) {
           /* sets the layer visibility only if
              the layer is not base layer and visible */
           if (layer.transparent === true || !layer.isVisible()) {
@@ -81,11 +81,11 @@ export default class LayerSwitcher extends Control {
           }
         }
         // range
-        else if (evt.target.classlist.contains('m-layerswitcher-transparency')) {
+        else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
           layer.setOpacity(evt.target.value);
         }
         // remove span
-        else if (evt.target.classlist.contains('m-layerswitcher-remove')) {
+        else if (evt.target.classList.contains('m-layerswitcher-remove')) {
           this.facadeMap_.removeLayers(layer);
         }
       }

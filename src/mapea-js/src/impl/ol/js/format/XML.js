@@ -1,7 +1,7 @@
 import Utils from 'facade/js/util/Utils';
 import Exception from 'facade/js/exception/exception';
 
-export default class XML extends ol.format.XML {
+export default class XML {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC formater
@@ -13,7 +13,7 @@ export default class XML extends ol.format.XML {
    * @api stable
    */
   constructor(options = {}) {
-    super();
+    // super();
     /**
      * Prefix on the root node that maps to the context namespace URI
      * @private

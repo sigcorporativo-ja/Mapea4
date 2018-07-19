@@ -13,7 +13,7 @@ export default class Circle extends ol.style.Circle {
    */
   constructor(options = {}) {
     // super call
-    ol.style.Circle.call(this, {
+    super({
       points: Infinity,
       fill: options.fill,
       radius: options.radius,

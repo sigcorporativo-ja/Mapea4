@@ -68,12 +68,18 @@ export default class View extends ol.View {
     this.set('resolutions', resolutions);
     this.maxResolution_ = resolutions[0];
     this.minResolution_ = resolutions[resolutions.length - 1];
-    this.constraints_.resolution = ol.ResolutionConstraint.createSnapToResolutions(resolutions);
-
+    // this.constraints_.resolution = View.createSnapToResolutions(resolutions);
     // updates zoom
-    this.setZoom(this.userZoom_);
-
     // updates center
     this.setCenter(this.getCenter());
+    this.applyOptions_({
+      minZoom: this.minZoom_,
+      resolutions,
+      zoomFactor: this.zoomFactor_,
+      minResolution: this.minResolution_,
+      maxResolution: this.maxResolution_,
+      projection: this.projection_,
+    });
+    // this.setZoom(this.userZoom_);
   }
 }

@@ -2,11 +2,13 @@ import Position from './Position';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Base from '../Base';
-import Object from '../Object';
+import MObject from '../Object';
 import EvtManager from '../event/Manager';
-import panelTemplate from "templates/panel.html";
+import panelTemplate from "templates/panel";
+import ControlBase from '../control/Control';
+import Template from '../util/Template';
 
-export default class Panel extends Object {
+export default class Panel extends MObject {
   /**
    * @classdesc
    * TODO
@@ -199,6 +201,7 @@ export default class Panel extends Object {
     if (!Utils.isNullOrEmpty(this.tooltip_)) {
       this.element_.setAttribute("title", this.tooltip_);
     }
+    const html = Template.compile(panelTemplate);
     this.buttonPanel_ = html.querySelector('button.m-panel-btn');
     if (!Utils.isNullOrEmpty(this.className_)) {
       this.className_.split(/\s+/).forEach(className => {
@@ -214,7 +217,7 @@ export default class Panel extends Object {
     }
 
     if (this.collapsible_ !== true) {
-      html.classlist.add('no-collapsible');
+      html.classList.add('no-collapsible');
     }
 
     this.controls_Container = html.querySelector('div.m-panel-controls');
@@ -241,20 +244,12 @@ export default class Panel extends Object {
    * @function
    */
   collapse_(html) {
-    html.classlist.remove('opened');
-    this.buttonPanel_.classlist.remove(this.openedButtonClass_);
-    html.classlist.add('collapsed');
-    this.buttonPanel_.classlist.add(this.collapsed_ButtonClass);
+    html.classList.remove('opened');
+    this.buttonPanel_.classList.remove(this.openedButtonClass_);
+    html.classList.add('collapsed');
+    this.buttonPanel_.classList.add(this.collapsed_ButtonClass);
     this.collapsed_ = true;
-    this.fire(EvtManager.
-      /**
-       * Template for this controls - button
-       * @const
-       * @type {string}
-       * @public
-       * @api stable
-       */
-      Panel.TEMPLATE = 'panel.html'; HIDE);
+    this.fire(EvtManager.HIDE);
   }
 
   /**
@@ -264,10 +259,10 @@ export default class Panel extends Object {
    * @function
    */
   open_(html) {
-    html.classlist.remove('collapsed');
-    this.buttonPanel_.classlist.remove(this.collapsed_ButtonClass);
-    html.classlist.add('opened');
-    this.buttonPanel_.classlist.add(this.openedButtonClass_);
+    html.classList.remove('collapsed');
+    this.buttonPanel_.classList.remove(this.collapsed_ButtonClass);
+    html.classList.add('opened');
+    this.buttonPanel_.classList.add(this.openedButtonClass_);
     this.collapsed_ = false;
     this.fire(EvtManager.SHOW);
   }
@@ -393,11 +388,11 @@ export default class Panel extends Object {
   removeControl_(controlsParam) {
     let controls = this.map_.controls(controlsParam);
     controls.forEach(control => {
-        let index = this.controls_.indexOf(control);
-        if (index !== -1) {
-          this.controls_.splice(index, 1);
-        });
-    }
+      let index = this.controls_.indexOf(control);
+      if (index !== -1) {
+        this.controls_.splice(index, 1);
+      }
+    });
   }
 
   /**
@@ -408,9 +403,9 @@ export default class Panel extends Object {
    * @param {array<M.Control>} controls
    * @api stable
    */
-  removeClassName = function(className) {
+  removeClassName(className) {
     if (!Utils.isNullOrEmpty(this.element_)) {
-      this.element_.classlist.remove(className);
+      this.element_.classList.remove(className);
     }
     else {
       this.className_ = this.className_.replace(new RegExp('\s*' + className + '\s*'), '');
@@ -427,7 +422,7 @@ export default class Panel extends Object {
    */
   addClassName(className) {
     if (!Utils.isNullOrEmpty(this.element_)) {
-      this.element_.classlist.add(className);
+      this.element_.classList.add(className);
     }
     else {
       this.className_ = this.className_.concat(' ').concat(className);
@@ -443,7 +438,7 @@ export default class Panel extends Object {
    * @api stable
    */
   moveControlView_(control) {
-    let controlElem = control.element();
+    let controlElem = control.getElement();
     if (!Utils.isNullOrEmpty(this.controls_Container)) {
       this.controls_Container.appendChild(controlElem);
     }

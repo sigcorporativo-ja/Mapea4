@@ -56,7 +56,7 @@ export default class Mapbox extends Layer {
       // if this layer is base then it hides all base layers
       if ((visibility === true) && (this.transparent !== true)) {
         // hides all base layers
-        this.map.getBaseLayers().forEach(layer => {
+        this.map.getBaseLayers().forEach((layer) => {
           if (!layer.equals(this) && layer.isVisible()) {
             layer.setVisible(false);
           }
@@ -68,7 +68,7 @@ export default class Mapbox extends Layer {
         }
 
         // updates resolutions and keep the bbox
-        let oldBbox = this.map.getBbox();
+        const oldBbox = this.map.getBbox();
         this.map.getImpl().updateResolutionsFromBaseLayer();
         if (!Utils.isNullOrEmpty(oldBbox)) {
           this.map.setBbox(oldBbox);
@@ -93,10 +93,10 @@ export default class Mapbox extends Layer {
 
     this.ol3Layer = new ol.layer.Tile({
       source: new SourceMapbox({
-        'url': this.url,
-        'name': this.name,
-        'accessToken': this.accessToken
-      })
+        url: this.url,
+        name: this.name,
+        accessToken: this.accessToken,
+      }),
     });
 
     this.map.getMapImpl().addLayer(this.ol3Layer);

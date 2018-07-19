@@ -1,6 +1,6 @@
 export default class GeoJSON {
-  get type() {
-    return GeoJSON.type_;
+  static get type() {
+    return GeoJSON.geojsonType;
   }
 }
 
@@ -11,12 +11,12 @@ export default class GeoJSON {
  * @public
  * @api stable
  */
-GeoJSON.type_ = {
-  POINT: "Point",
-  MULTI_POINT: "MultiPoint",
-  LINE_STRING: "LineString",
-  MULTI_LINE_STRING: "MultiLineString",
-  POLYGON: "Polygon",
-  MULTI_POLYGON: "MultiPolygon",
-  GEOMETRY_COLLECTION: "GeometryCollection"
+GeoJSON.geojsonType = {
+  POINT: 'Point',
+  MULTI_POINT: 'MultiPoint',
+  LINE_STRING: 'LineString',
+  MULTI_LINE_STRING: 'MultiLineString',
+  POLYGON: 'Polygon',
+  MULTI_POLYGON: 'MultiPolygon',
+  GEOMETRY_COLLECTION: 'GeometryCollection',
 };

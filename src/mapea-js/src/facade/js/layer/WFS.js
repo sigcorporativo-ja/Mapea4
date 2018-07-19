@@ -1,4 +1,4 @@
-import WFSImpl from 'impl/ol/js/layer/WFS';
+import WFSImpl from 'impl/layer/WFS';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Vector from './Vector';

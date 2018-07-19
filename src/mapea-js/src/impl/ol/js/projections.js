@@ -69,7 +69,8 @@ export const addProjections = () => {
     let olProjections = projection.codes.map(code => {
       return new ol.proj.Projection({
         code: code,
-        extent: projection.extent
+        extent: projection.extent,
+        units: 'm' // TODO PARAMETRICE
       });
     });
     ol.proj.addEquivalentProjections(olProjections);

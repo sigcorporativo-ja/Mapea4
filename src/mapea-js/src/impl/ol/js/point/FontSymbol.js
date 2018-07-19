@@ -1,7 +1,8 @@
+import OLFontSymbol from '../ext/fontsymbol';
 /**
  * @namespace M.impl.style.PointFontSymbol
  */
-export default class FontSymbol extends ol.style.FontSymbol {
+export default class FontSymbol extends OLFontSymbol {
   /**
    * @classdesc
    * chart style for vector features

@@ -2,7 +2,7 @@ import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import PanzoombarImpl from 'impl/ol/js/control/Panzoombar';
+import PanzoombarImpl from 'impl/control/Panzoombar';
 import panzoombarTemplate from "templates/panzoombar.html";
 
 export default class Panzoombar extends ControlBase {

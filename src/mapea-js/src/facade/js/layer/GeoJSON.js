@@ -1,11 +1,11 @@
+import GeoJSONImpl from 'impl/layer/GeoJSON';
 import LayerVector from './Vector';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import GeoJSONImpl from 'impl/ol/js/layer/GeoJSON';
 import StyleCluster from '../style/Cluster';
 import LayerType from './Type';
 import GeomGeojson from '../geom/GeoJSON';
-import EvtManager from "../event/Manager";
+import EvtManager from '../event/Manager';
 
 export default class GeoJSON extends LayerVector {
   /**
@@ -20,13 +20,12 @@ export default class GeoJSON extends LayerVector {
    * @api stable
    */
   constructor(parameters, options = {}) {
-
     /**
      * Implementation of this layer
      * @public
      * @type {M.impl.layer.GeoJSON}
      */
-    let impl = new GeoJSONImpl(parameters, options);
+    const impl = new GeoJSONImpl(parameters, options);
 
     // calls the super constructor
     super(options, impl);
@@ -59,19 +58,19 @@ export default class GeoJSON extends LayerVector {
 
       // extract
       this.extract = parameters.extract;
-      //crs
+      // crs
       if (!Utils.isNullOrEmpty(parameters.crs)) {
         if (Utils.isNullOrEmpty(this.source)) {
           this.source = {
-            "type": "FeatureCollection",
-            "features": []
+            type: 'FeatureCollection',
+            features: [],
           };
         }
-        this.source['crs'] = {
-          "type": "EPSG",
-          "properties": {
-            "code": parameters.crs
-          }
+        this.source.crs = {
+          type: 'EPSG',
+          properties: {
+            code: parameters.crs,
+          },
         };
       }
     }
@@ -90,13 +89,6 @@ export default class GeoJSON extends LayerVector {
    */
   get type() {
     return LayerType.GeoJSON;
-  }
-
-  set type(newType) {
-    if (!Utils.isUndefined(newType) &&
-      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.GeoJSON)) {
-      Exception('El tipo de capa debe ser \''.concat(LayerType.GeoJSON).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
-    }
   }
 
   /**
@@ -211,7 +203,7 @@ GeoJSON.DEFAULT_OPTIONS_STYLE = {
     opacity: 0.4
   },
   stroke: {
-    color: "#3399CC",
+    color: '#3399CC',
     width: 1.5
   },
   radius: 5,

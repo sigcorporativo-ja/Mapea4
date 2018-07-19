@@ -1,5 +1,5 @@
 import Utils from '../util/Utils';
-import Exception from '../exception/Exception';
+import Exception from '../exception/exception';
 
 /**
  * This function parses a container parameter in a legible

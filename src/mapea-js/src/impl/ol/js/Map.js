@@ -1,4 +1,4 @@
-import Object from 'facade/js/Object';
+import MObject from 'facade/js/Object';
 import FacadePanzoombar from 'facade/js/control/Panzoombar';
 import LayerType from 'facade/js/layer/Type';
 import Control from 'facade/js/control/Control';
@@ -9,8 +9,10 @@ import Exception from 'facade/js/exception/exception';
 import Utils from 'facade/js/util/Utils';
 import View from './View';
 import EnvolvedExtent from './util/EnvolvedExtent';
+import 'impl-assets/css/ol3.css';
+import 'impl-assets/css/custom.css';
 
-export default class Map extends Object {
+export default class Map extends MObject {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Map
@@ -102,10 +104,10 @@ export default class Map extends Object {
     this.resolutionsBaseLayer_ = false;
 
     // gets the renderer
-    let renderer = ol.renderer.Type.CANVAS;
-    if (!Utils.isNullOrEmpty(this.options_.renderer)) {
-      renderer = this.options_.renderer;
-    }
+    // let renderer = ol.renderer.Type.CANVAS;
+    // if (!Utils.isNullOrEmpty(this.options_.renderer)) {
+    //   renderer = this.options_.renderer;
+    // }
 
     /**
      * Implementation of this map
@@ -115,10 +117,10 @@ export default class Map extends Object {
     this.map_ = new ol.Map({
       controls: [],
       target: div.id,
-      renderer,
+      // renderer,
       view: new View(),
     });
-    this.map_.on('singleclick', this.onMapClick_, this);
+    this.map_.on('singleclick', () => this.onMapClick_);
     this.map_.addInteraction(new ol.interaction.Interaction({
       handleEvent: (e) => {
         if (e.type === 'pointermove') {
@@ -923,7 +925,7 @@ export default class Map extends Object {
    */
   getUnknowLayers_(filters) {
     let foundLayers = [];
-    let filtersVar;
+    let filtersVar = filters;
 
     // get all wmsLayers
     const unknowLayers = this.layers_.filter((layer) => {
@@ -931,11 +933,11 @@ export default class Map extends Object {
     });
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (Utils.isNullOrEmpty(filtersVar)) {
       filtersVar = [];
     }
-    if (!Utils.isArray(filters)) {
-      filtersVar = [filters];
+    if (!Utils.isArray(filtersVar)) {
+      filtersVar = [filtersVar];
     }
 
     if (filtersVar.length === 0) {
@@ -1053,7 +1055,7 @@ export default class Map extends Object {
    * @api stable
    */
   getControls(filters) {
-    let filtersVar;
+    let filtersVar = filters;
     let foundControls = [];
 
     let panelControls = this.facadeMap_.getPanels().map(p => p.getControls());
@@ -1062,11 +1064,11 @@ export default class Map extends Object {
     }
     const controlsToSearch = this.controls_.concat(panelControls);
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (Utils.isNullOrEmpty(filtersVar)) {
       filtersVar = [];
     }
-    if (!Utils.isArray(filters)) {
-      filtersVar = [filters];
+    if (!Utils.isArray(filtersVar)) {
+      filtersVar = [filtersVar];
     }
     if (filtersVar.length === 0) {
       foundControls = controlsToSearch;
@@ -1744,6 +1746,8 @@ export default class Map extends Object {
               this.fire(EventsManager.COMPLETED);
             }
           }
+        }).catch((error) => {
+          throw error;
         });
       }
     }

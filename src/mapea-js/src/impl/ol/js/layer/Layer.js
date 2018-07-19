@@ -1,8 +1,9 @@
 import Utils from 'facade/js/util/Utils';
 import Config from 'configuration';
-import Object from 'facade/js/Object';
+import MObject from 'facade/js/Object';
+import FacadeLayer from 'facade/js/layer/Layer';
 
-export default class LayerBase extends Object {
+export default class LayerBase extends MObject {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -16,7 +17,7 @@ export default class LayerBase extends Object {
    */
   constructor(options = {}) {
     // calls the super constructor
-    super();
+    super(options);
 
     /**
      * The map instance
@@ -81,7 +82,7 @@ export default class LayerBase extends Object {
      * @type {String}
      * @expose
      */
-    this.legendUrl_ = Utils.concatUrlPaths([Config.THEME_URL, LayerBase.LEGEND_DEFAULT]);
+    this.legendUrl_ = Utils.concatUrlPaths([Config.THEME_URL, FacadeLayer.LEGEND_DEFAULT]);
   }
 
   /**

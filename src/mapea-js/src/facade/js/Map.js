@@ -1,6 +1,6 @@
 import Base from "./Base";
 import Utils from "./util/Utils";
-import MapImpl from "impl/ol/js/Map";
+import MapImpl from 'impl/Map';
 import Exception from "./exception/exception";
 import Parameters from "./parameter/Parameters";
 import * as parameter from "./parameter/parameter";
@@ -8,7 +8,7 @@ import EventsManager from "./event/Manager";
 import FeaturesHandler from "./handler/Feature";
 import Point from "./style/Point";
 import Config from "configuration";
-import Dialog from "./dialog";
+import * as Dialog from "./dialog";
 import GetFeatureInfo from "./control/GetFeatureInfo";
 import WMCSelector from "./control/WMCSelector";
 import LayerSwitcher from "./control/Layerswitcher";
@@ -23,11 +23,15 @@ import Panzoombar from "./control/Panzoombar";
 import Layer from "./layer/Layer";
 import LayerType from "./layer/Type";
 import Vector from "./layer/Vector";
-import KML from "./layer/KML";
+// import KML from "./layer/KML";
 import WFS from "./layer/WFS";
 import WMC from "./layer/WMC";
 import WMS from "./layer/WMS";
 import WMTS from "./layer/WMTS";
+import OSM from "./layer/OSM";
+import Panel from './ui/Panel';
+import Position from './ui/Position';
+import Control from "./control/Control";
 
 export default class Map extends Base {
   /**
@@ -377,72 +381,72 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  addLayers(layersParam) {
+  addLayers(layersParameter) {
+    let layersParam = layersParameter;
     if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
       if (Utils.isUndefined(MapImpl.prototype.addLayers)) {
         Exception('La implementación usada no posee el método addLayers');
       }
-
       // parses parameters to Array
       if (!Utils.isArray(layersParam)) {
         layersParam = [layersParam];
       }
-
       // gets the parameters as Layer objects to add
-      let layers = layersParam.map(layerParam => {
+      const layers = layersParam.map((layerParam) => {
         let layer;
 
         if (layerParam instanceof Layer) {
           layer = layerParam;
         }
         else {
-          try {
-            let parameter = parameter.layer(layerParam);
-            if (!Utils.isNullOrEmpty(parameter.type)) {
-              switch (parameter.type) {
-                case "WFS":
-                  layer = new WFS(layerParam);
-                  break;
-                case "WMC":
-                  layer = new WMC(layerParam);
-                  break;
-                case "WMS":
-                  layer = new WMS(layerParam);
-                  break;
-                case "GeoJSON":
-                  layer = new GeoJSON(layerParam);
-                  break;
-                case "OSM":
-                  layer = new OSM(layerParam);
-                  break;
-                case "Mapbox":
-                  layer = new Mapbox(layerParam);
-                  break;
-                case "KML":
-                  layer = new KML(layerParam);
-                  break;
-                case "Vector":
-                  layer = new Vector(layerParam);
-                  break;
-                case "WMTS":
-                  layer = new WMTS(layerParam);
-                  break;
-                default:
-                  Dialog.error('No se ha especificado un tipo válido para la capa');
-              }
-            }
-            else {
-              Dialog.error('No se ha especificado un tipo válido para la capa');
+          // try {
+          const parameterVariable = parameter.layer(layerParam);
+          if (!Utils.isNullOrEmpty(parameterVariable.type)) {
+            switch (parameterVariable.type) {
+              case "WFS":
+                layer = new WFS(layerParam);
+                break;
+              case "WMC":
+                layer = new WMC(layerParam);
+                break;
+              case "WMS":
+                layer = new WMS(layerParam);
+                break;
+              case "GeoJSON":
+                layer = new GeoJSON(layerParam);
+                break;
+              case "OSM":
+                layer = new OSM(layerParam);
+                break;
+              case "Mapbox":
+                layer = new Mapbox(layerParam);
+                break;
+              case "KML":
+                layer = new KML(layerParam);
+                break;
+              case "Vector":
+                layer = new Vector(layerParam);
+                break;
+              case "WMTS":
+                layer = new WMTS(layerParam);
+                break;
+              default:
+                Dialog.error('No se ha especificado un tipo válido para la capa');
             }
           }
-          catch (err) {
-            Dialog.error('El formato de la capa (' + layerParam + ') no se reconoce');
+          else {
+            Dialog.error('No se ha especificado un tipo válido para la capa');
           }
+          // }
+          // catch (err) {
+          //   Dialog.error('El formato de la capa (' + layerParam + ') no se reconoce');
+          //   throw err;
+          // }
         }
 
         // KML and WFS layers handler its features
-        if ((layer instanceof Vector) && !(layer instanceof KML) && !(layer instanceof WFS)) {
+        if ((layer instanceof Vector) /*&& !(layer instanceof KML)*/ && !(layer instanceof WFS)) {
           this.featuresHandler_.addLayer(layer);
         }
 
@@ -1180,11 +1184,11 @@ export default class Map extends Base {
                 panel = new Panel('map-info', {
                   "collapsible": false,
                   "className": "m-map-info",
-                  "position": UI.position.BR
+                  "position": Position.BR
                 });
                 panel.on(EventsManager.ADDED_TO_MAP, html => {
                   if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
-                    this.getControls(["scaleline"])[0].getImpl().getElement().classlist.add("ol-scale-line-up");
+                    this.getControls(["scaleline"])[0].getImpl().getElement().classList.add("ol-scale-line-up");
                   }
                 });
               }
@@ -1195,12 +1199,12 @@ export default class Map extends Base {
               panel = new Panel(ScaleLine.NAME, {
                 "collapsible": false,
                 "className": "m-scaleline",
-                "position": UI.position.BL,
+                "position": Position.BL,
                 "tooltip": "Línea de escala"
               });
               panel.on(EventsManager.ADDED_TO_MAP, html => {
                 if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
-                  this.getControls(["scaleline"])[0].getImpl().getElement().classlist.add("ol-scale-line-up");
+                  this.getControls(["scaleline"])[0].getImpl().getElement().classList.add("ol-scale-line-up");
                 }
               });
               break;
@@ -1209,7 +1213,7 @@ export default class Map extends Base {
               panel = new Panel(Panzoombar.NAME, {
                 "collapsible": false,
                 "className": "m-panzoombar",
-                "position": UI.position.TL,
+                "position": Position.TL,
                 "tooltip": "Nivel de zoom"
               });
               break;
@@ -1218,7 +1222,7 @@ export default class Map extends Base {
               panel = new Panel(Panzoom.NAME, {
                 "collapsible": false,
                 "className": "m-panzoom",
-                "position": UI.position.TL
+                "position": Position.TL
               });
               break;
             case LayerSwitcher.NAME:
@@ -1230,7 +1234,7 @@ export default class Map extends Base {
                   "collapsible": true,
                   "className": "m-layerswitcher",
                   "collapsedButtonClass": "g-cartografia-capas2",
-                  "position": UI.position.TR,
+                  "position": Position.TR,
                   "tooltip": "Selector de capas"
                 });
                 // enables touch scroll
@@ -1255,7 +1259,7 @@ export default class Map extends Base {
                 panel = new Panel('map-info', {
                   "collapsible": false,
                   "className": "m-map-info",
-                  "position": UI.position.BR,
+                  "position": Position.BR,
                   "tooltip": "Coordenadas del puntero"
                 });
               }
@@ -1273,7 +1277,7 @@ export default class Map extends Base {
                 panel = new Panel('map-info', {
                   "collapsible": false,
                   "className": "m-map-info",
-                  "position": UI.position.BR
+                  "position": Position.BR
                 });
               }
               panel.addClassName('m-with-overviewmap');
@@ -1283,7 +1287,7 @@ export default class Map extends Base {
               panel = new Panel(Location.NAME, {
                 "collapsible": false,
                 "className": 'm-location',
-                "position": UI.position.BR
+                "position": Position.BR
               });
               break;
             case GetFeatureInfo.NAME:
@@ -1303,11 +1307,11 @@ export default class Map extends Base {
               panel = new Panel('map-info', {
                 "collapsible": false,
                 "className": "m-map-info",
-                "position": UI.position.BR
+                "position": Position.BR
               });
               panel.on(EventsManager.ADDED_TO_MAP, html => {
                 if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
-                  goog.dom.classlist.add(this.getControls(["scaleline"])[0].getImpl().getElement(),
+                  goog.dom.classList.add(this.getControls(["scaleline"])[0].getImpl().getElement(),
                     "ol-scale-line-up");
                 }
               });
@@ -1326,7 +1330,7 @@ export default class Map extends Base {
               "collapsible": true,
               "className": 'm-tools',
               "collapsedButtonClass": 'g-cartografia-herramienta',
-              "position": UI.position.TL,
+              "position": Position.TL,
               "tooltip": "Panel de herramientas"
             });
             //               this.addPanels([this.panel.TOOLS]);
@@ -1342,7 +1346,7 @@ export default class Map extends Base {
               "collapsible": true,
               "className": 'm-edition',
               "collapsedButtonClass": 'g-cartografia-editar',
-              "position": UI.position.TL,
+              "position": Position.TL,
               "tooltip": "Herramientas de edición"
             });
             //               this.addPanels([this.panel.EDITION]);
@@ -2247,29 +2251,29 @@ export default class Map extends Base {
   createMainPanels_() {
     // areas container
     this.areasContainer_ = document.createElement('div');
-    this.areasContainer_.classlist.add('m-areas');
+    this.areasContainer_.classList.add('m-areas');
 
     // top-left area
     let tlArea = document.createElement('div');
-    tlArea.classlist.add('m-area');
-    tlArea.classlist.add('m-top');
-    tlArea.classlist.add('m-left');
+    tlArea.classList.add('m-area');
+    tlArea.classList.add('m-top');
+    tlArea.classList.add('m-left');
     // top-right area
     let trArea = document.createElement('div');
-    trArea.classlist.add('m-area');
-    trArea.classlist.add('m-top');
-    trArea.classlist.add('m-right');
+    trArea.classList.add('m-area');
+    trArea.classList.add('m-top');
+    trArea.classList.add('m-right');
 
     // bottom-left area
     let blArea = document.createElement('div');
-    blArea.classlist.add('m-area');
-    blArea.classlist.add('m-bottom');
-    blArea.classlist.add('m-left');
+    blArea.classList.add('m-area');
+    blArea.classList.add('m-bottom');
+    blArea.classList.add('m-left');
     // bottom-right area
     let brArea = document.createElement('div');
-    brArea.classlist.add('m-area');
-    brArea.classlist.add('m-bottom');
-    brArea.classlist.add('m-right');
+    brArea.classList.add('m-area');
+    brArea.classList.add('m-bottom');
+    brArea.classList.add('m-right');
 
     this.areasContainer_.appendChild(tlArea);
     this.areasContainer_.appendChild(trArea);
