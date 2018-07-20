@@ -4,6 +4,7 @@ import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
 import Layer from 'facade/js/layer/Layer';
 import Config from 'configuration';
 import Control from './Control';
+import layerswitcherTemplate from "templates/layerswitcher";
 
 /**
  * @namespace M.impl.control
@@ -101,7 +102,7 @@ export default class LayerSwitcher extends Control {
    */
   renderPanel() {
     LayerSwitcherFacade.getTemplateVariables(this.facadeMap_).then((templateVars) => {
-      const html = Template.compile(LayerSwitcherFacade.TEMPLATE, {
+      const html = Template.compile(layerswitcherTemplate, {
         vars: templateVars,
       });
       this.registerImgErrorEvents_(html);

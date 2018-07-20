@@ -1,5 +1,6 @@
 import Handlebars from 'handlebars';
 import Utils from './Utils';
+import './handlebarshelpers';
 
 /**
  * @namespace M.template

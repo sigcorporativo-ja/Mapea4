@@ -6,6 +6,7 @@ import Template from "./util/Template";
 import EventsManager from "./event/Manager";
 import MWindow from "./util/Window";
 import Config from "configuration";
+import 'assets/css/popup';
 
 class Tab {
   /**

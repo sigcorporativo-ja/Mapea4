@@ -3,6 +3,9 @@ import MapImpl from 'impl/Map';
 import Map from './Map';
 import Utils from './util/Utils';
 import Exception from './exception/exception';
+import 'assets/css/mapea';
+import 'assets/css/fonts';
+import 'assets/css/animations';
 
 export default class Mapea {
   /**

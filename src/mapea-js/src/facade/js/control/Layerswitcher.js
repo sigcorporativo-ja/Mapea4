@@ -9,7 +9,8 @@ import Vector from '../layer/Vector';
 import StylePoint from '../style/Point';
 import LayerSwitcherImpl from 'impl/control/Layerswitcher';
 import EvtManager from '../event/Manager';
-import layerswitcherTemplate from "templates/layerswitcher.html";
+import layerswitcherTemplate from "templates/layerswitcher";
+import 'assets/css/controls/layerswitcher';
 
 export default class LayerSwitcher extends ControlBase {
   /**
@@ -58,8 +59,11 @@ export default class LayerSwitcher extends ControlBase {
    * @api stable
    */
   createView(map) {
-    return LayerSwitcher.templateVariables_(map).then(templateVars => {
-      Template.compile(layerswitcherTemplate, templateVars);
+    return new Promise((resolve) => {
+      LayerSwitcher.getTemplateVariables(map).then(templateVars => {
+        let html = Template.compile(layerswitcherTemplate, templateVars);
+        resolve(html);
+      });
     });
   }
 
@@ -114,8 +118,8 @@ export default class LayerSwitcher extends ControlBase {
     return new Promise((success, fail) => {
       // gets base layers and overlay layers
       if (!Utils.isNullOrEmpty(map)) {
-        let baseLayers = Map.getBaseLayers().filter(layer => LayerBase.displayInLayerSwitcher === true);
-        let overlayLayers = Map.getLayers().filter((layer) => {
+        let baseLayers = map.getBaseLayers().filter(layer => LayerBase.displayInLayerSwitcher === true);
+        let overlayLayers = map.getLayers().filter((layer) => {
           let isTransparent = (LayerBase.transparent === true);
           let displayInLayerSwitcher = (LayerBase.displayInLayerSwitcher === true);
           let isNotWMC = (LayerType !== LayerType.WMC);

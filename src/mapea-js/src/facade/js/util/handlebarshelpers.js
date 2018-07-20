@@ -1,7 +1,6 @@
 import Handlebars from "handlebars";
 
 const helpers = () => {
-
   /**
    * Helpers for Handlebars wich compares if the
    * first arguments is greater than the second one

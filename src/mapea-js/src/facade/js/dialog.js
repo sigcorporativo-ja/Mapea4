@@ -1,6 +1,35 @@
 import Utils from "./util/Utils";
 import Template from "./util/Template";
 import dialogTemplate from "templates/dialog.html";
+import 'assets/css/dialog';
+
+
+
+/**
+ * TODO
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+const removeElement = (element) => {
+  const parent = element.parentElement;
+  parent.removeChild(element);
+};
+/**
+ * TODO
+ *
+ * @public
+ * @function
+ * @api stable
+ */
+export const remove = () => {
+  const dialogs = document.querySelectorAll('div.m-dialog');
+  Array.prototype.forEach.call(dialogs, (dialog) => {
+    const parent = dialog.parentElement;
+    parent.removeChild(dialog);
+  });
+};
 
 /**
  * TODO
@@ -27,21 +56,10 @@ export const show = (message, title, severity) => {
 
   // adds listener to close the dialog
   let okButton = html.querySelector('div.m-button > button');
-  okButton.addEventListener("click", evt => okButton.removeNode(html));
+  okButton.addEventListener("click", evt => removeElement(html));
   mapeaContainer.appendChild(html);
 };
 
-/**
- * TODO
- *
- * @public
- * @function
- * @api stable
- */
-export const remove = () => {
-  let dialogs = document.querySelectorAll('div.m-dialog');
-  Array.prototype.forEach.call(dialogs, dialog => dialogs.removeNode(dialog));
-};
 
 /**
  * TODO
