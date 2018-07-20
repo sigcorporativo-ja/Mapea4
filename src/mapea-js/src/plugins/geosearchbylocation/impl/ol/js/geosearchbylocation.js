@@ -1,7 +1,6 @@
-goog.provide('P.impl.plugin.Geosearchbylocation');
+import Geosearchbylocation from "facade/js/geosearchbylocation";
 
-goog.require('P.impl.control.Geosearchbylocation');
-goog.require('P.plugin.Geosearchbylocation');
+export defautl Geosearchbylocation {}
+
 
 // this file it is just used in order to imports
-

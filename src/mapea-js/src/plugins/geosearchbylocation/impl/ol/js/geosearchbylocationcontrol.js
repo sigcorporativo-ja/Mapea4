@@ -1,11 +1,8 @@
-goog.provide('P.impl.control.Geosearchbylocation');
-
-goog.require('P.impl.control.Geosearch');
-
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class GeosearchbylocationControl extends M.impl.control.Geosearch {
+
   /**
    * @classdesc
    * Main constructor of the Geosearchbylocation control.
@@ -15,7 +12,12 @@ goog.require('P.impl.control.Geosearch');
    * @extends {M.impl.control.Geosearch}
    * @api stable
    */
-  M.impl.control.Geosearchbylocation = function(searchUrl_) {
+
+  constructor(searchUrl_) {
+    // calls super
+    super({
+      'layerName': GeosearchbylocationControl.NAME
+    });
 
     /**
      * Popup showed
@@ -31,12 +33,7 @@ goog.require('P.impl.control.Geosearch');
      */
     this.searchUrl_ = searchUrl_;
 
-    // calls super
-    goog.base(this, {
-      'layerName': M.control.Geosearchbylocation.NAME
-    });
-  };
-  goog.inherits(M.impl.control.Geosearchbylocation, M.impl.control.Geosearch);
+  }
 
   /**
    * Set the map instance the control is associated with.
@@ -45,15 +42,16 @@ goog.require('P.impl.control.Geosearch');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.setMap = function(map) {
+  setMap(map) {
+
+    super('setMap', map);
+
     if (M.utils.isNullOrEmpty(map)) {
       this.facadeMap_.getImpl().removeFeatures([this.positionFeature_]);
-    }
-    else {
+    } else {
       this.map = map;
     }
-    goog.base(this, 'setMap', map);
-  };
+  }
 
   /**
    * This function get coordinates
@@ -62,9 +60,9 @@ goog.require('P.impl.control.Geosearch');
    * @returns {Promise} coordinates
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.locate = function() {
+  locate() {
     // TODO
-    var geolocation = new ol.Geolocation({
+    let geolocation = new ol.Geolocation({
       projection: this.facadeMap_.getMapImpl().getView().getProjection()
     });
     geolocation.setTracking(true);
@@ -81,18 +79,17 @@ goog.require('P.impl.control.Geosearch');
         })
       })
     }));
-    var this_ = this;
-    var coordinates;
-    this.positionFeature_.click = function(evt) {
-      M.template.compile(M.impl.control.Geosearchbylocation.POPUP_LOCATION, {
+    let coordinates;
+    this.positionFeature_.click = function (evt) {
+      M.Template.compile(GeosearchbylocationControl.POPUP_LOCATION, {
         'jsonp': true,
         'vars': {
           'valorX': coordinates[0],
           'valorY': coordinates[1]
         },
         'parseToHtml': false
-      }).then(function(htmlAsText) {
-        var positionTabOpts = {
+      }).then(htmlAsText => {
+        let positionTabOpts = {
           'icon': 'g-cartografia-gps2',
           'title': 'posición',
           'content': htmlAsText
@@ -102,20 +99,19 @@ goog.require('P.impl.control.Geosearch');
           this_.popup_ = new M.Popup();
           this_.popup_.addTab(positionTabOpts);
           this_.facadeMap_.addPopup(this_.popup_, coordinates);
-        }
-        else {
+        } else {
           this_.popup_.addTab(positionTabOpts);
         }
       });
     };
-    return new Promise(function(success, fail) {
-      geolocation.on('change:position', function() {
+    return new Promise((success, fail) => {
+      geolocation.on('change:position', () => {
         geolocation.setTracking(false);
         coordinates = geolocation.getPosition();
         success(coordinates);
       }, this);
     });
-  };
+  }
 
   /**
    * This function remove point locate
@@ -123,7 +119,7 @@ goog.require('P.impl.control.Geosearch');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.removeLocate = function() {
+  M.impl.control.Geosearch.prototype.removeLocate = function () {
     this.facadeMap_.removeFeatures([this.positionFeature_]);
   };
 
@@ -134,10 +130,10 @@ goog.require('P.impl.control.Geosearch');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.drawLocation = function(coord) {
+  drawLocation(coord) {
     this.positionFeature_.getImpl().getOLFeature().setGeometry(coord ? new ol.geom.Point(coord) : null);
     this.facadeMap_.drawFeatures([this.positionFeature_]);
-  };
+  }
 
   /**
    * This function shows the container with the results
@@ -147,10 +143,10 @@ goog.require('P.impl.control.Geosearch');
    * @param {HTMLElement} container HTML to display
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.addResultsContainer = function(container) {
-    var mapContainer = this.map.getTargetElement();
-    goog.dom.appendChild(mapContainer, container);
-  };
+  addResultsContainer(container) {
+    let mapContainer = this.map.getTargetElement();
+    mapContainer.appendChild(container);
+  }
 
   /**
    * This function destroy the container with the results
@@ -160,9 +156,9 @@ goog.require('P.impl.control.Geosearch');
    * @param {HTMLElement} container HTML results panel
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.removeResultsContainer = function(container) {
-    goog.dom.removeNode(container);
-  };
+  removeResultsContainer(container) {
+    delete container;
+  }
 
   /**
    * Zoom Results
@@ -171,10 +167,10 @@ goog.require('P.impl.control.Geosearch');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.zoomToResultsAll = function() {
+  zoomToResultsAll() {
     let bbox = this.facadeMap_.getControls("geosearchbylocation")[0].getImpl().getLayer().getFeaturesExtent();
     this.facadeMap_.setBbox(bbox);
-  };
+  }
 
   /**
    * This function destroys this control and clear HTML
@@ -183,13 +179,13 @@ goog.require('P.impl.control.Geosearch');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.destroy = function() {
+  destroy() {
     this.facadeMap_.getMapImpl().removeControl(this);
     this.clear();
     this.facadeMap_.removeFeatures([this.positionFeature_]);
     this.popup_ = null;
     this.searchUrl_ = null;
-  };
+  }
 
   /**
    * Template for popup
@@ -198,5 +194,6 @@ goog.require('P.impl.control.Geosearch');
    * @public
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.POPUP_LOCATION = "geosearchbylocationfeaturepopup.html";
-})();
+}
+
+GeosearchbylocationControl.POPUP_LOCATION = "geosearchbylocationfeaturepopup.html";
