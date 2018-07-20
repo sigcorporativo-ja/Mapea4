@@ -1,7 +1,4 @@
-goog.provide('P.plugin.SearchstreetGeosearch');
-goog.require('P.plugin.Autocomplete');
-
-(function() {
+export default class SearchstreetGeosearch extends M.Plugin {
   /**
    * @classdesc Main facade plugin object. This class creates a plugin
    *            object which has an implementation Object
@@ -11,9 +8,10 @@ goog.require('P.plugin.Autocomplete');
    * @param {Mx.parameters.SearchstreetGeosearch} parameters - parameters SearchstreetGeosearch
    * @api stable
    */
-  M.plugin.SearchstreetGeosearch = (function(parameters) {
+  constructor(parameters) {
     parameters = (parameters || {});
 
+    super();
     /**
      * Parameters SearchstreetGeosearch
      *
@@ -55,9 +53,7 @@ goog.require('P.plugin.Autocomplete');
      */
     this.locality_ = parameters.locality;
 
-    goog.base(this);
-  });
-  goog.inherits(M.plugin.SearchstreetGeosearch, M.Plugin);
+  }
 
   /**
    * @inheritdoc
@@ -67,52 +63,50 @@ goog.require('P.plugin.Autocomplete');
    * @param {M.Map} map - Map to add the control
    * @api stable
    */
-  M.plugin.SearchstreetGeosearch.prototype.addTo = function(map) {
+  addTo(map) {
     this.map_ = map;
-    var this_ = this;
-    this.control_ = new M.control.SearchstreetGeosearch(this.parameters_);
+    this.control_ = new SearchstreetGeosearch(this.parameters_);
 
-    goog.dom.classlist.add(map._areasContainer.getElementsByClassName("m-top m-right")[0],
-      "top-extra");
+    map._areasContainer.getElementsByClassName("m-top m-right")[0].classList.add("top-extra");
 
-    this.control_.on(M.evt.ADDED_TO_MAP, function() {
+    this.control_.on(M.evt.ADDED_TO_MAP, () => {
       this.fire(M.evt.ADDED_TO_MAP);
 
       // Checks if the received INE code is correct.
-      var comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
+      let comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
         codigo: this.locality_
       });
-      M.remote.get(comCodIne).then(
-        function(response) {
-          var results = JSON.parse(response.text);
+      M.Remote.get(comCodIne).then(
+        (response) => {
+          let results = JSON.parse(response.text);
           if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
-            this_.locality_ = "";
+            this.locality_ = "";
           }
-          var autocompletador = new M.plugin.Autocomplete({
-            'locality': this_.locality_,
-            'target': this_.control_.getInput(),
-            'html': this_.control_.getHtml()
+          let autocompletador = new M.plugin.Autocomplete({
+            'locality': this.locality_,
+            'target': this.control_.getInput(),
+            'html': this.control_.getHtml()
           });
-          this_.map_.addPlugin(autocompletador);
+          this.map_.addPlugin(autocompletador);
         });
     }, this);
     this.panel_ = new M.ui.Panel('SearchstreetGeosearch', {
       'collapsible': true,
       'className': 'm-geosearch',
-      'position': M.ui.position.TL,
+      'position': M.ui.Position.TL,
       'tooltip': 'Buscador de calles y geobúsquedas'
     });
     //JGL20170816: foco al input al desplegar panel
-    this_.panel_.on(M.evt.ADDED_TO_MAP, function(html) {
-      this_.panel_._buttonPanel.addEventListener("click", function(evt) {
-        if (!this_.panel_._collapsed) {
-          this_.control_.input_.focus();
+    this.panel_.on(M.evt.ADDED_TO_MAP, html => {
+      this.panel_._buttonPanel.addEventListener("click", evt => {
+        if (!this.panel_._collapsed) {
+          this.control_.input_.focus();
         }
       });
     });
     this.panel_.addControls(this.control_);
     this.map_.addPanels(this.panel_);
-  };
+  }
 
   /**
    * This function destroys this plugin
@@ -121,14 +115,14 @@ goog.require('P.plugin.Autocomplete');
    * @function
    * @api stable
    */
-  M.plugin.SearchstreetGeosearch.prototype.destroy = function() {
+  destroy() {
     this.map_.removeControls([this.control_]);
     this.name = null;
     this.parameters_ = null;
     this.map_ = null;
     this.control_ = null;
     this.locality_ = null;
-  };
+  }
 
   /**
    * This function compare if pluging recieved by param is instance of M.plugin.SearchstreetGeosearch
@@ -138,12 +132,11 @@ goog.require('P.plugin.Autocomplete');
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.SearchstreetGeosearch.prototype.equals = function(plugin) {
-    if (plugin instanceof M.plugin.SearchstreetGeosearch) {
+  equals(plugin) {
+    if (plugin instanceof SearchstreetGeosearch) {
       return true;
-    }
-    else {
+    } else {
       return false;
     }
-  };
-})();
+  }
+}

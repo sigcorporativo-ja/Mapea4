@@ -1,12 +1,7 @@
-goog.provide('P.impl.control.GeosearchIntegrated');
-
-goog.require('P.impl.layer.Geosearch');
-goog.require('P.impl.control.Geosearch');
-
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class GeosearchIntegrated extends M.impl.control.Geosearch {
   /**
    * @classdesc
    * Main constructor of the GeosearchIntegrated control.
@@ -15,10 +10,9 @@ goog.require('P.impl.control.Geosearch');
    * @extends {M.impl.control.Geosearch}
    * @api stable
    */
-  M.impl.control.GeosearchIntegrated = function() {
-    goog.base(this);
-  };
-  goog.inherits(M.impl.control.GeosearchIntegrated, M.impl.control.Geosearch);
+  constructor() {
+    super();
+  }
 
   /**
    * This function replaces the addto of Geosearch not to add control
@@ -29,7 +23,7 @@ goog.require('P.impl.control.Geosearch');
    * @param {function} element - Template SearchstreetGeosearch control
    * @api stable
    */
-  M.impl.control.GeosearchIntegrated.prototype.addTo = function(map, element) {
+  addTo(map, element) {
     this.facadeMap_ = map;
 
     map.addLayers(this.layer_);
@@ -53,7 +47,7 @@ goog.require('P.impl.control.Geosearch');
     //   'target': null
     // });
     // map.getMapImpl().addControl(this);
-  };
+  }
 
   /**
    *  This function cancels the zoom function of Geosearch
@@ -61,6 +55,6 @@ goog.require('P.impl.control.Geosearch');
    * @private
    * @function
    */
-  M.impl.control.GeosearchIntegrated.prototype.zoomToResults = function() {};
+  zoomToResults() {};
 
-})();
+}
