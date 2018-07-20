@@ -1,13 +1,12 @@
-goog.provide('P.impl.plugin.WFSTControls');
+import WFSTBase from "./wfstcontrolbase";
+import DrawFeature from "./drawfeature";
+import ModifyFeature from "./modifyfeature";
+import DeleteFeature from "./DeleteFeature";
+import ClearFeature from "./ClearFeature";
+import SaveFeature from "./SaveFeature";
+import EditAttribute from "./EditAttribute";
+import WFSTControls from "./WFSTControls";
 
-goog.require('P.impl.control.WFSTBase');
-goog.require('P.impl.control.DrawFeature');
-goog.require('P.impl.control.ModifyFeature');
-goog.require('P.impl.control.DeleteFeature');
-goog.require('P.impl.control.ClearFeature');
-goog.require('P.impl.control.SaveFeature');
-goog.require('P.impl.control.EditAttribute');
-
-goog.require('P.plugin.WFSTControls');
+export default class WFSTControls {}
 
 // this file it is just used in order to imports

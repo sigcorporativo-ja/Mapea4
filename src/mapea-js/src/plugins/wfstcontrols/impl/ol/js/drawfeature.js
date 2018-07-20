@@ -1,10 +1,9 @@
-goog.provide('P.impl.control.DrawFeature');
+import WFSTBase from "./wfstcontrolbase";
 
-goog.require('P.impl.control.WFSTBase');
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class DrawFeature extends WFSTBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a DrawFeature
@@ -15,11 +14,9 @@ goog.require('P.impl.control.WFSTBase');
    * @extends {M.impl.control.WFSTBase}
    * @api stable
    */
-  M.impl.control.DrawFeature = function(layer) {
-    goog.base(this, layer);
-  };
-  goog.inherits(M.impl.control.DrawFeature, M.impl.control.WFSTBase);
-
+  constructor(layer) {
+    super(layer);
+  }
   /**
    * This function creates the interaction to draw
    *
@@ -27,9 +24,9 @@ goog.require('P.impl.control.WFSTBase');
    * @function
    * @api stable
    */
-  M.impl.control.DrawFeature.prototype.createInteraction_ = function() {
-    var layerImpl = this.layer_.getImpl();
-    var olLayer = layerImpl.getOL3Layer();
+  createInteraction_() {
+    let layerImpl = this.layer_.getImpl();
+    let olLayer = layerImpl.getOL3Layer();
     let olStyle = olLayer.getStyle()()[0];
     let [olFill, olStroke] = [olStyle.getFill(), olStyle.getStroke()];
     let image = new ol.style.Circle({
@@ -54,14 +51,14 @@ goog.require('P.impl.control.WFSTBase');
       }),
     });
 
-    this.interaction_.on('drawend', function(event) {
-      var feature = event.feature;
+    this.interaction_.on('drawend', (event) => {
+      let feature = event.feature;
       this.modifiedFeatures.push(feature);
     }, this);
 
     // updates features from refresh
     this.layer_.on(M.evt.LOAD, this.updateLayerFeatures_, this);
-  };
+  }
 
   /**
    * This function remove unsaved changes
@@ -69,10 +66,10 @@ goog.require('P.impl.control.WFSTBase');
    * @private
    * @function
    */
-  M.impl.control.DrawFeature.prototype.updateLayerFeatures_ = function() {
+  updateLayerFeatures_() {
     this.facadeMap_.getMapImpl().removeInteraction(this.interaction_);
     this.interaction_ = null;
-  };
+  }
 
   /**
    * This function deactivate control
@@ -81,12 +78,12 @@ goog.require('P.impl.control.WFSTBase');
    * @function
    * @api stable
    */
-  M.impl.control.DrawFeature.prototype.deactivate = function() {
+  deactivate() {
     if (M.utils.isNullOrEmpty(this.interaction_)) {
       this.createInteraction_();
     }
-    var olMap = this.facadeMap_.getMapImpl();
+    let olMap = this.facadeMap_.getMapImpl();
     olMap.removeInteraction(this.interaction_);
     this.interaction_ = null;
-  };
-})();
+  }
+}

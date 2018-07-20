@@ -1,10 +1,7 @@
-goog.provide('P.impl.control.ModifyFeature');
-
-
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class ModifyFeature extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a ModifyFeature
@@ -15,7 +12,7 @@ goog.provide('P.impl.control.ModifyFeature');
    * @extends {M.impl.Control}
    * @api stable
    */
-  M.impl.control.ModifyFeature = function(layer) {
+  constructor(layer) {
     /**
      * Layer for use in control
      * @private
@@ -42,8 +39,7 @@ goog.provide('P.impl.control.ModifyFeature');
      * @type {array}
      */
     this.currentFeature_ = null;
-  };
-  goog.inherits(M.impl.control.ModifyFeature, M.impl.Control);
+  }
 
   /**
    * This function active control
@@ -52,12 +48,12 @@ goog.provide('P.impl.control.ModifyFeature');
    * @function
    * @api stable
    */
-  M.impl.control.ModifyFeature.prototype.activate = function() {
+  activate() {
     if (M.utils.isNullOrEmpty(this.modify)) {
       this.createInteractionModify_();
     }
     this.modify.setActive(true);
-  };
+  }
 
   /**
    * This function deactivate control
@@ -66,14 +62,14 @@ goog.provide('P.impl.control.ModifyFeature');
    * @function
    * @api stable
    */
-  M.impl.control.ModifyFeature.prototype.deactivate = function() {
+  deactivate() {
     if (M.utils.isNullOrEmpty(this.modify)) {
       this.createInteractionModify_();
     }
-    var olMap = this.facadeMap_.getMapImpl();
+    let olMap = this.facadeMap_.getMapImpl();
     olMap.removeInteraction(this.modify);
     this.modify = null;
-  };
+  }
 
   /**
    * This function creates the interaction to modify
@@ -81,10 +77,10 @@ goog.provide('P.impl.control.ModifyFeature');
    * @private
    * @function
    */
-  M.impl.control.ModifyFeature.prototype.createInteractionModify_ = function() {
-    var olMap = this.facadeMap_.getMapImpl();
-    var layerImpl = this.layer_.getImpl();
-    var olLayer = layerImpl.getOL3Layer();
+  createInteractionModify_() {
+    let olMap = this.facadeMap_.getMapImpl();
+    let layerImpl = this.layer_.getImpl();
+    let olLayer = layerImpl.getOL3Layer();
     let olStyle = olLayer.getStyle()()[0];
     let styleImage = olStyle.getImage();
     let [olFill, olStroke] = [olStyle.getFill(), olStyle.getStroke()];
@@ -104,27 +100,26 @@ goog.provide('P.impl.control.ModifyFeature');
         stroke: olStroke
       });
     }
-    var layerFeatures = new ol.Collection(olLayer.getSource().getFeatures());
-    layerFeatures.forEach(function(feature) {
-      feature.on('change', function(evt) {
+    let layerFeatures = new ol.Collection(olLayer.getSource().getFeatures());
+    layerFeatures.forEach(feature => {
+      feature.on('change', evt => {
         this.currentFeature_ = evt.target;
       }, this);
     }, this);
     this.modify = new ol.interaction.Modify({
       features: layerFeatures,
-      deleteCondition: function(event) {
+      deleteCondition: function (event) {
         return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
       },
       style: new ol.style.Style({
         image: styleImage,
       })
     });
-    this.modify.on('modifyend', function(evt) {
-      var featureIdx = this.modifiedFeatures.indexOf(this.currentFeature_);
+    this.modify.on('modifyend', evt => {
+      let featureIdx = this.modifiedFeatures.indexOf(this.currentFeature_);
       if (featureIdx >= 0) {
         this.modifiedFeatures[featureIdx] = this.currentFeature_;
-      }
-      else {
+      } else {
         this.modifiedFeatures.push(this.currentFeature_);
       }
       this.currentFeature_ = null;
@@ -133,7 +128,7 @@ goog.provide('P.impl.control.ModifyFeature');
 
     // updates features from refresh
     this.layer_.on(M.evt.LOAD, this.updateLayerFeatures_, this);
-  };
+  }
 
   /**
    * This function remove unsaved changes
@@ -141,10 +136,10 @@ goog.provide('P.impl.control.ModifyFeature');
    * @private
    * @function
    */
-  M.impl.control.ModifyFeature.prototype.updateLayerFeatures_ = function() {
+  updateLayerFeatures_() {
     this.facadeMap_.getMapImpl().removeInteraction(this.modify);
     this.modify = null;
-  };
+  }
 
   /**
    * This function destroys this control and cleaning the HTML
@@ -153,10 +148,10 @@ goog.provide('P.impl.control.ModifyFeature');
    * @function
    * @api stable
    */
-  M.impl.control.ModifyFeature.prototype.destroy = function() {
+  destroy() {
     this.facadeMap_.getMapImpl().removeControl(this);
     this.layer_ = null;
     this.modify = null;
     this.modifiedFeatures = [];
-  };
-})();
+  }
+}
