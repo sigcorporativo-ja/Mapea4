@@ -1,10 +1,6 @@
-goog.provide('P.control.Printer');
+import PrinterControlImpl from "../../impl/ol/js/printercontrol";
 
-goog.require('goog.dom.classlist');
-goog.require('goog.events');
-goog.require('goog.style');
-
-(function () {
+export default class PrinterControl extends M.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMCSelector
@@ -14,18 +10,23 @@ goog.require('goog.style');
    * @extends {M.Control}
    * @api stable
    */
-  M.control.Printer = (function (url, params, options) {
+  constructor(url, params, options) {
+    // implementation of this control
+    let impl = new PrinterControlImpl();
+
+    super(impl);
+
     // checks if the implementation can manage this control
-    if (M.utils.isUndefined(M.impl.control.Printer)) {
-      M.exception('La implementación usada no puede crear controles Printer');
+    if (M.utils.isUndefined(PrinterControlImpl)) {
+      M.Exception('La implementación usada no puede crear controles Printer');
     }
 
-    if (M.utils.isUndefined(M.impl.control.Printer.prototype.encodeLayer)) {
-      M.exception('La implementación usada no posee el método encodeLayer');
+    if (M.utils.isUndefined(PrinterControlImpl.prototype.encodeLayer)) {
+      M.Exception('La implementación usada no posee el método encodeLayer');
     }
 
-    if (M.utils.isUndefined(M.impl.control.Printer.prototype.encodeLegend)) {
-      M.exception('La implementación usada no posee el método encodeLegend');
+    if (M.utils.isUndefined(PrinterControlImpl.prototype.encodeLegend)) {
+      M.Exception('La implementación usada no posee el método encodeLegend');
     }
 
     /**
@@ -126,12 +127,7 @@ goog.require('goog.style');
       this.options_.legend = M.config.geoprint.LEGEND;
     }
 
-    // implementation of this control
-    var impl = new M.impl.control.Printer();
-
-    goog.base(this, impl);
-  });
-  goog.inherits(M.control.Printer, M.Control);
+  }
 
   /**
    * This function creates the view to the specified map
@@ -141,49 +137,48 @@ goog.require('goog.style');
    * @param {M.Map} map to add the control
    * @api stabletrue
    */
-  M.control.Printer.prototype.createView = function (map) {
-    var this_ = this;
-    var promise = new Promise(function (success, fail) {
-      this_.getCapabilities().then(function (capabilities) {
-        var i = 0,
+  createView(map) {
+    let promise = new Promise((success, fail) => {
+      this.getCapabilities().then(capabilities => {
+        let i = 0,
           ilen;
         // default layout
         for (i = 0, ilen = capabilities.layouts.length; i < ilen; i++) {
-          var layout = capabilities.layouts[i];
-          if (layout.name === this_.options_.layout) {
+          let layout = capabilities.layouts[i];
+          if (layout.name === this.options_.layout) {
             layout.default = true;
             break;
           }
         }
         // default dpi
         for (i = 0, ilen = capabilities.dpis.length; i < ilen; i++) {
-          var dpi = capabilities.dpis[i];
-          if (dpi.value == this_.options_.dpi) {
+          let dpi = capabilities.dpis[i];
+          if (dpi.value == this.options_.dpi) {
             dpi.default = true;
             break;
           }
         }
         // default outputFormat
         for (i = 0, ilen = capabilities.outputFormats.length; i < ilen; i++) {
-          var outputFormat = capabilities.outputFormats[i];
-          if (outputFormat.name === this_.options_.format) {
+          let outputFormat = capabilities.outputFormats[i];
+          if (outputFormat.name === this.options_.format) {
             outputFormat.default = true;
             break;
           }
         }
         // forceScale
-        capabilities.forceScale = this_.options_.forceScale;
-        M.template.compile(M.control.Printer.TEMPLATE, {
+        capabilities.forceScale = this.options_.forceScale;
+        M.Template.compile(Printer.TEMPLATE, {
           'jsonp': true,
           'vars': capabilities
-        }).then(function (html) {
-          this_.addEvents(html);
+        }).then(html => {
+          this.addEvents(html);
           success(html);
         });
       });
     });
     return promise;
-  };
+  }
 
   /**
    * This function creates the view to the specified map
@@ -193,7 +188,7 @@ goog.require('goog.style');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.control.Printer.prototype.addEvents = function (html) {
+  addEvents(html) {
     this.element_ = html;
 
     // title
@@ -203,33 +198,31 @@ goog.require('goog.style');
     this.areaDescription_ = this.element_.querySelector('.form div.description > textarea');
 
     // layout
-    var selectLayout = this.element_.querySelector('.form div.layout > select');
-    goog.events.listen(selectLayout, [
-         goog.events.EventType.CHANGE
-      ], function (event) {
-      var layoutValue = selectLayout.value;
+    let selectLayout = this.element_.querySelector('.form div.layout > select');
+    selectLayout.addEventListener("change", (event) => {
+      let layoutValue = selectLayout.value;
       this.setLayout({
         'value': layoutValue,
         'name': layoutValue
       });
-    }, false, this);
-    var layoutValue = selectLayout.value;
+    });
+
+    let layoutValue = selectLayout.value;
     this.setLayout({
       'value': layoutValue,
       'name': layoutValue
     });
 
     // dpi
-    var selectDpi = this.element_.querySelector('.form div.dpi > select');
-    goog.events.listen(selectDpi, [
-         goog.events.EventType.CHANGE
-      ], function (event) {
-      var dpiValue = selectDpi.value;
+    let selectDpi = this.element_.querySelector('.form div.dpi > select');
+    selectDpi.addEventListener("change", (event) => {
+      let dpiValue = selectDpi.value;
       this.setDpi({
         'value': dpiValue,
         'name': dpiValue
       });
-    }, false, this);
+    });
+
     var dpiValue = selectDpi.value;
     this.setDpi({
       'value': dpiValue,
@@ -237,28 +230,26 @@ goog.require('goog.style');
     });
 
     // format
-    var selectFormat = this.element_.querySelector('.form div.format > select');
-    goog.events.listen(selectFormat, [
-         goog.events.EventType.CHANGE
-      ], function (event) {
+    let selectFormat = this.element_.querySelector('.form div.format > select');
+    selectFormat.addEventListener("change", (event) => {
       this.setFormat(selectFormat.value);
-    }, false, this);
+    });
     this.setFormat(selectFormat.value);
 
     // force scale
-    var checkboxForceScale = this.element_.querySelector('.form div.forcescale > input');
-    goog.events.listen(checkboxForceScale, goog.events.EventType.CLICK, function (event) {
+    let checkboxForceScale = this.element_.querySelector('.form div.forcescale > input');
+    checkboxForceScale.addEventListener("click", (event) => {
       this.setForceScale(checkboxForceScale.checked === true);
-    }, false, this);
+    });
     this.setForceScale(checkboxForceScale.checked === true);
 
     // print button
-    var printBtn = this.element_.querySelector('.button > button.print');
-    goog.events.listen(printBtn, goog.events.EventType.CLICK, this.printClick_, false, this);
+    let printBtn = this.element_.querySelector('.button > button.print');
+    printBtn.addEventListener("click", this.printClick_);
 
     // clean button
-    var cleanBtn = this.element_.querySelector('.button > button.remove');
-    goog.events.listen(cleanBtn, goog.events.EventType.CLICK, function (event) {
+    let cleanBtn = this.element_.querySelector('.button > button.remove');
+    cleanBtn.addEventListener("click", (event) => {
       event.preventDefault();
 
       // resets values
@@ -269,25 +260,36 @@ goog.require('goog.style');
       selectFormat.value = this.options_.format;
       checkboxForceScale.checked = this.options_.forceScale;
 
-      // fires all listeners
-      goog.events.getListeners(selectLayout, goog.events.EventType.CHANGE, false)
-        .concat(goog.events.getListeners(selectDpi, goog.events.EventType.CHANGE, false))
-        .concat(goog.events.getListeners(selectFormat, goog.events.EventType.CHANGE, false))
-        .concat(goog.events.getListeners(checkboxForceScale, goog.events.EventType.CLICK, false))
-        .forEach(goog.events.fireListener);
+      // Create events and init
+      const changeEvent = document.createEvent("HTMLEvents");
+      changeEvent.initEvent('change');
+      const clickEvent = document.createEvent('HTMLEvents');
+      // Fire listeners
+      clickEvent.initEvent('click');
+      selectLayout.dispatchEvent(changeEvent);
+      selectDpi.dispatchEvent(changeEvent);
+      selectFormat.dispatchEvent(changeEvent);
+      checkboxForceScale.dispatchEvent(clickEvent);
+
 
       // clean queue
       Array.prototype.forEach.apply(this.queueContainer_.children, [function (child) {
         // unlisten events
-        goog.events.unlisten(child, goog.events.EventType.CLICK, this.dowloadPrint, false, child);
+        child.removeEventListener('click', this.dowloadPrint);
          }, this]);
-      goog.dom.removeChildren(this.queueContainer_);
-    }, false, this);
+
+      child.removeEventListener('click', this.dowloadPrint);
+
+      while (this.queueContainer_.fistChild) {
+        this.queueContainer_.removeChild(this.queueContainer_.firsChild)
+      }
+      c0b0fcef264e92f13bedd58705dc93a5
+    });
 
     // queue
     this.queueContainer_ = this.element_.querySelector('.queue > ul.queue-container');
     M.utils.enableTouchScroll(this.queueContainer_);
-  };
+  }
 
   /**
    * This function creates the view to the specified map
@@ -297,13 +299,12 @@ goog.require('goog.style');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.control.Printer.prototype.getCapabilities = function () {
+  getCapabilities() {
     if (M.utils.isNullOrEmpty(this.capabilitiesPromise_)) {
-      var this_ = this;
-      this.capabilitiesPromise_ = new Promise(function (success, fail) {
-        var capabilitiesUrl = M.utils.concatUrlPaths([this_.url_, 'info.json']);
-        M.remote.get(capabilitiesUrl).then(function (response) {
-          var capabilities = {};
+      this.capabilitiesPromise_ = new Promise((success, fail) => {
+        let capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'info.json']);
+        M.Remote.get(capabilitiesUrl).then((response) => {
+          let capabilities = {};
           try {
             capabilities = JSON.parse(response.text);
           }
@@ -313,7 +314,7 @@ goog.require('goog.style');
       });
     }
     return this.capabilitiesPromise_;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -322,9 +323,9 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Printer.prototype.setLayout = function (layout) {
+  setLayout(layout) {
     this.layout_ = layout;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -333,9 +334,9 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Printer.prototype.setFormat = function (format) {
+  setFormat(format) {
     this.format_ = format;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -344,9 +345,9 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Printer.prototype.setDpi = function (dpi) {
+  setDpi(dpi) {
     this.dpi_ = dpi;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -355,9 +356,9 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Printer.prototype.setForceScale = function (forceScale) {
+  setForceScale(forceScale) {
     this.forceScale_ = forceScale;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -366,40 +367,39 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Printer.prototype.printClick_ = function (evt) {
+  printClick_(evt) {
     evt.preventDefault();
 
-    var this_ = this;
-    this.getCapabilities().then(function (capabilities) {
-      this_.getPrintData().then(function (printData) {
-        var printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
+    this.getCapabilities().then(capabilities => {
+      this.getPrintData().then(printData => {
+        let printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
 
         // append child
-        var queueEl = this_.createQueueElement();
-        goog.dom.appendChild(this_.queueContainer_, queueEl);
-        goog.dom.classlist.add(queueEl, M.control.Printer.LOADING_CLASS);
+        let queueEl = this.createQueueElement();
+        this.queueContainer_.appendChild(queueEl);
+        queueEl.classList.add(Printer.LOADING_CLASS);
 
-        M.remote.post(printUrl, printData).then(function (response) {
-          goog.dom.classlist.remove(queueEl, M.control.Printer.LOADING_CLASS);
+        M.Remote.post(printUrl, printData).then((response) => {
+          queueEl.classList.remove(queueEl, Printer.LOADING_CLASS);
 
           if (response.error !== true) {
-            var downloadUrl;
+            let downloadUrl;
             try {
               response = JSON.parse(response.text);
               downloadUrl = response['getURL'];
             }
             catch (err) {}
             // sets the download URL
-            queueEl.setAttribute(M.control.Printer.DOWNLOAD_ATTR_NAME, downloadUrl);
-            goog.events.listen(queueEl, goog.events.EventType.CLICK, this_.dowloadPrint, false, queueEl);
+            queueEl.setAttribute(Printer.DOWNLOAD_ATTR_NAME, downloadUrl);
+            queueEl.addEventListener("click", this.dowloadPrint);
           }
           else {
-            M.dialog.error('Se ha producido un error en la impresión');
+            M.Dialog.error('Se ha producido un error en la impresión');
           }
         });
       });
     });
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -408,15 +408,15 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Printer.prototype.getPrintData = function () {
-    var title = this.inputTitle_.value;
-    var description = this.areaDescription_.value;
-    var projection = this.map_.getProjection();
-    var layout = this.layout_.name;
-    var dpi = this.dpi_.value;
-    var outputFormat = this.format_;
+  getPrintData() {
+    let title = this.inputTitle_.value;
+    let description = this.areaDescription_.value;
+    let projection = this.map_.getProjection();
+    let layout = this.layout_.name;
+    let dpi = this.dpi_.value;
+    let outputFormat = this.format_;
 
-    var printData = M.utils.extend({
+    let printData = M.utils.extend({
       'units': projection.units,
       'srs': projection.code,
       'layout': layout,
@@ -424,19 +424,18 @@ goog.require('goog.style');
       'outputFormat': outputFormat
     }, this.params_.layout);
 
-    var this_ = this;
-    return this.encodeLayers().then(function (encodedLayers) {
+    return this.encodeLayers().then(encodedLayers => {
       printData.layers = encodedLayers;
-      printData.pages = this_.encodePages(title, description);
-      if (this_.options_.legend === true) {
-        printData.legends = this_.encodeLegends();
+      printData.pages = this.encodePages(title, description);
+      if (this.options_.legend === true) {
+        printData.legends = this.encodeLegends();
       }
-      if (projection.code !== "EPSG:3857" && this_.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+      if (projection.code !== "EPSG:3857" && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
         printData.srs = 'EPSG:3857';
       }
       return printData;
     });
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -445,17 +444,16 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Printer.prototype.encodeLayers = function () {
-    var layers = this.map_.getLayers().filter(function (layer) {
+  encodeLayers() {
+    let layers = this.map_.getLayers().filter(layer => {
       return ((layer.isVisible() === true) && (layer.inRange() === true) && layer.name !== "cluster_cover");
     });
-    var numLayersToProc = layers.length;
+    let numLayersToProc = layers.length;
 
-    var this_ = this;
-    return (new Promise(function (success, fail) {
-      var encodedLayers = [];
-      layers.forEach(function (layer) {
-        this.getImpl().encodeLayer(layer).then(function (encodedLayer) {
+    return (new Promise((success, fail) => {
+      let encodedLayers = [];
+      layers.forEach(layer => {
+        this.getImpl().encodeLayer(layer).then(encodedLayer => {
           if (encodedLayer !== null) {
             encodedLayers.push(encodedLayer);
           }
@@ -465,9 +463,9 @@ goog.require('goog.style');
           }
         });
 
-      }, this_);
+      }, this);
     }));
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -476,15 +474,15 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Printer.prototype.encodePages = function (title, description) {
-    var encodedPages = [];
-    var projection = this.map_.getProjection();
+  encodePages(title, description) {
+    let encodedPages = [];
+    let projection = this.map_.getProjection();
 
     if (!M.utils.isArray(this.params_.pages)) {
       this.params_.pages = [this.params_.pages];
     }
-    this.params_.pages.forEach(function (page) {
-      var encodedPage = M.utils.extend({
+    this.params_.pages.forEach((page) => {
+      let encodedPage = M.utils.extend({
         'title': title,
         'printTitle': title,
         'printDescription': description,
@@ -492,14 +490,14 @@ goog.require('goog.style');
       }, page);
 
       if (this.forceScale_ === false) {
-        var bbox = this.map_.getBbox();
+        let bbox = this.map_.getBbox();
         encodedPage.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
         if (projection.code !== "EPSG:3857" && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
           encodedPage.bbox = ol.proj.transformExtent(encodedPage.bbox, projection.code, 'EPSG:3857');
         }
       }
       else if (this.forceScale_ === true) {
-        var center = this.map_.getCenter();
+        let center = this.map_.getCenter();
         encodedPage.center = [center.x, center.y];
         encodedPage.scale = this.map_.getScale();
       }
@@ -508,7 +506,7 @@ goog.require('goog.style');
     }, this);
 
     return encodedPages;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -517,21 +515,21 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Printer.prototype.encodeLegends = function () {
+  encodeLegends() {
     // TODO
-    var encodedLegends = [];
+    let encodedLegends = [];
 
-    var layers = this.map_.getLayers();
-    layers.forEach(function (layer) {
+    let layers = this.map_.getLayers();
+    layers.forEach((layer) => {
       if ((layer.isVisible() === true) && (layer.inRange() === true)) {
-        var encodedLegend = this.getImpl().encodeLegend(layer);
+        let encodedLegend = this.getImpl().encodeLegend(layer);
         if (encodedLegend !== null) {
           encodedLegends.push(encodedLegend);
         }
       }
     }, this);
     return encodedLegends;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -541,15 +539,15 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.control.Printer.prototype.createQueueElement = function () {
-    var queueElem = goog.dom.createElement('li');
-    var title = this.inputTitle_.value;
+  createQueueElement() {
+    let queueElem = document.createElement('li');
+    let title = this.inputTitle_.value;
     if (M.utils.isNullOrEmpty(title)) {
-      title = M.control.Printer.NO_TITLE;
+      title = Printer.NO_TITLE;
     }
     queueElem.innerHTML = title;
     return queueElem;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -559,14 +557,14 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.control.Printer.prototype.dowloadPrint = function (event) {
+  dowloadPrint(event) {
     event.preventDefault();
 
-    var downloadUrl = this.getAttribute(M.control.Printer.DOWNLOAD_ATTR_NAME);
+    let downloadUrl = this.getAttribute(Printer.DOWNLOAD_ATTR_NAME);
     if (!M.utils.isNullOrEmpty(downloadUrl)) {
       window.open(downloadUrl, '_blank');
     }
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -575,47 +573,47 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.control.Printer.prototype.equals = function (obj) {
-    var equals = false;
-    if (obj instanceof M.control.Printer) {
+  equals(obj) {
+    let equals = false;
+    if (obj instanceof Printer) {
       equals = (this.name === obj.name);
     }
     return equals;
-  };
+  }
+}
 
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.control.Printer.TEMPLATE = 'printer.html';
+/**
+ * M.Template for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Printer.TEMPLATE = 'printer.html';
 
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.control.Printer.LOADING_CLASS = 'printing';
+/**
+ * M.Template for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Printer.LOADING_CLASS = 'printing';
 
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.control.Printer.DOWNLOAD_ATTR_NAME = 'data-donwload-url-print';
+/**
+ * M.Template for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Printer.DOWNLOAD_ATTR_NAME = 'data-donwload-url-print';
 
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.control.Printer.NO_TITLE = '(Sin título)';
-})();
+/**
+ * M.Template for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+Printer.NO_TITLE = '(Sin título)';

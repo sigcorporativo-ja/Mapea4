@@ -97,7 +97,8 @@ export default class Measurebar extends M.Plugin {
   equals(plugin) {
     if (plugin instanceof Measurebar) {
       return true;
-    } else {
+    }
+    else {
       return false;
     }
   }

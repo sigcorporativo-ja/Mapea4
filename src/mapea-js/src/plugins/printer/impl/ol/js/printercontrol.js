@@ -1,9 +1,7 @@
-goog.provide('P.impl.control.Printer');
-
 /**
  * @namespace M.impl.control
  */
-(function() {
+export deafult class PrinterControl extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the measure conrol.
@@ -12,15 +10,14 @@ goog.provide('P.impl.control.Printer');
    * @extends {ol.control.Control}
    * @api stable
    */
-  M.impl.control.Printer = function() {
+  constructor() {
     /**
      * Facade of the map
      * @private
      * @type {M.Map}
      */
     this.facadeMap_ = null;
-  };
-  goog.inherits(M.impl.control.Printer, M.impl.Control);
+  }
 
   /**
    * This function adds the control to the specified map
@@ -31,7 +28,7 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.addTo = function(map, element) {
+  addTo(map, element) {
     this.facadeMap_ = map;
 
     ol.control.Control.call(this, {
@@ -39,7 +36,7 @@ goog.provide('P.impl.control.Printer');
       'target': null
     });
     map.getMapImpl().addControl(this);
-  };
+  }
 
   /**
    * This function adds the control to the specified map
@@ -50,29 +47,28 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeLayer = function(layer) {
-    var this_ = this;
-    return (new Promise(function(success, fail) {
+  encodeLayer(layer) {
+    return (new Promise((success, fail) => {
       if (layer.type === M.layer.type.WMC) {
         // none
       }
       else if (layer.type === M.layer.type.KML) {
-        success(this_.encodeKML(layer));
+        success(this.encodeKML(layer));
       }
       else if (layer.type === M.layer.type.WMS) {
-        success(this_.encodeWMS(layer));
+        success(this.encodeWMS(layer));
       }
       else if (layer.type === M.layer.type.WFS) {
-        success(this_.encodeWFS(layer));
+        success(this.encodeWFS(layer));
       }
       else if (layer.type === M.layer.type.GeoJSON) {
         /*se reutiliza el codificador WFS ya, aunque ya está en geojson,
           el proceso a realizar es el mismo y recodificar en geojson no
           penaliza*/
-        success(this_.encodeWFS(layer));
+        success(this.encodeWFS(layer));
       }
       else if (layer.type === M.layer.type.WMTS) {
-        this_.encodeWMTS(layer).then(function(encodedLayer) {
+        this.encodeWMTS(layer).then(encodedLayer => {
           success(encodedLayer);
         });
       }
@@ -80,19 +76,19 @@ goog.provide('P.impl.control.Printer');
         // none
       }
       else if (layer.type === M.layer.type.OSM) {
-        success(this_.encodeOSM(layer));
+        success(this.encodeOSM(layer));
       }
       else if (layer.type === M.layer.type.Mapbox) {
-        success(this_.encodeMapbox(layer));
+        success(this.encodeMapbox(layer));
       }
       else if (M.utils.isNullOrEmpty(layer.type) && layer instanceof M.layer.Vector) {
-        success(this_.encodeWFS(layer));
+        success(this.encodeWFS(layer));
       }
       else {
-        success(this_.encodeWFS(layer));
+        success(this.encodeWFS(layer));
       }
     }));
-  };
+  }
 
   /**
    * This function adds the control to the specified map
@@ -103,8 +99,8 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeLegend = function(layer) {
-    var encodedLegend = null;
+  encodeLegend(layer) {
+    let encodedLegend = null;
 
     if (layer.displayInLayerSwitcher) {
       encodedLegend = {
@@ -112,8 +108,8 @@ goog.provide('P.impl.control.Printer');
         "classes": []
       };
 
-      var regExpImgDefault = new RegExp('.*' + M.Layer.LEGEND_DEFAULT + '$');
-      var regExpImgError = new RegExp('.*' + M.Layer.LEGEND_ERROR + '$');
+      let regExpImgDefault = new RegExp('.*' + M.layer.LEGEND_DEFAULT + '$');
+      var regExpImgError = new RegExp('.*' + M.layer.LEGEND_ERROR + '$');
       var legendURL = layer.getLegendURL();
       if (!M.utils.isNullOrEmpty(legendURL) && !regExpImgDefault.test(legendURL) && !regExpImgDefault.test(regExpImgError)) {
         encodedLegend["classes"][0] = {
@@ -127,7 +123,7 @@ goog.provide('P.impl.control.Printer');
     }
 
     return encodedLegend;
-  };
+  }
 
   /**
    * This function adds the control to the specified map
@@ -138,40 +134,40 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeKML = function(layer) {
-    var encodedLayer = null;
+  encodeKML(layer) {
+    let encodedLayer = null;
 
-    var olLayer = layer.getImpl().getOL3Layer();
-    var features = olLayer.getSource().getFeatures();
-    var layerName = layer.name;
-    var layerOpacity = olLayer.getOpacity();
-    var geoJSONFormat = new ol.format.GeoJSON();
-    var bbox = this.facadeMap_.getBbox();
+    let olLayer = layer.getImpl().getOL3Layer();
+    let features = olLayer.getSource().getFeatures();
+    let layerName = layer.name;
+    let layerOpacity = olLayer.getOpacity();
+    let geoJSONFormat = new ol.format.GeoJSON();
+    let bbox = this.facadeMap_.getBbox();
     bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-    var resolution = this.facadeMap_.getMapImpl().getView().getResolution();
+    let resolution = this.facadeMap_.getMapImpl().getView().getResolution();
 
-    var encodedFeatures = [];
-    var encodedStyles = {};
-    var stylesNames = {};
-    var index = 1;
-    features.forEach(function(feature) {
-      var geometry = feature.getGeometry();
-      var styleId = feature.get("styleUrl");
+    let encodedFeatures = [];
+    let encodedStyles = {};
+    let stylesNames = {};
+    let index = 1;
+    features.forEach(feature => {
+      let geometry = feature.getGeometry();
+      let styleId = feature.get("styleUrl");
       if (!M.utils.isNullOrEmpty(styleId)) {
         styleId = styleId.replace('\#', '');
       }
-      var styleFn = feature.getStyle();
+      let styleFn = feature.getStyle();
       if (!M.utils.isNullOrEmpty(styleFn)) {
-        var featureStyle = styleFn.call(feature, resolution)[0];
+        let featureStyle = styleFn.call(feature, resolution)[0];
         if (!M.utils.isNullOrEmpty(featureStyle)) {
 
-          var img = featureStyle.getImage();
-          var imgSize = img.getImageSize();
+          let img = featureStyle.getImage();
+          let imgSize = img.getImageSize();
           if (M.utils.isNullOrEmpty(imgSize)) {
             imgSize = [64, 64];
           }
-          var stroke = featureStyle.getStroke();
-          var style = {
+          let stroke = featureStyle.getStroke();
+          let style = {
             "id": styleId,
             "externalGraphic": img.getSrc(),
             "graphicHeight": imgSize[0],
@@ -179,7 +175,7 @@ goog.provide('P.impl.control.Printer');
             "graphicOpacity": img.getOpacity(),
             "strokeWidth": stroke.getWidth()
           };
-          var text = (featureStyle.getText && featureStyle.getText());
+          let text = (featureStyle.getText && featureStyle.getText());
           if (!M.utils.isNullOrEmpty(text)) {
             style = Object.assign(style, {
               "label": M.utils.isNullOrEmpty(text.getText()) ? feature.get("name") : text.getText(),
@@ -204,15 +200,15 @@ goog.provide('P.impl.control.Printer');
 
 
           if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
-            var styleStr = JSON.stringify(style);
-            var styleName = stylesNames[styleStr];
+            let styleStr = JSON.stringify(style);
+            let styleName = stylesNames[styleStr];
             if (M.utils.isUndefined(styleName)) {
               styleName = index;
               stylesNames[styleStr] = styleName;
               encodedStyles[styleName] = style;
               index++;
             }
-            var geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
+            let geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
             geoJSONFeature.properties = {
               "_gx_style": styleName
             };
@@ -235,7 +231,7 @@ goog.provide('P.impl.control.Printer');
     };
 
     return encodedLayer;
-  };
+  }
 
   /**
    * This function adds the control to the specified map
@@ -246,16 +242,16 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeWMS = function(layer) {
-    var encodedLayer = null;
-    var olLayer = layer.getImpl().getOL3Layer();
-    var layerUrl = layer.url;
-    var layerOpacity = olLayer.getOpacity();
-    var tiled = layer.getImpl().tiled;
-    var params = olLayer.getSource().getParams();
-    var paramsLayers = [params['LAYERS']];
-    var paramsFormat = params['FORMAT'];
-    var paramsStyles = [params['STYLES']];
+  encodeWMS(layer) {
+    let encodedLayer = null;
+    let olLayer = layer.getImpl().getOL3Layer();
+    let layerUrl = layer.url;
+    let layerOpacity = olLayer.getOpacity();
+    let tiled = layer.getImpl().tiled;
+    let params = olLayer.getSource().getParams();
+    let paramsLayers = [params['LAYERS']];
+    let paramsFormat = params['FORMAT'];
+    let paramsStyles = [params['STYLES']];
     encodedLayer = {
       'baseURL': layerUrl,
       'opacity': layerOpacity,
@@ -269,8 +265,8 @@ goog.provide('P.impl.control.Printer');
     /*************************************
      MAPEA DE CAPAS TILEADAS
     *************************************/
-    var noChacheName = layer.getNoChacheName();
-    var noChacheUrl = layer.getNoChacheUrl();
+    let noChacheName = layer.getNoChacheName();
+    let noChacheUrl = layer.getNoChacheUrl();
     if (!M.utils.isNullOrEmpty(noChacheName) && !M.utils.isNullOrEmpty(noChacheUrl)) {
       encodedLayer['layers'] = [noChacheName];
       encodedLayer['baseURL'] = noChacheUrl;
@@ -292,7 +288,7 @@ goog.provide('P.impl.control.Printer');
       }
     }
     return encodedLayer;
-  };
+  }
 
   /**
    * This function adds the control to the specified map
@@ -303,8 +299,8 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeWFS = function(layer) {
-    var encodedLayer = null;
+  encodeWFS(layer) {
+    let encodedLayer = null;
     let continuePrint = true;
     if (layer.getStyle() instanceof M.style.Chart) {
       continuePrint = false;
@@ -313,25 +309,25 @@ goog.provide('P.impl.control.Printer');
       continuePrint = false;
     }
     if (continuePrint) {
-      var projection = this.facadeMap_.getProjection();
-      var olLayer = layer.getImpl().getOL3Layer();
-      var features = olLayer.getSource().getFeatures();
-      var layerName = layer.name;
-      var layerOpacity = olLayer.getOpacity();
-      var layerStyle = olLayer.getStyle();
-      var geoJSONFormat = new ol.format.GeoJSON();
-      var bbox = this.facadeMap_.getBbox();
+      let projection = this.facadeMap_.getProjection();
+      let olLayer = layer.getImpl().getOL3Layer();
+      let features = olLayer.getSource().getFeatures();
+      let layerName = layer.name;
+      let layerOpacity = olLayer.getOpacity();
+      let layerStyle = olLayer.getStyle();
+      let geoJSONFormat = new ol.format.GeoJSON();
+      let bbox = this.facadeMap_.getBbox();
       bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-      var resolution = this.facadeMap_.getMapImpl().getView().getResolution();
+      let resolution = this.facadeMap_.getMapImpl().getView().getResolution();
 
-      var encodedFeatures = [];
-      var encodedStyles = {};
-      var stylesNames = {};
-      var index = 1;
-      features.forEach(function(feature) {
-        var geometry = feature.getGeometry();
-        var featureStyle;
-        var fStyle = feature.getStyle();
+      let encodedFeatures = [];
+      let encodedStyles = {};
+      let stylesNames = {};
+      let index = 1;
+      features.forEach(feature => {
+        let geometry = feature.getGeometry();
+        let featureStyle;
+        let fStyle = feature.getStyle();
 
         if (!M.utils.isNullOrEmpty(fStyle)) {
           featureStyle = fStyle;
@@ -487,7 +483,7 @@ goog.provide('P.impl.control.Printer');
       };
     }
     return encodedLayer;
-  };
+  }
 
   /**
    * This function adds the control to the specified map
@@ -498,34 +494,34 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeWMTS = function(layer) {
-    var zoom = this.facadeMap_.getZoom();
+  encodeWMTS(layer) {
+    let zoom = this.facadeMap_.getZoom();
     // var units = this.facadeMap_.getProjection().units;
-    var layerImpl = layer.getImpl();
-    var olLayer = layerImpl.getOL3Layer();
-    var layerSource = olLayer.getSource();
-    var tileGrid = layerSource.getTileGrid();
+    let layerImpl = layer.getImpl();
+    let olLayer = layerImpl.getOL3Layer();
+    let layerSource = olLayer.getSource();
+    let tileGrid = layerSource.getTileGrid();
 
-    var layerUrl = layer.url;
-    var layerName = layer.name;
+    let layerUrl = layer.url;
+    let layerName = layer.name;
     // var layerVersion = layer.version;
-    var layerOpacity = olLayer.getOpacity();
-    var layerReqEncoding = layerSource.getRequestEncoding();
-    var tiled = layerImpl.tiled;
+    let layerOpacity = olLayer.getOpacity();
+    let layerReqEncoding = layerSource.getRequestEncoding();
+    let tiled = layerImpl.tiled;
     // var style = layerSource.getStyle();
-    var layerExtent = olLayer.getExtent();
-    var params = {};
-    var matrixSet = layerSource.getMatrixSet();
+    let layerExtent = olLayer.getExtent();
+    let params = {};
+    let matrixSet = layerSource.getMatrixSet();
     // var tileOrigin = tileGrid.getOrigin(zoom);
-    var tileSize = tileGrid.getTileSize(zoom);
-    var resolutions = tileGrid.getResolutions();
+    let tileSize = tileGrid.getTileSize(zoom);
+    let resolutions = tileGrid.getResolutions();
     // var matrixIds = tileGrid.getMatrixIds();
 
     /**
      * @see http: //www.mapfish.org/doc/print/protocol.html#layers-params
      */
-    return layer.getImpl().getCapabilities().then(function(capabilities) {
-      var matrixIdsObj = capabilities["Contents"]["TileMatrixSet"].filter(function(tileMatrixSet) {
+    return layer.getImpl().getCapabilities().then(capabilities => {
+      let matrixIdsObj = capabilities["Contents"]["TileMatrixSet"].filter(tileMatrixSet => {
         return (tileMatrixSet["Identifier"] === matrixSet);
       })[0];
       return {
@@ -549,7 +545,7 @@ goog.provide('P.impl.control.Printer');
         "version": "1.0.0",
         'maxExtent': layerExtent,
         'matrixSet': matrixSet,
-        'matrixIds': matrixIdsObj.TileMatrix.map(function(tileMatrix, i) {
+        'matrixIds': matrixIdsObj.TileMatrix.map((tileMatrix, i) => {
           return {
             "identifier": tileMatrix["Identifier"],
             "matrixSize": [tileMatrix["MatrixHeight"], tileMatrix["MatrixWidth"]],
@@ -562,7 +558,7 @@ goog.provide('P.impl.control.Printer');
         'resolutions': resolutions
       };
     });
-  };
+  }
 
   /**
    * This function adds the control to the specified map
@@ -573,21 +569,21 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeOSM = function(layer) {
-    var encodedLayer = null;
+  encodeOSM(layer) {
+    let encodedLayer = null;
 
-    var layerImpl = layer.getImpl();
-    var olLayer = layerImpl.getOL3Layer();
-    var layerSource = olLayer.getSource();
-    var tileGrid = layerSource.getTileGrid();
+    let layerImpl = layer.getImpl();
+    let olLayer = layerImpl.getOL3Layer();
+    let layerSource = olLayer.getSource();
+    let tileGrid = layerSource.getTileGrid();
 
-    var layerUrl = layer.url || 'http://tile.openstreetmap.org/';
-    var layerName = layer.name;
-    var layerOpacity = olLayer.getOpacity();
-    var tiled = layerImpl.tiled;
-    var layerExtent = tileGrid.getExtent();
-    var tileSize = tileGrid.getTileSize();
-    var resolutions = tileGrid.getResolutions();
+    let layerUrl = layer.url || 'http://tile.openstreetmap.org/';
+    let layerName = layer.name;
+    let layerOpacity = olLayer.getOpacity();
+    let tiled = layerImpl.tiled;
+    let layerExtent = tileGrid.getExtent();
+    let tileSize = tileGrid.getTileSize();
+    let resolutions = tileGrid.getResolutions();
     encodedLayer = {
       'baseURL': layerUrl,
       'opacity': layerOpacity,
@@ -602,7 +598,7 @@ goog.provide('P.impl.control.Printer');
 
     return encodedLayer;
 
-  };
+  }
 
   /**
    * This function adds the control to the specified map
@@ -613,22 +609,22 @@ goog.provide('P.impl.control.Printer');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Printer.prototype.encodeMapbox = function(layer) {
-    var encodedLayer = null;
+  encodeMapbox(layer) {
+    let encodedLayer = null;
 
-    var layerImpl = layer.getImpl();
-    var olLayer = layerImpl.getOL3Layer();
-    var layerSource = olLayer.getSource();
-    var tileGrid = layerSource.getTileGrid();
+    let layerImpl = layer.getImpl();
+    let olLayer = layerImpl.getOL3Layer();
+    let layerSource = olLayer.getSource();
+    let tileGrid = layerSource.getTileGrid();
 
-    var layerUrl = M.utils.concatUrlPaths([M.config.MAPBOX_URL, layer.name]);
-    var layerOpacity = olLayer.getOpacity();
-    var layerExtent = tileGrid.getExtent();
+    let layerUrl = M.utils.concatUrlPaths([M.config.MAPBOX_URL, layer.name]);
+    let layerOpacity = olLayer.getOpacity();
+    let layerExtent = tileGrid.getExtent();
 
-    var tileSize = tileGrid.getTileSize();
-    var resolutions = tileGrid.getResolutions();
+    let tileSize = tileGrid.getTileSize();
+    let resolutions = tileGrid.getResolutions();
 
-    var customParams = {};
+    let customParams = {};
     customParams[M.config.MAPBOX_TOKEN_NAME] = M.config.MAPBOX_TOKEN_VALUE;
     encodedLayer = {
       'opacity': layerOpacity,
@@ -637,13 +633,13 @@ goog.provide('P.impl.control.Printer');
       'maxExtent': layerExtent,
       'tileSize': [tileSize, tileSize],
       'resolutions': resolutions,
-      'extension': M.config.MAPBOX_EXTENSION,
+      'extension': Config.MAPBOX_EXTENSION,
       'type': 'xyz',
       'path_format': '/${z}/${x}/${y}.png'
     };
 
     return encodedLayer;
-  };
+  }
 
   /**
    * This function destroys this control, clearing the HTML
@@ -653,8 +649,8 @@ goog.provide('P.impl.control.Printer');
    * @function
    * @api stable
    */
-  M.impl.control.Printer.prototype.destroy = function() {
+  destroy() {
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_ = null;
-  };
-})();
+  }
+}
