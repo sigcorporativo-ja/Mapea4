@@ -8,8 +8,9 @@
  * @api stable
  */
 export default class MeasureClear extends M.Control {
-
   constructor(measureLengthControl, measureAreaControl) {
+    super();
+
     /**
      * Implementation measureLength
      * @private
@@ -43,11 +44,11 @@ export default class MeasureClear extends M.Control {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    let button = element.getElementsByTagName('button')['m-measure-button'];
-    button.addEventListener("click", this.onClick);
+    const button = element.getElementsByTagName('button')['m-measure-button'];
+    button.addEventListener('click', this.onClick);
     ol.control.Control.call(this, {
-      'element': element,
-      'target': null
+      element,
+      target: null,
     });
     map.getMapImpl().addControl(this);
   }
@@ -80,5 +81,4 @@ export default class MeasureClear extends M.Control {
     this.facadeMap_.removeControls(this);
     this.facadeMap_ = null;
   }
-
 }

@@ -1,4 +1,4 @@
-import MeasureClearImpl from "../../impl/ol/js/measureclear";
+import MeasureClearImpl from '../../impl/ol/js/measureclear';
 
 
 /**
@@ -14,19 +14,17 @@ import MeasureClearImpl from "../../impl/ol/js/measureclear";
  */
 
 export default class MeasureClear extends M.Control {
-
   constructor(measureLengthControl, measureAreaControl) {
     // implementation of this control
-    let impl = new MeasureClearImpl(measureLengthControl.getImpl(), measureAreaControl.getImpl());
+    const impl = new MeasureClearImpl(measureLengthControl.getImpl(), measureAreaControl.getImpl());
 
     // calls the super constructor
     super(impl, MeasureClear.NAME);
 
     // checks if the implementation can create MeasureClear
     if (M.utils.isUndefined(MeasureClearImpl)) {
-      Exception('La implementación usada no puede crear controles MeasureClear');
+      M.Exception('La implementación usada no puede crear controles MeasureClear');
     }
-
   }
 
   /**
@@ -38,9 +36,9 @@ export default class MeasureClear extends M.Control {
    * @returns {Promise} HTML template
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return M.Template.compile(MeasureClear.TEMPLATE, {
-      'jsonp': true
+      jsonp: true,
     });
   }
 

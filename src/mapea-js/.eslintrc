@@ -14,7 +14,8 @@
     "window": true,
     "DOMParser": true,
     "XMLHttpRequest": true,
-    "Image": true
+    "Image": true,
+    "Draggabilly": true
   },
   "rules": {
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],

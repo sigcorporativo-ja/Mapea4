@@ -1,6 +1,6 @@
-import MeasureLength from "./measurelength"
-import MeasureArea from "./measurearea"
-import MeasureClear from "./measureclear"
+import MeasureLength from './measurelength';
+import MeasureArea from './measurearea';
+import MeasureClear from './measureclear';
 
 export default class Measurebar extends M.Plugin {
   /**
@@ -50,7 +50,6 @@ export default class Measurebar extends M.Plugin {
      * @type {M.control.MeasureClear}
      */
     this.measureClear_ = null;
-
   }
 
   /**
@@ -94,14 +93,12 @@ export default class Measurebar extends M.Plugin {
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  equals(plugin) {
+  static equals(plugin) {
     if (plugin instanceof Measurebar) {
       return true;
     }
-    else {
-      return false;
-    }
+    return false;
   }
 }
 
-Measurebar.NAME = "measurebar";
+Measurebar.NAME = 'measurebar';

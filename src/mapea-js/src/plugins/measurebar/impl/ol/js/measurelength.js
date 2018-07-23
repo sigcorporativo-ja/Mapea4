@@ -1,6 +1,7 @@
-import Measure from "./measurebase";
-import FacadeMeasureLength from "../../../js/measurelength";
-import FacadeMeasureArea from "../../../js/measurearea";
+import Measure from './measurebase';
+import FacadeMeasureLength from '../../../facade/js/measurelength';
+import FacadeMeasure from '../../../facade/js/mesasurebase';
+
 /**
  * @classdesc
  * Main constructor of the class. Creates a MeasureLength
@@ -11,9 +12,7 @@ import FacadeMeasureArea from "../../../js/measurearea";
  * @api stable
  */
 export default class MeasureLength extends Measure {
-
   constructor() {
-
     super('LineString');
 
     /**
@@ -29,7 +28,6 @@ export default class MeasureLength extends Measure {
      * @type {string}
      */
     this.helpMsgContinue_ = FacadeMeasureLength.HELP_KEEP_MESSAGE;
-
   }
 
 
@@ -40,16 +38,14 @@ export default class MeasureLength extends Measure {
    * @return {string} output - Indicates the measure distance
    * @api stable
    */
-  formatGeometry(geometry) {
-    let length = Math.round(geometry.getLength() * 100) / 100;
+  static formatGeometry(geometry) {
+    const length = Math.round(geometry.getLength() * 100) / 100;
     let output;
     if (length > 100) {
-      output = (Math.round(length / 1000 * 100) / 100) +
-        ' ' + 'km';
+      output = `${Math.round(((length / 1000) * 100) / 100)} km`;
     }
     else {
-      output = (Math.round(length * 100) / 100) +
-        ' ' + 'm';
+      output = `${Math.round(length * 100) / 100} m`;
     }
     return output;
   }
@@ -61,7 +57,7 @@ export default class MeasureLength extends Measure {
    * @return {array} coordinates to tooltip
    * @api stable
    */
-  getTooltipCoordinate(geometry) {
+  static getTooltipCoordinate(geometry) {
     return geometry.getLastCoordinate();
   }
 }

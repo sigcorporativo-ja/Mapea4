@@ -1,5 +1,4 @@
 export default class Measure extends M.Control {
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a Measure
@@ -19,7 +18,6 @@ export default class Measure extends M.Control {
      */
 
     this.template_ = template;
-
   }
 
   /**
@@ -33,7 +31,7 @@ export default class Measure extends M.Control {
    */
   createView(map) {
     return M.Template.compile(this.template_, {
-      'jsonp': true
+      jsonp: true,
     });
   }
 
@@ -46,7 +44,7 @@ export default class Measure extends M.Control {
    * @api stable
    * @export
    */
-  getActivationButton(element) {
+  static getActivationButton(element) {
     return element.querySelector('button#m-measure-button');
   }
 

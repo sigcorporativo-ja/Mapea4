@@ -7,9 +7,6 @@ export default class AttributeTableControl extends M.impl.Control {
    * @extends {M.impl.Control}
    * @api stable
    */
-  constructor() {
-    super();
-  }
   /**
    * This function adds the control to the specified map
    *

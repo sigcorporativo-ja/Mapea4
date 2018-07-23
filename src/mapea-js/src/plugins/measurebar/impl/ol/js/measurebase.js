@@ -1,9 +1,8 @@
-import Control from "impl/ol/js/controls/controlbase";
-import FacadeMeasureArea from "../../../js/measurearea";
-import FacadeMeasureLength from "../../../js/measurelength";
-import MeasureArea from "./measurearea"
-import Utils from "facade/js/utils/utils";
-import Template from "facade/js/utils/template";
+import FacadeMeasureArea from '../../../js/measurearea';
+import FacadeMeasureLength from '../../../js/measurelength';
+import MeasureAreaImpl from './measurearea';
+import MeasureLengthImpl from './measurelength';
+import FacadeMeasure from '../../../facade/js/measurebase';
 
 /**
  * @classdesc
@@ -15,9 +14,7 @@ import Template from "facade/js/utils/template";
  * @api stable
  */
 export default class Measure extends M.impl.Control {
-
   constructor(type) {
-
     super();
 
     /**
@@ -82,7 +79,6 @@ export default class Measure extends M.impl.Control {
      * @type {array<ol.Overlay>}
      */
     this.overlays_ = [];
-
   }
 
   /**
@@ -101,7 +97,7 @@ export default class Measure extends M.impl.Control {
     map.getMapImpl().addLayer(this.layer_);
 
     // super addTo
-    super('addTo', map, element);
+    map.addTo(element);
 
     this.createHelpTooltip_();
     this.createMeasureTooltip_();
@@ -116,8 +112,8 @@ export default class Measure extends M.impl.Control {
    */
   activate() {
     // if it is measure length then deactivate measure area
-    if (this instanceof MeasureLength) {
-      var measureArea = this.facadeMap_.getControls().filter(control => {
+    if (this instanceof MeasureLengthImpl) {
+      const measureArea = this.facadeMap_.getControls().filter((control) => {
         return (control instanceof FacadeMeasureArea);
       })[0];
       if (measureArea) {
@@ -125,8 +121,8 @@ export default class Measure extends M.impl.Control {
       }
     }
     // if it is measure area then deactivate measure length
-    else if (this instanceof MeasureArea) {
-      var measureLength = this.facadeMap_.getControls().filter(control => {
+    else if (this instanceof MeasureAreaImpl) {
+      const measureLength = this.facadeMap_.getControls().filter((control) => {
         return (control instanceof FacadeMeasureLength);
       })[0];
 
@@ -153,10 +149,10 @@ export default class Measure extends M.impl.Control {
     this.facadeMap_.getMapImpl().un('pointermove', this.pointerMoveHandler_, this);
     this.facadeMap_.getMapImpl().removeInteraction(this.draw_);
     this.clear();
-    if (!Utils.isNullOrEmpty(this.helpTooltip_)) {
+    if (!M.Utils.isNullOrEmpty(this.helpTooltip_)) {
       this.facadeMap_.getMapImpl().removeOverlay(this.helpTooltip_);
     }
-    if (!Utils.isNullOrEmpty(this.measureTooltip_)) {
+    if (!M.Utils.isNullOrEmpty(this.measureTooltip_)) {
       this.facadeMap_.getMapImpl().removeOverlay(this.measureTooltip_);
     }
     this.active = false;
@@ -169,25 +165,25 @@ export default class Measure extends M.impl.Control {
    * @private
    * @return {ol.layer.Vector} layer - Vector layer
    */
-  createLayer_() {
-    let layer = new ol.layer.Vector({
+  static createLayer_() {
+    const layer = new ol.layer.Vector({
       source: new ol.source.Vector({}),
       style: new ol.style.Style({
         fill: new ol.style.Fill({
-          color: 'rgba(51, 124, 235, 0.2)'
+          color: 'rgba(51, 124, 235, 0.2)',
         }),
         stroke: new ol.style.Stroke({
           color: '#337ceb',
-          width: 2
+          width: 2,
         }),
         image: new ol.style.Circle({
           radius: 7,
           fill: new ol.style.Fill({
-            color: '#337ceb'
-          })
-        })
+            color: '#337ceb',
+          }),
+        }),
       }),
-      zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 99
+      zIndex: M.impl.Map.Z_INDEX[M.layer.type.WFS] + 99,
     });
     return layer;
   }
@@ -200,28 +196,28 @@ export default class Measure extends M.impl.Control {
    * @return {ol.interaction.Draw} draw - Interaction draw
    */
   createIteractionDraw_() {
-    let draw = new ol.interaction.Draw({
+    const draw = new ol.interaction.Draw({
       source: this.layer_.getSource(),
       type: this.type_,
       style: new ol.style.Style({
         fill: new ol.style.Fill({
-          color: 'rgba(255, 255, 255, 0.5)'
+          color: 'rgba(255, 255, 255, 0.5)',
         }),
         stroke: new ol.style.Stroke({
           color: '#b54d01',
           lineDash: [10, 10],
-          width: 2
+          width: 2,
         }),
         image: new ol.style.Circle({
           radius: 5,
           stroke: new ol.style.Stroke({
-            color: '#b54d01'
+            color: '#b54d01',
           }),
           fill: new ol.style.Fill({
-            color: 'rgba(255, 255, 255, 0.5)'
-          })
-        })
-      })
+            color: 'rgba(255, 255, 255, 0.5)',
+          }),
+        }),
+      }),
     });
     draw.on('drawstart', this.onDrawStart_, this);
     draw.on('drawend', this.onDrawEnd_, this);
@@ -238,12 +234,12 @@ export default class Measure extends M.impl.Control {
    */
   createHelpTooltip_() {
     return M.Template.compile(FacadeMeasure.POINTER_TOOLTIP_TEMPLATE, {
-      'jsonp': true
-    }).then(helpTooltipElement => {
+      jsonp: true,
+    }).then((helpTooltipElement) => {
       this.helpTooltip_ = new ol.Overlay({
         element: helpTooltipElement,
         offset: [15, 0],
-        positioning: 'center-left'
+        positioning: 'center-left',
       });
       this.facadeMap_.getMapImpl().addOverlay(this.helpTooltip_);
     });
@@ -257,15 +253,15 @@ export default class Measure extends M.impl.Control {
    */
   createMeasureTooltip_() {
     M.Template.compile(FacadeMeasure.MEASURE_TOOLTIP_TEMPLATE, {
-      'jsonp': true
-    }).then(measureTooltipElement => {
-      if (!Utils.isNullOrEmpty(this.measureTooltip_)) {
+      jsonp: true,
+    }).then((measureTooltipElement) => {
+      if (!M.Utils.isNullOrEmpty(this.measureTooltip_)) {
         this.overlays_.push(this.measureTooltip_);
       }
       this.measureTooltip_ = new ol.Overlay({
         element: measureTooltipElement,
         offset: [0, -15],
-        positioning: 'bottom-center'
+        positioning: 'bottom-center',
       });
       this.facadeMap_.getMapImpl().addOverlay(this.measureTooltip_);
     });
@@ -316,7 +312,7 @@ export default class Measure extends M.impl.Control {
     if (this.currentFeature_) {
       helpMsg = this.helpMsgContinue_;
     }
-    if (!Utils.isNullOrEmpty(this.helpTooltip_)) {
+    if (!M.Utils.isNullOrEmpty(this.helpTooltip_)) {
       this.helpTooltip_.getElement().innerHTML = helpMsg;
       this.helpTooltip_.setPosition(evt.coordinate);
     }
@@ -329,11 +325,11 @@ export default class Measure extends M.impl.Control {
    * @param {ol.MapBrowserEvent} evt - Event pointer change
    */
   onGeometryChange_(evt) {
-    let newGeometry = evt.target;
-    let tooltipText = this.formatGeometry(newGeometry);
-    let tooltipCoord = this.getTooltipCoordinate(newGeometry);
+    const newGeometry = evt.target;
+    const tooltipText = this.formatGeometry(newGeometry);
+    const tooltipCoord = this.getTooltipCoordinate(newGeometry);
 
-    if (!Utils.isNullOrEmpty(this.measureTooltip_)) {
+    if (!M.Utils.isNullOrEmpty(this.measureTooltip_)) {
       this.measureTooltip_.getElement().innerHTML = tooltipText;
       this.measureTooltip_.setPosition(tooltipCoord);
     }
@@ -347,10 +343,10 @@ export default class Measure extends M.impl.Control {
    * @api stable
    */
   clear() {
-    if (!Utils.isNullOrEmpty(this.layer_)) {
+    if (!M.Utils.isNullOrEmpty(this.layer_)) {
       this.layer_.getSource().clear();
     }
-    this.overlays_.forEach(overlay => {
+    this.overlays_.forEach((overlay) => {
       this.facadeMap_.getMapImpl().removeOverlay(overlay);
     }, this);
     this.overlays_.length = 0;

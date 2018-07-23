@@ -1,5 +1,6 @@
-export default class AttributeTable extends M.plugin {
+import AttributeTableControl from './attributetableControl';
 
+export default class AttributeTable extends M.plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -9,15 +10,14 @@ export default class AttributeTable extends M.plugin {
    * @extends {M.Plugin}
    * @api stable
    */
-  constructor(parameters) {
-
+  constructor(parameters = {}) {
     super();
 
-  [this.control_, this.panel_, this.facadeMap_] = [null, null, null];
+    [this.control_, this.panel_, this.facadeMap_] = [null, null, null];
 
-    parameters = (parameters || {});
-
-    this.numPages_ = parseInt((!M.utils.isNullOrEmpty(parameters.pages) && parameters.pages >= 1 && parameters.pages % 1 === 0) ? parameters.pages : M.config.ATTRIBUTETABLE_PAGES);
+    this.numPages_ = parseInt((!M.utils.isNullOrEmpty(parameters.pages) &&
+      parameters.pages >= 1 &&
+      parameters.pages % 1 === 0) ? parameters.pages : M.config.ATTRIBUTETABLE_PAGES, 10);
 
     /**
      * Name of this control
@@ -37,31 +37,34 @@ export default class AttributeTable extends M.plugin {
    * @api stable
    */
   addTo(map) {
+    const add = (pluginParam) => {
+      const plugin = pluginParam;
+      plugin.facadeMap_ = map;
+      plugin.control_ = new AttributeTableControl(plugin.numPages_);
+      plugin.panel_ = new M.ui.Panel(AttributeTable.NAME, {
+        collapsible: true,
+        className: 'm-attributetable',
+        collapsedButtonClass: 'g-cartografia-localizacion4',
+        position: M.ui.position.TR,
+        tooltip: 'Tabla de atributos',
+      });
+      plugin.panel_.addControls(plugin.control_);
+      plugin.panel_.on(M.evt.SHOW, (evt) => {
+        if (map.getWFS().length === 0 && map.getKML().length === 0 && map.getLayers()
+          .filter(layer => layer.type === 'GeoJSON') === 0) {
+          plugin.panel_.collapse();
+          M.Dialog.info('No existen capas consultables.');
+        }
+      });
+      map.addPanels(plugin.panel_);
+    };
+
     map.on(M.evt.ADDED_LAYER, () => {
       this.destroy();
       add(this);
     });
 
-    const add = (plugin) => {
-      plugin.facadeMap_ = map;
-      plugin.control_ = new M.control.AttributeTableControl(plugin.numPages_);
-      plugin.panel_ = new M.ui.Panel(AttributeTable.NAME, {
-        'collapsible': true,
-        'className': 'm-attributetable',
-        'collapsedButtonClass': 'g-cartografia-localizacion4',
-        'position': M.ui.position.TR,
-        'tooltip': 'Tabla de atributos'
-      });
-      plugin.panel_.addControls(plugin.control_);
-      plugin.panel_.on(M.evt.SHOW, evt => {
-        if (map.getWFS().length === 0 && map.getKML().length === 0 && map.getLayers()
-          .filter(layer => layer.type === "GeoJSON") === 0) {
-          plugin.panel_.collapse();
-          Dialog.info("No existen capas consultables.");
-        }
-      });
-      map.addPanels(plugin.panel_);
-    };
+
     add(this);
   }
 
@@ -74,7 +77,7 @@ export default class AttributeTable extends M.plugin {
    */
   destroy() {
     this.facadeMap_.removeControls([this.control_]);
-   [this.control_, this.panel_, this.facadeMap_] = [null, null, null];
+    [this.control_, this.panel_, this.facadeMap_] = [null, null, null];
   }
 
   /**

@@ -1,4 +1,4 @@
-import SearchstreetImpl from "../../impl/ol/js/searchstreetcontrol";
+import SearchstreetImpl from '../../impl/ol/js/searchstreetcontrol';
 
 export default class SearchstreetControl extends M.Control {
   /**
@@ -12,9 +12,8 @@ export default class SearchstreetControl extends M.Control {
    * @api stable
    */
   constructor(url, locality) {
-
     // implementation of this control
-    let impl = new SearchstreetImpl();
+    const impl = new SearchstreetImpl();
 
     super(impl);
 
@@ -68,7 +67,7 @@ export default class SearchstreetControl extends M.Control {
      * @private
      * @type {string}
      */
-    this.name_ = "searchstreet";
+    this.name_ = 'searchstreet';
 
     /**
      * Search URL
@@ -100,7 +99,7 @@ export default class SearchstreetControl extends M.Control {
      * @private
      * @type {array}
      */
-    this.provincias_ = ["huelva", "sevilla", "córdoba", "jaén", "cádiz", "málaga", "granada", "almería"];
+    this.provincias_ = ['huelva', 'sevilla', 'córdoba', 'jaén', 'cádiz', 'málaga', 'granada', 'almería'];
 
     // checks if you receive the locality parameter, if so create two attributes.
     if (!M.utils.isUndefined(locality)) {
@@ -175,7 +174,6 @@ export default class SearchstreetControl extends M.Control {
      * @type {HTMLElement}
      */
     this.resultsScrollContainer_ = null;
-
   }
 
   /**
@@ -189,14 +187,13 @@ export default class SearchstreetControl extends M.Control {
    */
   createView(map) {
     this.facadeMap_ = map;
-    let promise = new Promise((success, fail) => {
+    const promise = new Promise((success, fail) => {
       M.Template.compile(SearchstreetControl.TEMPLATE, {
-        'jsonp': true
-      }).then(
-        (html) => {
-          this.addEvents(html);
-          success(html);
-        });
+        jsonp: true,
+      }).then((html) => {
+        this.addEvents(html);
+        success(html);
+      });
     });
     return promise;
   }
@@ -212,46 +209,47 @@ export default class SearchstreetControl extends M.Control {
   addEvents(html) {
     this.element_ = html;
 
-    this.on(EventsManager.COMPLETED, () => {
-      this.element_.classlist.add("shown");
+    this.on(M.evt.COMPLETED, () => {
+      this.element_.classlist.add('shown');
     }, this);
 
     // searchs
-    this.input_ = this.element_.getElementsByTagName("input")["m-searchstreet-search-input"];
-    this.button_ = this.element_.getElementsByTagName("button")["m-searchstreet-search-btn"];
-    this.clear_ = this.element_.getElementsByTagName("button")["m-searchstreet-clear-btn"];
+    this.input_ = this.element_.getElementsByTagName('input')['m-searchstreet-search-input'];
+    this.button_ = this.element_.getElementsByTagName('button')['m-searchstreet-search-btn'];
+    this.clear_ = this.element_.getElementsByTagName('button')['m-searchstreet-clear-btn'];
 
     // events
-    //JGL20170816: traslado gestión evento a autocomplete
-    //goog.events.listen(this.input_, goog.events.EventType.KEYUP, this.searchClick_, false, this);
-    this.button_.addEventListener("click", this.searchClick_);
-    this.clear_.addEventListener("click", this.clearSearchs_);
+    // JGL20170816: traslado gestión evento a autocomplete
+
+    this.button_.addEventListener('click', this.searchClick_);
+    this.clear_.addEventListener('click', this.clearSearchs_);
     // results container
-    this.resultsContainer_ = this.element_.getElementsByTagName('div')["m-searchstreet-results"];
-    this.resultsAutocomplete_ = this.element_.getElementsByTagName('div')["m-autocomplete-results"];
+    this.resultsContainer_ = this.element_.getElementsByTagName('div')['m-searchstreet-results'];
+    this.resultsAutocomplete_ = this.element_.getElementsByTagName('div')['m-autocomplete-results'];
     this.searchingResult_ = this.element_.querySelector('div#m-searchstreet-results > div#m-searching-result-searchstreet');
 
     if (!M.utils.isUndefined(this.codIne_) && !M.utils.isNullOrEmpty(this.codIne_)) {
-      let searchCodIne = M.utils.addParameters(this.searchCodIne_, {
-        codigo: this.codIne_
+      const searchCodIne = M.utils.addParameters(this.searchCodIne_, {
+        codigo: this.codIne_,
       });
-      M.Remote.get(searchCodIne).then(
-        (response) => {
-          let results;
-          try {
-            if (!M.utils.isNullOrEmpty(response.text)) {
-              results = JSON.parse(response.text);
-              if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
-                M.dialog.error("El código del municipio '" + this.codIne_ + "' no es válido");
-              } else {
-                this.getMunProv_(results);
-                this.element_.getElementsByTagName("span")["codIne"].innerHTML = "Búsquedas en " + this.municipio_ + "  (" + this.provincia_ + ")";
-              }
+      M.Remote.get(searchCodIne).then((response) => {
+        let results;
+        try {
+          if (!M.utils.isNullOrEmpty(response.text)) {
+            results = JSON.parse(response.text);
+            if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
+              M.dialog.error(`El código del municipio '${this.codIne_}' no es válido`);
             }
-          } catch (err) {
-            M.exception('La respuesta no es un JSON válido: ' + err);
+            else {
+              this.getMunProv_(results);
+              this.element_.getElementsByTagName('span').codIne.innerHTML = `Búsquedas en ${this.municipio_}  (${this.provincia_})`;
+            }
           }
-        });
+        }
+        catch (err) {
+          M.exception(`La respuesta no es un JSON válido: ${err}`);
+        }
+      });
     }
     this.resultsContainer_.removeChildren(this.searchingResult_);
   }
@@ -264,8 +262,10 @@ export default class SearchstreetControl extends M.Control {
    * @function
    */
   getMunProv_(results) {
-    this.provincia_ = results.comprobarCodIneResponse.comprobarCodIneReturn.comprobarCodIneReturn.nombreProvincia;
-    this.municipio_ = results.comprobarCodIneResponse.comprobarCodIneReturn.comprobarCodIneReturn.nombreMunicipio;
+    this.provincia_ = results.comprobarCodIneResponse.comprobarCodIneReturn
+      .comprobarCodIneReturn.nombreProvincia;
+    this.municipio_ = results.comprobarCodIneResponse.comprobarCodIneReturn
+      .comprobarCodIneReturn.nombreMunicipio;
   }
 
   /**
@@ -279,27 +279,30 @@ export default class SearchstreetControl extends M.Control {
   searchClick_(evt) {
     evt.preventDefault();
 
-    if ((evt.type !== "keyup") || (evt.keyCode === 13)) {
+    if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
       this.resultsAutocomplete_.classList.remove(SearchstreetControl.MINIMUM);
-      this.resultsAutocomplete_.removeChildren(this.resultsAutocomplete_.querySelector("div#m-searching-result-autocomplete"));
+      this.resultsAutocomplete_.removeChildren(this.resultsAutocomplete_.querySelector('div#m-searching-result-autocomplete'));
       // gets the query
       let query = this.input_.value;
       if (M.utils.isNullOrEmpty(query)) {
         M.dialog.error('Debe introducir una búsqueda.');
-      } else {
+      }
+      else {
         if (query.length < this.minAutocomplete_) {
           this.completed = false;
-        } else {
+        }
+        else {
           this.completed = true;
         }
         if (!M.utils.isUndefined(this.codIne_) && !M.utils.isNullOrEmpty(this.codIne_)) {
           // It does not take into account the municipality if indicated
-          var pos = query.indexOf(",");
-          if (query.indexOf(",") > -1) {
+          const pos = query.indexOf(',');
+          if (query.indexOf(',') > -1) {
             query = query.substring(0, pos);
           }
-          this.search_(query + ", " + this.municipio_ + " (" + this.provincia_ + ")", this.showResults_);
-        } else {
+          this.search_(`${query}, ${this.municipio_} (${this.provincia_})`, this.showResults_);
+        }
+        else {
           this.search_(query, this.showResults_);
         }
       }
@@ -322,12 +325,12 @@ export default class SearchstreetControl extends M.Control {
     // adds the class
     this.element_.classList.add(SearchstreetControl.SEARCHING_CLASS);
     this.resultsContainer_.classList.add(SearchstreetControl.MINIMUM);
-    let normalizar = M.utils.addParameters(M.config.SEARCHSTREET_NORMALIZAR, {
-      cadena: query
+    const normalizar = M.utils.addParameters(M.config.SEARCHSTREET_NORMALIZAR, {
+      cadena: query,
     });
 
-    M.Remote.get(normalizar).then(response => {
-      let results = JSON.parse(response.text).normalizarResponse.normalizarReturn;
+    M.Remote.get(normalizar).then((response) => {
+      const results = JSON.parse(response.text).normalizarResponse.normalizarReturn;
       this.provincia_ = M.utils.beautifyString(results.provincia);
       this.municipio_ = M.utils.beautifyString(results.municipio);
       if (!M.utils.isNullOrEmpty(this.provincia_)) {
@@ -337,33 +340,35 @@ export default class SearchstreetControl extends M.Control {
           streetType: results.tipoVia,
           municipio: this.municipio_,
           provincia: this.provincia_,
-          srs: this.facadeMap_.getProjection().code
+          srs: this.facadeMap_.getProjection().code,
         });
         this.searchTime_ = Date.now();
         this.querySearch_(searchUrl, this.provincia_, processor);
-      } else if (M.utils.isNullOrEmpty(this.provincia_) && !M.utils.isNullOrEmpty(this.municipio_)) {
+      }
+      else if (M.utils.isNullOrEmpty(this.provincia_) && !M.utils.isNullOrEmpty(this.municipio_)) {
         this.searchTime_ = Date.now();
         this.respuestasProvincias_ = [];
         this.contadorProvincias = 0;
-        for (var i = 0, ilen = this.provincias_.length; i < ilen; i++) {
+        for (let i = 0, ilen = this.provincias_.length; i < ilen; i += 1) {
           searchUrl = M.utils.addParameters(this.searchUrl_, {
             streetname: results.nombreVia,
             streetNumber: results.numeroPortal,
             streetType: results.tipoVia,
             municipio: this.municipio_,
             provincia: this.provincias_[i],
-            srs: this.facadeMap_.getProjection().code
+            srs: this.facadeMap_.getProjection().code,
           });
           this.querySearchProvinces(searchUrl, this.provincias_[i], processor);
         }
-      } else {
+      }
+      else {
         searchUrl = M.utils.addParameters(this.searchUrl_, {
           streetname: results.direccionSinNormalizar,
           streetNumber: null,
           streetType: null,
           municipio: null,
           provincia: null,
-          srs: this.facadeMap_.getProjection().code
+          srs: this.facadeMap_.getProjection().code,
         });
         this.searchTime_ = Date.now();
         this.querySearch_(searchUrl, null, processor);
@@ -381,25 +386,28 @@ export default class SearchstreetControl extends M.Control {
    * @param {string} processor - Calls function
    */
   querySearch_(searchUrl, provincia, processor) {
-    (searchTime => {
-      M.Remote.get(searchUrl).then(response => {
+    ((searchTime) => {
+      M.Remote.get(searchUrl).then((response) => {
         if (searchTime === this.searchTime_) {
           let results;
           try {
-            if (!M.utils.isNullOrEmpty(response.text) && response.text.indexOf("No se ha podido obtener el codigoINE") == -1) {
+            if (!M.utils.isNullOrEmpty(response.text) && response.text.indexOf('No se ha podido obtener el codigoINE') === -1) {
               results = JSON.parse(response.text);
-            } else {
+            }
+            else {
               results = null;
             }
-          } catch (err) {
-            M.exception('La respuesta no es un JSON válido: ' + err);
+          }
+          catch (err) {
+            M.exception(`La respuesta no es un JSON válido: ${err}`);
           }
           if (!M.utils.isNullOrEmpty(results)) {
             this.provincia_ = M.utils.beautifyString(provincia);
             processor.call(this, results);
             this.element_.classList.remove(SearchstreetControl.SEARCHING_CLASS);
             this.resultsContainer_.classList.remove(SearchstreetControl.MINIMUM);
-          } else {
+          }
+          else {
             processor.call(this, results);
             this.element_.classList.remove(SearchstreetControl.SEARCHING_CLASS);
             this.resultsContainer_.classList.remove(SearchstreetControl.MINIMUM);
@@ -420,25 +428,28 @@ export default class SearchstreetControl extends M.Control {
    * @api stable
    */
   querySearchProvinces(searchUrl, provincia, processor) {
-    (searchTime => {
-      M.Remote.get(searchUrl).then(response => {
+    ((searchTime) => {
+      M.Remote.get(searchUrl).then((response) => {
         this.respuestasProvincias_.push(response);
-        this.contadorProvincias++;
-        if (this.contadorProvincias == 8) {
-          for (var i = 0, ilen = this.respuestasProvincias_.length; i < ilen; i++) {
+        this.contadorProvincias += 1;
+        if (this.contadorProvincias === 8) {
+          for (let i = 0, ilen = this.respuestasProvincias_.length; i < ilen; i += 1) {
             if (searchTime === this.searchTime_) {
               let results;
               try {
-                let item = this.respuestasProvincias_[i].text;
-                if (!M.utils.isNullOrEmpty(item) && item.indexOf("No se ha podido obtener el codigoINE") == -1) {
+                const item = this.respuestasProvincias_[i].text;
+                if (!M.utils.isNullOrEmpty(item) && item.indexOf('No se ha podido obtener el codigoINE') === -1) {
                   results = JSON.parse(item);
-                } else {
+                }
+                else {
                   results = null;
                 }
-              } catch (err) {
-                M.exception('La respuesta no es un JSON válido: ' + err);
               }
-              if (!M.utils.isNullOrEmpty(results) && results.geocoderMunProvSrsResponse.geocoderMunProvSrsReturn.geocoderMunProvSrsReturn.coordinateX !== 0) {
+              catch (err) {
+                M.exception(`La respuesta no es un JSON válido: ${err}`);
+              }
+              if (!M.utils.isNullOrEmpty(results) && results.geocoderMunProvSrsResponse
+                .geocoderMunProvSrsReturn.geocoderMunProvSrsReturn.coordinateX !== 0) {
                 this.provincia_ = M.utils.beautifyString(provincia);
                 processor.call(this, results);
                 this.element_.classList.remove(SearchstreetControl.SEARCHING_CLASS);
@@ -459,25 +470,25 @@ export default class SearchstreetControl extends M.Control {
    * @param {object} results - Query results
    */
   showResults_(results) {
-    let resultsTemplateVars = this.parseResultsForTemplate_(results);
+    const resultsTemplateVars = this.parseResultsForTemplate_(results);
     if (!M.utils.isUndefined(this.codIne_)) {
-      for (var i = 0, ilen = resultsTemplateVars.docs.length; i < ilen; i++) {
+      for (let i = 0, ilen = resultsTemplateVars.docs.length; i < ilen; i += 1) {
         if (!M.utils.isUndefined(resultsTemplateVars.docs[i])) {
           if (resultsTemplateVars.docs[i].coordinateX === undefined) {
             resultsTemplateVars.docs.splice(i, 1);
-            ilen--;
-            i--;
+            ilen -= 1;
+            i -= 1;
           }
         }
       }
     }
     M.Template.compile(SearchstreetControl.RESULTS_TEMPLATE, {
-      'jsonp': true,
-      'vars': resultsTemplateVars
-    }).then(html => {
+      jsonp: true,
+      vars: resultsTemplateVars,
+    }).then((html) => {
       this.resultsContainer_.classList.remove(SearchstreetControl.HIDDEN_RESULTS_CLASS);
       this.resultsContainer_.innerHTML = html.innerHTML;
-      this.resultsScrollContainer_ = this.resultsContainer_.querySelector("div#m-searchstreet-results-scroll");
+      this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-searchstreet-results-scroll');
       if (!M.utils.isNullOrEmpty(this.resultsScrollContainer_)) {
         M.utils.enableTouchScroll(this.resultsScrollContainer_);
       }
@@ -494,12 +505,12 @@ export default class SearchstreetControl extends M.Control {
       this.resultsContainer_.classlist.remove(SearchstreetControl.MINIMUM);
 
       // results buntton
-      let btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-      btnResults.addEventListener("click", this.resultsClick_);
+      const btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
+      btnResults.addEventListener('click', this.resultsClick_);
 
-      this.fire(EventsManager.COMPLETED);
+      this.fire(M.evt.COMPLETED);
     });
-    this.element_.getElementsByTagName('div')["m-autocomplete-results"].innerHTML = "";
+    this.element_.getElementsByTagName('div')['m-autocomplete-results'].innerHTML = '';
   }
 
   /**
@@ -513,61 +524,68 @@ export default class SearchstreetControl extends M.Control {
   parseResultsForTemplate_(results) {
     let resultsTemplateVar = null;
     let containtResult = null;
-    let resultado = results;
-    let search = this.input_.value;
+    const resultado = results;
+    const search = this.input_.value;
     if (!M.utils.isNullOrEmpty(resultado)) {
-      let docs = resultado.geocoderMunProvSrsResponse.geocoderMunProvSrsReturn;
+      const docs = resultado.geocoderMunProvSrsResponse.geocoderMunProvSrsReturn;
       containtResult = !M.utils.isNullOrEmpty(docs);
       if (docs.geocoderMunProvSrsReturn instanceof Array) {
         if (!M.utils.isUndefined(docs.geocoderMunProvSrsReturn[0].coordinateX)) {
-          for (var i = 0, ilen = docs.geocoderMunProvSrsReturn.length; i < ilen; i++) {
+          for (let i = 0, ilen = docs.geocoderMunProvSrsReturn.length; i < ilen; i += 1) {
             docs.geocoderMunProvSrsReturn[i].localityName = this.municipio_;
             docs.geocoderMunProvSrsReturn[i].cityName = this.provincia_;
-            docs.geocoderMunProvSrsReturn[i].streetType = M.utils.beautifyString(docs.geocoderMunProvSrsReturn[i].streetType);
-            docs.geocoderMunProvSrsReturn[i].streetName = M.utils.beautifyString(docs.geocoderMunProvSrsReturn[i].streetName);
+            docs.geocoderMunProvSrsReturn[i].streetType =
+              M.utils.beautifyString(docs.geocoderMunProvSrsReturn[i].streetType);
+            docs.geocoderMunProvSrsReturn[i].streetName =
+              M.utils.beautifyString(docs.geocoderMunProvSrsReturn[i].streetName);
           }
           resultsTemplateVar = {
-            'docs': docs.geocoderMunProvSrsReturn,
-            'containtResult': containtResult,
-            'search': search
-          };
-        } else {
-          resultsTemplateVar = {
-            'docs': [undefined],
-            'containtResult': false,
-            'search': search
+            docs: docs.geocoderMunProvSrsReturn,
+            containtResult,
+            search,
           };
         }
-      } else {
-        if (M.utils.isNullOrEmpty(docs)) {
+        else {
           resultsTemplateVar = {
-            'docs': [undefined],
-            'containtResult': containtResult,
-            'search': search
-          };
-        } else if (docs.geocoderMunProvSrsReturn.coordinateX === 0) {
-          resultsTemplateVar = {
-            'docs': [undefined],
-            'containtResult': false,
-            'search': search
-          };
-        } else {
-          docs.geocoderMunProvSrsReturn.localityName = this.municipio_;
-          docs.geocoderMunProvSrsReturn.cityName = this.provincia_;
-          docs.geocoderMunProvSrsReturn.streetType = M.utils.beautifyString(docs.geocoderMunProvSrsReturn.streetType);
-          docs.geocoderMunProvSrsReturn.streetName = M.utils.beautifyString(docs.geocoderMunProvSrsReturn.streetName);
-          resultsTemplateVar = {
-            'docs': [docs.geocoderMunProvSrsReturn],
-            'containtResult': containtResult,
-            'search': search
+            docs: [undefined],
+            containtResult: false,
+            search,
           };
         }
       }
-    } else {
+      else if (M.utils.isNullOrEmpty(docs)) {
+        resultsTemplateVar = {
+          docs: [undefined],
+          containtResult,
+          search,
+        };
+      }
+      else if (docs.geocoderMunProvSrsReturn.coordinateX === 0) {
+        resultsTemplateVar = {
+          docs: [undefined],
+          containtResult: false,
+          search,
+        };
+      }
+      else {
+        docs.geocoderMunProvSrsReturn.localityName = this.municipio_;
+        docs.geocoderMunProvSrsReturn.cityName = this.provincia_;
+        docs.geocoderMunProvSrsReturn.streetType =
+          M.utils.beautifyString(docs.geocoderMunProvSrsReturn.streetType);
+        docs.geocoderMunProvSrsReturn.streetName =
+          M.utils.beautifyString(docs.geocoderMunProvSrsReturn.streetName);
+        resultsTemplateVar = {
+          docs: [docs.geocoderMunProvSrsReturn],
+          containtResult,
+          search,
+        };
+      }
+    }
+    else {
       resultsTemplateVar = {
-        'docs': [undefined],
-        'containtResult': containtResult,
-        'search': search
+        docs: [undefined],
+        containtResult,
+        search,
       };
     }
     return resultsTemplateVar;
@@ -581,8 +599,8 @@ export default class SearchstreetControl extends M.Control {
    * @param {array} results - Query results
    */
   eventList_(results) {
-    let rows = this.resultsContainer_.getElementsByClassName("result");
-    for (var i = 0, ilen = rows.length; i < ilen; i++) {
+    const rows = this.resultsContainer_.getElementsByClassName('result');
+    for (let i = 0, ilen = rows.length; i < ilen; i += 1) {
       this.addEventClickList_(rows[i], results[i]);
     }
   }
@@ -595,9 +613,8 @@ export default class SearchstreetControl extends M.Control {
    * @param {HTMLElement} element - Specific item in the list
    * @param {object} result - Specific query result
    */
-  addEventClickList_(element,
-    result) {
-    element.listen("click", e => {
+  addEventClickList_(element, result) {
+    element.listen('click', (e) => {
       // hidden results on click for mobile devices
       if (M.Window.WIDTH <= M.config.MOBILE_WIDTH) {
         e.target = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
@@ -654,12 +671,12 @@ export default class SearchstreetControl extends M.Control {
    * @function
    */
   clearSearchs_() {
-    this.element_.classList.remove("shown");
+    this.element_.classList.remove('shown');
     this.facadeMap_.removePopup();
     this.getImpl().removePoints_();
-    this.input_.value = "";
-    this.resultsContainer_.innerHTML = "";
-    this.resultsAutocomplete_.innerHTML = "";
+    this.input_.value = '';
+    this.resultsContainer_.innerHTML = '';
+    this.resultsAutocomplete_.innerHTML = '';
   }
 
   /**
@@ -670,12 +687,11 @@ export default class SearchstreetControl extends M.Control {
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0].classlist.add("top-extra-search");
+    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classlist.add('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle(SearchstreetControl.HIDDEN_RESULTS_CLASS);
   }
-
 }
 
 

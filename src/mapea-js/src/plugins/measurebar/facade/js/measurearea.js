@@ -1,22 +1,18 @@
-import Measure from "./measurebase";
-import MeasureAreaImpl from "../../impl/ol/js/measurearea";
+import Measure from './measurebase';
+import MeasureAreaImpl from '../../impl/ol/js/measurearea';
 
 export default class MeasureArea extends Measure {
-
   constructor() {
-
     // implementation of this control
-    let impl = new MeasureAreaImpl();
+    const impl = new MeasureAreaImpl();
 
-    // calls the super constructor
+    // const calls the super constructor
     super(impl, MeasureArea.TEMPLATE);
 
     // checks if the implementation can create WMC layers
     if (M.utils.isUndefined(MeasureAreaImpl)) {
-      Exception('La implementación usada no puede crear controles MeasureArea');
+      M.Exception('La implementación usada no puede crear controles MeasureArea');
     }
-
-
   }
 
   /**
@@ -36,7 +32,6 @@ export default class MeasureArea extends Measure {
     }
     return equals;
   }
-
 }
 
 /**

@@ -1,7 +1,6 @@
-import AttributeTableImpl from "impl/ol/js/attributetable";
+import AttributeTableImpl from '../../impl/ol/js/attributetable';
 
 export default class AttributeTableControl extends M.control {
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a AttributeTableControl
@@ -12,25 +11,27 @@ export default class AttributeTableControl extends M.control {
    * @api stable
    */
   constructor(numPages) {
-    let impl = new AttributeTableImpl();
+    const impl = new AttributeTableImpl();
 
-    super(impl, "AttributeTable");
+    super(impl, 'AttributeTable');
 
-  [this.facadeMap_, this.selectAllActive_, this.template_, this.areaTable_, this.layer_, this.numPages_, this.draggable_] = [null, false, null, null, null, numPages, null];
+    [this.facadeMap_, this.selectAllActive_, this.template_,
+      this.areaTable_, this.layer_, this.numPages_,
+      this.draggable_] = [null, false, null, null, null, numPages, null];
     this.pages_ = {
       total: 0,
       actual: 1,
-      element: 0
+      element: 0,
     };
 
     this.sortProperties_ = {
       active: false,
       sortBy: null,
-      sortType: null
+      sortType: null,
     };
 
     if (M.utils.isUndefined(AttributeTableImpl)) {
-      WKT('La implementación usada no puede crear controles AttributeTableControl');
+      M.exception('La implementación usada no puede crear controles AttributeTableControl');
     }
   }
 
@@ -45,26 +46,27 @@ export default class AttributeTableControl extends M.control {
   createView(map) {
     this.facadeMap_ = map;
     return new Promise((success, fail) => {
-      Template.compile('attributetable.html', {
-        'jsonp': true,
+      M.Template.compile('attributetable.html', {
+        jsonp: true,
         vars: {
-          layers: map.getWFS().concat(map.getKML().concat(map.getLayers().filter(layer => {
-            return layer.type === "GeoJSON";
-          })))
-        }
-      }).then(html => {
-        /*Draggable*/
-        let panel = this.getPanel().getTemplatePanel();
+          layers: map.getWFS().concat(map.getKML().concat(map.getLayers().filter((layer) => {
+            return layer.type === 'GeoJSON';
+          }))),
+        },
+      }).then((html) => {
+        /* Draggable */
+        const panel = this.getPanel().getTemplatePanel();
         panel.querySelector('.g-cartografia-localizacion4').addEventListener('click', () => {
           if (this.getPanel().isCollapsed()) {
-            panel.style.removeProperty("left");
-            panel.style.removeProperty("top");
+            panel.style.removeProperty('left');
+            panel.style.removeProperty('top');
           }
 
           if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
             if (this.getPanel().isCollapsed()) {
               this.deactivateDraggable_();
-            } else {
+            }
+            else {
               this.activateDraggable_();
             }
           }
@@ -76,14 +78,14 @@ export default class AttributeTableControl extends M.control {
           this.pages_ = {
             total: 0,
             actual: 1,
-            element: 0
+            element: 0,
           };
           this.sortProperties_ = {
             active: false,
             sortBy: null,
-            sortType: null
+            sortType: null,
           };
-          this.renderPanel_(evt.target[evt.target.selectedIndex].getAttribute("name"));
+          this.renderPanel_(evt.target[evt.target.selectedIndex].getAttribute('name'));
         });
         success(html);
       });
@@ -113,13 +115,13 @@ export default class AttributeTableControl extends M.control {
       this.layer_ = this.hasLayer_(name)[0];
     }
 
-    let features = this.layer_.getFeatures();
-    if (!M.utils.isNullOrEmpty(features)) {
-      let headerAtt = Object.keys(features[0].getAttributes());
+    const features = this.layer_.getFeatures();
+    const headerAtt = Object.keys(features[0].getAttributes());
+    let attributes = [];
 
-      let attributes = [];
-      features.forEach(feature => {
-        let properties = Object.values(feature.getAttributes());
+    if (!M.utils.isNullOrEmpty(features)) {
+      features.forEach((feature) => {
+        const properties = Object.values(feature.getAttributes());
         if (!M.utils.isNullOrEmpty(properties)) {
           attributes.push(properties);
         }
@@ -132,24 +134,25 @@ export default class AttributeTableControl extends M.control {
       let params = {};
       if (!M.utils.isUndefined(headerAtt)) {
         params = {
-          headerAtt: headerAtt,
+          headerAtt,
           legend: this.layer_.legend,
           pages: this.pageResults_(attributes),
-          attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes.slice(this.pages_.element, this.pages_.element + this.numPages_)
+          attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes
+            .slice(this.pages_.element, this.pages_.element + this.numPages_),
         };
       }
       M.template.compile('tableData.html', {
-        'jsonp': true,
-        'vars': params
-      }).then(html => {
-        let content = this.areaTable_.querySelector("table");
+        jsonp: true,
+        vars: params,
+      }).then((html) => {
+        const content = this.areaTable_.querySelector('table');
         if (!M.utils.isNullOrEmpty(content)) {
-          this.areaTable_.removeChild(this.areaTable_.querySelector("#m-attributetable-content-attributes"));
+          this.areaTable_.removeChild(this.areaTable_.querySelector('#m-attributetable-content-attributes'));
         }
-        let notResult = this.areaTable_.querySelector(".m-attributetable-notResult");
+        const notResult = this.areaTable_.querySelector('.m-attributetable-notResult');
         if (!M.utils.isNullOrEmpty(notResult)) {
-          //notResult.parentElement.removeChild(notResult);
-          this.areaTable_.removeChild(this.areaTable_.querySelector("#m-attributetable-content-attributes"));
+          // notResult.parentElement.removeChild(notResult);
+          this.areaTable_.removeChild(this.areaTable_.querySelector('#m-attributetable-content-attributes'));
         }
         this.areaTable_.appendChild(html);
         if (M.utils.isNullOrEmpty(html.querySelector('div.m-attributetable-notResult'))) {
@@ -158,13 +161,14 @@ export default class AttributeTableControl extends M.control {
           html.querySelector('input[value=selectAll]').addEventListener('click', this.selectAll);
           html.querySelector('#m-attributetable-attributes').addEventListener('click', this.openPanel_);
           html.querySelector('#m-attributetable-refresh').addEventListener('click', this.refresh_);
-          let header = Array.slice.call(this.areaTable_.querySelector("tr").querySelectorAll("td"), 1);
-          header.forEach(td => {
+          const header = Array.slice.call(this.areaTable_.querySelector('tr').querySelectorAll('td'), 1);
+          header.forEach((td) => {
             td.addEventListener('click', this.sort_);
           });
           this.hasNext_(html);
           this.hasPrevious_(html);
-        } else {
+        }
+        else {
           html.querySelector('#m-attributetable-refresh').addEventListener('click', this.refresh_);
         }
         this.rePosition_();
@@ -177,33 +181,35 @@ export default class AttributeTableControl extends M.control {
    *This function is has Layer map
    *
    * @private
-   * @param {array<string>| string| M.Layer} layerSearch - Array of layer names, layer name or layer instance
+   * @param {array<string>| string| M.Layer} layerSearch -
+        Array of layer names, layer name or layer instance
    * @function
    */
   hasLayer_(layerSearch) {
-    let layersFind = [];
-    if (M.utils.isNullOrEmpty(layerSearch) || (!M.utils.isArray(layerSearch) && !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
-      Dialog.error("El parametro para el método hasLayer no es correcto.", "Error");
+    const layersFind = [];
+    if (M.utils.isNullOrEmpty(layerSearch) || (!M.utils.isArray(layerSearch) &&
+        !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
+      M.Dialog.error('El parametro para el método hasLayer no es correcto.', 'Error');
       return layersFind;
     }
 
     if (M.utils.isString(layerSearch)) {
-      this.facadeMap_.getLayers().forEach(lay => {
-        if (lay.name == layerSearch) {
+      this.facadeMap_.getLayers().forEach((lay) => {
+        if (lay.name === layerSearch) {
           layersFind.push(lay);
         }
       });
     }
 
     if (layerSearch instanceof M.Layer) {
-      this.facadeMap_.getLayers().forEach(lay => {
+      this.facadeMap_.getLayers().forEach((lay) => {
         if (lay.equals(layerSearch)) {
           layersFind.push(lay);
         }
       });
     }
     if (M.utils.isArray(layerSearch)) {
-      this.facadeMap_.getLayers().forEach(lay => {
+      this.facadeMap_.getLayers().forEach((lay) => {
         if (layerSearch.indexOf(lay.name) >= 0) {
           layersFind.push(lay);
         }
@@ -219,10 +225,11 @@ export default class AttributeTableControl extends M.control {
    * @function
    */
   selectAll() {
-    this.selectAllActive_ = !this.selectAllActive_ ? true : false;
+    this.selectAllActive_ = !this.selectAllActive_;
     if (this.selectAllActive_ === true) {
       this.addSelectAll_();
-    } else {
+    }
+    else {
       this.removeSelectAll_();
     }
   }
@@ -234,8 +241,8 @@ export default class AttributeTableControl extends M.control {
    * @function
    */
   addSelectAll_() {
-    let checks = this.areaTable_.querySelectorAll('input');
-    checks.forEach(element => {
+    const checks = this.areaTable_.querySelectorAll('input');
+    checks.forEach((element) => {
       element.setAttribute('checked', true);
     });
   }
@@ -247,8 +254,8 @@ export default class AttributeTableControl extends M.control {
    * @function
    */
   removeSelectAll_() {
-    let checks = this.areaTable_.querySelectorAll('input');
-    checks.forEach(element => {
+    const checks = this.areaTable_.querySelectorAll('input');
+    checks.forEach((element) => {
       element.removeAttribute('checked');
     });
   }
@@ -337,9 +344,10 @@ export default class AttributeTableControl extends M.control {
   sort_(evt) {
     if (this.sortProperties_.active === false) this.sortProperties_.active = true;
     if (this.sortProperties_.sortBy !== evt.target.innerHTML) {
-      this.sortProperties_.sortType = "<";
-    } else {
-      this.sortProperties_.sortType = (this.sortProperties_.sortType === ">") ? "<" : ">";
+      this.sortProperties_.sortType = '<';
+    }
+    else {
+      this.sortProperties_.sortType = (this.sortProperties_.sortType === '>') ? '<' : '>';
     }
     this.sortProperties_.sortBy = evt.target.innerHTML;
     this.renderPanel_();
@@ -355,12 +363,12 @@ export default class AttributeTableControl extends M.control {
    * @return {array<string>} attributes - Ordered attributes
    */
   sortAttributes_(attributes, headerAtt) {
-    let sortBy = this.sortProperties_.sortBy;
-    let pos = headerAtt.indexOf(sortBy);
+    const sortBy = this.sortProperties_.sortBy;
+    const pos = headerAtt.indexOf(sortBy);
     let attributesSort = attributes.sort((a, b) => {
       return a[pos] - b[pos];
     });
-    if (this.sortProperties_.sortType === ">") {
+    if (this.sortProperties_.sortType === '>') {
       attributesSort = attributesSort.reverse();
     }
     return attributesSort;
@@ -376,14 +384,15 @@ export default class AttributeTableControl extends M.control {
    * @api stable
    */
   openPanel_(evt) {
-    let id = evt.target.id;
-    if (id === "m-attributetable-layer") {
-      let element = this.template_.querySelector("select#m-attributetable-select");
+    const id = evt.target.id;
+    if (id === 'm-attributetable-layer') {
+      const element = this.template_.querySelector('select#m-attributetable-select');
       element.classlist.toggle('m-attributetable-hidden');
       element.classlist.toggle('show');
-    } else if (id === "m-attributetable-attributes") {
-      this.template_.querySelector("#m-attributetable-table").classlist.toggle('m-attributetable-hidden');
-      this.template_.querySelector("#m-attributetable-tfoot").classlist.toggle('m-attributetable-hidden');
+    }
+    else if (id === 'm-attributetable-attributes') {
+      this.template_.querySelector('#m-attributetable-table').classlist.toggle('m-attributetable-hidden');
+      this.template_.querySelector('#m-attributetable-tfoot').classlist.toggle('m-attributetable-hidden');
     }
     this.rePosition_();
   }
@@ -399,10 +408,10 @@ export default class AttributeTableControl extends M.control {
   activateDraggable_() {
     if (M.utils.isNullOrEmpty(this.draggable_)) {
       this.setFixed_();
-      let panel = this.getPanel().getTemplatePanel();
+      const panel = this.getPanel().getTemplatePanel();
       this.draggable_ = new Draggabilly(panel, {
         containment: '.m-mapea-container',
-        handle: ".m-attributetable-container>div.m-attributetable-panel div.title",
+        handle: '.m-attributetable-container>div.m-attributetable-panel div.title',
       });
     }
     this.draggable_.enable();
@@ -417,7 +426,7 @@ export default class AttributeTableControl extends M.control {
    * @api stable
    */
   deactivateDraggable_() {
-    let panel = document.querySelector(".m-attributetable");
+    const panel = document.querySelector('.m-attributetable');
     panel.style.position = 'relative';
     this.draggable_.disable();
   }
@@ -429,12 +438,12 @@ export default class AttributeTableControl extends M.control {
    * @function
    * @api stable
    */
-  setFixed_() {
-    let panel = document.querySelector(".m-attributetable");
-    let bClient = panel.getBoundingClientRect();
+  static setFixed_() {
+    const panel = document.querySelector('.m-attributetable');
+    const bClient = panel.getBoundingClientRect();
     panel.style.position = 'fixed';
-    panel.style.left = (bClient.left) + 'px';
-    panel.style.top = bClient.top + 'px';
+    panel.style.left = `${bClient.left}px`;
+    panel.style.top = `${bClient.top}px`;
   }
 
   /**
@@ -445,12 +454,12 @@ export default class AttributeTableControl extends M.control {
    * @api stable
    */
   rePosition_() {
-    let panel = this.getPanel().getTemplatePanel();
-    if (parseInt(panel.style.left.replace("px", "")) + panel.clientWidth > document.querySelector('.m-mapea-container').clientWidth) {
-      panel.style.left = document.querySelector('.m-mapea-container').clientWidth - panel.clientWidth + "px";
+    const panel = this.getPanel().getTemplatePanel();
+    if (parseInt(panel.style.left.replace('px', ''), 10) + panel.clientWidth > document.querySelector('.m-mapea-container').clientWidth) {
+      panel.style.left = `${document.querySelector('.m-mapea-container').clientWidth - panel.clientWidth}px`;
     }
-    if (parseInt(panel.style.top.replace("px", "")) + panel.clientHeight > document.querySelector('.m-mapea-container').clientHeight) {
-      panel.style.top = document.querySelector('.m-mapea-container').clientHeight - panel.clientHeight - 10 + "px";
+    if (parseInt(panel.style.top.replace('px', ''), 10) + panel.clientHeight > document.querySelector('.m-mapea-container').clientHeight) {
+      panel.style.top = `${document.querySelector('.m-mapea-container').clientHeight - panel.clientHeight - 10}px`;
     }
   }
 }

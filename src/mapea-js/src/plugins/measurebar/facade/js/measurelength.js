@@ -1,5 +1,5 @@
-import Measure from "./measurebase";
-import MeasureLenghtImpl from "../../impl/ol/js/measurelength";
+import Measure from './measurebase';
+import MeasureLengthImpl from '../../impl/ol/js/measurelength';
 
 /**
  * @classdesc
@@ -12,17 +12,16 @@ import MeasureLenghtImpl from "../../impl/ol/js/measurelength";
  */
 
 export default class MeasureLength extends Measure {
-
   constructor() {
     // implementation of this control
-    let impl = new MeasureLengthImpl();
+    const impl = new MeasureLengthImpl();
 
     // calls the super constructor
     super(impl, MeasureLength.TEMPLATE);
 
     // checks if the implementation can create WMC layers
     if (M.utils.isUndefined(MeasureLengthImpl)) {
-      Exception('La implementación usada no puede crear controles MeasureLength');
+      M.Exception('La implementación usada no puede crear controles MeasureLength');
     }
   }
 

@@ -10,6 +10,7 @@ export default class SearchstreetControl extends ol.control.Control {
    * @api stable
    */
   constructor() {
+    super();
     /**
      * Facade of the map
      *
@@ -50,8 +51,8 @@ export default class SearchstreetControl extends ol.control.Control {
     this.element_ = element;
 
     ol.control.Control.call(this, {
-      'element': element,
-      'target': null
+      element,
+      target: null,
     });
     map.getMapImpl().addControl(this);
   }
@@ -66,26 +67,25 @@ export default class SearchstreetControl extends ol.control.Control {
    */
   drawPoints(results) {
     let positionFeature = null;
-    for (var i = 0, ilen = results.length; i < ilen; i++) {
+    for (let i = 0, ilen = results.length; i < ilen; i += 1) {
       positionFeature = new ol.Feature();
       positionFeature.setStyle(new ol.style.Style({
         image: new ol.style.Circle({
           radius: 6,
           fill: new ol.style.Fill({
-            color: '#3399CC'
+            color: '#3399CC',
           }),
           stroke: new ol.style.Stroke({
             color: '#fff',
-            width: 2
-          })
-        })
+            width: 2,
+          }),
+        }),
       }));
-      positionFeature.setGeometry([results[i].coordinateX,
-            results[i].coordinateY
-         ] ? new ol.geom.Point([
-            results[i].coordinateX, results[i].coordinateY
-         ]) : null);
-      let feature = results[i];
+      positionFeature.setGeometry(results[i].coordinateX !== null &&
+        results[i].coordinateY !== null ?
+        new ol.geom.Point([results[i].coordinateX, results[i].coordinateY,
+        ]) : null);
+      const feature = results[i];
       this.addEventClickFeature(feature, positionFeature);
 
       this.facadeMap_.drawFeatures([M.impl.Feature.olFeature2Facade(positionFeature)]);
@@ -102,13 +102,14 @@ export default class SearchstreetControl extends ol.control.Control {
    * @api stable
    */
   zoomResults() {
-    // var features = this.facadeMap_.getImpl().getDrawLayer().getOL3Layer().getSource().getFeatures();
-    let features = this.listPoints[0];
-    let bbox = ol.extent.boundingExtent(features
-      .filter(feature => {
+    // let features =
+    // this.facadeMap_.getImpl().getDrawLayer().getOL3Layer().getSource().getFeatures();
+    const features = this.listPoints[0];
+    const bbox = ol.extent.boundingExtent(features
+      .filter((feature) => {
         return (!M.utils.isNullOrEmpty(feature.getGeometry()));
       })
-      .map(feature => {
+      .map((feature) => {
         return feature.getGeometry().getFirstCoordinate();
       }));
     this.facadeMap_.setBbox(bbox);
@@ -128,17 +129,19 @@ export default class SearchstreetControl extends ol.control.Control {
     this.facadeMap_.removePopup();
     if (M.utils.isNullOrEmpty(result)) {
       this.showPopup_(element, false);
-      this.facadeMap_.setBbox([element.coordinateX, element.coordinateY, element.coordinateX, element.coordinateY]);
-    } else if (result instanceof ol.Feature) {
-      result.set("vendor", {
-        "mapea": {
-          "click": function (evt) {
+      this.facadeMap_.setBbox([element.coordinateX,
+        element.coordinateY, element.coordinateX, element.coordinateY]);
+    }
+    else if (result instanceof ol.Feature) {
+      result.set('vendor', {
+        mapea: {
+          click(evt) {
             this.showPopup_(element);
-          }
-        }
+          },
+        },
       });
     }
-  };
+  }
 
   /**
    * This function show popup with information
@@ -148,49 +151,53 @@ export default class SearchstreetControl extends ol.control.Control {
    * @param {object} feature - Specific result query response
    * @param {boolean} noPanMapIfOutOfView
    */
-  showPopup_(feature, noPanMapIfOutOfView) {
+  static showPopup_(feature, noPanMapIfOutOfView) {
     M.Template.compile(SearchstreetControl.POPUP_TEMPLATE, {
-      'jsonp': true,
-      'vars': {
-        'tVia': feature.streetType,
-        'nVia': feature.streetName,
-        'num': feature.streetNumber,
-        'mun': feature.localityName,
-        'prov': feature.cityName
+      jsonp: true,
+      vars: {
+        tVia: feature.streetType,
+        nVia: feature.streetName,
+        num: feature.streetNumber,
+        mun: feature.localityName,
+        prov: feature.cityName,
       },
-      'parseToHtml': false
-    }).then(function (htmlAsText) {
-      let popupContent = {
-        'icon': 'g-cartografia-zoom',
-        'title': 'Searchstreet',
-        'content': htmlAsText
+      parseToHtml: false,
+    }).then((htmlAsText) => {
+      const popupContent = {
+        icon: 'g-cartografia-zoom',
+        title: 'Searchstreet',
+        content: htmlAsText,
       };
 
       this.popup_ = this.facadeMap_.getPopup();
       if (!M.utils.isNullOrEmpty(this.popup_)) {
-        let hasExternalContent = this.popup_.getTabs().some(tab => {
-          return (tab['title'] !== 'Searchstreet');
+        const hasExternalContent = this.popup_.getTabs().some((tab) => {
+          return (tab.title !== 'Searchstreet');
         });
         if (!hasExternalContent) {
           this.facadeMap_.removePopup();
           if (M.utils.isUndefined(noPanMapIfOutOfView)) {
             this.popup_ = new M.Popup();
-          } else {
+          }
+          else {
             this.popup_ = new M.Popup({
-              'panMapIfOutOfView': noPanMapIfOutOfView
+              panMapIfOutOfView: noPanMapIfOutOfView,
             });
           }
           this.popup_.addTab(popupContent);
           this.facadeMap_.addPopup(this.popup_, [feature.coordinateX, feature.coordinateY]);
-        } else {
+        }
+        else {
           this.popup_.addTab(popupContent);
         }
-      } else {
+      }
+      else {
         if (M.utils.isUndefined(noPanMapIfOutOfView)) {
           this.popup_ = new M.Popup();
-        } else {
+        }
+        else {
           this.popup_ = new M.Popup({
-            'panMapIfOutOfView': noPanMapIfOutOfView
+            panMapIfOutOfView: noPanMapIfOutOfView,
           });
         }
         this.popup_.addTab(popupContent);
@@ -219,7 +226,7 @@ export default class SearchstreetControl extends ol.control.Control {
    * @function
    */
   removePoints_() {
-    for (var i = 0, ilen = this.listPoints.length; i < ilen; i++) {
+    for (let i = 0, ilen = this.listPoints.length; i < ilen; i += 1) {
       this.facadeMap_.removeFeatures(this.listPoints[i].map(M.impl.Feature.olFeature2Facade));
     }
     this.listPoints = [];
@@ -234,7 +241,7 @@ export default class SearchstreetControl extends ol.control.Control {
    * @api stable
    */
   destroy() {
-    this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0].classList.remove("top-extra");
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.remove('top-extra');
     this.removePoints_();
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_.getImpl().removePopup();
@@ -242,7 +249,6 @@ export default class SearchstreetControl extends ol.control.Control {
     this.listPoints = null;
     this.element_ = null;
   }
-
 }
 
 /**
@@ -254,4 +260,4 @@ export default class SearchstreetControl extends ol.control.Control {
  * @api stable
  */
 
-SearchstreetControl.POPUP_TEMPLATE = "searchstreetpopup.html";
+SearchstreetControl.POPUP_TEMPLATE = 'searchstreetpopup.html';
