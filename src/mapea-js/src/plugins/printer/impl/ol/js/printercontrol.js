@@ -633,7 +633,7 @@ export deafult class PrinterControl extends M.impl.Control {
       'maxExtent': layerExtent,
       'tileSize': [tileSize, tileSize],
       'resolutions': resolutions,
-      'extension': M.config.MAPBOX_EXTENSION,
+      'extension': Config.MAPBOX_EXTENSION,
       'type': 'xyz',
       'path_format': '/${z}/${x}/${y}.png'
     };
