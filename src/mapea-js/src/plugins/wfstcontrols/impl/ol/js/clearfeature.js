@@ -13,6 +13,7 @@ export default class ClearFeature extends M.impl.Control {
    * @api stable
    */
   constructor(layer) {
+    super();
     /**
      * Layer for use in control
      * @private
@@ -32,7 +33,7 @@ export default class ClearFeature extends M.impl.Control {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    super('addTo ', map, element);
+    super.addTo(map, element);
   }
 
   /**
@@ -43,23 +44,23 @@ export default class ClearFeature extends M.impl.Control {
    * @api stable
    */
   clear() {
-    let drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
-    if (!Utils.isNullOrEmpty(drawfeatureCtrl)) {
+    const drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
+    if (!M.Utils.isNullOrEmpty(drawfeatureCtrl)) {
       drawfeatureCtrl.getImpl().modifiedFeatures.length = 0;
       drawfeatureCtrl.deactivate();
     }
-    let modifyfeatureCtrl = this.facadeMap_.getControls('modifyfeature')[0];
-    if (!Utils.isNullOrEmpty(modifyfeatureCtrl)) {
+    const modifyfeatureCtrl = this.facadeMap_.getControls('modifyfeature')[0];
+    if (!M.Utils.isNullOrEmpty(modifyfeatureCtrl)) {
       modifyfeatureCtrl.getImpl().modifiedFeatures.length = 0;
       modifyfeatureCtrl.deactivate();
     }
-    let deletefeatureCtrl = this.facadeMap_.getControls('deletefeature')[0];
-    if (!Utils.isNullOrEmpty(deletefeatureCtrl)) {
+    const deletefeatureCtrl = this.facadeMap_.getControls('deletefeature')[0];
+    if (!M.Utils.isNullOrEmpty(deletefeatureCtrl)) {
       deletefeatureCtrl.getImpl().modifiedFeatures.length = 0;
       deletefeatureCtrl.deactivate();
     }
-    let editattributeCtrl = this.facadeMap_.getControls('editattribute')[0];
-    if (!Utils.isNullOrEmpty(editattributeCtrl)) {
+    const editattributeCtrl = this.facadeMap_.getControls('editattribute')[0];
+    if (!M.Utils.isNullOrEmpty(editattributeCtrl)) {
       editattributeCtrl.getImpl().editedFeature = null;
       editattributeCtrl.deactivate();
     }

@@ -1,4 +1,4 @@
-import ClearFeatureImpl from "../.../impl/ol/js/clearfeature";
+import ClearFeatureImpl from '../../impl/ol/js/clearfeature';
 
 export default class ClearFeature extends M.Control {
   /**
@@ -13,7 +13,7 @@ export default class ClearFeature extends M.Control {
    */
   constructor(layer) {
     // implementation of this control
-    let impl = new ClearFeatureImpl(layer);
+    const impl = new ClearFeatureImpl(layer);
 
     // calls the super constructor
     super(impl, ClearFeature.NAME);
@@ -32,9 +32,9 @@ export default class ClearFeature extends M.Control {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return M.Template.compile(ClearFeature.TEMPLATE, {
-      'jsonp': true
+      jsonp: true,
     });
   }
 
@@ -48,8 +48,8 @@ export default class ClearFeature extends M.Control {
    * @export
    */
   manageActivation(element) {
-    let activationBtn = element.querySelector('button#m-button-clearfeature');
-    activationBtn.addEventListener("click", this.clear_);
+    const activationBtn = element.querySelector('button#m-button-clearfeature');
+    activationBtn.addEventListener('click', this.clear_);
   }
 
   /**
@@ -60,8 +60,8 @@ export default class ClearFeature extends M.Control {
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
    */
-  equals(obj) {
-    let equals = (obj instanceof ClearFeature);
+  static equals(obj) {
+    const equals = (obj instanceof ClearFeature);
     return equals;
   }
 

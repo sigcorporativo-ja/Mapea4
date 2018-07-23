@@ -1,6 +1,7 @@
-import SearchstreetIntegrated from "./searchstreetintegrated"
-import GeosearchIntegrated from "./geosearchintegrated";
-import SearchstreetGeosearchControlImpl from "../../impl/ol/js/searchstreetgeosearchcontrol";
+import SearchstreetIntegrated from './searchstreetintegratedcontrol';
+import GeosearchIntegrated from './geosearchintegratedcontrol';
+import SearchstreetGeosearchControlImpl from '../../impl/ol/js/searchstreetgeosearchcontrol';
+import SearchStreetGeosearch from './searchstreetgeosearch';
 
 export default class SearchstreetGeosearchControl extends M.Control {
   /**
@@ -12,24 +13,17 @@ export default class SearchstreetGeosearchControl extends M.Control {
    * @param {Mx.parameters.SearchstreetGeosearch} parameters - parameters SearchstreetGeosearch
    * @api stable
    */
-  constructor(parameters) {
+  constructor(parameters = {}) {
     // implementation of this control
-    let impl = new SearchstreetGeosearchControlImpl();
-
-    super(impl, this.name_);
+    const impl = new SearchstreetGeosearchControlImpl();
 
     // checks if the implementation can create SearchstreetGeosearch
     if (M.utils.isUndefined(SearchstreetGeosearchControlImpl)) {
       M.exception('La implementación usada no puede crear controles SearchStreetGeosearch');
     }
 
-    /**
-     * Parameters SearchstreetGeosearch
-     *
-     * @private
-     * @type {Mx.parameters.SearchstreetGeosearch}
-     */
-    parameters = (parameters || {});
+    super(impl, SearchstreetGeosearchControl.name_);
+
 
     /**
      * INE code to specify the search
@@ -110,7 +104,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
      * @private
      * @type {string}
      */
-    this.name_ = "searchstreetgeosearch";
+    this.name_ = 'searchstreetgeosearch';
 
     /**
      * Template SearchstreetGeosearch
@@ -126,7 +120,6 @@ export default class SearchstreetGeosearchControl extends M.Control {
      * @type {M.Map}
      */
     this.facadeMap_ = null;
-
   }
 
 
@@ -140,29 +133,34 @@ export default class SearchstreetGeosearchControl extends M.Control {
    * @export
    */
   addTo(map) {
-    let impl = this.getImpl();
+    const impl = this.getImpl();
     this.facadeMap_ = map;
-    let view = this.createView(map);
+    const view = this.createView(map);
     if (view instanceof Promise) { // the view is a promise
-      view.then(html => {
+      view.then((html) => {
         impl.addTo(map, html);
         this.html = html;
         this.fire(M.evt.ADDED_TO_MAP);
       });
     }
 
-    this.on(M.evt.ADDED_TO_MAP, evt => {
+    this.on(M.evt.ADDED_TO_MAP, (evt) => {
       if (M.utils.isUndefined(this.locality_)) {
         this.ctrlSearchstreet = new SearchstreetIntegrated(this.urlSearchstret_);
-      } else {
+      }
+      else {
         this.ctrlSearchstreet = new SearchstreetIntegrated(this.urlSearchstret_, this.locality_);
       }
       let impl = this.ctrlSearchstreet.getImpl();
       let view = this.ctrlSearchstreet.createView(this.html, map);
       impl.addTo(map, this.html);
 
-      this.ctrlGeosearch = new GeosearchIntegrated(this.urlGeosearch_, this.coreGeosearch_,
-        this.handlerGeosearch_, this.paramsGeosearch_);
+      this.ctrlGeosearch = new GeosearchIntegrated(
+        this.urlGeosearch_,
+        this.coreGeosearch_,
+        this.handlerGeosearch_,
+        this.paramsGeosearch_,
+      );
       impl = this.ctrlGeosearch.getImpl();
       view = this.ctrlGeosearch.createView(this.html, this.facadeMap_);
       impl.addTo(map, this.html);
@@ -171,7 +169,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
 
       this.ctrlSearchstreet.on(M.evt.COMPLETED, () => {
         if (completados === true) {
-          this.element_.classList.add("shown");
+          this.element_.classList.add('shown');
           completados = false;
           this.zoomResults();
         }
@@ -180,7 +178,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
 
       this.ctrlGeosearch.on(M.evt.COMPLETED, () => {
         if (completados === true) {
-          this.element_.classList.add("shown");
+          this.element_.classList.add('shown');
           completados = false;
           this.zoomResults();
         }
@@ -200,37 +198,36 @@ export default class SearchstreetGeosearchControl extends M.Control {
    * @api stable
    */
   createView(map) {
-    let promise = new Promise((success, fail) => {
-      M.Template.compile(SearchstreetGeosearch.TEMPLATE, {
-        'jsonp': true
-      }).then(
-        (html) => {
-          this.element_ = html;
-          this.input_ = html.querySelector("input#m-searchstreetgeosearch-search-input");
-          let searchstreetResuts = html.querySelector('div#m-searchstreet-results');
-          let geosearchResuts = html.querySelector('div#m-geosearch-results');
-          let searchstreetTab = html.querySelector("ul#m-tabs > li:nth-child(1) > a");
-          let geosearchTab = html.querySelector("ul#m-tabs > li:nth-child(2) > a");
-          searchstreetTab.addEventListener("click", evt => {
-            evt.preventDefault();
-            if (!searchstreetTab.classList.contains('activated')) {
-              searchstreetTab.classList.add('activated');
-              geosearchTab.classList.remove('activated');
-              searchstreetResuts.classList.add('show');
-              geosearchResuts.classList.remove('show');
-            }
-          });
-          geosearchTab.addEventListener("click", evt => {
-            evt.preventDefault();
-            if (!goog.dom.classlist.contains(geosearchTab, 'activated')) {
-              goog.dom.classlist.add(geosearchTab, 'activated');
-              goog.dom.classlist.remove(searchstreetTab, 'activated');
-              goog.dom.classlist.remove(searchstreetResuts, 'show');
-              goog.dom.classlist.add(geosearchResuts, 'show');
-            }
-          });
-          success(html);
+    const promise = new Promise((success, fail) => {
+      M.Template.compile(SearchStreetGeosearch.TEMPLATE, {
+        jsonp: true,
+      }).then((html) => {
+        this.element_ = html;
+        this.input_ = html.querySelector('input#m-searchstreetgeosearch-search-input');
+        const searchstreetResuts = html.querySelector('div#m-searchstreet-results');
+        const geosearchResuts = html.querySelector('div#m-geosearch-results');
+        const searchstreetTab = html.querySelector('ul#m-tabs > li:nth-child(1) > a');
+        const geosearchTab = html.querySelector('ul#m-tabs > li:nth-child(2) > a');
+        searchstreetTab.addEventListener('click', (evt) => {
+          evt.preventDefault();
+          if (!searchstreetTab.classList.contains('activated')) {
+            searchstreetTab.classList.add('activated');
+            geosearchTab.classList.remove('activated');
+            searchstreetResuts.classList.add('show');
+            geosearchResuts.classList.remove('show');
+          }
         });
+        geosearchTab.addEventListener('click', (evt) => {
+          evt.preventDefault();
+          if (!geosearchTab.classList.contains('activated')) {
+            geosearchTab.classList.add('activated');
+            searchstreetTab.classList.remove('activated');
+            searchstreetResuts.classList.remove('show');
+            geosearchResuts.classList.add('show');
+          }
+        });
+        success(html);
+      });
     });
     return promise;
   }
@@ -258,7 +255,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
    */
   equals(obj) {
     let equals = false;
-    if (obj instanceof SearchstreetGeosearch) {
+    if (obj instanceof SearchStreetGeosearch) {
       equals = (this.name === obj.name);
     }
     return equals;
@@ -287,11 +284,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
   zoomResults() {
     this.getImpl().zoomResults();
   }
-
 }
-
-
-
 /**
  * Template for this controls
  *
@@ -300,4 +293,4 @@ export default class SearchstreetGeosearchControl extends M.Control {
  * @public
  * @api stable
  */
-SearchstreetGeosearch.TEMPLATE = 'searchstreetgeosearch.html';
+SearchStreetGeosearch.TEMPLATE = 'searchstreetgeosearch.html';

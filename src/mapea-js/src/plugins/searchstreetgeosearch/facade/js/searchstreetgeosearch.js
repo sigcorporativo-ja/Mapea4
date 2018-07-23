@@ -1,3 +1,5 @@
+import SearchstreetGeosearchControl from './searchstreetgeosearchcontrol';
+
 export default class SearchstreetGeosearch extends M.Plugin {
   /**
    * @classdesc Main facade plugin object. This class creates a plugin
@@ -8,9 +10,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
    * @param {Mx.parameters.SearchstreetGeosearch} parameters - parameters SearchstreetGeosearch
    * @api stable
    */
-  constructor(parameters) {
-    parameters = (parameters || {});
-
+  constructor(parameters = {}) {
     super();
     /**
      * Parameters SearchstreetGeosearch
@@ -27,7 +27,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
      * @type {string}
      * @api stable
      */
-    this.name = "searchstreetgeosearch";
+    this.name = 'searchstreetgeosearch';
 
     /**
      * Facade of the map
@@ -52,7 +52,6 @@ export default class SearchstreetGeosearch extends M.Plugin {
      * @type {number}
      */
     this.locality_ = parameters.locality;
-
   }
 
   /**
@@ -65,41 +64,40 @@ export default class SearchstreetGeosearch extends M.Plugin {
    */
   addTo(map) {
     this.map_ = map;
-    this.control_ = new SearchstreetGeosearch(this.parameters_);
+    this.control_ = new SearchstreetGeosearchControl(this.parameters_);
 
-    map._areasContainer.getElementsByClassName("m-top m-right")[0].classList.add("top-extra");
+    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
 
     this.control_.on(M.evt.ADDED_TO_MAP, () => {
       this.fire(M.evt.ADDED_TO_MAP);
 
       // Checks if the received INE code is correct.
-      let comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
-        codigo: this.locality_
+      const comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
+        codigo: this.locality_,
       });
-      M.Remote.get(comCodIne).then(
-        (response) => {
-          let results = JSON.parse(response.text);
-          if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
-            this.locality_ = "";
-          }
-          let autocompletador = new M.plugin.Autocomplete({
-            'locality': this.locality_,
-            'target': this.control_.getInput(),
-            'html': this.control_.getHtml()
-          });
-          this.map_.addPlugin(autocompletador);
+      M.Remote.get(comCodIne).then((response) => {
+        const results = JSON.parse(response.text);
+        if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
+          this.locality_ = '';
+        }
+        const autocompletador = new M.plugin.Autocomplete({
+          locality: this.locality_,
+          target: this.control_.getInput(),
+          html: this.control_.getHtml(),
         });
+        this.map_.addPlugin(autocompletador);
+      });
     }, this);
     this.panel_ = new M.ui.Panel('SearchstreetGeosearch', {
-      'collapsible': true,
-      'className': 'm-geosearch',
-      'position': M.ui.Position.TL,
-      'tooltip': 'Buscador de calles y geobúsquedas'
+      collapsible: true,
+      className: 'm-geosearch',
+      position: M.ui.Position.TL,
+      tooltip: 'Buscador de calles y geobúsquedas',
     });
-    //JGL20170816: foco al input al desplegar panel
-    this.panel_.on(M.evt.ADDED_TO_MAP, html => {
-      this.panel_._buttonPanel.addEventListener("click", evt => {
-        if (!this.panel_._collapsed) {
+    // JGL20170816: foco al input al desplegar panel
+    this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {
+      this.panel_.buttonPanel.addEventListener('click', (evt) => {
+        if (!this.panel_.collapsed) {
           this.control_.input_.focus();
         }
       });
@@ -125,18 +123,18 @@ export default class SearchstreetGeosearch extends M.Plugin {
   }
 
   /**
-   * This function compare if pluging recieved by param is instance of M.plugin.SearchstreetGeosearch
+   * This function compare if pluging recieved by param
+   is instance of M.plugin.SearchstreetGeosearch
    *
    * @public
    * @function
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  equals(plugin) {
+  static equals(plugin) {
     if (plugin instanceof SearchstreetGeosearch) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }

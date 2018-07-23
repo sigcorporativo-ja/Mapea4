@@ -1,3 +1,5 @@
+import EditAttributeImpl from '../../impl/ol/js/editattribute';
+
 export default class EditAttribute extends M.Control {
   /**
    * @classdesc
@@ -10,12 +12,11 @@ export default class EditAttribute extends M.Control {
    * @api stable
    */
   constructor(layer) {
-
     // implementation of this control
-    let impl = new EditAttributeImpl(layer);
+    const impl = new EditAttributeImpl(layer);
 
     // calls the super constructor
-    super(this, impl, EditAttribute.NAME);
+    super(impl, EditAttribute.NAME);
 
     /**
      * Name of the control
@@ -39,9 +40,9 @@ export default class EditAttribute extends M.Control {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return M.Template.compile(EditAttribute.TEMPLATE, {
-      'jsonp': true
+      jsonp: true,
     });
   }
 
@@ -55,7 +56,7 @@ export default class EditAttribute extends M.Control {
    * @api stable
    * @export
    */
-  getActivationButton(element) {
+  static getActivationButton(element) {
     return element.querySelector('button#m-button-editattribute');
   }
 
@@ -67,8 +68,8 @@ export default class EditAttribute extends M.Control {
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
    */
-  equals(obj) {
-    let equals = (obj instanceof EditAttribute);
+  static equals(obj) {
+    const equals = (obj instanceof EditAttribute);
     return equals;
   }
 

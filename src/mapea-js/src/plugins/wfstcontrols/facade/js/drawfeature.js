@@ -1,4 +1,4 @@
-import DrawFeatureImpl from "../.../impl/ol/js/drawfeature";
+import DrawFeatureImpl from '../../impl/ol/js/drawfeature';
 
 export default class DrawFeature extends M.Control {
   /**
@@ -12,7 +12,7 @@ export default class DrawFeature extends M.Control {
    */
   constructor(layer) {
     // implementation of this control
-    let impl = DrawFeatureImpl(layer);
+    const impl = DrawFeatureImpl(layer);
 
     // calls the super constructor
     super(impl, DrawFeature.NAME);
@@ -38,9 +38,9 @@ export default class DrawFeature extends M.Control {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return M.Template.compile(DrawFeature.TEMPLATE, {
-      'jsonp': true
+      jsonp: true,
     });
   }
 
@@ -54,7 +54,7 @@ export default class DrawFeature extends M.Control {
    * @api stable
    * @export
    */
-  getActivationButton(element) {
+  static getActivationButton(element) {
     return element.querySelector('button#m-button-drawfeature');
   }
 
@@ -66,8 +66,8 @@ export default class DrawFeature extends M.Control {
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
    */
-  equals(obj) {
-    let equals = (obj instanceof DrawFeature);
+  static equals(obj) {
+    const equals = (obj instanceof DrawFeature);
     return equals;
   }
 
@@ -79,7 +79,7 @@ export default class DrawFeature extends M.Control {
    * @param {M.layer.WFS} layer - Layer
    * @api stable
    */
-  setLayer(layer) {
+  static setLayer(layer) {
     this.getImpl().layer_ = layer;
   }
 }

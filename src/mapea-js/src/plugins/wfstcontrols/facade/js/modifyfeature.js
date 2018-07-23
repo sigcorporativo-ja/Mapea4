@@ -1,4 +1,4 @@
-import ModifyFeatureImpl from "../.../impl/ol/js/modifyfeature";
+import ModifyFeatureImpl from '../../impl/ol/js/modifyfeature';
 
 export default class ModifyFeature extends M.Control {
   /**
@@ -13,7 +13,7 @@ export default class ModifyFeature extends M.Control {
    */
   constructor(layer) {
     // implementation of this control
-    let impl = new ModifyFeatureImpl(layer);
+    const impl = new ModifyFeatureImpl(layer);
 
     // calls the super constructor
     super(impl, ModifyFeature.NAME);
@@ -40,9 +40,9 @@ export default class ModifyFeature extends M.Control {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return M.Template.compile(ModifyFeature.TEMPLATE, {
-      'jsonp': true
+      jsonp: true,
     });
   }
 
@@ -56,7 +56,7 @@ export default class ModifyFeature extends M.Control {
    * @api stable
    * @export
    */
-  getActivationButton(element) {
+  static getActivationButton(element) {
     return element.querySelector('button#m-button-modifyfeature');
   }
 
@@ -68,8 +68,8 @@ export default class ModifyFeature extends M.Control {
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
    */
-  equals(obj) {
-    let equals = (obj instanceof ModifyFeature);
+  static equals(obj) {
+    const equals = (obj instanceof ModifyFeature);
     return equals;
   }
 

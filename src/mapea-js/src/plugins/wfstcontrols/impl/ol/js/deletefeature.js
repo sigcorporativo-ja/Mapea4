@@ -1,5 +1,3 @@
-import WFSTBase from "./wfstcontrolbase";
-
 /**
  * @namespace M.impl.control
  */
@@ -15,7 +13,6 @@ export default class DeleteFeature extends M.impl.Control {
    * @api stable
    */
   constructor(layer) {
-
     super(layer);
 
     /**
@@ -32,7 +29,6 @@ export default class DeleteFeature extends M.impl.Control {
      * @api stable
      */
     this.modifiedFeatures = [];
-
   }
 
   /**
@@ -66,19 +62,20 @@ export default class DeleteFeature extends M.impl.Control {
    * @param {array} evt - Select event
    */
   removeFeature_(features, evt) {
-    let feature = features[0].getImpl().getOLFeature();
-    let olLayer = this.layer_.getImpl().getOL3Layer();
+    const feature = features[0].getImpl().getOLFeature();
+    const olLayer = this.layer_.getImpl().getOL3Layer();
     olLayer.getSource().removeFeature(feature);
 
     // prevents saving new features
     if (!M.utils.isNullOrEmpty(feature.getId())) {
       this.modifiedFeatures.push(feature);
-    } else {
+    }
+    else {
       // removes the created feature from the drawfeature control
-      let drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
+      const drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
       if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
-        let drawnFeatures = drawfeatureCtrl.getImpl().modifiedFeatures;
-        let idx = drawnFeatures.indexOf(feature);
+        const drawnFeatures = drawfeatureCtrl.getImpl().modifiedFeatures;
+        const idx = drawnFeatures.indexOf(feature);
         drawnFeatures.splice(idx, 1);
       }
     }

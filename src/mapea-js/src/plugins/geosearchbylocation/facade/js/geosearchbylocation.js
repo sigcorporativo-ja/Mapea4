@@ -1,4 +1,4 @@
-import geosearchbylocationcontrol from "./geosearchbylocationcontrol";
+import GeosearchbylocationControl from './geosearchbylocationcontrol';
 
 export default class Geosearchbylocation extends M.Plugin {
   /**
@@ -11,11 +11,9 @@ export default class Geosearchbylocation extends M.Plugin {
    * @param {Mx.parameters.Geosearchbylocation} parameters - Geosearchbylocation parameters
    * @api stable
    */
-  constructor(parameters) {
+  constructor(parameters = {}) {
     // call super
     super();
-
-    parameters = (parameters || {});
 
     /**
      * Name of this control
@@ -100,7 +98,6 @@ export default class Geosearchbylocation extends M.Plugin {
      * @type {M.ui.Panel}
      */
     this.panel_ = null;
-
   }
 
   /**
@@ -112,17 +109,23 @@ export default class Geosearchbylocation extends M.Plugin {
    */
   addTo(map) {
     this.map_ = map;
-    this.controlGeo = new GeosearchbylocationControl(this.url_,
-      this.core_, this.handler_, this.distance_, this.spatialField_, this.rows_);
+    this.controlGeo = new GeosearchbylocationControl(
+      this.url_,
+      this.core_,
+      this.handler_,
+      this.distance_,
+      this.spatialField_,
+      this.rows_,
+    );
 
     this.panel_ = new M.ui.Panel(Geosearchbylocation.NAME, {
-      'collapsible': false,
-      'className': 'm-geosearchbylocation',
-      'position': M.ui.Position.BR
+      collapsible: false,
+      className: 'm-geosearchbylocation',
+      position: M.ui.Position.BR,
     });
     // sets the className depending on other panels
-    var locationPanel = map.getPanels([M.control.Location.NAME])[0];
-    var streetViewPanel;
+    const locationPanel = map.getPanels([M.control.Location.NAME])[0];
+    let streetViewPanel;
 
     // TODO
     if (!M.utils.isNullOrEmpty(M.plugin.Streetview)) {
@@ -134,10 +137,12 @@ export default class Geosearchbylocation extends M.Plugin {
       locationPanel.addClassName('m-with-geosearchbylocation');
       streetViewPanel.addClassName('m-with-geosearchbylocation');
       this.panel_.addClassName('m-with-location m-with-streetview');
-    } else if (!M.utils.isNullOrEmpty(locationPanel)) {
+    }
+    else if (!M.utils.isNullOrEmpty(locationPanel)) {
       locationPanel.addClassName('m-with-geosearchbylocation');
       this.panel_.addClassName('m-with-location');
-    } else if (!M.utils.isNullOrEmpty(streetViewPanel)) {
+    }
+    else if (!M.utils.isNullOrEmpty(streetViewPanel)) {
       streetViewPanel.addClassName('m-with-geosearchbylocation');
       this.panel_.addClassName('m-with-streetview');
     }
@@ -174,12 +179,11 @@ export default class Geosearchbylocation extends M.Plugin {
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  equals(plugin) {
+  static equals(plugin) {
     if (plugin instanceof Geosearchbylocation) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }
 

@@ -97,7 +97,7 @@ export default class Measure extends M.impl.Control {
     map.getMapImpl().addLayer(this.layer_);
 
     // super addTo
-    map.addTo(element);
+    super.addTo(map, element);
 
     this.createHelpTooltip_();
     this.createMeasureTooltip_();

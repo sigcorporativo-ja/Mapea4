@@ -10,6 +10,7 @@ export default class SearchstreetGeosearch extends ol.control.Control {
    * @api stable
    */
   constructor() {
+    super();
     /**
      * Facade of the map
      *
@@ -25,7 +26,6 @@ export default class SearchstreetGeosearch extends ol.control.Control {
      * @type {HTMLElement}
      */
     this.element_ = null;
-
   }
 
   /**
@@ -42,8 +42,8 @@ export default class SearchstreetGeosearch extends ol.control.Control {
     this.element_ = element;
 
     ol.control.Control.call(this, {
-      'element': element,
-      'target': null
+      element,
+      target: null,
     });
     map.getMapImpl().addControl(this);
   }
@@ -68,7 +68,7 @@ export default class SearchstreetGeosearch extends ol.control.Control {
    * @api stable
    */
   zoomResults() {
-    let bbox = this.facadeMap_.getControls().find(c => c.name_ === "searchstreetgeosearch").ctrlGeosearch.getImpl().layer_.getFeaturesExtent();
+    const bbox = this.facadeMap_.getControls().find(c => c.name_ === 'searchstreetgeosearch').ctrlGeosearch.getImpl().layer.getFeaturesExtent();
     if (!M.utils.isNullOrEmpty(bbox)) {
       this.facadeMap_.setBbox(bbox);
     }
@@ -82,10 +82,17 @@ export default class SearchstreetGeosearch extends ol.control.Control {
    * @api stable
    */
   destroy() {
-    this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0].classList.remove("top-extra");
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.remove('top-extra');
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_.getImpl().removePopup();
     this.facadeMap_ = null;
     this.element_ = null;
+  }
+
+  /**
+   * TODO
+   */
+  get layer() {
+    return this.layer_;
   }
 }

@@ -1,9 +1,9 @@
-import DrawFeature from "./drawfeature";
-import ModifyFeature from "./modifyfeature";
-import DeleteFeature from "./deletefeature";
-import ClearFeature from "./clearfeature";
-import SaveFeature from "./savefeature";
-import EditAttribute from "./editattribute";
+import DrawFeature from './drawfeature';
+import ModifyFeature from './modifyfeature';
+import DeleteFeature from './deletefeature';
+import ClearFeature from './clearfeature';
+import SaveFeature from './savefeature';
+import EditAttribute from './editattribute';
 
 /**
  * @classdesc
@@ -16,9 +16,7 @@ import EditAttribute from "./editattribute";
  * @api stable
  */
 export default class WFSTControls extends M.Plugin {
-
   constructor(controls, layername) {
-
     super();
 
     /**
@@ -91,7 +89,6 @@ export default class WFSTControls extends M.Plugin {
      * @type {Object}
      */
     this.editattibute_ = null;
-
   }
   /**
    * This function provides the implementation
@@ -104,34 +101,38 @@ export default class WFSTControls extends M.Plugin {
    */
   addTo(map) {
     this.map_ = map;
-    let wfslayer = M.utils.isNullOrEmpty(this.map_.getWFS({
-      'name': this.layername_
-    })[0]) ? this.map_.getWFS()[0] : this.map_.getWFS({
-      'name': this.layername_
+    const firstLayer = this.map_.getWFS()[0];
+    const firstNamedLayer = this.map_.getWFS({
+      name: this.layername_,
     })[0];
+    const wfslayer = M.utils.isNullOrEmpty(firstNamedLayer) ? firstLayer : firstNamedLayer;
 
     if (M.utils.isNullOrEmpty(wfslayer)) {
-      M.dialog.error('Los controles <b>' + this.controls.join(',') + '</b> no se pueden añadir al mapa porque no existe una capa WFS cargada.');
-    } else {
+      M.dialog.error(`Los controles <b>${this.controls.join(',')}</b> no se pueden añadir al mapa porque no existe una capa WFS cargada.`);
+    }
+    else {
       let addSave = false;
       let addClear = false;
-      for (var i = 0, ilen = this.controls.length; i < ilen; i++) {
-        if (this.controls[i] === "drawfeature") {
+      for (let i = 0, ilen = this.controls.length; i < ilen; i += 1) {
+        if (this.controls[i] === 'drawfeature') {
           this.drawfeature_ = new DrawFeature(wfslayer);
           map.addControls([this.drawfeature_]);
           addSave = true;
           addClear = true;
-        } else if (this.controls[i] === "modifyfeature") {
+        }
+        else if (this.controls[i] === 'modifyfeature') {
           this.modifyfeature_ = new ModifyFeature(wfslayer);
           map.addControls([this.modifyfeature_]);
           addSave = true;
           addClear = true;
-        } else if (this.controls[i] === "deletefeature") {
+        }
+        else if (this.controls[i] === 'deletefeature') {
           this.deletefeature_ = new DeleteFeature(wfslayer);
           map.addControls([this.deletefeature_]);
           addSave = true;
           addClear = true;
-        } else if (this.controls[i] === "editattribute") {
+        }
+        else if (this.controls[i] === 'editattribute') {
           this.editattibute_ = new EditAttribute(wfslayer);
           map.addControls([this.editattibute_]);
           addClear = true;
@@ -163,8 +164,8 @@ export default class WFSTControls extends M.Plugin {
       this.deletefeature_,
       this.clearfeature_,
       this.savefeature_,
-      this.editattibute_
-   ]);
+      this.editattibute_,
+    ]);
     this.controls = null;
     this.map_ = null;
     this.drawfeature_ = null;
@@ -184,15 +185,15 @@ export default class WFSTControls extends M.Plugin {
    * @api stable
    */
   setLayer(layername) {
-
     this.layername_ = layername;
-    let wfslayer = this.map_.getWFS({
-      'name': this.layername_
+    const wfslayer = this.map_.getWFS({
+      name: this.layername_,
     })[0];
     if (M.utils.isNullOrEmpty(wfslayer)) {
-      M.dialog.error('Los capa <b>' + layername + '</b> no es una capa WFS cargada.');
-    } else {
-      let objControls = [];
+      M.dialog.error(`Los capa <b>${layername}</b> no es una capa WFS cargada.`);
+    }
+    else {
+      const objControls = [];
       if (!M.utils.isNullOrEmpty(this.drawfeature_)) objControls.push(this.drawfeature_);
       if (!M.utils.isNullOrEmpty(this.modifyfeature_)) objControls.push(this.modifyfeature_);
       if (!M.utils.isNullOrEmpty(this.deletefeature_)) objControls.push(this.deletefeature_);
@@ -200,12 +201,11 @@ export default class WFSTControls extends M.Plugin {
       if (!M.utils.isNullOrEmpty(this.savefeature_)) objControls.push(this.savefeature_);
       if (!M.utils.isNullOrEmpty(this.editattibute_)) objControls.push(this.editattibute_);
 
-      //let ctrlActivo = null;
-      //objControls.forEach(function (ctrl){if (ctrl.activated) ctrlActivo = ctrl});
+      // let ctrlActivo = null;
+      // objControls.forEach(function (ctrl){if (ctrl.activated) ctrlActivo = ctrl});
       this.clearfeature_.getImpl().clear();
       objControls.forEach(ctrl => ctrl.setLayer(wfslayer));
       // if(ctrl===ctrlActivo){ ctrl.activate();} //JGL: TODO no funciona
-
     }
   }
 
@@ -217,12 +217,11 @@ export default class WFSTControls extends M.Plugin {
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  equals(plugin) {
+  static equals(plugin) {
     if (plugin instanceof WFSTControls) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 }
 /**

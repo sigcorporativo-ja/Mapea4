@@ -13,6 +13,8 @@ export default class ModifyFeature extends M.impl.Control {
    * @api stable
    */
   constructor(layer) {
+    super();
+
     /**
      * Layer for use in control
      * @private
@@ -66,7 +68,7 @@ export default class ModifyFeature extends M.impl.Control {
     if (M.utils.isNullOrEmpty(this.modify)) {
       this.createInteractionModify_();
     }
-    let olMap = this.facadeMap_.getMapImpl();
+    const olMap = this.facadeMap_.getMapImpl();
     olMap.removeInteraction(this.modify);
     this.modify = null;
   }
@@ -78,18 +80,19 @@ export default class ModifyFeature extends M.impl.Control {
    * @function
    */
   createInteractionModify_() {
-    let olMap = this.facadeMap_.getMapImpl();
-    let layerImpl = this.layer_.getImpl();
-    let olLayer = layerImpl.getOL3Layer();
-    let olStyle = olLayer.getStyle()()[0];
+    const olMap = this.facadeMap_.getMapImpl();
+    const layerImpl = this.layer_.getImpl();
+    const olLayer = layerImpl.getOL3Layer();
+    const olStyle = olLayer.getStyle()()[0];
     let styleImage = olStyle.getImage();
-    let [olFill, olStroke] = [olStyle.getFill(), olStyle.getStroke()];
+    let olStroke = olStyle.getStroke();
+    const olFill = olStyle.getFill();
 
     if (styleImage != null) {
       olStroke = styleImage.getStroke();
     }
 
-    let olStrokeClone = olStroke == null ? null : olStroke.clone();
+    const olStrokeClone = olStroke == null ? null : olStroke.clone();
     if (olStrokeClone != null) {
       olStrokeClone.setColor(M.utils.getRgba(olStroke.getColor()));
     }
@@ -97,29 +100,30 @@ export default class ModifyFeature extends M.impl.Control {
       styleImage = new ol.style.Circle({
         fill: olFill || olStrokeClone,
         radius: 5,
-        stroke: olStroke
+        stroke: olStroke,
       });
     }
-    let layerFeatures = new ol.Collection(olLayer.getSource().getFeatures());
-    layerFeatures.forEach(feature => {
-      feature.on('change', evt => {
+    const layerFeatures = new ol.Collection(olLayer.getSource().getFeatures());
+    layerFeatures.forEach((feature) => {
+      feature.on('change', (evt) => {
         this.currentFeature_ = evt.target;
       }, this);
     }, this);
     this.modify = new ol.interaction.Modify({
       features: layerFeatures,
-      deleteCondition: function (event) {
+      deleteCondition: (event) => {
         return ol.events.condition.shiftKeyOnly(event) && ol.events.condition.singleClick(event);
       },
       style: new ol.style.Style({
         image: styleImage,
-      })
+      }),
     });
-    this.modify.on('modifyend', evt => {
-      let featureIdx = this.modifiedFeatures.indexOf(this.currentFeature_);
+    this.modify.on('modifyend', (evt) => {
+      const featureIdx = this.modifiedFeatures.indexOf(this.currentFeature_);
       if (featureIdx >= 0) {
         this.modifiedFeatures[featureIdx] = this.currentFeature_;
-      } else {
+      }
+      else {
         this.modifiedFeatures.push(this.currentFeature_);
       }
       this.currentFeature_ = null;

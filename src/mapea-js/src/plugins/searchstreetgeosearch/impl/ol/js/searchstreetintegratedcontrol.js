@@ -3,17 +3,6 @@
  */
 export default class SearchstreetIntegratedControl extends M.impl.control.Searchstreet {
   /**
-   * @classdesc Main constructor of the SearchstreetIntegrated control.
-   *
-   * @constructor
-   * @extends {M.impl.control.Searchstreet}
-   * @api stable
-   */
-  constructor {
-    super();
-  };
-
-  /**
    * This function replaces the addTo of Searchstreet, not to add control
    *
    * @public
@@ -27,8 +16,8 @@ export default class SearchstreetIntegratedControl extends M.impl.control.Search
     this.element_ = element;
 
     ol.control.Control.call(this, {
-      'element': element,
-      'target': null
+      element,
+      target: null,
     });
   }
 
@@ -39,5 +28,5 @@ export default class SearchstreetIntegratedControl extends M.impl.control.Search
    * @function
    * @api stable
    */
-  zoomResults() {};
+  static zoomResults() {}
 }

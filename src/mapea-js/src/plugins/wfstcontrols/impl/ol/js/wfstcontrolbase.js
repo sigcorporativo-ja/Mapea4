@@ -35,7 +35,6 @@ export default class WFSTBase extends M.impl.Control {
      * @api stable
      */
     this.modifiedFeatures = [];
-
   }
 
   /**
@@ -51,8 +50,8 @@ export default class WFSTBase extends M.impl.Control {
     this.facadeMap_ = map;
 
     ol.control.Control.call(this, {
-      'element': element,
-      'target': null
+      element,
+      target: null,
     });
     map.getMapImpl().addControl(this);
   }
@@ -69,10 +68,11 @@ export default class WFSTBase extends M.impl.Control {
       this.createInteraction_();
       this.facadeMap_.getMapImpl().addInteraction(this.interaction_);
       this.interaction_.setActive(true);
-    } else {
+    }
+    else {
       this.interaction_.setActive(true);
     }
-  };
+  }
 
   /**
    * This function deactivate control
@@ -86,7 +86,8 @@ export default class WFSTBase extends M.impl.Control {
       this.createInteraction_();
       this.facadeMap_.getMapImpl().addInteraction(this.interaction_);
       this.interaction_.setActive(false);
-    } else {
+    }
+    else {
       this.interaction_.setActive(false);
     }
   }
@@ -97,7 +98,7 @@ export default class WFSTBase extends M.impl.Control {
    * @private
    * @function
    */
-  createInteraction_() {};
+  static createInteraction_() {}
 
   /**
    * This function destroys this control and cleaning the HTML

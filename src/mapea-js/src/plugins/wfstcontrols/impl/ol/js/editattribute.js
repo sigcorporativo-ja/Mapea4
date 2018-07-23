@@ -1,5 +1,4 @@
-import WFSTBase from "./wfstcontrolbase";
-import FEditattribute from "../../../facade/js/editattribute";
+import FEditattribute from '../../../facade/js/editattribute';
 
 /**
  * @namespace M.impl.control
@@ -32,7 +31,6 @@ export default class EditAttribute extends M.impl.control {
      * @api stable
      */
     this.editFeature = null;
-
   }
 
   /**
@@ -71,69 +69,72 @@ export default class EditAttribute extends M.impl.control {
     this.unselectFeature_();
 
     this.editFeature = features[0].getImpl().getOLFeature();
-    let coordinate = evt.coord;
+    const coordinate = evt.coord;
 
     // avoid editing new features
     if (M.utils.isNullOrEmpty(this.editFeature.getId())) {
       this.editFeature = null;
       M.dialog.info('Debe guardar el elemento previamente');
-    } else {
+    }
+    else {
       this.editFeature.setStyle(EditAttribute.SELECTED_STYLE);
 
-      let templateVar = {
-        'properties': []
+      const templateVar = {
+        properties: [],
       };
-      Object.keys(this.editFeature.getProperties()).filter(propName => {
+      Object.keys(this.editFeature.getProperties()).filter((propName) => {
         return (propName !== 'geometry');
-      }).forEach(propName => {
+      }).forEach((propName) => {
         templateVar.properties.push({
-          'key': propName,
-          'value': this.editFeature.get(propName),
+          key: propName,
+          value: this.editFeature.get(propName),
           // 'type': p.localType
         });
       }, this);
       M.Template.compile(FEditattribute.TEMPLATE_POPUP, {
-        'jsonp': true,
-        'vars': templateVar,
-        'parseToHtml': false
-      }).then(htmlAsText => {
-        let popupContent = {
-          'icon': 'g-cartografia-texto',
-          'title': FEditattribute.POPUP_TITLE,
-          'content': htmlAsText
+        jsonp: true,
+        vars: templateVar,
+        parseToHtml: false,
+      }).then((htmlAsText) => {
+        const popupContent = {
+          icon: 'g-cartografia-texto',
+          title: FEditattribute.POPUP_TITLE,
+          content: htmlAsText,
         };
         this.popup_ = this.facadeMap_.getPopup();
         if (!M.utils.isNullOrEmpty(this.popup_)) {
-          let hasExternalContent = this.popup_.getTabs().some(function (tab) {
-            return (tab['title'] !== FEditattribute.POPUP_TITLE);
+          const hasExternalContent = this.popup_.getTabs().some((tab) => {
+            return (tab.title !== FEditattribute.POPUP_TITLE);
           });
           if (!hasExternalContent) {
             this.facadeMap_.removePopup();
             this.popup_ = new M.Popup();
             this.popup_.addTab(popupContent);
             this.facadeMap_.addPopup(this.popup_, coordinate);
-          } else {
+          }
+          else {
             this.popup_.addTab(popupContent);
           }
-        } else {
+        }
+        else {
           this.popup_ = new M.Popup();
           this.popup_.addTab(popupContent);
           this.facadeMap_.addPopup(this.popup_, coordinate);
         }
 
         // adds save button events on show
-        this.popup_.on(M.evt.SHOW, function () {
-          let popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
+        this.popup_.on(M.evt.SHOW, () => {
+          const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
           if (!M.utils.isNullOrEmpty(popupButton)) {
-            popupButton.addEventListener("click", this.saveAttributes_);
+            popupButton.addEventListener('click', this.saveAttributes_);
           }
         }, this);
 
         // removes events on destroy
-        this.popup_.on(M.evt.DESTROY, function () {
-          let popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
+        this.popup_.on(M.evt.DESTROY, () => {
+          const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
           if (!M.utils.isNullOrEmpty(popupButton)) {
-            popupButton.removeEventListener("click", this.saveAttributes_);
+            popupButton.removeEventListener('click', this.saveAttributes_);
           }
           this.unselectFeature_();
         }, this);
@@ -150,56 +151,57 @@ export default class EditAttribute extends M.impl.control {
    * @api stable
    */
   saveAttributes_(evt) {
-
-    //JGL 20163105: para evitar que se envié en la petición WFST el bbox
-    this.editFeature.unset("bbox", true);
+    // JGL 20163105: para evitar que se envié en la petición WFST el bbox
+    this.editFeature.unset('bbox', true);
     //
     // add class css
-    let popupContentHtml = this.popup_.getContent();
-    let popupButton = evt.target;
-    let featureProps = this.editFeature.getProperties();
+    const popupContentHtml = this.popup_.getContent();
+    const popupButton = evt.target;
+    const featureProps = this.editFeature.getProperties();
 
 
     popupButton.classList.add('m-savefeature-saving');
 
     // updates the properties from the inputs
     // with key of property as id
-    Object.keys(featureProps).forEach(p => {
-      let inputPopup = popupContentHtml.querySelector('input#' + p);
+    Object.keys(featureProps).forEach((p) => {
+      const inputPopup = popupContentHtml.querySelector(`input#${p}`);
       if (inputPopup !== null) {
-        let value = popupContentHtml.querySelector('input#' + p).value;
+        const value = popupContentHtml.querySelector(`input#${p}`).value;
         this.editFeature.set(p, value, true);
       }
     }, this);
 
-    this.layer_.getImpl().getDescribeFeatureType().then(function (describeFeatureType) {
-      let editFeatureGeomName = this.editFeature.getGeometryName();
-      let editFeatureGeom = this.editFeature.getGeometry();
+    this.layer_.getImpl().getDescribeFeatureType().then((describeFeatureType) => {
+      const editFeatureGeomName = this.editFeature.getGeometryName();
+      const editFeatureGeom = this.editFeature.getGeometry();
       this.editFeature.setGeometryName(describeFeatureType.geometryName);
       this.editFeature.setGeometry(editFeatureGeom);
       this.editFeature.unset(editFeatureGeomName);
 
-      let projectionCode = this.facadeMap_.getProjection().code;
-      let formatWFS = new ol.format.WFS();
-      let wfstRequestXml = formatWFS.writeTransaction(null, [this.editFeature], null, {
-        'featureNS': describeFeatureType.featureNS,
-        'featurePrefix': describeFeatureType.featurePrefix,
-        'featureType': this.layer_.name,
-        'srsName': projectionCode,
-        'gmlOptions': {
-          'srsName': projectionCode
-        }
-      })
+      const projectionCode = this.facadeMap_.getProjection().code;
+      const formatWFS = new ol.format.WFS();
+      const wfstRequestXml = formatWFS.writeTransaction(null, [this.editFeature], null, {
+        featureNS: describeFeatureType.featureNS,
+        featurePrefix: describeFeatureType.featurePrefix,
+        featureType: this.layer_.name,
+        srsName: projectionCode,
+        gmlOptions: {
+          srsName: projectionCode,
+        },
+      });
 
-      let wfstRequestText = wfstRequestXml.serializeToString(doc);
+      let doc;
+      const wfstRequestText = wfstRequestXml.serializeToString(doc);
 
       // closes the popup
       this.facadeMap_.removePopup(this.popup_);
-      M.Remote.post(this.layer_.url, wfstRequestText).then(response => {
+      M.Remote.post(this.layer_.url, wfstRequestText).then((response) => {
         popupButton.classList.remove('m-savefeature-saving');
         if (response.code === 200) {
           M.dialog.success('Se ha guardado correctamente el elemento');
-        } else {
+        }
+        else {
           M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
         }
       });
@@ -215,7 +217,7 @@ export default class EditAttribute extends M.impl.control {
    */
   unselectFeature_() {
     if (this.editFeature !== null) {
-      this.editFeature.setStyle(WFS.STYLE);
+      this.editFeature.setStyle(M.impl.layer.WFS.STYLE);
       this.editFeature = null;
       this.facadeMap_.removePopup();
     }
@@ -229,33 +231,31 @@ export default class EditAttribute extends M.impl.control {
    * @api stable
    */
   destroy() {
-    super('destroy');
+    super.destroy();
     if (!M.utils.isNull(this.facadeMap_) && !M.utils.isNull(this.facadeMap_.getPopup())) {
       this.facadeMap_.removePopup();
     }
   }
-
-
-  /**
-   * Style for selected features
-   * @const
-   * @type {ol.style.Style}
-   * @public
-   * @api stable
-   */
-  EditAttribute.SELECTED_STYLE = new ol.style.Style({
-    fill: new ol.style.Fill({
-      color: 'rgba(175, 127, 19, 0.2)'
-    }),
-    stroke: new ol.style.Stroke({
-      color: '#af7f13',
-      width: 2
-    }),
-    image: new ol.style.Circle({
-      radius: 7,
-      fill: new ol.style.Fill({
-        color: '#af7f13'
-      })
-    })
-  });
 }
+/**
+ * Style for selected features
+ * @const
+ * @type {ol.style.Style}
+ * @public
+ * @api stable
+ */
+EditAttribute.SELECTED_STYLE = new ol.style.Style({
+  fill: new ol.style.Fill({
+    color: 'rgba(175, 127, 19, 0.2)',
+  }),
+  stroke: new ol.style.Stroke({
+    color: '#af7f13',
+    width: 2,
+  }),
+  image: new ol.style.Circle({
+    radius: 7,
+    fill: new ol.style.Fill({
+      color: '#af7f13',
+    }),
+  }),
+});
