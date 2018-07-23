@@ -51,30 +51,40 @@ export deafult class PrinterControl extends M.impl.Control {
     return (new Promise((success, fail) => {
       if (layer.type === M.layer.type.WMC) {
         // none
-      } else if (layer.type === M.layer.type.KML) {
+      }
+      else if (layer.type === M.layer.type.KML) {
         success(this.encodeKML(layer));
-      } else if (layer.type === M.layer.type.WMS) {
+      }
+      else if (layer.type === M.layer.type.WMS) {
         success(this.encodeWMS(layer));
-      } else if (layer.type === M.layer.type.WFS) {
+      }
+      else if (layer.type === M.layer.type.WFS) {
         success(this.encodeWFS(layer));
-      } else if (layer.type === M.layer.type.GeoJSON) {
+      }
+      else if (layer.type === M.layer.type.GeoJSON) {
         /*se reutiliza el codificador WFS ya, aunque ya está en geojson,
           el proceso a realizar es el mismo y recodificar en geojson no
           penaliza*/
         success(this.encodeWFS(layer));
-      } else if (layer.type === M.layer.type.WMTS) {
+      }
+      else if (layer.type === M.layer.type.WMTS) {
         this.encodeWMTS(layer).then(encodedLayer => {
           success(encodedLayer);
         });
-      } else if (layer.type === M.layer.type.MBtiles) {
+      }
+      else if (layer.type === M.layer.type.MBtiles) {
         // none
-      } else if (layer.type === M.layer.type.OSM) {
+      }
+      else if (layer.type === M.layer.type.OSM) {
         success(this.encodeOSM(layer));
-      } else if (layer.type === M.layer.type.Mapbox) {
+      }
+      else if (layer.type === M.layer.type.Mapbox) {
         success(this.encodeMapbox(layer));
-      } else if (M.utils.isNullOrEmpty(layer.type) && layer instanceof M.layer.Vector) {
+      }
+      else if (M.utils.isNullOrEmpty(layer.type) && layer instanceof M.layer.Vector) {
         success(this.encodeWFS(layer));
-      } else {
+      }
+      else {
         success(this.encodeWFS(layer));
       }
     }));
@@ -294,7 +304,8 @@ export deafult class PrinterControl extends M.impl.Control {
     let continuePrint = true;
     if (layer.getStyle() instanceof M.style.Chart) {
       continuePrint = false;
-    } else if (layer.getStyle() instanceof M.style.Cluster && layer.getStyle().getOldStyle() instanceof M.style.Chart) {
+    }
+    else if (layer.getStyle() instanceof M.style.Cluster && layer.getStyle().getOldStyle() instanceof M.style.Chart) {
       continuePrint = false;
     }
     if (continuePrint) {
@@ -320,7 +331,8 @@ export deafult class PrinterControl extends M.impl.Control {
 
         if (!M.utils.isNullOrEmpty(fStyle)) {
           featureStyle = fStyle;
-        } else if (!M.utils.isNullOrEmpty(layerStyle)) {
+        }
+        else if (!M.utils.isNullOrEmpty(layerStyle)) {
           featureStyle = layerStyle;
         }
 
@@ -333,7 +345,8 @@ export deafult class PrinterControl extends M.impl.Control {
           if (featureStyle.length > 1) {
             featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage()) && featureStyle[1].getImage().getSrc) ?
               featureStyle[1] : featureStyle[0];
-          } else {
+          }
+          else {
             featureStyle = featureStyle[0];
           }
 
@@ -370,22 +383,28 @@ export deafult class PrinterControl extends M.impl.Control {
             if (!M.utils.isNullOrEmpty(tAlign)) {
               if (tAlign === M.style.align.LEFT) {
                 tAlign = 'l';
-              } else if (tAlign === M.style.align.RIGHT) {
+              }
+              else if (tAlign === M.style.align.RIGHT) {
                 tAlign = 'r';
-              } else if (tAlign === M.style.align.CENTER) {
+              }
+              else if (tAlign === M.style.align.CENTER) {
                 tAlign = 'c';
-              } else {
+              }
+              else {
                 tAlign = '';
               }
             }
             if (!M.utils.isNullOrEmpty(tBLine)) {
               if (tBLine === M.style.baseline.BOTTOM) {
                 tBLine = 'b';
-              } else if (tBLine === M.style.baseline.MIDDLE) {
+              }
+              else if (tBLine === M.style.baseline.MIDDLE) {
                 tBLine = 'm';
-              } else if (tBLine === M.style.baseline.TOP) {
+              }
+              else if (tBLine === M.style.baseline.TOP) {
                 tBLine = 't';
-              } else {
+              }
+              else {
                 tBLine = '';
               }
             }
@@ -401,7 +420,8 @@ export deafult class PrinterControl extends M.impl.Control {
                 let space = px.lastIndexOf(" ");
                 if (space > -1) {
                   fontSize = px.substr(space, px.length).trim().concat("px");
-                } else {
+                }
+                else {
                   fontSize = px.concat("px");
                 }
               }
@@ -438,7 +458,8 @@ export deafult class PrinterControl extends M.impl.Control {
                 'featureProjection': projection.code,
                 'dataProjection': 'EPSG:3857',
               });
-            } else {
+            }
+            else {
               geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
             }
             geoJSONFeature.properties = {
@@ -612,7 +633,7 @@ export deafult class PrinterControl extends M.impl.Control {
       'maxExtent': layerExtent,
       'tileSize': [tileSize, tileSize],
       'resolutions': resolutions,
-      'extension': Config.MAPBOX_EXTENSION,
+      'extension': M.config.MAPBOX_EXTENSION,
       'type': 'xyz',
       'path_format': '/${z}/${x}/${y}.png'
     };

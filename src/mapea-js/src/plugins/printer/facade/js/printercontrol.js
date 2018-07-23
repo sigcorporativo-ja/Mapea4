@@ -260,20 +260,28 @@ export default class PrinterControl extends M.Control {
       selectFormat.value = this.options_.format;
       checkboxForceScale.checked = this.options_.forceScale;
 
-      // fires all listeners
-      //TODO TODO TODO TODO TODO TODO
-      goog.events.getListeners(selectLayout, goog.events.EventType.CHANGE, false)
-        .concat(goog.events.getListeners(selectDpi, goog.events.EventType.CHANGE, false))
-        .concat(goog.events.getListeners(selectFormat, goog.events.EventType.CHANGE, false))
-        .concat(goog.events.getListeners(checkboxForceScale, goog.events.EventType.CLICK, false))
-        .forEach(goog.events.fireListener);
+      // Create events and init
+      const changeEvent = document.createEvent("HTMLEvents");
+      changeEvent.initEvent('change');
+      const clickEvent = document.createEvent('HTMLEvents');
+      // Fire listeners
+      clickEvent.initEvent('click');
+      selectLayout.dispatchEvent(changeEvent);
+      selectDpi.dispatchEvent(changeEvent);
+      selectFormat.dispatchEvent(changeEvent);
+      checkboxForceScale.dispatchEvent(clickEvent);
+
 
       // clean queue
       Array.prototype.forEach.apply(this.queueContainer_.children, [function (child) {
         // unlisten events
-        goog.events.unlisten(child, goog.events.EventType.CLICK, this.dowloadPrint, false, child);
+        child.removeEventListener('click', this.dowloadPrint);
          }, this]);
-      goog.dom.removeChildren(this.queueContainer_);
+      child.removeEventListener('click', this.dowloadPrint);
+
+      while (this.queueContainer_.fistChild) {
+        this.queueContainer_.removeChild(this.queueContainer_.firsChild)
+      }
     });
 
     // queue
@@ -297,7 +305,8 @@ export default class PrinterControl extends M.Control {
           let capabilities = {};
           try {
             capabilities = JSON.parse(response.text);
-          } catch (err) {}
+          }
+          catch (err) {}
           success(capabilities);
         });
       });
@@ -376,11 +385,13 @@ export default class PrinterControl extends M.Control {
             try {
               response = JSON.parse(response.text);
               downloadUrl = response['getURL'];
-            } catch (err) {}
+            }
+            catch (err) {}
             // sets the download URL
             queueEl.setAttribute(Printer.DOWNLOAD_ATTR_NAME, downloadUrl);
             queueEl.addEventListener("click", this.dowloadPrint);
-          } else {
+          }
+          else {
             M.Dialog.error('Se ha producido un error en la impresión');
           }
         });
@@ -482,7 +493,8 @@ export default class PrinterControl extends M.Control {
         if (projection.code !== "EPSG:3857" && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
           encodedPage.bbox = ol.proj.transformExtent(encodedPage.bbox, projection.code, 'EPSG:3857');
         }
-      } else if (this.forceScale_ === true) {
+      }
+      else if (this.forceScale_ === true) {
         let center = this.map_.getCenter();
         encodedPage.center = [center.x, center.y];
         encodedPage.scale = this.map_.getScale();
