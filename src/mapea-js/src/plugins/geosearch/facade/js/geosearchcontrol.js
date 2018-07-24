@@ -1,6 +1,6 @@
-import GeosearchImpl from "impl/ol/js/geosearchcontrol";
+import GeosearchImpl from '../../impl/ol/js/geosearchcontrol';
 
-export class GeosearchControl extends Control {
+export default class GeosearchControl extends M.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMCSelector
@@ -12,9 +12,9 @@ export class GeosearchControl extends Control {
    */
   constructor(url, core, handler, searchParameters) {
     // implementation of this control
-    let impl = new GeosearchImpl();
+    const impl = new GeosearchImpl();
 
-    control(impl, Geosearch.NAME);
+    super(impl, GeosearchControl.NAME);
 
     // checks if the implementation can create WMC layers
     if (M.utils.isUndefined(GeosearchImpl)) {
@@ -107,7 +107,7 @@ export class GeosearchControl extends Control {
     this.searchParameters_ = searchParameters;
     if (!M.utils.isNullOrEmpty(this.searchParameters_)) {
       if (M.utils.isNullOrEmpty(this.searchParameters_.rows)) {
-        this.searchParameters_.rows = Config.GEOSEARCH_ROWS;
+        this.searchParameters_.rows = M.config.GEOSEARCH_ROWS;
       }
       this.searchUrl_ = M.utils.addParameters(this.searchUrl_, this.searchParameters_);
     }
@@ -149,7 +149,6 @@ export class GeosearchControl extends Control {
      * @type {M.Map}
      */
     this.facadeMap_ = null;
-
   }
 
   /**
@@ -162,10 +161,10 @@ export class GeosearchControl extends Control {
    */
   createView(map) {
     this.facadeMap_ = map;
-    let promise = new Promise((success, fail) => {
+    const promise = new Promise((success, fail) => {
       M.Template.compile(GeosearchControl.TEMPLATE, {
-        'jsonp': true
-      }).then(html => {
+        jsonp: true,
+      }).then((html) => {
         this.addEvents(html);
         success(html);
       });
@@ -185,50 +184,54 @@ export class GeosearchControl extends Control {
     this.element_ = html;
 
     this.on(M.evt.COMPLETED, () => {
-      this.element_.classlist.add("shown");
+      this.element_.classList.add('shown');
     }, this);
 
     // input search
-    this.input_ = this.element_.getElementsByTagName('input')["m-geosearch-search-input"];
-    this.input_.addEventListener("keyup", this.searchClick_);
+    this.input_ = this.element_.getElementsByTagName('input')['m-geosearch-search-input'];
+    this.input_.addEventListener('keyup', this.searchClick_);
     // search buntton
-    let btnSearch = this.element_.getElementsByTagName('button')["m-geosearch-search-btn"];
-    btnSearch.addEventListener("click", this.searchClick_);
+    const btnSearch = this.element_.getElementsByTagName('button')['m-geosearch-search-btn'];
+    btnSearch.addEventListener('click', this.searchClick_);
 
     // help buntton
-    let btnHelp = this.element_.getElementsByTagName('button')["m-geosearch-help-btn"];
-    btnHelp.addEventListener("click", (evt) => {
-        evt.preventDefault();
-        btnHelp.classList.toggle('shown');
-        this.helpClick_();
-      }
-
-      // clear buntton
-      let btnClean = this.element_.getElementsByTagName('button')["m-geosearch-clear-btn"]; btnClean.addEventListener("click", this.clearClick_);
-
-      // results container
-      this.resultsContainer_ = this.element_.querySelector('div#m-geosearch-results'); M.utils.enableTouchScroll(this.resultsContainer_); this.searchingResult_ = this.element_.querySelector('div#m-geosearch-results > div#m-searching-result');
-    }
-
-    /**
-     * This function checks if an object is equals
-     * to this control
-     *
-     * @private
-     * @function
-     */
-    searchClick_(evt) {
+    const btnHelp = this.element_.getElementsByTagName('button')['m-geosearch-help-btn'];
+    btnHelp.addEventListener('click', (evt) => {
       evt.preventDefault();
+      btnHelp.classList.toggle('shown');
+      this.helpClick_();
+    });
 
-      if (evt.type !== "click")) {
+    // clear buntton
+    const btnClean = this.element_.getElementsByTagName('button')['m-geosearch-clear-btn'];
+    btnClean.addEventListener('click', this.clearClick_);
+
+    // results container
+    this.resultsContainer_ = this.element_.querySelector('div#m-geosearch-results');
+    M.utils.enableTouchScroll(this.resultsContainer_);
+    this.searchingResult_ = this.element_.querySelector('div#m-geosearch-results > div#m-searching-result');
+  }
+
+  /**
+   * This function checks if an object is equals
+   * to this control
+   *
+   * @private
+   * @function
+   */
+  searchClick_(evt) {
+    evt.preventDefault();
+
+    if (evt.type !== 'click') {
       // resets the results
       this.results_.length = 0;
 
       // gets the query
-      let query = this.input_.value;
+      const query = this.input_.value;
       if (M.utils.isNullOrEmpty(query)) {
         M.Dialog.info('Debe introducir una búsqueda.');
-      } else {
+      }
+      else {
         this.search_(query, this.showResults_);
       }
     }
@@ -241,7 +244,8 @@ export class GeosearchControl extends Control {
    * @private
    * @function
    */
-  resultClick_(evt) {
+  resultClick_(evtParam) {
+    const evt = evtParam;
     evt.preventDefault();
     // hidden results on click for mobile devices
     if (M.Window.WIDTH <= M.config.MOBILE_WIDTH) {
@@ -249,7 +253,7 @@ export class GeosearchControl extends Control {
       this.resultsClick_(evt);
     }
     this.getImpl().facadeMap_.removePopup();
-    let solrid = evt.currentTarget.id;
+    const solrid = evt.currentTarget.id;
     this.getImpl().resultClick(solrid);
   }
 
@@ -268,10 +272,10 @@ export class GeosearchControl extends Control {
     // adds the class
     this.element_.classList.add(GeosearchControl.SEARCHING_CLASS);
 
-    let searchUrl = M.utils.addParameters(this.searchUrl_, {
-      'q': query,
-      'start': this.results_.length,
-      'srs': this.facadeMap_.getProjection().code
+    const searchUrl = M.utils.addParameters(this.searchUrl_, {
+      q: query,
+      start: this.results_.length,
+      srs: this.facadeMap_.getProjection().code,
     });
 
     /* Stores the current search time into a
@@ -280,15 +284,16 @@ export class GeosearchControl extends Control {
        (this.searchTime) and the saved search time of
        the request (searchTime parameter).
        If they are different then aborts the response */
-    (searchTime => {
-      Remote.get(searchUrl).then(response => {
+    ((searchTime) => {
+      M.Remote.get(searchUrl).then((response) => {
         // if it is the current search then show the results
         if (searchTime === this.searchTime_) {
           let results;
           try {
             results = JSON.parse(response.text);
-          } catch (err) {
-            M.exception('La respuesta no es un JSON válido: ' + err);
+          }
+          catch (err) {
+            M.exception(`La respuesta no es un JSON válido: ${err}`);
           }
           processor.call(this, results);
           this.element_.classList.remove(GeosearchControl.SEARCHING_CLASS);
@@ -311,23 +316,23 @@ export class GeosearchControl extends Control {
     // draws the results on the map
     this.drawResults(results);
 
-    let resultsTemplateVars = this.parseResultsForTemplate_(results);
+    const resultsTemplateVars = this.parseResultsForTemplate_(results);
     M.Template.compile(GeosearchControl.RESULTS_TEMPLATE, {
-      'jsonp': true,
-      'vars': resultsTemplateVars
-    }).then(html => {
+      jsonp: true,
+      vars: resultsTemplateVars,
+    }).then((html) => {
       this.resultsContainer_.classList.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
       /* unregisters previous events */
       // scroll
       if (!M.utils.isNullOrEmpty(this.resultsScrollContainer_)) {
-        this.resultsScrollContainer_.removeEventListener("scroll", this.resultsScroll_);
+        this.resultsScrollContainer_.removeEventListener('scroll', this.resultsScroll_);
       }
       // results
-      let resultsHtmlElements = this.resultsContainer_.querySelectorAll(".result");
+      let resultsHtmlElements = this.resultsContainer_.querySelectorAll('.result');
       let resultHtml;
-      for (var i = 0, ilen = resultsHtmlElements.length; i < ilen; i++) {
+      for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
         resultHtml = resultsHtmlElements.item(i);
-        resultHtml.removeEventListener("click", this.resultClick_);
+        resultHtml.removeEventListener('click', this.resultClick_);
       }
       if (results.response.docs.length > 0) {
         this.zoomToResults();
@@ -336,26 +341,26 @@ export class GeosearchControl extends Control {
       // results buntton
       let btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
       if (!M.utils.isNullOrEmpty(btnResults)) {
-        btnResults.removeEventListener("click", this.resultsClick_);
+        btnResults.removeEventListener('click', this.resultsClick_);
       }
 
       // gets the new results scroll
       this.resultsContainer_.innerHTML = html.innerHTML;
-      this.resultsScrollContainer_ = this.resultsContainer_.querySelector("div#m-geosearch-results-scroll");
+      this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-geosearch-results-scroll');
       // registers the new event
       M.utils.enableTouchScroll(this.resultsScrollContainer_);
-      this.resultsScrollContainer_.addEventListener("scroll", this.resultsScroll_);
+      this.resultsScrollContainer_.addEventListener('scroll', this.resultsScroll_);
 
       // adds new events
-      resultsHtmlElements = this.resultsContainer_.getElementsByClassName("result");
-      for (i = 0, ilen = resultsHtmlElements.length; i < ilen; i++) {
+      resultsHtmlElements = this.resultsContainer_.getElementsByClassName('result');
+      for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
         resultHtml = resultsHtmlElements.item(i);
-        resultHtml.addEventListener("click", this.resultClick_);
+        resultHtml.addEventListener('click', this.resultClick_);
       }
 
       // results buntton
       btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-      btnResults.addEventListener("click", this.resultsClick_);
+      btnResults.addEventListener('click', this.resultsClick_);
       this.checkScrollSearch_(results);
       this.fire(M.evt.COMPLETED);
     });
@@ -405,7 +410,7 @@ export class GeosearchControl extends Control {
    * @returns {HTMLElement} the input that executes the search
    * @api stable
    */
-  getInput = function () {
+  getInput() {
     return this.input_;
   }
 
@@ -420,23 +425,22 @@ export class GeosearchControl extends Control {
     // draws the new results on the map
     this.drawNewResults(results);
 
-    let resultsTemplateVars = this.parseResultsForTemplate_(results, true);
-    let this = this;
+    const resultsTemplateVars = this.parseResultsForTemplate_(results, true);
     M.Template.compile(GeosearchControl.RESULTS_TEMPLATE, {
-      'jsonp': true,
-      'vars': resultsTemplateVars
-    }).then(html => {
+      jsonp: true,
+      vars: resultsTemplateVars,
+    }).then((html) => {
       // appends the new results
-      let newResultsScrollContainer = html.getElementsByTagName("div")["m-geosearch-results-scroll"];
-      let newResults = newResultsScrollContainer.children;
+      const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
+      const newResults = newResultsScrollContainer.children;
       let newResult;
-      while ((newResult = newResults.item(0)) !== null) {
+      while ((newResult === newResults.item(0)) !== null) {
         this.resultsScrollContainer_.appendChild(newResult);
-        newResult.addEventListener("click", this.resultClick_);
+        newResult.addEventListener('click', this.resultClick_);
       }
 
       // updates the found num elements
-      let spanNumFound = this.resultsContainer_.getElementsByTagName("span")["m-geosearch-page-found"];
+      const spanNumFound = this.resultsContainer_.getElementsByTagName('span')['m-geosearch-page-found'];
       spanNumFound.innerHTML = this.results_.length;
 
       // disables scroll if gets all results
@@ -452,17 +456,18 @@ export class GeosearchControl extends Control {
    * @function
    */
   resultsScroll_(evt) {
-    let target = evt.target;
-    let height = target.style.height;
-    let scrollHeight = target.scrollHeight;
-    let scrollTop = target.scrollTop;
+    const target = evt.target;
+    const height = target.style.height;
+    const scrollHeight = target.scrollHeight;
+    const scrollTop = target.scrollTop;
 
-    let scrollPosition = scrollHeight - scrollTop;
-    let scrollIsDown = ((scrollPosition - height) <= 15);
+    const scrollPosition = scrollHeight - scrollTop;
+    const scrollIsDown = ((scrollPosition - height) <= 15);
     if (scrollIsDown && this.scrollIsUp_) {
       this.scrollIsUp_ = false;
       this.scrollSearch_();
-    } else if (!scrollIsDown) {
+    }
+    else if (!scrollIsDown) {
       // updates the scroll state
       this.scrollIsUp_ = true;
     }
@@ -481,7 +486,7 @@ export class GeosearchControl extends Control {
     this.getImpl().setNewResultsAsDefault();
 
     // gets the query
-    let query = this.input_.value;
+    const query = this.input_.value;
     this.search_(query, this.appendResults_);
   }
 
@@ -496,20 +501,22 @@ export class GeosearchControl extends Control {
     if (this.helpShown_ === true) {
       this.getImpl().hideHelp();
       this.helpShown_ = false;
-    } else {
-      M.Remote.get(this.helpUrl_).then(response => {
-        var help;
+    }
+    else {
+      M.Remote.get(this.helpUrl_).then((response) => {
+        let help;
         try {
           help = JSON.parse(response.text);
-        } catch (err) {
-          Exception('La respuesta no es un JSON válido: ' + err);
+        }
+        catch (err) {
+          M.Exception(`La respuesta no es un JSON válido: ${err}`);
         }
         M.Template.compile(GeosearchControl.HELP_TEMPLATE, {
-          'jsonp': true,
-          'vars': {
-            'entities': help
-          }
-        }).then(html => {
+          jsonp: true,
+          vars: {
+            entities: help,
+          },
+        }).then((html) => {
           this.getImpl().showHelp(html);
           this.helpShown_ = true;
         });
@@ -525,7 +532,7 @@ export class GeosearchControl extends Control {
    * @function
    */
   clearClick_(evt) {
-    this.element_.classList.remove("shown");
+    this.element_.classList.remove('shown');
     if (!M.utils.isNullOrEmpty(this.input_)) {
       this.input_.value = '';
     }
@@ -550,7 +557,7 @@ export class GeosearchControl extends Control {
    * @function
    */
   resultsClick_(evt) {
-    this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0].add("top-extra-search");
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].add('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
 
@@ -588,30 +595,33 @@ export class GeosearchControl extends Control {
     if (!M.utils.isUndefined(results.spatial_response)) {
       total = results.spatial_response.numFound;
       this.spatialSearch_ = true;
-    } else {
+    }
+    else {
       total = results.response.numFound;
       this.spatialSearch_ = false;
     }
-    let docs = this.getDocsFromResults_(results);
+    const docs = this.getDocsFromResults_(results);
     if (append === true) {
       this.results_ = this.results_.concat(docs);
-    } else {
+    }
+    else {
       this.results_ = docs;
     }
-    let partial = (this.spatialSearch_ && M.utils.isNullOrEmpty(results.spatial_response.docs));
+    const partial = (this.spatialSearch_ && M.utils.isNullOrEmpty(results.spatial_response.docs));
     let resultsTemplateVar = null;
     if (total !== 0) {
       resultsTemplateVar = {
-        'docs': docs,
-        'total': total,
-        'partial': partial
+        docs,
+        total,
+        partial,
       };
-    } else {
+    }
+    else {
       resultsTemplateVar = {
-        'docs': docs,
-        'total': total,
-        'notResutls': true,
-        'query': search
+        docs,
+        total,
+        notResutls: true,
+        query: search,
       };
     }
     return resultsTemplateVar;
@@ -628,23 +638,25 @@ export class GeosearchControl extends Control {
     let docs = [];
     if (this.spatialSearch_) {
       docs = results.spatial_response.docs;
-    } else {
+    }
+    else {
       docs = results.response.docs;
     }
-    let hiddenAttributes = ['geom', '_version_', 'keywords', 'solrid'];
-    docs = docs.map(function (doc) {
-      let attributes = [];
-      for (var key in doc) {
+    const hiddenAttributes = ['geom', '_version_', 'keywords', 'solrid'];
+    docs = docs.map((doc) => {
+      const attributes = [];
+      const DocKeys = Object.keys(doc);
+      DocKeys.forEach((key) => {
         if (!M.utils.includes(hiddenAttributes, key)) {
           attributes.push({
-            'key': M.utils.beautifyAttributeName(key),
-            'value': doc[key]
+            key: M.utils.beautifyAttributeName(key),
+            value: doc[key],
           });
         }
-      }
+      });
       return {
-        'solrid': doc.solrid,
-        'attributes': attributes
+        solrid: doc.solrid,
+        attributes,
       };
     });
     return docs;
@@ -660,16 +672,16 @@ export class GeosearchControl extends Control {
     let total = 0;
     if (!M.utils.isUndefined(results.spatial_response)) {
       total = results.spatial_response.numFound;
-    } else {
+    }
+    else {
       total = results.response.numFound;
     }
-    if ((this.results_.length === total) && (!M.utils.isNullOrEmpty(this.resultsScrollContainer_))) {
-      this.resultsScrollContainer_.removeEventListener("scroll", this.resultsScroll_);
+    if ((this.results_.length === total) &&
+      (!M.utils.isNullOrEmpty(this.resultsScrollContainer_))) {
+      this.resultsScrollContainer_.removeEventListener('scroll', this.resultsScroll_);
     }
   }
 }
-
-
 
 /**
  * Name of this control

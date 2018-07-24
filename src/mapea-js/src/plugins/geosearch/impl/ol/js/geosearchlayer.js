@@ -1,4 +1,5 @@
-import GeoStyle from "./geosearchstyle";
+import GeoStyle from './geosearchstyle';
+import UtilsGeosearch from './utils';
 
 export default class GeosearchLayer extends M.impl.layer.Vector {
   /**
@@ -11,14 +12,20 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
    */
-  constructor(name = 'geosearch', options = {}) {
+  constructor(name = 'geosearch', optionsParam = {}) {
+    const options = optionsParam;
+
     // calls the super constructor
     super(options);
+
     /**
      * Currently drawn feature coordinate.
      * @private
      * @type {ol.format.M.geom.wkt}
      */
+
+    /* eslint new-cap: ["error", { "newIsCap": false } ] */
+
     this.wktFormatter_ = new ol.format.M.geom.wkt();
 
     /**
@@ -45,7 +52,6 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
      * @type {String}
      */
     this.name = name;
-
   }
 
   /**
@@ -57,10 +63,10 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @api stable
    */
   addTo(map) {
-    super('addTo', map);
+    super.addTo(map);
 
     this.ol3Layer.setSource(new ol.source.Vector({
-      'useSpatialIndex': false
+      useSpatialIndex: false,
     }));
   }
 
@@ -73,7 +79,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @api stable
    */
   drawResults(results) {
-    let projection = ol.proj.get(this.map.getProjection().code);
+    const projection = ol.proj.get(this.map.getProjection().code);
 
     let docs = [];
     if (!M.utils.isNullOrEmpty(results.spatial_response)) {
@@ -83,9 +89,9 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
       docs = results.response.docs;
     }
 
-    let features = docs.map(doc => {
-      let feature = this.wktFormatter_.readFeature(doc.geom, {
-        'dataProjection': projection
+    const features = docs.map((doc) => {
+      const feature = this.wktFormatter_.readFeature(doc.geom, {
+        dataProjection: projection,
       });
       feature.setId(doc.solrid);
       feature.setProperties(doc);
@@ -108,18 +114,19 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @api stable
    */
   drawNewResults(results) {
-    let projection = ol.proj.get(this.map.getProjection().code);
+    const projection = ol.proj.get(this.map.getProjection().code);
 
     let docs;
     if (!M.utils.isNullOrEmpty(results.spatial_response)) {
       docs = results.spatial_response.docs;
-    } else if (!M.utils.isNullOrEmpty(results.response)) {
+    }
+    else if (!M.utils.isNullOrEmpty(results.response)) {
       docs = results.response.docs;
     }
 
-    let features = docs.map(function (doc) {
-      let feature = this.wktFormatter_.readFeature(doc.geom, {
-        'dataProjection': projection
+    const features = docs.map((doc) => {
+      const feature = this.wktFormatter_.readFeature(doc.geom, {
+        dataProjection: projection,
       });
       feature.setId(doc.solrid);
       feature.setProperties(doc);
@@ -153,7 +160,9 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @param {ol.Feature} feature
    * @api stable
    */
-  selectFeatures(features, coord, evt, noPanMapIfOutOfView) {
+  selectFeatures(featuresParam, coord, evt, noPanMapIfOutOfView) {
+    let features = featuresParam;
+
     // unselects previous features
     this.unselectFeatures();
 
@@ -165,34 +174,34 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
 
     GeosearchLayer.setStyleFeature_(features, M.style.state.SELECTED);
 
-    let featureForTemplate = this.parseFeaturesForTemplate_(features);
+    const featureForTemplate = this.parseFeaturesForTemplate_(features);
     M.Template.compile(GeosearchLayer.POPUP_RESULT, {
-        'jsonp': true,
-        'vars': featureForTemplate,
-        'parseToHtml': false
-      })
-      .then(htmlAsText => {
-        let featureTabOpts = {
-          'icon': 'g-cartografia-pin',
-          'title': 'Geosearch',
-          'content': htmlAsText
-        };
-        let popup = this.map.getPopup();
-        if (M.utils.isNullOrEmpty(popup)) {
-          popup = new M.Popup({
-            'panMapIfOutOfView': !noPanMapIfOutOfView,
-            'ani': null
-          });
-          popup.addTab(featureTabOpts);
-          this.map.addPopup(popup, coord);
-        } else {
-          popup.addTab(featureTabOpts);
-        }
-        // removes events on destroy
-        popup.on(M.evt.DESTROY, () => {
-          this.internalUnselectFeatures_(true);
-        }, this);
-      });
+      jsonp: true,
+      vars: featureForTemplate,
+      parseToHtml: false,
+    }).then((htmlAsText) => {
+      const featureTabOpts = {
+        icon: 'g-cartografia-pin',
+        title: 'Geosearch',
+        content: htmlAsText,
+      };
+      let popup = this.map.getPopup();
+      if (M.utils.isNullOrEmpty(popup)) {
+        popup = new M.Popup({
+          panMapIfOutOfView: !noPanMapIfOutOfView,
+          ani: null,
+        });
+        popup.addTab(featureTabOpts);
+        this.map.addPopup(popup, coord);
+      }
+      else {
+        popup.addTab(featureTabOpts);
+      }
+      // removes events on destroy
+      popup.on(M.evt.DESTROY, () => {
+        this.internalUnselectFeatures_(true);
+      }, this);
+    });
   }
 
   /**
@@ -205,11 +214,11 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    */
   selectFeatureBySolrid(solrid) {
     // var feature = this.ol3Layer.getSource().getFeatureById(solrid);
-    let feature = this.facadeVector_.getFeatureById(solrid);
+    const feature = this.facadeVector_.getFeatureById(solrid);
     this.selectedFeatures_ = [feature];
 
-    let featureGeom = feature.getImpl().getOLFeature().getGeometry();
-    let coord = M.impl.utils.getCentroidCoordinate(featureGeom);
+    const featureGeom = feature.getImpl().getOLFeature().getGeometry();
+    const coord = UtilsGeosearch.getCentroidCoordinate(featureGeom);
 
     this.unselectFeatures();
     this.selectFeatures([feature], coord, null, true);
@@ -224,26 +233,27 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @private
    * @function
    */
-  parseFeaturesForTemplate_(features) {
-    let featuresTemplate = {
-      'features': []
-    }
+  static parseFeaturesForTemplate_(features) {
+    const featuresTemplate = {
+      features: [],
+    };
 
-    features.forEach(feature => {
-      let hiddenAttributes = ['geom', '_version_', 'keywords', 'solrid', feature.getGeometryName()];
-      let properties = feature.getProperties();
-      let attributes = [];
-      for (var key in properties) {
+    features.forEach((feature) => {
+      const hiddenAttributes = ['geom', '_version_', 'keywords', 'solrid', feature.getGeometryName()];
+      const properties = feature.getProperties();
+      const attributes = [];
+      const propKey = Object.keys(properties);
+      propKey.forEach((key) => {
         if (!M.utils.includes(hiddenAttributes, key.toLowerCase())) {
           attributes.push({
-            'key': M.utils.beautifyAttributeName(key),
-            'value': properties[key]
+            key: M.utils.beautifyAttributeName(key),
+            value: properties[key],
           });
         }
-      }
-      let featureTemplate = {
-        'solrid': feature.getId(),
-        'attributes': attributes
+      });
+      const featureTemplate = {
+        solrid: feature.getId(),
+        attributes,
       };
       featuresTemplate.features.push(featureTemplate);
     });
@@ -257,16 +267,18 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @private
    * @function
    */
-  wrapComplexFeature_(feature) {
-    let featureGeom = feature.getGeometry();
-    if ((featureGeom.getType() === M.geom.wkt.type.POLYGON) || (featureGeom.getType() === M.geom.wkt.type.MULTI_POLYGON)) {
+  static wrapComplexFeature_(feature) {
+    const featureGeom = feature.getGeometry();
+    if ((featureGeom.getType() === M.geom.wkt.type.POLYGON) ||
+      (featureGeom.getType() === M.geom.wkt.type.MULTI_POLYGON)) {
       let centroid;
       if (featureGeom.getType() === M.geom.wkt.type.POLYGON) {
         centroid = featureGeom.getInteriorPoint();
-      } else {
+      }
+      else {
         centroid = featureGeom.getInteriorPoints();
       }
-      let geometryCollection = new ol.geom.GeometryCollection([centroid, featureGeom]);
+      const geometryCollection = new ol.geom.GeometryCollection([centroid, featureGeom]);
       feature.setGeometry(geometryCollection);
     }
   }
@@ -295,7 +307,8 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
   internalUnselectFeatures_(keepPopup) {
     if (this.selectedFeatures_.length > 0) {
       // sets the style
-      GeosearchLayer.setStyleFeature_(this.selectedFeatures_.map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
+      GeosearchLayer.setStyleFeature_(this.selectedFeatures_
+        .map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
       this.selectedFeatures_.length = 0;
 
       // removes the popup just when event destroy was not fired
@@ -315,7 +328,8 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @api stable
    */
   setNewResultsAsDefault() {
-    GeosearchLayer.setStyleFeature_(this.facadeVector_.getFeatures().map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
+    GeosearchLayer.setStyleFeature_(this.facadeVector_.getFeatures()
+      .map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
   }
 
   /**
@@ -327,7 +341,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @api stable
    */
   destroy() {
-    let olMap = this.map.getMapImpl();
+    const olMap = this.map.getMapImpl();
     if (!M.utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
@@ -363,21 +377,24 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @private
    * @function
    */
-  static setStyleFeature_(features, state) {
+  static setStyleFeature_(featuresParam, state) {
+    let features = featuresParam;
     GeoStyle.init();
 
     if (!M.utils.isArray(features)) {
       features = [features];
     }
 
-    features.forEach(feature => {
+    features.forEach((feature) => {
       // gets the geometry type
-      let geometryType = feature.getGeometry().getType();
-      if (M.utils.isNullOrEmpty(state) || (state === Style.state.DEFAULT)) {
+      const geometryType = feature.getGeometry().getType();
+      if (M.utils.isNullOrEmpty(state) || (state === M.style.state.DEFAULT)) {
         feature.setStyle(GeoStyle.DEFAULT[geometryType]);
-      } else if (state === Style.state.NEW) {
+      }
+      else if (state === M.style.state.NEW) {
         feature.setStyle(GeoStyle.NEW[geometryType]);
-      } else if (state === Style.state.SELECTED) {
+      }
+      else if (state === M.style.state.SELECTED) {
         feature.setStyle(GeoStyle.SELECTED[geometryType]);
       }
     });
@@ -391,4 +408,4 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
  * @public
  * @api stable
  */
-GeosearchLayer.POPUP_RESULT = "geosearchfeaturepopup.html";
+GeosearchLayer.POPUP_RESULT = 'geosearchfeaturepopup.html';
