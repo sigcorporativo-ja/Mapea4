@@ -1,9 +1,9 @@
+import panzoombarTemplate from 'templates/panzoombar';
+import PanzoombarImpl from 'impl/control/Panzoombar';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import PanzoombarImpl from 'impl/control/Panzoombar';
-import panzoombarTemplate from "templates/panzoombar.html";
 
 export default class Panzoombar extends ControlBase {
   /**
@@ -19,7 +19,7 @@ export default class Panzoombar extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new PanzoombarImpl();
+    const impl = new PanzoombarImpl();
 
     // calls the super constructor
     super(impl, Panzoombar.NAME);
@@ -38,7 +38,7 @@ export default class Panzoombar extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return Template.compile(panzoombarTemplate);
   }
 
@@ -49,8 +49,8 @@ export default class Panzoombar extends ControlBase {
    * @function
    * @api stable
    */
-  equals(obj) {
-    let equals = (obj instanceof Panzoombar);
+  static equals(obj) {
+    const equals = (obj instanceof Panzoombar);
     return equals;
   }
 }

@@ -1,5 +1,4 @@
 import Config from 'configuration';
-import Parameters from './Parameters';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerType from '../layer/Type';

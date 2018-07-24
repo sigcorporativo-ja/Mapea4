@@ -1,5 +1,5 @@
 import 'assets/css/controls/mouse';
-import mouseTemplate from "templates/mouse";
+import mouseTemplate from 'templates/mouse';
 import MouseImpl from 'impl/control/Mouse';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
@@ -20,7 +20,7 @@ export default class Mouse extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new MouseImpl();
+    const impl = new MouseImpl();
 
     // calls the super constructor
     super(impl, Mouse.NAME);
@@ -39,7 +39,7 @@ export default class Mouse extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return Template.compile(mouseTemplate);
   }
 
@@ -50,8 +50,8 @@ export default class Mouse extends ControlBase {
    * @function
    * @api stable
    */
-  equals(obj) {
-    let equals = (obj instanceof Mouse);
+  static equals(obj) {
+    const equals = (obj instanceof Mouse);
     return equals;
   }
 }

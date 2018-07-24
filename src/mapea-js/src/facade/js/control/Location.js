@@ -1,10 +1,10 @@
+import LocationImpl from 'impl/control/Location';
+import locationTemplate from 'templates/location';
 import 'assets/css/controls/location';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import LocationImpl from 'impl/control/Location';
-import locationTemplate from "templates/location.html";
 
 export default class Location extends ControlBase {
   /**
@@ -23,7 +23,7 @@ export default class Location extends ControlBase {
     }
 
     // implementation of this control
-    let impl = new LocationImpl(tracking, highAccuracy, 60000);
+    const impl = new LocationImpl(tracking, highAccuracy, 60000);
 
     // calls the super constructor
     super(impl, Location.NAME);
@@ -38,7 +38,7 @@ export default class Location extends ControlBase {
    * @returns {Promise} HTML template
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return Template.compile(locationTemplate);
   }
 
@@ -52,7 +52,7 @@ export default class Location extends ControlBase {
    * @api stable
    * @export
    */
-  getActivationButton(element) {
+  static getActivationButton(element) {
     return element.querySelector('button#m-location-button');
   }
 
@@ -66,8 +66,8 @@ export default class Location extends ControlBase {
    * @returns {boolean} equals - Returns if they are equal or not
    * @api stable
    */
-  equals(obj) {
-    let equals = (obj instanceof Location);
+  static equals(obj) {
+    const equals = (obj instanceof Location);
     return equals;
   }
 

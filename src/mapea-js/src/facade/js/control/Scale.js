@@ -1,5 +1,5 @@
 import 'assets/css/controls/scale';
-import scaleTemplate from "templates/scale";
+import scaleTemplate from 'templates/scale';
 import ScaleImpl from 'impl/control/Scale';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
@@ -39,7 +39,7 @@ export default class Scale extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return Template.compile(scaleTemplate);
   }
 
@@ -50,8 +50,8 @@ export default class Scale extends ControlBase {
    * @function
    * @api stable
    */
-  equals(obj) {
-    let equals = (obj instanceof Scale);
+  static equals(obj) {
+    const equals = (obj instanceof Scale);
     return equals;
   }
 }

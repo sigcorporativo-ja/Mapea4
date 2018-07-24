@@ -1,7 +1,7 @@
+import OSMImpl from 'impl/layer/OSM';
 import LayerBase from './Layer';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import OSMImpl from 'impl/layer/OSM';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 
@@ -17,16 +17,16 @@ export default class OSM extends LayerBase {
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  constructor(userParameters, options = {}) {
+  constructor(userParametersVar, options = {}) {
+    let userParameters = userParametersVar;
     /**
      * Implementation of this layer
      * @public
      * @type {M.layer.WMS}
      */
-    let impl = new OSMImpl(userParameters, options);
-
-    //This layer is of parameters.
-    let parameters = parameter.layer(userParameters, LayerType.OSM);
+    const impl = new OSMImpl(userParameters, options);
+    // This layer is of parameters.
+    const parameters = parameter.layer(userParameters, LayerType.OSM);
 
     // calls the super constructor
     super(parameters, impl);
@@ -38,7 +38,7 @@ export default class OSM extends LayerBase {
 
     // checks if the param is null or empty
     if (Utils.isNullOrEmpty(userParameters)) {
-      userParameters = "OSM";
+      userParameters = 'OSM';
     }
 
     if (Utils.isNullOrEmpty(parameters.name)) {
@@ -79,11 +79,11 @@ export default class OSM extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  static get type() {
     return LayerType.OSM;
   }
 
-  set type(newType) {
+  static set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.OSM)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.OSM).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

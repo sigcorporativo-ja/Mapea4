@@ -9,7 +9,6 @@ export default class EventListener {
    */
 
   constructor(listener, scope, once = false) {
-
     /**
      * TODO
      *
@@ -44,7 +43,8 @@ export default class EventListener {
    * @function
    * @api stable
    */
-  fire(args) {
+  fire(argsParam) {
+    let args = argsParam;
     if (!Utils.isArray(args)) {
       args = [args];
     }

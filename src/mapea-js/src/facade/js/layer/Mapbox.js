@@ -1,10 +1,10 @@
+import Config from 'configuration';
+import MapboxImpl from 'impl/layer/Mapbox';
 import LayerBase from './Layer';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import MapboxImpl from 'impl/layer/Mapbox';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
-import Config from 'configuration';
 
 export default class Mapbox extends LayerBase {
   /**
@@ -19,16 +19,15 @@ export default class Mapbox extends LayerBase {
    * @api stable
    */
   constructor(userParameters, options = {}) {
-
     /**
      * Implementation of this layer
      * @public
      * @type {M.layer.WMS}
      */
-    let impl = new MapboxImpl(userParameters, options);
+    const impl = new MapboxImpl(userParameters, options);
 
-    //This layer is of parameters.
-    let parameters = parameter.layer(userParameters, LayerType.Mapbox);
+    // This layer is of parameters.
+    const parameters = parameter.layer(userParameters, LayerType.Mapbox);
 
     // calls the super constructor
     super(parameters, impl);
@@ -118,11 +117,11 @@ export default class Mapbox extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  static get type() {
     return LayerType.Mapbox;
   }
 
-  set type(newType) {
+  static set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.Mapbox)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Mapbox).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

@@ -17,7 +17,7 @@ export default class LayerType {
     }
     else {
       type = Object.keys(LayerType).find((knowType) => {
-        let knowTypeVal = LayerType[knowType];
+        const knowTypeVal = LayerType[knowType];
         return (Utils.isString(knowTypeVal) && (Utils.normalize(knowTypeVal, true) === type));
       });
     }

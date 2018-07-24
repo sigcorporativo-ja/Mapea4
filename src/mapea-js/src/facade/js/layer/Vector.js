@@ -1,10 +1,10 @@
+import VectorImpl from 'impl/layer/Vector';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
-import VectorImpl from 'impl/layer/Vector';
 import LayerType from './Type';
-import * as dialog from "../dialog";
-import FilterBase from "../filter/Base";
+import * as dialog from '../dialog';
+import FilterBase from '../filter/Base';
 import StyleCluster from '../style/Cluster';
 import GeomGeoJSON from '../geom/GeoJSON';
 import Style from '../style/Style';
@@ -52,11 +52,11 @@ export default class Vector extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  static get type() {
     return LayerType.Vector;
   }
 
-  set type(newType) {
+  static set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.Vector)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Vector).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
@@ -71,7 +71,8 @@ export default class Vector extends LayerBase {
    * @param {Array<M.feature>} features - Features to add
    * @api stable
    */
-  addFeatures(features, update = false) {
+  addFeatures(featuresParam, update = false) {
+    let features = featuresParam;
     if (!Utils.isNullOrEmpty(features)) {
       if (!Utils.isArray(features)) {
         features = [features];
@@ -89,7 +90,8 @@ export default class Vector extends LayerBase {
    * @return {Array<M.Feature>} returns all features or discriminating by the filter
    * @api stable
    */
-  getFeatures(skipFilter) {
+  getFeatures(skipFilterParam) {
+    let skipFilter = skipFilterParam;
     if (Utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
     return this.getImpl().getFeatures(skipFilter, this.filter_);
   }
@@ -99,7 +101,8 @@ export default class Vector extends LayerBase {
    * @function
    * @public
    * @param {string|number} id - Id feature
-   * @return {null|M.feature} feature - Returns the feature with that id if it is found, in case it is not found or does not indicate the id returns null
+   * @return {null|M.feature} feature - Returns the feature with that id if it is found,
+     in case it is not found or does not indicate the id returns null
    * @api stable
    */
   getFeatureById(id) {
@@ -108,7 +111,7 @@ export default class Vector extends LayerBase {
       feature = this.getImpl().getFeatureById(id);
     }
     else {
-      dialog.error("No se ha indicado un ID para obtener el feature");
+      dialog.error('No se ha indicado un ID para obtener el feature');
     }
     return feature;
   }
@@ -121,7 +124,8 @@ export default class Vector extends LayerBase {
    * @param {Array<M.feature>} features - Features to remove
    * @api stable
    */
-  removeFeatures(features) {
+  removeFeatures(featuresParam) {
+    let features = featuresParam;
     if (!Utils.isArray(features)) {
       features = [features];
     }
@@ -187,7 +191,7 @@ export default class Vector extends LayerBase {
   setFilter(filter) {
     if (Utils.isNullOrEmpty(filter) || (filter instanceof FilterBase)) {
       this.filter_ = filter;
-      let style = this.style();
+      const style = this.style();
       if (style instanceof StyleCluster) {
         // deactivate change cluster event
         style.getImpl().deactivateChangeEvent();
@@ -204,7 +208,7 @@ export default class Vector extends LayerBase {
       }
     }
     else {
-      dialog.error("El filtro indicado no es correcto");
+      dialog.error('El filtro indicado no es correcto');
     }
   }
 
@@ -228,7 +232,8 @@ export default class Vector extends LayerBase {
    * @return {Array<number>} Extent of features
    * @api stable
    */
-  getFeaturesExtent(skipFilter) {
+  getFeaturesExtent(skipFilterParam) {
+    let skipFilter = skipFilterParam;
     if (Utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
     return this.getImpl().getFeaturesExtent(skipFilter, this.filter_);
   }
@@ -269,19 +274,22 @@ export default class Vector extends LayerBase {
    * @param {M.Style}
    * @param {bool}
    */
-  setStyle(style, applyToFeature = false, optionStyle = Vector.DEFAULT_OPTIONS_STYLE) {
+  setStyle(styleParam, applyToFeature = false, optionStyle = Vector.DEFAULT_OPTIONS_STYLE) {
+    const styleC = styleParam;
     this.oldStyle_ = this.style_;
     let isNullStyle = false;
-    if (style === null) {
+    if (styleC === null) {
       isNullStyle = true;
     }
-    const applyStyleFn = (style) => {
+    const applyStyleFn = (styleVar) => {
+      let style = styleVar;
       const applyStyle = () => {
         if (Utils.isNullOrEmpty(style)) {
           style = Utils.generateStyleLayer(optionStyle, this);
         }
-        let isCluster = style instanceof StyleCluster;
-        let isPoint = [GeomGeoJSON.type.POINT, GeomGeoJSON.type.MULTI_POINT].includes(Utils.getGeometryType(this));
+        const isCluster = style instanceof StyleCluster;
+        const isPoint = [GeomGeoJSON.type.POINT, GeomGeoJSON.type.MULTI_POINT]
+          .includes(Utils.getGeometryType(this));
         if (style instanceof Style && (!isCluster || isPoint)) {
           if (!Utils.isNullOrEmpty(this.oldStyle_)) {
             this.oldStyle_.unapply(this);
@@ -291,20 +299,20 @@ export default class Vector extends LayerBase {
           this.fire(EvtManager.CHANGE_STYLE, [style, this]);
         }
         if (!Utils.isNullOrEmpty(this.getImpl().getMap())) {
-          let layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
+          const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
           if (!Utils.isNullOrEmpty(layerswitcher)) {
             layerswitcher.render();
           }
         }
       };
       return applyStyle;
-    }
+    };
 
     if (this.getImpl().isLoaded()) {
-      applyStyleFn(style).bind(this)();
+      applyStyleFn(styleC).bind(this)();
     }
     else {
-      this.once(EvtManager.LOAD, applyStyleFn(style), this);
+      this.once(EvtManager.LOAD, applyStyleFn(styleC), this);
     }
   }
 
@@ -339,7 +347,8 @@ export default class Vector extends LayerBase {
    */
   getLegendURL() {
     let legendUrl = this.getImpl().getLegendURL();
-    if (legendUrl.indexOf(LayerBase.LEGEND_DEFAULT) !== -1 && legendUrl.indexOf(LayerBase.LEGEND_ERROR) === -1 && !Utils.isNullOrEmpty(this.style_)) {
+    if (legendUrl.indexOf(LayerBase.LEGEND_DEFAULT) !== -1 &&
+      legendUrl.indexOf(LayerBase.LEGEND_ERROR) === -1 && !Utils.isNullOrEmpty(this.style_)) {
       legendUrl = this.style_.toImage();
     }
     return legendUrl;
@@ -356,11 +365,11 @@ export default class Vector extends LayerBase {
 Vector.DEFAULT_OPTIONS_STYLE = {
   fill: {
     color: 'rgba(255, 255, 255, 0.4)',
-    opacity: 0.4
+    opacity: 0.4,
   },
   stroke: {
-    color: "#3399CC",
-    width: 1.5
+    color: '#3399CC',
+    width: 1.5,
   },
   radius: 5,
 };

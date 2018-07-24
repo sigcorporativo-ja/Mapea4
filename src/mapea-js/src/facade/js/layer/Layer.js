@@ -1,8 +1,8 @@
+import Config from 'configuration';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import * as parserParameter from '../parameter/parameter';
 import Base from '../Base';
-import Config from 'configuration';
 
 export default class LayerBase extends Base {
   /**
@@ -174,7 +174,8 @@ export default class LayerBase extends Base {
    * @api stable
    * @export
    */
-  setVisible(visibility) {
+  setVisible(visibilityParam) {
+    let visibility = visibilityParam;
     // checks if the param is null or empty
     if (Utils.isNullOrEmpty(visibility)) {
       Exception('No ha especificado ningún parámetro de visibilidad');
@@ -229,7 +230,8 @@ export default class LayerBase extends Base {
    * @function
    * @api stable
    */
-  setLegendURL(legendUrl) {
+  setLegendURL(legendUrlParam) {
+    let legendUrl = legendUrlParam;
     if (Utils.isNullOrEmpty(legendUrl)) {
       legendUrl = Utils.concatUrlPaths([Config.THEME_URL, LayerBase.LEGEND_DEFAULT]);
     }
@@ -253,7 +255,7 @@ export default class LayerBase extends Base {
    * @api stable
    */
   setZIndex(zIndex) {
-    this.zindex_ = zIndex
+    this.zindex_ = zIndex;
     this.getImpl().setZIndex(zIndex);
   }
 

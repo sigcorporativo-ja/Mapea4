@@ -15,7 +15,7 @@ export default class Clustered extends Feature {
   constructor(features, attributes) {
     super(Utils.generateRandom('_mapea_cluster_'));
     this.setAttributes(attributes);
-    this.setAttribute("features", features);
+    this.setAttribute('features', features);
   }
 
   /**

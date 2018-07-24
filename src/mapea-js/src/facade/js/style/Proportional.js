@@ -1,6 +1,8 @@
 import StyleComposite from './Composite';
 import StylePoint from './Point';
 import StyleSimple from './Simple';
+import Utils from '../util/Utils';
+import Exception from '../exception/exception';
 
 /**
  * @namespace Proportional

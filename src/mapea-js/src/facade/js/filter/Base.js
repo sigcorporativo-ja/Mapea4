@@ -1,5 +1,4 @@
 export default class Base {
-
   /**
    * Abstract class
    *
@@ -14,7 +13,7 @@ export default class Base {
    * @protected
    * @function
    */
-  getFunctionFilter() {}
+  static getFunctionFilter() {}
 
   /**
    * This function execute a function filter
@@ -23,7 +22,7 @@ export default class Base {
    * @param {Array<M.Feature>} features - Features on which the filter runs
    * @function
    */
-  execute(features) {}
+  static execute(features) {}
 
   /**
    * This function execute a function filter
@@ -33,6 +32,5 @@ export default class Base {
    * @return {Array<M.Feature>} Result of execute
    * @function
    */
-  toCQL() {}
-
+  static toCQL() {}
 }
