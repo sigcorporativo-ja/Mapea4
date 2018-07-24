@@ -1,7 +1,7 @@
+import WKTImpl from 'impl/format/WKT';
 import Base from '../Base';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import WKTImpl from 'impl/ol/js/format/WKT';
 
 export default class WKT extends Base {
   /**
@@ -16,7 +16,7 @@ export default class WKT extends Base {
    * @api stable
    */
   constructor(options = {}) {
-    let impl = new WKTImpl(options);
+    const impl = new WKTImpl(options);
     // calls the super constructor
     super(impl);
     // checks if the implementation can create format GeoJSON

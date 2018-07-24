@@ -1,8 +1,9 @@
+import 'assets/css/controls/wmcselector';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import WMCSelectorImpl from 'impl/ol/js/control/WMCSelector';
+import WMCSelectorImpl from 'impl/control/WMCSelector';
 import wmcselectorTemplate from "templates/wmcselector.html";
 
 export default class WMCSelector extends ControlBase {

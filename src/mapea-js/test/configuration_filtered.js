@@ -15,7 +15,7 @@ Config.MOBILE_WIDTH = 768;
  * @api stable
  */
 //   Config.MAPEA_URL =  'http://192.168.60.2:8080/mapea');
-Config.MAPEA_URL = 'http://localhost:8080/mapea';
+Config.MAPEA_URL = 'http://mapea4-sigc.juntadeandalucia.es/mapea';
 
 /**
  * The path to the Mapea proxy to send
@@ -25,7 +25,7 @@ Config.MAPEA_URL = 'http://localhost:8080/mapea';
  * @public
  * @api stable
  */
-Config.PROXY_URL = 'http://localhost:8080/mapea/api/proxy';
+Config.PROXY_URL = 'http://mapea4-sigc.juntadeandalucia.es/mapea/api/proxy';
 
 /**
  * The path to the Mapea proxy to send
@@ -35,7 +35,7 @@ Config.PROXY_URL = 'http://localhost:8080/mapea/api/proxy';
  * @public
  * @api stable
  */
-Config.PROXY_POST_URL = 'http://localhost:8080/mapea/proxyPost';
+Config.PROXY_POST_URL = 'http://mapea4-sigc.juntadeandalucia.es/mapea/proxyPost';
 
 /**
  * The path to the Mapea templates
@@ -54,7 +54,7 @@ Config.TEMPLATES_PATH = '/files/templates/';
  * @api stable
  */
 //   Config('THEME_URL', 'http://192.168.60.2:8080/mapea/assets/';
-Config.THEME_URL = 'http://localhost:8080/mapea/assets/';
+Config.THEME_URL = 'http://mapea4-sigc.juntadeandalucia.es/mapea/assets/';
 
 /**
  * The Geosearch URL
@@ -395,7 +395,7 @@ Config.MAPBOX_TOKEN_NAME = 'access_token';
  * @private
  * @type {String}
  */
-Config.MAPBOX_TOKEN_VALUE = 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpbTgzcHQxMzAxMHp0eWx4bWQ1ZHN2NGcifQ.WVwjmljKYqKciEZIC3NfLA';
+Config.MAPBOX_TOKEN_VALUE = 'pk.eyJ1Ijoic2lnY29ycG9yYXRpdm9qYSIsImEiOiJjaXczZ3hlc2YwMDBrMm9wYnRqd3gyMWQ0In0.wF12VawgDM31l5RcAGb6AA';
 
 /**
  * Number of pages for the plugin AttributeTable

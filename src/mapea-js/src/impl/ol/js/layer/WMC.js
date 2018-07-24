@@ -90,7 +90,7 @@ export default class WMC extends Layer {
       this.loadContextPromise = new Promise((success, fail) => {
         Remote.get(this.url).then((response) => {
           let proj;
-          if (this.map._defaultProj === false) {
+          if (this.map.defaultProj === false) {
             proj = this.map.getProjection().code;
           }
           const wmcDocument = response.xml;
@@ -103,7 +103,7 @@ export default class WMC extends Layer {
       });
       this.loadContextPromise.then((context) => {
         // set projection with the wmc
-        if (this.map._defaultProj) {
+        if (this.map.defaultProj) {
           const olproj = ol.proj.get(context.projection);
           this.map.setProjection({
             code: olproj.getCode(),

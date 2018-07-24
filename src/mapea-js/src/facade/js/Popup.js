@@ -1,11 +1,12 @@
 import Utils from "./util/Utils";
 import Exception from "./exception/exception";
 import Base from "./Base";
-import PopupImpl from "impl/ol/js/Popup";
+import PopupImpl from "impl/Popup";
 import Template from "./util/Template";
 import EventsManager from "./event/Manager";
 import MWindow from "./util/Window";
 import Config from "configuration";
+import 'assets/css/popup';
 
 class Tab {
   /**
@@ -249,9 +250,9 @@ export default class Popup extends Base {
       if ((evt.type === "click") || (Math.abs(touchstartY - touchendY) < 5)) {
         // remove m-activated from all tabs
         Array.prototype.forEach.call(tabs, addedTab => {
-          addedTab.classlist.remove('m-activated');
+          addedTab.classList.remove('m-activated');
         });
-        tab.classlist.add('m-activated');
+        tab.classList.add('m-activated');
         let index = tab.getAttribute('data-index');
         this.switchTab(index);
       }
@@ -333,11 +334,11 @@ export default class Popup extends Base {
    */
   setStatus_(status) {
     if (status !== this.status_) {
-      this.element_.classlist.remove(this.status_);
+      this.element_.classList.remove(this.status_);
       this.status_ = status;
-      this.element_.classlist.add(this.status_);
+      this.element_.classList.add(this.status_);
       this.element_.style.top = "";
-      this.element_.classlist.remove('m-no-animation');
+      this.element_.classList.remove('m-no-animation');
       // mobile center
       if (MWindow.WIDTH <= Config.MOBILE_WIDTH) {
         this.getImpl().centerByStatus(status, this.coord_);

@@ -2,7 +2,7 @@ import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import NavtoolbarImpl from 'impl/ol/js/control/Navtoolbar';
+import NavtoolbarImpl from 'impl/control/Navtoolbar';
 import navtoolbarTemplate from "templates/navtoolbar.html";
 
 export default class Navtoolbar extends ControlBase {

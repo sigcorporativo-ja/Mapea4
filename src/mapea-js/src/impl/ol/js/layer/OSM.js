@@ -2,7 +2,6 @@ import Utils from "facade/js/util/Utils";
 import ImplMap from "../Map";
 import Layer from "./Layer";
 import FacadeMapbox from "facade/js/layer/Mapbox";
-import SourceMapbox from "../source/Mapbox";
 import FacadeOSM from "facade/js/layer/OSM";
 import LayerType from "facade/js/layer/Type";
 
@@ -107,6 +106,7 @@ export default class OSM extends Layer {
     }
 
     // recalculate resolutions
+    this.map.getMapImpl().updateSize();
     this.resolutions_ = Utils.generateResolutionsFromExtent(this.getExtent(), this.map.getMapImpl().getSize(), 16, this.map.getProjection().units);
 
     // sets its visibility if it is in range

@@ -1,5 +1,6 @@
 import Handlebars from 'handlebars';
 import Utils from './Utils';
+import './handlebarshelpers';
 
 /**
  * @namespace M.template
@@ -19,16 +20,12 @@ export default class Template {
     let template;
     let templateVars = {};
     let parseToHtml;
-    // let jsonp;
-    // let scope;
     if (!Utils.isUndefined(options)) {
       templateVars = Utils.extends(templateVars, options.vars);
       parseToHtml = options.parseToHtml;
-      // jsonp = options.jsonp;
-      // scope = options.scope;
     }
     const templateFn = Handlebars.compile(string);
-    const htmlText = templateFn.call(null, templateVars);
+    const htmlText = templateFn(templateVars);
     if (parseToHtml !== false) {
       template = Utils.stringToHtml(htmlText);
     }

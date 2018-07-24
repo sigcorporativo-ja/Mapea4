@@ -1,7 +1,7 @@
-import Object from "./Object";
-import Utils from "./util/Utils"
+import Utils from './util/Utils';
+import MObject from './Object';
 
-export default class Base extends Object {
+export default class Base extends MObject {
   /**
    * @classdesc
    * Main facade Object. This class creates a facede
@@ -14,7 +14,6 @@ export default class Base extends Object {
    * @api stable
    */
   constructor(impl) {
-
     // calls the super constructor
     super();
 
@@ -25,10 +24,9 @@ export default class Base extends Object {
      */
     this.impl_ = impl;
 
-    if (!Utils.isNullOrEmpty(this.impl_) && Utils.isFunction(this.impl_.facadeObj)) {
-      this.impl_.facadeObj = this;
+    if (!Utils.isNullOrEmpty(this.impl_) && Utils.isFunction(this.impl_.setFacadeObj)) {
+      this.impl_.setFacadeObj(this);
     }
-
   }
 
   /**

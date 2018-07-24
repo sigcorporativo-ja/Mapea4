@@ -1,7 +1,7 @@
 import Base from './Base';
 import Utils from './util/Util';
 import Exception from './exception/exception';
-import LabelImpl from '../../impl/ol/js/Label';
+import LabelImpl from '../../impl/Label';
 
 export default class Label extends Base {
   /**

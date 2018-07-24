@@ -79,18 +79,18 @@ export default class OverviewMap extends ol.control.OverviewMap {
 
     const button = this.element.querySelector('button');
     if (this.collapsed_ === true) {
-      if (button.classlist.contains(this.collapsedButtonClass_)) {
-        button.classlist.remove(this.collapsedButtonClass_);
+      if (button.classList.contains(this.collapsedButtonClass_)) {
+        button.classList.remove(this.collapsedButtonClass_);
       }
       else {
-        button.classlist.add(this.collapsedButtonClass_);
+        button.classList.add(this.collapsedButtonClass_);
       }
     }
-    else if (button.classlist.contains(this.openedButtonClass_)) {
-      button.classlist.remove(this.openedButtonClass_);
+    else if (button.classList.contains(this.openedButtonClass_)) {
+      button.classList.remove(this.openedButtonClass_);
     }
     else {
-      button.classlist.add(this.openedButtonClass_);
+      button.classList.add(this.openedButtonClass_);
     }
 
     map.getMapImpl().addControl(this);
@@ -119,6 +119,36 @@ export default class OverviewMap extends ol.control.OverviewMap {
     this.getOverviewMap().addLayer(layer.getOL3Layer());
   }
 
+  /**
+   * @override ol.control.Control.prototype
+   */
+  handleToggle_() {
+    Utils.classToggle(this.element, 'ol-collapsed');
+    const button = this.element.querySelector('button');
+    Utils.classToggle(button, this.openedButtonClass_);
+    Utils.classToggle(button, this.collapsedButtonClass_);
+
+    setTimeout(() => {
+      if (this.collapsed_) {
+        Utils.replaceNode(this.collapseLabel_, this.label_);
+      }
+      else {
+        Utils.replaceNode(this.label_, this.collapseLabel_);
+      }
+      this.collapsed_ = !this.collapsed_;
+
+      // manage overview map if it had not been rendered before and control
+      // is expanded
+      const ovmap = this.ovmap_;
+      if (!this.collapsed_ && !ovmap.isRendered()) {
+        ovmap.updateSize();
+        this.resetExtent_();
+        ovmap.addEventListener('postrender', (event) => {
+          this.updateBox_();
+        });
+      }
+    }, this.toggleDelay_);
+  }
 
   /**
    * This function destroys this control, cleaning the HTML

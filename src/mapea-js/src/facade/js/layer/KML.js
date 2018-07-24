@@ -1,7 +1,7 @@
 import LayerVector from './Vector';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import KMLImpl from 'impl/ol/js/layer/KML';
+import KMLImpl from 'impl/layer/KML';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 

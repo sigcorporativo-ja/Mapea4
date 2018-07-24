@@ -1,4 +1,4 @@
-import ClusterImpl from 'impl/ol/js/style/Cluster';
+import ClusterImpl from 'impl/style/Cluster';
 import Composite from './Composite';
 import Utils from '../util/Utils';
 

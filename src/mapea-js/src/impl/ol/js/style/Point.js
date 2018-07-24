@@ -1,3 +1,4 @@
+import chroma from 'chroma-js';
 import Config from 'configuration';
 import Baseline from 'facade/js/style/Baseline';
 import Align from 'facade/js/style/Align';
@@ -6,23 +7,12 @@ import Simple from './Simple';
 import Centroid from './Centroid';
 import PointFontSymbol from '../point/FontSymbol';
 import PointIcon from '../point/Icon';
-
+import PointCircle from '../point/Circle';
 /**
  * @namespace Point
  */
 
 export default class Point extends Simple {
-  /**
-   * Main constructor of the class.
-   * @constructor
-   * @implements {Simple}
-   * @api stable
-   */
-  constructor(options) {
-    super(options);
-    this.olStyleFn_ = null;
-  }
-
   /**
    * This function returns data url to canvas
    *
@@ -68,7 +58,7 @@ export default class Point extends Simple {
         if (style.getImage().getStroke().getWidth() > Point.DEFAULT_WIDTH_POINT) {
           style.getImage().getStroke().setWidth(Point.DEFAULT_WIDTH_POINT);
         }
-        style.getImage().render_();
+        style.getImage().render();
       }
       const imageCanvas = style.getImage().getImage();
       if (imageCanvas != null) {
@@ -155,7 +145,7 @@ export default class Point extends Simple {
         }
         style.setText(labelText);
       }
-      style.setImage(new PointIcon({
+      style.setImage(new PointCircle({
         fill,
         stroke,
         radius: Simple.getValue(options.radius, featureVariable),

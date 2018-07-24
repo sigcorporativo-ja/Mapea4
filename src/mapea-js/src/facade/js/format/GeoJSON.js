@@ -1,8 +1,7 @@
-import Feature from '../feature/Feature';
+import GeoJSONImpl from 'impl/format/GeoJSON';
 import Base from '../Base';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import GeoJSONImpl from 'impl/ol/js/format/GeoJSON';
 
 export default class GeoJSON extends Base {
   /**
@@ -22,7 +21,7 @@ export default class GeoJSON extends Base {
      * @public
      * @type {M.impl.format.GeoJSON}
      */
-    let impl = new GeoJSONImpl(options);
+    const impl = new GeoJSONImpl(options);
 
     // calls the super constructor
     super(impl);
@@ -43,7 +42,8 @@ export default class GeoJSON extends Base {
    * @return {Array<Object>}
    * @api stable
    */
-  write(features) {
+  write(featuresParam) {
+    let features = featuresParam;
     if (!Utils.isArray(features)) {
       features = [features];
     }
@@ -60,16 +60,18 @@ export default class GeoJSON extends Base {
    * @return {Array<M.Feature>}
    * @api stable
    */
-  read(geojson, projection) {
+  read(geojsonParam, projection) {
+    let geojson = geojsonParam;
     let features = [];
     if (!Utils.isNullOrEmpty(geojson)) {
       if (Utils.isString(geojson)) {
         geojson = JSON.parse(geojson);
       }
       let geojsonFeatures = [];
-      if (geojson.type === "FeatureCollection") {
+      if (geojson.type === 'FeatureCollection') {
         geojsonFeatures = geojson.features;
-      } else if (geojson.type === "Feature") {
+      }
+      else if (geojson.type === 'Feature') {
         geojsonFeatures = [geojson];
       }
       features = this.getImpl().read(geojson, geojsonFeatures, projection);

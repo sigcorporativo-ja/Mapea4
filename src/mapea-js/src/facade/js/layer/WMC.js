@@ -1,5 +1,5 @@
 import Config from 'configuration';
-import WMCImpl from 'impl/ol/js/layer/WMC';
+import WMCImpl from 'impl/layer/WMC';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';

@@ -2,11 +2,6 @@ import StyleFeature from './Feature';
 
 export default class Simple extends StyleFeature {
   /**
-   * Abstract class
-   *
-   * @api stable
-   */
-  /**
    * @inheritDoc
    */
   apply(layer, applyToFeature, isNullStyle) {

@@ -1,6 +1,8 @@
 /**
  * TODO
  */
-export const exception = (msg) => {
+const exception = (msg) => {
   throw msg;
 };
+
+export default exception;

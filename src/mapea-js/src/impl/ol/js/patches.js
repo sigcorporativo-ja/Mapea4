@@ -84,10 +84,10 @@ ol.format.GML3.prototype.getCoords_ = function(point, opt_srsName) {
  * PATCH: waits for the animation ending
  */
 ol.control.OverviewMap.prototype.handleToggle_ = function() {
-  goog.dom.classlist.toggle(this.element, 'ol-collapsed');
+  goog.dom.classList.toggle(this.element, 'ol-collapsed');
   var button = this.element.querySelector('button');
-  goog.dom.classlist.toggle(button, this.openedButtonClass_);
-  goog.dom.classlist.toggle(button, this.collapsedButtonClass_);
+  goog.dom.classList.toggle(button, this.openedButtonClass_);
+  goog.dom.classList.toggle(button, this.collapsedButtonClass_);
 
   setTimeout(function() {
     if (this.collapsed_) {

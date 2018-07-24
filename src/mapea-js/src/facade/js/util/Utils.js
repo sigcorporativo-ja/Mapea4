@@ -1,14 +1,14 @@
 import WKT from '../geom/WKT';
+import M from '../Mapea';
 import StylePoint from '../style/Point';
 import StyleLine from '../style/Line';
 import StylePolygon from '../style/Polygon';
-import M from "../Mapea";
+import './polyfills';
 
 /**
  * @namespace Utils
  */
-export class Utils {
-
+export default class Utils {
   /**
    * This function checks if the obj is null or empty
    *
@@ -26,7 +26,7 @@ export class Utils {
     else if (Utils.isArray(obj)) {
       nullOrEmpty = true;
       if (obj.length > 0) {
-        nullOrEmpty = !obj.some((objElem) => !Utils.isNullOrEmpty(objElem));
+        nullOrEmpty = !obj.some(objElem => !Utils.isNullOrEmpty(objElem));
       }
     }
     else if (typeof obj === 'string' && obj.trim().length === 0) {
@@ -133,7 +133,7 @@ export class Utils {
   static isUrl(obj) {
     let isUrl = false;
     if (!Utils.isNull(obj) && Utils.isString(obj)) {
-      isUrl = /(https?\:\/\/[^\*]+)/.test(obj);
+      isUrl = /(https?:\/\/[^*]+)/.test(obj);
     }
     return isUrl;
   }
@@ -143,7 +143,7 @@ export class Utils {
    * @function
    * @api stable
    */
-  isUndefined(obj) {
+  static isUndefined(obj) {
     return (typeof obj === 'undefined');
   }
 
@@ -156,7 +156,8 @@ export class Utils {
     let normalizedString = stringToNormalize;
     if (!Utils.isNullOrEmpty(normalizedString) && Utils.isString(normalizedString)) {
       normalizedString = normalizedString.trim();
-      normalizedString = upperCase ? normalizedString.toUpperCase() : normalizedString.toLowerCase();
+      normalizedString = upperCase ?
+        normalizedString.toUpperCase() : normalizedString.toLowerCase();
     }
     return normalizedString;
   }
@@ -169,16 +170,16 @@ export class Utils {
   static getParameterValue(paramName, url) {
     let parameterValue = null;
 
-    paramName = paramName.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+    const paramNameVar = paramName.replace(/[[]/, '\\[').replace(/[\]]/, '\\]');
 
     let parameters = url;
-    let idxQuery = parameters.indexOf('?');
-    if (idxQuery != -1) {
+    const idxQuery = parameters.indexOf('?');
+    if (idxQuery !== -1) {
       parameters = parameters.substring(idxQuery);
-      let regex = new RegExp("[\\?&]" + paramName + "=([^&#]*)");
+      const regex = new RegExp(`[\\?&]${paramNameVar}=([^&#]*)`);
       parameterValue = regex.exec(parameters);
       if (parameterValue !== null) {
-        parameterValue = decodeURIComponent(parameterValue[1].replace(/\+/g, " "));
+        parameterValue = decodeURIComponent(parameterValue[1].replace(/\+/g, ' '));
       }
     }
 
@@ -201,12 +202,14 @@ export class Utils {
 
     let requestParams = '';
     if (Utils.isObject(params)) {
-      for (let param in params) {
+      const keys = Object.keys(params);
+      keys.forEach((key) => {
+        const param = params[key];
         requestParams += param;
         requestParams += '=';
         requestParams += encodeURIComponent(params[param]);
         requestParams += '&';
-      }
+      });
       // removes the last '&'
       requestParams = requestParams.substring(0, requestParams.length - 1);
     }
@@ -279,7 +282,7 @@ export class Utils {
     // version
     if (!Utils.isNullOrEmpty(version)) {
       wmtsGetCapabilitiesUrl = Utils.addParameters(wmtsGetCapabilitiesUrl, {
-        'version': version
+        version,
       });
     }
 
@@ -299,8 +302,8 @@ export class Utils {
    * @api stable
    */
   static generateResolutionsFromScales(maxScale, minScale, zoomLevels, units) {
-    let minResolution = Utils.getResolutionFromScale(maxScale, units);
-    let maxResolution = Utils.getResolutionFromScale(minScale, units);
+    const minResolution = Utils.getResolutionFromScale(maxScale, units);
+    const maxResolution = Utils.getResolutionFromScale(minScale, units);
 
     return Utils.fillResolutions(minResolution, maxResolution, zoomLevels);
   }
@@ -328,7 +331,7 @@ export class Utils {
       hExtent = (extent.y.max - extent.y.min);
     }
     else if (Utils.isString(extent)) {
-      extent = extent.split(",");
+      extent = extent.split(',');
       wExtent = (extent[2] - extent[0]);
       hExtent = (extent[3] - extent[1]);
     }
@@ -354,7 +357,7 @@ export class Utils {
    * @api stable
    */
   static fillResolutions(minResolution, maxResolution, numZoomLevels) {
-    let resolutions = new Array(numZoomLevels);
+    var resolutions = new Array(numZoomLevels);
 
     minResolution = Number.parseFloat(minResolution);
     maxResolution = Number.parseFloat(maxResolution);
@@ -363,20 +366,19 @@ export class Utils {
     // the base for exponential scaling that starts at
     // maxResolution and ends at minResolution in numZoomLevels
     // steps.
-    let base = 2;
+    var base = 2;
     if (!Number.isNaN(minResolution)) {
       base = Math.pow((maxResolution / minResolution), (1 / (numZoomLevels - 1)));
     }
-    numZoomLevels.forEach(value => {
+    for (var i = 0; i < numZoomLevels; i++) {
       resolutions[i] = maxResolution / Math.pow(base, i);
-    });
+    }
     //sort resolutions array descendingly
-    resolutions.sort((a, b) => {
+    resolutions.sort(function(a, b) {
       return (b - a);
     });
     return resolutions;
-  }
-
+  };
   /**
    * This function calculates the resolution
    * for a provided scale
@@ -391,7 +393,7 @@ export class Utils {
     let resolution;
     if (!Utils.isNullOrEmpty(scale)) {
       if (Utils.isNull(units)) {
-        units = "degrees";
+        units = 'degrees';
       }
       // normalize scale
       let normScale = (scale > 1.0) ? (1.0 / scale) : scale;
@@ -412,7 +414,7 @@ export class Utils {
    */
   static getScaleFromResolution(resolution, units) {
     if (Utils.isNullOrEmpty(units)) {
-      units = "degrees";
+      units = 'degrees';
     }
 
     let scale = resolution * M.INCHES_PER_UNIT[units] * M.DOTS_PER_INCH;
@@ -474,11 +476,11 @@ export class Utils {
     // 3 first char to upper case
     beautifyString = beautifyString.charAt(0).toUpperCase() + beautifyString.slice(1);
 
-    // 4 replaces "_" by spaces
-    beautifyString = beautifyString.replace(/\_/g, " ");
+    // 4 replaces '_' by spaces
+    beautifyString = beautifyString.replace(/\_/g, ' ');
 
     // 5 simplifies spaces
-    beautifyString = beautifyString.replace(/\s+/, " ");
+    beautifyString = beautifyString.replace(/\s+/, ' ');
 
     // 6 to camel case
     beautifyString = beautifyString.replace(/(\s\w)+/g, (match) => {
@@ -505,12 +507,12 @@ export class Utils {
     let beautifyString = attributeName;
 
     if (beautifyString) {
-      //OpenLayers.String.trim
+      // OpenLayers.String.trim
       beautifyString = beautifyString.trim();
       if (beautifyString.length > 0) {
-        let idxPoints = beautifyString.indexOf(":");
-        if (idxPoints != -1) {
-          idxPoints++;
+        let idxPoints = beautifyString.indexOf(':');
+        if (idxPoints !== -1) {
+          idxPoints += 1;
           beautifyString = beautifyString.substring(idxPoints, beautifyString.length);
         }
       }
@@ -535,7 +537,7 @@ export class Utils {
       return match.toUpperCase();
     });
     return attributeName;
-  };
+  }
 
   /**
    * formated String
@@ -550,8 +552,8 @@ export class Utils {
     if (!Utils.isNullOrEmpty(paths)) {
       finalUrl = paths[0];
       finalUrl = finalUrl.replace(/\/+\s*$/, '');
-      for (let i = 1, ilen = paths.length; i < ilen; i++) {
-        let path = paths[i];
+      for (let i = 1, ilen = paths.length; i < ilen; i += 1) {
+        const path = paths[i];
         if (path.indexOf('/') !== 0) {
           finalUrl = finalUrl.concat('/');
         }
@@ -568,12 +570,12 @@ export class Utils {
    * @api stable
    */
   static includes(array, searchElement, fromIndex) {
-    let O = Object(array);
-    let len = parseInt(O.length) || 0;
+    const O = Object(array);
+    const len = parseInt(O.length, 10) || 0;
     if (len === 0) {
       return false;
     }
-    let n = parseInt(arguments[2]) || 0;
+    const n = parseInt(fromIndex, 10) || 0;
     let k;
     if (n >= 0) {
       k = n;
@@ -587,11 +589,10 @@ export class Utils {
     let currentElement;
     while (k < len) {
       currentElement = O[k];
-      if (searchElement === currentElement || Object.equals(searchElement, currentElement) ||
-        (searchElement !== searchElement && currentElement !== currentElement)) {
+      if (searchElement === currentElement || Object.equals(searchElement, currentElement)) {
         return true;
       }
-      k++;
+      k += 1;
     }
     return false;
   }
@@ -602,21 +603,23 @@ export class Utils {
    * @function
    * @api stable
    */
+  /* eslint-disable */
   static extend(target, source, override) {
-    for (let prop in source) {
-      if (Utils.isUndefined(target[prop])) {
-        target[prop] = source[prop];
+    Object.keys(source).forEach((key) => {
+      if (Utils.isUndefined(target[key])) {
+        target[key] = source[key];
       }
-      else if (Utils.isObject(target[prop])) {
-        Utils.extend(target[prop], source[prop], override);
+      else if (Utils.isObject(target[key])) {
+        Utils.extend(target[key], source[key], override);
       }
       else if ((override === true)) {
-        target[prop] = source[prop];
+        target[key] = source[key];
       }
-    }
+    });
+
     return target;
   }
-
+  /* eslint-enable */
   /**
    * TODO
    *
@@ -627,19 +630,19 @@ export class Utils {
     let validValue;
 
     // & --> &amp;
-    validValue = xssValue.replace(/\&/g, '&amp;');
+    validValue = xssValue.replace(/&/g, '&amp;');
 
     // < --> &lt;
     validValue = validValue.replace(/</g, '&lt;');
 
     // > --> &gt;
-    validValue = validValue.replace(/\>/g, '&gt;');
+    validValue = validValue.replace(/>/g, '&gt;');
 
-    // " --> &quot;
-    validValue = validValue.replace(/\"/g, '&quot;');
+    // ' --> &quot;
+    validValue = validValue.replace(/'/g, '&quot;');
 
     // ' --> &#x27;
-    validValue = validValue.replace(/\'/g, '&#x27;');
+    validValue = validValue.replace(/'/g, '&#x27;');
 
     // / --> &#x2F;
     validValue = validValue.replace(/\//g, '&#x2F;');
@@ -656,8 +659,8 @@ export class Utils {
   static escapeJSCode(jsCode) {
     let validValue;
 
-    validValue = jsCode.replace(/(<\s*script[^\>]*\>)+[^<]*(<\s*\/\s*script[^\>]*\>)+/ig, '');
-    validValue = validValue.replace(/((\"|\')\s*\+\s*)?\s*eval\s*\(.*\)\s*(\+\s*(\"|\'))?/ig, '');
+    validValue = jsCode.replace(/(<\s*script[^>]*>)+[^<]*(<\s*\/\s*script[^>]*>)+/ig, '');
+    validValue = validValue.replace(/(('|')\s*\+\s*)?\s*eval\s*\(.*\)\s*(\+\s*('|'))?/ig, '');
 
     return validValue;
   }
@@ -693,7 +696,9 @@ export class Utils {
     try {
       hexColor = chroma(rgbColor).hex();
     }
-    catch (err) {}
+    catch (err) {
+      throw err;
+    }
     return hexColor;
   }
 
@@ -708,7 +713,9 @@ export class Utils {
     try {
       hexColor = chroma(rgbaColor).hex();
     }
-    catch (err) {}
+    catch (err) {
+      throw err;
+    }
     return hexColor;
   }
 
@@ -721,13 +728,15 @@ export class Utils {
   static getOpacityFromRgba(rgbaColor) {
     let opacity;
 
-    let rgbaRegExp = /^rgba\s*\((\s*\d+\s*\,){3}\s*([\d\.]+)\s*\)$/;
+    const rgbaRegExp = /^rgba\s*\((\s*\d+\s*,){3}\s*([\d.]+)\s*\)$/;
     if (rgbaRegExp.test(rgbaColor)) {
       opacity = rgbaColor.replace(rgbaRegExp, '$2');
       try {
         opacity = parseFloat(opacity);
       }
-      catch (err) {}
+      catch (err) {
+        throw err;
+      }
     }
 
     return opacity;
@@ -740,10 +749,10 @@ export class Utils {
    * @api stable
    */
   static sameUrl(url1, url2) {
-    url1 = url1.replace(/^(.+)\/$/, '$1').replace(/^(.+)\?$/, '$1');
-    url2 = url2.replace(/^(.+)\/$/, '$1').replace(/^(.+)\?$/, '$1');
+    const url1Var = url1.replace(/^(.+)\/$/, '$1').replace(/^(.+)\?$/, '$1');
+    const url2Var = url2.replace(/^(.+)\/$/, '$1').replace(/^(.+)\?$/, '$1');
 
-    return url1.toLowerCase() === url2.toLowerCase();
+    return url1Var.toLowerCase() === url2Var.toLowerCase();
   }
 
   /**
@@ -753,38 +762,38 @@ export class Utils {
    * @api stable
    */
   static isGeometryType(type) {
-    let geometricTypes = [
-         WKT.type.GEOMETRY.toLowerCase(),
-         "GeometryPropertyType".toLowerCase(),
-         WKT.type.POINT.toLowerCase(),
-         WKT.type.LINE_STRING.toLowerCase(),
-         WKT.type.LINEAR_RING.toLowerCase(),
-         WKT.type.POLYGON.toLowerCase(),
-         WKT.type.MULTI_POINT.toLowerCase(),
-         WKT.type.MULTI_LINE_STRING.toLowerCase(),
-         WKT.type.MULTI_POLYGON.toLowerCase(),
-         WKT.type.GEOMETRY_COLLECTION.toLowerCase(),
-         WKT.type.CIRCLE.toLowerCase(),
-         "pointpropertytype",
-         "polygonpropertytype",
-         "linestringpropertytype",
-         "geometrypropertytype",
-         "multisurfacepropertytype",
-         "multilinestringpropertytype",
-         "surfacepropertytype",
-         "geometrypropertytype",
-         "geometryarraypropertytype",
-         "multigeometrypropertytype",
-         "multipolygonpropertytype",
-         "multipointpropertytype",
-         "abstractgeometricaggregatetype",
-         "pointarraypropertytype",
-         "curvearraypropertytype",
-         "solidpropertytype",
-         "solidarraypropertytype"
-      ];
-    type = type.toLowerCase();
-    return (geometricTypes.indexOf(type) !== -1);
+    const geometricTypes = [
+      WKT.type.GEOMETRY.toLowerCase(),
+      'GeometryPropertyType'.toLowerCase(),
+      WKT.type.POINT.toLowerCase(),
+      WKT.type.LINE_STRING.toLowerCase(),
+      WKT.type.LINEAR_RING.toLowerCase(),
+      WKT.type.POLYGON.toLowerCase(),
+      WKT.type.MULTI_POINT.toLowerCase(),
+      WKT.type.MULTI_LINE_STRING.toLowerCase(),
+      WKT.type.MULTI_POLYGON.toLowerCase(),
+      WKT.type.GEOMETRY_COLLECTION.toLowerCase(),
+      WKT.type.CIRCLE.toLowerCase(),
+      'pointpropertytype',
+      'polygonpropertytype',
+      'linestringpropertytype',
+      'geometrypropertytype',
+      'multisurfacepropertytype',
+      'multilinestringpropertytype',
+      'surfacepropertytype',
+      'geometrypropertytype',
+      'geometryarraypropertytype',
+      'multigeometrypropertytype',
+      'multipolygonpropertytype',
+      'multipointpropertytype',
+      'abstractgeometricaggregatetype',
+      'pointarraypropertytype',
+      'curvearraypropertytype',
+      'solidpropertytype',
+      'solidarraypropertytype',
+    ];
+    const typeVar = type.toLowerCase();
+    return (geometricTypes.indexOf(typeVar) !== -1);
   }
 
   /**
@@ -797,7 +806,7 @@ export class Utils {
    * @api stable
    */
   static decodeHtml(encodedHtml) {
-    let txtarea = document.createElement("textarea");
+    const txtarea = document.createElement('textarea');
     txtarea.innerHTML = encodedHtml;
     return txtarea.value;
   }
@@ -816,9 +825,9 @@ export class Utils {
     if (!Utils.isString(html) && html.outerHTML) {
       htmlText = html.outerHTML;
     }
-    let divElement = document.createElement("DIV");
+    const divElement = document.createElement('DIV');
     divElement.innerHTML = htmlText;
-    return divElement.textContent || divElement.innerText || "";
+    return divElement.textContent || divElement.innerText || '';
   }
 
   /**
@@ -828,8 +837,8 @@ export class Utils {
    * @return {Array<string>} array scale color in hexadecimal format
    * @api stable
    */
-  static generateColorScale(color1, color2, n_classes) {
-    return chroma.scale([color1, color2]).colors(n_classes);
+  static generateColorScale(color1, color2, numberClasses) {
+    return chroma.scale([color1, color2]).colors(numberClasses);
   }
 
   /**
@@ -846,7 +855,7 @@ export class Utils {
     let inverseColor;
     if (Utils.isString(color)) {
       let hexColor = chroma(color).hex();
-      hexColor = hexColor.replace(/^\#/, '0x');
+      hexColor = hexColor.replace(/^#/, '0x');
       inverseColor = chroma(0xFFFFFF - hexColor).hex();
     }
 
@@ -865,7 +874,7 @@ export class Utils {
     if (Utils.isNullOrEmpty(layer) || Utils.isNullOrEmpty(layer.getFeatures())) {
       return null;
     }
-    let firstFeature = layer.features()[0];
+    const firstFeature = layer.features()[0];
     if (!Utils.isNullOrEmpty(firstFeature) && !Utils.isNullOrEmpty(firstFeature.geometry())) {
       return firstFeature.geometry().type;
     }
@@ -884,17 +893,17 @@ export class Utils {
    */
   static generateStyleLayer(options, layer) {
     let style;
-    switch (Utils.geometryType(layer)) {
-      case "Point":
-      case "MultiPoint":
+    switch (Utils.getGeometryType(layer)) {
+      case 'Point':
+      case 'MultiPoint':
         style = new StylePoint(options);
         break;
-      case "LineString":
-      case "MultiLineString":
+      case 'LineString':
+      case 'MultiLineString':
         style = new StyleLine(options);
         break;
-      case "Polygon":
-      case "MultiPolygon":
+      case 'Polygon':
+      case 'MultiPolygon':
         style = new StylePolygon(options);
         break;
       default:
@@ -943,7 +952,7 @@ export class Utils {
    */
   static extends(dest = {}, src = {}) {
     if (!Utils.isNullOrEmpty(src)) {
-      Object.keys(src).forEach(key => {
+      Object.keys(src).forEach((key) => {
         let value = src[key];
         if (Utils.isArray(value)) {
           value = [...value];
@@ -952,12 +961,14 @@ export class Utils {
           value = Utils.extends({}, value);
         }
         if (Utils.isNullOrEmpty(dest[key])) {
+          /* eslint-disable */
           dest[key] = value;
+          /* eslint-enable */
         }
         else if (Utils.isObject(dest[key])) {
           Utils.extends(dest[key], value);
         }
-      }, this);
+      });
     }
     return dest;
   }
@@ -974,8 +985,8 @@ export class Utils {
   static generateIntervals(array, breaks) {
     let intervals = [...array];
     if (array.length < breaks) {
-      let step = (array[0] + array[1]) / (breaks - 1);
-      breaks.forEach(value => {
+      const step = (array[0] + array[1]) / (breaks - 1);
+      breaks.forEach((value) => {
         intervals[value] = step * value;
       });
       intervals = [...intervals, array[1]];
@@ -1004,7 +1015,7 @@ export class Utils {
    * @api stable
    */
   static getImageSize(url) {
-    let image = new Image();
+    const image = new Image();
     return new Promise((resolve, reject) => {
       image.onload = () => resolve(image);
       image.src = url;
@@ -1020,51 +1031,51 @@ export class Utils {
    * @api stable
    */
   static generateRandomStyle(feature, radiusParam, strokeWidthParam, strokeColorParam) {
-    let radius = radiusParam;
-    let fillColor = chroma.random().hex();
-    let strokeColor = strokeColorParam;
-    let strokeWidth = strokeWidthParam;
-    let geometry = feature.geometry().type;
+    const radius = radiusParam;
+    const fillColor = chroma.random().hex();
+    const strokeColor = strokeColorParam;
+    const strokeWidth = strokeWidthParam;
+    const geometry = feature.geometry().type;
     let style;
     let options;
     switch (geometry) {
-      case "Point":
-      case "MultiPoint":
+      case 'Point':
+      case 'MultiPoint':
         options = {
-          radius: radius,
+          radius,
           fill: {
-            color: fillColor
+            color: fillColor,
           },
           stroke: {
             color: strokeColor,
-            width: strokeWidth
-          }
+            width: strokeWidth,
+          },
         };
         style = new StylePoint(options);
         break;
-      case "LineString":
-      case "MultiLineString":
+      case 'LineString':
+      case 'MultiLineString':
         options = {
           fill: {
-            color: fillColor
+            color: fillColor,
           },
           stroke: {
             color: strokeColor,
-            width: strokeWidth
-          }
+            width: strokeWidth,
+          },
         };
         style = new StyleLine(options);
         break;
-      case "Polygon":
-      case "MultiPolygon":
+      case 'Polygon':
+      case 'MultiPolygon':
         options = {
           fill: {
-            color: fillColor
+            color: fillColor,
           },
           stroke: {
             color: strokeColor,
-            width: strokeWidth
-          }
+            width: strokeWidth,
+          },
         };
         style = new StylePolygon(options);
         break;
@@ -1072,5 +1083,22 @@ export class Utils {
         style = null;
     }
     return style;
+  }
+
+  static classToggle(htmlElement, className) {
+    const classList = htmlElement.classList;
+    if (classList.contains(className)) {
+      classList.remove(className);
+    }
+    else {
+      classList.add(className);
+    }
+  }
+
+  static replaceNode(newNode, oldNode) {
+    const parent = oldNode.parentNode;
+    if (parent) {
+      parent.replaceChild(newNode, oldNode);
+    }
   }
 }

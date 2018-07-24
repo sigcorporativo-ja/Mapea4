@@ -2,7 +2,7 @@ import Base from "../Base";
 import Utils from '../util/Utils';
 import GeoJSON from "../format/GeoJSON";
 import * as dialog from "../dialog";
-import FeatureImpl from 'impl/ol/js/feature/Feature';
+import FeatureImpl from 'impl/feature/Feature';
 import StyleFeature from "../style/Feature";
 import StylePoint from "../style/Point";
 import EvtManager from "../event/Manager";

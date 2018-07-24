@@ -1,7 +1,7 @@
 import LayerBase from './Layer';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import OSMImpl from 'impl/ol/js/layer/OSM';
+import OSMImpl from 'impl/layer/OSM';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 

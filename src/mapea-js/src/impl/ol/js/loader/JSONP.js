@@ -1,4 +1,4 @@
-import Object from 'facade/js/Object';
+import MObject from 'facade/js/Object';
 import Remote from 'facade/js/util/Remote';
 import Exception from 'facade/js/exception/exception';
 import Utils from 'facade/js/util/Utils';
@@ -6,7 +6,7 @@ import Utils from 'facade/js/util/Utils';
 /**
  * @namespace M.impl.control
  */
-export default class JSONP extends Object {
+export default class JSONP extends MObject {
   /**
    * @classdesc TODO
    * control

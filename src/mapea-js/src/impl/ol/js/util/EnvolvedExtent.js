@@ -96,16 +96,12 @@ export default class EnvolvedExtent {
    * @api stable
    */
   static calculateFromProjection(map) {
-    return new Promise((success, fail) => {
+    return new Promise((success) => {
       let projExtent = ol.proj.get(map.getProjection().code).getExtent();
       if (Utils.isNullOrEmpty(projExtent)) {
         projExtent = [-180, -90, 180, 90];
-        success(projExtent);
       }
-      else {
-        const err = new Error('Error en calculateFromProjection. Modulo EnvolvedExtent.');
-        fail(err);
-      }
+      success(projExtent);
     });
   }
 

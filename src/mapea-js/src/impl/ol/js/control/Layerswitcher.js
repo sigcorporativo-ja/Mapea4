@@ -4,6 +4,7 @@ import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
 import Layer from 'facade/js/layer/Layer';
 import Config from 'configuration';
 import Control from './Control';
+import layerswitcherTemplate from "templates/layerswitcher";
 
 /**
  * @namespace M.impl.control
@@ -46,11 +47,8 @@ export default class LayerSwitcher extends Control {
 
     // change slider event
     this.panel.addEventListener('input', this.clickLayer, false);
-
-    ol.control.Control.call(this, {
-      element,
-      target: null,
-    });
+    this.element = element;
+    this.target_ = null;
     olMap.addControl(this);
   }
 
@@ -69,7 +67,7 @@ export default class LayerSwitcher extends Control {
         evt.stopPropagation();
         const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
         // checkbox
-        if (evt.target.classlist.contains('m-check')) {
+        if (evt.target.classList.contains('m-check')) {
           /* sets the layer visibility only if
              the layer is not base layer and visible */
           if (layer.transparent === true || !layer.isVisible()) {
@@ -81,11 +79,11 @@ export default class LayerSwitcher extends Control {
           }
         }
         // range
-        else if (evt.target.classlist.contains('m-layerswitcher-transparency')) {
+        else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
           layer.setOpacity(evt.target.value);
         }
         // remove span
-        else if (evt.target.classlist.contains('m-layerswitcher-remove')) {
+        else if (evt.target.classList.contains('m-layerswitcher-remove')) {
           this.facadeMap_.removeLayers(layer);
         }
       }
@@ -101,7 +99,7 @@ export default class LayerSwitcher extends Control {
    */
   renderPanel() {
     LayerSwitcherFacade.getTemplateVariables(this.facadeMap_).then((templateVars) => {
-      const html = Template.compile(LayerSwitcherFacade.TEMPLATE, {
+      const html = Template.compile(layerswitcherTemplate, {
         vars: templateVars,
       });
       this.registerImgErrorEvents_(html);
@@ -124,7 +122,7 @@ export default class LayerSwitcher extends Control {
 
       this.registerViewEvents_(olMap.getView());
       this.registerLayersEvents_(olMap.getLayers());
-      olMap.on('change:view', this.onViewChange_, this);
+      olMap.on('change:view', () => this.onViewChange_);
     }
   }
 
@@ -141,7 +139,7 @@ export default class LayerSwitcher extends Control {
 
       this.unregisterViewEvents_(olMap.getView());
       this.unregisterLayersEvents_(olMap.getLayers());
-      olMap.un('change:view', this.onViewChange_, this);
+      olMap.un('change:view', () => this.onViewChange_);
     }
   }
 
@@ -149,49 +147,49 @@ export default class LayerSwitcher extends Control {
    * TODO
    */
   registerViewEvents_(view) {
-    view.on('change:resolution', this.renderPanel, this);
+    view.on('change:resolution', () => this.renderPanel);
   }
 
   /**
    * TODO
    */
   registerLayersEvents_(layers) {
-    layers.forEach(this.registerLayerEvents_, this);
-    layers.on('remove', this.renderPanel, this);
-    layers.on('add', this.onAddLayer_, this);
+    layers.forEach(this.registerLayerEvents_);
+    layers.on('remove', () => this.renderPanel);
+    layers.on('add', () => this.onAddLayer_);
   }
 
   /**
    * TODO
    */
   registerLayerEvents_(layer) {
-    layer.on('change:visible', this.renderPanel, this);
+    layer.on('change:visible', () => this.renderPanel);
     // layer.on('change:opacity', this.renderPanel, this);
-    layer.on('change:extent', this.renderPanel, this);
+    layer.on('change:extent', () => this.renderPanel);
   }
 
   /**
    * TODO
    */
   unregisterViewEvents_(view) {
-    view.un('change:resolution', this.renderPanel, this);
+    view.un('change:resolution', () => this.renderPanel);
   }
 
   /**
    * TODO
    */
   unregisterLayersEvents_(layers) {
-    layers.forEach(this.registerLayerEvents_, this);
-    layers.un('remove', this.renderPanel, this);
-    layers.un('add', this.onAddLayer_, this);
+    layers.forEach(this.unregisterLayerEvents_);
+    layers.un('remove', () => this.renderPanel);
+    layers.un('add', () => this.onAddLayer_);
   }
 
   /**
    * TODO
    */
   unregisterLayerEvents_(layer) {
-    layer.un('change:visible', this.renderPanel, this);
-    layer.un('change:extent', this.renderPanel, this);
+    layer.un('change:visible', () => this.renderPanel, this);
+    layer.un('change:extent', () => this.renderPanel, this);
   }
 
   /**

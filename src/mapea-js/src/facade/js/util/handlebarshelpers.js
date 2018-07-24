@@ -1,7 +1,6 @@
-import Handlebars from "handlebars";
+import Handlebars from 'handlebars';
 
 const helpers = () => {
-
   /**
    * Helpers for Handlebars wich compares if the
    * first arguments is greater than the second one
@@ -11,7 +10,7 @@ const helpers = () => {
       return options.fn(this);
     }
     return options.inverse(this);
-  })
+  });
 
   /**
    * Helpers for Handlebars wich compares if the
@@ -22,7 +21,7 @@ const helpers = () => {
       return options.fn(this);
     }
     return options.inverse(this);
-  })
+  });
 
   /**
    * Helpers for Handlebars wich compares if the
@@ -33,8 +32,8 @@ const helpers = () => {
       return options.fn(this);
     }
     return options.inverse(this);
-  })
-}
+  });
+};
 
 // Exec the register helpers
 helpers();

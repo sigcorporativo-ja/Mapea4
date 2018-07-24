@@ -1,9 +1,11 @@
+import 'assets/css/controls/getfeatureinfo';
+import GetFeatureInfoImpl from 'impl/control/GetFeatureInfo';
+import getfeatureinfoTemplate from 'templates/getfeatureinfo';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import GetFeatureInfoImpl from 'impl/ol/js/control/GetFeatureInfo';
-import getfeatureinfoTemplate from "templates/getfeatureinfo.html";
+
 export default class GetFeatureInfo extends ControlBase {
   /**
    * @classdesc
@@ -19,7 +21,7 @@ export default class GetFeatureInfo extends ControlBase {
    */
   constructor(format, options = {}) {
     // implementation of this control
-    let impl = new GetFeatureInfoImpl(format, options);
+    const impl = new GetFeatureInfoImpl(format, options);
     // calls the super constructor
     super(impl, GetFeatureInfo.NAME);
 

@@ -1,7 +1,7 @@
 import LayerBase from './Layer';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import MapboxImpl from 'impl/ol/js/layer/Mapbox';
+import MapboxImpl from 'impl/layer/Mapbox';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 import Config from 'configuration';
@@ -122,7 +122,7 @@ export default class Mapbox extends LayerBase {
     return LayerType.Mapbox;
   }
 
-  set type() {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.Mapbox)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Mapbox).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

@@ -4,6 +4,7 @@ import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerType from '../layer/Type';
 import Layer from '../layer/Layer';
+
 /**
  * Parses the specified user center parameter into an object
  *
@@ -14,7 +15,7 @@ import Layer from '../layer/Layer';
  * @function
  * @api stable
  */
-export const center = (centerParameterVar) => {
+const center = (centerParameterVar) => {
   let centerParameter = centerParameterVar;
   const centerParam = {};
   // checks if the param is null or empty
@@ -193,60 +194,6 @@ const getType = (parameter, forcedType) => {
 };
 
 /**
- * Parses the specified user layer parameters to a object
- *
- * @param {string|Mx.parameters.Layer} userParameters parameters
- * provided by the user
- * @param {string} forced type of the layer (optional)
- * @returns {Mx.parameters.Layer|Array<Mx.parameters.Layer>}
- * @public
- * @function
- * @api stable
- */
-
-export const layer = (userParameters, forcedType) => {
-  let layers = [];
-
-  // checks if the param is null or empty
-  if (Utils.isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
-  }
-
-  // checks if the parameter is an array
-  let userParametersArray = userParameters;
-  if (!Utils.isArray(userParametersArray)) {
-    userParametersArray = [userParametersArray];
-  }
-
-  layers = userParametersArray.map((userParam) => {
-    let layerObj = null;
-    if (Utils.isObject(userParam) && (userParam instanceof Layer)) {
-      layerObj = userParam;
-    }
-    else {
-      // gets the layer type
-      let type = getType(userParam, forcedType);
-      type = Utils.normalize(type);
-
-      if (Utils.isFunction(Parameters[type])) {
-        layerObj = Parameters[type](userParam);
-      }
-      else {
-        layerObj = userParam;
-      }
-    }
-
-    return layerObj;
-  });
-
-  if (!Utils.isArray(userParameters)) {
-    layers = layers[0];
-  }
-
-  return layers;
-};
-
-/**
  * Parses the parameter in order to get the transparence
  * @private
  * @function
@@ -316,7 +263,7 @@ const getOptionsKML = (parameter) => {
  * @function
  * @api stable
  */
-export const maxExtent = (maxExtentParam) => {
+const maxExtent = (maxExtentParam) => {
   const maxExtentParameter = maxExtentParam;
   const maxExtentVar = {
     x: {},
@@ -461,7 +408,7 @@ export const maxExtent = (maxExtentParam) => {
  * @function
  * @api stable
  */
-export const projection = (projectionParameter) => {
+const projection = (projectionParameter) => {
   const projectionVar = {
     code: null,
     units: null,
@@ -546,7 +493,7 @@ const getURLKML = (parameter) => {
  * @function
  * @api stable
  */
-export const resolutions = (resolutionsParam) => {
+const resolutions = (resolutionsParam) => {
   let resolutionsParameter = resolutionsParam;
   let resolutionsVar = [];
 
@@ -599,7 +546,7 @@ export const resolutions = (resolutionsParam) => {
  * @function
  * @api stable
  */
-export const zoom = (zoomParam) => {
+const zoom = (zoomParam) => {
   const zoomParameter = zoomParam;
   let zoomVar;
 
@@ -637,7 +584,7 @@ export const zoom = (zoomParam) => {
  * @function
  * @api stable
  */
-export const kml = (userParamer) => {
+const kml = (userParamer) => {
   const userParameters = userParamer;
   let layersVar = [];
 
@@ -832,7 +779,7 @@ const getLegendMapbox = (parameter) => {
  * @function
  * @api stable
  */
-export const mapbox = (userParameters) => {
+const mapbox = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -846,7 +793,7 @@ export const mapbox = (userParameters) => {
     userParametersArray = [userParametersArray];
   }
 
-  layers = userParametersArray.Map((userParam) => {
+  layers = userParametersArray.map((userParam) => {
     const layerObj = {};
 
     // gets the layer type
@@ -958,7 +905,7 @@ const getLegendOSM = (parameter) => {
  * @function
  * @api stable
  */
-export const osm = (userParame) => {
+const osm = (userParame) => {
   let userParameters = userParame;
   let layers = [];
 
@@ -1295,7 +1242,7 @@ const getOptionsWFS = (parameter) => {
  * @function
  * @api stable
  */
-export const wfs = (userParameters) => {
+const wfs = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -1448,7 +1395,7 @@ const getOptionsWMC = (parameter) => {
  * @function
  * @api stable
  */
-export const wmc = (userParameters) => {
+const wmc = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -1768,7 +1715,7 @@ const getOptionsWMS = (parameter) => {
  * @function
  * @api stable
  */
-export const WMS = (userParameters) => {
+const WMS = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -1782,7 +1729,7 @@ export const WMS = (userParameters) => {
     userParametersArray = [userParametersArray];
   }
 
-  layers = userParametersArray.Map((userParam) => {
+  layers = userParametersArray.map((userParam) => {
     const layerObj = {};
 
     // gets the layer type
@@ -2018,7 +1965,7 @@ const getTransparentWMTS = (parameter) => {
  * @function
  * @api stable
  */
-export const WMTS = (userParameters) => {
+const WMTS = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -2064,4 +2011,84 @@ export const WMTS = (userParameters) => {
   }
 
   return layers;
+};
+
+const parameterFunction = {
+  kml,
+  mapbox,
+  osm,
+  wfs,
+  wmc,
+  WMS,
+  WMTS,
+};
+
+
+/**
+ * Parses the specified user layer parameters to a object
+ *
+ * @param {string|Mx.parameters.Layer} userParameters parameters
+ * provided by the user
+ * @param {string} forced type of the layer (optional)
+ * @returns {Mx.parameters.Layer|Array<Mx.parameters.Layer>}
+ * @public
+ * @function
+ * @api stable
+ */
+const layer = (userParameters, forcedType) => {
+  let layers = [];
+
+  // checks if the param is null or empty
+  if (Utils.isNullOrEmpty(userParameters)) {
+    Exception('No ha especificado ningún parámetro');
+  }
+
+  // checks if the parameter is an array
+  let userParametersArray = userParameters;
+  if (!Utils.isArray(userParametersArray)) {
+    userParametersArray = [userParametersArray];
+  }
+
+  layers = userParametersArray.map((userParam) => {
+    let layerObj = null;
+    if (Utils.isObject(userParam) && (userParam instanceof Layer)) {
+      layerObj = userParam;
+    }
+    else {
+      // gets the layer type
+      let type = getType(userParam, forcedType);
+      type = Utils.normalize(type);
+
+      if (Utils.isFunction(parameterFunction[type])) {
+        layerObj = parameterFunction[type](userParam);
+      }
+      else {
+        layerObj = userParam;
+      }
+    }
+
+    return layerObj;
+  });
+
+  if (!Utils.isArray(userParameters)) {
+    layers = layers[0];
+  }
+
+  return layers;
+};
+
+export {
+  center,
+  layer,
+  maxExtent,
+  projection,
+  resolutions,
+  zoom,
+  kml,
+  mapbox,
+  osm,
+  wfs,
+  wmc,
+  WMS,
+  WMTS,
 };

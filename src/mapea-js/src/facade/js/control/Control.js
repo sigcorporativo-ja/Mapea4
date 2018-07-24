@@ -186,9 +186,9 @@ export default class ControlBase extends Base {
    */
   activate() {
     if (!Utils.isNullOrEmpty(this.element_)) {
-      this.element_.classlist.add('activated');
+      this.element_.classList.add('activated');
     }
-    if (!Utils.isUndefined(this.impl().activate)) {
+    if (!Utils.isUndefined(this.getImpl().activate)) {
       this.getImpl().activate();
     }
     this.activated = true;
@@ -205,7 +205,7 @@ export default class ControlBase extends Base {
    */
   deactivate() {
     if (!Utils.isNullOrEmpty(this.element_)) {
-      this.element_.classlist.remove('activated');
+      this.element_.classList.remove('activated');
     }
     if (!Utils.isUndefined(this.getImpl().deactivate)) {
       this.getImpl().deactivate();

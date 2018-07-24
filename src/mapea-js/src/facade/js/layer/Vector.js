@@ -1,15 +1,13 @@
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
-import VectorImpl from 'impl/ol/js/layer/Vector';
+import VectorImpl from 'impl/layer/Vector';
 import LayerType from './Type';
 import * as dialog from "../dialog";
 import FilterBase from "../filter/Base";
 import StyleCluster from '../style/Cluster';
-import LayerWFS from "./WFS";
 import GeomGeoJSON from '../geom/GeoJSON';
-import LayerGeoJSON from './GeoJSON';
-import StyleBase from '../style/Style';
+import Style from '../style/Style';
 import EvtManager from '../event/Manager';
 
 export default class Vector extends LayerBase {
@@ -47,7 +45,7 @@ export default class Vector extends LayerBase {
 
     this.setStyle(this.style_);
 
-    impl.on(EvtManager.LOAD, (features) => this.fire(EvtManager.LOAD, [features]));
+    impl.on(EvtManager.LOAD, features => this.fire(EvtManager.LOAD, [features]));
   }
 
   /**
@@ -92,7 +90,7 @@ export default class Vector extends LayerBase {
    * @api stable
    */
   getFeatures(skipFilter) {
-    if (Utils.isNullOrEmpty(this.filter())) skipFilter = true;
+    if (Utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
     return this.getImpl().getFeatures(skipFilter, this.filter_);
   }
 
@@ -271,7 +269,7 @@ export default class Vector extends LayerBase {
    * @param {M.Style}
    * @param {bool}
    */
-  setStyle(style, applyToFeature = false) {
+  setStyle(style, applyToFeature = false, optionStyle = Vector.DEFAULT_OPTIONS_STYLE) {
     this.oldStyle_ = this.style_;
     let isNullStyle = false;
     if (style === null) {
@@ -280,15 +278,10 @@ export default class Vector extends LayerBase {
     const applyStyleFn = (style) => {
       const applyStyle = () => {
         if (Utils.isNullOrEmpty(style)) {
-          if (this instanceof LayerWFS) {
-            style = Utils.generateStyleLayer(LayerBase.WFS.DEFAULT_OPTIONS_STYLE, this);
-          }
-          else {
-            style = Utils.generateStyleLayer(GeoJSON.DEFAULT_OPTIONS_STYLE, this);
-          }
+          style = Utils.generateStyleLayer(optionStyle, this);
         }
         let isCluster = style instanceof StyleCluster;
-        let isPoint = [GeomGeoJSON.type.POINT, GeomGeoJSON.type.MULTI_POINT].includes(Utils.geometryType(this));
+        let isPoint = [GeomGeoJSON.type.POINT, GeomGeoJSON.type.MULTI_POINT].includes(Utils.getGeometryType(this));
         if (style instanceof Style && (!isCluster || isPoint)) {
           if (!Utils.isNullOrEmpty(this.oldStyle_)) {
             this.oldStyle_.unapply(this);
@@ -352,3 +345,22 @@ export default class Vector extends LayerBase {
     return legendUrl;
   }
 }
+
+/**
+ * Options style by default
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
+ */
+Vector.DEFAULT_OPTIONS_STYLE = {
+  fill: {
+    color: 'rgba(255, 255, 255, 0.4)',
+    opacity: 0.4
+  },
+  stroke: {
+    color: "#3399CC",
+    width: 1.5
+  },
+  radius: 5,
+};

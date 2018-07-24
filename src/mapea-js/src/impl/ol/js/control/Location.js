@@ -55,7 +55,7 @@ export default class Location extends Control {
    * @api stable
    */
   activate() {
-    this.element.classlist.add('m-locating');
+    this.element.classList.add('m-locating');
 
     if (Utils.isNullOrEmpty(this.geolocation_)) {
       const proj = ol.proj.get(this.facadeMap_.getProjection().code);
@@ -77,11 +77,11 @@ export default class Location extends Control {
           null : new ol.geom.Point(newCoord);
         this.positionFeature_.getImpl().getOLFeature().setGeometry(newPosition);
         this.facadeMap_.setCenter(newCoord);
-        if (this.element.classlist.contains('m-locating')) {
+        if (this.element.classList.contains('m-locating')) {
           this.facadeMap_.setZoom(Location.ZOOM); // solo 1a vez
         }
-        this.element.classlist.remove('m-locating');
-        this.element.classlist.add('m-located');
+        this.element.classList.remove('m-locating');
+        this.element.classList.add('m-located');
 
         this.geolocation_.setTracking(this.tracking_);
       });
@@ -116,7 +116,7 @@ export default class Location extends Control {
    */
   deactivate() {
     this.removePositions_();
-    this.element.classlist.remove('m-located');
+    this.element.classList.remove('m-located');
   }
 
   /**

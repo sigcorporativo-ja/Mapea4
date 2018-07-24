@@ -1,9 +1,9 @@
+import HandlerImpl from 'impl/handler/Feature';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Base from '../Base';
-import HandlerImpl from 'impl/ol/js/handler/Feature';
 import FacadeFeature from '../feature/Feature';
-import EvtManaManager from "../event/Manager";
+import EvtManaManager from '../event/Manager';
 
 export default class Feature extends Base {
   /**
@@ -16,7 +16,6 @@ export default class Feature extends Base {
    * @api stable
    */
   constructor(options = {}, impl = new HandlerImpl(options)) {
-
     // calls the super constructor
     super(impl);
 

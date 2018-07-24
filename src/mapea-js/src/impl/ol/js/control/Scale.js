@@ -33,12 +33,9 @@ export default class Scale extends Control {
 
     const scaleId = 'm-scale-span';
     this.scaleContainer_ = element.querySelector('#'.concat(scaleId));
-
-    ol.control.Control.call(this, {
-      element,
-      render: this.render,
-      target: null,
-    });
+    this.element = element;
+    this.render = this.renderCB;
+    this.target_ = null;
     map.getMapImpl().addControl(this);
   }
 
@@ -48,7 +45,7 @@ export default class Scale extends Control {
    * @this {ol.control.ScaleLine}
    * @api
    */
-  render(mapEvent) {
+  renderCB(mapEvent) {
     const frameState = mapEvent.frameState;
     if (!Utils.isNullOrEmpty(frameState)) {
       Scale.updateElement(frameState.viewState, this.scaleContainer_, this.facadeMap_);

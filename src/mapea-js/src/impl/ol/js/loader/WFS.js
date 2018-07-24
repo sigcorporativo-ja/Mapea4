@@ -1,4 +1,4 @@
-import Object from 'facade/js/Object';
+import MObject from 'facade/js/Object';
 import Remote from 'facade/js/util/Remote';
 import Utils from 'facade/js/util/Utils';
 import Exception from 'facade/js/exception/exception';
@@ -6,7 +6,7 @@ import Dialog from 'facade/js/dialog';
 /**
  * @namespace M.impl.control
  */
-export default class WFS extends Object {
+export default class WFS extends MObject {
   /**
    * @classdesc TODO
    * control

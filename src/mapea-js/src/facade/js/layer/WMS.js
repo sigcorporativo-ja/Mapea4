@@ -1,4 +1,4 @@
-import WMSImpl from 'impl/ol/js/layer/WMS';
+import WMSImpl from 'impl/layer/WMS';
 import Config from 'configuration';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
