@@ -1,4 +1,4 @@
-import PrinterControlImpl from "../../impl/ol/js/printercontrol";
+import PrinterControlImpl from '../../impl/ol/js/printercontrol';
 
 export default class PrinterControl extends M.Control {
   /**
@@ -12,7 +12,7 @@ export default class PrinterControl extends M.Control {
    */
   constructor(url, params, options) {
     // implementation of this control
-    let impl = new PrinterControlImpl();
+    const impl = new PrinterControlImpl();
 
     super(impl);
 
@@ -126,7 +126,6 @@ export default class PrinterControl extends M.Control {
     if (M.utils.isNullOrEmpty(this.options_.legend)) {
       this.options_.legend = M.config.geoprint.LEGEND;
     }
-
   }
 
   /**
@@ -138,29 +137,30 @@ export default class PrinterControl extends M.Control {
    * @api stabletrue
    */
   createView(map) {
-    let promise = new Promise((success, fail) => {
-      this.getCapabilities().then(capabilities => {
-        let i = 0,
-          ilen;
+    const promise = new Promise((success, fail) => {
+      this.getCapabilities().then((capabilitiesParam) => {
+        const capabilities = capabilitiesParam;
+        let i = 0;
+        let ilen;
         // default layout
-        for (i = 0, ilen = capabilities.layouts.length; i < ilen; i++) {
-          let layout = capabilities.layouts[i];
+        for (i = 0, ilen = capabilities.layouts.length; i < ilen; i += 1) {
+          const layout = capabilities.layouts[i];
           if (layout.name === this.options_.layout) {
             layout.default = true;
             break;
           }
         }
         // default dpi
-        for (i = 0, ilen = capabilities.dpis.length; i < ilen; i++) {
-          let dpi = capabilities.dpis[i];
-          if (dpi.value == this.options_.dpi) {
+        for (i = 0, ilen = capabilities.dpis.length; i < ilen; i += 1) {
+          const dpi = capabilities.dpis[i];
+          if (dpi.value === this.options_.dpi) {
             dpi.default = true;
             break;
           }
         }
         // default outputFormat
-        for (i = 0, ilen = capabilities.outputFormats.length; i < ilen; i++) {
-          let outputFormat = capabilities.outputFormats[i];
+        for (i = 0, ilen = capabilities.outputFormats.length; i < ilen; i += 1) {
+          const outputFormat = capabilities.outputFormats[i];
           if (outputFormat.name === this.options_.format) {
             outputFormat.default = true;
             break;
@@ -168,10 +168,10 @@ export default class PrinterControl extends M.Control {
         }
         // forceScale
         capabilities.forceScale = this.options_.forceScale;
-        M.Template.compile(Printer.TEMPLATE, {
-          'jsonp': true,
-          'vars': capabilities
-        }).then(html => {
+        M.Template.compile(PrinterControl.TEMPLATE, {
+          jsonp: true,
+          vars: capabilities,
+        }).then((html) => {
           this.addEvents(html);
           success(html);
         });
@@ -198,70 +198,70 @@ export default class PrinterControl extends M.Control {
     this.areaDescription_ = this.element_.querySelector('.form div.description > textarea');
 
     // layout
-    let selectLayout = this.element_.querySelector('.form div.layout > select');
-    selectLayout.addEventListener("change", (event) => {
-      let layoutValue = selectLayout.value;
+    const selectLayout = this.element_.querySelector('.form div.layout > select');
+    selectLayout.addEventListener('change', (event) => {
+      const layoutValue = selectLayout.value;
       this.setLayout({
-        'value': layoutValue,
-        'name': layoutValue
+        value: layoutValue,
+        name: layoutValue,
       });
     });
 
-    let layoutValue = selectLayout.value;
+    const layoutValue = selectLayout.value;
     this.setLayout({
-      'value': layoutValue,
-      'name': layoutValue
+      value: layoutValue,
+      name: layoutValue,
     });
 
     // dpi
-    let selectDpi = this.element_.querySelector('.form div.dpi > select');
-    selectDpi.addEventListener("change", (event) => {
-      let dpiValue = selectDpi.value;
+    const selectDpi = this.element_.querySelector('.form div.dpi > select');
+    selectDpi.addEventListener('change', (event) => {
+      const dpiValue = selectDpi.value;
       this.setDpi({
-        'value': dpiValue,
-        'name': dpiValue
+        value: dpiValue,
+        name: dpiValue,
       });
     });
 
-    var dpiValue = selectDpi.value;
+    const dpiValue = selectDpi.value;
     this.setDpi({
-      'value': dpiValue,
-      'name': dpiValue
+      value: dpiValue,
+      name: dpiValue,
     });
 
     // format
-    let selectFormat = this.element_.querySelector('.form div.format > select');
-    selectFormat.addEventListener("change", (event) => {
+    const selectFormat = this.element_.querySelector('.form div.format > select');
+    selectFormat.addEventListener('change', (event) => {
       this.setFormat(selectFormat.value);
     });
     this.setFormat(selectFormat.value);
 
     // force scale
-    let checkboxForceScale = this.element_.querySelector('.form div.forcescale > input');
-    checkboxForceScale.addEventListener("click", (event) => {
+    const checkboxForceScale = this.element_.querySelector('.form div.forcescale > input');
+    checkboxForceScale.addEventListener('click', (event) => {
       this.setForceScale(checkboxForceScale.checked === true);
     });
     this.setForceScale(checkboxForceScale.checked === true);
 
     // print button
-    let printBtn = this.element_.querySelector('.button > button.print');
-    printBtn.addEventListener("click", this.printClick_);
+    const printBtn = this.element_.querySelector('.button > button.print');
+    printBtn.addEventListener('click', this.printClick_);
 
     // clean button
-    let cleanBtn = this.element_.querySelector('.button > button.remove');
-    cleanBtn.addEventListener("click", (event) => {
+    const cleanBtn = this.element_.querySelector('.button > button.remove');
+    cleanBtn.addEventListener('click', (event) => {
       event.preventDefault();
 
       // resets values
-      this.inputTitle_.value = "";
-      this.areaDescription_.value = "";
+      this.inputTitle_.value = '';
+      this.areaDescription_.value = '';
       selectLayout.value = this.options_.layout;
       selectDpi.value = this.options_.dpi;
       selectFormat.value = this.options_.format;
       checkboxForceScale.checked = this.options_.forceScale;
 
       // Create events and init
-      const changeEvent = document.createEvent("HTMLEvents");
+      const changeEvent = document.createEvent('HTMLEvents');
       changeEvent.initEvent('change');
       const clickEvent = document.createEvent('HTMLEvents');
       // Fire listeners
@@ -273,17 +273,14 @@ export default class PrinterControl extends M.Control {
 
 
       // clean queue
-      Array.prototype.forEach.apply(this.queueContainer_.children, [function (child) {
+      Array.prototype.forEach.apply(this.queueContainer_.children, [(child) => {
         // unlisten events
         child.removeEventListener('click', this.dowloadPrint);
-         }, this]);
-
-      child.removeEventListener('click', this.dowloadPrint);
+      }, this]);
 
       while (this.queueContainer_.fistChild) {
-        this.queueContainer_.removeChild(this.queueContainer_.firsChild)
+        this.queueContainer_.removeChild(this.queueContainer_.firsChild);
       }
-      c0b0fcef264e92f13bedd58705dc93a5
     });
 
     // queue
@@ -302,13 +299,15 @@ export default class PrinterControl extends M.Control {
   getCapabilities() {
     if (M.utils.isNullOrEmpty(this.capabilitiesPromise_)) {
       this.capabilitiesPromise_ = new Promise((success, fail) => {
-        let capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'info.json']);
+        const capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'info.json']);
         M.Remote.get(capabilitiesUrl).then((response) => {
           let capabilities = {};
           try {
             capabilities = JSON.parse(response.text);
           }
-          catch (err) {}
+          catch (err) {
+            M.Exception(err);
+          }
           success(capabilities);
         });
       });
@@ -370,28 +369,31 @@ export default class PrinterControl extends M.Control {
   printClick_(evt) {
     evt.preventDefault();
 
-    this.getCapabilities().then(capabilities => {
-      this.getPrintData().then(printData => {
-        let printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
+    this.getCapabilities().then((capabilities) => {
+      this.getPrintData().then((printData) => {
+        const printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
 
         // append child
-        let queueEl = this.createQueueElement();
+        const queueEl = this.createQueueElement();
         this.queueContainer_.appendChild(queueEl);
-        queueEl.classList.add(Printer.LOADING_CLASS);
+        queueEl.classList.add(PrinterControl.LOADING_CLASS);
 
-        M.Remote.post(printUrl, printData).then((response) => {
-          queueEl.classList.remove(queueEl, Printer.LOADING_CLASS);
+        M.Remote.post(printUrl, printData).then((responseParam) => {
+          let response = responseParam;
+          queueEl.classList.remove(queueEl, PrinterControl.LOADING_CLASS);
 
           if (response.error !== true) {
             let downloadUrl;
             try {
               response = JSON.parse(response.text);
-              downloadUrl = response['getURL'];
+              downloadUrl = response.getURL;
             }
-            catch (err) {}
+            catch (err) {
+              M.Exception(err);
+            }
             // sets the download URL
-            queueEl.setAttribute(Printer.DOWNLOAD_ATTR_NAME, downloadUrl);
-            queueEl.addEventListener("click", this.dowloadPrint);
+            queueEl.setAttribute(PrinterControl.DOWNLOAD_ATTR_NAME, downloadUrl);
+            queueEl.addEventListener('click', this.dowloadPrint);
           }
           else {
             M.Dialog.error('Se ha producido un error en la impresión');
@@ -409,28 +411,28 @@ export default class PrinterControl extends M.Control {
    * @function
    */
   getPrintData() {
-    let title = this.inputTitle_.value;
-    let description = this.areaDescription_.value;
-    let projection = this.map_.getProjection();
-    let layout = this.layout_.name;
-    let dpi = this.dpi_.value;
-    let outputFormat = this.format_;
+    const title = this.inputTitle_.value;
+    const description = this.areaDescription_.value;
+    const projection = this.map_.getProjection();
+    const layout = this.layout_.name;
+    const dpi = this.dpi_.value;
+    const outputFormat = this.format_;
 
-    let printData = M.utils.extend({
-      'units': projection.units,
-      'srs': projection.code,
-      'layout': layout,
-      'dpi': dpi,
-      'outputFormat': outputFormat
+    const printData = M.utils.extend({
+      units: projection.units,
+      srs: projection.code,
+      layout,
+      dpi,
+      outputFormat,
     }, this.params_.layout);
 
-    return this.encodeLayers().then(encodedLayers => {
+    return this.encodeLayers().then((encodedLayers) => {
       printData.layers = encodedLayers;
       printData.pages = this.encodePages(title, description);
       if (this.options_.legend === true) {
         printData.legends = this.encodeLegends();
       }
-      if (projection.code !== "EPSG:3857" && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+      if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
         printData.srs = 'EPSG:3857';
       }
       return printData;
@@ -445,25 +447,24 @@ export default class PrinterControl extends M.Control {
    * @function
    */
   encodeLayers() {
-    let layers = this.map_.getLayers().filter(layer => {
-      return ((layer.isVisible() === true) && (layer.inRange() === true) && layer.name !== "cluster_cover");
+    const layers = this.map_.getLayers().filter((layer) => {
+      return ((layer.isVisible() === true) && (layer.inRange() === true) && layer.name !== 'cluster_cover');
     });
     let numLayersToProc = layers.length;
 
     return (new Promise((success, fail) => {
-      let encodedLayers = [];
-      layers.forEach(layer => {
-        this.getImpl().encodeLayer(layer).then(encodedLayer => {
+      const encodedLayers = [];
+      layers.forEach((layer) => {
+        this.getImpl().encodeLayer(layer).then((encodedLayer) => {
           if (encodedLayer !== null) {
             encodedLayers.push(encodedLayer);
           }
-          numLayersToProc--;
+          numLayersToProc -= 1;
           if (numLayersToProc === 0) {
             success(encodedLayers);
           }
         });
-
-      }, this);
+      });
     }));
   }
 
@@ -475,29 +476,29 @@ export default class PrinterControl extends M.Control {
    * @function
    */
   encodePages(title, description) {
-    let encodedPages = [];
-    let projection = this.map_.getProjection();
+    const encodedPages = [];
+    const projection = this.map_.getProjection();
 
     if (!M.utils.isArray(this.params_.pages)) {
       this.params_.pages = [this.params_.pages];
     }
     this.params_.pages.forEach((page) => {
-      let encodedPage = M.utils.extend({
-        'title': title,
-        'printTitle': title,
-        'printDescription': description,
-        'infoSRS': "\n" + this.map_.getProjection().code
+      const encodedPage = M.utils.extend({
+        title,
+        printTitle: title,
+        printDescription: description,
+        infoSRS: `\n ${this.map_.getProjection().code}`,
       }, page);
 
       if (this.forceScale_ === false) {
-        let bbox = this.map_.getBbox();
+        const bbox = this.map_.getBbox();
         encodedPage.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-        if (projection.code !== "EPSG:3857" && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+        if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
           encodedPage.bbox = ol.proj.transformExtent(encodedPage.bbox, projection.code, 'EPSG:3857');
         }
       }
       else if (this.forceScale_ === true) {
-        let center = this.map_.getCenter();
+        const center = this.map_.getCenter();
         encodedPage.center = [center.x, center.y];
         encodedPage.scale = this.map_.getScale();
       }
@@ -517,12 +518,12 @@ export default class PrinterControl extends M.Control {
    */
   encodeLegends() {
     // TODO
-    let encodedLegends = [];
+    const encodedLegends = [];
 
-    let layers = this.map_.getLayers();
+    const layers = this.map_.getLayers();
     layers.forEach((layer) => {
       if ((layer.isVisible() === true) && (layer.inRange() === true)) {
-        let encodedLegend = this.getImpl().encodeLegend(layer);
+        const encodedLegend = this.getImpl().encodeLegend(layer);
         if (encodedLegend !== null) {
           encodedLegends.push(encodedLegend);
         }
@@ -540,10 +541,10 @@ export default class PrinterControl extends M.Control {
    * @api stable
    */
   createQueueElement() {
-    let queueElem = document.createElement('li');
+    const queueElem = document.createElement('li');
     let title = this.inputTitle_.value;
     if (M.utils.isNullOrEmpty(title)) {
-      title = Printer.NO_TITLE;
+      title = PrinterControl.NO_TITLE;
     }
     queueElem.innerHTML = title;
     return queueElem;
@@ -560,7 +561,7 @@ export default class PrinterControl extends M.Control {
   dowloadPrint(event) {
     event.preventDefault();
 
-    let downloadUrl = this.getAttribute(Printer.DOWNLOAD_ATTR_NAME);
+    const downloadUrl = this.getAttribute(PrinterControl.DOWNLOAD_ATTR_NAME);
     if (!M.utils.isNullOrEmpty(downloadUrl)) {
       window.open(downloadUrl, '_blank');
     }
@@ -575,7 +576,7 @@ export default class PrinterControl extends M.Control {
    */
   equals(obj) {
     let equals = false;
-    if (obj instanceof Printer) {
+    if (obj instanceof PrinterControl) {
       equals = (this.name === obj.name);
     }
     return equals;
@@ -589,7 +590,7 @@ export default class PrinterControl extends M.Control {
  * @public
  * @api stable
  */
-Printer.TEMPLATE = 'printer.html';
+PrinterControl.TEMPLATE = 'printer.html';
 
 /**
  * M.Template for this controls
@@ -598,7 +599,7 @@ Printer.TEMPLATE = 'printer.html';
  * @public
  * @api stable
  */
-Printer.LOADING_CLASS = 'printing';
+PrinterControl.LOADING_CLASS = 'printing';
 
 /**
  * M.Template for this controls
@@ -607,7 +608,7 @@ Printer.LOADING_CLASS = 'printing';
  * @public
  * @api stable
  */
-Printer.DOWNLOAD_ATTR_NAME = 'data-donwload-url-print';
+PrinterControl.DOWNLOAD_ATTR_NAME = 'data-donwload-url-print';
 
 /**
  * M.Template for this controls
@@ -616,4 +617,4 @@ Printer.DOWNLOAD_ATTR_NAME = 'data-donwload-url-print';
  * @public
  * @api stable
  */
-Printer.NO_TITLE = '(Sin título)';
+PrinterControl.NO_TITLE = '(Sin título)';

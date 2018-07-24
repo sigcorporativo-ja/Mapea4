@@ -1,4 +1,4 @@
-import SaveFeatureImpl from "../.../impl/ol/js/savefeature";
+import SaveFeatureImpl from '../../impl/ol/js/savefeature';
 
 export default class SaveFeature extends M.Control {
   /**
@@ -13,7 +13,7 @@ export default class SaveFeature extends M.Control {
    */
   constructor(layer) {
     // implementation of this control
-    let impl = new SaveFeatureImpl(layer);
+    const impl = new SaveFeatureImpl(layer);
     // calls the super constructor
     super(impl, SaveFeature.NAME);
 
@@ -42,7 +42,7 @@ export default class SaveFeature extends M.Control {
   createView(map) {
     this.facadeMap_ = map;
     return M.Template.compile(SaveFeature.TEMPLATE, {
-      'jsonp': true
+      jsonp: true,
     });
   }
 
@@ -54,8 +54,8 @@ export default class SaveFeature extends M.Control {
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
    */
-  equals(obj) {
-    let equals = (obj instanceof SaveFeature);
+  static equals(obj) {
+    const equals = (obj instanceof SaveFeature);
     return equals;
   }
 
@@ -69,8 +69,8 @@ export default class SaveFeature extends M.Control {
    * @export
    */
   manageActivation(html) {
-    let button = html.querySelector('button#m-button-savefeature');
-    button.addEventListener("click", this.saveFeature_);
+    const button = html.querySelector('button#m-button-savefeature');
+    button.addEventListener('click', this.saveFeature_);
   }
 
   /**

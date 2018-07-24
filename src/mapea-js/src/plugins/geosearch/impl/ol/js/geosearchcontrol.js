@@ -1,3 +1,5 @@
+import Geosearchlayer from '../../../facade/js/geosearchlayer';
+
 /**
  * @namespace M.impl.control
  */
@@ -11,6 +13,7 @@ export default class GeosearchControl extends M.impl.Control {
    * @api stable
    */
   constructor(options = {}) {
+    super();
     /**
      * Facade of the map
      * @private
@@ -31,7 +34,7 @@ export default class GeosearchControl extends M.impl.Control {
      * @type {M.impl.Layer}
      */
     this.layer_ = new Geosearchlayer({
-      'name': options.layerName
+      name: options.layerName,
     });
   }
 
@@ -50,8 +53,8 @@ export default class GeosearchControl extends M.impl.Control {
     map.addLayers(this.layer_);
 
     ol.control.Control.call(this, {
-      'element': element,
-      'target': null
+      element,
+      target: null,
     });
     map.getMapImpl().addControl(this);
   }
@@ -113,9 +116,11 @@ export default class GeosearchControl extends M.impl.Control {
    * @api stable
    */
   zoomToResults() {
-    let bbox = ol.extent.boundingExtent(this.layer_.getImpl().getOL3Layer().getSource().getFeatures().map(feature => {
-      return ol.extent.getCenter(feature.getGeometry().getExtent());
-    }));
+    const bbox = ol.extent.boundingExtent(this.layer_.getImpl().getOL3Layer()
+      .getSource().getFeatures()
+      .map((feature) => {
+        return ol.extent.getCenter(feature.getGeometry().getExtent());
+      }));
     this.facadeMap_.setBbox(bbox);
   }
 
@@ -156,7 +161,7 @@ export default class GeosearchControl extends M.impl.Control {
       this.facadeMap_.getMapImpl().getTargetElement().removeChild(this.helpHtml_);
       this.helpHtml_ = null;
     }
-  };
+  }
 
   /**
    * This function creates the view to the specified map
@@ -167,7 +172,7 @@ export default class GeosearchControl extends M.impl.Control {
    * @api stable
    */
   showHelp(helpHtml) {
-    let overlayContainer = this.facadeMap_.getMapImpl().getTargetElement();
+    const overlayContainer = this.facadeMap_.getMapImpl().getTargetElement();
     if (!M.utils.isNullOrEmpty(this.helpHtml_)) {
       overlayContainer.removeChild(this.helpHtml_);
     }
@@ -197,7 +202,7 @@ export default class GeosearchControl extends M.impl.Control {
    */
   destroy() {
     this.clear();
-    this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0].classList.remove("top-extra");
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.remove('top-extra');
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_ = null;
     this.helpHtml_ = null;

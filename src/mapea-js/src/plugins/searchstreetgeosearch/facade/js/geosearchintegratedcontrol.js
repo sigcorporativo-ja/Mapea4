@@ -1,4 +1,4 @@
-import GeosearchIntegratedImpl from "../../impl/ol/js/GeosearchIntegrated";
+import GeosearchIntegratedImpl from '../../impl/ol/js/geosearchintegratedcontrol';
 
 export default class GeosearchIntegrated extends M.control.Geosearch {
   /**
@@ -14,10 +14,10 @@ export default class GeosearchIntegrated extends M.control.Geosearch {
    * @api stable
    */
   constructor(url, core, handler, searchParameters) {
+    super(url, core, handler, searchParameters);
+
     // implementation of this control
     this.impl = new GeosearchIntegratedImpl();
-
-    super(url, core, handler, searchParameters);
 
     if (M.utils.isUndefined(GeosearchIntegratedImpl)) {
       M.exception('La implementación usada no puede crear controles GeosearchIntegrated');
@@ -53,33 +53,29 @@ export default class GeosearchIntegrated extends M.control.Geosearch {
     this.element_ = html;
 
     this.on(M.evt.COMPLETED, () => {
-      this.element_.classList.add("shown");
+      this.element_.classList.add('shown');
     }, this);
     // input search
-    this.input_ = this.element_.getElementsByTagName('input')["m-searchstreetgeosearch-search-input"];
-    //JGL20170818: traslado gestión evento a autocomplete
-    //goog.events.listen(this.input_, goog.events.EventType.KEYUP, this.searchClick_, false, this);
+    this.input_ = this.element_.getElementsByTagName('input')['m-searchstreetgeosearch-search-input'];
+    // JGL20170818: traslado gestión evento a autocomplete
 
     // search buntton
-    let btnSearch = this.element_.getElementsByTagName('button')["m-searchstreetgeosearch-search-btn"];
-    btnSearch.addEventListener("click", this.searchClick_);
+    const btnSearch = this.element_.getElementsByTagName('button')['m-searchstreetgeosearch-search-btn'];
+    btnSearch.addEventListener('click', this.searchClick_);
     // help buntton
-    let btnHelp = this.element_.getElementsByTagName('button')["m-searchstreetgeosearch-help-btn"];
-    btnHelp.addEventListener("click", evt => {
+    const btnHelp = this.element_.getElementsByTagName('button')['m-searchstreetgeosearch-help-btn'];
+    btnHelp.addEventListener('click', (evt) => {
       evt.preventDefault();
       btnHelp.classList.toggle('shown');
       this.helpClick_();
     });
 
     // results container
-    this.resultsContainer_ = this.element_.getElementsByTagName('div')["m-geosearch-results"];
+    this.resultsContainer_ = this.element_.getElementsByTagName('div')['m-geosearch-results'];
     M.utils.enableTouchScroll(this.resultsContainer_);
     this.searchingResult_ = this.element_.querySelector('div#m-geosearch-results > div#m-searching-result-geosearch');
     // goog.dom.removeChildren(this.resultsContainer_, this.searchingResult_);
   }
-
-
-
   /**
    * This function add new results panel Geosearch when done scroll
    * to this control
@@ -92,29 +88,29 @@ export default class GeosearchIntegrated extends M.control.Geosearch {
     // draws the new results on the map
     this.drawNewResults(results);
 
-    let resultsTemplateVars = this.parseResultsForTemplate_(results, true);
+    const resultsTemplateVars = this.parseResultsForTemplate_(results, true);
     M.Template.compile(M.control.Geosearch.RESULTS_TEMPLATE, {
-      'jsonp': true,
-      'vars': resultsTemplateVars
-    }).then(html => {
+      jsonp: true,
+      vars: resultsTemplateVars,
+    }).then((html) => {
       // appends the new results
-      let newResultsScrollContainer = html.getElementsByTagName("div")["m-geosearch-results-scroll"];
-      let newResults = newResultsScrollContainer.children;
+      const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
+      const newResults = newResultsScrollContainer.children;
       let newResult;
-      while ((newResult = newResults.item(0)) !== null) {
-        this_.resultsScrollContainer_.appendChild(newResult);
-        newResult.addEventListener("click", this_.resultClick_);
+      while ((newResult === newResults.item(0)) !== null) {
+        this.resultsScrollContainer_.appendChild(newResult);
+        newResult.addEventListener('click', this.resultClick_);
       }
 
       // updates the found num elements
-      let spanNumFound = this_.resultsContainer_.getElementsByTagName("span")["m-geosearch-page-found"];
-      spanNumFound.innerHTML = this_.results_.length;
+      const spanNumFound = this.resultsContainer_.getElementsByTagName('span')['m-geosearch-page-found'];
+      spanNumFound.innerHTML = this.results_.length;
 
 
-      this_.element_.classList.remove(M.control.Geosearch.SEARCHING_CLASS);
-      this_.resultsContainer_.removeChild(this_.searchingResult_);
+      this.element_.classList.remove(M.control.Geosearch.SEARCHING_CLASS);
+      this.resultsContainer_.removeChild(this.searchingResult_);
       // disables scroll if gets all results
-      this_.checkScrollSearch_(results);
+      this.checkScrollSearch_(results);
     });
   }
 
@@ -126,12 +122,12 @@ export default class GeosearchIntegrated extends M.control.Geosearch {
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0].classList.toggle("top-extra-search");
+    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.toggle('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
-    this.resultsContainer_.classList.toggle("hidden");
-    if (M.utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector("div#m-searchstreet-results.hidden"))) {
-      this.resultsContainer_.parentElement.classList.toggle("hidden");
+    this.resultsContainer_.classList.toggle('hidden');
+    if (M.utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector('div#m-searchstreet-results.hidden'))) {
+      this.resultsContainer_.parentElement.classList.toggle('hidden');
     }
   }
 
@@ -147,5 +143,4 @@ export default class GeosearchIntegrated extends M.control.Geosearch {
   getImpl(html) {
     return this.impl;
   }
-
 }

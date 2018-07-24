@@ -1,4 +1,4 @@
-import GeosearchbylocationImpl from "../../impl/ol/js/geosearchbylocation";
+import GeosearchbylocationImpl from '../../impl/ol/js/geosearchbylocationcontrol';
 
 export default class GeosearchbylocationControl extends M.control.GeosearchControl {
   /**
@@ -17,12 +17,13 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    * @api stable
    */
   constructor(url, core, handler, distance, spatialField, rows) {
-    // implementation of this control
-    let impl = new GeosearchbylocationImpl(this.searchUrl_);
-    this.setImpl(impl);
-
     // calls super
     super(url, core, handler);
+
+    // implementation of this control
+    const impl = new GeosearchbylocationImpl(this.searchUrl_);
+
+    this.setImpl(impl);
 
     /**
      * Status button 'Geosearchbylocation'
@@ -89,7 +90,6 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
 
     // name for this control
     this.name = GeosearchbylocationControl.NAME;
-
   }
 
   /**
@@ -103,7 +103,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    * @api stable
    */
   equals(obj) {
-    var equals = false;
+    let equals = false;
     if (obj instanceof GeosearchbylocationControl) {
       equals = (this.name === obj.name);
     }
@@ -122,7 +122,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
   createView(map) {
     this.facadeMap_ = map;
     return M.Template.compile(GeosearchbylocationControl.TEMPLATE, {
-      'jsonp': true
+      jsonp: true,
     });
   }
 
@@ -135,7 +135,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    * @api stable
    * @export
    */
-  getActivationButton(element) {
+  static getActivationButton(element) {
     return element.querySelector('button#m-geosearchbylocation-button');
   }
 
@@ -149,10 +149,10 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
   activate() {
     this.element_.classList.add('activated');
     this.element_.classlist.add(M.control.Geosearch.SEARCHING_CLASS);
-    this.getImpl().locate().then(coor => {
-      var pointGeom = new ol.geom.Point(coor);
-      var format = new ol.format.WKT();
-      var coorTrans = format.writeGeometry(pointGeom);
+    this.getImpl().locate().then((coor) => {
+      const pointGeom = new ol.geom.Point(coor);
+      const format = new ol.format.WKT();
+      const coorTrans = format.writeGeometry(pointGeom);
       this.searchFrom_(coorTrans, coor);
     });
   }
@@ -192,34 +192,35 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
   searchFrom_(coorTrans, coor) {
     let searchUrl = null;
     searchUrl = M.utils.addParameters(this.searchUrl_, {
-      'wt': 'json',
-      'pt': coorTrans,
-      'q': '*:*',
-      'start': 0,
-      'd': this.distance_,
-      'spatialField': this.spatialField_,
-      'rows': this.rows_,
-      'srs': this.map_.getProjection().code
+      wt: 'json',
+      pt: coorTrans,
+      q: '*:*',
+      start: 0,
+      d: this.distance_,
+      spatialField: this.spatialField_,
+      rows: this.rows_,
+      srs: this.map_.getProjection().code,
     });
 
     this.searchTime_ = Date.now();
     /* uses closure to keep the search time and it checks
      if the response is about the last executed search */
-    (searchTime => {
-      M.Remote.get(searchUrl).then(response => {
+    ((searchTime) => {
+      M.Remote.get(searchUrl).then((response) => {
         // if searchTime was updated by this promise then this is the last
         if (searchTime === this.searchTime_) {
           let results;
           try {
             results = JSON.parse(response.text);
-          } catch (err) {
-            M.Exception('La respuesta no es un JSON válido: ' + err);
+          }
+          catch (err) {
+            M.Exception(`La respuesta no es un JSON válido:${err}`);
           }
           this.showResults_(results);
           this.drawLocation_(coor);
           this.zoomToResultsAll_();
-          this.activationBtn_.classlist.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
-          this.element_.classlist.remove(GeosearchControl.SEARCHING_CLASS);
+          this.activationBtn_.classlist.remove(M.control.Geosearch.HIDDEN_RESULTS_CLASS);
+          this.element_.classlist.remove(M.control.Geosearch.SEARCHING_CLASS);
         }
       });
     })(this.searchTime_);
@@ -252,8 +253,8 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
     // draws the results on the map
     this.drawResults(results);
 
-    let btnShowList = this.element_.querySelector('button#m-geosearchbylocation-button-list');
-    btnShowList.addEventListener("click", this.showList_);
+    const btnShowList = this.element_.querySelector('button#m-geosearchbylocation-button-list');
+    btnShowList.addEventListener('click', this.showList_);
   }
 
   /**
@@ -264,29 +265,30 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    */
   showList_() {
     if (this.showList === true) {
-      let resultsTemplateVars = this.parseResultsForTemplate_(this.results);
+      const resultsTemplateVars = this.parseResultsForTemplate_(this.results);
       M.Template.compile(GeosearchbylocationControl.RESULTS_TEMPLATE, {
-        'jsonp': true,
-        'vars': resultsTemplateVars
-      }).then(html => {
+        jsonp: true,
+        vars: resultsTemplateVars,
+      }).then((html) => {
         this.resultsContainer_ = html;
-        this.resultsScrollContainer_ = this.resultsContainer_.querySelector("div#m-geosearchbylocation-results-scroll");
+        this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-geosearchbylocation-results-scroll');
         M.utils.enableTouchScroll(this.resultsScrollContainer_);
         this.getImpl().addResultsContainer(this.resultsContainer_);
-        var resultsHtmlElements = this.resultsContainer_.getElementsByClassName("result");
-        for (var i = 0, ilen = resultsHtmlElements.length; i < ilen; i++) {
-          let resultHtml = resultsHtmlElements.item(i);
-          resultHtml.addEventListener("click", evt => {
+        const resultsHtmlElements = this.resultsContainer_.getElementsByClassName('result');
+        for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
+          const resultHtml = resultsHtmlElements.item(i);
+          resultHtml.addEventListener('click', (evt) => {
             this.resultClick_(evt);
             this.getImpl().removeResultsContainer(this.resultsContainer_);
             this.showList = true;
           });
         }
-        let btnCloseList = html.querySelector('.title > button.m-panel-btn');
-        btnCloseList.addEventListener("click", this.showList_);
+        const btnCloseList = html.querySelector('.title > button.m-panel-btn');
+        btnCloseList.addEventListener('click', this.showList_);
       });
       this.showList = false;
-    } else {
+    }
+    else {
       this.getImpl().removeResultsContainer(this.resultsContainer_);
       this.showList = true;
     }
@@ -300,7 +302,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.resultsContainer_.classList.toggle(GeosearchControl.HIDDEN_RESULTS_CLASS);
+    this.resultsContainer_.classList.toggle(M.control.Geosearch.HIDDEN_RESULTS_CLASS);
   }
 }
 

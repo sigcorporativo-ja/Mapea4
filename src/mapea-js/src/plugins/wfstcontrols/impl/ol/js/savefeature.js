@@ -1,7 +1,7 @@
-import FDrawFeature from "../../../facade/js/drawfeature";
-import FModifyFeature from "../../../facade/js/modifyfeature";
-import FDeleteFeature from "../../../facade/js/deletefeature";
-import FClearFeature from "../../../facade/js/clearfeature";
+import FDrawFeature from '../../../facade/js/drawfeature';
+import FModifyFeature from '../../../facade/js/modifyfeature';
+import FDeleteFeature from '../../../facade/js/deletefeature';
+import FClearFeature from '../../../facade/js/clearfeature';
 
 /**
  * @namespace M.impl.control
@@ -18,6 +18,7 @@ export default class SaveFeature extends M.impl.Control {
    * @api stable
    */
   constructor(layer) {
+    super();
     /**
      * Layer for use in control
      * @private
@@ -37,7 +38,7 @@ export default class SaveFeature extends M.impl.Control {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    super('addTo', map, element);
+    super.addTo(map, element);
   }
 
   /**
@@ -48,61 +49,64 @@ export default class SaveFeature extends M.impl.Control {
    * @api stable
    */
   saveFeature() {
-    let layerImpl = this.layer_.getImpl();
+    const layerImpl = this.layer_.getImpl();
     layerImpl.getDescribeFeatureType().then((describeFeatureType) => {
       let saveFeaturesDraw = null;
       let saveFeaturesModify = null;
       let saveFeaturesDelete = null;
 
-      let drawfeatureCtrl = this.facadeMap_.getControls(FDrawFeature.NAME)[0];
+      const drawfeatureCtrl = this.facadeMap_.getControls(FDrawFeature.NAME)[0];
       if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
         saveFeaturesDraw = drawfeatureCtrl.getImpl().modifiedFeatures;
         SaveFeature.applyDescribeFeatureType.bind(this)(saveFeaturesDraw, describeFeatureType);
       }
-      var modifyfeatureCtrl = this.facadeMap_.getControls(FModifyFeature.NAME)[0];
+      const modifyfeatureCtrl = this.facadeMap_.getControls(FModifyFeature.NAME)[0];
       if (!M.utils.isNullOrEmpty(modifyfeatureCtrl)) {
         saveFeaturesModify = modifyfeatureCtrl.getImpl().modifiedFeatures;
         SaveFeature.applyDescribeFeatureType.bind(this)(saveFeaturesModify, describeFeatureType);
       }
-      var deletefeatureCtrl = this.facadeMap_.getControls(FDeleteFeature.NAME)[0];
+      const deletefeatureCtrl = this.facadeMap_.getControls(FDeleteFeature.NAME)[0];
       if (!M.utils.isNullOrEmpty(deletefeatureCtrl)) {
         saveFeaturesDelete = deletefeatureCtrl.getImpl().modifiedFeatures;
         SaveFeature.applyDescribeFeatureType.bind(this)(saveFeaturesDelete, describeFeatureType);
       }
-      //JGL 20163105: para evitar que se envié en la petición WFST el bbox
+      // JGL 20163105: para evitar que se envié en la petición WFST el bbox
       if (!M.utils.isNullOrEmpty(saveFeaturesModify)) {
-        saveFeaturesModify.forEach(feature => {
+        saveFeaturesModify.forEach((feature) => {
           feature.unset('bbox');
         });
       }
       if (!M.utils.isNullOrEmpty(saveFeaturesDraw)) {
-        saveFeaturesDraw.forEach(feature => {
+        saveFeaturesDraw.forEach((feature) => {
           feature.unset('bbox');
         });
       }
 
-      let projectionCode = this.facadeMap_.getProjection().code;
-      let formatWFS = new ol.format.WFS();
-      let wfstRequestXml = formatWFS.writeTransaction(saveFeaturesDraw, saveFeaturesModify, saveFeaturesDelete, {
-        'featureNS': describeFeatureType.featureNS,
-        'featurePrefix': describeFeatureType.featurePrefix,
-        'featureType': this.layer_.name,
-        'srsName': projectionCode,
-        'gmlOptions': {
-          'srsName': projectionCode
-        }
-      });
+      const projectionCode = this.facadeMap_.getProjection().code;
+      const formatWFS = new ol.format.WFS();
+      const wfstRequestXml = formatWFS
+        .writeTransaction(saveFeaturesDraw, saveFeaturesModify, saveFeaturesDelete, {
+          featureNS: describeFeatureType.featureNS,
+          featurePrefix: describeFeatureType.featurePrefix,
+          featureType: this.layer_.name,
+          srsName: projectionCode,
+          gmlOptions: {
+            srsName: projectionCode,
+          },
+        });
 
-      var wfstRequestText = goog.dom.xml.serialize(wfstRequestXml);
-      M.Remote.post(this.layer_.url, wfstRequestText).then(function (response) {
+      const wfstRequestText = goog.dom.xml.serialize(wfstRequestXml);
+      M.Remote.post(this.layer_.url, wfstRequestText).then((response) => {
         // clears layer
-        let clearCtrl = this.facadeMap_.getControls(FClearFeature.NAME)[0];
+        const clearCtrl = this.facadeMap_.getControls(FClearFeature.NAME)[0];
         clearCtrl.getImpl().clear();
-        if (response.code === 200 && response.text.indexOf("ExceptionText") === -1 && response.text.indexOf("<error><descripcion>") === -1) {
+        if (response.code === 200 && response.text.indexOf('ExceptionText') === -1 && response.text.indexOf('<error><descripcion>') === -1) {
           M.dialog.success('Se ha guardado correctamente');
-        } else if (response.code === 401) {
+        }
+        else if (response.code === 401) {
           M.dialog.error('Ha ocurrido un error al guardar: Usuario no autorizado');
-        } else {
+        }
+        else {
           M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
         }
       });
@@ -130,21 +134,22 @@ export default class SaveFeature extends M.impl.Control {
    * @api stable
    */
   applyDescribeFeatureType(features, describeFeatureType) {
-    let layerImpl = this.layer_.getImpl();
+    const layerImpl = this.layer_.getImpl();
 
-    features.forEach(feature => {
+    features.forEach((feature) => {
       // sets geometry name
-      let editFeatureGeomName = feature.getGeometryName();
-      let editFeatureGeom = feature.getGeometry();
+      const editFeatureGeomName = feature.getGeometryName();
+      const editFeatureGeom = feature.getGeometry();
       feature.set(describeFeatureType.geometryName, editFeatureGeom);
       feature.setGeometryName(describeFeatureType.geometryName);
       feature.setGeometry(editFeatureGeom);
       feature.unset(editFeatureGeomName);
 
       // sets default values
-      describeFeatureType.properties.forEach(property => {
+      describeFeatureType.properties.forEach((property) => {
         if (!M.utils.isGeometryType(property.localType)) {
-          let valueToAdd = feature.getProperties()[property.name] || layerImpl.getDefaultValue(property.localType);
+          const valueToAdd = feature
+            .getProperties()[property.name] || layerImpl.getDefaultValue(property.localType);
           feature.set(property.name, valueToAdd);
         }
       });

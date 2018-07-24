@@ -1,4 +1,4 @@
-import GeosearchLayerImpl from "impl/ol/js/geosearchlayer";
+import GeosearchLayerImpl from '../../impl/ol/js/geosearchlayer';
 
 export default class GeosearchLayer extends M.layer.Vector {
   /**
@@ -30,9 +30,8 @@ export default class GeosearchLayer extends M.layer.Vector {
    * @param {object} obj - Object to compare
    * @api stable
    */
-  equals(obj) {
-    let equals = false;
-    if (obj instanceof GeosearchLayer) {}
+  static equals(obj) {
+    const equals = false;
     return equals;
   }
 }

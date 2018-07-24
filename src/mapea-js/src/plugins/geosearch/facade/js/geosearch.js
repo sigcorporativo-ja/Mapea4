@@ -1,4 +1,7 @@
-export default Geosearch extends M.Plugin {
+import GeosearchControl from './geosearchcontrol';
+import GeosearchLayer from './geosearchlayer';
+
+export default class Geosearch extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -9,11 +12,8 @@ export default Geosearch extends M.Plugin {
    * @param {Object} impl implementation object
    * @api stable
    */
-  constructor(parameters) {
+  constructor(parameters = {}) {
     super();
-
-    parameters = (parameters || {});
-
     /**
      * Facade of the map
      * @private
@@ -79,7 +79,6 @@ export default Geosearch extends M.Plugin {
      * @type {String}
      */
     this.searchParameters_ = parameters.params || {};
-
   }
 
   /**
@@ -94,17 +93,21 @@ export default Geosearch extends M.Plugin {
   addTo(map) {
     this.map_ = map;
 
-    map._areasContainer.getElementsByClassName("m-top m-right")[0].classList.add("top-extra");
+    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
 
-    this.control_ = new GeosearchControl(this.url_, this.core_,
-      this.handler_, this.searchParameters_);
+    this.control_ = new GeosearchControl(
+      this.url_,
+      this.core_,
+      this.handler_,
+      this.searchParameters_,
+    );
     this.control_.on(M.evt.ADD_TO_MAP, this.onLoadCallback_, this);
     this.panel_ = new M.ui.Panel('geosearch', {
-      'collapsible': true,
-      'className': 'm-geosearch',
-      'collapsedButtonClass': 'g-cartografia-zoom',
-      'position': M.ui.Position.TL,
-      'tooltip': 'Geobúsquedas'
+      collapsible: true,
+      className: 'm-geosearch',
+      collapsedButtonClass: 'g-cartografia-zoom',
+      position: M.ui.Position.TL,
+      tooltip: 'Geobúsquedas',
     });
     this.panel_.addControls(this.control_);
     this.map_.addPanels(this.panel_);
@@ -152,14 +155,12 @@ export default Geosearch extends M.Plugin {
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  equals(plugin) {
+  static equals(plugin) {
     if (plugin instanceof Geosearch) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
-
 }
 
-Geosearch.NAME = "geosearch";
+Geosearch.NAME = 'geosearch';

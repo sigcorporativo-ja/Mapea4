@@ -2,7 +2,6 @@
  * @namespace M.impl.control
  */
 export default class GeosearchbylocationControl extends M.impl.control.Geosearch {
-
   /**
    * @classdesc
    * Main constructor of the Geosearchbylocation control.
@@ -16,7 +15,7 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
   constructor(searchUrl_) {
     // calls super
     super({
-      'layerName': GeosearchbylocationControl.NAME
+      layerName: GeosearchbylocationControl.NAME,
     });
 
     /**
@@ -32,7 +31,6 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
      * @type {string}
      */
     this.searchUrl_ = searchUrl_;
-
   }
 
   /**
@@ -43,12 +41,12 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
    * @api stable
    */
   setMap(map) {
-
-    super('setMap', map);
+    super.setMap(map);
 
     if (M.utils.isNullOrEmpty(map)) {
       this.facadeMap_.getImpl().removeFeatures([this.positionFeature_]);
-    } else {
+    }
+    else {
       this.map = map;
     }
   }
@@ -62,8 +60,8 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
    */
   locate() {
     // TODO
-    let geolocation = new ol.Geolocation({
-      projection: this.facadeMap_.getMapImpl().getView().getProjection()
+    const geolocation = new ol.Geolocation({
+      projection: this.facadeMap_.getMapImpl().getView().getProjection(),
     });
     geolocation.setTracking(true);
     this.positionFeature_ = M.impl.Feature.olFeature2Facade(new ol.Feature());
@@ -71,36 +69,37 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
       image: new ol.style.Circle({
         radius: 6,
         fill: new ol.style.Fill({
-          color: '#3399CC'
+          color: '#3399CC',
         }),
         stroke: new ol.style.Stroke({
           color: '#fff',
-          width: 2
-        })
-      })
+          width: 2,
+        }),
+      }),
     }));
     let coordinates;
-    this.positionFeature_.click = function (evt) {
+    this.positionFeature_.click = (evt) => {
       M.Template.compile(GeosearchbylocationControl.POPUP_LOCATION, {
-        'jsonp': true,
-        'vars': {
-          'valorX': coordinates[0],
-          'valorY': coordinates[1]
+        jsonp: true,
+        vars: {
+          valorX: coordinates[0],
+          valorY: coordinates[1],
         },
-        'parseToHtml': false
-      }).then(htmlAsText => {
-        let positionTabOpts = {
-          'icon': 'g-cartografia-gps2',
-          'title': 'posición',
-          'content': htmlAsText
+        parseToHtml: false,
+      }).then((htmlAsText) => {
+        const positionTabOpts = {
+          icon: 'g-cartografia-gps2',
+          title: 'posición',
+          content: htmlAsText,
         };
-        this_.popup_ = this_.facadeMap_.getPopup();
-        if (M.utils.isNullOrEmpty(this_.popup_)) {
-          this_.popup_ = new M.Popup();
-          this_.popup_.addTab(positionTabOpts);
-          this_.facadeMap_.addPopup(this_.popup_, coordinates);
-        } else {
-          this_.popup_.addTab(positionTabOpts);
+        this.popup_ = this.facadeMap_.getPopup();
+        if (M.utils.isNullOrEmpty(this.popup_)) {
+          this.popup_ = new M.Popup();
+          this.popup_.addTab(positionTabOpts);
+          this.facadeMap_.addPopup(this.popup_, coordinates);
+        }
+        else {
+          this.popup_.addTab(positionTabOpts);
         }
       });
     };
@@ -119,9 +118,11 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
    * @function
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.removeLocate = function () {
+
+
+  removeLocate() {
     this.facadeMap_.removeFeatures([this.positionFeature_]);
-  };
+  }
 
   /**
    * This function draw point location
@@ -131,7 +132,8 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
    * @api stable
    */
   drawLocation(coord) {
-    this.positionFeature_.getImpl().getOLFeature().setGeometry(coord ? new ol.geom.Point(coord) : null);
+    this.positionFeature_.getImpl()
+      .getOLFeature().setGeometry(coord ? new ol.geom.Point(coord) : null);
     this.facadeMap_.drawFeatures([this.positionFeature_]);
   }
 
@@ -144,7 +146,7 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
    * @api stable
    */
   addResultsContainer(container) {
-    let mapContainer = this.map.getTargetElement();
+    const mapContainer = this.map.getTargetElement();
     mapContainer.appendChild(container);
   }
 
@@ -156,8 +158,9 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
    * @param {HTMLElement} container HTML results panel
    * @api stable
    */
-  removeResultsContainer(container) {
-    delete container;
+  static removeResultsContainer(container) {
+    const parent = container.parentElement;
+    parent.removeChild(container);
   }
 
   /**
@@ -168,7 +171,7 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
    * @api stable
    */
   zoomToResultsAll() {
-    let bbox = this.facadeMap_.getControls("geosearchbylocation")[0].getImpl().getLayer().getFeaturesExtent();
+    const bbox = this.facadeMap_.getControls('geosearchbylocation')[0].getImpl().getLayer().getFeaturesExtent();
     this.facadeMap_.setBbox(bbox);
   }
 
@@ -196,4 +199,4 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
    */
 }
 
-GeosearchbylocationControl.POPUP_LOCATION = "geosearchbylocationfeaturepopup.html";
+GeosearchbylocationControl.POPUP_LOCATION = 'geosearchbylocationfeaturepopup.html';

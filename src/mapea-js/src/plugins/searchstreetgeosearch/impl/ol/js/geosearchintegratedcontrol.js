@@ -3,18 +3,6 @@
  */
 export default class GeosearchIntegrated extends M.impl.control.Geosearch {
   /**
-   * @classdesc
-   * Main constructor of the GeosearchIntegrated control.
-   *
-   * @constructor
-   * @extends {M.impl.control.Geosearch}
-   * @api stable
-   */
-  constructor() {
-    super();
-  }
-
-  /**
    * This function replaces the addto of Geosearch not to add control
    *
    * @public
@@ -34,8 +22,8 @@ export default class GeosearchIntegrated extends M.impl.control.Geosearch {
     // goog.base(this, 'addTo', map, element);
 
     ol.control.Control.call(this, {
-      'element': element,
-      'target': null
+      element,
+      target: null,
     });
 
     // this.facadeMap_ = map;
@@ -55,6 +43,5 @@ export default class GeosearchIntegrated extends M.impl.control.Geosearch {
    * @private
    * @function
    */
-  zoomToResults() {};
-
+  static zoomToResults() {}
 }

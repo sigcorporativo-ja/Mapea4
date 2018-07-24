@@ -1,3 +1,5 @@
+import PrinterControl from './printercontrol';
+
 export default class Printer extends M.Plugin {
   /**
    * @classdesc
@@ -9,11 +11,8 @@ export default class Printer extends M.Plugin {
    * @param {Object} impl implementation object
    * @api stable
    */
-  constructor(parameters) {
-
+  constructor(parameters = {}) {
     super(null, Printer.NAME);
-
-    parameters = (parameters || {});
 
     /**
      * Facade of the map
@@ -73,7 +72,6 @@ export default class Printer extends M.Plugin {
     if (!M.utils.isNullOrEmpty(parameters.options)) {
       this.options_ = parameters.options;
     }
-
   }
 
   /**
@@ -88,22 +86,25 @@ export default class Printer extends M.Plugin {
   addTo(map) {
     this.map_ = map;
 
-    this.control_ = new Printer(this.url_, this.params_,
-      this.options_);
+    this.control_ = new PrinterControl(
+      this.url_,
+      this.params_,
+      this.options_,
+    );
     this.panel_ = new M.ui.Panel('printer', {
-      'collapsible': true,
-      'className': 'm-printer',
-      'collapsedButtonClass': 'g-cartografia-impresora',
-      'position': M.ui.Position.TR,
-      'tooltip': 'Impresión del mapa'
+      collapsible: true,
+      className: 'm-printer',
+      collapsedButtonClass: 'g-cartografia-impresora',
+      position: M.ui.Position.TR,
+      tooltip: 'Impresión del mapa',
     });
-    this.panel_.on(M.evt.ADDED_TO_MAP, html => {
+    this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {
       M.utils.enableTouchScroll(html);
     });
     this.panel_.addControls(this.control_);
     this.map_.addPanels(this.panel_);
 
-    this.control_.on(M.evt.ADDED_TO_MAP, function () {
+    this.control_.on(M.evt.ADDED_TO_MAP, () => {
       this.fire(M.evt.ADDED_TO_MAP);
     });
   }
@@ -134,12 +135,11 @@ export default class Printer extends M.Plugin {
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  equals(plugin) {
+  static equals(plugin) {
     if (plugin instanceof Printer) {
       return true;
-    } else {
-      return false;
     }
+    return false;
   }
 
   /**
@@ -151,4 +151,4 @@ export default class Printer extends M.Plugin {
    */
 }
 
-Printer.NAME = "printer";
+Printer.NAME = 'printer';
