@@ -53,7 +53,7 @@ export default class AttributeTable extends M.plugin {
         if (map.getWFS().length === 0 && map.getKML().length === 0 && map.getLayers()
           .filter(layer => layer.type === 'GeoJSON') === 0) {
           plugin.panel_.collapse();
-          M.Dialog.info('No existen capas consultables.');
+          M.dialog.info('No existen capas consultables.');
         }
       });
       map.addPanels(plugin.panel_);

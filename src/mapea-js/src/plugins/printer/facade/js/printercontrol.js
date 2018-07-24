@@ -396,7 +396,7 @@ export default class PrinterControl extends M.Control {
             queueEl.addEventListener('click', this.dowloadPrint);
           }
           else {
-            M.Dialog.error('Se ha producido un error en la impresión');
+            M.dialog.error('Se ha producido un error en la impresión');
           }
         });
       });

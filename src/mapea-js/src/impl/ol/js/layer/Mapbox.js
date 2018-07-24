@@ -1,11 +1,11 @@
-import Utils from "facade/js/util/Utils";
-import ImplMap from "../Map";
-import FacadeOSM from "facade/js/layer/OSM";
-import FacadeMapbox from "facade/js/layer/Mapbox";
-import EnvolvedExtent from "../util/EnvolvedExtent";
-import Layer from "./Layer";
-import LayerType from "facade/js/layer/Type";
+import LayerType from 'facade/js/layer/Type';
+import FacadeOSM from 'facade/js/layer/OSM';
+import FacadeMapbox from 'facade/js/layer/Mapbox';
 import Config from 'configuration';
+import Utils from 'facade/js/util/Utils';
+import ImplMap from '../Map';
+import EnvolvedExtent from '../util/EnvolvedExtent';
+import Layer from './Layer';
 
 export default class Mapbox extends Layer {
   /**
@@ -19,7 +19,6 @@ export default class Mapbox extends Layer {
    * @api stable
    */
   constructor(userParameters, options) {
-
     // calls the super constructor
     super(options);
 
@@ -30,10 +29,10 @@ export default class Mapbox extends Layer {
      */
     this.resolutions_ = null;
 
-    //Añadir plugin attributions
+    // Añadir plugin attributions
     this.hasAttributtion = false;
 
-    //Tiene alguna capa que necesite el attributions
+    // Tiene alguna capa que necesite el attributions
     this.haveOSMorMapboxLayer = false;
 
     // sets visibility
@@ -99,21 +98,26 @@ export default class Mapbox extends Layer {
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
-    this.map.getMapImpl().getControls().getArray().forEach(cont => {
+    this.map.getMapImpl().getControls().getArray().forEach((cont) => {
       if (cont instanceof ol.control.Attribution) {
         this.hasAttributtion = true;
       }
     });
     if (!this.hasAttributtion) {
       this.map.getMapImpl().addControl(new ol.control.Attribution({
-        className: 'ol-attribution ol-unselectable ol-control ol-collapsed m-attribution'
+        className: 'ol-attribution ol-unselectable ol-control ol-collapsed m-attribution',
       }));
       this.hasAttributtion = false;
     }
 
     // recalculate resolutions
     this.map.getMapImpl().updateSize();
-    this.resolutions_ = Utils.generateResolutionsFromExtent(this.getExtent(), this.map.getMapImpl().getSize(), 16, this.map.getProjection().units);
+    this.resolutions_ = Utils.generateResolutionsFromExtent(
+      this.getExtent(),
+      this.map.getMapImpl().getSize(),
+      16,
+      this.map.getProjection().units,
+    );
 
     // sets its visibility if it is in range
     if (this.isVisible() && !this.inRange()) {
@@ -127,8 +131,8 @@ export default class Mapbox extends Layer {
       this.setResolutions(this.resolutions_);
     }
     // activates animation for base layers or animated parameters
-    let animated = ((this.transparent === false) || (this.options.animated === true));
-    this.ol3Layer.set("animated", animated);
+    const animated = ((this.transparent === false) || (this.options.animated === true));
+    this.ol3Layer.set('animated', animated);
   }
 
   /**
@@ -144,9 +148,9 @@ export default class Mapbox extends Layer {
 
     if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       // gets the extent
-      let promise = new Promise((success, fail) => {
+      const promise = new Promise((success, fail) => {
         // gets the extent
-        let extent = this.map.getMaxExtent();
+        const extent = this.map.getMaxExtent();
         if (!Utils.isNullOrEmpty(extent)) {
           success.call(this, extent);
         }
@@ -172,7 +176,7 @@ export default class Mapbox extends Layer {
           // }),
           extent: olExtent,
           resolutions,
-          attributionControl: true
+          attributionControl: true,
         });
         this.ol3Layer.setSource(newSource);
       });
@@ -193,14 +197,14 @@ export default class Mapbox extends Layer {
       extent = ol.proj.get(this.map.getProjection().code).getExtent();
     }
     return {
-      "x": {
-        "min": extent[0],
-        "max": extent[2]
+      x: {
+        min: extent[0],
+        max: extent[2],
       },
-      "y": {
-        "min": extent[1],
-        "max": extent[3]
-      }
+      y: {
+        min: extent[1],
+        max: extent[3],
+      },
     };
   }
 
@@ -237,24 +241,25 @@ export default class Mapbox extends Layer {
    * @api stable
    */
   destroy() {
-    let olMap = this.map.getMapImpl();
+    const olMap = this.map.getMapImpl();
     if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }
 
-    this.map.getLayers().forEach(layer => {
+    this.map.getLayers().forEach((layer) => {
       if (layer instanceof FacadeMapbox || layer instanceof FacadeOSM) {
         this.haveOSMorMapboxLayer = true;
       }
     });
 
     if (!this.haveOSMorMapboxLayer) {
-      this.map.getImpl().getMapImpl().getControls().getArray().forEach(data => {
-        if (data instanceof ol.control.Attribution) {
-          this.map.getImpl().getMapImpl().removeControl(data);
-        }
-      });
+      this.map.getImpl().getMapImpl().getControls().getArray()
+        .forEach((data) => {
+          if (data instanceof ol.control.Attribution) {
+            this.map.getImpl().getMapImpl().removeControl(data);
+          }
+        });
     }
     this.map = null;
   }

@@ -98,7 +98,7 @@ export default class Searchstreet extends M.Plugin {
           if (!M.utils.isNullOrEmpty(this.locality_) &&
             M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
             // If not correct, value empty
-            M.Dialog.error(`El código del municipio '${this.locality}' no es válido`);
+            M.dialog.error(`El código del municipio '${this.locality}' no es válido`);
             this.locality_ = '';
           }
         }

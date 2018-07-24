@@ -189,7 +189,7 @@ export default class AttributeTableControl extends M.control {
     const layersFind = [];
     if (M.utils.isNullOrEmpty(layerSearch) || (!M.utils.isArray(layerSearch) &&
         !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
-      M.Dialog.error('El parametro para el método hasLayer no es correcto.', 'Error');
+      M.dialog.error('El parametro para el método hasLayer no es correcto.', 'Error');
       return layersFind;
     }
 

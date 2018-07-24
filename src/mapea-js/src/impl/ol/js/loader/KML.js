@@ -50,11 +50,9 @@ export default class KML extends MObject {
    * @api stable
    */
   getLoaderFn(callback) {
-    const loaderScope = this;
     return ((extent, resolution, projection) => {
-      const sourceScope = this;
-      loaderScope.loadInternal_(projection).then((response) => {
-        callback.apply(sourceScope, response);
+      this.loadInternal_(projection).then((response) => {
+        callback.apply(this, response);
       });
     });
   }

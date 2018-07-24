@@ -1,9 +1,9 @@
-import Utils from "facade/js/util/Utils";
-import ImplMap from "../Map";
-import Layer from "./Layer";
-import FacadeMapbox from "facade/js/layer/Mapbox";
-import FacadeOSM from "facade/js/layer/OSM";
-import LayerType from "facade/js/layer/Type";
+import FacadeMapbox from 'facade/js/layer/Mapbox';
+import FacadeOSM from 'facade/js/layer/OSM';
+import LayerType from 'facade/js/layer/Type';
+import Utils from 'facade/js/util/Utils';
+import ImplMap from '../Map';
+import Layer from './Layer';
 
 export default class OSM extends Layer {
   /**
@@ -27,7 +27,7 @@ export default class OSM extends Layer {
      */
     this.resolutions_ = null;
 
-    //Añadir plugin attributions
+    // Añadir plugin attributions
     this.hasAttributtion = false;
 
     this.haveOSMorMapboxLayer = false;
@@ -52,7 +52,7 @@ export default class OSM extends Layer {
       // if this layer is base then it hides all base layers
       if ((visibility === true) && (this.transparent !== true)) {
         // hides all base layers
-        this.map.getBaseLayers().forEach(layer => {
+        this.map.getBaseLayers().forEach((layer) => {
           if (!layer.equals(this) && layer.isVisible()) {
             layer.setVisible(false);
           }
@@ -64,7 +64,7 @@ export default class OSM extends Layer {
         }
 
         // updates resolutions and keep the bbox
-        let oldBbox = this.map.getBbox();
+        const oldBbox = this.map.getBbox();
         this.map.getImpl().updateResolutionsFromBaseLayer();
         if (!Utils.isNullOrEmpty(oldBbox)) {
           this.map.setBbox(oldBbox);
@@ -88,26 +88,32 @@ export default class OSM extends Layer {
     this.map = map;
 
     this.ol3Layer = new ol.layer.Tile({
-      source: new ol.source.OSM()
+      source: new ol.source.OSM(),
     });
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
-    this.map.getImpl().getMapImpl().getControls().getArray().forEach(cont => {
-      if (cont instanceof ol.control.Attribution) {
-        this.hasAttributtion = true;
-      }
-    }, this);
+    this.map.getImpl().getMapImpl().getControls().getArray()
+      .forEach((cont) => {
+        if (cont instanceof ol.control.Attribution) {
+          this.hasAttributtion = true;
+        }
+      }, this);
     if (!this.hasAttributtion) {
       this.map.getMapImpl().addControl(new ol.control.Attribution({
-        className: 'ol-attribution ol-unselectable ol-control ol-collapsed m-attribution'
+        className: 'ol-attribution ol-unselectable ol-control ol-collapsed m-attribution',
       }));
       this.hasAttributtion = false;
     }
 
     // recalculate resolutions
     this.map.getMapImpl().updateSize();
-    this.resolutions_ = Utils.generateResolutionsFromExtent(this.getExtent(), this.map.getMapImpl().getSize(), 16, this.map.getProjection().units);
+    this.resolutions_ = Utils.generateResolutionsFromExtent(
+      this.getExtent(),
+      this.map.getMapImpl().getSize(),
+      16,
+      this.map.getProjection().units,
+    );
 
     // sets its visibility if it is in range
     if (this.isVisible() && !this.inRange()) {
@@ -121,8 +127,8 @@ export default class OSM extends Layer {
       this.setResolutions(this.resolutions_);
     }
     // activates animation for base layers or animated parameters
-    let animated = ((this.transparent === false) || (this.options.animated === true));
-    this.ol3Layer.set("animated", animated);
+    const animated = ((this.transparent === false) || (this.options.animated === true));
+    this.ol3Layer.set('animated', animated);
   }
 
   /**
@@ -138,9 +144,9 @@ export default class OSM extends Layer {
 
     if ((this.tiled === true) && !Utils.isNullOrEmpty(this.ol3Layer)) {
       // gets the extent
-      let promise = new Promise((success, fail) => {
+      const promise = new Promise((success, fail) => {
         // gets the extent
-        let extent = this.map.getMaxExtent();
+        const extent = this.map.getMaxExtent();
         if (!Utils.isNullOrEmpty(extent)) {
           success.call(this, extent);
         }
@@ -148,15 +154,15 @@ export default class OSM extends Layer {
           M.impl.envolvedExtent.calculate(this.map, this).then(success);
         }
       });
-      promise.then(extent => {
-        let olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
-        let newSource = new ol.source.OSM({
+      promise.then((extent) => {
+        const olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
+        const newSource = new ol.source.OSM({
           tileGrid: new ol.tilegrid.TileGrid({
-            resolutions: resolutions,
+            resolutions,
             extent: olExtent,
-            origin: ol.extent.getBottomLeft(olExtent)
+            origin: ol.extent.getBottomLeft(olExtent),
           }),
-          extent: olExtent
+          extent: olExtent,
         });
         this.ol3Layer.setSource(newSource);
       });
@@ -212,24 +218,25 @@ export default class OSM extends Layer {
    * @api stable
    */
   destroy() {
-    let olMap = this.map.getMapImpl();
+    const olMap = this.map.getMapImpl();
     if (!Utils.isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }
 
-    this.map.getLayers().forEach(layer => {
+    this.map.getLayers().forEach((layer) => {
       if (layer instanceof FacadeOSM || layer instanceof FacadeMapbox) {
         this.haveOSMorMapboxLayer = true;
       }
     });
 
     if (!this.haveOSMorMapboxLayer) {
-      this.map.getImpl().getMapImpl().getControls().getArray().forEach(data => {
-        if (data instanceof ol.control.Attribution) {
-          this.map.getImpl().getMapImpl().removeControl(data);
-        }
-      });
+      this.map.getImpl().getMapImpl().getControls().getArray()
+        .forEach((data) => {
+          if (data instanceof ol.control.Attribution) {
+            this.map.getImpl().getMapImpl().removeControl(data);
+          }
+        });
     }
     this.map = null;
   }

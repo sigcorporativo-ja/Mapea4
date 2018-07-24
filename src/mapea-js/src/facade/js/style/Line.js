@@ -1,5 +1,5 @@
 import StyleLineImpl from 'impl/style/Line';
-import Simple from 'Simple';
+import Simple from './Simple';
 import Utils from '../util/Utils';
 
 /**

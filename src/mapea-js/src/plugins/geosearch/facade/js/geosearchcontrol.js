@@ -229,7 +229,7 @@ export default class GeosearchControl extends M.Control {
       // gets the query
       const query = this.input_.value;
       if (M.utils.isNullOrEmpty(query)) {
-        M.Dialog.info('Debe introducir una búsqueda.');
+        M.dialog.info('Debe introducir una búsqueda.');
       }
       else {
         this.search_(query, this.showResults_);
