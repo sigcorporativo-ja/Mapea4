@@ -1,11 +1,12 @@
+import 'assets/css/mapea';
+import 'assets/css/animations';
 import 'impl/projections';
 import MapImpl from 'impl/Map';
 import Map from './Map';
 import Utils from './util/Utils';
 import Exception from './exception/exception';
-import 'assets/css/mapea';
+import './util/Window';
 import 'assets/css/fonts';
-import 'assets/css/animations';
 
 export default class Mapea {
   /**
@@ -62,8 +63,6 @@ export default class Mapea {
    * @returns {M.Map}
    * @api stable
    */
-
-
   static map(parameters, options) {
     // checks if the user specified an implementation
     if (Utils.isUndefined(MapImpl) || Utils.isNull(MapImpl)) {

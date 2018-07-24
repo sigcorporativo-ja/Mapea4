@@ -1,10 +1,9 @@
+import 'assets/css/panel';
+import panelTemplate from 'templates/panel';
 import Position from './Position';
 import Utils from '../util/Utils';
-import Exception from '../exception/exception';
-import Base from '../Base';
 import MObject from '../Object';
 import EvtManager from '../event/Manager';
-import panelTemplate from "templates/panel";
 import ControlBase from '../control/Control';
 import Template from '../util/Template';
 
@@ -20,7 +19,6 @@ export default class Panel extends MObject {
    * @api stable
    */
   constructor(name, options = {}) {
-
     // calls the super constructor
     super();
 
@@ -59,7 +57,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.collapsible_ = false;
-    if (Utils.isNullOrEmpty(options.collapsible)) {
+    if (!Utils.isNullOrEmpty(options.collapsible)) {
       this.collapsible_ = options.collapsible;
     }
 
@@ -70,7 +68,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.position = Position.TL;
-    if (Utils.isNullOrEmpty(options.position)) {
+    if (!Utils.isNullOrEmpty(options.position)) {
       this.position = options.position;
     }
 
@@ -80,7 +78,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.collapsed_ = this.collapsible_;
-    if (Utils.isNullOrEmpty(options.collapsed)) {
+    if (!Utils.isNullOrEmpty(options.collapsed)) {
       this.collapsed_ = (options.collapsed && (this.collapsible_ === true));
     }
 
@@ -90,7 +88,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.multiActivation_ = false;
-    if (Utils.isNullOrEmpty(options.multiActivation)) {
+    if (!Utils.isNullOrEmpty(options.multiActivation)) {
       this.multiActivation_ = options.multiActivation;
     }
 
@@ -100,7 +98,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.className_ = null;
-    if (Utils.isNullOrEmpty(options.className)) {
+    if (!Utils.isNullOrEmpty(options.className)) {
       this.className_ = options.className;
     }
 
@@ -109,15 +107,15 @@ export default class Panel extends MObject {
      * @type {string}
      * @expose
      */
-    this.collapsed_ButtonClass = null;
+    this.collapsedButtonClass_ = null;
     if (!Utils.isNullOrEmpty(options.collapsedButtonClass)) {
-      this.collapsed_ButtonClass = options.collapsedButtonClass;
+      this.collapsedButtonClass_ = options.collapsedButtonClass;
     }
     else if ((this.position === Position.TL) || (this.position === Position.BL)) {
-      this.collapsed_ButtonClass = 'g-cartografia-flecha-derecha';
+      this.collapsedButtonClass_ = 'g-cartografia-flecha-derecha';
     }
     else if ((this.position === Position.TR) || (this.position === Position.BR)) {
-      this.collapsed_ButtonClass = 'g-cartografia-flecha-izquierda';
+      this.collapsedButtonClass_ = 'g-cartografia-flecha-izquierda';
     }
 
     /**
@@ -156,7 +154,7 @@ export default class Panel extends MObject {
      * @type {HTMLElement}
      * @expose
      */
-    this.controls_Container = null;
+    this.controlsContainer_ = null;
 
     /**
      * @private
@@ -182,7 +180,7 @@ export default class Panel extends MObject {
     if (this.element_ != null) {
       this.areaContainer_.removeChild(this.element_);
     }
-    this.controls_Container = null;
+    this.controlsContainer_ = null;
   }
 
   /**
@@ -196,15 +194,15 @@ export default class Panel extends MObject {
   addTo(map, areaContainer) {
     this.map_ = map;
     this.areaContainer_ = areaContainer;
-    this.element_ = Template.compile(panelTemplate);
+    const html = Template.compile(panelTemplate);
+    this.element_ = html;
 
     if (!Utils.isNullOrEmpty(this.tooltip_)) {
-      this.element_.setAttribute("title", this.tooltip_);
+      this.element_.setAttribute('title', this.tooltip_);
     }
-    const html = Template.compile(panelTemplate);
     this.buttonPanel_ = html.querySelector('button.m-panel-btn');
     if (!Utils.isNullOrEmpty(this.className_)) {
-      this.className_.split(/\s+/).forEach(className => {
+      this.className_.split(/\s+/).forEach((className) => {
         html.classList.add(className);
       });
     }
@@ -220,10 +218,10 @@ export default class Panel extends MObject {
       html.classList.add('no-collapsible');
     }
 
-    this.controls_Container = html.querySelector('div.m-panel-controls');
-    html.appendChild(areaContainer);
+    this.controlsContainer_ = html.querySelector('div.m-panel-controls');
+    areaContainer.appendChild(html);
 
-    this.buttonPanel_.addEventListener('click', evt => {
+    this.buttonPanel_.addEventListener('click', (evt) => {
       evt.preventDefault();
       if (this.collapsed_ === false) {
         this.collapse_(html, this.buttonPanel_);
@@ -247,7 +245,7 @@ export default class Panel extends MObject {
     html.classList.remove('opened');
     this.buttonPanel_.classList.remove(this.openedButtonClass_);
     html.classList.add('collapsed');
-    this.buttonPanel_.classList.add(this.collapsed_ButtonClass);
+    this.buttonPanel_.classList.add(this.collapsedButtonClass_);
     this.collapsed_ = true;
     this.fire(EvtManager.HIDE);
   }
@@ -260,7 +258,7 @@ export default class Panel extends MObject {
    */
   open_(html) {
     html.classList.remove('collapsed');
-    this.buttonPanel_.classList.remove(this.collapsed_ButtonClass);
+    this.buttonPanel_.classList.remove(this.collapsedButtonClass_);
     html.classList.add('opened');
     this.buttonPanel_.classList.add(this.openedButtonClass_);
     this.collapsed_ = false;
@@ -307,25 +305,26 @@ export default class Panel extends MObject {
    * @param {array<M.Control>} controls
    * @api stable
    */
-  addControls(controls) {
+  addControls(controlsParam) {
+    let controls = controlsParam;
     if (!Utils.isNullOrEmpty(controls)) {
       if (!Utils.isArray(controls)) {
         controls = [controls];
       }
-      controls.forEach(control => {
+      controls.forEach((control) => {
         if (control instanceof ControlBase) {
           if (!this.hasControl(control)) {
             this.controls_.push(control);
             control.setPanel(this);
             control.on(EvtManager.DESTROY, this.removeControl_, this);
           }
-          if (!Utils.isNullOrEmpty(this.controls_Container)) {
+          if (!Utils.isNullOrEmpty(this.controlsContainer_)) {
             control.on(EvtManager.ADDED_TO_MAP, this.moveControlView_, this);
             this.map_.addControls(control);
           }
           control.on(EvtManager.ACTIVATED, this.manageActivation_, this);
         }
-      }, this);
+      });
     }
   }
 
@@ -338,7 +337,7 @@ export default class Panel extends MObject {
    * @api stable
    */
   hasControl(controlParam) {
-    var hasControl = false;
+    let hasControl = false;
     if (!Utils.isNullOrEmpty(controlParam)) {
       if (Utils.isString(controlParam)) {
         hasControl = this.controls_.filter(control => control.name === controlParam)[0] != null;
@@ -358,12 +357,13 @@ export default class Panel extends MObject {
    * @param {array<M.Control>} controls
    * @api stable
    */
-  removeControls(controls) {
+  removeControls(controlsParam) {
+    let controls = controlsParam;
     if (!Utils.isNullOrEmpty(controls)) {
       if (!Utils.isArray(controls)) {
         controls = [controls];
       }
-      controls.forEach(control => {
+      controls.forEach((control) => {
         if ((control instanceof ControlBase) && this.hasControl(control)) {
           this.controls_.remove(control);
           control.panel = null;
@@ -386,9 +386,9 @@ export default class Panel extends MObject {
    * @api stable
    */
   removeControl_(controlsParam) {
-    let controls = this.map_.controls(controlsParam);
-    controls.forEach(control => {
-      let index = this.controls_.indexOf(control);
+    const controls = this.map_.controls(controlsParam);
+    controls.forEach((control) => {
+      const index = this.controls_.indexOf(control);
       if (index !== -1) {
         this.controls_.splice(index, 1);
       }
@@ -438,9 +438,9 @@ export default class Panel extends MObject {
    * @api stable
    */
   moveControlView_(control) {
-    let controlElem = control.getElement();
-    if (!Utils.isNullOrEmpty(this.controls_Container)) {
-      this.controls_Container.appendChild(controlElem);
+    const controlElem = control.getElement();
+    if (!Utils.isNullOrEmpty(this.controlsContainer_)) {
+      this.controlsContainer_.appendChild(controlElem);
     }
     control.fire(EvtManager.ADDED_TO_PANEL);
   }
@@ -455,7 +455,7 @@ export default class Panel extends MObject {
    */
   manageActivation_(control) {
     if (this.multiActivation_ !== true) {
-      this.controls_.forEach(panelControl => {
+      this.controls_.forEach((panelControl) => {
         if (!panelControl.equals(control) && panelControl.activated) {
           panelControl.deactivate();
         }
@@ -472,7 +472,7 @@ export default class Panel extends MObject {
    * @api stable
    */
   equals(obj) {
-    var equals = false;
+    let equals = false;
     if (obj instanceof Panel) {
       equals = (obj.name === this.name);
     }

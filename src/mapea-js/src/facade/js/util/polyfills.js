@@ -7,6 +7,7 @@ const polyfill = () => {
    * compare elements using that function
    * @expose
    */
+  /* eslint-disable */
   if (![].includes) {
     /**
      *
@@ -211,5 +212,6 @@ const polyfill = () => {
   }
 };
 
-//exec the polifyll
+// exec the polifyll
 polyfill()
+/* eslint-enable xxdd*/

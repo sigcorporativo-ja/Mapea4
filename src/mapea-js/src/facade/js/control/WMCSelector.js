@@ -1,3 +1,4 @@
+import 'assets/css/controls/wmcselector';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';

@@ -23,12 +23,13 @@ import Panzoombar from "./control/Panzoombar";
 import Layer from "./layer/Layer";
 import LayerType from "./layer/Type";
 import Vector from "./layer/Vector";
-// import KML from "./layer/KML";
+import KML from "./layer/KML";
 import WFS from "./layer/WFS";
 import WMC from "./layer/WMC";
 import WMS from "./layer/WMS";
 import WMTS from "./layer/WMTS";
 import OSM from "./layer/OSM";
+import Mapbox from "./layer/Mapbox";
 import Panel from './ui/Panel';
 import Position from './ui/Position';
 import Control from "./control/Control";
@@ -562,7 +563,8 @@ export default class Map extends Base {
             wmcLayers.push(new WMC(layerParam, layerParam.options));
           }
           catch (err) {
-            Dialog.error(err);
+            Dialog.error(err.toString());
+            throw err;
           }
         }
       });
@@ -913,7 +915,8 @@ export default class Map extends Base {
             wfsLayer = new WFS(layerParam, layerParam.options);
           }
           catch (err) {
-            Dialog.error(err);
+            Dialog.error(err.toString());
+            throw err;
           }
         }
         this.featuresHandler_.addLayer(wfsLayer);
@@ -1171,7 +1174,7 @@ export default class Map extends Base {
       // gets the parameters as Control to add them
       let controls = [];
       //for (let i = 0, ilen = controlsParam.length; i < ilen; i++) {
-      controlsParam.forEach(controlParam => {
+      controlsParam.forEach((controlParam) => {
         let control;
         let panel;
         if (Utils.isString(controlParam)) {
@@ -1457,7 +1460,8 @@ export default class Map extends Base {
       this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
     }
     catch (err) {
-      Dialog.error(err);
+      Dialog.error(err.toString());
+      throw err;
     }
     return this;
   }
@@ -1563,7 +1567,8 @@ export default class Map extends Base {
       this.getImpl().setZoom(zoom);
     }
     catch (err) {
-      Dialog.error(err);
+      Dialog.error(err.toString());
+      throw err;
     }
 
     return this;
@@ -1613,7 +1618,7 @@ export default class Map extends Base {
 
     // parses the parameter
     try {
-      let center = Parameter.center(centerParam);
+      let center = parameter.center(centerParam);
       this.getImpl().setCenter(center);
       if (center.draw === true) {
         this.drawLayer_.clear();
@@ -1641,7 +1646,8 @@ export default class Map extends Base {
       }
     }
     catch (err) {
-      Dialog.error(err);
+      Dialog.error(err.toString());
+      throw err;
     }
 
     return this;
@@ -1791,7 +1797,8 @@ export default class Map extends Base {
       this.fire(EventsManager.CHANGE_PROJ, [oldProj, projection]);
     }
     catch (err) {
-      Dialog.error(err);
+      Dialog.error(err.toString());
+      throw err;
       if (String(err).indexOf("El formato del parámetro projection no es correcto") >= 0) {
         this.setProjection(Config.DEFAULT_PROJ, true);
       }
@@ -2231,11 +2238,13 @@ export default class Map extends Base {
       if (!Utils.isArray(names)) {
         names = [names];
       }
-      names.forEach(name => {
-        let panel = this.panels_.filter(panel => panel["name"] === name);
-        if (!Utils.isNullOrEmpty(panel)) {
-          panels.push(panel);
-        }
+      names.forEach((name) => {
+        const filteredPanels = this.panels_.filter(panel => panel["name"] === name)
+        filteredPanels.forEach((panel) => {
+          if (!Utils.isNullOrEmpty(panel)) {
+            panels.push(panel);
+          }
+        });
       });
     }
 
@@ -2415,6 +2424,16 @@ export default class Map extends Base {
     }
     this.getLayers().forEach(layer => layer.refresh());
     return this;
+  }
+
+  /**
+   * Getter of defaultProj_ attribute
+   * @public
+   * @function
+   * @api stable
+   */
+  get defaultProj() {
+    return this.defaultProj_;
   }
 
   /**

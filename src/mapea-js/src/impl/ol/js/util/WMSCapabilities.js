@@ -1,5 +1,5 @@
 import Utils from 'facade/js/util/Utils';
-// import WMS from 'facade/js/layer/WMS';
+import WMS from 'facade/js/layer/WMS';
 
 /**
  * @namespace M.impl.GetCapabilities

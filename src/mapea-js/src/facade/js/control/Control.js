@@ -188,7 +188,7 @@ export default class ControlBase extends Base {
     if (!Utils.isNullOrEmpty(this.element_)) {
       this.element_.classList.add('activated');
     }
-    if (!Utils.isUndefined(this.impl().activate)) {
+    if (!Utils.isUndefined(this.getImpl().activate)) {
       this.getImpl().activate();
     }
     this.activated = true;

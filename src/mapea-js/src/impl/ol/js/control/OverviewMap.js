@@ -119,6 +119,36 @@ export default class OverviewMap extends ol.control.OverviewMap {
     this.getOverviewMap().addLayer(layer.getOL3Layer());
   }
 
+  /**
+   * @override ol.control.Control.prototype
+   */
+  handleToggle_() {
+    Utils.classToggle(this.element, 'ol-collapsed');
+    const button = this.element.querySelector('button');
+    Utils.classToggle(button, this.openedButtonClass_);
+    Utils.classToggle(button, this.collapsedButtonClass_);
+
+    setTimeout(() => {
+      if (this.collapsed_) {
+        Utils.replaceNode(this.collapseLabel_, this.label_);
+      }
+      else {
+        Utils.replaceNode(this.label_, this.collapseLabel_);
+      }
+      this.collapsed_ = !this.collapsed_;
+
+      // manage overview map if it had not been rendered before and control
+      // is expanded
+      const ovmap = this.ovmap_;
+      if (!this.collapsed_ && !ovmap.isRendered()) {
+        ovmap.updateSize();
+        this.resetExtent_();
+        ovmap.addEventListener('postrender', (event) => {
+          this.updateBox_();
+        });
+      }
+    }, this.toggleDelay_);
+  }
 
   /**
    * This function destroys this control, cleaning the HTML

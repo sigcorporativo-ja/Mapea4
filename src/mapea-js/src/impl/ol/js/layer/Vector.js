@@ -125,7 +125,7 @@ export default class Vector extends Layer {
   addFeatures(features, update) {
     features.forEach((newFeature) => {
       this.features_.find(feature => feature.equals(newFeature));
-      if (Utils.isNul(newFeature)) {
+      if (Utils.isNullOrEmpty(newFeature)) {
         this.features_.push(newFeature);
       }
     });

@@ -25,7 +25,7 @@ export default class Template {
       parseToHtml = options.parseToHtml;
     }
     const templateFn = Handlebars.compile(string);
-    const htmlText = templateFn.call(null, templateVars);
+    const htmlText = templateFn(templateVars);
     if (parseToHtml !== false) {
       template = Utils.stringToHtml(htmlText);
     }

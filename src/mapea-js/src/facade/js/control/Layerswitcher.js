@@ -1,16 +1,14 @@
+import 'assets/css/controls/layerswitcher';
+import LayerSwitcherImpl from 'impl/control/Layerswitcher';
+import layerswitcherTemplate from 'templates/layerswitcher';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import LayerBase from '../layer/Layer';
 import LayerType from '../layer/Type';
-import Map from '../Map';
 import Vector from '../layer/Vector';
 import StylePoint from '../style/Point';
-import LayerSwitcherImpl from 'impl/control/Layerswitcher';
 import EvtManager from '../event/Manager';
-import layerswitcherTemplate from "templates/layerswitcher";
-import 'assets/css/controls/layerswitcher';
 
 export default class LayerSwitcher extends ControlBase {
   /**
@@ -26,7 +24,7 @@ export default class LayerSwitcher extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new LayerSwitcherImpl();
+    const impl = new LayerSwitcherImpl();
     // calls the super constructor
     super(impl, LayerSwitcher.NAME);
 
@@ -40,9 +38,9 @@ export default class LayerSwitcher extends ControlBase {
    */
   addTo(map) {
     this.map_ = map;
-    let impl = this.getImpl();
-    let view = this.createView(map);
-    view.then(html => {
+    const impl = this.getImpl();
+    const view = this.createView(map);
+    view.then((html) => {
       this.manageActivation(html);
       impl.addTo(map, html);
       this.fire(EvtManager.ADDED_TO_MAP);
@@ -60,8 +58,10 @@ export default class LayerSwitcher extends ControlBase {
    */
   createView(map) {
     return new Promise((resolve) => {
-      LayerSwitcher.getTemplateVariables(map).then(templateVars => {
-        let html = Template.compile(layerswitcherTemplate, templateVars);
+      LayerSwitcher.getTemplateVariables(this.map_).then((templateVars) => {
+        const html = Template.compile(layerswitcherTemplate, {
+          vars: templateVars,
+        });
         resolve(html);
       });
     });
@@ -74,10 +74,12 @@ export default class LayerSwitcher extends ControlBase {
    * @function
    * @api stable
    */
+  /* eslint-disable */
   equals(obj) {
     let equals = (obj instanceof LayerSwitcher);
     return equals;
   }
+  /* eslint-enable */
 
   /**
    * This function registers events on map and layers to render
@@ -118,28 +120,26 @@ export default class LayerSwitcher extends ControlBase {
     return new Promise((success, fail) => {
       // gets base layers and overlay layers
       if (!Utils.isNullOrEmpty(map)) {
-        let baseLayers = map.getBaseLayers().filter(layer => LayerBase.displayInLayerSwitcher === true);
-        let overlayLayers = map.getLayers().filter((layer) => {
-          let isTransparent = (LayerBase.transparent === true);
-          let displayInLayerSwitcher = (LayerBase.displayInLayerSwitcher === true);
-          let isNotWMC = (LayerType !== LayerType.WMC);
-          let isNotWMSFull = !((LayerType === LayerType.WMS) && Utils.isNullOrEmpty(LayerBase.name));
+        const baseLayers = map.getBaseLayers()
+          .filter(layer => layer.displayInLayerSwitcher === true);
+        const overlayLayers = map.getLayers().filter((layer) => {
+          const isTransparent = (layer.transparent === true);
+          const displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
+          const isNotWMC = (LayerType !== LayerType.WMC);
+          const isNotWMSFull = !((LayerType === LayerType.WMS) && Utils.isNullOrEmpty(layer.name));
           return (isTransparent && isNotWMC && isNotWMSFull && displayInLayerSwitcher);
         }).reverse();
 
-        let baseLayersPromise = Promise.all(baseLayers.map(LayerSwitcher.parseLayerForTemplate_));
-        let overlayLayersPromise = Promise.all(overlayLayers.map(LayerSwitcher.parseLayerForTemplate_));
-        baseLayersPromise.then(parsedBaseLayers => {
+        const baseLayersPromise = Promise.all(baseLayers.map(LayerSwitcher.parseLayerForTemplate));
+        const overlayLayersPromise = Promise.all(overlayLayers
+          .map(LayerSwitcher.parseLayerForTemplate));
+        baseLayersPromise.then((parsedBaseLayers) => {
           overlayLayersPromise.then(parsedOverlayLayers => success({
-            'baseLayers': parsedBaseLayers,
-            'overlayLayers': parsedOverlayLayers
+            baseLayers: parsedBaseLayers,
+            overlayLayers: parsedOverlayLayers,
           }));
         });
       }
-      // success({
-      //   'baseLayers': baseLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_),
-      //   'overlayLayers': overlayLayers.map(M.control.LayerSwitcher.parseLayerForTemplate_)
-      // });
     });
   }
 
@@ -150,49 +150,40 @@ export default class LayerSwitcher extends ControlBase {
    * @private
    * @function
    */
-  static parseLayerForTemplate_(layer) {
-    let layerTitle = LayerBase.legend;
+  static parseLayerForTemplate(layer) {
+    let layerTitle = layer.legend;
     if (Utils.isNullOrEmpty(layerTitle)) {
-      layerTitle = LayerBase.name;
+      layerTitle = layer.name;
     }
     if (Utils.isNullOrEmpty(layerTitle)) {
       layerTitle = 'Servicio WMS';
     }
-    // return new Promise((success, fail) => success({
-    //   'base': (LayerBase.transparent === false),
-    //   'visible': (LayerBase.isVisible() === true),
-    //   'id': LayerBase.name,
-    //   'title': layerTitle,
-    //   'legend': LayerBase.getLegendURL(),
-    //   'outOfRange': !LayerBase.inRange(),
-    //   'opacity': LayerBase.getOpacity()
-    // }));
     let isIcon = false;
     if (layer instanceof Vector) {
-      let style = LayerBase.style();
+      const style = layer.getStyle();
       if (style instanceof StylePoint && !Utils.isNullOrEmpty(style.get('icon.src'))) {
         isIcon = true;
       }
     }
     return new Promise((success, fail) => {
-      let layerVarTemplate = {
-        'base': (LayerBase.transparent === false),
-        'visible': (LayerBase.isVisible() === true),
-        'id': LayerBase.name,
-        'title': layerTitle,
-        'outOfRange': !LayerBase.inRange(),
-        'opacity': LayerBase.getOpacity(),
-        'isIcon': isIcon
+      const layerVarTemplate = {
+        base: (layer.transparent === false),
+        visible: (layer.isVisible() === true),
+        id: layer.name,
+        title: layerTitle,
+        outOfRange: !layer.inRange(),
+        opacity: layer.getOpacity(),
+        isIcon,
       };
-      let legendUrl = LayerBase.getLegendURL();
+      const legendUrl = layer.getLegendURL();
       if (legendUrl instanceof Promise) {
-        legendUrl.then(url => {
-          layerVarTemplate['legend'] = url;
+        legendUrl.then((url) => {
+          layerVarTemplate.legend = url;
           success(layerVarTemplate);
         });
       }
       else {
-        layerVarTemplate['legend'] = legendUrl;
+        layerVarTemplate.legend = legendUrl;
         success(layerVarTemplate);
       }
     });

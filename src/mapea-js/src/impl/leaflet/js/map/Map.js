@@ -3,7 +3,7 @@ import Utils from "facade/js/util/Utils";
 import Config from "Configuration";
 import Exception from "facade/js/exception/Exception";
 import LayerType from "facade/js/layer/Type";
-// import WMS from "facade/js/layer/WMS";
+import WMS from "facade/js/layer/WMS";
 import WFS from "facade/js/layer/WFS";
 import WMC from "facade/js/layer/WMC";
 import Panzoombar from "facade/js/control/Panzoombar";

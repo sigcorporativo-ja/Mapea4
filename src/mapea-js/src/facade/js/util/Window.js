@@ -1,11 +1,13 @@
 /**
  * @namespace M.window
  */
-export default class Window {
-  static listen_() {
+export default class MWindow {
+  static listen() {
+    MWindow.WIDTH = window.innerWidth;
+    MWindow.HEIGHT = window.innerHeight;
     window.addEventListener('resize', (e) => {
-      Window.WIDTH = e.target.innerWidth;
-      Window.HEIGHT = e.target.innerHeight;
+      MWindow.WIDTH = e.target.innerWidth;
+      MWindow.HEIGHT = e.target.innerHeight;
     });
   }
 }
@@ -17,7 +19,7 @@ export default class Window {
  * @api stable
  * @expose
  */
-Window.WIDTH = window.innerWidth;
+MWindow.WIDTH = window.innerWidth;
 
 /**
  * TODO
@@ -26,7 +28,7 @@ Window.WIDTH = window.innerWidth;
  * @api stable
  * @expose
  */
-Window.HEIGHT = window.innerHeight;
+MWindow.HEIGHT = window.innerHeight;
 
 // Starting listen resize event
-Window.listen_();
+MWindow.listen();

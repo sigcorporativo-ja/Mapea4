@@ -9,7 +9,7 @@ import Exception from 'facade/js/exception/exception';
 import Utils from 'facade/js/util/Utils';
 import View from './View';
 import EnvolvedExtent from './util/EnvolvedExtent';
-import 'impl-assets/css/ol3.css';
+import 'impl-assets/css/ol.css';
 import 'impl-assets/css/custom.css';
 
 export default class Map extends MObject {
@@ -145,7 +145,7 @@ export default class Map extends MObject {
     const wmsLayers = this.getWMS(filters);
     const wfsLayers = this.getWFS(filters);
     const wmtsLayers = this.getWMTS(filters);
-    const mbtilesLayers = Map.getMBtiles(filters);
+    const mbtilesLayers = this.getMBtiles(filters);
     const unknowLayers = this.getUnknowLayers_(filters);
 
     return wmcLayers.concat(kmlLayers).concat(wmsLayers)
@@ -871,7 +871,7 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.MBtiles>} layers from the map
    * @api stable
    */
-  static getMBtiles(filters) {
+  getMBtiles(filters) {
     const foundLayers = [];
     return foundLayers;
   }
@@ -906,7 +906,7 @@ export default class Map extends MObject {
    * @api stable
    */
   removeMBtiles(layers) {
-    const mbtilesMapLayers = Map.getMBtiles(layers);
+    const mbtilesMapLayers = this.getMBtiles(layers);
     mbtilesMapLayers.forEach((mbtilesLayer) => {
       // TODO removing the MBtiles layer with ol3
       this.layers_.remove(mbtilesLayer);

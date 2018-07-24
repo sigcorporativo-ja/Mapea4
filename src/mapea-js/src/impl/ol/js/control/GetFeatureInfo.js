@@ -85,7 +85,7 @@ export default class GetFeatureInfo extends Control {
     else {
       this.userFormat = 'text/html';
     }
-    olMap.on('singleclick', this.buildUrl_, this);
+    olMap.on('singleclick', this.buildUrl_(Dialog).bind(this));
   }
 
   /**
@@ -95,41 +95,43 @@ export default class GetFeatureInfo extends Control {
    * @function
    * @param {ol.MapBrowserPointerEvent} evt - Browser point event
    */
-  buildUrl_(evt) {
-    const olMap = this.facadeMap_.getMapImpl();
-    const viewResolution = olMap.getView().getResolution();
-    const srs = this.facadeMap_.getProjection().code;
-    const layerNamesUrls = [];
-    this.facadeMap_.getWMS().forEach((layer) => {
-      const olLayer = layer.getImpl().getOL3Layer();
-      if (layer.isVisible() && layer.isQueryable() && !Utils.isNullOrEmpty(olLayer)) {
-        const getFeatureInfoParams = {
-          INFO_FORMAT: this.userFormat,
-          FEATURE_COUNT: this.featureCount,
-        };
-        if (!/buffer/i.test(layer.url)) {
-          getFeatureInfoParams.Buffer = this.buffer;
+  buildUrl_(dialog) {
+    return (evt) => {
+      const olMap = this.facadeMap_.getMapImpl();
+      const viewResolution = olMap.getView().getResolution();
+      const srs = this.facadeMap_.getProjection().code;
+      const layerNamesUrls = [];
+      this.facadeMap_.getWMS().forEach((layer) => {
+        const olLayer = layer.getImpl().getOL3Layer();
+        if (layer.isVisible() && layer.isQueryable() && !Utils.isNullOrEmpty(olLayer)) {
+          const getFeatureInfoParams = {
+            INFO_FORMAT: this.userFormat,
+            FEATURE_COUNT: this.featureCount,
+          };
+          if (!/buffer/i.test(layer.url)) {
+            getFeatureInfoParams.Buffer = this.buffer;
+          }
+          const url = olLayer.getSource().getGetFeatureInfoUrl(
+            evt.coordinate,
+            viewResolution,
+            srs,
+            getFeatureInfoParams,
+          );
+          layerNamesUrls.push({
+            /** @type {String} */
+            layer: layer.name,
+            /** @type {String} */
+            url,
+          });
         }
-        const url = olLayer.getSource().getGetFeatureInfoUrl(
-          evt.coordinate,
-          viewResolution,
-          srs,
-          getFeatureInfoParams,
-        );
-        layerNamesUrls.push({
-          /** @type {String} */
-          layer: layer.name,
-          /** @type {String} */
-          url,
-        });
+      });
+      if (layerNamesUrls.length > 0) {
+        this.showInfoFromURL_(layerNamesUrls, evt.coordinate, olMap);
       }
-    }, this);
-    if (layerNamesUrls.length > 0) {
-      this.showInfoFromURL_(layerNamesUrls, evt.coordinate, olMap);
-    }
-    else {
-      Dialog.info('No existen capas consultables');
-    }
+      else {
+        dialog.info('No existen capas consultables');
+      }
+    };
   }
 
   /**

@@ -1,6 +1,6 @@
-/*	Copyright (c) 2015 Jean-Marc VIGLINO,
-	released under the CeCILL-B license (French BSD license)
-	(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
+/* Copyright (c) 2015 Jean-Marc VIGLINO,
+released under the CeCILL-B license (French BSD license)
+(http://www.cecill.info/licences/Licence_CeCILL-B_V1-en.txt).
 
 *  Add a marker style to use with font symbols
 */
@@ -8,7 +8,8 @@
  * @requires ol.style.Circle
  * @requires ol.structs.IHasChecksum
  */
-
+// TODO
+/* eslint-disable */
 
 /**
  * @classdesc

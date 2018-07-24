@@ -1,6 +1,5 @@
 const path = require('path');
 const webpack = require('webpack');
-const argv = require('yargs').argv;
 
 const env = process.env.NODE_ENV || 'development';
 const plugins = [];
@@ -56,11 +55,11 @@ module.exports = {
           },
         },
       },
-      // {
-      //   test: /\.js$/,
-      //   loader: 'eslint-loader',
-      //   exclude: /node_modules/,
-      // },
+      {
+        test: /\.js$/,
+        loader: 'eslint-loader',
+        exclude: [/node_modules/, /lib/, /test/],
+      },
       {
         test: [/\.hbs$/, /\.html$/],
         loader: 'html-loader',
@@ -69,12 +68,12 @@ module.exports = {
       {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
-        exclude: /node_modules/,
+        exclude: [/node_modules/],
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg)$/,
         exclude: /node_modules/,
-        loader: 'file-loader',
+        loader: 'url-loader?name=fonts/[name].[ext]',
       }],
   },
   plugins: [...plugins],

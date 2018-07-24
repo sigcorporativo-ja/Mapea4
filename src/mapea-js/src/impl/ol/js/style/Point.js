@@ -14,17 +14,6 @@ import PointCircle from '../point/Circle';
 
 export default class Point extends Simple {
   /**
-   * Main constructor of the class.
-   * @constructor
-   * @implements {Simple}
-   * @api stable
-   */
-  constructor(options) {
-    super(options);
-    // this.olStyleFn_ = null;
-  }
-
-  /**
    * This function returns data url to canvas
    *
    * @function
@@ -69,7 +58,7 @@ export default class Point extends Simple {
         if (style.getImage().getStroke().getWidth() > Point.DEFAULT_WIDTH_POINT) {
           style.getImage().getStroke().setWidth(Point.DEFAULT_WIDTH_POINT);
         }
-        style.getImage().render_();
+        style.getImage().render();
       }
       const imageCanvas = style.getImage().getImage();
       if (imageCanvas != null) {

@@ -1,4 +1,4 @@
-import Handlebars from "handlebars";
+import Handlebars from 'handlebars';
 
 const helpers = () => {
   /**
@@ -10,7 +10,7 @@ const helpers = () => {
       return options.fn(this);
     }
     return options.inverse(this);
-  })
+  });
 
   /**
    * Helpers for Handlebars wich compares if the
@@ -21,7 +21,7 @@ const helpers = () => {
       return options.fn(this);
     }
     return options.inverse(this);
-  })
+  });
 
   /**
    * Helpers for Handlebars wich compares if the
@@ -32,8 +32,8 @@ const helpers = () => {
       return options.fn(this);
     }
     return options.inverse(this);
-  })
-}
+  });
+};
 
 // Exec the register helpers
 helpers();

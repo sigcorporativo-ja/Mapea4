@@ -1,9 +1,10 @@
+import 'assets/css/controls/scale';
+import scaleTemplate from "templates/scale";
+import ScaleImpl from 'impl/control/Scale';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import ScaleImpl from 'impl/control/Scale';
-import scaleTemplate from "templates/scale.html"
 
 export default class Scale extends ControlBase {
   /**
@@ -19,7 +20,7 @@ export default class Scale extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new ScaleImpl();
+    const impl = new ScaleImpl();
 
     // calls the super constructor
     super(impl, Scale.NAME);

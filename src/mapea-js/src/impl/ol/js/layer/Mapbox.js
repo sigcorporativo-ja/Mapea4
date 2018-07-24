@@ -2,10 +2,10 @@ import Utils from "facade/js/util/Utils";
 import ImplMap from "../Map";
 import FacadeOSM from "facade/js/layer/OSM";
 import FacadeMapbox from "facade/js/layer/Mapbox";
-import SourceMapbox from "../source/Mapbox";
 import EnvolvedExtent from "../util/EnvolvedExtent";
 import Layer from "./Layer";
 import LayerType from "facade/js/layer/Type";
+import Config from 'configuration';
 
 export default class Mapbox extends Layer {
   /**
@@ -92,10 +92,8 @@ export default class Mapbox extends Layer {
     this.map = map;
 
     this.ol3Layer = new ol.layer.Tile({
-      source: new SourceMapbox({
-        url: this.url,
-        name: this.name,
-        accessToken: this.accessToken,
+      source: new ol.source.XYZ({
+        url: `${this.url}${this.name}/{z}/{x}/{y}.png?${Config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
       }),
     });
 
@@ -114,6 +112,7 @@ export default class Mapbox extends Layer {
     }
 
     // recalculate resolutions
+    this.map.getMapImpl().updateSize();
     this.resolutions_ = Utils.generateResolutionsFromExtent(this.getExtent(), this.map.getMapImpl().getSize(), 16, this.map.getProjection().units);
 
     // sets its visibility if it is in range
@@ -156,7 +155,7 @@ export default class Mapbox extends Layer {
         }
       });
       // resolve the promise
-      promise.then(extent => {
+      promise.then((extent) => {
         let olExtent;
         if (Utils.isArray(extent)) {
           olExtent = extent;
@@ -164,17 +163,15 @@ export default class Mapbox extends Layer {
         else {
           olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
         }
-
-        let newSource = new SourceMapbox({
-          'url': this.url,
-          'name': this.name,
-          'accessToken': this.accessToken,
-          'tileGrid': new ol.tilegrid.TileGrid({
-            resolutions: resolutions,
-            extent: olExtent,
-            origin: ol.extent.getBottomLeft(olExtent)
-          }),
-          'extent': olExtent,
+        const newSource = new ol.source.XYZ({
+          url: `${this.url}${this.name}/{z}/{x}/{y}.png?${Config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
+          // tileGrid: new ol.tilegrid.TileGrid({
+          //   resolutions,
+          //   extent: olExtent,
+          //   origin: ol.extent.getBottomLeft(olExtent)
+          // }),
+          extent: olExtent,
+          resolutions,
           attributionControl: true
         });
         this.ol3Layer.setSource(newSource);
@@ -280,3 +277,12 @@ export default class Mapbox extends Layer {
     return equals;
   }
 }
+
+/**
+ * The attribution containing a link to the OpenStreetMap Copyright and License
+ * page.
+ * @const
+ * @type {ol.Attribution}
+ * @api
+ */
+Mapbox.ATTRIBUTION = '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a>';

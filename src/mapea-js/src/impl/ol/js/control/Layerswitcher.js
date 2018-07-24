@@ -47,11 +47,8 @@ export default class LayerSwitcher extends Control {
 
     // change slider event
     this.panel.addEventListener('input', this.clickLayer, false);
-
-    ol.control.Control.call(this, {
-      element,
-      target: null,
-    });
+    this.element = element;
+    this.target_ = null;
     olMap.addControl(this);
   }
 
@@ -125,7 +122,7 @@ export default class LayerSwitcher extends Control {
 
       this.registerViewEvents_(olMap.getView());
       this.registerLayersEvents_(olMap.getLayers());
-      olMap.on('change:view', this.onViewChange_, this);
+      olMap.on('change:view', () => this.onViewChange_);
     }
   }
 
@@ -142,7 +139,7 @@ export default class LayerSwitcher extends Control {
 
       this.unregisterViewEvents_(olMap.getView());
       this.unregisterLayersEvents_(olMap.getLayers());
-      olMap.un('change:view', this.onViewChange_, this);
+      olMap.un('change:view', () => this.onViewChange_);
     }
   }
 
@@ -150,49 +147,49 @@ export default class LayerSwitcher extends Control {
    * TODO
    */
   registerViewEvents_(view) {
-    view.on('change:resolution', this.renderPanel, this);
+    view.on('change:resolution', () => this.renderPanel);
   }
 
   /**
    * TODO
    */
   registerLayersEvents_(layers) {
-    layers.forEach(this.registerLayerEvents_, this);
-    layers.on('remove', this.renderPanel, this);
-    layers.on('add', this.onAddLayer_, this);
+    layers.forEach(this.registerLayerEvents_);
+    layers.on('remove', () => this.renderPanel);
+    layers.on('add', () => this.onAddLayer_);
   }
 
   /**
    * TODO
    */
   registerLayerEvents_(layer) {
-    layer.on('change:visible', this.renderPanel, this);
+    layer.on('change:visible', () => this.renderPanel);
     // layer.on('change:opacity', this.renderPanel, this);
-    layer.on('change:extent', this.renderPanel, this);
+    layer.on('change:extent', () => this.renderPanel);
   }
 
   /**
    * TODO
    */
   unregisterViewEvents_(view) {
-    view.un('change:resolution', this.renderPanel, this);
+    view.un('change:resolution', () => this.renderPanel);
   }
 
   /**
    * TODO
    */
   unregisterLayersEvents_(layers) {
-    layers.forEach(this.registerLayerEvents_, this);
-    layers.un('remove', this.renderPanel, this);
-    layers.un('add', this.onAddLayer_, this);
+    layers.forEach(this.unregisterLayerEvents_);
+    layers.un('remove', () => this.renderPanel);
+    layers.un('add', () => this.onAddLayer_);
   }
 
   /**
    * TODO
    */
   unregisterLayerEvents_(layer) {
-    layer.un('change:visible', this.renderPanel, this);
-    layer.un('change:extent', this.renderPanel, this);
+    layer.un('change:visible', () => this.renderPanel, this);
+    layer.un('change:extent', () => this.renderPanel, this);
   }
 
   /**

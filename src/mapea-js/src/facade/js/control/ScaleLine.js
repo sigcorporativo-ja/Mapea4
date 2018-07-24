@@ -1,9 +1,10 @@
+import 'assets/css/controls/scale';
+import ScaleLineImpl from 'impl/control/ScaleLine';
+import scalelineTemplate from 'templates/scaleline';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import ScalelineImpl from 'impl/control/ScaleLine';
-import scalelineTemplate from "templates/scaleline.html";
 
 export default class ScaleLine extends ControlBase {
   /**

@@ -793,7 +793,7 @@ const mapbox = (userParameters) => {
     userParametersArray = [userParametersArray];
   }
 
-  layers = userParametersArray.Map((userParam) => {
+  layers = userParametersArray.map((userParam) => {
     const layerObj = {};
 
     // gets the layer type
@@ -1729,7 +1729,7 @@ const WMS = (userParameters) => {
     userParametersArray = [userParametersArray];
   }
 
-  layers = userParametersArray.Map((userParam) => {
+  layers = userParametersArray.map((userParam) => {
     const layerObj = {};
 
     // gets the layer type
