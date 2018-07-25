@@ -1,12 +1,11 @@
-import Utils from "./util/Utils";
-import Exception from "./exception/exception";
-import Base from "./Base";
-import PopupImpl from "impl/Popup";
-import Template from "./util/Template";
-import EventsManager from "./event/Manager";
-import MWindow from "./util/Window";
-import Config from "configuration";
+import PopupImpl from 'impl/Popup';
+import Config from 'configuration';
 import 'assets/css/popup';
+import Utils from './util/Utils';
+import Base from './Base';
+import Template from './util/Template';
+import EventsManager from './event/Manager';
+import MWindow from './util/Window';
 
 class Tab {
   /**
@@ -57,7 +56,7 @@ export default class Popup extends Base {
    * @api stable
    */
   constructor(options) {
-    let impl = new Impl(options);
+    const impl = new PopupImpl(options);
     // calls the super constructor
     super(impl);
 
@@ -98,7 +97,7 @@ export default class Popup extends Base {
    */
   getTabs() {
     return this.tabs_;
-  };
+  }
 
   /**
    * TODO
@@ -136,11 +135,11 @@ export default class Popup extends Base {
     this.map_ = map;
     if (Utils.isNullOrEmpty(this.element_)) {
       Template.compile(Popup.TEMPLATE, {
-        'jsonp': true,
-        'vars': {
-          'tabs': this.tabs_
-        }
-      }).then(html => {
+        jsonp: true,
+        vars: {
+          tabs: this.tabs_,
+        },
+      }).then((html) => {
         if (this.tabs_.length > 0) {
           this.element_ = html;
           this.addEvents(html);
@@ -164,11 +163,11 @@ export default class Popup extends Base {
   update() {
     if (!Utils.isNullOrEmpty(this.map_)) {
       Template.compile(Popup.TEMPLATE, {
-        'jsonp': true,
-        'vars': {
-          'tabs': this.tabs_
-        }
-      }).then(html => {
+        jsonp: true,
+        vars: {
+          tabs: this.tabs_,
+        },
+      }).then((html) => {
         if (this.tabs_.length > 0) {
           this.element_ = html;
           this.addEvents(html);
@@ -213,7 +212,7 @@ export default class Popup extends Base {
    */
   switchTab(index) {
     if (this.tabs_.length > index) {
-      let tab = this.tabs_[index];
+      const tab = this.tabs_[index];
       this.setContent_(tab.content);
       this.show(this.coord_);
     }
@@ -242,34 +241,33 @@ export default class Popup extends Base {
    * @private
    * @function
    */
-  addEvents(html) {
-    const eventListener = evt => {
-      evt.preventDefault();
-      // 5px tolerance
-      let touchendY = evt.clientY;
-      if ((evt.type === "click") || (Math.abs(touchstartY - touchendY) < 5)) {
-        // remove m-activated from all tabs
-        Array.prototype.forEach.call(tabs, addedTab => {
-          addedTab.classList.remove('m-activated');
-        });
-        tab.classList.add('m-activated');
-        let index = tab.getAttribute('data-index');
-        this.switchTab(index);
-      }
-    };
+  addEvents(htmlParam) {
+    const html = htmlParam;
 
     // adds tabs events
     let touchstartY;
-    let tabs = html.querySelectorAll('div.m-tab');
-    Array.prototype.forEach.call(tabs, tab => {
-      tab.addEventListener('click', eventListener, false);
-      tab.addEventListener('touchend', eventListener, false);
+    const tabs = html.querySelectorAll('div.m-tab');
+    Array.prototype.forEach.call(tabs, (tab) => {
+      goog.events.listen(tab, ['click', 'touchend'], (evt) => {
+        evt.preventDefault();
+        // 5px tolerance
+        const touchendY = evt.clientY;
+        if ((evt.type === 'click') || (Math.abs(touchstartY - touchendY) < 5)) {
+          // remove m-activated from all tabs
+          Array.prototype.forEach.call(tabs, (addedTab) => {
+            addedTab.classList.remove('m-activated');
+          });
+          tab.classList.add('m-activated');
+          const index = tab.getAttribute('data-index');
+          this.switchTab(index);
+        }
+      }, false);
     });
 
     // adds close event
-    let closeBtn = html.querySelector('a.m-popup-closer');
-    closeBtn.addEventListener("click", this.hide, false);
-    closeBtn.addEventListener("touchend", this.hide, false);
+    const closeBtn = html.querySelector('a.m-popup-closer');
+    closeBtn.addEventListener('click', this.hide, false);
+    closeBtn.addEventListener('touchend', this.hide, false);
     // mobile events
     let headerElement = html.querySelector('div.m-tabs');
     if (Utils.isNullOrEmpty(headerElement)) {
@@ -277,7 +275,7 @@ export default class Popup extends Base {
     }
     if (!Utils.isNullOrEmpty(headerElement)) {
       let topPosition;
-      headerElement.addEventListener("touchstart", evt => {
+      headerElement.addEventListener('touchstart', (evt) => {
         evt.preventDefault();
         touchstartY = evt.clientY;
         if (this.status_ === Popup.status.COLLAPSED) {
@@ -292,26 +290,25 @@ export default class Popup extends Base {
         html.classList.add('m-no-animation');
       }, false);
 
-      headerElement.addEventListener('touchmove', evt => {
+      headerElement.addEventListener('touchmove', (evt) => {
         evt.preventDefault();
-        let touchY = evt.clientY;
-        let translatedPixels = touchY - touchstartY;
-        html.style.top = (topPosition + translatedPixels) + 'px';
+        const touchY = evt.clientY;
+        const translatedPixels = touchY - touchstartY;
+        html.style.top = `${topPosition + translatedPixels}px`;
       }, false);
 
-      headerElement.addEventListener("touchend", evt => {
+      headerElement.addEventListener('touchend', (evt) => {
         evt.preventDefault();
-        let touchendY = Evt.clientY;
+        const touchendY = evt.clientY;
         this.manageCollapsiblePopup_(touchstartY, touchendY);
       }, false);
 
       // CLICK EVENTS
-      headerElement.addEventListener("mouseup", evt => {
+      headerElement.addEventListener('mouseup', (evt) => {
         evt.preventDefault();
 
         // COLLAPSED --> DEFAULT
         if (this.tabs_.length <= 1) {
-
           if (this.status_ === Popup.status.COLLAPSED) {
             this.setStatus_(Popup.status.DEFAULT);
           }
@@ -337,7 +334,7 @@ export default class Popup extends Base {
       this.element_.classList.remove(this.status_);
       this.status_ = status;
       this.element_.classList.add(this.status_);
-      this.element_.style.top = "";
+      this.element_.style.top = '';
       this.element_.classList.remove('m-no-animation');
       // mobile center
       if (MWindow.WIDTH <= Config.MOBILE_WIDTH) {
@@ -352,12 +349,11 @@ export default class Popup extends Base {
    * @function
    */
   manageCollapsiblePopup_(touchstartY, touchendY) {
-    let touchPerc = (touchendY * 100) / MWindow.HEIGHT;
-    let distanceTouch = Math.abs(touchstartY - touchendY);
-    let distanceTouchPerc = (distanceTouch * 100) / MWindow.HEIGHT;
+    const touchPerc = (touchendY * 100) / MWindow.HEIGHT;
+    const distanceTouch = Math.abs(touchstartY - touchendY);
+    const distanceTouchPerc = (distanceTouch * 100) / MWindow.HEIGHT;
     // 10% tolerance
     if (distanceTouchPerc > 10) {
-
       /*
        * manages collapsing events depending on
        * the current position of the popup header and the direction
@@ -456,7 +452,7 @@ export default class Popup extends Base {
     this.tabs_.length = 0;
     this.coord_ = null;
     this.fire(EventsManager.DESTROY);
-  };
+  }
 }
 
 /**

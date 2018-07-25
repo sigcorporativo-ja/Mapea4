@@ -320,7 +320,8 @@ export default class Utils {
    * @returns {Array<Number>} the resolutions
    * @api stable
    */
-  static generateResolutionsFromExtent(extent, size, zoomLevels, units) {
+  static generateResolutionsFromExtent(extentParam, size, zoomLevels, units) {
+    let extent = extentParam;
     let [wExtent, hExtent] = [null, null];
     if (Utils.isArray(extent)) {
       wExtent = (extent[2] - extent[0]);
@@ -335,12 +336,12 @@ export default class Utils {
       wExtent = (extent[2] - extent[0]);
       hExtent = (extent[3] - extent[1]);
     }
-    let wResolution = wExtent / size[0];
-    let hResolution = hExtent / size[1];
+    const wResolution = wExtent / size[0];
+    const hResolution = hExtent / size[1];
 
-    let maxResolution = Math.max(wResolution, hResolution);
+    const maxResolution = Math.max(wResolution, hResolution);
 
-    let resolutions = Utils.fillResolutions(null, maxResolution, zoomLevels);
+    const resolutions = Utils.fillResolutions(null, maxResolution, zoomLevels);
 
     return resolutions;
   }
@@ -356,8 +357,10 @@ export default class Utils {
    * @returns {Array<Number>} the resolutions
    * @api stable
    */
-  static fillResolutions(minResolution, maxResolution, numZoomLevels) {
-    var resolutions = new Array(numZoomLevels);
+  static fillResolutions(minResolutionParam, maxResolutionParam, numZoomLevels) {
+    let minResolution = minResolutionParam;
+    let maxResolution = maxResolutionParam;
+    const resolutions = new Array(numZoomLevels);
 
     minResolution = Number.parseFloat(minResolution);
     maxResolution = Number.parseFloat(maxResolution);
@@ -366,19 +369,19 @@ export default class Utils {
     // the base for exponential scaling that starts at
     // maxResolution and ends at minResolution in numZoomLevels
     // steps.
-    var base = 2;
+    let base = 2;
     if (!Number.isNaN(minResolution)) {
-      base = Math.pow((maxResolution / minResolution), (1 / (numZoomLevels - 1)));
+      base = ((maxResolution / minResolution) ** (1 / (numZoomLevels - 1)));
     }
-    for (var i = 0; i < numZoomLevels; i++) {
-      resolutions[i] = maxResolution / Math.pow(base, i);
+    for (let i = 0; i < numZoomLevels; i += 1) {
+      resolutions[i] = maxResolution / (base ** i);
     }
-    //sort resolutions array descendingly
-    resolutions.sort(function(a, b) {
+    // sort resolutions array descendingly
+    resolutions.sort((a, b) => {
       return (b - a);
     });
     return resolutions;
-  };
+  }
   /**
    * This function calculates the resolution
    * for a provided scale
@@ -389,14 +392,15 @@ export default class Utils {
    * @returns {Number} the resolution for the specified scale
    * @api stable
    */
-  static getResolutionFromScale(scale, units) {
+  static getResolutionFromScale(scale, unitsParam) {
+    let units = unitsParam;
     let resolution;
     if (!Utils.isNullOrEmpty(scale)) {
       if (Utils.isNull(units)) {
         units = 'degrees';
       }
       // normalize scale
-      let normScale = (scale > 1.0) ? (1.0 / scale) : scale;
+      const normScale = (scale > 1.0) ? (1.0 / scale) : scale;
       resolution = 1 / (normScale * M.INCHES_PER_UNIT[units] * M.DOTS_PER_INCH);
     }
     return resolution;
@@ -412,12 +416,13 @@ export default class Utils {
    * @returns {Number} the scale for the specified resolution
    * @api stable
    */
-  static getScaleFromResolution(resolution, units) {
+  static getScaleFromResolution(resolution, unitsParam) {
+    let units = unitsParam;
     if (Utils.isNullOrEmpty(units)) {
       units = 'degrees';
     }
 
-    let scale = resolution * M.INCHES_PER_UNIT[units] * M.DOTS_PER_INCH;
+    const scale = resolution * M.INCHES_PER_UNIT[units] * M.DOTS_PER_INCH;
 
     return scale;
   }
@@ -431,7 +436,7 @@ export default class Utils {
     let html;
 
     if (!Utils.isNullOrEmpty(htmlTxt)) {
-      let div = document.createElement('div');
+      const div = document.createElement('div');
       div.innerHTML = htmlTxt;
       html = div.children[0];
     }
@@ -448,7 +453,7 @@ export default class Utils {
     let text;
 
     if (!Utils.isNullOrEmpty(html)) {
-      let div = document.createElement('div');
+      const div = document.createElement('div');
       div.appendChild(html);
       text = div.innerHTML;
     }
@@ -477,7 +482,7 @@ export default class Utils {
     beautifyString = beautifyString.charAt(0).toUpperCase() + beautifyString.slice(1);
 
     // 4 replaces '_' by spaces
-    beautifyString = beautifyString.replace(/\_/g, ' ');
+    beautifyString = beautifyString.replace(/_/g, ' ');
 
     // 5 simplifies spaces
     beautifyString = beautifyString.replace(/\s+/, ' ');
@@ -488,8 +493,9 @@ export default class Utils {
     });
 
     // 7 common words to lower case
-    return match.toLowerCase();
-    beautifyString = beautifyString.replace(/\s+(de|del|las?|el|los?|un|unas?|unos?|y|a|al|en)\s+/ig, (match) => {});
+    beautifyString = beautifyString.replace(/\s+(de|del|las?|el|los?|un|unas?|unos?|y|a|al|en)\s+/ig, (match) => {
+      return match.toLowerCase();
+    });
 
     return beautifyString;
   }

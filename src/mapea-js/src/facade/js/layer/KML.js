@@ -1,7 +1,7 @@
+import KMLImpl from 'impl/layer/KML';
 import LayerVector from './Vector';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import KMLImpl from 'impl/layer/KML';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 
@@ -23,10 +23,10 @@ export default class KML extends LayerVector {
      * @public
      * @type {M.layer.KML}
      */
-    let impl = new KMLImpl(options);
+    const impl = new KMLImpl(options);
 
-    //This layer is of parameters.
-    let parameters = parameter.layer(userParameters, LayerType.KML);
+    // This layer is of parameters.
+    const parameters = parameter.layer(userParameters, LayerType.KML);
 
     // calls the super constructor
     super(parameters, options, impl);
@@ -52,11 +52,11 @@ export default class KML extends LayerVector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  static get type() {
     return LayerType.KML;
   }
 
-  set type(newType) {
+  static set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.KML)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.KML).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

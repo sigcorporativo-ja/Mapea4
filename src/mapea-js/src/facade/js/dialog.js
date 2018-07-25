@@ -1,10 +1,7 @@
-import Utils from "./util/Utils";
-import Template from "./util/Template";
-import dialogTemplate from "templates/dialog.html";
 import 'assets/css/dialog';
-
-
-
+import dialogTemplate from 'templates/dialog';
+import Utils from './util/Utils';
+import Template from './util/Template';
 /**
  * TODO
  *
@@ -40,23 +37,23 @@ export const remove = () => {
  * @returns {Promise}
  */
 export const show = (message, title, severity) => {
-  let vars = {
+  const vars = {
     message,
     title,
-    severity
+    severity,
   };
-  let html = Template.compile(dialogTemplate, {
-    vars
+  const html = Template.compile(dialogTemplate, {
+    vars,
   });
   // removes previous dialogs
   remove();
 
   // append new dialog
-  let mapeaContainer = document.querySelector('div.m-mapea-container');
+  const mapeaContainer = document.querySelector('div.m-mapea-container');
 
   // adds listener to close the dialog
-  let okButton = html.querySelector('div.m-button > button');
-  okButton.addEventListener("click", evt => removeElement(html));
+  const okButton = html.querySelector('div.m-button > button');
+  okButton.addEventListener('click', evt => removeElement(html));
   mapeaContainer.appendChild(html);
 };
 
@@ -71,7 +68,8 @@ export const show = (message, title, severity) => {
  * @api stable
  * @returns {Promise}
  */
-export const info = (message, title) => {
+export const info = (message, titleParam) => {
+  let title = titleParam;
   if (Utils.isNullOrEmpty(title)) {
     title = 'INFORMACIÓN';
   }
@@ -88,7 +86,8 @@ export const info = (message, title) => {
  * @api stable
  * @returns {Promise}
  */
-export const error = (message, title) => {
+export const error = (message, titleParam) => {
+  let title = titleParam;
   if (Utils.isNullOrEmpty(title)) {
     title = 'ERROR';
   }
@@ -105,7 +104,8 @@ export const error = (message, title) => {
  * @api stable
  * @returns {Promise}
  */
-export const success = (message, title) => {
+export const success = (message, titleParam) => {
+  let title = titleParam;
   if (Utils.isNullOrEmpty(title)) {
     title = 'ÉXITO';
   }

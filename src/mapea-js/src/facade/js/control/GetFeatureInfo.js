@@ -39,7 +39,7 @@ export default class GetFeatureInfo extends ControlBase {
    * @returns {Promise} HTML template
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return Template.compile(getfeatureinfoTemplate);
   }
 
@@ -53,7 +53,7 @@ export default class GetFeatureInfo extends ControlBase {
    * @api stable
    * @export
    */
-  getActivationButton(element) {
+  static getActivationButton(element) {
     return element.querySelector('button#m-getfeatureinfo-button');
   }
 
@@ -67,13 +67,12 @@ export default class GetFeatureInfo extends ControlBase {
    * @returns {boolean} equals - Returns if they are equal or not
    * @api stable
    */
-  equals(obj) {
+  static equals(obj) {
     let equals = false;
     if (obj instanceof GetFeatureInfo) {
       equals = (this.name === obj.name);
     }
     return equals;
-
   }
 }
 

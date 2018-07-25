@@ -1,9 +1,9 @@
+import OverviewMapImpl from 'impl/control/OverviewMap';
+import overviewmapTemplate from 'templates/overviewmap';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import OverviewMapImpl from 'impl/control/OverviewMap';
-import overviewmapTemplate from "templates/overviewmap.html";
 
 export default class OverviewMap extends ControlBase {
   /**
@@ -19,7 +19,7 @@ export default class OverviewMap extends ControlBase {
    */
   constructor(options = {}) {
     // implementation of this control
-    let impl = new OverviewMapImpl(options);
+    const impl = new OverviewMapImpl(options);
     // calls the super constructor
     super(impl, OverviewMap.NAME);
 
@@ -37,7 +37,7 @@ export default class OverviewMap extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return Template.compile(overviewmapTemplate);
   }
 
@@ -48,8 +48,8 @@ export default class OverviewMap extends ControlBase {
    * @function
    * @api stable
    */
-  equals(obj) {
-    let equals = (obj instanceof OverviewMap);
+  static equals(obj) {
+    const equals = (obj instanceof OverviewMap);
     return equals;
   }
 }

@@ -1,9 +1,9 @@
+import panzoomTemplate from 'templates/panzoom';
+import PanzoomImpl from 'impl/control/Panzoom';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import PanzoomImpl from 'impl/control/Panzoom';
-import panzoomTemplate from "templates/panzoom.html";
 
 export default class Panzoom extends ControlBase {
   /**
@@ -19,7 +19,7 @@ export default class Panzoom extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new PanzoomImpl();
+    const impl = new PanzoomImpl();
 
     // calls the super constructor
     super(impl, Panzoom.NAME);
@@ -38,7 +38,7 @@ export default class Panzoom extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return Template.compile(panzoomTemplate);
   }
 
@@ -49,8 +49,8 @@ export default class Panzoom extends ControlBase {
    * @function
    * @api stable
    */
-  equals(obj) {
-    let equals = (obj instanceof Panzoom);
+  static equals(obj) {
+    const equals = (obj instanceof Panzoom);
     return equals;
   }
 }

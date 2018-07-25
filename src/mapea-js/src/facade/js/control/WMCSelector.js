@@ -1,10 +1,10 @@
+import wmcselectorTemplate from 'templates/wmcselector';
 import 'assets/css/controls/wmcselector';
+import WMCSelectorImpl from 'impl/control/WMCSelector';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import WMCSelectorImpl from 'impl/control/WMCSelector';
-import wmcselectorTemplate from "templates/wmcselector.html";
 
 export default class WMCSelector extends ControlBase {
   /**
@@ -18,7 +18,7 @@ export default class WMCSelector extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new WMCSelectorImpl();
+    const impl = new WMCSelectorImpl();
 
     // calls the super constructor
     super(impl, WMCSelector.NAME);
@@ -37,12 +37,12 @@ export default class WMCSelector extends ControlBase {
    * @param {M.Map} map to add the control
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     // compiles the template
     return Template.compile(wmcselectorTemplate, {
-      'vars': {
-        'layers': map.getWMC()
-      }
+      vars: {
+        layers: map.getWMC(),
+      },
     });
   }
 

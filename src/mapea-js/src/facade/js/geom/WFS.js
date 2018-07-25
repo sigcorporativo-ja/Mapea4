@@ -1,5 +1,4 @@
 export default class WFS {
-
   static getType() {
     return WFS.type_;
   }
@@ -13,10 +12,10 @@ export default class WFS {
  * @api stable
  */
 WFS.type_ = {
-  "POINT": "POINT",
-  "LINE": "LINE",
-  "POLYGON": "POLYGON",
-  "MPOINT": "MPOINT",
-  "MLINE": "MLINE",
-  "MPOLYGON": "MPOLYGON"
+  POINT: 'POINT',
+  LINE: 'LINE',
+  POLYGON: 'POLYGON',
+  MPOINT: 'MPOINT',
+  MLINE: 'MLINE',
+  MPOLYGON: 'MPOLYGON',
 };

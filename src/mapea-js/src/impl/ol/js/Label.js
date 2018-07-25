@@ -1,8 +1,7 @@
-import Template from "facade/js/util/Template";
-import FacadeLabel from "facade/js/Label";
-import FacadePopup from "facade/js/Popup";
-import Utils from "facade/js/util/Utils";
-import labelPopupTemplate from "templates/label_popup.html";
+import Template from 'facade/js/util/Template';
+import FacadePopup from 'facade/js/Popup';
+import Utils from 'facade/js/util/Utils';
+import labelPopupTemplate from 'templates/label_popup';
 
 /**
  * @namespace M.impl.control
@@ -66,20 +65,20 @@ export default class Label {
    */
   show(map) {
     this.facadeMap_ = map;
-    let htmlAsText = Template.compile(labelPopupTemplate, {
-      'vars': {
-        'info': this.text_
+    const htmlAsText = Template.compile(labelPopupTemplate, {
+      vars: {
+        info: this.text_,
       },
-      'parseToHtml': false
+      parseToHtml: false,
     });
     map.removePopup();
     this.popup_ = new FacadePopup({
-      'panMapIfOutOfView': this.panMapIfOutOfView
+      panMapIfOutOfView: this.panMapIfOutOfView,
     });
     this.popup_.addTab({
-      'icon': 'g-cartografia-comentarios',
-      'title': 'Información',
-      'content': htmlAsText,
+      icon: 'g-cartografia-comentarios',
+      title: 'Información',
+      content: htmlAsText,
     });
     map.addPopup(this.popup_, this.coord_);
   }
@@ -114,6 +113,7 @@ export default class Label {
    * @api stable
    */
   getCoordinate() {
+    let coord = this.coord;
     if (Utils.isNullOrEmpty(coord)) {
       coord = this.getPopup().getCoordinate();
     }
@@ -127,7 +127,7 @@ export default class Label {
    * @api stable
    */
   setCoordinate(coord) {
-    let popup = this.getPopup();
+    const popup = this.getPopup();
     if (!Utils.isNullOrEmpty(popup)) {
       popup.setCoordinate(coord);
     }

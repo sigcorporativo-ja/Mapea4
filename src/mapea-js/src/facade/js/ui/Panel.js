@@ -363,7 +363,8 @@ export default class Panel extends MObject {
       if (!Utils.isArray(controls)) {
         controls = [controls];
       }
-      controls.forEach((control) => {
+      controls.forEach((controlParam) => {
+        const control = controlParam;
         if ((control instanceof ControlBase) && this.hasControl(control)) {
           this.controls_.remove(control);
           control.panel = null;
@@ -408,7 +409,7 @@ export default class Panel extends MObject {
       this.element_.classList.remove(className);
     }
     else {
-      this.className_ = this.className_.replace(new RegExp('\s*' + className + '\s*'), '');
+      this.className_ = this.className_.replace(new RegExp(`s* ${className} s*`), '');
     }
   }
 

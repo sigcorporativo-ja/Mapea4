@@ -1,5 +1,5 @@
 import Utils from '../util/Utils';
-import EventListener from './Listener'
+import EventListener from './Listener';
 
 export default class EventsManager {
   /**
@@ -31,16 +31,18 @@ export default class EventsManager {
    * @api stable
    */
   add(eventType, listener, optThis, once = false) {
-    if (!Utils.isNullOrEmpty(eventType) && (EventsManager.eventTypes.indexOf(eventType) !== -1) && Utils.isFunction(listener)) {
+    if (!Utils.isNullOrEmpty(eventType) &&
+      (EventsManager.eventTypes.indexOf(eventType) !== -1) && Utils.isFunction(listener)) {
       if (Utils.isNullOrEmpty(this.events_[eventType])) {
         this.events_[eventType] = [];
       }
       if (this.indexOf(eventType, listener, optThis) === -1) {
-        let EventsManagerListener = new EventListener(listener, optThis, once);
+        const EventsManagerListener = new EventListener(listener, optThis, once);
         this.events_[eventType].push(EventsManagerListener);
         return EventsManagerListener.getEventKey();
       }
     }
+    return undefined;
   }
 
   /**
@@ -51,9 +53,9 @@ export default class EventsManager {
    * @api stable
    */
   remove(eventType, listener, optThis) {
-    let listeners = this.events_[eventType];
+    const listeners = this.events_[eventType];
     if (!Utils.isNullOrEmpty(listeners)) {
-      let index = this.indexOf(eventType, listener, optThis);
+      const index = this.indexOf(eventType, listener, optThis);
       if (index !== -1) {
         listeners.splice(index, 1);
       }
@@ -68,9 +70,9 @@ export default class EventsManager {
    * @api stable
    */
   fire(eventType, args) {
-    let EventsManagerListeners = [].concat(this.events_[eventType]);
+    const EventsManagerListeners = [].concat(this.events_[eventType]);
     if (!Utils.isNullOrEmpty(EventsManagerListeners)) {
-      EventsManagerListeners.forEach(EventManagerListener => {
+      EventsManagerListeners.forEach((EventManagerListener) => {
         EventManagerListener.fire(args);
         if (EventManagerListener.isOnce() === true) {
           this.remove(eventType, EventManagerListener.getEventKey());
@@ -88,9 +90,9 @@ export default class EventsManager {
    */
   indexOf(eventType, listener, optThis) {
     let index = -1;
-    let evtListeners = this.events_[eventType];
+    const evtListeners = this.events_[eventType];
     if (!Utils.isNullOrEmpty(evtListeners)) {
-      for (let i = 0, ilen = evtListeners.length; i < ilen; i++) {
+      for (let i = 0, ilen = evtListeners.length; i < ilen; i += 1) {
         if (evtListeners[i].has(listener, optThis)) {
           index = i;
           break;
@@ -331,29 +333,29 @@ EventsManager.MOVE = 'move';
  * @type {array<string>}
  */
 EventsManager.eventTypes = [
-      EventsManager.ADDED_TO_MAP,
-      EventsManager.ADDED_TO_PANEL,
-      EventsManager.ADDED_LAYER,
-      EventsManager.ADDED_WMC,
-      EventsManager.ADDED_KML,
-      EventsManager.ADDED_WMS,
-      EventsManager.ADDED_WFS,
-      EventsManager.ADDED_WMTS,
-      EventsManager.ACTIVATED,
-      EventsManager.DEACTIVATED,
-      EventsManager.SHOW,
-      EventsManager.HIDE,
-      EventsManager.DESTROY,
-      EventsManager.UNSELECT_FEATURES,
-      EventsManager.SELECT_FEATURES,
-      EventsManager.HOVER_FEATURES,
-      EventsManager.LEAVE_FEATURES,
-      EventsManager.LOAD,
-      EventsManager.COMPLETED,
-      EventsManager.CHANGE,
-      EventsManager.CHANGE_WMC,
-      EventsManager.CHANGE_PROJ,
-      EventsManager.CHANGE_STYLE,
-      EventsManager.CLICK,
-      EventsManager.MOVE
-   ];
+  EventsManager.ADDED_TO_MAP,
+  EventsManager.ADDED_TO_PANEL,
+  EventsManager.ADDED_LAYER,
+  EventsManager.ADDED_WMC,
+  EventsManager.ADDED_KML,
+  EventsManager.ADDED_WMS,
+  EventsManager.ADDED_WFS,
+  EventsManager.ADDED_WMTS,
+  EventsManager.ACTIVATED,
+  EventsManager.DEACTIVATED,
+  EventsManager.SHOW,
+  EventsManager.HIDE,
+  EventsManager.DESTROY,
+  EventsManager.UNSELECT_FEATURES,
+  EventsManager.SELECT_FEATURES,
+  EventsManager.HOVER_FEATURES,
+  EventsManager.LEAVE_FEATURES,
+  EventsManager.LOAD,
+  EventsManager.COMPLETED,
+  EventsManager.CHANGE,
+  EventsManager.CHANGE_WMC,
+  EventsManager.CHANGE_PROJ,
+  EventsManager.CHANGE_STYLE,
+  EventsManager.CLICK,
+  EventsManager.MOVE,
+];

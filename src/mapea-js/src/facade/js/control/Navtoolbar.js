@@ -1,9 +1,9 @@
+import NavtoolbarImpl from 'impl/control/Navtoolbar';
+import navtoolbarTemplate from 'templates/navtoolbar';
 import ControlBase from './Control';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
-import NavtoolbarImpl from 'impl/control/Navtoolbar';
-import navtoolbarTemplate from "templates/navtoolbar.html";
 
 export default class Navtoolbar extends ControlBase {
   /**
@@ -19,7 +19,7 @@ export default class Navtoolbar extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new NavtoolbarImpl();
+    const impl = new NavtoolbarImpl();
 
     // calls the super constructor
     super(impl, Navtoolbar.NAME);
@@ -37,7 +37,7 @@ export default class Navtoolbar extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return Template.compile(navtoolbarTemplate);
   }
 
@@ -48,8 +48,8 @@ export default class Navtoolbar extends ControlBase {
    * @function
    * @api stable
    */
-  equals(obj) {
-    let equals = (obj instanceof Navtoolbar);
+  static equals(obj) {
+    const equals = (obj instanceof Navtoolbar);
     return equals;
   }
 }

@@ -87,18 +87,18 @@ export default class Feature extends Base {
    */
   clickOnMap_(evt) {
     if (this.activated_ === true) {
-      let impl = this.getImpl();
+      const impl = this.getImpl();
 
       this.layers_.forEach((layer) => {
-        let clickedFeatures = impl.getFeaturesByLayer(evt, layer);
-        let prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
+        const clickedFeatures = impl.getFeaturesByLayer(evt, layer);
+        const prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
         // no features selected then unselect prev selected features
         if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
           this.unselectFeatures(prevFeatures, layer, evt);
         }
         else if (clickedFeatures.length > 0) {
-          let newFeatures = clickedFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
-          let diffFeatures = prevFeatures.filter(f => !clickedFeatures.some(pf => pf.equals(f)));
+          const newFeatures = clickedFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
+          const diffFeatures = prevFeatures.filter(f => !clickedFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
           if (diffFeatures.length > 0) {
             this.unselectFeatures(diffFeatures, layer, evt);
@@ -120,18 +120,19 @@ export default class Feature extends Base {
    */
   moveOverMap_(evt) {
     if (this.activated_ === true) {
-      let impl = this.getImpl();
+      const impl = this.getImpl();
 
       this.layers_.forEach((layer) => {
-        let hoveredFeatures = impl.getFeaturesByLayer(evt, layer);
-        let prevFeatures = [...this.prevHoverFeatures_[layer.name]];
+        const hoveredFeatures = impl.getFeaturesByLayer(evt, layer);
+        const prevFeatures = [...this.prevHoverFeatures_[layer.name]];
         // no features selected then unselect prev selected features
         if (hoveredFeatures.length === 0 && prevFeatures.length > 0) {
           this.leaveFeatures_(prevFeatures, layer, evt);
         }
         else if (hoveredFeatures.length > 0) {
-          let newFeatures = hoveredFeatures.filter(f => (f instanceof FacadeFeature) && !prevFeatures.some(pf => pf.equals(f)));
-          let diffFeatures = prevFeatures.filter(f => !hoveredFeatures.some(pf => pf.equals(f)));
+          const newFeatures = hoveredFeatures
+            .filter(f => (f instanceof FacadeFeature) && !prevFeatures.some(pf => pf.equals(f)));
+          const diffFeatures = prevFeatures.filter(f => !hoveredFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
           if (diffFeatures.length > 0) {
             this.leaveFeatures_(diffFeatures, layer, evt);
@@ -153,8 +154,9 @@ export default class Feature extends Base {
    * @api stable
    */
   selectFeatures(features, layer, evt) {
-    this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name].concat(features);
-    let layerImpl = layer.getImpl();
+    this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name]
+      .concat(features);
+    const layerImpl = layer.getImpl();
     if (Utils.isFunction(layerImpl.selectFeatures)) {
       layerImpl.selectFeatures(features, evt.coord, evt);
     }
@@ -172,7 +174,7 @@ export default class Feature extends Base {
     // removes unselected features
     this.prevSelectedFeatures_[layer.name] =
       this.prevSelectedFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
-    let layerImpl = layer.getImpl();
+    const layerImpl = layer.getImpl();
     if (Utils.isFunction(layerImpl.unselectFeatures)) {
       layerImpl.unselectFeatures(features, evt.coord);
     }
@@ -278,7 +280,7 @@ export default class Feature extends Base {
    * @api stable
    * @export
    */
-  destroy() {
+  static destroy() {
     // TODO
     // this.getImpl().destroy();
     // this.fire(M.evt.DESTROY);

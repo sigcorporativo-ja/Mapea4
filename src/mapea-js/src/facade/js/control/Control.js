@@ -13,8 +13,8 @@ export default class ControlBase extends Base {
    * @extends {M.facade.Base}
    * @api stable
    */
-  constructor(impl, name) {
-
+  constructor(implParam, name) {
+    const impl = implParam;
     // calls the super constructor
     super(impl);
 
@@ -76,7 +76,6 @@ export default class ControlBase extends Base {
      * @expose
      */
     this.panel_ = null;
-
   }
 
   /**
@@ -87,7 +86,8 @@ export default class ControlBase extends Base {
    * @param {M.Map} impl to add the plugin
    * @api stable
    */
-  setImpl(impl) {
+  static setImpl(implParam) {
+    const impl = implParam;
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(impl.addTo)) {
       Exception('La implementación usada no posee el método addTo');
@@ -112,8 +112,8 @@ export default class ControlBase extends Base {
    */
   addTo(map) {
     this.map_ = map;
-    let impl = this.getImpl();
-    let view = this.createView(map);
+    const impl = this.getImpl();
+    const view = this.createView(map);
     if (view instanceof Promise) { // the view is a promise
       view.then((html) => {
         this.manageActivation(html);
@@ -136,7 +136,7 @@ export default class ControlBase extends Base {
    * @api stable
    * @export
    */
-  createView(map) {}
+  static createView(map) {}
 
   /**
    * TODO
@@ -174,7 +174,7 @@ export default class ControlBase extends Base {
    * @api stable
    * @export
    */
-  getActivationButton(html) {}
+  static getActivationButton(html) {}
 
   /**
    * function adds the event 'click'
@@ -261,5 +261,5 @@ export default class ControlBase extends Base {
    * @api stable
    * @export
    */
-  destroy() {}
+  static destroy() {}
 }

@@ -1,11 +1,11 @@
-import Base from "../Base";
-import Utils from '../util/Utils';
-import GeoJSON from "../format/GeoJSON";
-import * as dialog from "../dialog";
 import FeatureImpl from 'impl/feature/Feature';
-import StyleFeature from "../style/Feature";
-import StylePoint from "../style/Point";
-import EvtManager from "../event/Manager";
+import Base from '../Base';
+import Utils from '../util/Utils';
+import GeoJSON from '../format/GeoJSON';
+import * as dialog from '../dialog';
+import StyleFeature from '../style/Feature';
+import StylePoint from '../style/Point';
+import EvtManager from '../event/Manager';
 
 export default class Feature extends Base {
   /**
@@ -24,7 +24,8 @@ export default class Feature extends Base {
      * @public
      * @type {M.impl.Feature}
      */
-    let impl = new FeatureImpl(id, geojson, style);
+    const impl = new FeatureImpl(id, geojson, style);
+
     super(impl);
 
     /**
@@ -34,8 +35,7 @@ export default class Feature extends Base {
      */
     this.style_ = null;
 
-    /*** GeoJSON format
-
+    /** * GeoJSON format
      * @private
      * @type {M.format.GeoJSON}
      */
@@ -125,11 +125,11 @@ export default class Feature extends Base {
    * @api stable
    */
   setAttributes(attributes) {
-    if (typeof attributes === "object") {
+    if (typeof attributes === 'object') {
       this.getImpl().setAttributes(attributes);
     }
     else {
-      dialog.info("No se han especificado correctamente los atributos.");
+      dialog.info('No se han especificado correctamente los atributos.');
     }
   }
 
@@ -149,12 +149,22 @@ export default class Feature extends Base {
     if (Utils.isNullOrEmpty(attrValue)) {
       // we look up the attribute by its path. Example: getAttribute('foo.bar.attr')
       // --> return feature.properties.foo.bar.attr value
-      let attrPath = attribute.split('.');
+      const attrPath = attribute.split('.');
       if (attrPath.length > 1) {
-        attrValue = attrPath.reduce((obj, attr) => !Utils.isNullOrEmpty(obj) ? ((obj instanceof Feature) ? obj.getAttribute(attr) : obj[attr]) : undefined, this);
+        attrValue = attrPath.reduce((obj, attr) => {
+          let attrParam;
+          if (!Utils.isNullOrEmpty(obj)) {
+            if (obj instanceof Feature) {
+              attrParam = obj.getAttribute(attr);
+            }
+            else {
+              attrParam = obj[attr];
+            }
+          }
+          return attrParam;
+        });
       }
     }
-
     return attrValue;
   }
 
@@ -189,7 +199,7 @@ export default class Feature extends Base {
       this.getImpl().clearStyle();
     }
     this.fire(EvtManager.CHANGE_STYLE, [style, this]);
-  };
+  }
 
   /**
    * This function return if two features are equals
@@ -234,26 +244,26 @@ export default class Feature extends Base {
    * @return {M.Feature}
    * @api stable
    */
-  getCentroid() {
-    let id = this.getId();
-    let attributes = this.getAttributes();
-    let style = new StylePoint({
+  static getCentroid() {
+    const id = this.getId();
+    const attributes = this.getAttributes();
+    const style = new StylePoint({
       stroke: {
         color: '#67af13',
-        width: 2
+        width: 2,
       },
       radius: 8,
       fill: {
         color: '#67af13',
-        opacity: 0.2
-      }
+        opacity: 0.2,
+      },
     });
-    let centroid = this.getImpl().getCentroid();
+    const centroid = this.getImpl().getCentroid();
     if (!Utils.isNullOrEmpty(centroid)) {
-      centroid.id(id + "_centroid");
+      centroid.id(`${id} centroid}`);
       centroid.attributes(attributes);
       centroid.style = style;
-      return centroid;
     }
+    return centroid;
   }
 }

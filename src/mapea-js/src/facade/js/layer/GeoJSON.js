@@ -6,6 +6,7 @@ import StyleCluster from '../style/Cluster';
 import LayerType from './Type';
 import GeomGeojson from '../geom/GeoJSON';
 import EvtManager from '../event/Manager';
+import Style from '../style/Style';
 
 export default class GeoJSON extends LayerVector {
   /**
@@ -87,7 +88,7 @@ export default class GeoJSON extends LayerVector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
+  static get type() {
     return LayerType.GeoJSON;
   }
 
@@ -153,7 +154,8 @@ export default class GeoJSON extends LayerVector {
     this.getImpl().refresh(source);
   }
 
-  setStyle(style, applyToFeature = false) {
+  setStyle(styleVar, applyToFeature = false) {
+    let style = styleVar;
     let isNullStyle = false;
     if (style === null) {
       isNullStyle = true;
@@ -162,8 +164,9 @@ export default class GeoJSON extends LayerVector {
       if (Utils.isNullOrEmpty(style)) {
         style = Utils.generateStyleLayer(GeoJSON.DEFAULT_OPTIONS_STYLE, this);
       }
-      let isCluster = style instanceof StyleCluster;
-      let isPoint = [GeomGeojson.type.POINT, GeomGeojson.type.MULTI_POINT].includes(Utils.getGeometryType(this));
+      const isCluster = style instanceof StyleCluster;
+      const isPoint = [GeomGeojson.type.POINT, GeomGeojson.type.MULTI_POINT]
+        .includes(Utils.getGeometryType(this));
       if (style instanceof Style && (!isCluster || isPoint)) {
         if (!Utils.isNullOrEmpty(this.style_)) {
           this.style_.unapply(this);
@@ -172,7 +175,7 @@ export default class GeoJSON extends LayerVector {
         this.style_ = style;
       }
       if (!Utils.isNullOrEmpty(this.getImpl().getMap())) {
-        let layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
+        const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
         if (!Utils.isNullOrEmpty(layerswitcher)) {
           layerswitcher.render();
         }
@@ -187,7 +190,6 @@ export default class GeoJSON extends LayerVector {
       this.once(EvtManager.LOAD, applyStyleFn, this);
     }
   }
-
 }
 
 /**
@@ -200,11 +202,11 @@ export default class GeoJSON extends LayerVector {
 GeoJSON.DEFAULT_OPTIONS_STYLE = {
   fill: {
     color: 'rgba(255, 255, 255, 0.4)',
-    opacity: 0.4
+    opacity: 0.4,
   },
   stroke: {
     color: '#3399CC',
-    width: 1.5
+    width: 1.5,
   },
   radius: 5,
 };

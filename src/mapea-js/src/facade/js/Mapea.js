@@ -1,3 +1,4 @@
+import 'assets/css/fonts';
 import 'assets/css/mapea';
 import 'assets/css/animations';
 import 'impl/projections';
@@ -6,7 +7,6 @@ import Map from './Map';
 import Utils from './util/Utils';
 import Exception from './exception/exception';
 import './util/Window';
-import 'assets/css/fonts';
 
 export default class Mapea {
   /**

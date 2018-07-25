@@ -20,7 +20,7 @@ export default class ScaleLine extends ControlBase {
    */
   constructor() {
     // implementation of this control
-    let impl = new ScaleLineImpl();
+    const impl = new ScaleLineImpl();
 
     // calls the super constructor
     super(impl, ScaleLine.NAME);
@@ -39,7 +39,7 @@ export default class ScaleLine extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  createView(map) {
+  static createView(map) {
     return Template.compile(scalelineTemplate);
   }
 
@@ -50,8 +50,8 @@ export default class ScaleLine extends ControlBase {
    * @function
    * @api stable
    */
-  equals(obj) {
-    let equals = (obj instanceof ScaleLine);
+  static equals(obj) {
+    const equals = (obj instanceof ScaleLine);
     return equals;
   }
 }

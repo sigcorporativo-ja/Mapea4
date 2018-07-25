@@ -1,4 +1,4 @@
-import FilterFunction from "./Function";
+import FilterFunction from './Function';
 
 export default class Filter {
   /**

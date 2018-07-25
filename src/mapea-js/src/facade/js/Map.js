@@ -1,38 +1,42 @@
-import Base from "./Base";
-import Utils from "./util/Utils";
+import Config from 'configuration';
 import MapImpl from 'impl/Map';
-import Exception from "./exception/exception";
-import Parameters from "./parameter/Parameters";
-import * as parameter from "./parameter/parameter";
-import EventsManager from "./event/Manager";
-import FeaturesHandler from "./handler/Feature";
-import Point from "./style/Point";
-import Config from "configuration";
-import * as Dialog from "./dialog";
-import GetFeatureInfo from "./control/GetFeatureInfo";
-import WMCSelector from "./control/WMCSelector";
-import LayerSwitcher from "./control/Layerswitcher";
-import Location from "./control/Location";
-import Navtoolbar from "./control/Navtoolbar";
-import Scale from "./control/Scale";
-import ScaleLine from "./control/ScaleLine";
-import Mouse from "./control/Mouse";
-import OverviewMap from "./control/OverviewMap";
-import Panzoom from "./control/Panzoom";
-import Panzoombar from "./control/Panzoombar";
-import Layer from "./layer/Layer";
-import LayerType from "./layer/Type";
-import Vector from "./layer/Vector";
-import KML from "./layer/KML";
-import WFS from "./layer/WFS";
-import WMC from "./layer/WMC";
-import WMS from "./layer/WMS";
-import WMTS from "./layer/WMTS";
-import OSM from "./layer/OSM";
-import Mapbox from "./layer/Mapbox";
+import Base from './Base';
+import Utils from './util/Utils';
+import Exception from './exception/exception';
+import Label from './Label';
+import Popup from './Popup';
+import Parameters from './parameter/Parameters';
+import * as parameter from './parameter/parameter';
+import EventsManager from './event/Manager';
+import FeaturesHandler from './handler/Feature';
+import Feature from './feature/Feature';
+import Point from './style/Point';
+import * as Dialog from './dialog';
+import GetFeatureInfo from './control/GetFeatureInfo';
+import WMCSelector from './control/WMCSelector';
+import LayerSwitcher from './control/Layerswitcher';
+import Location from './control/Location';
+import Navtoolbar from './control/Navtoolbar';
+import Scale from './control/Scale';
+import ScaleLine from './control/ScaleLine';
+import Mouse from './control/Mouse';
+import OverviewMap from './control/OverviewMap';
+import Panzoom from './control/Panzoom';
+import Panzoombar from './control/Panzoombar';
+import Layer from './layer/Layer';
+import LayerType from './layer/Type';
+import Vector from './layer/Vector';
+import KML from './layer/KML';
+import WFS from './layer/WFS';
+import WMC from './layer/WMC';
+import WMS from './layer/WMS';
+import WMTS from './layer/WMTS';
+import OSM from './layer/OSM';
+import Mapbox from './layer/Mapbox';
 import Panel from './ui/Panel';
 import Position from './ui/Position';
-import Control from "./control/Control";
+import Control from './control/Control';
+import GeoJSON from './layer/GeoJSON';
 
 export default class Map extends Base {
   /**
@@ -49,12 +53,11 @@ export default class Map extends Base {
    * @api stable
    */
   constructor(userParameters, options = {}) {
-
     // parses parameters to build the new map
-    let params = new Parameters(userParameters);
+    const params = new Parameters(userParameters);
 
     // calls the super constructor
-    let impl = new MapImpl(params.container, options);
+    const impl = new MapImpl(params.container, options);
     super(impl);
     impl.setFacadeMap(this);
 
@@ -112,8 +115,8 @@ export default class Map extends Base {
      * @api stable
      */
     this.panel = {
-      'LEFT': null,
-      'RIGHT': 'null'
+      LEFT: null,
+      RIGHT: 'null',
     };
 
     /**
@@ -186,9 +189,9 @@ export default class Map extends Base {
     this.featuresHandler_.activate();
 
     this.drawLayer_ = new Vector({
-      'name': '__draw__'
+      name: '__draw__',
     }, {
-      'displayInLayerSwitcher': false
+      displayInLayerSwitcher: false,
     });
 
     this.drawLayer_.setStyle(new Point(Map.DRAWLAYER_STYLE));
@@ -249,11 +252,11 @@ export default class Map extends Base {
 
     // getfeatureinfo
     if (!Utils.isNullOrEmpty(params.getfeatureinfo)) {
-      if (params.getfeatureinfo !== "plain" && params.getfeatureinfo !== "html" && params.getfeatureinfo !== "gml") {
-        Dialog.error("El formato solicitado para la información no está disponible. Inténtelo utilizando gml, plain o html.");
+      if (params.getfeatureinfo !== 'plain' && params.getfeatureinfo !== 'html' && params.getfeatureinfo !== 'gml') {
+        Dialog.error('El formato solicitado para la información no está disponible. Inténtelo utilizando gml, plain o html.');
       }
       else {
-        let getFeatureInfo = new GetFeatureInfo(params.getfeatureinfo);
+        const getFeatureInfo = new GetFeatureInfo(params.getfeatureinfo);
         this.addControls(getFeatureInfo);
       }
     }
@@ -265,7 +268,7 @@ export default class Map extends Base {
 
     // maxExtent
     if (!Utils.isNullOrEmpty(params.maxExtent)) {
-      let zoomToMaxExtent = Utils.isNullOrEmpty(params.zoom) && Utils.isNullOrEmpty(params.bbox);
+      const zoomToMaxExtent = Utils.isNullOrEmpty(params.zoom) && Utils.isNullOrEmpty(params.bbox);
       this.setMaxExtent(params.maxExtent, zoomToMaxExtent);
     }
 
@@ -300,11 +303,12 @@ export default class Map extends Base {
     }
 
     // initial zoom
-    if (Utils.isNullOrEmpty(params.bbox) && Utils.isNullOrEmpty(params.zoom) && Utils.isNullOrEmpty(params.center)) {
+    if (Utils.isNullOrEmpty(params.bbox) && Utils.isNullOrEmpty(params.zoom) &&
+      Utils.isNullOrEmpty(params.center)) {
       this.zoomToMaxExtent(true);
     }
 
-    //ticket
+    // ticket
     if (!Utils.isNullOrEmpty(params.ticket)) {
       this.setTicket(params.ticket);
     }
@@ -318,14 +322,12 @@ export default class Map extends Base {
    * @returns {Array<Layer>}
    * @api stable
    */
-  getLayers(layersParam) {
+  getLayers(layersParamVar) {
+    let layersParam = layersParamVar;
     // checks if the implementation can manage layers
     if (Utils.isUndefined(MapImpl.prototype.getLayers)) {
       Exception('La implementación usada no posee el método getLayers');
     }
-
-    let layers;
-
     // parses parameters to Array
     if (Utils.isNull(layersParam)) {
       layersParam = [];
@@ -341,7 +343,7 @@ export default class Map extends Base {
     }
 
     // gets the layers
-    layers = this.getImpl().getLayers(filters).sort(Map.LAYER_SORT);
+    const layers = this.getImpl().getLayers(filters).sort(Map.LAYER_SORT);
 
     return layers;
   }
@@ -405,31 +407,31 @@ export default class Map extends Base {
           const parameterVariable = parameter.layer(layerParam);
           if (!Utils.isNullOrEmpty(parameterVariable.type)) {
             switch (parameterVariable.type) {
-              case "WFS":
+              case 'WFS':
                 layer = new WFS(layerParam);
                 break;
-              case "WMC":
+              case 'WMC':
                 layer = new WMC(layerParam);
                 break;
-              case "WMS":
+              case 'WMS':
                 layer = new WMS(layerParam);
                 break;
-              case "GeoJSON":
+              case 'GeoJSON':
                 layer = new GeoJSON(layerParam);
                 break;
-              case "OSM":
+              case 'OSM':
                 layer = new OSM(layerParam);
                 break;
-              case "Mapbox":
+              case 'Mapbox':
                 layer = new Mapbox(layerParam);
                 break;
-              case "KML":
+              case 'KML':
                 layer = new KML(layerParam);
                 break;
-              case "Vector":
+              case 'Vector':
                 layer = new Vector(layerParam);
                 break;
-              case "WMTS":
+              case 'WMTS':
                 layer = new WMTS(layerParam);
                 break;
               default:
@@ -447,7 +449,7 @@ export default class Map extends Base {
         }
 
         // KML and WFS layers handler its features
-        if ((layer instanceof Vector) /*&& !(layer instanceof KML)*/ && !(layer instanceof WFS)) {
+        if ((layer instanceof Vector) /* && !(layer instanceof KML) */ && !(layer instanceof WFS)) {
           this.featuresHandler_.addLayer(layer);
         }
 
@@ -479,8 +481,8 @@ export default class Map extends Base {
       }
 
       // gets the layers to remove
-      let layers = this.getLayers(layersParam);
-      layers.forEach(layer => {
+      const layers = this.getLayers(layersParam);
+      layers.forEach((layer) => {
         // KML and WFS layers handler its features
         if (layer instanceof Vector) {
           this.featuresHandler_.removeLayer(layer);
@@ -502,13 +504,12 @@ export default class Map extends Base {
    * @returns {Array<WMC>}
    * @api stable
    */
-  getWMC(layersParam) {
+  getWMC(layersParamVar) {
+    let layersParam = layersParamVar;
     // checks if the implementation can manage layers
     if (Utils.isUndefined(MapImpl.prototype.getWMC)) {
       Exception('La implementación usada no posee el método getWMC');
     }
-
-    let layers;
 
     // parses parameters to Array
     if (Utils.isNull(layersParam)) {
@@ -527,7 +528,7 @@ export default class Map extends Base {
     }
 
     // gets the layers
-    layers = this.getImpl().getWMC(filters).sort(Map.LAYER_SORT);
+    const layers = this.getImpl().getWMC(filters).sort(Map.LAYER_SORT);
 
     return layers;
   }
@@ -540,7 +541,8 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  addWMC(layersParam) {
+  addWMC(layersParamVar) {
+    let layersParam = layersParamVar;
     if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
       if (Utils.isUndefined(MapImpl.prototype.addWMC)) {
@@ -553,8 +555,8 @@ export default class Map extends Base {
       }
 
       // gets the parameters as WMC objects to add
-      let wmcLayers = [];
-      layersParam.forEach(layerParam => {
+      const wmcLayers = [];
+      layersParam.forEach((layerParam) => {
         if (Utils.isObject(layerParam) && (layerParam instanceof WMC)) {
           wmcLayers.push(layerParam);
         }
@@ -576,13 +578,13 @@ export default class Map extends Base {
 
       /* checks if it should create the WMC control
          to select WMC */
-      let addedWmcLayers = this.getWMC();
-      let wmcSelected = addedWmcLayers.filter(wmc => wmc.selected === true)[0];
+      const addedWmcLayers = this.getWMC();
+      const wmcSelected = addedWmcLayers.filter(wmc => wmc.selected === true)[0];
       if (wmcSelected == null) {
         addedWmcLayers[0].select();
       }
       if (addedWmcLayers.length > 1) {
-        this.removeControls("wmcselector");
+        this.removeControls('wmcselector');
         this.addControls(new WMCSelector());
       }
     }
@@ -595,13 +597,13 @@ export default class Map extends Base {
    * @public
    */
   refreshWMCSelectorControl() {
-    this.removeControls("wmcselector");
+    this.removeControls('wmcselector');
     if (this.getWMC().length === 1) {
       this.getWMC()[0].select();
     }
     else if (this.getWMC().length > 1) {
       this.addControls(new WMCSelector());
-      let wmcSelected = this.getWMC().filter(wmc => wmc.selected === true)[0];
+      const wmcSelected = this.getWMC().filter(wmc => wmc.selected === true)[0];
       if (wmcSelected == null) {
         this.getWMC()[0].select();
       }
@@ -624,7 +626,7 @@ export default class Map extends Base {
       }
 
       // gets the layers
-      let wmcLayers = this.getWMC(layersParam);
+      const wmcLayers = this.getWMC(layersParam);
       if (wmcLayers.length > 0) {
         // removes the layers
         this.getImpl().removeWMC(wmcLayers);
@@ -641,13 +643,12 @@ export default class Map extends Base {
    * @returns {Array<KML>}
    * @api stable
    */
-  getKML(layersParam) {
+  getKML(layersParamVar) {
+    let layersParam = layersParamVar;
     // checks if the implementation can manage layers
     if (Utils.isUndefined(MapImpl.prototype.getKML)) {
       Exception('La implementación usada no posee el método getKML');
     }
-
-    let layers;
 
     // parses parameters to Array
     if (Utils.isNull(layersParam)) {
@@ -660,13 +661,13 @@ export default class Map extends Base {
     // gets the parameters as Layer objects to filter
     let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(layerParam => {
+      filters = layersParam.map((layerParam) => {
         return parameter.layer(layerParam, LayerType.KML);
       });
     }
 
     // gets the layers
-    layers = this.getImpl().getKML(filters).sort(Map.LAYER_SORT);
+    const layers = this.getImpl().getKML(filters).sort(Map.LAYER_SORT);
 
     return layers;
   }
@@ -679,7 +680,8 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  addKML(layersParam) {
+  addKML(layersParamVar) {
+    let layersParam = layersParamVar;
     if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
       if (Utils.isUndefined(MapImpl.prototype.addKML)) {
@@ -692,8 +694,8 @@ export default class Map extends Base {
       }
 
       // gets the parameters as KML objects to add
-      let kmlLayers = [];
-      layersParam.forEach(layerParam => {
+      const kmlLayers = [];
+      layersParam.forEach((layerParam) => {
         let kmlLayer;
         if (Utils.isObject(layerParam) && (layerParam instanceof KML)) {
           kmlLayer = layerParam;
@@ -731,9 +733,9 @@ export default class Map extends Base {
       }
 
       // gets the layers
-      let kmlLayers = this.getKML(layersParam);
+      const kmlLayers = this.getKML(layersParam);
       if (kmlLayers.length > 0) {
-        kmlLayers.forEach(layer => {
+        kmlLayers.forEach((layer) => {
           this.featuresHandler_.removeLayer(layer);
         });
         // removes the layers
@@ -751,13 +753,12 @@ export default class Map extends Base {
    * @returns {Array<WMS>} layers from the map
    * @api stable
    */
-  getWMS(layersParam) {
+  getWMS(layersParamVar) {
+    let layersParam = layersParamVar;
     // checks if the implementation can manage layers
     if (Utils.isUndefined(MapImpl.prototype.getWMS)) {
       Exception('La implementación usada no posee el método getWMS');
     }
-
-    let layers;
 
     // parses parameters to Array
     if (Utils.isNull(layersParam)) {
@@ -770,13 +771,13 @@ export default class Map extends Base {
     // gets the parameters as Layer objects to filter
     let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(layerParam => {
+      filters = layersParam.map((layerParam) => {
         return parameter.layer(layerParam, LayerType.WMS);
       });
     }
 
     // gets the layers
-    layers = this.getImpl().getWMS(filters).sort(Map.LAYER_SORT);
+    const layers = this.getImpl().getWMS(filters).sort(Map.LAYER_SORT);
 
     return layers;
   }
@@ -789,7 +790,8 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  addWMS(layersParam) {
+  addWMS(layersParamVar) {
+    let layersParam = layersParamVar;
     if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
       if (Utils.isUndefined(MapImpl.prototype.addWMS)) {
@@ -802,8 +804,8 @@ export default class Map extends Base {
       }
 
       // gets the parameters as WMS objects to add
-      let wmsLayers = [];
-      layersParam.forEach(layerParam => {
+      const wmsLayers = [];
+      layersParam.forEach((layerParam) => {
         if (Utils.isObject(layerParam) && (layerParam instanceof WMS)) {
           wmsLayers.push(layerParam);
         }
@@ -836,7 +838,7 @@ export default class Map extends Base {
       }
 
       // gets the layers
-      let wmsLayers = this.getWMS(layersParam);
+      const wmsLayers = this.getWMS(layersParam);
       if (wmsLayers.length > 0) {
         // removes the layers
         this.getImpl().removeWMS(wmsLayers);
@@ -853,13 +855,12 @@ export default class Map extends Base {
    * @returns {Array<WFS>} layers from the map
    * @api stable
    */
-  getWFS(layersParam) {
+  getWFS(layersParamVar) {
+    let layersParam = layersParamVar;
     // checks if the implementation can manage layers
     if (Utils.isUndefined(MapImpl.prototype.getWFS)) {
       Exception('La implementación usada no posee el método getWFS');
     }
-
-    let layers;
 
     // parses parameters to Array
     if (Utils.isNull(layersParam)) {
@@ -872,13 +873,13 @@ export default class Map extends Base {
     // gets the parameters as Layer objects to filter
     let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(layerParam => {
+      filters = layersParam.map((layerParam) => {
         return parameter.layer(layerParam, LayerType.WFS);
       });
     }
 
     // gets the layers
-    layers = this.getImpl().getWFS(filters).sort(Map.LAYER_SORT);
+    const layers = this.getImpl().getWFS(filters).sort(Map.LAYER_SORT);
 
     return layers;
   }
@@ -891,7 +892,8 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  addWFS(layersParam) {
+  addWFS(layersParamVar) {
+    let layersParam = layersParamVar;
     if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
       if (Utils.isUndefined(MapImpl.prototype.addWFS)) {
@@ -904,8 +906,8 @@ export default class Map extends Base {
       }
 
       // gets the parameters as WFS objects to add
-      let wfsLayers = [];
-      layersParam.forEach(layerParam => {
+      const wfsLayers = [];
+      layersParam.forEach((layerParam) => {
         let wfsLayer;
         if (Utils.isObject(layerParam) && (layerParam instanceof WFS)) {
           wfsLayer = layerParam;
@@ -947,9 +949,9 @@ export default class Map extends Base {
       }
 
       // gets the layers
-      let wfsLayers = this.getWFS(layersParam);
+      const wfsLayers = this.getWFS(layersParam);
       if (wfsLayers.length > 0) {
-        wfsLayers.forEach(layer => {
+        wfsLayers.forEach((layer) => {
           this.featuresHandler_.removeLayer(layer);
         });
         // removes the layers
@@ -967,13 +969,12 @@ export default class Map extends Base {
    * @returns {Array<WMTS>} layers from the map
    * @api stable
    */
-  getWMTS(layersParam) {
+  getWMTS(layersParamVar) {
+    let layersParam = layersParamVar;
     // checks if the implementation can manage layers
     if (Utils.isUndefined(MapImpl.prototype.getWMTS)) {
       Exception('La implementación usada no posee el método getWMTS');
     }
-
-    let layers;
 
     // parses parameters to Array
     if (Utils.isNull(layersParam)) {
@@ -986,13 +987,13 @@ export default class Map extends Base {
     // gets the parameters as Layer objects to filter
     let filters = [];
     if (layersParam.length > 0) {
-      filters = layersParam.map(layerParam => {
+      filters = layersParam.map((layerParam) => {
         return parameter.layer(layerParam, LayerType.WMTS);
       });
     }
 
     // gets the layers
-    layers = this.getImpl().getWMTS(filters).sort(Map.LAYER_SORT);
+    const layers = this.getImpl().getWMTS(filters).sort(Map.LAYER_SORT);
 
     return layers;
   }
@@ -1005,7 +1006,8 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  addWMTS(layersParam) {
+  addWMTS(layersParamVar) {
+    let layersParam = layersParamVar;
     if (!Utils.isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
       if (Utils.isUndefined(MapImpl.prototype.addWMTS)) {
@@ -1018,8 +1020,8 @@ export default class Map extends Base {
       }
 
       // gets the parameters as WMS objects to add
-      let wmtsLayers = [];
-      layersParam.forEach(layerParam => {
+      const wmtsLayers = [];
+      layersParam.forEach((layerParam) => {
         if (Utils.isObject(layerParam) && (layerParam instanceof WMTS)) {
           wmtsLayers.push(layerParam);
         }
@@ -1052,7 +1054,7 @@ export default class Map extends Base {
       }
 
       // gets the layers
-      let wmtsLayers = this.getWMTS(layersParam);
+      const wmtsLayers = this.getWMTS(layersParam);
       if (wmtsLayers.length > 0) {
         // removes the layers
         this.getImpl().removeWMTS(wmtsLayers);
@@ -1069,13 +1071,12 @@ export default class Map extends Base {
    * @returns {Array<M.layer.MBtiles>} layers from the map
    * @api stable
    */
-  getMBtiles(layersParam) {
+  getMBtiles(layersParamVar) {
+    let layersParam = layersParamVar;
     // checks if the implementation can manage layers
     if (Utils.isUndefined(MapImpl.prototype.getMBtiles)) {
       Exception('La implementación usada no posee el método getMBtiles');
     }
-
-    let layers;
 
     // parses parameters to Array
     if (Utils.isNull(layersParam)) {
@@ -1092,7 +1093,7 @@ export default class Map extends Base {
     }
 
     // gets the layers
-    layers = this.getImpl().getMBtiles(filters).sort(Map.LAYER_SORT);
+    const layers = this.getImpl().getMBtiles(filters).sort(Map.LAYER_SORT);
 
     return layers;
   }
@@ -1105,7 +1106,7 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  addMBtiles(layersParam) {
+  static addMBtiles(layersParam) {
     // TODO
   }
 
@@ -1117,7 +1118,7 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  removeMBtiles(layersParam) {
+  static removeMBtiles(layersParam) {
     // TODO
   }
 
@@ -1130,7 +1131,9 @@ export default class Map extends Base {
    * @returns {Array<Control>}
    * @api stable
    */
-  getControls(controlsParam) {
+  getControls(controlsParamVar) {
+    let controlsParam = controlsParamVar;
+
     // checks if the implementation can manage layers
     if (Utils.isUndefined(MapImpl.prototype.getControls)) {
       Exception('La implementación usada no posee el método getControls');
@@ -1145,12 +1148,12 @@ export default class Map extends Base {
     }
 
     // gets the controls
-    let controls = this.getImpl().getControls(controlsParam);
+    const controls = this.getImpl().getControls(controlsParam);
 
     return controls;
   }
 
-  /*/**
+  /**
    * This function adds controls specified by the user
    *
    * @public
@@ -1159,7 +1162,8 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  addControls(controlsParam) {
+  addControls(controlsParamVar) {
+    let controlsParam = controlsParamVar;
     if (!Utils.isNullOrEmpty(controlsParam)) {
       // checks if the implementation can manage layers
       if (Utils.isUndefined(MapImpl.prototype.addControls)) {
@@ -1172,9 +1176,10 @@ export default class Map extends Base {
       }
 
       // gets the parameters as Control to add them
-      let controls = [];
-      //for (let i = 0, ilen = controlsParam.length; i < ilen; i++) {
-      controlsParam.forEach((controlParam) => {
+      const controls = [];
+      // for (let i = 0, ilen = controlsParam.length; i < ilen; i++) {
+      controlsParam.forEach((controlParamVar) => {
+        let controlParam = controlParamVar;
         let control;
         let panel;
         if (Utils.isString(controlParam)) {
@@ -1185,13 +1190,13 @@ export default class Map extends Base {
               panel = this.getPanels('map-info')[0];
               if (Utils.isNullOrEmpty(panel)) {
                 panel = new Panel('map-info', {
-                  "collapsible": false,
-                  "className": "m-map-info",
-                  "position": Position.BR
+                  collapsible: false,
+                  className: 'm-map-info',
+                  position: Position.BR,
                 });
-                panel.on(EventsManager.ADDED_TO_MAP, html => {
-                  if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
-                    this.getControls(["scaleline"])[0].getImpl().getElement().classList.add("ol-scale-line-up");
+                panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+                  if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
+                    this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
                   }
                 });
               }
@@ -1200,57 +1205,57 @@ export default class Map extends Base {
             case ScaleLine.NAME:
               control = new ScaleLine();
               panel = new Panel(ScaleLine.NAME, {
-                "collapsible": false,
-                "className": "m-scaleline",
-                "position": Position.BL,
-                "tooltip": "Línea de escala"
+                collapsible: false,
+                className: 'm-scaleline',
+                position: Position.BL,
+                tooltip: 'Línea de escala',
               });
-              panel.on(EventsManager.ADDED_TO_MAP, html => {
-                if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
-                  this.getControls(["scaleline"])[0].getImpl().getElement().classList.add("ol-scale-line-up");
+              panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+                if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
+                  this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
                 }
               });
               break;
             case Panzoombar.NAME:
               control = new Panzoombar();
               panel = new Panel(Panzoombar.NAME, {
-                "collapsible": false,
-                "className": "m-panzoombar",
-                "position": Position.TL,
-                "tooltip": "Nivel de zoom"
+                collapsible: false,
+                className: 'm-panzoombar',
+                position: Position.TL,
+                tooltip: 'Nivel de zoom',
               });
               break;
             case Panzoom.NAME:
               control = new Panzoom();
               panel = new Panel(Panzoom.NAME, {
-                "collapsible": false,
-                "className": "m-panzoom",
-                "position": Position.TL
+                collapsible: false,
+                className: 'm-panzoom',
+                position: Position.TL,
               });
               break;
             case LayerSwitcher.NAME:
               control = new LayerSwitcher();
               /* closure a function in order to keep
-               * the control value in the scope*/
-              (layerswitcherCtrl => {
+               * the control value in the scope */
+              ((layerswitcherCtrl) => {
                 panel = new Panel(LayerSwitcher.NAME, {
-                  "collapsible": true,
-                  "className": "m-layerswitcher",
-                  "collapsedButtonClass": "g-cartografia-capas2",
-                  "position": Position.TR,
-                  "tooltip": "Selector de capas"
+                  collapsible: true,
+                  className: 'm-layerswitcher',
+                  collapsedButtonClass: 'g-cartografia-capas2',
+                  position: Position.TR,
+                  tooltip: 'Selector de capas',
                 });
                 // enables touch scroll
-                panel.on(EventsManager.ADDED_TO_MAP, html => {
+                panel.on(EventsManager.ADDED_TO_MAP, (html) => {
                   Utils.enableTouchScroll(html.querySelector('.m-panel-controls'));
                 });
                 // renders and registers events
-                panel.on(EventsManager.SHOW, evt => {
+                panel.on(EventsManager.SHOW, (evt) => {
                   layerswitcherCtrl.registerEvents();
                   layerswitcherCtrl.render();
                 });
                 // unregisters events
-                panel.on(EventsManager.HIDE, evt => {
+                panel.on(EventsManager.HIDE, (evt) => {
                   layerswitcherCtrl.unregisterEvents();
                 });
               })(control);
@@ -1260,10 +1265,10 @@ export default class Map extends Base {
               panel = this.getPanels('map-info')[0];
               if (Utils.isNullOrEmpty(panel)) {
                 panel = new Panel('map-info', {
-                  "collapsible": false,
-                  "className": "m-map-info",
-                  "position": Position.BR,
-                  "tooltip": "Coordenadas del puntero"
+                  collapsible: false,
+                  className: 'm-map-info',
+                  position: Position.BR,
+                  tooltip: 'Coordenadas del puntero',
                 });
               }
               panel.addClassName('m-with-mouse');
@@ -1273,14 +1278,14 @@ export default class Map extends Base {
               break;
             case OverviewMap.NAME:
               control = new OverviewMap({
-                'toggleDelay': 400
+                toggleDelay: 400,
               });
               panel = this.getPanels('map-info')[0];
               if (Utils.isNullOrEmpty(panel)) {
                 panel = new Panel('map-info', {
-                  "collapsible": false,
-                  "className": "m-map-info",
-                  "position": Position.BR
+                  collapsible: false,
+                  className: 'm-map-info',
+                  position: Position.BR,
                 });
               }
               panel.addClassName('m-with-overviewmap');
@@ -1288,17 +1293,17 @@ export default class Map extends Base {
             case Location.NAME:
               control = new Location();
               panel = new Panel(Location.NAME, {
-                "collapsible": false,
-                "className": 'm-location',
-                "position": Position.BR
+                collapsible: false,
+                className: 'm-location',
+                position: Position.BR,
               });
               break;
             case GetFeatureInfo.NAME:
               control = new GetFeatureInfo();
               break;
             default:
-              let getControlsAvailable = Utils.concatUrlPaths([Config.MAPEA_URL, '/api/actions/controls']);
-              Dialog.error('El control "'.concat(controlParam).concat('" no está definido. Consulte los controles disponibles <a href="' + getControlsAvailable + '" target="_blank">aquí</a>'));
+              const getControlsAvailable = Utils.concatUrlPaths([Config.MAPEA_URL, '/api/actions/controls']);
+              Dialog.error(`El control ${controlParam} no está definido. Consulte los controles disponibles <a href='${getControlsAvailable}' target="_blank">aquí</a>`);
               break;
           }
         }
@@ -1308,14 +1313,13 @@ export default class Map extends Base {
             panel = this.getPanels('map-info')[0];
             if (Utils.isNullOrEmpty(panel)) {
               panel = new Panel('map-info', {
-                "collapsible": false,
-                "className": "m-map-info",
-                "position": Position.BR
+                collapsible: false,
+                className: 'm-map-info',
+                position: Position.BR,
               });
-              panel.on(EventsManager.ADDED_TO_MAP, html => {
-                if (this.getControls(["wmcselector", "scale", "scaleline"]).length === 3) {
-                  goog.dom.classList.add(this.getControls(["scaleline"])[0].getImpl().getElement(),
-                    "ol-scale-line-up");
+              panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+                if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
+                  this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
                 }
               });
             }
@@ -1330,11 +1334,11 @@ export default class Map extends Base {
         if (Config.panels.TOOLS.indexOf(control.name) !== -1) {
           if (Utils.isNullOrEmpty(this.panel.TOOLS)) {
             this.panel.TOOLS = new Panel('tools', {
-              "collapsible": true,
-              "className": 'm-tools',
-              "collapsedButtonClass": 'g-cartografia-herramienta',
-              "position": Position.TL,
-              "tooltip": "Panel de herramientas"
+              collapsible: true,
+              className: 'm-tools',
+              collapsedButtonClass: 'g-cartografia-herramienta',
+              position: Position.TL,
+              tooltip: 'Panel de herramientas',
             });
             //               this.addPanels([this.panel.TOOLS]);
           }
@@ -1346,11 +1350,11 @@ export default class Map extends Base {
         else if (Config.panels.EDITION.indexOf(control.name) !== -1) {
           if (Utils.isNullOrEmpty(this.panel.EDITION)) {
             this.panel.EDITION = new Panel('edit', {
-              "collapsible": true,
-              "className": 'm-edition',
-              "collapsedButtonClass": 'g-cartografia-editar',
-              "position": Position.TL,
-              "tooltip": "Herramientas de edición"
+              collapsible: true,
+              className: 'm-edition',
+              collapsedButtonClass: 'g-cartografia-editar',
+              position: Position.TL,
+              tooltip: 'Herramientas de edición',
             });
             //               this.addPanels([this.panel.EDITION]);
           }
@@ -1399,7 +1403,7 @@ export default class Map extends Base {
     controls = [].concat(controls);
     if (controls.length > 0) {
       // removes controls from their panels
-      controls.forEach(control => {
+      controls.forEach((control) => {
         if (!Utils.isNullOrEmpty(control.getPanel())) {
           control.getPanel().removeControls(control);
         }
@@ -1427,7 +1431,7 @@ export default class Map extends Base {
     }
 
     // parses the parameter
-    let maxExtent = this.getImpl().getMaxExtent();
+    const maxExtent = this.getImpl().getMaxExtent();
 
     return maxExtent;
   }
@@ -1456,7 +1460,7 @@ export default class Map extends Base {
 
     // parses the parameter
     try {
-      let maxExtent = parameter.maxExtent(maxExtentParam);
+      const maxExtent = parameter.maxExtent(maxExtentParam);
       this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
     }
     catch (err) {
@@ -1481,10 +1485,10 @@ export default class Map extends Base {
       Exception('La implementación usada no posee el método getBbox');
     }
 
-    let bbox = this.getImpl().getBbox();
+    const bbox = this.getImpl().getBbox();
 
     return bbox;
-  };
+  }
 
   /**
    * This function sets the bbox for this
@@ -1510,7 +1514,7 @@ export default class Map extends Base {
 
     try {
       // parses the parameter
-      let bbox = parameter.maxExtent(bboxParam);
+      const bbox = parameter.maxExtent(bboxParam);
       this.getImpl().setBbox(bbox, vendorOpts);
     }
     catch (err) {
@@ -1534,7 +1538,7 @@ export default class Map extends Base {
       Exception('La implementación usada no posee el método getZoom');
     }
 
-    let zoom = this.getImpl().getZoom();
+    const zoom = this.getImpl().getZoom();
 
     return zoom;
   }
@@ -1562,7 +1566,7 @@ export default class Map extends Base {
 
     try {
       // parses the parameter
-      let zoom = parameter.zoom(zoomParam);
+      const zoom = parameter.zoom(zoomParam);
       this.userZoom_ = zoom;
       this.getImpl().setZoom(zoom);
     }
@@ -1590,7 +1594,7 @@ export default class Map extends Base {
       Exception('La implementación usada no posee el método getCenter');
     }
 
-    let center = this.getImpl().getCenter();
+    const center = this.getImpl().getCenter();
 
     return center;
   }
@@ -1618,29 +1622,29 @@ export default class Map extends Base {
 
     // parses the parameter
     try {
-      let center = parameter.center(centerParam);
+      const center = parameter.center(centerParam);
       this.getImpl().setCenter(center);
       if (center.draw === true) {
         this.drawLayer_.clear();
 
-        this.centerFeature_ = new Feature("__mapeacenter__", {
-          "type": "Feature",
-          "geometry": {
-            "type": "Point",
-            "coordinates": [center.x, center.y]
+        this.centerFeature_ = new Feature('__mapeacenter__', {
+          type: 'Feature',
+          geometry: {
+            type: 'Point',
+            coordinates: [center.x, center.y],
           },
-          "properties": {
-            "vendor": {
-              "mapea": { // TODO mig
-                "click": evt => {
-                  let label = this.getLabel();
+          properties: {
+            vendor: {
+              mapea: { // TODO mig
+                click: (evt) => {
+                  const label = this.getLabel();
                   if (!Utils.isNullOrEmpty(label)) {
                     label.show(this);
                   }
-                }
-              }
-            }
-          }
+                },
+              },
+            },
+          },
         });
         this.drawFeatures([this.centerFeature_]);
       }
@@ -1693,7 +1697,7 @@ export default class Map extends Base {
       Exception('La implementación usada no posee el método getResolutions');
     }
 
-    let resolutions = this.getImpl().getResolutions();
+    const resolutions = this.getImpl().getResolutions();
 
     return resolutions;
   }
@@ -1720,7 +1724,7 @@ export default class Map extends Base {
     }
 
     // parses the parameter
-    let resolutions = parameter.resolutions(resolutionsParam);
+    const resolutions = parameter.resolutions(resolutionsParam);
 
     this.getImpl().setResolutions(resolutions);
 
@@ -1742,7 +1746,7 @@ export default class Map extends Base {
       Exception('La implementación usada no posee el método getScale');
     }
 
-    let scale = this.getImpl().getScale();
+    const scale = this.getImpl().getScale();
 
     return scale;
   }
@@ -1762,7 +1766,7 @@ export default class Map extends Base {
       Exception('La implementación usada no posee el método getProjection');
     }
 
-    let projection = this.getImpl().getProjection();
+    const projection = this.getImpl().getProjection();
 
     return projection;
   }
@@ -1777,7 +1781,8 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  setProjection(projection, asDefault) {
+  setProjection(projectionParam, asDefault) {
+    let projection = projectionParam;
     // checks if the param is null or empty
     if (Utils.isNullOrEmpty(projection)) {
       Exception('No ha especificado ninguna proyección');
@@ -1790,7 +1795,7 @@ export default class Map extends Base {
 
     // parses the parameter
     try {
-      let oldProj = this.getProjection();
+      const oldProj = this.getProjection();
       projection = parameter.projection(projection);
       this.getImpl().setProjection(projection);
       this.defaultProj_ = (this.defaultProj_ && (asDefault === true));
@@ -1798,10 +1803,10 @@ export default class Map extends Base {
     }
     catch (err) {
       Dialog.error(err.toString());
-      throw err;
-      if (String(err).indexOf("El formato del parámetro projection no es correcto") >= 0) {
+      if (String(err).indexOf('El formato del parámetro projection no es correcto') >= 0) {
         this.setProjection(Config.DEFAULT_PROJ, true);
       }
+      throw err;
     }
 
     return this;
@@ -1816,7 +1821,8 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  getPlugins(names) {
+  getPlugins(namesParam) {
+    let names = namesParam;
     // parses parameters to Array
     if (Utils.isNull(names)) {
       names = [];
@@ -1832,8 +1838,8 @@ export default class Map extends Base {
       plugins = this.plugins_;
     }
     else {
-      names.forEach(name => {
-        plugins = plugins.concat(this.plugins_.filter(plugin => {
+      names.forEach((name) => {
+        plugins = plugins.concat(this.plugins_.filter((plugin) => {
           return (name === plugin.name);
         }));
       });
@@ -1876,7 +1882,8 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  removePlugins(plugins) {
+  removePlugins(pluginsParam) {
+    let plugins = pluginsParam;
     // checks if the parameter is null or empty
     if (Utils.isNullOrEmpty(plugins)) {
       Exception('No ha especificado ningún plugin a eliminar');
@@ -1888,7 +1895,7 @@ export default class Map extends Base {
     plugins = [].concat(plugins);
     if (plugins.length > 0) {
       // removes controls from their panels
-      plugins.forEach(plugin => {
+      plugins.forEach((plugin) => {
         plugin.destroy();
         this.plugins_.remove(plugin);
       });
@@ -1926,7 +1933,7 @@ export default class Map extends Base {
    */
   zoomToMaxExtent(keepUserZoom) {
     // zoom to maxExtent if no zoom was specified
-    let maxExtent = this.getMaxExtent();
+    const maxExtent = this.getMaxExtent();
     if (!Utils.isNullOrEmpty(maxExtent)) {
       this.setBbox(maxExtent);
     }
@@ -1934,7 +1941,7 @@ export default class Map extends Base {
       /* if no maxExtent was provided then
        calculates the envolved extent */
       this.finishedMaxExtent_ = false;
-      this.getEnvolvedExtent().then(extent => {
+      this.getEnvolvedExtent().then((extent) => {
         if (keepUserZoom !== true || Utils.isNullOrEmpty(this.userZoom_)) {
           this.setBbox(extent);
         }
@@ -1956,14 +1963,14 @@ export default class Map extends Base {
    */
   setTicket(ticket) {
     if (!Utils.isNullOrEmpty(ticket)) {
-      if (Config.PROXY_POST_URL.indexOf("ticket=") == -1) {
+      if (Config.PROXY_POST_URL.indexOf('ticket=') === -1) {
         Config('PROXY_POST_URL', Utils.addParameters(Config.PROXY_POST_URL, {
-          'ticket': ticket
+          ticket,
         }));
       }
-      if (Config.PROXY_URL.indexOf("ticket=") == -1) {
+      if (Config.PROXY_URL.indexOf('ticket=') === -1) {
         Config('PROXY_URL', Utils.addParameters(Config.PROXY_URL, {
-          'ticket': ticket
+          ticket,
         }));
       }
     }
@@ -1986,21 +1993,21 @@ export default class Map extends Base {
         success(center);
       }
       else {
-        let maxExtent = this.getMaxExtent();
+        const maxExtent = this.getMaxExtent();
         if (!Utils.isNullOrEmpty(maxExtent)) {
           // obtener centro del maxExtent
           center = {
-            'x': ((maxExtent.x.max + maxExtent.x.min) / 2),
-            'y': ((maxExtent.y.max + maxExtent.y.min) / 2)
+            x: ((maxExtent.x.max + maxExtent.x.min) / 2),
+            y: ((maxExtent.y.max + maxExtent.y.min) / 2),
           };
           success(center);
         }
         else {
-          this.getEnvolvedExtent().then(extent => {
+          this.getEnvolvedExtent().then((extent) => {
             // obtener centrol del extent
             center = {
-              'x': ((extent[0] + extent[2]) / 2),
-              'y': ((extent[1] + extent[3]) / 2)
+              x: ((extent[0] + extent[2]) / 2),
+              y: ((extent[1] + extent[3]) / 2),
             };
             success(center);
           });
@@ -2037,7 +2044,8 @@ export default class Map extends Base {
    * @api stable
    */
   addLabel(labelParam, coordParam) {
-    let panMapIfOutOfView = labelParam.panMapIfOutOfView === undefined ? true : labelParam.panMapIfOutOfView;
+    const panMapIfOutOfView = labelParam.panMapIfOutOfView ===
+      undefined ? true : labelParam.panMapIfOutOfView;
     // checks if the param is null or empty
     if (Utils.isNullOrEmpty(labelParam)) {
       Exception('No ha especificado ninguna proyección');
@@ -2066,23 +2074,23 @@ export default class Map extends Base {
       coord = this.getCenter();
     }
     else {
-      coord = Parameter.center(coord);
+      coord = Parameters.center(coord);
     }
 
     if (Utils.isNullOrEmpty(coord)) {
-      this.getInitCenter_().then(initCenter => {
+      this.getInitCenter_().then((initCenter) => {
         // checks if the user stablished a center while it was
         // calculated
         let newCenter = this.getCenter();
         if (Utils.isNullOrEmpty(newCenter)) {
           newCenter = initCenter;
         }
-        let label = new Label(text, newCenter, panMapIfOutOfView);
+        const label = new Label(text, newCenter, panMapIfOutOfView);
         this.getImpl().addLabel(label);
       });
     }
     else {
-      let label = new Label(text, coord, panMapIfOutOfView);
+      const label = new Label(text, coord, panMapIfOutOfView);
       this.getImpl().addLabel(label);
     }
 
@@ -2122,7 +2130,8 @@ export default class Map extends Base {
    * @param {Array<Mx.Point>|Mx.Point} points
    * @api stable
    */
-  drawPoints(points) {
+  drawPoints(pointsVar) {
+    let points = pointsVar;
     // checks if the param is null or empty
     if (Utils.isNullOrEmpty(points)) {
       Exception('No ha especificado ningún punto');
@@ -2132,20 +2141,20 @@ export default class Map extends Base {
       points = [points];
     }
 
-    let features = points.map(point => {
-      let gj = {
-        "type": "Feature",
-        "geometry": {
-          "type": "Point",
-          "coordinates": [point.x, point.y]
+    const features = points.map((point) => {
+      const gj = {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [point.x, point.y],
         },
-        "properties": {}
+        properties: {},
       };
       if (Utils.isFunction(point.click)) {
         gj.properties.vendor = {
-          "mapea": {
-            "click": point.click
-          }
+          mapea: {
+            click: point.click,
+          },
         };
       }
       return new Feature(null, gj);
@@ -2184,17 +2193,18 @@ export default class Map extends Base {
    * @api stable
    * @returns {Map}
    */
-  addPanels(panels) {
+  addPanels(panelsVar) {
+    let panels = panelsVar;
     if (!Utils.isNullOrEmpty(panels)) {
       if (!Utils.isArray(panels)) {
         panels = [panels];
       }
-      panels.forEach(panel => {
-        let isIncluded = this.panels_.some(panel2 => panel2.equals(panel));
+      panels.forEach((panel) => {
+        const isIncluded = this.panels_.some(panel2 => panel2.equals(panel));
         if ((panel instanceof Panel) && !isIncluded) {
           this.panels_.push(panel);
-          let queryArea = 'div.m-area'.concat(panel.position);
-          let areaContainer = this.areasContainer_.querySelector(queryArea);
+          const queryArea = 'div.m-area'.concat(panel.position);
+          const areaContainer = this.areasContainer_.querySelector(queryArea);
           panel.addTo(this, areaContainer);
         }
       });
@@ -2227,7 +2237,8 @@ export default class Map extends Base {
    * @api stable
    * @returns {array<Panel>}
    */
-  getPanels(names) {
+  getPanels(namesVar) {
+    let names = namesVar;
     let panels = [];
 
     // parses parameters to Array
@@ -2239,7 +2250,7 @@ export default class Map extends Base {
         names = [names];
       }
       names.forEach((name) => {
-        const filteredPanels = this.panels_.filter(panel => panel["name"] === name)
+        const filteredPanels = this.panels_.filter(panel => panel.name === name);
         filteredPanels.forEach((panel) => {
           if (!Utils.isNullOrEmpty(panel)) {
             panels.push(panel);
@@ -2263,23 +2274,23 @@ export default class Map extends Base {
     this.areasContainer_.classList.add('m-areas');
 
     // top-left area
-    let tlArea = document.createElement('div');
+    const tlArea = document.createElement('div');
     tlArea.classList.add('m-area');
     tlArea.classList.add('m-top');
     tlArea.classList.add('m-left');
     // top-right area
-    let trArea = document.createElement('div');
+    const trArea = document.createElement('div');
     trArea.classList.add('m-area');
     trArea.classList.add('m-top');
     trArea.classList.add('m-right');
 
     // bottom-left area
-    let blArea = document.createElement('div');
+    const blArea = document.createElement('div');
     blArea.classList.add('m-area');
     blArea.classList.add('m-bottom');
     blArea.classList.add('m-left');
     // bottom-right area
-    let brArea = document.createElement('div');
+    const brArea = document.createElement('div');
     brArea.classList.add('m-area');
     brArea.classList.add('m-bottom');
     brArea.classList.add('m-right');
@@ -2444,8 +2455,8 @@ export default class Map extends Base {
    */
   static LAYER_SORT(layer1, layer2) {
     if (!Utils.isNullOrEmpty(layer1) && !Utils.isNullOrEmpty(layer2)) {
-      let z1 = layer1.getZIndex();
-      let z2 = layer2.getZIndex();
+      const z1 = layer1.getZIndex();
+      const z2 = layer2.getZIndex();
 
       return (z1 - z2);
     }
@@ -2475,7 +2486,7 @@ export default class Map extends Base {
    * @api stable
    */
   static set DRAWLAYER_STYLE(value) {
-    Map.DRAWLAYER_STYLE_ = value
+    Map.DRAWLAYER_STYLE_ = value;
   }
 }
 
@@ -2484,11 +2495,11 @@ export default class Map extends Base {
  */
 Map.DRAWLAYER_STYLE_ = {
   fill: {
-    color: '#009e00'
+    color: '#009e00',
   },
   stroke: {
     color: '#fcfcfc',
-    width: 2
+    width: 2,
   },
-  radius: 7
+  radius: 7,
 };
