@@ -84,11 +84,11 @@ export default class WMS extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  static get type() {
+  get type() {
     return LayerType.WMS;
   }
 
-  static set type(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

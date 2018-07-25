@@ -217,7 +217,8 @@ export default class WFSTControls extends M.Plugin {
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  static equals(plugin) {
+
+  equals(plugin) {
     if (plugin instanceof WFSTControls) {
       return true;
     }

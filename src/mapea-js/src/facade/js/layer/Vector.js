@@ -52,11 +52,11 @@ export default class Vector extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  static get type() {
+  get type() {
     return LayerType.Vector;
   }
 
-  static set type(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.Vector)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Vector).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

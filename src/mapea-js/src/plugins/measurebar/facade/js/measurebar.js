@@ -93,7 +93,7 @@ export default class Measurebar extends M.Plugin {
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  static equals(plugin) {
+  equals(plugin) {
     if (plugin instanceof Measurebar) {
       return true;
     }

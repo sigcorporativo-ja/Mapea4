@@ -30,7 +30,7 @@ export default class GeosearchLayer extends M.layer.Vector {
    * @param {object} obj - Object to compare
    * @api stable
    */
-  static equals(obj) {
+  equals(obj) {
     const equals = false;
     return equals;
   }

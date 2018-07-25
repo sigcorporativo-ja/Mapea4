@@ -38,7 +38,7 @@ export default class MeasureLength extends Measure {
    * @return {string} output - Indicates the measure distance
    * @api stable
    */
-  static formatGeometry(geometry) {
+  formatGeometry(geometry) {
     const length = Math.round(geometry.getLength() * 100) / 100;
     let output;
     if (length > 100) {
@@ -57,7 +57,7 @@ export default class MeasureLength extends Measure {
    * @return {array} coordinates to tooltip
    * @api stable
    */
-  static getTooltipCoordinate(geometry) {
+  getTooltipCoordinate(geometry) {
     return geometry.getLastCoordinate();
   }
 }

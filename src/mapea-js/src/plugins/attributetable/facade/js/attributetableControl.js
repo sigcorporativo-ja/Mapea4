@@ -438,7 +438,7 @@ export default class AttributeTableControl extends M.control {
    * @function
    * @api stable
    */
-  static setFixed_() {
+  setFixed_() {
     const panel = document.querySelector('.m-attributetable');
     const bClient = panel.getBoundingClientRect();
     panel.style.position = 'fixed';

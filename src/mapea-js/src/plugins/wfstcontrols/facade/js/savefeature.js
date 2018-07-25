@@ -54,7 +54,7 @@ export default class SaveFeature extends M.Control {
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
    */
-  static equals(obj) {
+  equals(obj) {
     const equals = (obj instanceof SaveFeature);
     return equals;
   }

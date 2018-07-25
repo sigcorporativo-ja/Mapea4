@@ -135,7 +135,7 @@ export default class Printer extends M.Plugin {
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  static equals(plugin) {
+  equals(plugin) {
     if (plugin instanceof Printer) {
       return true;
     }

@@ -61,11 +61,11 @@ export default class WFS extends Vector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  static get type() {
+  get type() {
     return LayerType.WFS;
   }
 
-  static set type(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) && !Utils.isNullOrEmpty(newType) &&
       (newType !== LayerType.WFS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WFS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

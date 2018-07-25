@@ -28,5 +28,5 @@ export default class SearchstreetIntegratedControl extends M.impl.control.Search
    * @function
    * @api stable
    */
-  static zoomResults() {}
+  zoomResults() {}
 }

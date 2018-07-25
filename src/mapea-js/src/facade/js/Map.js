@@ -1106,7 +1106,7 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  static addMBtiles(layersParam) {
+  addMBtiles(layersParam) {
     // TODO
   }
 
@@ -1118,7 +1118,7 @@ export default class Map extends Base {
    * @returns {Map}
    * @api stable
    */
-  static removeMBtiles(layersParam) {
+  removeMBtiles(layersParam) {
     // TODO
   }
 
@@ -2453,7 +2453,7 @@ export default class Map extends Base {
    * @function
    * @api stable
    */
-  static LAYER_SORT(layer1, layer2) {
+  LAYER_SORT(layer1, layer2) {
     if (!Utils.isNullOrEmpty(layer1) && !Utils.isNullOrEmpty(layer2)) {
       const z1 = layer1.getZIndex();
       const z2 = layer2.getZIndex();
@@ -2473,7 +2473,7 @@ export default class Map extends Base {
    * @public
    * @api stable
    */
-  static get DRAWLAYER_STYLE() {
+  get DRAWLAYER_STYLE() {
     return Map.DRAWLAYER_STYLE_;
   }
 
@@ -2485,7 +2485,7 @@ export default class Map extends Base {
    * @public
    * @api stable
    */
-  static set DRAWLAYER_STYLE(value) {
+  set DRAWLAYER_STYLE(value) {
     Map.DRAWLAYER_STYLE_ = value;
   }
 }

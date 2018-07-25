@@ -86,7 +86,7 @@ export default class ControlBase extends Base {
    * @param {M.Map} impl to add the plugin
    * @api stable
    */
-  static setImpl(implParam) {
+  setImpl(implParam) {
     const impl = implParam;
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(impl.addTo)) {
@@ -174,7 +174,7 @@ export default class ControlBase extends Base {
    * @api stable
    * @export
    */
-  static getActivationButton(html) {}
+  getActivationButton(html) {}
 
   /**
    * function adds the event 'click'
@@ -261,5 +261,5 @@ export default class ControlBase extends Base {
    * @api stable
    * @export
    */
-  static destroy() {}
+  destroy() {}
 }

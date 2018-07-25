@@ -233,7 +233,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @private
    * @function
    */
-  static parseFeaturesForTemplate_(features) {
+  parseFeaturesForTemplate_(features) {
     const featuresTemplate = {
       features: [],
     };
@@ -267,7 +267,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @private
    * @function
    */
-  static wrapComplexFeature_(feature) {
+  wrapComplexFeature_(feature) {
     const featureGeom = feature.getGeometry();
     if ((featureGeom.getType() === M.geom.wkt.type.POLYGON) ||
       (featureGeom.getType() === M.geom.wkt.type.MULTI_POLYGON)) {

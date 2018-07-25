@@ -135,7 +135,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    * @api stable
    * @export
    */
-  static getActivationButton(element) {
+  getActivationButton(element) {
     return element.querySelector('button#m-geosearchbylocation-button');
   }
 

@@ -43,5 +43,5 @@ export default class GeosearchIntegrated extends M.impl.control.Geosearch {
    * @private
    * @function
    */
-  static zoomToResults() {}
+  zoomToResults() {}
 }

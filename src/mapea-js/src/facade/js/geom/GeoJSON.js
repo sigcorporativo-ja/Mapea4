@@ -1,5 +1,5 @@
 export default class GeoJSON {
-  static get type() {
+  get type() {
     return GeoJSON.geojsonType;
   }
 }

@@ -98,7 +98,7 @@ export default class WFSTBase extends M.impl.Control {
    * @private
    * @function
    */
-  static createInteraction_() {}
+  createInteraction_() {}
 
   /**
    * This function destroys this control and cleaning the HTML

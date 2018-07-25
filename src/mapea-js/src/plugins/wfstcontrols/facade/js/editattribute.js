@@ -40,7 +40,7 @@ export default class EditAttribute extends M.Control {
    * @returns {Promise} html response
    * @api stable
    */
-  static createView(map) {
+  createView(map) {
     return M.Template.compile(EditAttribute.TEMPLATE, {
       jsonp: true,
     });
@@ -56,7 +56,7 @@ export default class EditAttribute extends M.Control {
    * @api stable
    * @export
    */
-  static getActivationButton(element) {
+  getActivationButton(element) {
     return element.querySelector('button#m-button-editattribute');
   }
 
@@ -68,7 +68,7 @@ export default class EditAttribute extends M.Control {
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
    */
-  static equals(obj) {
+  equals(obj) {
     const equals = (obj instanceof EditAttribute);
     return equals;
   }

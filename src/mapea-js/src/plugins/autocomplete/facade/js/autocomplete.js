@@ -537,7 +537,7 @@ export default class Autocomplete extends M.Plugin {
    * @Param {string} replace - String to replace
    * @returns {string} Format content
    */
-  static formatContent_(str, find, replace) {
+  formatContent_(str, find, replace) {
     return str.replace(new RegExp(find, 'g'), replace);
   }
 
@@ -596,7 +596,7 @@ export default class Autocomplete extends M.Plugin {
     this.searchingResult_ = null;
   }
 
-  static equals(plugin) {
+  equals(plugin) {
     if (plugin instanceof Autocomplete) {
       return true;
     }

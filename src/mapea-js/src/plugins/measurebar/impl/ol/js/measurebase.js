@@ -165,7 +165,7 @@ export default class Measure extends M.impl.Control {
    * @private
    * @return {ol.layer.Vector} layer - Vector layer
    */
-  static createLayer_() {
+  createLayer_() {
     const layer = new ol.layer.Vector({
       source: new ol.source.Vector({}),
       style: new ol.style.Style({

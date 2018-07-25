@@ -155,7 +155,7 @@ export default class Geosearch extends M.Plugin {
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  static equals(plugin) {
+  equals(plugin) {
     if (plugin instanceof Geosearch) {
       return true;
     }

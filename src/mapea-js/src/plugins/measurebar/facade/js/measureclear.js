@@ -36,7 +36,7 @@ export default class MeasureClear extends M.Control {
    * @returns {Promise} HTML template
    * @api stable
    */
-  static createView(map) {
+  createView(map) {
     return M.Template.compile(MeasureClear.TEMPLATE, {
       jsonp: true,
     });

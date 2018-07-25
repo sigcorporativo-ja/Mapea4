@@ -93,11 +93,11 @@ export default class WMC extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  static get type() {
+  get type() {
     return LayerType.WMC;
   }
 
-  static set type(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMC)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMC).concat('\' pero se ha especificado \'').concat(newType).concat('\''));

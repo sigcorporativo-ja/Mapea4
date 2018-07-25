@@ -151,7 +151,7 @@ export default class SearchstreetControl extends ol.control.Control {
    * @param {object} feature - Specific result query response
    * @param {boolean} noPanMapIfOutOfView
    */
-  static showPopup_(feature, noPanMapIfOutOfView) {
+  showPopup_(feature, noPanMapIfOutOfView) {
     M.Template.compile(SearchstreetControl.POPUP_TEMPLATE, {
       jsonp: true,
       vars: {

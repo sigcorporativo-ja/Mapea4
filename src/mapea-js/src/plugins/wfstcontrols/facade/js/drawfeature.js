@@ -38,7 +38,7 @@ export default class DrawFeature extends M.Control {
    * @returns {Promise} html response
    * @api stable
    */
-  static createView(map) {
+  createView(map) {
     return M.Template.compile(DrawFeature.TEMPLATE, {
       jsonp: true,
     });
@@ -54,7 +54,7 @@ export default class DrawFeature extends M.Control {
    * @api stable
    * @export
    */
-  static getActivationButton(element) {
+  getActivationButton(element) {
     return element.querySelector('button#m-button-drawfeature');
   }
 
@@ -66,7 +66,7 @@ export default class DrawFeature extends M.Control {
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
    */
-  static equals(obj) {
+  equals(obj) {
     const equals = (obj instanceof DrawFeature);
     return equals;
   }
@@ -79,7 +79,7 @@ export default class DrawFeature extends M.Control {
    * @param {M.layer.WFS} layer - Layer
    * @api stable
    */
-  static setLayer(layer) {
+  setLayer(layer) {
     this.getImpl().layer_ = layer;
   }
 }

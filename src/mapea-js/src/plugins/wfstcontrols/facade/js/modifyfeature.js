@@ -40,7 +40,7 @@ export default class ModifyFeature extends M.Control {
    * @returns {Promise} html response
    * @api stable
    */
-  static createView(map) {
+  createView(map) {
     return M.Template.compile(ModifyFeature.TEMPLATE, {
       jsonp: true,
     });
@@ -56,7 +56,7 @@ export default class ModifyFeature extends M.Control {
    * @api stable
    * @export
    */
-  static getActivationButton(element) {
+  getActivationButton(element) {
     return element.querySelector('button#m-button-modifyfeature');
   }
 
@@ -68,7 +68,7 @@ export default class ModifyFeature extends M.Control {
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
    */
-  static equals(obj) {
+  equals(obj) {
     const equals = (obj instanceof ModifyFeature);
     return equals;
   }

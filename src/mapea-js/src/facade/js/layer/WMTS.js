@@ -58,10 +58,10 @@ export default class WMTS extends LayerBase {
    * 'type' This property indicates if
    * the layer was selected
    */
-  static get type() {
+  get type() {
     return LayerType.WMTS;
   }
-  static set type(newType) {
+  set type(newType) {
     if (!Utils.isUndefined(newType) &&
       !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMTS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMTS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
