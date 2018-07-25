@@ -1,7 +1,5 @@
+import LabelImpl from 'impl/Label';
 import Base from './Base';
-import Utils from './util/Util';
-import Exception from './exception/exception';
-import LabelImpl from '../../impl/Label';
 
 export default class Label extends Base {
   /**
@@ -15,9 +13,8 @@ export default class Label extends Base {
    * @api stable
    */
   constructor(text, coordOpts, panMapIfOutOfView) {
-
     // implementation of this control
-    let impl = new LabelImpl(text, coordOpts, panMapIfOutOfView);
+    const impl = new LabelImpl(text, coordOpts, panMapIfOutOfView);
 
     // calls the super constructor
     super(impl);
@@ -88,5 +85,5 @@ export default class Label extends Base {
    * @public
    * @api stable
    */
-  Label.POPUP_TEMPLATE = 'label_popup.html';
 }
+Label.POPUP_TEMPLATE = 'label_popup.html';

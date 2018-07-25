@@ -50,7 +50,7 @@ export default class MObject {
    * @function
    * @api stable
    */
-  once(eventType, listener, optThis) {
+  static once(eventType, listener, optThis) {
     return this.eventsManager_.add(eventType, listener, optThis, true);
   }
 
@@ -72,7 +72,8 @@ export default class MObject {
    * @function
    * @api stable
    */
-  fire(eventType, args) {
+  fire(eventType, argsParam) {
+    let args = argsParam;
     if (Utils.isNullOrEmpty(args)) {
       args = [this];
     }

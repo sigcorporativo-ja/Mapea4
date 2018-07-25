@@ -334,7 +334,7 @@ export default class Popup extends Base {
       this.element_.classList.remove(this.status_);
       this.status_ = status;
       this.element_.classList.add(this.status_);
-      this.element_.style.top = "";
+      this.element_.style.top = '';
       this.element_.classList.remove('m-no-animation');
       // mobile center
       if (MWindow.WIDTH <= Config.MOBILE_WIDTH) {
