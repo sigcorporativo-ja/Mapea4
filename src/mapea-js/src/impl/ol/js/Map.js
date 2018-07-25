@@ -1,16 +1,16 @@
 import MObject from 'facade/js/Object';
 import FacadePanzoombar from 'facade/js/control/Panzoombar';
 import LayerType from 'facade/js/layer/Type';
+import 'impl-assets/css/ol';
 import Control from 'facade/js/control/Control';
 import FacadeWMS from 'facade/js/layer/WMS';
+import 'impl-assets/css/custom';
 import EventsManager from 'facade/js/event/Manager';
 import LayerBase from 'facade/js/layer/Layer';
 import Exception from 'facade/js/exception/exception';
 import Utils from 'facade/js/util/Utils';
 import View from './View';
 import EnvolvedExtent from './util/EnvolvedExtent';
-import 'impl-assets/css/ol.css';
-import 'impl-assets/css/custom.css';
 
 export default class Map extends MObject {
   /**
@@ -871,7 +871,7 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.MBtiles>} layers from the map
    * @api stable
    */
-  getMBtiles(filters) {
+  static getMBtiles(filters) {
     const foundLayers = [];
     return foundLayers;
   }

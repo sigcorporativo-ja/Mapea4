@@ -1,10 +1,10 @@
+import layerswitcherTemplate from 'templates/layerswitcher';
 import Utils from 'facade/js/util/Utils';
 import Template from 'facade/js/util/Template';
 import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
 import Layer from 'facade/js/layer/Layer';
 import Config from 'configuration';
 import Control from './Control';
-import layerswitcherTemplate from "templates/layerswitcher";
 
 /**
  * @namespace M.impl.control
