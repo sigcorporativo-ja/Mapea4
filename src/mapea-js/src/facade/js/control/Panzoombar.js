@@ -38,7 +38,7 @@ export default class Panzoombar extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  static createView(map) {
+  createView(map) {
     return Template.compile(panzoombarTemplate);
   }
 
@@ -49,7 +49,7 @@ export default class Panzoombar extends ControlBase {
    * @function
    * @api stable
    */
-  static equals(obj) {
+  equals(obj) {
     const equals = (obj instanceof Panzoombar);
     return equals;
   }

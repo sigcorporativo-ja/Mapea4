@@ -1,5 +1,5 @@
 export default class WKT {
-  static getType() {
+  getType() {
     return WKT.type_;
   }
 }

@@ -39,7 +39,7 @@ export default class ScaleLine extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  static createView(map) {
+  createView(map) {
     return Template.compile(scalelineTemplate);
   }
 
@@ -50,7 +50,7 @@ export default class ScaleLine extends ControlBase {
    * @function
    * @api stable
    */
-  static equals(obj) {
+  equals(obj) {
     const equals = (obj instanceof ScaleLine);
     return equals;
   }

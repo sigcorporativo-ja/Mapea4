@@ -38,7 +38,7 @@ export default class Panzoom extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  static createView(map) {
+  createView(map) {
     return Template.compile(panzoomTemplate);
   }
 
@@ -49,7 +49,7 @@ export default class Panzoom extends ControlBase {
    * @function
    * @api stable
    */
-  static equals(obj) {
+  equals(obj) {
     const equals = (obj instanceof Panzoom);
     return equals;
   }

@@ -38,7 +38,7 @@ export default class Location extends ControlBase {
    * @returns {Promise} HTML template
    * @api stable
    */
-  static createView(map) {
+  createView(map) {
     return Template.compile(locationTemplate);
   }
 
@@ -52,7 +52,7 @@ export default class Location extends ControlBase {
    * @api stable
    * @export
    */
-  static getActivationButton(element) {
+  getActivationButton(element) {
     return element.querySelector('button#m-location-button');
   }
 
@@ -66,7 +66,7 @@ export default class Location extends ControlBase {
    * @returns {boolean} equals - Returns if they are equal or not
    * @api stable
    */
-  static equals(obj) {
+  equals(obj) {
     const equals = (obj instanceof Location);
     return equals;
   }

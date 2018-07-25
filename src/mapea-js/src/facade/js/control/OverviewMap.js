@@ -37,7 +37,7 @@ export default class OverviewMap extends ControlBase {
    * @returns {Promise} html response
    * @api stable
    */
-  static createView(map) {
+  createView(map) {
     return Template.compile(overviewmapTemplate);
   }
 
@@ -48,7 +48,7 @@ export default class OverviewMap extends ControlBase {
    * @function
    * @api stable
    */
-  static equals(obj) {
+  equals(obj) {
     const equals = (obj instanceof OverviewMap);
     return equals;
   }

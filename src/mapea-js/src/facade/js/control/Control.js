@@ -136,7 +136,7 @@ export default class ControlBase extends Base {
    * @api stable
    * @export
    */
-  static createView(map) {}
+  createView(map) {}
 
   /**
    * TODO

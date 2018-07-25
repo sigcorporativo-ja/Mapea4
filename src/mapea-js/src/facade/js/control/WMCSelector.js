@@ -37,7 +37,7 @@ export default class WMCSelector extends ControlBase {
    * @param {M.Map} map to add the control
    * @api stable
    */
-  static createView(map) {
+  createView(map) {
     // compiles the template
     return Template.compile(wmcselectorTemplate, {
       vars: {

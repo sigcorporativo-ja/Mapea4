@@ -244,7 +244,7 @@ export default class Feature extends Base {
    * @return {M.Feature}
    * @api stable
    */
-  static getCentroid() {
+  getCentroid() {
     const id = this.getId();
     const attributes = this.getAttributes();
     const style = new StylePoint({

@@ -28,10 +28,6 @@
       "vars": "all",
       "args": "none"
     }],
-    "class-methods-use-this": ["error", {
-     "exceptMethods": [
-      "updateCanvas"
-     ]
-     }]
+    "class-methods-use-this": "off"
   }
 }

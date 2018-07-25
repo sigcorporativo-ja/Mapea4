@@ -280,7 +280,7 @@ export default class Feature extends Base {
    * @api stable
    * @export
    */
-  static destroy() {
+  destroy() {
     // TODO
     // this.getImpl().destroy();
     // this.fire(M.evt.DESTROY);

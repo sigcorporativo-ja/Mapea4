@@ -1,5 +1,5 @@
 export default class WFS {
-  static getType() {
+  getType() {
     return WFS.type_;
   }
 }

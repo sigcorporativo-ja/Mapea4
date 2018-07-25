@@ -13,7 +13,7 @@ export default class Base {
    * @protected
    * @function
    */
-  static getFunctionFilter() {}
+  getFunctionFilter() {}
 
   /**
    * This function execute a function filter
@@ -22,7 +22,7 @@ export default class Base {
    * @param {Array<M.Feature>} features - Features on which the filter runs
    * @function
    */
-  static execute(features) {}
+  execute(features) {}
 
   /**
    * This function execute a function filter
@@ -32,5 +32,5 @@ export default class Base {
    * @return {Array<M.Feature>} Result of execute
    * @function
    */
-  static toCQL() {}
+  toCQL() {}
 }
