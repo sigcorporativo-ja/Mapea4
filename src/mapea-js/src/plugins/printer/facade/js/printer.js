@@ -1,4 +1,5 @@
 import PrinterControl from './printercontrol';
+import '../assets/css/printer';
 
 export default class Printer extends M.Plugin {
   /**
@@ -95,7 +96,7 @@ export default class Printer extends M.Plugin {
       collapsible: true,
       className: 'm-printer',
       collapsedButtonClass: 'g-cartografia-impresora',
-      position: M.ui.Position.TR,
+      position: M.ui.position.TR,
       tooltip: 'Impresión del mapa',
     });
     this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {

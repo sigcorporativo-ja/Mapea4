@@ -1,8 +1,13 @@
 import WKT from '../geom/WKT';
-import M from '../Mapea';
-import StylePoint from '../style/Point';
-import StyleLine from '../style/Line';
-import StylePolygon from '../style/Polygon';
+import {
+  INCHES_PER_UNIT,
+  DOTS_PER_INCH
+}
+from '../Mapea';
+// import StylePoint from '../style/Point';
+
+// import StyleLine from '../style/Line';
+// import StylePolygon from '../style/Polygon';
 import './polyfills';
 
 /**
@@ -401,7 +406,7 @@ export default class Utils {
       }
       // normalize scale
       const normScale = (scale > 1.0) ? (1.0 / scale) : scale;
-      resolution = 1 / (normScale * M.INCHES_PER_UNIT[units] * M.DOTS_PER_INCH);
+      resolution = 1 / (normScale * INCHES_PER_UNIT[units] * DOTS_PER_INCH);
     }
     return resolution;
   }
@@ -422,7 +427,7 @@ export default class Utils {
       units = 'degrees';
     }
 
-    const scale = resolution * M.INCHES_PER_UNIT[units] * M.DOTS_PER_INCH;
+    const scale = resolution * INCHES_PER_UNIT[units] * DOTS_PER_INCH;
 
     return scale;
   }

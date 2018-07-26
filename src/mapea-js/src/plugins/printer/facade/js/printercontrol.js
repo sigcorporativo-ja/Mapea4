@@ -18,15 +18,15 @@ export default class PrinterControl extends M.Control {
 
     // checks if the implementation can manage this control
     if (M.utils.isUndefined(PrinterControlImpl)) {
-      M.Exception('La implementación usada no puede crear controles Printer');
+      M.exception('La implementación usada no puede crear controles Printer');
     }
 
     if (M.utils.isUndefined(PrinterControlImpl.prototype.encodeLayer)) {
-      M.Exception('La implementación usada no posee el método encodeLayer');
+      M.exception('La implementación usada no posee el método encodeLayer');
     }
 
     if (M.utils.isUndefined(PrinterControlImpl.prototype.encodeLegend)) {
-      M.Exception('La implementación usada no posee el método encodeLegend');
+      M.exception('La implementación usada no posee el método encodeLegend');
     }
 
     /**
@@ -168,7 +168,7 @@ export default class PrinterControl extends M.Control {
         }
         // forceScale
         capabilities.forceScale = this.options_.forceScale;
-        M.Template.compile(PrinterControl.TEMPLATE, {
+        M.template.compile(PrinterControl.TEMPLATE, {
           jsonp: true,
           vars: capabilities,
         }).then((html) => {
@@ -245,7 +245,7 @@ export default class PrinterControl extends M.Control {
 
     // print button
     const printBtn = this.element_.querySelector('.button > button.print');
-    printBtn.addEventListener('click', this.printClick_);
+    printBtn.addEventListener('click', this.printClick_.bind(this));
 
     // clean button
     const cleanBtn = this.element_.querySelector('.button > button.remove');
@@ -288,32 +288,6 @@ export default class PrinterControl extends M.Control {
     M.utils.enableTouchScroll(this.queueContainer_);
   }
 
-  /**
-   * This function creates the view to the specified map
-   *
-   * @public
-   * @function
-   * @param {M.Map} map to add the control
-   * @api stable
-   */
-  getCapabilities() {
-    if (M.utils.isNullOrEmpty(this.capabilitiesPromise_)) {
-      this.capabilitiesPromise_ = new Promise((success, fail) => {
-        const capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'info.json']);
-        M.Remote.get(capabilitiesUrl).then((response) => {
-          let capabilities = {};
-          try {
-            capabilities = JSON.parse(response.text);
-          }
-          catch (err) {
-            M.Exception(err);
-          }
-          success(capabilities);
-        });
-      });
-    }
-    return this.capabilitiesPromise_;
-  }
 
   /**
    * This function checks if an object is equals
@@ -369,6 +343,8 @@ export default class PrinterControl extends M.Control {
   printClick_(evt) {
     evt.preventDefault();
 
+    console.log(this);
+
     this.getCapabilities().then((capabilities) => {
       this.getPrintData().then((printData) => {
         const printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
@@ -378,9 +354,9 @@ export default class PrinterControl extends M.Control {
         this.queueContainer_.appendChild(queueEl);
         queueEl.classList.add(PrinterControl.LOADING_CLASS);
 
-        M.Remote.post(printUrl, printData).then((responseParam) => {
+        M.remote.post(printUrl, printData).then((responseParam) => {
           let response = responseParam;
-          queueEl.classList.remove(queueEl, PrinterControl.LOADING_CLASS);
+          queueEl.classList.remove(PrinterControl.LOADING_CLASS);
 
           if (response.error !== true) {
             let downloadUrl;
@@ -401,6 +377,33 @@ export default class PrinterControl extends M.Control {
         });
       });
     });
+  }
+
+  /**
+   * This function creates the view to the specified map
+   *
+   * @public
+   * @function
+   * @param {M.Map} map to add the control
+   * @api stable
+   */
+  getCapabilities() {
+    if (M.utils.isNullOrEmpty(this.capabilitiesPromise_)) {
+      this.capabilitiesPromise_ = new Promise((success, fail) => {
+        const capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'info.json']);
+        M.remote.get(capabilitiesUrl).then((response) => {
+          let capabilities = {};
+          try {
+            capabilities = JSON.parse(response.text);
+          }
+          catch (err) {
+            M.exception(err);
+          }
+          success(capabilities);
+        });
+      });
+    }
+    return this.capabilitiesPromise_;
   }
 
   /**

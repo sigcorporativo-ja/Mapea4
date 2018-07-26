@@ -96,14 +96,14 @@ Mapea.impl = null;
  * 0.02540005080010160020 (A sensible default)
  * @const {Number}
  */
-Mapea.METERS_PER_INCH = 0.02540005080010160020;
+export const METERS_PER_INCH = 0.02540005080010160020;
 
 /**
  * 72 (A sensible default)
  * @const {Number}
  * @api stable
  */
-Mapea.DOTS_PER_INCH = 72;
+export const DOTS_PER_INCH = 72;
 
 /**
  * Constant inches per unit -- borrowed from MapServer mapscale.c
@@ -115,7 +115,7 @@ Mapea.DOTS_PER_INCH = 72;
  * @const {Object}
  * @api stable
  */
-Mapea.INCHES_PER_UNIT = {
+export const INCHES_PER_UNIT = {
   inches: 1.0,
   in: 1.0,
   Inch: 1.0,

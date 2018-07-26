@@ -43,7 +43,7 @@ export default class Vector extends LayerBase {
      */
     this.filter_ = null;
 
-    this.setStyle(this.style_);
+    // this.setStyle(this.style_);
 
     impl.on(EvtManager.LOAD, features => this.fire(EvtManager.LOAD, [features]));
   }
@@ -274,47 +274,47 @@ export default class Vector extends LayerBase {
    * @param {M.Style}
    * @param {bool}
    */
-  setStyle(styleParam, applyToFeature = false, optionStyle = Vector.DEFAULT_OPTIONS_STYLE) {
-    const styleC = styleParam;
-    this.oldStyle_ = this.style_;
-    let isNullStyle = false;
-    if (styleC === null) {
-      isNullStyle = true;
-    }
-    const applyStyleFn = (styleVar) => {
-      let style = styleVar;
-      const applyStyle = () => {
-        if (Utils.isNullOrEmpty(style)) {
-          style = Utils.generateStyleLayer(optionStyle, this);
-        }
-        const isCluster = style instanceof StyleCluster;
-        const isPoint = [GeomGeoJSON.type.POINT, GeomGeoJSON.type.MULTI_POINT]
-          .includes(Utils.getGeometryType(this));
-        if (style instanceof Style && (!isCluster || isPoint)) {
-          if (!Utils.isNullOrEmpty(this.oldStyle_)) {
-            this.oldStyle_.unapply(this);
-          }
-          style.apply(this, applyToFeature, isNullStyle);
-          this.style_ = style;
-          this.fire(EvtManager.CHANGE_STYLE, [style, this]);
-        }
-        if (!Utils.isNullOrEmpty(this.getImpl().getMap())) {
-          const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
-          if (!Utils.isNullOrEmpty(layerswitcher)) {
-            layerswitcher.render();
-          }
-        }
-      };
-      return applyStyle;
-    };
-
-    if (this.getImpl().isLoaded()) {
-      applyStyleFn(styleC).bind(this)();
-    }
-    else {
-      this.once(EvtManager.LOAD, applyStyleFn(styleC), this);
-    }
-  }
+  // setStyle(styleParam, applyToFeature = false, optionStyle = Vector.DEFAULT_OPTIONS_STYLE) {
+  //   const styleC = styleParam;
+  //   this.oldStyle_ = this.style_;
+  //   let isNullStyle = false;
+  //   if (styleC === null) {
+  //     isNullStyle = true;
+  //   }
+  //   const applyStyleFn = (styleVar) => {
+  //     let style = styleVar;
+  //     const applyStyle = () => {
+  //       if (Utils.isNullOrEmpty(style)) {
+  //         style = Utils.generateStyleLayer(optionStyle, this);
+  //       }
+  //       const isCluster = style instanceof StyleCluster;
+  //       const isPoint = [GeomGeoJSON.type.POINT, GeomGeoJSON.type.MULTI_POINT]
+  //         .includes(Utils.getGeometryType(this));
+  //       if (style instanceof Style && (!isCluster || isPoint)) {
+  //         if (!Utils.isNullOrEmpty(this.oldStyle_)) {
+  //           this.oldStyle_.unapply(this);
+  //         }
+  //         style.apply(this, applyToFeature, isNullStyle);
+  //         this.style_ = style;
+  //         this.fire(EvtManager.CHANGE_STYLE, [style, this]);
+  //       }
+  //       if (!Utils.isNullOrEmpty(this.getImpl().getMap())) {
+  //         const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
+  //         if (!Utils.isNullOrEmpty(layerswitcher)) {
+  //           layerswitcher.render();
+  //         }
+  //       }
+  //     };
+  //     return applyStyle;
+  //   };
+  //
+  //   if (this.getImpl().isLoaded()) {
+  //     applyStyleFn(styleC).bind(this)();
+  //   }
+  //   else {
+  //     this.once(EvtManager.LOAD, applyStyleFn(styleC), this);
+  //   }
+  // }
 
   /**
    * This function return style vector

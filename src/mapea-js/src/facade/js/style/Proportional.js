@@ -1,4 +1,4 @@
-import StyleComposite from './Composite';
+// import StyleComposite from './Composite';
 import StylePoint from './Point';
 import StyleSimple from './Simple';
 import Utils from '../util/Utils';
@@ -7,7 +7,7 @@ import Exception from '../exception/exception';
 /**
  * @namespace Proportional
  */
-export default class Proportional extends StyleComposite {
+export default class Proportional {
   /**
    * @classdesc
    * Main constructor of the class. Creates a style Proportional
@@ -23,7 +23,7 @@ export default class Proportional extends StyleComposite {
    * @api stable
    */
   constructor(attributeName, minRadius, maxRadius, style, proportionalFunction, options = {}) {
-    super(options, {});
+    // super(options, {});
 
     if (Utils.isNullOrEmpty(attributeName)) {
       Exception('No se ha especificado el nombre del atributo.');

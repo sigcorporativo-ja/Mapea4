@@ -101,7 +101,7 @@ export default class PrinterControl extends M.impl.Control {
    * @param {function} template template of this control
    * @api stable
    */
-  static encodeLegend(layer) {
+  encodeLegend(layer) {
     let encodedLegend = null;
 
     if (layer.displayInLayerSwitcher) {
@@ -244,7 +244,7 @@ export default class PrinterControl extends M.impl.Control {
    * @param {function} template template of this control
    * @api stable
    */
-  static encodeWMS(layer) {
+  encodeWMS(layer) {
     let encodedLayer = null;
     const olLayer = layer.getImpl().getOL3Layer();
     const layerUrl = layer.url;
@@ -579,7 +579,7 @@ export default class PrinterControl extends M.impl.Control {
    * @param {function} template template of this control
    * @api stable
    */
-  static encodeOSM(layer) {
+  encodeOSM(layer) {
     let encodedLayer = null;
 
     const layerImpl = layer.getImpl();
@@ -617,7 +617,7 @@ export default class PrinterControl extends M.impl.Control {
    * @param {function} template template of this control
    * @api stable
    */
-  static encodeMapbox(layer) {
+  encodeMapbox(layer) {
     let encodedLayer = null;
 
     const layerImpl = layer.getImpl();

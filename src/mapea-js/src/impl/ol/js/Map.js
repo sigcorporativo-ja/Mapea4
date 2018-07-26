@@ -3,7 +3,7 @@ import FacadePanzoombar from 'facade/js/control/Panzoombar';
 import LayerType from 'facade/js/layer/Type';
 import 'impl-assets/css/ol';
 import Control from 'facade/js/control/Control';
-import FacadeWMS from 'facade/js/layer/WMS';
+// import FacadeWMS from 'facade/js/layer/WMS';
 import 'impl-assets/css/custom';
 import EventsManager from 'facade/js/event/Manager';
 import LayerBase from 'facade/js/layer/Layer';
@@ -871,7 +871,7 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.MBtiles>} layers from the map
    * @api stable
    */
-  static getMBtiles(filters) {
+  getMBtiles(filters) {
     const foundLayers = [];
     return foundLayers;
   }

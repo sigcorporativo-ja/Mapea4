@@ -26,10 +26,10 @@ import Panzoombar from './control/Panzoombar';
 import Layer from './layer/Layer';
 import LayerType from './layer/Type';
 import Vector from './layer/Vector';
-import KML from './layer/KML';
+// import KML from './layer/KML';
 import WFS from './layer/WFS';
 import WMC from './layer/WMC';
-import WMS from './layer/WMS';
+// import WMS from './layer/WMS';
 import WMTS from './layer/WMTS';
 import OSM from './layer/OSM';
 import Mapbox from './layer/Mapbox';
@@ -194,7 +194,7 @@ export default class Map extends Base {
       displayInLayerSwitcher: false,
     });
 
-    this.drawLayer_.setStyle(new Point(Map.DRAWLAYER_STYLE));
+    // this.drawLayer_.setStyle(new Point(Map.DRAWLAYER_STYLE));
 
     this.drawLayer_.setZIndex(MapImpl.Z_INDEX[LayerType.WFS] + 999);
     this.addLayers(this.drawLayer_);
