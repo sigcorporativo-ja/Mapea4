@@ -52,7 +52,7 @@ export default class KML extends MObject {
   getLoaderFn(callback) {
     return ((extent, resolution, projection) => {
       this.loadInternal_(projection).then((response) => {
-        callback.apply(this, response);
+        callback(response);
       });
     });
   }
@@ -67,22 +67,26 @@ export default class KML extends MObject {
     return new Promise((success, fail) => {
       Remote.get(this.url_).then((response) => {
         if (!Utils.isNullOrEmpty(response.text)) {
-          const features = this.format_.readFeatures(response.text, {
+          const features = this.format_.readCustomFeatures(response.text, {
             featureProjection: projection,
           });
           const screenOverlay = this.format_.getScreenOverlay();
-          success.call(this, [
-            features.map((olFeature) => {
-              const feature = new FacadeFeature(olFeature.getId(), {
-                geometry: {
-                  coordinates: olFeature.getGeometry().getCoordinates(),
-                  type: olFeature.getGeometry().getType(),
-                },
-                properties: olFeature.getProperties(),
-              });
-              feature.getImpl().getOLFeature().style = olFeature.getStyle();
-              return feature;
-            }), screenOverlay]);
+          const mFeatures = features.map((olFeature) => {
+            const feature = new FacadeFeature(olFeature.getId(), {
+              geometry: {
+                coordinates: olFeature.getGeometry().getCoordinates(),
+                type: olFeature.getGeometry().getType(),
+              },
+              properties: olFeature.getProperties(),
+            });
+            feature.getImpl().getOLFeature().setStyle(olFeature.getStyle());
+            return feature;
+          });
+
+          success({
+            features: mFeatures,
+            screenOverlay,
+          });
         }
         else {
           Exception('No hubo respuesta del KML');

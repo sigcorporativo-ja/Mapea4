@@ -26,6 +26,6 @@ export default class Clustered extends Feature {
    * @return {bool} returns the result of comparing two features
    */
   equals(feature) {
-    return this.id() === feature.id();
+    return this.id === feature.id;
   }
 }

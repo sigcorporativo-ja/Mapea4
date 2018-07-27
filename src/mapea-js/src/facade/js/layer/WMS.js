@@ -18,23 +18,20 @@ export default class WMS extends LayerBase {
    * @param {Mx.parameters.LayerOptions} options provided by the user
    * @api stable
    */
-  constructor(userParameters, options = {}, impl = new WMSImpl(options)) {
-    // This Layer is of parameters.
-    const parameters = parameter.layer(userParameters, LayerType.WMS);
-
-    // calls the super constructor
-    super(parameters, impl);
-
+  constructor(userParameters, options = {}) {
     // checks if the implementation can create WMC layers
     if (Utils.isUndefined(WMSImpl)) {
       Exception('La implementación usada no puede crear capas WMS');
     }
-
     // checks if the param is null or empty
     if (Utils.isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
-
+    // This Layer is of parameters.
+    const parameters = parameter.layer(userParameters, LayerType.WMS);
+    const impl = new WMSImpl(options);
+    // calls the super constructor
+    super(parameters, impl);
     // legend
     this.legend = parameters.legend;
 
@@ -60,25 +57,25 @@ export default class WMS extends LayerBase {
    * 'url' The service URL of the
    * layer
    */
-  get url() {
-    return this.getImpl().url;
-  }
-  set url(newUrl) {
-    this.getImpl().url = newUrl;
-    this._updateNoCache();
-  }
-
-  /**
-   * 'name' the layer name
-   */
-  get name() {
-    return this.getImpl().name;
-  }
-
-  set name(newName) {
-    this.getImpl().name = newName;
-    this._updateNoCache();
-  }
+  // get url() {
+  //   return this.getImpl().url_;
+  // }
+  // set url(newUrl) {
+  //   this.getImpl().url_ = newUrl;
+  //   this._updateNoCache();
+  // }
+  //
+  // /**
+  //  * 'name' the layer name
+  //  */
+  // get name() {
+  //   return this.getImpl().name_;
+  // }
+  //
+  // set name(newName) {
+  //   this.getImpl().name_ = newName;
+  //   this._updateNoCache();
+  // }
 
   /**
    * 'type' This property indicates if
@@ -210,7 +207,7 @@ export default class WMS extends LayerBase {
    * @function
    */
   _updateNoCache() {
-    const tiledIdx = M.config.tileMappgins.tiledNames.indexOf(this.name);
+    const tiledIdx = Config.tileMappgins.tiledNames.indexOf(this.name);
     if ((tiledIdx !== -1) && Utils.sameUrl(Config.tileMappgins.tiledUrls[tiledIdx], this.url)) {
       this._noCacheUrl = Config.tileMappgins.urls[tiledIdx];
       this._noCacheName = Config.tileMappgins.names[tiledIdx];

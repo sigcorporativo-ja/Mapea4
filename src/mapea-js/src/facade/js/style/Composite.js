@@ -1,7 +1,7 @@
 import StyleBase from './Style';
 import Utils from '../util/Utils';
-import StyleCluster from './Cluster';
-import StyleProportional from './Proportional';
+// import StyleCluster from './Cluster';
+// import StyleProportional from './Proportional';
 
 export default class Composite extends StyleBase {
   /**

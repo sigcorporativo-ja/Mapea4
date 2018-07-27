@@ -209,7 +209,7 @@ export default class Feature extends Base {
    * @return {bool} returns the result of comparing two features
    */
   equals(feature) {
-    return this.id() === feature.id();
+    return this.getId() === feature.getId();
   }
 
   /**

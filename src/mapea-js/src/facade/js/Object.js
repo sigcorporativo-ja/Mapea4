@@ -50,17 +50,6 @@ export default class MObject {
    * @function
    * @api stable
    */
-  static once(eventType, listener, optThis) {
-    return this.eventsManager_.add(eventType, listener, optThis, true);
-  }
-
-  /**
-   * Sets the callback when the instace is loaded
-   *
-   * @public
-   * @function
-   * @api stable
-   */
   un(eventType, listener, optThis) {
     this.eventsManager_.remove(eventType, listener, optThis);
   }

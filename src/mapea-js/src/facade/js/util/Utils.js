@@ -209,10 +209,10 @@ export default class Utils {
     if (Utils.isObject(params)) {
       const keys = Object.keys(params);
       keys.forEach((key) => {
-        const param = params[key];
-        requestParams += param;
+        const value = params[key];
+        requestParams += key;
         requestParams += '=';
-        requestParams += encodeURIComponent(params[param]);
+        requestParams += encodeURIComponent(value);
         requestParams += '&';
       });
       // removes the last '&'

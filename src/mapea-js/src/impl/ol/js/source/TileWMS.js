@@ -12,13 +12,11 @@ export default class TileWMS extends ol.source.TileWMS {
    */
 
   constructor(optOptions = {}) {
-    super(optOptions);
-
+    const options = optOptions;
     if (Utils.isNullOrEmpty(optOptions.tileLoadFunction)) {
-      /* eslint-disable */
-      optOptions.tileLoadFunction = TileWMS.tileLoadFunction.bind(this);
-      /* eslint-enable */
+      options.tileLoadFunction = TileWMS.tileLoadFunction;
     }
+    super(options);
   }
 
   /**
@@ -42,10 +40,8 @@ export default class TileWMS extends ol.source.TileWMS {
    * @function
    * @api stable
    */
-
-  tileLoadFunction(imageTile, src) {
-    /* eslint-disable */
+  static tileLoadFunction(imageTileParam, src) {
+    const imageTile = imageTileParam;
     imageTile.getImage().src = `${src}&_= ${this.revision_}`;
-    /* eslint-enable */
   }
 }

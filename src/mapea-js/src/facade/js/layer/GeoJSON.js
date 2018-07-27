@@ -88,9 +88,9 @@ export default class GeoJSON extends LayerVector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  get type() {
-    return LayerType.GeoJSON;
-  }
+  // get type() {
+  //   return LayerType.GeoJSON;
+  // }
 
   /**
    * 'extract' the features properties

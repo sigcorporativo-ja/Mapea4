@@ -246,8 +246,8 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.WMC>} layers from the map
    * @api stable
    */
-  getWMC(filters) {
-    let filtersVar;
+  getWMC(filtersParam) {
+    let filters = filtersParam;
     let foundLayers = [];
 
     // get all wmcLayers
@@ -257,17 +257,17 @@ export default class Map extends MObject {
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filtersVar = [];
+      filters = [];
     }
     if (!Utils.isArray(filters)) {
-      filtersVar = [filters];
+      filters = [filters];
     }
 
-    if (filtersVar.length === 0) {
+    if (filters.length === 0) {
       foundLayers = wmcLayers;
     }
     else {
-      filtersVar.forEach((filterLayer) => {
+      filters.forEach((filterLayer) => {
         foundLayers = foundLayers.concat(wmcLayers.filter((wmcLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
@@ -357,9 +357,9 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.KML>} layers from the map
    * @api stable
    */
-  getKML(filters) {
+  getKML(filtersParam) {
     let foundLayers = [];
-    let filtersVar;
+    let filters = filtersParam;
 
     // get all kmlLayers
     const kmlLayers = this.layers_.filter((layer) => {
@@ -368,17 +368,17 @@ export default class Map extends MObject {
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filtersVar = [];
+      filters = [];
     }
     if (!Utils.isArray(filters)) {
-      filtersVar = [filters];
+      filters = [filters];
     }
 
-    if (filtersVar.length === 0) {
+    if (filters.length === 0) {
       foundLayers = kmlLayers;
     }
     else {
-      filtersVar.forEach((filterLayer) => {
+      filters.forEach((filterLayer) => {
         const filteredKMLLayers = kmlLayers.filter((kmlLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers

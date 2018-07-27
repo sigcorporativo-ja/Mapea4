@@ -8,6 +8,7 @@ import Centroid from './Centroid';
 import PointFontSymbol from '../point/FontSymbol';
 import PointIcon from '../point/Icon';
 import PointCircle from '../point/Circle';
+
 /**
  * @namespace Point
  */

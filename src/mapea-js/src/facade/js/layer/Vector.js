@@ -191,7 +191,7 @@ export default class Vector extends LayerBase {
   setFilter(filter) {
     if (Utils.isNullOrEmpty(filter) || (filter instanceof FilterBase)) {
       this.filter_ = filter;
-      const style = this.style();
+      const style = this.style_;
       if (style instanceof StyleCluster) {
         // deactivate change cluster event
         style.getImpl().deactivateChangeEvent();

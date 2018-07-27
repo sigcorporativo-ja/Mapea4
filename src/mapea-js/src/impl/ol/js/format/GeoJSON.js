@@ -3,12 +3,9 @@ import Feature from 'facade/js/feature/Feature';
 
 export default class GeoJSON extends ol.format.GeoJSON {
   /**
-   * @classdesc
-   * Feature format for reading and writing data in the GeoJSON format.
-   *
    * @constructor
    * @extends {ol.format.JSONFeature}
-   * @param {olx.format.GeoJSONOptions=} opt_options Options.
+   * @param {olx.format.GeoJSONOptions=} options Options.
    * @api stable
    */
   constructor(options = {}) {
@@ -20,7 +17,7 @@ export default class GeoJSON extends ol.format.GeoJSON {
    */
   readFeatureFromObject(object, options) {
     const geoJSONFeature = object;
-    const geometry = ol.format.GeoJSON.readGeometry_(geoJSONFeature.geometry, options);
+    const geometry = super.readFeatureFromObject(geoJSONFeature, options);
     const feature = new ol.Feature();
     // geometry
     if (this.geometryName_) {
@@ -32,7 +29,7 @@ export default class GeoJSON extends ol.format.GeoJSON {
       feature.setId(geoJSONFeature.id);
     }
     else {
-      feature.setId(Utils.generateRandom.geojson_);
+      feature.setId(Utils.generateRandom('geojson_'));
     }
     // properties
     if (geoJSONFeature.properties) {
@@ -57,11 +54,8 @@ export default class GeoJSON extends ol.format.GeoJSON {
    * @inheritDoc
    */
   writeFeatureObject(feature, optionsParameters) {
-    let options = optionsParameters;
-    options = this.adaptOptions(options);
-    const object = {
-      type: 'Feature',
-    };
+    const options = optionsParameters;
+    let object = {};
 
     const id = feature.getId();
     if (id) {
@@ -69,8 +63,7 @@ export default class GeoJSON extends ol.format.GeoJSON {
     }
     const geometry = feature.getGeometry();
     if (geometry) {
-      object.geometry =
-        ol.format.GeoJSON.writeGeometry_(geometry, options);
+      object.geometry = super.writeGeometryObject(geometry, options);
     }
     else {
       object.geometry = null;

@@ -60,17 +60,6 @@ export default class LayerBase extends Base {
   }
 
   /**
-   * 'options' the layer options
-   */
-  get options() {
-    return this.getImpl().options;
-  }
-
-  set options(newOptions) {
-    this.getImpl().options = newOptions;
-  }
-
-  /**
    * 'url' The service URL of the
    * layer
    */
