@@ -1,4 +1,4 @@
-import AttributeTableImpl from '../../impl/ol/js/attributetable';
+import AttributeTableControlImpl from '../../impl/ol/js/attributetableControl';
 
 export default class AttributeTableControl extends M.control {
   /**
@@ -11,9 +11,9 @@ export default class AttributeTableControl extends M.control {
    * @api stable
    */
   constructor(numPages) {
-    const impl = new AttributeTableImpl();
+    const impl = new AttributeTableControlImpl();
 
-    super(impl, 'AttributeTable');
+    super(impl, 'attributetableControl');
 
     [this.facadeMap_, this.selectAllActive_, this.template_,
       this.areaTable_, this.layer_, this.numPages_,
@@ -30,7 +30,7 @@ export default class AttributeTableControl extends M.control {
       sortType: null,
     };
 
-    if (M.utils.isUndefined(AttributeTableImpl)) {
+    if (M.utils.isUndefined(AttributeTableControlImpl)) {
       M.exception('La implementación usada no puede crear controles AttributeTableControl');
     }
   }
@@ -46,7 +46,7 @@ export default class AttributeTableControl extends M.control {
   createView(map) {
     this.facadeMap_ = map;
     return new Promise((success, fail) => {
-      M.Template.compile('attributetable.html', {
+      M.template.compile('attributetable.html', {
         jsonp: true,
         vars: {
           layers: map.getWFS().concat(map.getKML().concat(map.getLayers().filter((layer) => {
@@ -316,7 +316,7 @@ export default class AttributeTableControl extends M.control {
     let element = this.template_;
     if (!M.utils.isNullOrEmpty(html)) element = html;
     if (this.pages_.actual < this.pages_.total) {
-      element.querySelector('#m-attributetable-next').classlist.remove('m-attributetable-hidden');
+      element.querySelector('#m-attributetable-next').classList.remove('m-attributetable-hidden');
     }
   }
 
@@ -330,7 +330,7 @@ export default class AttributeTableControl extends M.control {
     let element = this.template_;
     if (!M.utils.isNullOrEmpty(html)) element = html;
     if (this.pages_.actual <= this.pages_.total && this.pages_.actual !== 1) {
-      element.querySelector('#m-attributetable-previous').classlist.remove('m-attributetable-hidden');
+      element.querySelector('#m-attributetable-previous').classList.remove('m-attributetable-hidden');
     }
   }
 
@@ -387,12 +387,12 @@ export default class AttributeTableControl extends M.control {
     const id = evt.target.id;
     if (id === 'm-attributetable-layer') {
       const element = this.template_.querySelector('select#m-attributetable-select');
-      element.classlist.toggle('m-attributetable-hidden');
-      element.classlist.toggle('show');
+      element.classList.toggle('m-attributetable-hidden');
+      element.classList.toggle('show');
     }
     else if (id === 'm-attributetable-attributes') {
-      this.template_.querySelector('#m-attributetable-table').classlist.toggle('m-attributetable-hidden');
-      this.template_.querySelector('#m-attributetable-tfoot').classlist.toggle('m-attributetable-hidden');
+      this.template_.querySelector('#m-attributetable-table').classList.toggle('m-attributetable-hidden');
+      this.template_.querySelector('#m-attributetable-tfoot').classList.toggle('m-attributetable-hidden');
     }
     this.rePosition_();
   }

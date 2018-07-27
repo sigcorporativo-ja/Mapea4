@@ -188,7 +188,7 @@ export default class SearchstreetControl extends M.Control {
   createView(map) {
     this.facadeMap_ = map;
     const promise = new Promise((success, fail) => {
-      M.Template.compile(SearchstreetControl.TEMPLATE, {
+      M.template.compile(SearchstreetControl.TEMPLATE, {
         jsonp: true,
       }).then((html) => {
         this.addEvents(html);
@@ -210,7 +210,7 @@ export default class SearchstreetControl extends M.Control {
     this.element_ = html;
 
     this.on(M.evt.COMPLETED, () => {
-      this.element_.classlist.add('shown');
+      this.element_.classList.add('shown');
     }, this);
 
     // searchs
@@ -221,8 +221,8 @@ export default class SearchstreetControl extends M.Control {
     // events
     // JGL20170816: traslado gestión evento a autocomplete
 
-    this.button_.addEventListener('click', this.searchClick_);
-    this.clear_.addEventListener('click', this.clearSearchs_);
+    this.button_.addEventListener('click', this.searchClick_.bind(this));
+    this.clear_.addEventListener('click', this.clearSearchs_.bind(this));
     // results container
     this.resultsContainer_ = this.element_.getElementsByTagName('div')['m-searchstreet-results'];
     this.resultsAutocomplete_ = this.element_.getElementsByTagName('div')['m-autocomplete-results'];
@@ -232,7 +232,7 @@ export default class SearchstreetControl extends M.Control {
       const searchCodIne = M.utils.addParameters(this.searchCodIne_, {
         codigo: this.codIne_,
       });
-      M.Remote.get(searchCodIne).then((response) => {
+      M.remote.get(searchCodIne).then((response) => {
         let results;
         try {
           if (!M.utils.isNullOrEmpty(response.text)) {
@@ -251,7 +251,9 @@ export default class SearchstreetControl extends M.Control {
         }
       });
     }
-    this.resultsContainer_.removeChildren(this.searchingResult_);
+    // remove the child of "resultsContainer_"
+    const parentContainer = this.resultsContainer_.parentElement;
+    parentContainer.removeChild(this.searchingResult_);
   }
 
   /**
@@ -281,7 +283,9 @@ export default class SearchstreetControl extends M.Control {
 
     if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
       this.resultsAutocomplete_.classList.remove(SearchstreetControl.MINIMUM);
-      this.resultsAutocomplete_.removeChildren(this.resultsAutocomplete_.querySelector('div#m-searching-result-autocomplete'));
+      // this.resultsAutocomplete_.removeChildren(this.resultsAutocomplete_
+      // .querySelector('div#m-searching-result-autocomplete'));
+      this.resultsAutocomplete_.innerHTML = '';
       // gets the query
       let query = this.input_.value;
       if (M.utils.isNullOrEmpty(query)) {
@@ -329,7 +333,7 @@ export default class SearchstreetControl extends M.Control {
       cadena: query,
     });
 
-    M.Remote.get(normalizar).then((response) => {
+    M.remote.get(normalizar).then((response) => {
       const results = JSON.parse(response.text).normalizarResponse.normalizarReturn;
       this.provincia_ = M.utils.beautifyString(results.provincia);
       this.municipio_ = M.utils.beautifyString(results.municipio);
@@ -387,7 +391,7 @@ export default class SearchstreetControl extends M.Control {
    */
   querySearch_(searchUrl, provincia, processor) {
     ((searchTime) => {
-      M.Remote.get(searchUrl).then((response) => {
+      M.remote.get(searchUrl).then((response) => {
         if (searchTime === this.searchTime_) {
           let results;
           try {
@@ -429,7 +433,7 @@ export default class SearchstreetControl extends M.Control {
    */
   querySearchProvinces(searchUrl, provincia, processor) {
     ((searchTime) => {
-      M.Remote.get(searchUrl).then((response) => {
+      M.remote.get(searchUrl).then((response) => {
         this.respuestasProvincias_.push(response);
         this.contadorProvincias += 1;
         if (this.contadorProvincias === 8) {
@@ -482,7 +486,7 @@ export default class SearchstreetControl extends M.Control {
         }
       }
     }
-    M.Template.compile(SearchstreetControl.RESULTS_TEMPLATE, {
+    M.template.compile(SearchstreetControl.RESULTS_TEMPLATE, {
       jsonp: true,
       vars: resultsTemplateVars,
     }).then((html) => {
@@ -501,16 +505,16 @@ export default class SearchstreetControl extends M.Control {
         this.getImpl().drawPoints(resultsTemplateVars.docs);
         this.eventList_(resultsTemplateVars.docs);
       }
-      this.element_.classlist.remove(SearchstreetControl.SEARCHING_CLASS);
-      this.resultsContainer_.classlist.remove(SearchstreetControl.MINIMUM);
+      this.element_.classList.remove(SearchstreetControl.SEARCHING_CLASS);
+      this.resultsContainer_.classList.remove(SearchstreetControl.MINIMUM);
 
       // results buntton
       const btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-      btnResults.addEventListener('click', this.resultsClick_);
+      btnResults.addEventListener('click', this.resultsClick_.bind(this));
 
       this.fire(M.evt.COMPLETED);
     });
-    this.element_.getElementsByTagName('div')['m-autocomplete-results'].innerHTML = '';
+    this.element_.getElementsByClassName('m-autocomplete-results').innerHTML = '';
   }
 
   /**
@@ -687,7 +691,7 @@ export default class SearchstreetControl extends M.Control {
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classlist.add('top-extra-search');
+    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle(SearchstreetControl.HIDDEN_RESULTS_CLASS);

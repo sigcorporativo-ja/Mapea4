@@ -1,5 +1,5 @@
 import MeasureImpl from './measurebase';
-
+import FacadeMeasureLength from '../../../facade/js/measurelength';
 /**
  * @classdesc
  * Main constructor of the class. Creates a MeasureArea
@@ -55,5 +55,17 @@ export default class MeasureArea extends MeasureImpl {
    */
   static getTooltipCoordinate(geometry) {
     return geometry.getInteriorPoint().getCoordinates();
+  }
+
+  activate() {
+    const measureLength = this.facadeMap_.getControls().filter((control) => {
+      return (control instanceof FacadeMeasureLength);
+    })[0];
+
+    if (measureLength) {
+      measureLength.deactivate();
+    }
+
+    super.activate();
   }
 }

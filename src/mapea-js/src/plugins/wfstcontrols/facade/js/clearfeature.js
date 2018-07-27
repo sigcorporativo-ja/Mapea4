@@ -33,7 +33,7 @@ export default class ClearFeature extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.Template.compile(ClearFeature.TEMPLATE, {
+    return M.template.compile(ClearFeature.TEMPLATE, {
       jsonp: true,
     });
   }
@@ -49,7 +49,7 @@ export default class ClearFeature extends M.Control {
    */
   manageActivation(element) {
     const activationBtn = element.querySelector('button#m-button-clearfeature');
-    activationBtn.addEventListener('click', this.clear_);
+    activationBtn.addEventListener('click', this.clear_.bind(this));
   }
 
   /**

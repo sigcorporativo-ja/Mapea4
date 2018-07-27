@@ -199,7 +199,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
    */
   createView(map) {
     const promise = new Promise((success, fail) => {
-      M.Template.compile(SearchStreetGeosearch.TEMPLATE, {
+      M.template.compile(SearchStreetGeosearch.TEMPLATE, {
         jsonp: true,
       }).then((html) => {
         this.element_ = html;

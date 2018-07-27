@@ -35,7 +35,7 @@ export default class DeleteFeature extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.Template.compile(DeleteFeature.TEMPLATE, {
+    return M.template.compile(DeleteFeature.TEMPLATE, {
       jsonp: true,
     });
   }

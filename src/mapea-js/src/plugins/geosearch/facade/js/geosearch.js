@@ -1,5 +1,6 @@
 import GeosearchControl from './geosearchcontrol';
 import GeosearchLayer from './geosearchlayer';
+import '../assets/css/geosearch';
 
 export default class Geosearch extends M.Plugin {
   /**
@@ -93,7 +94,7 @@ export default class Geosearch extends M.Plugin {
   addTo(map) {
     this.map_ = map;
 
-    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
+    map._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
 
     this.control_ = new GeosearchControl(
       this.url_,
@@ -106,7 +107,7 @@ export default class Geosearch extends M.Plugin {
       collapsible: true,
       className: 'm-geosearch',
       collapsedButtonClass: 'g-cartografia-zoom',
-      position: M.ui.Position.TL,
+      position: M.ui.position.TL,
       tooltip: 'Geobúsquedas',
     });
     this.panel_.addControls(this.control_);

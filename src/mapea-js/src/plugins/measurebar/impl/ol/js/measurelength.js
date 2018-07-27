@@ -1,7 +1,8 @@
 import Measure from './measurebase';
-import FacadeMeasureLength from '../../../facade/js/measurelength';
-import FacadeMeasure from '../../../facade/js/mesasurebase';
+import { HELP_KEEP_MESSAGE } from '../../../facade/js/measurelength';
 
+import FacadeMeasure from '../../../facade/js/measurebase';
+import FacadeMeasureArea from '../../../facade/js/measurearea';
 /**
  * @classdesc
  * Main constructor of the class. Creates a MeasureLength
@@ -27,7 +28,7 @@ export default class MeasureLength extends Measure {
      * @private
      * @type {string}
      */
-    this.helpMsgContinue_ = FacadeMeasureLength.HELP_KEEP_MESSAGE;
+    this.helpMsgContinue_ = HELP_KEEP_MESSAGE;
   }
 
 
@@ -59,5 +60,15 @@ export default class MeasureLength extends Measure {
    */
   getTooltipCoordinate(geometry) {
     return geometry.getLastCoordinate();
+  }
+
+  activate() {
+    const measureArea = this.facadeMap_.getControls().filter((control) => {
+      return (control instanceof FacadeMeasureArea);
+    })[0];
+    if (measureArea) {
+      measureArea.deactivate();
+    }
+    super.activate();
   }
 }

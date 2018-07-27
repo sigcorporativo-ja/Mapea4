@@ -1,9 +1,13 @@
-import FEditattribute from '../../../facade/js/editattribute';
+import {
+  POPUP_TITLE,
+  TEMPLATE_POPUP,
+}
+from '../../../facade/js/editattribute';
 
 /**
  * @namespace M.impl.control
  */
-export default class EditAttribute extends M.impl.control {
+export default class EditAttribute extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a EditAttribute
@@ -91,20 +95,20 @@ export default class EditAttribute extends M.impl.control {
           // 'type': p.localType
         });
       }, this);
-      M.Template.compile(FEditattribute.TEMPLATE_POPUP, {
+      M.template.compile(TEMPLATE_POPUP, {
         jsonp: true,
         vars: templateVar,
         parseToHtml: false,
       }).then((htmlAsText) => {
         const popupContent = {
           icon: 'g-cartografia-texto',
-          title: FEditattribute.POPUP_TITLE,
+          title: POPUP_TITLE,
           content: htmlAsText,
         };
         this.popup_ = this.facadeMap_.getPopup();
         if (!M.utils.isNullOrEmpty(this.popup_)) {
           const hasExternalContent = this.popup_.getTabs().some((tab) => {
-            return (tab.title !== FEditattribute.POPUP_TITLE);
+            return (tab.title !== POPUP_TITLE);
           });
           if (!hasExternalContent) {
             this.facadeMap_.removePopup();
@@ -126,7 +130,7 @@ export default class EditAttribute extends M.impl.control {
         this.popup_.on(M.evt.SHOW, () => {
           const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
           if (!M.utils.isNullOrEmpty(popupButton)) {
-            popupButton.addEventListener('click', this.saveAttributes_);
+            popupButton.addEventListener('click', this.saveAttributes_.bind(this));
           }
         }, this);
 
@@ -191,12 +195,12 @@ export default class EditAttribute extends M.impl.control {
         },
       });
 
-      let doc;
-      const wfstRequestText = wfstRequestXml.serializeToString(doc);
+      const oSerializer = new XMLSerializer();
+      const wfstRequestText = oSerializer.serializeToString(wfstRequestXml);
 
       // closes the popup
       this.facadeMap_.removePopup(this.popup_);
-      M.Remote.post(this.layer_.url, wfstRequestText).then((response) => {
+      M.remote.post(this.layer_.url, wfstRequestText).then((response) => {
         popupButton.classList.remove('m-savefeature-saving');
         if (response.code === 200) {
           M.dialog.success('Se ha guardado correctamente el elemento');

@@ -587,7 +587,7 @@ export default class PrinterControl extends M.Control {
 }
 
 /**
- * M.Template for this controls
+ * M.template for this controls
  * @const
  * @type {string}
  * @public
@@ -596,7 +596,7 @@ export default class PrinterControl extends M.Control {
 PrinterControl.TEMPLATE = 'printer.html';
 
 /**
- * M.Template for this controls
+ * M.template for this controls
  * @const
  * @type {string}
  * @public
@@ -605,7 +605,7 @@ PrinterControl.TEMPLATE = 'printer.html';
 PrinterControl.LOADING_CLASS = 'printing';
 
 /**
- * M.Template for this controls
+ * M.template for this controls
  * @const
  * @type {string}
  * @public
@@ -614,7 +614,7 @@ PrinterControl.LOADING_CLASS = 'printing';
 PrinterControl.DOWNLOAD_ATTR_NAME = 'data-donwload-url-print';
 
 /**
- * M.Template for this controls
+ * M.template for this controls
  * @const
  * @type {string}
  * @public

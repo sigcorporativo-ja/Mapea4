@@ -89,7 +89,7 @@ export default class GeosearchIntegrated extends M.control.Geosearch {
     this.drawNewResults(results);
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results, true);
-    M.Template.compile(M.control.Geosearch.RESULTS_TEMPLATE, {
+    M.template.compile(M.control.Geosearch.RESULTS_TEMPLATE, {
       jsonp: true,
       vars: resultsTemplateVars,
     }).then((html) => {

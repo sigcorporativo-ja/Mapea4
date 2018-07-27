@@ -1,6 +1,3 @@
-/**
- * @namespace M.impl.control
- */
 export default class GeosearchbylocationControl extends M.impl.control.Geosearch {
   /**
    * @classdesc
@@ -17,6 +14,7 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
     super({
       layerName: GeosearchbylocationControl.NAME,
     });
+
 
     /**
      * Popup showed
@@ -79,7 +77,7 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
     }));
     let coordinates;
     this.positionFeature_.click = (evt) => {
-      M.Template.compile(GeosearchbylocationControl.POPUP_LOCATION, {
+      M.template.compile(GeosearchbylocationControl.POPUP_LOCATION, {
         jsonp: true,
         vars: {
           valorX: coordinates[0],

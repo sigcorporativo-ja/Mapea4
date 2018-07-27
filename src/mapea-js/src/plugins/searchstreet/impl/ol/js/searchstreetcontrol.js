@@ -10,7 +10,8 @@ export default class SearchstreetControl extends ol.control.Control {
    * @api stable
    */
   constructor() {
-    super();
+    super({});
+
     /**
      * Facade of the map
      *
@@ -152,7 +153,7 @@ export default class SearchstreetControl extends ol.control.Control {
    * @param {boolean} noPanMapIfOutOfView
    */
   showPopup_(feature, noPanMapIfOutOfView) {
-    M.Template.compile(SearchstreetControl.POPUP_TEMPLATE, {
+    M.template.compile(SearchstreetControl.POPUP_TEMPLATE, {
       jsonp: true,
       vars: {
         tVia: feature.streetType,

@@ -41,7 +41,7 @@ export default class SaveFeature extends M.Control {
    */
   createView(map) {
     this.facadeMap_ = map;
-    return M.Template.compile(SaveFeature.TEMPLATE, {
+    return M.template.compile(SaveFeature.TEMPLATE, {
       jsonp: true,
     });
   }
@@ -70,7 +70,7 @@ export default class SaveFeature extends M.Control {
    */
   manageActivation(html) {
     const button = html.querySelector('button#m-button-savefeature');
-    button.addEventListener('click', this.saveFeature_);
+    button.addEventListener('click', this.saveFeature_.bind(this));
   }
 
   /**

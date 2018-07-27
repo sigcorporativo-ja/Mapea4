@@ -60,4 +60,4 @@ MeasureLength.TEMPLATE = 'measurelength.html';
  * @public
  * @api stable
  */
-MeasureLength.HELP_KEEP_MESSAGE = 'Click para continuar dibujando la línea';
+export const HELP_KEEP_MESSAGE = 'Click para continuar dibujando la línea';

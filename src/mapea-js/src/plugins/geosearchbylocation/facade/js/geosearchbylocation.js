@@ -1,4 +1,5 @@
-import GeosearchbylocationControl from './geosearchbylocationcontrol';
+// import GeosearchbylocationControl from './geosearchbylocationcontrol';
+import '../assets/css/geosearchbylocation';
 
 export default class Geosearchbylocation extends M.Plugin {
   /**
@@ -109,19 +110,19 @@ export default class Geosearchbylocation extends M.Plugin {
    */
   addTo(map) {
     this.map_ = map;
-    this.controlGeo = new GeosearchbylocationControl(
-      this.url_,
-      this.core_,
-      this.handler_,
-      this.distance_,
-      this.spatialField_,
-      this.rows_,
-    );
+    // this.controlGeo = new GeosearchbylocationControl(
+    //   this.url_,
+    //   this.core_,
+    //   this.handler_,
+    //   this.distance_,
+    //   this.spatialField_,
+    //   this.rows_,
+    // );
 
     this.panel_ = new M.ui.Panel(Geosearchbylocation.NAME, {
       collapsible: false,
       className: 'm-geosearchbylocation',
-      position: M.ui.Position.BR,
+      position: M.ui.position.BR,
     });
     // sets the className depending on other panels
     const locationPanel = map.getPanels([M.control.Location.NAME])[0];

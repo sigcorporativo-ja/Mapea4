@@ -15,7 +15,8 @@
     "DOMParser": true,
     "XMLHttpRequest": true,
     "Image": true,
-    "Draggabilly": true
+    "Draggabilly": true,
+    "XMLSerializer": true,
   },
   "rules": {
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],

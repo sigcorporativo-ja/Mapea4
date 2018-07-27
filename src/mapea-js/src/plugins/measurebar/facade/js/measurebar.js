@@ -1,6 +1,7 @@
 import MeasureLength from './measurelength';
 import MeasureArea from './measurearea';
 import MeasureClear from './measureclear';
+import '../assets/css/measurebar';
 
 export default class Measurebar extends M.Plugin {
   /**

@@ -45,22 +45,22 @@ export default class ClearFeature extends M.impl.Control {
    */
   clear() {
     const drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
-    if (!M.Utils.isNullOrEmpty(drawfeatureCtrl)) {
+    if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
       drawfeatureCtrl.getImpl().modifiedFeatures.length = 0;
       drawfeatureCtrl.deactivate();
     }
     const modifyfeatureCtrl = this.facadeMap_.getControls('modifyfeature')[0];
-    if (!M.Utils.isNullOrEmpty(modifyfeatureCtrl)) {
+    if (!M.utils.isNullOrEmpty(modifyfeatureCtrl)) {
       modifyfeatureCtrl.getImpl().modifiedFeatures.length = 0;
       modifyfeatureCtrl.deactivate();
     }
     const deletefeatureCtrl = this.facadeMap_.getControls('deletefeature')[0];
-    if (!M.Utils.isNullOrEmpty(deletefeatureCtrl)) {
+    if (!M.utils.isNullOrEmpty(deletefeatureCtrl)) {
       deletefeatureCtrl.getImpl().modifiedFeatures.length = 0;
       deletefeatureCtrl.deactivate();
     }
     const editattributeCtrl = this.facadeMap_.getControls('editattribute')[0];
-    if (!M.Utils.isNullOrEmpty(editattributeCtrl)) {
+    if (!M.utils.isNullOrEmpty(editattributeCtrl)) {
       editattributeCtrl.getImpl().editedFeature = null;
       editattributeCtrl.deactivate();
     }

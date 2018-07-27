@@ -189,7 +189,7 @@ export default class GeosearchControl extends M.impl.Control {
    * @api stable
    */
   clear() {
-    this.layer_.getImpl().clear();
+    this.layer_.clear();
   }
 
   /**

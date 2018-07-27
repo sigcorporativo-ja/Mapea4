@@ -83,7 +83,7 @@ export default class SearchstreetIntegrated extends M.control.Searchstreet {
         codigo: this.codIne_,
       });
       ((searchTime) => {
-        M.Remote.get(searchCodIne).then((response) => {
+        M.remote.get(searchCodIne).then((response) => {
           let results;
           try {
             if (!M.utils.isNullOrEmpty(response.text)) {
@@ -173,7 +173,7 @@ export default class SearchstreetIntegrated extends M.control.Searchstreet {
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classlist.add('top-extra-searchs');
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-searchs');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle('hidden');

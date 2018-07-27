@@ -95,8 +95,11 @@ export default class SaveFeature extends M.impl.Control {
           },
         });
 
-      const wfstRequestText = goog.dom.xml.serialize(wfstRequestXml);
-      M.Remote.post(this.layer_.url, wfstRequestText).then((response) => {
+      const oSerializer = new XMLSerializer();
+      const wfstRequestText = oSerializer.serializeToString(wfstRequestXml);
+
+      // const wfstRequestText = goog.dom.xml.serialize(wfstRequestXml);
+      M.remote.post(this.layer_.url, wfstRequestText).then((response) => {
         // clears layer
         const clearCtrl = this.facadeMap_.getControls(FClearFeature.NAME)[0];
         clearCtrl.getImpl().clear();
@@ -133,7 +136,7 @@ export default class SaveFeature extends M.impl.Control {
    * @function
    * @api stable
    */
-  applyDescribeFeatureType(features, describeFeatureType) {
+  static applyDescribeFeatureType(features, describeFeatureType) {
     const layerImpl = this.layer_.getImpl();
 
     features.forEach((feature) => {

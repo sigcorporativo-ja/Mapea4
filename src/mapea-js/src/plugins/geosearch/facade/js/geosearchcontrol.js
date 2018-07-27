@@ -162,7 +162,7 @@ export default class GeosearchControl extends M.Control {
   createView(map) {
     this.facadeMap_ = map;
     const promise = new Promise((success, fail) => {
-      M.Template.compile(GeosearchControl.TEMPLATE, {
+      M.template.compile(GeosearchControl.TEMPLATE, {
         jsonp: true,
       }).then((html) => {
         this.addEvents(html);
@@ -189,10 +189,10 @@ export default class GeosearchControl extends M.Control {
 
     // input search
     this.input_ = this.element_.getElementsByTagName('input')['m-geosearch-search-input'];
-    this.input_.addEventListener('keyup', this.searchClick_);
+    this.input_.addEventListener('keyup', this.searchClick_.bind(this));
     // search buntton
     const btnSearch = this.element_.getElementsByTagName('button')['m-geosearch-search-btn'];
-    btnSearch.addEventListener('click', this.searchClick_);
+    btnSearch.addEventListener('click', this.searchClick_.bind(this));
 
     // help buntton
     const btnHelp = this.element_.getElementsByTagName('button')['m-geosearch-help-btn'];
@@ -285,7 +285,7 @@ export default class GeosearchControl extends M.Control {
        the request (searchTime parameter).
        If they are different then aborts the response */
     ((searchTime) => {
-      M.Remote.get(searchUrl).then((response) => {
+      M.remote.get(searchUrl).then((response) => {
         // if it is the current search then show the results
         if (searchTime === this.searchTime_) {
           let results;
@@ -317,7 +317,7 @@ export default class GeosearchControl extends M.Control {
     this.drawResults(results);
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results);
-    M.Template.compile(GeosearchControl.RESULTS_TEMPLATE, {
+    M.template.compile(GeosearchControl.RESULTS_TEMPLATE, {
       jsonp: true,
       vars: resultsTemplateVars,
     }).then((html) => {
@@ -426,7 +426,7 @@ export default class GeosearchControl extends M.Control {
     this.drawNewResults(results);
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results, true);
-    M.Template.compile(GeosearchControl.RESULTS_TEMPLATE, {
+    M.template.compile(GeosearchControl.RESULTS_TEMPLATE, {
       jsonp: true,
       vars: resultsTemplateVars,
     }).then((html) => {
@@ -503,7 +503,7 @@ export default class GeosearchControl extends M.Control {
       this.helpShown_ = false;
     }
     else {
-      M.Remote.get(this.helpUrl_).then((response) => {
+      M.remote.get(this.helpUrl_).then((response) => {
         let help;
         try {
           help = JSON.parse(response.text);
@@ -511,7 +511,7 @@ export default class GeosearchControl extends M.Control {
         catch (err) {
           M.Exception(`La respuesta no es un JSON válido: ${err}`);
         }
-        M.Template.compile(GeosearchControl.HELP_TEMPLATE, {
+        M.template.compile(GeosearchControl.HELP_TEMPLATE, {
           jsonp: true,
           vars: {
             entities: help,
@@ -544,7 +544,7 @@ export default class GeosearchControl extends M.Control {
       this.resultsScrollContainer_ = null;
     }
     this.results_.length = 0;
-    this.resultsContainer_.classlist.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
+    this.resultsContainer_.classList.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
     this.getImpl().clear();
     this.spatialSearch_ = false;
   }

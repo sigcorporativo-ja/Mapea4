@@ -12,7 +12,7 @@ export default class DrawFeature extends M.Control {
    */
   constructor(layer) {
     // implementation of this control
-    const impl = DrawFeatureImpl(layer);
+    const impl = new DrawFeatureImpl(layer);
 
     // calls the super constructor
     super(impl, DrawFeature.NAME);
@@ -39,7 +39,7 @@ export default class DrawFeature extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.Template.compile(DrawFeature.TEMPLATE, {
+    return M.template.compile(DrawFeature.TEMPLATE, {
       jsonp: true,
     });
   }

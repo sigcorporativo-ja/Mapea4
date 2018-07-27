@@ -20,6 +20,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
     // calls super
     super(url, core, handler);
 
+
     // implementation of this control
     const impl = new GeosearchbylocationImpl(this.searchUrl_);
 
@@ -121,7 +122,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    */
   createView(map) {
     this.facadeMap_ = map;
-    return M.Template.compile(GeosearchbylocationControl.TEMPLATE, {
+    return M.template.compile(GeosearchbylocationControl.TEMPLATE, {
       jsonp: true,
     });
   }
@@ -148,7 +149,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    */
   activate() {
     this.element_.classList.add('activated');
-    this.element_.classlist.add(M.control.Geosearch.SEARCHING_CLASS);
+    this.element_.classList.add(M.control.Geosearch.SEARCHING_CLASS);
     this.getImpl().locate().then((coor) => {
       const pointGeom = new ol.geom.Point(coor);
       const format = new ol.format.WKT();
@@ -206,7 +207,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
     /* uses closure to keep the search time and it checks
      if the response is about the last executed search */
     ((searchTime) => {
-      M.Remote.get(searchUrl).then((response) => {
+      M.remote.get(searchUrl).then((response) => {
         // if searchTime was updated by this promise then this is the last
         if (searchTime === this.searchTime_) {
           let results;
@@ -219,8 +220,8 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
           this.showResults_(results);
           this.drawLocation_(coor);
           this.zoomToResultsAll_();
-          this.activationBtn_.classlist.remove(M.control.Geosearch.HIDDEN_RESULTS_CLASS);
-          this.element_.classlist.remove(M.control.Geosearch.SEARCHING_CLASS);
+          this.activationBtn_.classList.remove(M.control.Geosearch.HIDDEN_RESULTS_CLASS);
+          this.element_.classList.remove(M.control.Geosearch.SEARCHING_CLASS);
         }
       });
     })(this.searchTime_);
@@ -266,7 +267,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
   showList_() {
     if (this.showList === true) {
       const resultsTemplateVars = this.parseResultsForTemplate_(this.results);
-      M.Template.compile(GeosearchbylocationControl.RESULTS_TEMPLATE, {
+      M.template.compile(GeosearchbylocationControl.RESULTS_TEMPLATE, {
         jsonp: true,
         vars: resultsTemplateVars,
       }).then((html) => {

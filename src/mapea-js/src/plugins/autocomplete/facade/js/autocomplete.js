@@ -84,7 +84,7 @@ export default class Autocomplete extends M.Plugin {
             }
           }
           else if (controls[1].name_ === 'searchstreetgeosearch') {
-            if (!M.Utils.isNullOrEmpty(selectedResult) && (this.controls[1].indexOf(',') < 0)) {
+            if (!M.utils.isNullOrEmpty(selectedResult) && (this.controls[1].indexOf(',') < 0)) {
               this.searchMunicipality_(this.controls[1]);
             }
             else {
@@ -274,7 +274,7 @@ export default class Autocomplete extends M.Plugin {
     searchUrl = this.formatContent_(searchUrl, ' ', '%20');
     this.searchTime_ = Date.now();
     ((searchTime) => {
-      M.Remote.get(searchUrl).then((response) => {
+      M.remote.get(searchUrl).then((response) => {
         if (searchTime === this.searchTime_) {
           let results = JSON.parse(response.text);
           results = this.parseResultsForTemplate_(results);
@@ -284,10 +284,10 @@ export default class Autocomplete extends M.Plugin {
            is indicated to locality results.docs will be undefinded
            * In this case, to change false the attribute completed of searchstreet
            */
-          if (!M.Utils.isUndefined(results.docs)) {
+          if (!M.utils.isUndefined(results.docs)) {
             // If the result is indefinite, it will not continue autocompleting
-            if (!M.Utils.isUndefined(results.docs[0])) {
-              M.Template.compile(Autocomplete.RESULTAUTOCOMPLETE, {
+            if (!M.utils.isUndefined(results.docs[0])) {
+              M.template.compile(Autocomplete.RESULTAUTOCOMPLETE, {
                 jsonp: true,
                 vars: results,
               }).then((html) => {
@@ -423,7 +423,7 @@ export default class Autocomplete extends M.Plugin {
       .autocompletarDireccionMunicipioReturn.autocompletarDireccionMunicipioReturn;
     const doscsTemp = [];
     if (this.busqMunicipio_ === true) {
-      if (!M.Utils.isUndefined(docs)) {
+      if (!M.utils.isUndefined(docs)) {
         if (docs instanceof Array === false) {
           docs = [docs];
         }

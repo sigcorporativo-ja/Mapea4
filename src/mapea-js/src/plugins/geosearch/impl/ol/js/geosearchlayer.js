@@ -1,5 +1,4 @@
 import GeoStyle from './geosearchstyle';
-import UtilsGeosearch from './utils';
 
 export default class GeosearchLayer extends M.impl.layer.Vector {
   /**
@@ -26,7 +25,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
 
     /* eslint new-cap: ["error", { "newIsCap": false } ] */
 
-    this.wktFormatter_ = new ol.format.M.geom.wkt();
+    this.wktFormatter_ = new ol.format.WKT();
 
     /**
      * Popup showed
@@ -175,7 +174,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
     GeosearchLayer.setStyleFeature_(features, M.style.state.SELECTED);
 
     const featureForTemplate = this.parseFeaturesForTemplate_(features);
-    M.Template.compile(GeosearchLayer.POPUP_RESULT, {
+    M.template.compile(GeosearchLayer.POPUP_RESULT, {
       jsonp: true,
       vars: featureForTemplate,
       parseToHtml: false,
@@ -331,6 +330,60 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
     GeosearchLayer.setStyleFeature_(this.facadeVector_.getFeatures()
       .map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
   }
+
+  getCentroidCoordinate(geometry) {
+    let centroid;
+    let coordinates;
+    let medianIdx;
+    let points;
+    let lineStrings;
+    let geometries;
+
+    // POINT
+    if (geometry.getType() === M.geom.wkt.type.POINT) {
+      centroid = geometry.getCoordinates();
+    }
+    // LINE
+    else if (geometry.getType() === M.geom.wkt.type.LINE_STRING) {
+      coordinates = geometry.getCoordinates();
+      medianIdx = Math.floor(coordinates.length / 2);
+      centroid = coordinates[medianIdx];
+    }
+    else if (geometry.getType() === M.geom.wkt.type.LINEAR_RING) {
+      coordinates = geometry.getCoordinates();
+      medianIdx = Math.floor(coordinates.length / 2);
+      centroid = coordinates[medianIdx];
+    }
+    // POLYGON
+    else if (geometry.getType() === M.geom.wkt.type.POLYGON) {
+      centroid = this.getCentroidCoordinate(geometry.getInteriorPoint());
+    }
+    // MULTI
+    else if (geometry.getType() === M.geom.wkt.type.MULTI_POINT) {
+      points = geometry.getPoints();
+      medianIdx = Math.floor(points.length / 2);
+      centroid = this.getCentroidCoordinate(points[medianIdx]);
+    }
+    else if (geometry.getType() === M.geom.wkt.type.MULTI_LINE_STRING) {
+      lineStrings = geometry.getLineStrings();
+      medianIdx = Math.floor(lineStrings.length / 2);
+      centroid = this.getCentroidCoordinate(lineStrings[medianIdx]);
+    }
+    else if (geometry.getType() === M.geom.wkt.type.MULTI_POLYGON) {
+      points = geometry.getInteriorPoints();
+      centroid = this.getCentroidCoordinate(points);
+    }
+    else if (geometry.getType() === M.geom.wkt.type.CIRCLE) {
+      centroid = geometry.getCenter();
+    }
+    else if (geometry.getType() === M.geom.wkt.type.GEOMETRY_COLLECTION) {
+      geometries = geometry.getGeometries();
+      medianIdx = Math.floor(geometries.length / 2);
+      centroid = this.getCentroidCoordinate(geometries[medianIdx]);
+    }
+    return centroid;
+  }
+
 
   /**
    * This function destroys this layer, clearing the HTML

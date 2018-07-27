@@ -75,7 +75,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
       const comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
         codigo: this.locality_,
       });
-      M.Remote.get(comCodIne).then((response) => {
+      M.remote.get(comCodIne).then((response) => {
         const results = JSON.parse(response.text);
         if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
           this.locality_ = '';
@@ -91,7 +91,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
     this.panel_ = new M.ui.Panel('SearchstreetGeosearch', {
       collapsible: true,
       className: 'm-geosearch',
-      position: M.ui.Position.TL,
+      position: M.ui.position.TL,
       tooltip: 'Buscador de calles y geobúsquedas',
     });
     // JGL20170816: foco al input al desplegar panel

@@ -41,7 +41,7 @@ export default class EditAttribute extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.Template.compile(EditAttribute.TEMPLATE, {
+    return M.template.compile(EditAttribute.TEMPLATE, {
       jsonp: true,
     });
   }
@@ -101,7 +101,7 @@ EditAttribute.NAME = 'editattribute';
  * @public
  * @api stable
  */
-EditAttribute.POPUP_TITLE = 'Editattribute';
+export const POPUP_TITLE = 'Editattribute';
 
 /**
  * Template for this controls - button
@@ -119,4 +119,4 @@ EditAttribute.TEMPLATE = 'editattribute.html';
  * @public
  * @api stable
  */
-EditAttribute.TEMPLATE_POPUP = 'editattribute_popup.html';
+export const TEMPLATE_POPUP = 'editattribute_popup.html';

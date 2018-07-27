@@ -7,7 +7,7 @@
  * @extends {M.impl.Control}
  * @api stable
  */
-export default class MeasureClear extends M.Control {
+export default class MeasureClear extends M.impl.Control {
   constructor(measureLengthControl, measureAreaControl) {
     super();
 

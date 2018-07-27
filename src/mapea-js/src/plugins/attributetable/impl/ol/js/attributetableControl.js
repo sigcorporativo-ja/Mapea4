@@ -1,13 +1,5 @@
 export default class AttributeTableControl extends M.impl.Control {
   /**
-   * @classdesc
-   * Main constructor of the AttributeTableControl.
-   *
-   * @constructor
-   * @extends {M.impl.Control}
-   * @api stable
-   */
-  /**
    * This function adds the control to the specified map
    *
    * @public
@@ -17,7 +9,7 @@ export default class AttributeTableControl extends M.impl.Control {
    * @api stable
    */
   addTo(map, html) {
-    super('addTo', map, html);
+    super.addTo(map, html);
   }
 
   /**

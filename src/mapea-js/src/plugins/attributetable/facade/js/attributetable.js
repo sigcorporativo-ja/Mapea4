@@ -1,4 +1,5 @@
 import AttributeTableControl from './attributetableControl';
+import '../assets/css/attributetable';
 
 export default class AttributeTable extends M.plugin {
   /**
