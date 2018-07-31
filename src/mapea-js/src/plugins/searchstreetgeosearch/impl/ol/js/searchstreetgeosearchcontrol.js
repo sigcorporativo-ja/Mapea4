@@ -1,6 +1,3 @@
-/**
- * @namespace M.impl.control
- */
 export default class SearchstreetGeosearch extends ol.control.Control {
   /**
    * @classdesc Main constructor of the SearchstreetGeosearch control.
@@ -10,7 +7,8 @@ export default class SearchstreetGeosearch extends ol.control.Control {
    * @api stable
    */
   constructor() {
-    super();
+    super({});
+
     /**
      * Facade of the map
      *

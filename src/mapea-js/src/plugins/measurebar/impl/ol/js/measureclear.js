@@ -45,7 +45,7 @@ export default class MeasureClear extends M.impl.Control {
   addTo(map, element) {
     this.facadeMap_ = map;
     const button = element.getElementsByTagName('button')['m-measure-button'];
-    button.addEventListener('click', this.onClick);
+    button.addEventListener('click', this.onClick.bind(this));
     ol.control.Control.call(this, {
       element,
       target: null,
@@ -61,12 +61,8 @@ export default class MeasureClear extends M.impl.Control {
    * @api stable
    */
   onClick() {
-    if (!M.utils.isNullOrEmpty(this.measureLengthControl_)) {
-      this.measureLengthControl_.clear();
-    }
-    if (!M.utils.isNullOrEmpty(this.measureAreaControl_)) {
-      this.measureAreaControl_.clear();
-    }
+    this.measureLengthControl_.clear();
+    this.measureAreaControl_.clear();
   }
 
   /**

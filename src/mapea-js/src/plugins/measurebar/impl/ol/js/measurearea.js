@@ -1,5 +1,9 @@
+import { HELP_KEEP_MESSAGE } from 'plugins/measurebar/facade/js/measurearea';
+
+import FacadeMeasure from 'plugins/measurebar/facade/js/measurebase';
+import FacadeMeasureLength from 'plugins/measurebar/facade/js/measurelength';
 import MeasureImpl from './measurebase';
-import FacadeMeasureLength from '../../../facade/js/measurelength';
+
 /**
  * @classdesc
  * Main constructor of the class. Creates a MeasureArea
@@ -17,14 +21,14 @@ export default class MeasureArea extends MeasureImpl {
      * @private
      * @type {string}
      */
-    this.helpMsg_ = MeasureImpl.HELP_MESSAGE;
+    this.helpMsg_ = FacadeMeasure.HELP_MESSAGE;
 
     /**
      * Help message
      * @private
      * @type {string}
      */
-    this.helpMsgContinue_ = MeasureArea.HELP_KEEP_MESSAGE;
+    this.helpMsgContinue_ = HELP_KEEP_MESSAGE;
   }
 
   /**
@@ -34,7 +38,7 @@ export default class MeasureArea extends MeasureImpl {
    * @return {string} output - Indicate the extent of the area
    * @api stable
    */
-  static formatGeometry(geometry) {
+  formatGeometry(geometry) {
     const area = geometry.getArea();
     let output;
     if (area > 10000) {
@@ -53,7 +57,7 @@ export default class MeasureArea extends MeasureImpl {
    * @return {array} coordinates to tooltip
    * @api stable
    */
-  static getTooltipCoordinate(geometry) {
+  getTooltipCoordinate(geometry) {
     return geometry.getInteriorPoint().getCoordinates();
   }
 

@@ -1,4 +1,4 @@
-export default class AttributeTableControl extends M.impl.Control {
+export default class AttributeTableControlImpl extends M.impl.Control {
   /**
    * This function adds the control to the specified map
    *
@@ -32,4 +32,4 @@ export default class AttributeTableControl extends M.impl.Control {
    */
 }
 
-AttributeTableControl.PANEL_ID = 'm-attibutetable-panel';
+AttributeTableControlImpl.PANEL_ID = 'm-attibutetable-panel';

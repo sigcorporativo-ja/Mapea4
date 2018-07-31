@@ -1,7 +1,7 @@
+import 'plugins/attributetable/facade/assets/css/attributetable';
 import AttributeTableControl from './attributetableControl';
-import '../assets/css/attributetable';
 
-export default class AttributeTable extends M.plugin {
+export default class AttributeTable extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin

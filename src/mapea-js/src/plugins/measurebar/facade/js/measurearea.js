@@ -51,4 +51,4 @@ MeasureArea.TEMPLATE = 'measurearea.html';
  * @public
  * @api stable
  */
-MeasureArea.HELP_KEEP_MESSAGE = 'Click para continuar dibujando el área';
+export const HELP_KEEP_MESSAGE = 'Click para continuar dibujando el área';

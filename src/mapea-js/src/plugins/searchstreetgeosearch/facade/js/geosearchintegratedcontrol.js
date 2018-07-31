@@ -1,6 +1,7 @@
-import GeosearchIntegratedImpl from '../../impl/ol/js/geosearchintegratedcontrol';
+import GeosearchIntegratedImpl from 'plugins/searchstreetgeosearch/impl/ol/js/geosearchintegratedcontrol';
+import GeosearchControl from 'plugins/geosearch/facade/js/geosearchcontrol';
 
-export default class GeosearchIntegrated extends M.control.Geosearch {
+export default class GeosearchIntegrated extends GeosearchControl {
   /**
    * @classdesc Main constructor of the class. Creates a GeosearchIntegrated
    * control.
@@ -10,7 +11,7 @@ export default class GeosearchIntegrated extends M.control.Geosearch {
    * @param {string} core - Core to the URL for the query
    * @param {string} handler - Handler to the URL for the query
    * @param {object} searchParameters - Others parameters
-   * @extends {M.control.Geosearch}
+   * @extends {GeosearchControl}
    * @api stable
    */
   constructor(url, core, handler, searchParameters) {
@@ -89,7 +90,7 @@ export default class GeosearchIntegrated extends M.control.Geosearch {
     this.drawNewResults(results);
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results, true);
-    M.template.compile(M.control.Geosearch.RESULTS_TEMPLATE, {
+    M.template.compile(GeosearchControl.RESULTS_TEMPLATE, {
       jsonp: true,
       vars: resultsTemplateVars,
     }).then((html) => {
@@ -107,7 +108,7 @@ export default class GeosearchIntegrated extends M.control.Geosearch {
       spanNumFound.innerHTML = this.results_.length;
 
 
-      this.element_.classList.remove(M.control.Geosearch.SEARCHING_CLASS);
+      this.element_.classList.remove(GeosearchControl.SEARCHING_CLASS);
       this.resultsContainer_.removeChild(this.searchingResult_);
       // disables scroll if gets all results
       this.checkScrollSearch_(results);

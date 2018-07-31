@@ -1,7 +1,6 @@
-/**
- * @namespace M.impl.control
- */
-export default class GeosearchIntegrated extends M.impl.control.Geosearch {
+import GeosearchControlImpl from 'plugins/geosearch/impl/ol/js/geosearchcontrol';
+
+export default class GeosearchIntegrated extends GeosearchControlImpl {
   /**
    * This function replaces the addto of Geosearch not to add control
    *

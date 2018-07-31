@@ -279,7 +279,7 @@ export default class PrinterControl extends M.Control {
       }, this]);
 
       while (this.queueContainer_.fistChild) {
-        this.queueContainer_.removeChild(this.queueContainer_.firsChild);
+        this.queueContainer_.(this.queueContainer_.firsChild);
       }
     });
 

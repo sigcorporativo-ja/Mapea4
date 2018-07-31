@@ -1,6 +1,7 @@
+import Searchstreet from 'plugins/searchstreet/facade/js/searchstreet';
 import SearchstreetIntegratedControlImpl from '../../impl/ol/js/searchstreetintegratedcontrol';
 
-export default class SearchstreetIntegrated extends M.control.Searchstreet {
+export default class SearchstreetIntegrated extends Searchstreet {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Searchstreet control that allows searches of streets
@@ -12,16 +13,15 @@ export default class SearchstreetIntegrated extends M.control.Searchstreet {
    * @api stable
    */
   constructor(url, locality) {
+    // call super
+    super(url, locality);
+
     /**
      * Implementation of this control
      *
      * @private
      * @type {M.impl.control.SearchstreetIntegrated}
      */
-
-
-    // call super
-    super(url, locality);
 
     this.impl = new SearchstreetIntegratedControlImpl();
     if (M.utils.isUndefined(SearchstreetIntegratedControlImpl)) {

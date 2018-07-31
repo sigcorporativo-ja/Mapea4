@@ -1,3 +1,5 @@
+import Autocomplete from 'plugins/autocomplete/facade/js/autocomplete';
+import 'plugins/searchstreetgeosearch/facade/assets/css/searchstreetgeosearch';
 import SearchstreetGeosearchControl from './searchstreetgeosearchcontrol';
 
 export default class SearchstreetGeosearch extends M.Plugin {
@@ -65,8 +67,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
   addTo(map) {
     this.map_ = map;
     this.control_ = new SearchstreetGeosearchControl(this.parameters_);
-
-    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
+    map._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
 
     this.control_.on(M.evt.ADDED_TO_MAP, () => {
       this.fire(M.evt.ADDED_TO_MAP);
@@ -80,7 +81,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
         if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
           this.locality_ = '';
         }
-        const autocompletador = new M.plugin.Autocomplete({
+        const autocompletador = new Autocomplete({
           locality: this.locality_,
           target: this.control_.getInput(),
           html: this.control_.getHtml(),
@@ -96,7 +97,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
     });
     // JGL20170816: foco al input al desplegar panel
     this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {
-      this.panel_.buttonPanel.addEventListener('click', (evt) => {
+      this.panel_._buttonPanel.addEventListener('click', (evt) => {
         if (!this.panel_.collapsed) {
           this.control_.input_.focus();
         }

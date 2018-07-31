@@ -1,6 +1,6 @@
+import SearchstreetGeosearchControlImpl from 'plugins/searchstreetgeosearch/impl/ol/js/searchstreetgeosearchcontrol';
 import SearchstreetIntegrated from './searchstreetintegratedcontrol';
 import GeosearchIntegrated from './geosearchintegratedcontrol';
-import SearchstreetGeosearchControlImpl from '../../impl/ol/js/searchstreetgeosearchcontrol';
 import SearchStreetGeosearch from './searchstreetgeosearch';
 
 export default class SearchstreetGeosearchControl extends M.Control {
@@ -285,6 +285,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
     this.getImpl().zoomResults();
   }
 }
+
 /**
  * Template for this controls
  *
@@ -293,4 +294,4 @@ export default class SearchstreetGeosearchControl extends M.Control {
  * @public
  * @api stable
  */
-SearchStreetGeosearch.TEMPLATE = 'searchstreetgeosearch.html';
+SearchstreetGeosearchControl.TEMPLATE = 'searchstreetgeosearch.html';

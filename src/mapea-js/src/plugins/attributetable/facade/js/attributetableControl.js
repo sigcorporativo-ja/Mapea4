@@ -1,6 +1,7 @@
-import AttributeTableControlImpl from '../../impl/ol/js/attributetableControl';
+import AttributeTableControlImpl from 'plugins/attributetable/impl/ol/js/attributetableControl';
+import Draggabilly from 'draggabilly';
 
-export default class AttributeTableControl extends M.control {
+export default class AttributeTableControl extends M.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a AttributeTableControl
@@ -73,7 +74,7 @@ export default class AttributeTableControl extends M.control {
         });
         this.template_ = html;
         this.areaTable_ = html.querySelector('div#m-attributetable-datas');
-        html.querySelector('#m-attributetable-layer').addEventListener('click', this.openPanel);
+        html.querySelector('#m-attributetable-layer').addEventListener('click', this.openPanel_.bind(this));
         html.querySelector('#m-attributetable-select').addEventListener('change', (evt) => {
           this.pages_ = {
             total: 0,
@@ -114,12 +115,11 @@ export default class AttributeTableControl extends M.control {
     if (!M.utils.isNullOrEmpty(name)) {
       this.layer_ = this.hasLayer_(name)[0];
     }
-
-    const features = this.layer_.getFeatures();
-    const headerAtt = Object.keys(features[0].getAttributes());
+    let headerAtt;
     let attributes = [];
-
+    const features = this.layer_.getFeatures();
     if (!M.utils.isNullOrEmpty(features)) {
+      headerAtt = Object.keys(features[0].getAttributes());
       features.forEach((feature) => {
         const properties = Object.values(feature.getAttributes());
         if (!M.utils.isNullOrEmpty(properties)) {
@@ -130,6 +130,7 @@ export default class AttributeTableControl extends M.control {
         attributes = this.sortAttributes_(attributes, headerAtt);
       }
     }
+    /* eslint-disable */
     return new Promise((success, fail) => {
       let params = {};
       if (!M.utils.isUndefined(headerAtt)) {
@@ -141,6 +142,7 @@ export default class AttributeTableControl extends M.control {
             .slice(this.pages_.element, this.pages_.element + this.numPages_),
         };
       }
+      /* eslint-enable */
       M.template.compile('tableData.html', {
         jsonp: true,
         vars: params,
@@ -152,24 +154,25 @@ export default class AttributeTableControl extends M.control {
         const notResult = this.areaTable_.querySelector('.m-attributetable-notResult');
         if (!M.utils.isNullOrEmpty(notResult)) {
           // notResult.parentElement.removeChild(notResult);
-          this.areaTable_.removeChild(this.areaTable_.querySelector('#m-attributetable-content-attributes'));
+          const parent = this.areaTable_.querySelector('#m-attributetable-content-attributes').parentElement;
+          parent.removeChild(this.areaTable_.querySelector('#m-attributetable-content-attributes'));
         }
         this.areaTable_.appendChild(html);
         if (M.utils.isNullOrEmpty(html.querySelector('div.m-attributetable-notResult'))) {
-          this.areaTable_.querySelector('#m-attributetable-next').addEventListener('click', this.nextPage_);
-          html.querySelector('#m-attributetable-previous').addEventListener('click', this.previousPage_);
-          html.querySelector('input[value=selectAll]').addEventListener('click', this.selectAll);
-          html.querySelector('#m-attributetable-attributes').addEventListener('click', this.openPanel_);
-          html.querySelector('#m-attributetable-refresh').addEventListener('click', this.refresh_);
+          this.areaTable_.querySelector('#m-attributetable-next').addEventListener('click', this.nextPage_.bind(this));
+          html.querySelector('#m-attributetable-previous').addEventListener('click', this.previousPage_.bind(this));
+          html.querySelector('input[value=selectAll]').addEventListener('click', this.selectAll.bind(this));
+          html.querySelector('#m-attributetable-attributes').addEventListener('click', this.openPanel_.bind(this));
+          html.querySelector('#m-attributetable-refresh').addEventListener('click', this.refresh_.bind(this));
           const header = Array.slice.call(this.areaTable_.querySelector('tr').querySelectorAll('td'), 1);
           header.forEach((td) => {
-            td.addEventListener('click', this.sort_);
+            td.addEventListener('click', this.sort_.bind(this));
           });
           this.hasNext_(html);
           this.hasPrevious_(html);
         }
         else {
-          html.querySelector('#m-attributetable-refresh').addEventListener('click', this.refresh_);
+          html.querySelector('#m-attributetable-refresh').addEventListener('click', this.refresh_.bind(this));
         }
         this.rePosition_();
         success();

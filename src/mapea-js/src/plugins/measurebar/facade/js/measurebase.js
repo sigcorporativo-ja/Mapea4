@@ -44,7 +44,7 @@ export default class Measure extends M.Control {
    * @api stable
    * @export
    */
-  static getActivationButton(element) {
+  getActivationButton(element) {
     return element.querySelector('button#m-measure-button');
   }
 

@@ -1,7 +1,6 @@
-/**
- * @namespace M.impl.control
- */
-export default class SearchstreetIntegratedControl extends M.impl.control.Searchstreet {
+import SearchstreetImpl from 'plugins/searchstreet/impl/ol/js/searchstreetcontrol';
+
+export default class SearchstreetIntegratedControl extends SearchstreetImpl {
   /**
    * This function replaces the addTo of Searchstreet, not to add control
    *

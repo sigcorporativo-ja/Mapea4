@@ -39,6 +39,7 @@ module.exports = {
       impl: path.resolve(__dirname, 'src/impl/ol/js'),
       configuration: path.resolve(__dirname, 'test/configuration_filtered'),
       'impl-assets': path.resolve(__dirname, 'src/impl/ol/assets'),
+      plugins: path.resolve(__dirname, 'src/plugins'),
     },
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html'],
   },
@@ -55,11 +56,11 @@ module.exports = {
           },
         },
       },
-      {
-        test: /\.js$/,
-        loader: 'eslint-loader',
-        exclude: [/node_modules/, /lib/, /test/],
-      },
+      // {
+      //   test: /\.js$/,
+      //   loader: 'eslint-loader',
+      //   exclude: [/node_modules/, /lib/, /test/],
+      // },
       {
         test: [/\.hbs$/, /\.html$/],
         loader: 'html-loader',
