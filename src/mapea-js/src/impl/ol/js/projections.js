@@ -58,7 +58,7 @@ const proj32628 = {
 
 // EPSG:4326
 const proj4326 = {
-  def: '+proj=utm +zone=28 +ellps=WGS84 +datum=WGS84 +units=m +no_defs',
+  def: '+proj=longlat +datum=WGS84 +no_defs',
   extent: [-180, -90, 180, 90],
   codes: ['EPSG:4326', 'urn:ogc:def:crs:EPSG::4326', 'urn:ogc:def:crs:OGC:1.3:CRS84'],
   units: 'd',
@@ -90,9 +90,8 @@ const addProjections = (projectionsParam) => {
     });
     ol.proj.addEquivalentProjections(olProjections);
   });
-
-  // register proj4
-  ol.proj.proj4.register(proj4);
 };
 
+// register proj4
 addProjections(projections);
+ol.proj.proj4.register(proj4);
