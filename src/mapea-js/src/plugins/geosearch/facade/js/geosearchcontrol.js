@@ -204,7 +204,7 @@ export default class GeosearchControl extends M.Control {
 
     // clear buntton
     const btnClean = this.element_.getElementsByTagName('button')['m-geosearch-clear-btn'];
-    btnClean.addEventListener('click', this.clearClick_);
+    btnClean.addEventListener('click', this.clearClick_.bind(this));
 
     // results container
     this.resultsContainer_ = this.element_.querySelector('div#m-geosearch-results');
@@ -332,7 +332,7 @@ export default class GeosearchControl extends M.Control {
       let resultHtml;
       for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
         resultHtml = resultsHtmlElements.item(i);
-        resultHtml.removeEventListener('click', this.resultClick_);
+        resultHtml.removeEventListener('click', this.resultClick_.bind(this));
       }
       if (results.response.docs.length > 0) {
         this.zoomToResults();
@@ -341,7 +341,7 @@ export default class GeosearchControl extends M.Control {
       // results buntton
       let btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
       if (!M.utils.isNullOrEmpty(btnResults)) {
-        btnResults.removeEventListener('click', this.resultsClick_);
+        btnResults.removeEventListener('click', this.resultsClick_.bind(this));
       }
 
       // gets the new results scroll
@@ -349,18 +349,18 @@ export default class GeosearchControl extends M.Control {
       this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-geosearch-results-scroll');
       // registers the new event
       M.utils.enableTouchScroll(this.resultsScrollContainer_);
-      this.resultsScrollContainer_.addEventListener('scroll', this.resultsScroll_);
+      this.resultsScrollContainer_.addEventListener('scroll', this.resultsScroll_.bind(this));
 
       // adds new events
       resultsHtmlElements = this.resultsContainer_.getElementsByClassName('result');
       for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
         resultHtml = resultsHtmlElements.item(i);
-        resultHtml.addEventListener('click', this.resultClick_);
+        resultHtml.addEventListener('click', this.resultClick_.bind(this));
       }
 
       // results buntton
       btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-      btnResults.addEventListener('click', this.resultsClick_);
+      btnResults.addEventListener('click', this.resultsClick_.bind(this));
       this.checkScrollSearch_(results);
       this.fire(M.evt.COMPLETED);
     });
@@ -557,7 +557,7 @@ export default class GeosearchControl extends M.Control {
    * @function
    */
   resultsClick_(evt) {
-    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].add('top-extra-search');
+    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
 

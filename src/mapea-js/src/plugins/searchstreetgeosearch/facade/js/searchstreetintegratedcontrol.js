@@ -1,4 +1,4 @@
-import Searchstreet from 'plugins/searchstreet/facade/js/searchstreet';
+import Searchstreet from 'plugins/searchstreet/facade/js/searchstreetcontrol';
 import SearchstreetIntegratedControlImpl from '../../impl/ol/js/searchstreetintegratedcontrol';
 
 export default class SearchstreetIntegrated extends Searchstreet {
@@ -67,8 +67,8 @@ export default class SearchstreetIntegrated extends Searchstreet {
 
     // events
     // JGL20170818: traslado gestión evento a autocomplete
-    this.button_.addEventListener('click', this.searchClick_);
-    this.clear_.addEventListener('click', this.clearSearchs_);
+    this.button_.addEventListener('click', this.searchClick_.bind(this));
+    this.clear_.addEventListener('click', this.clearSearchs_.bind(this));
 
 
     // results container
@@ -103,7 +103,8 @@ export default class SearchstreetIntegrated extends Searchstreet {
         });
       })(this.searchTime_);
     }
-    this.resultsContainer_.removeChildren(this.searchingResult_);
+    const parent = this.resultsContainer_;
+    parent.removeChild(this.searchingResult_);
   }
 
   /**
@@ -139,8 +140,12 @@ export default class SearchstreetIntegrated extends Searchstreet {
     evt.preventDefault();
 
     if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
-      this.resultsAutocomplete_.classList.remove(M.control.Searchstreet.MINIMUM);
-      this.resultsAutocomplete_.removeChildren(this.resultsAutocomplete_.querySelector('div#m-searching-result-autocomplete'));
+      this.resultsAutocomplete_.classList.remove(Searchstreet.MINIMUM);
+      // const parent = this.resultsAutocomplete_;
+      const element = this.resultsAutocomplete_.querySelector('div#m-searching-result-autocomplete');
+      if (M.utils.isUndefined(element)) {
+        element.parentNode.removeChild(element);
+      }
       // gets the query
       let query = this.input_.value;
       if (!M.utils.isNullOrEmpty(query)) {
@@ -173,7 +178,7 @@ export default class SearchstreetIntegrated extends Searchstreet {
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-searchs');
+    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-searchs');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle('hidden');

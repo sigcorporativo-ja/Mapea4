@@ -1,5 +1,5 @@
-import SearchstreetControl from './searchstreetcontrol';
 import Autocomplete from 'plugins/autocomplete/facade/js/autocomplete';
+import SearchstreetControl from './searchstreetcontrol';
 import '../assets/css/searchstreet';
 
 

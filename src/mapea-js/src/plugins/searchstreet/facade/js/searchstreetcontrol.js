@@ -222,6 +222,7 @@ export default class SearchstreetControl extends M.Control {
     // JGL20170816: traslado gestión evento a autocomplete
 
     this.button_.addEventListener('click', this.searchClick_.bind(this));
+    this.input_.addEventListener('keyup', this.searchClick_.bind(this));
     this.clear_.addEventListener('click', this.clearSearchs_.bind(this));
     // results container
     this.resultsContainer_ = this.element_.getElementsByTagName('div')['m-searchstreet-results'];
@@ -253,7 +254,7 @@ export default class SearchstreetControl extends M.Control {
     }
     // remove the child of "resultsContainer_"
     const parentContainer = this.resultsContainer_.parentElement;
-    parentContainer.removeChild(this.searchingResult_);
+    parentContainer.removeChild(this.resultsContainer_);
   }
 
   /**
@@ -280,11 +281,13 @@ export default class SearchstreetControl extends M.Control {
    */
   searchClick_(evt) {
     evt.preventDefault();
-
     if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
       this.resultsAutocomplete_.classList.remove(SearchstreetControl.MINIMUM);
+      const parent = this.resultsAutocomplete_;
+      const element = this.resultsAutocomplete_.querySelector('div#m-searching-result-autocomplete');
+      parent.parentNode.removeChild(element);
       // this.resultsAutocomplete_.removeChildren(this.resultsAutocomplete_
-      // .querySelector('div#m-searching-result-autocomplete'));
+      //   .querySelector('div#m-searching-result-autocomplete'));
       this.resultsAutocomplete_.innerHTML = '';
       // gets the query
       let query = this.input_.value;
