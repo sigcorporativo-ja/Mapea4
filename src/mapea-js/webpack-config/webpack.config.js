@@ -16,7 +16,7 @@ module.exports = {
   entry: entrypoints,
   output: {
     // options related to how webpack emits results
-    path: path.resolve(__dirname, 'dist/core/js'), // string
+    path: path.resolve(__dirname, '../dist/core/js'), // string
     // the target directory for all output files
     // must be an absolute path (use the Node.js path module)
     filename: '[name].js', // string
@@ -32,13 +32,13 @@ module.exports = {
   resolve: {
     alias: {
       handlebars: 'handlebars/dist/handlebars.min.js',
-      templates: path.resolve(__dirname, 'src/templates'),
-      assets: path.resolve(__dirname, 'src/facade/assets'),
-      facade: path.resolve(__dirname, 'src/facade'),
-      impl: path.resolve(__dirname, 'src/impl/ol/js'),
-      configuration: path.resolve(__dirname, 'test/configuration_filtered'),
-      'impl-assets': path.resolve(__dirname, 'src/impl/ol/assets'),
-      plugins: path.resolve(__dirname, 'src/plugins'),
+      templates: path.resolve(__dirname, '../src/templates'),
+      assets: path.resolve(__dirname, '../src/facade/assets'),
+      facade: path.resolve(__dirname, '../src/facade'),
+      impl: path.resolve(__dirname, '../src/impl/ol/js'),
+      configuration: path.resolve(__dirname, '../test/configuration_filtered'),
+      'impl-assets': path.resolve(__dirname, '../src/impl/ol/assets'),
+      plugins: path.resolve(__dirname, '../src/plugins'),
     },
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html'],
   },
