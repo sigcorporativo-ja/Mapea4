@@ -1,259 +1,288 @@
-import * as olXSD from 'ol/format/xsd';
-import * as olXML from 'ol/xml';
 import Utils from 'facade/js/util/Utils';
 
-export default class WMSCapabilities extends ol.format.WMSCapabilities {
-  /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMC formater
-   *
-   * @constructor
-   * @param {Mx.parameters.LayerOptions} options custom options for this formater
-   * @extends {ol.format.XML}
-   * @api stable
-   */
-  constructor() {
-    super();
+/**
+ * Name of the nodes that we want to spread from parents to children.
+ * @const
+ * @type {Array<String>}
+ */
+const PROPAGATED_ELEMENTS = [
+  'SRS',
+  'BoundingBox',
+  'ScaleHint',
+  'LatLonBoundingBox',
+];
 
-    /**
-     * @type {Number}
-     */
-    this.maxScale_ = Number.NEGATIVE_INFINITY;
+/**
+ * This function returns true if a node has a direct child with a name equals to
+ * childName parameter.
+ * @function
+ * @param {Node} node
+ * @param {String} childName
+ * @return {Bool}
+ */
+const hasChild = (node, childName) => {
+  const childNodes = Array.prototype.filter
+    .call(node.children, element => element.tagName === childName);
+  return childNodes.length > 0;
+};
 
-    /**
-     * @type {Number}
-     */
-    this.minScale_ = Number.POSITIVE_INFINITY;
+/**
+ * This function propagates all the nodes defined in the constant PROPAGATED_ELEMENTS
+ * from parents to child node.
+ * @function
+ * @param {Node} parentNode
+ * @param {Node} nodeChild
+ */
+const propagateNodeLayer = (parentNode, nodeChild) => {
+  if (parentNode !== null) {
+    PROPAGATED_ELEMENTS.forEach((elementName) => {
+      if (!hasChild(nodeChild, elementName)) {
+        const nodes = Array.prototype.filter
+          .call(parentNode.children, element => element.tagName === elementName);
+        nodes.forEach((node) => {
+          const cloneNode = node.cloneNode(true);
+          nodeChild.appendChild(cloneNode);
+        });
+      }
+    });
   }
+};
 
-  /**
-   * @private
-   * @param {Node} node Node.
-   * @param {Array.<*>} objectStack Object stack.
-   * @return {Object|undefined} Layer object.
-   */
-  static readScaleHint_(node, objectStack) {
-    const minScale = olXSD.readDecimalString(node.getAttribute('min'));
-    const maxScale = olXSD.readDecimalString(node.getAttribute('max'));
+/**
+ * This function returns an object where each key is the name of a layer of the WMS
+ * document and its value is the XML node that represents it.
+ * @function
+ * @param {Node} wmsNode
+ * @param {Bool} isRoot
+ * @param {Object} rootObj
+ * @param {Node|null} parent
+ * @returns {Object}
+ */
+const layerNodeToJSON = (wmsNode, isRoot = true, rootObj = {}, parent = null) => {
+  let rootObjVar = rootObj;
+  let node = wmsNode;
+  if (isRoot === true) {
+    node = wmsNode.querySelector('Layer');
+  }
+  propagateNodeLayer(parent, node);
+  const name = node.querySelector('Name').innerHTML;
+  const children = node.children;
+  Array.prototype.forEach.call(children, (child) => {
+    if (child.tagName === 'Layer') {
+      rootObjVar = layerNodeToJSON(child, false, rootObjVar, node);
+    }
+  });
+  rootObjVar[name] = node;
+  return rootObjVar;
+};
 
-    return {
+/**
+ * This function parse the SRS custom node of WMS XML.
+ * @function
+ * @param {Object} objLayer
+ * @param {Object} parsedLayerNodes
+ */
+const parseSRS = (objLayer, parsedLayerNodes) => {
+  const objLayerParam = objLayer;
+  const nodeLayer = parsedLayerNodes[objLayerParam.Name];
+  const SRS = nodeLayer.querySelector('SRS');
+  if (SRS !== null) {
+    const innerHTML = SRS.innerHTML;
+    objLayerParam.SRS = [innerHTML];
+  }
+};
+
+/**
+ * This function parse the BoundingBox custom node and SRS attribute of WMS XML.
+ * @function
+ * @param {Object} objLayer
+ * @param {Object} parsedLayerNodes
+ */
+const parseBoundingBox = (objLayer, parsedLayerNodes) => {
+  const nodeLayer = parsedLayerNodes[objLayer.Name];
+  if (Utils.isArray(objLayer.BoundingBox)) {
+    let bboxChilds = Array.prototype.map.call(nodeLayer.children, element => element);
+    bboxChilds = bboxChilds.filter(element => element.tagName === 'BoundingBox');
+
+    objLayer.BoundingBox.forEach((objBbox, index) => {
+      const objBboxParam = objBbox;
+      if (objBboxParam.crs === null) {
+        const bboxNode = bboxChilds[index];
+        const srs = bboxNode.getAttribute('SRS');
+        if (!Utils.isNullOrEmpty(srs)) {
+          objBboxParam.crs = srs;
+        }
+      }
+    });
+  }
+};
+
+/**
+ * This function parse the ScaleHint custom node of WMS XML.
+ * @function
+ * @param {Object} objLayer
+ * @param {Object} parsedLayerNodes
+ */
+const parseScaleHint = (objLayer, parsedLayerNodes) => {
+  const objLayerParam = objLayer;
+  const nodeLayer = parsedLayerNodes[objLayer.Name];
+  objLayerParam.ScaleHint = [];
+  let scaleHints = Array.prototype.map.call(nodeLayer.children, element => element);
+  scaleHints = scaleHints.filter(element => element.tagName === 'ScaleHint');
+  scaleHints.forEach((scaleHint) => {
+    const minScale = parseFloat(scaleHint.getAttribute('min'));
+    const maxScale = parseFloat(scaleHint.getAttribute('max'));
+    const obj = {
       minScale,
       maxScale,
     };
-  }
+    objLayerParam.ScaleHint.push(obj);
+  });
+};
 
-  /**
-   * @private
-   * @param {Node} node Node.
-   * @param {Array.<*>} objectStack Object stack.
-   * @return {Object|undefined} Layer object.
-   */
-  static readLayer_(node, objStack) {
-    const parentLayerObject = objStack[objStack.length - 1];
-
-    const layerObject = olXML.pushParseAndPop({}, WMSCapabilities.LAYER_PARSERS, node, objStack);
-
-    if (!layerObject) {
-      return undefined;
-    }
-    const queryableProp = 'queryable';
-    const cascadedProp = 'cascaded';
-    const opaqueProp = 'opaque';
-    const noSubsetsProp = 'noSubsets';
-    const fixedWidthProp = 'fixedWidth';
-    const fixedHeightProp = 'fixedHeight';
-
-    let queryable = olXSD.readBooleanString(node.getAttribute('queryable'));
-    if (queryable === undefined) {
-      queryable = parentLayerObject[queryableProp];
-    }
-    layerObject[queryableProp] = queryable !== undefined ? queryable : false;
-
-    let cascaded = olXSD.readNonNegativeIntegerString(node.getAttribute('cascaded'));
-    if (cascaded === undefined) {
-      cascaded = parentLayerObject[cascadedProp];
-    }
-    layerObject[cascadedProp] = cascaded;
-
-    let opaque = olXSD.readBooleanString(node.getAttribute('opaque'));
-    if (opaque === undefined) {
-      opaque = parentLayerObject[opaqueProp];
-    }
-    layerObject[opaqueProp] = opaque !== undefined ? opaque : false;
-
-    let noSubsets = olXSD.readBooleanString(node.getAttribute('noSubsets'));
-    if (noSubsets === undefined) {
-      noSubsets = parentLayerObject[noSubsetsProp];
-    }
-    layerObject[noSubsetsProp] = noSubsets !== undefined ? noSubsets : false;
-
-    let fixedWidth = olXSD.readDecimalString(node.getAttribute('fixedWidth'));
-    if (!fixedWidth) {
-      fixedWidth = parentLayerObject[fixedWidthProp];
-    }
-    layerObject[fixedWidthProp] = fixedWidth;
-
-    let fixedHeight = olXSD.readDecimalString(node.getAttribute('fixedHeight'));
-    if (!fixedHeight) {
-      fixedHeight = parentLayerObject[fixedHeightProp];
-    }
-    layerObject[fixedHeightProp] = fixedHeight;
-
-    // See 7.2.4.8
-    const addKeys = ['Style', 'CRS', 'AuthorityURL'];
-    addKeys.forEach((key) => {
-      if (key in parentLayerObject) {
-        let childValue = goog.object.setIfUndefined(layerObject, key, []);
-        childValue = childValue.concat(parentLayerObject[key]);
-        layerObject[key] = childValue;
-      }
-    });
-
-    const replaceKeys = ['EX_GeographicBoundingBox', 'BoundingBox', 'Dimension',
-      'Attribution', 'MinScaleDenominator', 'MaxScaleDenominator', 'ScaleHint',
-      'SRS', 'LatLonBoundingBox'];
-    replaceKeys.forEach((key) => {
-      if (!(key in layerObject)) {
-        const parentValue = parentLayerObject[key];
-        layerObject[key] = parentValue;
-      }
-    });
-
-    // replaces the BoundingBox by LatLonBoundinBox
-    const latLonBoundingBoxProp = 'LatLonBoundingBox';
-    const boundingBoxProp = 'BoundingBox';
-    if (Utils.isNullOrEmpty(layerObject[boundingBoxProp]) &&
-      !Utils.isNullOrEmpty(layerObject[latLonBoundingBoxProp])) {
-      layerObject[boundingBoxProp] = layerObject[latLonBoundingBoxProp];
-    }
-
-    // replaces the maxScale by ScaleHint
-    const maxScaleDenominatorProp = 'MaxScaleDenominator';
-    if (Utils.isNullOrEmpty(layerObject[maxScaleDenominatorProp]) &&
-      !Utils.isNullOrEmpty(layerObject.ScaleHint)) {
-      layerObject[maxScaleDenominatorProp] = layerObject.ScaleHint[0].maxScale;
-    }
-
-    // replaces the minScale by ScaleHint
-    const minScaleDenominatorProp = 'MinScaleDenominator';
-    if (Utils.isNullOrEmpty(layerObject[minScaleDenominatorProp]) &&
-      !Utils.isNullOrEmpty(layerObject.ScaleHint)) {
-      layerObject[minScaleDenominatorProp] = layerObject.ScaleHint[0].minScale;
-    }
-    return layerObject;
-  }
-
-  /**
-   * @private
-   * @param {Node} node Node.
-   * @param {Array.<*>} objectStack Object stack.
-   * @return {Object} Bounding box object.
-   */
-  static readBoundingBox_(node, objectStack) {
+/**
+ * This function parse the LatLonBoundingBox custom node of WMS XML.
+ * @function
+ * @param {Object} objLayer
+ * @param {Object} parsedLayerNodes
+ */
+const parseLatLonBoundingBox = (objLayer, parsedLayerNodes) => {
+  const objLayerParam = objLayer;
+  const nodeLayer = parsedLayerNodes[objLayer.Name];
+  objLayerParam.LatLonBoundingBox = [];
+  let latLonBboxes = Array.prototype.map.call(nodeLayer.children, element => element);
+  latLonBboxes = latLonBboxes.filter(element => element.tagName === 'LatLonBoundingBox');
+  latLonBboxes.forEach((latlonBbox) => {
     const extent = [
-      olXSD.readDecimalString(node.getAttribute('minx')),
-      olXSD.readDecimalString(node.getAttribute('miny')),
-      olXSD.readDecimalString(node.getAttribute('maxx')),
-      olXSD.readDecimalString(node.getAttribute('maxy')),
+      parseFloat(latlonBbox.getAttribute('minx')),
+      parseFloat(latlonBbox.getAttribute('miny')),
+      parseFloat(latlonBbox.getAttribute('maxx')),
+      parseFloat(latlonBbox.getAttribute('maxy')),
     ];
-
-    // CRS
-    let crs = node.getAttribute('CRS');
-    if (Utils.isNullOrEmpty(crs)) {
-      crs = node.getAttribute('SRS');
-    }
-
-    // resolutions
-    const resolutions = [
-      olXSD.readDecimalString(node.getAttribute('resx')),
-      olXSD.readDecimalString(node.getAttribute('resy')),
-    ];
-
-    return {
-      crs,
-      extent,
-      res: resolutions,
-    };
-  }
-
-  /**
-   * @private
-   * @param {Node} node Node.
-   * @param {Array.<*>} objectStack Object stack.
-   * @return {Object} Bounding box object.
-   */
-  static readLatLonBoundingBox_(node, objectStack) {
-    // extent
-    const extent = [
-      olXSD.readDecimalString(node.getAttribute('minx')),
-      olXSD.readDecimalString(node.getAttribute('miny')),
-      olXSD.readDecimalString(node.getAttribute('maxx')),
-      olXSD.readDecimalString(node.getAttribute('maxy')),
-    ];
-
-    return {
+    const obj = {
       crs: 'EPSG:4326',
       extent,
     };
-  }
-}
-//
-// ol.format.WMSCapabilities.LAYER_PARSERS_ = ol.xml
-//   .makeStructureNS(ol.format.WMSCapabilities.NAMESPACE_URIS_, {
-//     Name: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-//     Title: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-//     Abstract: ol.xml.makeObjectPropertySetter(ol.xsd.readString),
-//     KeywordList: ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readKeywordList_),
-//     CRS: ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
-//     SRS: ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
-//     EX_GeographicBoundingBox: ol.xml
-//       .makeObjectPropertySetter(ol.format.WMSCapabilities.readEXGeographicBoundingBox_),
-//     BoundingBox: ol.xml.makeObjectPropertyPusher(WMSCapabilities.readBoundingBox_),
-//     LatLonBoundingBox: ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLatLonBoundingBox_),
-//     Dimension: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readDimension_),
-//     Attribution: ol.xml.makeObjectPropertySetter(ol.format.WMSCapabilities.readAttribution_),
-//     AuthorityURL: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readAuthorityURL_),
-//     Identifier: ol.xml.makeObjectPropertyPusher(ol.xsd.readString),
-//     MetadataURL: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readMetadataURL_),
-//     DataURL: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
-//     FeatureListURL: ol.xml
-//       .makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
-//     Style: ol.xml.makeObjectPropertyPusher(ol.format.WMSCapabilities.readStyle_),
-//     MinScaleDenominator: ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
-//     MaxScaleDenominator: ol.xml.makeObjectPropertySetter(ol.xsd.readDecimal),
-//     Layer: ol.xml.makeObjectPropertyPusher(WMSCapabilities.readLayer_),
-//     ScaleHint: ol.xml.makeObjectPropertyPusher(WMSCapabilities.readScaleHint_),
-//   });
-
-// WMS.LAYER_PARSERS = olXML.makeStructureNS(WMSCapabilities.NAMESPACE_URIS, {
-//   Name: olXML.makeObjectPropertySetter(olXSD.readString),
-//   Title: olXML.makeObjectPropertySetter(olXSD.readString),
-//   Abstract: olXML.makeObjectPropertySetter(olXSD.readString),
-//   KeywordList: olXML.makeObjectPropertySetter(ol.format.WMSCapabilities.readKeywordList_),
-//   CRS: olXML.makeObjectPropertyPusher(olXSD.readString),
-//   SRS: olXML.makeObjectPropertyPusher(olXSD.readString),
-//   EX_GeographicBoundingBox: olXML.makeObjectPropertySetter(ol.format.WMSCapabilities.readEXGeographicBoundingBox_),
-//   BoundingBox: olXML.makeObjectPropertyPusher(WMSCapabilities.readBoundingBox_),
-//   LatLonBoundingBox: olXML.makeObjectPropertyPusher(WMSCapabilities.readLatLonBoundingBox_),
-//   Dimension: olXML.makeObjectPropertyPusher(ol.format.WMSCapabilities.readDimension_),
-//   Attribution: olXML.makeObjectPropertySetter(ol.format.WMSCapabilities.readAttribution_),
-//   AuthorityURL: olXML.makeObjectPropertyPusher(ol.format.WMSCapabilities.readAuthorityURL_),
-//   Identifier: olXML.makeObjectPropertyPusher(olXSD.readString),
-//   MetadataURL: olXML.makeObjectPropertyPusher(ol.format.WMSCapabilities.readMetadataURL_),
-//   DataURL: olXML.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
-//   FeatureListURL: olXML.makeObjectPropertyPusher(ol.format.WMSCapabilities.readFormatOnlineresource_),
-//   Style: olXML.makeObjectPropertyPusher(ol.format.WMSCapabilities.readStyle_),
-//   MinScaleDenominator: olXML.makeObjectPropertySetter(olXSD.readDecimal),
-//   MaxScaleDenominator: olXML.makeObjectPropertySetter(olXSD.readDecimal),
-//   Layer: olXML.makeObjectPropertyPusher(WMSCapabilities.readLayer_),
-//   ScaleHint: olXML.makeObjectPropertyPusher(WMSCapabilities.readScaleHint_),
-// });
+    objLayerParam.LatLonBoundingBox.push(obj);
+  });
+};
 
 /**
- * @const
- * @type {Array.<null|string>}
+ * This function replaces the BoundingBox (if BoundingBox is null)
+ * by LatLonBoundinBox in object layer.
+ * @function
+ * @param {Object} objLayer
+ * @param {Object} parsedLayerNodes
  */
-WMSCapabilities.NAMESPACE_URIS = [
-  null,
-  'http://www.opengis.net/wms',
+const replaceBoundingBox = (objLayer, parsedLayerNodes) => {
+  const objLayerParam = objLayer;
+  // replaces the BoundingBox by LatLonBoundinBox
+  const latLonBoundingBoxProp = 'LatLonBoundingBox';
+  const boundingBoxProp = 'BoundingBox';
+  if (Utils.isNullOrEmpty(objLayerParam[boundingBoxProp]) &&
+    !Utils.isNullOrEmpty(objLayerParam[latLonBoundingBoxProp])) {
+    objLayerParam[boundingBoxProp] = objLayerParam[latLonBoundingBoxProp];
+  }
+};
+
+/**
+ * This function replaces the maxScale (if maxScale is null)
+ * by ScaleHint in object layer.
+ * @function
+ * @param {Object} objLayer
+ * @param {Object} parsedLayerNodes
+ */
+const replaceMaxScaleDenominator = (objLayer, parsedLayerNodes) => {
+  const objLayerParam = objLayer;
+  const maxScaleDenominatorProp = 'MaxScaleDenominator';
+  if (Utils.isNullOrEmpty(objLayerParam[maxScaleDenominatorProp]) &&
+    !Utils.isNullOrEmpty(objLayerParam.ScaleHint)) {
+    objLayerParam[maxScaleDenominatorProp] = objLayerParam.ScaleHint[0].maxScale;
+  }
+};
+
+/**
+ * This function replaces the maxScale (if maxScale is null)
+ * by ScaleHint in object layer.
+ * @function
+ * @param {Object} objLayer
+ * @param {Object} parsedLayerNodes
+ */
+const replaceMinScaleDenominator = (objLayer, parsedLayerNodes) => {
+  const objLayerParam = objLayer;
+  const minScaleDenominatorProp = 'MinScaleDenominator';
+  if (Utils.isNullOrEmpty(objLayerParam[minScaleDenominatorProp]) &&
+    !Utils.isNullOrEmpty(objLayerParam.ScaleHint)) {
+    objLayerParam[minScaleDenominatorProp] = objLayerParam.ScaleHint[0].minScale;
+  }
+};
+
+/**
+ * Parsers to apply to WMS XML Document
+ * @const
+ * @type {Array<Function>}
+ */
+const LAYER_PARSERS = [
+  parseSRS,
+  parseBoundingBox,
+  parseScaleHint,
+  parseLatLonBoundingBox,
+  replaceBoundingBox,
+  replaceMaxScaleDenominator,
+  replaceMinScaleDenominator,
 ];
+
+/**
+ * This function applies all the parsers to a layer
+ * @function
+ * @param {Object} objLayer
+ * @param {Object} parsedLayerNodes
+ */
+const parserLayerProps = (objLayer, parsedLayerNodes) => {
+  LAYER_PARSERS.forEach((parser) => {
+    parser(objLayer, parsedLayerNodes);
+  });
+};
+
+/**
+ * This function applies all the parsers to each layer
+ * @function
+ * @param {Object} objLayer
+ * @param {Object} parsedLayerNodes
+ */
+const parseLayersProps = (objLayer, parsedLayerNodes) => {
+  if (Utils.isArray(objLayer)) {
+    objLayer.forEach((layer) => {
+      parseLayersProps(layer, parsedLayerNodes);
+    });
+  }
+  else if (Utils.isObject(objLayer)) {
+    parserLayerProps(objLayer, parsedLayerNodes);
+    parseLayersProps(objLayer.Layer, parsedLayerNodes);
+  }
+};
+
+
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a WMC formater
+ * @api stable
+ */
+export default class WMSCapabilities extends ol.format.WMSCapabilities {
+  /**
+   * This function reads some custom properties that do
+   * not follow the standard of WMS layers.
+   * @public
+   * @param {XMLDocument} wmsDocument - XML of WMS
+   * @return {Object} Layer object
+   */
+  customRead(wmsDocument) {
+    const formatedWMS = this.read(wmsDocument);
+    const parsedLayerNodes = layerNodeToJSON(wmsDocument);
+    const capabilityObj = formatedWMS.Capability;
+    if (!Utils.isNullOrEmpty(capabilityObj) && !Utils.isNullOrEmpty(capabilityObj.Layer)) {
+      parseLayersProps(capabilityObj.Layer, parsedLayerNodes);
+    }
+    return formatedWMS;
+  }
+}
