@@ -3,7 +3,7 @@ import * as parameter from 'facade/js/parameter/parameter';
 import Config from 'configuration';
 import Remote from 'facade/js/util/Remote';
 import EventsManager from 'facade/js/event/Manager';
-import FormatWMC from '../format/wmc/WMC110';
+import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
 
 export default class WMC extends Layer {

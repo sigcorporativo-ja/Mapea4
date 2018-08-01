@@ -20,3 +20,7 @@ GeoJSON.geojsonType = {
   MULTI_POLYGON: 'MultiPolygon',
   GEOMETRY_COLLECTION: 'GeometryCollection',
 };
+
+export const POINT = 'Point';
+
+export const MultiPoint = 'MultiPoint';

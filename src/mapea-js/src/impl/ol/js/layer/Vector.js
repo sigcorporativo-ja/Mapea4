@@ -76,12 +76,6 @@ export default class Vector extends Layer {
     this.updateSource_();
 
     this.setVisible(this.visibility);
-
-    // if (this.zIndex_ !== null) {
-    //   this.setZIndex(this.zIndex_);
-    // }
-    // this.setZIndex(999999);
-
     const olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
   }
@@ -107,12 +101,10 @@ export default class Vector extends Layer {
    * @api stable
    * @expose
    */
-  /* eslint-disable */
-  static inRange() {
+  inRange() {
     // vectors are always in range
     return true;
   }
-  /* eslint-enable */
 
   /**
    * This function add features to layer
@@ -124,8 +116,8 @@ export default class Vector extends Layer {
    */
   addFeatures(features, update) {
     features.forEach((newFeature) => {
-      this.features_.find(feature => feature.equals(newFeature));
-      if (Utils.isNullOrEmpty(newFeature)) {
+      const feature = this.features_.find(feature2 => feature2.equals(newFeature));
+      if (Utils.isNullOrEmpty(feature)) {
         this.features_.push(newFeature);
       }
     });

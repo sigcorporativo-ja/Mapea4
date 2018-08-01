@@ -4,7 +4,7 @@ import ClusteredFeature from 'facade/js/feature/Clustered';
 import Popup from 'facade/js/Popup';
 import Template from 'facade/js/util/Template';
 import geojsonPopupTemplate from 'templates/geojson_popup';
-import GeoJSONFormat from '../format/GeoJSON';
+import GeoJSONFormat from 'facade/js/format/GeoJSON';
 import JSONPLoader from '../loader/JSONP';
 import Vector from './Vector';
 
@@ -88,8 +88,6 @@ export default class GeoJSON extends Vector {
       this.loader_ = new JSONPLoader(map, this.url, this.formater_);
     }
     super.addTo(map);
-
-    // this.ol3Layer.setStyle(undefined);
   }
 
   /**

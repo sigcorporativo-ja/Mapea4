@@ -1,14 +1,35 @@
 import ClusteredFeature from 'facade/js/feature/Clustered';
+import FeatureFacade from 'facade/js/feature/Feature';
 import Cluster from 'facade/js/style/Cluster';
 import Utils from 'facade/js/util/Utils';
 import AnimatedCluster from '../layer/AnimatedCluster';
 
+/**
+ * function adds the event 'click'
+ *
+ * @private
+ * @function
+ * @export
+ */
+const getFacadeFeature = (feature, layer) => {
+  let mFeature;
+  const featureId = feature.getId();
+  if (!Utils.isNullOrEmpty(featureId)) {
+    mFeature = layer.getFeatureById(featureId);
+  }
+  if (Utils.isNullOrEmpty(mFeature)) {
+    mFeature = FeatureFacade.olFeature2Facade(feature);
+  }
+  return mFeature;
+};
+
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a KML layer
+ * with parameters specified by the user
+ */
 export default class Feature {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a KML layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @param {ol.Map} options custom options for this layer
    * @api stable
@@ -74,7 +95,7 @@ export default class Feature {
           }
         }
         else if (!Object.prototype.hasOwnProperty.call(feature.getProperties(), 'selectclusterlink')) {
-          features.push(this.getFacadeFeature_(feature, layer));
+          features.push(getFacadeFeature(feature, layer));
         }
       }, {
         layerFilter: (l) => {
@@ -117,25 +138,6 @@ export default class Feature {
    */
   removeCursorPointer() {
     this.map_.getMapImpl().getViewport().style.cursor = this.defaultCursor_;
-  }
-
-  /**
-   * function adds the event 'click'
-   *
-   * @private
-   * @function
-   * @export
-   */
-  static getFacadeFeature_(feature, layer) {
-    let mFeature;
-    const featureId = feature.getId();
-    if (!Utils.isNullOrEmpty(featureId)) {
-      mFeature = layer.getFeatureById(featureId);
-    }
-    if (Utils.isNullOrEmpty(mFeature)) {
-      mFeature = Feature.olFeature2Facade(feature);
-    }
-    return mFeature;
   }
 
   /**

@@ -1,4 +1,5 @@
 import Utils from 'facade/js/util/Utils';
+import FacadeLayerBase from 'facade/js/layer/Layer';
 import LayerType from 'facade/js/layer/Type';
 import FacadeWMS from 'facade/js/layer/WMS';
 import Config from 'configuration';
@@ -26,6 +27,7 @@ export default class WMS extends LayerBase {
     // calls the super constructor
     super(options);
 
+    this.options = options;
     /**
      * The WMS layers instances from capabilities
      * @private
@@ -46,7 +48,7 @@ export default class WMS extends LayerBase {
      * @type {boolean}
      * @expose
      */
-    this.displayInLayerSwitcher = true;
+    this.displayInLayerSwitcher_ = true;
 
     /**
      * get WMS getCapabilities promise
@@ -186,7 +188,8 @@ export default class WMS extends LayerBase {
       this.addSingleLayer_();
     }
 
-    if (this.legendUrl_ === Utils.concatUrlPaths([Config.THEME_URL, LayerBase.LEGEND_DEFAULT])) {
+    if (this.legendUrl_ === Utils.concatUrlPaths([Config.THEME_URL,
+      FacadeLayerBase.LEGEND_DEFAULT])) {
       this.legendUrl_ = Utils.addParameters(this.url, {
         SERVICE: 'WMS',
         VERSION: this.version,
@@ -518,7 +521,7 @@ export default class WMS extends LayerBase {
         Remote.get(wmsGetCapabilitiesUrl).then((response) => {
           const getCapabilitiesDocument = response.xml;
           const getCapabilitiesParser = new FormatWMS();
-          const getCapabilities = getCapabilitiesParser.read(getCapabilitiesDocument);
+          const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
 
           const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
           success(getCapabilitiesUtils);

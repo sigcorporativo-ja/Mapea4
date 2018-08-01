@@ -108,7 +108,7 @@ export default class Feature extends Base {
             this.selectFeatures(newFeatures, layer, evt);
           }
         }
-      }, this);
+      });
     }
   }
 

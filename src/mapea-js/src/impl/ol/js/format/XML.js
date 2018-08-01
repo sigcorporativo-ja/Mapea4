@@ -53,7 +53,7 @@ export default class XML {
    * @api stable
    */
   read(data) {
-    let dataVariable;
+    let dataVariable = data;
     if (Utils.isString(data)) {
       dataVariable = ol.xml.parse(data);
     }

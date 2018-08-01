@@ -323,7 +323,7 @@ export default class Choropleth extends Style {
    */
   update_() {
     if (!Utils.isNullOrEmpty(this.layer_)) {
-      let features = this.layer_.features();
+      let features = this.layer_.getFeatures();
       if (!Utils.isNullOrEmpty(features)) {
         this.dataValues_ = this.values();
         if (Utils.isNullOrEmpty(this.choroplethStyles_) || (!Utils.isNullOrEmpty(this.choroplethStyles_) &&

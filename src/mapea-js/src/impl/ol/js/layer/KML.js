@@ -87,7 +87,9 @@ export default class KML extends Vector {
       source: new ol.source.Vector({
         url: this.url,
         format: formater,
-        loader: loader.getLoaderFn((features, screenOverlay) => {
+        loader: loader.getLoaderFn((loaderData) => {
+          const features = loaderData.features;
+          const screenOverlay = loaderData.screenOverlay;
           // removes previous features
           this.facadeVector_.clear();
           this.facadeVector_.addFeatures(features);
@@ -101,7 +103,7 @@ export default class KML extends Vector {
     });
     // sets its visibility if it is in range
     if (this.options.visibility !== false) {
-      this.setVisible(Vector.inRange());
+      this.setVisible(this.inRange());
     }
     // sets its z-index
     if (this.zIndex_ !== null) {

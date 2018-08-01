@@ -96,7 +96,7 @@ export default class Response {
         }
         // it avoids responses that aren't xml format
         else if (/xml/i.test(contentType)) {
-          this.xml = goog.dom.xml.loadXml(this.text);
+          this.xml = ol.xml.parse(this.text);
         }
       }
       catch (err) {

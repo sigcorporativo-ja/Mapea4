@@ -126,7 +126,7 @@ export default class Chart extends StyleFeature {
    */
   apply(layer) {
     this.layer_ = layer;
-    layer.features().forEach(feature => feature.style = this.clone());
+    layer.getFeatures().forEach(feature => feature.style = this.clone());
     this.updateCanvas();
   }
 

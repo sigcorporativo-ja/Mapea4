@@ -1,20 +1,19 @@
 const path = require('path');
 const webpack = require('webpack');
+const entrypoints = require('./entry-points-test.json');
 
 const env = process.env.NODE_ENV || 'development';
 const plugins = [];
 if (env === 'development') {
   const HotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin();
   plugins.push(HotModuleReplacementPlugin);
+  entrypoints['ol.min'] = path.resolve(__dirname, '../lib/ol.js');
+  entrypoints['chroma.min'] = path.resolve(__dirname, '../lib/chroma.min.js');
 }
+
 module.exports = {
   mode: env,
-  entry: {
-    // "mapea.l.min": "src/impl/leaflet/js/map/map.js",
-    source: path.resolve(__dirname, 'test/browser/source.js'),
-    'ol.min': path.resolve(__dirname, 'lib/ol.js'),
-    'chroma.min': path.resolve(__dirname, 'lib/chroma.min.js'),
-  },
+  entry: entrypoints,
   output: {
     // options related to how webpack emits results
     path: path.resolve(__dirname, 'dist/core/js'), // string

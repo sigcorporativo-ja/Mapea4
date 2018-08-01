@@ -9,7 +9,7 @@ export default class Simple extends StyleFeature {
     this.getImpl().applyToLayer(layer);
     if (applyToFeature === true) {
       if (isNullStyle) {
-        layer.features().forEach((featureVar) => {
+        layer.getFeatures().forEach((featureVar) => {
           const feature = featureVar;
           feature.style = null;
         });

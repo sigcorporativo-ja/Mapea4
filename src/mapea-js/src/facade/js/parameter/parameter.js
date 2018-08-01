@@ -24,7 +24,7 @@ const center = (centerParameterVar) => {
   // string
   if (Utils.isString(centerParameter)) {
     centerParameter = Utils.normalize(centerParameter);
-    if (/^\?\d+(\\d+)?[\\]\?\d+(\\d+)?([*](true|false))?$/i.test(centerParameter)) {
+    if (/^-?\d+(\.\d+)?[,;]-?\d+(\.\d+)?([*](true|false))?$/i.test(centerParameter)) {
       const centerArray = centerParameter.split(/\*/);
       const coord = centerArray[0];
       const draw = centerArray[1];
@@ -97,7 +97,7 @@ const center = (centerParameterVar) => {
     Exception('El formato del parámetro center no es correcto');
   }
 
-  return center;
+  return centerParam;
 };
 
 /**

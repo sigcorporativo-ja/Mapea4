@@ -265,7 +265,7 @@ export default class Category extends Composite {
         this.categoryStyles_ = this.generateRandomCategories_();
       }
       let styleOther = this.categoryStyles_['other'];
-      this.layer_.features().forEach((feature) => {
+      this.layer_.getFeatures().forEach((feature) => {
         let value = feature.attribute(this.attributeName_);
         let style = this.categoryStyles_[value];
         if (!Utils.isNullOrEmpty(style)) {

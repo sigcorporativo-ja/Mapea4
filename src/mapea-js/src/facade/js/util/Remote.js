@@ -47,6 +47,9 @@ export default class Remote {
     return Remote.ajax_(url, data, Remote.method.POST);
   }
 
+  /**
+   * TODO
+   */
   static jsonp_(urlVar, data, options) {
     let url = urlVar;
     if (!Utils.isNullOrEmpty(data)) {
@@ -92,6 +95,9 @@ export default class Remote {
     return req;
   }
 
+  /**
+   * TODO
+   */
   static ajax_(urlVar, dataVar, method, useProxy) {
     let url = urlVar;
     let data = dataVar;
@@ -124,6 +130,9 @@ export default class Remote {
     });
   }
 
+  /**
+   * TODO
+   */
   static manageProxy_(url, method) {
     // deafult GET
     let proxyUrl = Config.PROXY_URL;
@@ -138,6 +147,9 @@ export default class Remote {
     return proxyUrl;
   }
 
+  /**
+   * TODO
+   */
   static createScriptTag_(proxyUrl, jsonpHandlerName) {
     const scriptTag = document.createElement('script');
     scriptTag.type = 'text/javascript';

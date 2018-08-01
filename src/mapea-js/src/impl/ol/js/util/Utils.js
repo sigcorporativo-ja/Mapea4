@@ -44,6 +44,7 @@ export default class Utils {
    * @api stable
    */
   static addOverlayImage(overlayImage, map) {
+    map.getMapImpl().updateSize();
     const mapSize = map.getMapImpl().getSize();
     const screenXY = overlayImage.screenXY;
     const screenXUnits = overlayImage.screenXUnits;
@@ -59,29 +60,29 @@ export default class Utils {
     img.src = src;
 
     // size
-    img.style.width = size[0];
-    img.style.height = size[1];
+    img.style.width = `${size[0]}px`;
+    img.style.height = `${size[1]}px`;
 
     // position
     let offsetX = overlayXY[0];
-    if (overlayXUnits === ol.style.IconAnchorUnits.FRACTION) {
+    if (overlayXUnits === 'fraction') {
       offsetX *= size[0];
     }
     let offsetY = overlayXY[1];
-    if (overlayYUnits === ol.style.IconAnchorUnits.FRACTION) {
+    if (overlayYUnits === 'fraction') {
       offsetY = (size[1] - (offsetY * size[1]));
     }
     img.style.position = 'absolute';
     let left = screenXY[0];
-    if (screenXUnits === ol.style.IconAnchorUnits.FRACTION) {
+    if (screenXUnits === 'fraction') {
       left = (left * mapSize[0]) - offsetX;
     }
     let top = screenXY[1];
-    if (screenYUnits === ol.style.IconAnchorUnits.FRACTION) {
+    if (screenYUnits === 'fraction') {
       top = (mapSize[1] - (top * mapSize[1])) - offsetY;
     }
-    img.style.top = top;
-    img.style.left = left;
+    img.style.top = `${top}px`;
+    img.style.left = `${left}px`;
 
     // parent
     const container = map.getMapImpl().getOverlayContainerStopEvent();

@@ -54,13 +54,15 @@
     "jsts": "^1.6.0",
     "lodash": "^4.17.10",
     "mocha-phantomjs": "^3.6.0",
+    "ol": "^5.1.3",
     "phantomjs": "1.9.7-15",
     "proj4": "^2.4.4",
     "temp": "0.8.3",
     "walk": "2.3.9"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --config=webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack --config=webpack.config.js"
+    "prestart": "node tasks/read-tests.js",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --config=webpack-config/webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --config=webpack-config/webpack.config.js"
   }
 }
