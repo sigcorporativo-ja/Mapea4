@@ -26,10 +26,10 @@ import Panzoombar from './control/Panzoombar';
 import Layer from './layer/Layer';
 import LayerType from './layer/Type';
 import Vector from './layer/Vector';
-// import KML from './layer/KML';
+import KML from './layer/KML';
 import WFS from './layer/WFS';
 import WMC from './layer/WMC';
-// import WMS from './layer/WMS';
+import WMS from './layer/WMS';
 import WMTS from './layer/WMTS';
 import OSM from './layer/OSM';
 import Mapbox from './layer/Mapbox';
@@ -1621,38 +1621,38 @@ export default class Map extends Base {
     }
 
     // parses the parameter
-    try {
-      const center = parameter.center(centerParam);
-      this.getImpl().setCenter(center);
-      if (center.draw === true) {
-        this.drawLayer_.clear();
+    // try {
+    const center = parameter.center(centerParam);
+    this.getImpl().setCenter(center);
+    if (center.draw === true) {
+      this.drawLayer_.clear();
 
-        this.centerFeature_ = new Feature('__mapeacenter__', {
-          type: 'Feature',
-          geometry: {
-            type: 'Point',
-            coordinates: [center.x, center.y],
-          },
-          properties: {
-            vendor: {
-              mapea: { // TODO mig
-                click: (evt) => {
-                  const label = this.getLabel();
-                  if (!Utils.isNullOrEmpty(label)) {
-                    label.show(this);
-                  }
-                },
+      this.centerFeature_ = new Feature('__mapeacenter__', {
+        type: 'Feature',
+        geometry: {
+          type: 'Point',
+          coordinates: [center.x, center.y],
+        },
+        properties: {
+          vendor: {
+            mapea: { // TODO mig
+              click: (evt) => {
+                const label = this.getLabel();
+                if (!Utils.isNullOrEmpty(label)) {
+                  label.show(this);
+                }
               },
             },
           },
-        });
-        this.drawFeatures([this.centerFeature_]);
-      }
+        },
+      });
+      this.drawFeatures([this.centerFeature_]);
     }
-    catch (err) {
-      Dialog.error(err.toString());
-      throw err;
-    }
+    // }
+    // catch (err) {
+    //   Dialog.error(err.toString());
+    //   throw err;
+    // }
 
     return this;
   }

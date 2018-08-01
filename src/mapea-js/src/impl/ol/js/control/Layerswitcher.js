@@ -43,10 +43,10 @@ export default class LayerSwitcher extends Control {
     this.panel = element.getElementsByTagName('div')[LayerSwitcher.PANEL_ID];
 
     // click layer event
-    this.panel.addEventListener('click', this.clickLayer, false);
+    this.panel.addEventListener('click', this.clickLayer.bind(this), false);
 
     // change slider event
-    this.panel.addEventListener('input', this.clickLayer, false);
+    this.panel.addEventListener('input', this.clickLayer.bind(this), false);
     this.element = element;
     this.target_ = null;
     olMap.addControl(this);

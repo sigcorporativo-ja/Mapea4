@@ -520,8 +520,8 @@ export default class WMS extends LayerBase {
         // gets the getCapabilities response
         Remote.get(wmsGetCapabilitiesUrl).then((response) => {
           const getCapabilitiesDocument = response.xml;
-          const getCapabilitiesParser = new ol.format.WMS();
-          const getCapabilities = getCapabilitiesParser.read(getCapabilitiesDocument);
+          const getCapabilitiesParser = new FormatWMS();
+          const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
 
           const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
           success(getCapabilitiesUtils);

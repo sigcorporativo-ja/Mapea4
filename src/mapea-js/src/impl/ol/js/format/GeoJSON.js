@@ -17,13 +17,11 @@ export default class GeoJSON extends ol.format.GeoJSON {
    */
   readFeatureFromObject(object, options) {
     const geoJSONFeature = object;
-    const geometry = super.readFeatureFromObject(geoJSONFeature, options);
-    const feature = new ol.Feature();
+    const feature = super.readFeatureFromObject(geoJSONFeature, options);
     // geometry
     if (this.geometryName_) {
       feature.setGeometryName(this.geometryName_);
     }
-    feature.setGeometry(geometry);
     // id
     if (!Utils.isNullOrEmpty(geoJSONFeature.id)) {
       feature.setId(geoJSONFeature.id);
@@ -151,7 +149,7 @@ export default class GeoJSON extends ol.format.GeoJSON {
    * @return {Array<M.Feature>}
    * @api estable
    */
-  static read(geojson, geojsonFeatures, projection) {
+  read(geojson, geojsonFeatures, projection) {
     let features = [];
     let dstProj = projection.code;
     if (Utils.isNullOrEmpty(dstProj)) {
@@ -166,7 +164,9 @@ export default class GeoJSON extends ol.format.GeoJSON {
     features = geojsonFeatures.map((geojsonFeature) => {
       const id = geojsonFeature.id;
       const feature = new Feature(id, geojsonFeature);
-      feature.getImpl().getOLFeature().getGeometry().transform(srcProj, dstProj);
+      const olFeature = feature.getImpl().getOLFeature();
+      const newGeometry = olFeature.getGeometry().transform(srcProj, dstProj);
+      olFeature.setGeometry(newGeometry);
       return feature;
     });
     return features;

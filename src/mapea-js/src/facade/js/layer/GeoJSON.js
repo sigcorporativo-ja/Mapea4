@@ -4,7 +4,7 @@ import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import StyleCluster from '../style/Cluster';
 import LayerType from './Type';
-import GeomGeojson from '../geom/GeoJSON';
+import { Point, MultiPoint } from '../geom/GeoJSON';
 import EvtManager from '../event/Manager';
 import Style from '../style/Style';
 
@@ -29,7 +29,7 @@ export default class GeoJSON extends LayerVector {
     const impl = new GeoJSONImpl(parameters, options);
 
     // calls the super constructor
-    super(options, impl);
+    super(parameters, options, impl);
 
     // checks if the implementation can create KML layers
     if (Utils.isUndefined(GeoJSONImpl)) {
@@ -155,17 +155,30 @@ export default class GeoJSON extends LayerVector {
   }
 
   setStyle(styleVar, applyToFeature = false) {
-    let style = styleVar;
+    const style = styleVar;
     let isNullStyle = false;
     if (style === null) {
       isNullStyle = true;
     }
-    const applyStyleFn = () => {
+    if (this.getImpl().isLoaded()) {
+      this.applyStyle_(style, applyToFeature, isNullStyle)();
+    }
+    else {
+      this.once(EvtManager.LOAD, () => this.applyStyle_(style, applyToFeature, isNullStyle));
+    }
+  }
+
+  /**
+   *
+   */
+  applyStyle_(styleParam, applyToFeature, isNullStyle) {
+    return () => {
+      let style = styleParam;
       if (Utils.isNullOrEmpty(style)) {
         style = Utils.generateStyleLayer(GeoJSON.DEFAULT_OPTIONS_STYLE, this);
       }
       const isCluster = style instanceof StyleCluster;
-      const isPoint = [GeomGeojson.type.POINT, GeomGeojson.type.MULTI_POINT]
+      const isPoint = [Point, MultiPoint]
         .includes(Utils.getGeometryType(this));
       if (style instanceof Style && (!isCluster || isPoint)) {
         if (!Utils.isNullOrEmpty(this.style_)) {
@@ -182,13 +195,6 @@ export default class GeoJSON extends LayerVector {
       }
       this.fire(EvtManager.CHANGE_STYLE, [style, this]);
     };
-
-    if (this.getImpl().isLoaded()) {
-      applyStyleFn.bind(this)();
-    }
-    else {
-      this.once(EvtManager.LOAD, applyStyleFn, this);
-    }
   }
 }
 

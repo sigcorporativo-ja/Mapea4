@@ -3,7 +3,7 @@ import FacadePanzoombar from 'facade/js/control/Panzoombar';
 import LayerType from 'facade/js/layer/Type';
 import 'impl-assets/css/ol';
 import Control from 'facade/js/control/Control';
-// import FacadeWMS from 'facade/js/layer/WMS';
+import FacadeWMS from 'facade/js/layer/WMS';
 import 'impl-assets/css/custom';
 import EventsManager from 'facade/js/event/Manager';
 import LayerBase from 'facade/js/layer/Layer';
@@ -463,9 +463,9 @@ export default class Map extends MObject {
    * @returns {Array<FacadeWMS>} layers from the map
    * @api stable
    */
-  getWMS(filters) {
+  getWMS(filtersParam) {
     let foundLayers = [];
-    let filtersVar;
+    let filters = filtersParam;
 
     // get all wmsLayers
     const wmsLayers = this.layers_.filter((layer) => {
@@ -474,17 +474,17 @@ export default class Map extends MObject {
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filtersVar = [];
+      filters = [];
     }
     if (!Utils.isArray(filters)) {
-      filtersVar = [filters];
+      filters = [filters];
     }
 
-    if (filtersVar.length === 0) {
+    if (filters.length === 0) {
       foundLayers = wmsLayers;
     }
     else {
-      filtersVar.forEach((filterLayer) => {
+      filters.forEach((filterLayer) => {
         const filteredWMSLayers = wmsLayers.filter((wmsLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
@@ -612,9 +612,9 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.WFS>} layers from the map
    * @api stable
    */
-  getWFS(filters) {
+  getWFS(filtersParam) {
     let foundLayers = [];
-    let filtersVar;
+    let filters = filtersParam;
 
     // get all wfsLayers
     const wfsLayers = this.layers_.filter((layer) => {
@@ -623,17 +623,17 @@ export default class Map extends MObject {
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filtersVar = [];
+      filters = [];
     }
     if (!Utils.isArray(filters)) {
-      filtersVar = [filters];
+      filters = [filters];
     }
 
-    if (filtersVar.length === 0) {
+    if (filters.length === 0) {
       foundLayers = wfsLayers;
     }
     else {
-      filtersVar.forEach((filterLayer) => {
+      filters.forEach((filterLayer) => {
         const filteredWFSLayers = wfsLayers.filter((wfsLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
@@ -739,9 +739,9 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.WMTS>} layers from the map
    * @api stable
    */
-  getWMTS(filters) {
+  getWMTS(filtersParam) {
     let foundLayers = [];
-    let filtersVar;
+    let filters = filtersParam;
 
     // get all kmlLayers
     const wmtsLayers = this.layers_.filter((layer) => {
@@ -750,17 +750,17 @@ export default class Map extends MObject {
 
     // parse to Array
     if (Utils.isNullOrEmpty(filters)) {
-      filtersVar = [];
+      filters = [];
     }
     if (!Utils.isArray(filters)) {
-      filtersVar = [filters];
+      filters = [filters];
     }
 
-    if (filtersVar.length === 0) {
+    if (filters.length === 0) {
       foundLayers = wmtsLayers;
     }
     else {
-      filtersVar.forEach((filterLayer) => {
+      filters.forEach((filterLayer) => {
         // TODO ERROR DE RECURSIVIDAD: let l = map.getLayers(); map.getWMS(l);
         const filteredWMTSLayers = wmtsLayers.filter((wmtsLayer) => {
           let layerMatched = true;
@@ -1033,7 +1033,7 @@ export default class Map extends MObject {
     // removes unknow layers
     layers.forEach((layer) => {
       if (Utils.includes(this.layers_, layer)) {
-        this.layers_.remove(layer);
+        this.layers_ = this.layers_.filter(layer2 => !layer2.equals(layer));
         layer.getImpl().destroy();
         if (layer.transparent !== true) {
           // it was base layer so sets the visibility of the first one

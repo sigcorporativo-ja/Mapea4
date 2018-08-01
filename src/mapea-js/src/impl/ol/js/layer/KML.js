@@ -103,7 +103,7 @@ export default class KML extends Vector {
     });
     // sets its visibility if it is in range
     if (this.options.visibility !== false) {
-      this.setVisible(Vector.inRange());
+      this.setVisible(this.inRange());
     }
     // sets its z-index
     if (this.zIndex_ !== null) {

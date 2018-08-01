@@ -885,9 +885,9 @@ export default class Utils {
     if (Utils.isNullOrEmpty(layer) || Utils.isNullOrEmpty(layer.getFeatures())) {
       return null;
     }
-    const firstFeature = layer.features()[0];
-    if (!Utils.isNullOrEmpty(firstFeature) && !Utils.isNullOrEmpty(firstFeature.geometry())) {
-      return firstFeature.geometry().type;
+    const firstFeature = layer.getFeatures()[0];
+    if (!Utils.isNullOrEmpty(firstFeature) && !Utils.isNullOrEmpty(firstFeature.getGeometry())) {
+      return firstFeature.getGeometry().type;
     }
     return null;
   }
@@ -1046,7 +1046,7 @@ export default class Utils {
     const fillColor = chroma.random().hex();
     const strokeColor = strokeColorParam;
     const strokeWidth = strokeWidthParam;
-    const geometry = feature.geometry().type;
+    const geometry = feature.getGeometry().type;
     let style;
     let options;
     switch (geometry) {

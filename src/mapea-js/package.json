@@ -61,7 +61,8 @@
     "walk": "2.3.9"
   },
   "scripts": {
-    "start": "cross-env NODE_ENV=development webpack-dev-server --config=webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack --config=webpack.config.js"
+    "prestart": "node tasks/read-tests.js",
+    "start": "cross-env NODE_ENV=development webpack-dev-server --config=webpack-config/webpack.config.js",
+    "build": "cross-env NODE_ENV=production webpack --config=webpack-config/webpack.config.js"
   }
 }
