@@ -39,7 +39,6 @@ export default class Quantification {
     return jenksFn;
   }
 
-
   /** This function returns a quantile quantification function
    * @function
    * @public
@@ -47,7 +46,7 @@ export default class Quantification {
    * @return {function}
    * @api stable
    */
-  QUANTILE(n_classes_param) {
+  static QUANTILE(n_classes_param) {
     n_classes_param = n_classes_param || Quantification.DEFAULT_CLASES_QUANTILE;
     const quantileFn = (data, n_classes = n_classes_param) => {
       let uniqueData = Quantification.uniqueArray_(data);
@@ -63,7 +62,7 @@ export default class Quantification {
 
       // Calculamos los puntos de ruptura multiplicando por el valor
       // del salto desde i = 1, 2, .. numero de clases - 1
-      n_classes.forEach(value) {
+      for (let value = 0; value < n_classes.length; value += 1) {
         let break_point = step * value;
         breaks.push(break_point);
       }

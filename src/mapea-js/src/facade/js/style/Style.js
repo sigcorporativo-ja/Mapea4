@@ -71,7 +71,7 @@ export default class Style extends Base {
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @api stable
    */
-  static unapply(layer) {}
+  unapply(layer) {}
 
   /**
    * This function returns the value of the indicated attribute

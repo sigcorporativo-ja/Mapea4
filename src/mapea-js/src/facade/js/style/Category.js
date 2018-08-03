@@ -189,7 +189,7 @@ export default class Category extends Composite {
       let scope_ = this;
       image.onload = () => {
         canvasImages.push({
-          'image': this,
+          image,
           'categoryName': category
         });
         scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
@@ -266,15 +266,15 @@ export default class Category extends Composite {
       }
       let styleOther = this.categoryStyles_['other'];
       this.layer_.getFeatures().forEach((feature) => {
-        let value = feature.attribute(this.attributeName_);
+        let value = feature.getAttribute(this.attributeName_);
         let style = this.categoryStyles_[value];
         if (!Utils.isNullOrEmpty(style)) {
-          feature.style = style;
+          feature.setStyle(style);
         }
         else if (!Utils.isNullOrEmpty(styleOther)) {
-          feature.style = styleOther;
+          feature.setStyle(styleOther);
         }
-      }.bind(this));
+      });
       this.updateCanvas();
     }
   }

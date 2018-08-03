@@ -1,14 +1,17 @@
+import chroma from 'chroma-js';
 import WKT from '../geom/WKT';
 import {
   INCHES_PER_UNIT,
   DOTS_PER_INCH
 }
 from '../Mapea';
-// import StylePoint from '../style/Point';
 
+// import StylePoint from '../style/Point';
 // import StyleLine from '../style/Line';
 // import StylePolygon from '../style/Polygon';
+
 import './polyfills';
+
 
 /**
  * @namespace Utils

@@ -31,8 +31,8 @@ export default class Composite extends StyleBase {
   apply(layer) {
     this.layer_ = layer;
     if (!Utils.isNullOrEmpty(layer)) {
-      const style = layer.style();
-      this.oldStyle_ = style instanceof StyleCluster ? style.oldStyle() : style;
+      const style = layer.getStyle();
+      this.oldStyle_ = style;
       this.updateInternal_(layer);
     }
   }
@@ -149,7 +149,7 @@ export default class Composite extends StyleBase {
    * @param {M.layer.Vector} layer layer to unapply his style
    * @api stable
    */
-  static unapplySoft(layer) {}
+  unapplySoft(layer) {}
 
   /**
    * This function unapply the style to specified layer

@@ -179,6 +179,19 @@ export default class WFS extends Vector {
   }
 
   /**
+   * This function sets the style to layer
+   *
+   * @function
+   * @public
+   * @param {M.Style}
+   * @param {bool}
+   */
+  setStyle(styleParam, applyToFeature = false, defaultStyle = WFS.DEFAULT_OPTIONS_STYLE) {
+    super.setStyle(styleParam, applyToFeature, defaultStyle);
+  }
+
+
+  /**
    * This function checks if an object is equals
    * to this layer
    *

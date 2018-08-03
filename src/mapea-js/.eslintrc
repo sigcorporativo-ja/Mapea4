@@ -9,7 +9,6 @@
     "proj4": true,
     "ActiveXObject": true,
     "jsts": true,
-    "chroma": true,
     "document": true,
     "window": true,
     "DOMParser": true,
