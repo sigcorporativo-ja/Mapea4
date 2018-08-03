@@ -1,26 +1,38 @@
-export default class GeoJSON {
-  get type() {
-    return GeoJSON.geojsonType;
-  }
-}
+/**
+ * @module M.geom.geojson.type
+ */
 
 /**
- * GeoJSON geometry type
- * @const
- * @type {object}
- * @public
- * @api stable
+ * TODO
  */
-GeoJSON.geojsonType = {
-  POINT: 'Point',
-  MULTI_POINT: 'MultiPoint',
-  LINE_STRING: 'LineString',
-  MULTI_LINE_STRING: 'MultiLineString',
-  POLYGON: 'Polygon',
-  MULTI_POLYGON: 'MultiPolygon',
-  GEOMETRY_COLLECTION: 'GeometryCollection',
-};
-
 export const POINT = 'Point';
 
-export const MultiPoint = 'MultiPoint';
+/**
+ * TODO
+ */
+export const MULTIPOINT = 'MultiPoint';
+
+/**
+ * TODO
+ */
+export const LINE_STRING = 'LineString';
+
+/**
+ * TODO
+ */
+export const MULTI_LINE_STRING = 'MultiLineString';
+
+/**
+ * TODO
+ */
+export const POLYGON = 'Polygon';
+
+/**
+ * TODO
+ */
+export const MULTI_POLYGON = 'MultiPolygon';
+
+/**
+ * TODO
+ */
+export const GEOMETRY_COLLECTION = 'GeometryCollection';

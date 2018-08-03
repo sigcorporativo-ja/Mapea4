@@ -1,6 +1,6 @@
 export default class WKT {
-  getType() {
-    return WKT.type_;
+  static get type() {
+    return WKT.geometryType;
   }
 }
 
@@ -11,7 +11,7 @@ export default class WKT {
  * @public
  * @api stable
  */
-WKT.type_ = {
+WKT.geometryType = {
   GEOMETRY: 'Geometry',
   POINT: 'Point',
   LINE_STRING: 'LineString',

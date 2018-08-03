@@ -1,4 +1,4 @@
-import Utils from '../util/Utils';
+import { normalize } from '../util/Utils';
 import WKT from './WKT';
 import WFS from './WFS';
 
@@ -11,7 +11,7 @@ export default class Geom {
    * @api stable
    */
   static parse(rawGeom) {
-    const parsedGeom = Utils.normalize(rawGeom, true);
+    const parsedGeom = normalize(rawGeom, true);
     return WFS.type[parsedGeom];
   }
 
@@ -26,20 +26,15 @@ export default class Geom {
     let parsedWFS;
     if (wfsType === WFS.type.POINT) {
       parsedWFS = WKT.type.POINT;
-    }
-    else if (wfsType === WFS.type.LINE) {
+    } else if (wfsType === WFS.type.LINE) {
       parsedWFS = WKT.type.LINE_STRING;
-    }
-    else if (wfsType === WFS.type.POLYGON) {
+    } else if (wfsType === WFS.type.POLYGON) {
       parsedWFS = WKT.type.POLYGON;
-    }
-    else if (wfsType === WFS.type.MPOINT) {
+    } else if (wfsType === WFS.type.MPOINT) {
       parsedWFS = WFS.type.MULTI_POINT;
-    }
-    else if (wfsType === WFS.type.MLINE) {
+    } else if (wfsType === WFS.type.MLINE) {
       parsedWFS = WKT.type.MULTI_LINE_STRING;
-    }
-    else if (wfsType === WFS.type.MPOLYGON) {
+    } else if (wfsType === WFS.type.MPOLYGON) {
       parsedWFS = WKT.type.MULTI_POLYGON;
     }
     return parsedWFS;
