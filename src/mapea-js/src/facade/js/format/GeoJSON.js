@@ -1,6 +1,6 @@
 import GeoJSONImpl from 'impl/format/GeoJSON';
 import Base from '../Base';
-import Utils from '../util/Utils';
+import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils';
 import Exception from '../exception/exception';
 
 export default class GeoJSON extends Base {
@@ -27,7 +27,7 @@ export default class GeoJSON extends Base {
     super(impl);
 
     // checks if the implementation can create format GeoJSON
-    if (Utils.isUndefined(GeoJSONImpl)) {
+    if (isUndefined(GeoJSONImpl)) {
       Exception('La implementación usada no puede M.impl.format.GeoJSON');
     }
   }
@@ -44,7 +44,7 @@ export default class GeoJSON extends Base {
    */
   write(featuresParam) {
     let features = featuresParam;
-    if (!Utils.isArray(features)) {
+    if (!isArray(features)) {
       features = [features];
     }
     return this.getImpl().write(features);
@@ -63,15 +63,14 @@ export default class GeoJSON extends Base {
   read(geojsonParam, projection) {
     let geojson = geojsonParam;
     let features = [];
-    if (!Utils.isNullOrEmpty(geojson)) {
-      if (Utils.isString(geojson)) {
+    if (!isNullOrEmpty(geojson)) {
+      if (isString(geojson)) {
         geojson = JSON.parse(geojson);
       }
       let geojsonFeatures = [];
       if (geojson.type === 'FeatureCollection') {
         geojsonFeatures = geojson.features;
-      }
-      else if (geojson.type === 'Feature') {
+      } else if (geojson.type === 'Feature') {
         geojsonFeatures = [geojson];
       }
       features = this.getImpl().read(geojson, geojsonFeatures, projection);

@@ -1,6 +1,6 @@
 import WKTImpl from 'impl/format/WKT';
 import Base from '../Base';
-import Utils from '../util/Utils';
+import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 
 export default class WKT extends Base {
@@ -20,7 +20,7 @@ export default class WKT extends Base {
     // calls the super constructor
     super(impl);
     // checks if the implementation can create format GeoJSON
-    if (Utils.isUndefined(WKTImpl)) {
+    if (isUndefined(WKTImpl)) {
       Exception('La implementación usada no puede M.impl.format.WKT');
     }
   }
