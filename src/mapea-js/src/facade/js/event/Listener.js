@@ -1,4 +1,4 @@
-import Utils from '../util/Utils';
+import { isArray, generateRandom, isFunction } from '../util/Utils';
 
 export default class EventListener {
   /**
@@ -28,7 +28,7 @@ export default class EventListener {
     /**
      * TODO
      */
-    this.eventKey_ = Utils.generateRandom();
+    this.eventKey_ = generateRandom();
 
     /**
      * TODO
@@ -45,7 +45,7 @@ export default class EventListener {
    */
   fire(argsParam) {
     let args = argsParam;
-    if (!Utils.isArray(args)) {
+    if (!isArray(args)) {
       args = [args];
     }
     this.listener_.apply(this.scope_, args);
@@ -82,10 +82,9 @@ export default class EventListener {
    */
   has(listener, scope) {
     let has = false;
-    if (Utils.isFunction(listener)) {
+    if (isFunction(listener)) {
       has = this.listener_ === listener && this.scope_ === scope;
-    }
-    else {
+    } else {
       has = this.eventKey_ === listener;
     }
     return has;
