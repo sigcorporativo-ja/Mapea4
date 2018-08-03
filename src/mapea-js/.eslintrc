@@ -21,7 +21,6 @@
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],
     "import/extensions": ["error", "never"],
     "import/no-unresolved": "off",
-    "brace-style": ["error", "stroustrup"],
     "prefer-destructuring": "off",
     "arrow-body-style": "off",
     "no-unused-vars": ["error", {
