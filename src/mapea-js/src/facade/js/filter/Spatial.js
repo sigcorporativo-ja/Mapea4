@@ -1,11 +1,10 @@
 import FilterFunction from './Function';
-import Utils from '../util/Utils';
+import { isNullOrEmpty } from '../util/Utils';
 
 /**
  * @namespace M.filter
  */
 export default class Spatial extends FilterFunction {
-
   /**
    * Creates a Filter Spatial to filter features
    *
@@ -16,11 +15,11 @@ export default class Spatial extends FilterFunction {
   constructor(FunctionParam, options) {
     const filterFunction = (feature, index) => {
       let geometry = null;
-      if (!Utils.isNullOrEmpty(feature)) {
+      if (!isNullOrEmpty(feature)) {
         geometry = feature.getGeometry();
       }
       return FunctionParam(geometry, index);
-    }
+    };
     super(filterFunction, options);
   }
 }

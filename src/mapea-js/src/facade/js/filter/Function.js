@@ -1,5 +1,5 @@
 import BaseFilter from './Base';
-import Utils from '../util/Utils';
+import { isNullOrEmpty } from '../util/Utils';
 
 export default class Function extends BaseFilter {
   /**
@@ -23,7 +23,7 @@ export default class Function extends BaseFilter {
      * @type {String}
      */
     this.cqlFilter_ = '';
-    if (Utils.isNullOrEmpty(options.cqlFilter)) {
+    if (isNullOrEmpty(options.cqlFilter)) {
       this.cqlFilter_ = options.cqlFilter;
     }
   }

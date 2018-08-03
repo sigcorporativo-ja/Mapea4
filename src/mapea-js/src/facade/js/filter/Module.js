@@ -1,5 +1,5 @@
 import Spatial from './Spatial';
-import Utils from '../util/Utils';
+import { isArray, isObject } from '../util/Utils';
 import Vector from '../layer/Vector';
 import Feature from '../feature/Feature';
 import WKT from '../format/WKT';
