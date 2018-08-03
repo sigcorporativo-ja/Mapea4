@@ -2,7 +2,7 @@ import 'assets/css/controls/getfeatureinfo';
 import GetFeatureInfoImpl from 'impl/control/GetFeatureInfo';
 import getfeatureinfoTemplate from 'templates/getfeatureinfo';
 import ControlBase from './Control';
-import Utils from '../util/Utils';
+import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
@@ -25,7 +25,7 @@ export default class GetFeatureInfo extends ControlBase {
     // calls the super constructor
     super(impl, GetFeatureInfo.NAME);
 
-    if (Utils.isUndefined(GetFeatureInfoImpl)) {
+    if (isUndefined(GetFeatureInfoImpl)) {
       Exception('La implementación usada no puede crear controles GetFeatureInfo');
     }
   }

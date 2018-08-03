@@ -15,10 +15,7 @@ export default class ImageWMS extends ol.source.ImageWMS {
     const options = optOptions;
 
     super(options);
-
-    if (Utils.isNullOrEmpty(options.imageLoadFunction)) {
-      options.imageLoadFunction = ImageWMS.imageLoadFunction.bind(this);
-    }
+    this.imageLoadFunction_ = options.imageLoadFunction || this.imageLoadFunction;
   }
 
   /**

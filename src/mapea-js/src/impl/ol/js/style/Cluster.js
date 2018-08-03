@@ -198,7 +198,7 @@ export default class Cluster extends Style {
    * @api stable
    */
   updateLastRange_() {
-    const cloneOptions = Utils.extends({}, this.options_);
+    const cloneOptions = Utils.extendsObj({}, this.options_);
     if (!Utils.isNullOrEmpty(this.options_) && !Utils.isNullOrEmpty(this.options_.ranges)) {
       let ranges = cloneOptions.ranges;
       if (ranges.length > 0) {

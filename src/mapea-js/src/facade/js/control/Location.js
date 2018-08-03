@@ -2,7 +2,7 @@ import LocationImpl from 'impl/control/Location';
 import locationTemplate from 'templates/location';
 import 'assets/css/controls/location';
 import ControlBase from './Control';
-import Utils from '../util/Utils';
+import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
@@ -18,7 +18,7 @@ export default class Location extends ControlBase {
    * @api stable
    */
   constructor(tracking = true, highAccuracy = false) {
-    if (Utils.isUndefined(LocationImpl)) {
+    if (isUndefined(LocationImpl)) {
       Exception('La implementación usada no puede crear controles Location');
     }
 

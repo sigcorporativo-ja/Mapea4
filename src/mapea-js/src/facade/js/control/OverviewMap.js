@@ -1,7 +1,7 @@
 import OverviewMapImpl from 'impl/control/OverviewMap';
 import overviewmapTemplate from 'templates/overviewmap';
 import ControlBase from './Control';
-import Utils from '../util/Utils';
+import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
@@ -23,7 +23,7 @@ export default class OverviewMap extends ControlBase {
     // calls the super constructor
     super(impl, OverviewMap.NAME);
 
-    if (Utils.isUndefined(OverviewMapImpl)) {
+    if (isUndefined(OverviewMapImpl)) {
       Exception('La implementación usada no puede crear controles OverviewMap');
     }
   }

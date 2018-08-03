@@ -1,4 +1,4 @@
-import Utils from './util/Utils';
+import { isNullOrEmpty, isFunction } from './util/Utils';
 import MObject from './Object';
 
 export default class Base extends MObject {
@@ -24,7 +24,7 @@ export default class Base extends MObject {
      */
     this.impl_ = impl;
 
-    if (!Utils.isNullOrEmpty(this.impl_) && Utils.isFunction(this.impl_.setFacadeObj)) {
+    if (!isNullOrEmpty(this.impl_) && isFunction(this.impl_.setFacadeObj)) {
       this.impl_.setFacadeObj(this);
     }
   }
@@ -63,7 +63,7 @@ export default class Base extends MObject {
    * @api stable
    */
   destroy() {
-    if (!Utils.isNullOrEmpty(this.impl_) && Utils.isFunction(this.impl_.destroy)) {
+    if (!isNullOrEmpty(this.impl_) && isFunction(this.impl_.destroy)) {
       this.impl_.destroy();
     }
   }

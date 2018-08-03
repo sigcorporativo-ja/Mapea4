@@ -2,7 +2,7 @@ import 'assets/css/controls/layerswitcher';
 import LayerSwitcherImpl from 'impl/control/Layerswitcher';
 import layerswitcherTemplate from 'templates/layerswitcher';
 import ControlBase from './Control';
-import Utils from '../util/Utils';
+import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 import LayerType from '../layer/Type';
@@ -28,7 +28,7 @@ export default class LayerSwitcher extends ControlBase {
     // calls the super constructor
     super(impl, LayerSwitcher.NAME);
 
-    if (Utils.isUndefined(LayerSwitcherImpl)) {
+    if (isUndefined(LayerSwitcherImpl)) {
       Exception('La implementación usada no puede crear controles LayerSwitcher');
     }
   }
@@ -119,14 +119,14 @@ export default class LayerSwitcher extends ControlBase {
   static getTemplateVariables(map) {
     return new Promise((success, fail) => {
       // gets base layers and overlay layers
-      if (!Utils.isNullOrEmpty(map)) {
+      if (!isNullOrEmpty(map)) {
         const baseLayers = map.getBaseLayers()
           .filter(layer => layer.displayInLayerSwitcher === true);
         const overlayLayers = map.getLayers().filter((layer) => {
           const isTransparent = (layer.transparent === true);
           const displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
           const isNotWMC = (LayerType !== LayerType.WMC);
-          const isNotWMSFull = !((LayerType === LayerType.WMS) && Utils.isNullOrEmpty(layer.name));
+          const isNotWMSFull = !((LayerType === LayerType.WMS) && isNullOrEmpty(layer.name));
           return (isTransparent && isNotWMC && isNotWMSFull && displayInLayerSwitcher);
         }).reverse();
 
@@ -152,16 +152,16 @@ export default class LayerSwitcher extends ControlBase {
    */
   static parseLayerForTemplate(layer) {
     let layerTitle = layer.legend;
-    if (Utils.isNullOrEmpty(layerTitle)) {
+    if (isNullOrEmpty(layerTitle)) {
       layerTitle = layer.name;
     }
-    if (Utils.isNullOrEmpty(layerTitle)) {
+    if (isNullOrEmpty(layerTitle)) {
       layerTitle = 'Servicio WMS';
     }
     let isIcon = false;
     if (layer instanceof Vector) {
       const style = layer.getStyle();
-      if (style instanceof StylePoint && !Utils.isNullOrEmpty(style.get('icon.src'))) {
+      if (style instanceof StylePoint && !isNullOrEmpty(style.get('icon.src'))) {
         isIcon = true;
       }
     }
@@ -181,8 +181,7 @@ export default class LayerSwitcher extends ControlBase {
           layerVarTemplate.legend = url;
           success(layerVarTemplate);
         });
-      }
-      else {
+      } else {
         layerVarTemplate.legend = legendUrl;
         success(layerVarTemplate);
       }

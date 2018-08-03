@@ -21,7 +21,7 @@ export default class Template {
     let templateVars = {};
     let parseToHtml;
     if (!Utils.isUndefined(options)) {
-      templateVars = Utils.extends(templateVars, options.vars);
+      templateVars = Utils.extendsObj(templateVars, options.vars);
       parseToHtml = options.parseToHtml;
     }
     const templateFn = Handlebars.compile(string);

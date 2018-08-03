@@ -30,7 +30,7 @@ export default class HeatMap extends Style {
      * @private
      * @type {object}
      */
-    this.opt_options_ = Utils.extends(options, vendorOptions);
+    this.opt_options_ = Utils.extendsObj(options, vendorOptions);
 
     this.opt_options_.zIndex = 999999;
     /**
@@ -100,7 +100,7 @@ export default class HeatMap extends Style {
    * @function
    */
   setOptions(options, vendorOptions) {
-    this.opt_options_ = Utils.extends(options, vendorOptions);
+    this.opt_options_ = Utils.extendsObj(options, vendorOptions);
   }
 
   /**

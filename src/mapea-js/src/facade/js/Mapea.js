@@ -4,9 +4,10 @@ import 'assets/css/animations';
 import 'impl/projections';
 import MapImpl from 'impl/Map';
 import Map from './Map';
-import Utils from './util/Utils';
+import { isBoolean, isNullOrEmpty } from './util/Utils';
 import Exception from './exception/exception';
 import './util/Window';
+import './util/polyfills';
 
 export default class Mapea {
   /**
@@ -18,7 +19,7 @@ export default class Mapea {
    * @api stable
    */
   static proxy(enable) {
-    if (Utils.isBoolean(enable)) {
+    if (isBoolean(enable)) {
       Mapea.proxy_ = enable;
     }
   }
@@ -35,7 +36,7 @@ export default class Mapea {
    * @api stable
    */
   static lang(langCode) {
-    if (!Utils.isNullOrEmpty(langCode)) {
+    if (!isNullOrEmpty(langCode)) {
       Mapea.lang_ = langCode;
     }
     return this;
@@ -65,7 +66,7 @@ export default class Mapea {
    */
   static map(parameters, options) {
     // checks if the user specified an implementation
-    if (Utils.isUndefined(MapImpl) || Utils.isNull(MapImpl)) {
+    if (isNullOrEmpty(MapImpl)) {
       Exception('No se ha especificado ninguna implementación');
     }
     return new Map(parameters, options);
