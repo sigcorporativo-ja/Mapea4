@@ -1,5 +1,5 @@
 import StyleCluster from 'facade/js/style/Cluster';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
 import EventsManager from 'facade/js/event/Manager';
 import Style from 'facade/js/style/Style';
 import Layer from './Layer';
@@ -86,7 +86,7 @@ export default class Vector extends Layer {
    * @function
    */
   updateSource_() {
-    if (Utils.isNullOrEmpty(this.ol3Layer.getSource())) {
+    if (isNullOrEmpty(this.ol3Layer.getSource())) {
       this.ol3Layer.setSource(new ol.source.Vector());
     }
     this.redraw();
@@ -117,7 +117,7 @@ export default class Vector extends Layer {
   addFeatures(features, update) {
     features.forEach((newFeature) => {
       const feature = this.features_.find(feature2 => feature2.equals(newFeature));
-      if (Utils.isNullOrEmpty(feature)) {
+      if (isNullOrEmpty(feature)) {
         this.features_.push(newFeature);
       }
     });
@@ -128,8 +128,7 @@ export default class Vector extends Layer {
     if (style instanceof StyleCluster) {
       style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
       style.refresh();
-    }
-    else {
+    } else {
       this.redraw();
     }
   }
@@ -143,17 +142,15 @@ export default class Vector extends Layer {
    */
   updateLayer_() {
     const style = this.facadeVector_.getStyle();
-    if (!Utils.isNullOrEmpty(style)) {
+    if (!isNullOrEmpty(style)) {
       if (style instanceof Style) {
         this.facadeVector_.setStyle(style);
-      }
-      else if (style instanceof StyleCluster) {
+      } else if (style instanceof StyleCluster) {
         const cluster = this.facadeVector_.getStyle();
         cluster.unapply(this.facadeVector_);
         cluster.getOldStyle().apply(this.facadeVector_);
         cluster.apply(this.facadeVector_);
-      }
-      else {
+      } else {
         style.apply(this.facadeVector_);
       }
     }
@@ -204,8 +201,7 @@ export default class Vector extends Layer {
     if (style instanceof StyleCluster) {
       style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
       style.refresh();
-    }
-    else {
+    } else {
       this.redraw();
     }
   }
@@ -219,7 +215,7 @@ export default class Vector extends Layer {
    */
   redraw() {
     const olLayer = this.getOL3Layer();
-    if (!Utils.isNullOrEmpty(olLayer)) {
+    if (!isNullOrEmpty(olLayer)) {
       const style = this.facadeVector_.getStyle();
       let olSource = olLayer.getSource();
       if (olSource instanceof ol.source.Cluster) {
@@ -267,9 +263,9 @@ export default class Vector extends Layer {
   /* eslint-disable*/
   selectFeatures(features, coord, evt) {
     const feature = features[0];
-    if (!Utils.isNullOrEmpty(feature)) {
+    if (!isNullOrEmpty(feature)) {
       const clickFn = feature.getAttribute('vendor.mapea.click');
-      if (Utils.isFunction(clickFn)) {
+      if (isFunction(clickFn)) {
         clickFn(evt, feature);
       }
     }
@@ -366,7 +362,7 @@ export default class Vector extends Layer {
    */
   destroy() {
     const olMap = this.map.getMapImpl();
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }

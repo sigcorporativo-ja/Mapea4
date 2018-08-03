@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
 import Config from 'configuration';
 import MObject from 'facade/js/Object';
 import FacadeLayer from 'facade/js/layer/Layer';
@@ -82,7 +82,7 @@ export default class LayerBase extends MObject {
      * @type {String}
      * @expose
      */
-    this.legendUrl_ = Utils.concatUrlPaths([Config.THEME_URL, FacadeLayer.LEGEND_DEFAULT]);
+    this.legendUrl_ = concatUrlPaths([Config.THEME_URL, FacadeLayer.LEGEND_DEFAULT]);
   }
 
   /**
@@ -94,10 +94,9 @@ export default class LayerBase extends MObject {
    */
   isVisible() {
     let visible = false;
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       visible = this.ol3Layer.getVisible();
-    }
-    else {
+    } else {
       visible = this.visibility;
     }
     return visible;
@@ -126,7 +125,7 @@ export default class LayerBase extends MObject {
    */
   inRange() {
     let inRange = false;
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       const resolution = this.map.getMapImpl().getView().getResolution();
       const maxResolution = this.ol3Layer.getMaxResolution();
       const minResolution = this.ol3Layer.getMinResolution();
@@ -146,7 +145,7 @@ export default class LayerBase extends MObject {
   setVisible(visibility) {
     this.visibility = visibility;
 
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       this.ol3Layer.setVisible(visibility);
     }
   }
@@ -159,7 +158,7 @@ export default class LayerBase extends MObject {
    * @expose
    */
   getZIndex() {
-    if (!Utils.isNullOrEmpty(this.getOL3Layer())) {
+    if (!isNullOrEmpty(this.getOL3Layer())) {
       this.zIndex_ = this.getOL3Layer().getZIndex();
     }
     return this.zIndex_;
@@ -174,7 +173,7 @@ export default class LayerBase extends MObject {
    */
   setZIndex(zIndex) {
     this.zIndex_ = zIndex;
-    if (!Utils.isNullOrEmpty(this.getOL3Layer())) {
+    if (!isNullOrEmpty(this.getOL3Layer())) {
       this.getOL3Layer().setZIndex(zIndex);
     }
   }
@@ -187,7 +186,7 @@ export default class LayerBase extends MObject {
    * @expose
    */
   getOpacity() {
-    if (!Utils.isNullOrEmpty(this.getOL3Layer())) {
+    if (!isNullOrEmpty(this.getOL3Layer())) {
       this.opacity_ = this.getOL3Layer().getOpacity();
     }
     return this.opacity_;
@@ -202,7 +201,7 @@ export default class LayerBase extends MObject {
    */
   setOpacity(opacity) {
     this.opacity_ = opacity;
-    if (!Utils.isNullOrEmpty(this.getOL3Layer())) {
+    if (!isNullOrEmpty(this.getOL3Layer())) {
       this.getOL3Layer().setOpacity(opacity);
     }
   }

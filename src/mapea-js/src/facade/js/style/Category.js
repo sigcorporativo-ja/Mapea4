@@ -1,5 +1,5 @@
 import Composite from './Composite';
-import Utils from '../util/Utils';
+import { isNullOrEmpty, generateRandomStyle, getImageSize, isArray } from '../util/Utils';
 import Exception from '../exception/exception';
 import StyleProportional from './Proportional';
 import StyleCluster from './Cluster';
@@ -19,8 +19,8 @@ export default class Category extends Composite {
    */
   constructor(attributeName, categoryStyles, options = {}) {
     super(options, {});
-    if (Utils.isNullOrEmpty(attributeName)) {
-      Exception("No se ha especificado el nombre del atributo.");
+    if (isNullOrEmpty(attributeName)) {
+      Exception('No se ha especificado el nombre del atributo.');
     }
 
     /**
@@ -160,7 +160,7 @@ export default class Category extends Composite {
    * @api stable
    */
   updateCanvas() {
-    let canvasImages = [];
+    const canvasImages = [];
     this.updateCanvasPromise_ = new Promise((success, fail) =>
       this.loadCanvasImages_(0, canvasImages, success));
   }
@@ -173,42 +173,39 @@ export default class Category extends Composite {
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
    */
   loadCanvasImages_(currentIndex, canvasImages, callbackFn) {
-    let categories = this.getCategories();
-    let categoryNames = Object.keys(categories);
+    const categories = this.getCategories();
+    const categoryNames = Object.keys(categories);
 
     // base case
     if (currentIndex === categoryNames.length) {
       this.drawGeometryToCanvas(canvasImages, callbackFn);
-    }
-    // recursive case
-    else {
-      let category = categoryNames[currentIndex];
-      let style = this.getStyleForCategory(category);
-      let image = new Image();
+    } else {
+      // recursive case
+      const category = categoryNames[currentIndex];
+      const style = this.getStyleForCategory(category);
+      const image = new Image();
       image.crossOrigin = 'Anonymous';
-      let scope_ = this;
       image.onload = () => {
         canvasImages.push({
           image,
-          'categoryName': category
+          categoryName: category,
         });
-        scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
-      }
+        this.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
+      };
       image.onerror = () => {
         canvasImages.push({
-          'categoryName': category
+          categoryName: category,
         });
-        scope_.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
-      }
+        this.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
+      };
       style.updateCanvas();
       if (style.get('icon.src')) {
-        Utils.getImageSize(style.get('icon.src')).then((img) => {
+        getImageSize(style.get('icon.src')).then((img) => {
           image.width = style.get('icon.scale') ? img.width * style.get('icon.scale') : img.width;
           image.height = style.get('icon.scale') ? img.height * style.get('icon.scale') : img.height;
           image.src = style.toImage();
         });
-      }
-      else {
+      } else {
         image.src = style.toImage();
       }
     }
@@ -223,27 +220,32 @@ export default class Category extends Composite {
    * @api stable
    */
   drawGeometryToCanvas(canvasImages, callbackFn) {
-    let heights = canvasImages.map(canvasImage => canvasImage['image'].height);
-    let widths = canvasImages.map(canvasImage => canvasImage['image'].width);
+    const heights = canvasImages.map(canvasImage => canvasImage.image.height);
+    const widths = canvasImages.map(canvasImage => canvasImage.image.width);
 
-    let vectorContext = this.canvas_.getContext('2d');
+    const vectorContext = this.canvas_.getContext('2d');
     vectorContext.canvas.height = heights.reduce((acc, h) => acc + h + 5);
-    vectorContext.textBaseline = "middle";
+    vectorContext.textBaseline = 'middle';
 
-    let maxWidth = Math.max.apply(widths, widths);
+    const maxWidth = Math.max.apply(widths, widths);
     canvasImages.forEach((canvasImage, index) => {
-      let image = canvasImage['image'];
-      let categoryName = canvasImage['categoryName'];
+      const image = canvasImage.image;
+      const categoryName = canvasImage.categoryName;
       let coordinateY = 0;
-      let prevHeights = heights.slice(0, index);
-      if (!Utils.isNullOrEmpty(prevHeights)) {
+      const prevHeights = heights.slice(0, index);
+      if (!isNullOrEmpty(prevHeights)) {
         coordinateY = prevHeights.reduce((acc, h) => acc + h + 5);
         coordinateY += 5;
       }
       let imageHeight = 0;
-      if (!Utils.isNullOrEmpty(image)) {
+      if (!isNullOrEmpty(image)) {
         imageHeight = image.height;
-        vectorContext.drawImage(image, (maxWidth - image.width) / 2, coordinateY, image.width, image.height);
+        vectorContext.drawImage(
+          image, (maxWidth - image.width) / 2,
+          coordinateY,
+          image.width,
+          image.height,
+        );
       }
       vectorContext.fillText(categoryName, maxWidth + 5, coordinateY + (imageHeight / 2));
     });
@@ -260,18 +262,17 @@ export default class Category extends Composite {
    * @api stable
    */
   update_() {
-    if (!Utils.isNullOrEmpty(this.layer_)) {
-      if (Utils.isNullOrEmpty(this.categoryStyles_) || Object.keys(this.categoryStyles_).length === 0) {
+    if (!isNullOrEmpty(this.layer_)) {
+      if (isNullOrEmpty(this.categoryStyles_) || Object.keys(this.categoryStyles_).length === 0) {
         this.categoryStyles_ = this.generateRandomCategories_();
       }
-      let styleOther = this.categoryStyles_['other'];
+      const styleOther = this.categoryStyles_.other;
       this.layer_.getFeatures().forEach((feature) => {
-        let value = feature.getAttribute(this.attributeName_);
-        let style = this.categoryStyles_[value];
-        if (!Utils.isNullOrEmpty(style)) {
+        const value = feature.getAttribute(this.attributeName_);
+        const style = this.categoryStyles_[value];
+        if (!isNullOrEmpty(style)) {
           feature.setStyle(style);
-        }
-        else if (!Utils.isNullOrEmpty(styleOther)) {
+        } else if (!isNullOrEmpty(styleOther)) {
           feature.setStyle(styleOther);
         }
       });
@@ -282,11 +283,14 @@ export default class Category extends Composite {
   /**
    * @inheritDoc
    */
-  add(styles) {
-    if (!Utils.isArray(styles)) {
+  add(stylesParam) {
+    let styles = stylesParam;
+    if (!isArray(styles)) {
       styles = [styles];
     }
-    styles = styles.filter(style => style instanceof StyleCluster || style instanceof StyleProportional);
+    styles = styles.filter((style) => {
+      return style instanceof StyleCluster || style instanceof StyleProportional;
+    });
     return super.add(styles);
   }
 
@@ -299,12 +303,17 @@ export default class Category extends Composite {
    * @api stable
    */
   generateRandomCategories_() {
-    let categories = {};
-    if (!Utils.isNullOrEmpty(this.layer_)) {
-      this.layer_.getFeatures().forEach(feature => {
-        let value = feature.getAttribute(this.attributeName_);
-        if (!categories.hasOwnProperty(value)) {
-          categories[value] = Utils.generateRandomStyle(feature, Category.RANDOM_RADIUS_OPTION, Category.RANDOM_STROKE_WIDTH_OPTION, Category.RANDOM_STROKE_COLOR_OPTION);
+    const categories = {};
+    if (!isNullOrEmpty(this.layer_)) {
+      this.layer_.getFeatures().forEach((feature) => {
+        const value = feature.getAttribute(this.attributeName_);
+        if (!Object.prototype.hasOwnProperty.call(categories, value)) {
+          categories[value] = generateRandomStyle(
+            feature,
+            Category.RANDOM_RADIUS_OPTION,
+            Category.RANDOM_STROKE_WIDTH_OPTION,
+            Category.RANDOM_STROKE_COLOR_OPTION,
+          );
         }
       });
     }
@@ -334,4 +343,4 @@ Category.RANDOM_STROKE_WIDTH_OPTION = 1;
  * @public
  * @api stable
  */
-Category.RANDOM_STROKE_COLOR_OPTION = "black";
+Category.RANDOM_STROKE_COLOR_OPTION = 'black';

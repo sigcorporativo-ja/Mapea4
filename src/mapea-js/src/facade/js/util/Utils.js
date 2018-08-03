@@ -5,7 +5,6 @@
 import chroma from 'chroma-js';
 import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../Mapea';
 import WKT from '../geom/WKT';
-import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../Mapea';
 
 /**
  *
@@ -880,58 +879,6 @@ export const inverseColor = (color) => {
 };
 
 /**
- * This function gets the geometry type of a layer.
- * @function
- * @public
- * @param {M.layer.Vector} layer - layer vector
- * @return {string} geometry type of layer
- * @api stable
- */
-export const getGeometryType = (layer) => {
-  if (isNullOrEmpty(layer) || isNullOrEmpty(layer.getFeatures())) {
-    return null;
-  }
-  const firstFeature = layer.getFeatures()[0];
-  if (!isNullOrEmpty(firstFeature) && !isNullOrEmpty(firstFeature.getGeometry())) {
-    return firstFeature
-      .getGeometry()
-      .type;
-  }
-  return null;
-};
-
-/**
- * This function returns the appropiate style to geomtry layer
- * with parameter options.
- * @function
- * @public
- * @param {object} options - style options
- * @param {M.layer.Vector} layer -
- * @return {M.style.Simple}
- * @api stable
- */
-export const generateStyleLayer = (options, layer) => {
-  let style;
-  switch (getGeometryType(layer)) {
-    case 'Point':
-    case 'MultiPoint':
-      style = new StylePoint(options);
-      break;
-    case 'LineString':
-    case 'MultiLineString':
-      style = new StyleLine(options);
-      break;
-    case 'Polygon':
-    case 'MultiPolygon':
-      style = new StylePolygon(options);
-      break;
-    default:
-      return null;
-  }
-  return style;
-};
-
-/**
  * This function returns a color as string with opacity
  * @function
  * @public
@@ -994,9 +941,6 @@ export const extendsObj = (dest = {}, src = {}) => {
   return dest;
 };
 
-<<
-<<
-<< < 13 ae1f00c5477f67b693b8a45946650056f37da4
 /**
  * This function returns an array whith breaks between head and tail of an array
  * @function
@@ -1006,40 +950,17 @@ export const extendsObj = (dest = {}, src = {}) => {
  * @return {array}
  * @api stable
  */
-static generateIntervals(array, breaks) {
-    let intervals = [...array];
-    if (array.length < breaks) {
-      const step = (array[0] + array[1]) / (breaks - 1);
-      for (let i = 1; i < breaks - 1; i += 1) {
-        intervals[i] = step * i;
-      }
-      intervals = [...intervals, array[1]];
-    }
-    return intervals; ===
-    ===
-    =
-    /**
-     * This function returns an array whith breaks between head and tail of an array
-     * @function
-     * @public
-     * @param {array} array
-     * @param {number} breaks
-     * @return {array}
-     * @api stable
-     */
-    export const generateIntervals = (array, breaks) => {
-        let intervals = [...array];
-        if (array.length < breaks) {
-          const step = (array[0] + array[1]) / (breaks - 1);
-          breaks.forEach((value) => {
-            intervals[value] = step * value;
-          });
-          intervals = [
+export const generateIntervals = (array, breaks) => {
+  let intervals = [...array];
+  if (array.length < breaks) {
+    const step = (array[0] + array[1]) / (breaks - 1);
+    breaks.forEach((value) => {
+      intervals[value] = step * value;
+    });
+    intervals = [
       ...intervals,
       array[1],
-    ]; >>>
-          >>>
-          > Tarea #107998
+    ];
   }
   return intervals;
 };
@@ -1052,111 +973,44 @@ static generateIntervals(array, breaks) {
  * @return {number}
  * @api stable
  */
-export const styleComparator =(style, style2) => {
-            return style.ORDER - style2.ORDER;
-          };
+export const styleComparator = (style, style2) => {
+  return style.ORDER - style2.ORDER;
+};
 
-          /**
-           * This functions returns the width and height of a image from src
-           * @function
-           * @public
-           * @param {string} url
-           * @return {Array<number>}
-           * @api stable
-           */
-          export const getImageSize = (url) => {
-            const image = new Image();
-            return new Promise((resolve, reject) => {
-              image.onload = () => resolve(image);
-              image.src = url;
-            });
-          };
+/**
+ * This functions returns the width and height of a image from src
+ * @function
+ * @public
+ * @param {string} url
+ * @return {Array<number>}
+ * @api stable
+ */
+export const getImageSize = (url) => {
+  const image = new Image();
+  return new Promise((resolve, reject) => {
+    image.onload = () => resolve(image);
+    image.src = url;
+  });
+};
 
-          /**
-           * This functions returns random simple style
-           * @function
-           * @public
-           * @param {M.Feature} feature
-           * @return {M.style.Simple}
-           * @api stable
-           */
-          export const generateRandomStyle = (feature, radiusParam, strokeWidthParam, strokeColorParam) => {
-            const radius = radiusParam;
-            const fillColor = chroma
-              .random()
-              .hex();
-            const strokeColor = strokeColorParam;
-            const strokeWidth = strokeWidthParam;
-            const geometry = feature
-              .getGeometry()
-              .type;
-            let style;
-            let options;
-            switch (geometry) {
-              case 'Point':
-              case 'MultiPoint':
-                options = {
-                  radius,
-                  fill: {
-                    color: fillColor,
-                  },
-                  stroke: {
-                    color: strokeColor,
-                    width: strokeWidth,
-                  },
-                };
-                style = new StylePoint(options);
-                break;
-              case 'LineString':
-              case 'MultiLineString':
-                options = {
-                  fill: {
-                    color: fillColor,
-                  },
-                  stroke: {
-                    color: strokeColor,
-                    width: strokeWidth,
-                  },
-                };
-                style = new StyleLine(options);
-                break;
-              case 'Polygon':
-              case 'MultiPolygon':
-                options = {
-                  fill: {
-                    color: fillColor,
-                  },
-                  stroke: {
-                    color: strokeColor,
-                    width: strokeWidth,
-                  },
-                };
-                style = new StylePolygon(options);
-                break;
-              default:
-                style = null;
-            }
-            return style;
-          };
+/**
+ * TODO
+ */
+export const classToggle = (htmlElement, className) => {
+  const classList = htmlElement.classList;
+  if (classList.contains(className)) {
+    classList.remove(className);
+  } else {
+    classList.add(className);
+  }
+};
 
-          /**
-           * TODO
-           */
-          export const classToggle = (htmlElement, className) => {
-            const classList = htmlElement.classList;
-            if (classList.contains(className)) {
-              classList.remove(className);
-            } else {
-              classList.add(className);
-            }
-          };
-
-          /**
-           * TODO
-           */
-          export const replaceNode = (newNode, oldNode) => {
-            const parent = oldNode.parentNode;
-            if (parent) {
-              parent.replaceChild(newNode, oldNode);
-            }
-          };
+/**
+ * TODO
+ */
+export const replaceNode = (newNode, oldNode) => {
+  const parent = oldNode.parentNode;
+  if (parent) {
+    parent.replaceChild(newNode, oldNode);
+  }
+};

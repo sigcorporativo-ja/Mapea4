@@ -16,6 +16,7 @@
     "Image": true,
     "Draggabilly": true,
     "XMLSerializer": true,
+    "isNaN": true,
   },
   "rules": {
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],
@@ -27,6 +28,7 @@
       "vars": "all",
       "args": "none"
     }],
-    "class-methods-use-this": "off"
+    "class-methods-use-this": "off",
+    "no-case-declarations": "off",
   }
 }

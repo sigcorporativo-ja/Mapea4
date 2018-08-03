@@ -8,7 +8,7 @@ import 'impl-assets/css/custom';
 import EventsManager from 'facade/js/event/Manager';
 import LayerBase from 'facade/js/layer/Layer';
 import Exception from 'facade/js/exception/exception';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, isArray, isString, isObject, includes, getScaleFromResolution, fillResolutions, generateResolutionsFromExtent } from 'facade/js/util/Utils';
 import View from './View';
 import EnvolvedExtent from './util/EnvolvedExtent';
 
@@ -105,7 +105,7 @@ export default class Map extends MObject {
 
     // gets the renderer
     // let renderer = ol.renderer.Type.CANVAS;
-    // if (!Utils.isNullOrEmpty(this.options_.renderer)) {
+    // if (!isNullOrEmpty(this.options_.renderer)) {
     //   renderer = this.options_.renderer;
     // }
 
@@ -256,36 +256,34 @@ export default class Map extends MObject {
     });
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wmcLayers;
-    }
-    else {
+    } else {
       filters.forEach((filterLayer) => {
         foundLayers = foundLayers.concat(wmcLayers.filter((wmcLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmcLayer)) {
             // type
-            if (!Utils.isNullOrEmpty(filterLayer.type)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === wmcLayer.type));
             }
             // URL
-            if (!Utils.isNullOrEmpty(filterLayer.url)) {
+            if (!isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === wmcLayer.url));
             }
             // name
-            if (!Utils.isNullOrEmpty(filterLayer.name)) {
+            if (!isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wmcLayer.name));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -307,7 +305,7 @@ export default class Map extends MObject {
     layers.forEach((layer, zIndex) => {
       // checks if layer is WMC and was added to the map
       if (layer.type === LayerType.WMC) {
-        if (!Utils.includes(this.layers_, layer)) {
+        if (!includes(this.layers_, layer)) {
           layer.setZIndex(Map.Z_INDEX[LayerType.WMC]);
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
@@ -337,8 +335,7 @@ export default class Map extends MObject {
           this.facadeMap_.removeWMS(wmcLayer.layers);
           this.facadeMap_.refreshWMCSelectorControl();
         });
-      }
-      else {
+      } else {
         wmcLayer.setLoaded(false);
         this.layers_.remove(wmcLayer);
         this.facadeMap_.removeWMS(wmcLayer.layers);
@@ -367,40 +364,38 @@ export default class Map extends MObject {
     });
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = kmlLayers;
-    }
-    else {
+    } else {
       filters.forEach((filterLayer) => {
         const filteredKMLLayers = kmlLayers.filter((kmlLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(kmlLayer)) {
             // type
-            if (!Utils.isNullOrEmpty(filterLayer.type)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === kmlLayer.type));
             }
             // URL
-            if (!Utils.isNullOrEmpty(filterLayer.url)) {
+            if (!isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === kmlLayer.url));
             }
             // name
-            if (!Utils.isNullOrEmpty(filterLayer.name)) {
+            if (!isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === kmlLayer.name));
             }
             // extract
-            if (!Utils.isNullOrEmpty(filterLayer.extract)) {
+            if (!isNullOrEmpty(filterLayer.extract)) {
               layerMatched = (layerMatched && (filterLayer.extract === kmlLayer.extract));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -423,7 +418,7 @@ export default class Map extends MObject {
     layers.forEach((layer) => {
       // checks if layer is WMC and was added to the map
       if (layer.type === LayerType.KML) {
-        if (!Utils.includes(this.layers_, layer)) {
+        if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
           if (layer.getZIndex() == null) {
@@ -473,17 +468,16 @@ export default class Map extends MObject {
     });
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wmsLayers;
-    }
-    else {
+    } else {
       filters.forEach((filterLayer) => {
         const filteredWMSLayers = wmsLayers.filter((wmsLayer) => {
           let layerMatched = true;
@@ -492,43 +486,41 @@ export default class Map extends MObject {
             // if instanceof FacadeWMS check if it is the same
             if (filterLayer instanceof FacadeWMS) {
               layerMatched = (filterLayer === wmsLayer);
-            }
-            else {
+            } else {
               // type
-              if (!Utils.isNullOrEmpty(filterLayer.type)) {
+              if (!isNullOrEmpty(filterLayer.type)) {
                 layerMatched = (layerMatched && (filterLayer.type === wmsLayer.type));
               }
               // URL
-              if (!Utils.isNullOrEmpty(filterLayer.url)) {
+              if (!isNullOrEmpty(filterLayer.url)) {
                 layerMatched = (layerMatched && (filterLayer.url === wmsLayer.url));
               }
               // name
-              if (!Utils.isNullOrEmpty(filterLayer.name)) {
+              if (!isNullOrEmpty(filterLayer.name)) {
                 layerMatched = (layerMatched && (filterLayer.name === wmsLayer.name));
               }
               // legend
-              if (!Utils.isNullOrEmpty(filterLayer.legend)) {
+              if (!isNullOrEmpty(filterLayer.legend)) {
                 layerMatched = (layerMatched && (filterLayer.legend === wmsLayer.legend));
               }
               // transparent
-              if (!Utils.isNullOrEmpty(filterLayer.transparent)) {
+              if (!isNullOrEmpty(filterLayer.transparent)) {
                 layerMatched = (layerMatched && (filterLayer.transparent === wmsLayer.transparent));
               }
               // tiled
-              if (!Utils.isNullOrEmpty(filterLayer.tiled)) {
+              if (!isNullOrEmpty(filterLayer.tiled)) {
                 layerMatched = (layerMatched && (filterLayer.tiled === wmsLayer.tiled));
               }
               // cql
-              if (!Utils.isNullOrEmpty(filterLayer.cql)) {
+              if (!isNullOrEmpty(filterLayer.cql)) {
                 layerMatched = (layerMatched && (filterLayer.cql === wmsLayer.cql));
               }
               // version
-              if (!Utils.isNullOrEmpty(filterLayer.version)) {
+              if (!isNullOrEmpty(filterLayer.version)) {
                 layerMatched = (layerMatched && (filterLayer.version === wmsLayer.version));
               }
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -555,7 +547,7 @@ export default class Map extends MObject {
     layers.forEach((layer) => {
       // checks if layer is WMC and was added to the map
       if (layer.type === LayerType.WMS) {
-        if (!Utils.includes(this.layers_, layer)) {
+        if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
 
@@ -568,8 +560,7 @@ export default class Map extends MObject {
               this.updateResolutionsFromBaseLayer();
             }
             layer.setZIndex(Map.Z_INDEX_BASELAYER);
-          }
-          else {
+          } else {
             if (layer.getZIndex() == null) {
               const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMS];
               layer.setZIndex(zIndex);
@@ -622,60 +613,58 @@ export default class Map extends MObject {
     });
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wfsLayers;
-    }
-    else {
+    } else {
       filters.forEach((filterLayer) => {
         const filteredWFSLayers = wfsLayers.filter((wfsLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wfsLayer)) {
             // type
-            if (!Utils.isNullOrEmpty(filterLayer.type)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === wfsLayer.type));
             }
             // URL
-            if (!Utils.isNullOrEmpty(filterLayer.url)) {
+            if (!isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === wfsLayer.url));
             }
             // name
-            if (!Utils.isNullOrEmpty(filterLayer.name)) {
+            if (!isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wfsLayer.name));
             }
             // namespace
-            if (!Utils.isNullOrEmpty(filterLayer.namespace)) {
+            if (!isNullOrEmpty(filterLayer.namespace)) {
               layerMatched = (layerMatched && (filterLayer.namespace === wfsLayer.namespace));
             }
             // legend
-            if (!Utils.isNullOrEmpty(filterLayer.legend)) {
+            if (!isNullOrEmpty(filterLayer.legend)) {
               layerMatched = (layerMatched && (filterLayer.legend === wfsLayer.legend));
             }
             // cql
-            if (!Utils.isNullOrEmpty(filterLayer.cql)) {
+            if (!isNullOrEmpty(filterLayer.cql)) {
               layerMatched = (layerMatched && (filterLayer.cql === wfsLayer.cql));
             }
             // geometry
-            if (!Utils.isNullOrEmpty(filterLayer.geometry)) {
+            if (!isNullOrEmpty(filterLayer.geometry)) {
               layerMatched = (layerMatched && (filterLayer.geometry === wfsLayer.geometry));
             }
             // ids
-            if (!Utils.isNullOrEmpty(filterLayer.ids)) {
+            if (!isNullOrEmpty(filterLayer.ids)) {
               layerMatched = (layerMatched && (filterLayer.ids === wfsLayer.ids));
             }
             // version
-            if (!Utils.isNullOrEmpty(filterLayer.version)) {
+            if (!isNullOrEmpty(filterLayer.version)) {
               layerMatched = (layerMatched && (filterLayer.version === wfsLayer.version));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -698,7 +687,7 @@ export default class Map extends MObject {
     layers.forEach((layer) => {
       // checks if layer is WFS and was added to the map
       if (layer.type === LayerType.WFS) {
-        if (!Utils.includes(this.layers_, layer)) {
+        if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
           layer.setZIndex(layer.getZIndex());
@@ -749,17 +738,16 @@ export default class Map extends MObject {
     });
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wmtsLayers;
-    }
-    else {
+    } else {
       filters.forEach((filterLayer) => {
         // TODO ERROR DE RECURSIVIDAD: let l = map.getLayers(); map.getWMS(l);
         const filteredWMTSLayers = wmtsLayers.filter((wmtsLayer) => {
@@ -767,27 +755,26 @@ export default class Map extends MObject {
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmtsLayer)) {
             // type
-            if (!Utils.isNullOrEmpty(filterLayer.type)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === wmtsLayer.type));
             }
             // URL
-            if (!Utils.isNullOrEmpty(filterLayer.url)) {
+            if (!isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === wmtsLayer.url));
             }
             // name
-            if (!Utils.isNullOrEmpty(filterLayer.name)) {
+            if (!isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wmtsLayer.name));
             }
             // matrixSet
-            if (!Utils.isNullOrEmpty(filterLayer.matrixSet)) {
+            if (!isNullOrEmpty(filterLayer.matrixSet)) {
               layerMatched = (layerMatched && (filterLayer.matrixSet === wmtsLayer.matrixSet));
             }
             // legend
-            if (!Utils.isNullOrEmpty(filterLayer.legend)) {
+            if (!isNullOrEmpty(filterLayer.legend)) {
               layerMatched = (layerMatched && (filterLayer.legend === wmtsLayer.legend));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -814,7 +801,7 @@ export default class Map extends MObject {
     layers.forEach((layer) => {
       // checks if layer is WMTS and was added to the map
       if (layer.type === LayerType.WMTS) {
-        if (!Utils.includes(this.layers_, layer)) {
+        if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
           /* if the layer is a base layer then
@@ -826,8 +813,7 @@ export default class Map extends MObject {
               this.updateResolutionsFromBaseLayer();
             }
             layer.setZIndex(Map.Z_INDEX_BASELAYER);
-          }
-          else {
+          } else {
             if (layer.getZIndex() == null) {
               const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMTS];
               layer.setZIndex(zIndex);
@@ -888,7 +874,7 @@ export default class Map extends MObject {
     layers.forEach((layer) => {
       // checks if layer is MBtiles and was added to the map
       if ((layer.type === LayerType.MBtiles) &&
-        !Utils.includes(this.layers_, layer)) {
+        !includes(this.layers_, layer)) {
         // TODO creating and adding the MBtiles layer with ol3
         this.layers_.push(layer);
       }
@@ -933,17 +919,16 @@ export default class Map extends MObject {
     });
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filtersVar)) {
+    if (isNullOrEmpty(filtersVar)) {
       filtersVar = [];
     }
-    if (!Utils.isArray(filtersVar)) {
+    if (!isArray(filtersVar)) {
       filtersVar = [filtersVar];
     }
 
     if (filtersVar.length === 0) {
       foundLayers = unknowLayers;
-    }
-    else {
+    } else {
       filtersVar.forEach((filterLayer) => {
         const filteredUnknowLayers = unknowLayers.filter((unknowLayer) => {
           let layerMatched = true;
@@ -952,19 +937,17 @@ export default class Map extends MObject {
             // if instanceof FacadeWMS check if it is the same
             if (filterLayer instanceof LayerBase) {
               layerMatched = filterLayer.equals(unknowLayer);
-            }
-            else {
+            } else {
               // type
-              if (!Utils.isNullOrEmpty(filterLayer.type)) {
+              if (!isNullOrEmpty(filterLayer.type)) {
                 layerMatched = (layerMatched && (filterLayer.type === unknowLayer.type));
               }
               // name
-              if (!Utils.isNullOrEmpty(filterLayer.name)) {
+              if (!isNullOrEmpty(filterLayer.name)) {
                 layerMatched = (layerMatched && (filterLayer.name === unknowLayer.name));
               }
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -989,7 +972,7 @@ export default class Map extends MObject {
 
     // adds layers
     layers.forEach((layer) => {
-      if (!Utils.includes(this.layers_, layer)) {
+      if (!includes(this.layers_, layer)) {
         layer.getImpl().addTo(this.facadeMap_);
         this.layers_.push(layer);
 
@@ -1002,8 +985,7 @@ export default class Map extends MObject {
             this.updateResolutionsFromBaseLayer();
           }
           layer.setZIndex(Map.Z_INDEX_BASELAYER);
-        }
-        else {
+        } else {
           layer.setZIndex(layer.getZIndex());
           if (layer.getZIndex() == null) {
             const zIndex = this.layers_.length + Map.Z_INDEX[layer.type];
@@ -1032,7 +1014,7 @@ export default class Map extends MObject {
   removeUnknowLayers_(layers) {
     // removes unknow layers
     layers.forEach((layer) => {
-      if (Utils.includes(this.layers_, layer)) {
+      if (includes(this.layers_, layer)) {
         this.layers_ = this.layers_.filter(layer2 => !layer2.equals(layer));
         layer.getImpl().destroy();
         if (layer.transparent !== true) {
@@ -1064,28 +1046,25 @@ export default class Map extends MObject {
     }
     const controlsToSearch = this.controls_.concat(panelControls);
     // parse to Array
-    if (Utils.isNullOrEmpty(filtersVar)) {
+    if (isNullOrEmpty(filtersVar)) {
       filtersVar = [];
     }
-    if (!Utils.isArray(filtersVar)) {
+    if (!isArray(filtersVar)) {
       filtersVar = [filtersVar];
     }
     if (filtersVar.length === 0) {
       foundControls = controlsToSearch;
-    }
-    else {
+    } else {
       filtersVar.forEach((filterControl) => {
         foundControls = foundControls.concat(controlsToSearch.filter((control) => {
           let controlMatched = false;
 
-          if (!Utils.includes(foundControls, control)) {
-            if (Utils.isString(filterControl)) {
+          if (!includes(foundControls, control)) {
+            if (isString(filterControl)) {
               controlMatched = (filterControl === control.name);
-            }
-            else if (filterControl instanceof Control) {
+            } else if (filterControl instanceof Control) {
               controlMatched = (filterControl === control);
-            }
-            else if (Utils.isObject(filterControl)) {
+            } else if (isObject(filterControl)) {
               controlMatched = (filterControl.name === control.name);
             }
           }
@@ -1117,7 +1096,7 @@ export default class Map extends MObject {
       if (control instanceof FacadePanzoombar) {
         this.facadeMap_.addControls('panzoom');
       }
-      if (!Utils.includes(this.controls_, control)) {
+      if (!includes(this.controls_, control)) {
         this.controls_.push(control);
       }
     });
@@ -1155,7 +1134,7 @@ export default class Map extends MObject {
    */
   setMaxExtent(maxExtent, zoomToExtent) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(maxExtent)) {
+    if (isNullOrEmpty(maxExtent)) {
       Exception('No ha especificado ningún maxExtent');
     }
 
@@ -1187,7 +1166,7 @@ export default class Map extends MObject {
     const olMap = this.getMapImpl();
     const olExtent = olMap.getView().get('extent');
 
-    if (!Utils.isNullOrEmpty(olExtent)) {
+    if (!isNullOrEmpty(olExtent)) {
       extent = {
         x: {
           min: olExtent[0],
@@ -1198,8 +1177,7 @@ export default class Map extends MObject {
           max: olExtent[3],
         },
       };
-    }
-    else {
+    } else {
       extent = this.envolvedMaxExtent_;
     }
 
@@ -1219,7 +1197,7 @@ export default class Map extends MObject {
    */
   setBbox(bbox, vendorOpts) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(bbox)) {
+    if (isNullOrEmpty(bbox)) {
       Exception('No ha especificado ningún bbox');
     }
 
@@ -1227,10 +1205,9 @@ export default class Map extends MObject {
 
     // set the extent by ol
     let extent;
-    if (Utils.isArray(bbox)) {
+    if (isArray(bbox)) {
       extent = bbox;
-    }
-    else if (Utils.isObject(bbox)) {
+    } else if (isObject(bbox)) {
       extent = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
     }
     const olMap = this.getMapImpl();
@@ -1253,10 +1230,10 @@ export default class Map extends MObject {
 
     const olMap = this.getMapImpl();
     const view = olMap.getView();
-    if (!Utils.isNullOrEmpty(view.getCenter())) {
+    if (!isNullOrEmpty(view.getCenter())) {
       const olExtent = view.calculateExtent(olMap.getSize());
 
-      if (!Utils.isNullOrEmpty(olExtent)) {
+      if (!isNullOrEmpty(olExtent)) {
         bbox = {
           x: {
             min: olExtent[0],
@@ -1284,7 +1261,7 @@ export default class Map extends MObject {
    */
   setZoom(zoom) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(zoom)) {
+    if (isNullOrEmpty(zoom)) {
       Exception('No ha especificado ningún zoom');
     }
 
@@ -1328,7 +1305,7 @@ export default class Map extends MObject {
    */
   setCenter(center) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(center)) {
+    if (isNullOrEmpty(center)) {
       Exception('No ha especificado ningún center');
     }
 
@@ -1336,7 +1313,7 @@ export default class Map extends MObject {
     const olCenter = [center.x, center.y];
     const olView = this.getMapImpl().getView();
     const srcCenter = olView.getCenter();
-    if (!Utils.isNullOrEmpty(srcCenter)) {
+    if (!isNullOrEmpty(srcCenter)) {
       this.getMapImpl().getView().animate({
         duration: 250,
         source: srcCenter,
@@ -1358,7 +1335,7 @@ export default class Map extends MObject {
   getCenter() {
     let center = null;
     const olCenter = this.getMapImpl().getView().getCenter();
-    if (!Utils.isNullOrEmpty(olCenter)) {
+    if (!isNullOrEmpty(olCenter)) {
       center = {
         x: olCenter[0],
         y: olCenter[1],
@@ -1395,11 +1372,11 @@ export default class Map extends MObject {
    */
   setResolutions(resolutions, optional) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(resolutions)) {
+    if (isNullOrEmpty(resolutions)) {
       Exception('No ha especificado ninguna resolución');
     }
 
-    if (Utils.isNullOrEmpty(optional)) {
+    if (isNullOrEmpty(optional)) {
       this.userResolutions_ = resolutions;
     }
 
@@ -1426,7 +1403,7 @@ export default class Map extends MObject {
       layer.getImpl().setResolutions(resolutions);
     });
 
-    if (!Utils.isNullOrEmpty(this.userBbox_)) {
+    if (!isNullOrEmpty(this.userBbox_)) {
       this.facadeMap_.setBbox(this.userBbox_, {
         nearest: true,
       });
@@ -1450,16 +1427,14 @@ export default class Map extends MObject {
     const resolution = olMap.getView().getResolution();
     const units = this.getProjection().units;
 
-    let scale = Utils.getScaleFromResolution(resolution, units);
+    let scale = getScaleFromResolution(resolution, units);
 
-    if (!Utils.isNullOrEmpty(scale)) {
+    if (!isNullOrEmpty(scale)) {
       if (scale >= 1000 && scale <= 950000) {
         scale = Math.round(scale / 1000) * 1000;
-      }
-      else if (scale >= 950000) {
+      } else if (scale >= 950000) {
         scale = Math.round(scale / 1000000) * 1000000;
-      }
-      else {
+      } else {
         scale = Math.round(scale);
       }
     }
@@ -1479,13 +1454,13 @@ export default class Map extends MObject {
    */
   setProjection(projection) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(projection)) {
+    if (isNullOrEmpty(projection)) {
       Exception('No ha especificado ninguna projection');
     }
 
     // gets the current view and modifies its projection
     let olProjection = ol.proj.get(projection.code);
-    if (Utils.isNullOrEmpty(olProjection)) {
+    if (isNullOrEmpty(olProjection)) {
       olProjection = new ol.proj.Projection(projection);
     }
 
@@ -1507,10 +1482,10 @@ export default class Map extends MObject {
     });
     newView.setProperties(oldViewProperties);
     newView.setUserZoom(userZoom);
-    if (!Utils.isNullOrEmpty(resolutions)) {
+    if (!isNullOrEmpty(resolutions)) {
       newView.setResolutions(resolutions);
     }
-    if (!Utils.isNullOrEmpty(resolution)) {
+    if (!isNullOrEmpty(resolution)) {
       newView.setResolution(resolution);
     }
     olMap.setView(newView);
@@ -1521,8 +1496,8 @@ export default class Map extends MObject {
     });
 
     // recalculates maxExtent
-    if (!Utils.isNullOrEmpty(prevMaxExtent)) {
-      if (!Utils.isArray(prevMaxExtent)) {
+    if (!isNullOrEmpty(prevMaxExtent)) {
+      if (!isArray(prevMaxExtent)) {
         prevMaxExtent = [prevMaxExtent.x.min,
           prevMaxExtent.y.min,
           prevMaxExtent.x.max,
@@ -1537,8 +1512,8 @@ export default class Map extends MObject {
     }
 
     // recalculates bbox
-    if (!Utils.isNullOrEmpty(prevBbox)) {
-      if (!Utils.isArray(prevBbox)) {
+    if (!isNullOrEmpty(prevBbox)) {
+      if (!isArray(prevBbox)) {
         prevBbox = [
           prevBbox.x.min,
           prevBbox.y.min,
@@ -1552,9 +1527,9 @@ export default class Map extends MObject {
     }
 
     // recalculates center
-    if (!Utils.isNullOrEmpty(prevCenter)) {
+    if (!isNullOrEmpty(prevCenter)) {
       let draw = false;
-      if (!Utils.isNullOrEmpty(this.facadeMap_.getFeatureCenter())) {
+      if (!isNullOrEmpty(this.facadeMap_.getFeatureCenter())) {
         draw = true;
       }
       this.facadeMap_.setCenter(`${ol.proj.transform([
@@ -1568,9 +1543,9 @@ export default class Map extends MObject {
 
     // reprojects popup
     const popup = this.facadeMap_.getPopup();
-    if (!Utils.isNullOrEmpty(popup)) {
+    if (!isNullOrEmpty(popup)) {
       let coord = popup.getCoordinate();
-      if (!Utils.isNullOrEmpty(coord)) {
+      if (!isNullOrEmpty(coord)) {
         coord = ol.proj.transform(coord, olPrevProjection, olProjection);
         popup.setCoordinate(coord);
       }
@@ -1578,9 +1553,9 @@ export default class Map extends MObject {
 
     // reprojects label
     const label = this.facadeMap_.getLabel();
-    if (!Utils.isNullOrEmpty(label)) {
+    if (!isNullOrEmpty(label)) {
       let coord = label.getCoordinate();
-      if (!Utils.isNullOrEmpty(coord)) {
+      if (!isNullOrEmpty(coord)) {
         coord = ol.proj.transform(coord, olPrevProjection, olProjection);
         label.setCoordinate(coord);
       }
@@ -1606,7 +1581,7 @@ export default class Map extends MObject {
 
     let projection = null;
 
-    if (!Utils.isNullOrEmpty(olProjection)) {
+    if (!isNullOrEmpty(olProjection)) {
       projection = {
         code: olProjection.getCode(),
         units: olProjection.getUnits(),
@@ -1638,7 +1613,7 @@ export default class Map extends MObject {
    * @api stable
    */
   removePopup(popup) {
-    if (!Utils.isNullOrEmpty(popup)) {
+    if (!isNullOrEmpty(popup)) {
       const olPopup = popup.getImpl();
       const olMap = this.getMapImpl();
       olMap.removeOverlay(olPopup);
@@ -1709,15 +1684,15 @@ export default class Map extends MObject {
     // gets min/max resolutions from base layer
     let maxResolution = null;
     let minResolution = null;
-    if (!Utils.isNullOrEmpty(baseLayer)) {
+    if (!isNullOrEmpty(baseLayer)) {
       minResolution = baseLayer.getImpl().getMinResolution();
       maxResolution = baseLayer.getImpl().getMaxResolution();
       zoomLevels = baseLayer.getImpl().getNumZoomLevels();
     }
 
     if (this.userResolutions_ === null) {
-      if (!Utils.isNullOrEmpty(minResolution) && !Utils.isNullOrEmpty(maxResolution)) {
-        resolutions = Utils.fillResolutions(minResolution, maxResolution, zoomLevels);
+      if (!isNullOrEmpty(minResolution) && !isNullOrEmpty(maxResolution)) {
+        resolutions = fillResolutions(minResolution, maxResolution, zoomLevels);
         this.setResolutions(resolutions, true);
 
         this.resolutionsBaseLayer_ = true;
@@ -1729,11 +1704,10 @@ export default class Map extends MObject {
           this.calculatedResolutions_ = true;
           this.fire(EventsManager.COMPLETED);
         }
-      }
-      else {
+      } else {
         EnvolvedExtent.calculate(this).then((extent) => {
           if (!this.resolutionsBaseLayer_ && (this.userResolutions_ === null)) {
-            resolutions = Utils.generateResolutionsFromExtent(extent, size, zoomLevels, units);
+            resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
 
             this.resolutionsEnvolvedExtent_ = true;
@@ -1792,7 +1766,7 @@ export default class Map extends MObject {
    * @api stable
    */
   removeLabel() {
-    if (!Utils.isNullOrEmpty(this.label)) {
+    if (!isNullOrEmpty(this.label)) {
       const popup = this.label.getPopup();
       this.removePopup(popup);
       this.label = null;
@@ -1847,7 +1821,7 @@ export default class Map extends MObject {
 
     // hides the label if it was added
     const label = this.facadeMap_.getLabel();
-    if (!Utils.isNullOrEmpty(label)) {
+    if (!isNullOrEmpty(label)) {
       label.hide();
     }
 
