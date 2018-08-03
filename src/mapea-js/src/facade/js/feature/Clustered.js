@@ -1,5 +1,5 @@
 import Feature from './Feature';
-import Utils from '../util/Utils';
+import { generateRandom } from '../util/Utils';
 
 export default class Clustered extends Feature {
   /**
@@ -13,7 +13,7 @@ export default class Clustered extends Feature {
    * @api stable
    */
   constructor(features, attributes) {
-    super(Utils.generateRandom('_mapea_cluster_'));
+    super(generateRandom('_mapea_cluster_'));
     this.setAttributes(attributes);
     this.setAttribute('features', features);
   }

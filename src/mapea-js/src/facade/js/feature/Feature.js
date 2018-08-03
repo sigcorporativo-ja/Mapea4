@@ -1,6 +1,6 @@
 import FeatureImpl from 'impl/feature/Feature';
 import Base from '../Base';
-import Utils from '../util/Utils';
+import { isNullOrEmpty } from '../util/Utils';
 import GeoJSON from '../format/GeoJSON';
 import * as dialog from '../dialog';
 import StyleFeature from '../style/Feature';
@@ -127,8 +127,7 @@ export default class Feature extends Base {
   setAttributes(attributes) {
     if (typeof attributes === 'object') {
       this.getImpl().setAttributes(attributes);
-    }
-    else {
+    } else {
       dialog.info('No se han especificado correctamente los atributos.');
     }
   }
@@ -146,18 +145,17 @@ export default class Feature extends Base {
     let attrValue;
 
     attrValue = this.getImpl().getAttribute(attribute);
-    if (Utils.isNullOrEmpty(attrValue)) {
+    if (isNullOrEmpty(attrValue)) {
       // we look up the attribute by its path. Example: getAttribute('foo.bar.attr')
       // --> return feature.properties.foo.bar.attr value
       const attrPath = attribute.split('.');
       if (attrPath.length > 1) {
         attrValue = attrPath.reduce((obj, attr) => {
           let attrParam;
-          if (!Utils.isNullOrEmpty(obj)) {
+          if (!isNullOrEmpty(obj)) {
             if (obj instanceof Feature) {
               attrParam = obj.getAttribute(attr);
-            }
-            else {
+            } else {
               attrParam = obj[attr];
             }
           }
@@ -190,11 +188,10 @@ export default class Feature extends Base {
    * @api stable
    */
   setStyle(style) {
-    if (!Utils.isNullOrEmpty(style) && style instanceof StyleFeature) {
+    if (!isNullOrEmpty(style) && style instanceof StyleFeature) {
       this.style_ = style;
       this.style_.applyToFeature(this);
-    }
-    else if (Utils.isNullOrEmpty(style)) {
+    } else if (isNullOrEmpty(style)) {
       this.style_ = null;
       this.getImpl().clearStyle();
     }
@@ -259,7 +256,7 @@ export default class Feature extends Base {
       },
     });
     const centroid = this.getImpl().getCentroid();
-    if (!Utils.isNullOrEmpty(centroid)) {
+    if (!isNullOrEmpty(centroid)) {
       centroid.id(`${id} centroid}`);
       centroid.attributes(attributes);
       centroid.style = style;
