@@ -1,6 +1,6 @@
 import WMSImpl from 'impl/layer/WMS';
 import Config from 'configuration';
-import Utils from '../util/Utils';
+import { isNullOrEmpty, isUndefined, sameUrl, isString, normalize } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import * as parameter from '../parameter/parameter';
@@ -20,11 +20,11 @@ export default class WMS extends LayerBase {
    */
   constructor(userParameters, options = {}) {
     // checks if the implementation can create WMC layers
-    if (Utils.isUndefined(WMSImpl)) {
+    if (isUndefined(WMSImpl)) {
       Exception('La implementación usada no puede crear capas WMS');
     }
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(userParameters)) {
+    if (isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
     // This Layer is of parameters.
@@ -42,7 +42,7 @@ export default class WMS extends LayerBase {
     this.version = parameters.version;
 
     // tiled
-    if (!Utils.isNullOrEmpty(parameters.tiled)) {
+    if (!isNullOrEmpty(parameters.tiled)) {
       this.tiled = parameters.tiled;
     }
 
@@ -86,8 +86,8 @@ export default class WMS extends LayerBase {
   }
 
   set type(newType) {
-    if (!Utils.isUndefined(newType) &&
-      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMS)) {
+    if (!isUndefined(newType) &&
+      !isNullOrEmpty(newType) && (newType !== LayerType.WMS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
@@ -100,10 +100,9 @@ export default class WMS extends LayerBase {
   }
 
   set legend(newLegend) {
-    if (Utils.isNullOrEmpty(newLegend)) {
+    if (isNullOrEmpty(newLegend)) {
       this.getImpl().legend = this.name;
-    }
-    else {
+    } else {
       this.getImpl().legend = newLegend;
     }
   }
@@ -116,15 +115,13 @@ export default class WMS extends LayerBase {
   }
 
   set tiled(newTiled) {
-    if (!Utils.isNullOrEmpty(newTiled)) {
-      if (Utils.isString(newTiled)) {
-        this.getImpl().tiled = (Utils.normalize(newTiled) === 'true');
-      }
-      else {
+    if (!isNullOrEmpty(newTiled)) {
+      if (isString(newTiled)) {
+        this.getImpl().tiled = (normalize(newTiled) === 'true');
+      } else {
         this.getImpl().tiled = newTiled;
       }
-    }
-    else {
+    } else {
       this.getImpl().tiled = true;
     }
   }
@@ -149,10 +146,9 @@ export default class WMS extends LayerBase {
   }
 
   set version(newVersion) {
-    if (!Utils.isNullOrEmpty(newVersion)) {
+    if (!isNullOrEmpty(newVersion)) {
       this.getImpl().version = newVersion;
-    }
-    else {
+    } else {
       this.getImpl().version = '1.1.0'; // default value
     }
   }
@@ -208,7 +204,7 @@ export default class WMS extends LayerBase {
    */
   _updateNoCache() {
     const tiledIdx = Config.tileMappgins.tiledNames.indexOf(this.name);
-    if ((tiledIdx !== -1) && Utils.sameUrl(Config.tileMappgins.tiledUrls[tiledIdx], this.url)) {
+    if ((tiledIdx !== -1) && sameUrl(Config.tileMappgins.tiledUrls[tiledIdx], this.url)) {
       this._noCacheUrl = Config.tileMappgins.urls[tiledIdx];
       this._noCacheName = Config.tileMappgins.names[tiledIdx];
     }

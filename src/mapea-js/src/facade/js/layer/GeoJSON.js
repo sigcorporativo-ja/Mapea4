@@ -1,6 +1,6 @@
 import GeoJSONImpl from 'impl/layer/GeoJSON';
 import LayerVector from './Vector';
-import Utils from '../util/Utils';
+import { isString, isNullOrEmpty, isUndefined, isArray, normalize } from '../util/Utils';
 import Exception from '../exception/exception';
 
 export default class GeoJSON extends LayerVector {
@@ -27,22 +27,20 @@ export default class GeoJSON extends LayerVector {
     super(parameters, options, impl);
 
     // checks if the implementation can create KML layers
-    if (Utils.isUndefined(GeoJSONImpl)) {
+    if (isUndefined(GeoJSONImpl)) {
       Exception('La implementación usada no puede crear capas GeoJSON');
     }
 
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(parameters)) {
+    if (isNullOrEmpty(parameters)) {
       Exception('No ha especificado ningún parámetro');
     }
 
-    if (Utils.isString(parameters)) {
+    if (isString(parameters)) {
       this.url = parameters;
-    }
-    else if (Utils.isArray(parameters)) {
+    } else if (isArray(parameters)) {
       this.source = parameters;
-    }
-    else {
+    } else {
       // url
       this.url = parameters.url;
 
@@ -55,8 +53,8 @@ export default class GeoJSON extends LayerVector {
       // extract
       this.extract = parameters.extract;
       // crs
-      if (!Utils.isNullOrEmpty(parameters.crs)) {
-        if (Utils.isNullOrEmpty(this.source)) {
+      if (!isNullOrEmpty(parameters.crs)) {
+        if (isNullOrEmpty(this.source)) {
           this.source = {
             type: 'FeatureCollection',
             features: [],
@@ -71,7 +69,7 @@ export default class GeoJSON extends LayerVector {
       }
     }
 
-    if (Utils.isNullOrEmpty(this.extract)) {
+    if (isNullOrEmpty(this.extract)) {
       this.extract = true; // by default
     }
 
@@ -106,15 +104,13 @@ export default class GeoJSON extends LayerVector {
   }
 
   set extract(newExtract) {
-    if (!Utils.isNullOrEmpty(newExtract)) {
-      if (Utils.isString(newExtract)) {
-        this.getImpl().extract = (Utils.normalize(newExtract) === 'true');
-      }
-      else {
+    if (!isNullOrEmpty(newExtract)) {
+      if (isString(newExtract)) {
+        this.getImpl().extract = (normalize(newExtract) === 'true');
+      } else {
         this.getImpl().extract = newExtract;
       }
-    }
-    else {
+    } else {
       this.getImpl().extract = true;
     }
   }

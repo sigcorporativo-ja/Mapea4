@@ -1,5 +1,5 @@
 import WMTSImpl from 'impl/layer/WMTS';
-import Utils from '../util/Utils';
+import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import * as parameter from '../parameter/parameter';
@@ -32,12 +32,12 @@ export default class WMTS extends LayerBase {
     super(parameters, impl);
 
     // checks if the implementation can create WMTS layers
-    if (Utils.isUndefined(WMTSImpl)) {
+    if (isUndefined(WMTSImpl)) {
       Exception('La implementación usada no puede crear capas WMTS');
     }
 
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(userParameters)) {
+    if (isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
 
@@ -62,8 +62,8 @@ export default class WMTS extends LayerBase {
     return LayerType.WMTS;
   }
   set type(newType) {
-    if (!Utils.isUndefined(newType) &&
-      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMTS)) {
+    if (!isUndefined(newType) &&
+      !isNullOrEmpty(newType) && (newType !== LayerType.WMTS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMTS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
@@ -86,10 +86,9 @@ export default class WMTS extends LayerBase {
   }
 
   set legend(newLegend) {
-    if (Utils.isNullOrEmpty(newLegend)) {
+    if (isNullOrEmpty(newLegend)) {
       this.getImpl().legend = this.name;
-    }
-    else {
+    } else {
       this.getImpl().legend = newLegend;
     }
   }
