@@ -1,5 +1,5 @@
 /**
- * @namespace M.style.chart.Variable
+ * @module M.style.chart.Variable
  */
 export default class Variable {
   /**
