@@ -1,4 +1,4 @@
-import BaseFilter from './Base':
+import BaseFilter from './Base';
 import Utils from '../util/Utils';
 
 export default class Function extends BaseFilter {
@@ -9,7 +9,7 @@ export default class Function extends BaseFilter {
    * @api stable
    */
   constructor(filterFunction, options = {}) {
-
+    super();
     /**
      * Function to execute
      * @private

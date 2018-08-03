@@ -1,3 +1,4 @@
+import chroma from 'chroma-js';
 import Baseline from 'facade/js/style/Baseline';
 import Utils from 'facade/js/util/Utils';
 import Align from 'facade/js/style/Align';
@@ -144,7 +145,7 @@ export default class Polygon extends Simple {
     }
 
     vectorContext.setStyle(applyStyle);
-    Polygon.drawGeometryToCanvas(vectorContext);
+    this.drawGeometryToCanvas(vectorContext);
   }
 
   /**
@@ -154,7 +155,7 @@ export default class Polygon extends Simple {
    * @function
    * @api stable
    */
-  static drawGeometryToCanvas(vectorContext) {
+  drawGeometryToCanvas(vectorContext) {
     const canvasSize = Polygon.getCanvasSize();
     const maxW = Math.floor(canvasSize[0]);
     const maxH = Math.floor(canvasSize[1]);

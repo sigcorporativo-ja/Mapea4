@@ -98,6 +98,6 @@ export default class WFS extends MObject {
     // ];
 
     // return this.service_.getFeatureUrl(minExtent, projection);
-    return this.service_.featureUrl(null, projection);
+    return this.service_.getFeatureUrl(null, projection);
   }
 }
