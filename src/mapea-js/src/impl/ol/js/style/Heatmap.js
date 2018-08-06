@@ -1,8 +1,8 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, extendsObj } from 'facade/js/util/Utils';
 import Style from './Style';
-import Heatmap from '../layer/Heatmap';
+import HeatmapLayer from '../layer/Heatmap';
 
-export default class HeatMap extends Style {
+export default class Heatmap extends Style {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Heatmap
@@ -30,7 +30,7 @@ export default class HeatMap extends Style {
      * @private
      * @type {object}
      */
-    this.opt_options_ = Utils.extendsObj(options, vendorOptions);
+    this.opt_options_ = extendsObj(options, vendorOptions);
 
     this.opt_options_.zIndex = 999999;
     /**
@@ -50,7 +50,7 @@ export default class HeatMap extends Style {
    */
   applyToLayer(layer) {
     this.layer_ = layer;
-    if (!Utils.isNullOrEmpty(layer)) {
+    if (!isNullOrEmpty(layer)) {
       const ol3Layer = this.layer_.getImpl().getOL3Layer();
       if (!(ol3Layer instanceof ol.layer.Heatmap)) {
         this.oldOLLayer_ = ol3Layer;
@@ -70,7 +70,7 @@ export default class HeatMap extends Style {
    * @api stable
    */
   unapply(layer) {
-    if (!Utils.isNullOrEmpty(this.oldOLLayer_)) {
+    if (!isNullOrEmpty(this.oldOLLayer_)) {
       this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
       this.layer_.redraw();
       this.layer_ = null;
@@ -89,7 +89,7 @@ export default class HeatMap extends Style {
     this.opt_options_.source = new ol.source.Vector({
       features: olFeatures,
     });
-    this.heatmapLayer_ = new Heatmap(this.opt_options_);
+    this.heatmapLayer_ = new HeatmapLayer(this.opt_options_);
   }
 
   /**
@@ -100,7 +100,7 @@ export default class HeatMap extends Style {
    * @function
    */
   setOptions(options, vendorOptions) {
-    this.opt_options_ = Utils.extendsObj(options, vendorOptions);
+    this.opt_options_ = extendsObj(options, vendorOptions);
   }
 
   /**

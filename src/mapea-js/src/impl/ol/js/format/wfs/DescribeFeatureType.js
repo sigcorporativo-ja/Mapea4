@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isGeometryType } from 'facade/js/util/Utils';
 import DescribeFeatureTypeXML from './DescribeFeatureTypeXML';
 
 export default class DescribeFeatureType {
@@ -61,8 +61,7 @@ export default class DescribeFeatureType {
     if (/json/gi.test(this.outputFormat_)) {
       try {
         describeFeatureTypeResponse = JSON.parse(response.text);
-      }
-      catch (err) {
+      } catch (err) {
         throw err;
       }
     }
@@ -78,10 +77,10 @@ export default class DescribeFeatureType {
       if (featureType.typeName === this.typeName_) {
         describeFeatureType.properties = featureType.properties;
         describeFeatureType.properties.some((prop) => {
-          if (Utils.isGeometryType(prop.localType)) {
+          if (isGeometryType(prop.localType)) {
             describeFeatureType.geometryName = prop.name;
           }
-          return Utils.isGeometryType(prop.localType);
+          return isGeometryType(prop.localType);
         });
       }
       return featureType.typeName === this.typeName_;

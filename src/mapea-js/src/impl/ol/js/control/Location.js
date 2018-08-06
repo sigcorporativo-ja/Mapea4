@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 import Control from './Control';
 import Feature from '../feature/Feature';
 
@@ -57,7 +57,7 @@ export default class Location extends Control {
   activate() {
     this.element.classList.add('m-locating');
 
-    if (Utils.isNullOrEmpty(this.geolocation_)) {
+    if (isNullOrEmpty(this.geolocation_)) {
       const proj = ol.proj.get(this.facadeMap_.getProjection().code);
       this.geolocation_ = new ol.Geolocation({
         projection: proj,
@@ -73,7 +73,7 @@ export default class Location extends Control {
       });
       this.geolocation_.on('change:position', (evt) => {
         const newCoord = evt.target.get(evt.key);
-        const newPosition = Utils.isNullOrEmpty(newCoord) ?
+        const newPosition = isNullOrEmpty(newCoord) ?
           null : new ol.geom.Point(newCoord);
         this.positionFeature_.getImpl().getOLFeature().setGeometry(newPosition);
         this.facadeMap_.setCenter(newCoord);
@@ -98,10 +98,10 @@ export default class Location extends Control {
    * @function
    */
   removePositions_() {
-    if (!Utils.isNullOrEmpty(this.accuracyFeature_)) {
+    if (!isNullOrEmpty(this.accuracyFeature_)) {
       this.facadeMap_.removeFeatures([this.accuracyFeature_]);
     }
-    if (!Utils.isNullOrEmpty(this.positionFeature_)) {
+    if (!isNullOrEmpty(this.positionFeature_)) {
       this.facadeMap_.removeFeatures([this.positionFeature_]);
     }
     this.geolocation_.setTracking(false);

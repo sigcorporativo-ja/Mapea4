@@ -1,7 +1,6 @@
-import Utils from "facade/js/util/Utils";
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 
 export default class WMTSCapabilities {
-
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC formater
@@ -58,7 +57,7 @@ export default class WMTSCapabilities {
       (i < ilen) && (matrixSet === undefined); i++) {
       let layer = this.capabilities.Contents.Layer[i];
       if (layer.Identifier === layerName) {
-        if (!Utils.isNullOrEmpty(srid)) {
+        if (!isNullOrEmpty(srid)) {
           // gets the matrixSet by the SRID
           matrixSet = layer.TileMatrixSetLink.filter(matrixSetLink => matrixSetLink.contains(srid))[0];
         }
@@ -112,8 +111,8 @@ export default class WMTSCapabilities {
    */
   getOptionsFromCapabilities(layerName, matrixSet) {
     let options = ol.source.WMTS.optionsFromCapabilities(this.capabilities, {
-      'layer': layerName,
-      'matrixSet': matrixSet
+      layer: layerName,
+      matrixSet: matrixSet
     });
 
     return options;

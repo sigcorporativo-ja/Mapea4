@@ -1,3 +1,4 @@
+import OLMap from 'ol/Map';
 import MObject from 'facade/js/Object';
 import FacadePanzoombar from 'facade/js/control/Panzoombar';
 import LayerType from 'facade/js/layer/Type';
@@ -11,6 +12,7 @@ import Exception from 'facade/js/exception/exception';
 import { isNullOrEmpty, isArray, isString, isObject, includes, getScaleFromResolution, fillResolutions, generateResolutionsFromExtent } from 'facade/js/util/Utils';
 import View from './View';
 import EnvolvedExtent from './util/EnvolvedExtent';
+// import './patches';
 
 export default class Map extends MObject {
   /**
@@ -114,7 +116,7 @@ export default class Map extends MObject {
      * @private
      * @type {ol.Map}
      */
-    this.map_ = new ol.Map({
+    this.map_ = new OLMap({
       controls: [],
       target: div.id,
       // renderer,

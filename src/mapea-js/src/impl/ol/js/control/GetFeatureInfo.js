@@ -3,7 +3,7 @@ import Popup from 'facade/js/Popup';
 import Dialog from 'facade/js/dialog';
 import Remote from 'facade/js/util/Remote';
 import Template from 'facade/js/util/Template';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, normalize, beautifyAttribute } from 'facade/js/util/Utils';
 import Control from './Control';
 
 /**
@@ -33,7 +33,7 @@ export default class GetFeatureInfo extends Control {
     this.userFormat = format;
 
     this.featureCount = options.featureCount;
-    if (Utils.isNullOrEmpty(this.featureCount)) {
+    if (isNullOrEmpty(this.featureCount)) {
       this.featureCount = 10;
     }
 
@@ -76,13 +76,11 @@ export default class GetFeatureInfo extends Control {
    */
   addOnClickEvent_() {
     const olMap = this.facadeMap_.getMapImpl();
-    if ((Utils.normalize(this.userFormat) === 'plain') || (Utils.normalize(this.userFormat) === 'text/plain')) {
+    if ((normalize(this.userFormat) === 'plain') || (normalize(this.userFormat) === 'text/plain')) {
       this.userFormat = 'text/plain';
-    }
-    else if ((Utils.normalize(this.userFormat) === 'gml') || (Utils.normalize(this.userFormat) === 'application/vnd.ogc.gml')) {
+    } else if ((normalize(this.userFormat) === 'gml') || (normalize(this.userFormat) === 'application/vnd.ogc.gml')) {
       this.userFormat = 'application/vnd.ogc.gml';
-    }
-    else {
+    } else {
       this.userFormat = 'text/html';
     }
     olMap.on('singleclick', this.buildUrl_(Dialog).bind(this));
@@ -103,7 +101,7 @@ export default class GetFeatureInfo extends Control {
       const layerNamesUrls = [];
       this.facadeMap_.getWMS().forEach((layer) => {
         const olLayer = layer.getImpl().getOL3Layer();
-        if (layer.isVisible() && layer.isQueryable() && !Utils.isNullOrEmpty(olLayer)) {
+        if (layer.isVisible() && layer.isQueryable() && !isNullOrEmpty(olLayer)) {
           const getFeatureInfoParams = {
             INFO_FORMAT: this.userFormat,
             FEATURE_COUNT: this.featureCount,
@@ -127,8 +125,7 @@ export default class GetFeatureInfo extends Control {
       });
       if (layerNamesUrls.length > 0) {
         this.showInfoFromURL_(layerNamesUrls, evt.coordinate, olMap);
-      }
-      else {
+      } else {
         dialog.info('No existen capas consultables');
       }
     };
@@ -243,13 +240,13 @@ export default class GetFeatureInfo extends Control {
         features.forEach((feature) => {
           const attr = feature.getKeys();
           formatedInfo += '<div class=\'divinfo\'>';
-          formatedInfo += `<table class='mapea-table'><tbody><tr><td class='header' colspan='3'>' ${Utils.beautifyAttribute(layerName)} '</td></tr>'`;
+          formatedInfo += `<table class='mapea-table'><tbody><tr><td class='header' colspan='3'>' ${beautifyAttribute(layerName)} '</td></tr>'`;
           for (let i = 0, ilen = attr.length; i < ilen; i += 1) {
             const attrName = attr[i];
             const attrValue = feature.get(attrName);
 
             formatedInfo += '<tr><td class="key"><b>';
-            formatedInfo += Utils.beautifyAttribute(attrName);
+            formatedInfo += beautifyAttribute(attrName);
             formatedInfo += '</b></td><td class="value">';
             formatedInfo += attrValue;
             formatedInfo += '</td></tr>';
@@ -260,8 +257,7 @@ export default class GetFeatureInfo extends Control {
       case 'text/plain': // exp reg
         if (GetFeatureInfo.regExs.gsResponse.test(info)) {
           formatedInfo = this.txtToHtmlGeoserver(info, layerName);
-        }
-        else {
+        } else {
           formatedInfo = GetFeatureInfo.txtToHtmlMapserver(info, layerName);
         }
         break;
@@ -311,7 +307,7 @@ export default class GetFeatureInfo extends Control {
     let html = '<div class=\'divinfo\'>';
 
     // build the table
-    html += `<table class='mapea-table'><tbody><tr><td class='header' colspan='3'>${Utils.beautifyAttribute(layerName)}</td></tr>`;
+    html += `<table class='mapea-table'><tbody><tr><td class='header' colspan='3'>${beautifyAttribute(layerName)}</td></tr>`;
 
     for (let i = 0, ilen = attrValuesString.length; i < ilen; i += 1) {
       const attrValueString = attrValuesString[i].trim();
@@ -328,15 +324,14 @@ export default class GetFeatureInfo extends Control {
 
         if (GetFeatureInfo.regExs.gsGeometry.test(attr) === false) {
           html += '<tr><td class="key"><b>';
-          html += Utils.beautifyAttribute(attr);
+          html += beautifyAttribute(attr);
           html += '</b></td><td class="value">';
           html += value;
           html += '</td></tr>';
         }
-      }
-      else if (GetFeatureInfo.regExs.gsNewFeature.test(attrValueString)) {
+      } else if (GetFeatureInfo.regExs.gsNewFeature.test(attrValueString)) {
         // set new header
-        html += `<tr><td class="header" colspan="3">${Utils.beautifyAttribute(layerName)}</td></tr>`;
+        html += `<tr><td class="header" colspan="3">${beautifyAttribute(layerName)}</td></tr>`;
       }
     }
 
@@ -376,7 +371,7 @@ export default class GetFeatureInfo extends Control {
     const attrValuesString = infoVar.split('\n');
 
     let html = '';
-    const htmlHeader = `<table class='mapea-table'><tbody><tr><td class='header' colspan='3'>${Utils.beautifyAttribute(layerName)}</td></tr>`;
+    const htmlHeader = `<table class='mapea-table'><tbody><tr><td class='header' colspan='3'>${beautifyAttribute(layerName)}</td></tr>`;
 
     for (let i = 0, ilen = attrValuesString.length; i < ilen; i += 1) {
       const attrValueString = attrValuesString[i].trim();
@@ -397,12 +392,11 @@ export default class GetFeatureInfo extends Control {
           if ((nextAttrValueString.length > 0) &&
             !GetFeatureInfo.regExs.msNewFeature.test(nextAttrValueString)) {
             // set new header
-            html += `<tr><td class='header' colspan='3'>${Utils.beautifyAttribute(layerName)}</td><td></td></tr>`;
+            html += `<tr><td class='header' colspan='3'>${beautifyAttribute(layerName)}</td><td></td></tr>`;
           }
-        }
-        else {
+        } else {
           html += '<tr><td class="key"><b>';
-          html += Utils.beautifyAttribute(attr);
+          html += beautifyAttribute(attr);
           html += '</b></td><td class="value">';
           html += value;
           html += '</td></tr>';
@@ -445,12 +439,11 @@ export default class GetFeatureInfo extends Control {
     };
     let popup = this.facadeMap_.getPopup();
 
-    if (Utils.isNullOrEmpty(popup)) {
+    if (isNullOrEmpty(popup)) {
       popup = new Popup();
       popup.addTab(loadingInfoTab);
       this.facadeMap_.addPopup(popup, coordinate);
-    }
-    else {
+    } else {
       // removes popup if all contents are getfeatureinfo
       const hasExternalContent =
         popup.getTabs().some(tab => tab.title !== GetFeatureInfo.POPUP_TITLE);
@@ -459,8 +452,7 @@ export default class GetFeatureInfo extends Control {
         popup = new Popup();
         popup.addTab(loadingInfoTab);
         this.facadeMap_.addPopup(popup, coordinate);
-      }
-      else {
+      } else {
         popup.addTab(loadingInfoTab);
       }
     }
@@ -474,13 +466,12 @@ export default class GetFeatureInfo extends Control {
           if (GetFeatureInfo.insert(info, formato) === true) {
             const formatedInfo = this.formatInfo(info, formato, layerName);
             infos.push(formatedInfo);
-          }
-          else if (GetFeatureInfo.unsupportedFormat(info, formato)) {
+          } else if (GetFeatureInfo.unsupportedFormat(info, formato)) {
             infos.push(`La capa <b>' ${layerName}'</b> no soporta el formato <i>'  ${formato}  '</i>`);
           }
         }
         contFull += 1;
-        if (layerNamesUrls.length === contFull && !Utils.isNullOrEmpty(popup)) {
+        if (layerNamesUrls.length === contFull && !isNullOrEmpty(popup)) {
           popup.removeTab(loadingInfoTab);
           if (infos.join('') === '') {
             popup.addTab({
@@ -488,8 +479,7 @@ export default class GetFeatureInfo extends Control {
               title: GetFeatureInfo.POPUP_TITLE,
               content: 'No hay información asociada.',
             });
-          }
-          else {
+          } else {
             popup.addTab({
               icon: 'g-cartografia-info',
               title: GetFeatureInfo.POPUP_TITLE,
@@ -509,7 +499,7 @@ export default class GetFeatureInfo extends Control {
  * @public
  * @api stable
  */
-GetFeatureInfo.LOADING_MESSAGE_ = 'Obteniendo información...';
+GetFeatureInfo.LOADING_MESSAGE = 'Obteniendo información...';
 
 GetFeatureInfo.regExs = {
   gsResponse: /^results[\w\s\S]*'http:/i,

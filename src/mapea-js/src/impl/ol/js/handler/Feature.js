@@ -1,7 +1,7 @@
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import FeatureFacade from 'facade/js/feature/Feature';
 import Cluster from 'facade/js/style/Cluster';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 import AnimatedCluster from '../layer/AnimatedCluster';
 
 /**
@@ -14,10 +14,10 @@ import AnimatedCluster from '../layer/AnimatedCluster';
 const getFacadeFeature = (feature, layer) => {
   let mFeature;
   const featureId = feature.getId();
-  if (!Utils.isNullOrEmpty(featureId)) {
+  if (!isNullOrEmpty(featureId)) {
     mFeature = layer.getFeatureById(featureId);
   }
-  if (Utils.isNullOrEmpty(mFeature)) {
+  if (isNullOrEmpty(mFeature)) {
     mFeature = FeatureFacade.olFeature2Facade(feature);
   }
   return mFeature;
@@ -72,16 +72,15 @@ export default class Feature {
   getFeaturesByLayer(evt, layer) {
     const features = [];
 
-    if (!Utils.isNullOrEmpty(layer) && layer.isVisible() &&
-      !Utils.isNullOrEmpty(layer.getImpl().getOL3Layer())) {
+    if (!isNullOrEmpty(layer) && layer.isVisible() &&
+      !isNullOrEmpty(layer.getImpl().getOL3Layer())) {
       const olLayer = layer.getImpl().getOL3Layer();
       this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, (feature, layerFrom) => {
-        if ((layerFrom instanceof AnimatedCluster) && !Utils.isNullOrEmpty(feature.get('features'))) {
+        if ((layerFrom instanceof AnimatedCluster) && !isNullOrEmpty(feature.get('features'))) {
           const clusteredFeatures = feature.get('features').map(f => this.getFacadeFeature_(f, layer));
           if (clusteredFeatures.length === 1) {
             features.push(clusteredFeatures[0]);
-          }
-          else {
+          } else {
             let styleCluster = layer.getStyle();
             if (!(styleCluster instanceof Cluster)) {
               styleCluster = styleCluster.getStyles().find(style => style instanceof Cluster);
@@ -93,8 +92,7 @@ export default class Feature {
               distance: styleCluster.getOptions().distance,
             }));
           }
-        }
-        else if (!Object.prototype.hasOwnProperty.call(feature.getProperties(), 'selectclusterlink')) {
+        } else if (!Object.prototype.hasOwnProperty.call(feature.getProperties(), 'selectclusterlink')) {
           features.push(getFacadeFeature(feature, layer));
         }
       }, {

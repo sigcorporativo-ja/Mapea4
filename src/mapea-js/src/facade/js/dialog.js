@@ -1,6 +1,6 @@
 import 'assets/css/dialog';
 import dialogTemplate from 'templates/dialog';
-import Utils from './util/Utils';
+import { isNullOrEmpty } from './util/Utils';
 import Template from './util/Template';
 /**
  * TODO
@@ -70,7 +70,7 @@ export const show = (message, title, severity) => {
  */
 export const info = (message, titleParam) => {
   let title = titleParam;
-  if (Utils.isNullOrEmpty(title)) {
+  if (isNullOrEmpty(title)) {
     title = 'INFORMACIÓN';
   }
   return show(message, title, 'info');
@@ -88,7 +88,7 @@ export const info = (message, titleParam) => {
  */
 export const error = (message, titleParam) => {
   let title = titleParam;
-  if (Utils.isNullOrEmpty(title)) {
+  if (isNullOrEmpty(title)) {
     title = 'ERROR';
   }
   return show(message, title, 'error');
@@ -106,7 +106,7 @@ export const error = (message, titleParam) => {
  */
 export const success = (message, titleParam) => {
   let title = titleParam;
-  if (Utils.isNullOrEmpty(title)) {
+  if (isNullOrEmpty(title)) {
     title = 'ÉXITO';
   }
   return show(message, title, 'success');

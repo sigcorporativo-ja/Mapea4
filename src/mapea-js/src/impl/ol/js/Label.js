@@ -1,6 +1,6 @@
 import Template from 'facade/js/util/Template';
 import FacadePopup from 'facade/js/Popup';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 import labelPopupTemplate from 'templates/label_popup';
 
 /**
@@ -114,7 +114,7 @@ export default class Label {
    */
   getCoordinate() {
     let coord = this.coord;
-    if (Utils.isNullOrEmpty(coord)) {
+    if (isNullOrEmpty(coord)) {
       coord = this.getPopup().getCoordinate();
     }
     return coord;
@@ -128,7 +128,7 @@ export default class Label {
    */
   setCoordinate(coord) {
     const popup = this.getPopup();
-    if (!Utils.isNullOrEmpty(popup)) {
+    if (!isNullOrEmpty(popup)) {
       popup.setCoordinate(coord);
     }
   }

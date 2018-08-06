@@ -1,7 +1,7 @@
 import Template from 'facade/js/util/Template';
 import popupKMLTemplate from 'templates/kml_popup';
 import Popup from 'facade/js/Popup';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import EventsManager from 'facade/js/event/Manager';
 import Vector from './Vector';
@@ -56,12 +56,12 @@ export default class KML extends Vector {
     this.visibility = visibility;
 
     // layer
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       this.ol3Layer.setVisible(visibility);
     }
 
     // screen overlay
-    if (!Utils.isNullOrEmpty(this.screenOverlayImg_)) {
+    if (!isNullOrEmpty(this.screenOverlayImg_)) {
       let display = 'none';
       if (visibility === true) {
         display = 'inherit';
@@ -94,7 +94,7 @@ export default class KML extends Vector {
           this.facadeVector_.clear();
           this.facadeVector_.addFeatures(features);
           this.fire(EventsManager.LOAD, [features]);
-          if (!Utils.isNullOrEmpty(screenOverlay)) {
+          if (!isNullOrEmpty(screenOverlay)) {
             const screenOverLayImg = ImplUtils.addOverlayImage(screenOverlay, map);
             this.setScreenOverlayImg(screenOverLayImg);
           }
@@ -143,12 +143,11 @@ export default class KML extends Vector {
         content: htmlAsText,
       };
       const popup = this.map.getPopup();
-      if (Utils.isNullOrEmpty(popup)) {
+      if (isNullOrEmpty(popup)) {
         this.popup_ = new Popup();
         this.popup_.addTab(this.tabPopup_);
         this.map.addPopup(this.popup_, featureCoord);
-      }
-      else {
+      } else {
         popup.addTab(this.tabPopup_);
       }
     }
@@ -164,7 +163,7 @@ export default class KML extends Vector {
    * @api stable
    */
   unselectFeatures() {
-    if (!Utils.isNullOrEmpty(this.popup_)) {
+    if (!isNullOrEmpty(this.popup_)) {
       this.popup_.hide();
       this.popup_ = null;
     }
@@ -192,7 +191,7 @@ export default class KML extends Vector {
   destroy() {
     const olMap = this.map.getMapImpl();
 
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }
@@ -210,11 +209,10 @@ export default class KML extends Vector {
    * @api stable
    */
   removePopup() {
-    if (!Utils.isNullOrEmpty(this.popup_)) {
+    if (!isNullOrEmpty(this.popup_)) {
       if (this.popup_.getTabs().length > 1) {
         this.popup_.removeTab(this.tabPopup_);
-      }
-      else {
+      } else {
         this.map.removePopup();
       }
     }

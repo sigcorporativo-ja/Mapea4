@@ -1,6 +1,6 @@
 import chroma from 'chroma-js';
 import Baseline from 'facade/js/style/Baseline';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 import Align from 'facade/js/style/Align';
 import Simple from './Simple';
 import Centroid from './Centroid';
@@ -37,7 +37,7 @@ export default class Polygon extends Simple {
         featureVariable = this;
       }
       const style = new Centroid();
-      if (!Utils.isNullOrEmpty(options.stroke)) {
+      if (!isNullOrEmpty(options.stroke)) {
         style.setStroke(new ol.style.Stroke({
           color: Simple.getValue(options.stroke.color, featureVariable),
           width: Simple.getValue(options.stroke.width, featureVariable),
@@ -48,7 +48,7 @@ export default class Polygon extends Simple {
           miterLimit: Simple.getValue(options.stroke.miterlimit, featureVariable),
         }));
       }
-      if (!Utils.isNullOrEmpty(options.label)) {
+      if (!isNullOrEmpty(options.label)) {
         const textLabel = Simple.getValue(options.label.text, featureVariable);
         const align = Simple.getValue(options.label.align, featureVariable);
         const baseline = Simple.getValue(options.label.baseline, featureVariable);
@@ -68,7 +68,7 @@ export default class Polygon extends Simple {
           text: textLabel === undefined ? undefined : String(textLabel),
           rotation: Simple.getValue(options.label.rotation, featureVariable),
         }));
-        if (!Utils.isNullOrEmpty(options.label.stroke)) {
+        if (!isNullOrEmpty(options.label.stroke)) {
           style.getText().setStroke(new ol.style.Stroke({
             color: Simple.getValue(options.label.stroke.color, featureVariable),
             width: Simple.getValue(options.label.stroke.width, featureVariable),
@@ -80,18 +80,18 @@ export default class Polygon extends Simple {
           }));
         }
       }
-      if (!Utils.isNullOrEmpty(options.fill)) {
+      if (!isNullOrEmpty(options.fill)) {
         const fillColorValue = Simple.getValue(options.fill.color, featureVariable);
         const fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable) || 1;
         let fill;
-        if (!Utils.isNullOrEmpty(fillColorValue)) {
+        if (!isNullOrEmpty(fillColorValue)) {
           fill = new ol.style.Fill({
             color: chroma(fillColorValue).alpha(fillOpacityValue).css(),
           });
         }
-        if (!Utils.isNullOrEmpty(options.fill.pattern)) {
+        if (!isNullOrEmpty(options.fill.pattern)) {
           let color = 'rgba(0,0,0,1)';
-          if (!Utils.isNullOrEmpty(options.fill.pattern.color)) {
+          if (!isNullOrEmpty(options.fill.pattern.color)) {
             const opacity = Simple.getValue(options.fill.pattern.opacity, featureVariable) || 1;
             color = chroma(options.fill.pattern.color).alpha(opacity).css();
           }
@@ -111,8 +111,7 @@ export default class Polygon extends Simple {
             offset: Simple.getValue(options.fill.pattern.offset, featureVariable),
             fill,
           }));
-        }
-        else {
+        } else {
           style.setFill(fill);
         }
       }
@@ -134,11 +133,11 @@ export default class Polygon extends Simple {
       size: canvasSize,
     });
     const applyStyle = this.olStyleFn_()[0];
-    if (!Utils.isNullOrEmpty(applyStyle.getText())) {
+    if (!isNullOrEmpty(applyStyle.getText())) {
       applyStyle.setText(null);
     }
     const stroke = applyStyle.getStroke();
-    if (!Utils.isNullOrEmpty(stroke) && !Utils.isNullOrEmpty(stroke.getWidth())) {
+    if (!isNullOrEmpty(stroke) && !isNullOrEmpty(stroke.getWidth())) {
       if (stroke.getWidth() > Polygon.DEFAULT_WIDTH_POLYGON) {
         applyStyle.getStroke().setWidth(Polygon.DEFAULT_WIDTH_POLYGON);
       }

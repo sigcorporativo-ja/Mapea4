@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 
 export default class AnimatedCluster extends ol.layer.Vector {
   /**
@@ -92,7 +92,7 @@ export default class AnimatedCluster extends ol.layer.Vector {
     return clusters.find((cluster) => {
       const clusterFeatures = cluster.get('features');
       let result;
-      if (!Utils.isNullOrEmpty(clusterFeatures)) {
+      if (!isNullOrEmpty(clusterFeatures)) {
         result = clusterFeatures.find(clusterFeature => clusterFeature === feature);
       }
       return result;
@@ -148,18 +148,17 @@ export default class AnimatedCluster extends ol.layer.Vector {
         if (this.animation_.reverse) {
           ptFrom[0] = ptTo[0] + (animationProgress * (ptFrom[0] - ptTo[0]));
           ptFrom[1] = ptTo[1] + (animationProgress * (ptFrom[1] - ptTo[1]));
-        }
-        else {
+        } else {
           ptFrom[0] += animationProgress * (ptTo[0] - ptFrom[0]);
           ptFrom[1] += animationProgress * (ptTo[1] - ptFrom[1]);
         }
         // Draw feature
         const olStyles = this.getStyle()(cluster, eventVariable.frameState.viewState.resolution);
         const geo = new ol.geom.Point(ptFrom);
-        if (!Utils.isNullOrEmpty(olStyles)) {
+        if (!isNullOrEmpty(olStyles)) {
           olStyles.forEach((olStyle) => {
             const styleImage = olStyle.getImage();
-            if (!Utils.isNullOrEmpty(styleImage)) {
+            if (!isNullOrEmpty(styleImage)) {
               if (styleImage.getOrigin() == null) {
                 styleImage.origin_ = [];
               }
@@ -186,8 +185,7 @@ export default class AnimatedCluster extends ol.layer.Vector {
       eventVariable.context.rect(0, 0, 0, 0);
       eventVariable.context.clip();
       this.clip_ = true;
-    }
-    else { // too much to animate
+    } else { // too much to animate
       this.animation_.clustersFrom.length = 0;
       this.animation_.clustersTo.length = 0;
       this.animation_.start = false;
@@ -215,9 +213,9 @@ export default class AnimatedCluster extends ol.layer.Vector {
 
     clustersFrom.forEach((clusterFrom) => {
       const clusterFeatures = clusterFrom.get('features');
-      if (!Utils.isNullOrEmpty(clusterFeatures)) {
+      if (!isNullOrEmpty(clusterFeatures)) {
         const clusterTo = AnimatedCluster.getClusterForFeature(clusterFeatures[0], clustersTo);
-        if (!Utils.isNullOrEmpty(clusterTo) && clusterTo !== false) {
+        if (!isNullOrEmpty(clusterTo) && clusterTo !== false) {
           this.animation_.clustersFrom.push(clusterFrom);
           this.animation_.clustersTo.push(clusterTo);
         }

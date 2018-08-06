@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, isObject, beautifyAttributeName, isFunction, includes } from 'facade/js/util/Utils';
 import EventsManager from 'facade/js/event/Manager';
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import Popup from 'facade/js/Popup';
@@ -57,7 +57,7 @@ export default class GeoJSON extends Vector {
      * @type {Array<String>}
      */
     this.hiddenAttributes_ = [];
-    if (!Utils.isNullOrEmpty(options.hide)) {
+    if (!isNullOrEmpty(options.hide)) {
       this.hiddenAttributes_ = options.hide;
     }
 
@@ -67,7 +67,7 @@ export default class GeoJSON extends Vector {
      * @type {Array<String>}
      */
     this.showAttributes_ = [];
-    if (!Utils.isNullOrEmpty(options.show)) {
+    if (!isNullOrEmpty(options.show)) {
       this.showAttributes_ = options.show;
     }
   }
@@ -84,7 +84,7 @@ export default class GeoJSON extends Vector {
     this.formater_ = new GeoJSONFormat({
       defaultDataProjection: ol.proj.get(map.getProjection().code),
     });
-    if (!Utils.isNullOrEmpty(this.url)) {
+    if (!isNullOrEmpty(this.url)) {
       this.loader_ = new JSONPLoader(map, this.url, this.formater_);
     }
     super.addTo(map);
@@ -111,7 +111,7 @@ export default class GeoJSON extends Vector {
         type: 'EPSG',
       },
     };
-    if (Utils.isObject(source)) {
+    if (isObject(source)) {
       newSource = source;
     }
     this.source = newSource;
@@ -128,7 +128,7 @@ export default class GeoJSON extends Vector {
    */
   setSource(source) {
     this.source = source;
-    if (!Utils.isNullOrEmpty(this.map)) {
+    if (!isNullOrEmpty(this.map)) {
       this.updateSource_();
     }
   }
@@ -141,7 +141,7 @@ export default class GeoJSON extends Vector {
    */
   updateSource_() {
     let srcOptions;
-    if (!Utils.isNullOrEmpty(this.url)) {
+    if (!isNullOrEmpty(this.url)) {
       srcOptions = {
         format: this.formater_,
         loader: this.loader_.getLoaderFn((features) => {
@@ -152,8 +152,7 @@ export default class GeoJSON extends Vector {
         strategy: ol.loadingstrategy.all,
       };
       this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
-    }
-    else if (!Utils.isNullOrEmpty(this.source)) {
+    } else if (!isNullOrEmpty(this.source)) {
       const features = this.formater_.read(this.source, this.map.getProjection());
       this.ol3Layer.setSource(new ol.source.Vector({
         loader: (extent, resolution, projection) => {
@@ -182,12 +181,11 @@ export default class GeoJSON extends Vector {
       // unselects previous features
       this.unselectFeatures();
 
-      if (!Utils.isNullOrEmpty(feature)) {
+      if (!isNullOrEmpty(feature)) {
         const clickFn = feature.getAttribute('vendor.mapea.click');
-        if (Utils.isFunction(clickFn)) {
+        if (isFunction(clickFn)) {
           clickFn(evt, feature);
-        }
-        else {
+        } else {
           const htmlAsText = Template.compile(geojsonPopupTemplate, {
             vars: this.parseFeaturesForTemplate_(features),
             parseToHtml: false,
@@ -198,12 +196,11 @@ export default class GeoJSON extends Vector {
             content: htmlAsText,
           };
           let popup = this.map.getPopup();
-          if (Utils.isNullOrEmpty(popup)) {
+          if (isNullOrEmpty(popup)) {
             popup = new Popup();
             popup.addTab(featureTabOpts);
             this.map.addPopup(popup, coord);
-          }
-          else {
+          } else {
             popup.addTab(featureTabOpts);
           }
         }
@@ -232,15 +229,14 @@ export default class GeoJSON extends Vector {
           let addAttribute = true;
           // adds the attribute just if it is not in
           // hiddenAttributes_ or it is in showAttributes_
-          if (!Utils.isNullOrEmpty(this.showAttributes_)) {
-            addAttribute = Utils.includes(this.showAttributes_, key);
-          }
-          else if (!Utils.isNullOrEmpty(this.hiddenAttributes_)) {
-            addAttribute = !Utils.includes(this.hiddenAttributes_, key);
+          if (!isNullOrEmpty(this.showAttributes_)) {
+            addAttribute = includes(this.showAttributes_, key);
+          } else if (!isNullOrEmpty(this.hiddenAttributes_)) {
+            addAttribute = !includes(this.hiddenAttributes_, key);
           }
           if (addAttribute) {
             attributes.push({
-              key: Utils.beautifyAttributeName(key),
+              key: beautifyAttributeName(key),
               value: properties[key],
             });
           }
@@ -266,7 +262,7 @@ export default class GeoJSON extends Vector {
   // destroy () {
   //   let olMap = this.map.getMapImpl();
   //
-  //   if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+  //   if (!isNullOrEmpty(this.ol3Layer)) {
   //     olMap.removeLayer(this.ol3Layer);
   //     this.ol3Layer = null;
   //   }

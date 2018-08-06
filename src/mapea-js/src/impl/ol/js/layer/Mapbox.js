@@ -2,7 +2,7 @@ import LayerType from 'facade/js/layer/Type';
 import FacadeOSM from 'facade/js/layer/OSM';
 import FacadeMapbox from 'facade/js/layer/Mapbox';
 import Config from 'configuration';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, generateResolutionsFromExtent, isArray } from 'facade/js/util/Utils';
 import ImplMap from '../Map';
 import EnvolvedExtent from '../util/EnvolvedExtent';
 import Layer from './Layer';
@@ -62,18 +62,17 @@ export default class Mapbox extends Layer {
         });
 
         // set this layer visible
-        if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+        if (!isNullOrEmpty(this.ol3Layer)) {
           this.ol3Layer.setVisible(visibility);
         }
 
         // updates resolutions and keep the bbox
         const oldBbox = this.map.getBbox();
         this.map.getImpl().updateResolutionsFromBaseLayer();
-        if (!Utils.isNullOrEmpty(oldBbox)) {
+        if (!isNullOrEmpty(oldBbox)) {
           this.map.setBbox(oldBbox);
         }
-      }
-      else if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+      } else if (!isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }
     }
@@ -112,7 +111,7 @@ export default class Mapbox extends Layer {
 
     // recalculate resolutions
     this.map.getMapImpl().updateSize();
-    this.resolutions_ = Utils.generateResolutionsFromExtent(
+    this.resolutions_ = generateResolutionsFromExtent(
       this.getExtent(),
       this.map.getMapImpl().getSize(),
       16,
@@ -146,25 +145,23 @@ export default class Mapbox extends Layer {
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
 
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       // gets the extent
       const promise = new Promise((success, fail) => {
         // gets the extent
         const extent = this.map.getMaxExtent();
-        if (!Utils.isNullOrEmpty(extent)) {
+        if (!isNullOrEmpty(extent)) {
           success.call(this, extent);
-        }
-        else {
+        } else {
           EnvolvedExtent.calculate(this.map, this).then(success);
         }
       });
       // resolve the promise
       promise.then((extent) => {
         let olExtent;
-        if (Utils.isArray(extent)) {
+        if (isArray(extent)) {
           olExtent = extent;
-        }
-        else {
+        } else {
           olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
         }
         const newSource = new ol.source.XYZ({
@@ -193,7 +190,7 @@ export default class Mapbox extends Layer {
    */
   getExtent() {
     let extent = null;
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       extent = ol.proj.get(this.map.getProjection().code).getExtent();
     }
     return {
@@ -242,7 +239,7 @@ export default class Mapbox extends Layer {
    */
   destroy() {
     const olMap = this.map.getMapImpl();
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }

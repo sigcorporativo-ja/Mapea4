@@ -1,5 +1,6 @@
 import Feature from 'facade/js/feature/Feature';
 import WKT from 'facade/js/geom/WKT';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 
 /**
  * @namespace Utils
@@ -17,16 +18,16 @@ export default class Utils {
     const generatedResolutions = [];
     const defaultMaxZoom = 28;
     // extent
-    if (Utils.isNullOrEmpty(extent)) {
+    if (isNullOrEmpty(extent)) {
       newExtent = projection.getExtent();
     }
     // size
     const size = ol.extent.getWidth(newExtent) / 256;
 
-    if (Utils.isNullOrEmpty(minZoom)) {
+    if (isNullOrEmpty(minZoom)) {
       newMinZoom = ol.DEFAULT_MIN_ZOOM;
     }
-    if (Utils.isNullOrEmpty(maxZoom)) {
+    if (isNullOrEmpty(maxZoom)) {
       newMaxZoom = defaultMaxZoom;
     }
     const zoomLevels = newMaxZoom - newMinZoom;
@@ -130,7 +131,7 @@ export default class Utils {
     let medianIdx;
     let points;
     let lineStrings;
-    if (Utils.isNullOrEmpty(geometry)) {
+    if (isNullOrEmpty(geometry)) {
       return null;
     }
     switch (geometry.getType()) {
@@ -207,41 +208,33 @@ export default class Utils {
     // POINT
     if (geometry.getType() === WKT.type.POINT) {
       centroid = geometry.getCoordinates();
-    }
-    // LINE
-    else if (geometry.getType() === WKT.type.LINE_STRING) {
+    } else if (geometry.getType() === WKT.type.LINE_STRING) {
+      // LINE
       coordinates = geometry.getCoordinates();
       medianIdx = Math.floor(coordinates.length / 2);
       centroid = coordinates[medianIdx];
-    }
-    else if (geometry.getType() === WKT.type.LINEAR_RING) {
+    } else if (geometry.getType() === WKT.type.LINEAR_RING) {
       coordinates = geometry.getCoordinates();
       medianIdx = Math.floor(coordinates.length / 2);
       centroid = coordinates[medianIdx];
-    }
-    // POLYGON
-    else if (geometry.getType() === WKT.type.POLYGON) {
+    } else if (geometry.getType() === WKT.type.POLYGON) {
+      // POLYGON
       centroid = Utils.getCentroidCoordinate(geometry.getInteriorPoint());
-    }
-    // MULTI
-    else if (geometry.getType() === WKT.type.MULTI_POINT) {
+    } else if (geometry.getType() === WKT.type.MULTI_POINT) {
+      // MULTI
       points = geometry.getPoints();
       medianIdx = Math.floor(points.length / 2);
       centroid = Utils.getCentroidCoordinate(points[medianIdx]);
-    }
-    else if (geometry.getType() === WKT.type.MULTI_LINE_STRING) {
+    } else if (geometry.getType() === WKT.type.MULTI_LINE_STRING) {
       lineStrings = geometry.getLineStrings();
       medianIdx = Math.floor(lineStrings.length / 2);
       centroid = Utils.getCentroidCoordinate(lineStrings[medianIdx]);
-    }
-    else if (geometry.getType() === WKT.type.MULTI_POLYGON) {
+    } else if (geometry.getType() === WKT.type.MULTI_POLYGON) {
       points = geometry.getInteriorPoints();
       centroid = Utils.getCentroidCoordinate(points);
-    }
-    else if (geometry.getType() === WKT.type.CIRCLE) {
+    } else if (geometry.getType() === WKT.type.CIRCLE) {
       centroid = geometry.getCenter();
-    }
-    else if (geometry.getType() === WKT.type.GEOMETRY_COLLECTION) {
+    } else if (geometry.getType() === WKT.type.GEOMETRY_COLLECTION) {
       geometries = geometry.getGeometries();
       medianIdx = Math.floor(geometries.length / 2);
       centroid = Utils.getCentroidCoordinate(geometries[medianIdx]);

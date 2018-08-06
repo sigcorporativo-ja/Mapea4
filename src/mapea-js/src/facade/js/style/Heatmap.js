@@ -1,7 +1,7 @@
-import Style from './Style';
-import Utils from '../util/Utils';
-import Exception from '../exception/exception';
 import HeatmapImpl from 'impl/style/Heatmap';
+import Style from './Style';
+import { isString, isFunction, isArray, inverseColor, isNullOrEmpty, generateIntervals, extendsObj } from '../util/Utils';
+import Exception from '../exception/exception';
 
 export default class Heatmap extends Style {
   /**
@@ -18,31 +18,36 @@ export default class Heatmap extends Style {
    * @param {object} vendorOptions - vendorOptions style
    * @api stable
    */
-  constructor(attribute, options = {}, vendorOptions = {}) {
-    if (!(Utils.isString(attribute) || Utils.isFunction(attribute))) {
+  constructor(attribute, optionsParam = {}, vendorOptionsParam = {}) {
+    const options = optionsParam;
+    const vendorOptions = vendorOptionsParam;
+    if (!(isString(attribute) || isFunction(attribute))) {
       Exception('Attribute parameter can not be empty (string or function)');
     }
 
-    Utils.extends(options, Heatmap.DEFAULT_OPTIONS);
+    extendsObj(options, Heatmap.DEFAULT_OPTIONS);
 
-    if (!Utils.isNullOrEmpty(options.gradient) && !Utils.isArray(options.gradient)) {
+    if (!isNullOrEmpty(options.gradient) && !isArray(options.gradient)) {
       options.gradient = [options.gradient];
     }
 
     options.gradient = options.gradient || Heatmap.DEFAULT_OPTIONS.gradient;
 
     if (options.gradient.length < 2) {
-      let inverseColor = Utils.inverseColor(options.gradient[0]);
-      options.gradient.push(inverseColor);
+      const inverseColorParam = inverseColor(options.gradient[0]);
+      options.gradient.push(inverseColorParam);
     }
 
-    options.blur = Utils.isNullOrEmpty(options.blur) ? Heatmap.DEFAULT_OPTIONS.blur : parseFloat(options.blur);
-    options.radius = Utils.isNullOrEmpty(options.radius) ? Heatmap.DEFAULT_OPTIONS.radius : parseFloat(options.radius);
+    options.blur = isNullOrEmpty(options.blur) ?
+      Heatmap.DEFAULT_OPTIONS.blur : parseFloat(options.blur);
+    options.radius = isNullOrEmpty(options.radius) ?
+      Heatmap.DEFAULT_OPTIONS.radius : parseFloat(options.radius);
     options.weight = attribute;
-    vendorOptions.opacity = isNaN(vendorOptions.opacity) ? 1 : parseFloat(vendorOptions.opacity);
+    vendorOptions.opacity = isNaN(vendorOptions.opacity) ?
+      1 : parseFloat(vendorOptions.opacity);
 
 
-    let impl = new HeatmapImpl(attribute, options, vendorOptions);
+    const impl = new HeatmapImpl(attribute, options, vendorOptions);
 
     // calls the super constructor
     super(options, impl);
@@ -121,13 +126,14 @@ export default class Heatmap extends Style {
    * @param {Array<string>} gradient
    * @api stable
    */
-  setGradient(gradient) {
-    if (!Utils.isArray(gradient)) {
+  setGradient(gradientParam) {
+    let gradient = gradientParam;
+    if (!isArray(gradient)) {
       gradient = [gradient];
     }
     if (gradient.length < 2) {
-      let inverseColor = Utils.inverseColor(gradient[0]);
-      gradient.push(inverseColor);
+      const inverseColorParam = inverseColor(gradient[0]);
+      gradient.push(inverseColorParam);
     }
     this.options_.gradient = gradient;
     this.update_();
@@ -200,15 +206,15 @@ export default class Heatmap extends Style {
    * @api stable
    */
   drawGeometryToCanvas() {
-    let [minWeight, maxWeight] = [this.getImpl().getMinWeight(), this.getImpl().getMaxWeight()];
-    let ctx = this.canvas_.getContext('2d');
-    let gradient = ctx.createLinearGradient(0.000, 150.000, 200.000, 150.000);
-    let intervals = Utils.generateIntervals([0, 1], this.options_.gradient.length);
+    const [minWeight, maxWeight] = [this.getImpl().getMinWeight(), this.getImpl().getMaxWeight()];
+    const ctx = this.canvas_.getContext('2d');
+    const gradient = ctx.createLinearGradient(0.000, 150.000, 200.000, 150.000);
+    const intervals = generateIntervals([0, 1], this.options_.gradient.length);
     this.options_.gradient.forEach((color, i) => gradient.addColorStop(intervals[i], color));
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 20, 200.000, 30.000);
-    ctx.fillStyle = "#000";
-    ctx.font = "10px sans-serif";
+    ctx.fillStyle = '#000';
+    ctx.font = '10px sans-serif';
     ctx.fillText(minWeight, 0, 60);
     ctx.fillText(maxWeight, 199, 60);
   }
@@ -236,4 +242,4 @@ Heatmap.DEFAULT_OPTIONS = {
   gradient: ['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
   blur: 15,
   radius: 10,
-}
+};

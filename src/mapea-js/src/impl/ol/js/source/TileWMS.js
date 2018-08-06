@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 
 export default class TileWMS extends ol.source.TileWMS {
   /**
@@ -13,7 +13,7 @@ export default class TileWMS extends ol.source.TileWMS {
 
   constructor(optOptions = {}) {
     const options = optOptions;
-    if (Utils.isNullOrEmpty(optOptions.tileLoadFunction)) {
+    if (isNullOrEmpty(optOptions.tileLoadFunction)) {
       options.tileLoadFunction = TileWMS.tileLoadFunction;
     }
     super(options);
@@ -27,7 +27,7 @@ export default class TileWMS extends ol.source.TileWMS {
    */
 
   changed() {
-    if (!Utils.isNullOrEmpty(this.tileCache)) {
+    if (!isNullOrEmpty(this.tileCache)) {
       this.tileCache.clear();
     }
     // super changed

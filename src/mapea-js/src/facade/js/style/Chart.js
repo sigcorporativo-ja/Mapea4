@@ -1,8 +1,8 @@
-import ChartImpl from 'impl/style/Chart';
+import ChartImpl from 'impl/js/style/stylechart';
 import StyleFeature from './Feature';
 import ChartVariable from '../chart/Variable';
 import * as ChartTypes from '../chart/types';
-import Utils from '../util/Utils';
+import { isNullOrEmpty } from '../util/Utils';
 
 /**
  * @namespace Chart
@@ -28,11 +28,12 @@ export default class Chart extends StyleFeature {
    *  - fill3DColor: {string} the fill color of the PIE_3D cylinder
    *  - scheme {string|Array<string>|Chart.schemes} the color set of the chart.If
    *            value is typeof 'string' you must declare this scheme into Chart.schemes
-   *            If you provide less colors than data size the colors will be taken from MOD operator:
+   *            If you provide less colors than data size the colors will be taken
+   *            from MOD operator:
    *              mycolor = userColors[currentArrayIndex % userColors.length]
    *  - rotateWithView {bool} determine whether the symbolizer rotates with the map.
    *  - animation {bool} this field is currently ignored [NOT IMPLEMENTED YET]
-   *  - variables {object|Chart.Variable|string|Array<string>|Array<Chart.Variable>} the chart variables
+   *  - variables {object|ChartVariable|string|Array<string>|Array<ChartVariable>} chart variables
    *
    * @api stable
    */
@@ -43,36 +44,33 @@ export default class Chart extends StyleFeature {
     if (!Object.values(ChartTypes.types).includes(options.type)) {
       options.type = Chart.DEFAULT.type;
     }
-    if (!Utils.isNullOrEmpty(variables)) {
+    if (!isNullOrEmpty(variables)) {
       if (variables instanceof Array) {
         options.variables = variables
           .filter(variable => variable != null).map(variable => Chart.formatVariable_(variable));
-      }
-      else if (typeof variables === 'string' || typeof variables === 'object') {
+      } else if (typeof variables === 'string' || typeof variables === 'object') {
         options.variables = [Chart.formatVariable_(variables)];
-      }
-      else {
+      } else {
         options.variables = [];
       }
     }
 
     // scheme parsing
     // if scheme is null we will set the default theme
-    if (Utils.isNullOrEmpty(options.scheme)) {
+    if (isNullOrEmpty(options.scheme)) {
       options.scheme = Chart.DEFAULT.scheme;
       // if is a string we will check if its custom (take values from variables) or a existing theme
-    }
-    else if (typeof options.scheme === 'string') {
+    } else if (typeof options.scheme === 'string') {
       // NOTICE THAT } else if (options.scheme instanceof String) { WONT BE TRUE
-      if (options.scheme === ChartTypes.schemes.Custom && options.variables.some(variable => variable.fillColor != null)) {
-        options.scheme = options.variables.map((variable) => variable.fillColor ? variable.fillColor : '');
-      }
-      else {
+      const someNotNull = options.variables.some(variable => variable.fillColor != null);
+      if (options.scheme === ChartTypes.schemes.Custom && someNotNull) {
+        options.scheme = options.variables
+          .map(variable => (variable.fillColor ? variable.fillColor : ''));
+      } else {
         options.scheme = ChartTypes.schemes[options.scheme] || Chart.DEFAULT.scheme;
       }
       // if is an array of string we will set it directly
-    }
-    else if (!(options.scheme instanceof Array && options.scheme.every(el => typeof el === 'string'))) {
+    } else if (!(options.scheme instanceof Array && options.scheme.every(el => typeof el === 'string'))) {
       options.scheme = Chart.DEFAULT.scheme;
     }
 
@@ -89,20 +87,18 @@ export default class Chart extends StyleFeature {
    * @function
    * @api stable
    */
-  static formatVariable_(variableOb) {
+  static formatVariable(variableOb) {
     if (variableOb == null) {
       return null;
     }
     let constructorOptions = {};
     if (variableOb instanceof ChartVariable) {
       return variableOb;
-    }
-    else if (typeof variableOb === 'string') {
+    } else if (typeof variableOb === 'string') {
       constructorOptions = {
         attribute: variableOb,
       };
-    }
-    else {
+    } else {
       constructorOptions = variableOb;
     }
     return new ChartVariable(constructorOptions);
@@ -116,7 +112,7 @@ export default class Chart extends StyleFeature {
    * @api stable
    */
   updateCanvas() {
-    if (!(Utils.isNullOrEmpty(this.getImpl()) && Utils.isNullOrEmpty(this.canvas_))) {
+    if (!(isNullOrEmpty(this.getImpl()) && isNullOrEmpty(this.canvas_))) {
       this.getImpl().updateCanvas(this.canvas_);
     }
   }

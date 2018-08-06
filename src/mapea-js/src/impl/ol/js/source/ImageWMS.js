@@ -1,10 +1,9 @@
-import Utils from 'facade/js/util/Utils';
-
+/**
+ * @classdesc
+ * Source for WMS servers providing single, untiled images.
+ */
 export default class ImageWMS extends ol.source.ImageWMS {
   /**
-   * @classdesc
-   * Source for WMS servers providing single, untiled images.
-   *
    * @constructor
    * @fires ol.source.ImageEvent
    * @extends {ol.source.Image}

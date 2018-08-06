@@ -1,6 +1,6 @@
 import ClusterImpl from 'impl/style/Cluster';
 import Composite from './Composite';
-import Utils from '../util/Utils';
+import { extendsObj, isNullOrEmpty } from '../util/Utils';
 
 /**
  * @namespace Cluster
@@ -23,8 +23,8 @@ export default class Cluster extends Composite {
     // calls the super constructor
     super(options, impl);
 
-    Utils.extends(options, Cluster.DEFAULT);
-    Utils.extends(optsVendor, Cluster.DEFAULT_VENDOR);
+    extendsObj(options, Cluster.DEFAULT);
+    extendsObj(optsVendor, Cluster.DEFAULT_VENDOR);
 
     /**
      * @private
@@ -50,7 +50,7 @@ export default class Cluster extends Composite {
    * @inheritDoc
    */
   add(styles) {
-    if (!Utils.isNullOrEmpty(this.layer_)) {
+    if (!isNullOrEmpty(this.layer_)) {
       this.unapplySoft(this.layer_);
     }
     return super.add(styles);
@@ -186,10 +186,9 @@ export default class Cluster extends Composite {
    */
   toImage() {
     let base64Img;
-    if (!Utils.isNullOrEmpty(this.oldStyle_)) {
+    if (!isNullOrEmpty(this.oldStyle_)) {
       base64Img = this.oldStyle_.toImage();
-    }
-    else {
+    } else {
       base64Img = super.toImage();
     }
     return base64Img;
@@ -205,7 +204,7 @@ export default class Cluster extends Composite {
    * @api stable
    */
   refresh() {
-    if (!Utils.isNullOrEmpty(this.layer_)) {
+    if (!isNullOrEmpty(this.layer_)) {
       const layer = this.layer_;
       this.unapply(this.layer_);
       this.apply(layer);
@@ -242,7 +241,7 @@ Cluster.DEFAULT = {
     text: (feature) => {
       let text;
       const cluseterFeatures = feature.attribute('features');
-      if (!Utils.isNullOrEmpty(cluseterFeatures)) {
+      if (!isNullOrEmpty(cluseterFeatures)) {
         text = cluseterFeatures.length.toString();
       }
       return text;

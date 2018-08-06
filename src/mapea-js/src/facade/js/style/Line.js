@@ -1,6 +1,6 @@
 import StyleLineImpl from 'impl/style/Line';
 import Simple from './Simple';
-import Utils from '../util/Utils';
+import { isNullOrEmpty, extendsObj } from '../util/Utils';
 
 /**
  * @namespace Line
@@ -20,10 +20,10 @@ export default class Line extends Simple {
    */
   constructor(optionsVar) {
     let options = optionsVar;
-    if (Utils.isNullOrEmpty(options)) {
+    if (isNullOrEmpty(options)) {
       options = Line.DEFAULT_NULL;
     }
-    options = Utils.extends({}, options);
+    options = extendsObj({}, options);
 
     const impl = new StyleLineImpl(options);
     super(options, impl);

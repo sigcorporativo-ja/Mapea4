@@ -1,7 +1,7 @@
-import MObject from "facade/js/Object";
-import Utils from "facade/js/util/Utils";
-import Config from "Configuration";
-import FacadeLayer from "facade/js/layer/Layer";
+import MObject from 'facade/js/Object';
+import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
+import Config from 'Configuration';
+import FacadeLayer from 'facade/js/layer/Layer';
 
 export default class Layer extends MObject {
   /**
@@ -16,7 +16,6 @@ export default class Layer extends MObject {
    * @api stable
    */
   constructor(options = {}) {
-
     // calls the super constructor
     super();
 
@@ -112,12 +111,11 @@ export default class Layer extends MObject {
    * @expose
    */
   setVisible(visibility) {
-    if (!Utils.isNullOrEmpty(this.leafletLayer)) {
-      let lMap = this.map.getMapImpl();
+    if (!isNullOrEmpty(this.leafletLayer)) {
+      const lMap = this.map.getMapImpl();
       if ((visibility === true) && !lMap.hasLayer(this.leafletLayer)) {
         lMap.addLayer(this.leafletLayer);
-      }
-      else if ((visibility !== true) && lMap.hasLayer(this.leafletLayer)) {
+      } else if ((visibility !== true) && lMap.hasLayer(this.leafletLayer)) {
         lMap.removeLayer(this.leafletLayer);
       }
     }
@@ -131,7 +129,7 @@ export default class Layer extends MObject {
    * @expose
    */
   getZIndex() {
-    if (!Utils.isNullOrEmpty(this.leafletLayer)) {
+    if (!isNullOrEmpty(this.leafletLayer)) {
       this.zIndex_ = this.leafletLayer.zIndex;
     }
     return this.zIndex_;
@@ -146,7 +144,7 @@ export default class Layer extends MObject {
    */
   setZIndex(zIndex) {
     this.zIndex_ = zIndex;
-    if (!Utils.isNullOrEmpty(this.leafletLayer)) {
+    if (!isNullOrEmpty(this.leafletLayer)) {
       this.leafletLayer.setZIndex(this.zIndex_);
     }
   }
@@ -159,7 +157,7 @@ export default class Layer extends MObject {
    * @expose
    */
   getOpacity() {
-    if (!Utils.isNullOrEmpty(this.leafletLayer)) {
+    if (!isNullOrEmpty(this.leafletLayer)) {
       this.opacity_ = this.leafletLayer.opacity;
     }
     return this.opacity_;
@@ -174,7 +172,7 @@ export default class Layer extends MObject {
    */
   setOpacity(opacity) {
     this.opacity_ = opacity;
-    if (!Utils.isNullOrEmpty(this.leafletLayer)) {
+    if (!isNullOrEmpty(this.leafletLayer)) {
       this.leafletLayer.setOpacity(opacity);
     }
   }
@@ -187,7 +185,7 @@ export default class Layer extends MObject {
    * @expose
    */
   getLegendURL() {
-    return Utils.concatUrlPaths([Config.THEME_URL, FacadeLayer.LEGEND_DEFAULT]);
+    return concatUrlPaths([Config.THEME_URL, FacadeLayer.LEGEND_DEFAULT]);
   }
 
   /**

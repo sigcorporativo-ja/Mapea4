@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'facade/js/util/Utils';
 import Remote from 'facade/js/util/Remote';
 import EventsManager from 'facade/js/event/Manager';
 import LayerBase from './Layer';
@@ -38,11 +38,11 @@ export default class WMTS extends LayerBase {
     this.map = map;
 
     // calculates the resolutions from scales
-    if (!Utils.isNull(this.options) &&
-      !Utils.isNull(this.options.minScale) && !Utils.isNull(this.options.maxScale)) {
+    if (!isNull(this.options) &&
+      !isNull(this.options.minScale) && !isNull(this.options.maxScale)) {
       const units = this.map.getMapImpl().getView().getProjection().getUnits();
-      this.options.minResolution = Utils.getResolutionFromScale(this.options.minScale, units);
-      this.options.maxResolution = Utils.getResolutionFromScale(this.options.maxScale, units);
+      this.options.minResolution = getResolutionFromScale(this.options.minScale, units);
+      this.options.maxResolution = getResolutionFromScale(this.options.maxScale, units);
     }
 
     // adds layer from capabilities
@@ -65,14 +65,13 @@ export default class WMTS extends LayerBase {
     // gets the extent
     const extent = this.map.getMaxExtent();
     let olExtent;
-    if (!Utils.isNullOrEmpty(extent)) {
+    if (!isNullOrEmpty(extent)) {
       olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
-    }
-    else {
+    } else {
       olExtent = projection.getExtent();
     }
 
-    if (!Utils.isNull(this.capabilitiesParser)) {
+    if (!isNull(this.capabilitiesParser)) {
       // gets matrix
       const matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
       const matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
@@ -94,8 +93,7 @@ export default class WMTS extends LayerBase {
         extent: olExtent,
       });
       this.ol3Layer.setSource(newSource);
-    }
-    else {
+    } else {
       // adds layer from capabilities
       this.getCapabilities_().then((capabilitiesParser) => {
         this.capabilitiesParser = capabilitiesParser;
@@ -142,18 +140,17 @@ export default class WMTS extends LayerBase {
           .forEach(layer => layer.setVisible(false));
 
         // set this layer visible
-        if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+        if (!isNullOrEmpty(this.ol3Layer)) {
           this.ol3Layer.setVisible(visibility);
         }
 
         // updates resolutions and keep the bbox
         const oldBbox = this.map.getBbox();
         this.map.getImpl().updateResolutionsFromBaseLayer();
-        if (!Utils.isNullOrEmpty(oldBbox)) {
+        if (!isNullOrEmpty(oldBbox)) {
           this.map.setBbox(oldBbox);
         }
-      }
-      else if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+      } else if (!isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }
     }
@@ -206,7 +203,7 @@ export default class WMTS extends LayerBase {
     const layerName = this.name;
     // matrix set
     let matrixSet = this.matrixSet;
-    if (Utils.isNullOrEmpty(matrixSet)) {
+    if (isNullOrEmpty(matrixSet)) {
       /* if no matrix set was specified then
          it supposes the matrix set has the name
          of the projection
@@ -229,7 +226,7 @@ export default class WMTS extends LayerBase {
    * @api stable
    */
   getCapabilities() {
-    const getCapabilitiesUrl = Utils.getWMTSGetCapabilitiesUrl(this.url);
+    const getCapabilitiesUrl = getWMTSGetCapabilitiesUrl(this.url);
     const parser = new ol.format.WMTSCapabilities();
     return new Promise((success, fail) => {
       Remote.get(getCapabilitiesUrl).then((response) => {
@@ -274,7 +271,7 @@ export default class WMTS extends LayerBase {
    */
   destroy() {
     const olMap = this.map.getMapImpl();
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }

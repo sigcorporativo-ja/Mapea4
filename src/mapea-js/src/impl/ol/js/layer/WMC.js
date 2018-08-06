@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 import * as parameter from 'facade/js/parameter/parameter';
 import Config from 'configuration';
 import Remote from 'facade/js/util/Remote';
@@ -112,7 +112,7 @@ export default class WMC extends Layer {
         }
         // load layers
         this.loadLayers(context);
-        if (!Utils.isNullOrEmpty(bbox)) {
+        if (!isNullOrEmpty(bbox)) {
           this.map.setBbox(bbox, {
             nearest: true,
           });
@@ -135,7 +135,7 @@ export default class WMC extends Layer {
       this.selected = false;
 
       // removes all loaded layers
-      if (!Utils.isNullOrEmpty(this.layers)) {
+      if (!isNullOrEmpty(this.layers)) {
         this.map.removeLayers(this.layers);
       }
     }
@@ -183,18 +183,17 @@ export default class WMC extends Layer {
   getMaxExtent() {
     const olProjection = ol.proj.get(this.map.getProjection().code);
     const promise = new Promise((success, fail) => {
-      if (Utils.isNullOrEmpty(this.maxExtent)) {
+      if (isNullOrEmpty(this.maxExtent)) {
         this.loadContextPromise.then((context) => {
           this.maxExtent = context.maxExtent;
-          if (Utils.isNullOrEmpty(this.extentProj_)) {
+          if (isNullOrEmpty(this.extentProj_)) {
             this.extentProj_ = parameter.projection(Config.DEFAULT_PROJ).code;
           }
           this.maxExtent = ol.proj.transformExtent(this.maxExtent, this.extentProj_, olProjection);
           this.extentProj_ = olProjection;
           success(this.maxExtent);
         });
-      }
-      else {
+      } else {
         this.extentProj_ = olProjection;
         success(this.maxExtent);
       }
@@ -223,7 +222,7 @@ export default class WMC extends Layer {
    * @api stable
    */
   destroy() {
-    if (!Utils.isNullOrEmpty(this.layers)) {
+    if (!isNullOrEmpty(this.layers)) {
       this.map.removeLayers(this.layers);
     }
     this.map = null;

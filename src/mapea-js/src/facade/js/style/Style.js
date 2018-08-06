@@ -1,5 +1,5 @@
 import Base from '../Base';
-import Utils from '../util/Utils';
+import { isNullOrEmpty, isArray, isObject, extendsObj } from '../util/Utils';
 import EvtManager from '../event/Manager';
 
 /**
@@ -84,14 +84,14 @@ export default class Style extends Base {
   get(attribute) {
     let attrValue;
     attrValue = this.options_[attribute];
-    if (Utils.isNullOrEmpty(attrValue)) {
+    if (isNullOrEmpty(attrValue)) {
       // we look up the attribute by its path. Example: getAttribute('foo.bar.attr')
       // --> return feature.properties.foo.bar.attr value
       const attrPath = attribute.split('.');
       if (attrPath.length > 1) {
         attrValue = attrPath.reduce((obj, attr) => {
           const attrValue2 = obj instanceof Style ? obj.get(attr) : obj[attr];
-          return !Utils.isNullOrEmpty(obj) ? attrValue2 : undefined;
+          return !isNullOrEmpty(obj) ? attrValue2 : undefined;
         });
       }
     }
@@ -113,10 +113,10 @@ export default class Style extends Base {
   set(property, value) {
     const oldValue = this.get(property);
     Style.setValue(this.options_, property, value);
-    if (!Utils.isNullOrEmpty(this.layer_)) {
+    if (!isNullOrEmpty(this.layer_)) {
       this.getImpl().updateFacadeOptions(this.options_);
     }
-    if (!Utils.isNullOrEmpty(this.feature_)) {
+    if (!isNullOrEmpty(this.feature_)) {
       this.applyToFeature(this.feature_);
     }
     this.fire(EvtManager.CHANGE, [property, oldValue, value]);
@@ -137,20 +137,18 @@ export default class Style extends Base {
   static setValue(objPara, path, valueVar) {
     let value = valueVar;
     const obj = objPara;
-    const keys = Utils.isArray(path) ? path : path.split('.');
+    const keys = isArray(path) ? path : path.split('.');
     const keyLength = keys.length;
     const key = keys[0];
     if (keyLength === 1) { // base case
-      if (Utils.isArray(value)) {
+      if (isArray(value)) {
         value = [...value];
-      }
-      else if (Utils.isObject(value)) {
+      } else if (isObject(value)) {
         value = Object.assign({}, value);
       }
       obj[key] = value;
-    }
-    else if (keyLength > 1) { // recursive case
-      if (Utils.isNullOrEmpty(obj[key])) {
+    } else if (keyLength > 1) { // recursive case
+      if (isNullOrEmpty(obj[key])) {
         obj[key] = {};
       }
       Style.setValue(obj[key], keys.slice(1, keyLength), value);
@@ -167,15 +165,15 @@ export default class Style extends Base {
    * @api stable
    */
   refresh(layer = null) {
-    if (!Utils.isNullOrEmpty(layer)) {
+    if (!isNullOrEmpty(layer)) {
       this.layer_ = layer;
     }
-    if (!Utils.isNullOrEmpty(this.layer_)) {
+    if (!isNullOrEmpty(this.layer_)) {
       this.apply(this.layer_);
       this.updateCanvas();
-      if (!Utils.isNullOrEmpty(this.layer_.getImpl().getMap())) {
+      if (!isNullOrEmpty(this.layer_.getImpl().getMap())) {
         const layerswitcher = this.layer_.getImpl().getMap().getControls('layerswitcher')[0];
-        if (!Utils.isNullOrEmpty(layerswitcher)) {
+        if (!isNullOrEmpty(layerswitcher)) {
           layerswitcher.render();
         }
       }
@@ -203,9 +201,9 @@ export default class Style extends Base {
   toImage() {
     let styleImgB64;
 
-    if (Utils.isNullOrEmpty(this.updateCanvasPromise_)) {
-      if (!Utils.isNullOrEmpty(this.options_.icon) &&
-        !Utils.isNullOrEmpty(this.options_.icon.src)) {
+    if (isNullOrEmpty(this.updateCanvasPromise_)) {
+      if (!isNullOrEmpty(this.options_.icon) &&
+        !isNullOrEmpty(this.options_.icon.src)) {
         const image = new Image();
         image.crossOrigin = 'Anonymous';
         const can = this.canvas_;
@@ -216,12 +214,10 @@ export default class Style extends Base {
         };
         image.src = this.options_.icon.src;
         styleImgB64 = this.canvas_.toDataURL('png');
-      }
-      else {
+      } else {
         styleImgB64 = this.canvas_.toDataURL('png');
       }
-    }
-    else {
+    } else {
       styleImgB64 = this.updateCanvasPromise_.then(() => this.canvas_.toDataURL('png'));
     }
 
@@ -262,7 +258,7 @@ export default class Style extends Base {
    */
   clone() {
     const optsClone = {};
-    Utils.extends(optsClone, this.options_);
+    extendsObj(optsClone, this.options_);
     const ImplClass = this.getImpl().constructor;
     const implClone = new ImplClass(optsClone);
     return new this.constructor(optsClone, implClone);

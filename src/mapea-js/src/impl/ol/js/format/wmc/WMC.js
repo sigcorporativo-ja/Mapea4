@@ -1,5 +1,5 @@
 import Exception from 'facade/js/exception/exception';
-import Utils from 'facade/js/util/Utils';
+import { normalize } from 'facade/js/util/Utils';
 import XML from '../XML';
 import WMC110 from './WMC110';
 
@@ -48,7 +48,7 @@ export default class WMC extends XML {
       this.version = WMC.DEFAULT_VERSION;
     }
 
-    const parserVersion = 'v'.concat(Utils.normalize(this.version).replace(/\./g, ''));
+    const parserVersion = 'v'.concat(normalize(this.version).replace(/\./g, ''));
     this.parser = new WMC.VERSION[parserVersion](this.options);
 
     const context = this.parser.read(data);

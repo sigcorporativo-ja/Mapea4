@@ -1,11 +1,11 @@
-import StyleCentroid from "./Centroid";
-import OLChart from "../chart/OLChart";
-import Feature from "./Feature";
-import Utils from "facade/js/util/Utils";
-import Simple from "./Simple";
-import Baseline from "facade/js/style/Baseline";
-import Align from "facade/js/style/Align";
-import FacadeChart from "facade/js/style/Chart";
+import { isNullOrEmpty } from 'facade/js/util/Utils';
+import Baseline from 'facade/js/style/Baseline';
+import Align from 'facade/js/Align';
+import FacadeChart from 'facade/js/style/Chart';
+import StyleCentroid from './Centroid';
+import OLChart from '../chart/OLChart';
+import Feature from './Feature';
+import Simple from './Simple';
 
 /**
  * @namespace Chart
@@ -72,7 +72,7 @@ export default class Chart extends Feature {
    * @api stable
    */
   updateCanvas(canvas) {
-    if (Utils.isNullOrEmpty(canvas)) {
+    if (isNullOrEmpty(canvas)) {
       return false;
     }
     let context = canvas.getContext('2d');
@@ -83,7 +83,7 @@ export default class Chart extends Feature {
    * @inheritDoc
    */
   drawGeometryToCanvas(context) {
-    if (Utils.isNullOrEmpty(context) || Utils.isNullOrEmpty(context.canvas)) {
+    if (isNullOrEmpty(context) || isNullOrEmpty(context.canvas)) {
       return null;
     }
 
@@ -122,8 +122,7 @@ export default class Chart extends Feature {
           });
           line = word + ' ';
           y += lineHeight;
-        }
-        else {
+        } else {
           line = line + word + ' ';
         }
       });
@@ -156,8 +155,8 @@ export default class Chart extends Feature {
       return [textPosition[0], (textPosition[1] > tmp_image_y ? textPosition[1] : tmp_image_y)];
     };
     this.variables_.forEach((variable, i) => {
-      let label = !Utils.isNullOrEmpty(variable.legend) ? variable.legend : variable.attribute;
-      let color = !Utils.isNullOrEmpty(variable.fillColor) ? variable.fillColor : (this.colorsScheme_[i % this.colorsScheme_.length] || this.colorsScheme_[0]);
+      let label = !isNullOrEmpty(variable.legend) ? variable.legend : variable.attribute;
+      let color = !isNullOrEmpty(variable.fillColor) ? variable.fillColor : (this.colorsScheme_[i % this.colorsScheme_.length] || this.colorsScheme_[0]);
       [x0, y0] = drawVariable([x0, y0], label, color);
       x0 = percentages.left_right_content;
     });
@@ -198,7 +197,7 @@ export default class Chart extends Feature {
 
       styleOptions.data = data;
 
-      if (!Utils.isNullOrEmpty(options.stroke)) {
+      if (!isNullOrEmpty(options.stroke)) {
         styleOptions.stroke = new ol.style.Stroke(options.stroke);
       }
 
@@ -232,7 +231,7 @@ export default class Chart extends Feature {
           }
           let radiusIncrement = typeof label.radiusIncrement === 'number' ? label.radiusIncrement : 3;
           let textAlign = typeof label.textAlign === 'function' ? label.textAlign(angle) : null;
-          if (Utils.isNullOrEmpty(textAlign)) {
+          if (isNullOrEmpty(textAlign)) {
             textAlign = label.textAlign || (angle < Math.PI / 2 ? 'left' : 'right');
           }
           let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
@@ -257,8 +256,7 @@ export default class Chart extends Feature {
             })
           });
         })).filter(style => style != null);
-      }
-      else if (styleOptions.type === Chart.types.BAR) {
+      } else if (styleOptions.type === Chart.types.BAR) {
         let height = 0;
         let acumSum = null;
         styles = styles.concat(styleOptions.data.map((dataValue, i) => {
@@ -270,15 +268,14 @@ export default class Chart extends Feature {
           const getValue = Simple.getValue;
           let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
           text = text === '0' ? '' : text;
-          if (Utils.isNullOrEmpty(text)) {
+          if (isNullOrEmpty(text)) {
             return null;
           }
           let font = getValue(label.font, feature);
           let sizeFont = 9;
-          if (Utils.isNullOrEmpty(acumSum)) {
+          if (isNullOrEmpty(acumSum)) {
             acumSum = (styles[0].getImage().getImage().height / 2) - 6;
-          }
-          else {
+          } else {
             acumSum -= sizeFont + 6;
           }
           height = height + sizeFont + 6;
@@ -313,7 +310,7 @@ export default class Chart extends Feature {
           }))
         }));
       }
-      if (!Utils.isNullOrEmpty(options.label)) {
+      if (!isNullOrEmpty(options.label)) {
         let styleLabel = new ol.style.Style();
         let textLabel = getValue(options.label.text, feature);
         let align = getValue(options.label.align, feature);
@@ -332,7 +329,7 @@ export default class Chart extends Feature {
           text: textLabel === undefined ? undefined : String(textLabel),
           rotation: getValue(options.label.rotation, feature)
         });
-        if (!Utils.isNullOrEmpty(options.label.stroke)) {
+        if (!isNullOrEmpty(options.label.stroke)) {
           labelText.setStroke(new ol.style.Stroke({
             color: getValue(options.label.stroke.color, feature),
             width: getValue(options.label.stroke.width, feature),

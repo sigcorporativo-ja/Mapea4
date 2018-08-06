@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 import Control from './Control';
 
 /**
@@ -47,7 +47,7 @@ export default class Scale extends Control {
    */
   renderCB(mapEvent) {
     const frameState = mapEvent.frameState;
-    if (!Utils.isNullOrEmpty(frameState)) {
+    if (!isNullOrEmpty(frameState)) {
       Scale.updateElement(frameState.viewState, this.scaleContainer_, this.facadeMap_);
     }
   }

@@ -1,5 +1,5 @@
 import StyleBase from './Style';
-import Utils from '../util/Utils';
+import { isNullOrEmpty, isArray, styleComparator } from '../util/Utils';
 // import StyleCluster from './Cluster';
 // import StyleProportional from './Proportional';
 
@@ -30,7 +30,7 @@ export default class Composite extends StyleBase {
    */
   apply(layer) {
     this.layer_ = layer;
-    if (!Utils.isNullOrEmpty(layer)) {
+    if (!isNullOrEmpty(layer)) {
       const style = layer.getStyle();
       this.oldStyle_ = style;
       this.updateInternal_(layer);
@@ -50,11 +50,11 @@ export default class Composite extends StyleBase {
     let styles = stylesPara;
     const layer = this.layer_;
     this.unapplyInternal(this.layer_);
-    if (!Utils.isArray(styles)) {
+    if (!isArray(styles)) {
       styles = [styles];
     }
     styles = styles.filter(style => style.constructor !== this.constructor);
-    if (!Utils.isNullOrEmpty(styles.find(style => !(style instanceof StyleCluster ||
+    if (!isNullOrEmpty(styles.find(style => !(style instanceof StyleCluster ||
         style instanceof StyleProportional)))) {
       this.styles_ = this.styles_.filter(style => style instanceof StyleCluster ||
         style instanceof StyleProportional);
@@ -63,7 +63,7 @@ export default class Composite extends StyleBase {
       this.styles_ = this.styles_.filter(s => s.constructor !== style.constructor);
     });
     this.styles_ = this.styles_.concat(styles);
-    if (!Utils.isNullOrEmpty(layer)) {
+    if (!isNullOrEmpty(layer)) {
       this.updateInternal_(layer);
     }
     return this;
@@ -81,10 +81,10 @@ export default class Composite extends StyleBase {
   remove(stylesPara) {
     let styles = stylesPara;
     const layer = this.layer_;
-    if (!Utils.isArray(styles)) {
+    if (!isArray(styles)) {
       styles = [styles];
     }
-    if (!Utils.isNullOrEmpty(this.layer_)) {
+    if (!isNullOrEmpty(this.layer_)) {
       this.unapplyInternal(this.layer_);
     }
     this.styles_ = this.styles_.filter(style => !styles.includes(style));
@@ -134,7 +134,7 @@ export default class Composite extends StyleBase {
    */
   unapplyInternal(layer) {
     const styles = this.styles_.concat(this).sort((style, style2) =>
-      Utils.styleComparator(style2, style));
+      styleComparator(style2, style));
     styles.forEach((style) => {
       if (style instanceof Composite) {
         style.unapplySoft(layer);
@@ -173,12 +173,11 @@ export default class Composite extends StyleBase {
 
   updateInternal_(layer) {
     const styles = this.styles_.concat(this).sort((style, style2) =>
-      Utils.styleComparator(style, style2));
+      styleComparator(style, style2));
     styles.forEach((style) => {
       if (style instanceof Composite) {
         style.applyInternal_(layer);
-      }
-      else if (style instanceof StyleBase) {
+      } else if (style instanceof StyleBase) {
         style.apply(layer, true);
       }
     });

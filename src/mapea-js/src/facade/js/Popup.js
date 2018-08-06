@@ -1,7 +1,7 @@
 import PopupImpl from 'impl/Popup';
 import Config from 'configuration';
 import 'assets/css/popup';
-import Utils from './util/Utils';
+import { isNullOrEmpty } from './util/Utils';
 import Base from './Base';
 import Template from './util/Template';
 import EventsManager from './event/Manager';
@@ -133,7 +133,7 @@ export default class Popup extends Base {
    */
   addTo(map, coordinate) {
     this.map_ = map;
-    if (Utils.isNullOrEmpty(this.element_)) {
+    if (isNullOrEmpty(this.element_)) {
       Template.compile(Popup.TEMPLATE, {
         jsonp: true,
         vars: {
@@ -147,8 +147,7 @@ export default class Popup extends Base {
           this.show(coordinate);
         }
       });
-    }
-    else {
+    } else {
       this.getImpl().addTo(map, this.element_);
       this.show(coordinate);
     }
@@ -161,7 +160,7 @@ export default class Popup extends Base {
    * @api stable
    */
   update() {
-    if (!Utils.isNullOrEmpty(this.map_)) {
+    if (!isNullOrEmpty(this.map_)) {
       Template.compile(Popup.TEMPLATE, {
         jsonp: true,
         vars: {
@@ -198,7 +197,7 @@ export default class Popup extends Base {
    * @api stable
    */
   hide(evt) {
-    if (!Utils.isNullOrEmpty(evt)) {
+    if (!isNullOrEmpty(evt)) {
       evt.preventDefault();
     }
     this.getImpl().hide();
@@ -270,21 +269,19 @@ export default class Popup extends Base {
     closeBtn.addEventListener('touchend', this.hide, false);
     // mobile events
     let headerElement = html.querySelector('div.m-tabs');
-    if (Utils.isNullOrEmpty(headerElement)) {
+    if (isNullOrEmpty(headerElement)) {
       headerElement = html.querySelector('div.m-content > div.m-header');
     }
-    if (!Utils.isNullOrEmpty(headerElement)) {
+    if (!isNullOrEmpty(headerElement)) {
       let topPosition;
       headerElement.addEventListener('touchstart', (evt) => {
         evt.preventDefault();
         touchstartY = evt.clientY;
         if (this.status_ === Popup.status.COLLAPSED) {
           topPosition = 0.9 * window.HEIGHT;
-        }
-        else if (this.status_ === Popup.status.DEFAULT) {
+        } else if (this.status_ === Popup.status.DEFAULT) {
           topPosition = 0.45 * window.HEIGHT;
-        }
-        else if (this.status_ === Popup.status.FULL) {
+        } else if (this.status_ === Popup.status.FULL) {
           topPosition = 0;
         }
         html.classList.add('m-no-animation');
@@ -311,12 +308,10 @@ export default class Popup extends Base {
         if (this.tabs_.length <= 1) {
           if (this.status_ === Popup.status.COLLAPSED) {
             this.setStatus_(Popup.status.DEFAULT);
-          }
-          // DEFAULT --> FULL
-          else if (this.status_ === Popup.status.DEFAULT) {
+          } else if (this.status_ === Popup.status.DEFAULT) {
+            // DEFAULT --> FULL
             this.setStatus_(Popup.status.FULL);
-          }
-          else {
+          } else {
             this.setStatus_(Popup.status.COLLAPSED);
           }
         }
@@ -378,43 +373,34 @@ export default class Popup extends Base {
         // 2
         if (touchPerc < 45) {
           this.setStatus_(Popup.status.FULL);
-        }
-        // 1
-        else if (touchPerc < 85) {
+        } else if (touchPerc < 85) {
+          // 1
           this.setStatus_(Popup.status.DEFAULT);
-        }
-        else {
+        } else {
           this.setStatus_(Popup.status.COLLAPSED);
         }
-      }
-      else if (this.status_ === Popup.status.DEFAULT) {
+      } else if (this.status_ === Popup.status.DEFAULT) {
         // 1
         if (touchPerc > 45) {
           this.setStatus_(Popup.status.COLLAPSED);
-        }
-        // 2
-        else if (touchPerc < 45) {
+        } else if (touchPerc < 45) {
+          // 2
           this.setStatus_(Popup.status.FULL);
-        }
-        else {
+        } else {
           this.setStatus_(Popup.status.DEFAULT);
         }
-      }
-      else if (this.status_ === Popup.status.FULL) {
+      } else if (this.status_ === Popup.status.FULL) {
         // 1
         if (touchPerc > 45) {
           this.setStatus_(Popup.status.COLLAPSED);
-        }
-        // 2
-        else if (touchPerc > 0) {
+        } else if (touchPerc > 0) {
+          // 2
           this.setStatus_(Popup.status.DEFAULT);
-        }
-        else {
+        } else {
           this.setStatus_(Popup.status.FULL);
         }
       }
-    }
-    else {
+    } else {
       this.setStatus_(this.status_);
     }
   }
@@ -437,7 +423,7 @@ export default class Popup extends Base {
    */
   setCoordinate(coord) {
     this.coord_ = coord;
-    if (!Utils.isNullOrEmpty(this.element_)) {
+    if (!isNullOrEmpty(this.element_)) {
       this.getImpl().show(coord);
     }
   }
