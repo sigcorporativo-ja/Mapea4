@@ -1,8 +1,13 @@
+import OLStyleRegularShape from 'ol/style/RegularShape';
+import OLStyleFill from 'ol/style/Fill';
+import OLFeature from 'ol/Feature';
+import OLGeomPoint from 'ol/geom/Point';
+import { asString as colorAsString } from 'ol/color';
 import Chart from 'facade/js/style/Chart';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import UtilsImpl from './utils/Utils';
 
-export default class OLChart extends ol.style.RegularShape {
+export default class OLChart extends OLStyleRegularShape {
   /**
    * @classdesc
    * chart style for vector features
@@ -32,7 +37,7 @@ export default class OLChart extends ol.style.RegularShape {
     // super call
     super({
       radius: (typeof options.radius === 'number' ? options.radius : 0) + strokeWidth,
-      fill: new ol.style.Fill({
+      fill: new OLStyleFill({
         color: [0, 0, 0],
       }),
       rotation: (typeof options.rotation === 'number' ? options.rotation : 0),
@@ -253,7 +258,7 @@ export default class OLChart extends ol.style.RegularShape {
     let strokeWidth = 0;
 
     if (this.stroke_) {
-      strokeStyle = ol.color.asString(this.stroke_.getColor());
+      strokeStyle = colorAsString(this.stroke_.getColor());
       strokeWidth = this.stroke_.getWidth();
     }
 
@@ -372,8 +377,8 @@ export default class OLChart extends ol.style.RegularShape {
     }
     let center = UtilsImpl.getCentroidCoordinate(feature.getGeometry());
     if (center != null) {
-      let tmpFeature = new ol.Feature({
-        geometry: new ol.geom.Point(center)
+      let tmpFeature = new OLFeature({
+        geometry: new OLGeomPoint(center)
       });
       ctx.drawFeature(tmpFeature, style);
     }
