@@ -2,6 +2,12 @@ import FacadeMapbox from 'facade/js/layer/Mapbox';
 import FacadeOSM from 'facade/js/layer/OSM';
 import LayerType from 'facade/js/layer/Type';
 import { isNullOrEmpty, generateResolutionsFromExtent } from 'facade/js/util/Utils';
+import OLLayerTile from 'ol/layer/Tile';
+import OLSourceOSM from 'ol/source/OSM';
+import OLTileGrid from 'ol/tilegrid/TileGrid';
+import OLControlAttribution from 'ol/control/Attribution';
+import OLproj from 'ol/proj';
+import { getBottomLeft } from 'ol/extent';
 import ImplMap from '../Map';
 import Layer from './Layer';
 
@@ -86,20 +92,20 @@ export default class OSM extends Layer {
   addTo(map) {
     this.map = map;
 
-    this.ol3Layer = new ol.layer.Tile({
-      source: new ol.source.OSM(),
+    this.ol3Layer = new OLLayerTile({
+      source: new OLSourceOSM(),
     });
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
     this.map.getImpl().getMapImpl().getControls().getArray()
       .forEach((cont) => {
-        if (cont instanceof ol.control.Attribution) {
+        if (cont instanceof OLControlAttribution) {
           this.hasAttributtion = true;
         }
       }, this);
     if (!this.hasAttributtion) {
-      this.map.getMapImpl().addControl(new ol.control.Attribution({
+      this.map.getMapImpl().addControl(new OLControlAttribution({
         className: 'ol-attribution ol-unselectable ol-control ol-collapsed m-attribution',
       }));
       this.hasAttributtion = false;
@@ -154,11 +160,11 @@ export default class OSM extends Layer {
       });
       promise.then((extent) => {
         const olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
-        const newSource = new ol.source.OSM({
-          tileGrid: new ol.tilegrid.TileGrid({
+        const newSource = new OLSourceOSM({
+          tileGrid: new OLTileGrid({
             resolutions,
             extent: olExtent,
-            origin: ol.extent.getBottomLeft(olExtent),
+            origin: getBottomLeft(olExtent),
           }),
           extent: olExtent,
         });
@@ -178,7 +184,7 @@ export default class OSM extends Layer {
   getExtent() {
     let extent = null;
     if (!isNullOrEmpty(this.ol3Layer)) {
-      extent = ol.proj.get(this.map.getProjection().code).getExtent();
+      extent = OLproj.get(this.map.getProjection().code).getExtent();
     }
     return extent;
   }
@@ -231,7 +237,7 @@ export default class OSM extends Layer {
     if (!this.haveOSMorMapboxLayer) {
       this.map.getImpl().getMapImpl().getControls().getArray()
         .forEach((data) => {
-          if (data instanceof ol.control.Attribution) {
+          if (data instanceof OLControlAttribution) {
             this.map.getImpl().getMapImpl().removeControl(data);
           }
         });

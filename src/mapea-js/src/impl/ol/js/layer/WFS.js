@@ -2,6 +2,10 @@ import StyleCluster from 'facade/js/style/Cluster';
 import FormatGeoJSON from 'facade/js/format/GeoJSON';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import EventsManager from 'facade/js/event/Manager';
+import OLSourceVector from 'ol/source/Vector';
+import OLSourceCluster from 'ol/source/Cluster';
+import OLproj from 'ol/proj';
+import { all } from 'ol/loadingstrategy';
 import ServiceWFS from '../service/WFS';
 import FormatImplGeoJSON from '../format/GeoJSON';
 import FormatGML from '../format/GML';
@@ -113,7 +117,7 @@ export default class WFS extends Vector {
     }, this.options.vendor);
     if (/json/gi.test(this.options.getFeatureOutputFormat)) {
       this.formater_ = new FormatGeoJSON({
-        defaultDataProjection: ol.proj.get(this.map.getProjection().code),
+        defaultDataProjection: OLproj.get(this.map.getProjection().code),
       });
     } else {
       this.formater_ = new FormatGML(this.name, this.version, this.map.getProjection());
@@ -123,7 +127,7 @@ export default class WFS extends Vector {
     const isCluster = (this.facadeVector_.getStyle() instanceof StyleCluster);
     let ol3LayerSource = this.ol3Layer.getSource();
     if (forceNewSource === true || isNullOrEmpty(ol3LayerSource)) {
-      const newSource = new ol.source.Vector({
+      const newSource = new OLSourceVector({
         format: this.formater_.getImpl(),
         loader: this.loader_.getLoaderFn((features) => {
           this.loaded_ = true;
@@ -131,11 +135,11 @@ export default class WFS extends Vector {
           this.fire(EventsManager.LOAD, [features]);
           this.facadeVector_.redraw();
         }),
-        strategy: ol.loadingstrategy.all,
+        strategy: all,
       });
       if (isCluster) {
         const distance = this.facadeVector_.getStyle().getOptions().distance;
-        const clusterSource = new ol.source.Cluster({
+        const clusterSource = new OLSourceCluster({
           distance,
           source: newSource,
         });
@@ -155,7 +159,7 @@ export default class WFS extends Vector {
         this.fire(EventsManager.LOAD, [features]);
         this.facadeVector_.redraw();
       }));
-      ol3LayerSource.set('strategy', ol.loadingstrategy.all);
+      ol3LayerSource.set('strategy', all);
       ol3LayerSource.changed();
     }
   }
@@ -187,7 +191,7 @@ export default class WFS extends Vector {
           if (!isNullOrEmpty(describeFeatureType)) {
             this.formater_ = new FormatImplGeoJSON({
               geometryName: describeFeatureType.geometryName,
-              defaultDataProjection: ol.proj.get(this.map.getProjection().code),
+              defaultDataProjection: OLproj.get(this.map.getProjection().code),
             });
           }
           return describeFeatureType;

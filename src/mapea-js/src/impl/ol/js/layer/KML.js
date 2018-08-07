@@ -4,6 +4,8 @@ import Popup from 'facade/js/Popup';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import EventsManager from 'facade/js/event/Manager';
+import OLLayerVector from 'ol/layer/Vector';
+import OLSourceVector from 'ol/source/Vector';
 import Vector from './Vector';
 import LoaderKML from '../loader/KML';
 import FormatKML from '../format/KML';
@@ -83,8 +85,8 @@ export default class KML extends Vector {
 
     const formater = new FormatKML();
     const loader = new LoaderKML(map, this.url, formater);
-    this.ol3Layer = new ol.layer.Vector({
-      source: new ol.source.Vector({
+    this.ol3Layer = new OLLayerVector({
+      source: new OLSourceVector({
         url: this.url,
         format: formater,
         loader: loader.getLoaderFn((loaderData) => {

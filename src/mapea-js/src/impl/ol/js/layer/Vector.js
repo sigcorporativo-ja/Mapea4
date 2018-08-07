@@ -2,6 +2,10 @@ import StyleCluster from 'facade/js/style/Cluster';
 import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
 import EventsManager from 'facade/js/event/Manager';
 import Style from 'facade/js/style/Style';
+import OLproj from 'ol/proj';
+import OLLayerVector from 'ol/layer/Vector';
+import OLSourceVector from 'ol/source/Vector';
+import OLSourceCluster from 'ol/source/Cluster';
 import Layer from './Layer';
 import ImplUtils from '../util/Utils';
 import Feature from '../feature/Feature';
@@ -72,7 +76,7 @@ export default class Vector extends Layer {
     this.map = map;
     map.on(EventsManager.CHANGE_PROJ, this.setProjection_, this);
 
-    this.ol3Layer = new ol.layer.Vector();
+    this.ol3Layer = new OLLayerVector();
     this.updateSource_();
 
     this.setVisible(this.visibility);
@@ -87,7 +91,7 @@ export default class Vector extends Layer {
    */
   updateSource_() {
     if (isNullOrEmpty(this.ol3Layer.getSource())) {
-      this.ol3Layer.setSource(new ol.source.Vector());
+      this.ol3Layer.setSource(new OLSourceVector());
     }
     this.redraw();
     this.loaded_ = true;
@@ -218,7 +222,7 @@ export default class Vector extends Layer {
     if (!isNullOrEmpty(olLayer)) {
       const style = this.facadeVector_.getStyle();
       let olSource = olLayer.getSource();
-      if (olSource instanceof ol.source.Cluster) {
+      if (olSource instanceof OLSourceCluster) {
         olSource = olSource.getSource();
       }
 
@@ -301,8 +305,8 @@ export default class Vector extends Layer {
    */
   setProjection_(oldProj, newProj) {
     if (oldProj.code !== newProj.code) {
-      const srcProj = ol.proj.get(oldProj.code);
-      const dstProj = ol.proj.get(newProj.code);
+      const srcProj = OLproj.get(oldProj.code);
+      const dstProj = OLproj.get(newProj.code);
 
       const style = this.facadeVector_.getStyle();
       if (style instanceof StyleCluster) {

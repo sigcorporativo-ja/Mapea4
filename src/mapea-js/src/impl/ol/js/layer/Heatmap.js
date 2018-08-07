@@ -1,8 +1,12 @@
 import Feature from 'facade/js/feature/Feature';
 import { clamp } from 'ol/math';
 import Simple from "../style/Simple";
+import OLLayerHeatmap from 'OLLayerHeatmap';
+import olFeature from 'ol/Feature';
+import OLStyle from 'ol/style/Style';
+import OLStyleIcon from 'ol/style/Style';
 
-export default class Heatmap extends ol.layer.Heatmap {
+export default class Heatmap extends OLLayerHeatmap {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Heatmap layer
@@ -31,17 +35,15 @@ export default class Heatmap extends ol.layer.Heatmap {
           .reduce((current, next) => Math.min(current, next));
         weightFunction = feature => {
           let value;
-          if (feature instanceof ol.Feature) {
+          if (feature instanceof OLFeature) {
             value = feature.get(weight);
-          }
-          else if (feature instanceof Feature) {
+          } else if (feature instanceof Feature) {
             value = feature.getAttribute(weight);
           }
           return parseFloat(value / maxWeight);
         };
       }
-    }
-    else {
+    } else {
       weightFunction = weight;
     }
     this.setStyle((feature, resolution) => {
@@ -52,8 +54,8 @@ export default class Heatmap extends ol.layer.Heatmap {
       let style = this.styleCache_[index];
       if (!style) {
         style = [
-        new ol.style.Style({
-            image: new ol.style.Icon({
+        new OLStyle({
+            image: new OLStyleIcon({
               opacity: opacity,
               src: this.circleImage_
             })

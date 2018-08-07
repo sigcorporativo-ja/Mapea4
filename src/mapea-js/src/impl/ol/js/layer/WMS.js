@@ -4,6 +4,11 @@ import LayerType from 'facade/js/layer/Type';
 import FacadeWMS from 'facade/js/layer/WMS';
 import Config from 'configuration';
 import Remote from 'facade/js/util/Remote';
+import OLLayerTile from 'ol/layer/Tile';
+import OLLayerImage from 'ol/layer/Image';
+import OLproj from 'ol/proj';
+import OLTileGrid from 'ol/tilegrid/TileGrid';
+import { getBottomLeft } from 'ol/extent';
 import ImplMap from '../Map';
 import LayerBase from './Layer';
 import GetCapabilities from '../util/WMSCapabilities';
@@ -239,10 +244,10 @@ export default class WMS extends LayerBase {
           newSource = new TileWMS({
             url: this.url,
             params: layerParams,
-            tileGrid: new ol.tilegrid.TileGrid({
+            tileGrid: new OLTileGrid({
               resolutions,
               extent: olExtent,
-              origin: ol.extent.getBottomLeft(olExtent),
+              origin: getBottomLeft(olExtent),
             }),
             extent: olExtent,
             minResolution: this.options.minResolution,
@@ -283,10 +288,10 @@ export default class WMS extends LayerBase {
 
       // gets the tileGrid
       if (!isNullOrEmpty(resolutions)) {
-        tileGrid = new ol.tilegrid.TileGrid({
+        tileGrid = new OLTileGrid({
           resolutions,
           extent: olExtent,
-          origin: ol.extent.getBottomLeft(olExtent),
+          origin: getBottomLeft(olExtent),
         });
       }
 
@@ -312,7 +317,7 @@ export default class WMS extends LayerBase {
       }
 
       if (this.tiled === true) {
-        this.ol3Layer = new ol.layer.Tile({
+        this.ol3Layer = new OLLayerTile({
           visible: this.visibility && (this.options.visibility !== false),
           source: new TileWMS({
             url: this.url,
@@ -326,7 +331,7 @@ export default class WMS extends LayerBase {
           zIndex: this.zIndex_,
         });
       } else {
-        this.ol3Layer = new ol.layer.Image({
+        this.ol3Layer = new OLLayerImage({
           visible: this.visibility && (this.options.visibility !== false),
           source: new ImageWMS({
             url: this.url,
@@ -404,12 +409,12 @@ export default class WMS extends LayerBase {
    * @api stable
    */
   getExtent() {
-    const olProjection = ol.proj.get(this.map.getProjection().code);
+    const olProjection = OLproj.get(this.map.getProjection().code);
 
     // creates the promise
     this.extentPromise = new Promise((success, fail) => {
       if (!isNullOrEmpty(this.extent_)) {
-        this.extent_ = ol.proj.transformExtent(this.extent_, this.extentProj_, olProjection);
+        this.extent_ = OLproj.transformExtent(this.extent_, this.extentProj_, olProjection);
         this.extentProj_ = olProjection;
         success(this.extent_);
       } else {

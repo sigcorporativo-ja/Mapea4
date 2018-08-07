@@ -6,6 +6,9 @@ import Template from 'facade/js/util/Template';
 import geojsonPopupTemplate from 'templates/geojson_popup';
 import GeoJSONFormat from 'facade/js/format/GeoJSON';
 import JSONPLoader from '../loader/JSONP';
+import OLSourceVector from 'ol/source/Vector';
+import OLproj from 'ol/proj';
+import { all } from 'ol/loadingstrategy';
 import Vector from './Vector';
 
 export default class GeoJSON extends Vector {
@@ -82,7 +85,7 @@ export default class GeoJSON extends Vector {
    */
   addTo(map) {
     this.formater_ = new GeoJSONFormat({
-      defaultDataProjection: ol.proj.get(map.getProjection().code),
+      defaultDataProjection: OLproj.get(map.getProjection().code),
     });
     if (!isNullOrEmpty(this.url)) {
       this.loader_ = new JSONPLoader(map, this.url, this.formater_);
@@ -149,12 +152,12 @@ export default class GeoJSON extends Vector {
           this.facadeVector_.addFeatures(features);
           this.fire(EventsManager.LOAD, [features]);
         }),
-        strategy: ol.loadingstrategy.all,
+        strategy: all,
       };
-      this.ol3Layer.setSource(new ol.source.Vector(srcOptions));
+      this.ol3Layer.setSource(new OLSourceVector(srcOptions));
     } else if (!isNullOrEmpty(this.source)) {
       const features = this.formater_.read(this.source, this.map.getProjection());
-      this.ol3Layer.setSource(new ol.source.Vector({
+      this.ol3Layer.setSource(new OLSourceVector({
         loader: (extent, resolution, projection) => {
           this.loaded_ = true;
           // removes previous features

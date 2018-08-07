@@ -1,6 +1,11 @@
 import { isNullOrEmpty } from 'facade/js/util/Utils';
+import OLLayerVector from 'ol/layer/Vector';
+import OLSourceVector from 'ol/source/Vector';
+import OLGeomPoint from 'ol/geom/Point';
+import { easeOut } from 'ol/easing';
+import { buffer } from 'ol/extent';
 
-export default class AnimatedCluster extends ol.layer.Vector {
+export default class AnimatedCluster extends OLLayerVector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a AnimatedCluster layer
@@ -30,7 +35,7 @@ export default class AnimatedCluster extends ol.layer.Vector {
      * @type {ol.source.Vector}
      * @expose
      */
-    this.oldCluster_ = new ol.source.Vector();
+    this.oldCluster_ = new OLSourceVector();
 
     /**
      * TODO
@@ -51,7 +56,7 @@ export default class AnimatedCluster extends ol.layer.Vector {
     };
 
     this.set('animationDuration', typeof options.animationDuration === 'number' ? options.animationDuration : 700);
-    this.set('animationMethod', options.animationMethod || ol.easing.easeOut);
+    this.set('animationMethod', options.animationMethod || easeOut);
 
     // Save cluster before change
     this.getSource().on('change', this.saveCluster_.bind(this));
@@ -154,7 +159,7 @@ export default class AnimatedCluster extends ol.layer.Vector {
         }
         // Draw feature
         const olStyles = this.getStyle()(cluster, eventVariable.frameState.viewState.resolution);
-        const geo = new ol.geom.Point(ptFrom);
+        const geo = new OLGeomPoint(ptFrom);
         if (!isNullOrEmpty(olStyles)) {
           olStyles.forEach((olStyle) => {
             const styleImage = olStyle.getImage();
@@ -203,7 +208,7 @@ export default class AnimatedCluster extends ol.layer.Vector {
     this.animation_.clustersFrom = [];
     this.animation_.clustersTo = [];
 
-    const extentBuff = ol.extent.buffer(extent, 100 * resolution);
+    const extentBuff = buffer(extent, 100 * resolution);
 
     const oldClusters = this.oldCluster_.getFeaturesInExtent(extentBuff);
     const currentClusters = this.getSource().getFeaturesInExtent(extentBuff);
