@@ -12,7 +12,7 @@ import Exception from 'facade/js/exception/exception';
 import { isNullOrEmpty, isArray, isString, isObject, includes, getScaleFromResolution, fillResolutions, generateResolutionsFromExtent } from 'facade/js/util/Utils';
 import View from './View';
 import EnvolvedExtent from './util/EnvolvedExtent';
-// import './patches';
+import './patches';
 
 export default class Map extends MObject {
   /**

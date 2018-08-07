@@ -1,14 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
 const entrypoints = require('./entry-points-test.json');
+const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 
 const env = process.env.NODE_ENV || 'development';
-const plugins = [];
+const plugins = [new AllowMutateEsmExports()];
 if (env === 'development') {
   const HotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin();
   plugins.push(HotModuleReplacementPlugin);
   entrypoints['ol.min'] = path.resolve(__dirname, '../lib/ol.js');
-  entrypoints['chroma.min'] = path.resolve(__dirname, '../lib/chroma.min.js');
 }
 
 module.exports = {
@@ -46,7 +46,7 @@ module.exports = {
     rules: [
       {
         test: /\.js$/,
-        exclude: /(node_modules|bower_components)/,
+        exclude: /(node_modules\/(?!ol)|bower_components)/,
         use: {
           loader: 'babel-loader',
           options: {
