@@ -1,6 +1,6 @@
 export default class WFS {
-  getType() {
-    return WFS.type_;
+  static get type() {
+    return WFS.WFStype;
   }
 }
 
@@ -11,7 +11,7 @@ export default class WFS {
  * @public
  * @api stable
  */
-WFS.type_ = {
+WFS.WFStype = {
   POINT: 'POINT',
   LINE: 'LINE',
   POLYGON: 'POLYGON',

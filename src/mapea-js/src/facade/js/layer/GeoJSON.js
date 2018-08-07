@@ -2,11 +2,6 @@ import GeoJSONImpl from 'impl/layer/GeoJSON';
 import LayerVector from './Vector';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import StyleCluster from '../style/Cluster';
-import LayerType from './Type';
-import { Point, MultiPoint } from '../geom/GeoJSON';
-import EvtManager from '../event/Manager';
-import Style from '../style/Style';
 
 export default class GeoJSON extends LayerVector {
   /**
@@ -154,47 +149,16 @@ export default class GeoJSON extends LayerVector {
     this.getImpl().refresh(source);
   }
 
-  setStyle(styleVar, applyToFeature = false) {
-    const style = styleVar;
-    let isNullStyle = false;
-    if (style === null) {
-      isNullStyle = true;
-    }
-    if (this.getImpl().isLoaded()) {
-      this.applyStyle_(style, applyToFeature, isNullStyle)();
-    }
-    else {
-      this.once(EvtManager.LOAD, () => this.applyStyle_(style, applyToFeature, isNullStyle));
-    }
-  }
-
   /**
+   * This function sets the style to layer
    *
+   * @function
+   * @public
+   * @param {M.Style}
+   * @param {bool}
    */
-  applyStyle_(styleParam, applyToFeature, isNullStyle) {
-    return () => {
-      let style = styleParam;
-      if (Utils.isNullOrEmpty(style)) {
-        style = Utils.generateStyleLayer(GeoJSON.DEFAULT_OPTIONS_STYLE, this);
-      }
-      const isCluster = style instanceof StyleCluster;
-      const isPoint = [Point, MultiPoint]
-        .includes(Utils.getGeometryType(this));
-      if (style instanceof Style && (!isCluster || isPoint)) {
-        if (!Utils.isNullOrEmpty(this.style_)) {
-          this.style_.unapply(this);
-        }
-        style.apply(this, applyToFeature, isNullStyle);
-        this.style_ = style;
-      }
-      if (!Utils.isNullOrEmpty(this.getImpl().getMap())) {
-        const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
-        if (!Utils.isNullOrEmpty(layerswitcher)) {
-          layerswitcher.render();
-        }
-      }
-      this.fire(EvtManager.CHANGE_STYLE, [style, this]);
-    };
+  setStyle(styleParam, applyToFeature = false, defaultStyle = GeoJSON.DEFAULT_OPTIONS_STYLE) {
+    super.setStyle(styleParam, applyToFeature, defaultStyle);
   }
 }
 

@@ -31,7 +31,6 @@ export default class Variable {
    * @api stable
    */
   constructor(options = {}) {
-
     /**
      * Feature property name where data is stored
      * @private

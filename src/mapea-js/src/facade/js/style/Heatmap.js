@@ -1,9 +1,9 @@
-import StyleBase from './Base';
-import Util from '../util/Utils';
+import Style from './Style';
+import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import HeatmapImpl from 'impl/style/Heatmap';
 
-export default class Heatmap extends StyleBase {
+export default class Heatmap extends Style {
   /**
    * @classdesc
    * Main constructor of the class. Creates a style heatmap
@@ -19,7 +19,6 @@ export default class Heatmap extends StyleBase {
    * @api stable
    */
   constructor(attribute, options = {}, vendorOptions = {}) {
-
     if (!(Utils.isString(attribute) || Utils.isFunction(attribute))) {
       Exception('Attribute parameter can not be empty (string or function)');
     }
@@ -186,7 +185,7 @@ export default class Heatmap extends StyleBase {
    * @function
    */
   update_() {
-    let styleImpl = this.getImpl();
+    const styleImpl = this.getImpl();
     styleImpl.unapply(this.layer_);
     styleImpl.setOptions(this.options_, this.vendorOptions_);
     styleImpl.applyToLayer(this.layer_);

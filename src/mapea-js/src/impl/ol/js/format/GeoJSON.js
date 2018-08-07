@@ -97,7 +97,7 @@ export default class GeoJSON extends ol.format.GeoJSON {
         // GeoServer.
         // TODO: remove this when http://jira.codehaus.org/browse/GEOS-5996
         // is fixed and widely deployed.
-        projection = ol.proj.get(`EPSG:  ${crs.properties.code}`);
+        projection = ol.proj.get(`EPSG:${crs.properties.code}`);
       }
       else {
         projection = null;

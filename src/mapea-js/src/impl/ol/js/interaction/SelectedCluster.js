@@ -86,7 +86,7 @@ export default class SelectCluster extends ol.interaction.Select {
   setMap(map) {
     if (this.getMap()) {
       if (this.getMap().getView()) {
-        this.getMap().getView().un('change:resolution', this.clear, this);
+        this.getMap().getView().un('change:resolution', this.clear.bind(this));
       }
       this.getMap().removeLayer(this.overlayLayer_);
     }
@@ -96,7 +96,7 @@ export default class SelectCluster extends ol.interaction.Select {
     // map.addLayer(this.overlayLayer_);
 
     if (map && map.getView()) {
-      map.getView().on('change:resolution', this.clear, this);
+      map.getView().on('change:resolution', this.clear.bind(this));
     }
   }
 
@@ -132,7 +132,7 @@ export default class SelectCluster extends ol.interaction.Select {
    */
   refreshViewEvents() {
     if (this.getMap() && this.getMap().getView()) {
-      this.getMap().getView().on('change:resolution', this.clear, this);
+      this.getMap().getView().on('change:resolution', this.clear.bind(this));
     }
   }
 

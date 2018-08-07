@@ -33,6 +33,12 @@ export default class Cluster extends Composite {
     this.oldStyle_ = null;
   }
 
+  apply(layer) {
+    super.apply(layer);
+    const style = layer.getStyle();
+    this.oldStyle_ = style instanceof Cluster ? style.getOldStyle() : style;
+  }
+
   /**
    * @inheritDoc
    */

@@ -73,8 +73,8 @@ export default class Feature extends Base {
    */
   addTo(map) {
     this.map_ = map;
-    this.map_.on(EvtManaManager.CLICK, this.clickOnMap_, this);
-    this.map_.on(EvtManaManager.MOVE, this.moveOverMap_, this);
+    this.map_.on(EvtManaManager.MOVE, this.moveOverMap_.bind(this));
+    this.map_.on(EvtManaManager.CLICK, this.clickOnMap_.bind(this));
     this.getImpl().addTo(this.map_);
     this.fire(EvtManaManager.ADDED_TO_MAP);
   }

@@ -1,8 +1,8 @@
+import ChartImpl from 'impl/style/Chart';
 import StyleFeature from './Feature';
 import ChartVariable from '../chart/Variable';
 import * as ChartTypes from '../chart/types';
 import Utils from '../util/Utils';
-import ChartImpl from 'impl/js/style/stylechart';
 
 /**
  * @namespace Chart
@@ -37,7 +37,6 @@ export default class Chart extends StyleFeature {
    * @api stable
    */
   constructor(options = {}) {
-
     let variables = options.variables || null;
 
     // vars parsing
@@ -46,7 +45,8 @@ export default class Chart extends StyleFeature {
     }
     if (!Utils.isNullOrEmpty(variables)) {
       if (variables instanceof Array) {
-        options.variables = variables.filter(variable => variable != null).map(variable => this.formatVariable_(variable));
+        options.variables = variables
+          .filter(variable => variable != null).map(variable => Chart.formatVariable_(variable));
       }
       else if (typeof variables === 'string' || typeof variables === 'object') {
         options.variables = [Chart.formatVariable_(variables)];
@@ -76,7 +76,7 @@ export default class Chart extends StyleFeature {
       options.scheme = Chart.DEFAULT.scheme;
     }
 
-    let impl = new ChartImpl(options);
+    const impl = new ChartImpl(options);
     // calls the super constructor
     super(options, impl);
   }
@@ -99,7 +99,7 @@ export default class Chart extends StyleFeature {
     }
     else if (typeof variableOb === 'string') {
       constructorOptions = {
-        attribute: variableOb
+        attribute: variableOb,
       };
     }
     else {
@@ -126,7 +126,7 @@ export default class Chart extends StyleFeature {
    */
   apply(layer) {
     this.layer_ = layer;
-    layer.getFeatures().forEach(feature => feature.style = this.clone());
+    layer.getFeatures().forEach(feature => feature.setStyle(this.clone()));
     this.updateCanvas();
   }
 
@@ -151,11 +151,11 @@ export default class Chart extends StyleFeature {
  */
 Chart.DEFAULT = {
   shadow3dColor: '#369',
-  type: Chart.types.PIE,
-  scheme: Chart.schemes.Classic,
+  type: ChartTypes.types.PIE,
+  scheme: ChartTypes.schemes.Classic,
   radius: 20,
   donutRatio: 0.5,
   offsetX: 0,
   offsetY: 0,
-  animationStep: 1
+  animationStep: 1,
 };

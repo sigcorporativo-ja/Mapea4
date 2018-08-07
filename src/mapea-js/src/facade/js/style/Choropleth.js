@@ -2,7 +2,6 @@ import StyleComposite from './Composite';
 import StyleQuantification from './Quantification';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
-import StyleBase from './Base';
 import GeomGeoJSON from "../geom/GeoJSON";
 import Filter from "../filter/Filter";
 import StyleCluster from './Cluster';
@@ -14,7 +13,7 @@ import StylePoint from "./Point";
 /**
  * @namespace Choropleth
  */
-export default class Choropleth extends Style {
+export default class Choropleth extends StyleComposite {
   /**
    * @classdesc
    * Main constructor of the class. Creates a style choropleth
@@ -31,7 +30,7 @@ export default class Choropleth extends Style {
   constructor(attributeName, styles, quantification = StyleQuantification.JENKS(), options = {}) {
     super(options, {});
     if (Utils.isNullOrEmpty(attributeName)) {
-      Exception("No se ha especificado el nombre del atributo.");
+      Exception('No se ha especificado el nombre del atributo.');
     }
 
     /**
@@ -74,7 +73,6 @@ export default class Choropleth extends Style {
      * @expose
      */
     this.breakPoints_ = [];
-
   }
 
   /**
@@ -195,7 +193,7 @@ export default class Choropleth extends Style {
   updateCanvas() {
     if (!Utils.isNullOrEmpty(this.choroplethStyles_)) {
       if (this.breakPoints_.length > 0) {
-        let canvasImages = [];
+        const canvasImages = [];
         this.updateCanvasPromise_ = new Promise((success, fail) =>
           this.loadCanvasImages_(0, canvasImages, success));
       }
@@ -226,7 +224,7 @@ export default class Choropleth extends Style {
       let scope_ = this;
       image.onload = () => {
         canvasImages.push({
-          'image': this,
+          image,
           'startLimit': Choropleth.CALC_CANVAS_NUMBER_(startLimit),
           'endLimit': Choropleth.CALC_CANVAS_NUMBER_(endLimit)
         });
@@ -325,7 +323,7 @@ export default class Choropleth extends Style {
     if (!Utils.isNullOrEmpty(this.layer_)) {
       let features = this.layer_.getFeatures();
       if (!Utils.isNullOrEmpty(features)) {
-        this.dataValues_ = this.values();
+        this.dataValues_ = this.getValues();
         if (Utils.isNullOrEmpty(this.choroplethStyles_) || (!Utils.isNullOrEmpty(this.choroplethStyles_) &&
             (Utils.isString(this.choroplethStyles_[0]) || Utils.isString(this.choroplethStyles_[1])))) {
           this.breakPoints_ = this.quantification_(this.dataValues_);
@@ -361,7 +359,7 @@ export default class Choropleth extends Style {
       }
       for (let i = this.breakPoints_.length - 1; i > -1; i--) {
         let filterLTE = new Filter.LTE(this.attributeName_, this.breakPoints_[i]);
-        filterLTE.execute(features).forEach(f => f.style = this.choroplethStyles_[i]);
+        filterLTE.execute(features).forEach(f => f.setStyle(this.choroplethStyles_[i]));
       }
       this.updateCanvas();
     }

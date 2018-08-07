@@ -1,4 +1,5 @@
 import Utils from 'facade/js/util/Utils';
+import chroma from 'chroma-js';
 import Centroid from './Centroid';
 import Path from './Path';
 import Simple from './Simple';
@@ -149,7 +150,7 @@ export default class Line extends Simple {
    * @function
    * @api stable
    */
-  static drawGeometryToCanvas(vectorContext, canvas, style, stroke) {
+  drawGeometryToCanvas(vectorContext, canvas, style, stroke) {
     let x = Line.getCanvasSize()[0];
     let y = Line.getCanvasSize()[1];
     vectorContext.drawGeometry(new ol.geom.LineString([[0 + (stroke / 2), 0 + (stroke / 2)],
@@ -160,8 +161,8 @@ export default class Line extends Simple {
       const width = style.width;
       const ctx = canvas.getContext('2d');
       ctx.lineWidth = style.width;
-      x = vectorContext.getContext('2d').canvas.width;
-      y = vectorContext.getContext('2d').canvas.height;
+      x = vectorContext.context_.canvas.width;
+      y = vectorContext.context_.canvas.height;
       ctx.strokeStyle = style.color;
       ctx.beginPath();
       ctx.lineTo(0 + width, 0 + width);
@@ -215,7 +216,7 @@ export default class Line extends Simple {
       applyStyle.getStroke().setWidth(width);
       vectorContext.setStyle(applyStyle);
     }
-    Line.drawGeometryToCanvas(vectorContext, canvas, optionsStyle, width);
+    this.drawGeometryToCanvas(vectorContext, canvas, optionsStyle, width);
   }
 
   /**

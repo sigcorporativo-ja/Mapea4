@@ -1,6 +1,6 @@
-import Style from "./Style";
-import Heatmap from "../layer/Heatmap";
-import Utils from "facade/js/util/Utils";
+import Utils from 'facade/js/util/Utils';
+import Style from './Style';
+import Heatmap from '../layer/Heatmap';
 
 export default class HeatMap extends Style {
   /**
@@ -13,7 +13,6 @@ export default class HeatMap extends Style {
    * @api stable
    */
   constructor(attribute, options, vendorOptions) {
-
     super({});
 
     /**
@@ -40,7 +39,6 @@ export default class HeatMap extends Style {
      *
      */
     this.oldOLLayer_ = null;
-
   }
 
   /**
@@ -53,12 +51,12 @@ export default class HeatMap extends Style {
   applyToLayer(layer) {
     this.layer_ = layer;
     if (!Utils.isNullOrEmpty(layer)) {
-      let ol3Layer = this.layer_.getImpl().getOL3Layer();
+      const ol3Layer = this.layer_.getImpl().getOL3Layer();
       if (!(ol3Layer instanceof ol.layer.Heatmap)) {
         this.oldOLLayer_ = ol3Layer;
       }
-      let features = this.layer_.getFeatures();
-      let olFeatures = features.map(f => f.getImpl().getOLFeature());
+      const features = this.layer_.getFeatures();
+      const olFeatures = features.map(f => f.getImpl().getOLFeature());
       olFeatures.forEach(f => f.setStyle(null));
       this.createHeatmapLayer_(olFeatures);
       this.layer_.getImpl().setOL3Layer(this.heatmapLayer_);
