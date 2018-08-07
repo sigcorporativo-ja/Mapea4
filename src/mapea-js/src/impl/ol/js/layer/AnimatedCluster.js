@@ -54,10 +54,10 @@ export default class AnimatedCluster extends ol.layer.Vector {
     this.set('animationMethod', options.animationMethod || ol.easing.easeOut);
 
     // Save cluster before change
-    this.getSource().on('change', this.saveCluster_, this);
+    this.getSource().on('change', this.saveCluster_.bind(this));
     // Animate the cluster
-    this.on('precompose', this.animate, this);
-    this.on('postcompose', this.postanimate, this);
+    this.on('precompose', this.animate.bind(this));
+    this.on('postcompose', this.postanimate.bind(this));
   }
 
   /**

@@ -4,14 +4,13 @@ import Feature from "./Feature";
 import Utils from "facade/js/util/Utils";
 import Simple from "./Simple";
 import Baseline from "facade/js/style/Baseline";
-import Align from "facade/js/Align";
+import Align from "facade/js/style/Align";
 import FacadeChart from "facade/js/style/Chart";
 
 /**
  * @namespace Chart
  */
 export default class Chart extends Feature {
-
   /**
    * @classdesc
    * Set chart style for vector features
@@ -39,7 +38,6 @@ export default class Chart extends Feature {
    * @api
    */
   constructor(options = {}) {
-
     // merge default values
     Chart.extend_(options, FacadeChart.DEFAULT);
 
@@ -107,12 +105,13 @@ export default class Chart extends Feature {
       let words = text.split(' ');
       let line = '';
       let [x, y] = initialPosition;
-      drawStackActions.push((buildCtx, fontSize, fontFamily, strokeColor, strokeWidth, textColor) => {
-        buildCtx.font = `${fontSize}px ${fontFamily}`;
-        buildCtx.strokeStyle = strokeColor;
-        buildCtx.strokeWidth = strokeWidth;
-        buildCtx.fillStyle = textColor;
-      });
+      drawStackActions
+        .push((buildCtx, fontSize, fontFamily, strokeColor, strokeWidth, textColor) => {
+          buildCtx.font = `${fontSize}px ${fontFamily}`;
+          buildCtx.strokeStyle = strokeColor;
+          buildCtx.strokeWidth = strokeWidth;
+          buildCtx.fillStyle = textColor;
+        });
 
       words.forEach((word, i) => {
         let metrics = context.measureText(line + word + ' ');
@@ -131,7 +130,7 @@ export default class Chart extends Feature {
       drawStackActions.push((buildCtx, line, x, y) => {
         buildCtx.strokeText(line, x, y);
         buildCtx.fillText(line, x, y);
-      }.bind(this, context, line, x, y));
+      });
       return [x, y];
     };
 
@@ -364,7 +363,7 @@ export default class Chart extends Feature {
    */
   applyToFeature(feature) {
     let featureCtx = feature.getImpl().getOLFeature();
-    featureCtx.setStyle(this.olStyleFn_.bind(this, featureCtx));
+    featureCtx.setStyle(this.olStyleFn_);
   }
 
   /**

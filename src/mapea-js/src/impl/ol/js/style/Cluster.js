@@ -1,3 +1,4 @@
+import { CHANGE as OLEventChange } from 'ol/events/EventType';
 import LayerVector from 'facade/js/layer/Vector';
 import Polygon from 'facade/js/style/Polygon';
 import StylePoint from 'facade/js/style/Point';
@@ -113,6 +114,16 @@ export default class Cluster extends Style {
     }
   }
 
+  /**
+   * Gets the select cluster interaction
+   *
+   * @function
+   * @public
+   * @api stable
+   */
+  get selectClusterInteraction() {
+    return this.selectClusterInteraction_;
+  }
   /**
    * Apply the style cluster to layer vectorresolution
    *
@@ -484,7 +495,7 @@ export default class Cluster extends Style {
   unapply() {
     if (!Utils.isNullOrEmpty(this.clusterLayer_)) {
       const clusterSource = this.clusterLayer_.getSource();
-      const eventType = ol.events.EventType.CHANGE;
+      const eventType = OLEventChange;
       const callback = ol.source.Cluster.prototype.refresh;
       this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
       this.removeCoverInteraction_();
@@ -527,10 +538,12 @@ export default class Cluster extends Style {
    * @api stable
    */
   activateChangeEvent() {
-    const clusterSource = this.clusterLayer_.getSource();
-    const eventType = ol.events.EventType.CHANGE;
-    const callback = ol.source.Cluster.prototype.refresh;
-    clusterSource.getSource().on(eventType, callback, clusterSource);
+    if (this.clusterLayer_ !== null) {
+      const clusterSource = this.clusterLayer_.getSource();
+      const eventType = OLEventChange;
+      const callback = ol.source.Cluster.prototype.refresh;
+      clusterSource.getSource().on(eventType, callback, clusterSource);
+    }
   }
 
   /**
@@ -541,10 +554,12 @@ export default class Cluster extends Style {
    * @api stable
    */
   deactivateChangeEvent() {
-    const clusterSource = this.clusterLayer_.getSource();
-    const eventType = ol.events.EventType.CHANGE;
-    const callback = ol.source.Cluster.prototype.refresh;
-    clusterSource.getSource().un(eventType, callback, clusterSource);
+    if (this.clusterLayer_ !== null) {
+      const clusterSource = this.clusterLayer_.getSource();
+      const eventType = OLEventChange;
+      const callback = ol.source.Cluster.prototype.refresh;
+      clusterSource.getSource().un(eventType, callback, clusterSource);
+    }
   }
 
   /**
@@ -556,6 +571,7 @@ export default class Cluster extends Style {
    */
   deactivateTemporarilyChangeEvent(callback, callbackArguments) {
     this.deactivateChangeEvent();
+
     if (Utils.isFunction(callback)) {
       if (callbackArguments == null) {
         callback();

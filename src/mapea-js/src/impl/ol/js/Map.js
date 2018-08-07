@@ -120,7 +120,7 @@ export default class Map extends MObject {
       // renderer,
       view: new View(),
     });
-    this.map_.on('singleclick', () => this.onMapClick_);
+    this.map_.on('singleclick', this.onMapClick_.bind(this));
     this.map_.addInteraction(new ol.interaction.Interaction({
       handleEvent: (e) => {
         if (e.type === 'pointermove') {

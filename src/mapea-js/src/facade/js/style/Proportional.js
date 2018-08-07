@@ -1,13 +1,14 @@
 // import StyleComposite from './Composite';
 import StylePoint from './Point';
 import StyleSimple from './Simple';
+import StyleComposite from './Composite';
 import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 
 /**
  * @namespace Proportional
  */
-export default class Proportional {
+export default class Proportional extends StyleComposite {
   /**
    * @classdesc
    * Main constructor of the class. Creates a style Proportional
@@ -23,7 +24,7 @@ export default class Proportional {
    * @api stable
    */
   constructor(attributeName, minRadius, maxRadius, style, proportionalFunction, options = {}) {
-    // super(options, {});
+    super(options, {});
 
     if (Utils.isNullOrEmpty(attributeName)) {
       Exception('No se ha especificado el nombre del atributo.');
@@ -105,7 +106,10 @@ export default class Proportional {
    * @api stable
    */
   applyToFeature(feature, resolution) {
-    let style = feature.getStyle() ? feature.getStyle() : this.layer_.getStyle();
+    let style = this.style_;
+    if (Utils.isNullOrEmpty(style)) {
+      style = feature.getStyle() ? feature.getStyle() : this.layer_.getStyle();
+    }
     if (!Utils.isNullOrEmpty(style)) {
       if (!(style instanceof StylePoint) && style instanceof StyleSimple) {
         style = new StylePoint(style.getOptions());
@@ -134,8 +138,8 @@ export default class Proportional {
       if (!Utils.isNullOrEmpty(this.style_)) {
         // this.layer_.setStyle(this.style_, true);
       }
-      this.oldStyle_ = this.layer_.style() instanceof StyleComposite ? this.layer_.style()
-        .getOldStyle() : this.layer_.style();
+      this.oldStyle_ = this.layer_.getStyle() instanceof StyleComposite ? this.layer_.getStyle()
+        .getOldStyle() : this.layer_.getStyle();
       [this.minValue_, this.maxValue_] = Proportional.getMinMaxValues_(this.layer_
         .getFeatures(), this.attributeName_);
       this.layer_.getFeatures().forEach(feature => this.applyToFeature(feature, 1));
@@ -145,7 +149,7 @@ export default class Proportional {
           newStyle = new StylePoint(newStyle.getOptions());
         }
         newStyle.set('zindex', feature => (this.maxValue_ - parseFloat(feature.getAttribute(this.attributeName_))));
-        newStyle.set(Proportional.sizeAttribute_(newStyle), (feature) => {
+        newStyle.set(Proportional.getSizeAttribute_(newStyle), (feature) => {
           const proportion = Proportional.SCALE_PROPORTION;
           const value = feature.attribute(this.attributeName_);
           let radius = this.getProportionalFunction_(
@@ -155,7 +159,7 @@ export default class Proportional {
             this.minRadius_,
             this.maxRadius_,
           );
-          if (Proportional.sizeAttribute_(this.oldStyle_) === 'icon.scale') {
+          if (Proportional.getSizeAttribute_(this.oldStyle_) === 'icon.scale') {
             radius = this.getProportionalFunction_(
               value,
               this.minValue_,
@@ -503,7 +507,7 @@ export default class Proportional {
         maxRadius,
       );
       const zindex = options.maxValue - parseFloat(feature.getAttribute(this.attributeName_));
-      style.set(Proportional.sizeAttribute_(style), radius);
+      style.set(Proportional.getSizeAttribute_(style), radius);
       style.set('zindex', zindex);
     }
     return style;

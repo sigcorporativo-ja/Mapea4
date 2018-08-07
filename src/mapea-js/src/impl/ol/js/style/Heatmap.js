@@ -1,6 +1,6 @@
-import Style from "./Style";
-import Heatmap from "../layer/Heatmap";
-import Utils from "facade/js/util/Utils";
+import Utils from 'facade/js/util/Utils';
+import Style from './Style';
+import Heatmap from '../layer/Heatmap';
 
 export default class HeatMap extends Style {
   /**
@@ -13,7 +13,6 @@ export default class HeatMap extends Style {
    * @api stable
    */
   constructor(attribute, options, vendorOptions) {
-
     super({});
 
     /**

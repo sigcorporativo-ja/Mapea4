@@ -1,10 +1,6 @@
 import chroma from 'chroma-js';
 import WKT from '../geom/WKT';
-import {
-  INCHES_PER_UNIT,
-  DOTS_PER_INCH
-}
-from '../Mapea';
+import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../Mapea';
 
 // import StylePoint from '../style/Point';
 // import StyleLine from '../style/Line';
@@ -1000,9 +996,9 @@ export default class Utils {
     let intervals = [...array];
     if (array.length < breaks) {
       const step = (array[0] + array[1]) / (breaks - 1);
-      breaks.forEach((value) => {
-        intervals[value] = step * value;
-      });
+      for (let i = 1; i < breaks - 1; i += 1) {
+        intervals[i] = step * i;
+      }
       intervals = [...intervals, array[1]];
     }
     return intervals;
