@@ -1,6 +1,15 @@
+import OLFeature from 'ol/Feature';
+import OLGeomPoint from 'ol/geom/Point';
+import OLGeomLineString from 'ol/geom/LineString';
+import OLInteractionSelect from 'ol/interaction/Select';
+import OLLayerVector from 'ol/layer/Vector';
+import OLSourceVector from 'ol/source/Vector';
+import OLCollection from 'ol/Collection';
+import OLObservable from 'ol/Observable';
+import { easeOut } from 'ol/easing';
 import Utils from '../util/Utils';
 
-export default class SelectCluster extends ol.interaction.Select {
+export default class SelectCluster extends OLInteractionSelect {
   /**
    * @classdesc
    * Main constructor of the class. Creates interaction SelectCluster
@@ -26,9 +35,9 @@ export default class SelectCluster extends ol.interaction.Select {
     this.style_ = options.style;
 
     // Create a new overlay layer for
-    this.overlayLayer_ = new ol.layer.Vector({
-      source: new ol.source.Vector({
-        features: new ol.Collection(),
+    this.overlayLayer_ = new OLLayerVector({
+      source: new OLSourceVector({
+        features: new OLCollection(),
         useSpatialIndex: true,
       }),
       name: 'Cluster overlay',
@@ -41,14 +50,13 @@ export default class SelectCluster extends ol.interaction.Select {
 
     // Add the overlay to selection
     if (options.layers) {
-      if (typeof (options.layers) === 'function') {
+      if (typeof(options.layers) === 'function') {
         const fn = options.layers;
         const optionsVariable = options;
         optionsVariable.layers = (layer) => {
           return (layer === overlay || fn(layer));
         };
-      }
-      else if (options.layers.push) {
+      } else if (options.layers.push) {
         options.layers.push(this.overlayLayer_);
       }
     }
@@ -61,8 +69,7 @@ export default class SelectCluster extends ol.interaction.Select {
         if (!l && f.get('selectclusterlink')) return false;
         return fn(f, l);
       };
-    }
-    else {
+    } else {
       const optionsVariable = options;
       optionsVariable.filter = (f, l) => {
         if (!l && f.get('selectclusterlink')) return false;
@@ -70,7 +77,7 @@ export default class SelectCluster extends ol.interaction.Select {
       };
       this.filter_ = options.filter;
 
-      ol.interaction.Select.call(this, options);
+      OLInteractionSelect.call(this, options);
       this.on('select', this.selectCluster, this);
     }
   }
@@ -91,7 +98,7 @@ export default class SelectCluster extends ol.interaction.Select {
       this.getMap().removeLayer(this.overlayLayer_);
     }
 
-    ol.interaction.Select.prototype.setMap.call(this, map);
+    OLInteractionSelect.prototype.setMap.call(this, map);
     this.overlayLayer_.setMap(map);
     // map.addLayer(this.overlayLayer_);
 
@@ -183,8 +190,7 @@ export default class SelectCluster extends ol.interaction.Select {
 
     if (!this.spiral || cluster.length <= this.circleMaxObjects) {
       this.drawFeaturesAndLinsInCircle_(cluster, resolution, radiusInPixels, center);
-    }
-    else { // Start angle
+    } else { // Start angle
       this.drawFeaturesAndLinsInSpiral_(cluster, resolution, center);
     }
     if (this.animate) {
@@ -240,7 +246,7 @@ export default class SelectCluster extends ol.interaction.Select {
    * @function
    */
   drawAnimatedFeatureAndLink_(clusterFeature, resolution, center, newPoint) {
-    const cf = new ol.Feature();
+    const cf = new OLFeature();
     clusterFeature.getKeys().forEach((attr) => {
       cf.set(attr, clusterFeature.get(attr));
     });
@@ -256,12 +262,12 @@ export default class SelectCluster extends ol.interaction.Select {
     cf.setId(clusterFeature.getId());
     cf.setStyle(clonedStyles);
     cf.set('features', [clusterFeature]);
-    cf.set('geometry', new ol.geom.Point(newPoint));
+    cf.set('geometry', new OLGeomPoint(newPoint));
     this.overlayLayer_.getSource().addFeature(cf);
 
-    const lk = new ol.Feature({
+    const lk = new OLFeature({
       selectclusterlink: true,
-      geometry: new ol.geom.LineString([center, newPoint]),
+      geometry: new OLGeomLineString([center, newPoint]),
     });
     this.overlayLayer_.getSource().addFeature(lk);
   }
@@ -277,7 +283,7 @@ export default class SelectCluster extends ol.interaction.Select {
     // Stop animation (if one is running)
     if (this.listenerKey_) {
       this.overlayLayer_.setVisible(true);
-      ol.Observable.unByKey(this.listenerKey_);
+      OLObservable.unByKey(this.listenerKey_);
     }
 
     // Features to animate
@@ -294,7 +300,7 @@ export default class SelectCluster extends ol.interaction.Select {
       // Retina device
       // let ratio = event.frameState.pixelRatio;
       const res = event.target.getView().getResolution();
-      const e = ol.easing.easeOut((event.frameState.time - start) / duration);
+      const e = easeOut((event.frameState.time - start) / duration);
       for (let i = 0; i < features.length; i += 1) {
         if (features[i].get('features')) {
           const feature = features[i];
@@ -302,7 +308,7 @@ export default class SelectCluster extends ol.interaction.Select {
           const pt = feature.getGeometry().getCoordinates();
           pt[0] = (center[0] + e) * (pt[0] - center[0]);
           pt[1] = (center[1] + e) * (pt[1] - center[1]);
-          const geo = new ol.geom.Point(pt);
+          const geo = new OLGeomPoint(pt);
 
           // draw links
           const st2 = this.overlayLayer_.getStyle()(mFeature, res).map(s => s.clone());
@@ -318,7 +324,7 @@ export default class SelectCluster extends ol.interaction.Select {
               // imgs.setScale(ratio); // setImageStyle don't check retina
             }
             vectorContext.setStyle(style);
-            vectorContext.drawLineString(new ol.geom.LineString([center, pt]));
+            vectorContext.drawLineString(new OLGeomLineString([center, pt]));
           }
 
           // Image style
@@ -357,7 +363,7 @@ export default class SelectCluster extends ol.interaction.Select {
         }
         // Stop animation and restore cluster visibility
         if (e > 1.0) {
-          ol.Observable.unByKey(this.listenerKey_);
+          OLObservable.unByKey(this.listenerKey_);
           this.overlayLayer_.setVisible(true);
           callbackFn();
           // text on chart style not show
