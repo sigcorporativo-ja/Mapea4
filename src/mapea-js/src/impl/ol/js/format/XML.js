@@ -1,5 +1,6 @@
 import { isString } from 'facade/js/util/Utils';
 import Exception from 'facade/js/exception/exception';
+import OLxml from 'ol/xml';
 
 export default class XML {
   /**
@@ -55,7 +56,7 @@ export default class XML {
   read(data) {
     let dataVariable = data;
     if (isString(data)) {
-      dataVariable = ol.xml.parse(data);
+      dataVariable = OLxml.parse(data);
     }
 
     if (data.nodeType !== 9) {

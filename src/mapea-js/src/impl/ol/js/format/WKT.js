@@ -1,7 +1,7 @@
+import OLFormatWKT from 'ol/format/WKT';
 import GeoJSON from "./GeoJSON";
 
-export default class WKT extends ol.format.WKT {
-
+export default class WKT extends OLFormatWKT {
   /**
    * @classdesc
    * Feature format for reading and writing data in the GeoJSON format.

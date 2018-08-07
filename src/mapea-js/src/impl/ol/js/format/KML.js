@@ -1,11 +1,15 @@
 import { decodeHtml } from 'facade/js/util/Utils';
+import OLFormatKML from 'ol/format/KML';
+import { FRACTION } from 'ol/style/IconAnchorUnits';
+import OLStyleIcon from 'ol/style/Icon';
+import OLxml from 'ol/xml';
 
 /**
  * @classdesc
  * Feature format for reading and writing data in the KML format.
  *
  */
-export default class KML extends ol.format.KML {
+export default class KML extends OLFormatKML {
   /**
    * @constructor
    * @extends {ol.format.KML}
@@ -30,7 +34,7 @@ export default class KML extends ol.format.KML {
     const featuresModified = features.map((feature) => {
       const styles = feature.getStyle()(feature);
       styles.forEach((style) => {
-        if (style.getImage() instanceof ol.style.Icon) {
+        if (style.getImage() instanceof OLStyleIcon) {
           const image = style.getImage();
           image.getImage().removeAttribute('crossorigin');
           style.setImage(image);
@@ -60,13 +64,13 @@ export default class KML extends ol.format.KML {
     const xUnitsAttr = 'xunits';
     const yUnitsAttr = 'yunits';
 
-    const screenOverlay = ol.xml.parse(textResponse).querySelector(screenOverlayAttr);
+    const screenOverlay = OLxml.parse(textResponse).querySelector(screenOverlayAttr);
     if (screenOverlay !== null) {
-
       const icon = screenOverlay.querySelector(iconAttr);
 
       // Icon src of ScreenOverlay
-      const src = icon !== null ? icon.querySelector(hrefAttr).innerHTML : 'NO_IMAGE';
+      const src = icon !== null ?
+        icon.querySelector(hrefAttr).innerHTML : KML.DEFAULT_NO_IMAGE_STYLE;
 
       // overlayXY (offset)
       let overlayXY;
@@ -92,14 +96,14 @@ export default class KML extends ol.format.KML {
         screenXY = [attributeX, attributeY];
         screenXUnits = screenXYElement.getAttribute(xUnitsAttr);
         screenYUnits = screenXYElement.getAttribute(yUnitsAttr);
-      } else if (src === ol.format.KML.DEFAULT_IMAGE_STYLE_SRC) {
-        screenXY = ol.format.KML.DEFAULT_IMAGE_STYLE_ANCHOR;
-        screenXUnits = ol.format.KML.DEFAULT_IMAGE_STYLE_ANCHOR_X_UNITS;
-        screenYUnits = ol.format.KML.DEFAULT_IMAGE_STYLE_ANCHOR_Y_UNITS;
+      } else if (src === KML.DEFAULT_IMAGE_STYLE_SRC) {
+        screenXY = KML.DEFAULT_IMAGE_STYLE_ANCHOR;
+        screenXUnits = KML.DEFAULT_IMAGE_STYLE_ANCHOR_X_UNITS;
+        screenYUnits = KML.DEFAULT_IMAGE_STYLE_ANCHOR_Y_UNITS;
       } else if (/^http:\/\/maps\.(?:google|gstatic)\.com\//.test(src)) {
         screenXY = [0.5, 0];
-        screenXUnits = ol.style.IconAnchorUnits.FRACTION;
-        screenYUnits = ol.style.IconAnchorUnits.FRACTION;
+        screenXUnits = FRACTION;
+        screenYUnits = FRACTION;
       }
 
       // rotation

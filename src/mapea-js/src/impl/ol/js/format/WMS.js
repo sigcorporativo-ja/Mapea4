@@ -1,4 +1,5 @@
 import { isArray, isObject, isNullOrEmpty } from 'facade/js/util/Utils';
+import OLFormatWMSCapabilities from 'ol/format/WMSCapabilities';
 
 /**
  * Name of the nodes that we want to spread from parents to children.
@@ -267,7 +268,7 @@ const parseLayersProps = (objLayer, parsedLayerNodes) => {
  * Main constructor of the class. Creates a WMC formater
  * @api stable
  */
-export default class WMSCapabilities extends ol.format.WMSCapabilities {
+export default class WMSCapabilities extends OLFormatWMSCapabilities {
   /**
    * This function reads some custom properties that do
    * not follow the standard of WMS layers.
