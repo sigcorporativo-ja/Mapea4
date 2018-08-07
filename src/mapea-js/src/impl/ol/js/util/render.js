@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isUndefined } from 'facade/js/util/Utils';
 import Line from 'facade/js/style/Line';
 import TextPath from './Textpath';
 
@@ -18,7 +18,7 @@ import TextPath from './Textpath';
 
 const postRender = (e = null) => {
   // add support for textpath
-  if (Utils.isUndefined(window.CanvasRenderingContext2D.prototype.textPath)) {
+  if (isUndefined(window.CanvasRenderingContext2D.prototype.textPath)) {
     window.CanvasRenderingContext2D.prototype.textPath = TextPath.render;
   }
 

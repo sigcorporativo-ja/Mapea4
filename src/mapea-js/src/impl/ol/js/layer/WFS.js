@@ -1,6 +1,6 @@
 import StyleCluster from 'facade/js/style/Cluster';
 import FormatGeoJSON from 'facade/js/format/GeoJSON';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 import EventsManager from 'facade/js/event/Manager';
 import ServiceWFS from '../service/WFS';
 import FormatImplGeoJSON from '../format/GeoJSON';
@@ -59,7 +59,7 @@ export default class WFS extends Vector {
     this.loaded_ = false;
 
     // GetFeature output format parameter
-    if (Utils.isNullOrEmpty(this.options.getFeatureOutputFormat)) {
+    if (isNullOrEmpty(this.options.getFeatureOutputFormat)) {
       this.options.getFeatureOutputFormat = 'application/json'; // by default
     }
   }
@@ -115,15 +115,14 @@ export default class WFS extends Vector {
       this.formater_ = new FormatGeoJSON({
         defaultDataProjection: ol.proj.get(this.map.getProjection().code),
       });
-    }
-    else {
+    } else {
       this.formater_ = new FormatGML(this.name, this.version, this.map.getProjection());
     }
     this.loader_ = new LoaderWFS(this.map, this.service_, this.formater_);
 
     const isCluster = (this.facadeVector_.getStyle() instanceof StyleCluster);
     let ol3LayerSource = this.ol3Layer.getSource();
-    if (forceNewSource === true || Utils.isNullOrEmpty(ol3LayerSource)) {
+    if (forceNewSource === true || isNullOrEmpty(ol3LayerSource)) {
       const newSource = new ol.source.Vector({
         format: this.formater_.getImpl(),
         loader: this.loader_.getLoaderFn((features) => {
@@ -142,12 +141,10 @@ export default class WFS extends Vector {
         });
         this.ol3Layer.setStyle(this.facadeVector_.getStyle().getImpl().olStyleFn);
         this.ol3Layer.setSource(clusterSource);
-      }
-      else {
+      } else {
         this.ol3Layer.setSource(newSource);
       }
-    }
-    else {
+    } else {
       if (isCluster) {
         ol3LayerSource = ol3LayerSource.getSource();
       }
@@ -184,10 +181,10 @@ export default class WFS extends Vector {
    * @api stable
    */
   getDescribeFeatureType() {
-    if (Utils.isNullOrEmpty(this.describeFeatureType_)) {
+    if (isNullOrEmpty(this.describeFeatureType_)) {
       this.describeFeatureType_ =
         this.service_.getDescribeFeatureType().then((describeFeatureType) => {
-          if (!Utils.isNullOrEmpty(describeFeatureType)) {
+          if (!isNullOrEmpty(describeFeatureType)) {
             this.formater_ = new FormatImplGeoJSON({
               geometryName: describeFeatureType.geometryName,
               defaultDataProjection: ol.proj.get(this.map.getProjection().code),
@@ -211,23 +208,17 @@ export default class WFS extends Vector {
     let defaultValue;
     if (type === 'dateTime') {
       defaultValue = '0000-00-00T00:00:00';
-    }
-    else if (type === 'date') {
+    } else if (type === 'date') {
       defaultValue = '0000-00-00';
-    }
-    else if (type === 'time') {
+    } else if (type === 'time') {
       defaultValue = '00:00:00';
-    }
-    else if (type === 'duration') {
+    } else if (type === 'duration') {
       defaultValue = 'P0Y';
-    }
-    else if (type === 'int' || type === 'number' || type === 'float' || type === 'double' || type === 'decimal' || type === 'short' || type === 'byte' || type === 'integer' || type === 'long' || type === 'negativeInteger' || type === 'nonNegativeInteger' || type === 'nonPositiveInteger' || type === 'positiveInteger' || type === 'unsignedLong' || type === 'unsignedInt' || type === 'unsignedShort' || type === 'unsignedByte') {
+    } else if (type === 'int' || type === 'number' || type === 'float' || type === 'double' || type === 'decimal' || type === 'short' || type === 'byte' || type === 'integer' || type === 'long' || type === 'negativeInteger' || type === 'nonNegativeInteger' || type === 'nonPositiveInteger' || type === 'positiveInteger' || type === 'unsignedLong' || type === 'unsignedInt' || type === 'unsignedShort' || type === 'unsignedByte') {
       defaultValue = 0;
-    }
-    else if (type === 'hexBinary') {
+    } else if (type === 'hexBinary') {
       defaultValue = null;
-    }
-    else {
+    } else {
       defaultValue = '-';
     }
     return defaultValue;
@@ -243,7 +234,7 @@ export default class WFS extends Vector {
   //  */
   // destroy() {
   //   let olMap = this.map.getMapImpl();
-  //   if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+  //   if (!isNullOrEmpty(this.ol3Layer)) {
   //     olMap.removeLayer(this.ol3Layer);
   //     this.ol3Layer = null;
   //   }

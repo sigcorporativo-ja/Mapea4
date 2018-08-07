@@ -1,5 +1,5 @@
 import layerswitcherTemplate from 'templates/layerswitcher';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
 import Template from 'facade/js/util/Template';
 import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
 import Layer from 'facade/js/layer/Layer';
@@ -61,9 +61,9 @@ export default class LayerSwitcher extends Control {
    */
   clickLayer(evtParameter) {
     const evt = (evtParameter || window.event);
-    if (!Utils.isNullOrEmpty(evt.target)) {
+    if (!isNullOrEmpty(evt.target)) {
       const layerName = evt.target.getAttribute('data-layer-name');
-      if (!Utils.isNullOrEmpty(layerName)) {
+      if (!isNullOrEmpty(layerName)) {
         evt.stopPropagation();
         const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
         // checkbox
@@ -72,7 +72,7 @@ export default class LayerSwitcher extends Control {
              the layer is not base layer and visible */
           if (layer.transparent === true || !layer.isVisible()) {
             const opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
-            if (!Utils.isNullOrEmpty(opacity)) {
+            if (!isNullOrEmpty(opacity)) {
               layer.setOpacity(opacity.value);
             }
             layer.setVisible(!layer.isVisible());
@@ -117,7 +117,7 @@ export default class LayerSwitcher extends Control {
    * @api stable
    */
   registerEvents() {
-    if (!Utils.isNullOrEmpty(this.facadeMap_)) {
+    if (!isNullOrEmpty(this.facadeMap_)) {
       const olMap = this.facadeMap_.getMapImpl();
 
       this.registerViewEvents_(olMap.getView());
@@ -134,7 +134,7 @@ export default class LayerSwitcher extends Control {
    * @api stable
    */
   unregisterEvents() {
-    if (!Utils.isNullOrEmpty(this.facadeMap_)) {
+    if (!isNullOrEmpty(this.facadeMap_)) {
       const olMap = this.facadeMap_.getMapImpl();
 
       this.unregisterViewEvents_(olMap.getView());
@@ -220,9 +220,9 @@ export default class LayerSwitcher extends Control {
     Array.prototype.forEach.call(imgElements, (imgElem) => {
       imgElem.addEventListener('error', (evt) => {
         const layerName = evt.target.getAttribute('data-layer-name');
-        const legendErrorUrl = Utils.concatUrlPaths([Config.THEME_URL, Layer.LEGEND_ERROR]);
+        const legendErrorUrl = concatUrlPaths([Config.THEME_URL, Layer.LEGEND_ERROR]);
         const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
-        if (!Utils.isNullOrEmpty(layer)) {
+        if (!isNullOrEmpty(layer)) {
           layer.setLegendURL(legendErrorUrl);
         }
       });

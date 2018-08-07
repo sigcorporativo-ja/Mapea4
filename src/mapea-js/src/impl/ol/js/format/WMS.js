@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isArray, isObject, isNullOrEmpty } from 'facade/js/util/Utils';
 
 /**
  * Name of the nodes that we want to spread from parents to children.
@@ -100,7 +100,7 @@ const parseSRS = (objLayer, parsedLayerNodes) => {
  */
 const parseBoundingBox = (objLayer, parsedLayerNodes) => {
   const nodeLayer = parsedLayerNodes[objLayer.Name];
-  if (Utils.isArray(objLayer.BoundingBox)) {
+  if (isArray(objLayer.BoundingBox)) {
     let bboxChilds = Array.prototype.map.call(nodeLayer.children, element => element);
     bboxChilds = bboxChilds.filter(element => element.tagName === 'BoundingBox');
 
@@ -109,7 +109,7 @@ const parseBoundingBox = (objLayer, parsedLayerNodes) => {
       if (objBboxParam.crs === null) {
         const bboxNode = bboxChilds[index];
         const srs = bboxNode.getAttribute('SRS');
-        if (!Utils.isNullOrEmpty(srs)) {
+        if (!isNullOrEmpty(srs)) {
           objBboxParam.crs = srs;
         }
       }
@@ -179,8 +179,8 @@ const replaceBoundingBox = (objLayer, parsedLayerNodes) => {
   // replaces the BoundingBox by LatLonBoundinBox
   const latLonBoundingBoxProp = 'LatLonBoundingBox';
   const boundingBoxProp = 'BoundingBox';
-  if (Utils.isNullOrEmpty(objLayerParam[boundingBoxProp]) &&
-    !Utils.isNullOrEmpty(objLayerParam[latLonBoundingBoxProp])) {
+  if (isNullOrEmpty(objLayerParam[boundingBoxProp]) &&
+    !isNullOrEmpty(objLayerParam[latLonBoundingBoxProp])) {
     objLayerParam[boundingBoxProp] = objLayerParam[latLonBoundingBoxProp];
   }
 };
@@ -195,8 +195,8 @@ const replaceBoundingBox = (objLayer, parsedLayerNodes) => {
 const replaceMaxScaleDenominator = (objLayer, parsedLayerNodes) => {
   const objLayerParam = objLayer;
   const maxScaleDenominatorProp = 'MaxScaleDenominator';
-  if (Utils.isNullOrEmpty(objLayerParam[maxScaleDenominatorProp]) &&
-    !Utils.isNullOrEmpty(objLayerParam.ScaleHint)) {
+  if (isNullOrEmpty(objLayerParam[maxScaleDenominatorProp]) &&
+    !isNullOrEmpty(objLayerParam.ScaleHint)) {
     objLayerParam[maxScaleDenominatorProp] = objLayerParam.ScaleHint[0].maxScale;
   }
 };
@@ -211,8 +211,8 @@ const replaceMaxScaleDenominator = (objLayer, parsedLayerNodes) => {
 const replaceMinScaleDenominator = (objLayer, parsedLayerNodes) => {
   const objLayerParam = objLayer;
   const minScaleDenominatorProp = 'MinScaleDenominator';
-  if (Utils.isNullOrEmpty(objLayerParam[minScaleDenominatorProp]) &&
-    !Utils.isNullOrEmpty(objLayerParam.ScaleHint)) {
+  if (isNullOrEmpty(objLayerParam[minScaleDenominatorProp]) &&
+    !isNullOrEmpty(objLayerParam.ScaleHint)) {
     objLayerParam[minScaleDenominatorProp] = objLayerParam.ScaleHint[0].minScale;
   }
 };
@@ -251,12 +251,11 @@ const parserLayerProps = (objLayer, parsedLayerNodes) => {
  * @param {Object} parsedLayerNodes
  */
 const parseLayersProps = (objLayer, parsedLayerNodes) => {
-  if (Utils.isArray(objLayer)) {
+  if (isArray(objLayer)) {
     objLayer.forEach((layer) => {
       parseLayersProps(layer, parsedLayerNodes);
     });
-  }
-  else if (Utils.isObject(objLayer)) {
+  } else if (isObject(objLayer)) {
     parserLayerProps(objLayer, parsedLayerNodes);
     parseLayersProps(objLayer.Layer, parsedLayerNodes);
   }
@@ -280,7 +279,7 @@ export default class WMSCapabilities extends ol.format.WMSCapabilities {
     const formatedWMS = this.read(wmsDocument);
     const parsedLayerNodes = layerNodeToJSON(wmsDocument);
     const capabilityObj = formatedWMS.Capability;
-    if (!Utils.isNullOrEmpty(capabilityObj) && !Utils.isNullOrEmpty(capabilityObj.Layer)) {
+    if (!isNullOrEmpty(capabilityObj) && !isNullOrEmpty(capabilityObj.Layer)) {
       parseLayersProps(capabilityObj.Layer, parsedLayerNodes);
     }
     return formatedWMS;

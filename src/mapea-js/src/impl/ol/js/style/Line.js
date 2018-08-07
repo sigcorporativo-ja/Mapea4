@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
 import chroma from 'chroma-js';
 import Centroid from './Centroid';
 import Path from './Path';
@@ -42,7 +42,7 @@ export default class Line extends Simple {
       const style = new Centroid();
       const styleStroke = new Centroid();
       const getValue = Simple.getValue;
-      if (!Utils.isNullOrEmpty(stroke)) {
+      if (!isNullOrEmpty(stroke)) {
         style.setStroke(new ol.style.Stroke({
           color: getValue(stroke.color, featureVariable),
           width: getValue(stroke.width, featureVariable),
@@ -53,7 +53,7 @@ export default class Line extends Simple {
           miterLimit: getValue(stroke.miterlimit, featureVariable),
         }));
       }
-      if (!Utils.isNullOrEmpty(label)) {
+      if (!isNullOrEmpty(label)) {
         const textPathConfig = {
           text: getValue(label.text, featureVariable) === undefined ?
             undefined : String(getValue(label.text, featureVariable)),
@@ -73,7 +73,7 @@ export default class Line extends Simple {
             undefined, featureVariable),
         };
         const textPathStyle = new Path(textPathConfig);
-        if (!Utils.isNullOrEmpty(label.stroke)) {
+        if (!isNullOrEmpty(label.stroke)) {
           textPathStyle.setStroke(new ol.style.Stroke({
             color: getValue(label.stroke.color, featureVariable),
             width: getValue(label.stroke.width, featureVariable),
@@ -88,21 +88,20 @@ export default class Line extends Simple {
         // we will use a flag into de options object to set pathstyle or ol.text style
         if (typeof applyPath === 'boolean' && applyPath) {
           style.textPath = textPathStyle;
-          if (!Utils.isNullOrEmpty(label.smooth) && label.smooth === true &&
-            Utils.isFunction(featureVariable.getGeometry)) {
+          if (!isNullOrEmpty(label.smooth) && label.smooth === true &&
+            isFunction(featureVariable.getGeometry)) {
             style.setGeometry(featureVariable.getGeometry().cspline());
           }
-        }
-        else {
+        } else {
           style.setText(textPathStyle);
         }
       }
       let fill;
-      if (!Utils.isNullOrEmpty(options.fill)) {
+      if (!isNullOrEmpty(options.fill)) {
         const fillColorValue = Simple.getValue(options.fill.color, featureVariable);
         const fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable) || 1;
         const widthValue = Simple.getValue(options.fill.width, featureVariable);
-        if (!Utils.isNullOrEmpty(fillColorValue)) {
+        if (!isNullOrEmpty(fillColorValue)) {
           fill = new ol.style.Stroke({
             color: chroma(fillColorValue)
               .alpha(fillOpacityValue).css(),
@@ -126,7 +125,7 @@ export default class Line extends Simple {
     super.applyToLayer(layer);
 
     const olLayer = layer.getImpl().getOL3Layer();
-    if (!Utils.isNullOrEmpty(olLayer)) {
+    if (!isNullOrEmpty(olLayer)) {
       this.postComposeEvtKey_ = olLayer.on('postcompose', Render.postRender, olLayer);
     }
   }
@@ -157,7 +156,7 @@ export default class Line extends Simple {
       [(x / 3), (y / 2) - (stroke / 2)],
       [(2 * x) / 3, 0 + (stroke / 2)],
       [x - (stroke / 2), (y / 2) - (stroke / 2)]]));
-    if (!Utils.isNullOrEmpty(style)) {
+    if (!isNullOrEmpty(style)) {
       const width = style.width;
       const ctx = canvas.getContext('2d');
       ctx.lineWidth = style.width;
@@ -187,26 +186,25 @@ export default class Line extends Simple {
     });
     let optionsStyle;
     const style = this.olStyleFn_()[1];
-    if (!Utils.isNullOrEmpty(style) && !Utils.isNullOrEmpty(style.getStroke())) {
+    if (!isNullOrEmpty(style) && !isNullOrEmpty(style.getStroke())) {
       optionsStyle = {
         color: style.getStroke().getColor(),
         width: 1,
       };
     }
     const applyStyle = this.olStyleFn_()[0];
-    if (!Utils.isNullOrEmpty(applyStyle.getText())) {
+    if (!isNullOrEmpty(applyStyle.getText())) {
       applyStyle.setText(null);
     }
     const stroke = applyStyle.getStroke();
     let width;
-    if (!Utils.isNullOrEmpty(stroke)) {
-      if (!Utils.isNullOrEmpty(stroke.getWidth())) {
+    if (!isNullOrEmpty(stroke)) {
+      if (!isNullOrEmpty(stroke.getWidth())) {
         width = stroke.getWidth();
         if (stroke.getWidth() > Line.DEFAULT_WIDTH_LINE) {
           width = Line.DEFAULT_WIDTH_LINE;
         }
-      }
-      else {
+      } else {
         width = 1;
       }
       optionsStyle = {

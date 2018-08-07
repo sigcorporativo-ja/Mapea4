@@ -1,10 +1,9 @@
-import Utils from 'facade/js/util/Utils';
-
+/**
+ * @classdesc
+ * Source for WMS servers providing single, untiled images.
+ */
 export default class ImageWMS extends ol.source.ImageWMS {
   /**
-   * @classdesc
-   * Source for WMS servers providing single, untiled images.
-   *
    * @constructor
    * @fires ol.source.ImageEvent
    * @extends {ol.source.Image}
@@ -15,10 +14,7 @@ export default class ImageWMS extends ol.source.ImageWMS {
     const options = optOptions;
 
     super(options);
-
-    if (Utils.isNullOrEmpty(options.imageLoadFunction)) {
-      options.imageLoadFunction = ImageWMS.imageLoadFunction.bind(this);
-    }
+    this.imageLoadFunction_ = options.imageLoadFunction || this.imageLoadFunction;
   }
 
   /**

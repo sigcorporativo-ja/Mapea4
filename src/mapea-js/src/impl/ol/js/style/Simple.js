@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isFunction, isNullOrEmpty } from 'facade/js/util/Utils';
 import Style from './Style';
 import Feature from '../feature/Feature';
 
@@ -36,7 +36,7 @@ export default class Simple extends Style {
   applyToLayer(layer) {
     // we will apply the style on the ol3 layer
     const olLayer = layer.getImpl().getOL3Layer();
-    if (!Utils.isNullOrEmpty(olLayer)) {
+    if (!isNullOrEmpty(olLayer)) {
       olLayer.setStyle(this.olStyleFn_);
       // layer.getFeatures().forEach(this.applyToFeature, this);
     }
@@ -66,22 +66,20 @@ export default class Simple extends Style {
   static getValue(attr, olFeature) {
     const templateRegexp = /^\{\{([^}]+)\}\}$/;
     let attrFeature = attr;
-    if (templateRegexp.test(attr) || Utils.isFunction(attr)) {
+    if (templateRegexp.test(attr) || isFunction(attr)) {
       if (!(olFeature instanceof ol.Feature)) {
         attrFeature = undefined;
-      }
-      else {
+      } else {
         const feature = Feature.olFeature2Facade(olFeature, false);
         if (templateRegexp.test(attr)) {
           const keyFeature = attr.replace(templateRegexp, '$1');
           attrFeature = feature.getAttribute(keyFeature);
-        }
-        else if (Utils.isFunction(attr)) {
+        } else if (isFunction(attr)) {
           attrFeature = attr(feature);
         }
       }
     }
-    if (Utils.isNullOrEmpty(attrFeature)) {
+    if (isNullOrEmpty(attrFeature)) {
       attrFeature = undefined;
     }
     return attrFeature;

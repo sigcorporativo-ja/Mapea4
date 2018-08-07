@@ -1,7 +1,7 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, normalize } from 'facade/js/util/Utils';
 import WMS from 'facade/js/layer/WMS';
 import XML from '../XML';
-/* eslint-disable*/
+
 export default class WMCV110 extends XML {
   /**
    * @classdesc
@@ -153,11 +153,9 @@ export default class WMCV110 extends XML {
       ////////////////////////////////////////////////
       if (style['href']) {
         layerInfo['params']['sld'] = style['href'];
-      }
-      else if (style['body']) {
+      } else if (style['body']) {
         layerInfo['params']['sld_body'] = style['body'];
-      }
-      else {
+      } else {
         layerInfo['params']['styles'] = style['name'];
       }
     }
@@ -224,7 +222,7 @@ export default class WMCV110 extends XML {
 
     let projDst = this.options.projection;
     let projSrc = obj.projection;
-    if (!Utils.isNullOrEmpty(projDst) && !Utils.isNullOrEmpty(projSrc) && (projDst !== projSrc)) {
+    if (!isNullOrEmpty(projDst) && !isNullOrEmpty(projSrc) && (projDst !== projSrc)) {
       projSrc = ol.proj.get(projSrc);
       projDst = ol.proj.get(projDst);
       extent = ol.proj.transformExtent(extent, projSrc, projDst);
@@ -287,7 +285,7 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_ol_displayInLayerSwitcher(layerInfo, node) {
-    let nodeValue = Utils.normalize(XML.getChildValue(node));
+    let nodeValue = normalize(XML.getChildValue(node));
     layerInfo['options']['displayInLayerSwitcher'] = (nodeValue == "true");
   }
 
@@ -750,5 +748,4 @@ export default class WMCV110 extends XML {
     let nameAttr = 'name';
     dimensions[dim[nameAttr]] = dim;
   }
-  /* eslint-enable */
 }

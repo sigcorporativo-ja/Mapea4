@@ -1,7 +1,7 @@
 import panzoomTemplate from 'templates/panzoom';
 import PanzoomImpl from 'impl/control/Panzoom';
 import ControlBase from './Control';
-import Utils from '../util/Utils';
+import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
@@ -24,7 +24,7 @@ export default class Panzoom extends ControlBase {
     // calls the super constructor
     super(impl, Panzoom.NAME);
 
-    if (Utils.isUndefined(PanzoomImpl)) {
+    if (isUndefined(PanzoomImpl)) {
       Exception('La implementación usada no puede crear controles Panzoom');
     }
   }

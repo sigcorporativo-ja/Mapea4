@@ -1,5 +1,6 @@
 import VectorImpl from 'impl/layer/Vector';
-import Utils from '../util/Utils';
+import { isUndefined, isArray, isNullOrEmpty } from '../util/Utils';
+import { generateStyleLayer } from '../style/utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import LayerType from './Type';
@@ -8,11 +9,7 @@ import FilterBase from '../filter/Base';
 import StyleCluster from '../style/Cluster';
 import Style from '../style/Style';
 import EvtManager from '../event/Manager';
-import {
-  Point,
-  MultiPoint
-}
-from '../geom/GeoJSON';
+import { POINT, MULTI_POINT } from '../geom/GeoJSON';
 
 export default class Vector extends LayerBase {
   /**
@@ -31,7 +28,7 @@ export default class Vector extends LayerBase {
     super(parameters, impl);
 
     // checks if the implementation can create Vector
-    if (Utils.isUndefined(VectorImpl)) {
+    if (isUndefined(VectorImpl)) {
       Exception('La implementación usada no puede crear capas Vector');
     }
 
@@ -61,8 +58,8 @@ export default class Vector extends LayerBase {
   }
 
   set type(newType) {
-    if (!Utils.isUndefined(newType) &&
-      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.Vector)) {
+    if (!isUndefined(newType) &&
+      !isNullOrEmpty(newType) && (newType !== LayerType.Vector)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Vector).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
@@ -77,8 +74,8 @@ export default class Vector extends LayerBase {
    */
   addFeatures(featuresParam, update = false) {
     let features = featuresParam;
-    if (!Utils.isNullOrEmpty(features)) {
-      if (!Utils.isArray(features)) {
+    if (!isNullOrEmpty(features)) {
+      if (!isArray(features)) {
         features = [features];
       }
       this.getImpl().addFeatures(features, update);
@@ -96,7 +93,7 @@ export default class Vector extends LayerBase {
    */
   getFeatures(skipFilterParam) {
     let skipFilter = skipFilterParam;
-    if (Utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
+    if (isNullOrEmpty(this.getFilter())) skipFilter = true;
     return this.getImpl().getFeatures(skipFilter, this.filter_);
   }
 
@@ -111,10 +108,9 @@ export default class Vector extends LayerBase {
    */
   getFeatureById(id) {
     let feature = null;
-    if (!Utils.isNullOrEmpty(id)) {
+    if (!isNullOrEmpty(id)) {
       feature = this.getImpl().getFeatureById(id);
-    }
-    else {
+    } else {
       dialog.error('No se ha indicado un ID para obtener el feature');
     }
     return feature;
@@ -130,7 +126,7 @@ export default class Vector extends LayerBase {
    */
   removeFeatures(featuresParam) {
     let features = featuresParam;
-    if (!Utils.isArray(features)) {
+    if (!isArray(features)) {
       features = [features];
     }
     this.getImpl().removeFeatures(features);
@@ -169,14 +165,14 @@ export default class Vector extends LayerBase {
    */
   redraw() {
     this.getImpl().redraw();
-    // if (!Utils.isNullOrEmpty(this.getStyle())) {
+    // if (!isNullOrEmpty(this.getStyle())) {
     //   let style = this.getStyle();
     //   if (!(style instanceof M.style.Cluster)) {
     //     style.refresh();
     //   }
     //   else {
     //     let oldStyle = style.getOldStyle();
-    //     if (!Utils.isNullOrEmpty(oldStyle)) {
+    //     if (!isNullOrEmpty(oldStyle)) {
     //       oldStyle.refresh(this);
     //     }
     //
@@ -193,7 +189,7 @@ export default class Vector extends LayerBase {
    * @api stable
    */
   setFilter(filter) {
-    if (Utils.isNullOrEmpty(filter) || (filter instanceof FilterBase)) {
+    if (isNullOrEmpty(filter) || (filter instanceof FilterBase)) {
       this.filter_ = filter;
       const style = this.style_;
       if (style instanceof StyleCluster) {
@@ -210,8 +206,7 @@ export default class Vector extends LayerBase {
         // no se actualiza automaticamente
         style.refresh();
       }
-    }
-    else {
+    } else {
       dialog.error('El filtro indicado no es correcto');
     }
   }
@@ -238,7 +233,7 @@ export default class Vector extends LayerBase {
    */
   getFeaturesExtent(skipFilterParam) {
     let skipFilter = skipFilterParam;
-    if (Utils.isNullOrEmpty(this.getFilter())) skipFilter = true;
+    if (isNullOrEmpty(this.getFilter())) skipFilter = true;
     return this.getImpl().getFeaturesExtent(skipFilter, this.filter_);
   }
 
@@ -280,13 +275,12 @@ export default class Vector extends LayerBase {
    */
   setStyle(styleVar, applyToFeature = false, defaultStyle = Vector.DEFAULT_OPTIONS_STYLE) {
     let style = styleVar;
-    if (Utils.isNullOrEmpty(style)) {
+    if (isNullOrEmpty(style)) {
       style = defaultStyle;
     }
     if (this.getImpl().isLoaded()) {
       this.applyStyle_(style, applyToFeature)();
-    }
-    else {
+    } else {
       this.once(EvtManager.LOAD, this.applyStyle_(style, applyToFeature));
     }
   }
@@ -298,21 +292,21 @@ export default class Vector extends LayerBase {
     return () => {
       let style = styleParam;
       if (!(style instanceof Style)) {
-        style = Utils.generateStyleLayer(style, this);
+        style = generateStyleLayer(style, this);
       }
       const isCluster = style instanceof StyleCluster;
-      const isPoint = [Point, MultiPoint].includes(Utils.getGeometryType(this));
+      const isPoint = [Point, MultiPoint].includes(this.getGeometryType());
       if (style instanceof Style /* && (!isCluster || isPoint) */ ) {
-        if (!Utils.isNullOrEmpty(this.oldStyle_)) {
+        if (!isNullOrEmpty(this.oldStyle_)) {
           this.oldStyle_.unapply(this);
         }
         style.apply(this, applyToFeature);
         this.style_ = style;
         this.fire(EvtManager.CHANGE_STYLE, [style, this]);
       }
-      if (!Utils.isNullOrEmpty(this.getImpl().getMap())) {
+      if (!isNullOrEmpty(this.getImpl().getMap())) {
         const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
-        if (!Utils.isNullOrEmpty(layerswitcher)) {
+        if (!isNullOrEmpty(layerswitcher)) {
           layerswitcher.render();
         }
       }
@@ -353,10 +347,28 @@ export default class Vector extends LayerBase {
   getLegendURL() {
     let legendUrl = this.getImpl().getLegendURL();
     if (legendUrl.indexOf(LayerBase.LEGEND_DEFAULT) !== -1 &&
-      legendUrl.indexOf(LayerBase.LEGEND_ERROR) === -1 && !Utils.isNullOrEmpty(this.style_)) {
+      legendUrl.indexOf(LayerBase.LEGEND_ERROR) === -1 && !isNullOrEmpty(this.style_)) {
       legendUrl = this.style_.toImage();
     }
     return legendUrl;
+  }
+
+  /**
+   * This function gets the geometry type of a layer.
+   * @function
+   * @public
+   * @param {M.layer.Vector} layer - layer vector
+   * @return {string} geometry type of layer
+   */
+  getGeometryType() {
+    let geometry = null;
+    if (!isNullOrEmpty(this.getFeatures())) {
+      const firstFeature = this.getFeatures()[0];
+      if (!isNullOrEmpty(firstFeature) && !isNullOrEmpty(firstFeature.getGeometry())) {
+        geometry = firstFeature.getGeometry().type;
+      }
+    }
+    return geometry;
   }
 }
 

@@ -1,6 +1,6 @@
 import MObject from 'facade/js/Object';
 import Remote from 'facade/js/util/Remote';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 import Exception from 'facade/js/exception/exception';
 import Dialog from 'facade/js/dialog';
 /**
@@ -65,17 +65,14 @@ export default class WFS extends MObject {
   loadInternal_(url, projection) {
     return new Promise((success, fail) => {
       Remote.get(url).then((response) => {
-        if (!Utils.isNullOrEmpty(response.text) && response.text.indexOf('ServiceExceptionReport') < 0) {
+        if (!isNullOrEmpty(response.text) && response.text.indexOf('ServiceExceptionReport') < 0) {
           const features = this.format_.read(response.text, projection);
           success(features);
-        }
-        else if (response.code === 401) {
+        } else if (response.code === 401) {
           Dialog.error('Ha ocurrido un error al cargar la capa: Usuario no autorizado.');
-        }
-        else if (response.text.indexOf('featureId and cql_filter') >= 0) {
+        } else if (response.text.indexOf('featureId and cql_filter') >= 0) {
           Dialog.error('FeatureID y CQL son mutuamente excluyentes. Indicar sólo un tipo de filtrado.');
-        }
-        else {
+        } else {
           Exception('No hubo respuesta en la operación GetFeature');
         }
       });

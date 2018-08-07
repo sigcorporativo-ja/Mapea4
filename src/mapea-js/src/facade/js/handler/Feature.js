@@ -1,5 +1,5 @@
 import HandlerImpl from 'impl/handler/Feature';
-import Utils from '../util/Utils';
+import { isFunction, includes } from '../util/Utils';
 import Exception from '../exception/exception';
 import Base from '../Base';
 import FacadeFeature from '../feature/Feature';
@@ -55,10 +55,10 @@ export default class Feature extends Base {
     this.prevHoverFeatures_ = {};
 
     // checks if the implementation has all methods
-    if (!Utils.isFunction(impl.addTo)) {
+    if (!isFunction(impl.addTo)) {
       Exception('La implementación usada no posee el método addTo');
     }
-    if (!Utils.isFunction(impl.getFeaturesByLayer)) {
+    if (!isFunction(impl.getFeaturesByLayer)) {
       Exception('La implementación usada no posee el método getFeaturesByLayer');
     }
   }
@@ -95,8 +95,7 @@ export default class Feature extends Base {
         // no features selected then unselect prev selected features
         if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
           this.unselectFeatures(prevFeatures, layer, evt);
-        }
-        else if (clickedFeatures.length > 0) {
+        } else if (clickedFeatures.length > 0) {
           const newFeatures = clickedFeatures.filter(f => !prevFeatures.some(pf => pf.equals(f)));
           const diffFeatures = prevFeatures.filter(f => !clickedFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
@@ -128,8 +127,7 @@ export default class Feature extends Base {
         // no features selected then unselect prev selected features
         if (hoveredFeatures.length === 0 && prevFeatures.length > 0) {
           this.leaveFeatures_(prevFeatures, layer, evt);
-        }
-        else if (hoveredFeatures.length > 0) {
+        } else if (hoveredFeatures.length > 0) {
           const newFeatures = hoveredFeatures
             .filter(f => (f instanceof FacadeFeature) && !prevFeatures.some(pf => pf.equals(f)));
           const diffFeatures = prevFeatures.filter(f => !hoveredFeatures.some(pf => pf.equals(f)));
@@ -157,7 +155,7 @@ export default class Feature extends Base {
     this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name]
       .concat(features);
     const layerImpl = layer.getImpl();
-    if (Utils.isFunction(layerImpl.selectFeatures)) {
+    if (isFunction(layerImpl.selectFeatures)) {
       layerImpl.selectFeatures(features, evt.coord, evt);
     }
     layer.fire(EvtManaManager.SELECT_FEATURES, [features, evt]);
@@ -175,7 +173,7 @@ export default class Feature extends Base {
     this.prevSelectedFeatures_[layer.name] =
       this.prevSelectedFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
     const layerImpl = layer.getImpl();
-    if (Utils.isFunction(layerImpl.unselectFeatures)) {
+    if (isFunction(layerImpl.unselectFeatures)) {
       layerImpl.unselectFeatures(features, evt.coord);
     }
     layer.fire(EvtManaManager.UNSELECT_FEATURES, [features, evt.coord]);
@@ -248,7 +246,7 @@ export default class Feature extends Base {
    * @export
    */
   addLayer(layer) {
-    if (!Utils.includes(this.layers_, layer)) {
+    if (!includes(this.layers_, layer)) {
       this.layers_.push(layer);
       this.prevSelectedFeatures_[layer.name] = [];
       this.prevHoverFeatures_[layer.name] = [];

@@ -1,13 +1,10 @@
-import MObject from "facade/js/Object";
-import Utils from "facade/js/util/Utils";
-import Config from "Configuration";
-import Exception from "facade/js/exception/Exception";
-import LayerType from "facade/js/layer/Type";
-import WMS from "facade/js/layer/WMS";
-import WFS from "facade/js/layer/WFS";
-import WMC from "facade/js/layer/WMC";
-import Panzoombar from "facade/js/control/Panzoombar";
-import Control from "facade/js/control/Control";
+import MObject from 'facade/js/Object';
+import { isNullOrEmpty, isArray, isString, isObject, includes } from 'facade/js/util/Utils';
+import Exception from 'facade/js/exception/Exception';
+import LayerType from 'facade/js/layer/Type';
+import WMS from 'facade/js/layer/WMS';
+import Panzoombar from 'facade/js/control/Panzoombar';
+import Control from 'facade/js/control/Control';
 
 export default class Map extends MObject {
   /**
@@ -21,7 +18,7 @@ export default class Map extends MObject {
    * @api stable
    */
   constructor(div, options = {}) {
-    super()
+    super();
     /**
      * Facade map to implement
      * @private
@@ -56,7 +53,7 @@ export default class Map extends MObject {
      * @type {L.Map}
      */
     this.map_ = new L.Map(div.id, {
-      zoomControl: false
+      zoomControl: false,
     });
   }
 
@@ -70,20 +67,24 @@ export default class Map extends MObject {
    * @api stable
    */
   getLayers(filters) {
-    let wmcLayers = this.getWMC(filters);
-    let kmlLayers = this.getKML(filters);
-    let wmsLayers = this.getWMS(filters);
-    let wfsLayers = this.getWFS(filters);
-    let wmtsLayers = this.getWMTS(filters);
-    let mbtilesLayers = this.getMBtiles(filters);
+    const wmcLayers = this.getWMC(filters);
+    const kmlLayers = this.getKML(filters);
+    const wmsLayers = this.getWMS(filters);
+    const wfsLayers = this.getWFS(filters);
+    const wmtsLayers = this.getWMTS(filters);
+    const mbtilesLayers = this.getMBtiles(filters);
 
-    let unknowLayers = this.layers_.filter(layer => {
+    const unknowLayers = this.layers_.filter((layer) => {
       return !LayerType.know(layer.type);
     });
 
-    return wmcLayers.concat(kmlLayers).concat(wmsLayers)
-      .concat(wfsLayers).concat(wmtsLayers)
-      .concat(mbtilesLayers).concat(unknowLayers);
+    return wmcLayers
+      .concat(kmlLayers)
+      .concat(wmsLayers)
+      .concat(wfsLayers)
+      .concat(wmtsLayers)
+      .concat(mbtilesLayers)
+      .concat(unknowLayers);
   }
 
   /**
@@ -96,9 +97,9 @@ export default class Map extends MObject {
    * @api stable
    */
   getBaseLayers() {
-    let baseLayers = this.getLayers().filter(layer => {
+    const baseLayers = this.getLayers().filter((layer) => {
       let isBaseLayer = false;
-      if (Utils.isNullOrEmpty(layer.type) || (layer.type === LayerType.WMS)) {
+      if (isNullOrEmpty(layer.type) || (layer.type === LayerType.WMS)) {
         isBaseLayer = (layer.transparent !== true);
       }
       return isBaseLayer;
@@ -117,10 +118,10 @@ export default class Map extends MObject {
    */
   addLayers(layers) {
     // gets the layers with type defined and undefined
-    let unknowLayers = layers.filter((layer) => {
+    const unknowLayers = layers.filter((layer) => {
       return !LayerType.know(layer.type);
     });
-    let knowLayers = layers.filter((layer) => {
+    const knowLayers = layers.filter((layer) => {
       return LayerType.know(layer.type);
     });
 
@@ -133,7 +134,7 @@ export default class Map extends MObject {
 
     // adds unknow layers
     unknowLayers.forEach((layer) => {
-      if (!Utils.includes(this.layers_, layer)) {
+      if (!includes(this.layers_, layer)) {
         layer.getImpl().addTo(this.facadeMap_);
         this.layers_.push(layer);
       }
@@ -151,13 +152,12 @@ export default class Map extends MObject {
    * @api stable
    */
   removeLayers(layers) {
-
     // gets the layers with type defined and undefined
-    let unknowLayers = layers.filter((layer) => {
-      return Utils.isNullOrEmpty(layer.type);
+    const unknowLayers = layers.filter((layer) => {
+      return isNullOrEmpty(layer.type);
     });
-    let knowLayers = layers.filter((layer) => {
-      return !Utils.isNullOrEmpty(layer.type);
+    const knowLayers = layers.filter((layer) => {
+      return !isNullOrEmpty(layer.type);
     });
 
     this.removeWMC(knowLayers);
@@ -169,7 +169,7 @@ export default class Map extends MObject {
 
     // removes unknow layers
     unknowLayers.forEach((layer) => {
-      if (!Utils.includes(this.layers_, layer)) {
+      if (!includes(this.layers_, layer)) {
         this.layers_.remove(layer);
         layer.getImpl().destroy();
       }
@@ -186,45 +186,43 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.WMC>} layers from the map
    * @api stable
    */
-  getWMC(filters) {
+  getWMC(filtersParam) {
     let foundLayers = [];
-
+    let filters = filtersParam;
     // get all wmcLayers
-    let wmcLayers = this.layers_.filter((layer) => {
+    const wmcLayers = this.layers_.filter((layer) => {
       return (layer.type === LayerType.WMC);
     });
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wmcLayers;
-    }
-    else {
-      filters.forEach(filterLayer => {
+    } else {
+      filters.forEach((filterLayer) => {
         foundLayers = foundLayers.concat(wmcLayers.filter((wmcLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmcLayer)) {
             // type
-            if (!Utils.isNullOrEmpty(filterLayer.type)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === wmcLayer.type));
             }
             // URL
-            if (!Utils.isNullOrEmpty(filterLayer.url)) {
+            if (!isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === wmcLayer.url));
             }
             // name
-            if (!Utils.isNullOrEmpty(filterLayer.name)) {
+            if (!isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wmcLayer.name));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -245,8 +243,8 @@ export default class Map extends MObject {
   addWMC(layers) {
     layers.forEach((layer, zIndex) => {
       // checks if layer is WMC and was added to the map
-      if (layer.type == LayerType.WMC) {
-        if (!Utils.includes(this.layers_, layer)) {
+      if (layer.type === LayerType.WMC) {
+        if (!includes(this.layers_, layer)) {
           layer.getImpl().setZIndex();
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
@@ -266,8 +264,8 @@ export default class Map extends MObject {
    * @api stable
    */
   removeWMC(layers) {
-    let wmcMapLayers = this.getWMC(layers);
-    wmcMapLayers.forEach(wmcLayer => {
+    const wmcMapLayers = this.getWMC(layers);
+    wmcMapLayers.forEach((wmcLayer) => {
       this.layers_.remove(wmcLayer);
     });
 
@@ -282,49 +280,47 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.KML>} layers from the map
    * @api stable
    */
-  getKML(filters) {
+  getKML(filtersParam) {
     let foundLayers = [];
-
+    let filters = filtersParam;
     // get all kmlLayers
-    let kmlLayers = this.layers_.filter(layer => {
+    const kmlLayers = this.layers_.filter((layer) => {
       return (layer.type === LayerType.KML);
     });
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = kmlLayers;
-    }
-    else {
-      filters.forEach(filterLayer => {
-        let filteredKMLLayers = kmlLayers.filter(kmlLayer => {
+    } else {
+      filters.forEach((filterLayer) => {
+        const filteredKMLLayers = kmlLayers.filter((kmlLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(kmlLayer)) {
             // type
-            if (!Utils.isNullOrEmpty(filterLayer.type)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === kmlLayer.type));
             }
             // URL
-            if (!Utils.isNullOrEmpty(filterLayer.url)) {
+            if (!isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === kmlLayer.url));
             }
             // name
-            if (!Utils.isNullOrEmpty(filterLayer.name)) {
+            if (!isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === kmlLayer.name));
             }
             // extract
-            if (!Utils.isNullOrEmpty(filterLayer.extract)) {
+            if (!isNullOrEmpty(filterLayer.extract)) {
               layerMatched = (layerMatched && (filterLayer.extract === kmlLayer.extract));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -344,13 +340,13 @@ export default class Map extends MObject {
    * @api stable
    */
   addKML(layers) {
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       // checks if layer is WMC and was added to the map
-      if (layer.type == LayerType.KML) {
-        if (!Utils.includes(this.layers_, layer)) {
+      if (layer.type === LayerType.KML) {
+        if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
-          let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.KML];
+          const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.KML];
           layer.getImpl().setZIndex(zIndex);
 
           // adds to featurehandler
@@ -373,8 +369,8 @@ export default class Map extends MObject {
    * @api stable
    */
   removeKML(layers) {
-    let kmlMapLayers = this.getKML(layers);
-    kmlMapLayers.forEach(kmlLayer => {
+    const kmlMapLayers = this.getKML(layers);
+    kmlMapLayers.forEach((kmlLayer) => {
       this.layers_.remove(kmlLayer);
       kmlLayer.getImpl().destroy();
     });
@@ -390,71 +386,68 @@ export default class Map extends MObject {
    * @returns {Array<WMS>} layers from the map
    * @api stable
    */
-  getWMS(filters) {
+  getWMS(filtersParam) {
     let foundLayers = [];
-
+    let filters = filtersParam;
     // get all wmsLayers
-    let wmsLayers = this.layers_.filter(layer => {
+    const wmsLayers = this.layers_.filter((layer) => {
       return (layer.type === LayerType.WMS);
     });
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wmsLayers;
-    }
-    else {
-      filters.forEach(filterLayer => {
-        let filteredWMSLayers = wmsLayers.filter(wmsLayer => {
+    } else {
+      filters.forEach((filterLayer) => {
+        const filteredWMSLayers = wmsLayers.filter((wmsLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmsLayer)) {
             // if instanceof WMS check if it is the same
             if (filterLayer instanceof WMS) {
               layerMatched = (filterLayer === wmsLayer);
-            }
-            else {
+            } else {
               // type
-              if (!Utils.isNullOrEmpty(filterLayer.type)) {
+              if (!isNullOrEmpty(filterLayer.type)) {
                 layerMatched = (layerMatched && (filterLayer.type === wmsLayer.type));
               }
               // URL
-              if (!Utils.isNullOrEmpty(filterLayer.url)) {
+              if (!isNullOrEmpty(filterLayer.url)) {
                 layerMatched = (layerMatched && (filterLayer.url === wmsLayer.url));
               }
               // name
-              if (!Utils.isNullOrEmpty(filterLayer.name)) {
+              if (!isNullOrEmpty(filterLayer.name)) {
                 layerMatched = (layerMatched && (filterLayer.name === wmsLayer.name));
               }
               // legend
-              if (!Utils.isNullOrEmpty(filterLayer.legend)) {
+              if (!isNullOrEmpty(filterLayer.legend)) {
                 layerMatched = (layerMatched && (filterLayer.legend === wmsLayer.legend));
               }
               // transparent
-              if (!Utils.isNullOrEmpty(filterLayer.transparent)) {
+              if (!isNullOrEmpty(filterLayer.transparent)) {
                 layerMatched = (layerMatched && (filterLayer.transparent === wmsLayer.transparent));
               }
               // tiled
-              if (!Utils.isNullOrEmpty(filterLayer.tiled)) {
+              if (!isNullOrEmpty(filterLayer.tiled)) {
                 layerMatched = (layerMatched && (filterLayer.tiled === wmsLayer.tiled));
               }
               // cql
-              if (!Utils.isNullOrEmpty(filterLayer.cql)) {
+              if (!isNullOrEmpty(filterLayer.cql)) {
                 layerMatched = (layerMatched && (filterLayer.cql === wmsLayer.cql));
               }
               // version
-              if (!Utils.isNullOrEmpty(filterLayer.version)) {
+              if (!isNullOrEmpty(filterLayer.version)) {
                 layerMatched = (layerMatched && (filterLayer.version === wmsLayer.version));
               }
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -475,13 +468,13 @@ export default class Map extends MObject {
    */
   addWMS(layers) {
     // cehcks if exists a base layer
-    let baseLayers = this.getWMS().filter(layer => layer.transparent !== true);
+    const baseLayers = this.getWMS().filter(layer => layer.transparent !== true);
     let existsBaseLayer = (baseLayers.length > 0);
 
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       // checks if layer is WMC and was added to the map
-      if (layer.type == LayerType.WMS) {
-        if (!Utils.includes(this.layers_, layer)) {
+      if (layer.type === LayerType.WMS) {
+        if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
 
@@ -494,9 +487,8 @@ export default class Map extends MObject {
               this.updateResolutionsFromBaseLayer();
             }
             layer.getImpl().setZIndex(0);
-          }
-          else {
-            let zIndex = this.layers_.length + layer.getImpl().getZIndex();
+          } else {
+            const zIndex = this.layers_.length + layer.getImpl().getZIndex();
             layer.getImpl().setZIndex(zIndex);
           }
         }
@@ -514,8 +506,8 @@ export default class Map extends MObject {
    * @api stable
    */
   removeWMS(layers) {
-    let wmsMapLayers = this.getWMS(layers);
-    wmsMapLayers.forEach(wmsLayer => {
+    const wmsMapLayers = this.getWMS(layers);
+    wmsMapLayers.forEach((wmsLayer) => {
       this.layers_.remove(wmsLayer);
       wmsLayer.getImpl().destroy();
     });
@@ -531,67 +523,65 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.WFS>} layers from the map
    * @api stable
    */
-  getWFS(filters) {
+  getWFS(filtersParam) {
     let foundLayers = [];
-
+    let filters = filtersParam;
     // get all wfsLayers
-    let wfsLayers = this.layers_.filter(layer => layer.type === LayerType.WFS);
+    const wfsLayers = this.layers_.filter(layer => layer.type === LayerType.WFS);
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wfsLayers;
-    }
-    else {
-      filters.forEach(filterLayer => {
-        let filteredWFSLayers = wfsLayers.filter(wfsLayer => {
+    } else {
+      filters.forEach((filterLayer) => {
+        const filteredWFSLayers = wfsLayers.filter((wfsLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wfsLayer)) {
             // type
-            if (!Utils.isNullOrEmpty(filterLayer.type)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === wfsLayer.type));
             }
             // URL
-            if (!Utils.isNullOrEmpty(filterLayer.url)) {
+            if (!isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === wfsLayer.url));
             }
             // name
-            if (!Utils.isNullOrEmpty(filterLayer.name)) {
+            if (!isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wfsLayer.name));
             }
             // namespace
-            if (!Utils.isNullOrEmpty(filterLayer.namespace)) {
+            if (!isNullOrEmpty(filterLayer.namespace)) {
               layerMatched = (layerMatched && (filterLayer.namespace === wfsLayer.namespace));
             }
             // legend
-            if (!Utils.isNullOrEmpty(filterLayer.legend)) {
+            if (!isNullOrEmpty(filterLayer.legend)) {
               layerMatched = (layerMatched && (filterLayer.legend === wfsLayer.legend));
             }
             // cql
-            if (!Utils.isNullOrEmpty(filterLayer.cql)) {
+            if (!isNullOrEmpty(filterLayer.cql)) {
               layerMatched = (layerMatched && (filterLayer.cql === wfsLayer.cql));
             }
             // geometry
-            if (!Utils.isNullOrEmpty(filterLayer.geometry)) {
+            if (!isNullOrEmpty(filterLayer.geometry)) {
               layerMatched = (layerMatched && (filterLayer.geometry === wfsLayer.geometry));
             }
             // ids
-            if (!Utils.isNullOrEmpty(filterLayer.ids)) {
+            if (!isNullOrEmpty(filterLayer.ids)) {
               layerMatched = (layerMatched && (filterLayer.ids === wfsLayer.ids));
             }
             // version
-            if (!Utils.isNullOrEmpty(filterLayer.version)) {
+            if (!isNullOrEmpty(filterLayer.version)) {
               layerMatched = (layerMatched && (filterLayer.version === wfsLayer.version));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -611,13 +601,13 @@ export default class Map extends MObject {
    * @api stable
    */
   addWFS(layers) {
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       // checks if layer is WFS and was added to the map
-      if (layer.type == LayerType.WFS) {
-        if (!Utils.includes(this.layers_, layer)) {
+      if (layer.type === LayerType.WFS) {
+        if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
-          let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WFS];
+          const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WFS];
           layer.getImpl().setZIndex(zIndex);
           this.featuresHandler_.addLayer(layer.getImpl());
         }
@@ -636,8 +626,8 @@ export default class Map extends MObject {
    * @api stable
    */
   removeWFS(layers) {
-    let wfsMapLayers = this.getWFS(layers);
-    wfsMapLayers.forEach(wfsLayer => {
+    const wfsMapLayers = this.getWFS(layers);
+    wfsMapLayers.forEach((wfsLayer) => {
       wfsLayer.getImpl().destroy();
       this.layers_.remove(wfsLayer);
     });
@@ -653,52 +643,50 @@ export default class Map extends MObject {
    * @returns {Array<M.layer.WMTS>} layers from the map
    * @api stable
    */
-  getWMTS(filters) {
+  getWMTS(filtersParam) {
     let foundLayers = [];
-
+    let filters = filtersParam;
     // get all kmlLayers
-    let wmtsLayers = this.layers_.filter(layer => layer.type === LayerType.WMTS);
+    const wmtsLayers = this.layers_.filter(layer => layer.type === LayerType.WMTS);
 
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
 
     if (filters.length === 0) {
       foundLayers = wmtsLayers;
-    }
-    else {
-      filters.forEach(filterLayer => {
+    } else {
+      filters.forEach((filterLayer) => {
         // TODO ERROR DE RECURSIVIDAD: let l = map.getLayers(); map.getWMS(l);
-        let filteredWMTSLayers = wmtsLayers.filter(wmtsLayer => {
+        const filteredWMTSLayers = wmtsLayers.filter((wmtsLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
           if (!foundLayers.includes(wmtsLayer)) {
             // type
-            if (!Utils.isNullOrEmpty(filterLayer.type)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
               layerMatched = (layerMatched && (filterLayer.type === wmtsLayer.type));
             }
             // URL
-            if (!Utils.isNullOrEmpty(filterLayer.url)) {
+            if (!isNullOrEmpty(filterLayer.url)) {
               layerMatched = (layerMatched && (filterLayer.url === wmtsLayer.url));
             }
             // name
-            if (!Utils.isNullOrEmpty(filterLayer.name)) {
+            if (!isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wmtsLayer.name));
             }
             // matrixSet
-            if (!Utils.isNullOrEmpty(filterLayer.matrixSet)) {
+            if (!isNullOrEmpty(filterLayer.matrixSet)) {
               layerMatched = (layerMatched && (filterLayer.matrixSet === wmtsLayer.matrixSet));
             }
             // legend
-            if (!Utils.isNullOrEmpty(filterLayer.legend)) {
+            if (!isNullOrEmpty(filterLayer.legend)) {
               layerMatched = (layerMatched && (filterLayer.legend === wmtsLayer.legend));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -718,13 +706,13 @@ export default class Map extends MObject {
    * @api stable
    */
   addWMTS(layers) {
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       // checks if layer is WMTS and was added to the map
-      if (layer.type == LayerType.WMTS) {
-        if (!Utils.includes(this.layers_, layer)) {
+      if (layer.type === LayerType.WMTS) {
+        if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
-          let zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMTS];
+          const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMTS];
           layer.getImpl().setZIndex(zIndex);
         }
       }
@@ -741,8 +729,8 @@ export default class Map extends MObject {
    * @api stable
    */
   removeWMTS(layers) {
-    let wmtsMapLayers = this.getWMTS(layers);
-    wmtsMapLayers.forEach(wmtsLayer => {
+    const wmtsMapLayers = this.getWMTS(layers);
+    wmtsMapLayers.forEach((wmtsLayer) => {
       wmtsLayer.getImpl().destroy();
       this.layers_.remove(wmtsLayer);
     });
@@ -759,7 +747,7 @@ export default class Map extends MObject {
    * @api stable
    */
   getMBtiles(filters) {
-    let foundLayers = [];
+    const foundLayers = [];
 
     return foundLayers;
   }
@@ -773,10 +761,10 @@ export default class Map extends MObject {
    * @api stable
    */
   addMBtiles(layers) {
-    layers.forEach(layer => {
+    layers.forEach((layer) => {
       // checks if layer is MBtiles and was added to the map
-      if ((layer.type == LayerType.MBtiles) &&
-        !Utils.includes(this.layers_, layer)) {
+      if ((layer.type === LayerType.MBtiles) &&
+        !includes(this.layers_, layer)) {
         // TODO creating and adding the MBtiles layer with ol3
         this.layers_.push(layer);
       }
@@ -793,8 +781,8 @@ export default class Map extends MObject {
    * @api stable
    */
   removeMBtiles(layers) {
-    let mbtilesMapLayers = this.getMBtiles(layers);
-    mbtilesMapLayers.forEach(mbtilesLayer => {
+    const mbtilesMapLayers = this.getMBtiles(layers);
+    mbtilesMapLayers.forEach((mbtilesLayer) => {
       // TODO removing the MBtiles layer with ol3
       this.layers_.remove(mbtilesLayer);
     });
@@ -811,32 +799,29 @@ export default class Map extends MObject {
    * @returns {Array<M.Control>}
    * @api stable
    */
-  getControls(filters) {
+  getControls(filtersParam) {
     let foundControls = [];
-
+    let filters = filtersParam;
     // parse to Array
-    if (Utils.isNullOrEmpty(filters)) {
+    if (isNullOrEmpty(filters)) {
       filters = [];
     }
-    if (!Utils.isArray(filters)) {
+    if (!isArray(filters)) {
       filters = [filters];
     }
     if (filters.length === 0) {
       foundControls = this.controls_;
-    }
-    else {
+    } else {
       filters.forEach((filterControl) => {
         foundControls = foundControls.concat(this.controls_.filter((control) => {
           let controlMatched = false;
 
-          if (!Utils.includes(foundControls, control)) {
-            if (Utils.isString(filterControl)) {
+          if (!includes(foundControls, control)) {
+            if (isString(filterControl)) {
               controlMatched = (filterControl === control.name);
-            }
-            else if (filterControl instanceof Control) {
+            } else if (filterControl instanceof Control) {
               controlMatched = (filterControl === control);
-            }
-            else if (Utils.isObject(filterControl)) {
+            } else if (isObject(filterControl)) {
               controlMatched = (filterControl.name === control.name);
             }
           }
@@ -857,11 +842,11 @@ export default class Map extends MObject {
    * @api stable
    */
   addControls(controls) {
-    controls.forEach(control => {
+    controls.forEach((control) => {
       if (control instanceof Panzoombar) {
         this.facadeMap_.addControls('panzoom');
       }
-      if (!Utils.includes(this.controls_, control)) {
+      if (!includes(this.controls_, control)) {
         this.controls_.push(control);
       }
     });
@@ -877,8 +862,8 @@ export default class Map extends MObject {
    * @api stable
    */
   removeControls(controls) {
-    let mapControls = this.getControls(controls);
-    mapControls.forEach(control => {
+    const mapControls = this.getControls(controls);
+    mapControls.forEach((control) => {
       control.getImpl().destroy();
       this.controls_.remove(control);
     });
@@ -898,16 +883,16 @@ export default class Map extends MObject {
    */
   setMaxExtent(maxExtent) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(maxExtent)) {
+    if (isNullOrEmpty(maxExtent)) {
       Exception('No ha especificado ningún maxExtent');
     }
 
     // set the extent by ol
-    let lMap = this.getMapImpl();
+    const lMap = this.getMapImpl();
     lMap.setMaxBounds([
-         [maxExtent.x.min, maxExtent.y.min],
-         [maxExtent.x.max, maxExtent.y.max]
-      ]);
+      [maxExtent.x.min, maxExtent.y.min],
+      [maxExtent.x.max, maxExtent.y.max],
+    ]);
 
     return this;
   }
@@ -923,19 +908,19 @@ export default class Map extends MObject {
    */
   getMaxExtent() {
     let extent;
-    let lMap = this.getMapImpl();
-    let lExtent = lMap.maxBounds;
+    const lMap = this.getMapImpl();
+    const lExtent = lMap.maxBounds;
 
-    if (!Utils.isNullOrEmpty(lExtent)) {
+    if (!isNullOrEmpty(lExtent)) {
       extent = {
-        'x': {
-          'min': lExtent.getWest(),
-          'max': lExtent.getEast()
+        x: {
+          min: lExtent.getWest(),
+          max: lExtent.getEast(),
         },
-        'y': {
-          'min': lExtent.getSouth(),
-          'max': lExtent.getNorth()
-        }
+        y: {
+          min: lExtent.getSouth(),
+          max: lExtent.getNorth(),
+        },
       };
     }
 
@@ -954,7 +939,7 @@ export default class Map extends MObject {
    */
   setBbox(bbox) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(bbox)) {
+    if (isNullOrEmpty(bbox)) {
       Exception('No ha especificado ningún bbox');
     }
 
@@ -962,19 +947,18 @@ export default class Map extends MObject {
 
     // set the extent by ol
     let extent;
-    if (Utils.isArray(bbox)) {
+    if (isArray(bbox)) {
       extent = [
-            [bbox[0], bbox[1]],
-            [bbox[2], bbox[3]]
-         ];
-    }
-    else if (Utils.isObject(bbox)) {
+        [bbox[0], bbox[1]],
+        [bbox[2], bbox[3]],
+      ];
+    } else if (isObject(bbox)) {
       extent = [
-            [bbox.x.min, bbox.y.min],
-            [bbox.x.max, bbox.y.max]
-         ];
+        [bbox.x.min, bbox.y.min],
+        [bbox.x.max, bbox.y.max],
+      ];
     }
-    let lMap = this.getMapImpl();
+    const lMap = this.getMapImpl();
     lMap.fitBounds(extent);
 
     return this;
@@ -992,19 +976,19 @@ export default class Map extends MObject {
   getBbox() {
     let bbox = null;
 
-    let lMap = this.getMapImpl();
-    let lExtent = lMap.getBounds();
+    const lMap = this.getMapImpl();
+    const lExtent = lMap.getBounds();
 
-    if (!Utils.isNullOrEmpty(lExtent)) {
+    if (!isNullOrEmpty(lExtent)) {
       bbox = {
-        'x': {
-          'min': lExtent.getWest(),
-          'max': lExtent.getEast()
+        x: {
+          min: lExtent.getWest(),
+          max: lExtent.getEast(),
         },
-        'y': {
-          'min': lExtent.getSouth(),
-          'max': lExtent.getNorth()
-        }
+        y: {
+          min: lExtent.getSouth(),
+          max: lExtent.getNorth(),
+        },
       };
     }
     return bbox;
@@ -1022,7 +1006,7 @@ export default class Map extends MObject {
    */
   setZoom(zoom) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(zoom)) {
+    if (isNullOrEmpty(zoom)) {
       Exception('No ha especificado ningún zoom');
     }
 
@@ -1042,7 +1026,7 @@ export default class Map extends MObject {
    * @api stable
    */
   getZoom() {
-    let zoom = this.getMapImpl().getZoom();
+    const zoom = this.getMapImpl().getZoom();
     return zoom;
   }
 
@@ -1074,14 +1058,13 @@ export default class Map extends MObject {
     let lCenter;
     try {
       lCenter = this.getMapImpl().getCenter();
-    }
-    catch (err) {
+    } catch (err) {
       // if map is not loaded throw an error
     }
-    if (!Utils.isNullOrEmpty(lCenter)) {
+    if (!isNullOrEmpty(lCenter)) {
       center = {
-        'x': lCenter.lat,
-        'y': lCenter.lng
+        x: lCenter.lat,
+        y: lCenter.lng,
       };
     }
     return center;
@@ -1112,7 +1095,7 @@ export default class Map extends MObject {
    */
   setProjection(projection) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(projection)) {
+    if (isNullOrEmpty(projection)) {
       Exception('No ha especificado ninguna projection');
     }
 
@@ -1131,8 +1114,8 @@ export default class Map extends MObject {
    */
   getProjection() {
     return {
-      'code': L.CRS.EPSG3857.code,
-      'units': 'm'
+      code: L.CRS.EPSG3857.code,
+      units: 'm',
     };
   }
 
@@ -1146,19 +1129,6 @@ export default class Map extends MObject {
    */
   getMapImpl() {
     return this.map_;
-  }
-
-  /**
-   * This function gets the envolved extent of this
-   * map instance
-   *
-   * @public
-   * @function
-   * @returns {Promise}
-   * @api stable
-   */
-  getEnvolvedExtent() {
-    // TODO
   }
 
   /**
@@ -1208,14 +1178,14 @@ export default class Map extends MObject {
   getEnvolvedExtent() {
     return new Promise((success, fail) => {
       success.call(this, {
-        'x': {
-          'min': -20037508.342789244,
-          'max': 20037508.342789244
+        x: {
+          min: -20037508.342789244,
+          max: 20037508.342789244,
         },
-        'y': {
-          'min': -20037508.342789244,
-          'max': 20037508.342789244
-        }
+        y: {
+          min: -20037508.342789244,
+          max: 20037508.342789244,
+        },
       });
     });
   }

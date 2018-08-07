@@ -1,6 +1,6 @@
 import PolygonImpl from 'impl/style/Polygon';
 import Simple from './Simple';
-import Utils from '../util/Utils';
+import { isNullOrEmpty, extendsObj } from '../util/Utils';
 
 /**
  * @namespace M.style.Polygon
@@ -21,10 +21,10 @@ export default class Polygon extends Simple {
 
     super(options, impl);
 
-    if (Utils.isNullOrEmpty(options)) {
+    if (isNullOrEmpty(options)) {
       options = Polygon.DEFAULT_NULL;
     }
-    options = Utils.extends({}, options);
+    options = extendsObj({}, options);
   }
 }
 

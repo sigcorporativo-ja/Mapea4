@@ -1,9 +1,8 @@
-import Layer from "./Layer";
-import Utils from "facade/js/util/Utils";
-import Exception from "facade/js/exception/exception";
-import Popup from "../Popup";
-import FormatGeoJSON from "../format/GeoJSON";
-import Map from "../Map";
+import Exception from 'facade/js/exception/exception';
+import { isFunction, isArray, isNullOrEmpty } from 'facade/js/util/Utils';
+import Layer from './Layer';
+import FormatGeoJSON from '../format/GeoJSON';
+import Map from '../Map';
 
 export default class Draw extends Layer {
   /**
@@ -75,7 +74,7 @@ export default class Draw extends Layer {
           })
         })
       }),
-      zIndex: Map.Z_INDEX["WFS"] + 999
+      zIndex: Map.Z_INDEX['WFS'] + 999
     });
     // sets its visibility if it is in range
     if (this.options.visibility !== false) {
@@ -97,7 +96,7 @@ export default class Draw extends Layer {
     this.selectedFeatures_ = features;
 
     // TODO: manage multiples features
-    if (Utils.isFunction(this.selectedFeatures_[0].click)) {
+    if (isFunction(this.selectedFeatures_[0].click)) {
       this.selectedFeatures_[0].click();
     }
   }
@@ -129,10 +128,10 @@ export default class Draw extends Layer {
    */
   drawPoints(points) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(points)) {
+    if (isNullOrEmpty(points)) {
       Exception('No ha especificado ningún punto');
     }
-    if (!Utils.isArray(points)) {
+    if (!isArray(points)) {
       points = [points];
     }
     let geojsons = this.pointsToGeoJSON_(points);
@@ -150,10 +149,10 @@ export default class Draw extends Layer {
    */
   drawGeoJSON(geojsons) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(geojsons)) {
+    if (isNullOrEmpty(geojsons)) {
       Exception('No ha especificado ningún GeoJSON');
     }
-    if (!Utils.isArray(geojsons)) {
+    if (!isArray(geojsons)) {
       geojsons = [geojsons];
     }
 
@@ -161,168 +160,166 @@ export default class Draw extends Layer {
     let projection = ol.proj.get(this.map.getProjection().code);
 
     let features = [];
-    geojsons.forEach(geojson => {
-        let formattedFeatures = this.geojsonFormatter_.readFeatures(geojson, {
-          'dataProjection': projection
-        });
-        features = features.concat(formattedFeatures);
-      };
+    geojsons.forEach((geojson) => {
+      let formattedFeatures = this.geojsonFormatter_.readFeatures(geojson, {
+        dataProjection: projection,
+      });
+      features = features.concat(formattedFeatures);
+    });
 
+    this.ol3Layer.getSource().addFeatures(features);
+  }
+
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @public
+   * @function
+   * @param {Array<Mx.Point>} coordinate
+   * @api stable
+   */
+  drawFeatures(features) {
+    // checks if the param is null or empty
+    if (!isNullOrEmpty(features)) {
+      if (!isArray(features)) {
+        features = [features];
+      }
       this.ol3Layer.getSource().addFeatures(features);
     }
+  }
 
-    /**
-     * This function checks if an object is equals
-     * to this layer
-     *
-     * @public
-     * @function
-     * @param {Array<Mx.Point>} coordinate
-     * @api stable
-     */
-    drawFeatures(features) {
-      // checks if the param is null or empty
-      if (!Utils.isNullOrEmpty(features)) {
-        if (!Utils.isArray(features)) {
-          features = [features];
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @public
+   * @function
+   * @param {Array<Mx.Point>} coordinate
+   * @api stable
+   */
+  removeFeatures(features) {
+    // checks if the param is null or empty
+    if (!isNullOrEmpty(features)) {
+      if (!isArray(features)) {
+        features = [features];
+      }
+      let olSource = this.ol3Layer.getSource();
+
+      features.forEach(feature => {
+        try {
+          olSource.removeFeature(feature);
+        } catch (err) {
+          console.log(err);
+          // the feature does not exist in the source
         }
-        this.ol3Layer.getSource().addFeatures(features);
-      }
-    }
-
-    /**
-     * This function checks if an object is equals
-     * to this layer
-     *
-     * @public
-     * @function
-     * @param {Array<Mx.Point>} coordinate
-     * @api stable
-     */
-    removeFeatures(features) {
-      // checks if the param is null or empty
-      if (!Utils.isNullOrEmpty(features)) {
-        if (!Utils.isArray(features)) {
-          features = [features];
-        }
-        let olSource = this.ol3Layer.getSource();
-
-        features.forEach(feature => {
-          try {
-            olSource.removeFeature(feature);
-          }
-          catch (err) {
-            console.log(err);
-            // the feature does not exist in the source
-          }
-        });
-      }
-    }
-
-    /**
-     * This function checks if an object is equals
-     * to this layer
-     *
-     * @public
-     * @function
-     * @param {ol.Coordinate} coordinate
-     * @api stable
-     */
-    getPoints(coordinate) {
-      let features = [];
-      let drawSource = this.ol3Layer.getSource();
-
-      if (!Utils.isNullOrEmpty(coordinate)) {
-        features = drawSource.getFeaturesAtCoordinate(coordinate);
-      }
-      else {
-        features = drawSource.getFeatures();
-      }
-
-      return this.featuresToPoints_(features);
-    }
-
-    /**
-     * This function destroys this layer, cleaning the HTML
-     * and unregistering all events
-     *
-     * @public
-     * @function
-     * @api stable
-     */
-    destroy() {
-      let olMap = this.map.getMapImpl();
-
-      if (!Utils.isNullOrEmpty(this.ol3Layer)) {
-        olMap.removeLayer(this.ol3Layer);
-        this.ol3Layer = null;
-      }
-      this.options = null;
-      this.map = null;
-    }
-
-    /**
-     * This function checks if an object is equals
-     * to this layer
-     *
-     * @function
-     * @api stable
-     */
-    equals(obj) {
-      let equals = false;
-
-      if (obj instanceof Draw) {
-        equals = equals && (this.name === obj.name);
-      }
-      return equals;
-    }
-
-    /**
-     * This function checks if an object is equals
-     * to this layer
-     *
-     * @private
-     * @function
-     */
-    pointsToGeoJSON_(points) {
-      let geojsons = [];
-
-      // gets the projection
-      let projection = ol.proj.get(this.map.getProjection().code);
-
-      geojsons = points.map(point => {
-        // properties
-        let geojsonProperties = point.data;
-
-        // geometry
-        let pointGeom = new ol.geom.Point([point.x, point.y]);
-        let geojsonGeom = this.geojsonFormatter_.writeGeometryObject(pointGeom, {
-          'dataProjection': projection
-        });
-
-        // return geojson
-        return {
-          "type": "Feature",
-          "geometry": geojsonGeom,
-          "properties": geojsonProperties,
-          "click": point.click,
-          "showPopup": point.showPopup
-        };
       });
-
-      return geojsons;
-    }
-
-    /**
-     * This function checks if an object is equals
-     * to this layer
-     *
-     * @private
-     * @function
-     */
-    featuresToPoints_(points) {
-      let features = [];
-
-      return features;
     }
   }
+
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @public
+   * @function
+   * @param {ol.Coordinate} coordinate
+   * @api stable
+   */
+  getPoints(coordinate) {
+    let features = [];
+    let drawSource = this.ol3Layer.getSource();
+
+    if (!isNullOrEmpty(coordinate)) {
+      features = drawSource.getFeaturesAtCoordinate(coordinate);
+    } else {
+      features = drawSource.getFeatures();
+    }
+
+    return this.featuresToPoints_(features);
+  }
+
+  /**
+   * This function destroys this layer, cleaning the HTML
+   * and unregistering all events
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  destroy() {
+    const olMap = this.map.getMapImpl();
+
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      olMap.removeLayer(this.ol3Layer);
+      this.ol3Layer = null;
+    }
+    this.options = null;
+    this.map = null;
+  }
+
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @function
+   * @api stable
+   */
+  equals(obj) {
+    let equals = false;
+
+    if (obj instanceof Draw) {
+      equals = equals && (this.name === obj.name);
+    }
+    return equals;
+  }
+
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @private
+   * @function
+   */
+  pointsToGeoJSON_(points) {
+    let geojsons = [];
+
+    // gets the projection
+    const projection = ol.proj.get(this.map.getProjection().code);
+
+    geojsons = points.map((point) => {
+      // properties
+      const geojsonProperties = point.data;
+
+      // geometry
+      const pointGeom = new ol.geom.Point([point.x, point.y]);
+      const geojsonGeom = this.geojsonFormatter_.writeGeometryObject(pointGeom, {
+        dataProjection: projection,
+      });
+
+      // return geojson
+      return {
+        type: 'Feature',
+        geometry: geojsonGeom,
+        properties: geojsonProperties,
+        click: point.click,
+        showPopup: point.showPopup,
+      };
+    });
+
+    return geojsons;
+  }
+
+  /**
+   * This function checks if an object is equals
+   * to this layer
+   *
+   * @private
+   * @function
+   */
+  featuresToPoints_(points) {
+    const features = [];
+
+    return features;
+  }
+}

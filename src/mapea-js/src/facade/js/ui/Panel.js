@@ -1,7 +1,7 @@
 import 'assets/css/panel';
 import panelTemplate from 'templates/panel';
 import Position from './Position';
-import Utils from '../util/Utils';
+import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils';
 import MObject from '../Object';
 import EvtManager from '../event/Manager';
 import ControlBase from '../control/Control';
@@ -57,7 +57,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.collapsible_ = false;
-    if (!Utils.isNullOrEmpty(options.collapsible)) {
+    if (!isNullOrEmpty(options.collapsible)) {
       this.collapsible_ = options.collapsible;
     }
 
@@ -68,7 +68,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.position = Position.TL;
-    if (!Utils.isNullOrEmpty(options.position)) {
+    if (!isNullOrEmpty(options.position)) {
       this.position = options.position;
     }
 
@@ -78,7 +78,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.collapsed_ = this.collapsible_;
-    if (!Utils.isNullOrEmpty(options.collapsed)) {
+    if (!isNullOrEmpty(options.collapsed)) {
       this.collapsed_ = (options.collapsed && (this.collapsible_ === true));
     }
 
@@ -88,7 +88,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.multiActivation_ = false;
-    if (!Utils.isNullOrEmpty(options.multiActivation)) {
+    if (!isNullOrEmpty(options.multiActivation)) {
       this.multiActivation_ = options.multiActivation;
     }
 
@@ -98,7 +98,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.className_ = null;
-    if (!Utils.isNullOrEmpty(options.className)) {
+    if (!isNullOrEmpty(options.className)) {
       this.className_ = options.className;
     }
 
@@ -108,13 +108,11 @@ export default class Panel extends MObject {
      * @expose
      */
     this.collapsedButtonClass_ = null;
-    if (!Utils.isNullOrEmpty(options.collapsedButtonClass)) {
+    if (!isNullOrEmpty(options.collapsedButtonClass)) {
       this.collapsedButtonClass_ = options.collapsedButtonClass;
-    }
-    else if ((this.position === Position.TL) || (this.position === Position.BL)) {
+    } else if ((this.position === Position.TL) || (this.position === Position.BL)) {
       this.collapsedButtonClass_ = 'g-cartografia-flecha-derecha';
-    }
-    else if ((this.position === Position.TR) || (this.position === Position.BR)) {
+    } else if ((this.position === Position.TR) || (this.position === Position.BR)) {
       this.collapsedButtonClass_ = 'g-cartografia-flecha-izquierda';
     }
 
@@ -124,13 +122,11 @@ export default class Panel extends MObject {
      * @expose
      */
     this.openedButtonClass_ = null;
-    if (!Utils.isNullOrEmpty(options.openedButtonClass)) {
+    if (!isNullOrEmpty(options.openedButtonClass)) {
       this.openedButtonClass_ = options.openedButtonClass;
-    }
-    else if ((this.position === Position.TL) || (this.position === Position.BL)) {
+    } else if ((this.position === Position.TL) || (this.position === Position.BL)) {
       this.openedButtonClass_ = 'g-cartografia-flecha-izquierda';
-    }
-    else if ((this.position === Position.TR) || (this.position === Position.BR)) {
+    } else if ((this.position === Position.TR) || (this.position === Position.BR)) {
       this.openedButtonClass_ = 'g-cartografia-flecha-derecha';
     }
 
@@ -162,7 +158,7 @@ export default class Panel extends MObject {
      * @expose
      */
     this.tooltip_ = null;
-    if (!Utils.isNullOrEmpty(options.tooltip)) {
+    if (!isNullOrEmpty(options.tooltip)) {
       this.tooltip_ = options.tooltip;
     }
   }
@@ -197,11 +193,11 @@ export default class Panel extends MObject {
     const html = Template.compile(panelTemplate);
     this.element_ = html;
 
-    if (!Utils.isNullOrEmpty(this.tooltip_)) {
+    if (!isNullOrEmpty(this.tooltip_)) {
       this.element_.setAttribute('title', this.tooltip_);
     }
     this.buttonPanel_ = html.querySelector('button.m-panel-btn');
-    if (!Utils.isNullOrEmpty(this.className_)) {
+    if (!isNullOrEmpty(this.className_)) {
       this.className_.split(/\s+/).forEach((className) => {
         html.classList.add(className);
       });
@@ -209,8 +205,7 @@ export default class Panel extends MObject {
 
     if (this.collapsed_ === true) {
       this.collapse_(html, this.buttonPanel_);
-    }
-    else {
+    } else {
       this.open_(html, this.buttonPanel_);
     }
 
@@ -225,8 +220,7 @@ export default class Panel extends MObject {
       evt.preventDefault();
       if (this.collapsed_ === false) {
         this.collapse_(html, this.buttonPanel_);
-      }
-      else {
+      } else {
         this.open_(html, this.buttonPanel_);
       }
     });
@@ -307,8 +301,8 @@ export default class Panel extends MObject {
    */
   addControls(controlsParam) {
     let controls = controlsParam;
-    if (!Utils.isNullOrEmpty(controls)) {
-      if (!Utils.isArray(controls)) {
+    if (!isNullOrEmpty(controls)) {
+      if (!isArray(controls)) {
         controls = [controls];
       }
       controls.forEach((control) => {
@@ -318,7 +312,7 @@ export default class Panel extends MObject {
             control.setPanel(this);
             control.on(EvtManager.DESTROY, this.removeControl_, this);
           }
-          if (!Utils.isNullOrEmpty(this.controlsContainer_)) {
+          if (!isNullOrEmpty(this.controlsContainer_)) {
             control.on(EvtManager.ADDED_TO_MAP, this.moveControlView_, this);
             this.map_.addControls(control);
           }
@@ -338,12 +332,11 @@ export default class Panel extends MObject {
    */
   hasControl(controlParam) {
     let hasControl = false;
-    if (!Utils.isNullOrEmpty(controlParam)) {
-      if (Utils.isString(controlParam)) {
+    if (!isNullOrEmpty(controlParam)) {
+      if (isString(controlParam)) {
         hasControl = this.controls_.filter(control => control.name === controlParam)[0] != null;
-      }
-      else if (controlParam instanceof ControlBase) {
-        hasControl = Utils.includes(this.controls_, controlParam);
+      } else if (controlParam instanceof ControlBase) {
+        hasControl = includes(this.controls_, controlParam);
       }
     }
     return hasControl;
@@ -359,8 +352,8 @@ export default class Panel extends MObject {
    */
   removeControls(controlsParam) {
     let controls = controlsParam;
-    if (!Utils.isNullOrEmpty(controls)) {
-      if (!Utils.isArray(controls)) {
+    if (!isNullOrEmpty(controls)) {
+      if (!isArray(controls)) {
         controls = [controls];
       }
       controls.forEach((controlParam) => {
@@ -405,10 +398,9 @@ export default class Panel extends MObject {
    * @api stable
    */
   removeClassName(className) {
-    if (!Utils.isNullOrEmpty(this.element_)) {
+    if (!isNullOrEmpty(this.element_)) {
       this.element_.classList.remove(className);
-    }
-    else {
+    } else {
       this.className_ = this.className_.replace(new RegExp(`s* ${className} s*`), '');
     }
   }
@@ -422,10 +414,9 @@ export default class Panel extends MObject {
    * @api stable
    */
   addClassName(className) {
-    if (!Utils.isNullOrEmpty(this.element_)) {
+    if (!isNullOrEmpty(this.element_)) {
       this.element_.classList.add(className);
-    }
-    else {
+    } else {
       this.className_ = this.className_.concat(' ').concat(className);
     }
   }
@@ -440,7 +431,7 @@ export default class Panel extends MObject {
    */
   moveControlView_(control) {
     const controlElem = control.getElement();
-    if (!Utils.isNullOrEmpty(this.controlsContainer_)) {
+    if (!isNullOrEmpty(this.controlsContainer_)) {
       this.controlsContainer_.appendChild(controlElem);
     }
     control.fire(EvtManager.ADDED_TO_PANEL);

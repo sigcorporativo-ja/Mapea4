@@ -1,5 +1,5 @@
 import Config from 'configuration';
-import Utils from './Utils';
+import { addParameters, generateRandom, isNullOrEmpty, isObject } from './Utils';
 import M from '../Mapea';
 import Response from './Response';
 /**
@@ -20,13 +20,12 @@ export default class Remote {
   static get(url, data, options) {
     let req;
 
-    const useProxy = ((Utils.isNullOrEmpty(options) || (options.jsonp !== false)) &&
+    const useProxy = ((isNullOrEmpty(options) || (options.jsonp !== false)) &&
       M.proxy_ !== false);
 
     if (useProxy === true) {
       req = Remote.jsonp_(url, data, options);
-    }
-    else {
+    } else {
       req = Remote.ajax_(url, data, Remote.method.GET, false);
     }
 
@@ -52,8 +51,8 @@ export default class Remote {
    */
   static jsonp_(urlVar, data, options) {
     let url = urlVar;
-    if (!Utils.isNullOrEmpty(data)) {
-      url = Utils.addParameters(url, data);
+    if (!isNullOrEmpty(data)) {
+      url = addParameters(url, data);
     }
 
     if (M.proxy_) {
@@ -61,8 +60,8 @@ export default class Remote {
     }
 
     // creates a random name to avoid clonflicts
-    const jsonpHandlerName = Utils.generateRandom('mapea_jsonp_handler_');
-    url = Utils.addParameters(url, {
+    const jsonpHandlerName = generateRandom('mapea_jsonp_handler_');
+    url = addParameters(url, {
       callback: jsonpHandlerName,
     });
 
@@ -106,7 +105,7 @@ export default class Remote {
     }
 
     // parses parameters to string
-    if (Utils.isObject(data)) {
+    if (isObject(data)) {
       data = JSON.stringify(data);
     }
 
@@ -114,8 +113,7 @@ export default class Remote {
       let xhr;
       if (window.XMLHttpRequest) {
         xhr = new XMLHttpRequest();
-      }
-      else if (window.ActiveXObject) {
+      } else if (window.ActiveXObject) {
         xhr = new ActiveXObject('Microsoft.XMLHTTP');
       }
       xhr.onreadystatechange = () => {
@@ -140,7 +138,7 @@ export default class Remote {
       proxyUrl = Config.PROXY_POST_URL;
     }
 
-    proxyUrl = Utils.addParameters(proxyUrl, {
+    proxyUrl = addParameters(proxyUrl, {
       url,
     });
 

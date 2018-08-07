@@ -1,6 +1,6 @@
 import Config from 'configuration';
 import WMCImpl from 'impl/layer/WMC';
-import Utils from '../util/Utils';
+import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import LayerType from './Type';
@@ -35,12 +35,12 @@ export default class WMC extends LayerBase {
     super(parameters, impl);
 
     // checks if the implementation can create WMC layers
-    if (Utils.isUndefined(WMCImpl)) {
+    if (isUndefined(WMCImpl)) {
       Exception('La implementación usada no puede crear capas WMC');
     }
 
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(userParameters)) {
+    if (isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
 
@@ -48,16 +48,14 @@ export default class WMC extends LayerBase {
     this.options = options;
 
     // checks if the name is auto-generated
-    if (!Utils.isNullOrEmpty(this.url) && Utils.isNullOrEmpty(this.name)) {
+    if (!isNullOrEmpty(this.url) && isNullOrEmpty(this.name)) {
       this.generateName_();
-    }
-    // checks if it is predefined context
-    else if (Utils.isNullOrEmpty(this.url) && !Utils.isNullOrEmpty(this.name)) {
+    } else if (isNullOrEmpty(this.url) && !isNullOrEmpty(this.name)) {
+      // checks if it is predefined context
       const predefinedIdx = Config.predefinedWMC.predefinedNames.indexOf(this.name);
       if (predefinedIdx === -1) {
         Exception(`El contexto predefinido '${this.name}'no existe`);
-      }
-      else {
+      } else {
         this.url = Config.predefinedWMC.urls[predefinedIdx];
         this.name = Config.predefinedWMC.names[predefinedIdx];
       }
@@ -98,8 +96,8 @@ export default class WMC extends LayerBase {
   }
 
   set type(newType) {
-    if (!Utils.isUndefined(newType) &&
-      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.WMC)) {
+    if (!isUndefined(newType) &&
+      !isNullOrEmpty(newType) && (newType !== LayerType.WMC)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WMC).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
@@ -157,7 +155,7 @@ export default class WMC extends LayerBase {
    */
   select() {
     // checks if the implementation can manage select method
-    if (Utils.isUndefined(this.getImpl().select)) {
+    if (isUndefined(this.getImpl().select)) {
       Exception('La implementación usada no posee el método select');
     }
 
@@ -173,7 +171,7 @@ export default class WMC extends LayerBase {
    */
   unselect() {
     // checks if the implementation can manage select method
-    if (Utils.isUndefined(this.getImpl().unselect)) {
+    if (isUndefined(this.getImpl().unselect)) {
       Exception('La implementación usada no posee el método unselect');
     }
 

@@ -1,5 +1,5 @@
 import WFSImpl from 'impl/layer/WFS';
-import Utils from '../util/Utils';
+import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import Vector from './Vector';
 import LayerType from './Type';
@@ -26,12 +26,12 @@ export default class WFS extends Vector {
     super(parameters, options, impl);
 
     // checks if the implementation can create WFS layers
-    if (Utils.isUndefined(WFSImpl)) {
+    if (isUndefined(WFSImpl)) {
       Exception('La implementación usada no puede crear capas WFS');
     }
 
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(userParameters)) {
+    if (isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
 
@@ -66,7 +66,7 @@ export default class WFS extends Vector {
   }
 
   set type(newType) {
-    if (!Utils.isUndefined(newType) && !Utils.isNullOrEmpty(newType) &&
+    if (!isUndefined(newType) && !isNullOrEmpty(newType) &&
       (newType !== LayerType.WFS)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.WFS).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
@@ -90,10 +90,9 @@ export default class WFS extends Vector {
   }
 
   set legend(newLegend) {
-    if (Utils.isNullOrEmpty(newLegend)) {
+    if (isNullOrEmpty(newLegend)) {
       this.getImpl().legend = this.name;
-    }
-    else {
+    } else {
       this.getImpl().legend = newLegend;
     }
   }
@@ -117,9 +116,9 @@ export default class WFS extends Vector {
   }
 
   set geometry(newGeometry) {
-    if (!Utils.isNullOrEmpty(newGeometry)) {
+    if (!isNullOrEmpty(newGeometry)) {
       const parsedGeom = Geom.parse(newGeometry);
-      if (Utils.isNullOrEmpty(parsedGeom)) {
+      if (isNullOrEmpty(parsedGeom)) {
         Exception(`El tipo de capa WFS <b>${newGeometry}</b> no se reconoce. Los tipos disponibles son: POINT, LINE, POLYGON, MPOINT, MLINE, MPOLYGON`);
       }
       this.getImpl().geometry = parsedGeom;
@@ -134,10 +133,9 @@ export default class WFS extends Vector {
   }
 
   set ids(newIds) {
-    if (Utils.isNullOrEmpty(newIds)) {
+    if (isNullOrEmpty(newIds)) {
       this.getImpl().ids = this.ids;
-    }
-    else {
+    } else {
       this.getImpl().ids = newIds;
     }
   }
@@ -150,10 +148,9 @@ export default class WFS extends Vector {
   }
 
   set version(newVersion) {
-    if (!Utils.isNullOrEmpty(newVersion)) {
+    if (!isNullOrEmpty(newVersion)) {
       this.getImpl().version = newVersion;
-    }
-    else {
+    } else {
       this.getImpl().version = '1.0.0'; // default value
     }
   }
@@ -167,7 +164,7 @@ export default class WFS extends Vector {
   setCQL(newCQLparam) {
     let newCQL = newCQLparam;
     this.getImpl().describeFeatureType().then((describeFeatureType) => {
-      if (!Utils.isNullOrEmpty(newCQL)) {
+      if (!isNullOrEmpty(newCQL)) {
         const geometryName = describeFeatureType.geometryName;
         // if exist, replace {{geometryName}} with the value geometryName
         newCQL = newCQL.replace(/{{geometryName}}/g, geometryName);

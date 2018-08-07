@@ -1,7 +1,20 @@
 import Config from 'configuration';
 import MapImpl from 'impl/Map';
 import Base from './Base';
-import Utils from './util/Utils';
+import {
+  isNullOrEmpty,
+  isUndefined,
+  isNull,
+  isArray,
+  isFunction,
+  normalize,
+  addParameters,
+  concatUrlPaths,
+  enableTouchScroll,
+  escapeJSCode,
+  isString,
+  isObject,
+} from './util/Utils';
 import Exception from './exception/exception';
 import Label from './Label';
 import Popup from './Popup';
@@ -10,7 +23,6 @@ import * as parameter from './parameter/parameter';
 import EventsManager from './event/Manager';
 import FeaturesHandler from './handler/Feature';
 import Feature from './feature/Feature';
-import Point from './style/Point';
 import * as Dialog from './dialog';
 import GetFeatureInfo from './control/GetFeatureInfo';
 import WMCSelector from './control/WMCSelector';
@@ -62,12 +74,12 @@ export default class Map extends Base {
     impl.setFacadeMap(this);
 
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(userParameters)) {
+    if (isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
 
     // checks if the implementation can create maps
-    if (Utils.isUndefined(MapImpl)) {
+    if (isUndefined(MapImpl)) {
       Exception('La implementación usada no posee un constructor');
     }
 
@@ -200,89 +212,85 @@ export default class Map extends Base {
     this.addLayers(this.drawLayer_);
 
     // projection
-    if (!Utils.isNullOrEmpty(params.projection)) {
+    if (!isNullOrEmpty(params.projection)) {
       this.setProjection(params.projection);
-    }
-    else { // default projection
+    } else { // default projection
       this.setProjection(Config.DEFAULT_PROJ, true);
     }
 
     // bbox
-    if (!Utils.isNullOrEmpty(params.bbox)) {
+    if (!isNullOrEmpty(params.bbox)) {
       this.setBbox(params.bbox);
     }
 
     // resolutions
-    if (!Utils.isNullOrEmpty(params.resolutions)) {
+    if (!isNullOrEmpty(params.resolutions)) {
       this.setResolutions(params.resolutions);
     }
 
     // layers
-    if (!Utils.isNullOrEmpty(params.layers)) {
+    if (!isNullOrEmpty(params.layers)) {
       this.addLayers(params.layers);
     }
 
     // wmc
-    if (!Utils.isNullOrEmpty(params.wmc)) {
+    if (!isNullOrEmpty(params.wmc)) {
       this.addWMC(params.wmc);
     }
 
     // wms
-    if (!Utils.isNullOrEmpty(params.wms)) {
+    if (!isNullOrEmpty(params.wms)) {
       this.addWMS(params.wms);
     }
 
     // wmts
-    if (!Utils.isNullOrEmpty(params.wmts)) {
+    if (!isNullOrEmpty(params.wmts)) {
       this.addWMTS(params.wmts);
     }
 
     // kml
-    if (!Utils.isNullOrEmpty(params.kml)) {
+    if (!isNullOrEmpty(params.kml)) {
       this.addKML(params.kml);
     }
 
     // controls
-    if (!Utils.isNullOrEmpty(params.controls)) {
+    if (!isNullOrEmpty(params.controls)) {
       this.addControls(params.controls);
-    }
-    else { // default controls
+    } else { // default controls
       this.addControls('panzoom');
     }
 
     // getfeatureinfo
-    if (!Utils.isNullOrEmpty(params.getfeatureinfo)) {
+    if (!isNullOrEmpty(params.getfeatureinfo)) {
       if (params.getfeatureinfo !== 'plain' && params.getfeatureinfo !== 'html' && params.getfeatureinfo !== 'gml') {
         Dialog.error('El formato solicitado para la información no está disponible. Inténtelo utilizando gml, plain o html.');
-      }
-      else {
+      } else {
         const getFeatureInfo = new GetFeatureInfo(params.getfeatureinfo);
         this.addControls(getFeatureInfo);
       }
     }
 
     // default WMC
-    if (Utils.isNullOrEmpty(params.wmc) && Utils.isNullOrEmpty(params.layers)) {
+    if (isNullOrEmpty(params.wmc) && isNullOrEmpty(params.layers)) {
       this.addWMC(Config.predefinedWMC.predefinedNames[0]);
     }
 
     // maxExtent
-    if (!Utils.isNullOrEmpty(params.maxExtent)) {
-      const zoomToMaxExtent = Utils.isNullOrEmpty(params.zoom) && Utils.isNullOrEmpty(params.bbox);
+    if (!isNullOrEmpty(params.maxExtent)) {
+      const zoomToMaxExtent = isNullOrEmpty(params.zoom) && isNullOrEmpty(params.bbox);
       this.setMaxExtent(params.maxExtent, zoomToMaxExtent);
     }
 
     // center
-    if (!Utils.isNullOrEmpty(params.center)) {
+    if (!isNullOrEmpty(params.center)) {
       this.setCenter(params.center);
-    }
-    else {
+    } else {
       this.finishedInitCenter_ = false;
       this.getInitCenter_().then((initCenter) => {
         // checks if the user stablished a center while it was
         // calculated
         let newCenter = this.getCenter();
-        if (Utils.isNullOrEmpty(newCenter)) {
+        if (isNullOrEmpty(newCenter)) {
           newCenter = initCenter;
           this.setCenter(newCenter);
         }
@@ -293,23 +301,23 @@ export default class Map extends Base {
     }
 
     // zoom
-    if (!Utils.isNullOrEmpty(params.zoom)) {
+    if (!isNullOrEmpty(params.zoom)) {
       this.setZoom(params.zoom);
     }
 
     // label
-    if (!Utils.isNullOrEmpty(params.label)) {
+    if (!isNullOrEmpty(params.label)) {
       this.addLabel(params.label);
     }
 
     // initial zoom
-    if (Utils.isNullOrEmpty(params.bbox) && Utils.isNullOrEmpty(params.zoom) &&
-      Utils.isNullOrEmpty(params.center)) {
+    if (isNullOrEmpty(params.bbox) && isNullOrEmpty(params.zoom) &&
+      isNullOrEmpty(params.center)) {
       this.zoomToMaxExtent(true);
     }
 
     // ticket
-    if (!Utils.isNullOrEmpty(params.ticket)) {
+    if (!isNullOrEmpty(params.ticket)) {
       this.setTicket(params.ticket);
     }
   }
@@ -325,14 +333,13 @@ export default class Map extends Base {
   getLayers(layersParamVar) {
     let layersParam = layersParamVar;
     // checks if the implementation can manage layers
-    if (Utils.isUndefined(MapImpl.prototype.getLayers)) {
+    if (isUndefined(MapImpl.prototype.getLayers)) {
       Exception('La implementación usada no posee el método getLayers');
     }
     // parses parameters to Array
-    if (Utils.isNull(layersParam)) {
+    if (isNull(layersParam)) {
       layersParam = [];
-    }
-    else if (!Utils.isArray(layersParam)) {
+    } else if (!isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
@@ -357,7 +364,7 @@ export default class Map extends Base {
    */
   getBaseLayers() {
     // checks if the implementation can manage layers
-    if (Utils.isUndefined(MapImpl.prototype.getBaseLayers)) {
+    if (isUndefined(MapImpl.prototype.getBaseLayers)) {
       Exception('La implementación usada no posee el método getBaseLayers');
     }
 
@@ -386,13 +393,13 @@ export default class Map extends Base {
    */
   addLayers(layersParameter) {
     let layersParam = layersParameter;
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.addLayers)) {
+      if (isUndefined(MapImpl.prototype.addLayers)) {
         Exception('La implementación usada no posee el método addLayers');
       }
       // parses parameters to Array
-      if (!Utils.isArray(layersParam)) {
+      if (!isArray(layersParam)) {
         layersParam = [layersParam];
       }
       // gets the parameters as Layer objects to add
@@ -401,11 +408,10 @@ export default class Map extends Base {
 
         if (layerParam instanceof Layer) {
           layer = layerParam;
-        }
-        else {
+        } else {
           // try {
           const parameterVariable = parameter.layer(layerParam);
-          if (!Utils.isNullOrEmpty(parameterVariable.type)) {
+          if (!isNullOrEmpty(parameterVariable.type)) {
             switch (parameterVariable.type) {
               case 'WFS':
                 layer = new WFS(layerParam);
@@ -437,8 +443,7 @@ export default class Map extends Base {
               default:
                 Dialog.error('No se ha especificado un tipo válido para la capa');
             }
-          }
-          else {
+          } else {
             Dialog.error('No se ha especificado un tipo válido para la capa');
           }
           // }
@@ -474,9 +479,9 @@ export default class Map extends Base {
    * @api stable
    */
   removeLayers(layersParam) {
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.removeLayers)) {
+      if (isUndefined(MapImpl.prototype.removeLayers)) {
         Exception('La implementación usada no posee el método removeLayers');
       }
 
@@ -507,15 +512,14 @@ export default class Map extends Base {
   getWMC(layersParamVar) {
     let layersParam = layersParamVar;
     // checks if the implementation can manage layers
-    if (Utils.isUndefined(MapImpl.prototype.getWMC)) {
+    if (isUndefined(MapImpl.prototype.getWMC)) {
       Exception('La implementación usada no posee el método getWMC');
     }
 
     // parses parameters to Array
-    if (Utils.isNull(layersParam)) {
+    if (isNull(layersParam)) {
       layersParam = [];
-    }
-    else if (!Utils.isArray(layersParam)) {
+    } else if (!isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
@@ -543,28 +547,26 @@ export default class Map extends Base {
    */
   addWMC(layersParamVar) {
     let layersParam = layersParamVar;
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.addWMC)) {
+      if (isUndefined(MapImpl.prototype.addWMC)) {
         Exception('La implementación usada no posee el método addWMC');
       }
 
       // parses parameters to Array
-      if (!Utils.isArray(layersParam)) {
+      if (!isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
       // gets the parameters as WMC objects to add
       const wmcLayers = [];
       layersParam.forEach((layerParam) => {
-        if (Utils.isObject(layerParam) && (layerParam instanceof WMC)) {
+        if (isObject(layerParam) && (layerParam instanceof WMC)) {
           wmcLayers.push(layerParam);
-        }
-        else if (!(layerParam instanceof Layer)) {
+        } else if (!(layerParam instanceof Layer)) {
           try {
             wmcLayers.push(new WMC(layerParam, layerParam.options));
-          }
-          catch (err) {
+          } catch (err) {
             Dialog.error(err.toString());
             throw err;
           }
@@ -600,8 +602,7 @@ export default class Map extends Base {
     this.removeControls('wmcselector');
     if (this.getWMC().length === 1) {
       this.getWMC()[0].select();
-    }
-    else if (this.getWMC().length > 1) {
+    } else if (this.getWMC().length > 1) {
       this.addControls(new WMCSelector());
       const wmcSelected = this.getWMC().filter(wmc => wmc.selected === true)[0];
       if (wmcSelected == null) {
@@ -619,9 +620,9 @@ export default class Map extends Base {
    * @api stable
    */
   removeWMC(layersParam) {
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.removeWMC)) {
+      if (isUndefined(MapImpl.prototype.removeWMC)) {
         Exception('La implementación usada no posee el método removeWMC');
       }
 
@@ -646,15 +647,14 @@ export default class Map extends Base {
   getKML(layersParamVar) {
     let layersParam = layersParamVar;
     // checks if the implementation can manage layers
-    if (Utils.isUndefined(MapImpl.prototype.getKML)) {
+    if (isUndefined(MapImpl.prototype.getKML)) {
       Exception('La implementación usada no posee el método getKML');
     }
 
     // parses parameters to Array
-    if (Utils.isNull(layersParam)) {
+    if (isNull(layersParam)) {
       layersParam = [];
-    }
-    else if (!Utils.isArray(layersParam)) {
+    } else if (!isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
@@ -682,14 +682,14 @@ export default class Map extends Base {
    */
   addKML(layersParamVar) {
     let layersParam = layersParamVar;
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.addKML)) {
+      if (isUndefined(MapImpl.prototype.addKML)) {
         Exception('La implementación usada no posee el método addKML');
       }
 
       // parses parameters to Array
-      if (!Utils.isArray(layersParam)) {
+      if (!isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
@@ -697,10 +697,9 @@ export default class Map extends Base {
       const kmlLayers = [];
       layersParam.forEach((layerParam) => {
         let kmlLayer;
-        if (Utils.isObject(layerParam) && (layerParam instanceof KML)) {
+        if (isObject(layerParam) && (layerParam instanceof KML)) {
           kmlLayer = layerParam;
-        }
-        else if (!(layerParam instanceof Layer)) {
+        } else if (!(layerParam instanceof Layer)) {
           kmlLayer = new KML(layerParam, layerParam.options);
         }
         if (kmlLayer.extract === true) {
@@ -726,9 +725,9 @@ export default class Map extends Base {
    * @api stable
    */
   removeKML(layersParam) {
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.removeKML)) {
+      if (isUndefined(MapImpl.prototype.removeKML)) {
         Exception('La implementación usada no posee el método removeKML');
       }
 
@@ -756,15 +755,14 @@ export default class Map extends Base {
   getWMS(layersParamVar) {
     let layersParam = layersParamVar;
     // checks if the implementation can manage layers
-    if (Utils.isUndefined(MapImpl.prototype.getWMS)) {
+    if (isUndefined(MapImpl.prototype.getWMS)) {
       Exception('La implementación usada no posee el método getWMS');
     }
 
     // parses parameters to Array
-    if (Utils.isNull(layersParam)) {
+    if (isNull(layersParam)) {
       layersParam = [];
-    }
-    else if (!Utils.isArray(layersParam)) {
+    } else if (!isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
@@ -792,24 +790,23 @@ export default class Map extends Base {
    */
   addWMS(layersParamVar) {
     let layersParam = layersParamVar;
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.addWMS)) {
+      if (isUndefined(MapImpl.prototype.addWMS)) {
         Exception('La implementación usada no posee el método addWMS');
       }
 
       // parses parameters to Array
-      if (!Utils.isArray(layersParam)) {
+      if (!isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
       // gets the parameters as WMS objects to add
       const wmsLayers = [];
       layersParam.forEach((layerParam) => {
-        if (Utils.isObject(layerParam) && (layerParam instanceof WMS)) {
+        if (isObject(layerParam) && (layerParam instanceof WMS)) {
           wmsLayers.push(layerParam);
-        }
-        else if (!(layerParam instanceof Layer)) {
+        } else if (!(layerParam instanceof Layer)) {
           wmsLayers.push(new WMS(layerParam, layerParam.options));
         }
       });
@@ -831,9 +828,9 @@ export default class Map extends Base {
    * @api stable
    */
   removeWMS(layersParam) {
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.removeWMS)) {
+      if (isUndefined(MapImpl.prototype.removeWMS)) {
         Exception('La implementación usada no posee el método removeWMS');
       }
 
@@ -858,15 +855,14 @@ export default class Map extends Base {
   getWFS(layersParamVar) {
     let layersParam = layersParamVar;
     // checks if the implementation can manage layers
-    if (Utils.isUndefined(MapImpl.prototype.getWFS)) {
+    if (isUndefined(MapImpl.prototype.getWFS)) {
       Exception('La implementación usada no posee el método getWFS');
     }
 
     // parses parameters to Array
-    if (Utils.isNull(layersParam)) {
+    if (isNull(layersParam)) {
       layersParam = [];
-    }
-    else if (!Utils.isArray(layersParam)) {
+    } else if (!isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
@@ -894,14 +890,14 @@ export default class Map extends Base {
    */
   addWFS(layersParamVar) {
     let layersParam = layersParamVar;
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.addWFS)) {
+      if (isUndefined(MapImpl.prototype.addWFS)) {
         Exception('La implementación usada no posee el método addWFS');
       }
 
       // parses parameters to Array
-      if (!Utils.isArray(layersParam)) {
+      if (!isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
@@ -909,14 +905,12 @@ export default class Map extends Base {
       const wfsLayers = [];
       layersParam.forEach((layerParam) => {
         let wfsLayer;
-        if (Utils.isObject(layerParam) && (layerParam instanceof WFS)) {
+        if (isObject(layerParam) && (layerParam instanceof WFS)) {
           wfsLayer = layerParam;
-        }
-        else if (!(layerParam instanceof Layer)) {
+        } else if (!(layerParam instanceof Layer)) {
           try {
             wfsLayer = new WFS(layerParam, layerParam.options);
-          }
-          catch (err) {
+          } catch (err) {
             Dialog.error(err.toString());
             throw err;
           }
@@ -942,9 +936,9 @@ export default class Map extends Base {
    * @api stable
    */
   removeWFS(layersParam) {
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.removeWFS)) {
+      if (isUndefined(MapImpl.prototype.removeWFS)) {
         Exception('La implementación usada no posee el método removeWFS');
       }
 
@@ -972,15 +966,14 @@ export default class Map extends Base {
   getWMTS(layersParamVar) {
     let layersParam = layersParamVar;
     // checks if the implementation can manage layers
-    if (Utils.isUndefined(MapImpl.prototype.getWMTS)) {
+    if (isUndefined(MapImpl.prototype.getWMTS)) {
       Exception('La implementación usada no posee el método getWMTS');
     }
 
     // parses parameters to Array
-    if (Utils.isNull(layersParam)) {
+    if (isNull(layersParam)) {
       layersParam = [];
-    }
-    else if (!Utils.isArray(layersParam)) {
+    } else if (!isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
@@ -1008,24 +1001,23 @@ export default class Map extends Base {
    */
   addWMTS(layersParamVar) {
     let layersParam = layersParamVar;
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.addWMTS)) {
+      if (isUndefined(MapImpl.prototype.addWMTS)) {
         Exception('La implementación usada no posee el método addWMTS');
       }
 
       // parses parameters to Array
-      if (!Utils.isArray(layersParam)) {
+      if (!isArray(layersParam)) {
         layersParam = [layersParam];
       }
 
       // gets the parameters as WMS objects to add
       const wmtsLayers = [];
       layersParam.forEach((layerParam) => {
-        if (Utils.isObject(layerParam) && (layerParam instanceof WMTS)) {
+        if (isObject(layerParam) && (layerParam instanceof WMTS)) {
           wmtsLayers.push(layerParam);
-        }
-        else if (!(layerParam instanceof Layer)) {
+        } else if (!(layerParam instanceof Layer)) {
           wmtsLayers.push(new WMTS(layerParam, layerParam.options));
         }
       });
@@ -1047,9 +1039,9 @@ export default class Map extends Base {
    * @api stable
    */
   removeWMTS(layersParam) {
-    if (!Utils.isNullOrEmpty(layersParam)) {
+    if (!isNullOrEmpty(layersParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.removeWMTS)) {
+      if (isUndefined(MapImpl.prototype.removeWMTS)) {
         Exception('La implementación usada no posee el método removeWMTS');
       }
 
@@ -1074,15 +1066,14 @@ export default class Map extends Base {
   getMBtiles(layersParamVar) {
     let layersParam = layersParamVar;
     // checks if the implementation can manage layers
-    if (Utils.isUndefined(MapImpl.prototype.getMBtiles)) {
+    if (isUndefined(MapImpl.prototype.getMBtiles)) {
       Exception('La implementación usada no posee el método getMBtiles');
     }
 
     // parses parameters to Array
-    if (Utils.isNull(layersParam)) {
+    if (isNull(layersParam)) {
       layersParam = [];
-    }
-    else if (!Utils.isArray(layersParam)) {
+    } else if (!isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
@@ -1135,15 +1126,14 @@ export default class Map extends Base {
     let controlsParam = controlsParamVar;
 
     // checks if the implementation can manage layers
-    if (Utils.isUndefined(MapImpl.prototype.getControls)) {
+    if (isUndefined(MapImpl.prototype.getControls)) {
       Exception('La implementación usada no posee el método getControls');
     }
 
     // parses parameters to Array
-    if (Utils.isNull(controlsParam)) {
+    if (isNull(controlsParam)) {
       controlsParam = [];
-    }
-    else if (!Utils.isArray(controlsParam)) {
+    } else if (!isArray(controlsParam)) {
       controlsParam = [controlsParam];
     }
 
@@ -1164,14 +1154,14 @@ export default class Map extends Base {
    */
   addControls(controlsParamVar) {
     let controlsParam = controlsParamVar;
-    if (!Utils.isNullOrEmpty(controlsParam)) {
+    if (!isNullOrEmpty(controlsParam)) {
       // checks if the implementation can manage layers
-      if (Utils.isUndefined(MapImpl.prototype.addControls)) {
+      if (isUndefined(MapImpl.prototype.addControls)) {
         Exception('La implementación usada no posee el método addControls');
       }
 
       // parses parameters to Array
-      if (!Utils.isArray(controlsParam)) {
+      if (!isArray(controlsParam)) {
         controlsParam = [controlsParam];
       }
 
@@ -1182,13 +1172,13 @@ export default class Map extends Base {
         let controlParam = controlParamVar;
         let control;
         let panel;
-        if (Utils.isString(controlParam)) {
-          controlParam = Utils.normalize(controlParam);
+        if (isString(controlParam)) {
+          controlParam = normalize(controlParam);
           switch (controlParam) {
             case Scale.NAME:
               control = new Scale();
               panel = this.getPanels('map-info')[0];
-              if (Utils.isNullOrEmpty(panel)) {
+              if (isNullOrEmpty(panel)) {
                 panel = new Panel('map-info', {
                   collapsible: false,
                   className: 'm-map-info',
@@ -1247,7 +1237,7 @@ export default class Map extends Base {
                 });
                 // enables touch scroll
                 panel.on(EventsManager.ADDED_TO_MAP, (html) => {
-                  Utils.enableTouchScroll(html.querySelector('.m-panel-controls'));
+                  enableTouchScroll(html.querySelector('.m-panel-controls'));
                 });
                 // renders and registers events
                 panel.on(EventsManager.SHOW, (evt) => {
@@ -1263,7 +1253,7 @@ export default class Map extends Base {
             case Mouse.NAME:
               control = new Mouse();
               panel = this.getPanels('map-info')[0];
-              if (Utils.isNullOrEmpty(panel)) {
+              if (isNullOrEmpty(panel)) {
                 panel = new Panel('map-info', {
                   collapsible: false,
                   className: 'm-map-info',
@@ -1281,7 +1271,7 @@ export default class Map extends Base {
                 toggleDelay: 400,
               });
               panel = this.getPanels('map-info')[0];
-              if (Utils.isNullOrEmpty(panel)) {
+              if (isNullOrEmpty(panel)) {
                 panel = new Panel('map-info', {
                   collapsible: false,
                   className: 'm-map-info',
@@ -1302,16 +1292,14 @@ export default class Map extends Base {
               control = new GetFeatureInfo();
               break;
             default:
-              const getControlsAvailable = Utils.concatUrlPaths([Config.MAPEA_URL, '/api/actions/controls']);
+              const getControlsAvailable = concatUrlPaths([Config.MAPEA_URL, '/api/actions/controls']);
               Dialog.error(`El control ${controlParam} no está definido. Consulte los controles disponibles <a href='${getControlsAvailable}' target="_blank">aquí</a>`);
-              break;
           }
-        }
-        else if (controlParam instanceof Control) {
+        } else if (controlParam instanceof Control) {
           control = controlParam;
           if (control instanceof WMCSelector) {
             panel = this.getPanels('map-info')[0];
-            if (Utils.isNullOrEmpty(panel)) {
+            if (isNullOrEmpty(panel)) {
               panel = new Panel('map-info', {
                 collapsible: false,
                 className: 'm-map-info',
@@ -1325,14 +1313,13 @@ export default class Map extends Base {
             }
             panel.addClassName('m-with-wmcselector');
           }
-        }
-        else {
+        } else {
           Exception('El control "'.concat(controlParam).concat('" no es un control válido.'));
         }
 
         // checks if it has to be added into a main panel
         if (Config.panels.TOOLS.indexOf(control.name) !== -1) {
-          if (Utils.isNullOrEmpty(this.panel.TOOLS)) {
+          if (isNullOrEmpty(this.panel.TOOLS)) {
             this.panel.TOOLS = new Panel('tools', {
               collapsible: true,
               className: 'm-tools',
@@ -1346,9 +1333,8 @@ export default class Map extends Base {
           //               this.panel.TOOLS.addControls(control);
           //            }
           panel = this.panel.TOOLS;
-        }
-        else if (Config.panels.EDITION.indexOf(control.name) !== -1) {
-          if (Utils.isNullOrEmpty(this.panel.EDITION)) {
+        } else if (Config.panels.EDITION.indexOf(control.name) !== -1) {
+          if (isNullOrEmpty(this.panel.EDITION)) {
             this.panel.EDITION = new Panel('edit', {
               collapsible: true,
               className: 'm-edition',
@@ -1364,11 +1350,10 @@ export default class Map extends Base {
           panel = this.panel.EDITION;
         }
 
-        if (!Utils.isNullOrEmpty(panel) && !panel.hasControl(control)) {
+        if (!isNullOrEmpty(panel) && !panel.hasControl(control)) {
           panel.addControls(control);
           this.addPanels(panel);
-        }
-        else {
+        } else {
           control.addTo(this);
           controls.push(control);
         }
@@ -1389,12 +1374,12 @@ export default class Map extends Base {
    */
   removeControls(controlsParam) {
     // checks if the parameter is null or empty
-    if (Utils.isNullOrEmpty(controlsParam)) {
+    if (isNullOrEmpty(controlsParam)) {
       Exception('No ha especificado ningún control a eliminar');
     }
 
     // checks if the implementation can manage controls
-    if (Utils.isUndefined(MapImpl.prototype.removeControls)) {
+    if (isUndefined(MapImpl.prototype.removeControls)) {
       Exception('La implementación usada no posee el método removeControls');
     }
 
@@ -1404,7 +1389,7 @@ export default class Map extends Base {
     if (controls.length > 0) {
       // removes controls from their panels
       controls.forEach((control) => {
-        if (!Utils.isNullOrEmpty(control.getPanel())) {
+        if (!isNullOrEmpty(control.getPanel())) {
           control.getPanel().removeControls(control);
         }
       });
@@ -1426,7 +1411,7 @@ export default class Map extends Base {
    */
   getMaxExtent() {
     // checks if the implementation can set the maxExtent
-    if (Utils.isUndefined(MapImpl.prototype.getMaxExtent)) {
+    if (isUndefined(MapImpl.prototype.getMaxExtent)) {
       Exception('La implementación usada no posee el método getMaxExtent');
     }
 
@@ -1449,12 +1434,12 @@ export default class Map extends Base {
    */
   setMaxExtent(maxExtentParam, zoomToExtent) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(maxExtentParam)) {
+    if (isNullOrEmpty(maxExtentParam)) {
       Exception('No ha especificado ningún maxExtent');
     }
 
     // checks if the implementation can set the maxExtent
-    if (Utils.isUndefined(MapImpl.prototype.setMaxExtent)) {
+    if (isUndefined(MapImpl.prototype.setMaxExtent)) {
       Exception('La implementación usada no posee el método setMaxExtent');
     }
 
@@ -1462,8 +1447,7 @@ export default class Map extends Base {
     try {
       const maxExtent = parameter.maxExtent(maxExtentParam);
       this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
-    }
-    catch (err) {
+    } catch (err) {
       Dialog.error(err.toString());
       throw err;
     }
@@ -1481,7 +1465,7 @@ export default class Map extends Base {
    */
   getBbox() {
     // checks if the implementation can set the maxExtent
-    if (Utils.isUndefined(MapImpl.prototype.getBbox)) {
+    if (isUndefined(MapImpl.prototype.getBbox)) {
       Exception('La implementación usada no posee el método getBbox');
     }
 
@@ -1503,12 +1487,12 @@ export default class Map extends Base {
    */
   setBbox(bboxParam, vendorOpts) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(bboxParam)) {
+    if (isNullOrEmpty(bboxParam)) {
       Exception('No ha especificado ningún bbox');
     }
 
     // checks if the implementation can set the maxExtent
-    if (Utils.isUndefined(MapImpl.prototype.setBbox)) {
+    if (isUndefined(MapImpl.prototype.setBbox)) {
       Exception('La implementación usada no posee el método setBbox');
     }
 
@@ -1516,8 +1500,7 @@ export default class Map extends Base {
       // parses the parameter
       const bbox = parameter.maxExtent(bboxParam);
       this.getImpl().setBbox(bbox, vendorOpts);
-    }
-    catch (err) {
+    } catch (err) {
       Dialog.error('El formato del parámetro bbox no es el correcto');
     }
     return this;
@@ -1534,7 +1517,7 @@ export default class Map extends Base {
    */
   getZoom() {
     // checks if the implementation can get the zoom
-    if (Utils.isUndefined(MapImpl.prototype.getZoom)) {
+    if (isUndefined(MapImpl.prototype.getZoom)) {
       Exception('La implementación usada no posee el método getZoom');
     }
 
@@ -1555,12 +1538,12 @@ export default class Map extends Base {
    */
   setZoom(zoomParam) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(zoomParam)) {
+    if (isNullOrEmpty(zoomParam)) {
       Exception('No ha especificado ningún zoom');
     }
 
     // checks if the implementation can set the zoom
-    if (Utils.isUndefined(MapImpl.prototype.setZoom)) {
+    if (isUndefined(MapImpl.prototype.setZoom)) {
       Exception('La implementación usada no posee el método setZoom');
     }
 
@@ -1569,8 +1552,7 @@ export default class Map extends Base {
       const zoom = parameter.zoom(zoomParam);
       this.userZoom_ = zoom;
       this.getImpl().setZoom(zoom);
-    }
-    catch (err) {
+    } catch (err) {
       Dialog.error(err.toString());
       throw err;
     }
@@ -1590,7 +1572,7 @@ export default class Map extends Base {
    */
   getCenter() {
     // checks if the implementation can get the center
-    if (Utils.isUndefined(MapImpl.prototype.getCenter)) {
+    if (isUndefined(MapImpl.prototype.getCenter)) {
       Exception('La implementación usada no posee el método getCenter');
     }
 
@@ -1611,12 +1593,12 @@ export default class Map extends Base {
    */
   setCenter(centerParam) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(centerParam)) {
+    if (isNullOrEmpty(centerParam)) {
       Exception('No ha especificado ningún center');
     }
 
     // checks if the implementation can set the center
-    if (Utils.isUndefined(MapImpl.prototype.setCenter)) {
+    if (isUndefined(MapImpl.prototype.setCenter)) {
       Exception('La implementación usada no posee el método setCenter');
     }
 
@@ -1638,7 +1620,7 @@ export default class Map extends Base {
             mapea: { // TODO mig
               click: (evt) => {
                 const label = this.getLabel();
-                if (!Utils.isNullOrEmpty(label)) {
+                if (!isNullOrEmpty(label)) {
                   label.show(this);
                 }
               },
@@ -1693,7 +1675,7 @@ export default class Map extends Base {
    */
   getResolutions() {
     // checks if the implementation can set the maxExtent
-    if (Utils.isUndefined(MapImpl.prototype.getResolutions)) {
+    if (isUndefined(MapImpl.prototype.getResolutions)) {
       Exception('La implementación usada no posee el método getResolutions');
     }
 
@@ -1714,12 +1696,12 @@ export default class Map extends Base {
    */
   setResolutions(resolutionsParam) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(resolutionsParam)) {
+    if (isNullOrEmpty(resolutionsParam)) {
       Exception('No ha especificado ninguna resolución');
     }
 
     // checks if the implementation can set the setResolutions
-    if (Utils.isUndefined(MapImpl.prototype.setResolutions)) {
+    if (isUndefined(MapImpl.prototype.setResolutions)) {
       Exception('La implementación usada no posee el método setResolutions');
     }
 
@@ -1742,7 +1724,7 @@ export default class Map extends Base {
    */
   getScale() {
     // checks if the implementation has the method
-    if (Utils.isUndefined(MapImpl.prototype.getScale)) {
+    if (isUndefined(MapImpl.prototype.getScale)) {
       Exception('La implementación usada no posee el método getScale');
     }
 
@@ -1762,7 +1744,7 @@ export default class Map extends Base {
    */
   getProjection() {
     // checks if the implementation has the method
-    if (Utils.isUndefined(MapImpl.prototype.getProjection)) {
+    if (isUndefined(MapImpl.prototype.getProjection)) {
       Exception('La implementación usada no posee el método getProjection');
     }
 
@@ -1784,12 +1766,12 @@ export default class Map extends Base {
   setProjection(projectionParam, asDefault) {
     let projection = projectionParam;
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(projection)) {
+    if (isNullOrEmpty(projection)) {
       Exception('No ha especificado ninguna proyección');
     }
 
     // checks if the implementation can set the projection
-    if (Utils.isUndefined(MapImpl.prototype.setProjection)) {
+    if (isUndefined(MapImpl.prototype.setProjection)) {
       Exception('La implementación usada no posee el método setProjection');
     }
 
@@ -1800,8 +1782,7 @@ export default class Map extends Base {
       this.getImpl().setProjection(projection);
       this.defaultProj_ = (this.defaultProj_ && (asDefault === true));
       this.fire(EventsManager.CHANGE_PROJ, [oldProj, projection]);
-    }
-    catch (err) {
+    } catch (err) {
       Dialog.error(err.toString());
       if (String(err).indexOf('El formato del parámetro projection no es correcto') >= 0) {
         this.setProjection(Config.DEFAULT_PROJ, true);
@@ -1824,10 +1805,9 @@ export default class Map extends Base {
   getPlugins(namesParam) {
     let names = namesParam;
     // parses parameters to Array
-    if (Utils.isNull(names)) {
+    if (isNull(names)) {
       names = [];
-    }
-    else if (!Utils.isArray(names)) {
+    } else if (!isArray(names)) {
       names = [names];
     }
 
@@ -1836,8 +1816,7 @@ export default class Map extends Base {
     // parse to Array
     if (names.length === 0) {
       plugins = this.plugins_;
-    }
-    else {
+    } else {
       names.forEach((name) => {
         plugins = plugins.concat(this.plugins_.filter((plugin) => {
           return (name === plugin.name);
@@ -1859,12 +1838,12 @@ export default class Map extends Base {
    */
   addPlugin(plugin) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(plugin)) {
+    if (isNullOrEmpty(plugin)) {
       Exception('No ha especificado ningún plugin');
     }
 
     // checks if the plugin can be added to the map
-    if (Utils.isUndefined(plugin.addTo)) {
+    if (isUndefined(plugin.addTo)) {
       Exception('El plugin no puede añadirse al mapa');
     }
 
@@ -1885,10 +1864,10 @@ export default class Map extends Base {
   removePlugins(pluginsParam) {
     let plugins = pluginsParam;
     // checks if the parameter is null or empty
-    if (Utils.isNullOrEmpty(plugins)) {
+    if (isNullOrEmpty(plugins)) {
       Exception('No ha especificado ningún plugin a eliminar');
     }
-    if (!Utils.isArray(plugins)) {
+    if (!isArray(plugins)) {
       plugins = [plugins];
     }
 
@@ -1915,7 +1894,7 @@ export default class Map extends Base {
    */
   getEnvolvedExtent() {
     // checks if the implementation can set the maxExtent
-    if (Utils.isUndefined(MapImpl.prototype.getEnvolvedExtent)) {
+    if (isUndefined(MapImpl.prototype.getEnvolvedExtent)) {
       Exception('La implementación usada no posee el método getEnvolvedExtent');
     }
 
@@ -1934,15 +1913,14 @@ export default class Map extends Base {
   zoomToMaxExtent(keepUserZoom) {
     // zoom to maxExtent if no zoom was specified
     const maxExtent = this.getMaxExtent();
-    if (!Utils.isNullOrEmpty(maxExtent)) {
+    if (!isNullOrEmpty(maxExtent)) {
       this.setBbox(maxExtent);
-    }
-    else {
+    } else {
       /* if no maxExtent was provided then
        calculates the envolved extent */
       this.finishedMaxExtent_ = false;
       this.getEnvolvedExtent().then((extent) => {
-        if (keepUserZoom !== true || Utils.isNullOrEmpty(this.userZoom_)) {
+        if (keepUserZoom !== true || isNullOrEmpty(this.userZoom_)) {
           this.setBbox(extent);
         }
         this.finishedMaxExtent_ = true;
@@ -1962,14 +1940,14 @@ export default class Map extends Base {
    * @api stable
    */
   setTicket(ticket) {
-    if (!Utils.isNullOrEmpty(ticket)) {
+    if (!isNullOrEmpty(ticket)) {
       if (Config.PROXY_POST_URL.indexOf('ticket=') === -1) {
-        Config('PROXY_POST_URL', Utils.addParameters(Config.PROXY_POST_URL, {
+        Config('PROXY_POST_URL', addParameters(Config.PROXY_POST_URL, {
           ticket,
         }));
       }
       if (Config.PROXY_URL.indexOf('ticket=') === -1) {
-        Config('PROXY_URL', Utils.addParameters(Config.PROXY_URL, {
+        Config('PROXY_URL', addParameters(Config.PROXY_URL, {
           ticket,
         }));
       }
@@ -1989,20 +1967,18 @@ export default class Map extends Base {
   getInitCenter_() {
     return new Promise((success, fail) => {
       let center = this.getCenter();
-      if (!Utils.isNullOrEmpty(center)) {
+      if (!isNullOrEmpty(center)) {
         success(center);
-      }
-      else {
+      } else {
         const maxExtent = this.getMaxExtent();
-        if (!Utils.isNullOrEmpty(maxExtent)) {
+        if (!isNullOrEmpty(maxExtent)) {
           // obtener centro del maxExtent
           center = {
             x: ((maxExtent.x.max + maxExtent.x.min) / 2),
             y: ((maxExtent.y.max + maxExtent.y.min) / 2),
           };
           success(center);
-        }
-        else {
+        } else {
           this.getEnvolvedExtent().then((extent) => {
             // obtener centrol del extent
             center = {
@@ -2027,7 +2003,7 @@ export default class Map extends Base {
    */
   destroy() {
     // checks if the implementation can provide the implementation map
-    if (Utils.isUndefined(MapImpl.prototype.destroy)) {
+    if (isUndefined(MapImpl.prototype.destroy)) {
       Exception('La implementación usada no posee el método destroy');
     }
 
@@ -2047,12 +2023,12 @@ export default class Map extends Base {
     const panMapIfOutOfView = labelParam.panMapIfOutOfView ===
       undefined ? true : labelParam.panMapIfOutOfView;
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(labelParam)) {
+    if (isNullOrEmpty(labelParam)) {
       Exception('No ha especificado ninguna proyección');
     }
 
     // checks if the implementation can add labels
-    if (Utils.isUndefined(MapImpl.prototype.addLabel)) {
+    if (isUndefined(MapImpl.prototype.addLabel)) {
       Exception('La implementación usada no posee el método addLabel');
     }
 
@@ -2060,36 +2036,33 @@ export default class Map extends Base {
     let coord = null;
 
     // object
-    if (Utils.isObject(labelParam)) {
-      text = Utils.escapeJSCode(labelParam.text);
+    if (isObject(labelParam)) {
+      text = escapeJSCode(labelParam.text);
       coord = labelParam.coord;
-    }
-    // string
-    else {
-      text = Utils.escapeJSCode(labelParam);
+    } else {
+      // string
+      text = escapeJSCode(labelParam);
       coord = coordParam;
     }
 
-    if (Utils.isNullOrEmpty(coord)) {
+    if (isNullOrEmpty(coord)) {
       coord = this.getCenter();
-    }
-    else {
+    } else {
       coord = Parameters.center(coord);
     }
 
-    if (Utils.isNullOrEmpty(coord)) {
+    if (isNullOrEmpty(coord)) {
       this.getInitCenter_().then((initCenter) => {
         // checks if the user stablished a center while it was
         // calculated
         let newCenter = this.getCenter();
-        if (Utils.isNullOrEmpty(newCenter)) {
+        if (isNullOrEmpty(newCenter)) {
           newCenter = initCenter;
         }
         const label = new Label(text, newCenter, panMapIfOutOfView);
         this.getImpl().addLabel(label);
       });
-    }
-    else {
+    } else {
       const label = new Label(text, coord, panMapIfOutOfView);
       this.getImpl().addLabel(label);
     }
@@ -2133,11 +2106,11 @@ export default class Map extends Base {
   drawPoints(pointsVar) {
     let points = pointsVar;
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(points)) {
+    if (isNullOrEmpty(points)) {
       Exception('No ha especificado ningún punto');
     }
 
-    if (!Utils.isArray(points)) {
+    if (!isArray(points)) {
       points = [points];
     }
 
@@ -2150,7 +2123,7 @@ export default class Map extends Base {
         },
         properties: {},
       };
-      if (Utils.isFunction(point.click)) {
+      if (isFunction(point.click)) {
         gj.properties.vendor = {
           mapea: {
             click: point.click,
@@ -2195,8 +2168,8 @@ export default class Map extends Base {
    */
   addPanels(panelsVar) {
     let panels = panelsVar;
-    if (!Utils.isNullOrEmpty(panels)) {
-      if (!Utils.isArray(panels)) {
+    if (!isNullOrEmpty(panels)) {
+      if (!isArray(panels)) {
         panels = [panels];
       }
       panels.forEach((panel) => {
@@ -2242,17 +2215,16 @@ export default class Map extends Base {
     let panels = [];
 
     // parses parameters to Array
-    if (Utils.isNullOrEmpty(names)) {
+    if (isNullOrEmpty(names)) {
       panels = this.panels_;
-    }
-    else {
-      if (!Utils.isArray(names)) {
+    } else {
+      if (!isArray(names)) {
         names = [names];
       }
       names.forEach((name) => {
         const filteredPanels = this.panels_.filter(panel => panel.name === name);
         filteredPanels.forEach((panel) => {
-          if (!Utils.isNullOrEmpty(panel)) {
+          if (!isNullOrEmpty(panel)) {
             panels.push(panel);
           }
         });
@@ -2312,7 +2284,7 @@ export default class Map extends Base {
    * @returns {Object} core map used by the implementation
    */
   getContainer() { // checks if the implementation can provides the container
-    if (Utils.isUndefined(MapImpl.prototype.getContainer)) {
+    if (isUndefined(MapImpl.prototype.getContainer)) {
       Exception('La implementación usada no posee el método getContainer');
     }
     return this.getImpl().getContainer();
@@ -2328,7 +2300,7 @@ export default class Map extends Base {
    */
   getMapImpl() {
     // checks if the implementation can add points
-    if (Utils.isUndefined(MapImpl.prototype.getMapImpl)) {
+    if (isUndefined(MapImpl.prototype.getMapImpl)) {
       Exception('La implementación usada no posee el método getMapImpl');
     }
     return this.getImpl().getMapImpl();
@@ -2354,11 +2326,11 @@ export default class Map extends Base {
    */
   removePopup() {
     // checks if the implementation can add popups
-    if (Utils.isUndefined(MapImpl.prototype.removePopup)) {
+    if (isUndefined(MapImpl.prototype.removePopup)) {
       Exception('La implementación usada no posee el método removePopup');
     }
 
-    if (!Utils.isNullOrEmpty(this.popup_)) {
+    if (!isNullOrEmpty(this.popup_)) {
       this.getImpl().removePopup(this.popup_);
       this.popup_.destroy();
       this.popup_ = null;
@@ -2376,7 +2348,7 @@ export default class Map extends Base {
    */
   addPopup(popup, coordinate) {
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(popup)) {
+    if (isNullOrEmpty(popup)) {
       Exception('No ha especificado ningún popup');
     }
 
@@ -2384,7 +2356,7 @@ export default class Map extends Base {
       Exception('El popup especificado no es válido');
     }
 
-    if (!Utils.isNullOrEmpty(this.popup_)) {
+    if (!isNullOrEmpty(this.popup_)) {
       this.removePopup();
     }
     this.popup_ = popup;
@@ -2430,7 +2402,7 @@ export default class Map extends Base {
    */
   refresh() {
     // checks if the implementation has refresh method
-    if (!Utils.isUndefined(this.getImpl().refresh) && Utils.isFunction(this.getImpl().refresh)) {
+    if (!isUndefined(this.getImpl().refresh) && isFunction(this.getImpl().refresh)) {
       this.getImpl().refresh();
     }
     this.getLayers().forEach(layer => layer.refresh());
@@ -2454,7 +2426,7 @@ export default class Map extends Base {
    * @api stable
    */
   LAYER_SORT(layer1, layer2) {
-    if (!Utils.isNullOrEmpty(layer1) && !Utils.isNullOrEmpty(layer2)) {
+    if (!isNullOrEmpty(layer1) && !isNullOrEmpty(layer2)) {
       const z1 = layer1.getZIndex();
       const z2 = layer2.getZIndex();
 

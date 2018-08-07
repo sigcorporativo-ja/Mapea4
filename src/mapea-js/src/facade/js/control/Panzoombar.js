@@ -1,7 +1,7 @@
 import panzoombarTemplate from 'templates/panzoombar';
 import PanzoombarImpl from 'impl/control/Panzoombar';
 import ControlBase from './Control';
-import Utils from '../util/Utils';
+import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
@@ -24,7 +24,7 @@ export default class Panzoombar extends ControlBase {
     // calls the super constructor
     super(impl, Panzoombar.NAME);
 
-    if (Utils.isUndefined(PanzoombarImpl)) {
+    if (isUndefined(PanzoombarImpl)) {
       Exception('La implementación usada no puede crear controles Panzoombar');
     }
   }

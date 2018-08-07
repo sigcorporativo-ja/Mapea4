@@ -1,6 +1,6 @@
-import Utils from "facade/js/util/Utils";
-import UtilsImpl from "../util/Utils";
-import Chart from "facade/js/style/Chart";
+import Chart from 'facade/js/style/Chart';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
+import UtilsImpl from './utils/Utils';
 
 export default class OLChart extends ol.style.RegularShape {
   /**
@@ -18,7 +18,8 @@ export default class OLChart extends ol.style.RegularShape {
    *  - offsetX {number} chart x axis offset
    *  - offsetY {number} chart y axis offset
    *  - animation {number} step in an animation sequence [0,1]
-   *  - variables {object|M.style.chart.Variable|string|Array<string>|Array<M.style.chart.Variable>} the chart variables
+   *  - variables {object|M.style.chart.Variable|string|Array<string>
+   * |Array<M.style.chart.Variable>} the chart variables
    *  - donutRatio {number} the chart 'donut' type ratio
    *  - data {Array<number>} chart data
    *  - fill3DColor {string} the pie3d cylinder fill color
@@ -26,17 +27,16 @@ export default class OLChart extends ol.style.RegularShape {
    * @api
    */
   constructor(options = {}) {
-
-    let strokeWidth = !Utils.isNullOrEmpty(options.stroke) ? options.stroke.getWidth() : 0;
+    const strokeWidth = !isNullOrEmpty(options.stroke) ? options.stroke.getWidth() : 0;
 
     // super call
     super({
       radius: (typeof options.radius === 'number' ? options.radius : 0) + strokeWidth,
       fill: new ol.style.Fill({
-        color: [0, 0, 0]
+        color: [0, 0, 0],
       }),
       rotation: (typeof options.rotation === 'number' ? options.rotation : 0),
-      snapToPixel: (typeof options.snapToPixel === 'boolean' ? options.snapToPixel : false)
+      snapToPixel: (typeof options.snapToPixel === 'boolean' ? options.snapToPixel : false),
     });
 
     if (options.scale) {
@@ -210,8 +210,7 @@ export default class OLChart extends ol.style.RegularShape {
         return;
       }
       this.animation_.animate = false;
-    }
-    else {
+    } else {
       if (this.animation_.step == step) {
         return;
       }
@@ -264,7 +263,7 @@ export default class OLChart extends ol.style.RegularShape {
     context.lineJoin = 'round';
 
     let sum = 0;
-    if (!Utils.isNullOrEmpty(this.data_) && this.data_.length > 0) {
+    if (!isNullOrEmpty(this.data_) && this.data_.length > 0) {
       sum = this.data_.reduce((tot, curr) => tot + curr);
     }
     context.setTransform(1, 0, 0, 1, 0, 0);
@@ -294,8 +293,7 @@ export default class OLChart extends ol.style.RegularShape {
           if (strokeStyle) {
             context.stroke();
           }
-        }
-        else if (this.type_ === Chart.types.DONUT) {
+        } else if (this.type_ === Chart.types.DONUT) {
           context.save();
           context.beginPath();
           context.rect(0, 0, 2 * center, 2 * center);
@@ -360,7 +358,7 @@ export default class OLChart extends ol.style.RegularShape {
   }
 
   /**
-   * Draws in a vector context a "center point" as feature and applies it this chart style.
+   * Draws in a vector context a 'center point' as feature and applies it this chart style.
    * This draw only will be applied to geometries of type POLYGON or MULTI_POLYGON.
    * [_REV] -> revisar si linestring necesita tratamiento
    *

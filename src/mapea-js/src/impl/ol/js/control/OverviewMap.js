@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, classToggle, replaceNode } from 'facade/js/util/Utils';
 import EvtManager from 'facade/js/event/Manager';
 import View from '../View';
 /**
@@ -22,7 +22,7 @@ export default class OverviewMap extends ol.control.OverviewMap {
      * @expose
      */
     this.toggleDelay_ = 0;
-    if (!Utils.isNullOrEmpty(options.toggleDelay)) {
+    if (!isNullOrEmpty(options.toggleDelay)) {
       this.toggleDelay_ = options.toggleDelay;
     }
 
@@ -32,7 +32,7 @@ export default class OverviewMap extends ol.control.OverviewMap {
      * @expose
      */
     this.collapsedButtonClass_ = 'g-cartografia-mundo';
-    if (!Utils.isNullOrEmpty(options.collapsedButtonClass)) {
+    if (!isNullOrEmpty(options.collapsedButtonClass)) {
       this.collapsedButtonClass_ = options.collapsedButtonClass;
     }
 
@@ -42,7 +42,7 @@ export default class OverviewMap extends ol.control.OverviewMap {
      * @expose
      */
     this.openedButtonClass_ = 'g-cartografia-flecha-derecha2';
-    if (!Utils.isNullOrEmpty(options.openedButtonClass)) {
+    if (!isNullOrEmpty(options.openedButtonClass)) {
       this.openedButtonClass_ = options.openedButtonClass;
     }
     this.facadeMap_ = null;
@@ -62,10 +62,9 @@ export default class OverviewMap extends ol.control.OverviewMap {
     const olLayers = [];
     map.getLayers().forEach((layer) => {
       const olLayer = layer.getImpl().getOL3Layer();
-      if (Utils.isNullOrEmpty(olLayer)) {
+      if (isNullOrEmpty(olLayer)) {
         layer.getImpl().on(EvtManager.ADDED_TO_MAP, this.addLayer_, this);
-      }
-      else {
+      } else {
         olLayers.push(olLayer);
       }
     });
@@ -81,15 +80,12 @@ export default class OverviewMap extends ol.control.OverviewMap {
     if (this.collapsed_ === true) {
       if (button.classList.contains(this.collapsedButtonClass_)) {
         button.classList.remove(this.collapsedButtonClass_);
-      }
-      else {
+      } else {
         button.classList.add(this.collapsedButtonClass_);
       }
-    }
-    else if (button.classList.contains(this.openedButtonClass_)) {
+    } else if (button.classList.contains(this.openedButtonClass_)) {
       button.classList.remove(this.openedButtonClass_);
-    }
-    else {
+    } else {
       button.classList.add(this.openedButtonClass_);
     }
 
@@ -123,17 +119,16 @@ export default class OverviewMap extends ol.control.OverviewMap {
    * @override ol.control.Control.prototype
    */
   handleToggle_() {
-    Utils.classToggle(this.element, 'ol-collapsed');
+    classToggle(this.element, 'ol-collapsed');
     const button = this.element.querySelector('button');
-    Utils.classToggle(button, this.openedButtonClass_);
-    Utils.classToggle(button, this.collapsedButtonClass_);
+    classToggle(button, this.openedButtonClass_);
+    classToggle(button, this.collapsedButtonClass_);
 
     setTimeout(() => {
       if (this.collapsed_) {
-        Utils.replaceNode(this.collapseLabel_, this.label_);
-      }
-      else {
-        Utils.replaceNode(this.label_, this.collapseLabel_);
+        replaceNode(this.collapseLabel_, this.label_);
+      } else {
+        replaceNode(this.label_, this.collapseLabel_);
       }
       this.collapsed_ = !this.collapsed_;
 

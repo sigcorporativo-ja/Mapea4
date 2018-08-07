@@ -1,24 +1,15 @@
-import Base from "./Base";
-import Utils from "./util/Utils";
-import Exception from "./exception/exception"
-import EventManager from "./event/Manager";
+import Base from './Base';
+import { isNullOrEmpty, isUndefined } from './util/Utils';
+import Exception from './exception/exception';
+import EventManager from './event/Manager';
 
+/**
+ * @classdesc
+ * Main facade plugin object. This class creates a plugin
+ * object which has an implementation Object
+ *
+ */
 export default class Plugin extends Base {
-  /**
-   * @classdesc
-   * Main facade plugin object. This class creates a plugin
-   * object which has an implementation Object
-   *
-   * @constructor
-   * @extends {M.facade.Base}
-   * @param {Object} impl implementation object
-   * @api stable
-   */
-  constructor(impl) {
-    // calls the super constructor
-    super(impl);
-  }
-
   /**
    * This function provides the implementation
    * of the object
@@ -30,26 +21,25 @@ export default class Plugin extends Base {
    */
   addTo(map) {
     // checks if the parameter is null or empty
-    if (Utils.isNullOrEmpty(map)) {
+    if (isNullOrEmpty(map)) {
       Exception('No ha especificado ningún mapa');
     }
 
     // checks if the implementation can add itself into the map
-    let impl = this.getImpl();
-    if (Utils.isUndefined(impl.addTo)) {
+    const impl = this.getImpl();
+    if (isUndefined(impl.addTo)) {
       Exception('La implementación usada no posee el método addTo');
     }
 
-    let view = this.createView(map);
+    const view = this.createView(map);
     // checks if the view is a promise
     if (view instanceof Promise) {
-      view.then(html => {
+      view.then((html) => {
         impl.addTo(map, html);
         // executes load callback
         this.fire(EventManager.ADDED_TO_MAP);
       });
-    }
-    else { // view is an HTML or text
+    } else { // view is an HTML or text
       impl.addTo(map, view);
       // executes load callback
       this.fire(EventManager.ADDED_TO_MAP);

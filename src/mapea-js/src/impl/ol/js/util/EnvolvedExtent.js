@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, isObject, isArray } from 'facade/js/util/Utils';
 
 /**
  * @namespace M.impl.envolvedExtent
@@ -36,34 +36,29 @@ export default class EnvolvedExtent {
       });
       if (baseLayers.length > 0) {
         wmsLayers.push(baseLayers[0]);
-      }
-      else {
+      } else {
         // if no base layers were specified then calculates the
         // envolved max extent for all WMS layers
         wmsLayers = map.getWMS();
       }
-      if (!Utils.isNullOrEmpty(selectedWMC)) {
+      if (!isNullOrEmpty(selectedWMC)) {
         EnvolvedExtent.calculateFromWMC(selectedWMC).then((extent) => {
           EnvolvedExtent.extentwmc = extent;
           success(extent);
         });
-      }
-      else if (wmsLayers.length > 0) {
+      } else if (wmsLayers.length > 0) {
         EnvolvedExtent.calculateFromWMS(wmsLayers).then((extent) => {
-          if (Utils.isNullOrEmpty(EnvolvedExtent.extentwmc)) {
+          if (isNullOrEmpty(EnvolvedExtent.extentwmc)) {
             success(extent);
-          }
-          else {
+          } else {
             success(EnvolvedExtent.extentwmc);
           }
         });
-      }
-      else {
+      } else {
         EnvolvedExtent.calculateFromProjection(map).then((extent) => {
-          if (Utils.isNullOrEmpty(EnvolvedExtent.extentwmc)) {
+          if (isNullOrEmpty(EnvolvedExtent.extentwmc)) {
             success(extent);
-          }
-          else {
+          } else {
             success(EnvolvedExtent.extentwmc);
           }
         });
@@ -98,7 +93,7 @@ export default class EnvolvedExtent {
   static calculateFromProjection(map) {
     return new Promise((success) => {
       let projExtent = ol.proj.get(map.getProjection().code).getExtent();
-      if (Utils.isNullOrEmpty(projExtent)) {
+      if (isNullOrEmpty(projExtent)) {
         projExtent = [-180, -90, 180, 90];
       }
       success(projExtent);
@@ -124,27 +119,24 @@ export default class EnvolvedExtent {
         envolvedExtent = EnvolvedExtent.updateExtent(envolvedExtent, extent);
         if (index === (wmsLayersLength - 1)) {
           success(envolvedExtent);
-        }
-        else {
+        } else {
           const err = new Error('Error en calculateFromWMC. Modulo EnvolvedExtent.');
           fail(err);
         }
         index += 1;
       };
 
-      if (!Utils.isNullOrEmpty(wmsLayers)) {
+      if (!isNullOrEmpty(wmsLayers)) {
         for (let i = 0; i < wmsLayersLength; i += 1) {
           const wmsLayer = wmsLayers[i];
           const extent = wmsLayer.getImpl().getExtent();
           if (extent instanceof Promise) {
             extent.then(updateExtent);
-          }
-          else {
+          } else {
             updateExtent(extent);
           }
         }
-      }
-      else {
+      } else {
         success(envolvedExtent);
       }
     });
@@ -161,13 +153,12 @@ export default class EnvolvedExtent {
    */
   static updateExtent(extent, newExtent) {
     const extentVariable = extent;
-    if (Utils.isArray(newExtent)) {
+    if (isArray(newExtent)) {
       extentVariable[0] = Math.min(extentVariable[0], newExtent[0]);
       extentVariable[1] = Math.min(extentVariable[1], newExtent[1]);
       extentVariable[2] = Math.max(extentVariable[2], newExtent[2]);
       extentVariable[3] = Math.max(extentVariable[3], newExtent[3]);
-    }
-    else if (Utils.isObject(newExtent)) {
+    } else if (isObject(newExtent)) {
       extentVariable[0] = Math.min(extentVariable[0], newExtent.x.min);
       extentVariable[1] = Math.min(extentVariable[1], newExtent.y.min);
       extentVariable[2] = Math.max(extentVariable[2], newExtent.x.max);

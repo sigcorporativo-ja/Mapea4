@@ -1,4 +1,4 @@
-import Utils from '../util/Utils';
+import { normalize, isString } from '../util/Utils';
 
 export default class LayerType {
   /**
@@ -8,17 +8,15 @@ export default class LayerType {
    * @param {string} rawType the type to be parsed
    */
   static parse(rawType) {
-    let type = Utils.normalize(rawType, true);
+    let type = normalize(rawType, true);
     if (type === 'WMS_FULL') {
       type = LayerType.WMS;
-    }
-    else if (type === 'WFST') {
+    } else if (type === 'WFST') {
       type = LayerType.WFS;
-    }
-    else {
+    } else {
       type = Object.keys(LayerType).find((knowType) => {
         const knowTypeVal = LayerType[knowType];
-        return (Utils.isString(knowTypeVal) && (Utils.normalize(knowTypeVal, true) === type));
+        return (isString(knowTypeVal) && (normalize(knowTypeVal, true) === type));
       });
     }
     return LayerType[type];

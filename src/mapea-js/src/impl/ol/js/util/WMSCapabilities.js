@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, isArray, isObject, isUndefined } from 'facade/js/util/Utils';
 import WMS from 'facade/js/layer/WMS';
 
 /**
@@ -68,22 +68,20 @@ export default class GetCapabilities {
     let extent = null;
     let i;
     let ilen;
-    if (!Utils.isNullOrEmpty(layer)) {
+    if (!isNullOrEmpty(layer)) {
       // array
-      if (Utils.isArray(layer)) {
+      if (isArray(layer)) {
         for (i = 0; i < layer.length && extent === null; i += 1) {
           extent = this.getExtentRecursive_(layer[i], layerName);
         }
-      }
-      else if (Utils.isObject(layer)) {
+      } else if (isObject(layer)) {
         // base case
-        if (Utils.isNullOrEmpty(layerName) || (layer.Name === layerName)) {
+        if (isNullOrEmpty(layerName) || (layer.Name === layerName)) {
           // if the layer supports the SRS
           let srsArray = [];
-          if (!Utils.isNullOrEmpty(layer.SRS)) {
+          if (!isNullOrEmpty(layer.SRS)) {
             srsArray = layer.SRS;
-          }
-          else if (!Utils.isNullOrEmpty(layer.CRS)) {
+          } else if (!isNullOrEmpty(layer.CRS)) {
             srsArray = layer.CRS;
           }
           if (srsArray.indexOf(this.projection_.code) !== -1) {
@@ -105,16 +103,14 @@ export default class GetCapabilities {
               const projDest = ol.proj.get(this.projection_.code);
               extent = ol.proj.transformExtent(extent, projSrc, projDest);
             }
-          }
-          // if the layer has not the SRS then transformExtent
-          // the latLonBoundingBox which is always present
-          else {
+          } else {
+            // if the layer has not the SRS then transformExtent
+            // the latLonBoundingBox which is always present
             extent = layer.LatLonBoundingBox[0].extent;
             extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:4326'), ol.proj.get(this.projection_.code));
           }
-        }
-        // recursive case
-        else if (!Utils.isUndefined(layer.Layer)) {
+        } else if (!isUndefined(layer.Layer)) {
+          // recursive case
           extent = this.getExtentRecursive_(layer.Layer, layerName);
         }
       }
@@ -150,15 +146,13 @@ export default class GetCapabilities {
    */
   getLayersRecursive_(layer) {
     let layers = [];
-    if (!Utils.isNullOrEmpty(layer.Layer)) {
+    if (!isNullOrEmpty(layer.Layer)) {
       layers = this.getLayersRecursive_(layer.Layer);
-    }
-    else if (Utils.isArray(layer)) {
+    } else if (isArray(layer)) {
       layer.forEach((layerElem) => {
         layers = layers.concat(this.getLayersRecursive_(layerElem));
       });
-    }
-    else { // base case
+    } else { // base case
       layers.push(new WMS({
         url: this.serviceUrl_,
         name: layer.Name,

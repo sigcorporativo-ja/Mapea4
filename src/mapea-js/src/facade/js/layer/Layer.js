@@ -1,15 +1,19 @@
+/**
+ * @module M.Layer
+ */
 import Config from 'configuration';
-import Utils from '../util/Utils';
 import Exception from '../exception/exception';
 import * as parserParameter from '../parameter/parameter';
 import Base from '../Base';
+import { isNullOrEmpty, concatUrlPaths, isUndefined, normalize, isString, isFunction, generateRandom, isBoolean } from '../util/Utils';
 
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ */
 export default class LayerBase extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.facade.Base}
    * @param {string|Mx.parameters.Layer} userParameters parameters
@@ -90,15 +94,13 @@ export default class LayerBase extends Base {
   }
 
   set transparent(newTransparent) {
-    if (!Utils.isNullOrEmpty(newTransparent)) {
-      if (Utils.isString(newTransparent)) {
-        this.getImpl().transparent = (Utils.normalize(newTransparent) === 'true');
-      }
-      else {
+    if (!isNullOrEmpty(newTransparent)) {
+      if (isString(newTransparent)) {
+        this.getImpl().transparent = (normalize(newTransparent) === 'true');
+      } else {
         this.getImpl().transparent = newTransparent;
       }
-    }
-    else {
+    } else {
       this.getImpl().transparent = true;
     }
   }
@@ -111,15 +113,13 @@ export default class LayerBase extends Base {
   }
 
   set displayInLayerSwitcher(newDisplayInLayerSwitcher) {
-    if (!Utils.isNullOrEmpty(newDisplayInLayerSwitcher)) {
-      if (Utils.isString(newDisplayInLayerSwitcher)) {
-        this.getImpl().displayInLayerSwitcher = (Utils.normalize(newDisplayInLayerSwitcher) === 'true');
-      }
-      else {
+    if (!isNullOrEmpty(newDisplayInLayerSwitcher)) {
+      if (isString(newDisplayInLayerSwitcher)) {
+        this.getImpl().displayInLayerSwitcher = (normalize(newDisplayInLayerSwitcher) === 'true');
+      } else {
         this.getImpl().displayInLayerSwitcher = newDisplayInLayerSwitcher;
       }
-    }
-    else {
+    } else {
       this.getImpl().displayInLayerSwitcher = true;
     }
   }
@@ -133,7 +133,7 @@ export default class LayerBase extends Base {
    */
   isVisible() {
     // checks if the implementation can manage this method
-    if (Utils.isUndefined(this.getImpl().isVisible)) {
+    if (isUndefined(this.getImpl().isVisible)) {
       Exception('La implementación usada no posee el método isVisible');
     }
 
@@ -149,7 +149,7 @@ export default class LayerBase extends Base {
    */
   isQueryable() {
     // checks if the implementation can manage this method
-    if (Utils.isUndefined(this.getImpl().isQueryable)) {
+    if (isUndefined(this.getImpl().isQueryable)) {
       Exception('La implementación usada no posee el método isQueryable');
     }
 
@@ -166,17 +166,17 @@ export default class LayerBase extends Base {
   setVisible(visibilityParam) {
     let visibility = visibilityParam;
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(visibility)) {
+    if (isNullOrEmpty(visibility)) {
       Exception('No ha especificado ningún parámetro de visibilidad');
     }
 
     // checks if the param is boolean or string
-    if (!Utils.isString(visibility) && !Utils.isBoolean(visibility)) {
+    if (!isString(visibility) && !isBoolean(visibility)) {
       Exception('No ha especificado ningún parámetro de visibilidad');
     }
 
     // checks if the implementation can manage this method
-    if (Utils.isUndefined(this.getImpl().setVisible)) {
+    if (isUndefined(this.getImpl().setVisible)) {
       Exception('La implementación usada no posee el método setVisible');
     }
 
@@ -194,7 +194,7 @@ export default class LayerBase extends Base {
    */
   inRange() {
     // checks if the implementation can manage this method
-    if (Utils.isUndefined(this.getImpl().inRange)) {
+    if (isUndefined(this.getImpl().inRange)) {
       Exception('La implementación usada no posee el método inRange');
     }
 
@@ -221,8 +221,8 @@ export default class LayerBase extends Base {
    */
   setLegendURL(legendUrlParam) {
     let legendUrl = legendUrlParam;
-    if (Utils.isNullOrEmpty(legendUrl)) {
-      legendUrl = Utils.concatUrlPaths([Config.THEME_URL, LayerBase.LEGEND_DEFAULT]);
+    if (isNullOrEmpty(legendUrl)) {
+      legendUrl = concatUrlPaths([Config.THEME_URL, LayerBase.LEGEND_DEFAULT]);
     }
     this.getImpl().setLegendURL(legendUrl);
   }
@@ -278,7 +278,7 @@ export default class LayerBase extends Base {
    */
   refresh() {
     // checks if the implementation can manage this method
-    if (!Utils.isUndefined(this.getImpl().refresh) && Utils.isFunction(this.getImpl().refresh)) {
+    if (!isUndefined(this.getImpl().refresh) && isFunction(this.getImpl().refresh)) {
       this.getImpl().refresh();
     }
   }
@@ -290,7 +290,7 @@ export default class LayerBase extends Base {
    * @export
    */
   generateName_() {
-    this.name = Utils.generateRandom('layer_', '_'.concat(this.type));
+    this.name = generateRandom('layer_', '_'.concat(this.type));
   }
 }
 

@@ -3,7 +3,7 @@ import LayerVector from 'facade/js/layer/Vector';
 import Polygon from 'facade/js/style/Polygon';
 import StylePoint from 'facade/js/style/Point';
 import FacadeCluster from 'facade/js/style/Cluster';
-import Utils from 'facade/js/util/Utils';
+import { inverseColor, extendsObj, isFunction, isNullOrEmpty } from 'facade/js/util/Utils';
 import EventsManager from 'facade/js/event/Manager';
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import Style from './Style';
@@ -101,15 +101,14 @@ export default class Cluster extends Style {
   applyToLayer(layer, map) {
     this.layer_ = layer;
     this.options_ = this.updateLastRange_();
-    if (!Utils.isNullOrEmpty(this.selectClusterInteraction_)) {
+    if (!isNullOrEmpty(this.selectClusterInteraction_)) {
       this.selectClusterInteraction_.clear();
     }
     this.updateCanvas();
     const features = layer.getFeatures();
     if (features.length > 0) {
       this.clusterize_(features);
-    }
-    else {
+    } else {
       this.layer_.on(EventsManager.LOAD, this.clusterize_, this);
     }
   }
@@ -157,7 +156,7 @@ export default class Cluster extends Style {
     }
     this.layer_.getImpl().setOL3Layer(this.clusterLayer_);
 
-    if (Utils.isNullOrEmpty(this.options_.ranges)) {
+    if (isNullOrEmpty(this.options_.ranges)) {
       this.options_.ranges = this.getDefaultRanges_();
       // this.options_.label.color = '#fff';
     }
@@ -180,11 +179,10 @@ export default class Cluster extends Style {
    * @api stable
    */
   setRanges(newRanges) {
-    if (Utils.isNullOrEmpty(newRanges)) {
+    if (isNullOrEmpty(newRanges)) {
       this.options_.ranges = this.getDefaultRanges_();
       // this.options_.label.color = '#fff';
-    }
-    else {
+    } else {
       this.options_.ranges = newRanges;
     }
   }
@@ -198,8 +196,8 @@ export default class Cluster extends Style {
    * @api stable
    */
   updateLastRange_() {
-    const cloneOptions = Utils.extends({}, this.options_);
-    if (!Utils.isNullOrEmpty(this.options_) && !Utils.isNullOrEmpty(this.options_.ranges)) {
+    const cloneOptions = extendsObj({}, this.options_);
+    if (!isNullOrEmpty(this.options_) && !isNullOrEmpty(this.options_.ranges)) {
       let ranges = cloneOptions.ranges;
       if (ranges.length > 0) {
         ranges = ranges.sort((range, range2) => {
@@ -208,7 +206,7 @@ export default class Cluster extends Style {
           return min - min2;
         });
         const lastRange = ranges.pop();
-        if (Utils.isNullOrEmpty(lastRange.max)) {
+        if (isNullOrEmpty(lastRange.max)) {
           const numFeatures = this.layer_.getFeatures().length;
           lastRange.max = numFeatures;
         }
@@ -258,8 +256,7 @@ export default class Cluster extends Style {
     clusterVariable.getOptions().animated = animated;
     if (animated === false) {
       this.clusterLayer_.set('animationDuration', undefined);
-    }
-    else {
+    } else {
       this.clusterLayer_.set('animationDuration', this.optionsVendor_.animationDuration);
     }
     return this;
@@ -308,13 +305,12 @@ export default class Cluster extends Style {
    * @api stable
    */
   hoverFeatureFn_(features, evt) {
-    if (!Utils.isNullOrEmpty(features)) {
+    if (!isNullOrEmpty(features)) {
       let hoveredFeatures = [];
       features.forEach((hoveredFeature) => {
         if (hoveredFeature instanceof ClusteredFeature) {
           hoveredFeatures = hoveredFeatures.concat(hoveredFeature.getAttribute('features'));
-        }
-        else {
+        } else {
           hoveredFeatures.push(hoveredFeature);
         }
       });
@@ -325,7 +321,7 @@ export default class Cluster extends Style {
       if (convexHull.length > 2) {
         const convexOlFeature = new ol.Feature(new ol.geom.Polygon([convexHull]));
         const convexFeature = Feature.olFeature2Facade(convexOlFeature);
-        if (Utils.isNullOrEmpty(this.convexHullLayer_)) {
+        if (isNullOrEmpty(this.convexHullLayer_)) {
           this.convexHullLayer_ = new LayerVector({
             name: 'cluster_cover',
             extract: false,
@@ -339,8 +335,7 @@ export default class Cluster extends Style {
             .on('change:resolution', this.clearConvexHull, this);
           this.convexHullLayer_.setStyle(new Polygon(this.optionsVendor_.convexHullStyle));
           this.convexHullLayer_.setZIndex(99990);
-        }
-        else {
+        } else {
           this.convexHullLayer_.removeFeatures(this.convexHullLayer_.getFeatures());
           this.convexHullLayer_.addFeatures(convexFeature);
         }
@@ -357,7 +352,7 @@ export default class Cluster extends Style {
    * @api stable
    */
   leaveFeatureFn_(features, evt) {
-    if (!Utils.isNullOrEmpty(this.convexHullLayer_)) {
+    if (!isNullOrEmpty(this.convexHullLayer_)) {
       this.convexHullLayer_.removeFeatures(this.convexHullLayer_.getFeatures());
     }
   }
@@ -407,28 +402,25 @@ export default class Cluster extends Style {
     }
     const numFeatures = clusterOlFeatures.length;
     const range = this.options_.ranges.find(el => (el.min <= numFeatures && el.max >= numFeatures));
-    if (!Utils.isNullOrEmpty(range)) {
+    if (!isNullOrEmpty(range)) {
       const style = range.style.clone();
       if (selected) {
         style.set('fill.opacity', 0.33);
-      }
-      else if (this.options_.displayAmount) {
+      } else if (this.options_.displayAmount) {
         style.set('label', this.options_.label);
         let labelColor = style.get('label.color');
-        if (Utils.isNullOrEmpty(labelColor)) {
+        if (isNullOrEmpty(labelColor)) {
           const fillColor = style.get('fill.color');
-          if (!Utils.isNullOrEmpty(fillColor)) {
-            labelColor = Utils.inverseColor(fillColor);
-          }
-          else {
+          if (!isNullOrEmpty(fillColor)) {
+            labelColor = inverseColor(fillColor);
+          } else {
             labelColor = '#000';
           }
           style.set('label.color', labelColor);
         }
       }
       olStyle = style.getImpl().olStyleFn(feature, resolution);
-    }
-    else if (numFeatures === 1) {
+    } else if (numFeatures === 1) {
       let clusterOlFeatureStyle = clusterOlFeatures[0].getStyle();
       if (!clusterOlFeatureStyle) {
         clusterOlFeatureStyle = this.oldOLLayer_.getStyle();
@@ -479,7 +471,7 @@ export default class Cluster extends Style {
    */
   selectClusterFeature_(evt) {
     this.clearConvexHull();
-    // if (!Utils.isNullOrEmpty(evt.selected)) {
+    // if (!isNullOrEmpty(evt.selected)) {
     //   let olFeatures = evt.selected[0].get('features');
     //   let features = olFeatures.map(M.impl.Feature.olFeature2Facade);
     //   this.layer_.fire(M.evt.SELECT_FEATURES, [features, evt]);
@@ -493,7 +485,7 @@ export default class Cluster extends Style {
    * @api stable
    */
   unapply() {
-    if (!Utils.isNullOrEmpty(this.clusterLayer_)) {
+    if (!isNullOrEmpty(this.clusterLayer_)) {
       const clusterSource = this.clusterLayer_.getSource();
       const eventType = OLEventChange;
       const callback = ol.source.Cluster.prototype.refresh;
@@ -505,8 +497,7 @@ export default class Cluster extends Style {
         .un('change:resolution', this.clearConvexHull, this);
       this.layer_.redraw();
       clusterSource.getSource().un(eventType, callback, clusterSource);
-    }
-    else if (!Utils.isNullOrEmpty(this.layer_)) {
+    } else if (!isNullOrEmpty(this.layer_)) {
       this.layer_.un(EventsManager.LOAD, this.clusterize_, this);
     }
   }
@@ -571,12 +562,10 @@ export default class Cluster extends Style {
    */
   deactivateTemporarilyChangeEvent(callback, callbackArguments) {
     this.deactivateChangeEvent();
-
-    if (Utils.isFunction(callback)) {
+    if (isFunction(callback)) {
       if (callbackArguments == null) {
         callback();
-      }
-      else {
+      } else {
         callback(...callbackArguments);
       }
     }

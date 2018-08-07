@@ -1,6 +1,6 @@
 import StylePointImpl from 'impl/style/Point';
 import Simple from './Simple';
-import Utils from '../util/Utils';
+import { isNullOrEmpty, extendsObj } from '../util/Utils';
 
 export default class Point extends Simple {
   /**
@@ -13,13 +13,12 @@ export default class Point extends Simple {
    */
   constructor(optionsVar) {
     let options = optionsVar;
-    if (Utils.isNullOrEmpty(options)) {
+    if (isNullOrEmpty(options)) {
       options = Point.DEFAULT_NULL;
+    } else {
+      options = extendsObj(options, Point.DEFAULT);
     }
-    else {
-      options = Utils.extends(options, Point.DEFAULT);
-    }
-    options = Utils.extends({}, options);
+    options = extendsObj({}, options);
 
     const impl = new StylePointImpl(options);
     super(options, impl);

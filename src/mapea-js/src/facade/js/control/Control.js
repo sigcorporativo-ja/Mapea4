@@ -1,4 +1,4 @@
-import Utils from '../util/Utils';
+import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import Base from '../Base';
 import EvtManager from '../event/Manager';
@@ -19,17 +19,17 @@ export default class ControlBase extends Base {
     super(impl);
 
     // checks if the implementation can create WMC layers
-    if (Utils.isUndefined(impl.addTo)) {
+    if (isUndefined(impl.addTo)) {
       Exception('La implementación usada no posee el método addTo');
     }
 
     // checks if the implementation can create WMC layers
-    if (Utils.isUndefined(impl.element)) {
+    if (isUndefined(impl.element)) {
       Exception('La implementación usada no posee el método getElement');
     }
 
     // checks if the implementation can create default controls
-    if (Utils.isUndefined(impl.isByDefault)) {
+    if (isUndefined(impl.isByDefault)) {
       impl.isByDefault = true;
     }
 
@@ -89,14 +89,14 @@ export default class ControlBase extends Base {
   setImpl(implParam) {
     const impl = implParam;
     // checks if the implementation can create WMC layers
-    if (Utils.isUndefined(impl.addTo)) {
+    if (isUndefined(impl.addTo)) {
       Exception('La implementación usada no posee el método addTo');
     }
-    if (Utils.isUndefined(impl.getElement)) {
+    if (isUndefined(impl.getElement)) {
       Exception('La implementación usada no posee el método getElement');
     }
     // checks if the implementation can create default controls
-    if (Utils.isUndefined(impl.isByDefault)) {
+    if (isUndefined(impl.isByDefault)) {
       impl.isByDefault = true;
     }
   }
@@ -120,8 +120,7 @@ export default class ControlBase extends Base {
         impl.addTo(map, html);
         this.fire(EvtManager.ADDED_TO_MAP);
       });
-    }
-    else { // view is an HTML or text or null
+    } else { // view is an HTML or text or null
       this.manageActivation(view);
       impl.addTo(map, view);
       this.fire(EvtManager.ADDED_TO_MAP);
@@ -150,14 +149,13 @@ export default class ControlBase extends Base {
   manageActivation(html) {
     this.element_ = html;
     this.activationBtn_ = this.getActivationButton(this.element_);
-    if (!Utils.isNullOrEmpty(this.activationBtn_)) {
+    if (!isNullOrEmpty(this.activationBtn_)) {
       this.activationBtn_.addEventListener('click', (evt) => {
         evt.preventDefault();
         if (!this.activated) {
           this.activate();
           this.activated = true;
-        }
-        else {
+        } else {
           this.deactivate();
           this.activated = false;
         }
@@ -185,10 +183,10 @@ export default class ControlBase extends Base {
    * @export
    */
   activate() {
-    if (!Utils.isNullOrEmpty(this.element_)) {
+    if (!isNullOrEmpty(this.element_)) {
       this.element_.classList.add('activated');
     }
-    if (!Utils.isUndefined(this.getImpl().activate)) {
+    if (!isUndefined(this.getImpl().activate)) {
       this.getImpl().activate();
     }
     this.activated = true;
@@ -204,10 +202,10 @@ export default class ControlBase extends Base {
    * @export
    */
   deactivate() {
-    if (!Utils.isNullOrEmpty(this.element_)) {
+    if (!isNullOrEmpty(this.element_)) {
       this.element_.classList.remove('activated');
     }
-    if (!Utils.isUndefined(this.getImpl().deactivate)) {
+    if (!isUndefined(this.getImpl().deactivate)) {
       this.getImpl().deactivate();
     }
     this.activated = false;

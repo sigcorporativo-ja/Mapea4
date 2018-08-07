@@ -2,7 +2,7 @@ import 'assets/css/controls/scale';
 import ScaleLineImpl from 'impl/control/ScaleLine';
 import scalelineTemplate from 'templates/scaleline';
 import ControlBase from './Control';
-import Utils from '../util/Utils';
+import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
@@ -25,7 +25,7 @@ export default class ScaleLine extends ControlBase {
     // calls the super constructor
     super(impl, ScaleLine.NAME);
 
-    if (Utils.isUndefined(ScaleLineImpl)) {
+    if (isUndefined(ScaleLineImpl)) {
       Exception('La implementación usada no puede crear controles ScaleLine');
     }
   }

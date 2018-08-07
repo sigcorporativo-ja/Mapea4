@@ -1,7 +1,7 @@
 import Config from 'configuration';
 import MapboxImpl from 'impl/layer/Mapbox';
 import LayerBase from './Layer';
-import Utils from '../util/Utils';
+import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
@@ -33,24 +33,24 @@ export default class Mapbox extends LayerBase {
     super(parameters, impl);
 
     // checks if the implementation can create Mapbox
-    if (Utils.isUndefined(MapboxImpl)) {
+    if (isUndefined(MapboxImpl)) {
       Exception('La implementación usada no puede crear capas Mapbox');
     }
 
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(userParameters)) {
+    if (isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
 
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(parameters.name)) {
+    if (isNullOrEmpty(parameters.name)) {
       Exception('No ha especificado ningún nombre');
     }
 
     this.name = parameters.name;
 
     this.legend = parameters.legend;
-    if (Utils.isNullOrEmpty(parameters.legend)) {
+    if (isNullOrEmpty(parameters.legend)) {
       this.legend = parameters.name;
     }
 
@@ -73,10 +73,9 @@ export default class Mapbox extends LayerBase {
   }
 
   set url(newUrl) {
-    if (!Utils.isNullOrEmpty(newUrl)) {
+    if (!isNullOrEmpty(newUrl)) {
       this.getImpl().url = newUrl;
-    }
-    else {
+    } else {
       this.getImpl().url = Config.MAPBOX_URL;
     }
   }
@@ -89,10 +88,9 @@ export default class Mapbox extends LayerBase {
   }
 
   set transparent(newTransparent) {
-    if (!Utils.isNullOrEmpty(newTransparent)) {
+    if (!isNullOrEmpty(newTransparent)) {
       this.getImpl().transparent = newTransparent;
-    }
-    else {
+    } else {
       this.getImpl().transparent = false;
     }
   }
@@ -105,10 +103,9 @@ export default class Mapbox extends LayerBase {
   }
 
   set accessToken(newAccessToken) {
-    if (!Utils.isNullOrEmpty(newAccessToken)) {
+    if (!isNullOrEmpty(newAccessToken)) {
       this.getImpl().accessToken = newAccessToken;
-    }
-    else {
+    } else {
       this.getImpl().accessToken = Config.MAPBOX_TOKEN_VALUE;
     }
   }
@@ -122,8 +119,8 @@ export default class Mapbox extends LayerBase {
   }
 
   set type(newType) {
-    if (!Utils.isUndefined(newType) &&
-      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.Mapbox)) {
+    if (!isUndefined(newType) &&
+      !isNullOrEmpty(newType) && (newType !== LayerType.Mapbox)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Mapbox).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }

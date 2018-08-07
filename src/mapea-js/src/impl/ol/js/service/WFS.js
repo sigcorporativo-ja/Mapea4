@@ -1,5 +1,5 @@
 import Remote from 'facade/js/util/Remote';
-import Utils from 'facade/js/util/Utils';
+import { addParameters, isNullOrEmpty } from 'facade/js/util/Utils';
 import Featuretype from '../format/wfs/DescribeFeatureType';
 
 export default class WFS {
@@ -41,7 +41,7 @@ export default class WFS {
      * @type {String}
      */
     this.typeName_ = this.name_;
-    if (!Utils.isNullOrEmpty(this.namespace_)) {
+    if (!isNullOrEmpty(this.namespace_)) {
       this.typeName_ = this.namespace_.concat(':').concat(this.name_);
     }
 
@@ -80,7 +80,7 @@ export default class WFS {
      * @type {String}
      */
     this.getFeatureOutputFormat_ = layerParameters.getFeatureOutputFormat;
-    if (Utils.isNullOrEmpty(this.getFeatureOutputFormat_)) {
+    if (isNullOrEmpty(this.getFeatureOutputFormat_)) {
       this.getFeatureOutputFormat_ = 'application/json'; // by default
     }
 
@@ -99,7 +99,7 @@ export default class WFS {
      * @type {Object}
      */
     this.getFeatureVendor_ = {};
-    if (!Utils.isNullOrEmpty(vendorOpts) && !Utils.isNullOrEmpty(vendorOpts.getFeature)) {
+    if (!isNullOrEmpty(vendorOpts) && !isNullOrEmpty(vendorOpts.getFeature)) {
       this.getFeatureVendor_ = vendorOpts.getFeature;
     }
 
@@ -110,7 +110,7 @@ export default class WFS {
      * @type {Object}
      */
     this.describeFeatureTypeVendor_ = {};
-    if (!Utils.isNullOrEmpty(vendorOpts) && !Utils.isNullOrEmpty(vendorOpts.describeFeatureType)) {
+    if (!isNullOrEmpty(vendorOpts) && !isNullOrEmpty(vendorOpts.describeFeatureType)) {
       this.describeFeatureTypeVendor_ = vendorOpts.describeFeatureType;
     }
   }
@@ -131,13 +131,12 @@ export default class WFS {
       request: 'DescribeFeatureType',
       typename: this.typeName_,
     };
-    if (!Utils.isNullOrEmpty(this.describeFeatureTypeOutputFormat_)) {
+    if (!isNullOrEmpty(this.describeFeatureTypeOutputFormat_)) {
       describeFeatureParams.outputFormat = this.describeFeatureTypeOutputFormat_;
     }
 
-    const params = Utils.addParameters(this.url_, describeFeatureParams);
-    const describeFeatureTypeUrl = Utils
-      .addParameters(params, this.describeFeatureTypeVendor_);
+    const params = addParameters(this.url_, describeFeatureParams);
+    const describeFeatureTypeUrl = addParameters(params, this.describeFeatureTypeVendor_);
     const descFTypeOForm = this.describeFeatureTypeOutputFormat_;
     const descrFTypeFormat = new Featuretype(this.name_, descFTypeOForm, this.projection_);
     return new Promise((success, fail) => {
@@ -169,19 +168,17 @@ export default class WFS {
       outputFormat: this.getFeatureOutputFormat_,
       srsname: projection.getCode(),
     };
-    if (!Utils.isNullOrEmpty(this.ids_)) {
+    if (!isNullOrEmpty(this.ids_)) {
       getFeatureParams.featureId = this.ids_.map((id) => {
         return this.name_.concat('.').concat(id);
       });
     }
-    if (!Utils.isNullOrEmpty(this.cql_)) {
+    if (!isNullOrEmpty(this.cql_)) {
       getFeatureParams.CQL_FILTER = this.cql_;
-    }
-    else if (!Utils.isNullOrEmpty(extent)) {
+    } else if (!isNullOrEmpty(extent)) {
       getFeatureParams.bbox = `${extent.join(',')},${projection.getCode()}`;
     }
 
-    return Utils
-      .addParameters(Utils.addParameters(this.url_, getFeatureParams), this.getFeatureVendor_);
+    return addParameters(addParameters(this.url_, getFeatureParams), this.getFeatureVendor_);
   }
 }

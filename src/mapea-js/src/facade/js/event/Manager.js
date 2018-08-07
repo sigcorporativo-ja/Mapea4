@@ -1,4 +1,4 @@
-import Utils from '../util/Utils';
+import { isNullOrEmpty, isFunction } from '../util/Utils';
 import EventListener from './Listener';
 
 export default class EventsManager {
@@ -31,9 +31,9 @@ export default class EventsManager {
    * @api stable
    */
   add(eventType, listener, optThis, once = false) {
-    if (!Utils.isNullOrEmpty(eventType) &&
-      (EventsManager.eventTypes.indexOf(eventType) !== -1) && Utils.isFunction(listener)) {
-      if (Utils.isNullOrEmpty(this.events_[eventType])) {
+    if (!isNullOrEmpty(eventType) &&
+      (EventsManager.eventTypes.indexOf(eventType) !== -1) && isFunction(listener)) {
+      if (isNullOrEmpty(this.events_[eventType])) {
         this.events_[eventType] = [];
       }
       if (this.indexOf(eventType, listener, optThis) === -1) {
@@ -54,7 +54,7 @@ export default class EventsManager {
    */
   remove(eventType, listener, optThis) {
     const listeners = this.events_[eventType];
-    if (!Utils.isNullOrEmpty(listeners)) {
+    if (!isNullOrEmpty(listeners)) {
       const index = this.indexOf(eventType, listener, optThis);
       if (index !== -1) {
         listeners.splice(index, 1);
@@ -71,7 +71,7 @@ export default class EventsManager {
    */
   fire(eventType, args) {
     const EventsManagerListeners = [].concat(this.events_[eventType]);
-    if (!Utils.isNullOrEmpty(EventsManagerListeners)) {
+    if (!isNullOrEmpty(EventsManagerListeners)) {
       EventsManagerListeners.forEach((EventManagerListener) => {
         EventManagerListener.fire(args);
         if (EventManagerListener.isOnce() === true) {
@@ -91,7 +91,7 @@ export default class EventsManager {
   indexOf(eventType, listener, optThis) {
     let index = -1;
     const evtListeners = this.events_[eventType];
-    if (!Utils.isNullOrEmpty(evtListeners)) {
+    if (!isNullOrEmpty(evtListeners)) {
       for (let i = 0, ilen = evtListeners.length; i < ilen; i += 1) {
         if (evtListeners[i].has(listener, optThis)) {
           index = i;

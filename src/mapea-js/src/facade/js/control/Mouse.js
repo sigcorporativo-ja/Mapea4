@@ -2,7 +2,7 @@ import 'assets/css/controls/mouse';
 import mouseTemplate from 'templates/mouse';
 import MouseImpl from 'impl/control/Mouse';
 import ControlBase from './Control';
-import Utils from '../util/Utils';
+import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
@@ -25,7 +25,7 @@ export default class Mouse extends ControlBase {
     // calls the super constructor
     super(impl, Mouse.NAME);
 
-    if (Utils.isUndefined(MouseImpl)) {
+    if (isUndefined(MouseImpl)) {
       Exception('La implementación usada no puede crear controles Mouse');
     }
   }

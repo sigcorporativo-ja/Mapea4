@@ -1,4 +1,4 @@
-import Utils from '../util/Utils';
+import { isString, isNullOrEmpty, getParameterValue, isObject, isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 
 /**
@@ -14,24 +14,20 @@ import Exception from '../exception/exception';
 
 const parseContainer = (userParameters) => {
   let container;
-  if (Utils.isString(userParameters)) {
+  if (isString(userParameters)) {
     container = document.getElementById(userParameters);
-  }
-  else if (Utils.isObject(userParameters)) {
-    if (!Utils.isNullOrEmpty(userParameters.id)) {
+  } else if (isObject(userParameters)) {
+    if (!isNullOrEmpty(userParameters.id)) {
       container = document.getElementById(userParameters.id);
-    }
-    else if (!Utils.isNullOrEmpty(userParameters.container)) {
+    } else if (!isNullOrEmpty(userParameters.container)) {
       container = parseContainer(userParameters.container);
-    }
-    else {
+    } else {
       Exception('No ha especificado ningún parámetro contenedor');
     }
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof userParameters}`);
   }
-  if (Utils.isNullOrEmpty(container)) {
+  if (isNullOrEmpty(container)) {
     Exception('No existe ningún contenedor con el id especificado');
   }
   return container;
@@ -51,13 +47,11 @@ const parseContainer = (userParameters) => {
 const parseLayers = (parameter) => {
   let layers;
 
-  if (Utils.isString(parameter)) {
-    layers = Utils.getParameterValue('layers', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    layers = getParameterValue('layers', parameter);
+  } else if (isObject(parameter)) {
     layers = parameter.layers;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof parameter}`);
   }
 
@@ -77,25 +71,23 @@ const parseLayers = (parameter) => {
 const parseWMC = (parameter) => {
   let wmc;
 
-  if (Utils.isString(parameter)) {
-    wmc = Utils.getParameterValue('wmc', parameter);
-    if (Utils.isNullOrEmpty(wmc)) {
-      wmc = Utils.getParameterValue('wmcfile', parameter);
+  if (isString(parameter)) {
+    wmc = getParameterValue('wmc', parameter);
+    if (isNullOrEmpty(wmc)) {
+      wmc = getParameterValue('wmcfile', parameter);
     }
-    if (Utils.isNullOrEmpty(wmc)) {
-      wmc = Utils.getParameterValue('wmcfiles', parameter);
+    if (isNullOrEmpty(wmc)) {
+      wmc = getParameterValue('wmcfiles', parameter);
     }
-  }
-  else if (Utils.isObject(parameter)) {
+  } else if (isObject(parameter)) {
     wmc = parameter.wmc;
-    if (Utils.isNullOrEmpty(wmc)) {
+    if (isNullOrEmpty(wmc)) {
       wmc = parameter.wmcfile;
     }
-    if (Utils.isNullOrEmpty(wmc)) {
+    if (isNullOrEmpty(wmc)) {
       wmc = parameter.wmcfiles;
     }
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof parameter}`);
   }
   return wmc;
@@ -114,13 +106,11 @@ const parseWMC = (parameter) => {
 const parseWMS = (parameter) => {
   let wms;
 
-  if (Utils.isString(parameter)) {
-    wms = Utils.getParameterValue('wms', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    wms = getParameterValue('wms', parameter);
+  } else if (isObject(parameter)) {
     wms = parameter.wms;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof parameter}`);
   }
   return wms;
@@ -138,13 +128,11 @@ const parseWMS = (parameter) => {
 const parseWMTS = (parameter) => {
   let wmts;
 
-  if (Utils.isString(parameter)) {
-    wmts = Utils.getParameterValue('wmts', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    wmts = getParameterValue('wmts', parameter);
+  } else if (isObject(parameter)) {
     wmts = parameter.wmts;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof parameter}`);
   }
 
@@ -164,13 +152,11 @@ const parseWMTS = (parameter) => {
 const parseKML = (parameter) => {
   let kml;
 
-  if (Utils.isString(parameter)) {
-    kml = Utils.getParameterValue('kml', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    kml = getParameterValue('kml', parameter);
+  } else if (isObject(parameter)) {
     kml = parameter.kml;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof parameter}`);
   }
 
@@ -190,13 +176,11 @@ const parseKML = (parameter) => {
 const parseControls = (parameter) => {
   let controls;
 
-  if (Utils.isString(parameter)) {
-    controls = Utils.getParameterValue('controls', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    controls = getParameterValue('controls', parameter);
+  } else if (isObject(parameter)) {
     controls = parameter.controls;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro controls no es válido: ${typeof parameter}`);
   }
 
@@ -216,16 +200,14 @@ const parseControls = (parameter) => {
 const parseGetFeatureInfo = (parameter) => {
   let getFeatureInfo;
 
-  if (Utils.isString(parameter)) {
-    getFeatureInfo = Utils.getParameterValue('getfeatureinfo', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    getFeatureInfo = getParameterValue('getfeatureinfo', parameter);
+  } else if (isObject(parameter)) {
     getFeatureInfo = parameter.getfeatureinfo;
-    if (!Utils.isUndefined(getFeatureInfo) && Utils.isNullOrEmpty(getFeatureInfo)) {
+    if (!isUndefined(getFeatureInfo) && isNullOrEmpty(getFeatureInfo)) {
       getFeatureInfo = 'plain';
     }
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro controls no es válido: ${typeof parameter}`);
   }
 
@@ -246,19 +228,17 @@ const parseGetFeatureInfo = (parameter) => {
 const parseMaxExtent = (parameter) => {
   let maxExtent;
 
-  if (Utils.isString(parameter)) {
-    maxExtent = Utils.getParameterValue('maxExtent', parameter);
-    if (Utils.isNullOrEmpty(maxExtent)) {
-      maxExtent = Utils.getParameterValue('maxextent', parameter);
+  if (isString(parameter)) {
+    maxExtent = getParameterValue('maxExtent', parameter);
+    if (isNullOrEmpty(maxExtent)) {
+      maxExtent = getParameterValue('maxextent', parameter);
     }
-  }
-  else if (Utils.isObject(parameter)) {
+  } else if (isObject(parameter)) {
     maxExtent = parameter.maxExtent;
-    if (Utils.isNullOrEmpty(maxExtent)) {
+    if (isNullOrEmpty(maxExtent)) {
       maxExtent = parameter.maxextent;
     }
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof parameter}`);
   }
   return maxExtent;
@@ -278,13 +258,11 @@ const parseMaxExtent = (parameter) => {
 const parseBbox = (parameter) => {
   let bbox;
 
-  if (Utils.isString(parameter)) {
-    bbox = Utils.getParameterValue('bbox', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    bbox = getParameterValue('bbox', parameter);
+  } else if (isObject(parameter)) {
     bbox = parameter.bbox;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof parameter}`);
   }
 
@@ -305,13 +283,11 @@ const parseBbox = (parameter) => {
 const parseZoom = (parameter) => {
   let zoom;
 
-  if (Utils.isString(parameter)) {
-    zoom = Utils.getParameterValue('zoom', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    zoom = getParameterValue('zoom', parameter);
+  } else if (isObject(parameter)) {
     zoom = parameter.zoom;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro zoom no es válido: ${typeof parameter}`);
   }
 
@@ -332,13 +308,11 @@ const parseZoom = (parameter) => {
 const parseCenter = (parameter) => {
   let center;
 
-  if (Utils.isString(parameter)) {
-    center = Utils.getParameterValue('center', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    center = getParameterValue('center', parameter);
+  } else if (isObject(parameter)) {
     center = parameter.center;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro center no es válido: ${typeof parameter}`);
   }
 
@@ -359,13 +333,11 @@ const parseCenter = (parameter) => {
 const parseTicket = (parameter) => {
   let ticket;
 
-  if (Utils.isString(parameter)) {
-    ticket = Utils.getParameterValue('ticket', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    ticket = getParameterValue('ticket', parameter);
+  } else if (isObject(parameter)) {
     ticket = parameter.ticket;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro ticket no es válido: ${typeof parameter}`);
   }
 
@@ -386,13 +358,11 @@ const parseTicket = (parameter) => {
 const parseResolutions = (parameter) => {
   let resolutions;
 
-  if (Utils.isString(parameter)) {
-    resolutions = Utils.getParameterValue('resolutions', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    resolutions = getParameterValue('resolutions', parameter);
+  } else if (isObject(parameter)) {
     resolutions = parameter.resolutions;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof parameter}`);
   }
 
@@ -412,13 +382,11 @@ const parseResolutions = (parameter) => {
  */
 const parseProjection = (parameter) => {
   let projection;
-  if (Utils.isString(parameter)) {
-    projection = Utils.getParameterValue('projection', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    projection = getParameterValue('projection', parameter);
+  } else if (isObject(parameter)) {
     projection = parameter.projection;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof parameter}`);
   }
 
@@ -439,13 +407,11 @@ const parseProjection = (parameter) => {
 const parseLabel = (parameter) => {
   let label;
 
-  if (Utils.isString(parameter)) {
-    label = Utils.getParameterValue('label', parameter);
-  }
-  else if (Utils.isObject(parameter)) {
+  if (isString(parameter)) {
+    label = getParameterValue('label', parameter);
+  } else if (isObject(parameter)) {
     label = parameter.label;
-  }
-  else {
+  } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof parameter}`);
   }
 
@@ -464,7 +430,7 @@ export default class Parameters {
    * @api stable
    */
   constructor(userParameters) {
-    if (Utils.isNullOrEmpty(userParameters)) {
+    if (isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
 

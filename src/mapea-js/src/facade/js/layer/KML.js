@@ -1,6 +1,6 @@
 import KMLImpl from 'impl/layer/KML';
 import LayerVector from './Vector';
-import Utils from '../util/Utils';
+import { isNullOrEmpty, isUndefined, normalize, isString } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
@@ -32,12 +32,12 @@ export default class KML extends LayerVector {
     super(parameters, options, impl);
 
     // checks if the implementation can create KML layers
-    if (Utils.isUndefined(KMLImpl)) {
+    if (isUndefined(KMLImpl)) {
       Exception('La implementación usada no puede crear capas KML');
     }
 
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(userParameters)) {
+    if (isNullOrEmpty(userParameters)) {
       Exception('No ha especificado ningún parámetro');
     }
 
@@ -57,8 +57,8 @@ export default class KML extends LayerVector {
   }
 
   set type(newType) {
-    if (!Utils.isUndefined(newType) &&
-      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.KML)) {
+    if (!isUndefined(newType) &&
+      !isNullOrEmpty(newType) && (newType !== LayerType.KML)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.KML).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
@@ -72,15 +72,13 @@ export default class KML extends LayerVector {
   }
 
   set extract(newExtract) {
-    if (!Utils.isNullOrEmpty(newExtract)) {
-      if (Utils.isString(newExtract)) {
-        this.getImpl().extract = (Utils.normalize(newExtract) === 'true');
-      }
-      else {
+    if (!isNullOrEmpty(newExtract)) {
+      if (isString(newExtract)) {
+        this.getImpl().extract = (normalize(newExtract) === 'true');
+      } else {
         this.getImpl().extract = newExtract;
       }
-    }
-    else {
+    } else {
       this.getImpl().extract = true;
     }
   }

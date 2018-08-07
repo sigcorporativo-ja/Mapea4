@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { decodeHtml } from 'facade/js/util/Utils';
 
 /**
  * @classdesc
@@ -36,7 +36,7 @@ export default class KML extends ol.format.KML {
           style.setImage(image);
         }
       });
-      feature.set('name', Utils.decodeHtml(feature.get('name')));
+      feature.set('name', decodeHtml(feature.get('name')));
       return feature;
     });
     this.readScreenOverlay(textResponse);
@@ -92,13 +92,11 @@ export default class KML extends ol.format.KML {
         screenXY = [attributeX, attributeY];
         screenXUnits = screenXYElement.getAttribute(xUnitsAttr);
         screenYUnits = screenXYElement.getAttribute(yUnitsAttr);
-      }
-      else if (src === ol.format.KML.DEFAULT_IMAGE_STYLE_SRC) {
+      } else if (src === ol.format.KML.DEFAULT_IMAGE_STYLE_SRC) {
         screenXY = ol.format.KML.DEFAULT_IMAGE_STYLE_ANCHOR;
         screenXUnits = ol.format.KML.DEFAULT_IMAGE_STYLE_ANCHOR_X_UNITS;
         screenYUnits = ol.format.KML.DEFAULT_IMAGE_STYLE_ANCHOR_Y_UNITS;
-      }
-      else if (/^http:\/\/maps\.(?:google|gstatic)\.com\//.test(src)) {
+      } else if (/^http:\/\/maps\.(?:google|gstatic)\.com\//.test(src)) {
         screenXY = [0.5, 0];
         screenXUnits = ol.style.IconAnchorUnits.FRACTION;
         screenYUnits = ol.style.IconAnchorUnits.FRACTION;

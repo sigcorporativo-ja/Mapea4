@@ -1,5 +1,5 @@
 import EventsManager from './event/Manager';
-import Utils from './util/Utils';
+import { isNullOrEmpty } from './util/Utils';
 
 /**
  * @classdesc
@@ -63,7 +63,7 @@ export default class MObject {
    */
   fire(eventType, argsParam) {
     let args = argsParam;
-    if (Utils.isNullOrEmpty(args)) {
+    if (isNullOrEmpty(args)) {
       args = [this];
     }
     this.eventsManager_.fire(eventType, args);

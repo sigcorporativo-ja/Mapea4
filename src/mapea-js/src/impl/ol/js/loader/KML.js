@@ -1,6 +1,6 @@
 import MObject from 'facade/js/Object';
 import Remote from 'facade/js/util/Remote';
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
 import FacadeFeature from 'facade/js/feature/Feature';
 import Exception from 'facade/js/exception/exception';
 
@@ -66,7 +66,7 @@ export default class KML extends MObject {
   loadInternal_(projection) {
     return new Promise((success, fail) => {
       Remote.get(this.url_).then((response) => {
-        if (!Utils.isNullOrEmpty(response.text)) {
+        if (!isNullOrEmpty(response.text)) {
           const features = this.format_.readCustomFeatures(response.text, {
             featureProjection: projection,
           });
@@ -87,8 +87,7 @@ export default class KML extends MObject {
             features: mFeatures,
             screenOverlay,
           });
-        }
-        else {
+        } else {
           Exception('No hubo respuesta del KML');
         }
       });

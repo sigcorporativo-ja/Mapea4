@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isNullOrEmpty, isNull, getResolutionFromScale, addParameters, concatUrlPaths, getWMSGetCapabilitiesUrl, isArray } from 'facade/js/util/Utils';
 import FacadeLayerBase from 'facade/js/layer/Layer';
 import LayerType from 'facade/js/layer/Type';
 import FacadeWMS from 'facade/js/layer/WMS';
@@ -99,17 +99,17 @@ export default class WMS extends LayerBase {
     }
 
     // tiled
-    if (Utils.isNullOrEmpty(this.tiled)) {
+    if (isNullOrEmpty(this.tiled)) {
       this.tiled = (this.options.singleTile !== true);
     }
 
     // number of zoom levels
-    if (Utils.isNullOrEmpty(this.options.numZoomLevels)) {
+    if (isNullOrEmpty(this.options.numZoomLevels)) {
       this.options.numZoomLevels = 16; // by default
     }
 
     // animated
-    if (Utils.isNullOrEmpty(this.options.animated)) {
+    if (isNullOrEmpty(this.options.animated)) {
       this.options.animated = false; // by default
     }
 
@@ -133,18 +133,17 @@ export default class WMS extends LayerBase {
           .forEach(layer => layer.setVisible(false));
 
         // set this layer visible
-        if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+        if (!isNullOrEmpty(this.ol3Layer)) {
           this.ol3Layer.setVisible(visibility);
         }
 
         // updates resolutions and keep the bbox
         const oldBbox = this.map.getBbox();
         this.map.getImpl().updateResolutionsFromBaseLayer();
-        if (!Utils.isNullOrEmpty(oldBbox)) {
+        if (!isNullOrEmpty(oldBbox)) {
           this.map.setBbox(oldBbox);
         }
-      }
-      else if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+      } else if (!isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }
     }
@@ -173,24 +172,23 @@ export default class WMS extends LayerBase {
     this.map = map;
 
     // calculates the resolutions from scales
-    if (!Utils.isNull(this.options) &&
-      !Utils.isNull(this.options.minScale) && !Utils.isNull(this.options.maxScale)) {
+    if (!isNull(this.options) &&
+      !isNull(this.options.minScale) && !isNull(this.options.maxScale)) {
       const units = this.map.getProjection().units;
-      this.options.minResolution = Utils.getResolutionFromScale(this.options.minScale, units);
-      this.options.maxResolution = Utils.getResolutionFromScale(this.options.maxScale, units);
+      this.options.minResolution = getResolutionFromScale(this.options.minScale, units);
+      this.options.maxResolution = getResolutionFromScale(this.options.maxScale, units);
     }
 
     // checks if it is a WMS_FULL
-    if (Utils.isNullOrEmpty(this.name)) { // WMS_FULL (add all wms layers)
+    if (isNullOrEmpty(this.name)) { // WMS_FULL (add all wms layers)
       this.addAllLayers_();
-    }
-    else { // just one WMS layer
+    } else { // just one WMS layer
       this.addSingleLayer_();
     }
 
-    if (this.legendUrl_ === Utils.concatUrlPaths([Config.THEME_URL,
+    if (this.legendUrl_ === concatUrlPaths([Config.THEME_URL,
       FacadeLayerBase.LEGEND_DEFAULT])) {
-      this.legendUrl_ = Utils.addParameters(this.url, {
+      this.legendUrl_ = addParameters(this.url, {
         SERVICE: 'WMS',
         VERSION: this.version,
         REQUEST: 'GetLegendGraphic',
@@ -211,12 +209,12 @@ export default class WMS extends LayerBase {
    */
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
-    if ((this.tiled === true) && !Utils.isNullOrEmpty(this.ol3Layer)) {
+    if ((this.tiled === true) && !isNullOrEmpty(this.ol3Layer)) {
       // gets the extent
       this.getMaxExtent_().then((olExtent) => {
         let layerParams = {};
         const optParams = this.options.params;
-        if (!Utils.isNullOrEmpty(optParams)) {
+        if (!isNullOrEmpty(optParams)) {
           const keysOptParams = Object.keys(optParams);
           keysOptParams.forEach((key) => {
             if (Object.prototype.hasOwnProperty.call(optParams, key)) {
@@ -225,8 +223,7 @@ export default class WMS extends LayerBase {
           });
           // TODO: parche para pedir todas las capas en PNG
           // layerParams.FORMAT = 'image/png';
-        }
-        else {
+        } else {
           layerParams = {
             LAYERS: this.name,
             TILED: true,
@@ -253,8 +250,7 @@ export default class WMS extends LayerBase {
             opacity: this.opacity_,
             zIndex: this.zIndex_,
           });
-        }
-        else {
+        } else {
           newSource = new ImageWMS({
             url: this.url,
             params: layerParams,
@@ -281,12 +277,12 @@ export default class WMS extends LayerBase {
     this.getMaxExtent_().then((olExtent) => {
       let tileGrid;
 
-      if (Utils.isNullOrEmpty(resolutions) && !Utils.isNullOrEmpty(this.resolutions_)) {
+      if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
         resolutions = this.resolutions_;
       }
 
       // gets the tileGrid
-      if (!Utils.isNullOrEmpty(resolutions)) {
+      if (!isNullOrEmpty(resolutions)) {
         tileGrid = new ol.tilegrid.TileGrid({
           resolutions,
           extent: olExtent,
@@ -296,7 +292,7 @@ export default class WMS extends LayerBase {
 
       let layerParams = {};
       const optParams = this.options.params;
-      if (!Utils.isNullOrEmpty(optParams)) {
+      if (!isNullOrEmpty(optParams)) {
         const keysOptParams = Object.keys(optParams);
         keysOptParams.forEach((key) => {
           if (Object.prototype.hasOwnProperty.call(optParams, key)) {
@@ -305,8 +301,7 @@ export default class WMS extends LayerBase {
         });
         // TODO: parche para pedir todas las capas en PNG
         // layerParams.FORMAT = 'image/png';
-      }
-      else {
+      } else {
         layerParams = {
           LAYERS: this.name,
           TILED: true,
@@ -330,8 +325,7 @@ export default class WMS extends LayerBase {
           opacity: this.opacity_,
           zIndex: this.zIndex_,
         });
-      }
-      else {
+      } else {
         this.ol3Layer = new ol.layer.Image({
           visible: this.visibility && (this.options.visibility !== false),
           source: new ImageWMS({
@@ -414,12 +408,11 @@ export default class WMS extends LayerBase {
 
     // creates the promise
     this.extentPromise = new Promise((success, fail) => {
-      if (!Utils.isNullOrEmpty(this.extent_)) {
+      if (!isNullOrEmpty(this.extent_)) {
         this.extent_ = ol.proj.transformExtent(this.extent_, this.extentProj_, olProjection);
         this.extentProj_ = olProjection;
         success(this.extent_);
-      }
-      else {
+      } else {
         this.getCapabilities().then((getCapabilities) => {
           this.extent_ = getCapabilities.getLayerExtent(this.name);
           this.extentProj_ = olProjection;
@@ -463,15 +456,13 @@ export default class WMS extends LayerBase {
    * @api stable
    */
   updateMinMaxResolution(projection) {
-    if (!Utils.isNullOrEmpty(this.options.minResolution)) {
-      this.options.minResolution = Utils
-        .getResolutionFromScale(this.options.minScale, projection.units);
+    if (!isNullOrEmpty(this.options.minResolution)) {
+      this.options.minResolution = getResolutionFromScale(this.options.minScale, projection.units);
       this.ol3Layer.setMinResolution(this.options.minResolution);
     }
 
-    if (!Utils.isNullOrEmpty(this.options.maxResolution)) {
-      this.options.maxResolution = Utils
-        .getResolutionFromScale(this.options.maxScale, projection.units);
+    if (!isNullOrEmpty(this.options.maxResolution)) {
+      this.options.maxResolution = getResolutionFromScale(this.options.maxScale, projection.units);
       this.ol3Layer.setMaxResolution(this.options.maxResolution);
     }
   }
@@ -510,13 +501,13 @@ export default class WMS extends LayerBase {
    */
   getCapabilities() {
     // creates the promise
-    if (Utils.isNullOrEmpty(this.getCapabilitiesPromise)) {
+    if (isNullOrEmpty(this.getCapabilitiesPromise)) {
       const layerUrl = this.url;
       const layerVersion = this.version;
       const projection = this.map.getProjection();
       this.getCapabilitiesPromise = new Promise((success, fail) => {
         // gest the capabilities URL
-        const wmsGetCapabilitiesUrl = Utils.getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
+        const wmsGetCapabilitiesUrl = getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
         // gets the getCapabilities response
         Remote.get(wmsGetCapabilitiesUrl).then((response) => {
           const getCapabilitiesDocument = response.xml;
@@ -540,23 +531,21 @@ export default class WMS extends LayerBase {
   getMaxExtent_() {
     let extent = this.map.getMaxExtent();
     return new Promise((success, fail) => {
-      if (!Utils.isNullOrEmpty(extent)) {
-        if (!Utils.isArray(extent)) {
+      if (!isNullOrEmpty(extent)) {
+        if (!isArray(extent)) {
           extent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
         }
         success.call(this, extent);
-      }
-      else {
+      } else {
         EnvolvedExtent.calculate(this.map, this).then((envolvedExtent) => {
-          if (!Utils.isNullOrEmpty(this.map)) {
+          if (!isNullOrEmpty(this.map)) {
             let maxExtent = this.map.getMaxExtent();
-            if (!Utils.isNullOrEmpty(maxExtent)) {
-              if (!Utils.isArray(maxExtent)) {
+            if (!isNullOrEmpty(maxExtent)) {
+              if (!isArray(maxExtent)) {
                 maxExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
               }
               success.call(this, maxExtent);
-            }
-            else {
+            } else {
               success.call(this, envolvedExtent);
             }
           }
@@ -599,7 +588,7 @@ export default class WMS extends LayerBase {
    */
   refresh() {
     const ol3Layer = this.getOL3Layer();
-    if (!Utils.isNullOrEmpty(ol3Layer)) {
+    if (!isNullOrEmpty(ol3Layer)) {
       ol3Layer.getSource().changed();
     }
   }
@@ -614,11 +603,11 @@ export default class WMS extends LayerBase {
    */
   destroy() {
     const olMap = this.map.getMapImpl();
-    if (!Utils.isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer)) {
       olMap.removeLayer(this.ol3Layer);
       this.ol3Layer = null;
     }
-    if (!Utils.isNullOrEmpty(this.layers)) {
+    if (!isNullOrEmpty(this.layers)) {
       this.layers.map(this.map.removeLayers, this.map);
       this.layers.length = 0;
     }

@@ -1,4 +1,4 @@
-import Utils from 'facade/js/util/Utils';
+import { isString } from 'facade/js/util/Utils';
 import Exception from 'facade/js/exception/exception';
 
 export default class XML {
@@ -54,7 +54,7 @@ export default class XML {
    */
   read(data) {
     let dataVariable = data;
-    if (Utils.isString(data)) {
+    if (isString(data)) {
       dataVariable = ol.xml.parse(data);
     }
 
@@ -122,8 +122,7 @@ export default class XML {
     let prefix = null;
     if (uri === null) {
       prefix = this.namespaces[this.defaultPrefix];
-    }
-    else {
+    } else {
       const keys = Object.keys(this.namespaces);
       for (let i = 0; i < keys.length; i += 1) {
         prefix = keys[i];
@@ -171,8 +170,7 @@ export default class XML {
     let attributeValue = '';
     if (node.getAttributeNS) {
       attributeValue = node.getAttributeNS(uri, name) || '';
-    }
-    else {
+    } else {
       const attributeNode = this.getAttributeNodeNS(node, uri, name);
       if (attributeNode) {
         attributeValue = attributeNode.nodeValue;

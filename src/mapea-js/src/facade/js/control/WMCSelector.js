@@ -2,7 +2,7 @@ import wmcselectorTemplate from 'templates/wmcselector';
 import 'assets/css/controls/wmcselector';
 import WMCSelectorImpl from 'impl/control/WMCSelector';
 import ControlBase from './Control';
-import Utils from '../util/Utils';
+import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
@@ -24,7 +24,7 @@ export default class WMCSelector extends ControlBase {
     super(impl, WMCSelector.NAME);
 
     // checks if the implementation can create WMC layers
-    if (Utils.isUndefined(WMCSelectorImpl)) {
+    if (isUndefined(WMCSelectorImpl)) {
       Exception('La implementación usada no puede crear controles WMCSelector');
     }
   }

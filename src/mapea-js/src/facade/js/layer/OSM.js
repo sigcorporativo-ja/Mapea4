@@ -1,6 +1,6 @@
 import OSMImpl from 'impl/layer/OSM';
 import LayerBase from './Layer';
-import Utils from '../util/Utils';
+import { isNullOrEmpty, isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
@@ -32,23 +32,23 @@ export default class OSM extends LayerBase {
     super(parameters, impl);
 
     // checks if the implementation can create OSM
-    if (Utils.isUndefined(OSMImpl)) {
+    if (isUndefined(OSMImpl)) {
       Exception('La implementación usada no puede crear capas OSM');
     }
 
     // checks if the param is null or empty
-    if (Utils.isNullOrEmpty(userParameters)) {
+    if (isNullOrEmpty(userParameters)) {
       userParameters = 'OSM';
     }
 
-    if (Utils.isNullOrEmpty(parameters.name)) {
+    if (isNullOrEmpty(parameters.name)) {
       parameters.name = 'osm';
     }
 
     this.name = parameters.name;
 
     this.legend = parameters.legend;
-    if (Utils.isNullOrEmpty(parameters.legend)) {
+    if (isNullOrEmpty(parameters.legend)) {
       this.legend = 'OpenStreetMap';
     }
 
@@ -67,10 +67,9 @@ export default class OSM extends LayerBase {
   }
 
   set transparent(newTransparent) {
-    if (!Utils.isNullOrEmpty(newTransparent)) {
+    if (!isNullOrEmpty(newTransparent)) {
       this.getImpl().transparent = newTransparent;
-    }
-    else {
+    } else {
       this.getImpl().transparent = false;
     }
   }
@@ -84,8 +83,8 @@ export default class OSM extends LayerBase {
   }
 
   set type(newType) {
-    if (!Utils.isUndefined(newType) &&
-      !Utils.isNullOrEmpty(newType) && (newType !== LayerType.OSM)) {
+    if (!isUndefined(newType) &&
+      !isNullOrEmpty(newType) && (newType !== LayerType.OSM)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.OSM).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
