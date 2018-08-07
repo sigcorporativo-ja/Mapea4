@@ -36,7 +36,7 @@ export default class Cluster extends Composite {
   apply(layer) {
     super.apply(layer);
     const style = layer.getStyle();
-    this.oldStyle_ = style instanceof this ? style.oldStyle() : style;
+    this.oldStyle_ = style instanceof Cluster ? style.getOldStyle() : style;
   }
 
   /**

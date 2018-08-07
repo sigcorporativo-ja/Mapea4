@@ -1,9 +1,8 @@
 import Utils from "facade/js/util/Utils";
-import UtilsImpl from "./utils/Utils";
+import UtilsImpl from "../util/Utils";
 import Chart from "facade/js/style/Chart";
 
 export default class OLChart extends ol.style.RegularShape {
-
   /**
    * @classdesc
    * chart style for vector features
@@ -211,7 +210,8 @@ export default class OLChart extends ol.style.RegularShape {
         return;
       }
       this.animation_.animate = false;
-    } else {
+    }
+    else {
       if (this.animation_.step == step) {
         return;
       }
@@ -294,7 +294,8 @@ export default class OLChart extends ol.style.RegularShape {
           if (strokeStyle) {
             context.stroke();
           }
-        } else if (this.type_ === Chart.types.DONUT) {
+        }
+        else if (this.type_ === Chart.types.DONUT) {
           context.save();
           context.beginPath();
           context.rect(0, 0, 2 * center, 2 * center);

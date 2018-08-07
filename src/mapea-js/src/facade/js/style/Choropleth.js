@@ -30,7 +30,7 @@ export default class Choropleth extends StyleComposite {
   constructor(attributeName, styles, quantification = StyleQuantification.JENKS(), options = {}) {
     super(options, {});
     if (Utils.isNullOrEmpty(attributeName)) {
-      Exception("No se ha especificado el nombre del atributo.");
+      Exception('No se ha especificado el nombre del atributo.');
     }
 
     /**
@@ -193,7 +193,7 @@ export default class Choropleth extends StyleComposite {
   updateCanvas() {
     if (!Utils.isNullOrEmpty(this.choroplethStyles_)) {
       if (this.breakPoints_.length > 0) {
-        let canvasImages = [];
+        const canvasImages = [];
         this.updateCanvasPromise_ = new Promise((success, fail) =>
           this.loadCanvasImages_(0, canvasImages, success));
       }

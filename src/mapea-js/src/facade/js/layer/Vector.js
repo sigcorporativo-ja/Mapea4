@@ -301,14 +301,14 @@ export default class Vector extends LayerBase {
         style = Utils.generateStyleLayer(style, this);
       }
       const isCluster = style instanceof StyleCluster;
-      const isPoint = [Point, MultiPoint]
-        .includes(Utils.getGeometryType(this));
-      if (style instanceof Style && (!isCluster || isPoint)) {
-        if (!Utils.isNullOrEmpty(this.style_)) {
-          this.style_.unapply(this);
+      const isPoint = [Point, MultiPoint].includes(Utils.getGeometryType(this));
+      if (style instanceof Style /* && (!isCluster || isPoint) */ ) {
+        if (!Utils.isNullOrEmpty(this.oldStyle_)) {
+          this.oldStyle_.unapply(this);
         }
         style.apply(this, applyToFeature);
         this.style_ = style;
+        this.fire(EvtManager.CHANGE_STYLE, [style, this]);
       }
       if (!Utils.isNullOrEmpty(this.getImpl().getMap())) {
         const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];

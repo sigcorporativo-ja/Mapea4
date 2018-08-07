@@ -263,8 +263,8 @@ export default class Style extends Base {
   clone() {
     const optsClone = {};
     Utils.extends(optsClone, this.options_);
-    const implClass = this.getImpl().constructor;
-    const implClone = implClass(optsClone);
+    const ImplClass = this.getImpl().constructor;
+    const implClone = new ImplClass(optsClone);
     return new this.constructor(optsClone, implClone);
   }
 }

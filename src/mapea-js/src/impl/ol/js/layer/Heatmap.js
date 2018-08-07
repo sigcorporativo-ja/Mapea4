@@ -1,4 +1,5 @@
-import Feature from "facade/js/feature/Feature";
+import Feature from 'facade/js/feature/Feature';
+import { clamp } from 'ol/math';
 import Simple from "../style/Simple";
 
 export default class Heatmap extends ol.layer.Heatmap {
@@ -11,13 +12,13 @@ export default class Heatmap extends ol.layer.Heatmap {
    * @api stable
    */
   constructor(options = {}) {
-    ol.layer.Heatmap.call(this, options);
+    super(options);
 
-    let weight = options.weight ? options.weight : 'weight';
+    const weight = options.weight ? options.weight : 'weight';
     let weightFunction;
     if (typeof weight === 'string') {
       let maxWeight = 1;
-      let features = this.getSource().getFeatures();
+      const features = this.getSource().getFeatures();
       if (features.length > 0) {
         maxWeight = features
           .map(feature => feature.get(options.weight))
@@ -45,7 +46,7 @@ export default class Heatmap extends ol.layer.Heatmap {
     }
     this.setStyle((feature, resolution) => {
       let weight = Simple.getValue(weightFunction, feature);
-      let opacity = weight !== undefined ? ol.math.clamp(weight, 0, 1) : 1;
+      let opacity = weight !== undefined ? clamp(weight, 0, 1) : 1;
       // cast to 8 bits
       let index = (255 * opacity) | 0;
       let style = this.styleCache_[index];
