@@ -1,5 +1,5 @@
 import { isNullOrEmpty } from 'facade/js/util/Utils';
-import OLproj from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import OLFeature from 'ol/Feature';
 import OLGeolocation from 'ol/Geolocation';
 import OLGeomPoint from 'ol/geom/Point';
@@ -66,7 +66,7 @@ export default class Location extends Control {
     this.element.classList.add('m-locating');
 
     if (isNullOrEmpty(this.geolocation_)) {
-      const proj = OLproj.get(this.facadeMap_.getProjection().code);
+      const proj = getProj.get(this.facadeMap_.getProjection().code);
       this.geolocation_ = new OLGeolocation({
         projection: proj,
         tracking: this.tracking_,

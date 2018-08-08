@@ -1,6 +1,6 @@
 import { isNullOrEmpty, classToggle, replaceNode } from 'facade/js/util/Utils';
 import OLControlOverviewMap from 'ol/control/OverviewMap';
-import OLproj from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import EvtManager from 'facade/js/event/Manager';
 import View from '../View';
 
@@ -74,7 +74,7 @@ export default class OverviewMap extends OLControlOverviewMap {
     OLControlOverviewMap.call(this, {
       layers: olLayers,
       view: new View({
-        projection: OLproj.get(map.getProjection().code),
+        projection: getProj(map.getProjection().code),
         resolutions: map.getResolutions(),
       }),
     });

@@ -1,10 +1,10 @@
+import OLLayerHeatmap from 'ol/layer/Heatmap';
+import OLFeature from 'ol/Feature';
+import OLStyle from 'ol/style/Style';
+import OLStyleIcon from 'ol/style/Icon';
 import Feature from 'facade/js/feature/Feature';
 import { clamp } from 'ol/math';
-import Simple from "../style/Simple";
-import OLLayerHeatmap from 'OLLayerHeatmap';
-import olFeature from 'ol/Feature';
-import OLStyle from 'ol/style/Style';
-import OLStyleIcon from 'ol/style/Style';
+import Simple from '../style/Simple';
 
 export default class Heatmap extends OLLayerHeatmap {
   /**

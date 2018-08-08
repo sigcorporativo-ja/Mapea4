@@ -1,6 +1,6 @@
 import OLControlMousePosition from 'ol/control/MousePosition';
-import OLcoordinate from 'ol/coordinate';
-import OLproj from 'ol/proj';
+import { createStringXY as createStringXYCoordinate } from 'ol/coordinate';
+import { get as getProj } from 'ol/proj';
 import EvtManager from 'facade/js/event/Manager';
 
 /**
@@ -33,7 +33,7 @@ export default class Mouse extends OLControlMousePosition {
   addTo(map, element) {
     this.facadeMap_ = map;
     OLControlMousePosition.call(this, {
-      coordinateFormat: OLcoordinate.createStringXY(4),
+      coordinateFormat: createStringXYCoordinate(4),
       projection: map.getProjection().code,
       undefinedHTML: '',
       className: 'm-mouse-position g-cartografia-flecha',
@@ -42,7 +42,7 @@ export default class Mouse extends OLControlMousePosition {
 
     // update projection mouse
     map.getImpl().on(EvtManager.CHANGE, () => {
-      this.setProjection(OLproj.get(map.getProjection().code));
+      this.setProjection(getProj(map.getProjection().code));
     });
   }
 

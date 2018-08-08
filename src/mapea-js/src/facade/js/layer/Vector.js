@@ -295,7 +295,7 @@ export default class Vector extends LayerBase {
         style = generateStyleLayer(style, this);
       }
       const isCluster = style instanceof StyleCluster;
-      const isPoint = [Point, MultiPoint].includes(this.getGeometryType());
+      const isPoint = [POINT, MULTI_POINT].includes(this.getGeometryType());
       if (style instanceof Style /* && (!isCluster || isPoint) */ ) {
         if (!isNullOrEmpty(this.oldStyle_)) {
           this.oldStyle_.unapply(this);
