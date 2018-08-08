@@ -2,7 +2,7 @@ import { decodeHtml } from 'facade/js/util/Utils';
 import OLFormatKML from 'ol/format/KML';
 import { FRACTION } from 'ol/style/IconAnchorUnits';
 import OLStyleIcon from 'ol/style/Icon';
-import OLxml from 'ol/xml';
+import { parse as parseXML } from 'ol/xml';
 
 /**
  * @classdesc
@@ -64,7 +64,7 @@ export default class KML extends OLFormatKML {
     const xUnitsAttr = 'xunits';
     const yUnitsAttr = 'yunits';
 
-    const screenOverlay = OLxml.parse(textResponse).querySelector(screenOverlayAttr);
+    const screenOverlay = parseXML(textResponse).querySelector(screenOverlayAttr);
     if (screenOverlay !== null) {
       const icon = screenOverlay.querySelector(iconAttr);
 

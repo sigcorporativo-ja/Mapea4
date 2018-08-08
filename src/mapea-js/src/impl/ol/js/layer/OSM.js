@@ -6,7 +6,7 @@ import OLLayerTile from 'ol/layer/Tile';
 import OLSourceOSM from 'ol/source/OSM';
 import OLTileGrid from 'ol/tilegrid/TileGrid';
 import OLControlAttribution from 'ol/control/Attribution';
-import OLproj from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import { getBottomLeft } from 'ol/extent';
 import ImplMap from '../Map';
 import Layer from './Layer';
@@ -184,7 +184,7 @@ export default class OSM extends Layer {
   getExtent() {
     let extent = null;
     if (!isNullOrEmpty(this.ol3Layer)) {
-      extent = OLproj.get(this.map.getProjection().code).getExtent();
+      extent = getProj(this.map.getProjection().code).getExtent();
     }
     return extent;
   }

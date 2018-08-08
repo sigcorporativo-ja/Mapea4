@@ -6,7 +6,7 @@ import Config from 'configuration';
 import Remote from 'facade/js/util/Remote';
 import OLLayerTile from 'ol/layer/Tile';
 import OLLayerImage from 'ol/layer/Image';
-import OLproj from 'ol/proj';
+import { get as getProj, transformExtent } from 'ol/proj';
 import OLTileGrid from 'ol/tilegrid/TileGrid';
 import { getBottomLeft } from 'ol/extent';
 import ImplMap from '../Map';
@@ -409,12 +409,12 @@ export default class WMS extends LayerBase {
    * @api stable
    */
   getExtent() {
-    const olProjection = OLproj.get(this.map.getProjection().code);
+    const olProjection = getProj(this.map.getProjection().code);
 
     // creates the promise
     this.extentPromise = new Promise((success, fail) => {
       if (!isNullOrEmpty(this.extent_)) {
-        this.extent_ = OLproj.transformExtent(this.extent_, this.extentProj_, olProjection);
+        this.extent_ = transformExtent(this.extent_, this.extentProj_, olProjection);
         this.extentProj_ = olProjection;
         success(this.extent_);
       } else {

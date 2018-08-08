@@ -1,6 +1,7 @@
 import Feature from 'facade/js/feature/Feature';
 import WKT from 'facade/js/geom/WKT';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
+import { getWidth, extend } from 'ol/extent';
 
 /**
  * @namespace Utils
@@ -22,10 +23,11 @@ export default class Utils {
       newExtent = projection.getExtent();
     }
     // size
-    const size = ol.extent.getWidth(newExtent) / 256;
+    const size = getWidth(newExtent) / 256;
 
     if (isNullOrEmpty(minZoom)) {
-      newMinZoom = ol.DEFAULT_MIN_ZOOM;
+      // ol.DEFAULT_MIN_ZOOM;
+      newMinZoom = 0;
     }
     if (isNullOrEmpty(maxZoom)) {
       newMaxZoom = defaultMaxZoom;
@@ -184,7 +186,7 @@ export default class Utils {
     });
     const extents = olFeatures.map(feature => feature.getGeometry().getExtent().slice(0));
     return extents.length === 0 ? null : extents.reduce((ext1, ext2) => {
-      return ol.extent.extend(ext1, ext2);
+      return extend(ext1, ext2);
     });
   }
 

@@ -1,7 +1,7 @@
 import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'facade/js/util/Utils';
 import Remote from 'facade/js/util/Remote';
 import EventsManager from 'facade/js/event/Manager';
-import OLproj from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceWMTS from 'ol/source/WMTS';
 import OLTileGridWMTS from 'ol/tilegrid/WMTS';
@@ -66,7 +66,7 @@ export default class WMTS extends LayerBase {
    */
   setResolutions(resolutions) {
     // gets the projection
-    const projection = OLproj.get(this.map.getProjection().code);
+    const projection = getProj(this.map.getProjection().code);
 
     // gets the extent
     const extent = this.map.getMaxExtent();

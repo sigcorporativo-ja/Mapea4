@@ -1,5 +1,5 @@
 import OLFormatWKT from 'ol/format/WKT';
-import GeoJSON from "./GeoJSON";
+import GeoJSON from './GeoJSON';
 
 export default class WKT extends OLFormatWKT {
   /**

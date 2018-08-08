@@ -5,11 +5,11 @@ import Popup from 'facade/js/Popup';
 import Template from 'facade/js/util/Template';
 import geojsonPopupTemplate from 'templates/geojson_popup';
 import GeoJSONFormat from 'facade/js/format/GeoJSON';
-import JSONPLoader from '../loader/JSONP';
 import OLSourceVector from 'ol/source/Vector';
-import OLproj from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import { all } from 'ol/loadingstrategy';
 import Vector from './Vector';
+import JSONPLoader from '../loader/JSONP';
 
 export default class GeoJSON extends Vector {
   /**
@@ -85,7 +85,7 @@ export default class GeoJSON extends Vector {
    */
   addTo(map) {
     this.formater_ = new GeoJSONFormat({
-      defaultDataProjection: OLproj.get(map.getProjection().code),
+      defaultDataProjection: getProj(map.getProjection().code),
     });
     if (!isNullOrEmpty(this.url)) {
       this.loader_ = new JSONPLoader(map, this.url, this.formater_);

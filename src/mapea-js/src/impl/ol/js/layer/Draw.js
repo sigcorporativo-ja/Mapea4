@@ -1,8 +1,5 @@
 import Exception from 'facade/js/exception/exception';
 import { isFunction, isArray, isNullOrEmpty } from 'facade/js/util/Utils';
-import Layer from './Layer';
-import FormatGeoJSON from '../format/GeoJSON';
-import Map from '../Map';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import OLStyle from 'ol/style/Style';
@@ -10,7 +7,10 @@ import OLStyleFill from 'ol/style/Fill';
 import OLStyleStroke from 'ol/style/Stroke';
 import OLStyleCircle from 'ol/style/Circle';
 import OLGeomPoint from 'ol/geom/Point';
-import OLproj from 'ol/proj';
+import { get as getProj } from 'ol/proj';
+import Layer from './Layer';
+import FormatGeoJSON from '../format/GeoJSON';
+import Map from '../Map';
 
 export default class Draw extends Layer {
   /**
@@ -165,7 +165,7 @@ export default class Draw extends Layer {
     }
 
     // gets the projection
-    let projection = OLproj.get(this.map.getProjection().code);
+    let projection = getProj(this.map.getProjection().code);
 
     let features = [];
     geojsons.forEach((geojson) => {
@@ -293,7 +293,7 @@ export default class Draw extends Layer {
     let geojsons = [];
 
     // gets the projection
-    const projection = OLproj.get(this.map.getProjection().code);
+    const projection = getProj(this.map.getProjection().code);
 
     geojsons = points.map((point) => {
       // properties

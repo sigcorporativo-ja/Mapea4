@@ -4,7 +4,7 @@ import { isNullOrEmpty } from 'facade/js/util/Utils';
 import EventsManager from 'facade/js/event/Manager';
 import OLSourceVector from 'ol/source/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
-import OLproj from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import { all } from 'ol/loadingstrategy';
 import ServiceWFS from '../service/WFS';
 import FormatImplGeoJSON from '../format/GeoJSON';
@@ -117,7 +117,7 @@ export default class WFS extends Vector {
     }, this.options.vendor);
     if (/json/gi.test(this.options.getFeatureOutputFormat)) {
       this.formater_ = new FormatGeoJSON({
-        defaultDataProjection: OLproj.get(this.map.getProjection().code),
+        defaultDataProjection: getProj(this.map.getProjection().code),
       });
     } else {
       this.formater_ = new FormatGML(this.name, this.version, this.map.getProjection());
@@ -191,7 +191,7 @@ export default class WFS extends Vector {
           if (!isNullOrEmpty(describeFeatureType)) {
             this.formater_ = new FormatImplGeoJSON({
               geometryName: describeFeatureType.geometryName,
-              defaultDataProjection: OLproj.get(this.map.getProjection().code),
+              defaultDataProjection: getProj(this.map.getProjection().code),
             });
           }
           return describeFeatureType;

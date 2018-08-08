@@ -1,5 +1,7 @@
 import proj4 from 'proj4';
-
+import OLProjection from 'ol/proj/Projection';
+import { register } from 'ol/proj/proj4';
+import { addEquivalentProjections } from 'ol/proj';
 // EPSG:25830
 const proj25830 = {
   def: '+proj=utm +zone=30 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
@@ -82,16 +84,16 @@ const addProjections = (projectionsParam) => {
       proj4.defs(code, projection.def);
     });
     const olProjections = projection.codes.map((code) => {
-      return new ol.proj.Projection({
+      return new OLProjection({
         code,
         extent: projection.extent,
         units: projection.units,
       });
     });
-    ol.proj.addEquivalentProjections(olProjections);
+    addEquivalentProjections(olProjections);
   });
 };
 
 // register proj4
 addProjections(projections);
-ol.proj.proj4.register(proj4);
+register(proj4);

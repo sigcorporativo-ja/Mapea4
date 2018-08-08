@@ -1,5 +1,5 @@
 import OLMap from 'ol/Map';
-import OLproj from 'ol/proj'
+import { get as getProj, transformExtent, transform } from 'ol/proj';
 import OLProjection from 'ol/proj/Projection';
 import OLInteraction from 'ol/interaction/Interaction';
 import MObject from 'facade/js/Object';
@@ -1386,7 +1386,7 @@ export default class Map extends MObject {
     }
 
     // gets the projection
-    const projection = OLproj.get(this.getProjection().code);
+    const projection = getProj(this.getProjection().code);
 
     // sets the resolutions
     const olMap = this.getMapImpl();
@@ -1464,13 +1464,13 @@ export default class Map extends MObject {
     }
 
     // gets the current view and modifies its projection
-    let olProjection = OLproj.get(projection.code);
+    let olProjection = getProj(projection.code);
     if (isNullOrEmpty(olProjection)) {
       olProjection = new OLProjection(projection);
     }
 
     // gets previous data
-    const olPrevProjection = OLproj.get(this.getProjection().code);
+    const olPrevProjection = getProj(this.getProjection().code);
     let prevBbox = this.facadeMap_.getBbox();
     let prevMaxExtent = this.facadeMap_.getMaxExtent();
     const prevCenter = this.facadeMap_.getCenter();
@@ -1509,7 +1509,7 @@ export default class Map extends MObject {
           prevMaxExtent.y.max,
         ];
       }
-      this.facadeMap_.setMaxExtent(OLproj.transformExtent(
+      this.facadeMap_.setMaxExtent(transformExtent(
         prevMaxExtent,
         olPrevProjection,
         olProjection,
@@ -1526,7 +1526,7 @@ export default class Map extends MObject {
           prevBbox.y.max,
         ];
       }
-      this.facadeMap_.setBbox(OLproj.transformExtent(prevBbox, olPrevProjection, olProjection), {
+      this.facadeMap_.setBbox(transformExtent(prevBbox, olPrevProjection, olProjection), {
         nearest: true,
       });
     }
@@ -1537,7 +1537,7 @@ export default class Map extends MObject {
       if (!isNullOrEmpty(this.facadeMap_.getFeatureCenter())) {
         draw = true;
       }
-      this.facadeMap_.setCenter(`${OLproj.transform([
+      this.facadeMap_.setCenter(`${transform([
         prevCenter.x,
         prevCenter.y,
       ], olPrevProjection, olProjection)}*${draw}`);
@@ -1551,7 +1551,7 @@ export default class Map extends MObject {
     if (!isNullOrEmpty(popup)) {
       let coord = popup.getCoordinate();
       if (!isNullOrEmpty(coord)) {
-        coord = OLproj.transform(coord, olPrevProjection, olProjection);
+        coord = transform(coord, olPrevProjection, olProjection);
         popup.setCoordinate(coord);
       }
     }
@@ -1561,7 +1561,7 @@ export default class Map extends MObject {
     if (!isNullOrEmpty(label)) {
       let coord = label.getCoordinate();
       if (!isNullOrEmpty(coord)) {
-        coord = OLproj.transform(coord, olPrevProjection, olProjection);
+        coord = transform(coord, olPrevProjection, olProjection);
         label.setCoordinate(coord);
       }
     }

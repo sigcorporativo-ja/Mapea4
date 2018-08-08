@@ -1,4 +1,5 @@
 import { isNullOrEmpty, isObject, isArray } from 'facade/js/util/Utils';
+import { get as getProj } from 'ol/proj';
 
 /**
  * @namespace M.impl.envolvedExtent
@@ -92,7 +93,7 @@ export default class EnvolvedExtent {
    */
   static calculateFromProjection(map) {
     return new Promise((success) => {
-      let projExtent = ol.proj.get(map.getProjection().code).getExtent();
+      let projExtent = getProj(map.getProjection().code).getExtent();
       if (isNullOrEmpty(projExtent)) {
         projExtent = [-180, -90, 180, 90];
       }

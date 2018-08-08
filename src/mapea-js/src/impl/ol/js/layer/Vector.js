@@ -2,7 +2,7 @@ import StyleCluster from 'facade/js/style/Cluster';
 import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
 import EventsManager from 'facade/js/event/Manager';
 import Style from 'facade/js/style/Style';
-import OLproj from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
@@ -305,8 +305,8 @@ export default class Vector extends Layer {
    */
   setProjection_(oldProj, newProj) {
     if (oldProj.code !== newProj.code) {
-      const srcProj = OLproj.get(oldProj.code);
-      const dstProj = OLproj.get(newProj.code);
+      const srcProj = getProj(oldProj.code);
+      const dstProj = getProj(newProj.code);
 
       const style = this.facadeVector_.getStyle();
       if (style instanceof StyleCluster) {

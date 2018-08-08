@@ -6,7 +6,7 @@ import { isNullOrEmpty, generateResolutionsFromExtent, isArray } from 'facade/js
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceXYZ from 'ol/source/XYZ';
 import OLControlAttribution from 'ol/control/Attribution';
-import OLproj from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import ImplMap from '../Map';
 import EnvolvedExtent from '../util/EnvolvedExtent';
 import Layer from './Layer';
@@ -195,7 +195,7 @@ export default class Mapbox extends Layer {
   getExtent() {
     let extent = null;
     if (!isNullOrEmpty(this.ol3Layer)) {
-      extent = OLproj.get(this.map.getProjection().code).getExtent();
+      extent = getProj(this.map.getProjection().code).getExtent();
     }
     return {
       x: {
