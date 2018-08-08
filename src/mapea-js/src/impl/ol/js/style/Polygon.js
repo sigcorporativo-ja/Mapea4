@@ -1,7 +1,15 @@
 import chroma from 'chroma-js';
 import Baseline from 'facade/js/style/Baseline';
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+import OLFeature from 'ol/Feature';
 import Align from 'facade/js/style/Align';
+import OLStyleStroke from 'ol/style/Stroke';
+import OLStyleText from 'ol/style/Text';
+import OLGeomPolygon from 'ol/geom/Polygon';
+import { isNullOrEmpty } from 'facade/js/util/Utils';
+import OLStyleIcon from 'ol/style/Icon';
+import OLStyleFill from 'ol/style/Fill';
+import { toContext as toContextRender } from 'ol/render';
+import OLStyleFillPattern from '../ext/FillPattern';
 import Simple from './Simple';
 import Centroid from './Centroid';
 
@@ -33,12 +41,12 @@ export default class Polygon extends Simple {
   updateFacadeOptions(options) {
     return (feature) => {
       let featureVariable = feature;
-      if (!(featureVariable instanceof ol.Feature)) {
+      if (!(featureVariable instanceof OLFeature)) {
         featureVariable = this;
       }
       const style = new Centroid();
       if (!isNullOrEmpty(options.stroke)) {
-        style.setStroke(new ol.style.Stroke({
+        style.setStroke(new OLStyleStroke({
           color: Simple.getValue(options.stroke.color, featureVariable),
           width: Simple.getValue(options.stroke.width, featureVariable),
           lineDash: Simple.getValue(options.stroke.linedash, featureVariable),
@@ -52,7 +60,7 @@ export default class Polygon extends Simple {
         const textLabel = Simple.getValue(options.label.text, featureVariable);
         const align = Simple.getValue(options.label.align, featureVariable);
         const baseline = Simple.getValue(options.label.baseline, featureVariable);
-        style.setText(new ol.style.Text({
+        style.setText(new OLStyleText({
           font: Simple.getValue(options.label.font, featureVariable),
           rotateWithView: Simple.getValue(options.label.rotate, featureVariable),
           scale: Simple.getValue(options.label.scale, featureVariable),
@@ -60,7 +68,7 @@ export default class Polygon extends Simple {
             options.label.offset[0] : undefined, featureVariable),
           offsetY: Simple.getValue(options.label.ofsset ?
             options.label.offset[1] : undefined, featureVariable),
-          fill: new ol.style.Fill({
+          fill: new OLStyleFill({
             color: Simple.getValue(options.label.color || '#000000', featureVariable),
           }),
           textAlign: Object.values(Align).includes(align) ? align : 'center',
@@ -69,7 +77,7 @@ export default class Polygon extends Simple {
           rotation: Simple.getValue(options.label.rotation, featureVariable),
         }));
         if (!isNullOrEmpty(options.label.stroke)) {
-          style.getText().setStroke(new ol.style.Stroke({
+          style.getText().setStroke(new OLStyleStroke({
             color: Simple.getValue(options.label.stroke.color, featureVariable),
             width: Simple.getValue(options.label.stroke.width, featureVariable),
             lineCap: Simple.getValue(options.label.stroke.linecap, featureVariable),
@@ -85,7 +93,7 @@ export default class Polygon extends Simple {
         const fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable) || 1;
         let fill;
         if (!isNullOrEmpty(fillColorValue)) {
-          fill = new ol.style.Fill({
+          fill = new OLStyleFill({
             color: chroma(fillColorValue).alpha(fillOpacityValue).css(),
           });
         }
@@ -95,7 +103,7 @@ export default class Polygon extends Simple {
             const opacity = Simple.getValue(options.fill.pattern.opacity, featureVariable) || 1;
             color = chroma(options.fill.pattern.color).alpha(opacity).css();
           }
-          style.setFill(new ol.style.FillPattern({
+          style.setFill(new OLStyleFillPattern({
             pattern: (Simple.getValue(options.fill.pattern.name, featureVariable) || '')
               .toLowerCase(),
             color,
@@ -103,7 +111,7 @@ export default class Polygon extends Simple {
             size: Simple.getValue(options.fill.pattern.size, featureVariable),
             spacing: Simple.getValue(options.fill.pattern.spacing, featureVariable),
             image: (Simple.getValue(options.fill.pattern.name, featureVariable) === 'Image') ?
-              new ol.style.Icon({
+              new OLStyleIcon({
                 src: Simple.getValue(options.fill.pattern.src, featureVariable),
               }) : undefined,
             angle: Simple.getValue(options.fill.pattern.rotation, featureVariable),
@@ -129,7 +137,7 @@ export default class Polygon extends Simple {
    */
   updateCanvas(canvas) {
     const canvasSize = Polygon.getCanvasSize();
-    const vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+    const vectorContext = toContextRender(canvas.getContext('2d'), {
       size: canvasSize,
     });
     const applyStyle = this.olStyleFn_()[0];
@@ -160,7 +168,7 @@ export default class Polygon extends Simple {
     const maxH = Math.floor(canvasSize[1]);
     const minW = (canvasSize[0] - maxW);
     const minH = (canvasSize[1] - maxH);
-    vectorContext.drawGeometry(new ol.geom.Polygon([[
+    vectorContext.drawGeometry(new OLGeomPolygon([[
       [minW + 3, minH + 3],
       [maxW - 3, minH + 3],
       [maxW - 3, maxH - 3],

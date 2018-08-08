@@ -1,4 +1,6 @@
-export default class Centroid extends ol.style.Style {
+import OLStyle from 'ol/style/Style';
+
+export default class Centroid extends OLStyle {
   /**
    * @classdesc custom root styles
    *

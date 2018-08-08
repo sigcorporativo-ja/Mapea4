@@ -1,9 +1,16 @@
 import { isNullOrEmpty } from 'facade/js/util/Utils';
-import Baseline from 'facade/js/style/Baseline';
 import Align from 'facade/js/Align';
 import FacadeChart from 'facade/js/style/Chart';
-import StyleCentroid from './Centroid';
+import OLFeature from 'ol/Feature';
+import OLStyleStroke from 'ol/style/Stroke';
+import OLGeomMultipolygon from 'ol/geom/MultiPolygon';
+import OLStyleText from 'ol/style/Text';
+import OLStyleFill from 'ol/style/Fill';
+import OLStyle from 'ol/style/Style';
+import OLStyleIcon from 'ol/style/Icon';
+import Baseline from 'facade/js/style/Baseline';
 import OLChart from '../chart/OLChart';
+import StyleCentroid from './Centroid';
 import Feature from './Feature';
 import Simple from './Simple';
 
@@ -176,7 +183,7 @@ export default class Chart extends Feature {
     options.rotateWithView = false;
 
     this.olStyleFn_ = (feature, resolution) => {
-      if (!(feature instanceof ol.Feature)) {
+      if (!(feature instanceof OLFeature)) {
         resolution = feature;
         feature = this;
       }
@@ -198,13 +205,13 @@ export default class Chart extends Feature {
       styleOptions.data = data;
 
       if (!isNullOrEmpty(options.stroke)) {
-        styleOptions.stroke = new ol.style.Stroke(options.stroke);
+        styleOptions.stroke = new OLStyleStroke(options.stroke);
       }
 
       let styles = [new StyleCentroid({
         geometry: (olFeature) => {
           let geometry = olFeature.getGeometry();
-          if (olFeature.getGeometry() instanceof ol.geom.MultiPolygon) {
+          if (olFeature.getGeometry() instanceof OLGeomMultipolygon) {
             geometry = geometry.getPolygons()[0].getInteriorPoint();
           }
           return geometry;
@@ -238,19 +245,19 @@ export default class Chart extends Feature {
           text = styleOptions.type !== Chart.types.BAR && text === '0' ? '' : text;
           let font = getValue(label.font, feature);
           return new StyleCentroid({
-            text: new ol.style.Text({
+            text: new OLStyleText({
               text: typeof text === 'string' ? `${text}` : '',
               offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX, feature) : (Math.cos(angle) * (radius + radiusIncrement) + styleOptions.offsetX || 0),
               offsetY: typeof label.offsetY === 'number' ? getValue(label.offsetY, feature) : (Math.sin(angle) * (radius + radiusIncrement) + styleOptions.offsetY || 0),
               textAlign: getValue(textAlign, feature),
               textBaseline: getValue(label.textBaseline, feature) || 'middle',
-              stroke: label.stroke ? new ol.style.Stroke({
+              stroke: label.stroke ? new OLStyleStroke({
                 color: getValue(label.stroke.color, feature) || '#000',
                 width: getValue(label.stroke.width, feature) || 1
               }) : undefined,
               font: /^([1-9])[0-9]*px ./.test(font) ? font : `12px ${font}`,
               scale: typeof label.scale === 'number' ? getValue(label.scale, feature) : undefined,
-              fill: new ol.style.Fill({
+              fill: new OLStyleFill({
                 color: getValue(label.fill, feature) || '#000'
               })
             })
@@ -280,25 +287,25 @@ export default class Chart extends Feature {
           }
           height = height + sizeFont + 6;
           return new StyleCentroid({
-            text: new ol.style.Text({
+            text: new OLStyleText({
               text: typeof text === 'string' ? `${text}` : '',
               offsetY: acumSum + styleOptions.offsetY || 0,
               offsetX: -(styles[0].getImage().getImage().width / 2) - 1 + styleOptions.offsetX || 0,
               textBaseline: 'middle',
               rotateWithView: false,
               textAlign: 'center',
-              stroke: label.stroke ? new ol.style.Stroke({}) : undefined,
+              stroke: label.stroke ? new OLStyleStroke({}) : undefined,
               font: `9px ${font}`,
               scale: typeof label.scale === 'number' ? getValue(label.scale, feature) : undefined,
-              fill: new ol.style.Fill({
+              fill: new OLStyleFill({
                 color: styleOptions.scheme[i % styleOptions.scheme.length]
               })
             })
           });
         })).filter(style => style != null);
         height = Math.max(height, 1);
-        styles.push(new ol.style.Style({
-          image: new ol.style.Icon(({
+        styles.push(new OLStyle({
+          image: new OLStyleIcon(({
             anchor: [-(styles[0].getImage().getImage().width / 2) + 10 + styleOptions.offsetX, (styles[0].getImage().getImage().height / 2) + styleOptions.offsetY],
             anchorOrigin: 'bottom-right',
             offsetOrigin: 'bottom-left',
@@ -311,17 +318,17 @@ export default class Chart extends Feature {
         }));
       }
       if (!isNullOrEmpty(options.label)) {
-        let styleLabel = new ol.style.Style();
+        let styleLabel = new OLStyle();
         let textLabel = getValue(options.label.text, feature);
         let align = getValue(options.label.align, feature);
         let baseline = getValue(options.label.baseline, feature);
-        let labelText = new ol.style.Text({
+        let labelText = new OLStyleText({
           font: getValue(options.label.font, feature),
           rotateWithView: getValue(options.label.rotate, feature),
           scale: getValue(options.label.scale, feature),
           offsetX: getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
           offsetY: getValue(options.label.offset ? options.label.offset[1] : undefined, feature),
-          fill: new ol.style.Fill({
+          fill: new OLStyleFill({
             color: getValue(options.label.color || '#000000', feature)
           }),
           textAlign: Object.values(Align).includes(align) ? align : 'center',
@@ -330,7 +337,7 @@ export default class Chart extends Feature {
           rotation: getValue(options.label.rotation, feature)
         });
         if (!isNullOrEmpty(options.label.stroke)) {
-          labelText.setStroke(new ol.style.Stroke({
+          labelText.setStroke(new OLStyleStroke({
             color: getValue(options.label.stroke.color, feature),
             width: getValue(options.label.stroke.width, feature),
             lineCap: getValue(options.label.stroke.linecap, feature),
@@ -366,7 +373,7 @@ export default class Chart extends Feature {
   /**
    * Converts a single object to extracted feature values object
    * @param {object} options unparsed options object
-   * @param {ol.Feature} feature the ol feature
+   * @param {OLFeature} feature the ol feature
    * @return {object} parsed options with paths replaced with feature values
    * @function
    * @private

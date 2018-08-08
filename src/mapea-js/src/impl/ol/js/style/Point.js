@@ -1,8 +1,18 @@
+import { isNullOrEmpty, concatUrlPaths, addParameters } from 'facade/js/util/Utils';
 import chroma from 'chroma-js';
 import Config from 'configuration';
-import Baseline from 'facade/js/style/Baseline';
+import OLStyleImage from 'ol/style/Image';
+import OLFeature from 'ol/Feature';
 import Align from 'facade/js/style/Align';
-import { isNullOrEmpty, concatUrlPaths, addParameters } from 'facade/js/util/Utils';
+import Baseline from 'facade/js/style/Baseline';
+import OLStyleFill from 'ol/style/Fill';
+import OLGeomPoint from 'ol/geom/Point';
+import OLStyleStroke from 'ol/style/Stroke';
+import OLGeomCircle from 'ol/geom/Circle';
+import OLStyleText from 'ol/style/Text';
+import OLStyleIcon from 'ol/style/Icon';
+import { toContext as toContextRender } from 'ol/render';
+import OLStyleFontsSymbol from '../ext/OLFontSymbol';
 import Simple from './Simple';
 import Centroid from './Centroid';
 import PointFontSymbol from '../point/FontSymbol';
@@ -28,7 +38,7 @@ export default class Point extends Simple {
     }
     let style = this.olStyleFn_()[1];
     let image = null;
-    if (style.getImage && style.getImage() != null && style.getImage() instanceof ol.style.Image) {
+    if (style.getImage && style.getImage() != null && style.getImage() instanceof OLStyleImage) {
       // see https://github.com/openlayers/openlayers/blob/master/src/ol/style/regularshape.js#L205
       if (style.getImage() instanceof PointFontSymbol) {
         const imageCanvas = style.getImage().getImage();
@@ -78,7 +88,7 @@ export default class Point extends Simple {
   updateFacadeOptions(options) {
     this.olStyleFn_ = (feature) => {
       let featureVariable = feature;
-      if (!(featureVariable instanceof ol.Feature)) {
+      if (!(featureVariable instanceof OLFeature)) {
         featureVariable = this;
       }
       const style = new Centroid({
@@ -90,7 +100,7 @@ export default class Point extends Simple {
         const fillColorValue = Simple.getValue(options.fill.color, featureVariable);
         const fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable) || 1;
         if (!isNullOrEmpty(fillColorValue)) {
-          fill = new ol.style.Fill({
+          fill = new OLStyleFill({
             color: chroma(fillColorValue)
               .alpha(fillOpacityValue).css(),
           });
@@ -100,7 +110,7 @@ export default class Point extends Simple {
       if (!isNullOrEmpty(options.stroke)) {
         const strokeColorValue = Simple.getValue(options.stroke.color, featureVariable);
         if (!isNullOrEmpty(strokeColorValue)) {
-          stroke = new ol.style.Stroke({
+          stroke = new OLStyleStroke({
             color: strokeColorValue,
             width: Simple.getValue(options.stroke.width, featureVariable),
             lineDash: Simple.getValue(options.stroke.linedash, featureVariable),
@@ -115,7 +125,7 @@ export default class Point extends Simple {
         const textLabel = Simple.getValue(options.label.text, featureVariable);
         const align = Simple.getValue(options.label.align, featureVariable);
         const baseline = Simple.getValue(options.label.baseline, featureVariable);
-        const labelText = new ol.style.Text({
+        const labelText = new OLStyleText({
           font: Simple.getValue(options.label.font, featureVariable),
           rotateWithView: Simple.getValue(options.label.rotate, featureVariable),
           scale: Simple.getValue(options.label.scale, featureVariable),
@@ -123,7 +133,7 @@ export default class Point extends Simple {
             options.label.offset[0] : undefined, featureVariable),
           offsetY: Simple.getValue(options.label.offset ?
             options.label.offset[1] : undefined, featureVariable),
-          fill: new ol.style.Fill({
+          fill: new OLStyleFill({
             color: Simple.getValue(options.label.color || '#000000', featureVariable),
           }),
           textAlign: Object.values(Align).includes(align) ? align : 'center',
@@ -132,7 +142,7 @@ export default class Point extends Simple {
           rotation: Simple.getValue(options.label.rotation, featureVariable),
         });
         if (!isNullOrEmpty(options.label.stroke)) {
-          labelText.setStroke(new ol.style.Stroke({
+          labelText.setStroke(new OLStyleStroke({
             color: Simple.getValue(options.label.stroke.color, featureVariable),
             width: Simple.getValue(options.label.stroke.width, featureVariable),
             lineCap: Simple.getValue(options.label.stroke.linecap, featureVariable),
@@ -182,10 +192,10 @@ export default class Point extends Simple {
               options.icon.offset[0] : undefined, featureVariable),
             offsetY: Simple.getValue(options.icon.offset ?
               options.icon.offset[1] : undefined, featureVariable),
-            fill: new ol.style.Fill({
+            fill: new OLStyleFill({
               color: Simple.getValue(options.icon.fill, featureVariable),
             }),
-            stroke: options.icon.gradientcolor ? new ol.style.Stroke({
+            stroke: options.icon.gradientcolor ? new OLStyleStroke({
               color: Simple.getValue(options.icon.gradientcolor, featureVariable),
               width: 1,
             }) : undefined,
@@ -216,10 +226,10 @@ export default class Point extends Simple {
    * @api stable
    */
   drawGeometryToCanvas(vectorContext) {
-    if (this.olStyleFn_()[1].getImage() instanceof ol.style.FontSymbol) {
-      vectorContext.drawGeometry(new ol.geom.Point([10, 10]));
+    if (this.olStyleFn_()[1].getImage() instanceof OLStyleFontsSymbol) {
+      vectorContext.drawGeometry(new OLGeomPoint([10, 10]));
     } else {
-      vectorContext.drawCircle(new ol.geom.Circle([this.getCanvasSize()[0] / 2,
+      vectorContext.drawCircle(new OLGeomCircle([this.getCanvasSize()[0] / 2,
         this.getCanvasSize()[1] / 2], this.getRadius_()));
     }
   }
@@ -234,7 +244,7 @@ export default class Point extends Simple {
    */
   updateCanvas(canvas) {
     const canvasSize = this.getCanvasSize();
-    const vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+    const vectorContext = toContextRender(canvas.getContext('2d'), {
       size: canvasSize,
     });
     let applyStyle = this.olStyleFn_()[0];
@@ -242,7 +252,7 @@ export default class Point extends Simple {
       applyStyle.setText(null);
     }
     if (!isNullOrEmpty(this.olStyleFn_()[1]) &&
-      this.olStyleFn_()[1].getImage() instanceof ol.style.FontSymbol) {
+      this.olStyleFn_()[1].getImage() instanceof OLStyleFontsSymbol) {
       applyStyle = this.olStyleFn_()[1];
     }
     const stroke = applyStyle.getImage().getStroke();
@@ -263,7 +273,7 @@ export default class Point extends Simple {
   getCanvasSize() {
     const image = this.olStyleFn_()[1].getImage();
     let size;
-    if (image instanceof ol.style.FontSymbol) {
+    if (image instanceof OLStyleFontsSymbol) {
       size = [90, 90];
     } else {
       const radius = this.getRadius_(image);
@@ -281,9 +291,9 @@ export default class Point extends Simple {
    */
   getRadius_(image) {
     let r;
-    if (image instanceof ol.style.Icon) {
+    if (image instanceof OLStyleIcon) {
       r = 25;
-    } else if (image instanceof ol.style.FontSymbol) {
+    } else if (image instanceof OLStyleFontsSymbol) {
       r = image.getRadius();
     } else {
       r = this.olStyleFn_()[0].getImage().getRadius();
