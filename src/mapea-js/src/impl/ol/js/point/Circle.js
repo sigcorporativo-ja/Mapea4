@@ -1,14 +1,16 @@
+import OLStyleCircle from 'ol/style/Circle';
+
 /**
  * @namespace M.impl.style.PointCircle
  */
-export default class Circle extends ol.style.Circle {
+export default class Circle extends OLStyleCircle {
   /**
    * @classdesc
    * chart style for vector features
    *
    * @constructor
    * @param {object} options - Options style PointCircle
-   * @extends {ol.style.Circle}
+   * @extends {OLStyleCircle}
    * @api stable
    */
   constructor(options = {}) {
