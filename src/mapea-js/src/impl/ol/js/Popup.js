@@ -1,12 +1,13 @@
+import OLOverlay from 'ol/Overlay';
 import { enableTouchScroll, isFunction, isNullOrEmpty } from 'facade/js/util/Utils';
 import FacadePopup from 'facade/js/Popup';
 import FacadeWindow from 'facade/js/util/Window';
 
-export default class Popup extends ol.Overlay {
+export default class Popup extends OLOverlay {
   /**
    * OpenLayers 3 Popup Overlay.
    * @constructor
-   * @extends {ol.Overlay}
+   * @extends {OLOverlay}
    * @api stable
    */
   constructor(options = {}) {
@@ -69,7 +70,7 @@ export default class Popup extends ol.Overlay {
     // Apply workaround to enable scrolling of content div on touch devices
     enableTouchScroll(this.content);
 
-    ol.Overlay.call(this, {
+    OLOverlay.call(this, {
       element: this.container,
       stopEvent: true,
     });
