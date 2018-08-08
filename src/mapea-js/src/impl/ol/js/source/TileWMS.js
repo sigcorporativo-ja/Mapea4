@@ -1,6 +1,7 @@
 import { isNullOrEmpty } from 'facade/js/util/Utils';
+import OLSourceTileWMS from 'ol/source/TileWMS';
 
-export default class TileWMS extends ol.source.TileWMS {
+export default class TileWMS extends OLSourceTileWMS {
   /**
    * @classdesc
    * Layer source for tile data from WMS servers.

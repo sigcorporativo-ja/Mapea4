@@ -1,8 +1,10 @@
+import OLSourceImageWMS from 'ol/source/ImageWMS';
+
 /**
  * @classdesc
  * Source for WMS servers providing single, untiled images.
  */
-export default class ImageWMS extends ol.source.ImageWMS {
+export default class ImageWMS extends OLSourceImageWMS {
   /**
    * @constructor
    * @fires ol.source.ImageEvent
