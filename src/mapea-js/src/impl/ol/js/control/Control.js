@@ -1,14 +1,16 @@
+import OLControl from 'ol/control/Control';
+
 /**
  * @namespace M.impl.control
  */
-export default class Control extends ol.control.Control {
+export default class Control extends OLControl {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
    * control
    *
    * @constructor
-   * @extends {ol.control.Control}
+   * @extends {OLControl}
    * @api stable
    */
   constructor() {
@@ -33,7 +35,7 @@ export default class Control extends ol.control.Control {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    ol.control.Control.call(this, {
+    OLControl.call(this, {
       element,
       target: null,
     });

@@ -1,4 +1,12 @@
 import { isNullOrEmpty } from 'facade/js/util/Utils';
+import OLproj from 'ol/proj';
+import OLFeature from 'ol/Feature';
+import OLGeolocation from 'ol/Geolocation';
+import OLGeomPoint from 'ol/geom/Point';
+import OLStyle from 'ol/style/Style';
+import OLStyleCircle from 'ol/style/Circle';
+import OLStyleFill from 'ol/style/Fill';
+import OLStyleStroke from 'ol/style/Stroke';
 import Control from './Control';
 import Feature from '../feature/Feature';
 
@@ -21,16 +29,16 @@ export default class Location extends Control {
     /**
      * Helper class for providing HTML5 Geolocation
      * @private
-     * @type {ol.Geolocation}
+     * @type {OLGeolocation}
      */
     this.geolocation_ = null;
 
     /**
      * Feature of the accuracy position
      * @private
-     * @type {ol.Feature}
+     * @type {OLFeature}
      */
-    this.accuracyFeature_ = Feature.olFeature2Facade(new ol.Feature());
+    this.accuracyFeature_ = Feature.olFeature2Facade(new OLFeature());
 
     this.tracking_ = tracking;
     this.highAccuracy_ = highAccuracy;
@@ -40,9 +48,9 @@ export default class Location extends Control {
     /**
      * Feature of the position
      * @private
-     * @type {ol.Feature}
+     * @type {OLFeature}
      */
-    this.positionFeature_ = Feature.olFeature2Facade(new ol.Feature({
+    this.positionFeature_ = Feature.olFeature2Facade(new OLFeature({
       style: Location.POSITION_STYLE,
     }));
   }
@@ -58,8 +66,8 @@ export default class Location extends Control {
     this.element.classList.add('m-locating');
 
     if (isNullOrEmpty(this.geolocation_)) {
-      const proj = ol.proj.get(this.facadeMap_.getProjection().code);
-      this.geolocation_ = new ol.Geolocation({
+      const proj = OLproj.get(this.facadeMap_.getProjection().code);
+      this.geolocation_ = new OLGeolocation({
         projection: proj,
         tracking: this.tracking_,
         trackingOptions: {
@@ -74,7 +82,7 @@ export default class Location extends Control {
       this.geolocation_.on('change:position', (evt) => {
         const newCoord = evt.target.get(evt.key);
         const newPosition = isNullOrEmpty(newCoord) ?
-          null : new ol.geom.Point(newCoord);
+          null : new OLGeomPoint(newCoord);
         this.positionFeature_.getImpl().getOLFeature().setGeometry(newPosition);
         this.facadeMap_.setCenter(newCoord);
         if (this.element.classList.contains('m-locating')) {
@@ -147,13 +155,13 @@ export default class Location extends Control {
  * @public
  * @api stable
  */
-Location.POSITION_STYLE = new ol.style.Style({
-  image: new ol.style.Circle({
+Location.POSITION_STYLE = new OLStyle({
+  image: new OLStyleCircle({
     radius: 6,
-    fill: new ol.style.Fill({
+    fill: new OLStyleFill({
       color: '#3399CC',
     }),
-    stroke: new ol.style.Stroke({
+    stroke: new OLStyleStroke({
       color: '#fff',
       width: 2,
     }),

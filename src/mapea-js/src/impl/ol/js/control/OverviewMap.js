@@ -1,10 +1,13 @@
 import { isNullOrEmpty, classToggle, replaceNode } from 'facade/js/util/Utils';
+import OLControlOverviewMap from 'ol/control/OverviewMap';
+import OLproj from 'ol/proj';
 import EvtManager from 'facade/js/event/Manager';
 import View from '../View';
+
 /**
  * @namespace M.impl.control
  */
-export default class OverviewMap extends ol.control.OverviewMap {
+export default class OverviewMap extends OLControlOverviewMap {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
@@ -68,10 +71,10 @@ export default class OverviewMap extends ol.control.OverviewMap {
         olLayers.push(olLayer);
       }
     });
-    ol.control.OverviewMap.call(this, {
+    OLControlOverviewMap.call(this, {
       layers: olLayers,
       view: new View({
-        projection: ol.proj.get(map.getProjection().code),
+        projection: OLproj.get(map.getProjection().code),
         resolutions: map.getResolutions(),
       }),
     });
