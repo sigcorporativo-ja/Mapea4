@@ -1,5 +1,6 @@
-export default class Icon extends ol.style.Icon {
+import OLStyleIcon from 'ol/style/Icon';
 
+export default class Icon extends OLStyleIcon {
   /**
    * @classdesc
    * Set icon style for Vector features.

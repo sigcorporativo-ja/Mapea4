@@ -1,3 +1,4 @@
+import OLFormatWFS from 'ol/format/WFS';
 import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup';
 import Popup from 'facade/js/Popup';
 import Dialog from 'facade/js/dialog';
@@ -200,7 +201,7 @@ export default class GetFeatureInfo extends Control {
         break;
 
       case 'application/vnd.ogc.gml': // ol.format.GML (http://openlayers.org/en/v3.9.0/apidoc/ol.format.GML.html)
-        const formater = new ol.format.WFS();
+        const formater = new OLFormatWFS();
         const features = formater.readFeatures(info);
         res = (features.length > 0);
         break;
@@ -234,7 +235,7 @@ export default class GetFeatureInfo extends Control {
       case 'application/vnd.ogc.gml': // ol.format.GML (http://openlayers.org/en/v3.9.0/apidoc/ol.format.GML.html)
         // let formater = new ol.format.GML();
         // let feature = formater.readFeatures(info)[0];
-        const formater = new ol.format.WFS();
+        const formater = new OLFormatWFS();
         const features = formater.readFeatures(info);
         formatedInfo = '';
         features.forEach((feature) => {

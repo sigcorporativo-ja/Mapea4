@@ -1,4 +1,7 @@
 import OLMap from 'ol/Map';
+import { get as getProj, transformExtent, transform } from 'ol/proj';
+import OLProjection from 'ol/proj/Projection';
+import OLInteraction from 'ol/interaction/Interaction';
 import MObject from 'facade/js/Object';
 import FacadePanzoombar from 'facade/js/control/Panzoombar';
 import LayerType from 'facade/js/layer/Type';
@@ -123,7 +126,7 @@ export default class Map extends MObject {
       view: new View(),
     });
     this.map_.on('singleclick', this.onMapClick_.bind(this));
-    this.map_.addInteraction(new ol.interaction.Interaction({
+    this.map_.addInteraction(new OLInteraction({
       handleEvent: (e) => {
         if (e.type === 'pointermove') {
           this.onMapMove_(e);
@@ -1383,7 +1386,7 @@ export default class Map extends MObject {
     }
 
     // gets the projection
-    const projection = ol.proj.get(this.getProjection().code);
+    const projection = getProj(this.getProjection().code);
 
     // sets the resolutions
     const olMap = this.getMapImpl();
@@ -1461,13 +1464,13 @@ export default class Map extends MObject {
     }
 
     // gets the current view and modifies its projection
-    let olProjection = ol.proj.get(projection.code);
+    let olProjection = getProj(projection.code);
     if (isNullOrEmpty(olProjection)) {
-      olProjection = new ol.proj.Projection(projection);
+      olProjection = new OLProjection(projection);
     }
 
     // gets previous data
-    const olPrevProjection = ol.proj.get(this.getProjection().code);
+    const olPrevProjection = getProj(this.getProjection().code);
     let prevBbox = this.facadeMap_.getBbox();
     let prevMaxExtent = this.facadeMap_.getMaxExtent();
     const prevCenter = this.facadeMap_.getCenter();
@@ -1506,7 +1509,7 @@ export default class Map extends MObject {
           prevMaxExtent.y.max,
         ];
       }
-      this.facadeMap_.setMaxExtent(ol.proj.transformExtent(
+      this.facadeMap_.setMaxExtent(transformExtent(
         prevMaxExtent,
         olPrevProjection,
         olProjection,
@@ -1523,7 +1526,7 @@ export default class Map extends MObject {
           prevBbox.y.max,
         ];
       }
-      this.facadeMap_.setBbox(ol.proj.transformExtent(prevBbox, olPrevProjection, olProjection), {
+      this.facadeMap_.setBbox(transformExtent(prevBbox, olPrevProjection, olProjection), {
         nearest: true,
       });
     }
@@ -1534,7 +1537,7 @@ export default class Map extends MObject {
       if (!isNullOrEmpty(this.facadeMap_.getFeatureCenter())) {
         draw = true;
       }
-      this.facadeMap_.setCenter(`${ol.proj.transform([
+      this.facadeMap_.setCenter(`${transform([
         prevCenter.x,
         prevCenter.y,
       ], olPrevProjection, olProjection)}*${draw}`);
@@ -1548,7 +1551,7 @@ export default class Map extends MObject {
     if (!isNullOrEmpty(popup)) {
       let coord = popup.getCoordinate();
       if (!isNullOrEmpty(coord)) {
-        coord = ol.proj.transform(coord, olPrevProjection, olProjection);
+        coord = transform(coord, olPrevProjection, olProjection);
         popup.setCoordinate(coord);
       }
     }
@@ -1558,7 +1561,7 @@ export default class Map extends MObject {
     if (!isNullOrEmpty(label)) {
       let coord = label.getCoordinate();
       if (!isNullOrEmpty(coord)) {
-        coord = ol.proj.transform(coord, olPrevProjection, olProjection);
+        coord = transform(coord, olPrevProjection, olProjection);
         label.setCoordinate(coord);
       }
     }

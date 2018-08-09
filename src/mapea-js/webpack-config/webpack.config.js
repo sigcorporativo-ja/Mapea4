@@ -8,7 +8,6 @@ const plugins = [new AllowMutateEsmExports()];
 if (env === 'development') {
   const HotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin();
   plugins.push(HotModuleReplacementPlugin);
-  entrypoints['ol.min'] = path.resolve(__dirname, '../lib/ol.js');
 }
 
 module.exports = {

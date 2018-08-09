@@ -1,14 +1,16 @@
+import OLStyleIcon from 'ol/style/Icon';
+
 /**
  * @namespace M.impl.style.PointIcon
  */
-export default class Icon extends ol.style.Icon {
+export default class Icon extends OLStyleIcon {
   /**
    * @classdesc
    * chart style for vector features
    *
    * @constructor
    * @param {object} options - Options style PointIcon
-   * @extends {ol.style.Icon}
+   * @extends {OLStyleIcon}
    * @api stable
    */
   constructor(options = {}) {

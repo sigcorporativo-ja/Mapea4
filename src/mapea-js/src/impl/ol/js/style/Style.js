@@ -1,3 +1,5 @@
+import { toContext as toContextRender } from 'ol/render';
+
 export default class Style {
   /**
    * Main constructor of the class.
@@ -67,7 +69,7 @@ export default class Style {
    */
   updateCanvas(canvas) {
     const canvasSize = Style.getCanvasSize();
-    const vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+    const vectorContext = toContextRender(canvas.getContext('2d'), {
       size: canvasSize,
     });
     vectorContext.setStyle(this.olStyleFn_()[0]);

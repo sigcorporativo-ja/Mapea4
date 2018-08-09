@@ -3,8 +3,6 @@
   "globals": {
     "goog": true,
     "M": true,
-    "ol": true,
-    "L": true,
     "Handlebars": true,
     "proj4": true,
     "ActiveXObject": true,

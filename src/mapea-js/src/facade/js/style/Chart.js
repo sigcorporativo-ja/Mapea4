@@ -1,4 +1,4 @@
-import ChartImpl from 'impl/js/style/stylechart';
+import ChartImpl from 'impl/js/style/Chart';
 import StyleFeature from './Feature';
 import ChartVariable from '../chart/Variable';
 import * as ChartTypes from '../chart/types';

@@ -1,9 +1,12 @@
+import OLControlMousePosition from 'ol/control/MousePosition';
+import { createStringXY as createStringXYCoordinate } from 'ol/coordinate';
+import { get as getProj } from 'ol/proj';
 import EvtManager from 'facade/js/event/Manager';
 
 /**
  * @namespace M.impl.control
  */
-export default class Mouse extends ol.control.MousePosition {
+export default class Mouse extends OLControlMousePosition {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
@@ -29,8 +32,8 @@ export default class Mouse extends ol.control.MousePosition {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    ol.control.MousePosition.call(this, {
-      coordinateFormat: ol.coordinate.createStringXY(4),
+    OLControlMousePosition.call(this, {
+      coordinateFormat: createStringXYCoordinate(4),
       projection: map.getProjection().code,
       undefinedHTML: '',
       className: 'm-mouse-position g-cartografia-flecha',
@@ -39,7 +42,7 @@ export default class Mouse extends ol.control.MousePosition {
 
     // update projection mouse
     map.getImpl().on(EvtManager.CHANGE, () => {
-      this.setProjection(ol.proj.get(map.getProjection().code));
+      this.setProjection(getProj(map.getProjection().code));
     });
   }
 

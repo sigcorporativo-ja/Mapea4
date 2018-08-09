@@ -6,7 +6,7 @@ export default class Form {}
  * @public
  * @api stable
  */
-Form.CIRCLE = "CIRCLE";
+Form.CIRCLE = 'CIRCLE';
 
 /**
  * Buble style form
@@ -15,7 +15,7 @@ Form.CIRCLE = "CIRCLE";
  * @public
  * @api stable
  */
-Form.BUBBLE = "BUBBLE";
+Form.BUBBLE = 'BUBBLE';
 
 /**
  * Marker style form
@@ -24,7 +24,7 @@ Form.BUBBLE = "BUBBLE";
  * @public
  * @api stable
  */
-Form.MARKER = "MARKER";
+Form.MARKER = 'MARKER';
 
 /**
  * Shield style form
@@ -33,7 +33,7 @@ Form.MARKER = "MARKER";
  * @public
  * @api stable
  */
-Form.SHIELD = "SHIELD";
+Form.SHIELD = 'SHIELD';
 
 /**
  * Blazon style form
@@ -42,7 +42,7 @@ Form.SHIELD = "SHIELD";
  * @public
  * @api stable
  */
-Form.BLAZON = "BLAZON";
+Form.BLAZON = 'BLAZON';
 
 /**
  * Triangle style form
@@ -51,7 +51,7 @@ Form.BLAZON = "BLAZON";
  * @public
  * @api stable
  */
-Form.TRIANGLE = "TRIANGLE";
+Form.TRIANGLE = 'TRIANGLE';
 
 /**
  * Sing style form
@@ -60,7 +60,7 @@ Form.TRIANGLE = "TRIANGLE";
  * @public
  * @api stable
  */
-Form.SIGN = "SIGN";
+Form.SIGN = 'SIGN';
 
 /**
  * Ban style form
@@ -69,7 +69,7 @@ Form.SIGN = "SIGN";
  * @public
  * @api stable
  */
-Form.BAN = "BAN";
+Form.BAN = 'BAN';
 
 /**
  * Lozenge style form
@@ -78,7 +78,7 @@ Form.BAN = "BAN";
  * @public
  * @api stable
  */
-Form.LOZENGE = "LOZENGE";
+Form.LOZENGE = 'LOZENGE';
 
 /**
  * Square style form
@@ -87,7 +87,7 @@ Form.LOZENGE = "LOZENGE";
  * @public
  * @api stable
  */
-Form.SQUARE = "SQUARE";
+Form.SQUARE = 'SQUARE';
 
 
 /**
@@ -97,4 +97,4 @@ Form.SQUARE = "SQUARE";
  * @public
  * @api stable
  */
-Form.NONE = "none";
+Form.NONE = 'none';

@@ -1,7 +1,9 @@
+import OLControlZoomSlider from 'ol/control/ZoomSlider';
+
 /**
  * @namespace M.impl.control
  */
-export default class Panzoombar extends ol.control.ZoomSlider {
+export default class Panzoombar extends OLControlZoomSlider {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector

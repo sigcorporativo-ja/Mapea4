@@ -1,5 +1,3 @@
-/* eslint-disable */
-
 import Dialog from 'facade/js/dialog';
 import XML from '../XML';
 
@@ -51,8 +49,7 @@ export default class DescribeFeatureTypeXML extends XML {
 
     if (/ServiceExceptionReport/i.test(root.localName)) {
       this.serviceException_ = true;
-    }
-    else {
+    } else {
       this.rootPrefix = root.prefix;
       const contextVar = context;
       contextVar.elementFormDefault = root.getAttribute('elementFormDefault');
@@ -163,13 +160,10 @@ export default class DescribeFeatureTypeXML extends XML {
         type: node.getAttribute('type'),
         localType: node.getAttribute('type').replace(/^\w+:/g, ''),
       });
-    }
-    else {
+    } else {
       const contextVar = context;
       contextVar.featureTypes[this.featureTypeIdx_].typeName = node.getAttribute('name');
       this.featureTypeIdx_ += 1;
     }
   }
 }
-
-/* eslint-enable */

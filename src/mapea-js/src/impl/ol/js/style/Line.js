@@ -1,4 +1,10 @@
 import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
+import OLFeature from 'ol/Feature';
+import OLStyleStroke from 'ol/style/Stroke';
+import OLStyleFill from 'ol/style/Fill';
+import { unByKey as unByKeyObservable } from 'ol/Observable';
+import { toContext as toContextRender } from 'ol/render';
+import OLGeomLineString from 'ol/geom/LineString';
 import chroma from 'chroma-js';
 import Centroid from './Centroid';
 import Path from './Path';
@@ -33,7 +39,7 @@ export default class Line extends Simple {
   updateFacadeOptions(options) {
     return (feature) => {
       let featureVariable = feature;
-      if (!(featureVariable instanceof ol.Feature)) {
+      if (!(featureVariable instanceof OLFeature)) {
         featureVariable = this;
       }
       const stroke = options.stroke;
@@ -43,7 +49,7 @@ export default class Line extends Simple {
       const styleStroke = new Centroid();
       const getValue = Simple.getValue;
       if (!isNullOrEmpty(stroke)) {
-        style.setStroke(new ol.style.Stroke({
+        style.setStroke(new OLStyleStroke({
           color: getValue(stroke.color, featureVariable),
           width: getValue(stroke.width, featureVariable),
           lineDash: getValue(stroke.linedash, featureVariable),
@@ -58,7 +64,7 @@ export default class Line extends Simple {
           text: getValue(label.text, featureVariable) === undefined ?
             undefined : String(getValue(label.text, featureVariable)),
           font: getValue(label.font, featureVariable),
-          fill: new ol.style.Fill({
+          fill: new OLStyleFill({
             color: getValue(label.color || '#000000', featureVariable),
           }),
           textBaseline: (getValue(label.baseline, featureVariable) || '').toLowerCase(),
@@ -74,7 +80,7 @@ export default class Line extends Simple {
         };
         const textPathStyle = new Path(textPathConfig);
         if (!isNullOrEmpty(label.stroke)) {
-          textPathStyle.setStroke(new ol.style.Stroke({
+          textPathStyle.setStroke(new OLStyleStroke({
             color: getValue(label.stroke.color, featureVariable),
             width: getValue(label.stroke.width, featureVariable),
             lineCap: getValue(label.stroke.linecap, featureVariable),
@@ -102,7 +108,7 @@ export default class Line extends Simple {
         const fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable) || 1;
         const widthValue = Simple.getValue(options.fill.width, featureVariable);
         if (!isNullOrEmpty(fillColorValue)) {
-          fill = new ol.style.Stroke({
+          fill = new OLStyleStroke({
             color: chroma(fillColorValue)
               .alpha(fillOpacityValue).css(),
             width: widthValue,
@@ -139,7 +145,7 @@ export default class Line extends Simple {
    * @api stable
    */
   unapply() {
-    ol.Observable.unByKey(this.postComposeEvtKey_);
+    unByKeyObservable.unByKey(this.postComposeEvtKey_);
   }
 
   /**
@@ -152,7 +158,7 @@ export default class Line extends Simple {
   drawGeometryToCanvas(vectorContext, canvas, style, stroke) {
     let x = Line.getCanvasSize()[0];
     let y = Line.getCanvasSize()[1];
-    vectorContext.drawGeometry(new ol.geom.LineString([[0 + (stroke / 2), 0 + (stroke / 2)],
+    vectorContext.drawGeometry(new OLGeomLineString([[0 + (stroke / 2), 0 + (stroke / 2)],
       [(x / 3), (y / 2) - (stroke / 2)],
       [(2 * x) / 3, 0 + (stroke / 2)],
       [x - (stroke / 2), (y / 2) - (stroke / 2)]]));
@@ -181,7 +187,7 @@ export default class Line extends Simple {
    */
   updateCanvas(canvas) {
     const canvasSize = Line.getCanvasSize();
-    const vectorContext = ol.render.toContext(canvas.getContext('2d'), {
+    const vectorContext = toContextRender(canvas.getContext('2d'), {
       size: canvasSize,
     });
     let optionsStyle;

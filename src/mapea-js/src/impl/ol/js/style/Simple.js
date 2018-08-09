@@ -1,3 +1,4 @@
+import OLFeature from 'ol/Feature';
 import { isFunction, isNullOrEmpty } from 'facade/js/util/Utils';
 import Style from './Style';
 import Feature from '../feature/Feature';
@@ -67,7 +68,7 @@ export default class Simple extends Style {
     const templateRegexp = /^\{\{([^}]+)\}\}$/;
     let attrFeature = attr;
     if (templateRegexp.test(attr) || isFunction(attr)) {
-      if (!(olFeature instanceof ol.Feature)) {
+      if (!(olFeature instanceof OLFeature)) {
         attrFeature = undefined;
       } else {
         const feature = Feature.olFeature2Facade(olFeature, false);

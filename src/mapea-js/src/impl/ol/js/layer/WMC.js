@@ -3,6 +3,7 @@ import * as parameter from 'facade/js/parameter/parameter';
 import Config from 'configuration';
 import Remote from 'facade/js/util/Remote';
 import EventsManager from 'facade/js/event/Manager';
+import { get as getProj, transformExtent } from 'ol/proj';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
 
@@ -104,7 +105,7 @@ export default class WMC extends Layer {
       this.loadContextPromise.then((context) => {
         // set projection with the wmc
         if (this.map.defaultProj) {
-          const olproj = ol.proj.get(context.projection);
+          const olproj = getProj(context.projection);
           this.map.setProjection({
             code: olproj.getCode(),
             units: olproj.getUnits(),
@@ -181,7 +182,7 @@ export default class WMC extends Layer {
    * @api stable
    */
   getMaxExtent() {
-    const olProjection = ol.proj.get(this.map.getProjection().code);
+    const olProjection = getProj(this.map.getProjection().code);
     const promise = new Promise((success, fail) => {
       if (isNullOrEmpty(this.maxExtent)) {
         this.loadContextPromise.then((context) => {
@@ -189,7 +190,7 @@ export default class WMC extends Layer {
           if (isNullOrEmpty(this.extentProj_)) {
             this.extentProj_ = parameter.projection(Config.DEFAULT_PROJ).code;
           }
-          this.maxExtent = ol.proj.transformExtent(this.maxExtent, this.extentProj_, olProjection);
+          this.maxExtent = transformExtent(this.maxExtent, this.extentProj_, olProjection);
           this.extentProj_ = olProjection;
           success(this.maxExtent);
         });

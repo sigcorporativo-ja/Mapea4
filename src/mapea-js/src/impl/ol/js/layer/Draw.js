@@ -1,5 +1,13 @@
 import Exception from 'facade/js/exception/exception';
 import { isFunction, isArray, isNullOrEmpty } from 'facade/js/util/Utils';
+import OLLayerVector from 'ol/layer/Vector';
+import OLSourceVector from 'ol/source/Vector';
+import OLStyle from 'ol/style/Style';
+import OLStyleFill from 'ol/style/Fill';
+import OLStyleStroke from 'ol/style/Stroke';
+import OLStyleCircle from 'ol/style/Circle';
+import OLGeomPoint from 'ol/geom/Point';
+import { get as getProj } from 'ol/proj';
 import Layer from './Layer';
 import FormatGeoJSON from '../format/GeoJSON';
 import Map from '../Map';
@@ -53,22 +61,22 @@ export default class Draw extends Layer {
   addTo(map) {
     this.map = map;
 
-    this.ol3Layer = new ol.layer.Vector({
-      source: new ol.source.Vector({}),
-      style: new ol.style.Style({
-        fill: new ol.style.Fill({
+    this.ol3Layer = new OLLayerVector({
+      source: new OLSourceVector({}),
+      style: new OLStyle({
+        fill: new OLStyleFill({
           color: 'rgba(0, 158, 0, 0.1)'
         }),
-        stroke: new ol.style.Stroke({
+        stroke: new OLStyleStroke({
           color: '#fcfcfc',
           width: 2
         }),
-        image: new ol.style.Circle({
+        image: new OLStyleCircle({
           radius: 7,
-          fill: new ol.style.Fill({
+          fill: new OLStyleFill({
             color: '#009E00'
           }),
-          stroke: new ol.style.Stroke({
+          stroke: new OLStyleStroke({
             color: '#fcfcfc',
             width: 2
           })
@@ -157,7 +165,7 @@ export default class Draw extends Layer {
     }
 
     // gets the projection
-    let projection = ol.proj.get(this.map.getProjection().code);
+    let projection = getProj(this.map.getProjection().code);
 
     let features = [];
     geojsons.forEach((geojson) => {
@@ -285,14 +293,14 @@ export default class Draw extends Layer {
     let geojsons = [];
 
     // gets the projection
-    const projection = ol.proj.get(this.map.getProjection().code);
+    const projection = getProj(this.map.getProjection().code);
 
     geojsons = points.map((point) => {
       // properties
       const geojsonProperties = point.data;
 
       // geometry
-      const pointGeom = new ol.geom.Point([point.x, point.y]);
+      const pointGeom = new OLGeomPoint([point.x, point.y]);
       const geojsonGeom = this.geojsonFormatter_.writeGeometryObject(pointGeom, {
         dataProjection: projection,
       });

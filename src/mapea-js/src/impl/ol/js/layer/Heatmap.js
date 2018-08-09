@@ -1,8 +1,12 @@
+import OLLayerHeatmap from 'ol/layer/Heatmap';
+import OLFeature from 'ol/Feature';
+import OLStyle from 'ol/style/Style';
+import OLStyleIcon from 'ol/style/Icon';
 import Feature from 'facade/js/feature/Feature';
 import { clamp } from 'ol/math';
-import Simple from "../style/Simple";
+import Simple from '../style/Simple';
 
-export default class Heatmap extends ol.layer.Heatmap {
+export default class Heatmap extends OLLayerHeatmap {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Heatmap layer
@@ -22,43 +26,41 @@ export default class Heatmap extends ol.layer.Heatmap {
       if (features.length > 0) {
         maxWeight = features
           .map(feature => feature.get(options.weight))
-          .filter(weight => weight != null)
+          .filter(weightVar => weightVar != null)
           .reduce((current, next) => Math.max(current, next));
         this.maxWeight_ = maxWeight;
         this.minWeight_ = features
           .map(feature => feature.get(options.weight))
-          .filter(weight => weight != null)
+          .filter(weightVar => weightVar != null)
           .reduce((current, next) => Math.min(current, next));
-        weightFunction = feature => {
+        weightFunction = (feature) => {
           let value;
-          if (feature instanceof ol.Feature) {
+          if (feature instanceof OLFeature) {
             value = feature.get(weight);
-          }
-          else if (feature instanceof Feature) {
+          } else if (feature instanceof Feature) {
             value = feature.getAttribute(weight);
           }
           return parseFloat(value / maxWeight);
         };
       }
-    }
-    else {
+    } else {
       weightFunction = weight;
     }
     this.setStyle((feature, resolution) => {
-      let weight = Simple.getValue(weightFunction, feature);
-      let opacity = weight !== undefined ? clamp(weight, 0, 1) : 1;
+      const weightParam = Simple.getValue(weightFunction, feature);
+      const opacity = weightParam !== undefined ? clamp(weightParam, 0, 1) : 1;
       // cast to 8 bits
-      let index = (255 * opacity) | 0;
+      const index = (255 * opacity) || 0;
       let style = this.styleCache_[index];
       if (!style) {
         style = [
-        new ol.style.Style({
-            image: new ol.style.Icon({
-              opacity: opacity,
-              src: this.circleImage_
-            })
-          })
-      ];
+          new OLStyle({
+            image: new OLStyleIcon({
+              opacity,
+              src: this.circleImage_,
+            }),
+          }),
+        ];
         this.styleCache_[index] = style;
       }
       return style;

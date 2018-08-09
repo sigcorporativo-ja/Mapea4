@@ -1,3 +1,4 @@
+import OLLayerHeatmap from 'ol/layer/Heatmap';
 import { isNullOrEmpty, extendsObj } from 'facade/js/util/Utils';
 import Style from './Style';
 import HeatmapLayer from '../layer/Heatmap';
@@ -17,7 +18,7 @@ export default class Heatmap extends Style {
 
     /**
      * @private
-     * @type {ol.layer.Heatmap}
+     * @type {OLLayerHeatmap}
      */
     this.heatmapLayer_ = null;
     /**
@@ -52,7 +53,7 @@ export default class Heatmap extends Style {
     this.layer_ = layer;
     if (!isNullOrEmpty(layer)) {
       const ol3Layer = this.layer_.getImpl().getOL3Layer();
-      if (!(ol3Layer instanceof ol.layer.Heatmap)) {
+      if (!(ol3Layer instanceof OLLayerHeatmap)) {
         this.oldOLLayer_ = ol3Layer;
       }
       const features = this.layer_.getFeatures();

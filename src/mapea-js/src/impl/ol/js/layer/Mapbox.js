@@ -3,6 +3,10 @@ import FacadeOSM from 'facade/js/layer/OSM';
 import FacadeMapbox from 'facade/js/layer/Mapbox';
 import Config from 'configuration';
 import { isNullOrEmpty, generateResolutionsFromExtent, isArray } from 'facade/js/util/Utils';
+import OLLayerTile from 'ol/layer/Tile';
+import OLSourceXYZ from 'ol/source/XYZ';
+import OLControlAttribution from 'ol/control/Attribution';
+import { get as getProj } from 'ol/proj';
 import ImplMap from '../Map';
 import EnvolvedExtent from '../util/EnvolvedExtent';
 import Layer from './Layer';
@@ -89,8 +93,8 @@ export default class Mapbox extends Layer {
   addTo(map) {
     this.map = map;
 
-    this.ol3Layer = new ol.layer.Tile({
-      source: new ol.source.XYZ({
+    this.ol3Layer = new OLLayerTile({
+      source: new OLSourceXYZ({
         url: `${this.url}${this.name}/{z}/{x}/{y}.png?${Config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
       }),
     });
@@ -98,12 +102,12 @@ export default class Mapbox extends Layer {
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
     this.map.getMapImpl().getControls().getArray().forEach((cont) => {
-      if (cont instanceof ol.control.Attribution) {
+      if (cont instanceof OLControlAttribution) {
         this.hasAttributtion = true;
       }
     });
     if (!this.hasAttributtion) {
-      this.map.getMapImpl().addControl(new ol.control.Attribution({
+      this.map.getMapImpl().addControl(new OLControlAttribution({
         className: 'ol-attribution ol-unselectable ol-control ol-collapsed m-attribution',
       }));
       this.hasAttributtion = false;
@@ -164,7 +168,7 @@ export default class Mapbox extends Layer {
         } else {
           olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
         }
-        const newSource = new ol.source.XYZ({
+        const newSource = new OLSourceXYZ({
           url: `${this.url}${this.name}/{z}/{x}/{y}.png?${Config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
           // tileGrid: new ol.tilegrid.TileGrid({
           //   resolutions,
@@ -191,7 +195,7 @@ export default class Mapbox extends Layer {
   getExtent() {
     let extent = null;
     if (!isNullOrEmpty(this.ol3Layer)) {
-      extent = ol.proj.get(this.map.getProjection().code).getExtent();
+      extent = getProj(this.map.getProjection().code).getExtent();
     }
     return {
       x: {
@@ -253,7 +257,7 @@ export default class Mapbox extends Layer {
     if (!this.haveOSMorMapboxLayer) {
       this.map.getImpl().getMapImpl().getControls().getArray()
         .forEach((data) => {
-          if (data instanceof ol.control.Attribution) {
+          if (data instanceof OLControlAttribution) {
             this.map.getImpl().getMapImpl().removeControl(data);
           }
         });

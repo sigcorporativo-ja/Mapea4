@@ -1,4 +1,6 @@
-export default class View extends ol.View {
+import OLView from 'ol/View';
+
+export default class View extends OLView {
   /**
    * @classdesc
    *

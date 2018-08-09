@@ -1,6 +1,12 @@
 import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'facade/js/util/Utils';
 import Remote from 'facade/js/util/Remote';
 import EventsManager from 'facade/js/event/Manager';
+import { get as getProj } from 'ol/proj';
+import OLLayerTile from 'ol/layer/Tile';
+import OLSourceWMTS from 'ol/source/WMTS';
+import OLTileGridWMTS from 'ol/tilegrid/WMTS';
+import { getBottomLeft } from 'ol/extent';
+import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import LayerBase from './Layer';
 
 export default class WMTS extends LayerBase {
@@ -60,7 +66,7 @@ export default class WMTS extends LayerBase {
    */
   setResolutions(resolutions) {
     // gets the projection
-    const projection = ol.proj.get(this.map.getProjection().code);
+    const projection = getProj(this.map.getProjection().code);
 
     // gets the extent
     const extent = this.map.getMaxExtent();
@@ -79,14 +85,14 @@ export default class WMTS extends LayerBase {
       // gets format
       const format = this.capabilitiesParser.getFormat(this.name);
 
-      const newSource = new ol.source.WMTS({
+      const newSource = new OLSourceWMTS({
         url: this.url,
         layer: this.name,
         matrixSet,
         format,
         projection,
-        tileGrid: new ol.tilegrid.WMTS({
-          origin: ol.extent.getBottomLeft(olExtent),
+        tileGrid: new OLTileGridWMTS({
+          origin: getBottomLeft(olExtent),
           resolutions,
           matrixIds,
         }),
@@ -105,14 +111,14 @@ export default class WMTS extends LayerBase {
         // gets format
         const format = this.capabilitiesParser.getFormat(this.name);
 
-        const newSource = new ol.source.WMTS({
+        const newSource = new OLSourceWMTS({
           url: this.url,
           layer: this.name,
           matrixSet,
           format,
           projection,
           tileGrid: new ol.tilegrid.WMTS({
-            origin: ol.extent.getBottomLeft(olExtent),
+            origin: getBottomLeft(olExtent),
             resolutions,
             matrixIds,
           }),
@@ -169,9 +175,9 @@ export default class WMTS extends LayerBase {
     const maxResolution = this.options.maxResolution;
     capabilitiesOptionsVariable.format = this.options.format || capabilitiesOptions.format;
 
-    this.ol3Layer = new ol.layer.Tile({
+    this.ol3Layer = new OLLayerTile({
       visible: this.options.visibility,
-      source: new ol.source.WMTS(capabilitiesOptionsVariable),
+      source: new OLSourceWMTS(capabilitiesOptionsVariable),
       minResolution,
       maxResolution,
     });
@@ -211,7 +217,7 @@ export default class WMTS extends LayerBase {
       matrixSet = this.map.getProjection().code;
     }
     return this.getCapabilities().then((parsedCapabilities) => {
-      return ol.source.WMTS.optionsFromCapabilities(parsedCapabilities, {
+      return OLSourceWMTS.optionsFromCapabilities(parsedCapabilities, {
         layer: layerName,
         matrixSet,
       });
@@ -227,7 +233,7 @@ export default class WMTS extends LayerBase {
    */
   getCapabilities() {
     const getCapabilitiesUrl = getWMTSGetCapabilitiesUrl(this.url);
-    const parser = new ol.format.WMTSCapabilities();
+    const parser = new OLFormatWMTSCapabilities();
     return new Promise((success, fail) => {
       Remote.get(getCapabilitiesUrl).then((response) => {
         const getCapabilitiesDocument = response.xml;

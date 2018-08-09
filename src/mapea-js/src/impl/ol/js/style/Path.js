@@ -1,13 +1,15 @@
+import OLStyleText from 'ol/style/Text';
+
 /**
  * @namespace M.impl.style.TextPath
  */
 
-export default class Path extends ol.style.Text {
+export default class Path extends OLStyleText {
   /**
    * @classdesc
    * Main constructor of the class. Creates a M.impl.style.TextPath style
    *
-   * @extends ol.style.Text
+   * @extends OLStyleText
    * @constructor
    * @param {Object} options - style options
    * @api stable

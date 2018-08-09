@@ -1,5 +1,11 @@
 import { CHANGE as OLEventChange } from 'ol/events/EventType';
 import LayerVector from 'facade/js/layer/Vector';
+import OLSourceCluster from 'ol/source/Cluster';
+import OLSourceVector from 'ol/source/Vector';
+import * as OLeasing from 'ol/easing';
+import { convexHull as convexHullCoordinate } from 'ol/coordinate';
+import OLFeature from 'ol/Feature';
+import OLGeomPolygon from 'ol/geom/Polygon';
 import Polygon from 'facade/js/style/Polygon';
 import StylePoint from 'facade/js/style/Point';
 import FacadeCluster from 'facade/js/style/Cluster';
@@ -136,15 +142,15 @@ export default class Cluster extends Style {
     const olFeatures = features.map(f => f.getImpl().getOLFeature());
     this.clusterLayer_ = new AnimatedCluster({
       name: 'Cluster',
-      source: new ol.source.Cluster({
+      source: new OLSourceCluster({
         distance: this.options_.distance,
-        source: new ol.source.Vector({
+        source: new OLSourceVector({
           features: olFeatures,
         }),
       }),
       animationDuration: this.optionsVendor_.animationDuration,
       style: this.clusterStyleFn_.bind(this),
-      animationMethod: ol.easing[this.optionsVendor_.animationMethod],
+      animationMethod: OLeasing[this.optionsVendor_.animationMethod],
     });
     if (this.options_.animated === false) {
       this.clusterLayer_.set('animationDuration', undefined);
@@ -317,9 +323,9 @@ export default class Cluster extends Style {
 
       const coordinates = hoveredFeatures
         .map(f => f.getImpl().getOLFeature().getGeometry().getCoordinates());
-      const convexHull = ol.coordinate.convexHull(coordinates);
+      const convexHull = convexHullCoordinate(coordinates);
       if (convexHull.length > 2) {
-        const convexOlFeature = new ol.Feature(new ol.geom.Polygon([convexHull]));
+        const convexOlFeature = new OLFeature(new OLGeomPolygon([convexHull]));
         const convexFeature = Feature.olFeature2Facade(convexOlFeature);
         if (isNullOrEmpty(this.convexHullLayer_)) {
           this.convexHullLayer_ = new LayerVector({
@@ -488,7 +494,7 @@ export default class Cluster extends Style {
     if (!isNullOrEmpty(this.clusterLayer_)) {
       const clusterSource = this.clusterLayer_.getSource();
       const eventType = OLEventChange;
-      const callback = ol.source.Cluster.prototype.refresh;
+      const callback = OLSourceCluster.prototype.refresh;
       this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
       this.removeCoverInteraction_();
       this.removeSelectInteraction_();
@@ -532,7 +538,7 @@ export default class Cluster extends Style {
     if (this.clusterLayer_ !== null) {
       const clusterSource = this.clusterLayer_.getSource();
       const eventType = OLEventChange;
-      const callback = ol.source.Cluster.prototype.refresh;
+      const callback = OLSourceCluster.prototype.refresh;
       clusterSource.getSource().on(eventType, callback, clusterSource);
     }
   }
@@ -548,7 +554,7 @@ export default class Cluster extends Style {
     if (this.clusterLayer_ !== null) {
       const clusterSource = this.clusterLayer_.getSource();
       const eventType = OLEventChange;
-      const callback = ol.source.Cluster.prototype.refresh;
+      const callback = OLSourceCluster.prototype.refresh;
       clusterSource.getSource().un(eventType, callback, clusterSource);
     }
   }

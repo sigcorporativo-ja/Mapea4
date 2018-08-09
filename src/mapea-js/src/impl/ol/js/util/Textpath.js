@@ -1,3 +1,6 @@
+import OLStyle from 'ol/style/Style';
+import OLStyleText from 'ol/style/Text';
+
 /**
  * @namespace TextPath
  */
@@ -89,8 +92,7 @@ export default class TextPath {
         if (ctx.textJustify) {
           start = 0;
           letterPadding = (d - ctx.measureText(newText).width) / (text.length - (1 + nbspace));
-        }
-        else {
+        } else {
           start = d - ctx.measureText(newText).width - ((newText.length + nbspace) * letterPadding);
           if (ctx.textAlign === 'center') {
             start /= 2;
@@ -161,14 +163,13 @@ export default class TextPath {
 
     let formattedStyle = null;
     if (typeof newStyle === 'undefined') {
-      newStyle = [new ol.style.Style({
-        text: new ol.style.Text(),
+      newStyle = [new OLStyle({
+        text: new OLStyleText(),
       })];
     }
     if (typeof newStyle === 'function') {
       formattedStyle = newStyle;
-    }
-    else {
+    } else {
       formattedStyle = () => {
         return [newStyle];
       };

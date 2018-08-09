@@ -1,5 +1,6 @@
 import { isNullOrEmpty, isArray, isObject, isUndefined } from 'facade/js/util/Utils';
 import WMS from 'facade/js/layer/WMS';
+import { get as getProj, transformExtent } from 'ol/proj';
 
 /**
  * @namespace M.impl.GetCapabilities
@@ -99,15 +100,15 @@ export default class GetCapabilities {
             }
             extent = matchedBbox.extent;
             if (matchedBbox.crs !== this.projection_.code) {
-              const projSrc = ol.proj.get(matchedBbox.crs);
-              const projDest = ol.proj.get(this.projection_.code);
-              extent = ol.proj.transformExtent(extent, projSrc, projDest);
+              const projSrc = getProj(matchedBbox.crs);
+              const projDest = getProj(this.projection_.code);
+              extent = transformExtent(extent, projSrc, projDest);
             }
           } else {
             // if the layer has not the SRS then transformExtent
             // the latLonBoundingBox which is always present
             extent = layer.LatLonBoundingBox[0].extent;
-            extent = ol.proj.transformExtent(extent, ol.proj.get('EPSG:4326'), ol.proj.get(this.projection_.code));
+            extent = transformExtent(extent, getProj('EPSG:4326'), getProj(this.projection_.code));
           }
         } else if (!isUndefined(layer.Layer)) {
           // recursive case
