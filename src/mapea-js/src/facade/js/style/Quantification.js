@@ -1,5 +1,4 @@
 export default class Quantification {
-
   /** This function returns a jenks quantification function
    * @function
    * @public
@@ -8,7 +7,8 @@ export default class Quantification {
    * @api stable
    */
 
-  static JENKS(n_classes_param) {
+  static JENKS(n_classes_paramVar) {
+    const n_classes_param = n_classes_paramVar;
     n_classes_param = n_classes_param || Quantification.DEFAULT_CLASES_JENKS;
 
     const jenksFn = (data, n_classes = n_classes_param) => {
@@ -21,19 +21,19 @@ export default class Quantification {
       });
 
       // get our basic matrices
-      let matrices = Quantification.getMatrices_(data, n_classes);
+      const matrices = Quantification.getMatrices_(data, n_classes);
       // we only need lower class limits here
-      let lower_class_limits = matrices.lower_class_limits;
+      const lower_class_limits = matrices.lower_class_limits;
 
       // extract n_classes out of the computed matrices
-      let breaks = Quantification.jenksBreaks_(data, lower_class_limits, n_classes);
+      const breaks = Quantification.jenksBreaks_(data, lower_class_limits, n_classes);
       // No cogemos el minimo
-      let break_points = breaks.slice(1, breaks.length);
+      const break_points = breaks.slice(1, breaks.length);
       return break_points;
     };
 
-    Object.defineProperty(jenksFn, "name", {
-      value: "jenks"
+    Object.defineProperty(jenksFn, 'name', {
+      value: 'jenks',
     });
 
     return jenksFn;
@@ -49,29 +49,29 @@ export default class Quantification {
   static QUANTILE(n_classes_param) {
     n_classes_param = n_classes_param || Quantification.DEFAULT_CLASES_QUANTILE;
     const quantileFn = (data, n_classes = n_classes_param) => {
-      let uniqueData = Quantification.uniqueArray_(data);
+      const uniqueData = Quantification.uniqueArray_(data);
       n_classes = uniqueData.length <= n_classes ? uniqueData.length - 1 : n_classes;
-      let numData = data.length;
+      const numData = data.length;
       data.sort((a, b) => a - b);
-      let [min, max] = [data[0], data[numData - 1]];
+      const [min, max] = [data[0], data[numData - 1]];
 
       // Calculamos el salto para calcular los puntos de ruptura
       // Esto será (valor minimo + valor máximo) / número de clases
-      let step = (min + max) / n_classes;
-      let breaks = [];
+      const step = (min + max) / n_classes;
+      const breaks = [];
 
       // Calculamos los puntos de ruptura multiplicando por el valor
       // del salto desde i = 1, 2, .. numero de clases - 1
       for (let value = 0; value < n_classes.length; value += 1) {
-        let break_point = step * value;
+        const break_point = step * value;
         breaks.push(break_point);
       }
       breaks.push(max);
       return breaks;
     };
 
-    Object.defineProperty(quantileFn, "name", {
-      value: "quantile"
+    Object.defineProperty(quantileFn, 'name', {
+      value: 'quantile'
     });
     return quantileFn;
   };
@@ -85,22 +85,21 @@ export default class Quantification {
    *
    */
   static getMatrices_(data, n_classes) {
-
     // in the original implementation, these matrices are referred to
     // as `LC` and `OP`
     //
     // * lower_class_limits (LC): optimal lower class limits
     // * variance_combinations (OP): optimal variance combinations for all classes
-    let lower_class_limits = [];
-    let variance_combinations = [];
+    const lower_class_limits = [];
+    const variance_combinations = [];
     // the variance, as computed at each step in the calculation
     let variance = 0;
 
     // Initialize and fill each matrix with zeroes
-    for (let i = 0; i < data.length + 1; i++) {
-      let tmp1 = [];
-      let tmp2 = [];
-      for (let j = 0; j < n_classes + 1; j++) {
+    for (let i = 0; i < data.length + 1; i += 1) {
+      const tmp1 = [];
+      const tmp2 = [];
+      for (let j = 0; j < n_classes + 1; j += 1) {
         tmp1.push(0);
         tmp2.push(0);
       }
@@ -108,17 +107,17 @@ export default class Quantification {
       variance_combinations.push(tmp2);
     }
 
-    for (let i = 1; i < n_classes + 1; i++) {
+    for (let i = 1; i < n_classes + 1; i += 1) {
       lower_class_limits[1][i] = 1;
       variance_combinations[1][i] = 0;
       // in the original implementation, 9999999 is used but
       // since Javascript has `Infinity`, we use that.
-      for (let j = 2; j < data.length + 1; j++) {
+      for (let j = 2; j < data.length + 1; j += 1) {
         variance_combinations[j][i] = Infinity;
       }
     }
 
-    for (let l = 2; l < data.length + 1; l++) {
+    for (let l = 2; l < data.length + 1; l += 1) {
 
       // `SZ` originally. this is the sum of the values seen thus
       // far when calculating variance.
@@ -130,16 +129,16 @@ export default class Quantification {
       // in several instances, you could say `Math.pow(x, 2)`
       // instead of `x * x`, but this is slower in some browsers
       // introduces an unnecessary concept.
-      for (let m = 1; m < l + 1; m++) {
+      for (let m = 1; m < l + 1; m += 1) {
 
         // `III` originally
-        let lower_class_limit = l - m + 1;
-        let val = data[lower_class_limit - 1];
+        let lower_class_limit = (l - m) + 1;
+        const val = data[lower_class_limit - 1];
 
         // here we're estimating variance for each potential classing
         // of the data, for each potential number of classes. `w`
         // is the number of data points considered so far.
-        w++;
+        w += 1;
 
         // increase the current sum and sum-of-squares
         sum += val;
@@ -148,12 +147,12 @@ export default class Quantification {
         // the variance at this point in the sequence is the difference
         // between the sum of squares and the total x 2, over the number
         // of samples.
-        variance = sum_squares - (sum * sum) / w;
+        variance = (sum_squares - (sum * sum)) / w;
 
         i4 = lower_class_limit - 1;
 
         if (i4 !== 0) {
-          for (let j = 2; j < n_classes + 1; j++) {
+          for (let j = 2; j < n_classes + 1; j += 1) {
             // if adding this element to an existing class
             // will increase its variance beyond the limit, break
             // the class at this point, setting the lower_class_limit
@@ -176,8 +175,8 @@ export default class Quantification {
     // `lower_class_limits` is needed, but variances can be useful to
     // evaluage goodness of fit.
     return {
-      lower_class_limits: lower_class_limits,
-      variance_combinations: variance_combinations
+      lower_class_limits,
+      variance_combinations,
     };
   }
 
@@ -192,7 +191,7 @@ export default class Quantification {
   static jenksBreaks_(data, lower_class_limits, n_classes) {
 
     let k = data.length - 1;
-    let kclass = [];
+    const kclass = [];
     let countNum = n_classes;
 
     // the calculation of classes will never include the upper and
@@ -205,7 +204,7 @@ export default class Quantification {
     while (countNum > 1) {
       kclass[countNum - 1] = data[lower_class_limits[k][countNum] - 2];
       k = lower_class_limits[k][countNum] - 1;
-      countNum--;
+      countNum -= 1;
     }
 
     return kclass;
@@ -221,7 +220,7 @@ export default class Quantification {
    */
 
   static uniqueArray_(array) {
-    let uniqueArray = [];
+    const uniqueArray = [];
     array.forEach((elem) => {
       if (uniqueArray.indexOf(elem) === -1) {
         uniqueArray.push(elem);

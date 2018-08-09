@@ -26,14 +26,14 @@ export default class Heatmap extends OLLayerHeatmap {
       if (features.length > 0) {
         maxWeight = features
           .map(feature => feature.get(options.weight))
-          .filter(weight => weight != null)
+          .filter(weightVar => weightVar != null)
           .reduce((current, next) => Math.max(current, next));
         this.maxWeight_ = maxWeight;
         this.minWeight_ = features
           .map(feature => feature.get(options.weight))
-          .filter(weight => weight != null)
+          .filter(weightVar => weightVar != null)
           .reduce((current, next) => Math.min(current, next));
-        weightFunction = feature => {
+        weightFunction = (feature) => {
           let value;
           if (feature instanceof OLFeature) {
             value = feature.get(weight);
@@ -47,20 +47,20 @@ export default class Heatmap extends OLLayerHeatmap {
       weightFunction = weight;
     }
     this.setStyle((feature, resolution) => {
-      let weight = Simple.getValue(weightFunction, feature);
-      let opacity = weight !== undefined ? clamp(weight, 0, 1) : 1;
+      const weightParam = Simple.getValue(weightFunction, feature);
+      const opacity = weightParam !== undefined ? clamp(weightParam, 0, 1) : 1;
       // cast to 8 bits
-      let index = (255 * opacity) | 0;
+      const index = (255 * opacity) || 0;
       let style = this.styleCache_[index];
       if (!style) {
         style = [
-        new OLStyle({
+          new OLStyle({
             image: new OLStyleIcon({
-              opacity: opacity,
-              src: this.circleImage_
-            })
-          })
-      ];
+              opacity,
+              src: this.circleImage_,
+            }),
+          }),
+        ];
         this.styleCache_[index] = style;
       }
       return style;

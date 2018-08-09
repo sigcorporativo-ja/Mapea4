@@ -93,13 +93,10 @@ export default class Response {
         const contentType = proxyResponse.headers['Content-Type'];
         if ((typeof DOMParser !== 'undefined') && /text\/html/i.test(contentType)) {
           this.xml = (new DOMParser()).parseFromString(this.text, 'text/html');
-        }
-        // it avoids responses that aren't xml format
-        else if (/xml/i.test(contentType)) {
+        } else if (/xml/i.test(contentType)) { // it avoids responses that aren't xml format
           this.xml = ol.xml.parse(this.text);
         }
-      }
-      catch (err) {
+      } catch (err) {
         this.xml = null;
         this.error = true;
       }

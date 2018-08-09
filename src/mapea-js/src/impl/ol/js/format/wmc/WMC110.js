@@ -19,8 +19,9 @@ export default class WMCV110 extends XML {
    * @param {Element} node An element node.
    * @api stable
    */
-  read_sld_MinScaleDenominator(layerInfo, node) {
-    layerInfo['options']['minScale'] = parseFloat(XML.getChildValue(node));
+  read_sld_MinScaleDenominator(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    layerInfo.options.minScale = parseFloat(XML.getChildValue(node));
   }
 
   /**
@@ -29,31 +30,31 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   read_wmc_Layer(context, node) {
-    let layerInfo = {
-      'params': this.layerParams || {},
-      'options': {
-        'visibility': (node.getAttribute("hidden") != "1"),
-        'queryable': (node.getAttribute("queryable") == "1")
+    const layerInfo = {
+      params: this.layerParams || {},
+      options: {
+        visibility: (node.getAttribute('hidden') !== '1'),
+        queryable: (node.getAttribute('queryable') === '1'),
 
       },
-      'formats': [],
-      'styles': []
+      formats: [],
+      styles: [],
     };
     this.runChildNodes(layerInfo, node);
     // set properties common to multiple objects on layer options/params
-    layerInfo['params']['isWMC'] = 'ok';
-    layerInfo['params']['layers'] = layerInfo['name'];
-    layerInfo['options']['maxExtent'] = layerInfo.maxExtent;
+    layerInfo.params.isWMC = 'ok';
+    layerInfo.params.layers = layerInfo.name;
+    layerInfo.options.maxExtent = layerInfo.maxExtent;
     // create the layer
-    let layer = this.getLayerFromInfo(layerInfo);
-    if (layerInfo["styles"] != null && layerInfo["styles"][0] != null) {
-      let firstStyle = layerInfo["styles"][0];
-      if (firstStyle["legend"] != null && firstStyle["legend"]["href"]) {
-        let legendUrl = firstStyle["legend"]["href"];
+    const layer = this.getLayerFromInfo(layerInfo);
+    if (layerInfo.styles != null && layerInfo.styles[0] != null) {
+      const firstStyle = layerInfo.styles[0];
+      if (firstStyle.legend != null && firstStyle.legend.href) {
+        const legendUrl = firstStyle.legend.href;
         layer.setLegendURL(legendUrl);
       }
     }
-    context['layers'].push(layer);
+    context.layers.push(layer);
   }
 
   /**
@@ -66,13 +67,13 @@ export default class WMCV110 extends XML {
    * @api stable
    */
   getLayerFromInfo(layerInfo) {
-    let options = layerInfo['options'];
-    options['params'] = layerInfo['params'];
-    let layer = new WMS({
-      'name': layerInfo['name'],
-      'legend': layerInfo['title'],
-      'url': layerInfo['href'],
-      'transparent': !/^1|(true)$/i.test(options.isBaseLayer)
+    const options = layerInfo.options;
+    options.params = layerInfo.params;
+    const layer = new WMS({
+      name: layerInfo.name,
+      legend: layerInfo.title,
+      url: layerInfo.href,
+      transparent: !/^1|(true)$/i.test(options.isBaseLayer),
     }, options);
     return layer;
   }
@@ -82,8 +83,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_units(obj, node) {
-    obj['units'] = XML.getChildValue(node);
+  read_ol_units(objVar, node) {
+    const obj = objVar;
+    obj.units = XML.getChildValue(node);
   }
 
   /**
@@ -91,10 +93,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_tileSize(context, node) {
-    context['tileSize'] = {
-      'width': parseFloat(node.getAttribute("width")),
-      'height': parseFloat(node.getAttribute("height"))
+  read_ol_tileSize(contextVar, node) {
+    const context = contextVar;
+    context.tileSize = {
+      width: parseFloat(node.getAttribute('width')),
+      height: parseFloat(node.getAttribute('height')),
     };
   }
 
@@ -103,8 +106,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_groupDisplayLayerSwitcher(layerInfo, node) {
-    layerInfo['options']['groupDisplayLayerSwitcher'] =
+  read_ol_groupDisplayLayerSwitcher(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    layerInfo.options.groupDisplayLayerSwitcher =
       (XML.getChildValue(node));
   }
 
@@ -113,8 +117,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_orderInsideGroupDisplayLayerSwitcher(layerInfo, node) {
-    layerInfo['options']['orderInsideGroupDisplayLayerSwitcher'] =
+  read_ol_orderInsideGroupDisplayLayerSwitcher(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    layerInfo.options.orderInsideGroupDisplayLayerSwitcher =
       XML.getChildValue(node);
   }
 
@@ -127,8 +132,9 @@ export default class WMCV110 extends XML {
    * @param {Element} node an element node
    * @api stable
    */
-  read_sld_MaxScaleDenominator(layerInfo, node) {
-    layerInfo['options']['maxScale'] = parseFloat(XML.getChildValue(node));
+  read_sld_MaxScaleDenominator(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    layerInfo.options.maxScale = parseFloat(XML.getChildValue(node));
   }
 
   /**
@@ -136,32 +142,32 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_Style(layerInfo, node) {
-
-    let style = {};
+  read_wmc_Style(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    const style = {};
     this.runChildNodes(style, node);
 
-    if (node.getAttribute("current") == "1") {
+    if (node.getAttribute('current') === '1') {
       // three style types to consider
       // 1) linked SLD
       // 2) inline SLD
       // 3) named style
       // running child nodes always gets name, optionally gets href or body
 
-      //MDRC_STYLE_LEGEND 06102008
-      if (style['legend']) {
-        layerInfo['params']['layerLegend'] = style['legend'];
+      // MDRC_STYLE_LEGEND 06102008
+      if (style.legend) {
+        layerInfo.params.layerLegend = style.legend;
       }
-      ////////////////////////////////////////////////
-      if (style['href']) {
-        layerInfo['params']['sld'] = style['href'];
-      } else if (style['body']) {
-        layerInfo['params']['sld_body'] = style['body'];
+      // //////////////////////////////////////////////
+      if (style.href) {
+        layerInfo.params.sld = style.href;
+      } else if (style.body) {
+        layerInfo.params.sld_body = style.body;
       } else {
-        layerInfo['params']['styles'] = style['name'];
+        layerInfo.params.styles = style.name;
       }
     }
-    layerInfo['styles'].push(style);
+    layerInfo.styles.push(style);
   }
 
   /**
@@ -178,14 +184,15 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_BoundingBox(context, node) {
-    context['projection'] = node.getAttribute("SRS");
-    context['bounds'] = [
-      parseFloat(node.getAttribute("minx")),
-      parseFloat(node.getAttribute("miny")),
-      parseFloat(node.getAttribute("maxx")),
-      parseFloat(node.getAttribute("maxy"))
-   ];
+  read_wmc_BoundingBox(contextVar, node) {
+    const context = contextVar;
+    context.projection = node.getAttribute('SRS');
+    context.bounds = [
+      parseFloat(node.getAttribute('minx')),
+      parseFloat(node.getAttribute('miny')),
+      parseFloat(node.getAttribute('maxx')),
+      parseFloat(node.getAttribute('maxy')),
+    ];
   }
 
   /**
@@ -193,8 +200,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_LayerList(context, node) {
-    context['layers'] = [];
+  read_wmc_LayerList(contextVar, node) {
+    const context = contextVar;
+    context.layers = [];
     this.runChildNodes(context, node);
   }
 
@@ -212,15 +220,16 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_maxExtent(obj, node) {
-    let maxExtent = 'maxExtent';
+  read_ol_maxExtent(objVar, node) {
+    const obj = objVar;
+    const maxExtent = 'maxExtent';
 
     let extent = [
-      parseFloat(node.getAttribute("minx")),
-      parseFloat(node.getAttribute("miny")),
-      parseFloat(node.getAttribute("maxx")),
-      parseFloat(node.getAttribute("maxy"))
-   ];
+      parseFloat(node.getAttribute('minx')),
+      parseFloat(node.getAttribute('miny')),
+      parseFloat(node.getAttribute('maxx')),
+      parseFloat(node.getAttribute('maxy')),
+    ];
 
     let projDst = this.options.projection;
     let projSrc = obj.projection;
@@ -237,9 +246,10 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_transparent(layerInfo, node) {
-    let transparent = 'transparent';
-    let params = 'params';
+  read_ol_transparent(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    const transparent = 'transparent';
+    const params = 'params';
     layerInfo[params][transparent] = XML.getChildValue(node);
   }
 
@@ -248,10 +258,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_numZoomLevels(layerInfo, node) {
-    let options = 'options';
-    let numZoomLevels = 'numZoomLevels';
-    layerInfo[options][numZoomLevels] = parseInt(XML.getChildValue(node));
+  read_ol_numZoomLevels(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    const options = 'options';
+    const numZoomLevels = 'numZoomLevels';
+    layerInfo[options][numZoomLevels] = parseInt(XML.getChildValue(node), 10);
   }
 
   /**
@@ -259,8 +270,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_opacity(layerInfo, node) {
-    layerInfo['options']['opacity'] = parseFloat(XML.getChildValue(node));
+  read_ol_opacity(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    layerInfo.options.opacity = parseFloat(XML.getChildValue(node));
   }
 
   /**
@@ -268,8 +280,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_singleTile(layerInfo, node) {
-    layerInfo['options']['singleTile'] = (XML.getChildValue(node) == "true");
+  read_ol_singleTile(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    layerInfo.options.singleTile = (XML.getChildValue(node) === 'true');
   }
 
   /**
@@ -277,8 +290,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_isBaseLayer(layerInfo, node) {
-    layerInfo['options']['isBaseLayer'] = (XML.getChildValue(node) == "true");
+  read_ol_isBaseLayer(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    layerInfo.options.isBaseLayer = (XML.getChildValue(node) === 'true');
   }
 
   /**
@@ -286,9 +300,10 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_ol_displayInLayerSwitcher(layerInfo, node) {
-    let nodeValue = normalize(XML.getChildValue(node));
-    layerInfo['options']['displayInLayerSwitcher'] = (nodeValue == "true");
+  read_ol_displayInLayerSwitcher(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    const nodeValue = normalize(XML.getChildValue(node));
+    layerInfo.options.displayInLayerSwitcher = (nodeValue === 'true');
   }
 
   /**
@@ -296,8 +311,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_Server(layerInfo, node) {
-    layerInfo['params']['version'] = node.getAttribute("version");
+  read_wmc_Server(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    layerInfo.params.version = node.getAttribute('version');
     this.runChildNodes(layerInfo, node);
   }
 
@@ -315,11 +331,12 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_Format(layerInfo, node) {
-    let format = XML.getChildValue(node);
-    layerInfo['formats'].push(format);
-    if (node.getAttribute("current") == "1") {
-      layerInfo['params']['format'] = format;
+  read_wmc_Format(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    const format = XML.getChildValue(node);
+    layerInfo.formats.push(format);
+    if (node.getAttribute('current') === '1') {
+      layerInfo.params.format = format;
     }
   }
 
@@ -347,8 +364,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_sld_StyledLayerDescriptor(sld, node) {
-    let body = 'body';
+  read_sld_StyledLayerDescriptor(sldVar, node) {
+    const sld = sldVar;
+    const body = 'body';
     sld[body] = getAllTextContent(node);
   }
 
@@ -357,12 +375,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_OnlineResource(obj, node) {
-    let href = 'href';
-    let xlink = 'xlink';
-    obj[href] = this.getAttributeNS(
-      node, this.namespaces[xlink], "href"
-    );
+  read_wmc_OnlineResource(objVar, node) {
+    const obj = objVar;
+    const href = 'href';
+    const xlink = 'xlink';
+    obj[href] = this.getAttributeNS(node, this.namespaces[xlink], 'href');
   }
 
   /**
@@ -370,10 +387,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_Name(obj, node) {
-    let nameValue = XML.getChildValue(node);
+  read_wmc_Name(objVar, node) {
+    const obj = objVar;
+    const nameValue = XML.getChildValue(node);
     if (nameValue) {
-      let nameAttr = 'name';
+      const nameAttr = 'name';
       obj[nameAttr] = nameValue;
     }
   }
@@ -383,10 +401,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_Title(obj, node) {
-    let title = XML.getChildValue(node);
+  read_wmc_Title(objVar, node) {
+    const obj = objVar;
+    const title = XML.getChildValue(node);
     if (title) {
-      let titleAttr = 'title';
+      const titleAttr = 'title';
       obj[titleAttr] = title;
     }
   }
@@ -396,17 +415,17 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_MetadataURL(layerInfo, node) {
-    let metadataURL = {};
-    let links = node.getElementsByTagName("OnlineResource");
+  read_wmc_MetadataURL(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    const metadataURL = {};
+    const links = node.getElementsByTagName('OnlineResource');
     if (links.length > 0) {
       this.read_wmc_OnlineResource(metadataURL, links[0]);
     }
-    let options = 'options';
-    let metadataURLAttr = 'metadataURL';
-    let href = 'href';
+    const options = 'options';
+    const metadataURLAttr = 'metadataURL';
+    const href = 'href';
     layerInfo[options][metadataURLAttr] = metadataURL[href];
-
   }
 
   /**
@@ -414,10 +433,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_Abstract(obj, node) {
-    let abst = XML.getChildValue(node);
+  read_wmc_Abstract(objVar, node) {
+    const obj = objVar;
+    const abst = XML.getChildValue(node);
     if (abst) {
-      let abstProp = 'abstract';
+      const abstProp = 'abstract';
       obj[abstProp] = abst;
     }
   }
@@ -427,14 +447,15 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_LatLonBoundingBox(layer, node) {
-    let llbbox = 'llbbox';
+  read_wmc_LatLonBoundingBox(layerVar, node) {
+    const layer = layerVar;
+    const llbbox = 'llbbox';
     layer[llbbox] = [
-      parseFloat(node.getAttribute("minx")),
-      parseFloat(node.getAttribute("miny")),
-      parseFloat(node.getAttribute("maxx")),
-      parseFloat(node.getAttribute("maxy"))
-   ];
+      parseFloat(node.getAttribute('minx')),
+      parseFloat(node.getAttribute('miny')),
+      parseFloat(node.getAttribute('maxx')),
+      parseFloat(node.getAttribute('maxy')),
+    ];
   }
 
   /**
@@ -442,16 +463,17 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_LegendURL(style, node) {
-    let legend = {
-      'width': node.getAttribute('width'),
-      'height': node.getAttribute('height')
+  read_wmc_LegendURL(styleVar, node) {
+    const style = styleVar;
+    const legend = {
+      width: node.getAttribute('width'),
+      height: node.getAttribute('height'),
     };
-    let links = node.getElementsByTagName("OnlineResource");
+    const links = node.getElementsByTagName('OnlineResource');
     if (links.length > 0) {
       this.read_wmc_OnlineResource(legend, links[0]);
     }
-    let legendAttr = 'legend';
+    const legendAttr = 'legend';
     style[legendAttr] = legend;
   }
 
@@ -460,8 +482,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_sld_FeatureTypeStyle(sld, node) {
-    let body = 'body';
+  read_sld_FeatureTypeStyle(sldVar, node) {
+    const sld = sldVar;
+    const body = 'body';
     sld[body] = getAllTextContent(node);
   }
 
@@ -471,8 +494,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_KeywordList(context, node) {
-    let keywords = 'keywords';
+  read_wmc_KeywordList(contextVar, node) {
+    const context = contextVar;
+    const keywords = 'keywords';
     context[keywords] = [];
     this.runChildNodes(context[keywords], node);
   }
@@ -491,13 +515,14 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_LogoURL(context, node) {
-    let logo = 'logo';
+  read_wmc_LogoURL(contextVar, node) {
+    const context = contextVar;
+    const logo = 'logo';
     context[logo] = {
-      'width': node.getAttribute("width"),
-      'height': node.getAttribute("height"),
-      'format': node.getAttribute("format"),
-      'href': this.getOnlineResource_href(node)
+      width: node.getAttribute('width'),
+      height: node.getAttribute('height'),
+      format: node.getAttribute('format'),
+      href: this.getOnlineResource_href(node),
     };
   }
 
@@ -506,8 +531,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_DescriptionURL(context, node) {
-    let descriptionURL = 'descriptionURL';
+  read_wmc_DescriptionURL(contextVar, node) {
+    const context = contextVar;
+    const descriptionURL = 'descriptionURL';
     context[descriptionURL] = this.getOnlineResource_href(node);
   }
 
@@ -516,10 +542,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_ContactInformation(obj, node) {
-    let contact = {};
+  read_wmc_ContactInformation(objVar, node) {
+    const obj = objVar;
+    const contact = {};
     this.runChildNodes(contact, node);
-    let contactInformation = 'contactInformation';
+    const contactInformation = 'contactInformation';
     obj[contactInformation] = contact;
   }
 
@@ -528,10 +555,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_ContactPersonPrimary(contact, node) {
-    let personPrimary = {};
+  read_wmc_ContactPersonPrimary(contactVar, node) {
+    const contact = contactVar;
+    const personPrimary = {};
     this.runChildNodes(personPrimary, node);
-    let personPrimaryAttr = 'personPrimary';
+    const personPrimaryAttr = 'personPrimary';
     contact[personPrimaryAttr] = personPrimary;
   }
 
@@ -540,10 +568,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_ContactPerson(primaryPerson, node) {
-    let person = XML.getChildValue(node);
+  read_wmc_ContactPerson(primaryPersonVar, node) {
+    const primaryPerson = primaryPersonVar;
+    const person = XML.getChildValue(node);
     if (person) {
-      let personAttr = 'person';
+      const personAttr = 'person';
       primaryPerson[personAttr] = person;
     }
   }
@@ -553,10 +582,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_ContactOrganization(primaryPerson, node) {
-    let organization = XML.getChildValue(node);
+  read_wmc_ContactOrganization(primaryPersonVar, node) {
+    const primaryPerson = primaryPersonVar;
+    const organization = XML.getChildValue(node);
     if (organization) {
-      let organizationAttr = 'organization';
+      const organizationAttr = 'organization';
       primaryPerson[organizationAttr] = organization;
     }
   }
@@ -566,10 +596,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_ContactPosition(contact, node) {
-    let position = XML.getChildValue(node);
+  read_wmc_ContactPosition(contactVar, node) {
+    const contact = contactVar;
+    const position = XML.getChildValue(node);
     if (position) {
-      let positionAttr = 'position';
+      const positionAttr = 'position';
       contact[positionAttr] = position;
     }
   }
@@ -579,10 +610,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_ContactAddress(contact, node) {
-    let contactAddress = {};
+  read_wmc_ContactAddress(contactVar, node) {
+    const contact = contactVar;
+    const contactAddress = {};
     this.runChildNodes(contactAddress, node);
-    let contactAddressAttr = 'contactAddress';
+    const contactAddressAttr = 'contactAddress';
     contact[contactAddressAttr] = contactAddress;
   }
 
@@ -591,10 +623,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_AddressType(contactAddress, node) {
-    let type = XML.getChildValue(node);
+  read_wmc_AddressType(contactAddressVar, node) {
+    const contactAddress = contactAddressVar;
+    const type = XML.getChildValue(node);
     if (type) {
-      let typeAttr = 'type';
+      const typeAttr = 'type';
       contactAddress[typeAttr] = type;
     }
   }
@@ -604,10 +637,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_Address(contactAddress, node) {
-    let address = XML.getChildValue(node);
+  read_wmc_Address(contactAddressVar, node) {
+    const contactAddress = contactAddressVar;
+    const address = XML.getChildValue(node);
     if (address) {
-      let addressAttr = 'address';
+      const addressAttr = 'address';
       contactAddress[addressAttr] = address;
     }
   }
@@ -617,10 +651,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_City(contactAddress, node) {
-    let city = XML.getChildValue(node);
+  read_wmc_City(contactAddressVar, node) {
+    const contactAddress = contactAddressVar;
+    const city = XML.getChildValue(node);
     if (city) {
-      let cityAttr = 'city';
+      const cityAttr = 'city';
       contactAddress[cityAttr] = city;
     }
   }
@@ -630,10 +665,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_StateOrProvince(contactAddress, node) {
-    let stateOrProvince = XML.getChildValue(node);
+  read_wmc_StateOrProvince(contactAddressVar, node) {
+    const contactAddress = contactAddressVar;
+    const stateOrProvince = XML.getChildValue(node);
     if (stateOrProvince) {
-      let stateOrProvinceAttr = 'stateOrProvince';
+      const stateOrProvinceAttr = 'stateOrProvince';
       contactAddress[stateOrProvinceAttr] = stateOrProvince;
     }
   }
@@ -643,10 +679,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_PostCode(contactAddress, node) {
-    let postcode = XML.getChildValue(node);
+  read_wmc_PostCode(contactAddressVar, node) {
+    const contactAddress = contactAddressVar;
+    const postcode = XML.getChildValue(node);
     if (postcode) {
-      let postcodeAttr = 'postcode';
+      const postcodeAttr = 'postcode';
       contactAddress[postcodeAttr] = postcode;
     }
   }
@@ -656,10 +693,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_Country(contactAddress, node) {
-    let country = XML.getChildValue(node);
+  read_wmc_Country(contactAddressVar, node) {
+    const contactAddress = contactAddressVar;
+    const country = XML.getChildValue(node);
     if (country) {
-      let countryAttr = 'country';
+      const countryAttr = 'country';
       contactAddress[countryAttr] = country;
     }
   }
@@ -669,10 +707,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_ContactVoiceTelephone(contact, node) {
-    let phone = XML.getChildValue(node);
+  read_wmc_ContactVoiceTelephone(contactVar, node) {
+    const contact = contactVar;
+    const phone = XML.getChildValue(node);
     if (phone) {
-      let phoneAttr = 'phone';
+      const phoneAttr = 'phone';
       contact[phoneAttr] = phone;
     }
   }
@@ -682,10 +721,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_ContactFacsimileTelephone(contact, node) {
-    let fax = XML.getChildValue(node);
+  read_wmc_ContactFacsimileTelephone(contactVar, node) {
+    const contact = contactVar;
+    const fax = XML.getChildValue(node);
     if (fax) {
-      let faxAttr = 'fax';
+      const faxAttr = 'fax';
       contact[faxAttr] = fax;
     }
   }
@@ -695,10 +735,11 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_ContactElectronicMailAddress(contact, node) {
-    let email = XML.getChildValue(node);
+  read_wmc_ContactElectronicMailAddress(contactVar, node) {
+    const contact = contactVar;
+    const email = XML.getChildValue(node);
     if (email) {
-      let emailAttr = 'email';
+      const emailAttr = 'email';
       contact[emailAttr] = email;
     }
   }
@@ -708,8 +749,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_DataURL(layerContext, node) {
-    let dataURL = 'dataURL';
+  read_wmc_DataURL(layerContextVar, node) {
+    const layerContext = layerContextVar;
+    const dataURL = 'dataURL';
     layerContext[dataURL] = this.getOnlineResource_href(node);
   }
 
@@ -718,8 +760,9 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_DimensionList(layerContext, node) {
-    let dimensions = 'dimensions';
+  read_wmc_DimensionList(layerContextVar, node) {
+    const layerContext = layerContextVar;
+    const dimensions = 'dimensions';
     layerContext[dimensions] = {};
     this.runChildNodes(layerContext[dimensions], node);
   }
@@ -729,25 +772,26 @@ export default class WMCV110 extends XML {
    * @function
    * @api stable
    */
-  read_wmc_Dimension(dimensions, node) {
-    let name = node.getAttribute("name").toLowerCase();
+  read_wmc_Dimension(dimensionsVar, node) {
+    const dimensions = dimensionsVar;
+    const name = node.getAttribute('name').toLowerCase();
 
-    let dim = {
-      'name': name,
-      'units': node.getAttribute("units") || "",
-      'unitSymbol': node.getAttribute("unitSymbol") || "",
-      'userValue': node.getAttribute("userValue") || "",
-      'nearestValue': node.getAttribute("nearestValue") === "1",
-      'multipleValues': node.getAttribute("multipleValues") === "1",
-      'current': node.getAttribute("current") === "1",
-      'default': node.getAttribute("default") || ""
+    const dim = {
+      name,
+      units: node.getAttribute('units') || '',
+      unitSymbol: node.getAttribute('unitSymbol') || '',
+      userValue: node.getAttribute('userValue') || '',
+      nearestValue: node.getAttribute('nearestValue') === '1',
+      multipleValues: node.getAttribute('multipleValues') === '1',
+      current: node.getAttribute('current') === '1',
+      default: node.getAttribute('default') || '',
     };
-    let values = XML.getChildValue(node);
+    const values = XML.getChildValue(node);
 
-    let valuesAttr = 'values';
-    dim[valuesAttr] = values.split(",");
+    const valuesAttr = 'values';
+    dim[valuesAttr] = values.split(',');
 
-    let nameAttr = 'name';
+    const nameAttr = 'name';
     dimensions[dim[nameAttr]] = dim;
   }
 }
