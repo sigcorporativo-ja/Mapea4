@@ -1,3 +1,6 @@
+/**
+ * @module M/layer
+ */
 import WMTSImpl from 'impl/layer/WMTS';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
@@ -5,11 +8,14 @@ import LayerBase from './Layer';
 import * as parameter from '../parameter/parameter';
 import LayerType from './Type';
 
-export default class WMTS extends LayerBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a WMTS layer
+ * with parameters specified by the user
+ * @api
+ */
+class WMTS extends LayerBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMTS layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.Layer}
@@ -124,3 +130,5 @@ export default class WMTS extends LayerBase {
     return equals;
   }
 }
+
+export default WMTS;

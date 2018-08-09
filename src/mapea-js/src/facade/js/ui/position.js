@@ -1,4 +1,7 @@
-export default class Position {}
+/**
+ * @module M/ui/position
+ */
+
 /**
  *  ______________
  * |    |    |    |
@@ -12,9 +15,9 @@ export default class Position {}
  * |____|____|____|
  * @public
  * @type {string}
- * @api stable
+ * @api
  */
-Position.TL = '.m-top.m-left';
+export const TL = '.m-top.m-left';
 
 /**
  *  ______________
@@ -29,9 +32,9 @@ Position.TL = '.m-top.m-left';
  * |____|____|____|
  * @public
  * @type {string}
- * @api stable
+ * @api
  */
-Position.TR = '.m-top.m-right';
+export const TR = '.m-top.m-right';
 
 /**
  *  ______________
@@ -46,9 +49,9 @@ Position.TR = '.m-top.m-right';
  * |____|____|____|
  * @public
  * @type {string}
- * @api stable
+ * @api
  */
-Position.BL = '.m-bottom.m-left';
+export const BL = '.m-bottom.m-left';
 
 /**
  *  ______________
@@ -63,6 +66,6 @@ Position.BL = '.m-bottom.m-left';
  * |____|____|____|
  * @public
  * @type {string}
- * @api stable
+ * @api
  */
-Position.BR = '.m-bottom.m-right';
+export const BR = '.m-bottom.m-right';

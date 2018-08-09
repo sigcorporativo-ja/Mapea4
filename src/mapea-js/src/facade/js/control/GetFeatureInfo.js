@@ -1,3 +1,6 @@
+/**
+ * @module M/control/GetFeatureInfo
+ */
 import 'assets/css/controls/getfeatureinfo';
 import GetFeatureInfoImpl from 'impl/control/GetFeatureInfo';
 import getfeatureinfoTemplate from 'templates/getfeatureinfo';
@@ -6,13 +9,12 @@ import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
-export default class GetFeatureInfo extends ControlBase {
+/**
+ * @classdesc
+ * @api
+ */
+class GetFeatureInfo extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the map
-   *
    * @constructor
    * @param {string} format - Format response
    * @param {object} options - Control options
@@ -93,3 +95,5 @@ GetFeatureInfo.NAME = 'getfeatureinfo';
  * @api stable
  */
 GetFeatureInfo.POPUP_TITLE = 'Información';
+
+export default GetFeatureInfo;

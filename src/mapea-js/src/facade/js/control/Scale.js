@@ -1,3 +1,6 @@
+/**
+ * @module M/control/Scale
+ */
 import 'assets/css/controls/scale';
 import scaleTemplate from 'templates/scale';
 import ScaleImpl from 'impl/control/Scale';
@@ -6,13 +9,12 @@ import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
-export default class Scale extends ControlBase {
+/**
+ * @classdesc
+ * @api
+ */
+class Scale extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the map.
-   *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
@@ -64,3 +66,5 @@ export default class Scale extends ControlBase {
  * @api stable
  */
 Scale.NAME = 'scale';
+
+export default Scale;

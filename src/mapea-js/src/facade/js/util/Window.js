@@ -1,7 +1,12 @@
 /**
- * @namespace M.window
+ * @module M/
  */
-export default class MWindow {
+
+/**
+ * @classdesc
+ * @api
+ */
+class window {
   static listen() {
     MWindow.WIDTH = window.innerWidth;
     MWindow.HEIGHT = window.innerHeight;
@@ -32,3 +37,5 @@ MWindow.HEIGHT = window.innerHeight;
 
 // Starting listen resize event
 MWindow.listen();
+
+export default window;

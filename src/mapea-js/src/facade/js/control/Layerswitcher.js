@@ -1,3 +1,6 @@
+/**
+ * @module M/control/Layerswitcher
+ */
 import 'assets/css/controls/layerswitcher';
 import LayerSwitcherImpl from 'impl/control/Layerswitcher';
 import layerswitcherTemplate from 'templates/layerswitcher';
@@ -10,13 +13,16 @@ import Vector from '../layer/Vector';
 import StylePoint from '../style/Point';
 import EvtManager from '../event/Manager';
 
-export default class LayerSwitcher extends ControlBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a GetFeatureInfo
+ * control to provides a popup with information about the place
+ * where the user has clicked inside the Map.
+ * @api
+ *
+ */
+class LayerSwitcher extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the Map.
-   *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
@@ -197,3 +203,5 @@ export default class LayerSwitcher extends ControlBase {
  * @api stable
  */
 LayerSwitcher.NAME = 'layerswitcher';
+
+export default LayerSwitcher;

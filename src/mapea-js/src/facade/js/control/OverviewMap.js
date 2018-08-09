@@ -1,3 +1,6 @@
+/**
+ * @module M/control/OverviewMap
+ */
 import OverviewMapImpl from 'impl/control/OverviewMap';
 import overviewmapTemplate from 'templates/overviewmap';
 import ControlBase from './Control';
@@ -5,13 +8,15 @@ import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
-export default class OverviewMap extends ControlBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a GetFeatureInfo
+ * control to provides a popup with information about the place
+ * where the user has clicked inside the map.
+ * @api
+ */
+class OverviewMap extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the map.
-   *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
@@ -62,3 +67,5 @@ export default class OverviewMap extends ControlBase {
  * @api stable
  */
 OverviewMap.NAME = 'overviewmap';
+
+export default OverviewMap;

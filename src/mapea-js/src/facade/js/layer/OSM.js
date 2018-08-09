@@ -1,3 +1,6 @@
+/**
+ * @module M/layer
+ */
 import OSMImpl from 'impl/layer/OSM';
 import LayerBase from './Layer';
 import { isNullOrEmpty, isUndefined } from '../util/Utils';
@@ -5,12 +8,14 @@ import Exception from '../exception/exception';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a WMS layer
+ * with parameters specified by the user
+ * @api
+ */
 export default class OSM extends LayerBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMS layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMS} userParameters parameters

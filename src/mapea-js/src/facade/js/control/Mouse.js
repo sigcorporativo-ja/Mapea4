@@ -1,3 +1,6 @@
+/**
+ * @module M/control/Mouse
+ */
 import 'assets/css/controls/mouse';
 import mouseTemplate from 'templates/mouse';
 import MouseImpl from 'impl/control/Mouse';
@@ -6,12 +9,15 @@ import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
-export default class Mouse extends ControlBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a GetFeatureInfo
+ * control to provides a popup with information about the place
+ * where the user has clicked inside the map.
+ * @api
+ */
+class Mouse extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the map.
    *
    * @constructor
    * @param {String} format format response
@@ -64,3 +70,5 @@ export default class Mouse extends ControlBase {
  * @api stable
  */
 Mouse.NAME = 'mouse';
+
+export default Mouse;

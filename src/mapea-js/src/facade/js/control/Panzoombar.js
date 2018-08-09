@@ -1,3 +1,6 @@
+/**
+ * @module M/control/Panzoom
+ */
 import panzoombarTemplate from 'templates/panzoombar';
 import PanzoombarImpl from 'impl/control/Panzoombar';
 import ControlBase from './Control';
@@ -5,13 +8,12 @@ import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
-export default class Panzoombar extends ControlBase {
+/**
+ * @classdesc
+ * @api
+ */
+class Panzoombar extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the map.
-   *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
@@ -63,3 +65,5 @@ export default class Panzoombar extends ControlBase {
  * @api stable
  */
 Panzoombar.NAME = 'panzoombar';
+
+export default Panzoombar;

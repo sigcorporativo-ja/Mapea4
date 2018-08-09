@@ -1,3 +1,6 @@
+/**
+ * @module M/layer
+ */
 import KMLImpl from 'impl/layer/KML';
 import LayerVector from './Vector';
 import { isNullOrEmpty, isUndefined, normalize, isString } from '../util/Utils';
@@ -5,11 +8,14 @@ import Exception from '../exception/exception';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 
-export default class KML extends LayerVector {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a WMS layer
+ * with parameters specified by the user
+ * @api
+ */
+class KML extends LayerVector {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMS layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.layer.Vector}
@@ -113,3 +119,5 @@ export default class KML extends LayerVector {
     return equals;
   }
 }
+
+export default KML;

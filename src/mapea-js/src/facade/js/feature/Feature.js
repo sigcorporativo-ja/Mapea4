@@ -1,3 +1,6 @@
+/**
+ * @module M/Feature
+ */
 import FeatureImpl from 'impl/feature/Feature';
 import Base from '../Base';
 import { isNullOrEmpty } from '../util/Utils';
@@ -7,11 +10,13 @@ import StyleFeature from '../style/Feature';
 import StylePoint from '../style/Point';
 import EvtManager from '../event/Manager';
 
-export default class Feature extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Create a Feature
+ * @api
+ */
+class Feature extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Create a Feature
-   *
    * @constructor
    * @extends {M.facade.Base}
    * @param {string} id - id to feature
@@ -264,3 +269,5 @@ export default class Feature extends Base {
     return centroid;
   }
 }
+
+export default Feature;

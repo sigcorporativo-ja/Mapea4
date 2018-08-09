@@ -1,3 +1,6 @@
+/**
+ * @module M/layer
+ */
 import WFSImpl from 'impl/layer/WFS';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
@@ -6,12 +9,14 @@ import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 import Geom from '../geom/Geom';
 
-export default class WFS extends Vector {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a WFS layer
+ * with parameters specified by the user
+ * @api
+ */
+class WFS extends Vector {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WFS layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.WFS} userParameters parameters
@@ -229,3 +234,5 @@ WFS.DEFAULT_OPTIONS_STYLE = {
   },
   radius: 5,
 };
+
+export default WFS;

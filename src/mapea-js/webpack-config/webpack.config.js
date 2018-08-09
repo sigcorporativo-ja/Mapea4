@@ -3,6 +3,8 @@ const webpack = require('webpack');
 const entrypoints = require('./entry-points-test.json');
 const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 
+const distPath = path.resolve(__dirname, '../dist/core/js');
+const productionEntryPoint = path.resolve(__dirname, '../src/index.js');
 const env = process.env.NODE_ENV || 'development';
 const plugins = [new AllowMutateEsmExports()];
 if (env === 'development') {
@@ -12,10 +14,10 @@ if (env === 'development') {
 
 module.exports = {
   mode: env,
-  entry: entrypoints,
+  entry: env === 'development' ? entrypoints : { 'mapea.ol.min': productionEntryPoint },
   output: {
     // options related to how webpack emits results
-    path: path.resolve(__dirname, '../dist/core/js'), // string
+    path: distPath, // string
     // the target directory for all output files
     // must be an absolute path (use the Node.js path module)
     filename: '[name].js', // string

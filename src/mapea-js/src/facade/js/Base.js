@@ -1,12 +1,18 @@
+/**
+ * @module M/facade
+ */
 import { isNullOrEmpty, isFunction } from './util/Utils';
 import MObject from './Object';
 
-export default class Base extends MObject {
+/**
+ * @classdesc
+ * Main facade Object. This class creates a facede
+ * Object which has an implementation Object and
+ * provides the needed methods to access its implementation
+ * @api
+ */
+class Base extends MObject {
   /**
-   * @classdesc
-   * Main facade Object. This class creates a facede
-   * Object which has an implementation Object and
-   * provides the needed methods to access its implementation
    *
    * @constructor
    * @param {Object} impl implementation object
@@ -68,3 +74,5 @@ export default class Base extends MObject {
     }
   }
 }
+
+export default Base;

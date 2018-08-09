@@ -1,3 +1,6 @@
+/**
+ * @module M/control/ScaleLine
+ */
 import 'assets/css/controls/scale';
 import ScaleLineImpl from 'impl/control/ScaleLine';
 import scalelineTemplate from 'templates/scaleline';
@@ -6,13 +9,12 @@ import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
-export default class ScaleLine extends ControlBase {
+/**
+ * @classdesc
+ * @api
+ */
+class ScaleLine extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the map.
-   *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
@@ -64,3 +66,5 @@ export default class ScaleLine extends ControlBase {
  * @api stable
  */
 ScaleLine.NAME = 'scaleline';
+
+export default ScaleLine;

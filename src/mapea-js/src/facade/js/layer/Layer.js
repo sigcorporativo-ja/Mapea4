@@ -11,8 +11,9 @@ import { isNullOrEmpty, concatUrlPaths, isUndefined, normalize, isString, isFunc
  * @classdesc
  * Main constructor of the class. Creates a layer
  * with parameters specified by the user
+ * @api
  */
-export default class LayerBase extends Base {
+class LayerBase extends Base {
   /**
    * @constructor
    * @extends {M.facade.Base}
@@ -311,3 +312,5 @@ LayerBase.LEGEND_DEFAULT = '/img/legend-default.png';
  * @api stable
  */
 LayerBase.LEGEND_ERROR = '/img/legend-error.png';
+
+export default LayerBase;

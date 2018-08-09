@@ -1,3 +1,6 @@
+/**
+ * @module M/control/Navtoolbar
+ */
 import NavtoolbarImpl from 'impl/control/Navtoolbar';
 import navtoolbarTemplate from 'templates/navtoolbar';
 import ControlBase from './Control';
@@ -5,13 +8,15 @@ import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
-export default class Navtoolbar extends ControlBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a GetFeatureInfo
+ * control to provides a popup with information about the place
+ * where the user has clicked inside the map.
+ * @api
+ */
+class Navtoolbar extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the map.
-   *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
@@ -62,3 +67,5 @@ export default class Navtoolbar extends ControlBase {
  * @api stable
  */
 Navtoolbar.NAME = 'navtoolbar';
+
+export default Navtoolbar;

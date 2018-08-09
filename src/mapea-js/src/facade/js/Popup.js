@@ -1,3 +1,6 @@
+/**
+ * @module M
+ */
 import PopupImpl from 'impl/Popup';
 import Config from 'configuration';
 import 'assets/css/popup';
@@ -7,12 +10,13 @@ import Template from './util/Template';
 import EventsManager from './event/Manager';
 import MWindow from './util/Window';
 
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ */
 class Tab {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
-   *
    * @constructor
    */
   constructor(options = {}) {
@@ -45,12 +49,14 @@ class Tab {
   }
 }
 
-export default class Popup extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ * @api
+ */
+class Popup extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.facade.Base}
    * @api stable
@@ -485,3 +491,6 @@ Popup.status.DEFAULT = 'm-default';
  * @api stable
  */
 Popup.status.FULL = 'm-full';
+
+
+export default Popup;

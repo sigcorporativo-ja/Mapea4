@@ -1,3 +1,6 @@
+/**
+ * @module M/control/Location
+ */
 import LocationImpl from 'impl/control/Location';
 import locationTemplate from 'templates/location';
 import 'assets/css/controls/location';
@@ -6,13 +9,16 @@ import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
-export default class Location extends ControlBase {
+
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a Location
+ * control that allows the user to locate and draw your
+ * position on the map.
+ * @api
+ */
+class Location extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Location
-   * control that allows the user to locate and draw your
-   * position on the map.
-   *
    * @constructor
    * @extends {M.Control}
    * @api stable
@@ -87,3 +93,5 @@ export default class Location extends ControlBase {
  * @api stable
  */
 Location.NAME = 'location';
+
+export default Location;

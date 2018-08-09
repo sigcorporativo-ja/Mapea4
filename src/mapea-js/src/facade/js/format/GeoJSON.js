@@ -1,13 +1,19 @@
+/**
+ * @module M/format
+ */
 import GeoJSONImpl from 'impl/format/GeoJSON';
 import Base from '../Base';
 import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils';
 import Exception from '../exception/exception';
 
-export default class GeoJSON extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ * @api
+ */
+class GeoJSON extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.facade.Base}
@@ -78,3 +84,5 @@ export default class GeoJSON extends Base {
     return features;
   }
 }
+
+export default GeoJSON;

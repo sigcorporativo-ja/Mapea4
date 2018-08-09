@@ -1,3 +1,6 @@
+/**
+ * @module M/layer
+ */
 import Config from 'configuration';
 import MapboxImpl from 'impl/layer/Mapbox';
 import LayerBase from './Layer';
@@ -5,12 +8,14 @@ import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
-
-export default class Mapbox extends LayerBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a Mapbox layer
+ * with parameters specified by the user
+ * @api
+ */
+class Mapbox extends LayerBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Mapbox layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.Layer}
@@ -143,3 +148,5 @@ export default class Mapbox extends LayerBase {
     return equals;
   }
 }
+
+export default Mapbox;

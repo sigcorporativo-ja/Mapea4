@@ -1,7 +1,14 @@
+/**
+ * @module M/filter/Function
+ */
 import BaseFilter from './Base';
 import { isNullOrEmpty } from '../util/Utils';
 
-export default class Function extends BaseFilter {
+/**
+ * @classdesc
+ * @api
+ */
+class Function extends BaseFilter {
   /**
    * Creates a Filter Function to filter features
    *
@@ -76,3 +83,5 @@ export default class Function extends BaseFilter {
     return this.cqlFilter_;
   }
 }
+
+export default Function;

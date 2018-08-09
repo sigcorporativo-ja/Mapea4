@@ -1,3 +1,6 @@
+/**
+ * @module M/handler
+ */
 import HandlerImpl from 'impl/handler/Feature';
 import { isFunction, includes } from '../util/Utils';
 import Exception from '../exception/exception';
@@ -5,11 +8,14 @@ import Base from '../Base';
 import FacadeFeature from '../feature/Feature';
 import EvtManaManager from '../event/Manager';
 
-export default class Feature extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ * @api
+ */
+class Features extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.facade.Base}
@@ -284,3 +290,5 @@ export default class Feature extends Base {
     // this.fire(M.evt.DESTROY);
   }
 }
+
+export default Features;

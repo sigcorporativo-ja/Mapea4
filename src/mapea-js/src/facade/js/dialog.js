@@ -1,3 +1,6 @@
+/**
+ * @module M/dialog
+ */
 import 'assets/css/dialog';
 import dialogTemplate from 'templates/dialog';
 import { isNullOrEmpty } from './util/Utils';

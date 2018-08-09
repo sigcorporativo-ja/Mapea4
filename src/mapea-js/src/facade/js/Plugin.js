@@ -1,3 +1,6 @@
+/**
+ * @module M
+ */
 import Base from './Base';
 import { isNullOrEmpty, isUndefined } from './util/Utils';
 import Exception from './exception/exception';
@@ -7,9 +10,9 @@ import EventManager from './event/Manager';
  * @classdesc
  * Main facade plugin object. This class creates a plugin
  * object which has an implementation Object
- *
+ * @api
  */
-export default class Plugin extends Base {
+class Plugin extends Base {
   /**
    * This function provides the implementation
    * of the object
@@ -55,3 +58,5 @@ export default class Plugin extends Base {
    */
   createView(map) {}
 }
+
+export default Plugin;

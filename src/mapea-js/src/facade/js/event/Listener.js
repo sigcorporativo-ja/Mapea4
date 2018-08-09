@@ -1,13 +1,17 @@
+/**
+ * @module M/evt/Listener
+ */
 import { isArray, generateRandom, isFunction } from '../util/Utils';
 
-export default class EventListener {
+/**
+ * @classdesc
+ * @api
+ */
+class EventListener {
   /**
-   * TODO
-   *
-   * @private
-   * @type {function}
+   * @constructor
+   * @api
    */
-
   constructor(listener, scope, once = false) {
     /**
      * TODO
@@ -90,3 +94,5 @@ export default class EventListener {
     return has;
   }
 }
+
+export default EventListener;

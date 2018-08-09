@@ -1,11 +1,14 @@
 /**
- * @module M.style.chart.Variable
+ * @module M/style/chart/Variable
  */
-export default class Variable {
+
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a chart variable
+ * @api
+ */
+class Variable {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a chart variable
-   *
    * @param {Mx.ChartVariableOptions} options.
    *  - attribute {string} the feature property name where data is stored
    *  - label {number}
@@ -104,3 +107,5 @@ export default class Variable {
     this.legend_ = legend;
   }
 }
+
+export default Variable;

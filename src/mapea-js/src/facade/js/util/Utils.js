@@ -3,7 +3,7 @@
  */
 
 import chroma from 'chroma-js';
-import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../Mapea';
+import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units';
 import WKT from '../geom/WKT';
 
 /**

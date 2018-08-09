@@ -10,5 +10,6 @@ target
 externs
 libraries
 doc
-build
+dist
+index.js
 *~

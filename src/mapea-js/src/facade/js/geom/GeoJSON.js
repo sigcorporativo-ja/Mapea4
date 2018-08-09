@@ -1,38 +1,52 @@
 /**
- * @module M.geom.geojson.type
+ * @module M/geom/geojson/type
  */
 
 /**
- * TODO
+ * @const
+ * @type {string}
+ * @api
  */
 export const POINT = 'Point';
 
 /**
- * TODO
+ * @const
+ * @type {string}
+ * @api
  */
 export const MULTIPOINT = 'MultiPoint';
 
 /**
- * TODO
+ * @const
+ * @type {string}
+ * @api
  */
 export const LINE_STRING = 'LineString';
 
 /**
- * TODO
+ * @const
+ * @type {string}
+ * @api
  */
 export const MULTI_LINE_STRING = 'MultiLineString';
 
 /**
- * TODO
+ * @const
+ * @type {string}
+ * @api
  */
 export const POLYGON = 'Polygon';
 
 /**
- * TODO
+ * @const
+ * @type {string}
+ * @api
  */
 export const MULTI_POLYGON = 'MultiPolygon';
 
 /**
- * TODO
+ * @const
+ * @type {string}
+ * @api
  */
 export const GEOMETRY_COLLECTION = 'GeometryCollection';

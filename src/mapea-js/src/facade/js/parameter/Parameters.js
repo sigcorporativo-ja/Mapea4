@@ -1,3 +1,6 @@
+/**
+ * @module M
+ */
 import { isString, isNullOrEmpty, getParameterValue, isObject, isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 
@@ -418,12 +421,14 @@ const parseLabel = (parameter) => {
   return label;
 };
 
-export default class Parameters {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates the parsed parameters
+ * with parameters specified by the user
+ * @api
+ */
+class Parameters {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates the parsed parameters
-   * with parameters specified by the user
-   *
    * @constructor
    * @param {string|Mx.parameters.Map} userParameters parameters
    * provided by the user
@@ -547,3 +552,5 @@ export default class Parameters {
     this.ticket = parseTicket(userParameters);
   }
 }
+
+export default Parameters;

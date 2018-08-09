@@ -1,13 +1,19 @@
+/**
+ * @module M/format
+ */
 import WKTImpl from 'impl/format/WKT';
 import Base from '../Base';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 
-export default class WKT extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ * @api
+ */
+class WKT extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.facade.Base}
@@ -39,3 +45,5 @@ export default class WKT extends Base {
     return this.getImpl().write(geomtry);
   }
 }
+
+export default WKT;

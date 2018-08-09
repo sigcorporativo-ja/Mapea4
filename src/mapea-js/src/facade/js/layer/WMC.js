@@ -1,3 +1,6 @@
+/**
+ * @module M/layer
+ */
 import Config from 'configuration';
 import WMCImpl from 'impl/layer/WMC';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
@@ -7,12 +10,14 @@ import LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 import EvtManager from '../event/Manager';
 
-export default class WMC extends LayerBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a WMC layer
+ * with parameters specified by the user
+ * @api
+ */
+class WMC extends LayerBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMC layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMC} userParameters parameters
@@ -216,3 +221,5 @@ export default class WMC extends LayerBase {
     this.loaded_ = loaded;
   }
 }
+
+export default WMC;

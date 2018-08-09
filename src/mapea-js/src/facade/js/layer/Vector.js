@@ -1,3 +1,6 @@
+/**
+ * @module M/layer
+ */
 import VectorImpl from 'impl/layer/Vector';
 import { isUndefined, isArray, isNullOrEmpty } from '../util/Utils';
 import { generateStyleLayer } from '../style/utils';
@@ -11,12 +14,14 @@ import Style from '../style/Style';
 import EvtManager from '../event/Manager';
 import { POINT, MULTI_POINT } from '../geom/GeoJSON';
 
-export default class Vector extends LayerBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a Vector layer
+ * with parameters specified by the user
+ * @api
+ */
+class Vector extends LayerBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Vector layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.Layer}
    * @param {Mx.parameters.Layer} userParameters - parameters
@@ -390,3 +395,5 @@ Vector.DEFAULT_OPTIONS_STYLE = {
   },
   radius: 5,
 };
+
+export default Vector;

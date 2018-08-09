@@ -1,3 +1,6 @@
+/**
+ * @module M/layer
+ */
 import WMSImpl from 'impl/layer/WMS';
 import Config from 'configuration';
 import { isNullOrEmpty, isUndefined, sameUrl, isString, normalize } from '../util/Utils';
@@ -6,12 +9,14 @@ import LayerBase from './Layer';
 import * as parameter from '../parameter/parameter';
 import LayerType from './Type';
 
-export default class WMS extends LayerBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a WMS layer
+ * with parameters specified by the user*
+ * @api
+ */
+class WMS extends LayerBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMS layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMS} userParameters parameters
@@ -230,3 +235,5 @@ export default class WMS extends LayerBase {
     return equals;
   }
 }
+
+export default WMS;

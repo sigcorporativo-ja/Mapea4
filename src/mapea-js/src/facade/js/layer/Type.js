@@ -1,45 +1,7 @@
+/**
+ * @module M/layer/type
+ */
 import { normalize, isString } from '../util/Utils';
-
-export default class LayerType {
-  /**
-   * Parses the type
-   * @private
-   * @function
-   * @param {string} rawType the type to be parsed
-   */
-  static parse(rawType) {
-    let type = normalize(rawType, true);
-    if (type === 'WMS_FULL') {
-      type = LayerType.WMS;
-    } else if (type === 'WFST') {
-      type = LayerType.WFS;
-    } else {
-      type = Object.keys(LayerType).find((knowType) => {
-        const knowTypeVal = LayerType[knowType];
-        return (isString(knowTypeVal) && (normalize(knowTypeVal, true) === type));
-      });
-    }
-    return LayerType[type];
-  }
-
-  /**
-   * Parses the type
-   * @private
-   * @function
-   * @param {string} rawType the type to be parsed
-   */
-  static know(type) {
-    const knowTypes = [
-      LayerType.WMC,
-      LayerType.KML,
-      LayerType.WMS,
-      LayerType.WFS,
-      LayerType.WMTS,
-      LayerType.MBtiles,
-    ];
-    return (knowTypes.indexOf(LayerType.parse(type)) !== -1);
-  }
-}
 
 /**
  * WMC type
@@ -48,85 +10,143 @@ export default class LayerType {
  * @public
  * @api stable
  */
-LayerType.WMC = 'WMC';
+export const WMC = 'WMC';
 
 /**
  * KML type
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-LayerType.KML = 'KML';
+export const KML = 'KML';
 
 /**
  * WMS type
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-LayerType.WMS = 'WMS';
+export const WMS = 'WMS';
 
 /**
  * WFS type
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-LayerType.WFS = 'WFS';
+export const WFS = 'WFS';
 
 /**
  * WMTS type
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-LayerType.WMTS = 'WMTS';
+export const WMTS = 'WMTS';
 
 /**
  * MBtiles type
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-LayerType.MBtiles = 'MBtiles';
+export const MBtiles = 'MBtiles';
 
 /**
  * OSM type
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-LayerType.OSM = 'OSM';
+export const OSM = 'OSM';
 
 /**
  * Mapbox type
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-LayerType.Mapbox = 'Mapbox';
+export const Mapbox = 'Mapbox';
 
 /**
  * GeoJSON type
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-LayerType.GeoJSON = 'GeoJSON';
+export const GeoJSON = 'GeoJSON';
 
 /**
  * Vector type
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-LayerType.Vector = 'Vector';
+export const Vector = 'Vector';
+
+/**
+ * All layer types
+ * @const
+ * @type {object}
+ *
+ */
+const layertypes = {
+  WMC,
+  KML,
+  WMS,
+  WFS,
+  WMTS,
+  MBtiles,
+  OSM,
+  Mapbox,
+  GeoJSON,
+  Vector,
+};
+
+/**
+ * Parses the type
+ * @private
+ * @function
+ * @param {string} rawType the type to be parsed
+ */
+export const parse = (rawType) => {
+  let type = normalize(rawType, true);
+  if (type === 'WMS_FULL') {
+    type = WMS;
+  } else if (type === 'WFST') {
+    type = WFS;
+  } else {
+    type = Object.keys(layertypes).find((knowType) => {
+      const knowTypeVal = layertypes[knowType];
+      return (isString(knowTypeVal) && (normalize(knowTypeVal, true) === type));
+    });
+  }
+  return layertypes[type];
+};
+
+/**
+ * Parses the type
+ * @private
+ * @function
+ * @param {string} rawType the type to be parsed
+ */
+export const know = (type) => {
+  const knowTypes = [
+    WMC,
+    KML,
+    WMS,
+    WFS,
+    WMTS,
+    MBtiles,
+  ];
+  return (knowTypes.indexOf(parse(type)) !== -1);
+};

@@ -1,3 +1,6 @@
+/**
+ * @module M
+ */
 import Config from 'configuration';
 import MapImpl from 'impl/Map';
 import Base from './Base';
@@ -50,17 +53,18 @@ import Position from './ui/Position';
 import Control from './control/Control';
 import GeoJSON from './layer/GeoJSON';
 
-export default class Map extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a Map
+ * with parameters specified by the user
+ * @api
+ */
+class Map extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Map
-   * with parameters specified by the user
-   *
    * @constructor
-   * @extends {M.facade.Base}
-   * @param {string|Mx.parameters.Map} userParameters parameters
-   * @param {Mx.parameters.MapOptions} options custom options
-   * for the implementation
+   * @extends { M.facade.Base }
+   * @param { string | Mx.parameters.Map } userParameters parameters
+   * @param { Mx.parameters.MapOptions } options custom options  for the implementation
    * provided by the user
    * @api stable
    */
@@ -2425,7 +2429,7 @@ export default class Map extends Base {
    * @function
    * @api stable
    */
-  LAYER_SORT(layer1, layer2) {
+  static LAYER_SORT(layer1, layer2) {
     if (!isNullOrEmpty(layer1) && !isNullOrEmpty(layer2)) {
       const z1 = layer1.getZIndex();
       const z2 = layer2.getZIndex();
@@ -2436,36 +2440,17 @@ export default class Map extends Base {
     // equals
     return 0;
   }
-
-  /**
-   * Draw layer style options.
-   *
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  get DRAWLAYER_STYLE() {
-    return Map.DRAWLAYER_STYLE_;
-  }
-
-  /**
-   * Draw layer style options.
-   *
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
-   */
-  set DRAWLAYER_STYLE(value) {
-    Map.DRAWLAYER_STYLE_ = value;
-  }
 }
 
 /**
- * TODO
+ * Draw layer style options.
+ *
+ * @const
+ * @type {object}
+ * @public
+ * @api stable
  */
-Map.DRAWLAYER_STYLE_ = {
+Map.DRAWLAYER_STYLE = {
   fill: {
     color: '#009e00',
   },
@@ -2475,3 +2460,5 @@ Map.DRAWLAYER_STYLE_ = {
   },
   radius: 7,
 };
+
+export default Map;

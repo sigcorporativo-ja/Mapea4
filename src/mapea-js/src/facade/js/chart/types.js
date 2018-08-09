@@ -1,5 +1,5 @@
 /**
- * @module M.style.chart
+ * @module M/style/chart
  */
 
 /**
@@ -7,7 +7,7 @@
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 export const types = {
   DONUT: 'donut',
@@ -21,7 +21,7 @@ export const types = {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 export const schemes = {
   Custom: 'm.style.chart.types.custom_scheme',

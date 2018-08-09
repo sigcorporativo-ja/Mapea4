@@ -1,16 +1,18 @@
+/**
+ * @module M/Control
+ */
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import Base from '../Base';
 import EvtManager from '../event/Manager';
 
-export default class ControlBase extends Base {
+/**
+ * @classdesc
+ * @api
+ */
+class Control extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
-   *
    * @constructor
-   * @extends {M.facade.Base}
    * @api stable
    */
   constructor(implParam, name) {
@@ -261,3 +263,5 @@ export default class ControlBase extends Base {
    */
   destroy() {}
 }
+
+export default Control;

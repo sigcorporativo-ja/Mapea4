@@ -1,3 +1,6 @@
+/**
+ * @module M/control/WMCSelector
+ */
 import wmcselectorTemplate from 'templates/wmcselector';
 import 'assets/css/controls/wmcselector';
 import WMCSelectorImpl from 'impl/control/WMCSelector';
@@ -6,12 +9,12 @@ import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import Template from '../util/Template';
 
-export default class WMCSelector extends ControlBase {
+/**
+ * @classdesc
+ * @api
+ */
+class WMCSelector extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMCSelector
-   * control to provides a way to select an specific WMC
-   *
    * @constructor
    * @extends {M.Control}
    * @api stable
@@ -70,3 +73,5 @@ export default class WMCSelector extends ControlBase {
  * @api stable
  */
 WMCSelector.NAME = 'wmcselector';
+
+export default WMCSelector;

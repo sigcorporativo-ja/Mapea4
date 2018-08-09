@@ -1,6 +1,6 @@
 import Config from 'configuration';
 import { addParameters, generateRandom, isNullOrEmpty, isObject } from './Utils';
-import M from '../Mapea';
+import { proxy_ } from '../proxy';
 import Response from './Response';
 /**
  * @namespace Remote
@@ -21,7 +21,7 @@ export default class Remote {
     let req;
 
     const useProxy = ((isNullOrEmpty(options) || (options.jsonp !== false)) &&
-      M.proxy_ !== false);
+      proxy_ !== false);
 
     if (useProxy === true) {
       req = Remote.jsonp_(url, data, options);

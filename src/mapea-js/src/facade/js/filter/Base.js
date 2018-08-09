@@ -1,11 +1,12 @@
-export default class Base {
-  /**
-   * Abstract class
-   *
-   * @api stable
-   */
-
-
+/**
+ * @module M/Filter
+ */
+/**
+ * @classdesc
+ * Abstract class
+ * @api stable
+ */
+class Base {
   /**
    * This function get a function filter
    *
@@ -34,3 +35,5 @@ export default class Base {
    */
   toCQL() {}
 }
+
+export default Base;

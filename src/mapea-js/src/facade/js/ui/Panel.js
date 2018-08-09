@@ -1,17 +1,21 @@
+/**
+ * @module M/ui
+ */
 import 'assets/css/panel';
 import panelTemplate from 'templates/panel';
-import Position from './Position';
+import * as Position from './Position';
 import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils';
 import MObject from '../Object';
 import EvtManager from '../event/Manager';
 import ControlBase from '../control/Control';
 import Template from '../util/Template';
 
-export default class Panel extends MObject {
+/**
+ * @classdesc
+ * @api
+ */
+class Panel extends MObject {
   /**
-   * @classdesc
-   * TODO
-   *
    * @constructor
    * @param {string} name of the panel
    * @param {Mx.parameters.Panel} options of the panel
@@ -495,3 +499,5 @@ export default class Panel extends MObject {
     return this.collapsed_;
   }
 }
+
+export default Panel;

@@ -1,11 +1,17 @@
+/**
+ * @module M
+ */
 import LabelImpl from 'impl/Label';
 import Base from './Base';
 
-export default class Label extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a Label
+ * control to provides a popup with specified information
+ * @api
+ */
+class Label extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Label
-   * control to provides a popup with specified information
    * @constructor
    * @param {string} text - Text to show
    * @param {array} coordOpts - Coordinate to display popup
@@ -78,12 +84,15 @@ export default class Label extends Base {
     this.getImpl().coordinate = coord;
   }
 
-  /**
-   * Template popup for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
 }
+
+/**
+ * Template popup for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
 Label.POPUP_TEMPLATE = 'label_popup.html';
+
+export default Label;
