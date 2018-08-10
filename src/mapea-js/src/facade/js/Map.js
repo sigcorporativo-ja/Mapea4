@@ -1,7 +1,6 @@
 /**
  * @module M/Map
  */
-
 import MapImpl from 'impl/Map';
 import Base from './Base';
 import {
@@ -23,7 +22,7 @@ import Label from './Label';
 import Popup from './Popup';
 import Parameters from './parameter/Parameters';
 import * as parameter from './parameter/parameter';
-import EventsManager from './event/Manager';
+import * as EventType from './event/eventtype';
 import FeaturesHandler from './handler/Feature';
 import Feature from './feature/Feature';
 import * as Dialog from './dialog';
@@ -185,12 +184,6 @@ class Map extends Base {
 
     // adds class to the container
     params.container.classList.add('m-mapea-container');
-
-    // sets flag if the map impl has been completed
-    impl.on(EventsManager.COMPLETED, () => {
-      this.finishedMapImpl_ = true;
-      this.checkCompleted_();
-    });
 
     // creates main panels
     this.createMainPanels_();
@@ -467,7 +460,7 @@ class Map extends Base {
 
       // adds the layers
       this.getImpl().addLayers(layers);
-      this.fire(EventsManager.ADDED_LAYER, [layers]);
+      this.fire(EventType.ADDED_LAYER, [layers]);
     }
     return this;
   }
@@ -579,8 +572,8 @@ class Map extends Base {
 
       // adds the layers
       this.getImpl().addWMC(wmcLayers);
-      this.fire(EventsManager.ADDED_LAYER, [wmcLayers]);
-      this.fire(EventsManager.ADDED_WMC, [wmcLayers]);
+      this.fire(EventType.ADDED_LAYER, [wmcLayers]);
+      this.fire(EventType.ADDED_WMC, [wmcLayers]);
 
       /* checks if it should create the WMC control
          to select WMC */
@@ -714,8 +707,8 @@ class Map extends Base {
 
       // adds the layers
       this.getImpl().addKML(kmlLayers);
-      this.fire(EventsManager.ADDED_LAYER, [kmlLayers]);
-      this.fire(EventsManager.ADDED_KML, [kmlLayers]);
+      this.fire(EventType.ADDED_LAYER, [kmlLayers]);
+      this.fire(EventType.ADDED_KML, [kmlLayers]);
     }
     return this;
   }
@@ -817,8 +810,8 @@ class Map extends Base {
 
       // adds the layers
       this.getImpl().addWMS(wmsLayers);
-      this.fire(EventsManager.ADDED_LAYER, [wmsLayers]);
-      this.fire(EventsManager.ADDED_WMS, [wmsLayers]);
+      this.fire(EventType.ADDED_LAYER, [wmsLayers]);
+      this.fire(EventType.ADDED_WMS, [wmsLayers]);
     }
     return this;
   }
@@ -925,8 +918,8 @@ class Map extends Base {
 
       // adds the layers
       this.getImpl().addWFS(wfsLayers);
-      this.fire(EventsManager.ADDED_LAYER, [wfsLayers]);
-      this.fire(EventsManager.ADDED_WFS, [wfsLayers]);
+      this.fire(EventType.ADDED_LAYER, [wfsLayers]);
+      this.fire(EventType.ADDED_WFS, [wfsLayers]);
     }
     return this;
   }
@@ -1028,8 +1021,8 @@ class Map extends Base {
 
       // adds the layers
       this.getImpl().addWMTS(wmtsLayers);
-      this.fire(EventsManager.ADDED_LAYER, [wmtsLayers]);
-      this.fire(EventsManager.ADDED_WMTS, [wmtsLayers]);
+      this.fire(EventType.ADDED_LAYER, [wmtsLayers]);
+      this.fire(EventType.ADDED_WMTS, [wmtsLayers]);
     }
     return this;
   }
@@ -1188,7 +1181,7 @@ class Map extends Base {
                   className: 'm-map-info',
                   position: Position.BR,
                 });
-                panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+                panel.on(EventType.ADDED_TO_MAP, (html) => {
                   if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
                     this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
                   }
@@ -1204,7 +1197,7 @@ class Map extends Base {
                 position: Position.BL,
                 tooltip: 'Línea de escala',
               });
-              panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+              panel.on(EventType.ADDED_TO_MAP, (html) => {
                 if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
                   this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
                 }
@@ -1240,16 +1233,16 @@ class Map extends Base {
                   tooltip: 'Selector de capas',
                 });
                 // enables touch scroll
-                panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+                panel.on(EventType.ADDED_TO_MAP, (html) => {
                   enableTouchScroll(html.querySelector('.m-panel-controls'));
                 });
                 // renders and registers events
-                panel.on(EventsManager.SHOW, (evt) => {
+                panel.on(EventType.SHOW, (evt) => {
                   layerswitcherCtrl.registerEvents();
                   layerswitcherCtrl.render();
                 });
                 // unregisters events
-                panel.on(EventsManager.HIDE, (evt) => {
+                panel.on(EventType.HIDE, (evt) => {
                   layerswitcherCtrl.unregisterEvents();
                 });
               })(control);
@@ -1309,7 +1302,7 @@ class Map extends Base {
                 className: 'm-map-info',
                 position: Position.BR,
               });
-              panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+              panel.on(EventType.ADDED_TO_MAP, (html) => {
                 if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
                   this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
                 }
@@ -1785,7 +1778,7 @@ class Map extends Base {
       projection = parameter.projection(projection);
       this.getImpl().setProjection(projection);
       this.defaultProj_ = (this.defaultProj_ && (asDefault === true));
-      this.fire(EventsManager.CHANGE_PROJ, [oldProj, projection]);
+      this.fire(EventType.CHANGE_PROJ, [oldProj, projection]);
     } catch (err) {
       Dialog.error(err.toString());
       if (String(err).indexOf('El formato del parámetro projection no es correcto') >= 0) {
@@ -2377,7 +2370,7 @@ class Map extends Base {
    */
   checkCompleted_() {
     if (this.finishedInitCenter_ && this.finishedMaxExtent_ && this.finishedMapImpl_) {
-      this.fire(EventsManager.COMPLETED);
+      this.fire(EventType.COMPLETED);
       this.finishedMap_ = true;
     }
   }
@@ -2391,8 +2384,8 @@ class Map extends Base {
    */
   on(eventType, listener, optThis) {
     super.on(eventType, listener, optThis);
-    if ((eventType === EventsManager.COMPLETED) && (this.finishedMap_ === true)) {
-      this.fire(EventsManager.COMPLETED);
+    if ((eventType === EventType.COMPLETED) && (this.finishedMap_ === true)) {
+      this.fire(EventType.COMPLETED);
     }
   }
 

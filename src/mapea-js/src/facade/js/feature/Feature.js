@@ -8,7 +8,7 @@ import GeoJSON from '../format/GeoJSON';
 import * as dialog from '../dialog';
 import StyleFeature from '../style/Feature';
 import StylePoint from '../style/Point';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 
 /**
  * @classdesc
@@ -200,7 +200,7 @@ class Feature extends Base {
       this.style_ = null;
       this.getImpl().clearStyle();
     }
-    this.fire(EvtManager.CHANGE_STYLE, [style, this]);
+    this.fire(EventType.CHANGE_STYLE, [style, this]);
   }
 
   /**

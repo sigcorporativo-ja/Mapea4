@@ -3,7 +3,7 @@
  */
 import Base from '../Base';
 import { isNullOrEmpty, isArray, isObject, extendsObj } from '../util/Utils';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 
 /**
  * @classdesc
@@ -120,7 +120,7 @@ class Style extends Base {
     if (!isNullOrEmpty(this.feature_)) {
       this.applyToFeature(this.feature_);
     }
-    this.fire(EvtManager.CHANGE, [property, oldValue, value]);
+    this.fire(EventType.CHANGE, [property, oldValue, value]);
     this.refresh();
     return this;
   }

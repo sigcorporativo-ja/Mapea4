@@ -11,7 +11,7 @@ import * as dialog from '../dialog';
 import FilterBase from '../filter/Base';
 import StyleCluster from '../style/Cluster';
 import Style from '../style/Style';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 import { POINT, MULTI_POINT } from '../geom/GeoJSON';
 
 /**
@@ -51,7 +51,7 @@ class Vector extends LayerBase {
 
     this.setStyle(this.style_);
 
-    impl.on(EvtManager.LOAD, features => this.fire(EvtManager.LOAD, [features]));
+    impl.on(EventType.LOAD, features => this.fire(EventType.LOAD, [features]));
   }
 
   /**
@@ -286,7 +286,7 @@ class Vector extends LayerBase {
     if (this.getImpl().isLoaded()) {
       this.applyStyle_(style, applyToFeature)();
     } else {
-      this.once(EvtManager.LOAD, this.applyStyle_(style, applyToFeature));
+      this.once(EventType.LOAD, this.applyStyle_(style, applyToFeature));
     }
   }
 
@@ -307,7 +307,7 @@ class Vector extends LayerBase {
         }
         style.apply(this, applyToFeature);
         this.style_ = style;
-        this.fire(EvtManager.CHANGE_STYLE, [style, this]);
+        this.fire(EventType.CHANGE_STYLE, [style, this]);
       }
       if (!isNullOrEmpty(this.getImpl().getMap())) {
         const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
@@ -315,7 +315,7 @@ class Vector extends LayerBase {
           layerswitcher.render();
         }
       }
-      this.fire(EvtManager.CHANGE_STYLE, [style, this]);
+      this.fire(EventType.CHANGE_STYLE, [style, this]);
     };
   }
 

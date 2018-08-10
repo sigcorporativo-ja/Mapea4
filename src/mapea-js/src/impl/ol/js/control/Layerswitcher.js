@@ -1,6 +1,6 @@
 import layerswitcherTemplate from 'templates/layerswitcher';
 import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
-import {compile as compileTemplate} from 'facade/js/util/Template';
+import { compile as compileTemplate } from 'facade/js/util/Template';
 import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
 import Layer from 'facade/js/layer/Layer';
 
@@ -77,13 +77,11 @@ export default class LayerSwitcher extends Control {
             }
             layer.setVisible(!layer.isVisible());
           }
-        }
-        // range
-        else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
+        } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
+          // range
           layer.setOpacity(evt.target.value);
-        }
-        // remove span
-        else if (evt.target.classList.contains('m-layerswitcher-remove')) {
+          // remove span
+        } else if (evt.target.classList.contains('m-layerswitcher-remove')) {
           this.facadeMap_.removeLayers(layer);
         }
       }

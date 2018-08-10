@@ -6,8 +6,8 @@ import PopupImpl from 'impl/Popup';
 import 'assets/css/popup';
 import { isNullOrEmpty } from './util/Utils';
 import Base from './Base';
-import {compile as compileTemplate} from './util/Template';
-import EventsManager from './event/Manager';
+import { compile as compileTemplate } from './util/Template';
+import * as EventType from './event/eventtype';
 import MWindow from './util/Window';
 
 /**
@@ -192,7 +192,7 @@ class Popup extends Base {
   show(coord) {
     this.coord_ = coord;
     this.getImpl().show(this.coord_, () => {
-      this.fire(EventsManager.SHOW);
+      this.fire(EventType.SHOW);
     });
   }
 
@@ -443,7 +443,7 @@ class Popup extends Base {
   destroy() {
     this.tabs_.length = 0;
     this.coord_ = null;
-    this.fire(EventsManager.DESTROY);
+    this.fire(EventType.DESTROY);
   }
 }
 

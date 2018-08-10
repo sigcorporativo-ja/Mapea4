@@ -3,7 +3,6 @@
  */
 import { isNullOrEmpty, isFunction } from '../util/Utils';
 import EventListener from './Listener';
-import * as eventTypes from './eventtypes';
 
 /**
  * @classdesc
@@ -38,7 +37,7 @@ class EventsManager {
    */
   add(eventType, listener, optThis, once = false) {
     if (!isNullOrEmpty(eventType) &&
-      (eventTypes.indexOf(eventType) !== -1) && isFunction(listener)) {
+      (this.indexOf(eventType) !== -1) && isFunction(listener)) {
       if (isNullOrEmpty(this.events_[eventType])) {
         this.events_[eventType] = [];
       }

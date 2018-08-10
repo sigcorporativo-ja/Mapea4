@@ -1,7 +1,7 @@
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import * as parameter from 'facade/js/parameter/parameter';
 import { get as getRemote } from 'facade/js/util/Remote';
-import EventsManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import { get as getProj, transformExtent } from 'ol/proj';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
@@ -117,7 +117,7 @@ export default class WMC extends Layer {
             nearest: true,
           });
         }
-        this.map.fire(EventsManager.CHANGE_WMC, this);
+        this.map.fire(EventType.CHANGE_WMC, this);
       });
     }
   }
@@ -157,7 +157,7 @@ export default class WMC extends Layer {
 
     // updates the z-index of the layers
     this.layers.forEach((layer, i) => layer.setZIndex(this.getZIndex() + i));
-    this.facadeLayer_.fire(EventsManager.LOAD, [this.layers]);
+    this.facadeLayer_.fire(EventType.LOAD, [this.layers]);
   }
 
   /**

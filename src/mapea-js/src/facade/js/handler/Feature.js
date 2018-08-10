@@ -6,7 +6,7 @@ import { isFunction, includes } from '../util/Utils';
 import Exception from '../exception/exception';
 import Base from '../Base';
 import FacadeFeature from '../feature/Feature';
-import EvtManaManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 
 /**
  * @classdesc
@@ -79,10 +79,10 @@ class Features extends Base {
    */
   addTo(map) {
     this.map_ = map;
-    this.map_.on(EvtManaManager.MOVE, this.moveOverMap_.bind(this));
-    this.map_.on(EvtManaManager.CLICK, this.clickOnMap_.bind(this));
+    this.map_.on(EventType.MOVE, this.moveOverMap_.bind(this));
+    this.map_.on(EventType.CLICK, this.clickOnMap_.bind(this));
     this.getImpl().addTo(this.map_);
-    this.fire(EvtManaManager.ADDED_TO_MAP);
+    this.fire(EventType.ADDED_TO_MAP);
   }
 
   /**
@@ -164,7 +164,7 @@ class Features extends Base {
     if (isFunction(layerImpl.selectFeatures)) {
       layerImpl.selectFeatures(features, evt.coord, evt);
     }
-    layer.fire(EvtManaManager.SELECT_FEATURES, [features, evt]);
+    layer.fire(EventType.SELECT_FEATURES, [features, evt]);
   }
 
   /**
@@ -182,7 +182,7 @@ class Features extends Base {
     if (isFunction(layerImpl.unselectFeatures)) {
       layerImpl.unselectFeatures(features, evt.coord);
     }
-    layer.fire(EvtManaManager.UNSELECT_FEATURES, [features, evt.coord]);
+    layer.fire(EventType.UNSELECT_FEATURES, [features, evt.coord]);
   }
 
   /**
@@ -194,7 +194,7 @@ class Features extends Base {
    */
   hoverFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] = this.prevHoverFeatures_[layer.name].concat(features);
-    layer.fire(EvtManaManager.HOVER_FEATURES, [features, evt]);
+    layer.fire(EventType.HOVER_FEATURES, [features, evt]);
     this.getImpl().addCursorPointer();
   }
 
@@ -208,7 +208,7 @@ class Features extends Base {
   leaveFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] =
       this.prevHoverFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
-    layer.fire(EvtManaManager.LEAVE_FEATURES, [features, evt.coord]);
+    layer.fire(EventType.LEAVE_FEATURES, [features, evt.coord]);
     this.getImpl().removeCursorPointer();
   }
 
@@ -223,7 +223,7 @@ class Features extends Base {
   activate() {
     if (this.activated_ === false) {
       this.activated_ = true;
-      this.fire(EvtManaManager.ACTIVATED);
+      this.fire(EventType.ACTIVATED);
     }
   }
 
@@ -238,7 +238,7 @@ class Features extends Base {
   deactivate() {
     if (this.activated_ === true) {
       this.activated_ = false;
-      this.fire(EvtManaManager.DEACTIVATED);
+      this.fire(EventType.DEACTIVATED);
     }
   }
 

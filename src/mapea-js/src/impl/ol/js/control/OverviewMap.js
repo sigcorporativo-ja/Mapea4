@@ -1,7 +1,7 @@
 import { isNullOrEmpty, classToggle, replaceNode } from 'facade/js/util/Utils';
 import OLControlOverviewMap from 'ol/control/OverviewMap';
 import { get as getProj } from 'ol/proj';
-import EvtManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import View from '../View';
 
 /**
@@ -66,7 +66,7 @@ export default class OverviewMap extends OLControlOverviewMap {
     map.getLayers().forEach((layer) => {
       const olLayer = layer.getImpl().getOL3Layer();
       if (isNullOrEmpty(olLayer)) {
-        layer.getImpl().on(EvtManager.ADDED_TO_MAP, this.addLayer_, this);
+        layer.getImpl().on(EventType.ADDED_TO_MAP, this.addLayer_, this);
       } else {
         olLayers.push(olLayer);
       }
@@ -114,7 +114,7 @@ export default class OverviewMap extends OLControlOverviewMap {
    * @function
    */
   addLayer_(layer) {
-    layer.un(EvtManager.ADDED_TO_MAP, this.addLayer_, this);
+    layer.un(EventType.ADDED_TO_MAP, this.addLayer_, this);
     this.getOverviewMap().addLayer(layer.getOL3Layer());
   }
 

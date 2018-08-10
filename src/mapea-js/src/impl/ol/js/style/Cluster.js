@@ -10,7 +10,7 @@ import Polygon from 'facade/js/style/Polygon';
 import StylePoint from 'facade/js/style/Point';
 import FacadeCluster from 'facade/js/style/Cluster';
 import { inverseColor, extendsObj, isFunction, isNullOrEmpty } from 'facade/js/util/Utils';
-import EventsManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import Style from './Style';
 import AnimatedCluster from '../layer/AnimatedCluster';
@@ -115,7 +115,7 @@ export default class Cluster extends Style {
     if (features.length > 0) {
       this.clusterize_(features);
     } else {
-      this.layer_.on(EventsManager.LOAD, this.clusterize_, this);
+      this.layer_.on(EventType.LOAD, this.clusterize_, this);
     }
   }
 
@@ -307,7 +307,7 @@ export default class Cluster extends Style {
    * @function
    * @private
    * @param {Array<Features>} features
-   * @param {M.evt.EventsManager} evt
+   * @param {M.evt.EventType} evt
    * @api stable
    */
   hoverFeatureFn_(features, evt) {
@@ -354,7 +354,7 @@ export default class Cluster extends Style {
    * @function
    * @private
    * @param {Array<Features>} features
-   * @param {M.evt.EventsManager} evt
+   * @param {M.evt.EventType} evt
    * @api stable
    */
   leaveFeatureFn_(features, evt) {
@@ -371,8 +371,8 @@ export default class Cluster extends Style {
    * @api stable
    */
   addCoverInteraction_() {
-    this.layer_.on(EventsManager.HOVER_FEATURES, this.hoverFeatureFn_, this);
-    this.layer_.on(EventsManager.LEAVE_FEATURES, this.leaveFeatureFn_, this);
+    this.layer_.on(EventType.HOVER_FEATURES, this.hoverFeatureFn_, this);
+    this.layer_.on(EventType.LEAVE_FEATURES, this.leaveFeatureFn_, this);
   }
 
   /**
@@ -383,8 +383,8 @@ export default class Cluster extends Style {
    * @api stable
    */
   removeCoverInteraction_() {
-    this.layer_.un(EventsManager.HOVER_FEATURE, this.hoverFeatureFn_, this);
-    this.layer_.un(EventsManager.LEAVE_FEATURE, this.leaveFeatureFn_, this);
+    this.layer_.un(EventType.HOVER_FEATURE, this.hoverFeatureFn_, this);
+    this.layer_.un(EventType.LEAVE_FEATURE, this.leaveFeatureFn_, this);
   }
 
   /**
@@ -504,7 +504,7 @@ export default class Cluster extends Style {
       this.layer_.redraw();
       clusterSource.getSource().un(eventType, callback, clusterSource);
     } else if (!isNullOrEmpty(this.layer_)) {
-      this.layer_.un(EventsManager.LOAD, this.clusterize_, this);
+      this.layer_.un(EventType.LOAD, this.clusterize_, this);
     }
   }
 

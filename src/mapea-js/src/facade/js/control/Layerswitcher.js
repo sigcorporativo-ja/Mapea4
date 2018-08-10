@@ -7,11 +7,11 @@ import layerswitcherTemplate from 'templates/layerswitcher';
 import ControlBase from './Control';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
-import {compile as compileTemplate} from '../util/Template';
+import { compile as compileTemplate } from '../util/Template';
 import * as LayerType from '../layer/Type';
 import Vector from '../layer/Vector';
 import StylePoint from '../style/Point';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 
 /**
  * @classdesc
@@ -49,7 +49,7 @@ class LayerSwitcher extends ControlBase {
     view.then((html) => {
       this.manageActivation(html);
       impl.addTo(map, html);
-      this.fire(EvtManager.ADDED_TO_MAP);
+      this.fire(EventType.ADDED_TO_MAP);
     });
   }
 

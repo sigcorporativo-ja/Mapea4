@@ -9,7 +9,7 @@ import 'impl-assets/css/ol';
 import 'impl-assets/css/custom';
 import Control from 'facade/js/control/Control';
 import FacadeWMS from 'facade/js/layer/WMS';
-import EventsManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import LayerBase from 'facade/js/layer/Layer';
 import Exception from 'facade/js/exception/exception';
 import { isNullOrEmpty, isArray, isString, isObject, includes, getScaleFromResolution, fillResolutions, generateResolutionsFromExtent } from 'facade/js/util/Utils';
@@ -334,7 +334,7 @@ export default class Map extends MObject {
     wmcMapLayers.forEach((wmcLayer) => {
       // TODO removing the WMC layer with ol3
       if (wmcLayer.selected === true && wmcLayer.isLoaded() === false) {
-        wmcLayer.on(EventsManager.LOAD, () => {
+        wmcLayer.on(EventType.LOAD, () => {
           wmcLayer.setLoaded(false);
           this.layers_.remove(wmcLayer);
           this.facadeMap_.removeWMS(wmcLayer.layers);
@@ -1566,7 +1566,7 @@ export default class Map extends MObject {
       }
     }
 
-    this.fire(EventsManager.CHANGE);
+    this.fire(EventType.CHANGE);
 
     return this;
   }
@@ -1707,7 +1707,7 @@ export default class Map extends MObject {
         // fires the completed event
         if (this.calculatedResolutions_ === false) {
           this.calculatedResolutions_ = true;
-          this.fire(EventsManager.COMPLETED);
+          this.fire(EventType.COMPLETED);
         }
       } else {
         EnvolvedExtent.calculate(this).then((extent) => {
@@ -1722,7 +1722,7 @@ export default class Map extends MObject {
             // fires the completed event
             if (this.calculatedResolutions_ === false) {
               this.calculatedResolutions_ = true;
-              this.fire(EventsManager.COMPLETED);
+              this.fire(EventType.COMPLETED);
             }
           }
         }).catch((error) => {
@@ -1830,7 +1830,7 @@ export default class Map extends MObject {
       label.hide();
     }
 
-    this.facadeMap_.fire(EventsManager.CLICK, [{
+    this.facadeMap_.fire(EventType.CLICK, [{
       pixel,
       coord,
       vendor: evt,
@@ -1847,7 +1847,7 @@ export default class Map extends MObject {
     const pixel = evt.pixel;
     const coord = this.map_.getCoordinateFromPixel(pixel);
 
-    this.facadeMap_.fire(EventsManager.MOVE, [{
+    this.facadeMap_.fire(EventType.MOVE, [{
       pixel,
       coord,
       vendor: evt,

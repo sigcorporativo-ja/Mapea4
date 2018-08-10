@@ -73,21 +73,18 @@ OLFormatGML3.prototype.getCoords_ = (point, optSRSName) => {
   // ------------------------------------- end
 };
 
-/**
- * TODO Test in IOS11
- */
-
 // /**
 //  * @param {module:ol/MapBrowserPointerEvent} mapBrowserEvent Event.
 //  * @return {boolean} Whether the event is a pointerdown, pointerdrag
 //  *     or pointerup event.
+//  * @see https://github.com/openlayers/openlayers/blob/master/src/ol/interaction/Pointer.js#L192
 //  */
-// function isPointerDraggingEvent(mapBrowserEvent) {
+// const isPointerDraggingEvent = (mapBrowserEvent) => {
 //   const type = mapBrowserEvent.type;
 //   return type === POINTERDOWN ||
 //     type === POINTERDRAG ||
 //     type === POINTERUP;
-// }
+// };
 //
 // /**
 //  * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.

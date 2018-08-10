@@ -1,6 +1,6 @@
 import StyleCluster from 'facade/js/style/Cluster';
 import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
-import EventsManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import Style from 'facade/js/style/Style';
 import { get as getProj } from 'ol/proj';
 import OLLayerVector from 'ol/layer/Vector';
@@ -74,7 +74,7 @@ export default class Vector extends Layer {
    */
   addTo(map) {
     this.map = map;
-    map.on(EventsManager.CHANGE_PROJ, this.setProjection_, this);
+    map.on(EventType.CHANGE_PROJ, this.setProjection_, this);
 
     this.ol3Layer = new OLLayerVector();
     this.updateSource_();
@@ -95,7 +95,7 @@ export default class Vector extends Layer {
     }
     this.redraw();
     this.loaded_ = true;
-    this.fire(EventsManager.LOAD, [this.features_]);
+    this.fire(EventType.LOAD, [this.features_]);
   }
 
   /**

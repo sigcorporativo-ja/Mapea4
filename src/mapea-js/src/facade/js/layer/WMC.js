@@ -8,7 +8,7 @@ import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 
 /**
  * @classdesc
@@ -74,7 +74,7 @@ class WMC extends LayerBase {
      */
     this.loaded_ = false;
 
-    this.once(EvtManager.LOAD, () => {
+    this.once(EventType.LOAD, () => {
       this.loaded = true;
     });
   }

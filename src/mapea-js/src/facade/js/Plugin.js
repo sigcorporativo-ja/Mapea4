@@ -4,7 +4,7 @@
 import Base from './Base';
 import { isNullOrEmpty, isUndefined } from './util/Utils';
 import Exception from './exception/exception';
-import EventManager from './event/Manager';
+import * as EventType from './event/eventtype';
 
 /**
  * @classdesc
@@ -40,12 +40,12 @@ class Plugin extends Base {
       view.then((html) => {
         impl.addTo(map, html);
         // executes load callback
-        this.fire(EventManager.ADDED_TO_MAP);
+        this.fire(EventType.ADDED_TO_MAP);
       });
     } else { // view is an HTML or text
       impl.addTo(map, view);
       // executes load callback
-      this.fire(EventManager.ADDED_TO_MAP);
+      this.fire(EventType.ADDED_TO_MAP);
     }
   }
 

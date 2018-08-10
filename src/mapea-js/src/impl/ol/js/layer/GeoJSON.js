@@ -1,5 +1,5 @@
 import { isNullOrEmpty, isObject, beautifyAttributeName, isFunction, includes } from 'facade/js/util/Utils';
-import EventsManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import Popup from 'facade/js/Popup';
 import {compile as compileTemplate} from 'facade/js/util/Template';
@@ -150,7 +150,7 @@ export default class GeoJSON extends Vector {
         loader: this.loader_.getLoaderFn((features) => {
           this.loaded_ = true;
           this.facadeVector_.addFeatures(features);
-          this.fire(EventsManager.LOAD, [features]);
+          this.fire(EventType.LOAD, [features]);
         }),
         strategy: all,
       };
@@ -163,7 +163,7 @@ export default class GeoJSON extends Vector {
           // removes previous features
           this.facadeVector_.clear();
           this.facadeVector_.addFeatures(features);
-          this.fire(EventsManager.LOAD, [features]);
+          this.fire(EventType.LOAD, [features]);
         },
       }));
       this.facadeVector_.addFeatures(features);

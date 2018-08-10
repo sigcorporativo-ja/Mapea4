@@ -6,7 +6,7 @@ import panelTemplate from 'templates/panel';
 import * as Position from './position';
 import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils';
 import MObject from '../Object';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 import ControlBase from '../control/Control';
 import { compile as compileTemplate } from '../util/Template';
 
@@ -230,7 +230,7 @@ class Panel extends MObject {
     });
 
     this.addControls(this.controls_);
-    this.fire(EvtManager.ADDED_TO_MAP, html);
+    this.fire(EventType.ADDED_TO_MAP, html);
   }
 
   /**
@@ -245,7 +245,7 @@ class Panel extends MObject {
     html.classList.add('collapsed');
     this.buttonPanel_.classList.add(this.collapsedButtonClass_);
     this.collapsed_ = true;
-    this.fire(EvtManager.HIDE);
+    this.fire(EventType.HIDE);
   }
 
   /**
@@ -260,7 +260,7 @@ class Panel extends MObject {
     html.classList.add('opened');
     this.buttonPanel_.classList.add(this.openedButtonClass_);
     this.collapsed_ = false;
-    this.fire(EvtManager.SHOW);
+    this.fire(EventType.SHOW);
   }
 
   /**
@@ -314,13 +314,13 @@ class Panel extends MObject {
           if (!this.hasControl(control)) {
             this.controls_.push(control);
             control.setPanel(this);
-            control.on(EvtManager.DESTROY, this.removeControl_, this);
+            control.on(EventType.DESTROY, this.removeControl_, this);
           }
           if (!isNullOrEmpty(this.controlsContainer_)) {
-            control.on(EvtManager.ADDED_TO_MAP, this.moveControlView_, this);
+            control.on(EventType.ADDED_TO_MAP, this.moveControlView_, this);
             this.map_.addControls(control);
           }
-          control.on(EvtManager.ACTIVATED, this.manageActivation_, this);
+          control.on(EventType.ACTIVATED, this.manageActivation_, this);
         }
       });
     }
@@ -438,7 +438,7 @@ class Panel extends MObject {
     if (!isNullOrEmpty(this.controlsContainer_)) {
       this.controlsContainer_.appendChild(controlElem);
     }
-    control.fire(EvtManager.ADDED_TO_PANEL);
+    control.fire(EventType.ADDED_TO_PANEL);
   }
 
   /**

@@ -1,6 +1,6 @@
 import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'facade/js/util/Utils';
 import { get as getRemote } from 'facade/js/util/Remote';
-import EventsManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import { get as getProj } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceWMTS from 'ol/source/WMTS';
@@ -194,7 +194,7 @@ export default class WMTS extends LayerBase {
     // activates animation always for WMTS layers
     this.ol3Layer.set('animated', true);
 
-    this.fire(EventsManager.ADDED_TO_MAP, this);
+    this.fire(EventType.ADDED_TO_MAP, this);
   }
 
   /**
