@@ -2,7 +2,7 @@ import * as ModuleLayer from 'ol/layer/Layer';
 import OLFormatGML3 from 'ol/format/GML3';
 import OLInteractionPointer from 'ol/interaction/Pointer';
 import { writeStringTextNode } from 'ol/format/xsd';
-import { POINTERUP, POINTERDOWN } from 'ol/MapBrowserEventType';
+import { POINTERUP, POINTERDOWN, POINTERDRAG } from 'ol/MapBrowserEventType';
 import { getValues } from 'ol/obj';
 /* eslint-disable */
 /**
@@ -73,24 +73,39 @@ OLFormatGML3.prototype.getCoords_ = (point, optSRSName) => {
   // ------------------------------------- end
 };
 
-
 /**
- * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
- * @private
+ * TODO Test in IOS11
  */
-OLInteractionPointer.prototype.updateTrackedPointers_ = (mapBrowserEvent) => {
-  if (this.isPointerDraggingEvent_(mapBrowserEvent)) {
-    const event = mapBrowserEvent.pointerEvent;
 
-    const id = event.pointerId.toString();
-    if (mapBrowserEvent.type === POINTERUP) {
-      delete this.trackedPointers_[id];
-    } else if (mapBrowserEvent.type === POINTERDOWN) {
-      this.trackedPointers_[id] = event;
-    } else if (id in this.trackedPointers_) {
-      // update only when there was a pointerdown event for this pointer
-      this.trackedPointers_[id] = event;
-    }
-    this.targetPointers = getValues(this.trackedPointers_);
-  }
-};
+// /**
+//  * @param {module:ol/MapBrowserPointerEvent} mapBrowserEvent Event.
+//  * @return {boolean} Whether the event is a pointerdown, pointerdrag
+//  *     or pointerup event.
+//  */
+// function isPointerDraggingEvent(mapBrowserEvent) {
+//   const type = mapBrowserEvent.type;
+//   return type === POINTERDOWN ||
+//     type === POINTERDRAG ||
+//     type === POINTERUP;
+// }
+//
+// /**
+//  * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
+//  * @private
+//  */
+// OLInteractionPointer.prototype.updateTrackedPointers_ = (mapBrowserEvent) => {
+//   if (isPointerDraggingEvent(mapBrowserEvent)) {
+//     const event = mapBrowserEvent.pointerEvent;
+//
+//     const id = event.pointerId.toString();
+//     if (mapBrowserEvent.type === POINTERUP) {
+//       delete this.trackedPointers_[id];
+//     } else if (mapBrowserEvent.type === POINTERDOWN) {
+//       this.trackedPointers_[id] = event;
+//     } else if (id in this.trackedPointers_) {
+//       // update only when there was a pointerdown event for this pointer
+//       this.trackedPointers_[id] = event;
+//     }
+//     this.targetPointers = getValues(this.trackedPointers_);
+//   }
+// };
