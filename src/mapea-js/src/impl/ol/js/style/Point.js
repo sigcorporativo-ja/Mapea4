@@ -12,7 +12,7 @@ import OLGeomCircle from 'ol/geom/Circle';
 import OLStyleText from 'ol/style/Text';
 import OLStyleIcon from 'ol/style/Icon';
 import { toContext as toContextRender } from 'ol/render';
-import OLStyleFontsSymbol from '../ext/OLFontSymbol';
+import OLStyleFontsSymbol from '../ext/OLStyleFontSymbol';
 import Simple from './Simple';
 import Centroid from './Centroid';
 import PointFontSymbol from '../point/FontSymbol';

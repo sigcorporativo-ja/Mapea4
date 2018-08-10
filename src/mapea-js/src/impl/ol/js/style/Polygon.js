@@ -9,7 +9,7 @@ import { isNullOrEmpty } from 'facade/js/util/Utils';
 import OLStyleIcon from 'ol/style/Icon';
 import OLStyleFill from 'ol/style/Fill';
 import { toContext as toContextRender } from 'ol/render';
-import OLStyleFillPattern from '../ext/FillPattern';
+import OLStyleFillPattern from '../ext/OLStyleFillPattern';
 import Simple from './Simple';
 import Centroid from './Centroid';
 

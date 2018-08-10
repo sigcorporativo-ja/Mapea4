@@ -1,4 +1,4 @@
-import OLFontSymbol from '../ext/fontsymbol';
+import OLFontSymbol from '../ext/OLStyleFontSymbol';
 /**
  * @namespace M.impl.style.PointFontSymbol
  */
