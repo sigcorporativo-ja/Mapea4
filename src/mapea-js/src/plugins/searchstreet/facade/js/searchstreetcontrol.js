@@ -240,21 +240,18 @@ export default class SearchstreetControl extends M.Control {
             results = JSON.parse(response.text);
             if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
               M.dialog.error(`El código del municipio '${this.codIne_}' no es válido`);
-            }
-            else {
+            } else {
               this.getMunProv_(results);
               this.element_.getElementsByTagName('span').codIne.innerHTML = `Búsquedas en ${this.municipio_}  (${this.provincia_})`;
             }
           }
-        }
-        catch (err) {
+        } catch (err) {
           M.exception(`La respuesta no es un JSON válido: ${err}`);
         }
       });
     }
     // remove the child of "resultsContainer_"
-    const parentContainer = this.resultsContainer_.parentElement;
-    parentContainer.removeChild(this.resultsContainer_);
+    this.searchingResult_.parentNode.removeChild(this.searchingResult_);
   }
 
   /**
@@ -283,9 +280,10 @@ export default class SearchstreetControl extends M.Control {
     evt.preventDefault();
     if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
       this.resultsAutocomplete_.classList.remove(SearchstreetControl.MINIMUM);
-      const parent = this.resultsAutocomplete_;
       const element = this.resultsAutocomplete_.querySelector('div#m-searching-result-autocomplete');
-      parent.parentNode.removeChild(element);
+      if (!M.utils.isNullOrEmpty(element)) {
+        element.parentNode.removeChild(element);
+      }
       // this.resultsAutocomplete_.removeChildren(this.resultsAutocomplete_
       //   .querySelector('div#m-searching-result-autocomplete'));
       this.resultsAutocomplete_.innerHTML = '';
@@ -293,12 +291,10 @@ export default class SearchstreetControl extends M.Control {
       let query = this.input_.value;
       if (M.utils.isNullOrEmpty(query)) {
         M.dialog.error('Debe introducir una búsqueda.');
-      }
-      else {
+      } else {
         if (query.length < this.minAutocomplete_) {
           this.completed = false;
-        }
-        else {
+        } else {
           this.completed = true;
         }
         if (!M.utils.isUndefined(this.codIne_) && !M.utils.isNullOrEmpty(this.codIne_)) {
@@ -307,9 +303,8 @@ export default class SearchstreetControl extends M.Control {
           if (query.indexOf(',') > -1) {
             query = query.substring(0, pos);
           }
-          this.search_(`${query}, ${this.municipio_} (${this.provincia_})`, this.showResults_);
-        }
-        else {
+          this.search_(`${query}, ${this.municipio_} , (${this.provincia_})`, this.showResults_);
+        } else {
           this.search_(query, this.showResults_);
         }
       }
@@ -351,8 +346,8 @@ export default class SearchstreetControl extends M.Control {
         });
         this.searchTime_ = Date.now();
         this.querySearch_(searchUrl, this.provincia_, processor);
-      }
-      else if (M.utils.isNullOrEmpty(this.provincia_) && !M.utils.isNullOrEmpty(this.municipio_)) {
+      } else if (M.utils.isNullOrEmpty(this.provincia_) &&
+        !M.utils.isNullOrEmpty(this.municipio_)) {
         this.searchTime_ = Date.now();
         this.respuestasProvincias_ = [];
         this.contadorProvincias = 0;
@@ -367,8 +362,7 @@ export default class SearchstreetControl extends M.Control {
           });
           this.querySearchProvinces(searchUrl, this.provincias_[i], processor);
         }
-      }
-      else {
+      } else {
         searchUrl = M.utils.addParameters(this.searchUrl_, {
           streetname: results.direccionSinNormalizar,
           streetNumber: null,
@@ -400,12 +394,10 @@ export default class SearchstreetControl extends M.Control {
           try {
             if (!M.utils.isNullOrEmpty(response.text) && response.text.indexOf('No se ha podido obtener el codigoINE') === -1) {
               results = JSON.parse(response.text);
-            }
-            else {
+            } else {
               results = null;
             }
-          }
-          catch (err) {
+          } catch (err) {
             M.exception(`La respuesta no es un JSON válido: ${err}`);
           }
           if (!M.utils.isNullOrEmpty(results)) {
@@ -413,8 +405,7 @@ export default class SearchstreetControl extends M.Control {
             processor.call(this, results);
             this.element_.classList.remove(SearchstreetControl.SEARCHING_CLASS);
             this.resultsContainer_.classList.remove(SearchstreetControl.MINIMUM);
-          }
-          else {
+          } else {
             processor.call(this, results);
             this.element_.classList.remove(SearchstreetControl.SEARCHING_CLASS);
             this.resultsContainer_.classList.remove(SearchstreetControl.MINIMUM);
@@ -447,12 +438,10 @@ export default class SearchstreetControl extends M.Control {
                 const item = this.respuestasProvincias_[i].text;
                 if (!M.utils.isNullOrEmpty(item) && item.indexOf('No se ha podido obtener el codigoINE') === -1) {
                   results = JSON.parse(item);
-                }
-                else {
+                } else {
                   results = null;
                 }
-              }
-              catch (err) {
+              } catch (err) {
                 M.exception(`La respuesta no es un JSON válido: ${err}`);
               }
               if (!M.utils.isNullOrEmpty(results) && results.geocoderMunProvSrsResponse
@@ -551,30 +540,26 @@ export default class SearchstreetControl extends M.Control {
             containtResult,
             search,
           };
-        }
-        else {
+        } else {
           resultsTemplateVar = {
             docs: [undefined],
             containtResult: false,
             search,
           };
         }
-      }
-      else if (M.utils.isNullOrEmpty(docs)) {
+      } else if (M.utils.isNullOrEmpty(docs)) {
         resultsTemplateVar = {
           docs: [undefined],
           containtResult,
           search,
         };
-      }
-      else if (docs.geocoderMunProvSrsReturn.coordinateX === 0) {
+      } else if (docs.geocoderMunProvSrsReturn.coordinateX === 0) {
         resultsTemplateVar = {
           docs: [undefined],
           containtResult: false,
           search,
         };
-      }
-      else {
+      } else {
         docs.geocoderMunProvSrsReturn.localityName = this.municipio_;
         docs.geocoderMunProvSrsReturn.cityName = this.provincia_;
         docs.geocoderMunProvSrsReturn.streetType =
@@ -587,8 +572,7 @@ export default class SearchstreetControl extends M.Control {
           search,
         };
       }
-    }
-    else {
+    } else {
       resultsTemplateVar = {
         docs: [undefined],
         containtResult,
@@ -621,9 +605,9 @@ export default class SearchstreetControl extends M.Control {
    * @param {object} result - Specific query result
    */
   addEventClickList_(element, result) {
-    element.listen('click', (e) => {
+    element.addEventListener('click', (e) => {
       // hidden results on click for mobile devices
-      if (M.Window.WIDTH <= M.config.MOBILE_WIDTH) {
+      if (M.window.WIDTH <= M.config.MOBILE_WIDTH) {
         e.target = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
         this.resultsClick_(e);
       }

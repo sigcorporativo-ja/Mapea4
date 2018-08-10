@@ -77,17 +77,14 @@ export default class Autocomplete extends M.Plugin {
           if (controls[1].name_ === 'searchstreet') {
             if (this.controls[1].indexOf(',') < 0) {
               this.searchMunicipality_(this.controls[1]);
-            }
-            else {
+            } else {
               controls[1].searchClick_(e);
               controls[1].completed = false;
             }
-          }
-          else if (controls[1].name_ === 'searchstreetgeosearch') {
+          } else if (controls[1].name_ === 'searchstreetgeosearch') {
             if (!M.utils.isNullOrEmpty(selectedResult) && (this.controls[1].indexOf(',') < 0)) {
               this.searchMunicipality_(this.controls[1]);
-            }
-            else {
+            } else {
               controls[1].ctrlSearchstreet.searchClick_(e);
               controls[1].ctrlSearchstreet.completed = false;
               controls[1].ctrlGeosearch.searchClick_(e);
@@ -95,8 +92,7 @@ export default class Autocomplete extends M.Plugin {
           }
         }
         selectedResult = null;
-      }
-      else if (lista.length > 0) {
+      } else if (lista.length > 0) {
         let idxSelectedResult = -1;
         for (let i = 0; i < lista.length; i += 1) {
           if (lista[i].classList.contains('selected')) {
@@ -108,20 +104,17 @@ export default class Autocomplete extends M.Plugin {
           if (idxSelectedResult === -1) {
             selectedResult = lista[0];
             selectedResult.classList.add('selected');
-          }
-          else if (idxSelectedResult < lista.length - 1) {
+          } else if (idxSelectedResult < lista.length - 1) {
             // console.log(idxSelectedResult,lista.length);
             lista[idxSelectedResult].classList.remove('selected');
             selectedResult = lista[idxSelectedResult + 1];
             selectedResult.classList.add('selected');
           }
-        }
-        else if (e.keyCode === 38) {
+        } else if (e.keyCode === 38) {
           if (idxSelectedResult === lista.length) {
             selectedResult = lista[lista.length];
             selectedResult.classList.add('selected');
-          }
-          else if (idxSelectedResult >= 1) {
+          } else if (idxSelectedResult >= 1) {
             lista[idxSelectedResult].classList.remove('selected');
             selectedResult = lista[idxSelectedResult - 1];
             selectedResult.classList.add('selected');
@@ -204,9 +197,9 @@ export default class Autocomplete extends M.Plugin {
   addTo(map) {
     this.map_ = map;
     this.target_.classList.add(Autocomplete.CLASS);
-    this.resultsContainer_.remove(this.searchingResult_);
-    this.target_.addEventListener('input', this.keyPress);
-    this.target_.addEventListener('keyup', this.hiddenAutocomplete_);
+    this.resultsContainer_.removeChild(this.searchingResult_);
+    this.target_.addEventListener('input', this.keyPress_.bind(this));
+    this.target_.addEventListener('keyup', this.hiddenAutocomplete_.bind(this));
   }
 
   /**
@@ -244,8 +237,7 @@ export default class Autocomplete extends M.Plugin {
       this.timeoutKey_ = setTimeout(() => {
         if (query.indexOf(',') !== -1) {
           this.busqMunicipio_ = true;
-        }
-        else {
+        } else {
           this.busqMunicipio_ = false;
           this.busqMunicipioClick_ = false;
         }
@@ -315,35 +307,30 @@ export default class Autocomplete extends M.Plugin {
                           controls[1].ctrlSearchstreet.searchClick_(this.evt);
                           controls[1].ctrlSearchstreet.completed = false;
                           controls[1].ctrlGeosearch.searchClick_(this.evt);
-                        }
-                        else if (controls[1].name_ === 'searchstreet') {
+                        } else if (controls[1].name_ === 'searchstreet') {
                           controls[1].searchClick_(this.evt);
                           controls[1].completed = false;
                         }
                       }
                       this.busqMunicipioClick_ = false;
                     }
-                  }
-                  else {
+                  } else {
                     const autocompleteResults = this.resultsContainer_.querySelectorAll('div.autocomplete');
                     for (let m = 0, ilen2 = controls.length; m < ilen2; m += 1) {
                       if (controls[m].name_ === 'searchstreetgeosearch') {
                         if (controls[m].ctrlSearchstreet.completed === true) {
                           controls[m].ctrlSearchstreet.completed = false;
                           this.resultsContainer_.innerHTML = '';
-                        }
-                        else {
+                        } else {
                           for (let h = 0, ilen3 = autocompleteResults.length; h < ilen3; h += 1) {
                             this.evtClickMunicipaly_(autocompleteResults[h]);
                           }
                         }
-                      }
-                      else if (controls[m].name_ === 'searchstreet') {
+                      } else if (controls[m].name_ === 'searchstreet') {
                         if (controls[m].completed === true) {
                           controls[m].completed = false;
                           this.resultsContainer_.innerHTML = '';
-                        }
-                        else {
+                        } else {
                           for (let j = 0, ilen5 = autocompleteResults.length; j < ilen5; j += 1) {
                             this.evtClickMunicipaly_(autocompleteResults[j]);
                           }
@@ -351,16 +338,14 @@ export default class Autocomplete extends M.Plugin {
                       }
                     }
                   }
-                }
-                else {
+                } else {
                   for (let y = 0, ilen4 = controls.length; y < ilen4; y += 1) {
                     if (controls[y].name_ === 'searchstreet') {
                       if (controls[y].completed === true) {
                         this.resultsContainer_.innerHTML = '';
                         controls[y].completed = false;
                       }
-                    }
-                    else if (controls[y].name_ === 'searchstreetgeosearch') {
+                    } else if (controls[y].name_ === 'searchstreetgeosearch') {
                       if (controls[y].ctrlSearchstreet.completed === true) {
                         this.resultsContainer_.innerHTML = '';
                         controls[y].ctrlSearchstreet.completed = false;
@@ -369,30 +354,28 @@ export default class Autocomplete extends M.Plugin {
                   }
                 }
               });
-            }
-            else {
+            } else {
               for (let r = 0, ilen4 = controls.length; r < ilen4; r += 1) {
                 if (controls[r].name_ === 'searchstreet') {
                   controls[r].completed = false;
-                }
-                else if (controls[r].name_ === 'searchstreetgeosearch') {
+                } else if (controls[r].name_ === 'searchstreetgeosearch') {
                   controls[r].ctrlSearchstreet.completed = false;
                 }
               }
             }
-          }
-          else {
+          } else {
             for (let g = 0, ilen6 = controls.length; g < ilen6; g += 1) {
               if (controls[g].name_ === 'searchstreet') {
                 controls[g].completed = false;
-              }
-              else if (controls[g].name_ === 'searchstreetgeosearch') {
+              } else if (controls[g].name_ === 'searchstreetgeosearch') {
                 controls[g].ctrlSearchstreet.completed = false;
               }
             }
           }
-          this.resultsContainer_.classList.remove(Autocomplete.MINIMUM);
-          this.resultsContainer_.removeChildren(this.searchingResult_);
+          if (this.resultsContainer_.classList.contains(Autocomplete.MINIMUM)) {
+            this.resultsContainer_.classList.remove(Autocomplete.MINIMUM);
+            this.searchingResult_.parentElement.removeChild(this.searchingResult_);
+          }
         }
       });
     })(this.searchTime_);
@@ -432,12 +415,10 @@ export default class Autocomplete extends M.Plugin {
           doscsTemp.push(`${info[0]} ${info[1]}, ${info[3]} (${info[info.length - 1]})`);
         }
         docs = doscsTemp;
-      }
-      else {
+      } else {
         this.resultsContainer_.innerHTML = '';
       }
-    }
-    else if (docs instanceof Array === false) {
+    } else if (docs instanceof Array === false) {
       doscsTemp.push(docs);
       docs = doscsTemp;
       if (!M.utils.isUndefined(docs[0])) {
@@ -445,8 +426,7 @@ export default class Autocomplete extends M.Plugin {
           docs[x] = this.formatContent_(docs[x], ',', ' ');
         }
       }
-    }
-    else {
+    } else {
       for (let j = 0, ilen2 = docs.length; j < ilen2; j += 1) {
         docs[j] = this.formatContent_(docs[j], ',', ' ');
       }
@@ -489,15 +469,13 @@ export default class Autocomplete extends M.Plugin {
           if (control.name_ === 'searchstreet') {
             control.searchClick_(e);
             control.completed = false;
-          }
-          else if (control.name_ === 'searchstreetgeosearch') {
+          } else if (control.name_ === 'searchstreetgeosearch') {
             control.ctrlSearchstreet.searchClick_(e);
             control.ctrlSearchstreet.completed = false;
             control.ctrlGeosearch.searchClick_(e);
           }
         });
-      }
-      else {
+      } else {
         this.searchMunicipality_(result.innerHTML, e);
       }
     });
@@ -555,20 +533,20 @@ export default class Autocomplete extends M.Plugin {
       if (!M.utils.isNullOrEmpty(this.resultsContainer_.parentElement.querySelector('#m-searchstreet-results>div'))) {
         this.resultsContainer_.classList.add('results-panel-content');
         this.resultsContainer_.classList.remove('results-panel');
-      }
-      else {
+      } else {
         this.resultsContainer_.classList.add('results-panel');
       }
       this.resultsContainer_.appendChild(this.searchingResult_);
       this.resultsContainer_.parentElement.classList.add(Autocomplete.SEARCHING_CLASS);
       this.resultsContainer_.classList.add(Autocomplete.MINIMUM);
-    }
-    else {
+    } else {
       this.searchTime_ = 0;
       this.resultsContainer_.parentElement.classList.remove(Autocomplete.SEARCHING_CLASS);
-      this.resultsContainer_.classList.remove(Autocomplete.MINIMUM);
-      this.resultsContainer_.removeChildren(this.searchingResult_);
-      this.resultsContainer_.innerHTML = '';
+      if (this.resultsContainer_.classList.contains(Autocomplete.MINIMUM)) {
+        this.resultsContainer_.classList.remove(Autocomplete.MINIMUM);
+        this.resultsContainer_.removeChild(this.searchingResult_);
+        this.resultsContainer_.innerHTML = '';
+      }
     }
   }
 

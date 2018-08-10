@@ -14,7 +14,7 @@ export default class GeosearchLayer extends M.layer.Vector {
    */
   constructor(parameters = {}, options = {}, impl = new GeosearchLayerImpl()) {
     // calls the super constructor
-    super(parameters, options, new GeosearchLayerImpl());
+    super(parameters, options, impl);
     // checks if the implementation can create KML layers
     if (M.utils.isUndefined(GeosearchLayerImpl)) {
       M.exception('La implementación usada no puede crear capas Geosearch');

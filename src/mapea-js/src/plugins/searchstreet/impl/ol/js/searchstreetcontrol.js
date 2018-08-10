@@ -128,16 +128,16 @@ export default class SearchstreetControl extends ol.control.Control {
    */
   addEventClickFeature(element, result) {
     this.facadeMap_.removePopup();
+    const this_ = this;
     if (M.utils.isNullOrEmpty(result)) {
       this.showPopup_(element, false);
       this.facadeMap_.setBbox([element.coordinateX,
         element.coordinateY, element.coordinateX, element.coordinateY]);
-    }
-    else if (result instanceof ol.Feature) {
+    } else if (result instanceof ol.Feature) {
       result.set('vendor', {
         mapea: {
           click(evt) {
-            this.showPopup_(element);
+            this_.showPopup_(element, false);
           },
         },
       });
@@ -179,24 +179,20 @@ export default class SearchstreetControl extends ol.control.Control {
           this.facadeMap_.removePopup();
           if (M.utils.isUndefined(noPanMapIfOutOfView)) {
             this.popup_ = new M.Popup();
-          }
-          else {
+          } else {
             this.popup_ = new M.Popup({
               panMapIfOutOfView: noPanMapIfOutOfView,
             });
           }
           this.popup_.addTab(popupContent);
           this.facadeMap_.addPopup(this.popup_, [feature.coordinateX, feature.coordinateY]);
-        }
-        else {
+        } else {
           this.popup_.addTab(popupContent);
         }
-      }
-      else {
+      } else {
         if (M.utils.isUndefined(noPanMapIfOutOfView)) {
           this.popup_ = new M.Popup();
-        }
-        else {
+        } else {
           this.popup_ = new M.Popup({
             panMapIfOutOfView: noPanMapIfOutOfView,
           });
