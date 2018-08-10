@@ -15,7 +15,7 @@ class Clustered extends Feature {
    * @extends {M.Feature}
    * @param {Array<M.Feature>} features - array of features
    * @param {Object} attributes - attributes
-   * @api stable
+   * @api
    */
   constructor(features, attributes) {
     super(generateRandom('_mapea_cluster_'));

@@ -1,5 +1,5 @@
 /**
- * @module M
+ * @module M/proxy
  */
 import { isBoolean } from './util/Utils';
 
@@ -7,7 +7,6 @@ import { isBoolean } from './util/Utils';
  * Flag that indicates if the proxy is
  * enabled to use
  * @type {boolean}
- * @api
  */
 export let proxy_ = true;
 
@@ -17,7 +16,7 @@ export let proxy_ = true;
  * @public
  * @function
  * @param {boolean} enable
- * @api stable
+ * @api
  */
 export const proxy = (enable) => {
   if (isBoolean(enable)) {

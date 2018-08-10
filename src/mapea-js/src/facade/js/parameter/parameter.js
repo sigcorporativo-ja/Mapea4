@@ -1,7 +1,9 @@
-import Config from 'configuration';
+/**
+ * @module M/parameter
+ */
 import { isNullOrEmpty, isString, isNull, isFunction, normalize, isArray, isObject, isUrl, isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerType from '../layer/Type';
+import * as LayerType from '../layer/Type';
 import Layer from '../layer/Layer';
 
 /**
@@ -386,7 +388,7 @@ export const projection = (projectionParameter) => {
       projectionVar.code = projectionArray[0];
       projectionVar.units = normalize(projectionArray[1].substring(0, 1));
     } else {
-      Exception(`El formato del parámetro projection no es correcto. </br>Se usará la proyección por defecto: ${Config.DEFAULT_PROJ}`);
+      Exception(`El formato del parámetro projection no es correcto. </br>Se usará la proyección por defecto: ${M.config.DEFAULT_PROJ}`);
     }
   } else if (isObject(projectionParameter)) {
     // object
@@ -396,7 +398,7 @@ export const projection = (projectionParameter) => {
       projectionVar.code = projectionParameter.code;
       projectionVar.units = normalize(projectionParameter.units.substring(0, 1));
     } else {
-      Exception(`El formato del parámetro projection no es correcto. </br>Se usará la proyección por defecto: ${Config.DEFAULT_PROJ}`);
+      Exception(`El formato del parámetro projection no es correcto. </br>Se usará la proyección por defecto: ${M.config.DEFAULT_PROJ}`);
     }
   } else {
     // unknown
@@ -1872,8 +1874,8 @@ const parameterFunction = {
   osm,
   wfs,
   wmc,
-  WMS,
-  WMTS,
+  wms,
+  wmts,
 };
 
 

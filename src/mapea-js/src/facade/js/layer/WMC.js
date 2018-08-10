@@ -1,12 +1,12 @@
 /**
- * @module M/layer
+ * @module M/layer/WMC
  */
-import Config from 'configuration';
+
 import WMCImpl from 'impl/layer/WMC';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
-import LayerType from './Type';
+import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 import EvtManager from '../event/Manager';
 
@@ -23,7 +23,7 @@ class WMC extends LayerBase {
    * @param {string|Mx.parameters.WMC} userParameters parameters
    * provided by the user
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
-   * @api stable
+   * @api
    */
   constructor(userParameters, options) {
     /**
@@ -57,12 +57,12 @@ class WMC extends LayerBase {
       this.generateName_();
     } else if (isNullOrEmpty(this.url) && !isNullOrEmpty(this.name)) {
       // checks if it is predefined context
-      const predefinedIdx = Config.predefinedWMC.predefinedNames.indexOf(this.name);
+      const predefinedIdx = M.config.predefinedWMC.predefinedNames.indexOf(this.name);
       if (predefinedIdx === -1) {
         Exception(`El contexto predefinido '${this.name}'no existe`);
       } else {
-        this.url = Config.predefinedWMC.urls[predefinedIdx];
-        this.name = Config.predefinedWMC.names[predefinedIdx];
+        this.url = M.config.predefinedWMC.urls[predefinedIdx];
+        this.name = M.config.predefinedWMC.names[predefinedIdx];
       }
     }
 
@@ -70,7 +70,7 @@ class WMC extends LayerBase {
      * 'loaded' This property indicates if the layers is loaded and all its layers.
      * @type {bool}
      * @private
-     * @api stable
+     * @api
      */
     this.loaded_ = false;
 
@@ -156,7 +156,7 @@ class WMC extends LayerBase {
    * triggers the event to draw it
    *
    * @function
-   * @api stable
+   * @api
    */
   select() {
     // checks if the implementation can manage select method
@@ -172,7 +172,7 @@ class WMC extends LayerBase {
    * removes all its layers
    *
    * @function
-   * @api stable
+   * @api
    */
   unselect() {
     // checks if the implementation can manage select method
@@ -188,7 +188,7 @@ class WMC extends LayerBase {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -205,7 +205,7 @@ class WMC extends LayerBase {
    * This function returns if the layer is loaded
    *
    * @function
-   * @api stable
+   * @api
    */
   isLoaded() {
     return this.loaded_;
@@ -215,7 +215,7 @@ class WMC extends LayerBase {
    * This function returns if the layer is loaded
    *
    * @function
-   * @api stable
+   * @api
    */
   setLoaded(loaded) {
     this.loaded_ = loaded;

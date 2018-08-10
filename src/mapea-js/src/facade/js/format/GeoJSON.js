@@ -1,5 +1,5 @@
 /**
- * @module M/format
+ * @module M/format/GeoJSON
  */
 import GeoJSONImpl from 'impl/format/GeoJSON';
 import Base from '../Base';
@@ -19,7 +19,7 @@ class GeoJSON extends Base {
    * @extends {M.facade.Base}
    * @param {string|Object} userParameters parameters
    * provided by the user
-   * @api stable
+   * @api
    */
   constructor(options = {}) {
     /**
@@ -46,7 +46,7 @@ class GeoJSON extends Base {
    * @param {Array<M.Feature>} features features array to parsed
    * as a GeoJSON FeatureCollection
    * @return {Array<Object>}
-   * @api stable
+   * @api
    */
   write(featuresParam) {
     let features = featuresParam;
@@ -64,7 +64,7 @@ class GeoJSON extends Base {
    * @param {object} geojson GeoJSON to parsed as a
    * M.Feature array
    * @return {Array<M.Feature>}
-   * @api stable
+   * @api
    */
   read(geojsonParam, projection) {
     let geojson = geojsonParam;

@@ -4,7 +4,7 @@
 /**
  * @classdesc
  * Abstract class
- * @api stable
+ * @api
  */
 class Base {
   /**

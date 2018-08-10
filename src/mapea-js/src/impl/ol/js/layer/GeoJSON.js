@@ -2,7 +2,7 @@ import { isNullOrEmpty, isObject, beautifyAttributeName, isFunction, includes } 
 import EventsManager from 'facade/js/event/Manager';
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import Popup from 'facade/js/Popup';
-import Template from 'facade/js/util/Template';
+import {compile as compileTemplate} from 'facade/js/util/Template';
 import geojsonPopupTemplate from 'templates/geojson_popup';
 import GeoJSONFormat from 'facade/js/format/GeoJSON';
 import OLSourceVector from 'ol/source/Vector';
@@ -189,7 +189,7 @@ export default class GeoJSON extends Vector {
         if (isFunction(clickFn)) {
           clickFn(evt, feature);
         } else {
-          const htmlAsText = Template.compile(geojsonPopupTemplate, {
+          const htmlAsText = compileTemplate(geojsonPopupTemplate, {
             vars: this.parseFeaturesForTemplate_(features),
             parseToHtml: false,
           });

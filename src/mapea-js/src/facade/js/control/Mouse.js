@@ -7,7 +7,7 @@ import MouseImpl from 'impl/control/Mouse';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
+import {compile as compileTemplate} from '../util/Template';
 
 /**
  * @classdesc
@@ -22,7 +22,7 @@ class Mouse extends ControlBase {
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor() {
     // implementation of this control
@@ -43,10 +43,10 @@ class Mouse extends ControlBase {
    * @function
    * @param {M.Map} map map to add the control
    * @returns {Promise} html response
-   * @api stable
+   * @api
    */
   createView(map) {
-    return Template.compile(mouseTemplate);
+    return compileTemplate(mouseTemplate);
   }
 
   /**
@@ -54,7 +54,7 @@ class Mouse extends ControlBase {
    * to this control
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     const equals = (obj instanceof Mouse);
@@ -67,7 +67,7 @@ class Mouse extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Mouse.NAME = 'mouse';
 

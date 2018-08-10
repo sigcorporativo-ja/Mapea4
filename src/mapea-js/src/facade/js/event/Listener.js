@@ -45,7 +45,7 @@ class EventListener {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   fire(argsParam) {
     let args = argsParam;
@@ -60,7 +60,7 @@ class EventListener {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getEventKey() {
     return this.eventKey_;
@@ -71,7 +71,7 @@ class EventListener {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   isOnce() {
     return this.once_;
@@ -82,7 +82,7 @@ class EventListener {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   has(listener, scope) {
     let has = false;

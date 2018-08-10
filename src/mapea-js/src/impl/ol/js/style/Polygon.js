@@ -1,7 +1,7 @@
 import chroma from 'chroma-js';
-import Baseline from 'facade/js/style/Baseline';
+import * as Baseline from 'facade/js/style/Baseline';
 import OLFeature from 'ol/Feature';
-import Align from 'facade/js/style/Align';
+import * as Align from 'facade/js/style/Align';
 import OLStyleStroke from 'ol/style/Stroke';
 import OLStyleText from 'ol/style/Text';
 import OLGeomPolygon from 'ol/geom/Polygon';

@@ -1,7 +1,7 @@
 /**
- * @module M
+ * @module M/Map
  */
-import Config from 'configuration';
+
 import MapImpl from 'impl/Map';
 import Base from './Base';
 import {
@@ -39,7 +39,7 @@ import OverviewMap from './control/OverviewMap';
 import Panzoom from './control/Panzoom';
 import Panzoombar from './control/Panzoombar';
 import Layer from './layer/Layer';
-import LayerType from './layer/Type';
+import * as LayerType from './layer/Type';
 import Vector from './layer/Vector';
 import KML from './layer/KML';
 import WFS from './layer/WFS';
@@ -49,7 +49,7 @@ import WMTS from './layer/WMTS';
 import OSM from './layer/OSM';
 import Mapbox from './layer/Mapbox';
 import Panel from './ui/Panel';
-import Position from './ui/Position';
+import * as Position from './ui/position';
 import Control from './control/Control';
 import GeoJSON from './layer/GeoJSON';
 
@@ -66,7 +66,7 @@ class Map extends Base {
    * @param { string | Mx.parameters.Map } userParameters parameters
    * @param { Mx.parameters.MapOptions } options custom options  for the implementation
    * provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParameters, options = {}) {
     // parses parameters to build the new map
@@ -120,7 +120,7 @@ class Map extends Base {
      * is by default
      * @public
      * @type {Boolean}
-     * @api stable
+     * @api
      * @expose
      */
     this.defaultProj_ = true;
@@ -128,7 +128,7 @@ class Map extends Base {
     /**
      * @public
      * @type {object}
-     * @api stable
+     * @api
      */
     this.panel = {
       LEFT: null,
@@ -219,7 +219,7 @@ class Map extends Base {
     if (!isNullOrEmpty(params.projection)) {
       this.setProjection(params.projection);
     } else { // default projection
-      this.setProjection(Config.DEFAULT_PROJ, true);
+      this.setProjection(M.config.DEFAULT_PROJ, true);
     }
 
     // bbox
@@ -276,7 +276,7 @@ class Map extends Base {
 
     // default WMC
     if (isNullOrEmpty(params.wmc) && isNullOrEmpty(params.layers)) {
-      this.addWMC(Config.predefinedWMC.predefinedNames[0]);
+      this.addWMC(M.config.predefinedWMC.predefinedNames[0]);
     }
 
     // maxExtent
@@ -332,7 +332,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Array<Layer>}
-   * @api stable
+   * @api
    */
   getLayers(layersParamVar) {
     let layersParam = layersParamVar;
@@ -364,7 +364,7 @@ class Map extends Base {
    *
    * @function
    * @returns {Array<Layer>}
-   * @api stable
+   * @api
    */
   getBaseLayers() {
     // checks if the implementation can manage layers
@@ -381,7 +381,7 @@ class Map extends Base {
    * @function
    * @returns {M.handler.Feature}
    * @public
-   * @api stable
+   * @api
    */
   getFeatureHandler() {
     return this.featuresHandler_;
@@ -393,7 +393,7 @@ class Map extends Base {
    * @function
    * @param {string|Object|Array<String>|Array<Object>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addLayers(layersParameter) {
     let layersParam = layersParameter;
@@ -480,7 +480,7 @@ class Map extends Base {
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * specified by the user
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeLayers(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -511,7 +511,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Array<WMC>}
-   * @api stable
+   * @api
    */
   getWMC(layersParamVar) {
     let layersParam = layersParamVar;
@@ -547,7 +547,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addWMC(layersParamVar) {
     let layersParam = layersParamVar;
@@ -621,7 +621,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeWMC(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -646,7 +646,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Array<KML>}
-   * @api stable
+   * @api
    */
   getKML(layersParamVar) {
     let layersParam = layersParamVar;
@@ -682,7 +682,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.KML>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addKML(layersParamVar) {
     let layersParam = layersParamVar;
@@ -726,7 +726,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.KML>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeKML(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -754,7 +754,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMC>} layersParam
    * @returns {Array<WMS>} layers from the map
-   * @api stable
+   * @api
    */
   getWMS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -790,7 +790,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addWMS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -829,7 +829,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeWMS(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -854,7 +854,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Array<WFS>} layers from the map
-   * @api stable
+   * @api
    */
   getWFS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -890,7 +890,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WFS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addWFS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -937,7 +937,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WFS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeWFS(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -965,7 +965,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMTS>} layersParam
    * @returns {Array<WMTS>} layers from the map
-   * @api stable
+   * @api
    */
   getWMTS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -1001,7 +1001,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMTS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addWMTS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -1040,7 +1040,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMTS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeWMTS(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -1065,7 +1065,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Array<M.layer.MBtiles>} layers from the map
-   * @api stable
+   * @api
    */
   getMBtiles(layersParamVar) {
     let layersParam = layersParamVar;
@@ -1099,7 +1099,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addMBtiles(layersParam) {
     // TODO
@@ -1111,7 +1111,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeMBtiles(layersParam) {
     // TODO
@@ -1124,7 +1124,7 @@ class Map extends Base {
    * @function
    * @param {string|Array<String>} controlsParam
    * @returns {Array<Control>}
-   * @api stable
+   * @api
    */
   getControls(controlsParamVar) {
     let controlsParam = controlsParamVar;
@@ -1154,7 +1154,7 @@ class Map extends Base {
    * @function
    * @param {string|Object|Array<String>|Array<Object>} controlsParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addControls(controlsParamVar) {
     let controlsParam = controlsParamVar;
@@ -1296,7 +1296,7 @@ class Map extends Base {
               control = new GetFeatureInfo();
               break;
             default:
-              const getControlsAvailable = concatUrlPaths([Config.MAPEA_URL, '/api/actions/controls']);
+              const getControlsAvailable = concatUrlPaths([M.config.MAPEA_URL, '/api/actions/controls']);
               Dialog.error(`El control ${controlParam} no está definido. Consulte los controles disponibles <a href='${getControlsAvailable}' target="_blank">aquí</a>`);
           }
         } else if (controlParam instanceof Control) {
@@ -1322,7 +1322,7 @@ class Map extends Base {
         }
 
         // checks if it has to be added into a main panel
-        if (Config.panels.TOOLS.indexOf(control.name) !== -1) {
+        if (M.config.panels.TOOLS.indexOf(control.name) !== -1) {
           if (isNullOrEmpty(this.panel.TOOLS)) {
             this.panel.TOOLS = new Panel('tools', {
               collapsible: true,
@@ -1337,7 +1337,7 @@ class Map extends Base {
           //               this.panel.TOOLS.addControls(control);
           //            }
           panel = this.panel.TOOLS;
-        } else if (Config.panels.EDITION.indexOf(control.name) !== -1) {
+        } else if (M.config.panels.EDITION.indexOf(control.name) !== -1) {
           if (isNullOrEmpty(this.panel.EDITION)) {
             this.panel.EDITION = new Panel('edit', {
               collapsible: true,
@@ -1374,7 +1374,7 @@ class Map extends Base {
    * @param {string|Array<string>} controlsParam
    * specified by the user
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeControls(controlsParam) {
     // checks if the parameter is null or empty
@@ -1411,7 +1411,7 @@ class Map extends Base {
    * @public
    * @function
    * @returns {Mx.Extent}
-   * @api stable
+   * @api
    */
   getMaxExtent() {
     // checks if the implementation can set the maxExtent
@@ -1434,7 +1434,7 @@ class Map extends Base {
    * @param {String|Array<String>|Array<Number>|Mx.Extent} maxExtentParam the extent max
    * @param {Boolean} zoomToExtent - Set bbox
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setMaxExtent(maxExtentParam, zoomToExtent) {
     // checks if the param is null or empty
@@ -1465,7 +1465,7 @@ class Map extends Base {
    * @public
    * @function
    * @returns {Mx.Extent}
-   * @api stable
+   * @api
    */
   getBbox() {
     // checks if the implementation can set the maxExtent
@@ -1487,7 +1487,7 @@ class Map extends Base {
    * @param {String|Array<String>|Array<Number>|Mx.Extent} bboxParam the bbox
    * @param {Object} vendorOpts vendor options
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setBbox(bboxParam, vendorOpts) {
     // checks if the param is null or empty
@@ -1517,7 +1517,7 @@ class Map extends Base {
    * @public
    * @function
    * @returns {Number}
-   * @api stable
+   * @api
    */
   getZoom() {
     // checks if the implementation can get the zoom
@@ -1538,7 +1538,7 @@ class Map extends Base {
    * @function
    * @param {String|Number} zoomParam the zoom
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setZoom(zoomParam) {
     // checks if the param is null or empty
@@ -1572,7 +1572,7 @@ class Map extends Base {
    * @public
    * @function
    * @returns {Array<Number>}
-   * @api stable
+   * @api
    */
   getCenter() {
     // checks if the implementation can get the center
@@ -1593,7 +1593,7 @@ class Map extends Base {
    * @function
    * @param {String|Array<String>|Array<Number>|Mx.Center} centerParam the new center
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setCenter(centerParam) {
     // checks if the param is null or empty
@@ -1660,7 +1660,7 @@ class Map extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   removeCenter() {
     this.removeFeatures(this.centerFeature_);
@@ -1675,7 +1675,7 @@ class Map extends Base {
    * @public
    * @function
    * @returns {Array<Number>}
-   * @api stable
+   * @api
    */
   getResolutions() {
     // checks if the implementation can set the maxExtent
@@ -1696,7 +1696,7 @@ class Map extends Base {
    * @function
    * @param {String|Array<String>|Array<Number>} resolutionsParam the resolutions
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setResolutions(resolutionsParam) {
     // checks if the param is null or empty
@@ -1724,7 +1724,7 @@ class Map extends Base {
    * @public
    * @function
    * @returns {Mx.Projection}
-   * @api stable
+   * @api
    */
   getScale() {
     // checks if the implementation has the method
@@ -1744,7 +1744,7 @@ class Map extends Base {
    * @public
    * @function
    * @returns {Mx.Projection}
-   * @api stable
+   * @api
    */
   getProjection() {
     // checks if the implementation has the method
@@ -1765,7 +1765,7 @@ class Map extends Base {
    * @function
    * @param {String|Mx.Projection} projection the bbox
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setProjection(projectionParam, asDefault) {
     let projection = projectionParam;
@@ -1789,7 +1789,7 @@ class Map extends Base {
     } catch (err) {
       Dialog.error(err.toString());
       if (String(err).indexOf('El formato del parámetro projection no es correcto') >= 0) {
-        this.setProjection(Config.DEFAULT_PROJ, true);
+        this.setProjection(M.config.DEFAULT_PROJ, true);
       }
       throw err;
     }
@@ -1804,7 +1804,7 @@ class Map extends Base {
    * @function
    * @param {Mx.Plugin} plugin the plugin to add to the map
    * @returns {Map}
-   * @api stable
+   * @api
    */
   getPlugins(namesParam) {
     let names = namesParam;
@@ -1838,7 +1838,7 @@ class Map extends Base {
    * @function
    * @param {Mx.Plugin} plugin the plugin to add to the map
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addPlugin(plugin) {
     // checks if the param is null or empty
@@ -1863,7 +1863,7 @@ class Map extends Base {
    * @function
    * @param {Array<Plugin>} plugins specified by the user
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removePlugins(pluginsParam) {
     let plugins = pluginsParam;
@@ -1894,7 +1894,7 @@ class Map extends Base {
    * @public
    * @function
    * @returns {Promise}
-   * @api stable
+   * @api
    */
   getEnvolvedExtent() {
     // checks if the implementation can set the maxExtent
@@ -1912,7 +1912,7 @@ class Map extends Base {
    * @public
    * @function
    * @returns {Map}
-   * @api stable
+   * @api
    */
   zoomToMaxExtent(keepUserZoom) {
     // zoom to maxExtent if no zoom was specified
@@ -1941,17 +1941,17 @@ class Map extends Base {
    * @public
    * @function
    * @param {String} ticket ticket user
-   * @api stable
+   * @api
    */
   setTicket(ticket) {
     if (!isNullOrEmpty(ticket)) {
-      if (Config.PROXY_POST_URL.indexOf('ticket=') === -1) {
-        Config('PROXY_POST_URL', addParameters(Config.PROXY_POST_URL, {
+      if (M.config.PROXY_POST_URL.indexOf('ticket=') === -1) {
+        M.config('PROXY_POST_URL', addParameters(M.config.PROXY_POST_URL, {
           ticket,
         }));
       }
-      if (Config.PROXY_URL.indexOf('ticket=') === -1) {
-        Config('PROXY_URL', addParameters(Config.PROXY_URL, {
+      if (M.config.PROXY_URL.indexOf('ticket=') === -1) {
+        M.config('PROXY_URL', addParameters(M.config.PROXY_URL, {
           ticket,
         }));
       }
@@ -2003,7 +2003,7 @@ class Map extends Base {
    * @public
    * @function
    * @returns {Map}
-   * @api stable
+   * @api
    */
   destroy() {
     // checks if the implementation can provide the implementation map
@@ -2021,7 +2021,7 @@ class Map extends Base {
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @api stable
+   * @api
    */
   addLabel(labelParam, coordParam) {
     const panMapIfOutOfView = labelParam.panMapIfOutOfView ===
@@ -2081,7 +2081,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   getLabel() {
     return this.getImpl().getLabel();
@@ -2094,7 +2094,7 @@ class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeLabel() {
     return this.getImpl().removeLabel();
@@ -2105,7 +2105,7 @@ class Map extends Base {
    *
    * @function
    * @param {Array<Mx.Point>|Mx.Point} points
-   * @api stable
+   * @api
    */
   drawPoints(pointsVar) {
     let points = pointsVar;
@@ -2144,7 +2144,7 @@ class Map extends Base {
    *
    * @function
    * @param {Array<Feature>|Feature} features
-   * @api stable
+   * @api
    */
   drawFeatures(features) {
     this.drawLayer_.addFeatures(features);
@@ -2156,7 +2156,7 @@ class Map extends Base {
    *
    * @function
    * @param {Array<Feature>|Feature} features
-   * @api stable
+   * @api
    */
   removeFeatures(features) {
     this.drawLayer_.removeFeatures(features);
@@ -2167,7 +2167,7 @@ class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Map}
    */
   addPanels(panelsVar) {
@@ -2193,7 +2193,7 @@ class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    */
   removePanel(panel) {
     if (panel.getControls().length > 0) {
@@ -2211,7 +2211,7 @@ class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    * @returns {array<Panel>}
    */
   getPanels(namesVar) {
@@ -2284,7 +2284,7 @@ class Map extends Base {
    * implementation
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Object} core map used by the implementation
    */
   getContainer() { // checks if the implementation can provides the container
@@ -2299,7 +2299,7 @@ class Map extends Base {
    * implementation
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Object} core map used by the implementation
    */
   getMapImpl() {
@@ -2314,7 +2314,7 @@ class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Popup} core map used by the implementation
    */
   getPopup() {
@@ -2325,7 +2325,7 @@ class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Map} core map used by the implementation
    */
   removePopup() {
@@ -2347,7 +2347,7 @@ class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Map} core map used by the implementation
    */
   addPopup(popup, coordinate) {
@@ -2387,7 +2387,7 @@ class Map extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   on(eventType, listener, optThis) {
     super.on(eventType, listener, optThis);
@@ -2401,7 +2401,7 @@ class Map extends Base {
    * this is, all its layers.
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Map} the instance
    */
   refresh() {
@@ -2417,7 +2417,7 @@ class Map extends Base {
    * Getter of defaultProj_ attribute
    * @public
    * @function
-   * @api stable
+   * @api
    */
   get defaultProj() {
     return this.defaultProj_;
@@ -2427,7 +2427,7 @@ class Map extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   static LAYER_SORT(layer1, layer2) {
     if (!isNullOrEmpty(layer1) && !isNullOrEmpty(layer2)) {
@@ -2448,7 +2448,7 @@ class Map extends Base {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Map.DRAWLAYER_STYLE = {
   fill: {

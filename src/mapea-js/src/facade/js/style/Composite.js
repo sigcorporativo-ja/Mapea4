@@ -1,13 +1,19 @@
+/**
+ * @module M/style/Composite
+ */
 import StyleBase from './Style';
 import { isNullOrEmpty, isArray, styleComparator } from '../util/Utils';
 // import StyleCluster from './Cluster';
 // import StyleProportional from './Proportional';
 
-export default class Composite extends StyleBase {
+/**
+ * @classdesc
+ * @api
+ */
+class Composite extends StyleBase {
   /**
-   * Abstract class
    * @constructor
-   * @api stable
+   * @api
    */
   constructor(options, impl) {
     // calls the super constructor
@@ -26,7 +32,7 @@ export default class Composite extends StyleBase {
    * @public
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @function
-   * @api stable
+   * @api
    */
   apply(layer) {
     this.layer_ = layer;
@@ -44,7 +50,7 @@ export default class Composite extends StyleBase {
    * @function
    * @param {M.style|Array<M.Style>} styles
    * @returns {M.style.Composite}
-   * @api stable
+   * @api
    */
   add(stylesPara) {
     let styles = stylesPara;
@@ -76,7 +82,7 @@ export default class Composite extends StyleBase {
    * @function
    * @param {M.style|Array<M.Style>} styles
    * @returns {M.style.Composite}
-   * @api stable
+   * @api
    */
   remove(stylesPara) {
     let styles = stylesPara;
@@ -98,7 +104,7 @@ export default class Composite extends StyleBase {
    * @function
    * @public
    * @return {Array<M.Style>} array styles
-   * @api stable
+   * @api
    */
   getStyles() {
     return this.styles_;
@@ -110,7 +116,7 @@ export default class Composite extends StyleBase {
    * @function
    * @public
    * @return {M.Style} array styles
-   * @api stable
+   * @api
    */
   getOldStyle() {
     return this.oldStyle_;
@@ -120,7 +126,7 @@ export default class Composite extends StyleBase {
    * This function clears the style Composite
    * @function
    * @public
-   * @api stable
+   * @api
    */
   clear() {
     this.remove(this.styles_);
@@ -130,7 +136,7 @@ export default class Composite extends StyleBase {
    * This function updates the style
    * @function
    * @private
-   * @api stable
+   * @api
    */
   unapplyInternal(layer) {
     const styles = this.styles_.concat(this).sort((style, style2) =>
@@ -147,7 +153,7 @@ export default class Composite extends StyleBase {
    * @function
    * @public
    * @param {M.layer.Vector} layer layer to unapply his style
-   * @api stable
+   * @api
    */
   unapplySoft(layer) {}
 
@@ -156,7 +162,7 @@ export default class Composite extends StyleBase {
    * @function
    * @public
    * @param {M.layer.Vector} layer layer to unapply his style
-   * @api stable
+   * @api
    */
   unapply(layer) {
     this.unapplyInternal(layer);
@@ -168,7 +174,7 @@ export default class Composite extends StyleBase {
    * @function
    * @private
    * @param {M.layer.Vector} layer layer to update the style
-   * @api stable
+   * @api
    */
 
   updateInternal_(layer) {
@@ -183,3 +189,5 @@ export default class Composite extends StyleBase {
     });
   }
 }
+
+export default Composite;

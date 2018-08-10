@@ -1,5 +1,5 @@
 /**
- * @module Choropleth
+ * @module M/style/Choropleth
  */
 
 import StyleComposite from './Composite';
@@ -17,7 +17,7 @@ import StylePoint from './Point';
 /**
  * Accuracy of numbers on canvas
  * @constant
- * @api stable
+ * @api
  */
 const ACCURACY_NUMBER_CANVAS = 2;
 
@@ -35,8 +35,9 @@ const calcCanvasNumber = (number) => {
  * @classdesc
  * Main constructor of the class. Creates a style choropleth
  * with parameters specified by the user
+ * @api
  */
-export default class Choropleth extends StyleComposite {
+class Choropleth extends StyleComposite {
   /**
    * @constructor
    * @extends {Style}
@@ -44,7 +45,7 @@ export default class Choropleth extends StyleComposite {
    * @param {Array<Style>}
    * @param {Style.quantification}
    * @param {object}
-   * @api stable
+   * @api
    */
   constructor(attributeName, styles, quantification = StyleQuantification.JENKS(), options = {}) {
     super(options, {});
@@ -56,7 +57,7 @@ export default class Choropleth extends StyleComposite {
      * TODO
      * @public
      * @type {String}
-     * @api stable
+     * @api
      * @expose
      */
     this.attributeName_ = attributeName;
@@ -64,7 +65,7 @@ export default class Choropleth extends StyleComposite {
     /**
      * @public
      * @type {Array<Style.Simple>}
-     * @api stable
+     * @api
      * @expose
      */
     this.choroplethStyles_ = styles;
@@ -72,7 +73,7 @@ export default class Choropleth extends StyleComposite {
     /**
      * @public
      * @type {M.quantification|function}
-     * @api stable
+     * @api
      * @expose
      */
     this.quantification_ = quantification;
@@ -80,7 +81,7 @@ export default class Choropleth extends StyleComposite {
     /**
      * @public
      * @type {Array<Number>}
-     * @api stable
+     * @api
      * @expose
      */
     this.dataValues_ = [];
@@ -88,7 +89,7 @@ export default class Choropleth extends StyleComposite {
     /**
      * @public
      * @type{Array<Number>}
-     * @api stable
+     * @api
      * @expose
      */
     this.breakPoints_ = [];
@@ -99,7 +100,7 @@ export default class Choropleth extends StyleComposite {
    * @function
    * @public
    * @param {M.Layer.Vector} layer - Layer where to apply choropleth style
-   * @api stable
+   * @api
    */
   applyInternal_(layer) {
     this.layer_ = layer;
@@ -111,7 +112,7 @@ export default class Choropleth extends StyleComposite {
    * @function
    * @public
    * @return {String} attribute name of Style
-   * @api stable
+   * @api
    */
   getAttributeName() {
     return this.attributeName_;
@@ -122,7 +123,7 @@ export default class Choropleth extends StyleComposite {
    * @function
    * @public
    * @param {String} attributeName - attribute name to set
-   * @api stable
+   * @api
    */
   setAttributeName(attributeName) {
     this.attributeName_ = attributeName;
@@ -136,7 +137,7 @@ export default class Choropleth extends StyleComposite {
    * @function
    * @public
    * @return {Style.quantification|function} quantification function of style
-   * @api stable
+   * @api
    */
   getQuantification() {
     return this.quantification_;
@@ -147,7 +148,7 @@ export default class Choropleth extends StyleComposite {
    * @function
    * @public
    * @param {Style.quantification|function} quantification - quantification function of style
-   * @api stable
+   * @api
    */
   setQuantification(quantification) {
     this.quantification_ = quantification;
@@ -177,7 +178,7 @@ export default class Choropleth extends StyleComposite {
    * @function
    * @public
    * @return {Array(Style)|null} returns the styles defined by user
-   * @api stable
+   * @api
    */
   getChoroplethStyles() {
     return this.choroplethStyles_;
@@ -188,7 +189,7 @@ export default class Choropleth extends StyleComposite {
    * @function
    * @public
    * @param {Array<StylePoint>|Array<StyleLine>|Array<StylePolygon>} styles - styles defined by user
-   * @api stable
+   * @api
    */
   setStyles(stylesParam) {
     let styles = stylesParam;
@@ -206,7 +207,7 @@ export default class Choropleth extends StyleComposite {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
 
   updateCanvas() {
@@ -265,7 +266,7 @@ export default class Choropleth extends StyleComposite {
    * @function
    * @public
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
-   * @api stable
+   * @api
    */
   drawGeometryToCanvas(canvasImages, callbackFn) {
     const heights = canvasImages.map(canvasImage => canvasImage.image.height);
@@ -309,7 +310,7 @@ export default class Choropleth extends StyleComposite {
    * @function
    * @public
    * @return {Array<number>} numeric features values of layer
-   * @api stable
+   * @api
    */
   getValues() {
     const values = [];
@@ -332,7 +333,7 @@ export default class Choropleth extends StyleComposite {
    * This function updates the style
    * @function
    * @private
-   * @api stable
+   * @api
    */
   update_() {
     if (!isNullOrEmpty(this.layer_)) {
@@ -387,7 +388,7 @@ export default class Choropleth extends StyleComposite {
    * @public
    * @param {String} c - color in hexadecimal format
    * @return {Style.Point}
-   * @api stable
+   * @api
    */
   static DEFAULT_STYLE_POINT(c) {
     return new StylePoint({
@@ -409,7 +410,7 @@ export default class Choropleth extends StyleComposite {
    * @public
    * @param {String} c - color in hexadecimal format
    * @return {Style.Line}
-   * @api stable
+   * @api
    */
   static DEFAULT_STYLE_LINE(c) {
     return new StyleLine({
@@ -426,7 +427,7 @@ export default class Choropleth extends StyleComposite {
    * @public
    * @param {String} c - color in hexadecimal format
    * @return {Style.Polygon}
-   * @api stable
+   * @api
    */
   static DEFAULT_STYLE_POLYGON(c) {
     return new StylePolygon({
@@ -459,7 +460,7 @@ export default class Choropleth extends StyleComposite {
    * This constant defines the order of style.
    * @constant
    * @public
-   * @api stable
+   * @api
    */
   get ORDER() {
     return 1;
@@ -468,13 +469,15 @@ export default class Choropleth extends StyleComposite {
 
 /** Color style by default
  * @constant
- * @api stable
+ * @api
  */
 Choropleth.START_COLOR_DEFAULT = 'red';
 
 /**
  * Color style by default
  * @constant
- * @api stable
+ * @api
  */
 Choropleth.END_COLOR_DEFAULT = 'brown';
+
+export default Choropleth;

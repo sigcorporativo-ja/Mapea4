@@ -8,7 +8,7 @@ import { normalize, isString } from '../util/Utils';
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 export const WMC = 'WMC';
 

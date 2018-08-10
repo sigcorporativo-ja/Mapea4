@@ -1,5 +1,5 @@
 /**
- * @module M/facade
+ * @module M/facade/Base
  */
 import { isNullOrEmpty, isFunction } from './util/Utils';
 import MObject from './Object';
@@ -17,7 +17,7 @@ class Base extends MObject {
    * @constructor
    * @param {Object} impl implementation object
    * @extends {M.Object}
-   * @api stable
+   * @api
    */
   constructor(impl) {
     // calls the super constructor
@@ -42,7 +42,7 @@ class Base extends MObject {
    * @public
    * @function
    * @returns {Object}
-   * @api stable
+   * @api
    */
   getImpl() {
     return this.impl_;
@@ -54,7 +54,7 @@ class Base extends MObject {
    * @public
    * @function
    * @param {M.Map} impl to add the plugin
-   * @api stable
+   * @api
    */
   setImpl(value) {
     this.impl_ = value;
@@ -66,7 +66,7 @@ class Base extends MObject {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   destroy() {
     if (!isNullOrEmpty(this.impl_) && isFunction(this.impl_.destroy)) {

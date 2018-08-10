@@ -1,4 +1,4 @@
-import M from 'facade/js/Mapea';
+import M from 'facade/js/mapea';
 import KML from 'facade/js/layer/KML';
 import proj4 from 'proj4';
 window.map = M.map({

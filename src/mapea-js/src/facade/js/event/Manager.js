@@ -16,7 +16,7 @@ class EventsManager {
   /**
    * @constructor
    * @param {Object} impl implementation object
-   * @api stable
+   * @api
    */
   constructor() {
     /**
@@ -34,7 +34,7 @@ class EventsManager {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   add(eventType, listener, optThis, once = false) {
     if (!isNullOrEmpty(eventType) &&
@@ -56,7 +56,7 @@ class EventsManager {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   remove(eventType, listener, optThis) {
     const listeners = this.events_[eventType];
@@ -73,7 +73,7 @@ class EventsManager {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   fire(eventType, args) {
     const EventsManagerListeners = [].concat(this.events_[eventType]);
@@ -92,7 +92,7 @@ class EventsManager {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   indexOf(eventType, listener, optThis) {
     let index = -1;

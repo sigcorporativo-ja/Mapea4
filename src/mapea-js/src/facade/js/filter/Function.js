@@ -13,7 +13,7 @@ class Function extends BaseFilter {
    * Creates a Filter Function to filter features
    *
    * @param {function} filterFunction - Function to execute
-   * @api stable
+   * @api
    */
   constructor(filterFunction, options = {}) {
     super();
@@ -40,7 +40,7 @@ class Function extends BaseFilter {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   setFunction(filterFunction) {
     this.filterFunction_ = filterFunction;
@@ -52,7 +52,7 @@ class Function extends BaseFilter {
    * @public
    * @function
    * @return {M.filter.Function} filter to execute
-   * @api stable
+   * @api
    */
   getFunctionFilter() {
     return this.filterFunction_;
@@ -65,7 +65,7 @@ class Function extends BaseFilter {
    * @function
    * @param {Array<M.Feature>} features - Features on which the filter runs
    * @return {Array<M.Feature>} features to passed filter
-   * @api stable
+   * @api
    */
   execute(features) {
     return features.filter(this.filterFunction_);
@@ -76,7 +76,7 @@ class Function extends BaseFilter {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @return {string} CQL
    */
   toCQL() {

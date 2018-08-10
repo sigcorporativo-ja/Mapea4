@@ -1,5 +1,5 @@
 import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'facade/js/util/Utils';
-import Remote from 'facade/js/util/Remote';
+import { get as getRemote } from 'facade/js/util/Remote';
 import EventsManager from 'facade/js/event/Manager';
 import { get as getProj } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
@@ -235,7 +235,7 @@ export default class WMTS extends LayerBase {
     const getCapabilitiesUrl = getWMTSGetCapabilitiesUrl(this.url);
     const parser = new OLFormatWMTSCapabilities();
     return new Promise((success, fail) => {
-      Remote.get(getCapabilitiesUrl).then((response) => {
+      getRemote(getCapabilitiesUrl).then((response) => {
         const getCapabilitiesDocument = response.xml;
         const parsedCapabilities = parser.read(getCapabilitiesDocument);
         success.call(this, parsedCapabilities);

@@ -1,5 +1,5 @@
 /**
- * @module M.template
+ * @module M/template
  */
 import Handlebars from 'handlebars';
 import { extendsObj, isUndefined, stringToHtml } from './Utils';
@@ -13,9 +13,9 @@ import './handlebarshelpers';
  * This function gets a template by its name and
  * @param {Mx.parameters.TemplateOptions} options of the template compilation
  * @returns {Promise} the promise with the html resultant
- * @api stable
+ * @api
  */
-const compile = (string, options) => {
+export const compile = (string, options) => {
   let template;
   let templateVars = {};
   let parseToHtml;

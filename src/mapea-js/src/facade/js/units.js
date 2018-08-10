@@ -1,11 +1,9 @@
 /**
- * @module M
+ * @module M/units
  */
-
 /**
  * 0.02540005080010160020 (A sensible default)
  * @const {Number}
- * @api
  */
 const METERS_PER_INCH = 0.02540005080010160020;
 

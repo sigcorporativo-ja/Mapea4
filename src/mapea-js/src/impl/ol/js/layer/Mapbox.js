@@ -1,7 +1,7 @@
-import LayerType from 'facade/js/layer/Type';
+import * as LayerType from 'facade/js/layer/Type';
 import FacadeOSM from 'facade/js/layer/OSM';
 import FacadeMapbox from 'facade/js/layer/Mapbox';
-import Config from 'configuration';
+
 import { isNullOrEmpty, generateResolutionsFromExtent, isArray } from 'facade/js/util/Utils';
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceXYZ from 'ol/source/XYZ';
@@ -95,7 +95,7 @@ export default class Mapbox extends Layer {
 
     this.ol3Layer = new OLLayerTile({
       source: new OLSourceXYZ({
-        url: `${this.url}${this.name}/{z}/{x}/{y}.png?${Config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
+        url: `${this.url}${this.name}/{z}/{x}/{y}.png?${M.config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
       }),
     });
 
@@ -169,7 +169,7 @@ export default class Mapbox extends Layer {
           olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
         }
         const newSource = new OLSourceXYZ({
-          url: `${this.url}${this.name}/{z}/{x}/{y}.png?${Config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
+          url: `${this.url}${this.name}/{z}/{x}/{y}.png?${M.config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
           // tileGrid: new ol.tilegrid.TileGrid({
           //   resolutions,
           //   extent: olExtent,

@@ -21,7 +21,7 @@ class Feature extends Base {
    * @extends {M.facade.Base}
    * @param {string} id - id to feature
    * @param {Object} geojson - geojson to feature
-   * @api stable
+   * @api
    */
   constructor(id, geojson, style) {
     /**
@@ -55,7 +55,7 @@ class Feature extends Base {
    * @public
    * @function
    * @param {string} id - ID to feature
-   * @api stable
+   * @api
    */
   setId(id) {
     this.getImpl().setId(id);
@@ -67,7 +67,7 @@ class Feature extends Base {
    * @public
    * @function
    * @return {string} ID to feature
-   * @api stable
+   * @api
    */
   getId() {
     return this.getImpl().getId();
@@ -79,7 +79,7 @@ class Feature extends Base {
    * @public
    * @function
    * @return {object} Geometry feature
-   * @api stable
+   * @api
    */
   getGeometry() {
     return this.getGeoJSON().geometry;
@@ -91,7 +91,7 @@ class Feature extends Base {
    * @public
    * @function
    * @param {object} Geometry feature
-   * @api stable
+   * @api
    */
   setGeometry(geometry) {
     this.getImpl().setGeometry(geometry);
@@ -103,7 +103,7 @@ class Feature extends Base {
    * @public
    * @function
    * @return {Object} geojson feature
-   * @api stable
+   * @api
    */
   getGeoJSON() {
     return this.formatGeoJSON_.write(this)[0];
@@ -115,7 +115,7 @@ class Feature extends Base {
    * @public
    * @function
    * @return {Object} attributes feature
-   * @api stable
+   * @api
    */
   getAttributes() {
     return this.getImpl().getAttributes();
@@ -127,7 +127,7 @@ class Feature extends Base {
    * @public
    * @function
    * @param {Object} attributes - attributes to feature
-   * @api stable
+   * @api
    */
   setAttributes(attributes) {
     if (typeof attributes === 'object') {
@@ -144,7 +144,7 @@ class Feature extends Base {
    * @function
    * @param {string} attribute - Name attribute
    * @return  {string|number|object} returns the value of the indicated attribute
-   * @api stable
+   * @api
    */
   getAttribute(attribute) {
     let attrValue;
@@ -178,7 +178,7 @@ class Feature extends Base {
    * @function
    * @param {string} attribute - Name attribute
    * @return  {string|number|object} returns the value of the indicated attribute
-   * @api stable
+   * @api
    */
   setAttribute(attribute, value) {
     return this.getImpl().setAttribute(attribute, value);
@@ -190,7 +190,7 @@ class Feature extends Base {
    * @public
    * @function
    * @param {M.style.Feature}
-   * @api stable
+   * @api
    */
   setStyle(style) {
     if (!isNullOrEmpty(style) && style instanceof StyleFeature) {
@@ -220,7 +220,7 @@ class Feature extends Base {
    * @public
    * @function
    * @return {M.style.Feature} returns the style feature
-   * @api stable
+   * @api
    */
   getStyle() {
     return this.style_;
@@ -232,7 +232,7 @@ class Feature extends Base {
    * @public
    * @function
    * @return {M.style.Feature} returns the style feature
-   * @api stable
+   * @api
    */
   clearStyle() {
     this.setStyle(null);
@@ -244,7 +244,7 @@ class Feature extends Base {
    * @public
    * @function
    * @return {M.Feature}
-   * @api stable
+   * @api
    */
   getCentroid() {
     const id = this.getId();

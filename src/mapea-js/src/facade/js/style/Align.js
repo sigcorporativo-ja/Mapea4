@@ -1,36 +1,39 @@
-export default class Align {}
+/**
+ * @module M/style/align
+ */
+
 /**
  * Left style alignment
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Align.LEFT = 'left';
+export const LEFT = 'left';
 
 /**
  * Center style alignment
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Align.CENTER = 'center';
+export const CENTER = 'center';
 
 /**
  * Right style alignment
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Align.RIGHT = 'right';
+export const RIGHT = 'right';
 
 /**
  * Justify style alignment
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Align.JUSTIFY = 'justify';
+export const JUSTIFY = 'justify';

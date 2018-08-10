@@ -4,6 +4,8 @@ const entrypoints = require('./entry-points-test.json');
 const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 
 const distPath = path.resolve(__dirname, '../dist/core/js');
+const config = path.resolve(__dirname, '../test/configuration_filtered.js');
+entrypoints.config = config;
 const productionEntryPoint = path.resolve(__dirname, '../src/index.js');
 const env = process.env.NODE_ENV || 'development';
 const plugins = [new AllowMutateEsmExports()];
@@ -81,13 +83,10 @@ module.exports = {
   devServer: {
     hot: true,
     open: true,
+    openPage: '/test/browser',
     watchOptions: {
       poll: 1000,
     },
   },
   devtool: 'source-map',
-  externals: {
-    ol: 'ol',
-    leaflet: 'L',
-  },
 };

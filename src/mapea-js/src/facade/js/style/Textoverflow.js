@@ -1,28 +1,29 @@
-export default class Textoverflow {}
-
+/**
+ * @module M/style/textoverflow
+ */
 /**
  * Left style textoverflow
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Textoverflow.ELLIPSIS = "ellipsis";
+export const ELLIPSIS = 'ellipsis';
 
 /**
  * Center style textoverflow
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Textoverflow.VISIBLE = "visible";
+export const VISIBLE = 'visible';
 
 /**
  * Right style textoverflow
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Textoverflow.HIDDEN = "";
+export const HIDDEN = '';

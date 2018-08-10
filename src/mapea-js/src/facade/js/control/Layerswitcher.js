@@ -7,8 +7,8 @@ import layerswitcherTemplate from 'templates/layerswitcher';
 import ControlBase from './Control';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
-import LayerType from '../layer/Type';
+import {compile as compileTemplate} from '../util/Template';
+import * as LayerType from '../layer/Type';
 import Vector from '../layer/Vector';
 import StylePoint from '../style/Point';
 import EvtManager from '../event/Manager';
@@ -26,7 +26,7 @@ class LayerSwitcher extends ControlBase {
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor() {
     // implementation of this control
@@ -60,12 +60,12 @@ class LayerSwitcher extends ControlBase {
    * @function
    * @param {M.Map} map map to add the control
    * @returns {Promise} html response
-   * @api stable
+   * @api
    */
   createView(map) {
     return new Promise((resolve) => {
       LayerSwitcher.getTemplateVariables(this.map_).then((templateVars) => {
-        const html = Template.compile(layerswitcherTemplate, {
+        const html = compileTemplate(layerswitcherTemplate, {
           vars: templateVars,
         });
         resolve(html);
@@ -78,7 +78,7 @@ class LayerSwitcher extends ControlBase {
    * to this control
    *
    * @function
-   * @api stable
+   * @api
    */
   /* eslint-disable */
   equals(obj) {
@@ -92,7 +92,7 @@ class LayerSwitcher extends ControlBase {
    * the layerswitcher
    *
    * @function
-   * @api stable
+   * @api
    */
   render() {
     this.getImpl().renderPanel();
@@ -103,7 +103,7 @@ class LayerSwitcher extends ControlBase {
    * the layerswitcher
    *
    * @function
-   * @api stable
+   * @api
    */
   registerEvents() {
     this.getImpl().registerEvents();
@@ -113,7 +113,7 @@ class LayerSwitcher extends ControlBase {
    * Unegisters events for map and layers from the layerswitcher
    *
    * @function
-   * @api stable
+   * @api
    */
   unregisterEvents() {
     this.getImpl().unregisterEvents();
@@ -200,7 +200,7 @@ class LayerSwitcher extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 LayerSwitcher.NAME = 'layerswitcher';
 

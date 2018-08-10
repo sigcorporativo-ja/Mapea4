@@ -2,8 +2,8 @@ import OLFormatWFS from 'ol/format/WFS';
 import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup';
 import Popup from 'facade/js/Popup';
 import Dialog from 'facade/js/dialog';
-import Remote from 'facade/js/util/Remote';
-import Template from 'facade/js/util/Template';
+import { get as getRemote } from 'facade/js/util/Remote';
+import { compile as compileTemplate } from 'facade/js/util/Template';
 import { isNullOrEmpty, normalize, beautifyAttribute } from 'facade/js/util/Utils';
 import Control from './Control';
 
@@ -423,7 +423,7 @@ export default class GetFeatureInfo extends Control {
 
    */
   showInfoFromURL_(layerNamesUrls, coordinate, olMap) {
-    const htmlAsText = Template.compile(getfeatureinfoPopupTemplate, {
+    const htmlAsText = compileTemplate(getfeatureinfoPopupTemplate, {
       vars: {
         info: GetFeatureInfo.LOADING_MESSAGE,
       },
@@ -460,7 +460,7 @@ export default class GetFeatureInfo extends Control {
     layerNamesUrls.forEach((layerNameUrl) => {
       const url = layerNameUrl.url;
       const layerName = layerNameUrl.layer;
-      Remote.get(url).then((response) => {
+      getRemote(url).then((response) => {
         popup = this.facadeMap_.getPopup();
         if (response.code === 200 && response.error === false) {
           const info = response.text;

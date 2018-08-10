@@ -1,7 +1,7 @@
 import MObject from 'facade/js/Object';
 import { isNullOrEmpty, isArray, isString, isObject, includes } from 'facade/js/util/Utils';
 import Exception from 'facade/js/exception/Exception';
-import LayerType from 'facade/js/layer/Type';
+import * as LayerType from 'facade/js/layer/Type';
 import WMS from 'facade/js/layer/WMS';
 import Panzoombar from 'facade/js/control/Panzoombar';
 import Control from 'facade/js/control/Control';

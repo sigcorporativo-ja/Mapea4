@@ -5,7 +5,7 @@ import OLGeomPoint from 'ol/geom/Point';
 import { asString as colorAsString } from 'ol/color';
 import Chart from 'facade/js/style/Chart';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
-import UtilsImpl from './utils/Utils';
+import UtilsImpl from '../util/Utils';
 
 export default class OLChart extends OLStyleRegularShape {
   /**

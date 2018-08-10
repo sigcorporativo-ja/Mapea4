@@ -1,4 +1,4 @@
-import Template from 'facade/js/util/Template';
+import {compile as compileTemplate} from 'facade/js/util/Template';
 import popupKMLTemplate from 'templates/kml_popup';
 import Popup from 'facade/js/Popup';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
@@ -132,7 +132,7 @@ export default class KML extends Vector {
       const featureDesc = feature.getAttribute('description');
       const featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();
 
-      const htmlAsText = Template.compile(popupKMLTemplate, {
+      const htmlAsText = compileTemplate(popupKMLTemplate, {
         vars: {
           name: featureName,
           desc: featureDesc,

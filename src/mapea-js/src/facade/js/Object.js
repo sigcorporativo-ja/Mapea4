@@ -1,5 +1,5 @@
 /**
- * @module M
+ * @module M/Object
  */
 import EventsManager from './event/Manager';
 import { isNullOrEmpty } from './util/Utils';
@@ -10,7 +10,7 @@ import { isNullOrEmpty } from './util/Utils';
  * which manages events
  * @apì
  */
-class Object {
+class MObject {
   /**
    * @constructor
    * @api
@@ -42,7 +42,7 @@ class Object {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   once(eventType, listener, optThis) {
     return this.eventsManager_.add(eventType, listener, optThis, true);
@@ -53,7 +53,7 @@ class Object {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   un(eventType, listener, optThis) {
     this.eventsManager_.remove(eventType, listener, optThis);
@@ -64,7 +64,7 @@ class Object {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   fire(eventType, argsParam) {
     let args = argsParam;
@@ -75,4 +75,4 @@ class Object {
   }
 }
 
-export default Object;
+export default MObject;

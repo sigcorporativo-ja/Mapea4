@@ -1,12 +1,12 @@
 /**
- * @module M
+ * @module M/Popup
  */
 import PopupImpl from 'impl/Popup';
-import Config from 'configuration';
+
 import 'assets/css/popup';
 import { isNullOrEmpty } from './util/Utils';
 import Base from './Base';
-import Template from './util/Template';
+import {compile as compileTemplate} from './util/Template';
 import EventsManager from './event/Manager';
 import MWindow from './util/Window';
 
@@ -24,7 +24,7 @@ class Tab {
      * TODO
      * @public
      * @type {String}
-     * @api stable
+     * @api
      * @expose
      */
     this.icon = options.icon;
@@ -33,7 +33,7 @@ class Tab {
      * TODO
      * @public
      * @type {String}
-     * @api stable
+     * @api
      * @expose
      */
     this.title = options.title;
@@ -42,7 +42,7 @@ class Tab {
      * TODO
      * @public
      * @type {String}
-     * @api stable
+     * @api
      * @expose
      */
     this.content = options.content;
@@ -59,7 +59,7 @@ class Popup extends Base {
   /**
    * @constructor
    * @extends {M.facade.Base}
-   * @api stable
+   * @api
    */
   constructor(options) {
     const impl = new PopupImpl(options);
@@ -99,7 +99,7 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getTabs() {
     return this.tabs_;
@@ -109,7 +109,7 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   removeTab(tabToRemove) {
     this.tabs_ = this.tabs_.filter(tab => tab.content !== tabToRemove.content);
@@ -120,7 +120,7 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   addTab(tabOptions) {
     let tab = tabOptions;
@@ -135,12 +135,12 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   addTo(map, coordinate) {
     this.map_ = map;
     if (isNullOrEmpty(this.element_)) {
-      Template.compile(Popup.TEMPLATE, {
+      compileTemplate(Popup.TEMPLATE, {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
@@ -163,11 +163,11 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   update() {
     if (!isNullOrEmpty(this.map_)) {
-      Template.compile(Popup.TEMPLATE, {
+      compileTemplate(Popup.TEMPLATE, {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
@@ -187,7 +187,7 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   show(coord) {
     this.coord_ = coord;
@@ -200,7 +200,7 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   hide(evt) {
     if (!isNullOrEmpty(evt)) {
@@ -213,7 +213,7 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   switchTab(index) {
     if (this.tabs_.length > index) {
@@ -338,7 +338,7 @@ class Popup extends Base {
       this.element_.style.top = '';
       this.element_.classList.remove('m-no-animation');
       // mobile center
-      if (MWindow.WIDTH <= Config.MOBILE_WIDTH) {
+      if (MWindow.WIDTH <= M.config.MOBILE_WIDTH) {
         this.getImpl().centerByStatus(status, this.coord_);
       }
     }
@@ -415,7 +415,7 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getCoordinate() {
     return this.coord_;
@@ -425,7 +425,7 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   setCoordinate(coord) {
     this.coord_ = coord;
@@ -438,7 +438,7 @@ class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   destroy() {
     this.tabs_.length = 0;
@@ -452,7 +452,7 @@ class Popup extends Base {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Popup.TEMPLATE = 'popup.html';
 
@@ -461,7 +461,7 @@ Popup.TEMPLATE = 'popup.html';
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Popup.status = {};
 
@@ -470,7 +470,7 @@ Popup.status = {};
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Popup.status.COLLAPSED = 'm-collapsed';
 
@@ -479,7 +479,7 @@ Popup.status.COLLAPSED = 'm-collapsed';
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Popup.status.DEFAULT = 'm-default';
 
@@ -488,7 +488,7 @@ Popup.status.DEFAULT = 'm-default';
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Popup.status.FULL = 'm-full';
 

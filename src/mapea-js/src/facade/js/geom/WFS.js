@@ -1,5 +1,5 @@
 /**
- * @module M/wfs/geojson/type
+ * @module M/geom/wfs/type
  */
 
 /**

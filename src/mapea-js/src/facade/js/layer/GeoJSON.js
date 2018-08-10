@@ -1,5 +1,5 @@
 /**
- * @module M/layer
+ * @module M/layer/GeoJSON
  */
 import GeoJSONImpl from 'impl/layer/GeoJSON';
 import LayerVector from './Vector';
@@ -19,7 +19,7 @@ class GeoJSON extends LayerVector {
    * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.GeoJSON} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
-   * @api stable
+   * @api
    */
   constructor(parameters, options = {}) {
     /**
@@ -126,7 +126,7 @@ class GeoJSON extends LayerVector {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -144,7 +144,7 @@ class GeoJSON extends LayerVector {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   setSource(source) {
     this.source = source;
@@ -169,7 +169,7 @@ class GeoJSON extends LayerVector {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 GeoJSON.DEFAULT_OPTIONS_STYLE = {
   fill: {

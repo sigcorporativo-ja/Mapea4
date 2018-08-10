@@ -1,5 +1,5 @@
 /**
- * @module M
+ * @module M/Parameters
  */
 import { isString, isNullOrEmpty, getParameterValue, isObject, isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
@@ -432,7 +432,7 @@ class Parameters {
    * @constructor
    * @param {string|Mx.parameters.Map} userParameters parameters
    * provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParameters) {
     if (isNullOrEmpty(userParameters)) {
@@ -442,112 +442,112 @@ class Parameters {
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.container = parseContainer(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.layers = parseLayers(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.wmc = parseWMC(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.wms = parseWMS(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.wmts = parseWMTS(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.kml = parseKML(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.controls = parseControls(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.getfeatureinfo = parseGetFeatureInfo(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.maxExtent = parseMaxExtent(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.bbox = parseBbox(userParameters);
 
     /**
      * @public
      * @type {Number}
-     * @api stable
+     * @api
      */
     this.zoom = parseZoom(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.center = parseCenter(userParameters);
 
     /**
      * @public
      * @type {String|Array<String>|Array<Number>}
-     * @api stable
+     * @api
      */
     this.resolutions = parseResolutions(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.projection = parseProjection(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.label = parseLabel(userParameters);
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.ticket = parseTicket(userParameters);
   }

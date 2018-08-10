@@ -7,7 +7,7 @@ import scalelineTemplate from 'templates/scaleline';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
+import {compile as compileTemplate} from '../util/Template';
 
 /**
  * @classdesc
@@ -18,7 +18,7 @@ class ScaleLine extends ControlBase {
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor() {
     // implementation of this control
@@ -39,10 +39,10 @@ class ScaleLine extends ControlBase {
    * @function
    * @param {M.Map} map map to add the control
    * @returns {Promise} html response
-   * @api stable
+   * @api
    */
   createView(map) {
-    return Template.compile(scalelineTemplate);
+    return compileTemplate(scalelineTemplate);
   }
 
   /**
@@ -50,7 +50,7 @@ class ScaleLine extends ControlBase {
    * to this control
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     const equals = (obj instanceof ScaleLine);
@@ -63,7 +63,7 @@ class ScaleLine extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 ScaleLine.NAME = 'scaleline';
 

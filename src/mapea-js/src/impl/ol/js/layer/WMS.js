@@ -1,9 +1,8 @@
 import { isNullOrEmpty, isNull, getResolutionFromScale, addParameters, concatUrlPaths, getWMSGetCapabilitiesUrl, isArray } from 'facade/js/util/Utils';
 import FacadeLayerBase from 'facade/js/layer/Layer';
-import LayerType from 'facade/js/layer/Type';
+import * as LayerType from 'facade/js/layer/Type';
 import FacadeWMS from 'facade/js/layer/WMS';
-import Config from 'configuration';
-import Remote from 'facade/js/util/Remote';
+import { get as getRemote } from 'facade/js/util/Remote';
 import OLLayerTile from 'ol/layer/Tile';
 import OLLayerImage from 'ol/layer/Image';
 import { get as getProj, transformExtent } from 'ol/proj';
@@ -191,7 +190,7 @@ export default class WMS extends LayerBase {
       this.addSingleLayer_();
     }
 
-    if (this.legendUrl_ === concatUrlPaths([Config.THEME_URL,
+    if (this.legendUrl_ === concatUrlPaths([M.config.THEME_URL,
       FacadeLayerBase.LEGEND_DEFAULT])) {
       this.legendUrl_ = addParameters(this.url, {
         SERVICE: 'WMS',
@@ -514,7 +513,7 @@ export default class WMS extends LayerBase {
         // gest the capabilities URL
         const wmsGetCapabilitiesUrl = getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
         // gets the getCapabilities response
-        Remote.get(wmsGetCapabilitiesUrl).then((response) => {
+        getRemote(wmsGetCapabilitiesUrl).then((response) => {
           const getCapabilitiesDocument = response.xml;
           const getCapabilitiesParser = new FormatWMS();
           const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);

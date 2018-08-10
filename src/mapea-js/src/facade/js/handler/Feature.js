@@ -1,5 +1,5 @@
 /**
- * @module M/handler
+ * @module M/handler/Feature
  */
 import HandlerImpl from 'impl/handler/Feature';
 import { isFunction, includes } from '../util/Utils';
@@ -19,7 +19,7 @@ class Features extends Base {
    *
    * @constructor
    * @extends {M.facade.Base}
-   * @api stable
+   * @api
    */
   constructor(options = {}, impl = new HandlerImpl(options)) {
     // calls the super constructor
@@ -74,7 +74,7 @@ class Features extends Base {
    * @public
    * @function
    * @param {M.Map} map to add the plugin
-   * @api stable
+   * @api
    * @export
    */
   addTo(map) {
@@ -155,7 +155,7 @@ class Features extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   selectFeatures(features, layer, evt) {
     this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name]
@@ -172,7 +172,7 @@ class Features extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   unselectFeatures(features, layer, evt) {
     // removes unselected features
@@ -190,7 +190,7 @@ class Features extends Base {
    *
    * @private
    * @function
-   * @api stable
+   * @api
    */
   hoverFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] = this.prevHoverFeatures_[layer.name].concat(features);
@@ -203,7 +203,7 @@ class Features extends Base {
    *
    * @private
    * @function
-   * @api stable
+   * @api
    */
   leaveFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] =
@@ -217,7 +217,7 @@ class Features extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   activate() {
@@ -232,7 +232,7 @@ class Features extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   deactivate() {
@@ -248,7 +248,7 @@ class Features extends Base {
    * @public
    * @function
    * @param {M.ui.Panel} panel
-   * @api stable
+   * @api
    * @export
    */
   addLayer(layer) {
@@ -265,7 +265,7 @@ class Features extends Base {
    * @public
    * @function
    * @returns {M.ui.Panel}
-   * @api stable
+   * @api
    * @export
    */
   removeLayer(layer) {
@@ -281,7 +281,7 @@ class Features extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   destroy() {

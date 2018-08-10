@@ -7,7 +7,7 @@ import getfeatureinfoTemplate from 'templates/getfeatureinfo';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
+import { compile as compileTemplate } from '../util/Template';
 
 /**
  * @classdesc
@@ -19,7 +19,7 @@ class GetFeatureInfo extends ControlBase {
    * @param {string} format - Format response
    * @param {object} options - Control options
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor(format, options = {}) {
     // implementation of this control
@@ -39,10 +39,10 @@ class GetFeatureInfo extends ControlBase {
    * @function
    * @param {M.Map} map - Facade map
    * @returns {Promise} HTML template
-   * @api stable
+   * @api
    */
   createView(map) {
-    return Template.compile(getfeatureinfoTemplate);
+    return compileTemplate(getfeatureinfoTemplate);
   }
 
   /**
@@ -52,7 +52,7 @@ class GetFeatureInfo extends ControlBase {
    * @function
    * @param {HTMLElement} element - Template control
    * @returns {HTMLElement} HTML control button
-   * @api stable
+   * @api
    * @export
    */
   getActivationButton(element) {
@@ -67,7 +67,7 @@ class GetFeatureInfo extends ControlBase {
    * @function
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -83,7 +83,7 @@ class GetFeatureInfo extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 GetFeatureInfo.NAME = 'getfeatureinfo';
 
@@ -92,7 +92,7 @@ GetFeatureInfo.NAME = 'getfeatureinfo';
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 GetFeatureInfo.POPUP_TITLE = 'Información';
 

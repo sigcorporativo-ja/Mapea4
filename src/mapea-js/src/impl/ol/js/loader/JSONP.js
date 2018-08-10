@@ -1,5 +1,5 @@
 import MObject from 'facade/js/Object';
-import Remote from 'facade/js/util/Remote';
+import {get as getRemote} from 'facade/js/util/Remote';
 import Exception from 'facade/js/exception/exception';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 
@@ -65,7 +65,7 @@ export default class JSONP extends MObject {
    */
   loadInternal_(projection) {
     return new Promise((success) => {
-      Remote.get(this.url_).then((response) => {
+      getRemote(this.url_).then((response) => {
         if (!isNullOrEmpty(response.text)) {
           const features = this.format_.read(response.text, {
             featureProjection: projection,

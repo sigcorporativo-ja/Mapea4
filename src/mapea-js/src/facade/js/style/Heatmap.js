@@ -1,13 +1,19 @@
+/**
+ * @module M/style/Heatmap
+ */
 import HeatmapImpl from 'impl/style/Heatmap';
 import Style from './Style';
 import { isString, isFunction, isArray, inverseColor, isNullOrEmpty, generateIntervals, extendsObj } from '../util/Utils';
 import Exception from '../exception/exception';
 
-export default class Heatmap extends Style {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a style heatmap
+ * with parameters specified by the user
+ * @api
+ */
+class Heatmap extends Style {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a style heatmap
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.Style}
@@ -16,7 +22,7 @@ export default class Heatmap extends Style {
    * (and values outside will be clamped to that range). Default is weight. Required.
    * @param {Mx.HeatmapStyleOptions} options - options style
    * @param {object} vendorOptions - vendorOptions style
-   * @api stable
+   * @api
    */
   constructor(attribute, optionsParam = {}, vendorOptionsParam = {}) {
     const options = optionsParam;
@@ -55,7 +61,7 @@ export default class Heatmap extends Style {
     /**
      * @public
      * @type {string|function}
-     * @api stable
+     * @api
      */
     this.attribute_ = attribute;
 
@@ -77,7 +83,7 @@ export default class Heatmap extends Style {
    * @function
    * @public
    * @param {M.Layer.Vector} layer - Layer where to apply choropleth style
-   * @api stable
+   * @api
    */
   unapply(layer) {
     this.layer_ = null;
@@ -89,7 +95,7 @@ export default class Heatmap extends Style {
    * @function
    * @public
    * @return {string|function}
-   * @api stable
+   * @api
    */
   getAttributeName() {
     return this.attribute_;
@@ -100,7 +106,7 @@ export default class Heatmap extends Style {
    * @function
    * @public
    * @param {string|function} attribute - The attribute of heatmap style
-   * @api stable
+   * @api
    */
   setAttributeName(attribute) {
     this.attribute_ = attribute;
@@ -113,7 +119,7 @@ export default class Heatmap extends Style {
    * @function
    * @public
    * @return {Array<string>}
-   * @api stable
+   * @api
    */
   getGradient() {
     return this.options_.gradient;
@@ -124,7 +130,7 @@ export default class Heatmap extends Style {
    * @function
    * @public
    * @param {Array<string>} gradient
-   * @api stable
+   * @api
    */
   setGradient(gradientParam) {
     let gradient = gradientParam;
@@ -144,7 +150,7 @@ export default class Heatmap extends Style {
    * @function
    * @public
    * @return {number}
-   * @api stable
+   * @api
    */
   getRadius() {
     return this.options_.radius;
@@ -155,7 +161,7 @@ export default class Heatmap extends Style {
    * @function
    * @public
    * @param {number} radius
-   * @api stable
+   * @api
    */
   setRadius(radius) {
     this.options_.radius = radius;
@@ -167,7 +173,7 @@ export default class Heatmap extends Style {
    * @function
    * @public
    * @return {number}
-   * @api stable
+   * @api
    */
   getBlurSize() {
     return this.options_.blur;
@@ -178,7 +184,7 @@ export default class Heatmap extends Style {
    * @function
    * @public
    * @param {number} blur
-   * @api stable
+   * @api
    */
   setBlurSize(blur) {
     this.options_.blur = blur;
@@ -203,7 +209,7 @@ export default class Heatmap extends Style {
    * @function
    * @public
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
-   * @api stable
+   * @api
    */
   drawGeometryToCanvas() {
     const [minWeight, maxWeight] = [this.getImpl().getMinWeight(), this.getImpl().getMaxWeight()];
@@ -224,7 +230,7 @@ export default class Heatmap extends Style {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   updateCanvas() {
     this.drawGeometryToCanvas();
@@ -236,10 +242,12 @@ export default class Heatmap extends Style {
  * @constant
  * @public
  * @param {object}
- * @api stable
+ * @api
  */
 Heatmap.DEFAULT_OPTIONS = {
   gradient: ['#00f', '#0ff', '#0f0', '#ff0', '#f00'],
   blur: 15,
   radius: 10,
 };
+
+export default Heatmap;

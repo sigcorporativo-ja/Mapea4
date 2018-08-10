@@ -1,6 +1,6 @@
 import MObject from 'facade/js/Object';
 import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
-import Config from 'Configuration';
+import M.config from 'M.configuration';
 import FacadeLayer from 'facade/js/layer/Layer';
 
 export default class Layer extends MObject {
@@ -185,7 +185,7 @@ export default class Layer extends MObject {
    * @expose
    */
   getLegendURL() {
-    return concatUrlPaths([Config.THEME_URL, FacadeLayer.LEGEND_DEFAULT]);
+    return concatUrlPaths([M.config.THEME_URL, FacadeLayer.LEGEND_DEFAULT]);
   }
 
   /**

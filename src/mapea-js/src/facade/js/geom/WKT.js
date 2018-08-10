@@ -1,5 +1,5 @@
 /**
- * @module M/wkt/geojson/type
+ * @module M/geom/wkt/type
  */
 
 /**

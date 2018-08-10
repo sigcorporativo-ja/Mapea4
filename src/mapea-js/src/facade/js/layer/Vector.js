@@ -1,12 +1,12 @@
 /**
- * @module M/layer
+ * @module M/layer/Vector
  */
 import VectorImpl from 'impl/layer/Vector';
 import { isUndefined, isArray, isNullOrEmpty } from '../util/Utils';
 import { generateStyleLayer } from '../style/utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
-import LayerType from './Type';
+import * as LayerType from './Type';
 import * as dialog from '../dialog';
 import FilterBase from '../filter/Base';
 import StyleCluster from '../style/Cluster';
@@ -26,7 +26,7 @@ class Vector extends LayerBase {
    * @extends {M.Layer}
    * @param {Mx.parameters.Layer} userParameters - parameters
    * @param {Mx.parameters.LayerOptions} options - custom options for this layer
-   * @api stable
+   * @api
    */
   constructor(parameters = {}, options = {}, impl = new VectorImpl(options)) {
     // calls the super constructor
@@ -75,7 +75,7 @@ class Vector extends LayerBase {
    * @function
    * @public
    * @param {Array<M.feature>} features - Features to add
-   * @api stable
+   * @api
    */
   addFeatures(featuresParam, update = false) {
     let features = featuresParam;
@@ -94,7 +94,7 @@ class Vector extends LayerBase {
    * @public
    * @param {boolean} applyFilter - Indicates whether execute filter
    * @return {Array<M.Feature>} returns all features or discriminating by the filter
-   * @api stable
+   * @api
    */
   getFeatures(skipFilterParam) {
     let skipFilter = skipFilterParam;
@@ -109,7 +109,7 @@ class Vector extends LayerBase {
    * @param {string|number} id - Id feature
    * @return {null|M.feature} feature - Returns the feature with that id if it is found,
      in case it is not found or does not indicate the id returns null
-   * @api stable
+   * @api
    */
   getFeatureById(id) {
     let feature = null;
@@ -127,7 +127,7 @@ class Vector extends LayerBase {
    * @function
    * @public
    * @param {Array<M.feature>} features - Features to remove
-   * @api stable
+   * @api
    */
   removeFeatures(featuresParam) {
     let features = featuresParam;
@@ -142,7 +142,7 @@ class Vector extends LayerBase {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   clear() {
     this.removeFilter();
@@ -154,7 +154,7 @@ class Vector extends LayerBase {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   refresh() {
     this.getImpl().refresh(true);
@@ -166,7 +166,7 @@ class Vector extends LayerBase {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   redraw() {
     this.getImpl().redraw();
@@ -191,7 +191,7 @@ class Vector extends LayerBase {
    * @function
    * @public
    * @param {M.Filter} filter - filter to set
-   * @api stable
+   * @api
    */
   setFilter(filter) {
     if (isNullOrEmpty(filter) || (filter instanceof FilterBase)) {
@@ -222,7 +222,7 @@ class Vector extends LayerBase {
    * @function
    * @public
    * @return {M.Filter} returns filter assigned
-   * @api stable
+   * @api
    */
   getFilter() {
     return this.filter_;
@@ -234,7 +234,7 @@ class Vector extends LayerBase {
    * @function
    * @param {boolean} applyFilter - Indicates whether execute filter
    * @return {Array<number>} Extent of features
-   * @api stable
+   * @api
    */
   getFeaturesExtent(skipFilterParam) {
     let skipFilter = skipFilterParam;
@@ -247,7 +247,7 @@ class Vector extends LayerBase {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   removeFilter() {
     this.setFilter(null);
@@ -260,7 +260,7 @@ class Vector extends LayerBase {
    * @function
    * @public
    * @param {object} obj - Object to compare
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -324,7 +324,7 @@ class Vector extends LayerBase {
    * This function return style vector
    *
    * TODO
-   * @api stable
+   * @api
    */
   getStyle() {
     return this.style_;
@@ -335,7 +335,7 @@ class Vector extends LayerBase {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   clearStyle() {
     this.style = null;
@@ -347,7 +347,7 @@ class Vector extends LayerBase {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   getLegendURL() {
     let legendUrl = this.getImpl().getLegendURL();
@@ -382,7 +382,7 @@ class Vector extends LayerBase {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Vector.DEFAULT_OPTIONS_STYLE = {
   fill: {

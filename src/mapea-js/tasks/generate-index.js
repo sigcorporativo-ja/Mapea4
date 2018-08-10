@@ -85,23 +85,23 @@ function formatSymbolExport(name, namespaces) {
  */
 function generateExports(symbols, namespaces, imports) {
   let blocks = [];
-  symbols.forEach(function(symbol) {
+  symbols.forEach((symbol) => {
     const name = symbol.name;
-    if (name.indexOf('#') == -1) {
+    if (name.indexOf('#') === -1) {
       const block = formatSymbolExport(name, namespaces);
       if (block !== blocks[blocks.length - 1]) {
         blocks.push(block);
       }
     }
   });
-  const nsdefs = ['const M = window[\'M\'] = {};'];
+  const nsdefs = [];
   const ns = Object.keys(namespaces).sort();
   for (let i = 0, ii = ns.length; i < ii; ++i) {
     if (namespaces[ns[i]]) {
       nsdefs.push(`${ns[i]} = {};`);
     }
   }
-  blocks = imports.concat(nsdefs.sort()).concat(blocks.sort());
+  blocks = imports.concat(['const M = window[\'M\'] = {};'].concat(nsdefs.concat(blocks).sort()));
   blocks.push('');
   return blocks.join('\n');
 }

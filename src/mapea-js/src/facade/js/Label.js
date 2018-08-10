@@ -1,5 +1,5 @@
 /**
- * @module M
+ * @module M/Label
  */
 import LabelImpl from 'impl/Label';
 import Base from './Base';
@@ -16,7 +16,7 @@ class Label extends Base {
    * @param {string} text - Text to show
    * @param {array} coordOpts - Coordinate to display popup
    * @extends {M.facade.Base}
-   * @api stable
+   * @api
    */
   constructor(text, coordOpts, panMapIfOutOfView) {
     // implementation of this control
@@ -31,7 +31,7 @@ class Label extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   hide() {
@@ -44,7 +44,7 @@ class Label extends Base {
    * @public
    * @function
    * @param {M.Map} map - Facade map
-   * @api stable
+   * @api
    * @export
    */
   show(map) {
@@ -57,7 +57,7 @@ class Label extends Base {
    * @public
    * @function
    * @returns {M.Popup} popup created
-   * @api stable
+   * @api
    * @export
    */
   getPopup() {
@@ -68,7 +68,7 @@ class Label extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getCoordinate() {
     return this.getImpl().getCoordinate();
@@ -78,7 +78,7 @@ class Label extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   setCoordinate(coord) {
     this.getImpl().coordinate = coord;
@@ -91,7 +91,7 @@ class Label extends Base {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Label.POPUP_TEMPLATE = 'label_popup.html';
 

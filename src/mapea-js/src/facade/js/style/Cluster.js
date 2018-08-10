@@ -1,21 +1,23 @@
+/**
+ * @module M/style/Cluster
+ */
 import ClusterImpl from 'impl/style/Cluster';
 import Composite from './Composite';
 import { extendsObj, isNullOrEmpty } from '../util/Utils';
 
 /**
- * @namespace Cluster
+ * @classdesc
+ * Main constructor of the class. Creates a style cluster
+ * with parameters specified by the user
+ * @api
  */
-export default class Cluster extends Composite {
+class Cluster extends Composite {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a style cluster
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.Style}
    * @param {object} parameters for style cluster
    * @param {object} specified parameters for class claster depends on its implementation
-   * @api stable
+   * @api
    */
   constructor(options = {}, optsVendor = {}) {
     const impl = new ClusterImpl(options, optsVendor);
@@ -62,7 +64,7 @@ export default class Cluster extends Composite {
    * @function
    * @public
    * @param {M.layer.Vector} layer - Layer to apply the style
-   * @api stable
+   * @api
    */
   applyInternal_(layer) {
     this.layer_ = layer;
@@ -75,7 +77,7 @@ export default class Cluster extends Composite {
    * @function
    * @public
    * @return {M.Style} the old style of layer
-   * @api stable
+   * @api
    */
   getOldStyle() {
     return this.oldStyle_;
@@ -87,7 +89,7 @@ export default class Cluster extends Composite {
    * @function
    * @public
    * @return {Array<Object>} ranges stablished by user
-   * @api stable
+   * @api
    */
   getRanges() {
     return this.options_.ranges;
@@ -98,7 +100,7 @@ export default class Cluster extends Composite {
    * @function
    * @public
    * @return {object} options of style cluster
-   * @api stable
+   * @api
    */
   getOptions() {
     return this.options_;
@@ -111,7 +113,7 @@ export default class Cluster extends Composite {
    * @public
    * @param {Array<Object>} newRanges as new Ranges
    * @return {Cluster}
-   * @api stable
+   * @api
    */
   setRanges(newRanges) {
     this.getImpl().ranges = newRanges;
@@ -128,7 +130,7 @@ export default class Cluster extends Composite {
    * @param {number} min as minimal value in the interval
    * @param {number} max as max value in the interval
    * @return {Object}
-   * @api stable
+   * @api
    */
   getRange(min, max) {
     return this.options_.ranges.find(el => (el.min === min && el.max === max));
@@ -143,7 +145,7 @@ export default class Cluster extends Composite {
    * @param {number} max as range max value to be overwritten
    * @param {number} newRange as the new range
    * @return {Cluster}
-   * @api stable
+   * @api
    */
   updateRange(min, max, newRange) {
     ClusterImpl.updateRangeImpl(min, max, newRange, this.layer_, this);
@@ -159,7 +161,7 @@ export default class Cluster extends Composite {
    * @public
    * @param {boolean} animated defining if layer must be animated
    * @return {Cluster}
-   * @api stable
+   * @api
    */
   setAnimated(animated) {
     return this.getImpl().setAnimated(animated, this.layer_, this);
@@ -171,7 +173,7 @@ export default class Cluster extends Composite {
    * @function
    * @public
    * @return {boolean} A flag indicating if layer is currently being animated
-   * @api stable
+   * @api
    */
   isAnimated() {
     return this.options_.animated;
@@ -201,7 +203,7 @@ export default class Cluster extends Composite {
    * @public
    * @function
    * @return {String} data url to canvas
-   * @api stable
+   * @api
    */
   refresh() {
     if (!isNullOrEmpty(this.layer_)) {
@@ -216,7 +218,7 @@ export default class Cluster extends Composite {
    * This constant defines the order of style.
    * @constant
    * @public
-   * @api stable
+   * @api
    */
   static get ORDER() {
     return 1;
@@ -228,7 +230,7 @@ export default class Cluster extends Composite {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Cluster.DEFAULT = {
   hoverInteraction: true,
@@ -258,7 +260,7 @@ Cluster.DEFAULT = {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Cluster.DEFAULT_VENDOR = {
   animationDuration: 250,
@@ -281,7 +283,7 @@ Cluster.DEFAULT_VENDOR = {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Cluster.RANGE_1_DEFAULT = {
   fill: {
@@ -299,7 +301,7 @@ Cluster.RANGE_1_DEFAULT = {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Cluster.RANGE_2_DEFAULT = {
   fill: {
@@ -317,7 +319,7 @@ Cluster.RANGE_2_DEFAULT = {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Cluster.RANGE_3_DEFAULT = {
   fill: {
@@ -329,3 +331,5 @@ Cluster.RANGE_3_DEFAULT = {
   },
   radius: 25,
 };
+
+export default Cluster;

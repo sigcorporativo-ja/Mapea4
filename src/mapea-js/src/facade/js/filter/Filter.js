@@ -9,7 +9,7 @@ import FilterFunction from './Function';
  * @function
  * @param {Array<M.Fiter>} filters - Filters to joins
  * @return {M.Filter} Filters joins
- * @api stable
+ * @api
  */
 export const AND = (filters) => {
   let cqlFilter = '';
@@ -35,7 +35,7 @@ export const AND = (filters) => {
  * @function
  * @param {Array<M.Fiter>} filters - Filters to joins
  * @return {M.Filter} Filters joins
- * @api stable
+ * @api
  */
 export const OR = (filters) => {
   const numFilters = filters.length;
@@ -61,7 +61,7 @@ export const OR = (filters) => {
  * @function
  * @param {M.Fiter} filters - Filters to joins
  * @return {M.Filter} opposite filter
- * @api stable
+ * @api
  */
 export const NOT = (filter) => {
   return new FilterFunction((feature) => {
@@ -78,7 +78,7 @@ export const NOT = (filter) => {
  * @param {string} nameAtt - Name Attribute
  * @param {string|number} value - Value to compare
  * @return {M.Filter} Filter - Filter to compare the value of an attribute
- * @api stable
+ * @api
  */
 export const EQUAL = (nameAtt, value) => {
   return new FilterFunction((feature) => {
@@ -96,7 +96,7 @@ export const EQUAL = (nameAtt, value) => {
  * @param {string} nameAtt - Name Attribute
  * @param {string|number} value - Regular expression
  * @return {M.Filter} Filter - Filter
- * @api stable
+ * @api
  */
 export const LIKE = (nameAtt, value) => {
   return new FilterFunction((feature) => {
@@ -113,7 +113,7 @@ export const LIKE = (nameAtt, value) => {
  * @param {string} nameAtt - name Attribute
  * @param {string|number} value - value to compare
  * @return {M.Filter} Filter - Filter
- * @api stable
+ * @api
  */
 export const LT = (nameAtt, value) => {
   return new FilterFunction((feature) => {
@@ -130,7 +130,7 @@ export const LT = (nameAtt, value) => {
  * @param {string} nameAtt - name Attribute
  * @param {string|number} value - value to compare
  * @return {M.Filter} Filter - Filter
- * @api stable
+ * @api
  */
 export const GT = (nameAtt, value) => {
   return new FilterFunction((feature) => {
@@ -147,7 +147,7 @@ export const GT = (nameAtt, value) => {
  * @param {string} nameAtt - name Attribute
  * @param {string|number} value - value to compare
  * @return {M.Filter} Filter - Filter
- * @api stable
+ * @api
  */
 export const LTE = (nameAtt, value) => {
   return new FilterFunction((feature) => {
@@ -164,7 +164,7 @@ export const LTE = (nameAtt, value) => {
  * @param {string} nameAtt - name Attribute
  * @param {string|number} value - value to compare
  * @return {M.Filter} Filter - Filter
- * @api stable
+ * @api
  */
 export const GTE = (nameAtt, value) => {
   return new FilterFunction((feature) => {

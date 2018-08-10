@@ -1,10 +1,10 @@
 import { isNullOrEmpty, concatUrlPaths, addParameters } from 'facade/js/util/Utils';
 import chroma from 'chroma-js';
-import Config from 'configuration';
+
 import OLStyleImage from 'ol/style/Image';
 import OLFeature from 'ol/Feature';
-import Align from 'facade/js/style/Align';
-import Baseline from 'facade/js/style/Baseline';
+import * as Align from 'facade/js/style/Align';
+import * as Baseline from 'facade/js/style/Baseline';
 import OLStyleFill from 'ol/style/Fill';
 import OLGeomPoint from 'ol/geom/Point';
 import OLStyleStroke from 'ol/style/Stroke';
@@ -54,7 +54,7 @@ export default class Point extends Simple {
         if (!isNullOrEmpty(imageStyle)) {
           image = imageStyle.getSrc();
           if (!image.startsWith(window.location.origin)) {
-            const proxyImageURL = concatUrlPaths([Config.PROXY_URL, '/image']);
+            const proxyImageURL = concatUrlPaths([M.config.PROXY_URL, '/image']);
             image = addParameters(proxyImageURL, {
               url: image,
             });

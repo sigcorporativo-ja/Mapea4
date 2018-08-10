@@ -1,5 +1,5 @@
 /**
- * @module M/format
+ * @module M/format/WKT
  */
 import WKTImpl from 'impl/format/WKT';
 import Base from '../Base';
@@ -19,7 +19,7 @@ class WKT extends Base {
    * @extends {M.facade.Base}
    * @param {string|Object} userParameters parameters
    * provided by the user
-   * @api stable
+   * @api
    */
   constructor(options = {}) {
     const impl = new WKTImpl(options);
@@ -39,7 +39,7 @@ class WKT extends Base {
    * @param {Array<M.Feature>} features features array to parsed
    * as a GeoJSON FeatureCollection
    * @return {Array<Object>}
-   * @api stable
+   * @api
    */
   write(geomtry) {
     return this.getImpl().write(geomtry);

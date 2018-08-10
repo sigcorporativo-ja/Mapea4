@@ -1,5 +1,5 @@
 /**
- * @module M
+ * @module M/Plugin
  */
 import Base from './Base';
 import { isNullOrEmpty, isUndefined } from './util/Utils';
@@ -20,7 +20,7 @@ class Plugin extends Base {
    * @public
    * @function
    * @param {Object} map the map to add the plugin
-   * @api stable
+   * @api
    */
   addTo(map) {
     // checks if the parameter is null or empty
@@ -54,7 +54,7 @@ class Plugin extends Base {
    * @public
    * @function
    * @param {M.Map} map to add the plugin
-   * @api stable
+   * @api
    */
   createView(map) {}
 }

@@ -1,3 +1,6 @@
+/**
+ * @module M/style/Proportional
+ */
 import StyleComposite from './Composite';
 import StylePoint from './Point';
 import StyleSimple from './Simple';
@@ -5,13 +8,13 @@ import { isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 
 /**
- * @namespace Proportional
+ * @classdesc
+ * Main constructor of the class. Creates a style Proportional
+ * with parameters specified by the user
+ * @api
  */
-export default class Proportional extends StyleComposite {
+class Proportional extends StyleComposite {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a style Proportional
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.Style}
@@ -20,7 +23,7 @@ export default class Proportional extends StyleComposite {
    * @param{number}
    * @param {StylePoint}
    * @param {object}
-   * @api stable
+   * @api
    */
   constructor(attributeName, minRadius, maxRadius, style, proportionalFunction, options = {}) {
     super(options, {});
@@ -33,7 +36,7 @@ export default class Proportional extends StyleComposite {
      * TODO
      * @public
      * @type {String}
-     * @api stable
+     * @api
      * @expose
      */
     this.attributeName_ = attributeName;
@@ -42,7 +45,7 @@ export default class Proportional extends StyleComposite {
      * The minimum radius of the proportionality
      * @private
      * @type {number}
-     * @api stable
+     * @api
      * @expose
      */
     this.minRadius_ = parseInt(minRadius, 10) || 5;
@@ -51,7 +54,7 @@ export default class Proportional extends StyleComposite {
      * The maximum radius of the proportionality
      * @private
      * @type {number}
-     * @api stable
+     * @api
      * @expose
      */
     this.maxRadius_ = parseInt(maxRadius, 10) || 15;
@@ -60,7 +63,7 @@ export default class Proportional extends StyleComposite {
      * The style point define by user
      * @private
      * @type {M.Style}
-     * @api stable
+     * @api
      * @expose
      */
     this.style_ = style;
@@ -69,7 +72,7 @@ export default class Proportional extends StyleComposite {
      * the proportionality function
      * @private
      * @type {function}
-     * @api stable
+     * @api
      * @expose
      */
     this.proportionalFunction_ =
@@ -90,7 +93,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @param {M.Layer.Vector} layer - Layer where to apply choropleth style
-   * @api stable
+   * @api
    */
   applyInternal_(layer) {
     this.layer_ = layer;
@@ -102,7 +105,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @param {M.Layer.Vector} layer - Layer where to apply choropleth style
-   * @api stable
+   * @api
    */
   applyToFeature(feature, resolution) {
     let style = this.style_;
@@ -129,7 +132,7 @@ export default class Proportional extends StyleComposite {
    * This function updates the style
    * @function
    * @private
-   * @api stable
+   * @api
    */
   update_() {
     if (!isNullOrEmpty(this.layer_)) {
@@ -178,7 +181,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @return {String} attribute name of Style
-   * @api stable
+   * @api
    */
   getAttributeName() {
     return this.attributeName_;
@@ -189,7 +192,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @param {String} attributeName - attribute name to set
-   * @api stable
+   * @api
    */
   setAttributeName(attributeName) {
     this.attributeName_ = attributeName;
@@ -217,7 +220,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @param {StylePoint} style - style point to set
-   * @api stable
+   * @api
    */
   setStyle(style) {
     this.style_ = style;
@@ -230,7 +233,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @return {number} minimum radius of style point
-   * @api stable
+   * @api
    */
   getMinRadius() {
     return this.minRadius_;
@@ -241,7 +244,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @param {function} proportionalFunction - proportional function
-   * @api stable
+   * @api
    */
   setProportionalFunction(proportionalFunction) {
     this.proportionalFunction_ = proportionalFunction;
@@ -253,7 +256,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @return {number} minimum radius of style point
-   * @api stable
+   * @api
    */
   getProportionalFunction() {
     return this.proportionalFunction_;
@@ -264,7 +267,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @param {number} minRadius - minimum radius of style point
-   * @api stable
+   * @api
    */
   setMinRadius(minRadius) {
     this.minRadius_ = parseInt(minRadius, 10);
@@ -281,7 +284,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @return {number} maximum radius of style point
-   * @api stable
+   * @api
    */
   getMaxRadius() {
     return this.maxRadius_;
@@ -292,7 +295,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @param {number} minRadius - maximum radius of style point
-   * @api stable
+   * @api
    */
   setMaxRadius(maxRadius) {
     this.maxRadius_ = parseInt(maxRadius, 10);
@@ -309,7 +312,7 @@ export default class Proportional extends StyleComposite {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   updateCanvas() {
     this.updateCanvasPromise_ = new Promise((success, fail) => {
@@ -349,7 +352,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
-   * @api stable
+   * @api
    */
   loadCanvasImage_(value, url, callbackFn) {
     const image = new Image();
@@ -375,7 +378,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @public
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
-   * @api stable
+   * @api
    */
 
   drawGeometryToCanvas(canvasImageMax, canvasImageMin, callbackFn) {
@@ -429,7 +432,7 @@ export default class Proportional extends StyleComposite {
    * @private
    * @param {Array<M.Feature>} features - array of features
    * @param {String} attributeName - attributeName of style
-   * @api stable
+   * @api
    */
   static getMinMaxValues(features, attributeName) {
     let [minValue, maxValue] = [undefined, undefined];
@@ -456,7 +459,7 @@ export default class Proportional extends StyleComposite {
    * @function
    * @private
    * @return {string} the attribute that controls the size
-   * @api stable
+   * @api
    */
   static getSizeAttribute(style) {
     let sizeAttribute = 'radius';
@@ -478,7 +481,7 @@ export default class Proportional extends StyleComposite {
    * @param {object} options - minRadius, maxRadius, minValue, maxValue
    * @param {StylePoint} style
    * @return {StyleSimple} the proportional style of feature
-   * @api stable
+   * @api
    */
   calculateStyle_(feature, options, styleVar) {
     let style = styleVar;
@@ -511,7 +514,7 @@ export default class Proportional extends StyleComposite {
    * This constant defines the order of style.
    * @constant
    * @public
-   * @api stable
+   * @api
    */
   static get ORDER() {
     return 1;
@@ -522,6 +525,8 @@ export default class Proportional extends StyleComposite {
  * This constant defines the scale proportion for iconstyle in Proportional.
  * @constant
  * @public
- * @api stable
+ * @api
  */
 Proportional.SCALE_PROPORTION = 20;
+
+export default Proportional;

@@ -1,11 +1,11 @@
 /**
- * @module M/layer
+ * @module M/layer/WFS
  */
 import WFSImpl from 'impl/layer/WFS';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import Vector from './Vector';
-import LayerType from './Type';
+import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 import Geom from '../geom/Geom';
 
@@ -21,7 +21,7 @@ class WFS extends Vector {
    * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.WFS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParameters, options = {}, impl = new WFSImpl(options)) {
     // This layer is of parameters.
@@ -164,7 +164,7 @@ class WFS extends Vector {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   setCQL(newCQLparam) {
     let newCQL = newCQLparam;
@@ -198,7 +198,7 @@ class WFS extends Vector {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -221,7 +221,7 @@ class WFS extends Vector {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 WFS.DEFAULT_OPTIONS_STYLE = {
   fill: {

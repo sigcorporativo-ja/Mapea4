@@ -14,7 +14,7 @@ class Spatial extends FilterFunction {
    *
    * @param {function} Function - filter function
    * TODO @param {object} options
-   * @api stable
+   * @api
    */
   constructor(FunctionParam, options) {
     const filterFunction = (feature, index) => {

@@ -13,7 +13,7 @@ import EvtManager from '../event/Manager';
 class Control extends Base {
   /**
    * @constructor
-   * @api stable
+   * @api
    */
   constructor(implParam, name) {
     const impl = implParam;
@@ -38,7 +38,7 @@ class Control extends Base {
     /**
      * @public
      * @type {string}
-     * @api stable
+     * @api
      * @expose
      */
     this.name = name;
@@ -67,7 +67,7 @@ class Control extends Base {
     /**
      * @public
      * @type {boolean}
-     * @api stable
+     * @api
      * @expose
      */
     this.activated = false;
@@ -86,7 +86,7 @@ class Control extends Base {
    * @public
    * @function
    * @param {M.Map} impl to add the plugin
-   * @api stable
+   * @api
    */
   setImpl(implParam) {
     const impl = implParam;
@@ -109,7 +109,7 @@ class Control extends Base {
    * @public
    * @function
    * @param {M.Map} map to add the plugin
-   * @api stable
+   * @api
    * @export
    */
   addTo(map) {
@@ -134,7 +134,7 @@ class Control extends Base {
    * @public
    * @function
    * @param {M.Map} map to add the plugin
-   * @api stable
+   * @api
    * @export
    */
   createView(map) {}
@@ -145,7 +145,7 @@ class Control extends Base {
    * @public
    * @function
    * @param {HTMLElement} html to add the plugin
-   * @api stable
+   * @api
    * @export
    */
   manageActivation(html) {
@@ -171,7 +171,7 @@ class Control extends Base {
    * @public
    * @function
    * @param {HTMLElement} html to add the plugin
-   * @api stable
+   * @api
    * @export
    */
   getActivationButton(html) {}
@@ -181,7 +181,7 @@ class Control extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   activate() {
@@ -200,7 +200,7 @@ class Control extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   deactivate() {
@@ -219,7 +219,7 @@ class Control extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   getElement() {
@@ -233,7 +233,7 @@ class Control extends Base {
    * @public
    * @function
    * @param {M.ui.Panel} panel
-   * @api stable
+   * @api
    * @export
    */
   setPanel(panel) {
@@ -246,7 +246,7 @@ class Control extends Base {
    * @public
    * @function
    * @returns {M.ui.Panel}
-   * @api stable
+   * @api
    * @export
    */
   getPanel() {
@@ -258,7 +258,7 @@ class Control extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   destroy() {}

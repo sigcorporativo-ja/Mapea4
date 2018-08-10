@@ -28,7 +28,7 @@ export let lang_ = 'es';
  * @param {string} code of the language
  * following the standard ISO 639-1:2002
  * @see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
- * @api stable
+ * @api
  */
 export const lang = (langCode) => {
   if (!isNullOrEmpty(langCode)) {
@@ -42,7 +42,7 @@ export const lang = (langCode) => {
  * @function
  * @param {String} configKey key of the configuration variable
  * @param {*} configValue value of the configuration variable
- * @api stable
+ * @api
  */
 export const config = (configKey, configValue) => {
   config[configKey] = configValue;
@@ -65,10 +65,3 @@ export const map = (parameters, options) => {
   }
   return new Map(parameters, options);
 };
-
-// /**
-//  * Implementation of Mapea
-//  * @type {Object}
-//  * @api stable
-//  */
-// const impl = null;

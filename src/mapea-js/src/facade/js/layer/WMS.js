@@ -1,13 +1,13 @@
 /**
- * @module M/layer
+ * @module M/layer/WMS
  */
 import WMSImpl from 'impl/layer/WMS';
-import Config from 'configuration';
+
 import { isNullOrEmpty, isUndefined, sameUrl, isString, normalize } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import * as parameter from '../parameter/parameter';
-import LayerType from './Type';
+import * as LayerType from './Type';
 
 /**
  * @classdesc
@@ -21,7 +21,7 @@ class WMS extends LayerBase {
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParameters, options = {}) {
     // checks if the implementation can create WMC layers
@@ -173,7 +173,7 @@ class WMS extends LayerBase {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    */
   getNoCacheUrl() {
     return this._noCacheUrl;
@@ -183,7 +183,7 @@ class WMS extends LayerBase {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    */
   getNoCacheName() {
     return this._noCacheName;
@@ -195,7 +195,7 @@ class WMS extends LayerBase {
    * @public
    * @function
    * @param {String|Mx.Projection} projection - Projection map
-   * @api stable
+   * @api
    */
   updateMinMaxResolution(projection) {
     return this.getImpl().updateMinMaxResolution(projection);
@@ -208,10 +208,10 @@ class WMS extends LayerBase {
    * @function
    */
   _updateNoCache() {
-    const tiledIdx = Config.tileMappgins.tiledNames.indexOf(this.name);
-    if ((tiledIdx !== -1) && sameUrl(Config.tileMappgins.tiledUrls[tiledIdx], this.url)) {
-      this._noCacheUrl = Config.tileMappgins.urls[tiledIdx];
-      this._noCacheName = Config.tileMappgins.names[tiledIdx];
+    const tiledIdx = M.config.tileMappgins.tiledNames.indexOf(this.name);
+    if ((tiledIdx !== -1) && sameUrl(M.config.tileMappgins.tiledUrls[tiledIdx], this.url)) {
+      this._noCacheUrl = M.config.tileMappgins.urls[tiledIdx];
+      this._noCacheName = M.config.tileMappgins.names[tiledIdx];
     }
   }
 
@@ -220,7 +220,7 @@ class WMS extends LayerBase {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;

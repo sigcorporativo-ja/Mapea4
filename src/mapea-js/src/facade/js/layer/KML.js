@@ -1,11 +1,11 @@
 /**
- * @module M/layer
+ * @module M/layer/KML
  */
 import KMLImpl from 'impl/layer/KML';
 import LayerVector from './Vector';
 import { isNullOrEmpty, isUndefined, normalize, isString } from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerType from './Type';
+import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 
 /**
@@ -21,7 +21,7 @@ class KML extends LayerVector {
    * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.KML} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParameters, options = {}) {
     /**
@@ -105,7 +105,7 @@ class KML extends LayerVector {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;

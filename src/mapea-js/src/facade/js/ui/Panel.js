@@ -1,14 +1,14 @@
 /**
- * @module M/ui
+ * @module M/ui/Panel
  */
 import 'assets/css/panel';
 import panelTemplate from 'templates/panel';
-import * as Position from './Position';
+import * as Position from './position';
 import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils';
 import MObject from '../Object';
 import EvtManager from '../event/Manager';
 import ControlBase from '../control/Control';
-import Template from '../util/Template';
+import { compile as compileTemplate } from '../util/Template';
 
 /**
  * @classdesc
@@ -20,7 +20,7 @@ class Panel extends MObject {
    * @param {string} name of the panel
    * @param {Mx.parameters.Panel} options of the panel
    * @extends {M.Object}
-   * @api stable
+   * @api
    */
   constructor(name, options = {}) {
     // calls the super constructor
@@ -29,7 +29,7 @@ class Panel extends MObject {
     /**
      * @public
      * @type {string}
-     * @api stable
+     * @api
      * @expose
      */
     this.name = name;
@@ -68,7 +68,7 @@ class Panel extends MObject {
     /**
      * @public
      * @type {Position}
-     * @api stable
+     * @api
      * @expose
      */
     this.position = Position.TL;
@@ -174,7 +174,7 @@ class Panel extends MObject {
    * @function
    @param {HTMLElement} html panel
    @param {HTMLElement} html area
-   * @api stable
+   * @api
    */
   destroy() {
     if (this.element_ != null) {
@@ -189,12 +189,12 @@ class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   addTo(map, areaContainer) {
     this.map_ = map;
     this.areaContainer_ = areaContainer;
-    const html = Template.compile(panelTemplate);
+    const html = compileTemplate(panelTemplate);
     this.element_ = html;
 
     if (!isNullOrEmpty(this.tooltip_)) {
@@ -289,7 +289,7 @@ class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   getControls() {
     return this.controls_;
@@ -301,7 +301,7 @@ class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   addControls(controlsParam) {
     let controls = controlsParam;
@@ -332,7 +332,7 @@ class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   hasControl(controlParam) {
     let hasControl = false;
@@ -352,7 +352,7 @@ class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   removeControls(controlsParam) {
     let controls = controlsParam;
@@ -381,7 +381,7 @@ class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   removeControl_(controlsParam) {
     const controls = this.map_.controls(controlsParam);
@@ -399,7 +399,7 @@ class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   removeClassName(className) {
     if (!isNullOrEmpty(this.element_)) {
@@ -415,7 +415,7 @@ class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   addClassName(className) {
     if (!isNullOrEmpty(this.element_)) {
@@ -431,7 +431,7 @@ class Panel extends MObject {
    * @private
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   moveControlView_(control) {
     const controlElem = control.getElement();
@@ -447,7 +447,7 @@ class Panel extends MObject {
    * @private
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   manageActivation_(control) {
     if (this.multiActivation_ !== true) {
@@ -465,7 +465,7 @@ class Panel extends MObject {
    * @private
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -480,7 +480,7 @@ class Panel extends MObject {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @returns {HTMLElement}
    */
   getTemplatePanel() {
@@ -492,7 +492,7 @@ class Panel extends MObject {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @returns {Boolean}
    */
   isCollapsed() {

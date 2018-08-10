@@ -31,7 +31,7 @@ class Variable {
    *  not of type 'multipolygon' and chart type is distinct of 'bar' type
    *
    * @constructor
-   * @api stable
+   * @api
    */
   constructor(options = {}) {
     /**

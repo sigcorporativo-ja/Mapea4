@@ -1,14 +1,16 @@
+/**
+ * @module M/style/Feature
+ */
 import StyleBase from './Style';
 
 /**
- * @namespace M.style.Feature
+ * @classdesc
+ * @api
  */
-
-export default class Feature extends StyleBase {
+class Feature extends StyleBase {
   /**
-   * Abstract class
-   *
-   * @api stable
+   * @constructor
+   * @api
    */
   constructor(options, impl) {
     super(options, impl);
@@ -27,10 +29,12 @@ export default class Feature extends StyleBase {
    * @public
    * @param {M.Feature} feature - Feature to apply style
    * @function
-   * @api stable
+   * @api
    */
   applyToFeature(feature) {
     this.feature_ = feature;
     this.getImpl().applyToFeature(feature);
   }
 }
+
+export default Feature;

@@ -4,26 +4,26 @@
 import 'assets/css/dialog';
 import dialogTemplate from 'templates/dialog';
 import { isNullOrEmpty } from './util/Utils';
-import Template from './util/Template';
+import { compile as compileTemplate } from './util/Template';
+
 /**
  * TODO
  *
  * @public
  * @function
- * @api stable
  */
 const removeElement = (element) => {
   const parent = element.parentElement;
   parent.removeChild(element);
 };
+
 /**
  * TODO
  *
  * @public
  * @function
- * @api stable
  */
-export const remove = () => {
+const remove = () => {
   const dialogs = document.querySelectorAll('div.m-dialog');
   Array.prototype.forEach.call(dialogs, (dialog) => {
     const parent = dialog.parentElement;
@@ -36,8 +36,8 @@ export const remove = () => {
  *
  * @public
  * @function
- * @api stable
  * @returns {Promise}
+ * @api
  */
 export const show = (message, title, severity) => {
   const vars = {
@@ -45,7 +45,7 @@ export const show = (message, title, severity) => {
     title,
     severity,
   };
-  const html = Template.compile(dialogTemplate, {
+  const html = compileTemplate(dialogTemplate, {
     vars,
   });
   // removes previous dialogs
@@ -60,7 +60,6 @@ export const show = (message, title, severity) => {
   mapeaContainer.appendChild(html);
 };
 
-
 /**
  * TODO
  *
@@ -68,8 +67,8 @@ export const show = (message, title, severity) => {
  * @function
  * @param {string} message to show
  * @param {string} title of the dialog
- * @api stable
  * @returns {Promise}
+ * @api
  */
 export const info = (message, titleParam) => {
   let title = titleParam;
@@ -86,8 +85,8 @@ export const info = (message, titleParam) => {
  * @function
  * @param {string} message to show
  * @param {string} title of the dialog
- * @api stable
  * @returns {Promise}
+ * @api
  */
 export const error = (message, titleParam) => {
   let title = titleParam;
@@ -104,8 +103,8 @@ export const error = (message, titleParam) => {
  * @function
  * @param {string} message to show
  * @param {string} title of the dialog
- * @api stable
  * @returns {Promise}
+ * @api
  */
 export const success = (message, titleParam) => {
   let title = titleParam;

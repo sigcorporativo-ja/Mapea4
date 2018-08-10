@@ -7,7 +7,7 @@ import 'assets/css/controls/location';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
+import {compile as compileTemplate} from '../util/Template';
 
 
 /**
@@ -21,7 +21,7 @@ class Location extends ControlBase {
   /**
    * @constructor
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor(tracking = true, highAccuracy = false) {
     if (isUndefined(LocationImpl)) {
@@ -42,10 +42,10 @@ class Location extends ControlBase {
    * @function
    * @param {M.Map} map - Facade map
    * @returns {Promise} HTML template
-   * @api stable
+   * @api
    */
   createView(map) {
-    return Template.compile(locationTemplate);
+    return compileTemplate(locationTemplate);
   }
 
   /**
@@ -55,7 +55,7 @@ class Location extends ControlBase {
    * @function
    * @param {HTMLElement} element - Control template
    * @returns {HTMLElement} HTML control button
-   * @api stable
+   * @api
    * @export
    */
   getActivationButton(element) {
@@ -70,7 +70,7 @@ class Location extends ControlBase {
    * @function
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
-   * @api stable
+   * @api
    */
   equals(obj) {
     const equals = (obj instanceof Location);
@@ -90,7 +90,7 @@ class Location extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Location.NAME = 'location';
 

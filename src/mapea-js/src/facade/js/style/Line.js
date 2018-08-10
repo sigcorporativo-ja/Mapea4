@@ -1,22 +1,22 @@
+/**
+ * @module M/style/Line
+ */
 import StyleLineImpl from 'impl/style/Line';
 import Simple from './Simple';
 import { isNullOrEmpty, extendsObj } from '../util/Utils';
 
 /**
- * @namespace Line
+ * @classdesc
+ * TODO Main constructor of the class. Creates a categoryStyle
+ * with parameters specified by the user
+ * @api
  */
-export default class Line extends Simple {
+class Line extends Simple {
   /**
-   * @classdesc
-   * TODO Main constructor of the class. Creates a categoryStyle
-   * with parameters specified by the user
-   * for the implementation
-   * provided by the user
-   *
    * @constructor
    * @extends {M.style.Simple}
    * @param {options} userParameters parameters
-   * @api stable
+   * @api
    */
   constructor(optionsVar) {
     let options = optionsVar;
@@ -35,7 +35,7 @@ export default class Line extends Simple {
    * @function
    * @protected
    * @param {M.layer.Vector} layer - Layer to apply the styles
-   * @api stable
+   * @api
    */
   unapply(layer) {
     this.getImpl().unapply(layer);
@@ -47,7 +47,7 @@ export default class Line extends Simple {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Line.DEFAULT_NULL = {
   fill: {
@@ -59,3 +59,5 @@ Line.DEFAULT_NULL = {
     width: 1.5,
   },
 };
+
+export default Line;

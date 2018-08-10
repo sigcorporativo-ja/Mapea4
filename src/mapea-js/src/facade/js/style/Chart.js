@@ -1,19 +1,20 @@
-import ChartImpl from 'impl/js/style/Chart';
+/**
+ * @module M/style/Chart
+ */
+import ChartImpl from 'impl/style/Chart';
 import StyleFeature from './Feature';
 import ChartVariable from '../chart/Variable';
 import * as ChartTypes from '../chart/types';
 import { isNullOrEmpty } from '../util/Utils';
 
 /**
- * @namespace Chart
+ * @classdesc
+ * Main constructor of the class. Creates a chart style
+ * with parameters specified by the user
+ * @api
  */
-export default class Chart extends StyleFeature {
+class Chart extends StyleFeature {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a chart style
-   * with parameters specified by the user for the implementation
-   * provided by the user
-   *
    * @constructor
    * @extends {M.style.Simple}
    * @param {Mx.ChartOptions} options.
@@ -35,7 +36,7 @@ export default class Chart extends StyleFeature {
    *  - animation {bool} this field is currently ignored [NOT IMPLEMENTED YET]
    *  - variables {object|ChartVariable|string|Array<string>|Array<ChartVariable>} chart variables
    *
-   * @api stable
+   * @api
    */
   constructor(options = {}) {
     let variables = options.variables || null;
@@ -85,7 +86,7 @@ export default class Chart extends StyleFeature {
    * @param {Chart.Variable|string|object} variableOb a chart variable
    * @private
    * @function
-   * @api stable
+   * @api
    */
   static formatVariable(variableOb) {
     if (variableOb == null) {
@@ -109,7 +110,7 @@ export default class Chart extends StyleFeature {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   updateCanvas() {
     if (!(isNullOrEmpty(this.getImpl()) && isNullOrEmpty(this.canvas_))) {
@@ -130,7 +131,7 @@ export default class Chart extends StyleFeature {
    * This constant defines the order of style.
    * @constant
    * @public
-   * @api stable
+   * @api
    */
   get ORDER() {
     return 1;
@@ -143,7 +144,7 @@ export default class Chart extends StyleFeature {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Chart.DEFAULT = {
   shadow3dColor: '#369',
@@ -155,3 +156,5 @@ Chart.DEFAULT = {
   offsetY: 0,
   animationStep: 1,
 };
+
+export default Chart;

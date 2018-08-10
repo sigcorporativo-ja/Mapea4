@@ -1,12 +1,12 @@
 /**
- * @module M/layer
+ * @module M/layer/WMTS
  */
 import WMTSImpl from 'impl/layer/WMTS';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import * as parameter from '../parameter/parameter';
-import LayerType from './Type';
+import * as LayerType from './Type';
 
 /**
  * @classdesc
@@ -21,7 +21,7 @@ class WMTS extends LayerBase {
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMTS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParameters, options = {}) {
     /**
@@ -116,7 +116,7 @@ class WMTS extends LayerBase {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;

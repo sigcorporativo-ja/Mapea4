@@ -1,4 +1,4 @@
-import M from 'facade/js/Mapea';
+import M from 'facade/js/mapea';
 import WMS from 'facade/js/layer/WMS';
 
 const wms = new WMS({

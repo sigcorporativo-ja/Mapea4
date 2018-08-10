@@ -1,9 +1,9 @@
 import layerswitcherTemplate from 'templates/layerswitcher';
 import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
-import Template from 'facade/js/util/Template';
+import {compile as compileTemplate} from 'facade/js/util/Template';
 import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
 import Layer from 'facade/js/layer/Layer';
-import Config from 'configuration';
+
 import Control from './Control';
 
 /**
@@ -99,7 +99,7 @@ export default class LayerSwitcher extends Control {
    */
   renderPanel() {
     LayerSwitcherFacade.getTemplateVariables(this.facadeMap_).then((templateVars) => {
-      const html = Template.compile(layerswitcherTemplate, {
+      const html = compileTemplate(layerswitcherTemplate, {
         vars: templateVars,
       });
       this.registerImgErrorEvents_(html);
@@ -220,7 +220,7 @@ export default class LayerSwitcher extends Control {
     Array.prototype.forEach.call(imgElements, (imgElem) => {
       imgElem.addEventListener('error', (evt) => {
         const layerName = evt.target.getAttribute('data-layer-name');
-        const legendErrorUrl = concatUrlPaths([Config.THEME_URL, Layer.LEGEND_ERROR]);
+        const legendErrorUrl = concatUrlPaths([M.config.THEME_URL, Layer.LEGEND_ERROR]);
         const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
         if (!isNullOrEmpty(layer)) {
           layer.setLegendURL(legendErrorUrl);

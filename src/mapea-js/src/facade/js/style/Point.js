@@ -1,15 +1,21 @@
+/**
+ * @module M/style/Point
+ */
 import StylePointImpl from 'impl/style/Point';
 import Simple from './Simple';
 import { isNullOrEmpty, extendsObj } from '../util/Utils';
 
-export default class Point extends Simple {
+/**
+ * @classdesc
+ * Creates a style point
+ * @api
+ */
+class Point extends Simple {
   /**
-   * @classdesc
-   * Creates a style point
    * @constructor
    * @extends {M.style.Simple}
    * @param {Object} options - options style
-   * @api stable
+   * @api
    */
   constructor(optionsVar) {
     let options = optionsVar;
@@ -26,7 +32,7 @@ export default class Point extends Simple {
 
   /**
    * @inheritDoc
-   * @api stable
+   * @api
    */
   toImage() {
     return this.getImpl().toImage(this.canvas_);
@@ -38,7 +44,7 @@ export default class Point extends Simple {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Point.DEFAULT = {
   radius: 5,
@@ -49,7 +55,7 @@ Point.DEFAULT = {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Point.DEFAULT_NULL = {
   fill: {
@@ -62,3 +68,5 @@ Point.DEFAULT_NULL = {
   },
   radius: 5,
 };
+
+export default Point;

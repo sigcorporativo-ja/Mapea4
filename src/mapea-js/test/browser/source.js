@@ -1,4 +1,4 @@
-import M from 'facade/js/Mapea';
+import M from 'facade/js/mapea';
 import GeoJSON from 'facade/js/layer/GeoJSON';
 import StylePoint from 'facade/js/style/Point';
 
