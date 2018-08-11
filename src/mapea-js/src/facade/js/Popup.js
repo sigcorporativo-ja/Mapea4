@@ -4,6 +4,7 @@
 import PopupImpl from 'impl/Popup';
 
 import 'assets/css/popup';
+import popupTemplate from 'templates/popup';
 import { isNullOrEmpty } from './util/Utils';
 import Base from './Base';
 import { compile as compileTemplate } from './util/Template';
@@ -63,6 +64,7 @@ class Popup extends Base {
    */
   constructor(options) {
     const impl = new PopupImpl(options);
+
     // calls the super constructor
     super(impl);
 
@@ -140,19 +142,18 @@ class Popup extends Base {
   addTo(map, coordinate) {
     this.map_ = map;
     if (isNullOrEmpty(this.element_)) {
-      compileTemplate(Popup.TEMPLATE, {
+      const html = compileTemplate(popupTemplate, {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
         },
-      }).then((html) => {
-        if (this.tabs_.length > 0) {
-          this.element_ = html;
-          this.addEvents(html);
-          this.getImpl().addTo(map, html);
-          this.show(coordinate);
-        }
       });
+      if (this.tabs_.length > 0) {
+        this.element_ = html;
+        this.addEvents(html);
+        this.getImpl().addTo(map, html);
+        this.show(coordinate);
+      }
     } else {
       this.getImpl().addTo(map, this.element_);
       this.show(coordinate);
@@ -167,19 +168,18 @@ class Popup extends Base {
    */
   update() {
     if (!isNullOrEmpty(this.map_)) {
-      compileTemplate(Popup.TEMPLATE, {
+      const html = compileTemplate(popupTemplate, {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
         },
-      }).then((html) => {
-        if (this.tabs_.length > 0) {
-          this.element_ = html;
-          this.addEvents(html);
-          this.getImpl().setContainer(html);
-          this.show(this.coord_);
-        }
       });
+      if (this.tabs_.length > 0) {
+        this.element_ = html;
+        this.addEvents(html);
+        this.getImpl().setContainer(html);
+        this.show(this.coord_);
+      }
     }
   }
 
@@ -271,8 +271,8 @@ class Popup extends Base {
 
     // adds close event
     const closeBtn = html.querySelector('a.m-popup-closer');
-    closeBtn.addEventListener('click', this.hide, false);
-    closeBtn.addEventListener('touchend', this.hide, false);
+    closeBtn.addEventListener('click', this.hide.bind(this), false);
+    closeBtn.addEventListener('touchend', this.hide.bind(this), false);
     // mobile events
     let headerElement = html.querySelector('div.m-tabs');
     if (isNullOrEmpty(headerElement)) {
@@ -446,15 +446,6 @@ class Popup extends Base {
     this.fire(EventType.DESTROY);
   }
 }
-
-/**
- * Template for popup
- * @const
- * @type {string}
- * @public
- * @api
- */
-Popup.TEMPLATE = 'popup.html';
 
 /**
  * status of this popup

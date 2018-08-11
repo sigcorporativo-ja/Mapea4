@@ -3,6 +3,7 @@
  */
 import { isNullOrEmpty, isFunction } from '../util/Utils';
 import EventListener from './Listener';
+import * as EventType from './eventtype';
 
 /**
  * @classdesc
@@ -36,18 +37,20 @@ class EventsManager {
    * @api
    */
   add(eventType, listener, optThis, once = false) {
+    let eventTypes = Object.values(EventType);
+    let eventKey;
     if (!isNullOrEmpty(eventType) &&
-      (this.indexOf(eventType) !== -1) && isFunction(listener)) {
+      (eventTypes.indexOf(eventType) !== -1) && isFunction(listener)) {
       if (isNullOrEmpty(this.events_[eventType])) {
         this.events_[eventType] = [];
       }
       if (this.indexOf(eventType, listener, optThis) === -1) {
         const EventsManagerListener = new EventListener(listener, optThis, once);
         this.events_[eventType].push(EventsManagerListener);
-        return EventsManagerListener.getEventKey();
+        eventKey = EventsManagerListener.getEventKey();
       }
     }
-    return undefined;
+    return eventKey;
   }
 
   /**
