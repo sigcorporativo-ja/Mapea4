@@ -253,7 +253,7 @@ class Popup extends Base {
     let touchstartY;
     const tabs = html.querySelectorAll('div.m-tab');
     Array.prototype.forEach.call(tabs, (tab) => {
-      goog.events.listen(tab, ['click', 'touchend'], (evt) => {
+      tab.addEventListener('click', (evt) => {
         evt.preventDefault();
         // 5px tolerance
         const touchendY = evt.clientY;
@@ -266,7 +266,22 @@ class Popup extends Base {
           const index = tab.getAttribute('data-index');
           this.switchTab(index);
         }
-      }, false);
+      });
+
+      tab.addEventListener('touchend', (evt) => {
+        evt.preventDefault();
+        // 5px tolerance
+        const touchendY = evt.clientY;
+        if ((evt.type === 'click') || (Math.abs(touchstartY - touchendY) < 5)) {
+          // remove m-activated from all tabs
+          Array.prototype.forEach.call(tabs, (addedTab) => {
+            addedTab.classList.remove('m-activated');
+          });
+          tab.classList.add('m-activated');
+          const index = tab.getAttribute('data-index');
+          this.switchTab(index);
+        }
+      });
     });
 
     // adds close event

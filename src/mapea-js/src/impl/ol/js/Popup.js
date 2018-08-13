@@ -71,7 +71,7 @@ export default class Popup extends OLOverlay {
     // Apply workaround to enable scrolling of content div on touch devices
     enableTouchScroll(this.content);
 
-    this.element = this.container;
+    this.setElement(this.container);
 
     map.getMapImpl().addOverlay(this);
   }
@@ -184,7 +184,7 @@ export default class Popup extends OLOverlay {
           }
 
           if (newPx[0] !== curPix[0] || newPx[1] !== curPix[1]) {
-            this.getMap().getView().setcenter(this.getMap().getCoordinateFromPixel(newPx));
+            this.getMap().getView().setCenter(this.getMap().getCoordinateFromPixel(newPx));
           }
         }
       }
@@ -235,9 +235,8 @@ export default class Popup extends OLOverlay {
    * @api stable
    */
   setContainer(html) {
-    this.element(html);
-    //      this.container.innerHTML = html.innerHTML;
-    this.content = Popup.getContentFromContainer(html);
+    this.setElement(html);
+    this.content = this.getContentFromContainer(html);
     enableTouchScroll(this.content);
   }
 
