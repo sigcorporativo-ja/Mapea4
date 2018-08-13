@@ -12,4 +12,5 @@ libraries
 doc
 dist
 index.js
+entry-points-test.json
 *~

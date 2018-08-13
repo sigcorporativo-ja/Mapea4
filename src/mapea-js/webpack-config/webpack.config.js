@@ -83,7 +83,7 @@ module.exports = {
   devServer: {
     hot: true,
     open: true,
-    openPage: '/test/browser',
+    openPage: '/test',
     watchOptions: {
       poll: 1000,
     },
