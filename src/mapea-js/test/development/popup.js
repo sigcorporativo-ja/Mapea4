@@ -1,9 +1,5 @@
 import { map } from 'facade/js/mapea';
 import Popup from 'facade/js/Popup';
-import OLPopup from 'ol-popup';
-
-window.p = new OLPopup();
-
 window.mapjs = map({
   container: 'map',
   controls: ['mouse'],

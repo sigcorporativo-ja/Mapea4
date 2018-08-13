@@ -131,7 +131,7 @@ function fun(M_) {
      */
     urls: (function(stringValue) {
       return stringValue.split(',');
-    })('http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejeroCache.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextCallejero.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextOrtofoto.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextIDEA.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/contextOrtofoto2009.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/callejero2011cache.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/ortofoto2011cache.xml,http://mapea-sigc.juntadeandalucia.es/Componente/mapConfig/hibrido2011cache.xml'),
+    })('http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_callejero.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_hibrido.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_satelite.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejeroCache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejero.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextIDEA.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto2009.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/callejero2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/ortofoto2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/hibrido2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto.xml'),
     /**
      * WMC predefined names
      * @const
