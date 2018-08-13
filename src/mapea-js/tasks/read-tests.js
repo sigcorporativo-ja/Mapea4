@@ -1,7 +1,7 @@
 const fs = require('fs-extra');
 const path = require('path');
 
-const pathBrowserTest = path.resolve(__dirname, '../test');
+const pathBrowserTest = path.resolve(__dirname, '../test/development');
 const pathEntrypoint = path.resolve(__dirname, '../webpack-config/entry-points-test.json');
 const entrypointFile = {};
 
@@ -9,8 +9,8 @@ const jsRegexp = /\.js$/;
 let tests = fs.readdirSync(pathBrowserTest);
 tests = tests.filter(filename => jsRegexp.test(filename));
 tests.forEach((filename) => {
-  const name = filename.split(".")[0];
-  entrypointFile[name] = path.resolve(__dirname, '../test', filename);
+  const name = filename.split('.')[0];
+  entrypointFile[name] = path.resolve(__dirname, '../test/development', filename);
 });
 
 if (tests.length > 0) {

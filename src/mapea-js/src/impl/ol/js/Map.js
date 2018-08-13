@@ -29,14 +29,14 @@ export default class Map extends MObject {
    * @param {Mx.parameters.MapOptions} options
    * @api stable
    */
-  constructor(div, options = {}) {
+  constructor(div, facadeMap, options = {}) {
     super();
     /**
      * Facade map to implement
      * @private
      * @type {M.Map}
      */
-    this.facadeMap_ = null;
+    this.facadeMap_ = facadeMap;
 
     /**
      * Layers added to the map
@@ -124,6 +124,9 @@ export default class Map extends MObject {
       target: div.id,
       // renderer,
       view: new View(),
+    });
+    this.facadeMap_.on(EventType.COMPLETED, () => {
+      this.map_.updateSize()
     });
     this.map_.on('singleclick', this.onMapClick_.bind(this));
     this.map_.addInteraction(new OLInteraction({
@@ -593,7 +596,7 @@ export default class Map extends MObject {
   removeWMS(layers) {
     const wmsMapLayers = this.getWMS(layers);
     wmsMapLayers.forEach((wmsLayer) => {
-      this.layers_.remove(wmsLayer);
+      this.layers_ = this.layers_.filter(layer => !wmsLayer.equals(layer));
       wmsLayer.getImpl().destroy();
     });
 

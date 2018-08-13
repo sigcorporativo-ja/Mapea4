@@ -2,7 +2,7 @@ const path = require('path');
 const webpack = require('webpack');
 
 const distPath = path.resolve(__dirname, '../dist/core/js/mapea.ol.min.js');
-const testPreprod = path.resolve(__dirname, '../test/browser/test-preprod.js');
+const testPreprod = path.resolve(__dirname, '../test/production/basic-map.js');
 const plugins = [new webpack.HotModuleReplacementPlugin()];
 
 module.exports = {
@@ -24,7 +24,6 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-proposal-export-default-from'],
           },
         },
       }],
@@ -33,7 +32,7 @@ module.exports = {
   devServer: {
     hot: true,
     open: true,
-    openPage: '/test/browser/test-preprod.html',
+    openPage: 'test/production/basic-map.html',
     watchOptions: {
       poll: 1000,
     },

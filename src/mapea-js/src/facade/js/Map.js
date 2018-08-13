@@ -72,9 +72,10 @@ class Map extends Base {
     const params = new Parameters(userParameters);
 
     // calls the super constructor
-    const impl = new MapImpl(params.container, options);
-    super(impl);
-    impl.setFacadeMap(this);
+    super();
+    const impl = new MapImpl(params.container, this, options);
+    // impl.setFacadeMap(this);
+    this.setImpl(impl);
 
     // checks if the param is null or empty
     if (isNullOrEmpty(userParameters)) {
@@ -184,6 +185,11 @@ class Map extends Base {
 
     // adds class to the container
     params.container.classList.add('m-mapea-container');
+
+    impl.on(EventType.COMPLETED, () => {
+      this.finishedMapImpl_ = true;
+      this.checkCompleted_();
+    });
 
     // creates main panels
     this.createMainPanels_();

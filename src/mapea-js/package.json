@@ -62,6 +62,7 @@
     "debug:prebuild": "node --inspect-brk tasks/generate-index.js",
     "prebuild": "node tasks/generate-index.js",
     "build": "cross-env NODE_ENV=production webpack --config=webpack-config/webpack.config.js",
-    "start:build": "npm run build && webpack-dev-server --config=webpack-config/webpack.pre.config.js"
+    "debug:build": "webpack-dev-server --config=webpack-config/webpack.pre.config.js",
+    "start:build": "npm run build && npm run debug:build"
   }
 }

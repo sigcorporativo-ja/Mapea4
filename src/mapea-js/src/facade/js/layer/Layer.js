@@ -182,7 +182,7 @@ class LayerBase extends Base {
 
     visibility = /^1|(true)$/i.test(visibility);
 
-    this.getImpl().visible = visibility;
+    this.getImpl().setVisible(visibility);
   }
 
   /**

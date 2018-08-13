@@ -54,7 +54,6 @@ module.exports = {
           loader: 'babel-loader',
           options: {
             presets: ['@babel/preset-env'],
-            plugins: ['@babel/plugin-proposal-export-default-from'],
           },
         },
       },
@@ -83,7 +82,7 @@ module.exports = {
   devServer: {
     hot: true,
     open: true,
-    openPage: '/test',
+    openPage: '/test/development',
     watchOptions: {
       poll: 1000,
     },

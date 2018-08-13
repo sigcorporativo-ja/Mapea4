@@ -80,12 +80,10 @@ class LayerSwitcher extends ControlBase {
    * @function
    * @api
    */
-  /* eslint-disable */
   equals(obj) {
-    let equals = (obj instanceof LayerSwitcher);
+    const equals = (obj instanceof LayerSwitcher);
     return equals;
   }
-  /* eslint-enable */
 
   /**
    * This function registers events on map and layers to render
