@@ -50,7 +50,7 @@ export default class SelectCluster extends OLInteractionSelect {
 
     // Add the overlay to selection
     if (options.layers) {
-      if (typeof (options.layers) === 'function') {
+      if (typeof options.layers === 'function') {
         const fn = options.layers;
         const optionsVariable = options;
         optionsVariable.layers = (layer) => {
@@ -78,7 +78,7 @@ export default class SelectCluster extends OLInteractionSelect {
       this.filter_ = options.filter;
 
       OLInteractionSelect.call(this, options);
-      this.on('select', this.selectCluster, this);
+      this.on('select', this.selectCluster.bind(this), this);
     }
   }
 

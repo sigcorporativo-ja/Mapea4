@@ -14,7 +14,6 @@ export default class FontSymbol extends OLFontSymbol {
    */
   constructor(options = {}) {
     // super call
-    super();
     const optionsC = options;
     if (!options.anchor) {
       optionsC.anchor = [];
@@ -22,7 +21,7 @@ export default class FontSymbol extends OLFontSymbol {
     if (!options.offset) {
       optionsC.offset = [];
     }
-    ol.style.FontSymbol.call(this, {
+    super({
       glyph: options.glyph,
       color: options.color,
       fontSize: options.fontSize,
@@ -37,33 +36,5 @@ export default class FontSymbol extends OLFontSymbol {
       rotation: options.rotation,
       rotateWithView: options.rotateWithView,
     });
-  }
-
-  /**
-   * clones the style
-   * @public
-   * @function
-   * @api stable
-   */
-  clone() {
-    const style = new FontSymbol({
-      glyph: '',
-      color: this.color_,
-      fontSize: this.fontSize_,
-      stroke: this.stroke_,
-      fill: this.fill_,
-      radius: this.radius_ + (this.stroke_ ? this.stroke_.getWidth() : 0),
-      form: this.form_,
-      gradient: this.gradient_,
-      offsetX: this.offset_[0],
-      offsetY: this.offset_[1],
-      opacity: this.getOpacity(),
-      rotation: this.getRotation(),
-      rotateWithView: this.getRotateWithView(),
-    });
-    style.setScale(this.getScale());
-    style.glyph_ = this.glyph_;
-    style.renderMarker_();
-    return style;
   }
 }

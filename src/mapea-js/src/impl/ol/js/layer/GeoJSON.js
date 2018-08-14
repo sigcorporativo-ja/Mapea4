@@ -2,7 +2,7 @@ import { isNullOrEmpty, isObject, beautifyAttributeName, isFunction, includes } 
 import * as EventType from 'facade/js/event/eventtype';
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import Popup from 'facade/js/Popup';
-import {compile as compileTemplate} from 'facade/js/util/Template';
+import { compile as compileTemplate } from 'facade/js/util/Template';
 import geojsonPopupTemplate from 'templates/geojson_popup';
 import GeoJSONFormat from 'facade/js/format/GeoJSON';
 import OLSourceVector from 'ol/source/Vector';

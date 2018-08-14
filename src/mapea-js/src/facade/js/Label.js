@@ -83,7 +83,6 @@ class Label extends Base {
   setCoordinate(coord) {
     this.getImpl().coordinate = coord;
   }
-
 }
 
 /**

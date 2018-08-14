@@ -170,7 +170,7 @@ export default class Map extends MObject {
     // removes unknow layers
     unknowLayers.forEach((layer) => {
       if (!includes(this.layers_, layer)) {
-        this.layers_.remove(layer);
+        this.layers_ = this.layers_.filter(layer2 => !layer.equals(layer2));
         layer.getImpl().destroy();
       }
     });
@@ -266,7 +266,7 @@ export default class Map extends MObject {
   removeWMC(layers) {
     const wmcMapLayers = this.getWMC(layers);
     wmcMapLayers.forEach((wmcLayer) => {
-      this.layers_.remove(wmcLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
     });
 
     return this;
@@ -371,7 +371,7 @@ export default class Map extends MObject {
   removeKML(layers) {
     const kmlMapLayers = this.getKML(layers);
     kmlMapLayers.forEach((kmlLayer) => {
-      this.layers_.remove(kmlLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(kmlLayer));
       kmlLayer.getImpl().destroy();
     });
 
@@ -508,7 +508,7 @@ export default class Map extends MObject {
   removeWMS(layers) {
     const wmsMapLayers = this.getWMS(layers);
     wmsMapLayers.forEach((wmsLayer) => {
-      this.layers_.remove(wmsLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(wmsLayer));
       wmsLayer.getImpl().destroy();
     });
 
@@ -629,7 +629,7 @@ export default class Map extends MObject {
     const wfsMapLayers = this.getWFS(layers);
     wfsMapLayers.forEach((wfsLayer) => {
       wfsLayer.getImpl().destroy();
-      this.layers_.remove(wfsLayer);
+      this.layers_ = this.layers_.filter(layer => layer.equals(wfsLayer));
     });
 
     return this;
@@ -732,7 +732,7 @@ export default class Map extends MObject {
     const wmtsMapLayers = this.getWMTS(layers);
     wmtsMapLayers.forEach((wmtsLayer) => {
       wmtsLayer.getImpl().destroy();
-      this.layers_.remove(wmtsLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(wmtsLayer));
     });
 
     return this;
@@ -784,7 +784,7 @@ export default class Map extends MObject {
     const mbtilesMapLayers = this.getMBtiles(layers);
     mbtilesMapLayers.forEach((mbtilesLayer) => {
       // TODO removing the MBtiles layer with ol3
-      this.layers_.remove(mbtilesLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(mbtilesLayer));
     });
 
     return this;
@@ -865,7 +865,7 @@ export default class Map extends MObject {
     const mapControls = this.getControls(controls);
     mapControls.forEach((control) => {
       control.getImpl().destroy();
-      this.controls_.remove(control);
+      this.controls_ = this.controls_.filter(control2 => control.equals(control));
     });
 
     return this;

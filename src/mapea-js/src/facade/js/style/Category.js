@@ -65,7 +65,7 @@ class Category extends Composite {
    * @returns {M.style.Category}
    * @api
    */
-  applyInternal_(layer) {
+  applyInternal(layer) {
     this.layer_ = layer;
     this.update_();
   }

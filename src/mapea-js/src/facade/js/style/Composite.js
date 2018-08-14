@@ -52,19 +52,14 @@ class Composite extends StyleBase {
    * @returns {M.style.Composite}
    * @api
    */
-  add(stylesPara) {
-    let styles = stylesPara;
+  add(stylesParam) {
+    let styles = stylesParam;
     const layer = this.layer_;
     this.unapplyInternal(this.layer_);
     if (!isArray(styles)) {
       styles = [styles];
     }
     styles = styles.filter(style => style.constructor !== this.constructor);
-    if (!isNullOrEmpty(styles.find(style => !(style instanceof StyleCluster ||
-        style instanceof StyleProportional)))) {
-      this.styles_ = this.styles_.filter(style => style instanceof StyleCluster ||
-        style instanceof StyleProportional);
-    }
     styles.forEach((style) => {
       this.styles_ = this.styles_.filter(s => s.constructor !== style.constructor);
     });
@@ -84,8 +79,8 @@ class Composite extends StyleBase {
    * @returns {M.style.Composite}
    * @api
    */
-  remove(stylesPara) {
-    let styles = stylesPara;
+  remove(stylesParam) {
+    let styles = stylesParam;
     const layer = this.layer_;
     if (!isArray(styles)) {
       styles = [styles];
@@ -182,7 +177,7 @@ class Composite extends StyleBase {
       styleComparator(style, style2));
     styles.forEach((style) => {
       if (style instanceof Composite) {
-        style.applyInternal_(layer);
+        style.applyInternal(layer);
       } else if (style instanceof StyleBase) {
         style.apply(layer, true);
       }

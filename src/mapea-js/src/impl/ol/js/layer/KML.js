@@ -1,4 +1,4 @@
-import {compile as compileTemplate} from 'facade/js/util/Template';
+import { compile as compileTemplate } from 'facade/js/util/Template';
 import popupKMLTemplate from 'templates/kml_popup';
 import Popup from 'facade/js/Popup';
 import { isNullOrEmpty } from 'facade/js/util/Utils';

@@ -607,23 +607,21 @@ export const includes = (array, searchElement, fromIndex) => {
  * @function
  * @api
  */
-/* eslint-disable */
-export const extend = (target, source, override) => {
-  Object
-    .keys(source)
-    .forEach((key) => {
-      if (isUndefined(target[key])) {
-        target[key] = source[key];
-      } else if (isObject(target[key])) {
-        extend(target[key], source[key], override);
-      } else if ((override === true)) {
-        target[key] = source[key];
-      }
-    });
+export const extend = (targetParam, source, override) => {
+  const target = targetParam;
+  Object.keys(source).forEach((key) => {
+    if (isUndefined(target[key])) {
+      target[key] = source[key];
+    } else if (isObject(target[key])) {
+      extend(target[key], source[key], override);
+    } else if ((override === true)) {
+      target[key] = source[key];
+    }
+  });
 
   return target;
-}
-/* eslint-enable */
+};
+
 /**
  * TODO
  *
@@ -918,25 +916,22 @@ export const setEquals = (array, array2) => {
  * @param {M.Map} impl to add the plugin
  * @api
  */
-export const extendsObj = (dest = {}, src = {}) => {
+export const extendsObj = (destParam = {}, src = {}) => {
+  const dest = destParam;
   if (!isNullOrEmpty(src)) {
-    Object
-      .keys(src)
-      .forEach((key) => {
-        let value = src[key];
-        if (isArray(value)) {
-          value = [...value];
-        } else if (isObject(value)) {
-          value = extendsObj({}, value);
-        }
-        if (isNullOrEmpty(dest[key])) {
-          /* eslint-disable */
-          dest[key] = value;
-          /* eslint-enable */
-        } else if (isObject(dest[key])) {
-          extendsObj(dest[key], value);
-        }
-      });
+    Object.keys(src).forEach((key) => {
+      let value = src[key];
+      if (isArray(value)) {
+        value = [...value];
+      } else if (isObject(value)) {
+        value = extendsObj({}, value);
+      }
+      if (isNullOrEmpty(dest[key])) {
+        dest[key] = value;
+      } else if (isObject(dest[key])) {
+        extendsObj(dest[key], value);
+      }
+    });
   }
   return dest;
 };

@@ -12,7 +12,7 @@ import FilterBase from '../filter/Base';
 import StyleCluster from '../style/Cluster';
 import Style from '../style/Style';
 import * as EventType from '../event/eventtype';
-import { POINT, MULTI_POINT } from '../geom/GeoJSON';
+// import { POINT, MULTI_POINT } from '../geom/GeoJSON';
 
 /**
  * @classdesc
@@ -299,9 +299,9 @@ class Vector extends LayerBase {
       if (!(style instanceof Style)) {
         style = generateStyleLayer(style, this);
       }
-      const isCluster = style instanceof StyleCluster;
-      const isPoint = [POINT, MULTI_POINT].includes(this.getGeometryType());
-      if (style instanceof Style /* && (!isCluster || isPoint) */ ) {
+      // const isCluster = style instanceof StyleCluster;
+      // const isPoint = [POINT, MULTI_POINT].includes(this.getGeometryType());
+      if (style instanceof Style) /* && (!isCluster || isPoint) ) */ {
         if (!isNullOrEmpty(this.oldStyle_)) {
           this.oldStyle_.unapply(this);
         }

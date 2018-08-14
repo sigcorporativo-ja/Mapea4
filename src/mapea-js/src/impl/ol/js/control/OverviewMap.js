@@ -62,6 +62,20 @@ export default class OverviewMap extends OLControlOverviewMap {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
+    if (this.facadeMap_.isFinished()) {
+      this.update(map, element);
+    } else {
+      this.facadeMap_.once(EventType.COMPLETED, () => this.update(map, element));
+    }
+  }
+
+  /**
+   * Updates the controls
+   * @function
+   * @param {M.Map} map to add the plugin
+   * @param {function} template template of this control
+   */
+  update(map, element) {
     const olLayers = [];
     map.getLayers().forEach((layer) => {
       const olLayer = layer.getImpl().getOL3Layer();
@@ -71,13 +85,14 @@ export default class OverviewMap extends OLControlOverviewMap {
         olLayers.push(olLayer);
       }
     });
-    OLControlOverviewMap.call(this, {
-      layers: olLayers,
-      view: new View({
-        projection: getProj(map.getProjection().code),
-        resolutions: map.getResolutions(),
-      }),
+
+    const newView = new View({
+      projection: getProj(map.getProjection().code),
+      resolutions: map.getResolutions(),
     });
+
+    this.ovmap_.setView(newView);
+    olLayers.forEach(layer => this.ovmap_.addLayer(layer));
 
     const button = this.element.querySelector('button');
     if (this.collapsed_ === true) {

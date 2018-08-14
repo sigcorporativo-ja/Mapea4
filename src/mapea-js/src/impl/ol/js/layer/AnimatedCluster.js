@@ -164,15 +164,16 @@ export default class AnimatedCluster extends OLLayerVector {
           olStyles.forEach((olStyle) => {
             const styleImage = olStyle.getImage();
             if (!isNullOrEmpty(styleImage)) {
-              if (styleImage.getOrigin() == null) {
-                styleImage.origin_ = [];
-              }
-              if (styleImage.getAnchor() == null) {
-                styleImage.normalizedAnchor_ = [];
-              }
-              if (styleImage.getSize() == null) {
-                styleImage.size_ = [];
-              }
+              // TODO
+              // if (styleImage.getOrigin() == null) {
+              //   styleImage.origin_ = [];
+              // }
+              // if (styleImage.getAnchor() == null) {
+              //   styleImage.normalizedAnchor_ = [];
+              // }
+              // if (styleImage.getSize() == null) {
+              //   styleImage.size_ = [];
+              // }
             }
             vectorContext.setStyle(olStyle);
             vectorContext.drawGeometry(geo);

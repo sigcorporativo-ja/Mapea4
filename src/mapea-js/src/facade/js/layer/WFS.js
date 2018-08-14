@@ -7,7 +7,7 @@ import Exception from '../exception/exception';
 import Vector from './Vector';
 import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
-import Geom from '../geom/Geom';
+import { parse } from '../geom/Geom';
 
 /**
  * @classdesc
@@ -122,7 +122,7 @@ class WFS extends Vector {
 
   set geometry(newGeometry) {
     if (!isNullOrEmpty(newGeometry)) {
-      const parsedGeom = Geom.parse(newGeometry);
+      const parsedGeom = parse(newGeometry);
       if (isNullOrEmpty(parsedGeom)) {
         Exception(`El tipo de capa WFS <b>${newGeometry}</b> no se reconoce. Los tipos disponibles son: POINT, LINE, POLYGON, MPOINT, MLINE, MPOLYGON`);
       }

@@ -126,7 +126,7 @@ export default class Map extends MObject {
       view: new View(),
     });
     this.facadeMap_.on(EventType.COMPLETED, () => {
-      this.map_.updateSize()
+      this.map_.updateSize();
     });
     this.map_.on('singleclick', this.onMapClick_.bind(this));
     this.map_.addInteraction(new OLInteraction({
@@ -339,13 +339,13 @@ export default class Map extends MObject {
       if (wmcLayer.selected === true && wmcLayer.isLoaded() === false) {
         wmcLayer.on(EventType.LOAD, () => {
           wmcLayer.setLoaded(false);
-          this.layers_.remove(wmcLayer);
+          this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
           this.facadeMap_.removeWMS(wmcLayer.layers);
           this.facadeMap_.refreshWMCSelectorControl();
         });
       } else {
         wmcLayer.setLoaded(false);
-        this.layers_.remove(wmcLayer);
+        this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
         this.facadeMap_.removeWMS(wmcLayer.layers);
       }
       this.facadeMap_.refreshWMCSelectorControl();
@@ -451,7 +451,7 @@ export default class Map extends MObject {
   removeKML(layers) {
     const kmlMapLayers = this.getKML(layers);
     kmlMapLayers.forEach((kmlLayer) => {
-      this.layers_.remove(kmlLayer);
+      this.layers_ = this.layers_.filter(layer => !kmlLayer.equals(layer));
       kmlLayer.getImpl().destroy();
     }, this);
 
@@ -721,7 +721,7 @@ export default class Map extends MObject {
   removeWFS(layers) {
     const wfsMapLayers = this.getWFS(layers);
     wfsMapLayers.forEach((wfsLayer) => {
-      this.layers_.remove(wfsLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(wfsLayer));
       wfsLayer.getImpl().destroy();
     });
 
@@ -850,7 +850,7 @@ export default class Map extends MObject {
   removeWMTS(layers) {
     const wmtsMapLayers = this.getWMTS(layers);
     wmtsMapLayers.forEach((wmtsLayer) => {
-      this.layers_.remove(wmtsLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(wmtsLayer));
       wmtsLayer.getImpl().destroy();
     });
 
@@ -903,7 +903,7 @@ export default class Map extends MObject {
     const mbtilesMapLayers = this.getMBtiles(layers);
     mbtilesMapLayers.forEach((mbtilesLayer) => {
       // TODO removing the MBtiles layer with ol3
-      this.layers_.remove(mbtilesLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(mbtilesLayer));
     });
 
     return this;
@@ -1124,7 +1124,7 @@ export default class Map extends MObject {
     const mapControls = this.getControls(controls);
     mapControls.forEach((control) => {
       control.destroy();
-      this.controls_.remove(control);
+      this.controls_ = this.controls_.filter(control2 => !control2.equals(control));
     });
     return this;
   }
@@ -1803,7 +1803,7 @@ export default class Map extends MObject {
    * @returns {Object} core map used by the implementation
    */
   getContainer() {
-    return this.map_.overlayContainerStopEvent_;
+    return this.map_.getOverlayContainerStopEvent();
   }
 
   /**

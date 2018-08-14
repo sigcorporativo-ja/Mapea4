@@ -97,7 +97,7 @@ class Features extends Base {
 
       this.layers_.forEach((layer) => {
         const clickedFeatures = impl.getFeaturesByLayer(evt, layer);
-        const prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
+        const prevFeatures = [...(this.prevSelectedFeatures_[layer.name])];
         // no features selected then unselect prev selected features
         if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
           this.unselectFeatures(prevFeatures, layer, evt);
@@ -269,7 +269,7 @@ class Features extends Base {
    * @export
    */
   removeLayer(layer) {
-    this.layers_.remove(layer);
+    this.layers_ = this.layers_.filter(layer2 => !layer2.equals(layer));
     this.prevSelectedFeatures_[layer.name] = null;
     this.prevHoverFeatures_[layer.name] = null;
     delete this.prevSelectedFeatures_[layer.name];

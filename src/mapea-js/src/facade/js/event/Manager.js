@@ -37,7 +37,7 @@ class EventsManager {
    * @api
    */
   add(eventType, listener, optThis, once = false) {
-    let eventTypes = Object.values(EventType);
+    const eventTypes = Object.values(EventType);
     let eventKey;
     if (!isNullOrEmpty(eventType) &&
       (eventTypes.indexOf(eventType) !== -1) && isFunction(listener)) {

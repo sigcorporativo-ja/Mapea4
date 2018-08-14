@@ -12,29 +12,6 @@ import Exception from './exception/exception';
 import './util/Window';
 import './util/polyfills';
 
-/**
- * Default messages language
- * @type {string}
- * @api
- */
-export let lang_ = 'es';
-
-/**
- * This function sets the language used
- * to display messages
- *
- * @public
- * @function
- * @param {string} code of the language
- * following the standard ISO 639-1:2002
- * @see https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes
- * @api
- */
-export const lang = (langCode) => {
-  if (!isNullOrEmpty(langCode)) {
-    lang_ = langCode;
-  }
-};
 
 /**
  * This function sets the configuration variables
@@ -64,4 +41,25 @@ export const map = (parameters, options) => {
     Exception('No se ha especificado ninguna implementación');
   }
   return new Map(parameters, options);
+};
+
+/**
+ * Flag that indicates if the proxy is
+ * enabled to use
+ * @type {boolean}
+ */
+export let useproxy = true;
+
+/**
+ * This function enables/disables the proxy
+ *
+ * @public
+ * @function
+ * @param {boolean} enable
+ * @api
+ */
+export const proxy = (enable) => {
+  if (typeof enable === 'boolean') {
+    useproxy = enable;
+  }
 };

@@ -74,7 +74,7 @@ export default class Vector extends Layer {
    */
   addTo(map) {
     this.map = map;
-    map.on(EventType.CHANGE_PROJ, this.setProjection_, this);
+    map.on(EventType.CHANGE_PROJ, this.setProjection_.bind(this), this);
 
     this.ol3Layer = new OLLayerVector();
     this.updateSource_();
@@ -264,7 +264,6 @@ export default class Vector extends Layer {
    * @param {ol.Feature} feature
    * @api stable
    */
-  /* eslint-disable*/
   selectFeatures(features, coord, evt) {
     const feature = features[0];
     if (!isNullOrEmpty(feature)) {
@@ -274,7 +273,6 @@ export default class Vector extends Layer {
       }
     }
   }
-  /* eslint-enable */
 
   /**
    * TODO

@@ -3,7 +3,7 @@
  */
 
 import { addParameters, generateRandom, isNullOrEmpty, isObject } from './Utils';
-import { proxy_ } from '../proxy';
+import { useproxy } from '../mapea';
 import Response from './Response';
 
 /**
@@ -64,7 +64,7 @@ const jsonp = (urlVar, data, options) => {
     url = addParameters(url, data);
   }
 
-  if (proxy_) {
+  if (useproxy) {
     url = manageProxy(url, method.GET);
   }
 
@@ -109,7 +109,7 @@ const jsonp = (urlVar, data, options) => {
 const ajax = (urlVar, dataVar, methodType, useProxy) => {
   let url = urlVar;
   let data = dataVar;
-  if ((useProxy !== false) && (proxy_ === true)) {
+  if ((useProxy !== false) && (useproxy === true)) {
     url = manageProxy(url, methodType);
   }
 
@@ -152,7 +152,7 @@ export const get = (url, data, options) => {
   let req;
 
   const useProxy = ((isNullOrEmpty(options) || (options.jsonp !== false)) &&
-    proxy_ !== false);
+    useproxy !== false);
 
   if (useProxy === true) {
     req = jsonp(url, data, options);

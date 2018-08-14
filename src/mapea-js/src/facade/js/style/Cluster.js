@@ -66,7 +66,7 @@ class Cluster extends Composite {
    * @param {M.layer.Vector} layer - Layer to apply the style
    * @api
    */
-  applyInternal_(layer) {
+  applyInternal(layer) {
     this.layer_ = layer;
     this.getImpl().applyToLayer(layer);
     this.updateCanvas();
@@ -242,7 +242,7 @@ Cluster.DEFAULT = {
   label: {
     text: (feature) => {
       let text;
-      const cluseterFeatures = feature.attribute('features');
+      const cluseterFeatures = feature.getAttribute('features');
       if (!isNullOrEmpty(cluseterFeatures)) {
         text = cluseterFeatures.length.toString();
       }

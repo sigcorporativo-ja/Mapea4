@@ -7,7 +7,7 @@ import WMCSelectorImpl from 'impl/control/WMCSelector';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import {compile as compileTemplate} from '../util/Template';
+import { compile as compileTemplate } from '../util/Template';
 
 /**
  * @classdesc

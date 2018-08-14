@@ -110,11 +110,9 @@ export default class LayerBase extends MObject {
    * @expose
    *
    */
-  /* eslint-disable */
   isQueryable() {
     return false;
   }
-  /* eslint-enable */
 
   /**
    * This function indicates if the layer is in range
@@ -273,7 +271,6 @@ export default class LayerBase extends MObject {
    * @function
    * @api stable
    */
-  /* eslint-disable */
   getNumZoomLevels() {
     return 16; // 16 zoom levels by default
   }
@@ -296,5 +293,4 @@ export default class LayerBase extends MObject {
    * @expose
    */
   selectFeatures(features, coord, evt) {}
-  /* eslint-enable */
 }

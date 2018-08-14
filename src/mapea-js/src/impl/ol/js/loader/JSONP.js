@@ -1,5 +1,5 @@
 import MObject from 'facade/js/Object';
-import {get as getRemote} from 'facade/js/util/Remote';
+import { get as getRemote } from 'facade/js/util/Remote';
 import Exception from 'facade/js/exception/exception';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 

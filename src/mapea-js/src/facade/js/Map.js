@@ -1505,6 +1505,7 @@ class Map extends Base {
       this.getImpl().setBbox(bbox, vendorOpts);
     } catch (err) {
       Dialog.error('El formato del parámetro bbox no es el correcto');
+      throw err;
     }
     return this;
   }
@@ -1879,7 +1880,7 @@ class Map extends Base {
       // removes controls from their panels
       plugins.forEach((plugin) => {
         plugin.destroy();
-        this.plugins_.remove(plugin);
+        this.plugins_ = this.plugins_.filter(plugin2 => plugin.name !== plugin2.name);
       });
     }
 
@@ -2200,7 +2201,7 @@ class Map extends Base {
     }
     if (panel instanceof Panel) {
       panel.destroy();
-      this.panels_.remove(panel);
+      this.panels_ = this.panels_.filter(panel2 => !panel2.equals(panel));
     }
 
     return this;
@@ -2376,8 +2377,8 @@ class Map extends Base {
    */
   checkCompleted_() {
     if (this.finishedInitCenter_ && this.finishedMaxExtent_ && this.finishedMapImpl_) {
-      this.fire(EventType.COMPLETED);
       this.finishedMap_ = true;
+      this.fire(EventType.COMPLETED);
     }
   }
 
@@ -2438,6 +2439,15 @@ class Map extends Base {
 
     // equals
     return 0;
+  }
+
+  /**
+   * This function returns true if the map and its impl are completed.
+   * @public
+   * @returns {bool}
+   */
+  isFinished() {
+    return this.finishedMap_;
   }
 }
 

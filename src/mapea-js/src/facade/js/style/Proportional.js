@@ -95,7 +95,7 @@ class Proportional extends StyleComposite {
    * @param {M.Layer.Vector} layer - Layer where to apply choropleth style
    * @api
    */
-  applyInternal_(layer) {
+  applyInternal(layer) {
     this.layer_ = layer;
     this.update_();
   }
@@ -152,7 +152,7 @@ class Proportional extends StyleComposite {
         newStyle.set('zindex', feature => (this.maxValue_ - parseFloat(feature.getAttribute(this.attributeName_))));
         newStyle.set(Proportional.getSizeAttribute(newStyle), (feature) => {
           const proportion = Proportional.SCALE_PROPORTION;
-          const value = feature.attribute(this.attributeName_);
+          const value = feature.getAttribute(this.attributeName_);
           let radius = this.getProportionalFunction_(
             value,
             this.minValue_,

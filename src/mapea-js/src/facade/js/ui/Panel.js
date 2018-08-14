@@ -314,13 +314,13 @@ class Panel extends MObject {
           if (!this.hasControl(control)) {
             this.controls_.push(control);
             control.setPanel(this);
-            control.on(EventType.DESTROY, this.removeControl_, this);
+            control.on(EventType.DESTROY, this.removeControl_.bind(this), this);
           }
           if (!isNullOrEmpty(this.controlsContainer_)) {
-            control.on(EventType.ADDED_TO_MAP, this.moveControlView_, this);
+            control.on(EventType.ADDED_TO_MAP, this.moveControlView_.bind(this), this);
             this.map_.addControls(control);
           }
-          control.on(EventType.ACTIVATED, this.manageActivation_, this);
+          control.on(EventType.ACTIVATED, this.manageActivation_.bind(this), this);
         }
       });
     }
@@ -363,7 +363,7 @@ class Panel extends MObject {
       controls.forEach((controlParam) => {
         const control = controlParam;
         if ((control instanceof ControlBase) && this.hasControl(control)) {
-          this.controls_.remove(control);
+          this.controls = this.controls_.filter(control2 => !control.equals(control2));
           control.panel = null;
         }
       }, this);

@@ -66,8 +66,7 @@ export default class AttributeTableControl extends M.Control {
           if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
             if (this.getPanel().isCollapsed()) {
               this.deactivateDraggable_();
-            }
-            else {
+            } else {
               this.activateDraggable_();
             }
           }
@@ -130,7 +129,6 @@ export default class AttributeTableControl extends M.Control {
         attributes = this.sortAttributes_(attributes, headerAtt);
       }
     }
-    /* eslint-disable */
     return new Promise((success, fail) => {
       let params = {};
       if (!M.utils.isUndefined(headerAtt)) {
@@ -170,8 +168,7 @@ export default class AttributeTableControl extends M.Control {
           });
           this.hasNext_(html);
           this.hasPrevious_(html);
-        }
-        else {
+        } else {
           html.querySelector('#m-attributetable-refresh').addEventListener('click', this.refresh_.bind(this));
         }
         this.rePosition_();
@@ -231,8 +228,7 @@ export default class AttributeTableControl extends M.Control {
     this.selectAllActive_ = !this.selectAllActive_;
     if (this.selectAllActive_ === true) {
       this.addSelectAll_();
-    }
-    else {
+    } else {
       this.removeSelectAll_();
     }
   }
@@ -348,8 +344,7 @@ export default class AttributeTableControl extends M.Control {
     if (this.sortProperties_.active === false) this.sortProperties_.active = true;
     if (this.sortProperties_.sortBy !== evt.target.innerHTML) {
       this.sortProperties_.sortType = '<';
-    }
-    else {
+    } else {
       this.sortProperties_.sortType = (this.sortProperties_.sortType === '>') ? '<' : '>';
     }
     this.sortProperties_.sortBy = evt.target.innerHTML;
@@ -392,8 +387,7 @@ export default class AttributeTableControl extends M.Control {
       const element = this.template_.querySelector('select#m-attributetable-select');
       element.classList.toggle('m-attributetable-hidden');
       element.classList.toggle('show');
-    }
-    else if (id === 'm-attributetable-attributes') {
+    } else if (id === 'm-attributetable-attributes') {
       this.template_.querySelector('#m-attributetable-table').classList.toggle('m-attributetable-hidden');
       this.template_.querySelector('#m-attributetable-tfoot').classList.toggle('m-attributetable-hidden');
     }

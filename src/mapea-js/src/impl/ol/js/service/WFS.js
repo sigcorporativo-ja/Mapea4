@@ -1,4 +1,4 @@
-import {get as getRemote} from 'facade/js/util/Remote';
+import { get as getRemote } from 'facade/js/util/Remote';
 import { addParameters, isNullOrEmpty } from 'facade/js/util/Utils';
 import Featuretype from '../format/wfs/DescribeFeatureType';
 

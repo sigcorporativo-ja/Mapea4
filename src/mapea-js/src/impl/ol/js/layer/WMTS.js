@@ -117,7 +117,7 @@ export default class WMTS extends LayerBase {
           matrixSet,
           format,
           projection,
-          tileGrid: new ol.tilegrid.WMTS({
+          tileGrid: new OLTileGridWMTS({
             origin: getBottomLeft(olExtent),
             resolutions,
             matrixIds,

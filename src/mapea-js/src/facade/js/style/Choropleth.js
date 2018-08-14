@@ -102,7 +102,7 @@ class Choropleth extends StyleComposite {
    * @param {M.Layer.Vector} layer - Layer where to apply choropleth style
    * @api
    */
-  applyInternal_(layer) {
+  applyInternal(layer) {
     this.layer_ = layer;
     this.update_();
   }
