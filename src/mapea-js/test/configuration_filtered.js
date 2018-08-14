@@ -364,7 +364,7 @@ function fun(M_) {
    * @private
    * @type {String}
    */
-  M_.config('MAPBOX_TOKEN_VALUE', 'pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpbTgzcHQxMzAxMHp0eWx4bWQ1ZHN2NGcifQ.WVwjmljKYqKciEZIC3NfLA');
+  M_.config('MAPBOX_TOKEN_VALUE', 'pk.eyJ1Ijoic2lnY29ycG9yYXRpdm9qYSIsImEiOiJjaXczZ3hlc2YwMDBrMm9wYnRqd3gyMWQ0In0.wF12VawgDM31l5RcAGb6AA');
   /**
    * Number of pages for the plugin AttributeTable
    *
