@@ -29,5 +29,6 @@
     "class-methods-use-this": "off",
     "no-case-declarations": "off",
     "import/no-mutable-exports": "off",
+    "no-template-curly-in-string": "off",
   }
 }
