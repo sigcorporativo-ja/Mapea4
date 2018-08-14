@@ -4,14 +4,46 @@ const entrypoints = require('./entry-points-test.json');
 const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 
 const distPath = path.resolve(__dirname, '../dist/core/js');
+const testPath = path.resolve(__dirname, '../test');
 const config = path.resolve(__dirname, '../test/configuration_filtered.js');
 entrypoints.config = config;
 const productionEntryPoint = path.resolve(__dirname, '../src/index.js');
 const env = process.env.NODE_ENV || 'development';
+const rules = [
+  {
+    test: /\.js$/,
+    exclude: /(node_modules\/(?!ol)|bower_components)/,
+    use: {
+      loader: 'babel-loader',
+      options: {
+        presets: ['@babel/preset-env'],
+      },
+    },
+  },
+  {
+    test: [/\.hbs$/, /\.html$/],
+    loader: 'html-loader',
+    exclude: /node_modules/,
+  },
+  {
+    test: /\.css$/,
+    loader: 'style-loader!css-loader',
+    exclude: [/node_modules/],
+  },
+  {
+    test: /\.(woff|woff2|eot|ttf|svg)$/,
+    exclude: /node_modules/,
+    loader: 'url-loader?name=fonts/[name].[ext]',
+  }];
 const plugins = [new AllowMutateEsmExports()];
 if (env === 'development') {
   const HotModuleReplacementPlugin = new webpack.HotModuleReplacementPlugin();
   plugins.push(HotModuleReplacementPlugin);
+  rules.push({
+    test: /\.js$/,
+    loader: 'eslint-loader',
+    exclude: [/node_modules/, /lib/, /test/],
+  });
 }
 
 module.exports = {
@@ -46,37 +78,7 @@ module.exports = {
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html'],
   },
   module: {
-    rules: [
-      {
-        test: /\.js$/,
-        exclude: /(node_modules\/(?!ol)|bower_components)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: ['@babel/preset-env'],
-          },
-        },
-      },
-      // {
-      //   test: /\.js$/,
-      //   loader: 'eslint-loader',
-      //   exclude: [/node_modules/, /lib/, /test/],
-      // },
-      {
-        test: [/\.hbs$/, /\.html$/],
-        loader: 'html-loader',
-        exclude: /node_modules/,
-      },
-      {
-        test: /\.css$/,
-        loader: 'style-loader!css-loader',
-        exclude: [/node_modules/],
-      },
-      {
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
-        exclude: /node_modules/,
-        loader: 'url-loader?name=fonts/[name].[ext]',
-      }],
+    rules,
   },
   plugins: [...plugins],
   devServer: {
@@ -87,5 +89,5 @@ module.exports = {
       poll: 1000,
     },
   },
-  devtool: 'source-map',
+  devtool: env === 'development' ? 'eval-source-map' : '',
 };
