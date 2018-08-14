@@ -106,6 +106,18 @@ function generateExports(symbols, namespaces, imports) {
   return blocks.join('\n');
 }
 
+/**
+ * PATCH
+ * Concat openlayers minified code to entry point of Mapea
+ * @param {string} inputFilePath - Input file path
+ * @param {string} outputFilePath - output file path
+ */
+async function concatOL(inputFilePath, outputFilePath) {
+  const olContent = fse.readFileSync(path.resolve(__dirname, inputFilePath), 'utf8');
+  fse.writeFileSync(path.resolve(__dirname, outputFilePath), olContent, {
+    flag: 'a',
+  });
+}
 
 /**
  * Generate the exports code.
@@ -125,8 +137,9 @@ async function main() {
 if (require.main === module) {
   main().then(async (code) => {
     const filepath = path.join(__dirname, '..', 'src', 'index.js');
-    await fse.outputFile(filepath, code);
-  }).catch((err) => {
+    fse.outputFileSync(filepath, code);
+    concatOL('../externs/ol.js', '../src/index.js');
+  }).then(async () => {}).catch((err) => {
     process.stderr.write(`${err.message}\n`, () => process.exit(1));
   });
 }
