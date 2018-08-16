@@ -49,7 +49,7 @@ class Heatmap extends Style {
     options.radius = isNullOrEmpty(options.radius) ?
       Heatmap.DEFAULT_OPTIONS.radius : parseFloat(options.radius);
     options.weight = attribute;
-    vendorOptions.opacity = isNaN(vendorOptions.opacity) ?
+    vendorOptions.opacity = Number.isNaN(parseFloat(vendorOptions.opacity)) ?
       1 : parseFloat(vendorOptions.opacity);
 
 

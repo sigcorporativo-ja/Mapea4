@@ -97,7 +97,7 @@ const getMatrices = (data, numberClasses) => {
       // the variance at this point in the sequence is the difference
       // between the sum of squares and the total x 2, over the number
       // of samples.
-      variance = (sumSquares - (sum * sum)) / w;
+      variance = sumSquares - ((sum ** 2) / w);
 
       i4 = lowerClassLimit - 1;
 
@@ -210,20 +210,19 @@ export const QUANTILE = (nclasses) => {
     const nClasses = uniqueData.length <= nclassesParam ? uniqueData.length - 1 : nclassesParam;
     const numData = data.length;
     data.sort((a, b) => a - b);
-    const [min, max] = [data[0], data[numData - 1]];
 
     // Calculamos el salto para calcular los puntos de ruptura
-    // Esto será (valor minimo + valor máximo) / número de clases
-    const step = (min + max) / nClasses;
+    const step = Math.trunc(numData / nClasses);
     const breaks = [];
 
-    // Calculamos los puntos de ruptura multiplicando por el valor
-    // del salto desde i = 1, 2, .. numero de clases - 1
-    for (let value = 0; value < nClasses.length; value += 1) {
-      const breakPoint = step * value;
+    for (let i = 0; i < nClasses; i += 1) {
+      let partition = data.slice(i * step, (i + 1) * step);
+      if (i === nClasses - 1) {
+        partition = data.slice(i * step);
+      }
+      const breakPoint = partition.slice(-1)[0];
       breaks.push(breakPoint);
     }
-    breaks.push(max);
     return breaks;
   };
 

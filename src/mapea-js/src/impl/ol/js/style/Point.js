@@ -1,6 +1,5 @@
 import { isNullOrEmpty, concatUrlPaths, addParameters } from 'facade/js/util/Utils';
 import chroma from 'chroma-js';
-
 import OLStyleImage from 'ol/style/Image';
 import OLFeature from 'ol/Feature';
 import * as Align from 'facade/js/style/Align';
@@ -14,6 +13,7 @@ import OLStyleIcon from 'ol/style/Icon';
 import { toContext as toContextRender } from 'ol/render';
 import OLStyleFontsSymbol from '../ext/OLStyleFontSymbol';
 import Simple from './Simple';
+import Utils from '../util/Utils';
 import Centroid from './Centroid';
 import PointFontSymbol from '../point/FontSymbol';
 import PointIcon from '../point/Icon';
@@ -93,6 +93,11 @@ export default class Point extends Simple {
       }
       const style = new Centroid({
         zIndex: Simple.getValue(options.zindex, featureVariable),
+        geometry: (olFeature) => {
+          const center = Utils.getCentroid(olFeature.getGeometry());
+          const centroidGeometry = new OLGeomPoint(center);
+          return centroidGeometry;
+        },
       });
       const styleIcon = new Centroid();
       let fill;

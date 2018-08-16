@@ -1,13 +1,12 @@
 /**
  * @module M/style/Choropleth
  */
-
 import StyleComposite from './Composite';
-import StyleQuantification from './Quantification';
+import * as StyleQuantification from './Quantification';
 import { isNullOrEmpty, generateColorScale, isArray, isString } from '../util/Utils';
 import Exception from '../exception/exception';
 import * as geometry from '../geom/GeoJSON';
-import Filter from '../filter/Filter';
+import * as Filter from '../filter/Filter';
 import StyleCluster from './Cluster';
 import StyleProportional from './Proportional';
 import StylePolygon from './Polygon';
@@ -318,7 +317,7 @@ class Choropleth extends StyleComposite {
       this.layer_.getFeatures().forEach((f) => {
         try {
           const value = parseFloat(f.getAttribute(this.attributeName_));
-          if (!isNaN(value)) {
+          if (!Number.isNaN(value)) {
             values.push(value);
           }
         } catch (e) {

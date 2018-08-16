@@ -51,6 +51,17 @@ class Style extends Base {
   }
 
   /**
+   * canvas getter
+   * @public
+   * @function
+   * @return {HTMLCanvasElement}
+   * @api
+   */
+  get canvas() {
+    return this.canvas_;
+  }
+
+  /**
    * This function apply style
    *
    * @public

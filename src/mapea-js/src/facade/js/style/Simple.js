@@ -23,7 +23,7 @@ class Simple extends StyleFeature {
       } else {
         layer.getFeatures().forEach((featureVar) => {
           const feature = featureVar;
-          feature.style = this.clone();
+          feature.setStyle(this.clone());
         });
       }
     }

@@ -139,8 +139,8 @@ class Proportional extends StyleComposite {
       if (!isNullOrEmpty(this.style_)) {
         // this.layer_.setStyle(this.style_, true);
       }
-      this.oldStyle_ = this.layer_.style() instanceof StyleComposite ? this.layer_.style()
-        .getOldStyle() : this.layer_.style();
+      this.oldStyle_ = this.layer_.getStyle() instanceof StyleComposite ? this.layer_.getStyle()
+        .getOldStyle() : this.layer_.getStyle();
       [this.minValue_, this.maxValue_] = Proportional.getMinMaxValues(this.layer_
         .getFeatures(), this.attributeName_);
       this.layer_.getFeatures().forEach(feature => this.applyToFeature(feature, 1));
@@ -317,7 +317,7 @@ class Proportional extends StyleComposite {
   updateCanvas() {
     this.updateCanvasPromise_ = new Promise((success, fail) => {
       if (!isNullOrEmpty(this.layer_)) {
-        const style = !isNullOrEmpty(this.style_) ? this.style_ : this.layer_.style();
+        const style = !isNullOrEmpty(this.style_) ? this.style_ : this.layer_.getStyle();
 
         if (style instanceof StyleSimple) {
           let featureStyle = style.clone();
@@ -339,7 +339,7 @@ class Proportional extends StyleComposite {
             });
           });
         } else if (!isNullOrEmpty(style)) {
-          this.canvas_ = style.canvas_;
+          this.canvas_ = style.canvas;
           success();
         }
       }

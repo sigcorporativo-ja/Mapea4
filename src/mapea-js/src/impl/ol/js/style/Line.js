@@ -9,7 +9,7 @@ import chroma from 'chroma-js';
 import Centroid from './Centroid';
 import Path from './Path';
 import Simple from './Simple';
-import Render from '../util/render';
+import postRender from '../util/render';
 
 /**
  * @namespace M.impl.style.Line
@@ -132,7 +132,7 @@ export default class Line extends Simple {
 
     const olLayer = layer.getImpl().getOL3Layer();
     if (!isNullOrEmpty(olLayer)) {
-      this.postComposeEvtKey_ = olLayer.on('postcompose', Render.postRender, olLayer);
+      this.postComposeEvtKey_ = olLayer.on('postcompose', postRender, olLayer);
     }
   }
 

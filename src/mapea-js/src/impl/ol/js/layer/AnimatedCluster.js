@@ -63,6 +63,7 @@ export default class AnimatedCluster extends OLLayerVector {
     // Animate the cluster
     this.on('precompose', this.animate.bind(this));
     this.on('postcompose', this.postanimate.bind(this));
+    this.setStyle(options.style);
   }
 
   /**
@@ -165,15 +166,16 @@ export default class AnimatedCluster extends OLLayerVector {
             const styleImage = olStyle.getImage();
             if (!isNullOrEmpty(styleImage)) {
               // TODO
-              // if (styleImage.getOrigin() == null) {
-              //   styleImage.origin_ = [];
-              // }
-              // if (styleImage.getAnchor() == null) {
-              //   styleImage.normalizedAnchor_ = [];
-              // }
-              // if (styleImage.getSize() == null) {
-              //   styleImage.size_ = [];
-              // }
+              /* eslint-disable */
+              if (styleImage.getOrigin() == null) {
+                styleImage.origin_ = [];
+              }
+              if (styleImage.getAnchor() == null) {
+                styleImage.normalizedAnchor_ = [];
+              }
+              if (styleImage.getSize() == null) {
+                styleImage.size_ = [];
+              }
             }
             vectorContext.setStyle(olStyle);
             vectorContext.drawGeometry(geo);

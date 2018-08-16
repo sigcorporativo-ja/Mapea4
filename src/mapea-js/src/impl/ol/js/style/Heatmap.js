@@ -1,4 +1,5 @@
 import OLLayerHeatmap from 'ol/layer/Heatmap';
+import OLSourceVector from 'ol/source/Vector';
 import { isNullOrEmpty, extendsObj } from 'facade/js/util/Utils';
 import Style from './Style';
 import HeatmapLayer from '../layer/Heatmap';
@@ -87,7 +88,7 @@ export default class Heatmap extends Style {
    * @api stable
    */
   createHeatmapLayer_(olFeatures) {
-    this.opt_options_.source = new ol.source.Vector({
+    this.opt_options_.source = new OLSourceVector({
       features: olFeatures,
     });
     this.heatmapLayer_ = new HeatmapLayer(this.opt_options_);

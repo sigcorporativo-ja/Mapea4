@@ -19,8 +19,13 @@ export default class SelectCluster extends OLInteractionSelect {
    * @param {Object} options - ranges defined by user
    * @api stable
    */
-  constructor(options = {}) {
-    super();
+  constructor(optionsParam = {}) {
+    const options = optionsParam;
+    options.filter = (f, l) => {
+      if (!l && f.get('selectclusterlink')) return false;
+      return true;
+    };
+    super(options);
 
     this.map = options.map;
     this.pointRadius = options.pointRadius || 12;
@@ -33,7 +38,7 @@ export default class SelectCluster extends OLInteractionSelect {
     this.maxFeaturesToSelect = options.maxFeaturesToSelect;
     this.facadeLayer_ = options.fLayer;
     this.style_ = options.style;
-
+    this.filter_ = options.filter;
     // Create a new overlay layer for
     this.overlayLayer_ = new OLLayerVector({
       source: new OLSourceVector({
@@ -46,40 +51,8 @@ export default class SelectCluster extends OLInteractionSelect {
       displayInLayerSwitcher: false,
       style: options.featureStyle,
     });
-    const overlay = this.overlayLayer_;
 
-    // Add the overlay to selection
-    if (options.layers) {
-      if (typeof options.layers === 'function') {
-        const fn = options.layers;
-        const optionsVariable = options;
-        optionsVariable.layers = (layer) => {
-          return (layer === overlay || fn(layer));
-        };
-      } else if (options.layers.push) {
-        options.layers.push(this.overlayLayer_);
-      }
-    }
-
-    // Don't select links
-    if (options.filter) {
-      const fn = options.filter;
-      const optionsVariable = options;
-      optionsVariable.filter = (f, l) => {
-        if (!l && f.get('selectclusterlink')) return false;
-        return fn(f, l);
-      };
-    } else {
-      const optionsVariable = options;
-      optionsVariable.filter = (f, l) => {
-        if (!l && f.get('selectclusterlink')) return false;
-        return true;
-      };
-      this.filter_ = options.filter;
-
-      OLInteractionSelect.call(this, options);
-      this.on('select', this.selectCluster.bind(this), this);
-    }
+    this.on('select', this.selectCluster.bind(this), this);
   }
 
   /**
