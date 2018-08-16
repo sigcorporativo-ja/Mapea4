@@ -3,6 +3,7 @@ import WFS from 'facade/js/layer/WFS';
 import StyleCluster from 'facade/js/style/Cluster';
 
 window.mapjs = map({
+  controls: ['layerswitcher'],
   container: 'map',
 });
 

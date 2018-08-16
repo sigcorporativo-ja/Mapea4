@@ -1,15 +1,16 @@
 import { map } from 'facade/js/mapea';
 import WFS from 'facade/js/layer/WFS';
+import StyleProportional from 'facade/js/style/Proportional';
 import StylePoint from 'facade/js/style/Point';
 
 const mapjs = map({
-  controls: ['layerswitcher'],
   container: 'map',
+  controls: ['layerswitcher'],
 });
 
 const wfs = new WFS({
-  namespace: 'ggis',
-  name: 'Colegios',
+  namespace: 'mapea',
+  name: 'da_provincia',
   url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
   legend: 'Prestaciones - Ámbito municipal',
 });
@@ -17,15 +18,15 @@ const wfs = new WFS({
 mapjs.addLayers([wfs]);
 const stylepoint = new StylePoint({
   fill: {
-    color: 'blue',
-    opacity: 0.4,
+    color: 'red',
   },
   stroke: {
-    width: 5,
-    color: 'green',
+    color: 'white',
+    stroke: 4,
   },
-  radius: 13,
 });
-wfs.setStyle(stylepoint);
+const styleproportional = new StyleProportional('area', 15, 30);
+styleproportional.add(stylepoint);
+wfs.setStyle(styleproportional);
 
 window.mapjs = mapjs;

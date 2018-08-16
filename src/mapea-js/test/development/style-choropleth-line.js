@@ -1,20 +1,11 @@
 import { map } from 'facade/js/mapea';
 import WFS from 'facade/js/layer/WFS';
-import StyleLine from 'facade/js/style/Line';
+import StyleChoropleth from 'facade/js/style/Choropleth';
+import * as StyleQuantification from 'facade/js/style/Quantification';
 
 const mapjs = map({
   controls: ['layerswitcher'],
   container: 'map',
-});
-
-const styleline = new StyleLine({
-  fill: {
-    color: 'red',
-  },
-  stroke: {
-    color: 'black',
-    width: 3,
-  },
 });
 
 const wfs = new WFS({
@@ -24,7 +15,8 @@ const wfs = new WFS({
   legend: 'Prestaciones - Ámbito municipal',
 });
 
-mapjs.addLayers(wfs);
-wfs.setStyle(styleline);
+mapjs.addLayers([wfs]);
+const stylechoropleth = new StyleChoropleth('gid', ['#ff0aee', '#040fef'], StyleQuantification.JENKS(3));
+wfs.setStyle(stylechoropleth);
 
 window.mapjs = mapjs;

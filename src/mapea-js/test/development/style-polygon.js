@@ -1,13 +1,13 @@
 import { map } from 'facade/js/mapea';
 import WFS from 'facade/js/layer/WFS';
-import StyleLine from 'facade/js/style/Line';
+import StylePolygon from 'facade/js/style/Polygon';
 
 const mapjs = map({
   controls: ['layerswitcher'],
   container: 'map',
 });
 
-const styleline = new StyleLine({
+const stylepolygon = new StylePolygon({
   fill: {
     color: 'red',
   },
@@ -19,12 +19,12 @@ const styleline = new StyleLine({
 
 const wfs = new WFS({
   namespace: 'mapea',
-  name: 'mapb_hs1_100',
+  name: 'da_provincia',
   url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
   legend: 'Prestaciones - Ámbito municipal',
 });
 
 mapjs.addLayers(wfs);
-wfs.setStyle(styleline);
+wfs.setStyle(stylepolygon);
 
 window.mapjs = mapjs;
