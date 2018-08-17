@@ -488,6 +488,18 @@ class Panel extends MObject {
   }
 
   /**
+   * Returns the button panel
+   *
+   * @public
+   * @function
+   * @api
+   * @returns {HTMLElement}
+   */
+  getButtonPanel() {
+    return this.buttonPanel_;
+  }
+
+  /**
    * Returns is collapsed
    *
    * @public
