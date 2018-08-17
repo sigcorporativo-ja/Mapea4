@@ -12,5 +12,6 @@ libraries
 doc
 dist
 index.js
+index-*.js
 entry-points-test.json
 *~
