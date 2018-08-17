@@ -358,6 +358,7 @@ class Map extends Base {
     return layers;
   }
 
+
   /**
    * This function gets the base layers added to the map
    *
@@ -2448,6 +2449,13 @@ class Map extends Base {
    */
   isFinished() {
     return this.finishedMap_;
+  }
+
+  /**
+   * areasContainer_ getter
+   */
+  get areasContainer() {
+    return this.areasContainer_;
   }
 }
 
