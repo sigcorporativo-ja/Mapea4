@@ -58,7 +58,6 @@
     "walk": "2.3.9"
   },
   "scripts": {
-    "prestart": "node tasks/read-tests.js",
     "start": "cross-env NODE_ENV=development webpack-dev-server --config=webpack-config/webpack.development.config.js",
     "debug:prebuild": "node --inspect-brk tasks/generate-index.js",
     "prebuild": "node tasks/generate-index.js && node tasks/generate-plugins-entrypoints.js",
