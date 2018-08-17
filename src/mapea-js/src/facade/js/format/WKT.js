@@ -1,19 +1,25 @@
+/**
+ * @module M/format/WKT
+ */
 import WKTImpl from 'impl/format/WKT';
 import Base from '../Base';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 
-export default class WKT extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ * @api
+ */
+class WKT extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.facade.Base}
    * @param {string|Object} userParameters parameters
    * provided by the user
-   * @api stable
+   * @api
    */
   constructor(options = {}) {
     const impl = new WKTImpl(options);
@@ -33,9 +39,11 @@ export default class WKT extends Base {
    * @param {Array<M.Feature>} features features array to parsed
    * as a GeoJSON FeatureCollection
    * @return {Array<Object>}
-   * @api stable
+   * @api
    */
   write(geomtry) {
     return this.getImpl().write(geomtry);
   }
 }
+
+export default WKT;

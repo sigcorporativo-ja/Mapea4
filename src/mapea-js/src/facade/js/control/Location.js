@@ -1,21 +1,27 @@
+/**
+ * @module M/control/Location
+ */
 import LocationImpl from 'impl/control/Location';
 import locationTemplate from 'templates/location';
 import 'assets/css/controls/location';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
+import { compile as compileTemplate } from '../util/Template';
 
-export default class Location extends ControlBase {
+
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a Location
+ * control that allows the user to locate and draw your
+ * position on the map.
+ * @api
+ */
+class Location extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Location
-   * control that allows the user to locate and draw your
-   * position on the map.
-   *
    * @constructor
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor(tracking = true, highAccuracy = false) {
     if (isUndefined(LocationImpl)) {
@@ -36,10 +42,10 @@ export default class Location extends ControlBase {
    * @function
    * @param {M.Map} map - Facade map
    * @returns {Promise} HTML template
-   * @api stable
+   * @api
    */
   createView(map) {
-    return Template.compile(locationTemplate);
+    return compileTemplate(locationTemplate);
   }
 
   /**
@@ -49,7 +55,7 @@ export default class Location extends ControlBase {
    * @function
    * @param {HTMLElement} element - Control template
    * @returns {HTMLElement} HTML control button
-   * @api stable
+   * @api
    * @export
    */
   getActivationButton(element) {
@@ -64,7 +70,7 @@ export default class Location extends ControlBase {
    * @function
    * @param {*} obj - Object to compare
    * @returns {boolean} equals - Returns if they are equal or not
-   * @api stable
+   * @api
    */
   equals(obj) {
     const equals = (obj instanceof Location);
@@ -84,6 +90,8 @@ export default class Location extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Location.NAME = 'location';
+
+export default Location;

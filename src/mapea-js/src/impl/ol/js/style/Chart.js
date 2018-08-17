@@ -1,5 +1,5 @@
 import { isNullOrEmpty } from 'facade/js/util/Utils';
-import Align from 'facade/js/Align';
+import * as Align from 'facade/js/style/Align';
 import FacadeChart from 'facade/js/style/Chart';
 import OLFeature from 'ol/Feature';
 import OLStyleStroke from 'ol/style/Stroke';
@@ -8,7 +8,7 @@ import OLStyleText from 'ol/style/Text';
 import OLStyleFill from 'ol/style/Fill';
 import OLStyle from 'ol/style/Style';
 import OLStyleIcon from 'ol/style/Icon';
-import Baseline from 'facade/js/style/Baseline';
+import * as Baseline from 'facade/js/style/Baseline';
 import OLChart from '../chart/OLChart';
 import StyleCentroid from './Centroid';
 import Feature from './Feature';

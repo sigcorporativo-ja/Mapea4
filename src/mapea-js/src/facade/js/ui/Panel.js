@@ -1,22 +1,26 @@
+/**
+ * @module M/ui/Panel
+ */
 import 'assets/css/panel';
 import panelTemplate from 'templates/panel';
-import Position from './Position';
+import * as Position from './position';
 import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils';
 import MObject from '../Object';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 import ControlBase from '../control/Control';
-import Template from '../util/Template';
+import { compile as compileTemplate } from '../util/Template';
 
-export default class Panel extends MObject {
+/**
+ * @classdesc
+ * @api
+ */
+class Panel extends MObject {
   /**
-   * @classdesc
-   * TODO
-   *
    * @constructor
    * @param {string} name of the panel
    * @param {Mx.parameters.Panel} options of the panel
    * @extends {M.Object}
-   * @api stable
+   * @api
    */
   constructor(name, options = {}) {
     // calls the super constructor
@@ -25,7 +29,7 @@ export default class Panel extends MObject {
     /**
      * @public
      * @type {string}
-     * @api stable
+     * @api
      * @expose
      */
     this.name = name;
@@ -64,7 +68,7 @@ export default class Panel extends MObject {
     /**
      * @public
      * @type {Position}
-     * @api stable
+     * @api
      * @expose
      */
     this.position = Position.TL;
@@ -170,7 +174,7 @@ export default class Panel extends MObject {
    * @function
    @param {HTMLElement} html panel
    @param {HTMLElement} html area
-   * @api stable
+   * @api
    */
   destroy() {
     if (this.element_ != null) {
@@ -185,12 +189,12 @@ export default class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   addTo(map, areaContainer) {
     this.map_ = map;
     this.areaContainer_ = areaContainer;
-    const html = Template.compile(panelTemplate);
+    const html = compileTemplate(panelTemplate);
     this.element_ = html;
 
     if (!isNullOrEmpty(this.tooltip_)) {
@@ -226,7 +230,7 @@ export default class Panel extends MObject {
     });
 
     this.addControls(this.controls_);
-    this.fire(EvtManager.ADDED_TO_MAP, html);
+    this.fire(EventType.ADDED_TO_MAP, html);
   }
 
   /**
@@ -241,7 +245,7 @@ export default class Panel extends MObject {
     html.classList.add('collapsed');
     this.buttonPanel_.classList.add(this.collapsedButtonClass_);
     this.collapsed_ = true;
-    this.fire(EvtManager.HIDE);
+    this.fire(EventType.HIDE);
   }
 
   /**
@@ -256,7 +260,7 @@ export default class Panel extends MObject {
     html.classList.add('opened');
     this.buttonPanel_.classList.add(this.openedButtonClass_);
     this.collapsed_ = false;
-    this.fire(EvtManager.SHOW);
+    this.fire(EventType.SHOW);
   }
 
   /**
@@ -285,7 +289,7 @@ export default class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   getControls() {
     return this.controls_;
@@ -297,7 +301,7 @@ export default class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   addControls(controlsParam) {
     let controls = controlsParam;
@@ -310,13 +314,13 @@ export default class Panel extends MObject {
           if (!this.hasControl(control)) {
             this.controls_.push(control);
             control.setPanel(this);
-            control.on(EvtManager.DESTROY, this.removeControl_, this);
+            control.on(EventType.DESTROY, this.removeControl_.bind(this), this);
           }
           if (!isNullOrEmpty(this.controlsContainer_)) {
-            control.on(EvtManager.ADDED_TO_MAP, this.moveControlView_, this);
+            control.on(EventType.ADDED_TO_MAP, this.moveControlView_.bind(this), this);
             this.map_.addControls(control);
           }
-          control.on(EvtManager.ACTIVATED, this.manageActivation_, this);
+          control.on(EventType.ACTIVATED, this.manageActivation_.bind(this), this);
         }
       });
     }
@@ -328,7 +332,7 @@ export default class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   hasControl(controlParam) {
     let hasControl = false;
@@ -348,7 +352,7 @@ export default class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   removeControls(controlsParam) {
     let controls = controlsParam;
@@ -359,7 +363,7 @@ export default class Panel extends MObject {
       controls.forEach((controlParam) => {
         const control = controlParam;
         if ((control instanceof ControlBase) && this.hasControl(control)) {
-          this.controls_.remove(control);
+          this.controls = this.controls_.filter(control2 => !control.equals(control2));
           control.panel = null;
         }
       }, this);
@@ -377,7 +381,7 @@ export default class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   removeControl_(controlsParam) {
     const controls = this.map_.controls(controlsParam);
@@ -395,7 +399,7 @@ export default class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   removeClassName(className) {
     if (!isNullOrEmpty(this.element_)) {
@@ -411,7 +415,7 @@ export default class Panel extends MObject {
    * @public
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   addClassName(className) {
     if (!isNullOrEmpty(this.element_)) {
@@ -427,14 +431,14 @@ export default class Panel extends MObject {
    * @private
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   moveControlView_(control) {
     const controlElem = control.getElement();
     if (!isNullOrEmpty(this.controlsContainer_)) {
       this.controlsContainer_.appendChild(controlElem);
     }
-    control.fire(EvtManager.ADDED_TO_PANEL);
+    control.fire(EventType.ADDED_TO_PANEL);
   }
 
   /**
@@ -443,7 +447,7 @@ export default class Panel extends MObject {
    * @private
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   manageActivation_(control) {
     if (this.multiActivation_ !== true) {
@@ -461,7 +465,7 @@ export default class Panel extends MObject {
    * @private
    * @function
    * @param {array<M.Control>} controls
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -476,7 +480,7 @@ export default class Panel extends MObject {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @returns {HTMLElement}
    */
   getTemplatePanel() {
@@ -484,14 +488,28 @@ export default class Panel extends MObject {
   }
 
   /**
+   * Returns the button panel
+   *
+   * @public
+   * @function
+   * @api
+   * @returns {HTMLElement}
+   */
+  getButtonPanel() {
+    return this.buttonPanel_;
+  }
+
+  /**
    * Returns is collapsed
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @returns {Boolean}
    */
   isCollapsed() {
     return this.collapsed_;
   }
 }
+
+export default Panel;

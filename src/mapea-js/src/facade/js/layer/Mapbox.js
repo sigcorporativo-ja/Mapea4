@@ -1,22 +1,26 @@
-import Config from 'configuration';
+/**
+ * @module M/layer/Mapbox
+ */
 import MapboxImpl from 'impl/layer/Mapbox';
 import LayerBase from './Layer';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerType from './Type';
+import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
-
-export default class Mapbox extends LayerBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a Mapbox layer
+ * with parameters specified by the user
+ * @api
+ */
+class Mapbox extends LayerBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Mapbox layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParameters, options = {}) {
     /**
@@ -76,7 +80,7 @@ export default class Mapbox extends LayerBase {
     if (!isNullOrEmpty(newUrl)) {
       this.getImpl().url = newUrl;
     } else {
-      this.getImpl().url = Config.MAPBOX_URL;
+      this.getImpl().url = M.config.MAPBOX_URL;
     }
   }
 
@@ -106,7 +110,7 @@ export default class Mapbox extends LayerBase {
     if (!isNullOrEmpty(newAccessToken)) {
       this.getImpl().accessToken = newAccessToken;
     } else {
-      this.getImpl().accessToken = Config.MAPBOX_TOKEN_VALUE;
+      this.getImpl().accessToken = M.config.MAPBOX_TOKEN_VALUE;
     }
   }
 
@@ -130,7 +134,7 @@ export default class Mapbox extends LayerBase {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -143,3 +147,5 @@ export default class Mapbox extends LayerBase {
     return equals;
   }
 }
+
+export default Mapbox;

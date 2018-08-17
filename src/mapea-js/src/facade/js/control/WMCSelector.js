@@ -1,20 +1,23 @@
+/**
+ * @module M/control/WMCSelector
+ */
 import wmcselectorTemplate from 'templates/wmcselector';
 import 'assets/css/controls/wmcselector';
 import WMCSelectorImpl from 'impl/control/WMCSelector';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
+import { compile as compileTemplate } from '../util/Template';
 
-export default class WMCSelector extends ControlBase {
+/**
+ * @classdesc
+ * @api
+ */
+class WMCSelector extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMCSelector
-   * control to provides a way to select an specific WMC
-   *
    * @constructor
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor() {
     // implementation of this control
@@ -35,11 +38,11 @@ export default class WMCSelector extends ControlBase {
    * @public
    * @function
    * @param {M.Map} map to add the control
-   * @api stable
+   * @api
    */
   createView(map) {
     // compiles the template
-    return Template.compile(wmcselectorTemplate, {
+    return compileTemplate(wmcselectorTemplate, {
       vars: {
         layers: map.getWMC(),
       },
@@ -51,7 +54,7 @@ export default class WMCSelector extends ControlBase {
    * to this control
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -67,6 +70,8 @@ export default class WMCSelector extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 WMCSelector.NAME = 'wmcselector';
+
+export default WMCSelector;

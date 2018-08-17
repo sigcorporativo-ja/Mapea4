@@ -1,27 +1,32 @@
+/**
+ * @module M/layer/Vector
+ */
 import VectorImpl from 'impl/layer/Vector';
 import { isUndefined, isArray, isNullOrEmpty } from '../util/Utils';
 import { generateStyleLayer } from '../style/utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
-import LayerType from './Type';
+import * as LayerType from './Type';
 import * as dialog from '../dialog';
 import FilterBase from '../filter/Base';
 import StyleCluster from '../style/Cluster';
 import Style from '../style/Style';
-import EvtManager from '../event/Manager';
-import { POINT, MULTI_POINT } from '../geom/GeoJSON';
+import * as EventType from '../event/eventtype';
+// import { POINT, MULTI_POINT } from '../geom/GeoJSON';
 
-export default class Vector extends LayerBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a Vector layer
+ * with parameters specified by the user
+ * @api
+ */
+class Vector extends LayerBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Vector layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.Layer}
    * @param {Mx.parameters.Layer} userParameters - parameters
    * @param {Mx.parameters.LayerOptions} options - custom options for this layer
-   * @api stable
+   * @api
    */
   constructor(parameters = {}, options = {}, impl = new VectorImpl(options)) {
     // calls the super constructor
@@ -46,7 +51,7 @@ export default class Vector extends LayerBase {
 
     this.setStyle(this.style_);
 
-    impl.on(EvtManager.LOAD, features => this.fire(EvtManager.LOAD, [features]));
+    impl.on(EventType.LOAD, features => this.fire(EventType.LOAD, [features]));
   }
 
   /**
@@ -70,7 +75,7 @@ export default class Vector extends LayerBase {
    * @function
    * @public
    * @param {Array<M.feature>} features - Features to add
-   * @api stable
+   * @api
    */
   addFeatures(featuresParam, update = false) {
     let features = featuresParam;
@@ -89,7 +94,7 @@ export default class Vector extends LayerBase {
    * @public
    * @param {boolean} applyFilter - Indicates whether execute filter
    * @return {Array<M.Feature>} returns all features or discriminating by the filter
-   * @api stable
+   * @api
    */
   getFeatures(skipFilterParam) {
     let skipFilter = skipFilterParam;
@@ -104,7 +109,7 @@ export default class Vector extends LayerBase {
    * @param {string|number} id - Id feature
    * @return {null|M.feature} feature - Returns the feature with that id if it is found,
      in case it is not found or does not indicate the id returns null
-   * @api stable
+   * @api
    */
   getFeatureById(id) {
     let feature = null;
@@ -122,7 +127,7 @@ export default class Vector extends LayerBase {
    * @function
    * @public
    * @param {Array<M.feature>} features - Features to remove
-   * @api stable
+   * @api
    */
   removeFeatures(featuresParam) {
     let features = featuresParam;
@@ -137,7 +142,7 @@ export default class Vector extends LayerBase {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   clear() {
     this.removeFilter();
@@ -149,7 +154,7 @@ export default class Vector extends LayerBase {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   refresh() {
     this.getImpl().refresh(true);
@@ -161,7 +166,7 @@ export default class Vector extends LayerBase {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   redraw() {
     this.getImpl().redraw();
@@ -186,7 +191,7 @@ export default class Vector extends LayerBase {
    * @function
    * @public
    * @param {M.Filter} filter - filter to set
-   * @api stable
+   * @api
    */
   setFilter(filter) {
     if (isNullOrEmpty(filter) || (filter instanceof FilterBase)) {
@@ -217,7 +222,7 @@ export default class Vector extends LayerBase {
    * @function
    * @public
    * @return {M.Filter} returns filter assigned
-   * @api stable
+   * @api
    */
   getFilter() {
     return this.filter_;
@@ -229,7 +234,7 @@ export default class Vector extends LayerBase {
    * @function
    * @param {boolean} applyFilter - Indicates whether execute filter
    * @return {Array<number>} Extent of features
-   * @api stable
+   * @api
    */
   getFeaturesExtent(skipFilterParam) {
     let skipFilter = skipFilterParam;
@@ -242,7 +247,7 @@ export default class Vector extends LayerBase {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   removeFilter() {
     this.setFilter(null);
@@ -255,7 +260,7 @@ export default class Vector extends LayerBase {
    * @function
    * @public
    * @param {object} obj - Object to compare
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -281,7 +286,7 @@ export default class Vector extends LayerBase {
     if (this.getImpl().isLoaded()) {
       this.applyStyle_(style, applyToFeature)();
     } else {
-      this.once(EvtManager.LOAD, this.applyStyle_(style, applyToFeature));
+      this.once(EventType.LOAD, this.applyStyle_(style, applyToFeature));
     }
   }
 
@@ -294,15 +299,15 @@ export default class Vector extends LayerBase {
       if (!(style instanceof Style)) {
         style = generateStyleLayer(style, this);
       }
-      const isCluster = style instanceof StyleCluster;
-      const isPoint = [POINT, MULTI_POINT].includes(this.getGeometryType());
-      if (style instanceof Style /* && (!isCluster || isPoint) */ ) {
+      // const isCluster = style instanceof StyleCluster;
+      // const isPoint = [POINT, MULTI_POINT].includes(this.getGeometryType());
+      if (style instanceof Style) /* && (!isCluster || isPoint) ) */ {
         if (!isNullOrEmpty(this.oldStyle_)) {
           this.oldStyle_.unapply(this);
         }
         style.apply(this, applyToFeature);
         this.style_ = style;
-        this.fire(EvtManager.CHANGE_STYLE, [style, this]);
+        this.fire(EventType.CHANGE_STYLE, [style, this]);
       }
       if (!isNullOrEmpty(this.getImpl().getMap())) {
         const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
@@ -310,7 +315,7 @@ export default class Vector extends LayerBase {
           layerswitcher.render();
         }
       }
-      this.fire(EvtManager.CHANGE_STYLE, [style, this]);
+      this.fire(EventType.CHANGE_STYLE, [style, this]);
     };
   }
 
@@ -319,7 +324,7 @@ export default class Vector extends LayerBase {
    * This function return style vector
    *
    * TODO
-   * @api stable
+   * @api
    */
   getStyle() {
     return this.style_;
@@ -330,7 +335,7 @@ export default class Vector extends LayerBase {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   clearStyle() {
     this.style = null;
@@ -342,7 +347,7 @@ export default class Vector extends LayerBase {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   getLegendURL() {
     let legendUrl = this.getImpl().getLegendURL();
@@ -377,7 +382,7 @@ export default class Vector extends LayerBase {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Vector.DEFAULT_OPTIONS_STYLE = {
   fill: {
@@ -390,3 +395,5 @@ Vector.DEFAULT_OPTIONS_STYLE = {
   },
   radius: 5,
 };
+
+export default Vector;

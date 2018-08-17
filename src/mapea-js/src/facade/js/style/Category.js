@@ -1,21 +1,25 @@
+/**
+ * @module M/style/Category
+ */
 import Composite from './Composite';
 import { isNullOrEmpty, generateRandomStyle, getImageSize, isArray } from '../util/Utils';
 import Exception from '../exception/exception';
 import StyleProportional from './Proportional';
 import StyleCluster from './Cluster';
 
-export default class Category extends Composite {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a category style
+ * with parameters specified by the user
+ * @api
+ */
+class Category extends Composite {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a categoryStyle
-   * with parameters specified by the user
-   * for the implementation
-   * provided by the user
    * @constructor
    * @extends {M.Style}
    * @param {String} attributeName
    * @param {Map<String,M.Style>} categoryStyles
-   * @api stable
+   * @api
    */
   constructor(attributeName, categoryStyles, options = {}) {
     super(options, {});
@@ -27,7 +31,7 @@ export default class Category extends Composite {
      * TODO
      * @public
      * @type {String}
-     * @api stable
+     * @api
      * @expose
      */
     this.attributeName_ = attributeName;
@@ -36,7 +40,7 @@ export default class Category extends Composite {
      * TODO
      * @public
      * @type {Map<String,M.Style>}
-     * @api stable
+     * @api
      * @expose
      */
     this.categoryStyles_ = categoryStyles;
@@ -46,7 +50,7 @@ export default class Category extends Composite {
    * This constant defines the order of style.
    * @constant
    * @public
-   * @api stable
+   * @api
    */
   get ORDER() {
     return 1;
@@ -59,9 +63,9 @@ export default class Category extends Composite {
    * @public
    * @param {M.layer.Vector} layer - layer is the layer where we want to apply the new Style
    * @returns {M.style.Category}
-   * @api stable
+   * @api
    */
-  applyInternal_(layer) {
+  applyInternal(layer) {
     this.layer_ = layer;
     this.update_();
   }
@@ -71,7 +75,7 @@ export default class Category extends Composite {
    * @function
    * @public
    * @returns {String}
-   * @api stable
+   * @api
    */
   getAttributeName() {
     return this.attributeName_;
@@ -84,7 +88,7 @@ export default class Category extends Composite {
    * @public
    * @param {String} attributeName - newAttributeName is the newAttributeName specified by the user
    * @returns {M.style.Category}
-   * @api stable
+   * @api
    */
   setAttributeName(attributeName) {
     this.attributeName_ = attributeName;
@@ -99,7 +103,7 @@ export default class Category extends Composite {
    * @function
    * @public
    * @returns {Array<String>}
-   * @api stable
+   * @api
    */
   getCategories() {
     return this.categoryStyles_;
@@ -112,7 +116,7 @@ export default class Category extends Composite {
    * @public
    * @param {Map<String,M.style>} categories
    * @return {M.style.Category}
-   * @api stable
+   * @api
    *
    */
   setCategories(categories) {
@@ -129,7 +133,7 @@ export default class Category extends Composite {
    * @public
    * @param {String} string - string is the name of a category value
    * @returns {M.style}
-   * @api stable
+   * @api
    */
   getStyleForCategory(category) {
     return this.categoryStyles_[category];
@@ -143,7 +147,7 @@ export default class Category extends Composite {
    * @param {String} category - category is the name of a category value
    * @param {M.style.Simple} style - style is the new style to switch
    * @returns {M.style.Category}
-   * @api stable
+   * @api
    */
   setStyleForCategory(category, style) {
     this.categoryStyles_[category] = style;
@@ -157,7 +161,7 @@ export default class Category extends Composite {
    *
    * @function
    * @public
-   * @api stable
+   * @api
    */
   updateCanvas() {
     const canvasImages = [];
@@ -217,7 +221,7 @@ export default class Category extends Composite {
    * @function
    * @public
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
-   * @api stable
+   * @api
    */
   drawGeometryToCanvas(canvasImages, callbackFn) {
     const heights = canvasImages.map(canvasImage => canvasImage.image.height);
@@ -259,7 +263,7 @@ export default class Category extends Composite {
    * @function
    * @private
    * @return {M.style.Category}
-   * @api stable
+   * @api
    */
   update_() {
     if (!isNullOrEmpty(this.layer_)) {
@@ -300,7 +304,7 @@ export default class Category extends Composite {
    * @function
    * @private
    * @return {object}
-   * @api stable
+   * @api
    */
   generateRandomCategories_() {
     const categories = {};
@@ -325,7 +329,7 @@ export default class Category extends Composite {
  * This constant defines the radius of random category style.
  * @constant
  * @public
- * @api stable
+ * @api
  */
 Category.RANDOM_RADIUS_OPTION = 10;
 
@@ -333,7 +337,7 @@ Category.RANDOM_RADIUS_OPTION = 10;
  * This constant defines the stroke width of random category style.
  * @constant
  * @public
- * @api stable
+ * @api
  */
 Category.RANDOM_STROKE_WIDTH_OPTION = 1;
 
@@ -341,6 +345,8 @@ Category.RANDOM_STROKE_WIDTH_OPTION = 1;
  * This constant defines the stroke color of random category style.
  * @constant
  * @public
- * @api stable
+ * @api
  */
 Category.RANDOM_STROKE_COLOR_OPTION = 'black';
+
+export default Category;

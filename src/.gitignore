@@ -10,5 +10,8 @@ target
 externs
 libraries
 doc
-build
+dist
+index.js
+index-*.js
+entry-points-test.json
 *~

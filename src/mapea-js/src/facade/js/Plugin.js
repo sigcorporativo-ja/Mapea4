@@ -1,15 +1,18 @@
+/**
+ * @module M/Plugin
+ */
 import Base from './Base';
 import { isNullOrEmpty, isUndefined } from './util/Utils';
 import Exception from './exception/exception';
-import EventManager from './event/Manager';
+import * as EventType from './event/eventtype';
 
 /**
  * @classdesc
  * Main facade plugin object. This class creates a plugin
  * object which has an implementation Object
- *
+ * @api
  */
-export default class Plugin extends Base {
+class Plugin extends Base {
   /**
    * This function provides the implementation
    * of the object
@@ -17,7 +20,7 @@ export default class Plugin extends Base {
    * @public
    * @function
    * @param {Object} map the map to add the plugin
-   * @api stable
+   * @api
    */
   addTo(map) {
     // checks if the parameter is null or empty
@@ -37,12 +40,12 @@ export default class Plugin extends Base {
       view.then((html) => {
         impl.addTo(map, html);
         // executes load callback
-        this.fire(EventManager.ADDED_TO_MAP);
+        this.fire(EventType.ADDED_TO_MAP);
       });
     } else { // view is an HTML or text
       impl.addTo(map, view);
       // executes load callback
-      this.fire(EventManager.ADDED_TO_MAP);
+      this.fire(EventType.ADDED_TO_MAP);
     }
   }
 
@@ -51,7 +54,9 @@ export default class Plugin extends Base {
    * @public
    * @function
    * @param {M.Map} map to add the plugin
-   * @api stable
+   * @api
    */
   createView(map) {}
 }
+
+export default Plugin;

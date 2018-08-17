@@ -2,14 +2,14 @@ import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
 import OLFeature from 'ol/Feature';
 import OLStyleStroke from 'ol/style/Stroke';
 import OLStyleFill from 'ol/style/Fill';
-import { unByKey as unByKeyObservable } from 'ol/Observable';
+import { unByKey } from 'ol/Observable';
 import { toContext as toContextRender } from 'ol/render';
 import OLGeomLineString from 'ol/geom/LineString';
 import chroma from 'chroma-js';
 import Centroid from './Centroid';
 import Path from './Path';
 import Simple from './Simple';
-import Render from '../util/render';
+import postRender from '../util/render';
 
 /**
  * @namespace M.impl.style.Line
@@ -132,7 +132,7 @@ export default class Line extends Simple {
 
     const olLayer = layer.getImpl().getOL3Layer();
     if (!isNullOrEmpty(olLayer)) {
-      this.postComposeEvtKey_ = olLayer.on('postcompose', Render.postRender, olLayer);
+      this.postComposeEvtKey_ = olLayer.on('postcompose', postRender, olLayer);
     }
   }
 
@@ -145,7 +145,7 @@ export default class Line extends Simple {
    * @api stable
    */
   unapply() {
-    unByKeyObservable.unByKey(this.postComposeEvtKey_);
+    unByKey(this.postComposeEvtKey_);
   }
 
   /**
@@ -166,8 +166,8 @@ export default class Line extends Simple {
       const width = style.width;
       const ctx = canvas.getContext('2d');
       ctx.lineWidth = style.width;
-      x = vectorContext.context_.canvas.width;
-      y = vectorContext.context_.canvas.height;
+      x = canvas.width;
+      y = canvas.height;
       ctx.strokeStyle = style.color;
       ctx.beginPath();
       ctx.lineTo(0 + width, 0 + width);

@@ -1,93 +1,96 @@
-export default class Form {}
+/**
+ * @module M/style/form
+ */
+
 /**
  * Circle style form
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.CIRCLE = 'CIRCLE';
+export const CIRCLE = 'CIRCLE';
 
 /**
  * Buble style form
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.BUBBLE = 'BUBBLE';
+export const BUBBLE = 'BUBBLE';
 
 /**
  * Marker style form
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.MARKER = 'MARKER';
+export const MARKER = 'MARKER';
 
 /**
  * Shield style form
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.SHIELD = 'SHIELD';
+export const SHIELD = 'SHIELD';
 
 /**
  * Blazon style form
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.BLAZON = 'BLAZON';
+export const BLAZON = 'BLAZON';
 
 /**
  * Triangle style form
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.TRIANGLE = 'TRIANGLE';
+export const TRIANGLE = 'TRIANGLE';
 
 /**
  * Sing style form
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.SIGN = 'SIGN';
+export const SIGN = 'SIGN';
 
 /**
  * Ban style form
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.BAN = 'BAN';
+export const BAN = 'BAN';
 
 /**
  * Lozenge style form
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.LOZENGE = 'LOZENGE';
+export const LOZENGE = 'LOZENGE';
 
 /**
  * Square style form
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.SQUARE = 'SQUARE';
+export const SQUARE = 'SQUARE';
 
 
 /**
@@ -95,6 +98,6 @@ Form.SQUARE = 'SQUARE';
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Form.NONE = 'none';
+export const NONE = 'none';

@@ -105,11 +105,9 @@ export default class SaveFeature extends M.impl.Control {
         clearCtrl.getImpl().clear();
         if (response.code === 200 && response.text.indexOf('ExceptionText') === -1 && response.text.indexOf('<error><descripcion>') === -1) {
           M.dialog.success('Se ha guardado correctamente');
-        }
-        else if (response.code === 401) {
+        } else if (response.code === 401) {
           M.dialog.error('Ha ocurrido un error al guardar: Usuario no autorizado');
-        }
-        else {
+        } else {
           M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
         }
       });
@@ -157,5 +155,14 @@ export default class SaveFeature extends M.impl.Control {
         }
       });
     });
+  }
+
+  /**
+   * @public
+   * @function
+   * @api stable
+   */
+  setLayer(layer) {
+    this.layer_ = layer;
   }
 }

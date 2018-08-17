@@ -122,8 +122,7 @@ export default class ModifyFeature extends M.impl.Control {
       const featureIdx = this.modifiedFeatures.indexOf(this.currentFeature_);
       if (featureIdx >= 0) {
         this.modifiedFeatures[featureIdx] = this.currentFeature_;
-      }
-      else {
+      } else {
         this.modifiedFeatures.push(this.currentFeature_);
       }
       this.currentFeature_ = null;
@@ -157,5 +156,14 @@ export default class ModifyFeature extends M.impl.Control {
     this.layer_ = null;
     this.modify = null;
     this.modifiedFeatures = [];
+  }
+
+  /**
+   * @public
+   * @function
+   * @api stable
+   */
+  setLayer(layer) {
+    this.layer_ = layer;
   }
 }

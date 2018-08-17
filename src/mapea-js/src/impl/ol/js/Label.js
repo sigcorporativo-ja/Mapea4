@@ -1,4 +1,4 @@
-import Template from 'facade/js/util/Template';
+import { compile as compileTemplate } from 'facade/js/util/Template';
 import FacadePopup from 'facade/js/Popup';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import labelPopupTemplate from 'templates/label_popup';
@@ -65,7 +65,7 @@ export default class Label {
    */
   show(map) {
     this.facadeMap_ = map;
-    const htmlAsText = Template.compile(labelPopupTemplate, {
+    const htmlAsText = compileTemplate(labelPopupTemplate, {
       vars: {
         info: this.text_,
       },

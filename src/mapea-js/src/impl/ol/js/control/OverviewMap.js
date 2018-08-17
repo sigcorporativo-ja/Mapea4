@@ -1,7 +1,7 @@
 import { isNullOrEmpty, classToggle, replaceNode } from 'facade/js/util/Utils';
 import OLControlOverviewMap from 'ol/control/OverviewMap';
 import { get as getProj } from 'ol/proj';
-import EvtManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import View from '../View';
 
 /**
@@ -62,22 +62,37 @@ export default class OverviewMap extends OLControlOverviewMap {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
+    if (this.facadeMap_.isFinished()) {
+      this.update(map, element);
+    } else {
+      this.facadeMap_.once(EventType.COMPLETED, () => this.update(map, element));
+    }
+  }
+
+  /**
+   * Updates the controls
+   * @function
+   * @param {M.Map} map to add the plugin
+   * @param {function} template template of this control
+   */
+  update(map, element) {
     const olLayers = [];
     map.getLayers().forEach((layer) => {
       const olLayer = layer.getImpl().getOL3Layer();
       if (isNullOrEmpty(olLayer)) {
-        layer.getImpl().on(EvtManager.ADDED_TO_MAP, this.addLayer_, this);
+        layer.getImpl().on(EventType.ADDED_TO_MAP, this.addLayer_, this);
       } else {
         olLayers.push(olLayer);
       }
     });
-    OLControlOverviewMap.call(this, {
-      layers: olLayers,
-      view: new View({
-        projection: getProj(map.getProjection().code),
-        resolutions: map.getResolutions(),
-      }),
+
+    const newView = new View({
+      projection: getProj(map.getProjection().code),
+      resolutions: map.getResolutions(),
     });
+
+    this.ovmap_.setView(newView);
+    olLayers.forEach(layer => this.ovmap_.addLayer(layer));
 
     const button = this.element.querySelector('button');
     if (this.collapsed_ === true) {
@@ -114,7 +129,7 @@ export default class OverviewMap extends OLControlOverviewMap {
    * @function
    */
   addLayer_(layer) {
-    layer.un(EvtManager.ADDED_TO_MAP, this.addLayer_, this);
+    layer.un(EventType.ADDED_TO_MAP, this.addLayer_, this);
     this.getOverviewMap().addLayer(layer.getOL3Layer());
   }
 

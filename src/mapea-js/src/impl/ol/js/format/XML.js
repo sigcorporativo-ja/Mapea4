@@ -64,7 +64,7 @@ export default class XML {
     }
 
     const context = {};
-    this.read_root(context, dataVariable);
+    this.readRoot(context, dataVariable);
     return context;
   }
 
@@ -76,7 +76,7 @@ export default class XML {
    * @api stable
    */
 
-  read_root(context, node) {
+  readRoot(context, node) {
     const contextVariable = context;
     const root = node.documentElement;
     this.rootPrefix = root.prefix;
@@ -102,7 +102,7 @@ export default class XML {
       if (childNode.nodeType === 1) {
         prefix = this.getNamespacePrefix(childNode.namespaceURI);
         local = childNode.nodeName.split(':').pop();
-        processor = this[`read_${prefix}_${local}`];
+        processor = this[`read${prefix}${local}`];
         if (processor) {
           processor.apply(this, [obj, childNode]);
         }

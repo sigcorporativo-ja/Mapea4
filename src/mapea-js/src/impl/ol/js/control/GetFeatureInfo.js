@@ -1,21 +1,21 @@
 import OLFormatWFS from 'ol/format/WFS';
+import { unByKey } from 'ol/Observable';
 import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup';
 import Popup from 'facade/js/Popup';
 import Dialog from 'facade/js/dialog';
-import Remote from 'facade/js/util/Remote';
-import Template from 'facade/js/util/Template';
+import { get as getRemote } from 'facade/js/util/Remote';
+import { compile as compileTemplate } from 'facade/js/util/Template';
 import { isNullOrEmpty, normalize, beautifyAttribute } from 'facade/js/util/Utils';
 import Control from './Control';
 
 /**
- * @namespace M.impl.control
+ * @classdesc
+ * Main constructor of the class. Creates a GetFeatureInfo
+ * control
+ * @api
  */
 export default class GetFeatureInfo extends Control {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control
-   *
    * @constructor
    * @param {string} format - Format response
    * @param {Object} options - Control options
@@ -84,7 +84,7 @@ export default class GetFeatureInfo extends Control {
     } else {
       this.userFormat = 'text/html';
     }
-    olMap.on('singleclick', this.buildUrl_(Dialog).bind(this));
+    this.clickEventKey_ = olMap.on('singleclick', this.buildUrl_(Dialog).bind(this));
   }
 
   /**
@@ -139,8 +139,8 @@ export default class GetFeatureInfo extends Control {
    * @function
    */
   deleteOnClickEvent_() {
-    const olMap = this.facadeMap_.getMapImpl();
-    olMap.un('singleclick', this.buildUrl_, this);
+    // const olMap = this.facadeMap_.getMapImpl();
+    unByKey(this.clickEventKey_);
   }
 
   /**
@@ -259,7 +259,7 @@ export default class GetFeatureInfo extends Control {
         if (GetFeatureInfo.regExs.gsResponse.test(info)) {
           formatedInfo = this.txtToHtmlGeoserver(info, layerName);
         } else {
-          formatedInfo = GetFeatureInfo.txtToHtmlMapserver(info, layerName);
+          formatedInfo = this.txtToHtmlMapserver(info, layerName);
         }
         break;
       default:
@@ -293,7 +293,7 @@ export default class GetFeatureInfo extends Control {
    * @param {string} layername - Layer name
    * @returns {string} html - Information formated
    */
-  static txtToHtmlGeoserver(info, layerName) {
+  txtToHtmlGeoserver(info, layerName) {
     // get layer name from the header
     // let layerName = info.replace(/[\w\s\S]*\:(\w*)\'\:[\s\S\w]*/i, "$1");
     // remove header
@@ -349,7 +349,7 @@ export default class GetFeatureInfo extends Control {
    * @param {string} info - Information to formatting
    * @returns {string} html - Information formated
    */
-  static txtToHtmlMapserver(info) {
+  txtToHtmlMapserver(info) {
     let infoVar = info;
     // remove header
     infoVar = infoVar.replace(/[\w\s\S]*(layer)/i, '$1');
@@ -423,7 +423,7 @@ export default class GetFeatureInfo extends Control {
 
    */
   showInfoFromURL_(layerNamesUrls, coordinate, olMap) {
-    const htmlAsText = Template.compile(getfeatureinfoPopupTemplate, {
+    const htmlAsText = compileTemplate(getfeatureinfoPopupTemplate, {
       vars: {
         info: GetFeatureInfo.LOADING_MESSAGE,
       },
@@ -460,7 +460,7 @@ export default class GetFeatureInfo extends Control {
     layerNamesUrls.forEach((layerNameUrl) => {
       const url = layerNameUrl.url;
       const layerName = layerNameUrl.layer;
-      Remote.get(url).then((response) => {
+      getRemote(url).then((response) => {
         popup = this.facadeMap_.getPopup();
         if (response.code === 200 && response.error === false) {
           const info = response.text;
@@ -498,10 +498,16 @@ export default class GetFeatureInfo extends Control {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 GetFeatureInfo.LOADING_MESSAGE = 'Obteniendo información...';
 
+/**
+ * Regular expressions of GetFeatureInfo
+ * @type {object}
+ * @public
+ * @api
+ */
 GetFeatureInfo.regExs = {
   gsResponse: /^results[\w\s\S]*'http:/i,
   msNewFeature: /feature(\s*)(\w+)(\s*):/i,

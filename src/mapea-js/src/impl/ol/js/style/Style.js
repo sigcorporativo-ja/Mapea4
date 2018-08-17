@@ -31,9 +31,7 @@ export default class Style {
    * @param {Object} options
    * @api stable
    */
-  /* eslint-disable */
   updateFacadeOptions(options = {}) {}
-  /* eslint-enable */
 
   /**
    * This function apply style to layer
@@ -83,9 +81,7 @@ export default class Style {
    * @function
    * @api stable
    */
-  /* eslint-disable */
   drawGeometryToCanvas(vectorContext) {}
-  /* eslint-enable */
 
   /**
    * This function gets the canvas size

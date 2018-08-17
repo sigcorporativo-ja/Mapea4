@@ -1,16 +1,20 @@
+/**
+ * @module M/filter
+ */
 import FilterFunction from './Function';
 import { isNullOrEmpty } from '../util/Utils';
 
 /**
- * @namespace M.filter
+ * @classdesc
+ * @api
  */
-export default class Spatial extends FilterFunction {
+class Spatial extends FilterFunction {
   /**
    * Creates a Filter Spatial to filter features
    *
    * @param {function} Function - filter function
    * TODO @param {object} options
-   * @api stable
+   * @api
    */
   constructor(FunctionParam, options) {
     const filterFunction = (feature, index) => {
@@ -23,3 +27,5 @@ export default class Spatial extends FilterFunction {
     super(filterFunction, options);
   }
 }
+
+export default Spatial;

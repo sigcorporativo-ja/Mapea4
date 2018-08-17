@@ -1,19 +1,25 @@
+/**
+ * @module M/handler/Feature
+ */
 import HandlerImpl from 'impl/handler/Feature';
 import { isFunction, includes } from '../util/Utils';
 import Exception from '../exception/exception';
 import Base from '../Base';
 import FacadeFeature from '../feature/Feature';
-import EvtManaManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 
-export default class Feature extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ * @api
+ */
+class Features extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.facade.Base}
-   * @api stable
+   * @api
    */
   constructor(options = {}, impl = new HandlerImpl(options)) {
     // calls the super constructor
@@ -68,15 +74,15 @@ export default class Feature extends Base {
    * @public
    * @function
    * @param {M.Map} map to add the plugin
-   * @api stable
+   * @api
    * @export
    */
   addTo(map) {
     this.map_ = map;
-    this.map_.on(EvtManaManager.MOVE, this.moveOverMap_.bind(this));
-    this.map_.on(EvtManaManager.CLICK, this.clickOnMap_.bind(this));
+    this.map_.on(EventType.MOVE, this.moveOverMap_.bind(this));
+    this.map_.on(EventType.CLICK, this.clickOnMap_.bind(this));
     this.getImpl().addTo(this.map_);
-    this.fire(EvtManaManager.ADDED_TO_MAP);
+    this.fire(EventType.ADDED_TO_MAP);
   }
 
   /**
@@ -91,7 +97,7 @@ export default class Feature extends Base {
 
       this.layers_.forEach((layer) => {
         const clickedFeatures = impl.getFeaturesByLayer(evt, layer);
-        const prevFeatures = [...this.prevSelectedFeatures_[layer.name]];
+        const prevFeatures = [...(this.prevSelectedFeatures_[layer.name])];
         // no features selected then unselect prev selected features
         if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
           this.unselectFeatures(prevFeatures, layer, evt);
@@ -149,7 +155,7 @@ export default class Feature extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   selectFeatures(features, layer, evt) {
     this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name]
@@ -158,7 +164,7 @@ export default class Feature extends Base {
     if (isFunction(layerImpl.selectFeatures)) {
       layerImpl.selectFeatures(features, evt.coord, evt);
     }
-    layer.fire(EvtManaManager.SELECT_FEATURES, [features, evt]);
+    layer.fire(EventType.SELECT_FEATURES, [features, evt]);
   }
 
   /**
@@ -166,7 +172,7 @@ export default class Feature extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   unselectFeatures(features, layer, evt) {
     // removes unselected features
@@ -176,7 +182,7 @@ export default class Feature extends Base {
     if (isFunction(layerImpl.unselectFeatures)) {
       layerImpl.unselectFeatures(features, evt.coord);
     }
-    layer.fire(EvtManaManager.UNSELECT_FEATURES, [features, evt.coord]);
+    layer.fire(EventType.UNSELECT_FEATURES, [features, evt.coord]);
   }
 
   /**
@@ -184,11 +190,11 @@ export default class Feature extends Base {
    *
    * @private
    * @function
-   * @api stable
+   * @api
    */
   hoverFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] = this.prevHoverFeatures_[layer.name].concat(features);
-    layer.fire(EvtManaManager.HOVER_FEATURES, [features, evt]);
+    layer.fire(EventType.HOVER_FEATURES, [features, evt]);
     this.getImpl().addCursorPointer();
   }
 
@@ -197,12 +203,12 @@ export default class Feature extends Base {
    *
    * @private
    * @function
-   * @api stable
+   * @api
    */
   leaveFeatures_(features, layer, evt) {
     this.prevHoverFeatures_[layer.name] =
       this.prevHoverFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
-    layer.fire(EvtManaManager.LEAVE_FEATURES, [features, evt.coord]);
+    layer.fire(EventType.LEAVE_FEATURES, [features, evt.coord]);
     this.getImpl().removeCursorPointer();
   }
 
@@ -211,13 +217,13 @@ export default class Feature extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   activate() {
     if (this.activated_ === false) {
       this.activated_ = true;
-      this.fire(EvtManaManager.ACTIVATED);
+      this.fire(EventType.ACTIVATED);
     }
   }
 
@@ -226,13 +232,13 @@ export default class Feature extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   deactivate() {
     if (this.activated_ === true) {
       this.activated_ = false;
-      this.fire(EvtManaManager.DEACTIVATED);
+      this.fire(EventType.DEACTIVATED);
     }
   }
 
@@ -242,7 +248,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @param {M.ui.Panel} panel
-   * @api stable
+   * @api
    * @export
    */
   addLayer(layer) {
@@ -259,11 +265,11 @@ export default class Feature extends Base {
    * @public
    * @function
    * @returns {M.ui.Panel}
-   * @api stable
+   * @api
    * @export
    */
   removeLayer(layer) {
-    this.layers_.remove(layer);
+    this.layers_ = this.layers_.filter(layer2 => !layer2.equals(layer));
     this.prevSelectedFeatures_[layer.name] = null;
     this.prevHoverFeatures_[layer.name] = null;
     delete this.prevSelectedFeatures_[layer.name];
@@ -275,7 +281,7 @@ export default class Feature extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   destroy() {
@@ -284,3 +290,5 @@ export default class Feature extends Base {
     // this.fire(M.evt.DESTROY);
   }
 }
+
+export default Features;

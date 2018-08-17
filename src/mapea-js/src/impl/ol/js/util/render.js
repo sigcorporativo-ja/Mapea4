@@ -16,7 +16,7 @@ import TextPath from './Textpath';
  * @api stable
  */
 
-const postRender = (e = null) => {
+const postRender = function postRender(e = null) {
   // add support for textpath
   if (isUndefined(window.CanvasRenderingContext2D.prototype.textPath)) {
     window.CanvasRenderingContext2D.prototype.textPath = TextPath.render;
@@ -42,9 +42,12 @@ const postRender = (e = null) => {
         styles = [styles];
       }
       styles.forEach((style) => {
-        const geom = (style instanceof Line ? style.getOptions().geometry :
+        let geom = (style instanceof Line ? style.getOptions().geometry :
           style.getGeometry()) || feature.getGeometry();
         let coords;
+        if (typeof geom === 'function') {
+          geom = geom(feature);
+        }
         switch (geom.getType()) {
           case 'MultiLineString':
             coords = geom.getLineString(0).getCoordinates();

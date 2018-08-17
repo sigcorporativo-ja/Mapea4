@@ -68,8 +68,7 @@ export default class WFSTBase extends M.impl.Control {
       this.createInteraction_();
       this.facadeMap_.getMapImpl().addInteraction(this.interaction_);
       this.interaction_.setActive(true);
-    }
-    else {
+    } else {
       this.interaction_.setActive(true);
     }
   }
@@ -86,8 +85,7 @@ export default class WFSTBase extends M.impl.Control {
       this.createInteraction_();
       this.facadeMap_.getMapImpl().addInteraction(this.interaction_);
       this.interaction_.setActive(false);
-    }
-    else {
+    } else {
       this.interaction_.setActive(false);
     }
   }

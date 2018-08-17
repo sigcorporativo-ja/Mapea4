@@ -1,8 +1,4 @@
-import {
-  POPUP_TITLE,
-  TEMPLATE_POPUP,
-}
-from '../../../facade/js/editattribute';
+import { POPUP_TITLE, TEMPLATE_POPUP } from '../../../facade/js/editattribute';
 
 /**
  * @namespace M.impl.control
@@ -79,8 +75,7 @@ export default class EditAttribute extends M.impl.Control {
     if (M.utils.isNullOrEmpty(this.editFeature.getId())) {
       this.editFeature = null;
       M.dialog.info('Debe guardar el elemento previamente');
-    }
-    else {
+    } else {
       this.editFeature.setStyle(EditAttribute.SELECTED_STYLE);
 
       const templateVar = {
@@ -115,12 +110,10 @@ export default class EditAttribute extends M.impl.Control {
             this.popup_ = new M.Popup();
             this.popup_.addTab(popupContent);
             this.facadeMap_.addPopup(this.popup_, coordinate);
-          }
-          else {
+          } else {
             this.popup_.addTab(popupContent);
           }
-        }
-        else {
+        } else {
           this.popup_ = new M.Popup();
           this.popup_.addTab(popupContent);
           this.facadeMap_.addPopup(this.popup_, coordinate);
@@ -204,8 +197,7 @@ export default class EditAttribute extends M.impl.Control {
         popupButton.classList.remove('m-savefeature-saving');
         if (response.code === 200) {
           M.dialog.success('Se ha guardado correctamente el elemento');
-        }
-        else {
+        } else {
           M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
         }
       });
@@ -240,7 +232,17 @@ export default class EditAttribute extends M.impl.Control {
       this.facadeMap_.removePopup();
     }
   }
+
+  /**
+   * @public
+   * @function
+   * @api stable
+   */
+  setLayer(layer) {
+    this.layer_ = layer;
+  }
 }
+
 /**
  * Style for selected features
  * @const

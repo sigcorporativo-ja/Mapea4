@@ -1,7 +1,7 @@
 import StyleCluster from 'facade/js/style/Cluster';
 import FormatGeoJSON from 'facade/js/format/GeoJSON';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
-import EventsManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import OLSourceVector from 'ol/source/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
 import { get as getProj } from 'ol/proj';
@@ -79,7 +79,7 @@ export default class WFS extends Vector {
   addTo(map) {
     super.addTo(map);
     this.updateSource_();
-    map.getImpl().on(EventsManager.CHANGE, () => this.refresh());
+    map.getImpl().on(EventType.CHANGE, () => this.refresh());
   }
 
   /**
@@ -132,7 +132,7 @@ export default class WFS extends Vector {
         loader: this.loader_.getLoaderFn((features) => {
           this.loaded_ = true;
           this.facadeVector_.addFeatures(features);
-          this.fire(EventsManager.LOAD, [features]);
+          this.fire(EventType.LOAD, [features]);
           this.facadeVector_.redraw();
         }),
         strategy: all,
@@ -156,7 +156,7 @@ export default class WFS extends Vector {
       ol3LayerSource.set('loader', this.loader_.getLoaderFn((features) => {
         this.loaded_ = true;
         this.facadeVector_.addFeatures(features);
-        this.fire(EventsManager.LOAD, [features]);
+        this.fire(EventType.LOAD, [features]);
         this.facadeVector_.redraw();
       }));
       ol3LayerSource.set('strategy', all);

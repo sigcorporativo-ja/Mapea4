@@ -128,16 +128,16 @@ export default class SearchstreetControl extends ol.control.Control {
    */
   addEventClickFeature(element, result) {
     this.facadeMap_.removePopup();
-    const this_ = this;
+    const this2 = this;
     if (M.utils.isNullOrEmpty(result)) {
-      this.showPopup_(element, false);
+      this.showPopup(element, false);
       this.facadeMap_.setBbox([element.coordinateX,
         element.coordinateY, element.coordinateX, element.coordinateY]);
     } else if (result instanceof ol.Feature) {
       result.set('vendor', {
         mapea: {
           click(evt) {
-            this_.showPopup_(element, false);
+            this2.showPopup(element, false);
           },
         },
       });
@@ -152,7 +152,7 @@ export default class SearchstreetControl extends ol.control.Control {
    * @param {object} feature - Specific result query response
    * @param {boolean} noPanMapIfOutOfView
    */
-  showPopup_(feature, noPanMapIfOutOfView) {
+  showPopup(feature, noPanMapIfOutOfView) {
     M.template.compile(SearchstreetControl.POPUP_TEMPLATE, {
       jsonp: true,
       vars: {
@@ -222,7 +222,7 @@ export default class SearchstreetControl extends ol.control.Control {
    * @private
    * @function
    */
-  removePoints_() {
+  removePoints() {
     for (let i = 0, ilen = this.listPoints.length; i < ilen; i += 1) {
       this.facadeMap_.removeFeatures(this.listPoints[i].map(M.impl.Feature.olFeature2Facade));
     }
@@ -239,7 +239,7 @@ export default class SearchstreetControl extends ol.control.Control {
    */
   destroy() {
     this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.remove('top-extra');
-    this.removePoints_();
+    this.removePoints();
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_.getImpl().removePopup();
     this.facadeMap_ = null;

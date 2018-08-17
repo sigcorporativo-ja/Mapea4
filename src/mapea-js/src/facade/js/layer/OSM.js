@@ -1,21 +1,26 @@
+/**
+ * @module M/layer/OSM
+ */
 import OSMImpl from 'impl/layer/OSM';
 import LayerBase from './Layer';
 import { isNullOrEmpty, isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerType from './Type';
+import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 
-export default class OSM extends LayerBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a WMS layer
+ * with parameters specified by the user
+ * @api
+ */
+class OSM extends LayerBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMS layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParametersVar, options = {}) {
     let userParameters = userParametersVar;
@@ -94,7 +99,7 @@ export default class OSM extends LayerBase {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -107,3 +112,5 @@ export default class OSM extends LayerBase {
     return equals;
   }
 }
+
+export default OSM;

@@ -1,19 +1,25 @@
+/**
+ * @module M/format/GeoJSON
+ */
 import GeoJSONImpl from 'impl/format/GeoJSON';
 import Base from '../Base';
 import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils';
 import Exception from '../exception/exception';
 
-export default class GeoJSON extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ * @api
+ */
+class GeoJSON extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.facade.Base}
    * @param {string|Object} userParameters parameters
    * provided by the user
-   * @api stable
+   * @api
    */
   constructor(options = {}) {
     /**
@@ -40,7 +46,7 @@ export default class GeoJSON extends Base {
    * @param {Array<M.Feature>} features features array to parsed
    * as a GeoJSON FeatureCollection
    * @return {Array<Object>}
-   * @api stable
+   * @api
    */
   write(featuresParam) {
     let features = featuresParam;
@@ -58,7 +64,7 @@ export default class GeoJSON extends Base {
    * @param {object} geojson GeoJSON to parsed as a
    * M.Feature array
    * @return {Array<M.Feature>}
-   * @api stable
+   * @api
    */
   read(geojsonParam, projection) {
     let geojson = geojsonParam;
@@ -78,3 +84,5 @@ export default class GeoJSON extends Base {
     return features;
   }
 }
+
+export default GeoJSON;

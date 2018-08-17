@@ -1,4 +1,5 @@
 import GeoStyle from './geosearchstyle';
+import UtilsGeosearch from './utils';
 
 export default class GeosearchLayer extends M.impl.layer.Vector {
   /**
@@ -94,7 +95,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
       });
       feature.setId(doc.solrid);
       feature.setProperties(doc);
-      GeosearchLayer.setStyleFeature_(feature, M.style.state.DEFAULT);
+      GeosearchLayer.setStyleFeature(feature, M.style.state.DEFAULT);
 
       this.wrapComplexFeature_(feature);
 
@@ -118,8 +119,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
     let docs;
     if (!M.utils.isNullOrEmpty(results.spatial_response)) {
       docs = results.spatial_response.docs;
-    }
-    else if (!M.utils.isNullOrEmpty(results.response)) {
+    } else if (!M.utils.isNullOrEmpty(results.response)) {
       docs = results.response.docs;
     }
 
@@ -129,7 +129,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
       });
       feature.setId(doc.solrid);
       feature.setProperties(doc);
-      GeosearchLayer.setStyleFeature_(feature, M.style.state.NEW);
+      GeosearchLayer.setStyleFeature(feature, M.style.state.NEW);
 
       return M.impl.Feature.olFeature2Facade(feature);
     }, this);
@@ -171,7 +171,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
     // gets olFeatures
     features = features.map(M.impl.Feature.facade2OLFeature);
 
-    GeosearchLayer.setStyleFeature_(features, M.style.state.SELECTED);
+    GeosearchLayer.setStyleFeature(features, M.style.state.SELECTED);
 
     const featureForTemplate = this.parseFeaturesForTemplate_(features);
     M.template.compile(GeosearchLayer.POPUP_RESULT, {
@@ -192,8 +192,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
         });
         popup.addTab(featureTabOpts);
         this.map.addPopup(popup, coord);
-      }
-      else {
+      } else {
         popup.addTab(featureTabOpts);
       }
       // removes events on destroy
@@ -273,8 +272,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
       let centroid;
       if (featureGeom.getType() === M.geom.wkt.type.POLYGON) {
         centroid = featureGeom.getInteriorPoint();
-      }
-      else {
+      } else {
         centroid = featureGeom.getInteriorPoints();
       }
       const geometryCollection = new ol.geom.GeometryCollection([centroid, featureGeom]);
@@ -306,7 +304,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
   internalUnselectFeatures_(keepPopup) {
     if (this.selectedFeatures_.length > 0) {
       // sets the style
-      GeosearchLayer.setStyleFeature_(this.selectedFeatures_
+      GeosearchLayer.setStyleFeature(this.selectedFeatures_
         .map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
       this.selectedFeatures_.length = 0;
 
@@ -327,7 +325,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @api stable
    */
   setNewResultsAsDefault() {
-    GeosearchLayer.setStyleFeature_(this.facadeVector_.getFeatures()
+    GeosearchLayer.setStyleFeature(this.facadeVector_.getFeatures()
       .map(M.impl.Feature.facade2OLFeature), M.style.state.DEFAULT);
   }
 
@@ -342,41 +340,33 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
     // POINT
     if (geometry.getType() === M.geom.wkt.type.POINT) {
       centroid = geometry.getCoordinates();
-    }
-    // LINE
-    else if (geometry.getType() === M.geom.wkt.type.LINE_STRING) {
+    } else if (geometry.getType() === M.geom.wkt.type.LINE_STRING) {
+      // LINE
       coordinates = geometry.getCoordinates();
       medianIdx = Math.floor(coordinates.length / 2);
       centroid = coordinates[medianIdx];
-    }
-    else if (geometry.getType() === M.geom.wkt.type.LINEAR_RING) {
+    } else if (geometry.getType() === M.geom.wkt.type.LINEAR_RING) {
       coordinates = geometry.getCoordinates();
       medianIdx = Math.floor(coordinates.length / 2);
       centroid = coordinates[medianIdx];
-    }
-    // POLYGON
-    else if (geometry.getType() === M.geom.wkt.type.POLYGON) {
+    } else if (geometry.getType() === M.geom.wkt.type.POLYGON) {
+      // POLYGON
       centroid = this.getCentroidCoordinate(geometry.getInteriorPoint());
-    }
-    // MULTI
-    else if (geometry.getType() === M.geom.wkt.type.MULTI_POINT) {
+    } else if (geometry.getType() === M.geom.wkt.type.MULTI_POINT) {
+      // MULTI
       points = geometry.getPoints();
       medianIdx = Math.floor(points.length / 2);
       centroid = this.getCentroidCoordinate(points[medianIdx]);
-    }
-    else if (geometry.getType() === M.geom.wkt.type.MULTI_LINE_STRING) {
+    } else if (geometry.getType() === M.geom.wkt.type.MULTI_LINE_STRING) {
       lineStrings = geometry.getLineStrings();
       medianIdx = Math.floor(lineStrings.length / 2);
       centroid = this.getCentroidCoordinate(lineStrings[medianIdx]);
-    }
-    else if (geometry.getType() === M.geom.wkt.type.MULTI_POLYGON) {
+    } else if (geometry.getType() === M.geom.wkt.type.MULTI_POLYGON) {
       points = geometry.getInteriorPoints();
       centroid = this.getCentroidCoordinate(points);
-    }
-    else if (geometry.getType() === M.geom.wkt.type.CIRCLE) {
+    } else if (geometry.getType() === M.geom.wkt.type.CIRCLE) {
       centroid = geometry.getCenter();
-    }
-    else if (geometry.getType() === M.geom.wkt.type.GEOMETRY_COLLECTION) {
+    } else if (geometry.getType() === M.geom.wkt.type.GEOMETRY_COLLECTION) {
       geometries = geometry.getGeometries();
       medianIdx = Math.floor(geometries.length / 2);
       centroid = this.getCentroidCoordinate(geometries[medianIdx]);
@@ -430,7 +420,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    * @private
    * @function
    */
-  static setStyleFeature_(featuresParam, state) {
+  static setStyleFeature(featuresParam, state) {
     let features = featuresParam;
     GeoStyle.init();
 
@@ -443,11 +433,9 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
       const geometryType = feature.getGeometry().getType();
       if (M.utils.isNullOrEmpty(state) || (state === M.style.state.DEFAULT)) {
         feature.setStyle(GeoStyle.DEFAULT[geometryType]);
-      }
-      else if (state === M.style.state.NEW) {
+      } else if (state === M.style.state.NEW) {
         feature.setStyle(GeoStyle.NEW[geometryType]);
-      }
-      else if (state === M.style.state.SELECTED) {
+      } else if (state === M.style.state.SELECTED) {
         feature.setStyle(GeoStyle.SELECTED[geometryType]);
       }
     });

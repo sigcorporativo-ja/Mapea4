@@ -56,39 +56,41 @@ export default class AttributeTableControl extends M.Control {
         },
       }).then((html) => {
         /* Draggable */
-        const panel = this.getPanel().getTemplatePanel();
-        panel.querySelector('.g-cartografia-localizacion4').addEventListener('click', () => {
-          if (this.getPanel().isCollapsed()) {
-            panel.style.removeProperty('left');
-            panel.style.removeProperty('top');
-          }
-
-          if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+        const panel = this.getPanel();
+        if (!M.utils.isNullOrEmpty(panel)) {
+          const htmlPanel = panel.getTemplatePanel();
+          htmlPanel.querySelector('.g-cartografia-localizacion4').addEventListener('click', () => {
             if (this.getPanel().isCollapsed()) {
-              this.deactivateDraggable_();
+              htmlPanel.style.removeProperty('left');
+              htmlPanel.style.removeProperty('top');
             }
-            else {
-              this.activateDraggable_();
+
+            if (M.window.WIDTH >= M.config.MOBILE_WIDTH) {
+              if (this.getPanel().isCollapsed()) {
+                this.deactivateDraggable_();
+              } else {
+                this.activateDraggable_();
+              }
             }
-          }
-        });
-        this.template_ = html;
-        this.areaTable_ = html.querySelector('div#m-attributetable-datas');
-        html.querySelector('#m-attributetable-layer').addEventListener('click', this.openPanel_.bind(this));
-        html.querySelector('#m-attributetable-select').addEventListener('change', (evt) => {
-          this.pages_ = {
-            total: 0,
-            actual: 1,
-            element: 0,
-          };
-          this.sortProperties_ = {
-            active: false,
-            sortBy: null,
-            sortType: null,
-          };
-          this.renderPanel_(evt.target[evt.target.selectedIndex].getAttribute('name'));
-        });
-        success(html);
+          });
+          this.template_ = html;
+          this.areaTable_ = html.querySelector('div#m-attributetable-datas');
+          html.querySelector('#m-attributetable-layer').addEventListener('click', this.openPanel_.bind(this));
+          html.querySelector('#m-attributetable-select').addEventListener('change', (evt) => {
+            this.pages_ = {
+              total: 0,
+              actual: 1,
+              element: 0,
+            };
+            this.sortProperties_ = {
+              active: false,
+              sortBy: null,
+              sortType: null,
+            };
+            this.renderPanel_(evt.target[evt.target.selectedIndex].getAttribute('name'));
+          });
+          success(html);
+        }
       });
     });
   }
@@ -130,7 +132,6 @@ export default class AttributeTableControl extends M.Control {
         attributes = this.sortAttributes_(attributes, headerAtt);
       }
     }
-    /* eslint-disable */
     return new Promise((success, fail) => {
       let params = {};
       if (!M.utils.isUndefined(headerAtt)) {
@@ -142,7 +143,6 @@ export default class AttributeTableControl extends M.Control {
             .slice(this.pages_.element, this.pages_.element + this.numPages_),
         };
       }
-      /* eslint-enable */
       M.template.compile('tableData.html', {
         jsonp: true,
         vars: params,
@@ -164,14 +164,13 @@ export default class AttributeTableControl extends M.Control {
           html.querySelector('input[value=selectAll]').addEventListener('click', this.selectAll.bind(this));
           html.querySelector('#m-attributetable-attributes').addEventListener('click', this.openPanel_.bind(this));
           html.querySelector('#m-attributetable-refresh').addEventListener('click', this.refresh_.bind(this));
-          const header = Array.slice.call(this.areaTable_.querySelector('tr').querySelectorAll('td'), 1);
+          const header = Array.prototype.slice.call(this.areaTable_.querySelector('tr').querySelectorAll('td'), 1);
           header.forEach((td) => {
             td.addEventListener('click', this.sort_.bind(this));
           });
           this.hasNext_(html);
           this.hasPrevious_(html);
-        }
-        else {
+        } else {
           html.querySelector('#m-attributetable-refresh').addEventListener('click', this.refresh_.bind(this));
         }
         this.rePosition_();
@@ -231,8 +230,7 @@ export default class AttributeTableControl extends M.Control {
     this.selectAllActive_ = !this.selectAllActive_;
     if (this.selectAllActive_ === true) {
       this.addSelectAll_();
-    }
-    else {
+    } else {
       this.removeSelectAll_();
     }
   }
@@ -348,8 +346,7 @@ export default class AttributeTableControl extends M.Control {
     if (this.sortProperties_.active === false) this.sortProperties_.active = true;
     if (this.sortProperties_.sortBy !== evt.target.innerHTML) {
       this.sortProperties_.sortType = '<';
-    }
-    else {
+    } else {
       this.sortProperties_.sortType = (this.sortProperties_.sortType === '>') ? '<' : '>';
     }
     this.sortProperties_.sortBy = evt.target.innerHTML;
@@ -392,8 +389,7 @@ export default class AttributeTableControl extends M.Control {
       const element = this.template_.querySelector('select#m-attributetable-select');
       element.classList.toggle('m-attributetable-hidden');
       element.classList.toggle('show');
-    }
-    else if (id === 'm-attributetable-attributes') {
+    } else if (id === 'm-attributetable-attributes') {
       this.template_.querySelector('#m-attributetable-table').classList.toggle('m-attributetable-hidden');
       this.template_.querySelector('#m-attributetable-tfoot').classList.toggle('m-attributetable-hidden');
     }

@@ -1,21 +1,23 @@
+/**
+ * @module M/control/Panzoombar
+ */
 import panzoombarTemplate from 'templates/panzoombar';
 import PanzoombarImpl from 'impl/control/Panzoombar';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
+import { compile as compileTemplate } from '../util/Template';
 
-export default class Panzoombar extends ControlBase {
+/**
+ * @classdesc
+ * @api
+ */
+class Panzoombar extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the map.
-   *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor() {
     // implementation of this control
@@ -36,10 +38,10 @@ export default class Panzoombar extends ControlBase {
    * @function
    * @param {M.Map} map map to add the control
    * @returns {Promise} html response
-   * @api stable
+   * @api
    */
   createView(map) {
-    return Template.compile(panzoombarTemplate);
+    return compileTemplate(panzoombarTemplate);
   }
 
   /**
@@ -47,7 +49,7 @@ export default class Panzoombar extends ControlBase {
    * to this control
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     const equals = (obj instanceof Panzoombar);
@@ -60,6 +62,8 @@ export default class Panzoombar extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Panzoombar.NAME = 'panzoombar';
+
+export default Panzoombar;

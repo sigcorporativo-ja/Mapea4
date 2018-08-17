@@ -1,3 +1,6 @@
+/**
+ * @module M/Feature
+ */
 import FeatureImpl from 'impl/feature/Feature';
 import Base from '../Base';
 import { isNullOrEmpty } from '../util/Utils';
@@ -5,18 +8,20 @@ import GeoJSON from '../format/GeoJSON';
 import * as dialog from '../dialog';
 import StyleFeature from '../style/Feature';
 import StylePoint from '../style/Point';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 
-export default class Feature extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Create a Feature
+ * @api
+ */
+class Feature extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Create a Feature
-   *
    * @constructor
    * @extends {M.facade.Base}
    * @param {string} id - id to feature
    * @param {Object} geojson - geojson to feature
-   * @api stable
+   * @api
    */
   constructor(id, geojson, style) {
     /**
@@ -50,7 +55,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @param {string} id - ID to feature
-   * @api stable
+   * @api
    */
   setId(id) {
     this.getImpl().setId(id);
@@ -62,7 +67,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @return {string} ID to feature
-   * @api stable
+   * @api
    */
   getId() {
     return this.getImpl().getId();
@@ -74,7 +79,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @return {object} Geometry feature
-   * @api stable
+   * @api
    */
   getGeometry() {
     return this.getGeoJSON().geometry;
@@ -86,7 +91,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @param {object} Geometry feature
-   * @api stable
+   * @api
    */
   setGeometry(geometry) {
     this.getImpl().setGeometry(geometry);
@@ -98,7 +103,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @return {Object} geojson feature
-   * @api stable
+   * @api
    */
   getGeoJSON() {
     return this.formatGeoJSON_.write(this)[0];
@@ -110,7 +115,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @return {Object} attributes feature
-   * @api stable
+   * @api
    */
   getAttributes() {
     return this.getImpl().getAttributes();
@@ -122,7 +127,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @param {Object} attributes - attributes to feature
-   * @api stable
+   * @api
    */
   setAttributes(attributes) {
     if (typeof attributes === 'object') {
@@ -139,7 +144,7 @@ export default class Feature extends Base {
    * @function
    * @param {string} attribute - Name attribute
    * @return  {string|number|object} returns the value of the indicated attribute
-   * @api stable
+   * @api
    */
   getAttribute(attribute) {
     let attrValue;
@@ -173,7 +178,7 @@ export default class Feature extends Base {
    * @function
    * @param {string} attribute - Name attribute
    * @return  {string|number|object} returns the value of the indicated attribute
-   * @api stable
+   * @api
    */
   setAttribute(attribute, value) {
     return this.getImpl().setAttribute(attribute, value);
@@ -185,7 +190,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @param {M.style.Feature}
-   * @api stable
+   * @api
    */
   setStyle(style) {
     if (!isNullOrEmpty(style) && style instanceof StyleFeature) {
@@ -195,7 +200,7 @@ export default class Feature extends Base {
       this.style_ = null;
       this.getImpl().clearStyle();
     }
-    this.fire(EvtManager.CHANGE_STYLE, [style, this]);
+    this.fire(EventType.CHANGE_STYLE, [style, this]);
   }
 
   /**
@@ -215,7 +220,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @return {M.style.Feature} returns the style feature
-   * @api stable
+   * @api
    */
   getStyle() {
     return this.style_;
@@ -227,7 +232,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @return {M.style.Feature} returns the style feature
-   * @api stable
+   * @api
    */
   clearStyle() {
     this.setStyle(null);
@@ -239,7 +244,7 @@ export default class Feature extends Base {
    * @public
    * @function
    * @return {M.Feature}
-   * @api stable
+   * @api
    */
   getCentroid() {
     const id = this.getId();
@@ -264,3 +269,5 @@ export default class Feature extends Base {
     return centroid;
   }
 }
+
+export default Feature;

@@ -1,26 +1,32 @@
+/**
+ * @module M/control/Layerswitcher
+ */
 import 'assets/css/controls/layerswitcher';
 import LayerSwitcherImpl from 'impl/control/Layerswitcher';
 import layerswitcherTemplate from 'templates/layerswitcher';
 import ControlBase from './Control';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
-import LayerType from '../layer/Type';
+import { compile as compileTemplate } from '../util/Template';
+import * as LayerType from '../layer/Type';
 import Vector from '../layer/Vector';
 import StylePoint from '../style/Point';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 
-export default class LayerSwitcher extends ControlBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a GetFeatureInfo
+ * control to provides a popup with information about the place
+ * where the user has clicked inside the Map.
+ * @api
+ *
+ */
+class LayerSwitcher extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the Map.
-   *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor() {
     // implementation of this control
@@ -43,7 +49,7 @@ export default class LayerSwitcher extends ControlBase {
     view.then((html) => {
       this.manageActivation(html);
       impl.addTo(map, html);
-      this.fire(EvtManager.ADDED_TO_MAP);
+      this.fire(EventType.ADDED_TO_MAP);
     });
   }
 
@@ -54,12 +60,12 @@ export default class LayerSwitcher extends ControlBase {
    * @function
    * @param {M.Map} map map to add the control
    * @returns {Promise} html response
-   * @api stable
+   * @api
    */
   createView(map) {
     return new Promise((resolve) => {
       LayerSwitcher.getTemplateVariables(this.map_).then((templateVars) => {
-        const html = Template.compile(layerswitcherTemplate, {
+        const html = compileTemplate(layerswitcherTemplate, {
           vars: templateVars,
         });
         resolve(html);
@@ -72,21 +78,19 @@ export default class LayerSwitcher extends ControlBase {
    * to this control
    *
    * @function
-   * @api stable
+   * @api
    */
-  /* eslint-disable */
   equals(obj) {
-    let equals = (obj instanceof LayerSwitcher);
+    const equals = (obj instanceof LayerSwitcher);
     return equals;
   }
-  /* eslint-enable */
 
   /**
    * This function registers events on map and layers to render
    * the layerswitcher
    *
    * @function
-   * @api stable
+   * @api
    */
   render() {
     this.getImpl().renderPanel();
@@ -97,7 +101,7 @@ export default class LayerSwitcher extends ControlBase {
    * the layerswitcher
    *
    * @function
-   * @api stable
+   * @api
    */
   registerEvents() {
     this.getImpl().registerEvents();
@@ -107,7 +111,7 @@ export default class LayerSwitcher extends ControlBase {
    * Unegisters events for map and layers from the layerswitcher
    *
    * @function
-   * @api stable
+   * @api
    */
   unregisterEvents() {
     this.getImpl().unregisterEvents();
@@ -194,6 +198,8 @@ export default class LayerSwitcher extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 LayerSwitcher.NAME = 'layerswitcher';
+
+export default LayerSwitcher;

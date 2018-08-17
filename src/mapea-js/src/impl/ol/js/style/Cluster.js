@@ -3,20 +3,20 @@ import LayerVector from 'facade/js/layer/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
 import OLSourceVector from 'ol/source/Vector';
 import * as OLeasing from 'ol/easing';
-import { convexHull as convexHullCoordinate } from 'ol/coordinate';
 import OLFeature from 'ol/Feature';
 import OLGeomPolygon from 'ol/geom/Polygon';
 import Polygon from 'facade/js/style/Polygon';
 import StylePoint from 'facade/js/style/Point';
 import FacadeCluster from 'facade/js/style/Cluster';
 import { inverseColor, extendsObj, isFunction, isNullOrEmpty } from 'facade/js/util/Utils';
-import EventsManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import Style from './Style';
 import AnimatedCluster from '../layer/AnimatedCluster';
 import SelectCluster from '../interaction/SelectedCluster';
 import Centroid from './Centroid';
 import Feature from '../feature/Feature';
+import coordinatesConvexHull from '../util/convexhull';
 
 /**
  * @namespace M.style.Cluster
@@ -115,7 +115,7 @@ export default class Cluster extends Style {
     if (features.length > 0) {
       this.clusterize_(features);
     } else {
-      this.layer_.on(EventsManager.LOAD, this.clusterize_, this);
+      this.layer_.on(EventType.LOAD, this.clusterize_.bind(this), this);
     }
   }
 
@@ -285,9 +285,9 @@ export default class Cluster extends Style {
       animate: true,
       style: this.clusterStyleFn_.bind(this),
     });
-    this.selectClusterInteraction_.on('select', this.selectClusterFeature_, this);
+    this.selectClusterInteraction_.on('select', this.selectClusterFeature_.bind(this), this);
     map.getMapImpl().addInteraction(this.selectClusterInteraction_);
-    map.getMapImpl().on('change:view', () => this.selectClusterInteraction_.refreshViewEvents());
+    map.getMapImpl().on('change:view', () => this.selectClusterInteraction_.refreshViewEvents().bind(this));
   }
 
   /**
@@ -307,7 +307,7 @@ export default class Cluster extends Style {
    * @function
    * @private
    * @param {Array<Features>} features
-   * @param {M.evt.EventsManager} evt
+   * @param {M.evt.EventType} evt
    * @api stable
    */
   hoverFeatureFn_(features, evt) {
@@ -323,7 +323,7 @@ export default class Cluster extends Style {
 
       const coordinates = hoveredFeatures
         .map(f => f.getImpl().getOLFeature().getGeometry().getCoordinates());
-      const convexHull = convexHullCoordinate(coordinates);
+      const convexHull = coordinatesConvexHull(coordinates);
       if (convexHull.length > 2) {
         const convexOlFeature = new OLFeature(new OLGeomPolygon([convexHull]));
         const convexFeature = Feature.olFeature2Facade(convexOlFeature);
@@ -338,7 +338,7 @@ export default class Cluster extends Style {
           this.convexHullLayer_.addFeatures(convexFeature);
           this.layer_.getImpl().getMap().addLayers(this.convexHullLayer_);
           this.layer_.getImpl().getMap().getMapImpl().getView()
-            .on('change:resolution', this.clearConvexHull, this);
+            .on('change:resolution', this.clearConvexHull.bind(this), this);
           this.convexHullLayer_.setStyle(new Polygon(this.optionsVendor_.convexHullStyle));
           this.convexHullLayer_.setZIndex(99990);
         } else {
@@ -354,7 +354,7 @@ export default class Cluster extends Style {
    * @function
    * @private
    * @param {Array<Features>} features
-   * @param {M.evt.EventsManager} evt
+   * @param {M.evt.EventType} evt
    * @api stable
    */
   leaveFeatureFn_(features, evt) {
@@ -371,8 +371,8 @@ export default class Cluster extends Style {
    * @api stable
    */
   addCoverInteraction_() {
-    this.layer_.on(EventsManager.HOVER_FEATURES, this.hoverFeatureFn_, this);
-    this.layer_.on(EventsManager.LEAVE_FEATURES, this.leaveFeatureFn_, this);
+    this.layer_.on(EventType.HOVER_FEATURES, this.hoverFeatureFn_.bind(this), this);
+    this.layer_.on(EventType.LEAVE_FEATURES, this.leaveFeatureFn_.bind(this), this);
   }
 
   /**
@@ -383,8 +383,8 @@ export default class Cluster extends Style {
    * @api stable
    */
   removeCoverInteraction_() {
-    this.layer_.un(EventsManager.HOVER_FEATURE, this.hoverFeatureFn_, this);
-    this.layer_.un(EventsManager.LEAVE_FEATURE, this.leaveFeatureFn_, this);
+    this.layer_.un(EventType.HOVER_FEATURE, this.hoverFeatureFn_.bind(this), this);
+    this.layer_.un(EventType.LEAVE_FEATURE, this.leaveFeatureFn_.bind(this), this);
   }
 
   /**
@@ -500,11 +500,11 @@ export default class Cluster extends Style {
       this.removeSelectInteraction_();
       this.clearConvexHull();
       this.layer_.getImpl().getMap().getMapImpl().getView()
-        .un('change:resolution', this.clearConvexHull, this);
+        .un('change:resolution', this.clearConvexHull.bind(this), this);
       this.layer_.redraw();
       clusterSource.getSource().un(eventType, callback, clusterSource);
     } else if (!isNullOrEmpty(this.layer_)) {
-      this.layer_.un(EventsManager.LOAD, this.clusterize_, this);
+      this.layer_.un(EventType.LOAD, this.clusterize_.bind(this), this);
     }
   }
 
@@ -575,5 +575,13 @@ export default class Cluster extends Style {
         callback(...callbackArguments);
       }
     }
+  }
+
+  /**
+   * oldOLLayer getter
+   * @public
+   */
+  get oldOLLayer() {
+    return this.oldOLLayer_;
   }
 }

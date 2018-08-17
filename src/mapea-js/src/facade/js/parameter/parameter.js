@@ -1,7 +1,9 @@
-import Config from 'configuration';
+/**
+ * @module M/parameter
+ */
 import { isNullOrEmpty, isString, isNull, isFunction, normalize, isArray, isObject, isUrl, isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerType from '../layer/Type';
+import * as LayerType from '../layer/Type';
 import Layer from '../layer/Layer';
 
 /**
@@ -12,9 +14,9 @@ import Layer from '../layer/Layer';
  * @returns {Mx.Center}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const center = (centerParameterVar) => {
+export const center = (centerParameterVar) => {
   let centerParameter = centerParameterVar;
   const centerParam = {};
   // checks if the param is null or empty
@@ -235,9 +237,9 @@ const getOptionsKML = (parameter) => {
  * @returns {Mx.Extent}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const maxExtent = (maxExtentParam) => {
+export const maxExtent = (maxExtentParam) => {
   const maxExtentParameter = maxExtentParam;
   const maxExtentVar = {
     x: {},
@@ -366,9 +368,9 @@ const maxExtent = (maxExtentParam) => {
  * @returns {Mx.Projection}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const projection = (projectionParameter) => {
+export const projection = (projectionParameter) => {
   const projectionVar = {
     code: null,
     units: null,
@@ -386,7 +388,7 @@ const projection = (projectionParameter) => {
       projectionVar.code = projectionArray[0];
       projectionVar.units = normalize(projectionArray[1].substring(0, 1));
     } else {
-      Exception(`El formato del parámetro projection no es correcto. </br>Se usará la proyección por defecto: ${Config.DEFAULT_PROJ}`);
+      Exception(`El formato del parámetro projection no es correcto. </br>Se usará la proyección por defecto: ${M.config.DEFAULT_PROJ}`);
     }
   } else if (isObject(projectionParameter)) {
     // object
@@ -396,7 +398,7 @@ const projection = (projectionParameter) => {
       projectionVar.code = projectionParameter.code;
       projectionVar.units = normalize(projectionParameter.units.substring(0, 1));
     } else {
-      Exception(`El formato del parámetro projection no es correcto. </br>Se usará la proyección por defecto: ${Config.DEFAULT_PROJ}`);
+      Exception(`El formato del parámetro projection no es correcto. </br>Se usará la proyección por defecto: ${M.config.DEFAULT_PROJ}`);
     }
   } else {
     // unknown
@@ -444,9 +446,9 @@ const getURLKML = (parameter) => {
  * @returns {Array<Number>}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const resolutions = (resolutionsParam) => {
+export const resolutions = (resolutionsParam) => {
   let resolutionsParameter = resolutionsParam;
   let resolutionsVar = [];
 
@@ -495,9 +497,9 @@ const resolutions = (resolutionsParam) => {
  * @returns {Number}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const zoom = (zoomParam) => {
+export const zoom = (zoomParam) => {
   const zoomParameter = zoomParam;
   let zoomVar;
 
@@ -531,9 +533,9 @@ const zoom = (zoomParam) => {
  * @returns {Mx.parameters.KML|Array<Mx.parameters.KML>}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const kml = (userParamer) => {
+export const kml = (userParamer) => {
   const userParameters = userParamer;
   let layersVar = [];
 
@@ -713,9 +715,9 @@ const getLegendMapbox = (parameter) => {
  * @returns {Mx.parameters.KML|Array<Mx.parameters.KML>}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const mapbox = (userParameters) => {
+export const mapbox = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -835,9 +837,9 @@ const getLegendOSM = (parameter) => {
  * @returns {Mx.parameters.KML|Array<Mx.parameters.KML>}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const osm = (userParame) => {
+export const osm = (userParame) => {
   let userParameters = userParame;
   let layers = [];
 
@@ -1148,9 +1150,9 @@ const getOptionsWFS = (parameter) => {
  * @returns {Mx.parameters.WFS|Array<Mx.parameters.WFS>}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const wfs = (userParameters) => {
+export const wfs = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -1292,9 +1294,9 @@ const getOptionsWMC = (parameter) => {
  * @returns {Mx.parameters.WMC|Array<Mx.parameters.WMC>}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const wmc = (userParameters) => {
+export const wmc = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -1581,9 +1583,9 @@ const getOptionsWMS = (parameter) => {
  * @returns {Mx.parameters.WMS|Array<Mx.parameters.WMS>}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const WMS = (userParameters) => {
+export const wms = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -1813,9 +1815,9 @@ const getTransparentWMTS = (parameter) => {
  * @returns {Mx.parameters.WMTS|Array<Mx.parameters.WMTS>}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const WMTS = (userParameters) => {
+export const wmts = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -1863,14 +1865,17 @@ const WMTS = (userParameters) => {
   return layers;
 };
 
+/**
+ * @type {object}
+ */
 const parameterFunction = {
   kml,
   mapbox,
   osm,
   wfs,
   wmc,
-  WMS,
-  WMTS,
+  wms,
+  wmts,
 };
 
 
@@ -1883,9 +1888,9 @@ const parameterFunction = {
  * @returns {Mx.parameters.Layer|Array<Mx.parameters.Layer>}
  * @public
  * @function
- * @api stable
+ * @api
  */
-const layer = (userParameters, forcedType) => {
+export const layer = (userParameters, forcedType) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -1923,20 +1928,4 @@ const layer = (userParameters, forcedType) => {
   }
 
   return layers;
-};
-
-export {
-  center,
-  layer,
-  maxExtent,
-  projection,
-  resolutions,
-  zoom,
-  kml,
-  mapbox,
-  osm,
-  wfs,
-  wmc,
-  WMS,
-  WMTS,
 };

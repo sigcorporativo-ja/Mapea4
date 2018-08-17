@@ -26,7 +26,7 @@ export default class DescribeFeatureTypeXML extends XML {
      * @private
      * @type {boolean}
      */
-    this.readingFeatureType_ = false;
+    this.readingFeatureType = false;
 
     /**
      * flag to indicate if service responded with
@@ -44,7 +44,7 @@ export default class DescribeFeatureTypeXML extends XML {
    * @return {Object} parsed object.
    * @api stable
    */
-  read_root(context, node) {
+  readRoot(context, node) {
     const root = node.documentElement;
 
     if (/ServiceExceptionReport/i.test(root.localName)) {
@@ -67,7 +67,7 @@ export default class DescribeFeatureTypeXML extends XML {
    * @param {Document} node
    * @api stable
    */
-  read_ogc_ServiceException(context, node) {
+  readogcServiceException(context, node) {
     Dialog.error(`Error en el DescribeFeatureType: ${node.textContent.trim()} `);
   }
 
@@ -78,7 +78,7 @@ export default class DescribeFeatureTypeXML extends XML {
    * @param {Document} node
    * @api stable
    */
-  read_xsd_schema(context, node) {
+  readxsdschema(context, node) {
     this.runChildNodes(context, node);
   }
 
@@ -89,7 +89,7 @@ export default class DescribeFeatureTypeXML extends XML {
    * @param {Document} node
    * @api stable
    */
-  read_xsd_import(context, node) {
+  readxsdimport(context, node) {
     // none
   }
 
@@ -100,13 +100,13 @@ export default class DescribeFeatureTypeXML extends XML {
    * @param {Document} node
    * @api stable
    */
-  read_xsd_complexType(context, node) {
-    this.readingFeatureType_ = true;
+  readxsdcomplexType(context, node) {
+    this.readingFeatureType = true;
     context.featureTypes.push({
       properties: [],
     });
     this.runChildNodes(context, node);
-    this.readingFeatureType_ = false;
+    this.readingFeatureType = false;
   }
 
   /**
@@ -116,7 +116,7 @@ export default class DescribeFeatureTypeXML extends XML {
    * @param {Document} node
    * @api stable
    */
-  read_xsd_complexContent(context, node) {
+  readxsdcomplexContent(context, node) {
     this.runChildNodes(context, node);
   }
 
@@ -127,7 +127,7 @@ export default class DescribeFeatureTypeXML extends XML {
    * @param {Document} node
    * @api stable
    */
-  read_xsd_extension(context, node) {
+  readxsdextension(context, node) {
     this.runChildNodes(context, node);
   }
 
@@ -139,7 +139,7 @@ export default class DescribeFeatureTypeXML extends XML {
    * @param {Document} node
    * @api stable
    */
-  read_xsd_sequence(context, node) {
+  readxsdsequence(context, node) {
     this.runChildNodes(context, node);
   }
 
@@ -150,8 +150,8 @@ export default class DescribeFeatureTypeXML extends XML {
    * @param {Document} node
    * @api stable
    */
-  read_xsd_element(context, node) {
-    if (this.readingFeatureType_ === true) {
+  readxsdelement(context, node) {
+    if (this.readingFeatureType === true) {
       context.featureTypes[this.featureTypeIdx_].properties.push({
         name: node.getAttribute('name'),
         maxOccurs: node.getAttribute('maxOccurs'),

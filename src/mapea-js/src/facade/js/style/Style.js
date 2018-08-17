@@ -1,17 +1,18 @@
+/**
+ * @module M/Style
+ */
 import Base from '../Base';
 import { isNullOrEmpty, isArray, isObject, extendsObj } from '../util/Utils';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 
 /**
- * @namespace M.Style
+ * @classdesc
+ * @api
  */
-export default class Style extends Base {
-  /* Rec. options que es el json del estilo   */
-
+class Style extends Base {
   /**
-   * Abstract class
-   *
-   * @api stable
+   * @constructor
+   * @api
    */
   constructor(options, impl) {
     // call super constructor
@@ -50,12 +51,23 @@ export default class Style extends Base {
   }
 
   /**
+   * canvas getter
+   * @public
+   * @function
+   * @return {HTMLCanvasElement}
+   * @api
+   */
+  get canvas() {
+    return this.canvas_;
+  }
+
+  /**
    * This function apply style
    *
    * @public
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @function
-   * @api stable
+   * @api
    */
   apply(layer) {
     this.layer_ = layer;
@@ -69,7 +81,7 @@ export default class Style extends Base {
    * @function
    * @protected
    * @param {M.layer.Vector} layer - Layer to apply the styles
-   * @api stable
+   * @api
    */
   unapply(layer) {}
 
@@ -107,7 +119,7 @@ export default class Style extends Base {
    * @param {String} value - Value to property
    * @return {M.Style}
    * @function
-   * @api stable
+   * @api
    */
 
   set(property, value) {
@@ -119,7 +131,7 @@ export default class Style extends Base {
     if (!isNullOrEmpty(this.feature_)) {
       this.applyToFeature(this.feature_);
     }
-    this.fire(EvtManager.CHANGE, [property, oldValue, value]);
+    this.fire(EventType.CHANGE, [property, oldValue, value]);
     this.refresh();
     return this;
   }
@@ -162,7 +174,7 @@ export default class Style extends Base {
    * @public
    * @function
    * @return {String} data url to canvas
-   * @api stable
+   * @api
    */
   refresh(layer = null) {
     if (!isNullOrEmpty(layer)) {
@@ -185,7 +197,7 @@ export default class Style extends Base {
    * @function
    * @public
    * @return {object}
-   * @api stable
+   * @api
    */
   getOptions() {
     return this.options_;
@@ -234,7 +246,7 @@ export default class Style extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   updateCanvas() {
     this.updateCanvasPromise_ = this.getImpl().updateCanvas(this.canvas_);
@@ -254,7 +266,7 @@ export default class Style extends Base {
    * @public
    * @return {M.Style}
    * @function
-   * @api stable
+   * @api
    */
   clone() {
     const optsClone = {};
@@ -264,3 +276,5 @@ export default class Style extends Base {
     return new this.constructor(optsClone, implClone);
   }
 }
+
+export default Style;

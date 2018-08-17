@@ -1,17 +1,19 @@
+/**
+ * @module M/Control
+ */
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import Base from '../Base';
-import EvtManager from '../event/Manager';
+import * as EventType from '../event/eventtype';
 
-export default class ControlBase extends Base {
+/**
+ * @classdesc
+ * @api
+ */
+class Control extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
-   *
    * @constructor
-   * @extends {M.facade.Base}
-   * @api stable
+   * @api
    */
   constructor(implParam, name) {
     const impl = implParam;
@@ -36,7 +38,7 @@ export default class ControlBase extends Base {
     /**
      * @public
      * @type {string}
-     * @api stable
+     * @api
      * @expose
      */
     this.name = name;
@@ -65,7 +67,7 @@ export default class ControlBase extends Base {
     /**
      * @public
      * @type {boolean}
-     * @api stable
+     * @api
      * @expose
      */
     this.activated = false;
@@ -84,7 +86,7 @@ export default class ControlBase extends Base {
    * @public
    * @function
    * @param {M.Map} impl to add the plugin
-   * @api stable
+   * @api
    */
   setImpl(implParam) {
     const impl = implParam;
@@ -107,7 +109,7 @@ export default class ControlBase extends Base {
    * @public
    * @function
    * @param {M.Map} map to add the plugin
-   * @api stable
+   * @api
    * @export
    */
   addTo(map) {
@@ -118,12 +120,12 @@ export default class ControlBase extends Base {
       view.then((html) => {
         this.manageActivation(html);
         impl.addTo(map, html);
-        this.fire(EvtManager.ADDED_TO_MAP);
+        this.fire(EventType.ADDED_TO_MAP);
       });
     } else { // view is an HTML or text or null
       this.manageActivation(view);
       impl.addTo(map, view);
-      this.fire(EvtManager.ADDED_TO_MAP);
+      this.fire(EventType.ADDED_TO_MAP);
     }
   }
 
@@ -132,7 +134,7 @@ export default class ControlBase extends Base {
    * @public
    * @function
    * @param {M.Map} map to add the plugin
-   * @api stable
+   * @api
    * @export
    */
   createView(map) {}
@@ -143,7 +145,7 @@ export default class ControlBase extends Base {
    * @public
    * @function
    * @param {HTMLElement} html to add the plugin
-   * @api stable
+   * @api
    * @export
    */
   manageActivation(html) {
@@ -169,7 +171,7 @@ export default class ControlBase extends Base {
    * @public
    * @function
    * @param {HTMLElement} html to add the plugin
-   * @api stable
+   * @api
    * @export
    */
   getActivationButton(html) {}
@@ -179,7 +181,7 @@ export default class ControlBase extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   activate() {
@@ -190,7 +192,7 @@ export default class ControlBase extends Base {
       this.getImpl().activate();
     }
     this.activated = true;
-    this.fire(EvtManager.ACTIVATED);
+    this.fire(EventType.ACTIVATED);
   }
 
   /**
@@ -198,7 +200,7 @@ export default class ControlBase extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   deactivate() {
@@ -209,7 +211,7 @@ export default class ControlBase extends Base {
       this.getImpl().deactivate();
     }
     this.activated = false;
-    this.fire(EvtManager.DEACTIVATED);
+    this.fire(EventType.DEACTIVATED);
   }
 
   /**
@@ -217,7 +219,7 @@ export default class ControlBase extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   getElement() {
@@ -231,7 +233,7 @@ export default class ControlBase extends Base {
    * @public
    * @function
    * @param {M.ui.Panel} panel
-   * @api stable
+   * @api
    * @export
    */
   setPanel(panel) {
@@ -244,7 +246,7 @@ export default class ControlBase extends Base {
    * @public
    * @function
    * @returns {M.ui.Panel}
-   * @api stable
+   * @api
    * @export
    */
   getPanel() {
@@ -256,8 +258,10 @@ export default class ControlBase extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   destroy() {}
 }
+
+export default Control;

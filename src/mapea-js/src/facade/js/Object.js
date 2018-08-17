@@ -1,3 +1,6 @@
+/**
+ * @module M/Object
+ */
 import EventsManager from './event/Manager';
 import { isNullOrEmpty } from './util/Utils';
 
@@ -5,11 +8,13 @@ import { isNullOrEmpty } from './util/Utils';
  * @classdesc
  * Main mapea Object. This class creates a Object
  * which manages events
- *
- * @constructor
- * @api stable
+ * @apì
  */
-export default class MObject {
+class MObject {
+  /**
+   * @constructor
+   * @api
+   */
   constructor() {
     /**
      * Callback for events managed by the
@@ -26,7 +31,7 @@ export default class MObject {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   on(eventType, listener, optThis) {
     return this.eventsManager_.add(eventType, listener, optThis);
@@ -37,7 +42,7 @@ export default class MObject {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   once(eventType, listener, optThis) {
     return this.eventsManager_.add(eventType, listener, optThis, true);
@@ -48,7 +53,7 @@ export default class MObject {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   un(eventType, listener, optThis) {
     this.eventsManager_.remove(eventType, listener, optThis);
@@ -59,7 +64,7 @@ export default class MObject {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   fire(eventType, argsParam) {
     let args = argsParam;
@@ -69,3 +74,5 @@ export default class MObject {
     this.eventsManager_.fire(eventType, args);
   }
 }
+
+export default MObject;

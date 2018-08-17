@@ -1,7 +1,7 @@
 import OLControlMousePosition from 'ol/control/MousePosition';
 import { createStringXY as createStringXYCoordinate } from 'ol/coordinate';
 import { get as getProj } from 'ol/proj';
-import EvtManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 
 /**
  * @namespace M.impl.control
@@ -41,7 +41,7 @@ export default class Mouse extends OLControlMousePosition {
     map.getMapImpl().addControl(this);
 
     // update projection mouse
-    map.getImpl().on(EvtManager.CHANGE, () => {
+    map.getImpl().on(EventType.CHANGE, () => {
       this.setProjection(getProj(map.getProjection().code));
     });
   }

@@ -1,4 +1,6 @@
-import Config from 'configuration';
+/**
+ * @module M/Map
+ */
 import MapImpl from 'impl/Map';
 import Base from './Base';
 import {
@@ -20,7 +22,7 @@ import Label from './Label';
 import Popup from './Popup';
 import Parameters from './parameter/Parameters';
 import * as parameter from './parameter/parameter';
-import EventsManager from './event/Manager';
+import * as EventType from './event/eventtype';
 import FeaturesHandler from './handler/Feature';
 import Feature from './feature/Feature';
 import * as Dialog from './dialog';
@@ -36,7 +38,7 @@ import OverviewMap from './control/OverviewMap';
 import Panzoom from './control/Panzoom';
 import Panzoombar from './control/Panzoombar';
 import Layer from './layer/Layer';
-import LayerType from './layer/Type';
+import * as LayerType from './layer/Type';
 import Vector from './layer/Vector';
 import KML from './layer/KML';
 import WFS from './layer/WFS';
@@ -46,32 +48,34 @@ import WMTS from './layer/WMTS';
 import OSM from './layer/OSM';
 import Mapbox from './layer/Mapbox';
 import Panel from './ui/Panel';
-import Position from './ui/Position';
+import * as Position from './ui/position';
 import Control from './control/Control';
 import GeoJSON from './layer/GeoJSON';
 
-export default class Map extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a Map
+ * with parameters specified by the user
+ * @api
+ */
+class Map extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Map
-   * with parameters specified by the user
-   *
    * @constructor
-   * @extends {M.facade.Base}
-   * @param {string|Mx.parameters.Map} userParameters parameters
-   * @param {Mx.parameters.MapOptions} options custom options
-   * for the implementation
+   * @extends { M.facade.Base }
+   * @param { string | Mx.parameters.Map } userParameters parameters
+   * @param { Mx.parameters.MapOptions } options custom options  for the implementation
    * provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParameters, options = {}) {
     // parses parameters to build the new map
     const params = new Parameters(userParameters);
 
     // calls the super constructor
-    const impl = new MapImpl(params.container, options);
-    super(impl);
-    impl.setFacadeMap(this);
+    super();
+    const impl = new MapImpl(params.container, this, options);
+    // impl.setFacadeMap(this);
+    this.setImpl(impl);
 
     // checks if the param is null or empty
     if (isNullOrEmpty(userParameters)) {
@@ -116,7 +120,7 @@ export default class Map extends Base {
      * is by default
      * @public
      * @type {Boolean}
-     * @api stable
+     * @api
      * @expose
      */
     this.defaultProj_ = true;
@@ -124,7 +128,7 @@ export default class Map extends Base {
     /**
      * @public
      * @type {object}
-     * @api stable
+     * @api
      */
     this.panel = {
       LEFT: null,
@@ -182,8 +186,7 @@ export default class Map extends Base {
     // adds class to the container
     params.container.classList.add('m-mapea-container');
 
-    // sets flag if the map impl has been completed
-    impl.on(EventsManager.COMPLETED, () => {
+    impl.on(EventType.COMPLETED, () => {
       this.finishedMapImpl_ = true;
       this.checkCompleted_();
     });
@@ -215,7 +218,7 @@ export default class Map extends Base {
     if (!isNullOrEmpty(params.projection)) {
       this.setProjection(params.projection);
     } else { // default projection
-      this.setProjection(Config.DEFAULT_PROJ, true);
+      this.setProjection(M.config.DEFAULT_PROJ, true);
     }
 
     // bbox
@@ -272,7 +275,7 @@ export default class Map extends Base {
 
     // default WMC
     if (isNullOrEmpty(params.wmc) && isNullOrEmpty(params.layers)) {
-      this.addWMC(Config.predefinedWMC.predefinedNames[0]);
+      this.addWMC(M.config.predefinedWMC.predefinedNames[0]);
     }
 
     // maxExtent
@@ -328,7 +331,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Array<Layer>}
-   * @api stable
+   * @api
    */
   getLayers(layersParamVar) {
     let layersParam = layersParamVar;
@@ -355,12 +358,13 @@ export default class Map extends Base {
     return layers;
   }
 
+
   /**
    * This function gets the base layers added to the map
    *
    * @function
    * @returns {Array<Layer>}
-   * @api stable
+   * @api
    */
   getBaseLayers() {
     // checks if the implementation can manage layers
@@ -377,7 +381,7 @@ export default class Map extends Base {
    * @function
    * @returns {M.handler.Feature}
    * @public
-   * @api stable
+   * @api
    */
   getFeatureHandler() {
     return this.featuresHandler_;
@@ -389,7 +393,7 @@ export default class Map extends Base {
    * @function
    * @param {string|Object|Array<String>|Array<Object>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addLayers(layersParameter) {
     let layersParam = layersParameter;
@@ -463,7 +467,7 @@ export default class Map extends Base {
 
       // adds the layers
       this.getImpl().addLayers(layers);
-      this.fire(EventsManager.ADDED_LAYER, [layers]);
+      this.fire(EventType.ADDED_LAYER, [layers]);
     }
     return this;
   }
@@ -476,7 +480,7 @@ export default class Map extends Base {
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * specified by the user
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeLayers(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -507,7 +511,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Array<WMC>}
-   * @api stable
+   * @api
    */
   getWMC(layersParamVar) {
     let layersParam = layersParamVar;
@@ -543,7 +547,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addWMC(layersParamVar) {
     let layersParam = layersParamVar;
@@ -575,8 +579,8 @@ export default class Map extends Base {
 
       // adds the layers
       this.getImpl().addWMC(wmcLayers);
-      this.fire(EventsManager.ADDED_LAYER, [wmcLayers]);
-      this.fire(EventsManager.ADDED_WMC, [wmcLayers]);
+      this.fire(EventType.ADDED_LAYER, [wmcLayers]);
+      this.fire(EventType.ADDED_WMC, [wmcLayers]);
 
       /* checks if it should create the WMC control
          to select WMC */
@@ -617,7 +621,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeWMC(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -642,7 +646,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Array<KML>}
-   * @api stable
+   * @api
    */
   getKML(layersParamVar) {
     let layersParam = layersParamVar;
@@ -678,7 +682,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.KML>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addKML(layersParamVar) {
     let layersParam = layersParamVar;
@@ -710,8 +714,8 @@ export default class Map extends Base {
 
       // adds the layers
       this.getImpl().addKML(kmlLayers);
-      this.fire(EventsManager.ADDED_LAYER, [kmlLayers]);
-      this.fire(EventsManager.ADDED_KML, [kmlLayers]);
+      this.fire(EventType.ADDED_LAYER, [kmlLayers]);
+      this.fire(EventType.ADDED_KML, [kmlLayers]);
     }
     return this;
   }
@@ -722,7 +726,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.KML>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeKML(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -750,7 +754,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMC>} layersParam
    * @returns {Array<WMS>} layers from the map
-   * @api stable
+   * @api
    */
   getWMS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -786,7 +790,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addWMS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -813,8 +817,8 @@ export default class Map extends Base {
 
       // adds the layers
       this.getImpl().addWMS(wmsLayers);
-      this.fire(EventsManager.ADDED_LAYER, [wmsLayers]);
-      this.fire(EventsManager.ADDED_WMS, [wmsLayers]);
+      this.fire(EventType.ADDED_LAYER, [wmsLayers]);
+      this.fire(EventType.ADDED_WMS, [wmsLayers]);
     }
     return this;
   }
@@ -825,7 +829,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeWMS(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -850,7 +854,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Array<WFS>} layers from the map
-   * @api stable
+   * @api
    */
   getWFS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -886,7 +890,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WFS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addWFS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -921,8 +925,8 @@ export default class Map extends Base {
 
       // adds the layers
       this.getImpl().addWFS(wfsLayers);
-      this.fire(EventsManager.ADDED_LAYER, [wfsLayers]);
-      this.fire(EventsManager.ADDED_WFS, [wfsLayers]);
+      this.fire(EventType.ADDED_LAYER, [wfsLayers]);
+      this.fire(EventType.ADDED_WFS, [wfsLayers]);
     }
     return this;
   }
@@ -933,7 +937,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WFS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeWFS(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -961,7 +965,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMTS>} layersParam
    * @returns {Array<WMTS>} layers from the map
-   * @api stable
+   * @api
    */
   getWMTS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -997,7 +1001,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMTS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addWMTS(layersParamVar) {
     let layersParam = layersParamVar;
@@ -1024,8 +1028,8 @@ export default class Map extends Base {
 
       // adds the layers
       this.getImpl().addWMTS(wmtsLayers);
-      this.fire(EventsManager.ADDED_LAYER, [wmtsLayers]);
-      this.fire(EventsManager.ADDED_WMTS, [wmtsLayers]);
+      this.fire(EventType.ADDED_LAYER, [wmtsLayers]);
+      this.fire(EventType.ADDED_WMTS, [wmtsLayers]);
     }
     return this;
   }
@@ -1036,7 +1040,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.WMTS>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeWMTS(layersParam) {
     if (!isNullOrEmpty(layersParam)) {
@@ -1061,7 +1065,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Array<M.layer.MBtiles>} layers from the map
-   * @api stable
+   * @api
    */
   getMBtiles(layersParamVar) {
     let layersParam = layersParamVar;
@@ -1095,7 +1099,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addMBtiles(layersParam) {
     // TODO
@@ -1107,7 +1111,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeMBtiles(layersParam) {
     // TODO
@@ -1120,7 +1124,7 @@ export default class Map extends Base {
    * @function
    * @param {string|Array<String>} controlsParam
    * @returns {Array<Control>}
-   * @api stable
+   * @api
    */
   getControls(controlsParamVar) {
     let controlsParam = controlsParamVar;
@@ -1150,7 +1154,7 @@ export default class Map extends Base {
    * @function
    * @param {string|Object|Array<String>|Array<Object>} controlsParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addControls(controlsParamVar) {
     let controlsParam = controlsParamVar;
@@ -1184,7 +1188,7 @@ export default class Map extends Base {
                   className: 'm-map-info',
                   position: Position.BR,
                 });
-                panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+                panel.on(EventType.ADDED_TO_MAP, (html) => {
                   if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
                     this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
                   }
@@ -1200,7 +1204,7 @@ export default class Map extends Base {
                 position: Position.BL,
                 tooltip: 'Línea de escala',
               });
-              panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+              panel.on(EventType.ADDED_TO_MAP, (html) => {
                 if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
                   this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
                 }
@@ -1236,16 +1240,16 @@ export default class Map extends Base {
                   tooltip: 'Selector de capas',
                 });
                 // enables touch scroll
-                panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+                panel.on(EventType.ADDED_TO_MAP, (html) => {
                   enableTouchScroll(html.querySelector('.m-panel-controls'));
                 });
                 // renders and registers events
-                panel.on(EventsManager.SHOW, (evt) => {
+                panel.on(EventType.SHOW, (evt) => {
                   layerswitcherCtrl.registerEvents();
                   layerswitcherCtrl.render();
                 });
                 // unregisters events
-                panel.on(EventsManager.HIDE, (evt) => {
+                panel.on(EventType.HIDE, (evt) => {
                   layerswitcherCtrl.unregisterEvents();
                 });
               })(control);
@@ -1292,7 +1296,7 @@ export default class Map extends Base {
               control = new GetFeatureInfo();
               break;
             default:
-              const getControlsAvailable = concatUrlPaths([Config.MAPEA_URL, '/api/actions/controls']);
+              const getControlsAvailable = concatUrlPaths([M.config.MAPEA_URL, '/api/actions/controls']);
               Dialog.error(`El control ${controlParam} no está definido. Consulte los controles disponibles <a href='${getControlsAvailable}' target="_blank">aquí</a>`);
           }
         } else if (controlParam instanceof Control) {
@@ -1305,7 +1309,7 @@ export default class Map extends Base {
                 className: 'm-map-info',
                 position: Position.BR,
               });
-              panel.on(EventsManager.ADDED_TO_MAP, (html) => {
+              panel.on(EventType.ADDED_TO_MAP, (html) => {
                 if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
                   this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
                 }
@@ -1318,7 +1322,7 @@ export default class Map extends Base {
         }
 
         // checks if it has to be added into a main panel
-        if (Config.panels.TOOLS.indexOf(control.name) !== -1) {
+        if (M.config.panels.TOOLS.indexOf(control.name) !== -1) {
           if (isNullOrEmpty(this.panel.TOOLS)) {
             this.panel.TOOLS = new Panel('tools', {
               collapsible: true,
@@ -1333,7 +1337,7 @@ export default class Map extends Base {
           //               this.panel.TOOLS.addControls(control);
           //            }
           panel = this.panel.TOOLS;
-        } else if (Config.panels.EDITION.indexOf(control.name) !== -1) {
+        } else if (M.config.panels.EDITION.indexOf(control.name) !== -1) {
           if (isNullOrEmpty(this.panel.EDITION)) {
             this.panel.EDITION = new Panel('edit', {
               collapsible: true,
@@ -1370,7 +1374,7 @@ export default class Map extends Base {
    * @param {string|Array<string>} controlsParam
    * specified by the user
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeControls(controlsParam) {
     // checks if the parameter is null or empty
@@ -1407,7 +1411,7 @@ export default class Map extends Base {
    * @public
    * @function
    * @returns {Mx.Extent}
-   * @api stable
+   * @api
    */
   getMaxExtent() {
     // checks if the implementation can set the maxExtent
@@ -1430,7 +1434,7 @@ export default class Map extends Base {
    * @param {String|Array<String>|Array<Number>|Mx.Extent} maxExtentParam the extent max
    * @param {Boolean} zoomToExtent - Set bbox
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setMaxExtent(maxExtentParam, zoomToExtent) {
     // checks if the param is null or empty
@@ -1461,7 +1465,7 @@ export default class Map extends Base {
    * @public
    * @function
    * @returns {Mx.Extent}
-   * @api stable
+   * @api
    */
   getBbox() {
     // checks if the implementation can set the maxExtent
@@ -1483,7 +1487,7 @@ export default class Map extends Base {
    * @param {String|Array<String>|Array<Number>|Mx.Extent} bboxParam the bbox
    * @param {Object} vendorOpts vendor options
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setBbox(bboxParam, vendorOpts) {
     // checks if the param is null or empty
@@ -1502,6 +1506,7 @@ export default class Map extends Base {
       this.getImpl().setBbox(bbox, vendorOpts);
     } catch (err) {
       Dialog.error('El formato del parámetro bbox no es el correcto');
+      throw err;
     }
     return this;
   }
@@ -1513,7 +1518,7 @@ export default class Map extends Base {
    * @public
    * @function
    * @returns {Number}
-   * @api stable
+   * @api
    */
   getZoom() {
     // checks if the implementation can get the zoom
@@ -1534,7 +1539,7 @@ export default class Map extends Base {
    * @function
    * @param {String|Number} zoomParam the zoom
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setZoom(zoomParam) {
     // checks if the param is null or empty
@@ -1568,7 +1573,7 @@ export default class Map extends Base {
    * @public
    * @function
    * @returns {Array<Number>}
-   * @api stable
+   * @api
    */
   getCenter() {
     // checks if the implementation can get the center
@@ -1589,7 +1594,7 @@ export default class Map extends Base {
    * @function
    * @param {String|Array<String>|Array<Number>|Mx.Center} centerParam the new center
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setCenter(centerParam) {
     // checks if the param is null or empty
@@ -1656,7 +1661,7 @@ export default class Map extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   removeCenter() {
     this.removeFeatures(this.centerFeature_);
@@ -1671,7 +1676,7 @@ export default class Map extends Base {
    * @public
    * @function
    * @returns {Array<Number>}
-   * @api stable
+   * @api
    */
   getResolutions() {
     // checks if the implementation can set the maxExtent
@@ -1692,7 +1697,7 @@ export default class Map extends Base {
    * @function
    * @param {String|Array<String>|Array<Number>} resolutionsParam the resolutions
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setResolutions(resolutionsParam) {
     // checks if the param is null or empty
@@ -1720,7 +1725,7 @@ export default class Map extends Base {
    * @public
    * @function
    * @returns {Mx.Projection}
-   * @api stable
+   * @api
    */
   getScale() {
     // checks if the implementation has the method
@@ -1740,7 +1745,7 @@ export default class Map extends Base {
    * @public
    * @function
    * @returns {Mx.Projection}
-   * @api stable
+   * @api
    */
   getProjection() {
     // checks if the implementation has the method
@@ -1761,7 +1766,7 @@ export default class Map extends Base {
    * @function
    * @param {String|Mx.Projection} projection the bbox
    * @returns {Map}
-   * @api stable
+   * @api
    */
   setProjection(projectionParam, asDefault) {
     let projection = projectionParam;
@@ -1781,11 +1786,11 @@ export default class Map extends Base {
       projection = parameter.projection(projection);
       this.getImpl().setProjection(projection);
       this.defaultProj_ = (this.defaultProj_ && (asDefault === true));
-      this.fire(EventsManager.CHANGE_PROJ, [oldProj, projection]);
+      this.fire(EventType.CHANGE_PROJ, [oldProj, projection]);
     } catch (err) {
       Dialog.error(err.toString());
       if (String(err).indexOf('El formato del parámetro projection no es correcto') >= 0) {
-        this.setProjection(Config.DEFAULT_PROJ, true);
+        this.setProjection(M.config.DEFAULT_PROJ, true);
       }
       throw err;
     }
@@ -1800,7 +1805,7 @@ export default class Map extends Base {
    * @function
    * @param {Mx.Plugin} plugin the plugin to add to the map
    * @returns {Map}
-   * @api stable
+   * @api
    */
   getPlugins(namesParam) {
     let names = namesParam;
@@ -1834,7 +1839,7 @@ export default class Map extends Base {
    * @function
    * @param {Mx.Plugin} plugin the plugin to add to the map
    * @returns {Map}
-   * @api stable
+   * @api
    */
   addPlugin(plugin) {
     // checks if the param is null or empty
@@ -1859,7 +1864,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<Plugin>} plugins specified by the user
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removePlugins(pluginsParam) {
     let plugins = pluginsParam;
@@ -1876,7 +1881,7 @@ export default class Map extends Base {
       // removes controls from their panels
       plugins.forEach((plugin) => {
         plugin.destroy();
-        this.plugins_.remove(plugin);
+        this.plugins_ = this.plugins_.filter(plugin2 => plugin.name !== plugin2.name);
       });
     }
 
@@ -1890,7 +1895,7 @@ export default class Map extends Base {
    * @public
    * @function
    * @returns {Promise}
-   * @api stable
+   * @api
    */
   getEnvolvedExtent() {
     // checks if the implementation can set the maxExtent
@@ -1908,7 +1913,7 @@ export default class Map extends Base {
    * @public
    * @function
    * @returns {Map}
-   * @api stable
+   * @api
    */
   zoomToMaxExtent(keepUserZoom) {
     // zoom to maxExtent if no zoom was specified
@@ -1937,17 +1942,17 @@ export default class Map extends Base {
    * @public
    * @function
    * @param {String} ticket ticket user
-   * @api stable
+   * @api
    */
   setTicket(ticket) {
     if (!isNullOrEmpty(ticket)) {
-      if (Config.PROXY_POST_URL.indexOf('ticket=') === -1) {
-        Config('PROXY_POST_URL', addParameters(Config.PROXY_POST_URL, {
+      if (M.config.PROXY_POST_URL.indexOf('ticket=') === -1) {
+        M.config('PROXY_POST_URL', addParameters(M.config.PROXY_POST_URL, {
           ticket,
         }));
       }
-      if (Config.PROXY_URL.indexOf('ticket=') === -1) {
-        Config('PROXY_URL', addParameters(Config.PROXY_URL, {
+      if (M.config.PROXY_URL.indexOf('ticket=') === -1) {
+        M.config('PROXY_URL', addParameters(M.config.PROXY_URL, {
           ticket,
         }));
       }
@@ -1999,7 +2004,7 @@ export default class Map extends Base {
    * @public
    * @function
    * @returns {Map}
-   * @api stable
+   * @api
    */
   destroy() {
     // checks if the implementation can provide the implementation map
@@ -2017,7 +2022,7 @@ export default class Map extends Base {
    *
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @api stable
+   * @api
    */
   addLabel(labelParam, coordParam) {
     const panMapIfOutOfView = labelParam.panMapIfOutOfView ===
@@ -2077,7 +2082,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   getLabel() {
     return this.getImpl().getLabel();
@@ -2090,7 +2095,7 @@ export default class Map extends Base {
    * @function
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @returns {Map}
-   * @api stable
+   * @api
    */
   removeLabel() {
     return this.getImpl().removeLabel();
@@ -2101,7 +2106,7 @@ export default class Map extends Base {
    *
    * @function
    * @param {Array<Mx.Point>|Mx.Point} points
-   * @api stable
+   * @api
    */
   drawPoints(pointsVar) {
     let points = pointsVar;
@@ -2140,7 +2145,7 @@ export default class Map extends Base {
    *
    * @function
    * @param {Array<Feature>|Feature} features
-   * @api stable
+   * @api
    */
   drawFeatures(features) {
     this.drawLayer_.addFeatures(features);
@@ -2152,7 +2157,7 @@ export default class Map extends Base {
    *
    * @function
    * @param {Array<Feature>|Feature} features
-   * @api stable
+   * @api
    */
   removeFeatures(features) {
     this.drawLayer_.removeFeatures(features);
@@ -2163,7 +2168,7 @@ export default class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Map}
    */
   addPanels(panelsVar) {
@@ -2189,7 +2194,7 @@ export default class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    */
   removePanel(panel) {
     if (panel.getControls().length > 0) {
@@ -2197,7 +2202,7 @@ export default class Map extends Base {
     }
     if (panel instanceof Panel) {
       panel.destroy();
-      this.panels_.remove(panel);
+      this.panels_ = this.panels_.filter(panel2 => !panel2.equals(panel));
     }
 
     return this;
@@ -2207,7 +2212,7 @@ export default class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    * @returns {array<Panel>}
    */
   getPanels(namesVar) {
@@ -2280,7 +2285,7 @@ export default class Map extends Base {
    * implementation
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Object} core map used by the implementation
    */
   getContainer() { // checks if the implementation can provides the container
@@ -2295,7 +2300,7 @@ export default class Map extends Base {
    * implementation
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Object} core map used by the implementation
    */
   getMapImpl() {
@@ -2310,7 +2315,7 @@ export default class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Popup} core map used by the implementation
    */
   getPopup() {
@@ -2321,7 +2326,7 @@ export default class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Map} core map used by the implementation
    */
   removePopup() {
@@ -2343,7 +2348,7 @@ export default class Map extends Base {
    * TODO
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Map} core map used by the implementation
    */
   addPopup(popup, coordinate) {
@@ -2373,8 +2378,8 @@ export default class Map extends Base {
    */
   checkCompleted_() {
     if (this.finishedInitCenter_ && this.finishedMaxExtent_ && this.finishedMapImpl_) {
-      this.fire(EventsManager.COMPLETED);
       this.finishedMap_ = true;
+      this.fire(EventType.COMPLETED);
     }
   }
 
@@ -2383,12 +2388,12 @@ export default class Map extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   on(eventType, listener, optThis) {
     super.on(eventType, listener, optThis);
-    if ((eventType === EventsManager.COMPLETED) && (this.finishedMap_ === true)) {
-      this.fire(EventsManager.COMPLETED);
+    if ((eventType === EventType.COMPLETED) && (this.finishedMap_ === true)) {
+      this.fire(EventType.COMPLETED);
     }
   }
 
@@ -2397,7 +2402,7 @@ export default class Map extends Base {
    * this is, all its layers.
    *
    * @function
-   * @api stable
+   * @api
    * @returns {Map} the instance
    */
   refresh() {
@@ -2413,7 +2418,7 @@ export default class Map extends Base {
    * Getter of defaultProj_ attribute
    * @public
    * @function
-   * @api stable
+   * @api
    */
   get defaultProj() {
     return this.defaultProj_;
@@ -2423,9 +2428,9 @@ export default class Map extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
-  LAYER_SORT(layer1, layer2) {
+  static LAYER_SORT(layer1, layer2) {
     if (!isNullOrEmpty(layer1) && !isNullOrEmpty(layer2)) {
       const z1 = layer1.getZIndex();
       const z2 = layer2.getZIndex();
@@ -2438,34 +2443,31 @@ export default class Map extends Base {
   }
 
   /**
-   * Draw layer style options.
-   *
-   * @const
-   * @type {object}
+   * This function returns true if the map and its impl are completed.
    * @public
-   * @api stable
+   * @returns {bool}
    */
-  get DRAWLAYER_STYLE() {
-    return Map.DRAWLAYER_STYLE_;
+  isFinished() {
+    return this.finishedMap_;
   }
 
   /**
-   * Draw layer style options.
-   *
-   * @const
-   * @type {object}
-   * @public
-   * @api stable
+   * areasContainer_ getter
    */
-  set DRAWLAYER_STYLE(value) {
-    Map.DRAWLAYER_STYLE_ = value;
+  get areasContainer() {
+    return this.areasContainer_;
   }
 }
 
 /**
- * TODO
+ * Draw layer style options.
+ *
+ * @const
+ * @type {object}
+ * @public
+ * @api
  */
-Map.DRAWLAYER_STYLE_ = {
+Map.DRAWLAYER_STYLE = {
   fill: {
     color: '#009e00',
   },
@@ -2475,3 +2477,5 @@ Map.DRAWLAYER_STYLE_ = {
   },
   radius: 7,
 };
+
+export default Map;

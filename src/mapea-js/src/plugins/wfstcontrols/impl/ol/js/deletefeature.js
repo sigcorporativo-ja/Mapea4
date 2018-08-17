@@ -69,8 +69,7 @@ export default class DeleteFeature extends M.impl.Control {
     // prevents saving new features
     if (!M.utils.isNullOrEmpty(feature.getId())) {
       this.modifiedFeatures.push(feature);
-    }
-    else {
+    } else {
       // removes the created feature from the drawfeature control
       const drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
       if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
@@ -79,5 +78,14 @@ export default class DeleteFeature extends M.impl.Control {
         drawnFeatures.splice(idx, 1);
       }
     }
+  }
+
+  /**
+   * @public
+   * @function
+   * @api stable
+   */
+  setLayer(layer) {
+    this.layer_ = layer;
   }
 }

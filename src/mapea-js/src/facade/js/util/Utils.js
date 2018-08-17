@@ -1,15 +1,15 @@
 /**
- * @module M.utils
+ * @module M/utils
  */
 
 import chroma from 'chroma-js';
-import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../Mapea';
+import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units';
 import WKT from '../geom/WKT';
 
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const isUndefined = (obj) => {
   return (typeof obj === 'undefined');
@@ -18,7 +18,7 @@ export const isUndefined = (obj) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const isBoolean = (obj) => {
   let isBooleanParam = false;
@@ -31,7 +31,7 @@ export const isBoolean = (obj) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const isNull = (obj) => {
   let isNullParam = false;
@@ -52,7 +52,7 @@ export const isNull = (obj) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const isArray = (obj) => {
   let isArrayParam = false;
@@ -68,7 +68,7 @@ export const isArray = (obj) => {
  * @function
  * @param {string|Object|Array<*>} obj
  * @returns {boolean}
- * @api stable
+ * @api
  */
 export const isNullOrEmpty = (obj) => {
   let nullOrEmpty = false;
@@ -91,7 +91,7 @@ export const isNullOrEmpty = (obj) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const isFunction = (obj) => {
   let isFunctionParam = false;
@@ -104,7 +104,7 @@ export const isFunction = (obj) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const isObject = (obj) => {
   let isObjectParam = false;
@@ -117,7 +117,7 @@ export const isObject = (obj) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const isString = (obj) => {
   let isStringParam = false;
@@ -130,7 +130,7 @@ export const isString = (obj) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const isUrl = (obj) => {
   let isUrlParam = false;
@@ -144,7 +144,7 @@ export const isUrl = (obj) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const normalize = (stringToNormalize, upperCase) => {
   let normalizedString = stringToNormalize;
@@ -160,7 +160,7 @@ export const normalize = (stringToNormalize, upperCase) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const getParameterValue = (paramName, url) => {
   let parameterValue = null;
@@ -186,7 +186,7 @@ export const getParameterValue = (paramName, url) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const addParameters = (url, params) => {
   let requestUrl = url;
@@ -219,7 +219,7 @@ export const addParameters = (url, params) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const generateRandom = (prefix, sufix) => {
   let random = '';
@@ -245,7 +245,7 @@ export const generateRandom = (prefix, sufix) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const getWMSGetCapabilitiesUrl = (serverUrl, version) => {
   let wmsGetCapabilitiesUrl = serverUrl;
@@ -267,7 +267,7 @@ export const getWMSGetCapabilitiesUrl = (serverUrl, version) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const getWMTSGetCapabilitiesUrl = (serverUrl, version) => {
   let wmtsGetCapabilitiesUrl = serverUrl;
@@ -295,7 +295,7 @@ export const getWMTSGetCapabilitiesUrl = (serverUrl, version) => {
  * @param {Number} maxResolution
  * @param {Number} numZoomLevels
  * @returns {Array<Number>} the resolutions
- * @api stable
+ * @api
  */
 export const fillResolutions = (minResolutionParam, maxResolutionParam, numZoomLevels) => {
   let minResolution = minResolutionParam;
@@ -331,7 +331,7 @@ export const fillResolutions = (minResolutionParam, maxResolutionParam, numZoomL
  * @param {Number} scale
  * @param {String} units
  * @returns {Number} the resolution for the specified scale
- * @api stable
+ * @api
  */
 export const getResolutionFromScale = (scale, unitsParam) => {
   let units = unitsParam;
@@ -359,7 +359,7 @@ export const getResolutionFromScale = (scale, unitsParam) => {
  * @param {Number} zoomLevels
  * @param {String} units
  * @returns {Array<Number>} the resolutions
- * @api stable
+ * @api
  */
 export const generateResolutionsFromScales = (maxScale, minScale, zoomLevels, units) => {
   const minResolution = getResolutionFromScale(maxScale, units);
@@ -378,7 +378,7 @@ export const generateResolutionsFromScales = (maxScale, minScale, zoomLevels, un
  * @param {Number} zoomLevels
  * @param {String} units
  * @returns {Array<Number>} the resolutions
- * @api stable
+ * @api
  */
 export const generateResolutionsFromExtent = (extentParam, size, zoomLevels, units) => {
   let extent = extentParam;
@@ -412,7 +412,7 @@ export const generateResolutionsFromExtent = (extentParam, size, zoomLevels, uni
  * @param {Number} resolution
  * @param {String} units
  * @returns {Number} the scale for the specified resolution
- * @api stable
+ * @api
  */
 export const getScaleFromResolution = (resolution, unitsParam) => {
   let units = unitsParam;
@@ -428,7 +428,7 @@ export const getScaleFromResolution = (resolution, unitsParam) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const stringToHtml = (htmlTxt) => {
   let html;
@@ -445,7 +445,7 @@ export const stringToHtml = (htmlTxt) => {
 /**
  *
  * @function
- * @api stable
+ * @api
  */
 export const htmlToString = (html) => {
   let text;
@@ -465,7 +465,7 @@ export const htmlToString = (html) => {
  * @function
  * @param {String} String text to format string
  * @returns {String} beautifyString formated String
- * @api stable
+ * @api
  */
 export const beautifyString = (text) => {
   let beautifyStringParam;
@@ -506,7 +506,7 @@ export const beautifyString = (text) => {
  * @function
  * @param {attributeName} String
  * @returns {Number} formated String
- * @api stable
+ * @api
  */
 export const beautifyAttribute = (attributeName) => {
   let beautifyStringParam = attributeName;
@@ -531,7 +531,7 @@ export const beautifyAttribute = (attributeName) => {
  * @function
  * @param {attributeName} String
  * @returns {Number} formated String
- * @api stable
+ * @api
  */
 export const beautifyAttributeName = (rawAttributeName) => {
   let attributeName = normalize(rawAttributeName);
@@ -550,7 +550,7 @@ export const beautifyAttributeName = (rawAttributeName) => {
  * @function
  * @param {attributeName} String
  * @returns {Number} formated String
- * @api stable
+ * @api
  */
 export const concatUrlPaths = (paths) => {
   let finalUrl = null;
@@ -572,7 +572,7 @@ export const concatUrlPaths = (paths) => {
  *
  *
  * @function
- * @api stable
+ * @api
  */
 export const includes = (array, searchElement, fromIndex) => {
   const O = Object(array);
@@ -605,30 +605,28 @@ export const includes = (array, searchElement, fromIndex) => {
  *
  *
  * @function
- * @api stable
+ * @api
  */
-/* eslint-disable */
-export const extend = (target, source, override) => {
-  Object
-    .keys(source)
-    .forEach((key) => {
-      if (isUndefined(target[key])) {
-        target[key] = source[key];
-      } else if (isObject(target[key])) {
-        extend(target[key], source[key], override);
-      } else if ((override === true)) {
-        target[key] = source[key];
-      }
-    });
+export const extend = (targetParam, source, override) => {
+  const target = targetParam;
+  Object.keys(source).forEach((key) => {
+    if (isUndefined(target[key])) {
+      target[key] = source[key];
+    } else if (isObject(target[key])) {
+      extend(target[key], source[key], override);
+    } else if ((override === true)) {
+      target[key] = source[key];
+    }
+  });
 
   return target;
-}
-/* eslint-enable */
+};
+
 /**
  * TODO
  *
  * @function
- * @api stable
+ * @api
  */
 export const escapeXSS = (xssValue) => {
   let validValue;
@@ -658,7 +656,7 @@ export const escapeXSS = (xssValue) => {
  * TODO
  *
  * @function
- * @api stable
+ * @api
  */
 export const escapeJSCode = (jsCode) => {
   let validValue;
@@ -673,7 +671,7 @@ export const escapeJSCode = (jsCode) => {
  * TODO
  *
  * @function
- * @api stable
+ * @api
  */
 export const enableTouchScroll = (elem) => {
   if ('ontouchstart' in document) {
@@ -699,7 +697,7 @@ export const enableTouchScroll = (elem) => {
  * TODO
  *
  * @function
- * @api stable
+ * @api
  */
 export const rgbToHex = (rgbColor) => {
   let hexColor;
@@ -716,7 +714,7 @@ export const rgbToHex = (rgbColor) => {
  * TODO
  *
  * @function
- * @api stable
+ * @api
  */
 export const rgbaToHex = (rgbaColor) => {
   let hexColor;
@@ -733,7 +731,7 @@ export const rgbaToHex = (rgbaColor) => {
  * TODO
  *
  * @function
- * @api stable
+ * @api
  */
 export const getOpacityFromRgba = (rgbaColor) => {
   let opacity;
@@ -755,7 +753,7 @@ export const getOpacityFromRgba = (rgbaColor) => {
  * TODO
  *
  * @function
- * @api stable
+ * @api
  */
 export const sameUrl = (url1, url2) => {
   const url1Var = url1
@@ -772,7 +770,7 @@ export const sameUrl = (url1, url2) => {
  * TODO
  *
  * @function
- * @api stable
+ * @api
  */
 export const isGeometryType = (type) => {
   const geometricTypes = [
@@ -816,7 +814,7 @@ export const isGeometryType = (type) => {
  * @function
  * @param {String} encodedHtml encoded text with HTML entities
  * @returns {String} text decoded
- * @api stable
+ * @api
  */
 export const decodeHtml = (encodedHtml) => {
   const txtarea = document.createElement('textarea');
@@ -831,7 +829,7 @@ export const decodeHtml = (encodedHtml) => {
  * @function
  * @param {HTMLElement | String} html string or element with HTML tags
  * @returns {String} text contained by the HTML tags
- * @api stable
+ * @api
  */
 export const getTextFromHtml = (html) => {
   let htmlText = html;
@@ -848,7 +846,7 @@ export const getTextFromHtml = (html) => {
  * @function
  * @public
  * @return {Array<string>} array scale color in hexadecimal format
- * @api stable
+ * @api
  */
 export const generateColorScale = (color1, color2, numberClasses) => {
   return chroma.scale([color1, color2])
@@ -863,7 +861,7 @@ export const generateColorScale = (color1, color2, numberClasses) => {
  * @public
  * @param {string} color
  * @return {string} inverse color in hexadecimal format
- * @api stable
+ * @api
  */
 export const inverseColor = (color) => {
   let inverseColorParam;
@@ -885,7 +883,7 @@ export const inverseColor = (color) => {
  * @param {string} color
  * @param {number} opacity
  * @return {string}
- * @api stable
+ * @api
  */
 export const getRgba = (color, opacity) => {
   return chroma(color)
@@ -900,7 +898,7 @@ export const getRgba = (color, opacity) => {
  * @param {array} array
  * @param {array} array2
  * @return {bool}
- * @api stable
+ * @api
  */
 export const setEquals = (array, array2) => {
   let equals = false;
@@ -916,27 +914,24 @@ export const setEquals = (array, array2) => {
  * @public
  * @function
  * @param {M.Map} impl to add the plugin
- * @api stable
+ * @api
  */
-export const extendsObj = (dest = {}, src = {}) => {
+export const extendsObj = (destParam = {}, src = {}) => {
+  const dest = destParam;
   if (!isNullOrEmpty(src)) {
-    Object
-      .keys(src)
-      .forEach((key) => {
-        let value = src[key];
-        if (isArray(value)) {
-          value = [...value];
-        } else if (isObject(value)) {
-          value = extendsObj({}, value);
-        }
-        if (isNullOrEmpty(dest[key])) {
-          /* eslint-disable */
-          dest[key] = value;
-          /* eslint-enable */
-        } else if (isObject(dest[key])) {
-          extendsObj(dest[key], value);
-        }
-      });
+    Object.keys(src).forEach((key) => {
+      let value = src[key];
+      if (isArray(value)) {
+        value = [...value];
+      } else if (isObject(value)) {
+        value = extendsObj({}, value);
+      }
+      if (isNullOrEmpty(dest[key])) {
+        dest[key] = value;
+      } else if (isObject(dest[key])) {
+        extendsObj(dest[key], value);
+      }
+    });
   }
   return dest;
 };
@@ -948,19 +943,16 @@ export const extendsObj = (dest = {}, src = {}) => {
  * @param {array} array
  * @param {number} breaks
  * @return {array}
- * @api stable
+ * @api
  */
 export const generateIntervals = (array, breaks) => {
   let intervals = [...array];
   if (array.length < breaks) {
     const step = (array[0] + array[1]) / (breaks - 1);
-    breaks.forEach((value) => {
-      intervals[value] = step * value;
-    });
-    intervals = [
-      ...intervals,
-      array[1],
-    ];
+    for (let i = 1; i < breaks - 1; i += 1) {
+      intervals[i] = step * i;
+    }
+    intervals = [...intervals, array[1]];
   }
   return intervals;
 };
@@ -971,7 +963,7 @@ export const generateIntervals = (array, breaks) => {
  * @public
  * @param {M.Style}
  * @return {number}
- * @api stable
+ * @api
  */
 export const styleComparator = (style, style2) => {
   return style.ORDER - style2.ORDER;
@@ -983,7 +975,7 @@ export const styleComparator = (style, style2) => {
  * @public
  * @param {string} url
  * @return {Array<number>}
- * @api stable
+ * @api
  */
 export const getImageSize = (url) => {
   const image = new Image();

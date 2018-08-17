@@ -1,13 +1,17 @@
+/**
+ * @module M/evt/Listener
+ */
 import { isArray, generateRandom, isFunction } from '../util/Utils';
 
-export default class EventListener {
+/**
+ * @classdesc
+ * @api
+ */
+class EventListener {
   /**
-   * TODO
-   *
-   * @private
-   * @type {function}
+   * @constructor
+   * @api
    */
-
   constructor(listener, scope, once = false) {
     /**
      * TODO
@@ -41,7 +45,7 @@ export default class EventListener {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   fire(argsParam) {
     let args = argsParam;
@@ -56,7 +60,7 @@ export default class EventListener {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getEventKey() {
     return this.eventKey_;
@@ -67,7 +71,7 @@ export default class EventListener {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   isOnce() {
     return this.once_;
@@ -78,7 +82,7 @@ export default class EventListener {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   has(listener, scope) {
     let has = false;
@@ -90,3 +94,5 @@ export default class EventListener {
     return has;
   }
 }
+
+export default EventListener;

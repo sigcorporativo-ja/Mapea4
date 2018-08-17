@@ -1,9 +1,9 @@
 import * as ModuleLayer from 'ol/layer/Layer';
 import OLFormatGML3 from 'ol/format/GML3';
-import OLInteractionPointer from 'ol/interaction/Pointer';
+// import OLInteractionPointer from 'ol/interaction/Pointer';
 import { writeStringTextNode } from 'ol/format/xsd';
-import { POINTERUP, POINTERDOWN, POINTERDRAG } from 'ol/MapBrowserEventType';
-import { getValues } from 'ol/obj';
+// import { POINTERUP, POINTERDOWN, POINTERDRAG } from 'ol/MapBrowserEventType';
+// import { getValues } from 'ol/obj';
 /* eslint-disable */
 /**
  * Return `true` if the layer is visible, and if the passed resolution is
@@ -73,21 +73,18 @@ OLFormatGML3.prototype.getCoords_ = (point, optSRSName) => {
   // ------------------------------------- end
 };
 
-/**
- * TODO Test in IOS11
- */
-
 // /**
 //  * @param {module:ol/MapBrowserPointerEvent} mapBrowserEvent Event.
 //  * @return {boolean} Whether the event is a pointerdown, pointerdrag
 //  *     or pointerup event.
+//  * @see https://github.com/openlayers/openlayers/blob/master/src/ol/interaction/Pointer.js#L192
 //  */
-// function isPointerDraggingEvent(mapBrowserEvent) {
+// const isPointerDraggingEvent = (mapBrowserEvent) => {
 //   const type = mapBrowserEvent.type;
 //   return type === POINTERDOWN ||
 //     type === POINTERDRAG ||
 //     type === POINTERUP;
-// }
+// };
 //
 // /**
 //  * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.

@@ -9,7 +9,6 @@ import StylePolygon from '../style/Polygon';
  * @public
  * @param {M.Feature} feature
  * @return {M.style.Simple}
- * @api stable
  */
 export const generateRandomStyle = (feature, radiusParam, strokeWidthParam, strokeColorParam) => {
   const radius = radiusParam;
@@ -77,7 +76,6 @@ export const generateRandomStyle = (feature, radiusParam, strokeWidthParam, stro
  * @param {object} options - style options
  * @param {M.layer.Vector} layer -
  * @return {M.style.Simple}
- * @api stable
  */
 export const generateStyleLayer = (options, layer) => {
   let style;

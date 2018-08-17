@@ -1,184 +1,178 @@
-import Config from 'configuration';
+/**
+ * @module M/remote
+ */
+
 import { addParameters, generateRandom, isNullOrEmpty, isObject } from './Utils';
-import M from '../Mapea';
+import { useproxy } from '../mapea';
 import Response from './Response';
+
 /**
- * @namespace Remote
+ * HTTP methods POST y GET
+ * @const
+ * @type {object}
+ * @public
+ * @api2
  */
-export default class Remote {
-  /**
-   * This function gets a resource throw a
-   * HTTP GET method and checks if the request
-   * is ajax or jsonp based
-   *
-   * @function
-   * @param {string} url
-   * @param {Object} options
-   * @returns {Promise}
-   * @api stable
-   */
-  static get(url, data, options) {
-    let req;
+export const method = {
+  GET: 'GET',
+  POST: 'POST',
+};
 
-    const useProxy = ((isNullOrEmpty(options) || (options.jsonp !== false)) &&
-      M.proxy_ !== false);
+/**
+ * TODO
+ */
+const createScriptTag = (proxyUrl, jsonpHandlerName) => {
+  const scriptTag = document.createElement('script');
+  scriptTag.type = 'text/javascript';
+  scriptTag.id = jsonpHandlerName;
+  scriptTag.src = proxyUrl;
+  scriptTag.setAttribute('async', '');
+  window.document.body.appendChild(scriptTag);
+};
 
-    if (useProxy === true) {
-      req = Remote.jsonp_(url, data, options);
-    } else {
-      req = Remote.ajax_(url, data, Remote.method.GET, false);
-    }
+/**
+ * TODO
+ */
+const removeScriptTag = (jsonpHandlerName) => {
+  const scriptTag = document.getElementById(jsonpHandlerName);
+  scriptTag.parentNode.removeChild(scriptTag);
+};
 
-    return req;
+/**
+ * TODO
+ */
+const manageProxy = (url, methodType) => {
+  // deafult GET
+  let proxyUrl = M.config.PROXY_URL;
+  if (methodType === method.POST) {
+    proxyUrl = M.config.PROXY_POST_URL;
   }
 
-  /**
-   * This function gets a resource throw a
-   * HTTP POST method using ajax
-   *
-   * @function
-   * @param {string} url
-   * @param {Object} data
-   * @returns {Promise}
-   * @api stable
-   */
-  static post(url, data, options) {
-    return Remote.ajax_(url, data, Remote.method.POST);
+  proxyUrl = addParameters(proxyUrl, {
+    url,
+  });
+
+  return proxyUrl;
+};
+
+/**
+ * TODO
+ */
+const jsonp = (urlVar, data, options) => {
+  let url = urlVar;
+  if (!isNullOrEmpty(data)) {
+    url = addParameters(url, data);
   }
 
-  /**
-   * TODO
-   */
-  static jsonp_(urlVar, data, options) {
-    let url = urlVar;
-    if (!isNullOrEmpty(data)) {
-      url = addParameters(url, data);
-    }
+  if (useproxy) {
+    url = manageProxy(url, method.GET);
+  }
 
-    if (M.proxy_) {
-      url = Remote.manageProxy_(url, Remote.method.GET);
-    }
+  // creates a random name to avoid clonflicts
+  const jsonpHandlerName = generateRandom('mapea_jsonphandler_');
+  url = addParameters(url, {
+    callback: jsonpHandlerName,
+  });
 
-    // creates a random name to avoid clonflicts
-    const jsonpHandlerName = generateRandom('mapea_jsonp_handler_');
-    url = addParameters(url, {
-      callback: jsonpHandlerName,
+  const req = new Promise((success, fail) => {
+    const userCallback = success;
+    // get the promise of the script tag
+    const scriptTagPromise = new Promise((scriptTagSuccess) => {
+      window[jsonpHandlerName] = scriptTagSuccess;
     });
+    /* when the script tag was executed remove
+     * the handler and execute the callback
+     */
+    scriptTagPromise.then((proxyResponse) => {
+      // remove the jsonp handler from global window
+      delete window[jsonpHandlerName];
 
-    const req = new Promise((success, fail) => {
-      const userCallback = success;
-      // get the promise of the script tag
-      const scriptTagPromise = new Promise((scriptTagSuccess) => {
-        window[jsonpHandlerName] = scriptTagSuccess;
-      });
-      /* when the script tag was executed remove
-       * the handler and execute the callback
-       */
-      scriptTagPromise.then((proxyResponse) => {
-        // remove the jsonp handler from global window
-        delete window[jsonpHandlerName];
+      // remove the script tag from the html
+      removeScriptTag(jsonpHandlerName);
 
-        // remove the script tag from the html
-        Remote.removeScriptTag_(jsonpHandlerName);
+      const response = new Response();
+      response.parseProxy(proxyResponse);
 
+      userCallback(response);
+    });
+  });
+
+  // creates the script tag
+  createScriptTag(url, jsonpHandlerName);
+
+  return req;
+};
+
+/**
+ * TODO
+ */
+const ajax = (urlVar, dataVar, methodType, useProxy) => {
+  let url = urlVar;
+  let data = dataVar;
+  if ((useProxy !== false) && (useproxy === true)) {
+    url = manageProxy(url, methodType);
+  }
+
+  // parses parameters to string
+  if (isObject(data)) {
+    data = JSON.stringify(data);
+  }
+
+  return new Promise((success, fail) => {
+    let xhr;
+    if (window.XMLHttpRequest) {
+      xhr = new XMLHttpRequest();
+    } else if (window.ActiveXObject) {
+      xhr = new ActiveXObject('Microsoft.XMLHTTP');
+    }
+    xhr.onreadystatechange = () => {
+      if (xhr.readyState === 4) {
         const response = new Response();
-        response.parseProxy(proxyResponse);
-
-        userCallback(response);
-      });
-    });
-
-    // creates the script tag
-    Remote.createScriptTag_(url, jsonpHandlerName);
-
-    return req;
-  }
-
-  /**
-   * TODO
-   */
-  static ajax_(urlVar, dataVar, method, useProxy) {
-    let url = urlVar;
-    let data = dataVar;
-    if ((useProxy !== false) && (M.proxy_ === true)) {
-      url = Remote.manageProxy_(url, method);
-    }
-
-    // parses parameters to string
-    if (isObject(data)) {
-      data = JSON.stringify(data);
-    }
-
-    return new Promise((success, fail) => {
-      let xhr;
-      if (window.XMLHttpRequest) {
-        xhr = new XMLHttpRequest();
-      } else if (window.ActiveXObject) {
-        xhr = new ActiveXObject('Microsoft.XMLHTTP');
+        response.parseXmlHttp(xhr);
+        success(response);
       }
-      xhr.onreadystatechange = () => {
-        if (xhr.readyState === 4) {
-          const response = new Response();
-          response.parseXmlHttp(xhr);
-          success(response);
-        }
-      };
-      xhr.open(method, url, true);
-      xhr.send(data);
-    });
-  }
-
-  /**
-   * TODO
-   */
-  static manageProxy_(url, method) {
-    // deafult GET
-    let proxyUrl = Config.PROXY_URL;
-    if (method === Remote.method.POST) {
-      proxyUrl = Config.PROXY_POST_URL;
-    }
-
-    proxyUrl = addParameters(proxyUrl, {
-      url,
-    });
-
-    return proxyUrl;
-  }
-
-  /**
-   * TODO
-   */
-  static createScriptTag_(proxyUrl, jsonpHandlerName) {
-    const scriptTag = document.createElement('script');
-    scriptTag.type = 'text/javascript';
-    scriptTag.id = jsonpHandlerName;
-    scriptTag.src = proxyUrl;
-    scriptTag.setAttribute('async', '');
-    window.document.body.appendChild(scriptTag);
-  }
-
-  static removeScriptTag_(jsonpHandlerName) {
-    const scriptTag = document.getElementById(jsonpHandlerName);
-    scriptTag.parentNode.removeChild(scriptTag);
-  }
-}
-
-
-Remote.method = {};
-/**
- * HTTP method GET
- * @const
- * @type {string}
- * @public
- * @api stable
- */
-Remote.method.GET = 'GET';
+    };
+    xhr.open(methodType, url, true);
+    xhr.send(data);
+  });
+};
 
 /**
- * HTTP method POST
- * @const
- * @type {string}
- * @public
- * @api stable
+ * This function gets a resource throw a
+ * HTTP GET method and checks if the request
+ * is ajax or jsonp based
+ *
+ * @function
+ * @param {string} url
+ * @param {Object} options
+ * @returns {Promise}
+ * @api
  */
-Remote.method.POST = 'POST';
+export const get = (url, data, options) => {
+  let req;
+
+  const useProxy = ((isNullOrEmpty(options) || (options.jsonp !== false)) &&
+    useproxy !== false);
+
+  if (useProxy === true) {
+    req = jsonp(url, data, options);
+  } else {
+    req = ajax(url, data, method.GET, false);
+  }
+
+  return req;
+};
+
+/**
+ * This function gets a resource throw a
+ * HTTP POST method using ajax
+ *
+ * @function
+ * @param {string} url
+ * @param {Object} data
+ * @returns {Promise}
+ * @api
+ */
+export const post = (url, data, options) => {
+  return ajax(url, data, method.POST);
+};

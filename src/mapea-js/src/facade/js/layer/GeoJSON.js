@@ -1,19 +1,25 @@
+/**
+ * @module M/layer/GeoJSON
+ */
 import GeoJSONImpl from 'impl/layer/GeoJSON';
 import LayerVector from './Vector';
 import { isString, isNullOrEmpty, isUndefined, isArray, normalize } from '../util/Utils';
 import Exception from '../exception/exception';
 
-export default class GeoJSON extends LayerVector {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a WMS layer
+ * with parameters specified by the user
+ * @api
+ */
+class GeoJSON extends LayerVector {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMS layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.GeoJSON} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
-   * @api stable
+   * @api
    */
   constructor(parameters, options = {}) {
     /**
@@ -120,7 +126,7 @@ export default class GeoJSON extends LayerVector {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -138,7 +144,7 @@ export default class GeoJSON extends LayerVector {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   setSource(source) {
     this.source = source;
@@ -163,7 +169,7 @@ export default class GeoJSON extends LayerVector {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 GeoJSON.DEFAULT_OPTIONS_STYLE = {
   fill: {
@@ -176,3 +182,5 @@ GeoJSON.DEFAULT_OPTIONS_STYLE = {
   },
   radius: 5,
 };
+
+export default GeoJSON;

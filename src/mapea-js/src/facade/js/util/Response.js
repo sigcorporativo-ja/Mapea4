@@ -1,46 +1,53 @@
-export default class Response {
+/**
+ * @module M/remote/Response
+ */
+
+/**
+ * @classdesc
+ * Response for proxy requests
+ * @api
+ */
+class Response {
   /**
-   * @classdesc
-   * Response for proxy requests
    *
    * @constructor
    * @extends {M.Object}
    * @param {Object} response from proxy requests
-   * @api stable
+   * @api
    */
   constructor(xmlHttpResponse) {
     /**
      * @public
      * @type {string}
-     * @api stable
+     * @api
      */
     this.text = null;
 
     /**
      * @public
      * @type {XML}
-     * @api stable
+     * @api
      */
     this.xml = null;
 
     /**
      * @public
      * @type {Object}
-     * @api stable
+     * @api
      */
     this.headers = {};
 
     /**
      * @public
      * @type {boolean}
-     * @api stable
+     * @api
      */
     this.error = false;
 
     /**
      * @public
      * @type {int}
-     * @api stable
+     * @api
      */
     this.code = 0;
   }
@@ -51,7 +58,7 @@ export default class Response {
    *
    * @function
    * @param {Object} url
-   * @api stable
+   * @api
    */
   parseXmlHttp(xmlHttpResponse) {
     this.text = xmlHttpResponse.responseText;
@@ -78,7 +85,7 @@ export default class Response {
    *
    * @function
    * @param {Object} url
-   * @api stable
+   * @api
    */
   parseProxy(proxyResponse) {
     this.code = proxyResponse.code;
@@ -94,7 +101,7 @@ export default class Response {
         if ((typeof DOMParser !== 'undefined') && /text\/html/i.test(contentType)) {
           this.xml = (new DOMParser()).parseFromString(this.text, 'text/html');
         } else if (/xml/i.test(contentType)) { // it avoids responses that aren't xml format
-          this.xml = ol.xml.parse(this.text);
+          this.xml = (new DOMParser()).parseFromString(this.text, 'text/xml');
         }
       } catch (err) {
         this.xml = null;
@@ -108,3 +115,5 @@ export default class Response {
     });
   }
 }
+
+export default Response;

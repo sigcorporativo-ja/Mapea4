@@ -1,17 +1,23 @@
+/**
+ * @module M/facade/Base
+ */
 import { isNullOrEmpty, isFunction } from './util/Utils';
 import MObject from './Object';
 
-export default class Base extends MObject {
+/**
+ * @classdesc
+ * Main facade Object. This class creates a facede
+ * Object which has an implementation Object and
+ * provides the needed methods to access its implementation
+ * @api
+ */
+class Base extends MObject {
   /**
-   * @classdesc
-   * Main facade Object. This class creates a facede
-   * Object which has an implementation Object and
-   * provides the needed methods to access its implementation
    *
    * @constructor
    * @param {Object} impl implementation object
    * @extends {M.Object}
-   * @api stable
+   * @api
    */
   constructor(impl) {
     // calls the super constructor
@@ -36,7 +42,7 @@ export default class Base extends MObject {
    * @public
    * @function
    * @returns {Object}
-   * @api stable
+   * @api
    */
   getImpl() {
     return this.impl_;
@@ -48,7 +54,7 @@ export default class Base extends MObject {
    * @public
    * @function
    * @param {M.Map} impl to add the plugin
-   * @api stable
+   * @api
    */
   setImpl(value) {
     this.impl_ = value;
@@ -60,7 +66,7 @@ export default class Base extends MObject {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   destroy() {
     if (!isNullOrEmpty(this.impl_) && isFunction(this.impl_.destroy)) {
@@ -68,3 +74,5 @@ export default class Base extends MObject {
     }
   }
 }
+
+export default Base;

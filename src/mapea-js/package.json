@@ -1,6 +1,6 @@
 {
   "name": "mapea",
-  "version": "4.2.0",
+  "version": "5.0.0",
   "description": "Herramienta para desarrollo de mapas interactivos de forma sencilla",
   "keywords": [
     "map",
@@ -37,6 +37,7 @@
     "fs-extra": "2.0.0",
     "html-loader": "^0.5.5",
     "ink-docstrap": "^1.3.0",
+    "mini-css-extract-plugin": "^0.4.1",
     "style-loader": "^0.21.0",
     "uglify-js": "^2.6.1",
     "uglifycss": "0.0.29",
@@ -52,17 +53,16 @@
     "handlebars": "^4.0.11",
     "jsdoc": "3.4.3",
     "jsts": "^1.6.0",
-    "lodash": "^4.17.10",
-    "mocha-phantomjs": "^3.6.0",
     "ol": "^5.1.3",
-    "phantomjs": "1.9.7-15",
     "proj4": "^2.4.4",
-    "temp": "0.8.3",
     "walk": "2.3.9"
   },
   "scripts": {
-    "prestart": "node tasks/read-tests.js",
-    "start": "cross-env NODE_ENV=development webpack-dev-server --config=webpack-config/webpack.config.js",
-    "build": "cross-env NODE_ENV=production webpack --config=webpack-config/webpack.config.js"
+    "start": "cross-env NODE_ENV=development webpack-dev-server --config=webpack-config/webpack.development.config.js",
+    "debug:prebuild": "node --inspect-brk tasks/generate-index.js",
+    "prebuild": "node tasks/generate-index.js && node tasks/generate-plugins-entrypoints.js",
+    "build": "cross-env NODE_ENV=production webpack --config=webpack-config/webpack.production.config.js",
+    "debug:build": "webpack-dev-server --config=webpack-config/webpack.pre.config.js",
+    "start:build": "npm run build && npm run debug:build"
   }
 }

@@ -1,21 +1,27 @@
+/**
+ * @module M/layer/KML
+ */
 import KMLImpl from 'impl/layer/KML';
 import LayerVector from './Vector';
 import { isNullOrEmpty, isUndefined, normalize, isString } from '../util/Utils';
 import Exception from '../exception/exception';
-import LayerType from './Type';
+import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 
-export default class KML extends LayerVector {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a WMS layer
+ * with parameters specified by the user
+ * @api
+ */
+class KML extends LayerVector {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMS layer
-   * with parameters specified by the user
    *
    * @constructor
    * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.KML} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParameters, options = {}) {
     /**
@@ -99,7 +105,7 @@ export default class KML extends LayerVector {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     let equals = false;
@@ -113,3 +119,5 @@ export default class KML extends LayerVector {
     return equals;
   }
 }
+
+export default KML;

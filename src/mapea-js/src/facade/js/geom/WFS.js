@@ -1,21 +1,45 @@
-export default class WFS {
-  static get type() {
-    return WFS.WFStype;
-  }
-}
+/**
+ * @module M/geom/wfs/type
+ */
 
 /**
- * WFS geometry type
  * @const
- * @type {object}
- * @public
- * @api stable
+ * @type {string}
+ * @api
  */
-WFS.WFStype = {
-  POINT: 'POINT',
-  LINE: 'LINE',
-  POLYGON: 'POLYGON',
-  MPOINT: 'MPOINT',
-  MLINE: 'MLINE',
-  MPOLYGON: 'MPOLYGON',
-};
+export const POINT = 'POINT';
+
+/**
+ * @const
+ * @type {string}
+ * @api
+ */
+export const LINE = 'LINE';
+
+/**
+ * @const
+ * @type {string}
+ * @api
+ */
+export const POLYGON = 'POLYGON';
+
+/**
+ * @const
+ * @type {string}
+ * @api
+ */
+export const MPOINT = 'MPOINT';
+
+/**
+ * @const
+ * @type {string}
+ * @api
+ */
+export const MLINE = 'MLINE';
+
+/**
+ * @const
+ * @type {string}
+ * @api
+ */
+export const MPOLYGON = 'MPOLYGON';

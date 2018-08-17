@@ -1,8 +1,8 @@
 import ClusteredFeature from 'facade/js/feature/Clustered';
-import FeatureFacade from 'facade/js/feature/Feature';
 import Cluster from 'facade/js/style/Cluster';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import AnimatedCluster from '../layer/AnimatedCluster';
+import FeatureImpl from '../feature/Feature';
 
 /**
  * function adds the event 'click'
@@ -18,7 +18,7 @@ const getFacadeFeature = (feature, layer) => {
     mFeature = layer.getFeatureById(featureId);
   }
   if (isNullOrEmpty(mFeature)) {
-    mFeature = FeatureFacade.olFeature2Facade(feature);
+    mFeature = FeatureImpl.olFeature2Facade(feature);
   }
   return mFeature;
 };
@@ -77,7 +77,7 @@ export default class Feature {
       const olLayer = layer.getImpl().getOL3Layer();
       this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, (feature, layerFrom) => {
         if ((layerFrom instanceof AnimatedCluster) && !isNullOrEmpty(feature.get('features'))) {
-          const clusteredFeatures = feature.get('features').map(f => this.getFacadeFeature_(f, layer));
+          const clusteredFeatures = feature.get('features').map(f => getFacadeFeature(f, layer));
           if (clusteredFeatures.length === 1) {
             features.push(clusteredFeatures[0]);
           } else {

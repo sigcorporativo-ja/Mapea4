@@ -63,6 +63,7 @@ export default class AnimatedCluster extends OLLayerVector {
     // Animate the cluster
     this.on('precompose', this.animate.bind(this));
     this.on('postcompose', this.postanimate.bind(this));
+    this.setStyle(options.style);
   }
 
   /**
@@ -164,6 +165,8 @@ export default class AnimatedCluster extends OLLayerVector {
           olStyles.forEach((olStyle) => {
             const styleImage = olStyle.getImage();
             if (!isNullOrEmpty(styleImage)) {
+              // TODO
+              /* eslint-disable */
               if (styleImage.getOrigin() == null) {
                 styleImage.origin_ = [];
               }

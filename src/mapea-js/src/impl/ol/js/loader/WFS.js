@@ -1,5 +1,5 @@
 import MObject from 'facade/js/Object';
-import Remote from 'facade/js/util/Remote';
+import { get as getRemote } from 'facade/js/util/Remote';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import Exception from 'facade/js/exception/exception';
 import Dialog from 'facade/js/dialog';
@@ -64,7 +64,7 @@ export default class WFS extends MObject {
    */
   loadInternal_(url, projection) {
     return new Promise((success, fail) => {
-      Remote.get(url).then((response) => {
+      getRemote(url).then((response) => {
         if (!isNullOrEmpty(response.text) && response.text.indexOf('ServiceExceptionReport') < 0) {
           const features = this.format_.read(response.text, projection);
           success(features);

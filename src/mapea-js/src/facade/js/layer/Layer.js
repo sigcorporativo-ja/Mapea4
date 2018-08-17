@@ -1,7 +1,6 @@
 /**
- * @module M.Layer
+ * @module M/Layer
  */
-import Config from 'configuration';
 import Exception from '../exception/exception';
 import * as parserParameter from '../parameter/parameter';
 import Base from '../Base';
@@ -11,14 +10,15 @@ import { isNullOrEmpty, concatUrlPaths, isUndefined, normalize, isString, isFunc
  * @classdesc
  * Main constructor of the class. Creates a layer
  * with parameters specified by the user
+ * @api
  */
-export default class LayerBase extends Base {
+class LayerBase extends Base {
   /**
    * @constructor
    * @extends {M.facade.Base}
    * @param {string|Mx.parameters.Layer} userParameters parameters
    * provided by the user
-   * @api stable
+   * @api
    */
   constructor(userParameters, impl) {
     // calls the super constructor
@@ -128,7 +128,7 @@ export default class LayerBase extends Base {
    * This function indicates if the layer is visible
    *
    * @function
-   * @api stable
+   * @api
    * @export
    */
   isVisible() {
@@ -144,7 +144,7 @@ export default class LayerBase extends Base {
    * This function indicates if the layer is visible
    *
    * @function
-   * @api stable
+   * @api
    * @export
    */
   isQueryable() {
@@ -160,7 +160,7 @@ export default class LayerBase extends Base {
    * This function sets the visibility of this layer
    *
    * @function
-   * @api stable
+   * @api
    * @export
    */
   setVisible(visibilityParam) {
@@ -182,14 +182,14 @@ export default class LayerBase extends Base {
 
     visibility = /^1|(true)$/i.test(visibility);
 
-    this.getImpl().visible = visibility;
+    this.getImpl().setVisible(visibility);
   }
 
   /**
    * This function indicates if the layer is in range
    *
    * @function
-   * @api stable
+   * @api
    * @export
    */
   inRange() {
@@ -206,7 +206,7 @@ export default class LayerBase extends Base {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   getLegendURL() {
     return this.getImpl().getLegendURL();
@@ -217,12 +217,12 @@ export default class LayerBase extends Base {
    * to this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   setLegendURL(legendUrlParam) {
     let legendUrl = legendUrlParam;
     if (isNullOrEmpty(legendUrl)) {
-      legendUrl = concatUrlPaths([Config.THEME_URL, LayerBase.LEGEND_DEFAULT]);
+      legendUrl = concatUrlPaths([M.config.THEME_URL, LayerBase.LEGEND_DEFAULT]);
     }
     this.getImpl().setLegendURL(legendUrl);
   }
@@ -231,7 +231,7 @@ export default class LayerBase extends Base {
    * This function gets the z-index of this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   getZIndex() {
     return this.zindex_;
@@ -241,7 +241,7 @@ export default class LayerBase extends Base {
    * This function sets the z-index for this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   setZIndex(zIndex) {
     this.zindex_ = zIndex;
@@ -252,7 +252,7 @@ export default class LayerBase extends Base {
    * This function gets the opacity of this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   getOpacity() {
     return this.getImpl().getOpacity();
@@ -262,7 +262,7 @@ export default class LayerBase extends Base {
    * This function sets the opacity of this layer
    *
    * @function
-   * @api stable
+   * @api
    */
   setOpacity(opacity) {
     this.getImpl().opacity = opacity;
@@ -273,7 +273,7 @@ export default class LayerBase extends Base {
    * layer
    *
    * @function
-   * @api stable
+   * @api
    * @export
    */
   refresh() {
@@ -299,7 +299,7 @@ export default class LayerBase extends Base {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 LayerBase.LEGEND_DEFAULT = '/img/legend-default.png';
 
@@ -308,6 +308,8 @@ LayerBase.LEGEND_DEFAULT = '/img/legend-default.png';
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 LayerBase.LEGEND_ERROR = '/img/legend-error.png';
+
+export default LayerBase;

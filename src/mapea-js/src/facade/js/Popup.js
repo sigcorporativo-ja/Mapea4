@@ -1,18 +1,23 @@
+/**
+ * @module M/Popup
+ */
 import PopupImpl from 'impl/Popup';
-import Config from 'configuration';
+
 import 'assets/css/popup';
+import popupTemplate from 'templates/popup';
 import { isNullOrEmpty } from './util/Utils';
 import Base from './Base';
-import Template from './util/Template';
-import EventsManager from './event/Manager';
+import { compile as compileTemplate } from './util/Template';
+import * as EventType from './event/eventtype';
 import MWindow from './util/Window';
 
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ */
 class Tab {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
-   *
    * @constructor
    */
   constructor(options = {}) {
@@ -20,7 +25,7 @@ class Tab {
      * TODO
      * @public
      * @type {String}
-     * @api stable
+     * @api
      * @expose
      */
     this.icon = options.icon;
@@ -29,7 +34,7 @@ class Tab {
      * TODO
      * @public
      * @type {String}
-     * @api stable
+     * @api
      * @expose
      */
     this.title = options.title;
@@ -38,25 +43,28 @@ class Tab {
      * TODO
      * @public
      * @type {String}
-     * @api stable
+     * @api
      * @expose
      */
     this.content = options.content;
   }
 }
 
-export default class Popup extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a layer
+ * with parameters specified by the user
+ * @api
+ */
+class Popup extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @extends {M.facade.Base}
-   * @api stable
+   * @api
    */
   constructor(options) {
     const impl = new PopupImpl(options);
+
     // calls the super constructor
     super(impl);
 
@@ -93,7 +101,7 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getTabs() {
     return this.tabs_;
@@ -103,7 +111,7 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   removeTab(tabToRemove) {
     this.tabs_ = this.tabs_.filter(tab => tab.content !== tabToRemove.content);
@@ -114,7 +122,7 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   addTab(tabOptions) {
     let tab = tabOptions;
@@ -129,24 +137,23 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   addTo(map, coordinate) {
     this.map_ = map;
     if (isNullOrEmpty(this.element_)) {
-      Template.compile(Popup.TEMPLATE, {
+      const html = compileTemplate(popupTemplate, {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
         },
-      }).then((html) => {
-        if (this.tabs_.length > 0) {
-          this.element_ = html;
-          this.addEvents(html);
-          this.getImpl().addTo(map, html);
-          this.show(coordinate);
-        }
       });
+      if (this.tabs_.length > 0) {
+        this.element_ = html;
+        this.addEvents(html);
+        this.getImpl().addTo(map, html);
+        this.show(coordinate);
+      }
     } else {
       this.getImpl().addTo(map, this.element_);
       this.show(coordinate);
@@ -157,23 +164,22 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   update() {
     if (!isNullOrEmpty(this.map_)) {
-      Template.compile(Popup.TEMPLATE, {
+      const html = compileTemplate(popupTemplate, {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
         },
-      }).then((html) => {
-        if (this.tabs_.length > 0) {
-          this.element_ = html;
-          this.addEvents(html);
-          this.getImpl().setContainer(html);
-          this.show(this.coord_);
-        }
       });
+      if (this.tabs_.length > 0) {
+        this.element_ = html;
+        this.addEvents(html);
+        this.getImpl().setContainer(html);
+        this.show(this.coord_);
+      }
     }
   }
 
@@ -181,12 +187,12 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   show(coord) {
     this.coord_ = coord;
     this.getImpl().show(this.coord_, () => {
-      this.fire(EventsManager.SHOW);
+      this.fire(EventType.SHOW);
     });
   }
 
@@ -194,7 +200,7 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   hide(evt) {
     if (!isNullOrEmpty(evt)) {
@@ -207,7 +213,7 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   switchTab(index) {
     if (this.tabs_.length > index) {
@@ -247,7 +253,7 @@ export default class Popup extends Base {
     let touchstartY;
     const tabs = html.querySelectorAll('div.m-tab');
     Array.prototype.forEach.call(tabs, (tab) => {
-      goog.events.listen(tab, ['click', 'touchend'], (evt) => {
+      tab.addEventListener('click', (evt) => {
         evt.preventDefault();
         // 5px tolerance
         const touchendY = evt.clientY;
@@ -260,13 +266,28 @@ export default class Popup extends Base {
           const index = tab.getAttribute('data-index');
           this.switchTab(index);
         }
-      }, false);
+      });
+
+      tab.addEventListener('touchend', (evt) => {
+        evt.preventDefault();
+        // 5px tolerance
+        const touchendY = evt.clientY;
+        if ((evt.type === 'click') || (Math.abs(touchstartY - touchendY) < 5)) {
+          // remove m-activated from all tabs
+          Array.prototype.forEach.call(tabs, (addedTab) => {
+            addedTab.classList.remove('m-activated');
+          });
+          tab.classList.add('m-activated');
+          const index = tab.getAttribute('data-index');
+          this.switchTab(index);
+        }
+      });
     });
 
     // adds close event
     const closeBtn = html.querySelector('a.m-popup-closer');
-    closeBtn.addEventListener('click', this.hide, false);
-    closeBtn.addEventListener('touchend', this.hide, false);
+    closeBtn.addEventListener('click', this.hide.bind(this), false);
+    closeBtn.addEventListener('touchend', this.hide.bind(this), false);
     // mobile events
     let headerElement = html.querySelector('div.m-tabs');
     if (isNullOrEmpty(headerElement)) {
@@ -332,7 +353,7 @@ export default class Popup extends Base {
       this.element_.style.top = '';
       this.element_.classList.remove('m-no-animation');
       // mobile center
-      if (MWindow.WIDTH <= Config.MOBILE_WIDTH) {
+      if (MWindow.WIDTH <= M.config.MOBILE_WIDTH) {
         this.getImpl().centerByStatus(status, this.coord_);
       }
     }
@@ -409,7 +430,7 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getCoordinate() {
     return this.coord_;
@@ -419,7 +440,7 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   setCoordinate(coord) {
     this.coord_ = coord;
@@ -432,30 +453,21 @@ export default class Popup extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   destroy() {
     this.tabs_.length = 0;
     this.coord_ = null;
-    this.fire(EventsManager.DESTROY);
+    this.fire(EventType.DESTROY);
   }
 }
-
-/**
- * Template for popup
- * @const
- * @type {string}
- * @public
- * @api stable
- */
-Popup.TEMPLATE = 'popup.html';
 
 /**
  * status of this popup
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Popup.status = {};
 
@@ -464,7 +476,7 @@ Popup.status = {};
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Popup.status.COLLAPSED = 'm-collapsed';
 
@@ -473,7 +485,7 @@ Popup.status.COLLAPSED = 'm-collapsed';
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Popup.status.DEFAULT = 'm-default';
 
@@ -482,6 +494,9 @@ Popup.status.DEFAULT = 'm-default';
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Popup.status.FULL = 'm-full';
+
+
+export default Popup;

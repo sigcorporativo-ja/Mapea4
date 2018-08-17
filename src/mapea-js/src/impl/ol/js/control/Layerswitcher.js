@@ -1,9 +1,9 @@
 import layerswitcherTemplate from 'templates/layerswitcher';
 import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
-import Template from 'facade/js/util/Template';
+import { compile as compileTemplate } from 'facade/js/util/Template';
 import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
 import Layer from 'facade/js/layer/Layer';
-import Config from 'configuration';
+
 import Control from './Control';
 
 /**
@@ -77,17 +77,16 @@ export default class LayerSwitcher extends Control {
             }
             layer.setVisible(!layer.isVisible());
           }
-        }
-        // range
-        else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
+        } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
+          // range
           layer.setOpacity(evt.target.value);
-        }
-        // remove span
-        else if (evt.target.classList.contains('m-layerswitcher-remove')) {
+          // remove span
+        } else if (evt.target.classList.contains('m-layerswitcher-remove')) {
           this.facadeMap_.removeLayers(layer);
         }
       }
     }
+    this.renderPanel();
   }
 
   /**
@@ -99,7 +98,7 @@ export default class LayerSwitcher extends Control {
    */
   renderPanel() {
     LayerSwitcherFacade.getTemplateVariables(this.facadeMap_).then((templateVars) => {
-      const html = Template.compile(layerswitcherTemplate, {
+      const html = compileTemplate(layerswitcherTemplate, {
         vars: templateVars,
       });
       this.registerImgErrorEvents_(html);
@@ -122,7 +121,7 @@ export default class LayerSwitcher extends Control {
 
       this.registerViewEvents_(olMap.getView());
       this.registerLayersEvents_(olMap.getLayers());
-      olMap.on('change:view', () => this.onViewChange_);
+      olMap.on('change:view', () => this.onViewChange_.bind(this));
     }
   }
 
@@ -139,7 +138,7 @@ export default class LayerSwitcher extends Control {
 
       this.unregisterViewEvents_(olMap.getView());
       this.unregisterLayersEvents_(olMap.getLayers());
-      olMap.un('change:view', () => this.onViewChange_);
+      olMap.un('change:view', () => this.onViewChange_.bind(this));
     }
   }
 
@@ -147,49 +146,48 @@ export default class LayerSwitcher extends Control {
    * TODO
    */
   registerViewEvents_(view) {
-    view.on('change:resolution', () => this.renderPanel);
+    view.on('change:resolution', () => this.renderPanel.bind(this));
   }
 
   /**
    * TODO
    */
   registerLayersEvents_(layers) {
-    layers.forEach(this.registerLayerEvents_);
-    layers.on('remove', () => this.renderPanel);
-    layers.on('add', () => this.onAddLayer_);
+    layers.forEach(this.registerLayerEvents_.bind(this));
+    layers.on('remove', () => this.renderPanel.bind(this));
+    layers.on('add', () => this.onAddLayer_.bind(this));
   }
 
   /**
    * TODO
    */
   registerLayerEvents_(layer) {
-    layer.on('change:visible', () => this.renderPanel);
-    // layer.on('change:opacity', this.renderPanel, this);
-    layer.on('change:extent', () => this.renderPanel);
+    layer.on('change:visible', () => this.renderPanel.bind(this));
+    layer.on('change:extent', () => this.renderPanel.bind(this));
   }
 
   /**
    * TODO
    */
   unregisterViewEvents_(view) {
-    view.un('change:resolution', () => this.renderPanel);
+    view.un('change:resolution', () => this.renderPanel.bind(this));
   }
 
   /**
    * TODO
    */
   unregisterLayersEvents_(layers) {
-    layers.forEach(this.unregisterLayerEvents_);
-    layers.un('remove', () => this.renderPanel);
-    layers.un('add', () => this.onAddLayer_);
+    layers.forEach(this.unregisterLayerEvents_.bind(this));
+    layers.un('remove', () => this.renderPanel.bind(this));
+    layers.un('add', () => this.onAddLayer_.bind(this));
   }
 
   /**
    * TODO
    */
   unregisterLayerEvents_(layer) {
-    layer.un('change:visible', () => this.renderPanel, this);
-    layer.un('change:extent', () => this.renderPanel, this);
+    layer.un('change:visible', () => this.renderPanel.bind(this));
+    layer.un('change:extent', () => this.renderPanel.bind(this));
   }
 
   /**
@@ -220,7 +218,7 @@ export default class LayerSwitcher extends Control {
     Array.prototype.forEach.call(imgElements, (imgElem) => {
       imgElem.addEventListener('error', (evt) => {
         const layerName = evt.target.getAttribute('data-layer-name');
-        const legendErrorUrl = concatUrlPaths([Config.THEME_URL, Layer.LEGEND_ERROR]);
+        const legendErrorUrl = concatUrlPaths([M.config.THEME_URL, Layer.LEGEND_ERROR]);
         const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
         if (!isNullOrEmpty(layer)) {
           layer.setLegendURL(legendErrorUrl);

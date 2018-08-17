@@ -4,12 +4,12 @@ import OLProjection from 'ol/proj/Projection';
 import OLInteraction from 'ol/interaction/Interaction';
 import MObject from 'facade/js/Object';
 import FacadePanzoombar from 'facade/js/control/Panzoombar';
-import LayerType from 'facade/js/layer/Type';
+import * as LayerType from 'facade/js/layer/Type';
 import 'impl-assets/css/ol';
+import 'impl-assets/css/custom';
 import Control from 'facade/js/control/Control';
 import FacadeWMS from 'facade/js/layer/WMS';
-import 'impl-assets/css/custom';
-import EventsManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import LayerBase from 'facade/js/layer/Layer';
 import Exception from 'facade/js/exception/exception';
 import { isNullOrEmpty, isArray, isString, isObject, includes, getScaleFromResolution, fillResolutions, generateResolutionsFromExtent } from 'facade/js/util/Utils';
@@ -29,14 +29,14 @@ export default class Map extends MObject {
    * @param {Mx.parameters.MapOptions} options
    * @api stable
    */
-  constructor(div, options = {}) {
+  constructor(div, facadeMap, options = {}) {
     super();
     /**
      * Facade map to implement
      * @private
      * @type {M.Map}
      */
-    this.facadeMap_ = null;
+    this.facadeMap_ = facadeMap;
 
     /**
      * Layers added to the map
@@ -124,6 +124,9 @@ export default class Map extends MObject {
       target: div.id,
       // renderer,
       view: new View(),
+    });
+    this.facadeMap_.on(EventType.COMPLETED, () => {
+      this.map_.updateSize();
     });
     this.map_.on('singleclick', this.onMapClick_.bind(this));
     this.map_.addInteraction(new OLInteraction({
@@ -334,15 +337,15 @@ export default class Map extends MObject {
     wmcMapLayers.forEach((wmcLayer) => {
       // TODO removing the WMC layer with ol3
       if (wmcLayer.selected === true && wmcLayer.isLoaded() === false) {
-        wmcLayer.on(EventsManager.LOAD, () => {
+        wmcLayer.on(EventType.LOAD, () => {
           wmcLayer.setLoaded(false);
-          this.layers_.remove(wmcLayer);
+          this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
           this.facadeMap_.removeWMS(wmcLayer.layers);
           this.facadeMap_.refreshWMCSelectorControl();
         });
       } else {
         wmcLayer.setLoaded(false);
-        this.layers_.remove(wmcLayer);
+        this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
         this.facadeMap_.removeWMS(wmcLayer.layers);
       }
       this.facadeMap_.refreshWMCSelectorControl();
@@ -448,7 +451,7 @@ export default class Map extends MObject {
   removeKML(layers) {
     const kmlMapLayers = this.getKML(layers);
     kmlMapLayers.forEach((kmlLayer) => {
-      this.layers_.remove(kmlLayer);
+      this.layers_ = this.layers_.filter(layer => !kmlLayer.equals(layer));
       kmlLayer.getImpl().destroy();
     }, this);
 
@@ -593,7 +596,7 @@ export default class Map extends MObject {
   removeWMS(layers) {
     const wmsMapLayers = this.getWMS(layers);
     wmsMapLayers.forEach((wmsLayer) => {
-      this.layers_.remove(wmsLayer);
+      this.layers_ = this.layers_.filter(layer => !wmsLayer.equals(layer));
       wmsLayer.getImpl().destroy();
     });
 
@@ -718,7 +721,7 @@ export default class Map extends MObject {
   removeWFS(layers) {
     const wfsMapLayers = this.getWFS(layers);
     wfsMapLayers.forEach((wfsLayer) => {
-      this.layers_.remove(wfsLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(wfsLayer));
       wfsLayer.getImpl().destroy();
     });
 
@@ -847,7 +850,7 @@ export default class Map extends MObject {
   removeWMTS(layers) {
     const wmtsMapLayers = this.getWMTS(layers);
     wmtsMapLayers.forEach((wmtsLayer) => {
-      this.layers_.remove(wmtsLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(wmtsLayer));
       wmtsLayer.getImpl().destroy();
     });
 
@@ -900,7 +903,7 @@ export default class Map extends MObject {
     const mbtilesMapLayers = this.getMBtiles(layers);
     mbtilesMapLayers.forEach((mbtilesLayer) => {
       // TODO removing the MBtiles layer with ol3
-      this.layers_.remove(mbtilesLayer);
+      this.layers_ = this.layers_.filter(layer => !layer.equals(mbtilesLayer));
     });
 
     return this;
@@ -1121,7 +1124,7 @@ export default class Map extends MObject {
     const mapControls = this.getControls(controls);
     mapControls.forEach((control) => {
       control.destroy();
-      this.controls_.remove(control);
+      this.controls_ = this.controls_.filter(control2 => !control2.equals(control));
     });
     return this;
   }
@@ -1566,7 +1569,7 @@ export default class Map extends MObject {
       }
     }
 
-    this.fire(EventsManager.CHANGE);
+    this.fire(EventType.CHANGE);
 
     return this;
   }
@@ -1707,7 +1710,7 @@ export default class Map extends MObject {
         // fires the completed event
         if (this.calculatedResolutions_ === false) {
           this.calculatedResolutions_ = true;
-          this.fire(EventsManager.COMPLETED);
+          this.fire(EventType.COMPLETED);
         }
       } else {
         EnvolvedExtent.calculate(this).then((extent) => {
@@ -1722,7 +1725,7 @@ export default class Map extends MObject {
             // fires the completed event
             if (this.calculatedResolutions_ === false) {
               this.calculatedResolutions_ = true;
-              this.fire(EventsManager.COMPLETED);
+              this.fire(EventType.COMPLETED);
             }
           }
         }).catch((error) => {
@@ -1800,7 +1803,7 @@ export default class Map extends MObject {
    * @returns {Object} core map used by the implementation
    */
   getContainer() {
-    return this.map_.overlayContainerStopEvent_;
+    return this.map_.getOverlayContainerStopEvent();
   }
 
   /**
@@ -1830,7 +1833,7 @@ export default class Map extends MObject {
       label.hide();
     }
 
-    this.facadeMap_.fire(EventsManager.CLICK, [{
+    this.facadeMap_.fire(EventType.CLICK, [{
       pixel,
       coord,
       vendor: evt,
@@ -1847,7 +1850,7 @@ export default class Map extends MObject {
     const pixel = evt.pixel;
     const coord = this.map_.getCoordinateFromPixel(pixel);
 
-    this.facadeMap_.fire(EventsManager.MOVE, [{
+    this.facadeMap_.fire(EventType.MOVE, [{
       pixel,
       coord,
       vendor: evt,

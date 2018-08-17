@@ -1,5 +1,5 @@
 import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
-import Config from 'configuration';
+
 import MObject from 'facade/js/Object';
 import FacadeLayer from 'facade/js/layer/Layer';
 
@@ -82,7 +82,7 @@ export default class LayerBase extends MObject {
      * @type {String}
      * @expose
      */
-    this.legendUrl_ = concatUrlPaths([Config.THEME_URL, FacadeLayer.LEGEND_DEFAULT]);
+    this.legendUrl_ = concatUrlPaths([M.config.THEME_URL, FacadeLayer.LEGEND_DEFAULT]);
   }
 
   /**
@@ -110,11 +110,9 @@ export default class LayerBase extends MObject {
    * @expose
    *
    */
-  /* eslint-disable */
   isQueryable() {
     return false;
   }
-  /* eslint-enable */
 
   /**
    * This function indicates if the layer is in range
@@ -273,7 +271,6 @@ export default class LayerBase extends MObject {
    * @function
    * @api stable
    */
-  /* eslint-disable */
   getNumZoomLevels() {
     return 16; // 16 zoom levels by default
   }
@@ -296,5 +293,4 @@ export default class LayerBase extends MObject {
    * @expose
    */
   selectFeatures(features, coord, evt) {}
-  /* eslint-enable */
 }

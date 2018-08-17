@@ -1,22 +1,28 @@
+/**
+ * @module M/control/Mouse
+ */
 import 'assets/css/controls/mouse';
 import mouseTemplate from 'templates/mouse';
 import MouseImpl from 'impl/control/Mouse';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
+import { compile as compileTemplate } from '../util/Template';
 
-export default class Mouse extends ControlBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a GetFeatureInfo
+ * control to provides a popup with information about the place
+ * where the user has clicked inside the map.
+ * @api
+ */
+class Mouse extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the map.
    *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor() {
     // implementation of this control
@@ -37,10 +43,10 @@ export default class Mouse extends ControlBase {
    * @function
    * @param {M.Map} map map to add the control
    * @returns {Promise} html response
-   * @api stable
+   * @api
    */
   createView(map) {
-    return Template.compile(mouseTemplate);
+    return compileTemplate(mouseTemplate);
   }
 
   /**
@@ -48,7 +54,7 @@ export default class Mouse extends ControlBase {
    * to this control
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     const equals = (obj instanceof Mouse);
@@ -61,6 +67,8 @@ export default class Mouse extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 Mouse.NAME = 'mouse';
+
+export default Mouse;

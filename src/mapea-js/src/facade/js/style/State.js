@@ -1,28 +1,30 @@
-export default class State {}
+/**
+ * @module M/style/state
+ */
 
 /**
  * Default style status
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-State.DEFAULT = 'default';
+export const DEFAULT = 'default';
 
 /**
  * New style status
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-State.NEW = 'new';
+export const NEW = 'new';
 
 /**
  * Selected style status
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-State.SELECTED = 'selected';
+export const SELECTED = 'selected';

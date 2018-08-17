@@ -1,8 +1,7 @@
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import * as parameter from 'facade/js/parameter/parameter';
-import Config from 'configuration';
-import Remote from 'facade/js/util/Remote';
-import EventsManager from 'facade/js/event/Manager';
+import { get as getRemote } from 'facade/js/util/Remote';
+import * as EventType from 'facade/js/event/eventtype';
 import { get as getProj, transformExtent } from 'ol/proj';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
@@ -89,7 +88,7 @@ export default class WMC extends Layer {
 
       // loads the layers from this WMC if it is not cached
       this.loadContextPromise = new Promise((success, fail) => {
-        Remote.get(this.url).then((response) => {
+        getRemote(this.url).then((response) => {
           let proj;
           if (this.map.defaultProj === false) {
             proj = this.map.getProjection().code;
@@ -118,7 +117,7 @@ export default class WMC extends Layer {
             nearest: true,
           });
         }
-        this.map.fire(EventsManager.CHANGE_WMC, this);
+        this.map.fire(EventType.CHANGE_WMC, this);
       });
     }
   }
@@ -158,7 +157,7 @@ export default class WMC extends Layer {
 
     // updates the z-index of the layers
     this.layers.forEach((layer, i) => layer.setZIndex(this.getZIndex() + i));
-    this.facadeLayer_.fire(EventsManager.LOAD, [this.layers]);
+    this.facadeLayer_.fire(EventType.LOAD, [this.layers]);
   }
 
   /**
@@ -188,7 +187,7 @@ export default class WMC extends Layer {
         this.loadContextPromise.then((context) => {
           this.maxExtent = context.maxExtent;
           if (isNullOrEmpty(this.extentProj_)) {
-            this.extentProj_ = parameter.projection(Config.DEFAULT_PROJ).code;
+            this.extentProj_ = parameter.projection(M.config.DEFAULT_PROJ).code;
           }
           this.maxExtent = transformExtent(this.maxExtent, this.extentProj_, olProjection);
           this.extentProj_ = olProjection;

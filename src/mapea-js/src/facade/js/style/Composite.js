@@ -1,13 +1,19 @@
+/**
+ * @module M/style/Composite
+ */
 import StyleBase from './Style';
 import { isNullOrEmpty, isArray, styleComparator } from '../util/Utils';
 // import StyleCluster from './Cluster';
 // import StyleProportional from './Proportional';
 
-export default class Composite extends StyleBase {
+/**
+ * @classdesc
+ * @api
+ */
+class Composite extends StyleBase {
   /**
-   * Abstract class
    * @constructor
-   * @api stable
+   * @api
    */
   constructor(options, impl) {
     // calls the super constructor
@@ -26,7 +32,7 @@ export default class Composite extends StyleBase {
    * @public
    * @param {M.layer.Vector} layer - Layer to apply the styles
    * @function
-   * @api stable
+   * @api
    */
   apply(layer) {
     this.layer_ = layer;
@@ -44,21 +50,16 @@ export default class Composite extends StyleBase {
    * @function
    * @param {M.style|Array<M.Style>} styles
    * @returns {M.style.Composite}
-   * @api stable
+   * @api
    */
-  add(stylesPara) {
-    let styles = stylesPara;
+  add(stylesParam) {
+    let styles = stylesParam;
     const layer = this.layer_;
     this.unapplyInternal(this.layer_);
     if (!isArray(styles)) {
       styles = [styles];
     }
     styles = styles.filter(style => style.constructor !== this.constructor);
-    if (!isNullOrEmpty(styles.find(style => !(style instanceof StyleCluster ||
-        style instanceof StyleProportional)))) {
-      this.styles_ = this.styles_.filter(style => style instanceof StyleCluster ||
-        style instanceof StyleProportional);
-    }
     styles.forEach((style) => {
       this.styles_ = this.styles_.filter(s => s.constructor !== style.constructor);
     });
@@ -76,10 +77,10 @@ export default class Composite extends StyleBase {
    * @function
    * @param {M.style|Array<M.Style>} styles
    * @returns {M.style.Composite}
-   * @api stable
+   * @api
    */
-  remove(stylesPara) {
-    let styles = stylesPara;
+  remove(stylesParam) {
+    let styles = stylesParam;
     const layer = this.layer_;
     if (!isArray(styles)) {
       styles = [styles];
@@ -98,7 +99,7 @@ export default class Composite extends StyleBase {
    * @function
    * @public
    * @return {Array<M.Style>} array styles
-   * @api stable
+   * @api
    */
   getStyles() {
     return this.styles_;
@@ -110,7 +111,7 @@ export default class Composite extends StyleBase {
    * @function
    * @public
    * @return {M.Style} array styles
-   * @api stable
+   * @api
    */
   getOldStyle() {
     return this.oldStyle_;
@@ -120,7 +121,7 @@ export default class Composite extends StyleBase {
    * This function clears the style Composite
    * @function
    * @public
-   * @api stable
+   * @api
    */
   clear() {
     this.remove(this.styles_);
@@ -130,7 +131,7 @@ export default class Composite extends StyleBase {
    * This function updates the style
    * @function
    * @private
-   * @api stable
+   * @api
    */
   unapplyInternal(layer) {
     const styles = this.styles_.concat(this).sort((style, style2) =>
@@ -147,7 +148,7 @@ export default class Composite extends StyleBase {
    * @function
    * @public
    * @param {M.layer.Vector} layer layer to unapply his style
-   * @api stable
+   * @api
    */
   unapplySoft(layer) {}
 
@@ -156,7 +157,7 @@ export default class Composite extends StyleBase {
    * @function
    * @public
    * @param {M.layer.Vector} layer layer to unapply his style
-   * @api stable
+   * @api
    */
   unapply(layer) {
     this.unapplyInternal(layer);
@@ -168,7 +169,7 @@ export default class Composite extends StyleBase {
    * @function
    * @private
    * @param {M.layer.Vector} layer layer to update the style
-   * @api stable
+   * @api
    */
 
   updateInternal_(layer) {
@@ -176,10 +177,12 @@ export default class Composite extends StyleBase {
       styleComparator(style, style2));
     styles.forEach((style) => {
       if (style instanceof Composite) {
-        style.applyInternal_(layer);
+        style.applyInternal(layer);
       } else if (style instanceof StyleBase) {
         style.apply(layer, true);
       }
     });
   }
 }
+
+export default Composite;

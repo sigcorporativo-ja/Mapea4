@@ -1,6 +1,13 @@
+/**
+ * @module M/style/Simple
+ */
 import StyleFeature from './Feature';
 
-export default class Simple extends StyleFeature {
+/**
+ * @classdesc
+ * @api
+ */
+class Simple extends StyleFeature {
   /**
    * @inheritDoc
    */
@@ -13,11 +20,10 @@ export default class Simple extends StyleFeature {
           const feature = featureVar;
           feature.style = null;
         });
-      }
-      else {
+      } else {
         layer.getFeatures().forEach((featureVar) => {
           const feature = featureVar;
-          feature.style = this.clone();
+          feature.setStyle(this.clone());
         });
       }
     }
@@ -28,9 +34,11 @@ export default class Simple extends StyleFeature {
    * This constant defines the order of style.
    * @constant
    * @public
-   * @api stable
+   * @api
    */
   static get ORDER() {
     return 1;
   }
 }
+
+export default Simple;

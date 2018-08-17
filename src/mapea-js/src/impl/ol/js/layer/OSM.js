@@ -1,6 +1,6 @@
 import FacadeMapbox from 'facade/js/layer/Mapbox';
 import FacadeOSM from 'facade/js/layer/OSM';
-import LayerType from 'facade/js/layer/Type';
+import * as LayerType from 'facade/js/layer/Type';
 import { isNullOrEmpty, generateResolutionsFromExtent } from 'facade/js/util/Utils';
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceOSM from 'ol/source/OSM';

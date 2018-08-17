@@ -259,7 +259,6 @@
 
 .m-areas>div.m-area>div.m-panel.m-layerswitcher>div.m-panel-controls {
   max-width: 50vw;
-  max-height: 80vh;
 }
 
 @media only screen and (max-width: 768px) {

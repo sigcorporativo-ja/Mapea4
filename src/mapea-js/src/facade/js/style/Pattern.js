@@ -1,324 +1,327 @@
-export default class Pattern {}
+/**
+ * @module M/style/pattern
+ */
+
 /**
  * Hatch style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.HATCH = "HATCH";
+export const HATCH = 'HATCH';
 
 /**
  * Cross style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.CROSS = "CROSS";
+export const CROSS = 'CROSS';
 
 /**
  * Dot style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.DOT = "DOT";
+export const DOT = 'DOT';
 
 /**
  * Cirlce style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.CIRCLE = "CIRCLE";
+export const CIRCLE = 'CIRCLE';
 
 /**
  * Square style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.SQUARE = "SQUARE";
+export const SQUARE = 'SQUARE';
 
 /**
  * Tile style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.TILE = "TILE";
+export const TILE = 'TILE';
 
 /**
  * Woven style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.WOVEN = "WOVEN";
+export const WOVEN = 'WOVEN';
 
 /**
  * Crosses style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.CROSSES = "CROSSES";
+export const CROSSES = 'CROSSES';
 
 /**
  * Caps style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.CAPS = "CAPS";
+export const CAPS = 'CAPS';
 
 /**
  * Nylon style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.NYLON = "NYLON";
+export const NYLON = 'NYLON';
 
 /**
  * Hexagon style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.HEXAGON = "HEXAGON";
+export const HEXAGON = 'HEXAGON';
 
 /**
  * Cementery style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.CEMETRY = "CEMETRY";
+export const CEMETRY = 'CEMETRY';
 
 /**
  * Sand style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.SAND = "SAND";
+export const SAND = 'SAND';
 
 /**
  * Conglomerate style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.CONGLOMERATE = "CONGLOMERATE";
+export const CONGLOMERATE = 'CONGLOMERATE';
 
 /**
  * Gravel style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.GRAVEL = "GRAVEL";
+export const GRAVEL = 'GRAVEL';
 
 /**
  * Brick style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.BRICK = "BRICK";
+export const BRICK = 'BRICK';
 
 /**
  * Dolomite style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.DOLOMITE = "DOLOMITE";
+export const DOLOMITE = 'DOLOMITE';
 
 /**
  * Coal style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.COAL = "COAL";
+export const COAL = 'COAL';
 
 /**
  * Brevvia style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.BRECCIA = "BRECCIA";
+export const BRECCIA = 'BRECCIA';
 
 /**
  * Clay style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.CLAY = "CLAY";
+export const CLAY = 'CLAY';
 
 /**
  * Flooded style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.FLOODED = "FLOODED";
+export const FLOODED = 'FLOODED';
 
 /**
  * Chaos style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.CHAOS = "CHAOS";
+export const CHAOS = 'CHAOS';
 
 /**
  * Grass style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.GRASS = "GRASS";
+export const GRASS = 'GRASS';
 
 /**
  * Swamp style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.SWAMP = "SWAMP";
+export const SWAMP = 'SWAMP';
 
 /**
  * Wave style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.WAVE = "WAVE";
+export const WAVE = 'WAVE';
 
 /**
  * Vine style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.VINE = "VINE";
+export const VINE = 'VINE';
 
 /**
  * Forest style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.FOREST = "FOREST";
+export const FOREST = 'FOREST';
 
 /**
  * Scrub style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.SCRUB = "SCRUB";
+export const SCRUB = 'SCRUB';
 
 /**
  * Tree style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.TREE = "TREE";
+export const TREE = 'TREE';
 
 /**
  * Pine style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.PINE = "PINE";
+export const PINE = 'PINE';
 
 /**
  * Pines style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.PINES = "PINES";
+export const PINES = 'PINES';
 
 /**
  * Rock style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.ROCK = "ROCK";
+export const ROCK = 'ROCK';
 
 /**
  * Rocks style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.ROCKS = "ROCKS";
+export const ROCKS = 'ROCKS';
 
 /**
  * Character style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.CHARACTER = "CHARACTER";
+export const CHARACTER = 'CHARACTER';
 
 /**
  * Icon style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.ICON = "ICON";
+export const ICON = 'ICON';
 
 /**
  * Image style pattern
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
-Pattern.IMAGE = "IMAGE";
+export const IMAGE = 'IMAGE';

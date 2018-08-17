@@ -1,16 +1,22 @@
+/**
+ * @module M/Label
+ */
 import LabelImpl from 'impl/Label';
 import Base from './Base';
 
-export default class Label extends Base {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a Label
+ * control to provides a popup with specified information
+ * @api
+ */
+class Label extends Base {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Label
-   * control to provides a popup with specified information
    * @constructor
    * @param {string} text - Text to show
    * @param {array} coordOpts - Coordinate to display popup
    * @extends {M.facade.Base}
-   * @api stable
+   * @api
    */
   constructor(text, coordOpts, panMapIfOutOfView) {
     // implementation of this control
@@ -25,7 +31,7 @@ export default class Label extends Base {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    * @export
    */
   hide() {
@@ -38,7 +44,7 @@ export default class Label extends Base {
    * @public
    * @function
    * @param {M.Map} map - Facade map
-   * @api stable
+   * @api
    * @export
    */
   show(map) {
@@ -51,7 +57,7 @@ export default class Label extends Base {
    * @public
    * @function
    * @returns {M.Popup} popup created
-   * @api stable
+   * @api
    * @export
    */
   getPopup() {
@@ -62,7 +68,7 @@ export default class Label extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getCoordinate() {
     return this.getImpl().getCoordinate();
@@ -72,18 +78,20 @@ export default class Label extends Base {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   setCoordinate(coord) {
     this.getImpl().coordinate = coord;
   }
-
-  /**
-   * Template popup for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
 }
+
+/**
+ * Template popup for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api
+ */
 Label.POPUP_TEMPLATE = 'label_popup.html';
+
+export default Label;

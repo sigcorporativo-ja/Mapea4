@@ -1,18 +1,21 @@
+/**
+ * @module M/style/Polygon
+ */
 import PolygonImpl from 'impl/style/Polygon';
 import Simple from './Simple';
 import { isNullOrEmpty, extendsObj } from '../util/Utils';
 
 /**
- * @namespace M.style.Polygon
+ * @classdesc
+ * Creates a style polygon
+ * @api
  */
-export default class Polygon extends Simple {
+class Polygon extends Simple {
   /**
-   * @classdesc
-   * Creates a style polygon
    * @constructor
    * @extends {M.style.Simple}
    * @param {Object} options - options style
-   * @api stable
+   * @api
    */
   constructor(optionsPara) {
     let options = optionsPara;
@@ -33,7 +36,7 @@ export default class Polygon extends Simple {
  * @const
  * @type {object}
  * @public
- * @api stable
+ * @api
  */
 Polygon.DEFAULT_NULL = {
   fill: {
@@ -45,3 +48,5 @@ Polygon.DEFAULT_NULL = {
     width: 1.5,
   },
 };
+
+export default Polygon;

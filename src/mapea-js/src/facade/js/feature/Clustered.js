@@ -1,16 +1,21 @@
+/**
+ * @module M/ClusteredFeature
+ */
 import Feature from './Feature';
 import { generateRandom } from '../util/Utils';
 
-export default class Clustered extends Feature {
+/**
+ * @classdesc
+ * Main constructor of the class. Create a clustered Feature
+ * @api
+ */
+class Clustered extends Feature {
   /**
-   * @classdesc
-   * Main constructor of the class. Create a clustered Feature
-   *
    * @constructor
    * @extends {M.Feature}
    * @param {Array<M.Feature>} features - array of features
    * @param {Object} attributes - attributes
-   * @api stable
+   * @api
    */
   constructor(features, attributes) {
     super(generateRandom('_mapea_cluster_'));
@@ -29,3 +34,5 @@ export default class Clustered extends Feature {
     return this.id === feature.id;
   }
 }
+
+export default Clustered;

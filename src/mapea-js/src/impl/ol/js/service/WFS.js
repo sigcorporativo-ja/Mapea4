@@ -1,4 +1,4 @@
-import Remote from 'facade/js/util/Remote';
+import { get as getRemote } from 'facade/js/util/Remote';
 import { addParameters, isNullOrEmpty } from 'facade/js/util/Utils';
 import Featuretype from '../format/wfs/DescribeFeatureType';
 
@@ -140,7 +140,7 @@ export default class WFS {
     const descFTypeOForm = this.describeFeatureTypeOutputFormat_;
     const descrFTypeFormat = new Featuretype(this.name_, descFTypeOForm, this.projection_);
     return new Promise((success, fail) => {
-      Remote.get(describeFeatureTypeUrl).then((response) => {
+      getRemote(describeFeatureTypeUrl).then((response) => {
         success(descrFTypeFormat.read(response));
       });
     });

@@ -1,16 +1,22 @@
+/**
+ * @module M/evt/EventsManager
+ */
 import { isNullOrEmpty, isFunction } from '../util/Utils';
 import EventListener from './Listener';
+import * as EventType from './eventtype';
 
-export default class EventsManager {
+/**
+ * @classdesc
+ * Main facade Object. This class creates a facede
+ * Object which has an implementation Object and
+ * provides the needed methods to access its implementation
+ * @api
+ */
+class EventsManager {
   /**
-   * @classdesc
-   * Main facade Object. This class creates a facede
-   * Object which has an implementation Object and
-   * provides the needed methods to access its implementation
-   *
    * @constructor
    * @param {Object} impl implementation object
-   * @api stable
+   * @api
    */
   constructor() {
     /**
@@ -28,21 +34,23 @@ export default class EventsManager {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   add(eventType, listener, optThis, once = false) {
+    const eventTypes = Object.values(EventType);
+    let eventKey;
     if (!isNullOrEmpty(eventType) &&
-      (EventsManager.eventTypes.indexOf(eventType) !== -1) && isFunction(listener)) {
+      (eventTypes.indexOf(eventType) !== -1) && isFunction(listener)) {
       if (isNullOrEmpty(this.events_[eventType])) {
         this.events_[eventType] = [];
       }
       if (this.indexOf(eventType, listener, optThis) === -1) {
         const EventsManagerListener = new EventListener(listener, optThis, once);
         this.events_[eventType].push(EventsManagerListener);
-        return EventsManagerListener.getEventKey();
+        eventKey = EventsManagerListener.getEventKey();
       }
     }
-    return undefined;
+    return eventKey;
   }
 
   /**
@@ -50,7 +58,7 @@ export default class EventsManager {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   remove(eventType, listener, optThis) {
     const listeners = this.events_[eventType];
@@ -67,7 +75,7 @@ export default class EventsManager {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   fire(eventType, args) {
     const EventsManagerListeners = [].concat(this.events_[eventType]);
@@ -86,7 +94,7 @@ export default class EventsManager {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   indexOf(eventType, listener, optThis) {
     let index = -1;
@@ -103,259 +111,4 @@ export default class EventsManager {
   }
 }
 
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.ADDED_TO_MAP = 'added:map';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.ADDED_TO_PANEL = 'added:panel';
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.ADDED_LAYER = 'added:layer';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.ADDED_WMC = 'added:wmc';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.ADDED_KML = 'added:kml';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.ADDED_WMS = 'added:wms';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.ADDED_WFS = 'added:wfs';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.ADDED_WMTS = 'added:wmts';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.ACTIVATED = 'activated';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.DEACTIVATED = 'deactivated';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.SHOW = 'show';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.HIDE = 'hide';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.DESTROY = 'destroy';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.SELECT_FEATURES = 'select:features';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.UNSELECT_FEATURES = 'unselect:features';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.HOVER_FEATURES = 'hover:features';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.LEAVE_FEATURES = 'leave:features';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.LOAD = 'load';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.COMPLETED = 'completed';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.CHANGE = 'change';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.CHANGE_WMC = 'change:wmc';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.CHANGE_PROJ = 'change:proj';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.CHANGE_STYLE = 'change:style';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.CLICK = 'click';
-
-/**
- * Event type
- * @public
- * @type {string}
- * @api stable
- * @expose
- */
-EventsManager.MOVE = 'move';
-
-/**
- * Event type
- * @private
- * @type {array<string>}
- */
-EventsManager.eventTypes = [
-  EventsManager.ADDED_TO_MAP,
-  EventsManager.ADDED_TO_PANEL,
-  EventsManager.ADDED_LAYER,
-  EventsManager.ADDED_WMC,
-  EventsManager.ADDED_KML,
-  EventsManager.ADDED_WMS,
-  EventsManager.ADDED_WFS,
-  EventsManager.ADDED_WMTS,
-  EventsManager.ACTIVATED,
-  EventsManager.DEACTIVATED,
-  EventsManager.SHOW,
-  EventsManager.HIDE,
-  EventsManager.DESTROY,
-  EventsManager.UNSELECT_FEATURES,
-  EventsManager.SELECT_FEATURES,
-  EventsManager.HOVER_FEATURES,
-  EventsManager.LEAVE_FEATURES,
-  EventsManager.LOAD,
-  EventsManager.COMPLETED,
-  EventsManager.CHANGE,
-  EventsManager.CHANGE_WMC,
-  EventsManager.CHANGE_PROJ,
-  EventsManager.CHANGE_STYLE,
-  EventsManager.CLICK,
-  EventsManager.MOVE,
-];
+export default EventsManager;

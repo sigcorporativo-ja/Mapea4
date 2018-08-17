@@ -109,8 +109,7 @@ export default class WFSTControls extends M.Plugin {
 
     if (M.utils.isNullOrEmpty(wfslayer)) {
       M.dialog.error(`Los controles <b>${this.controls.join(',')}</b> no se pueden añadir al mapa porque no existe una capa WFS cargada.`);
-    }
-    else {
+    } else {
       let addSave = false;
       let addClear = false;
       for (let i = 0, ilen = this.controls.length; i < ilen; i += 1) {
@@ -119,20 +118,17 @@ export default class WFSTControls extends M.Plugin {
           map.addControls([this.drawfeature_]);
           addSave = true;
           addClear = true;
-        }
-        else if (this.controls[i] === 'modifyfeature') {
+        } else if (this.controls[i] === 'modifyfeature') {
           this.modifyfeature_ = new ModifyFeature(wfslayer);
           map.addControls([this.modifyfeature_]);
           addSave = true;
           addClear = true;
-        }
-        else if (this.controls[i] === 'deletefeature') {
+        } else if (this.controls[i] === 'deletefeature') {
           this.deletefeature_ = new DeleteFeature(wfslayer);
           map.addControls([this.deletefeature_]);
           addSave = true;
           addClear = true;
-        }
-        else if (this.controls[i] === 'editattribute') {
+        } else if (this.controls[i] === 'editattribute') {
           this.editattibute_ = new EditAttribute(wfslayer);
           map.addControls([this.editattibute_]);
           addClear = true;
@@ -191,8 +187,7 @@ export default class WFSTControls extends M.Plugin {
     })[0];
     if (M.utils.isNullOrEmpty(wfslayer)) {
       M.dialog.error(`Los capa <b>${layername}</b> no es una capa WFS cargada.`);
-    }
-    else {
+    } else {
       const objControls = [];
       if (!M.utils.isNullOrEmpty(this.drawfeature_)) objControls.push(this.drawfeature_);
       if (!M.utils.isNullOrEmpty(this.modifyfeature_)) objControls.push(this.modifyfeature_);

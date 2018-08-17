@@ -5,7 +5,6 @@ const polyfill = () => {
    * This adds includes function to Array natively.
    * An optional equals function can be specified in order to
    * compare elements using that function
-   * @expose
    */
   /* eslint-disable */
   if (![].includes) {
@@ -13,7 +12,7 @@ const polyfill = () => {
      *
      * @public
      * @function
-     * @api stable
+     * @api
      */
     Array.prototype.includes = (searchElement) => {
       let O = Object(this);
@@ -25,8 +24,7 @@ const polyfill = () => {
       let k;
       if (n >= 0) {
         k = n;
-      }
-      else {
+      } else {
         k = len + n;
         if (k < 0) {
           k = 0;
@@ -56,7 +54,6 @@ const polyfill = () => {
      *
      * @public
      * @function
-     * @api stable
      */
     Array.prototype.remove = (elementToRemove) => {
       let O = Object(this);
@@ -68,8 +65,7 @@ const polyfill = () => {
       let k;
       if (n >= 0) {
         k = n;
-      }
-      else {
+      } else {
         k = len + n;
         if (k < 0) {
           k = 0;
@@ -94,27 +90,24 @@ const polyfill = () => {
       });
     };
   }
+
   /**
    * Object.equals()
    *
    * This adds map function to check equals object
-   * @expose
    */
   if (!Object.equals) {
     /**
      *
      * @public
      * @function
-     * @api stable
      */
     Object.equals = (obj1, obj2) => {
       if (obj1.equals !== null && ((typeof obj1.equals === 'function') && obj1.equals.call)) {
         return obj1.equals(obj2);
-      }
-      else if (obj2.equals !== null && ((typeof obj2.equals === 'function') && obj2.equals.call)) {
+      } else if (obj2.equals !== null && ((typeof obj2.equals === 'function') && obj2.equals.call)) {
         return obj2.equals(obj1);
-      }
-      else {
+      } else {
         let leftChain = [],
           rightChain = [];
         let p;
@@ -170,8 +163,7 @@ const polyfill = () => {
         for (p in obj2) {
           if (obj2.hasOwnProperty(p) !== obj1.hasOwnProperty(p)) {
             return false;
-          }
-          else if (typeof obj2[p] !== typeof obj1[p]) {
+          } else if (typeof obj2[p] !== typeof obj1[p]) {
             return false;
           }
         }
@@ -179,8 +171,7 @@ const polyfill = () => {
         for (p in obj1) {
           if (obj2.hasOwnProperty(p) !== obj1.hasOwnProperty(p)) {
             return false;
-          }
-          else if (typeof obj2[p] !== typeof obj1[p]) {
+          } else if (typeof obj2[p] !== typeof obj1[p]) {
             return false;
           }
 

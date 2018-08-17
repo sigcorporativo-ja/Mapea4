@@ -11,7 +11,8 @@ export default class Popup extends OLOverlay {
    * @api stable
    */
   constructor(options = {}) {
-    super();
+    super({});
+
     /**
      * Flag to indicate if map does pan or not
      * @private
@@ -70,10 +71,7 @@ export default class Popup extends OLOverlay {
     // Apply workaround to enable scrolling of content div on touch devices
     enableTouchScroll(this.content);
 
-    OLOverlay.call(this, {
-      element: this.container,
-      stopEvent: true,
-    });
+    this.setElement(this.container);
 
     map.getMapImpl().addOverlay(this);
   }
@@ -87,7 +85,7 @@ export default class Popup extends OLOverlay {
    * @api stable
    */
   show(coord, callback) {
-    this.position = coord;
+    this.setPosition(coord);
     if (this.panMapIfOutOfView) {
       this.panIntoView_(coord);
     }
@@ -131,7 +129,7 @@ export default class Popup extends OLOverlay {
   /**
    * @private
    */
-  static getContentFromContainer(html) {
+  getContentFromContainer(html) {
     return html.querySelector('div.m-body');
   }
 
@@ -145,7 +143,7 @@ export default class Popup extends OLOverlay {
       this.isAnimating_ = true;
       if (FacadeWindow.WIDTH > 768) {
         const tabHeight = 30; // 30px for tabs
-        const popupElement = this.getElement();
+        const popupElement = this.element;
         const popupWidth = popupElement.clientWidth + 20;
         const popupHeight = popupElement.clientHeight + 20 + tabHeight;
         const mapSize = this.getMap().getSize();
@@ -186,7 +184,7 @@ export default class Popup extends OLOverlay {
           }
 
           if (newPx[0] !== curPix[0] || newPx[1] !== curPix[1]) {
-            this.getMap().getView().setcenter(this.getMap().getCoordinateFromPixel(newPx));
+            this.getMap().getView().setCenter(this.getMap().getCoordinateFromPixel(newPx));
           }
         }
       }
@@ -237,9 +235,8 @@ export default class Popup extends OLOverlay {
    * @api stable
    */
   setContainer(html) {
-    this.element(html);
-    //      this.container.innerHTML = html.innerHTML;
-    this.content = Popup.getContentFromContainer(html);
+    this.setElement(html);
+    this.content = this.getContentFromContainer(html);
     enableTouchScroll(this.content);
   }
 

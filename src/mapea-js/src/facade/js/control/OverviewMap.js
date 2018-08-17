@@ -1,21 +1,26 @@
+/**
+ * @module M/control/OverviewMap
+ */
 import OverviewMapImpl from 'impl/control/OverviewMap';
 import overviewmapTemplate from 'templates/overviewmap';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import Template from '../util/Template';
+import { compile as compileTemplate } from '../util/Template';
 
-export default class OverviewMap extends ControlBase {
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a GetFeatureInfo
+ * control to provides a popup with information about the place
+ * where the user has clicked inside the map.
+ * @api
+ */
+class OverviewMap extends ControlBase {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a GetFeatureInfo
-   * control to provides a popup with information about the place
-   * where the user has clicked inside the map.
-   *
    * @constructor
    * @param {String} format format response
    * @extends {M.Control}
-   * @api stable
+   * @api
    */
   constructor(options = {}) {
     // implementation of this control
@@ -35,10 +40,10 @@ export default class OverviewMap extends ControlBase {
    * @function
    * @param {M.Map} map map to add the control
    * @returns {Promise} html response
-   * @api stable
+   * @api
    */
   createView(map) {
-    return Template.compile(overviewmapTemplate);
+    return compileTemplate(overviewmapTemplate);
   }
 
   /**
@@ -46,7 +51,7 @@ export default class OverviewMap extends ControlBase {
    * to this control
    *
    * @function
-   * @api stable
+   * @api
    */
   equals(obj) {
     const equals = (obj instanceof OverviewMap);
@@ -59,6 +64,8 @@ export default class OverviewMap extends ControlBase {
  * @const
  * @type {string}
  * @public
- * @api stable
+ * @api
  */
 OverviewMap.NAME = 'overviewmap';
+
+export default OverviewMap;

@@ -73,4 +73,13 @@ export default class DrawFeature extends WFSTBase {
     olMap.removeInteraction(this.interaction_);
     this.interaction_ = null;
   }
+
+  /**
+   * @public
+   * @function
+   * @api stable
+   */
+  setLayer(layer) {
+    this.layer_ = layer;
+  }
 }

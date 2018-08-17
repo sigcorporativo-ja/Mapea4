@@ -1,9 +1,9 @@
-import Template from 'facade/js/util/Template';
+import { compile as compileTemplate } from 'facade/js/util/Template';
 import popupKMLTemplate from 'templates/kml_popup';
 import Popup from 'facade/js/Popup';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import ClusteredFeature from 'facade/js/feature/Clustered';
-import EventsManager from 'facade/js/event/Manager';
+import * as EventType from 'facade/js/event/eventtype';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import Vector from './Vector';
@@ -95,7 +95,7 @@ export default class KML extends Vector {
           // removes previous features
           this.facadeVector_.clear();
           this.facadeVector_.addFeatures(features);
-          this.fire(EventsManager.LOAD, [features]);
+          this.fire(EventType.LOAD, [features]);
           if (!isNullOrEmpty(screenOverlay)) {
             const screenOverLayImg = ImplUtils.addOverlayImage(screenOverlay, map);
             this.setScreenOverlayImg(screenOverLayImg);
@@ -132,7 +132,7 @@ export default class KML extends Vector {
       const featureDesc = feature.getAttribute('description');
       const featureCoord = feature.getImpl().getOLFeature().getGeometry().getFirstCoordinate();
 
-      const htmlAsText = Template.compile(popupKMLTemplate, {
+      const htmlAsText = compileTemplate(popupKMLTemplate, {
         vars: {
           name: featureName,
           desc: featureDesc,

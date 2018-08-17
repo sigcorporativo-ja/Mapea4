@@ -22,7 +22,6 @@ export default class SearchstreetIntegrated extends Searchstreet {
      * @private
      * @type {M.impl.control.SearchstreetIntegrated}
      */
-
     this.impl = new SearchstreetIntegratedControlImpl();
     if (M.utils.isUndefined(SearchstreetIntegratedControlImpl)) {
       M.exception('La implementación usada no puede crear controles SearchstreetIntegrated');
@@ -67,7 +66,7 @@ export default class SearchstreetIntegrated extends Searchstreet {
 
     // events
     // JGL20170818: traslado gestión evento a autocomplete
-    this.button_.addEventListener('click', this.searchClick_.bind(this));
+    this.button_.addEventListener('click', this.searchClick.bind(this));
     this.clear_.addEventListener('click', this.clearSearchs_.bind(this));
 
 
@@ -117,12 +116,12 @@ export default class SearchstreetIntegrated extends Searchstreet {
     this.element_.classList.remove('shown');
     const controls = this.facadeMap_.getControls();
     for (let x = 0, ilen = controls.length; x < ilen; x += 1) {
-      if (controls[x].name_ === 'searchstreetgeosearch') {
-        controls[x].ctrlGeosearch.getImpl().layer_.clear();
+      if (controls[x].name === 'searchstreetgeosearch') {
+        controls[x].ctrlGeosearch.getImpl().getLayer().clear();
       }
     }
     this.facadeMap_.removePopup();
-    this.getImpl().removePoints_();
+    this.getImpl().removePoints();
     this.input_.value = '';
     this.resultsContainer_.innerHTML = '';
     this.resultsAutocomplete_.innerHTML = '';
@@ -136,7 +135,7 @@ export default class SearchstreetIntegrated extends Searchstreet {
    * @function
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
-  searchClick_(evt) {
+  searchClick(evt) {
     evt.preventDefault();
 
     if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
@@ -176,7 +175,7 @@ export default class SearchstreetIntegrated extends Searchstreet {
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-searchs');
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-searchs');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle('hidden');

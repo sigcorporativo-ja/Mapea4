@@ -1,6 +1,6 @@
 import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'facade/js/util/Utils';
-import Remote from 'facade/js/util/Remote';
-import EventsManager from 'facade/js/event/Manager';
+import { get as getRemote } from 'facade/js/util/Remote';
+import * as EventType from 'facade/js/event/eventtype';
 import { get as getProj } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceWMTS from 'ol/source/WMTS';
@@ -117,7 +117,7 @@ export default class WMTS extends LayerBase {
           matrixSet,
           format,
           projection,
-          tileGrid: new ol.tilegrid.WMTS({
+          tileGrid: new OLTileGridWMTS({
             origin: getBottomLeft(olExtent),
             resolutions,
             matrixIds,
@@ -194,7 +194,7 @@ export default class WMTS extends LayerBase {
     // activates animation always for WMTS layers
     this.ol3Layer.set('animated', true);
 
-    this.fire(EventsManager.ADDED_TO_MAP, this);
+    this.fire(EventType.ADDED_TO_MAP, this);
   }
 
   /**
@@ -235,7 +235,7 @@ export default class WMTS extends LayerBase {
     const getCapabilitiesUrl = getWMTSGetCapabilitiesUrl(this.url);
     const parser = new OLFormatWMTSCapabilities();
     return new Promise((success, fail) => {
-      Remote.get(getCapabilitiesUrl).then((response) => {
+      getRemote(getCapabilitiesUrl).then((response) => {
         const getCapabilitiesDocument = response.xml;
         const parsedCapabilities = parser.read(getCapabilitiesDocument);
         success.call(this, parsedCapabilities);
