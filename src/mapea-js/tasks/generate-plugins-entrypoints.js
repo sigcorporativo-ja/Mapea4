@@ -6,7 +6,7 @@ const outputFile = path.resolve(__dirname, '../webpack-config/entry-points-plugi
 const entrypointFile = {};
 
 fs.readdirSync(inputPath).forEach((nameFolder) => {
-  const pathName = path.resolve(__dirname, '../dist/plugins/', nameFolder);
+  const pathName = `dist/plugins/${nameFolder}/${nameFolder}.ol.min`;
   entrypointFile[pathName] = path.resolve(inputPath, nameFolder, 'facade/js', `${nameFolder}.js`);
 });
 const content = JSON.stringify(entrypointFile);
