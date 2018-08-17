@@ -67,7 +67,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
   addTo(map) {
     this.map_ = map;
     this.control_ = new SearchstreetGeosearchControl(this.parameters_);
-    map._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
+    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
 
     this.control_.on(M.evt.ADDED_TO_MAP, () => {
       this.fire(M.evt.ADDED_TO_MAP);
@@ -97,9 +97,9 @@ export default class SearchstreetGeosearch extends M.Plugin {
     });
     // JGL20170816: foco al input al desplegar panel
     this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {
-      this.panel_._buttonPanel.addEventListener('click', (evt) => {
+      this.panel_.getButtonPanel.addEventListener('click', (evt) => {
         if (!this.panel_.collapsed) {
-          this.control_.input_.focus();
+          this.control_.getInput().focus();
         }
       });
     });

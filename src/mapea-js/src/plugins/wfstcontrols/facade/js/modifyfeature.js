@@ -82,7 +82,7 @@ export default class ModifyFeature extends M.Control {
    * @api stable
    */
   setLayer(layer) {
-    this.getImpl().layer_ = layer;
+    this.getImpl().setLayer(layer);
   }
 }
 

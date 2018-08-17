@@ -62,7 +62,7 @@ export default class GeosearchIntegrated extends GeosearchControl {
 
     // search buntton
     const btnSearch = this.element_.getElementsByTagName('button')['m-searchstreetgeosearch-search-btn'];
-    btnSearch.addEventListener('click', this.searchClick_);
+    btnSearch.addEventListener('click', this.searchClick);
     // help buntton
     const btnHelp = this.element_.getElementsByTagName('button')['m-searchstreetgeosearch-help-btn'];
     btnHelp.addEventListener('click', (evt) => {
@@ -123,7 +123,7 @@ export default class GeosearchIntegrated extends GeosearchControl {
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.toggle('top-extra-search');
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.toggle('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle('hidden');

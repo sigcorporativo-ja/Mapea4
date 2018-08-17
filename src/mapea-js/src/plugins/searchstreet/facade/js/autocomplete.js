@@ -74,20 +74,20 @@ export default class Autocomplete extends M.Plugin {
       if (e.keyCode === 13) {
         const controls = this.map_.getControls();
         for (let i = 0, ilen = controls.length; i < ilen; i += 1) {
-          if (controls[1].name_ === 'searchstreet') {
+          if (controls[1].name === 'searchstreet') {
             if (this.controls[1].indexOf(',') < 0) {
               this.searchMunicipality_(this.controls[1]);
             } else {
-              controls[1].searchClick_(e);
+              controls[1].searchClick(e);
               controls[1].completed = false;
             }
-          } else if (controls[1].name_ === 'searchstreetgeosearch') {
+          } else if (controls[1].name === 'searchstreetgeosearch') {
             if (!M.utils.isNullOrEmpty(selectedResult) && (this.controls[1].indexOf(',') < 0)) {
               this.searchMunicipality_(this.controls[1]);
             } else {
-              controls[1].ctrlSearchstreet.searchClick_(e);
+              controls[1].ctrlSearchstreet.searchClick(e);
               controls[1].ctrlSearchstreet.completed = false;
-              controls[1].ctrlGeosearch.searchClick_(e);
+              controls[1].ctrlGeosearch.searchClick(e);
             }
           }
         }
@@ -303,12 +303,12 @@ export default class Autocomplete extends M.Plugin {
                     this.resultsContainer_.innerHTML = '';
                     if (!M.utils.isUndefined(this.evt)) {
                       for (let i = 0, ilen = controls.length; i < ilen; i += 1) {
-                        if (controls[1].name_ === 'searchstreetgeosearch') {
-                          controls[1].ctrlSearchstreet.searchClick_(this.evt);
+                        if (controls[1].name === 'searchstreetgeosearch') {
+                          controls[1].ctrlSearchstreet.searchClick(this.evt);
                           controls[1].ctrlSearchstreet.completed = false;
-                          controls[1].ctrlGeosearch.searchClick_(this.evt);
-                        } else if (controls[1].name_ === 'searchstreet') {
-                          controls[1].searchClick_(this.evt);
+                          controls[1].ctrlGeosearch.searchClick(this.evt);
+                        } else if (controls[1].name === 'searchstreet') {
+                          controls[1].searchClick(this.evt);
                           controls[1].completed = false;
                         }
                       }
@@ -317,7 +317,7 @@ export default class Autocomplete extends M.Plugin {
                   } else {
                     const autocompleteResults = this.resultsContainer_.querySelectorAll('div.autocomplete');
                     for (let m = 0, ilen2 = controls.length; m < ilen2; m += 1) {
-                      if (controls[m].name_ === 'searchstreetgeosearch') {
+                      if (controls[m].name === 'searchstreetgeosearch') {
                         if (controls[m].ctrlSearchstreet.completed === true) {
                           controls[m].ctrlSearchstreet.completed = false;
                           this.resultsContainer_.innerHTML = '';
@@ -326,7 +326,7 @@ export default class Autocomplete extends M.Plugin {
                             this.evtClickMunicipaly_(autocompleteResults[h]);
                           }
                         }
-                      } else if (controls[m].name_ === 'searchstreet') {
+                      } else if (controls[m].name === 'searchstreet') {
                         if (controls[m].completed === true) {
                           controls[m].completed = false;
                           this.resultsContainer_.innerHTML = '';
@@ -340,12 +340,12 @@ export default class Autocomplete extends M.Plugin {
                   }
                 } else {
                   for (let y = 0, ilen4 = controls.length; y < ilen4; y += 1) {
-                    if (controls[y].name_ === 'searchstreet') {
+                    if (controls[y].name === 'searchstreet') {
                       if (controls[y].completed === true) {
                         this.resultsContainer_.innerHTML = '';
                         controls[y].completed = false;
                       }
-                    } else if (controls[y].name_ === 'searchstreetgeosearch') {
+                    } else if (controls[y].name === 'searchstreetgeosearch') {
                       if (controls[y].ctrlSearchstreet.completed === true) {
                         this.resultsContainer_.innerHTML = '';
                         controls[y].ctrlSearchstreet.completed = false;
@@ -356,18 +356,18 @@ export default class Autocomplete extends M.Plugin {
               });
             } else {
               for (let r = 0, ilen4 = controls.length; r < ilen4; r += 1) {
-                if (controls[r].name_ === 'searchstreet') {
+                if (controls[r].name === 'searchstreet') {
                   controls[r].completed = false;
-                } else if (controls[r].name_ === 'searchstreetgeosearch') {
+                } else if (controls[r].name === 'searchstreetgeosearch') {
                   controls[r].ctrlSearchstreet.completed = false;
                 }
               }
             }
           } else {
             for (let g = 0, ilen6 = controls.length; g < ilen6; g += 1) {
-              if (controls[g].name_ === 'searchstreet') {
+              if (controls[g].name === 'searchstreet') {
                 controls[g].completed = false;
-              } else if (controls[g].name_ === 'searchstreetgeosearch') {
+              } else if (controls[g].name === 'searchstreetgeosearch') {
                 controls[g].ctrlSearchstreet.completed = false;
               }
             }
@@ -466,13 +466,13 @@ export default class Autocomplete extends M.Plugin {
         this.resultsContainer_.innerHTML = '';
         controls.forEach((controlVar) => {
           const control = controlVar;
-          if (control.name_ === 'searchstreet') {
-            control.searchClick_(e);
+          if (control.name === 'searchstreet') {
+            control.searchClick(e);
             control.completed = false;
-          } else if (control.name_ === 'searchstreetgeosearch') {
-            control.ctrlSearchstreet.searchClick_(e);
+          } else if (control.name === 'searchstreetgeosearch') {
+            control.ctrlSearchstreet.searchClick(e);
             control.ctrlSearchstreet.completed = false;
-            control.ctrlGeosearch.searchClick_(e);
+            control.ctrlGeosearch.searchClick(e);
           }
         });
       } else {

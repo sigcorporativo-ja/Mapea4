@@ -78,4 +78,13 @@ export default class ClearFeature extends M.impl.Control {
     this.layer_ = null;
     this.facadeMap_.getMapImpl().removeControl(this);
   }
+
+  /**
+   * @public
+   * @function
+   * @api stable
+   */
+  setLayer(layer) {
+    this.layer_ = layer;
+  }
 }

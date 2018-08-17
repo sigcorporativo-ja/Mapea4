@@ -138,12 +138,10 @@ export default class Geosearchbylocation extends M.Plugin {
       locationPanel.addClassName('m-with-geosearchbylocation');
       streetViewPanel.addClassName('m-with-geosearchbylocation');
       this.panel_.addClassName('m-with-location m-with-streetview');
-    }
-    else if (!M.utils.isNullOrEmpty(locationPanel)) {
+    } else if (!M.utils.isNullOrEmpty(locationPanel)) {
       locationPanel.addClassName('m-with-geosearchbylocation');
       this.panel_.addClassName('m-with-location');
-    }
-    else if (!M.utils.isNullOrEmpty(streetViewPanel)) {
+    } else if (!M.utils.isNullOrEmpty(streetViewPanel)) {
       streetViewPanel.addClassName('m-with-geosearchbylocation');
       this.panel_.addClassName('m-with-streetview');
     }

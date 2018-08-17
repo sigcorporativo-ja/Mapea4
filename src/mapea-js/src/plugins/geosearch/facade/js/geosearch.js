@@ -1,5 +1,4 @@
 import GeosearchControl from './geosearchcontrol';
-import GeosearchLayer from './geosearchlayer';
 import '../assets/css/geosearch';
 
 export default class Geosearch extends M.Plugin {
@@ -94,7 +93,7 @@ export default class Geosearch extends M.Plugin {
   addTo(map) {
     this.map_ = map;
 
-    map._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
+    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
 
     this.control_ = new GeosearchControl(
       this.url_,

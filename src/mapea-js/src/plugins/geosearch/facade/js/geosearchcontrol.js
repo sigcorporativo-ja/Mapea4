@@ -189,10 +189,10 @@ export default class GeosearchControl extends M.Control {
 
     // input search
     this.input_ = this.element_.getElementsByTagName('input')['m-geosearch-search-input'];
-    this.input_.addEventListener('keyup', this.searchClick_.bind(this));
+    this.input_.addEventListener('keyup', this.searchClick.bind(this));
     // search buntton
     const btnSearch = this.element_.getElementsByTagName('button')['m-geosearch-search-btn'];
-    btnSearch.addEventListener('click', this.searchClick_.bind(this));
+    btnSearch.addEventListener('click', this.searchClick.bind(this));
 
     // help buntton
     const btnHelp = this.element_.getElementsByTagName('button')['m-geosearch-help-btn'];
@@ -219,7 +219,7 @@ export default class GeosearchControl extends M.Control {
    * @private
    * @function
    */
-  searchClick_(evt) {
+  searchClick(evt) {
     evt.preventDefault();
 
     if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
@@ -251,7 +251,7 @@ export default class GeosearchControl extends M.Control {
       evt.target = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
       this.resultsClick_(evt);
     }
-    this.getImpl().facadeMap_.removePopup();
+    this.facadeMap_.removePopup();
     const solrid = evt.currentTarget.id;
     this.getImpl().resultClick(solrid);
   }
@@ -552,7 +552,7 @@ export default class GeosearchControl extends M.Control {
    * @function
    */
   resultsClick_(evt) {
-    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-search');
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle(GeosearchControl.HIDDEN_RESULTS_CLASS);

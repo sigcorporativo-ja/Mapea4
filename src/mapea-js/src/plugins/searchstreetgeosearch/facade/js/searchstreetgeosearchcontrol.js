@@ -3,6 +3,11 @@ import SearchstreetIntegrated from './searchstreetintegratedcontrol';
 import GeosearchIntegrated from './geosearchintegratedcontrol';
 import SearchStreetGeosearch from './searchstreetgeosearch';
 
+/**
+ * Name controls
+ * @type {string}
+ */
+const name = 'searchstreetgeosearch';
 export default class SearchstreetGeosearchControl extends M.Control {
   /**
    * @classdesc Main constructor of the class. Creates a SearchstreetGeosearch
@@ -22,8 +27,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
       M.exception('La implementación usada no puede crear controles SearchStreetGeosearch');
     }
 
-    super(impl, SearchstreetGeosearchControl.name_);
-
+    super(impl, name);
 
     /**
      * INE code to specify the search
@@ -104,7 +108,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
      * @private
      * @type {string}
      */
-    this.name_ = 'searchstreetgeosearch';
+    this.name_ = name;
 
     /**
      * Template SearchstreetGeosearch
@@ -147,13 +151,11 @@ export default class SearchstreetGeosearchControl extends M.Control {
     this.on(M.evt.ADDED_TO_MAP, (evt) => {
       if (M.utils.isUndefined(this.locality_)) {
         this.ctrlSearchstreet = new SearchstreetIntegrated(this.urlSearchstret_);
-      }
-      else {
+      } else {
         this.ctrlSearchstreet = new SearchstreetIntegrated(this.urlSearchstret_, this.locality_);
       }
-      let impl = this.ctrlSearchstreet.getImpl();
-      let view = this.ctrlSearchstreet.createView(this.html, map);
-      impl.addTo(map, this.html);
+      const impl2 = this.ctrlSearchstreet.getImpl();
+      impl2.addTo(map, this.html);
 
       this.ctrlGeosearch = new GeosearchIntegrated(
         this.urlGeosearch_,
@@ -161,9 +163,8 @@ export default class SearchstreetGeosearchControl extends M.Control {
         this.handlerGeosearch_,
         this.paramsGeosearch_,
       );
-      impl = this.ctrlGeosearch.getImpl();
-      view = this.ctrlGeosearch.createView(this.html, this.facadeMap_);
-      impl.addTo(map, this.html);
+      // const view2 = this.ctrlGeosearch.createView(this.html, this.facadeMap_);
+      impl2.addTo(map, this.html);
 
       let completados = false;
 

@@ -72,7 +72,7 @@ export default class DrawFeature extends M.Control {
   }
 
   /**
-   * This function set layer for draw
+   * This function set layer for delete features
    *
    * @public
    * @function
@@ -80,7 +80,7 @@ export default class DrawFeature extends M.Control {
    * @api stable
    */
   setLayer(layer) {
-    this.getImpl().layer_ = layer;
+    this.getImpl().setLayer(layer);
   }
 }
 

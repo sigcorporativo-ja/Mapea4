@@ -221,8 +221,8 @@ export default class SearchstreetControl extends M.Control {
     // events
     // JGL20170816: traslado gestión evento a autocomplete
 
-    this.button_.addEventListener('click', this.searchClick_.bind(this));
-    this.input_.addEventListener('keyup', this.searchClick_.bind(this));
+    this.button_.addEventListener('click', this.searchClick.bind(this));
+    this.input_.addEventListener('keyup', this.searchClick.bind(this));
     this.clear_.addEventListener('click', this.clearSearchs_.bind(this));
     // results container
     this.resultsContainer_ = this.element_.getElementsByTagName('div')['m-searchstreet-results'];
@@ -276,7 +276,7 @@ export default class SearchstreetControl extends M.Control {
    * @function
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
-  searchClick_(evt) {
+  searchClick(evt) {
     evt.preventDefault();
     if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
       this.resultsAutocomplete_.classList.remove(SearchstreetControl.MINIMUM);
@@ -491,7 +491,7 @@ export default class SearchstreetControl extends M.Control {
 
       this.facadeMap_.removePopup();
       if (this.getImpl().listPoints.length > 0) {
-        this.getImpl().removePoints_();
+        this.getImpl().removePoints();
       }
       if (!M.utils.isUndefined(resultsTemplateVars.docs[0])) {
         this.getImpl().drawPoints(resultsTemplateVars.docs);
@@ -664,7 +664,7 @@ export default class SearchstreetControl extends M.Control {
   clearSearchs_() {
     this.element_.classList.remove('shown');
     this.facadeMap_.removePopup();
-    this.getImpl().removePoints_();
+    this.getImpl().removePoints();
     this.input_.value = '';
     this.resultsContainer_.innerHTML = '';
     this.resultsAutocomplete_.innerHTML = '';
@@ -678,7 +678,7 @@ export default class SearchstreetControl extends M.Control {
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-search');
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle(SearchstreetControl.HIDDEN_RESULTS_CLASS);

@@ -95,7 +95,7 @@ export default class SaveFeature extends M.Control {
    * @api stable
    */
   setLayer(layer) {
-    this.getImpl().layer_ = layer;
+    this.getImpl().setLayer(layer);
   }
 }
 

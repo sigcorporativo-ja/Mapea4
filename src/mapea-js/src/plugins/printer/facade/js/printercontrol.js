@@ -279,7 +279,7 @@ export default class PrinterControl extends M.Control {
       }, this]);
 
       while (this.queueContainer_.fistChild) {
-        this.queueContainer_.(this.queueContainer_.firsChild);
+        this.queueContainer_(this.queueContainer_.firsChild);
       }
     });
 
@@ -343,8 +343,6 @@ export default class PrinterControl extends M.Control {
   printClick_(evt) {
     evt.preventDefault();
 
-    console.log(this);
-
     this.getCapabilities().then((capabilities) => {
       this.getPrintData().then((printData) => {
         const printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
@@ -363,15 +361,13 @@ export default class PrinterControl extends M.Control {
             try {
               response = JSON.parse(response.text);
               downloadUrl = response.getURL;
-            }
-            catch (err) {
+            } catch (err) {
               M.Exception(err);
             }
             // sets the download URL
             queueEl.setAttribute(PrinterControl.DOWNLOAD_ATTR_NAME, downloadUrl);
             queueEl.addEventListener('click', this.dowloadPrint);
-          }
-          else {
+          } else {
             M.dialog.error('Se ha producido un error en la impresión');
           }
         });
@@ -395,8 +391,7 @@ export default class PrinterControl extends M.Control {
           let capabilities = {};
           try {
             capabilities = JSON.parse(response.text);
-          }
-          catch (err) {
+          } catch (err) {
             M.exception(err);
           }
           success(capabilities);
@@ -499,8 +494,7 @@ export default class PrinterControl extends M.Control {
         if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
           encodedPage.bbox = ol.proj.transformExtent(encodedPage.bbox, projection.code, 'EPSG:3857');
         }
-      }
-      else if (this.forceScale_ === true) {
+      } else if (this.forceScale_ === true) {
         const center = this.map_.getCenter();
         encodedPage.center = [center.x, center.y];
         encodedPage.scale = this.map_.getScale();
