@@ -70,7 +70,7 @@ module.exports = {
   plugins: [
     new AllowMutateEsmExports(),
     new MiniCssExtractPlugin({
-      filename: '[name].min.css',
+      filename: '[name].css',
     }),
   ],
 };
