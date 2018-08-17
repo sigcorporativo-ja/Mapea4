@@ -222,7 +222,7 @@ export default class GeosearchControl extends M.Control {
   searchClick_(evt) {
     evt.preventDefault();
 
-    if (evt.type !== 'click') {
+    if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
       // resets the results
       this.results_.length = 0;
 
@@ -230,8 +230,7 @@ export default class GeosearchControl extends M.Control {
       const query = this.input_.value;
       if (M.utils.isNullOrEmpty(query)) {
         M.dialog.info('Debe introducir una búsqueda.');
-      }
-      else {
+      } else {
         this.search_(query, this.showResults_);
       }
     }
@@ -248,7 +247,7 @@ export default class GeosearchControl extends M.Control {
     const evt = evtParam;
     evt.preventDefault();
     // hidden results on click for mobile devices
-    if (M.Window.WIDTH <= M.config.MOBILE_WIDTH) {
+    if (M.window.WIDTH <= M.config.MOBILE_WIDTH) {
       evt.target = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
       this.resultsClick_(evt);
     }
@@ -291,8 +290,7 @@ export default class GeosearchControl extends M.Control {
           let results;
           try {
             results = JSON.parse(response.text);
-          }
-          catch (err) {
+          } catch (err) {
             M.exception(`La respuesta no es un JSON válido: ${err}`);
           }
           processor.call(this, results);
@@ -466,8 +464,7 @@ export default class GeosearchControl extends M.Control {
     if (scrollIsDown && this.scrollIsUp_) {
       this.scrollIsUp_ = false;
       this.scrollSearch_();
-    }
-    else if (!scrollIsDown) {
+    } else if (!scrollIsDown) {
       // updates the scroll state
       this.scrollIsUp_ = true;
     }
@@ -501,14 +498,12 @@ export default class GeosearchControl extends M.Control {
     if (this.helpShown_ === true) {
       this.getImpl().hideHelp();
       this.helpShown_ = false;
-    }
-    else {
+    } else {
       M.remote.get(this.helpUrl_).then((response) => {
         let help;
         try {
           help = JSON.parse(response.text);
-        }
-        catch (err) {
+        } catch (err) {
           M.Exception(`La respuesta no es un JSON válido: ${err}`);
         }
         M.template.compile(GeosearchControl.HELP_TEMPLATE, {
@@ -560,7 +555,6 @@ export default class GeosearchControl extends M.Control {
     this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
-
     this.resultsContainer_.classList.toggle(GeosearchControl.HIDDEN_RESULTS_CLASS);
   }
 
@@ -595,16 +589,14 @@ export default class GeosearchControl extends M.Control {
     if (!M.utils.isUndefined(results.spatial_response)) {
       total = results.spatial_response.numFound;
       this.spatialSearch_ = true;
-    }
-    else {
+    } else {
       total = results.response.numFound;
       this.spatialSearch_ = false;
     }
     const docs = this.getDocsFromResults_(results);
     if (append === true) {
       this.results_ = this.results_.concat(docs);
-    }
-    else {
+    } else {
       this.results_ = docs;
     }
     const partial = (this.spatialSearch_ && M.utils.isNullOrEmpty(results.spatial_response.docs));
@@ -615,8 +607,7 @@ export default class GeosearchControl extends M.Control {
         total,
         partial,
       };
-    }
-    else {
+    } else {
       resultsTemplateVar = {
         docs,
         total,
@@ -638,8 +629,7 @@ export default class GeosearchControl extends M.Control {
     let docs = [];
     if (this.spatialSearch_) {
       docs = results.spatial_response.docs;
-    }
-    else {
+    } else {
       docs = results.response.docs;
     }
     const hiddenAttributes = ['geom', '_version_', 'keywords', 'solrid'];
@@ -672,8 +662,7 @@ export default class GeosearchControl extends M.Control {
     let total = 0;
     if (!M.utils.isUndefined(results.spatial_response)) {
       total = results.spatial_response.numFound;
-    }
-    else {
+    } else {
       total = results.response.numFound;
     }
     if ((this.results_.length === total) &&

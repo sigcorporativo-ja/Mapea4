@@ -90,21 +90,21 @@ export default class SearchstreetIntegrated extends Searchstreet {
               results = JSON.parse(response.text);
               if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
                 M.dialog.error(`El código del municipio  ${this.codIne_} no es válido`);
-              }
-              else {
+              } else {
                 this.getMunProv_(results);
                 this.element_.getElementsByTagName('span').codIne.innerHTML = `Búsquedas en  ${this.municipio_} ( ${this.provincia_} )`;
               }
             }
-          }
-          catch (err) {
+          } catch (err) {
             M.exception(`La respuesta no es un JSON válido:  ${err}`);
           }
         });
       })(this.searchTime_);
     }
-    const parent = this.resultsContainer_;
-    parent.removeChild(this.searchingResult_);
+
+    // const parent = this.resultsContainer_;
+    // parent.removeChild(this.searchingResult_);
+    this.searchingResult_.parentNode.removeChild(this.searchingResult_);
   }
 
   /**
@@ -151,8 +151,7 @@ export default class SearchstreetIntegrated extends Searchstreet {
       if (!M.utils.isNullOrEmpty(query)) {
         if (query.length < this.minAutocomplete_) {
           this.completed = false;
-        }
-        else {
+        } else {
           this.completed = true;
         }
         if (!M.utils.isUndefined(this.codIne_) && !M.utils.isNullOrEmpty(this.codIne_)) {
@@ -162,8 +161,7 @@ export default class SearchstreetIntegrated extends Searchstreet {
             query = query.substring(0, pos);
           }
           this.search_(`${query} ,  ${this.municipio_}  ( ${this.provincia_} ), ${this.showResults_}`);
-        }
-        else {
+        } else {
           this.search_(query, this.showResults_);
         }
       }

@@ -1,5 +1,5 @@
-import Autocomplete from 'plugins/autocomplete/facade/js/autocomplete';
 import 'plugins/searchstreetgeosearch/facade/assets/css/searchstreetgeosearch';
+import Autocomplete from './autocomplete';
 import SearchstreetGeosearchControl from './searchstreetgeosearchcontrol';
 
 export default class SearchstreetGeosearch extends M.Plugin {
