@@ -1,7 +1,7 @@
 import { map } from 'facade/js/mapea';
 import WFS from 'facade/js/layer/WFS';
 import StyleProportional from 'facade/js/style/Proportional';
-import StylePoint from 'facade/js/style/Point';
+import StyleLine from 'facade/js/style/Line';
 
 const mapjs = map({
   controls: ['layerswitcher'],
@@ -16,17 +16,17 @@ const wfs = new WFS({
 });
 
 mapjs.addLayers([wfs]);
-const stylepoint = new StylePoint({
+const styleline = new StyleLine({
   fill: {
     color: 'red',
   },
   stroke: {
-    color: 'white',
-    stroke: 4,
+    color: 'black',
+    width: 3,
   },
 });
 const styleproportional = new StyleProportional('gid', 15, 30);
-styleproportional.add(stylepoint);
+styleproportional.add(styleline);
 wfs.setStyle(styleproportional);
 
 window.mapjs = mapjs;

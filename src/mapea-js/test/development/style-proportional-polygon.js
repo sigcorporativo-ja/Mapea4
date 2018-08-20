@@ -1,7 +1,7 @@
 import { map } from 'facade/js/mapea';
 import WFS from 'facade/js/layer/WFS';
 import StyleProportional from 'facade/js/style/Proportional';
-import StylePoint from 'facade/js/style/Point';
+import StylePolygon from 'facade/js/style/Polygon';
 
 const mapjs = map({
   container: 'map',
@@ -16,7 +16,7 @@ const wfs = new WFS({
 });
 
 mapjs.addLayers([wfs]);
-const stylepoint = new StylePoint({
+const Stylepolygon = new StylePolygon({
   fill: {
     color: 'red',
   },
@@ -26,7 +26,7 @@ const stylepoint = new StylePoint({
   },
 });
 const styleproportional = new StyleProportional('area', 15, 30);
-styleproportional.add(stylepoint);
+styleproportional.add(Stylepolygon);
 wfs.setStyle(styleproportional);
 
 window.mapjs = mapjs;

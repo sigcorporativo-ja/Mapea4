@@ -9,7 +9,7 @@ const mapjs = map({
 
 const stylepolygon = new StylePolygon({
   fill: {
-    color: 'red',
+    color: 'yellow',
   },
   stroke: {
     color: 'black',

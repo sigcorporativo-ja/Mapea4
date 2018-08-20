@@ -1,8 +1,8 @@
 import OLFormatWFS from 'ol/format/WFS';
 import { unByKey } from 'ol/Observable';
+import * as dialog from 'facade/js/dialog';
 import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup';
 import Popup from 'facade/js/Popup';
-import Dialog from 'facade/js/dialog';
 import { get as getRemote } from 'facade/js/util/Remote';
 import { compile as compileTemplate } from 'facade/js/util/Template';
 import { isNullOrEmpty, normalize, beautifyAttribute } from 'facade/js/util/Utils';
@@ -84,7 +84,7 @@ export default class GetFeatureInfo extends Control {
     } else {
       this.userFormat = 'text/html';
     }
-    this.clickEventKey_ = olMap.on('singleclick', this.buildUrl_(Dialog).bind(this));
+    this.clickEventKey_ = olMap.on('singleclick', this.buildUrl_(dialog).bind(this));
   }
 
   /**
@@ -94,7 +94,7 @@ export default class GetFeatureInfo extends Control {
    * @function
    * @param {ol.MapBrowserPointerEvent} evt - Browser point event
    */
-  buildUrl_(dialog) {
+  buildUrl_(dialogParam) {
     return (evt) => {
       const olMap = this.facadeMap_.getMapImpl();
       const viewResolution = olMap.getView().getResolution();
@@ -127,7 +127,7 @@ export default class GetFeatureInfo extends Control {
       if (layerNamesUrls.length > 0) {
         this.showInfoFromURL_(layerNamesUrls, evt.coordinate, olMap);
       } else {
-        dialog.info('No existen capas consultables');
+        dialogParam.info('No existen capas consultables');
       }
     };
   }

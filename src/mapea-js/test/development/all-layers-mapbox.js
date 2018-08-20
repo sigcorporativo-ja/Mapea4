@@ -74,53 +74,53 @@ const geojson = new GeoJSON({
             -5.515136718749999,
             37.081475648860525,
           ],
-        }
         },
+      },
       {
         type: 'Feature',
         properties: {},
         geometry: {
           type: 'Point',
           coordinates: [
-          -4.9658203125,
-          37.19533058280065
-        ]
-        }
-    },
+            -4.9658203125,
+            37.19533058280065,
+          ],
+        },
+      },
       {
         type: 'Feature',
         properties: {},
         geometry: {
           type: 'Point',
           coordinates: [
-          -3.6254882812499996,
-          37.34395908944491
-        ]
-        }
-    },
+            -3.6254882812499996,
+            37.34395908944491,
+          ],
+        },
+      },
       {
         type: 'Feature',
         properties: {},
         geometry: {
           type: 'Point',
           coordinates: [
-          -3.80126953125,
-          37.96152331396614
-        ]
-        }
-    },
+            -3.80126953125,
+            37.96152331396614,
+          ],
+        },
+      },
       {
         type: 'Feature',
         properties: {},
         geometry: {
           type: 'Point',
           coordinates: [
-          -4.515380859375,
-          37.64903402157866
-        ]
-        }
-    }
-  ]
+            -4.515380859375,
+            37.64903402157866,
+          ],
+        },
+      },
+    ],
   },
 });
 
