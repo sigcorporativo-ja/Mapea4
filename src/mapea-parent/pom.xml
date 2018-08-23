@@ -2,13 +2,13 @@
    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <groupId>es.juntadeandalucia.mapea</groupId>
-   <artifactId>mapea5-parent</artifactId>
-   <version>4.2.0</version>
+   <artifactId>mapea-parent</artifactId>
+   <version>5.0.0</version>
    <packaging>pom</packaging>
-   <name>Mapea 4 PARENT</name>
+   <name>Mapea PARENT</name>
    <description>Herramienta para desarrollo de mapas interactivos de forma sencilla</description>
    <properties>
-      <project.release.date>27/11/2017</project.release.date>
+      <project.release.date>23/08/2018</project.release.date>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <build.timestamp>${maven.build.timestamp}</build.timestamp>
       <maven.build.timestamp.format>dd-MM-yyyy</maven.build.timestamp.format>

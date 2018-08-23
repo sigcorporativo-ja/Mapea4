@@ -24,6 +24,7 @@
     "async": "2.1.4",
     "babel-loader": "^8.0.0-beta.4",
     "browserify": "14.0.0",
+    "copy-webpack-plugin": "^4.5.2",
     "cross-env": "^5.2.0",
     "css-loader": "^0.28.11",
     "derequire": "2.0.6",
@@ -61,7 +62,9 @@
     "start": "cross-env NODE_ENV=development webpack-dev-server --config=webpack-config/webpack.development.config.js",
     "debug:prebuild": "node --inspect-brk tasks/generate-index.js",
     "prebuild": "node tasks/generate-index.js && node tasks/generate-plugins-entrypoints.js",
-    "build": "cross-env NODE_ENV=production webpack --config=webpack-config/webpack.production.config.js",
+    "build": "npm run build:core && npm run build:plugins",
+    "build:core": "cross-env NODE_ENV=production webpack --config=webpack-config/webpack.production-core.config.js",
+    "build:plugins": "cross-env NODE_ENV=production webpack --config=webpack-config/webpack.production-plugins.config.js",
     "debug:build": "webpack-dev-server --config=webpack-config/webpack.pre.config.js",
     "start:build": "npm run build && npm run debug:build"
   }
