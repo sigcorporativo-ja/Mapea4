@@ -2,18 +2,17 @@ const path = require('path');
 const webpack = require('webpack');
 const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const CopywebpackPlugin = require('copy-webpack-plugin');
 const entryPoints = require('./entry-points-plugins.json');
 
-const distPath = path.resolve(__dirname, '../');
-const productionEntryPoint = path.resolve(__dirname, '../src/index.js');
-
-entryPoints['dist/core/mapea.ol.min'] = productionEntryPoint;
+const distDir = path.resolve(__dirname, '../dist');
+const pluginDir = path.resolve(__dirname, '../src/plugins');
 
 module.exports = {
   mode: 'production',
   entry: entryPoints,
   output: {
-    path: distPath,
+    path: distDir,
     filename: '[name].js',
   },
   resolve: {
@@ -25,7 +24,7 @@ module.exports = {
       impl: path.resolve(__dirname, '../src/impl/ol/js'),
       configuration: path.resolve(__dirname, '../test/configuration_filtered'),
       'impl-assets': path.resolve(__dirname, '../src/impl/ol/assets'),
-      plugins: path.resolve(__dirname, '../src/plugins'),
+      plugins: pluginDir,
     },
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html'],
   },
@@ -69,6 +68,16 @@ module.exports = {
   },
   plugins: [
     new AllowMutateEsmExports(),
+    new CopywebpackPlugin([{
+      from: path.join(pluginDir, '**', 'api.json'),
+      to: path.join(distDir, 'plugins/[1]/api.json'),
+      test: /([^/]+)\/api\.json/
+    }]),
+    new CopywebpackPlugin([{
+      from: path.join(pluginDir, '**', '.mplugin'),
+      to: path.join(distDir, 'plugins/[1]/.mplugin'),
+      test: /([^/]+)\/\.mplugin$/
+    }]),
     new MiniCssExtractPlugin({
       filename: '[name].css',
     }),

@@ -11,9 +11,9 @@ import Control from './Control';
 import Feature from '../feature/Feature';
 
 /**
- * @namespace M.impl.control
+ * @module M/impl/control/Location
  */
-export default class Location extends Control {
+class Location extends Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Location
@@ -154,6 +154,7 @@ export default class Location extends Control {
  * @type {ol.style.Style}
  * @public
  * @api stable
+ * @memberof module:M/impl/control/Location~
  */
 Location.POSITION_STYLE = new OLStyle({
   image: new OLStyleCircle({
@@ -176,3 +177,5 @@ Location.POSITION_STYLE = new OLStyle({
  * @api stable
  */
 Location.ZOOM = 12;
+
+export default Location;

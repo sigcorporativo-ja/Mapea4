@@ -12,7 +12,10 @@ import { isNullOrEmpty, generateRandom } from 'facade/js/util/Utils';
 import FormatGeoJSON from '../format/GeoJSON';
 import ImplUtils from '../util/Utils';
 
-export default class Feature {
+/**
+ * @module M/impl/Feature
+ */
+class Feature {
   /**
    * @classdesc
    * Main constructor of the class. Create a Feature
@@ -32,12 +35,14 @@ export default class Feature {
         geojsonVariable.type = 'Feature';
       }
       this.olFeature_ = this.formatter_.readFeature(geojsonVariable);
-    } else {
+    }
+    else {
       this.olFeature_ = new OLFeature();
     }
     if (!isNullOrEmpty(id)) {
       this.olFeature_.setId(id);
-    } else if (isNullOrEmpty(this.olFeature_.getId())) {
+    }
+    else if (isNullOrEmpty(this.olFeature_.getId())) {
       this.olFeature_.setId(generateRandom('mapea_feature_'));
     }
   }
@@ -192,19 +197,26 @@ export default class Feature {
     const type = geojson.geometry.type;
     if (type === 'circle') {
       geometry = new OLGeomCircle(geojson.geometry.coordinates);
-    } else if (type === 'geometry') {
+    }
+    else if (type === 'geometry') {
       geometry = new OLGeomGeometry(geojson.geometry.coordinates);
-    } else if (type === 'linestring') {
+    }
+    else if (type === 'linestring') {
       geometry = new OLGeomLineString(geojson.geometry.coordinates);
-    } else if (type === 'multilinestring') {
+    }
+    else if (type === 'multilinestring') {
       geometry = new OLGeomMultiLineString(geojson.geometry.coordinates);
-    } else if (type === 'multipoint') {
+    }
+    else if (type === 'multipoint') {
       geometry = new OLGeomMultiPoint(geojson.geometry.coordinates);
-    } else if (type === 'multipolygon') {
+    }
+    else if (type === 'multipolygon') {
       geometry = new OLGeomMultiPolygon(geojson.geometry.coordinates);
-    } else if (type === 'point') {
+    }
+    else if (type === 'point') {
       geometry = new OLGeomPoint(geojson.geometry.coordinates);
-    } else if (type === 'polygon') {
+    }
+    else if (type === 'polygon') {
       geometry = new OLGeomPolygon(geojson.geometry.coordinates);
     }
     return geometry;
@@ -222,19 +234,26 @@ export default class Feature {
     const type = geometry.type.toLowerCase();
     if (type === 'circle') {
       this.olFeature_.setGeometry(new OLGeomCircle(geometry.coordinates));
-    } else if (type === 'geometry') {
+    }
+    else if (type === 'geometry') {
       this.olFeature_.setGeometry(new OLGeomGeometry(geometry.coordinates));
-    } else if (type === 'linestring') {
+    }
+    else if (type === 'linestring') {
       this.olFeature_.setGeometry(new OLGeomLineString(geometry.coordinates));
-    } else if (type === 'multilinestring') {
+    }
+    else if (type === 'multilinestring') {
       this.olFeature_.setGeometry(new OLGeomMultiLineString(geometry.coordinates));
-    } else if (type === 'multipoint') {
+    }
+    else if (type === 'multipoint') {
       this.olFeature_.setGeometry(new OLGeomMultiPoint(geometry.coordinates));
-    } else if (type === 'multipolygon') {
+    }
+    else if (type === 'multipolygon') {
       this.olFeature_.setGeometry(new OLGeomMultiPolygon(geometry.coordinates));
-    } else if (type === 'point') {
+    }
+    else if (type === 'point') {
       this.olFeature_.setGeometry(new OLGeomPoint(geometry.coordinates));
-    } else if (type === 'polygon') {
+    }
+    else if (type === 'polygon') {
       this.olFeature_.setGeometry(new OLGeomPolygon(geometry.coordinates));
     }
   }
@@ -287,3 +306,5 @@ export default class Feature {
     this.olFeature_.setStyle(null);
   }
 }
+
+export default Feature;

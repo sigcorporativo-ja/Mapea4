@@ -12,8 +12,10 @@ import FormatGML from '../format/GML';
 import LoaderWFS from '../loader/WFS';
 import Vector from './Vector';
 
-
-export default class WFS extends Vector {
+/**
+ * @module M/impl/layer/WFS
+ */
+class WFS extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -119,7 +121,8 @@ export default class WFS extends Vector {
       this.formater_ = new FormatGeoJSON({
         defaultDataProjection: getProj(this.map.getProjection().code),
       });
-    } else {
+    }
+    else {
       this.formater_ = new FormatGML(this.name, this.version, this.map.getProjection());
     }
     this.loader_ = new LoaderWFS(this.map, this.service_, this.formater_);
@@ -145,10 +148,12 @@ export default class WFS extends Vector {
         });
         this.ol3Layer.setStyle(this.facadeVector_.getStyle().getImpl().olStyleFn);
         this.ol3Layer.setSource(clusterSource);
-      } else {
+      }
+      else {
         this.ol3Layer.setSource(newSource);
       }
-    } else {
+    }
+    else {
       if (isCluster) {
         ol3LayerSource = ol3LayerSource.getSource();
       }
@@ -212,17 +217,23 @@ export default class WFS extends Vector {
     let defaultValue;
     if (type === 'dateTime') {
       defaultValue = '0000-00-00T00:00:00';
-    } else if (type === 'date') {
+    }
+    else if (type === 'date') {
       defaultValue = '0000-00-00';
-    } else if (type === 'time') {
+    }
+    else if (type === 'time') {
       defaultValue = '00:00:00';
-    } else if (type === 'duration') {
+    }
+    else if (type === 'duration') {
       defaultValue = 'P0Y';
-    } else if (type === 'int' || type === 'number' || type === 'float' || type === 'double' || type === 'decimal' || type === 'short' || type === 'byte' || type === 'integer' || type === 'long' || type === 'negativeInteger' || type === 'nonNegativeInteger' || type === 'nonPositiveInteger' || type === 'positiveInteger' || type === 'unsignedLong' || type === 'unsignedInt' || type === 'unsignedShort' || type === 'unsignedByte') {
+    }
+    else if (type === 'int' || type === 'number' || type === 'float' || type === 'double' || type === 'decimal' || type === 'short' || type === 'byte' || type === 'integer' || type === 'long' || type === 'negativeInteger' || type === 'nonNegativeInteger' || type === 'nonPositiveInteger' || type === 'positiveInteger' || type === 'unsignedLong' || type === 'unsignedInt' || type === 'unsignedShort' || type === 'unsignedByte') {
       defaultValue = 0;
-    } else if (type === 'hexBinary') {
+    }
+    else if (type === 'hexBinary') {
       defaultValue = null;
-    } else {
+    }
+    else {
       defaultValue = '-';
     }
     return defaultValue;
@@ -276,3 +287,5 @@ export default class WFS extends Vector {
     return equals;
   }
 }
+
+export default WFS;

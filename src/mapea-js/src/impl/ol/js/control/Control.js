@@ -1,9 +1,9 @@
 import OLControl from 'ol/control/Control';
 
 /**
- * @namespace M.impl.control
+ * @module M/impl/Control
  */
-export default class Control extends OLControl {
+class Control extends OLControl {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
@@ -68,3 +68,5 @@ export default class Control extends OLControl {
     return this.element;
   }
 }
+
+export default Control;

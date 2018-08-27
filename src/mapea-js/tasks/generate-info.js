@@ -12,8 +12,8 @@ const isWindows = process.platform.indexOf('win') === 0;
 /**
  * Patch. rootDir of facade classes
  */
-const rootDir = 'src/facade/js/';
-const sourceDir = path.join(__dirname, '..', rootDir);
+const sourceFacadePath = path.join(__dirname, '..', 'src/facade/js/');
+const sourceImplPath = path.join(__dirname, '..', 'src/impl/ol/js/');
 const infoPath = path.join(__dirname, '..', 'build', 'info.json');
 
 /**
@@ -52,11 +52,11 @@ const jsdocConfig = path.join(
  * Generate a list of all .js paths in the source directory.
  * @return {Promise<Array>} Resolves to an array of source paths.
  */
-function getPaths() {
+function getPaths(rootPath) {
   return new Promise((resolve, reject) => {
     let paths = [];
 
-    const walker = walk(sourceDir);
+    const walker = walk(rootPath);
     walker.on('file', (root, stats, next) => {
       const sourcePath = path.join(root, stats.name);
       if (/\.js$/.test(sourcePath)) {
@@ -76,7 +76,7 @@ function getPaths() {
        * pass the sourceDir to the task so it can do the walking.
        */
       if (isWindows) {
-        paths = [sourceDir];
+        paths = [rootPath];
       }
 
       resolve(paths);
@@ -98,7 +98,8 @@ function parseOutput(output) {
   let info;
   try {
     info = JSON.parse(String(output));
-  } catch (err) {
+  }
+  catch (err) {
     throw new Error('Failed to parse output as JSON: ' + output);
   }
   if (!Array.isArray(info.symbols)) {
@@ -123,7 +124,9 @@ function spawnJSDoc(paths) {
     let output = '';
     let errors = '';
     const cwd = path.join(__dirname, '..');
-    const child = spawn(jsdoc, ['-c', jsdocConfig].concat(paths), { cwd });
+    const child = spawn(jsdoc, ['-c', jsdocConfig].concat(paths), {
+      cwd
+    });
 
     child.stdout.on('data', (data) => {
       output += String(data);
@@ -142,7 +145,8 @@ function spawnJSDoc(paths) {
       let info;
       try {
         info = parseOutput(output);
-      } catch (err) {
+      }
+      catch (err) {
         reject(err);
         return;
       }
@@ -157,7 +161,9 @@ function spawnJSDoc(paths) {
  * @return {Promise} Resolves on completion.
  */
 async function write(info) {
-  await fse.outputJson(infoPath, info, { spaces: 2 });
+  await fse.outputJson(infoPath, info, {
+    spaces: 2
+  });
 }
 
 /**
@@ -165,8 +171,9 @@ async function write(info) {
  * @return {Promise<Error>} Resolves with the info object.
  */
 async function main() {
-  const paths = await getPaths();
-  const spawnResult = await spawnJSDoc(paths);
+  const facadePaths = await getPaths(sourceFacadePath);
+  const implPaths = await getPaths(sourceImplPath);
+  const spawnResult = await spawnJSDoc(facadePaths.concat(implPaths));
   return spawnResult;
 }
 

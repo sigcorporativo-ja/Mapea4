@@ -6,6 +6,7 @@ const fse = require('fs-extra');
 const path = require('path');
 const generateInfo = require('./generate-info');
 
+const OL_MIN_FILE = '../externs/ol-v5.1.3.js';
 
 /**
  * Read the symbols from info file.
@@ -13,7 +14,7 @@ const generateInfo = require('./generate-info');
  */
 async function getSymbols() {
   const info = await generateInfo();
-  return info.symbols.filter(symbol => symbol.kind !== 'member');
+  return info.symbols.filter(symbol => symbol.kind !== 'member' && symbol.name.startsWith('module\:'));
 }
 
 const srcPath = path.posix.resolve(__dirname, '../src').replace(/\\/g, '/');
@@ -41,7 +42,8 @@ function getImports(symbols) {
       const importName = defaultExport[0].replace(/_\D*_/, '').replace(/[./]+/g, '$').replace(/^module:/, '$');
       const defaultImport = `import ${importName} from '${getPath(from)}';`;
       imports[defaultImport] = true;
-    } else if (namedExport.length > 1) {
+    }
+    else if (namedExport.length > 1) {
       const from = symbol.path.replace(/.*facade/, './facade');
       const importName = namedExport[0].replace(/[./]+/g, '_').replace(/^module:/, '_');
       const namedImport = `import * as ${importName} from '${getPath(from)}';`;
@@ -138,7 +140,7 @@ if (require.main === module) {
   main().then(async (code) => {
     const filepath = path.join(__dirname, '..', 'src', 'index.js');
     fse.outputFileSync(filepath, code);
-    concatOL('../externs/ol.js', '../src/index.js');
+    concatOL(OL_MIN_FILE, '../src/index.js');
   }).then(async () => {}).catch((err) => {
     process.stderr.write(`${err.message}\n`, () => process.exit(1));
   });
