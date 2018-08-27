@@ -1,9 +1,7 @@
 import AttributeTable from 'plugins/attributetable/facade/js/attributetable';
-import { map } from 'facade/js/mapea';
 import WFS from 'facade/js/layer/WFS';
 
-const mapjs = map({
-  controls: ['layerswitcher'],
+const mapjs = M.map({
   container: 'map',
 });
 
@@ -15,6 +13,8 @@ const wfs = new WFS({
   url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
   legend: 'Prestaciones - Ámbito municipal',
 });
-mapjs.addLayers(wfs);
 
+mapjs.addLayers(wfs);
 mapjs.addPlugin(plugin);
+window.wfs = wfs;
+window.plugin = plugin;

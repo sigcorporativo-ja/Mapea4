@@ -185,7 +185,7 @@ export default class SearchstreetControl extends M.Control {
    * @public
    * @function
    * @param {M.Map} map - Map to add the control
-   * @returns {Promise} HTML template
+   * @returns {HTMLElement} HTML template
    * @api stable
    */
   createView(map) {

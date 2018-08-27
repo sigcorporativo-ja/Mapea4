@@ -33,7 +33,7 @@ entrypoint[testName] = testPath;
 entrypoint.config = config;
 
 if (coremin) {
-  entrypoint['mapea.ol.min'] = path.resolve(__dirname, '..', 'dist', 'core', 'mapea.ol.min.js');
+  entrypoint['mapea.ol.min'] = path.resolve(__dirname, '..', 'dist', 'js', 'mapea.ol.min.js');
 }
 
 module.exports = {
