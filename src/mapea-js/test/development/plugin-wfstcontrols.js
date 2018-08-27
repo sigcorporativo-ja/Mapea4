@@ -1,6 +1,7 @@
+import { map } from 'facade/js/mapea';
 import WFSTControls from 'plugins/wfstcontrols/facade/js/wfstcontrols';
 
-const mapjs = M.map({
+const mapjs = map({
   controls: ['layerswitcher'],
   container: 'map',
 });

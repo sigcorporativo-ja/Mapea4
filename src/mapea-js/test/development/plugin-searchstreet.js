@@ -1,12 +1,11 @@
+// import { map } from 'facade/js/mapea';
 import Searchstreet from 'plugins/searchstreet/facade/js/searchstreet';
 
 const mapjs = M.map({
-  controls: ['layerswitcher'],
   container: 'map',
+  controls: ['mouse', 'layerswitcher'],
 });
 
-const plugin = new Searchstreet({});
-
-mapjs.addPlugin(plugin);
+mapjs.addPlugin(new Searchstreet({}));
 
 window.mapjs = mapjs;

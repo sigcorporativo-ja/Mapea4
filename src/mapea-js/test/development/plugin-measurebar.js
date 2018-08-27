@@ -1,6 +1,7 @@
+import { map } from 'facade/js/mapea';
 import Measurebar from 'plugins/measurebar/facade/js/measurebar';
 
-const mapjs = M.map({
+const mapjs = map({
   controls: ['layerswitcher'],
   container: 'map',
 });

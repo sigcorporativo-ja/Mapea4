@@ -1,6 +1,7 @@
+import { map } from 'facade/js/mapea';
 import GeosearchByLocation from 'plugins/geosearchbylocation/facade/js/geosearchbylocation';
 
-const mapjs = M.map({
+const mapjs = map({
   controls: ['layerswitcher'],
   container: 'map',
 });
