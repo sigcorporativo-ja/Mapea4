@@ -88,7 +88,7 @@ class Chart extends StyleFeature {
    * @function
    * @api
    */
-  static formatVariable(variableOb) {
+  static formatVariable_(variableOb) {
     if (variableOb == null) {
       return null;
     }

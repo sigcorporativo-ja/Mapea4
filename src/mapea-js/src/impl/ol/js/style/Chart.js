@@ -232,7 +232,7 @@ export default class Chart extends Feature {
           }
           return geometry;
         },
-        image: new OLChart(styleOptions)
+        image: new OLChart(styleOptions),
       })];
 
       /* ****

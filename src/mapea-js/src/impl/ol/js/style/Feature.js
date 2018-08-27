@@ -9,7 +9,7 @@ export default class Feature extends Style {
    *
    * @api stable
    */
-  constructor(options, impl) {
-    super(options, impl);
-  }
+  // constructor(options, impl) {
+  //   super(options, impl);
+  // }
 }

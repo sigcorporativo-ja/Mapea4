@@ -87,57 +87,57 @@ export default class Searchstreet extends M.Plugin {
   addTo(map) {
     this.map_ = map;
 
-    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
-
+    map.areasContainer_.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
     // Checks if the received INE code is correct.
     const comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
       codigo: this.locality_,
     });
-
-    M.remote.get(comCodIne).then((response) => {
-      let results;
-      // try {
-      if (!M.utils.isNullOrEmpty(response.text)) {
-        results = JSON.parse(response.text);
-        if (!M.utils.isNullOrEmpty(this.locality_) &&
-          M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
-          // If not correct, value empty
-          M.dialog.error(`El código del municipio '${this.locality}' no es válido`);
-          this.locality_ = '';
-        }
-      }
-      this.control_ = new SearchstreetControl(this.url_, this.locality_);
-      this.control_.on(M.evt.ADDED_TO_MAP, () => {
-        this.fire(M.evt.ADDED_TO_MAP);
-        this.autocompletador_ = new Autocomplete({
-          locality: this.locality_,
-          target: this.control_.getInput(),
-          html: this.control_.getHtml(),
-        });
-        this.map_.addPlugin(this.autocompletador_);
-      }, this);
-      this.panel_ = new M.ui.Panel('searchstreet', {
-        collapsible: true,
-        className: 'm-searchstreet',
-        position: M.ui.position.TL,
-        tooltip: 'Buscador de calles',
-      });
-      // JGL20170816: foco al input al desplegar panel
-
-      this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {
-        this.panel_.getButtonPanel().addEventListener('click', (evt) => {
-          if (!this.panel_.collapsed) {
-            this.control_.getInput().focus();
+    if (!M.utils.isNullOrEmpty(comCodIne)) {
+      M.remote.get(comCodIne).then((response) => {
+        let results;
+        // try {
+        if (!M.utils.isNullOrEmpty(response.text)) {
+          results = JSON.parse(response.text);
+          if (!M.utils.isNullOrEmpty(this.locality_) &&
+            M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
+            // If not correct, value empty
+            M.dialog.error(`El código del municipio '${this.locality}' no es válido`);
+            this.locality_ = '';
           }
+        }
+        this.control_ = new SearchstreetControl(this.url_, this.locality_);
+        this.control_.on(M.evt.ADDED_TO_MAP, () => {
+          this.fire(M.evt.ADDED_TO_MAP);
+          this.autocompletador_ = new Autocomplete({
+            locality: this.locality_,
+            target: this.control_.getInput(),
+            html: this.control_.getHtml(),
+          });
+          this.map_.addPlugin(this.autocompletador_);
+        }, this);
+        this.panel_ = new M.ui.Panel('searchstreet', {
+          collapsible: true,
+          className: 'm-searchstreet',
+          position: M.ui.position.TL,
+          tooltip: 'Buscador de calles',
         });
+        // JGL20170816: foco al input al desplegar panel
+
+        this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {
+          this.panel_.getButtonPanel().addEventListener('click', (evt) => {
+            if (!this.panel_.collapsed) {
+              this.control_.getInput().focus();
+            }
+          });
+        });
+        this.panel_.addControls(this.control_);
+        this.map_.addPanels(this.panel_);
+        // }
+        // catch (err) {
+        //   M.exception(`La respuesta no es un JSON válido: ${err}`);
+        // }
       });
-      this.panel_.addControls(this.control_);
-      this.map_.addPanels(this.panel_);
-      // }
-      // catch (err) {
-      //   M.exception(`La respuesta no es un JSON válido: ${err}`);
-      // }
-    });
+    }
   }
 
   /**

@@ -1,4 +1,7 @@
 import SearchstreetImpl from '../../impl/ol/js/searchstreetcontrol';
+import SearchstreetTemplate from '../../templates/searchstreet';
+import SearchstreetResultsTemplate from '../../templates/searchstreetresults';
+
 
 export default class SearchstreetControl extends M.Control {
   /**
@@ -15,7 +18,7 @@ export default class SearchstreetControl extends M.Control {
     // implementation of this control
     const impl = new SearchstreetImpl();
 
-    super(impl);
+    super(impl, SearchstreetControl.NAME);
 
     if (M.utils.isUndefined(SearchstreetImpl)) {
       M.exception('La implementación usada no puede crear controles Searchstreet');
@@ -187,16 +190,25 @@ export default class SearchstreetControl extends M.Control {
    */
   createView(map) {
     this.facadeMap_ = map;
-    const promise = new Promise((success, fail) => {
-      M.template.compile(SearchstreetControl.TEMPLATE, {
-        jsonp: true,
-      }).then((html) => {
-        this.addEvents(html);
-        success(html);
-      });
-    });
-    return promise;
+    const options = { jsonp: true };
+    const html = M.template.compile(SearchstreetTemplate, options);
+    this.addEvents(html);
+    return html;
   }
+
+  //
+  // createView2(map) {
+  //   this.facadeMap_ = map;
+  //   const promise = new Promise((success, fail) => {
+  //     M.template.compile(SearchstreetControl.TEMPLATE, {
+  //       jsonp: true,
+  //     }).then((html) => {
+  //       this.addEvents(html);
+  //       success(html);
+  //     });
+  //   });
+  //   return promise;
+  // }
 
   /**
    * This function add events to HTML elements
@@ -478,34 +490,32 @@ export default class SearchstreetControl extends M.Control {
         }
       }
     }
-    M.template.compile(SearchstreetControl.RESULTS_TEMPLATE, {
-      jsonp: true,
-      vars: resultsTemplateVars,
-    }).then((html) => {
-      this.resultsContainer_.classList.remove(SearchstreetControl.HIDDEN_RESULTS_CLASS);
-      this.resultsContainer_.innerHTML = html.innerHTML;
-      this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-searchstreet-results-scroll');
-      if (!M.utils.isNullOrEmpty(this.resultsScrollContainer_)) {
-        M.utils.enableTouchScroll(this.resultsScrollContainer_);
-      }
+    const options = { jsonp: true, vars: resultsTemplateVars };
+    const html = M.template.compile(SearchstreetResultsTemplate, options);
+    this.resultsContainer_.classList.remove(SearchstreetControl.HIDDEN_RESULTS_CLASS);
+    this.resultsContainer_.innerHTML = html.innerHTML;
+    this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-searchstreet-results-scroll');
+    if (!M.utils.isNullOrEmpty(this.resultsScrollContainer_)) {
+      M.utils.enableTouchScroll(this.resultsScrollContainer_);
+    }
 
-      this.facadeMap_.removePopup();
-      if (this.getImpl().listPoints.length > 0) {
-        this.getImpl().removePoints();
-      }
-      if (!M.utils.isUndefined(resultsTemplateVars.docs[0])) {
-        this.getImpl().drawPoints(resultsTemplateVars.docs);
-        this.eventList_(resultsTemplateVars.docs);
-      }
-      this.element_.classList.remove(SearchstreetControl.SEARCHING_CLASS);
-      this.resultsContainer_.classList.remove(SearchstreetControl.MINIMUM);
+    this.facadeMap_.removePopup();
+    // // if (this.getImpl().listPoints.length > 0) {
+    // //   // this.getImpl().removePoints();
+    // }
+    if (!M.utils.isUndefined(resultsTemplateVars.docs[0])) {
+      this.getImpl().drawPoints(resultsTemplateVars.docs);
+      this.eventList_(resultsTemplateVars.docs);
+    }
+    this.element_.classList.remove(SearchstreetControl.SEARCHING_CLASS);
+    this.resultsContainer_.classList.remove(SearchstreetControl.MINIMUM);
 
-      // results buntton
-      const btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-      btnResults.addEventListener('click', this.resultsClick_.bind(this));
+    // results buntton
+    const btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
+    btnResults.addEventListener('click', this.resultsClick_.bind(this));
 
-      this.fire(M.evt.COMPLETED);
-    });
+    this.fire(M.evt.COMPLETED);
+
     this.element_.getElementsByClassName('m-autocomplete-results').innerHTML = '';
   }
 
@@ -664,7 +674,7 @@ export default class SearchstreetControl extends M.Control {
   clearSearchs_() {
     this.element_.classList.remove('shown');
     this.facadeMap_.removePopup();
-    this.getImpl().removePoints();
+    // this.getImpl().removePoints();
     this.input_.value = '';
     this.resultsContainer_.innerHTML = '';
     this.resultsAutocomplete_.innerHTML = '';
@@ -685,6 +695,14 @@ export default class SearchstreetControl extends M.Control {
   }
 }
 
+/**
+ * Name to identify this control
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+SearchstreetControl.NAME = 'searchstreet';
 
 /**
  * Template for this controls

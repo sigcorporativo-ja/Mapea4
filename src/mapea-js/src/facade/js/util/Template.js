@@ -12,7 +12,7 @@ import './handlebarshelpers';
  * @param {string} templatePath name of the template
  * This function gets a template by its name and
  * @param {Mx.parameters.TemplateOptions} options of the template compilation
- * @returns {Promise} the promise with the html resultant
+ * @returns the template resultant
  * @api
  */
 export const compile = (string, options) => {
