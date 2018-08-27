@@ -3,7 +3,10 @@ import { enableTouchScroll, isFunction, isNullOrEmpty } from 'facade/js/util/Uti
 import FacadePopup from 'facade/js/Popup';
 import FacadeWindow from 'facade/js/util/Window';
 
-export default class Popup extends OLOverlay {
+/**
+ * @module M/impl/Popup
+ */
+class Popup extends OLOverlay {
   /**
    * OpenLayers 3 Popup Overlay.
    * @constructor
@@ -81,8 +84,9 @@ export default class Popup extends OLOverlay {
    * @public
    * @function
    * @param {ol.Coordinate} coord Where to anchor the popup.
-   * @param {String} html String of HTML to display within the popup.
+   * @param {function} callback Callback function to execute
    * @api stable
+   * @memberof module:M/impl/Popup#
    */
   show(coord, callback) {
     this.setPosition(coord);
@@ -262,3 +266,4 @@ export default class Popup extends OLOverlay {
     return this.content;
   }
 }
+export default Popup;

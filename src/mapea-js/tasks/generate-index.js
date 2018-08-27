@@ -14,7 +14,7 @@ const OL_MIN_FILE = '../externs/ol-v5.1.3.js';
  */
 async function getSymbols() {
   const info = await generateInfo();
-  return info.symbols.filter(symbol => symbol.kind !== 'member');
+  return info.symbols.filter(symbol => symbol.kind !== 'member' && symbol.name.startsWith('module\:'));
 }
 
 const srcPath = path.posix.resolve(__dirname, '../src').replace(/\\/g, '/');

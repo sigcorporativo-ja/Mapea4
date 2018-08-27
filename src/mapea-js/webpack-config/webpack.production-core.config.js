@@ -3,12 +3,11 @@ const webpack = require('webpack');
 const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopywebpackPlugin = require('copy-webpack-plugin');
-const productionEntryPoint = path.resolve(__dirname, '../src/index.js');
 
 module.exports = {
   mode: 'production',
   entry: {
-    'mapea.ol.min': productionEntryPoint
+    'mapea.ol.min': path.resolve(__dirname, '../src/index.js')
   },
   output: {
     path: path.resolve(__dirname, '../dist'),

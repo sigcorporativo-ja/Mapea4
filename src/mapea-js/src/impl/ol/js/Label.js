@@ -4,10 +4,9 @@ import { isNullOrEmpty } from 'facade/js/util/Utils';
 import labelPopupTemplate from 'templates/label_popup';
 
 /**
- * @namespace M.impl.control
+ * @module M/impl/Label
  */
-
-export default class Label {
+class Label {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Label
@@ -133,3 +132,5 @@ export default class Label {
     }
   }
 }
+
+export default Label;

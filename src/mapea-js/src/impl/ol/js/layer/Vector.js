@@ -10,7 +10,10 @@ import Layer from './Layer';
 import ImplUtils from '../util/Utils';
 import Feature from '../feature/Feature';
 
-export default class Vector extends Layer {
+/**
+ * @module M/impl/layer/Vector
+ */
+class Vector extends Layer {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Vector layer
@@ -132,7 +135,8 @@ export default class Vector extends Layer {
     if (style instanceof StyleCluster) {
       style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
       style.refresh();
-    } else {
+    }
+    else {
       this.redraw();
     }
   }
@@ -149,12 +153,14 @@ export default class Vector extends Layer {
     if (!isNullOrEmpty(style)) {
       if (style instanceof Style) {
         this.facadeVector_.setStyle(style);
-      } else if (style instanceof StyleCluster) {
+      }
+      else if (style instanceof StyleCluster) {
         const cluster = this.facadeVector_.getStyle();
         cluster.unapply(this.facadeVector_);
         cluster.getOldStyle().apply(this.facadeVector_);
         cluster.apply(this.facadeVector_);
-      } else {
+      }
+      else {
         style.apply(this.facadeVector_);
       }
     }
@@ -205,7 +211,8 @@ export default class Vector extends Layer {
     if (style instanceof StyleCluster) {
       style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
       style.refresh();
-    } else {
+    }
+    else {
       this.redraw();
     }
   }
@@ -371,3 +378,5 @@ export default class Vector extends Layer {
     this.map = null;
   }
 }
+
+export default Vector;

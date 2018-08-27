@@ -7,9 +7,9 @@ import Layer from 'facade/js/layer/Layer';
 import Control from './Control';
 
 /**
- * @namespace M.impl.control
+ * @module M/impl/control/LayerSwitcher
  */
-export default class LayerSwitcher extends Control {
+class LayerSwitcher extends Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layerswitcher
@@ -245,3 +245,5 @@ export default class LayerSwitcher extends Control {
  * @api stable
  */
 LayerSwitcher.PANEL_ID = 'm-layerswitcher-panel';
+
+export default LayerSwitcher;
