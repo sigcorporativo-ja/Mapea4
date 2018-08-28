@@ -1,4 +1,5 @@
 import DrawFeatureImpl from '../../impl/ol/js/drawfeature';
+import drawfeatureHTML from '../../templates/drawfeature';
 
 export default class DrawFeature extends M.Control {
   /**
@@ -35,11 +36,11 @@ export default class DrawFeature extends M.Control {
    * @public
    * @function
    * @param {M.Map} map - Map to add the control
-   * @returns {Promise} html response
+   * @returns {HTMLElement} html response
    * @api stable
    */
   createView(map) {
-    return M.template.compile(DrawFeature.TEMPLATE, {
+    return M.template.compile(drawfeatureHTML, {
       jsonp: true,
     });
   }

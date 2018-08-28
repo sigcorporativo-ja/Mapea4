@@ -1,7 +1,7 @@
-import Searchstreet from 'plugins/searchstreet/facade/js/searchstreetcontrol';
+import SearchstreetControl from 'plugins/searchstreet/facade/js/searchstreetcontrol';
 import SearchstreetIntegratedControlImpl from '../../impl/ol/js/searchstreetintegratedcontrol';
 
-export default class SearchstreetIntegrated extends Searchstreet {
+export default class SearchstreetIntegrated extends SearchstreetControl {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Searchstreet control that allows searches of streets
@@ -67,6 +67,7 @@ export default class SearchstreetIntegrated extends Searchstreet {
     // events
     // JGL20170818: traslado gestión evento a autocomplete
     this.button_.addEventListener('click', this.searchClick.bind(this));
+    this.input_.addEventListener('keyup', this.searchClick.bind(this));
     this.clear_.addEventListener('click', this.clearSearchs_.bind(this));
 
 
@@ -84,25 +85,23 @@ export default class SearchstreetIntegrated extends Searchstreet {
       ((searchTime) => {
         M.remote.get(searchCodIne).then((response) => {
           let results;
-          try {
-            if (!M.utils.isNullOrEmpty(response.text)) {
-              results = JSON.parse(response.text);
-              if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
-                M.dialog.error(`El código del municipio  ${this.codIne_} no es válido`);
-              } else {
-                this.getMunProv_(results);
-                this.element_.getElementsByTagName('span').codIne.innerHTML = `Búsquedas en  ${this.municipio_} ( ${this.provincia_} )`;
-              }
+          // try {
+          if (!M.utils.isNullOrEmpty(response.text)) {
+            results = JSON.parse(response.text);
+            if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
+              M.dialog.error(`El código del municipio  ${this.codIne_} no es válido`);
+            } else {
+              this.getMunProv_(results);
+              this.element_.getElementsByTagName('span').codIne.innerHTML = `Búsquedas en  ${this.municipio_} ( ${this.provincia_} )`;
             }
-          } catch (err) {
-            M.exception(`La respuesta no es un JSON válido:  ${err}`);
           }
+          // } catch (err) {
+          //   M.exception(`La respuesta no es un JSON válido:  ${err}`);
+          // }
         });
       })(this.searchTime_);
     }
 
-    // const parent = this.resultsContainer_;
-    // parent.removeChild(this.searchingResult_);
     this.searchingResult_.parentNode.removeChild(this.searchingResult_);
   }
 
@@ -139,12 +138,13 @@ export default class SearchstreetIntegrated extends Searchstreet {
     evt.preventDefault();
 
     if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
-      this.resultsAutocomplete_.classList.remove(Searchstreet.MINIMUM);
+      this.resultsAutocomplete_.classList.remove(SearchstreetControl.MINIMUM);
       // const parent = this.resultsAutocomplete_;
       const element = this.resultsAutocomplete_.querySelector('div#m-searching-result-autocomplete');
       if (M.utils.isUndefined(element)) {
         element.parentNode.removeChild(element);
       }
+      this.resultsAutocomplete_.innerHTML = '';
       // gets the query
       let query = this.input_.value;
       if (!M.utils.isNullOrEmpty(query)) {

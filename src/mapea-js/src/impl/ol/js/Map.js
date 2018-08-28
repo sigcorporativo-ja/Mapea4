@@ -801,7 +801,7 @@ class Map extends MObject {
    *
    * @function
    * @param {Array<M.layer.WMTS>} layers
-   * @returns {Map}º
+   * @returns {Map}
    * @api stable
    */
   addWMTS(layers) {
@@ -1601,14 +1601,7 @@ class Map extends MObject {
     return projection;
   }
 
-  /**
-   * This function provides ol3 map used by this instance
-   *
-   * @public
-   * @returns {ol.Map}
-   * @function
-   * @api stable
-   */
+
   getMapImpl() {
     return this.map_;
   }

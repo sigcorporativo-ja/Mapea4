@@ -1,4 +1,5 @@
 import DeleteFeatureImpl from '../../impl/ol/js/deletefeature';
+import deletefeatureHTML from '../../templates/deletefeature';
 
 export default class DeleteFeature extends M.Control {
   /**
@@ -31,11 +32,11 @@ export default class DeleteFeature extends M.Control {
    * @public
    * @function
    * @param {M.Map} map - Map to add the control
-   * @returns {Promise} html response
+   * @returns {HTMLElement} html response
    * @api stable
    */
   createView(map) {
-    return M.template.compile(DeleteFeature.TEMPLATE, {
+    return M.template.compile(deletefeatureHTML, {
       jsonp: true,
     });
   }

@@ -1,7 +1,6 @@
 import Printer from 'plugins/printer/facade/js/printer';
 
 const mapjs = M.map({
-  controls: ['layerswitcher'],
   container: 'map',
 });
 

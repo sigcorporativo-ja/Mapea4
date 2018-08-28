@@ -1,3 +1,5 @@
+import ResultsTemplate from '../../templates/resultautocomplete';
+
 export default class Autocomplete extends M.Plugin {
   /**
    * @classdesc
@@ -257,12 +259,12 @@ export default class Autocomplete extends M.Plugin {
    */
   search_(query, evt) {
     let searchUrl;
+    this.evt = evt;
     searchUrl = M.utils.addParameters(this.url_, {
       input: query.trim(),
       limit: this.limit_,
       codine: this.locality_,
     });
-
     searchUrl = this.formatContent_(searchUrl, ' ', '%20');
     this.searchTime_ = Date.now();
     ((searchTime) => {
@@ -279,81 +281,86 @@ export default class Autocomplete extends M.Plugin {
           if (!M.utils.isUndefined(results.docs)) {
             // If the result is indefinite, it will not continue autocompleting
             if (!M.utils.isUndefined(results.docs[0])) {
-              M.template.compile(Autocomplete.RESULTAUTOCOMPLETE, {
-                jsonp: true,
-                vars: results,
-              }).then((html) => {
-                this.resultsContainer_.innerHTML = html.innerHTML;
-                const divResultsAutocomplete = this.resultsContainer_.querySelectorAll('div.autocomplete');
-                this.addEvents_(divResultsAutocomplete);
-                this.target_.focus();
-                /*
-                 * In case the municipality not searched, to verify that searchstreet is completed,
-                 * in affirmative case to change to false the attribute completed of searchstreet
-                 * and not show results
-                 * */
-                if (this.busqMunicipio_ === true) {
-                  /* In case of not having the added event, it will be verified
-                   if searchstreet is completed.
-                   *  In affirmative case to change to false and not to show result,
-                   *  in negative case, to assign the event to the results
-                   */
-                  if (this.busqMunicipioClick_ === true) {
-                    // this.target_.value = query.slice(0, -1);
-                    this.resultsContainer_.innerHTML = '';
-                    if (!M.utils.isUndefined(this.evt)) {
-                      for (let i = 0, ilen = controls.length; i < ilen; i += 1) {
-                        if (controls[1].name === 'searchstreetgeosearch') {
-                          controls[1].ctrlSearchstreet.searchClick(this.evt);
-                          controls[1].ctrlSearchstreet.completed = false;
-                          controls[1].ctrlGeosearch.searchClick(this.evt);
-                        } else if (controls[1].name === 'searchstreet') {
-                          controls[1].searchClick(this.evt);
-                          controls[1].completed = false;
-                        }
-                      }
-                      this.busqMunicipioClick_ = false;
-                    }
-                  } else {
-                    const autocompleteResults = this.resultsContainer_.querySelectorAll('div.autocomplete');
-                    for (let m = 0, ilen2 = controls.length; m < ilen2; m += 1) {
-                      if (controls[m].name === 'searchstreetgeosearch') {
-                        if (controls[m].ctrlSearchstreet.completed === true) {
-                          controls[m].ctrlSearchstreet.completed = false;
-                          this.resultsContainer_.innerHTML = '';
-                        } else {
-                          for (let h = 0, ilen3 = autocompleteResults.length; h < ilen3; h += 1) {
-                            this.evtClickMunicipaly_(autocompleteResults[h]);
-                          }
-                        }
-                      } else if (controls[m].name === 'searchstreet') {
-                        if (controls[m].completed === true) {
-                          controls[m].completed = false;
-                          this.resultsContainer_.innerHTML = '';
-                        } else {
-                          for (let j = 0, ilen5 = autocompleteResults.length; j < ilen5; j += 1) {
-                            this.evtClickMunicipaly_(autocompleteResults[j]);
-                          }
-                        }
+              const options = { jsonp: true, vars: results };
+
+              if (this.resultsContainer_.classList.contains(Autocomplete.MINIMUM)) {
+                this.resultsContainer_.classList.remove(Autocomplete.MINIMUM);
+                if (!M.utils.isNullOrEmpty(this.resultsContainer_.parentElement)) {
+                  this.searchingResult_.parentElement.removeChild(this.searchingResult_);
+                }
+              }
+
+              const html = M.template.compile(ResultsTemplate, options);
+              this.resultsContainer_.innerHTML = html.innerHTML;
+              const divResultsAutocomplete = this.resultsContainer_.querySelectorAll('div.autocomplete');
+              this.addEvents_(divResultsAutocomplete);
+              this.target_.focus();
+              /*
+               * In case the municipality not searched, to verify that searchstreet is completed,
+               * in affirmative case to change to false the attribute completed of searchstreet
+               * and not show results
+               * */
+              if (this.busqMunicipio_ === true) {
+                /* In case of not having the added event, it will be verified
+                 if searchstreet is completed.
+                 *  In affirmative case to change to false and not to show result,
+                 *  in negative case, to assign the event to the results
+                 */
+                if (this.busqMunicipioClick_ === true) {
+                  // this.target_.value = query.slice(0, -1);
+                  this.resultsContainer_.innerHTML = '';
+                  if (!M.utils.isUndefined(this.evt)) {
+                    for (let i = 0, ilen = controls.length; i < ilen; i += 1) {
+                      if (controls[1].name === 'searchstreetgeosearch') {
+                        controls[1].ctrlSearchstreet.searchClick(this.evt);
+                        controls[1].ctrlSearchstreet.completed = false;
+                        controls[1].ctrlGeosearch.searchClick(this.evt);
+                      } else if (controls[2].name === 'searchstreet') {
+                        controls[2].searchClick(this.evt);
+                        controls[2].completed = false;
                       }
                     }
+                    this.busqMunicipioClick_ = false;
                   }
                 } else {
-                  for (let y = 0, ilen4 = controls.length; y < ilen4; y += 1) {
-                    if (controls[y].name === 'searchstreet') {
-                      if (controls[y].completed === true) {
+                  const autocompleteResults = this.resultsContainer_.querySelectorAll('div.autocomplete');
+                  for (let m = 0, ilen2 = controls.length; m < ilen2; m += 1) {
+                    if (controls[m].name === 'searchstreetgeosearch') {
+                      if (controls[m].ctrlSearchstreet.completed === true) {
+                        controls[m].ctrlSearchstreet.completed = false;
                         this.resultsContainer_.innerHTML = '';
-                        controls[y].completed = false;
+                      } else {
+                        for (let h = 0, ilen3 = autocompleteResults.length; h < ilen3; h += 1) {
+                          this.evtClickMunicipaly_(autocompleteResults[h]);
+                        }
                       }
-                    } else if (controls[y].name === 'searchstreetgeosearch') {
-                      if (controls[y].ctrlSearchstreet.completed === true) {
+                    } else if (controls[m].name === 'searchstreet') {
+                      if (controls[m].completed === true) {
+                        controls[m].completed = false;
                         this.resultsContainer_.innerHTML = '';
-                        controls[y].ctrlSearchstreet.completed = false;
+                      } else {
+                        for (let j = 0, ilen5 = autocompleteResults.length; j < ilen5; j += 1) {
+                          this.evtClickMunicipaly_(autocompleteResults[j]);
+                        }
                       }
                     }
                   }
                 }
-              });
+              } else {
+                for (let y = 0, ilen4 = controls.length; y < ilen4; y += 1) {
+                  if (controls[y].name === 'searchstreet') {
+                    if (controls[y].completed === true) {
+                      this.resultsContainer_.innerHTML = '';
+                      controls[y].completed = false;
+                    }
+                  } else if (controls[y].name === 'searchstreetgeosearch') {
+                    if (controls[y].ctrlSearchstreet.completed === true) {
+                      this.resultsContainer_.innerHTML = '';
+                      controls[y].ctrlSearchstreet.completed = false;
+                    }
+                  }
+                }
+              }
             } else {
               for (let r = 0, ilen4 = controls.length; r < ilen4; r += 1) {
                 if (controls[r].name === 'searchstreet') {
@@ -371,10 +378,6 @@ export default class Autocomplete extends M.Plugin {
                 controls[g].ctrlSearchstreet.completed = false;
               }
             }
-          }
-          if (this.resultsContainer_.classList.contains(Autocomplete.MINIMUM)) {
-            this.resultsContainer_.classList.remove(Autocomplete.MINIMUM);
-            this.searchingResult_.parentElement.removeChild(this.searchingResult_);
           }
         }
       });

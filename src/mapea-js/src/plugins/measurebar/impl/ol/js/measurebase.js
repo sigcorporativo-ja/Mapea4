@@ -1,4 +1,4 @@
-import FacadeMeasure from '../../../facade/js/measurebase';
+import tooltipHTML from '../../../templates/measure_tooltip';
 
 /**
  * @classdesc
@@ -207,19 +207,17 @@ export default class Measure extends M.impl.Control {
    *
    * @private
    * @function
-   * @return {Promise} Template tooltip
+   * @return {HTMLElement} Template tooltip
    */
   createHelpTooltip_() {
-    return M.template.compile(FacadeMeasure.POINTER_TOOLTIP_TEMPLATE, {
-      jsonp: true,
-    }).then((helpTooltipElement) => {
-      this.helpTooltip_ = new ol.Overlay({
-        element: helpTooltipElement,
-        offset: [15, 0],
-        positioning: 'center-left',
-      });
-      this.facadeMap_.getMapImpl().addOverlay(this.helpTooltip_);
+    const html = M.template.compile(tooltipHTML, { jsonp: true });
+    this.helpTooltip_ = new ol.Overlay({
+      element: html,
+      offset: [15, 0],
+      positioning: 'center-left',
     });
+    this.facadeMap_.getMapImpl().addOverlay(this.helpTooltip_);
+    return html;
   }
 
   /**
@@ -229,19 +227,16 @@ export default class Measure extends M.impl.Control {
    * @function
    */
   createMeasureTooltip_() {
-    M.template.compile(FacadeMeasure.MEASURE_TOOLTIP_TEMPLATE, {
-      jsonp: true,
-    }).then((measureTooltipElement) => {
-      if (!M.utils.isNullOrEmpty(this.measureTooltip_)) {
-        this.overlays_.push(this.measureTooltip_);
-      }
-      this.measureTooltip_ = new ol.Overlay({
-        element: measureTooltipElement,
-        offset: [0, -15],
-        positioning: 'bottom-center',
-      });
-      this.facadeMap_.getMapImpl().addOverlay(this.measureTooltip_);
+    const html = M.template.compile(tooltipHTML, { jsonp: true });
+    if (!M.utils.isNullOrEmpty(this.measureTooltip_)) {
+      this.overlays_.push(this.measureTooltip_);
+    }
+    this.measureTooltip_ = new ol.Overlay({
+      element: html,
+      offset: [0, -15],
+      positioning: 'bottom-center',
     });
+    this.facadeMap_.getMapImpl().addOverlay(this.measureTooltip_);
   }
 
   /**

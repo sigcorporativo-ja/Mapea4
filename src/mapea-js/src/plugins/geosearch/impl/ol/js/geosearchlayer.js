@@ -1,5 +1,6 @@
 import GeoStyle from './geosearchstyle';
 import UtilsGeosearch from './utils';
+import resultsPopupHTML from '../../../templates/geosearchfeaturepopup';
 
 export default class GeosearchLayer extends M.impl.layer.Vector {
   /**
@@ -174,32 +175,28 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
     GeosearchLayer.setStyleFeature(features, M.style.state.SELECTED);
 
     const featureForTemplate = this.parseFeaturesForTemplate_(features);
-    M.template.compile(GeosearchLayer.POPUP_RESULT, {
-      jsonp: true,
-      vars: featureForTemplate,
-      parseToHtml: false,
-    }).then((htmlAsText) => {
-      const featureTabOpts = {
-        icon: 'g-cartografia-pin',
-        title: 'Geosearch',
-        content: htmlAsText,
-      };
-      let popup = this.map.getPopup();
-      if (M.utils.isNullOrEmpty(popup)) {
-        popup = new M.Popup({
-          panMapIfOutOfView: !noPanMapIfOutOfView,
-          ani: null,
-        });
-        popup.addTab(featureTabOpts);
-        this.map.addPopup(popup, coord);
-      } else {
-        popup.addTab(featureTabOpts);
-      }
-      // removes events on destroy
-      popup.on(M.evt.DESTROY, () => {
-        this.internalUnselectFeatures_(true);
-      }, this);
-    });
+    const options = { jsonp: true, vars: featureForTemplate, parseToHtml: false };
+    const htmlAsText = M.template.compile(resultsPopupHTML, options);
+    const featureTabOpts = {
+      icon: 'g-cartografia-pin',
+      title: 'Geosearch',
+      content: htmlAsText,
+    };
+    let popup = this.map.getPopup();
+    if (M.utils.isNullOrEmpty(popup)) {
+      popup = new M.Popup({
+        panMapIfOutOfView: !noPanMapIfOutOfView,
+        ani: null,
+      });
+      popup.addTab(featureTabOpts);
+      this.map.addPopup(popup, coord);
+    } else {
+      popup.addTab(featureTabOpts);
+    }
+    // removes events on destroy
+    popup.on(M.evt.DESTROY, () => {
+      this.internalUnselectFeatures_(true);
+    }, this);
   }
 
   /**

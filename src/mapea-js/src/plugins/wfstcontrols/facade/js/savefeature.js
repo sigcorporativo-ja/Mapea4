@@ -1,4 +1,5 @@
 import SaveFeatureImpl from '../../impl/ol/js/savefeature';
+import savefeatureHTML from '../../templates/savefeature';
 
 export default class SaveFeature extends M.Control {
   /**
@@ -41,7 +42,7 @@ export default class SaveFeature extends M.Control {
    */
   createView(map) {
     this.facadeMap_ = map;
-    return M.template.compile(SaveFeature.TEMPLATE, {
+    return M.template.compile(savefeatureHTML, {
       jsonp: true,
     });
   }

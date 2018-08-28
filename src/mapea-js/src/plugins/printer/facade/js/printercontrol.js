@@ -1,4 +1,5 @@
 import PrinterControlImpl from '../../impl/ol/js/printercontrol';
+import printerHTML from '../../templates/printer';
 
 export default class PrinterControl extends M.Control {
   /**
@@ -168,13 +169,9 @@ export default class PrinterControl extends M.Control {
         }
         // forceScale
         capabilities.forceScale = this.options_.forceScale;
-        M.template.compile(PrinterControl.TEMPLATE, {
-          jsonp: true,
-          vars: capabilities,
-        }).then((html) => {
-          this.addEvents(html);
-          success(html);
-        });
+        const html = M.template.compile(printerHTML, { jsonp: true, vars: capabilities });
+        this.addEvents(html);
+        success(html);
       });
     });
     return promise;

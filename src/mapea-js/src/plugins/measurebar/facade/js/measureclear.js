@@ -1,4 +1,5 @@
 import MeasureClearImpl from 'plugins/measurebar/impl/ol/js/measureclear';
+import measureclearHTML from '../../templates/measureclear';
 
 /**
  * @classdesc
@@ -32,11 +33,11 @@ export default class MeasureClear extends M.Control {
    * @public
    * @function
    * @param {M.Map} map - Map to add the control
-   * @returns {Promise} HTML template
+   * @returns {HTMLElement} HTML template
    * @api stable
    */
   createView(map) {
-    return M.template.compile(MeasureClear.TEMPLATE, {
+    return M.template.compile(measureclearHTML, {
       jsonp: true,
     });
   }
