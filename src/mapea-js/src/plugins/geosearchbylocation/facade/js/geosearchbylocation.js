@@ -1,4 +1,4 @@
-// import GeosearchbylocationControl from './geosearchbylocationcontrol';
+import GeosearchbylocationControl from './geosearchbylocationcontrol';
 import '../assets/css/geosearchbylocation';
 
 export default class Geosearchbylocation extends M.Plugin {
@@ -110,14 +110,14 @@ export default class Geosearchbylocation extends M.Plugin {
    */
   addTo(map) {
     this.map_ = map;
-    // this.controlGeo = new GeosearchbylocationControl(
-    //   this.url_,
-    //   this.core_,
-    //   this.handler_,
-    //   this.distance_,
-    //   this.spatialField_,
-    //   this.rows_,
-    // );
+    this.controlGeo = new GeosearchbylocationControl(
+      this.url_,
+      this.core_,
+      this.handler_,
+      this.distance_,
+      this.spatialField_,
+      this.rows_,
+    );
 
     this.panel_ = new M.ui.Panel(Geosearchbylocation.NAME, {
       collapsible: false,
@@ -129,10 +129,9 @@ export default class Geosearchbylocation extends M.Plugin {
     let streetViewPanel;
 
     // TODO
-    if (!M.utils.isNullOrEmpty(M.plugin.Streetview)) {
-      streetViewPanel = map.getPanels([M.plugin.Streetview.NAME])[0];
-    }
-
+    // if (!M.utils.isNullOrEmpty(M.plugin.Streetview)) {
+    //   streetViewPanel = map.getPanels([M.plugin.Streetview.NAME])[0];
+    // }
 
     if (!M.utils.isNullOrEmpty(locationPanel) && !M.utils.isNullOrEmpty(streetViewPanel)) {
       locationPanel.addClassName('m-with-geosearchbylocation');

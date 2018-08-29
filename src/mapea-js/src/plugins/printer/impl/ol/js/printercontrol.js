@@ -257,22 +257,22 @@ export default class PrinterControl extends M.impl.Control {
     /** ***********************************
      MAPEA DE CAPAS TILEADA.
     ************************************ */
-
-    const noChacheName = layer.getNoChacheName();
-    const noChacheUrl = layer.getNoChacheUrl();
-    if (!M.utils.isNullOrEmpty(noChacheName) && !M.utils.isNullOrEmpty(noChacheUrl)) {
-      encodedLayer.layers = [noChacheName];
+    const noCacheName = layer.getNoCacheName();
+    const noChacheUrl = layer.getNoCacheUrl();
+    if (!M.utils.isNullOrEmpty(noCacheName) && !M.utils.isNullOrEmpty(noChacheUrl)) {
+      encodedLayer.layers = [noCacheName];
       encodedLayer.baseURL = noChacheUrl;
     }
+
     /** *********************************  */
 
     // defaults
     encodedLayer.customParams = {
-      //         'service': "WMS",
-      //         'version': "1.1.1",
-      //         'request': "GetMap",
-      //         'styles': "",
-      //         'format': "image/jpeg"
+      // service: 'WMS',
+      // version: '1.1.1',
+      // request: 'GetMap',
+      // styles: '',
+      // format: 'image/jpeg',
     };
 
     const propKeys = Object.keys(params);

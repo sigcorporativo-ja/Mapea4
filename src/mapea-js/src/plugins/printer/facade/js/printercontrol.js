@@ -356,10 +356,11 @@ export default class PrinterControl extends M.Control {
           if (response.error !== true) {
             let downloadUrl;
             try {
+              // const textParse = JSON.stringify(response.text);
               response = JSON.parse(response.text);
               downloadUrl = response.getURL;
             } catch (err) {
-              M.Exception(err);
+              M.exception(err);
             }
             // sets the download URL
             queueEl.setAttribute(PrinterControl.DOWNLOAD_ATTR_NAME, downloadUrl);

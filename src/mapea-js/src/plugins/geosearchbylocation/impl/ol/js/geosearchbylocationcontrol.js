@@ -1,3 +1,5 @@
+// import geosearchbylocationfeaturepopupHTML from '../../../templates/geosearchbylocationfeaturepopup';
+
 export default class GeosearchbylocationControl extends M.impl.control.Geosearch {
   /**
    * @classdesc
@@ -43,8 +45,7 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
 
     if (M.utils.isNullOrEmpty(map)) {
       this.facadeMap_.getImpl().removeFeatures([this.positionFeature_]);
-    }
-    else {
+    } else {
       this.map = map;
     }
   }
@@ -77,29 +78,25 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
     }));
     let coordinates;
     this.positionFeature_.click = (evt) => {
-      M.template.compile(GeosearchbylocationControl.POPUP_LOCATION, {
+      const options = {
         jsonp: true,
-        vars: {
-          valorX: coordinates[0],
-          valorY: coordinates[1],
-        },
+        vars: { valorX: coordinates[0], valorY: coordinates[1] },
         parseToHtml: false,
-      }).then((htmlAsText) => {
-        const positionTabOpts = {
-          icon: 'g-cartografia-gps2',
-          title: 'posición',
-          content: htmlAsText,
-        };
-        this.popup_ = this.facadeMap_.getPopup();
-        if (M.utils.isNullOrEmpty(this.popup_)) {
-          this.popup_ = new M.Popup();
-          this.popup_.addTab(positionTabOpts);
-          this.facadeMap_.addPopup(this.popup_, coordinates);
-        }
-        else {
-          this.popup_.addTab(positionTabOpts);
-        }
-      });
+      };
+      const htmlAsText = M.template.compile(geosearchbylocationfeaturepopupHTML, options);
+      const positionTabOpts = {
+        icon: 'g-cartografia-gps2',
+        title: 'posición',
+        content: htmlAsText,
+      };
+      this.popup_ = this.facadeMap_.getPopup();
+      if (M.utils.isNullOrEmpty(this.popup_)) {
+        this.popup_ = new M.Popup();
+        this.popup_.addTab(positionTabOpts);
+        this.facadeMap_.addPopup(this.popup_, coordinates);
+      } else {
+        this.popup_.addTab(positionTabOpts);
+      }
     };
     return new Promise((success, fail) => {
       geolocation.on('change:position', () => {

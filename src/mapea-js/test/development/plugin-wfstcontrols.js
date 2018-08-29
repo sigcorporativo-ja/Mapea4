@@ -3,6 +3,8 @@ import WFS from 'facade/js/layer/WFS';
 
 const mapjs = M.map({
   container: 'map',
+  layers: ['OSM'],
+  projection: 'EPSG:4326*d',
 });
 
 const plugin = new WFSTControls(['deletefeature', 'savefeature', 'drawfeature', 'editattribute']);
@@ -13,8 +15,6 @@ const wfs = new WFS({
   url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
   legend: 'Prestaciones - Ámbito municipal',
 });
-
-// wfs.getFeatures().splice(1, 50);
 
 mapjs.addLayers(wfs);
 mapjs.addPlugin(plugin);

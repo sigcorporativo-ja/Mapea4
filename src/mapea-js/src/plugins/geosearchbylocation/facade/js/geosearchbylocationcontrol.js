@@ -1,4 +1,6 @@
 import GeosearchbylocationImpl from '../../impl/ol/js/geosearchbylocationcontrol';
+import geosearchbylocationHTML from '../../templates/geosearchbylocation';
+import geosearchbylocationresultsHTML from '../../templates/geosearchbylocationresults';
 
 export default class GeosearchbylocationControl extends M.control.GeosearchControl {
   /**
@@ -122,7 +124,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    */
   createView(map) {
     this.facadeMap_ = map;
-    return M.template.compile(GeosearchbylocationControl.TEMPLATE, {
+    return M.template.compile(geosearchbylocationHTML, {
       jsonp: true,
     });
   }
@@ -213,8 +215,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
           let results;
           try {
             results = JSON.parse(response.text);
-          }
-          catch (err) {
+          } catch (err) {
             M.Exception(`La respuesta no es un JSON válido:${err}`);
           }
           this.showResults_(results);
@@ -267,29 +268,25 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
   showList_() {
     if (this.showList === true) {
       const resultsTemplateVars = this.parseResultsForTemplate_(this.results);
-      M.template.compile(GeosearchbylocationControl.RESULTS_TEMPLATE, {
-        jsonp: true,
-        vars: resultsTemplateVars,
-      }).then((html) => {
-        this.resultsContainer_ = html;
-        this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-geosearchbylocation-results-scroll');
-        M.utils.enableTouchScroll(this.resultsScrollContainer_);
-        this.getImpl().addResultsContainer(this.resultsContainer_);
-        const resultsHtmlElements = this.resultsContainer_.getElementsByClassName('result');
-        for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
-          const resultHtml = resultsHtmlElements.item(i);
-          resultHtml.addEventListener('click', (evt) => {
-            this.resultClick_(evt);
-            this.getImpl().removeResultsContainer(this.resultsContainer_);
-            this.showList = true;
-          });
-        }
-        const btnCloseList = html.querySelector('.title > button.m-panel-btn');
-        btnCloseList.addEventListener('click', this.showList_);
-      });
+      const options = { jsonp: true, vars: resultsTemplateVars };
+      const html = M.template.compile(geosearchbylocationresultsHTML, options);
+      this.resultsContainer_ = html;
+      this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-geosearchbylocation-results-scroll');
+      M.utils.enableTouchScroll(this.resultsScrollContainer_);
+      this.getImpl().addResultsContainer(this.resultsContainer_);
+      const resultsHtmlElements = this.resultsContainer_.getElementsByClassName('result');
+      for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
+        const resultHtml = resultsHtmlElements.item(i);
+        resultHtml.addEventListener('click', (evt) => {
+          this.resultClick_(evt);
+          this.getImpl().removeResultsContainer(this.resultsContainer_);
+          this.showList = true;
+        });
+      }
+      const btnCloseList = html.querySelector('.title > button.m-panel-btn');
+      btnCloseList.addEventListener('click', this.showList_);
       this.showList = false;
-    }
-    else {
+    } else {
       this.getImpl().removeResultsContainer(this.resultsContainer_);
       this.showList = true;
     }
