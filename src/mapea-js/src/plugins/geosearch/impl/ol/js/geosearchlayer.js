@@ -81,7 +81,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
    */
   drawResults(results) {
     const projection = ol.proj.get(this.map.getProjection().code);
-
+    // const resultVar = JSON.parse(results);
     let docs = [];
     if (!M.utils.isNullOrEmpty(results.spatial_response)) {
       docs = results.spatial_response.docs;

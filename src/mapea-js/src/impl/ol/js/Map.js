@@ -1515,11 +1515,7 @@ class Map extends MObject {
           prevMaxExtent.y.max,
         ];
       }
-      this.facadeMap_.setMaxExtent(transformExtent(
-        prevMaxExtent,
-        olPrevProjection,
-        olProjection,
-      ));
+      this.facadeMap_.setMaxExtent(transformExtent(prevMaxExtent, olPrevProjection, olProjection));
     }
 
     // recalculates bbox

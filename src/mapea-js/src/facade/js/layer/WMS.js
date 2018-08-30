@@ -58,27 +58,13 @@ class WMS extends LayerBase {
     this.options = options;
   }
 
-  /**
-   * 'url' The service URL of the
-   * layer
-   */
-  // get url() {
-  //   return this.getImpl().url_;
-  // }
   // set url(newUrl) {
-  //   this.getImpl().url_ = newUrl;
+  //   super.url = newUrl;
   //   this._updateNoCache();
   // }
   //
-  // /**
-  //  * 'name' the layer name
-  //  */
-  // get name() {
-  //   return this.getImpl().name_;
-  // }
-  //
   // set name(newName) {
-  //   this.getImpl().name_ = newName;
+  //   super.name = newName;
   //   this._updateNoCache();
   // }
 

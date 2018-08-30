@@ -44,7 +44,6 @@ class OSM extends LayerBase {
 
     // This layer is of parameters.
     const parameters = parameter.layer(userParameters, LayerType.OSM);
-
     if (isNullOrEmpty(parameters.name)) {
       parameters.name = 'osm';
     }
