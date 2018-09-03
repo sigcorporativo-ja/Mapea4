@@ -135,8 +135,7 @@ class Vector extends Layer {
     if (style instanceof StyleCluster) {
       style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
       style.refresh();
-    }
-    else {
+    } else {
       this.redraw();
     }
   }
@@ -153,14 +152,12 @@ class Vector extends Layer {
     if (!isNullOrEmpty(style)) {
       if (style instanceof Style) {
         this.facadeVector_.setStyle(style);
-      }
-      else if (style instanceof StyleCluster) {
+      } else if (style instanceof StyleCluster) {
         const cluster = this.facadeVector_.getStyle();
         cluster.unapply(this.facadeVector_);
         cluster.getOldStyle().apply(this.facadeVector_);
         cluster.apply(this.facadeVector_);
-      }
-      else {
+      } else {
         style.apply(this.facadeVector_);
       }
     }
@@ -211,8 +208,7 @@ class Vector extends Layer {
     if (style instanceof StyleCluster) {
       style.getImpl().deactivateTemporarilyChangeEvent(this.redraw.bind(this));
       style.refresh();
-    }
-    else {
+    } else {
       this.redraw();
     }
   }

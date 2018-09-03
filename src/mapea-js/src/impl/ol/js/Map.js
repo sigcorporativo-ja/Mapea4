@@ -276,8 +276,7 @@ class Map extends MObject {
 
     if (filters.length === 0) {
       foundLayers = wmcLayers;
-    }
-    else {
+    } else {
       filters.forEach((filterLayer) => {
         foundLayers = foundLayers.concat(wmcLayers.filter((wmcLayer) => {
           let layerMatched = true;
@@ -295,8 +294,7 @@ class Map extends MObject {
             if (!isNullOrEmpty(filterLayer.name)) {
               layerMatched = (layerMatched && (filterLayer.name === wmcLayer.name));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -348,8 +346,7 @@ class Map extends MObject {
           this.facadeMap_.removeWMS(wmcLayer.layers);
           this.facadeMap_.refreshWMCSelectorControl();
         });
-      }
-      else {
+      } else {
         wmcLayer.setLoaded(false);
         this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
         this.facadeMap_.removeWMS(wmcLayer.layers);
@@ -387,8 +384,7 @@ class Map extends MObject {
 
     if (filters.length === 0) {
       foundLayers = kmlLayers;
-    }
-    else {
+    } else {
       filters.forEach((filterLayer) => {
         const filteredKMLLayers = kmlLayers.filter((kmlLayer) => {
           let layerMatched = true;
@@ -410,8 +406,7 @@ class Map extends MObject {
             if (!isNullOrEmpty(filterLayer.extract)) {
               layerMatched = (layerMatched && (filterLayer.extract === kmlLayer.extract));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -493,8 +488,7 @@ class Map extends MObject {
 
     if (filters.length === 0) {
       foundLayers = wmsLayers;
-    }
-    else {
+    } else {
       filters.forEach((filterLayer) => {
         const filteredWMSLayers = wmsLayers.filter((wmsLayer) => {
           let layerMatched = true;
@@ -503,8 +497,7 @@ class Map extends MObject {
             // if instanceof FacadeWMS check if it is the same
             if (filterLayer instanceof FacadeWMS) {
               layerMatched = (filterLayer === wmsLayer);
-            }
-            else {
+            } else {
               // type
               if (!isNullOrEmpty(filterLayer.type)) {
                 layerMatched = (layerMatched && (filterLayer.type === wmsLayer.type));
@@ -538,8 +531,7 @@ class Map extends MObject {
                 layerMatched = (layerMatched && (filterLayer.version === wmsLayer.version));
               }
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -579,8 +571,7 @@ class Map extends MObject {
               this.updateResolutionsFromBaseLayer();
             }
             layer.setZIndex(Map.Z_INDEX_BASELAYER);
-          }
-          else {
+          } else {
             if (layer.getZIndex() == null) {
               const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMS];
               layer.setZIndex(zIndex);
@@ -642,8 +633,7 @@ class Map extends MObject {
 
     if (filters.length === 0) {
       foundLayers = wfsLayers;
-    }
-    else {
+    } else {
       filters.forEach((filterLayer) => {
         const filteredWFSLayers = wfsLayers.filter((wfsLayer) => {
           let layerMatched = true;
@@ -685,8 +675,7 @@ class Map extends MObject {
             if (!isNullOrEmpty(filterLayer.version)) {
               layerMatched = (layerMatched && (filterLayer.version === wfsLayer.version));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -769,8 +758,7 @@ class Map extends MObject {
 
     if (filters.length === 0) {
       foundLayers = wmtsLayers;
-    }
-    else {
+    } else {
       filters.forEach((filterLayer) => {
         // TODO ERROR DE RECURSIVIDAD: let l = map.getLayers(); map.getWMS(l);
         const filteredWMTSLayers = wmtsLayers.filter((wmtsLayer) => {
@@ -797,8 +785,7 @@ class Map extends MObject {
             if (!isNullOrEmpty(filterLayer.legend)) {
               layerMatched = (layerMatched && (filterLayer.legend === wmtsLayer.legend));
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -837,8 +824,7 @@ class Map extends MObject {
               this.updateResolutionsFromBaseLayer();
             }
             layer.setZIndex(Map.Z_INDEX_BASELAYER);
-          }
-          else {
+          } else {
             if (layer.getZIndex() == null) {
               const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMTS];
               layer.setZIndex(zIndex);
@@ -953,8 +939,7 @@ class Map extends MObject {
 
     if (filtersVar.length === 0) {
       foundLayers = unknowLayers;
-    }
-    else {
+    } else {
       filtersVar.forEach((filterLayer) => {
         const filteredUnknowLayers = unknowLayers.filter((unknowLayer) => {
           let layerMatched = true;
@@ -963,8 +948,7 @@ class Map extends MObject {
             // if instanceof FacadeWMS check if it is the same
             if (filterLayer instanceof LayerBase) {
               layerMatched = filterLayer.equals(unknowLayer);
-            }
-            else {
+            } else {
               // type
               if (!isNullOrEmpty(filterLayer.type)) {
                 layerMatched = (layerMatched && (filterLayer.type === unknowLayer.type));
@@ -974,8 +958,7 @@ class Map extends MObject {
                 layerMatched = (layerMatched && (filterLayer.name === unknowLayer.name));
               }
             }
-          }
-          else {
+          } else {
             layerMatched = false;
           }
           return layerMatched;
@@ -1013,8 +996,7 @@ class Map extends MObject {
             this.updateResolutionsFromBaseLayer();
           }
           layer.setZIndex(Map.Z_INDEX_BASELAYER);
-        }
-        else {
+        } else {
           layer.setZIndex(layer.getZIndex());
           if (layer.getZIndex() == null) {
             const zIndex = this.layers_.length + Map.Z_INDEX[layer.type];
@@ -1083,8 +1065,7 @@ class Map extends MObject {
     }
     if (filtersVar.length === 0) {
       foundControls = controlsToSearch;
-    }
-    else {
+    } else {
       filtersVar.forEach((filterControl) => {
         foundControls = foundControls.concat(controlsToSearch.filter((control) => {
           let controlMatched = false;
@@ -1092,11 +1073,9 @@ class Map extends MObject {
           if (!includes(foundControls, control)) {
             if (isString(filterControl)) {
               controlMatched = (filterControl === control.name);
-            }
-            else if (filterControl instanceof Control) {
+            } else if (filterControl instanceof Control) {
               controlMatched = (filterControl === control);
-            }
-            else if (isObject(filterControl)) {
+            } else if (isObject(filterControl)) {
               controlMatched = (filterControl.name === control.name);
             }
           }
@@ -1209,8 +1188,7 @@ class Map extends MObject {
           max: olExtent[3],
         },
       };
-    }
-    else {
+    } else {
       extent = this.envolvedMaxExtent_;
     }
 
@@ -1240,8 +1218,7 @@ class Map extends MObject {
     let extent;
     if (isArray(bbox)) {
       extent = bbox;
-    }
-    else if (isObject(bbox)) {
+    } else if (isObject(bbox)) {
       extent = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
     }
     const olMap = this.getMapImpl();
@@ -1466,11 +1443,9 @@ class Map extends MObject {
     if (!isNullOrEmpty(scale)) {
       if (scale >= 1000 && scale <= 950000) {
         scale = Math.round(scale / 1000) * 1000;
-      }
-      else if (scale >= 950000) {
+      } else if (scale >= 950000) {
         scale = Math.round(scale / 1000000) * 1000000;
-      }
-      else {
+      } else {
         scale = Math.round(scale);
       }
     }
@@ -1740,8 +1715,7 @@ class Map extends MObject {
           this.calculatedResolutions_ = true;
           this.fire(EventType.COMPLETED);
         }
-      }
-      else {
+      } else {
         EnvolvedExtent.calculate(this).then((extent) => {
           if (!this.resolutionsBaseLayer_ && (this.userResolutions_ === null)) {
             resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
