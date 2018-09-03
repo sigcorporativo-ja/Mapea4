@@ -1,5 +1,5 @@
 /**
- * @module M/control/Layerswitcher
+ * @module M/control/LayerSwitcher
  */
 import 'assets/css/controls/layerswitcher';
 import LayerSwitcherImpl from 'impl/control/Layerswitcher';
