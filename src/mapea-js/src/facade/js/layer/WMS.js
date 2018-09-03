@@ -56,6 +56,8 @@ class WMS extends LayerBase {
 
     // options
     this.options = options;
+
+    this._updateNoCache();
   }
 
   // set url(newUrl) {

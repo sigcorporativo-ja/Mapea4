@@ -1,5 +1,3 @@
-import measurebaseHTML from '../../templates/measurearea';
-
 export default class Measure extends M.Control {
   /**
    * @classdesc
@@ -32,7 +30,7 @@ export default class Measure extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.template.compile(measurebaseHTML, {
+    return M.template.compile(this.template_, {
       jsonp: true,
     });
   }

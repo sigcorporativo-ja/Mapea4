@@ -1,3 +1,4 @@
+import tooltipPointerHTML from '../../../templates/measure_pointer_tooltip';
 import tooltipHTML from '../../../templates/measure_tooltip';
 
 /**
@@ -107,11 +108,14 @@ export default class Measure extends M.impl.Control {
    * @api stable
    */
   activate() {
-    this.createHelpTooltip_().then(() => {
-      this.facadeMap_.getMapImpl().on('pointermove', this.pointerMoveHandler_, this);
-      this.facadeMap_.getMapImpl().addInteraction(this.draw_);
-      this.active = true;
+    this.createHelpTooltip_();
+    this.facadeMap_.getMapImpl().on('pointermove', this.pointerMoveHandler_.bind(this));
+    this.facadeMap_.getMapImpl().addInteraction(this.draw_);
+    this.draw_.on('drawstart', () => {
+      console.log('Empiezo');
     });
+    this.active = true;
+
     this.createMeasureTooltip_();
   }
 
@@ -123,7 +127,7 @@ export default class Measure extends M.impl.Control {
    * @api stable
    */
   deactivate() {
-    this.facadeMap_.getMapImpl().un('pointermove', this.pointerMoveHandler_, this);
+    this.facadeMap_.getMapImpl().un('pointermove', this.pointerMoveHandler_.bind(this));
     this.facadeMap_.getMapImpl().removeInteraction(this.draw_);
     this.clear();
     if (!M.utils.isNullOrEmpty(this.helpTooltip_)) {
@@ -196,8 +200,10 @@ export default class Measure extends M.impl.Control {
         }),
       }),
     });
-    draw.on('drawstart', this.onDrawStart_, this);
-    draw.on('drawend', this.onDrawEnd_, this);
+    draw.on('drawstart', () => {
+      console.log('Empiezo');
+    });
+    draw.on('drawend', this.onDrawEnd_.bind(this));
 
     return draw;
   }
@@ -207,17 +213,16 @@ export default class Measure extends M.impl.Control {
    *
    * @private
    * @function
-   * @return {HTMLElement} Template tooltip
+   * @return {Promise} Template tooltip
    */
   createHelpTooltip_() {
-    const html = M.template.compile(tooltipHTML, { jsonp: true });
+    const helpTooltipElement = M.template.compile(tooltipPointerHTML, { jsonp: true });
     this.helpTooltip_ = new ol.Overlay({
-      element: html,
+      element: helpTooltipElement,
       offset: [15, 0],
       positioning: 'center-left',
     });
     this.facadeMap_.getMapImpl().addOverlay(this.helpTooltip_);
-    return html;
   }
 
   /**
@@ -227,12 +232,12 @@ export default class Measure extends M.impl.Control {
    * @function
    */
   createMeasureTooltip_() {
-    const html = M.template.compile(tooltipHTML, { jsonp: true });
+    const measureTooltipElement = M.template.compile(tooltipHTML, { jsonp: true });
     if (!M.utils.isNullOrEmpty(this.measureTooltip_)) {
       this.overlays_.push(this.measureTooltip_);
     }
     this.measureTooltip_ = new ol.Overlay({
-      element: html,
+      element: measureTooltipElement,
       offset: [0, -15],
       positioning: 'bottom-center',
     });
@@ -248,7 +253,7 @@ export default class Measure extends M.impl.Control {
   onDrawStart_(evt) {
     this.currentFeature_ = evt.feature;
     this.tooltipCoord_ = evt.coordinate;
-    this.currentFeature_.getGeometry().on('change', this.onGeometryChange_, this);
+    this.currentFeature_.getGeometry().on('change', this.onGeometryChange_.bind(this));
   }
 
   /**
