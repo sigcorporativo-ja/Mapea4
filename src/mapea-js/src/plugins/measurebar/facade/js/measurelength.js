@@ -1,5 +1,6 @@
 import Measure from './measurebase';
 import MeasureLengthImpl from '../../impl/ol/js/measurelength';
+import measurelengthHTML from '../../templates/measurelength';
 
 /**
  * @classdesc
@@ -17,7 +18,7 @@ export default class MeasureLength extends Measure {
     const impl = new MeasureLengthImpl();
 
     // calls the super constructor
-    super(impl, MeasureLength.TEMPLATE);
+    super(impl, measurelengthHTML);
 
     // checks if the implementation can create WMC layers
     if (M.utils.isUndefined(MeasureLengthImpl)) {

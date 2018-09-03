@@ -1,5 +1,6 @@
 import GeosearchIntegratedImpl from 'plugins/searchstreetgeosearch/impl/ol/js/geosearchintegratedcontrol';
 import GeosearchControl from 'plugins/geosearch/facade/js/geosearchcontrol';
+import searchstreetgeosearchHTML from '../../templates/searchstreetgeosearch';
 
 export default class GeosearchIntegrated extends GeosearchControl {
   /**
@@ -90,29 +91,26 @@ export default class GeosearchIntegrated extends GeosearchControl {
     this.drawNewResults(results);
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results, true);
-    M.template.compile(GeosearchControl.RESULTS_TEMPLATE, {
-      jsonp: true,
-      vars: resultsTemplateVars,
-    }).then((html) => {
-      // appends the new results
-      const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
-      const newResults = newResultsScrollContainer.children;
-      let newResult;
-      while ((newResult === newResults.item(0)) !== null) {
-        this.resultsScrollContainer_.appendChild(newResult);
-        newResult.addEventListener('click', this.resultClick_);
-      }
+    const options = { jsonp: true, vars: resultsTemplateVars };
+    const html = M.template.compile(searchstreetgeosearchHTML, options);
+    // appends the new results
+    const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
+    const newResults = newResultsScrollContainer.children;
+    let newResult;
+    while ((newResult === newResults.item(0)) !== null) {
+      this.resultsScrollContainer_.appendChild(newResult);
+      newResult.addEventListener('click', this.resultClick_);
+    }
 
-      // updates the found num elements
-      const spanNumFound = this.resultsContainer_.getElementsByTagName('span')['m-geosearch-page-found'];
-      spanNumFound.innerHTML = this.results_.length;
+    // updates the found num elements
+    const spanNumFound = this.resultsContainer_.getElementsByTagName('span')['m-geosearch-page-found'];
+    spanNumFound.innerHTML = this.results_.length;
 
 
-      this.element_.classList.remove(GeosearchControl.SEARCHING_CLASS);
-      this.resultsContainer_.removeChild(this.searchingResult_);
-      // disables scroll if gets all results
-      this.checkScrollSearch_(results);
-    });
+    this.element_.classList.remove(GeosearchControl.SEARCHING_CLASS);
+    this.resultsContainer_.removeChild(this.searchingResult_);
+    // disables scroll if gets all results
+    this.checkScrollSearch_(results);
   }
 
   /**

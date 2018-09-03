@@ -130,7 +130,7 @@ export default class ModifyFeature extends M.impl.Control {
     olMap.addInteraction(this.modify);
 
     // updates features from refresh
-    this.layer_.on(M.evt.LOAD, this.updateLayerFeatures_, this);
+    this.layer_.on(M.evt.LOAD, this.updateLayerFeatures_.bind(this));
   }
 
   /**

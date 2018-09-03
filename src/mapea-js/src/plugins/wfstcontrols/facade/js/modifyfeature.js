@@ -1,4 +1,5 @@
 import ModifyFeatureImpl from '../../impl/ol/js/modifyfeature';
+import modifyfeatureHTML from '../../templates/modifyfeature';
 
 export default class ModifyFeature extends M.Control {
   /**
@@ -41,7 +42,7 @@ export default class ModifyFeature extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.template.compile(ModifyFeature.TEMPLATE, {
+    return M.template.compile(modifyfeatureHTML, {
       jsonp: true,
     });
   }

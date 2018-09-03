@@ -95,9 +95,10 @@ export default class SearchstreetGeosearch extends M.Plugin {
       position: M.ui.position.TL,
       tooltip: 'Buscador de calles y geobúsquedas',
     });
+    /* eslint-disable */
     // JGL20170816: foco al input al desplegar panel
     this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {
-      this.panel_.getButtonPanel.addEventListener('click', (evt) => {
+      this.panel_.buttonPanel_.addEventListener('click', (evt) => {
         if (!this.panel_.collapsed) {
           this.control_.getInput().focus();
         }
@@ -105,6 +106,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
     });
     this.panel_.addControls(this.control_);
     this.map_.addPanels(this.panel_);
+    /* eslint-enable */
   }
 
   /**

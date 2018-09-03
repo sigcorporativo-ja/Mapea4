@@ -91,8 +91,8 @@ export default class SearchstreetControl extends ol.control.Control {
       const feature = results[i];
       this.addEventClickFeature(feature, positionFeature);
 
-      // this.facadeMap_.drawFeatures([M.impl.Feature.olFeature2Facade(positionFeature)]);
-      this.facadeMap_.drawFeatures([new M.Feature(positionFeature.id)]);
+      this.facadeMap_.drawFeatures([M.impl.Feature.olFeature2Facade(positionFeature)]);
+      // this.facadeMap_.drawFeatures([new M.Feature(positionFeature.id)]);
       this.listPoints.push([positionFeature]);
     }
     this.zoomResults();
@@ -106,8 +106,8 @@ export default class SearchstreetControl extends ol.control.Control {
    * @api stable
    */
   zoomResults() {
-    // let features =
-    // this.facadeMap_.getImpl().getDrawLayer().getOL3Layer().getSource().getFeatures();
+    // let features = this.facadeMap_.getImpl().getDrawLayer().getOL3Layer()
+    // .getSource().getFeatures();
     const features = this.listPoints[0];
     const bbox = ol.extent.boundingExtent(features
       .filter((feature) => {
@@ -227,8 +227,8 @@ export default class SearchstreetControl extends ol.control.Control {
    */
   removePoints() {
     for (let i = 0, ilen = this.listPoints.length; i < ilen; i += 1) {
-      // this.facadeMap_.removeFeatures(this.listPoints[i].map(M.impl.Feature.olFeature2Facade));
-      this.facadeMap_.removeFeatures(this.listPoints[i].map(M.Feature));
+      this.facadeMap_.removeFeatures(this.listPoints[i].map(M.impl.Feature.olFeature2Facade));
+      // this.facadeMap_.removeFeatures(this.listPoints[i].map(M.Feature));
     }
     this.listPoints = [];
   }

@@ -1,4 +1,5 @@
 import EditAttributeImpl from '../../impl/ol/js/editattribute';
+import editattributeHTML from '../../templates/editattribute';
 
 export default class EditAttribute extends M.Control {
   /**
@@ -41,7 +42,7 @@ export default class EditAttribute extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.template.compile(EditAttribute.TEMPLATE, {
+    return M.template.compile(editattributeHTML, {
       jsonp: true,
     });
   }

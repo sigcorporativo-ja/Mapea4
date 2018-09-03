@@ -185,7 +185,7 @@ export default class SearchstreetControl extends M.Control {
    * @public
    * @function
    * @param {M.Map} map - Map to add the control
-   * @returns {Promise} HTML template
+   * @returns {HTMLElement} HTML template
    * @api stable
    */
   createView(map) {
@@ -500,9 +500,9 @@ export default class SearchstreetControl extends M.Control {
     }
 
     this.facadeMap_.removePopup();
-    // // if (this.getImpl().listPoints.length > 0) {
-    // //   // this.getImpl().removePoints();
-    // }
+    if (this.getImpl().listPoints.length > 0) {
+      this.getImpl().removePoints();
+    }
     if (!M.utils.isUndefined(resultsTemplateVars.docs[0])) {
       this.getImpl().drawPoints(resultsTemplateVars.docs);
       this.eventList_(resultsTemplateVars.docs);
@@ -674,7 +674,7 @@ export default class SearchstreetControl extends M.Control {
   clearSearchs_() {
     this.element_.classList.remove('shown');
     this.facadeMap_.removePopup();
-    // this.getImpl().removePoints();
+    this.getImpl().removePoints();
     this.input_.value = '';
     this.resultsContainer_.innerHTML = '';
     this.resultsAutocomplete_.innerHTML = '';

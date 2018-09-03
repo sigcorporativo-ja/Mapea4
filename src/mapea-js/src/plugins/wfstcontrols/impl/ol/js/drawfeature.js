@@ -44,7 +44,7 @@ export default class DrawFeature extends WFSTBase {
     }, this);
 
     // updates features from refresh
-    this.layer_.on(M.evt.LOAD, this.updateLayerFeatures_, this);
+    this.layer_.on(M.evt.LOAD, this.updateLayerFeatures_.bind(this));
   }
 
   /**

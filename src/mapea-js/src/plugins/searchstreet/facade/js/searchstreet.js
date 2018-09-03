@@ -87,7 +87,7 @@ export default class Searchstreet extends M.Plugin {
   addTo(map) {
     this.map_ = map;
 
-    map.areasContainer_.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
+    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
     // Checks if the received INE code is correct.
     const comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
       codigo: this.locality_,

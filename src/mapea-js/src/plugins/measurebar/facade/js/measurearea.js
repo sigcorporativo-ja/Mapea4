@@ -1,5 +1,6 @@
 import Measure from './measurebase';
 import MeasureAreaImpl from '../../impl/ol/js/measurearea';
+import measureareaHTML from '../../templates/measurearea';
 
 export default class MeasureArea extends Measure {
   constructor() {
@@ -7,14 +8,13 @@ export default class MeasureArea extends Measure {
     const impl = new MeasureAreaImpl();
 
     // const calls the super constructor
-    super(impl, MeasureArea.TEMPLATE);
+    super(impl, measureareaHTML);
 
     // checks if the implementation can create WMC layers
     if (M.utils.isUndefined(MeasureAreaImpl)) {
       M.Exception('La implementación usada no puede crear controles MeasureArea');
     }
   }
-
   /**
    * This function checks if an object is equals
    * to this control

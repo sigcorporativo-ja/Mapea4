@@ -1,4 +1,5 @@
 import ClearFeatureImpl from '../../impl/ol/js/clearfeature';
+import ClearFeatureHTML from '../../templates/clearfeature';
 
 export default class ClearFeature extends M.Control {
   /**
@@ -29,11 +30,11 @@ export default class ClearFeature extends M.Control {
    * @public
    * @function
    * @param {M.Map} map - Map to add the control
-   * @returns {Promise} html response
+   * @returns {HTMLElement} html response
    * @api stable
    */
   createView(map) {
-    return M.template.compile(ClearFeature.TEMPLATE, {
+    return M.template.compile(ClearFeatureHTML, {
       jsonp: true,
     });
   }

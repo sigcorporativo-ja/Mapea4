@@ -1,20 +1,16 @@
-import { map } from 'facade/js/mapea';
 import WFSTControls from 'plugins/wfstcontrols/facade/js/wfstcontrols';
+// import WFS from 'facade/js/layer/WFS';
 
-const mapjs = map({
-  controls: ['layerswitcher'],
+const mapjs = M.map({
   container: 'map',
+  wmcfiles: ['cdau'],
+  layers: ['WFST*Campamentos*http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?*sepim:campamentos*MPOINT'],
 });
 
 const plugin = new WFSTControls(['deletefeature', 'savefeature', 'drawfeature', 'editattribute']);
 
-const wfs = new M.layer.WFS({
-  namespace: 'callejero',
-  name: 'prueba_pun_wfst',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
-  geometry: 'POINT',
-});
-mapjs.addLayers(wfs);
-
+// mapjs.addLayers(wfs);
 mapjs.addPlugin(plugin);
+
+window.plugin = plugin;
+// window.layer = wfs;

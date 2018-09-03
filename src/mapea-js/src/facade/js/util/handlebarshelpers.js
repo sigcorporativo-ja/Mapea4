@@ -1,4 +1,5 @@
 import Handlebars from 'handlebars';
+import { getTextFromHtml } from '../util/Utils';
 
 const helpers = () => {
   /**
@@ -33,7 +34,17 @@ const helpers = () => {
     }
     return options.inverse(this);
   });
-};
 
+  /**
+   * Helpers for Handlebars wich compares if the
+   * first arguments is greater than the second one
+   */
+  Handlebars.registerHelper('oneword', (arg1, options) => {
+    if (!/\s/g.test(getTextFromHtml(arg1))) {
+      return options.fn(this);
+    }
+    return options.inverse(this);
+  });
+};
 // Exec the register helpers
 helpers();

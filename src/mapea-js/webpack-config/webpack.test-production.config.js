@@ -1,7 +1,7 @@
 const path = require('path');
 const webpack = require('webpack');
 
-const distPath = path.resolve(__dirname, '../dist/core/js/mapea.ol.min.js');
+const distPath = path.resolve(__dirname, '../dist/js/mapea.ol.min.js');
 const testPreprod = path.resolve(__dirname, '../test/production/basic-map.js');
 const plugins = [new webpack.HotModuleReplacementPlugin()];
 

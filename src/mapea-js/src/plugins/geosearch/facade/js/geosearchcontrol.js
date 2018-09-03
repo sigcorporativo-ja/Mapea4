@@ -1,4 +1,7 @@
 import GeosearchImpl from '../../impl/ol/js/geosearchcontrol';
+import geosearchHTML from '../../templates/geosearch';
+import geosearchResultHTML from '../../templates/geosearchresults';
+import helpTemplateHTML from '../../templates/geosearchhelp';
 
 export default class GeosearchControl extends M.Control {
   /**
@@ -161,15 +164,10 @@ export default class GeosearchControl extends M.Control {
    */
   createView(map) {
     this.facadeMap_ = map;
-    const promise = new Promise((success, fail) => {
-      M.template.compile(GeosearchControl.TEMPLATE, {
-        jsonp: true,
-      }).then((html) => {
-        this.addEvents(html);
-        success(html);
-      });
-    });
-    return promise;
+    const options = { jsonp: true };
+    const html = M.template.compile(geosearchHTML, options);
+    this.addEvents(html);
+    return html;
   }
 
   /**
@@ -315,53 +313,50 @@ export default class GeosearchControl extends M.Control {
     this.drawResults(results);
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results);
-    M.template.compile(GeosearchControl.RESULTS_TEMPLATE, {
-      jsonp: true,
-      vars: resultsTemplateVars,
-    }).then((html) => {
-      this.resultsContainer_.classList.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
-      /* unregisters previous events */
-      // scroll
-      if (!M.utils.isNullOrEmpty(this.resultsScrollContainer_)) {
-        this.resultsScrollContainer_.removeEventListener('scroll', this.resultsScroll_);
-      }
-      // results
-      let resultsHtmlElements = this.resultsContainer_.querySelectorAll('.result');
-      let resultHtml;
-      for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
-        resultHtml = resultsHtmlElements.item(i);
-        resultHtml.removeEventListener('click', this.resultClick_.bind(this));
-      }
-      if (results.response.docs.length > 0) {
-        this.zoomToResults();
-      }
+    const options = { jsonp: true, vars: resultsTemplateVars };
+    const html = M.template.compile(geosearchResultHTML, options);
+    this.resultsContainer_.classList.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
+    /* unregisters previous events */
+    // scroll
+    if (!M.utils.isNullOrEmpty(this.resultsScrollContainer_)) {
+      this.resultsScrollContainer_.removeEventListener('scroll', this.resultsScroll_);
+    }
+    // results
+    let resultsHtmlElements = this.resultsContainer_.querySelectorAll('.result');
+    let resultHtml;
+    for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
+      resultHtml = resultsHtmlElements.item(i);
+      resultHtml.removeEventListener('click', this.resultClick_.bind(this));
+    }
+    if (results.response.docs.length > 0) {
+      this.zoomToResults();
+    }
 
-      // results buntton
-      let btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-      if (!M.utils.isNullOrEmpty(btnResults)) {
-        btnResults.removeEventListener('click', this.resultsClick_.bind(this));
-      }
+    // results buntton
+    let btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
+    if (!M.utils.isNullOrEmpty(btnResults)) {
+      btnResults.removeEventListener('click', this.resultsClick_.bind(this));
+    }
 
-      // gets the new results scroll
-      this.resultsContainer_.innerHTML = html.innerHTML;
-      this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-geosearch-results-scroll');
-      // registers the new event
-      M.utils.enableTouchScroll(this.resultsScrollContainer_);
-      this.resultsScrollContainer_.addEventListener('scroll', this.resultsScroll_.bind(this));
+    // gets the new results scroll
+    this.resultsContainer_.innerHTML = html.innerHTML;
+    this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-geosearch-results-scroll');
+    // registers the new event
+    M.utils.enableTouchScroll(this.resultsScrollContainer_);
+    this.resultsScrollContainer_.addEventListener('scroll', this.resultsScroll_.bind(this));
 
-      // adds new events
-      resultsHtmlElements = this.resultsContainer_.getElementsByClassName('result');
-      for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
-        resultHtml = resultsHtmlElements.item(i);
-        resultHtml.addEventListener('click', this.resultClick_.bind(this));
-      }
+    // adds new events
+    resultsHtmlElements = this.resultsContainer_.getElementsByClassName('result');
+    for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
+      resultHtml = resultsHtmlElements.item(i);
+      resultHtml.addEventListener('click', this.resultClick_.bind(this));
+    }
 
-      // results buntton
-      btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-      btnResults.addEventListener('click', this.resultsClick_.bind(this));
-      this.checkScrollSearch_(results);
-      this.fire(M.evt.COMPLETED);
-    });
+    // results buntton
+    btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
+    btnResults.addEventListener('click', this.resultsClick_.bind(this));
+    this.checkScrollSearch_(results);
+    this.fire(M.evt.COMPLETED);
   }
 
   /**
@@ -424,26 +419,23 @@ export default class GeosearchControl extends M.Control {
     this.drawNewResults(results);
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results, true);
-    M.template.compile(GeosearchControl.RESULTS_TEMPLATE, {
-      jsonp: true,
-      vars: resultsTemplateVars,
-    }).then((html) => {
-      // appends the new results
-      const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
-      const newResults = newResultsScrollContainer.children;
-      let newResult;
-      while ((newResult === newResults.item(0)) !== null) {
-        this.resultsScrollContainer_.appendChild(newResult);
-        newResult.addEventListener('click', this.resultClick_);
-      }
+    const options = { jsonp: true, vars: resultsTemplateVars };
+    const html = M.template.compile(geosearchResultHTML, options);
+    // appends the new results
+    const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
+    const newResults = newResultsScrollContainer.children;
+    let newResult;
+    while ((newResult === newResults.item(0)) !== null) {
+      this.resultsScrollContainer_.appendChild(newResult);
+      newResult.addEventListener('click', this.resultClick_);
+    }
 
-      // updates the found num elements
-      const spanNumFound = this.resultsContainer_.getElementsByTagName('span')['m-geosearch-page-found'];
-      spanNumFound.innerHTML = this.results_.length;
+    // updates the found num elements
+    const spanNumFound = this.resultsContainer_.getElementsByTagName('span')['m-geosearch-page-found'];
+    spanNumFound.innerHTML = this.results_.length;
 
-      // disables scroll if gets all results
-      this.checkScrollSearch_(results);
-    });
+    // disables scroll if gets all results
+    this.checkScrollSearch_(results);
   }
 
   /**
@@ -506,15 +498,10 @@ export default class GeosearchControl extends M.Control {
         } catch (err) {
           M.Exception(`La respuesta no es un JSON válido: ${err}`);
         }
-        M.template.compile(GeosearchControl.HELP_TEMPLATE, {
-          jsonp: true,
-          vars: {
-            entities: help,
-          },
-        }).then((html) => {
-          this.getImpl().showHelp(html);
-          this.helpShown_ = true;
-        });
+        const options = { jsonp: true, vars: { entities: help } };
+        const html = M.template.compile(helpTemplateHTML, options);
+        this.getImpl().showHelp(html);
+        this.helpShown_ = true;
       });
     }
   }

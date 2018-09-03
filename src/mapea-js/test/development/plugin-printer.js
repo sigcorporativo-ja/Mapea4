@@ -1,8 +1,6 @@
-import { map } from 'facade/js/mapea';
 import Printer from 'plugins/printer/facade/js/printer';
 
-const mapjs = map({
-  controls: ['layerswitcher'],
+const mapjs = M.map({
   container: 'map',
 });
 
