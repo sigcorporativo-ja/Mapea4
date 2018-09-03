@@ -2,8 +2,8 @@
  * @module M/geom
  */
 import { normalize } from '../util/Utils';
-import WKT from './WKT';
-import WFS from './WFS';
+import * as WKT from './WKT';
+import * as WFS from './WFS';
 
 /**
  * Parses the geometry
@@ -14,7 +14,7 @@ import WFS from './WFS';
  */
 export const parse = (rawGeom) => {
   const parsedGeom = normalize(rawGeom, true);
-  return WFS.type[parsedGeom];
+  return WFS[parsedGeom];
 };
 
 /**
@@ -26,18 +26,18 @@ export const parse = (rawGeom) => {
  */
 export const parseWFS = (wfsType) => {
   let parsedWFS;
-  if (wfsType === WFS.type.POINT) {
-    parsedWFS = WKT.type.POINT;
-  } else if (wfsType === WFS.type.LINE) {
-    parsedWFS = WKT.type.LINE_STRING;
-  } else if (wfsType === WFS.type.POLYGON) {
-    parsedWFS = WKT.type.POLYGON;
-  } else if (wfsType === WFS.type.MPOINT) {
-    parsedWFS = WFS.type.MULTI_POINT;
-  } else if (wfsType === WFS.type.MLINE) {
-    parsedWFS = WKT.type.MULTI_LINE_STRING;
-  } else if (wfsType === WFS.type.MPOLYGON) {
-    parsedWFS = WKT.type.MULTI_POLYGON;
+  if (wfsType === WFS.POINT) {
+    parsedWFS = WKT.POINT;
+  } else if (wfsType === WFS.LINE) {
+    parsedWFS = WKT.LINE_STRING;
+  } else if (wfsType === WFS.POLYGON) {
+    parsedWFS = WKT.POLYGON;
+  } else if (wfsType === WFS.MPOINT) {
+    parsedWFS = WFS.MULTI_POINT;
+  } else if (wfsType === WFS.MLINE) {
+    parsedWFS = WKT.MULTI_LINE_STRING;
+  } else if (wfsType === WFS.MPOLYGON) {
+    parsedWFS = WKT.MULTI_POLYGON;
   }
   return parsedWFS;
 };
