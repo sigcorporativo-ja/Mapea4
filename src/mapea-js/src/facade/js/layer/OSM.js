@@ -24,17 +24,6 @@ class OSM extends LayerBase {
    */
   constructor(userParametersVar, options = {}) {
     let userParameters = userParametersVar;
-    /**
-     * Implementation of this layer
-     * @public
-     * @type {M.layer.WMS}
-     */
-    const impl = new OSMImpl(userParameters, options);
-    // This layer is of parameters.
-    const parameters = parameter.layer(userParameters, LayerType.OSM);
-
-    // calls the super constructor
-    super(parameters, impl);
 
     // checks if the implementation can create OSM
     if (isUndefined(OSMImpl)) {
@@ -46,9 +35,22 @@ class OSM extends LayerBase {
       userParameters = 'OSM';
     }
 
+    /**
+     * Implementation of this layer
+     * @public
+     * @type {M.layer.WMS}
+     */
+    const impl = new OSMImpl(userParameters, options);
+
+    // This layer is of parameters.
+    const parameters = parameter.layer(userParameters, LayerType.OSM);
+
     if (isNullOrEmpty(parameters.name)) {
       parameters.name = 'osm';
     }
+
+    // calls the super constructor
+    super(parameters, impl);
 
     this.name = parameters.name;
 
