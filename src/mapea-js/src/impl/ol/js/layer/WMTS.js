@@ -3,7 +3,8 @@ import { get as getRemote } from 'facade/js/util/Remote';
 import * as EventType from 'facade/js/event/eventtype';
 import { get as getProj } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
-import OLSourceWMTS from 'ol/source/WMTS';
+/* eslint-disable */
+import { default as OLSourceWMTS, optionsFromCapabilities } from 'ol/source/WMTS';
 import OLTileGridWMTS from 'ol/tilegrid/WMTS';
 import { getBottomLeft } from 'ol/extent';
 import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
@@ -217,7 +218,7 @@ export default class WMTS extends LayerBase {
       matrixSet = this.map.getProjection().code;
     }
     return this.getCapabilities().then((parsedCapabilities) => {
-      return OLSourceWMTS.optionsFromCapabilities(parsedCapabilities, {
+      return optionsFromCapabilities(parsedCapabilities, {
         layer: layerName,
         matrixSet,
       });

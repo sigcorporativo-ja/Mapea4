@@ -73,7 +73,7 @@ export default class View extends OLView {
     // this.constraints_.resolution = View.createSnapToResolutions(resolutions);
     // updates zoom
     // updates center
-    this.setCenter(this.getCenter());
+    // this.setCenter(this.getCenter());
     this.applyOptions_({
       minZoom: this.minZoom_,
       resolutions,
@@ -81,6 +81,7 @@ export default class View extends OLView {
       minResolution: this.minResolution_,
       maxResolution: this.maxResolution_,
       projection: this.projection_,
+      center: this.getCenter(),
     });
     // this.setZoom(this.userZoom_);
   }
