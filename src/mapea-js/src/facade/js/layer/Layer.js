@@ -265,7 +265,7 @@ class LayerBase extends Base {
    * @api
    */
   setOpacity(opacity) {
-    this.getImpl().opacity = opacity;
+    this.getImpl().setOpacity(opacity);
   }
 
   /**
