@@ -13,5 +13,5 @@ doc
 dist
 index.js
 index-*.js
-entry-points-test.json
+entry-points-plugins.json
 *~
