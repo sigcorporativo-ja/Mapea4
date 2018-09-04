@@ -2,7 +2,6 @@
  * @module M/filter
  */
 import FilterFunction from './Function';
-
 /**
  * This function joins the filters so that all the filters are fulfilled
  *
