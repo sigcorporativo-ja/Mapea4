@@ -15,8 +15,8 @@ class Cluster extends Composite {
   /**
    * @constructor
    * @extends {M.Style}
-   * @param {object} parameters for style cluster
-   * @param {object} specified parameters for class claster depends on its implementation
+   * @param {object} options - parameters for style cluster
+   * @param {object} optsVendor - specified parameters for cluster depends on its implementation
    * @api
    */
   constructor(options = {}, optsVendor = {}) {
@@ -35,6 +35,10 @@ class Cluster extends Composite {
     this.oldStyle_ = null;
   }
 
+  /**
+   *
+   * @api
+   */
   apply(layer) {
     super.apply(layer);
     const style = layer.getStyle();

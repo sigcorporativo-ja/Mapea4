@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+
+    <title>PRUEBA DESARROLLO</title>
+    <style rel="stylesheet">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: auto;
+      }
+
+      .makidentist:before {
+        content: '\e814';
+        color: 'red'
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <label for="min">Tamaño mínimo</label>
+    <input id="min" type="number" value=5 min=1 max=10 />
+    <label for="max">Tamaño máximo</label>
+    <input id="max" type="number" value=15 min=10 max=30 />
+    <br>
+    <input type="radio" id="symbol" name="tipo" value="symbol"> Símbolo
+    <br>
+    <input type="radio" id="simple" name="tipo" value="simple" checked=true>
+    <label for="borde">Borde</label>
+    <input id="borde" type="color" value="#ffffff">
+    <label for="relleno">Relleno</label>
+    <input id="relleno" type="color" value="#000000">
+    <br>
+    <input type="radio" id="icono" name="tipo" value="icono">
+    <img src="https://cdn0.iconfinder.com/data/icons/citycons/150/Citycons_building-32.png" />
+    <br>
+    <input type="button" id="applyButton" value="Aplicar" />
+    <div id="map" class="container"></div>
+
+    <script src="/config.js" charset="utf-8"></script>
+    <script src="/style-proportional-icon.js" charset="utf-8"></script>
+  </body>
+
+</html>

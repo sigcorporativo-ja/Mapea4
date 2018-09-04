@@ -10,12 +10,12 @@ import StylePolygon from '../style/Polygon';
  * @param {M.Feature} feature
  * @return {M.style.Simple}
  */
-export const generateRandomStyle = (feature, radiusParam, strokeWidthParam, strokeColorParam) => {
-  const radius = radiusParam;
+export const generateRandomStyle = (opts) => {
+  const radius = opts.radius;
   const fillColor = chroma.random().hex();
-  const strokeColor = strokeColorParam;
-  const strokeWidth = strokeWidthParam;
-  const geometry = feature
+  const strokeColor = opts.strokeColor;
+  const strokeWidth = opts.strokeWidth;
+  const geometry = opts.feature
     .getGeometry()
     .type;
   let style;

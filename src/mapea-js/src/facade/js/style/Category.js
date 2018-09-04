@@ -18,7 +18,8 @@ class Category extends Composite {
    * @constructor
    * @extends {M.Style}
    * @param {String} attributeName
-   * @param {Map<String,M.Style>} categoryStyles
+   * @param {object} categoryStyles
+   * @param {object} options
    * @api
    */
   constructor(attributeName, categoryStyles, options = {}) {
@@ -28,27 +29,24 @@ class Category extends Composite {
     }
 
     /**
-     * TODO
+     * Attribute name of category
      * @public
      * @type {String}
      * @api
-     * @expose
      */
     this.attributeName_ = attributeName;
 
     /**
-     * TODO
+     * An object that relate category with a style
      * @public
      * @type {Map<String,M.Style>}
      * @api
-     * @expose
      */
     this.categoryStyles_ = categoryStyles;
   }
 
   /**
    * This constant defines the order of style.
-   * @constant
    * @public
    * @api
    */
@@ -117,7 +115,6 @@ class Category extends Composite {
    * @param {Map<String,M.style>} categories
    * @return {M.style.Category}
    * @api
-   *
    */
   setCategories(categories) {
     this.categoryStyles_ = categories;
@@ -170,7 +167,7 @@ class Category extends Composite {
   }
 
   /**
-   * TODO
+   * Load the canvas image style
    *
    * @function
    * @private
@@ -216,7 +213,7 @@ class Category extends Composite {
   }
 
   /**
-   * TODO
+   * Draw the geometry into the canvas style
    *
    * @function
    * @public
@@ -244,12 +241,8 @@ class Category extends Composite {
       let imageHeight = 0;
       if (!isNullOrEmpty(image)) {
         imageHeight = image.height;
-        vectorContext.drawImage(
-          image, (maxWidth - image.width) / 2,
-          coordinateY,
-          image.width,
-          image.height,
-        );
+        const calculateWidth = (maxWidth - image.width) / 2;
+        vectorContext.drawImage(image, calculateWidth, coordinateY, image.width, image.height);
       }
       vectorContext.fillText(categoryName, maxWidth + 5, coordinateY + (imageHeight / 2));
     });
@@ -285,7 +278,13 @@ class Category extends Composite {
   }
 
   /**
-   * @inheritDoc
+   * This function adds styles of style Composite
+   *
+   * @public
+   * @function
+   * @param {M.style|Array<M.Style>} styles
+   * @returns {M.style.Composite}
+   * @api
    */
   add(stylesParam) {
     let styles = stylesParam;
@@ -312,12 +311,12 @@ class Category extends Composite {
       this.layer_.getFeatures().forEach((feature) => {
         const value = feature.getAttribute(this.attributeName_);
         if (!Object.prototype.hasOwnProperty.call(categories, value)) {
-          categories[value] = generateRandomStyle(
+          categories[value] = generateRandomStyle({
             feature,
-            Category.RANDOM_RADIUS_OPTION,
-            Category.RANDOM_STROKE_WIDTH_OPTION,
-            Category.RANDOM_STROKE_COLOR_OPTION,
-          );
+            radius: Category.RANDOM_RADIUS_OPTION,
+            strokeColor: Category.RANDOM_STROKE_COLOR_OPTION,
+            strokeWidth: Category.RANDOM_STROKE_WIDTH_OPTION,
+          });
         }
       });
     }
@@ -327,7 +326,8 @@ class Category extends Composite {
 
 /**
  * This constant defines the radius of random category style.
- * @constant
+ * @const
+ * @type {number}
  * @public
  * @api
  */
@@ -335,7 +335,8 @@ Category.RANDOM_RADIUS_OPTION = 10;
 
 /**
  * This constant defines the stroke width of random category style.
- * @constant
+ * @const
+ * @type {number}
  * @public
  * @api
  */
@@ -343,8 +344,9 @@ Category.RANDOM_STROKE_WIDTH_OPTION = 1;
 
 /**
  * This constant defines the stroke color of random category style.
- * @constant
+ * @const
  * @public
+ * @type {string}
  * @api
  */
 Category.RANDOM_STROKE_COLOR_OPTION = 'black';

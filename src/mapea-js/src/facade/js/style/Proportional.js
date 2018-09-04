@@ -8,6 +8,41 @@ import { isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 
 /**
+ * This function gets the min value of feature's atributte.
+ * @function
+ * @private
+ * @param {Array<M.Feature>} features - array of features
+ * @param {String} attributeName - attributeName of style
+ * @api
+ */
+export const getMinMaxValues = (features, attributeName) => {
+  let [minValue, maxValue] = [undefined, undefined];
+  const filteredFeatures = features.filter((feature) => {
+    return ![NaN, undefined, null].includes(feature.getAttribute(attributeName));
+  }).map(f => parseInt(f.getAttribute(attributeName), 10));
+  let index = 1;
+  if (!isNullOrEmpty(filteredFeatures)) {
+    minValue = filteredFeatures[0];
+    maxValue = filteredFeatures[0];
+    while (index < filteredFeatures.length - 1) {
+      const posteriorValue = filteredFeatures[index + 1];
+      minValue = (minValue < posteriorValue) ? minValue : posteriorValue;
+      maxValue = (maxValue < posteriorValue) ? posteriorValue : maxValue;
+      index += 1;
+    }
+  }
+  return [minValue, maxValue];
+};
+
+/**
+ * Default proportional function
+ * @private
+ * @api
+ */
+const defaultProportionalFunction = ((value, minValue, maxValue, minRadius, maxRadius) =>
+  (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius);
+
+/**
  * @classdesc
  * Main constructor of the class. Creates a style Proportional
  * with parameters specified by the user
@@ -75,9 +110,7 @@ class Proportional extends StyleComposite {
      * @api
      * @expose
      */
-    this.proportionalFunction_ =
-      proportionalFunction || ((value, minValue, maxValue) =>
-        (((value - minValue) * (maxRadius - minRadius)) / (maxValue - minValue)) + minRadius);
+    this.proportionalFunction_ = proportionalFunction || defaultProportionalFunction;
 
     if (this.maxRadius_ < this.minRadius_) {
       this.minRadius_ = maxRadius;
@@ -141,8 +174,8 @@ class Proportional extends StyleComposite {
       }
       this.oldStyle_ = this.layer_.getStyle() instanceof StyleComposite ? this.layer_.getStyle()
         .getOldStyle() : this.layer_.getStyle();
-      [this.minValue_, this.maxValue_] = Proportional.getMinMaxValues(this.layer_
-        .getFeatures(), this.attributeName_);
+      const minMaxValues = getMinMaxValues(this.layer_.getFeatures(), this.attributeName_);
+      [this.minValue_, this.maxValue_] = minMaxValues;
       this.layer_.getFeatures().forEach(feature => this.applyToFeature(feature, 1));
       let newStyle = this.oldStyle_.clone();
       if (newStyle instanceof StyleSimple) {
@@ -151,23 +184,15 @@ class Proportional extends StyleComposite {
         }
         newStyle.set('zindex', feature => (this.maxValue_ - parseFloat(feature.getAttribute(this.attributeName_))));
         newStyle.set(Proportional.getSizeAttribute(newStyle), (feature) => {
-          const proportion = Proportional.SCALE_PROPORTION;
+          const weigh = Proportional.SCALE_PROPORTION;
           const value = feature.getAttribute(this.attributeName_);
-          let radius = this.getProportionalFunction_(
-            value,
-            this.minValue_,
-            this.maxValue_,
-            this.minRadius_,
-            this.maxRadius_,
-          );
+          const args = [value, this.minValue_, this.maxValue_, this.minRadius_, this.maxRadius_];
+          let radius = this.proportionalFunction_(...args);
           if (Proportional.getSizeAttribute(this.oldStyle_) === 'icon.scale') {
-            radius = this.getProportionalFunction_(
-              value,
-              this.minValue_,
-              this.maxValue_,
-              this.minRadius_ / proportion,
-              this.maxRadius_ / proportion,
-            );
+            const weighMinRadius = this.minRadius_ / weigh;
+            const weighMaxRadius = this.maxRadius_ / weigh;
+            const args2 = [value, this.minValue_, this.maxValue_, weighMinRadius, weighMaxRadius];
+            radius = this.proportionalFunction_(...args2);
           }
           return radius;
         });
@@ -427,34 +452,6 @@ class Proportional extends StyleComposite {
   }
 
   /**
-   * This function gets the min value of feature's atributte.
-   * @function
-   * @private
-   * @param {Array<M.Feature>} features - array of features
-   * @param {String} attributeName - attributeName of style
-   * @api
-   */
-  static getMinMaxValues(features, attributeName) {
-    let [minValue, maxValue] = [undefined, undefined];
-    const filteredFeatures =
-      features.filter((feature) => {
-        return ![NaN, undefined, null].includes(feature.getAttribute(attributeName));
-      }).map(f => parseInt(f.getAttribute(attributeName), 10));
-    let index = 1;
-    if (!isNullOrEmpty(filteredFeatures)) {
-      minValue = filteredFeatures[0];
-      maxValue = filteredFeatures[0];
-      while (index < filteredFeatures.length - 1) {
-        const posteriorValue = filteredFeatures[index + 1];
-        minValue = (minValue < posteriorValue) ? minValue : posteriorValue;
-        maxValue = (maxValue < posteriorValue) ? posteriorValue : maxValue;
-        index += 1;
-      }
-    }
-    return [minValue, maxValue];
-  }
-
-  /**
    * This function returns the attribute of style point that controls the size
    * @function
    * @private
@@ -484,6 +481,7 @@ class Proportional extends StyleComposite {
    * @api
    */
   calculateStyle_(feature, options, styleVar) {
+    const propFun = this.proportionalFunction_;
     let style = styleVar;
     if (!isNullOrEmpty(style)) {
       style = style.clone();
@@ -496,13 +494,7 @@ class Proportional extends StyleComposite {
       if (value == null) {
         console.warn(`Warning: ${this.attributeName_} value is null or empty.`);
       }
-      const radius = this.proportionalFunction_(
-        value,
-        options.minValue,
-        options.maxValue,
-        minRadius,
-        maxRadius,
-      );
+      const radius = propFun(value, options.minValue, options.maxValue, minRadius, maxRadius);
       const zindex = options.maxValue - parseFloat(feature.getAttribute(this.attributeName_));
       style.set(Proportional.getSizeAttribute(style), radius);
       style.set('zindex', zindex);
