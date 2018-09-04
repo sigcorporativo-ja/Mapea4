@@ -26,7 +26,7 @@ class Control extends Base {
     }
 
     // checks if the implementation can create WMC layers
-    if (isUndefined(impl.element)) {
+    if (isUndefined(impl.getElement)) {
       Exception('La implementación usada no posee el método getElement');
     }
 
