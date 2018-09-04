@@ -65,7 +65,7 @@
     "build": "npm run build:core && npm run build:plugins",
     "build:core": "cross-env NODE_ENV=production webpack --config=webpack-config/webpack.production-core.config.js",
     "build:plugins": "cross-env NODE_ENV=production webpack --config=webpack-config/webpack.production-plugins.config.js",
-    "debug:build": "webpack-dev-server --config=webpack-config/webpack.pre.config.js",
+    "debug:build": "webpack-dev-server --config=webpack-config/webpack.test-production.config.js",
     "start:build": "npm run build && npm run debug:build"
   }
 }
