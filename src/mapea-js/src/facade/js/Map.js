@@ -51,6 +51,7 @@ import Panel from './ui/Panel';
 import * as Position from './ui/position';
 import Control from './control/Control';
 import GeoJSON from './layer/GeoJSON';
+import StylePoint from './style/Point';
 
 /**
  * @classdesc
@@ -209,7 +210,7 @@ class Map extends Base {
       displayInLayerSwitcher: false,
     });
 
-    // this.drawLayer_.setStyle(new Point(Map.DRAWLAYER_STYLE));
+    this.drawLayer_.setStyle(new StylePoint(Map.DRAWLAYER_STYLE));
 
     this.drawLayer_.setZIndex(MapImpl.Z_INDEX[LayerType.WFS] + 999);
     this.addLayers(this.drawLayer_);
