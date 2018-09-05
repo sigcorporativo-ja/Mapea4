@@ -7,9 +7,6 @@ import { isArray, isObject } from '../util/Utils';
 import Vector from '../layer/Vector';
 import Feature from '../feature/Feature';
 
-const jsts = require('jsts/dist/jsts.js');
-
-
 /**
  * TODO
  *
