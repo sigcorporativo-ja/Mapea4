@@ -7,6 +7,7 @@ const path = require('path');
 const generateInfo = require('./generate-info');
 
 const OL_MIN_FILE = '../externs/ol-v5.1.3.js';
+const EXTERNS_LIBRARIES = require('./externs-libraries.js');
 
 /**
  * Read the symbols from info file.
@@ -14,7 +15,7 @@ const OL_MIN_FILE = '../externs/ol-v5.1.3.js';
  */
 async function getSymbols() {
   const info = await generateInfo();
-  return info.symbols.filter(symbol => symbol.kind !== 'member' && symbol.name.startsWith('module\:'));
+  return info.symbols.filter(symbol => symbol.kind !== 'member' && symbol.name.startsWith('module:'));
 }
 
 const srcPath = path.posix.resolve(__dirname, '../src').replace(/\\/g, '/');
@@ -42,8 +43,7 @@ function getImports(symbols) {
       const importName = defaultExport[0].replace(/_\D*_/, '').replace(/[./]+/g, '$').replace(/^module:/, '$');
       const defaultImport = `import ${importName} from '${getPath(from)}';`;
       imports[defaultImport] = true;
-    }
-    else if (namedExport.length > 1) {
+    } else if (namedExport.length > 1) {
       const from = symbol.path.replace(/.*facade/, './facade');
       const importName = namedExport[0].replace(/[./]+/g, '_').replace(/^module:/, '_');
       const namedImport = `import * as ${importName} from '${getPath(from)}';`;
@@ -122,6 +122,21 @@ async function concatOL(inputFilePath, outputFilePath) {
 }
 
 /**
+ * PATCH
+ * Concat externs minified libraries
+ * @param {array<object>} libraries - Object array of libraries -> [{name, path}]
+ * @param {string} outputFilePath - output file path
+ */
+async function includeExterns(libraries, outputFilePath) {
+  libraries.forEach((library) => {
+    const requireLine = `window['${library.name}'] = require('${library.path}');\n`;
+    fse.writeFileSync(path.resolve(__dirname, outputFilePath), requireLine, {
+      flag: 'a',
+    });
+  });
+}
+
+/**
  * Generate the exports code.
  * @return {Promise<string>} Resolves with the exports code.
  */
@@ -140,6 +155,7 @@ if (require.main === module) {
   main().then(async (code) => {
     const filepath = path.join(__dirname, '..', 'src', 'index.js');
     fse.outputFileSync(filepath, code);
+    includeExterns(EXTERNS_LIBRARIES, '../src/index.js');
     concatOL(OL_MIN_FILE, '../src/index.js');
   }).then(async () => {}).catch((err) => {
     process.stderr.write(`${err.message}\n`, () => process.exit(1));
