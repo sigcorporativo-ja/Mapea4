@@ -56,7 +56,9 @@ export default class GeoJSON extends OLFormatGeoJSON {
    */
   writeFeatureObject(feature, optionsParameters) {
     const options = optionsParameters;
-    const object = {};
+    const object = {
+      type: 'Feature',
+    };
 
     const id = feature.getId();
     if (id) {
