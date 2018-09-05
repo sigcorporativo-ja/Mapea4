@@ -26,8 +26,7 @@ const generateEntryPoints = (pluginspath) => {
     entrypoint.path = path.resolve(__dirname, '..', 'src', `index-${nameFolder}.js`);
     entrypoint.from = path.join('plugins', nameFolder, 'facade/js', `${nameFolder}`);
     entrypoint.name = getClassName(path.resolve(__dirname, '..', 'src', `${entrypoint.from}.js`));
-    // entrypoint.webpackPath = path.join('dist', 'plugins', `${nameFolder}`, `${nameFolder}.ol.min`);
-    entrypoint.webpackPath = path.join('plugins', `${nameFolder}`, `${nameFolder}.ol.min`);
+    entrypoint.webpackPath = path.join('plugins', `${nameFolder}`, `${nameFolder}`);
     entrypoints.push(entrypoint);
   });
   return entrypoints;

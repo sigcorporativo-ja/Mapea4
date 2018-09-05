@@ -13,7 +13,7 @@ module.exports = {
   entry: entryPoints,
   output: {
     path: distDir,
-    filename: '[name].js',
+    filename: '[name].ol.min.js',
   },
   resolve: {
     alias: {
@@ -71,15 +71,15 @@ module.exports = {
     new CopywebpackPlugin([{
       from: path.join(pluginDir, '**', 'api.json'),
       to: path.join(distDir, 'plugins/[1]/api.json'),
-      test: /([^/]+)\/api\.json/
+      test: /([^/]+)\/api\.json/,
     }]),
     new CopywebpackPlugin([{
       from: path.join(pluginDir, '**', '.mplugin'),
       to: path.join(distDir, 'plugins/[1]/.mplugin'),
-      test: /([^/]+)\/\.mplugin$/
+      test: /([^/]+)\/\.mplugin$/,
     }]),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
+      filename: '[name].min.css',
     }),
   ],
 };
