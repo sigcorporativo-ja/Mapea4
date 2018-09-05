@@ -111,9 +111,6 @@ export default class Measure extends M.impl.Control {
     this.createHelpTooltip_();
     this.facadeMap_.getMapImpl().on('pointermove', this.pointerMoveHandler_.bind(this));
     this.facadeMap_.getMapImpl().addInteraction(this.draw_);
-    this.draw_.on('drawstart', () => {
-      console.log('Empiezo');
-    });
     this.active = true;
 
     this.createMeasureTooltip_();
@@ -200,9 +197,7 @@ export default class Measure extends M.impl.Control {
         }),
       }),
     });
-    draw.on('drawstart', () => {
-      console.log('Empiezo');
-    });
+    draw.on('drawstart', this.onDrawStart_.bind(this));
     draw.on('drawend', this.onDrawEnd_.bind(this));
 
     return draw;
