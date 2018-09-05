@@ -1793,7 +1793,6 @@ class Map extends Base {
       if (String(err).indexOf('El formato del parámetro projection no es correcto') >= 0) {
         this.setProjection(M.config.DEFAULT_PROJ, true);
       }
-      throw err;
     }
 
     return this;
