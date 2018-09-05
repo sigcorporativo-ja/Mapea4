@@ -5,8 +5,8 @@
 const fse = require('fs-extra');
 const path = require('path');
 const generateInfo = require('./generate-info');
+const generateOLInfo = require('./generate-ol-info');
 
-const OL_MIN_FILE = '../externs/ol-v5.1.3.js';
 const EXTERNS_LIBRARIES = require('./externs-libraries.js');
 
 /**
@@ -18,11 +18,25 @@ async function getSymbols() {
   return info.symbols.filter(symbol => symbol.kind !== 'member' && symbol.name.startsWith('module:'));
 }
 
+/**
+ * Read the ol symbols from info file
+ * @return {Promise<Array>}
+ */
+async function getOLSymbols() {
+  const info = await generateOLInfo();
+  return info.symbols.filter(symbol => symbol.name.startsWith('module:'));
+}
+
 const srcPath = path.posix.resolve(__dirname, '../src').replace(/\\/g, '/');
 
 function getPath(name) {
   const fullPath = require.resolve(path.resolve('src', name));
   return './' + path.posix.relative(srcPath, fullPath.replace(/\\/g, '/'));
+}
+
+function getOLPath(name) {
+  // const fullPath = require.resolve(path.resolve('node_modules', name));
+  return name.replace(/\.\//, '');
 }
 
 /**
@@ -47,6 +61,31 @@ function getImports(symbols) {
       const from = symbol.path.replace(/.*facade/, './facade');
       const importName = namedExport[0].replace(/[./]+/g, '_').replace(/^module:/, '_');
       const namedImport = `import * as ${importName} from '${getPath(from)}';`;
+      imports[namedImport] = true;
+    }
+  });
+  return Object.keys(imports).sort();
+}
+
+/**
+ * Generate a list of imports.
+ * @param {Array.<Object>} symbols List of symbols.
+ * @return {Promise<Array>} A list of imports sorted by export name.
+ */
+function getOLImports(symbols) {
+  const imports = {};
+  symbols.forEach((symbol) => {
+    const defaultExport = symbol.name.split('~');
+    const namedExport = symbol.name.split('.');
+    if (defaultExport.length > 1) {
+      const from = defaultExport[0].replace(/^module:/, './');
+      const importName = from.replace(/[./]+/g, '$');
+      const defaultImport = `import ${importName} from '${getOLPath(from)}';`;
+      imports[defaultImport] = true;
+    } else if (namedExport.length > 1) {
+      const from = namedExport[0].replace(/^module:/, './');
+      const importName = from.replace(/[./]+/g, '_');
+      const namedImport = `import * as ${importName} from '${getOLPath(from)}';`;
       imports[namedImport] = true;
     }
   });
@@ -103,22 +142,10 @@ function generateExports(symbols, namespaces, imports) {
       nsdefs.push(`${ns[i]} = {};`);
     }
   }
-  blocks = imports.concat(['const M = window[\'M\'] = {};'].concat(nsdefs.concat(blocks).sort()));
+  blocks = imports.concat(['const M = window[\'M\'] = {};\nconst ol = window[\'ol\'] = {}']
+    .concat(nsdefs.concat(blocks).sort()));
   blocks.push('');
   return blocks.join('\n');
-}
-
-/**
- * PATCH
- * Concat openlayers minified code to entry point of Mapea
- * @param {string} inputFilePath - Input file path
- * @param {string} outputFilePath - output file path
- */
-async function concatOL(inputFilePath, outputFilePath) {
-  const olContent = fse.readFileSync(path.resolve(__dirname, inputFilePath), 'utf8');
-  fse.writeFileSync(path.resolve(__dirname, outputFilePath), olContent, {
-    flag: 'a',
-  });
 }
 
 /**
@@ -143,9 +170,12 @@ async function includeExterns(libraries, outputFilePath) {
 async function main() {
   const symbols = await getSymbols();
   const imports = await getImports(symbols);
-  return generateExports(symbols, {}, imports);
+  const olSymbols = await getOLSymbols();
+  const olImports = await getOLImports(olSymbols);
+  const totalSymbols = symbols.concat(olSymbols);
+  const totalImports = imports.concat(olImports);
+  return generateExports(totalSymbols, {}, totalImports);
 }
-
 
 /**
  * If running this module directly, read the config file, call the main
@@ -156,7 +186,6 @@ if (require.main === module) {
     const filepath = path.join(__dirname, '..', 'src', 'index.js');
     fse.outputFileSync(filepath, code);
     includeExterns(EXTERNS_LIBRARIES, '../src/index.js');
-    concatOL(OL_MIN_FILE, '../src/index.js');
   }).then(async () => {}).catch((err) => {
     process.stderr.write(`${err.message}\n`, () => process.exit(1));
   });
