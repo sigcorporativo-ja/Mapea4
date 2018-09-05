@@ -230,16 +230,14 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
     switch (this.form_) {
       case 'none':
         transfo.fac = 1;
+        const pi = Math.PI;
         break;
       case 'circle':
       case 'ban':
         context.arc(c, c, s / 2, 0, 2 * Math.PI, true);
         break;
       case 'poi':
-        context.arc(
-          c, c - (0.4 * this.radius_), 0.6 * this.radius_,
-          0.15 * Math.PI, 0.85 * Math.PI, true,
-        );
+        context.arc(c, c - (0.4 * this.radius_), 0.6 * this.radius_, 0.15 * pi, 0.85 * pi, true);
         context.lineTo(c - (0.89 * 0.05 * s), ((0.95 + (0.45 * 0.05)) * s) + w);
         context.arc(c, (0.95 * s) + w, 0.05 * s, 0.85 * Math.PI, 0.15 * Math.PI, true);
         transfo = {
@@ -249,13 +247,7 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
         };
         break;
       case 'bubble':
-        context.arc(
-          c,
-          c - (0.2 * this.radius_),
-          0.8 * this.radius_,
-          0.4 * Math.PI, 0.6 * Math.PI,
-          true,
-        );
+        context.arc(c, c - (0.2 * this.radius_), 0.8 * this.radius_, 0.4 * pi, 0.6 * pi, true);
         context.lineTo((0.5 * s) + w, s + w);
         transfo = {
           fac: 0.7,
@@ -264,13 +256,7 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
         };
         break;
       case 'marker':
-        context.arc(
-          c,
-          c - (0.2 * this.radius_),
-          0.8 * this.radius_,
-          0.25 * Math.PI, 0.75 * Math.PI,
-          true,
-        );
+        context.arc(c, c - (0.2 * this.radius_), 0.8 * this.radius_, 0.25 * pi, 0.75 * pi, true);
         context.lineTo((0.5 * s) + w, s + w);
         transfo = {
           fac: 0.7,
@@ -281,7 +267,7 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
       case 'coma':
         context.moveTo(c + (0.8 * this.radius_), c - (0.2 * this.radius_));
         context.quadraticCurveTo((0.95 * s) + w, (0.75 * s) + w, (0.5 * s) + w, s + w);
-        context.arc(c, c - (0.2 * this.radius_), 0.8 * this.radius_, 0.45 * Math.PI, 0, false);
+        context.arc(c, c - (0.2 * this.radius_), 0.8 * this.radius_, 0.45 * pi, 0, false);
         transfo = {
           fac: 0.7,
           posX: c,

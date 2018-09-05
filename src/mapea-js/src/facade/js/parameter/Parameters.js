@@ -355,7 +355,7 @@ const parseTicket = (parameter) => {
  * @function
  * @param {string|Mx.parameters.Map} parameter parameters
  * especified by the user
- * @returns {String|Array<String>|Array<Number> resolutions}
+ * @returns {String|Array<String>|Array<Number>} resolutions
  * established by the user
  */
 const parseResolutions = (parameter) => {
