@@ -1,16 +1,13 @@
 import WFSTControls from 'plugins/wfstcontrols/facade/js/wfstcontrols';
-// import WFS from 'facade/js/layer/WFS';
 
 const mapjs = M.map({
   container: 'map',
   wmcfiles: ['cdau'],
-  layers: ['WFST*Campamentos*http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?*sepim:campamentos*MPOINT'],
+  layers: ['WFST*capa_wfs*http://clientes.guadaltel.es/desarrollo/geossigc/wfs?*callejero:prueba_pun_wfst*POINT'],
 });
 
 const plugin = new WFSTControls(['deletefeature', 'savefeature', 'drawfeature', 'editattribute']);
-
-// mapjs.addLayers(wfs);
 mapjs.addPlugin(plugin);
 
 window.plugin = plugin;
-// window.layer = wfs;
+window.mapjs = mapjs;
