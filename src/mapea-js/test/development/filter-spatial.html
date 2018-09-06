@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="mapea" content="yes">
-    <link rel="stylesheet" href="http://mapea4-sigc.juntadeandalucia.es/mapea/assets/css/mapea.ol.min.css">
     <title>PRUEBA DESARROLLO</title>
     <style rel="stylesheet">
       html,
@@ -26,10 +25,23 @@
   </head>
 
   <body>
-    <div id="map" class="container"></div>
-    <script src="/mapea.ol.min.js" charset="utf-8"></script>
-    <script src="http://mapea4-sigc.juntadeandalucia.es/js/configuration.js" charset="utf-8"></script>
-    <script src="./basic-map.js" charset="utf-8"></script>
+
+    <button id="filtrar" >
+  Filtrar por nombre
+</button>
+    <input id="chkY" type="radio" checked="checked" name="condition"> Y
+    <input id="chkO" type="radio" name="condition"> O
+    <button id="filtrarSpatial" >
+  Filtrado espacial
+</button>
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    <button id="limpiar" >
+  Limpiar filtro
+</button>
+
+    <div id="map" class="map"></div>
+    <script src="/config.js" charset="utf-8"></script>
+    <script src="/filter-spatial.js" charset="utf-8"></script>
   </body>
 
 </html>

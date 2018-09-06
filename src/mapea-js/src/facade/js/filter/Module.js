@@ -7,6 +7,9 @@ import { isArray, isObject } from '../util/Utils';
 import Vector from '../layer/Vector';
 import Feature from '../feature/Feature';
 
+// Se utiliza para arrancarlo en desarrollo
+// const jsts = require('jsts/dist/jsts.min.js');
+
 /**
  * TODO
  *
