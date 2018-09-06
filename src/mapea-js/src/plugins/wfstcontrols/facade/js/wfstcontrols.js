@@ -1,3 +1,4 @@
+import 'plugins/wfstcontrols/facade/assets/css/wfstcontrols';
 import DrawFeature from './drawfeature';
 import ModifyFeature from './modifyfeature';
 import DeleteFeature from './deletefeature';
