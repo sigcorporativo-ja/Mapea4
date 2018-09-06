@@ -21,7 +21,7 @@ export const AND = (filters) => {
   });
   return new FilterFunction((feature) => {
     return filters.every((filter) => {
-      return filter.functionFilter()(feature);
+      return filter.getFunctionFilter()(feature);
     });
   }, {
     cqlFilter,
@@ -47,7 +47,7 @@ export const OR = (filters) => {
   });
   return new FilterFunction((feature) => {
     return filters.some((filter) => {
-      return filter.functionFilter()(feature);
+      return filter.getFunctionFilter()(feature);
     });
   }, {
     cqlFilter,
@@ -64,7 +64,7 @@ export const OR = (filters) => {
  */
 export const NOT = (filter) => {
   return new FilterFunction((feature) => {
-    return !filter.functionFilter()(feature);
+    return !filter.getFunctionFilter()(feature);
   }, {
     cqlFilter: `NOT ${filter.toCQL()}`,
   });
