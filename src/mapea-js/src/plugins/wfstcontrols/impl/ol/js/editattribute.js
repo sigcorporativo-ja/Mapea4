@@ -1,4 +1,5 @@
-import { POPUP_TITLE, TEMPLATE_POPUP } from '../../../facade/js/editattribute';
+import { POPUP_TITLE } from '../../../facade/js/editattribute';
+import templatePopupHTML from '../../../templates/editattribute_popup';
 
 /**
  * @namespace M.impl.control
@@ -90,52 +91,48 @@ export default class EditAttribute extends M.impl.Control {
           // 'type': p.localType
         });
       }, this);
-      M.template.compile(TEMPLATE_POPUP, {
-        jsonp: true,
-        vars: templateVar,
-        parseToHtml: false,
-      }).then((htmlAsText) => {
-        const popupContent = {
-          icon: 'g-cartografia-texto',
-          title: POPUP_TITLE,
-          content: htmlAsText,
-        };
-        this.popup_ = this.facadeMap_.getPopup();
-        if (!M.utils.isNullOrEmpty(this.popup_)) {
-          const hasExternalContent = this.popup_.getTabs().some((tab) => {
-            return (tab.title !== POPUP_TITLE);
-          });
-          if (!hasExternalContent) {
-            this.facadeMap_.removePopup();
-            this.popup_ = new M.Popup();
-            this.popup_.addTab(popupContent);
-            this.facadeMap_.addPopup(this.popup_, coordinate);
-          } else {
-            this.popup_.addTab(popupContent);
-          }
-        } else {
+      const options = { jsonp: true, vars: templateVar, parseToHtml: false };
+      const htmlAsText = M.template.compile(templatePopupHTML, options);
+      const popupContent = {
+        icon: 'g-cartografia-texto',
+        title: POPUP_TITLE,
+        content: htmlAsText,
+      };
+      this.popup_ = this.facadeMap_.getPopup();
+      if (!M.utils.isNullOrEmpty(this.popup_)) {
+        const hasExternalContent = this.popup_.getTabs().some((tab) => {
+          return (tab.title !== POPUP_TITLE);
+        });
+        if (!hasExternalContent) {
+          this.facadeMap_.removePopup();
           this.popup_ = new M.Popup();
           this.popup_.addTab(popupContent);
           this.facadeMap_.addPopup(this.popup_, coordinate);
+        } else {
+          this.popup_.addTab(popupContent);
         }
+      } else {
+        this.popup_ = new M.Popup();
+        this.popup_.addTab(popupContent);
+        this.facadeMap_.addPopup(this.popup_, coordinate);
+      }
 
-        // adds save button events on show
-        this.popup_.on(M.evt.SHOW, () => {
-          const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
-          if (!M.utils.isNullOrEmpty(popupButton)) {
-            popupButton.addEventListener('click', this.saveAttributes_.bind(this));
-          }
-        }, this);
+      // adds save button events on show
+      this.popup_.on(M.evt.SHOW, () => {
+        const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
+        if (!M.utils.isNullOrEmpty(popupButton)) {
+          popupButton.addEventListener('click', this.saveAttributes_.bind(this));
+        }
+      }, this);
 
-        // removes events on destroy
-        this.popup_.on(M.evt.DESTROY, () => {
-          const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
-          if (!M.utils.isNullOrEmpty(popupButton)) {
-            popupButton.removeEventListener('click', this.saveAttributes_);
-          }
-          this.unselectFeature_();
-        }, this);
-      });
+      // removes events on destroy
+      this.popup_.on(M.evt.DESTROY, () => {
+        const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
+        if (!M.utils.isNullOrEmpty(popupButton)) {
+          popupButton.removeEventListener('click', this.saveAttributes_);
+        }
+        this.unselectFeature_();
+      }, this);
     }
   }
 

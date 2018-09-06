@@ -4,7 +4,7 @@
 
 import chroma from 'chroma-js';
 import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units';
-import WKT from '../geom/WKT';
+import * as WKT from '../geom/WKT';
 
 /**
  *
@@ -774,17 +774,17 @@ export const sameUrl = (url1, url2) => {
  */
 export const isGeometryType = (type) => {
   const geometricTypes = [
-    WKT.type.GEOMETRY.toLowerCase(),
+    WKT.GEOMETRY.toLowerCase(),
     'GeometryPropertyType'.toLowerCase(),
-    WKT.type.POINT.toLowerCase(),
-    WKT.type.LINE_STRING.toLowerCase(),
-    WKT.type.LINEAR_RING.toLowerCase(),
-    WKT.type.POLYGON.toLowerCase(),
-    WKT.type.MULTI_POINT.toLowerCase(),
-    WKT.type.MULTI_LINE_STRING.toLowerCase(),
-    WKT.type.MULTI_POLYGON.toLowerCase(),
-    WKT.type.GEOMETRY_COLLECTION.toLowerCase(),
-    WKT.type.CIRCLE.toLowerCase(),
+    WKT.POINT.toLowerCase(),
+    WKT.LINE_STRING.toLowerCase(),
+    WKT.LINEAR_RING.toLowerCase(),
+    WKT.POLYGON.toLowerCase(),
+    WKT.MULTI_POINT.toLowerCase(),
+    WKT.MULTI_LINE_STRING.toLowerCase(),
+    WKT.MULTI_POLYGON.toLowerCase(),
+    WKT.GEOMETRY_COLLECTION.toLowerCase(),
+    WKT.CIRCLE.toLowerCase(),
     'pointpropertytype',
     'polygonpropertytype',
     'linestringpropertytype',

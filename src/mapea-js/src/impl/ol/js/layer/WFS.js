@@ -210,7 +210,7 @@ class WFS extends Vector {
    * @function
    * @api stable
    */
-  static getDefaultValue(type) {
+  getDefaultValue(type) {
     let defaultValue;
     if (type === 'dateTime') {
       defaultValue = '0000-00-00T00:00:00';

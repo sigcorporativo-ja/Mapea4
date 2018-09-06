@@ -1,6 +1,6 @@
 import { isString } from 'facade/js/util/Utils';
 import Exception from 'facade/js/exception/exception';
-import OLxml from 'ol/xml';
+import { parse as olXMLParse } from 'ol/xml';
 
 export default class XML {
   /**
@@ -56,10 +56,10 @@ export default class XML {
   read(data) {
     let dataVariable = data;
     if (isString(data)) {
-      dataVariable = OLxml.parse(data);
+      dataVariable = olXMLParse(data);
     }
 
-    if (data.nodeType !== 9) {
+    if (dataVariable.nodeType !== 9) {
       Exception('doc.nodeType should be DOCUMENT');
     }
 

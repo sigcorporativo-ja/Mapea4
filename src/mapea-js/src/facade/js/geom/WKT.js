@@ -42,14 +42,14 @@ export const MULTI_LINE_STRING = 'MultiLineString';
  * @type {string}
  * @api
  */
-export const MUTLY_POLYGON = 'MultiPolygon';
+export const MULTI_POLYGON = 'MultiPolygon';
 
 /**
  * @const
  * @type {string}
  * @api
  */
-export const LINE_RING = 'LineRing';
+export const LINEAR_RING = 'LinearRing';
 
 /**
  * @const
