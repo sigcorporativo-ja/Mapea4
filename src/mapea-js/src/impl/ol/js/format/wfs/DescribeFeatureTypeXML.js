@@ -53,7 +53,7 @@ export default class DescribeFeatureTypeXML extends XML {
       this.rootPrefix = root.prefix;
       const contextVar = context;
       contextVar.elementFormDefault = root.getAttribute('elementFormDefault');
-      contextVar.elementFormDefault = root.getAttribute('targetNamespace');
+      contextVar.targetNamespace = root.getAttribute('targetNamespace');
       contextVar.targetPrefix = root.getAttribute('targetPrefix');
       contextVar.featureTypes = [];
     }
