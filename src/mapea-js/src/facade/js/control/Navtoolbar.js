@@ -6,7 +6,7 @@ import navtoolbarTemplate from 'templates/navtoolbar';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
-import { compile as compileTemplate } from '../util/Template';
+import { compileSync as compileTemplate } from '../util/Template';
 
 /**
  * @classdesc

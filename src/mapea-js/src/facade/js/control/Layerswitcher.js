@@ -7,7 +7,7 @@ import layerswitcherTemplate from 'templates/layerswitcher';
 import ControlBase from './Control';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
-import { compile as compileTemplate } from '../util/Template';
+import { compileSync as compileTemplate } from '../util/Template';
 import * as LayerType from '../layer/Type';
 import Vector from '../layer/Vector';
 import StylePoint from '../style/Point';

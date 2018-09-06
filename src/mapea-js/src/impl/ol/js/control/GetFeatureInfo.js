@@ -7,7 +7,7 @@ import * as dialog from 'facade/js/dialog';
 import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup';
 import Popup from 'facade/js/Popup';
 import { get as getRemote } from 'facade/js/util/Remote';
-import { compile as compileTemplate } from 'facade/js/util/Template';
+import { compileSync as compileTemplate } from 'facade/js/util/Template';
 import { isNullOrEmpty, normalize, beautifyAttribute } from 'facade/js/util/Utils';
 import Control from './Control';
 

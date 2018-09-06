@@ -8,7 +8,7 @@ import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils';
 import MObject from '../Object';
 import * as EventType from '../event/eventtype';
 import ControlBase from '../control/Control';
-import { compile as compileTemplate } from '../util/Template';
+import { compileSync as compileTemplate } from '../util/Template';
 
 /**
  * @classdesc

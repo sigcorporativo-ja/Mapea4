@@ -1,6 +1,6 @@
 import layerswitcherTemplate from 'templates/layerswitcher';
 import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
-import { compile as compileTemplate } from 'facade/js/util/Template';
+import { compileSync as compileTemplate } from 'facade/js/util/Template';
 import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
 import Layer from 'facade/js/layer/Layer';
 

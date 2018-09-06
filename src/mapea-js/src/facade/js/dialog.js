@@ -4,7 +4,7 @@
 import 'assets/css/dialog';
 import dialogTemplate from 'templates/dialog';
 import { isNullOrEmpty } from './util/Utils';
-import { compile as compileTemplate } from './util/Template';
+import { compileSync as compileTemplate } from './util/Template';
 
 /**
  * TODO

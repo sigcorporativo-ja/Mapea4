@@ -1,4 +1,4 @@
-import { compile as compileTemplate } from 'facade/js/util/Template';
+import { compileSync as compileTemplate } from 'facade/js/util/Template';
 import FacadePopup from 'facade/js/Popup';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import labelPopupTemplate from 'templates/label_popup';

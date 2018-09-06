@@ -7,7 +7,7 @@ import 'assets/css/popup';
 import popupTemplate from 'templates/popup';
 import { isNullOrEmpty } from './util/Utils';
 import Base from './Base';
-import { compile as compileTemplate } from './util/Template';
+import { compileSync as compileTemplate } from './util/Template';
 import * as EventType from './event/eventtype';
 import MWindow from './util/Window';
 
