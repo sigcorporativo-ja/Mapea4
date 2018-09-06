@@ -99,7 +99,14 @@ export default class Point extends Simple {
           return centroidGeometry;
         },
       });
-      const styleIcon = new Centroid();
+      const styleIcon = new Centroid({
+        zIndex: Simple.getValue(options.zindex, featureVariable),
+        geometry: (olFeature) => {
+          const center = Utils.getCentroid(olFeature.getGeometry());
+          const centroidGeometry = new OLGeomPoint(center);
+          return centroidGeometry;
+        },
+      });
       let fill;
       if (!isNullOrEmpty(options.fill)) {
         const fillColorValue = Simple.getValue(options.fill.color, featureVariable);

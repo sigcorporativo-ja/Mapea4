@@ -97,19 +97,22 @@ class Style extends Base {
     let attrValue;
     attrValue = this.options_[attribute];
     if (isNullOrEmpty(attrValue)) {
-      // we look up the attribute by its path. Example: getAttribute('foo.bar.attr')
-      // --> return feature.properties.foo.bar.attr value
       const attrPath = attribute.split('.');
       if (attrPath.length > 1) {
         attrValue = attrPath.reduce((obj, attr) => {
-          const attrValue2 = obj instanceof Style ? obj.get(attr) : obj[attr];
-          return !isNullOrEmpty(obj) ? attrValue2 : undefined;
-        });
+          let value;
+          if (!isNullOrEmpty(obj)) {
+            value = obj[attr];
+            if (obj instanceof Style) {
+              value = obj.get(attr);
+            }
+          }
+          return value;
+        }, this);
       }
     }
     return attrValue;
   }
-
 
   /**
    * This function set value to property and apply new property
