@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/control/GetFeatureInfo
+ */
 import OLFormatWFS from 'ol/format/WFS';
 import { unByKey } from 'ol/Observable';
 import * as dialog from 'facade/js/dialog';
@@ -14,7 +17,7 @@ import Control from './Control';
  * control
  * @api
  */
-export default class GetFeatureInfo extends Control {
+class GetFeatureInfo extends Control {
   /**
    * @constructor
    * @param {string} format - Format response
@@ -110,12 +113,9 @@ export default class GetFeatureInfo extends Control {
           if (!/buffer/i.test(layer.url)) {
             getFeatureInfoParams.Buffer = this.buffer;
           }
-          const url = olLayer.getSource().getGetFeatureInfoUrl(
-            evt.coordinate,
-            viewResolution,
-            srs,
-            getFeatureInfoParams,
-          );
+          const source = olLayer.getSource();
+          const coord = evt.coordinate;
+          const url = source.getGetFeatureInfoUrl(coord, viewResolution, srs, getFeatureInfoParams);
           layerNamesUrls.push({
             /** @type {String} */
             layer: layer.name,
@@ -516,3 +516,5 @@ GetFeatureInfo.regExs = {
   msGeometry: /boundedby$/i,
   msUnsupportedFormat: /error(.*)unsupported(.*)info_format/i,
 };
+
+export default GetFeatureInfo;

@@ -134,7 +134,7 @@ export default class OverviewMap extends OLControlOverviewMap {
   }
 
   /**
-   * @override ol.control.Control.prototype
+   * @overrides ol.control.Control.prototype
    */
   handleToggle_() {
     classToggle(this.element, 'ol-collapsed');

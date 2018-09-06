@@ -205,4 +205,4 @@ const polyfill = () => {
 
 // exec the polifyll
 polyfill()
-/* eslint-enable xxdd*/
+/* eslint-enable */

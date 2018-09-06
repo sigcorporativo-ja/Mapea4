@@ -121,12 +121,10 @@ export default class AnimatedCluster extends OLLayerVector {
     // Start a new animation, if change resolution and source has changed
     if (this.animation_.resolution !== eventVariable.frameState.viewState.resolution &&
       this.sourceChanged) {
-      this.animation_.reverse = this.animation_.resolution >=
-        eventVariable.frameState.viewState.resolution;
-      this.prepareAnimation_(
-        eventVariable.frameState.extent,
-        eventVariable.frameState.viewState.resolution,
-      );
+      const resolution = eventVariable.frameState.viewState.resolution;
+      const extent = eventVariable.frameState.extent;
+      this.animation_.reverse = this.animation_.resolution >= resolution;
+      this.prepareAnimation_(extent, eventVariable.frameState.viewState.resolution);
       eventVariable.frameState.time = this.animation_.start;
     }
 

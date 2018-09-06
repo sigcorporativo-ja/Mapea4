@@ -25,8 +25,6 @@ class Tab {
      * TODO
      * @public
      * @type {String}
-     * @api
-     * @expose
      */
     this.icon = options.icon;
 
@@ -34,8 +32,6 @@ class Tab {
      * TODO
      * @public
      * @type {String}
-     * @api
-     * @expose
      */
     this.title = options.title;
 
@@ -43,8 +39,6 @@ class Tab {
      * TODO
      * @public
      * @type {String}
-     * @api
-     * @expose
      */
     this.content = options.content;
   }

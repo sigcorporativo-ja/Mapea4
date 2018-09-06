@@ -25,7 +25,6 @@ ModuleLayer.visibleAtResolution = (layerState, resolution) => {
  * @param {Node} node Node.
  * @param {ol.geom.Point} value Point geometry.
  * @param {Array.<*>} objectStack Node stack.
- * @private
  *
  * PATCH: disables axis order configuration
  */
@@ -56,7 +55,6 @@ OLFormatGML3.prototype.writePos_ = (node, value, objectStack) => {
  * @param {Array.<number>} point Point geometry.
  * @param {string=} optSRSName Optional srsName
  * @return {string} The coords string.
- * @private
  *
  * PATCH: disables axis order configuration
  */
@@ -88,7 +86,7 @@ OLFormatGML3.prototype.getCoords_ = (point, optSRSName) => {
 //
 // /**
 //  * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
-//  * @private
+//
 //  */
 // OLInteractionPointer.prototype.updateTrackedPointers_ = (mapBrowserEvent) => {
 //   if (isPointerDraggingEvent(mapBrowserEvent)) {

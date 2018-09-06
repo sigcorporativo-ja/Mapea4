@@ -115,12 +115,9 @@ export default class Mapbox extends Layer {
 
     // recalculate resolutions
     this.map.getMapImpl().updateSize();
-    this.resolutions_ = generateResolutionsFromExtent(
-      this.getExtent(),
-      this.map.getMapImpl().getSize(),
-      16,
-      this.map.getProjection().units,
-    );
+    const size = this.map.getMapImpl().getSize();
+    const units = this.map.getProjection().units;
+    this.resolutions_ = generateResolutionsFromExtent(this.getExtent(), size, 16, units);
 
     // sets its visibility if it is in range
     if (this.isVisible() && !this.inRange()) {
