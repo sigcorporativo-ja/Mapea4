@@ -32,6 +32,11 @@ module.exports = {
         },
       },
       {
+        test: /\.js$/,
+        loader: 'eslint-loader',
+        exclude: [/node_modules/],
+      },
+      {
         test: [/\.hbs$/, /\.html$/],
         loader: 'html-loader',
         exclude: /node_modules/,
@@ -56,6 +61,9 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'url-loader?name=fonts/[name].[ext]',
       }],
+  },
+  optimization: {
+    noEmitOnErrors: true,
   },
   plugins: [
     new CopywebpackPlugin([{

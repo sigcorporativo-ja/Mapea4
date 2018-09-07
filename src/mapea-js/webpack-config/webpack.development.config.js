@@ -95,7 +95,7 @@ module.exports = {
   devServer: {
     hot: true,
     open: true,
-    openPage: `/test/development/${testName}.html`,
+    openPage: `test/development/${testName}.html`,
     watchOptions: {
       poll: 1000,
     },
