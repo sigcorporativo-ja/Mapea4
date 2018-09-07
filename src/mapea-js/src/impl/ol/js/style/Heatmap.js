@@ -91,6 +91,7 @@ export default class Heatmap extends Style {
     this.opt_options_.source = new OLSourceVector({
       features: olFeatures,
     });
+    this.opt_options_.name = this.layer_.name;
     this.heatmapLayer_ = new HeatmapLayer(this.opt_options_);
   }
 
