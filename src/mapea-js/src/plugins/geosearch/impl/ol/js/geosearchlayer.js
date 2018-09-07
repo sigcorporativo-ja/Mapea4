@@ -176,7 +176,7 @@ export default class GeosearchLayer extends M.impl.layer.Vector {
 
     const featureForTemplate = this.parseFeaturesForTemplate_(features);
     const options = { jsonp: true, vars: featureForTemplate, parseToHtml: false };
-    const htmlAsText = M.template.compile(resultsPopupHTML, options);
+    const htmlAsText = M.template.compileSync(resultsPopupHTML, options);
     const featureTabOpts = {
       icon: 'g-cartografia-pin',
       title: 'Geosearch',

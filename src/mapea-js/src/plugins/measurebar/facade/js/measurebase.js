@@ -30,7 +30,7 @@ export default class Measure extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.template.compile(this.template_, {
+    return M.template.compileSync(this.template_, {
       jsonp: true,
     });
   }

@@ -154,7 +154,8 @@ export default class PrinterControl extends M.Control {
         // default dpi
         for (i = 0, ilen = capabilities.dpis.length; i < ilen; i += 1) {
           const dpi = capabilities.dpis[i];
-          if (dpi.value === this.options_.dpi) {
+
+          if (parseInt(dpi.value, 10) === this.options_.dpi) {
             dpi.default = true;
             break;
           }
@@ -169,7 +170,7 @@ export default class PrinterControl extends M.Control {
         }
         // forceScale
         capabilities.forceScale = this.options_.forceScale;
-        const html = M.template.compile(printerHTML, { jsonp: true, vars: capabilities });
+        const html = M.template.compileSync(printerHTML, { jsonp: true, vars: capabilities });
         this.addEvents(html);
         success(html);
       });
@@ -452,7 +453,7 @@ export default class PrinterControl extends M.Control {
       const encodedLayers = [];
       layers.forEach((layer) => {
         this.getImpl().encodeLayer(layer).then((encodedLayer) => {
-          if (encodedLayer !== null) {
+          if (!M.utils.isNullOrEmpty(encodedLayer)) {
             encodedLayers.push(encodedLayer);
           }
           numLayersToProc -= 1;

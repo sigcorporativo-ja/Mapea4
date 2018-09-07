@@ -92,7 +92,6 @@ export default class SearchstreetControl extends ol.control.Control {
       this.addEventClickFeature(feature, positionFeature);
 
       this.facadeMap_.drawFeatures([M.impl.Feature.olFeature2Facade(positionFeature)]);
-      // this.facadeMap_.drawFeatures([new M.Feature(positionFeature.id)]);
       this.listPoints.push([positionFeature]);
     }
     this.zoomResults();
@@ -106,8 +105,9 @@ export default class SearchstreetControl extends ol.control.Control {
    * @api stable
    */
   zoomResults() {
-    // let features = this.facadeMap_.getImpl().getDrawLayer().getOL3Layer()
-    // .getSource().getFeatures();
+    // const features = this.facadeMap_.getImpl().getDrawLayer().getOL3Layer()
+    //   .getSource()
+    //   .getFeatures();
     const features = this.listPoints[0];
     const bbox = ol.extent.boundingExtent(features
       .filter((feature) => {
@@ -131,19 +131,19 @@ export default class SearchstreetControl extends ol.control.Control {
    */
   addEventClickFeature(element, result) {
     this.facadeMap_.removePopup();
-    const this2 = this;
     if (M.utils.isNullOrEmpty(result)) {
       this.showPopup(element, false);
       this.facadeMap_.setBbox([element.coordinateX,
         element.coordinateY, element.coordinateX, element.coordinateY]);
     } else if (result instanceof ol.Feature) {
-      result.set('vendor', {
-        mapea: {
-          click(evt) {
-            this2.showPopup(element, false);
-          },
-        },
-      });
+      this.showPopup(element, false);
+      // result.set('vendor', {
+      //   mapea: {
+      //     click(evt) {
+      //       this.showPopup(element, false);
+      //     },
+      //   },
+      // });
     }
   }
 
@@ -167,7 +167,7 @@ export default class SearchstreetControl extends ol.control.Control {
       },
       parseToHtml: false,
     };
-    const htmlAsText = M.template.compile(SearchstreetPopup, options);
+    const htmlAsText = M.template.compileSync(SearchstreetPopup, options);
     const popupContent = {
       icon: 'g-cartografia-zoom',
       title: 'Searchstreet',

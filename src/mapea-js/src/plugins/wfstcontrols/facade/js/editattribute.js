@@ -42,7 +42,7 @@ export default class EditAttribute extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.template.compile(editattributeHTML, {
+    return M.template.compileSync(editattributeHTML, {
       jsonp: true,
     });
   }

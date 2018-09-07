@@ -42,7 +42,7 @@ export default class ModifyFeature extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.template.compile(modifyfeatureHTML, {
+    return M.template.compileSync(modifyfeatureHTML, {
       jsonp: true,
     });
   }

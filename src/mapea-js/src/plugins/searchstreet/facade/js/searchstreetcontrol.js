@@ -191,24 +191,10 @@ export default class SearchstreetControl extends M.Control {
   createView(map) {
     this.facadeMap_ = map;
     const options = { jsonp: true };
-    const html = M.template.compile(SearchstreetTemplate, options);
+    const html = M.template.compileSync(SearchstreetTemplate, options);
     this.addEvents(html);
     return html;
   }
-
-  //
-  // createView2(map) {
-  //   this.facadeMap_ = map;
-  //   const promise = new Promise((success, fail) => {
-  //     M.template.compile(SearchstreetControl.TEMPLATE, {
-  //       jsonp: true,
-  //     }).then((html) => {
-  //       this.addEvents(html);
-  //       success(html);
-  //     });
-  //   });
-  //   return promise;
-  // }
 
   /**
    * This function add events to HTML elements
@@ -332,6 +318,7 @@ export default class SearchstreetControl extends M.Control {
    * @param {function} processor - Calls function
    */
   search_(query, processor) {
+    this.resultsContainer_.innerHTML = ' ';
     let searchUrl = null;
     this.provincia_ = null;
     this.municipio_ = null;
@@ -491,7 +478,7 @@ export default class SearchstreetControl extends M.Control {
       }
     }
     const options = { jsonp: true, vars: resultsTemplateVars };
-    const html = M.template.compile(SearchstreetResultsTemplate, options);
+    const html = M.template.compileSync(SearchstreetResultsTemplate, options);
     this.resultsContainer_.classList.remove(SearchstreetControl.HIDDEN_RESULTS_CLASS);
     this.resultsContainer_.innerHTML = html.innerHTML;
     this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-searchstreet-results-scroll');

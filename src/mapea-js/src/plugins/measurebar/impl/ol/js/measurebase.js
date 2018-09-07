@@ -211,7 +211,7 @@ export default class Measure extends M.impl.Control {
    * @return {Promise} Template tooltip
    */
   createHelpTooltip_() {
-    const helpTooltipElement = M.template.compile(tooltipPointerHTML, { jsonp: true });
+    const helpTooltipElement = M.template.compileSync(tooltipPointerHTML, { jsonp: true });
     this.helpTooltip_ = new ol.Overlay({
       element: helpTooltipElement,
       offset: [15, 0],
@@ -227,7 +227,7 @@ export default class Measure extends M.impl.Control {
    * @function
    */
   createMeasureTooltip_() {
-    const measureTooltipElement = M.template.compile(tooltipHTML, { jsonp: true });
+    const measureTooltipElement = M.template.compileSync(tooltipHTML, { jsonp: true });
     if (!M.utils.isNullOrEmpty(this.measureTooltip_)) {
       this.overlays_.push(this.measureTooltip_);
     }

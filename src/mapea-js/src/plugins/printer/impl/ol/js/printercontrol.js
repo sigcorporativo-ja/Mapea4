@@ -151,7 +151,7 @@ export default class PrinterControl extends M.impl.Control {
       }
       const styleFn = feature.getStyle();
       if (!M.utils.isNullOrEmpty(styleFn)) {
-        const featureStyle = styleFn.call(feature, resolution)[0];
+        const featureStyle = styleFn(feature, resolution)[0];
         if (!M.utils.isNullOrEmpty(featureStyle)) {
           const img = featureStyle.getImage();
           let imgSize = img.getImageSize();
@@ -242,7 +242,7 @@ export default class PrinterControl extends M.impl.Control {
     const tiled = layer.getImpl().tiled;
     const params = olLayer.getSource().getParams();
     const paramsLayers = [params.LAYERS];
-    const paramsFormat = [params.FORMAT];
+    const paramsFormat = params.FORMAT;
     const paramsStyles = [params.STYLES];
     encodedLayer = {
       baseURL: layerUrl,
@@ -257,6 +257,8 @@ export default class PrinterControl extends M.impl.Control {
     /** ***********************************
      MAPEA DE CAPAS TILEADA.
     ************************************ */
+    /* eslint-disable */
+    layer._updateNoCache();
     const noCacheName = layer.getNoCacheName();
     const noChacheUrl = layer.getNoCacheUrl();
     if (!M.utils.isNullOrEmpty(noCacheName) && !M.utils.isNullOrEmpty(noChacheUrl)) {
@@ -280,8 +282,8 @@ export default class PrinterControl extends M.impl.Control {
       if ('iswmc,transparent'.indexOf(key.toLowerCase()) !== -1) {
         encodedLayer.customParams[key] = params[key];
       }
-      return encodedLayer;
     });
+    return encodedLayer;
   }
 
   /**

@@ -56,7 +56,7 @@ export default class AttributeTableControl extends M.Control {
         }))),
       },
     };
-    const html = M.template.compile(attributetableHTML, options);
+    const html = M.template.compileSync(attributetableHTML, options);
     /* Draggable */
     const panel = this.getPanel();
     if (!M.utils.isNullOrEmpty(panel)) {
@@ -143,7 +143,7 @@ export default class AttributeTableControl extends M.Control {
       };
     }
     const options = { jsonp: true, vars: params };
-    const html = M.template.compile(tableDataHTML, options);
+    const html = M.template.compileSync(tableDataHTML, options);
     const content = this.areaTable_.querySelector('table');
     if (!M.utils.isNullOrEmpty(content)) {
       this.areaTable_.removeChild(this.areaTable_.querySelector('#m-attributetable-content-attributes'));

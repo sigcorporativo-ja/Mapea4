@@ -201,7 +201,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
    */
   createView(map) {
     const promise = new Promise((success, fail) => {
-      const html = M.template.compile(searchstreetgeosearchHTML, { jsonp: true });
+      const html = M.template.compileSync(searchstreetgeosearchHTML, { jsonp: true });
       this.element_ = html;
       this.input_ = html.querySelector('input#m-searchstreetgeosearch-search-input');
       const searchstreetResuts = html.querySelector('div#m-searchstreet-results');

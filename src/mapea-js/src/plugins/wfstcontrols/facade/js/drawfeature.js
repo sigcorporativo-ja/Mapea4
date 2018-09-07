@@ -40,7 +40,7 @@ export default class DrawFeature extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.template.compile(drawfeatureHTML, {
+    return M.template.compileSync(drawfeatureHTML, {
       jsonp: true,
     });
   }

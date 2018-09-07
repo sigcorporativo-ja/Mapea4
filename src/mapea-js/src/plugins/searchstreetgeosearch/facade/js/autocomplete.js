@@ -290,7 +290,7 @@ export default class Autocomplete extends M.Plugin {
                 }
               }
 
-              const html = M.template.compile(ResultsTemplate, options);
+              const html = M.template.compileSync(ResultsTemplate, options);
               this.resultsContainer_.innerHTML = html.innerHTML;
               const divResultsAutocomplete = this.resultsContainer_.querySelectorAll('div.autocomplete');
               this.addEvents_(divResultsAutocomplete);

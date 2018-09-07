@@ -92,7 +92,7 @@ export default class GeosearchIntegrated extends GeosearchControl {
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results, true);
     const options = { jsonp: true, vars: resultsTemplateVars };
-    const html = M.template.compile(searchstreetgeosearchHTML, options);
+    const html = M.template.compileSync(searchstreetgeosearchHTML, options);
     // appends the new results
     const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
     const newResults = newResultsScrollContainer.children;

@@ -124,7 +124,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    */
   createView(map) {
     this.facadeMap_ = map;
-    return M.template.compile(geosearchbylocationHTML, {
+    return M.template.compileSync(geosearchbylocationHTML, {
       jsonp: true,
     });
   }
@@ -269,7 +269,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
     if (this.showList === true) {
       const resultsTemplateVars = this.parseResultsForTemplate_(this.results);
       const options = { jsonp: true, vars: resultsTemplateVars };
-      const html = M.template.compile(geosearchbylocationresultsHTML, options);
+      const html = M.template.compileSync(geosearchbylocationresultsHTML, options);
       this.resultsContainer_ = html;
       this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-geosearchbylocation-results-scroll');
       M.utils.enableTouchScroll(this.resultsScrollContainer_);

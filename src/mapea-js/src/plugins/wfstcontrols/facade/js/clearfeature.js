@@ -34,7 +34,7 @@ export default class ClearFeature extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.template.compile(ClearFeatureHTML, {
+    return M.template.compileSync(ClearFeatureHTML, {
       jsonp: true,
     });
   }

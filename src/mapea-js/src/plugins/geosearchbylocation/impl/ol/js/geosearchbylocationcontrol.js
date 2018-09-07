@@ -83,7 +83,7 @@ export default class GeosearchbylocationControl extends M.impl.control.Geosearch
         vars: { valorX: coordinates[0], valorY: coordinates[1] },
         parseToHtml: false,
       };
-      const htmlAsText = M.template.compile(geosearchbylocationfeaturepopupHTML, options);
+      const htmlAsText = M.template.compileSync(geosearchbylocationfeaturepopupHTML, options);
       const positionTabOpts = {
         icon: 'g-cartografia-gps2',
         title: 'posición',

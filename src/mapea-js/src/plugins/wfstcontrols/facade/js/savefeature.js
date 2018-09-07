@@ -42,7 +42,7 @@ export default class SaveFeature extends M.Control {
    */
   createView(map) {
     this.facadeMap_ = map;
-    return M.template.compile(savefeatureHTML, {
+    return M.template.compileSync(savefeatureHTML, {
       jsonp: true,
     });
   }

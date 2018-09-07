@@ -37,7 +37,7 @@ export default class MeasureClear extends M.Control {
    * @api stable
    */
   createView(map) {
-    return M.template.compile(measureclearHTML, {
+    return M.template.compileSync(measureclearHTML, {
       jsonp: true,
     });
   }

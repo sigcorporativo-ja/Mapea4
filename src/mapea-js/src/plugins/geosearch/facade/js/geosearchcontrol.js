@@ -165,7 +165,7 @@ export default class GeosearchControl extends M.Control {
   createView(map) {
     this.facadeMap_ = map;
     const options = { jsonp: true };
-    const html = M.template.compile(geosearchHTML, options);
+    const html = M.template.compileSync(geosearchHTML, options);
     this.addEvents(html);
     return html;
   }
@@ -314,7 +314,7 @@ export default class GeosearchControl extends M.Control {
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results);
     const options = { jsonp: true, vars: resultsTemplateVars };
-    const html = M.template.compile(geosearchResultHTML, options);
+    const html = M.template.compileSync(geosearchResultHTML, options);
     this.resultsContainer_.classList.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
     /* unregisters previous events */
     // scroll
@@ -420,7 +420,7 @@ export default class GeosearchControl extends M.Control {
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results, true);
     const options = { jsonp: true, vars: resultsTemplateVars };
-    const html = M.template.compile(geosearchResultHTML, options);
+    const html = M.template.compileSync(geosearchResultHTML, options);
     // appends the new results
     const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
     const newResults = newResultsScrollContainer.children;
@@ -499,7 +499,7 @@ export default class GeosearchControl extends M.Control {
           M.Exception(`La respuesta no es un JSON válido: ${err}`);
         }
         const options = { jsonp: true, vars: { entities: help } };
-        const html = M.template.compile(helpTemplateHTML, options);
+        const html = M.template.compileSync(helpTemplateHTML, options);
         this.getImpl().showHelp(html);
         this.helpShown_ = true;
       });

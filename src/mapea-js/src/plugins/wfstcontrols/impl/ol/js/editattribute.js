@@ -92,7 +92,7 @@ export default class EditAttribute extends M.impl.Control {
         });
       }, this);
       const options = { jsonp: true, vars: templateVar, parseToHtml: false };
-      const htmlAsText = M.template.compile(templatePopupHTML, options);
+      const htmlAsText = M.template.compileSync(templatePopupHTML, options);
       const popupContent = {
         icon: 'g-cartografia-texto',
         title: POPUP_TITLE,
