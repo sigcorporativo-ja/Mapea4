@@ -30,12 +30,11 @@ async function getOLSymbols() {
 const srcPath = path.posix.resolve(__dirname, '../src').replace(/\\/g, '/');
 
 function getPath(name) {
-  const fullPath = require.resolve(path.resolve('src', name));
+  const fullPath = require.resolve(path.resolve('src', name)).replace(/\.js$/, '');
   return './' + path.posix.relative(srcPath, fullPath.replace(/\\/g, '/'));
 }
 
 function getOLPath(name) {
-  // const fullPath = require.resolve(path.resolve('node_modules', name));
   return name.replace(/\.\//, '');
 }
 
@@ -59,7 +58,7 @@ function getImports(symbols) {
       imports[defaultImport] = true;
     } else if (namedExport.length > 1) {
       const from = symbol.path.replace(/.*facade/, './facade');
-      const importName = namedExport[0].replace(/[./]+/g, '_').replace(/^module:/, '_');
+      const importName = `${namedExport[0].replace(/[./]+/g, '').replace(/^module:/, '')}Module`;
       const namedImport = `import * as ${importName} from '${getPath(from)}';`;
       imports[namedImport] = true;
     }
@@ -84,7 +83,7 @@ function getOLImports(symbols) {
       imports[defaultImport] = true;
     } else if (namedExport.length > 1) {
       const from = namedExport[0].replace(/^module:/, './');
-      const importName = from.replace(/[./]+/g, '_');
+      const importName = `${from.replace(/[./]+/g, '').replace(/\.\//, 'module')}Module`;
       const namedImport = `import * as ${importName} from '${getOLPath(from)}';`;
       imports[namedImport] = true;
     }
@@ -100,12 +99,12 @@ function getOLImports(symbols) {
  * @return {string} Export code.
  */
 function formatSymbolExport(name, namespaces) {
-  const parts = name.replace(/\/\_\D*\_/, "").split('~');
+  const parts = name.replace(/\/_\D*_/, '').split('~');
   const isNamed = parts[0].indexOf('.') !== -1;
-  const nsParts = parts[0].replace(/^module\:/, '').split(/[\/\.]/);
+  const nsParts = parts[0].replace(/^module:/, '').split(/[/.]/);
   const last = nsParts.length - 1;
   const importName = isNamed ?
-    '_' + nsParts.slice(0, last).join('_') + '.' + nsParts[last] :
+    nsParts.slice(0, last).join('') + 'Module' + '.' + nsParts[last] :
     '$' + nsParts.join('$');
   let line = nsParts[0];
   for (let i = 1, ii = nsParts.length; i < ii; ++i) {
@@ -171,6 +170,7 @@ async function main() {
   const symbols = await getSymbols();
   const imports = await getImports(symbols);
   const olSymbols = await getOLSymbols();
+  imports.push('\n/* eslint-disable */\n');
   const olImports = await getOLImports(olSymbols);
   const totalSymbols = symbols.concat(olSymbols);
   const totalImports = imports.concat(olImports);
