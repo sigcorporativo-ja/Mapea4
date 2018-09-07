@@ -1,7 +1,6 @@
 {
   "extends": "airbnb",
   "globals": {
-    "goog": true,
     "M": true,
     "Handlebars": true,
     "proj4": true,
@@ -14,7 +13,6 @@
     "Image": true,
     "Draggabilly": true,
     "XMLSerializer": true,
-    "ol": true,  
   },
   "rules": {
     "no-underscore-dangle": ["error", { "allowAfterThis": true }],
@@ -30,5 +28,6 @@
     "no-case-declarations": "off",
     "import/no-mutable-exports": "off",
     "no-template-curly-in-string": "off",
+    "import/no-duplicates": off,
   }
 }
