@@ -2,10 +2,11 @@
  * @module M/style/Category
  */
 import Composite from './Composite';
-import { isNullOrEmpty, generateRandomStyle, getImageSize, isArray } from '../util/Utils';
+import { isNullOrEmpty, getImageSize, isArray } from '../util/Utils';
 import Exception from '../exception/exception';
 import StyleProportional from './Proportional';
 import StyleCluster from './Cluster';
+import { generateRandomStyle } from './utils';
 
 /**
  * @classdesc
