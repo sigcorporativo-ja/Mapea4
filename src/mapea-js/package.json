@@ -60,14 +60,15 @@
     "walk": "2.3.9"
   },
   "scripts": {
-    "start": "webpack-dev-server --config=webpack-config/webpack.development.config.js",
-    "debug:prebuild": "node --inspect-brk tasks/generate-index.js",
-    "prebuild": "node tasks/generate-index.js && node tasks/generate-plugins-entrypoints.js",
+    "generate-test": "node tasks/test-generator",
     "build": "npm run build:core && npm run build:plugins",
     "build:sourcemap": "npm run prebuild && npm run build:core -- --source-map && npm run build:plugins",
     "build:core": "webpack --config=webpack-config/webpack.production-core.config.js",
     "build:plugins": "webpack --config=webpack-config/webpack.production-plugins.config.js",
     "debug:build": "webpack-dev-server --config=webpack-config/webpack.test-production.config.js",
+    "debug:prebuild": "node --inspect-brk tasks/generate-index.js",
+    "prebuild": "node tasks/generate-index.js && node tasks/generate-plugins-entrypoints.js",
+    "start": "webpack-dev-server --config=webpack-config/webpack.development.config.js",
     "start:build": "npm run build && npm run debug:build"
   }
 }
