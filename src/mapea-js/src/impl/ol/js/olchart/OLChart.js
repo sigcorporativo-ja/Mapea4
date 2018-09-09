@@ -1,11 +1,9 @@
 import OLStyleRegularShape from 'ol/style/RegularShape';
 import OLStyleFill from 'ol/style/Fill';
-import OLFeature from 'ol/Feature';
-import OLGeomPoint from 'ol/geom/Point';
 import { asString as colorAsString } from 'ol/color';
 import Chart from 'facade/js/style/Chart';
+import * as chartTypes from 'facade/js/chart/types';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
-import UtilsImpl from '../util/Utils';
 
 export default class OLChart extends OLStyleRegularShape {
   /**
@@ -101,7 +99,7 @@ export default class OLChart extends OLStyleRegularShape {
      */
     this.animation_ = {
       animate: typeof options.animation === 'number',
-      step: (typeof options.animation === 'number') ? options.animation : Chart.DEFAULT.animationStep
+      step: (typeof options.animation === 'number') ? options.animation : Chart.DEFAULT.animationStep,
     };
 
     /**
@@ -143,7 +141,7 @@ export default class OLChart extends OLStyleRegularShape {
    * @api stable
    */
   clone() {
-    let newInstance = new OLChart({
+    const newInstance = new OLChart({
       type: this.type_,
       radius: this.radius_,
       colors: this.colors_,
@@ -159,7 +157,7 @@ export default class OLChart extends OLStyleRegularShape {
       offsetY: this.offset_[1],
       animation: this.animation_,
       fill3DColor: this.fill3DColor_,
-      rotateWithView: this.rotateWithView_
+      rotateWithView: this.rotateWithView_,
     });
     newInstance.setScale(this.getScale());
     newInstance.setOpacity(this.getOpacity());
@@ -211,12 +209,12 @@ export default class OLChart extends OLStyleRegularShape {
    */
   setAnimation(step) {
     if (step === false) {
-      if (this.animation_.animate == false) {
+      if (this.animation_.animate === false) {
         return;
       }
       this.animation_.animate = false;
     } else {
-      if (this.animation_.step == step) {
+      if (this.animation_.step === step) {
         return;
       }
       this.animation_.animate = true;
@@ -230,16 +228,16 @@ export default class OLChart extends OLStyleRegularShape {
    */
   getChecksum() {
     let fillChecksum;
-    let strokeChecksum = (this.stroke_ !== null) ? this.stroke_.getChecksum() : '-';
-    let recalculate = (this.checksums_ === null) ||
-      (strokeChecksum != this.checksums_[1]) ||
-      (fillChecksum != this.checksums_[2]) ||
-      (this.radius_ != this.checksums_[3]) ||
-      (this.data_.join('|') != this.checksums_[4]);
+    const strokeChecksum = (this.stroke_ !== null) ? this.stroke_.getChecksum() : '-';
+    const recalculate = (this.checksums_ === null) ||
+      (strokeChecksum !== this.checksums_[1]) ||
+      (fillChecksum !== this.checksums_[2]) ||
+      (this.radius_ !== this.checksums_[3]) ||
+      (this.data_.join('|') !== this.checksums_[4]);
 
     if (recalculate) {
-      let checksum = 'c' + strokeChecksum + fillChecksum +
-        ((this.radius_ !== void 0) ? this.radius_.toString() : '-') + this.data_.join('|');
+      const radiusCheck = this.radius_ ? this.radius_.toString() : '-';
+      const checksum = `c${strokeChecksum}${fillChecksum}${radiusCheck}${this.data_.join('|')}`;
       this.checksums_ = [checksum, strokeChecksum, fillChecksum, this.radius_, this.data_.join('|')];
     }
     return this.checksums_[0];
@@ -254,6 +252,65 @@ export default class OLChart extends OLStyleRegularShape {
    * @api stable
    */
   renderChart_(atlasManager) {
+    switch (this.type_) {
+      case chartTypes.types.DONUT:
+      case chartTypes.types.PIE_3D:
+      case chartTypes.types.PIE:
+        this.renderCircleChart();
+        break;
+      default:
+        this.renderBarChart();
+        break;
+    }
+  }
+
+  /**
+   * @function
+   * This function draw the Bar chart
+   */
+  renderBarChart() {
+    const canvas = this.getImage();
+    const context = canvas.getContext('2d');
+    let strokeStyle;
+    let strokeWidth = 0;
+    const step = this.animation_.animate ? this.animation_.step : 1;
+    if (this.stroke_) {
+      strokeStyle = colorAsString(this.stroke_.getColor());
+      strokeWidth = this.stroke_.getWidth();
+    }
+    const max = Math.max.apply(null, this.data_) || 0;
+    const start = Math.min(5, (2 * this.radius_) / this.data_.length);
+    const border = canvas.width - (strokeWidth || 0);
+    let x;
+    const center = canvas.width / 2;
+    let x0 = center - ((this.data_.length * start) / 2);
+    if (strokeStyle) {
+      context.strokeStyle = strokeStyle;
+      context.lineWidth = strokeWidth;
+    }
+    this.data_.sort((num, numNext) => num - numNext).forEach((data, i) => {
+      context.beginPath();
+      context.fillStyle = this.colors_[i % this.colors_.length];
+      x = x0 + start;
+      const height = (data / max) * 2 * this.radius_ * step;
+      context.rect(x0, border - height, start, height);
+      context.closePath();
+      context.fill();
+      if (strokeStyle) {
+        context.stroke();
+      }
+      x0 = x;
+    });
+    const anchor = this.getAnchor();
+    anchor[0] = center - this.offset_[0];
+    anchor[1] = center - this.offset_[1];
+  }
+
+  /**
+   * This function draw the circle chart: pie | pie3d | donut
+   * @function
+   */
+  renderCircleChart() {
     let strokeStyle;
     let strokeWidth = 0;
 
@@ -262,8 +319,8 @@ export default class OLChart extends OLStyleRegularShape {
       strokeWidth = this.stroke_.getWidth();
     }
 
-    let canvas = this.getImage();
-    var context = canvas.getContext('2d');
+    const canvas = this.getImage();
+    const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.lineJoin = 'round';
 
@@ -274,113 +331,89 @@ export default class OLChart extends OLStyleRegularShape {
     context.setTransform(1, 0, 0, 1, 0, 0);
     context.translate(0, 0);
 
-    let step = this.animation_.animate ? this.animation_.step : 1;
-    let center;
-    switch (this.type_) {
-      case Chart.types.DONUT:
-      case Chart.types.PIE_3D:
-      case Chart.types.PIE:
-        let angle;
-        let angle0 = Math.PI * (step - 1.5);
-        center = canvas.width / 2;
-        if (strokeStyle) {
-          context.strokeStyle = strokeStyle;
-          context.lineWidth = strokeWidth;
-        }
-        context.save();
-        if (this.type_ === Chart.types.PIE_3D) {
-          context.translate(0, center * 0.3);
-          context.scale(1, 0.7);
-          context.beginPath();
-          context.fillStyle = this.fill3DColor_;
-          context.arc(center, center * 1.4, this.radius_ * step, 0, 2 * Math.PI);
-          context.fill();
-          if (strokeStyle) {
-            context.stroke();
-          }
-        } else if (this.type_ === Chart.types.DONUT) {
-          context.save();
-          context.beginPath();
-          context.rect(0, 0, 2 * center, 2 * center);
-          context.arc(center, center, this.radius_ * step * this.donutRatio_, 0, 2 * Math.PI);
-          context.clip('evenodd');
-        }
-        this.data_.forEach((data, i) => {
-          context.beginPath();
-          context.moveTo(center, center);
-          context.fillStyle = this.colors_[i % this.colors_.length];
-          angle = angle0 + 2 * Math.PI * data / sum * step;
-          context.arc(center, center, this.radius_ * step, angle0, angle);
-          context.closePath();
-          context.fill();
-          if (strokeStyle) {
-            context.stroke();
-          }
-          angle0 = angle;
-        });
-        if (this.type_ === Chart.types.DONUT) {
-          context.restore();
-          context.beginPath();
-          context.strokeStyle = strokeStyle;
-          context.lineWidth = strokeWidth;
-          context.arc(center, center, this.radius_ * step * this.donutRatio_, Math.PI * (step - 1.5), angle0);
-          if (strokeStyle) {
-            context.stroke();
-          }
-        }
-        context.restore();
-        break;
-        // case Chart.types.BAR:
-      default:
-        let max = Math.max.apply(null, this.data_) || 0;
-        let start = Math.min(5, 2 * this.radius_ / this.data_.length);
-        let border = canvas.width - (strokeWidth || 0);
-        let x;
-        center = canvas.width / 2;
-        let x0 = center - this.data_.length * start / 2;
-        if (strokeStyle) {
-          context.strokeStyle = strokeStyle;
-          context.lineWidth = strokeWidth;
-        }
-        this.data_.sort((num, numNext) => num - numNext).forEach((data, i) => {
-          context.beginPath();
-          context.fillStyle = this.colors_[i % this.colors_.length];
-          x = x0 + start;
-          let height = this.data_[i] / max * 2 * this.radius_ * step;
-          context.rect(x0, border - height, start, height);
-          context.closePath();
-          context.fill();
-          if (strokeStyle) {
-            context.stroke();
-          }
-          x0 = x;
-        });
-        break;
+    const step = this.animation_.animate ? this.animation_.step : 1;
+    const angle0 = Math.PI * (step - 1.5);
+    const center = canvas.width / 2;
+    if (strokeStyle) {
+      context.strokeStyle = strokeStyle;
+      context.lineWidth = strokeWidth;
     }
-    let anchor = this.getAnchor();
+    context.save();
+    if (this.type_ === chartTypes.types.PIE_3D) {
+      this.drawPie3D(context, angle0, center, step, strokeStyle, sum);
+    } else if (this.type_ === chartTypes.types.DONUT) {
+      this.drawDonut(context, angle0, center, step, strokeStyle, strokeWidth, sum);
+    } else {
+      this.drawPie(context, angle0, center, step, strokeStyle, sum);
+    }
+    context.restore();
+    const anchor = this.getAnchor();
     anchor[0] = center - this.offset_[0];
     anchor[1] = center - this.offset_[1];
   }
 
   /**
-   * Draws in a vector context a 'center point' as feature and applies it this chart style.
-   * This draw only will be applied to geometries of type POLYGON or MULTI_POLYGON.
-   * [_REV] -> revisar si linestring necesita tratamiento
-   *
-   * @private
+   * This function draw the Donut chart
    * @function
-   * @api stable
    */
-  forceRender_(feature, style, ctx) {
-    if (feature.getGeometry() == null) {
-      return;
+  drawDonut(contextParam, angle0Param, center, step, strokeStyle, strokeWidth, sum) {
+    const context = contextParam;
+    context.save();
+    context.beginPath();
+    context.rect(0, 0, 2 * center, 2 * center);
+    context.arc(center, center, this.radius_ * step * this.donutRatio_, 0, 2 * Math.PI);
+    context.clip('evenodd');
+    const angle0 = this.drawPie(context, angle0Param, center, step, strokeStyle, sum);
+    context.restore();
+    context.beginPath();
+    context.strokeStyle = strokeStyle;
+    context.lineWidth = strokeWidth;
+    const r = this.radius_;
+    context.arc(center, center, r * step * this.donutRatio_, Math.PI * (step - 1.5), angle0);
+    if (strokeStyle) {
+      context.stroke();
     }
-    let center = UtilsImpl.getCentroidCoordinate(feature.getGeometry());
-    if (center != null) {
-      let tmpFeature = new OLFeature({
-        geometry: new OLGeomPoint(center)
-      });
-      ctx.drawFeature(tmpFeature, style);
+  }
+
+  /**
+   * This function draw the 3D-Pie chart
+   * @function
+   */
+  drawPie3D(contextParam, angle0Param, center, step, strokeStyle, sum) {
+    const context = contextParam;
+    context.translate(0, center * 0.3);
+    context.scale(1, 0.7);
+    context.beginPath();
+    context.fillStyle = this.fill3DColor_;
+    context.arc(center, center * 1.4, this.radius_ * step, 0, 2 * Math.PI);
+    context.fill();
+    if (strokeStyle) {
+      context.stroke();
     }
+    this.drawPie(contextParam, angle0Param, center, step, strokeStyle, sum);
+  }
+
+  /**
+   * @function
+   * This function draw the Pie chart
+   */
+  drawPie(contextParam, angle0Param, center, step, strokeStyle, sum) {
+    let angle;
+    let angle0 = angle0Param;
+    const context = contextParam;
+    this.data_.forEach((data, i) => {
+      context.beginPath();
+      context.moveTo(center, center);
+      context.fillStyle = this.colors_[i % this.colors_.length];
+      angle = angle0 + ((2 * Math.PI * data) / (sum * step));
+      context.arc(center, center, this.radius_ * step, angle0, angle);
+      context.closePath();
+      context.fill();
+      if (strokeStyle) {
+        context.stroke();
+      }
+      angle0 = angle;
+    });
+    return angle0;
   }
 }
