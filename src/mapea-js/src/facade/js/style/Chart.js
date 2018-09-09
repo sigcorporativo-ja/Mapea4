@@ -38,8 +38,9 @@ class Chart extends StyleFeature {
    *
    * @api
    */
-  constructor(options = {}) {
-    let variables = options.variables || null;
+  constructor(optsVar = {}) {
+    const options = optsVar;
+    const variables = options.variables || null;
 
     // vars parsing
     if (!Object.values(ChartTypes.types).includes(options.type)) {
@@ -48,9 +49,9 @@ class Chart extends StyleFeature {
     if (!isNullOrEmpty(variables)) {
       if (variables instanceof Array) {
         options.variables = variables
-          .filter(variable => variable != null).map(variable => Chart.formatVariable_(variable));
+          .filter(variable => variable != null).map(variable => Chart.formatVariable(variable));
       } else if (typeof variables === 'string' || typeof variables === 'object') {
-        options.variables = [Chart.formatVariable_(variables)];
+        options.variables = [Chart.formatVariable(variables)];
       } else {
         options.variables = [];
       }
@@ -86,9 +87,8 @@ class Chart extends StyleFeature {
    * @param {Chart.Variable|string|object} variableOb a chart variable
    * @private
    * @function
-   * @api
    */
-  static formatVariable_(variableOb) {
+  static formatVariable(variableOb) {
     if (variableOb == null) {
       return null;
     }

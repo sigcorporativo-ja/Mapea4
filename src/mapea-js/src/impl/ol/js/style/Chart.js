@@ -1,61 +1,325 @@
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+/**
+ * @namespace Chart
+ */
+
+import { isNullOrEmpty, isObject } from 'facade/js/util/Utils';
 import * as Align from 'facade/js/style/Align';
 import FacadeChart from 'facade/js/style/Chart';
 import OLFeature from 'ol/Feature';
 import OLStyleStroke from 'ol/style/Stroke';
-import OLGeomMultipolygon from 'ol/geom/MultiPolygon';
+import OLGeomPoint from 'ol/geom/Point';
 import OLStyleText from 'ol/style/Text';
 import OLStyleFill from 'ol/style/Fill';
 import OLStyle from 'ol/style/Style';
 import OLStyleIcon from 'ol/style/Icon';
 import * as Baseline from 'facade/js/style/Baseline';
-import OLChart from '../chart/OLChart';
+import OLChart from '../olchart/OLChart';
 import StyleCentroid from './Centroid';
 import Feature from './Feature';
 import Simple from './Simple';
+import Utils from '../util/Utils';
 
 /**
- * @namespace Chart
+ * Object assign hook. Merges the array of source objects into target object.
+ * @param {object} target the target ob
+ * @param {object|Array<object>} sourceObs array of source obs
+ * @return {object} merged target object
+ * @function
+ * @private
+ */
+const extend = (targetVar, ...sourceObs) => {
+  const target = targetVar;
+  if (target == null) { // TypeError if undefined or null
+    throw new TypeError('Cannot convert undefined or null to object');
+  }
+
+  const to = Object(target);
+  sourceObs.filter(source => source != null).forEach(source => Object.keys(source)
+    .forEach((sourceKey) => {
+      if (Object.prototype.hasOwnProperty.call(source, sourceKey) &&
+        !Object.prototype.hasOwnProperty.call(target, sourceKey)) {
+        target[sourceKey] = source[sourceKey];
+      }
+    }));
+  return to;
+};
+
+/**
+ * This function get the text chart data of a feature attribute.
+ * @function
+ */
+const getTextData = (label, feature, styleOptions, dataValue) => {
+  let text = `${Simple.getValue(label.text, feature)}` || '';
+  if (typeof label.text === 'function') {
+    text = label.text(dataValue, styleOptions.data, feature);
+  }
+  text = text === '0' ? '' : text;
+  return text;
+};
+
+/**
+ * This function generates the bar chart with options
+ * @function
+ */
+const generateTextBarChart = (stylesParam, styleOptions, feature) => {
+  let height = 0;
+  let acumSum = null;
+  const variables = styleOptions.variables;
+  const data = styleOptions.data;
+  const styles = stylesParam.concat(styleOptions.data.map((dataValue, i) => {
+    const variable = variables.length === data.length ? variables[i] : variables[0];
+    const label = variable.label || {};
+    if (!variable.label) {
+      return null;
+    }
+    const text = getTextData(label, feature, styleOptions, dataValue);
+    const font = Simple.getValue(label.font, feature);
+    const sizeFont = 9;
+    if (isNullOrEmpty(acumSum)) {
+      acumSum = (stylesParam[0].getImage().getImage().height / 2) - 6;
+    } else {
+      acumSum -= sizeFont + 6;
+    }
+    height = height + sizeFont + 6;
+    const styleImage = stylesParam[0].getImage().getImage();
+    const offsetX = -(styleImage.width / 2) - (1 + styleOptions.offsetX) || 0;
+    return new StyleCentroid({
+      text: new OLStyleText({
+        text: typeof text === 'string' ? `${text}` : '',
+        offsetY: acumSum + styleOptions.offsetY || 0,
+        offsetX,
+        textBaseline: 'middle',
+        rotateWithView: false,
+        textAlign: 'center',
+        stroke: label.stroke ? new OLStyleStroke({}) : undefined,
+        font: `9px ${font}`,
+        scale: typeof label.scale === 'number' ? Simple.getValue(label.scale, feature) : undefined,
+        fill: new OLStyleFill({
+          color: styleOptions.scheme[i % styleOptions.scheme.length],
+        }),
+      }),
+    });
+  }));
+  const filteredStyles = styles.filter(style => style != null);
+  height = Math.max(height, 1);
+  const anchorX = -(stylesParam[0].getImage().getImage().width / 2) + 10 + styleOptions.offsetX;
+  const anchorY = (stylesParam[0].getImage().getImage().height / 2) + styleOptions.offsetY;
+  const backgroundText = new OLStyleIcon(({
+    anchor: [anchorX, anchorY],
+    anchorOrigin: 'bottom-right',
+    offsetOrigin: 'bottom-left',
+    anchorXUnits: 'pixels',
+    anchorYUnits: 'pixels',
+    rotateWithView: false,
+    src: `data:image/svg+xml;base64,${window.btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="${stylesParam[0].getImage()
+      .getImage().width / 2}" height="${height}"><rect width="${styles[0].getImage()
+      .getImage().width / 2}" height="${height}" fill="rgba(255, 255, 255, 0.75)" stroke-width="0" stroke="rgba(0, 0, 0, 0.34)"/></svg>`)}`,
+    size: [styles[0].getImage().getImage().width / 2, height],
+  }));
+  filteredStyles.push(new OLStyle({
+    image: backgroundText,
+  }));
+  return filteredStyles;
+};
+
+/**
+ * This function generates the circle chart with options
+ * @function
+ */
+const generateTextCircleChart = (stylesParam, styleOptions, feature) => {
+  let acumSum = 0;
+  const sum = styleOptions.data.reduce((tot, curr) => tot + curr);
+  const variables = styleOptions.variables;
+  const data = styleOptions.data;
+  const styles = stylesParam.concat(styleOptions.data.map((dataValue, i) => {
+    const variable = variables.length === data.length ? variables[i] : variables[0];
+    const label = variable.label || {};
+    const radius = label.radius ? label.radius : styleOptions.radius;
+    const angle = (((((2 * acumSum) + dataValue) / sum) * Math.PI) - (Math.PI / 2));
+    acumSum += dataValue;
+    if (!variable.label) {
+      return null;
+    }
+    const radiusIncrement = typeof label.radiusIncrement === 'number' ? label.radiusIncrement : 3;
+    let textAlign = typeof label.textAlign === 'function' ? label.textAlign(angle) : null;
+    if (isNullOrEmpty(textAlign)) {
+      textAlign = label.textAlign || (angle < Math.PI / 2 ? 'left' : 'right');
+    }
+    const text = getTextData(label, feature, styleOptions, dataValue);
+    const font = Simple.getValue(label.font, feature);
+    const olFill = new OLStyleFill({
+      color: Simple.getValue(label.fill, feature) || '#000',
+    });
+    const olStroke = new OLStyleStroke({
+      color: Simple.getValue(label.stroke.color, feature) || '#000',
+      width: Simple.getValue(label.stroke.width, feature) || 1,
+    });
+    const arcPositionX = Math.cos(angle) * ((radius + radiusIncrement) + styleOptions.offsetX) || 0;
+    const arcPositionY = Math.sin(angle) * ((radius + radiusIncrement) + styleOptions.offsetY) || 0;
+    const olText = new OLStyleText({
+      text: typeof text === 'string' ? `${text}` : '',
+      offsetX: typeof label.offsetX === 'number' ? Simple.getValue(label.offsetX, feature) : arcPositionX,
+      offsetY: typeof label.offsetY === 'number' ? Simple.getValue(label.offsetY, feature) : arcPositionY,
+      textAlign: Simple.getValue(textAlign, feature),
+      textBaseline: Simple.getValue(label.textBaseline, feature) || 'middle',
+      stroke: label.stroke ? olStroke : undefined,
+      font: /^([1-9])[0-9]*px ./.test(font) ? font : `12px ${font}`,
+      scale: typeof label.scale === 'number' ? Simple.getValue(label.scale, feature) : undefined,
+      fill: olFill,
+    });
+    return new StyleCentroid({
+      text: olText,
+    });
+  }));
+  const filteredStyles = styles.filter(style => style != null);
+  return filteredStyles;
+};
+
+/**
+ * This function add the style text to the array of styles
+ * @function
+ */
+const addTextChart = (options, styles, feature) => {
+  if (!isNullOrEmpty(options.label)) {
+    const styleLabel = new OLStyle();
+    const textLabel = Simple.getValue(options.label.text, feature);
+    const align = Simple.getValue(options.label.align, feature);
+    const baseline = Simple.getValue(options.label.baseline, feature);
+    const offsetX = options.label.offset ? options.label.offset[0] : undefined;
+    const offsetY = options.label.offset ? options.label.offset[1] : undefined;
+    const fill = new OLStyleFill({
+      color: Simple.getValue(options.label.color || '#000000', feature),
+    });
+    const labelText = new OLStyleText({
+      font: Simple.getValue(options.label.font, feature),
+      rotateWithView: Simple.getValue(options.label.rotate, feature),
+      scale: Simple.getValue(options.label.scale, feature),
+      offsetX: Simple.getValue(offsetX, feature),
+      offsetY: Simple.getValue(offsetY, feature),
+      fill,
+      textAlign: Object.values(Align).includes(align) ? align : 'center',
+      textBaseline: Object.values(Baseline).includes(baseline) ? baseline : 'top',
+      text: textLabel === undefined ? undefined : String(textLabel),
+      rotation: Simple.getValue(options.label.rotation, feature),
+    });
+    if (!isNullOrEmpty(options.label.stroke)) {
+      labelText.setStroke(new OLStyleStroke({
+        color: Simple.getValue(options.label.stroke.color, feature),
+        width: Simple.getValue(options.label.stroke.width, feature),
+        lineCap: Simple.getValue(options.label.stroke.linecap, feature),
+        lineJoin: Simple.getValue(options.label.stroke.linejoin, feature),
+        lineDash: Simple.getValue(options.label.stroke.linedash, feature),
+        lineDashOffset: Simple.getValue(options.label.stroke.linedashoffset, feature),
+        miterLimit: Simple.getValue(options.label.stroke.miterlimit, feature),
+      }));
+    }
+    styleLabel.setText(labelText);
+    styles.push(styleLabel);
+  }
+};
+
+/**
+ * @function
+ */
+// const wrapText = (contextParam, initialPosition, drawStackActions, options) => {
+//   const words = options.text.split(' ');
+//   let line = '';
+//   const x = initialPosition[0];
+//   let y = initialPosition[1];
+//   drawStackActions.push((opts = {}) => {
+//     const buildCtx = contextParam;
+//     buildCtx.font = `${opts.fontSize}px ${opts.fontFamily}`;
+//     buildCtx.strokeStyle = opts.strokeColor;
+//     buildCtx.strokeWidth = opts.strokeWidth;
+//     buildCtx.fillStyle = opts.textColor;
+//   });
+//
+//   words.forEach((word, i) => {
+//     const metrics = contextParam.measureText(`${line + word} `);
+//     if (metrics.width > options.maxWidth && i > 0) {
+//       drawStackActions.push(() => {
+//         contextParam.strokeText(line, x, y);
+//         contextParam.fillText(line, x, y);
+//       });
+//       line = `${word} `;
+//       y += options.lineHeight;
+//     } else {
+//       line = `${line + word} `;
+//     }
+//   });
+//   drawStackActions.push(() => {
+//     contextParam.strokeText(line, x, y);
+//     contextParam.fillText(line, x, y);
+//   });
+//   return [x, y];
+// };
+
+/**
+ * @function
+ */
+// const drawVariable = (options, optsVendor, drawStackActions) => {
+//   let [x, y] = options.initialPosition;
+//   y += options.fixedProps.item_top_margin;
+//   drawStackActions.push((opts = {}) => {
+//     const buildCtx = options.context;
+//     buildCtx.beginPath();
+//     buildCtx.strokeStyle = optsVendor.strokeColor;
+//     buildCtx.lineWidth = optsVendor.borderWidth;
+//     buildCtx.fillStyle = options.color;
+//     buildCtx.rect(x, y, optsVendor.rectSize, optsVendor.rectSize);
+//     buildCtx.closePath();
+//     buildCtx.stroke();
+//     buildCtx.fill();
+//   });
+//
+//   x += options.percentages.item_side_margin + options.fixedProps.rect_size;
+//   y += (options.fixedProps.rect_size / 1.5);
+//   // y coord plus bottom padding
+//   const tmpImageT = y + options.fixedProps.item_top_margin;
+//   const textPosition = wrapText(options.context, [x, y], drawStackActions, {
+//     text: options.text,
+//     maxWidth: options.percentages.max_text_width,
+//     lineHeight: options.fixedProps.text_line_height,
+//   });
+//   return [textPosition[0], (textPosition[1] > tmpImageT ? textPosition[1] : tmpImageT)];
+// };
+
+
+/**
+ * @classdesc
+ * Openlayers implementation of style chart
+ * @api
  */
 export default class Chart extends Feature {
   /**
-   * @classdesc
-   * Set chart style for vector features
-   *
-   * @constructor
-   * @param {Mx.ChartOptions} options. (SAME AS M.style.Chart)
-   *  - type {string|M.style.chart.types} the chart type
-   *  - radius {number} the radius of the chart. If chart type is 'bar' type this field
-   *            will limit the max bar height
-   *  - offsetX {number} chart x axis offset
-   *  - offsetY {number} chart y axis offset
-   *  - stroke.
-   *      - color {string} the color of the chart stroke
-   *      - width {number} the width of the chart stroke
-   *  - fill3DColor: {string} the fill color of the PIE_3D cylinder
-   *  - scheme {string|Array<string>|M.style.chart.schemes} the color set of the chart.If
-   *            value is typeof 'string' you must declare this scheme into M.style.chart.schemes
-   *            If you provide less colors than data size
-    the colors will be taken from MOD operator:
-   *              mycolor = userColors[currentArrayIndex % userColors.length]
-   *  - rotateWithView {bool} determine whether the symbolizer rotates with the map.
-   *  - animation {bool} this field is currently ignored [NOT IMPLEMENTED YET]
-   *  - variables {object|M.style.chart.Variable|string|Array<string>
-   |Array<M.style.chart.Variable>} the chart variables
-   *
-   * @implements {M.impl.style.Simple}
-   * @api
-   */
+  * @constructor
+  * @param {Mx.ChartOptions} options. (SAME AS M.style.Chart)
+  *  - type {string|M.style.chart.types} the chart type
+  *  - radius {number} the radius of the chart. If chart type is 'bar' type this field
+  *            will limit the max bar height
+  *  - offsetX {number} chart x axis offset
+  *  - offsetY {number} chart y axis offset
+  *  - stroke.
+  *      - color {string} the color of the chart stroke
+  *      - width {number} the width of the chart stroke
+  *  - fill3DColor: {string} the fill color of the PIE_3D cylinder
+  *  - scheme {string|Array<string>|M.style.chart.schemes} the color set of the chart.If
+  *            value is typeof 'string' you must declare this scheme into M.style.chart.schemes
+  *            If you provide less colors than data size
+   the colors will be taken from MOD operator:
+  *              mycolor = userColors[currentArrayIndex % userColors.length]
+  *  - rotateWithView {bool} determine whether the symbolizer rotates with the map.
+  *  - animation {bool} this field is currently ignored [NOT IMPLEMENTED YET]
+  *  - variables {object|M.style.chart.Variable|string|Array<string>
+  |Array<M.style.chart.Variable>} the chart variables
+  *
+  * @implements {M.impl.style.Simple}
+  * @api
+  */
   constructor(options = {}) {
     // merge default values
-    Chart.extend_(options, FacadeChart.DEFAULT);
-
+    extend(options, FacadeChart.DEFAULT);
     super(options);
-    /**
-     * the ol style function
-     * @private
-     */
-    this.olStyleFn_ = null;
 
     /**
      * the style variables
@@ -81,115 +345,127 @@ export default class Chart extends Feature {
    * @api stable
    */
   updateCanvas(canvas) {
-    if (isNullOrEmpty(canvas)) {
-      return false;
+    if (!isNullOrEmpty(canvas)) {
+      const context = canvas.getContext('2d');
+      this.drawGeometryToCanvas(context);
     }
-    const context = canvas.getContext('2d');
-    this.drawGeometryToCanvas(context);
   }
 
   /**
-   * @inheritDoc
+   * TODO [REV] Refactor
+   * This function updates the canvas of style of canvas
+   *
+   * @public
+   * @function
+   * @param {CanvasRenderingContext2D} contextVar - CanvasRenderingContext2D
+   * @api stable
    */
   drawGeometryToCanvas(contextVar) {
     const context = contextVar;
-    if (isNullOrEmpty(context) || isNullOrEmpty(context.canvas)) {
-      return null;
-    }
-
-    const fixedProps = Chart.CANVAS_PROPS.fixedProps;
-    const width = Chart.CANVAS_PROPS.width;
-
-    context.canvas.setAttribute('width', width);
-    context.width = width;
-
-    const drawStackActions = []; // canvas fn draw stack
-
-    // const props = Object.keys(Chart.CANVAS_PROPS.percentages).map(key => {
-    const percentages = {};
-    Object.keys(Chart.CANVAS_PROPS.percentages)
-      .forEach((key) => {
+    if (!isNullOrEmpty(context) && !isNullOrEmpty(context.canvas)) {
+      const fixedProps = Chart.CANVAS_PROPS.fixedProps;
+      const width = Chart.CANVAS_PROPS.width;
+      context.canvas.setAttribute('width', width);
+      context.width = width;
+      const drawStackActions = []; // canvas fn draw stack
+      const percentages = {};
+      Object.keys(Chart.CANVAS_PROPS.percentages).forEach((key) => {
         percentages[key] = width * (Chart.CANVAS_PROPS.percentages[key] / 100);
       });
-    // initial x, y content padding
-    let [x0, y0] = [percentages.left_right_content, fixedProps.top_content];
-
-    const wrapText = (contextParam, initialPosition, text, maxWidth, lineHeight) => {
-      const words = text.split(' ');
-      let line = '';
-      const [x, y] = initialPosition;
-      drawStackActions
-        .push((buildCtxParam, fontSize, fontFamily, strokeColor, strokeWidth, textColor) => {
-          const buildCtx = buildCtxParam;
-          buildCtx.font = `${fontSize}px ${fontFamily}`;
-          buildCtx.strokeStyle = strokeColor;
-          buildCtx.strokeWidth = strokeWidth;
-          buildCtx.fillStyle = textColor;
+      // initial x, y content padding
+      let [x0, y0] = [percentages.left_right_content, fixedProps.top_content];
+      const wrapText = (contextParam, initialPosition, text, maxWidth, lineHeight) => {
+        const words = text.split(' ');
+        let line = '';
+        const x = initialPosition[0];
+        let y = initialPosition[1];
+        drawStackActions.push(((options) => {
+          const buildCtx = options.context;
+          buildCtx.font = `${options.fontSize}px ${options.fontFamily}`;
+          buildCtx.strokeStyle = options.strokeColor;
+          buildCtx.strokeWidth = options.strokeWidth;
+          buildCtx.fillStyle = options.textColor;
+        }).bind(this, {
+          context,
+          fontSize: fixedProps.font_size,
+          fontFamily: fixedProps.font_family,
+          strokeColor: fixedProps.text_stroke_color,
+          strokeWidth: fixedProps.text_stroke_width,
+          textColor: fixedProps.text_color,
+        }));
+        words.forEach((word, i) => {
+          const metrics = context.measureText(`${line + word}`);
+          if (metrics.width > maxWidth && i > 0) {
+            drawStackActions.push(((buildCtx, lineVar, xVar, yVar) => {
+              buildCtx.strokeText(lineVar, xVar, yVar);
+              buildCtx.fillText(lineVar, xVar, yVar);
+            }).bind(this, context, line, x, y));
+            line = `${word} `;
+            y += lineHeight;
+          } else {
+            line = `${line + word} `;
+          }
         });
-
-      words.forEach((word, i) => {
-        const metrics = context.measureText(`${line + word} `);
-        if (metrics.width > maxWidth && i > 0) {
-          drawStackActions.push((buildCtx, lineVar, xVar, yVar) => {
-            buildCtx.strokeText(lineVar, xVar, yVar);
-            buildCtx.fillText(lineVar, xVar, yVar);
-          });
-          line = `${word} `;
-          y += lineHeight;
-        } else {
-          line = `${line + word} `;
-        }
-      });
-      drawStackActions.push((buildCtx, lineVar, xVar, yVar) => {
-        buildCtx.strokeText(lineVar, xVar, yVar);
-        buildCtx.fillText(lineVar, xVar, yVar);
-      });
-      return [x, y];
-    };
-
-    const drawVariable = (initialPosition, text, color) => {
-      let [x, y] = initialPosition;
-      y += fixedProps.item_top_margin;
-      drawStackActions
-        .push((buildCtxParam, strokeColor, borderWidth, colorVar, xVar, yVar, rectSize) => {
-          const buildCtx = buildCtxParam;
+        drawStackActions.push(((buildCtx, lineVar, xVar, yVar) => {
+          buildCtx.strokeText(lineVar, xVar, yVar);
+          buildCtx.fillText(lineVar, xVar, yVar);
+        }).bind(this, context, line, x, y));
+        return [x, y];
+      };
+      const drawVariable = (initialPosition, text, color) => {
+        let [x, y] = initialPosition;
+        y += fixedProps.item_top_margin;
+        drawStackActions.push(((options) => {
+          const buildCtx = options.context;
           buildCtx.beginPath();
-          buildCtx.strokeStyle = strokeColor;
-          buildCtx.lineWidth = borderWidth;
-          buildCtx.fillStyle = colorVar;
-          buildCtx.rect(xVar, yVar, rectSize, rectSize);
+          buildCtx.strokeStyle = options.strokeColor;
+          buildCtx.lineWidth = options.width;
+          buildCtx.fillStyle = options.color;
+          buildCtx.rect(options.x, options.y, options.rectSize, options.rectSize);
           buildCtx.closePath();
           buildCtx.stroke();
           buildCtx.fill();
-        });
-
-      x += percentages.item_side_margin + fixedProps.rect_size;
-      y += (fixedProps.rect_size / 1.5);
-      // y coord plus bottom padding
-      const tmp_image_y = y + fixedProps.item_top_margin;
-      const textPosition =
-        wrapText(context, [x, y], text, percentages.max_text_width, fixedProps.text_line_height);
-      return [textPosition[0], (textPosition[1] > tmp_image_y ? textPosition[1] : tmp_image_y)];
-    };
-    this.variables_.forEach((variable, i) => {
-      const label = !isNullOrEmpty(variable.legend) ? variable.legend : variable.attribute;
-      const color = !isNullOrEmpty(variable.fillColor) ?
-        variable.fillColor : (this.colorsScheme_[i % this.colorsScheme_.length] ||
-          this.colorsScheme_[0]);
-      [x0, y0] = drawVariable([x0, y0], label, color);
-      x0 = percentages.left_right_content;
-    });
-    y0 += fixedProps.top_content;
-
-    context.canvas.setAttribute('height', y0);
-
-    context.save();
-    drawStackActions.forEach(drawAction => drawAction());
-    context.restore();
+        }).bind(this, {
+          context,
+          strokeColor: '#000',
+          width: fixedProps.rect_border_width,
+          color,
+          x,
+          y,
+          rectSize: fixedProps.rect_size,
+        }));
+        x += percentages.item_side_margin + fixedProps.rect_size;
+        y += (fixedProps.rect_size / 1.5);
+        // y coord plus bottom padding
+        const tmpImageY = y + fixedProps.item_top_margin;
+        const textWidth = percentages.max_text_width;
+        const textHeight = percentages.max_text_line_height;
+        const textPosition = wrapText(context, [x, y], text, textWidth, textHeight);
+        return [textPosition[0], (textPosition[1] > tmpImageY ? textPosition[1] : tmpImageY)];
+      };
+      this.variables_.forEach((variable, i) => {
+        const label = !isNullOrEmpty(variable.legend) ? variable.legend : variable.attribute;
+        const color = !isNullOrEmpty(variable.fillColor) ?
+          variable.fillColor : (this.colorsScheme_[i % this.colorsScheme_.length] ||
+            this.colorsScheme_[0]);
+        [x0, y0] = drawVariable([x0, y0], label, color);
+        x0 = percentages.left_right_content;
+      });
+      y0 += fixedProps.top_content;
+      context.canvas.setAttribute('height', y0);
+      context.save();
+      drawStackActions.forEach(drawAction => drawAction());
+      context.restore();
+    }
   }
 
   /**
-   * @inheritDoc
+   * This function se options to ol style
+   *
+   * @private
+   * @param {object} optionsVar - options to style
+   * @function
+   * @api stable
    */
   updateFacadeOptions(optionsVar) {
     const options = optionsVar;
@@ -197,12 +473,9 @@ export default class Chart extends Feature {
 
     this.olStyleFn_ = (featureVar, resolutionVar) => {
       let feature = featureVar;
-      let resolution = resolutionVar;
       if (!(feature instanceof OLFeature)) {
-        resolution = feature;
         feature = this;
       }
-      const getValue = Simple.getValue;
       const styleOptions = this.formatDataRecursively_(options, feature);
       let data = [];
       // let variables = this.variables_.map
@@ -226,156 +499,21 @@ export default class Chart extends Feature {
 
       let styles = [new StyleCentroid({
         geometry: (olFeature) => {
-          let geometry = olFeature.getGeometry();
-          if (olFeature.getGeometry() instanceof OLGeomMultipolygon) {
-            geometry = geometry.getPolygons()[0].getInteriorPoint();
-          }
-          return geometry;
+          const center = Utils.getCentroid(olFeature.getGeometry());
+          const centroidGeometry = new OLGeomPoint(center);
+          return centroidGeometry;
         },
         image: new OLChart(styleOptions),
       })];
 
-      /* ****
-        [WARN] Chart text style won't be rendered for multipolygon geom types
-      **** */
-      // let geomTypes = Object.keys(ol.geom.GeometryType).map(k => ol.geom.GeometryType[k]);
-      // let validGeom = feature.getGeometry() !=
-      // null && geomTypes.includes(feature.getGeometry().getType())
-      // && feature.getGeometry().getType() !== ol.geom.GeometryType.MULTI_POLYGON;
-      if ((options.variables.length === 1 || options.variables.length === data.length) &&
-        styleOptions.type !== M.style.chart.types.BAR) {
-        let acumSum = 0;
-        const sum = styleOptions.data.reduce((tot, curr) => tot + curr);
-        styles = styles.concat(styleOptions.data.map((dataValue, i) => {
-          const variable = styleOptions.variables.length ===
-            styleOptions.data.length ? styleOptions.variables[i] : styleOptions.variables[0];
-          const label = variable.label || {};
-          const radius = label.radius ? label.radius : styleOptions.radius;
-          const angle = ((2 * (acumSum + dataValue)) / sum) * ((Math.PI - Math.PI) / 2);
-          acumSum += dataValue;
-          if (!variable.label) {
-            return null;
-          }
-          const radiusIncrement = typeof label.radiusIncrement === 'number' ? label.radiusIncrement : 3;
-          let textAlign = typeof label.textAlign === 'function' ? label.textAlign(angle) : null;
-          if (isNullOrEmpty(textAlign)) {
-            textAlign = label.textAlign || (angle < Math.PI / 2 ? 'left' : 'right');
-          }
-          let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${getValue(label.text, feature)}` || '');
-          text = styleOptions.type !== Chart.types.BAR && text === '0' ? '' : text;
-          const font = getValue(label.font, feature);
-          return new StyleCentroid({
-            text: new OLStyleText({
-              text: typeof text === 'string' ? `${text}` : '',
-              offsetX: typeof label.offsetX === 'number' ? getValue(label.offsetX, feature) : (Math.cos(angle) * ((radius + radiusIncrement) + styleOptions.offsetX) || 0),
-              offsetY: typeof label.offsetY === 'number' ? getValue(label.offsetY, feature) : (Math.sin(angle) * ((radius + radiusIncrement) + styleOptions.offsetY) || 0),
-              textAlign: getValue(textAlign, feature),
-              textBaseline: getValue(label.textBaseline, feature) || 'middle',
-              stroke: label.stroke ? new OLStyleStroke({
-                color: getValue(label.stroke.color, feature) || '#000',
-                width: getValue(label.stroke.width, feature) || 1,
-              }) : undefined,
-              font: /^([1-9])[0-9]*px ./.test(font) ? font : `12px ${font}`,
-              scale: typeof label.scale === 'number' ? getValue(label.scale, feature) : undefined,
-              fill: new OLStyleFill({
-                color: getValue(label.fill, feature) || '#000',
-              }),
-            }),
-          });
-        })).filter(style => style != null);
-      } else if (styleOptions.type === Chart.types.BAR) {
-        let height = 0;
-        let acumSum = null;
-        styles = styles.concat(styleOptions.data.map((dataValue, i) => {
-          const variable = styleOptions.variables.length ===
-            styleOptions.data.length ? styleOptions.variables[i] : styleOptions.variables[0];
-          const label = variable.label || {};
-          if (!variable.label) {
-            return null;
-          }
-          const value = Simple.getValue;
-          let text = typeof label.text === 'function' ? label.text(dataValue, styleOptions.data, feature) : (`${value(label.text, feature)}` || '');
-          text = text === '0' ? '' : text;
-          if (isNullOrEmpty(text)) {
-            return null;
-          }
-          const font = getValue(label.font, feature);
-          const sizeFont = 9;
-          if (isNullOrEmpty(acumSum)) {
-            acumSum = (styles[0].getImage().getImage().height / 2) - 6;
-          } else {
-            acumSum -= sizeFont + 6;
-          }
-          height = height + sizeFont + 6;
-          return new StyleCentroid({
-            text: new OLStyleText({
-              text: typeof text === 'string' ? `${text}` : '',
-              offsetY: acumSum + styleOptions.offsetY || 0,
-              offsetX: (-(styles[0].getImage()
-                .getImage().width / 2) - (1 + styleOptions.offsetX)) || 0,
-              textBaseline: 'middle',
-              rotateWithView: false,
-              textAlign: 'center',
-              stroke: label.stroke ? new OLStyleStroke({}) : undefined,
-              font: `9px ${font}`,
-              scale: typeof label.scale === 'number' ? getValue(label.scale, feature) : undefined,
-              fill: new OLStyleFill({
-                color: styleOptions.scheme[i % styleOptions.scheme.length],
-              }),
-            }),
-          });
-        })).filter(style => style != null);
-        height = Math.max(height, 1);
-        styles.push(new OLStyle({
-          image: new OLStyleIcon(({
-            anchor: [-(styles[0].getImage()
-              .getImage().width / 2) + 10 + styleOptions.offsetX, (styles[0]
-              .getImage().getImage().height / 2) + styleOptions.offsetY],
-            anchorOrigin: 'bottom-right',
-            offsetOrigin: 'bottom-left',
-            anchorXUnits: 'pixels',
-            anchorYUnits: 'pixels',
-            rotateWithView: false,
-            src: `data:image/svg+xml;base64,${btoa(`<svg xmlns="http://www.w3.org/2000/svg" width="${styles[0].getImage()
-              .getImage().width / 2}" height="${height}"><rect width="${styles[0].getImage()
-              .getImage().width / 2}" height="${height}" fill="rgba(255, 255, 255, 0.75)" stroke-width="0" stroke="rgba(0, 0, 0, 0.34)"/></svg>`)}`,
-            size: [styles[0].getImage().getImage().width / 2, height]
-          }))
-        }));
-      }
-      if (!isNullOrEmpty(options.label)) {
-        const styleLabel = new OLStyle();
-        const textLabel = getValue(options.label.text, feature);
-        const align = getValue(options.label.align, feature);
-        const baseline = getValue(options.label.baseline, feature);
-        const labelText = new OLStyleText({
-          font: getValue(options.label.font, feature),
-          rotateWithView: getValue(options.label.rotate, feature),
-          scale: getValue(options.label.scale, feature),
-          offsetX: getValue(options.label.offset ? options.label.offset[0] : undefined, feature),
-          offsetY: getValue(options.label.offset ? options.label.offset[1] : undefined, feature),
-          fill: new OLStyleFill({
-            color: getValue(options.label.color || '#000000', feature),
-          }),
-          textAlign: Object.values(Align).includes(align) ? align : 'center',
-          textBaseline: Object.values(Baseline).includes(baseline) ? baseline : 'top',
-          text: textLabel === undefined ? undefined : String(textLabel),
-          rotation: getValue(options.label.rotation, feature),
-        });
-        if (!isNullOrEmpty(options.label.stroke)) {
-          labelText.setStroke(new OLStyleStroke({
-            color: getValue(options.label.stroke.color, feature),
-            width: getValue(options.label.stroke.width, feature),
-            lineCap: getValue(options.label.stroke.linecap, feature),
-            lineJoin: getValue(options.label.stroke.linejoin, feature),
-            lineDash: getValue(options.label.stroke.linedash, feature),
-            lineDashOffset: getValue(options.label.stroke.linedashoffset, feature),
-            miterLimit: getValue(options.label.stroke.miterlimit, feature),
-          }));
+      if (styleOptions.type !== 'bar') {
+        if (options.variables.length === 1 || options.variables.length === data.length) {
+          styles = styles.concat(generateTextCircleChart(styles, styleOptions, feature));
         }
-        styleLabel.setText(labelText);
-        styles.push(styleLabel);
+      } else if (styleOptions.type === 'bar') {
+        styles = styles.concat(generateTextBarChart(styles, styleOptions, feature));
       }
+      addTextChart(styleOptions, styles, feature);
       return styles;
     };
   }
@@ -403,49 +541,30 @@ export default class Chart extends Feature {
    * @return {object} parsed options with paths replaced with feature values
    * @function
    * @private
-   * @api stable
    */
   formatDataRecursively_(options, feature) {
     return Object.keys(options).reduce((tot, curr, i) => {
-      let _ob = tot;
-      const setVal = (ob, opts, key) => {
-        ob[key] = typeof opts[key] === 'object' && opts[key] != null && !(opts[key] instanceof Array) ? this.formatDataRecursively_(opts[key], feature) : M.impl.style.Simple.getValue(opts[key], feature);
-      };
+      let ob = tot;
       if (typeof tot !== 'object') {
-        _ob = {};
+        ob = {};
         if (typeof options[tot] !== 'object') {
-          setVal(_ob, options, tot);
+          this.setVal(ob, options, tot, feature);
         }
       }
-      setVal(_ob, options, curr);
-      return _ob;
+      this.setVal(ob, options, curr);
+      return ob;
     });
   }
 
   /**
-   * Object assign hook. Merges the array of source objects into target object.
-   * @param {object} target the target ob
-   * @param {object|Array<object>} sourceObs array of source obs
-   * @return {object} merged target object
    * @function
-   * @private
-   * @api stable
    */
-  static extend_(targetVar, ...sourceObs) {
-    const target = targetVar;
-    if (target == null) { // TypeError if undefined or null
-      throw new TypeError('Cannot convert undefined or null to object');
+  setVal(ob, opts, key, feature) {
+    const obParam = ob;
+    obParam[key] = Simple.getValue(opts[key], feature);
+    if (isObject(opts[key]) && !(opts[key] instanceof Array)) {
+      obParam[key] = this.formatDataRecursively_(opts[key], feature);
     }
-
-    const to = Object(target);
-    sourceObs.filter(source => source != null).forEach(source => Object.keys(source)
-      .forEach((sourceKey) => {
-        if (Object.prototype.hasOwnProperty.call(source, sourceKey) &&
-          !Object.prototype.hasOwnProperty.call(target, sourceKey)) {
-          target[sourceKey] = source[sourceKey];
-        }
-      }));
-    return to;
   }
 }
 
