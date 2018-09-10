@@ -136,6 +136,7 @@ export default class Polygon extends Simple {
    * @api stable
    */
   updateCanvas(canvas) {
+    this.updateFacadeOptions(this.options_);
     const canvasSize = Polygon.getCanvasSize();
     const vectorContext = toContextRender(canvas.getContext('2d'), {
       size: canvasSize,

@@ -17,8 +17,8 @@ class Polygon extends Simple {
    * @param {Object} options - options style
    * @api
    */
-  constructor(optionsPara) {
-    let options = optionsPara;
+  constructor(optionsParam = {}) {
+    let options = optionsParam;
 
     const impl = new PolygonImpl(options);
 

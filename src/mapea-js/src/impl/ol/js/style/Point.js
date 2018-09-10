@@ -255,6 +255,7 @@ export default class Point extends Simple {
    * @api stable
    */
   updateCanvas(canvas) {
+    this.updateFacadeOptions(this.options_);
     const canvasSize = this.getCanvasSize();
     const vectorContext = toContextRender(canvas.getContext('2d'), {
       size: canvasSize,
