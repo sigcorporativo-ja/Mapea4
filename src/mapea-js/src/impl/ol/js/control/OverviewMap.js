@@ -62,11 +62,7 @@ export default class OverviewMap extends OLControlOverviewMap {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    if (this.facadeMap_.isFinished()) {
-      this.update(map, element);
-    } else {
-      this.facadeMap_.once(EventType.COMPLETED, () => this.update(map, element));
-    }
+    this.update(map, element);
   }
 
   /**
