@@ -79,7 +79,7 @@ export default class Heatmap extends OLLayerHeatmap {
     const source = this.getSource();
     if (source !== null) {
       const features = source.getFeatures();
-      if (features.lengt > 0) {
+      if (features.length > 0) {
         weights = features.map(feature => feature.get(options.weight))
           .filter(weightVar => weightVar != null);
       }
