@@ -136,7 +136,6 @@ export default class SearchstreetControl extends ol.control.Control {
       this.facadeMap_.setBbox([element.coordinateX,
         element.coordinateY, element.coordinateX, element.coordinateY]);
     } else if (result instanceof ol.Feature) {
-      this.showPopup(element, false);
       // result.set('vendor', {
       //   mapea: {
       //     click(evt) {

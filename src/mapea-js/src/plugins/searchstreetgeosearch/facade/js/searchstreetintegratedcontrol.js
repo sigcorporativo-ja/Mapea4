@@ -137,7 +137,7 @@ export default class SearchstreetIntegrated extends SearchstreetControl {
   searchClick(evt) {
     evt.preventDefault();
 
-    if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
+    if (evt.type !== 'keyup') { // || (evt.keyCode === 13)
       this.resultsAutocomplete_.classList.remove(SearchstreetControl.MINIMUM);
       // const parent = this.resultsAutocomplete_;
       const element = this.resultsAutocomplete_.querySelector('div#m-searching-result-autocomplete');

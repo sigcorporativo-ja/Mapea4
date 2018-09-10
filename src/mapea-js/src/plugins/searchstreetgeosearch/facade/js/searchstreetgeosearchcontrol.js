@@ -156,6 +156,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
         this.ctrlSearchstreet = new SearchstreetIntegrated(this.urlSearchstret_, this.locality_);
       }
       impl = this.ctrlSearchstreet.getImpl();
+      view = this.ctrlSearchstreet.createView(this.html, map);
       impl.addTo(map, this.html);
 
       this.ctrlGeosearch = new GeosearchIntegrated(
@@ -164,6 +165,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
         this.handlerGeosearch_,
         this.paramsGeosearch_,
       );
+      impl = this.ctrlGeosearch.getImpl();
       view = this.ctrlGeosearch.createView(this.html, this.facadeMap_);
       impl.addTo(map, this.html);
 
