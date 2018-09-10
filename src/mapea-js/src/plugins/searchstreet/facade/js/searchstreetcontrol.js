@@ -276,7 +276,7 @@ export default class SearchstreetControl extends M.Control {
    */
   searchClick(evt) {
     evt.preventDefault();
-    if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
+    if (evt.type !== 'keyup') { // || (evt.keyCode === 13)
       this.resultsAutocomplete_.classList.remove(SearchstreetControl.MINIMUM);
       const element = this.resultsAutocomplete_.querySelector('div#m-searching-result-autocomplete');
       if (!M.utils.isNullOrEmpty(element)) {
