@@ -63,7 +63,7 @@ export default class GeosearchIntegrated extends GeosearchControl {
 
     // search buntton
     const btnSearch = this.element_.getElementsByTagName('button')['m-searchstreetgeosearch-search-btn'];
-    btnSearch.addEventListener('click', this.searchClick);
+    btnSearch.addEventListener('click', this.searchClick.bind(this));
     // help buntton
     const btnHelp = this.element_.getElementsByTagName('button')['m-searchstreetgeosearch-help-btn'];
     btnHelp.addEventListener('click', (evt) => {
@@ -99,7 +99,7 @@ export default class GeosearchIntegrated extends GeosearchControl {
     let newResult;
     while ((newResult === newResults.item(0)) !== null) {
       this.resultsScrollContainer_.appendChild(newResult);
-      newResult.addEventListener('click', this.resultClick_);
+      newResult.addEventListener('click', this.resultClick_.bind(this));
     }
 
     // updates the found num elements

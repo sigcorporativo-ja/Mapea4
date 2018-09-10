@@ -138,9 +138,9 @@ export default class SearchstreetGeosearchControl extends M.Control {
    * @export
    */
   addTo(map) {
-    const impl = this.getImpl();
+    let impl = this.getImpl();
     this.facadeMap_ = map;
-    const view = this.createView(map);
+    let view = this.createView(map);
     if (view instanceof Promise) { // the view is a promise
       view.then((html) => {
         impl.addTo(map, html);
@@ -155,8 +155,8 @@ export default class SearchstreetGeosearchControl extends M.Control {
       } else {
         this.ctrlSearchstreet = new SearchstreetIntegrated(this.urlSearchstret_, this.locality_);
       }
-      const impl2 = this.ctrlSearchstreet.getImpl();
-      impl2.addTo(map, this.html);
+      impl = this.ctrlSearchstreet.getImpl();
+      impl.addTo(map, this.html);
 
       this.ctrlGeosearch = new GeosearchIntegrated(
         this.urlGeosearch_,
@@ -164,8 +164,8 @@ export default class SearchstreetGeosearchControl extends M.Control {
         this.handlerGeosearch_,
         this.paramsGeosearch_,
       );
-      // const view2 = this.ctrlGeosearch.createView(this.html, this.facadeMap_);
-      impl2.addTo(map, this.html);
+      view = this.ctrlGeosearch.createView(this.html, this.facadeMap_);
+      impl.addTo(map, this.html);
 
       let completados = false;
 
@@ -201,32 +201,33 @@ export default class SearchstreetGeosearchControl extends M.Control {
    */
   createView(map) {
     const promise = new Promise((success, fail) => {
-      const html = M.template.compileSync(searchstreetgeosearchHTML, { jsonp: true });
-      this.element_ = html;
-      this.input_ = html.querySelector('input#m-searchstreetgeosearch-search-input');
-      const searchstreetResuts = html.querySelector('div#m-searchstreet-results');
-      const geosearchResuts = html.querySelector('div#m-geosearch-results');
-      const searchstreetTab = html.querySelector('ul#m-tabs > li:nth-child(1) > a');
-      const geosearchTab = html.querySelector('ul#m-tabs > li:nth-child(2) > a');
-      searchstreetTab.addEventListener('click', (evt) => {
-        evt.preventDefault();
-        if (!searchstreetTab.classList.contains('activated')) {
-          searchstreetTab.classList.add('activated');
-          geosearchTab.classList.remove('activated');
-          searchstreetResuts.classList.add('show');
-          geosearchResuts.classList.remove('show');
-        }
+      M.template.compile(searchstreetgeosearchHTML, { jsonp: true }).then((html) => {
+        this.element_ = html;
+        this.input_ = html.querySelector('input#m-searchstreetgeosearch-search-input');
+        const searchstreetResuts = html.querySelector('div#m-searchstreet-results');
+        const geosearchResuts = html.querySelector('div#m-geosearch-results');
+        const searchstreetTab = html.querySelector('ul#m-tabs > li:nth-child(1) > a');
+        const geosearchTab = html.querySelector('ul#m-tabs > li:nth-child(2) > a');
+        searchstreetTab.addEventListener('click', (evt) => {
+          evt.preventDefault();
+          if (!searchstreetTab.classList.contains('activated')) {
+            searchstreetTab.classList.add('activated');
+            geosearchTab.classList.remove('activated');
+            searchstreetResuts.classList.add('show');
+            geosearchResuts.classList.remove('show');
+          }
+        });
+        geosearchTab.addEventListener('click', (evt) => {
+          evt.preventDefault();
+          if (!geosearchTab.classList.contains('activated')) {
+            geosearchTab.classList.add('activated');
+            searchstreetTab.classList.remove('activated');
+            searchstreetResuts.classList.remove('show');
+            geosearchResuts.classList.add('show');
+          }
+        });
+        success(html);
       });
-      geosearchTab.addEventListener('click', (evt) => {
-        evt.preventDefault();
-        if (!geosearchTab.classList.contains('activated')) {
-          geosearchTab.classList.add('activated');
-          searchstreetTab.classList.remove('activated');
-          searchstreetResuts.classList.remove('show');
-          geosearchResuts.classList.add('show');
-        }
-      });
-      success(html);
     });
     return promise;
   }
