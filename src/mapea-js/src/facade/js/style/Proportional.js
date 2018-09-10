@@ -342,7 +342,9 @@ class Proportional extends StyleComposite {
   updateCanvas() {
     this.updateCanvasPromise_ = new Promise((success, fail) => {
       if (!isNullOrEmpty(this.layer_)) {
-        const style = !isNullOrEmpty(this.style_) ? this.style_ : this.layer_.getStyle();
+        const styleSimple = this.styles_.filter(style => style instanceof StyleSimple)[0];
+        let style = !isNullOrEmpty(styleSimple) ? styleSimple : this.layer_.getStyle();
+        style = !isNullOrEmpty(style) ? style : this.style_;
 
         if (style instanceof StyleSimple) {
           let featureStyle = style.clone();
@@ -358,8 +360,8 @@ class Proportional extends StyleComposite {
           styleMax.set(sizeAttribute, maxRadius);
           styleMin.set(sizeAttribute, minRadius);
 
-          this.loadCanvasImage_(maxRadius, styleMax.toImage(), (canvasImageMax) => {
-            this.loadCanvasImage_(minRadius, styleMin.toImage(), (canvasImageMin) => {
+          this.loadCanvasImage(maxRadius, styleMax.toImage(), (canvasImageMax) => {
+            this.loadCanvasImage(minRadius, styleMin.toImage(), (canvasImageMin) => {
               this.drawGeometryToCanvas(canvasImageMax, canvasImageMin, success);
             });
           });
@@ -377,24 +379,22 @@ class Proportional extends StyleComposite {
    * @function
    * @public
    * @param {CanvasRenderingContext2D} vectorContext - context of style canvas
-   * @api
    */
-  loadCanvasImage_(value, url, callbackFn) {
+  loadCanvasImage(value, url, callbackFn) {
     const image = new Image();
     image.crossOrigin = 'Anonymous';
     image.onload = () => {
       callbackFn({
-        image: this,
+        image,
         value,
       });
-
-      image.onerror = () => {
-        callbackFn({
-          value,
-        });
-      };
-      image.src = url;
     };
+    image.onerror = () => {
+      callbackFn({
+        value,
+      });
+    };
+    image.src = url;
   }
 
   /**
