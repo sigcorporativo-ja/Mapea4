@@ -66,8 +66,8 @@ export default class SearchstreetGeosearch extends ol.control.Control {
    * @api stable
    */
   zoomResults() {
-    const bbox = this.facadeMap_.getControls().find(c => c.name === 'searchstreetgeosearch');
-    bbox.ctrlGeosearch.getImpl().getLayer().getFeaturesExtent();
+    const control = this.facadeMap_.getControls().find(c => c.name === 'searchstreetgeosearch');
+    const bbox = control.ctrlGeosearch.getImpl().getLayer().getFeaturesExtent();
     if (!M.utils.isNullOrEmpty(bbox)) {
       this.facadeMap_.setBbox(bbox);
     }
