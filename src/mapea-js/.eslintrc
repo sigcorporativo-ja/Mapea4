@@ -2,6 +2,7 @@
   "extends": "airbnb",
   "globals": {
     "M": true,
+    "ol": "true",
     "Handlebars": true,
     "proj4": true,
     "ActiveXObject": true,
