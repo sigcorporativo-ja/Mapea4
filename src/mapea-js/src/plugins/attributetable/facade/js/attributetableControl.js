@@ -457,4 +457,13 @@ export default class AttributeTableControl extends M.Control {
       panel.style.top = `${document.querySelector('.m-mapea-container').clientHeight - panel.clientHeight - 10}px`;
     }
   }
+
+  /**
+   * This function return if this is equals to control parameter
+   * @public
+   * @api
+   */
+  equals(control) {
+    return control instanceof AttributeTableControl;
+  }
 }
