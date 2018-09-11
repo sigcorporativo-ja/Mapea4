@@ -1,4 +1,4 @@
-// import geosearchbylocationfeaturepopupHTML from '../../../templates/geosearchbylocationfeaturepopup';
+import geosearchbylocationfeaturepopupHTML from '../../../templates/geosearchbylocationfeaturepopup';
 
 export default class GeosearchbylocationControl extends M.impl.control.Geosearch {
   /**
