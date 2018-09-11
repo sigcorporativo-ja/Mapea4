@@ -2,13 +2,9 @@ const path = require('path');
 const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopywebpackPlugin = require('copy-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 const argv = require('yargs').argv;
 
 const sourcemap = argv['source-map'];
-const pathsToClean = [
-  path.resolve(__dirname, '..', 'dist', 'js'),
-];
 
 module.exports = {
   mode: 'production',
@@ -77,9 +73,6 @@ module.exports = {
     noEmitOnErrors: true,
   },
   plugins: [
-    new CleanWebpackPlugin(pathsToClean, {
-      root: path.resolve(__dirname, '..'),
-    }),
     new AllowMutateEsmExports(),
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',
