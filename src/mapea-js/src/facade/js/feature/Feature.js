@@ -165,7 +165,7 @@ class Feature extends Base {
             }
           }
           return attrParam;
-        });
+        }, this);
       }
     }
     return attrValue;
