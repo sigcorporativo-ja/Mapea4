@@ -88,6 +88,10 @@ module.exports = {
       from: 'src/configuration.js',
       to: 'js/configuration.js',
     }]),
+    new CopywebpackPlugin([{
+      from: 'src/facade/assets/img',
+      to: 'assets/img',
+    }]),
   ],
   devtool: sourcemap ? 'source-map' : '',
 };
