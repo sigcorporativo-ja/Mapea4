@@ -1,14 +1,16 @@
+/**
+ * @module M/impl/control/ScaleLine
+ */
 import OLControlScaleLine from 'ol/control/ScaleLine';
 
 /**
- * @namespace M.impl.control
+ * @classdesc
+ * Main constructor of the class. Creates a WMC selector
+ * control
+ * @api
  */
-export default class ScaleLine extends OLControlScaleLine {
+class ScaleLine extends OLControlScaleLine {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMC selector
-   * control
-   *
    * @constructor
    * @extends {ol.control.Control}
    * @api stable
@@ -58,3 +60,5 @@ export default class ScaleLine extends OLControlScaleLine {
     this.facadeMap_ = null;
   }
 }
+
+export default ScaleLine;

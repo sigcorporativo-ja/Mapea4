@@ -1,6 +1,9 @@
+/**
+ * @module M/impl/style/Centroid
+ */
 import OLStyle from 'ol/style/Style';
 
-export default class Centroid extends OLStyle {
+class Centroid extends OLStyle {
   /**
    * @classdesc custom root styles
    *
@@ -34,3 +37,5 @@ export default class Centroid extends OLStyle {
     });
   }
 }
+
+export default Centroid;

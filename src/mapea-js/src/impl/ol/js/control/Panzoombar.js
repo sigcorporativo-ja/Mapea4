@@ -1,14 +1,15 @@
+/**
+ * @module M/impl/control/Panzoombar
+ */
 import OLControlZoomSlider from 'ol/control/ZoomSlider';
 
+
 /**
- * @namespace M.impl.control
+ * @classdesc
+ * @api
  */
-export default class Panzoombar extends OLControlZoomSlider {
+class Panzoombar extends OLControlZoomSlider {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMC selector
-   * control
-   *
    * @constructor
    * @extends {ol.control.Control}
    * @api stable
@@ -58,3 +59,5 @@ export default class Panzoombar extends OLControlZoomSlider {
     this.facadeMap_ = null;
   }
 }
+
+export default Panzoombar;

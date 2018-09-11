@@ -1,14 +1,14 @@
+/**
+ * @module M/impl/control/Panzoom
+ */
 import OLControlZoom from 'ol/control/Zoom';
 
 /**
- * @namespace M.impl.control
+ * @classdesc
+ * @api
  */
-export default class Panzoom extends OLControlZoom {
+class Panzoom extends OLControlZoom {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMC selector
-   * control
-   *
    * @constructor
    * @extends {ol.control.Control}
    * @api stable
@@ -58,3 +58,5 @@ export default class Panzoom extends OLControlZoom {
     this.facadeMap_ = null;
   }
 }
+
+export default Panzoom;

@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/control/OverviewMap
+ */
 import { isNullOrEmpty, classToggle, replaceNode } from 'facade/js/util/Utils';
 import OLControlOverviewMap from 'ol/control/OverviewMap';
 import { get as getProj } from 'ol/proj';
@@ -5,14 +8,11 @@ import * as EventType from 'facade/js/event/eventtype';
 import View from '../View';
 
 /**
- * @namespace M.impl.control
+ * @classdesc
+ * @api
  */
-export default class OverviewMap extends OLControlOverviewMap {
+class OverviewMap extends OLControlOverviewMap {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMC selector
-   * control
-   *
    * @constructor
    * @extends {ol.control.Control}
    * @api stable
@@ -173,3 +173,5 @@ export default class OverviewMap extends OLControlOverviewMap {
     this.facadeMap_ = null;
   }
 }
+
+export default OverviewMap;

@@ -1,3 +1,7 @@
+/**
+ * @module M/impl/control/Location
+ */
+
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import { get as getProj } from 'ol/proj';
 import OLFeature from 'ol/Feature';
@@ -11,14 +15,11 @@ import Control from './Control';
 import Feature from '../feature/Feature';
 
 /**
- * @module M/impl/control/Location
+ * @classdesc Main constructor of the class. Creates a Locatio control
+ * @api
  */
 class Location extends Control {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a Location
-   * control
-   *
    * @constructor
    * @extends {M.impl.Control}
    * @api stable

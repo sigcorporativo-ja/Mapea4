@@ -1,21 +1,20 @@
+/**
+ * @module M/impl/control/LayerSwitcher
+ */
+
 import layerswitcherTemplate from 'templates/layerswitcher';
 import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
 import { compileSync as compileTemplate } from 'facade/js/util/Template';
 import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
 import Layer from 'facade/js/layer/Layer';
-
 import Control from './Control';
 
 /**
- * @module M/impl/control/LayerSwitcher
+ * @classdesc
+ * @api
  */
 class LayerSwitcher extends Control {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a layerswitcher
-   * control
-   * Source code from: https://github.com/walkermatt/ol3-layerswitcher
-   *
    * @constructor
    * @extends {ol.control.Control}
    * @api stable

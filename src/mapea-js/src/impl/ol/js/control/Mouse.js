@@ -1,12 +1,16 @@
+/**
+ * @module M/impl/control/Mouse
+ */
 import OLControlMousePosition from 'ol/control/MousePosition';
 import { createStringXY as createStringXYCoordinate } from 'ol/coordinate';
 import { get as getProj } from 'ol/proj';
 import * as EventType from 'facade/js/event/eventtype';
 
 /**
- * @namespace M.impl.control
+ * @classdesc
+ * @api
  */
-export default class Mouse extends OLControlMousePosition {
+class Mouse extends OLControlMousePosition {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC selector
@@ -72,3 +76,5 @@ export default class Mouse extends OLControlMousePosition {
     this.facadeMap_ = null;
   }
 }
+
+export default Mouse;

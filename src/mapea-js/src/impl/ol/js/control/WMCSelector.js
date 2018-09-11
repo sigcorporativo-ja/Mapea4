@@ -1,14 +1,14 @@
+/**
+ * @module M/impl/control/WMCSelector
+ */
 import Control from './Control';
 
 /**
- * @namespace M.impl.control
+ * @classdesc
+ * Main constructor of the class. Creates a WMC selector control
+ * @api
  */
-export default class WMCSelector extends Control {
-  /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMC selector
-   * control
-   *
+class WMCSelector extends Control {
   /**
    * This function adds the control to the specified map
    *
@@ -27,3 +27,5 @@ export default class WMCSelector extends Control {
     super.addTo(map, element);
   }
 }
+
+export default WMCSelector;

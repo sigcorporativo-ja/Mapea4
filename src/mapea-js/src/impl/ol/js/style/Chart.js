@@ -1,7 +1,6 @@
 /**
- * @namespace Chart
+ * @module M/impl/style/Chart
  */
-
 import { isNullOrEmpty, isObject } from 'facade/js/util/Utils';
 import * as Align from 'facade/js/style/Align';
 import FacadeChart from 'facade/js/style/Chart';
@@ -219,78 +218,11 @@ const addTextChart = (options, styles, feature) => {
 };
 
 /**
- * @function
- */
-// const wrapText = (contextParam, initialPosition, drawStackActions, options) => {
-//   const words = options.text.split(' ');
-//   let line = '';
-//   const x = initialPosition[0];
-//   let y = initialPosition[1];
-//   drawStackActions.push((opts = {}) => {
-//     const buildCtx = contextParam;
-//     buildCtx.font = `${opts.fontSize}px ${opts.fontFamily}`;
-//     buildCtx.strokeStyle = opts.strokeColor;
-//     buildCtx.strokeWidth = opts.strokeWidth;
-//     buildCtx.fillStyle = opts.textColor;
-//   });
-//
-//   words.forEach((word, i) => {
-//     const metrics = contextParam.measureText(`${line + word} `);
-//     if (metrics.width > options.maxWidth && i > 0) {
-//       drawStackActions.push(() => {
-//         contextParam.strokeText(line, x, y);
-//         contextParam.fillText(line, x, y);
-//       });
-//       line = `${word} `;
-//       y += options.lineHeight;
-//     } else {
-//       line = `${line + word} `;
-//     }
-//   });
-//   drawStackActions.push(() => {
-//     contextParam.strokeText(line, x, y);
-//     contextParam.fillText(line, x, y);
-//   });
-//   return [x, y];
-// };
-
-/**
- * @function
- */
-// const drawVariable = (options, optsVendor, drawStackActions) => {
-//   let [x, y] = options.initialPosition;
-//   y += options.fixedProps.item_top_margin;
-//   drawStackActions.push((opts = {}) => {
-//     const buildCtx = options.context;
-//     buildCtx.beginPath();
-//     buildCtx.strokeStyle = optsVendor.strokeColor;
-//     buildCtx.lineWidth = optsVendor.borderWidth;
-//     buildCtx.fillStyle = options.color;
-//     buildCtx.rect(x, y, optsVendor.rectSize, optsVendor.rectSize);
-//     buildCtx.closePath();
-//     buildCtx.stroke();
-//     buildCtx.fill();
-//   });
-//
-//   x += options.percentages.item_side_margin + options.fixedProps.rect_size;
-//   y += (options.fixedProps.rect_size / 1.5);
-//   // y coord plus bottom padding
-//   const tmpImageT = y + options.fixedProps.item_top_margin;
-//   const textPosition = wrapText(options.context, [x, y], drawStackActions, {
-//     text: options.text,
-//     maxWidth: options.percentages.max_text_width,
-//     lineHeight: options.fixedProps.text_line_height,
-//   });
-//   return [textPosition[0], (textPosition[1] > tmpImageT ? textPosition[1] : tmpImageT)];
-// };
-
-
-/**
  * @classdesc
  * Openlayers implementation of style chart
  * @api
  */
-export default class Chart extends Feature {
+class Chart extends Feature {
   /**
   * @constructor
   * @param {Mx.ChartOptions} options. (SAME AS M.style.Chart)
@@ -593,3 +525,5 @@ Chart.CANVAS_PROPS = {
     rect_size: 15, // px
   },
 };
+
+export default Chart;

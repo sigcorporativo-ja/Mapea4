@@ -1,12 +1,13 @@
 /**
- * @namespace M.impl.control
+ * @module M/impl/control/Navtoolbar
  */
-export default class Navtoolbar {
+
+/**
+ * @classdesc
+ * @api
+ */
+class Navtoolbar {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMC selector
-   * control
-   *
    * @constructor
    * @extends {ol.control.Control}
    * @api stable
@@ -51,3 +52,5 @@ export default class Navtoolbar {
    */
   destroy() {}
 }
+
+export default Navtoolbar;

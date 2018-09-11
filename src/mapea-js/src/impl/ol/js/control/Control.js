@@ -1,14 +1,13 @@
-import OLControl from 'ol/control/Control';
-
 /**
  * @module M/impl/Control
  */
+import OLControl from 'ol/control/Control';
+/**
+ * @classdesc
+ * @api
+ */
 class Control extends OLControl {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMC selector
-   * control
-   *
    * @constructor
    * @extends {OLControl}
    * @api stable

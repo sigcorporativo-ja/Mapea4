@@ -1,15 +1,17 @@
+/**
+ * @module M/impl/control/Scale
+ */
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import Control from './Control';
 
 /**
- * @namespace M.impl.control
+ * @classdesc
+ * Main constructor of the class. Creates a WMC selector
+ * control
+ * @api
  */
-export default class Scale extends Control {
+class Scale extends Control {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMC selector
-   * control
-   *
    * @constructor
    * @extends {ol.control.Control}
    * @api stable
@@ -73,3 +75,5 @@ export default class Scale extends Control {
     this.scaleContainer_ = null;
   }
 }
+
+export default Scale;
