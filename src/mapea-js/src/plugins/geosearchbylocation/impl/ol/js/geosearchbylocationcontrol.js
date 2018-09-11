@@ -1,13 +1,14 @@
+import GeosearchControlImpl from 'plugins/geosearch/impl/ol/js/geosearchcontrol';
 import geosearchbylocationfeaturepopupHTML from '../../../templates/geosearchbylocationfeaturepopup';
 
-export default class GeosearchbylocationControl extends M.impl.control.Geosearch {
+export default class GeosearchbylocationControl extends GeosearchControlImpl {
   /**
    * @classdesc
    * Main constructor of the Geosearchbylocation control.
    *
    * @constructor
    * @param {string} searchUrl_ - URL for the request
-   * @extends {M.impl.control.Geosearch}
+   * @extends {GeosearchControlImpl}
    * @api stable
    */
 

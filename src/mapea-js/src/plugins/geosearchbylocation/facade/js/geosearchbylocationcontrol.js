@@ -1,8 +1,9 @@
+import GeosearchControl from 'plugins/geosearch/facade/js/geosearchcontrol';
 import GeosearchbylocationImpl from '../../impl/ol/js/geosearchbylocationcontrol';
 import geosearchbylocationHTML from '../../templates/geosearchbylocation';
 import geosearchbylocationresultsHTML from '../../templates/geosearchbylocationresults';
 
-export default class GeosearchbylocationControl extends M.control.GeosearchControl {
+export default class GeosearchbylocationControl extends GeosearchControl {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Geosearchbylocation
@@ -15,7 +16,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    * @param {number} distance - Distance search
    * @param {string} spatialField - Spatial field
    * @param {number} rows - Number of responses allowed
-   * @extends {M.control.Geosearch}
+   * @extends {GeosearchControl}
    * @api stable
    */
   constructor(url, core, handler, distance, spatialField, rows) {
@@ -24,9 +25,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
 
 
     // implementation of this control
-    const impl = new GeosearchbylocationImpl(this.searchUrl_);
-
-    this.setImpl(impl);
+    this.impl_ = new GeosearchbylocationImpl(this.searchUrl_);
 
     /**
      * Status button 'Geosearchbylocation'
@@ -151,7 +150,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    */
   activate() {
     this.element_.classList.add('activated');
-    this.element_.classList.add(M.control.Geosearch.SEARCHING_CLASS);
+    this.element_.classList.add(GeosearchControl.SEARCHING_CLASS);
     this.getImpl().locate().then((coor) => {
       const pointGeom = new ol.geom.Point(coor);
       const format = new ol.format.WKT();
@@ -221,8 +220,8 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
           this.showResults_(results);
           this.drawLocation_(coor);
           this.zoomToResultsAll_();
-          this.activationBtn_.classList.remove(M.control.Geosearch.HIDDEN_RESULTS_CLASS);
-          this.element_.classList.remove(M.control.Geosearch.SEARCHING_CLASS);
+          this.activationBtn_.classList.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
+          this.element_.classList.remove(GeosearchControl.SEARCHING_CLASS);
         }
       });
     })(this.searchTime_);
@@ -300,7 +299,7 @@ export default class GeosearchbylocationControl extends M.control.GeosearchContr
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.resultsContainer_.classList.toggle(M.control.Geosearch.HIDDEN_RESULTS_CLASS);
+    this.resultsContainer_.classList.toggle(GeosearchControl.HIDDEN_RESULTS_CLASS);
   }
 }
 
