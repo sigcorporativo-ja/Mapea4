@@ -154,7 +154,7 @@ export default class GeosearchbylocationControl extends GeosearchControlImpl {
    * @param {HTMLElement} container HTML results panel
    * @api stable
    */
-  static removeResultsContainer(container) {
+  removeResultsContainer(container) {
     const parent = container.parentElement;
     parent.removeChild(container);
   }
