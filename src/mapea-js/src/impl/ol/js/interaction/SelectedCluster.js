@@ -5,7 +5,7 @@ import OLInteractionSelect from 'ol/interaction/Select';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import OLCollection from 'ol/Collection';
-import OLObservable from 'ol/Observable';
+import { unByKey } from 'ol/Observable';
 import { easeOut } from 'ol/easing';
 import Utils from '../util/Utils';
 
@@ -256,7 +256,7 @@ export default class SelectCluster extends OLInteractionSelect {
     // Stop animation (if one is running)
     if (this.listenerKey_) {
       this.overlayLayer_.setVisible(true);
-      OLObservable.unByKey(this.listenerKey_);
+      unByKey(this.listenerKey_);
     }
 
     // Features to animate
@@ -279,8 +279,8 @@ export default class SelectCluster extends OLInteractionSelect {
           const feature = features[i];
           const mFeature = feature.get('features')[0];
           const pt = feature.getGeometry().getCoordinates();
-          pt[0] = (center[0] + e) * (pt[0] - center[0]);
-          pt[1] = (center[1] + e) * (pt[1] - center[1]);
+          pt[0] = center[0] + (e * (pt[0] - center[0]));
+          pt[1] = center[1] + (e * (pt[1] - center[1]));
           const geo = new OLGeomPoint(pt);
 
           // draw links
@@ -336,7 +336,7 @@ export default class SelectCluster extends OLInteractionSelect {
         }
         // Stop animation and restore cluster visibility
         if (e > 1.0) {
-          OLObservable.unByKey(this.listenerKey_);
+          unByKey(this.listenerKey_);
           this.overlayLayer_.setVisible(true);
           callbackFn();
           // text on chart style not show
@@ -347,10 +347,9 @@ export default class SelectCluster extends OLInteractionSelect {
         const eventVariable = event;
         eventVariable.frameState.animate = true;
       }
-
-      // Start a new postcompose animation
-      this.listenerKey_ = this.getMap().on('postcompose', animate, this);
-      // select.getMap().renderSync();
     };
+    // Start a new postcompose animation
+    this.listenerKey_ = this.getMap().on('postcompose', animate, this);
+    // select.getMap().renderSync();
   }
 }
