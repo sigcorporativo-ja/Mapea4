@@ -4,6 +4,7 @@ const fs = require('fs-extra');
 const path = require('path');
 
 const testName = argv.name;
+const { force } = argv;
 let { mode } = argv;
 
 if (!mode) {
@@ -18,6 +19,7 @@ if (!mode) {
 const errorMessages = {
   undefinedMode: (modeTest, validValues) => `${modeTest} is not valid mode. Valid mode values: ${validValues.join(' | ')}`,
   undefinedName: 'Test name is not defined. Use: npm run generate-test -- --name=<name-of-test>',
+  existFile: 'Test already exists. Use another name or use --force flag to overwrite',
 };
 
 /**
@@ -46,6 +48,15 @@ const checkUserParamenters = (validObject, modeTest) => {
   if (isValid === false) {
     throw new Error(errorMessages.undefinedMode(modeTest, validValues));
   }
+};
+
+/**
+ * @function
+ */
+const checkIfExists = (testname, conf) => {
+  const destPathJS = path.resolve(conf.destFolder, `${testname}.js`);
+  const destPathHTML = path.resolve(conf.destFolder, `${testname}.html`);
+  return fs.existsSync(destPathJS) || fs.existsSync(destPathHTML);
 };
 
 /**
@@ -81,6 +92,9 @@ const main = (pathsObject, testname, testMode) => {
   checkUserParamenters(pathsObject, testMode);
   if (!testname) {
     throw new Error(errorMessages.undefinedName);
+  }
+  if (checkIfExists(testName, paths[testMode]) && !force) {
+    throw new Error(errorMessages.existFile);
   }
   generateHTML(testname, paths[testMode]);
   generateJS(testname, paths[testMode]);
