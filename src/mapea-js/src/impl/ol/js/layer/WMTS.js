@@ -1,13 +1,13 @@
 import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'facade/js/util/Utils';
-import { get as getRemote } from 'facade/js/util/Remote';
-import * as EventType from 'facade/js/event/eventtype';
-import { get as getProj } from 'ol/proj';
-import OLLayerTile from 'ol/layer/Tile';
-/* eslint-disable */
 import { default as OLSourceWMTS, optionsFromCapabilities } from 'ol/source/WMTS';
+import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import OLTileGridWMTS from 'ol/tilegrid/WMTS';
 import { getBottomLeft } from 'ol/extent';
-import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
+import { get as getRemote } from 'facade/js/util/Remote';
+import * as EventType from 'facade/js/event/eventtype';
+import { get as getProj, transformExtent } from 'ol/proj';
+import OLLayerTile from 'ol/layer/Tile';
+import getLayerExtent from '../util/wmtscapabilities';
 import LayerBase from './Layer';
 
 export default class WMTS extends LayerBase {
@@ -268,6 +268,26 @@ export default class WMTS extends LayerBase {
     return this.options.maxResolution;
   }
 
+  getExtent() {
+    const olProjection = getProj(this.map.getProjection().code);
+    // creates the promise
+    this.extentPromise = new Promise((success, fail) => {
+      if (!isNullOrEmpty(this.extent_)) {
+        this.extent_ = transformExtent(this.extent_, this.extentProj_, olProjection);
+        this.extentProj_ = olProjection;
+        success(this.extent_);
+      } else {
+        this.getCapabilities().then((getCapabilities) => {
+          const contents = getCapabilities.Contents;
+          const projCode = this.map.getProjection().code;
+          this.extent_ = getLayerExtent(contents, this.name, projCode);
+          success(this.extent_);
+        });
+      }
+    });
+    return this.extentPromise;
+  }
+
   /**
    * This function destroys this layer, cleaning the HTML
    * and unregistering all events
@@ -304,3 +324,4 @@ export default class WMTS extends LayerBase {
     return equals;
   }
 }
+
