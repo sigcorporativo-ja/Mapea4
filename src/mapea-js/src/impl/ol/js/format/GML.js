@@ -1,6 +1,12 @@
+/**
+ * @module M/impl/format/GML
+ */
 import OLFormatGML from 'ol/format/GML';
-
-export default class GML extends OLFormatGML {
+/**
+ * @classdesc
+ * @api
+ */
+class GML extends OLFormatGML {
   /**
    * @classdesc
    * Feature format for reading and writing data in the GeoJSON format.
@@ -14,3 +20,5 @@ export default class GML extends OLFormatGML {
     super(opt_options);
   }
 }
+
+export default GML;

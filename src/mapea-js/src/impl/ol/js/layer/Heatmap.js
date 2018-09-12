@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/layer/Heatmap
+ */
 import * as dialog from 'facade/js/dialog';
 import OLLayerHeatmap from 'ol/layer/Heatmap';
 import OLFeature from 'ol/Feature';
@@ -6,8 +9,11 @@ import OLStyleIcon from 'ol/style/Icon';
 import Feature from 'facade/js/feature/Feature';
 import { clamp } from 'ol/math';
 import Simple from '../style/Simple';
-
-export default class Heatmap extends OLLayerHeatmap {
+/**
+ * @classdesc
+ * @api
+ */
+class Heatmap extends OLLayerHeatmap {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Heatmap layer
@@ -87,3 +93,5 @@ export default class Heatmap extends OLLayerHeatmap {
     return weights;
   }
 }
+
+export default Heatmap;

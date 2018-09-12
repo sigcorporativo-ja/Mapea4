@@ -1,7 +1,13 @@
+/**
+ * @module M/impl/format/WKT
+ */
 import OLFormatWKT from 'ol/format/WKT';
 import GeoJSON from './GeoJSON';
-
-export default class WKT extends OLFormatWKT {
+/**
+ * @classdesc
+ * @api
+ */
+class WKT extends OLFormatWKT {
   /**
    * @classdesc
    * Feature format for reading and writing data in the GeoJSON format.
@@ -29,3 +35,5 @@ export default class WKT extends OLFormatWKT {
     return wktGeom;
   }
 }
+
+export default WKT;

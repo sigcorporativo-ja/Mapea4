@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/layer/WMTS
+ */
 import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'facade/js/util/Utils';
 import { get as getRemote } from 'facade/js/util/Remote';
 import * as EventType from 'facade/js/event/eventtype';
@@ -9,8 +12,11 @@ import OLTileGridWMTS from 'ol/tilegrid/WMTS';
 import { getBottomLeft } from 'ol/extent';
 import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import LayerBase from './Layer';
-
-export default class WMTS extends LayerBase {
+/**
+ * @classdesc
+ * @api
+ */
+class WMTS extends LayerBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMTS layer
@@ -304,3 +310,5 @@ export default class WMTS extends LayerBase {
     return equals;
   }
 }
+
+export default WMTS;

@@ -1,6 +1,12 @@
+/**
+ * @module M/impl/style/Icon
+ */
 import OLStyleIcon from 'ol/style/Icon';
-
-export default class Icon extends OLStyleIcon {
+/**
+ * @classdesc
+ * @api
+ */
+class Icon extends OLStyleIcon {
   /**
    * @classdesc
    * Set icon style for Vector features.
@@ -25,3 +31,5 @@ export default class Icon extends OLStyleIcon {
     return this.iconImage_.getSize();
   }
 }
+
+export default Icon;

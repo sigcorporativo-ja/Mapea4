@@ -1,11 +1,17 @@
+/**
+ * @module M/impl/format/GeoJSON
+ */
 import { isNullOrEmpty, generateRandom } from 'facade/js/util/Utils';
 import Feature from 'facade/js/feature/Feature';
 import OLFormatGeoJSON from 'ol/format/GeoJSON';
 import { get as getProj } from 'ol/proj';
 import OLStyle from 'ol/style/Style';
 import OLStyleIcon from 'ol/style/Icon';
-
-export default class GeoJSON extends OLFormatGeoJSON {
+/**
+ * @classdesc
+ * @api
+ */
+class GeoJSON extends OLFormatGeoJSON {
   /**
    * @constructor
    * @extends {ol.format.JSONFeature}
@@ -171,3 +177,5 @@ export default class GeoJSON extends OLFormatGeoJSON {
     return features;
   }
 }
+
+export default GeoJSON;

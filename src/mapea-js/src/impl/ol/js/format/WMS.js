@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/format/WMSCapabilities
+ */
 import { isArray, isObject, isNullOrEmpty } from 'facade/js/util/Utils';
 import OLFormatWMSCapabilities from 'ol/format/WMSCapabilities';
 
@@ -265,10 +268,11 @@ const parseLayersProps = (objLayer, parsedLayerNodes) => {
 
 /**
  * @classdesc
+ * @api
  * Main constructor of the class. Creates a WMC formater
  * @api stable
  */
-export default class WMSCapabilities extends OLFormatWMSCapabilities {
+class WMSCapabilities extends OLFormatWMSCapabilities {
   /**
    * This function reads some custom properties that do
    * not follow the standard of WMS layers.
@@ -286,3 +290,5 @@ export default class WMSCapabilities extends OLFormatWMSCapabilities {
     return formatedWMS;
   }
 }
+
+export default WMSCapabilities;

@@ -1,6 +1,12 @@
+/**
+ * @module M/impl/Style
+ */
 import { toContext as toContextRender } from 'ol/render';
-
-export default class Style {
+/**
+ * @classdesc
+ * @api
+ */
+class Style {
   /**
    * Main constructor of the class.
    * @constructor
@@ -106,3 +112,5 @@ export default class Style {
     return new Style(Object.assign({}, this.options_));
   }
 }
+
+export default Style;

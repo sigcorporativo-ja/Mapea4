@@ -1,10 +1,16 @@
+/**
+ * @module M/impl/format/wmc/WMC110
+ */
 import { isNullOrEmpty, normalize } from 'facade/js/util/Utils';
 import WMS from 'facade/js/layer/WMS';
 import { get as getProj, transformExtent } from 'ol/proj';
 import { getAllTextContent } from 'ol/xml';
 import XML from '../XML';
-
-export default class WMCV110 extends XML {
+/**
+ * @classdesc
+ * @api
+ */
+class WMC110 extends XML {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC formater
@@ -795,3 +801,5 @@ export default class WMCV110 extends XML {
     dimensions[dim[nameAttr]] = dim;
   }
 }
+
+export default WMC110;

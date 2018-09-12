@@ -1,9 +1,14 @@
+/**
+ * @module M/impl/Layer
+ */
 import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
-
 import MObject from 'facade/js/Object';
 import FacadeLayer from 'facade/js/layer/Layer';
-
-export default class LayerBase extends MObject {
+/**
+ * @classdesc
+ * @api
+ */
+class LayerBase extends MObject {
   /**
    * @classdesc
    * Main constructor of the class. Creates a layer
@@ -294,3 +299,5 @@ export default class LayerBase extends MObject {
    */
   selectFeatures(features, coord, evt) {}
 }
+
+export default LayerBase;

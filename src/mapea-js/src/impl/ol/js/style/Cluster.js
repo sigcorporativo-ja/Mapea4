@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/style/Cluster
+ */
 import { CHANGE as OLEventChange } from 'ol/events/EventType';
 import LayerVector from 'facade/js/layer/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
@@ -19,10 +22,12 @@ import Feature from '../feature/Feature';
 import coordinatesConvexHull from '../util/convexhull';
 
 /**
+ * @classdesc
+ * @api
  * @namespace M.style.Cluster
  */
 
-export default class Cluster extends Style {
+class Cluster extends Style {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Cluster
@@ -585,3 +590,5 @@ export default class Cluster extends Style {
     return this.oldOLLayer_;
   }
 }
+
+export default Cluster;

@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/layer/Vector
+ */
 import StyleCluster from 'facade/js/style/Cluster';
 import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
 import * as EventType from 'facade/js/event/eventtype';
@@ -9,9 +12,9 @@ import OLSourceCluster from 'ol/source/Cluster';
 import Layer from './Layer';
 import ImplUtils from '../util/Utils';
 import Feature from '../feature/Feature';
-
 /**
- * @module M/impl/layer/Vector
+ * @classdesc
+ * @api
  */
 class Vector extends Layer {
   /**

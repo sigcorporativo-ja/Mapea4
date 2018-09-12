@@ -1,8 +1,14 @@
+/**
+ * @module M/impl/format/XML
+ */
 import { isString } from 'facade/js/util/Utils';
 import Exception from 'facade/js/exception/exception';
 import { parse as olXMLParse } from 'ol/xml';
-
-export default class XML {
+/**
+ * @classdesc
+ * @api
+ */
+class XML {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC formater
@@ -180,3 +186,5 @@ export default class XML {
     return attributeValue;
   }
 }
+
+export default XML;

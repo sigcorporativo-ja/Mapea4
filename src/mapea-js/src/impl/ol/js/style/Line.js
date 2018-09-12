@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/style/Line
+ */
 import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
 import OLFeature from 'ol/Feature';
 import OLStyleStroke from 'ol/style/Stroke';
@@ -12,11 +15,13 @@ import Simple from './Simple';
 import postRender from '../util/render';
 
 /**
+ * @classdesc
+ * @api
  * @namespace M.impl.style.Line
  *
  */
 
-export default class Line extends Simple {
+class Line extends Simple {
   /**
    * Main constructor of the class.
    * @constructor
@@ -236,3 +241,5 @@ export default class Line extends Simple {
 }
 
 Line.DEFAULT_WIDTH_LINE = 3;
+
+export default Line;

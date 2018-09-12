@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/layer/GeoJSON
+ */
 import { isNullOrEmpty, isObject, beautifyAttributeName, isFunction, includes } from 'facade/js/util/Utils';
 import * as EventType from 'facade/js/event/eventtype';
 import ClusteredFeature from 'facade/js/feature/Clustered';
@@ -10,8 +13,11 @@ import { get as getProj } from 'ol/proj';
 import { all } from 'ol/loadingstrategy';
 import Vector from './Vector';
 import JSONPLoader from '../loader/JSONP';
-
-export default class GeoJSON extends Vector {
+/**
+ * @classdesc
+ * @api
+ */
+class GeoJSON extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a KML layer
@@ -299,3 +305,5 @@ export default class GeoJSON extends Vector {
     return equals;
   }
 }
+
+export default GeoJSON;

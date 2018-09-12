@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/layer/WMS
+ */
 import { isNullOrEmpty, isNull, getResolutionFromScale, addParameters, concatUrlPaths, getWMSGetCapabilitiesUrl, isArray } from 'facade/js/util/Utils';
 import FacadeLayerBase from 'facade/js/layer/Layer';
 import * as LayerType from 'facade/js/layer/Type';
@@ -15,8 +18,11 @@ import FormatWMS from '../format/WMS';
 import TileWMS from '../source/TileWMS';
 import ImageWMS from '../source/ImageWMS';
 import EnvolvedExtent from '../util/EnvolvedExtent';
-
-export default class WMS extends LayerBase {
+/**
+ * @classdesc
+ * @api
+ */
+class WMS extends LayerBase {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -642,3 +648,5 @@ export default class WMS extends LayerBase {
  * TODO
  */
 WMS.LEGEND_IMAGE = null;
+
+export default WMS;

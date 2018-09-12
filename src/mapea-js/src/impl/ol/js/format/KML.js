@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/format/KML
+ */
 import { decodeHtml } from 'facade/js/util/Utils';
 import OLFormatKML from 'ol/format/KML';
 import { FRACTION } from 'ol/style/IconAnchorUnits';
@@ -6,10 +9,11 @@ import { parse as parseXML } from 'ol/xml';
 
 /**
  * @classdesc
+ * @api
  * Feature format for reading and writing data in the KML format.
  *
  */
-export default class KML extends OLFormatKML {
+class KML extends OLFormatKML {
   /**
    * @constructor
    * @extends {ol.format.KML}
@@ -191,3 +195,5 @@ KML.DEFAULT_IMAGE_STYLE_ANCHOR_X_UNITS = 'pixels';
  * @type {ol.style.IconAnchorUnits}
  */
 KML.DEFAULT_IMAGE_STYLE_ANCHOR_Y_UNITS = 'pixels';
+
+export default KML;

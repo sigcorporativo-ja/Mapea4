@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/layer/WFS
+ */
 import StyleCluster from 'facade/js/style/Cluster';
 import FormatGeoJSON from 'facade/js/format/GeoJSON';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
@@ -11,9 +14,9 @@ import FormatImplGeoJSON from '../format/GeoJSON';
 import FormatGML from '../format/GML';
 import LoaderWFS from '../loader/WFS';
 import Vector from './Vector';
-
 /**
- * @module M/impl/layer/WFS
+ * @classdesc
+ * @api
  */
 class WFS extends Vector {
   /**

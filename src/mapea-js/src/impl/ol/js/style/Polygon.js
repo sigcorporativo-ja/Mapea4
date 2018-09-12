@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/style/Polygon
+ */
 import chroma from 'chroma-js';
 import * as Baseline from 'facade/js/style/Baseline';
 import OLFeature from 'ol/Feature';
@@ -14,12 +17,14 @@ import Simple from './Simple';
 import Centroid from './Centroid';
 
 /**
+ * @classdesc
+ * @api
  * TODO
  * @private
  * @type {M.style.Polygon}
  */
 
-export default class Polygon extends Simple {
+class Polygon extends Simple {
   /**
    * Main constructor of the class.
    * @constructor
@@ -191,3 +196,5 @@ export default class Polygon extends Simple {
 }
 
 Polygon.DEFAULT_WIDTH_POLYGON = 3;
+
+export default Polygon;

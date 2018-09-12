@@ -1,11 +1,17 @@
+/**
+ * @module M/impl/layer/AnimatedCluster
+ */
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import OLGeomPoint from 'ol/geom/Point';
 import { easeOut } from 'ol/easing';
 import { buffer } from 'ol/extent';
-
-export default class AnimatedCluster extends OLLayerVector {
+/**
+ * @classdesc
+ * @api
+ */
+class AnimatedCluster extends OLLayerVector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a AnimatedCluster layer
@@ -263,3 +269,5 @@ export default class AnimatedCluster extends OLLayerVector {
     super.setStyle(this.styleCluster_);
   }
 }
+
+export default AnimatedCluster;

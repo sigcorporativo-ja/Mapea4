@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/style/Point
+ */
 import { isNullOrEmpty, concatUrlPaths, addParameters } from 'facade/js/util/Utils';
 import chroma from 'chroma-js';
 import OLStyleImage from 'ol/style/Image';
@@ -20,10 +23,12 @@ import PointIcon from '../point/Icon';
 import PointCircle from '../point/Circle';
 
 /**
+ * @classdesc
+ * @api
  * @namespace Point
  */
 
-export default class Point extends Simple {
+class Point extends Simple {
   /**
    * This function returns data url to canvas
    *
@@ -316,3 +321,5 @@ export default class Point extends Simple {
   }
 }
 Point.DEFAULT_WIDTH_POINT = 3;
+
+export default Point;

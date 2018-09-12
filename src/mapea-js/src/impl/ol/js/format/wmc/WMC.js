@@ -1,9 +1,15 @@
+/**
+ * @module M/impl/format/wmc/WMC
+ */
 import Exception from 'facade/js/exception/exception';
 import { normalize } from 'facade/js/util/Utils';
 import XML from '../XML';
 import WMC110 from './WMC110';
-
-export default class WMC extends XML {
+/**
+ * @classdesc
+ * @api
+ */
+class WMC extends XML {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC formater
@@ -60,3 +66,5 @@ export default class WMC extends XML {
 WMC.VERSION = {
   v110: WMC110,
 };
+
+export default WMC;

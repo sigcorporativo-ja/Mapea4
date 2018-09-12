@@ -1,12 +1,17 @@
+/**
+ * @module M/impl/style/Simple
+ */
 import OLFeature from 'ol/Feature';
 import { isFunction, isNullOrEmpty } from 'facade/js/util/Utils';
 import Style from './Style';
 import Feature from '../feature/Feature';
 
 /**
+ * @classdesc
+ * @api
  * @namespace M.impl.style.Simple
  */
-export default class Simple extends Style {
+class Simple extends Style {
   /**
    * Main constructor of the class.
    * @constructor
@@ -86,3 +91,5 @@ export default class Simple extends Style {
     return attrFeature;
   }
 }
+
+export default Simple;

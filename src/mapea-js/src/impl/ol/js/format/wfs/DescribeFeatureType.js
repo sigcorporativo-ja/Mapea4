@@ -1,7 +1,13 @@
+/**
+ * @module M/impl/format/wfs/DescribeFeatureType
+ */
 import { isGeometryType } from 'facade/js/util/Utils';
 import DescribeFeatureTypeXML from './DescribeFeatureTypeXML';
-
-export default class DescribeFeatureType {
+/**
+ * @classdesc
+ * @api
+ */
+class DescribeFeatureType {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -88,3 +94,5 @@ export default class DescribeFeatureType {
     return describeFeatureType;
   }
 }
+
+export default DescribeFeatureType;

@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/layer/WMC
+ */
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import * as parameter from 'facade/js/parameter/parameter';
 import { get as getRemote } from 'facade/js/util/Remote';
@@ -5,8 +8,11 @@ import * as EventType from 'facade/js/event/eventtype';
 import { get as getProj, transformExtent } from 'ol/proj';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
-
-export default class WMC extends Layer {
+/**
+ * @classdesc
+ * @api
+ */
+class WMC extends Layer {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC layer
@@ -248,3 +254,5 @@ export default class WMC extends Layer {
     return equals;
   }
 }
+
+export default WMC;

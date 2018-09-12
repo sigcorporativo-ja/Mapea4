@@ -1,7 +1,13 @@
+/**
+ * @module M/impl/format/wfs/DescribeFeatureTypeXML
+ */
 import Dialog from 'facade/js/dialog';
 import XML from '../XML';
-
-export default class DescribeFeatureTypeXML extends XML {
+/**
+ * @classdesc
+ * @api
+ */
+class DescribeFeatureTypeXML extends XML {
   /**
    * @classdesc
    * Main constructor of the class. Creates a XML formater
@@ -167,3 +173,5 @@ export default class DescribeFeatureTypeXML extends XML {
     }
   }
 }
+
+export default DescribeFeatureTypeXML;

@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/layer/OSM
+ */
 import FacadeMapbox from 'facade/js/layer/Mapbox';
 import FacadeOSM from 'facade/js/layer/OSM';
 import * as LayerType from 'facade/js/layer/Type';
@@ -10,8 +13,11 @@ import { get as getProj } from 'ol/proj';
 import { getBottomLeft } from 'ol/extent';
 import ImplMap from '../Map';
 import Layer from './Layer';
-
-export default class OSM extends Layer {
+/**
+ * @classdesc
+ * @api
+ */
+class OSM extends Layer {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMS layer
@@ -260,3 +266,5 @@ export default class OSM extends Layer {
     return equals;
   }
 }
+
+export default OSM;

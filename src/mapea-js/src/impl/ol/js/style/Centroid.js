@@ -2,7 +2,10 @@
  * @module M/impl/style/Centroid
  */
 import OLStyle from 'ol/style/Style';
-
+/**
+ * @classdesc
+ * @api
+ */
 class Centroid extends OLStyle {
   /**
    * @classdesc custom root styles

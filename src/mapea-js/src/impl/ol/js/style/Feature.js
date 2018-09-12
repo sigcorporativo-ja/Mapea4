@@ -1,15 +1,20 @@
+/**
+ * @module M/impl/style/Feature
+ */
 import Style from './Style';
 
 /**
+ * @classdesc
  * @namespace M.impl.style.Feature
  */
 
-export default class Feature extends Style {
+class Feature extends Style {
   /**
-   *
    * @api stable
    */
   // constructor(options, impl) {
   //   super(options, impl);
   // }
 }
+
+export default Feature;

@@ -1,8 +1,14 @@
+/**
+ * @module M/impl/format/WMTSCapabilities
+ */
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
 import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
-
-export default class WMTSCapabilities {
+/**
+ * @classdesc
+ * @api
+ */
+class WMTSCapabilities {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMC formater
@@ -120,3 +126,5 @@ export default class WMTSCapabilities {
     return options;
   }
 }
+
+export default WMTSCapabilities;

@@ -1,10 +1,18 @@
+/**
+ * @module M/impl/style/Heatmap
+ */
 import OLLayerHeatmap from 'ol/layer/Heatmap';
 import OLSourceVector from 'ol/source/Vector';
 import { isNullOrEmpty, extendsObj } from 'facade/js/util/Utils';
 import Style from './Style';
 import HeatmapLayer from '../layer/Heatmap';
 
-export default class Heatmap extends Style {
+/**
+ * @classdesc
+ * @api
+ */
+
+class Heatmap extends Style {
   /**
    * @classdesc
    * Main constructor of the class. Creates a Heatmap
@@ -126,3 +134,5 @@ export default class Heatmap extends Style {
     return this.heatmapLayer_.getMaxWeight();
   }
 }
+
+export default Heatmap;

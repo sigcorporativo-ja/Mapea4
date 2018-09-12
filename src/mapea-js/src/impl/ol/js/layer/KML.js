@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/layer/KML
+ */
 import { compileSync as compileTemplate } from 'facade/js/util/Template';
 import popupKMLTemplate from 'templates/kml_popup';
 import Popup from 'facade/js/Popup';
@@ -10,8 +13,11 @@ import Vector from './Vector';
 import LoaderKML from '../loader/KML';
 import FormatKML from '../format/KML';
 import ImplUtils from '../util/Utils';
-
-export default class KML extends Vector {
+/**
+ * @classdesc
+ * @api
+ */
+class KML extends Vector {
   /**
    * @classdesc
    * Main constructor of the class. Creates a KML layer
@@ -238,3 +244,5 @@ export default class KML extends Vector {
     return equals;
   }
 }
+
+export default KML;

@@ -1,10 +1,15 @@
+/**
+ * @module M/impl/style/Path
+ */
 import OLStyleText from 'ol/style/Text';
 
 /**
+ * @classdesc
+ * @api
  * @namespace M.impl.style.TextPath
  */
 
-export default class Path extends OLStyleText {
+class Path extends OLStyleText {
   /**
    * @classdesc
    * Main constructor of the class. Creates a M.impl.style.TextPath style
@@ -58,3 +63,5 @@ export default class Path extends OLStyleText {
     return this.minWidth_;
   }
 }
+
+export default Path;

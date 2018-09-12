@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/layer/Draw
+ */
 import Exception from 'facade/js/exception/exception';
 import { isFunction, isArray, isNullOrEmpty } from 'facade/js/util/Utils';
 import OLLayerVector from 'ol/layer/Vector';
@@ -11,8 +14,11 @@ import { get as getProj } from 'ol/proj';
 import Layer from './Layer';
 import FormatGeoJSON from '../format/GeoJSON';
 import Map from '../Map';
-
-export default class Draw extends Layer {
+/**
+ * @classdesc
+ * @api
+ */
+class Draw extends Layer {
   /**
    * @classdesc
    * Main constol.style.Stroke of the class. Creates a KML layer
@@ -65,30 +71,30 @@ export default class Draw extends Layer {
       source: new OLSourceVector({}),
       style: new OLStyle({
         fill: new OLStyleFill({
-          color: 'rgba(0, 158, 0, 0.1)'
+          color: 'rgba(0, 158, 0, 0.1)',
         }),
         stroke: new OLStyleStroke({
           color: '#fcfcfc',
-          width: 2
+          width: 2,
         }),
         image: new OLStyleCircle({
           radius: 7,
           fill: new OLStyleFill({
-            color: '#009E00'
+            color: '#009E00',
           }),
           stroke: new OLStyleStroke({
             color: '#fcfcfc',
-            width: 2
-          })
-        })
+            width: 2,
+          }),
+        }),
       }),
-      zIndex: Map.Z_INDEX['WFS'] + 999
+      zIndex: Map.Z_INDEX.WFS + 999,
     });
     // sets its visibility if it is in range
     if (this.options.visibility !== false) {
       this.setVisible(this.inRange());
     }
-    let olMap = this.map.getMapImpl();
+    const olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
   }
 
@@ -331,3 +337,5 @@ export default class Draw extends Layer {
     return features;
   }
 }
+
+export default Draw;
