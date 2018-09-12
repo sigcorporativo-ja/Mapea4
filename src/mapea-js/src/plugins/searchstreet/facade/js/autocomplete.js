@@ -75,17 +75,17 @@ export default class Autocomplete extends M.Plugin {
       let selectedResult = this.resultsContainer_.querySelector('.selected');
       if (e.keyCode === 13) {
         const controls = this.map_.getControls();
-        for (let i = 0, ilen = controls.length - 1; i < ilen; i += 1) {
+        for (let i = 0; i < controls.length; i += 1) {
           if (controls[i].name === 'searchstreet') {
-            if (this.controls[i].indexOf(',') < 0) {
-              this.searchMunicipality_(this.controls[1]);
+            if (e.target.value.indexOf(',') < 0) {
+              this.searchMunicipality_(e.target.value);
             } else {
               controls[i].searchClick(e);
               controls[i].completed = false;
             }
           } else if (controls[i].name === 'searchstreetgeosearch') {
-            if (!M.utils.isNullOrEmpty(selectedResult) && (this.controls[1].indexOf(',') < 0)) {
-              this.searchMunicipality_(this.controls[1]);
+            if (!M.utils.isNullOrEmpty(selectedResult) && (e.target.value.indexOf(',') < 0)) {
+              this.searchMunicipality_(e.target.value);
             } else {
               controls[i].ctrlSearchstreet.searchClick(e);
               controls[i].ctrlSearchstreet.completed = false;
@@ -124,7 +124,7 @@ export default class Autocomplete extends M.Plugin {
         }
 
         if (!M.utils.isNullOrEmpty(selectedResult)) {
-          this.value = selectedResult.innerHTML.trim();
+          e.target.value = selectedResult.innerHTML.trim();
           const divCont = document.getElementById('m-autcomplete');
           divCont.scrollTop = selectedResult.offsetTop;
         }
