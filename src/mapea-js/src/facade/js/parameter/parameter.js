@@ -1778,8 +1778,8 @@ const getTransparentWMTS = (parameter) => {
   let transparent;
   let params;
   if (isString(parameter)) {
-    // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>
-    if (/^WMS\*[^*]+\*[^*]+\*[^*]+\*(true|false)/i.test(parameter)) {
+    // <WMTS>*<URL>*<NAME>*<MATRIXSET>?*<TITLE>?*<TRANSPARENT>
+    if (/^WMTS\*[^*]+\*[^*]+\*[^*]*\*[^*]*\*(true|false)/i.test(parameter)) {
       params = parameter.split(/\*/);
       transparent = params[4].trim();
     } else if (/^WMS_FULL\*[^*]+(\*(true|false))?/i.test(parameter)) {
