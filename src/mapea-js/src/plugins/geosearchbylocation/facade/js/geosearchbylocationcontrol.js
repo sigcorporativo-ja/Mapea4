@@ -255,7 +255,7 @@ export default class GeosearchbylocationControl extends GeosearchControl {
     this.drawResults(results);
 
     const btnShowList = this.element_.querySelector('button#m-geosearchbylocation-button-list');
-    btnShowList.addEventListener('click', this.showList_);
+    btnShowList.onclick = this.showList_.bind(this);
   }
 
   /**
@@ -283,7 +283,7 @@ export default class GeosearchbylocationControl extends GeosearchControl {
         });
       }
       const btnCloseList = html.querySelector('.title > button.m-panel-btn');
-      btnCloseList.addEventListener('click', this.showList_);
+      btnCloseList.addEventListener('click', this.showList_.bind(this));
       this.showList = false;
     } else {
       this.getImpl().removeResultsContainer(this.resultsContainer_);

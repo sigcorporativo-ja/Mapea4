@@ -155,8 +155,9 @@ export default class GeosearchbylocationControl extends GeosearchControlImpl {
    * @api stable
    */
   removeResultsContainer(container) {
-    const parent = container.parentElement;
-    parent.removeChild(container);
+    if (container !== null && container.parentElement != null) {
+      container.parentElement.removeChild(container);
+    }
   }
 
   /**
