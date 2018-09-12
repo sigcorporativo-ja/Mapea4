@@ -30,5 +30,7 @@
     "import/no-mutable-exports": "off",
     "no-template-curly-in-string": "off",
     "import/no-duplicates": off,
+    "import/no-named-default": "off",
   }
 }
+
