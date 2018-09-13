@@ -363,8 +363,8 @@ class Panel extends MObject {
       controls.forEach((controlParam) => {
         const control = controlParam;
         if ((control instanceof ControlBase) && this.hasControl(control)) {
-          this.controls = this.controls_.filter(control2 => !control.equals(control2));
-          control.panel = null;
+          this.controls_ = this.controls_.filter(control2 => !control.equals(control2));
+          control.setPanel(null);
         }
       }, this);
       // if this panel hasn't any controls then it's removed
