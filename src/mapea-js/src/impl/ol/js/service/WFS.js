@@ -1,8 +1,14 @@
+/**
+ * @module M/impl/service/WFS
+ */
 import { get as getRemote } from 'facade/js/util/Remote';
 import { addParameters, isNullOrEmpty } from 'facade/js/util/Utils';
 import Featuretype from '../format/wfs/DescribeFeatureType';
-
-export default class WFS {
+/**
+ * @classdesc
+ * @api
+ */
+class WFS {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WFS layer
@@ -182,3 +188,5 @@ export default class WFS {
     return addParameters(addParameters(this.url_, getFeatureParams), this.getFeatureVendor_);
   }
 }
+
+export default WFS;

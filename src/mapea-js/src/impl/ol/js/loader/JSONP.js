@@ -1,12 +1,17 @@
+/**
+ * @module M/impl/loader/JSONP
+ */
 import MObject from 'facade/js/Object';
 import { get as getRemote } from 'facade/js/util/Remote';
 import Exception from 'facade/js/exception/exception';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 
 /**
+ * @classdesc
+ * @api
  * @namespace M.impl.control
  */
-export default class JSONP extends MObject {
+class JSONP extends MObject {
   /**
    * @classdesc TODO
    * control
@@ -78,3 +83,5 @@ export default class JSONP extends MObject {
     });
   }
 }
+
+export default JSONP;

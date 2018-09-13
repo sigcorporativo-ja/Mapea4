@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/loader/KML
+ */
 import MObject from 'facade/js/Object';
 import { get as getRemote } from 'facade/js/util/Remote';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
@@ -5,9 +8,11 @@ import FacadeFeature from 'facade/js/feature/Feature';
 import Exception from 'facade/js/exception/exception';
 
 /**
+ * @classdesc
+ * @api
  * @namespace M.impl.control
  */
-export default class KML extends MObject {
+class KML extends MObject {
   /**
    * @classdesc TODO
    * control
@@ -94,3 +99,5 @@ export default class KML extends MObject {
     });
   }
 }
+
+export default KML;

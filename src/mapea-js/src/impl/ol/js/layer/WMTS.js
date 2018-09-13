@@ -331,7 +331,4 @@ class WMTS extends LayerBase {
   }
 }
 
-<<<<<<< HEAD
 export default WMTS;
-=======
->>>>>>> a9f90d2ab2d2e47cdd82812c0943f910809023f7

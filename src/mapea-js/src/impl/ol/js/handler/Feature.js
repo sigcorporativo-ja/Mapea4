@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/handler/Feature
+ */
 import ClusteredFeature from 'facade/js/feature/Clustered';
 import Cluster from 'facade/js/style/Cluster';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
@@ -28,7 +31,7 @@ const getFacadeFeature = (feature, layer) => {
  * Main constructor of the class. Creates a KML layer
  * with parameters specified by the user
  */
-export default class Feature {
+class Feature {
   /**
    * @constructor
    * @param {ol.Map} options custom options for this layer
@@ -152,3 +155,5 @@ export default class Feature {
     this.map_ = null;
   }
 }
+
+export default Feature;

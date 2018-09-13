@@ -1,12 +1,17 @@
+/**
+ * @module M/impl/loader/WFS
+ */
 import MObject from 'facade/js/Object';
 import { get as getRemote } from 'facade/js/util/Remote';
 import { isNullOrEmpty } from 'facade/js/util/Utils';
 import Exception from 'facade/js/exception/exception';
 import Dialog from 'facade/js/dialog';
 /**
+ * @classdesc
+ * @api
  * @namespace M.impl.control
  */
-export default class WFS extends MObject {
+class WFS extends MObject {
   /**
    * @classdesc TODO
    * control
@@ -98,3 +103,5 @@ export default class WFS extends MObject {
     return this.service_.getFeatureUrl(null, projection);
   }
 }
+
+export default WFS;

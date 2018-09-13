@@ -1,9 +1,11 @@
+/**
+ * @module M/impl/View
+ */
 import OLView from 'ol/View';
 
-export default class View extends OLView {
+class View extends OLView {
   /**
    * @classdesc
-   *
    * @constructor
    * @extends {ol.View}
    * @param {olx.ViewOptions=} opt_options View options.
@@ -86,3 +88,5 @@ export default class View extends OLView {
     // this.setZoom(this.userZoom_);
   }
 }
+
+export default View;
