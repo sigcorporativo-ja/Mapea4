@@ -1,5 +1,5 @@
-import { map as Mmap } from 'facade/js/mapea';
-import Feature from 'facade/js/feature/Feature';
+import { map as Mmap } from 'M/mapea';
+import Feature from 'M/feature/Feature';
 
 const mapjs = Mmap({
   container: 'map',

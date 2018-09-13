@@ -1,7 +1,7 @@
-import { map } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
-import StyleChoropleth from 'facade/js/style/Choropleth';
-import * as StyleQuantification from 'facade/js/style/Quantification';
+import { map } from 'M/mapea';
+import WFS from 'M/layer/WFS';
+import StyleChoropleth from 'M/style/Choropleth';
+import * as StyleQuantification from 'M/style/Quantification';
 
 const mapjs = map({
   controls: ['layerswitcher'],

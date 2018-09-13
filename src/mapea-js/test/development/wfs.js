@@ -1,5 +1,5 @@
-import { map } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
+import { map } from 'M/mapea';
+import WFS from 'M/layer/WFS';
 
 const mapjs = map({
   container: 'map',

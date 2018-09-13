@@ -1,5 +1,5 @@
-import { map } from 'facade/js/mapea';
-import KML from 'facade/js/layer/KML';
+import { map } from 'M/mapea';
+import KML from 'M/layer/KML';
 
 const mapjs = map({
   container: 'map',

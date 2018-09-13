@@ -1,11 +1,12 @@
 /**
  * @module M/impl/loader/WFS
  */
-import MObject from 'facade/js/Object';
-import { get as getRemote } from 'facade/js/util/Remote';
-import { isNullOrEmpty } from 'facade/js/util/Utils';
-import Exception from 'facade/js/exception/exception';
-import Dialog from 'facade/js/dialog';
+import MObject from 'M/Object';
+import { get as getRemote } from 'M/util/Remote';
+import { isNullOrEmpty } from 'M/util/Utils';
+import Exception from 'M/exception/exception';
+import Dialog from 'M/dialog';
+
 /**
  * @classdesc
  * @api

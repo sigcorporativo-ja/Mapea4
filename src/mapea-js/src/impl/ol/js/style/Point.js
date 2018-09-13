@@ -1,12 +1,12 @@
 /**
  * @module M/impl/style/Point
  */
-import { isNullOrEmpty, concatUrlPaths, addParameters } from 'facade/js/util/Utils';
+import { isNullOrEmpty, concatUrlPaths, addParameters } from 'M/util/Utils';
 import chroma from 'chroma-js';
 import OLStyleImage from 'ol/style/Image';
 import OLFeature from 'ol/Feature';
-import * as Align from 'facade/js/style/Align';
-import * as Baseline from 'facade/js/style/Baseline';
+import * as Align from 'M/style/Align';
+import * as Baseline from 'M/style/Baseline';
 import OLStyleFill from 'ol/style/Fill';
 import OLGeomPoint from 'ol/geom/Point';
 import OLStyleStroke from 'ol/style/Stroke';

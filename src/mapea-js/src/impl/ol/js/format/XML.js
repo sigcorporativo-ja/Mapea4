@@ -1,8 +1,8 @@
 /**
  * @module M/impl/format/XML
  */
-import { isString } from 'facade/js/util/Utils';
-import Exception from 'facade/js/exception/exception';
+import { isString } from 'M/util/Utils';
+import Exception from 'M/exception/exception';
 import { parse as olXMLParse } from 'ol/xml';
 /**
  * @classdesc

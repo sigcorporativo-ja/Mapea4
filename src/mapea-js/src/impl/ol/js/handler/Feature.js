@@ -1,9 +1,9 @@
 /**
  * @module M/impl/handler/Feature
  */
-import ClusteredFeature from 'facade/js/feature/Clustered';
-import Cluster from 'facade/js/style/Cluster';
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+import ClusteredFeature from 'M/feature/Clustered';
+import Cluster from 'M/style/Cluster';
+import { isNullOrEmpty } from 'M/util/Utils';
 import AnimatedCluster from '../layer/AnimatedCluster';
 import FeatureImpl from '../feature/Feature';
 

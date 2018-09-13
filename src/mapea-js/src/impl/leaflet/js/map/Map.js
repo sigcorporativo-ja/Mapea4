@@ -1,10 +1,10 @@
-import MObject from 'facade/js/Object';
-import { isNullOrEmpty, isArray, isString, isObject, includes } from 'facade/js/util/Utils';
-import Exception from 'facade/js/exception/Exception';
-import * as LayerType from 'facade/js/layer/Type';
-import WMS from 'facade/js/layer/WMS';
-import Panzoombar from 'facade/js/control/Panzoombar';
-import Control from 'facade/js/control/Control';
+import MObject from 'M/Object';
+import { isNullOrEmpty, isArray, isString, isObject, includes } from 'M/util/Utils';
+import Exception from 'M/exception/Exception';
+import * as LayerType from 'M/layer/Type';
+import WMS from 'M/layer/WMS';
+import Panzoombar from 'M/control/Panzoombar';
+import Control from 'M/control/Control';
 
 export default class Map extends MObject {
   /**

@@ -1,8 +1,8 @@
 /**
  * @module M/impl/format/GeoJSON
  */
-import { isNullOrEmpty, generateRandom } from 'facade/js/util/Utils';
-import Feature from 'facade/js/feature/Feature';
+import { isNullOrEmpty, generateRandom } from 'M/util/Utils';
+import Feature from 'M/feature/Feature';
 import OLFormatGeoJSON from 'ol/format/GeoJSON';
 import { get as getProj } from 'ol/proj';
 import OLStyle from 'ol/style/Style';

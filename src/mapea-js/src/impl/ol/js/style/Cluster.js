@@ -2,18 +2,18 @@
  * @module M/impl/style/Cluster
  */
 import { CHANGE as OLEventChange } from 'ol/events/EventType';
-import LayerVector from 'facade/js/layer/Vector';
+import LayerVector from 'M/layer/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
 import OLSourceVector from 'ol/source/Vector';
 import * as OLeasing from 'ol/easing';
 import OLFeature from 'ol/Feature';
 import OLGeomPolygon from 'ol/geom/Polygon';
-import Polygon from 'facade/js/style/Polygon';
-import StylePoint from 'facade/js/style/Point';
-import FacadeCluster from 'facade/js/style/Cluster';
-import { inverseColor, extendsObj, isFunction, isNullOrEmpty } from 'facade/js/util/Utils';
-import * as EventType from 'facade/js/event/eventtype';
-import ClusteredFeature from 'facade/js/feature/Clustered';
+import Polygon from 'M/style/Polygon';
+import StylePoint from 'M/style/Point';
+import FacadeCluster from 'M/style/Cluster';
+import { inverseColor, extendsObj, isFunction, isNullOrEmpty } from 'M/util/Utils';
+import * as EventType from 'M/event/eventtype';
+import ClusteredFeature from 'M/feature/Clustered';
 import Style from './Style';
 import AnimatedCluster from '../layer/AnimatedCluster';
 import SelectCluster from '../interaction/SelectedCluster';

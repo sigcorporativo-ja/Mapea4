@@ -1,8 +1,8 @@
 /**
  * @module M/impl/format/wmc/WMC
  */
-import Exception from 'facade/js/exception/exception';
-import { normalize } from 'facade/js/util/Utils';
+import Exception from 'M/exception/exception';
+import { normalize } from 'M/util/Utils';
 import XML from '../XML';
 import WMC110 from './WMC110';
 /**

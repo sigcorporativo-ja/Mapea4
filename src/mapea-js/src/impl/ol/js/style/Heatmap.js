@@ -3,7 +3,7 @@
  */
 import OLLayerHeatmap from 'ol/layer/Heatmap';
 import OLSourceVector from 'ol/source/Vector';
-import { isNullOrEmpty, extendsObj } from 'facade/js/util/Utils';
+import { isNullOrEmpty, extendsObj } from 'M/util/Utils';
 import Style from './Style';
 import HeatmapLayer from '../layer/Heatmap';
 

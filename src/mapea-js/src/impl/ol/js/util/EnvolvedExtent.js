@@ -1,4 +1,4 @@
-import { isNullOrEmpty, isObject, isArray } from 'facade/js/util/Utils';
+import { isNullOrEmpty, isObject, isArray } from 'M/util/Utils';
 import { get as getProj } from 'ol/proj';
 
 /**

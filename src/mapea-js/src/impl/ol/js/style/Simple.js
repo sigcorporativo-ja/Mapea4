@@ -2,7 +2,7 @@
  * @module M/impl/style/Simple
  */
 import OLFeature from 'ol/Feature';
-import { isFunction, isNullOrEmpty } from 'facade/js/util/Utils';
+import { isFunction, isNullOrEmpty } from 'M/util/Utils';
 import Style from './Style';
 import Feature from '../feature/Feature';
 

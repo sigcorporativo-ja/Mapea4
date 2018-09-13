@@ -1,9 +1,10 @@
 /**
  * @module M/impl/service/WFS
  */
-import { get as getRemote } from 'facade/js/util/Remote';
-import { addParameters, isNullOrEmpty } from 'facade/js/util/Utils';
+import { get as getRemote } from 'M/util/Remote';
+import { addParameters, isNullOrEmpty } from 'M/util/Utils';
 import Featuretype from '../format/wfs/DescribeFeatureType';
+
 /**
  * @classdesc
  * @api

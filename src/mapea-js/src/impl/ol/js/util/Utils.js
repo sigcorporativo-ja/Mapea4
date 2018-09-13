@@ -1,6 +1,6 @@
-import Feature from 'facade/js/feature/Feature';
-import WKT from 'facade/js/geom/WKT';
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+import Feature from 'M/feature/Feature';
+import WKT from 'M/geom/WKT';
+import { isNullOrEmpty } from 'M/util/Utils';
 import { getWidth, extend } from 'ol/extent';
 
 /**

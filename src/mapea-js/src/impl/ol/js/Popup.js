@@ -1,7 +1,7 @@
 import OLOverlay from 'ol/Overlay';
-import { enableTouchScroll, isFunction, isNullOrEmpty } from 'facade/js/util/Utils';
-import FacadePopup from 'facade/js/Popup';
-import FacadeWindow from 'facade/js/util/Window';
+import { enableTouchScroll, isFunction, isNullOrEmpty } from 'M/util/Utils';
+import FacadePopup from 'M/Popup';
+import FacadeWindow from 'M/util/Window';
 
 /**
  * @module M/impl/Popup

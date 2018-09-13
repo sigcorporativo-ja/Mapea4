@@ -1,10 +1,10 @@
 /**
  * @module M/impl/control/OverviewMap
  */
-import { isNullOrEmpty, classToggle, replaceNode } from 'facade/js/util/Utils';
+import { isNullOrEmpty, classToggle, replaceNode } from 'M/util/Utils';
 import OLControlOverviewMap from 'ol/control/OverviewMap';
 import { get as getProj } from 'ol/proj';
-import * as EventType from 'facade/js/event/eventtype';
+import * as EventType from 'M/event/eventtype';
 import View from '../View';
 
 /**

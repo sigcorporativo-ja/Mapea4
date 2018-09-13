@@ -1,10 +1,10 @@
 /**
  * @module M/impl/layer/WMC
  */
-import { isNullOrEmpty } from 'facade/js/util/Utils';
-import * as parameter from 'facade/js/parameter/parameter';
-import { get as getRemote } from 'facade/js/util/Remote';
-import * as EventType from 'facade/js/event/eventtype';
+import { isNullOrEmpty } from 'M/util/Utils';
+import * as parameter from 'M/parameter/parameter';
+import { get as getRemote } from 'M/util/Remote';
+import * as EventType from 'M/event/eventtype';
 import { get as getProj, transformExtent } from 'ol/proj';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';

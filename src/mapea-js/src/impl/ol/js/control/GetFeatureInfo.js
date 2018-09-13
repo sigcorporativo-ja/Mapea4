@@ -3,12 +3,12 @@
  */
 import OLFormatWFS from 'ol/format/WFS';
 import { unByKey } from 'ol/Observable';
-import * as dialog from 'facade/js/dialog';
+import * as dialog from 'M/dialog';
 import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup';
-import Popup from 'facade/js/Popup';
-import { get as getRemote } from 'facade/js/util/Remote';
-import { compileSync as compileTemplate } from 'facade/js/util/Template';
-import { isNullOrEmpty, normalize, beautifyAttribute } from 'facade/js/util/Utils';
+import Popup from 'M/Popup';
+import { get as getRemote } from 'M/util/Remote';
+import { compileSync as compileTemplate } from 'M/util/Template';
+import { isNullOrEmpty, normalize, beautifyAttribute } from 'M/util/Utils';
 import Control from './Control';
 
 /**

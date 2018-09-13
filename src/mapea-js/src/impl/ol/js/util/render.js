@@ -1,5 +1,5 @@
-import { isUndefined } from 'facade/js/util/Utils';
-import Line from 'facade/js/style/Line';
+import { isUndefined } from 'M/util/Utils';
+import Line from 'M/style/Line';
 import TextPath from './Textpath';
 
 /**

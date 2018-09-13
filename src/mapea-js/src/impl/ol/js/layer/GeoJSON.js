@@ -1,13 +1,13 @@
 /**
  * @module M/impl/layer/GeoJSON
  */
-import { isNullOrEmpty, isObject, beautifyAttributeName, isFunction, includes } from 'facade/js/util/Utils';
-import * as EventType from 'facade/js/event/eventtype';
-import ClusteredFeature from 'facade/js/feature/Clustered';
-import Popup from 'facade/js/Popup';
-import { compileSync as compileTemplate } from 'facade/js/util/Template';
+import { isNullOrEmpty, isObject, beautifyAttributeName, isFunction, includes } from 'M/util/Utils';
+import * as EventType from 'M/event/eventtype';
+import ClusteredFeature from 'M/feature/Clustered';
+import Popup from 'M/Popup';
+import { compileSync as compileTemplate } from 'M/util/Template';
 import geojsonPopupTemplate from 'templates/geojson_popup';
-import GeoJSONFormat from 'facade/js/format/GeoJSON';
+import GeoJSONFormat from 'M/format/GeoJSON';
 import OLSourceVector from 'ol/source/Vector';
 import { get as getProj } from 'ol/proj';
 import { all } from 'ol/loadingstrategy';

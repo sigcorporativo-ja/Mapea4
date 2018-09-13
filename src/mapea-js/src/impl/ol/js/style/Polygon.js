@@ -2,13 +2,13 @@
  * @module M/impl/style/Polygon
  */
 import chroma from 'chroma-js';
-import * as Baseline from 'facade/js/style/Baseline';
+import * as Baseline from 'M/style/Baseline';
 import OLFeature from 'ol/Feature';
-import * as Align from 'facade/js/style/Align';
+import * as Align from 'M/style/Align';
 import OLStyleStroke from 'ol/style/Stroke';
 import OLStyleText from 'ol/style/Text';
 import OLGeomPolygon from 'ol/geom/Polygon';
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'M/util/Utils';
 import OLStyleIcon from 'ol/style/Icon';
 import OLStyleFill from 'ol/style/Fill';
 import { toContext as toContextRender } from 'ol/render';

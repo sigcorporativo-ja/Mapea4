@@ -2,7 +2,7 @@
  * @module M/impl/control/Location
  */
 
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'M/util/Utils';
 import { get as getProj } from 'ol/proj';
 import OLFeature from 'ol/Feature';
 import OLGeolocation from 'ol/Geolocation';

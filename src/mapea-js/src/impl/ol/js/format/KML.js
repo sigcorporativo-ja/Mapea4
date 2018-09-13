@@ -1,7 +1,7 @@
 /**
  * @module M/impl/format/KML
  */
-import { decodeHtml } from 'facade/js/util/Utils';
+import { decodeHtml } from 'M/util/Utils';
 import OLFormatKML from 'ol/format/KML';
 import { FRACTION } from 'ol/style/IconAnchorUnits';
 import OLStyleIcon from 'ol/style/Icon';

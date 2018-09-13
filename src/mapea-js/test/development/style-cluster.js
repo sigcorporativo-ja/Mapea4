@@ -1,6 +1,6 @@
-import { map } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
-import StyleCluster from 'facade/js/style/Cluster';
+import { map } from 'M/mapea';
+import WFS from 'M/layer/WFS';
+import StyleCluster from 'M/style/Cluster';
 
 window.mapjs = map({
   controls: ['layerswitcher'],

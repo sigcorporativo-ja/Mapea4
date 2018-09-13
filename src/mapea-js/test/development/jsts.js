@@ -1,8 +1,8 @@
-import { map } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
-import GeoJSON from 'facade/js/layer/GeoJSON';
-import { SELECT_FEATURES } from 'facade/js/event/eventtype';
-import Feature from 'facade/js/feature/Feature';
+import { map } from 'M/mapea';
+import WFS from 'M/layer/WFS';
+import GeoJSON from 'M/layer/GeoJSON';
+import { SELECT_FEATURES } from 'M/event/eventtype';
+import Feature from 'M/feature/Feature';
 
 const jsts = require('jsts/dist/jsts.js');
 

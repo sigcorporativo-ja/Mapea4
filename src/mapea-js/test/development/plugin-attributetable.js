@@ -1,5 +1,5 @@
 import AttributeTable from 'plugins/attributetable/facade/js/attributetable';
-import WFS from 'facade/js/layer/WFS';
+import WFS from 'M/layer/WFS';
 
 const mapjs = M.map({
   container: 'map',

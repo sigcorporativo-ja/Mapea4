@@ -1,5 +1,5 @@
-import { map } from 'facade/js/mapea';
-import WMTS from 'facade/js/layer/WMTS';
+import { map } from 'M/mapea';
+import WMTS from 'M/layer/WMTS';
 
 const mapajs = map({
   container: 'map',

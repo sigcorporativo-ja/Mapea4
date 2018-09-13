@@ -1,5 +1,5 @@
-import { map } from 'facade/js/mapea';
-import GeoJSON from 'facade/js/layer/GeoJSON';
+import { map } from 'M/mapea';
+import GeoJSON from 'M/layer/GeoJSON';
 
 const mapjs = map({
   container: 'map',

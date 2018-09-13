@@ -1,5 +1,5 @@
-import { isNullOrEmpty, isArray, isObject, isUndefined } from 'facade/js/util/Utils';
-import WMS from 'facade/js/layer/WMS';
+import { isNullOrEmpty, isArray, isObject, isUndefined } from 'M/util/Utils';
+import WMS from 'M/layer/WMS';
 import { get as getProj, transformExtent } from 'ol/proj';
 
 /**

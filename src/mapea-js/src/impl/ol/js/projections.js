@@ -62,7 +62,7 @@ const proj32628 = {
 const proj4326 = {
   def: '+proj=longlat +datum=WGS84 +no_defs',
   extent: [-180, -90, 180, 90],
-  codes: ['EPSG:4326', 'urn:ogc:def:crs:EPSG::4326', 'urn:ogc:def:crs:OGC:1.3:CRS84'],
+  codes: ['EPSG:4326', 'urn:ogc:def:crs:EPSG::4326', 'urn:ogc:def:crs:OGC:1.3:CRS84', 'http://www.opengis.net/def/crs/OGC/1.3/CRS84'],
   units: 'd',
 };
 

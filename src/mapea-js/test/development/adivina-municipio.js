@@ -1,8 +1,8 @@
-import { map as Mmap } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
-import Polygon from 'facade/js/style/Polygon';
-import Category from 'facade/js/style/Category';
-import { LOAD as LoadEvt, SELECT_FEATURES as SelectFeaturesEvt } from 'facade/js/event/eventtype';
+import { map as Mmap } from 'M/mapea';
+import WFS from 'M/layer/WFS';
+import Polygon from 'M/style/Polygon';
+import Category from 'M/style/Category';
+import { LOAD as LoadEvt, SELECT_FEATURES as SelectFeaturesEvt } from 'M/event/eventtype';
 
 const mapajs = Mmap({
   container: 'map',

@@ -1,7 +1,7 @@
-import { map } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
-import StyleCategory from 'facade/js/style/Category';
-import StylePoint from 'facade/js/style/Point';
+import { map } from 'M/mapea';
+import WFS from 'M/layer/WFS';
+import StyleCategory from 'M/style/Category';
+import StylePoint from 'M/style/Point';
 
 const mapjs = map({
   controls: ['layerswitcher'],

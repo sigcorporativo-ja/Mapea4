@@ -1,7 +1,7 @@
 /**
  * @module M/impl/control/Scale
  */
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'M/util/Utils';
 import Control from './Control';
 
 /**

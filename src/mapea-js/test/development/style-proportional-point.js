@@ -1,7 +1,7 @@
-import { map } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
-import StyleProportional from 'facade/js/style/Proportional';
-import StylePoint from 'facade/js/style/Point';
+import { map } from 'M/mapea';
+import WFS from 'M/layer/WFS';
+import StyleProportional from 'M/style/Proportional';
+import StylePoint from 'M/style/Point';
 
 const mapjs = map({
   container: 'map',

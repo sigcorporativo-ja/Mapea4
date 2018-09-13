@@ -4,7 +4,7 @@
 import OLControlMousePosition from 'ol/control/MousePosition';
 import { createStringXY as createStringXYCoordinate } from 'ol/coordinate';
 import { get as getProj } from 'ol/proj';
-import * as EventType from 'facade/js/event/eventtype';
+import * as EventType from 'M/event/eventtype';
 
 /**
  * @classdesc

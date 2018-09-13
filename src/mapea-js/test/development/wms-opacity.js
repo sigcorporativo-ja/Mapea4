@@ -1,4 +1,4 @@
-import { map } from 'facade/js/mapea';
+import { map } from 'M/mapea';
 
 const mapajs = map({
   container: 'map',

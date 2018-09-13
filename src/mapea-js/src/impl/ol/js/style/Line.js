@@ -1,7 +1,7 @@
 /**
  * @module M/impl/style/Line
  */
-import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
+import { isNullOrEmpty, isFunction } from 'M/util/Utils';
 import OLFeature from 'ol/Feature';
 import OLStyleStroke from 'ol/style/Stroke';
 import OLStyleFill from 'ol/style/Fill';

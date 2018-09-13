@@ -1,7 +1,7 @@
 /**
  * @module M/impl/format/wfs/DescribeFeatureType
  */
-import { isGeometryType } from 'facade/js/util/Utils';
+import { isGeometryType } from 'M/util/Utils';
 import DescribeFeatureTypeXML from './DescribeFeatureTypeXML';
 /**
  * @classdesc

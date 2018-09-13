@@ -1,10 +1,10 @@
 /**
  * @module M/impl/layer/OSM
  */
-import FacadeMapbox from 'facade/js/layer/Mapbox';
-import FacadeOSM from 'facade/js/layer/OSM';
-import * as LayerType from 'facade/js/layer/Type';
-import { isNullOrEmpty, generateResolutionsFromExtent } from 'facade/js/util/Utils';
+import FacadeMapbox from 'M/layer/Mapbox';
+import FacadeOSM from 'M/layer/OSM';
+import * as LayerType from 'M/layer/Type';
+import { isNullOrEmpty, generateResolutionsFromExtent } from 'M/util/Utils';
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceOSM from 'ol/source/OSM';
 import OLTileGrid from 'ol/tilegrid/TileGrid';

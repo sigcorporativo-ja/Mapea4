@@ -1,10 +1,10 @@
 /**
  * @module M/impl/layer/WFS
  */
-import StyleCluster from 'facade/js/style/Cluster';
-import FormatGeoJSON from 'facade/js/format/GeoJSON';
-import { isNullOrEmpty } from 'facade/js/util/Utils';
-import * as EventType from 'facade/js/event/eventtype';
+import StyleCluster from 'M/style/Cluster';
+import FormatGeoJSON from 'M/format/GeoJSON';
+import { isNullOrEmpty } from 'M/util/Utils';
+import * as EventType from 'M/event/eventtype';
 import OLSourceVector from 'ol/source/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
 import { get as getProj } from 'ol/proj';

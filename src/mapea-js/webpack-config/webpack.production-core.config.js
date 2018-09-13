@@ -20,7 +20,7 @@ module.exports = {
       handlebars: 'handlebars/dist/handlebars.min.js',
       templates: path.resolve(__dirname, '..', 'src', 'templates'),
       assets: path.resolve(__dirname, '..', 'src', 'facade', 'assets'),
-      facade: path.resolve(__dirname, '..', 'src', 'facade'),
+      M: path.resolve(__dirname, '../src/facade/js'),
       impl: path.resolve(__dirname, '..', 'src', 'impl', 'ol', 'js'),
       'impl-assets': path.resolve(__dirname, '..', 'src', 'impl', 'ol', 'assets'),
     },

@@ -1,12 +1,12 @@
 /**
  * @module M/impl/layer/KML
  */
-import { compileSync as compileTemplate } from 'facade/js/util/Template';
+import { compileSync as compileTemplate } from 'M/util/Template';
 import popupKMLTemplate from 'templates/kml_popup';
-import Popup from 'facade/js/Popup';
-import { isNullOrEmpty } from 'facade/js/util/Utils';
-import ClusteredFeature from 'facade/js/feature/Clustered';
-import * as EventType from 'facade/js/event/eventtype';
+import Popup from 'M/Popup';
+import { isNullOrEmpty } from 'M/util/Utils';
+import ClusteredFeature from 'M/feature/Clustered';
+import * as EventType from 'M/event/eventtype';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import Vector from './Vector';

@@ -1,9 +1,9 @@
 /**
  * @module M/impl/style/Chart
  */
-import { isNullOrEmpty, isObject } from 'facade/js/util/Utils';
-import * as Align from 'facade/js/style/Align';
-import FacadeChart from 'facade/js/style/Chart';
+import { isNullOrEmpty, isObject } from 'M/util/Utils';
+import * as Align from 'M/style/Align';
+import FacadeChart from 'M/style/Chart';
 import OLFeature from 'ol/Feature';
 import OLStyleStroke from 'ol/style/Stroke';
 import OLGeomPoint from 'ol/geom/Point';
@@ -11,7 +11,7 @@ import OLStyleText from 'ol/style/Text';
 import OLStyleFill from 'ol/style/Fill';
 import OLStyle from 'ol/style/Style';
 import OLStyleIcon from 'ol/style/Icon';
-import * as Baseline from 'facade/js/style/Baseline';
+import * as Baseline from 'M/style/Baseline';
 import OLChart from '../olchart/OLChart';
 import StyleCentroid from './Centroid';
 import Feature from './Feature';

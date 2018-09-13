@@ -3,10 +3,10 @@
  */
 
 import layerswitcherTemplate from 'templates/layerswitcher';
-import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
-import { compileSync as compileTemplate } from 'facade/js/util/Template';
-import LayerSwitcherFacade from 'facade/js/control/Layerswitcher';
-import Layer from 'facade/js/layer/Layer';
+import { isNullOrEmpty, concatUrlPaths } from 'M/util/Utils';
+import { compileSync as compileTemplate } from 'M/util/Template';
+import LayerSwitcherFacade from 'M/control/Layerswitcher';
+import Layer from 'M/layer/Layer';
 import Control from './Control';
 
 /**

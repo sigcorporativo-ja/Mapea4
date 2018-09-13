@@ -1,7 +1,7 @@
-import MObject from 'facade/js/Object';
-import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
+import MObject from 'M/Object';
+import { isNullOrEmpty, concatUrlPaths } from 'M/util/Utils';
 import M.config from 'M.configuration';
-import FacadeLayer from 'facade/js/layer/Layer';
+import FacadeLayer from 'M/layer/Layer';
 
 export default class Layer extends MObject {
   /**

@@ -1,8 +1,8 @@
-import { map } from 'facade/js/mapea';
-import WMS from 'facade/js/layer/WMS';
-import WFS from 'facade/js/layer/WFS';
-import KML from 'facade/js/layer/KML';
-import GeoJSON from 'facade/js/layer/GeoJSON';
+import { map } from 'M/mapea';
+import WMS from 'M/layer/WMS';
+import WFS from 'M/layer/WFS';
+import KML from 'M/layer/KML';
+import GeoJSON from 'M/layer/GeoJSON';
 
 
 window.mapjs = map({

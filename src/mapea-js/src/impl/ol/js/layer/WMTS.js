@@ -1,13 +1,13 @@
 /**
  * @module M/impl/layer/WMTS
  */
-import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'facade/js/util/Utils';
+import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'M/util/Utils';
 import { default as OLSourceWMTS, optionsFromCapabilities } from 'ol/source/WMTS';
 import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import OLTileGridWMTS from 'ol/tilegrid/WMTS';
 import { getBottomLeft } from 'ol/extent';
-import { get as getRemote } from 'facade/js/util/Remote';
-import * as EventType from 'facade/js/event/eventtype';
+import { get as getRemote } from 'M/util/Remote';
+import * as EventType from 'M/event/eventtype';
 import { get as getProj, transformExtent } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
 import getLayerExtent from '../util/wmtscapabilities';

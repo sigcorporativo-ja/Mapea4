@@ -1,9 +1,9 @@
-import { map } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
-import Feature from 'facade/js/feature/Feature';
-import { isNullOrEmpty } from 'facade/js/util/Utils';
-import { LIKE, AND, OR } from 'facade/js/filter/Filter';
-import { INTERSECT } from 'facade/js/filter/Module';
+import { map } from 'M/mapea';
+import WFS from 'M/layer/WFS';
+import Feature from 'M/feature/Feature';
+import { isNullOrEmpty } from 'M/util/Utils';
+import { LIKE, AND, OR } from 'M/filter/Filter';
+import { INTERSECT } from 'M/filter/Module';
 
 const mapajs = map({
   container: 'map',

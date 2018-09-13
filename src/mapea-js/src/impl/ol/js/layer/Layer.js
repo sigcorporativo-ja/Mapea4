@@ -1,9 +1,9 @@
 /**
  * @module M/impl/Layer
  */
-import { isNullOrEmpty, concatUrlPaths } from 'facade/js/util/Utils';
-import MObject from 'facade/js/Object';
-import FacadeLayer from 'facade/js/layer/Layer';
+import { isNullOrEmpty, concatUrlPaths } from 'M/util/Utils';
+import MObject from 'M/Object';
+import FacadeLayer from 'M/layer/Layer';
 /**
  * @classdesc
  * @api

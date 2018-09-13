@@ -1,9 +1,9 @@
 import OLStyleRegularShape from 'ol/style/RegularShape';
 import OLStyleFill from 'ol/style/Fill';
 import { asString as colorAsString } from 'ol/color';
-import Chart from 'facade/js/style/Chart';
-import * as chartTypes from 'facade/js/chart/types';
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+import Chart from 'M/style/Chart';
+import * as chartTypes from 'M/chart/types';
+import { isNullOrEmpty } from 'M/util/Utils';
 
 export default class OLChart extends OLStyleRegularShape {
   /**

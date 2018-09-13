@@ -1,11 +1,11 @@
 /**
  * @module M/impl/layer/WMS
  */
-import { isNullOrEmpty, isNull, getResolutionFromScale, addParameters, concatUrlPaths, getWMSGetCapabilitiesUrl, isArray } from 'facade/js/util/Utils';
-import FacadeLayerBase from 'facade/js/layer/Layer';
-import * as LayerType from 'facade/js/layer/Type';
-import FacadeWMS from 'facade/js/layer/WMS';
-import { get as getRemote } from 'facade/js/util/Remote';
+import { isNullOrEmpty, isNull, getResolutionFromScale, addParameters, concatUrlPaths, getWMSGetCapabilitiesUrl, isArray } from 'M/util/Utils';
+import FacadeLayerBase from 'M/layer/Layer';
+import * as LayerType from 'M/layer/Type';
+import FacadeWMS from 'M/layer/WMS';
+import { get as getRemote } from 'M/util/Remote';
 import OLLayerTile from 'ol/layer/Tile';
 import OLLayerImage from 'ol/layer/Image';
 import { get as getProj, transformExtent } from 'ol/proj';

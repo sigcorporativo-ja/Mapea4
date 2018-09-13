@@ -1,8 +1,8 @@
-import { map as Mmap } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
-import { isNullOrEmpty } from 'facade/js/util/Utils';
-import * as dialog from 'facade/js/dialog';
-import Heatmap from 'facade/js/style/Heatmap';
+import { map as Mmap } from 'M/mapea';
+import WFS from 'M/layer/WFS';
+import { isNullOrEmpty } from 'M/util/Utils';
+import * as dialog from 'M/dialog';
+import Heatmap from 'M/style/Heatmap';
 
 const mapjs = Mmap({
   container: 'map',

@@ -1,6 +1,6 @@
-import { map } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
-import StyleLine from 'facade/js/style/Line';
+import { map } from 'M/mapea';
+import WFS from 'M/layer/WFS';
+import StyleLine from 'M/style/Line';
 
 const mapjs = map({
   controls: ['layerswitcher'],

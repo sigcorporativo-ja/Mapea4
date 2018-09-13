@@ -1,7 +1,7 @@
 /**
  * @module M/impl/format/WMTSCapabilities
  */
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'M/util/Utils';
 import { optionsFromCapabilities } from 'ol/source/WMTS';
 import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 /**
@@ -61,13 +61,15 @@ class WMTSCapabilities {
    */
   getMatrixSet(layerName, srid) {
     let matrixSet;
-    for (let i = 0, ilen = this.capabilities.Contents.Layer.length;
-      (i < ilen) && (matrixSet === undefined); i++) {
-      let layer = this.capabilities.Contents.Layer[i];
+    for (let i = 0; i < this.capabilities.Contents.Layer.length &&
+      matrixSet === undefined; i += 1) {
+      const layer = this.capabilities.Contents.Layer[i];
       if (layer.Identifier === layerName) {
         if (!isNullOrEmpty(srid)) {
           // gets the matrixSet by the SRID
-          matrixSet = layer.TileMatrixSetLink.filter(matrixSetLink => matrixSetLink.contains(srid))[0];
+          matrixSet = layer.TileMatrixSetLink.filter((matrixSetLink) => {
+            return matrixSetLink.contains(srid);
+          })[0];
         }
         if (matrixSet === undefined) {
           matrixSet = layer.TileMatrixSetLink[0].TileMatrixSet;
@@ -86,11 +88,14 @@ class WMTSCapabilities {
    */
   getMatrixIds(layerName, srid) {
     let matrixIds = [];
-    let matrixSet = this.getMatrixSet(layerName, srid);
-    let tileMatrixSet = his.capabilities.Contents.TileMatrixSet.filter(tileMatrixSet => tileMatrixSet.Identifier === matrixSet)[0];
+    const matrixSet = this.getMatrixSet(layerName, srid);
+    const tileMatrixSet = this.capabilities.Contents.TileMatrixSet.filter((tMatrixSet) => {
+      return tMatrixSet.Identifier === matrixSet;
+    })[0];
     if (tileMatrixSet != null && tileMatrixSet.length > 0) {
       matrixIds = tileMatrixSet.TileMatrix.map(tileMatrix => tileMatrix.Identifier);
     }
+    return matrixIds;
   }
 
   /**
@@ -102,7 +107,7 @@ class WMTSCapabilities {
    */
   getFormat(layerName) {
     let format;
-    let layer = this.capabilities.Contents.Layer.filter(layer => layer.Identifier === layerName)[0];
+    const layer = this.capabilities.Contents.Layer.filter(l => l.Identifier === layerName)[0];
     if (layer != null) {
       format = layer.Format[0];
     }
@@ -118,9 +123,9 @@ class WMTSCapabilities {
    * @api stable
    */
   getOptionsFromCapabilities(layerName, matrixSet) {
-    let options = optionsFromCapabilities(this.capabilities, {
+    const options = optionsFromCapabilities(this.capabilities, {
       layer: layerName,
-      matrixSet: matrixSet
+      matrixSet,
     });
 
     return options;

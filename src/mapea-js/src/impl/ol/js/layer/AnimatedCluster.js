@@ -1,7 +1,7 @@
 /**
  * @module M/impl/layer/AnimatedCluster
  */
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'M/util/Utils';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import OLGeomPoint from 'ol/geom/Point';

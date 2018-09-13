@@ -1,7 +1,7 @@
 /**
  * @module M/impl/format/WMSCapabilities
  */
-import { isArray, isObject, isNullOrEmpty } from 'facade/js/util/Utils';
+import { isArray, isObject, isNullOrEmpty } from 'M/util/Utils';
 import OLFormatWMSCapabilities from 'ol/format/WMSCapabilities';
 
 /**

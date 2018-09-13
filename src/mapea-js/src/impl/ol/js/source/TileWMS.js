@@ -1,4 +1,4 @@
-import { isNullOrEmpty } from 'facade/js/util/Utils';
+import { isNullOrEmpty } from 'M/util/Utils';
 import OLSourceTileWMS from 'ol/source/TileWMS';
 
 export default class TileWMS extends OLSourceTileWMS {

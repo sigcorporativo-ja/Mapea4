@@ -1,10 +1,10 @@
 /**
  * @module M/impl/layer/Vector
  */
-import StyleCluster from 'facade/js/style/Cluster';
-import { isNullOrEmpty, isFunction } from 'facade/js/util/Utils';
-import * as EventType from 'facade/js/event/eventtype';
-import Style from 'facade/js/style/Style';
+import StyleCluster from 'M/style/Cluster';
+import { isNullOrEmpty, isFunction } from 'M/util/Utils';
+import * as EventType from 'M/event/eventtype';
+import Style from 'M/style/Style';
 import { get as getProj } from 'ol/proj';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';

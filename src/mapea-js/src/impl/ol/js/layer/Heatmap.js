@@ -1,12 +1,12 @@
 /**
  * @module M/impl/layer/Heatmap
  */
-import * as dialog from 'facade/js/dialog';
+import * as dialog from 'M/dialog';
 import OLLayerHeatmap from 'ol/layer/Heatmap';
 import OLFeature from 'ol/Feature';
 import OLStyle from 'ol/style/Style';
 import OLStyleIcon from 'ol/style/Icon';
-import Feature from 'facade/js/feature/Feature';
+import Feature from 'M/feature/Feature';
 import { clamp } from 'ol/math';
 import Simple from '../style/Simple';
 /**

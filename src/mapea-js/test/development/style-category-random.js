@@ -1,6 +1,6 @@
-import { map as Mmap } from 'facade/js/mapea';
-import WFS from 'facade/js/layer/WFS';
-import StyleCategory from 'facade/js/style/Category';
+import { map as Mmap } from 'M/mapea';
+import WFS from 'M/layer/WFS';
+import StyleCategory from 'M/style/Category';
 
 const mapjs = Mmap({
   container: 'map',

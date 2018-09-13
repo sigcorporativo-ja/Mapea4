@@ -1,8 +1,8 @@
 /**
  * @module M/impl/layer/Draw
  */
-import Exception from 'facade/js/exception/exception';
-import { isFunction, isArray, isNullOrEmpty } from 'facade/js/util/Utils';
+import Exception from 'M/exception/exception';
+import { isFunction, isArray, isNullOrEmpty } from 'M/util/Utils';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import OLStyle from 'ol/style/Style';
@@ -140,15 +140,16 @@ class Draw extends Layer {
    * @param {Array<Mx.Point>} coordinate
    * @api stable
    */
-  drawPoints(points) {
+  drawPoints(pointsParam) {
     // checks if the param is null or empty
+    let points = pointsParam;
     if (isNullOrEmpty(points)) {
       Exception('No ha especificado ningún punto');
     }
     if (!isArray(points)) {
       points = [points];
     }
-    let geojsons = this.pointsToGeoJSON_(points);
+    const geojsons = this.pointsToGeoJSON_(points);
     this.drawGeoJSON(geojsons);
   }
 
@@ -161,7 +162,8 @@ class Draw extends Layer {
    * @param {Array<Mx.Point>} coordinate
    * @api stable
    */
-  drawGeoJSON(geojsons) {
+  drawGeoJSON(geojsonsParam) {
+    let geojsons = geojsonsParam;
     // checks if the param is null or empty
     if (isNullOrEmpty(geojsons)) {
       Exception('No ha especificado ningún GeoJSON');
@@ -171,11 +173,11 @@ class Draw extends Layer {
     }
 
     // gets the projection
-    let projection = getProj(this.map.getProjection().code);
+    const projection = getProj(this.map.getProjection().code);
 
     let features = [];
     geojsons.forEach((geojson) => {
-      let formattedFeatures = this.geojsonFormatter_.readFeatures(geojson, {
+      const formattedFeatures = this.geojsonFormatter_.readFeatures(geojson, {
         dataProjection: projection,
       });
       features = features.concat(formattedFeatures);
@@ -193,7 +195,8 @@ class Draw extends Layer {
    * @param {Array<Mx.Point>} coordinate
    * @api stable
    */
-  drawFeatures(features) {
+  drawFeatures(featuresParam) {
+    let features = featuresParam;
     // checks if the param is null or empty
     if (!isNullOrEmpty(features)) {
       if (!isArray(features)) {
@@ -212,19 +215,20 @@ class Draw extends Layer {
    * @param {Array<Mx.Point>} coordinate
    * @api stable
    */
-  removeFeatures(features) {
+  removeFeatures(featuresParam) {
+    let features = featuresParam;
     // checks if the param is null or empty
     if (!isNullOrEmpty(features)) {
       if (!isArray(features)) {
         features = [features];
       }
-      let olSource = this.ol3Layer.getSource();
+      const olSource = this.ol3Layer.getSource();
 
-      features.forEach(feature => {
+      features.forEach((feature) => {
         try {
           olSource.removeFeature(feature);
         } catch (err) {
-          console.log(err);
+          throw err;
           // the feature does not exist in the source
         }
       });
@@ -242,7 +246,7 @@ class Draw extends Layer {
    */
   getPoints(coordinate) {
     let features = [];
-    let drawSource = this.ol3Layer.getSource();
+    const drawSource = this.ol3Layer.getSource();
 
     if (!isNullOrEmpty(coordinate)) {
       features = drawSource.getFeaturesAtCoordinate(coordinate);

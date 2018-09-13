@@ -7,8 +7,8 @@ import OLGeomPolygon from 'ol/geom/Polygon';
 import OLGeomMultiLineString from 'ol/geom/MultiLineString';
 import OLGeomMultiPolygon from 'ol/geom/MultiPolygon';
 import OLFeature from 'ol/Feature';
-import FacadeFeature from 'facade/js/feature/Feature';
-import { isNullOrEmpty, generateRandom } from 'facade/js/util/Utils';
+import FacadeFeature from 'M/feature/Feature';
+import { isNullOrEmpty, generateRandom } from 'M/util/Utils';
 import FormatGeoJSON from '../format/GeoJSON';
 import ImplUtils from '../util/Utils';
 

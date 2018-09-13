@@ -1,4 +1,4 @@
-import { map } from 'facade/js/mapea';
+import { map } from 'M/mapea';
 
 window.map = map({
   container: 'map',
