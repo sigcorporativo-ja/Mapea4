@@ -129,8 +129,8 @@ class LayerSwitcher extends ControlBase {
         const overlayLayers = map.getLayers().filter((layer) => {
           const isTransparent = (layer.transparent === true);
           const displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
-          const isNotWMC = (LayerType !== LayerType.WMC);
-          const isNotWMSFull = !((LayerType === LayerType.WMS) && isNullOrEmpty(layer.name));
+          const isNotWMC = (layer.type !== LayerType.WMC);
+          const isNotWMSFull = !((layer.type === LayerType.WMS) && isNullOrEmpty(layer.name));
           return (isTransparent && isNotWMC && isNotWMSFull && displayInLayerSwitcher);
         }).reverse();
 
