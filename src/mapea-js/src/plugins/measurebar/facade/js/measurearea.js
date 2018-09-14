@@ -8,7 +8,7 @@ export default class MeasureArea extends Measure {
     const impl = new MeasureAreaImpl();
 
     // const calls the super constructor
-    super(impl, measureareaHTML);
+    super(impl, measureareaHTML, MeasureArea.NAME);
 
     // checks if the implementation can create WMC layers
     if (M.utils.isUndefined(MeasureAreaImpl)) {
@@ -33,6 +33,15 @@ export default class MeasureArea extends Measure {
     return equals;
   }
 }
+
+/**
+ * Name for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+MeasureArea.NAME = 'measurearea';
 
 /**
  * Template for this controls

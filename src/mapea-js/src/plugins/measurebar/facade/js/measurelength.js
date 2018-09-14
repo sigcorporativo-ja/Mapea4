@@ -18,7 +18,7 @@ export default class MeasureLength extends Measure {
     const impl = new MeasureLengthImpl();
 
     // calls the super constructor
-    super(impl, measurelengthHTML);
+    super(impl, measurelengthHTML, MeasureLength.NAME);
 
     // checks if the implementation can create WMC layers
     if (M.utils.isUndefined(MeasureLengthImpl)) {
@@ -44,6 +44,14 @@ export default class MeasureLength extends Measure {
     return equals;
   }
 }
+/**
+ * Name for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+MeasureLength.NAME = 'measurelength';
 
 /**
  * Template for this controls

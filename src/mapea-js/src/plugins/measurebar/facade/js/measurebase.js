@@ -8,8 +8,8 @@ export default class Measure extends M.Control {
    * @extends {M.Control}
    * @api stable
    */
-  constructor(impl, template) {
-    super(impl, Measure.NAME);
+  constructor(impl, template, name) {
+    super(impl, name);
 
     /**
      * Template of the control

@@ -11,11 +11,11 @@ export default class PrinterControl extends M.Control {
    * @extends {M.Control}
    * @api stable
    */
-  constructor(url, params, options) {
+  constructor(url, params, options, name) {
     // implementation of this control
     const impl = new PrinterControlImpl();
 
-    super(impl);
+    super(impl, PrinterControl.NAME);
 
     // checks if the implementation can manage this control
     if (M.utils.isUndefined(PrinterControlImpl)) {
@@ -578,6 +578,15 @@ export default class PrinterControl extends M.Control {
     return equals;
   }
 }
+
+/**
+ * Name for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+PrinterControl.NAME = 'printercontrol';
 
 /**
  * M.template for this controls

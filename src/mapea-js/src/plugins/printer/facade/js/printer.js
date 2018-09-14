@@ -13,7 +13,7 @@ export default class Printer extends M.Plugin {
    * @api stable
    */
   constructor(parameters = {}) {
-    super(null, Printer.NAME);
+    super(null);
 
     /**
      * Facade of the map
