@@ -31,6 +31,7 @@ class OverviewMap extends ControlBase {
     if (isUndefined(OverviewMapImpl)) {
       Exception('La implementación usada no puede crear controles OverviewMap');
     }
+    impl.facadeControl = this;
   }
 
   /**

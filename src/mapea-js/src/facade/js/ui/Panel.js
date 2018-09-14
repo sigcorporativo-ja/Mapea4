@@ -510,6 +510,13 @@ class Panel extends MObject {
   isCollapsed() {
     return this.collapsed_;
   }
+
+  /**
+   * TODO
+   */
+  getControlsContainer() {
+    return this.controlsContainer_;
+  }
 }
 
 export default Panel;

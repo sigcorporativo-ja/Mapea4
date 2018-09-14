@@ -5,6 +5,7 @@ import { isNullOrEmpty, classToggle, replaceNode } from 'M/util/Utils';
 import OLControlOverviewMap from 'ol/control/OverviewMap';
 import { get as getProj } from 'ol/proj';
 import * as EventType from 'M/event/eventtype';
+import { WMS as WMSType } from 'M/layer/Type';
 import View from '../View';
 
 /**
@@ -18,7 +19,9 @@ class OverviewMap extends OLControlOverviewMap {
    * @api stable
    */
   constructor(options) {
-    super({});
+    super({
+      layers: [],
+    });
     /**
      * @private
      * @type {number}
@@ -52,6 +55,26 @@ class OverviewMap extends OLControlOverviewMap {
   }
 
   /**
+   * This function sets de control facade of the class
+   * @function
+   * @param {M/control/OverviewMap}
+   * @api
+   */
+  set facadeControl(c) {
+    this.facadeControl_ = c;
+  }
+
+  /**
+   * This function gets de control facade of the class
+   * @function
+   * @return {M/control/OverviewMap}
+   * @api
+   */
+  get facadeControl() {
+    return this.facadeControl_;
+  }
+
+  /**
    * This function adds the control to the specified map
    *
    * @public
@@ -72,24 +95,6 @@ class OverviewMap extends OLControlOverviewMap {
    * @param {function} template template of this control
    */
   update(map, element) {
-    const olLayers = [];
-    map.getLayers().forEach((layer) => {
-      const olLayer = layer.getImpl().getOL3Layer();
-      if (isNullOrEmpty(olLayer)) {
-        layer.getImpl().on(EventType.ADDED_TO_MAP, this.addLayer_, this);
-      } else {
-        olLayers.push(olLayer);
-      }
-    });
-
-    const newView = new View({
-      projection: getProj(map.getProjection().code),
-      resolutions: map.getResolutions(),
-    });
-
-    this.ovmap_.setView(newView);
-    olLayers.forEach(layer => this.ovmap_.addLayer(layer));
-
     const button = this.element.querySelector('button');
     if (this.collapsed_ === true) {
       if (button.classList.contains(this.collapsedButtonClass_)) {
@@ -102,8 +107,46 @@ class OverviewMap extends OLControlOverviewMap {
     } else {
       button.classList.add(this.openedButtonClass_);
     }
+    this.addOpenEventListener(button, map);
+    this.setTarget();
+  }
 
-    map.getMapImpl().addControl(this);
+  /**
+   * This method adds the open event listener
+   * @function
+   * @api
+   */
+  addOpenEventListener(btn, map) {
+    const button = btn;
+    button.onclick = this.openEventListener.bind(this);
+  }
+
+  /**
+   * This function execute the addLayers method when
+   * the control is opened.
+   * @function
+   */
+  openEventListener(evt) {
+    const event = evt;
+    if (this.getCollapsed() === true) {
+      this.addLayers(this.facadeMap_);
+      event.target.onclick = null;
+    }
+  }
+
+  /**
+   * Sets the target of overviewmap control
+   * @function
+   * @api
+   */
+  setTarget() {
+    const facadeControl = this.facadeControl_;
+    if (!isNullOrEmpty(facadeControl)) {
+      const panel = facadeControl.getPanel();
+      if (!isNullOrEmpty(panel)) {
+        this.target_ = panel.getControlsContainer();
+      }
+    }
   }
 
   /**
@@ -127,6 +170,34 @@ class OverviewMap extends OLControlOverviewMap {
   addLayer_(layer) {
     layer.un(EventType.ADDED_TO_MAP, this.addLayer_, this);
     this.getOverviewMap().addLayer(layer.getOL3Layer());
+  }
+
+  /**
+   * This function adds the layers of map to overviewmap control
+   * @function
+   * @param {M/Map}
+   */
+  addLayers(map) {
+    const olLayers = [];
+    map.getLayers().forEach((layer) => {
+      if ((layer.type === WMSType || layer.transparent === false) && layer.isVisible()) {
+        const olLayer = layer.getImpl().getOL3Layer();
+        if (isNullOrEmpty(olLayer)) {
+          layer.getImpl().on(EventType.ADDED_TO_MAP, this.addLayer_.bind(this));
+        } else {
+          olLayers.push(olLayer);
+        }
+      }
+    });
+    const newView = new View({
+      projection: getProj(map.getProjection().code),
+      resolutions: map.getResolutions(),
+    });
+
+    this.ovmap_.setView(newView);
+    olLayers.forEach(layer => this.ovmap_.addLayer(layer));
+    map.getMapImpl().addControl(this);
+    this.wasOpen_ = true;
   }
 
   /**
