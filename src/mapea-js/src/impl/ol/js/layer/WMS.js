@@ -380,10 +380,10 @@ class WMS extends LayerBase {
     this.getCapabilities().then((getCapabilities) => {
       getCapabilities.getLayers().forEach((layer) => {
         const wmsLayer = new FacadeWMS({
-          url: this.options.url,
+          url: this.url,
           name: layer.name,
           version: layer.version,
-          tiled: this.options.tiled,
+          tiled: this.tiled,
         });
         this.layers.push(wmsLayer);
       });
