@@ -3,6 +3,7 @@
  */
 import OLFormatWFS from 'ol/format/WFS';
 import { unByKey } from 'ol/Observable';
+import OLControl from 'ol/control/Control';
 import * as dialog from 'M/dialog';
 import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup';
 import Popup from 'M/Popup';
@@ -48,6 +49,29 @@ class GetFeatureInfo extends Control {
      * @api stable
      */
     this.buffer = options.buffer;
+  }
+
+  /**
+   * This function adds the control to the specified map
+   *
+   * @public
+   * @function
+   * @param {M.Map} map to add the plugin
+   * @param {function} template template of this control
+   * @api stable
+   * @export
+   */
+  addTo(map, element) {
+    const olControls = map.getMapImpl().getControls().getArray();
+    const hasControl = olControls.some(control => control instanceof GetFeatureInfo);
+    if (hasControl === false) {
+      this.facadeMap_ = map;
+      OLControl.call(this, {
+        element,
+        target: null,
+      });
+      map.getMapImpl().addControl(this);
+    }
   }
 
   /**
