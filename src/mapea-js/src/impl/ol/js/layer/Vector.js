@@ -288,7 +288,7 @@ class Vector extends Layer {
    * @api stable
    */
   unselectFeatures() {
-    this.map.removePopup();
+    // this.map.removePopup();
   }
   /**
    * This function set facade class vector
