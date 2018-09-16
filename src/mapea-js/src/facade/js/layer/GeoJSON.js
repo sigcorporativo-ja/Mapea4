@@ -95,7 +95,7 @@ class GeoJSON extends LayerVector {
    * 'extract' the features properties
    */
   get source() {
-    return this.impl.source;
+    return this.getImpl().source;
   }
 
   set source(newSource) {
