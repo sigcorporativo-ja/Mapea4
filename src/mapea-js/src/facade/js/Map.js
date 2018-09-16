@@ -2053,7 +2053,7 @@ class Map extends Base {
     if (isNullOrEmpty(coord)) {
       coord = this.getCenter();
     } else {
-      coord = Parameters.center(coord);
+      coord = parameter.center(coord);
     }
 
     if (isNullOrEmpty(coord)) {
