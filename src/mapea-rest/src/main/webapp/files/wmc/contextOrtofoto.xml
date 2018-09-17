@@ -64,7 +64,7 @@
 			<Extension>
 				<ol:transparent xmlns:ol="http://openlayers.org/context">false</ol:transparent>
 				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">true</ol:isBaseLayer>
-				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
 			</Extension>
 			<StyleList>
 				<Style current="1">
