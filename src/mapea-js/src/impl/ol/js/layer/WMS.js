@@ -89,14 +89,6 @@ class WMS extends LayerBase {
     this.resolutions_ = null;
 
     /**
-     * Legend URL for this layer
-     * @private
-     * @type {string}
-     * @expose
-     */
-    this.legendUrl_ = null;
-
-    /**
      * Current projection
      * @private
      * @type {ol.Projection}
