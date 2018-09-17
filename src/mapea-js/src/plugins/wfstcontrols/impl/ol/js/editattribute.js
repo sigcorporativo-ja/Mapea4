@@ -118,18 +118,16 @@ export default class EditAttribute extends M.impl.Control {
       }
 
       // adds save button events on show
-      this.popup_.on(M.evt.SHOW, () => {
-        const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
-        if (!M.utils.isNullOrEmpty(popupButton)) {
-          popupButton.addEventListener('click', this.saveAttributes_.bind(this));
-        }
-      }, this);
+      const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
+      if (!M.utils.isNullOrEmpty(popupButton)) {
+        popupButton.addEventListener('click', this.saveAttributes_.bind(this));
+      }
 
       // removes events on destroy
       this.popup_.on(M.evt.DESTROY, () => {
-        const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
-        if (!M.utils.isNullOrEmpty(popupButton)) {
-          popupButton.removeEventListener('click', this.saveAttributes_);
+        const popupButton2 = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
+        if (!M.utils.isNullOrEmpty(popupButton2)) {
+          popupButton.removeEventListener('click', this.saveAttributes_.bind(this));
         }
         this.unselectFeature_();
       }, this);
