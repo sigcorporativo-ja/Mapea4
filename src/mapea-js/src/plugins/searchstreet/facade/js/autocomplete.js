@@ -561,20 +561,22 @@ export default class Autocomplete extends M.Plugin {
    * @api stable
    */
   destroy() {
-    this.map_.removeControls(this);
-    this.map_ = null;
-    this.locality_ = '';
-    this.url_ = null;
-    this.minLength_ = null;
-    this.target_ = null;
-    this.resultsContainer_ = null;
-    this.delayTime_ = null;
-    this.timeoutKey_ = null;
-    this.limit_ = null;
-    this.searchTime_ = null;
-    this.busqMunicipio_ = null;
-    this.busqMunicipioClick_ = null;
-    this.searchingResult_ = null;
+    if (this.map_ !== null) {
+      this.map_.removeControls(this);
+      this.map_ = null;
+      this.locality_ = '';
+      this.url_ = null;
+      this.minLength_ = null;
+      this.target_ = null;
+      this.resultsContainer_ = null;
+      this.delayTime_ = null;
+      this.timeoutKey_ = null;
+      this.limit_ = null;
+      this.searchTime_ = null;
+      this.busqMunicipio_ = null;
+      this.busqMunicipioClick_ = null;
+      this.searchingResult_ = null;
+    }
   }
 
   equals(plugin) {
