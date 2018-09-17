@@ -89,10 +89,14 @@ const layerNodeToJSON = (wmsNode, isRoot = true, rootObj = {}, parent = null) =>
 const parseSRS = (objLayer, parsedLayerNodes) => {
   const objLayerParam = objLayer;
   const nodeLayer = parsedLayerNodes[objLayerParam.Name];
-  const SRS = nodeLayer.querySelector('SRS');
-  if (SRS !== null) {
-    const innerHTML = SRS.innerHTML;
-    objLayerParam.SRS = [innerHTML];
+  if (!isNullOrEmpty(nodeLayer)) {
+    const SRS = nodeLayer.querySelector('SRS');
+    if (SRS !== null) {
+      const innerHTML = SRS.innerHTML;
+      objLayerParam.SRS = [innerHTML];
+    }
+  } else if (isArray(objLayerParam.Layer)) {
+    objLayerParam.Layer.forEach(objLayerChild => parseSRS(objLayerChild, parsedLayerNodes));
   }
 };
 
@@ -104,20 +108,26 @@ const parseSRS = (objLayer, parsedLayerNodes) => {
  */
 const parseBoundingBox = (objLayer, parsedLayerNodes) => {
   const nodeLayer = parsedLayerNodes[objLayer.Name];
-  if (isArray(objLayer.BoundingBox)) {
-    let bboxChilds = Array.prototype.map.call(nodeLayer.children, element => element);
-    bboxChilds = bboxChilds.filter(element => element.tagName === 'BoundingBox');
+  if (!isNullOrEmpty(nodeLayer)) {
+    if (isArray(objLayer.BoundingBox)) {
+      let bboxChilds = Array.prototype.map.call(nodeLayer.children, element => element);
+      bboxChilds = bboxChilds.filter(element => ['BoundingBox'].includes(element.tagName));
 
-    objLayer.BoundingBox.forEach((objBbox, index) => {
-      const objBboxParam = objBbox;
-      if (objBboxParam.crs === null) {
-        const bboxNode = bboxChilds[index];
-        const srs = bboxNode.getAttribute('SRS');
-        if (!isNullOrEmpty(srs)) {
-          objBboxParam.crs = srs;
+      objLayer.BoundingBox.forEach((objBbox, index) => {
+        const objBboxParam = objBbox;
+        if (objBboxParam.crs === null) {
+          const bboxNode = bboxChilds[index];
+          if (!isNullOrEmpty(bboxNode)) {
+            const srs = bboxNode.getAttribute('SRS');
+            if (!isNullOrEmpty(srs)) {
+              objBboxParam.crs = srs;
+            }
+          }
         }
-      }
-    });
+      });
+    }
+  } else if (isArray(objLayer.Layer)) {
+    objLayer.Layer.forEach(objLayerChild => parseBoundingBox(objLayerChild, parsedLayerNodes));
   }
 };
 
@@ -130,18 +140,22 @@ const parseBoundingBox = (objLayer, parsedLayerNodes) => {
 const parseScaleHint = (objLayer, parsedLayerNodes) => {
   const objLayerParam = objLayer;
   const nodeLayer = parsedLayerNodes[objLayer.Name];
-  objLayerParam.ScaleHint = [];
-  let scaleHints = Array.prototype.map.call(nodeLayer.children, element => element);
-  scaleHints = scaleHints.filter(element => element.tagName === 'ScaleHint');
-  scaleHints.forEach((scaleHint) => {
-    const minScale = parseFloat(scaleHint.getAttribute('min'));
-    const maxScale = parseFloat(scaleHint.getAttribute('max'));
-    const obj = {
-      minScale,
-      maxScale,
-    };
-    objLayerParam.ScaleHint.push(obj);
-  });
+  if (!isNullOrEmpty(nodeLayer)) {
+    objLayerParam.ScaleHint = [];
+    let scaleHints = Array.prototype.map.call(nodeLayer.children, element => element);
+    scaleHints = scaleHints.filter(element => element.tagName === 'ScaleHint');
+    scaleHints.forEach((scaleHint) => {
+      const minScale = parseFloat(scaleHint.getAttribute('min'));
+      const maxScale = parseFloat(scaleHint.getAttribute('max'));
+      const obj = {
+        minScale,
+        maxScale,
+      };
+      objLayerParam.ScaleHint.push(obj);
+    });
+  } else if (isArray(objLayer.Layer)) {
+    objLayer.Layer.forEach(objLayerChild => parseScaleHint(objLayerChild, parsedLayerNodes));
+  }
 };
 
 /**
@@ -153,22 +167,27 @@ const parseScaleHint = (objLayer, parsedLayerNodes) => {
 const parseLatLonBoundingBox = (objLayer, parsedLayerNodes) => {
   const objLayerParam = objLayer;
   const nodeLayer = parsedLayerNodes[objLayer.Name];
-  objLayerParam.LatLonBoundingBox = [];
-  let latLonBboxes = Array.prototype.map.call(nodeLayer.children, element => element);
-  latLonBboxes = latLonBboxes.filter(element => element.tagName === 'LatLonBoundingBox');
-  latLonBboxes.forEach((latlonBbox) => {
-    const extent = [
-      parseFloat(latlonBbox.getAttribute('minx')),
-      parseFloat(latlonBbox.getAttribute('miny')),
-      parseFloat(latlonBbox.getAttribute('maxx')),
-      parseFloat(latlonBbox.getAttribute('maxy')),
-    ];
-    const obj = {
-      crs: 'EPSG:4326',
-      extent,
-    };
-    objLayerParam.LatLonBoundingBox.push(obj);
-  });
+  if (!isNullOrEmpty(nodeLayer)) {
+    objLayerParam.LatLonBoundingBox = [];
+    let latLonBboxes = Array.prototype.map.call(nodeLayer.children, element => element);
+    latLonBboxes = latLonBboxes.filter(element => element.tagName === 'LatLonBoundingBox');
+    latLonBboxes.forEach((latlonBbox) => {
+      const extent = [
+        parseFloat(latlonBbox.getAttribute('minx')),
+        parseFloat(latlonBbox.getAttribute('miny')),
+        parseFloat(latlonBbox.getAttribute('maxx')),
+        parseFloat(latlonBbox.getAttribute('maxy')),
+      ];
+      const obj = {
+        crs: 'EPSG:4326',
+        extent,
+      };
+      objLayerParam.LatLonBoundingBox.push(obj);
+    });
+  } else if (isArray(objLayerParam.Layer)) {
+    objLayerParam.Layer
+      .forEach(objLayerChild => parseLatLonBoundingBox(objLayerChild, parsedLayerNodes));
+  }
 };
 
 /**

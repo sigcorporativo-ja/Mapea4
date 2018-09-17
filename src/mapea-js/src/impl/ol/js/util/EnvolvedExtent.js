@@ -120,9 +120,6 @@ export default class EnvolvedExtent {
         envolvedExtent = EnvolvedExtent.updateExtent(envolvedExtent, extent);
         if (index === (wmsLayersLength - 1)) {
           success(envolvedExtent);
-        } else {
-          const err = new Error('Error en calculateFromWMC. Modulo EnvolvedExtent.');
-          fail(err);
         }
         index += 1;
       };
