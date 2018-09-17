@@ -1,7 +1,7 @@
 /**
  * @module M/impl/format/wfs/DescribeFeatureTypeXML
  */
-import Dialog from 'M/dialog';
+import * as Dialog from 'M/dialog';
 import XML from '../XML';
 /**
  * @classdesc
