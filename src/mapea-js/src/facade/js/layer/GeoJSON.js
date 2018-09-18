@@ -3,6 +3,7 @@
  */
 import GeoJSONImpl from 'impl/layer/GeoJSON';
 import LayerVector from './Vector';
+import { GeoJSON as GeoJSONType } from './Type';
 import { isString, isNullOrEmpty, isUndefined, isArray, normalize } from '../util/Utils';
 import Exception from '../exception/exception';
 
@@ -87,10 +88,16 @@ class GeoJSON extends LayerVector {
    * 'type' This property indicates if
    * the layer was selected
    */
-  // get type() {
-  //   return LayerType.GeoJSON;
-  // }
+  get type() {
+    return GeoJSONType;
+  }
 
+  set type(newType) {
+    if (!isUndefined(newType) &&
+      !isNullOrEmpty(newType) && (newType !== GeoJSONType)) {
+      Exception('El tipo de capa debe ser \''.concat(GeoJSONType).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
+    }
+  }
   /**
    * 'extract' the features properties
    */
