@@ -1,7 +1,7 @@
 /**
  * @module M/impl/style/Cluster
  */
-import { CHANGE as OLEventChange } from 'ol/events/EventType';
+import { unByKey } from 'ol/Observable';
 import LayerVector from 'M/layer/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
 import OLSourceVector from 'ol/source/Vector';
@@ -497,9 +497,6 @@ class Cluster extends Style {
    */
   unapply() {
     if (!isNullOrEmpty(this.clusterLayer_)) {
-      const clusterSource = this.clusterLayer_.getSource();
-      const eventType = OLEventChange;
-      const callback = OLSourceCluster.prototype.refresh;
       this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
       this.removeCoverInteraction_();
       this.removeSelectInteraction_();
@@ -507,7 +504,7 @@ class Cluster extends Style {
       this.layer_.getImpl().getMap().getMapImpl().getView()
         .un('change:resolution', this.clearConvexHull.bind(this), this);
       this.layer_.redraw();
-      clusterSource.getSource().un(eventType, callback, clusterSource);
+      this.deactivateChangeEvent();
     } else if (!isNullOrEmpty(this.layer_)) {
       this.layer_.un(EventType.LOAD, this.clusterize_.bind(this), this);
     }
@@ -542,9 +539,8 @@ class Cluster extends Style {
   activateChangeEvent() {
     if (this.clusterLayer_ !== null) {
       const clusterSource = this.clusterLayer_.getSource();
-      const eventType = OLEventChange;
       const callback = OLSourceCluster.prototype.refresh;
-      clusterSource.getSource().on(eventType, callback, clusterSource);
+      clusterSource.getSource().on('change', callback);
     }
   }
 
@@ -558,11 +554,42 @@ class Cluster extends Style {
   deactivateChangeEvent() {
     if (this.clusterLayer_ !== null) {
       const clusterSource = this.clusterLayer_.getSource();
-      const eventType = OLEventChange;
       const callback = OLSourceCluster.prototype.refresh;
-      clusterSource.getSource().un(eventType, callback, clusterSource);
+      unByKey({
+        bindTo: undefined,
+        callOnce: false,
+        listener: callback,
+        target: clusterSource.getSource(),
+        type: 'change',
+      });
     }
   }
+
+
+  /**
+   * TODO
+   * @public
+   * @param {object} canvas
+   * @function
+   * @api stable
+   */
+  deactivateChangeResolutionEvent() {
+    if (!isNullOrEmpty(this.layer_) && !isNullOrEmpty(this.layer_.getImpl())) {
+      const impl = this.layer_.getImpl();
+      const map = impl.getMap();
+      if (!isNullOrEmpty(map) && !isNullOrEmpty(map.getMapImpl())) {
+        const olView = map.getMapImpl().getView();
+        unByKey({
+          type: 'change:resolution',
+          bindTo: undefined,
+          listener: this.clearConvexHull,
+          target: olView,
+          callOnce: false,
+        });
+      }
+    }
+  }
+
 
   /**
    * TODO
