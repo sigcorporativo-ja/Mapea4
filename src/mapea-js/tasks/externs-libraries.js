@@ -9,6 +9,10 @@ const libraries = [
     name: 'jsts',
     path: 'jsts/dist/jsts.min.js',
   },
+  {
+    name: 'Handlebars',
+    path: 'handlebars',
+  },
 ];
 
 module.exports = libraries;
