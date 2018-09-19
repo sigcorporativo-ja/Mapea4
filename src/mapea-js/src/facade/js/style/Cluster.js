@@ -224,8 +224,8 @@ class Cluster extends Composite {
    * @public
    * @api
    */
-  static get ORDER() {
-    return 1;
+  get ORDER() {
+    return 4;
   }
 }
 

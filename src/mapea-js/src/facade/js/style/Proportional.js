@@ -508,8 +508,8 @@ class Proportional extends StyleComposite {
    * @public
    * @api
    */
-  static get ORDER() {
-    return 1;
+  get ORDER() {
+    return 3;
   }
 }
 

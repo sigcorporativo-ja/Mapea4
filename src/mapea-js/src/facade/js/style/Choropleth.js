@@ -462,7 +462,7 @@ class Choropleth extends StyleComposite {
    * @api
    */
   get ORDER() {
-    return 1;
+    return 2;
   }
 }
 

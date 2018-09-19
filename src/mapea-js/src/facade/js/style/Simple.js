@@ -36,7 +36,7 @@ class Simple extends StyleFeature {
    * @public
    * @api
    */
-  static get ORDER() {
+  get ORDER() {
     return 1;
   }
 }

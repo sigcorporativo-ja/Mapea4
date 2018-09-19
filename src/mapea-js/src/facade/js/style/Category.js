@@ -52,7 +52,7 @@ class Category extends Composite {
    * @api
    */
   get ORDER() {
-    return 1;
+    return 2;
   }
 
   /**
