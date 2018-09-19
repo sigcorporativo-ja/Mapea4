@@ -48,9 +48,11 @@ const extend = (targetVar, ...sourceObs) => {
  * @function
  */
 const getTextData = (label, feature, styleOptions, dataValue) => {
-  let text = `${Simple.getValue(label.text, feature)}` || '';
+  let text;
   if (typeof label.text === 'function') {
     text = label.text(dataValue, styleOptions.data, feature);
+  } else {
+    text = `${Simple.getValue(label.text, feature)}` || '';
   }
   text = text === '0' ? '' : text;
   return text;
