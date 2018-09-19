@@ -302,8 +302,8 @@ class Vector extends LayerBase {
       // const isCluster = style instanceof StyleCluster;
       // const isPoint = [POINT, MULTI_POINT].includes(this.getGeometryType());
       if (style instanceof Style) /* && (!isCluster || isPoint) ) */ {
-        if (!isNullOrEmpty(this.oldStyle_)) {
-          this.oldStyle_.unapply(this);
+        if (!isNullOrEmpty(this.style_)) {
+          this.style_.unapply(this);
         }
         style.apply(this, applyToFeature);
         this.style_ = style;
@@ -338,7 +338,7 @@ class Vector extends LayerBase {
    * @api
    */
   clearStyle() {
-    this.style = null;
+    this.setStyle(null);
     this.getFeatures().forEach(feature => feature.clearStyle());
   }
 
