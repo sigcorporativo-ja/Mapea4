@@ -376,8 +376,8 @@ class Cluster extends Style {
    * @api stable
    */
   addCoverInteraction_() {
-    this.layer_.on(EventType.HOVER_FEATURES, this.hoverFeatureFn_.bind(this), this);
-    this.layer_.on(EventType.LEAVE_FEATURES, this.leaveFeatureFn_.bind(this), this);
+    this.hoverKey_ = this.layer_.on(EventType.HOVER_FEATURES, this.hoverFeatureFn_.bind(this));
+    this.leaveKey_ = this.layer_.on(EventType.LEAVE_FEATURES, this.leaveFeatureFn_.bind(this));
   }
 
   /**
@@ -388,8 +388,8 @@ class Cluster extends Style {
    * @api stable
    */
   removeCoverInteraction_() {
-    this.layer_.un(EventType.HOVER_FEATURE, this.hoverFeatureFn_.bind(this), this);
-    this.layer_.un(EventType.LEAVE_FEATURE, this.leaveFeatureFn_.bind(this), this);
+    this.layer_.unByKey(EventType.HOVER_FEATURES, this.hoverKey_);
+    this.layer_.unByKey(EventType.LEAVE_FEATURES, this.leaveKey_);
   }
 
   /**
@@ -501,8 +501,7 @@ class Cluster extends Style {
       this.removeCoverInteraction_();
       this.removeSelectInteraction_();
       this.clearConvexHull();
-      this.layer_.getImpl().getMap().getMapImpl().getView()
-        .un('change:resolution', this.clearConvexHull.bind(this), this);
+      this.deactivateChangeResolutionEvent();
       this.layer_.redraw();
       this.deactivateChangeEvent();
     } else if (!isNullOrEmpty(this.layer_)) {

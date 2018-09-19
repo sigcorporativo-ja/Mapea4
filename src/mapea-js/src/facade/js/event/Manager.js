@@ -77,6 +77,29 @@ class EventsManager {
    * @function
    * @api
    */
+  removeByKey(eventType, key) {
+    const listeners = this.events_[eventType];
+    if (!isNullOrEmpty(listeners)) {
+      const index = listeners.map((listener, index2) => {
+        let i = -1;
+        if (listener.getEventKey() === key) {
+          i = index2;
+        }
+        return i;
+      });
+      if (index !== -1) {
+        listeners.splice(index, 1);
+      }
+    }
+  }
+
+  /**
+   * Sets the callback when the instace is loaded
+   *
+   * @public
+   * @function
+   * @api
+   */
   fire(eventType, args) {
     const EventsManagerListeners = [].concat(this.events_[eventType]);
     if (!isNullOrEmpty(EventsManagerListeners)) {

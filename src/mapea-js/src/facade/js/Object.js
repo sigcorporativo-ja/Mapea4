@@ -66,6 +66,17 @@ class MObject {
    * @function
    * @api
    */
+  unByKey(eventType, key) {
+    this.eventsManager_.remove(eventType, key);
+  }
+
+  /**
+   * Sets the callback when the instace is loaded
+   *
+   * @public
+   * @function
+   * @api
+   */
   fire(eventType, argsParam) {
     let args = argsParam;
     if (isNullOrEmpty(args)) {
