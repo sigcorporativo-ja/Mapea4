@@ -1127,7 +1127,13 @@ class Map extends MObject {
     const mapControls = this.getControls(controls);
     mapControls.forEach((control) => {
       control.destroy();
-      this.controls_ = this.controls_.filter(control2 => !control2.equals(control));
+      this.controls_ = this.controls_.filter((control2) => {
+        let equals = control2.constructor === control.constructor;
+        if (!isNullOrEmpty(control2.equals)) {
+          equals = !control2.equals(control);
+        }
+        return equals;
+      });
     });
     return this;
   }
