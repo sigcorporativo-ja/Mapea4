@@ -54,8 +54,8 @@ export const parseParamToGeometries = (paramParameter) => {
 const toCQLFilter = (operation, geometries) => {
   let cqlFilter = '';
   const wktFormat = new WKT();
-  geometries.forEach((value) => {
-    if (value !== 0) {
+  geometries.forEach((value, index) => {
+    if (index !== 0) {
       // es un OR porque se hace una interseccion completa con todas
       // las geometries
       cqlFilter += ' OR ';

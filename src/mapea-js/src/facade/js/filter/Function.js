@@ -30,7 +30,7 @@ class Function extends BaseFilter {
      * @type {String}
      */
     this.cqlFilter_ = '';
-    if (isNullOrEmpty(options.cqlFilter)) {
+    if (!isNullOrEmpty(options.cqlFilter)) {
       this.cqlFilter_ = options.cqlFilter;
     }
   }
