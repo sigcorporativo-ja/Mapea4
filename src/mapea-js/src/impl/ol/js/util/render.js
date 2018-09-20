@@ -1,7 +1,7 @@
 import { isUndefined } from 'M/util/Utils';
 import Line from 'M/style/Line';
 import TextPath from './Textpath';
-
+import Path from '../style/Path';
 /**
  * Post render event method.<br />
  * Handles additional renderings after default ol style render.<br />
@@ -58,7 +58,7 @@ const postRender = function postRender(e = null) {
 
         // add support for textpath
         const textStyle = (style instanceof Line) ? style.getOptions().text : style.textPath;
-        if (textStyle != null && textStyle instanceof TextPath) {
+        if (textStyle != null && textStyle instanceof Path) {
           TextPath.draw(ctx, e.frameState.coordinateToPixelTransform, textStyle, coords);
         }
       });
