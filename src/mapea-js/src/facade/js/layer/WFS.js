@@ -168,7 +168,7 @@ class WFS extends Vector {
    */
   setCQL(newCQLparam) {
     let newCQL = newCQLparam;
-    this.getImpl().describeFeatureType().then((describeFeatureType) => {
+    this.getImpl().getDescribeFeatureType().then((describeFeatureType) => {
       if (!isNullOrEmpty(newCQL)) {
         const geometryName = describeFeatureType.geometryName;
         // if exist, replace {{geometryName}} with the value geometryName
