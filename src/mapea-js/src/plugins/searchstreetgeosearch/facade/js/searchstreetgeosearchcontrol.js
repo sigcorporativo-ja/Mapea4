@@ -202,36 +202,34 @@ export default class SearchstreetGeosearchControl extends M.Control {
    * @api stable
    */
   createView(map) {
-    const promise = new Promise((success, fail) => {
-      M.template.compile(searchstreetgeosearchHTML, { jsonp: true }).then((html) => {
-        this.element_ = html;
-        this.input_ = html.querySelector('input#m-searchstreetgeosearch-search-input');
-        const searchstreetResuts = html.querySelector('div#m-searchstreet-results');
-        const geosearchResuts = html.querySelector('div#m-geosearch-results');
-        const searchstreetTab = html.querySelector('ul#m-tabs > li:nth-child(1) > a');
-        const geosearchTab = html.querySelector('ul#m-tabs > li:nth-child(2) > a');
-        searchstreetTab.addEventListener('click', (evt) => {
-          evt.preventDefault();
-          if (!searchstreetTab.classList.contains('activated')) {
-            searchstreetTab.classList.add('activated');
-            geosearchTab.classList.remove('activated');
-            searchstreetResuts.classList.add('show');
-            geosearchResuts.classList.remove('show');
-          }
-        });
-        geosearchTab.addEventListener('click', (evt) => {
-          evt.preventDefault();
-          if (!geosearchTab.classList.contains('activated')) {
-            geosearchTab.classList.add('activated');
-            searchstreetTab.classList.remove('activated');
-            searchstreetResuts.classList.remove('show');
-            geosearchResuts.classList.add('show');
-          }
-        });
-        success(html);
-      });
+    const html = M.template.compileSync(searchstreetgeosearchHTML);
+    this.element_ = html;
+    this.input_ = html.querySelector('input#m-searchstreetgeosearch-search-input');
+    const searchstreetResuts = html.querySelector('div#m-searchstreet-results');
+    const geosearchResuts = html.querySelector('div#m-geosearch-results');
+    const searchstreetTab = html.querySelector('ul#m-tabs > li:nth-child(1) > a');
+    const geosearchTab = html.querySelector('ul#m-tabs > li:nth-child(2) > a');
+    searchstreetTab.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      if (!searchstreetTab.classList.contains('activated')) {
+        searchstreetTab.classList.add('activated');
+        geosearchTab.classList.remove('activated');
+        searchstreetResuts.classList.add('show');
+        geosearchResuts.classList.remove('show');
+      }
     });
-    return promise;
+    geosearchTab.addEventListener('click', (evt) => {
+      evt.preventDefault();
+      if (!geosearchTab.classList.contains('activated')) {
+        geosearchTab.classList.add('activated');
+        searchstreetTab.classList.remove('activated');
+        searchstreetResuts.classList.remove('show');
+        geosearchResuts.classList.add('show');
+      }
+    });
+    return new Promise((resolve) => {
+      resolve(html);
+    });
   }
 
   /**
