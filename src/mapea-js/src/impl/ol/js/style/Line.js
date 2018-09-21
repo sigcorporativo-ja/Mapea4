@@ -74,6 +74,7 @@ class Line extends Simple {
           }),
           textBaseline: (getValue(label.baseline, featureVariable) || '').toLowerCase(),
           textAlign: getValue(label.align, featureVariable),
+          scale: getValue(label.scale, featureVariable),
           rotateWithView: getValue(label.rotate, featureVariable) || false,
           textOverflow: getValue(label.textoverflow, featureVariable) || '',
           minWidth: getValue(label.minwidth, featureVariable) || 0,
