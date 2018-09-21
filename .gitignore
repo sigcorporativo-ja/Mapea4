@@ -11,4 +11,8 @@ externs
 libraries
 doc
 build
+dist
+index.js
+index-*.js
+entry-points-plugins.json
 *~
