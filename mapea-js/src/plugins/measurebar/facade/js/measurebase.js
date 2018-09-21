@@ -1,85 +1,84 @@
-goog.provide('P.control.Measure');
+export default class Measure extends M.Control {
+  /**
+   * @classdesc
+   * Main constructor of the class. Creates a Measure
+   * control to provides measure tools
+   *
+   * @constructor
+   * @extends {M.Control}
+   * @api stable
+   */
+  constructor(impl, template, name) {
+    super(impl, name);
 
-/**
- * @classdesc
- * Main constructor of the class. Creates a Measure
- * control to provides measure tools
- *
- * @constructor
- * @extends {M.Control}
- * @api stable
- */
-M.control.Measure = (function(impl, template) {
-   /**
-    * Template of the control
-    * @private
-    * @type {string}
-    */
-   this.template_ = template;
+    /**
+     * Template of the control
+     * @private
+     * @type {string}
+     */
 
-   goog.base(this, impl, M.control.Measure.NAME);
-});
-goog.inherits(M.control.Measure, M.Control);
+    this.template_ = template;
+  }
 
-/**
- * This function creates the view to the specified map
- *
- * @public
- * @function
- * @param {M.Map} map - Map to add the control
- * @returns {Promise} HTML template
- * @api stable
- */
-M.control.Measure.prototype.createView = function(map) {
-   return M.template.compile(this.template_, {
-      'jsonp': true
-   });
-};
+  /**
+   * This function creates the view to the specified map
+   *
+   * @public
+   * @function
+   * @param {M.Map} map - Map to add the control
+   * @returns {HTMLElement} HTML template
+   * @api stable
+   */
+  createView(map) {
+    return M.template.compileSync(this.template_, {
+      jsonp: true,
+    });
+  }
 
-/**
- * This function returns the HTML control button
- *
- * @public
- * @function
- * @param {HTMLElement} html to add the plugin
- * @api stable
- * @export
- */
-M.control.Measure.prototype.getActivationButton = function(element) {
-   return element.querySelector('button#m-measure-button');
-};
+  /**
+   * This function returns the HTML control button
+   *
+   * @public
+   * @function
+   * @param {HTMLElement} html to add the plugin
+   * @api stable
+   * @export
+   */
+  getActivationButton(element) {
+    return element.querySelector('button#m-measure-button');
+  }
 
-/**
- * This function checks if an object is equals
- * to this control
- *
- * @public
- * @function
- * @param {*} obj - Object to compare
- * @returns {boolean} equals - Returns if they are equal or not
- * @api stable
- */
-M.control.Measure.prototype.equals = function(obj) {
-   var equals = false;
-   if (obj instanceof M.control.Measure) {
+  /**
+   * This function checks if an object is equals
+   * to this control
+   *
+   * @public
+   * @function
+   * @param {*} obj - Object to compare
+   * @returns {boolean} equals - Returns if they are equal or not
+   * @api stable
+   */
+  equals(obj) {
+    let equals = false;
+    if (obj instanceof Measure) {
       equals = (this.name === obj.name);
-   }
-   return equals;
-};
+    }
+    return equals;
+  }
 
-/**
- * This function destroys this plugin
- *
- * @public
- * @function
- * @api stable
- */
-M.control.Measure.prototype.destroy = function() {
-   this.getImpl().destroy();
-   this.template_ = null;
-   this.impl = null;
-};
-
+  /**
+   * This function destroys this plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  destroy() {
+    this.getImpl().destroy();
+    this.template_ = null;
+    this.impl = null;
+  }
+}
 /**
  * Name to identify this control
  * @const
@@ -87,7 +86,7 @@ M.control.Measure.prototype.destroy = function() {
  * @public
  * @api stable
  */
-M.control.Measure.NAME = 'measurebar';
+Measure.NAME = 'measurebar';
 
 /**
  * Template for this controls
@@ -96,7 +95,7 @@ M.control.Measure.NAME = 'measurebar';
  * @public
  * @api stable
  */
-M.control.Measure.POINTER_TOOLTIP_TEMPLATE = 'measure_pointer_tooltip.html';
+Measure.POINTER_TOOLTIP_TEMPLATE = 'measure_pointer_tooltip.html';
 
 /**
  * Template for this controls
@@ -105,7 +104,7 @@ M.control.Measure.POINTER_TOOLTIP_TEMPLATE = 'measure_pointer_tooltip.html';
  * @public
  * @api stable
  */
-M.control.Measure.MEASURE_TOOLTIP_TEMPLATE = 'measure_tooltip.html';
+Measure.MEASURE_TOOLTIP_TEMPLATE = 'measure_tooltip.html';
 
 /**
  * Help message
@@ -114,4 +113,4 @@ M.control.Measure.MEASURE_TOOLTIP_TEMPLATE = 'measure_tooltip.html';
  * @public
  * @api stable
  */
-M.control.Measure.HELP_MESSAGE = 'Click para empezar a dibujar';
+Measure.HELP_MESSAGE = 'Click para empezar a dibujar';

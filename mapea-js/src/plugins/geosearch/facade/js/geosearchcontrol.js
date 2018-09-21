@@ -1,11 +1,9 @@
-goog.provide('P.control.Geosearch');
+import GeosearchImpl from '../../impl/ol/js/geosearchcontrol';
+import geosearchHTML from '../../templates/geosearch';
+import geosearchResultHTML from '../../templates/geosearchresults';
+import helpTemplateHTML from '../../templates/geosearchhelp';
 
-goog.require('P.layer.Geosearch');
-goog.require('goog.dom.classlist');
-goog.require('goog.events');
-goog.require('goog.style');
-
-(function() {
+export default class GeosearchControl extends M.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a WMCSelector
@@ -15,9 +13,14 @@ goog.require('goog.style');
    * @extends {M.Control}
    * @api stable
    */
-  M.control.Geosearch = (function(url, core, handler, searchParameters) {
+  constructor(url, core, handler, searchParameters) {
+    // implementation of this control
+    const impl = new GeosearchImpl();
+
+    super(impl, GeosearchControl.NAME);
+
     // checks if the implementation can create WMC layers
-    if (M.utils.isUndefined(M.impl.control.Geosearch)) {
+    if (M.utils.isUndefined(GeosearchImpl)) {
       M.exception('La implementación usada no puede crear controles Geosearch');
     }
 
@@ -149,13 +152,7 @@ goog.require('goog.style');
      * @type {M.Map}
      */
     this.facadeMap_ = null;
-
-    // implementation of this control
-    var impl = new M.impl.control.Geosearch();
-
-    goog.base(this, impl, M.control.Geosearch.NAME);
-  });
-  goog.inherits(M.control.Geosearch, M.Control);
+  }
 
   /**
    * This function creates the view to the specified map
@@ -165,19 +162,13 @@ goog.require('goog.style');
    * @param {M.Map} map to add the control
    * @api stabletrue
    */
-  M.control.Geosearch.prototype.createView = function(map) {
-    var this_ = this;
+  createView(map) {
     this.facadeMap_ = map;
-    var promise = new Promise(function(success, fail) {
-      M.template.compile(M.control.Geosearch.TEMPLATE, {
-        'jsonp': true
-      }).then(function(html) {
-        this_.addEvents(html);
-        success(html);
-      });
-    });
-    return promise;
-  };
+    const options = { jsonp: true };
+    const html = M.template.compileSync(geosearchHTML, options);
+    this.addEvents(html);
+    return html;
+  }
 
   /**
    * This function creates the view to the specified map
@@ -187,39 +178,37 @@ goog.require('goog.style');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.control.Geosearch.prototype.addEvents = function(html) {
+  addEvents(html) {
     this.element_ = html;
 
-    this.on(M.evt.COMPLETED, function() {
-      goog.dom.classlist.add(this.element_,
-        "shown");
+    this.on(M.evt.COMPLETED, () => {
+      this.element_.classList.add('shown');
     }, this);
 
     // input search
-    this.input_ = this.element_.getElementsByTagName('input')["m-geosearch-search-input"];
-    goog.events.listen(this.input_, goog.events.EventType.KEYUP, this.searchClick_, false, this);
-
+    this.input_ = this.element_.getElementsByTagName('input')['m-geosearch-search-input'];
+    this.input_.addEventListener('keyup', this.searchClick.bind(this));
     // search buntton
-    var btnSearch = this.element_.getElementsByTagName('button')["m-geosearch-search-btn"];
-    goog.events.listen(btnSearch, goog.events.EventType.CLICK, this.searchClick_, false, this);
+    const btnSearch = this.element_.getElementsByTagName('button')['m-geosearch-search-btn'];
+    btnSearch.addEventListener('click', this.searchClick.bind(this));
 
     // help buntton
-    var btnHelp = this.element_.getElementsByTagName('button')["m-geosearch-help-btn"];
-    goog.events.listen(btnHelp, goog.events.EventType.CLICK, function(evt) {
+    const btnHelp = this.element_.getElementsByTagName('button')['m-geosearch-help-btn'];
+    btnHelp.addEventListener('click', (evt) => {
       evt.preventDefault();
-      goog.dom.classlist.toggle(btnHelp, 'shown');
+      btnHelp.classList.toggle('shown');
       this.helpClick_();
-    }, false, this);
+    });
 
     // clear buntton
-    var btnClean = this.element_.getElementsByTagName('button')["m-geosearch-clear-btn"];
-    goog.events.listen(btnClean, goog.events.EventType.CLICK, this.clearClick_, false, this);
+    const btnClean = this.element_.getElementsByTagName('button')['m-geosearch-clear-btn'];
+    btnClean.addEventListener('click', this.clearClick_.bind(this));
 
     // results container
     this.resultsContainer_ = this.element_.querySelector('div#m-geosearch-results');
     M.utils.enableTouchScroll(this.resultsContainer_);
     this.searchingResult_ = this.element_.querySelector('div#m-geosearch-results > div#m-searching-result');
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -228,23 +217,22 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.searchClick_ = function(evt) {
+  searchClick(evt) {
     evt.preventDefault();
 
-    if ((evt.type !== goog.events.EventType.KEYUP) || (evt.keyCode === 13)) {
+    if ((evt.type !== 'keyup') || (evt.keyCode === 13)) {
       // resets the results
       this.results_.length = 0;
 
       // gets the query
-      var query = this.input_.value;
+      const query = this.input_.value;
       if (M.utils.isNullOrEmpty(query)) {
         M.dialog.info('Debe introducir una búsqueda.');
-      }
-      else {
+      } else {
         this.search_(query, this.showResults_);
       }
     }
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -253,17 +241,18 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.resultClick_ = function(evt) {
+  resultClick_(evtParam) {
+    const evt = evtParam;
     evt.preventDefault();
     // hidden results on click for mobile devices
     if (M.window.WIDTH <= M.config.MOBILE_WIDTH) {
       evt.target = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
       this.resultsClick_(evt);
     }
-    this.getImpl().facadeMap_.removePopup();
-    var solrid = evt.currentTarget.id;
+    this.facadeMap_.removePopup();
+    const solrid = evt.currentTarget.id;
     this.getImpl().resultClick(solrid);
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -272,44 +261,42 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.search_ = function(query, processor) {
-    goog.dom.appendChild(this.resultsContainer_, this.searchingResult_);
+  search_(query, processor) {
+    this.resultsContainer_.appendChild(this.searchingResult_);
 
     this.searchTime_ = Date.now();
 
     // adds the class
-    goog.dom.classlist.add(this.element_, M.control.Geosearch.SEARCHING_CLASS);
+    this.element_.classList.add(GeosearchControl.SEARCHING_CLASS);
 
-    var searchUrl = M.utils.addParameters(this.searchUrl_, {
-      'q': query,
-      'start': this.results_.length,
-      'srs': this.facadeMap_.getProjection().code
+    const searchUrl = M.utils.addParameters(this.searchUrl_, {
+      q: query,
+      start: this.results_.length,
+      srs: this.facadeMap_.getProjection().code,
     });
 
     /* Stores the current search time into a
        closure function. When the promise returns a
        value we compare the current search time
-       (this_.searchTime) and the saved search time of
+       (this.searchTime) and the saved search time of
        the request (searchTime parameter).
        If they are different then aborts the response */
-    var this_ = this;
-    (function(searchTime) {
-      M.remote.get(searchUrl).then(function(response) {
+    ((searchTime) => {
+      M.remote.get(searchUrl).then((response) => {
         // if it is the current search then show the results
-        if (searchTime === this_.searchTime_) {
-          var results;
+        if (searchTime === this.searchTime_) {
+          let results;
           try {
             results = JSON.parse(response.text);
+          } catch (err) {
+            M.exception(`La respuesta no es un JSON válido: ${err}`);
           }
-          catch (err) {
-            M.exception('La respuesta no es un JSON válido: ' + err);
-          }
-          processor.call(this_, results);
-          goog.dom.classlist.remove(this_.element_, M.control.Geosearch.SEARCHING_CLASS);
+          processor.call(this, results);
+          this.element_.classList.remove(GeosearchControl.SEARCHING_CLASS);
         }
       });
     })(this.searchTime_);
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -318,65 +305,59 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.showResults_ = function(results) {
+  showResults_(results) {
     // clears the layer
     this.getImpl().clear();
 
     // draws the results on the map
     this.drawResults(results);
 
-    var resultsTemplateVars = this.parseResultsForTemplate_(results);
-    var this_ = this;
-    M.template.compile(M.control.Geosearch.RESULTS_TEMPLATE, {
-      'jsonp': true,
-      'vars': resultsTemplateVars
-    }).then(function(html) {
-      goog.dom.classlist.remove(this_.resultsContainer_, M.control.Geosearch.HIDDEN_RESULTS_CLASS);
-      /* unregisters previous events */
-      // scroll
-      if (!M.utils.isNullOrEmpty(this_.resultsScrollContainer_)) {
-        goog.events.unlisten(this_.resultsScrollContainer_, goog.events.EventType.SCROLL, this_.resultsScroll_, false, this_);
-      }
-      // results
-      var resultsHtmlElements = this_.resultsContainer_.querySelectorAll(".result");
-      var resultHtml;
-      for (var i = 0, ilen = resultsHtmlElements.length; i < ilen; i++) {
-        resultHtml = resultsHtmlElements.item(i);
-        goog.events.unlisten(resultHtml, goog.events.EventType.CLICK, this_.resultClick_, false, this_);
-      }
-      if (results.response.docs.length > 0) {
-        this_.zoomToResults();
-      }
+    const resultsTemplateVars = this.parseResultsForTemplate_(results);
+    const options = { jsonp: true, vars: resultsTemplateVars };
+    const html = M.template.compileSync(geosearchResultHTML, options);
+    this.resultsContainer_.classList.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
+    /* unregisters previous events */
+    // scroll
+    if (!M.utils.isNullOrEmpty(this.resultsScrollContainer_)) {
+      this.resultsScrollContainer_.removeEventListener('scroll', this.resultsScroll_);
+    }
+    // results
+    let resultsHtmlElements = this.resultsContainer_.querySelectorAll('.result');
+    let resultHtml;
+    for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
+      resultHtml = resultsHtmlElements.item(i);
+      resultHtml.removeEventListener('click', this.resultClick_.bind(this));
+    }
+    if (results.response.docs.length > 0) {
+      this.zoomToResults();
+    }
 
-      // results buntton
-      var btnResults = this_.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-      if (!M.utils.isNullOrEmpty(btnResults)) {
-        goog.events.unlisten(btnResults, goog.events.EventType.CLICK, this_.resultsClick_, false, this_);
-      }
+    // results buntton
+    let btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
+    if (!M.utils.isNullOrEmpty(btnResults)) {
+      btnResults.removeEventListener('click', this.resultsClick_.bind(this));
+    }
 
-      // gets the new results scroll
-      this_.resultsContainer_.innerHTML = html.innerHTML;
-      this_.resultsScrollContainer_ = this_.resultsContainer_.querySelector("div#m-geosearch-results-scroll");
-      // registers the new event
-      M.utils.enableTouchScroll(this_.resultsScrollContainer_);
-      goog.events.listen(this_.resultsScrollContainer_, goog.events.EventType.SCROLL, this_.resultsScroll_, false, this_);
+    // gets the new results scroll
+    this.resultsContainer_.innerHTML = html.innerHTML;
+    this.resultsScrollContainer_ = this.resultsContainer_.querySelector('div#m-geosearch-results-scroll');
+    // registers the new event
+    M.utils.enableTouchScroll(this.resultsScrollContainer_);
+    this.resultsScrollContainer_.addEventListener('scroll', this.resultsScroll_.bind(this));
 
-      // adds new events
-      resultsHtmlElements = this_.resultsContainer_.getElementsByClassName("result");
-      for (i = 0, ilen = resultsHtmlElements.length; i < ilen; i++) {
-        resultHtml = resultsHtmlElements.item(i);
-        goog.events.listen(resultHtml, goog.events.EventType.CLICK, this_.resultClick_, false, this_);
-      }
+    // adds new events
+    resultsHtmlElements = this.resultsContainer_.getElementsByClassName('result');
+    for (let i = 0, ilen = resultsHtmlElements.length; i < ilen; i += 1) {
+      resultHtml = resultsHtmlElements.item(i);
+      resultHtml.addEventListener('click', this.resultClick_.bind(this));
+    }
 
-      // results buntton
-      btnResults = this_.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-      goog.events.listen(btnResults, goog.events.EventType.CLICK, this_.resultsClick_, false, this_);
-
-      this_.checkScrollSearch_(results);
-
-      this_.fire(M.evt.COMPLETED);
-    });
-  };
+    // results buntton
+    btnResults = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
+    btnResults.addEventListener('click', this.resultsClick_.bind(this));
+    this.checkScrollSearch_(results);
+    this.fire(M.evt.COMPLETED);
+  }
 
   /**
    * This function draws the results into the specified map
@@ -386,9 +367,9 @@ goog.require('goog.style');
    * @param {Array<Object>} results to draw
    * @api stable
    */
-  M.control.Geosearch.prototype.drawResults = function(results) {
+  drawResults(results) {
     this.getImpl().drawResults(results);
-  };
+  }
 
   /**
    * This function creates the view to the specified map
@@ -398,9 +379,9 @@ goog.require('goog.style');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.control.Geosearch.prototype.drawNewResults = function(results) {
+  drawNewResults(results) {
     this.getImpl().drawNewResults(results);
-  };
+  }
 
   /**
    * This function sets zoom to results
@@ -410,9 +391,9 @@ goog.require('goog.style');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.control.Geosearch.prototype.zoomToResults = function() {
+  zoomToResults() {
     this.getImpl().zoomToResults();
-  };
+  }
 
   /**
    * This function provides the input search
@@ -422,9 +403,9 @@ goog.require('goog.style');
    * @returns {HTMLElement} the input that executes the search
    * @api stable
    */
-  M.control.Geosearch.prototype.getInput = function() {
+  getInput() {
     return this.input_;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -433,33 +414,29 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.appendResults_ = function(results) {
+  appendResults_(results) {
     // draws the new results on the map
     this.drawNewResults(results);
 
-    var resultsTemplateVars = this.parseResultsForTemplate_(results, true);
-    var this_ = this;
-    M.template.compile(M.control.Geosearch.RESULTS_TEMPLATE, {
-      'jsonp': true,
-      'vars': resultsTemplateVars
-    }).then(function(html) {
-      // appends the new results
-      var newResultsScrollContainer = html.getElementsByTagName("div")["m-geosearch-results-scroll"];
-      var newResults = newResultsScrollContainer.children;
-      var newResult;
-      while ((newResult = newResults.item(0)) !== null) {
-        this_.resultsScrollContainer_.appendChild(newResult);
-        goog.events.listen(newResult, goog.events.EventType.CLICK, this_.resultClick_, false, this_);
-      }
+    const resultsTemplateVars = this.parseResultsForTemplate_(results, true);
+    const options = { jsonp: true, vars: resultsTemplateVars };
+    const html = M.template.compileSync(geosearchResultHTML, options);
+    // appends the new results
+    const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
+    const newResults = newResultsScrollContainer.children;
+    let newResult;
+    while ((newResult === newResults.item(0)) !== null) {
+      this.resultsScrollContainer_.appendChild(newResult);
+      newResult.addEventListener('click', this.resultClick_);
+    }
 
-      // updates the found num elements
-      var spanNumFound = this_.resultsContainer_.getElementsByTagName("span")["m-geosearch-page-found"];
-      spanNumFound.innerHTML = this_.results_.length;
+    // updates the found num elements
+    const spanNumFound = this.resultsContainer_.getElementsByTagName('span')['m-geosearch-page-found'];
+    spanNumFound.innerHTML = this.results_.length;
 
-      // disables scroll if gets all results
-      this_.checkScrollSearch_(results);
-    });
-  };
+    // disables scroll if gets all results
+    this.checkScrollSearch_(results);
+  }
 
   /**
    * This function checks if an object is equals
@@ -468,23 +445,22 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.resultsScroll_ = function(evt) {
-    var target = evt.target;
-    var height = goog.style.getSize(target).height;
-    var scrollHeight = target.scrollHeight;
-    var scrollTop = target.scrollTop;
+  resultsScroll_(evt) {
+    const target = evt.target;
+    const height = target.style.height;
+    const scrollHeight = target.scrollHeight;
+    const scrollTop = target.scrollTop;
 
-    var scrollPosition = scrollHeight - scrollTop;
-    var scrollIsDown = ((scrollPosition - height) <= 15);
+    const scrollPosition = scrollHeight - scrollTop;
+    const scrollIsDown = ((scrollPosition - height) <= 15);
     if (scrollIsDown && this.scrollIsUp_) {
       this.scrollIsUp_ = false;
       this.scrollSearch_();
-    }
-    else if (!scrollIsDown) {
+    } else if (!scrollIsDown) {
       // updates the scroll state
       this.scrollIsUp_ = true;
     }
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -493,15 +469,15 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.scrollSearch_ = function() {
+  scrollSearch_() {
     // unselects features
     this.getImpl().unselectResults(true);
     this.getImpl().setNewResultsAsDefault();
 
     // gets the query
-    var query = this.input_.value;
+    const query = this.input_.value;
     this.search_(query, this.appendResults_);
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -510,33 +486,25 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.helpClick_ = function(evt) {
+  helpClick_(evt) {
     if (this.helpShown_ === true) {
       this.getImpl().hideHelp();
       this.helpShown_ = false;
-    }
-    else {
-      var this_ = this;
-      M.remote.get(this.helpUrl_).then(function(response) {
-        var help;
+    } else {
+      M.remote.get(this.helpUrl_).then((response) => {
+        let help;
         try {
           help = JSON.parse(response.text);
+        } catch (err) {
+          M.Exception(`La respuesta no es un JSON válido: ${err}`);
         }
-        catch (err) {
-          M.exception('La respuesta no es un JSON válido: ' + err);
-        }
-        M.template.compile(M.control.Geosearch.HELP_TEMPLATE, {
-          'jsonp': true,
-          'vars': {
-            'entities': help
-          }
-        }).then(function(html) {
-          this_.getImpl().showHelp(html);
-          this_.helpShown_ = true;
-        });
+        const options = { jsonp: true, vars: { entities: help } };
+        const html = M.template.compileSync(helpTemplateHTML, options);
+        this.getImpl().showHelp(html);
+        this.helpShown_ = true;
       });
     }
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -545,8 +513,8 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.clearClick_ = function(evt) {
-    goog.dom.classlist.remove(this.element_, "shown");
+  clearClick_(evt) {
+    this.element_.classList.remove('shown');
     if (!M.utils.isNullOrEmpty(this.input_)) {
       this.input_.value = '';
     }
@@ -558,10 +526,10 @@ goog.require('goog.style');
       this.resultsScrollContainer_ = null;
     }
     this.results_.length = 0;
-    goog.dom.classlist.remove(this.resultsContainer_, M.control.Geosearch.HIDDEN_RESULTS_CLASS);
+    this.resultsContainer_.classList.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
     this.getImpl().clear();
     this.spatialSearch_ = false;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -570,13 +538,12 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.resultsClick_ = function(evt) {
-    goog.dom.classlist.add(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
-      "top-extra-search");
-    goog.dom.classlist.toggle(evt.target, 'g-cartografia-flecha-arriba');
-    goog.dom.classlist.toggle(evt.target, 'g-cartografia-flecha-abajo');
-    goog.dom.classlist.toggle(this.resultsContainer_, M.control.Geosearch.HIDDEN_RESULTS_CLASS);
-  };
+  resultsClick_(evt) {
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-search');
+    evt.target.classList.toggle('g-cartografia-flecha-arriba');
+    evt.target.classList.toggle('g-cartografia-flecha-abajo');
+    this.resultsContainer_.classList.toggle(GeosearchControl.HIDDEN_RESULTS_CLASS);
+  }
 
   /**
    * This function checks if an object is equals
@@ -585,13 +552,13 @@ goog.require('goog.style');
    * @function
    * @api stable
    */
-  M.control.Geosearch.prototype.equals = function(obj) {
-    var equals = false;
-    if (obj instanceof M.control.Geosearch) {
+  equals(obj) {
+    let equals = false;
+    if (obj instanceof GeosearchControl) {
       equals = (this.name === obj.name);
     }
     return equals;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -600,46 +567,43 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.parseResultsForTemplate_ = function(results, append) {
-    var search = '';
+  parseResultsForTemplate_(results, append) {
+    let search = '';
     if (!M.utils.isNullOrEmpty(this.input_)) {
       search = this.input_.value;
     }
-    var total = 0;
+    let total = 0;
     if (!M.utils.isUndefined(results.spatial_response)) {
       total = results.spatial_response.numFound;
       this.spatialSearch_ = true;
-    }
-    else {
+    } else {
       total = results.response.numFound;
       this.spatialSearch_ = false;
     }
-    var docs = this.getDocsFromResults_(results);
+    const docs = this.getDocsFromResults_(results);
     if (append === true) {
       this.results_ = this.results_.concat(docs);
-    }
-    else {
+    } else {
       this.results_ = docs;
     }
-    var partial = (this.spatialSearch_ && M.utils.isNullOrEmpty(results.spatial_response.docs));
-    var resultsTemplateVar = null;
+    const partial = (this.spatialSearch_ && M.utils.isNullOrEmpty(results.spatial_response.docs));
+    let resultsTemplateVar = null;
     if (total !== 0) {
       resultsTemplateVar = {
-        'docs': docs,
-        'total': total,
-        'partial': partial
+        docs,
+        total,
+        partial,
       };
-    }
-    else {
+    } else {
       resultsTemplateVar = {
-        'docs': docs,
-        'total': total,
-        'notResutls': true,
-        'query': search
+        docs,
+        total,
+        notResutls: true,
+        query: search,
       };
     }
     return resultsTemplateVar;
-  };
+  }
 
   /**
    * This function checks if an object is equals
@@ -648,32 +612,32 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.getDocsFromResults_ = function(results) {
-    var docs = [];
+  getDocsFromResults_(results) {
+    let docs = [];
     if (this.spatialSearch_) {
       docs = results.spatial_response.docs;
-    }
-    else {
+    } else {
       docs = results.response.docs;
     }
-    var hiddenAttributes = ['geom', '_version_', 'keywords', 'solrid'];
-    docs = docs.map(function(doc) {
-      var attributes = [];
-      for (var key in doc) {
+    const hiddenAttributes = ['geom', '_version_', 'keywords', 'solrid'];
+    docs = docs.map((doc) => {
+      const attributes = [];
+      const DocKeys = Object.keys(doc);
+      DocKeys.forEach((key) => {
         if (!M.utils.includes(hiddenAttributes, key)) {
           attributes.push({
-            'key': M.utils.beautifyAttributeName(key),
-            'value': doc[key]
+            key: M.utils.beautifyAttributeName(key),
+            value: doc[key],
           });
         }
-      }
+      });
       return {
-        'solrid': doc.solrid,
-        'attributes': attributes
+        solrid: doc.solrid,
+        attributes,
       };
     });
     return docs;
-  };
+  }
 
   /**
    * Disables scroll if gets all results
@@ -681,70 +645,70 @@ goog.require('goog.style');
    * @private
    * @function
    */
-  M.control.Geosearch.prototype.checkScrollSearch_ = function(results) {
+  checkScrollSearch_(results) {
     let total = 0;
     if (!M.utils.isUndefined(results.spatial_response)) {
       total = results.spatial_response.numFound;
-    }
-    else {
+    } else {
       total = results.response.numFound;
     }
-    if ((this.results_.length === total) && (!M.utils.isNullOrEmpty(this.resultsScrollContainer_))) {
-      goog.events.unlisten(this.resultsScrollContainer_, goog.events.EventType.SCROLL, this.resultsScroll_, false, this);
+    if ((this.results_.length === total) &&
+      (!M.utils.isNullOrEmpty(this.resultsScrollContainer_))) {
+      this.resultsScrollContainer_.removeEventListener('scroll', this.resultsScroll_);
     }
-  };
+  }
+}
 
-  /**
-   * Name of this control
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.control.Geosearch.NAME = 'geosearch';
+/**
+ * Name of this control
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+GeosearchControl.NAME = 'geosearch';
 
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.control.Geosearch.TEMPLATE = 'geosearch.html';
+/**
+ * Template for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+GeosearchControl.TEMPLATE = 'geosearch.html';
 
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.control.Geosearch.RESULTS_TEMPLATE = 'geosearchresults.html';
+/**
+ * Template for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+GeosearchControl.RESULTS_TEMPLATE = 'geosearchresults.html';
 
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.control.Geosearch.HELP_TEMPLATE = 'geosearchhelp.html';
+/**
+ * Template for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+GeosearchControl.HELP_TEMPLATE = 'geosearchhelp.html';
 
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.control.Geosearch.SEARCHING_CLASS = 'm-searching';
+/**
+ * Template for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+GeosearchControl.SEARCHING_CLASS = 'm-searching';
 
-  /**
-   * Template for this controls
-   * @const
-   * @type {string}
-   * @public
-   * @api stable
-   */
-  M.control.Geosearch.HIDDEN_RESULTS_CLASS = 'hidden';
-})();
+/**
+ * Template for this controls
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+GeosearchControl.HIDDEN_RESULTS_CLASS = 'hidden';

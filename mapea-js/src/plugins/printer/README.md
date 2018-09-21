@@ -1,7 +1,7 @@
 ## Descripción
 
 Plugin de impresión a través del servicio Geoprint. Las capacidades del mismo definen las opciones de impresión disponibles: dpi,
-formatos y plantillas. En función de la plantilla elegida, en el construtctor del plugin habrá que incluir los parámetros que dicha 
+formatos y plantillas. En función de la plantilla elegida, en el construtctor del plugin habrá que incluir los parámetros que dicha
 plantilla necesite. Las plantillas 'imagen apaisada' e 'imagen cuadrada' no necesitan parámetros.
 
 ## Recursos y uso
@@ -28,7 +28,7 @@ mapajs.addPlugin(new M.plugin.Printer({
       'layout': 'imagen apaisada',
       'format': 'png',
       'dpi': '127'
-    } 
+    }
 }));
 ```
 
@@ -44,7 +44,7 @@ Los json que Mapea envía al servidor Geoprint deben cumplir con las siguientes 
 ## Tabla de compatibilidad de versiones   
 En caso de utilizar un core de Mapea con número de versión explícito, debe cumplirse la siguiente relación:  
 
-versión plugin | versión Mapea | 
+versión plugin | versión Mapea |
 --- | --- |
-1.0.0 | <= 4.1.0 
+1.0.0 | <= 4.1.0
 1.1.0 | >= 4.2.0

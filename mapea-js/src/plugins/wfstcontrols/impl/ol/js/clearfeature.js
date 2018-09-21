@@ -1,9 +1,7 @@
-goog.provide('P.impl.control.ClearFeature');
-
 /**
  * @namespace M.impl.control
  */
-(function () {
+export default class ClearFeature extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a ClearFeature
@@ -14,16 +12,15 @@ goog.provide('P.impl.control.ClearFeature');
    * @extends {M.impl.Control}
    * @api stable
    */
-  M.impl.control.ClearFeature = function (layer) {
+  constructor(layer) {
+    super();
     /**
      * Layer for use in control
      * @private
      * @type {M.layer.WFS}
      */
     this.layer_ = layer;
-  };
-
-  goog.inherits(M.impl.control.ClearFeature, M.impl.Control);
+  }
 
   /**
    * This function adds the control to the specified map
@@ -34,10 +31,10 @@ goog.provide('P.impl.control.ClearFeature');
    * @param {function} element - Template of this control
    * @api stable
    */
-  M.impl.control.ClearFeature.prototype.addTo = function (map, element) {
+  addTo(map, element) {
     this.facadeMap_ = map;
-    goog.base(this, 'addTo', map, element);
-  };
+    super.addTo(map, element);
+  }
 
   /**
    * This function remove unsaved changes
@@ -46,29 +43,29 @@ goog.provide('P.impl.control.ClearFeature');
    * @function
    * @api stable
    */
-  M.impl.control.ClearFeature.prototype.clear = function () {
-    var drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
+  clear() {
+    const drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
     if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
       drawfeatureCtrl.getImpl().modifiedFeatures.length = 0;
       drawfeatureCtrl.deactivate();
     }
-    var modifyfeatureCtrl = this.facadeMap_.getControls('modifyfeature')[0];
+    const modifyfeatureCtrl = this.facadeMap_.getControls('modifyfeature')[0];
     if (!M.utils.isNullOrEmpty(modifyfeatureCtrl)) {
       modifyfeatureCtrl.getImpl().modifiedFeatures.length = 0;
       modifyfeatureCtrl.deactivate();
     }
-    var deletefeatureCtrl = this.facadeMap_.getControls('deletefeature')[0];
+    const deletefeatureCtrl = this.facadeMap_.getControls('deletefeature')[0];
     if (!M.utils.isNullOrEmpty(deletefeatureCtrl)) {
       deletefeatureCtrl.getImpl().modifiedFeatures.length = 0;
       deletefeatureCtrl.deactivate();
     }
-    var editattributeCtrl = this.facadeMap_.getControls('editattribute')[0];
+    const editattributeCtrl = this.facadeMap_.getControls('editattribute')[0];
     if (!M.utils.isNullOrEmpty(editattributeCtrl)) {
       editattributeCtrl.getImpl().editedFeature = null;
       editattributeCtrl.deactivate();
     }
     this.layer_.getImpl().refresh(true);
-  };
+  }
 
   /**
    * This function destroys this control and cleaning the HTML
@@ -77,8 +74,17 @@ goog.provide('P.impl.control.ClearFeature');
    * @function
    * @api stable
    */
-  M.impl.control.ClearFeature.prototype.destroy = function () {
+  destroy() {
     this.layer_ = null;
     this.facadeMap_.getMapImpl().removeControl(this);
-  };
-})();
+  }
+
+  /**
+   * @public
+   * @function
+   * @api stable
+   */
+  setLayer(layer) {
+    this.layer_ = layer;
+  }
+}

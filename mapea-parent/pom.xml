@@ -3,12 +3,12 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>es.juntadeandalucia.mapea</groupId>
    <artifactId>mapea-parent</artifactId>
-   <version>4.3.0</version>
+   <version>5.0.0</version>
    <packaging>pom</packaging>
-   <name>Mapea 4 PARENT</name>
+   <name>Mapea PARENT</name>
    <description>Herramienta para desarrollo de mapas interactivos de forma sencilla</description>
    <properties>
-      <project.release.date>24/01/2018</project.release.date>
+      <project.release.date>23/08/2018</project.release.date>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <build.timestamp>${maven.build.timestamp}</build.timestamp>
       <maven.build.timestamp.format>dd-MM-yyyy</maven.build.timestamp.format>
@@ -31,10 +31,28 @@
       </developer>
    </developers>
    <profiles>
+     <profile>
+         <id>mapea-local</id>
+         <activation>
+            <activeByDefault>false</activeByDefault>
+         </activation>
+         <properties>
+            <environment>mapea-local</environment>
+         </properties>
+      </profile>
+      <profile>
+         <id>mapea-desarrollo</id>
+         <activation>
+            <activeByDefault>true</activeByDefault>
+         </activation>
+         <properties>
+            <environment>mapea-desarrollo</environment>
+         </properties>
+      </profile>
       <profile>
          <id>mapea-produccion</id>
          <activation>
-            <activeByDefault>true</activeByDefault>
+            <activeByDefault>false</activeByDefault>
          </activation>
          <properties>
             <environment>mapea-produccion</environment>

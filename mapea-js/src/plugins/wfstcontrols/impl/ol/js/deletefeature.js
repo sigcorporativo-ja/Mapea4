@@ -1,11 +1,7 @@
-goog.provide('P.impl.control.DeleteFeature');
-
-goog.require('P.impl.control.WFSTBase');
-
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class DeleteFeature extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the class. Creates a DeleteFeature
@@ -16,7 +12,9 @@ goog.require('P.impl.control.WFSTBase');
    * @extends {ol.control.Control}
    * @api stable
    */
-  M.impl.control.DeleteFeature = function(layer) {
+  constructor(layer) {
+    super(layer);
+
     /**
      * Layer for use in control
      * @private
@@ -31,10 +29,7 @@ goog.require('P.impl.control.WFSTBase');
      * @api stable
      */
     this.modifiedFeatures = [];
-
-    goog.base(this, layer);
-  };
-  goog.inherits(M.impl.control.DeleteFeature, M.impl.Control);
+  }
 
   /**
    * This function active control
@@ -43,9 +38,9 @@ goog.require('P.impl.control.WFSTBase');
    * @function
    * @api stable
    */
-  M.impl.control.DeleteFeature.prototype.activate = function() {
+  activate() {
     this.layer_.on(M.evt.SELECT_FEATURES, this.removeFeature_, this);
-  };
+  }
 
   /**
    * This function deactivate control
@@ -54,9 +49,9 @@ goog.require('P.impl.control.WFSTBase');
    * @function
    * @api stable
    */
-  M.impl.control.DeleteFeature.prototype.deactivate = function() {
+  deactivate() {
     this.layer_.un(M.evt.SELECT_FEATURES, this.removeFeature_, this);
-  };
+  }
 
   /**
    * This function remove a specific feature
@@ -66,23 +61,31 @@ goog.require('P.impl.control.WFSTBase');
    * @param {ol.Feature} features - Feature to remove
    * @param {array} evt - Select event
    */
-  M.impl.control.DeleteFeature.prototype.removeFeature_ = function(features, evt) {
-    let feature = features[0].getImpl().getOLFeature();
-    var olLayer = this.layer_.getImpl().getOL3Layer();
+  removeFeature_(features, evt) {
+    const feature = features[0].getImpl().getOLFeature();
+    const olLayer = this.layer_.getImpl().getOL3Layer();
     olLayer.getSource().removeFeature(feature);
 
     // prevents saving new features
     if (!M.utils.isNullOrEmpty(feature.getId())) {
       this.modifiedFeatures.push(feature);
-    }
-    else {
+    } else {
       // removes the created feature from the drawfeature control
-      var drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
+      const drawfeatureCtrl = this.facadeMap_.getControls('drawfeature')[0];
       if (!M.utils.isNullOrEmpty(drawfeatureCtrl)) {
-        var drawnFeatures = drawfeatureCtrl.getImpl().modifiedFeatures;
-        var idx = drawnFeatures.indexOf(feature);
+        const drawnFeatures = drawfeatureCtrl.getImpl().modifiedFeatures;
+        const idx = drawnFeatures.indexOf(feature);
         drawnFeatures.splice(idx, 1);
       }
     }
-  };
-})();
+  }
+
+  /**
+   * @public
+   * @function
+   * @api stable
+   */
+  setLayer(layer) {
+    this.layer_ = layer;
+  }
+}

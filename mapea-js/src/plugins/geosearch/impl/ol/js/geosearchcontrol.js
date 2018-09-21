@@ -1,12 +1,9 @@
-goog.provide('P.impl.control.Geosearch');
-
-goog.require('P.impl.layer.Geosearch');
-goog.require('goog.dom.classes');
+import Geosearchlayer from '../../../facade/js/geosearchlayer';
 
 /**
  * @namespace M.impl.control
  */
-(function() {
+export default class GeosearchControl extends M.impl.Control {
   /**
    * @classdesc
    * Main constructor of the measure conrol.
@@ -15,7 +12,8 @@ goog.require('goog.dom.classes');
    * @extends {ol.control.Control}
    * @api stable
    */
-  M.impl.control.Geosearch = function(options = {}) {
+  constructor(options = {}) {
+    super();
     /**
      * Facade of the map
      * @private
@@ -35,11 +33,10 @@ goog.require('goog.dom.classes');
      * @private
      * @type {M.impl.Layer}
      */
-    this.layer_ = new M.layer.Geosearch({
-      'name': options.layerName
+    this.layer_ = new Geosearchlayer({
+      name: options.layerName,
     });
-  };
-  goog.inherits(M.impl.control.Geosearch, M.impl.Control);
+  }
 
   /**
    * This function adds the control to the specified map
@@ -50,17 +47,17 @@ goog.require('goog.dom.classes');
    * @param {function} template template of this control
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.addTo = function(map, element) {
+  addTo(map, element) {
     this.facadeMap_ = map;
 
     map.addLayers(this.layer_);
 
     ol.control.Control.call(this, {
-      'element': element,
-      'target': null
+      element,
+      target: null,
     });
     map.getMapImpl().addControl(this);
-  };
+  }
 
   /**
    * This function draws the results into the specified map
@@ -70,9 +67,9 @@ goog.require('goog.dom.classes');
    * @param {boolean} keepPopup to draw
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.unselectResults = function(keepPopup) {
+  unselectResults(keepPopup) {
     this.layer_.getImpl().unselectFeatures(keepPopup);
-  };
+  }
 
   /**
    * This function draws the results into the specified map
@@ -82,9 +79,9 @@ goog.require('goog.dom.classes');
    * @param {boolean} keepPopup to draw
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.setNewResultsAsDefault = function() {
+  setNewResultsAsDefault() {
     this.layer_.getImpl().setNewResultsAsDefault();
-  };
+  }
 
   /**
    * This function draws the results into the specified map
@@ -94,9 +91,9 @@ goog.require('goog.dom.classes');
    * @param {Array<Object>} results to draw
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.drawResults = function(results) {
+  drawResults(results) {
     this.layer_.getImpl().drawResults(results);
-  };
+  }
 
   /**
    * This function creates the view to the specified map
@@ -106,9 +103,9 @@ goog.require('goog.dom.classes');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.drawNewResults = function(results) {
+  drawNewResults(results) {
     this.layer_.getImpl().drawNewResults(results);
-  };
+  }
 
   /**
    * This function creates the view to the specified map
@@ -118,12 +115,14 @@ goog.require('goog.dom.classes');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.zoomToResults = function() {
-    var bbox = ol.extent.boundingExtent(this.layer_.getImpl().getOL3Layer().getSource().getFeatures().map(function(feature) {
-      return ol.extent.getCenter(feature.getGeometry().getExtent());
-    }));
+  zoomToResults() {
+    const bbox = ol.extent.boundingExtent(this.layer_.getImpl().getOL3Layer()
+      .getSource().getFeatures()
+      .map((feature) => {
+        return ol.extent.getCenter(feature.getGeometry().getExtent());
+      }));
     this.facadeMap_.setBbox(bbox);
-  };
+  }
 
   /**
    * This function returns the layer used
@@ -133,9 +132,9 @@ goog.require('goog.dom.classes');
    * @returns {ol.layer.Vector}
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.getLayer = function() {
+  getLayer() {
     return this.layer_;
-  };
+  }
 
   /**
    * This function creates the view to the specified map
@@ -145,9 +144,9 @@ goog.require('goog.dom.classes');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.resultClick = function(solrid) {
+  resultClick(solrid) {
     this.layer_.getImpl().selectFeatureBySolrid(solrid);
-  };
+  }
 
   /**
    * This function creates the view to the specified map
@@ -157,12 +156,12 @@ goog.require('goog.dom.classes');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.hideHelp = function() {
+  hideHelp() {
     if (!M.utils.isNullOrEmpty(this.helpHtml_)) {
       this.facadeMap_.getMapImpl().getTargetElement().removeChild(this.helpHtml_);
       this.helpHtml_ = null;
     }
-  };
+  }
 
   /**
    * This function creates the view to the specified map
@@ -172,14 +171,14 @@ goog.require('goog.dom.classes');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.showHelp = function(helpHtml) {
-    var overlayContainer = this.facadeMap_.getMapImpl().getTargetElement();
+  showHelp(helpHtml) {
+    const overlayContainer = this.facadeMap_.getMapImpl().getTargetElement();
     if (!M.utils.isNullOrEmpty(this.helpHtml_)) {
       overlayContainer.removeChild(this.helpHtml_);
     }
     this.helpHtml_ = helpHtml;
     overlayContainer.appendChild(this.helpHtml_);
-  };
+  }
 
   /**
    * This function creates the view to the specified map
@@ -189,9 +188,9 @@ goog.require('goog.dom.classes');
    * @param {M.Map} map to add the control
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.clear = function() {
-    this.layer_.getImpl().clear();
-  };
+  clear() {
+    this.layer_.clear();
+  }
 
   /**
    * This function destroys this control, clearing the HTML
@@ -201,13 +200,12 @@ goog.require('goog.dom.classes');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.destroy = function() {
+  destroy() {
     this.clear();
-    goog.dom.classlist.remove(this.facadeMap_._areasContainer.getElementsByClassName("m-top m-right")[0],
-      "top-extra");
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.remove('top-extra');
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_ = null;
     this.helpHtml_ = null;
     this.layer_ = null;
-  };
-})();
+  }
+}

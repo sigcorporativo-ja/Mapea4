@@ -1,105 +1,106 @@
-goog.provide('P.control.DrawFeature');
+import DrawFeatureImpl from '../../impl/ol/js/drawfeature';
+import drawfeatureHTML from '../../templates/drawfeature';
 
-(function() {
-   /**
-    * @classdesc Main constructor of the class. Creates a DrawFeature
-    * control to draw features on the map.
-    *
-    * @constructor
-    * @param {M.layer.WFS} layer - Layer for use in control
-    * @extends {M.Control}
-    * @api stable
-    */
-   M.control.DrawFeature = (function(layer) {
-      /**
-       * Name of the control
-       * @public
-       * @type {String}
-       */
-      this.name = M.control.DrawFeature.NAME;
+export default class DrawFeature extends M.Control {
+  /**
+   * @classdesc Main constructor of the class. Creates a DrawFeature
+   * control to draw features on the map.
+   *
+   * @constructor
+   * @param {M.layer.WFS} layer - Layer for use in control
+   * @extends {M.Control}
+   * @api stable
+   */
+  constructor(layer) {
+    // implementation of this control
+    const impl = new DrawFeatureImpl(layer);
 
-      if (M.utils.isUndefined(M.impl.control.DrawFeature)) {
-         M.exception('La implementación usada no puede crear controles DrawFeature');
-      }
-      // implementation of this control
-      var impl = new M.impl.control.DrawFeature(layer);
+    // calls the super constructor
+    super(impl, DrawFeature.NAME);
 
-      // calls the super constructor
-      goog.base(this, impl, M.control.DrawFeature.NAME);
-   });
-   goog.inherits(M.control.DrawFeature, M.Control);
+    /**
+     * Name of the control
+     * @public
+     * @type {String}
+     */
+    this.name = DrawFeature.NAME;
 
-   /**
-    * This function creates the view to the specified map
-    *
-    * @public
-    * @function
-    * @param {M.Map} map - Map to add the control
-    * @returns {Promise} html response
-    * @api stable
-    */
-   M.control.DrawFeature.prototype.createView = function(map) {
-      return M.template.compile(M.control.DrawFeature.TEMPLATE, {
-         'jsonp': true
-      });
-   };
+    if (M.utils.isUndefined(DrawFeatureImpl)) {
+      M.Exception('La implementación usada no puede crear controles DrawFeature');
+    }
+  }
 
-   /**
-    * This function returns the HTML button
-    *
-    * @public
-    * @function
-    * @param {HTMLElement} element - HTML control
-    * @return {HTMLElement} return HTML button
-    * @api stable
-    * @export
-    */
-   M.control.DrawFeature.prototype.getActivationButton = function(element) {
-      return element.querySelector('button#m-button-drawfeature');
-   };
+  /**
+   * This function creates the view to the specified map
+   *
+   * @public
+   * @function
+   * @param {M.Map} map - Map to add the control
+   * @returns {HTMLElement} html response
+   * @api stable
+   */
+  createView(map) {
+    return M.template.compileSync(drawfeatureHTML, {
+      jsonp: true,
+    });
+  }
 
-   /**
-    * This function checks if an object is equals to this control
-    *
-    * @function
-    * @api stable
-    * @param {*} obj - Object to compare
-    * @returns {boolean} equals - Returns if they are equal or not
-    */
-   M.control.DrawFeature.prototype.equals = function(obj) {
-      var equals = (obj instanceof M.control.DrawFeature);
-      return equals;
-   };
+  /**
+   * This function returns the HTML button
+   *
+   * @public
+   * @function
+   * @param {HTMLElement} element - HTML control
+   * @return {HTMLElement} return HTML button
+   * @api stable
+   * @export
+   */
+  getActivationButton(element) {
+    return element.querySelector('button#m-button-drawfeature');
+  }
 
-   /**
-    * This function set layer for draw
-    *
-    * @public
-    * @function
-    * @param {M.layer.WFS} layer - Layer
-    * @api stable
-    */
-   M.control.DrawFeature.prototype.setLayer = function(layer) {
-      this.getImpl().layer_ = layer;
-   };
+  /**
+   * This function checks if an object is equals to this control
+   *
+   * @function
+   * @api stable
+   * @param {*} obj - Object to compare
+   * @returns {boolean} equals - Returns if they are equal or not
+   */
+  equals(obj) {
+    const equals = (obj instanceof DrawFeature);
+    return equals;
+  }
 
-   /**
-    * Name for this controls
-    *
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.control.DrawFeature.NAME = 'drawfeature';
+  /**
+   * This function set layer for delete features
+   *
+   * @public
+   * @function
+   * @param {M.layer.WFS} layer - Layer
+   * @api stable
+   */
+  setLayer(layer) {
+    this.getImpl().setLayer(layer);
+  }
+}
 
-   /**
-    * Template for this controls - button
-    *
-    * @const
-    * @type {string}
-    * @public
-    * @api stable
-    */
-   M.control.DrawFeature.TEMPLATE = 'drawfeature.html';
-})();
+/**
+ * Name for this controls
+ *
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+DrawFeature.NAME = 'drawfeature';
+
+/**
+ * Template for this controls - button
+ *
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
+DrawFeature.TEMPLATE = 'drawfeature.html';

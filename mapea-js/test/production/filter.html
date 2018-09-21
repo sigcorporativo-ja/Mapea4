@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+    <link rel="stylesheet" href="http://mapea4-sigc.juntadeandalucia.es/mapea/assets/css/mapea.ol.min.css">
+    <title>PRUEBA DESARROLLO</title>
+    <style rel="stylesheet">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: auto;
+      }
+
+      .makidentist:before {
+        content: '\e814';
+        color: 'red'
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <button type="button" onclick="intersectFilter()">Interseccion puntos-polígono</button>
+    <button type="button" onclick="intersectLayerFilter()">Interseccion puntos-poligonos (Layer a Layer)</button>
+    <button type="button" onclick="intersectLayerFilter2()">Interseccion poligonos-lineas (Layer a Layer)</button>
+    <button type="button" onclick="disjointFilter()">Diferencia línea-polígono</button>
+    <button type="button" onclick="filterIntersectCQL()">Interseccion puntos-poligono con CQL</button>
+    <button type="button" onclick="filterDisjointCQL()">Diferencia lineas-poligono con CQL</button>
+    <button type="button" onclick="filterIntersectAnd()">Interseccion lineas-poligono AND</button>
+    <button type="button" onclick="filterIntersectOr()">Interseccion puntos-poligono OR</button>
+    <button type="button" onclick="filterIntersectNot()">Interseccion lineas-poligono NOT</button>
+    <button type="button" onclick="filterFeatureComoParametro()">Interseccion puntos-poligono(Feature parametro)</button>
+    <button type="button" onclick="filterArrayComoParametro()">Interseccion puntos-poligono(Array Feature parametro)</button>
+    <button type="button" onclick="filterCapaComoParametro()">Interseccion puntos-poligono(Capa parametro)</button>
+    <button type="button" onclick="containFilter()">Filtro Contain puntos-poligono</button>
+    <button type="button" onclick="filterContainCQL()">Filtro Contain puntos-poligono con CQL</button>
+    <button type="button" onclick="withinFilter()">Filtro Within puntos-poligono</button>
+    <button type="button" onclick="filterWithinCQL()">Filtro Within puntos-poligono con CQL</button>
+    <button type="button" onclick="removeFiltros()">Quitar Filtros</button>
+    <div id="map" class="container"></div>
+    <script src="https://sigc.desarrollo.guadaltel.es/mapea5/js/mapea.ol.min.js" charset="utf-8"></script>
+    <script src="https://sigc.desarrollo.guadaltel.es/mapea5/js/configuration.js" charset="utf-8"></script>
+    <script src="./filter.js" charset="utf-8"></script>
+  </body>
+
+</html>

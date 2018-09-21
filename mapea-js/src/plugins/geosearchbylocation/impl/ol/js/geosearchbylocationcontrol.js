@@ -1,21 +1,23 @@
-goog.provide('P.impl.control.Geosearchbylocation');
+import GeosearchControlImpl from 'plugins/geosearch/impl/ol/js/geosearchcontrol';
+import geosearchbylocationfeaturepopupHTML from '../../../templates/geosearchbylocationfeaturepopup';
 
-goog.require('P.impl.control.Geosearch');
-
-/**
- * @namespace M.impl.control
- */
-(function() {
+export default class GeosearchbylocationControl extends GeosearchControlImpl {
   /**
    * @classdesc
    * Main constructor of the Geosearchbylocation control.
    *
    * @constructor
    * @param {string} searchUrl_ - URL for the request
-   * @extends {M.impl.control.Geosearch}
+   * @extends {GeosearchControlImpl}
    * @api stable
    */
-  M.impl.control.Geosearchbylocation = function(searchUrl_) {
+
+  constructor(searchUrl_) {
+    // calls super
+    super({
+      layerName: GeosearchbylocationControl.NAME,
+    });
+
 
     /**
      * Popup showed
@@ -30,13 +32,7 @@ goog.require('P.impl.control.Geosearch');
      * @type {string}
      */
     this.searchUrl_ = searchUrl_;
-
-    // calls super
-    goog.base(this, {
-      'layerName': M.control.Geosearchbylocation.NAME
-    });
-  };
-  goog.inherits(M.impl.control.Geosearchbylocation, M.impl.control.Geosearch);
+  }
 
   /**
    * Set the map instance the control is associated with.
@@ -45,15 +41,15 @@ goog.require('P.impl.control.Geosearch');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.setMap = function(map) {
+  setMap(map) {
+    super.setMap(map);
+
     if (M.utils.isNullOrEmpty(map)) {
       this.facadeMap_.getImpl().removeFeatures([this.positionFeature_]);
-    }
-    else {
+    } else {
       this.map = map;
     }
-    goog.base(this, 'setMap', map);
-  };
+  }
 
   /**
    * This function get coordinates
@@ -62,10 +58,10 @@ goog.require('P.impl.control.Geosearch');
    * @returns {Promise} coordinates
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.locate = function() {
+  locate() {
     // TODO
-    var geolocation = new ol.Geolocation({
-      projection: this.facadeMap_.getMapImpl().getView().getProjection()
+    const geolocation = new ol.Geolocation({
+      projection: this.facadeMap_.getMapImpl().getView().getProjection(),
     });
     geolocation.setTracking(true);
     this.positionFeature_ = M.impl.Feature.olFeature2Facade(new ol.Feature());
@@ -73,49 +69,44 @@ goog.require('P.impl.control.Geosearch');
       image: new ol.style.Circle({
         radius: 6,
         fill: new ol.style.Fill({
-          color: '#3399CC'
+          color: '#3399CC',
         }),
         stroke: new ol.style.Stroke({
           color: '#fff',
-          width: 2
-        })
-      })
+          width: 2,
+        }),
+      }),
     }));
-    var this_ = this;
-    var coordinates;
-    this.positionFeature_.click = function(evt) {
-      M.template.compile(M.impl.control.Geosearchbylocation.POPUP_LOCATION, {
-        'jsonp': true,
-        'vars': {
-          'valorX': coordinates[0],
-          'valorY': coordinates[1]
-        },
-        'parseToHtml': false
-      }).then(function(htmlAsText) {
-        var positionTabOpts = {
-          'icon': 'g-cartografia-gps2',
-          'title': 'posición',
-          'content': htmlAsText
-        };
-        this_.popup_ = this_.facadeMap_.getPopup();
-        if (M.utils.isNullOrEmpty(this_.popup_)) {
-          this_.popup_ = new M.Popup();
-          this_.popup_.addTab(positionTabOpts);
-          this_.facadeMap_.addPopup(this_.popup_, coordinates);
-        }
-        else {
-          this_.popup_.addTab(positionTabOpts);
-        }
-      });
+    let coordinates;
+    this.positionFeature_.click = (evt) => {
+      const options = {
+        jsonp: true,
+        vars: { valorX: coordinates[0], valorY: coordinates[1] },
+        parseToHtml: false,
+      };
+      const htmlAsText = M.template.compileSync(geosearchbylocationfeaturepopupHTML, options);
+      const positionTabOpts = {
+        icon: 'g-cartografia-gps2',
+        title: 'posición',
+        content: htmlAsText,
+      };
+      this.popup_ = this.facadeMap_.getPopup();
+      if (M.utils.isNullOrEmpty(this.popup_)) {
+        this.popup_ = new M.Popup();
+        this.popup_.addTab(positionTabOpts);
+        this.facadeMap_.addPopup(this.popup_, coordinates);
+      } else {
+        this.popup_.addTab(positionTabOpts);
+      }
     };
-    return new Promise(function(success, fail) {
-      geolocation.on('change:position', function() {
+    return new Promise((success, fail) => {
+      geolocation.on('change:position', () => {
         geolocation.setTracking(false);
         coordinates = geolocation.getPosition();
         success(coordinates);
       }, this);
     });
-  };
+  }
 
   /**
    * This function remove point locate
@@ -123,9 +114,11 @@ goog.require('P.impl.control.Geosearch');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearch.prototype.removeLocate = function() {
+
+
+  removeLocate() {
     this.facadeMap_.removeFeatures([this.positionFeature_]);
-  };
+  }
 
   /**
    * This function draw point location
@@ -134,10 +127,11 @@ goog.require('P.impl.control.Geosearch');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.drawLocation = function(coord) {
-    this.positionFeature_.getImpl().getOLFeature().setGeometry(coord ? new ol.geom.Point(coord) : null);
+  drawLocation(coord) {
+    this.positionFeature_.getImpl()
+      .getOLFeature().setGeometry(coord ? new ol.geom.Point(coord) : null);
     this.facadeMap_.drawFeatures([this.positionFeature_]);
-  };
+  }
 
   /**
    * This function shows the container with the results
@@ -147,10 +141,10 @@ goog.require('P.impl.control.Geosearch');
    * @param {HTMLElement} container HTML to display
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.addResultsContainer = function(container) {
-    var mapContainer = this.map.getTargetElement();
-    goog.dom.appendChild(mapContainer, container);
-  };
+  addResultsContainer(container) {
+    const mapContainer = this.map.getTargetElement();
+    mapContainer.appendChild(container);
+  }
 
   /**
    * This function destroy the container with the results
@@ -160,9 +154,11 @@ goog.require('P.impl.control.Geosearch');
    * @param {HTMLElement} container HTML results panel
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.removeResultsContainer = function(container) {
-    goog.dom.removeNode(container);
-  };
+  removeResultsContainer(container) {
+    if (container !== null && container.parentElement != null) {
+      container.parentElement.removeChild(container);
+    }
+  }
 
   /**
    * Zoom Results
@@ -171,10 +167,10 @@ goog.require('P.impl.control.Geosearch');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.zoomToResultsAll = function() {
-    let bbox = this.facadeMap_.getControls("geosearchbylocation")[0].getImpl().getLayer().getFeaturesExtent();
+  zoomToResultsAll() {
+    const bbox = this.facadeMap_.getControls('geosearchbylocation')[0].getImpl().getLayer().getFeaturesExtent();
     this.facadeMap_.setBbox(bbox);
-  };
+  }
 
   /**
    * This function destroys this control and clear HTML
@@ -183,13 +179,13 @@ goog.require('P.impl.control.Geosearch');
    * @function
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.prototype.destroy = function() {
+  destroy() {
     this.facadeMap_.getMapImpl().removeControl(this);
     this.clear();
     this.facadeMap_.removeFeatures([this.positionFeature_]);
     this.popup_ = null;
     this.searchUrl_ = null;
-  };
+  }
 
   /**
    * Template for popup
@@ -198,5 +194,6 @@ goog.require('P.impl.control.Geosearch');
    * @public
    * @api stable
    */
-  M.impl.control.Geosearchbylocation.POPUP_LOCATION = "geosearchbylocationfeaturepopup.html";
-})();
+}
+
+GeosearchbylocationControl.POPUP_LOCATION = 'geosearchbylocationfeaturepopup.html';

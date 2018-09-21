@@ -17,7 +17,7 @@ Los cambios no persistidos pueden deshacerse con el botón 'deshacer'.
 
 Creación del plugin:
 ```
-var edicionWFST = new M.plugin.WFSTControls(["drawfeature","modifyfeature","deletefeature","editattribute"],'nombreCapaWFS');
+var edicionWFST = new M.plugin.WFSTControls(["drawfeature","modifyfeature","deletefeature","editattribute"],'nombreCapaWFS';
 mapajs.addPlugin(edicionWFST);
 ```
 Cambiar la capa WFS sobre la que se edita:
@@ -31,8 +31,8 @@ http://jsfiddle.net/sigcJunta/6onxnaow/
 ## Tabla de compatibilidad de versiones   
 En caso de utilizar un core de Mapea con número de versión explícito, debe cumplirse la siguiente relación:  
 
-versión plugin | versión Mapea | 
+versión plugin | versión Mapea |
 --- | --- |
-1.0.0 | 4.0.x 
-1.1.1 | 4.1.x 
+1.0.0 | 4.0.x
+1.1.1 | 4.1.x
 1.2.0 | 4.2.x 
