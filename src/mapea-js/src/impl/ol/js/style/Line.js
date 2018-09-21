@@ -13,6 +13,7 @@ import Centroid from './Centroid';
 import Path from './Path';
 import Simple from './Simple';
 import postRender from '../util/render';
+import '../ext/cspline';
 
 /**
  * @classdesc
