@@ -60,7 +60,7 @@
   },
   "scripts": {
     "generate-test": "node tasks/test-generator",
-    "build": "npm run build:core && npm run build:plugins",
+    "build": "./node/node ./node/npm/bin/npm-cli.js run build:core && ./node/node ./node/npm/bin/npm-cli.js run build:plugins",
     "build:sourcemap": "npm run prebuild && npm run build:core -- --source-map && npm run build:plugins",
     "build:core": "webpack --config=webpack-config/webpack.production-core.config.js",
     "build:plugins": "webpack --config=webpack-config/webpack.production-plugins.config.js",
