@@ -43,7 +43,7 @@
       <profile>
          <id>mapea-desarrollo</id>
          <activation>
-            <activeByDefault>true</activeByDefault>
+            <activeByDefault>false</activeByDefault>
          </activation>
          <properties>
             <environment>mapea-desarrollo</environment>
@@ -52,7 +52,7 @@
       <profile>
          <id>mapea-produccion</id>
          <activation>
-            <activeByDefault>false</activeByDefault>
+            <activeByDefault>true</activeByDefault>
          </activation>
          <properties>
             <environment>mapea-produccion</environment>
