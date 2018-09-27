@@ -5,7 +5,7 @@ import MObject from 'M/Object';
 import { get as getRemote } from 'M/util/Remote';
 import { isNullOrEmpty } from 'M/util/Utils';
 import Exception from 'M/exception/exception';
-import Dialog from 'M/dialog';
+import * as Dialog from 'M/dialog';
 
 /**
  * @classdesc

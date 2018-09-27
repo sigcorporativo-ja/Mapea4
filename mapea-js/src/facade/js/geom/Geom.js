@@ -33,7 +33,7 @@ export const parseWFS = (wfsType) => {
   } else if (wfsType === WFS.POLYGON) {
     parsedWFS = WKT.POLYGON;
   } else if (wfsType === WFS.MPOINT) {
-    parsedWFS = WFS.MULTI_POINT;
+    parsedWFS = WKT.MULTI_POINT;
   } else if (wfsType === WFS.MLINE) {
     parsedWFS = WKT.MULTI_LINE_STRING;
   } else if (wfsType === WFS.MPOLYGON) {
