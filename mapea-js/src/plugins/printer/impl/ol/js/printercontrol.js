@@ -100,11 +100,11 @@ export default class PrinterControl extends M.impl.Control {
         classes: [],
       };
 
-      const regExpImgDefault = new RegExp(`.*  ${M.layer.LEGEND_DEFAULT}  $`);
-      const regExpImgError = new RegExp(`.*  ${M.layer.LEGEND_ERROR}  $`);
+      const regExpImgDefault = new RegExp(`.*${M.Layer.LEGEND_DEFAULT}$`);
+      const regExpImgError = new RegExp(`.*${M.Layer.LEGEND_ERROR}$`);
       const legendURL = layer.getLegendURL();
       if (!M.utils.isNullOrEmpty(legendURL) && !regExpImgDefault.test(legendURL) &&
-        !regExpImgDefault.test(regExpImgError)) {
+        !regExpImgError.test(legendURL)) {
         encodedLegend.classes[0] = {
           name: '',
           icons: [layer.getLegendURL()],
