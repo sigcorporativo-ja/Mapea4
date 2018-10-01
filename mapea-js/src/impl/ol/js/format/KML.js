@@ -3,7 +3,7 @@
  */
 import { decodeHtml } from 'M/util/Utils';
 import OLFormatKML from 'ol/format/KML';
-import { FRACTION } from 'ol/style/IconAnchorUnits';
+import IconAnchorUnits from 'ol/style/IconAnchorUnits';
 import OLStyleIcon from 'ol/style/Icon';
 import { parse as parseXML } from 'ol/xml';
 
@@ -106,8 +106,8 @@ class KML extends OLFormatKML {
         screenYUnits = KML.DEFAULT_IMAGE_STYLE_ANCHOR_Y_UNITS;
       } else if (/^http:\/\/maps\.(?:google|gstatic)\.com\//.test(src)) {
         screenXY = [0.5, 0];
-        screenXUnits = FRACTION;
-        screenYUnits = FRACTION;
+        screenXUnits = IconAnchorUnits.FRACTION;
+        screenYUnits = IconAnchorUnits.FRACTION;
       }
 
       // rotation

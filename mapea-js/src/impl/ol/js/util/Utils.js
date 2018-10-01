@@ -1,5 +1,5 @@
 import Feature from 'M/feature/Feature';
-import WKT from 'M/geom/WKT';
+import * as WKT from 'M/geom/WKT';
 import { isNullOrEmpty } from 'M/util/Utils';
 import { getWidth, extend } from 'ol/extent';
 
@@ -208,35 +208,35 @@ export default class Utils {
     let geometries;
 
     // POINT
-    if (geometry.getType() === WKT.type.POINT) {
+    if (geometry.getType() === WKT.POINT) {
       centroid = geometry.getCoordinates();
-    } else if (geometry.getType() === WKT.type.LINE_STRING) {
+    } else if (geometry.getType() === WKT.LINE_STRING) {
       // LINE
       coordinates = geometry.getCoordinates();
       medianIdx = Math.floor(coordinates.length / 2);
       centroid = coordinates[medianIdx];
-    } else if (geometry.getType() === WKT.type.LINEAR_RING) {
+    } else if (geometry.getType() === WKT.LINEAR_RING) {
       coordinates = geometry.getCoordinates();
       medianIdx = Math.floor(coordinates.length / 2);
       centroid = coordinates[medianIdx];
-    } else if (geometry.getType() === WKT.type.POLYGON) {
+    } else if (geometry.getType() === WKT.POLYGON) {
       // POLYGON
       centroid = Utils.getCentroidCoordinate(geometry.getInteriorPoint());
-    } else if (geometry.getType() === WKT.type.MULTI_POINT) {
+    } else if (geometry.getType() === WKT.MULTI_POINT) {
       // MULTI
       points = geometry.getPoints();
       medianIdx = Math.floor(points.length / 2);
       centroid = Utils.getCentroidCoordinate(points[medianIdx]);
-    } else if (geometry.getType() === WKT.type.MULTI_LINE_STRING) {
+    } else if (geometry.getType() === WKT.MULTI_LINE_STRING) {
       lineStrings = geometry.getLineStrings();
       medianIdx = Math.floor(lineStrings.length / 2);
       centroid = Utils.getCentroidCoordinate(lineStrings[medianIdx]);
-    } else if (geometry.getType() === WKT.type.MULTI_POLYGON) {
+    } else if (geometry.getType() === WKT.MULTI_POLYGON) {
       points = geometry.getInteriorPoints();
       centroid = Utils.getCentroidCoordinate(points);
-    } else if (geometry.getType() === WKT.type.CIRCLE) {
+    } else if (geometry.getType() === WKT.CIRCLE) {
       centroid = geometry.getCenter();
-    } else if (geometry.getType() === WKT.type.GEOMETRY_COLLECTION) {
+    } else if (geometry.getType() === WKT.GEOMETRY_COLLECTION) {
       geometries = geometry.getGeometries();
       medianIdx = Math.floor(geometries.length / 2);
       centroid = Utils.getCentroidCoordinate(geometries[medianIdx]);
