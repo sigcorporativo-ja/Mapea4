@@ -19,6 +19,8 @@ export default class GeosearchLayer extends M.layer.Vector {
     if (M.utils.isUndefined(GeosearchLayerImpl)) {
       M.exception('La implementación usada no puede crear capas Geosearch');
     }
+
+    this.displayInLayerSwitcher = false;
   }
 
   /**
