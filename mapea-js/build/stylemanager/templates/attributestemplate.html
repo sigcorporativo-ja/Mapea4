@@ -1,0 +1,5 @@
+<div>
+  {{#each attributes}}
+  <option value="{{this.name}}" {{#eq this.name this.selected}}selected{{/eq}}>{{this.name}}</option>
+  {{/each}}
+</div>

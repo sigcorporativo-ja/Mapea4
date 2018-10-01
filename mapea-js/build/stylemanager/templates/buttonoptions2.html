@@ -1,0 +1,6 @@
+<div>
+  {{#each buttonsParams}}
+  <input data-apply="{{id}}" type="checkbox" class="m-input" id="cat-{{id}}">
+  <label data-selector="{{id}}" for="cat-{{id}}" class="submenu-check check-selected"></label>
+  <label data-label="{{id}}" class="submenu-label">{{name}}</label> {{/each}}
+</div>

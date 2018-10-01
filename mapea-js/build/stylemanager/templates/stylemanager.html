@@ -1,0 +1,59 @@
+<div class="m-stylemanager-control styles-panel">
+  <div class="m-stylemanager-container-select">
+    <ul>
+      <li class="group">
+        <div class="m-stylemanager-buttons-wrap">
+          <select class="" id="m-stylemanager-select">
+            <option disabled="disabled" selected="selected">Seleccione una capa...</option>
+          {{#each layers}}
+               <option name={{this.name}}>{{this.name}}</option>
+          {{/each}}
+          </select>
+          <button title="Aplicar estilo" class="m-button-styles" data-apply-style><i class="gi-1x g-sigc-apply"></i></button>
+          <button title="Limpiar estilo" class="m-button-styles" data-clear-style><i class="gi-1x g-sigc-reset"></i></button>
+        </div>
+      </li>
+    </ul>
+
+    <div class="m-boxes m-hidden m-boxes-botonera" data-role="botonera">
+      <input data-checkbox="stylesimple" type="checkbox" class="m-input" id="box-4">
+      <label data-flap="stylesimple" for="box-4" class="check-selected check-inactive"></label>
+      <label><i class="gi-1x g-sigc-simple"></i> Simple</label>
+
+      <!-- submenu -->
+      <div data-buttons-option class="m-submenu-simple">
+      </div>
+
+      <!-- fin submenu -->
+
+      <input data-checkbox="stylecluster" type="checkbox" class="m-input" id="box-1">
+      <label data-flap="stylecluster" for="box-1" class="check-selected check-inactive"></label>
+      <label><i class="gi-1x g-sigc-cluster"></i> Cluster</label>
+
+      <input data-checkbox="styleheatmap" type="checkbox" class="m-input" id="box-2">
+      <label data-flap="styleheatmap" for="box-2" class="check-selected check-inactive"></label>
+      <label><i class="gi-1x g-sigc-heatmap"></i> Mapa de calor</label>
+
+      <input data-checkbox="stylecategory" type="checkbox" class="m-input" id="box-3">
+      <label data-flap="stylecategory" for="box-3" class="check-selected check-inactive"></label>
+      <label><i class="gi-1x g-sigc-category"></i>Categoría</label>
+
+      <div data-buttons-option-category class="m-hidden m-submenu-simple">
+      </div>
+
+      <input data-checkbox="stylechoropleth" type="checkbox" class="m-input" id="box-5">
+      <label data-flap="stylechoropleth" for="box-5" class="check-selected check-inactive"></label>
+      <label><i class="gi-1x g-sigc-choro"></i>Coropletas</label>
+
+      <input data-checkbox="styleproportional" type="checkbox" class="m-input" id="box-6">
+      <label data-flap="styleproportional" for="box-6" class="check-selected check-inactive"></label>
+      <label><i class="gi-1x g-sigc-proportional"></i> Proporcional</label>
+
+      <input data-checkbox="stylechart" type="checkbox" class="m-input" id="box-7">
+      <label data-flap="stylechart" for="box-7" class="check-selected check-inactive"></label>
+      <label><i class="gi-1x g-sigc-chart"></i>Estadísticos</label>
+    </div>
+
+
+  </div>
+</div>

@@ -1,0 +1,27 @@
+<div data-role="m-proportional" class="m-stylemanager-simple-section m-proportional m-hidden">
+  <div class="styles-row">
+    <div class="title">Opciones</div>
+    <div class="m-styles-body">
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Atributos:</span>
+          <select data-options="attributeName">
+        {{#each attributes}}
+          <option value="{{this.name}}" {{#eq this.name this.selected}}selected{{/eq}}>{{this.name}}</option>
+        {{/each}}
+      </select>
+        </div>
+      </div>
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Radio mínimo:</span>
+          <input type="number" min="1" data-options="minRadius" value="{{this.minRadius}}">
+        </div>
+        <div class="style-col-2">
+          <span for="">Radio máximo:</span>
+          <input type="number" min="1" data-options="maxRadius" value="{{this.maxRadius}}">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,46 @@
+<div data-role="m-heatmap" class="m-stylemanager-simple-section m-hidden m-heatmap">
+  <div class="styles-row">
+    <div class="title">Opciones</div>
+    <div class="m-styles-body">
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Atributo:</span>
+          <select data-options="attributeName">
+        {{#each attributes}}
+          <option value="{{this.name}}"{{#eq this.name this.selected}}selected{{/eq}}>{{this.name}}</option>
+        {{/each}}
+      </select>
+        </div>
+      </div>
+      <div class="group-row">
+        <div class="style-col-1" >
+          <span>Gradiente:</span>
+          <div class="m-grid" data-parent="gradient">
+          {{#each gradient}}
+          <div class="m-removable-input-color">
+            <input type="color" data-array-options="gradient" value="{{this}}">
+            <span class="m-close"></span>
+          </div>
+          {{/each}}
+        </div>
+        </div>
+        <div class="style-col-2">
+          <span></span>
+          <button data-add class="m-add-gradient m-button-styles">Añadir color</button>
+        </div>
+      </div>
+
+      <div class="group-row">
+        <div class="style-col-1">
+          <span for="">Difuminado:</span>
+          <input type="number" data-style-options="blur" min="1" value="{{blur}}">
+        </div>
+
+        <div class="style-col-2">
+          <span for="">Radio:</span>
+          <input type="number" data-style-options="radius" min="1" value="{{radius}}">
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

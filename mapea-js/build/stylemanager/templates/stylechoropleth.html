@@ -1,0 +1,47 @@
+<div data-role="m-choropleth" class="m-stylemanager-simple-section m-hidden m-choropleth">
+  <div class="styles-row">
+    <div class="title">Opciones</div>
+    <div class="m-styles-body">
+
+      <div class="group-row">
+
+        <div class="style-col-1">
+          <span>Atributos:</span>
+          <select data-options="attributeName">
+            {{#each attributes}}
+            <option value="{{this.name}}" {{#eq this.name this.selected}} selected {{/eq}}>{{this.name}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+      </div>
+      <div class="group-row">
+
+        <div class="style-col-1">
+          <span>Algoritmo:</span>
+          <select data-options="quantification">
+            <option value="JENKS" {{#eq quantification "jenks"}}selected{{/eq}}>Jenks</option>
+            <option value="QUANTILE" {{#eq quantification "quantile"}}selected{{/eq}}>Quantile</option>
+          </select>
+        </div>
+
+        <div class="style-col-2">
+          <span>Rangos:</span>
+          <input type="number" min="2" data-number-ranges data-options="ranges" value="{{ranges}}">
+        </div>
+      </div>
+      <div class="subtitle">Rampa de color</div>
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Inicial:</span>
+          <input type="color" data-array-options="colors" value="{{startColor}}">
+        </div>
+        <div class="style-col-2">
+          <span>Final:</span>
+          <input type="color" data-array-options="colors" value="{{endColor}}">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>

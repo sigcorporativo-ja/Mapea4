@@ -1,0 +1,502 @@
+<div data-role="m-simple" class="m-stylemanager-simple-section">
+  <!-- Fill options -->
+  <div class="styles-row m-hidden m-simple-category" data-id="fill">
+    <div class="title">Opciones</div>
+    <div class="m-styles-body">
+
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Color:</span>
+          <input data-style-options="fill.color" type="color" value="{{fill.color}}">
+        </div>
+
+        <div class="style-col-2">
+          <span>Opacidad:</span>
+          <input data-style-options="fill.opacity" type="number" value="{{fill.opacity}}" min="0" step="0.1" max="1">
+        </div>
+      </div>
+
+      <div class="group-row" data-geometry="point">
+        <div class="style-col-1">
+          <span>Radio:</span>
+          <input data-style-options="radius" type="number" value="{{radius}}" min="1" max="60">
+        </div>
+      </div>
+
+      <div class="group-row" data-geometry="line">
+        <div class="style-col-1">
+          <span>Ancho:</span>
+          <input value="{{fill.width}}" min="1" type="number" data-style-options="fill.width">
+        </div>
+      </div>
+      <!-- Polygon Pattern -->
+      <div class="subtitle" data-geometry="polygon">Opciones de patrón</div>
+
+      <div class="group-row" data-geometry="polygon">
+        <div class="style-col-1 input-reverse">
+          <span>Patrón</span>
+          <input data-apply="fill.pattern" type="checkbox" {{#if patternflag }}checked{{/if}}>
+        </div>
+      </div>
+
+      <div class="group-row" data-geometry="polygon">
+        <div class="style-col-1">
+          <span>Tipo:</span>
+          <select data-style-options="fill.pattern.name">
+            {{#each patternlist}}
+            <option value="{{#lowercase this.name}}{{/lowercase}}" {{#eq this.name this.selected}} selected {{/eq}}>{{this.name}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="style-col-2">
+          <span>Color:</span>
+          <input value="{{fill.pattern.color}}" type="color" data-style-options="fill.pattern.color">
+        </div>
+      </div>
+
+      <div class="group-row" data-geometry="polygon">
+        <div class="style-col-1">
+          <span>Tamaño:</span>
+          <input value="{{fill.pattern.size}}" type="number" min="1" max="100" data-style-options="fill.pattern.size">
+        </div>
+
+        <div class="style-col-2">
+          <span>Espacio:</span>
+          <input value="{{fill.pattern.spacing}}" type="number" min="1" max="100" data-style-options="fill.pattern.spacing">
+        </div>
+      </div>
+
+      <div class="group-row" data-geometry="polygon">
+        <div class="style-col-1">
+          <span>Rotación:</span>
+          <input value="{{fill.pattern.rotation}}" type="number" data-style-options="fill.pattern.rotation">
+        </div>
+
+        <div class="style-col-2">
+          <span>Escala:</span>
+          <input value="{{fill.pattern.scale}}" type="number" min="1" max="30" data-style-options="fill.pattern.scale">
+        </div>
+      </div>
+      <div class="group-row" data-geometry="polygon">
+        <div class="style-col-1">
+          <span>Offset:</span>
+          <input value="{{fill.pattern.offset}}" type="number" data-style-options="fill.pattern.offset">
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stroke options -->
+  <div class="styles-row m-hidden m-simple-category" data-id="stroke">
+    <div class="title">Opciones</div>
+    <div class="m-styles-body">
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Color:</span>
+          <input value="{{stroke.color}}" type="color" data-style-options="stroke.color">
+        </div>
+        <div class="style-col-2">
+          <span>Ancho:</span>
+          <input value="{{stroke.width}}" type="number" value="2" min="1" data-style-options="stroke.width">
+        </div>
+      </div>
+
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Linedash:</span>
+          <input value="{{#get 0 stroke.linedash}}{{/get}}" type="number" data-target="stroke.linedash" data-style-options="stroke.linedash">
+          <span class="empty">&nbsp;</span>
+          <input value="{{#get 1 stroke.linedash}}{{/get}}" type="number" data-id="stroke.linedash">
+        </div>
+
+        <div class="style-col-2">
+          <span>Linedash Offset:</span>
+          <input type="number" value="{{stroke.linedashoffset}}" data-style-options="stroke.linedashoffset">
+        </div>
+      </div>
+
+      <div class="group-row">
+
+        <div class="style-col-1">
+          <span>Line Cap</span>
+          <select data-style-options="stroke.linecap">
+          <option value="">Ninguno</option>
+          {{#each linecapstroke}}
+          <option value="{{this.name}}" {{#eq this.name this.selected}}selected{{/eq}}>{{this.name}}</option>
+          {{/each}}
+        </select>
+        </div>
+
+        <div class="style-col-2">
+          <span>Line Join:</span>
+          <select data-style-options="stroke.linejoin">
+          <option value="">Ninguno</option>
+          {{#each linejoinstroke}}
+          <option value="{{this.name}}" {{#eq this.name this.selected}}selected{{/eq}}> {{this.name}}</option>
+          {{/each}}
+        </select>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Label options -->
+  <div class="styles-row m-hidden m-simple-category" data-id="label">
+    <div class="title">Opciones</div>
+    <div class="m-styles-body">
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Color</span>
+          <input value="{{label.fill.color}}" type="color" data-style-options="label.color" value="#0d5cdc">
+        </div>
+        <div class="style-col-2">
+          <span>Texto:</span>
+          <select data-style-options="label.text">
+            {{#each featuresAttr}}
+            <option value="{{this.id}}" {{#eq this.id this.selected}}selected{{/eq}}>{{this.name}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Fuente:</span>
+          <select data-font-family>
+          <option value="serif">Serif</option>
+          <option value="sans-serif">Sans-Serif</option>
+          <option value="mono">Mono</option>
+        </select>
+        </div>
+        <div class="style-col-2">
+          <span>Tamaño:</span>
+          <input data-font-size type="number" min="1" max="40" value="12">
+        </div>
+      </div>
+
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Alineación horizontal:</span>
+          <select data-style-options="label.align">
+          {{#each alignlist}}
+            <option value="{{this.name}}" {{#eq this.id this.selected}}selected{{/eq}}>{{this.name}}</option>
+          {{/each}}
+          </select>
+        </div>
+
+        <div class="style-col-2">
+          <span>Alineación vertical:</span>
+          <select data-style-options="label.baseline">
+          {{#each baselinelist}}
+            <option value="{{this.name}}" {{#eq this.id this.selected}}selected{{/eq}}>{{this.name}}</option>
+          {{/each}}
+          </select>
+        </div>
+
+      </div>
+
+      <div class="group-row">
+
+        <div class="style-col-1 input-reverse">
+          <span>Rotar</span>
+          <input {{#if label.rotate}}checked{{/if}} type="checkbox" data-style-options="label.rotate">
+        </div>
+
+        <div class="style-col-2">
+          <span>Rotación</span>
+          <input value="{{label.rotation}}" type="number" step="0.1" data-style-options="label.rotation">
+        </div>
+
+      </div>
+
+      <div class="group-row">
+
+        <div class="style-col-1">
+          <span>Escala:</span>
+          <input value="{{label.scale}}" type="number" max="3" min="0" step="0.1" value="2" data-style-options="label.scale">
+        </div>
+
+        <div class="style-col-2">
+          <span>Offset:</span>
+          <input value="{{#get 0 label.offset}}{{/get}}" type="number" data-target="label.offset" data-style-options="label.offset">
+          <span class="empty">&nbsp;</span>
+          <input value="{{#get 1 label.offset}}{{/get}}" type="number" data-id="label.offset">
+        </div>
+
+      </div>
+
+      <!-- TextPath Options -->
+
+      <div class="group-row" data-geometry="line">
+
+        <div class="style-col-1 input-reverse">
+          <span>Ajustar a geometría</span>
+          <input {{#if label.path}}checked{{/if}} type="checkbox" data-style-options="label.path">
+        </div>
+
+        <div class="style-col-2">
+          <span>Ancho Mínimo:</span>
+          <input value="{{label.minwidth}}" type="number" min="1" max="200" value="10" data-style-options="label.minwidth" data-textpath {{#unless label.path}}disabled{{/unless}}>
+        </div>
+
+      </div>
+
+      <div class="group-row" data-geometry="line">
+
+        <div class="style-col-1 input-reverse">
+          <span>Suavizar</span>
+          <input {{#if label.smooth}}checked{{/if}} type="checkbox" data-style-options="label.smooth" data-textpath {{#unless label.path}}disabled{{/unless}}>
+        </div>
+
+        <div class=style-col-2>
+          <span>Desbordar:</span>
+          <select data-style-options="label.textoverflow" data-textpath {{#unless label.path}}disabled{{/unless}}>
+          <option value="hidden">Oculto</option>
+          <option value="visible">Visible</option>
+          <option value="ellipsis">Puntos suspensivos</option>
+        </select>
+        </div>
+
+      </div>
+
+      <!-- Stroke Label -->
+      <div class="subtitle">Trazo de etiqueta:</div>
+      <div class="group-row">
+
+        <div class="style-col-1 input-reverse">
+          <span>Trazo</span>
+          <input type="checkbox" data-apply="label.stroke" {{#neq label.stroke.color 'no-color'}}checked{{/neq}}>
+        </div>
+
+      </div>
+      <div class="group-row">
+
+        <div class="style-col-1">
+          <span>Color:</span>
+          <input type="color" data-style-options="label.stroke.color" {{#neq label.stroke.color 'no-color'}}value="{{label.stroke.color}}" {{/neq}}>
+        </div>
+
+        <div class="style-col-2">
+          <span>Ancho:</span>
+          <input value="{{label.stroke.width}}" type="number" value="2" max="15" min="1" data-style-options="label.stroke.width">
+        </div>
+
+      </div>
+
+      <div class="group-row">
+
+        <div class="style-col-1">
+          <span>Line Dash:</span>
+          <input value="{{#get 0 label.stroke.linedash}}{{/get}}" type="number" data-target="label.stroke.linedash" data-style-options="label.stroke.linedash" data-format="array">
+          <span class="empty">&nbsp;</span>
+          <input value="{{#get 1 label.stroke.linedash}}{{/get}}" type="number" data-id="label.stroke.linedash">
+        </div>
+
+        <div class="style-col-2">
+          <span>Offset:</span>
+          <input type="number" value="{{label.stroke.linedashoffset}}" data-style-options="label.stroke.linedashoffset">
+        </div>
+
+      </div>
+
+      <div class="group-row">
+
+        <div class="style-col-1">
+          <span>Line Cap:</span>
+          <select data-style-options="label.stroke.linecap">
+            {{#each linecaplabelstroke}}
+            <option value="{{this.id}}" {{#eq this.id this.selected}}selected{{/eq}}>{{this.name}}</option>
+            {{/each}}
+          </select>
+        </div>
+
+        <div class="style-col-2">
+          <span>Line Join:</span>
+          <select data-style-options="label.stroke.linejoin">
+            {{#each linejoinlabelstroke}}
+            <option value="{{this.id}}" {{#eq this.id this.selected}}selected{{/eq}}>{{this.name}}</option>
+            {{/each}}
+          </select>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Icon Options -->
+  <div class="styles-row m-hidden m-simple-category" data-id="icon">
+    <div class="title">Opciones</div>
+    <div class="m-styles-body">
+      <!-- Point Icon -->
+      <div data-pointicon class="group-row">
+        <div class="style-col-1">
+          <span>URL:</span>
+          <input value="{{icon.src}}" type="url" data-style-options="src.src">
+        </div>
+        <div class="style-col-2">
+          <span>Tamaño:</span>
+          <input {{#if icon.size}}value="{{#get 0 icon.size}}{{/get}}" {{/if}} type="number" min="1" data-undefined data-target="size" data-style-options="src.size">
+          <span class="empty">&nbsp;</span>
+          <input {{#if icon.size}}value="{{#get 1 icon.size}}{{/get}}" {{/if}} type="number" min="1" data-undefined data-id="size">
+        </div>
+      </div>
+
+      <div data-pointicon class="group-row">
+        <div class="style-col-2 input-reverse m-hidden">
+          <span>Snap to pixel</span>
+          <input {{#if icon.snaptopixel}}checked{{/if}} type="checkbox" data-style-options="src.snaptopixel">
+        </div>
+      </div>
+
+      <div data-pointicon class="group-row">
+        <div class="style-col-1">
+          <span>Anclaje:</span>
+          <input value="{{#get 0 icon.anchor}}{{/get}}" type="number" data-target="anchor" data-style-options="src.anchor">
+          <span class="empty">&nbsp;</span>
+          <input value="{{#get 1 icon.anchor}}{{/get}}" type="number" data-id="anchor">
+        </div>
+        <div class="style-col-2">
+          <span>Escala:</span>
+          <input value="{{icon.scale}}" type="number" data-style-options="src.scale" max="3" min="0" step="0.1">
+        </div>
+      </div>
+
+      <!-- Common -->
+      <div data-common-icon class="group-row">
+
+        <div class="style-col-1">
+          <span>Offset:</span>
+          <input value="{{#get 0 icon.offset}}{{/get}}" type="number" data-target="icon-offset" data-style-options="src.offset">
+          <span class="empty">&nbsp;</span>
+          <input value="{{#get 1 icon.offset}}{{/get}}" type="number" data-id="icon-offset" />
+        </div>
+
+        <div class="style-col-2">
+          <span>Opacidad:</span>
+          <input value="{{icon.opacity}}" type="number" step="0.1" min=0 max=1 data-style-options="src.opacity">
+        </div>
+      </div>
+
+      <div data-common-icon class="group-row">
+
+        <div class="style-col-1 input-reverse">
+          <span>Rotar</span>
+          <input {{#if icon.rotate}}checked {{/if}} type="checkbox" data-style-options="src.rotate">
+        </div>
+
+        <div class="style-col-2">
+          <span>Rotación:</span>
+          <input value="{{icon.rotation}}" type="number" min=0 max=360 data-style-options="src.rotation">
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Form Options -->
+  <div class="styles-row m-hidden m-simple-category" data-id="form">
+    <div class="title">Opciones</div>
+    <div class="m-styles-body">
+
+      <!-- Point Font -->
+      <div data-pointfont class="group-row">
+
+        <div class="style-col-1">
+          <span>Color:</span>
+          <input type="color" data-style-options="form.fill" value="{{icon.fill}}">
+        </div>
+
+      </div>
+
+      <div data-pointfont class="group-row">
+
+        <div class="style-col-1">
+          <span>Forma:</span>
+          <select data-style-options="form.form">
+          {{#each formlist}}
+          <option value="{{this.id}}"{{#eq this.id this.selected}}selected{{/eq}}>{{this.name}}</option>
+          {{/each}}
+        </select>
+        </div>
+
+        <div class="style-col-2">
+          <span>Fuente:</span>
+          <select data-style-options="form.class">
+          <option value="">None</option>
+          <option value="g-cartografia-alerta" selected>Alerta</option>
+          <option value="g-cartografia-escala">Escala</option>
+          <option value="g-cartografia-cancelar">Cancelar</option>
+          <option value="g-cartografia-bandera">Bandera</option>
+          <option value="g-cartografia-brujula">Brujula</option>
+          <option value="g-cartografia-editar">Editar</option>
+        </select>
+        </div>
+
+      </div>
+
+      <div data-pointfont class="group-row">
+
+        <div class="style-col-1">
+          <span>Radio:</span>
+          <input type="number" min="1" max="100" value="20" data-style-options="form.radius" value="{{icon.radius}}">
+        </div>
+
+        <div class="style-col-2">
+          <span>Tamaño:</span>
+          <input type="number" step="0.1" min=0 max=100 data-style-options="form.fontsize" value="{{icon.fontsize}}">
+        </div>
+
+
+      </div>
+
+      <div data-pointfont class="group-row">
+
+        <div class="style-col-1 input-reverse">
+          <span>Gradiente</span>
+          <input type="checkbox" data-style-options="form.gradient" {{#if icon.gradient}}checked{{/if}}>
+        </div>
+
+        <div class="style-col-2">
+          <span>Trazo:</span>
+          <input type="color" data-style-options="form.gradientcolor" value="{{icon.gradientcolor}}">
+        </div>
+      </div>
+
+      <!-- Common -->
+      <div data-common-icon class="group-row">
+
+        <div class="style-col-1">
+          <span>Offset:</span>
+          <input value="{{#get 0 icon.offset}}{{/get}}" type="number" data-target="form-offset" data-style-options="form.offset">
+          <span class="empty">&nbsp;</span>
+          <input value="{{#get 1 icon.offset}}{{/get}}" type="number" data-id="form-offset" />
+        </div>
+
+        <div class="style-col-2">
+          <span>Opacidad:</span>
+          <input value="{{icon.opacity}}" type="number" step="0.1" min=0 max=1 data-style-options="form.opacity">
+        </div>
+      </div>
+
+      <div data-common-icon class="group-row">
+
+        <div class="style-col-1 input-reverse">
+          <span>Rotar</span>
+          <input {{#if icon.rotate}}checked {{/if}} type="checkbox" data-style-options="form.rotate">
+        </div>
+
+        <div class="style-col-2">
+          <span>Rotación:</span>
+          <input value="{{icon.rotation}}" type="number" min=0 max=360 data-style-options="form.rotation">
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</div>
+
+</div>

@@ -1,0 +1,13 @@
+{
+  "url": {
+    "name": "stylemanager",
+    "separator": "*"
+  },
+  "constructor": "M.plugin.StyleManager",
+  "files": {
+    "ol": {
+      "scripts": "stylemanager.ol.js",
+      "styles": "stylemanager.min.css"
+    }
+  }
+}

@@ -1,0 +1,83 @@
+<div data-role="m-chart" class="m-stylemanager-simple-section m-chart m-hidden">
+  <div class="styles-row m-stylechart">
+    <div class="title">Opciones</div>
+
+    <div class="group-row">
+      <div class="style-col-1">
+        <span>Tipo:</span>
+        <select data-style-options="type">
+          <option value="pie" {{#eq type "pie"}}selected {{/eq}}>Tarta</option>
+          <option value="pie3D" {{#eq type "pie3D"}}selected {{/eq}}>Tarta 3D</option>
+          <option value="donut" {{#eq type "donut"}}selected {{/eq}}>Donut</option>
+          <option value="bar" {{#eq type "bar"}}selected {{/eq}}>Gráfico</option>
+        </select>
+      </div>
+
+      <div class="style-col-2">
+        <span>Color:</span>
+        <select data-style-options="scheme">
+          <option value="Classic" {{#eq scheme "Classic"}}selected {{/eq}}>Clásico</option>
+          <option value="Dark" {{#eq scheme "Dark"}}selected {{/eq}}>Oscuro</option>
+          <option value="Pale" {{#eq scheme "Pale"}}selected {{/eq}}>Pálido</option>
+          <option value="Pastel" {{#eq scheme "Pastel"}}selected {{/eq}}>Neón</option>
+          <option value="Neon" {{#eq scheme "Neon"}}selected {{/eq}}>Pastel</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="group-row">
+      <div class="style-col-1">
+        <span>Eje X:</span>
+        <input type="number" value="{{offsetX}}" data-style-options="offsetX">
+      </div>
+
+      <div class="style-col-2">
+        <span>Eje Y:</span>
+        <input type="number" value="{{offsetY}}" data-style-options="offsetY">
+      </div>
+    </div>
+
+    <div class="group-row">
+      <div class="style-col-1 {{#eq type 'bar'}}m-hidden{{/eq}}" data-type="donut,pie,pie3D">
+        <span>Radio:</span>
+        <input type="number" min="1" value="{{radius}}" data-style-options="radius">
+      </div>
+
+      <div class="style-col-2 {{#neq type 'donut'}}m-hidden{{/neq}}" data-type="donut">
+        <span>Radio de donut:</span>
+        <input type="number" min="0" value="6" data-style-options="donutRadio">
+      </div>
+    </div>
+
+    <div class="group-row">
+      <div class="style-col-1 {{#neq type 'pie3D'}}m-hidden{{/neq}}" data-type="pie3D">
+        <span>Color 3D:</span>
+        <input type="color" value="#ff00f0" data-style-options="fill3DColor">
+      </div>
+    </div>
+
+  </div>
+  <div class="styles-row m-stylechart">
+    <div class="title">Atributos</div>
+    <div class="group-row">
+
+      <div class="style-col-1">
+        <span>Atributo:</span>
+        <select data-attribute>
+
+        </select>
+      </div>
+
+      <div class="style-col-2">
+        <span></span>
+        <button data-add class="m-add-gradient m-button-styles">Añadir atributo</button>
+      </div>
+    </div>
+    <div class="m-chart-variables" data-variables>
+    </div>
+
+    <div class="m-pagination" data-pagination>
+    </div>
+
+  </div>
+</div>

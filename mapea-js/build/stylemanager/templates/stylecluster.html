@@ -1,0 +1,163 @@
+<div data-role="m-cluster" class="m-stylemanager-simple-section m-hidden">
+  <!-- Ranges Options -->
+  <div class="styles-row" data-id="ranges">
+    <div class="title">Rangos</div>
+    <div class="m-styles-body">
+
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Número de rangos:</span>
+          <input type="number" data-number-ranges value="{{ranges.length}}" min="1" max="12">
+        </div>
+      </div>
+      <div data-parent="ranges">
+        {{#each ranges}}
+        <div {{#neq @index 0}} class="m-hidden" {{/neq}} data-page="{{#sum @index 1}}{{/sum}}">
+          <div class="subtitle">Rango {{#sum @index 1}}{{/sum}}</div>
+          <div class="group-row">
+            <div class="style-col-1">
+              <span>Desde:</span>
+              <input data-apply-range type="number" min="0" data-ranges-options="minRange" data-ranges-id="{{#sum @index 1}}{{/sum}}" value="{{min}}">
+            </div>
+            <div class="style-col-2">
+              <span>Hasta:</span>
+              <input data-apply-range type="number" min="0" data-ranges-options="maxRange" data-ranges-id="{{#sum @index 1}}{{/sum}}" value="{{max}}">
+            </div>
+          </div>
+          <div class="group-row">
+            <div class="style-col-1">
+              <span>Relleno:</span>
+              <input data-apply-range value="{{fill}}" type="color" data-ranges-options="style.fill.color" data-ranges-id="{{#sum @index 1}}{{/sum}}">
+            </div>
+            <div class="style-col-2">
+              <span>Opacidad:</span>
+              <input data-apply-range value="{{opacity}}" min="0" step="0.1" type="number" data-ranges-options="style.fill.opacity" data-ranges-id="{{#sum @index 1}}{{/sum}}">
+            </div>
+          </div>
+          <div class="group-row">
+            <div class="style-col-1">
+              <span>Borde:</span>
+              <input data-apply-range type="color" value="{{stroke}}" data-ranges-options="style.stroke.color" data-ranges-id="{{#sum @index 1}}{{/sum}}">
+            </div>
+            <div class="style-col-2">
+              <span>Ancho:</span>
+              <input data-apply-range value="{{width}}" type="number" min="1" data-ranges-options="style.stroke.width" data-ranges-id="{{#sum @index 1}}{{/sum}}">
+            </div>
+          </div>
+
+          <div class="group-row">
+            <div class="style-col-1">
+              <span>Radio:</span>
+              <input data-apply-range value="{{#if radius}}{{radius}}{{/if}}{{#unless radius}}10{{/unless}}" type="number" min="1" data-ranges-options="style.radius" data-ranges-id="{{#sum @index 1}}{{/sum}}">
+            </div>
+          </div>
+        </div>
+        {{/each}} {{#pages}}
+        <div class="m-hidden" data-page="{{id}}">
+          <div class="subtitle">Rango {{id}}</div>
+          <div class="group-row">
+            <div class="style-col-1">
+              <span>Desde:</span>
+              <input value="{{min}}" type="number" min="0" data-ranges-options="minRange" data-ranges-id="{{id}}">
+            </div>
+            <div class="style-col-2">
+              <span>Hasta:</span>
+              <input value="{{max}}" type="number" min="0" data-ranges-options="maxRange" data-ranges-id="{{id}}">
+            </div>
+          </div>
+          <div class="group-row">
+            <div class="style-col-1">
+              <span>Relleno:</span>
+              <input type="color" value="{{fill}}" data-ranges-options="style.fill.color" data-ranges-id="{{id}}">
+            </div>
+            <div class="style-col-2">
+              <span>Opacidad:</span>
+              <input value="1" step="0.1" type="number" min="0" data-ranges-options="style.fill.opacity" data-ranges-id="{{id}}">
+            </div>
+          </div>
+          <div class="group-row">
+            <div class="style-col-1">
+              <span>Borde:</span>
+              <input type="color" value="{{stroke}}" data-ranges-options="style.stroke.color" data-ranges-id="{{id}}">
+            </div>
+            <div class="style-col-2">
+              <span>Ancho:</span>
+              <input value="2" type="number" min="1" data-ranges-options="style.stroke.width" data-ranges-id="{{id}}">
+            </div>
+          </div>
+
+          <div class="group-row">
+            <div class="style-col-1">
+              <span>Radio:</span>
+              <input value="10" type="number" min="1" data-ranges-options="style.radius" data-ranges-id="{{id}}">
+            </div>
+          </div>
+        </div>
+        {{/pages}}
+      </div>
+
+      <div class="m-pagination" data-parent-pagination>
+        <ul>
+          {{#each ranges}}
+          <li data-page-selector="{{#sum @index 1}}{{/sum}}" {{#eq @index 0}} data-page-active class="m-page-active" {{/eq}}>{{#sum @index 1}}{{/sum}}</li>
+          {{/each}} {{#each pages}}
+          <li data-page-selector="{{id}}" class="m-hidden">{{id}}</li>
+          {{/each}}
+
+        </ul>
+      </div>
+
+    </div>
+  </div>
+  <!-- Vendor Options -->
+  <div class="styles-row" data-id="options">
+    <div class="title">Opciones</div>
+    <div class="m-styles-body">
+
+      <div class="group-row">
+        <div class="style-col-1 input-reverse">
+          <span>Envoltura</span>
+          <input type="checkbox" data-style-options="hoveInteraction" {{#if hoverInteraction}}checked{{/if}}>
+        </div>
+        <div class="style-col-2 input-reverse">
+          <span>Cantidad</span>
+          <input type="checkbox" data-style-options="displayAmount" {{#if displayAmount}}checked{{/if}}>
+        </div>
+      </div>
+
+      <div class="group-row">
+        <div class="style-col-1 input-reverse">
+          <span>Seleccionable</span>
+          <input type="checkbox" data-style-options="selectInteraction" {{#if selectInteraction}}checked{{/if}}>
+        </div>
+        <div class="style-col-2 input-reverse">
+          <span>Animado</span>
+          <input type="checkbox" data-style-options="animated" {{#if animated}}checked{{/if}}>
+        </div>
+      </div>
+
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Distancia:</span>
+          <input type="number" min="1" data-style-options="distance" value="{{distance}}">
+        </div>
+        <div class="style-col-2">
+          <span>Puntos:</span>
+          <input type="number" min="1" data-style-options="maxFeaturesToSelect" value="{{maxFeaturesToSelect}}">
+        </div>
+      </div>
+
+      <div class="group-row">
+        <div class="style-col-1">
+          <span>Distancia de abanico:</span>
+          <input type="number" min="1" data-style-options="distanceSelectFeatures" value="{{distanceSelectFeatures}}">
+        </div>
+        <div class="style-col-2">
+          <span>Color de texto:</span>
+          <input type="color" data-style-options="label.color" value="{{label.color}}">
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
