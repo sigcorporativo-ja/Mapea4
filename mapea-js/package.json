@@ -66,7 +66,7 @@
     "build:plugins": "webpack --config=webpack-config/webpack.production-plugins.config.js",
     "debug:build": "webpack-dev-server --config=webpack-config/webpack.test-production.config.js",
     "debug:prebuild": "node --inspect-brk tasks/generate-index.js",
-    "prebuild": "node  tasks/clean-build.js --path=dist  && node tasks/generate-index.js && node tasks/generate-plugins-entrypoints.js",
+    "prebuild": "node tasks/clean-build.js --path=dist && node tasks/copy-legacy.js && node tasks/generate-index.js && node tasks/generate-plugins-entrypoints.js",
     "start": "webpack-dev-server --config=webpack-config/webpack.development.config.js",
     "start:build": "npm run build && npm run debug:build"
   }
