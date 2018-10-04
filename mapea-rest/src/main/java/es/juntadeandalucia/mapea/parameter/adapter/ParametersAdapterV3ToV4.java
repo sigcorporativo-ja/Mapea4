@@ -14,7 +14,7 @@ public abstract class ParametersAdapterV3ToV4 {
 
    /**
     * This method adapts the query v3 to new format v4 to allow backward compatibility
-    * 
+    *
     * @param queryParameters
     */
    public static void adapt (MultivaluedMap<String, String> query) {
@@ -26,7 +26,7 @@ public abstract class ParametersAdapterV3ToV4 {
 
    /**
     * This method adapts the query v3 to new format v4 to allow backward compatibility
-    * 
+    *
     * @param queryParameters
     */
    public static Map<String, String[]> adapt (Map<String, String[]> query) {
@@ -47,7 +47,7 @@ public abstract class ParametersAdapterV3ToV4 {
          for (String operation : operations) {
             if (operation.toLowerCase().indexOf("searchcallejero") != -1) {
                // adds searchcallejero as geosearch
-               query.put("geosearch", new String[0]);
+               query.put("searchstreet", new String[0]);
             }
             else if (operation.toLowerCase().indexOf("searchstreet") != -1) {
                // checks if user specified locality parameter
