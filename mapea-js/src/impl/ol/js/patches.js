@@ -1,10 +1,10 @@
-import * as ModuleLayer from 'ol/layer/Layer';
+/* eslint-disable */
+import { visibleAtResolution } from 'ol/layer/Layer';
 import OLFormatGML3 from 'ol/format/GML3';
 // import OLInteractionPointer from 'ol/interaction/Pointer';
 import { writeStringTextNode } from 'ol/format/xsd';
 // import { POINTERUP, POINTERDOWN, POINTERDRAG } from 'ol/MapBrowserEventType';
 // import { getValues } from 'ol/obj';
-/* eslint-disable */
 /**
  * Return `true` if the layer is visible, and if the passed resolution is
  * between the layer's minResolution and maxResolution. The comparison is
@@ -16,7 +16,9 @@ import { writeStringTextNode } from 'ol/format/xsd';
  * PATCH: inclusive maxResolution comparasion to show layers with the
  * same resolution as its maxResolution
  */
-ModuleLayer.visibleAtResolution = (layerState, resolution) => {
+
+let visibleAtResolutionLayer = visibleAtResolution;
+visibleAtResolutionLayer = (layerState, resolution) => {
   return layerState.visible && resolution >= layerState.minResolution &&
     resolution <= layerState.maxResolution;
 };

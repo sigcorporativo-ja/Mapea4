@@ -1,8 +1,12 @@
 const path = require('path');
 const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
+const GenerateVersionPlugin = require('./GenerateVersionPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopywebpackPlugin = require('copy-webpack-plugin');
 const argv = require('yargs').argv;
+
+const PJSON_PATH = path.resolve(__dirname, '..', 'package.json');
+const pjson = require(PJSON_PATH);
 
 const sourcemap = argv['source-map'];
 
@@ -74,12 +78,20 @@ module.exports = {
   },
   plugins: [
     new AllowMutateEsmExports(),
+    new GenerateVersionPlugin({
+      version: pjson.version,
+      regex: 'min',
+    }),
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',
     }),
     new CopywebpackPlugin([{
       from: 'src/configuration.js',
       to: 'js/configuration.js',
+    }]),
+    new CopywebpackPlugin([{
+      from: 'src/configuration.js',
+      to: `js/configuration-${pjson.version}.js`,
     }]),
     new CopywebpackPlugin([{
       from: 'src/facade/assets/img',
