@@ -70,9 +70,14 @@ class KML extends MObject {
   loadInternal_(projection) {
     return new Promise((success, fail) => {
       getRemote(this.url_).then((response) => {
+        /*
+          Fix: While the KML URL was being resolved the map projection
+          might have been changed therefore the projection is readed again
+        */
+        const lastProjection = this.map_.getProjection().code;
         if (!isNullOrEmpty(response.text)) {
           const features = this.format_.readCustomFeatures(response.text, {
-            featureProjection: projection,
+            featureProjection: lastProjection,
           });
           const screenOverlay = this.format_.getScreenOverlay();
           const mFeatures = features.map((olFeature) => {
