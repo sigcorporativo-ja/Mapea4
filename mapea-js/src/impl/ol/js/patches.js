@@ -1,4 +1,4 @@
-import { visibleAtResolution } from 'ol/layer/Layer';
+import * as LayerModule from 'ol/layer/Layer';
 import OLFormatGML3 from 'ol/format/GML3';
 // import OLInteractionPointer from 'ol/interaction/Pointer';
 import { writeStringTextNode } from 'ol/format/xsd';
@@ -16,8 +16,7 @@ import { writeStringTextNode } from 'ol/format/xsd';
  * PATCH: inclusive maxResolution comparasion to show layers with the
  * same resolution as its maxResolution
  */
-let visibleAtResolutionLayer = visibleAtResolution;
-visibleAtResolutionLayer = (layerState, resolution) => {
+LayerModule.visibleAtResolution = (layerState, resolution) => {
   return layerState.visible && resolution >= layerState.minResolution &&
     resolution <= layerState.maxResolution;
 };
