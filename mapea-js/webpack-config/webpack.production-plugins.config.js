@@ -69,7 +69,7 @@ module.exports = {
   plugins: [
     new GenerateVersionPlugin({
       fileName: '.mplugin',
-      regex: 'min',
+      regex: /([A-Za-z]+)(\..*)/,
       aliasRoot: 'plugins',
     }),
     new CopywebpackPlugin([{
