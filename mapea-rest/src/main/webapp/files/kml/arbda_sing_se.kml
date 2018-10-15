@@ -4,7 +4,7 @@
             <Style id="arbol">
               <IconStyle>
                 <Icon>
-                  <href>http://maps.google.com/mapfiles/kml/pal2/icon4.png</href>
+                  <href>http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/ico_arbol.png</href>
                 </Icon>
               </IconStyle>
               <LineStyle>
@@ -15,11 +15,11 @@
         <ScreenOverlay>
             <name>Nombre</name>
             <Icon>
-                <href>http://192.168.60.2:8080/mapea/logojunta.gif</href>
+                <href>http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logojunta.gif</href>
             </Icon>
             <overlayXY x="0.5" y="1" xunits="fraction" yunits="fraction"/>
             <screenXY x="0.5" y="1" xunits="fraction" yunits="fraction"/>
-            <rotationXY x="50" y="50" xunits="pixels" yunits="pixels"/>
+            <rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/>
             <size x="94" y="73" xunits="pixels" yunits="pixels"/>
         </ScreenOverlay>
 <!-- Detalle del Equipamiento -->

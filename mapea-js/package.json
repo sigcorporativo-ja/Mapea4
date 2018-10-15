@@ -53,20 +53,20 @@
     "draggabilly": "^2.2.0",
     "handlebars": "^4.0.11",
     "jsdoc": "3.4.3",
-    "jsts": "^1.6.0",
+    "jsts": "^2.0.2",
     "ol": "^5.2.0",
     "proj4": "^2.4.4",
     "walk": "2.3.9"
   },
   "scripts": {
     "generate-test": "node tasks/test-generator",
-    "build": "npm run build:core && npm run build:plugins",
+    "build": "./node/node ./node/npm/bin/npm-cli.js run build:core && ./node/node ./node/npm/bin/npm-cli.js run build:plugins",
     "build:sourcemap": "npm run prebuild && npm run build:core -- --source-map && npm run build:plugins",
     "build:core": "webpack --config=webpack-config/webpack.production-core.config.js",
     "build:plugins": "webpack --config=webpack-config/webpack.production-plugins.config.js",
     "debug:build": "webpack-dev-server --config=webpack-config/webpack.test-production.config.js",
     "debug:prebuild": "node --inspect-brk tasks/generate-index.js",
-    "prebuild": "node  tasks/clean-build.js --path=dist  && node tasks/generate-index.js && node tasks/generate-plugins-entrypoints.js",
+    "prebuild": "node tasks/clean-build.js --path=dist && node tasks/copy-legacy.js && node tasks/generate-index.js && node tasks/generate-plugins-entrypoints.js",
     "start": "webpack-dev-server --config=webpack-config/webpack.development.config.js",
     "start:build": "npm run build && npm run debug:build"
   }

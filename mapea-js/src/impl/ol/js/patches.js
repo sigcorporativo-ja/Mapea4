@@ -1,10 +1,10 @@
+/* eslint-disable */
 import * as LayerModule from 'ol/layer/Layer';
 import OLFormatGML3 from 'ol/format/GML3';
 // import OLInteractionPointer from 'ol/interaction/Pointer';
 import { writeStringTextNode } from 'ol/format/xsd';
 // import { POINTERUP, POINTERDOWN, POINTERDRAG } from 'ol/MapBrowserEventType';
 // import { getValues } from 'ol/obj';
-/* eslint-disable */
 /**
  * Return `true` if the layer is visible, and if the passed resolution is
  * between the layer's minResolution and maxResolution. The comparison is
