@@ -1,12 +1,17 @@
+/**
+ * @module M/impl/utils
+ */
 import Feature from 'M/feature/Feature';
 import * as WKT from 'M/geom/WKT';
 import { isNullOrEmpty } from 'M/util/Utils';
 import { getWidth, extend } from 'ol/extent';
 
 /**
- * @namespace Utils
+ * @classdesc
+ * Static utils class.
+ * @api
  */
-export default class Utils {
+class Utils {
   /**
    *
    * @function
@@ -244,3 +249,5 @@ export default class Utils {
     return centroid;
   }
 }
+
+export default Utils;
