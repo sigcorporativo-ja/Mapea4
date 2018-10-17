@@ -103,7 +103,7 @@ class Feature {
           let passFilter = false;
           if (layer.getStyle() instanceof Cluster &&
             layer.getStyle().getOptions().selectInteraction) {
-            passFilter = (l === layer.getStyle().getImpl().selectClusterInteraction.overlayLayer);
+            passFilter = (l === layer.getStyle().getImpl().selectClusterInteraction.getLayer());
           }
           passFilter = passFilter || l === olLayer;
           return passFilter;
