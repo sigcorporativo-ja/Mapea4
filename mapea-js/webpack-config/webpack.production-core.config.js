@@ -1,5 +1,4 @@
 const path = require('path');
-const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 const GenerateVersionPlugin = require('./GenerateVersionPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopywebpackPlugin = require('copy-webpack-plugin');
@@ -77,7 +76,6 @@ module.exports = {
     noEmitOnErrors: true,
   },
   plugins: [
-    new AllowMutateEsmExports(),
     new GenerateVersionPlugin({
       version: pjson.version,
       regex: /([A-Za-z]+)(\..*)/,

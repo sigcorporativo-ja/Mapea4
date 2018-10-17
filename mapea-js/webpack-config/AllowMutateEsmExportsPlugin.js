@@ -12,7 +12,8 @@ class AllowMutateEsmExports {
   apply(compiler) {
     compiler.hooks.compilation.tap('AllowMutateEsmExports', (compilation) => {
       compilation.mainTemplate.hooks.requireExtensions.tap('AllowMutateEsmExports', (source) => {
-        source = source.replace('get: getter', 'get: getter, writable: true');
+        // source = source.replace(/(Object\.defineProperty\([^\,]+\s*\,\s*[^\,]+\,\s*\{[^\}]+)(\}\s*\))/, `name === 'visibleAtResolution'? ($1, set: function(newVal) {visibleAtResolution = newVal;}})) : ($1}))`);
+        return source;
       });
     });
   }
