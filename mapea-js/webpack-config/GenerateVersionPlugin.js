@@ -22,10 +22,15 @@ class GenerateVersionPlugin {
       const { path } = stats.compilation.options.output;
       stats.compilation.chunks.forEach((chunk) => {
         chunk.files.forEach((file, index) => {
-          const realPath = pathmodule.resolve(path, file);
+          const basename = pathmodule.basename(file);
           const version = this.version || this.geExecuteCB(index, stats);
-          const replacePath = realPath.replace(this.regex, `${this.regex}-${version}`);
-          fs.copyFileSync(realPath, replacePath);
+          let replacePath;
+          if (this.regex instanceof RegExp) {
+            replacePath = basename.replace(this.regex, `$1-${version}$2`);
+          }
+          const realPath = pathmodule.resolve(path, file);
+          const newPath = pathmodule.join(pathmodule.dirname(realPath), replacePath);
+          fs.copyFileSync(realPath, newPath);
         });
       });
     });

@@ -80,7 +80,7 @@ module.exports = {
     new AllowMutateEsmExports(),
     new GenerateVersionPlugin({
       version: pjson.version,
-      regex: 'min',
+      regex: /([A-Za-z]+)(\..*)/,
     }),
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',
