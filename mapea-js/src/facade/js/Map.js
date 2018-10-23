@@ -299,7 +299,7 @@ class Map extends Base {
         }
 
         this._finishedInitCenter = true;
-        this.checkCompleted_();
+        this._checkCompleted();
       });
     }
 
@@ -2367,7 +2367,7 @@ class Map extends Base {
    * @public
    * @function
    */
-  checkCompleted_() {
+  _checkCompleted() {
     if (this._finishedInitCenter && this._finishedMaxExtent && this._finishedMapImpl) {
       this._finishedMap = true;
       this.fire(EventType.COMPLETED);
