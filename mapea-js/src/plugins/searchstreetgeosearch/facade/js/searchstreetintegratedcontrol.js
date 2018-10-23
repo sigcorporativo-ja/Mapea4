@@ -172,7 +172,7 @@ export default class SearchstreetIntegrated extends SearchstreetControl {
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-searchs');
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-searchs');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle('hidden');

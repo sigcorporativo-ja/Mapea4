@@ -81,7 +81,7 @@ export default class SearchstreetGeosearch extends ol.control.Control {
    * @api stable
    */
   destroy() {
-    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.remove('top-extra');
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.remove('top-extra');
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_.getImpl().removePopup();
     this.facadeMap_ = null;

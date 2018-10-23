@@ -202,7 +202,7 @@ export default class GeosearchControl extends M.impl.Control {
    */
   destroy() {
     this.clear();
-    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.remove('top-extra');
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.remove('top-extra');
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_ = null;
     this.helpHtml_ = null;

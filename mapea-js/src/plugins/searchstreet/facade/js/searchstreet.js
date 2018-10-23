@@ -87,7 +87,7 @@ export default class Searchstreet extends M.Plugin {
   addTo(map) {
     this.map_ = map;
 
-    map._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
+    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
     // Checks if the received INE code is correct.
     const comCodIne = M.utils.addParameters(M.config.SEARCHSTREET_URLCOMPROBARINE, {
       codigo: this.locality_,
@@ -125,7 +125,7 @@ export default class Searchstreet extends M.Plugin {
 
         this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {
           this.panel_.getButtonPanel().addEventListener('click', (evt) => {
-            if (!this.panel_._collapsed) {
+            if (!this.panel_.collapsed) {
               this.control_.getInput().focus();
             }
           });

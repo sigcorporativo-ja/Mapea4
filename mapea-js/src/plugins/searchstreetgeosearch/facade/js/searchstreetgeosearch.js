@@ -67,7 +67,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
   addTo(map) {
     this.map_ = map;
     this.control_ = new SearchstreetGeosearchControl(this.parameters_);
-    map._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
+    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
 
     this.control_.on(M.evt.ADDED_TO_MAP, () => {
       this.fire(M.evt.ADDED_TO_MAP);

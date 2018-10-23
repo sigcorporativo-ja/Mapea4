@@ -20,7 +20,7 @@ import {
   includes,
   getScaleFromResolution,
   fillResolutions,
-  generateResolutionsFromExtent
+  generateResolutionsFromExtent,
 } from 'M/util/Utils';
 import View from './View';
 import EnvolvedExtent from './util/EnvolvedExtent';
@@ -135,7 +135,7 @@ class Map extends MObject {
       controls: [],
       target: div.id,
       // renderer,
-      view: new View()
+      view: new View(),
     });
     this.facadeMap_.on(EventType.COMPLETED, () => {
       this.map_.updateSize();
@@ -147,7 +147,7 @@ class Map extends MObject {
           this.onMapMove_(e);
         }
         return true;
-      }
+      },
     }));
   }
   /**
@@ -168,7 +168,12 @@ class Map extends MObject {
     const mbtilesLayers = this.getMBtiles(filters);
     const unknowLayers = this.getUnknowLayers_(filters);
 
-    return wmcLayers.concat(kmlLayers).concat(wmsLayers).concat(wfsLayers).concat(wmtsLayers).concat(mbtilesLayers).concat(unknowLayers);
+    return wmcLayers.concat(kmlLayers)
+      .concat(wmsLayers)
+      .concat(wfsLayers)
+      .concat(wmtsLayers)
+      .concat(mbtilesLayers)
+      .concat(unknowLayers);
   }
 
   /**
@@ -183,7 +188,9 @@ class Map extends MObject {
   getBaseLayers() {
     const baseLayers = this.getLayers().filter((layer) => {
       let isBaseLayer = false;
-      if ((layer.type === LayerType.WMS) || (layer.type === LayerType.OSM) || (layer.type === LayerType.Mapbox) || (layer.type === LayerType.WMTS)) {
+      if ((layer.type === LayerType.WMS) ||
+        (layer.type === LayerType.OSM) ||
+        (layer.type === LayerType.Mapbox) || (layer.type === LayerType.WMTS)) {
         isBaseLayer = (layer.transparent !== true);
       }
       return isBaseLayer;
@@ -1190,12 +1197,12 @@ class Map extends MObject {
       extent = {
         x: {
           min: olExtent[0],
-          max: olExtent[2]
+          max: olExtent[2],
         },
         y: {
           min: olExtent[1],
-          max: olExtent[3]
-        }
+          max: olExtent[3],
+        },
       };
     } else {
       extent = this.envolvedMaxExtent_;
@@ -1257,12 +1264,12 @@ class Map extends MObject {
         bbox = {
           x: {
             min: olExtent[0],
-            max: olExtent[2]
+            max: olExtent[2],
           },
           y: {
             min: olExtent[1],
-            max: olExtent[3]
-          }
+            max: olExtent[3],
+          },
         };
       }
     }
@@ -1355,7 +1362,7 @@ class Map extends MObject {
     if (!isNullOrEmpty(olCenter)) {
       center = {
         x: olCenter[0],
-        y: olCenter[1]
+        y: olCenter[1],
       };
     }
     return center;
@@ -1509,7 +1516,10 @@ class Map extends MObject {
     // recalculates maxExtent
     if (!isNullOrEmpty(prevMaxExtent)) {
       if (!isArray(prevMaxExtent)) {
-        prevMaxExtent = [prevMaxExtent.x.min, prevMaxExtent.y.min, prevMaxExtent.x.max, prevMaxExtent.y.max];
+        prevMaxExtent = [
+          prevMaxExtent.x.min,
+          prevMaxExtent.y.min, prevMaxExtent.x.max,
+          prevMaxExtent.y.max];
       }
       this.facadeMap_.setMaxExtent(transformExtent(prevMaxExtent, olPrevProjection, olProjection));
     }
@@ -1519,7 +1529,9 @@ class Map extends MObject {
       if (!isArray(prevBbox)) {
         prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
       }
-      this.facadeMap_.setBbox(transformExtent(prevBbox, olPrevProjection, olProjection), { nearest: true });
+      this.facadeMap_.setBbox(transformExtent(prevBbox, olPrevProjection, olProjection), {
+        nearest: true,
+      });
     }
 
     // recalculates center
@@ -1529,7 +1541,7 @@ class Map extends MObject {
         draw = true;
       }
       this.facadeMap_.setCenter(`${transform([
-        prevCenter.x, prevCenter.y
+        prevCenter.x, prevCenter.y,
       ], olPrevProjection, olProjection)}*${draw}`);
     }
 
@@ -1579,7 +1591,7 @@ class Map extends MObject {
     if (!isNullOrEmpty(olProjection)) {
       projection = {
         code: olProjection.getCode(),
-        units: olProjection.getUnits()
+        units: olProjection.getUnits(),
       };
     }
     return projection;
@@ -1816,8 +1828,8 @@ class Map extends MObject {
       {
         pixel,
         coord,
-        vendor: evt
-      }
+        vendor: evt,
+      },
     ]);
   }
 
@@ -1835,8 +1847,8 @@ class Map extends MObject {
       {
         pixel,
         coord,
-        vendor: evt
-      }
+        vendor: evt,
+      },
     ]);
   }
 }

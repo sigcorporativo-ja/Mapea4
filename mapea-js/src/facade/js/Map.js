@@ -15,7 +15,7 @@ import {
   enableTouchScroll,
   escapeJSCode,
   isString,
-  isObject
+  isObject,
 } from './util/Utils';
 import './util/handlebarshelpers';
 import Exception from './exception/exception';
@@ -134,7 +134,7 @@ class Map extends Base {
      */
     this.panel = {
       LEFT: null,
-      RIGHT: 'null'
+      RIGHT: 'null',
     };
 
     /**
@@ -206,8 +206,8 @@ class Map extends Base {
     this.featuresHandler_.activate();
 
     this.drawLayer_ = new Vector({
-      name: '__draw__'
-    }, {displayInLayerSwitcher: false});
+      name: '__draw__',
+    }, { displayInLayerSwitcher: false });
 
     this.drawLayer_.setStyle(new StylePoint(Map.DRAWLAYER_STYLE));
 
@@ -456,8 +456,8 @@ class Map extends Base {
         }
 
         // KML and WFS layers handler its features
-        if ((layer instanceof Vector)/* && !(layer instanceof KML) */
-        && !(layer instanceof WFS)) {
+        if ((layer instanceof Vector) /* && !(layer instanceof KML) */ &&
+          !(layer instanceof WFS)) {
           this.featuresHandler_.addLayer(layer);
         }
 
@@ -1185,7 +1185,7 @@ class Map extends Base {
                 panel = new Panel('map-info', {
                   collapsible: false,
                   className: 'm-map-info',
-                  position: Position.BR
+                  position: Position.BR,
                 });
                 panel.on(EventType.ADDED_TO_MAP, (html) => {
                   if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
@@ -1201,7 +1201,7 @@ class Map extends Base {
                 collapsible: false,
                 className: 'm-scaleline',
                 position: Position.BL,
-                tooltip: 'Línea de escala'
+                tooltip: 'Línea de escala',
               });
               panel.on(EventType.ADDED_TO_MAP, (html) => {
                 if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
@@ -1215,7 +1215,7 @@ class Map extends Base {
                 collapsible: false,
                 className: 'm-panzoombar',
                 position: Position.TL,
-                tooltip: 'Nivel de zoom'
+                tooltip: 'Nivel de zoom',
               });
               break;
             case Panzoom.NAME:
@@ -1223,7 +1223,7 @@ class Map extends Base {
               panel = new Panel(Panzoom.NAME, {
                 collapsible: false,
                 className: 'm-panzoom',
-                position: Position.TL
+                position: Position.TL,
               });
               break;
             case LayerSwitcher.NAME:
@@ -1236,7 +1236,7 @@ class Map extends Base {
                   className: 'm-layerswitcher',
                   collapsedButtonClass: 'g-cartografia-capas2',
                   position: Position.TR,
-                  tooltip: 'Selector de capas'
+                  tooltip: 'Selector de capas',
                 });
                 // enables touch scroll
                 panel.on(EventType.ADDED_TO_MAP, (html) => {
@@ -1261,7 +1261,7 @@ class Map extends Base {
                   collapsible: false,
                   className: 'm-map-info',
                   position: Position.BR,
-                  tooltip: 'Coordenadas del puntero'
+                  tooltip: 'Coordenadas del puntero',
                 });
               }
               panel.addClassName('m-with-mouse');
@@ -1270,13 +1270,13 @@ class Map extends Base {
               control = new Navtoolbar();
               break;
             case OverviewMap.NAME:
-              control = new OverviewMap({toggleDelay: 400});
+              control = new OverviewMap({ toggleDelay: 400 });
               panel = this.getPanels('map-info')[0];
               if (isNullOrEmpty(panel)) {
                 panel = new Panel('map-info', {
                   collapsible: false,
                   className: 'm-map-info',
-                  position: Position.BR
+                  position: Position.BR,
                 });
               }
               panel.addClassName('m-with-overviewmap');
@@ -1286,7 +1286,7 @@ class Map extends Base {
               panel = new Panel(Location.NAME, {
                 collapsible: false,
                 className: 'm-location',
-                position: Position.BR
+                position: Position.BR,
               });
               break;
             case GetFeatureInfo.NAME:
@@ -1304,7 +1304,7 @@ class Map extends Base {
               panel = new Panel('map-info', {
                 collapsible: false,
                 className: 'm-map-info',
-                position: Position.BR
+                position: Position.BR,
               });
               panel.on(EventType.ADDED_TO_MAP, (html) => {
                 if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
@@ -1326,7 +1326,7 @@ class Map extends Base {
               className: 'm-tools',
               collapsedButtonClass: 'g-cartografia-herramienta',
               position: Position.TL,
-              tooltip: 'Panel de herramientas'
+              tooltip: 'Panel de herramientas',
             });
             //               this.addPanels([this.panel.TOOLS]);
           }
@@ -1341,7 +1341,7 @@ class Map extends Base {
               className: 'm-edition',
               collapsedButtonClass: 'g-cartografia-editar',
               position: Position.TL,
-              tooltip: 'Herramientas de edición'
+              tooltip: 'Herramientas de edición',
             });
             //               this.addPanels([this.panel.EDITION]);
           }
@@ -1615,7 +1615,7 @@ class Map extends Base {
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [center.x, center.y]
+          coordinates: [center.x, center.y],
         },
         properties: {
           vendor: {
@@ -1625,10 +1625,10 @@ class Map extends Base {
                 if (!isNullOrEmpty(label)) {
                   label.show(this);
                 }
-              }
-            }
-          }
-        }
+              },
+            },
+          },
+        },
       });
       this.drawFeatures([this.centerFeature_]);
     }
@@ -1943,10 +1943,10 @@ class Map extends Base {
   setTicket(ticket) {
     if (!isNullOrEmpty(ticket)) {
       if (M.config.PROXY_POST_URL.indexOf('ticket=') === -1) {
-        M.config('PROXY_POST_URL', addParameters(M.config.PROXY_POST_URL, {ticket}));
+        M.config('PROXY_POST_URL', addParameters(M.config.PROXY_POST_URL, { ticket }));
       }
       if (M.config.PROXY_URL.indexOf('ticket=') === -1) {
-        M.config('PROXY_URL', addParameters(M.config.PROXY_URL, {ticket}));
+        M.config('PROXY_URL', addParameters(M.config.PROXY_URL, { ticket }));
       }
     }
 
@@ -1972,7 +1972,7 @@ class Map extends Base {
           // obtener centro del maxExtent
           center = {
             x: ((maxExtent.x.max + maxExtent.x.min) / 2),
-            y: ((maxExtent.y.max + maxExtent.y.min) / 2)
+            y: ((maxExtent.y.max + maxExtent.y.min) / 2),
           };
           success(center);
         } else {
@@ -1980,7 +1980,7 @@ class Map extends Base {
             // obtener centrol del extent
             center = {
               x: ((extent[0] + extent[2]) / 2),
-              y: ((extent[1] + extent[3]) / 2)
+              y: ((extent[1] + extent[3]) / 2),
             };
             success(center);
           });
@@ -2017,9 +2017,9 @@ class Map extends Base {
    * @api
    */
   addLabel(labelParam, coordParam) {
-    const panMapIfOutOfView = labelParam.panMapIfOutOfView === undefined
-      ? true
-      : labelParam.panMapIfOutOfView;
+    const panMapIfOutOfView = labelParam.panMapIfOutOfView === undefined ?
+      true :
+      labelParam.panMapIfOutOfView;
     // checks if the param is null or empty
     if (isNullOrEmpty(labelParam)) {
       Exception('No ha especificado ninguna proyección');
@@ -2115,15 +2115,15 @@ class Map extends Base {
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [point.x, point.y]
+          coordinates: [point.x, point.y],
         },
-        properties: {}
+        properties: {},
       };
       if (isFunction(point.click)) {
         gj.properties.vendor = {
           mapea: {
-            click: point.click
-          }
+            click: point.click,
+          },
         };
       }
       return new Feature(null, gj);
@@ -2460,13 +2460,13 @@ class Map extends Base {
  */
 Map.DRAWLAYER_STYLE = {
   fill: {
-    color: '#009e00'
+    color: '#009e00',
   },
   stroke: {
     color: '#fcfcfc',
-    width: 2
+    width: 2,
   },
-  radius: 7
+  radius: 7,
 };
 
 export default Map;

@@ -1,11 +1,11 @@
 /**
  * @module M/impl/layer/WMC
  */
-import {isNullOrEmpty} from 'M/util/Utils';
+import { isNullOrEmpty } from 'M/util/Utils';
 import * as parameter from 'M/parameter/parameter';
-import {get as getRemote} from 'M/util/Remote';
+import { get as getRemote } from 'M/util/Remote';
 import * as EventType from 'M/event/eventtype';
-import {get as getProj, transformExtent} from 'ol/proj';
+import { get as getProj, transformExtent } from 'ol/proj';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
 /**
@@ -96,28 +96,28 @@ class WMC extends Layer {
       this.loadContextPromise = new Promise((success, fail) => {
         getRemote(this.url).then((response) => {
           let proj;
-          if (this.map._defaultProj === false) {
+          if (this.map.defaultProj === false) {
             proj = this.map.getProjection().code;
           }
           const wmcDocument = response.xml;
-          const formater = new FormatWMC({projection: proj});
+          const formater = new FormatWMC({ projection: proj });
           const context = formater.readFromDocument(wmcDocument);
           success.call(this, context);
         });
       });
       this.loadContextPromise.then((context) => {
         // set projection with the wmc
-        if (this.map._defaultProj) {
+        if (this.map.defaultProj) {
           const olproj = getProj(context.projection);
           this.map.setProjection({
             code: olproj.getCode(),
-            units: olproj.getUnits()
+            units: olproj.getUnits(),
           }, true);
         }
         // load layers
         this.loadLayers(context);
         if (!isNullOrEmpty(bbox)) {
-          this.map.setBbox(bbox, {nearest: true});
+          this.map.setBbox(bbox, { nearest: true });
         }
         this.map.fire(EventType.CHANGE_WMC, this);
       });

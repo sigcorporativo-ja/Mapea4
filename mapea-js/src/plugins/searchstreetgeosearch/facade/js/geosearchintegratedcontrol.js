@@ -121,7 +121,7 @@ export default class GeosearchIntegrated extends GeosearchControl {
    * @param {goog.events.BrowserEvent} evt - Keypress event
    */
   resultsClick_(evt) {
-    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.toggle('top-extra-search');
+    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.toggle('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle('hidden');

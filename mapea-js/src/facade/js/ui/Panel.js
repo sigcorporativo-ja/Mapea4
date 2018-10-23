@@ -4,11 +4,11 @@
 import 'assets/css/panel';
 import panelTemplate from 'templates/panel';
 import * as Position from './position';
-import {isNullOrEmpty, isArray, isString, includes} from '../util/Utils';
+import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils';
 import MObject from '../Object';
 import * as EventType from '../event/eventtype';
 import ControlBase from '../control/Control';
-import {compileSync as compileTemplate} from '../util/Template';
+import { compileSync as compileTemplate } from '../util/Template';
 
 /**
  * @classdesc
