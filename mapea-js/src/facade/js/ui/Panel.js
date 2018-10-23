@@ -4,11 +4,11 @@
 import 'assets/css/panel';
 import panelTemplate from 'templates/panel';
 import * as Position from './position';
-import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils';
+import {isNullOrEmpty, isArray, isString, includes} from '../util/Utils';
 import MObject from '../Object';
 import * as EventType from '../event/eventtype';
 import ControlBase from '../control/Control';
-import { compileSync as compileTemplate } from '../util/Template';
+import {compileSync as compileTemplate} from '../util/Template';
 
 /**
  * @classdesc
@@ -39,30 +39,30 @@ class Panel extends MObject {
      * @type {M.Map}
      * @expose
      */
-    this.map_ = null;
+    this._map = null;
 
     /**
      * @private
      * @type {array}
      * @expose
      */
-    this.controls_ = [];
+    this._controls = [];
 
     /**
      * @private
      * @type {HTMLElement}
      * @expose
      */
-    this.buttonPanel_ = null;
+    this._buttonPanel = null;
 
     /**
      * @private
      * @type {boolean}
      * @expose
      */
-    this.collapsible_ = false;
+    this._collapsible = false;
     if (!isNullOrEmpty(options.collapsible)) {
-      this.collapsible_ = options.collapsible;
+      this._collapsible = options.collapsible;
     }
 
     /**
@@ -81,9 +81,9 @@ class Panel extends MObject {
      * @type {boolean}
      * @expose
      */
-    this.collapsed_ = this.collapsible_;
+    this._collapsed = this._collapsible;
     if (!isNullOrEmpty(options.collapsed)) {
-      this.collapsed_ = (options.collapsed && (this.collapsible_ === true));
+      this._collapsed = (options.collapsed && (this._collapsible === true));
     }
 
     /**
@@ -91,9 +91,9 @@ class Panel extends MObject {
      * @type {boolean}
      * @expose
      */
-    this.multiActivation_ = false;
+    this._multiActivation = false;
     if (!isNullOrEmpty(options.multiActivation)) {
-      this.multiActivation_ = options.multiActivation;
+      this._multiActivation = options.multiActivation;
     }
 
     /**
@@ -101,9 +101,9 @@ class Panel extends MObject {
      * @type {string}
      * @expose
      */
-    this.className_ = null;
+    this._className = null;
     if (!isNullOrEmpty(options.className)) {
-      this.className_ = options.className;
+      this._className = options.className;
     }
 
     /**
@@ -111,13 +111,13 @@ class Panel extends MObject {
      * @type {string}
      * @expose
      */
-    this.collapsedButtonClass_ = null;
+    this._collapsedButtonClass = null;
     if (!isNullOrEmpty(options.collapsedButtonClass)) {
-      this.collapsedButtonClass_ = options.collapsedButtonClass;
+      this._collapsedButtonClass = options.collapsedButtonClass;
     } else if ((this.position === Position.TL) || (this.position === Position.BL)) {
-      this.collapsedButtonClass_ = 'g-cartografia-flecha-derecha';
+      this._collapsedButtonClass = 'g-cartografia-flecha-derecha';
     } else if ((this.position === Position.TR) || (this.position === Position.BR)) {
-      this.collapsedButtonClass_ = 'g-cartografia-flecha-izquierda';
+      this._collapsedButtonClass = 'g-cartografia-flecha-izquierda';
     }
 
     /**
@@ -125,13 +125,13 @@ class Panel extends MObject {
      * @type {string}
      * @expose
      */
-    this.openedButtonClass_ = null;
+    this._openedButtonClass = null;
     if (!isNullOrEmpty(options.openedButtonClass)) {
-      this.openedButtonClass_ = options.openedButtonClass;
+      this._openedButtonClass = options.openedButtonClass;
     } else if ((this.position === Position.TL) || (this.position === Position.BL)) {
-      this.openedButtonClass_ = 'g-cartografia-flecha-izquierda';
+      this._openedButtonClass = 'g-cartografia-flecha-izquierda';
     } else if ((this.position === Position.TR) || (this.position === Position.BR)) {
-      this.openedButtonClass_ = 'g-cartografia-flecha-derecha';
+      this._openedButtonClass = 'g-cartografia-flecha-derecha';
     }
 
     /**
@@ -139,7 +139,7 @@ class Panel extends MObject {
      * @type {HTMLElement}
      * @expose
      */
-    this.element_ = null;
+    this._element = null;
 
     /**
      * TODO
@@ -147,23 +147,23 @@ class Panel extends MObject {
      * @type {HTMLElement}
      * @expose
      */
-    this.areaContainer_ = null;
+    this._areaContainer = null;
 
     /**
      * @private
      * @type {HTMLElement}
      * @expose
      */
-    this.controlsContainer_ = null;
+    this._controlsContainer = null;
 
     /**
      * @private
      * @type {String}
      * @expose
      */
-    this.tooltip_ = null;
+    this._tooltip = null;
     if (!isNullOrEmpty(options.tooltip)) {
-      this.tooltip_ = options.tooltip;
+      this._tooltip = options.tooltip;
     }
   }
 
@@ -177,10 +177,10 @@ class Panel extends MObject {
    * @api
    */
   destroy() {
-    if (this.element_ != null) {
-      this.areaContainer_.removeChild(this.element_);
+    if (this._element != null) {
+      this._areaContainer.removeChild(this._element);
     }
-    this.controlsContainer_ = null;
+    this._controlsContainer = null;
   }
 
   /**
@@ -192,44 +192,44 @@ class Panel extends MObject {
    * @api
    */
   addTo(map, areaContainer) {
-    this.map_ = map;
-    this.areaContainer_ = areaContainer;
+    this._map = map;
+    this._areaContainer = areaContainer;
     const html = compileTemplate(panelTemplate);
-    this.element_ = html;
+    this._element = html;
 
-    if (!isNullOrEmpty(this.tooltip_)) {
-      this.element_.setAttribute('title', this.tooltip_);
+    if (!isNullOrEmpty(this._tooltip)) {
+      this._element.setAttribute('title', this._tooltip);
     }
-    this.buttonPanel_ = html.querySelector('button.m-panel-btn');
-    if (!isNullOrEmpty(this.className_)) {
-      this.className_.split(/\s+/).forEach((className) => {
+    this._buttonPanel = html.querySelector('button.m-panel-btn');
+    if (!isNullOrEmpty(this._className)) {
+      this._className.split(/\s+/).forEach((className) => {
         html.classList.add(className);
       });
     }
 
-    if (this.collapsed_ === true) {
-      this.collapse_(html, this.buttonPanel_);
+    if (this._collapsed === true) {
+      this._collapse(html, this._buttonPanel);
     } else {
-      this.open_(html, this.buttonPanel_);
+      this._open(html, this._buttonPanel);
     }
 
-    if (this.collapsible_ !== true) {
+    if (this._collapsible !== true) {
       html.classList.add('no-collapsible');
     }
 
-    this.controlsContainer_ = html.querySelector('div.m-panel-controls');
+    this._controlsContainer = html.querySelector('div.m-panel-controls');
     areaContainer.appendChild(html);
 
-    this.buttonPanel_.addEventListener('click', (evt) => {
+    this._buttonPanel.addEventListener('click', (evt) => {
       evt.preventDefault();
-      if (this.collapsed_ === false) {
-        this.collapse_(html, this.buttonPanel_);
+      if (this._collapsed === false) {
+        this._collapse(html, this._buttonPanel);
       } else {
-        this.open_(html, this.buttonPanel_);
+        this._open(html, this._buttonPanel);
       }
     });
 
-    this.addControls(this.controls_);
+    this.addControls(this._controls);
     this.fire(EventType.ADDED_TO_MAP, html);
   }
 
@@ -239,12 +239,12 @@ class Panel extends MObject {
    * @private
    * @function
    */
-  collapse_(html) {
+  _collapse(html) {
     html.classList.remove('opened');
-    this.buttonPanel_.classList.remove(this.openedButtonClass_);
+    this._buttonPanel.classList.remove(this._openedButtonClass);
     html.classList.add('collapsed');
-    this.buttonPanel_.classList.add(this.collapsedButtonClass_);
-    this.collapsed_ = true;
+    this._buttonPanel.classList.add(this._collapsedButtonClass);
+    this._collapsed = true;
     this.fire(EventType.HIDE);
   }
 
@@ -254,33 +254,33 @@ class Panel extends MObject {
    * @private
    * @function
    */
-  open_(html) {
+  _open(html) {
     html.classList.remove('collapsed');
-    this.buttonPanel_.classList.remove(this.collapsedButtonClass_);
+    this._buttonPanel.classList.remove(this._collapsedButtonClass);
     html.classList.add('opened');
-    this.buttonPanel_.classList.add(this.openedButtonClass_);
-    this.collapsed_ = false;
+    this._buttonPanel.classList.add(this._openedButtonClass);
+    this._collapsed = false;
     this.fire(EventType.SHOW);
   }
 
   /**
-   * Call private method open_
+   * Call private method _open
    *
    * @public
    * @function
    */
   open() {
-    this.open_(this.element_);
+    this._open(this._element);
   }
 
   /**
-   * Call private method collapse_
+   * Call private method _collapse
    *
    * @public
    * @function
    */
   collapse() {
-    this.collapse_(this.element_);
+    this._collapse(this._element);
   }
 
   /**
@@ -292,7 +292,7 @@ class Panel extends MObject {
    * @api
    */
   getControls() {
-    return this.controls_;
+    return this._controls;
   }
 
   /**
@@ -312,15 +312,15 @@ class Panel extends MObject {
       controls.forEach((control) => {
         if (control instanceof ControlBase) {
           if (!this.hasControl(control)) {
-            this.controls_.push(control);
+            this._controls.push(control);
             control.setPanel(this);
-            control.on(EventType.DESTROY, this.removeControl_.bind(this), this);
+            control.on(EventType.DESTROY, this._removeControl.bind(this), this);
           }
-          if (!isNullOrEmpty(this.controlsContainer_)) {
-            control.on(EventType.ADDED_TO_MAP, this.moveControlView_.bind(this), this);
-            this.map_.addControls(control);
+          if (!isNullOrEmpty(this._controlsContainer)) {
+            control.on(EventType.ADDED_TO_MAP, this._moveControlView.bind(this), this);
+            this._map.addControls(control);
           }
-          control.on(EventType.ACTIVATED, this.manageActivation_.bind(this), this);
+          control.on(EventType.ACTIVATED, this._manageActivation.bind(this), this);
         }
       });
     }
@@ -338,9 +338,9 @@ class Panel extends MObject {
     let hasControl = false;
     if (!isNullOrEmpty(controlParam)) {
       if (isString(controlParam)) {
-        hasControl = this.controls_.filter(control => control.name === controlParam)[0] != null;
+        hasControl = this._controls.filter(control => control.name === controlParam)[0] != null;
       } else if (controlParam instanceof ControlBase) {
-        hasControl = includes(this.controls_, controlParam);
+        hasControl = includes(this._controls, controlParam);
       }
     }
     return hasControl;
@@ -363,14 +363,14 @@ class Panel extends MObject {
       controls.forEach((controlParam) => {
         const control = controlParam;
         if ((control instanceof ControlBase) && this.hasControl(control)) {
-          this.controls_ = this.controls_.filter(control2 => !control.equals(control2));
+          this._controls = this._controls.filter(control2 => !control.equals(control2));
           control.setPanel(null);
         }
       }, this);
       // if this panel hasn't any controls then it's removed
       // from the map
-      if (this.controls_.length === 0) {
-        this.map_.removePanel(this);
+      if (this._controls.length === 0) {
+        this._map.removePanel(this);
       }
     }
   }
@@ -383,12 +383,12 @@ class Panel extends MObject {
    * @param {array<M.Control>} controls
    * @api
    */
-  removeControl_(controlsParam) {
-    const controls = this.map_.controls(controlsParam);
+  _removeControl(controlsParam) {
+    const controls = this._map.controls(controlsParam);
     controls.forEach((control) => {
-      const index = this.controls_.indexOf(control);
+      const index = this._controls.indexOf(control);
       if (index !== -1) {
-        this.controls_.splice(index, 1);
+        this._controls.splice(index, 1);
       }
     });
   }
@@ -402,10 +402,10 @@ class Panel extends MObject {
    * @api
    */
   removeClassName(className) {
-    if (!isNullOrEmpty(this.element_)) {
-      this.element_.classList.remove(className);
+    if (!isNullOrEmpty(this._element)) {
+      this._element.classList.remove(className);
     } else {
-      this.className_ = this.className_.replace(new RegExp(`s* ${className} s*`), '');
+      this._className = this._className.replace(new RegExp(`s* ${className} s*`), '');
     }
   }
 
@@ -418,10 +418,10 @@ class Panel extends MObject {
    * @api
    */
   addClassName(className) {
-    if (!isNullOrEmpty(this.element_)) {
-      this.element_.classList.add(className);
+    if (!isNullOrEmpty(this._element)) {
+      this._element.classList.add(className);
     } else {
-      this.className_ = this.className_.concat(' ').concat(className);
+      this._className = this._className.concat(' ').concat(className);
     }
   }
 
@@ -433,10 +433,10 @@ class Panel extends MObject {
    * @param {array<M.Control>} controls
    * @api
    */
-  moveControlView_(control) {
+  _moveControlView(control) {
     const controlElem = control.getElement();
-    if (!isNullOrEmpty(this.controlsContainer_)) {
-      this.controlsContainer_.appendChild(controlElem);
+    if (!isNullOrEmpty(this._controlsContainer)) {
+      this._controlsContainer.appendChild(controlElem);
     }
     control.fire(EventType.ADDED_TO_PANEL);
   }
@@ -449,9 +449,9 @@ class Panel extends MObject {
    * @param {array<M.Control>} controls
    * @api
    */
-  manageActivation_(control) {
-    if (this.multiActivation_ !== true) {
-      this.controls_.forEach((panelControl) => {
+  _manageActivation(control) {
+    if (this._multiActivation !== true) {
+      this._controls.forEach((panelControl) => {
         if (!panelControl.equals(control) && panelControl.activated) {
           panelControl.deactivate();
         }
@@ -484,7 +484,7 @@ class Panel extends MObject {
    * @returns {HTMLElement}
    */
   getTemplatePanel() {
-    return this.element_;
+    return this._element;
   }
 
   /**
@@ -496,7 +496,7 @@ class Panel extends MObject {
    * @returns {HTMLElement}
    */
   getButtonPanel() {
-    return this.buttonPanel_;
+    return this._buttonPanel;
   }
 
   /**
@@ -508,14 +508,14 @@ class Panel extends MObject {
    * @returns {Boolean}
    */
   isCollapsed() {
-    return this.collapsed_;
+    return this._collapsed;
   }
 
   /**
    * TODO
    */
   getControlsContainer() {
-    return this.controlsContainer_;
+    return this._controlsContainer;
   }
 }
 

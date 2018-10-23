@@ -15,7 +15,7 @@ import {
   enableTouchScroll,
   escapeJSCode,
   isString,
-  isObject,
+  isObject
 } from './util/Utils';
 import './util/handlebarshelpers';
 import Exception from './exception/exception';
@@ -94,21 +94,21 @@ class Map extends Base {
      * @type {array<Panel>}
      * @expose
      */
-    this.panels_ = [];
+    this._panels = [];
 
     /**
      * @private
      * @type {array<Plugin>}
      * @expose
      */
-    this.plugins_ = [];
+    this._plugins = [];
 
     /**
      * @private
      * @type {HTMLElement}
      * @expose
      */
-    this.areasContainer_ = null;
+    this._areasContainer = null;
 
     /**
      * The added popup
@@ -125,7 +125,7 @@ class Map extends Base {
      * @api
      * @expose
      */
-    this.defaultProj_ = true;
+    this._defaultProj = true;
 
     /**
      * @public
@@ -134,42 +134,42 @@ class Map extends Base {
      */
     this.panel = {
       LEFT: null,
-      RIGHT: 'null',
+      RIGHT: 'null'
     };
 
     /**
      * @private
      * @type {Number}
      */
-    this.userZoom_ = null;
+    this._userZoom = null;
 
     /**
      * TODO
      * @private
      * @type {Boolean}
      */
-    this.finishedInitCenter_ = true;
+    this._finishedInitCenter = true;
 
     /**
      * TODO
      * @private
      * @type {Boolean}
      */
-    this.finishedMaxExtent_ = true;
+    this._finishedMaxExtent = true;
 
     /**
      * TODO
      * @private
      * @type {Boolean}
      */
-    this.finishedMapImpl_ = false;
+    this._finishedMapImpl = false;
 
     /**
      * TODO
      * @private
      * @type {Boolean}
      */
-    this.finishedMap_ = false;
+    this._finishedMap = false;
 
     /**
      * Feature Center
@@ -189,8 +189,8 @@ class Map extends Base {
     params.container.classList.add('m-mapea-container');
 
     impl.on(EventType.COMPLETED, () => {
-      this.finishedMapImpl_ = true;
-      this.checkCompleted_();
+      this._finishedMapImpl = true;
+      this._checkCompleted();
     });
 
     // creates main panels
@@ -206,10 +206,8 @@ class Map extends Base {
     this.featuresHandler_.activate();
 
     this.drawLayer_ = new Vector({
-      name: '__draw__',
-    }, {
-      displayInLayerSwitcher: false,
-    });
+      name: '__draw__'
+    }, {displayInLayerSwitcher: false});
 
     this.drawLayer_.setStyle(new StylePoint(Map.DRAWLAYER_STYLE));
 
@@ -290,7 +288,7 @@ class Map extends Base {
     if (!isNullOrEmpty(params.center)) {
       this.setCenter(params.center);
     } else {
-      this.finishedInitCenter_ = false;
+      this._finishedInitCenter = false;
       this.getInitCenter_().then((initCenter) => {
         // checks if the user stablished a center while it was
         // calculated
@@ -300,7 +298,7 @@ class Map extends Base {
           this.setCenter(newCenter);
         }
 
-        this.finishedInitCenter_ = true;
+        this._finishedInitCenter = true;
         this.checkCompleted_();
       });
     }
@@ -316,8 +314,7 @@ class Map extends Base {
     }
 
     // initial zoom
-    if (isNullOrEmpty(params.bbox) && isNullOrEmpty(params.zoom) &&
-      isNullOrEmpty(params.center)) {
+    if (isNullOrEmpty(params.bbox) && isNullOrEmpty(params.zoom) && isNullOrEmpty(params.center)) {
       this.zoomToMaxExtent(true);
     }
 
@@ -359,7 +356,6 @@ class Map extends Base {
 
     return layers;
   }
-
 
   /**
    * This function gets the base layers added to the map
@@ -460,7 +456,8 @@ class Map extends Base {
         }
 
         // KML and WFS layers handler its features
-        if ((layer instanceof Vector) /* && !(layer instanceof KML) */ && !(layer instanceof WFS)) {
+        if ((layer instanceof Vector)/* && !(layer instanceof KML) */
+        && !(layer instanceof WFS)) {
           this.featuresHandler_.addLayer(layer);
         }
 
@@ -1188,7 +1185,7 @@ class Map extends Base {
                 panel = new Panel('map-info', {
                   collapsible: false,
                   className: 'm-map-info',
-                  position: Position.BR,
+                  position: Position.BR
                 });
                 panel.on(EventType.ADDED_TO_MAP, (html) => {
                   if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
@@ -1204,7 +1201,7 @@ class Map extends Base {
                 collapsible: false,
                 className: 'm-scaleline',
                 position: Position.BL,
-                tooltip: 'Línea de escala',
+                tooltip: 'Línea de escala'
               });
               panel.on(EventType.ADDED_TO_MAP, (html) => {
                 if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
@@ -1218,7 +1215,7 @@ class Map extends Base {
                 collapsible: false,
                 className: 'm-panzoombar',
                 position: Position.TL,
-                tooltip: 'Nivel de zoom',
+                tooltip: 'Nivel de zoom'
               });
               break;
             case Panzoom.NAME:
@@ -1226,7 +1223,7 @@ class Map extends Base {
               panel = new Panel(Panzoom.NAME, {
                 collapsible: false,
                 className: 'm-panzoom',
-                position: Position.TL,
+                position: Position.TL
               });
               break;
             case LayerSwitcher.NAME:
@@ -1239,7 +1236,7 @@ class Map extends Base {
                   className: 'm-layerswitcher',
                   collapsedButtonClass: 'g-cartografia-capas2',
                   position: Position.TR,
-                  tooltip: 'Selector de capas',
+                  tooltip: 'Selector de capas'
                 });
                 // enables touch scroll
                 panel.on(EventType.ADDED_TO_MAP, (html) => {
@@ -1264,7 +1261,7 @@ class Map extends Base {
                   collapsible: false,
                   className: 'm-map-info',
                   position: Position.BR,
-                  tooltip: 'Coordenadas del puntero',
+                  tooltip: 'Coordenadas del puntero'
                 });
               }
               panel.addClassName('m-with-mouse');
@@ -1273,15 +1270,13 @@ class Map extends Base {
               control = new Navtoolbar();
               break;
             case OverviewMap.NAME:
-              control = new OverviewMap({
-                toggleDelay: 400,
-              });
+              control = new OverviewMap({toggleDelay: 400});
               panel = this.getPanels('map-info')[0];
               if (isNullOrEmpty(panel)) {
                 panel = new Panel('map-info', {
                   collapsible: false,
                   className: 'm-map-info',
-                  position: Position.BR,
+                  position: Position.BR
                 });
               }
               panel.addClassName('m-with-overviewmap');
@@ -1291,7 +1286,7 @@ class Map extends Base {
               panel = new Panel(Location.NAME, {
                 collapsible: false,
                 className: 'm-location',
-                position: Position.BR,
+                position: Position.BR
               });
               break;
             case GetFeatureInfo.NAME:
@@ -1309,7 +1304,7 @@ class Map extends Base {
               panel = new Panel('map-info', {
                 collapsible: false,
                 className: 'm-map-info',
-                position: Position.BR,
+                position: Position.BR
               });
               panel.on(EventType.ADDED_TO_MAP, (html) => {
                 if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
@@ -1331,7 +1326,7 @@ class Map extends Base {
               className: 'm-tools',
               collapsedButtonClass: 'g-cartografia-herramienta',
               position: Position.TL,
-              tooltip: 'Panel de herramientas',
+              tooltip: 'Panel de herramientas'
             });
             //               this.addPanels([this.panel.TOOLS]);
           }
@@ -1346,7 +1341,7 @@ class Map extends Base {
               className: 'm-edition',
               collapsedButtonClass: 'g-cartografia-editar',
               position: Position.TL,
-              tooltip: 'Herramientas de edición',
+              tooltip: 'Herramientas de edición'
             });
             //               this.addPanels([this.panel.EDITION]);
           }
@@ -1557,7 +1552,7 @@ class Map extends Base {
     try {
       // parses the parameter
       const zoom = parameter.zoom(zoomParam);
-      this.userZoom_ = zoom;
+      this._userZoom = zoom;
       this.getImpl().setZoom(zoom);
     } catch (err) {
       Dialog.error(err.toString());
@@ -1620,7 +1615,7 @@ class Map extends Base {
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [center.x, center.y],
+          coordinates: [center.x, center.y]
         },
         properties: {
           vendor: {
@@ -1630,10 +1625,10 @@ class Map extends Base {
                 if (!isNullOrEmpty(label)) {
                   label.show(this);
                 }
-              },
-            },
-          },
-        },
+              }
+            }
+          }
+        }
       });
       this.drawFeatures([this.centerFeature_]);
     }
@@ -1787,7 +1782,7 @@ class Map extends Base {
       const oldProj = this.getProjection();
       projection = parameter.projection(projection);
       this.getImpl().setProjection(projection);
-      this.defaultProj_ = (this.defaultProj_ && (asDefault === true));
+      this._defaultProj = (this._defaultProj && (asDefault === true));
       this.fire(EventType.CHANGE_PROJ, [oldProj, projection]);
     } catch (err) {
       Dialog.error(err.toString());
@@ -1821,10 +1816,10 @@ class Map extends Base {
 
     // parse to Array
     if (names.length === 0) {
-      plugins = this.plugins_;
+      plugins = this._plugins;
     } else {
       names.forEach((name) => {
-        plugins = plugins.concat(this.plugins_.filter((plugin) => {
+        plugins = plugins.concat(this._plugins.filter((plugin) => {
           return (name === plugin.name);
         }));
       });
@@ -1853,7 +1848,7 @@ class Map extends Base {
       Exception('El plugin no puede añadirse al mapa');
     }
 
-    this.plugins_.push(plugin);
+    this._plugins.push(plugin);
     plugin.addTo(this);
 
     return this;
@@ -1882,7 +1877,7 @@ class Map extends Base {
       // removes controls from their panels
       plugins.forEach((plugin) => {
         plugin.destroy();
-        this.plugins_ = this.plugins_.filter(plugin2 => plugin.name !== plugin2.name);
+        this._plugins = this._plugins.filter(plugin2 => plugin.name !== plugin2.name);
       });
     }
 
@@ -1924,13 +1919,13 @@ class Map extends Base {
     } else {
       /* if no maxExtent was provided then
        calculates the envolved extent */
-      this.finishedMaxExtent_ = false;
+      this._finishedMaxExtent = false;
       this.getEnvolvedExtent().then((extent) => {
-        if (keepUserZoom !== true || isNullOrEmpty(this.userZoom_)) {
+        if (keepUserZoom !== true || isNullOrEmpty(this._userZoom)) {
           this.setBbox(extent);
         }
-        this.finishedMaxExtent_ = true;
-        this.checkCompleted_();
+        this._finishedMaxExtent = true;
+        this._checkCompleted();
       });
     }
 
@@ -1948,14 +1943,10 @@ class Map extends Base {
   setTicket(ticket) {
     if (!isNullOrEmpty(ticket)) {
       if (M.config.PROXY_POST_URL.indexOf('ticket=') === -1) {
-        M.config('PROXY_POST_URL', addParameters(M.config.PROXY_POST_URL, {
-          ticket,
-        }));
+        M.config('PROXY_POST_URL', addParameters(M.config.PROXY_POST_URL, {ticket}));
       }
       if (M.config.PROXY_URL.indexOf('ticket=') === -1) {
-        M.config('PROXY_URL', addParameters(M.config.PROXY_URL, {
-          ticket,
-        }));
+        M.config('PROXY_URL', addParameters(M.config.PROXY_URL, {ticket}));
       }
     }
 
@@ -1981,7 +1972,7 @@ class Map extends Base {
           // obtener centro del maxExtent
           center = {
             x: ((maxExtent.x.max + maxExtent.x.min) / 2),
-            y: ((maxExtent.y.max + maxExtent.y.min) / 2),
+            y: ((maxExtent.y.max + maxExtent.y.min) / 2)
           };
           success(center);
         } else {
@@ -1989,7 +1980,7 @@ class Map extends Base {
             // obtener centrol del extent
             center = {
               x: ((extent[0] + extent[2]) / 2),
-              y: ((extent[1] + extent[3]) / 2),
+              y: ((extent[1] + extent[3]) / 2)
             };
             success(center);
           });
@@ -2026,8 +2017,9 @@ class Map extends Base {
    * @api
    */
   addLabel(labelParam, coordParam) {
-    const panMapIfOutOfView = labelParam.panMapIfOutOfView ===
-      undefined ? true : labelParam.panMapIfOutOfView;
+    const panMapIfOutOfView = labelParam.panMapIfOutOfView === undefined
+      ? true
+      : labelParam.panMapIfOutOfView;
     // checks if the param is null or empty
     if (isNullOrEmpty(labelParam)) {
       Exception('No ha especificado ninguna proyección');
@@ -2076,7 +2068,6 @@ class Map extends Base {
     return this;
   }
 
-
   /**
    * This function removes the WMC layers to the map
    *
@@ -2088,7 +2079,6 @@ class Map extends Base {
   getLabel() {
     return this.getImpl().getLabel();
   }
-
 
   /**
    * This function removes the WMC layers to the map
@@ -2125,15 +2115,15 @@ class Map extends Base {
         type: 'Feature',
         geometry: {
           type: 'Point',
-          coordinates: [point.x, point.y],
+          coordinates: [point.x, point.y]
         },
-        properties: {},
+        properties: {}
       };
       if (isFunction(point.click)) {
         gj.properties.vendor = {
           mapea: {
-            click: point.click,
-          },
+            click: point.click
+          }
         };
       }
       return new Feature(null, gj);
@@ -2179,11 +2169,11 @@ class Map extends Base {
         panels = [panels];
       }
       panels.forEach((panel) => {
-        const isIncluded = this.panels_.some(panel2 => panel2.equals(panel));
+        const isIncluded = this._panels.some(panel2 => panel2.equals(panel));
         if ((panel instanceof Panel) && !isIncluded) {
-          this.panels_.push(panel);
+          this._panels.push(panel);
           const queryArea = 'div.m-area'.concat(panel.position);
-          const areaContainer = this.areasContainer_.querySelector(queryArea);
+          const areaContainer = this._areasContainer.querySelector(queryArea);
           panel.addTo(this, areaContainer);
         }
       });
@@ -2203,7 +2193,7 @@ class Map extends Base {
     }
     if (panel instanceof Panel) {
       panel.destroy();
-      this.panels_ = this.panels_.filter(panel2 => !panel2.equals(panel));
+      this._panels = this._panels.filter(panel2 => !panel2.equals(panel));
     }
 
     return this;
@@ -2222,13 +2212,13 @@ class Map extends Base {
 
     // parses parameters to Array
     if (isNullOrEmpty(names)) {
-      panels = this.panels_;
+      panels = this._panels;
     } else {
       if (!isArray(names)) {
         names = [names];
       }
       names.forEach((name) => {
-        const filteredPanels = this.panels_.filter(panel => panel.name === name);
+        const filteredPanels = this._panels.filter(panel => panel.name === name);
         filteredPanels.forEach((panel) => {
           if (!isNullOrEmpty(panel)) {
             panels.push(panel);
@@ -2248,8 +2238,8 @@ class Map extends Base {
    */
   createMainPanels_() {
     // areas container
-    this.areasContainer_ = document.createElement('div');
-    this.areasContainer_.classList.add('m-areas');
+    this._areasContainer = document.createElement('div');
+    this._areasContainer.classList.add('m-areas');
 
     // top-left area
     const tlArea = document.createElement('div');
@@ -2273,12 +2263,12 @@ class Map extends Base {
     brArea.classList.add('m-bottom');
     brArea.classList.add('m-right');
 
-    this.areasContainer_.appendChild(tlArea);
-    this.areasContainer_.appendChild(trArea);
-    this.areasContainer_.appendChild(blArea);
-    this.areasContainer_.appendChild(brArea);
+    this._areasContainer.appendChild(tlArea);
+    this._areasContainer.appendChild(trArea);
+    this._areasContainer.appendChild(blArea);
+    this._areasContainer.appendChild(brArea);
 
-    this.getContainer().appendChild(this.areasContainer_);
+    this.getContainer().appendChild(this._areasContainer);
   }
 
   /**
@@ -2378,8 +2368,8 @@ class Map extends Base {
    * @function
    */
   checkCompleted_() {
-    if (this.finishedInitCenter_ && this.finishedMaxExtent_ && this.finishedMapImpl_) {
-      this.finishedMap_ = true;
+    if (this._finishedInitCenter && this._finishedMaxExtent && this._finishedMapImpl) {
+      this._finishedMap = true;
       this.fire(EventType.COMPLETED);
     }
   }
@@ -2393,7 +2383,7 @@ class Map extends Base {
    */
   on(eventType, listener, optThis) {
     super.on(eventType, listener, optThis);
-    if ((eventType === EventType.COMPLETED) && (this.finishedMap_ === true)) {
+    if ((eventType === EventType.COMPLETED) && (this._finishedMap === true)) {
       this.fire(EventType.COMPLETED);
     }
   }
@@ -2422,7 +2412,7 @@ class Map extends Base {
    * @api
    */
   get defaultProj() {
-    return this.defaultProj_;
+    return this._defaultProj;
   }
 
   /**
@@ -2449,14 +2439,14 @@ class Map extends Base {
    * @returns {bool}
    */
   isFinished() {
-    return this.finishedMap_;
+    return this._finishedMap;
   }
 
   /**
    * areasContainer_ getter
    */
   get areasContainer() {
-    return this.areasContainer_;
+    return this._areasContainer;
   }
 }
 
@@ -2470,13 +2460,13 @@ class Map extends Base {
  */
 Map.DRAWLAYER_STYLE = {
   fill: {
-    color: '#009e00',
+    color: '#009e00'
   },
   stroke: {
     color: '#fcfcfc',
-    width: 2,
+    width: 2
   },
-  radius: 7,
+  radius: 7
 };
 
 export default Map;

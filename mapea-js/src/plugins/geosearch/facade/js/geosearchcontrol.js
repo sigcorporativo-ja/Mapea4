@@ -539,7 +539,7 @@ export default class GeosearchControl extends M.Control {
    * @function
    */
   resultsClick_(evt) {
-    this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-search');
+    this.facadeMap_._areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra-search');
     evt.target.classList.toggle('g-cartografia-flecha-arriba');
     evt.target.classList.toggle('g-cartografia-flecha-abajo');
     this.resultsContainer_.classList.toggle(GeosearchControl.HIDDEN_RESULTS_CLASS);
