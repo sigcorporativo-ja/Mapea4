@@ -12,7 +12,16 @@ import FacadeWMS from 'M/layer/WMS';
 import * as EventType from 'M/event/eventtype';
 import LayerBase from 'M/layer/Layer';
 import Exception from 'M/exception/exception';
-import { isNullOrEmpty, isArray, isString, isObject, includes, getScaleFromResolution, fillResolutions, generateResolutionsFromExtent } from 'M/util/Utils';
+import {
+  isNullOrEmpty,
+  isArray,
+  isString,
+  isObject,
+  includes,
+  getScaleFromResolution,
+  fillResolutions,
+  generateResolutionsFromExtent
+} from 'M/util/Utils';
 import View from './View';
 import EnvolvedExtent from './util/EnvolvedExtent';
 import './patches';
@@ -95,21 +104,21 @@ class Map extends MObject {
      * @private
      * @type {Boolean}
      */
-    this.calculatedResolutions_ = false;
+    this._calculatedResolutions = false;
 
     /**
      * calculated resolution form envolved extent
      * @private
      * @type {Boolean}
      */
-    this.resolutionsEnvolvedExtent_ = false;
+    this._resolutionsEnvolvedExtent = false;
 
     /**
      * calculated resolution form base layer
      * @private
      * @type {Boolean}
      */
-    this.resolutionsBaseLayer_ = false;
+    this._resolutionsBaseLayer = false;
 
     // gets the renderer
     // let renderer = ol.renderer.Type.CANVAS;
@@ -126,7 +135,7 @@ class Map extends MObject {
       controls: [],
       target: div.id,
       // renderer,
-      view: new View(),
+      view: new View()
     });
     this.facadeMap_.on(EventType.COMPLETED, () => {
       this.map_.updateSize();
@@ -138,7 +147,7 @@ class Map extends MObject {
           this.onMapMove_(e);
         }
         return true;
-      },
+      }
     }));
   }
   /**
@@ -159,11 +168,7 @@ class Map extends MObject {
     const mbtilesLayers = this.getMBtiles(filters);
     const unknowLayers = this.getUnknowLayers_(filters);
 
-    return wmcLayers.concat(kmlLayers).concat(wmsLayers)
-      .concat(wfsLayers)
-      .concat(wmtsLayers)
-      .concat(mbtilesLayers)
-      .concat(unknowLayers);
+    return wmcLayers.concat(kmlLayers).concat(wmsLayers).concat(wfsLayers).concat(wmtsLayers).concat(mbtilesLayers).concat(unknowLayers);
   }
 
   /**
@@ -178,8 +183,7 @@ class Map extends MObject {
   getBaseLayers() {
     const baseLayers = this.getLayers().filter((layer) => {
       let isBaseLayer = false;
-      if ((layer.type === LayerType.WMS) || (layer.type === LayerType.OSM) ||
-        (layer.type === LayerType.Mapbox) || (layer.type === LayerType.WMTS)) {
+      if ((layer.type === LayerType.WMS) || (layer.type === LayerType.OSM) || (layer.type === LayerType.Mapbox) || (layer.type === LayerType.WMTS)) {
         isBaseLayer = (layer.transparent !== true);
       }
       return isBaseLayer;
@@ -884,8 +888,7 @@ class Map extends MObject {
   addMBtiles(layers) {
     layers.forEach((layer) => {
       // checks if layer is MBtiles and was added to the map
-      if ((layer.type === LayerType.MBtiles) &&
-        !includes(this.layers_, layer)) {
+      if ((layer.type === LayerType.MBtiles) && !includes(this.layers_, layer)) {
         // TODO creating and adding the MBtiles layer with ol3
         this.layers_.push(layer);
       }
@@ -1187,12 +1190,12 @@ class Map extends MObject {
       extent = {
         x: {
           min: olExtent[0],
-          max: olExtent[2],
+          max: olExtent[2]
         },
         y: {
           min: olExtent[1],
-          max: olExtent[3],
-        },
+          max: olExtent[3]
+        }
       };
     } else {
       extent = this.envolvedMaxExtent_;
@@ -1254,12 +1257,12 @@ class Map extends MObject {
         bbox = {
           x: {
             min: olExtent[0],
-            max: olExtent[2],
+            max: olExtent[2]
           },
           y: {
             min: olExtent[1],
-            max: olExtent[3],
-          },
+            max: olExtent[3]
+          }
         };
       }
     }
@@ -1331,10 +1334,7 @@ class Map extends MObject {
     const olView = this.getMapImpl().getView();
     const srcCenter = olView.getCenter();
     if (!isNullOrEmpty(srcCenter)) {
-      this.getMapImpl().getView().animate({
-        duration: 250,
-        source: srcCenter,
-      });
+      this.getMapImpl().getView().animate({ duration: 250, source: srcCenter });
     }
     olView.setCenter(olCenter);
     return this;
@@ -1355,7 +1355,7 @@ class Map extends MObject {
     if (!isNullOrEmpty(olCenter)) {
       center = {
         x: olCenter[0],
-        y: olCenter[1],
+        y: olCenter[1]
       };
     }
     return center;
@@ -1405,9 +1405,7 @@ class Map extends MObject {
     const oldViewProperties = olMap.getView().getProperties();
     const userZoom = olMap.getView().getUserZoom();
 
-    const newView = new View({
-      projection,
-    });
+    const newView = new View({ projection });
     newView.setProperties(oldViewProperties);
     newView.setResolutions(resolutions);
     newView.setUserZoom(userZoom);
@@ -1421,9 +1419,7 @@ class Map extends MObject {
     });
 
     if (!isNullOrEmpty(this.userBbox_)) {
-      this.facadeMap_.setBbox(this.userBbox_, {
-        nearest: true,
-      });
+      this.facadeMap_.setBbox(this.userBbox_, { nearest: true });
     }
 
     return this;
@@ -1494,9 +1490,7 @@ class Map extends MObject {
     const resolution = olMap.getView().getResolution();
 
     // sets the new view
-    const newView = new View({
-      projection: olProjection,
-    });
+    const newView = new View({ projection: olProjection });
     newView.setProperties(oldViewProperties);
     newView.setUserZoom(userZoom);
     if (!isNullOrEmpty(resolutions)) {
@@ -1515,11 +1509,7 @@ class Map extends MObject {
     // recalculates maxExtent
     if (!isNullOrEmpty(prevMaxExtent)) {
       if (!isArray(prevMaxExtent)) {
-        prevMaxExtent = [prevMaxExtent.x.min,
-          prevMaxExtent.y.min,
-          prevMaxExtent.x.max,
-          prevMaxExtent.y.max,
-        ];
+        prevMaxExtent = [prevMaxExtent.x.min, prevMaxExtent.y.min, prevMaxExtent.x.max, prevMaxExtent.y.max];
       }
       this.facadeMap_.setMaxExtent(transformExtent(prevMaxExtent, olPrevProjection, olProjection));
     }
@@ -1527,16 +1517,9 @@ class Map extends MObject {
     // recalculates bbox
     if (!isNullOrEmpty(prevBbox)) {
       if (!isArray(prevBbox)) {
-        prevBbox = [
-          prevBbox.x.min,
-          prevBbox.y.min,
-          prevBbox.x.max,
-          prevBbox.y.max,
-        ];
+        prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
       }
-      this.facadeMap_.setBbox(transformExtent(prevBbox, olPrevProjection, olProjection), {
-        nearest: true,
-      });
+      this.facadeMap_.setBbox(transformExtent(prevBbox, olPrevProjection, olProjection), { nearest: true });
     }
 
     // recalculates center
@@ -1546,8 +1529,7 @@ class Map extends MObject {
         draw = true;
       }
       this.facadeMap_.setCenter(`${transform([
-        prevCenter.x,
-        prevCenter.y,
+        prevCenter.x, prevCenter.y
       ], olPrevProjection, olProjection)}*${draw}`);
     }
 
@@ -1597,12 +1579,11 @@ class Map extends MObject {
     if (!isNullOrEmpty(olProjection)) {
       projection = {
         code: olProjection.getCode(),
-        units: olProjection.getUnits(),
+        units: olProjection.getUnits()
       };
     }
     return projection;
   }
-
 
   getMapImpl() {
     return this.map_;
@@ -1701,28 +1682,28 @@ class Map extends MObject {
         resolutions = fillResolutions(minResolution, maxResolution, zoomLevels);
         this.setResolutions(resolutions, true);
 
-        this.resolutionsBaseLayer_ = true;
+        this._resolutionsBaseLayer = true;
 
         // checks if it was the first time to
         // calculate resolutions in that case
         // fires the completed event
-        if (this.calculatedResolutions_ === false) {
-          this.calculatedResolutions_ = true;
+        if (this._calculatedResolutions === false) {
+          this._calculatedResolutions = true;
           this.fire(EventType.COMPLETED);
         }
       } else {
         EnvolvedExtent.calculate(this).then((extent) => {
-          if (!this.resolutionsBaseLayer_ && (this.userResolutions_ === null)) {
+          if (!this._resolutionsBaseLayer && (this.userResolutions_ === null)) {
             resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
 
-            this.resolutionsEnvolvedExtent_ = true;
+            this._resolutionsEnvolvedExtent = true;
 
             // checks if it was the first time to
             // calculate resolutions in that case
             // fires the completed event
-            if (this.calculatedResolutions_ === false) {
-              this.calculatedResolutions_ = true;
+            if (this._calculatedResolutions === false) {
+              this._calculatedResolutions = true;
               this.fire(EventType.COMPLETED);
             }
           }
@@ -1831,11 +1812,13 @@ class Map extends MObject {
       label.hide();
     }
 
-    this.facadeMap_.fire(EventType.CLICK, [{
-      pixel,
-      coord,
-      vendor: evt,
-    }]);
+    this.facadeMap_.fire(EventType.CLICK, [
+      {
+        pixel,
+        coord,
+        vendor: evt
+      }
+    ]);
   }
 
   /**
@@ -1848,11 +1831,13 @@ class Map extends MObject {
     const pixel = evt.pixel;
     const coord = this.map_.getCoordinateFromPixel(pixel);
 
-    this.facadeMap_.fire(EventType.MOVE, [{
-      pixel,
-      coord,
-      vendor: evt,
-    }]);
+    this.facadeMap_.fire(EventType.MOVE, [
+      {
+        pixel,
+        coord,
+        vendor: evt
+      }
+    ]);
   }
 }
 /**
