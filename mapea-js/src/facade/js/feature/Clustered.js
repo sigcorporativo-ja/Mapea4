@@ -22,17 +22,6 @@ class Clustered extends Feature {
     this.setAttributes(attributes);
     this.setAttribute('features', features);
   }
-
-  /**
-   * This function return if two features are equals
-   * @public
-   * @function
-   * @param {M.Feature} feature
-   * @return {bool} returns the result of comparing two features
-   */
-  equals(feature) {
-    return this.id === feature.id;
-  }
 }
 
 export default Clustered;
