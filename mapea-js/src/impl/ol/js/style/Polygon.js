@@ -65,6 +65,7 @@ class Polygon extends Simple {
         const textLabel = Simple.getValue(options.label.text, featureVariable);
         const align = Simple.getValue(options.label.align, featureVariable);
         const baseline = Simple.getValue(options.label.baseline, featureVariable);
+        const overflow = isNullOrEmpty(options.label.overflow) ? true : options.label.overflow;
         style.setText(new OLStyleText({
           font: Simple.getValue(options.label.font, featureVariable),
           rotateWithView: Simple.getValue(options.label.rotate, featureVariable),
@@ -80,6 +81,7 @@ class Polygon extends Simple {
           textBaseline: Object.values(Baseline).includes(baseline) ? baseline : 'top',
           text: textLabel === undefined ? undefined : String(textLabel),
           rotation: Simple.getValue(options.label.rotation, featureVariable),
+          overflow: Simple.getValue(overflow, featureVariable),
         }));
         if (!isNullOrEmpty(options.label.stroke)) {
           style.getText().setStroke(new OLStyleStroke({
