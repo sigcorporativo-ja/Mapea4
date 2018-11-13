@@ -2,7 +2,7 @@
  * @module M/layer/Vector
  */
 import VectorImpl from 'impl/layer/Vector';
-import { isUndefined, isArray, isNullOrEmpty } from '../util/Utils';
+import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils';
 import { generateStyleLayer } from '../style/utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
@@ -284,9 +284,9 @@ class Vector extends LayerBase {
       style = defaultStyle;
     }
     if (this.getImpl().isLoaded()) {
-      this.applyStyle_(style, applyToFeature)();
+      this.applyStyle_(style, applyToFeature);
     } else {
-      this.once(EventType.LOAD, this.applyStyle_(style, applyToFeature));
+      this.once(EventType.LOAD, () => this.applyStyle_(style, applyToFeature));
     }
   }
 
@@ -294,29 +294,29 @@ class Vector extends LayerBase {
    * TODO
    */
   applyStyle_(styleParam, applyToFeature) {
-    return () => {
-      let style = styleParam;
-      if (!(style instanceof Style)) {
-        style = generateStyleLayer(style, this);
+    let style = styleParam;
+    if (isString(style)) {
+      style = Style.deserialize(style);
+    } else if (!(style instanceof Style)) {
+      style = generateStyleLayer(style, this);
+    }
+    // const isCluster = style instanceof StyleCluster;
+    // const isPoint = [POINT, MULTI_POINT].includes(this.getGeometryType());
+    if (style instanceof Style) /* && (!isCluster || isPoint) ) */ {
+      if (!isNullOrEmpty(this.style_)) {
+        this.style_.unapply(this);
       }
-      // const isCluster = style instanceof StyleCluster;
-      // const isPoint = [POINT, MULTI_POINT].includes(this.getGeometryType());
-      if (style instanceof Style) /* && (!isCluster || isPoint) ) */ {
-        if (!isNullOrEmpty(this.style_)) {
-          this.style_.unapply(this);
-        }
-        style.apply(this, applyToFeature);
-        this.style_ = style;
-        this.fire(EventType.CHANGE_STYLE, [style, this]);
-      }
-      if (!isNullOrEmpty(this.getImpl().getMap())) {
-        const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
-        if (!isNullOrEmpty(layerswitcher)) {
-          layerswitcher.render();
-        }
-      }
+      style.apply(this, applyToFeature);
+      this.style_ = style;
       this.fire(EventType.CHANGE_STYLE, [style, this]);
-    };
+    }
+    if (!isNullOrEmpty(this.getImpl().getMap())) {
+      const layerswitcher = this.getImpl().getMap().getControls('layerswitcher')[0];
+      if (!isNullOrEmpty(layerswitcher)) {
+        layerswitcher.render();
+      }
+    }
+    this.fire(EventType.CHANGE_STYLE, [style, this]);
   }
 
 

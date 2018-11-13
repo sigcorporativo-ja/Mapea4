@@ -29,6 +29,16 @@ class Polygon extends Simple {
     }
     options = extendsObj({}, options);
   }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @private
+   */
+  getDeserializedMethod_() {
+    return "((serializedParameters) => M.style.Simple.deserialize(serializedParameters, 'M.style.Polygon'))";
+  }
 }
 
 /**
