@@ -1008,6 +1008,8 @@ export const stringifyFunctions = (objParam) => {
         obj[key] = stringifyFunctions(val);
       }
     });
+  } else if (isFunction(objParam)) {
+    obj = `{{f}}${objParam.toString()}`;
   } else {
     obj = objParam;
   }
@@ -1023,18 +1025,24 @@ export const stringifyFunctions = (objParam) => {
  * @api
  */
 export const defineFunctionFromString = (objParam) => {
-  const obj = objParam;
-  Object.keys(obj).forEach((key) => {
-    const val = obj[key];
-    if (/^\{\{f\}\}/.test(val)) {
-      const functionStr = val.replace(/^\{\{f\}\}(.+)/, '$1');
-      /* eslint-disable */
-      obj[key] = new Function('f', `return ${functionStr}`)();
-      /* eslint-enable */
-    } else if (isObject(val)) {
-      defineFunctionFromString(val);
-    }
-  });
+  let obj = objParam;
+  if (/^\{\{f\}\}/.test(objParam)) {
+    const functionStr = objParam.replace(/^\{\{f\}\}(.+)/, '$1');
+    /* eslint-disable */
+    obj = new Function('f', `return ${functionStr}`)();
+  } else {
+    Object.keys(obj).forEach((key) => {
+      const val = obj[key];
+      if (/^\{\{f\}\}/.test(val)) {
+        const functionStr = val.replace(/^\{\{f\}\}(.+)/, '$1');
+        /* eslint-disable */
+        obj[key] = new Function('f', `return ${functionStr}`)();
+        /* eslint-enable */
+      } else if (isObject(val)) {
+        defineFunctionFromString(val);
+      }
+    });
+  }
   return obj;
 };
 

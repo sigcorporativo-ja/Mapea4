@@ -1,9 +1,10 @@
 /**
  * @module M/style/Choropleth
  */
+import StyleBase from './Style';
 import StyleComposite from './Composite';
 import * as StyleQuantification from './Quantification';
-import { isNullOrEmpty, generateColorScale, isArray, isString } from '../util/Utils';
+import { extendsObj, isNullOrEmpty, generateColorScale, isArray, isString, stringifyFunctions, defineFunctionFromString } from '../util/Utils';
 import Exception from '../exception/exception';
 import * as geometry from '../geom/GeoJSON';
 import * as Filter from '../filter/Filter';
@@ -463,6 +464,60 @@ class Choropleth extends StyleComposite {
    */
   get ORDER() {
     return 2;
+  }
+
+  /**
+   * This function implements the mechanism to
+   * generate the JSON of this instance
+   *
+   * @public
+   * @return {string}
+   * @function
+   * @api
+   */
+  toJSON() {
+    const attributeName = this.getAttributeName();
+    const styles = this.getChoroplethStyles().map(style => style.serialize());
+    let quantification = this.getQuantification();
+    if (isNullOrEmpty(quantification.name)) {
+      quantification = stringifyFunctions(quantification);
+    } else {
+      quantification = quantification.name;
+    }
+    let options = extendsObj({}, this.getOptions());
+    options = stringifyFunctions(options);
+
+    const parameters = [attributeName, styles, quantification, options];
+    const deserializedMethod = 'M.style.Choropleth.deserialize';
+    return { parameters, deserializedMethod };
+  }
+
+  /**
+   * This function returns the style instance of the serialization
+   * @function
+   * @public
+   * @param {string} serializedStyle - serialized style
+   * @param {string} className - class name of the style child
+   * @return {M.style.Simple}
+   */
+  static deserialize([serializedAttributeName, serializedStyles,
+    serializedQuantification, serializedOptions]) {
+    const attributeName = serializedAttributeName;
+    const styles = serializedStyles.map(serializedStyle =>
+      StyleBase.deserialize(serializedStyle));
+    let quantification;
+    if (serializedQuantification === 'jenks') {
+      quantification = StyleQuantification.JENKS();
+    } else if (serializedQuantification === 'quantile') {
+      quantification = StyleQuantification.QUANTILE();
+    } else {
+      quantification = defineFunctionFromString(serializedQuantification);
+    }
+    const options = defineFunctionFromString(serializedOptions);
+    /* eslint-disable */
+    const styleFn = new Function(['attributeName', 'styles', 'quantification', 'options'], `return new M.style.Choropleth(attributeName, styles, quantification, options)`);
+    /* eslint-enable */
+    return styleFn(attributeName, styles, quantification, options);
   }
 }
 
