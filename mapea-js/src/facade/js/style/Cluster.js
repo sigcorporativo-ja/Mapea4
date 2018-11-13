@@ -2,8 +2,9 @@
  * @module M/style/Cluster
  */
 import ClusterImpl from 'impl/style/Cluster';
+import Style from './Style';
 import Composite from './Composite';
-import { extendsObj, isNullOrEmpty } from '../util/Utils';
+import { extendsObj, isNullOrEmpty, stringifyFunctions, defineFunctionFromString } from '../util/Utils';
 
 /**
  * @classdesc
@@ -27,6 +28,12 @@ class Cluster extends Composite {
 
     extendsObj(options, Cluster.DEFAULT);
     extendsObj(optsVendor, Cluster.DEFAULT_VENDOR);
+
+    /**
+     * @private
+     * @type {Object}
+     */
+    this.optsVendor_ = optsVendor;
 
     /**
      * @private
@@ -227,6 +234,90 @@ class Cluster extends Composite {
   get ORDER() {
     return 4;
   }
+
+  // /**
+  //  * TODO
+  //  *
+  //  * @function
+  //  * @private
+  //  */
+  // getParameters_() {
+  //   let options = extendsObj({}, this.getOptions());
+  //   options.ranges = this.getRanges().map((r) => {
+  //     const range = extendsObj({}, r);
+  //     range.style = r.style.serialize();
+  //     return range;
+  //   });
+  //   options = stringifyFunctions(options);
+  //   const optsVendor = stringifyFunctions(this.optsVendor_);
+  //   return [options, optsVendor];
+  // }
+  //
+  // /**
+  //  * TODO
+  //  *
+  //  * @function
+  //  * @private
+  //  */
+  // getClassName_() {
+  //   return 'M.style.Cluster';
+  // }
+  //
+  // /**
+  //  * This function returns the style instance of the serialization
+  //  * @function
+  //  * @public
+  //  * @param {string} serializedStyle - serialized style
+  //  * @return {M.Style}
+  //  */
+  // static deserializeParameters(serializedParams) {
+  //   return defineFunctionFromString(serializedParams);
+  // }
+
+  /**
+   * This function implements the mechanism to
+   * generate the JSON of this instance
+   *
+   * @public
+   * @return {string}
+   * @function
+   * @api
+   */
+  toJSON() {
+    let options = extendsObj({}, this.getOptions());
+    options.ranges = this.getRanges().map((r) => {
+      const range = extendsObj({}, r);
+      range.style = r.style.serialize();
+      return range;
+    });
+    options = stringifyFunctions(options);
+    const optsVendor = stringifyFunctions(this.optsVendor_);
+    const parameters = [options, optsVendor];
+    const deserializedMethod = 'M.style.Cluster.deserialize';
+    return { parameters, deserializedMethod };
+  }
+
+  /**
+   * This function returns the style instance of the serialization
+   * @function
+   * @public
+   * @param {string} serializedStyle - serialized style
+   * @param {string} className - class name of the style child
+   * @return {M.style.Simple}
+   */
+  static deserialize([serializedOptions, serializedVendor]) {
+    let options = serializedOptions;
+    options.ranges.forEach((r) => {
+      const range = r;
+      range.style = Style.deserialize(r.style);
+    });
+    options = defineFunctionFromString(serializedOptions);
+    const vendors = defineFunctionFromString(serializedVendor);
+    /* eslint-disable */
+    const styleFn = new Function(['options', 'optsVendor'], `return new M.style.Cluster(options, optsVendor)`);
+    /* eslint-enable */
+    return styleFn(options, vendors);
+  }
 }
 
 /**
@@ -247,7 +338,7 @@ Cluster.DEFAULT = {
     text: (feature) => {
       let text;
       const cluseterFeatures = feature.getAttribute('features');
-      if (!isNullOrEmpty(cluseterFeatures)) {
+      if (cluseterFeatures.length) {
         text = cluseterFeatures.length.toString();
       }
       return text;
