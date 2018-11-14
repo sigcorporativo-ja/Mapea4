@@ -68,15 +68,17 @@ const layerNodeToJSON = (wmsNode, isRoot = true, rootObj = {}, parent = null) =>
   if (isRoot === true) {
     node = wmsNode.querySelector('Layer');
   }
-  propagateNodeLayer(parent, node);
-  const name = node.querySelector('Name').innerHTML;
-  const children = node.children;
-  Array.prototype.forEach.call(children, (child) => {
-    if (child.tagName === 'Layer') {
-      rootObjVar = layerNodeToJSON(child, false, rootObjVar, node);
-    }
-  });
-  rootObjVar[name] = node;
+  if (node !== null) {
+    propagateNodeLayer(parent, node);
+    const name = node.querySelector('Name').innerHTML;
+    const children = node.children;
+    Array.prototype.forEach.call(children, (child) => {
+      if (child.tagName === 'Layer') {
+        rootObjVar = layerNodeToJSON(child, false, rootObjVar, node);
+      }
+    });
+    rootObjVar[name] = node;
+  }
   return rootObjVar;
 };
 
