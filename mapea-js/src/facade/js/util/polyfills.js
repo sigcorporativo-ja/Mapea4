@@ -14,7 +14,7 @@ const polyfill = () => {
      * @function
      * @api
      */
-    Array.prototype.includes = (searchElement) => {
+    Array.prototype.includes = function includes(searchElement) {
       let O = Object(this);
       let len = parseInt(O.length) || 0;
       if (len === 0) {
@@ -33,8 +33,7 @@ const polyfill = () => {
       let currentElement;
       while (k < len) {
         currentElement = O[k];
-        if (searchElement === currentElement || Object.equals(searchElement, currentElement) ||
-          (searchElement !== searchElement && currentElement !== currentElement)) {
+        if (searchElement === currentElement || Object.equals(searchElement, currentElement) || (searchElement !== searchElement && currentElement !== currentElement)) {
           return true;
         }
         k++;
@@ -75,15 +74,14 @@ const polyfill = () => {
       let currentElement;
       while (k < len) {
         currentElement = O[k];
-        if (elementToRemove === currentElement || Object.equals(elementToRemove, currentElement) ||
-          (elementToRemove !== elementToRemove && currentElement !== currentElement)) {
+        if (elementToRemove === currentElement || Object.equals(elementToRemove, currentElement) || (elementToRemove !== elementToRemove && currentElement !== currentElement)) {
           idxsToRemove.push(k);
         }
         k++;
       }
       // removes elements
       let offset = 0;
-      idxsToRemove.forEach(function(idx) {
+      idxsToRemove.forEach(function (idx) {
         idx += offset;
         O.splice(idx, 1);
         offset--;
@@ -128,11 +126,7 @@ const polyfill = () => {
         // Works in case when functions are created in constructor.
         // Comparing dates is a common scenario. Another built-ins?
         // We can even handle functions passed across iframes
-        if ((typeof obj1 === 'function' && typeof obj2 === 'function') ||
-          (obj1 instanceof Date && obj2 instanceof Date) ||
-          (obj1 instanceof RegExp && obj2 instanceof RegExp) ||
-          (obj1 instanceof String && obj2 instanceof String) ||
-          (obj1 instanceof Number && obj2 instanceof Number)) {
+        if ((typeof obj1 === 'function' && typeof obj2 === 'function') || (obj1 instanceof Date && obj2 instanceof Date) || (obj1 instanceof RegExp && obj2 instanceof RegExp) || (obj1 instanceof String && obj2 instanceof String) || (obj1 instanceof Number && obj2 instanceof Number)) {
           return obj1.toString() === obj2.toString();
         }
 
