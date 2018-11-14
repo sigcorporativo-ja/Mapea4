@@ -116,7 +116,7 @@ class Point extends Simple {
       if (!isNullOrEmpty(options.fill)) {
         const fillColorValue = Simple.getValue(options.fill.color, featureVariable);
         let fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable);
-        if (!fillOpacityValue && fillOpacityValue !== 0) {
+        if (!Number.isFinite(fillOpacityValue)) {
           fillOpacityValue = 1;
         }
         if (!isNullOrEmpty(fillColorValue)) {

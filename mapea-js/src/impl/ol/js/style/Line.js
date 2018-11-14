@@ -113,7 +113,7 @@ class Line extends Simple {
       if (!isNullOrEmpty(options.fill)) {
         const fillColorValue = Simple.getValue(options.fill.color, featureVariable);
         let fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable);
-        if (!fillOpacityValue && fillOpacityValue !== 0) {
+        if (!Number.isFinite(fillOpacityValue)) {
           fillOpacityValue = 1;
         }
         const widthValue = Simple.getValue(options.fill.width, featureVariable);
