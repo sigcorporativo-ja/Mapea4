@@ -298,7 +298,7 @@ class Style extends Base {
    * @public
    */
   serialize() {
-    return window.btoa(JSON.stringify(this));
+    return window.btoa(unescape(encodeURIComponent(JSON.stringify(this))));
   }
 
   /**
@@ -309,7 +309,7 @@ class Style extends Base {
    * @return {M.Style}
    */
   static deserialize(encodedSerializedStyle) {
-    const serializedStyle = window.atob(encodedSerializedStyle);
+    const serializedStyle = decodeURIComponent(escape(window.atob(encodedSerializedStyle)));
     const { parameters, deserializedMethod } = JSON.parse(serializedStyle);
     /* eslint-disable */
     return (new Function("serializedParams", `return ${deserializedMethod}(serializedParams)`))(parameters);
