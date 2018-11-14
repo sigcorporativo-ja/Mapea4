@@ -291,7 +291,8 @@ class Cluster extends Composite {
       return range;
     });
     options = stringifyFunctions(options);
-    const optsVendor = stringifyFunctions(this.optsVendor_);
+    let optsVendor = extendsObj({}, this.optsVendor_);
+    optsVendor = stringifyFunctions(optsVendor);
     const parameters = [options, optsVendor];
     const deserializedMethod = 'M.style.Cluster.deserialize';
     return { parameters, deserializedMethod };
