@@ -17,7 +17,6 @@ import {
   isString,
   isObject,
 } from './util/Utils';
-import './util/handlebarshelpers';
 import Exception from './exception/exception';
 import Label from './Label';
 import Popup from './Popup';
