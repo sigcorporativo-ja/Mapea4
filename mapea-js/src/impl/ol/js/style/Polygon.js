@@ -97,7 +97,10 @@ class Polygon extends Simple {
       }
       if (!isNullOrEmpty(options.fill)) {
         const fillColorValue = Simple.getValue(options.fill.color, featureVariable);
-        const fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable) || 1;
+        let fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable);
+        if (!fillOpacityValue && fillOpacityValue !== 0) {
+          fillOpacityValue = 1;
+        }
         let fill;
         if (!isNullOrEmpty(fillColorValue)) {
           fill = new OLStyleFill({
@@ -107,7 +110,10 @@ class Polygon extends Simple {
         if (!isNullOrEmpty(options.fill.pattern)) {
           let color = 'rgba(0,0,0,1)';
           if (!isNullOrEmpty(options.fill.pattern.color)) {
-            const opacity = Simple.getValue(options.fill.pattern.opacity, featureVariable) || 1;
+            let opacity = Simple.getValue(options.fill.pattern.opacity, featureVariable) || 1;
+            if (!opacity && opacity !== 0) {
+              opacity = 1;
+            }
             color = chroma(options.fill.pattern.color).alpha(opacity).css();
           }
           style.setFill(new OLStyleFillPattern({

@@ -40,6 +40,16 @@ class Line extends Simple {
   unapply(layer) {
     this.getImpl().unapply(layer);
   }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @private
+   */
+  getDeserializedMethod_() {
+    return "((serializedParameters) => M.style.Simple.deserialize(serializedParameters, 'M.style.Line'))";
+  }
 }
 
 /**

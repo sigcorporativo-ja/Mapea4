@@ -986,6 +986,67 @@ export const getImageSize = (url) => {
 };
 
 /**
+ * This functions replaces functions into string
+ * @function
+ * @public
+ * @param {object} objParam
+ * @return {obj}
+ * @api
+ */
+export const stringifyFunctions = (objParam) => {
+  let obj;
+  if (isArray(objParam)) {
+    obj = [...objParam];
+    obj = obj.map(stringifyFunctions);
+  } else if (isObject(objParam)) {
+    obj = extendsObj({}, objParam);
+    Object.keys(obj).forEach((key) => {
+      const val = obj[key];
+      if (isFunction(val)) {
+        obj[key] = `{{f}}${val.toString()}`;
+      } else if (isObject(val)) {
+        obj[key] = stringifyFunctions(val);
+      }
+    });
+  } else if (isFunction(objParam)) {
+    obj = `{{f}}${objParam.toString()}`;
+  } else {
+    obj = objParam;
+  }
+  return obj;
+};
+
+/**
+ * This functions replaces functions into string
+ * @function
+ * @public
+ * @param {object} objParam
+ * @return {obj}
+ * @api
+ */
+export const defineFunctionFromString = (objParam) => {
+  let obj = objParam;
+  if (/^\{\{f\}\}/.test(objParam)) {
+    const functionStr = objParam.replace(/^\{\{f\}\}(.+)/, '$1');
+    /* eslint-disable */
+    obj = new Function('f', `return ${functionStr}`)();
+  } else {
+    Object.keys(obj).forEach((key) => {
+      const val = obj[key];
+      if (/^\{\{f\}\}/.test(val)) {
+        const functionStr = val.replace(/^\{\{f\}\}(.+)/, '$1');
+        /* eslint-disable */
+        obj[key] = new Function('f', `return ${functionStr}`)();
+        /* eslint-enable */
+      } else if (isObject(val)) {
+        defineFunctionFromString(val);
+      }
+    });
+  }
+  return obj;
+};
+
+/**
  * TODO
  */
 export const classToggle = (htmlElement, className) => {

@@ -112,7 +112,10 @@ class Line extends Simple {
       let fill;
       if (!isNullOrEmpty(options.fill)) {
         const fillColorValue = Simple.getValue(options.fill.color, featureVariable);
-        const fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable) || 1;
+        let fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable);
+        if (!fillOpacityValue && fillOpacityValue !== 0) {
+          fillOpacityValue = 1;
+        }
         const widthValue = Simple.getValue(options.fill.width, featureVariable);
         if (!isNullOrEmpty(fillColorValue)) {
           fill = new OLStyleStroke({

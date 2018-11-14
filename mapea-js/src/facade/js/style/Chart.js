@@ -5,7 +5,7 @@ import ChartImpl from 'impl/style/Chart';
 import StyleFeature from './Feature';
 import ChartVariable from '../chart/Variable';
 import * as ChartTypes from '../chart/types';
-import { isNullOrEmpty } from '../util/Utils';
+import { isNullOrEmpty, extendsObj, isArray, stringifyFunctions, defineFunctionFromString } from '../util/Utils';
 
 /**
  * @classdesc
@@ -135,6 +135,66 @@ class Chart extends StyleFeature {
    */
   get ORDER() {
     return 1;
+  }
+
+  /**
+   * This function implements the mechanism to
+   * generate the JSON of this instance
+   *
+   * @public
+   * @return {string}
+   * @function
+   * @api
+   */
+  toJSON() {
+    const options = this.getOptions();
+    const serializedOptions = {
+      type: options.type,
+      radius: options.radius,
+      donutRadio: options.donutRadio,
+      offsetX: options.offsetX,
+      offsetY: options.offsetY,
+      stroke: isNullOrEmpty(options.stroke) ? undefined : extendsObj({}, options.stroke),
+      fill3DColor: options.fill3DColor,
+      scheme: isArray(options.scheme) ? [...options.scheme] : options.scheme,
+      label: isNullOrEmpty(options.label) ? undefined : extendsObj({}, options.label),
+      rotateWithView: options.rotateWithView,
+      variables: options.variables.map((variable) => {
+        let label;
+        if (!isNullOrEmpty(variable.label)) {
+          label = extendsObj({}, variable.label);
+          label = stringifyFunctions(label);
+        }
+        return {
+          attribute: variable.attribute,
+          legend: variable.legend,
+          fill: variable.fillColor,
+          label,
+        };
+      }),
+    };
+
+    const parameters = [serializedOptions];
+    const deserializedMethod = 'M.style.Chart.deserialize';
+    return { parameters, deserializedMethod };
+  }
+
+  /**
+   * This function returns the style instance of the serialization
+   * @function
+   * @public
+   * @param {string} serializedStyle - serialized style
+   * @param {string} className - class name of the style child
+   * @return {M.style.Simple}
+   */
+  static deserialize([serializedOptions]) {
+    const options = serializedOptions;
+    options.variables = serializedOptions.variables.map(variableOpt =>
+      new ChartVariable(defineFunctionFromString(variableOpt)));
+    /* eslint-disable */
+    const styleFn = new Function(['options'], `return new M.style.Chart(options)`);
+    /* eslint-enable */
+    return styleFn(options);
   }
 }
 
