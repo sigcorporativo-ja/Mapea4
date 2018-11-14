@@ -1,8 +1,9 @@
 /**
  * @module M/style/Category
  */
+import StyleBase from './Style';
 import Composite from './Composite';
-import { isNullOrEmpty, getImageSize, isArray } from '../util/Utils';
+import { isNullOrEmpty, getImageSize, isArray, extendsObj, stringifyFunctions, defineFunctionFromString } from '../util/Utils';
 import Exception from '../exception/exception';
 import StyleProportional from './Proportional';
 import StyleCluster from './Cluster';
@@ -322,6 +323,51 @@ class Category extends Composite {
       });
     }
     return categories;
+  }
+
+  /**
+   * This function implements the mechanism to
+   * generate the JSON of this instance
+   *
+   * @public
+   * @return {string}
+   * @function
+   * @api
+   */
+  toJSON() {
+    const attributeName = this.getAttributeName();
+    const categoryStyles = this.getCategories();
+    const serializedCategoryStyles = {};
+    Object.keys(categoryStyles).forEach((category) => {
+      serializedCategoryStyles[category] = categoryStyles[category].serialize();
+    });
+    let options = extendsObj({}, this.getOptions());
+    options = stringifyFunctions(options);
+
+    const parameters = [attributeName, serializedCategoryStyles, options];
+    const deserializedMethod = 'M.style.Category.deserialize';
+    return { parameters, deserializedMethod };
+  }
+
+  /**
+   * This function returns the style instance of the serialization
+   * @function
+   * @public
+   * @param {string} serializedStyle - serialized style
+   * @param {string} className - class name of the style child
+   * @return {M.style.Simple}
+   */
+  static deserialize([serializedAttributeName, serializedCategoryStyles, serializedOptions]) {
+    const attributeName = serializedAttributeName;
+    const categoryStyles = serializedCategoryStyles;
+    Object.keys(serializedCategoryStyles).forEach((category) => {
+      categoryStyles[category] = StyleBase.deserialize(serializedCategoryStyles[category]);
+    });
+    const options = defineFunctionFromString(serializedOptions);
+    /* eslint-disable */
+    const styleFn = new Function(['attributeName', 'categoryStyles', 'options'], `return new M.style.Category(attributeName, categoryStyles, options)`);
+    /* eslint-enable */
+    return styleFn(attributeName, categoryStyles, options);
   }
 }
 
