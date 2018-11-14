@@ -471,7 +471,7 @@ class Choropleth extends StyleComposite {
    * generate the JSON of this instance
    *
    * @public
-   * @return {string}
+   * @return {object}
    * @function
    * @api
    */
@@ -497,9 +497,9 @@ class Choropleth extends StyleComposite {
    * This function returns the style instance of the serialization
    * @function
    * @public
-   * @param {string} serializedStyle - serialized style
-   * @param {string} className - class name of the style child
-   * @return {M.style.Simple}
+   * @param {Array} parametrers - parameters to deserialize and create
+   * the instance
+   * @return {M.style.Choropleth}
    */
   static deserialize([serializedAttributeName, serializedStyles,
     serializedQuantification, serializedOptions, serializedCompStyles]) {

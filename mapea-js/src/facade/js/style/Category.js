@@ -330,7 +330,7 @@ class Category extends Composite {
    * generate the JSON of this instance
    *
    * @public
-   * @return {string}
+   * @return {object}
    * @function
    * @api
    */
@@ -354,9 +354,9 @@ class Category extends Composite {
    * This function returns the style instance of the serialization
    * @function
    * @public
-   * @param {string} serializedStyle - serialized style
-   * @param {string} className - class name of the style child
-   * @return {M.style.Simple}
+   * @param {Array} parametrers - parameters to deserialize and create
+   * the instance
+   * @return {M.style.Category}
    */
   static deserialize([serializedAttributeName, serializedCategoryStyles,
     serializedOptions, serializedCompStyles]) {

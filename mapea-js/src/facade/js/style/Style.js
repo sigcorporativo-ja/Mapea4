@@ -279,7 +279,7 @@ class Style extends Base {
    * generate the JSON of this instance
    *
    * @public
-   * @return {string}
+   * @return {object}
    * @function
    * @api
    */
