@@ -293,7 +293,9 @@ class Cluster extends Composite {
     options = stringifyFunctions(options);
     let optsVendor = extendsObj({}, this.optsVendor_);
     optsVendor = stringifyFunctions(optsVendor);
-    const parameters = [options, optsVendor];
+    const compStyles = this.getStyles().map(style => style.serialize());
+
+    const parameters = [options, optsVendor, compStyles];
     const deserializedMethod = 'M.style.Cluster.deserialize';
     return { parameters, deserializedMethod };
   }
@@ -306,7 +308,7 @@ class Cluster extends Composite {
    * @param {string} className - class name of the style child
    * @return {M.style.Simple}
    */
-  static deserialize([serializedOptions, serializedVendor]) {
+  static deserialize([serializedOptions, serializedVendor, serializedCompStyles]) {
     let options = serializedOptions;
     options.ranges.forEach((r) => {
       const range = r;
@@ -317,7 +319,13 @@ class Cluster extends Composite {
     /* eslint-disable */
     const styleFn = new Function(['options', 'optsVendor'], `return new M.style.Cluster(options, optsVendor)`);
     /* eslint-enable */
-    return styleFn(options, vendors);
+    const deserializedStyle = styleFn(options, vendors);
+
+    const compStyles = serializedCompStyles.map(serializedStyle =>
+      Style.deserialize(serializedStyle));
+    deserializedStyle.add(compStyles);
+
+    return deserializedStyle;
   }
 }
 

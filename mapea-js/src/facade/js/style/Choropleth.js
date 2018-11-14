@@ -486,8 +486,9 @@ class Choropleth extends StyleComposite {
     }
     let options = extendsObj({}, this.getOptions());
     options = stringifyFunctions(options);
+    const compStyles = this.getStyles().map(style => style.serialize());
 
-    const parameters = [attributeName, styles, quantification, options];
+    const parameters = [attributeName, styles, quantification, options, compStyles];
     const deserializedMethod = 'M.style.Choropleth.deserialize';
     return { parameters, deserializedMethod };
   }
@@ -501,7 +502,7 @@ class Choropleth extends StyleComposite {
    * @return {M.style.Simple}
    */
   static deserialize([serializedAttributeName, serializedStyles,
-    serializedQuantification, serializedOptions]) {
+    serializedQuantification, serializedOptions, serializedCompStyles]) {
     const attributeName = serializedAttributeName;
     const styles = serializedStyles.map(serializedStyle =>
       StyleBase.deserialize(serializedStyle));
@@ -517,7 +518,13 @@ class Choropleth extends StyleComposite {
     /* eslint-disable */
     const styleFn = new Function(['attributeName', 'styles', 'quantification', 'options'], `return new M.style.Choropleth(attributeName, styles, quantification, options)`);
     /* eslint-enable */
-    return styleFn(attributeName, styles, quantification, options);
+    const deserializedStyle = styleFn(attributeName, styles, quantification, options);
+
+    const compStyles = serializedCompStyles.map(serializedStyle =>
+      StyleBase.deserialize(serializedStyle));
+    deserializedStyle.add(compStyles);
+
+    return deserializedStyle;
   }
 }
 

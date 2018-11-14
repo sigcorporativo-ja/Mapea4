@@ -548,7 +548,6 @@ class Proportional extends StyleComposite {
     const attributeName = serializedAttributeName;
     const minRadius = serializedMinRadius;
     const maxRadius = serializedMaxRadius;
-    const styles = serializedStyles.map(serializedStyle => StyleBase.deserialize(serializedStyle));
     const proportionalFunction = defineFunctionFromString(serializedProportionalFunction);
     const options = defineFunctionFromString(serializedOptions);
 
@@ -556,11 +555,13 @@ class Proportional extends StyleComposite {
     const styleFn = new Function(['attributeName', 'minRadius', 'maxRadius', 'style',
     'proportionalFunction', 'options'], `return new M.style.Proportional(attributeName,
     minRadius, maxRadius, style, proportionalFunction, options)`);
+    const deserializedStyle = styleFn(attributeName, minRadius, maxRadius,undefined, proportionalFunction, options);
     /* eslint-enable */
 
-    // TODO se pasa el primer style del array ¿qué se hace con el resto?
-    // ¿se llama posteriormente a setStyles?
-    return styleFn(attributeName, minRadius, maxRadius, styles[0], proportionalFunction, options);
+    const styles = serializedStyles.map(serializedStyle => StyleBase.deserialize(serializedStyle));
+    deserializedStyle.add(styles);
+
+    return deserializedStyle;
   }
 }
 

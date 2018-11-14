@@ -343,8 +343,9 @@ class Category extends Composite {
     });
     let options = extendsObj({}, this.getOptions());
     options = stringifyFunctions(options);
+    const compStyles = this.getStyles().map(style => style.serialize());
 
-    const parameters = [attributeName, serializedCategoryStyles, options];
+    const parameters = [attributeName, serializedCategoryStyles, options, compStyles];
     const deserializedMethod = 'M.style.Category.deserialize';
     return { parameters, deserializedMethod };
   }
@@ -357,7 +358,8 @@ class Category extends Composite {
    * @param {string} className - class name of the style child
    * @return {M.style.Simple}
    */
-  static deserialize([serializedAttributeName, serializedCategoryStyles, serializedOptions]) {
+  static deserialize([serializedAttributeName, serializedCategoryStyles,
+    serializedOptions, serializedCompStyles]) {
     const attributeName = serializedAttributeName;
     const categoryStyles = serializedCategoryStyles;
     Object.keys(serializedCategoryStyles).forEach((category) => {
@@ -367,7 +369,13 @@ class Category extends Composite {
     /* eslint-disable */
     const styleFn = new Function(['attributeName', 'categoryStyles', 'options'], `return new M.style.Category(attributeName, categoryStyles, options)`);
     /* eslint-enable */
-    return styleFn(attributeName, categoryStyles, options);
+    const deserializedStyle = styleFn(attributeName, categoryStyles, options);
+
+    const compStyles = serializedCompStyles.map(serializedStyle =>
+      StyleBase.deserialize(serializedStyle));
+    deserializedStyle.add(compStyles);
+
+    return deserializedStyle;
   }
 }
 
