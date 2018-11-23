@@ -54,7 +54,7 @@ const polyfill = () => {
      * @public
      * @function
      */
-    Array.prototype.remove = (elementToRemove) => {
+    Array.prototype.remove = function (elementToRemove) {
       let O = Object(this);
       let len = parseInt(O.length) || 0;
       if (len === 0) {
@@ -169,7 +169,7 @@ const polyfill = () => {
             return false;
           }
 
-          switch (typeof(obj1[p])) {
+          switch (typeof (obj1[p])) {
             case 'object':
             case 'function':
 
