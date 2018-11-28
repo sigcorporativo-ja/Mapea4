@@ -1107,6 +1107,32 @@ const getIdsWFS = (parameter) => {
 };
 
 /**
+ * Parses the parameter in order to get the style
+ * @private
+ * @function
+ */
+const getStyleWFS = (parameter) => {
+  let params;
+  let style;
+
+  if (isString(parameter)) {
+    if (/^WFS(T)?\*.+/i.test(parameter)) {
+      // <WFS(T)?>*(<TITLE>)?*<URL>*<NAMESPACE>:<NAME>*<GEOM>...
+      // ...*<FEATURE_ID1>-<FEATURE_ID2>*<CQL>*<STYLE>...
+      if (/^WFS(T)?\*[^*]*\*[^*]+\*[^*]+:[^*]+\*[^*]+\*[^*]*\*[^*]*\*[^*]*/i.test(parameter)) {
+        params = parameter.split(/\*/);
+        style = params[7].trim();
+      }
+    }
+  } else if (isObject(parameter) && !isNullOrEmpty(parameter.style)) {
+    style = parameter.style;
+  } else if (!isObject(parameter)) {
+    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
+  }
+  return style;
+};
+
+/**
  * Parses the parameter in order to get the version
  * @private
  * @function
@@ -1196,11 +1222,178 @@ export const wfs = (userParameters) => {
     // gets the version
     layerObj.version = getVersionWFS(userParam);
 
+    // gets the styles
+    layerObj.style = getStyleWFS(userParam);
+
     // gets the options
     layerObj.options = getOptionsWFS(userParam);
 
     // format specified by the user when create object WFS
     layerObj.outputFormat = userParameters.outputFormat;
+
+    return layerObj;
+  });
+
+  if (!isArray(userParameters)) {
+    layers = layers[0];
+  }
+
+  return layers;
+};
+
+
+/**
+ * Parses the parameter in order to get the layer legend
+ * @private
+ * @function
+ */
+const getLegendGeoJSON = (parameter) => {
+  let legend;
+  let params;
+  if (isString(parameter)) {
+    // <GeoJSON(T)?>*<TYPE>*<LEGEND>...
+    if (/^GeoJSON(T)?\*[^*]/i.test(parameter)) {
+      params = parameter.split(/\*/);
+      legend = params[1].trim();
+    } else if (/^[^*]+\*[^*]+:[^*]+\*[^*]+/.test(parameter)) {
+      // <TYPE>*<LEGEND>...
+      params = parameter.split(/\*/);
+      legend = params[2].trim();
+    }
+  } else if (isObject(parameter) && !isNullOrEmpty(parameter.legend)) {
+    legend = parameter.legend.trim();
+  } else if (!isObject(parameter)) {
+    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
+  }
+
+  if (isUrl(legend) || /^(true|false)$/i.test(legend)) {
+    legend = null;
+  }
+  return legend;
+};
+
+/**
+ * Parses the parameter in order to get the service URL
+ * @private
+ * @function
+ */
+const getURLGeoJSON = (parameter) => {
+  let url;
+  if (isString(parameter)) {
+    const urlMatches = parameter.match(/^([^*]*\*)*(https?:\/\/[^*]+)([^*]*\*?)*$/i);
+    if (urlMatches && (urlMatches.length > 2)) {
+      url = urlMatches[2];
+    }
+  } else if (isObject(parameter)) {
+    url = parameter.url;
+  } else {
+    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
+  }
+  return url;
+};
+
+/**
+ * Parses the parameter in order to get the transparence
+ * @private
+ * @function
+ */
+const getExtractGeoJSON = (parameter) => {
+  let extract;
+  let params;
+  let hideParams;
+  if (isString(parameter)) {
+    // [TYPE]*[LEGEND]*[URL]*[EXTRACT/HIDE]*[STYLE]
+    if (/^GeoJSON\*[^*]+\*[^*]+\*[^*]*(true|false)/i.test(parameter)) {
+      params = parameter.split(/\*/);
+      extract = params[3].trim();
+    } else {
+      params = parameter.split(/\*/);
+      hideParams = params[3];
+      if (!isNullOrEmpty(hideParams)) {
+        extract = [hideParams];
+      } else {
+        extract = false;
+      }
+    }
+  } else if (isObject(parameter)) {
+    extract = normalize(parameter.extract);
+  } else {
+    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
+  }
+
+  return extract;
+};
+
+/**
+ * Parses the parameter in order to get the style
+ * @private
+ * @function
+ */
+const getStyleGeoJSON = (parameter) => {
+  let params;
+  let style;
+
+  if (isString(parameter)) {
+    if (/^GeoJSON(T)?\*.+/i.test(parameter)) {
+      // [TYPE]*[LEGEND]*[URL]*[EXTRACT/HIDE]*[STYLE]
+      if (/^GeoJSON(T)?\*[^*]*\*[^*]+\*[^*]+\*[^*]*/i.test(parameter)) {
+        params = parameter.split(/\*/);
+        style = params[4].trim();
+      } else if (/^GeoJSON(T)?\*[^*]*\*[^*]+\*/i.test(parameter)) {
+        params = parameter.split(/\*/);
+        style = params[4].trim();
+      }
+    }
+  } else if (isObject(parameter) && !isNullOrEmpty(parameter.style)) {
+    style = parameter.style;
+  } else if (!isObject(parameter)) {
+    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
+  }
+  return style;
+};
+
+
+/**
+ * Parses the specified user layer GeoJSON parameters to a object
+ *
+ * @param {string|Mx.parameters.Layer} userParameters parameters
+ * provided by the user
+ * @returns {Mx.parameters.GeoJSON|Array<Mx.parameters.GeoJSON>}
+ * @public
+ * @function
+ * @api
+ */
+export const geojson = (userParameters) => {
+  let layers = [];
+
+  // checks if the param is null or empty
+  if (isNullOrEmpty(userParameters)) {
+    Exception('No ha especificado ningún parámetro');
+  }
+
+  // checks if the parameter is an array
+  let userParametersArray = userParameters;
+  if (!isArray(userParametersArray)) {
+    userParametersArray = [userParametersArray];
+  }
+
+  layers = userParametersArray.map((userParam) => {
+    const layerObj = {};
+
+    // gets the layer type
+    layerObj.type = LayerType.GeoJSON;
+
+    // gets the name
+    layerObj.legend = getLegendGeoJSON(userParam);
+
+    // gets the URL
+    layerObj.url = getURLGeoJSON(userParam);
+
+    // gets the name
+    layerObj.extract = getExtractGeoJSON(userParam);
+
+    // gets the styles
+    layerObj.style = getStyleGeoJSON(userParam);
 
     return layerObj;
   });
@@ -1876,6 +2069,7 @@ const parameterFunction = {
   wmc,
   wms,
   wmts,
+  geojson,
 };
 
 
