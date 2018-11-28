@@ -415,7 +415,7 @@ class Map extends Base {
           if (!isNullOrEmpty(parameterVariable.type)) {
             switch (parameterVariable.type) {
               case 'WFS':
-                layer = new WFS(layerParam);
+                layer = new WFS(layerParam, { style: parameterVariable.style });
                 break;
               case 'WMC':
                 layer = new WMC(layerParam);
@@ -424,7 +424,7 @@ class Map extends Base {
                 layer = new WMS(layerParam);
                 break;
               case 'GeoJSON':
-                layer = new GeoJSON(layerParam);
+                layer = new GeoJSON(parameterVariable, { style: parameterVariable.style });
                 break;
               case 'OSM':
                 layer = new OSM(layerParam);
