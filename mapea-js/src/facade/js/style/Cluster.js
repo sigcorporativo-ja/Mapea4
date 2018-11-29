@@ -199,7 +199,7 @@ class Cluster extends Composite {
    */
   toImage() {
     let base64Img;
-    if (!isNullOrEmpty(this.oldStyle_)) {
+    if (this.oldStyle_ instanceof Style) {
       base64Img = this.oldStyle_.toImage();
     } else {
       base64Img = super.toImage();
