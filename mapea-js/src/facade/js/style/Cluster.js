@@ -337,6 +337,7 @@ class Cluster extends Composite {
  * @api
  */
 Cluster.DEFAULT = {
+  ranges: [],
   hoverInteraction: true,
   displayAmount: true,
   selectInteraction: true,
