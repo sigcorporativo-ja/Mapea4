@@ -96,5 +96,5 @@ module.exports = {
       to: 'assets/img',
     }]),
   ],
-  devtool: sourcemap ? 'source-map' : '',
+  devtool: 'source-map',
 };
