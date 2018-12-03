@@ -3,7 +3,7 @@
  */
 import HeatmapImpl from 'impl/style/Heatmap';
 import Style from './Style';
-import { isString, isFunction, isArray, inverseColor, isNullOrEmpty, generateIntervals, extendsObj } from '../util/Utils';
+import { isString, isFunction, isArray, inverseColor, isNullOrEmpty, generateIntervals, extendsObj, defineFunctionFromString } from '../util/Utils';
 import Exception from '../exception/exception';
 
 /**
@@ -234,6 +234,49 @@ class Heatmap extends Style {
    */
   updateCanvas() {
     this.drawGeometryToCanvas();
+  }
+
+  /**
+   * This function implements the mechanism to
+   * generate the JSON of this instance
+   *
+   * @public
+   * @return {object}
+   * @function
+   * @api
+   */
+  toJSON() {
+    const attribute = this.getAttributeName();
+    const options = this.getOptions();
+    const serializedOptions = {
+      gradient: [...options.gradient],
+      blur: options.blur,
+      radius: options.radius,
+      weight: options.weight,
+    };
+    const vendorOptions = this.vendorOptions_;
+    const parameters = [attribute, serializedOptions, vendorOptions];
+    const deserializedMethod = 'M.style.Heatmap.deserialize';
+    return { parameters, deserializedMethod };
+  }
+
+  /**
+   * This function returns the style instance of the serialization
+   * @function
+   * @public
+   * @param {Array} parametrers - parameters to deserialize and create
+   * the instance
+   * @return {M.style.Heatmap}
+   */
+  static deserialize([serializedAttribute, serializedOptions, serializedVendorOptions]) {
+    const attribute = serializedAttribute;
+    const options = defineFunctionFromString(serializedOptions);
+    const vendorOptions = defineFunctionFromString(serializedVendorOptions);
+
+    /* eslint-disable */
+    const styleFn = new Function(['attribute', 'options', 'vendorOptions'], `return new M.style.Heatmap(attribute, options, vendorOptions)`);
+    /* eslint-enable */
+    return styleFn(attribute, options, vendorOptions);
   }
 }
 

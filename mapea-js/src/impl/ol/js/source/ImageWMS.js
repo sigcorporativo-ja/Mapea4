@@ -1,10 +1,14 @@
+/**
+ * @module M/impl/source/ImageWMS
+ */
 import OLSourceImageWMS from 'ol/source/ImageWMS';
 
 /**
  * @classdesc
  * Source for WMS servers providing single, untiled images.
+ * @api
  */
-export default class ImageWMS extends OLSourceImageWMS {
+class ImageWMS extends OLSourceImageWMS {
   /**
    * @constructor
    * @fires ol.source.ImageEvent
@@ -41,3 +45,5 @@ export default class ImageWMS extends OLSourceImageWMS {
     imageVariable.getImage().src = `${src}&_=${this.revision_}`;
   }
 }
+
+export default ImageWMS;

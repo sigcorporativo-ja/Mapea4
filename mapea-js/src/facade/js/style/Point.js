@@ -37,6 +37,16 @@ class Point extends Simple {
   toImage() {
     return this.getImpl().toImage(this.canvas_);
   }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @private
+   */
+  getDeserializedMethod_() {
+    return "((serializedParameters) => M.style.Simple.deserialize(serializedParameters, 'M.style.Point'))";
+  }
 }
 
 /**

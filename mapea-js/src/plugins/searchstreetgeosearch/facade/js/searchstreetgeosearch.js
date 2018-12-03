@@ -98,8 +98,8 @@ export default class SearchstreetGeosearch extends M.Plugin {
     /* eslint-disable */
     // JGL20170816: foco al input al desplegar panel
     this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {
-      this.panel_.buttonPanel_.addEventListener('click', (evt) => {
-        if (!this.panel_.collapsed) {
+      this.panel_._buttonPanel.addEventListener('click', (evt) => {
+        if (!this.panel_._collapsed) {
           this.control_.getInput().focus();
         }
       });

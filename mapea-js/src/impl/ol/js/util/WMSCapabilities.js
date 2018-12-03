@@ -1,16 +1,18 @@
+/**
+ * @module M/impl/GetCapabilities
+ */
 import { isNullOrEmpty, isArray, isObject, isUndefined } from 'M/util/Utils';
 import WMS from 'M/layer/WMS';
 import { get as getProj, transformExtent } from 'ol/proj';
 
 /**
- * @namespace M.impl.GetCapabilities
+ * @classdesc
+ * Main constructor of the class. Creates a WMS layer
+ * with parameters specified by the user
+ * @api
  */
-export default class GetCapabilities {
+class GetCapabilities {
   /**
-   * @classdesc
-   * Main constructor of the class. Creates a WMS layer
-   * with parameters specified by the user
-   *
    * @constructor
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
    * @api stable
@@ -154,11 +156,10 @@ export default class GetCapabilities {
         layers = layers.concat(this.getLayersRecursive_(layerElem));
       });
     } else { // base case
-      layers.push(new WMS({
-        url: this.serviceUrl_,
-        name: layer.Name,
-      }));
+      layers.push(new WMS({ url: this.serviceUrl_, name: layer.Name }));
     }
     return layers;
   }
 }
+
+export default GetCapabilities;

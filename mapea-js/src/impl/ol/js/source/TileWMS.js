@@ -1,11 +1,16 @@
+/**
+ * @module M/impl/source/TileWMS
+ */
 import { isNullOrEmpty } from 'M/util/Utils';
 import OLSourceTileWMS from 'ol/source/TileWMS';
 
-export default class TileWMS extends OLSourceTileWMS {
+/**
+ * @classdesc
+ * Layer source for tile data from WMS servers.
+ * @api
+ */
+class TileWMS extends OLSourceTileWMS {
   /**
-   * @classdesc
-   * Layer source for tile data from WMS servers.
-   *
    * @constructor
    * @extends {ol.source.TileImage}
    * @param {olx.source.TileWMSOptions=} opt_options Tile WMS options.
@@ -46,3 +51,5 @@ export default class TileWMS extends OLSourceTileWMS {
     imageTile.getImage().src = `${src}&_= ${this.revision_}`;
   }
 }
+
+export default TileWMS;

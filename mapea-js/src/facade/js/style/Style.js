@@ -2,7 +2,7 @@
  * @module M/Style
  */
 import Base from '../Base';
-import { isNullOrEmpty, isArray, isObject, extendsObj } from '../util/Utils';
+import { isNullOrEmpty, isArray, isObject, extendsObj, stringifyFunctions } from '../util/Utils';
 import * as EventType from '../event/eventtype';
 
 /**
@@ -240,11 +240,6 @@ class Style extends Base {
   }
 
   /**
-   * TODO
-   */
-  static serialize() {}
-
-  /**
    * This function updates the styles's canvas
    *
    * @public
@@ -277,6 +272,48 @@ class Style extends Base {
     const ImplClass = this.getImpl().constructor;
     const implClone = new ImplClass(optsClone);
     return new this.constructor(optsClone, implClone);
+  }
+
+  /**
+   * This function implements the mechanism to
+   * generate the JSON of this instance
+   *
+   * @public
+   * @return {object}
+   * @function
+   * @api
+   */
+  toJSON() {
+    const parameters = [stringifyFunctions(this.getOptions())];
+    const deserializedMethod = this.getDeserializedMethod_();
+    return { parameters, deserializedMethod };
+  }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @return {String}
+   * @api
+   * @public
+   */
+  serialize() {
+    return window.btoa(unescape(encodeURIComponent(JSON.stringify(this))));
+  }
+
+  /**
+   * This function returns the style instance of the serialization
+   * @function
+   * @public
+   * @param {string} serializedStyle - serialized style
+   * @return {M.Style}
+   */
+  static deserialize(encodedSerializedStyle) {
+    const serializedStyle = decodeURIComponent(escape(window.atob(encodedSerializedStyle)));
+    const { parameters, deserializedMethod } = JSON.parse(serializedStyle);
+    /* eslint-disable */
+    return (new Function("serializedParams", `return ${deserializedMethod}(serializedParams)`))(parameters);
+    /* eslint-enable */
   }
 }
 

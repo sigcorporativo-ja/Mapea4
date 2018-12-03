@@ -8,7 +8,7 @@ const generateInfo = require('./generate-info');
 const generateOLInfo = require('./generate-ol-info');
 
 const EXTERNS_LIBRARIES = require('./externs-libraries.js');
-
+const CUSTOM_NAMESPACES = require('./custom-namespaces');
 /**
  * Read the symbols from info file.
  * @return {Promise<Array>} Resolves with an array of symbol objects.
@@ -163,6 +163,20 @@ async function includeExterns(libraries, outputFilePath) {
 }
 
 /**
+ * Concat custom namespaces
+ * @param {array<object>} libraries - Object array of libraries -> [{name, path}]
+ * @param {string} outputFilePath - output file path
+ */
+async function includeCustomNamespaces(customNamespaces, outputFilePath) {
+  customNamespaces.forEach((library) => {
+    const requireLine = `${library.name} = ${library.object}`;
+    fse.writeFileSync(path.resolve(__dirname, outputFilePath), requireLine, {
+      flag: 'a',
+    });
+  });
+}
+
+/**
  * Generate the exports code.
  * @return {Promise<string>} Resolves with the exports code.
  */
@@ -186,6 +200,7 @@ if (require.main === module) {
     const filepath = path.join(__dirname, '..', 'src', 'index.js');
     fse.outputFileSync(filepath, code);
     includeExterns(EXTERNS_LIBRARIES, '../src/index.js');
+    includeCustomNamespaces(CUSTOM_NAMESPACES, '../src/index.js');
   }).then(async () => {}).catch((err) => {
     process.stderr.write(`${err.message}\n`, () => process.exit(1));
   });

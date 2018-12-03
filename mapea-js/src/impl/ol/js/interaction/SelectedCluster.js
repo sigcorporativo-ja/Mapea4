@@ -7,6 +7,7 @@ import OLSourceVector from 'ol/source/Vector';
 import OLCollection from 'ol/Collection';
 import { unByKey } from 'ol/Observable';
 import { easeOut } from 'ol/easing';
+import Icon from '../point/Icon';
 import Utils from '../util/Utils';
 
 export default class SelectCluster extends OLInteractionSelect {
@@ -286,17 +287,11 @@ export default class SelectCluster extends OLInteractionSelect {
           // draw links
           const st2 = this.overlayLayer_.getStyle()(mFeature, res).map(s => s.clone());
           for (let s = 0; s < st2.length; s += 1) {
-            const style = st2[s];
-            if (!style.getImage().size) {
-              style.getImage().size = [42, 42];
+            const styleLink = st2[s];
+            if (!styleLink.getImage().size) {
+              styleLink.getImage().size = [42, 42];
             }
-            const imgs = style.getImage();
-            // let sc;
-            if (imgs) {
-              // sc = imgs.getScale();
-              // imgs.setScale(ratio); // setImageStyle don't check retina
-            }
-            vectorContext.setStyle(style);
+            vectorContext.setStyle(styleLink);
             vectorContext.drawLineString(new OLGeomLineString([center, pt]));
           }
 
@@ -312,26 +307,19 @@ export default class SelectCluster extends OLInteractionSelect {
             const style = st[s];
             const imgs = style.getImage();
 
-            // let sc;
-            if (imgs) {
-              // sc = imgs.getScale();
-              // imgs.setScale(ratio); // setImageStyle don't check retina
-              if (imgs.getOrigin() == null) {
-                imgs.origin = [];
-              }
-              if (imgs.getAnchor() == null) {
-                imgs.normalizedAnchor = [];
-              }
-              if (imgs.getSize() == null) {
-                imgs.size = [42, 42];
-              }
+            if (imgs instanceof Icon) {
+              const newOrigin = imgs.getOrigin() == null ? [0, 0] : imgs.getOrigin();
+              const newAnchor = imgs.getAnchor() == null ? [0, 0] : imgs.getAnchor();
+              const newSize = imgs.getSize() == null ? [42, 42] : imgs.getSize();
+              imgs.size = newSize;
+              imgs.anchor = newAnchor;
+              imgs.origin = newOrigin;
+              style.setImage(imgs);
             }
             // OL3 > v3.14
             // if (vectorContext.setStyle) {
             vectorContext.setStyle(style);
             vectorContext.drawGeometry(geo);
-            // }
-            // if (imgs) imgs.setScale(sc);
           }
         }
         // Stop animation and restore cluster visibility

@@ -100,9 +100,7 @@ class WMC extends Layer {
             proj = this.map.getProjection().code;
           }
           const wmcDocument = response.xml;
-          const formater = new FormatWMC({
-            projection: proj,
-          });
+          const formater = new FormatWMC({ projection: proj });
           const context = formater.readFromDocument(wmcDocument);
           success.call(this, context);
         });
@@ -119,9 +117,7 @@ class WMC extends Layer {
         // load layers
         this.loadLayers(context);
         if (!isNullOrEmpty(bbox)) {
-          this.map.setBbox(bbox, {
-            nearest: true,
-          });
+          this.map.setBbox(bbox, { nearest: true });
         }
         this.map.fire(EventType.CHANGE_WMC, this);
       });
@@ -176,7 +172,6 @@ class WMC extends Layer {
   setFacadeObj(obj) {
     this.facadeLayer_ = obj;
   }
-
 
   /**
    * This function gets the envolved extent for

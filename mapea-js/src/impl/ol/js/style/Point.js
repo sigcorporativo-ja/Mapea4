@@ -97,7 +97,7 @@ class Point extends Simple {
         featureVariable = this;
       }
       const style = new Centroid({
-        zIndex: Simple.getValue(options.zindex, featureVariable),
+        zIndex: Simple.getValue(options.zindex, featureVariable, this.layer_),
         geometry: (olFeature) => {
           const center = Utils.getCentroid(olFeature.getGeometry());
           const centroidGeometry = new OLGeomPoint(center);
@@ -105,7 +105,7 @@ class Point extends Simple {
         },
       });
       const styleIcon = new Centroid({
-        zIndex: Simple.getValue(options.zindex, featureVariable),
+        zIndex: Simple.getValue(options.zindex, featureVariable, this.layer_),
         geometry: (olFeature) => {
           const center = Utils.getCentroid(olFeature.getGeometry());
           const centroidGeometry = new OLGeomPoint(center);
@@ -114,8 +114,11 @@ class Point extends Simple {
       });
       let fill;
       if (!isNullOrEmpty(options.fill)) {
-        const fillColorValue = Simple.getValue(options.fill.color, featureVariable);
-        const fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable) || 1;
+        const fillColorValue = Simple.getValue(options.fill.color, featureVariable, this.layer_);
+        let fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable, this.layer_);
+        if (!fillOpacityValue && fillOpacityValue !== 0) {
+          fillOpacityValue = 1;
+        }
         if (!isNullOrEmpty(fillColorValue)) {
           fill = new OLStyleFill({
             color: chroma(fillColorValue)
@@ -125,48 +128,52 @@ class Point extends Simple {
       }
       let stroke;
       if (!isNullOrEmpty(options.stroke)) {
-        const strokeColorValue = Simple.getValue(options.stroke.color, featureVariable);
+        const strokeColorValue =
+          Simple.getValue(options.stroke.color, featureVariable, this.layer_);
         if (!isNullOrEmpty(strokeColorValue)) {
           stroke = new OLStyleStroke({
             color: strokeColorValue,
-            width: Simple.getValue(options.stroke.width, featureVariable),
-            lineDash: Simple.getValue(options.stroke.linedash, featureVariable),
-            lineDashOffset: Simple.getValue(options.stroke.linedashoffset, featureVariable),
-            lineCap: Simple.getValue(options.stroke.linecap, featureVariable),
-            lineJoin: Simple.getValue(options.stroke.linejoin, featureVariable),
-            miterLimit: Simple.getValue(options.stroke.miterlimit, featureVariable),
+            width: Simple.getValue(options.stroke.width, featureVariable, this.layer_),
+            lineDash: Simple.getValue(options.stroke.linedash, featureVariable, this.layer_),
+            lineDashOffset:
+              Simple.getValue(options.stroke.linedashoffset, featureVariable, this.layer_),
+            lineCap: Simple.getValue(options.stroke.linecap, featureVariable, this.layer_),
+            lineJoin: Simple.getValue(options.stroke.linejoin, featureVariable, this.layer_),
+            miterLimit: Simple.getValue(options.stroke.miterlimit, featureVariable, this.layer_),
           });
         }
       }
       if (!isNullOrEmpty(options.label)) {
-        const textLabel = Simple.getValue(options.label.text, featureVariable);
-        const align = Simple.getValue(options.label.align, featureVariable);
-        const baseline = Simple.getValue(options.label.baseline, featureVariable);
+        const textLabel = Simple.getValue(options.label.text, featureVariable, this.layer_);
+        const align = Simple.getValue(options.label.align, featureVariable, this.layer_);
+        const baseline = Simple.getValue(options.label.baseline, featureVariable, this.layer_);
         const labelText = new OLStyleText({
-          font: Simple.getValue(options.label.font, featureVariable),
-          rotateWithView: Simple.getValue(options.label.rotate, featureVariable),
-          scale: Simple.getValue(options.label.scale, featureVariable),
+          font: Simple.getValue(options.label.font, featureVariable, this.layer_),
+          rotateWithView: Simple.getValue(options.label.rotate, featureVariable, this.layer_),
+          scale: Simple.getValue(options.label.scale, featureVariable, this.layer_),
           offsetX: Simple.getValue(options.label.offset ?
-            options.label.offset[0] : undefined, featureVariable),
+            options.label.offset[0] : undefined, featureVariable, this.layer_),
           offsetY: Simple.getValue(options.label.offset ?
-            options.label.offset[1] : undefined, featureVariable),
+            options.label.offset[1] : undefined, featureVariable, this.layer_),
           fill: new OLStyleFill({
-            color: Simple.getValue(options.label.color || '#000000', featureVariable),
+            color: Simple.getValue(options.label.color || '#000000', featureVariable, this.layer_),
           }),
           textAlign: Object.values(Align).includes(align) ? align : 'center',
           textBaseline: Object.values(Baseline).includes(baseline) ? baseline : 'top',
           text: textLabel === undefined ? undefined : String(textLabel),
-          rotation: Simple.getValue(options.label.rotation, featureVariable),
+          rotation: Simple.getValue(options.label.rotation, featureVariable, this.layer_),
         });
         if (!isNullOrEmpty(options.label.stroke)) {
           labelText.setStroke(new OLStyleStroke({
-            color: Simple.getValue(options.label.stroke.color, featureVariable),
-            width: Simple.getValue(options.label.stroke.width, featureVariable),
-            lineCap: Simple.getValue(options.label.stroke.linecap, featureVariable),
-            lineJoin: Simple.getValue(options.label.stroke.linejoin, featureVariable),
-            lineDash: Simple.getValue(options.label.stroke.linedash, featureVariable),
-            lineDashOffset: Simple.getValue(options.label.stroke.linedashoffset, featureVariable),
-            miterLimit: Simple.getValue(options.label.stroke.miterlimit, featureVariable),
+            color: Simple.getValue(options.label.stroke.color, featureVariable, this.layer_),
+            width: Simple.getValue(options.label.stroke.width, featureVariable, this.layer_),
+            lineCap: Simple.getValue(options.label.stroke.linecap, featureVariable, this.layer_),
+            lineJoin: Simple.getValue(options.label.stroke.linejoin, featureVariable, this.layer_),
+            lineDash: Simple.getValue(options.label.stroke.linedash, featureVariable, this.layer_),
+            lineDashOffset:
+              Simple.getValue(options.label.stroke.linedashoffset, featureVariable, this.layer_),
+            miterLimit:
+              Simple.getValue(options.label.stroke.miterlimit, featureVariable, this.layer_),
           }));
         }
         style.setText(labelText);
@@ -174,60 +181,60 @@ class Point extends Simple {
       style.setImage(new PointCircle({
         fill,
         stroke,
-        radius: Simple.getValue(options.radius, featureVariable),
-        snapToPixel: Simple.getValue(options.snapToPixel, featureVariable),
+        radius: Simple.getValue(options.radius, featureVariable, this.layer_),
+        snapToPixel: Simple.getValue(options.snapToPixel, featureVariable, this.layer_),
         // forceGeometryRender: options.forceGeometryRender
       }));
       if (!isNullOrEmpty(options.icon)) {
         if (!isNullOrEmpty(options.icon.src)) {
           styleIcon.setImage(new PointIcon({
-            anchor: Simple.getValue(options.icon.anchor, featureVariable),
-            anchorXUnits: Simple.getValue(options.icon.anchorxunits, featureVariable),
-            anchorYUnits: Simple.getValue(options.icon.anchoryunits, featureVariable),
-            src: Simple.getValue(options.icon.src, featureVariable),
-            opacity: Simple.getValue(options.icon.opacity, featureVariable),
-            scale: Simple.getValue(options.icon.scale, featureVariable),
-            rotation: Simple.getValue(options.icon.rotation, featureVariable),
-            rotateWithView: Simple.getValue(options.icon.rotate, featureVariable),
-            snapToPixel: Simple.getValue(options.icon.snaptopixel, featureVariable),
-            offsetOrigin: Simple.getValue(options.icon.offsetorigin, featureVariable),
-            offset: Simple.getValue(options.icon.offset, featureVariable),
-            crossOrigin: Simple.getValue(options.icon.crossorigin, featureVariable),
-            anchorOrigin: Simple.getValue(options.icon.anchororigin, featureVariable),
-            size: Simple.getValue(options.icon.size, featureVariable),
+            anchor: Simple.getValue(options.icon.anchor, featureVariable, this.layer_),
+            anchorXUnits: Simple.getValue(options.icon.anchorxunits, featureVariable, this.layer_),
+            anchorYUnits: Simple.getValue(options.icon.anchoryunits, featureVariable, this.layer_),
+            src: Simple.getValue(options.icon.src, featureVariable, this.layer_),
+            opacity: Simple.getValue(options.icon.opacity, featureVariable, this.layer_),
+            scale: Simple.getValue(options.icon.scale, featureVariable, this.layer_),
+            rotation: Simple.getValue(options.icon.rotation, featureVariable, this.layer_),
+            rotateWithView: Simple.getValue(options.icon.rotate, featureVariable, this.layer_),
+            snapToPixel: Simple.getValue(options.icon.snaptopixel, featureVariable, this.layer_),
+            offsetOrigin: Simple.getValue(options.icon.offsetorigin, featureVariable, this.layer_),
+            offset: Simple.getValue(options.icon.offset, featureVariable, this.layer_),
+            crossOrigin: Simple.getValue(options.icon.crossorigin, featureVariable, this.layer_),
+            anchorOrigin: Simple.getValue(options.icon.anchororigin, featureVariable, this.layer_),
+            size: Simple.getValue(options.icon.size, featureVariable, this.layer_),
           }));
         } else if (!isNullOrEmpty(options.icon.form)) {
           styleIcon.setImage(new PointFontSymbol({
-            form: isNullOrEmpty(Simple.getValue(options.icon.form, featureVariable)) ? '' : Simple.getValue(options.icon.form, featureVariable).toLowerCase(),
-            gradient: Simple.getValue(options.icon.gradient, featureVariable),
-            glyph: Simple.getValue(options.icon.class, featureVariable),
-            fontSize: Simple.getValue(options.icon.fontsize, featureVariable),
-            radius: Simple.getValue(options.icon.radius, featureVariable),
-            rotation: Simple.getValue(options.icon.rotation, featureVariable),
-            rotateWithView: Simple.getValue(options.icon.rotate, featureVariable),
+            form: isNullOrEmpty(Simple.getValue(options.icon.form, featureVariable, this.layer_)) ? '' : Simple.getValue(options.icon.form, featureVariable, this.layer_).toLowerCase(),
+            gradient: Simple.getValue(options.icon.gradient, featureVariable, this.layer_),
+            glyph: Simple.getValue(options.icon.class, featureVariable, this.layer_),
+            fontSize: Simple.getValue(options.icon.fontsize, featureVariable, this.layer_),
+            radius: Simple.getValue(options.icon.radius, featureVariable, this.layer_),
+            rotation: Simple.getValue(options.icon.rotation, featureVariable, this.layer_),
+            rotateWithView: Simple.getValue(options.icon.rotate, featureVariable, this.layer_),
             offsetX: Simple.getValue(options.icon.offset ?
-              options.icon.offset[0] : undefined, featureVariable),
+              options.icon.offset[0] : undefined, featureVariable, this.layer_),
             offsetY: Simple.getValue(options.icon.offset ?
-              options.icon.offset[1] : undefined, featureVariable),
+              options.icon.offset[1] : undefined, featureVariable, this.layer_),
             fill: new OLStyleFill({
-              color: Simple.getValue(options.icon.fill, featureVariable),
+              color: Simple.getValue(options.icon.fill, featureVariable, this.layer_),
             }),
             stroke: options.icon.gradientcolor ? new OLStyleStroke({
-              color: Simple.getValue(options.icon.gradientcolor, featureVariable),
+              color: Simple.getValue(options.icon.gradientcolor, featureVariable, this.layer_),
               width: 1,
             }) : undefined,
-            anchor: Simple.getValue(options.icon.anchor, featureVariable),
-            anchorXUnits: Simple.getValue(options.icon.anchorxunits, featureVariable),
-            anchorYUnits: Simple.getValue(options.icon.anchoryunits, featureVariable),
-            src: Simple.getValue(options.icon.src, featureVariable),
-            opacity: Simple.getValue(options.icon.opacity, featureVariable),
-            scale: Simple.getValue(options.icon.scale, featureVariable),
-            snapToPixel: Simple.getValue(options.icon.snaptopixel, featureVariable),
-            offsetOrigin: Simple.getValue(options.icon.offsetorigin, featureVariable),
-            offset: Simple.getValue(options.icon.offset, featureVariable),
-            crossOrigin: Simple.getValue(options.icon.crossorigin, featureVariable),
-            anchorOrigin: Simple.getValue(options.icon.anchororigin, featureVariable),
-            size: Simple.getValue(options.icon.size, featureVariable),
+            anchor: Simple.getValue(options.icon.anchor, featureVariable, this.layer_),
+            anchorXUnits: Simple.getValue(options.icon.anchorxunits, featureVariable, this.layer_),
+            anchorYUnits: Simple.getValue(options.icon.anchoryunits, featureVariable, this.layer_),
+            src: Simple.getValue(options.icon.src, featureVariable, this.layer_),
+            opacity: Simple.getValue(options.icon.opacity, featureVariable, this.layer_),
+            scale: Simple.getValue(options.icon.scale, featureVariable, this.layer_),
+            snapToPixel: Simple.getValue(options.icon.snaptopixel, featureVariable, this.layer_),
+            offsetOrigin: Simple.getValue(options.icon.offsetorigin, featureVariable, this.layer_),
+            offset: Simple.getValue(options.icon.offset, featureVariable, this.layer_),
+            crossOrigin: Simple.getValue(options.icon.crossorigin, featureVariable, this.layer_),
+            anchorOrigin: Simple.getValue(options.icon.anchororigin, featureVariable, this.layer_),
+            size: Simple.getValue(options.icon.size, featureVariable, this.layer_),
             // forceGeometryRender: options.forceGeometryRender
           }));
         }

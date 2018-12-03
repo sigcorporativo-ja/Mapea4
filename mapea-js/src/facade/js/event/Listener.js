@@ -19,7 +19,7 @@ class EventListener {
      * @private
      * @type {function}
      */
-    this.listener_ = listener;
+    this._listener = listener;
 
     /**
      * TODO
@@ -27,7 +27,7 @@ class EventListener {
      * @private
      * @type {Object}
      */
-    this.scope_ = scope;
+    this._scope = scope;
 
     /**
      * TODO
@@ -52,7 +52,7 @@ class EventListener {
     if (!isArray(args)) {
       args = [args];
     }
-    this.listener_.apply(this.scope_, args);
+    this._listener.apply(this._scope, args);
   }
 
   /**
@@ -87,7 +87,7 @@ class EventListener {
   has(listener, scope) {
     let has = false;
     if (isFunction(listener)) {
-      has = this.listener_ === listener && this.scope_ === scope;
+      has = this._listener === listener && this._scope === scope;
     } else {
       has = this.eventKey_ === listener;
     }

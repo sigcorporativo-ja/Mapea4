@@ -1,6 +1,7 @@
 /**
  * @module M/style/Simple
  */
+import { defineFunctionFromString } from '../util/Utils';
 import StyleFeature from './Feature';
 
 /**
@@ -38,6 +39,24 @@ class Simple extends StyleFeature {
    */
   get ORDER() {
     return 1;
+  }
+
+  /**
+   * This function returns the style instance of the serialization
+   * @function
+   * @public
+   * @param {string} serializedStyle - serialized style
+   * @param {string} className - class name of the style child
+   * @return {M.style.Simple}
+   */
+  static deserialize(serializedParams, className) {
+    const parameters = defineFunctionFromString(serializedParams);
+    const parameterArgs = parameters.map((p, i) => `arg${i}`);
+    const parameterArgsString = parameterArgs.reduce((acc, param) => acc.concat(', ').concat(param));
+    /* eslint-disable */
+    const styleFn = new Function(parameterArgs, `return new ${className}(${parameterArgsString})`);
+    /* eslint-enable */
+    return styleFn(...parameters);
   }
 }
 

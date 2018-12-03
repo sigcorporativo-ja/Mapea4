@@ -40,6 +40,7 @@ class Simple extends Style {
    * @api stable
    */
   applyToLayer(layer) {
+    this.layer_ = layer;
     // we will apply the style on the ol3 layer
     const olLayer = layer.getImpl().getOL3Layer();
     if (!isNullOrEmpty(olLayer)) {
@@ -66,10 +67,11 @@ class Simple extends Style {
    * @public
    * @function
    * @param {string|number|function} attr - attribute or function
-   * @param {M.Feature}  feature - Feature
+   * @param {ol.Feature}  feature - OpenLayer Feature
+   * @param {M.layer.Vector} layer - Layer
    * @api stable
    */
-  static getValue(attr, olFeature) {
+  static getValue(attr, olFeature, layer) {
     const templateRegexp = /^\{\{([^}]+)\}\}$/;
     let attrFeature = attr;
     if (templateRegexp.test(attr) || isFunction(attr)) {
@@ -81,7 +83,11 @@ class Simple extends Style {
           const keyFeature = attr.replace(templateRegexp, '$1');
           attrFeature = feature.getAttribute(keyFeature);
         } else if (isFunction(attr)) {
-          attrFeature = attr(feature);
+          let facadeMap;
+          if (!isNullOrEmpty(layer)) {
+            facadeMap = layer.getImpl().getMap();
+          }
+          attrFeature = attr(feature, facadeMap);
         }
       }
     }

@@ -1,0 +1,17 @@
+# Directorios y ficheros ignorados por git
+*.settings
+*.project
+*.classpath
+*.externalToolBuilders
+.atomignore
+node
+node_modules
+target
+externs
+libraries
+doc
+dist
+index.js
+index-*.js
+entry-points-plugins.json
+*~

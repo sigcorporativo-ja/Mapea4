@@ -9,7 +9,6 @@ import { isArray, isObject } from '../util/Utils';
 import Vector from '../layer/Vector';
 import Feature from '../feature/Feature';
 
-
 /**
  * TODO
  *

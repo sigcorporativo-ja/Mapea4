@@ -52,50 +52,59 @@ class Polygon extends Simple {
       const style = new Centroid();
       if (!isNullOrEmpty(options.stroke)) {
         style.setStroke(new OLStyleStroke({
-          color: Simple.getValue(options.stroke.color, featureVariable),
-          width: Simple.getValue(options.stroke.width, featureVariable),
-          lineDash: Simple.getValue(options.stroke.linedash, featureVariable),
-          lineDashOffset: Simple.getValue(options.stroke.linedashoffset, featureVariable),
-          lineCap: Simple.getValue(options.stroke.linecap, featureVariable),
-          lineJoin: Simple.getValue(options.stroke.linejoin, featureVariable),
-          miterLimit: Simple.getValue(options.stroke.miterlimit, featureVariable),
+          color: Simple.getValue(options.stroke.color, featureVariable, this.layer_),
+          width: Simple.getValue(options.stroke.width, featureVariable, this.layer_),
+          lineDash: Simple.getValue(options.stroke.linedash, featureVariable, this.layer_),
+          lineDashOffset:
+            Simple.getValue(options.stroke.linedashoffset, featureVariable, this.layer_),
+          lineCap: Simple.getValue(options.stroke.linecap, featureVariable, this.layer_),
+          lineJoin: Simple.getValue(options.stroke.linejoin, featureVariable, this.layer_),
+          miterLimit: Simple.getValue(options.stroke.miterlimit, featureVariable, this.layer_),
         }));
       }
       if (!isNullOrEmpty(options.label)) {
-        const textLabel = Simple.getValue(options.label.text, featureVariable);
-        const align = Simple.getValue(options.label.align, featureVariable);
-        const baseline = Simple.getValue(options.label.baseline, featureVariable);
+        const textLabel = Simple.getValue(options.label.text, featureVariable, this.layer_);
+        const align = Simple.getValue(options.label.align, featureVariable, this.layer_);
+        const baseline = Simple.getValue(options.label.baseline, featureVariable, this.layer_);
+        const overflow =
+          isNullOrEmpty(options.label.overflow, this.layer_) ? true : options.label.overflow;
         style.setText(new OLStyleText({
-          font: Simple.getValue(options.label.font, featureVariable),
-          rotateWithView: Simple.getValue(options.label.rotate, featureVariable),
-          scale: Simple.getValue(options.label.scale, featureVariable),
+          font: Simple.getValue(options.label.font, featureVariable, this.layer_),
+          rotateWithView: Simple.getValue(options.label.rotate, featureVariable, this.layer_),
+          scale: Simple.getValue(options.label.scale, featureVariable, this.layer_),
           offsetX: Simple.getValue(options.label.offset ?
-            options.label.offset[0] : undefined, featureVariable),
+            options.label.offset[0] : undefined, featureVariable, this.layer_),
           offsetY: Simple.getValue(options.label.ofsset ?
-            options.label.offset[1] : undefined, featureVariable),
+            options.label.offset[1] : undefined, featureVariable, this.layer_),
           fill: new OLStyleFill({
-            color: Simple.getValue(options.label.color || '#000000', featureVariable),
+            color: Simple.getValue(options.label.color || '#000000', featureVariable, this.layer_),
           }),
           textAlign: Object.values(Align).includes(align) ? align : 'center',
           textBaseline: Object.values(Baseline).includes(baseline) ? baseline : 'top',
           text: textLabel === undefined ? undefined : String(textLabel),
-          rotation: Simple.getValue(options.label.rotation, featureVariable),
+          rotation: Simple.getValue(options.label.rotation, featureVariable, this.layer_),
+          overflow: Simple.getValue(overflow, featureVariable, this.layer_),
         }));
         if (!isNullOrEmpty(options.label.stroke)) {
           style.getText().setStroke(new OLStyleStroke({
-            color: Simple.getValue(options.label.stroke.color, featureVariable),
-            width: Simple.getValue(options.label.stroke.width, featureVariable),
-            lineCap: Simple.getValue(options.label.stroke.linecap, featureVariable),
-            lineJoin: Simple.getValue(options.label.stroke.linejoin, featureVariable),
-            lineDash: Simple.getValue(options.label.stroke.linedash, featureVariable),
-            lineDashOffset: Simple.getValue(options.label.stroke.linedashoffset, featureVariable),
-            miterLimit: Simple.getValue(options.label.stroke.miterlimit, featureVariable),
+            color: Simple.getValue(options.label.stroke.color, featureVariable, this.layer_),
+            width: Simple.getValue(options.label.stroke.width, featureVariable, this.layer_),
+            lineCap: Simple.getValue(options.label.stroke.linecap, featureVariable, this.layer_),
+            lineJoin: Simple.getValue(options.label.stroke.linejoin, featureVariable, this.layer_),
+            lineDash: Simple.getValue(options.label.stroke.linedash, featureVariable, this.layer_),
+            lineDashOffset:
+              Simple.getValue(options.label.stroke.linedashoffset, featureVariable, this.layer_),
+            miterLimit:
+              Simple.getValue(options.label.stroke.miterlimit, featureVariable, this.layer_),
           }));
         }
       }
       if (!isNullOrEmpty(options.fill)) {
-        const fillColorValue = Simple.getValue(options.fill.color, featureVariable);
-        const fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable) || 1;
+        const fillColorValue = Simple.getValue(options.fill.color, featureVariable, this.layer_);
+        let fillOpacityValue = Simple.getValue(options.fill.opacity, featureVariable, this.layer_);
+        if (!fillOpacityValue && fillOpacityValue !== 0) {
+          fillOpacityValue = 1;
+        }
         let fill;
         if (!isNullOrEmpty(fillColorValue)) {
           fill = new OLStyleFill({
@@ -105,23 +114,27 @@ class Polygon extends Simple {
         if (!isNullOrEmpty(options.fill.pattern)) {
           let color = 'rgba(0,0,0,1)';
           if (!isNullOrEmpty(options.fill.pattern.color)) {
-            const opacity = Simple.getValue(options.fill.pattern.opacity, featureVariable) || 1;
+            let opacity =
+              Simple.getValue(options.fill.pattern.opacity, featureVariable, this.layer_) || 1;
+            if (!opacity && opacity !== 0) {
+              opacity = 1;
+            }
             color = chroma(options.fill.pattern.color).alpha(opacity).css();
           }
           style.setFill(new OLStyleFillPattern({
-            pattern: (Simple.getValue(options.fill.pattern.name, featureVariable) || '')
+            pattern: (Simple.getValue(options.fill.pattern.name, featureVariable, this.layer_) || '')
               .toLowerCase(),
             color,
 
-            size: Simple.getValue(options.fill.pattern.size, featureVariable),
-            spacing: Simple.getValue(options.fill.pattern.spacing, featureVariable),
-            image: (Simple.getValue(options.fill.pattern.name, featureVariable) === 'Image') ?
+            size: Simple.getValue(options.fill.pattern.size, featureVariable, this.layer_),
+            spacing: Simple.getValue(options.fill.pattern.spacing, featureVariable, this.layer_),
+            image: (Simple.getValue(options.fill.pattern.name, featureVariable, this.layer_) === 'Image') ?
               new OLStyleIcon({
-                src: Simple.getValue(options.fill.pattern.src, featureVariable),
+                src: Simple.getValue(options.fill.pattern.src, featureVariable, this.layer_),
               }) : undefined,
-            angle: Simple.getValue(options.fill.pattern.rotation, featureVariable),
-            scale: Simple.getValue(options.fill.pattern.scale, featureVariable),
-            offset: Simple.getValue(options.fill.pattern.offset, featureVariable),
+            angle: Simple.getValue(options.fill.pattern.rotation, featureVariable, this.layer_),
+            scale: Simple.getValue(options.fill.pattern.scale, featureVariable, this.layer_),
+            offset: Simple.getValue(options.fill.pattern.offset, featureVariable, this.layer_),
             fill,
           }));
         } else {

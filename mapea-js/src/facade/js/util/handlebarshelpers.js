@@ -6,7 +6,7 @@ const helpers = () => {
    * Helpers for Handlebars wich compares if the
    * first arguments is greater than the second one
    */
-  Handlebars.registerHelper('gt', (arg1, arg2, options) => {
+  Handlebars.registerHelper('gt', function gt(arg1, arg2, options) {
     if (arg1 > arg2) {
       return options.fn(this);
     }
@@ -17,7 +17,7 @@ const helpers = () => {
    * Helpers for Handlebars wich compares if the
    * first arguments is greater than the second one
    */
-  Handlebars.registerHelper('lt', (arg1, arg2, options) => {
+  Handlebars.registerHelper('lt', function lt(arg1, arg2, options) {
     if (arg1 < arg2) {
       return options.fn(this);
     }
@@ -28,7 +28,7 @@ const helpers = () => {
    * Helpers for Handlebars wich compares if the
    * first arguments is greater than the second one
    */
-  Handlebars.registerHelper('eq', (arg1, arg2, options) => {
+  Handlebars.registerHelper('eq', function eq(arg1, arg2, options) {
     if (Object.equals(arg1, arg2)) {
       return options.fn(this);
     }
@@ -39,7 +39,7 @@ const helpers = () => {
    * Helpers for Handlebars wich compares if the
    * first arguments is greater than the second one
    */
-  Handlebars.registerHelper('oneword', (arg1, options) => {
+  Handlebars.registerHelper('oneword', function oneword(arg1, options) {
     if (!/\s/g.test(getTextFromHtml(arg1))) {
       return options.fn(this);
     }

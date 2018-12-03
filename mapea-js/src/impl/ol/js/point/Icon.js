@@ -61,4 +61,25 @@ export default class Icon extends OLStyleIcon {
       rotateWithView: this.getRotateWithView(),
     });
   }
+
+  /**
+   * Setter size
+   */
+  set size(value) {
+    this.size_ = Array.isArray(value) ? value : null;
+  }
+
+  /**
+   * Setter anchor
+   */
+  set anchor(value) {
+    this.anchor_ = Array.isArray(value) ? value : null;
+  }
+
+  /**
+   * Setter anchor
+   */
+  set origin(value) {
+    this.origin_ = Array.isArray(value) ? value : null;
+  }
 }

@@ -1,10 +1,11 @@
 /**
  * @module M/style/Proportional
  */
+import StyleBase from './Style';
 import StyleComposite from './Composite';
 import StylePoint from './Point';
 import StyleSimple from './Simple';
-import { isNullOrEmpty } from '../util/Utils';
+import { isNullOrEmpty, stringifyFunctions, extendsObj, defineFunctionFromString } from '../util/Utils';
 import Exception from '../exception/exception';
 
 /**
@@ -510,6 +511,57 @@ class Proportional extends StyleComposite {
    */
   get ORDER() {
     return 3;
+  }
+
+  /**
+   * This function implements the mechanism to
+   * generate the JSON of this instance
+   *
+   * @public
+   * @return {object}
+   * @function
+   * @api
+   */
+  toJSON() {
+    const attributeName = this.getAttributeName();
+    const minRadius = this.getMinRadius();
+    const maxRadius = this.getMaxRadius();
+    const styles = this.getStyles().map(style => style.serialize());
+    const proportionalFunction = stringifyFunctions(this.getProportionalFunction());
+    let options = extendsObj({}, this.getOptions());
+    options = stringifyFunctions(options);
+    const parameters = [attributeName, minRadius, maxRadius, styles, proportionalFunction, options];
+    const deserializedMethod = 'M.style.Proportional.deserialize';
+    return { parameters, deserializedMethod };
+  }
+
+  /**
+   * This function returns the style instance of the serialization
+   * @function
+   * @public
+   * @param {Array} parametrers - parameters to deserialize and create
+   * the instance
+   * @return {M.style.Proportional}
+   */
+  static deserialize([serializedAttributeName, serializedMinRadius, serializedMaxRadius,
+    serializedStyles, serializedProportionalFunction, serializedOptions]) {
+    const attributeName = serializedAttributeName;
+    const minRadius = serializedMinRadius;
+    const maxRadius = serializedMaxRadius;
+    const proportionalFunction = defineFunctionFromString(serializedProportionalFunction);
+    const options = defineFunctionFromString(serializedOptions);
+
+    /* eslint-disable */
+    const styleFn = new Function(['attributeName', 'minRadius', 'maxRadius', 'style',
+    'proportionalFunction', 'options'], `return new M.style.Proportional(attributeName,
+    minRadius, maxRadius, style, proportionalFunction, options)`);
+    const deserializedStyle = styleFn(attributeName, minRadius, maxRadius,undefined, proportionalFunction, options);
+    /* eslint-enable */
+
+    const styles = serializedStyles.map(serializedStyle => StyleBase.deserialize(serializedStyle));
+    deserializedStyle.add(styles);
+
+    return deserializedStyle;
   }
 }
 

@@ -1,5 +1,4 @@
 const path = require('path');
-const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 const GenerateVersionPlugin = require('./GenerateVersionPlugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopywebpackPlugin = require('copy-webpack-plugin');
@@ -77,10 +76,9 @@ module.exports = {
     noEmitOnErrors: true,
   },
   plugins: [
-    new AllowMutateEsmExports(),
     new GenerateVersionPlugin({
       version: pjson.version,
-      regex: 'min',
+      regex: /([A-Za-z]+)(\..*)/,
     }),
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',
@@ -98,5 +96,5 @@ module.exports = {
       to: 'assets/img',
     }]),
   ],
-  devtool: sourcemap ? 'source-map' : '',
+  devtool: 'source-map',
 };
