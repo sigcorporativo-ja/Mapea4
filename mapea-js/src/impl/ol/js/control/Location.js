@@ -2,7 +2,7 @@
  * @module M/impl/control/Location
  */
 
-import { isNullOrEmpty } from 'M/util/Utils';
+import { isNullOrEmpty, extend } from 'M/util/Utils';
 import { get as getProj } from 'ol/proj';
 import OLFeature from 'ol/Feature';
 import OLGeolocation from 'ol/Geolocation';
@@ -25,8 +25,16 @@ class Location extends Control {
    * @api stable
    */
 
-  constructor(tracking, highAccuracy, maximumAge) {
-    super();
+  constructor(tracking, highAccuracy, maximumAge, vendorOptions) {
+    super(vendorOptions);
+
+    /**
+     * Vendor options for the base library
+     * @private
+     * @type {Object}
+     */
+    this.vendorOptions_ = vendorOptions;
+
     /**
      * Helper class for providing HTML5 Geolocation
      * @private
@@ -68,14 +76,14 @@ class Location extends Control {
 
     if (isNullOrEmpty(this.geolocation_)) {
       const proj = getProj(this.facadeMap_.getProjection().code);
-      this.geolocation_ = new OLGeolocation({
+      this.geolocation_ = new OLGeolocation(extend({
         projection: proj,
         tracking: this.tracking_,
         trackingOptions: {
           enableHighAccuracy: this.highAccuracy_,
           maximumAge: this.maximumAge_,
         },
-      });
+      }, this.vendorOptions_, true));
       this.geolocation_.on('change:accuracyGeometry', (evt) => {
         const accuracyGeom = evt.target.get(evt.key);
         this.accuracyFeature_.getImpl().getOLFeature().setGeometry(accuracyGeom);
