@@ -1,6 +1,7 @@
 /**
  * @module M/impl/control/Mouse
  */
+import { extend } from 'M/util/Utils';
 import OLControlMousePosition from 'ol/control/MousePosition';
 import { createStringXY as createStringXYCoordinate } from 'ol/coordinate';
 import { get as getProj } from 'ol/proj';
@@ -18,10 +19,19 @@ class Mouse extends OLControlMousePosition {
    *
    * @constructor
    * @extends {ol.control.Control}
+   * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor() {
-    super({});
+  constructor(vendorOptions) {
+    super(vendorOptions);
+
+    /**
+     * Vendor options for the base library
+     * @private
+     * @type {Object}
+     */
+    this.vendorOptions_ = vendorOptions;
+
     this.facadeMap_ = null;
   }
 
@@ -36,12 +46,12 @@ class Mouse extends OLControlMousePosition {
    */
   addTo(map, element) {
     this.facadeMap_ = map;
-    OLControlMousePosition.call(this, {
+    OLControlMousePosition.call(this, extend({
       coordinateFormat: createStringXYCoordinate(4),
       projection: map.getProjection().code,
       undefinedHTML: '',
       className: 'm-mouse-position g-cartografia-flecha',
-    });
+    }, this.vendorOptions_, true));
     map.getMapImpl().addControl(this);
 
     // update projection mouse

@@ -21,12 +21,13 @@ class Mouse extends ControlBase {
    *
    * @constructor
    * @param {String} format format response
+   * @param {Object} vendorOptions vendor options for the base library
    * @extends {M.Control}
    * @api
    */
-  constructor() {
+  constructor(vendorOptions = {}) {
     // implementation of this control
-    const impl = new MouseImpl();
+    const impl = new MouseImpl(vendorOptions);
 
     // calls the super constructor
     super(impl, Mouse.NAME);
