@@ -1,7 +1,13 @@
 /**
  * @module M/impl/layer/WMTS
  */
-import { isNullOrEmpty, isNull, getResolutionFromScale, getWMTSGetCapabilitiesUrl } from 'M/util/Utils';
+import {
+  isNullOrEmpty,
+  isNull,
+  getResolutionFromScale,
+  getWMTSGetCapabilitiesUrl,
+  extend,
+} from 'M/util/Utils';
 import { default as OLSourceWMTS, optionsFromCapabilities } from 'ol/source/WMTS';
 import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import OLTileGridWMTS from 'ol/tilegrid/WMTS';
@@ -25,11 +31,12 @@ class WMTS extends LayerBase {
    * @constructor
    * @implements {M.impl.Layer}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
+   * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(options = {}) {
+  constructor(options = {}, vendorOptions) {
     // calls the super constructor
-    super(options);
+    super(options, vendorOptions);
 
     /**
      * Options from the GetCapabilities
@@ -72,45 +79,20 @@ class WMTS extends LayerBase {
    * @api stable
    */
   setResolutions(resolutions) {
-    // gets the projection
-    const projection = getProj(this.map.getProjection().code);
+    if (isNullOrEmpty(this.vendorOptions_.source)) {
+      // gets the projection
+      const projection = getProj(this.map.getProjection().code);
 
-    // gets the extent
-    const extent = this.map.getMaxExtent();
-    let olExtent;
-    if (!isNullOrEmpty(extent)) {
-      olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
-    } else {
-      olExtent = projection.getExtent();
-    }
+      // gets the extent
+      const extent = this.map.getMaxExtent();
+      let olExtent;
+      if (!isNullOrEmpty(extent)) {
+        olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
+      } else {
+        olExtent = projection.getExtent();
+      }
 
-    if (!isNull(this.capabilitiesParser)) {
-      // gets matrix
-      const matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
-      const matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
-
-      // gets format
-      const format = this.capabilitiesParser.getFormat(this.name);
-
-      const newSource = new OLSourceWMTS({
-        url: this.url,
-        layer: this.name,
-        matrixSet,
-        format,
-        projection,
-        tileGrid: new OLTileGridWMTS({
-          origin: getBottomLeft(olExtent),
-          resolutions,
-          matrixIds,
-        }),
-        extent: olExtent,
-      });
-      this.ol3Layer.setSource(newSource);
-    } else {
-      // adds layer from capabilities
-      this.getCapabilities_().then((capabilitiesParser) => {
-        this.capabilitiesParser = capabilitiesParser;
-
+      if (!isNull(this.capabilitiesParser)) {
         // gets matrix
         const matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
         const matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
@@ -132,7 +114,34 @@ class WMTS extends LayerBase {
           extent: olExtent,
         });
         this.ol3Layer.setSource(newSource);
-      });
+      } else {
+        // adds layer from capabilities
+        this.getCapabilities_().then((capabilitiesParser) => {
+          this.capabilitiesParser = capabilitiesParser;
+
+          // gets matrix
+          const matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
+          const matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
+
+          // gets format
+          const format = this.capabilitiesParser.getFormat(this.name);
+
+          const newSource = new OLSourceWMTS({
+            url: this.url,
+            layer: this.name,
+            matrixSet,
+            format,
+            projection,
+            tileGrid: new OLTileGridWMTS({
+              origin: getBottomLeft(olExtent),
+              resolutions,
+              matrixIds,
+            }),
+            extent: olExtent,
+          });
+          this.ol3Layer.setSource(newSource);
+        });
+      }
     }
   }
 
@@ -182,12 +191,12 @@ class WMTS extends LayerBase {
     const maxResolution = this.options.maxResolution;
     capabilitiesOptionsVariable.format = this.options.format || capabilitiesOptions.format;
 
-    this.ol3Layer = new OLLayerTile({
+    this.ol3Layer = new OLLayerTile(extend({
       visible: this.options.visibility,
       source: new OLSourceWMTS(capabilitiesOptionsVariable),
       minResolution,
       maxResolution,
-    });
+    }, this.vendorOptions_, true));
 
     // keeps z-index values before ol resets
     const zIndex = this.zIndex_;

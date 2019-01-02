@@ -21,15 +21,16 @@ class WMTS extends LayerBase {
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMTS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
+   * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(userParameters, options = {}) {
+  constructor(userParameters, options = {}, vendorOptions) {
     /**
      * Implementation of this layer
      * @public
      * @type {M.layer.WMTS}
      */
-    const impl = new WMTSImpl(options);
+    const impl = new WMTSImpl(options, vendorOptions);
 
     // This Layer is of parameters.
     const parameters = parameter.layer(userParameters, LayerType.WMTS);
