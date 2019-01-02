@@ -15,14 +15,21 @@ class LayerBase extends MObject {
    * with parameters specified by the user
    *
    * @interface
-   * @extends {M.facade.Base}
-   * @param {string | Mx.parameters.Layer} userParameters parameters
-   * provided by the user
+   * @extends {M.Object}
+   * @param {Object} options options provided by the user
+   * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(options = {}) {
+  constructor(options = {}, vendorOptions = {}) {
     // calls the super constructor
     super(options);
+
+    /**
+     * Vendor options for the base library
+     * @private
+     * @type {Object}
+     */
+    this.vendorOptions_ = vendorOptions;
 
     /**
      * The map instance
