@@ -1,6 +1,8 @@
 /**
  * @module M/impl/control/Panzoombar
  */
+import { extend } from 'M/util/Utils';
+
 import OLControlZoomSlider from 'ol/control/ZoomSlider';
 
 
@@ -14,8 +16,8 @@ class Panzoombar extends OLControlZoomSlider {
    * @extends {ol.control.Control}
    * @api stable
    */
-  constructor() {
-    super({});
+  constructor(vendorOptions) {
+    super(extend({}, vendorOptions, true));
     this.facadeMap_ = null;
   }
 
