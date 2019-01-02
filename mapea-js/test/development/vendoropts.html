@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+
+    <title>PRUEBA DESARROLLO</title>
+    <style rel="stylesheet">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: auto;
+      }
+
+      .makidentist:before {
+        content: '\e814';
+        color: 'red'
+      }
+
+      .vendorbtn {
+        position: absolute;
+        top: 5px;
+        z-index: 99999;
+        left: 20px;
+      }
+    </style>
+
+  </head>
+
+  <button id="vendorLocation" onclick="vendorLocation();" class="vendorbtn" style="left: 60px">vendorLocation</button>
+  <button id="vendorKML" onclick="vendorKML();" class="vendorbtn" style="left: 220px">vendorKML</button>
+  <button id="vendorMapbox" onclick="vendorMapbox();" class="vendorbtn" style="left: 420px">vendorMapbox</button>
+  <button id="vendorOSM" onclick="vendorOSM();" class="vendorbtn" style="left: 620px">vendorOSM</button>
+  <!-- <button id="vendorVector" onclick="vendorVector();" class="vendorbtn" style="left: 820px">vendorVector</button> -->
+  <button id="vendorWFS" onclick="vendorWFS();" class="vendorbtn" style="left: 1020px">vendorWFS</button>
+  <button id="vendorWMS" onclick="vendorWMS();" class="vendorbtn" style="top: 30px; left: 60px">vendorWMS</button>
+  <button id="vendorWMTS" onclick="vendorWMTS();" class="vendorbtn" style="top: 30px; left: 220px">vendorWMTS</button>
+  <!-- <button id="vendorPopup" onclick="vendorPopup();" class="vendorbtn" style="top: 30px; left: 420px">vendorPopup</button> -->
+  <button id="vendorGeoJSON" onclick="vendorGeoJSON();" class="vendorbtn" style="top: 30px; left: 620px">vendorGeoJSON</button>
+  <button id="vendorMouse" onclick="vendorMouse();" class="vendorbtn" style="left: 820px">vendorMouse</button>
+  <button id="vendorOverviewMap" onclick="vendorOverviewMap();" class="vendorbtn" style="top: 30px; left: 1020px">vendorOverviewMap</button>
+  <button id="vendorPanzoom" onclick="vendorPanzoom();" class="vendorbtn" style="top: 60px; left: 60px">vendorPanzoom</button>
+  <button id="vendorPanzoombar" onclick="vendorPanzoombar();" class="vendorbtn" style="top: 60px; left: 220px">vendorPanzoombar</button>
+  <button id="vendorScaleLine" onclick="vendorScaleLine();" class="vendorbtn" style="top: 30px; left: 420px">vendorScaleLine</button>
+  <div id="map" class="map"></div>
+  <script src="/config.js" charset="utf-8"></script>
+  <script src="/vendoropts.js" charset="utf-8"></script>
+  </body>
+
+</html>

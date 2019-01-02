@@ -23,13 +23,13 @@ class Location extends ControlBase {
    * @extends {M.Control}
    * @api
    */
-  constructor(tracking = true, highAccuracy = false) {
+  constructor(tracking = true, highAccuracy = false, vendorOptions = {}) {
     if (isUndefined(LocationImpl)) {
       Exception('La implementación usada no puede crear controles Location');
     }
 
     // implementation of this control
-    const impl = new LocationImpl(tracking, highAccuracy, 60000);
+    const impl = new LocationImpl(tracking, highAccuracy, 60000, vendorOptions);
 
     // calls the super constructor
     super(impl, Location.NAME);

@@ -612,7 +612,7 @@ export const extend = (targetParam, source, override) => {
   Object.keys(source).forEach((key) => {
     if (isUndefined(target[key])) {
       target[key] = source[key];
-    } else if (isObject(target[key])) {
+    } else if (Object.getPrototypeOf(target[key]) === Object.prototype) {
       extend(target[key], source[key], override);
     } else if ((override === true)) {
       target[key] = source[key];
