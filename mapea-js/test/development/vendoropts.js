@@ -22,6 +22,7 @@ import * as Position from 'M/ui/position';
 
 import OLSourceVector from 'ol/source/Vector';
 import OLSourceXYZ from 'ol/source/XYZ';
+import { get as getProj } from 'ol/proj';
 import { default as OLSourceWMTS, optionsFromCapabilities } from 'ol/source/WMTS';
 
 let osmLayer = new OSM();
@@ -252,16 +253,15 @@ window.vendorMouse = (evt) => {
   if (window.confirm(`
     Se incluyen los siguientes parámetros vendor:
       {
-        projection: 'EPGS:4326',
-        render: function() {
-          console.log(arguments);
-        },
-        target: document.head.title
+        projection: getProj('EPSG:4326'),
+        undefinedHTML: 'sin valor',
+        coordinateFormat: (coord) => "x: \${coord[0]} | y: \${coord[1]}"
       }
   `)) {
     const mouse = new Mouse({
-      projection: 'EPGS:4326',
-      undefinedHTML: 'sin valor'
+      projection: getProj('EPSG:4326'),
+      undefinedHTML: 'sin valor',
+      coordinateFormat: (coord) => `x: ${coord[0]} | y: ${coord[1]}`
     });
     let panel = mapjs.getPanels('map-info')[0];
     if (!panel) {
@@ -285,9 +285,10 @@ window.vendorOverviewMap = (evt) => {
   if (window.confirm(`
     Se incluyen los siguientes parámetros vendor:
       {
-        collapsible: false,
-        className: 'm-map-info',
-        position: Position.BR,
+        collapsed: false,
+        tipLabel: 'prueba de tip label',
+        label: 'prueba de label',
+        collapseLabel: 'esto es el label de colapsar'
       }
   `)) {
     const overviewmap = new OverviewMap({ toggleDelay: 400 }, {
