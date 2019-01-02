@@ -1,7 +1,7 @@
 /**
  * @module M/impl/control/OverviewMap
  */
-import { isNullOrEmpty, classToggle, replaceNode } from 'M/util/Utils';
+import { isNullOrEmpty, classToggle, replaceNode, extend } from 'M/util/Utils';
 import OLControlOverviewMap from 'ol/control/OverviewMap';
 import { get as getProj } from 'ol/proj';
 import * as EventType from 'M/event/eventtype';
@@ -18,10 +18,11 @@ class OverviewMap extends OLControlOverviewMap {
    * @extends {ol.control.Control}
    * @api stable
    */
-  constructor(options) {
-    super({
+  constructor(options, vendorOptions = {}) {
+    super(extend({
       layers: [],
-    });
+    }, vendorOptions, true));
+
     /**
      * @private
      * @type {number}
@@ -86,6 +87,9 @@ class OverviewMap extends OLControlOverviewMap {
   addTo(map, element) {
     this.facadeMap_ = map;
     this.update(map, element);
+    if (!this.getCollapsed()) {
+      this.addLayers(this.facadeMap_);
+    }
   }
 
   /**

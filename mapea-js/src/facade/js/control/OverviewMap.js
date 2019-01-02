@@ -18,13 +18,14 @@ import { compileSync as compileTemplate } from '../util/Template';
 class OverviewMap extends ControlBase {
   /**
    * @constructor
-   * @param {String} format format response
+   * @param {Object} options
+   * @param {Object} vendorOptions vendor options for the base library
    * @extends {M.Control}
    * @api
    */
-  constructor(options = {}) {
+  constructor(options = {}, vendorOptions = {}) {
     // implementation of this control
-    const impl = new OverviewMapImpl(options);
+    const impl = new OverviewMapImpl(options, vendorOptions);
     // calls the super constructor
     super(impl, OverviewMap.NAME);
 
