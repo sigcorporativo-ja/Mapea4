@@ -20,9 +20,10 @@ class OSM extends LayerBase {
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
+   * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(userParametersVar, options = {}) {
+  constructor(userParametersVar, options = {}, vendorOptions = {}) {
     let userParameters = userParametersVar;
 
     // checks if the implementation can create OSM
@@ -40,7 +41,7 @@ class OSM extends LayerBase {
      * @public
      * @type {M.layer.WMS}
      */
-    const impl = new OSMImpl(userParameters, options);
+    const impl = new OSMImpl(userParameters, options, vendorOptions);
 
     // This layer is of parameters.
     const parameters = parameter.layer(userParameters, LayerType.OSM);
