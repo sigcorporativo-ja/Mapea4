@@ -26,11 +26,12 @@ class GeoJSON extends Vector {
    * @constructor
    * @implements {M.impl.layer.Vector}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
+   * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(parameters, options) {
+  constructor(parameters, options, vendorOptions) {
     // calls the super constructor
-    super(options);
+    super(options, vendorOptions);
 
     /**
      * Popup showed
@@ -149,30 +150,32 @@ class GeoJSON extends Vector {
    * @function
    */
   updateSource_() {
-    let srcOptions;
-    if (!isNullOrEmpty(this.url)) {
-      srcOptions = {
-        format: this.formater_,
-        loader: this.loader_.getLoaderFn((features) => {
-          this.loaded_ = true;
-          this.facadeVector_.addFeatures(features);
-          this.fire(EventType.LOAD, [features]);
-        }),
-        strategy: all,
-      };
-      this.ol3Layer.setSource(new OLSourceVector(srcOptions));
-    } else if (!isNullOrEmpty(this.source)) {
-      const features = this.formater_.read(this.source, this.map.getProjection());
-      this.ol3Layer.setSource(new OLSourceVector({
-        loader: (extent, resolution, projection) => {
-          this.loaded_ = true;
-          // removes previous features
-          this.facadeVector_.clear();
-          this.facadeVector_.addFeatures(features);
-          this.fire(EventType.LOAD, [features]);
-        },
-      }));
-      this.facadeVector_.addFeatures(features);
+    if (isNullOrEmpty(this.vendorOptions_.source)) {
+      let srcOptions;
+      if (!isNullOrEmpty(this.url)) {
+        srcOptions = {
+          format: this.formater_,
+          loader: this.loader_.getLoaderFn((features) => {
+            this.loaded_ = true;
+            this.facadeVector_.addFeatures(features);
+            this.fire(EventType.LOAD, [features]);
+          }),
+          strategy: all,
+        };
+        this.ol3Layer.setSource(new OLSourceVector(srcOptions));
+      } else if (!isNullOrEmpty(this.source)) {
+        const features = this.formater_.read(this.source, this.map.getProjection());
+        this.ol3Layer.setSource(new OLSourceVector({
+          loader: (extent, resolution, projection) => {
+            this.loaded_ = true;
+            // removes previous features
+            this.facadeVector_.clear();
+            this.facadeVector_.addFeatures(features);
+            this.fire(EventType.LOAD, [features]);
+          },
+        }));
+        this.facadeVector_.addFeatures(features);
+      }
     }
   }
 
