@@ -15,8 +15,9 @@ class ScaleLine extends OLControlScaleLine {
    * @extends {ol.control.Control}
    * @api stable
    */
-  constructor() {
-    super();
+  constructor(vendorOptions) {
+    super(vendorOptions);
+
     this.facadeMap_ = null;
   }
 
