@@ -4,7 +4,7 @@
 import * as LayerType from 'M/layer/Type';
 import FacadeOSM from 'M/layer/OSM';
 import FacadeMapbox from 'M/layer/Mapbox';
-import { isNullOrEmpty, generateResolutionsFromExtent, isArray } from 'M/util/Utils';
+import { isNullOrEmpty, generateResolutionsFromExtent, isArray, extend } from 'M/util/Utils';
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceXYZ from 'ol/source/XYZ';
 import OLControlAttribution from 'ol/control/Attribution';
@@ -25,11 +25,12 @@ class Mapbox extends Layer {
    * @constructor
    * @implements {M.impl.Layer}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
+   * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(userParameters, options) {
+  constructor(userParameters, options, vendorOptions) {
     // calls the super constructor
-    super(options);
+    super(options, vendorOptions);
 
     /**
      * Layer resolutions
@@ -98,11 +99,11 @@ class Mapbox extends Layer {
   addTo(map) {
     this.map = map;
 
-    this.ol3Layer = new OLLayerTile({
+    this.ol3Layer = new OLLayerTile(extend({
       source: new OLSourceXYZ({
         url: `${this.url}${this.name}/{z}/{x}/{y}.png?${M.config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
       }),
-    });
+    }, this.vendorOptions_, true));
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
@@ -112,9 +113,13 @@ class Mapbox extends Layer {
       }
     });
     if (!this.hasAttributtion) {
-      this.map.getMapImpl().addControl(new OLControlAttribution({
-        className: 'ol-attribution ol-unselectable ol-control ol-collapsed m-attribution',
-      }));
+      let attributionCtrlOptions;
+      if (isNullOrEmpty(this.vendorOptions_)) {
+        attributionCtrlOptions = {
+          className: 'ol-attribution ol-unselectable ol-control ol-collapsed m-attribution',
+        };
+      }
+      this.map.getMapImpl().addControl(new OLControlAttribution(attributionCtrlOptions));
       this.hasAttributtion = false;
     }
 
@@ -151,7 +156,7 @@ class Mapbox extends Layer {
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
 
-    if (!isNullOrEmpty(this.ol3Layer)) {
+    if (!isNullOrEmpty(this.ol3Layer) && isNullOrEmpty(this.vendorOptions_.source)) {
       // gets the extent
       const promise = new Promise((success, fail) => {
         // gets the extent

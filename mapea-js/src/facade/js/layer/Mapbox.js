@@ -20,15 +20,16 @@ class Mapbox extends LayerBase {
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
+   * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(userParameters, options = {}) {
+  constructor(userParameters, options = {}, vendorOptions = {}) {
     /**
      * Implementation of this layer
      * @public
-     * @type {M.layer.WMS}
+     * @type {M.impl.layer.Mapbox}
      */
-    const impl = new MapboxImpl(userParameters, options);
+    const impl = new MapboxImpl(userParameters, options, vendorOptions);
 
     // This layer is of parameters.
     const parameters = parameter.layer(userParameters, LayerType.Mapbox);
