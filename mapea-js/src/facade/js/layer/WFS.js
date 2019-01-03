@@ -21,14 +21,16 @@ class WFS extends Vector {
    * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.WFS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
+   * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(userParameters, options = {}, impl = new WFSImpl(options)) {
+  constructor(userParameters, options = {}, vendorOptions = {}, impl =
+  new WFSImpl(options, vendorOptions)) {
     // This layer is of parameters.
     const parameters = parameter.layer(userParameters, LayerType.WFS);
 
     // calls the super constructor
-    super(parameters, options, impl);
+    super(parameters, options, undefined, impl);
 
     // checks if the implementation can create WFS layers
     if (isUndefined(WFSImpl)) {

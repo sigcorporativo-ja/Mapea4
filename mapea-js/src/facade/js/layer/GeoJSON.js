@@ -20,18 +20,19 @@ class GeoJSON extends LayerVector {
    * @extends {M.layer.Vector}
    * @param {string|Mx.parameters.GeoJSON} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
+   * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(parameters, options = {}) {
+  constructor(parameters, options = {}, vendorOptions) {
     /**
      * Implementation of this layer
      * @public
      * @type {M.impl.layer.GeoJSON}
      */
-    const impl = new GeoJSONImpl(parameters, options);
+    const impl = new GeoJSONImpl(parameters, options, vendorOptions);
 
     // calls the super constructor
-    super(parameters, options, impl);
+    super(parameters, options, undefined, impl);
 
     // checks if the implementation can create KML layers
     if (isUndefined(GeoJSONImpl)) {

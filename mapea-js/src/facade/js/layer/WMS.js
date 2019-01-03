@@ -21,9 +21,10 @@ class WMS extends LayerBase {
    * @extends {M.Layer}
    * @param {string|Mx.parameters.WMS} userParameters parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
+   * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(userParameters, options = {}) {
+  constructor(userParameters, options = {}, vendorOptions) {
     // checks if the implementation can create WMC layers
     if (isUndefined(WMSImpl)) {
       Exception('La implementación usada no puede crear capas WMS');
@@ -34,7 +35,7 @@ class WMS extends LayerBase {
     }
     // This Layer is of parameters.
     const parameters = parameter.layer(userParameters, LayerType.WMS);
-    const impl = new WMSImpl(options);
+    const impl = new WMSImpl(options, vendorOptions);
     // calls the super constructor
     super(parameters, impl);
     // legend

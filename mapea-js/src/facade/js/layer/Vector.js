@@ -26,9 +26,11 @@ class Vector extends LayerBase {
    * @extends {M.Layer}
    * @param {Mx.parameters.Layer} userParameters - parameters
    * @param {Mx.parameters.LayerOptions} options - custom options for this layer
+   * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(parameters = {}, options = {}, impl = new VectorImpl(options)) {
+  constructor(parameters = {}, options = {}, vendorOptions = {}, impl =
+  new VectorImpl(options, vendorOptions)) {
     // calls the super constructor
     super(parameters, impl);
 

@@ -16,13 +16,13 @@ class Panzoom extends ControlBase {
   /**
    *
    * @constructor
-   * @param {String} format format response
+   * @param {Object} vendorOptions vendor options for the base library
    * @extends {M.Control}
    * @api
    */
-  constructor() {
+  constructor(vendorOptions = {}) {
     // implementation of this control
-    const impl = new PanzoomImpl();
+    const impl = new PanzoomImpl(vendorOptions);
 
     // calls the super constructor
     super(impl, Panzoom.NAME);

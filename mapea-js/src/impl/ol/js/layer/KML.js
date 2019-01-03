@@ -4,7 +4,7 @@
 import { compileSync as compileTemplate } from 'M/util/Template';
 import popupKMLTemplate from 'templates/kml_popup';
 import Popup from 'M/Popup';
-import { isNullOrEmpty } from 'M/util/Utils';
+import { isNullOrEmpty, extend } from 'M/util/Utils';
 import ClusteredFeature from 'M/feature/Clustered';
 import * as EventType from 'M/event/eventtype';
 import OLLayerVector from 'ol/layer/Vector';
@@ -26,11 +26,12 @@ class KML extends Vector {
    * @constructor
    * @implements {M.impl.layer.Vector}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
+   * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(options) {
+  constructor(options, vendorOptions) {
     // calls the super constructor
-    super(options);
+    super(options, vendorOptions);
 
     /**
      * Popup showed
@@ -91,7 +92,7 @@ class KML extends Vector {
 
     const formater = new FormatKML();
     const loader = new LoaderKML(map, this.url, formater);
-    this.ol3Layer = new OLLayerVector({
+    this.ol3Layer = new OLLayerVector(extend({
       source: new OLSourceVector({
         url: this.url,
         format: formater,
@@ -108,7 +109,7 @@ class KML extends Vector {
           }
         }),
       }),
-    });
+    }, this.vendorOptions_, true));
     // sets its visibility if it is in range
     if (this.options.visibility !== false) {
       this.setVisible(this.inRange());

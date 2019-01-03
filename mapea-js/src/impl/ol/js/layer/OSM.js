@@ -4,7 +4,7 @@
 import FacadeMapbox from 'M/layer/Mapbox';
 import FacadeOSM from 'M/layer/OSM';
 import * as LayerType from 'M/layer/Type';
-import { isNullOrEmpty, generateResolutionsFromExtent } from 'M/util/Utils';
+import { isNullOrEmpty, generateResolutionsFromExtent, extend } from 'M/util/Utils';
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceOSM from 'ol/source/OSM';
 import OLTileGrid from 'ol/tilegrid/TileGrid';
@@ -26,11 +26,12 @@ class OSM extends Layer {
    * @constructor
    * @implements {M.impl.Layer}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
+   * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(userParameters, options = {}) {
+  constructor(userParameters, options = {}, vendorOptions) {
     // calls the super constructor
-    super(options);
+    super(options, vendorOptions);
 
     /**
      * Layer resolutions
@@ -98,9 +99,9 @@ class OSM extends Layer {
   addTo(map) {
     this.map = map;
 
-    this.ol3Layer = new OLLayerTile({
+    this.ol3Layer = new OLLayerTile(extend({
       source: new OLSourceOSM(),
-    });
+    }, this.vendorOptions_, true));
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
@@ -150,7 +151,8 @@ class OSM extends Layer {
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
 
-    if ((this.tiled === true) && !isNullOrEmpty(this.ol3Layer)) {
+    if ((this.tiled === true) && !isNullOrEmpty(this.ol3Layer) &&
+    isNullOrEmpty(this.vendorOptions_.source)) {
       // gets the extent
       const promise = new Promise((success, fail) => {
         // gets the extent

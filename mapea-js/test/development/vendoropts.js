@@ -22,7 +22,7 @@ import * as Position from 'M/ui/position';
 
 import OLSourceVector from 'ol/source/Vector';
 import OLSourceXYZ from 'ol/source/XYZ';
-import { default as OLSourceWMTS, optionsFromCapabilities } from 'ol/source/WMTS';
+import { get as getProj } from 'ol/proj';
 
 let osmLayer = new OSM();
 let mapboxLayer;
@@ -66,9 +66,9 @@ window.vendorGeoJSON = (evt) => {
   if (window.confirm(`
     Se incluyen los siguientes parámetros vendor:
       {
-        opacity: 0.8,
+        opacity: 0.1,
         source: new OLSourceVector({
-          attributions: 'prueba de mapea'
+          attributions: 'geojson de mapea'
         })
       }
   `)) {
@@ -78,7 +78,7 @@ window.vendorGeoJSON = (evt) => {
     }, undefined, {
       opacity: 0.1,
       source: new OLSourceVector({
-        attributions: 'prueba de mapea'
+        attributions: 'geojson de mapea',
       })
     });
     mapjs.addLayers(geoJSON);
@@ -123,8 +123,7 @@ window.vendorMapbox = (evt) => {
       {
         preload: 2,
         source: new OLSourceXYZ({
-          attributions: 'prueba mapea',
-          attributionsCollapsible: false,
+          attributions: 'prueba mapea mapbox',
           url: 'https://api.mapbox.com/v4/mapbox.pirates/8/123/99.png?access_token=pk.eyJ1Ijoic2lnY29ycG9yYXRpdm9qYSIsImEiOiJjaXczZ3hlc2YwMDBrMm9wYnRqd3gyMWQ0In0.wF12VawgDM31l5RcAGb6AA',
         }),
       }
@@ -134,8 +133,7 @@ window.vendorMapbox = (evt) => {
     }, undefined, {
       preload: 2,
       source: new OLSourceXYZ({
-        attributions: 'prueba mapea',
-        attributionsCollapsible: false,
+        attributions: 'prueba mapea mapbox',
         url: 'https://api.mapbox.com/v4/mapbox.pirates/8/123/99.png?access_token=pk.eyJ1Ijoic2lnY29ycG9yYXRpdm9qYSIsImEiOiJjaXczZ3hlc2YwMDBrMm9wYnRqd3gyMWQ0In0.wF12VawgDM31l5RcAGb6AA',
       }),
     });
@@ -151,7 +149,6 @@ window.vendorOSM = (evt) => {
         preload: 2,
         source: new OLSourceXYZ({
           attributions: 'osm de mapea',
-          attributionsCollapsible: true,
           url: 'https://b.tile.openstreetmap.org/11/989/794.png',
         })
       }
@@ -161,7 +158,6 @@ window.vendorOSM = (evt) => {
       preload: 2,
       source: new OLSourceXYZ({
         attributions: 'osm de mapea',
-        attributionsCollapsible: true,
         url: 'https://b.tile.openstreetmap.org/11/989/794.png',
       })
     });
@@ -233,16 +229,10 @@ window.vendorWMTS = (evt) => {
     Se incluyen los siguientes parámetros vendor:
       {
         visible: false,
-        source: new OLSourceWMTS({
-          url: "http://clientes.guadaltel.es/desarrollo/geossigc/wfs?",
-        })
       }
   `)) {
     const wmts = new WMTS("WMTS*http://www.ideandalucia.es/geowebcache/service/wmts?*toporaster", undefined, {
       visible: false,
-      source: new OLSourceWMTS({
-        url: "http://clientes.guadaltel.es/desarrollo/geossigc/wfs?",
-      })
     });
     mapjs.addLayers(wmts);
   }
@@ -252,16 +242,15 @@ window.vendorMouse = (evt) => {
   if (window.confirm(`
     Se incluyen los siguientes parámetros vendor:
       {
-        projection: 'EPGS:4326',
-        render: function() {
-          console.log(arguments);
-        },
-        target: document.head.title
+        projection: getProj('EPSG:4326'),
+        undefinedHTML: 'sin valor',
+        coordinateFormat: (coord) => "x: \${coord[0]} | y: \${coord[1]}"
       }
   `)) {
     const mouse = new Mouse({
-      projection: 'EPGS:4326',
-      undefinedHTML: 'sin valor'
+      projection: getProj('EPSG:4326'),
+      undefinedHTML: 'sin valor',
+      coordinateFormat: (coord) => `x: ${coord[0]} | y: ${coord[1]}`
     });
     let panel = mapjs.getPanels('map-info')[0];
     if (!panel) {
@@ -285,9 +274,10 @@ window.vendorOverviewMap = (evt) => {
   if (window.confirm(`
     Se incluyen los siguientes parámetros vendor:
       {
-        collapsible: false,
-        className: 'm-map-info',
-        position: Position.BR,
+        collapsed: false,
+        tipLabel: 'prueba de tip label',
+        label: 'prueba de label',
+        collapseLabel: 'esto es el label de colapsar'
       }
   `)) {
     const overviewmap = new OverviewMap({ toggleDelay: 400 }, {

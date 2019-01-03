@@ -16,13 +16,13 @@ import { compileSync as compileTemplate } from '../util/Template';
 class ScaleLine extends ControlBase {
   /**
    * @constructor
-   * @param {String} format format response
+   * @param {Object} vendorOptions vendor options for the base library
    * @extends {M.Control}
    * @api
    */
-  constructor() {
+  constructor(vendorOptions = {}) {
     // implementation of this control
-    const impl = new ScaleLineImpl();
+    const impl = new ScaleLineImpl(vendorOptions);
 
     // calls the super constructor
     super(impl, ScaleLine.NAME);

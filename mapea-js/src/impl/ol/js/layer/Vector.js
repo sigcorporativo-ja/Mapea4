@@ -25,10 +25,12 @@ class Vector extends Layer {
    * @constructor
    * @implements {M.impl.Layer}
    * @param {Mx.parameters.LayerOptions} options - custom options for this layer
+   * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(options) {
-    super(options);
+  constructor(options, vendorOptions) {
+    super(options, vendorOptions);
+
     /**
      * The facade layer instance
      * @private
@@ -82,13 +84,14 @@ class Vector extends Layer {
     this.map = map;
     map.on(EventType.CHANGE_PROJ, this.setProjection_.bind(this), this);
 
-    this.ol3Layer = new OLLayerVector();
+    this.ol3Layer = new OLLayerVector(this.vendorOptions_);
     this.updateSource_();
 
     this.setVisible(this.visibility);
     const olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
   }
+
   /**
    * This function sets the map object of the layer
    *
@@ -96,12 +99,14 @@ class Vector extends Layer {
    * @function
    */
   updateSource_() {
-    if (isNullOrEmpty(this.ol3Layer.getSource())) {
-      this.ol3Layer.setSource(new OLSourceVector());
+    if (isNullOrEmpty(this.vendorOptions_.source)) {
+      if (isNullOrEmpty(this.ol3Layer.getSource())) {
+        this.ol3Layer.setSource(new OLSourceVector());
+      }
+      this.redraw();
+      this.loaded_ = true;
+      this.fire(EventType.LOAD, [this.features_]);
     }
-    this.redraw();
-    this.loaded_ = true;
-    this.fire(EventType.LOAD, [this.features_]);
   }
 
   /**

@@ -15,13 +15,13 @@ import { compileSync as compileTemplate } from '../util/Template';
 class Panzoombar extends ControlBase {
   /**
    * @constructor
-   * @param {String} format format response
+   * @param {Object} vendorOptions vendor options for the base library
    * @extends {M.Control}
    * @api
    */
-  constructor() {
+  constructor(vendorOptions = {}) {
     // implementation of this control
-    const impl = new PanzoombarImpl();
+    const impl = new PanzoombarImpl(vendorOptions);
 
     // calls the super constructor
     super(impl, Panzoombar.NAME);

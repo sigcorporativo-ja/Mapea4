@@ -1,7 +1,7 @@
 /**
  * @module M/impl/control/Mouse
  */
-import { extend } from 'M/util/Utils';
+import { extend, isNullOrEmpty } from 'M/util/Utils';
 import OLControlMousePosition from 'ol/control/MousePosition';
 import { createStringXY as createStringXYCoordinate } from 'ol/coordinate';
 import { get as getProj } from 'ol/proj';
@@ -54,10 +54,12 @@ class Mouse extends OLControlMousePosition {
     }, this.vendorOptions_, true));
     map.getMapImpl().addControl(this);
 
-    // update projection mouse
-    map.getImpl().on(EventType.CHANGE, () => {
-      this.setProjection(getProj(map.getProjection().code));
-    });
+    // update projection mouse only if the projection was no specified
+    if (isNullOrEmpty(this.vendorOptions_.projection)) {
+      map.getImpl().on(EventType.CHANGE, () => {
+        this.setProjection(getProj(map.getProjection().code));
+      });
+    }
   }
 
   /**

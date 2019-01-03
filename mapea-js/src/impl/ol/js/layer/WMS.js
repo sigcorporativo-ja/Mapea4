@@ -1,7 +1,16 @@
 /**
  * @module M/impl/layer/WMS
  */
-import { isNullOrEmpty, isNull, getResolutionFromScale, addParameters, concatUrlPaths, getWMSGetCapabilitiesUrl, isArray } from 'M/util/Utils';
+import {
+  isNullOrEmpty,
+  isNull,
+  getResolutionFromScale,
+  addParameters,
+  concatUrlPaths,
+  getWMSGetCapabilitiesUrl,
+  isArray,
+  extend,
+} from 'M/util/Utils';
 import FacadeLayerBase from 'M/layer/Layer';
 import * as LayerType from 'M/layer/Type';
 import FacadeWMS from 'M/layer/WMS';
@@ -31,26 +40,27 @@ class WMS extends LayerBase {
    * @constructor
    * @implements {M.impl.Layer}
    * @param {Mx.parameters.LayerOptions} options custom options for this layer
+   * @param {Object} vendorOptions vendor options for the base library
    * @api stable
    */
-  constructor(options = {}) {
+  constructor(options = {}, vendorOptions) {
     // calls the super constructor
-    super(options);
+    super(options, vendorOptions);
 
+    /**
+    * WMS layer options
+    * @private
+    * @type {object}
+    * @expose
+    */
     this.options = options;
+
     /**
      * The WMS layers instances from capabilities
      * @private
      * @type {Array<M.layer.WMS>}
      */
     this.layers = [];
-
-    /**
-     * WMS layer options
-     * @private
-     * @type {object}
-     * @expose
-     */
 
     /**
      * WMS layer options
@@ -211,7 +221,8 @@ class WMS extends LayerBase {
    */
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
-    if ((this.tiled === true) && !isNullOrEmpty(this.ol3Layer)) {
+    if ((this.tiled === true) && !isNullOrEmpty(this.ol3Layer) &&
+    isNullOrEmpty(this.vendorOptions_.source)) {
       // gets the extent
       this.getMaxExtent_().then((olExtent) => {
         let layerParams = {};
@@ -234,7 +245,6 @@ class WMS extends LayerBase {
             FORMAT: 'image/png',
           };
         }
-
 
         let newSource;
         if (this.tiled === true) {
@@ -314,7 +324,7 @@ class WMS extends LayerBase {
       }
 
       if (this.tiled === true) {
-        this.ol3Layer = new OLLayerTile({
+        this.ol3Layer = new OLLayerTile(extend({
           visible: this.visibility && (this.options.visibility !== false),
           source: new TileWMS({
             url: this.url,
@@ -326,9 +336,9 @@ class WMS extends LayerBase {
           maxResolution: this.options.maxResolution,
           opacity: this.opacity_,
           zIndex: this.zIndex_,
-        });
+        }, this.vendorOptions_, true));
       } else {
-        this.ol3Layer = new OLLayerImage({
+        this.ol3Layer = new OLLayerImage(extend({
           visible: this.visibility && (this.options.visibility !== false),
           source: new ImageWMS({
             url: this.url,
@@ -339,7 +349,7 @@ class WMS extends LayerBase {
           maxResolution: this.options.maxResolution,
           opacity: this.opacity_,
           zIndex: this.zIndex_,
-        });
+        }, this.vendorOptions_, true));
       }
       // keeps z-index values before ol resets
       const zIndex = this.zIndex_;
@@ -376,7 +386,7 @@ class WMS extends LayerBase {
           name: layer.name,
           version: layer.version,
           tiled: this.tiled,
-        });
+        }, this.vendorOptions_);
         this.layers.push(wmsLayer);
       });
 
