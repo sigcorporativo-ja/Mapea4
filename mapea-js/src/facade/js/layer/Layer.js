@@ -56,11 +56,25 @@ class LayerBase extends Base {
     this.transparent = parameter.transparent;
 
     /**
+    * @private
+    * @type {Array<number>}
+    * @expose
+    */
+    this.maxExtent_ = parameter.maxExtent;
+
+    /**
      * @private
      * @type {number}
      * @expose
      */
     this.zindex_ = null;
+
+    /**
+     * @private
+     * @type {M.Map}
+     * @expose
+     */
+    this.map_ = null;
   }
 
   /**
@@ -122,6 +136,58 @@ class LayerBase extends Base {
     } else {
       this.getImpl().displayInLayerSwitcher = true;
     }
+  }
+
+  /**
+   * This function indicates the layer max extent
+   *
+   * @function
+   * @api
+   * @export
+   */
+  getMaxExtent() {
+    let maxExtent;
+    if (isNullOrEmpty(this.maxExtent_)) {
+      const mapMaxExtent = this.map_.getMaxExtent();
+      if (isNullOrEmpty(mapMaxExtent)) {
+        const projMaxExtent = this.map_.getProjection().getExtent();
+        maxExtent = projMaxExtent;
+      } else {
+        const mapMaxExtentArr = [
+          mapMaxExtent.x.min,
+          mapMaxExtent.y.min,
+          mapMaxExtent.x.max,
+          mapMaxExtent.y.max,
+        ];
+        maxExtent = mapMaxExtentArr;
+      }
+    } else {
+      maxExtent = this.maxExtent_;
+    }
+    return maxExtent;
+  }
+
+  /**
+   * This function changes the layer max extent
+   *
+   * @function
+   * @api
+   * @export
+   */
+  setMaxExtent(maxExtent) {
+    this.maxExtent_ = maxExtent;
+  }
+
+  /**
+   * The facade map instace
+   *
+   * @function
+   * @public
+   * @api
+   * @export
+   */
+  setMap(map) {
+    this.map_ = map;
   }
 
   /**
