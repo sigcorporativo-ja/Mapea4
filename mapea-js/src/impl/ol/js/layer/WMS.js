@@ -8,7 +8,6 @@ import {
   addParameters,
   concatUrlPaths,
   getWMSGetCapabilitiesUrl,
-  isArray,
   extend,
 } from 'M/util/Utils';
 import FacadeLayerBase from 'M/layer/Layer';
@@ -26,7 +25,7 @@ import GetCapabilities from '../util/WMSCapabilities';
 import FormatWMS from '../format/WMS';
 import TileWMS from '../source/TileWMS';
 import ImageWMS from '../source/ImageWMS';
-import EnvolvedExtent from '../util/EnvolvedExtent';
+
 /**
  * @classdesc
  * @api
@@ -46,6 +45,14 @@ class WMS extends LayerBase {
   constructor(options = {}, vendorOptions) {
     // calls the super constructor
     super(options, vendorOptions);
+
+    /**
+     * The facade layer instance
+     * @private
+     * @type {M.layer.WMS}
+     * @expose
+     */
+    this.facadeLayer_ = null;
 
     /**
     * WMS layer options
@@ -224,7 +231,7 @@ class WMS extends LayerBase {
     if ((this.tiled === true) && !isNullOrEmpty(this.ol3Layer) &&
     isNullOrEmpty(this.vendorOptions_.source)) {
       // gets the extent
-      this.getMaxExtent_().then((olExtent) => {
+      this.facadeLayer_.getMaxExtent().then((maxExtent) => {
         let layerParams = {};
         const optParams = this.options.params;
         if (!isNullOrEmpty(optParams)) {
@@ -253,10 +260,10 @@ class WMS extends LayerBase {
             params: layerParams,
             tileGrid: new OLTileGrid({
               resolutions,
-              extent: olExtent,
-              origin: getBottomLeft(olExtent),
+              extent: maxExtent,
+              origin: getBottomLeft(maxExtent),
             }),
-            extent: olExtent,
+            extent: maxExtent,
             minResolution: this.options.minResolution,
             maxResolution: this.options.maxResolution,
             opacity: this.opacity_,
@@ -270,7 +277,7 @@ class WMS extends LayerBase {
           });
         }
         this.ol3Layer.setSource(newSource);
-        this.ol3Layer.setExtent(olExtent);
+        this.ol3Layer.setExtent(maxExtent);
       });
     }
   }
@@ -286,7 +293,7 @@ class WMS extends LayerBase {
     let resolutions = this.map.getResolutions();
 
     // gets the extent
-    this.getMaxExtent_().then((olExtent) => {
+    this.facadeLayer_.getMaxExtent().then((maxExtent) => {
       let tileGrid;
 
       if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
@@ -297,8 +304,8 @@ class WMS extends LayerBase {
       if (!isNullOrEmpty(resolutions)) {
         tileGrid = new OLTileGrid({
           resolutions,
-          extent: olExtent,
-          origin: getBottomLeft(olExtent),
+          extent: maxExtent,
+          origin: getBottomLeft(maxExtent),
         });
       }
 
@@ -331,7 +338,7 @@ class WMS extends LayerBase {
             params: layerParams,
             tileGrid,
           }),
-          extent: olExtent,
+          extent: maxExtent,
           minResolution: this.options.minResolution,
           maxResolution: this.options.maxResolution,
           opacity: this.opacity_,
@@ -344,7 +351,7 @@ class WMS extends LayerBase {
             url: this.url,
             params: layerParams,
           }),
-          extent: olExtent,
+          extent: maxExtent,
           minResolution: this.options.minResolution,
           maxResolution: this.options.maxResolution,
           opacity: this.opacity_,
@@ -535,38 +542,6 @@ class WMS extends LayerBase {
   }
 
   /**
-   * TODO
-   *
-   * @private
-   * @function
-   */
-  getMaxExtent_() {
-    let extent = this.map.getMaxExtent();
-    return new Promise((success, fail) => {
-      if (!isNullOrEmpty(extent)) {
-        if (!isArray(extent)) {
-          extent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
-        }
-        success.call(this, extent);
-      } else {
-        EnvolvedExtent.calculate(this.map, this).then((envolvedExtent) => {
-          if (!isNullOrEmpty(this.map)) {
-            let maxExtent = this.map.getMaxExtent();
-            if (!isNullOrEmpty(maxExtent)) {
-              if (!isArray(maxExtent)) {
-                maxExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
-              }
-              success.call(this, maxExtent);
-            } else {
-              success.call(this, envolvedExtent);
-            }
-          }
-        });
-      }
-    });
-  }
-
-  /**
    * This function destroys this layer, cleaning the HTML
    * and unregistering all events
    *
@@ -603,6 +578,29 @@ class WMS extends LayerBase {
     if (!isNullOrEmpty(ol3Layer)) {
       ol3Layer.getSource().changed();
     }
+  }
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getExtentFromCapabilities(capabilities) {
+    const name = this.facadeLayer_.name;
+    return capabilities.getLayerExtent(name);
+  }
+
+  /**
+   * This function set facade class WMS
+   *
+   * @function
+   * @param {object} obj - Facade layer
+   * @api stable
+   */
+  setFacadeObj(obj) {
+    this.facadeLayer_ = obj;
   }
 
   /**

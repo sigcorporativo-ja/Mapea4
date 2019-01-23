@@ -85,8 +85,13 @@ class WMC extends Layer {
    */
   select() {
     if (this.selected === false) {
-      const bbox = this.map.getBbox();
-
+      const bboxObj = this.map.getBbox();
+      const bbox = [
+        bboxObj.x.min,
+        bboxObj.y.min,
+        bboxObj.x.max,
+        bboxObj.y.max,
+      ];
       // unselect layers
       this.map.getWMC().forEach(wmcLayer => wmcLayer.unselect());
 

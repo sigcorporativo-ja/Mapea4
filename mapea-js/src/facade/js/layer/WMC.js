@@ -75,7 +75,7 @@ class WMC extends LayerBase {
     this.loaded_ = false;
 
     this.once(EventType.LOAD, () => {
-      this.loaded = true;
+      this.setLoaded(true);
     });
   }
 
