@@ -352,13 +352,11 @@ class Map extends MObject {
       // TODO removing the WMC layer with ol3
       if (wmcLayer.selected === true && wmcLayer.isLoaded() === false) {
         wmcLayer.on(EventType.LOAD, () => {
-          wmcLayer.setLoaded(false);
           this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
           this.facadeMap_.removeWMS(wmcLayer.layers);
           this.facadeMap_.refreshWMCSelectorControl();
         });
       } else {
-        wmcLayer.setLoaded(false);
         this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
         this.facadeMap_.removeWMS(wmcLayer.layers);
       }
@@ -1160,19 +1158,17 @@ class Map extends MObject {
    * @api stable
    */
   setMaxExtent(maxExtent, zoomToExtent) {
-    // checks if the param is null or empty
-    if (isNullOrEmpty(maxExtent)) {
-      Exception('No ha especificado ningún maxExtent');
+    let olExtent = maxExtent;
+
+    if (!isNullOrEmpty(olExtent)) {
+      olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
     }
 
-    // set the extent by ol
-    const olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
     const olMap = this.getMapImpl();
-    //      let minZoom = olMap.getView().
     olMap.getView().set('extent', olExtent);
     this.updateResolutionsFromBaseLayer();
 
-    if (zoomToExtent !== false) {
+    if (!isNullOrEmpty(olExtent) && (zoomToExtent !== false)) {
       this.setBbox(olExtent);
     }
 
@@ -1592,6 +1588,7 @@ class Map extends MObject {
       projection = {
         code: olProjection.getCode(),
         units: olProjection.getUnits(),
+        getExtent: () => olProjection.getExtent(),
       };
     }
     return projection;
@@ -1865,6 +1862,7 @@ Map.Z_INDEX[LayerType.WMC] = 1;
 Map.Z_INDEX[LayerType.WMS] = 1000;
 Map.Z_INDEX[LayerType.WMTS] = 2000;
 Map.Z_INDEX[LayerType.OSM] = 2000;
+Map.Z_INDEX[LayerType.Mapbox] = 2000;
 Map.Z_INDEX[LayerType.KML] = 3000;
 Map.Z_INDEX[LayerType.WFS] = 9999;
 Map.Z_INDEX[LayerType.Vector] = 9999;

@@ -241,119 +241,122 @@ const getOptionsKML = (parameter) => {
  */
 export const maxExtent = (maxExtentParam) => {
   const maxExtentParameter = maxExtentParam;
-  const maxExtentVar = {
-    x: {},
-    y: {},
-  };
+  let maxExtentVar;
+  if (!isNullOrEmpty(maxExtentParameter)) {
+    maxExtentVar = {
+      x: {},
+      y: {},
+    };
 
-  // checks if the param is null or empty
-  if (isNullOrEmpty(maxExtentParameter)) {
-    Exception('No ha especificado ningún parámetro maxExtent');
-  }
+    // checks if the param is null or empty
+    if (isNullOrEmpty(maxExtentParameter)) {
+      Exception('No ha especificado ningún parámetro maxExtent');
+    }
 
-  // string
-  if (isString(maxExtentParameter)) {
-    if (/^\s*-?\d+(\.\d+)?\s*[,;]\s*-?\d+(\.\d+)?\s*[,;]\s*-?\d+(\.\d+)?\s*[,;]\s*-?\d+(\.\d+)?$/.test(maxExtentParameter)) {
-      const extentArray = maxExtentParameter.split(/[,;]+/);
-      if (extentArray.length === 4) {
-        maxExtentVar.x.min = Number.parseFloat(extentArray[0]);
-        maxExtentVar.y.min = Number.parseFloat(extentArray[1]);
-        maxExtentVar.x.max = Number.parseFloat(extentArray[2]);
-        maxExtentVar.y.max = Number.parseFloat(extentArray[3]);
+    // string
+    if (isString(maxExtentParameter)) {
+      if (/^\s*-?\d+(\.\d+)?\s*[,;]\s*-?\d+(\.\d+)?\s*[,;]\s*-?\d+(\.\d+)?\s*[,;]\s*-?\d+(\.\d+)?$/.test(maxExtentParameter)) {
+        const extentArray = maxExtentParameter.split(/[,;]+/);
+        if (extentArray.length === 4) {
+          maxExtentVar.x.min = Number.parseFloat(extentArray[0]);
+          maxExtentVar.y.min = Number.parseFloat(extentArray[1]);
+          maxExtentVar.x.max = Number.parseFloat(extentArray[2]);
+          maxExtentVar.y.max = Number.parseFloat(extentArray[3]);
+        } else {
+          Exception('El formato del parámetro maxExtent no es correcto');
+        }
+      } else {
+        Exception('El formato del parámetro maxExtent no es correcto');
+      }
+    } else if (isArray(maxExtentParameter)) {
+      // array
+      if (maxExtentParameter.length === 4) {
+        if (isString(maxExtentParameter[0])) {
+          maxExtentParameter[0] = Number.parseFloat(maxExtentParameter[0]);
+        }
+        if (isString(maxExtentParameter[1])) {
+          maxExtentParameter[1] = Number.parseFloat(maxExtentParameter[1]);
+        }
+        if (isString(maxExtentParameter[2])) {
+          maxExtentParameter[2] = Number.parseFloat(maxExtentParameter[2]);
+        }
+        if (isString(maxExtentParameter[3])) {
+          maxExtentParameter[3] = Number.parseFloat(maxExtentParameter[3]);
+        }
+        maxExtentVar.x.min = maxExtentParameter[0];
+        maxExtentVar.y.min = maxExtentParameter[1];
+        maxExtentVar.x.max = maxExtentParameter[2];
+        maxExtentVar.y.max = maxExtentParameter[3];
+      } else {
+        Exception('El formato del parámetro maxExtent no es correcto');
+      }
+    } else if (isObject(maxExtentParameter)) {
+      // object
+      // x min
+      if (!isNull(maxExtentParameter.left)) {
+        if (isString(maxExtentParameter.left)) {
+          maxExtentParameter.left = Number.parseFloat(maxExtentParameter.left);
+        }
+        maxExtentVar.x.min = maxExtentParameter.left;
+      } else if (!isNull(maxExtentParameter.x.min)) {
+        if (isString(maxExtentParameter.x.min)) {
+          maxExtentParameter.x.min = Number.parseFloat(maxExtentParameter.x.min);
+        }
+        maxExtentVar.x.min = maxExtentParameter.x.min;
+      } else {
+        Exception('El formato del parámetro maxExtent no es correcto');
+      }
+      // y min
+      if (!isNull(maxExtentParameter.bottom)) {
+        if (isString(maxExtentParameter.bottom)) {
+          maxExtentParameter.bottom = Number.parseFloat(maxExtentParameter.bottom);
+        }
+        maxExtentVar.y.min = maxExtentParameter.bottom;
+      } else if (!isNull(maxExtentParameter.y.min)) {
+        if (isString(maxExtentParameter.y.min)) {
+          maxExtentParameter.y.min = Number.parseFloat(maxExtentParameter.y.min);
+        }
+        maxExtentVar.y.min = maxExtentParameter.y.min;
+      } else {
+        Exception('El formato del parámetro maxExtent no es correcto');
+      }
+      // x max
+      if (!isNull(maxExtentParameter.right)) {
+        if (isString(maxExtentParameter.right)) {
+          maxExtentParameter.right = Number.parseFloat(maxExtentParameter.right);
+        }
+        maxExtentVar.x.max = maxExtentParameter.right;
+      } else if (!isNull(maxExtentParameter.x.max)) {
+        if (isString(maxExtentParameter.x.max)) {
+          maxExtentParameter.x.max = Number.parseFloat(maxExtentParameter.x.max);
+        }
+        maxExtentVar.x.max = maxExtentParameter.x.max;
+      } else {
+        Exception('El formato del parámetro maxExtent no es correcto');
+      }
+      // y max
+      if (!isNull(maxExtentParameter.top)) {
+        if (isString(maxExtentParameter.top)) {
+          maxExtentParameter.top = Number.parseFloat(maxExtentParameter.top);
+        }
+        maxExtentVar.y.max = maxExtentParameter.top;
+      } else if (!isNull(maxExtentParameter.y.max)) {
+        if (isString(maxExtentParameter.y.max)) {
+          maxExtentParameter.y.max = Number.parseFloat(maxExtentParameter.y.max);
+        }
+        maxExtentVar.y.max = maxExtentParameter.y.max;
       } else {
         Exception('El formato del parámetro maxExtent no es correcto');
       }
     } else {
-      Exception('El formato del parámetro maxExtent no es correcto');
+      // unknown
+      Exception(`El parámetro no es de un tipo soportado: ${typeof maxExtentParameter}`);
     }
-  } else if (isArray(maxExtentParameter)) {
-    // array
-    if (maxExtentParameter.length === 4) {
-      if (isString(maxExtentParameter[0])) {
-        maxExtentParameter[0] = Number.parseFloat(maxExtentParameter[0]);
-      }
-      if (isString(maxExtentParameter[1])) {
-        maxExtentParameter[1] = Number.parseFloat(maxExtentParameter[1]);
-      }
-      if (isString(maxExtentParameter[2])) {
-        maxExtentParameter[2] = Number.parseFloat(maxExtentParameter[2]);
-      }
-      if (isString(maxExtentParameter[3])) {
-        maxExtentParameter[3] = Number.parseFloat(maxExtentParameter[3]);
-      }
-      maxExtentVar.x.min = maxExtentParameter[0];
-      maxExtentVar.y.min = maxExtentParameter[1];
-      maxExtentVar.x.max = maxExtentParameter[2];
-      maxExtentVar.y.max = maxExtentParameter[3];
-    } else {
-      Exception('El formato del parámetro maxExtent no es correcto');
-    }
-  } else if (isObject(maxExtentParameter)) {
-    // object
-    // x min
-    if (!isNull(maxExtentParameter.left)) {
-      if (isString(maxExtentParameter.left)) {
-        maxExtentParameter.left = Number.parseFloat(maxExtentParameter.left);
-      }
-      maxExtentVar.x.min = maxExtentParameter.left;
-    } else if (!isNull(maxExtentParameter.x.min)) {
-      if (isString(maxExtentParameter.x.min)) {
-        maxExtentParameter.x.min = Number.parseFloat(maxExtentParameter.x.min);
-      }
-      maxExtentVar.x.min = maxExtentParameter.x.min;
-    } else {
-      Exception('El formato del parámetro maxExtent no es correcto');
-    }
-    // y min
-    if (!isNull(maxExtentParameter.bottom)) {
-      if (isString(maxExtentParameter.bottom)) {
-        maxExtentParameter.bottom = Number.parseFloat(maxExtentParameter.bottom);
-      }
-      maxExtentVar.y.min = maxExtentParameter.bottom;
-    } else if (!isNull(maxExtentParameter.y.min)) {
-      if (isString(maxExtentParameter.y.min)) {
-        maxExtentParameter.y.min = Number.parseFloat(maxExtentParameter.y.min);
-      }
-      maxExtentVar.y.min = maxExtentParameter.y.min;
-    } else {
-      Exception('El formato del parámetro maxExtent no es correcto');
-    }
-    // x max
-    if (!isNull(maxExtentParameter.right)) {
-      if (isString(maxExtentParameter.right)) {
-        maxExtentParameter.right = Number.parseFloat(maxExtentParameter.right);
-      }
-      maxExtentVar.x.max = maxExtentParameter.right;
-    } else if (!isNull(maxExtentParameter.x.max)) {
-      if (isString(maxExtentParameter.x.max)) {
-        maxExtentParameter.x.max = Number.parseFloat(maxExtentParameter.x.max);
-      }
-      maxExtentVar.x.max = maxExtentParameter.x.max;
-    } else {
-      Exception('El formato del parámetro maxExtent no es correcto');
-    }
-    // y max
-    if (!isNull(maxExtentParameter.top)) {
-      if (isString(maxExtentParameter.top)) {
-        maxExtentParameter.top = Number.parseFloat(maxExtentParameter.top);
-      }
-      maxExtentVar.y.max = maxExtentParameter.top;
-    } else if (!isNull(maxExtentParameter.y.max)) {
-      if (isString(maxExtentParameter.y.max)) {
-        maxExtentParameter.y.max = Number.parseFloat(maxExtentParameter.y.max);
-      }
-      maxExtentVar.y.max = maxExtentParameter.y.max;
-    } else {
-      Exception('El formato del parámetro maxExtent no es correcto');
-    }
-  } else {
-    // unknown
-    Exception(`El parámetro no es de un tipo soportado: ${typeof maxExtentParameter}`);
-  }
 
-  if (Number.isNaN(maxExtentVar.x.min) || Number.isNaN(maxExtentVar.y.min) ||
-    Number.isNaN(maxExtentVar.x.max) || Number.isNaN(maxExtentVar.y.max)) {
-    Exception('El formato del parámetro maxExtent no es correcto');
+    if (Number.isNaN(maxExtentVar.x.min) || Number.isNaN(maxExtentVar.y.min) ||
+      Number.isNaN(maxExtentVar.x.max) || Number.isNaN(maxExtentVar.y.max)) {
+      Exception('El formato del parámetro maxExtent no es correcto');
+    }
   }
 
   return maxExtentVar;
@@ -1689,47 +1692,48 @@ const getTiledWMS = (parameter) => {
 };
 
 /**
- * Parses the parameter in order to get the CQL filter
+ * Parses the parameter in order to get the layer max extent
  * @private
  * @function
  */
-const getCQLWMS = (parameter) => {
-  let cql;
-  let params;
+const getMaxExtentWMS = (parameter) => {
+  let maxExtentParam;
   if (isString(parameter)) {
-    // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>*<TILED>
-    if (/^WMS\*[^*]+\*[^*]+\*[^*]+\*(true|false)\*(true|false)$/i.test(parameter)) {
-      params = parameter.split(/\*/);
-      cql = params[5].trim();
-    } else if (/^WMS\*[^*]+\*[^*]+\*[^*]+\*(true|false)/i.test(parameter)) {
-      cql = true;
-    } else if (/^[^*]+\*[^*]+\*[^*]+\*(true|false)\*(true|false)\*[^*]+/i.test(parameter)) {
-      // <URL>*<NAME>*<TITLE>*<TRANSPARENCE>*<TILED>*<CQL>
-      params = parameter.split(/\*/);
-      cql = params[5].trim();
-    } else if (/^[^*]+\*[^*]+\*[^*]+\*(true|false)\*[^*]+/i.test(parameter)) {
-      // <URL>*<NAME>*<TITLE>*<TRANSPARENCE>*<CQL>
-      params = parameter.split(/\*/);
-      cql = params[4].trim();
-    } else if (/^[^*]+\*[^*]+\*[^*]+\*[^*]+/i.test(parameter)) {
-      // <URL>*<NAME>*<TITLE>*<CQL>
-      params = parameter.split(/\*/);
-      cql = params[3].trim();
-    } else if (/^[^*]+\*[^*]+\*(true|false)\*(true|false)\*[^*]+/i.test(parameter)) {
-      // <URL>*<NAME>*<TRANSPARENCE>*<TILED>*<CQL>
-      params = parameter.split(/\*/);
-      cql = params[4].trim();
+    // <WMS>*<LEGEND>*<URL>*<NAME>*<TRANSPARENCE>*<TILED>*<MAXEXTENT>
+    if (/^WMS(\*[^*]*){6}$/i.test(parameter)) {
+      const params = parameter.split(/\*/);
+      maxExtentParam = params[6].trim();
+      // <WMS_FULL>*<URL>*<TILED>*<MAXEXTENT>
+    } else if (/^WMS_FULL(\*[^*]*){3}/i.test(parameter)) {
+      const params = parameter.split(/\*/);
+      maxExtentParam = params[3].trim();
     }
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.cql)) {
-    cql = parameter.cql.trim();
-  } else if (!isObject(parameter)) {
+    if (!isNullOrEmpty(maxExtentParam)) {
+      maxExtentParam = maxExtentParam.split(/[,;]+/);
+    }
+  } else if (isObject(parameter)) {
+    maxExtentParam = parameter.maxExtent;
+  } else {
     Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
   }
-
-  if (/^(true|false)$/i.test(cql) || /^\d\.\d\.\d$/.test(cql)) {
-    cql = undefined;
+  if (!isNullOrEmpty(maxExtentParam) && maxExtentParam.length === 4) {
+    if (isString(maxExtentParam[0])) {
+      maxExtentParam[0] = Number.parseFloat(maxExtentParam[0]);
+    }
+    if (isString(maxExtentParam[1])) {
+      maxExtentParam[1] = Number.parseFloat(maxExtentParam[1]);
+    }
+    if (isString(maxExtentParam[2])) {
+      maxExtentParam[2] = Number.parseFloat(maxExtentParam[2]);
+    }
+    if (isString(maxExtentParam[3])) {
+      maxExtentParam[3] = Number.parseFloat(maxExtentParam[3]);
+    }
+  } else if (!isNullOrEmpty(maxExtentParam)) {
+    Exception('El formato del parámetro maxExtent no es correcto');
   }
-  return cql;
+
+  return maxExtentParam;
 };
 
 /**
@@ -1793,35 +1797,26 @@ export const wms = (userParameters) => {
   }
 
   layers = userParametersArray.map((userParam) => {
-    const layerObj = {};
-
-    // gets the layer type
-    layerObj.type = LayerType.WMS;
-
-    // gets the name
-    layerObj.name = getNameWMS(userParam);
-
-    // gets the URL
-    layerObj.url = getURLWMS(userParam);
-
-    // gets the legend
-    layerObj.legend = getLegendWMS(userParam);
-
-    // gets the transparence
-    layerObj.transparent = getTransparentWMS(userParam);
-
-    // gets the tiled
-    layerObj.tiled = getTiledWMS(userParam);
-
-    layerObj.cql = getCQLWMS(userParam);
-
-    // gets the version
-    layerObj.version = getVersionWMS(userParam);
-
-    // gets the options
-    layerObj.options = getOptionsWMS(userParam);
-
-    return layerObj;
+    const type = LayerType.WMS;
+    const name = getNameWMS(userParam);
+    const url = getURLWMS(userParam);
+    const legend = getLegendWMS(userParam);
+    const transparent = getTransparentWMS(userParam);
+    const tiled = getTiledWMS(userParam);
+    const maxExtentWMS = getMaxExtentWMS(userParam);
+    const version = getVersionWMS(userParam);
+    const options = getOptionsWMS(userParam);
+    return {
+      type,
+      name,
+      url,
+      legend,
+      transparent,
+      tiled,
+      maxExtent: maxExtentWMS,
+      version,
+      options,
+    };
   });
 
   if (!isArray(userParameters)) {
