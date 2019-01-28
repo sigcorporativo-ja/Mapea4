@@ -132,12 +132,19 @@ class WMC extends LayerBase {
   /**
    * Max extent provided by the WMC file
    */
-  get maxExtent() {
-    return this.getImpl().maxExtent;
-  }
-
   set maxExtent(newMaxExtent) {
     this.getImpl().maxExtent = newMaxExtent;
+  }
+
+  /**
+   * This function indicates the layer max extent
+   *
+   * @function
+   * @api
+   * @export
+   */
+  getMaxExtent() {
+    return this.getImpl().getMaxExtent();
   }
 
   /**

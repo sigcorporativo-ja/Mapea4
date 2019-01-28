@@ -147,7 +147,7 @@ class LayerBase extends Base {
    */
   getMaxExtent() {
     let maxExtent;
-    if (isNullOrEmpty(this.maxExtent_)) {
+    if (isNullOrEmpty(this.maxExtent_) && !isNullOrEmpty(this.map_)) {
       const mapMaxExtent = this.map_.getMaxExtent();
       if (isNullOrEmpty(mapMaxExtent)) {
         const projMaxExtent = this.map_.getProjection().getExtent();

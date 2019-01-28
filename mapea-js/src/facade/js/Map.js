@@ -1899,7 +1899,19 @@ class Map extends Base {
    * @api
    */
   getEnvolvedExtent() {
-    return Promise.all(this.getLayers().map((layer) => {
+    let envolvedLayers;
+    const wmcLayer = this.getWMC().find(wmc => wmc.selected);
+    if (isNullOrEmpty(wmcLayer)) {
+      const baseLayers = this.getBaseLayers();
+      if (isNullOrEmpty(baseLayers)) {
+        envolvedLayers = this.getLayers();
+      } else {
+        envolvedLayers = baseLayers;
+      }
+    } else {
+      envolvedLayers = [wmcLayer];
+    }
+    return Promise.all(envolvedLayers.map((layer) => {
       let maxExtentPromise = layer.getMaxExtent();
       if (!(maxExtentPromise instanceof Promise)) {
         maxExtentPromise = new Promise(success => success(maxExtentPromise));
@@ -1917,10 +1929,12 @@ class Map extends Base {
         },
       };
       maxExtents.forEach((maxExtent) => {
-        envolvedMaxExtent.x.min = Math.min(envolvedMaxExtent.x.min, maxExtent[0]);
-        envolvedMaxExtent.y.min = Math.min(envolvedMaxExtent.y.min, maxExtent[1]);
-        envolvedMaxExtent.x.max = Math.max(envolvedMaxExtent.x.max, maxExtent[2]);
-        envolvedMaxExtent.y.max = Math.max(envolvedMaxExtent.y.max, maxExtent[3]);
+        if (!isNullOrEmpty(maxExtent)) {
+          envolvedMaxExtent.x.min = Math.min(envolvedMaxExtent.x.min, maxExtent[0]);
+          envolvedMaxExtent.y.min = Math.min(envolvedMaxExtent.y.min, maxExtent[1]);
+          envolvedMaxExtent.x.max = Math.max(envolvedMaxExtent.x.max, maxExtent[2]);
+          envolvedMaxExtent.y.max = Math.max(envolvedMaxExtent.y.max, maxExtent[3]);
+        }
       });
       return envolvedMaxExtent;
     });
@@ -1987,28 +2001,32 @@ class Map extends Base {
    */
   getInitCenter_() {
     return new Promise((success, fail) => {
-      let center = this.getCenter();
-      if (!isNullOrEmpty(center)) {
-        success(center);
-      } else {
-        const maxExtent = this.getMaxExtent();
-        if (!isNullOrEmpty(maxExtent)) {
-          // obtener centro del maxExtent
+      const getCenterFn = (extent) => {
+        let center;
+        if (isArray(extent)) {
           center = {
-            x: ((maxExtent.x.max + maxExtent.x.min) / 2),
-            y: ((maxExtent.y.max + maxExtent.y.min) / 2),
+            x: ((extent[0] + extent[2]) / 2),
+            y: ((extent[1] + extent[3]) / 2),
           };
-          success(center);
         } else {
-          this.getEnvolvedExtent().then((extent) => {
-            // obtener centrol del extent
-            center = {
-              x: ((extent[0] + extent[2]) / 2),
-              y: ((extent[1] + extent[3]) / 2),
-            };
-            success(center);
-          });
+          center = {
+            x: ((extent.x.max + extent.x.min) / 2),
+            y: ((extent.y.max + extent.y.min) / 2),
+          };
         }
+        return center;
+      };
+      const center = this.getCenter();
+      if (isNullOrEmpty(center)) {
+        const maxExtent = this.getMaxExtent();
+        if (isNullOrEmpty(maxExtent)) {
+          this.getEnvolvedExtent()
+            .then(getCenterFn).then(success);
+        } else {
+          success(getCenterFn(maxExtent));
+        }
+      } else {
+        success(center);
       }
     });
   }
