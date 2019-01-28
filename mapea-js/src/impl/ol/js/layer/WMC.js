@@ -115,7 +115,7 @@ class WMC extends Layer {
         // load layers
         this.loadLayers(context);
         const bboxObj = this.map.getBbox();
-        if (!isNullOrEmpty(bbox)) {
+        if (!isNullOrEmpty(bboxObj)) {
           const bbox = [
             bboxObj.x.min,
             bboxObj.y.min,
