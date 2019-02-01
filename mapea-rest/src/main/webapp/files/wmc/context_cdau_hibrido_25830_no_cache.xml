@@ -52,7 +52,7 @@
 
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?"/>
 			</Server>
 			<Name>contexto_andalucia</Name>
 			<Title>Callejero Digital de Andalucía Unificado (Híbrido)</Title>
@@ -72,7 +72,7 @@
 					<Name/>
 					<Title>Estilo de la leyenda</Title>
 					<LegendURL format="image/png" height="891" width="333">
-							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/img/leyenda_CDAU_hibrido.png"/>
+							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/img/leyenda_CDAU_hibrido.png"/>
 					</LegendURL>
 				</Style>
 			</StyleList>
@@ -82,7 +82,7 @@
 
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?"/>
 			</Server>
 			<Name>batimetria</Name>
 			<Title>batimetria</Title>
@@ -111,7 +111,7 @@
 
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_SPOT_Andalucia_2005?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_SPOT_Andalucia_2005?"/>
 			</Server>
 			<Name>mosaico_spot_2005</Name>
 			<Title>Base Cartográfica</Title>
@@ -139,7 +139,7 @@
 		
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/wms/ortofoto2010?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/wms/ortofoto2010?"/>
 			</Server>
 			<Name>orto_2010-11</Name>
 			<Title>Ortofoto</Title>
@@ -166,7 +166,7 @@
 		<!--  ******   Base Cartografica ******  -->
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?"/>
 			</Server>
 			<Name>CDAU_base</Name>
 			<Title>Base Cartografica</Title>
@@ -195,7 +195,7 @@
 
 		<Layer hidden="0" queryable="1">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/cdau/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/cdau/wms?"/>
 			</Server>
 			<Name>CDAU_wms</Name>
 			<Title>Viales y Portales</Title>
@@ -224,7 +224,7 @@
 
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?"/>
 			</Server>
 			<Name>CDAU_toponimia</Name>
 			<Title>Toponimia de núcleos y Litoral</Title>

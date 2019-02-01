@@ -52,7 +52,7 @@
 
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?" xlink:type="simple"/>
+				<OnlineResource xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?" xlink:type="simple"/>
 			</Server>
 			<Name>contexto_andalucia</Name>
 			<Title>Callejero Digital de Andalucía Unificado</Title>
@@ -71,7 +71,7 @@
 					<Name/>
 					<Title>Estilo de la leyenda</Title>
 					<LegendURL format="image/png" height="891" width="333">
-							<OnlineResource xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/img/leyenda_CDAU_callejero.png"/>
+							<OnlineResource xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/img/leyenda_CDAU_callejero.png"/>
 					</LegendURL>
 				</Style>
 			</StyleList>
@@ -81,7 +81,7 @@
 
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?" xlink:type="simple"/>
+				<OnlineResource xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?" xlink:type="simple"/>
 			</Server>
 			<Name>batimetria</Name>
 			<Title>batimetria</Title>
@@ -108,7 +108,7 @@
 		<!--  ******   Base Cartografica ******  -->
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
-				<OnlineResource xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?" xlink:type="simple"/>
+				<OnlineResource xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?" xlink:type="simple"/>
 			</Server>
 			<Name>CDAU_base</Name>
 			<Title>Base Cartografica</Title>
@@ -136,7 +136,7 @@
 
 		<Layer hidden="0" queryable="1">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xlink:href="http://www.callejerodeandalucia.es/servicios/cdau/wms?" xlink:type="simple"/>
+				<OnlineResource xlink:href="https://www.callejerodeandalucia.es/servicios/cdau/wms?" xlink:type="simple"/>
 			</Server>
 			<Name>CDAU_wms</Name>
 			<Title>Viales y Portales</Title>
@@ -165,7 +165,7 @@
 
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?" xlink:type="simple"/>
+				<OnlineResource xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?" xlink:type="simple"/>
 			</Server>
 			<Name>CDAU_toponimia</Name>
 			<Title>Toponimia de núcleos y Litoral</Title>
