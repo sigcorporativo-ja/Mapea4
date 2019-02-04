@@ -886,6 +886,42 @@ class Map extends Base {
   }
 
   /**
+   * This function gets the GeoJSON layers added to the map
+   *
+   * @function
+   * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
+   * @returns {Array<WFS>} layers from the map
+   * @api
+   */
+  getGeoJSON(layersParamVar) {
+    let layersParam = layersParamVar;
+    // checks if the implementation can manage layers
+    if (isUndefined(MapImpl.prototype.getGeoJSON)) {
+      Exception('La implementación usada no posee el método getGeoJSON');
+    }
+
+    // parses parameters to Array
+    if (isNull(layersParam)) {
+      layersParam = [];
+    } else if (!isArray(layersParam)) {
+      layersParam = [layersParam];
+    }
+
+    // gets the parameters as Layer objects to filter
+    let filters = [];
+    if (layersParam.length > 0) {
+      filters = layersParam.map((layerParam) => {
+        return parameter.layer(layerParam, LayerType.GeoJSON);
+      });
+    }
+
+    // gets the layers
+    const layers = this.getImpl().getGeoJSON(filters).sort(Map.LAYER_SORT);
+
+    return layers;
+  }
+
+  /**
    * This function adds the WFS layers to the map
    *
    * @function

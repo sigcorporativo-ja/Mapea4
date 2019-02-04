@@ -616,6 +616,66 @@ class Map extends MObject {
   }
 
   /**
+   * This function gets the GeoJSON layers added to the map
+   *
+   * @function
+   * @param {Array<M.Layer>} filters to apply to the search
+   * @returns {Array<M.layer.WFS>} layers from the map
+   * @api stable
+   */
+  getGeoJSON(filtersParam) {
+    let foundLayers = [];
+    let filters = filtersParam;
+
+    // get all geojson layers
+    const geojsonLayers = this.layers_.filter((layer) => {
+      return (layer.type === LayerType.GeoJSON);
+    });
+
+    // parse to Array
+    if (isNullOrEmpty(filters)) {
+      filters = [];
+    }
+    if (!isArray(filters)) {
+      filters = [filters];
+    }
+
+    if (filters.length === 0) {
+      foundLayers = geojsonLayers;
+    } else {
+      filters.forEach((filterLayer) => {
+        const filteredWFSLayers = geojsonLayers.filter((wfsLayer) => {
+          let layerMatched = true;
+          // checks if the layer is not in selected layers
+          if (!foundLayers.includes(wfsLayer)) {
+            // type
+            if (!isNullOrEmpty(filterLayer.type)) {
+              layerMatched = (layerMatched && (filterLayer.type === wfsLayer.type));
+            }
+            // URL
+            if (!isNullOrEmpty(filterLayer.url)) {
+              layerMatched = (layerMatched && (filterLayer.url === wfsLayer.url));
+            }
+            // name
+            if (!isNullOrEmpty(filterLayer.name)) {
+              layerMatched = (layerMatched && (filterLayer.name === wfsLayer.name));
+            }
+            // legend
+            if (!isNullOrEmpty(filterLayer.legend)) {
+              layerMatched = (layerMatched && (filterLayer.legend === wfsLayer.legend));
+            }
+          } else {
+            layerMatched = false;
+          }
+          return layerMatched;
+        });
+        foundLayers = foundLayers.concat(filteredWFSLayers);
+      });
+    }
+    return foundLayers;
+  }
+
+  /**
    * This function gets the WFS layers added to the map
    *
    * @function
