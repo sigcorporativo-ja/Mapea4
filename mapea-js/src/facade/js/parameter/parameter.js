@@ -1387,7 +1387,7 @@ export const geojson = (userParameters) => {
     layerObj.type = LayerType.GeoJSON;
 
     // gets the name
-    layerObj.legend = getLegendGeoJSON(userParam);
+    layerObj.name = getLegendGeoJSON(userParam);
 
     // gets the URL
     layerObj.url = getURLGeoJSON(userParam);
