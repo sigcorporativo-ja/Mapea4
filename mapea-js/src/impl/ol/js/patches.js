@@ -1,5 +1,5 @@
 /* eslint-disable */
-import * as LayerModule from 'ol/layer/Layer';
+import LayerModule from 'ol/layer/Layer';
 import OLFormatGML3 from 'ol/format/GML3';
 // import OLInteractionPointer from 'ol/interaction/Pointer';
 import { writeStringTextNode } from 'ol/format/xsd';
@@ -106,7 +106,7 @@ OLFormatGML3.prototype.getCoords_ = (point, optSRSName) => {
  */
 export const optionsFromCapabilities = (wmtsCap, config) => {
   const layers = wmtsCap['Contents']['Layer'];
-  const l = find(layers, function(elt, index, array) {
+  const l = find(layers, function (elt, index, array) {
     return elt['Identifier'] == config['layer'];
   });
   if (l === null) {
@@ -117,13 +117,13 @@ export const optionsFromCapabilities = (wmtsCap, config) => {
   if (l['TileMatrixSetLink'].length > 1) {
     if ('projection' in config) {
       idx = findIndex(l['TileMatrixSetLink'],
-        function(elt, index, array) {
-          const tileMatrixSet = find(tileMatrixSets, function(el) {
+        function (elt, index, array) {
+          const tileMatrixSet = find(tileMatrixSets, function (el) {
             return el['Identifier'] == elt['TileMatrixSet'];
           });
           const supportedCRS = tileMatrixSet['SupportedCRS'];
           const proj1 = getProjection(supportedCRS.replace(/urn:ogc:def:crs:(\w+):(.*:)?(\w+)$/, '$1:$3')) ||
-                getProjection(supportedCRS);
+            getProjection(supportedCRS);
           const proj2 = getProjection(config['projection']);
           if (proj1 && proj2) {
             return equivalent(proj1, proj2);
@@ -133,7 +133,7 @@ export const optionsFromCapabilities = (wmtsCap, config) => {
         });
     } else {
       idx = findIndex(l['TileMatrixSetLink'],
-        function(elt, index, array) {
+        function (elt, index, array) {
           return elt['TileMatrixSet'] == config['matrixSet'];
         });
     }
@@ -152,7 +152,7 @@ export const optionsFromCapabilities = (wmtsCap, config) => {
   if ('format' in config) {
     format = config['format'];
   }
-  idx = findIndex(l['Style'], function(elt, index, array) {
+  idx = findIndex(l['Style'], function (elt, index, array) {
     if ('style' in config) {
       return elt['Title'] == config['style'];
     } else {
@@ -166,7 +166,7 @@ export const optionsFromCapabilities = (wmtsCap, config) => {
 
   const dimensions = {};
   if ('Dimension' in l) {
-    l['Dimension'].forEach(function(elt, index, array) {
+    l['Dimension'].forEach(function (elt, index, array) {
       const key = elt['Identifier'];
       let value = elt['Default'];
       if (value === undefined) {
@@ -177,7 +177,7 @@ export const optionsFromCapabilities = (wmtsCap, config) => {
   }
 
   const matrixSets = wmtsCap['Contents']['TileMatrixSet'];
-  const matrixSetObj = find(matrixSets, function(elt, index, array) {
+  const matrixSetObj = find(matrixSets, function (elt, index, array) {
     return elt['Identifier'] == matrixSet;
   });
 
@@ -185,7 +185,7 @@ export const optionsFromCapabilities = (wmtsCap, config) => {
   const code = matrixSetObj['SupportedCRS'];
   if (code) {
     projection = getProjection(code.replace(/urn:ogc:def:crs:(\w+):(.*:)?(\w+)$/, '$1:$3')) ||
-        getProjection(code);
+      getProjection(code);
   }
   if ('projection' in config) {
     const projConfig = getProjection(config['projection']);
@@ -206,7 +206,7 @@ export const optionsFromCapabilities = (wmtsCap, config) => {
   else if (wgs84BoundingBox !== undefined) {
     const wgs84ProjectionExtent = getProjection('EPSG:4326').getExtent();
     wrapX = (wgs84BoundingBox[0] == wgs84ProjectionExtent[0] &&
-        wgs84BoundingBox[2] == wgs84ProjectionExtent[2]);
+      wgs84BoundingBox[2] == wgs84ProjectionExtent[2]);
     extent = transformExtent(
       wgs84BoundingBox, 'EPSG:4326', projection);
     const projectionExtent = projection.getExtent();
@@ -231,7 +231,7 @@ export const optionsFromCapabilities = (wmtsCap, config) => {
 
     for (let i = 0, ii = gets.length; i < ii; ++i) {
       if (gets[i]['Constraint']) {
-        const constraint = find(gets[i]['Constraint'], function(element) {
+        const constraint = find(gets[i]['Constraint'], function (element) {
           return element['name'] == 'GetEncoding';
         });
         const encodings = constraint['AllowedValues']['Value'];
@@ -242,23 +242,23 @@ export const optionsFromCapabilities = (wmtsCap, config) => {
         }
         if (requestEncoding === WMTSRequestEncoding.KVP) {
           if (includes(encodings, WMTSRequestEncoding.KVP)) {
-            urls.push(/** @type {string} */ (gets[i]['href']));
+            urls.push( /** @type {string} */ (gets[i]['href']));
           }
         } else {
           break;
         }
       } else if (gets[i]['href']) {
         requestEncoding = WMTSRequestEncoding.KVP;
-        urls.push(/** @type {string} */ (gets[i]['href']));
+        urls.push( /** @type {string} */ (gets[i]['href']));
       }
     }
   }
   if (urls.length === 0) {
     requestEncoding = WMTSRequestEncoding.REST;
-    l['ResourceURL'].forEach(function(element) {
+    l['ResourceURL'].forEach(function (element) {
       if (element['resourceType'] === 'tile') {
         format = element['format'];
-        urls.push(/** @type {string} */ (element['template']));
+        urls.push( /** @type {string} */ (element['template']));
       }
     });
   }
