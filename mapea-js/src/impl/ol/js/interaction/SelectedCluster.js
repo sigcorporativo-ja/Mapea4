@@ -236,12 +236,18 @@ export default class SelectCluster extends OLInteractionSelect {
     cf.setId(clusterFeature.getId());
     cf.setStyle(clonedStyles);
     cf.set('features', [clusterFeature]);
-    cf.set('geometry', new OLGeomPoint(newPoint));
+    const geometry = ['Point', 'MultiPoint'].includes(clusterFeature.getGeometry().getType()) === true ?
+      new OLGeomPoint(newPoint) :
+      clusterFeature.getGeometry();
+    const linkGeometry = ['Point', 'MultiPoint'].includes(clusterFeature.getGeometry().getType()) === true ?
+      new OLGeomLineString([center, newPoint]) :
+      new OLGeomLineString([center, Utils.getCentroid(clusterFeature.getGeometry())]);
+    cf.set('geometry', geometry);
     this.overlayLayer_.getSource().addFeature(cf);
 
     const lk = new OLFeature({
       selectclusterlink: true,
-      geometry: new OLGeomLineString([center, newPoint]),
+      geometry: linkGeometry,
     });
     this.overlayLayer_.getSource().addFeature(lk);
   }
