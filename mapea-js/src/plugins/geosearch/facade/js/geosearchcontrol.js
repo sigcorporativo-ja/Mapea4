@@ -165,7 +165,7 @@ export default class GeosearchControl extends M.Control {
   createView(map) {
     this.facadeMap_ = map;
     const options = { jsonp: true };
-    const html = M.template.compileSync(geosearchHTML, options);
+    const html = this.accessHelp_(M.template.compileSync(geosearchHTML, options));
     this.addEvents(html);
     return html;
   }
@@ -194,13 +194,15 @@ export default class GeosearchControl extends M.Control {
 
     // help buntton
     const btnHelp = this.element_.getElementsByTagName('button')['m-geosearch-help-btn'];
-    btnHelp.addEventListener('click', (evt) => {
-      evt.preventDefault();
-      btnHelp.classList.toggle('shown');
-      this.helpClick_();
-    });
+    if (btnHelp) {
+      btnHelp.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        btnHelp.classList.toggle('shown');
+        this.helpClick_();
+      });
+    }
 
-    // clear buntton
+    // clear button
     const btnClean = this.element_.getElementsByTagName('button')['m-geosearch-clear-btn'];
     btnClean.addEventListener('click', this.clearClick_.bind(this));
 
@@ -208,6 +210,12 @@ export default class GeosearchControl extends M.Control {
     this.resultsContainer_ = this.element_.querySelector('div#m-geosearch-results');
     M.utils.enableTouchScroll(this.resultsContainer_);
     this.searchingResult_ = this.element_.querySelector('div#m-geosearch-results > div#m-searching-result');
+  }
+
+  addEventsHelp(html) {
+    this.element_ = html;
+    const btnCloseHelp = this.element_.getElementsByTagName('button')['m-geosearch-closeHelp-btn'];
+    btnCloseHelp.addEventListener('click', this.closeHelpClick_.bind(this));
   }
 
   /**
@@ -314,6 +322,7 @@ export default class GeosearchControl extends M.Control {
 
     const resultsTemplateVars = this.parseResultsForTemplate_(results);
     const options = { jsonp: true, vars: resultsTemplateVars };
+
     const html = M.template.compileSync(geosearchResultHTML, options);
     this.resultsContainer_.classList.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
     /* unregisters previous events */
@@ -500,10 +509,49 @@ export default class GeosearchControl extends M.Control {
         }
         const options = { jsonp: true, vars: { entities: help } };
         const html = M.template.compileSync(helpTemplateHTML, options);
+        this.addEventsHelp(html);
         this.getImpl().showHelp(html);
         this.helpShown_ = true;
       });
     }
+  }
+
+  /**
+   * This function close the help container
+   * to this control
+   *
+   * @private
+   * @function
+   */
+  closeHelpClick_(evt) {
+    if (this.helpShown_ === true) {
+      this.getImpl().hideHelp();
+      this.helpShown_ = false;
+    }
+  }
+
+  /**
+   * This function checks if there is help service
+   * to this control
+   *
+   * @private
+   * @function
+   */
+  accessHelp_(html) {
+    this.element_ = html;
+    let help;
+    M.remote.get(this.helpUrl_).then((res) => {
+      try {
+        help = JSON.parse(res.text);
+      } catch (e) {
+        M.Exception(`La respuesta no es un JSON válido: ${e}`);
+      }
+    });
+    if (!help) {
+      const buttons = this.element_.getElementsByTagName('button');
+      buttons[1].remove();
+    }
+    return this.element_;
   }
 
   /**
@@ -528,6 +576,7 @@ export default class GeosearchControl extends M.Control {
     this.results_.length = 0;
     this.resultsContainer_.classList.remove(GeosearchControl.HIDDEN_RESULTS_CLASS);
     this.getImpl().clear();
+    this.getImpl().hideHelp();
     this.spatialSearch_ = false;
   }
 
