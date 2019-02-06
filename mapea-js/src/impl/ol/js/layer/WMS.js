@@ -55,11 +55,11 @@ class WMS extends LayerBase {
     this.facadeLayer_ = null;
 
     /**
-    * WMS layer options
-    * @private
-    * @type {object}
-    * @expose
-    */
+     * WMS layer options
+     * @private
+     * @type {object}
+     * @expose
+     */
     this.options = options;
 
     /**
@@ -229,7 +229,7 @@ class WMS extends LayerBase {
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
     if ((this.tiled === true) && !isNullOrEmpty(this.ol3Layer) &&
-    isNullOrEmpty(this.vendorOptions_.source)) {
+      isNullOrEmpty(this.vendorOptions_.source)) {
       // gets the extent
       this.facadeLayer_.getMaxExtent().then((maxExtent) => {
         let layerParams = {};
@@ -483,6 +483,30 @@ class WMS extends LayerBase {
     if (!isNullOrEmpty(this.options.maxResolution)) {
       this.options.maxResolution = getResolutionFromScale(this.options.maxScale, projection.units);
       this.ol3Layer.setMaxResolution(this.options.maxResolution);
+    }
+  }
+
+  /**
+   * TODO
+   */
+  setMaxExtent(maxExtent) {
+    this.getOL3Layer().setExtent(maxExtent);
+    if (this.tiled === true) {
+      let resolutions = this.map.getResolutions();
+      let tileGrid;
+      if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
+        resolutions = this.resolutions_;
+      }
+
+      // gets the tileGrid
+      if (!isNullOrEmpty(resolutions)) {
+        tileGrid = new OLTileGrid({
+          resolutions,
+          extent: maxExtent,
+          origin: getBottomLeft(maxExtent),
+        });
+        this.ol3Layer.getSource().tileGrid = tileGrid;
+      }
     }
   }
 

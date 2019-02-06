@@ -56,10 +56,10 @@ class LayerBase extends Base {
     this.transparent = parameter.transparent;
 
     /**
-    * @private
-    * @type {Array<number>}
-    * @expose
-    */
+     * @private
+     * @type {Array<number>}
+     * @expose
+     */
     this.maxExtent_ = parameter.maxExtent;
 
     /**
@@ -176,6 +176,9 @@ class LayerBase extends Base {
    */
   setMaxExtent(maxExtent) {
     this.maxExtent_ = maxExtent;
+    if (this.getImpl().setMaxExtent !== undefined) {
+      this.getImpl().setMaxExtent(maxExtent);
+    }
   }
 
   /**
