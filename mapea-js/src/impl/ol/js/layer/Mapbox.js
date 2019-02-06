@@ -9,8 +9,6 @@ import OLLayerTile from 'ol/layer/Tile';
 import OLSourceXYZ from 'ol/source/XYZ';
 import OLControlAttribution from 'ol/control/Attribution';
 import { get as getProj } from 'ol/proj';
-import OLTileGrid from 'ol/tilegrid/TileGrid';
-import { getBottomLeft } from 'ol/extent';
 import ImplMap from '../Map';
 import Layer from './Layer';
 
@@ -211,22 +209,7 @@ class Mapbox extends Layer {
    * TODO
    */
   setMaxExtent(maxExtent) {
-    this.getOL3Layer().setExtent(maxExtent);
-    let resolutions = this.map.getResolutions();
-    let tileGrid;
-    if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
-      resolutions = this.resolutions_;
-    }
-
-    // gets the tileGrid
-    if (!isNullOrEmpty(resolutions)) {
-      tileGrid = new OLTileGrid({
-        resolutions,
-        extent: maxExtent,
-        origin: getBottomLeft(maxExtent),
-      });
-      this.ol3Layer.getSource().tileGrid = tileGrid;
-    }
+    this.ol3Layer.setExtent(maxExtent);
   }
 
   /**

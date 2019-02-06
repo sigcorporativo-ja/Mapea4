@@ -329,7 +329,7 @@ class WMS extends LayerBase {
           FORMAT: 'image/png',
         };
       }
-
+      this.layerParams_ = layerParams;
       if (this.tiled === true) {
         this.ol3Layer = new OLLayerTile(extend({
           visible: this.visibility && (this.options.visibility !== false),
@@ -505,7 +505,12 @@ class WMS extends LayerBase {
           extent: maxExtent,
           origin: getBottomLeft(maxExtent),
         });
-        this.ol3Layer.getSource().tileGrid = tileGrid;
+        const newSource = new TileWMS({
+          url: this.url,
+          params: this.layerParams_,
+          tileGrid,
+        });
+        this.ol3Layer.setSource(newSource);
       }
     }
   }
