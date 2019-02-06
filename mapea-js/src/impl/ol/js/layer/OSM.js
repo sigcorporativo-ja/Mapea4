@@ -8,8 +8,6 @@ import { isNullOrEmpty, generateResolutionsFromExtent, extend } from 'M/util/Uti
 import OLLayerTile from 'ol/layer/Tile';
 import OLControlAttribution from 'ol/control/Attribution';
 import SourceOSM from 'ol/source/OSM';
-import OLTileGrid from 'ol/tilegrid/TileGrid';
-import { getBottomLeft } from 'ol/extent';
 import ImplMap from '../Map';
 import Layer from './Layer';
 
@@ -187,22 +185,7 @@ class OSM extends Layer {
    * TODO
    */
   setMaxExtent(maxExtent) {
-    this.getOL3Layer().setExtent(maxExtent);
-    let resolutions = this.map.getResolutions();
-    let tileGrid;
-    if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
-      resolutions = this.resolutions_;
-    }
-
-    // gets the tileGrid
-    if (!isNullOrEmpty(resolutions)) {
-      tileGrid = new OLTileGrid({
-        resolutions,
-        extent: maxExtent,
-        origin: getBottomLeft(maxExtent),
-      });
-      this.ol3Layer.getSource().tileGrid = tileGrid;
-    }
+    this.ol3Layer.setExtent(maxExtent);
   }
 
   /**

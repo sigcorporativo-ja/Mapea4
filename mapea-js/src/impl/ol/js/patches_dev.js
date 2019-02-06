@@ -1,5 +1,5 @@
 /* eslint-disable */
-import * as LayerModule from 'ol/layer/Layer';
+import LayerModule from 'ol/layer/Layer';
 import OLFormatGML3 from 'ol/format/GML3';
 // import OLInteractionPointer from 'ol/interaction/Pointer';
 import { writeStringTextNode } from 'ol/format/xsd';

@@ -22,9 +22,9 @@ import {
   fillResolutions,
   generateResolutionsFromExtent,
 } from 'M/util/Utils';
+import 'patches';
 import View from './View';
 import EnvolvedExtent from './util/EnvolvedExtent';
-import './patches';
 
 /**
  * @module M/impl/Map
