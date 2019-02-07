@@ -227,10 +227,11 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
     context.beginPath();
 
     // Draw the path with the form
+    const pi = Math.PI;
     switch (this.form_) {
       case 'none':
         transfo.fac = 1;
-        const pi = Math.PI;
+        // const pi = Math.PI;
         break;
       case 'circle':
       case 'ban':
@@ -263,6 +264,7 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
           posX: c,
           posY: c - (0.2 * this.radius_),
         };
+
         break;
       case 'coma':
         context.moveTo(c + (0.8 * this.radius_), c - (0.2 * this.radius_));
@@ -357,7 +359,9 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
         grd.addColorStop(1, colorAsString(fcolor));
         grd.addColorStop(0, colorAsString(scolor));
         context.fillStyle = grd;
-      } else context.fillStyle = colorAsString(fcolor);
+      } else {
+        context.fillStyle = colorAsString(fcolor);
+      }
       context.fill();
     }
     if (this.stroke_ && renderOptions.strokeWidth) {
