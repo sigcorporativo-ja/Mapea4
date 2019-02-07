@@ -148,6 +148,19 @@ export default class Geosearch extends M.Plugin {
   }
 
   /**
+   * This function return the control of plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getControls() {
+    const aControl = [];
+    aControl.push(this.control_);
+    return aControl;
+  }
+
+  /**
    * This function compare if pluging recieved by param is instance of  Geosearch
    *
    * @public

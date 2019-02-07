@@ -86,6 +86,19 @@ export default class AttributeTable extends M.Plugin {
   }
 
   /**
+   * This function return the control of plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getControls() {
+    const aControl = [];
+    aControl.push(this.control_);
+    return aControl;
+  }
+
+  /**
    * Name of this control
    * @const
    * @type {string}

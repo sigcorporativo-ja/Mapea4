@@ -91,7 +91,7 @@ export default class Geosearchbylocation extends M.Plugin {
      * @type {M.control.Geosearchbylocation}
      * @api stable
      */
-    this.controlGeo = null;
+    this.controlGeo_ = null;
 
     /**
      * Plugin panel
@@ -110,7 +110,7 @@ export default class Geosearchbylocation extends M.Plugin {
    */
   addTo(map) {
     this.map_ = map;
-    this.controlGeo = new GeosearchbylocationControl(
+    this.controlGeo_ = new GeosearchbylocationControl(
       this.url_,
       this.core_,
       this.handler_,
@@ -144,7 +144,7 @@ export default class Geosearchbylocation extends M.Plugin {
       streetViewPanel.addClassName('m-with-geosearchbylocation');
       this.panel_.addClassName('m-with-streetview');
     }
-    this.panel_.addControls(this.controlGeo);
+    this.panel_.addControls(this.controlGeo_);
     this.map_.addPanels(this.panel_);
   }
 
@@ -156,8 +156,8 @@ export default class Geosearchbylocation extends M.Plugin {
    * @api stable
    */
   destroy() {
-    this.map_.removeControls([this.controlGeo]);
-    this.controlGeo = null;
+    this.map_.removeControls([this.controlGeo_]);
+    this.controlGeo_ = null;
     this.name = null;
     this.url_ = null;
     this.core_ = null;
@@ -166,9 +166,23 @@ export default class Geosearchbylocation extends M.Plugin {
     this.spatialField_ = null;
     this.rows_ = null;
     this.map_ = null;
-    this.controlGeo = null;
+    this.controlGeo_ = null;
     this.panel_ = null;
   }
+
+  /**
+   * This function return the control of plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getControls() {
+    const aControl = [];
+    aControl.push(this.controlGeo_);
+    return aControl;
+  }
+
   /**
    * This function compare if pluging recieved by param is instance of  M.plugin.Geosearchbylocation
    *

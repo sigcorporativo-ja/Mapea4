@@ -25,7 +25,14 @@ export default class WFSTControls extends M.Plugin {
      * @private
      * @type {String}
      */
+
     this.controls = controls;
+    /**
+     * Array of controls to be added
+     * @private
+     * @type {String}
+     */
+    this.controls_ = [];
 
     /**
      * Name of this control
@@ -117,21 +124,25 @@ export default class WFSTControls extends M.Plugin {
         if (this.controls[i] === 'drawfeature') {
           this.drawfeature_ = new DrawFeature(wfslayer);
           map.addControls([this.drawfeature_]);
+          this.controls_.push(this.drawfeature_);
           addSave = true;
           addClear = true;
         } else if (this.controls[i] === 'modifyfeature') {
           this.modifyfeature_ = new ModifyFeature(wfslayer);
           map.addControls([this.modifyfeature_]);
+          this.controls_.push(this.modifyfeature_);
           addSave = true;
           addClear = true;
         } else if (this.controls[i] === 'deletefeature') {
           this.deletefeature_ = new DeleteFeature(wfslayer);
           map.addControls([this.deletefeature_]);
+          this.controls_.push(this.deletefeature_);
           addSave = true;
           addClear = true;
         } else if (this.controls[i] === 'editattribute') {
           this.editattibute_ = new EditAttribute(wfslayer);
           map.addControls([this.editattibute_]);
+          this.controls_.push(this.editattibute_);
           addClear = true;
         }
       }
@@ -139,12 +150,25 @@ export default class WFSTControls extends M.Plugin {
       if (addSave) {
         this.savefeature_ = new SaveFeature(wfslayer);
         map.addControls([this.savefeature_]);
+        this.controls_.push(this.savefeature_);
       }
       if (addClear) {
         this.clearfeature_ = new ClearFeature(wfslayer);
         map.addControls([this.clearfeature_]);
+        this.controls_.push(this.clearfeature_);
       }
     }
+  }
+
+  /**
+   * This function return the control of plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getControls() {
+    return this.controls_;
   }
 
   /**
@@ -221,13 +245,7 @@ export default class WFSTControls extends M.Plugin {
     return false;
   }
 }
-/**
- * Name to identify this control
- * @const
- * @type {string}
- * @public
- * @api stable
- */
+
 /**
  * Name to identify this plugin
  * @const
