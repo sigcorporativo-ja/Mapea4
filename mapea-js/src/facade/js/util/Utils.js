@@ -1067,3 +1067,62 @@ export const replaceNode = (newNode, oldNode) => {
     parent.replaceChild(newNode, oldNode);
   }
 };
+
+/**
+ * This function returns true if some object value is function or "{{*}}"
+ * @function
+ * @public
+ * @param {object} obj
+ * @return {bool}
+ * @api
+ */
+export const isDynamic = (obj) => {
+  let flag = false;
+  if (!Array.isArray(obj) && typeof obj === 'object') {
+    flag = Object.values(obj).some(val => isDynamic(val));
+  } else if (typeof obj === 'function' || (typeof obj === 'string' && /\{\{.*\}\}/.test(obj))) {
+    flag = true;
+  }
+  return flag;
+};
+
+/**
+ * This function draw in a canvas style which is dynamic
+ * @function
+ * @public
+ * @param {object} obj
+ * @return {bool}
+ * @api
+ */
+
+export const drawDynamicStyle = (canvas) => {
+  const crossAngleA = Math.PI / 4;
+  const width = 160;
+  const height = 80;
+  const marginTextBottom = 15;
+  const radius = 20;
+  const axisA1 = [20 * Math.cos(crossAngleA), 20 * Math.cos(crossAngleA)];
+  const axisA2 = [20 * Math.cos(crossAngleA + Math.PI), 20 * Math.cos(crossAngleA + Math.PI)];
+  const centerSymbol = [width / 2, (height / 2) - marginTextBottom];
+  const canvasParam = canvas;
+  const ctx = canvas.getContext('2d');
+
+  canvasParam.width = width;
+  canvasParam.height = height;
+  ctx.font = '14px Arial';
+
+  // Draw the text
+  ctx.fillText('Simbología no disponible', 0, height - marginTextBottom);
+  ctx.strokeStyle = '#f00';
+  ctx.lineWidth = 3;
+
+  // Draw the symbol
+  ctx.beginPath();
+  ctx.arc(centerSymbol[0], centerSymbol[1], radius, 0, 2 * Math.PI);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(axisA1[0] + centerSymbol[0], axisA1[1] + centerSymbol[1]);
+  ctx.lineTo(axisA2[0] + centerSymbol[0], axisA2[1] + centerSymbol[1]);
+  ctx.stroke();
+  return canvas.toDataURL();
+};

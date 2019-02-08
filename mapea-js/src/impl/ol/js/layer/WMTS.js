@@ -8,15 +8,15 @@ import {
   getWMTSGetCapabilitiesUrl,
   extend,
 } from 'M/util/Utils';
-import { default as OLSourceWMTS, optionsFromCapabilities } from 'ol/source/WMTS';
+import { default as OLSourceWMTS } from 'ol/source/WMTS';
 import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 import OLTileGridWMTS from 'ol/tilegrid/WMTS';
 import { getBottomLeft } from 'ol/extent';
 import { get as getRemote } from 'M/util/Remote';
 import * as EventType from 'M/event/eventtype';
-import { get as getProj, transformExtent } from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
-import getLayerExtent from '../util/wmtscapabilities';
+import { optionsFromCapabilities } from 'patches';
 import LayerBase from './Layer';
 /**
  * @classdesc
@@ -39,11 +39,26 @@ class WMTS extends LayerBase {
     super(options, vendorOptions);
 
     /**
+     * The facade layer instance
+     * @private
+     * @type {M.layer.WMS}
+     * @expose
+     */
+    this.facadeLayer_ = null;
+
+    /**
      * Options from the GetCapabilities
      * @private
-     * @type {M.impl.format.WMTSCapabilities}
+     * @type {Prosmie}
      */
-    this.capabilitiesOptions = null;
+    this.capabilitiesOptionsPromise = null;
+
+    /**
+     * Options from the GetCapabilities
+     * @private
+     * @type {Promise}
+     */
+    this.getCapabilitiesPromise_ = null;
   }
 
   /**
@@ -80,25 +95,15 @@ class WMTS extends LayerBase {
    */
   setResolutions(resolutions) {
     if (isNullOrEmpty(this.vendorOptions_.source)) {
-      // gets the projection
+      const extent = this.facadeLayer_.getMaxExtent();
       const projection = getProj(this.map.getProjection().code);
-
-      // gets the extent
-      const extent = this.map.getMaxExtent();
-      let olExtent;
-      if (!isNullOrEmpty(extent)) {
-        olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
-      } else {
-        olExtent = projection.getExtent();
-      }
-
-      if (!isNull(this.capabilitiesParser)) {
+      this.getCapabilities().then((capabilities) => {
         // gets matrix
-        const matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
-        const matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
+        const matrixSet = capabilities.getMatrixSet(this.name);
+        const matrixIds = capabilities.getMatrixIds(this.name);
 
         // gets format
-        const format = this.capabilitiesParser.getFormat(this.name);
+        const format = capabilities.getFormat(this.name);
 
         const newSource = new OLSourceWMTS({
           url: this.url,
@@ -107,41 +112,14 @@ class WMTS extends LayerBase {
           format,
           projection,
           tileGrid: new OLTileGridWMTS({
-            origin: getBottomLeft(olExtent),
+            origin: getBottomLeft(extent),
             resolutions,
             matrixIds,
           }),
-          extent: olExtent,
+          extent,
         });
         this.ol3Layer.setSource(newSource);
-      } else {
-        // adds layer from capabilities
-        this.getCapabilities_().then((capabilitiesParser) => {
-          this.capabilitiesParser = capabilitiesParser;
-
-          // gets matrix
-          const matrixSet = this.capabilitiesParser.getMatrixSet(this.name);
-          const matrixIds = this.capabilitiesParser.getMatrixIds(this.name);
-
-          // gets format
-          const format = this.capabilitiesParser.getFormat(this.name);
-
-          const newSource = new OLSourceWMTS({
-            url: this.url,
-            layer: this.name,
-            matrixSet,
-            format,
-            projection,
-            tileGrid: new OLTileGridWMTS({
-              origin: getBottomLeft(olExtent),
-              resolutions,
-              matrixIds,
-            }),
-            extent: olExtent,
-          });
-          this.ol3Layer.setSource(newSource);
-        });
-      }
+      });
     }
   }
 
@@ -185,15 +163,25 @@ class WMTS extends LayerBase {
    * @function
    */
   addLayer_(capabilitiesOptions) {
+    const extent = this.facadeLayer_.getMaxExtent();
     // gets resolutions from defined min/max resolutions
     const capabilitiesOptionsVariable = capabilitiesOptions;
     const minResolution = this.options.minResolution;
     const maxResolution = this.options.maxResolution;
     capabilitiesOptionsVariable.format = this.options.format || capabilitiesOptions.format;
 
+    const wmtsSource = new OLSourceWMTS(extend(capabilitiesOptionsVariable, {
+      // tileGrid: new OLTileGridWMTS({
+      //   origin: getBottomLeft(extent),
+      //   resolutions,
+      //   matrixIds,
+      // }),
+      extent,
+    }, true));
+
     this.ol3Layer = new OLLayerTile(extend({
       visible: this.options.visibility,
-      source: new OLSourceWMTS(capabilitiesOptionsVariable),
+      source: wmtsSource,
       minResolution,
       maxResolution,
     }, this.vendorOptions_, true));
@@ -214,6 +202,14 @@ class WMTS extends LayerBase {
   }
 
   /**
+   * TODO
+   */
+  setMaxExtent(maxExtent) {
+    this.getOL3Layer().setExtent(maxExtent);
+  }
+
+
+  /**
    * This function gets the capabilities
    * of the WMTS service
    *
@@ -221,23 +217,28 @@ class WMTS extends LayerBase {
    * @function
    */
   getCapabilitiesOptions_() {
-    // name
-    const layerName = this.name;
-    // matrix set
-    let matrixSet = this.matrixSet;
-    if (isNullOrEmpty(matrixSet)) {
-      /* if no matrix set was specified then
-         it supposes the matrix set has the name
-         of the projection
-         */
-      matrixSet = this.map.getProjection().code;
-    }
-    return this.getCapabilities().then((parsedCapabilities) => {
-      return optionsFromCapabilities(parsedCapabilities, {
-        layer: layerName,
-        matrixSet,
+    if (isNullOrEmpty(this.capabilitiesOptionsPromise)) {
+      this.capabilitiesOptionsPromise = this.getCapabilities().then((capabilities) => {
+        const layerName = this.name;
+        let matrixSet = this.matrixSet;
+        if (isNullOrEmpty(matrixSet)) {
+          /* if no matrix set was specified then
+          it supposes the matrix set has the name
+          of the projection
+          */
+          matrixSet = this.map.getProjection().code;
+        }
+        const extent = this.facadeLayer_.getMaxExtent();
+        const capabilitiesOpts = optionsFromCapabilities(capabilities, {
+          layer: layerName,
+          matrixSet,
+          extent,
+        });
+        capabilitiesOpts.tileGrid.extent = extent;
+        return capabilitiesOpts;
       });
-    });
+    }
+    return this.capabilitiesOptionsPromise;
   }
 
   /**
@@ -248,15 +249,18 @@ class WMTS extends LayerBase {
    * @api stable
    */
   getCapabilities() {
-    const getCapabilitiesUrl = getWMTSGetCapabilitiesUrl(this.url);
-    const parser = new OLFormatWMTSCapabilities();
-    return new Promise((success, fail) => {
-      getRemote(getCapabilitiesUrl).then((response) => {
-        const getCapabilitiesDocument = response.xml;
-        const parsedCapabilities = parser.read(getCapabilitiesDocument);
-        success.call(this, parsedCapabilities);
+    if (isNullOrEmpty(this.getCapabilitiesPromise_)) {
+      this.getCapabilitiesPromise_ = new Promise((success, fail) => {
+        const getCapabilitiesUrl = getWMTSGetCapabilitiesUrl(this.url);
+        const parser = new OLFormatWMTSCapabilities();
+        getRemote(getCapabilitiesUrl).then((response) => {
+          const getCapabilitiesDocument = response.xml;
+          const parsedCapabilities = parser.read(getCapabilitiesDocument);
+          success.call(this, parsedCapabilities);
+        });
       });
-    });
+    }
+    return this.getCapabilitiesPromise_;
   }
 
   /**
@@ -283,24 +287,15 @@ class WMTS extends LayerBase {
     return this.options.maxResolution;
   }
 
-  getExtent() {
-    const olProjection = getProj(this.map.getProjection().code);
-    // creates the promise
-    this.extentPromise = new Promise((success, fail) => {
-      if (!isNullOrEmpty(this.extent_)) {
-        this.extent_ = transformExtent(this.extent_, this.extentProj_, olProjection);
-        this.extentProj_ = olProjection;
-        success(this.extent_);
-      } else {
-        this.getCapabilities().then((getCapabilities) => {
-          const contents = getCapabilities.Contents;
-          const projCode = this.map.getProjection().code;
-          this.extent_ = getLayerExtent(contents, this.name, projCode);
-          success(this.extent_);
-        });
-      }
-    });
-    return this.extentPromise;
+  /**
+   * This function set facade class WMTS
+   *
+   * @function
+   * @param {object} obj - Facade layer
+   * @api stable
+   */
+  setFacadeObj(obj) {
+    this.facadeLayer_ = obj;
   }
 
   /**

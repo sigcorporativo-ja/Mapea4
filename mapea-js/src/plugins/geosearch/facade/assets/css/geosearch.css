@@ -1,7 +1,6 @@
 /*********************
        GENERAL
 *********************/
-
 .m-geosearch-container, .m-searchstreetgeosearch-container, .m-searchstreet-container {
   top: 75px;
   width: 100%;
@@ -21,7 +20,6 @@
 /*********************
      SEARCH PANEL
 *********************/
-
 .m-geosearch-container>div.search-panel, .m-searchstreetgeosearch-container>div.search-panel, .m-searchstreet-container>div.search-panel {
   -webkit-display: flex;
   display: flex;
@@ -44,9 +42,11 @@
   .m-areas>div.m-area>div.m-geosearch.collapsed, .m-areas>div.m-area>div.m-searchstreetgeosearch.collapsed, .m-areas>div.m-area>div.m-searchstreet.collapsed {
     border-radius: 4px !important;
   }
+
   .m-geosearch-container, .m-searchstreetgeosearch-container, .m-searchstreet-container {
     border-radius: 4px !important;
   }
+
   div.m-geosearch.collapsed>div.m-panel-controls, div.m-searchstreetgeosearch.collapsed>div.m-panel-controls, div.m-searchstreet.collapsed>div.m-panel-controls {
     opacity: 100 !important;
     max-width: initial !important;
@@ -58,11 +58,11 @@
 /****************************
      FIREFOX HACKS
 ****************************/
-
 @-moz-document url-prefix() {
   div.m-geosearch div.m-panel-controls, div.m-searchstreetgeosearch div.m-panel-controls, div.m-searchstreet div.m-panel-controls {
     display: flex !important;
   }
+
   div.m-geosearch-container.shown, div.m-searchstreet-container.shown {
     display: initial !important;
   }
@@ -71,24 +71,25 @@
 /****************************
  INTERNET EXPLORER HACKS
 ****************************/
-
 @media all and (-ms-high-contrast: none), (-ms-high-contrast: active) {
   div.search-panel>input.m-input-search {
     width: 75% !important;
   }
+
   div.search-panel>input.m-input-search::-ms-clear {
     display: none;
   }
+
   div#m-searching-result, div#m-searching-result-searchstreet, div#m-searching-result-geosearch, div#m-searching-result-autocomplete {
     padding-left: 44%;
   }
+
   div.m-control.m-searchstreetgeosearch-container.shown {
     display: block !important;
   }
 }
 
 /* TEXT INPUT */
-
 div.search-panel>input.m-input-search {
   width: 100%;
   margin: 0px;
@@ -106,20 +107,20 @@ div.search-panel>input.m-input-search {
   div.search-panel>input.m-input-search#m-searchstreet-search-input {
     width: calc(100vw - 120px);
   }
+
   div.search-panel>input.m-input-search#m-geosearch-search-input {
     width: calc(100vw - 157px);
   }
+
   div.search-panel>input.m-input-search#m-searchstreetgeosearch-search-input {
     width: calc(100vw - 157px);
   }
 }
 
 /* SEARCH BUTTON */
-
 div.search-panel>button.m-input-search {}
 
 /* HELP BUTTON */
-
 div.search-panel>button.m-input-search.shown {
   color: #a15bd7;
   opacity: 1;
@@ -128,7 +129,6 @@ div.search-panel>button.m-input-search.shown {
 /*********************
      RESULTS PANEL
 *********************/
-
 #m-autocomplete-results {
   background-color: #F9F9F9;
 }
@@ -232,7 +232,6 @@ div#m-autcomplete>div:hover {
 /*********************
      RESULT
 *********************/
-
 .results-panel>div.results>div.result {
   padding: 20px;
   /*-webkit-transition: box-shadow 0.3s ease 0s, background 0.3s ease 0s, transform 0.05s ease 0s;
@@ -264,7 +263,6 @@ div#m-autcomplete>div:hover {
 /*********************
      RESULT TABLE
 *********************/
-
 .results-panel>div.results>div.result>table, .m-popup>div.m-content>div.m-body>div.m-geosearch-content>div.result>table, .m-popup>div.m-content>div.m-body>div.m-searchstreet-content>div.result>table {
   width: 100%;
   border-top: 1px solid rgba(0, 0, 0, 0.09);
@@ -308,7 +306,6 @@ div#m-autcomplete>div:hover {
 /*********************
      PAGES
 *********************/
-
 .results-panel>div.page {
   margin-top: 0px;
   text-align: center;
@@ -323,7 +320,6 @@ div#m-autcomplete>div:hover {
 /*********************
      HELP
 *********************/
-
 .m-geosearch-help, .m-searchstreetgeosearch-help, .m-searchstreet-help {
   top: 59px;
   left: 70px;
@@ -365,7 +361,6 @@ div#m-autcomplete>div:hover {
 /***************
        PANEL
 ***************/
-
 .m-areas>div.m-area>div.m-panel.m-geosearch, .m-areas>div.m-area>div.m-panel.m-searchstreetgeosearch, .m-areas>div.m-area>div.m-panel.m-searchstreet {
   order: -100;
   width: auto;
@@ -388,6 +383,16 @@ div#m-autcomplete>div:hover {
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2), 0 -1px 0px rgba(0, 0, 0, 0.02);
 }
 
+#m-geosearch-closeHelp-btn {
+  position: absolute;
+  box-shadow: none;
+  border: none;
+  background-color: white;
+  bottom: 40px;
+  right: -5px;
+  color: grey;
+}
+
 .m-areas>div.m-area>div.m-panel.m-geosearch.collapsed>button.m-panel-btn, .m-areas>div.m-area>div.m-panel.m-searchstreetgeosearch.collapsed>button.m-panel-btn, .m-areas>div.m-area>div.m-panel.m-searchstreet.collapsed>button.m-panel-btn {
   color: #a15bd7;
   position: inherit;
@@ -402,7 +407,6 @@ div#m-autcomplete>div:hover {
 }
 
 /* ANIMATIONS */
-
 .m-areas>div.m-area>div.m-panel.m-geosearch, .m-areas>div.m-area>div.m-panel.m-searchstreetgeosearch, .m-areas>div.m-area>div.m-panel.m-searchstreet {
   -webkit-transition: max-height .33s ease-in-out 0s;
   transition: max-height .33s ease-in-out 0s;
@@ -453,7 +457,6 @@ div#m-autcomplete>div:hover {
 /***************
        TABS SEARCHSTREETGEOSEARCH
 ***************/
-
 .m-tab-results {
   display: none;
 }

@@ -26,6 +26,7 @@ module.exports = {
       M: path.resolve(__dirname, '../src/facade/js'),
       impl: path.resolve(__dirname, '..', 'src', 'impl', 'ol', 'js'),
       'impl-assets': path.resolve(__dirname, '..', 'src', 'impl', 'ol', 'assets'),
+      patches: path.resolve(__dirname, '../src/impl/ol/js/patches.js'),
     },
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html'],
   },

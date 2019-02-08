@@ -110,6 +110,19 @@ export default class SearchstreetGeosearch extends M.Plugin {
   }
 
   /**
+   * This function return the control of plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getControls() {
+    const aControls = [];
+    aControls.push(this.control_);
+    return aControls;
+  }
+
+  /**
    * This function destroys this plugin
    *
    * @public

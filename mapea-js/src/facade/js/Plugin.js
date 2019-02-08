@@ -57,6 +57,15 @@ class Plugin extends Base {
    * @api
    */
   createView(map) {}
+
+  /**
+   * This function returns the controls of a plugin
+   * @public
+   * @function
+   * @param {Array} controls
+   * @api
+   */
+  getControls() {}
 }
 
 export default Plugin;

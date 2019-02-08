@@ -103,13 +103,28 @@ class WMTS extends LayerBase {
   /**
    * 'options' the layer options
    */
-
   get options() {
     return this.getImpl().options;
   }
 
   set options(newOptions) {
     this.getImpl().options = newOptions;
+  }
+
+  /**
+   * This functions retrieves a Promise which will be
+   * resolved when the GetCapabilities request is retrieved
+   * by the service and parsed. The capabilities is cached in
+   * order to prevent multiple requests
+   *
+   * @function
+   * @api
+   */
+  getCapabilities() {
+    if (isNullOrEmpty(this.getCapabilitiesPromise_)) {
+      this.getCapabilitiesPromise_ = this.getImpl().getCapabilities();
+    }
+    return this.getCapabilitiesPromise_;
   }
 
   /**

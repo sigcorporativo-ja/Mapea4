@@ -41,7 +41,6 @@ class WMC110 extends XML {
       options: {
         visibility: (node.getAttribute('hidden') !== '1'),
         queryable: (node.getAttribute('queryable') === '1'),
-
       },
       formats: [],
       styles: [],
@@ -50,7 +49,8 @@ class WMC110 extends XML {
     // set properties common to multiple objects on layer options/params
     layerInfo.params.isWMC = 'ok';
     layerInfo.params.layers = layerInfo.name;
-    layerInfo.options.maxExtent = layerInfo.maxExtent;
+    layerInfo.options.wmcMaxExtent = layerInfo.maxExtent;
+    layerInfo.options.wmcGlobalMaxExtent = context.maxExtent;
     // create the layer
     const layer = this.getLayerFromInfo(layerInfo);
     if (layerInfo.styles != null && layerInfo.styles[0] != null) {
@@ -75,6 +75,7 @@ class WMC110 extends XML {
   getLayerFromInfo(layerInfo) {
     const options = layerInfo.options;
     options.params = layerInfo.params;
+
     const layer = new WMS({
       name: layerInfo.name,
       legend: layerInfo.title,

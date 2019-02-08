@@ -52,6 +52,7 @@ module.exports = {
       configuration: path.resolve(__dirname, '../test/configuration_filtered'),
       'impl-assets': path.resolve(__dirname, '../src/impl/ol/assets'),
       plugins: path.resolve(__dirname, '../src/plugins'),
+      patches: path.resolve(__dirname, '../src/impl/ol/js/patches_dev.js'),
     },
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html'],
   },

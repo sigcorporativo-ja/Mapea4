@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+
+    <title>PRUEBA DESARROLLO</title>
+    <style rel="stylesheet">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: auto;
+      }
+
+      .makidentist:before {
+        content: '\e814';
+        color: 'red'
+      }
+
+      .vendorbtn {
+        position: absolute;
+        top: 5px;
+        z-index: 99999;
+        left: 20px;
+      }
+    </style>
+
+  </head>
+
+  <body>
+    <button id="prioridadCapa" onclick="prioridadCapa();" class="vendorbtn" style="left: 60px">1. Capa</button>
+    <button id="prioridadWMC" onclick="prioridadWMC();" class="vendorbtn" style="left: 220px">2. WMC y 4. WMC global</button>
+    <button id="prioridadMapa" onclick="prioridadMapa();" class="vendorbtn" style="left: 420px">3. Mapa</button>
+    <button id="prioridadGetCapabilities" onclick="prioridadGetCapabilities();" class="vendorbtn" style="left: 620px">5. GetCapabilities</button>
+    <button id="prioridadProyeccion" onclick="prioridadProyeccion();" class="vendorbtn" style="left: 820px">6. Proyeccion</button>
+
+    <div id="map" class="map"></div>
+    <script src="/config.js" charset="utf-8"></script>
+    <script src="/maxextent.js" charset="utf-8"></script>
+  </body>
+
+</html>

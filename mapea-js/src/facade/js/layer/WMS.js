@@ -58,6 +58,13 @@ class WMS extends LayerBase {
     // options
     this.options = options;
 
+    /**
+     * get WMS getCapabilities promise
+     * @private
+     * @type {Promise}
+     */
+    this.getCapabilitiesPromise_ = null;
+
     this._updateNoCache();
   }
 
@@ -156,6 +163,67 @@ class WMS extends LayerBase {
 
   set options(newOptions) {
     this.getImpl().options = newOptions;
+  }
+
+  getMaxExtent() {
+    return new Promise((success, fail) => {
+      if (isNullOrEmpty(this.maxExtent_)) {
+        if (isNullOrEmpty(this.options.wmcMaxExtent)) {
+          const mapMaxExtent = this.map_.getMaxExtent();
+          if (isNullOrEmpty(mapMaxExtent)) {
+            if (isNullOrEmpty(this.options.wmcGlobalMaxExtent)) {
+              // maxExtent provided by the service
+              this.getCapabilities().then((capabilities) => {
+                const capabilitiesMaxExtent = this.getImpl()
+                  .getExtentFromCapabilities(capabilities);
+                if (isNullOrEmpty(capabilitiesMaxExtent)) {
+                  // #6 projection maxExtent
+                  const projMaxExtent = this.map_.getProjection().getExtent();
+                  success(projMaxExtent);
+                } else {
+                  // #5 maxExtent provided by the service
+                  success(capabilitiesMaxExtent);
+                }
+              });
+            } else {
+              // #4 global maxExtent specified in the WMC
+              success(this.options.wmcGlobalMaxExtent);
+            }
+          } else {
+            // #3 map maxExtent given by the user
+            const mapMaxExtentArr = [
+              mapMaxExtent.x.min,
+              mapMaxExtent.y.min,
+              mapMaxExtent.x.max,
+              mapMaxExtent.y.max,
+            ];
+            success(mapMaxExtentArr);
+          }
+        } else {
+          // #2 layer maxExtent specified in the WMC
+          success(this.options.wmcMaxExtent);
+        }
+      } else {
+        // #1 maxExtent provided by the user
+        success(this.maxExtent_);
+      }
+    });
+  }
+
+  /**
+   * This functions retrieves a Promise which will be
+   * resolved when the GetCapabilities request is retrieved
+   * by the service and parsed. The capabilities is cached in
+   * order to prevent multiple requests
+   *
+   * @function
+   * @api
+   */
+  getCapabilities() {
+    if (isNullOrEmpty(this.getCapabilitiesPromise_)) {
+      this.getCapabilitiesPromise_ = this.getImpl().getCapabilities();
+    }
+    return this.getCapabilitiesPromise_;
   }
 
   /**

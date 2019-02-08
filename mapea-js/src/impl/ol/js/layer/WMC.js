@@ -85,8 +85,6 @@ class WMC extends Layer {
    */
   select() {
     if (this.selected === false) {
-      const bbox = this.map.getBbox();
-
       // unselect layers
       this.map.getWMC().forEach(wmcLayer => wmcLayer.unselect());
 
@@ -116,7 +114,14 @@ class WMC extends Layer {
         }
         // load layers
         this.loadLayers(context);
-        if (!isNullOrEmpty(bbox)) {
+        const bboxObj = this.map.getBbox();
+        if (!isNullOrEmpty(bboxObj)) {
+          const bbox = [
+            bboxObj.x.min,
+            bboxObj.y.min,
+            bboxObj.x.max,
+            bboxObj.y.max,
+          ];
           this.map.setBbox(bbox, { nearest: true });
         }
         this.map.fire(EventType.CHANGE_WMC, this);

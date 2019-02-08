@@ -4,14 +4,14 @@
 import * as LayerType from 'M/layer/Type';
 import FacadeOSM from 'M/layer/OSM';
 import FacadeMapbox from 'M/layer/Mapbox';
-import { isNullOrEmpty, generateResolutionsFromExtent, isArray, extend } from 'M/util/Utils';
+import { isNullOrEmpty, generateResolutionsFromExtent, extend } from 'M/util/Utils';
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceXYZ from 'ol/source/XYZ';
 import OLControlAttribution from 'ol/control/Attribution';
 import { get as getProj } from 'ol/proj';
 import ImplMap from '../Map';
-import EnvolvedExtent from '../util/EnvolvedExtent';
 import Layer from './Layer';
+
 /**
  * @classdesc
  * @api
@@ -38,6 +38,14 @@ class Mapbox extends Layer {
      * @type {Array<Number>}
      */
     this.resolutions_ = null;
+
+    /**
+     * The facade layer instance
+     * @private
+     * @type {M.layer.Mapbox}
+     * @expose
+     */
+    this.facadeLayer_ = null;
 
     // Añadir plugin attributions
     this.hasAttributtion = false;
@@ -99,10 +107,12 @@ class Mapbox extends Layer {
   addTo(map) {
     this.map = map;
 
+    const extent = this.facadeLayer_.getMaxExtent();
     this.ol3Layer = new OLLayerTile(extend({
       source: new OLSourceXYZ({
         url: `${this.url}${this.name}/{z}/{x}/{y}.png?${M.config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
       }),
+      extent,
     }, this.vendorOptions_, true));
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
@@ -158,36 +168,14 @@ class Mapbox extends Layer {
 
     if (!isNullOrEmpty(this.ol3Layer) && isNullOrEmpty(this.vendorOptions_.source)) {
       // gets the extent
-      const promise = new Promise((success, fail) => {
-        // gets the extent
-        const extent = this.map.getMaxExtent();
-        if (!isNullOrEmpty(extent)) {
-          success.call(this, extent);
-        } else {
-          EnvolvedExtent.calculate(this.map, this).then(success);
-        }
+      const extent = this.facadeLayer_.getMaxExtent();
+      const newSource = new OLSourceXYZ({
+        url: `${this.url}${this.name}/{z}/{x}/{y}.png?${M.config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
+        extent,
+        resolutions,
+        attributionControl: true,
       });
-      // resolve the promise
-      promise.then((extent) => {
-        let olExtent;
-        if (isArray(extent)) {
-          olExtent = extent;
-        } else {
-          olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
-        }
-        const newSource = new OLSourceXYZ({
-          url: `${this.url}${this.name}/{z}/{x}/{y}.png?${M.config.MAPBOX_TOKEN_NAME}=${this.accessToken}`,
-          // tileGrid: new ol.tilegrid.TileGrid({
-          //   resolutions,
-          //   extent: olExtent,
-          //   origin: ol.extent.getBottomLeft(olExtent)
-          // }),
-          extent: olExtent,
-          resolutions,
-          attributionControl: true,
-        });
-        this.ol3Layer.setSource(newSource);
-      });
+      this.ol3Layer.setSource(newSource);
     }
   }
 
@@ -214,6 +202,25 @@ class Mapbox extends Layer {
         max: extent[3],
       },
     };
+  }
+
+
+  /**
+   * TODO
+   */
+  setMaxExtent(maxExtent) {
+    this.ol3Layer.setExtent(maxExtent);
+  }
+
+  /**
+   * This function set facade class Mapbox
+   *
+   * @function
+   * @param {object} obj - Facade layer
+   * @api stable
+   */
+  setFacadeObj(obj) {
+    this.facadeLayer_ = obj;
   }
 
   /**

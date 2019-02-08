@@ -6,13 +6,11 @@ import FacadeOSM from 'M/layer/OSM';
 import * as LayerType from 'M/layer/Type';
 import { isNullOrEmpty, generateResolutionsFromExtent, extend } from 'M/util/Utils';
 import OLLayerTile from 'ol/layer/Tile';
-import OLSourceOSM from 'ol/source/OSM';
-import OLTileGrid from 'ol/tilegrid/TileGrid';
 import OLControlAttribution from 'ol/control/Attribution';
-import { get as getProj } from 'ol/proj';
-import { getBottomLeft } from 'ol/extent';
+import SourceOSM from 'ol/source/OSM';
 import ImplMap from '../Map';
 import Layer from './Layer';
+
 /**
  * @classdesc
  * @api
@@ -39,6 +37,14 @@ class OSM extends Layer {
      * @type {Array<Number>}
      */
     this.resolutions_ = null;
+
+    /**
+     * The facade layer instance
+     * @private
+     * @type {M.layer.OSM}
+     * @expose
+     */
+    this.facadeLayer_ = null;
 
     // Añadir plugin attributions
     this.hasAttributtion = false;
@@ -99,8 +105,10 @@ class OSM extends Layer {
   addTo(map) {
     this.map = map;
 
+    const extent = this.facadeLayer_.getMaxExtent();
     this.ol3Layer = new OLLayerTile(extend({
-      source: new OLSourceOSM(),
+      source: new SourceOSM(),
+      extent,
     }, this.vendorOptions_, true));
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
@@ -122,7 +130,8 @@ class OSM extends Layer {
     this.map.getMapImpl().updateSize();
     const size = this.map.getMapImpl().getSize();
     const units = this.map.getProjection().units;
-    this.resolutions_ = generateResolutionsFromExtent(this.getExtent(), size, 16, units);
+    this.resolutions_ =
+      generateResolutionsFromExtent(this.facadeLayer_.getMaxExtent(), size, 16, units);
 
     // sets its visibility if it is in range
     if (this.isVisible() && !this.inRange()) {
@@ -151,47 +160,32 @@ class OSM extends Layer {
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
 
-    if ((this.tiled === true) && !isNullOrEmpty(this.ol3Layer) &&
-    isNullOrEmpty(this.vendorOptions_.source)) {
+    if (!isNullOrEmpty(this.ol3Layer) && isNullOrEmpty(this.vendorOptions_.source)) {
       // gets the extent
-      const promise = new Promise((success, fail) => {
-        // gets the extent
-        const extent = this.map.getMaxExtent();
-        if (!isNullOrEmpty(extent)) {
-          success.call(this, extent);
-        } else {
-          M.impl.envolvedExtent.calculate(this.map, this).then(success);
-        }
+      const extent = this.facadeLayer_.getMaxExtent();
+      const newSource = new SourceOSM({
+        extent,
       });
-      promise.then((extent) => {
-        const olExtent = [extent.x.min, extent.y.min, extent.x.max, extent.y.max];
-        const newSource = new OLSourceOSM({
-          tileGrid: new OLTileGrid({
-            resolutions,
-            extent: olExtent,
-            origin: getBottomLeft(olExtent),
-          }),
-          extent: olExtent,
-        });
-        this.ol3Layer.setSource(newSource);
-      });
+      this.ol3Layer.setSource(newSource);
     }
   }
 
   /**
-   * This function gets the envolved extent for
-   * this WMS
+   * This function set facade class OSM
    *
-   * @public
    * @function
+   * @param {object} obj - Facade layer
    * @api stable
    */
-  getExtent() {
-    let extent = null;
-    if (!isNullOrEmpty(this.ol3Layer)) {
-      extent = getProj(this.map.getProjection().code).getExtent();
-    }
-    return extent;
+  setFacadeObj(obj) {
+    this.facadeLayer_ = obj;
+  }
+
+  /**
+   * TODO
+   */
+  setMaxExtent(maxExtent) {
+    this.ol3Layer.setExtent(maxExtent);
   }
 
   /**

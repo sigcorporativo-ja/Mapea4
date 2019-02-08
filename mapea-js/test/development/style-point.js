@@ -1,31 +1,34 @@
 import { map } from 'M/mapea';
 import WFS from 'M/layer/WFS';
 import StylePoint from 'M/style/Point';
+import * as form from 'M/style/Form';
 
 const mapjs = map({
   controls: ['layerswitcher'],
   container: 'map',
 });
 
-const wfs = new WFS({
-  namespace: 'ggis',
-  name: 'Colegios',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+const campamentos = new WFS({
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows',
+  name: 'sepim:campamentos',
+  legend: 'Campamentos',
+  geometry: 'POINT',
+  extract: true,
 });
 
-mapjs.addLayers([wfs]);
 const stylepoint = new StylePoint({
-  fill: {
-    color: 'blue',
-    opacity: 0.4,
+  icon: {
+    form: form.SQUARE,
+    // form: form.CIRCLE,
+    class: 'g-cartografia-bandera',
+    fontsize: 0.5,
+    radius: 15,
+    color: 'red',
+    // fill: 'black',
   },
-  stroke: {
-    width: 5,
-    color: 'green',
-  },
-  radius: 13,
 });
-wfs.setStyle(stylepoint);
+
+campamentos.setStyle(stylepoint);
+mapjs.addLayers([campamentos]);
 
 window.mapjs = mapjs;

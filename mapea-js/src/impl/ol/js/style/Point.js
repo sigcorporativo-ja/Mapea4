@@ -37,12 +37,16 @@ class Point extends Simple {
    * @return {String} data url to canvas
    * @api stable
    */
-  toImage() {
+  toImage(canvas) {
+    // TODO: #232
+    let image = null;
+    // if (isDynamic(this.options_) === true) {
+    //   image = drawDynamicStyle(canvas);
+    // } else {
     if (isNullOrEmpty(this.olStyleFn_)) {
       return null;
     }
     let style = this.olStyleFn_()[1];
-    let image = null;
     if (style.getImage && style.getImage() != null && style.getImage() instanceof OLStyleImage) {
       // see https://github.com/openlayers/openlayers/blob/master/src/ol/style/regularshape.js#L205
       if (style.getImage() instanceof PointFontSymbol) {
@@ -79,6 +83,7 @@ class Point extends Simple {
         image = imageCanvas.toDataURL();
       }
     }
+    // }
     return image;
   }
 
@@ -131,12 +136,12 @@ class Point extends Simple {
         const strokeColorValue =
           Simple.getValue(options.stroke.color, featureVariable, this.layer_);
         if (!isNullOrEmpty(strokeColorValue)) {
+          const { linedashoffset } = options.stroke;
           stroke = new OLStyleStroke({
             color: strokeColorValue,
             width: Simple.getValue(options.stroke.width, featureVariable, this.layer_),
             lineDash: Simple.getValue(options.stroke.linedash, featureVariable, this.layer_),
-            lineDashOffset:
-              Simple.getValue(options.stroke.linedashoffset, featureVariable, this.layer_),
+            lineDashOffset: Simple.getValue(linedashoffset, featureVariable, this.layer_),
             lineCap: Simple.getValue(options.stroke.linecap, featureVariable, this.layer_),
             lineJoin: Simple.getValue(options.stroke.linejoin, featureVariable, this.layer_),
             miterLimit: Simple.getValue(options.stroke.miterlimit, featureVariable, this.layer_),
@@ -164,16 +169,15 @@ class Point extends Simple {
           rotation: Simple.getValue(options.label.rotation, featureVariable, this.layer_),
         });
         if (!isNullOrEmpty(options.label.stroke)) {
+          const { miterlimit, linedashoffset } = this.options.label.stroke;
           labelText.setStroke(new OLStyleStroke({
             color: Simple.getValue(options.label.stroke.color, featureVariable, this.layer_),
             width: Simple.getValue(options.label.stroke.width, featureVariable, this.layer_),
             lineCap: Simple.getValue(options.label.stroke.linecap, featureVariable, this.layer_),
             lineJoin: Simple.getValue(options.label.stroke.linejoin, featureVariable, this.layer_),
             lineDash: Simple.getValue(options.label.stroke.linedash, featureVariable, this.layer_),
-            lineDashOffset:
-              Simple.getValue(options.label.stroke.linedashoffset, featureVariable, this.layer_),
-            miterLimit:
-              Simple.getValue(options.label.stroke.miterlimit, featureVariable, this.layer_),
+            lineDashOffset: Simple.getValue(linedashoffset, featureVariable, this.layer_),
+            miterLimit: Simple.getValue(miterlimit, featureVariable, this.layer_),
           }));
         }
         style.setText(labelText);
@@ -217,10 +221,10 @@ class Point extends Simple {
             offsetY: Simple.getValue(options.icon.offset ?
               options.icon.offset[1] : undefined, featureVariable, this.layer_),
             fill: new OLStyleFill({
-              color: Simple.getValue(options.icon.fill, featureVariable, this.layer_),
+              color: Simple.getValue(options.icon.fill !== undefined ? options.icon.fill : '#FFFFFF', featureVariable, this.layer_),
             }),
-            stroke: options.icon.gradientcolor ? new OLStyleStroke({
-              color: Simple.getValue(options.icon.gradientcolor, featureVariable, this.layer_),
+            stroke: options.icon.color ? new OLStyleStroke({
+              color: Simple.getValue(options.icon.color, featureVariable, this.layer_),
               width: 1,
             }) : undefined,
             anchor: Simple.getValue(options.icon.anchor, featureVariable, this.layer_),

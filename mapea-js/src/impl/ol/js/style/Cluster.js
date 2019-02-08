@@ -2,12 +2,14 @@
  * @module M/impl/style/Cluster
  */
 import { unByKey } from 'ol/Observable';
+import { getCenter } from 'ol/extent';
 import LayerVector from 'M/layer/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
 import OLSourceVector from 'ol/source/Vector';
 import * as OLeasing from 'ol/easing';
 import OLFeature from 'ol/Feature';
 import OLGeomPolygon from 'ol/geom/Polygon';
+import OLGeomPoint from 'ol/geom/Point';
 import Polygon from 'M/style/Polygon';
 import StylePoint from 'M/style/Point';
 import FacadeCluster from 'M/style/Cluster';
@@ -149,6 +151,9 @@ class Cluster extends Style {
       name: 'Cluster',
       source: new OLSourceCluster({
         distance: this.options_.distance,
+        geometryFunction(feature) {
+          return new OLGeomPoint(getCenter(feature.getGeometry().getExtent()));
+        },
         source: new OLSourceVector({
           features: olFeatures,
         }),
@@ -437,6 +442,7 @@ class Cluster extends Style {
         clusterOlFeatureStyle = this.oldOLLayer_.getStyle();
       }
       olStyle = clusterOlFeatureStyle(clusterOlFeatures[0], resolution);
+      olStyle[0].setGeometry(clusterOlFeatures[0].getGeometry());
     }
     return olStyle;
   }

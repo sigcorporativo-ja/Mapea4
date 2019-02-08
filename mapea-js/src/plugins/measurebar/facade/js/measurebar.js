@@ -87,6 +87,19 @@ export default class Measurebar extends M.Plugin {
   }
 
   /**
+   * This function return the control of plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getControls() {
+    const aControls = [];
+    aControls.push(this.measureArea_, this.measureClear_, this.measureLength_);
+    return aControls;
+  }
+
+  /**
    * This function compare if pluging recieved by param is instance of M.plugin.Measurebar
    *
    * @public

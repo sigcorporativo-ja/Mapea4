@@ -22,9 +22,9 @@ import {
   fillResolutions,
   generateResolutionsFromExtent,
 } from 'M/util/Utils';
+import 'patches';
 import View from './View';
 import EnvolvedExtent from './util/EnvolvedExtent';
-import './patches';
 
 /**
  * @module M/impl/Map
@@ -352,13 +352,11 @@ class Map extends MObject {
       // TODO removing the WMC layer with ol3
       if (wmcLayer.selected === true && wmcLayer.isLoaded() === false) {
         wmcLayer.on(EventType.LOAD, () => {
-          wmcLayer.setLoaded(false);
           this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
           this.facadeMap_.removeWMS(wmcLayer.layers);
           this.facadeMap_.refreshWMCSelectorControl();
         });
       } else {
-        wmcLayer.setLoaded(false);
         this.layers_ = this.layers_.filter(layer => !layer.equals(wmcLayer));
         this.facadeMap_.removeWMS(wmcLayer.layers);
       }
@@ -615,6 +613,66 @@ class Map extends MObject {
     });
 
     return this;
+  }
+
+  /**
+   * This function gets the GeoJSON layers added to the map
+   *
+   * @function
+   * @param {Array<M.Layer>} filters to apply to the search
+   * @returns {Array<M.layer.WFS>} layers from the map
+   * @api stable
+   */
+  getGeoJSON(filtersParam) {
+    let foundLayers = [];
+    let filters = filtersParam;
+
+    // get all geojson layers
+    const geojsonLayers = this.layers_.filter((layer) => {
+      return (layer.type === LayerType.GeoJSON);
+    });
+
+    // parse to Array
+    if (isNullOrEmpty(filters)) {
+      filters = [];
+    }
+    if (!isArray(filters)) {
+      filters = [filters];
+    }
+
+    if (filters.length === 0) {
+      foundLayers = geojsonLayers;
+    } else {
+      filters.forEach((filterLayer) => {
+        const filteredWFSLayers = geojsonLayers.filter((geojsonLayer) => {
+          let layerMatched = true;
+          // checks if the layer is not in selected layers
+          if (!foundLayers.includes(geojsonLayer)) {
+            // type
+            if (!isNullOrEmpty(filterLayer.type)) {
+              layerMatched = (layerMatched && (filterLayer.type === geojsonLayer.type));
+            }
+            // URL
+            if (!isNullOrEmpty(filterLayer.url)) {
+              layerMatched = (layerMatched && (filterLayer.url === geojsonLayer.url));
+            }
+            // name
+            if (!isNullOrEmpty(filterLayer.name)) {
+              layerMatched = (layerMatched && (filterLayer.name === geojsonLayer.name));
+            }
+            // legend
+            if (!isNullOrEmpty(filterLayer.legend)) {
+              layerMatched = (layerMatched && (filterLayer.legend === geojsonLayer.legend));
+            }
+          } else {
+            layerMatched = false;
+          }
+          return layerMatched;
+        });
+        foundLayers = foundLayers.concat(filteredWFSLayers);
+      });
+    }
+    return foundLayers;
   }
 
   /**
@@ -1160,19 +1218,17 @@ class Map extends MObject {
    * @api stable
    */
   setMaxExtent(maxExtent, zoomToExtent) {
-    // checks if the param is null or empty
-    if (isNullOrEmpty(maxExtent)) {
-      Exception('No ha especificado ningún maxExtent');
+    let olExtent = maxExtent;
+
+    if (!isNullOrEmpty(olExtent)) {
+      olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
     }
 
-    // set the extent by ol
-    const olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
     const olMap = this.getMapImpl();
-    //      let minZoom = olMap.getView().
     olMap.getView().set('extent', olExtent);
     this.updateResolutionsFromBaseLayer();
 
-    if (zoomToExtent !== false) {
+    if (!isNullOrEmpty(olExtent) && (zoomToExtent !== false)) {
       this.setBbox(olExtent);
     }
 
@@ -1592,6 +1648,7 @@ class Map extends MObject {
       projection = {
         code: olProjection.getCode(),
         units: olProjection.getUnits(),
+        getExtent: () => olProjection.getExtent(),
       };
     }
     return projection;
@@ -1865,6 +1922,7 @@ Map.Z_INDEX[LayerType.WMC] = 1;
 Map.Z_INDEX[LayerType.WMS] = 1000;
 Map.Z_INDEX[LayerType.WMTS] = 2000;
 Map.Z_INDEX[LayerType.OSM] = 2000;
+Map.Z_INDEX[LayerType.Mapbox] = 2000;
 Map.Z_INDEX[LayerType.KML] = 3000;
 Map.Z_INDEX[LayerType.WFS] = 9999;
 Map.Z_INDEX[LayerType.Vector] = 9999;

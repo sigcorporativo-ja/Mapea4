@@ -460,6 +460,8 @@ class Map extends Base {
           this.featuresHandler_.addLayer(layer);
         }
 
+        layer.setMap(this);
+
         return layer;
       });
 
@@ -806,11 +808,12 @@ class Map extends Base {
       // gets the parameters as WMS objects to add
       const wmsLayers = [];
       layersParam.forEach((layerParam) => {
-        if (isObject(layerParam) && (layerParam instanceof WMS)) {
-          wmsLayers.push(layerParam);
-        } else if (!(layerParam instanceof Layer)) {
-          wmsLayers.push(new WMS(layerParam, layerParam.options));
+        let wmsLayer = layerParam;
+        if (!(layerParam instanceof WMS)) {
+          wmsLayer = new WMS(layerParam, layerParam.options);
         }
+        wmsLayer.setMap(this);
+        wmsLayers.push(wmsLayer);
       });
 
       // adds the layers
@@ -878,6 +881,34 @@ class Map extends Base {
 
     // gets the layers
     const layers = this.getImpl().getWFS(filters).sort(Map.LAYER_SORT);
+
+    return layers;
+  }
+
+  /**
+   * This function gets the GeoJSON layers added to the map
+   *
+   * @function
+   * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
+   * @returns {Array<WFS>} layers from the map
+   * @api
+   */
+  getGeoJSON(layersParamVar) {
+    let layersParam = layersParamVar;
+    // checks if the implementation can manage layers
+    if (isUndefined(MapImpl.prototype.getGeoJSON)) {
+      Exception('La implementación usada no posee el método getGeoJSON');
+    }
+
+    // parses parameters to Array
+    if (isNull(layersParam)) {
+      layersParam = [];
+    } else if (!isArray(layersParam)) {
+      layersParam = [layersParam];
+    }
+
+    // gets the layers
+    const layers = this.getImpl().getGeoJSON(layersParam).sort(Map.LAYER_SORT);
 
     return layers;
   }
@@ -1018,9 +1049,12 @@ class Map extends Base {
       const wmtsLayers = [];
       layersParam.forEach((layerParam) => {
         if (isObject(layerParam) && (layerParam instanceof WMTS)) {
+          layerParam.setMap(this);
           wmtsLayers.push(layerParam);
         } else if (!(layerParam instanceof Layer)) {
-          wmtsLayers.push(new WMTS(layerParam, layerParam.options));
+          const wmtsLayer = new WMTS(layerParam, layerParam.options);
+          wmtsLayer.setMap(this);
+          wmtsLayers.push(wmtsLayer);
         }
       });
 
@@ -1434,9 +1468,9 @@ class Map extends Base {
    */
   setMaxExtent(maxExtentParam, zoomToExtent) {
     // checks if the param is null or empty
-    if (isNullOrEmpty(maxExtentParam)) {
-      Exception('No ha especificado ningún maxExtent');
-    }
+    // if (isNullOrEmpty(maxExtentParam)) {
+    //   Exception('No ha especificado ningún maxExtent');
+    // }
 
     // checks if the implementation can set the maxExtent
     if (isUndefined(MapImpl.prototype.setMaxExtent)) {
@@ -1893,12 +1927,45 @@ class Map extends Base {
    * @api
    */
   getEnvolvedExtent() {
-    // checks if the implementation can set the maxExtent
-    if (isUndefined(MapImpl.prototype.getEnvolvedExtent)) {
-      Exception('La implementación usada no posee el método getEnvolvedExtent');
+    let envolvedLayers;
+    const wmcLayer = this.getWMC().find(wmc => wmc.selected);
+    if (isNullOrEmpty(wmcLayer)) {
+      const baseLayers = this.getBaseLayers();
+      if (isNullOrEmpty(baseLayers)) {
+        envolvedLayers = this.getLayers();
+      } else {
+        envolvedLayers = baseLayers;
+      }
+    } else {
+      envolvedLayers = [wmcLayer];
     }
-
-    return this.getImpl().getEnvolvedExtent();
+    return Promise.all(envolvedLayers.map((layer) => {
+      let maxExtentPromise = layer.getMaxExtent();
+      if (!(maxExtentPromise instanceof Promise)) {
+        maxExtentPromise = new Promise(success => success(maxExtentPromise));
+      }
+      return maxExtentPromise;
+    })).then((maxExtents) => {
+      const envolvedMaxExtent = {
+        x: {
+          min: Number.MAX_SAFE_INTEGER,
+          max: Number.MIN_SAFE_INTEGER,
+        },
+        y: {
+          min: Number.MAX_SAFE_INTEGER,
+          max: Number.MIN_SAFE_INTEGER,
+        },
+      };
+      maxExtents.forEach((maxExtent) => {
+        if (!isNullOrEmpty(maxExtent)) {
+          envolvedMaxExtent.x.min = Math.min(envolvedMaxExtent.x.min, maxExtent[0]);
+          envolvedMaxExtent.y.min = Math.min(envolvedMaxExtent.y.min, maxExtent[1]);
+          envolvedMaxExtent.x.max = Math.max(envolvedMaxExtent.x.max, maxExtent[2]);
+          envolvedMaxExtent.y.max = Math.max(envolvedMaxExtent.y.max, maxExtent[3]);
+        }
+      });
+      return envolvedMaxExtent;
+    });
   }
 
   /**
@@ -1962,28 +2029,32 @@ class Map extends Base {
    */
   getInitCenter_() {
     return new Promise((success, fail) => {
-      let center = this.getCenter();
-      if (!isNullOrEmpty(center)) {
-        success(center);
-      } else {
-        const maxExtent = this.getMaxExtent();
-        if (!isNullOrEmpty(maxExtent)) {
-          // obtener centro del maxExtent
+      const getCenterFn = (extent) => {
+        let center;
+        if (isArray(extent)) {
           center = {
-            x: ((maxExtent.x.max + maxExtent.x.min) / 2),
-            y: ((maxExtent.y.max + maxExtent.y.min) / 2),
+            x: ((extent[0] + extent[2]) / 2),
+            y: ((extent[1] + extent[3]) / 2),
           };
-          success(center);
         } else {
-          this.getEnvolvedExtent().then((extent) => {
-            // obtener centrol del extent
-            center = {
-              x: ((extent[0] + extent[2]) / 2),
-              y: ((extent[1] + extent[3]) / 2),
-            };
-            success(center);
-          });
+          center = {
+            x: ((extent.x.max + extent.x.min) / 2),
+            y: ((extent.y.max + extent.y.min) / 2),
+          };
         }
+        return center;
+      };
+      const center = this.getCenter();
+      if (isNullOrEmpty(center)) {
+        const maxExtent = this.getMaxExtent();
+        if (isNullOrEmpty(maxExtent)) {
+          this.getEnvolvedExtent()
+            .then(getCenterFn).then(success);
+        } else {
+          success(getCenterFn(maxExtent));
+        }
+      } else {
+        success(center);
       }
     });
   }

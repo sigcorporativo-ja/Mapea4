@@ -78,6 +78,13 @@ class Control extends Base {
      * @expose
      */
     this.panel_ = null;
+
+    /**
+     * @private
+     * @type {Array}
+     * @expose
+     */
+    this.controls_ = null;
   }
 
   /**
