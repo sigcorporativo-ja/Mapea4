@@ -644,25 +644,25 @@ class Map extends MObject {
       foundLayers = geojsonLayers;
     } else {
       filters.forEach((filterLayer) => {
-        const filteredWFSLayers = geojsonLayers.filter((wfsLayer) => {
+        const filteredWFSLayers = geojsonLayers.filter((geojsonLayer) => {
           let layerMatched = true;
           // checks if the layer is not in selected layers
-          if (!foundLayers.includes(wfsLayer)) {
+          if (!foundLayers.includes(geojsonLayer)) {
             // type
             if (!isNullOrEmpty(filterLayer.type)) {
-              layerMatched = (layerMatched && (filterLayer.type === wfsLayer.type));
+              layerMatched = (layerMatched && (filterLayer.type === geojsonLayer.type));
             }
             // URL
             if (!isNullOrEmpty(filterLayer.url)) {
-              layerMatched = (layerMatched && (filterLayer.url === wfsLayer.url));
+              layerMatched = (layerMatched && (filterLayer.url === geojsonLayer.url));
             }
             // name
             if (!isNullOrEmpty(filterLayer.name)) {
-              layerMatched = (layerMatched && (filterLayer.name === wfsLayer.name));
+              layerMatched = (layerMatched && (filterLayer.name === geojsonLayer.name));
             }
             // legend
             if (!isNullOrEmpty(filterLayer.legend)) {
-              layerMatched = (layerMatched && (filterLayer.legend === wfsLayer.legend));
+              layerMatched = (layerMatched && (filterLayer.legend === geojsonLayer.legend));
             }
           } else {
             layerMatched = false;

@@ -907,16 +907,8 @@ class Map extends Base {
       layersParam = [layersParam];
     }
 
-    // gets the parameters as Layer objects to filter
-    let filters = [];
-    if (layersParam.length > 0) {
-      filters = layersParam.map((layerParam) => {
-        return parameter.layer(layerParam, LayerType.GeoJSON);
-      });
-    }
-
     // gets the layers
-    const layers = this.getImpl().getGeoJSON(filters).sort(Map.LAYER_SORT);
+    const layers = this.getImpl().getGeoJSON(layersParam).sort(Map.LAYER_SORT);
 
     return layers;
   }
