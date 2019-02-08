@@ -176,8 +176,8 @@ class LayerBase extends Base {
    */
   setMaxExtent(maxExtent) {
     this.maxExtent_ = maxExtent;
-    if (this.getImpl().setMaxExtent !== undefined) {
-      this.getImpl().setMaxExtent(maxExtent);
+    if (typeof this.getImpl().setMaxExtent === 'function') {
+      this.getImpl().setMaxExtent(this.getMaxExtent());
     }
   }
 
