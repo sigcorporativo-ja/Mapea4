@@ -27,10 +27,10 @@
    "files": {
       "ol": {
          "scripts": [
-            "geosearchbylocation.ol.min.js"
+            "geosearchbylocation-2.0.0.ol.min.js"
          ],
          "styles": [
-            "geosearchbylocation.min.css"
+            "geosearchbylocation-2.0.0.min.css"
          ]
       }
    }
