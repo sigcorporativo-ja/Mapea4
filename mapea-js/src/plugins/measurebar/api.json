@@ -6,10 +6,10 @@
    "files": {
       "ol": {
          "scripts": [
-            "measurebar.ol.min.js"
+            "measurebar-2.0.0.ol.min.js"
          ],
          "styles": [
-            "measurebar.min.css"
+            "measurebar-2.0.0.min.css"
          ]
       }
    }
