@@ -23,10 +23,10 @@
    "files": {
       "ol": {
          "scripts": [
-            "geosearch.ol.min.js"
+            "geosearch-2.0.0.ol.min.js"
          ],
          "styles": [
-            "geosearch.min.css"
+            "geosearch-2.0.0.min.css"
          ]
       }
    }
