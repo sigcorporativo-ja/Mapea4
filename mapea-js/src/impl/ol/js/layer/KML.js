@@ -179,6 +179,36 @@ class KML extends Vector {
   }
 
   /**
+   * This function sets the map object of the layer
+   *
+   * @private
+   * @function
+   */
+  updateSource_() {
+    if (isNullOrEmpty(this.vendorOptions_.source)) {
+      const formater = new FormatKML();
+      const loader = new LoaderKML(this.map, this.url, formater);
+      const srcOptions = {
+        url: this.url,
+        format: formater,
+        loader: loader.getLoaderFn((loaderData) => {
+          const features = loaderData.features;
+          const screenOverlay = loaderData.screenOverlay;
+          // removes previous features
+          this.facadeVector_.clear();
+          this.facadeVector_.addFeatures(features);
+          this.fire(EventType.LOAD, [features]);
+          if (!isNullOrEmpty(screenOverlay)) {
+            const screenOverLayImg = ImplUtils.addOverlayImage(screenOverlay, this.map);
+            this.setScreenOverlayImg(screenOverLayImg);
+          }
+        }),
+      };
+      this.ol3Layer.setSource(new OLSourceVector(srcOptions));
+    }
+  }
+
+  /**
    * Sets the screen overlay image for this KML
    *
    * @public
