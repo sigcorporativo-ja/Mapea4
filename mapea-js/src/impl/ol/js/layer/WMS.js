@@ -232,7 +232,13 @@ class WMS extends LayerBase {
       isNullOrEmpty(this.vendorOptions_.source)) {
       // gets the extent
       this.facadeLayer_.getMaxExtent().then((maxExtent) => {
-        let layerParams = {};
+        const layerParams = {
+          LAYERS: this.name,
+          TILED: true,
+          VERSION: this.version,
+          TRANSPARENT: this.transparent,
+          FORMAT: 'image/png',
+        };
         const optParams = this.options.params;
         if (!isNullOrEmpty(optParams)) {
           const keysOptParams = Object.keys(optParams);
@@ -243,14 +249,6 @@ class WMS extends LayerBase {
           });
           // TODO: parche para pedir todas las capas en PNG
           // layerParams.FORMAT = 'image/png';
-        } else {
-          layerParams = {
-            LAYERS: this.name,
-            TILED: true,
-            VERSION: this.version,
-            TRANSPARENT: this.transparent,
-            FORMAT: 'image/png',
-          };
         }
 
         let newSource;
@@ -309,7 +307,14 @@ class WMS extends LayerBase {
         });
       }
 
-      let layerParams = {};
+      const layerParams = {
+        LAYERS: this.name,
+        TILED: true,
+        VERSION: this.version,
+        TRANSPARENT: this.transparent,
+        FORMAT: 'image/png',
+      };
+
       const optParams = this.options.params;
       if (!isNullOrEmpty(optParams)) {
         const keysOptParams = Object.keys(optParams);
@@ -320,15 +325,8 @@ class WMS extends LayerBase {
         });
         // TODO: parche para pedir todas las capas en PNG
         // layerParams.FORMAT = 'image/png';
-      } else {
-        layerParams = {
-          LAYERS: this.name,
-          TILED: true,
-          VERSION: this.version,
-          TRANSPARENT: this.transparent,
-          FORMAT: 'image/png',
-        };
       }
+
       this.layerParams_ = layerParams;
       if (this.tiled === true) {
         this.ol3Layer = new OLLayerTile(extend({
