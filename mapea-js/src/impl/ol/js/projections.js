@@ -64,6 +64,8 @@ const proj4326 = {
   extent: [-180, -90, 180, 90],
   codes: ['EPSG:4326', 'urn:ogc:def:crs:EPSG::4326', 'urn:ogc:def:crs:OGC:1.3:CRS84', 'http://www.opengis.net/def/crs/OGC/1.3/CRS84'],
   units: 'd',
+  metersPerUnit: 111319.49079327358,
+  axisOrientation: 'neu',
 };
 
 // All projections above
@@ -88,6 +90,8 @@ const addProjections = (projectionsParam) => {
         code,
         extent: projection.extent,
         units: projection.units,
+        metersPerUnit: projection.metersPerUnit,
+        axisOrientation: projection.axisOrientation,
       });
     });
     addEquivalentProjections(olProjections);
