@@ -45,10 +45,46 @@ class LayerSwitcher extends Control {
     this.panel.addEventListener('click', this.clickLayer.bind(this), false);
 
     // change slider event
-    this.panel.addEventListener('input', this.clickLayer.bind(this), false);
+    this.panel.addEventListener('input', this.inputLayer.bind(this), false);
     this.element = element;
     this.target_ = null;
     olMap.addControl(this);
+  }
+
+  /**
+   * Sets the visibility of the clicked layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  inputLayer(evtParameter) {
+    const evt = (evtParameter || window.event);
+    if (!isNullOrEmpty(evt.target)) {
+      const layerName = evt.target.getAttribute('data-layer-name');
+      if (!isNullOrEmpty(layerName)) {
+        evt.stopPropagation();
+        const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        // checkbox
+        if (evt.target.classList.contains('m-check')) {
+          /* sets the layer visibility only if
+             the layer is not base layer and visible */
+          if (layer.transparent === true || !layer.isVisible()) {
+            const opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
+            if (!isNullOrEmpty(opacity)) {
+              layer.setOpacity(opacity.value);
+            }
+            layer.setVisible(!layer.isVisible());
+          }
+        } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
+          // range
+          layer.setOpacity(evt.target.value);
+          // remove span
+        } else if (evt.target.classList.contains('m-layerswitcher-remove')) {
+          this.facadeMap_.removeLayers(layer);
+        }
+      }
+    }
   }
 
   /**
