@@ -32,6 +32,7 @@ class Vector extends LayerBase {
   constructor(parameters = {}, options = {}, vendorOptions = {}, impl =
   new VectorImpl(options, vendorOptions)) {
     // calls the super constructor
+
     super(parameters, impl);
 
     // checks if the implementation can create Vector
@@ -377,7 +378,18 @@ class Vector extends LayerBase {
     }
     return geometry;
   }
+
+  /**
+   * This function indicates the layer max extent
+   *
+   * @function
+   * @api
+   */
+  getMaxExtent() {
+    return this.getFeaturesExtent();
+  }
 }
+
 
 /**
  * Options style by default
