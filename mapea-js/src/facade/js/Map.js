@@ -1939,7 +1939,7 @@ class Map extends Base {
     } else {
       envolvedLayers = [wmcLayer];
     }
-    return Promise.all(envolvedLayers.map((layer) => {
+    return Promise.all(envolvedLayers.filter(layer => layer.name !== '__draw__').map((layer) => {
       let maxExtentPromise = layer.getMaxExtent();
       if (!(maxExtentPromise instanceof Promise)) {
         maxExtentPromise = new Promise(success => success(maxExtentPromise));
