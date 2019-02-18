@@ -24,7 +24,6 @@ import {
 } from 'M/util/Utils';
 import 'patches';
 import View from './View';
-import EnvolvedExtent from './util/EnvolvedExtent';
 
 /**
  * @module M/impl/Map
@@ -435,6 +434,8 @@ class Map extends MObject {
    * @api stable
    */
   addKML(layers) {
+    const existsBaseLayer = this.getBaseLayers().length > 0;
+
     layers.forEach((layer) => {
       // checks if layer is WMC and was added to the map
       if (layer.type === LayerType.KML) {
@@ -444,6 +445,9 @@ class Map extends MObject {
           if (layer.getZIndex() == null) {
             const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.KML];
             layer.setZIndex(zIndex);
+          }
+          if (!existsBaseLayer) {
+            this.updateResolutionsFromBaseLayer();
           }
         }
       }
@@ -764,6 +768,10 @@ class Map extends MObject {
    * @api stable
    */
   addWFS(layers) {
+    // checks if exists a base layer
+    const baseLayers = this.getBaseLayers();
+    const existsBaseLayer = (baseLayers.length > 0);
+
     layers.forEach((layer) => {
       // checks if layer is WFS and was added to the map
       if (layer.type === LayerType.WFS) {
@@ -774,6 +782,9 @@ class Map extends MObject {
           if (layer.getZIndex() == null) {
             const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WFS];
             layer.setZIndex(zIndex);
+          }
+          if (!existsBaseLayer) {
+            this.updateResolutionsFromBaseLayer();
           }
         }
       }
@@ -1678,22 +1689,6 @@ class Map extends MObject {
   }
 
   /**
-   * This function gets the envolved extent of this
-   * map instance
-   *
-   * @public
-   * @function
-   * @returns {Promise}
-   * @api stable
-   */
-  getEnvolvedExtent() {
-    return EnvolvedExtent.calculate(this).then((extent) => {
-      this.envolvedMaxExtent_ = extent;
-      return this.envolvedMaxExtent_;
-    });
-  }
-
-  /**
    * This function destroys this map, cleaning the HTML
    * and unregistering all events
    *
@@ -1761,7 +1756,7 @@ class Map extends MObject {
           this.fire(EventType.COMPLETED);
         }
       } else {
-        EnvolvedExtent.calculate(this).then((extent) => {
+        this.facadeMap_.getEnvolvedExtent().then((extent) => {
           if (!this._resolutionsBaseLayer && (this.userResolutions_ === null)) {
             resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
