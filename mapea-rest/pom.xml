@@ -58,13 +58,22 @@
             <artifactId>maven-war-plugin</artifactId>
             <version>2.0.2</version>
             <configuration>
-               <warSourceExcludes>filter/**</warSourceExcludes>
+               <warSourceExcludes>files/configuration.js,files/configuration-${project.version}.js</warSourceExcludes>
                <webResources>
                   <!-- file min.js -->
                   <resource>
                      <directory>${project.build.directory}/${project.build.finalName}/filter</directory>
                      <targetPath>js</targetPath>
                      <filtering>true</filtering>
+                     <includes>
+                        <include>configuration.js</include>
+                        <include>configuration-${project.version}.js</include>
+                     </includes>
+                  </resource>
+                  <resource>
+                     <directory>${basedir}/target/${project.build.finalName}/files/</directory>
+                     <targetPath>./js/</targetPath>
+                     <filtering>false</filtering>
                      <includes>
                         <include>configuration.js</include>
                         <include>configuration-${project.version}.js</include>
