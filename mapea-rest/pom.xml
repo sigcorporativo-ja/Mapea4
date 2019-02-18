@@ -58,7 +58,7 @@
             <artifactId>maven-war-plugin</artifactId>
             <version>2.0.2</version>
             <configuration>
-               <warSourceExcludes>files/configuration.js</warSourceExcludes>
+               <warSourceExcludes>files/configuration.js,files/configuration-${project.version}.js</warSourceExcludes>
                <webResources>
                   <!-- file min.js -->
                   <resource>
@@ -67,6 +67,7 @@
                      <filtering>true</filtering>
                      <includes>
                         <include>configuration.js</include>
+                        <include>configuration-${project.version}.js</include>
                      </includes>
                   </resource>
                   <resource>
@@ -75,6 +76,7 @@
                      <filtering>false</filtering>
                      <includes>
                         <include>configuration.js</include>
+                        <include>configuration-${project.version}.js</include>
                      </includes>
                   </resource>
                </webResources>
