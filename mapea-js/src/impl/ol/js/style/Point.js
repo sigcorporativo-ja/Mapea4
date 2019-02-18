@@ -169,7 +169,7 @@ class Point extends Simple {
           rotation: Simple.getValue(options.label.rotation, featureVariable, this.layer_),
         });
         if (!isNullOrEmpty(options.label.stroke)) {
-          const { miterlimit, linedashoffset } = this.options.label.stroke;
+          const { miterlimit, linedashoffset } = options.label.stroke;
           labelText.setStroke(new OLStyleStroke({
             color: Simple.getValue(options.label.stroke.color, featureVariable, this.layer_),
             width: Simple.getValue(options.label.stroke.width, featureVariable, this.layer_),
