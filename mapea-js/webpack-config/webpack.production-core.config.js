@@ -86,11 +86,11 @@ module.exports = {
     }),
     new CopywebpackPlugin([{
       from: 'src/configuration.js',
-      to: 'js/configuration.js',
+      to: 'filter/configuration.js',
     }]),
     new CopywebpackPlugin([{
       from: 'src/configuration.js',
-      to: `js/configuration-${pjson.version}.js`,
+      to: `filter/configuration-${pjson.version}.js`,
     }]),
     new CopywebpackPlugin([{
       from: 'src/facade/assets/img',
