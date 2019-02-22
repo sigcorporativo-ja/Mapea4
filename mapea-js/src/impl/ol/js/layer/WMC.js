@@ -105,13 +105,13 @@ class WMC extends Layer {
       });
       this.loadContextPromise.then((context) => {
         // set projection with the wmc
-        if (this.map.defaultProj) {
-          const olproj = getProj(context.projection);
-          this.map.setProjection({
-            code: olproj.getCode(),
-            units: olproj.getUnits(),
-          }, true);
-        }
+        // if (this.map.defaultProj) {
+        //   const olproj = getProj(context.projection);
+        //   this.map.setProjection({
+        //     code: olproj.getCode(),
+        //     units: olproj.getUnits(),
+        //   }, true);
+        // }
         // load layers
         this.loadLayers(context);
         const bboxObj = this.map.getBbox();
