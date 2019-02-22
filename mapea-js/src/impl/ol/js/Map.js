@@ -1553,7 +1553,7 @@ class Map extends MObject {
 
     // gets previous data
     const olPrevProjection = getProj(this.getProjection().code);
-    let prevBbox = this.facadeMap_.getBbox();
+    // let prevBbox = this.facadeMap_.getBbox();
     let prevMaxExtent = this.facadeMap_.getMaxExtent();
     const prevCenter = this.facadeMap_.getCenter();
     const resolutions = this.facadeMap_.getResolutions();
@@ -1591,15 +1591,16 @@ class Map extends MObject {
       this.facadeMap_.setMaxExtent(transformExtent(prevMaxExtent, olPrevProjection, olProjection));
     }
 
-    // recalculates bbox
-    if (!isNullOrEmpty(prevBbox)) {
-      if (!isArray(prevBbox)) {
-        prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
-      }
-      this.facadeMap_.setBbox(transformExtent(prevBbox, olPrevProjection, olProjection), {
-        nearest: true,
-      });
-    }
+    // recalculates bbox //TODO
+    // if (!isNullOrEmpty(prevBbox)) {
+    //   if (!isArray(prevBbox)) {
+    //     prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
+    //   }
+    //   this.facadeMap_.setBbox(transformExtent(prevBbox, olPrevProjection, olProjection), {
+    //     nearest: true,
+    //   });
+    // }
+
 
     // recalculates center
     if (!isNullOrEmpty(prevCenter)) {
