@@ -1591,15 +1591,17 @@ class Map extends MObject {
       this.facadeMap_.setMaxExtent(transformExtent(prevMaxExtent, olPrevProjection, olProjection));
     }
 
-    // recalculates bbox
+    // recalculates bbox //TODO
     if (!isNullOrEmpty(prevBbox)) {
       if (!isArray(prevBbox)) {
         prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
       }
-      this.facadeMap_.setBbox(transformExtent(prevBbox, olPrevProjection, olProjection), {
+      const newBbox = transformExtent(prevBbox, olPrevProjection, olProjection);
+      this.facadeMap_.setBbox(newBbox, {
         nearest: true,
       });
     }
+
 
     // recalculates center
     if (!isNullOrEmpty(prevCenter)) {
