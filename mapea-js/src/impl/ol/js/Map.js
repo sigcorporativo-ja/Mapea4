@@ -1591,7 +1591,7 @@ class Map extends MObject {
       this.facadeMap_.setMaxExtent(transformExtent(prevMaxExtent, olPrevProjection, olProjection));
     }
 
-    // recalculates bbox //TODO
+    // recalculates bbox 
     // if (!isNullOrEmpty(prevBbox)) {
     //   if (!isArray(prevBbox)) {
     //     prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
@@ -1600,6 +1600,16 @@ class Map extends MObject {
     //     nearest: true,
     //   });
     // }
+
+    if (!isNullOrEmpty(prevBbox)) {
+      if (!isArray(prevBbox)) {
+        prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
+      }
+      const newBbox = transformExtent(prevBbox, olPrevProjection, olProjection);
+      this.facadeMap_.setBbox(newBbox, {
+        nearest: true,
+      });
+    }
 
 
     // recalculates center
