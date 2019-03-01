@@ -1932,38 +1932,45 @@ class Map extends Base {
     if (isNullOrEmpty(wmcLayer)) {
       const baseLayers = this.getBaseLayers();
       if (isNullOrEmpty(baseLayers)) {
-        envolvedLayers = this.getLayers();
+        envolvedLayers = this.getLayers().filter(layer => layer.name !== '__draw__');
       } else {
         envolvedLayers = baseLayers;
       }
     } else {
       envolvedLayers = [wmcLayer];
     }
-    return Promise.all(envolvedLayers.filter(layer => layer.name !== '__draw__').map((layer) => {
+    return Promise.all(envolvedLayers.map((layer) => {
       let maxExtentPromise = layer.getMaxExtent();
       if (!(maxExtentPromise instanceof Promise)) {
         maxExtentPromise = new Promise(success => success(maxExtentPromise));
       }
       return maxExtentPromise;
     })).then((maxExtents) => {
+      const extent = this.getProjection().getExtent();
       const envolvedMaxExtent = {
         x: {
-          min: Number.MAX_SAFE_INTEGER,
-          max: Number.MIN_SAFE_INTEGER,
+          min: extent[0],
+          max: extent[2],
         },
         y: {
-          min: Number.MAX_SAFE_INTEGER,
-          max: Number.MIN_SAFE_INTEGER,
+          min: extent[1],
+          max: extent[3],
         },
       };
-      maxExtents.forEach((maxExtent) => {
-        if (!isNullOrEmpty(maxExtent)) {
-          envolvedMaxExtent.x.min = Math.min(envolvedMaxExtent.x.min, maxExtent[0]);
-          envolvedMaxExtent.y.min = Math.min(envolvedMaxExtent.y.min, maxExtent[1]);
-          envolvedMaxExtent.x.max = Math.max(envolvedMaxExtent.x.max, maxExtent[2]);
-          envolvedMaxExtent.y.max = Math.max(envolvedMaxExtent.y.max, maxExtent[3]);
-        }
-      });
+      if (maxExtents.length > 0) {
+        envolvedMaxExtent.x.min = Number.MAX_SAFE_INTEGER;
+        envolvedMaxExtent.y.min = Number.MAX_SAFE_INTEGER;
+        envolvedMaxExtent.x.max = Number.MIN_SAFE_INTEGER;
+        envolvedMaxExtent.y.max = Number.MIN_SAFE_INTEGER;
+        maxExtents.forEach((maxExtent) => {
+          if (!isNullOrEmpty(maxExtent)) {
+            envolvedMaxExtent.x.min = Math.min(envolvedMaxExtent.x.min, maxExtent[0]);
+            envolvedMaxExtent.y.min = Math.min(envolvedMaxExtent.y.min, maxExtent[1]);
+            envolvedMaxExtent.x.max = Math.max(envolvedMaxExtent.x.max, maxExtent[2]);
+            envolvedMaxExtent.y.max = Math.max(envolvedMaxExtent.y.max, maxExtent[3]);
+          }
+        });
+      }
       return envolvedMaxExtent;
     });
   }
