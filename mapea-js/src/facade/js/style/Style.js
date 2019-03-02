@@ -2,7 +2,7 @@
  * @module M/Style
  */
 import Base from '../Base';
-import { isNullOrEmpty, isArray, isObject, extendsObj, stringifyFunctions } from '../util/Utils';
+import { isNullOrEmpty, isArray, isObject, extendsObj, stringifyFunctions, isDynamic, drawDynamicStyle } from '../util/Utils';
 import * as EventType from '../event/eventtype';
 
 /**
@@ -236,10 +236,9 @@ class Style extends Base {
       styleImgB64 = this.updateCanvasPromise_.then(() => this.canvas_.toDataURL('png'));
     }
 
-    // TODO: #232
-    // if (isDynamic(this.options_) === true) {
-    //   styleImgB64 = drawDynamicStyle(this.canvas_);
-    // }
+    if (isDynamic(this.options_) === true) {
+      styleImgB64 = drawDynamicStyle(this.canvas_);
+    }
 
     return styleImgB64;
   }
