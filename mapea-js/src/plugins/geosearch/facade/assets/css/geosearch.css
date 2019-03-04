@@ -385,12 +385,19 @@ div#m-autcomplete>div:hover {
 
 #m-geosearch-closeHelp-btn {
   position: absolute;
+  cursor: pointer;
   box-shadow: none;
   border: none;
   background-color: white;
   bottom: 40px;
   right: -5px;
-  color: grey;
+  color: black;
+  opacity: 0.4;
+  transition: opacity 0.25 ease;
+}
+
+#m-geosearch-closeHelp-btn:hover {
+  opacity: 1;
 }
 
 .m-areas>div.m-area>div.m-panel.m-geosearch.collapsed>button.m-panel-btn, .m-areas>div.m-area>div.m-panel.m-searchstreetgeosearch.collapsed>button.m-panel-btn, .m-areas>div.m-area>div.m-panel.m-searchstreet.collapsed>button.m-panel-btn {
@@ -559,4 +566,8 @@ div#m-autcomplete>div:hover {
 
 #m-searchstreet-results:target, #m-searchstreet-results:target {
   display: block;
+}
+
+.m-hidden {
+  display: none;
 }

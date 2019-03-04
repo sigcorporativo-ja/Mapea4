@@ -13,7 +13,7 @@ export default class GeosearchControl extends M.Control {
    * @extends {M.Control}
    * @api stable
    */
-  constructor(url, core, handler, searchParameters) {
+  constructor(url, core, handler, searchParameters, showHelp) {
     // implementation of this control
     const impl = new GeosearchImpl();
 
@@ -128,7 +128,7 @@ export default class GeosearchControl extends M.Control {
      * @private
      * @type {Boolean}
      */
-    this.helpShown_ = false;
+    this.showHelp_ = showHelp;
 
     /**
      * Flag that indicates the scroll is up
@@ -165,7 +165,10 @@ export default class GeosearchControl extends M.Control {
   createView(map) {
     this.facadeMap_ = map;
     const options = { jsonp: true };
-    const html = this.accessHelp_(M.template.compileSync(geosearchHTML, options));
+    const html = M.template.compileSync(geosearchHTML, options);
+    if (this.showHelp_ === false) {
+      html.querySelector('#m-geosearch-help-btn').classList.add('m-hidden');
+    }
     this.addEvents(html);
     return html;
   }
@@ -528,30 +531,6 @@ export default class GeosearchControl extends M.Control {
       this.getImpl().hideHelp();
       this.helpShown_ = false;
     }
-  }
-
-  /**
-   * This function checks if there is help service
-   * to this control
-   *
-   * @private
-   * @function
-   */
-  accessHelp_(html) {
-    this.element_ = html;
-    let help;
-    M.remote.get(this.helpUrl_).then((res) => {
-      try {
-        help = JSON.parse(res.text);
-      } catch (e) {
-        M.Exception(`La respuesta no es un JSON válido: ${e}`);
-      }
-    });
-    if (!help) {
-      const buttons = this.element_.getElementsByTagName('button');
-      buttons[1].remove();
-    }
-    return this.element_;
   }
 
   /**
