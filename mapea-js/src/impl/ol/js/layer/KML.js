@@ -2,6 +2,7 @@
  * @module M/impl/layer/KML
  */
 import { compileSync as compileTemplate } from 'M/util/Template';
+import { get as getProj } from 'ol/proj';
 import popupKMLTemplate from 'templates/kml_popup';
 import Popup from 'M/Popup';
 import { isNullOrEmpty, extend } from 'M/util/Utils';
@@ -48,6 +49,13 @@ class KML extends Vector {
     this.tabPopup_ = null;
 
     /**
+     *
+     * @private
+     * @type {Promise}
+     */
+    this.loadFeaturesPromise_ = null;
+
+    /**
      * Image tag for the screenOverlay
      * @private
      * @type {HTMLElement}
@@ -88,28 +96,12 @@ class KML extends Vector {
    * @api stable
    */
   addTo(map) {
-    super.addTo(map);
-
-    const formater = new FormatKML();
-    const loader = new LoaderKML(map, this.url, formater);
-    this.ol3Layer = new OLLayerVector(extend({
-      source: new OLSourceVector({
-        url: this.url,
-        format: formater,
-        loader: loader.getLoaderFn((loaderData) => {
-          const features = loaderData.features;
-          const screenOverlay = loaderData.screenOverlay;
-          // removes previous features
-          this.facadeVector_.clear();
-          this.facadeVector_.addFeatures(features);
-          this.fire(EventType.LOAD, [features]);
-          if (!isNullOrEmpty(screenOverlay)) {
-            const screenOverLayImg = ImplUtils.addOverlayImage(screenOverlay, map);
-            this.setScreenOverlayImg(screenOverLayImg);
-          }
-        }),
-      }),
-    }, this.vendorOptions_, true));
+    this.map = map;
+    map.on(EventType.CHANGE_PROJ, this.setProjection_.bind(this), this);
+    this.formater_ = new FormatKML();
+    this.loader_ = new LoaderKML(this.map, this.url, this.formater_);
+    this.ol3Layer = new OLLayerVector(extend({}, this.vendorOptions_, true));
+    this.updateSource_();
     // sets its visibility if it is in range
     if (this.options.visibility !== false) {
       this.setVisible(this.inRange());
@@ -186,25 +178,22 @@ class KML extends Vector {
    */
   updateSource_() {
     if (isNullOrEmpty(this.vendorOptions_.source)) {
-      const formater = new FormatKML();
-      const loader = new LoaderKML(this.map, this.url, formater);
-      const srcOptions = {
-        url: this.url,
-        format: formater,
-        loader: loader.getLoaderFn((loaderData) => {
-          const features = loaderData.features;
-          const screenOverlay = loaderData.screenOverlay;
-          // removes previous features
-          this.facadeVector_.clear();
-          this.facadeVector_.addFeatures(features);
-          this.fire(EventType.LOAD, [features]);
-          if (!isNullOrEmpty(screenOverlay)) {
-            const screenOverLayImg = ImplUtils.addOverlayImage(screenOverlay, this.map);
-            this.setScreenOverlayImg(screenOverLayImg);
-          }
-        }),
-      };
-      this.ol3Layer.setSource(new OLSourceVector(srcOptions));
+      this.requestFeatures_().then((response) => {
+        this.ol3Layer.setSource(new OLSourceVector({
+          loader: () => {
+            const screenOverlay = response.screenOverlay;
+            // removes previous features
+            this.facadeVector_.clear();
+            this.facadeVector_.addFeatures(response.features);
+            this.fire(EventType.LOAD, [response.features]);
+            if (!isNullOrEmpty(screenOverlay)) {
+              const screenOverLayImg = ImplUtils.addOverlayImage(screenOverlay, this.map);
+              this.setScreenOverlayImg(screenOverLayImg);
+            }
+          },
+        }));
+        this.facadeVector_.addFeatures(response.features);
+      });
     }
   }
 
@@ -256,6 +245,48 @@ class KML extends Vector {
       }
     }
   }
+
+  /**
+   * This function return extent of all features or discriminating by the filter
+   *
+   * @function
+   * @param {boolean} skipFilter - Indicates whether skip filter
+   * @param {M.Filter} filter - Filter to execute
+   * @return {Array<number>} Extent of features
+   * @api stable
+   */
+  getFeaturesExtent(skipFilter, filter) {
+    return new Promise((resolve) => {
+      const codeProj = this.map.getProjection().code;
+      if (this.isLoaded() === true) {
+        const features = this.getFeatures(skipFilter, filter);
+        const extent = ImplUtils.getFeaturesExtent(features, codeProj);
+        resolve(extent);
+      } else {
+        this.requestFeatures_().then((response) => {
+          const extent = ImplUtils.getFeaturesExtent(response.features, codeProj);
+          resolve(extent);
+        });
+      }
+    });
+  }
+
+  /**
+   *
+   * @private
+   * @function
+   */
+  requestFeatures_() {
+    if (isNullOrEmpty(this.loadFeaturesPromise_)) {
+      this.loadFeaturesPromise_ = new Promise((resolve) => {
+        this.loader_.getLoaderFn((features) => {
+          resolve(features);
+        })(null, null, getProj(this.map.getProjection().code));
+      });
+    }
+    return this.loadFeaturesPromise_;
+  }
+
 
   /**
    * This function checks if an object is equals

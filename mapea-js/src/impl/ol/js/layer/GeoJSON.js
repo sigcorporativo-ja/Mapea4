@@ -10,9 +10,10 @@ import geojsonPopupTemplate from 'templates/geojson_popup';
 import GeoJSONFormat from 'M/format/GeoJSON';
 import OLSourceVector from 'ol/source/Vector';
 import { get as getProj } from 'ol/proj';
-import { all } from 'ol/loadingstrategy';
 import Vector from './Vector';
 import JSONPLoader from '../loader/JSONP';
+import ImplUtils from '../util/Utils';
+
 /**
  * @classdesc
  * @api
@@ -53,6 +54,13 @@ class GeoJSON extends Vector {
      * @type {function}
      */
     this.loader_ = null;
+
+    /**
+     *
+     * @private
+     * @type {Promise}
+     */
+    this.loadFeaturesPromise_ = null;
 
     /**
      *
@@ -149,22 +157,31 @@ class GeoJSON extends Vector {
    * @private
    * @function
    */
+  requestFeatures_() {
+    if (isNullOrEmpty(this.loadFeaturesPromise_)) {
+      this.loadFeaturesPromise_ = new Promise((resolve) => {
+        if (this.source) {
+          const features = this.formater_.read(this.source, this.map.getProjection());
+          resolve(features);
+        } else {
+          this.loader_.getLoaderFn((features) => {
+            resolve(features);
+          })(null, null, getProj(this.map.getProjection().code));
+        }
+      });
+    }
+    return this.loadFeaturesPromise_;
+  }
+
+  /**
+   * This function sets the map object of the layer
+   *
+   * @private
+   * @function
+   */
   updateSource_() {
     if (isNullOrEmpty(this.vendorOptions_.source)) {
-      let srcOptions;
-      if (!isNullOrEmpty(this.url)) {
-        srcOptions = {
-          format: this.formater_,
-          loader: this.loader_.getLoaderFn((features) => {
-            this.loaded_ = true;
-            this.facadeVector_.addFeatures(features);
-            this.fire(EventType.LOAD, [features]);
-          }),
-          strategy: all,
-        };
-        this.ol3Layer.setSource(new OLSourceVector(srcOptions));
-      } else if (!isNullOrEmpty(this.source)) {
-        const features = this.formater_.read(this.source, this.map.getProjection());
+      this.requestFeatures_().then((features) => {
         this.ol3Layer.setSource(new OLSourceVector({
           loader: (extent, resolution, projection) => {
             this.loaded_ = true;
@@ -175,8 +192,33 @@ class GeoJSON extends Vector {
           },
         }));
         this.facadeVector_.addFeatures(features);
-      }
+      });
     }
+  }
+
+  /**
+   * This function return extent of all features or discriminating by the filter
+   *
+   * @function
+   * @param {boolean} skipFilter - Indicates whether skip filter
+   * @param {M.Filter} filter - Filter to execute
+   * @return {Array<number>} Extent of features
+   * @api stable
+   */
+  getFeaturesExtent(skipFilter, filter) {
+    return new Promise((resolve) => {
+      const codeProj = this.map.getProjection().code;
+      if (this.isLoaded() === true) {
+        const features = this.getFeatures(skipFilter, filter);
+        const extent = ImplUtils.getFeaturesExtent(features, codeProj);
+        resolve(extent);
+      } else {
+        this.requestFeatures_().then((features) => {
+          const extent = ImplUtils.getFeaturesExtent(features, codeProj);
+          resolve(extent);
+        });
+      }
+    });
   }
 
   /**
