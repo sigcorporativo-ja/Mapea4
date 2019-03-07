@@ -44,7 +44,7 @@ export default class MeasureLength extends Measure {
     const length = Math.round(geometry.getLength() * 100) / 100;
     let output;
     if (length > 100) {
-      output = `${Math.round(((length / 1000) * 100) / 100)} km`;
+      output = `${Math.round(((length / 1000) * 100)) / 100} km`;
     } else {
       output = `${Math.round(length * 100) / 100} m`;
     }
