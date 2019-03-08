@@ -1079,7 +1079,7 @@ export const replaceNode = (newNode, oldNode) => {
  */
 export const isDynamic = (obj) => {
   let flag = false;
-  if (!Array.isArray(obj) && typeof obj === 'object') {
+  if (!Array.isArray(obj) && typeof obj === 'object' && !isNullOrEmpty(obj)) {
     flag = Object.values(obj).some(val => isDynamic(val));
   } else if (typeof obj === 'function' || (typeof obj === 'string' && /\{\{.*\}\}/.test(obj))) {
     flag = true;
