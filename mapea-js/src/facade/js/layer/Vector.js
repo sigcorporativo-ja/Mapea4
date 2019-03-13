@@ -281,15 +281,20 @@ class Vector extends LayerBase {
    * @param {M.Style}
    * @param {bool}
    */
-  setStyle(styleVar, applyToFeature = false, defaultStyle = Vector.DEFAULT_OPTIONS_STYLE) {
-    let style = styleVar;
-    if (isNullOrEmpty(style)) {
-      style = defaultStyle;
-    }
+  setStyle(style, applyToFeature = false) {
+    const defaultStyle = Vector.DEFAULT_OPTIONS_STYLE;
     if (this.getImpl().isLoaded()) {
-      this.applyStyle_(style, applyToFeature);
+      this.applyStyle_(defaultStyle, applyToFeature);
+      if (!isNullOrEmpty(style)) {
+        this.applyStyle_(style, applyToFeature);
+      }
     } else {
-      this.once(EventType.LOAD, () => this.applyStyle_(style, applyToFeature));
+      this.once(EventType.LOAD, () => {
+        this.applyStyle_(defaultStyle, applyToFeature);
+        if (!isNullOrEmpty(style)) {
+          this.applyStyle_(style, applyToFeature);
+        }
+      });
     }
   }
 
