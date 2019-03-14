@@ -265,7 +265,11 @@ class Vector extends Layer {
    */
   getFeaturesExtent(skipFilter, filter) {
     const features = this.getFeatures(skipFilter, filter);
-    return ImplUtils.getFeaturesExtent(features);
+    let extent = ImplUtils.getFeaturesExtent(features, this.map.getProjection().code);
+    if (extent === null) {
+      extent = this.map.getProjection().getExtent();
+    }
+    return extent;
   }
 
   /**

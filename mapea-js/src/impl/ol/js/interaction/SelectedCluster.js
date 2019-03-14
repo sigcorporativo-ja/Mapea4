@@ -143,7 +143,7 @@ export default class SelectCluster extends OLInteractionSelect {
 
     if (!cluster || cluster.length > this.maxFeaturesToSelect) {
       if (this.facadeLayer_.getImpl().getNumZoomLevels() - this.map.getZoom() !== 1) {
-        const extend = Utils.getFeaturesExtent(cluster);
+        const extend = Utils.getFeaturesExtent(cluster, this.map.getProjection().code);
         this.map.setBbox(extend);
         return;
       }

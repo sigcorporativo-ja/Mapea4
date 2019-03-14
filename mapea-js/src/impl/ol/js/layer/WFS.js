@@ -14,6 +14,8 @@ import FormatImplGeoJSON from '../format/GeoJSON';
 import FormatGML from '../format/GML';
 import LoaderWFS from '../loader/WFS';
 import Vector from './Vector';
+import ImplUtils from '../util/Utils';
+
 /**
  * @classdesc
  * @api
@@ -72,6 +74,13 @@ class WFS extends Vector {
     if (isNullOrEmpty(this.options.getFeatureOutputFormat)) {
       this.options.getFeatureOutputFormat = 'application/json'; // by default
     }
+
+    /**
+     *
+     * @private
+     * @type {Promise}
+     */
+    this.loadFeaturesPromise_ = null;
   }
 
   /**
@@ -131,45 +140,88 @@ class WFS extends Vector {
       }
       this.loader_ = new LoaderWFS(this.map, this.service_, this.formater_);
 
+
       const isCluster = (this.facadeVector_.getStyle() instanceof StyleCluster);
       let ol3LayerSource = this.ol3Layer.getSource();
-      if (forceNewSource === true || isNullOrEmpty(ol3LayerSource)) {
-        const newSource = new OLSourceVector({
-          format: this.formater_.getImpl(),
-          loader: this.loader_.getLoaderFn((features) => {
-            this.loaded_ = true;
-            this.facadeVector_.addFeatures(features);
-            this.fire(EventType.LOAD, [features]);
-            this.facadeVector_.redraw();
-          }),
-          strategy: all,
-        });
-        if (isCluster) {
-          const distance = this.facadeVector_.getStyle().getOptions().distance;
-          const clusterSource = new OLSourceCluster({
-            distance,
-            source: newSource,
+      this.requestFeatures_().then((features) => {
+        if (forceNewSource === true || isNullOrEmpty(ol3LayerSource)) {
+          const newSource = new OLSourceVector({
+            loader: () => {
+              this.loaded_ = true;
+              this.facadeVector_.addFeatures(features);
+              this.fire(EventType.LOAD, [features]);
+              this.facadeVector_.redraw();
+            },
           });
-          this.ol3Layer.setStyle(this.facadeVector_.getStyle().getImpl().olStyleFn);
-          this.ol3Layer.setSource(clusterSource);
+
+          if (isCluster) {
+            const distance = this.facadeVector_.getStyle().getOptions().distance;
+            const clusterSource = new OLSourceCluster({
+              distance,
+              source: newSource,
+            });
+            this.ol3Layer.setStyle(this.facadeVector_.getStyle().getImpl().olStyleFn);
+            this.ol3Layer.setSource(clusterSource);
+          } else {
+            this.ol3Layer.setSource(newSource);
+          }
         } else {
-          this.ol3Layer.setSource(newSource);
+          if (isCluster) {
+            ol3LayerSource = ol3LayerSource.getSource();
+          }
+          ol3LayerSource.set('format', this.formater_);
+          ol3LayerSource.set('loader', this.loader_.getLoaderFn((features2) => {
+            this.loaded_ = true;
+            this.facadeVector_.addFeatures(features2);
+            this.fire(EventType.LOAD, [features2]);
+            this.facadeVector_.redraw();
+          }));
+          ol3LayerSource.set('strategy', all);
+          ol3LayerSource.changed();
         }
-      } else {
-        if (isCluster) {
-          ol3LayerSource = ol3LayerSource.getSource();
-        }
-        ol3LayerSource.set('format', this.formater_);
-        ol3LayerSource.set('loader', this.loader_.getLoaderFn((features) => {
-          this.loaded_ = true;
-          this.facadeVector_.addFeatures(features);
-          this.fire(EventType.LOAD, [features]);
-          this.facadeVector_.redraw();
-        }));
-        ol3LayerSource.set('strategy', all);
-        ol3LayerSource.changed();
-      }
+      });
     }
+  }
+
+  /**
+   * This function return extent of all features or discriminating by the filter
+   *
+   * @function
+   * @param {boolean} skipFilter - Indicates whether skip filter
+   * @param {M.Filter} filter - Filter to execute
+   * @return {Array<number>} Extent of features
+   * @api stable
+   */
+  getFeaturesExtent(skipFilter, filter) {
+    const codeProj = this.map.getProjection().code;
+    const features = this.getFeatures(skipFilter, filter);
+    const extent = ImplUtils.getFeaturesExtent(features, codeProj);
+    return extent;
+  }
+
+  /**
+   * This function return extent of all features or discriminating by the filter
+   *
+   * @function
+   * @param {boolean} skipFilter - Indicates whether skip filter
+   * @param {M.Filter} filter - Filter to execute
+   * @return {Array<number>} Extent of features
+   * @api stable
+   */
+  getFeaturesExtentPromise(skipFilter, filter) {
+    return new Promise((resolve) => {
+      const codeProj = this.map.getProjection().code;
+      if (this.isLoaded() === true) {
+        const features = this.getFeatures(skipFilter, filter);
+        const extent = ImplUtils.getFeaturesExtent(features, codeProj);
+        resolve(extent);
+      } else {
+        this.requestFeatures_().then((features) => {
+          const extent = ImplUtils.getFeaturesExtent(features, codeProj);
+          resolve(extent);
+        });
+      }
+    });
   }
 
   /**
@@ -260,6 +312,26 @@ class WFS extends Vector {
    */
   isLoaded() {
     return this.loaded_;
+  }
+
+  /**
+   * TODO
+   */
+  /**
+   * This function sets the map object of the layer
+   *
+   * @private
+   * @function
+   */
+  requestFeatures_() {
+    if (isNullOrEmpty(this.loadFeaturesPromise_)) {
+      this.loadFeaturesPromise_ = new Promise((resolve) => {
+        this.loader_.getLoaderFn((features) => {
+          resolve(features);
+        })(null, null, getProj(this.map.getProjection().code));
+      });
+    }
+    return this.loadFeaturesPromise_;
   }
 
   /**

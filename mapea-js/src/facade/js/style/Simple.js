@@ -1,7 +1,7 @@
 /**
  * @module M/style/Simple
  */
-import { defineFunctionFromString } from '../util/Utils';
+import { defineFunctionFromString, isDynamic, drawDynamicStyle } from '../util/Utils';
 import StyleFeature from './Feature';
 
 /**
@@ -29,6 +29,23 @@ class Simple extends StyleFeature {
       }
     }
     this.updateCanvas();
+  }
+
+  /**
+   * This function returns data url to canvas
+   *
+   * @function
+   * @public
+   * @return {String} data url to canvas
+   */
+  toImage() {
+    let styleImgB64 = super.toImage();
+
+    if (isDynamic(this.options_) === true) {
+      styleImgB64 = drawDynamicStyle(this.canvas_);
+    }
+
+    return styleImgB64;
   }
 
   /**

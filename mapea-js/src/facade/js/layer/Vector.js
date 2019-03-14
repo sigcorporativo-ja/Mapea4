@@ -246,6 +246,20 @@ class Vector extends LayerBase {
   }
 
   /**
+   * This function return extent of all features or discriminating by the filter
+   *
+   * @function
+   * @param {boolean} applyFilter - Indicates whether execute filter
+   * @return {Array<number>} Extent of features
+   * @api
+   */
+  getFeaturesExtentPromise(skipFilterParam) {
+    let skipFilter = skipFilterParam;
+    if (isNullOrEmpty(this.getFilter())) skipFilter = true;
+    return this.getImpl().getFeaturesExtentPromise(skipFilter, this.filter_);
+  }
+
+  /**
    * This function remove filter
    *
    * @function
@@ -281,15 +295,19 @@ class Vector extends LayerBase {
    * @param {M.Style}
    * @param {bool}
    */
-  setStyle(styleVar, applyToFeature = false, defaultStyle = Vector.DEFAULT_OPTIONS_STYLE) {
-    let style = styleVar;
-    if (isNullOrEmpty(style)) {
-      style = defaultStyle;
-    }
+  setStyle(style, applyToFeature = false, defaultStyle = Vector.DEFAULT_OPTIONS_STYLE) {
     if (this.getImpl().isLoaded()) {
-      this.applyStyle_(style, applyToFeature);
+      this.applyStyle_(defaultStyle, applyToFeature);
+      if (!isNullOrEmpty(style)) {
+        this.applyStyle_(style, applyToFeature);
+      }
     } else {
-      this.once(EventType.LOAD, () => this.applyStyle_(style, applyToFeature));
+      this.once(EventType.LOAD, () => {
+        this.applyStyle_(defaultStyle, applyToFeature);
+        if (!isNullOrEmpty(style)) {
+          this.applyStyle_(style, applyToFeature);
+        }
+      });
     }
   }
 
@@ -388,8 +406,17 @@ class Vector extends LayerBase {
   getMaxExtent() {
     return this.getFeaturesExtent();
   }
-}
 
+  /**
+   * This function indicates the layer max extent
+   *
+   * @function
+   * @api
+   */
+  getMaxExtentPromise() {
+    return this.getFeaturesExtentPromise();
+  }
+}
 
 /**
  * Options style by default

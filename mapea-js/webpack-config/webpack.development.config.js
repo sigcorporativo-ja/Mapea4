@@ -54,7 +54,7 @@ module.exports = {
       plugins: path.resolve(__dirname, '../src/plugins'),
       patches: path.resolve(__dirname, '../src/impl/ol/js/patches_dev.js'),
     },
-    extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html'],
+    extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html', '.jpg'],
   },
   module: {
     rules: [
@@ -84,7 +84,7 @@ module.exports = {
         exclude: [/node_modules/],
       },
       {
-        test: /\.(woff|woff2|eot|ttf|svg)$/,
+        test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
         exclude: /node_modules/,
         loader: 'url-loader?name=fonts/[name].[ext]',
       }],

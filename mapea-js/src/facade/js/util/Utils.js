@@ -3,6 +3,7 @@
  */
 
 import chroma from 'chroma-js';
+import * as dynamicImage from 'assets/img/dynamic_legend';
 import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units';
 import * as WKT from '../geom/WKT';
 
@@ -1078,12 +1079,63 @@ export const replaceNode = (newNode, oldNode) => {
  */
 export const isDynamic = (obj) => {
   let flag = false;
-  if (!Array.isArray(obj) && typeof obj === 'object') {
+  if (!Array.isArray(obj) && typeof obj === 'object' && !isNullOrEmpty(obj)) {
     flag = Object.values(obj).some(val => isDynamic(val));
   } else if (typeof obj === 'function' || (typeof obj === 'string' && /\{\{.*\}\}/.test(obj))) {
     flag = true;
   }
   return flag;
+};
+
+/**
+ * This parameter represent the src image of the dynamic legend
+ * @const
+ * @type {string}
+ */
+let dynamicLegend = dynamicImage;
+
+/**
+ * This parameter represent the width canvas of the dynamic legend
+ * @const
+ * @type {number}
+ */
+let dynamicLegendWidth = 48;
+
+/**
+ * This parameter represent the height canvas of the dynamic legend
+ * @const
+ * @type {number}
+ */
+let dynamicLegendHeight = 48;
+
+/**
+ * This functions sets the dynamic legend constant
+ * @function
+ * @public
+ * @api
+ */
+export const setDynamicLegend = (legend) => {
+  dynamicLegend = legend;
+};
+
+/**
+ * This functions sets the dynamic legend width constant
+ * @function
+ * @public
+ * @api
+ */
+export const setDynamicLegendWidth = (width) => {
+  dynamicLegendWidth = width;
+};
+
+/**
+ * This functions sets the dynamic legend height constant
+ * @function
+ * @public
+ * @api
+ */
+export const setDynamicLegendHeight = (height) => {
+  dynamicLegendHeight = height;
 };
 
 /**
@@ -1094,35 +1146,24 @@ export const isDynamic = (obj) => {
  * @return {bool}
  * @api
  */
-
 export const drawDynamicStyle = (canvas) => {
-  const crossAngleA = Math.PI / 4;
-  const width = 160;
-  const height = 80;
-  const marginTextBottom = 15;
-  const radius = 20;
-  const axisA1 = [20 * Math.cos(crossAngleA), 20 * Math.cos(crossAngleA)];
-  const axisA2 = [20 * Math.cos(crossAngleA + Math.PI), 20 * Math.cos(crossAngleA + Math.PI)];
-  const centerSymbol = [width / 2, (height / 2) - marginTextBottom];
+  const width = dynamicLegendWidth;
+  const height = dynamicLegendHeight;
   const canvasParam = canvas;
   const ctx = canvas.getContext('2d');
 
+  const image = new Image();
+  image.width = width;
+  image.height = height;
   canvasParam.width = width;
   canvasParam.height = height;
-  ctx.font = '14px Arial';
-
-  // Draw the text
-  ctx.fillText('Simbología no disponible', 0, height - marginTextBottom);
-  ctx.strokeStyle = '#f00';
-  ctx.lineWidth = 3;
-
-  // Draw the symbol
-  ctx.beginPath();
-  ctx.arc(centerSymbol[0], centerSymbol[1], radius, 0, 2 * Math.PI);
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(axisA1[0] + centerSymbol[0], axisA1[1] + centerSymbol[1]);
-  ctx.lineTo(axisA2[0] + centerSymbol[0], axisA2[1] + centerSymbol[1]);
-  ctx.stroke();
-  return canvas.toDataURL();
+  return new Promise((resolve, reject) => {
+    image.crossOrigin = 'anonymous';
+    image.onload = () => {
+      ctx.drawImage(image, 0, 0, width, height);
+      const dataUrl = canvas.toDataURL();
+      resolve(dataUrl);
+    };
+    image.src = dynamicLegend;
+  });
 };

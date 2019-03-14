@@ -1,7 +1,7 @@
 /**
  * @module M/impl/style/Point
  */
-import { isNullOrEmpty, concatUrlPaths, addParameters } from 'M/util/Utils';
+import { isNullOrEmpty, concatUrlPaths, addParameters, isDynamic, drawDynamicStyle } from 'M/util/Utils';
 import chroma from 'chroma-js';
 import OLStyleImage from 'ol/style/Image';
 import OLFeature from 'ol/Feature';
@@ -40,50 +40,50 @@ class Point extends Simple {
   toImage(canvas) {
     // TODO: #232
     let image = null;
-    // if (isDynamic(this.options_) === true) {
-    //   image = drawDynamicStyle(canvas);
-    // } else {
-    if (isNullOrEmpty(this.olStyleFn_)) {
-      return null;
-    }
-    let style = this.olStyleFn_()[1];
-    if (style.getImage && style.getImage() != null && style.getImage() instanceof OLStyleImage) {
-      // see https://github.com/openlayers/openlayers/blob/master/src/ol/style/regularshape.js#L205
-      if (style.getImage() instanceof PointFontSymbol) {
-        const imageCanvas = style.getImage().getImage();
-        if (imageCanvas != null && imageCanvas) {
-          image = imageCanvas.toDataURL();
-        }
-      } else if (style.getImage() instanceof PointIcon) {
-        const imageStyle = style.getImage();
-        // let canvasSize = this.getCanvasSize();
-        // canvasSize[0] / size[0]) * size[0]
-        // let [size, scale] = [imageStyle.getSize(), imageStyle.getScale()];
-        // ctx.drawImage(imageStyle.getImage(), 0, 0, ctx.canvas.height, ctx.canvas.width);
-        if (!isNullOrEmpty(imageStyle)) {
-          image = imageStyle.getSrc();
-          if (!image.startsWith(window.location.origin)) {
-            const proxyImageURL = concatUrlPaths([M.config.PROXY_URL, '/image']);
-            image = addParameters(proxyImageURL, {
-              url: image,
-            });
+    if (isDynamic(this.options_) === true) {
+      image = drawDynamicStyle(canvas);
+    } else {
+      if (isNullOrEmpty(this.olStyleFn_)) {
+        return null;
+      }
+      let style = this.olStyleFn_()[1];
+      if (style.getImage && style.getImage() != null && style.getImage() instanceof OLStyleImage) {
+        // see https://github.com/openlayers/openlayers/blob/master/src/ol/style/regularshape.js#L205
+        if (style.getImage() instanceof PointFontSymbol) {
+          const imageCanvas = style.getImage().getImage();
+          if (imageCanvas != null && imageCanvas) {
+            image = imageCanvas.toDataURL();
+          }
+        } else if (style.getImage() instanceof PointIcon) {
+          const imageStyle = style.getImage();
+          // let canvasSize = this.getCanvasSize();
+          // canvasSize[0] / size[0]) * size[0]
+          // let [size, scale] = [imageStyle.getSize(), imageStyle.getScale()];
+          // ctx.drawImage(imageStyle.getImage(), 0, 0, ctx.canvas.height, ctx.canvas.width);
+          if (!isNullOrEmpty(imageStyle)) {
+            image = imageStyle.getSrc();
+            if (!image.startsWith(window.location.origin)) {
+              const proxyImageURL = concatUrlPaths([M.config.PROXY_URL, '/image']);
+              image = addParameters(proxyImageURL, {
+                url: image,
+              });
+            }
           }
         }
-      }
-    } else {
-      style = this.olStyleFn_()[0];
-      if (style.getImage() != null && style.getImage().getStroke() != null) {
-        if (style.getImage().getStroke().getWidth() > Point.DEFAULT_WIDTH_POINT) {
-          style.getImage().getStroke().setWidth(Point.DEFAULT_WIDTH_POINT);
+      } else {
+        style = this.olStyleFn_()[0];
+        if (style.getImage() != null && style.getImage().getStroke() != null) {
+          if (style.getImage().getStroke().getWidth() > Point.DEFAULT_WIDTH_POINT) {
+            style.getImage().getStroke().setWidth(Point.DEFAULT_WIDTH_POINT);
+          }
+          style.getImage().render();
         }
-        style.getImage().render();
-      }
-      const imageCanvas = style.getImage().getImage();
-      if (imageCanvas != null) {
-        image = imageCanvas.toDataURL();
+        const imageCanvas = style.getImage().getImage();
+        if (imageCanvas != null) {
+          image = imageCanvas.toDataURL();
+        }
       }
     }
-    // }
     return image;
   }
 
@@ -258,7 +258,8 @@ class Point extends Simple {
       vectorContext.drawGeometry(new OLGeomPoint([10, 10]));
     } else {
       vectorContext.drawCircle(new OLGeomCircle([this.getCanvasSize()[0] / 2,
-        this.getCanvasSize()[1] / 2], this.getRadius_()));
+        this.getCanvasSize()[1] / 2,
+      ], this.getRadius_()));
     }
   }
 

@@ -5,6 +5,14 @@ import Feature from 'M/feature/Feature';
 import * as WKT from 'M/geom/WKT';
 import { isNullOrEmpty } from 'M/util/Utils';
 import { getWidth, extend } from 'ol/extent';
+import { get as getProj } from 'ol/proj';
+
+const getUnitsPerMeter = (projectionCode, meter) => {
+  const projection = getProj(projectionCode);
+  const metersPerUnit = projection.getMetersPerUnit();
+  return meter / metersPerUnit;
+};
+
 
 /**
  * @classdesc
@@ -185,14 +193,24 @@ class Utils {
    * @return {number} Width.
    * @api stable
    */
-  static getFeaturesExtent(features) {
-    const olFeatures = features.map((f) => {
-      return f instanceof Feature ? f.getImpl().getOLFeature() : f;
-    });
-    const extents = olFeatures.map(feature => feature.getGeometry().getExtent().slice(0));
-    return extents.length === 0 ? null : extents.reduce((ext1, ext2) => {
-      return extend(ext1, ext2);
-    });
+  static getFeaturesExtent(features, projectionCode) {
+    const olFeatures = features.map(f => (f instanceof Feature ? f.getImpl().getOLFeature() : f));
+    let extents = olFeatures.map(feature => feature.getGeometry().getExtent().slice(0));
+    if (extents.length === 1) {
+      const geometry = olFeatures[0].getGeometry();
+      if (geometry.getType() === 'Point') {
+        const units = getUnitsPerMeter(projectionCode, 1000);
+        const coordX = geometry.getCoordinates()[0];
+        const coordY = geometry.getCoordinates()[1];
+        extents = [[
+          coordX - units,
+          coordY - units,
+          coordX + units,
+          coordY + units,
+        ]];
+      }
+    }
+    return extents.length === 0 ? null : extents.reduce((ext1, ext2) => extend(ext1, ext2));
   }
 
 

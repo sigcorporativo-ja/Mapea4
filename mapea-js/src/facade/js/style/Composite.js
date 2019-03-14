@@ -37,8 +37,8 @@ class Composite extends StyleBase {
   apply(layer) {
     this.layer_ = layer;
     if (!isNullOrEmpty(layer)) {
-      const style = layer.getStyle();
-      this.oldStyle_ = style;
+      // const style = layer.getStyle();
+      // this.oldStyle_ = style;
       this.updateInternal_(layer);
     }
   }

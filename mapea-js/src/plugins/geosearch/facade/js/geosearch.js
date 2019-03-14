@@ -79,6 +79,12 @@ export default class Geosearch extends M.Plugin {
      * @type {String}
      */
     this.searchParameters_ = parameters.params || {};
+
+    /**
+     * @private
+     * @type {bool}
+     */
+    this.showHelp_ = parameters.showHelp;
   }
 
   /**
@@ -100,6 +106,7 @@ export default class Geosearch extends M.Plugin {
       this.core_,
       this.handler_,
       this.searchParameters_,
+      this.showHelp_,
     );
     this.control_.on(M.evt.ADD_TO_MAP, this.onLoadCallback_, this);
     this.panel_ = new M.ui.Panel('geosearch', {

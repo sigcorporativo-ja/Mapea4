@@ -236,11 +236,6 @@ class Style extends Base {
       styleImgB64 = this.updateCanvasPromise_.then(() => this.canvas_.toDataURL('png'));
     }
 
-    // TODO: #232
-    // if (isDynamic(this.options_) === true) {
-    //   styleImgB64 = drawDynamicStyle(this.canvas_);
-    // }
-
     return styleImgB64;
   }
 
