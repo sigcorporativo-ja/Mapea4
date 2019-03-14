@@ -5,7 +5,7 @@ import Feature from 'M/feature/Feature';
 import * as WKT from 'M/geom/WKT';
 import { isNullOrEmpty } from 'M/util/Utils';
 import { getWidth, extend } from 'ol/extent';
-import { get as getProj } from 'ol/proj';
+import { get as getProj, getTransform } from 'ol/proj';
 
 const getUnitsPerMeter = (projectionCode, meter) => {
   const projection = getProj(projectionCode);
@@ -13,6 +13,18 @@ const getUnitsPerMeter = (projectionCode, meter) => {
   return meter / metersPerUnit;
 };
 
+export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
+  const transformFunction = getTransform(codeProjection, 'EPSG:4326');
+  return featuresAsJSON.map((featureAsJSON) => {
+    return {
+      ...featureAsJSON,
+      geometry: {
+        type: featureAsJSON.geometry.type,
+        coordinates: transformFunction(featureAsJSON.geometry.coordinates),
+      },
+    };
+  });
+};
 
 /**
  * @classdesc

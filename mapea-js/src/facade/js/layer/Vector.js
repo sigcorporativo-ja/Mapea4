@@ -2,6 +2,7 @@
  * @module M/layer/Vector
  */
 import VectorImpl from 'impl/layer/Vector';
+import { geojsonTo4326 } from 'impl/util/Utils';
 import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils';
 import { generateStyleLayer } from '../style/utils';
 import Exception from '../exception/exception';
@@ -12,6 +13,7 @@ import FilterBase from '../filter/Base';
 import StyleCluster from '../style/Cluster';
 import Style from '../style/Style';
 import * as EventType from '../event/eventtype';
+
 // import { POINT, MULTI_POINT } from '../geom/GeoJSON';
 
 /**
@@ -415,6 +417,17 @@ class Vector extends LayerBase {
    */
   getMaxExtentPromise() {
     return this.getFeaturesExtentPromise();
+  }
+
+  /**
+   * This function gets the geojson representation of the layer
+   * @function
+   * @api
+   */
+  toGeoJSON() {
+    const code = this.map_.getProjection().code;
+    const featuresAsJSON = this.getFeatures().map(feature => feature.getGeoJSON());
+    return { type: 'FeatureCollection', features: geojsonTo4326(featuresAsJSON, code) };
   }
 }
 
