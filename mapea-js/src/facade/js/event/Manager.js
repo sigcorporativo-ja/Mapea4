@@ -3,7 +3,6 @@
  */
 import { isNullOrEmpty, isFunction } from '../util/Utils';
 import EventListener from './Listener';
-import * as EventType from './eventtype';
 
 /**
  * @classdesc
@@ -37,10 +36,8 @@ class EventsManager {
    * @api
    */
   add(eventType, listener, optThis, once = false) {
-    const eventTypes = Object.values(EventType);
     let eventKey;
-    if (!isNullOrEmpty(eventType) &&
-      (eventTypes.indexOf(eventType) !== -1) && isFunction(listener)) {
+    if (!isNullOrEmpty(eventType) && isFunction(listener)) {
       if (isNullOrEmpty(this.events_[eventType])) {
         this.events_[eventType] = [];
       }
