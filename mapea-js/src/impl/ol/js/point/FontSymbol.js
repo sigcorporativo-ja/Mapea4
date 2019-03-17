@@ -1,7 +1,5 @@
 import OLFontSymbol from '../ext/OLStyleFontSymbol';
-/**
- * @namespace M.impl.style.PointFontSymbol
- */
+
 export default class FontSymbol extends OLFontSymbol {
   /**
    * @classdesc
@@ -10,7 +8,6 @@ export default class FontSymbol extends OLFontSymbol {
    * @constructor
    * @param {object} options - Options style PointFontSymbol
    * @extends {ol.style.FontSymbol}
-   * @api stable
    */
   constructor(options = {}) {
     // super call

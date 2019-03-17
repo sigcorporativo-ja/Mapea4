@@ -27,7 +27,6 @@ export default class OLChart extends OLStyleRegularShape {
    *  - data {Array<number>} chart data
    *  - fill3DColor {string} the pie3d cylinder fill color
    * @extends {ol.style.RegularShape}
-   * @api
    */
   constructor(options = {}) {
     const strokeWidth = !isNullOrEmpty(options.stroke) ? options.stroke.getWidth() : 0;
@@ -138,7 +137,6 @@ export default class OLChart extends OLStyleRegularShape {
    * clones the chart
    * @public
    * @function
-   * @api stable
    */
   clone() {
     const newInstance = new OLChart({
@@ -194,7 +192,6 @@ export default class OLChart extends OLStyleRegularShape {
    * Radius and donut ratio type setter
    * @public
    * @function
-   * @api stable
    */
   setRadius(radius, ratio) {
     this.donutRatio_ = ratio || this.donutRatio_;
@@ -205,7 +202,6 @@ export default class OLChart extends OLStyleRegularShape {
    * sets the animation step
    * @public
    * @function
-   * @api stable
    */
   setAnimation(step) {
     if (step === false) {
@@ -249,7 +245,6 @@ export default class OLChart extends OLStyleRegularShape {
    *
    * @function
    * @private
-   * @api stable
    */
   renderChart_(atlasManager) {
     switch (this.type_) {

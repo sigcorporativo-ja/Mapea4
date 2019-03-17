@@ -1,55 +1,38 @@
-<table><tr>
-<th width="33.3%">Map</th><th width="33.3%">View</th><th width="33.3%">Layers</th>
-</tr><tr>
-<td><p>A [map](module-ol_Map-Map.html) is made of [layers](module-ol_layer_Base-BaseLayer.html), a [view](module-ol_View-View.html) to visualize them, [interactions](module-ol_interaction_Interaction-Interaction.html) to modify map content and [controls](module-ol_control_Control-Control.html) with UI components.</p>
-[Overview](module-ol_Map-Map.html)<br>
-[Creation](module-ol_Map-Map.html#Map)<br>
-[Events](module-ol_MapBrowserEvent-MapBrowserEvent.html)</td>
-<td><p>The view manages the visual parameters of the map view, like resolution or rotation.</p>
-[View](module-ol_View-View.html) with center, projection, resolution and rotation</td>
-<td><p>Layers are lightweight containers that get their data from [sources](module-ol_source_Source-Source.html).</p>
-[layer/Tile](module-ol_layer_Tile-TileLayer.html)<br>
-[layer/Image](module-ol_layer_Image-ImageLayer.html)<br>
-[layer/Vector](module-ol_layer_Vector-VectorLayer.html)<br>
-[layer/VectorTile](module-ol_layer_VectorTile-VectorTileLayer.html)</td>
-</tr><tr>
-<th>Controls</th><th>Interactions</th><th>Sources and formats</th>
-</tr><tr>
-<td>[Map default controls](module-ol_control_util.html#.defaults)<br>
-[All controls](module-ol_control_Control-Control.html)
-</td>
-<td>
-[Map default interactions](module-ol_interaction.html#~defaults)<br>
-Interactions for [vector features](module-ol_Feature-Feature.html)
-<ul><li>[interaction/Select](module-ol_interaction_Select-Select.html)</li>
-<li>[interaction/Draw](module-ol_interaction_Draw-Draw.html)</li>
-<li>[interaction/Modify](module-ol_interaction_Modify-Modify.html)</li></ul>
-[All interactions](module-ol_interaction_Interaction-Interaction.html)</td>
-<td>[Tile sources](module-ol_source_Tile-TileSource.html) for [layer/Tile](module-ol_layer_Tile-TileLayer.html)
-<br>[Image sources](module-ol_source_Image-ImageSource.html) for [layer/Image](module-ol_layer_Image-ImageLayer.html)
-<br>[Vector sources](module-ol_source_Vector-VectorSource.html) for [layer/Vector](module-ol_layer_Vector-VectorLayer.html)
-<br>[Vector tile sources](module-ol_source_VectorTile-VectorTile.html) for [layer/VectorTile](module-ol_layer_VectorTile-VectorTileLayer.html)
-<br>[Formats](module-ol_format_Feature-FeatureFormat.html) for reading/writing vector data
-<br>[format/WMSCapabilities](module-ol_format_WMSCapabilities-WMSCapabilities.html)</td></tr>
-<tr><th>Projections</th><th>Observable objects</th><th>Other components</th></tr>
-<tr><td><p>All coordinates and extents need to be provided in view projection (default: EPSG:3857). To transform, use [proj.transform()](module-ol_proj.html#.transform) and [proj.transformExtent()](module-ol_proj.html#.transformExtent).</p>
-[ol/proj](module-ol_proj.html)</td>
-<td><p>Changes to all [ol/Object](module-ol_Object-BaseObject.html)s can be observed by calling the [object.on('propertychange')](module-ol_Object-BaseObject.html#on) method.  Listeners receive an [ol/Object~ObjectEvent](module-ol_Object-ObjectEvent.html) with information on the changed property and old value.</p>
-<td>
-[ol/Geolocation](module-ol_Geolocation.html)<br>
-[ol/Overlay](module-ol_Overlay-Overlay.html)<br></td>
-</tr></table>
+# Mapea
 
-&nbsp;
+[Mapea](http://mapea4-sigc.juntadeandalucia.es/) es una herramienta que permite integrar de una forma muy sencilla un visualizador de mapas interactivo en cualquier página web y configurarlo consumiendo ficheros WMC, servicios WMS, servicios WFS, ficheros KML, etc. Además, provee la capacidad de añadir una gran cantidad de herramientas y controles.
 
-#### API change policy
+Para adaptarse a las necesidades de los usuarios y ser mucho más flexible, Mapea cuenta con dos APIs. De esta manera, es el propio usuario el que selecciona la que más se adapta a las necesidades que necesite cubrir en cada momento:
 
-The OpenLayers API consists of
-* names and signatures of constructors
-* names and signatures of instance methods and properties
-* names and signatures of functions
-* names of constants
+ - A través de una API REST muy sencilla y documentada permite incluir un visualizador interactivo en cualquier página web sin necesidad de disponer de conocimientos específicos en programación ni en el ámbito de los SIG.
+ - A través de una API JavaScript que permite crear desde visualizadores de mapas básico hasta otros de mayor complejidad.
 
-Within a major release series, the API will not be changed.  Any changes to the API will be accompanied by a new major release.
+Mapea se presenta como una solución gratuita para la incorporación de clientes de mapas interactivos en nuestras páginas web muy facilmente.
 
-*Note*: The API change policy does not cover CSS class names that are used to style the OpenLayers UI. It also does not cover any typedefs and enums.
+## Componentes
+
+La arquitectura de Mapea está compuesta por los siguientes componentes:
+
+- [mapea-js](/mapea-js) Librería JavaScript que provee una API para facilitar la creación de visores de mapas.
+- [mapea-parent](/mapea-parent) Módulo padre que hace uso de maven para compilar y generar el war final de Mapea.
+- [mapea-proxy](/mapea-proxy) Proxy para realizar peticiones POST por si el [CORS](https://developer.mozilla.org/en-US/docs/Web/HTTP/Access_control_CORS) no está habilitado.
+- [mapea-rest](/mapea-rest) Servicio Web con API RESTful que genera el código JS necesario para generar un visor con la configuración especificada por parámetros.
+
+## Primeros pasos
+
+Se ha creado una [Wiki](https://github.com/sigcorporativo-ja/Mapea4/wiki/Primeros-pasos) para servir de guía en los primeros pasos, así como para tenerla como referencia de consulta en cualquier momento.
+
+## Navegadores soportados
+
+- Internet Explorer 11+
+- Mozilla Firefox 44+
+- Goole Chrome 49+
+
+## Dispositivos móviles y SO soportados
+
+- Android KitKat 4.4.2+
+- iOS 9+
+
+## Bugs
+
+A través de [GitHub issue tracker](https://github.com/sigcorporativo-ja/Mapea4/issues) podremos informar de los bugs detectados durante el uso de Mapea o realizar peticiones de nuevas funcionalidades. Antes de crear una petición se recomienda realizar una búsqueda rápida por si ya fue reportada por alguien.

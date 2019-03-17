@@ -6,7 +6,7 @@ import StylePolygon from '../style/Polygon';
 /**
  * This functions returns random simple style
  * @function
- * @public
+ * @private
  * @param {M.Feature} feature
  * @return {M.style.Simple}
  */
@@ -72,7 +72,7 @@ export const generateRandomStyle = (opts) => {
  * This function returns the appropiate style to geomtry layer
  * with parameter options.
  * @function
- * @public
+ * @private
  * @param {object} options - style options
  * @param {M.layer.Vector} layer -
  * @return {M.style.Simple}

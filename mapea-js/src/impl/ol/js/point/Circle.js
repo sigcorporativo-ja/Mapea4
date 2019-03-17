@@ -1,8 +1,5 @@
 import OLStyleCircle from 'ol/style/Circle';
 
-/**
- * @namespace M.impl.style.PointCircle
- */
 export default class Circle extends OLStyleCircle {
   /**
    * @classdesc
@@ -11,7 +8,6 @@ export default class Circle extends OLStyleCircle {
    * @constructor
    * @param {object} options - Options style PointCircle
    * @extends {OLStyleCircle}
-   * @api stable
    */
   constructor(options = {}) {
     // super call
@@ -29,7 +25,6 @@ export default class Circle extends OLStyleCircle {
    * clones the style
    * @public
    * @function
-   * @api stable
    */
   clone() {
     const style = new Circle({
