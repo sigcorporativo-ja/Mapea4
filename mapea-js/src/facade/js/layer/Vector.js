@@ -2,6 +2,7 @@
  * @module M/layer/Vector
  */
 import VectorImpl from 'impl/layer/Vector';
+import { geojsonTo4326 } from 'impl/util/Utils';
 import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils';
 import { generateStyleLayer } from '../style/utils';
 import Exception from '../exception/exception';
@@ -12,6 +13,7 @@ import FilterBase from '../filter/Base';
 import StyleCluster from '../style/Cluster';
 import Style from '../style/Style';
 import * as EventType from '../event/eventtype';
+
 // import { POINT, MULTI_POINT } from '../geom/GeoJSON';
 
 /**
@@ -43,7 +45,7 @@ class Vector extends LayerBase {
     /**
      * TODO
      */
-    this.style_ = options.style;
+    this.style_ = null;
 
     /**
      * Filter
@@ -52,7 +54,7 @@ class Vector extends LayerBase {
      */
     this.filter_ = null;
 
-    this.setStyle(this.style_);
+    this.setStyle(options.style);
 
     impl.on(EventType.LOAD, features => this.fire(EventType.LOAD, [features]));
   }
@@ -297,13 +299,17 @@ class Vector extends LayerBase {
    */
   setStyle(style, applyToFeature = false, defaultStyle = Vector.DEFAULT_OPTIONS_STYLE) {
     if (this.getImpl().isLoaded()) {
-      this.applyStyle_(defaultStyle, applyToFeature);
+      if (isNullOrEmpty(this.getStyle())) {
+        this.applyStyle_(defaultStyle, applyToFeature);
+      }
       if (!isNullOrEmpty(style)) {
         this.applyStyle_(style, applyToFeature);
       }
     } else {
       this.once(EventType.LOAD, () => {
-        this.applyStyle_(defaultStyle, applyToFeature);
+        if (isNullOrEmpty(this.getStyle())) {
+          this.applyStyle_(defaultStyle, applyToFeature);
+        }
         if (!isNullOrEmpty(style)) {
           this.applyStyle_(style, applyToFeature);
         }
@@ -415,6 +421,17 @@ class Vector extends LayerBase {
    */
   getMaxExtentPromise() {
     return this.getFeaturesExtentPromise();
+  }
+
+  /**
+   * This function gets the geojson representation of the layer
+   * @function
+   * @api
+   */
+  toGeoJSON() {
+    const code = this.map_.getProjection().code;
+    const featuresAsJSON = this.getFeatures().map(feature => feature.getGeoJSON());
+    return { type: 'FeatureCollection', features: geojsonTo4326(featuresAsJSON, code) };
   }
 }
 

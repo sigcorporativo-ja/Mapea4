@@ -1,8 +1,5 @@
 import OLStyleIcon from 'ol/style/Icon';
 
-/**
- * @namespace M.impl.style.PointIcon
- */
 export default class Icon extends OLStyleIcon {
   /**
    * @classdesc
@@ -11,7 +8,6 @@ export default class Icon extends OLStyleIcon {
    * @constructor
    * @param {object} options - Options style PointIcon
    * @extends {OLStyleIcon}
-   * @api stable
    */
   constructor(options = {}) {
     // super call
@@ -40,7 +36,6 @@ export default class Icon extends OLStyleIcon {
    * clones the style
    * @public
    * @function
-   * @api stable
    */
   clone() {
     return new Icon({

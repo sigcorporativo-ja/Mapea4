@@ -17,7 +17,6 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
    * @param {olx.style.FontSymbolOptions=} opt_options Options.
    * @extends {ol.style.RegularShape}
    * @implements {ol.structs.IHasChecksum}
-   * @api
    */
   constructor(options = {}) {
     let strokeWidth = 0;
@@ -116,7 +115,6 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
   /**
    * Get the fill style for the symbol.
    * @return {ol.style.Fill} Fill style.
-   * @api
    */
   getFill() {
     return this.fill_;
@@ -125,7 +123,6 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
   /**
    * Get the stroke style for the symbol.
    * @return {ol.style.Stroke} Stroke style.
-   * @api
    */
   getStroke() {
     return this.stroke_;
@@ -134,7 +131,6 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
   /**
    * Get the stroke style for the symbol.
    * @return {ol.style.Stroke} Stroke style.
-   * @api
    */
   getGlyph(name) {
     let glyph = this.glyph_;
@@ -154,7 +150,6 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
   /**
    * Get the glyph name.
    * @return {string} the name
-   * @api
    */
   getGlyphName() {
     let glyphName = '';
@@ -169,7 +164,6 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
   /**
    * Get the stroke style for the symbol.
    * @return {ol.style.Stroke} Stroke style.
-   * @api
    */
   getFontInfo(glyph) {
     return OLStyleFontSymbol.defs.fonts[glyph.font];

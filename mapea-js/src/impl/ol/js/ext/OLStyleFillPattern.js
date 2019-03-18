@@ -28,7 +28,6 @@ export default class OLStyleFillPattern extends OLStyleFill {
    * scale [number} pattern scale
    * @extends {ol.style.Fill}
    * @implements {ol.structs.IHasChecksum}
-   * @api
    */
   constructor(options = {}) {
     let pattern;

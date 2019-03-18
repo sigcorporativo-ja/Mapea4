@@ -7,7 +7,6 @@
 node
 node_modules
 target
-externs
 libraries
 doc
 dist

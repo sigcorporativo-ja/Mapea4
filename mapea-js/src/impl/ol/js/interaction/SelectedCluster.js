@@ -1,3 +1,6 @@
+/**
+ * @module M/impl/interaction/SelectCluster
+ */
 import OLFeature from 'ol/Feature';
 import OLGeomPoint from 'ol/geom/Point';
 import OLGeomLineString from 'ol/geom/LineString';
@@ -10,7 +13,7 @@ import { easeOut } from 'ol/easing';
 import Icon from '../point/Icon';
 import Utils from '../util/Utils';
 
-export default class SelectCluster extends OLInteractionSelect {
+class SelectCluster extends OLInteractionSelect {
   /**
    * @classdesc
    * Main constructor of the class. Creates interaction SelectCluster
@@ -18,7 +21,7 @@ export default class SelectCluster extends OLInteractionSelect {
    *
    * @constructor
    * @param {Object} options - ranges defined by user
-   * @api stable
+   * @api
    */
   constructor(optionsParam = {}) {
     const options = optionsParam;
@@ -61,7 +64,7 @@ export default class SelectCluster extends OLInteractionSelect {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
 
   setMap(map) {
@@ -86,7 +89,7 @@ export default class SelectCluster extends OLInteractionSelect {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   clear() {
     this.getFeatures().clear();
@@ -98,7 +101,7 @@ export default class SelectCluster extends OLInteractionSelect {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getLayer() {
     return this.overlayLayer_;
@@ -109,7 +112,7 @@ export default class SelectCluster extends OLInteractionSelect {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   refreshViewEvents() {
     if (this.getMap() && this.getMap().getView()) {
@@ -122,7 +125,7 @@ export default class SelectCluster extends OLInteractionSelect {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   selectCluster(e) {
     // Nothing selected
@@ -257,7 +260,7 @@ export default class SelectCluster extends OLInteractionSelect {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   animateCluster_(center, callbackFn) {
     // Stop animation (if one is running)
@@ -347,3 +350,5 @@ export default class SelectCluster extends OLInteractionSelect {
     // select.getMap().renderSync();
   }
 }
+
+export default SelectCluster;
