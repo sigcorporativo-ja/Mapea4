@@ -45,7 +45,7 @@ class Vector extends LayerBase {
     /**
      * TODO
      */
-    this.style_ = options.style;
+    this.style_ = null;
 
     /**
      * Filter
@@ -54,7 +54,7 @@ class Vector extends LayerBase {
      */
     this.filter_ = null;
 
-    this.setStyle(this.style_);
+    this.setStyle(options.style);
 
     impl.on(EventType.LOAD, features => this.fire(EventType.LOAD, [features]));
   }
@@ -299,13 +299,17 @@ class Vector extends LayerBase {
    */
   setStyle(style, applyToFeature = false, defaultStyle = Vector.DEFAULT_OPTIONS_STYLE) {
     if (this.getImpl().isLoaded()) {
-      this.applyStyle_(defaultStyle, applyToFeature);
+      if (isNullOrEmpty(this.getStyle())) {
+        this.applyStyle_(defaultStyle, applyToFeature);
+      }
       if (!isNullOrEmpty(style)) {
         this.applyStyle_(style, applyToFeature);
       }
     } else {
       this.once(EventType.LOAD, () => {
-        this.applyStyle_(defaultStyle, applyToFeature);
+        if (isNullOrEmpty(this.getStyle())) {
+          this.applyStyle_(defaultStyle, applyToFeature);
+        }
         if (!isNullOrEmpty(style)) {
           this.applyStyle_(style, applyToFeature);
         }
