@@ -1095,20 +1095,6 @@ export const isDynamic = (obj) => {
 let dynamicLegend = dynamicImage;
 
 /**
- * This parameter represent the width canvas of the dynamic legend
- * @const
- * @type {number}
- */
-let dynamicLegendWidth = 48;
-
-/**
- * This parameter represent the height canvas of the dynamic legend
- * @const
- * @type {number}
- */
-let dynamicLegendHeight = 48;
-
-/**
  * This functions sets the dynamic legend constant
  * @function
  * @public
@@ -1116,26 +1102,6 @@ let dynamicLegendHeight = 48;
  */
 export const setDynamicLegend = (legend) => {
   dynamicLegend = legend;
-};
-
-/**
- * This functions sets the dynamic legend width constant
- * @function
- * @public
- * @api
- */
-export const setDynamicLegendWidth = (width) => {
-  dynamicLegendWidth = width;
-};
-
-/**
- * This functions sets the dynamic legend height constant
- * @function
- * @public
- * @api
- */
-export const setDynamicLegendHeight = (height) => {
-  dynamicLegendHeight = height;
 };
 
 /**
@@ -1147,23 +1113,5 @@ export const setDynamicLegendHeight = (height) => {
  * @api
  */
 export const drawDynamicStyle = (canvas) => {
-  const width = dynamicLegendWidth;
-  const height = dynamicLegendHeight;
-  const canvasParam = canvas;
-  const ctx = canvas.getContext('2d');
-
-  const image = new Image();
-  image.width = width;
-  image.height = height;
-  canvasParam.width = width;
-  canvasParam.height = height;
-  return new Promise((resolve, reject) => {
-    image.crossOrigin = 'anonymous';
-    image.onload = () => {
-      ctx.drawImage(image, 0, 0, width, height);
-      const dataUrl = canvas.toDataURL();
-      resolve(dataUrl);
-    };
-    image.src = dynamicLegend;
-  });
+  return dynamicLegend;
 };
