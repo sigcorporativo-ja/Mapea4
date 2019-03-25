@@ -38,9 +38,13 @@ class Point extends Simple {
    * @api stable
    */
   toImage(canvas) {
-    // TODO: #232
     let image = null;
-    if (isDynamic(this.options_) === true) {
+    const options = {
+      fill: this.options_.fill,
+      stroke: this.options_.stroke,
+      icon: this.options_.icon,
+    };
+    if (isDynamic(options) === true) {
       image = drawDynamicStyle(canvas);
     } else {
       if (isNullOrEmpty(this.olStyleFn_)) {
