@@ -200,3 +200,11 @@ export const CLICK = 'click';
  * @api
  */
 export const MOVE = 'move';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const DOUBLE_CLICK = 'doubleclick';
