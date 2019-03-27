@@ -3,6 +3,7 @@
  */
 import Exception from 'M/exception/exception';
 import { isFunction, isArray, isNullOrEmpty } from 'M/util/Utils';
+import * as EventType from 'M/event/eventtype';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import OLStyle from 'ol/style/Style';
@@ -66,6 +67,7 @@ class Draw extends Layer {
    */
   addTo(map) {
     this.map = map;
+    this.fire(EventType.ADDED_TO_MAP);
 
     this.ol3Layer = new OLLayerVector({
       source: new OLSourceVector({}),

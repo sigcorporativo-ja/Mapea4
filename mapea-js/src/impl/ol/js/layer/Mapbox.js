@@ -5,6 +5,7 @@ import * as LayerType from 'M/layer/Type';
 import FacadeOSM from 'M/layer/OSM';
 import FacadeMapbox from 'M/layer/Mapbox';
 import { isNullOrEmpty, generateResolutionsFromExtent, extend } from 'M/util/Utils';
+import * as EventType from 'M/event/eventtype';
 import OLLayerTile from 'ol/layer/Tile';
 import OLSourceXYZ from 'ol/source/XYZ';
 import OLControlAttribution from 'ol/control/Attribution';
@@ -106,6 +107,7 @@ class Mapbox extends Layer {
    */
   addTo(map) {
     this.map = map;
+    this.fire(EventType.ADDED_TO_MAP);
 
     const extent = this.facadeLayer_.getMaxExtent();
     this.ol3Layer = new OLLayerTile(extend({
