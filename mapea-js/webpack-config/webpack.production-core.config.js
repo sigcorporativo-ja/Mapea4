@@ -1,5 +1,6 @@
 const path = require('path');
-const GenerateVersionPlugin = require('./GenerateVersionPlugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopywebpackPlugin = require('copy-webpack-plugin');
 const argv = require('yargs').argv;
@@ -31,8 +32,7 @@ module.exports = {
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html', '.jpg'],
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.js$/,
         exclude: /(node_modules\/(?!ol)|bower_components)/,
         use: {
@@ -54,8 +54,7 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          {
+        use: [{
             loader: MiniCssExtractPlugin.loader,
           },
           {
@@ -71,10 +70,17 @@ module.exports = {
         test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
         exclude: /node_modules/,
         loader: 'url-loader?name=fonts/[name].[ext]',
-      }],
+      }
+    ],
   },
   optimization: {
     noEmitOnErrors: true,
+    minimizer: [
+      new OptimizeCssAssetsPlugin(),
+      new TerserPlugin({
+        sourceMap: true,
+      }),
+    ]
   },
   plugins: [
     new GenerateVersionPlugin({
