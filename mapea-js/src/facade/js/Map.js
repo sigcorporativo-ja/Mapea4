@@ -1949,29 +1949,26 @@ class Map extends Base {
    * @api
    */
   getEnvolvedExtent() {
-    let envolvedLayers;
-    const wmcLayer = this.getWMC().find(wmc => wmc.selected);
-    if (isNullOrEmpty(wmcLayer)) {
-      const baseLayers = this.getBaseLayers();
-      if (isNullOrEmpty(baseLayers)) {
-        envolvedLayers = this.getLayers().filter(layer => layer.name !== '__draw__');
+    return new Promise((resolve) => {
+      // 1 check the WMC extent
+      const wmcLayer = this.getWMC().find(wmc => wmc.selected);
+      if (!isNullOrEmpty(wmcLayer)) {
+        wmcLayer.getMaxExtent(resolve);
       } else {
-        envolvedLayers = baseLayers;
+        const visibleBaseLayer = this.getBaseLayers().find(layer => layer.isVisible());
+        if (!isNullOrEmpty(visibleBaseLayer)) {
+          visibleBaseLayer.getMaxExtent(resolve);
+        } else {
+          const layers = this.getLayers().filter(layer => layer.name !== '__draw__');
+          Promise.all(layers.map((layer) => {
+            return (layer instanceof Vector ? layer.getMaxExtentPromise() : layer.getMaxExtent());
+          })).then((extens) => {
+            const projExtent = this.getProjection().getExtent();
+            const envolvedMaxExtent = getEnvolvedExtent([...extens, projExtent]);
+            resolve(envolvedMaxExtent);
+          });
+        }
       }
-    } else {
-      envolvedLayers = [wmcLayer];
-    }
-    return Promise.all(envolvedLayers.map((layer) => {
-      let maxExtentPromise = layer instanceof Vector ?
-        layer.getMaxExtentPromise() : layer.getMaxExtent();
-      if (!(maxExtentPromise instanceof Promise)) {
-        maxExtentPromise = new Promise(success => success(maxExtentPromise));
-      }
-      return maxExtentPromise;
-    })).then((maxExtents) => {
-      const extent = this.getProjection().getExtent();
-      const envolvedMaxExtent = getEnvolvedExtent([...maxExtents, extent]);
-      return envolvedMaxExtent;
     });
   }
 
