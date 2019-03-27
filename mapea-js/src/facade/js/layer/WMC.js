@@ -143,8 +143,8 @@ class WMC extends LayerBase {
    * @api
    * @export
    */
-  getMaxExtent() {
-    return this.getImpl().getMaxExtent();
+  getMaxExtent(callbackFn) {
+    return this.getImpl().getMaxExtent(callbackFn);
   }
 
   /**

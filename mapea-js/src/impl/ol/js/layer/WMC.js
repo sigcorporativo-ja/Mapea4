@@ -5,6 +5,7 @@ import { isNullOrEmpty } from 'M/util/Utils';
 import * as parameter from 'M/parameter/parameter';
 import { get as getRemote } from 'M/util/Remote';
 import * as EventType from 'M/event/eventtype';
+import { isFunction } from 'M/util/Utils';
 import { get as getProj, transformExtent } from 'ol/proj';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
@@ -187,25 +188,24 @@ class WMC extends Layer {
    * @function
    * @api stable
    */
-  getMaxExtent() {
-    const olProjection = getProj(this.map.getProjection().code);
-    const promise = new Promise((success, fail) => {
-      if (isNullOrEmpty(this.maxExtent)) {
-        this.loadContextPromise.then((context) => {
-          this.maxExtent = context.maxExtent;
-          if (isNullOrEmpty(this.extentProj_)) {
-            this.extentProj_ = parameter.projection(M.config.DEFAULT_PROJ).code;
-          }
-          this.maxExtent = transformExtent(this.maxExtent, this.extentProj_, olProjection);
-          this.extentProj_ = olProjection;
-          success(this.maxExtent);
-        });
-      } else {
+  getMaxExtent(callbackFn) {
+    if (isNullOrEmpty(this.maxExtent)) {
+      this.loadContextPromise.then((context) => {
+        if (isNullOrEmpty(this.extentProj_)) {
+          this.extentProj_ = parameter.projection(M.config.DEFAULT_PROJ).code;
+        }
+        const olProjection = getProj(this.map.getProjection().code);
+        this.maxExtent = transformExtent(context.maxExtent, this.extentProj_, olProjection);
         this.extentProj_ = olProjection;
-        success(this.maxExtent);
-      }
-    });
-    return promise;
+        if (isFunction(callbackFn)) {
+          callbackFn(this.maxExtent);
+        }
+      });
+    }
+    if (!isNullOrEmpty(this.maxExtent) && isFunction(callbackFn)) {
+      callbackFn(this.maxExtent);
+    }
+    return this.maxExtent;
   }
 
   /**
