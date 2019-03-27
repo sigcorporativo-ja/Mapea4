@@ -1,5 +1,5 @@
 /**
- * @module M/impl/format/wfs/DescribeFeatureTypeXML
+ * @module M/impl/format/DescribeFeatureTypeXML
  */
 import * as Dialog from 'M/dialog';
 import XML from '../XML';
