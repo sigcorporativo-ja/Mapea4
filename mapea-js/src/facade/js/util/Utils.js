@@ -1115,3 +1115,35 @@ export const setDynamicLegend = (legend) => {
 export const drawDynamicStyle = (canvas) => {
   return dynamicLegend;
 };
+
+/**
+ * This function calculates the envolved extent
+ * from extents provided by the user
+ * @function
+ * @public
+ * @param {Array<Array<Number>>} extents
+ * @return {Array<Number>}
+ * @api
+ */
+export const getEnvolvedExtent = (extents) => {
+  let envolvedExtent = null;
+
+  if (extents.length > 0) {
+    envolvedExtent = [
+      Number.MAX_SAFE_INTEGER,
+      Number.MAX_SAFE_INTEGER,
+      Number.MIN_SAFE_INTEGER,
+      Number.MIN_SAFE_INTEGER,
+    ];
+    extents.forEach((extent) => {
+      if (!isNullOrEmpty(extent)) {
+        envolvedExtent[0] = Math.min(envolvedExtent[0], extent[0]);
+        envolvedExtent[1] = Math.min(envolvedExtent[1], extent[1]);
+        envolvedExtent[2] = Math.max(envolvedExtent[2], extent[2]);
+        envolvedExtent[3] = Math.max(envolvedExtent[3], extent[3]);
+      }
+    });
+  }
+
+  return envolvedExtent;
+};
