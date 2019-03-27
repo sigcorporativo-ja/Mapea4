@@ -27,10 +27,10 @@ module.exports = (config) => {
       watched: false,
       type: 'dom',
     }, {
-      pattern: path.resolve(__dirname, 'dist', 'js', 'mapea.ol.min.js'),
+      pattern: path.resolve(__dirname, 'dist', 'js', 'mapea-5.0.0.ol.min.js'),
       watched: false,
     }, {
-      pattern: path.resolve(__dirname, 'dist', 'assets', 'css', 'mapea.ol.min.css'),
+      pattern: path.resolve(__dirname, 'dist', 'assets', 'css', 'mapea-5.0.0.ol.min.css'),
       watched: false,
     }, {
       pattern: path.resolve(__dirname, 'test', 'configuration_filtered.js'),
