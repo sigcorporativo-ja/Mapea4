@@ -1,14 +1,11 @@
-/**
- * @module M/impl/format/wmc/WMC110
- */
 import { isNullOrEmpty, normalize } from 'M/util/Utils';
 import WMS from 'M/layer/WMS';
 import { get as getProj, transformExtent } from 'ol/proj';
 import { getAllTextContent } from 'ol/xml';
 import XML from '../XML';
+
 /**
  * @classdesc
- * @api
  */
 class WMC110 extends XML {
   /**
