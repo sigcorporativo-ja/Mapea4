@@ -1458,7 +1458,7 @@ class Map extends Base {
   getMaxExtent() {
     let maxExtent = this.userMaxExtent;
     if (isNullOrEmpty(maxExtent)) {
-      const selectedWmc = this.getWMC().filter(wmc => wmc.selected);
+      const selectedWmc = this.getWMC().find(wmc => wmc.selected);
       if (isNullOrEmpty(selectedWmc)) {
         maxExtent = getEnvolvedExtent(this.getLayers().filter(layer => layer.name !== '__draw__').map(l => l.getMaxExtent()));
       } else {
