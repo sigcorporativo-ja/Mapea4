@@ -3,7 +3,7 @@
  */
 import WMSImpl from 'impl/layer/WMS';
 
-import { isNullOrEmpty, isUndefined, sameUrl, isString, normalize } from '../util/Utils';
+import { isNullOrEmpty, isUndefined, sameUrl, isString, normalize, isFunction } from '../util/Utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import * as parameter from '../parameter/parameter';
@@ -67,16 +67,6 @@ class WMS extends LayerBase {
 
     this._updateNoCache();
   }
-
-  // set url(newUrl) {
-  //   super.url = newUrl;
-  //   this._updateNoCache();
-  // }
-  //
-  // set name(newName) {
-  //   super.name = newName;
-  //   this._updateNoCache();
-  // }
 
   /**
    * 'type' This property indicates if
@@ -165,51 +155,57 @@ class WMS extends LayerBase {
     this.getImpl().options = newOptions;
   }
 
-  getMaxExtent() {
-    return new Promise((success, fail) => {
-      if (isNullOrEmpty(this.maxExtent_)) {
-        if (isNullOrEmpty(this.options.wmcMaxExtent)) {
-          const mapMaxExtent = this.map_.getMaxExtent();
-          if (isNullOrEmpty(mapMaxExtent)) {
-            if (isNullOrEmpty(this.options.wmcGlobalMaxExtent)) {
-              // maxExtent provided by the service
-              this.getCapabilities().then((capabilities) => {
-                const capabilitiesMaxExtent = this.getImpl()
-                  .getExtentFromCapabilities(capabilities);
-                if (isNullOrEmpty(capabilitiesMaxExtent)) {
-                  // #6 projection maxExtent
-                  const projMaxExtent = this.map_.getProjection().getExtent();
-                  success(projMaxExtent);
-                } else {
-                  // #5 maxExtent provided by the service
-                  success(capabilitiesMaxExtent);
-                }
-              });
-            } else {
-              // #4 global maxExtent specified in the WMC
-              success(this.options.wmcGlobalMaxExtent);
-            }
+  /**
+   * This method calculates the maxExtent of this layer:
+   * 1. Check if the user specified a maxExtentn parameter
+   * 2. Gets the maxExtent of the layer in the WMC
+   * 3. Gets the map maxExtent
+   * 4. If not, sets the maxExtent from the WMC global
+   * 5. Sets the maxExtent from the capabilities
+   * 6. Sets the maxExtent from the map projection
+   *
+   * @function
+   * @api
+   */
+  getMaxExtent(callbackFn) {
+    let maxExtent;
+    if (isNullOrEmpty(this.userMaxExtent)) { // 1
+      if (isNullOrEmpty(this.options.wmcMaxExtent)) { // 2
+        if (isNullOrEmpty(this.map_.userMaxExtent)) { // 3
+          if (isNullOrEmpty(this.options.wmcGlobalMaxExtent)) { // 4
+            // maxExtent provided by the service
+            this.getCapabilities().then((capabilities) => {
+              const capabilitiesMaxExtent = this.getImpl()
+                .getExtentFromCapabilities(capabilities);
+              if (isNullOrEmpty(capabilitiesMaxExtent)) { // 5
+                const projMaxExtent = this.map_.getProjection().getExtent();
+                this.maxExtent_ = projMaxExtent; // 6
+              } else {
+                this.maxExtent_ = capabilitiesMaxExtent;
+              }
+              // this allows get the async extent by the capabilites
+              if (isFunction(callbackFn)) {
+                callbackFn(this.maxExtent_);
+              }
+            });
           } else {
-            // #3 map maxExtent given by the user
-            const mapMaxExtentArr = [
-              mapMaxExtent.x.min,
-              mapMaxExtent.y.min,
-              mapMaxExtent.x.max,
-              mapMaxExtent.y.max,
-            ];
-            success(mapMaxExtentArr);
+            this.maxExtent_ = this.options.wmcGlobalMaxExtent;
           }
         } else {
-          // #2 layer maxExtent specified in the WMC
-          success(this.options.wmcMaxExtent);
+          this.maxExtent_ = this.map_.userMaxExtent;
         }
       } else {
-        // #1 maxExtent provided by the user
-        success(this.maxExtent_);
+        this.maxExtent_ = this.options.wmcMaxExtent;
       }
-    });
+      maxExtent = this.maxExtent_;
+    } else {
+      maxExtent = this.userMaxExtent;
+    }
+    if (!isNullOrEmpty(maxExtent) && isFunction(callbackFn)) {
+      callbackFn(maxExtent);
+    }
+    return maxExtent;
   }
-
   /**
    * This functions retrieves a Promise which will be
    * resolved when the GetCapabilities request is retrieved

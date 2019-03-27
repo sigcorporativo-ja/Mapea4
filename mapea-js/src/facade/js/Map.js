@@ -16,6 +16,7 @@ import {
   escapeJSCode,
   isString,
   isObject,
+  getEnvolvedExtent,
 } from './util/Utils';
 import Exception from './exception/exception';
 import Label from './Label';
@@ -183,6 +184,14 @@ class Map extends Base {
      * @type {Vector}
      */
     this.drawLayer_ = null;
+
+    /**
+     * MaxExtent provided by the user
+     * @public
+     * @type {Array<Number>}
+     * @api
+     */
+    this.userMaxExtent = null;
 
     // adds class to the container
     params.container.classList.add('m-mapea-container');
@@ -566,10 +575,13 @@ class Map extends Base {
       const wmcLayers = [];
       layersParam.forEach((layerParam) => {
         if (isObject(layerParam) && (layerParam instanceof WMC)) {
+          layerParam.setMap(this);
           wmcLayers.push(layerParam);
         } else if (!(layerParam instanceof Layer)) {
           try {
-            wmcLayers.push(new WMC(layerParam, layerParam.options));
+            const wmcLayer = new WMC(layerParam, layerParam.options);
+            wmcLayer.setMap(this);
+            wmcLayers.push(wmcLayer);
           } catch (err) {
             Dialog.error(err.toString());
             throw err;
@@ -1444,14 +1456,15 @@ class Map extends Base {
    * @api
    */
   getMaxExtent() {
-    // checks if the implementation can set the maxExtent
-    if (isUndefined(MapImpl.prototype.getMaxExtent)) {
-      Exception('La implementación usada no posee el método getMaxExtent');
+    let maxExtent = this.userMaxExtent;
+    if (isNullOrEmpty(maxExtent)) {
+      const selectedWmc = this.getWMC().filter(wmc => wmc.selected);
+      if (isNullOrEmpty(selectedWmc)) {
+        maxExtent = getEnvolvedExtent(this.getLayers().filter(layer => layer.name !== '__draw__').map(l => l.getMaxExtent()));
+      } else {
+        maxExtent = selectedWmc.getMaxExtent();
+      }
     }
-
-    // parses the parameter
-    const maxExtent = this.getImpl().getMaxExtent();
-
     return maxExtent;
   }
 
@@ -1481,6 +1494,15 @@ class Map extends Base {
     try {
       const maxExtent = parameter.maxExtent(maxExtentParam);
       this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
+      this.userMaxExtent = maxExtentParam;
+      if (!isArray(maxExtentParam) && isObject(maxExtentParam)) {
+        this.userMaxExtent = [
+          maxExtentParam.x.min,
+          maxExtentParam.y.min,
+          maxExtentParam.x.max,
+          maxExtentParam.y.max,
+        ];
+      }
     } catch (err) {
       Dialog.error(err.toString());
       throw err;
@@ -1948,30 +1970,7 @@ class Map extends Base {
       return maxExtentPromise;
     })).then((maxExtents) => {
       const extent = this.getProjection().getExtent();
-      const envolvedMaxExtent = {
-        x: {
-          min: extent[0],
-          max: extent[2],
-        },
-        y: {
-          min: extent[1],
-          max: extent[3],
-        },
-      };
-      if (maxExtents.length > 0) {
-        envolvedMaxExtent.x.min = Number.MAX_SAFE_INTEGER;
-        envolvedMaxExtent.y.min = Number.MAX_SAFE_INTEGER;
-        envolvedMaxExtent.x.max = Number.MIN_SAFE_INTEGER;
-        envolvedMaxExtent.y.max = Number.MIN_SAFE_INTEGER;
-        maxExtents.forEach((maxExtent) => {
-          if (!isNullOrEmpty(maxExtent)) {
-            envolvedMaxExtent.x.min = Math.min(envolvedMaxExtent.x.min, maxExtent[0]);
-            envolvedMaxExtent.y.min = Math.min(envolvedMaxExtent.y.min, maxExtent[1]);
-            envolvedMaxExtent.x.max = Math.max(envolvedMaxExtent.x.max, maxExtent[2]);
-            envolvedMaxExtent.y.max = Math.max(envolvedMaxExtent.y.max, maxExtent[3]);
-          }
-        });
-      }
+      const envolvedMaxExtent = getEnvolvedExtent([...maxExtents, extent]);
       return envolvedMaxExtent;
     });
   }

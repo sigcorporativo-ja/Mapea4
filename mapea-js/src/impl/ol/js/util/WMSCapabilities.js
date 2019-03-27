@@ -70,7 +70,6 @@ class GetCapabilities {
   getExtentRecursive_(layer, layerName) {
     let extent = null;
     let i;
-    let ilen;
     if (!isNullOrEmpty(layer)) {
       // array
       if (isArray(layer)) {
@@ -80,37 +79,23 @@ class GetCapabilities {
       } else if (isObject(layer)) {
         // base case
         if (isNullOrEmpty(layerName) || (layer.Name === layerName)) {
-          // if the layer supports the SRS
-          let srsArray = [];
-          if (!isNullOrEmpty(layer.SRS)) {
-            srsArray = layer.SRS;
-          } else if (!isNullOrEmpty(layer.CRS)) {
-            srsArray = layer.CRS;
-          }
-          if (srsArray.indexOf(this.projection_.code) !== -1) {
-            let matchedBbox = null;
-            const bboxes = layer.BoundingBox;
-            for (i = 0, ilen = bboxes.length;
-              (i < ilen) && (matchedBbox === null); i += 1) {
-              const bbox = bboxes[i];
-              if (bbox.crs === this.projection_.code) {
-                matchedBbox = bbox;
-              }
-            }
-            if (matchedBbox === null) {
-              matchedBbox = bboxes[0];
-            }
-            extent = matchedBbox.extent;
-            if (matchedBbox.crs !== this.projection_.code) {
-              const projSrc = getProj(matchedBbox.crs);
+          if (!isNullOrEmpty(layer.BoundingBox)) {
+            const bboxSameProj = layer.BoundingBox.find(bbox => bbox.crs === this.projection_.code);
+            if (!isNullOrEmpty(bboxSameProj)) {
+              extent = bboxSameProj.extent;
+            } else {
+              const bbox = layer.BoundingBox[0];
+              const projSrc = getProj(bbox.crs);
               const projDest = getProj(this.projection_.code);
-              extent = transformExtent(extent, projSrc, projDest);
+              extent = transformExtent(bbox.extent, projSrc, projDest);
             }
-          } else {
+          } else if (!isNullOrEmpty(layer.LatLonBoundingBox)) {
+            const bbox = layer.LatLonBoundingBox[0];
             // if the layer has not the SRS then transformExtent
             // the latLonBoundingBox which is always present
-            extent = layer.LatLonBoundingBox[0].extent;
-            extent = transformExtent(extent, getProj('EPSG:4326'), getProj(this.projection_.code));
+            const projSrc = getProj('EPSG:4326');
+            const projDest = getProj(this.projection_.code);
+            extent = transformExtent(bbox.extent, projSrc, projDest);
           }
         } else if (!isUndefined(layer.Layer)) {
           // recursive case
