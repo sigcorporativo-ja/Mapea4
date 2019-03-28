@@ -1,20 +1,16 @@
-goog.provide('M.exception');
+/**
+ * @module M/exception
+ */
 
-goog.require('M.dialog');
+/**
+ * This function throws an Error with message.
+ * @function
+ * @public
+ * @param {string} msg - Message error
+ * @api
+ */
+const exception = (msg) => {
+  throw msg;
+};
 
-(function(window) {
-   'use strict';
-
-   /**
-    * This function shows the message of the error
-    *
-    * @public
-    * @function
-    * @param {string} msg the message of the error
-    * @api stable
-    */
-   M.exception = function(msg) {
-      throw msg;
-   };
-
-})(window || {});
+export default exception;

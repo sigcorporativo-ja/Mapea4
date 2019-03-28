@@ -14,10 +14,10 @@
    "files": {
       "ol": {
          "scripts": [
-            "searchstreet.ol.min.js"
+            "searchstreet-2.0.0.ol.min.js"
          ],
          "styles": [
-            "searchstreet.min.css"
+            "searchstreet-2.0.0.min.css"
          ]
       }
    }

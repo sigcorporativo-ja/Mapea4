@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+
+<ViewContext xmlns="http://www.opengis.net/context"
+	xmlns:xlink="http://www.w3.org/1999/xlink"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Callejero"
+	version="1.1.0"
+	xsi:schemaLocation="http://www.opengis.net/context http://schemas.opengis.net/context/1.1.0/context.xsd">
+	<General>
+		<Window height="370" width="610" />
+		<BoundingBox SRS="EPSG:25830" maxx="621889.9370" maxy="4299792.1070" minx="96388.1179" miny="3959795.9442" />
+		<Title>Callejero Digital de Andalucía Unificado</Title>
+		<Extension>
+			<ol:maxExtent xmlns:ol="http://openlayers.org/context" maxx="621889.9370" maxy="4299792.1070" minx="96388.1179" miny="3959795.9442" />
+		</Extension>
+		<KeywordList>
+			<Keyword>IECA</Keyword>
+			<Keyword>
+				Callejero Digital de Andalucía Unificado
+			</Keyword>
+		</KeywordList>
+		<Abstract>
+			Fichero de configuración del contexto de visualización de capas.
+		</Abstract>
+	</General>
+
+	<LayerList>
+
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Toponimia"
+				version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:type="simple"
+					xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?" />
+			</Server>
+			<Name>contexto_andalucia</Name>
+			<Title>Callejero Digital de Andalucía Unificado</Title>
+			<SRS>EPSG:25830</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">false</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">true</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+				<ol:maxExtent xmlns:ol="http://openlayers.org/context" maxx="2229176.725303816" maxy="5003196.555304059" minx="-1040313.3423018171" miny="3427200.171153531"/>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name></Name>
+					<Title>Estilo de la leyenda</Title>
+					<LegendURL format="image/png" height="891" width="333">
+							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+								xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/img/leyenda_CDAU_callejero.png"/>
+					</LegendURL>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+		</Layer>
+
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Toponimia"
+				version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:type="simple"
+					xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?" />
+			</Server>
+			<Name>batimetria</Name>
+			<Title>batimetria</Title>
+			<SRS>EPSG:25830</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+				<ol:maxExtent xmlns:ol="http://openlayers.org/context" maxx="2229176.725303816" maxy="5003196.555304059" minx="-1040313.3423018171" miny="3427200.171153531"/>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name></Name>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+		</Layer>
+
+		<!--  ******   Base Cartografica Cacheada    ******  -->
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Andalucía"
+				version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:type="simple"
+					xlink:href="https://www.callejerodeandalucia.es/servicios/base/gwc/service/wms?" />
+			</Server>
+			<Name>base</Name>
+			<Title>Base Cartografica</Title>
+			<SRS>EPSG:25830</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">false</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name></Name>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+		</Layer>
+
+		<!--  ******   Base Cartografica ******  -->
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Andalucía"
+				version="1.1.1">
+				<OnlineResource
+					xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:type="simple"
+					xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?"/>
+			</Server>
+			<Name>CDAU_base</Name>
+			<Title>Base Cartografica</Title>
+			<SRS>EPSG:25830</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">false</ol:singleTile>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name></Name>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1999.9989179605843128</sld:MaxScaleDenominator>
+		</Layer>
+
+		<!--  ******   Viales    ******  -->
+		<Layer hidden="0" queryable="1">
+			<Server service="OGC:WMS" title="Toponimia"
+				version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:type="simple"
+					xlink:href="https://www.callejerodeandalucia.es/servicios/cdau/wms?Buffer=5" />
+			</Server>
+			<Name>v_vial</Name>
+			<Title>Viales</Title>
+			<SRS>EPSG:25830</SRS>
+			<FormatList>
+				<Format current="1">image/gif</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+			</Extension>
+				<StyleList>
+				<Style current="1">
+					<Name></Name>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">1500</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">8000</sld:MaxScaleDenominator>
+		</Layer>
+		<!--  ******  Viales y Portales   ******  -->
+		<Layer hidden="0" queryable="1">
+			<Server service="OGC:WMS" title="Toponimia"
+				version="1.1.1">
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:type="simple"
+					xlink:href="https://www.callejerodeandalucia.es/servicios/cdau/wms?Buffer=5" />
+			</Server>
+			<Name>CDAU_wms</Name>
+			<Title>Portales</Title>
+			<SRS>EPSG:25830</SRS>
+			<FormatList>
+				<Format current="1">image/gif</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+			</Extension>
+				<StyleList>
+				<Style current="1">
+					<Name></Name>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.7813</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1550</sld:MaxScaleDenominator>
+		</Layer>
+
+		<!--  ******   TOPONIMIA    ******  -->
+
+		<Layer hidden="0" queryable="0">
+			<Server service="OGC:WMS" title="Toponimia"
+				version="1.1.1">
+				<OnlineResource  xmlns:xlink="http://www.w3.org/1999/xlink"
+					xlink:type="simple"
+					xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?" />
+			</Server>
+			<Name>CDAU_toponimia</Name>
+			<Title>Toponimia de núcleos y Litoral</Title>
+			<SRS>EPSG:25830</SRS>
+			<FormatList>
+				<Format current="1">image/png</Format>
+			</FormatList>
+			<Extension>
+				<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
+				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+				<ol:maxExtent xmlns:ol="http://openlayers.org/context" maxx="2229176.725303816" maxy="5003196.555304059" minx="-1040313.3423018171" miny="3427200.171153531"/>
+			</Extension>
+			<StyleList>
+				<Style current="1">
+					<Name></Name>
+					<Title>Estilo de la leyenda</Title>
+				</Style>
+			</StyleList>
+			<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">730.78136246</sld:MinScaleDenominator>
+			<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1390292.642889335448</sld:MaxScaleDenominator>
+		</Layer>
+  </LayerList>
+</ViewContext>

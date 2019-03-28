@@ -14,10 +14,10 @@
    "files": {
       "ol": {
          "scripts": [
-            "searchstreetgeosearch.ol.min.js"
+            "searchstreetgeosearch-2.0.0.ol.min.js"
          ],
          "styles": [
-            "searchstreetgeosearch.min.css"
+            "searchstreetgeosearch-2.0.0.min.css"
          ]
       }
    }

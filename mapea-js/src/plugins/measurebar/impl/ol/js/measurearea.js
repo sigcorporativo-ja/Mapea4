@@ -1,6 +1,8 @@
-goog.provide('P.impl.control.MeasureArea');
+import { HELP_KEEP_MESSAGE } from 'plugins/measurebar/facade/js/measurearea';
 
-goog.require('P.impl.control.Measure');
+import FacadeMeasure from 'plugins/measurebar/facade/js/measurebase';
+import FacadeMeasureLength from 'plugins/measurebar/facade/js/measurelength';
+import MeasureImpl from './measurebase';
 
 /**
  * @classdesc
@@ -11,54 +13,62 @@ goog.require('P.impl.control.Measure');
  * @extends {M.impl.control.Measure}
  * @api stable
  */
-M.impl.control.MeasureArea = function() {
-   /**
-    * Help message
-    * @private
-    * @type {string}
-    */
-   this.helpMsg_ = M.control.Measure.HELP_MESSAGE;
+export default class MeasureArea extends MeasureImpl {
+  constructor() {
+    super('Polygon');
+    /**
+     * Help message
+     * @private
+     * @type {string}
+     */
+    this.helpMsg_ = FacadeMeasure.HELP_MESSAGE;
 
-   /**
-    * Help message
-    * @private
-    * @type {string}
-    */
-   this.helpMsgContinue_ = M.control.MeasureArea.HELP_KEEP_MESSAGE;
+    /**
+     * Help message
+     * @private
+     * @type {string}
+     */
+    this.helpMsgContinue_ = HELP_KEEP_MESSAGE;
+  }
 
-   goog.base(this, 'Polygon');
-};
-goog.inherits(M.impl.control.MeasureArea, M.impl.control.Measure);
+  /**
+   * This function add tooltip with extent of the area
+   * @public
+   * @param {ol.geom.SimpleGeometry} geometry - Object geometry
+   * @return {string} output - Indicate the extent of the area
+   * @api stable
+   */
+  formatGeometry(geometry) {
+    const area = geometry.getArea();
+    let output;
+    if (area > 10000) {
+      output = `${((Math.round((area / 1000000) * 100) / 100))} km<sup>2</sup>`;
+    } else {
+      output = `${(Math.round(area * 100) / 100)} m<sup>2</sup>`;
+    }
+    return output;
+  }
 
+  /**
+   * This function returns coordinates to tooltip
+   * @public
+   * @param {ol.geom.Geometry} geometry - Object geometry
+   * @return {array} coordinates to tooltip
+   * @api stable
+   */
+  getTooltipCoordinate(geometry) {
+    return geometry.getInteriorPoint().getCoordinates();
+  }
 
-/**
- * This function add tooltip with extent of the area
- * @public
- * @param {ol.geom.SimpleGeometry} geometry - Object geometry
- * @return {string} output - Indicate the extent of the area
- * @api stable
- */
-M.impl.control.MeasureArea.prototype.formatGeometry = function(geometry) {
-   var area = geometry.getArea();
-   var output;
-   if (area > 10000) {
-      output = (Math.round(area / 1000000 * 100) / 100) +
-         ' ' + 'km<sup>2</sup>';
-   }
-   else {
-      output = (Math.round(area * 100) / 100) +
-         ' ' + 'm<sup>2</sup>';
-   }
-   return output;
-};
+  activate() {
+    const measureLength = this.facadeMap_.getControls().filter((control) => {
+      return (control instanceof FacadeMeasureLength);
+    })[0];
 
-/**
- * This function returns coordinates to tooltip
- * @public
- * @param {ol.geom.Geometry} geometry - Object geometry
- * @return {array} coordinates to tooltip
- * @api stable
- */
-M.impl.control.MeasureArea.prototype.getTooltipCoordinate = function(geometry) {
-   return geometry.getInteriorPoint().getCoordinates();
-};
+    if (measureLength) {
+      measureLength.deactivate();
+    }
+
+    super.activate();
+  }
+}

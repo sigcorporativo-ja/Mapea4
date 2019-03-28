@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+    <title>ASSDA 04</title>
+
+    <!-- styles -->
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/assets/css/mapea.ol.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/geosearchbylocation/geosearchbylocation.min.css" rel="stylesheet" />
+
+
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/wfstcontrols/wfstcontrols.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/geosearch/geosearch.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/printer/printer.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/measurebar/measurebar.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/streetview/streetview.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/attributetable/attributetable.min.css" rel="stylesheet" />
+
+
+    <style rel="stylesheet">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .m-popup {
+        position: fixed;
+        bottom: inherit;
+        left: initial;
+        top: 0;
+        right: 0;
+        z-index: 9999;
+      }
+
+      .m-popup:before {
+        border-top-color: initial;
+        border-width: 0;
+        left: inherit;
+        margin-left: 0;
+      }
+
+      .m-popup:after,
+      .m-popup:before {
+        top: 0;
+        border: inherit;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: inherit;
+        pointer-events: inherit;
+      }
+
+      .m-popup tr:nth-child(odd) {
+        background-color: rgba(41, 105, 168, 0.78);
+        color: white;
+      }
+
+      .tooltip {
+        position: relative;
+        padding: 3px;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        opacity: 0.7;
+        white-space: nowrap;
+        font: 10pt sans-serif;
+      }
+
+      #categoria {
+        background-color: rgba(55, 126, 235, 0.64);
+        padding: 6px;
+        border: 2px solid black;
+      }
+
+      .panel {
+        display: none;
+        padding: 10px;
+        background-color: #f6f6f6;
+        width: 200px;
+        cursor: pointer;
+      }
+
+      .closePanel {
+        display: none;
+      }
+
+      .openPanel {
+        display: block;
+        position: fixed;
+        bottom: inherit;
+        left: initial;
+        top: 0;
+        right: 0;
+        z-index: 9999;
+        border: 6px solid #5e8fb7;
+      }
+    </style>
+
+
+  </head>
+
+  <body>
+
+    <!-- container -->
+    <div id="PanelTipologia" class="closePanel panel">
+      <input type="checkbox" onclick="tipologiaFilter()" name="panel" value="CENTRO DE DÍA"> CENTRO DE DÍA<br>
+      <input type="checkbox" onclick="tipologiaFilter()" name="panel" value="CENTRO DE NOCHE"> CENTRO DE NOCHE<br>
+      <input type="checkbox" onclick="tipologiaFilter()" name="panel" value="CENTRO DE PARTICIPACIÓN ACTIVA DE PERSONAS MAYORES"> CENTRO DE PARTICIPACIÓN ACTIVA DE PERSONAS MAYORES<br>
+      <input type="checkbox" onclick="tipologiaFilter()" name="panel" value="CENTRO DE SERVICIOS SOCIALES COMUNITARIOS"> CENTRO DE SERVICIOS SOCIALES COMUNITARIOS<br>
+      <input type="checkbox" onclick="tipologiaFilter()" name="panel" value="CENTRO RESIDENCIAL"> CENTRO RESIDENCIAL<br>
+      <input type="checkbox" onclick="tipologiaFilter()" name="panel" value="CENTRO SOCIAL"> CENTRO SOCIAL<br>
+      <input type="checkbox" onclick="tipologiaFilter()" name="panel" value="CENTRO SOCIOCULTURAL GITANO"> CENTRO SOCIOCULTURAL GITANO<br>
+      <input type="checkbox" onclick="tipologiaFilter()" name="panel" value="COMEDOR"> COMEDOR<br>
+      <input type="checkbox" onclick="tipologiaFilter()" name="panel" value="CONSULTAR A LA COORDINACIÓN"> CONSULTAR A LA COORDINACIÓN<br>
+    </div>
+    <button id="categoria" onclick="openPanel()">Categorías</button>
+
+    <div id="map" class="map">
+      <div id="tooltip" class="tooltip"></div>
+    </div>
+    <div id="map"></div>
+
+
+
+
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/vendor/browser-polyfill.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/js/mapea.ol.min.js"></script>
+
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/geosearchbylocation/geosearchbylocation.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/wfstcontrols/wfstcontrols.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/geosearch/geosearch.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/printer/printer.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/measurebar/measurebar.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/plugins/attributetable/attributetable.ol.min.js"></script>
+
+
+
+    <!-- configuration -->
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42_factoria/js/configuration.js"></script>
+
+
+
+    <script type="application/javascript">
+      M.proxy(true);
+
+      function openPanel() {
+        if (document.getElementById("PanelTipologia").className.indexOf("openPanel") >= 0) {
+          document.getElementById("PanelTipologia").classList.remove("openPanel");
+          document.getElementById("PanelTipologia").classList.add("closePanel");
+        } else {
+          document.getElementById("PanelTipologia").classList.add("openPanel");
+          document.getElementById("PanelTipologia").classList.remove("closePanel");
+        }
+      }
+
+      var mapajs = M.map({
+        'container': 'map',
+        "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline", ],
+        "getfeatureinfo": "plain"
+      });
+
+
+      var centros = new M.layer.WFS({
+        name: "Centros ASSDA",
+        url: "https://clientes.guadaltel.es/desarrollo/geossigc/wfs?",
+        namespace: "mapea",
+        name: "centrosassda",
+        legend: "centrosassda",
+        getfeatureinfo: "plain",
+        geometry: 'POINT',
+        extract: true,
+      });
+
+      centros.on(M.evt.LOAD, function() {
+        centros.setStyle(categoryStyle);
+        centros.setStyle(new M.style.Cluster(options, vendorParameters));
+      });
+
+      centros.on(M.evt.SELECT_FEATURES, function(features) {
+        features.forEach(function(feature) {
+          //logFeature(feature);
+          if (feature.getGeoJSON().properties.features) {
+            //console.log('Es un cluster');
+          } else {
+            //console.log('Es un feature');
+            // Creamos el html de la pestaña
+            var fs = "<table width='500'>";
+            var keys = Object.keys(feature.getGeoJSON().properties);
+            keys.remove("ogc_fid");
+            keys.remove("concierto");
+            keys.remove("xx");
+            keys.remove("longitud");
+            keys.remove("latitud");
+            keys.remove("tipo");
+            keys.forEach(function atributos(key) {
+              if (feature.getAttribute(key) != "") {
+                fs += '<tr><td>';
+                fs += '\t<b>' + key + '</b>: ' + feature.getAttribute(key);
+                fs += '</tr></td>';
+              }
+            });
+            fs += '</table>';
+            //console.log(fs);
+            // Creamos un objeto tab
+            var featureTabOpts = {
+              'icon': 'g-cartografia-pin',
+              'title': 'Información del Centro',
+              'content': fs
+            };
+            // Creamos el Popup y le añadimos la pestaña
+            popup = new M.Popup();
+            popup.addTab(featureTabOpts);
+            // Finalmente se añade al mapa, especificando las Coordenadas
+            var coordenadas = feature.getGeometry().coordinates;
+            //console.log(feature.getGeometry().coordinates);
+            mapajs.addPopup(popup, coordenadas);
+
+            //tipologiaFilter();
+          }
+
+        });
+      })
+
+
+      mapajs.addLayers(centros);
+
+
+
+      mapajs.addPlugin(new M.plugin.AttributeTable());
+
+      let estiloSubtipoDefPink = new M.style.Point({
+        fill: {
+          color: 'red'
+        },
+        stroke: {
+          color: 'red',
+          width: 5
+        },
+        radius: 15
+      });
+
+
+
+      /// Preparación de estilos
+
+      let dia = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/discapacidad_recursos.png',
+          scale: 1
+        },
+      });
+
+      let noche = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/empleo_y_vivienda.png',
+          scale: 1
+        },
+      });
+
+      let mayores = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/administracion.png',
+          scale: 1
+        },
+      });
+
+      let sociales = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/gasolineras.png',
+          scale: 1
+        },
+      });
+
+      let residencial = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/infancia_recursos.png',
+          scale: 1
+        },
+      });
+
+      let social = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/icono_defecto.png',
+          scale: 1
+        },
+      });
+
+      let gitano = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/parking.png',
+          scale: 1
+        },
+      });
+
+      let comedor = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/mayores_recursos.png',
+          scale: 1
+        },
+      });
+
+      let consulta = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/interrogation.png',
+          scale: 1
+        },
+      });
+
+
+
+      let categoryStyle = new M.style.Category("tipologia", {
+        "CENTRO DE DÍA": dia,
+        "CENTRO DE NOCHE": noche,
+        "CENTRO DE PARTICIPACIÓN ACTIVA DE PERSONAS MAYORES": mayores,
+        "CENTRO DE SERVICIOS SOCIALES COMUNITARIOS": sociales,
+        "CENTRO RESIDENCIAL": residencial,
+        "CENTRO SOCIAL": social,
+        "CENTRO SOCIOCULTURAL GITANO": gitano,
+        "COMEDOR": comedor,
+        "CONSULTAR A LA COORDINACIÓN": consulta
+      });
+
+      // ********************* ///
+      // Métodos de filtros    ///
+
+
+      // Aplicar filtro en función de las tipologías seleccionadas, generadas a partir de la
+      // clasificación establecida
+      function tipologiaFilter() {
+        // Recorrer los elementos activos en la lista para montar el filtro 'OR'
+        // Ejemplo
+        // let filter = M.filter.OR([M.filter.OR([filtroA, filtroB]), filtroC])
+        // layer.setFilter(filter);
+
+        /*centros.setStyle(categoryStyle);
+
+
+   let filterEqual = M.filter.EQUAL("tipologia", "CENTRO DE DÍA");
+   centros.setFilter(filterEqual);
+
+ 	centros.setStyle(new M.style.Cluster(options, vendorParameters));*/
+
+        let selected = document.querySelector("#PanelTipologia").querySelectorAll("[type=checkbox]:checked");
+        let filter = [];
+        selected.forEach(function(elem) {
+          filter.push(M.filter.EQUAL('tipologia', elem.value));
+        });
+        centros.setFilter(M.filter.OR(filter));
+
+        centros.setStyle(new M.style.Cluster(options, vendorParameters));
+      }
+
+
+      function removeFilter() {
+        centros.removeFilter();
+      }
+
+
+
+      // CONFIGURACIÓN PARÁMETROS CLUSTER
+
+      var options = {
+        ranges: [
+          /*{min:1, max:1, style: new M.style.Point({
+              fill: {
+                color: 'red'
+              },
+              radius: 15
+            })},*/
+
+          {
+            min: 2,
+            max: 3,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#a3c5d8',
+                opacity: 0.2
+              },
+              radius: 20
+            })
+          },
+          {
+            min: 3,
+            max: 5,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#6aa8da',
+                opacity: 0.4
+              },
+              radius: 20
+            })
+          },
+          {
+            min: 5,
+            max: 10,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#468cc4',
+                opacity: 0.5
+              },
+              radius: 20
+            })
+          },
+          {
+            min: 10,
+            max: 15,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#2160a6',
+                opacity: 0.7
+              },
+              radius: 20
+            })
+          },
+          {
+            min: 15,
+            max: 20,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#1c5fa1',
+                opacity: 0.7
+              },
+              radius: 20
+            })
+          },
+          {
+            min: 20,
+            max: 50000,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#1c5fa1',
+                opacity: 0.9
+              },
+              radius: 40
+            })
+          }
+        ],
+        animated: true,
+        hoverInteraction: true,
+        displayAmount: true,
+        selectedInteraction: true,
+        distance: 80
+      };
+
+      var vendorParameters = {
+        displayInLayerSwitcherHoverLayer: false,
+        distanceSelectFeatures: 15
+      }
+
+
+      var tooltip = document.getElementById('tooltip');
+
+      var overlay = new ol.Overlay({
+        element: tooltip,
+        offset: [10, 0],
+        positioning: 'bottom-left'
+      });
+      mapajs.getMapImpl().addOverlay(overlay);
+
+
+      function displayTooltip(evt) {
+        var pixel = evt.pixel;
+        var feature = mapajs.getMapImpl().forEachFeatureAtPixel(pixel, function(feature) {
+          return feature;
+        });
+        tooltip.style.display = (!M.utils.isNullOrEmpty(feature) && !M.utils.isNullOrEmpty(feature.getProperties().features) && feature.getProperties().features.length == 1) ? '' : 'none';
+        if (feature) {
+          if (!M.utils.isNullOrEmpty(feature.getProperties().features) && feature.getProperties().features.length == 1) {
+            overlay.setPosition(evt.coordinate);
+
+            tooltip.innerHTML = feature.getProperties().features[0].getProperties().nombre_entidad;
+          }
+        }
+      };
+
+      mapajs.getMapImpl().on('pointermove', displayTooltip);
+    </script>
+  </body>
+
+</html>

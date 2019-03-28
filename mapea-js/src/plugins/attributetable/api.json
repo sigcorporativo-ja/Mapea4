@@ -15,10 +15,10 @@
     "files": {
         "ol": {
             "scripts": [
-                "attributetable.ol.min.js"
+                "attributetable-2.0.0.ol.min.js"
             ],
             "styles": [
-                "attributetable.min.css"
+                "attributetable-2.0.0.min.css"
             ]
         }
     }

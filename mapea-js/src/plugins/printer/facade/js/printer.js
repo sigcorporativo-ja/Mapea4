@@ -1,8 +1,7 @@
-goog.provide('P.plugin.Printer');
+import PrinterControl from './printercontrol';
+import '../assets/css/printer';
 
-goog.require('P.control.Printer');
-
-(function () {
+export default class Printer extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -13,8 +12,8 @@ goog.require('P.control.Printer');
    * @param {Object} impl implementation object
    * @api stable
    */
-  M.plugin.Printer = (function (parameters) {
-    parameters = (parameters || {});
+  constructor(parameters = {}) {
+    super(null);
 
     /**
      * Facade of the map
@@ -43,7 +42,7 @@ goog.require('P.control.Printer');
      * @type {string}
      * @api stable
      */
-    this.name = M.plugin.Printer.NAME;
+    this.name = Printer.NAME;
 
     /**
      * Facade of the map
@@ -74,10 +73,7 @@ goog.require('P.control.Printer');
     if (!M.utils.isNullOrEmpty(parameters.options)) {
       this.options_ = parameters.options;
     }
-
-    goog.base(this, null, M.plugin.Printer.NAME);
-  });
-  goog.inherits(M.plugin.Printer, M.Plugin);
+  }
 
   /**
    * This function provides the implementation
@@ -88,29 +84,44 @@ goog.require('P.control.Printer');
    * @param {Object} map the map to add the plugin
    * @api stable
    */
-  M.plugin.Printer.prototype.addTo = function (map) {
+  addTo(map) {
     this.map_ = map;
 
-    this.control_ = new M.control.Printer(this.url_, this.params_,
-      this.options_);
+    this.control_ = new PrinterControl(
+      this.url_,
+      this.params_,
+      this.options_,
+    );
     this.panel_ = new M.ui.Panel('printer', {
-      'collapsible': true,
-      'className': 'm-printer',
-      'collapsedButtonClass': 'g-cartografia-impresora',
-      'position': M.ui.position.TR,
-      'tooltip': 'Impresión del mapa'
+      collapsible: true,
+      className: 'm-printer',
+      collapsedButtonClass: 'g-cartografia-impresora',
+      position: M.ui.position.TR,
+      tooltip: 'Impresión del mapa',
     });
-    this.panel_.on(M.evt.ADDED_TO_MAP, function (html) {
+    this.panel_.on(M.evt.ADDED_TO_MAP, (html) => {
       M.utils.enableTouchScroll(html);
     });
     this.panel_.addControls(this.control_);
     this.map_.addPanels(this.panel_);
 
-    var this_ = this;
-    this.control_.on(M.evt.ADDED_TO_MAP, function () {
-      this_.fire(M.evt.ADDED_TO_MAP);
+    this.control_.on(M.evt.ADDED_TO_MAP, () => {
+      this.fire(M.evt.ADDED_TO_MAP);
     });
-  };
+  }
+
+  /**
+   * This function return the control of plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getControls() {
+    const aControls = [];
+    aControls.push(this.control_);
+    return aControls;
+  }
 
   /**
    * This function destroys this plugin
@@ -119,7 +130,7 @@ goog.require('P.control.Printer');
    * @function
    * @api stable
    */
-  M.plugin.Printer.prototype.destroy = function () {
+  destroy() {
     this.map_.removeControls([this.control_]);
     this.map_ = null;
     this.control_ = null;
@@ -128,7 +139,7 @@ goog.require('P.control.Printer');
     this.params_ = null;
     this.options_ = null;
     this.name = null;
-  };
+  }
 
   /**
    * This function compare if pluging recieved by param is instance of   M.plugin.Printer
@@ -138,14 +149,12 @@ goog.require('P.control.Printer');
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.Printer.prototype.equals = function (plugin) {
-    if (plugin instanceof M.plugin.Printer) {
+  equals(plugin) {
+    if (plugin instanceof Printer) {
       return true;
     }
-    else {
-      return false;
-    }
-  };
+    return false;
+  }
 
   /**
    * Name to identify this plugin
@@ -154,5 +163,6 @@ goog.require('P.control.Printer');
    * @public
    * @api stable
    */
-  M.plugin.Printer.NAME = "printer";
-})();
+}
+
+Printer.NAME = 'printer';

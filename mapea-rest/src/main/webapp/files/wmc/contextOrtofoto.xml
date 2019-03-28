@@ -53,7 +53,7 @@
 
 	<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
-				<OnlineResource xlink:href="http://www.ideandalucia.es/wms/ortofoto2007?" xlink:type="simple"/>
+				<OnlineResource xlink:href="https://www.ideandalucia.es/wms/ortofoto2007?" xlink:type="simple"/>
 			</Server>
 			<Name>oca10_2007</Name>
 			<Title>Ortofoto</Title>
@@ -79,7 +79,7 @@
 	<Layer queryable="0" hidden="0">
 			<Server service="OGC:WMS" version="1.1.1" title="raster">
 				<OnlineResource xlink:type="simple"
-					xlink:href="http://www.ideandalucia.es/wms/mta100v_2005" />
+					xlink:href="https://www.ideandalucia.es/wms/mta100v_2005" />
 			</Server>
 			<Name>Limites_Provinciales</Name>
 			<Title>Provincias</Title>
@@ -99,7 +99,7 @@
 	<Layer queryable="0" hidden="0">
 			<Server service="OGC:WMS" version="1.1.1" title="raster">
 				<OnlineResource xlink:type="simple"
-					xlink:href="http://www.ideandalucia.es/wms/mta100v_2005" />
+					xlink:href="https://www.ideandalucia.es/wms/mta100v_2005" />
 			</Server>
 			<Name>Nucleos_de_Poblacion</Name>
 			<Title>Poblaciones</Title>

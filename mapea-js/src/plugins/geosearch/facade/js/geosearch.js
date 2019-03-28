@@ -1,9 +1,7 @@
-goog.provide('P.plugin.Geosearch');
+import GeosearchControl from './geosearchcontrol';
+import '../assets/css/geosearch';
 
-goog.require('P.control.Geosearch');
-goog.require('P.layer.Geosearch');
-
-(function() {
+export default class Geosearch extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a plugin
@@ -14,9 +12,8 @@ goog.require('P.layer.Geosearch');
    * @param {Object} impl implementation object
    * @api stable
    */
-  M.plugin.Geosearch = (function(parameters) {
-    parameters = (parameters || {});
-
+  constructor(parameters = {}) {
+    super();
     /**
      * Facade of the map
      * @private
@@ -44,7 +41,7 @@ goog.require('P.layer.Geosearch');
      * @type {string}
      * @api stable
      */
-    this.name = M.plugin.Geosearch.NAME;
+    this.name = Geosearch.NAME;
 
     /**
      * Facade of the map
@@ -83,9 +80,12 @@ goog.require('P.layer.Geosearch');
      */
     this.searchParameters_ = parameters.params || {};
 
-    goog.base(this);
-  });
-  goog.inherits(M.plugin.Geosearch, M.Plugin);
+    /**
+     * @private
+     * @type {bool}
+     */
+    this.showHelp_ = parameters.showHelp;
+  }
 
   /**
    * This function provides the implementation
@@ -96,25 +96,29 @@ goog.require('P.layer.Geosearch');
    * @param {Object} map the map to add the plugin
    * @api stable
    */
-  M.plugin.Geosearch.prototype.addTo = function(map) {
+  addTo(map) {
     this.map_ = map;
 
-    goog.dom.classlist.add(map._areasContainer.getElementsByClassName("m-top m-right")[0],
-      "top-extra");
+    map.areasContainer.getElementsByClassName('m-top m-right')[0].classList.add('top-extra');
 
-    this.control_ = new M.control.Geosearch(this.url_, this.core_,
-      this.handler_, this.searchParameters_);
+    this.control_ = new GeosearchControl(
+      this.url_,
+      this.core_,
+      this.handler_,
+      this.searchParameters_,
+      this.showHelp_,
+    );
     this.control_.on(M.evt.ADD_TO_MAP, this.onLoadCallback_, this);
     this.panel_ = new M.ui.Panel('geosearch', {
-      'collapsible': true,
-      'className': 'm-geosearch',
-      'collapsedButtonClass': 'g-cartografia-zoom',
-      'position': M.ui.position.TL,
-      'tooltip': 'Geobúsquedas'
+      collapsible: true,
+      className: 'm-geosearch',
+      collapsedButtonClass: 'g-cartografia-zoom',
+      position: M.ui.position.TL,
+      tooltip: 'Geobúsquedas',
     });
     this.panel_.addControls(this.control_);
     this.map_.addPanels(this.panel_);
-  };
+  }
 
   /**
    * This function provides the input search
@@ -124,13 +128,13 @@ goog.require('P.layer.Geosearch');
    * @returns {HTMLElement} the input that executes the search
    * @api stable
    */
-  M.plugin.Geosearch.prototype.getInput = function() {
-    var inputSearch = null;
+  getInput() {
+    let inputSearch = null;
     if (!M.utils.isNullOrEmpty(this.control_)) {
       inputSearch = this.control_.getInput();
     }
     return inputSearch;
-  };
+  }
 
   /**
    * This function destroys this plugin
@@ -139,7 +143,7 @@ goog.require('P.layer.Geosearch');
    * @function
    * @api stable
    */
-  M.plugin.Geosearch.prototype.destroy = function() {
+  destroy() {
     this.map_.removeControls([this.control_]);
     this.map_ = null;
     this.control_ = null;
@@ -148,24 +152,35 @@ goog.require('P.layer.Geosearch');
     this.core_ = null;
     this.handler_ = null;
     this.searchParameters_ = null;
-  };
+  }
 
   /**
-   * This function compare if pluging recieved by param is instance of  M.plugin.Geosearch
+   * This function return the control of plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getControls() {
+    const aControl = [];
+    aControl.push(this.control_);
+    return aControl;
+  }
+
+  /**
+   * This function compare if pluging recieved by param is instance of  Geosearch
    *
    * @public
    * @function
    * @param {M.plugin} plugin to comapre
    * @api stable
    */
-  M.plugin.Geosearch.prototype.equals = function(plugin) {
-    if (plugin instanceof M.plugin.Geosearch) {
+  equals(plugin) {
+    if (plugin instanceof Geosearch) {
       return true;
     }
-    else {
-      return false;
-    }
-  };
+    return false;
+  }
+}
 
-  M.plugin.Geosearch.NAME = "geosearch";
-})();
+Geosearch.NAME = 'geosearch';

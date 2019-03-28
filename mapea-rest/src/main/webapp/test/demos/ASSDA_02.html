@@ -1,0 +1,688 @@
+<!DOCTYPE html>
+<html lang="en">
+
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+    <title>ASSDA 02</title>
+
+    <!-- styles -->
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/assets/css/mapea.ol.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/geosearchbylocation/geosearchbylocation.min.css" rel="stylesheet" />
+
+
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/wfstcontrols/wfstcontrols.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/geosearch/geosearch.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/printer/printer.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/measurebar/measurebar.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/streetview/streetview.min.css" rel="stylesheet" />
+    <link href="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/attributetable/attributetable.min.css" rel="stylesheet" />
+
+
+    <style rel="stylesheet">
+      html,
+      body {
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden;
+      }
+
+      .m-popup {
+        position: fixed;
+        bottom: inherit;
+        left: initial;
+        top: 0;
+        right: 0;
+        z-index: 9999;
+      }
+
+      .m-popup:before {
+        border-top-color: initial;
+        border-width: 0;
+        left: inherit;
+        margin-left: 0;
+      }
+
+      .m-popup:after,
+      .m-popup:before {
+        top: 0;
+        border: inherit;
+        content: " ";
+        height: 0;
+        width: 0;
+        position: inherit;
+        pointer-events: inherit;
+      }
+
+      .m-popup tr:nth-child(odd) {
+        background-color: rgba(41, 105, 168, 0.78);
+        color: white;
+      }
+
+      .tooltip {
+        position: relative;
+        padding: 3px;
+        background: rgba(0, 0, 0, 0.9);
+        color: white;
+        opacity: 0.7;
+        white-space: nowrap;
+        font: 10pt sans-serif;
+      }
+
+      #subcategoria {
+        background-color: rgba(55, 126, 235, 0.64);
+        padding: 6px;
+        border: 2px solid black;
+      }
+
+      .panel {
+        display: none;
+        padding: 10px;
+        background-color: #f6f6f6;
+        width: 200px;
+        cursor: pointer;
+      }
+
+      .closePanel {
+        display: none;
+      }
+
+      .openPanel {
+        display: block;
+        position: fixed;
+        bottom: inherit;
+        left: initial;
+        top: 0;
+        right: 0;
+        z-index: 9999;
+        border: 6px solid #5e8fb7;
+        overflow-y: scroll;
+        height: 50%;
+      }
+    </style>
+
+
+  </head>
+
+  <body>
+
+    <!-- container -->
+    <div id="PanelSubtipologia" class="closePanel panel">
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA"> CENTRO DE DÍA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA OCUPACIONAL"> CENTRO DE DÍA OCUPACIONAL<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA PARA PERSONAS CON AUTISMO"> CENTRO DE DÍA PARA PERSONAS CON AUTISMO<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA PARA PERSONAS CON DAÑO CEREBRAL"> CENTRO DE DÍA PARA PERSONAS CON DAÑO CEREBRAL<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA PARA PERSONAS CON DISCAPACIDAD FÍSICA"> CENTRO DE DÍA PARA PERSONAS CON DISCAPACIDAD FÍSICA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA PARA PERSONAS CON PARÁLISIS CEREBRAL"> CENTRO DE DÍA PARA PERSONAS CON PARÁLISIS CEREBRAL<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE DÍA PARA PERSONAS CON TRASTORNOS DE CONDUCTA"> CENTRO DE DÍA PARA PERSONAS CON TRASTORNOS DE CONDUCTA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE ENCUENTRO Y ACOGIDA">CENTRO DE ENCUENTRO Y ACOGIDA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE TRATAMIENTO AMBULATORIO">CENTRO DE TRATAMIENTO AMBULATORIO<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE TRATAMIENTO AMBULATORIO DE ATENCIÓN EXCLUSIVA AL JUEGO PATOLÓGICO">CENTRO DE TRATAMIENTO AMBULATORIO DE ATENCIÓN EXCLUSIVA AL JUEGO PATOLÓGICO<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE NOCHE"> CENTRO DE NOCHE<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE PARTICIPACIÓN ACTIVA DE PERSONAS MAYORES"> CENTRO DE PARTICIPACIÓN ACTIVA DE PERSONAS MAYORES<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE SERVICIOS SOCIALES COMUNITARIOS"> CENTRO DE SERVICIOS SOCIALES COMUNITARIOS<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="ALBERGUES PARA PERSONAS TRABAJADORAS TEMPORERAS">ALBERGUES PARA PERSONAS TRABAJADORAS TEMPORERAS<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CASA">CASA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CASA DE ACOGIDA"> CASA DE ACOGIDA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CASA HOGAR"> CASA HOGAR<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO DE ACOGIDA"> CENTRO DE ACOGIDA<br> <input type="checkbox" onclick="subtipologiaFilter()"
+        name="panel" value="CENTRO DE DESINTOXICACIÓN RESIDENCIAL">CENTRO DE DESINTOXICACIÓN RESIDENCIAL<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO RESIDENCIAL"> CENTRO RESIDENCIAL<br> <input type="checkbox" onclick="subtipologiaFilter()"
+        name="panel" value="COMUNIDAD TERAPÉUTICA"> COMUNIDAD TERAPÉUTICA<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="PISO TUTELADO"> PISO TUTELADO<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel"
+        value="RESIDENCIA">RESIDENCIA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA DE PERSONAS CON AUTISMO">RESIDENCIA DE PERSONAS CON AUTISMO<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA DE PERSONAS CON DISCAPACIDAD">      RESIDENCIA DE PERSONAS CON DISCAPACIDAD<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA DE PERSONAS CON DISCAPACIDAD FÍSICA">RESIDENCIA DE PERSONAS CON DISCAPACIDAD FÍSICA<br> <input type="checkbox" onclick="subtipologiaFilter()"
+        name="panel" value="RESIDENCIA DE PERSONAS CON DISCAPACIDAD INTELECTUAL Y TRASTORNOS DE CONDUCTA">RESIDENCIA DE PERSONAS CON DISCAPACIDAD INTELECTUAL Y TRASTORNOS DE CONDUCTA<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel"
+        value="RESIDENCIA DE PERSONAS CON PARÁLISIS CEREBRAL">RESIDENCIA DE PERSONAS CON PARÁLISIS CEREBRAL<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS ADULTAS (RA)"> RESIDENCIA PARA PERSONAS ADULTAS
+      (RA)
+      <br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES AUTÓNOMAS">RESIDENCIA PARA PERSONAS MAYORES AUTÓNOMAS<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES AUTÓNOMAS">RESIDENCIA
+      PARA PERSONAS MAYORES AUTÓNOMAS<br> <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES CON TRASTORNOS DE CONDUCTA">RESIDENCIA PARA PERSONAS MAYORES CON TRASTORNOS DE CONDUCTA<br> <input type="checkbox"
+        onclick="subtipologiaFilter()" name="panel" value="RESIDENCIA PARA PERSONAS MAYORES EN SITUACIÓN DE DEPENDENCIA">RESIDENCIA PARA PERSONAS MAYORES EN SITUACIÓN DE DEPENDENCIA<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA DE APOYO A LA REINSERCIÓN"> VIVIENDA DE APOYO A LA REINSERCIÓN<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA DE APOYO AL TRATAMIENTO"> VIVIENDA DE APOYO AL TRATAMIENTO<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA SUPERVISADA"> VIVIENDA
+      SUPERVISADA
+      <br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="VIVIENDA TUTELADA"> VIVIENDA TUTELADA<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CENTRO SOCIAL"> CENTRO SOCIAL<br><input type="checkbox"
+        onclick="subtipologiaFilter()" name="panel" value="ENTRO SOCIOCULTURAL GITANO">ENTRO SOCIOCULTURAL GITANO<br><input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="COMEDOR"> COMEDOR<br>
+      <input type="checkbox" onclick="subtipologiaFilter()" name="panel" value="CONSULTAR A LA COORDINACIÓN"> CONSULTAR A LA COORDINACIÓN<br>
+    </div>
+    <button id="subcategoria" onclick="openPanel()">
+    Subcategorias
+    </button>
+    <div id="map" class="map">
+      <div id="tooltip" class="tooltip"></div>
+    </div>
+
+    <div id="map"></div>
+
+
+
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/vendor/browser-polyfill.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/js/mapea.ol.min.js"></script>
+
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/geosearchbylocation/geosearchbylocation.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/wfstcontrols/wfstcontrols.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/geosearch/geosearch.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/printer/printer.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/measurebar/measurebar.ol.min.js"></script>
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/plugins/attributetable/attributetable.ol.min.js"></script>
+
+
+
+    <!-- configuration -->
+    <script type="text/javascript" src="http://sigc.desarrollo.guadaltel.es/mapea42/js/configuration.js"></script>
+
+
+
+    <script type="application/javascript">
+      M.proxy(true);
+
+      function openPanel() {
+        if (document.getElementById("PanelSubtipologia").className.indexOf("openPanel") >= 0) {
+          document.getElementById("PanelSubtipologia").classList.remove("openPanel");
+          document.getElementById("PanelSubtipologia").classList.add("closePanel");
+        } else {
+          document.getElementById("PanelSubtipologia").classList.add("openPanel");
+        }
+      }
+
+
+      var mapajs = M.map({
+        'container': 'map',
+        "controls": ["layerswitcher", "mouse", "scale", "overviewmap", "panzoombar", "scaleline", ],
+        "getfeatureinfo": "plain"
+      });
+
+
+      var centros = new M.layer.WFS({
+        name: "Centros ASSDA",
+        url: "https://clientes.guadaltel.es/desarrollo/geossigc/wfs?",
+        namespace: "mapea",
+        name: "centrosassda_subtipo",
+        legend: "centrosassda_subtipo",
+        getfeatureinfo: "plain",
+        geometry: 'POINT',
+        extract: true,
+      });
+
+      centros.on(M.evt.LOAD, function() {
+        centros.setStyle(subtipologiaStyle);
+        centros.setStyle(new M.style.Cluster(options, vendorParameters));
+      });
+
+      centros.on(M.evt.SELECT_FEATURES, function(features) {
+        features.forEach(function(feature) {
+          //logFeature(feature);
+          if (feature.getGeoJSON().properties.features) {
+            //console.log('Es un cluster');
+          } else {
+            //console.log('Es un feature');
+            // Creamos el html de la pestaña
+            var fs = "<table width='500'>";
+            var keys = Object.keys(feature.getGeoJSON().properties);
+            //keys.remove("ogc_fid");
+            keys.remove("concierto");
+            keys.remove("xx");
+            keys.remove("longitud");
+            keys.remove("latitud");
+            keys.remove("tipo");
+            keys.forEach(function atributos(key) {
+              if (feature.getAttribute(key) != "") {
+                fs += '<tr><td>';
+                fs += '\t<b>' + key + '</b>: ' + feature.getAttribute(key);
+                fs += '</tr></td>';
+              }
+            });
+            fs += '</table>';
+            //console.log(fs);
+            // Creamos un objeto tab
+            var featureTabOpts = {
+              'icon': 'g-cartografia-pin',
+              'title': 'Información del Centro',
+              'content': fs
+            };
+            // Creamos el Popup y le añadimos la pestaña
+            popup = new M.Popup();
+            popup.addTab(featureTabOpts);
+            // Finalmente se añade al mapa, especificando las Coordenadas
+            var coordenadas = feature.getGeometry().coordinates;
+            //console.log(feature.getGeometry().coordinates);
+            mapajs.addPopup(popup, coordenadas);
+
+          }
+
+        });
+      })
+
+
+      mapajs.addLayers(centros);
+
+
+
+      mapajs.addPlugin(new M.plugin.AttributeTable());
+
+      let estiloSubtipoDefPink = new M.style.Point({
+        fill: {
+          color: 'red'
+        },
+        stroke: {
+          color: 'red',
+          width: 5
+        },
+        radius: 15
+      });
+
+
+
+
+      let dia = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/discapacidad_recursos.png',
+          scale: 1
+        },
+      });
+
+      let dia_st2 = new M.style.Point({
+        stroke: {
+          color: '#fff351',
+          width: 2
+        },
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/discapacidad_recursos.png',
+          scale: 0.75
+        },
+        radius: 15,
+        fill: {
+          color: 'white',
+          width: 15,
+          opacity: 0
+        }
+      });
+
+      let dia_st3 = new M.style.Point({
+        stroke: {
+          color: '#9b9126',
+          width: 2
+        },
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/discapacidad_recursos.png',
+          scale: 0.75
+        },
+        radius: 15,
+        fill: {
+          color: 'white',
+          width: 15,
+          opacity: 0
+        }
+      });
+
+
+      let dia_st4 = new M.style.Point({
+        stroke: {
+          color: '#9b9126',
+          width: 5
+        },
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/discapacidad_recursos.png',
+          scale: 0.75
+        },
+        radius: 15,
+        fill: {
+          color: 'white',
+          width: 15,
+          opacity: 0
+        }
+      });
+
+      let dia_st5 = new M.style.Point({
+        stroke: {
+          color: '#fff351',
+          width: 5
+        },
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/discapacidad_recursos.png',
+          scale: 0.75
+        },
+        radius: 15,
+        fill: {
+          color: 'white',
+          width: 15,
+          opacity: 0
+        }
+      });
+
+
+      let noche = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/empleo_y_vivienda.png',
+          scale: 1
+        },
+      });
+
+      let mayores = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/administracion.png',
+          scale: 1
+        },
+      });
+
+      let sociales = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/centroeducativo.png',
+          scale: 1
+        },
+      });
+
+      let residencial = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/infancia_recursos.png',
+          scale: 1
+        },
+      });
+
+      let residencial_st2 = new M.style.Point({
+        stroke: {
+          color: '#00b964',
+          width: 2
+        },
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/infancia_recursos.png',
+          scale: 0.75
+        },
+        radius: 15,
+        fill: {
+          color: 'white',
+          width: 15,
+          opacity: 0
+        }
+      });
+
+      let residencial_st3 = new M.style.Point({
+        stroke: {
+          color: '#32ffdc',
+          width: 2
+        },
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/infancia_recursos.png',
+          scale: 0.75
+        },
+        radius: 15,
+        fill: {
+          color: 'white',
+          width: 15,
+          opacity: 0
+        }
+      });
+
+      let residencial_st4 = new M.style.Point({
+        stroke: {
+          color: '#32ffdc',
+          width: 4
+        },
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/infancia_recursos.png',
+          scale: 0.75
+        },
+        radius: 15,
+        fill: {
+          color: 'white',
+          width: 15,
+          opacity: 0
+        }
+      });
+
+      let residencial_st5 = new M.style.Point({
+        stroke: {
+          color: '#00b964',
+          width: 5
+        },
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/infancia_recursos.png',
+          scale: 0.75
+        },
+        radius: 15,
+        fill: {
+          color: 'white',
+          width: 15,
+          opacity: 0
+        }
+      });
+
+
+      let social = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/icono_defecto.png',
+          scale: 1
+        },
+      });
+
+      let gitano = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/parking.png',
+          scale: 1
+        },
+      });
+
+      let comedor = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/mayores_recursos.png',
+          scale: 1
+        },
+      });
+
+      let consulta = new M.style.Point({
+        icon: {
+          src: 'http://mapabienestarsocial.iass.es/wp-content/plugins/tfecom-maps/images/interrogation.png',
+          scale: 1
+        },
+      });
+
+
+      let categoryStyle = new M.style.Category("tipologia", {
+        "CENTRO DE DÍA": dia,
+        "CENTRO DE NOCHE": noche,
+        "CENTRO DE PARTICIPACIÓN ACTIVA DE PERSONAS MAYORES": mayores,
+        "CENTRO DE SERVICIOS SOCIALES COMUNITARIOS": sociales,
+        "CENTRO RESIDENCIAL": residencial,
+        "CENTRO SOCIAL": social,
+        "CENTRO SOCIOCULTURAL GITANO": gitano,
+        "COMEDOR": comedor,
+        "CONSULTAR A LA COORDINACIÓN": consulta
+      });
+
+
+
+      let subtipologiaStyle = new M.style.Category("subtipologia", {
+        "CENTRO DE DÍA": dia,
+        "CENTRO DE DÍA OCUPACIONAL": dia_st2,
+        "CENTRO DE DÍA PARA PERSONAS CON AUTISMO": dia_st3,
+        "CENTRO DE DÍA PARA PERSONAS CON DAÑO CEREBRAL": dia_st2,
+        "CENTRO DE DÍA PARA PERSONAS CON DISCAPACIDAD FÍSICA": dia_st3,
+        "CENTRO DE DÍA PARA PERSONAS CON PARÁLISIS CEREBRAL": dia_st2,
+        "CENTRO DE DÍA PARA PERSONAS CON TRASTORNOS DE CONDUCTA": dia_st4,
+        "CENTRO DE ENCUENTRO Y ACOGIDA": dia_st5,
+        "CENTRO DE TRATAMIENTO AMBULATORIO": dia_st4,
+        "CENTRO DE TRATAMIENTO AMBULATORIO DE ATENCIÓN EXCLUSIVA AL JUEGO PATOLÓGICO": dia_st5,
+        "CENTRO DE NOCHE": noche,
+        "CENTRO DE PARTICIPACIÓN ACTIVA DE PERSONAS MAYORES": mayores,
+        "CENTRO DE SERVICIOS SOCIALES COMUNITARIOS": sociales,
+        "ALBERGUES PARA PERSONAS TRABAJADORAS TEMPORERAS": residencial,
+        "CASA": residencial_st3,
+        "CASA DE ACOGIDA": residencial_st2,
+        "CASA DE EMERGENCIA": residencial_st3,
+        "CASA HOGAR": residencial_st2,
+        "CENTRO DE ACOGIDA": residencial_st3,
+        "CENTRO DE DESINTOXICACIÓN RESIDENCIAL": residencial_st2,
+        "CENTRO RESIDENCIAL": residencial_st3,
+        "COMUNIDAD TERAPÉUTICA": residencial_st4,
+        "PISO TUTELADO": residencial_st5,
+        "RESIDENCIA": residencial_st4,
+        "RESIDENCIA DE PERSONAS CON AUTISMO": residencial_st5,
+        "RESIDENCIA DE PERSONAS CON DISCAPACIDAD": residencial_st4,
+        "RESIDENCIA DE PERSONAS CON DISCAPACIDAD FÍSICA": residencial_st5,
+        "RESIDENCIA DE PERSONAS CON DISCAPACIDAD INTELECTUAL Y TRASTORNOS DE CONDUCTA": residencial_st4,
+        "RESIDENCIA DE PERSONAS CON PARÁLISIS CEREBRAL": residencial_st5,
+        "RESIDENCIA PARA PERSONAS ADULTAS (RA)": residencial_st2,
+        "RESIDENCIA PARA PERSONAS MAYORES AUTÓNOMAS": residencial_st3,
+        "RESIDENCIA PARA PERSONAS MAYORES CON TRASTORNOS DE CONDUCTA": residencial_st2,
+        "RESIDENCIA PARA PERSONAS MAYORES EN SITUACIÓN DE DEPENDENCIA": residencial_st3,
+        "VIVIENDA DE APOYO A LA REINSERCIÓN": residencial_st2,
+        "VIVIENDA DE APOYO AL TRATAMIENTO": residencial_st3,
+        "VIVIENDA SUPERVISADA": residencial_st2,
+        "VIVIENDA TUTELADA": residencial_st3,
+        "CENTRO SOCIAL": social,
+        "CENTRO SOCIOCULTURAL GITANO": gitano,
+        "COMEDOR": comedor,
+        "CONSULTAR A LA COORDINACIÓN": consulta
+      });
+
+      function subtipologiaFilter() {
+        let selected = document.querySelector("#PanelSubtipologia").querySelectorAll("[type=checkbox]:checked");
+        let filter = [];
+        selected.forEach(function(elem) {
+          filter.push(M.filter.EQUAL('subtipologia', elem.value));
+        });
+        centros.setFilter(M.filter.OR(filter));
+
+        centros.setStyle(new M.style.Cluster(options, vendorParameters));
+      }
+
+      // CONFIGURACIÓN PARÁMETROS CLUSTER
+
+      var options = {
+        ranges: [
+          /*{min:1, max:1, style: new M.style.Point({
+              fill: {
+                color: 'red'
+              },
+              radius: 15
+            })},*/
+
+          {
+            min: 2,
+            max: 3,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#a3c5d8',
+                opacity: 0.2
+              },
+              radius: 20
+            })
+          },
+          {
+            min: 3,
+            max: 5,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#6aa8da',
+                opacity: 0.4
+              },
+              radius: 20
+            })
+          },
+          {
+            min: 5,
+            max: 10,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#468cc4',
+                opacity: 0.5
+              },
+              radius: 20
+            })
+          },
+          {
+            min: 10,
+            max: 15,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#2160a6',
+                opacity: 0.7
+              },
+              radius: 20
+            })
+          },
+          {
+            min: 15,
+            max: 20,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#1c5fa1',
+                opacity: 0.7
+              },
+              radius: 20
+            })
+          },
+          {
+            min: 20,
+            max: 50000,
+            style: new M.style.Point({
+              stroke: {
+                color: '#5789aa'
+              },
+              fill: {
+                color: '#1c5fa1',
+                opacity: 0.9
+              },
+              radius: 40
+            })
+          }
+        ],
+        animated: true,
+        hoverInteraction: true,
+        displayAmount: true,
+        selectedInteraction: true,
+        distance: 80
+      };
+
+      var vendorParameters = {
+        displayInLayerSwitcherHoverLayer: false,
+        distanceSelectFeatures: 15
+      }
+
+      var tooltip = document.getElementById('tooltip');
+
+      var overlay = new ol.Overlay({
+        element: tooltip,
+        offset: [10, 0],
+        positioning: 'bottom-left'
+      });
+      mapajs.getMapImpl().addOverlay(overlay);
+
+
+      function displayTooltip(evt) {
+        var pixel = evt.pixel;
+        var feature = mapajs.getMapImpl().forEachFeatureAtPixel(pixel, function(feature) {
+          return feature;
+        });
+        tooltip.style.display = (!M.utils.isNullOrEmpty(feature) && !M.utils.isNullOrEmpty(feature.getProperties().features) && feature.getProperties().features.length == 1) ? '' : 'none';
+        if (feature) {
+          if (!M.utils.isNullOrEmpty(feature.getProperties().features) && feature.getProperties().features.length == 1) {
+            overlay.setPosition(evt.coordinate);
+
+            tooltip.innerHTML = feature.getProperties().features[0].getProperties().denom_centro + "<br />" + feature.getProperties().features[0].getProperties().tipologia + "<br />" + feature.getProperties().features[0].getProperties().subtipologia +
+              "<br />" + feature.getProperties().features[0].getProperties().nombre_entidad;
+          }
+        }
+      };
+
+      mapajs.getMapImpl().on('pointermove', displayTooltip);
+    </script>
+  </body>
+
+</html>

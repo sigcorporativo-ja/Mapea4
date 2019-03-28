@@ -1,8 +1,16 @@
-goog.provide('M.impl.patches');
+/* eslint-disable */
+import * as LayerModule from 'ol/layer/Layer';
+import OLFormatGML3 from 'ol/format/GML3';
+// import OLInteractionPointer from 'ol/interaction/Pointer';
+import { writeStringTextNode } from 'ol/format/xsd';
+import { find, findIndex, includes } from 'ol/array';
+import { get as getProjection } from 'ol/proj';
+import { createFromCapabilitiesMatrixSet } from 'ol/tilegrid/WMTS';
+import WMTSRequestEncoding from 'ol/source/WMTSRequestEncoding';
 
-goog.require('ol.layer.Layer');
-goog.require('ol.format.WFS');
-goog.require('ol.format.GML3');
+// import { POINTERUP, POINTERDOWN, POINTERDRAG } from 'ol/MapBrowserEventType';
+// import { getValues } from 'ol/obj';
+
 
 /**
  * Return `true` if the layer is visible, and if the passed resolution is
@@ -15,7 +23,7 @@ goog.require('ol.format.GML3');
  * PATCH: inclusive maxResolution comparasion to show layers with the
  * same resolution as its maxResolution
  */
-ol.layer.Layer.visibleAtResolution = function(layerState, resolution) {
+LayerModule.visibleAtResolution = (layerState, resolution) => {
   return layerState.visible && resolution >= layerState.minResolution &&
     resolution <= layerState.maxResolution;
 };
@@ -24,11 +32,10 @@ ol.layer.Layer.visibleAtResolution = function(layerState, resolution) {
  * @param {Node} node Node.
  * @param {ol.geom.Point} value Point geometry.
  * @param {Array.<*>} objectStack Node stack.
- * @private
  *
  * PATCH: disables axis order configuration
  */
-ol.format.GML3.prototype.writePos_ = function(node, value, objectStack) {
+OLFormatGML3.prototype.writePos_ = (node, value, objectStack) => {
   // var context = objectStack[objectStack.length - 1];
   // PATCH: ------------------------------ init
   // var srsName = context['srsName'];
@@ -37,182 +44,236 @@ ol.format.GML3.prototype.writePos_ = function(node, value, objectStack) {
   //   axisOrientation = ol.proj.get(srsName).getAxisOrientation();
   // }
   // ------------------------------------- end
-  var point = value.getCoordinates();
-  var coords;
+  const point = value.getCoordinates();
+  const coords = `${point[0]} ${point[1]}`;
   // PATCH: ------------------------------ init
   // only 2d for simple features profile
   // if (axisOrientation.substr(0, 2) === 'en') {
   // ------------------------------------- end
-  coords = (point[0] + ' ' + point[1]);
   // PATCH: ------------------------------ init
   // } else {
   //   coords = (point[1] + ' ' + point[0]);
   // }
   // ------------------------------------- end
-  ol.format.XSD.writeStringTextNode(node, coords);
+  writeStringTextNode(node, coords);
 };
 
 /**
  * @param {Array.<number>} point Point geometry.
- * @param {string=} opt_srsName Optional srsName
+ * @param {string=} optSRSName Optional srsName
  * @return {string} The coords string.
- * @private
  *
  * PATCH: disables axis order configuration
  */
-ol.format.GML3.prototype.getCoords_ = function(point, opt_srsName) {
+OLFormatGML3.prototype.getCoords_ = (point, optSRSName) => {
   // PATCH: ------------------------------ init
   // var axisOrientation = 'enu';
-  // if (opt_srsName) {
-  //   axisOrientation = ol.proj.get(opt_srsName).getAxisOrientation();
+  // if (optSRSName) {
+  //   axisOrientation = ol.proj.get(optSRSName).getAxisOrientation();
   // }
   // return ((axisOrientation.substr(0, 2) === 'en') ?
   //     point[0] + ' ' + point[1] :
   //     point[1] + ' ' + point[0]);
-  return (point[0] + ' ' + point[1]);
+  return `${point[0]} ${point[1]}`;
   // ------------------------------------- end
 };
 
 /**
- * This function adds the control to the specified map
+ * Generate source options from a capabilities object.
+ * @param {Object} wmtsCap An object representing the capabilities document.
+ * @param {!Object} config Configuration properties for the layer.  Defaults for
+ *                  the layer will apply if not provided.
  *
- * @private
- * @function
- * @param {M.Map} map to add the plugin
- * @param {function} template template of this control
+ * Required config properties:
+ *  - layer - {string} The layer identifier.
  *
- * PATCH: waits for the animation ending
+ * Optional config properties:
+ *  - matrixSet - {string} The matrix set identifier, required if there is
+ *       more than one matrix set in the layer capabilities.
+ *  - projection - {string} The desired CRS when no matrixSet is specified.
+ *       eg: "EPSG:3857". If the desired projection is not available,
+ *       an error is thrown.
+ *  - requestEncoding - {string} url encoding format for the layer. Default is
+ *       the first tile url format found in the GetCapabilities response.
+ *  - style - {string} The name of the style
+ *  - format - {string} Image format for the layer. Default is the first
+ *       format returned in the GetCapabilities response.
+ *  - crossOrigin - {string|null|undefined} Cross origin. Default is `undefined`.
+ * @return {?Options} WMTS source options object or `null` if the layer was not found.
+ * @api
+ *
+ * PATCH: allow override tileGrid extent
  */
-ol.control.OverviewMap.prototype.handleToggle_ = function() {
-  goog.dom.classlist.toggle(this.element, 'ol-collapsed');
-  var button = this.element.querySelector('button');
-  goog.dom.classlist.toggle(button, this.openedButtonClass_);
-  goog.dom.classlist.toggle(button, this.collapsedButtonClass_);
-
-  setTimeout(function() {
-    if (this.collapsed_) {
-      ol.dom.replaceNode(this.collapseLabel_, this.label_);
+export const optionsFromCapabilities = (wmtsCap, config) => {
+  const layers = wmtsCap['Contents']['Layer'];
+  const l = find(layers, function(elt, index, array) {
+    return elt['Identifier'] == config['layer'];
+  });
+  if (l === null) {
+    return null;
+  }
+  const tileMatrixSets = wmtsCap['Contents']['TileMatrixSet'];
+  let idx;
+  if (l['TileMatrixSetLink'].length > 1) {
+    if ('projection' in config) {
+      idx = findIndex(l['TileMatrixSetLink'],
+        function(elt, index, array) {
+          const tileMatrixSet = find(tileMatrixSets, function(el) {
+            return el['Identifier'] == elt['TileMatrixSet'];
+          });
+          const supportedCRS = tileMatrixSet['SupportedCRS'];
+          const proj1 = getProjection(supportedCRS.replace(/urn:ogc:def:crs:(\w+):(.*:)?(\w+)$/, '$1:$3')) ||
+            getProjection(supportedCRS);
+          const proj2 = getProjection(config['projection']);
+          if (proj1 && proj2) {
+            return equivalent(proj1, proj2);
+          } else {
+            return supportedCRS == config['projection'];
+          }
+        });
     } else {
-      ol.dom.replaceNode(this.label_, this.collapseLabel_);
+      idx = findIndex(l['TileMatrixSetLink'],
+        function(elt, index, array) {
+          return elt['TileMatrixSet'] == config['matrixSet'];
+        });
     }
-    this.collapsed_ = !this.collapsed_;
+  } else {
+    idx = 0;
+  }
+  if (idx < 0) {
+    idx = 0;
+  }
+  const matrixSet = /** @type {string} */
+    (l['TileMatrixSetLink'][idx]['TileMatrixSet']);
+  const matrixLimits = /** @type {Array<Object>} */
+    (l['TileMatrixSetLink'][idx]['TileMatrixSetLimits']);
 
-    // manage overview map if it had not been rendered before and control
-    // is expanded
-    var ovmap = this.ovmap_;
-    if (!this.collapsed_ && !ovmap.isRendered()) {
-      ovmap.updateSize();
-      this.resetExtent_();
-      ol.events.listenOnce(ovmap, ol.MapEventType.POSTRENDER,
-        function(event) {
-          this.updateBox_();
-        },
-        this);
+  let format = /** @type {string} */ (l['Format'][0]);
+  if ('format' in config) {
+    format = config['format'];
+  }
+  idx = findIndex(l['Style'], function(elt, index, array) {
+    if ('style' in config) {
+      return elt['Title'] == config['style'];
+    } else {
+      return elt['isDefault'];
     }
-  }.bind(this), this.toggleDelay_);
-};
+  });
+  if (idx < 0) {
+    idx = 0;
+  }
+  const style = /** @type {string} */ (l['Style'][idx]['Identifier']);
 
-/**
- * @param {ol.MapBrowserPointerEvent} mapBrowserEvent Event.
- * @private
- */
-ol.interaction.Pointer.prototype.updateTrackedPointers_ = function(mapBrowserEvent) {
-  if (this.isPointerDraggingEvent_(mapBrowserEvent)) {
-    var event = mapBrowserEvent.pointerEvent;
+  const dimensions = {};
+  if ('Dimension' in l) {
+    l['Dimension'].forEach(function(elt, index, array) {
+      const key = elt['Identifier'];
+      let value = elt['Default'];
+      if (value === undefined) {
+        value = elt['Value'][0];
+      }
+      dimensions[key] = value;
+    });
+  }
 
-    var id = event.pointerId.toString();
-    if (mapBrowserEvent.type == ol.MapBrowserEventType.POINTERUP) {
-      delete this.trackedPointers_[id];
-    } else if (mapBrowserEvent.type ==
-      ol.MapBrowserEventType.POINTERDOWN) {
-      this.trackedPointers_[id] = event;
-    } else if (id in this.trackedPointers_) {
-      // update only when there was a pointerdown event for this pointer
-      this.trackedPointers_[id] = event;
+  const matrixSets = wmtsCap['Contents']['TileMatrixSet'];
+  const matrixSetObj = find(matrixSets, function(elt, index, array) {
+    return elt['Identifier'] == matrixSet;
+  });
+
+  let projection;
+  const code = matrixSetObj['SupportedCRS'];
+  if (code) {
+    projection = getProjection(code.replace(/urn:ogc:def:crs:(\w+):(.*:)?(\w+)$/, '$1:$3')) ||
+      getProjection(code);
+  }
+  if ('projection' in config) {
+    const projConfig = getProjection(config['projection']);
+    if (projConfig) {
+      if (!projection || equivalent(projConfig, projection)) {
+        projection = projConfig;
+      }
     }
-    this.targetPointers = ol.obj.getValues(this.trackedPointers_);
   }
-};
 
-/**
- * @private
- * @param {ol.render.ReplayGroup} replayGroup Replay group.
- * @param {ol.geom.Circle} geometry Geometry.
- * @param {ol.style.Style} style Style.
- * @param {ol.Feature} feature Feature.
- */
-M.impl.patches.renderPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
-  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
-    M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
-  } else {
-    ol.renderer.vector.renderPolygonGeometry_(replayGroup, geometry, style, feature);
+  const wgs84BoundingBox = l['WGS84BoundingBox'];
+  let extent, wrapX;
+  // PATCH init ------------------
+  if (config.extent) {
+    extent = config.extent;
   }
-};
-
-/**
- * @private
- * @param {ol.render.ReplayGroup} replayGroup Replay group.
- * @param {ol.geom.Circle} geometry Geometry.
- * @param {ol.style.Style} style Style.
- * @param {ol.Feature} feature Feature.
- */
-M.impl.patches.renderMultiPolygonGeometry_ = function(replayGroup, geometry, style, feature) {
-  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
-    M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
-  } else {
-    ol.renderer.vector.renderMultiPolygonGeometry_(replayGroup, geometry, style, feature);
+  // PATCH end ------------------
+  else if (wgs84BoundingBox !== undefined) {
+    const wgs84ProjectionExtent = getProjection('EPSG:4326').getExtent();
+    wrapX = (wgs84BoundingBox[0] == wgs84ProjectionExtent[0] &&
+      wgs84BoundingBox[2] == wgs84ProjectionExtent[2]);
+    extent = transformExtent(
+      wgs84BoundingBox, 'EPSG:4326', projection);
+    const projectionExtent = projection.getExtent();
+    if (projectionExtent) {
+      // If possible, do a sanity check on the extent - it should never be
+      // bigger than the validity extent of the projection of a matrix set.
+      if (!containsExtent(projectionExtent, extent)) {
+        extent = undefined;
+      }
+    }
   }
-};
 
-/**
- * @private
- * @param {ol.render.ReplayGroup} replayGroup Replay group.
- * @param {ol.geom.Circle} geometry Geometry.
- * @param {ol.style.Style} style Style.
- * @param {ol.Feature} feature Feature.
- */
-M.impl.patches.renderLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
-  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
-    M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
-  } else {
-    ol.renderer.vector.renderLineStringGeometry_(replayGroup, geometry, style, feature);
+  const tileGrid = createFromCapabilitiesMatrixSet(matrixSetObj, extent, matrixLimits);
+
+  /** @type {!Array<string>} */
+  const urls = [];
+  let requestEncoding = config['requestEncoding'];
+  requestEncoding = requestEncoding !== undefined ? requestEncoding : '';
+
+  if ('OperationsMetadata' in wmtsCap && 'GetTile' in wmtsCap['OperationsMetadata']) {
+    const gets = wmtsCap['OperationsMetadata']['GetTile']['DCP']['HTTP']['Get'];
+
+    for (let i = 0, ii = gets.length; i < ii; ++i) {
+      if (gets[i]['Constraint']) {
+        const constraint = find(gets[i]['Constraint'], function(element) {
+          return element['name'] == 'GetEncoding';
+        });
+        const encodings = constraint['AllowedValues']['Value'];
+
+        if (requestEncoding === '') {
+          // requestEncoding not provided, use the first encoding from the list
+          requestEncoding = encodings[0];
+        }
+        if (requestEncoding === WMTSRequestEncoding.KVP) {
+          if (includes(encodings, WMTSRequestEncoding.KVP)) {
+            urls.push( /** @type {string} */ (gets[i]['href']));
+          }
+        } else {
+          break;
+        }
+      } else if (gets[i]['href']) {
+        requestEncoding = WMTSRequestEncoding.KVP;
+        urls.push( /** @type {string} */ (gets[i]['href']));
+      }
+    }
   }
-};
-
-/**
- * @private
- * @param {ol.render.ReplayGroup} replayGroup Replay group.
- * @param {ol.geom.Circle} geometry Geometry.
- * @param {ol.style.Style} style Style.
- * @param {ol.Feature} feature Feature.
- */
-M.impl.patches.renderMultiLineStringGeometry_ = function(replayGroup, geometry, style, feature) {
-  if (style instanceof M.impl.style.CentroidStyle && style.getImage() != null) {
-    M.impl.patches.drawGeometryCentroidAsFeature(replayGroup, geometry, style, feature);
-  } else {
-    ol.renderer.vector.renderMultiLineStringGeometry_(replayGroup, geometry, style, feature);
+  if (urls.length === 0) {
+    requestEncoding = WMTSRequestEncoding.REST;
+    l['ResourceURL'].forEach(function(element) {
+      if (element['resourceType'] === 'tile') {
+        format = element['format'];
+        urls.push( /** @type {string} */ (element['template']));
+      }
+    });
   }
-};
 
-/**
- * @private
- * @param {ol.render.ReplayGroup} replayGroup Replay group.
- * @param {ol.geom.Circle} geometry Geometry.
- * @param {ol.style.Style} style Style.
- * @param {ol.Feature} feature Feature.
- */
-M.impl.patches.drawGeometryCentroidAsFeature = function(replayGroup, geometry, style, feature) {
-  let parser = new jsts.io.OL3Parser();
-  let jstsGeom = parser.read(feature.getGeometry());
-  let centroid = Object.values(jstsGeom.getCentroid().getCoordinates()[0]).filter(c => c != undefined);
-  // let centroid = M.impl.utils.getCentroidCoordinate(geometry);
-  let geom = new ol.geom.Point(centroid);
-  ol.renderer.vector.GEOMETRY_RENDERERS_[geom.getType()](replayGroup, geom, style, feature);
-};
-
-Object.assign(ol.renderer.vector.GEOMETRY_RENDERERS_, {
-  'LineString': M.impl.patches.renderLineStringGeometry_,
-  'Polygon': M.impl.patches.renderPolygonGeometry_,
-  'MultiPolygon': M.impl.patches.renderMultiPolygonGeometry_,
-  'MultiLineString': M.impl.patches.renderMultiLineStringGeometry_
-});
+  return {
+    urls: urls,
+    layer: config['layer'],
+    matrixSet: matrixSet,
+    format: format,
+    projection: projection,
+    requestEncoding: requestEncoding,
+    tileGrid: tileGrid,
+    style: style,
+    dimensions: dimensions,
+    wrapX: wrapX,
+    crossOrigin: config['crossOrigin']
+  };
+}

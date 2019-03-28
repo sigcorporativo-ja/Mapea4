@@ -26,10 +26,10 @@
    "files": {
       "ol": {
          "scripts": [
-            "wfstcontrols.ol.min.js"
+            "wfstcontrols-2.0.0.ol.min.js"
          ],
          "styles": [
-            "wfstcontrols.min.css"
+            "wfstcontrols-2.0.0.min.css"
          ]
       }
    }

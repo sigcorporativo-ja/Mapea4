@@ -64,6 +64,7 @@
 				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">true</ol:isBaseLayer>
 				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
 				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+				<ol:maxExtent xmlns:ol="http://openlayers.org/context" maxx="2229176.725303816" maxy="5003196.555304059" minx="-1040313.3423018171" miny="3427200.171153531"/>
 			</Extension>
 			<StyleList>
 				<Style current="1">
@@ -94,6 +95,7 @@
 				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
 				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
 				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+				<ol:maxExtent xmlns:ol="http://openlayers.org/context" maxx="2229176.725303816" maxy="5003196.555304059" minx="-1040313.3423018171" miny="3427200.171153531"/>
 			</Extension>
 			<StyleList>
 				<Style current="1">
@@ -180,6 +182,7 @@
 				<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
 				<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">false</ol:displayInLayerSwitcher>
 				<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+				<ol:maxExtent xmlns:ol="http://openlayers.org/context" maxx="2229176.725303816" maxy="5003196.555304059" minx="-1040313.3423018171" miny="3427200.171153531"/>
 			</Extension>
 				<StyleList>
 				<Style current="1">

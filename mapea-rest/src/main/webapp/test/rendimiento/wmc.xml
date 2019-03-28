@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ViewContext xmlns="http://www.opengis.net/context" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="Callejero" version="1.1.0" xsi:schemaLocation="http://www.opengis.net/context http://schemas.opengis.net/context/1.1.0/context.xsd">
+	<General>
+		<Window height="370" width="610"/>
+		<BoundingBox SRS="EPSG:25830" maxx="621889.9370" maxy="4299792.1070" minx="96388.1179" miny="3959795.9442"/>
+		<Title>Callejero Digital de Andalucía Unificado</Title>
+		<Extension>
+			<ol:maxExtent xmlns:ol="http://openlayers.org/context" maxx="621889.9370" maxy="4299792.1070" minx="96388.1179" miny="3959795.9442"/>
+		</Extension>		
+		<KeywordList>
+			<Keyword>IECA</Keyword>
+			<Keyword>
+				Callejero Digital de Andalucía Unificado
+			</Keyword>
+		</KeywordList>
+		<Abstract>
+			Fichero de configuración del contexto de visualización de capas.
+		</Abstract>
+	</General>
+
+	<LayerList>
+  </LayerList>
+</ViewContext>
+
+

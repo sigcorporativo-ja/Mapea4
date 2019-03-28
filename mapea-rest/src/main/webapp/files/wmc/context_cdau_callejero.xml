@@ -22,7 +22,7 @@
 
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?"/>
 			</Server>
 			<Name>contexto_andalucia</Name>
 			<Title>Callejero Digital de Andalucía Unificado</Title>
@@ -41,7 +41,7 @@
 					<Name/>
 					<Title>Estilo de la leyenda</Title>
 					<LegendURL format="image/png" height="891" width="333">
-							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/img/leyenda_CDAU_callejero.png"/>
+							<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/img/leyenda_CDAU_callejero.png"/>
 					</LegendURL>
 				</Style>
 			</StyleList>
@@ -52,7 +52,7 @@
 
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?"/>
 			</Server>
 			<Name>batimetria</Name>
 			<Title>batimetria</Title>
@@ -79,7 +79,7 @@
 		<!--  ******   Base Cartografica Cacheada    ******  -->
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/gwc/service/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/base/gwc/service/wms?"/>
 			</Server>
 			<Name>base</Name>
 			<Title>Base Cartografica</Title>
@@ -106,7 +106,7 @@
 		<!--  ******   Base Cartografica ******  -->
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Andalucía" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?"/>
 			</Server>
 			<Name>CDAU_base</Name>
 			<Title>Base Cartografica</Title>
@@ -134,7 +134,7 @@
 
 		<Layer hidden="0" queryable="1">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/cdau/wms?Buffer=5"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/cdau/wms?Buffer=5"/>
 			</Server>
 			<Name>CDAU_wms</Name>
 			<Title>Viales y Portales</Title>
@@ -163,7 +163,7 @@
 
 		<Layer hidden="0" queryable="0">
 			<Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.callejerodeandalucia.es/servicios/base/wms?"/>
+				<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.callejerodeandalucia.es/servicios/base/wms?"/>
 			</Server>
 			<Name>CDAU_toponimia</Name>
 			<Title>Toponimia de núcleos y Litoral</Title>
@@ -189,7 +189,7 @@
 <!--  ******   POIs    ******  -->
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=10" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=10" xlink:type="simple"/>
       </Server>
       <Name>sv01_sanidad_centro_salud</Name>
       <Title>Centros de Salud</Title>
@@ -209,7 +209,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv01_sanidad_centro_salud"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv01_sanidad_centro_salud"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -218,7 +218,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv02_sanidad_hospital</Name>
       <Title>Hospitales</Title>
@@ -237,7 +237,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv02_sanidad_hospital"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv02_sanidad_hospital"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -246,7 +246,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv04_equip_educativo</Name>
       <Title>Equipamiento Educativo</Title>
@@ -265,7 +265,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv04_equip_educativo"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv04_equip_educativo"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -274,7 +274,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv06_facultad</Name>
       <Title>Facultades</Title>
@@ -293,7 +293,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv06_facultad"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv06_facultad"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -302,7 +302,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv08_arch_biblioteca</Name>
       <Title>Archivos y Bibliotecas</Title>
@@ -321,7 +321,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv08_arch_biblioteca"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv08_arch_biblioteca"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -330,7 +330,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv10_ayuntamiento</Name>
       <Title>Ayuntamientos</Title>
@@ -349,7 +349,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv10_ayuntamiento"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv10_ayuntamiento"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -358,7 +358,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv11_juzgado</Name>
       <Title>Juzgados</Title>
@@ -377,7 +377,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv11_juzgado"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv11_juzgado"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -386,7 +386,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv14_farmacia</Name>
       <Title>Farmacias</Title>
@@ -405,7 +405,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv14_farmacia"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv14_farmacia"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -414,7 +414,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv22_museo</Name>
       <Title>Museos</Title>
@@ -433,7 +433,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv22_museo"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv22_museo"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -442,7 +442,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv29_policia</Name>
       <Title>Comisarias de Policia</Title>
@@ -461,7 +461,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv29_policia"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv29_policia"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -470,7 +470,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv31_parque_bombero</Name>
       <Title>Parques de Bomberos</Title>
@@ -489,7 +489,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv31_parque_bombero"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv31_parque_bombero"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -498,7 +498,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv12_sae</Name>
       <Title>Oficina de Empleo</Title>
@@ -517,7 +517,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv12_sae"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv12_sae"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -526,7 +526,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv13_correos</Name>
       <Title>Oficina de Correos</Title>
@@ -545,7 +545,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv13_correos"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv13_correos"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -554,7 +554,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv15_cementerio</Name>
       <Title>Cementerio</Title>
@@ -573,7 +573,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv15_cementerio"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv15_cementerio"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -582,7 +582,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv16_edif_religioso</Name>
       <Title>Edificio Religioso</Title>
@@ -601,7 +601,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv16_edif_religioso"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv16_edif_religioso"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -610,7 +610,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv17_gran_comercio</Name>
       <Title>Centro Comercial</Title>
@@ -629,7 +629,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv17_gran_comercio"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv17_gran_comercio"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -638,7 +638,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv18_abasto</Name>
       <Title>Mercado</Title>
@@ -657,7 +657,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv18_abasto"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv18_abasto"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -666,7 +666,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv19_comercio_abierto</Name>
       <Title>Comercio Abierto</Title>
@@ -685,7 +685,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv19_comercio_abierto"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv19_comercio_abierto"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -694,7 +694,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv24_ocio</Name>
       <Title>Establecimiento de Ocio</Title>
@@ -713,7 +713,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv24_ocio"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv24_ocio"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -722,7 +722,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv25_oficina_turismo</Name>
       <Title>Oficina de Turismo</Title>
@@ -741,7 +741,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv25_oficina_turismo"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv25_oficina_turismo"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -750,7 +750,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv27_pal_congreso</Name>
       <Title>Palacio de Congreso</Title>
@@ -769,7 +769,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv27_pal_congreso"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv27_pal_congreso"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -778,7 +778,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv26_golf</Name>
       <Title>Campo de Golf</Title>
@@ -797,7 +797,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv26_golf"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv26_golf"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -806,7 +806,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv28_equip_deportivo</Name>
       <Title>Equipamiento Deportivo</Title>
@@ -825,7 +825,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv28_equip_deportivo"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv28_equip_deportivo"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -834,7 +834,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv30_prision</Name>
       <Title>Centro Penitenciario</Title>
@@ -853,7 +853,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv30_prision"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv30_prision"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -866,7 +866,7 @@
     
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv09_astronomico</Name>
       <Title>Observatorio Astronómico</Title>
@@ -885,7 +885,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv09_astronomico"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv09_astronomico"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -894,7 +894,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv20_equip_naturaleza</Name>
       <Title>Equipamiento en la Naturaleza</Title>
@@ -913,7 +913,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv20_equip_naturaleza"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv20_equip_naturaleza"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -922,7 +922,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv21_equip_infoca</Name>
       <Title>Equipamiento INFOCA</Title>
@@ -941,7 +941,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv21_equip_infoca"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv21_equip_infoca"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -950,7 +950,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>sv23_alojamiento</Name>
       <Title>Alojamiento</Title>
@@ -969,7 +969,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv23_alojamiento"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=sv23_alojamiento"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -983,7 +983,7 @@
     
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>it01_puerto</Name>
       <Title>Puertos</Title>
@@ -1002,7 +1002,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it01_puerto"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it01_puerto"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -1011,7 +1011,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>it02_aeropuerto</Name>
       <Title>Aeropuertos</Title>
@@ -1030,7 +1030,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it02_aeropuerto"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it02_aeropuerto"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -1039,7 +1039,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>it03_faro</Name>
       <Title>Faros</Title>
@@ -1058,7 +1058,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it03_faro"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it03_faro"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -1067,7 +1067,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>it04_bus_estacion</Name>
       <Title>Estaciones de Autobuses</Title>
@@ -1086,7 +1086,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it04_bus_estacion"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it04_bus_estacion"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -1095,7 +1095,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>it06_itv</Name>
       <Title>ITV</Title>
@@ -1114,7 +1114,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it06_itv"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it06_itv"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -1123,7 +1123,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>it07_tren_estacion</Name>
       <Title>Estaciones de Trenes</Title>
@@ -1142,7 +1142,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it07_tren_estacion"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it07_tren_estacion"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -1152,7 +1152,7 @@
     
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>it10_gasolinera</Name>
       <Title>Gasolineras</Title>
@@ -1171,7 +1171,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it10_gasolinera"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it10_gasolinera"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -1180,7 +1180,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>it12_estacion_metro</Name>
       <Title>Estaciones Metro o tranvia</Title>
@@ -1199,7 +1199,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it12_estacion_metro"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=it12_estacion_metro"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -1209,7 +1209,7 @@
     
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>tep01_espacio_productivo</Name>
       <Title>Espacio Productivo</Title>
@@ -1229,7 +1229,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=tep01_espacio_productivo"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=tep01_espacio_productivo"/>
           </LegendURL>
         </Style>
       </StyleList>
@@ -1238,7 +1238,7 @@
     </Layer>
     <Layer hidden="1" queryable="1">
       <Server service="OGC:WMS" title="Toponimia" version="1.1.1">
-        <OnlineResource xlink:href="http://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
+        <OnlineResource xlink:href="https://www.ideandalucia.es/services/poi/wms?Buffer=20" xlink:type="simple"/>
       </Server>
       <Name>tep03_espacio_tecnologico</Name>
       <Title>Espacio Tecnológico</Title>
@@ -1258,7 +1258,7 @@
           <Name/>
           <Title>Estilo de la leyenda</Title>
           <LegendURL format="image/png" height="37" width="32">
-            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=tep03_espacio_tecnologico"/>
+            <OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="https://www.ideandalucia.es/services/poi/wms?request=GetLegendGraphic&amp;SERVICE=WMS&amp;VERSION=1.0.0&amp;FORMAT=image/png&amp;WIDTH=32&amp;HEIGHT=37&amp;LAYER=tep03_espacio_tecnologico"/>
           </LegendURL>
         </Style>
       </StyleList>

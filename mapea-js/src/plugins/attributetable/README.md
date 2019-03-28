@@ -29,7 +29,7 @@ mapajs.addPlugin(new M.plugin.AttributeTable({
 ## Tabla de compatibilidad de versiones   
 En caso de utilizar un core de Mapea con número de versión explícito, debe cumplirse la siguiente relación:  
 
-versión plugin | versión Mapea | 
+versión plugin | versión Mapea |
 --- | --- |
-1.0.0 | <= 4.1.0 
+1.0.0 | <= 4.1.0
 1.0.1 | >= 4.2.0
