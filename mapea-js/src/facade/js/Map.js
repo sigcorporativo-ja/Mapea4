@@ -1469,6 +1469,35 @@ class Map extends Base {
   }
 
   /**
+   * This function provides the maximum extent for this
+   * map instance.
+   * Async version of getMaxExtent
+   *
+   * @public
+   * @function
+   * @returns {Promise}
+   * @api
+   */
+  calculateMaxExtent() {
+    return new Promise((resolve) => {
+      let maxExtent = this.userMaxExtent;
+      if (isNullOrEmpty(maxExtent)) {
+        const selectedWmc = this.getWMC().find(wmc => wmc.selected);
+        if (isNullOrEmpty(selectedWmc)) {
+          const calculateExtents = this.getLayers().filter(layer => layer.name !== '__draw__').map(l => l.calculateMaxExtent());
+          Promise.all(calculateExtents).then(extents => resolve(getEnvolvedExtent(extents)));
+        } else {
+          maxExtent = selectedWmc.getMaxExtent();
+          resolve(maxExtent);
+        }
+      } else {
+        resolve(maxExtent);
+      }
+    });
+  }
+
+
+  /**
    * This function sets the maximum extent for this
    * map instance
    *

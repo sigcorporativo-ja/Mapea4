@@ -206,6 +206,24 @@ class WMS extends LayerBase {
     }
     return maxExtent;
   }
+
+  /**
+   * This method calculates the maxExtent of this layer:
+   * 1. Check if the user specified a maxExtentn parameter
+   * 2. Gets the maxExtent of the layer in the WMC
+   * 3. Gets the map maxExtent
+   * 4. If not, sets the maxExtent from the WMC global
+   * 5. Sets the maxExtent from the capabilities
+   * 6. Sets the maxExtent from the map projection
+   *
+   * Async version of getMaxExtent
+   * @function
+   * @api
+   */
+  calculateMaxExtent() {
+    return new Promise(resolve => this.getMaxExtent(resolve));
+  }
+
   /**
    * This functions retrieves a Promise which will be
    * resolved when the GetCapabilities request is retrieved

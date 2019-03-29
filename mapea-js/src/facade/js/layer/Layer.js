@@ -154,7 +154,6 @@ class LayerBase extends Base {
    *
    * @function
    * @api
-   * @export
    */
   getMaxExtent() {
     let maxExtent = this.userMaxExtent; // 1
@@ -165,6 +164,20 @@ class LayerBase extends Base {
       }
     }
     return maxExtent;
+  }
+
+  /**
+   * This method calculates the maxExtent of this layer:
+   * 1. Check if the user specified a maxExtent parameter
+   * 2. Gets the map maxExtent
+   * 3. Sets the maxExtent from the map projection
+   * Async version of getMaxExtent
+   *
+   * @function
+   * @api
+   */
+  calculateMaxExtent() {
+    return new Promise(resolve => resolve(this.getMaxExtent()));
   }
 
   /**

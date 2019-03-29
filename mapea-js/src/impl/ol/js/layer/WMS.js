@@ -229,7 +229,7 @@ class WMS extends LayerBase {
    */
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
-    this.facadeLayer_.getMaxExtent((extent) => {
+    this.facadeLayer_.calculateMaxExtent().then((extent) => {
       const minResolution = this.options.minResolution;
       const maxResolution = this.options.maxResolution;
       const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
@@ -254,7 +254,7 @@ class WMS extends LayerBase {
     if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
       resolutions = this.resolutions_;
     }
-    this.facadeLayer_.getMaxExtent((extent) => {
+    this.facadeLayer_.calculateMaxExtent().then((extent) => {
       const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
       if (this.tiled === true) {
         this.ol3Layer = new OLLayerTile(extend({
