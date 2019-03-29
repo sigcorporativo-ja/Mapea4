@@ -209,6 +209,18 @@ class WMC extends Layer {
   }
 
   /**
+   * This function gets the envolved extent for
+   * this WMC
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  calculateMaxExtent() {
+    return new Promise(resolve => this.getMaxExtent(resolve));
+  }
+
+  /**
    * This function gets layers loaded from
    * this WMC
    *
