@@ -12,6 +12,7 @@ class GenerateVersionPlugin {
     this.regex = opt.regex;
     this.fileName = opt.fileName;
     this.aliasRoot = opt.aliasRoot;
+    this.override = opt.override;
   }
   /**
    * This function apply the logic plugin.
@@ -30,7 +31,11 @@ class GenerateVersionPlugin {
           }
           const realPath = pathmodule.resolve(path, file);
           const newPath = pathmodule.join(pathmodule.dirname(realPath), replacePath);
-          fs.copyFileSync(realPath, newPath);
+          if (this.override === true) {
+            fs.renameSync(realPath, newPath);
+          } else {
+            fs.copyFileSync(realPath, newPath);
+          }
         });
       });
     });
