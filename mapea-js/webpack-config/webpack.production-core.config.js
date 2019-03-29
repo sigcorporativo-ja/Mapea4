@@ -13,7 +13,7 @@ const sourcemap = argv['source-map'];
 module.exports = {
   mode: 'production',
   entry: {
-    'mapea.ol.min': path.resolve(__dirname, '..', 'src', 'index.js'),
+    [`mapea-${pjson.version}.ol.min`]: path.resolve(__dirname, '..', 'src', 'index.js'),
   },
   output: {
     path: path.resolve(__dirname, '..', 'dist'),
@@ -54,17 +54,13 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [{
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              minimize: true,
-            },
-          },
-        ],
-        exclude: [/node_modules/],
+        loader: MiniCssExtractPlugin.loader,
+        exclude: /node_modules/,
+      }, {
+        test: /\.css$/,
+        loader: 'css-loader',
+        exclude: /node_modules/,
+
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
@@ -83,10 +79,10 @@ module.exports = {
     ]
   },
   plugins: [
-    new GenerateVersionPlugin({
-      version: pjson.version,
-      regex: /([A-Za-z]+)(\..*)/,
-    }),
+    // new GenerateVersionPlugin({
+    //   version: pjson.version,
+    //   regex: /([A-Za-z]+)(\..*)/,
+    // }),
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',
     }),
@@ -101,6 +97,10 @@ module.exports = {
     new CopywebpackPlugin([{
       from: 'src/facade/assets/img',
       to: 'assets/img',
+    }]),
+    new CopywebpackPlugin([{
+      from: 'src/facade/assets/fonts',
+      to: 'assets/fonts',
     }]),
   ],
   devtool: 'source-map',
