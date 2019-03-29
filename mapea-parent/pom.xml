@@ -8,7 +8,7 @@
    <name>Mapea PARENT</name>
    <description>Herramienta para desarrollo de mapas interactivos de forma sencilla</description>
    <properties>
-      <project.release.date>08/03/2019</project.release.date>
+      <project.release.date>${maven.build.timestamp}</project.release.date>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
       <build.timestamp>${maven.build.timestamp}</build.timestamp>
       <maven.build.timestamp.format>dd-MM-yyyy</maven.build.timestamp.format>
