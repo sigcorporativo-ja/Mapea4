@@ -250,11 +250,11 @@ class WMS extends LayerBase {
     const opacity = this.opacity_;
     const zIndex = this.zIndex_;
     const visible = this.visibility && (this.options.visibility !== false);
-    let resolutions = this.map.getResolutions();
-    if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
-      resolutions = this.resolutions_;
-    }
     this.facadeLayer_.calculateMaxExtent().then((extent) => {
+      let resolutions = this.map.getResolutions();
+      if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
+        resolutions = this.resolutions_;
+      }
       const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
       if (this.tiled === true) {
         this.ol3Layer = new OLLayerTile(extend({

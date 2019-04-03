@@ -1128,7 +1128,7 @@ export const drawDynamicStyle = (canvas) => {
 export const getEnvolvedExtent = (extents) => {
   let envolvedExtent = null;
 
-  if (extents.length > 0) {
+  if (!isNullOrEmpty(extents)) {
     envolvedExtent = [
       Number.MAX_SAFE_INTEGER,
       Number.MAX_SAFE_INTEGER,
