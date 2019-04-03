@@ -461,32 +461,32 @@ class WMS extends LayerBase {
   /**
    * TODO
    */
-  setMaxExtent(maxExtentPromise) {
-    maxExtentPromise.then((maxExtent) => {
-      this.getOL3Layer().setExtent(maxExtent);
-      if (this.tiled === true) {
-        let resolutions = this.map.getResolutions();
-        let tileGrid;
-        if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
-          resolutions = this.resolutions_;
-        }
-
-        // gets the tileGrid
-        if (!isNullOrEmpty(resolutions)) {
-          tileGrid = new OLTileGrid({
-            resolutions,
-            extent: maxExtent,
-            origin: getBottomLeft(maxExtent),
-          });
-          const newSource = new TileWMS({
-            url: this.url,
-            params: this.layerParams_,
-            tileGrid,
-          });
-          this.ol3Layer.setSource(newSource);
-        }
+  setMaxExtent(maxExtent) {
+    // maxExtentPromise.then((maxExtent) => {
+    this.getOL3Layer().setExtent(maxExtent);
+    if (this.tiled === true) {
+      let resolutions = this.map.getResolutions();
+      let tileGrid;
+      if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
+        resolutions = this.resolutions_;
       }
-    });
+
+      // gets the tileGrid
+      if (!isNullOrEmpty(resolutions)) {
+        tileGrid = new OLTileGrid({
+          resolutions,
+          extent: maxExtent,
+          origin: getBottomLeft(maxExtent),
+        });
+        const newSource = new TileWMS({
+          url: this.url,
+          params: this.layerParams_,
+          tileGrid,
+        });
+        this.ol3Layer.setSource(newSource);
+      }
+    }
+    // });
   }
 
   /**
