@@ -198,7 +198,7 @@ class LayerBase extends Base {
       ];
     }
     if (isFunction(this.getImpl().setMaxExtent)) {
-      this.getImpl().setMaxExtent(this.getMaxExtent());
+      this.getImpl().setMaxExtent(maxExtent);
     }
   }
 
