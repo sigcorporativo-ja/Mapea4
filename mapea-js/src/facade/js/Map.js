@@ -1990,7 +1990,7 @@ class Map extends Base {
         } else {
           const layers = this.getLayers().filter(layer => layer.name !== '__draw__');
           Promise.all(layers.map((layer) => {
-            return (layer instanceof Vector ? layer.getMaxExtentPromise() : layer.getMaxExtent());
+            return (layer instanceof Vector ? layer.calculateMaxExtent() : layer.getMaxExtent());
           })).then((extens) => {
             const projExtent = this.getProjection().getExtent();
             const envolvedMaxExtent = getEnvolvedExtent([...extens, projExtent]);
