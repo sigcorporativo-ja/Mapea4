@@ -233,10 +233,8 @@ class WMS extends LayerBase {
       const minResolution = this.options.minResolution;
       const maxResolution = this.options.maxResolution;
       const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
-      if (!isNullOrEmpty(this.ol3Layer)) {
-        this.ol3Layer.setSource(source);
-        this.ol3Layer.setExtent(extent);
-      }
+      this.ol3Layer.setSource(source);
+      this.ol3Layer.setExtent(extent);
     });
   }
 
@@ -247,12 +245,12 @@ class WMS extends LayerBase {
    * @function
    */
   addSingleLayer_() {
-    const minResolution = this.options.minResolution;
-    const maxResolution = this.options.maxResolution;
-    const opacity = this.opacity_;
-    const zIndex = this.zIndex_;
-    const visible = this.visibility && (this.options.visibility !== false);
     this.facadeLayer_.calculateMaxExtent().then((extent) => {
+      const minResolution = this.options.minResolution;
+      const maxResolution = this.options.maxResolution;
+      const opacity = this.opacity_;
+      const zIndex = this.zIndex_;
+      const visible = this.visibility && (this.options.visibility !== false);
       let resolutions = this.map.getResolutions();
       if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
         resolutions = this.resolutions_;
@@ -283,7 +281,10 @@ class WMS extends LayerBase {
       // sets its visibility if it is in range
       if (this.isVisible() && !this.inRange()) {
         this.setVisible(false);
+      } else {
+        this.setVisible(this.visibility);
       }
+
       // sets its z-index
       if (zIndex !== null) {
         this.setZIndex(zIndex);
@@ -465,27 +466,18 @@ class WMS extends LayerBase {
    */
   setMaxExtent(maxExtent) {
     // maxExtentPromise.then((maxExtent) => {
+    const minResolution = this.options.minResolution;
+    const maxResolution = this.options.maxResolution;
     this.getOL3Layer().setExtent(maxExtent);
     if (this.tiled === true) {
       let resolutions = this.map.getResolutions();
-      let tileGrid;
       if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
         resolutions = this.resolutions_;
       }
-
       // gets the tileGrid
       if (!isNullOrEmpty(resolutions)) {
-        tileGrid = new OLTileGrid({
-          resolutions,
-          extent: maxExtent,
-          origin: getBottomLeft(maxExtent),
-        });
-        const newSource = new TileWMS({
-          url: this.url,
-          params: this.layerParams_,
-          tileGrid,
-        });
-        this.ol3Layer.setSource(newSource);
+        const source = this.createOLSource_(resolutions, minResolution, maxResolution, maxExtent);
+        this.ol3Layer.setSource(source);
       }
     }
     // });

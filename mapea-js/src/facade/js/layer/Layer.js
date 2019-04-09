@@ -198,8 +198,26 @@ class LayerBase extends Base {
       ];
     }
     if (isFunction(this.getImpl().setMaxExtent)) {
-      this.getImpl().setMaxExtent(maxExtent);
+      if (isNullOrEmpty(maxExtent)) {
+        this.resetMaxExtent();
+      } else {
+        this.getImpl().setMaxExtent(maxExtent);
+      }
     }
+  }
+
+  /**
+   * This function resets the maximum extent of the layer.
+   * @function
+   * @api
+   */
+  resetMaxExtent() {
+    this.userMaxExtent = null;
+    this.calculateMaxExtent().then((maxExtent) => {
+      if (isFunction(this.getImpl().setMaxExtent)) {
+        this.getImpl().setMaxExtent(maxExtent);
+      }
+    });
   }
 
   /**
