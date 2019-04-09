@@ -1236,7 +1236,8 @@ class Map extends MObject {
     }
 
     const olMap = this.getMapImpl();
-    olMap.getView().set('extent', olExtent);
+    const olView = olMap.getView();
+    olView.set('extent', olExtent);
     this.updateResolutionsFromBaseLayer();
 
     if (!isNullOrEmpty(olExtent) && (zoomToExtent !== false)) {
@@ -1586,7 +1587,8 @@ class Map extends MObject {
         prevMaxExtent = [
           prevMaxExtent.x.min,
           prevMaxExtent.y.min, prevMaxExtent.x.max,
-          prevMaxExtent.y.max];
+          prevMaxExtent.y.max,
+        ];
       }
       this.facadeMap_.setMaxExtent(transformExtent(prevMaxExtent, olPrevProjection, olProjection));
     }
@@ -1878,13 +1880,11 @@ class Map extends MObject {
       label.hide();
     }
 
-    this.facadeMap_.fire(EventType.CLICK, [
-      {
-        pixel,
-        coord,
-        vendor: evt,
-      },
-    ]);
+    this.facadeMap_.fire(EventType.CLICK, [{
+      pixel,
+      coord,
+      vendor: evt,
+    }]);
   }
 
   /**
@@ -1897,13 +1897,11 @@ class Map extends MObject {
     const pixel = evt.pixel;
     const coord = this.map_.getCoordinateFromPixel(pixel);
 
-    this.facadeMap_.fire(EventType.MOVE, [
-      {
-        pixel,
-        coord,
-        vendor: evt,
-      },
-    ]);
+    this.facadeMap_.fire(EventType.MOVE, [{
+      pixel,
+      coord,
+      vendor: evt,
+    }]);
   }
 }
 /**

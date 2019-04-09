@@ -1508,11 +1508,11 @@ class Map extends Base {
    * @returns {Map}
    * @api
    */
-  setMaxExtent(maxExtentParam, zoomToExtent) {
+  setMaxExtent(maxExtentParam, zoomToExtent = true) {
     // checks if the param is null or empty
-    // if (isNullOrEmpty(maxExtentParam)) {
-    //   Exception('No ha especificado ningún maxExtent');
-    // }
+    if (isNullOrEmpty(maxExtentParam)) {
+      this.resetMaxExtent();
+    }
 
     // checks if the implementation can set the maxExtent
     if (isUndefined(MapImpl.prototype.setMaxExtent)) {
@@ -1522,7 +1522,6 @@ class Map extends Base {
     // parses the parameter
     try {
       const maxExtent = parameter.maxExtent(maxExtentParam);
-      this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
       this.userMaxExtent = maxExtentParam;
       if (!isArray(maxExtentParam) && isObject(maxExtentParam)) {
         this.userMaxExtent = [
@@ -1532,10 +1531,28 @@ class Map extends Base {
           maxExtentParam.y.max,
         ];
       }
+      this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
     } catch (err) {
       Dialog.error(err.toString());
       throw err;
     }
+    return this;
+  }
+
+  /**
+   * This function resets the maximum extent of the Map.
+   *
+   * @public
+   * @function
+   * @returns {Map}
+   * @api
+   */
+  resetMaxExtent() {
+    this.userMaxExtent = null;
+    this.calculateMaxExtent().then((maxExtentParam) => {
+      const maxExtent = parameter.maxExtent(maxExtentParam);
+      this.getImpl().setMaxExtent(maxExtent, true);
+    });
     return this;
   }
 
