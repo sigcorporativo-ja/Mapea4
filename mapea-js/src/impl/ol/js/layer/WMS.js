@@ -230,11 +230,13 @@ class WMS extends LayerBase {
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
     this.facadeLayer_.calculateMaxExtent().then((extent) => {
-      const minResolution = this.options.minResolution;
-      const maxResolution = this.options.maxResolution;
-      const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
-      this.ol3Layer.setSource(source);
-      this.ol3Layer.setExtent(extent);
+      if (!isNullOrEmpty(this.ol3Layer)) {
+        const minResolution = this.options.minResolution;
+        const maxResolution = this.options.maxResolution;
+        const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
+        this.ol3Layer.setSource(source);
+        this.ol3Layer.setExtent(extent);
+      }
     });
   }
 

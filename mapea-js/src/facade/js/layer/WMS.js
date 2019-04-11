@@ -172,7 +172,9 @@ class WMS extends LayerBase {
     if (isNullOrEmpty(this.userMaxExtent)) { // 1
       if (isNullOrEmpty(this.options.wmcMaxExtent)) { // 2
         if (isNullOrEmpty(this.map_.userMaxExtent)) { // 3
-          if (isNullOrEmpty(this.options.wmcGlobalMaxExtent)) { // 4
+          const selectedWMC = this.map_.getWMC().find(wmc => wmc.selected);
+          // if (isNullOrEmpty(this.options.wmcGlobalMaxExtent)) {
+          if (isNullOrEmpty(selectedWMC)) { // 4
             // maxExtent provided by the service
             this.getCapabilities().then((capabilities) => {
               const capabilitiesMaxExtent = this.getImpl()
@@ -189,7 +191,12 @@ class WMS extends LayerBase {
               }
             });
           } else {
-            this.maxExtent_ = this.options.wmcGlobalMaxExtent;
+            selectedWMC.calculateMaxExtent().then((wmcMaxExtent) => {
+              this.maxExtent_ = wmcMaxExtent;
+              if (isFunction(callbackFn)) {
+                callbackFn(this.maxExtent_);
+              }
+            });
           }
         } else {
           this.maxExtent_ = this.map_.userMaxExtent;
