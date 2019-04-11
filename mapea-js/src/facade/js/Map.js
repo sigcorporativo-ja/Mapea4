@@ -239,14 +239,14 @@ class Map extends Base {
       this.setResolutions(params.resolutions);
     }
 
-    // layers
-    if (!isNullOrEmpty(params.layers)) {
-      this.addLayers(params.layers);
-    }
-
     // wmc
     if (!isNullOrEmpty(params.wmc)) {
       this.addWMC(params.wmc);
+    }
+
+    // layers
+    if (!isNullOrEmpty(params.layers)) {
+      this.addLayers(params.layers);
     }
 
     // wms
