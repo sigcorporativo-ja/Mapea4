@@ -1231,7 +1231,7 @@ class Map extends MObject {
   setMaxExtent(maxExtent, zoomToExtent) {
     let olExtent = maxExtent;
 
-    if (!isNullOrEmpty(olExtent)) {
+    if (!isNullOrEmpty(olExtent) && !isArray(olExtent) && isObject(olExtent)) {
       olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
     }
 
@@ -1493,7 +1493,7 @@ class Map extends MObject {
       layer.getImpl().setResolutions(resolutions);
     });
 
-    if (bbox !== null) {
+    if (!isNullOrEmpty(bbox) && isNullOrEmpty(userZoom)) {
       this.facadeMap_.setBbox(bbox, { nearest: true });
     }
 
@@ -1760,7 +1760,7 @@ class Map extends MObject {
           this.fire(EventType.COMPLETED);
         }
       } else {
-        this.facadeMap_.getEnvolvedExtent().then((extent) => {
+        this.facadeMap_.calculateMaxExtent().then((extent) => {
           if (!this._resolutionsBaseLayer && (this.userResolutions_ === null)) {
             resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
