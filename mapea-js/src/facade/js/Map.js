@@ -239,6 +239,12 @@ class Map extends Base {
       this.setResolutions(params.resolutions);
     }
 
+    // maxExtent
+    if (!isNullOrEmpty(params.maxExtent)) {
+      const zoomToMaxExtent = isNullOrEmpty(params.zoom) && isNullOrEmpty(params.bbox);
+      this.setMaxExtent(params.maxExtent, zoomToMaxExtent);
+    }
+
     // wmc
     if (!isNullOrEmpty(params.wmc)) {
       this.addWMC(params.wmc);
@@ -284,12 +290,6 @@ class Map extends Base {
     // default WMC
     if (isNullOrEmpty(params.wmc) && isNullOrEmpty(params.layers)) {
       this.addWMC(M.config.predefinedWMC.predefinedNames[0]);
-    }
-
-    // maxExtent
-    if (!isNullOrEmpty(params.maxExtent)) {
-      const zoomToMaxExtent = isNullOrEmpty(params.zoom) && isNullOrEmpty(params.bbox);
-      this.setMaxExtent(params.maxExtent, zoomToMaxExtent);
     }
 
     // center
@@ -1464,6 +1464,9 @@ class Map extends Base {
       } else {
         maxExtent = selectedWmc.getMaxExtent();
       }
+      if (isNullOrEmpty(maxExtent)) {
+        maxExtent = this.getProjection().getExtent();
+      }
     }
     return maxExtent;
   }
@@ -1485,7 +1488,13 @@ class Map extends Base {
         const selectedWmc = this.getWMC().find(wmc => wmc.selected);
         if (isNullOrEmpty(selectedWmc)) {
           const calculateExtents = this.getLayers().filter(layer => layer.name !== '__draw__').map(l => l.calculateMaxExtent());
-          Promise.all(calculateExtents).then(extents => resolve(getEnvolvedExtent(extents)));
+          Promise.all(calculateExtents).then((extents) => {
+            maxExtent = getEnvolvedExtent(extents);
+            if (isNullOrEmpty(maxExtent)) {
+              maxExtent = this.getProjection().getExtent();
+            }
+            resolve(maxExtent);
+          });
         } else {
           maxExtent = selectedWmc.getMaxExtent();
           resolve(maxExtent);
@@ -1521,16 +1530,16 @@ class Map extends Base {
 
     // parses the parameter
     try {
-      const maxExtent = parameter.maxExtent(maxExtentParam);
-      this.userMaxExtent = maxExtentParam;
-      if (!isArray(maxExtentParam) && isObject(maxExtentParam)) {
-        this.userMaxExtent = [
-          maxExtentParam.x.min,
-          maxExtentParam.y.min,
-          maxExtentParam.x.max,
-          maxExtentParam.y.max,
+      let maxExtent = parameter.maxExtent(maxExtentParam);
+      if (!isArray(maxExtent) && isObject(maxExtent)) {
+        maxExtent = [
+          maxExtent.x.min,
+          maxExtent.y.min,
+          maxExtent.x.max,
+          maxExtent.y.max,
         ];
       }
+      this.userMaxExtent = maxExtent;
       this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
     } catch (err) {
       Dialog.error(err.toString());
@@ -2006,13 +2015,13 @@ class Map extends Base {
           visibleBaseLayer.getMaxExtent(resolve);
         } else {
           const layers = this.getLayers().filter(layer => layer.name !== '__draw__');
-          Promise.all(layers.map((layer) => {
-            return (layer instanceof Vector ? layer.calculateMaxExtent() : layer.getMaxExtent());
-          })).then((extens) => {
-            const projExtent = this.getProjection().getExtent();
-            const envolvedMaxExtent = getEnvolvedExtent([...extens, projExtent]);
-            resolve(envolvedMaxExtent);
-          });
+          Promise.all(layers.map(layer => layer.calculateMaxExtent()))
+            .then((extents) => {
+              const extentsToCalculate =
+                isNullOrEmpty(extents) ? [this.getProjection().getExtent()] : extents;
+              const envolvedMaxExtent = getEnvolvedExtent(extentsToCalculate);
+              resolve(envolvedMaxExtent);
+            });
         }
       }
     });
