@@ -9,6 +9,8 @@ import {
   concatUrlPaths,
   getWMSGetCapabilitiesUrl,
   extend,
+  fillResolutions,
+  generateResolutionsFromExtent,
 } from 'M/util/Utils';
 import FacadeLayerBase from 'M/layer/Layer';
 import * as LayerType from 'M/layer/Type';
@@ -256,6 +258,16 @@ class WMS extends LayerBase {
       let resolutions = this.map.getResolutions();
       if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
         resolutions = this.resolutions_;
+      } else if (isNullOrEmpty(resolutions)) {
+        // generates the resolution
+        const zoomLevels = this.getNumZoomLevels();
+        const size = this.map.getMapImpl().getSize();
+        const units = this.map.getProjection().units;
+        if (!isNullOrEmpty(minResolution) && !isNullOrEmpty(maxResolution)) {
+          resolutions = fillResolutions(minResolution, maxResolution, zoomLevels);
+        } else {
+          resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
+        }
       }
       const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
       if (this.tiled === true) {

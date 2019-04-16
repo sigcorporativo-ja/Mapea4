@@ -85,7 +85,7 @@ class View extends OLView {
       projection: this.projection_,
       center: this.getCenter(),
     });
-    // this.setZoom(this.userZoom_);
+    this.setZoom(this.userZoom_);
   }
 }
 
