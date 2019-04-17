@@ -35,10 +35,13 @@ class Rotate extends Control {
     const olMap = map.getMapImpl();
     // panel
     this.panel = element;
-    if (this.panel) {
-      this.panel.style.display = 'none';
-    }
-
+    // REV_OL
+    // El funcionamiento por defecto en OL es mostrar el control oculto
+    // En Mapea por defecto vamos a mostrar si alguien lo pone se interpreta
+    // que es para usarlo en un contexto de uso para su visualización sobre el mapa
+    // if (this.panel) {
+    // this.panel.style.display = 'none';
+    // }
     this.panel.querySelector('button').addEventListener('click', () => {
       olMap.getView().setRotation(0);
     });
@@ -48,11 +51,16 @@ class Rotate extends Control {
       olView.on('change:rotation', (ev) => {
         const newView = ev.target;
         const rotation = newView.getRotation();
-        if (rotation !== 0) {
-          this.panel.style.display = '';
-        } else {
-          this.panel.style.display = 'none';
-        }
+
+        // REV_OL
+        // Se suprime el comportamiento por defecto de OL
+        // Que oculta el control si la orientación es al Norte.
+        // if (rotation !== 0) {
+        //   this.panel.style.display = '';
+        // } else {
+        //   this.panel.style.display = 'none';
+        // }
+
         const iconRotation = `rotate(${(rotation * 360) / (2 * Math.PI)}deg)`;
         this.panel.querySelector('button').style.transform = iconRotation;
       });
