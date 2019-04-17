@@ -144,6 +144,12 @@ class Map extends Base {
     this._userZoom = null;
 
     /**
+     * @private
+     * @type {Object}
+     */
+    this.userCenter_ = null;
+
+    /**
      * TODO
      * @private
      * @type {Boolean}
@@ -295,20 +301,6 @@ class Map extends Base {
     // center
     if (!isNullOrEmpty(params.center)) {
       this.setCenter(params.center);
-    } else {
-      this._finishedInitCenter = false;
-      this.getInitCenter_().then((initCenter) => {
-        // checks if the user stablished a center while it was
-        // calculated
-        let newCenter = this.getCenter();
-        if (isNullOrEmpty(newCenter)) {
-          newCenter = initCenter;
-          this.setCenter(newCenter);
-        }
-
-        this._finishedInitCenter = true;
-        this._checkCompleted();
-      });
     }
 
     // zoom
@@ -321,14 +313,26 @@ class Map extends Base {
       this.addLabel(params.label);
     }
 
+    // ticket
+    if (!isNullOrEmpty(params.ticket)) {
+      this.setTicket(params.ticket);
+    }
+
     // initial zoom
     if (isNullOrEmpty(params.bbox) && isNullOrEmpty(params.zoom) && isNullOrEmpty(params.center)) {
       this.zoomToMaxExtent(true);
     }
 
-    // ticket
-    if (!isNullOrEmpty(params.ticket)) {
-      this.setTicket(params.ticket);
+    // initial center
+    if (isNullOrEmpty(params.center)) {
+      this._finishedInitCenter = false;
+      this.getInitCenter_().then((initCenter) => {
+        if (isNullOrEmpty(this.userCenter_)) {
+          this.setCenter(initCenter);
+        }
+        this._finishedInitCenter = true;
+        this._checkCompleted();
+      });
     }
   }
 
@@ -1493,11 +1497,14 @@ class Map extends Base {
             if (isNullOrEmpty(maxExtent)) {
               maxExtent = this.getProjection().getExtent();
             }
+            // if the maxExtent is modified while are calculating maxExtent
+            if (!isNullOrEmpty(this.userMaxExtent)) {
+              maxExtent = this.userMaxExtent;
+            }
             resolve(maxExtent);
           });
         } else {
-          maxExtent = selectedWmc.getMaxExtent();
-          resolve(maxExtent);
+          selectedWmc.calculateMaxExtent().then(resolve);
         }
       } else {
         resolve(maxExtent);
@@ -1718,6 +1725,7 @@ class Map extends Base {
     // try {
     const center = parameter.center(centerParam);
     this.getImpl().setCenter(center);
+    this.userCenter_ = center;
     if (center.draw === true) {
       this.drawLayer_.clear();
 
@@ -2037,23 +2045,13 @@ class Map extends Base {
    * @api
    */
   zoomToMaxExtent(keepUserZoom) {
-    // zoom to maxExtent if no zoom was specified
-    const maxExtent = this.getMaxExtent();
-    if (!isNullOrEmpty(maxExtent)) {
-      this.setBbox(maxExtent);
-    } else {
-      /* if no maxExtent was provided then
-       calculates the envolved extent */
-      this._finishedMaxExtent = false;
-      this.getEnvolvedExtent().then((extent) => {
-        if (keepUserZoom !== true || isNullOrEmpty(this._userZoom)) {
-          this.setBbox(extent);
-        }
-        this._finishedMaxExtent = true;
-        this._checkCompleted();
-      });
-    }
-
+    this.calculateMaxExtent().then((maxExtent) => {
+      if (keepUserZoom !== true || isNullOrEmpty(this._userZoom)) {
+        this.setBbox(maxExtent);
+      }
+      this._finishedMaxExtent = true;
+      this._checkCompleted();
+    });
     return this;
   }
 
@@ -2088,7 +2086,7 @@ class Map extends Base {
    */
   getInitCenter_() {
     return new Promise((success, fail) => {
-      const getCenterFn = (extent) => {
+      this.calculateMaxExtent().then((extent) => {
         let center;
         if (isArray(extent)) {
           center = {
@@ -2101,20 +2099,8 @@ class Map extends Base {
             y: ((extent.y.max + extent.y.min) / 2),
           };
         }
-        return center;
-      };
-      const center = this.getCenter();
-      if (isNullOrEmpty(center)) {
-        const maxExtent = this.getMaxExtent();
-        if (isNullOrEmpty(maxExtent)) {
-          this.getEnvolvedExtent()
-            .then(getCenterFn).then(success);
-        } else {
-          success(getCenterFn(maxExtent));
-        }
-      } else {
         success(center);
-      }
+      });
     });
   }
 
@@ -2180,13 +2166,7 @@ class Map extends Base {
 
     if (isNullOrEmpty(coord)) {
       this.getInitCenter_().then((initCenter) => {
-        // checks if the user stablished a center while it was
-        // calculated
-        let newCenter = this.getCenter();
-        if (isNullOrEmpty(newCenter)) {
-          newCenter = initCenter;
-        }
-        const label = new Label(text, newCenter, panMapIfOutOfView);
+        const label = new Label(text, initCenter, panMapIfOutOfView);
         this.getImpl().addLabel(label);
       });
     } else {
