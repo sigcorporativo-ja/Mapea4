@@ -1,5 +1,5 @@
 import OLMap from 'ol/Map';
-import { get as getProj, transformExtent, transform } from 'ol/proj';
+import { get as getProj, transform } from 'ol/proj';
 import OLProjection from 'ol/proj/Projection';
 import OLInteraction from 'ol/interaction/Interaction';
 import MObject from 'M/Object';
@@ -23,6 +23,7 @@ import {
   generateResolutionsFromExtent,
 } from 'M/util/Utils';
 import 'patches';
+import ImplUtils from './util/Utils';
 import View from './View';
 
 /**
@@ -1556,7 +1557,7 @@ class Map extends MObject {
     const olPrevProjection = getProj(this.getProjection().code);
     let prevBbox = this.facadeMap_.getBbox();
     let prevMaxExtent = this.facadeMap_.getMaxExtent();
-    const prevCenter = this.facadeMap_.getCenter();
+    // const prevCenter = this.facadeMap_.getCenter();
     const resolutions = this.facadeMap_.getResolutions();
 
     const olMap = this.getMapImpl();
@@ -1590,7 +1591,8 @@ class Map extends MObject {
           prevMaxExtent.y.max,
         ];
       }
-      this.facadeMap_.setMaxExtent(transformExtent(prevMaxExtent, olPrevProjection, olProjection));
+      this.setMaxExtent(ImplUtils
+        .transformExtent(prevMaxExtent, olPrevProjection, olProjection));
     }
 
     // recalculates bbox //TODO
@@ -1598,22 +1600,10 @@ class Map extends MObject {
       if (!isArray(prevBbox)) {
         prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
       }
-      const newBbox = transformExtent(prevBbox, olPrevProjection, olProjection);
+      const newBbox = ImplUtils.transformExtent(prevBbox, olPrevProjection, olProjection);
       this.facadeMap_.setBbox(newBbox, {
         nearest: true,
       });
-    }
-
-
-    // recalculates center
-    if (!isNullOrEmpty(prevCenter)) {
-      let draw = false;
-      if (!isNullOrEmpty(this.facadeMap_.getFeatureCenter())) {
-        draw = true;
-      }
-      this.facadeMap_.setCenter(`${transform([
-        prevCenter.x, prevCenter.y,
-      ], olPrevProjection, olProjection)}*${draw}`);
     }
 
     // recalculates resolutions
