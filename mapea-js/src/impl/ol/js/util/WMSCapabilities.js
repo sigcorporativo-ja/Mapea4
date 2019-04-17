@@ -3,7 +3,8 @@
  */
 import { isNullOrEmpty, isArray, isObject, isUndefined } from 'M/util/Utils';
 import WMS from 'M/layer/WMS';
-import { get as getProj, transformExtent } from 'ol/proj';
+import { get as getProj } from 'ol/proj';
+import ImplUtils from './Utils';
 
 /**
  * @classdesc
@@ -87,7 +88,7 @@ class GetCapabilities {
               const bbox = layer.BoundingBox[0];
               const projSrc = getProj(bbox.crs);
               const projDest = getProj(this.projection_.code);
-              extent = transformExtent(bbox.extent, projSrc, projDest);
+              extent = ImplUtils.transformExtent(bbox.extent, projSrc, projDest);
             }
           } else if (!isNullOrEmpty(layer.LatLonBoundingBox)) {
             const bbox = layer.LatLonBoundingBox[0];
@@ -95,7 +96,7 @@ class GetCapabilities {
             // the latLonBoundingBox which is always present
             const projSrc = getProj('EPSG:4326');
             const projDest = getProj(this.projection_.code);
-            extent = transformExtent(bbox.extent, projSrc, projDest);
+            extent = ImplUtils.transformExtent(bbox.extent, projSrc, projDest);
           }
         } else if (!isUndefined(layer.Layer)) {
           // recursive case

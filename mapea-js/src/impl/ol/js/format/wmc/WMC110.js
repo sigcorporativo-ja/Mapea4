@@ -1,7 +1,8 @@
 import { isNullOrEmpty, normalize } from 'M/util/Utils';
 import WMS from 'M/layer/WMS';
-import { get as getProj, transformExtent } from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import { getAllTextContent } from 'ol/xml';
+import ImplUtils from '../../util/Utils';
 import XML from '../XML';
 
 /**
@@ -240,7 +241,7 @@ class WMC110 extends XML {
     if (!isNullOrEmpty(projDst) && !isNullOrEmpty(projSrc) && (projDst !== projSrc)) {
       projSrc = getProj(projSrc);
       projDst = getProj(projDst);
-      extent = transformExtent(extent, projSrc, projDst);
+      extent = ImplUtils.transformExtent(extent, projSrc, projDst);
     }
     obj[maxExtent] = extent;
   }
