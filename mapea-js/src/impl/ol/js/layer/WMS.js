@@ -19,9 +19,10 @@ import { get as getRemote } from 'M/util/Remote';
 import * as EventType from 'M/event/eventtype';
 import OLLayerTile from 'ol/layer/Tile';
 import OLLayerImage from 'ol/layer/Image';
-import { get as getProj, transformExtent } from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import OLTileGrid from 'ol/tilegrid/TileGrid';
 import { getBottomLeft } from 'ol/extent';
+import ImplUtils from '../util/Utils';
 import ImplMap from '../Map';
 import LayerBase from './Layer';
 import GetCapabilities from '../util/WMSCapabilities';
@@ -160,11 +161,11 @@ class WMS extends LayerBase {
         }
 
         // updates resolutions and keep the bbox
-        const oldBbox = this.map.getBbox();
+        // const oldBbox = this.map.getBbox();
         this.map.getImpl().updateResolutionsFromBaseLayer();
-        if (!isNullOrEmpty(oldBbox)) {
-          this.map.setBbox(oldBbox);
-        }
+        // if (!isNullOrEmpty(oldBbox)) {
+        //   this.map.setBbox(oldBbox);
+        // }
       } else if (!isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }
@@ -417,7 +418,7 @@ class WMS extends LayerBase {
     // creates the promise
     this.extentPromise = new Promise((success, fail) => {
       if (!isNullOrEmpty(this.extent_)) {
-        this.extent_ = transformExtent(this.extent_, this.extentProj_, olProjection);
+        this.extent_ = ImplUtils.transformExtent(this.extent_, this.extentProj_, olProjection);
         this.extentProj_ = olProjection;
         success(this.extent_);
       } else {

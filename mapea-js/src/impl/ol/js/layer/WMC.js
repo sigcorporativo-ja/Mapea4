@@ -6,7 +6,8 @@ import * as parameter from 'M/parameter/parameter';
 import { get as getRemote } from 'M/util/Remote';
 import * as EventType from 'M/event/eventtype';
 import { isFunction } from 'M/util/Utils';
-import { get as getProj, transformExtent } from 'ol/proj';
+import { get as getProj } from 'ol/proj';
+import ImplUtils from '../util/Utils';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
 /**
@@ -195,7 +196,8 @@ class WMC extends Layer {
           this.extentProj_ = parameter.projection(M.config.DEFAULT_PROJ).code;
         }
         const olProjection = getProj(this.map.getProjection().code);
-        this.maxExtent = transformExtent(context.maxExtent, this.extentProj_, olProjection);
+        this.maxExtent = ImplUtils
+          .transformExtent(context.maxExtent, this.extentProj_, olProjection);
         this.extentProj_ = olProjection;
         if (isFunction(callbackFn)) {
           callbackFn(this.maxExtent);
