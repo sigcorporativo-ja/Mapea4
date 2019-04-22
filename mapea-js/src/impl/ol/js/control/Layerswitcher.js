@@ -7,6 +7,7 @@ import { isNullOrEmpty, concatUrlPaths } from 'M/util/Utils';
 import { compileSync as compileTemplate } from 'M/util/Template';
 import LayerSwitcherFacade from 'M/control/Layerswitcher';
 import Layer from 'M/layer/Layer';
+import LayerGroup from 'M/layer/LayerGroup';
 import Control from './Control';
 
 /**
@@ -60,32 +61,49 @@ class LayerSwitcher extends Control {
    */
   inputLayer(evtParameter) {
     const evt = (evtParameter || window.event);
+    const groupID = evt.target.getAttribute('data-group-id');
     if (!isNullOrEmpty(evt.target)) {
       const layerName = evt.target.getAttribute('data-layer-name');
       if (!isNullOrEmpty(layerName)) {
         evt.stopPropagation();
-        const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
-        // checkbox
-        if (evt.target.classList.contains('m-check')) {
-          /* sets the layer visibility only if
-             the layer is not base layer and visible */
-          if (layer.transparent === true || !layer.isVisible()) {
-            const opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
-            if (!isNullOrEmpty(opacity)) {
-              layer.setOpacity(opacity.value);
-            }
-            layer.setVisible(!layer.isVisible());
+        let layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        if (isNullOrEmpty(layer)) { // find by group
+          if (!isNullOrEmpty(groupID)) {
+            const group = LayerGroup.findGroupById(groupID, this.facadeMap_.getLayerGroups());
+            layer = group.getChildren().find(l => ((l instanceof Layer) && (l.name === layerName)));
           }
-        } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
-          // range
-          layer.setOpacity(evt.target.value);
-          // remove span
-        } else if (evt.target.classList.contains('m-layerswitcher-remove')) {
-          this.facadeMap_.removeLayers(layer);
+          // checkbox
+          if (evt.target.classList.contains('m-check')) {
+            /* sets the layer visibility only if
+               the layer is not base layer and visible */
+            if (layer.transparent === true || !layer.isVisible()) {
+              const opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
+              if (!isNullOrEmpty(opacity)) {
+                layer.setOpacity(opacity.value);
+              }
+              layer.setVisible(!layer.isVisible());
+            }
+          } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
+            // range
+            layer.setOpacity(evt.target.value);
+            // remove span
+          } else if (evt.target.classList.contains('m-layerswitcher-remove')) {
+            this.facadeMap_.removeLayers(layer);
+          }
+        } else if (!groupID) {
+          const group = LayerGroup.findGroupById(groupID, this.facadeMap_.getLayerGroups());
+          // checkbox
+          if (evt.target.classList.contains('m-check')) {
+            group.setVisible(!group.isVisible());
+          } else {
+            group.collapsed = !group.collapsed;
+            this.renderPanel();
+          }
         }
       }
     }
   }
+
 
   /**
    * Sets the visibility of the clicked layer

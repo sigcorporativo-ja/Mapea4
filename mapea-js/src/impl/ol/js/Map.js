@@ -168,9 +168,8 @@ class Map extends MObject {
     const mbtilesLayers = this.getMBtiles(filters);
     const unknowLayers = this.getUnknowLayers_(filters);
 
-    return wmcLayers.concat(kmlLayers)
-      .concat(wmsLayers)
-      .concat(wfsLayers)
+    return wmcLayers
+      .concat(kmlLayers).concat(wmsLayers).concat(wfsLayers)
       .concat(wmtsLayers)
       .concat(mbtilesLayers)
       .concat(unknowLayers);
@@ -188,8 +187,7 @@ class Map extends MObject {
   getBaseLayers() {
     const baseLayers = this.getLayers().filter((layer) => {
       let isBaseLayer = false;
-      if ((layer.type === LayerType.WMS) ||
-        (layer.type === LayerType.OSM) ||
+      if ((layer.type === LayerType.WMS) || (layer.type === LayerType.OSM) ||
         (layer.type === LayerType.Mapbox) || (layer.type === LayerType.WMTS)) {
         isBaseLayer = (layer.transparent !== true);
       }
@@ -257,6 +255,85 @@ class Map extends MObject {
       this.removeUnknowLayers_(unknowLayers);
     }
 
+    return this;
+  }
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @returns {Array<M.layer.Group>} layers from the map
+   * @api stable
+   */
+  getLayerGroups() {
+    return this.layerGroups_;
+  }
+
+  /**
+   * TODO
+   *
+   * @public
+   * @function
+   * @param {Array<M.layer.Group>} layers
+   * @returns {M.impl.Map}
+   */
+  addLayerGroups(groups) {
+    // cehcks if exists a base layer
+    const baseLayers = this.getBaseLayers();
+    let existsBaseLayer = (baseLayers.length > 0);
+    groups.forEach((group) => {
+      if (!M.utils.includes(this.layerGroups_, group)) {
+        this.layerGroups_.push(group);
+        group.getAllLayers().forEach((layer) => {
+          layer.getImpl().addTo(this.facadeMap_);
+          /* if the layer is a base layer then
+          sets its visibility */
+          if (layer.transparent !== true) {
+            layer.setVisible(!existsBaseLayer);
+            existsBaseLayer = true;
+            if (layer.isVisible()) {
+              this.updateResolutionsFromBaseLayer();
+            }
+            layer.getImpl().setZIndex(0);
+          } else {
+            const zIndex = this.layers_.length + layer.getImpl().getZIndex();
+            layer.getImpl().setZIndex(zIndex);
+            // recalculates resolution if there are not
+            // any base layer
+            if (!existsBaseLayer) {
+              this.updateResolutionsFromBaseLayer();
+            }
+          }
+        }, this);
+      }
+    }, this);
+    return this;
+  }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @param {Array<M.layer.Group>} layers to remove
+   * @returns {M.impl.Map}
+   * @api stable
+   */
+  removeLayerGroups(groups) {
+    // this.layerGroups_
+    groups.forEach((group) => {
+      this.layerGroups_.remove(group);
+      group.getAllLayers().forEach((layer) => {
+        layer.getImpl().destroy();
+        if (layer.transparent !== true) {
+          // it was base layer so sets the visibility of the first one
+          const baseLayers = this.facadeMap_.getBaseLayers();
+          if (baseLayers.length > 0) {
+            baseLayers[0].setVisible(true);
+          }
+        }
+      }, this);
+    }, this);
     return this;
   }
 
@@ -1585,25 +1662,19 @@ class Map extends MObject {
     // recalculates maxExtent
     if (!isNullOrEmpty(prevMaxExtent)) {
       if (!isArray(prevMaxExtent)) {
-        prevMaxExtent = [
-          prevMaxExtent.x.min,
-          prevMaxExtent.y.min, prevMaxExtent.x.max,
-          prevMaxExtent.y.max,
-        ];
+        prevMaxExtent = [prevMaxExtent.x.min, prevMaxExtent.y.min,
+          prevMaxExtent.x.max, prevMaxExtent.y.max];
       }
-      this.setMaxExtent(ImplUtils
-        .transformExtent(prevMaxExtent, olPrevProjection, olProjection));
+      this.setMaxExtent(ImplUtils.transformExtent(prevMaxExtent, olPrevProjection, olProjection));
     }
 
-    // recalculates bbox //TODO
+    // recalculates bbox TODO
     if (!isNullOrEmpty(prevBbox)) {
       if (!isArray(prevBbox)) {
         prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
       }
       const newBbox = ImplUtils.transformExtent(prevBbox, olPrevProjection, olProjection);
-      this.facadeMap_.setBbox(newBbox, {
-        nearest: true,
-      });
+      this.facadeMap_.setBbox(newBbox, { nearest: true });
     }
 
     // recalculates resolutions
@@ -1870,11 +1941,13 @@ class Map extends MObject {
       label.hide();
     }
 
-    this.facadeMap_.fire(EventType.CLICK, [{
-      pixel,
-      coord,
-      vendor: evt,
-    }]);
+    this.facadeMap_.fire(EventType.CLICK, [
+      {
+        pixel,
+        coord,
+        vendor: evt,
+      },
+    ]);
   }
 
   /**
@@ -1887,11 +1960,13 @@ class Map extends MObject {
     const pixel = evt.pixel;
     const coord = this.map_.getCoordinateFromPixel(pixel);
 
-    this.facadeMap_.fire(EventType.MOVE, [{
-      pixel,
-      coord,
-      vendor: evt,
-    }]);
+    this.facadeMap_.fire(EventType.MOVE, [
+      {
+        pixel,
+        coord,
+        vendor: evt,
+      },
+    ]);
   }
 }
 /**

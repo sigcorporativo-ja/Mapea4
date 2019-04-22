@@ -5,9 +5,11 @@ import { isNullOrEmpty } from 'M/util/Utils';
 import * as parameter from 'M/parameter/parameter';
 import { get as getRemote } from 'M/util/Remote';
 import * as EventType from 'M/event/eventtype';
+import FacadeType from 'M/layer/type';
 import { isFunction } from 'M/util/Utils';
 import { get as getProj } from 'ol/proj';
 import ImplUtils from '../util/Utils';
+import ImplMap from '../Map';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
 /**
@@ -42,6 +44,13 @@ class WMC extends Layer {
      * @type {Array<M.layer.WMS>}
      */
     this.layers = [];
+
+    /**
+     * Group layers defined into the WMC
+     * @private
+     * @type {Array<M.layer.Group>}
+     */
+    this.groups = [];
 
     /**
      * Load WMC file promise
@@ -148,6 +157,11 @@ class WMC extends Layer {
       if (!isNullOrEmpty(this.layers)) {
         this.map.removeLayers(this.layers);
       }
+
+      // removes all groups layers
+      if (!isNullOrEmpty(this.groups)) {
+        this.map.removeGroups(this.groups);
+      }
     }
   }
 
@@ -162,12 +176,18 @@ class WMC extends Layer {
   loadLayers(context) {
     this.layers = context.layers;
     this.maxExtent = context.maxExtent;
+    if (!isNullOrEmpty(context.layerGroups)) {
+      this.groups.push(context.layerGroups);
+    }
 
     this.map.addWMS(this.layers, true);
+    this.map.addLayerGroups(this.groups);
 
-    // updates the z-index of the layers
+    // updates the z-index of the layers and groups
     this.layers.forEach((layer, i) => layer.setZIndex(this.getZIndex() + i));
+    this.groups.forEach((group, i) => group.setZIndex(this.getZIndex() + i));
     this.facadeLayer_.fire(EventType.LOAD, [this.layers]);
+    this.facadeLayer_.fire(EventType.LOAD, [this.groups]);
   }
 
   /**

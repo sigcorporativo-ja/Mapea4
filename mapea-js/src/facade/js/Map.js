@@ -519,6 +519,70 @@ class Map extends Base {
   }
 
   /**
+   * TODO
+   *
+   * @function
+   * @returns {Array<M.layer.Group>}
+   * @api stable
+   */
+  getLayerGroups() {
+    // checks if the implementation can manage layers
+    if (isUndefined(MapImpl.getLayerGroups)) {
+      Exception('La implementación usada no posee el método getLayerGroups');
+    }
+    return this.getImpl().getLayerGroups().sort(Map.LAYER_SORT);
+  }
+  /**
+   * TODO
+   *
+   * @function
+   * @param {Array<M.layer.Group>} layerGroups
+   * @returns {M.Map}
+   * @api stable
+   */
+  addLayerGroups(layerGroups) {
+    let lGroups = layerGroups;
+    // checks if the parameter is null or empty
+    if (isNullOrEmpty(lGroups)) {
+      Exception('No ha especificado ningun grupo');
+    }
+    // checks if the implementation can manage groups
+    if (isUndefined(MapImpl.addLayerGroups)) {
+      Exception('La implementación usada no posee el método addLayerGroups');
+    }
+    // parses parameters to Array
+    if (!isArray(lGroups)) {
+      lGroups = [lGroups];
+    }
+    // adds the groups
+    this.getImpl().addLayerGroups(lGroups);
+    return this;
+  }
+  /**
+   * TODO
+   *
+   * @function
+   * @param {Array<M.layer.Group>} layerGroups
+   * specified by the user
+   * @returns {M.Map}
+   * @api stable
+   */
+  removeLayerGroups(layerGroups) {
+    // checks if the parameter is null or empty
+    if (isNullOrEmpty(layerGroups)) {
+      Exception('No ha especificado ningun grupo a eliminar');
+    }
+    // checks if the implementation can manage groups
+    if (isUndefined(MapImpl.removeGroups)) {
+      Exception('La implementación usada no posee el método removeGroups');
+    }
+    // removes the layers
+    this.getImpl().removeGroups(layerGroups);
+    return this;
+  }
+
+
+  /**
    * This function gets the WMC layers added to the map
    *
    * @function

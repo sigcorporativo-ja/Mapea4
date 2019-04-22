@@ -233,6 +233,29 @@ class LayerBase extends Base {
   }
 
   /**
+   * 'LayerGroup' the layer transparence
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  getLayerGroup() {
+    return this.getImpl().layerGroup;
+  }
+
+  /**
+   * Defining new LayerGroup
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  setLayerGroup(layerGroup) {
+    this.getImpl().layerGroup = layerGroup;
+  }
+
+
+  /**
    * This function indicates if the layer is visible
    *
    * @function

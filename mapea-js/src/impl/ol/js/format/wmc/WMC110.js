@@ -1,5 +1,6 @@
-import { isNullOrEmpty, normalize } from 'M/util/Utils';
+import { isNullOrEmpty, normalize, isArray } from 'M/util/Utils';
 import WMS from 'M/layer/WMS';
+import LayerGroup from 'M/layer/LayerGroup';
 import { get as getProj } from 'ol/proj';
 import { getAllTextContent } from 'ol/xml';
 import ImplUtils from '../../util/Utils';
@@ -14,6 +15,36 @@ class WMC110 extends XML {
    * Main constructor of the class. Creates a WMC formater
    * for version 1.0.0
    */
+
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   * @param {Object} layerInfo An object representing a layer.
+   * @param {Element} node An element node.
+   * @api stable
+   */
+  readOlGroup(obj, node) {
+    const objVar = obj;
+    if (isArray(objVar)) {
+      const context = objVar[0];
+      const currentGroup = objVar[1];
+      const groups = context.layerGroups;
+      const group = new LayerGroup(node.getAttribute('id'), node.getAttribute('title'), node.getAttribute('orderInsideGroupDisplay'));
+      if (isNullOrEmpty(currentGroup)) {
+        groups.push(group);
+      } else {
+        currentGroup.addChild(group);
+      }
+      this.runChildNodes([context, group], node);
+    } else {
+      objVar.layerGroups = [];
+      this.runChildNodes([objVar], node);
+    }
+  }
+
   /**
    * Read a sld:MinScaleDenominator node.
    *
@@ -33,7 +64,8 @@ class WMC110 extends XML {
    * @function
    * @api stable
    */
-  readwmcLayer(context, node) {
+  readwmcLayer(contextVar, node) {
+    const context = contextVar;
     const layerInfo = {
       params: this.layerParams || {},
       options: {
@@ -51,12 +83,25 @@ class WMC110 extends XML {
     layerInfo.options.wmcGlobalMaxExtent = context.maxExtent;
     // create the layer
     const layer = this.getLayerFromInfo(layerInfo);
+
+    const groupId = layerInfo.options.groupDisplayLayerSwitcher;
+    const groupOrder = layerInfo.options.orderInsideGroupDisplayLayerSwitcher;
+    const layerGroups = context.layerGroups;
+
+    const group = LayerGroup.findGroupById(groupId, layerGroups);
+
     if (layerInfo.styles != null && layerInfo.styles[0] != null) {
       const firstStyle = layerInfo.styles[0];
       if (firstStyle.legend != null && firstStyle.legend.href) {
         const legendUrl = firstStyle.legend.href;
         layer.setLegendURL(legendUrl);
       }
+    }
+
+    if (!isNullOrEmpty(group)) {
+      group.addChild(layer, parseInt(groupOrder, 10));
+    } else if (isNullOrEmpty(context.layers)) {
+      context.layers = [];
     }
     context.layers.push(layer);
   }
@@ -208,6 +253,9 @@ class WMC110 extends XML {
   readwmcLayerList(contextVar, node) {
     const context = contextVar;
     context.layers = [];
+    if (isNullOrEmpty(context.layerGroups)) {
+      context.layerGroups = new LayerGroup('root', 'root', 0);
+    }
     this.runChildNodes(context, node);
   }
 
