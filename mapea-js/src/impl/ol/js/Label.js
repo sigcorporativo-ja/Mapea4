@@ -6,9 +6,14 @@ import labelPopupTemplate from 'templates/label_popup';
 /**
  * @module M/impl/Label
  */
+
+/**
+ * @classdesc
+ * Class of Label implementation
+ * @api
+ */
 class Label {
   /**
-   * @classdesc
    * Main constructor of the class. Creates a Label
    * control
    * @constructor
