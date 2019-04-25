@@ -58,6 +58,13 @@ class Map extends MObject {
     this.layers_ = [];
 
     /**
+     * Groups added to the map
+     * @private
+     * @type {Array<M.layer.Group>}
+     */
+    this.layerGroups_ = [];
+
+    /**
      * Controls added to the map
      * @private
      * @type {Array<M.Control>}
@@ -283,7 +290,7 @@ class Map extends MObject {
     const baseLayers = this.getBaseLayers();
     let existsBaseLayer = (baseLayers.length > 0);
     groups.forEach((group) => {
-      if (!M.utils.includes(this.layerGroups_, group)) {
+      if (!includes(this.layerGroups_, group)) {
         this.layerGroups_.push(group);
         group.getAllLayers().forEach((layer) => {
           layer.getImpl().addTo(this.facadeMap_);
@@ -297,7 +304,8 @@ class Map extends MObject {
             }
             layer.getImpl().setZIndex(0);
           } else {
-            const zIndex = this.layers_.length + layer.getImpl().getZIndex();
+            const allLayersGroups = groups.map(gr => gr.getAllLayers());
+            const zIndex = this.layers_.length + allLayersGroups[0].length;
             layer.getImpl().setZIndex(zIndex);
             // recalculates resolution if there are not
             // any base layer

@@ -16,6 +16,19 @@ class WMC110 extends XML {
    * for version 1.0.0
    */
 
+  /**
+   * Read a sld:MinScaleDenominator node.
+   *
+   * @private
+   * @function
+   * @param {Object} layerInfo An object representing a layer.
+   * @param {Element} node An element node.
+   * @api stable
+   */
+  readsldMinScaleDenominator(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    layerInfo.options.minScale = parseFloat(XML.getChildValue(node));
+  }
 
   /**
    * TODO
@@ -26,7 +39,7 @@ class WMC110 extends XML {
    * @param {Element} node An element node.
    * @api stable
    */
-  readOlGroup(obj, node) {
+  readolgroup(obj, node) {
     const objVar = obj;
     if (isArray(objVar)) {
       const context = objVar[0];
@@ -43,20 +56,6 @@ class WMC110 extends XML {
       objVar.layerGroups = [];
       this.runChildNodes([objVar], node);
     }
-  }
-
-  /**
-   * Read a sld:MinScaleDenominator node.
-   *
-   * @private
-   * @function
-   * @param {Object} layerInfo An object representing a layer.
-   * @param {Element} node An element node.
-   * @api stable
-   */
-  readsldMinScaleDenominator(layerInfoVar, node) {
-    const layerInfo = layerInfoVar;
-    layerInfo.options.minScale = parseFloat(XML.getChildValue(node));
   }
 
   /**

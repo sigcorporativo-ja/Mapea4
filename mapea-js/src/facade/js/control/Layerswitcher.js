@@ -128,7 +128,7 @@ class LayerSwitcher extends ControlBase {
       if (!isNullOrEmpty(map)) {
         const baseLayers = map.getBaseLayers()
           .filter(layer => layer.displayInLayerSwitcher === true);
-        const layerGroups = map.getLayersGroups();
+        const layerGroups = map.getLayerGroup();
         const overlayLayers = map.getLayers().filter((layer) => {
           const isTransparent = (layer.transparent === true);
           const displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
@@ -141,8 +141,8 @@ class LayerSwitcher extends ControlBase {
         const overlayLayersPromise = Promise.all(overlayLayers
           .map(LayerSwitcher.parseLayerForTemplate));
         const layerGroupsPromise = Promise.all(layerGroups
-          .map(LayerSwitcher.parseGroupForTemplate(layerGroups, baseLayers)
-            .filter(g => !isNullOrEmpty(g))));
+          .map(layerGroup => LayerSwitcher.parseGroupForTemplate(layerGroup, baseLayers))
+          .filter(g => !isNullOrEmpty(g)));
         baseLayersPromise.then((parsedBaseLayers) => {
           layerGroupsPromise.then((parsedLayerGroups) => {
             overlayLayersPromise.then(parsedOverlayLayers => success({
@@ -207,15 +207,23 @@ class LayerSwitcher extends ControlBase {
    * @private
    * @function
    */
-  parseGroupForTemplate(groupLayer, baseLayers) {
+  static parseGroupForTemplate(groupLayer, baseLayers) {
+    let layerTitle = groupLayer.legend;
+    if (isNullOrEmpty(layerTitle)) {
+      layerTitle = groupLayer.id.title;
+    }
+    if (isNullOrEmpty(layerTitle)) {
+      layerTitle = 'Conjunto de Servicios WMS';
+    }
     let varTemplate = {
-      id: groupLayer.id,
-      title: groupLayer.title,
+      id: layerTitle.replace(/\s/g, '_'),
+      title: layerTitle,
       order: groupLayer.order,
       collapsed: groupLayer.collapsed,
       layers: [],
       layerGroups: [],
     };
+
     groupLayer.getChildren().forEach((child) => {
       if (child instanceof LayerBase) {
         varTemplate.layers.push(LayerSwitcher.parseLayerForTemplate(child));
@@ -226,6 +234,15 @@ class LayerSwitcher extends ControlBase {
         }
       }
     });
+
+    // Resolve the layers promise
+    const promiseLayers = Promise.all(varTemplate.layers);
+    promiseLayers.then((layers) => {
+      if (!isNullOrEmpty(varTemplate)) {
+        varTemplate.layers = layers;
+      }
+    });
+
     let visibleLevel = 0;
     const layers = groupLayer.getAllLayers();
     if (layers.every(l => l.isVisible())) {

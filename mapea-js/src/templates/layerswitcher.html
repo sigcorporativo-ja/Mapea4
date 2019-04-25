@@ -1,46 +1,81 @@
-<div class="m-control m-layerswitcher-container">
-  <div class="m-layersiwtcher-panel" id="m-layerswitcher-panel">
-    <ul>
-      {{#gt baseLayers.length 0}}
-        <li class="group">
-          <div class="title">Capas base</div>
-          <ul>
-            {{#each baseLayers}}
-              <li class="{{#if outOfRange}}disabled{{/if}}{{#if visible}} visible{{/if}}">
-                <div class="layer-base">
-                  <span data-layer-name="{{id}}" class="m-check g-cartografia-check{{#if visible}}5{{^}}4{{/if}}"></span>
-                  <span>{{title}}</span>
-                </div>
-                <div class="legend">
-                  <img data-layer-name="{{id}}" src="{{legend}}"></img>
-                </div>
-              </li>
-            {{/each}}
-          </ul>
-        </li>
-      {{/gt}} {{#gt overlayLayers.length 0}}
-        <li class="group">
-          <div class="title">Otras capas</div>
-          <ul>
-            {{#each overlayLayers}}
-              <li class="{{#if outOfRange}}disabled{{/if}}{{#if visible}}visible{{/if}}">
-                <div class="layer">
-                  <span data-layer-name="{{id}}" class="m-check g-cartografia-check{{#if visible}}3{{^}}2{{/if}}"></span>
-                  <span class="m-title">{{title}}</span>
-
-                </div>
-                <div class="tools">
-                  <input type="range" data-layer-name="{{id}}" class="m-layerswitcher-transparency" min="0" max="1" step="0.1" value="{{opacity}}" {{#unless visible}} disabled {{/unless}} {{#if outOfRange}} disabled {{/if}} />
-                  <span data-layer-name="{{id}}" class="g-cartografia-cancelar m-layerswitcher-remove"></span>
-                </div>
-                <div class="legend">
-                  <img data-layer-name="{{id}}" src="{{legend}}" {{#if isIcon}} width="32px" height="32px" {{/if}}></img>
-                </div>
-              </li>
-            {{/each}}
-          </ul>
-        </li>
-      {{/gt}}
-    </ul>
-  </div>
-</div>
+{{#*inline "layerswitcherLayer"}}
+  {{#each layers}}
+    <li class="m-layer {{#if outOfRange}}disabled{{/if}}{{#if visible}} visible{{/if}}">
+      <div class="m-visible-control">
+        <span data-layer-name="{{id}}" {{#if ../group}} data-group-id="{{../group}}" {{/if}} class="m-check g-cartografia-check{{#if base}}{{#if visible}}5{{^}}4{{/if}}{{^}}{{#if visible}}3{{^}}2{{/if}}{{/if}}"></span>
+      </div>
+      <div class="m-title">
+        <span>{{title}}</span>
+      </div>
+      {{#if visible}}
+        {{#unless base}}
+          <div class="m-tools">
+            <input type="range" data-layer-name="{{id}}" {{#if ../group}} data-group-id="{{../group}}" {{/if}} class="m-layerswitcher-transparency" min="0" max="1" step="0.1" value="{{opacity}}" {{#unless visible}} disabled {{/unless}}
+              {{#if outOfRange}} disabled {{/if}} />
+            <span data-layer-name="{{id}}" {{#if ../group}} data-group-id="{{../group}}" {{/if}} class="g-cartografia-cancelar m-layerswitcher-remove"></span>
+          </div>
+        {{/unless}}
+        <div class="m-legend">
+          <img data-layer-name="{{id}}" {{#if ../group}} data-group-id="{{../group}}" {{/if}} src="{{legend}}"></img>
+        </div>
+      {{/if}}
+    </li>
+  {{/each}}
+  {{/inline}}
+  {{#*inline "layerswitcherGroup"}}
+    {{#each layerGroups}}
+      <li class="m-group{{#if collapsed}} m-collapsed{{/if}}">
+        <div class="m-visible-control">
+          <span data-group-id="{{id}}" class="m-check g-cartografia-check{{#eq visible 0}}2{{/eq}}{{#eq visible 1}}5{{/eq}}{{#eq visible 2}}3{{/eq}}"></span>
+        </div>
+        <div class="m-title" data-group-id="{{id}}">
+          <span data-group-id="{{id}}">{{title}}</span>
+        </div>
+        <div class="m-collapsed-icon" data-group-id="{{id}}">
+          <span class="g-cartografia-flecha-{{#if collapsed}}izquierda{{^}}abajo{{/if}}" data-group-id="{{id}}"></span>
+        </div>
+        {{#unless collapsed}}
+          {{#gt layerGroups.length 0}}
+            <ul class="m-groups">
+              {{> layerswitcherGroup}}
+            </ul>
+          {{/gt}}
+          {{#gt layers.length 0}}
+            <ul class="m-layers">
+              {{> layerswitcherLayer group=id}}
+            </ul>
+          {{/gt}}
+        {{/unless}}
+      </li>
+    {{/each}}
+    {{/inline}}
+    <div class="m-control m-layerswitcher-container">
+      <div class="m-layersiwtcher-panel" id="m-layerswitcher-panel">
+        <ul>
+          {{#gt baseLayers.length 0}}
+            <li class="m-group">
+              <div class="m-title">Capas base</div>
+              <ul class="m-base-layers">
+                {{> layerswitcherLayer layers=baseLayers}}
+              </ul>
+            </li>
+          {{/gt}}
+          {{#gt layerGroups.length 0}}
+            <li class="m-group">
+              <div class="m-title">Grupos de capas</div>
+              <ul class="m-groups">
+                {{> layerswitcherGroup }}
+              </ul>
+            </li>
+          {{/gt}}
+          {{#gt overlayLayers.length 0}}
+            <li class="m-group">
+              <div class="m-title">Otras capas</div>
+              <ul class="m-layers">
+                {{> layerswitcherLayer layers=overlayLayers}}
+              </ul>
+            </li>
+          {{/gt}}
+        </ul>
+      </div>
+    </div>

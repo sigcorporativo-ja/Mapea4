@@ -30,7 +30,7 @@ class LayerGroup extends MObject {
      * @type {String}
      * @api stable
      */
-    this.title = title;
+    this.title = title || 'Conjunto de Servicios WMS';
     /**
      * @public
      * @type {Boolean}
@@ -192,18 +192,19 @@ class LayerGroup extends MObject {
    * @api stable
    * @export
    */
-  findGroupById(groupId, layerGroups) {
-    let group = null;
-    layerGroups.some((currentGroup) => {
-      if (currentGroup instanceof LayerGroup) {
-        if (currentGroup.id === groupId) {
-          group = currentGroup;
-        } else {
-          group = LayerGroup.findGroupById(groupId, currentGroup.getChildren());
+  static findGroupById(groupId, layerGroups) {
+    let group;
+    if (!isNullOrEmpty(layerGroups) && Array.isArray(layerGroups)) {
+      layerGroups.forEach((layerGroup) => {
+        if (layerGroup instanceof LayerGroup) {
+          const idLayerGroup = !isNullOrEmpty(layerGroup.id.title) ?
+            layerGroup.id.title.replace(/\s/g, '_') : layerGroup.title.replace(/\s/g, '_');
+          if (idLayerGroup === groupId) {
+            group = layerGroup;
+          }
         }
-      }
-      return !isNullOrEmpty(group);
-    });
+      });
+    }
     return group;
   }
 }

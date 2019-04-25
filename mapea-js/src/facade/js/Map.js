@@ -504,6 +504,7 @@ class Map extends Base {
 
       // gets the layers to remove
       const layers = this.getLayers(layersParam);
+
       layers.forEach((layer) => {
         // KML and WFS layers handler its features
         if (layer instanceof Vector) {
@@ -525,9 +526,9 @@ class Map extends Base {
    * @returns {Array<M.layer.Group>}
    * @api stable
    */
-  getLayerGroups() {
+  getLayerGroup() {
     // checks if the implementation can manage layers
-    if (isUndefined(MapImpl.getLayerGroups)) {
+    if (isUndefined(MapImpl.prototype.getLayerGroups)) {
       Exception('La implementación usada no posee el método getLayerGroups');
     }
     return this.getImpl().getLayerGroups().sort(Map.LAYER_SORT);
@@ -540,14 +541,14 @@ class Map extends Base {
    * @returns {M.Map}
    * @api stable
    */
-  addLayerGroups(layerGroups) {
+  addLayerGroup(layerGroups) {
     let lGroups = layerGroups;
     // checks if the parameter is null or empty
     if (isNullOrEmpty(lGroups)) {
       Exception('No ha especificado ningun grupo');
     }
     // checks if the implementation can manage groups
-    if (isUndefined(MapImpl.addLayerGroups)) {
+    if (isUndefined(MapImpl.prototype.addLayerGroups)) {
       Exception('La implementación usada no posee el método addLayerGroups');
     }
     // parses parameters to Array
@@ -567,13 +568,13 @@ class Map extends Base {
    * @returns {M.Map}
    * @api stable
    */
-  removeLayerGroups(layerGroups) {
+  removeLayerGroup(layerGroups) {
     // checks if the parameter is null or empty
     if (isNullOrEmpty(layerGroups)) {
       Exception('No ha especificado ningun grupo a eliminar');
     }
     // checks if the implementation can manage groups
-    if (isUndefined(MapImpl.removeGroups)) {
+    if (isUndefined(MapImpl.prototype.removeGroups)) {
       Exception('La implementación usada no posee el método removeGroups');
     }
     // removes the layers

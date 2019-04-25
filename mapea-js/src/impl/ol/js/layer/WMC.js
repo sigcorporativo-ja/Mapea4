@@ -5,11 +5,9 @@ import { isNullOrEmpty } from 'M/util/Utils';
 import * as parameter from 'M/parameter/parameter';
 import { get as getRemote } from 'M/util/Remote';
 import * as EventType from 'M/event/eventtype';
-import FacadeType from 'M/layer/type';
 import { isFunction } from 'M/util/Utils';
 import { get as getProj } from 'ol/proj';
 import ImplUtils from '../util/Utils';
-import ImplMap from '../Map';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
 /**
@@ -181,7 +179,7 @@ class WMC extends Layer {
     }
 
     this.map.addWMS(this.layers, true);
-    this.map.addLayerGroups(this.groups);
+    this.map.addLayerGroup(this.groups);
 
     // updates the z-index of the layers and groups
     this.layers.forEach((layer, i) => layer.setZIndex(this.getZIndex() + i));
