@@ -1,5 +1,5 @@
 import OLMap from 'ol/Map';
-import { get as getProj, transformExtent, transform } from 'ol/proj';
+import { get as getProj, transform } from 'ol/proj';
 import OLProjection from 'ol/proj/Projection';
 import OLInteraction from 'ol/interaction/Interaction';
 import MObject from 'M/Object';
@@ -23,6 +23,7 @@ import {
   generateResolutionsFromExtent,
 } from 'M/util/Utils';
 import 'patches';
+import ImplUtils from './util/Utils';
 import View from './View';
 
 /**
@@ -1231,12 +1232,13 @@ class Map extends MObject {
   setMaxExtent(maxExtent, zoomToExtent) {
     let olExtent = maxExtent;
 
-    if (!isNullOrEmpty(olExtent)) {
+    if (!isNullOrEmpty(olExtent) && !isArray(olExtent) && isObject(olExtent)) {
       olExtent = [maxExtent.x.min, maxExtent.y.min, maxExtent.x.max, maxExtent.y.max];
     }
 
     const olMap = this.getMapImpl();
-    olMap.getView().set('extent', olExtent);
+    const olView = olMap.getView();
+    olView.set('extent', olExtent);
     this.updateResolutionsFromBaseLayer();
 
     if (!isNullOrEmpty(olExtent) && (zoomToExtent !== false)) {
@@ -1492,7 +1494,7 @@ class Map extends MObject {
       layer.getImpl().setResolutions(resolutions);
     });
 
-    if (bbox !== null) {
+    if (!isNullOrEmpty(bbox) && isNullOrEmpty(userZoom)) {
       this.facadeMap_.setBbox(bbox, { nearest: true });
     }
 
@@ -1555,7 +1557,7 @@ class Map extends MObject {
     const olPrevProjection = getProj(this.getProjection().code);
     let prevBbox = this.facadeMap_.getBbox();
     let prevMaxExtent = this.facadeMap_.getMaxExtent();
-    const prevCenter = this.facadeMap_.getCenter();
+    // const prevCenter = this.facadeMap_.getCenter();
     const resolutions = this.facadeMap_.getResolutions();
 
     const olMap = this.getMapImpl();
@@ -1586,9 +1588,11 @@ class Map extends MObject {
         prevMaxExtent = [
           prevMaxExtent.x.min,
           prevMaxExtent.y.min, prevMaxExtent.x.max,
-          prevMaxExtent.y.max];
+          prevMaxExtent.y.max,
+        ];
       }
-      this.facadeMap_.setMaxExtent(transformExtent(prevMaxExtent, olPrevProjection, olProjection));
+      this.setMaxExtent(ImplUtils
+        .transformExtent(prevMaxExtent, olPrevProjection, olProjection));
     }
 
     // recalculates bbox //TODO
@@ -1596,22 +1600,10 @@ class Map extends MObject {
       if (!isArray(prevBbox)) {
         prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
       }
-      const newBbox = transformExtent(prevBbox, olPrevProjection, olProjection);
+      const newBbox = ImplUtils.transformExtent(prevBbox, olPrevProjection, olProjection);
       this.facadeMap_.setBbox(newBbox, {
         nearest: true,
       });
-    }
-
-
-    // recalculates center
-    if (!isNullOrEmpty(prevCenter)) {
-      let draw = false;
-      if (!isNullOrEmpty(this.facadeMap_.getFeatureCenter())) {
-        draw = true;
-      }
-      this.facadeMap_.setCenter(`${transform([
-        prevCenter.x, prevCenter.y,
-      ], olPrevProjection, olProjection)}*${draw}`);
     }
 
     // recalculates resolutions
@@ -1758,7 +1750,7 @@ class Map extends MObject {
           this.fire(EventType.COMPLETED);
         }
       } else {
-        this.facadeMap_.getEnvolvedExtent().then((extent) => {
+        this.facadeMap_.calculateMaxExtent().then((extent) => {
           if (!this._resolutionsBaseLayer && (this.userResolutions_ === null)) {
             resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
@@ -1878,13 +1870,11 @@ class Map extends MObject {
       label.hide();
     }
 
-    this.facadeMap_.fire(EventType.CLICK, [
-      {
-        pixel,
-        coord,
-        vendor: evt,
-      },
-    ]);
+    this.facadeMap_.fire(EventType.CLICK, [{
+      pixel,
+      coord,
+      vendor: evt,
+    }]);
   }
 
   /**
@@ -1897,13 +1887,11 @@ class Map extends MObject {
     const pixel = evt.pixel;
     const coord = this.map_.getCoordinateFromPixel(pixel);
 
-    this.facadeMap_.fire(EventType.MOVE, [
-      {
-        pixel,
-        coord,
-        vendor: evt,
-      },
-    ]);
+    this.facadeMap_.fire(EventType.MOVE, [{
+      pixel,
+      coord,
+      vendor: evt,
+    }]);
   }
 }
 /**

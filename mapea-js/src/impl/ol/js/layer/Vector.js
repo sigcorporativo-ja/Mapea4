@@ -82,6 +82,7 @@ class Vector extends Layer {
    */
   addTo(map) {
     this.map = map;
+    this.fire(EventType.ADDED_TO_MAP);
     map.on(EventType.CHANGE_PROJ, this.setProjection_.bind(this), this);
 
     this.ol3Layer = new OLLayerVector(this.vendorOptions_);

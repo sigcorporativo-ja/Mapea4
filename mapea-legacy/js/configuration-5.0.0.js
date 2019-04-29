@@ -1,21 +1,16 @@
-const config = (configKey, configValue) => {
-  config[configKey] = configValue;
-};
-
-if (!window.M) {
-  const M = {};
-  window.M = M;
-}
-M.config = config;
-
-function fun(M_) {
+/**
+ * Mapea API
+ * Version 5.0.0
+ * Date 26-02-2019
+ */
+(function(M) {
   /**
    * Pixels width for mobile devices
    *
    * @private
    * @type {Number}
    */
-  M_.config('MOBILE_WIDTH', 768);
+  M.config('MOBILE_WIDTH', 768);
 
   /**
    * The Mapea URL
@@ -24,7 +19,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('MAPEA_URL', 'http://mapea4-sigc.juntadeandalucia.es/mapea');
+  M.config('MAPEA_URL', 'http://mapea4-sigc.juntadeandalucia.es/mapea');
 
   /**
    * The path to the Mapea proxy to send
@@ -34,7 +29,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('PROXY_URL', location.protocol + '//mapea4-sigc.juntadeandalucia.es/mapea/api/proxy');
+  M.config('PROXY_URL', location.protocol + '//mapea4-sigc.juntadeandalucia.es/mapea/api/proxy');
 
   /**
    * The path to the Mapea proxy to send
@@ -44,7 +39,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('PROXY_POST_URL', location.protocol + '//mapea4-sigc.juntadeandalucia.es/mapea/proxyPost');
+  M.config('PROXY_POST_URL', location.protocol + '//mapea4-sigc.juntadeandalucia.es/mapea/proxyPost');
 
   /**
    * The path to the Mapea templates
@@ -53,7 +48,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('TEMPLATES_PATH', '/files/templates/');
+  M.config('TEMPLATES_PATH', '/files/templates/');
 
   /**
    * The path to the Mapea theme
@@ -62,7 +57,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('THEME_URL', location.protocol + '//mapea4-sigc.juntadeandalucia.es/mapea/assets/');
+  M.config('THEME_URL', location.protocol + '//mapea4-sigc.juntadeandalucia.es/mapea/assets/');
 
   /**
    * The Geosearch URL
@@ -71,7 +66,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('GEOSEARCH_URL', 'http://geobusquedas-sigc.juntadeandalucia.es');
+  M.config('GEOSEARCH_URL', 'https://geobusquedas-sigc.juntadeandalucia.es');
 
   /**
    * The Geosearch core
@@ -80,7 +75,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('GEOSEARCH_CORE', 'sigc');
+  M.config('GEOSEARCH_CORE', 'sigc');
 
   /**
    * The Geosearch handler
@@ -89,7 +84,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('GEOSEARCH_HANDLER', '/search?');
+  M.config('GEOSEARCH_HANDLER', '/search?');
 
   /**
    * The Geosearch distance
@@ -98,7 +93,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('GEOSEARCH_DISTANCE', '600');
+  M.config('GEOSEARCH_DISTANCE', '600');
 
   /**
    * The Geosearchbylocation spatial field
@@ -107,7 +102,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('GEOSEARCH_SPATIAL_FIELD', 'geom');
+  M.config('GEOSEARCH_SPATIAL_FIELD', 'geom');
 
   /**
    * The Geosearch rows
@@ -116,7 +111,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('GEOSEARCH_ROWS', '20');
+  M.config('GEOSEARCH_ROWS', '20');
 
   /**
    * The Geosearch rows
@@ -125,7 +120,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('GEOSEARCHBYLOCATION_ROWS', '100');
+  M.config('GEOSEARCHBYLOCATION_ROWS', '100');
 
   /**
    * Predefined WMC files. It is composed of URL,
@@ -134,7 +129,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('predefinedWMC', {
+  M.config('predefinedWMC', {
     /**
      * Predefined WMC URLs
      * @const
@@ -142,7 +137,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'urls': 'http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_callejero.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_hibrido.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_satelite.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejeroCache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejero.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextIDEA.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto2009.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/callejero2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/ortofoto2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/hibrido2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto.xml'.split(','),
+    'urls': 'http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/mapa.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/hibrido.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/satelite.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_callejero.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_hibrido.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_satelite.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejeroCache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejero.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextIDEA.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto2009.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/callejero2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/ortofoto2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/hibrido2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto.xml'.split(','),
 
     /**
      * WMC predefined names
@@ -151,7 +146,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'predefinedNames': 'cdau,cdau_hibrido,cdau_satelite,callejerocacheado,callejero,idea,ortofoto09,callejero2011cache,ortofoto2011cache,hibrido2011cache,ortofoto'.split(','),
+    'predefinedNames': 'mapa,hibrido,satelite,cdau,cdau_hibrido,cdau_satelite,callejerocacheado,callejero,idea,ortofoto09,callejero2011cache,ortofoto2011cache,hibrido2011cache,ortofoto'.split(','),
 
     /**
      * WMC context names
@@ -160,7 +155,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'names': 'Callejero,Hibrido,Satelite,mapa callejero cache,mapa del callejero,mapa idea,mapa ortofoto09,Callejero,Ortofoto,HÃ­brido,mapa ortofoto'.split(',')
+    'names': 'Mapa,Hibrido,Satelite,Callejero,Hibrido,Satelite,mapa callejero cache,mapa del callejero,mapa idea,mapa ortofoto09,Callejero,Ortofoto,HÃ­brido,mapa ortofoto'.split(',')
   });
 
   /**
@@ -169,7 +164,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('tileMappgins', {
+  M.config('tileMappgins', {
     /**
      * Predefined WMC URLs
      * @const
@@ -214,7 +209,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('DEFAULT_PROJ', 'EPSG:25830*m');
+  M.config('DEFAULT_PROJ', 'EPSG:25830*m');
 
   /**
    * Predefined WMC files. It is composed of URL,
@@ -223,7 +218,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('geoprint', {
+  M.config('geoprint', {
     /**
      * Printer service URL
      * @const
@@ -286,7 +281,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('panels', {
+  M.config('panels', {
     /**
      * TODO
      * @const
@@ -294,7 +289,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'TOOLS': 'measurebar,getfeatureinfo'.split(','),
+    'TOOLS': 'measurebar,measurelength,measureclear,measurearea,getfeatureinfo'.split(','),
 
     /**
      * TODO
@@ -313,7 +308,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('SEARCHSTREET_URL', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/geocoderMunProvSrs');
+  M.config('SEARCHSTREET_URL', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/geocoderMunProvSrs');
 
   /**
    * Autocomplete municipality service URL
@@ -322,7 +317,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('SEARCHSTREET_URLCODINEAUTOCOMPLETE', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/autocompletarDireccionMunicipio');
+  M.config('SEARCHSTREET_URLCODINEAUTOCOMPLETE', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/autocompletarDireccionMunicipio');
 
   /**
    * service URL check code INE
@@ -331,7 +326,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('SEARCHSTREET_URLCOMPROBARINE', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/comprobarCodIne');
+  M.config('SEARCHSTREET_URLCOMPROBARINE', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/comprobarCodIne');
 
   /**
    * Normalizar searchstreet service URL
@@ -340,7 +335,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('SEARCHSTREET_NORMALIZAR', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/normalizar');
+  M.config('SEARCHSTREET_NORMALIZAR', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/normalizar');
 
   /**
    * Minimum number of characters to start autocomplete
@@ -349,7 +344,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('AUTOCOMPLETE_MINLENGTH', '3');
+  M.config('AUTOCOMPLETE_MINLENGTH', '3');
 
   /**
    * TODO
@@ -357,7 +352,7 @@ function fun(M_) {
    * @private
    * @type {Number}
    */
-  M_.config('AUTOCOMPLETE_DELAYTIME', '750');
+  M.config('AUTOCOMPLETE_DELAYTIME', '750');
 
   /**
    * Number of results to show
@@ -365,7 +360,7 @@ function fun(M_) {
    * @private
    * @type {Number}
    */
-  M_.config('AUTOCOMPLETE_LIMIT', '10');
+  M.config('AUTOCOMPLETE_LIMIT', '10');
 
   /**
    * TODO
@@ -373,7 +368,7 @@ function fun(M_) {
    * @private
    * @type {String}
    */
-  M_.config('MAPBOX_URL', 'https://api.mapbox.com/v4/');
+  M.config('MAPBOX_URL', 'https://api.mapbox.com/v4/');
 
   /**
    * TODO
@@ -381,7 +376,7 @@ function fun(M_) {
    * @private
    * @type {String}
    */
-  M_.config('MAPBOX_EXTENSION', 'png');
+  M.config('MAPBOX_EXTENSION', 'png');
 
   /**
    * TODO
@@ -389,7 +384,7 @@ function fun(M_) {
    * @private
    * @type {String}
    */
-  M_.config('MAPBOX_TOKEN_NAME', 'access_token');
+  M.config('MAPBOX_TOKEN_NAME', 'access_token');
 
   /**
    * TODO
@@ -397,7 +392,7 @@ function fun(M_) {
    * @private
    * @type {String}
    */
-  M_.config('MAPBOX_TOKEN_VALUE', 'pk.eyJ1Ijoic2lnY29ycG9yYXRpdm9qYSIsImEiOiJjaXczZ3hlc2YwMDBrMm9wYnRqd3gyMWQ0In0.wF12VawgDM31l5RcAGb6AA');
+  M.config('MAPBOX_TOKEN_VALUE', 'pk.eyJ1Ijoic2lnY29ycG9yYXRpdm9qYSIsImEiOiJjaXczZ3hlc2YwMDBrMm9wYnRqd3gyMWQ0In0.wF12VawgDM31l5RcAGb6AA');
 
   /**
    * Number of pages for the plugin AttributeTable
@@ -405,7 +400,5 @@ function fun(M_) {
    * @private
    * @type {String}
    */
-  M_.config('ATTRIBUTETABLE_PAGES', '5');
-}
-
-fun(window.M);
+  M.config('ATTRIBUTETABLE_PAGES', '5');
+})(window.M);

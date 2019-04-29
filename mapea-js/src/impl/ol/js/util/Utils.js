@@ -3,9 +3,9 @@
  */
 import Feature from 'M/feature/Feature';
 import * as WKT from 'M/geom/WKT';
-import { isNullOrEmpty } from 'M/util/Utils';
+import { isNullOrEmpty, isString } from 'M/util/Utils';
 import { getWidth, extend } from 'ol/extent';
-import { get as getProj, getTransform } from 'ol/proj';
+import { get as getProj, getTransform, transformExtent } from 'ol/proj';
 
 const getUnitsPerMeter = (projectionCode, meter) => {
   const projection = getProj(projectionCode);
@@ -214,12 +214,14 @@ class Utils {
         const units = getUnitsPerMeter(projectionCode, 1000);
         const coordX = geometry.getCoordinates()[0];
         const coordY = geometry.getCoordinates()[1];
-        extents = [[
-          coordX - units,
-          coordY - units,
-          coordX + units,
-          coordY + units,
-        ]];
+        extents = [
+          [
+            coordX - units,
+            coordY - units,
+            coordX + units,
+            coordY + units,
+          ],
+        ];
       }
     }
     return extents.length === 0 ? null : extents.reduce((ext1, ext2) => extend(ext1, ext2));
@@ -277,6 +279,37 @@ class Utils {
       centroid = Utils.getCentroidCoordinate(geometries[medianIdx]);
     }
     return centroid;
+  }
+
+  /**
+   * Transform the extent. If the extent it is the same
+   * than source proj extent then the target proj extent
+   * will be returned
+   * @public
+   * @function
+   * @param {ol.Extent} extent Extent to transform.
+   * @param {String} srcProj source projection.
+   * @param {String} tgtProj target projection.
+   * @return {ol.Extent} transformed extent.
+   * @api stable
+   */
+  static transformExtent(extent, srcProj, tgtProj) {
+    let transformedExtent;
+
+    const olSrcProj = isString(srcProj) ? getProj(srcProj) : srcProj;
+    const olTgtProj = isString(tgtProj) ? getProj(tgtProj) : tgtProj;
+
+    // checks if the extent to transform is the same
+    // than source projection extent
+    const srcProjExtent = olSrcProj.getExtent();
+    const sameSrcProjExtent = extent.every((coord, i) => coord === srcProjExtent[i]);
+
+    if (sameSrcProjExtent) {
+      transformedExtent = olTgtProj.getExtent();
+    } else {
+      transformedExtent = transformExtent(extent, olSrcProj, olTgtProj);
+    }
+    return transformedExtent;
   }
 }
 

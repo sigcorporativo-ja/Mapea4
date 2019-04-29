@@ -1,5 +1,5 @@
 /**
- * @module M/impl/format/wfs/DescribeFeatureType
+ * @module M/impl/format/DescribeFeatureType
  */
 import { isGeometryType } from 'M/util/Utils';
 import DescribeFeatureTypeXML from './DescribeFeatureTypeXML';

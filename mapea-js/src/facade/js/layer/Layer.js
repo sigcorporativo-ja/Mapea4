@@ -4,7 +4,7 @@
 import Exception from '../exception/exception';
 import * as parserParameter from '../parameter/parameter';
 import Base from '../Base';
-import { isNullOrEmpty, concatUrlPaths, isUndefined, normalize, isString, isFunction, generateRandom, isBoolean } from '../util/Utils';
+import { isNullOrEmpty, concatUrlPaths, isUndefined, normalize, isString, isFunction, generateRandom, isBoolean, isArray, isObject } from '../util/Utils';
 
 /**
  * @classdesc
@@ -60,7 +60,7 @@ class LayerBase extends Base {
      * @type {Array<number>}
      * @expose
      */
-    this.maxExtent_ = parameter.maxExtent;
+    this.maxExtent_ = null;
 
     /**
      * @private
@@ -75,6 +75,14 @@ class LayerBase extends Base {
      * @expose
      */
     this.map_ = null;
+
+    /**
+     * MaxExtent provided by the user
+     * @public
+     * @type {Array<Number>}
+     * @api
+     */
+    this.userMaxExtent = parameter.maxExtent;
   }
 
   /**
@@ -139,32 +147,37 @@ class LayerBase extends Base {
   }
 
   /**
-   * This function indicates the layer max extent
+   * This method calculates the maxExtent of this layer:
+   * 1. Check if the user specified a maxExtent parameter
+   * 2. Gets the map maxExtent
+   * 3. Sets the maxExtent from the map projection
    *
    * @function
    * @api
-   * @export
    */
   getMaxExtent() {
-    let maxExtent;
-    if (isNullOrEmpty(this.maxExtent_) && !isNullOrEmpty(this.map_)) {
-      const mapMaxExtent = this.map_.getMaxExtent();
-      if (isNullOrEmpty(mapMaxExtent)) {
-        const projMaxExtent = this.map_.getProjection().getExtent();
-        maxExtent = projMaxExtent;
-      } else {
-        const mapMaxExtentArr = [
-          mapMaxExtent.x.min,
-          mapMaxExtent.y.min,
-          mapMaxExtent.x.max,
-          mapMaxExtent.y.max,
-        ];
-        maxExtent = mapMaxExtentArr;
+    let maxExtent = this.userMaxExtent; // 1
+    if (isNullOrEmpty(maxExtent)) {
+      maxExtent = this.map_.userMaxExtent; // 2
+      if (isNullOrEmpty(maxExtent)) {
+        maxExtent = this.map_.getProjection().getExtent(); // 3
       }
-    } else {
-      maxExtent = this.maxExtent_;
     }
     return maxExtent;
+  }
+
+  /**
+   * This method calculates the maxExtent of this layer:
+   * 1. Check if the user specified a maxExtent parameter
+   * 2. Gets the map maxExtent
+   * 3. Sets the maxExtent from the map projection
+   * Async version of getMaxExtent
+   *
+   * @function
+   * @api
+   */
+  calculateMaxExtent() {
+    return new Promise(resolve => resolve(this.getMaxExtent()));
   }
 
   /**
@@ -175,10 +188,36 @@ class LayerBase extends Base {
    * @export
    */
   setMaxExtent(maxExtent) {
-    this.maxExtent_ = maxExtent;
-    if (typeof this.getImpl().setMaxExtent === 'function') {
-      this.getImpl().setMaxExtent(this.getMaxExtent());
+    this.userMaxExtent = maxExtent;
+    if (!isArray(maxExtent) && isObject(maxExtent)) {
+      this.userMaxExtent = [
+        maxExtent.x.min,
+        maxExtent.y.min,
+        maxExtent.x.max,
+        maxExtent.y.max,
+      ];
     }
+    if (isFunction(this.getImpl().setMaxExtent)) {
+      if (isNullOrEmpty(maxExtent)) {
+        this.resetMaxExtent();
+      } else {
+        this.getImpl().setMaxExtent(maxExtent);
+      }
+    }
+  }
+
+  /**
+   * This function resets the maximum extent of the layer.
+   * @function
+   * @api
+   */
+  resetMaxExtent() {
+    this.userMaxExtent = null;
+    this.calculateMaxExtent().then((maxExtent) => {
+      if (isFunction(this.getImpl().setMaxExtent)) {
+        this.getImpl().setMaxExtent(maxExtent);
+      }
+    });
   }
 
   /**

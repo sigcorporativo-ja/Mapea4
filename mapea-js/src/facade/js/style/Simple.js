@@ -40,8 +40,11 @@ class Simple extends StyleFeature {
    */
   toImage() {
     let styleImgB64 = super.toImage();
-
-    if (isDynamic(this.options_) === true) {
+    const options = {
+      fill: this.options_.fill,
+      stroke: this.options_.stroke,
+    };
+    if (isDynamic(options) === true) {
       styleImgB64 = drawDynamicStyle(this.canvas_);
     }
 

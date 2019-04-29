@@ -5,6 +5,7 @@ import FacadeMapbox from 'M/layer/Mapbox';
 import FacadeOSM from 'M/layer/OSM';
 import * as LayerType from 'M/layer/Type';
 import { isNullOrEmpty, generateResolutionsFromExtent, extend } from 'M/util/Utils';
+import * as EventType from 'M/event/eventtype';
 import OLLayerTile from 'ol/layer/Tile';
 import OLControlAttribution from 'ol/control/Attribution';
 import SourceOSM from 'ol/source/OSM';
@@ -104,6 +105,7 @@ class OSM extends Layer {
    */
   addTo(map) {
     this.map = map;
+    this.fire(EventType.ADDED_TO_MAP);
 
     const extent = this.facadeLayer_.getMaxExtent();
     this.ol3Layer = new OLLayerTile(extend({

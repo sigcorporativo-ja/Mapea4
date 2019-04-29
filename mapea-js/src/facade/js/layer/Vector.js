@@ -14,8 +14,6 @@ import StyleCluster from '../style/Cluster';
 import Style from '../style/Style';
 import * as EventType from '../event/eventtype';
 
-// import { POINT, MULTI_POINT } from '../geom/GeoJSON';
-
 /**
  * @classdesc
  * Main constructor of the class. Creates a Vector layer
@@ -31,10 +29,9 @@ class Vector extends LayerBase {
    * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
-  constructor(parameters = {}, options = {}, vendorOptions = {}, impl =
-  new VectorImpl(options, vendorOptions)) {
+  constructor(parameters = {}, options = {}, vendorOptions = {}, implParam) {
     // calls the super constructor
-
+    const impl = implParam || new VectorImpl(options, vendorOptions);
     super(parameters, impl);
 
     // checks if the implementation can create Vector
@@ -248,20 +245,6 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function return extent of all features or discriminating by the filter
-   *
-   * @function
-   * @param {boolean} applyFilter - Indicates whether execute filter
-   * @return {Array<number>} Extent of features
-   * @api
-   */
-  getFeaturesExtentPromise(skipFilterParam) {
-    let skipFilter = skipFilterParam;
-    if (isNullOrEmpty(this.getFilter())) skipFilter = true;
-    return this.getImpl().getFeaturesExtentPromise(skipFilter, this.filter_);
-  }
-
-  /**
    * This function remove filter
    *
    * @function
@@ -419,8 +402,8 @@ class Vector extends LayerBase {
    * @function
    * @api
    */
-  getMaxExtentPromise() {
-    return this.getFeaturesExtentPromise();
+  calculateMaxExtent() {
+    return this.getImpl().getFeaturesExtentPromise(true, this.filter_);
   }
 
   /**
