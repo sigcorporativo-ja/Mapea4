@@ -2,11 +2,52 @@ import proj4 from 'proj4';
 import OLProjection from 'ol/proj/Projection';
 import { register } from 'ol/proj/proj4';
 import { addEquivalentProjections } from 'ol/proj';
+
+// EPSG:25828
+const proj25828 = {
+  def: '+proj=utm +zone=28 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
+  extent: [397101.09, 3638520.14, 1034670.43, 9625438.82],
+  codes: ['EPSG:25828', 'urn:ogc:def:crs:EPSG::25828', 'http://www.opengis.net/gml/srs/epsg.xml#25828'],
+  units: 'm',
+};
+
+// EPSG:25829
+const proj25829 = {
+  def: '+proj=utm +zone=29 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
+  extent: [-164850.78, 3660417.01, 988728.57, 9567111.85],
+  codes: ['EPSG:25829', 'urn:ogc:def:crs:EPSG::25829', 'http://www.opengis.net/gml/srs/epsg.xml#25829'],
+  units: 'm',
+};
+
 // EPSG:25830
 const proj25830 = {
   def: '+proj=utm +zone=30 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
   extent: [-729785.83, 3715125.82, 940929.67, 9518470.69],
   codes: ['EPSG:25830', 'urn:ogc:def:crs:EPSG::25830', 'http://www.opengis.net/gml/srs/epsg.xml#23030'],
+  units: 'm',
+};
+
+// EPSG:25831
+const proj25831 = {
+  def: '+proj=utm +zone=31 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
+  extent: [-1300111.74, 3804640.43, 893164.13, 9478718.31],
+  codes: ['EPSG:25831', 'urn:ogc:def:crs:EPSG::25831', 'http://www.opengis.net/gml/srs/epsg.xml#25831'],
+  units: 'm',
+};
+
+// EPSG:23028
+const proj23028 = {
+  def: '+proj=utm +zone=28 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs',
+  extent: [997517.95, 3873475.61, 2024693.05, 8529441.99],
+  codes: ['EPSG:23028', 'urn:ogc:def:crs:EPSG::23028', 'http://www.opengis.net/gml/srs/epsg.xml#23028'],
+  units: 'm',
+};
+
+// EPSG:23029
+const proj23029 = {
+  def: '+proj=utm +zone=29 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs',
+  extent: [448933.91, 3860083.93, 1860436.11, 8381369.16],
+  codes: ['EPSG:23029', 'urn:ogc:def:crs:EPSG::23029', 'http://www.opengis.net/gml/srs/epsg.xml#23029'],
   units: 'm',
 };
 
@@ -18,6 +59,14 @@ const proj23030 = {
   units: 'm',
 };
 
+// EPSG:23031
+const proj23031 = {
+  def: '+proj=utm +zone=31 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs',
+  extent: [-650883.16, 3932764.97, 1493695.91, 8141744.84],
+  codes: ['EPSG:23031', 'urn:ogc:def:crs:EPSG::23031', 'http://www.opengis.net/gml/srs/epsg.xml#23031'],
+  units: 'm',
+};
+
 // EPSG:4258
 const proj4258 = {
   def: '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs',
@@ -26,21 +75,6 @@ const proj4258 = {
   units: 'd',
 };
 
-// EPSG:25829
-const proj25829 = {
-  def: '+proj=utm +zone=29 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
-  extent: [-164850.78, 3660417.01, 988728.57, 9567111.85],
-  codes: ['EPSG:25829', 'urn:ogc:def:crs:EPSG::25829', 'http://www.opengis.net/gml/srs/epsg.xml#25829'],
-  units: 'm',
-};
-
-// EPSG:23029
-const proj23029 = {
-  def: '+proj=utm +zone=29 +ellps=intl +towgs84=-87,-98,-121,0,0,0,0 +units=m +no_defs',
-  extent: [448933.91, 3860083.93, 1860436.11, 8381369.16],
-  codes: ['EPSG:23029', 'urn:ogc:def:crs:EPSG::23029', 'http://www.opengis.net/gml/srs/epsg.xml#23029'],
-  units: 'm',
-};
 
 // EPSG:4230
 const proj4230 = {
@@ -77,7 +111,12 @@ const projections = [
   proj23029,
   proj4230,
   proj32628,
-  proj4326];
+  proj4326,
+  proj25828,
+  proj25831,
+  proj23028,
+  proj23031,
+];
 
 const addProjections = (projectionsParam) => {
   // Register and publish projections
