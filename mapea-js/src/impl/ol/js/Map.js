@@ -1587,7 +1587,7 @@ class Map extends MObject {
         ];
       }
       this.setMaxExtent(ImplUtils
-        .transformExtent(prevMaxExtent, olPrevProjection, olProjection));
+        .transformExtent(prevMaxExtent, olPrevProjection, olProjection), false);
     }
 
     // recalculates bbox //TODO
