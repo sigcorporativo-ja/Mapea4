@@ -20,10 +20,11 @@ module.exports = {
       .pause(2000)
       .execute(`
         const bbox2 = mapjs.getBbox();
-        return (window.bbox1[0] === bbox2[0] &&
-          window.bbox1[1] === bbox2[1] &&
-          window.bbox1[2] === bbox2[2] &&
-          window.bbox1[3] === bbox2[3])`, [], function({ value }) {
+        return (window.bbox1.x.min === bbox2.x.min &&
+          window.bbox1.y.min === bbox2.y.min &&
+          window.bbox1.x.max === bbox2.x.max &&
+          window.bbox1.y.max === bbox2.y.max)
+        `, [], function({ value }) {
         assert.ok(value);
       })
   },
@@ -43,10 +44,41 @@ module.exports = {
       .pause(2000)
       .execute(`
         const bbox2 = mapjs.getBbox();
-        return (window.bbox1[0] === bbox2[0] &&
-          window.bbox1[1] === bbox2[1] &&
-          window.bbox1[2] === bbox2[2] &&
-          window.bbox1[3] === bbox2[3])`, [], function({ value }) {
+        return (window.bbox1.x.min === bbox2.x.min &&
+          window.bbox1.y.min === bbox2.y.min &&
+          window.bbox1.x.max === bbox2.x.max &&
+          window.bbox1.y.max === bbox2.y.max)`, [], function({ value }) {
+        assert.ok(value);
+      })
+  },
+
+  'Comparamos BBOX centrando con el ratón y después cambiar de contexto': (browser) => {
+    browser
+      .url(URL_SIMPLE)
+      .assert.elementPresent('.m-control.m-wmcselector-container.g-cartografia-mapa')
+      .pause(1000)
+      // zoom in 5 times
+      .moveToElement('div#map', 400, 400)
+      .doubleClick()
+      .pause(500)
+      .doubleClick()
+      .pause(500)
+      .doubleClick()
+      .pause(500)
+      .doubleClick()
+      .pause(500)
+      .doubleClick()
+      .pause(500)
+      .execute('window.bbox1 = mapjs.getBbox();', [])
+      .click('.m-wmcselector-select option[value*=context_cdau_satelite]')
+      .pause(2000)
+      .execute(`
+        const bbox2 = mapjs.getBbox();
+        return (window.bbox1.x.min === bbox2.x.min &&
+          window.bbox1.y.min === bbox2.y.min &&
+          window.bbox1.x.max === bbox2.x.max &&
+          window.bbox1.y.max === bbox2.y.max)
+        `, [], function({ value }) {
         assert.ok(value);
       })
       .end(() => server.close());
