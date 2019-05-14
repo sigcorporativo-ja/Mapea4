@@ -1565,7 +1565,6 @@ class Map extends MObject {
     const olMap = this.getMapImpl();
     const oldViewProperties = olMap.getView().getProperties();
     const userZoom = olMap.getView().getUserZoom();
-    const bbox = this.facadeMap_.getBbox();
     const newView = new View({ projection });
     newView.setProperties(oldViewProperties);
     newView.setResolutions(resolutions);
@@ -1578,10 +1577,6 @@ class Map extends MObject {
     layers.forEach((layer) => {
       layer.getImpl().setResolutions(resolutions);
     });
-
-    if (!isNullOrEmpty(bbox) && isNullOrEmpty(userZoom)) {
-      this.facadeMap_.setBbox(bbox, { nearest: true });
-    }
 
     return this;
   }
@@ -1671,9 +1666,11 @@ class Map extends MObject {
     if (!isNullOrEmpty(prevMaxExtent)) {
       if (!isArray(prevMaxExtent)) {
         prevMaxExtent = [prevMaxExtent.x.min, prevMaxExtent.y.min,
-          prevMaxExtent.x.max, prevMaxExtent.y.max];
+          prevMaxExtent.x.max, prevMaxExtent.y.max
+        ];
       }
-      this.setMaxExtent(ImplUtils.transformExtent(prevMaxExtent, olPrevProjection, olProjection));
+      this.setMaxExtent(ImplUtils
+        .transformExtent(prevMaxExtent, olPrevProjection, olProjection), false);
     }
 
     // recalculates bbox TODO
@@ -1949,13 +1946,11 @@ class Map extends MObject {
       label.hide();
     }
 
-    this.facadeMap_.fire(EventType.CLICK, [
-      {
-        pixel,
-        coord,
-        vendor: evt,
-      },
-    ]);
+    this.facadeMap_.fire(EventType.CLICK, [{
+      pixel,
+      coord,
+      vendor: evt,
+    }, ]);
   }
 
   /**
@@ -1968,13 +1963,11 @@ class Map extends MObject {
     const pixel = evt.pixel;
     const coord = this.map_.getCoordinateFromPixel(pixel);
 
-    this.facadeMap_.fire(EventType.MOVE, [
-      {
-        pixel,
-        coord,
-        vendor: evt,
-      },
-    ]);
+    this.facadeMap_.fire(EventType.MOVE, [{
+      pixel,
+      coord,
+      vendor: evt,
+    }, ]);
   }
 }
 /**
