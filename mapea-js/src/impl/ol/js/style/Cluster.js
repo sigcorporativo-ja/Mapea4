@@ -294,6 +294,7 @@ class Cluster extends Style {
       pointRadius: this.optionsVendor_.distanceSelectFeatures,
       animate: true,
       style: this.clusterStyleFn_.bind(this),
+      layers: [this.clusterLayer_],
     });
     this.selectClusterInteraction_.on('select', this.selectClusterFeature_.bind(this), this);
     map.getMapImpl().addInteraction(this.selectClusterInteraction_);
