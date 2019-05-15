@@ -436,10 +436,10 @@ export default class GeosearchControl extends M.Control {
     // appends the new results
     const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
     const newResults = newResultsScrollContainer.children;
-    let newResult;
-    while ((newResult === newResults.item(0)) !== null) {
+    for (let i = 0; i < newResults.length; i += 1) {
+      const newResult = newResults.item(i);
       this.resultsScrollContainer_.appendChild(newResult);
-      newResult.addEventListener('click', this.resultClick_);
+      newResult.addEventListener('click', e => this.resultClick_(e));
     }
 
     // updates the found num elements
@@ -459,7 +459,7 @@ export default class GeosearchControl extends M.Control {
    */
   resultsScroll_(evt) {
     const target = evt.target;
-    const height = target.style.height;
+    const height = target.offsetHeight;
     const scrollHeight = target.scrollHeight;
     const scrollTop = target.scrollTop;
 
