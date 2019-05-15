@@ -4,6 +4,8 @@
 import { isString } from 'M/util/Utils';
 import Exception from 'M/exception/exception';
 import { parse as olXMLParse } from 'ol/xml';
+import { getValue } from 'M/i18n/language';
+
 /**
  * @classdesc
  * @api
@@ -66,7 +68,7 @@ class XML {
     }
 
     if (dataVariable.nodeType !== 9) {
-      Exception('doc.nodeType should be DOCUMENT');
+      Exception(getValue('exception').must_be_document);
     }
 
     const context = {};

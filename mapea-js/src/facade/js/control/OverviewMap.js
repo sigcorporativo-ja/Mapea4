@@ -7,6 +7,7 @@ import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -30,7 +31,7 @@ class OverviewMap extends ControlBase {
     super(impl, OverviewMap.NAME);
 
     if (isUndefined(OverviewMapImpl)) {
-      Exception('La implementación usada no puede crear controles OverviewMap');
+      Exception(getValue('exception').overviewmap_method);
     }
     impl.facadeControl = this;
   }

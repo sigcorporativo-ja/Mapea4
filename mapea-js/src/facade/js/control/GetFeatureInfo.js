@@ -8,6 +8,7 @@ import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -28,7 +29,7 @@ class GetFeatureInfo extends ControlBase {
     super(impl, GetFeatureInfo.NAME);
 
     if (isUndefined(GetFeatureInfoImpl)) {
-      Exception('La implementación usada no puede crear controles GetFeatureInfo');
+      Exception(getValue('exception').getfeatureinfo_method);
     }
   }
 
@@ -42,7 +43,11 @@ class GetFeatureInfo extends ControlBase {
    * @api
    */
   createView(map) {
-    return compileTemplate(getfeatureinfoTemplate);
+    return compileTemplate(getfeatureinfoTemplate, {
+      vars: {
+        title: getValue('getfeatureinfo').title,
+      },
+    });
   }
 
   /**
@@ -94,6 +99,6 @@ GetFeatureInfo.NAME = 'getfeatureinfo';
  * @public
  * @api
  */
-GetFeatureInfo.POPUP_TITLE = 'Información';
+GetFeatureInfo.POPUP_TITLE = getValue('getfeatureinfo').info;
 
 export default GetFeatureInfo;

@@ -5,6 +5,7 @@ import { isNullOrEmpty, isString, isNull, isFunction, normalize, isArray, isObje
 import Exception from '../exception/exception';
 import * as LayerType from '../layer/Type';
 import Layer from '../layer/Layer';
+import { getValue } from '../i18n/language';
 
 /**
  * Parses the specified user center parameter into an object
@@ -21,7 +22,7 @@ export const center = (centerParameterVar) => {
   const centerParam = {};
   // checks if the param is null or empty
   if (isNullOrEmpty(centerParameter)) {
-    Exception('No ha especificado ningún parámetro center');
+    Exception(getValue('exception').no_center);
   }
   // string
   if (isString(centerParameter)) {
@@ -35,11 +36,11 @@ export const center = (centerParameterVar) => {
         centerParam.x = Number.parseFloat(coordArray[0]);
         centerParam.y = Number.parseFloat(coordArray[1]);
       } else {
-        Exception('El formato del parámetro center no es correcto');
+        Exception(getValue('exception').invalid_center_param);
       }
       centerParam.draw = /^1|(true)$/i.test(draw);
     } else {
-      Exception('El formato del parámetro center no es correcto');
+      Exception(getValue('exception').invalid_center_param);
     }
   } else if (isArray(centerParameter)) {
     // array
@@ -53,7 +54,7 @@ export const center = (centerParameterVar) => {
       centerParam.x = centerParameter[0];
       centerParam.y = centerParameter[1];
     } else {
-      Exception('El formato del parámetro center no es correcto');
+      Exception(getValue('exception').invalid_center_param);
     }
   } else if (isObject(centerParameter)) {
     // object
@@ -64,7 +65,7 @@ export const center = (centerParameterVar) => {
       }
       centerParam.x = centerParameter.x;
     } else {
-      Exception('El formato del parámetro center no es correcto');
+      Exception(getValue('exception').invalid_center_param);
     }
     // y
     if (!isNull(centerParameter.y)) {
@@ -73,7 +74,7 @@ export const center = (centerParameterVar) => {
       }
       centerParam.y = centerParameter.y;
     } else {
-      Exception('El formato del parámetro center no es correcto');
+      Exception(getValue('exception').invalid_center_param);
     }
     // draw
     if (!isNull(centerParameter.draw)) {
@@ -87,7 +88,7 @@ export const center = (centerParameterVar) => {
   }
 
   if (Number.isNaN(centerParam.x) || Number.isNaN(centerParam.y)) {
-    Exception('El formato del parámetro center no es correcto');
+    Exception(getValue('exception').invalid_center_param);
   }
 
   return centerParam;
@@ -250,7 +251,7 @@ export const maxExtent = (maxExtentParam) => {
 
     // checks if the param is null or empty
     if (isNullOrEmpty(maxExtentParameter)) {
-      Exception('No ha especificado ningún parámetro maxExtent');
+      Exception(getValue('exception').no_maxextent);
     }
 
     // string
@@ -263,10 +264,10 @@ export const maxExtent = (maxExtentParam) => {
           maxExtentVar.x.max = Number.parseFloat(extentArray[2]);
           maxExtentVar.y.max = Number.parseFloat(extentArray[3]);
         } else {
-          Exception('El formato del parámetro maxExtent no es correcto');
+          Exception(getValue('exception').invalid_maxextent_param);
         }
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
     } else if (isArray(maxExtentParameter)) {
       // array
@@ -288,7 +289,7 @@ export const maxExtent = (maxExtentParam) => {
         maxExtentVar.x.max = maxExtentParameter[2];
         maxExtentVar.y.max = maxExtentParameter[3];
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
     } else if (isObject(maxExtentParameter)) {
       // object
@@ -304,7 +305,7 @@ export const maxExtent = (maxExtentParam) => {
         }
         maxExtentVar.x.min = maxExtentParameter.x.min;
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
       // y min
       if (!isNull(maxExtentParameter.bottom)) {
@@ -318,7 +319,7 @@ export const maxExtent = (maxExtentParam) => {
         }
         maxExtentVar.y.min = maxExtentParameter.y.min;
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
       // x max
       if (!isNull(maxExtentParameter.right)) {
@@ -332,7 +333,7 @@ export const maxExtent = (maxExtentParam) => {
         }
         maxExtentVar.x.max = maxExtentParameter.x.max;
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
       // y max
       if (!isNull(maxExtentParameter.top)) {
@@ -346,7 +347,7 @@ export const maxExtent = (maxExtentParam) => {
         }
         maxExtentVar.y.max = maxExtentParameter.y.max;
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
     } else {
       // unknown
@@ -355,7 +356,7 @@ export const maxExtent = (maxExtentParam) => {
 
     if (Number.isNaN(maxExtentVar.x.min) || Number.isNaN(maxExtentVar.y.min) ||
       Number.isNaN(maxExtentVar.x.max) || Number.isNaN(maxExtentVar.y.max)) {
-      Exception('El formato del parámetro maxExtent no es correcto');
+      Exception(getValue('exception').invalid_maxextent_param);
     }
   }
 
@@ -381,7 +382,7 @@ export const projection = (projectionParameter) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(projectionParameter)) {
-    Exception('No ha especificado ningún parámetro projection');
+    Exception(getValue('exception').no_projection);
   }
 
   // string
@@ -457,7 +458,7 @@ export const resolutions = (resolutionsParam) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(resolutionsParameter)) {
-    Exception('No ha especificado ningún parámetro resolutions');
+    Exception(getValue('exception').no_resolutions);
   }
 
   // string
@@ -465,7 +466,7 @@ export const resolutions = (resolutionsParam) => {
     if (/^\d+(\.\d+)?([,;]\d+(\.\d+)?)*$/.test(resolutionsParameter)) {
       resolutionsParameter = resolutionsParameter.split(/[,;]+/);
     } else {
-      Exception('El formato del parámetro resolutions no es correcto');
+      Exception(getValue('exception').invalid_resolutions_param);
     }
   }
   // array
@@ -487,7 +488,7 @@ export const resolutions = (resolutionsParam) => {
   }
 
   if (!valid) {
-    Exception('El formato del parámetro resolutions no es correcto');
+    Exception(getValue('exception').invalid_resolutions_param);
   }
   return resolutionsVar;
 };
@@ -508,7 +509,7 @@ export const zoom = (zoomParam) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(zoomParameter)) {
-    Exception('No ha especificado ningún parámetro zoom');
+    Exception(getValue('exception').no_zoom);
   }
 
   // string
@@ -523,7 +524,7 @@ export const zoom = (zoomParam) => {
   }
 
   if (Number.isNaN(zoomVar)) {
-    Exception('El formato del parámetro zoom no es correcto');
+    Exception(getValue('exception').invalid_zoom_param);
   }
   return zoomVar;
 };
@@ -544,7 +545,7 @@ export const kml = (userParamer) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array
@@ -725,7 +726,7 @@ export const mapbox = (userParameters) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array
@@ -1186,7 +1187,7 @@ export const wfs = (userParameters) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array
@@ -1371,7 +1372,7 @@ export const geojson = (userParameters) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array
@@ -1497,7 +1498,7 @@ export const wmc = (userParameters) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array
@@ -1730,7 +1731,7 @@ const getMaxExtentWMS = (parameter) => {
       maxExtentParam[3] = Number.parseFloat(maxExtentParam[3]);
     }
   } else if (!isNullOrEmpty(maxExtentParam)) {
-    Exception('El formato del parámetro maxExtent no es correcto');
+    Exception(getValue('exception').invalid_maxextent_param);
   }
 
   return maxExtentParam;
@@ -1787,7 +1788,7 @@ export const wms = (userParameters) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array
@@ -2010,7 +2011,7 @@ export const wmts = (userParameters) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array
@@ -2084,7 +2085,7 @@ export const layer = (userParameters, forcedType) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array

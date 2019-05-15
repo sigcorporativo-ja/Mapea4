@@ -13,6 +13,7 @@ import FilterBase from '../filter/Base';
 import StyleCluster from '../style/Cluster';
 import Style from '../style/Style';
 import * as EventType from '../event/eventtype';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -36,7 +37,7 @@ class Vector extends LayerBase {
 
     // checks if the implementation can create Vector
     if (isUndefined(VectorImpl)) {
-      Exception('La implementación usada no puede crear capas Vector');
+      Exception(getValue('exception').vectorlayer_method);
     }
 
     /**
@@ -118,7 +119,7 @@ class Vector extends LayerBase {
     if (!isNullOrEmpty(id)) {
       feature = this.getImpl().getFeatureById(id);
     } else {
-      dialog.error('No se ha indicado un ID para obtener el feature');
+      dialog.error(getValue('dialog').id_feature);
     }
     return feature;
   }
@@ -214,7 +215,7 @@ class Vector extends LayerBase {
         style.refresh();
       }
     } else {
-      dialog.error('El filtro indicado no es correcto');
+      dialog.error(getValue('dialog').vector_filter);
     }
   }
 

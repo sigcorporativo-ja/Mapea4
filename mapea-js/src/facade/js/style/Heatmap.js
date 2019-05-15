@@ -5,6 +5,7 @@ import HeatmapImpl from 'impl/style/Heatmap';
 import Style from './Style';
 import { isString, isFunction, isArray, inverseColor, isNullOrEmpty, generateIntervals, extendsObj, defineFunctionFromString } from '../util/Utils';
 import Exception from '../exception/exception';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -28,7 +29,7 @@ class Heatmap extends Style {
     const options = optionsParam;
     const vendorOptions = vendorOptionsParam;
     if (!(isString(attribute) || isFunction(attribute))) {
-      Exception('Attribute parameter can not be empty (string or function)');
+      Exception(getValue('exception').no_empty);
     }
 
     extendsObj(options, Heatmap.DEFAULT_OPTIONS);

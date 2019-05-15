@@ -11,10 +11,13 @@ import OLStyleFill from 'ol/style/Fill';
 import OLStyleStroke from 'ol/style/Stroke';
 import OLStyleCircle from 'ol/style/Circle';
 import OLGeomPoint from 'ol/geom/Point';
+import { getValue } from 'M/i18n/language';
 import { get as getProj } from 'ol/proj';
 import Layer from './Layer';
 import FormatGeoJSON from '../format/GeoJSON';
 import Map from '../Map';
+
+
 /**
  * @classdesc
  * @api
@@ -146,7 +149,7 @@ class Draw extends Layer {
     // checks if the param is null or empty
     let points = pointsParam;
     if (isNullOrEmpty(points)) {
-      Exception('No ha especificado ningún punto');
+      Exception(getValue('exception').no_point);
     }
     if (!isArray(points)) {
       points = [points];
@@ -168,7 +171,7 @@ class Draw extends Layer {
     let geojsons = geojsonsParam;
     // checks if the param is null or empty
     if (isNullOrEmpty(geojsons)) {
-      Exception('No ha especificado ningún GeoJSON');
+      Exception(getValue('exception').no_geojson);
     }
     if (!isArray(geojsons)) {
       geojsons = [geojsons];

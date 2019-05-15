@@ -6,6 +6,7 @@ import LayerVector from './Vector';
 import { GeoJSON as GeoJSONType } from './Type';
 import { isString, isNullOrEmpty, isUndefined, isArray, normalize } from '../util/Utils';
 import Exception from '../exception/exception';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -36,12 +37,12 @@ class GeoJSON extends LayerVector {
 
     // checks if the implementation can create KML layers
     if (isUndefined(GeoJSONImpl)) {
-      Exception('La implementación usada no puede crear capas GeoJSON');
+      Exception(getValue('exception').geojsonlayer_method);
     }
 
     // checks if the param is null or empty
     if (isNullOrEmpty(parameters)) {
-      Exception('No ha especificado ningún parámetro');
+      Exception(getValue('exception').no_param);
     }
 
     if (isString(parameters)) {

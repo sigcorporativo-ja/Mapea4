@@ -7,6 +7,7 @@ import { isNullOrEmpty, isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -28,7 +29,7 @@ class OSM extends LayerBase {
 
     // checks if the implementation can create OSM
     if (isUndefined(OSMImpl)) {
-      Exception('La implementación usada no puede crear capas OSM');
+      Exception(getValue('exception').osm_method);
     }
 
     // checks if the param is null or empty
