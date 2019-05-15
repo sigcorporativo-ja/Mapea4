@@ -1480,7 +1480,6 @@ class Map extends MObject {
     const olMap = this.getMapImpl();
     const oldViewProperties = olMap.getView().getProperties();
     const userZoom = olMap.getView().getUserZoom();
-    const bbox = this.facadeMap_.getBbox();
     const newView = new View({ projection });
     newView.setProperties(oldViewProperties);
     newView.setResolutions(resolutions);
@@ -1493,10 +1492,6 @@ class Map extends MObject {
     layers.forEach((layer) => {
       layer.getImpl().setResolutions(resolutions);
     });
-
-    if (!isNullOrEmpty(bbox) && isNullOrEmpty(userZoom)) {
-      this.facadeMap_.setBbox(bbox, { nearest: true });
-    }
 
     return this;
   }
@@ -1592,7 +1587,7 @@ class Map extends MObject {
         ];
       }
       this.setMaxExtent(ImplUtils
-        .transformExtent(prevMaxExtent, olPrevProjection, olProjection));
+        .transformExtent(prevMaxExtent, olPrevProjection, olProjection), false);
     }
 
     // recalculates bbox //TODO
