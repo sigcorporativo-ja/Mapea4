@@ -6,6 +6,7 @@ import * as WKT from 'M/geom/WKT';
 import { isNullOrEmpty, isString } from 'M/util/Utils';
 import { getWidth, extend } from 'ol/extent';
 import { get as getProj, getTransform, transformExtent } from 'ol/proj';
+import RenderFeature from 'ol/render/Feature';
 
 const getUnitsPerMeter = (projectionCode, meter) => {
   const projection = getProj(projectionCode);
@@ -159,40 +160,43 @@ class Utils {
     let points;
     let lineStrings;
     if (isNullOrEmpty(geometry)) {
-      return null;
-    }
-    switch (geometry.getType()) {
-      case 'Point':
-        centroid = geometry.getCoordinates();
-        break;
-      case 'LineString':
-      case 'LinearRing':
-        coordinates = geometry.getCoordinates();
-        medianIdx = Math.floor(coordinates.length / 2);
-        centroid = coordinates[medianIdx];
-        break;
-      case 'Polygon':
-        centroid = Utils.getCentroid(geometry.getInteriorPoint());
-        break;
-      case 'MultiPoint':
-        points = geometry.getPoints();
-        medianIdx = Math.floor(points.length / 2);
-        centroid = Utils.getCentroid(points[medianIdx]);
-        break;
-      case 'MultiLineString':
-        lineStrings = geometry.getLineStrings();
-        medianIdx = Math.floor(lineStrings.length / 2);
-        centroid = Utils.getCentroid(lineStrings[medianIdx]);
-        break;
-      case 'MultiPolygon':
-        points = geometry.getInteriorPoints();
-        centroid = Utils.getCentroid(points);
-        break;
-      case 'Circle':
-        centroid = geometry.getCenter();
-        break;
-      default:
-        return null;
+      centroid = null;
+    } else if (geometry instanceof RenderFeature) {
+      centroid = geometry;
+    } else {
+      switch (geometry.getType()) {
+        case 'Point':
+          centroid = geometry.getCoordinates();
+          break;
+        case 'LineString':
+        case 'LinearRing':
+          coordinates = geometry.getCoordinates();
+          medianIdx = Math.floor(coordinates.length / 2);
+          centroid = coordinates[medianIdx];
+          break;
+        case 'Polygon':
+          centroid = Utils.getCentroid(geometry.getInteriorPoint());
+          break;
+        case 'MultiPoint':
+          points = geometry.getPoints();
+          medianIdx = Math.floor(points.length / 2);
+          centroid = Utils.getCentroid(points[medianIdx]);
+          break;
+        case 'MultiLineString':
+          lineStrings = geometry.getLineStrings();
+          medianIdx = Math.floor(lineStrings.length / 2);
+          centroid = Utils.getCentroid(lineStrings[medianIdx]);
+          break;
+        case 'MultiPolygon':
+          points = geometry.getInteriorPoints();
+          centroid = Utils.getCentroid(points);
+          break;
+        case 'Circle':
+          centroid = geometry.getCenter();
+          break;
+        default:
+          return null;
+      }
     }
     return centroid;
   }

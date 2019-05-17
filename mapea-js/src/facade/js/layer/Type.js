@@ -94,6 +94,15 @@ export const GeoJSON = 'GeoJSON';
 export const Vector = 'Vector';
 
 /**
+ * Vector Tile type
+ * @const
+ * @type {string}
+ * @public
+ * @api
+ */
+export const MVT = 'MVT';
+
+/**
  * All layer types
  * @const
  * @type {object}
@@ -110,6 +119,7 @@ const layertypes = {
   Mapbox,
   GeoJSON,
   Vector,
+  MVT,
 };
 
 /**
@@ -147,6 +157,7 @@ export const know = (type) => {
     WFS,
     WMTS,
     MBtiles,
+    MVT,
   ];
   return (knowTypes.indexOf(parse(type)) !== -1);
 };
