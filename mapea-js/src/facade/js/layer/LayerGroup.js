@@ -1,12 +1,12 @@
 /**
- * @module M/Layer/LayerGroup
+ * @module M/layer/LayerGroup
  */
 
 import MapImpl from 'impl/Map';
 import MObject from 'M/Object';
 import LayerBase from './Layer';
 import WMC from './WMC';
-import { isNullOrEmpty } from '../util/Utils';
+import { isNullOrEmpty, isArray, generateRandom } from '../util/Utils';
 
 /**
  * @constructor
@@ -25,12 +25,18 @@ class LayerGroup extends MObject {
      * @api stable
      */
     this.id = id;
+    if (isNullOrEmpty(this.id)) {
+      this.id = generateRandom('mapea_layer_group_');
+    }
     /**
      * @public
      * @type {String}
      * @api stable
      */
-    this.title = title || 'Conjunto de Servicios WMS';
+    this.title = title;
+    if (isNullOrEmpty(this.title)) {
+      this.title = 'Conjunto de Servicios WMS';
+    }
     /**
      * @public
      * @type {Boolean}
@@ -194,16 +200,8 @@ class LayerGroup extends MObject {
    */
   static findGroupById(groupId, layerGroups) {
     let group;
-    if (!isNullOrEmpty(layerGroups) && Array.isArray(layerGroups)) {
-      layerGroups.forEach((layerGroup) => {
-        if (layerGroup instanceof LayerGroup) {
-          const idLayerGroup = !isNullOrEmpty(layerGroup.id.title) ?
-            layerGroup.id.title.replace(/\s/g, '_') : layerGroup.title.replace(/\s/g, '_');
-          if (idLayerGroup === groupId) {
-            group = layerGroup;
-          }
-        }
-      });
+    if (isArray(layerGroups)) {
+      group = layerGroups.find(g => g instanceof LayerGroup && g.id === groupId);
     }
     return group;
   }

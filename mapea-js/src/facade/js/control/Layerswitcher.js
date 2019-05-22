@@ -208,15 +208,15 @@ class LayerSwitcher extends ControlBase {
    * @function
    */
   static parseGroupForTemplate(groupLayer, baseLayers) {
-    let layerTitle = groupLayer.legend;
+    let layerTitle = groupLayer.title;
     if (isNullOrEmpty(layerTitle)) {
-      layerTitle = groupLayer.id.title;
+      layerTitle = groupLayer.id;
     }
     if (isNullOrEmpty(layerTitle)) {
       layerTitle = 'Conjunto de Servicios WMS';
     }
     let varTemplate = {
-      id: layerTitle.replace(/\s/g, '_'),
+      id: groupLayer.id,
       title: layerTitle,
       order: groupLayer.order,
       collapsed: groupLayer.collapsed,

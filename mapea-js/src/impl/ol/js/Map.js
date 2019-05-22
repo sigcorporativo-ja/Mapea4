@@ -1665,8 +1665,9 @@ class Map extends MObject {
     // recalculates maxExtent
     if (!isNullOrEmpty(prevMaxExtent)) {
       if (!isArray(prevMaxExtent)) {
-        prevMaxExtent = [prevMaxExtent.x.min, prevMaxExtent.y.min,
-          prevMaxExtent.x.max, prevMaxExtent.y.max
+        prevMaxExtent = [
+          prevMaxExtent.x.min, prevMaxExtent.y.min,
+          prevMaxExtent.x.max, prevMaxExtent.y.max,
         ];
       }
       this.setMaxExtent(ImplUtils
@@ -1950,7 +1951,7 @@ class Map extends MObject {
       pixel,
       coord,
       vendor: evt,
-    }, ]);
+    }]);
   }
 
   /**
@@ -1967,7 +1968,7 @@ class Map extends MObject {
       pixel,
       coord,
       vendor: evt,
-    }, ]);
+    }]);
   }
 }
 /**
