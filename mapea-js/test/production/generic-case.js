@@ -3,6 +3,12 @@
  */
 window.putMapOnWindowScope = function putMapOnWindowScope(mapInstance) {
   window.mapjs = mapInstance;
+  // window.mapjs.on(M.evt.COMPLETED, () => {
+  const divElem = document.createElement('div');
+  divElem.id = 'mapLoaded';
+  divElem.style.display = 'none';
+  document.body.appendChild(divElem);
+  // });
 };
 
 // gets parameters to use the API
