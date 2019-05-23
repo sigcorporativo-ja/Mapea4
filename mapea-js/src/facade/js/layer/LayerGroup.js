@@ -61,23 +61,6 @@ class LayerGroup extends MObject {
      * @expose
      */
     this.children_ = [];
-    /**
-     * @private
-     * @type {Boolean}
-     * @expose
-     */
-    this.visible_ = false;
-  }
-
-  /**
-   * TODO
-   *
-   * @function
-   * @api stable
-   * @export
-   */
-  isVisible() {
-    return this.visible_;
   }
   /**
    * TODO
@@ -87,8 +70,7 @@ class LayerGroup extends MObject {
    * @export
    */
   setVisible(visibility) {
-    this.visible_ = visibility;
-    this.getAllLayers().forEach(l => (l.transparent === true) && l.setVisible(this.visible_));
+    this.getAllLayers().forEach(l => (l.transparent === true) && l.setVisible(visibility));
   }
 
   /**

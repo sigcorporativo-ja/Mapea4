@@ -142,7 +142,11 @@ class LayerSwitcher extends Control {
         group = LayerGroup.findGroupById(idGroup, this.facadeMap_.getLayerGroup());
         // checkbox
         if (evt.target.classList.contains('m-check')) {
-          group.setVisible(!group.isVisible());
+          if (evt.target.classList.contains('g-cartografia-check3')) {
+            group.setVisible(false);
+          } else {
+            group.setVisible(true);
+          }
           // collapse
         } else {
           group.collapsed = !group.collapsed;
