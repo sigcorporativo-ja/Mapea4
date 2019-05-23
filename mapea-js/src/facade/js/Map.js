@@ -33,6 +33,7 @@ import LayerSwitcher from './control/Layerswitcher';
 import Location from './control/Location';
 import Navtoolbar from './control/Navtoolbar';
 import Scale from './control/Scale';
+import Rotate from './control/Rotate';
 import ScaleLine from './control/ScaleLine';
 import Mouse from './control/Mouse';
 import OverviewMap from './control/OverviewMap';
@@ -1407,6 +1408,14 @@ class Map extends Base {
               break;
             case GetFeatureInfo.NAME:
               control = new GetFeatureInfo();
+              break;
+            case Rotate.NAME:
+              control = new Rotate();
+              panel = new Panel(Rotate.name, {
+                collapsible: false,
+                className: 'm-rotate',
+                position: Position.TR,
+              });
               break;
             default:
               const getControlsAvailable = concatUrlPaths([M.config.MAPEA_URL, '/api/actions/controls']);
