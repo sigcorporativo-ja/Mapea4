@@ -306,6 +306,8 @@ class Map extends Base {
     // zoom
     if (!isNullOrEmpty(params.zoom)) {
       this.setZoom(params.zoom);
+    } else {
+      this.setZoom(0);
     }
 
     // label
