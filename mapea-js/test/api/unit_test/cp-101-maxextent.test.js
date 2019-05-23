@@ -8,6 +8,7 @@ import { createMapAndWait } from './test-utils';
 describe('CP-101 Gestión del MaxExtent', () => {
   let mapjs;
   before(async function mapCreation() {
+    this.timeout(10000);
     mapjs = await createMapAndWait({
       container: "map",
       layers: [
