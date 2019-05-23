@@ -5,6 +5,8 @@ import 'assets/css/controls/layerswitcher';
 import LayerSwitcherImpl from 'impl/control/Layerswitcher';
 import layerswitcherTemplate from 'templates/layerswitcher';
 import ControlBase from './Control';
+import LayerBase from '../layer/Layer';
+import LayerGroup from '../layer/LayerGroup';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
@@ -126,6 +128,7 @@ class LayerSwitcher extends ControlBase {
       if (!isNullOrEmpty(map)) {
         const baseLayers = map.getBaseLayers()
           .filter(layer => layer.displayInLayerSwitcher === true);
+        const layerGroups = map.getLayerGroup();
         const overlayLayers = map.getLayers().filter((layer) => {
           const isTransparent = (layer.transparent === true);
           const displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
@@ -137,11 +140,17 @@ class LayerSwitcher extends ControlBase {
         const baseLayersPromise = Promise.all(baseLayers.map(LayerSwitcher.parseLayerForTemplate));
         const overlayLayersPromise = Promise.all(overlayLayers
           .map(LayerSwitcher.parseLayerForTemplate));
+        const layerGroupsPromise = Promise.all(layerGroups
+          .map(layerGroup => LayerSwitcher.parseGroupForTemplate(layerGroup, baseLayers))
+          .filter(g => !isNullOrEmpty(g)));
         baseLayersPromise.then((parsedBaseLayers) => {
-          overlayLayersPromise.then(parsedOverlayLayers => success({
-            baseLayers: parsedBaseLayers,
-            overlayLayers: parsedOverlayLayers,
-          }));
+          layerGroupsPromise.then((parsedLayerGroups) => {
+            overlayLayersPromise.then(parsedOverlayLayers => success({
+              baseLayers: parsedBaseLayers,
+              overlayLayers: parsedOverlayLayers,
+              layerGroups: parsedLayerGroups,
+            }));
+          });
         });
       }
     });
@@ -190,6 +199,62 @@ class LayerSwitcher extends ControlBase {
         success(layerVarTemplate);
       }
     });
+  }
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   */
+  static parseGroupForTemplate(groupLayer, baseLayers) {
+    let layerTitle = groupLayer.title;
+    if (isNullOrEmpty(layerTitle)) {
+      layerTitle = groupLayer.id;
+    }
+    if (isNullOrEmpty(layerTitle)) {
+      layerTitle = 'Conjunto de Servicios WMS';
+    }
+    let varTemplate = {
+      id: groupLayer.id,
+      title: layerTitle,
+      order: groupLayer.order,
+      collapsed: groupLayer.collapsed,
+      layers: [],
+      layerGroups: [],
+    };
+
+    groupLayer.getChildren().forEach((child) => {
+      if (child instanceof LayerBase) {
+        varTemplate.layers.push(LayerSwitcher.parseLayerForTemplate(child));
+      } else if (child instanceof LayerGroup) {
+        const varGroup = LayerSwitcher.parseGroupForTemplate(child, baseLayers);
+        if (!isNullOrEmpty(varGroup)) {
+          varTemplate.layerGroups.push(varGroup);
+        }
+      }
+    });
+
+    // Resolve the layers promise
+    const promiseLayers = Promise.all(varTemplate.layers);
+    promiseLayers.then((layers) => {
+      if (!isNullOrEmpty(varTemplate)) {
+        varTemplate.layers = layers;
+      }
+    });
+
+    let visibleLevel = 0;
+    const layers = groupLayer.getAllLayers();
+    if (layers.every(l => l.isVisible())) {
+      visibleLevel = 2;
+    } else if (layers.some(l => l.isVisible())) {
+      visibleLevel = 1;
+    }
+    varTemplate.visible = visibleLevel;
+    if (isNullOrEmpty(varTemplate.layers) && isNullOrEmpty(varTemplate.layerGroups)) {
+      varTemplate = null;
+    }
+    return varTemplate;
   }
 }
 
