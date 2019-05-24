@@ -577,11 +577,11 @@ class Map extends Base {
       Exception('No ha especificado ningun grupo a eliminar');
     }
     // checks if the implementation can manage groups
-    if (isUndefined(MapImpl.prototype.removeGroups)) {
+    if (isUndefined(this.getImpl().removeLayerGroups)) {
       Exception('La implementación usada no posee el método removeGroups');
     }
     // removes the layers
-    this.getImpl().removeGroups(layerGroups);
+    this.getImpl().removeLayerGroups(layerGroups);
     return this;
   }
 
