@@ -5,7 +5,7 @@
 import MapImpl from 'impl/Map';
 import MObject from 'M/Object';
 import LayerBase from './Layer';
-import WMC from './WMC';
+// import WMC from './WMC';
 import { isNullOrEmpty, isArray, generateRandom } from '../util/Utils';
 
 /**
@@ -81,7 +81,7 @@ class LayerGroup extends MObject {
    * @export
    */
   setZIndex(zIndex) {
-    // TODO
+    // TODO:
   }
 
   /**
@@ -92,7 +92,7 @@ class LayerGroup extends MObject {
    * @export
    */
   getZIndex(zIndex) {
-    return MapImpl.Z_INDEX[WMC] + this.order;
+    return MapImpl.Z_INDEX.WMC + this.order;
   }
 
   /**

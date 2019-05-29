@@ -129,6 +129,7 @@ class LayerSwitcher extends ControlBase {
         const baseLayers = map.getBaseLayers()
           .filter(layer => layer.displayInLayerSwitcher === true);
         const layerGroups = map.getLayerGroup();
+        const orderedLayerGroups = LayerSwitcher.orderLayerGroups(layerGroups);
         const overlayLayers = map.getLayers().filter((layer) => {
           const isTransparent = (layer.transparent === true);
           const displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
@@ -140,7 +141,7 @@ class LayerSwitcher extends ControlBase {
         const baseLayersPromise = Promise.all(baseLayers.map(LayerSwitcher.parseLayerForTemplate));
         const overlayLayersPromise = Promise.all(overlayLayers
           .map(LayerSwitcher.parseLayerForTemplate));
-        const layerGroupsPromise = Promise.all(layerGroups
+        const layerGroupsPromise = Promise.all(orderedLayerGroups
           .map(layerGroup => LayerSwitcher.parseGroupForTemplate(layerGroup, baseLayers))
           .filter(g => !isNullOrEmpty(g)));
         baseLayersPromise.then((parsedBaseLayers) => {
@@ -255,6 +256,18 @@ class LayerSwitcher extends ControlBase {
       varTemplate = null;
     }
     return varTemplate;
+  }
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   */
+  static orderLayerGroups(layerGroups) {
+    return layerGroups.sort((a, b) => { // Descending order
+      return b.order - a.order;
+    });
   }
 }
 
