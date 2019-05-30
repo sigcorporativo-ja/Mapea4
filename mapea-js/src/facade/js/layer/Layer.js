@@ -83,6 +83,27 @@ class LayerBase extends Base {
      * @api
      */
     this.userMaxExtent = parameter.maxExtent;
+
+    /** 
+     * Legend 
+     * @public
+     * @type {string}
+     * @api
+     */
+    this.legend = parameter.legend;
+  }
+
+  /**
+   *'legend' non - identifying name of layer
+   */
+
+  getLegend() {
+    return this.getImpl().legend;
+  }
+
+  setLegend(newLegend) {
+    this.legend = newLegend;
+    this.getImpl().legend = newLegend;
   }
 
   /**
