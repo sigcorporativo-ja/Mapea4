@@ -84,8 +84,8 @@ class LayerBase extends Base {
      */
     this.userMaxExtent = parameter.maxExtent;
 
-    /** 
-     * Legend 
+    /**
+     * Legend
      * @public
      * @type {string}
      * @api
