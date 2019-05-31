@@ -15,16 +15,48 @@ const getUnitsPerMeter = (projectionCode, meter) => {
 
 export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
   const transformFunction = getTransform(codeProjection, 'EPSG:4326');
-  return featuresAsJSON.map((featureAsJSON) => {
-    return {
-      ...featureAsJSON,
-      geometry: {
-        type: featureAsJSON.geometry.type,
-        coordinates: transformFunction(featureAsJSON.geometry.coordinates),
-      },
-    };
+  const jsonResult = [];
+  featuresAsJSON.forEach((featureAsJSON) => {
+    const coordinates = [];
+    if (Array.isArray(featureAsJSON.geometry.coordinates[0])) { // Type Polygon
+      featureAsJSON.geometry.coordinates.forEach((aCoordinates) => {
+        if (Array.isArray(aCoordinates)) {
+          coordinates.push(aCoordinates.map((cord) => {
+            const arrayAuxCC = [];
+            cord.forEach((coordinate) => {
+              arrayAuxCC.push(transformFunction(coordinate));
+            });
+            return arrayAuxCC;
+          }));
+
+          const jsonFeature = {
+            ...featureAsJSON,
+            geometry: {
+              type: featureAsJSON.geometry.type,
+              coordinates,
+            },
+          };
+
+          jsonResult.push(jsonFeature);
+        }
+      }); // Type Point
+    } else {
+      if (featureAsJSON.geometry.coordinates.length === 3) { // Type Point && KML
+        featureAsJSON.geometry.coordinates.pop();
+      }
+      const jsonFeature = {
+        ...featureAsJSON,
+        geometry: {
+          type: featureAsJSON.geometry.type,
+          coordinates: transformFunction(featureAsJSON.geometry.coordinates),
+        },
+      };
+      jsonResult.push(jsonFeature);
+    }
   });
+  return jsonResult;
 };
+
 
 /**
  * @classdesc
