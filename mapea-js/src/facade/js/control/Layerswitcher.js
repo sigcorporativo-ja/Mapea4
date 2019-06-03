@@ -196,7 +196,7 @@ class LayerSwitcher extends ControlBase {
           success(layerVarTemplate);
         });
       } else {
-        layerVarTemplate.legend = legendUrl;
+        layerVarTemplate.legend = layer.type !== 'KML' ? legendUrl : null;
         success(layerVarTemplate);
       }
     });
