@@ -18,7 +18,8 @@ export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
   const jsonResult = [];
   featuresAsJSON.forEach((featureAsJSON) => {
     const coordinates = [];
-    if (Array.isArray(featureAsJSON.geometry.coordinates[0])) { // Type Polygon
+    if (Array.isArray(featureAsJSON.geometry.coordinates[0]) &&
+      featuresAsJSON.length > 1) { // Type Polygon
       featureAsJSON.geometry.coordinates.forEach((aCoordinates) => {
         if (Array.isArray(aCoordinates)) {
           coordinates.push(aCoordinates.map((cord) => {
@@ -40,10 +41,8 @@ export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
           jsonResult.push(jsonFeature);
         }
       }); // Type Point
-    } else {
-      if (featureAsJSON.geometry.coordinates.length === 3) { // Type Point && KML
-        featureAsJSON.geometry.coordinates.pop();
-      }
+    } else if (featureAsJSON.geometry.coordinates.length === 3) {
+      featureAsJSON.geometry.coordinates.pop();
       const jsonFeature = {
         ...featureAsJSON,
         geometry: {
@@ -52,6 +51,28 @@ export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
         },
       };
       jsonResult.push(jsonFeature);
+    } else if (featuresAsJSON.length === 1) { // the layer has only one feature line
+      if (featureAsJSON.geometry.coordinates[0].length > 2) {
+        const coordinatesPolygon = featureAsJSON.geometry.coordinates[0]
+          .map(coord => transformFunction(coord));
+        const jsonFeature = {
+          ...featureAsJSON,
+          geometry: {
+            type: featureAsJSON.geometry.type,
+            coordinates: coordinatesPolygon,
+          },
+        };
+        jsonResult.push(jsonFeature);
+      } else {
+        const jsonFeature = {
+          ...featureAsJSON,
+          geometry: {
+            type: featureAsJSON.geometry.type,
+            coordinates: transformFunction(featureAsJSON.geometry.coordinates[0]),
+          },
+        };
+        jsonResult.push(jsonFeature);
+      }
     }
   });
   return jsonResult;
