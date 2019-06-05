@@ -569,36 +569,35 @@ class Map extends MObject {
     const baseLayers = this.getBaseLayers();
     let existsBaseLayer = (baseLayers.length > 0);
 
+    const addedLayers = [];
     layers.forEach((layer) => {
       // checks if layer is WMC and was added to the map
       if (layer.type === LayerType.WMS) {
         if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
+          addedLayers.push(layer);
 
           /* if the layer is a base layer then
           sets its visibility */
           if (layer.transparent !== true) {
             layer.setVisible(!existsBaseLayer);
             existsBaseLayer = true;
-            if (layer.isVisible()) {
-              this.updateResolutionsFromBaseLayer();
-            }
             layer.setZIndex(Map.Z_INDEX_BASELAYER);
-          } else {
-            if (layer.getZIndex() == null) {
-              const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMS];
-              layer.setZIndex(zIndex);
-            }
-            // recalculates resolution if there are not
-            // any base layer
-            if (!existsBaseLayer) {
-              this.updateResolutionsFromBaseLayer();
-            }
+          } else if (layer.getZIndex() == null) {
+            const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.WMS];
+            layer.setZIndex(zIndex);
           }
         }
       }
     });
+    // calculate resolutions if layers were added and there is not any base layer
+    // or if some base layer was added
+    const calculateResolutions = (addedLayers.length > 0 && !existsBaseLayer) ||
+      addedLayers.some(l => l.transparent !== true && l.isVisible());
+    if (calculateResolutions) {
+      this.updateResolutionsFromBaseLayer();
+    }
     return this;
   }
 
@@ -1479,12 +1478,13 @@ class Map extends MObject {
     // sets the resolutions
     const olMap = this.getMapImpl();
     const oldViewProperties = olMap.getView().getProperties();
-    const userZoom = olMap.getView().getUserZoom();
-    const bbox = this.facadeMap_.getBbox();
+    // const userZoom = olMap.getView().getUserZoom();
+    const currentZoom = olMap.getView().getZoom();
     const newView = new View({ projection });
     newView.setProperties(oldViewProperties);
     newView.setResolutions(resolutions);
-    newView.setUserZoom(userZoom);
+    // newView.setUserZoom(userZoom);
+    newView.setUserZoom(currentZoom);
 
     olMap.setView(newView);
 
@@ -1493,10 +1493,6 @@ class Map extends MObject {
     layers.forEach((layer) => {
       layer.getImpl().setResolutions(resolutions);
     });
-
-    if (!isNullOrEmpty(bbox) && isNullOrEmpty(userZoom)) {
-      this.facadeMap_.setBbox(bbox, { nearest: true });
-    }
 
     return this;
   }
@@ -1592,7 +1588,7 @@ class Map extends MObject {
         ];
       }
       this.setMaxExtent(ImplUtils
-        .transformExtent(prevMaxExtent, olPrevProjection, olProjection));
+        .transformExtent(prevMaxExtent, olPrevProjection, olProjection), false);
     }
 
     // recalculates bbox //TODO

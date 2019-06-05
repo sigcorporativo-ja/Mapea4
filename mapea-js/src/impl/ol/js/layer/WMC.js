@@ -2,12 +2,12 @@
  * @module M/impl/layer/WMC
  */
 import { isNullOrEmpty } from 'M/util/Utils';
-import * as parameter from 'M/parameter/parameter';
+// import * as parameter from 'M/parameter/parameter';
 import { get as getRemote } from 'M/util/Remote';
 import * as EventType from 'M/event/eventtype';
 import { isFunction } from 'M/util/Utils';
 import { get as getProj } from 'ol/proj';
-import ImplUtils from '../util/Utils';
+// import ImplUtils from '../util/Utils';
 import FormatWMC from '../format/wmc/WMC';
 import Layer from './Layer';
 /**
@@ -117,16 +117,6 @@ class WMC extends Layer {
         }
         // load layers
         this.loadLayers(context);
-        const bboxObj = this.map.getBbox();
-        if (!isNullOrEmpty(bboxObj)) {
-          const bbox = [
-            bboxObj.x.min,
-            bboxObj.y.min,
-            bboxObj.x.max,
-            bboxObj.y.max,
-          ];
-          this.map.setBbox(bbox, { nearest: true });
-        }
         this.map.fire(EventType.CHANGE_WMC, this);
       });
     }
@@ -192,13 +182,14 @@ class WMC extends Layer {
   getMaxExtent(callbackFn) {
     if (isNullOrEmpty(this.maxExtent)) {
       this.loadContextPromise.then((context) => {
-        if (isNullOrEmpty(this.extentProj_)) {
-          this.extentProj_ = parameter.projection(M.config.DEFAULT_PROJ).code;
-        }
-        const olProjection = getProj(this.map.getProjection().code);
-        this.maxExtent = ImplUtils
-          .transformExtent(context.maxExtent, this.extentProj_, olProjection);
-        this.extentProj_ = olProjection;
+        // if (isNullOrEmpty(this.extentProj_)) {
+        //   this.extentProj_ = parameter.projection(M.config.DEFAULT_PROJ).code;
+        // }
+        // const olProjection = getProj(this.map.getProjection().code);
+        // this.maxExtent = ImplUtils
+        //   .transformExtent(context.maxExtent, this.extentProj_, olProjection);
+        // this.extentProj_ = olProjection;
+        this.maxExtent = context.maxExtent;
         if (isFunction(callbackFn)) {
           callbackFn(this.maxExtent);
         }
