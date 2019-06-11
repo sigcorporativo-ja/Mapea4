@@ -16,34 +16,48 @@ const getUnitsPerMeter = (projectionCode, meter) => {
 export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
   const transformFunction = getTransform(codeProjection, 'EPSG:4326');
   const jsonResult = [];
+  let jsonFeature = {};
   featuresAsJSON.forEach((featureAsJSON) => {
     const coordinates = [];
     if (Array.isArray(featureAsJSON.geometry.coordinates[0]) &&
       featuresAsJSON.length > 1) { // Type Polygon
       featureAsJSON.geometry.coordinates.forEach((aCoordinates) => {
-        if (Array.isArray(aCoordinates)) {
+        if (!Number.isFinite(aCoordinates[0]) && Array.isArray(aCoordinates)) {
           coordinates.push(aCoordinates.map((cord) => {
             const arrayAuxCC = [];
-            cord.forEach((coordinate) => {
-              arrayAuxCC.push(transformFunction(coordinate));
-            });
+            if (Number.isFinite(cord[0])) {
+              arrayAuxCC.push(transformFunction(cord));
+            } else {
+              cord.forEach((coordinate) => {
+                arrayAuxCC.push(transformFunction(coordinate));
+              });
+            }
             return arrayAuxCC;
           }));
-
-          const jsonFeature = {
+          jsonFeature = {
             ...featureAsJSON,
             geometry: {
               type: featureAsJSON.geometry.type,
               coordinates,
             },
           };
+        } else { // type line
+          const coordinate = transformFunction(aCoordinates);
+          coordinates.push(coordinate);
 
-          jsonResult.push(jsonFeature);
+          jsonFeature = {
+            ...featureAsJSON,
+            geometry: {
+              type: featureAsJSON.geometry.type,
+              coordinates,
+            },
+          };
         }
       }); // Type Point
+      jsonResult.push(jsonFeature);
     } else if (featureAsJSON.geometry.coordinates.length === 3) {
       featureAsJSON.geometry.coordinates.pop();
-      const jsonFeature = {
+      jsonFeature = {
         ...featureAsJSON,
         geometry: {
           type: featureAsJSON.geometry.type,
@@ -55,7 +69,7 @@ export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
       if (featureAsJSON.geometry.coordinates[0].length > 2) {
         const coordinatesPolygon = featureAsJSON.geometry.coordinates[0]
           .map(coord => transformFunction(coord));
-        const jsonFeature = {
+        jsonFeature = {
           ...featureAsJSON,
           geometry: {
             type: featureAsJSON.geometry.type,
@@ -64,7 +78,7 @@ export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
         };
         jsonResult.push(jsonFeature);
       } else {
-        const jsonFeature = {
+        jsonFeature = {
           ...featureAsJSON,
           geometry: {
             type: featureAsJSON.geometry.type,
@@ -73,6 +87,16 @@ export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
         };
         jsonResult.push(jsonFeature);
       }
+    } else if (Number.isFinite(featureAsJSON.geometry.coordinates[0])) {
+      const coordTransformed = transformFunction(featureAsJSON.geometry.coordinates);
+      jsonFeature = {
+        ...featureAsJSON,
+        geometry: {
+          type: featureAsJSON.geometry.type,
+          coordinates: coordTransformed,
+        },
+      };
+      jsonResult.push(jsonFeature);
     }
   });
   return jsonResult;
