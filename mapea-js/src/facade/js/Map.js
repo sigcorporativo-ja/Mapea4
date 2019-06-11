@@ -306,7 +306,7 @@ class Map extends Base {
     // zoom
     if (!isNullOrEmpty(params.zoom)) {
       this.setZoom(params.zoom);
-    } else {
+    } else if (isNullOrEmpty(params.bbox)) {
       this.setZoom(0);
     }
 
@@ -326,7 +326,7 @@ class Map extends Base {
     }
 
     // initial center
-    if (isNullOrEmpty(params.center)) {
+    if (isNullOrEmpty(params.center) && isNullOrEmpty(params.bbox)) {
       this._finishedInitCenter = false;
       this.getInitCenter_().then((initCenter) => {
         if (isNullOrEmpty(this.userCenter_)) {
