@@ -5,6 +5,18 @@ import { isNullOrEmpty } from 'M/util/Utils';
 import Control from './Control';
 
 /**
+ * @private
+ */
+const updateElement = (viewState, container, map, exact) => {
+  const containerVariable = container;
+  if (exact === true) {
+    containerVariable.innerHTML = map.getExactScale();
+  } else {
+    containerVariable.innerHTML = map.getScale();
+  }
+};
+
+/**
  * @classdesc
  * Main constructor of the class. Creates a WMC selector
  * control
@@ -16,9 +28,10 @@ class Scale extends Control {
    * @extends {ol.control.Control}
    * @api stable
    */
-  constructor() {
+  constructor(options = {}) {
     super();
     this.facadeMap_ = null;
+    this.exactScale = options.exactScale || false;
   }
 
   /**
@@ -50,16 +63,8 @@ class Scale extends Control {
   renderCB(mapEvent) {
     const frameState = mapEvent.frameState;
     if (!isNullOrEmpty(frameState)) {
-      Scale.updateElement(frameState.viewState, this.scaleContainer_, this.facadeMap_);
+      updateElement(frameState.viewState, this.scaleContainer_, this.facadeMap_, this.exactScale);
     }
-  }
-
-  /**
-   * @private
-   */
-  static updateElement(viewState, container, map) {
-    const containerVariable = container;
-    containerVariable.innerHTML = map.getScale();
   }
 
   /**

@@ -20,9 +20,9 @@ class Scale extends ControlBase {
    * @extends {M.Control}
    * @api
    */
-  constructor() {
+  constructor(options = {}) {
     // implementation of this control
-    const impl = new ScaleImpl();
+    const impl = new ScaleImpl(options);
 
     // calls the super constructor
     super(impl, Scale.NAME);
