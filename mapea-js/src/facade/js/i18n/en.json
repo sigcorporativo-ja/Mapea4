@@ -11,7 +11,10 @@
   },
   "getfeatureinfo": {
     "info": "Information",
-    "title": "Consult layer"
+    "title": "Consult layer",
+    "no_info": "No associated info",
+    "info_of": "Information about",
+    "unsupported_format": "Unsupported format"
   },
   "wmcselector": {
     "title": "Context selector"

@@ -1,0 +1,13 @@
+  {{#each layers}}
+      <div class='m-getfeatureinfo-content-info'>
+          <div class='m-getfeatureinfo-content-info-header'>
+              <div class="m-arrow-right"></div>
+              <div>
+                  <p> {{../info_of}} <strong>{{layerName}}</strong></p>
+              </div>
+          </div>
+          <div class='m-getfeatureinfo-content-info-body m-content-collapsed'>
+              {{{formatedInfo}}}
+          </div>
+      </div>
+  {{/each}}

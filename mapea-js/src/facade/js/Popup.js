@@ -118,13 +118,13 @@ class Popup extends Base {
    * @function
    * @api
    */
-  addTab(tabOptions) {
+  addTab(tabOptions, listeners = []) {
     let tab = tabOptions;
     if (!(tab instanceof Tab)) {
       tab = new Tab(tabOptions);
     }
     this.tabs_.push(tab);
-    this.update();
+    this.update(listeners);
   }
 
   /**
@@ -160,7 +160,7 @@ class Popup extends Base {
    * @function
    * @api
    */
-  update() {
+  update(listeners = []) {
     if (!isNullOrEmpty(this.map_)) {
       const html = compileTemplate(popupTemplate, {
         jsonp: true,
@@ -171,6 +171,16 @@ class Popup extends Base {
       if (this.tabs_.length > 0) {
         this.element_ = html;
         this.addEvents(html);
+        listeners.forEach((listener) => {
+          if (listener.all === true) {
+            html.querySelectorAll(listener.selector).forEach((element) => {
+              element.addEventListener(listener.type, e => listener.callback(e));
+            });
+          } else {
+            html.querySelector(listener.selector)
+              .addEventListener(listener.type, e => listener.callback(e));
+          }
+        });
         this.getImpl().setContainer(html);
         this.show(this.coord_);
       }
