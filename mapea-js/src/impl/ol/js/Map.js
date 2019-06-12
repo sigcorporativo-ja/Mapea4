@@ -1387,7 +1387,7 @@ class Map extends MObject {
           break;
         }
       }
-    } else {
+    } else if (!isNullOrEmpty(resolution)) {
       zoom = olView.getZoomForResolution(resolution);
     }
     return zoom;
