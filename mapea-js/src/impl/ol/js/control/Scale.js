@@ -2,6 +2,7 @@
  * @module M/impl/control/Scale
  */
 import { isNullOrEmpty } from 'M/util/Utils';
+import Utils from 'impl/util/Utils';
 import Control from './Control';
 
 /**
@@ -9,9 +10,11 @@ import Control from './Control';
  */
 const updateElement = (viewState, container, map, exact) => {
   const containerVariable = container;
-  if (exact === true) {
+  if (map.getWMTS().length > 0) {
+    containerVariable.innerHTML = Utils.getWMTSScale(map, exact);
+  } else if (map.getWMTS().length <= 0 && exact === true) {
     containerVariable.innerHTML = map.getExactScale();
-  } else {
+  } else if (map.getWMTS().length <= 0 && !exact === true) {
     containerVariable.innerHTML = map.getScale();
   }
 };

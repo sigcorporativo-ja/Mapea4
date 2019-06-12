@@ -388,6 +388,33 @@ class Utils {
     }
     return transformedExtent;
   }
+
+  /**
+   * TODO:
+   */
+  static getWMTSScale(map, exact) {
+    const projection = map.getProjection().code;
+    const olProj = getProj(projection);
+    const mpu = olProj.getMetersPerUnit(); // meters per unit in depending on the CRS;
+    const size = map.getMapImpl().getSize();
+    const pix = size[0]; // Numero de pixeles en el mapa
+    // Extension del mapa en grados (xmin, ymin, xmax, ymax)
+    const pix2 = map.getMapImpl().getView().calculateExtent(size);
+    // Extension angular del mapa (cuantos grados estan en el mapa)
+    const ang = pix2[2] - pix2[0];
+    // (numero de metros en el mapa / numero de pixeles) / metros por pixel
+    let scale = (((mpu * ang) / pix) * 1000) / 0.28;
+    if (!exact === true) {
+      if (scale >= 1000 && scale <= 950000) {
+        scale = Math.round(scale / 1000) * 1000;
+      } else if (scale >= 950000) {
+        scale = Math.round(scale / 1000000) * 1000000;
+      } else {
+        scale = Math.round(scale);
+      }
+    }
+    return Math.trunc(scale);
+  }
 }
 
 export default Utils;
