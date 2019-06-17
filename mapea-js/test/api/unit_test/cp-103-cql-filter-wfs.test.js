@@ -34,13 +34,14 @@ describe('CP-103 Capa WFS y filtro CQL', () => {
     });
   });
   describe('Cambiamos el filtro CQL por otro', () => {
-    it('Todos los features cumplen el filtro cql', (done) => {
-      // gridWFS.once(M.evt.LOAD, () => {
-      //   const features = gridWFS.getFeatures();
-      //   expect(features.every(f => f.getAttribute('pob_tot') >= 500)).to.be.ok();
-      done();
-      // });
-      // gridWFS.setCQL('pob_tot gte 500');
+    it('Todos los features cumplen el filtro cql', function test2(done) {
+      this.timeout(10000);
+      gridWFS.once(M.evt.LOAD, () => {
+        const features = gridWFS.getFeatures();
+        expect(features.every(f => f.getAttribute('cmun').indexOf('18006') !== -1)).to.be.ok();
+        done();
+      });
+      gridWFS.setCQL("cmun LIKE '%18006%'");
     });
   });
 });

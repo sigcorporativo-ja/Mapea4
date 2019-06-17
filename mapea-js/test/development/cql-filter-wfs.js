@@ -24,8 +24,8 @@ layer.on(LoadEvt, function() {
 mapjs.addWFS(layer);
 
 window.setCQL = () => {
-  // layer.setCQL("cmun LIKE '%18006%'");
-  layer.setCQL("pob_tot gte 500");
+  layer.setCQL("cmun LIKE '%18006%'");
+  // layer.setCQL("pob_tot gte 500");
 };
 
 window.filtrar = () => {
