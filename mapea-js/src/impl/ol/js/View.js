@@ -32,10 +32,9 @@ class View extends OLView {
 
   /**
    * Provides the zoom user
-   * @param {number} zoom Zoom level.
    * @api stable
    */
-  getUserZoom(zoom) {
+  getUserZoom() {
     return this.userZoom_;
   }
 

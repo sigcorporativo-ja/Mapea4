@@ -74,13 +74,6 @@ class WFS extends Vector {
     if (isNullOrEmpty(this.options.getFeatureOutputFormat)) {
       this.options.getFeatureOutputFormat = 'application/json'; // by default
     }
-
-    /**
-     *
-     * @private
-     * @type {Promise}
-     */
-    this.loadFeaturesPromise_ = null;
   }
 
   /**
@@ -324,14 +317,11 @@ class WFS extends Vector {
    * @function
    */
   requestFeatures_() {
-    if (isNullOrEmpty(this.loadFeaturesPromise_)) {
-      this.loadFeaturesPromise_ = new Promise((resolve) => {
-        this.loader_.getLoaderFn((features) => {
-          resolve(features);
-        })(null, null, getProj(this.map.getProjection().code));
-      });
-    }
-    return this.loadFeaturesPromise_;
+    return new Promise((resolve) => {
+      this.loader_.getLoaderFn((features) => {
+        resolve(features);
+      })(null, null, getProj(this.map.getProjection().code));
+    });
   }
 
   /**
