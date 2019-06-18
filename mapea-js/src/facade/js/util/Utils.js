@@ -675,21 +675,16 @@ export const escapeJSCode = (jsCode) => {
  * @api
  */
 export const enableTouchScroll = (elem) => {
+  const elemParam = elem;
   if ('ontouchstart' in document) {
     let scrollStartPos = 0;
 
-    elem.addEventListener('touchstart', (evt) => {
-      scrollStartPos = this.scrollTop + evt
-        .getBrowserEvent()
-        .touches[0]
-        .pageY;
+    elemParam.addEventListener('touchstart', (evt) => {
+      scrollStartPos = elemParam.scrollTop + evt.touches[0].pageY;
     });
 
-    elem.addEventListener('touchmove', (evt) => {
-      this.scrollTop = scrollStartPos - evt
-        .getBrowserEvent()
-        .touches[0]
-        .pageY;
+    elemParam.addEventListener('touchmove', (evt) => {
+      elemParam.scrollTop = scrollStartPos - evt.touches[0].pageY;
     });
   }
 };

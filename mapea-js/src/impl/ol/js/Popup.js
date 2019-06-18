@@ -251,17 +251,6 @@ class Popup extends OLOverlay {
    * @param {text} new text.
    * @api stable
    */
-  setContent(content) {
-    this.content.innerHTML = content;
-  }
-
-  /**
-   * change text popup
-   * @public
-   * @function
-   * @param {text} new text.
-   * @api stable
-   */
   getContent() {
     return this.content;
   }

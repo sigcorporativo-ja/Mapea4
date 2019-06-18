@@ -41,6 +41,13 @@ class Tab {
      * @type {String}
      */
     this.content = options.content;
+
+    /**
+     * TODO
+     * @public
+     * @type {Array<object>}
+     */
+    this.listeners = options.listeners || [];
   }
 }
 
@@ -118,13 +125,13 @@ class Popup extends Base {
    * @function
    * @api
    */
-  addTab(tabOptions, listeners = []) {
+  addTab(tabOptions) {
     let tab = tabOptions;
     if (!(tab instanceof Tab)) {
       tab = new Tab(tabOptions);
     }
     this.tabs_.push(tab);
-    this.update(listeners);
+    this.update();
   }
 
   /**
@@ -160,7 +167,7 @@ class Popup extends Base {
    * @function
    * @api
    */
-  update(listeners = []) {
+  update() {
     if (!isNullOrEmpty(this.map_)) {
       const html = compileTemplate(popupTemplate, {
         jsonp: true,
@@ -170,17 +177,8 @@ class Popup extends Base {
       });
       if (this.tabs_.length > 0) {
         this.element_ = html;
+        this.addEventTabs(this.tabs_[0], html);
         this.addEvents(html);
-        listeners.forEach((listener) => {
-          if (listener.all === true) {
-            html.querySelectorAll(listener.selector).forEach((element) => {
-              element.addEventListener(listener.type, e => listener.callback(e));
-            });
-          } else {
-            html.querySelector(listener.selector)
-              .addEventListener(listener.type, e => listener.callback(e));
-          }
-        });
         this.getImpl().setContainer(html);
         this.show(this.coord_);
       }
@@ -223,8 +221,30 @@ class Popup extends Base {
     if (this.tabs_.length > index) {
       const tab = this.tabs_[index];
       this.setContent_(tab.content);
+      this.addEventTabs(tab, this.getContent());
       this.show(this.coord_);
     }
+  }
+
+  /**
+   * This functions adds the events to the popup tabs.
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addEventTabs(tab, html) {
+    const { listeners } = tab;
+    listeners.forEach((listener) => {
+      if (listener.all === true) {
+        html.querySelectorAll(listener.selector).forEach((element) => {
+          element.addEventListener(listener.type, e => listener.callback(e));
+        });
+      } else {
+        html.querySelector(listener.selector)
+          .addEventListener(listener.type, e => listener.callback(e));
+      }
+    });
   }
 
   /**
@@ -233,7 +253,7 @@ class Popup extends Base {
    * @function
    */
   setContent_(content) {
-    this.getImpl().setContent(content);
+    this.getContent().innerHTML = content;
   }
 
   /**
@@ -276,7 +296,7 @@ class Popup extends Base {
         evt.preventDefault();
         // 5px tolerance
         const touchendY = evt.clientY;
-        if ((evt.type === 'click') || (Math.abs(touchstartY - touchendY) < 5)) {
+        if ((evt.type === 'touchend') || (Math.abs(touchstartY - touchendY) < 5)) {
           // remove m-activated from all tabs
           Array.prototype.forEach.call(tabs, (addedTab) => {
             addedTab.classList.remove('m-activated');
@@ -301,11 +321,11 @@ class Popup extends Base {
       let topPosition;
       headerElement.addEventListener('touchstart', (evt) => {
         evt.preventDefault();
-        touchstartY = evt.clientY;
+        touchstartY = evt.touches[0].clientY;
         if (this.status_ === Popup.status.COLLAPSED) {
-          topPosition = 0.9 * window.HEIGHT;
+          topPosition = 0.9 * MWindow.HEIGHT;
         } else if (this.status_ === Popup.status.DEFAULT) {
-          topPosition = 0.45 * window.HEIGHT;
+          topPosition = 0.45 * MWindow.HEIGHT;
         } else if (this.status_ === Popup.status.FULL) {
           topPosition = 0;
         }
@@ -314,15 +334,14 @@ class Popup extends Base {
 
       headerElement.addEventListener('touchmove', (evt) => {
         evt.preventDefault();
-        const touchY = evt.clientY;
-        const translatedPixels = touchY - touchstartY;
+        this.touchY = evt.touches[0].clientY;
+        const translatedPixels = this.touchY - touchstartY;
         html.style.top = `${topPosition + translatedPixels}px`;
       }, false);
 
       headerElement.addEventListener('touchend', (evt) => {
         evt.preventDefault();
-        const touchendY = evt.clientY;
-        this.manageCollapsiblePopup_(touchstartY, touchendY);
+        this.manageCollapsiblePopup_(touchstartY, this.touchY);
       }, false);
 
       // CLICK EVENTS

@@ -521,12 +521,13 @@ class GetFeatureInfo extends Control {
               icon: 'g-cartografia-info',
               title: GetFeatureInfo.POPUP_TITLE,
               content: popupContent,
-            }, [{
-              selector: '.m-getfeatureinfo-content-info div.m-arrow-right',
-              all: true,
-              type: 'click',
-              callback: this.toogleSection,
-            }]);
+              listeners: [{
+                selector: '.m-getfeatureinfo-content-info div.m-arrow-right',
+                all: true,
+                type: 'click',
+                callback: e => this.toogleSection(e),
+              }],
+            });
           }
         }
       });
