@@ -41,14 +41,12 @@ describe('CP-102 Zoom y center con capas WMS', () => {
     it('Tiene zoom 0 y 5 respectivamente', () => {
       const zoom = mapjs.getZoom();
       const zoom2 = mapjs2.getZoom();
-      console.log(zoom, zoom2, ZOOM2);
       expect(zoom).to.be(0);
       expect(zoom2).to.be(ZOOM2);
     });
     it('Tiene el centro especificado', () => {
       const center = mapjs.getCenter();
       const center2 = mapjs2.getCenter();
-      console.log([center.x, center.y], [center2.x, center2.y], CENTER);
       expect([center.x, center.y]).to.be.eql(CENTER);
       expect([center2.x, center2.y]).to.be.eql(CENTER);
     });

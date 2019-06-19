@@ -160,12 +160,12 @@ class WMS extends LayerBase {
           this.ol3Layer.setVisible(visibility);
         }
 
-        // updates resolutions and keep the bbox
-        // const oldBbox = this.map.getBbox();
+        // updates resolutions and keep the zoom
+        const oldZoom = this.map.getZoom();
         this.map.getImpl().updateResolutionsFromBaseLayer();
-        // if (!isNullOrEmpty(oldBbox)) {
-        //   this.map.setBbox(oldBbox);
-        // }
+        if (!isNullOrEmpty(oldZoom)) {
+          this.map.setZoom(oldZoom);
+        }
       } else if (!isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }

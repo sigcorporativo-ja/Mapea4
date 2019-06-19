@@ -1376,14 +1376,19 @@ class Map extends MObject {
    * @api stable
    */
   getZoom() {
-    const resolution = this.getMapImpl().getView().getResolution();
-    const resolutions = this.getResolutions();
     let zoom = null;
-    for (let i = 0, ilen = resolutions.length; i < ilen; i += 1) {
-      if (resolutions[i] <= resolution) {
-        zoom = i;
-        break;
+    const olView = this.getMapImpl().getView();
+    const resolution = olView.getResolution();
+    const resolutions = this.getResolutions();
+    if (!isNullOrEmpty(resolutions)) {
+      for (let i = 0, ilen = resolutions.length; i < ilen; i += 1) {
+        if (resolutions[i] <= resolution) {
+          zoom = i;
+          break;
+        }
       }
+    } else if (!isNullOrEmpty(resolution)) {
+      zoom = olView.getZoomForResolution(resolution);
     }
     return zoom;
   }
@@ -1478,13 +1483,33 @@ class Map extends MObject {
     // sets the resolutions
     const olMap = this.getMapImpl();
     const oldViewProperties = olMap.getView().getProperties();
-    // const userZoom = olMap.getView().getUserZoom();
-    const currentZoom = olMap.getView().getZoom();
+    const oldZoom = olMap.getView().getUserZoom();
+    const size = olMap.getSize();
+
     const newView = new View({ projection });
     newView.setProperties(oldViewProperties);
     newView.setResolutions(resolutions);
-    // newView.setUserZoom(userZoom);
-    newView.setUserZoom(currentZoom);
+    newView.setUserZoom(oldZoom);
+
+    // calculates the new resolution
+    let newResolution;
+    if (!isNullOrEmpty(oldZoom)) {
+      newResolution = resolutions[oldZoom];
+    } else {
+      const bbox = this.facadeMap_.getBbox();
+      if (!isNullOrEmpty(bbox)) {
+        const oldResolution = newView.getResolutionForExtent([
+          bbox.x.min,
+          bbox.y.min,
+          bbox.x.max,
+          bbox.y.max,
+        ], size);
+        const restDiff = resolutions.map(r => Math.abs(r - oldResolution));
+        const newResolutionIdx = restDiff.indexOf(Math.min(...restDiff));
+        newResolution = resolutions[newResolutionIdx];
+      }
+    }
+    newView.setResolution(newResolution);
 
     olMap.setView(newView);
 
@@ -1551,26 +1576,26 @@ class Map extends MObject {
 
     // gets previous data
     const olPrevProjection = getProj(this.getProjection().code);
-    let prevBbox = this.facadeMap_.getBbox();
+    // let prevBbox = this.facadeMap_.getBbox();
+    // const prevZoom = this.facadeMap_.getZoom();
     let prevMaxExtent = this.facadeMap_.getMaxExtent();
-    // const prevCenter = this.facadeMap_.getCenter();
     const resolutions = this.facadeMap_.getResolutions();
 
     const olMap = this.getMapImpl();
     const oldViewProperties = olMap.getView().getProperties();
-    const userZoom = olMap.getView().getUserZoom();
     const resolution = olMap.getView().getResolution();
+    const userZoom = olMap.getView().getUserZoom();
 
     // sets the new view
     const newView = new View({ projection: olProjection });
     newView.setProperties(oldViewProperties);
-    newView.setUserZoom(userZoom);
     if (!isNullOrEmpty(resolutions)) {
       newView.setResolutions(resolutions);
     }
     if (!isNullOrEmpty(resolution)) {
       newView.setResolution(resolution);
     }
+    newView.setUserZoom(userZoom);
     olMap.setView(newView);
 
     // updates min, max resolutions of all WMS layers
@@ -1589,17 +1614,6 @@ class Map extends MObject {
       }
       this.setMaxExtent(ImplUtils
         .transformExtent(prevMaxExtent, olPrevProjection, olProjection), false);
-    }
-
-    // recalculates bbox //TODO
-    if (!isNullOrEmpty(prevBbox)) {
-      if (!isArray(prevBbox)) {
-        prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
-      }
-      const newBbox = ImplUtils.transformExtent(prevBbox, olPrevProjection, olProjection);
-      this.facadeMap_.setBbox(newBbox, {
-        nearest: true,
-      });
     }
 
     // recalculates resolutions
