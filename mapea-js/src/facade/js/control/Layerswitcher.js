@@ -130,7 +130,7 @@ class LayerSwitcher extends ControlBase {
           .filter(layer => layer.displayInLayerSwitcher === true);
         const layerGroups = map.getLayerGroup();
         const orderedLayerGroups = LayerSwitcher.orderLayerGroups(layerGroups);
-        const overlayLayers = map.getLayers().filter((layer) => {
+        const overlayLayers = map.getRootLayers().filter((layer) => {
           const isTransparent = (layer.transparent === true);
           const displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
           const isNotWMC = (layer.type !== LayerType.WMC);

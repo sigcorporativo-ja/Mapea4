@@ -374,6 +374,20 @@ class Map extends Base {
   }
 
   /**
+   * This function gets the layers which are not in any layerGroup
+   *
+   * @function
+   * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
+   * @returns {Array<Layer>}
+   * @api
+   */
+  getRootLayers(layersParamVar) {
+    const layers = this.getLayers(layersParamVar).filter(l => isNullOrEmpty(l.group));
+
+    return layers;
+  }
+
+  /**
    * This function gets the base layers added to the map
    *
    * @function
