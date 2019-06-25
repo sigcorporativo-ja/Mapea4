@@ -42,6 +42,14 @@ class MVT extends Vector {
      * @type {Boolean}
      */
     this.loaded_ = true;
+
+    /**
+     * Projection of the layer.
+     *
+     * @private
+     * @type {ol.proj.Projection}
+     */
+    this.projection_ = parameters.projection || 'EPSG:3857';
   }
 
   /**
@@ -63,6 +71,7 @@ class MVT extends Vector {
     const source = new OLSourceVectorTile({
       format: this.formater_,
       url: this.url,
+      projection: this.projection_,
     });
 
     this.ol3Layer = new OLLayerVectorTile(extend({

@@ -87,6 +87,16 @@ class MVT extends Vector {
   setStyle(styleParam, applyToFeature = false, defaultStyle = MVT.DEFAULT_OPTIONS_STYLE) {
     super.setStyle(styleParam, applyToFeature, defaultStyle);
   }
+
+  /**
+   * This function gets the projection of the map.
+   * @function
+   * @public
+   * @api
+   */
+  getProjection() {
+    return this.getImpl().getProjection();
+  }
 }
 
 /**
