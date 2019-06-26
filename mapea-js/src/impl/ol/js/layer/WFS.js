@@ -86,7 +86,6 @@ class WFS extends Vector {
    */
   addTo(map) {
     super.addTo(map);
-    this.updateSource_();
     map.getImpl().on(EventType.CHANGE, () => this.refresh());
   }
 
