@@ -48,6 +48,7 @@ import WMC from './layer/WMC';
 import WMS from './layer/WMS';
 import WMTS from './layer/WMTS';
 import OSM from './layer/OSM';
+import MVT from './layer/MVT';
 import Mapbox from './layer/Mapbox';
 import Panel from './ui/Panel';
 import * as Position from './ui/position';
@@ -457,6 +458,9 @@ class Map extends Base {
               case 'WMTS':
                 layer = new WMTS(layerParam);
                 break;
+              case 'MVT':
+                layer = new MVT(layerParam);
+                break;
               default:
                 Dialog.error('No se ha especificado un tipo válido para la capa');
             }
@@ -471,7 +475,9 @@ class Map extends Base {
         }
 
         // KML and WFS layers handler its features
-        if ((layer instanceof Vector) /* && !(layer instanceof KML) */ &&
+        if ((layer instanceof Vector && !(layer instanceof MVT))
+          /* && !(layer instanceof KML) */
+          &&
           !(layer instanceof WFS)) {
           this.featuresHandler_.addLayer(layer);
         }
@@ -1231,6 +1237,104 @@ class Map extends Base {
    */
   removeMBtiles(layersParam) {
     // TODO
+  }
+
+  /**
+   * This function gets the vector tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  getMVT(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (isUndefined(MapImpl.prototype.getMVT)) {
+      Exception('La implementación usada no posee el método getWFS');
+    }
+
+    if (isNull(layersParam)) {
+      layersParam = [];
+    } else if (!isArray(layersParam)) {
+      layersParam = [layersParam];
+    }
+
+    let filters = [];
+    if (layersParam.length > 0) {
+      filters = layersParam.map((layerParam) => {
+        return parameter.layer(layerParam, LayerType.MVT);
+      });
+    }
+
+    const layers = this.getImpl().getMVT(filters).sort(Map.LAYER_SORT);
+
+    return layers;
+  }
+
+  /**
+   * This function removes the vector tile layers from map.
+   *
+   * @function
+   * @public
+   * @api
+   */
+  removeMVT(layersParam) {
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.removeMVT)) {
+        Exception('La implementación usada no posee el método removeWFS');
+      }
+      const mvtLayers = this.getMVT(layersParam);
+      if (mvtLayers.length > 0) {
+        mvtLayers.forEach((layer) => {
+          this.featuresHandler_.removeLayer(layer);
+        });
+        this.getImpl().removeMVT(mvtLayers);
+      }
+    }
+    return this;
+  }
+
+  /**
+   * This function adds the vector tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addMVT(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.addMVT)) {
+        Exception('La implementación usada no posee el método addWFS');
+      }
+
+      if (!isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      const mvtLayers = [];
+      layersParam.forEach((layerParam) => {
+        let vectorTile;
+        if (isObject(layerParam) && (layerParam instanceof MVT)) {
+          vectorTile = layerParam;
+        } else if (!(layerParam instanceof Layer)) {
+          try {
+            vectorTile = new MVT(layerParam, layerParam.options);
+          } catch (err) {
+            Dialog.error(err.toString());
+            throw err;
+          }
+        }
+        // FIXME: Hay problemas majenando las features de los vector tiles
+        // en openlayers
+        // this.featuresHandler_.addLayer(vectorTile);
+        mvtLayers.push(vectorTile);
+      });
+
+      this.getImpl().addMVT(mvtLayers);
+      this.fire(EventType.ADDED_LAYER, [mvtLayers]);
+      this.fire(EventType.ADDED_VECTOR_TILE, [mvtLayers]);
+    }
+    return this;
   }
 
   /**

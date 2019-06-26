@@ -172,12 +172,14 @@ class Map extends MObject {
     const wmsLayers = this.getWMS(filters);
     const wfsLayers = this.getWFS(filters);
     const wmtsLayers = this.getWMTS(filters);
+    const mvtLayers = this.getMVT(filters);
     const mbtilesLayers = this.getMBtiles(filters);
     const unknowLayers = this.getUnknowLayers_(filters);
 
     return wmcLayers
       .concat(kmlLayers).concat(wmsLayers).concat(wfsLayers)
       .concat(wmtsLayers)
+      .concat(mvtLayers)
       .concat(mbtilesLayers)
       .concat(unknowLayers);
   }
@@ -228,6 +230,7 @@ class Map extends MObject {
     this.facadeMap_.addWMTS(knowLayers.filter(layer => (layer.type === LayerType.WMTS)));
     this.facadeMap_.addKML(knowLayers.filter(layer => (layer.type === LayerType.KML)));
     this.facadeMap_.addWFS(knowLayers.filter(layer => (layer.type === LayerType.WFS)));
+    this.facadeMap_.addMVT(knowLayers.filter(layer => (layer.type === LayerType.MVT)));
 
     return this;
   }
@@ -255,6 +258,7 @@ class Map extends MObject {
       this.removeWMS(knowLayers);
       this.removeWFS(knowLayers);
       this.removeWMTS(knowLayers);
+      this.removeMVT(knowLayers);
       this.removeMBtiles(knowLayers);
     }
 
@@ -1215,6 +1219,105 @@ class Map extends MObject {
       }
     });
   }
+
+  /**
+   * This function gets the vector tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  getMVT(filtersParam) {
+    let foundLayers = [];
+    let filters = filtersParam;
+
+    const MVTLayers = this.layers_.filter((layer) => {
+      return (layer.type === LayerType.MVT);
+    });
+
+    if (isNullOrEmpty(filters)) {
+      filters = [];
+    }
+    if (!isArray(filters)) {
+      filters = [filters];
+    }
+
+    if (filters.length === 0) {
+      foundLayers = MVTLayers;
+    } else {
+      filters.forEach((filterLayer) => {
+        const filteredMVTLayers = MVTLayers.filter((mvtLayer) => {
+          let layerMatched = true;
+          if (!foundLayers.includes(mvtLayer)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
+              layerMatched = (layerMatched && (filterLayer.type === mvtLayer.type));
+            }
+            if (!isNullOrEmpty(filterLayer.url)) {
+              layerMatched = (layerMatched && (filterLayer.url === mvtLayer.url));
+            }
+            if (!isNullOrEmpty(filterLayer.name)) {
+              layerMatched = (layerMatched && (filterLayer.name === mvtLayer.name));
+            }
+          } else {
+            layerMatched = false;
+          }
+          return layerMatched;
+        });
+        foundLayers = foundLayers.concat(filteredMVTLayers);
+      });
+    }
+    return foundLayers;
+  }
+
+  /**
+   * This function removes the vector tile layers from map.
+   *
+   * @function
+   * @public
+   * @api
+   */
+  removeMVT(layers) {
+    const mvtLayers = this.getMVT(layers);
+    mvtLayers.forEach((mvtLayer) => {
+      this.layers_ = this.layers_.filter(layer => !layer.equals(mvtLayer));
+      mvtLayer.getImpl().destroy();
+    });
+
+    return this;
+  }
+
+  /**
+   * This function adds the vector tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addMVT(layers) {
+    const baseLayers = this.getBaseLayers();
+    const existsBaseLayer = baseLayers.length > 0;
+
+    layers.forEach((layer) => {
+      // checks if layer is WFS and was added to the map
+      if (layer.type === LayerType.MVT) {
+        if (!includes(this.layers_, layer)) {
+          layer.getImpl().addTo(this.facadeMap_);
+          this.layers_.push(layer);
+          layer.setZIndex(layer.getZIndex());
+          if (layer.getZIndex() == null) {
+            const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.MVT];
+            layer.setZIndex(zIndex);
+          }
+          if (!existsBaseLayer) {
+            this.updateResolutionsFromBaseLayer();
+          }
+        }
+      }
+    });
+
+    return this;
+  }
+
   /**
    * This function adds controls specified by the user
    *
@@ -2018,6 +2121,7 @@ Map.Z_INDEX[LayerType.Mapbox] = 2000;
 Map.Z_INDEX[LayerType.KML] = 3000;
 Map.Z_INDEX[LayerType.WFS] = 9999;
 Map.Z_INDEX[LayerType.Vector] = 9999;
+Map.Z_INDEX[LayerType.MVT] = 9999;
 Map.Z_INDEX[LayerType.GeoJSON] = 9999;
 
 export default Map;

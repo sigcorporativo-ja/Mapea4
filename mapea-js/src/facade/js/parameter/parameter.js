@@ -1409,6 +1409,94 @@ export const geojson = (userParameters) => {
 };
 
 /**
+ * This function gets the url of the string parameter mvt layer
+ *
+ * @function
+ * @private
+ * @param {string} parameter
+ */
+const getURLMVT = (parameter) => {
+  let url;
+  if (isString(parameter)) {
+    if (/^MVT\*.+/i.test(parameter)) {
+      const urlMatches = parameter.match(/.*\*(https?:\/\/[^*]+).*/i);
+      if (urlMatches && (urlMatches.length > 1)) {
+        url = urlMatches[1];
+      }
+    }
+  } else if (isObject(parameter) && !isNullOrEmpty(parameter.url)) {
+    url = parameter.url.trim();
+  } else if (!isObject(parameter)) {
+    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
+  }
+  return url;
+};
+
+/**
+ * This function gets the url of the string parameter mvt layer
+ *
+ * @function
+ * @private
+ * @param {string} parameter
+ */
+export const getNameMVT = (parameter) => {
+  let name;
+  if (isString(parameter)) {
+    if (/^MVT\*.+/i.test(parameter)) {
+      const urlMatches = parameter.match(/.*\*(https?:\/\/[^*]+)\*([^*]+)/i);
+      if (urlMatches && (urlMatches.length > 2)) {
+        name = urlMatches[2];
+      }
+    }
+  } else if (isObject(parameter) && !isNullOrEmpty(parameter.name)) {
+    name = parameter.name.trim();
+  } else if (!isObject(parameter)) {
+    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
+  }
+  return name;
+};
+
+/**
+ * Parses the specified user layer MVT parameters to a object
+ *
+ * @public
+ * @function
+ * @api
+ */
+export const mvt = (userParameters) => {
+  let layers = [];
+
+  // checks if the param is null or empty
+  if (isNullOrEmpty(userParameters)) {
+    Exception('No ha especificado ningún parámetro');
+  }
+
+  // checks if the parameter is an array
+  let userParametersArray = userParameters;
+  if (!isArray(userParametersArray)) {
+    userParametersArray = [userParametersArray];
+  }
+
+  layers = userParametersArray.map((userParam) => {
+    const layerObj = {};
+
+    layerObj.type = LayerType.MVT;
+
+    layerObj.name = getNameMVT(userParam);
+
+    layerObj.url = getURLMVT(userParam);
+
+    return layerObj;
+  });
+
+  if (!isArray(userParameters)) {
+    layers = layers[0];
+  }
+
+  return layers;
+};
+
+/**
  * Parses the parameter in order to get the layer name
  * @private
  * @function
@@ -2065,6 +2153,7 @@ const parameterFunction = {
   wms,
   wmts,
   geojson,
+  mvt,
 };
 
 
