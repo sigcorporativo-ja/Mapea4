@@ -4,7 +4,9 @@
 
 import MapImpl from 'impl/Map';
 import MObject from 'M/Object';
+import * as EventType from 'M/event/eventtype';
 import LayerBase from './Layer';
+
 // import WMC from './WMC';
 import { isNullOrEmpty, isArray, generateRandom } from '../util/Utils';
 
@@ -62,6 +64,20 @@ class LayerGroup extends MObject {
      */
     this.children_ = [];
   }
+
+  /**
+   * This function sets the map object of the group
+   *
+   * @public
+   * @function
+   * @param {M.Map} map
+   * @api stable
+   */
+  addTo(map) {
+    this.map = map;
+    this.fire(EventType.ADDED_TO_MAP);
+  }
+
   /**
    * TODO
    *
@@ -102,17 +118,22 @@ class LayerGroup extends MObject {
    * @api stable
    * @export
    */
-  addChild(child, index) {
-    const children = child;
+  addChild(childParam, index) {
+    const child = childParam;
     if (isNullOrEmpty(index)) {
       this.children_.push(child);
     } else {
       this.children_.splice(index, 0, child);
     }
-    if (children instanceof LayerGroup) {
-      children.parent = this;
-    } else if (children instanceof LayerBase) {
-      children.group = this;
+    if (child instanceof LayerGroup) {
+      child.parent = this;
+    } else if (child instanceof LayerBase) {
+      child.group = this;
+      // if the layer is not in the map then is added
+      if (!isNullOrEmpty(this.map) &&
+        !this.map.getRootLayers().some(rootLayer => rootLayer.equals(child))) {
+        this.map.addLayers(child);
+      }
     }
   }
 

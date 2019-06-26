@@ -282,6 +282,30 @@ class Map extends MObject {
   }
 
   /**
+   * Retrieves all layers which are in some LayerGroup
+   *
+   * @public
+   * @function
+   * @returns {Array<M.Layer>} grouped layers from the map
+   * @api stable
+   */
+  getGroupedLayers() {
+    let groupedLayers = [];
+
+    const layerGroups = this.getLayerGroups();
+    if (layerGroups.length === 1) {
+      groupedLayers = layerGroups[0].getAllLayers();
+    } else if (layerGroups.length > 1) {
+      groupedLayers = layerGroups.reduce((a, v) => {
+        return Array.isArray(a) ? a.concat(v.getAllLayers()) :
+          a.getAllLayers().concat(v.getAllLayers());
+      });
+    }
+
+    return groupedLayers;
+  }
+
+  /**
    * TODO
    *
    * @public
@@ -318,6 +342,7 @@ class Map extends MObject {
             }
           }
         }, this);
+        group.addTo(this.facadeMap_);
       }
     }, this);
     return this;
@@ -481,7 +506,8 @@ class Map extends MObject {
     let filters = filtersParam;
 
     // get all kmlLayers
-    const kmlLayers = this.layers_.filter((layer) => {
+    const allLayers = this.layers_.concat(this.getGroupedLayers());
+    const kmlLayers = allLayers.filter((layer) => {
       return (layer.type === LayerType.KML);
     });
 
@@ -590,7 +616,8 @@ class Map extends MObject {
     let filters = filtersParam;
 
     // get all wmsLayers
-    const wmsLayers = this.layers_.filter((layer) => {
+    const allLayers = this.layers_.concat(this.getGroupedLayers());
+    const wmsLayers = allLayers.filter((layer) => {
       return (layer.type === LayerType.WMS);
     });
 
@@ -733,8 +760,9 @@ class Map extends MObject {
     let foundLayers = [];
     let filters = filtersParam;
 
-    // get all geojson layers
-    const geojsonLayers = this.layers_.filter((layer) => {
+    // get all geojsonLayers
+    const allLayers = this.layers_.concat(this.getGroupedLayers());
+    const geojsonLayers = allLayers.filter((layer) => {
       return (layer.type === LayerType.GeoJSON);
     });
 
@@ -794,7 +822,8 @@ class Map extends MObject {
     let filters = filtersParam;
 
     // get all wfsLayers
-    const wfsLayers = this.layers_.filter((layer) => {
+    const allLayers = this.layers_.concat(this.getGroupedLayers());
+    const wfsLayers = allLayers.filter((layer) => {
       return (layer.type === LayerType.WFS);
     });
 
@@ -925,8 +954,9 @@ class Map extends MObject {
     let foundLayers = [];
     let filters = filtersParam;
 
-    // get all kmlLayers
-    const wmtsLayers = this.layers_.filter((layer) => {
+    // get all wmtsLayers
+    const allLayers = this.layers_.concat(this.getGroupedLayers());
+    const wmtsLayers = allLayers.filter((layer) => {
       return (layer.type === LayerType.WMTS);
     });
 
@@ -1106,7 +1136,8 @@ class Map extends MObject {
     let filtersVar = filters;
 
     // get all wmsLayers
-    const unknowLayers = this.layers_.filter((layer) => {
+    const allLayers = this.layers_.concat(this.getGroupedLayers());
+    const unknowLayers = allLayers.filter((layer) => {
       return !LayerType.know(layer.type);
     });
 
