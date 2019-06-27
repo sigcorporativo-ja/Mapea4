@@ -1,24 +1,24 @@
 {
-   "url": {
-      "name": "searchstreetgeosearch"
-   },
-   "constructor": "M.plugin.SearchstreetGeosearch",
-   "parameters": [{
-      "type": "object",
-      "properties": [{
-         "type": "simple",
-         "name": "locality",
-         "position": 0
-      }]
-   }],
-   "files": {
-      "ol": {
-         "scripts": [
-            "searchstreetgeosearch-2.0.0.ol.min.js"
-         ],
-         "styles": [
-            "searchstreetgeosearch-2.0.0.min.css"
-         ]
-      }
-   }
+  "url": {
+    "name": "searchstreetgeosearch"
+  },
+  "constructor": "M.plugin.SearchstreetGeosearch",
+  "parameters": [{
+    "type": "object",
+    "properties": [{
+      "type": "simple",
+      "name": "locality",
+      "position": 0
+    }]
+  }],
+  "files": {
+    "ol": {
+      "scripts": [
+        "searchstreetgeosearch-2.0.1.ol.min.js"
+      ],
+      "styles": [
+        "searchstreetgeosearch-2.0.1.min.css"
+      ]
+    }
+  }
 }
