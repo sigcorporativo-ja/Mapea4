@@ -83,6 +83,27 @@ class LayerBase extends Base {
      * @api
      */
     this.userMaxExtent = parameter.maxExtent;
+
+    /**
+     * Legend
+     * @public
+     * @type {string}
+     * @api
+     */
+    this.legend = parameter.legend;
+  }
+
+  /**
+   *'legend' non - identifying name of layer
+   */
+
+  getLegend() {
+    return this.getImpl().legend;
+  }
+
+  setLegend(newLegend) {
+    this.legend = newLegend;
+    this.getImpl().legend = newLegend;
   }
 
   /**
@@ -231,6 +252,29 @@ class LayerBase extends Base {
   setMap(map) {
     this.map_ = map;
   }
+
+  /**
+   * 'LayerGroup' the layer transparence
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  getLayerGroup() {
+    return this.getImpl().layerGroup;
+  }
+
+  /**
+   * Defining new LayerGroup
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  setLayerGroup(layerGroup) {
+    this.getImpl().layerGroup = layerGroup;
+  }
+
 
   /**
    * This function indicates if the layer is visible

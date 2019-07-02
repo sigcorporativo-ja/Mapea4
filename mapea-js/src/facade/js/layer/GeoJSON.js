@@ -99,6 +99,7 @@ class GeoJSON extends LayerVector {
       Exception('El tipo de capa debe ser \''.concat(GeoJSONType).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
     }
   }
+
   /**
    * 'extract' the features properties
    */

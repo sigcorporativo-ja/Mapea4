@@ -153,7 +153,7 @@ class WFS extends Vector {
             });
             this.ol3Layer.setStyle(this.facadeVector_.getStyle().getImpl().olStyleFn);
             this.ol3Layer.setSource(clusterSource);
-          } else {
+          } else if (this.ol3Layer) {
             this.ol3Layer.setSource(newSource);
           }
         } else {

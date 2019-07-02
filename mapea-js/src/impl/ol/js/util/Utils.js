@@ -6,6 +6,7 @@ import * as WKT from 'M/geom/WKT';
 import { isNullOrEmpty, isString } from 'M/util/Utils';
 import { getWidth, extend } from 'ol/extent';
 import { get as getProj, getTransform, transformExtent } from 'ol/proj';
+import RenderFeature from 'ol/render/Feature';
 
 const getUnitsPerMeter = (projectionCode, meter) => {
   const projection = getProj(projectionCode);
@@ -15,16 +16,93 @@ const getUnitsPerMeter = (projectionCode, meter) => {
 
 export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
   const transformFunction = getTransform(codeProjection, 'EPSG:4326');
-  return featuresAsJSON.map((featureAsJSON) => {
-    return {
-      ...featureAsJSON,
-      geometry: {
-        type: featureAsJSON.geometry.type,
-        coordinates: transformFunction(featureAsJSON.geometry.coordinates),
-      },
-    };
+  const jsonResult = [];
+  let jsonFeature = {};
+  featuresAsJSON.forEach((featureAsJSON) => {
+    const coordinates = [];
+    if (Array.isArray(featureAsJSON.geometry.coordinates[0]) &&
+      featuresAsJSON.length > 1) { // Type Polygon
+      featureAsJSON.geometry.coordinates.forEach((aCoordinates) => {
+        if (!Number.isFinite(aCoordinates[0]) && Array.isArray(aCoordinates)) {
+          coordinates.push(aCoordinates.map((cord) => {
+            const arrayAuxCC = [];
+            if (Number.isFinite(cord[0])) {
+              arrayAuxCC.push(transformFunction(cord));
+            } else {
+              cord.forEach((coordinate) => {
+                arrayAuxCC.push(transformFunction(coordinate));
+              });
+            }
+            return arrayAuxCC;
+          }));
+          jsonFeature = {
+            ...featureAsJSON,
+            geometry: {
+              type: featureAsJSON.geometry.type,
+              coordinates,
+            },
+          };
+        } else { // type line
+          const coordinate = transformFunction(aCoordinates);
+          coordinates.push(coordinate);
+
+          jsonFeature = {
+            ...featureAsJSON,
+            geometry: {
+              type: featureAsJSON.geometry.type,
+              coordinates,
+            },
+          };
+        }
+      }); // Type Point
+      jsonResult.push(jsonFeature);
+    } else if (featureAsJSON.geometry.coordinates.length === 3) {
+      featureAsJSON.geometry.coordinates.pop();
+      jsonFeature = {
+        ...featureAsJSON,
+        geometry: {
+          type: featureAsJSON.geometry.type,
+          coordinates: transformFunction(featureAsJSON.geometry.coordinates),
+        },
+      };
+      jsonResult.push(jsonFeature);
+    } else if (featuresAsJSON.length === 1) { // the layer has only one feature line
+      if (featureAsJSON.geometry.coordinates[0].length > 2) {
+        const coordinatesPolygon = featureAsJSON.geometry.coordinates[0]
+          .map(coord => transformFunction(coord));
+        jsonFeature = {
+          ...featureAsJSON,
+          geometry: {
+            type: featureAsJSON.geometry.type,
+            coordinates: coordinatesPolygon,
+          },
+        };
+        jsonResult.push(jsonFeature);
+      } else {
+        jsonFeature = {
+          ...featureAsJSON,
+          geometry: {
+            type: featureAsJSON.geometry.type,
+            coordinates: transformFunction(featureAsJSON.geometry.coordinates[0]),
+          },
+        };
+        jsonResult.push(jsonFeature);
+      }
+    } else if (Number.isFinite(featureAsJSON.geometry.coordinates[0])) {
+      const coordTransformed = transformFunction(featureAsJSON.geometry.coordinates);
+      jsonFeature = {
+        ...featureAsJSON,
+        geometry: {
+          type: featureAsJSON.geometry.type,
+          coordinates: coordTransformed,
+        },
+      };
+      jsonResult.push(jsonFeature);
+    }
   });
+  return jsonResult;
 };
+
 
 /**
  * @classdesc
@@ -159,40 +237,43 @@ class Utils {
     let points;
     let lineStrings;
     if (isNullOrEmpty(geometry)) {
-      return null;
-    }
-    switch (geometry.getType()) {
-      case 'Point':
-        centroid = geometry.getCoordinates();
-        break;
-      case 'LineString':
-      case 'LinearRing':
-        coordinates = geometry.getCoordinates();
-        medianIdx = Math.floor(coordinates.length / 2);
-        centroid = coordinates[medianIdx];
-        break;
-      case 'Polygon':
-        centroid = Utils.getCentroid(geometry.getInteriorPoint());
-        break;
-      case 'MultiPoint':
-        points = geometry.getPoints();
-        medianIdx = Math.floor(points.length / 2);
-        centroid = Utils.getCentroid(points[medianIdx]);
-        break;
-      case 'MultiLineString':
-        lineStrings = geometry.getLineStrings();
-        medianIdx = Math.floor(lineStrings.length / 2);
-        centroid = Utils.getCentroid(lineStrings[medianIdx]);
-        break;
-      case 'MultiPolygon':
-        points = geometry.getInteriorPoints();
-        centroid = Utils.getCentroid(points);
-        break;
-      case 'Circle':
-        centroid = geometry.getCenter();
-        break;
-      default:
-        return null;
+      centroid = null;
+    } else if (geometry instanceof RenderFeature) {
+      centroid = geometry;
+    } else {
+      switch (geometry.getType()) {
+        case 'Point':
+          centroid = geometry.getCoordinates();
+          break;
+        case 'LineString':
+        case 'LinearRing':
+          coordinates = geometry.getCoordinates();
+          medianIdx = Math.floor(coordinates.length / 2);
+          centroid = coordinates[medianIdx];
+          break;
+        case 'Polygon':
+          centroid = Utils.getCentroid(geometry.getInteriorPoint());
+          break;
+        case 'MultiPoint':
+          points = geometry.getPoints();
+          medianIdx = Math.floor(points.length / 2);
+          centroid = Utils.getCentroid(points[medianIdx]);
+          break;
+        case 'MultiLineString':
+          lineStrings = geometry.getLineStrings();
+          medianIdx = Math.floor(lineStrings.length / 2);
+          centroid = Utils.getCentroid(lineStrings[medianIdx]);
+          break;
+        case 'MultiPolygon':
+          points = geometry.getInteriorPoints();
+          centroid = Utils.getCentroid(points);
+          break;
+        case 'Circle':
+          centroid = geometry.getCenter();
+          break;
+        default:
+          return null;
+      }
     }
     return centroid;
   }

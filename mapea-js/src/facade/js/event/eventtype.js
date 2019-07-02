@@ -63,6 +63,14 @@ export const ADDED_WFS = 'added:wfs';
  * @type {string}
  * @api
  */
+export const ADDED_VECTOR_TILE = 'added:vectortile';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const ADDED_WMTS = 'added:wmts';
 
 /**
