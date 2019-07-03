@@ -11,7 +11,10 @@
   },
   "getfeatureinfo": {
     "info": "Información",
-    "title": "Consultar capa"
+    "title": "Consultar capa",
+    "no_info": "No existe información asociada",
+    "info_of": "Información de",
+    "unsupported_format": "Formato no soportado"
   },
   "wmcselector": {
     "title": "Selector de contextos"

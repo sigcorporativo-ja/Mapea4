@@ -6,10 +6,12 @@ import { unByKey } from 'ol/Observable';
 import OLControl from 'ol/control/Control';
 import * as dialog from 'M/dialog';
 import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup';
+import getfeatureinfoLayers from 'templates/getfeatureinfo_layers';
 import Popup from 'M/Popup';
 import { get as getRemote } from 'M/util/Remote';
 import { compileSync as compileTemplate } from 'M/util/Template';
 import { isNullOrEmpty, normalize, beautifyAttribute } from 'M/util/Utils';
+import { getValue } from 'M/i18n/language';
 import Control from './Control';
 
 /**
@@ -142,7 +144,7 @@ class GetFeatureInfo extends Control {
           const url = source.getGetFeatureInfoUrl(coord, viewResolution, srs, getFeatureInfoParams);
           layerNamesUrls.push({
             /** @type {String} */
-            layer: layer.name,
+            layer: layer.legend || layer.name,
             /** @type {String} */
             url,
           });
@@ -490,30 +492,64 @@ class GetFeatureInfo extends Control {
           const info = response.text;
           if (GetFeatureInfo.insert(info, formato) === true) {
             const formatedInfo = this.formatInfo(info, formato, layerName);
-            infos.push(formatedInfo);
+            infos.push({ formatedInfo, layerName });
           } else if (GetFeatureInfo.unsupportedFormat(info, formato)) {
-            infos.push(`La capa <b>' ${layerName}'</b> no soporta el formato <i>'  ${formato}  '</i>`);
+            infos.push({
+              formatedInfo: getValue('getfeatureinfo').unsupported_format,
+              layerName,
+            });
           }
         }
         contFull += 1;
         if (layerNamesUrls.length === contFull && !isNullOrEmpty(popup)) {
           popup.removeTab(loadingInfoTab);
-          if (infos.join('') === '') {
+          if (infos.length === 0) {
             popup.addTab({
               icon: 'g-cartografia-info',
               title: GetFeatureInfo.POPUP_TITLE,
-              content: 'No hay información asociada.',
+              content: getValue('getfeatureinfo').no_info,
             });
           } else {
+            const popupContent = compileTemplate(getfeatureinfoLayers, {
+              vars: {
+                layers: infos,
+                info_of: getValue('getfeatureinfo').info_of,
+              },
+              parseToHtml: false,
+            });
             popup.addTab({
               icon: 'g-cartografia-info',
               title: GetFeatureInfo.POPUP_TITLE,
-              content: infos.join(''),
-            });
+              content: popupContent,
+            }, [{
+              selector: '.m-getfeatureinfo-content-info div.m-arrow-right',
+              all: true,
+              type: 'click',
+              callback: this.toogleSection,
+            }]);
           }
         }
       });
     });
+  }
+
+  /**
+   * This functions handle the close/open beahaviour of the sections feature info
+   * @function
+   */
+  toogleSection(e) {
+    const { target } = e;
+    const { parentElement } = target.parentElement;
+    const content = parentElement.querySelector('.m-getfeatureinfo-content-info-body');
+    if (content.classList.contains('m-content-collapsed')) {
+      content.classList.remove('m-content-collapsed');
+      target.classList.remove('m-arrow-right');
+      target.classList.add('m-arrow-down');
+    } else {
+      content.classList.add('m-content-collapsed');
+      target.classList.add('m-arrow-right');
+      target.classList.remove('m-arrow-down');
+    }
   }
 }
 
