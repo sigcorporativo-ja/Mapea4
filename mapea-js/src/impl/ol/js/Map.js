@@ -1786,6 +1786,26 @@ class Map extends MObject {
   }
 
   /**
+   * This function gets current scale for this
+   * map instance
+   *
+   * @public
+   * @function
+   * @returns {number}
+   * @api stable
+   */
+  getExactScale() {
+    const olMap = this.getMapImpl();
+
+    const resolution = olMap.getView().getResolution();
+    const units = this.getProjection().units;
+
+    const scale = getScaleFromResolution(resolution, units);
+
+    return Math.trunc(scale);
+  }
+
+  /**
    * This function sets current projection for this
    * map instance
    *
