@@ -5,6 +5,7 @@ import * as LayerType from 'M/layer/Type';
 import WMS from 'M/layer/WMS';
 import Panzoombar from 'M/control/Panzoombar';
 import Control from 'M/control/Control';
+import { getValue } from 'M/i18n/language';
 
 export default class Map extends MObject {
   /**
@@ -884,7 +885,7 @@ export default class Map extends MObject {
   setMaxExtent(maxExtent) {
     // checks if the param is null or empty
     if (isNullOrEmpty(maxExtent)) {
-      Exception('No ha especificado ningún maxExtent');
+      Exception(getValue('exception').no_maxextent);
     }
 
     // set the extent by ol
@@ -940,7 +941,7 @@ export default class Map extends MObject {
   setBbox(bbox) {
     // checks if the param is null or empty
     if (isNullOrEmpty(bbox)) {
-      Exception('No ha especificado ningún bbox');
+      Exception(getValue('exception').no_bbox);
     }
 
     this.userBbox_ = bbox;
@@ -1007,7 +1008,7 @@ export default class Map extends MObject {
   setZoom(zoom) {
     // checks if the param is null or empty
     if (isNullOrEmpty(zoom)) {
-      Exception('No ha especificado ningún zoom');
+      Exception(getValue('exception').no_zoom);
     }
 
     // set the zoom by ol
@@ -1096,7 +1097,7 @@ export default class Map extends MObject {
   setProjection(projection) {
     // checks if the param is null or empty
     if (isNullOrEmpty(projection)) {
-      Exception('No ha especificado ninguna projection');
+      Exception(getValue('exception').no_projection);
     }
 
     // TODO

@@ -8,6 +8,7 @@ import Exception from '../exception/exception';
 import StyleProportional from './Proportional';
 import StyleCluster from './Cluster';
 import { generateRandomStyle } from './utils';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -27,7 +28,7 @@ class Category extends Composite {
   constructor(attributeName, categoryStyles, options = {}) {
     super(options, {});
     if (isNullOrEmpty(attributeName)) {
-      Exception('No se ha especificado el nombre del atributo.');
+      Exception(getValue('exception').no_attr_name);
     }
 
     /**
@@ -359,7 +360,8 @@ class Category extends Composite {
    * @return {M.style.Category}
    */
   static deserialize([serializedAttributeName, serializedCategoryStyles,
-    serializedOptions, serializedCompStyles]) {
+    serializedOptions, serializedCompStyles,
+  ]) {
     const attributeName = serializedAttributeName;
     const categoryStyles = serializedCategoryStyles;
     Object.keys(serializedCategoryStyles).forEach((category) => {

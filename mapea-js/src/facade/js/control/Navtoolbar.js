@@ -7,6 +7,7 @@ import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -30,7 +31,7 @@ class Navtoolbar extends ControlBase {
     super(impl, Navtoolbar.NAME);
 
     if (isUndefined(NavtoolbarImpl)) {
-      Exception('La implementación usada no puede crear controles Navtoolbar');
+      Exception(getValue('exception').navtoolbar_method);
     }
   }
   /**

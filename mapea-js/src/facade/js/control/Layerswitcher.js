@@ -14,6 +14,7 @@ import * as LayerType from '../layer/Type';
 import Vector from '../layer/Vector';
 import StylePoint from '../style/Point';
 import * as EventType from '../event/eventtype';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -37,7 +38,7 @@ class LayerSwitcher extends ControlBase {
     super(impl, LayerSwitcher.NAME);
 
     if (isUndefined(LayerSwitcherImpl)) {
-      Exception('La implementación usada no puede crear controles LayerSwitcher');
+      Exception(getValue('exception').layerswitcher_method);
     }
   }
 

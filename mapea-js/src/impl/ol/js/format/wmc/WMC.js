@@ -2,9 +2,11 @@
  * @module M/impl/format/WMC
  */
 import Exception from 'M/exception/exception';
+import { getValue } from 'M/i18n/language';
 import { normalize } from 'M/util/Utils';
 import XML from '../XML';
 import WMC110 from './WMC110';
+
 /**
  * @classdesc
  * @api
@@ -45,7 +47,7 @@ class WMC extends XML {
    */
   readFromDocument(data) {
     if (data.nodeType !== 9) {
-      Exception('doc.nodeType should be DOCUMENT');
+      Exception(getValue('exception').must_be_document);
     }
 
     const root = data.documentElement;

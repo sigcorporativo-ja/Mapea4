@@ -5,6 +5,7 @@ import Exception from '../exception/exception';
 import * as parserParameter from '../parameter/parameter';
 import Base from '../Base';
 import { isNullOrEmpty, concatUrlPaths, isUndefined, normalize, isString, isFunction, generateRandom, isBoolean, isArray, isObject } from '../util/Utils';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -286,7 +287,7 @@ class LayerBase extends Base {
   isVisible() {
     // checks if the implementation can manage this method
     if (isUndefined(this.getImpl().isVisible)) {
-      Exception('La implementación usada no posee el método isVisible');
+      Exception(getValue('exception').isvisible_method);
     }
 
     return this.getImpl().isVisible();
@@ -302,7 +303,7 @@ class LayerBase extends Base {
   isQueryable() {
     // checks if the implementation can manage this method
     if (isUndefined(this.getImpl().isQueryable)) {
-      Exception('La implementación usada no posee el método isQueryable');
+      Exception(getValue('exception').isqueryable_method);
     }
 
     return this.getImpl().isQueryable();
@@ -319,17 +320,17 @@ class LayerBase extends Base {
     let visibility = visibilityParam;
     // checks if the param is null or empty
     if (isNullOrEmpty(visibility)) {
-      Exception('No ha especificado ningún parámetro de visibilidad');
+      Exception(getValue('exception').visibility_param);
     }
 
     // checks if the param is boolean or string
     if (!isString(visibility) && !isBoolean(visibility)) {
-      Exception('No ha especificado ningún parámetro de visibilidad');
+      Exception(getValue('exception').visibility_param);
     }
 
     // checks if the implementation can manage this method
     if (isUndefined(this.getImpl().setVisible)) {
-      Exception('La implementación usada no posee el método setVisible');
+      Exception(getValue('exception').setvisible_method);
     }
 
     visibility = /^1|(true)$/i.test(visibility);
@@ -347,7 +348,7 @@ class LayerBase extends Base {
   inRange() {
     // checks if the implementation can manage this method
     if (isUndefined(this.getImpl().inRange)) {
-      Exception('La implementación usada no posee el método inRange');
+      Exception(getValue('exception').inrage_method);
     }
 
     return this.getImpl().inRange();

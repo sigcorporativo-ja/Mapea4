@@ -8,6 +8,7 @@ import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -33,7 +34,7 @@ class Mouse extends ControlBase {
     super(impl, Mouse.NAME);
 
     if (isUndefined(MouseImpl)) {
-      Exception('La implementación usada no puede crear controles Mouse');
+      Exception(getValue('exception').mouse_method);
     }
   }
 

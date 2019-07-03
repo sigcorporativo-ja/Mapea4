@@ -9,6 +9,7 @@ import * as dialog from '../dialog';
 import StyleFeature from '../style/Feature';
 import StylePoint from '../style/Point';
 import * as EventType from '../event/eventtype';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -133,7 +134,7 @@ class Feature extends Base {
     if (typeof attributes === 'object') {
       this.getImpl().setAttributes(attributes);
     } else {
-      dialog.info('No se han especificado correctamente los atributos.');
+      dialog.info(getValue('feature').incorrect_attributes);
     }
   }
 

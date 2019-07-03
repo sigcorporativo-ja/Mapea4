@@ -12,6 +12,7 @@ import FacadeWMS from 'M/layer/WMS';
 import * as EventType from 'M/event/eventtype';
 import LayerBase from 'M/layer/Layer';
 import Exception from 'M/exception/exception';
+import { getValue } from 'M/i18n/language';
 import {
   isNullOrEmpty,
   isArray,
@@ -1525,7 +1526,7 @@ class Map extends MObject {
   setBbox(bbox, vendorOpts) {
     // checks if the param is null or empty
     if (isNullOrEmpty(bbox)) {
-      Exception('No ha especificado ningún bbox');
+      Exception(getValue('exception').no_bbox);
     }
 
     this.userBbox_ = bbox;
@@ -1589,7 +1590,7 @@ class Map extends MObject {
   setZoom(zoom) {
     // checks if the param is null or empty
     if (isNullOrEmpty(zoom)) {
-      Exception('No ha especificado ningún zoom');
+      Exception(getValue('exception').no_zoom);
     }
 
     // set the zoom by ol
@@ -1638,7 +1639,7 @@ class Map extends MObject {
   setCenter(center) {
     // checks if the param is null or empty
     if (isNullOrEmpty(center)) {
-      Exception('No ha especificado ningún center');
+      Exception(getValue('exception').no_center);
     }
 
     // set the zoom by ol
@@ -1702,7 +1703,7 @@ class Map extends MObject {
   setResolutions(resolutions, optional) {
     // checks if the param is null or empty
     if (isNullOrEmpty(resolutions)) {
-      Exception('No ha especificado ninguna resolución');
+      Exception(getValue('exception').no_resolutions);
     }
 
     if (isNullOrEmpty(optional)) {
@@ -1797,7 +1798,7 @@ class Map extends MObject {
   setProjection(projection) {
     // checks if the param is null or empty
     if (isNullOrEmpty(projection)) {
-      Exception('No ha especificado ninguna projection');
+      Exception(getValue('exception').no_projection);
     }
 
     // gets the current view and modifies its projection

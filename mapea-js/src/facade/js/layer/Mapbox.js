@@ -7,6 +7,8 @@ import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
+import { getValue } from '../i18n/language';
+
 /**
  * @classdesc
  * Main constructor of the class. Creates a Mapbox layer
@@ -39,17 +41,17 @@ class Mapbox extends LayerBase {
 
     // checks if the implementation can create Mapbox
     if (isUndefined(MapboxImpl)) {
-      Exception('La implementación usada no puede crear capas Mapbox');
+      Exception(getValue('exception').mapbox_method);
     }
 
     // checks if the param is null or empty
     if (isNullOrEmpty(userParameters)) {
-      Exception('No ha especificado ningún parámetro');
+      Exception(getValue('exception').no_param);
     }
 
     // checks if the param is null or empty
     if (isNullOrEmpty(parameters.name)) {
-      Exception('No ha especificado ningún nombre');
+      Exception(getValue('exception').no_name);
     }
 
     this.name = parameters.name;

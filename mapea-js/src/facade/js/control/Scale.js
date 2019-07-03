@@ -8,6 +8,7 @@ import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -28,7 +29,7 @@ class Scale extends ControlBase {
     super(impl, Scale.NAME);
 
     if (isUndefined(ScaleImpl)) {
-      Exception('La implementación usada no puede crear controles Scale');
+      Exception(getValue('exception').scale_method);
     }
   }
 
@@ -42,7 +43,12 @@ class Scale extends ControlBase {
    * @api
    */
   createView(map) {
-    return compileTemplate(scaleTemplate);
+    return compileTemplate(scaleTemplate, {
+      vars: {
+        title: getValue('scale').title,
+        scale: getValue('scale').scale,
+      },
+    });
   }
 
   /**

@@ -3,6 +3,7 @@
  */
 import { isString, isNullOrEmpty, getParameterValue, isObject, isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
+import { getValue } from '../i18n/language';
 
 /**
  * This function parses a container parameter in a legible
@@ -25,13 +26,13 @@ const parseContainer = (userParameters) => {
     } else if (!isNullOrEmpty(userParameters.container)) {
       container = parseContainer(userParameters.container);
     } else {
-      Exception('No ha especificado ningún parámetro contenedor');
+      Exception(getValue('exception').no_container);
     }
   } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof userParameters}`);
   }
   if (isNullOrEmpty(container)) {
-    Exception('No existe ningún contenedor con el id especificado');
+    Exception(getValue('exception').no_id_container);
   }
   return container;
 };
@@ -436,7 +437,7 @@ class Parameters {
    */
   constructor(userParameters) {
     if (isNullOrEmpty(userParameters)) {
-      Exception('No ha especificado ningún parámetro');
+      Exception(getValue('exception').no_param);
     }
 
     /**
