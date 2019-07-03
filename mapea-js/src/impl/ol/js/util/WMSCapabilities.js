@@ -42,6 +42,39 @@ class GetCapabilities {
   }
 
   /**
+   * capabilities getter
+   *
+   * @function
+   * @public
+   * @api
+   */
+  get capabilities() {
+    return this.capabilities_;
+  }
+
+  /**
+   * projection getter
+   *
+   * @function
+   * @public
+   * @api
+   */
+  get projection() {
+    return this.projection_;
+  }
+
+  /**
+   * serviceUrl getter
+   *
+   * @function
+   * @public
+   * @api
+   */
+  get serviceUrl() {
+    return this.serviceUrl_;
+  }
+
+  /**
    * This function calculates the extent for a specific layer
    * from its getCapabilities
    *
