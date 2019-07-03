@@ -2155,7 +2155,40 @@ class Map extends MObject {
       vendor: evt,
     }]);
   }
+
+  /**
+   * This function gets the rotation of the view map
+   *
+   * @function
+   * @public
+   * @api
+   * @return {number}
+   */
+  getRotation() {
+    let rotation;
+    const view = this.map_.getView();
+    if (!isNullOrEmpty(view)) {
+      rotation = view.getRotation();
+    }
+    return rotation;
+  }
+
+  /**
+   * This function sets the rotation of the view map
+   *
+   * @function
+   * @public
+   * @api
+   * @param {number}
+   */
+  setRotation(rotation) {
+    const view = this.map_.getView();
+    if (!isNullOrEmpty(view)) {
+      view.setRotation(rotation);
+    }
+  }
 }
+
 /**
  * Z-INDEX for the layers
  * @const
