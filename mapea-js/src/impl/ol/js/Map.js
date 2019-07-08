@@ -1836,11 +1836,12 @@ class Map extends MObject {
 
     const olMap = this.getMapImpl();
     const oldViewProperties = olMap.getView().getProperties();
+    const oldRotation = olMap.getView().getRotation();
     const resolution = olMap.getView().getResolution();
     const userZoom = olMap.getView().getUserZoom();
 
     // sets the new view
-    const newView = new View({ projection: olProjection });
+    const newView = new View({ projection: olProjection, rotation: oldRotation });
     newView.setProperties(oldViewProperties);
     if (!isNullOrEmpty(resolutions)) {
       newView.setResolutions(resolutions);

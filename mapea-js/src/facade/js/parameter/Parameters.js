@@ -349,6 +349,23 @@ const parseTicket = (parameter) => {
 };
 
 /**
+ * This functions gets the rotation parameter setted by the user.
+ *
+ * @private
+ * @function
+ */
+const parseRotation = (parameter) => {
+  let rotation = parameter;
+
+  if (isString(parameter)) {
+    rotation = getParameterValue('rotation', parameter);
+  } else if (isObject(parameter)) {
+    rotation = parameter.rotation;
+  }
+  return rotation;
+};
+
+/**
  * This function parses a resolutions parameter in a legible
  * parameter to Mapea and checks posible errors
  *
@@ -551,6 +568,13 @@ class Parameters {
      * @api
      */
     this.ticket = parseTicket(userParameters);
+
+    /**
+     * @public
+     * @type {number}
+     * @api
+     */
+    this.rotation = parseRotation(userParameters);
   }
 }
 

@@ -1,8 +1,48 @@
-.m-rotate-container {
+/* .m-rotate-container {
     top: 20px;
     left: 600px;
+} */
+
+.m-areas>div.m-area>div.m-panel>div.m-panel-controls>div.m-control.m-rotate-container {
+    /* display: flex; */
 }
 
-#m-rotate-button {
+.m-areas>div.m-area>div.m-panel>div.m-panel-controls>div.m-control.m-rotate-container button[class^="g-cartografia-"]#m-rotate-button {
+    background-color: #fff;
     color: #337ceb;
+    cursor: pointer;
+    position: absolute;
+    z-index: 200;
+    padding: 0;
+    left: 18%;
+    top: 18%;
+    font-size: 1.85rem;
+    border-radius: 50%;
+}
+
+.m-rotate-slider {
+    border: 6px solid #fda823;
+    border-radius: 50%;
+    height: 30px;
+    width: 30px;
+    cursor: pointer;
+    position: absolute;
+}
+
+#m-rotate-slider-container {
+    width: 40px;
+    height: 40px;
+    background-color: rgba(0, 0, 0, 0.);
+}
+
+#m-rotate-marker {
+    width: 45px;
+    position: absolute;
+    height: 45px;
+}
+
+#m-rotate-marker-circle {
+    stroke: #337ceb;
+    fill: #fff;
+    cursor: pointer;
 }

@@ -313,6 +313,13 @@ class Map extends Base {
       this.setZoom(0);
     }
 
+    // rotation
+    if (!isNullOrEmpty(params.rotation)) {
+      this.once(EventType.COMPLETED, () => {
+        this.setRotation(params.rotation);
+      });
+    }
+
     // label
     if (!isNullOrEmpty(params.label)) {
       this.addLabel(params.label);
@@ -2804,7 +2811,7 @@ class Map extends Base {
     if (isUndefined(MapImpl.prototype.getRotation)) {
       Exception(getValue('exception').no_get_rotation_method);
     }
-    return this.getImpl().getRotation();
+    return (this.getImpl().getRotation()) * (180 / Math.PI);
   }
 
   /**
@@ -2819,7 +2826,7 @@ class Map extends Base {
     if (isUndefined(MapImpl.prototype.setRotation)) {
       Exception(getValue('exception').no_set_rotation_method);
     }
-    this.getImpl().setRotation(rotation);
+    this.getImpl().setRotation(rotation * (Math.PI / 180));
   }
 }
 
