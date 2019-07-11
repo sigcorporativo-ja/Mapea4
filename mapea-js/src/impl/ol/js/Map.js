@@ -1,5 +1,6 @@
 import OLMap from 'ol/Map';
-import { get as getProj, transform } from 'ol/proj';
+// import { get as getProj, transform } from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import OLProjection from 'ol/proj/Projection';
 import OLInteraction from 'ol/interaction/Interaction';
 import MObject from 'M/Object';
@@ -1575,30 +1576,18 @@ class Map extends MObject {
     }
 
     // gets previous data
-    const olPrevProjection = getProj(this.getProjection().code);
-    // let prevBbox = this.facadeMap_.getBbox();
-    // const prevZoom = this.facadeMap_.getZoom();
+    const prevProjection = this.getProjection();
+    const olPrevProjection = getProj(prevProjection.code);
+
     let prevMaxExtent = this.facadeMap_.getMaxExtent();
-    const resolutions = this.facadeMap_.getResolutions();
+    let prevBbox = this.facadeMap_.getBbox();
 
     const olMap = this.getMapImpl();
-    const oldViewProperties = olMap.getView().getProperties();
-    const resolution = olMap.getView().getResolution();
-    const userZoom = olMap.getView().getUserZoom();
-
     // sets the new view
     const newView = new View({ projection: olProjection });
-    newView.setProperties(oldViewProperties);
-    if (!isNullOrEmpty(resolutions)) {
-      newView.setResolutions(resolutions);
-    }
-    if (!isNullOrEmpty(resolution)) {
-      newView.setResolution(resolution);
-    }
-    newView.setUserZoom(userZoom);
     olMap.setView(newView);
 
-    // updates min, max resolutions of all WMS layers
+    // updates min, max resolutions and the maxExtent of all WMS layers
     this.facadeMap_.getWMS().forEach((layer) => {
       layer.updateMinMaxResolution(projection);
     });
@@ -1608,35 +1597,24 @@ class Map extends MObject {
       if (!isArray(prevMaxExtent)) {
         prevMaxExtent = [
           prevMaxExtent.x.min,
-          prevMaxExtent.y.min, prevMaxExtent.x.max,
+          prevMaxExtent.y.min,
+          prevMaxExtent.x.max,
           prevMaxExtent.y.max,
         ];
       }
-      this.setMaxExtent(ImplUtils
+      this.facadeMap_.setMaxExtent(ImplUtils
         .transformExtent(prevMaxExtent, olPrevProjection, olProjection), false);
     }
 
-    // recalculates resolutions
-    this.updateResolutionsFromBaseLayer();
-
-    // reprojects popup
-    const popup = this.facadeMap_.getPopup();
-    if (!isNullOrEmpty(popup)) {
-      let coord = popup.getCoordinate();
-      if (!isNullOrEmpty(coord)) {
-        coord = transform(coord, olPrevProjection, olProjection);
-        popup.setCoordinate(coord);
+    // recalculates bbox
+    if (!isNullOrEmpty(prevBbox)) {
+      if (!isArray(prevBbox)) {
+        prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
       }
-    }
-
-    // reprojects label
-    const label = this.facadeMap_.getLabel();
-    if (!isNullOrEmpty(label)) {
-      let coord = label.getCoordinate();
-      if (!isNullOrEmpty(coord)) {
-        coord = transform(coord, olPrevProjection, olProjection);
-        label.setCoordinate(coord);
-      }
+      const newBbox = ImplUtils.transformExtent(prevBbox, olPrevProjection, olProjection);
+      this.facadeMap_.setBbox(newBbox, {
+        nearest: true,
+      });
     }
 
     this.fire(EventType.CHANGE);
