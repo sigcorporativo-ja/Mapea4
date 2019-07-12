@@ -480,7 +480,6 @@ class WMS extends LayerBase {
    * TODO
    */
   setMaxExtent(maxExtent) {
-    // maxExtentPromise.then((maxExtent) => {
     const minResolution = this.options.minResolution;
     const maxResolution = this.options.maxResolution;
     const olLayer = this.getOL3Layer();
@@ -498,7 +497,6 @@ class WMS extends LayerBase {
         }
       }
     }
-    // });
   }
 
   /**
@@ -538,7 +536,6 @@ class WMS extends LayerBase {
     if (isNullOrEmpty(this.getCapabilitiesPromise)) {
       const layerUrl = this.url;
       const layerVersion = this.version;
-      const projection = this.map.getProjection();
       this.getCapabilitiesPromise = new Promise((success, fail) => {
         // gest the capabilities URL
         const wmsGetCapabilitiesUrl = getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
@@ -548,6 +545,7 @@ class WMS extends LayerBase {
           const getCapabilitiesParser = new FormatWMS();
           const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
 
+          const projection = this.map.getProjection();
           const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
           success(getCapabilitiesUtils);
         });
@@ -604,7 +602,8 @@ class WMS extends LayerBase {
    */
   getExtentFromCapabilities(capabilities) {
     const name = this.facadeLayer_.name;
-    return capabilities.getLayerExtent(name);
+    const projection = this.map.getProjection().code;
+    return capabilities.getLayerExtent(name, projection);
   }
 
   /**

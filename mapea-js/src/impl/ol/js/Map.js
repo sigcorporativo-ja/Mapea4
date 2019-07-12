@@ -1508,6 +1508,9 @@ class Map extends MObject {
         const restDiff = resolutions.map(r => Math.abs(r - oldResolution));
         const newResolutionIdx = restDiff.indexOf(Math.min(...restDiff));
         newResolution = resolutions[newResolutionIdx];
+      } else {
+        // zoom 0 by default
+        newResolution = resolutions[0];
       }
     }
     newView.setResolution(newResolution);
@@ -1579,12 +1582,15 @@ class Map extends MObject {
     const prevProjection = this.getProjection();
     const olPrevProjection = getProj(prevProjection.code);
 
-    let prevMaxExtent = this.facadeMap_.getMaxExtent();
     let prevBbox = this.facadeMap_.getBbox();
 
     const olMap = this.getMapImpl();
+    const olView = olMap.getView();
+    const oldZoom = olView.getUserZoom();
+
     // sets the new view
     const newView = new View({ projection: olProjection });
+    newView.setUserZoom(oldZoom);
     olMap.setView(newView);
 
     // updates min, max resolutions and the maxExtent of all WMS layers
@@ -1592,19 +1598,7 @@ class Map extends MObject {
       layer.updateMinMaxResolution(projection);
     });
 
-    // recalculates maxExtent
-    if (!isNullOrEmpty(prevMaxExtent)) {
-      if (!isArray(prevMaxExtent)) {
-        prevMaxExtent = [
-          prevMaxExtent.x.min,
-          prevMaxExtent.y.min,
-          prevMaxExtent.x.max,
-          prevMaxExtent.y.max,
-        ];
-      }
-      this.facadeMap_.setMaxExtent(ImplUtils
-        .transformExtent(prevMaxExtent, olPrevProjection, olProjection), false);
-    }
+    this.updateResolutionsFromBaseLayer();
 
     // recalculates bbox
     if (!isNullOrEmpty(prevBbox)) {
