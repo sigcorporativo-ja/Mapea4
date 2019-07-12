@@ -107,12 +107,8 @@ class OSM extends Layer {
     this.map = map;
     this.fire(EventType.ADDED_TO_MAP);
 
-    const extent = this.facadeLayer_.getMaxExtent();
-    this.ol3Layer = new OLLayerTile(extend({
-      source: new SourceOSM(),
-      extent,
-    }, this.vendorOptions_, true));
-
+    this.ol3Layer = new OLLayerTile(extend({}, this.vendorOptions_, true));
+    this.updateSource_();
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
     this.map.getImpl().getMapImpl().getControls().getArray()
@@ -149,6 +145,9 @@ class OSM extends Layer {
     // activates animation for base layers or animated parameters
     const animated = ((this.transparent === false) || (this.options.animated === true));
     this.ol3Layer.set('animated', animated);
+
+    // set the extent when the map changed
+    this.map.on(EventType.CHANGE_PROJ, () => this.updateSource_());
   }
 
   /**
@@ -161,9 +160,26 @@ class OSM extends Layer {
    */
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
+    this.updateSource_(resolutions);
+  }
 
+  /**
+   * This function sets the map object of the layer
+   *
+   * @private
+   * @function
+   * @param resolutions new resolutions to apply
+   */
+  updateSource_(resolutions) {
+    if (isNullOrEmpty(resolutions)) {
+      this.map.getMapImpl().updateSize();
+      const size = this.map.getMapImpl().getSize();
+      const units = this.map.getProjection().units;
+      const zoomLevels = 16;
+      this.resolutions_ =
+        generateResolutionsFromExtent(this.facadeLayer_.getMaxExtent(), size, zoomLevels, units);
+    }
     if (!isNullOrEmpty(this.ol3Layer) && isNullOrEmpty(this.vendorOptions_.source)) {
-      // gets the extent
       const extent = this.facadeLayer_.getMaxExtent();
       const newSource = new SourceOSM({
         extent,
@@ -199,7 +215,7 @@ class OSM extends Layer {
    * @api stable
    */
   getMinResolution() {
-    return this.resolutions_[0];
+    // return this.resolutions_[this.resolutions_.length - 1];
   }
 
   /**
@@ -211,7 +227,7 @@ class OSM extends Layer {
    * @api stable
    */
   getMaxResolution() {
-    return this.resolutions_[this.resolutions_.length - 1];
+    // return this.resolutions_[0];
   }
 
   /**

@@ -201,16 +201,19 @@ class WMS extends LayerBase {
           }
         } else {
           this.maxExtent_ = this.map_.userMaxExtent;
+          maxExtent = this.maxExtent_;
         }
       } else {
         this.maxExtent_ = this.options.wmcMaxExtent;
+        maxExtent = this.maxExtent_;
       }
-      maxExtent = this.maxExtent_;
     } else {
       maxExtent = this.userMaxExtent;
     }
     if (!isNullOrEmpty(maxExtent) && isFunction(callbackFn)) {
       callbackFn(maxExtent);
+    } else if (isNullOrEmpty(maxExtent)) {
+      maxExtent = this.maxExtent_;
     }
     return maxExtent;
   }

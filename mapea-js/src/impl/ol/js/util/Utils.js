@@ -383,7 +383,15 @@ class Utils {
     // checks if the extent to transform is the same
     // than source projection extent
     const srcProjExtent = olSrcProj.getExtent();
-    const sameSrcProjExtent = extent.every((coord, i) => coord === srcProjExtent[i]);
+    const sameSrcProjExtent = extent.every((coord, i) => {
+      let isProjExtent = false;
+      if (i < 2) {
+        isProjExtent = (coord <= srcProjExtent[i]);
+      } else {
+        isProjExtent = (coord >= srcProjExtent[i]);
+      }
+      return isProjExtent;
+    });
 
     if (sameSrcProjExtent) {
       transformedExtent = olTgtProj.getExtent();
