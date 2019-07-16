@@ -2,7 +2,7 @@
  * @module M/layer/LayerGroup
  */
 
-import MapImpl from 'impl/Map';
+import LayerGroupImpl from 'impl/layer/LayerGroup';
 import MObject from 'M/Object';
 import * as EventType from 'M/event/eventtype';
 import LayerBase from './Layer';
@@ -19,8 +19,14 @@ import { isNullOrEmpty, isArray, generateRandom } from '../util/Utils';
  */
 class LayerGroup extends MObject {
   constructor(id, title, order) {
+    /**
+     * Implementation of this layer
+     * @public
+     * @type {M.impl.layer.LayerGroup}
+     */
+    const impl = new LayerGroupImpl(id, title, order);
     // calls the super constructor
-    super();
+    super(impl);
     /**
      * @public
      * @type {String}
@@ -63,6 +69,20 @@ class LayerGroup extends MObject {
      * @expose
      */
     this.children_ = [];
+
+    /**
+     * @private
+     * @type {Array<M.impl.layer.LayerGroup>}
+     * @expose
+     */
+    this.impl_ = impl;
+
+    /**
+     * @public
+     * @type {Number}
+     * @api stable
+     */
+    this.zIndex_ = 10000;
   }
 
   /**
@@ -97,7 +117,14 @@ class LayerGroup extends MObject {
    * @export
    */
   setZIndex(zIndex) {
-    // TODO:
+    this.zIndex_ = zIndex;
+    const layersOfLayerGroup = this.getAllLayers();
+    let countZindex = zIndex;
+    layersOfLayerGroup.forEach((varLayer) => {
+      const layer = varLayer;
+      layer.setZIndex(countZindex);
+      countZindex += 1;
+    });
   }
 
   /**
@@ -108,7 +135,7 @@ class LayerGroup extends MObject {
    * @export
    */
   getZIndex(zIndex) {
-    return MapImpl.Z_INDEX.WMC + this.order;
+    return this.zIndex_;
   }
 
   /**
