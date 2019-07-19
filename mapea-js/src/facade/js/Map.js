@@ -490,7 +490,7 @@ class Map extends Base {
         }
 
         // KML and WFS layers handler its features
-        if ((layer instanceof Vector && !(layer instanceof MVT))
+        if (layer instanceof Vector
           /* && !(layer instanceof KML) */
           &&
           !(layer instanceof WFS)) {

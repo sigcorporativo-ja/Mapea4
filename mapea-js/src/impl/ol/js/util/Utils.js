@@ -3,10 +3,21 @@
  */
 import Feature from 'M/feature/Feature';
 import * as WKT from 'M/geom/WKT';
-import { isNullOrEmpty, isString } from 'M/util/Utils';
+import { isNullOrEmpty, isString, generateRandom } from 'M/util/Utils';
 import { getWidth, extend } from 'ol/extent';
 import { get as getProj, getTransform, transformExtent } from 'ol/proj';
+import OLFeature from 'ol/Feature';
 import RenderFeature from 'ol/render/Feature';
+import GeometryType from 'ol/geom/GeometryType';
+import Point from 'ol/geom/Point';
+import LineString from 'ol/geom/LineString';
+import LinearRing from 'ol/geom/LinearRing';
+import Polygon from 'ol/geom/Polygon';
+import MultiPoint from 'ol/geom/MultiPoint';
+import MultiLineString from 'ol/geom/MultiLineString';
+import MultiPolygon from 'ol/geom/MultiPolygon';
+import GeometryCollection from 'ol/geom/GeometryCollection';
+import Circle from 'ol/geom/Circle';
 
 const getUnitsPerMeter = (projectionCode, meter) => {
   const projection = getProj(projectionCode);
@@ -399,6 +410,123 @@ class Utils {
       transformedExtent = transformExtent(extent, olSrcProj, olTgtProj);
     }
     return transformedExtent;
+  }
+
+  /**
+   * Transforms the renderFeature to standard feature.
+   * @public
+   * @function
+   * @param {RenderFeature} olRenderFeature render feature to transform
+   * @param {ol.Projection} tileProjection
+   * @param {ol.Projection} mapProjection
+   * @return {OLFeature} the ol.Feature
+   * @api stable
+   */
+  static olRenderFeature2olFeature(olRenderFeature, tileProjection, mapProjection) {
+    let olFeature;
+
+    if (!isNullOrEmpty(olRenderFeature)) {
+      const id = olRenderFeature.getId();
+      const properties = olRenderFeature.getProperties();
+      let geometry;
+      if (isNullOrEmpty(tileProjection) && isNullOrEmpty(tileProjection)) {
+        geometry = this.getGeometryFromRenderFeature(olRenderFeature.getGeometry());
+      } else {
+        const tileExtent = tileProjection.getExtent();
+        const tileWorldExtent = tileProjection.getWorldExtent();
+        if (!isNullOrEmpty(tileExtent) && !isNullOrEmpty(tileWorldExtent)) {
+          const clonedOLRenderFeature = this.cloneOLRenderFeature(olRenderFeature);
+          clonedOLRenderFeature.transform(tileProjection, mapProjection);
+          geometry = this.getGeometryFromRenderFeature(clonedOLRenderFeature.getGeometry());
+        }
+      }
+      olFeature = new OLFeature();
+      if (!isNullOrEmpty(id)) {
+        olFeature.setId(id);
+      } else {
+        olFeature.setId(generateRandom('mapea_feature_'));
+      }
+      olFeature.setProperties(properties, true);
+      olFeature.setGeometry(geometry);
+    }
+    return olFeature;
+  }
+
+  /**
+   * Clones a renderFeature
+   * @public
+   * @function
+   * @param {RenderFeature} olRenderFeature render feature to clone
+   * @return { RenderFeature } a clone
+   * @api stable
+   */
+  static cloneOLRenderFeature(olRenderFeature) {
+    const type = olRenderFeature.getType();
+    const flatCoordinates = olRenderFeature.getFlatCoordinates();
+    const ends = olRenderFeature.getEnds();
+    const properties = olRenderFeature.getProperties();
+    const id = olRenderFeature.getId();
+
+    const clonedFlatCoordinates = [...flatCoordinates];
+    const clonedProperties = Object.assign(properties);
+    const clonedEnds = [...ends];
+    const clonedOLRenderFeature =
+      new RenderFeature(type, clonedFlatCoordinates, clonedEnds, clonedProperties, id);
+
+    return clonedOLRenderFeature;
+  }
+
+  /**
+   * Creates a OL geometry from a render featuer
+   * @public
+   * @function
+   * @param {RenderFeature} olRenderFeature render feature which will be
+   * used in order to build the Geometry
+   * @param {function} transform function to reproject the coordinates
+   * @return {ol.geom} the geometry of the render feature
+   * @api stable
+   */
+  static getGeometryFromRenderFeature(olRenderFeature) {
+    let geometry;
+    const coordinates = olRenderFeature.getFlatCoordinates();
+    const ends = olRenderFeature.getEnds();
+    const endss = olRenderFeature.getEndss();
+    const type = olRenderFeature.getType();
+    switch (type) {
+      case GeometryType.POINT:
+        geometry = new Point(coordinates);
+        break;
+      case GeometryType.LINE_STRING:
+        geometry = new LineString(coordinates);
+        break;
+      case GeometryType.LINEAR_RING:
+        geometry = new LinearRing(coordinates);
+        break;
+      case GeometryType.POLYGON:
+        geometry = new Polygon(coordinates);
+        break;
+      case GeometryType.MULTI_POINT:
+        geometry = new MultiPoint(coordinates);
+        break;
+      case GeometryType.MULTI_LINE_STRING:
+        geometry = new MultiLineString(coordinates, undefined, ends);
+        break;
+      case GeometryType.MULTI_POLYGON:
+        geometry = new MultiPolygon(coordinates, undefined, endss);
+        break;
+      case GeometryType.GEOMETRY_COLLECTION:
+        const geometries = olRenderFeature.getGeometries();
+        geometry = new GeometryCollection(geometries);
+        break;
+      case GeometryType.CIRCLE:
+        const center = olRenderFeature.getFlatInteriorPoint();
+        geometry = new Circle(center);
+        break;
+      default:
+        geometry = null;
+    }
+
+    return geometry;
   }
 
   /**
