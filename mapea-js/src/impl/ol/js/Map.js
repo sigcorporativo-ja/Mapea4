@@ -146,10 +146,9 @@ class Map extends MObject {
       // renderer,
       view: new View(),
     });
-    this.facadeMap_.on(EventType.COMPLETED, () => {
-      this.map_.updateSize();
-    });
-    this.map_.on('singleclick', this.onMapClick_.bind(this));
+
+    this.registerEvents_();
+
     this.map_.addInteraction(new OLInteraction({
       handleEvent: (e) => {
         if (e.type === 'pointermove') {
@@ -2087,6 +2086,34 @@ class Map extends MObject {
    */
   setFacadeMap(facadeMap) {
     this.facadeMap_ = facadeMap;
+  }
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   */
+  registerEvents_() {
+    this.facadeMap_.on(EventType.COMPLETED, () => {
+      this.map_.updateSize();
+    });
+    this.map_.on('singleclick', this.onMapClick_.bind(this));
+    this.map_.getView().on('change:resolution', this.zoomEvent_.bind(this));
+    this.map_.on('change:view', (evt) => {
+      evt.oldValue.un('change:resolution', this.zoomEvent_.bind(this));
+      this.map_.getView().on('change:resolution', this.zoomEvent_.bind(this));
+    });
+  }
+
+  /**
+   * TODO
+   *
+   * @private
+   * @function
+   */
+  zoomEvent_(evt) {
+    this.facadeMap_.fire(EventType.CHANGE_ZOOM, evt);
   }
 
   /**

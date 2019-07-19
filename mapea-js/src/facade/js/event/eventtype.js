@@ -199,6 +199,14 @@ export const CHANGE_STYLE = 'change:style';
  * @type {string}
  * @api
  */
+export const CHANGE_ZOOM = 'change:zoom';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const CLICK = 'click';
 
 /**
