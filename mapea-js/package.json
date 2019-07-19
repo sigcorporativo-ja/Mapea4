@@ -62,9 +62,9 @@
     "draggabilly": "^2.2.0",
     "get-image-colors": "^2.0.0",
     "handlebars": "^4.1.0",
-    "jsdoc": "^3.5.5",
+    "jsdoc": "3.5.5",
     "jsts": "^2.0.2",
-    "ol": "^5.3.0",
+    "ol": "5.2.0",
     "proj4": "^2.4.4"
   },
   "scripts": {
