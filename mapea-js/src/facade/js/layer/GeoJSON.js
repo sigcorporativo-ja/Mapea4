@@ -4,7 +4,7 @@
 import GeoJSONImpl from 'impl/layer/GeoJSON';
 import LayerVector from './Vector';
 import { GeoJSON as GeoJSONType } from './Type';
-import { isString, isNullOrEmpty, isUndefined, isArray, normalize } from '../util/Utils';
+import { isString, isNullOrEmpty, isUndefined, isArray } from '../util/Utils';
 import Exception from '../exception/exception';
 import { getValue } from '../i18n/language';
 
@@ -59,8 +59,6 @@ class GeoJSON extends LayerVector {
       // source
       this.source = parameters.source;
 
-      // extract
-      this.extract = parameters.extract;
       // crs
       if (!isNullOrEmpty(parameters.crs)) {
         if (isNullOrEmpty(this.source)) {
@@ -76,10 +74,6 @@ class GeoJSON extends LayerVector {
           },
         };
       }
-    }
-
-    if (isNullOrEmpty(this.extract)) {
-      this.extract = true; // by default
     }
 
     // options
@@ -110,25 +104,6 @@ class GeoJSON extends LayerVector {
 
   set source(newSource) {
     this.getImpl().source = newSource;
-  }
-
-  /**
-   * 'extract' the features properties
-   */
-  get extract() {
-    return this.getImpl().extract;
-  }
-
-  set extract(newExtract) {
-    if (!isNullOrEmpty(newExtract)) {
-      if (isString(newExtract)) {
-        this.getImpl().extract = (normalize(newExtract) === 'true');
-      } else {
-        this.getImpl().extract = newExtract;
-      }
-    } else {
-      this.getImpl().extract = true;
-    }
   }
 
   /**

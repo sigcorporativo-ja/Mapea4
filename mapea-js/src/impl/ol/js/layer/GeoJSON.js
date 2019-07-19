@@ -1,12 +1,8 @@
 /**
  * @module M/impl/layer/GeoJSON
  */
-import { isNullOrEmpty, isObject, beautifyAttributeName, isFunction, includes } from 'M/util/Utils';
+import { isNullOrEmpty, isObject } from 'M/util/Utils';
 import * as EventType from 'M/event/eventtype';
-import ClusteredFeature from 'M/feature/Clustered';
-import Popup from 'M/Popup';
-import { compileSync as compileTemplate } from 'M/util/Template';
-import geojsonPopupTemplate from 'templates/geojson_popup';
 import GeoJSONFormat from 'M/format/GeoJSON';
 import OLSourceVector from 'ol/source/Vector';
 import { get as getProj } from 'ol/proj';
@@ -207,22 +203,6 @@ class GeoJSON extends Vector {
    * @return {Array<number>} Extent of features
    * @api stable
    */
-  getFeaturesExtent(skipFilter, filter) {
-    const codeProj = this.map.getProjection().code;
-    const features = this.getFeatures(skipFilter, filter);
-    const extent = ImplUtils.getFeaturesExtent(features, codeProj);
-    return extent;
-  }
-
-  /**
-   * This function return extent of all features or discriminating by the filter
-   *
-   * @function
-   * @param {boolean} skipFilter - Indicates whether skip filter
-   * @param {M.Filter} filter - Filter to execute
-   * @return {Array<number>} Extent of features
-   * @api stable
-   */
   getFeaturesExtentPromise(skipFilter, filter) {
     return new Promise((resolve) => {
       const codeProj = this.map.getProjection().code;
@@ -237,90 +217,6 @@ class GeoJSON extends Vector {
         });
       }
     });
-  }
-
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   * @public
-   * @function
-   * @param {ol.Feature} feature
-   * @api stable
-   */
-  selectFeatures(features, coord, evt) {
-    const feature = features[0];
-    if (!(feature instanceof ClusteredFeature) && (this.extract === true)) {
-      // unselects previous features
-      this.unselectFeatures();
-
-      if (!isNullOrEmpty(feature)) {
-        const clickFn = feature.getAttribute('vendor.mapea.click');
-        if (isFunction(clickFn)) {
-          clickFn(evt, feature);
-        } else {
-          const htmlAsText = compileTemplate(geojsonPopupTemplate, {
-            vars: this.parseFeaturesForTemplate_(features),
-            parseToHtml: false,
-          });
-          const featureTabOpts = {
-            icon: 'g-cartografia-pin',
-            title: this.name,
-            content: htmlAsText,
-          };
-          let popup = this.map.getPopup();
-          if (isNullOrEmpty(popup)) {
-            popup = new Popup();
-            popup.addTab(featureTabOpts);
-            this.map.addPopup(popup, coord);
-          } else {
-            popup.addTab(featureTabOpts);
-          }
-        }
-      }
-    }
-  }
-
-  /**
-   * This function checks if an object is equals
-   * to this control
-   *
-   * @private
-   * @function
-   */
-  parseFeaturesForTemplate_(features) {
-    const featuresTemplate = {
-      features: [],
-    };
-
-    features.forEach((feature) => {
-      if (!(feature instanceof ClusteredFeature)) {
-        const properties = feature.getAttributes();
-        const propertyKeys = Object.keys(properties);
-        const attributes = [];
-        propertyKeys.forEach((key) => {
-          let addAttribute = true;
-          // adds the attribute just if it is not in
-          // hiddenAttributes_ or it is in showAttributes_
-          if (!isNullOrEmpty(this.showAttributes_)) {
-            addAttribute = includes(this.showAttributes_, key);
-          } else if (!isNullOrEmpty(this.hiddenAttributes_)) {
-            addAttribute = !includes(this.hiddenAttributes_, key);
-          }
-          if (addAttribute) {
-            attributes.push({
-              key: beautifyAttributeName(key),
-              value: properties[key],
-            });
-          }
-        });
-        const featureTemplate = {
-          id: feature.getId(),
-          attributes,
-        };
-        featuresTemplate.features.push(featureTemplate);
-      }
-    });
-    return featuresTemplate;
   }
 
   // /**

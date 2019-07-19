@@ -3,7 +3,7 @@
  */
 import VectorImpl from 'impl/layer/Vector';
 import { geojsonTo4326 } from 'impl/util/Utils';
-import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils';
+import { isUndefined, isArray, isNullOrEmpty, isString, normalize } from '../util/Utils';
 import { generateStyleLayer } from '../style/utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
@@ -40,6 +40,12 @@ class Vector extends LayerBase {
       Exception(getValue('exception').vectorlayer_method);
     }
 
+    // extract
+    this.extract = parameters.extract;
+    if (isNullOrEmpty(this.extract)) {
+      this.extract = true; // by default
+    }
+
     /**
      * TODO
      */
@@ -69,6 +75,25 @@ class Vector extends LayerBase {
     if (!isUndefined(newType) &&
       !isNullOrEmpty(newType) && (newType !== LayerType.Vector)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Vector).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
+    }
+  }
+
+  /**
+   * 'extract' the features properties
+   */
+  get extract() {
+    return this.getImpl().extract;
+  }
+
+  set extract(newExtract) {
+    if (!isNullOrEmpty(newExtract)) {
+      if (isString(newExtract)) {
+        this.getImpl().extract = (normalize(newExtract) === 'true');
+      } else {
+        this.getImpl().extract = newExtract;
+      }
+    } else {
+      this.getImpl().extract = true;
     }
   }
 
@@ -329,7 +354,6 @@ class Vector extends LayerBase {
     }
     this.fire(EventType.CHANGE_STYLE, [style, this]);
   }
-
 
   /**
    * This function return style vector

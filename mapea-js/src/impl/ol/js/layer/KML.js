@@ -256,22 +256,6 @@ class KML extends Vector {
    * @return {Array<number>} Extent of features
    * @api stable
    */
-  getFeaturesExtent(skipFilter, filter) {
-    const codeProj = this.map.getProjection().code;
-    const features = this.getFeatures(skipFilter, filter);
-    const extent = ImplUtils.getFeaturesExtent(features, codeProj);
-    return extent;
-  }
-
-  /**
-   * This function return extent of all features or discriminating by the filter
-   *
-   * @function
-   * @param {boolean} skipFilter - Indicates whether skip filter
-   * @param {M.Filter} filter - Filter to execute
-   * @return {Array<number>} Extent of features
-   * @api stable
-   */
   getFeaturesExtentPromise(skipFilter, filter) {
     return new Promise((resolve) => {
       const codeProj = this.map.getProjection().code;
