@@ -388,7 +388,11 @@ class Vector extends LayerBase {
     let legendUrl = this.getImpl().getLegendURL();
     if (legendUrl.indexOf(LayerBase.LEGEND_DEFAULT) !== -1 &&
       legendUrl.indexOf(LayerBase.LEGEND_ERROR) === -1 && this.style_ instanceof Style) {
-      legendUrl = this.style_.toImage();
+      if (this.style_ instanceof StyleCluster && this.style_.getStyles().length > 0) {
+        legendUrl = this.style_.getStyles()[0].toImage();
+      } else {
+        legendUrl = this.style_.toImage();
+      }
     }
     return legendUrl;
   }
