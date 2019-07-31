@@ -1863,8 +1863,6 @@ class Map extends MObject {
       });
     }
 
-    this.fire(EventType.CHANGE);
-
     return this;
   }
 
