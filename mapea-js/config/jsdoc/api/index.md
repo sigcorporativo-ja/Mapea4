@@ -24,13 +24,13 @@ Se ha creado una [Wiki](https://github.com/sigcorporativo-ja/Mapea4/wiki/Primero
 
 ## Navegadores soportados
 
-- Internet Explorer 11+
-- Mozilla Firefox 44+
+- EdgeHTML 12+
+- Mozilla Firefox 45+
 - Goole Chrome 49+
 
 ## Dispositivos móviles y SO soportados
 
-- Android KitKat 4.4.2+
+- Android 6+
 - iOS 9+
 
 ## Bugs
