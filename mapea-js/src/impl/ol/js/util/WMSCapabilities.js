@@ -52,9 +52,9 @@ class GetCapabilities {
    * @returns {Array<Number>} the extension
    * @api stable
    */
-  getLayerExtent(layerName) {
+  getLayerExtent(layerName, projection) {
     const layer = this.capabilities_.Capability.Layer;
-    const extent = this.getExtentRecursive_(layer, layerName);
+    const extent = this.getExtentRecursive_(layer, layerName, projection);
     return extent;
   }
 
@@ -66,28 +66,30 @@ class GetCapabilities {
    * @function
    * @param {Mx.GetCapabilities} capabilities
    * @param {String} layerName
+   * @param { String } tgtProjection
    * @returns {Array<Number>} the extension
    */
-  getExtentRecursive_(layer, layerName) {
+  getExtentRecursive_(layer, layerName, tgtProjection) {
     let extent = null;
     let i;
     if (!isNullOrEmpty(layer)) {
       // array
       if (isArray(layer)) {
         for (i = 0; i < layer.length && extent === null; i += 1) {
-          extent = this.getExtentRecursive_(layer[i], layerName);
+          extent = this.getExtentRecursive_(layer[i], layerName, tgtProjection);
         }
       } else if (isObject(layer)) {
         // base case
         if (isNullOrEmpty(layerName) || (layer.Name === layerName)) {
+          const projection = tgtProjection || this.projection_.code;
           if (!isNullOrEmpty(layer.BoundingBox)) {
-            const bboxSameProj = layer.BoundingBox.find(bbox => bbox.crs === this.projection_.code);
+            const bboxSameProj = layer.BoundingBox.find(bbox => bbox.crs === projection);
             if (!isNullOrEmpty(bboxSameProj)) {
               extent = bboxSameProj.extent;
             } else {
               const bbox = layer.BoundingBox[0];
               const projSrc = getProj(bbox.crs);
-              const projDest = getProj(this.projection_.code);
+              const projDest = getProj(projection);
               extent = ImplUtils.transformExtent(bbox.extent, projSrc, projDest);
             }
           } else if (!isNullOrEmpty(layer.LatLonBoundingBox)) {
@@ -95,12 +97,12 @@ class GetCapabilities {
             // if the layer has not the SRS then transformExtent
             // the latLonBoundingBox which is always present
             const projSrc = getProj('EPSG:4326');
-            const projDest = getProj(this.projection_.code);
+            const projDest = getProj(projection);
             extent = ImplUtils.transformExtent(bbox.extent, projSrc, projDest);
           }
         } else if (!isUndefined(layer.Layer)) {
           // recursive case
-          extent = this.getExtentRecursive_(layer.Layer, layerName);
+          extent = this.getExtentRecursive_(layer.Layer, layerName, tgtProjection);
         }
       }
     }

@@ -4,8 +4,8 @@ import { map as Mmap } from 'M/mapea';
 const mapjs = Mmap({
   container: "map",
   layers: [
-    "WMS*Municipios*http://www.ideandalucia.es/wms/dea100_divisiones_administrativas?*terminos_municipales*false*true",
-    "WMS*Mapa*http://www.ideandalucia.es/services/andalucia/wms?*00_Mapa_Andalucia*true*false",
+    'WMS*Municipios*http://www.ideandalucia.es/wms/dea100_divisiones_administrativas?*terminos_municipales*true*true',
+    'WMS*Mapa*http://www.ideandalucia.es/services/andalucia/wms?*00_Mapa_Andalucia*true*false',
   ],
 });
 

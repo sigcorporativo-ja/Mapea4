@@ -21,8 +21,8 @@ class GenerateVersionPlugin {
   apply(compiler) {
     compiler.hooks.done.tap('GenerateVersionPlugin', (stats) => {
       const { path } = stats.compilation.options.output;
-      stats.compilation.chunks.forEach((chunk) => {
-        chunk.files.forEach((file, index) => {
+      stats.compilation.chunks.forEach((chunk, index) => {
+        chunk.files.forEach((file) => {
           const basename = pathmodule.basename(file);
           const version = this.version || this.geExecuteCB(index, stats);
           let replacePath;
@@ -45,11 +45,14 @@ class GenerateVersionPlugin {
    * @function
    */
   geExecuteCB(index, stats) {
+    console.log(1, index);
     const entry = Object.keys(stats.compilation.options.entry)[index];
     const name = entry.split('/').slice(-1)[0];
     const context = stats.compilation.options.resolve.alias[this.aliasRoot];
     const absolutePath = pathmodule.resolve(context, name, this.fileName);
+    console.log(2, absolutePath);
     const version = JSON.parse(fs.readFileSync(absolutePath)).version;
+    console.log(3, version);
     return version;
   }
 }

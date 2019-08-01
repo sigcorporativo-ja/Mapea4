@@ -480,22 +480,23 @@ class WMS extends LayerBase {
    * TODO
    */
   setMaxExtent(maxExtent) {
-    // maxExtentPromise.then((maxExtent) => {
     const minResolution = this.options.minResolution;
     const maxResolution = this.options.maxResolution;
-    this.getOL3Layer().setExtent(maxExtent);
-    if (this.tiled === true) {
-      let resolutions = this.map.getResolutions();
-      if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
-        resolutions = this.resolutions_;
-      }
-      // gets the tileGrid
-      if (!isNullOrEmpty(resolutions)) {
-        const source = this.createOLSource_(resolutions, minResolution, maxResolution, maxExtent);
-        this.ol3Layer.setSource(source);
+    const olLayer = this.getOL3Layer();
+    if (!isNullOrEmpty(olLayer)) {
+      olLayer.setExtent(maxExtent);
+      if (this.tiled === true) {
+        let resolutions = this.map.getResolutions();
+        if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
+          resolutions = this.resolutions_;
+        }
+        // gets the tileGrid
+        if (!isNullOrEmpty(resolutions)) {
+          const source = this.createOLSource_(resolutions, minResolution, maxResolution, maxExtent);
+          olLayer.setSource(source);
+        }
       }
     }
-    // });
   }
 
   /**
@@ -535,7 +536,6 @@ class WMS extends LayerBase {
     if (isNullOrEmpty(this.getCapabilitiesPromise)) {
       const layerUrl = this.url;
       const layerVersion = this.version;
-      const projection = this.map.getProjection();
       this.getCapabilitiesPromise = new Promise((success, fail) => {
         // gest the capabilities URL
         const wmsGetCapabilitiesUrl = getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
@@ -545,6 +545,7 @@ class WMS extends LayerBase {
           const getCapabilitiesParser = new FormatWMS();
           const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
 
+          const projection = this.map.getProjection();
           const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
           success(getCapabilitiesUtils);
         });
@@ -601,7 +602,8 @@ class WMS extends LayerBase {
    */
   getExtentFromCapabilities(capabilities) {
     const name = this.facadeLayer_.name;
-    return capabilities.getLayerExtent(name);
+    const projection = this.map.getProjection().code;
+    return capabilities.getLayerExtent(name, projection);
   }
 
   /**
