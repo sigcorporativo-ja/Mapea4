@@ -298,7 +298,7 @@ class Cluster extends Style {
     });
     this.selectClusterInteraction_.on('select', this.selectClusterFeature_.bind(this), this);
     map.getMapImpl().addInteraction(this.selectClusterInteraction_);
-    map.getMapImpl().on('change:view', () => this.selectClusterInteraction_.refreshViewEvents().bind(this));
+    map.getMapImpl().on('change:view', evt => this.selectClusterInteraction_.refreshViewEvents(evt));
   }
 
   /**
