@@ -14,7 +14,7 @@ export const POINT = 'Point';
  * @type {string}
  * @api
  */
-export const MULTIPOINT = 'MultiPoint';
+export const MULTI_POINT = 'MultiPoint';
 
 /**
  * @const

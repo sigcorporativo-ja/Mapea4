@@ -21,8 +21,7 @@ module.exports = {
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html'],
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.js$/,
         exclude: /(node_modules\/(?!ol)|bower_components)/,
         use: {
@@ -44,24 +43,20 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              minimize: true,
-            },
-          },
-        ],
-        exclude: [/node_modules/],
+        loader: MiniCssExtractPlugin.loader,
+        exclude: /node_modules/,
+      }, {
+        test: /\.css$/,
+        loader: 'css-loader',
+        exclude: /node_modules/,
+
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg)$/,
         exclude: /node_modules/,
         loader: 'url-loader?name=fonts/[name].[ext]',
-      }],
+      }
+    ],
   },
   optimization: {
     noEmitOnErrors: true,
@@ -71,6 +66,7 @@ module.exports = {
       fileName: '.mplugin',
       regex: /([A-Za-z]+)(\..*)/,
       aliasRoot: 'plugins',
+      override: true,
     }),
     new CopywebpackPlugin([{
       from: path.join(pluginDir, '**', 'api.json'),

@@ -3,7 +3,8 @@
  */
 import { isNullOrEmpty, isArray, isObject, isUndefined } from 'M/util/Utils';
 import WMS from 'M/layer/WMS';
-import { get as getProj, transformExtent } from 'ol/proj';
+import { get as getProj } from 'ol/proj';
+import ImplUtils from './Utils';
 
 /**
  * @classdesc
@@ -51,9 +52,9 @@ class GetCapabilities {
    * @returns {Array<Number>} the extension
    * @api stable
    */
-  getLayerExtent(layerName) {
+  getLayerExtent(layerName, projection) {
     const layer = this.capabilities_.Capability.Layer;
-    const extent = this.getExtentRecursive_(layer, layerName);
+    const extent = this.getExtentRecursive_(layer, layerName, projection);
     return extent;
   }
 
@@ -65,56 +66,43 @@ class GetCapabilities {
    * @function
    * @param {Mx.GetCapabilities} capabilities
    * @param {String} layerName
+   * @param { String } tgtProjection
    * @returns {Array<Number>} the extension
    */
-  getExtentRecursive_(layer, layerName) {
+  getExtentRecursive_(layer, layerName, tgtProjection) {
     let extent = null;
     let i;
-    let ilen;
     if (!isNullOrEmpty(layer)) {
       // array
       if (isArray(layer)) {
         for (i = 0; i < layer.length && extent === null; i += 1) {
-          extent = this.getExtentRecursive_(layer[i], layerName);
+          extent = this.getExtentRecursive_(layer[i], layerName, tgtProjection);
         }
       } else if (isObject(layer)) {
         // base case
         if (isNullOrEmpty(layerName) || (layer.Name === layerName)) {
-          // if the layer supports the SRS
-          let srsArray = [];
-          if (!isNullOrEmpty(layer.SRS)) {
-            srsArray = layer.SRS;
-          } else if (!isNullOrEmpty(layer.CRS)) {
-            srsArray = layer.CRS;
-          }
-          if (srsArray.indexOf(this.projection_.code) !== -1) {
-            let matchedBbox = null;
-            const bboxes = layer.BoundingBox;
-            for (i = 0, ilen = bboxes.length;
-              (i < ilen) && (matchedBbox === null); i += 1) {
-              const bbox = bboxes[i];
-              if (bbox.crs === this.projection_.code) {
-                matchedBbox = bbox;
-              }
+          const projection = tgtProjection || this.projection_.code;
+          if (!isNullOrEmpty(layer.BoundingBox)) {
+            const bboxSameProj = layer.BoundingBox.find(bbox => bbox.crs === projection);
+            if (!isNullOrEmpty(bboxSameProj)) {
+              extent = bboxSameProj.extent;
+            } else {
+              const bbox = layer.BoundingBox[0];
+              const projSrc = getProj(bbox.crs);
+              const projDest = getProj(projection);
+              extent = ImplUtils.transformExtent(bbox.extent, projSrc, projDest);
             }
-            if (matchedBbox === null) {
-              matchedBbox = bboxes[0];
-            }
-            extent = matchedBbox.extent;
-            if (matchedBbox.crs !== this.projection_.code) {
-              const projSrc = getProj(matchedBbox.crs);
-              const projDest = getProj(this.projection_.code);
-              extent = transformExtent(extent, projSrc, projDest);
-            }
-          } else {
+          } else if (!isNullOrEmpty(layer.LatLonBoundingBox)) {
+            const bbox = layer.LatLonBoundingBox[0];
             // if the layer has not the SRS then transformExtent
             // the latLonBoundingBox which is always present
-            extent = layer.LatLonBoundingBox[0].extent;
-            extent = transformExtent(extent, getProj('EPSG:4326'), getProj(this.projection_.code));
+            const projSrc = getProj('EPSG:4326');
+            const projDest = getProj(projection);
+            extent = ImplUtils.transformExtent(bbox.extent, projSrc, projDest);
           }
         } else if (!isUndefined(layer.Layer)) {
           // recursive case
-          extent = this.getExtentRecursive_(layer.Layer, layerName);
+          extent = this.getExtentRecursive_(layer.Layer, layerName, tgtProjection);
         }
       }
     }

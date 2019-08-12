@@ -16,6 +16,7 @@ import {
   escapeJSCode,
   isString,
   isObject,
+  getEnvolvedExtent,
 } from './util/Utils';
 import Exception from './exception/exception';
 import Label from './Label';
@@ -143,6 +144,12 @@ class Map extends Base {
     this._userZoom = null;
 
     /**
+     * @private
+     * @type {Object}
+     */
+    this.userCenter_ = null;
+
+    /**
      * TODO
      * @private
      * @type {Boolean}
@@ -183,6 +190,14 @@ class Map extends Base {
      * @type {Vector}
      */
     this.drawLayer_ = null;
+
+    /**
+     * MaxExtent provided by the user
+     * @public
+     * @type {Array<Number>}
+     * @api
+     */
+    this.userMaxExtent = null;
 
     // adds class to the container
     params.container.classList.add('m-mapea-container');
@@ -230,14 +245,20 @@ class Map extends Base {
       this.setResolutions(params.resolutions);
     }
 
-    // layers
-    if (!isNullOrEmpty(params.layers)) {
-      this.addLayers(params.layers);
+    // maxExtent
+    if (!isNullOrEmpty(params.maxExtent)) {
+      const zoomToMaxExtent = isNullOrEmpty(params.zoom) && isNullOrEmpty(params.bbox);
+      this.setMaxExtent(params.maxExtent, zoomToMaxExtent);
     }
 
     // wmc
     if (!isNullOrEmpty(params.wmc)) {
       this.addWMC(params.wmc);
+    }
+
+    // layers
+    if (!isNullOrEmpty(params.layers)) {
+      this.addLayers(params.layers);
     }
 
     // wms
@@ -277,34 +298,16 @@ class Map extends Base {
       this.addWMC(M.config.predefinedWMC.predefinedNames[0]);
     }
 
-    // maxExtent
-    if (!isNullOrEmpty(params.maxExtent)) {
-      const zoomToMaxExtent = isNullOrEmpty(params.zoom) && isNullOrEmpty(params.bbox);
-      this.setMaxExtent(params.maxExtent, zoomToMaxExtent);
-    }
-
     // center
     if (!isNullOrEmpty(params.center)) {
       this.setCenter(params.center);
-    } else {
-      this._finishedInitCenter = false;
-      this.getInitCenter_().then((initCenter) => {
-        // checks if the user stablished a center while it was
-        // calculated
-        let newCenter = this.getCenter();
-        if (isNullOrEmpty(newCenter)) {
-          newCenter = initCenter;
-          this.setCenter(newCenter);
-        }
-
-        this._finishedInitCenter = true;
-        this._checkCompleted();
-      });
     }
 
     // zoom
     if (!isNullOrEmpty(params.zoom)) {
       this.setZoom(params.zoom);
+    } else if (isNullOrEmpty(params.bbox)) {
+      this.setZoom(0);
     }
 
     // label
@@ -312,14 +315,26 @@ class Map extends Base {
       this.addLabel(params.label);
     }
 
+    // ticket
+    if (!isNullOrEmpty(params.ticket)) {
+      this.setTicket(params.ticket);
+    }
+
     // initial zoom
     if (isNullOrEmpty(params.bbox) && isNullOrEmpty(params.zoom) && isNullOrEmpty(params.center)) {
       this.zoomToMaxExtent(true);
     }
 
-    // ticket
-    if (!isNullOrEmpty(params.ticket)) {
-      this.setTicket(params.ticket);
+    // initial center
+    if (isNullOrEmpty(params.center) && isNullOrEmpty(params.bbox)) {
+      this._finishedInitCenter = false;
+      this.getInitCenter_().then((initCenter) => {
+        if (isNullOrEmpty(this.userCenter_)) {
+          this.setCenter(initCenter);
+        }
+        this._finishedInitCenter = true;
+        this._checkCompleted();
+      });
     }
   }
 
@@ -566,10 +581,13 @@ class Map extends Base {
       const wmcLayers = [];
       layersParam.forEach((layerParam) => {
         if (isObject(layerParam) && (layerParam instanceof WMC)) {
+          layerParam.setMap(this);
           wmcLayers.push(layerParam);
         } else if (!(layerParam instanceof Layer)) {
           try {
-            wmcLayers.push(new WMC(layerParam, layerParam.options));
+            const wmcLayer = new WMC(layerParam, layerParam.options);
+            wmcLayer.setMap(this);
+            wmcLayers.push(wmcLayer);
           } catch (err) {
             Dialog.error(err.toString());
             throw err;
@@ -1444,16 +1462,58 @@ class Map extends Base {
    * @api
    */
   getMaxExtent() {
-    // checks if the implementation can set the maxExtent
-    if (isUndefined(MapImpl.prototype.getMaxExtent)) {
-      Exception('La implementación usada no posee el método getMaxExtent');
+    let maxExtent = this.userMaxExtent;
+    if (isNullOrEmpty(maxExtent)) {
+      const selectedWmc = this.getWMC().find(wmc => wmc.selected);
+      if (isNullOrEmpty(selectedWmc)) {
+        maxExtent = getEnvolvedExtent(this.getLayers().filter(layer => layer.name !== '__draw__').map(l => l.getMaxExtent()));
+      } else {
+        maxExtent = selectedWmc.getMaxExtent();
+      }
+      if (isNullOrEmpty(maxExtent)) {
+        maxExtent = this.getProjection().getExtent();
+      }
     }
-
-    // parses the parameter
-    const maxExtent = this.getImpl().getMaxExtent();
-
     return maxExtent;
   }
+
+  /**
+   * This function provides the maximum extent for this
+   * map instance.
+   * Async version of getMaxExtent
+   *
+   * @public
+   * @function
+   * @returns {Promise}
+   * @api
+   */
+  calculateMaxExtent() {
+    return new Promise((resolve) => {
+      let maxExtent = this.userMaxExtent;
+      if (isNullOrEmpty(maxExtent)) {
+        const selectedWmc = this.getWMC().find(wmc => wmc.selected);
+        if (isNullOrEmpty(selectedWmc)) {
+          const calculateExtents = this.getLayers().filter(layer => layer.name !== '__draw__').map(l => l.calculateMaxExtent());
+          Promise.all(calculateExtents).then((extents) => {
+            maxExtent = getEnvolvedExtent(extents);
+            if (isNullOrEmpty(maxExtent)) {
+              maxExtent = this.getProjection().getExtent();
+            }
+            // if the maxExtent is modified while are calculating maxExtent
+            if (!isNullOrEmpty(this.userMaxExtent)) {
+              maxExtent = this.userMaxExtent;
+            }
+            resolve(maxExtent);
+          });
+        } else {
+          selectedWmc.calculateMaxExtent().then(resolve);
+        }
+      } else {
+        resolve(maxExtent);
+      }
+    });
+  }
+
 
   /**
    * This function sets the maximum extent for this
@@ -1466,11 +1526,11 @@ class Map extends Base {
    * @returns {Map}
    * @api
    */
-  setMaxExtent(maxExtentParam, zoomToExtent) {
+  setMaxExtent(maxExtentParam, zoomToExtent = true) {
     // checks if the param is null or empty
-    // if (isNullOrEmpty(maxExtentParam)) {
-    //   Exception('No ha especificado ningún maxExtent');
-    // }
+    if (isNullOrEmpty(maxExtentParam)) {
+      this.resetMaxExtent();
+    }
 
     // checks if the implementation can set the maxExtent
     if (isUndefined(MapImpl.prototype.setMaxExtent)) {
@@ -1479,12 +1539,38 @@ class Map extends Base {
 
     // parses the parameter
     try {
-      const maxExtent = parameter.maxExtent(maxExtentParam);
+      let maxExtent = parameter.maxExtent(maxExtentParam);
+      if (!isArray(maxExtent) && isObject(maxExtent)) {
+        maxExtent = [
+          maxExtent.x.min,
+          maxExtent.y.min,
+          maxExtent.x.max,
+          maxExtent.y.max,
+        ];
+      }
+      this.userMaxExtent = maxExtent;
       this.getImpl().setMaxExtent(maxExtent, zoomToExtent);
     } catch (err) {
       Dialog.error(err.toString());
       throw err;
     }
+    return this;
+  }
+
+  /**
+   * This function resets the maximum extent of the Map.
+   *
+   * @public
+   * @function
+   * @returns {Map}
+   * @api
+   */
+  resetMaxExtent() {
+    this.userMaxExtent = null;
+    this.calculateMaxExtent().then((maxExtentParam) => {
+      const maxExtent = parameter.maxExtent(maxExtentParam);
+      this.getImpl().setMaxExtent(maxExtent, true);
+    });
     return this;
   }
 
@@ -1641,6 +1727,7 @@ class Map extends Base {
     // try {
     const center = parameter.center(centerParam);
     this.getImpl().setCenter(center);
+    this.userCenter_ = center;
     if (center.draw === true) {
       this.drawLayer_.clear();
 
@@ -1814,9 +1901,12 @@ class Map extends Base {
     try {
       const oldProj = this.getProjection();
       projection = parameter.projection(projection);
-      this.getImpl().setProjection(projection);
-      this._defaultProj = (this._defaultProj && (asDefault === true));
-      this.fire(EventType.CHANGE_PROJ, [oldProj, projection]);
+
+      if (oldProj.code !== projection.code) {
+        this.getImpl().setProjection(projection);
+        this._defaultProj = (this._defaultProj && (asDefault === true));
+        this.fire(EventType.CHANGE_PROJ, [oldProj, projection]);
+      }
     } catch (err) {
       Dialog.error(err.toString());
       if (String(err).indexOf('El formato del parámetro projection no es correcto') >= 0) {
@@ -1927,52 +2017,26 @@ class Map extends Base {
    * @api
    */
   getEnvolvedExtent() {
-    let envolvedLayers;
-    const wmcLayer = this.getWMC().find(wmc => wmc.selected);
-    if (isNullOrEmpty(wmcLayer)) {
-      const baseLayers = this.getBaseLayers();
-      if (isNullOrEmpty(baseLayers)) {
-        envolvedLayers = this.getLayers().filter(layer => layer.name !== '__draw__');
+    return new Promise((resolve) => {
+      // 1 check the WMC extent
+      const wmcLayer = this.getWMC().find(wmc => wmc.selected);
+      if (!isNullOrEmpty(wmcLayer)) {
+        wmcLayer.getMaxExtent(resolve);
       } else {
-        envolvedLayers = baseLayers;
+        const visibleBaseLayer = this.getBaseLayers().find(layer => layer.isVisible());
+        if (!isNullOrEmpty(visibleBaseLayer)) {
+          visibleBaseLayer.getMaxExtent(resolve);
+        } else {
+          const layers = this.getLayers().filter(layer => layer.name !== '__draw__');
+          Promise.all(layers.map(layer => layer.calculateMaxExtent()))
+            .then((extents) => {
+              const extentsToCalculate =
+                isNullOrEmpty(extents) ? [this.getProjection().getExtent()] : extents;
+              const envolvedMaxExtent = getEnvolvedExtent(extentsToCalculate);
+              resolve(envolvedMaxExtent);
+            });
+        }
       }
-    } else {
-      envolvedLayers = [wmcLayer];
-    }
-    return Promise.all(envolvedLayers.map((layer) => {
-      let maxExtentPromise = layer instanceof Vector ?
-        layer.getMaxExtentPromise() : layer.getMaxExtent();
-      if (!(maxExtentPromise instanceof Promise)) {
-        maxExtentPromise = new Promise(success => success(maxExtentPromise));
-      }
-      return maxExtentPromise;
-    })).then((maxExtents) => {
-      const extent = this.getProjection().getExtent();
-      const envolvedMaxExtent = {
-        x: {
-          min: extent[0],
-          max: extent[2],
-        },
-        y: {
-          min: extent[1],
-          max: extent[3],
-        },
-      };
-      if (maxExtents.length > 0) {
-        envolvedMaxExtent.x.min = Number.MAX_SAFE_INTEGER;
-        envolvedMaxExtent.y.min = Number.MAX_SAFE_INTEGER;
-        envolvedMaxExtent.x.max = Number.MIN_SAFE_INTEGER;
-        envolvedMaxExtent.y.max = Number.MIN_SAFE_INTEGER;
-        maxExtents.forEach((maxExtent) => {
-          if (!isNullOrEmpty(maxExtent)) {
-            envolvedMaxExtent.x.min = Math.min(envolvedMaxExtent.x.min, maxExtent[0]);
-            envolvedMaxExtent.y.min = Math.min(envolvedMaxExtent.y.min, maxExtent[1]);
-            envolvedMaxExtent.x.max = Math.max(envolvedMaxExtent.x.max, maxExtent[2]);
-            envolvedMaxExtent.y.max = Math.max(envolvedMaxExtent.y.max, maxExtent[3]);
-          }
-        });
-      }
-      return envolvedMaxExtent;
     });
   }
 
@@ -1986,23 +2050,13 @@ class Map extends Base {
    * @api
    */
   zoomToMaxExtent(keepUserZoom) {
-    // zoom to maxExtent if no zoom was specified
-    const maxExtent = this.getMaxExtent();
-    if (!isNullOrEmpty(maxExtent)) {
-      this.setBbox(maxExtent);
-    } else {
-      /* if no maxExtent was provided then
-       calculates the envolved extent */
-      this._finishedMaxExtent = false;
-      this.getEnvolvedExtent().then((extent) => {
-        if (keepUserZoom !== true || isNullOrEmpty(this._userZoom)) {
-          this.setBbox(extent);
-        }
-        this._finishedMaxExtent = true;
-        this._checkCompleted();
-      });
-    }
-
+    this.calculateMaxExtent().then((maxExtent) => {
+      if (keepUserZoom !== true || isNullOrEmpty(this._userZoom)) {
+        this.setBbox(maxExtent);
+      }
+      this._finishedMaxExtent = true;
+      this._checkCompleted();
+    });
     return this;
   }
 
@@ -2037,7 +2091,7 @@ class Map extends Base {
    */
   getInitCenter_() {
     return new Promise((success, fail) => {
-      const getCenterFn = (extent) => {
+      this.calculateMaxExtent().then((extent) => {
         let center;
         if (isArray(extent)) {
           center = {
@@ -2050,20 +2104,8 @@ class Map extends Base {
             y: ((extent.y.max + extent.y.min) / 2),
           };
         }
-        return center;
-      };
-      const center = this.getCenter();
-      if (isNullOrEmpty(center)) {
-        const maxExtent = this.getMaxExtent();
-        if (isNullOrEmpty(maxExtent)) {
-          this.getEnvolvedExtent()
-            .then(getCenterFn).then(success);
-        } else {
-          success(getCenterFn(maxExtent));
-        }
-      } else {
         success(center);
-      }
+      });
     });
   }
 
@@ -2129,13 +2171,7 @@ class Map extends Base {
 
     if (isNullOrEmpty(coord)) {
       this.getInitCenter_().then((initCenter) => {
-        // checks if the user stablished a center while it was
-        // calculated
-        let newCenter = this.getCenter();
-        if (isNullOrEmpty(newCenter)) {
-          newCenter = initCenter;
-        }
-        const label = new Label(text, newCenter, panMapIfOutOfView);
+        const label = new Label(text, initCenter, panMapIfOutOfView);
         this.getImpl().addLabel(label);
       });
     } else {

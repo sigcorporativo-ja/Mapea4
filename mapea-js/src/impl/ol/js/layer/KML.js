@@ -97,6 +97,7 @@ class KML extends Vector {
    */
   addTo(map) {
     this.map = map;
+    this.fire(EventType.ADDED_TO_MAP);
     map.on(EventType.CHANGE_PROJ, this.setProjection_.bind(this), this);
     this.formater_ = new FormatKML();
     this.loader_ = new LoaderKML(this.map, this.url, this.formater_);

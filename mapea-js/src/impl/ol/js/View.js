@@ -1,6 +1,7 @@
 /**
  * @module M/impl/View
  */
+import { isNullOrEmpty } from 'M/util/Utils';
 import OLView from 'ol/View';
 
 class View extends OLView {
@@ -24,15 +25,16 @@ class View extends OLView {
    */
   setUserZoom(zoom) {
     this.userZoom_ = zoom;
-    this.setZoom(zoom);
+    if (!isNullOrEmpty(zoom)) {
+      this.setZoom(zoom);
+    }
   }
 
   /**
    * Provides the zoom user
-   * @param {number} zoom Zoom level.
    * @api stable
    */
-  getUserZoom(zoom) {
+  getUserZoom() {
     return this.userZoom_;
   }
 
@@ -85,7 +87,9 @@ class View extends OLView {
       projection: this.projection_,
       center: this.getCenter(),
     });
-    // this.setZoom(this.userZoom_);
+    if (!isNullOrEmpty(this.userZoom_)) {
+      this.setZoom(this.userZoom_);
+    }
   }
 }
 

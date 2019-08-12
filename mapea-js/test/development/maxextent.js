@@ -9,7 +9,7 @@ import OSM from 'M/layer/OSM';
 const mapjs = Mmap({
   container: 'map',
   layers: ["OSM"],
-  controls: ["mouse", "layerswitcher"]
+  controls: ["mouse", "layerswitcher"],
 });
 
 window.mapjs = mapjs;
@@ -32,7 +32,7 @@ const limites = new WMS("WMS*Limites*http://www.ideandalucia.es/wms/mta10v_2007?
 const canarias = new WMS("WMS*canarias*http://idecan2.grafcan.es/ServicioWMS/MOS?*WMS_MOS*true*false");
 const toporaster = new WMTS("WMTS*http://www.ideandalucia.es/geowebcache/service/wmts?*toporaster");
 const mapbox = new Mapbox("MAPBOX*mapbox.streets*true");
-const osm = new OSM({transparent: true});
+const osm = new OSM({ transparent: true });
 
 const removeLayers = () => mapjs.removeLayers(mapjs.getLayers());
 

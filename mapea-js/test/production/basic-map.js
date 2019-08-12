@@ -1,4 +1,4 @@
-window.map = M.map({
+const map = M.map({
   container: 'map',
-  controls: ['scale', 'scaleline', 'panzoombar', 'panzoom', 'layerswitcher', 'mouse', 'overviewmap', 'location'],
+  controls: ['layerswitcher'],
 });

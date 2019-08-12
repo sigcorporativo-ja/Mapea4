@@ -1,6 +1,6 @@
 import GeosearchIntegratedImpl from 'plugins/searchstreetgeosearch/impl/ol/js/geosearchintegratedcontrol';
 import GeosearchControl from 'plugins/geosearch/facade/js/geosearchcontrol';
-import searchstreetgeosearchHTML from '../../templates/searchstreetgeosearch';
+import searchstreetgeosearchHTML from 'plugins/geosearch/templates/geosearchresults';
 
 export default class GeosearchIntegrated extends GeosearchControl {
   /**
@@ -94,12 +94,12 @@ export default class GeosearchIntegrated extends GeosearchControl {
     const options = { jsonp: true, vars: resultsTemplateVars };
     const html = M.template.compileSync(searchstreetgeosearchHTML, options);
     // appends the new results
-    const newResultsScrollContainer = html.getElementsByTagName('div')['m-geosearch-results-scroll'];
+    const newResultsScrollContainer = html.querySelector('div#m-geosearch-results-scroll');
     const newResults = newResultsScrollContainer.children;
-    let newResult;
-    while ((newResult === newResults.item(0)) !== null) {
+    for (let i = 0; i < newResults.length; i += 1) {
+      const newResult = newResults.item(i);
       this.resultsScrollContainer_.appendChild(newResult);
-      newResult.addEventListener('click', this.resultClick_.bind(this));
+      newResult.addEventListener('click', e => this.resultClick_(e));
     }
 
     // updates the found num elements

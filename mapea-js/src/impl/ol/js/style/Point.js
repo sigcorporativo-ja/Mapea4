@@ -38,9 +38,13 @@ class Point extends Simple {
    * @api stable
    */
   toImage(canvas) {
-    // TODO: #232
     let image = null;
-    if (isDynamic(this.options_) === true) {
+    const options = {
+      fill: this.options_.fill,
+      stroke: this.options_.stroke,
+      icon: this.options_.icon,
+    };
+    if (isDynamic(options) === true) {
       image = drawDynamicStyle(canvas);
     } else {
       if (isNullOrEmpty(this.olStyleFn_)) {
@@ -273,24 +277,26 @@ class Point extends Simple {
    */
   updateCanvas(canvas) {
     this.updateFacadeOptions(this.options_);
-    const canvasSize = this.getCanvasSize();
-    const vectorContext = toContextRender(canvas.getContext('2d'), {
-      size: canvasSize,
-    });
-    let applyStyle = this.olStyleFn_()[0];
-    if (!isNullOrEmpty(applyStyle.getText())) {
-      applyStyle.setText(null);
+    if (!isDynamic(this.options_)) {
+      const canvasSize = this.getCanvasSize();
+      const vectorContext = toContextRender(canvas.getContext('2d'), {
+        size: canvasSize,
+      });
+      let applyStyle = this.olStyleFn_()[0];
+      if (!isNullOrEmpty(applyStyle.getText())) {
+        applyStyle.setText(null);
+      }
+      if (!isNullOrEmpty(this.olStyleFn_()[1]) &&
+        this.olStyleFn_()[1].getImage() instanceof OLStyleFontsSymbol) {
+        applyStyle = this.olStyleFn_()[1];
+      }
+      const stroke = applyStyle.getImage().getStroke();
+      if (!isNullOrEmpty(stroke) && !isNullOrEmpty(stroke.getWidth())) {
+        stroke.setWidth(3);
+      }
+      vectorContext.setStyle(applyStyle);
+      this.drawGeometryToCanvas(vectorContext);
     }
-    if (!isNullOrEmpty(this.olStyleFn_()[1]) &&
-      this.olStyleFn_()[1].getImage() instanceof OLStyleFontsSymbol) {
-      applyStyle = this.olStyleFn_()[1];
-    }
-    const stroke = applyStyle.getImage().getStroke();
-    if (!isNullOrEmpty(stroke) && !isNullOrEmpty(stroke.getWidth())) {
-      stroke.setWidth(3);
-    }
-    vectorContext.setStyle(applyStyle);
-    this.drawGeometryToCanvas(vectorContext);
   }
 
   /**

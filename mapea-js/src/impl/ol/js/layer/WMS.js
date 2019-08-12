@@ -9,16 +9,20 @@ import {
   concatUrlPaths,
   getWMSGetCapabilitiesUrl,
   extend,
+  fillResolutions,
+  generateResolutionsFromExtent,
 } from 'M/util/Utils';
 import FacadeLayerBase from 'M/layer/Layer';
 import * as LayerType from 'M/layer/Type';
 import FacadeWMS from 'M/layer/WMS';
 import { get as getRemote } from 'M/util/Remote';
+import * as EventType from 'M/event/eventtype';
 import OLLayerTile from 'ol/layer/Tile';
 import OLLayerImage from 'ol/layer/Image';
-import { get as getProj, transformExtent } from 'ol/proj';
+import { get as getProj } from 'ol/proj';
 import OLTileGrid from 'ol/tilegrid/TileGrid';
 import { getBottomLeft } from 'ol/extent';
+import ImplUtils from '../util/Utils';
 import ImplMap from '../Map';
 import LayerBase from './Layer';
 import GetCapabilities from '../util/WMSCapabilities';
@@ -156,11 +160,11 @@ class WMS extends LayerBase {
           this.ol3Layer.setVisible(visibility);
         }
 
-        // updates resolutions and keep the bbox
-        const oldBbox = this.map.getBbox();
+        // updates resolutions and keep the zoom
+        const oldZoom = this.map.getZoom();
         this.map.getImpl().updateResolutionsFromBaseLayer();
-        if (!isNullOrEmpty(oldBbox)) {
-          this.map.setBbox(oldBbox);
+        if (!isNullOrEmpty(oldZoom)) {
+          this.map.setZoom(oldZoom);
         }
       } else if (!isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
@@ -189,6 +193,7 @@ class WMS extends LayerBase {
    */
   addTo(map) {
     this.map = map;
+    this.fire(EventType.ADDED_TO_MAP);
 
     // calculates the resolutions from scales
     if (!isNull(this.options) &&
@@ -205,8 +210,7 @@ class WMS extends LayerBase {
       this.addSingleLayer_();
     }
 
-    if (this.legendUrl_ === concatUrlPaths([M.config.THEME_URL,
-      FacadeLayerBase.LEGEND_DEFAULT])) {
+    if (this.legendUrl_ === concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
       this.legendUrl_ = addParameters(this.url, {
         SERVICE: 'WMS',
         VERSION: this.version,
@@ -228,56 +232,15 @@ class WMS extends LayerBase {
    */
   setResolutions(resolutions) {
     this.resolutions_ = resolutions;
-    if ((this.tiled === true) && !isNullOrEmpty(this.ol3Layer) &&
-      isNullOrEmpty(this.vendorOptions_.source)) {
-      // gets the extent
-      this.facadeLayer_.getMaxExtent().then((maxExtent) => {
-        const layerParams = {
-          LAYERS: this.name,
-          TILED: true,
-          VERSION: this.version,
-          TRANSPARENT: this.transparent,
-          FORMAT: 'image/png',
-        };
-        const optParams = this.options.params;
-        if (!isNullOrEmpty(optParams)) {
-          const keysOptParams = Object.keys(optParams);
-          keysOptParams.forEach((key) => {
-            if (Object.prototype.hasOwnProperty.call(optParams, key)) {
-              layerParams[key.toUpperCase()] = optParams[key];
-            }
-          });
-          // TODO: parche para pedir todas las capas en PNG
-          // layerParams.FORMAT = 'image/png';
-        }
-
-        let newSource;
-        if (this.tiled === true) {
-          newSource = new TileWMS({
-            url: this.url,
-            params: layerParams,
-            tileGrid: new OLTileGrid({
-              resolutions,
-              extent: maxExtent,
-              origin: getBottomLeft(maxExtent),
-            }),
-            extent: maxExtent,
-            minResolution: this.options.minResolution,
-            maxResolution: this.options.maxResolution,
-            opacity: this.opacity_,
-            zIndex: this.zIndex_,
-          });
-        } else {
-          newSource = new ImageWMS({
-            url: this.url,
-            params: layerParams,
-            resolutions,
-          });
-        }
-        this.ol3Layer.setSource(newSource);
-        this.ol3Layer.setExtent(maxExtent);
-      });
-    }
+    this.facadeLayer_.calculateMaxExtent().then((extent) => {
+      if (!isNullOrEmpty(this.ol3Layer)) {
+        const minResolution = this.options.minResolution;
+        const maxResolution = this.options.maxResolution;
+        const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
+        this.ol3Layer.setSource(source);
+        this.ol3Layer.setExtent(extent);
+      }
+    });
   }
 
   /**
@@ -287,82 +250,56 @@ class WMS extends LayerBase {
    * @function
    */
   addSingleLayer_() {
-    // gets resolutions of the map
-    let resolutions = this.map.getResolutions();
-
-    // gets the extent
-    this.facadeLayer_.getMaxExtent().then((maxExtent) => {
-      let tileGrid;
-
+    this.facadeLayer_.calculateMaxExtent().then((extent) => {
+      const minResolution = this.options.minResolution;
+      const maxResolution = this.options.maxResolution;
+      const opacity = this.opacity_;
+      const zIndex = this.zIndex_;
+      const visible = this.visibility && (this.options.visibility !== false);
+      let resolutions = this.map.getResolutions();
       if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
         resolutions = this.resolutions_;
+      } else if (isNullOrEmpty(resolutions)) {
+        // generates the resolution
+        const zoomLevels = this.getNumZoomLevels();
+        const size = this.map.getMapImpl().getSize();
+        const units = this.map.getProjection().units;
+        if (!isNullOrEmpty(minResolution) && !isNullOrEmpty(maxResolution)) {
+          resolutions = fillResolutions(minResolution, maxResolution, zoomLevels);
+        } else {
+          resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
+        }
       }
-
-      // gets the tileGrid
-      if (!isNullOrEmpty(resolutions)) {
-        tileGrid = new OLTileGrid({
-          resolutions,
-          extent: maxExtent,
-          origin: getBottomLeft(maxExtent),
-        });
-      }
-
-      const layerParams = {
-        LAYERS: this.name,
-        TILED: true,
-        VERSION: this.version,
-        TRANSPARENT: this.transparent,
-        FORMAT: 'image/png',
-      };
-
-      const optParams = this.options.params;
-      if (!isNullOrEmpty(optParams)) {
-        const keysOptParams = Object.keys(optParams);
-        keysOptParams.forEach((key) => {
-          if (Object.prototype.hasOwnProperty.call(optParams, key)) {
-            layerParams[key.toUpperCase()] = optParams[key];
-          }
-        });
-        // TODO: parche para pedir todas las capas en PNG
-        // layerParams.FORMAT = 'image/png';
-      }
-
-      this.layerParams_ = layerParams;
+      const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
       if (this.tiled === true) {
         this.ol3Layer = new OLLayerTile(extend({
-          visible: this.visibility && (this.options.visibility !== false),
-          source: new TileWMS({
-            url: this.url,
-            params: layerParams,
-            tileGrid,
-          }),
-          extent: maxExtent,
-          minResolution: this.options.minResolution,
-          maxResolution: this.options.maxResolution,
-          opacity: this.opacity_,
-          zIndex: this.zIndex_,
+          visible,
+          source,
+          extent,
+          minResolution,
+          maxResolution,
+          opacity,
+          zIndex,
         }, this.vendorOptions_, true));
       } else {
         this.ol3Layer = new OLLayerImage(extend({
-          visible: this.visibility && (this.options.visibility !== false),
-          source: new ImageWMS({
-            url: this.url,
-            params: layerParams,
-          }),
-          extent: maxExtent,
-          minResolution: this.options.minResolution,
-          maxResolution: this.options.maxResolution,
-          opacity: this.opacity_,
-          zIndex: this.zIndex_,
+          visible,
+          source,
+          extent,
+          minResolution,
+          maxResolution,
+          opacity,
+          zIndex,
         }, this.vendorOptions_, true));
       }
-      // keeps z-index values before ol resets
-      const zIndex = this.zIndex_;
       this.map.getMapImpl().addLayer(this.ol3Layer);
       // sets its visibility if it is in range
       if (this.isVisible() && !this.inRange()) {
         this.setVisible(false);
+      } else {
+        this.setVisible(this.visibility);
       }
+
       // sets its z-index
       if (zIndex !== null) {
         this.setZIndex(zIndex);
@@ -375,6 +312,61 @@ class WMS extends LayerBase {
       const animated = ((this.transparent === false) || (this.options.animated === true));
       this.ol3Layer.set('animated', animated);
     });
+  }
+
+  /**
+   * This function creates the ol source for this instance
+   *
+   * @private
+   * @function
+   */
+  createOLSource_(resolutions, minResolution, maxResolution, extent) {
+    let olSource = this.vendorOptions_.source;
+    if (isNullOrEmpty(this.vendorOptions_.source)) {
+      const layerParams = {
+        LAYERS: this.name,
+        TILED: true,
+        VERSION: this.version,
+        TRANSPARENT: this.transparent,
+        FORMAT: 'image/png',
+      };
+      if (!isNullOrEmpty(this.options.params)) {
+        Object.keys(this.options.params).forEach((key) => {
+          layerParams[key.toUpperCase()] = this.options.params[key];
+        });
+      }
+      const opacity = this.opacity_;
+      const zIndex = this.zIndex_;
+      if (this.tiled === true) {
+        const origin = getBottomLeft(extent);
+        olSource = new TileWMS({
+          url: this.url,
+          params: layerParams,
+          tileGrid: new OLTileGrid({
+            resolutions,
+            extent,
+            origin,
+          }),
+          extent,
+          minResolution,
+          maxResolution,
+          opacity,
+          zIndex,
+        });
+      } else {
+        olSource = new ImageWMS({
+          url: this.url,
+          params: layerParams,
+          resolutions,
+          extent,
+          minResolution,
+          maxResolution,
+          opacity,
+          zIndex,
+        });
+      }
+    }
+    return olSource;
   }
 
   /**
@@ -426,7 +418,7 @@ class WMS extends LayerBase {
     // creates the promise
     this.extentPromise = new Promise((success, fail) => {
       if (!isNullOrEmpty(this.extent_)) {
-        this.extent_ = transformExtent(this.extent_, this.extentProj_, olProjection);
+        this.extent_ = ImplUtils.transformExtent(this.extent_, this.extentProj_, olProjection);
         this.extentProj_ = olProjection;
         success(this.extent_);
       } else {
@@ -487,32 +479,24 @@ class WMS extends LayerBase {
   /**
    * TODO
    */
-  setMaxExtent(maxExtentPromise) {
-    maxExtentPromise.then((maxExtent) => {
-      this.getOL3Layer().setExtent(maxExtent);
+  setMaxExtent(maxExtent) {
+    const minResolution = this.options.minResolution;
+    const maxResolution = this.options.maxResolution;
+    const olLayer = this.getOL3Layer();
+    if (!isNullOrEmpty(olLayer)) {
+      olLayer.setExtent(maxExtent);
       if (this.tiled === true) {
         let resolutions = this.map.getResolutions();
-        let tileGrid;
         if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
           resolutions = this.resolutions_;
         }
-
         // gets the tileGrid
         if (!isNullOrEmpty(resolutions)) {
-          tileGrid = new OLTileGrid({
-            resolutions,
-            extent: maxExtent,
-            origin: getBottomLeft(maxExtent),
-          });
-          const newSource = new TileWMS({
-            url: this.url,
-            params: this.layerParams_,
-            tileGrid,
-          });
-          this.ol3Layer.setSource(newSource);
+          const source = this.createOLSource_(resolutions, minResolution, maxResolution, maxExtent);
+          olLayer.setSource(source);
         }
       }
-    });
+    }
   }
 
   /**
@@ -552,7 +536,6 @@ class WMS extends LayerBase {
     if (isNullOrEmpty(this.getCapabilitiesPromise)) {
       const layerUrl = this.url;
       const layerVersion = this.version;
-      const projection = this.map.getProjection();
       this.getCapabilitiesPromise = new Promise((success, fail) => {
         // gest the capabilities URL
         const wmsGetCapabilitiesUrl = getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
@@ -562,6 +545,7 @@ class WMS extends LayerBase {
           const getCapabilitiesParser = new FormatWMS();
           const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
 
+          const projection = this.map.getProjection();
           const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
           success(getCapabilitiesUtils);
         });
@@ -618,7 +602,8 @@ class WMS extends LayerBase {
    */
   getExtentFromCapabilities(capabilities) {
     const name = this.facadeLayer_.name;
-    return capabilities.getLayerExtent(name);
+    const projection = this.map.getProjection().code;
+    return capabilities.getLayerExtent(name, projection);
   }
 
   /**

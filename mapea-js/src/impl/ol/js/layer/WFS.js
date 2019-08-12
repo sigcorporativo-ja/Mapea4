@@ -74,13 +74,6 @@ class WFS extends Vector {
     if (isNullOrEmpty(this.options.getFeatureOutputFormat)) {
       this.options.getFeatureOutputFormat = 'application/json'; // by default
     }
-
-    /**
-     *
-     * @private
-     * @type {Promise}
-     */
-    this.loadFeaturesPromise_ = null;
   }
 
   /**
@@ -93,7 +86,6 @@ class WFS extends Vector {
    */
   addTo(map) {
     super.addTo(map);
-    this.updateSource_();
     map.getImpl().on(EventType.CHANGE, () => this.refresh());
   }
 
@@ -140,10 +132,9 @@ class WFS extends Vector {
       }
       this.loader_ = new LoaderWFS(this.map, this.service_, this.formater_);
 
-
-      const isCluster = (this.facadeVector_.getStyle() instanceof StyleCluster);
-      let ol3LayerSource = this.ol3Layer.getSource();
       this.requestFeatures_().then((features) => {
+        const isCluster = (this.facadeVector_.getStyle() instanceof StyleCluster);
+        let ol3LayerSource = this.ol3Layer.getSource();
         if (forceNewSource === true || isNullOrEmpty(ol3LayerSource)) {
           const newSource = new OLSourceVector({
             loader: () => {
@@ -177,7 +168,12 @@ class WFS extends Vector {
             this.facadeVector_.redraw();
           }));
           ol3LayerSource.set('strategy', all);
-          ol3LayerSource.changed();
+          /* cluster does infinite calls due to it executes
+          the refresh method when it has changed so we prevent
+          that checking if the style is not cluster */
+          if (!isCluster) {
+            ol3LayerSource.changed();
+          }
         }
       });
     }
@@ -324,14 +320,11 @@ class WFS extends Vector {
    * @function
    */
   requestFeatures_() {
-    if (isNullOrEmpty(this.loadFeaturesPromise_)) {
-      this.loadFeaturesPromise_ = new Promise((resolve) => {
-        this.loader_.getLoaderFn((features) => {
-          resolve(features);
-        })(null, null, getProj(this.map.getProjection().code));
-      });
-    }
-    return this.loadFeaturesPromise_;
+    return new Promise((resolve) => {
+      this.loader_.getLoaderFn((features) => {
+        resolve(features);
+      })(null, null, getProj(this.map.getProjection().code));
+    });
   }
 
   /**

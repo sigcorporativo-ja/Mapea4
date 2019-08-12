@@ -1,5 +1,6 @@
 import { isNullOrEmpty, isArray, isObject } from 'M/util/Utils';
-import { get as getProj, transformExtent } from 'ol/proj';
+import { get as getProj } from 'ol/proj';
+import ImplUtils from './Utils';
 
 /**
  * TODO
@@ -18,7 +19,7 @@ const getExtentRecursive = (layer, layerName, code) => {
         extent = layer.WGS84BoundingBox;
         const extentProj = getProj('EPSG:4326');
         const oldProj = getProj(code);
-        extent = transformExtent(extent, extentProj, oldProj);
+        extent = ImplUtils.transformExtent(extent, extentProj, oldProj);
       }
     }
   }

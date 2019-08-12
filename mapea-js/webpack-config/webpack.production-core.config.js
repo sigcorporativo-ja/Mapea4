@@ -1,5 +1,6 @@
 const path = require('path');
-const GenerateVersionPlugin = require('./GenerateVersionPlugin');
+const OptimizeCssAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const CopywebpackPlugin = require('copy-webpack-plugin');
 const argv = require('yargs').argv;
@@ -12,7 +13,7 @@ const sourcemap = argv['source-map'];
 module.exports = {
   mode: 'production',
   entry: {
-    'mapea.ol.min': path.resolve(__dirname, '..', 'src', 'index.js'),
+    [`mapea-${pjson.version}.ol.min`]: path.resolve(__dirname, '..', 'src', 'index.js'),
   },
   output: {
     path: path.resolve(__dirname, '..', 'dist'),
@@ -31,8 +32,7 @@ module.exports = {
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html', '.jpg'],
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.js$/,
         exclude: /(node_modules\/(?!ol)|bower_components)/,
         use: {
@@ -54,33 +54,35 @@ module.exports = {
       },
       {
         test: /\.css$/,
-        use: [
-          {
-            loader: MiniCssExtractPlugin.loader,
-          },
-          {
-            loader: 'css-loader',
-            options: {
-              minimize: true,
-            },
-          },
-        ],
-        exclude: [/node_modules/],
+        loader: MiniCssExtractPlugin.loader,
+        exclude: /node_modules/,
+      }, {
+        test: /\.css$/,
+        loader: 'css-loader',
+        exclude: /node_modules/,
+
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
         exclude: /node_modules/,
         loader: 'url-loader?name=fonts/[name].[ext]',
-      }],
+      }
+    ],
   },
   optimization: {
     noEmitOnErrors: true,
+    minimizer: [
+      new OptimizeCssAssetsPlugin(),
+      new TerserPlugin({
+        sourceMap: true,
+      }),
+    ]
   },
   plugins: [
-    new GenerateVersionPlugin({
-      version: pjson.version,
-      regex: /([A-Za-z]+)(\..*)/,
-    }),
+    // new GenerateVersionPlugin({
+    //   version: pjson.version,
+    //   regex: /([A-Za-z]+)(\..*)/,
+    // }),
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',
     }),
@@ -95,6 +97,10 @@ module.exports = {
     new CopywebpackPlugin([{
       from: 'src/facade/assets/img',
       to: 'assets/img',
+    }]),
+    new CopywebpackPlugin([{
+      from: 'src/facade/assets/fonts',
+      to: 'assets/fonts',
     }]),
   ],
   devtool: 'source-map',

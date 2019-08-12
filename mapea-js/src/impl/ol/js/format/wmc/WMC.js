@@ -1,5 +1,5 @@
 /**
- * @module M/impl/format/wmc/WMC
+ * @module M/impl/format/WMC
  */
 import Exception from 'M/exception/exception';
 import { normalize } from 'M/util/Utils';
@@ -55,7 +55,7 @@ class WMC extends XML {
     }
 
     const parserVersion = 'v'.concat(normalize(this.version).replace(/\./g, ''));
-    this.parser = new WMC.VERSION[parserVersion](this.options);
+    this.parser = new WMC[parserVersion](this.options);
 
     const context = this.parser.read(data);
 
@@ -63,8 +63,10 @@ class WMC extends XML {
   }
 }
 
-WMC.VERSION = {
-  v110: WMC110,
-};
+/**
+ * @constant
+ * @api
+ */
+WMC.v110 = WMC110;
 
 export default WMC;
