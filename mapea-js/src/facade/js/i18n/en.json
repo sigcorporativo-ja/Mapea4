@@ -35,6 +35,8 @@
   },
   "exception": {
     "addto_method": "The used implementation does not have the addTo method",
+    "no_get_rotation_method": "The used implementation does not have the getRotation method",
+    "no_set_rotation_method": "The used implementation does not have the setRotation method",
     "getelement_method": "The used implementation does not have the getElement method",
     "getfeatureinfo_method": "The used implementation can not create GetFeatureInfo controls",
     "mouse_method": "The used implementation can not create Mouse controls",
