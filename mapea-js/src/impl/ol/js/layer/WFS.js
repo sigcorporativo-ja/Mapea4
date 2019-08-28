@@ -134,7 +134,10 @@ class WFS extends Vector {
 
       this.requestFeatures_().then((features) => {
         const isCluster = (this.facadeVector_.getStyle() instanceof StyleCluster);
-        let ol3LayerSource = this.ol3Layer.getSource();
+        let ol3LayerSource = null;
+        if (!isNullOrEmpty(this.ol3Layer)) {
+          ol3LayerSource = this.ol3Layer.getSource();
+        }
         if (forceNewSource === true || isNullOrEmpty(ol3LayerSource)) {
           const newSource = new OLSourceVector({
             loader: () => {

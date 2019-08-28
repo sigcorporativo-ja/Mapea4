@@ -174,6 +174,7 @@ class LayerGroup extends MObject {
   removeChild(child) {
     const children = child;
     this.children_.remove(children);
+    children.getImpl().destroy();
     if (children instanceof LayerGroup) {
       children.parent = null;
     } else if (child instanceof LayerBase) {
