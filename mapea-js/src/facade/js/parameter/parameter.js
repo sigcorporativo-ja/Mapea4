@@ -104,8 +104,8 @@ const getNameKML = (parameter) => {
   let params;
   if (isString(parameter)) {
     if (/^KML\*.+/i.test(parameter)) {
-      // <KML>*<NAME>*<URL>(*<FILENAME>)?*<EXTRACT>
-      if (/^KML\*[^*]+\*[^*]+(\*[^*]+)?(\*(true|false))?$/i.test(parameter)) {
+      // <KML>*<NAME>*<URL>(*<FILENAME>)?*<EXTRACT>*<LABEL>
+      if (/^KML\*[^*]+\*[^*]+(\*[^*]+)?\*(true|false)\*(true|false)/i.test(parameter)) {
         params = parameter.split(/\*/);
         name = params[1].trim();
       }
@@ -187,17 +187,12 @@ const getExtractKML = (parameter) => {
   let params;
   if (isString(parameter)) {
     // <KML>*<NAME>*<URL>(*<FILENAME>)?*<EXTRACT>
-    if (/^KML\*[^*]+\*[^*]+(\*[^*]+)?(\*(true|false))?$/i.test(parameter)) {
+    if (/^KML\*[^*]+\*[^*]+\*[^*]+\*(true|false)/i.test(parameter)) {
       params = parameter.split(/\*/);
-      extract = params[params.length - 1].trim();
-    } else if (/^[^*]+\*[^*]+\*(true|false)$/i.test(parameter)) {
-      // <NAME>*<URL>*<EXTRACT>
+      extract = params[4].trim();
+    } else if (/^KML\*[^*]+\*[^*]+(\*(true|false))/i.test(parameter)) {
       params = parameter.split(/\*/);
-      extract = params[2].trim();
-    } else if (/^[^*]+\*(true|false)$/i.test(parameter)) {
-      // <URL>*<EXTRACT>
-      params = parameter.split(/\*/);
-      extract = params[1].trim();
+      extract = params[3].trim();
     }
   } else if (isObject(parameter)) {
     extract = normalize(parameter.extract);
@@ -211,6 +206,37 @@ const getExtractKML = (parameter) => {
     extract = undefined;
   }
   return extract;
+};
+
+/**
+ * Parses the parameter in order to get the transparence
+ * @private
+ * @function
+ */
+const getLabelKML = (parameter) => {
+  let label;
+  let params;
+  if (isString(parameter)) {
+    // <KML>*<NAME>*<URL>(*<FILENAME>)?*<EXTRACT>*<LABEL>
+    if (/^KML\*[^*]+\*[^*]+\*[^*]+\*(true|false)\*(true|false)/i.test(parameter)) {
+      params = parameter.split(/\*/);
+      label = params[5].trim();
+    } else if (/^KML\*[^*]+\*[^*]+\*(true|false)\*(true|false)/i.test(parameter)) {
+      params = parameter.split(/\*/);
+      label = params[4].trim();
+    }
+  } else if (isObject(parameter)) {
+    label = normalize(parameter.label);
+  } else {
+    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
+  }
+
+  if (!isNullOrEmpty(label)) {
+    label = /^1|(true)$/i.test(label);
+  } else {
+    label = undefined;
+  }
+  return label;
 };
 
 /**
@@ -424,12 +450,12 @@ export const projection = (projectionParameter) => {
 const getURLKML = (parameter) => {
   let url;
   if (isString(parameter)) {
-    // v3 <KML>*<NAME>*<DIR>*<FILENAME>*<EXTRACT>
-    if (/^KML\*[^*]+\*[^*]+\*[^*]+\.kml\*(true|false)$/i.test(parameter)) {
+    // v3 <KML>*<NAME>*<DIR>*<FILENAME>*<EXTRACT>*<LABEL>
+    if (/^KML\*[^*]+\*[^*]+\*[^*]+\.kml\*(true|false)\*(true|false)/i.test(parameter)) {
       const params = parameter.split(/\*/);
       url = params[2].concat(params[3]);
     } else {
-      const urlMatches = parameter.match(/^([^*]*\*)*(https?:\/\/[^*]+)(\*(true|false))?$/i);
+      const urlMatches = parameter.match(/^([^*]*\*)*(https?:\/\/[^*]+)\*(true|false)\*(true|false)/i);
       if (urlMatches && (urlMatches.length > 2)) {
         url = urlMatches[2];
       }
@@ -568,6 +594,9 @@ export const kml = (userParamer) => {
 
     // gets the extract
     layerObj.extract = getExtractKML(userParam);
+
+    // gets the label
+    layerObj.label = getLabelKML(userParam);
 
     // gets the options
     layerObj.options = getOptionsKML(userParam);
