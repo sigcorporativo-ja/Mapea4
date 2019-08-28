@@ -146,6 +146,23 @@ class WMTS extends LayerBase {
 
     return equals;
   }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  getGetFeatureInfoUrl(coordinate, zoom, formatInfo) {
+    return this.getImpl().getGetFeatureInfoUrl(coordinate, zoom, formatInfo);
+  }
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  getTileColTileRow(coordinate, zoom) {
+    return this.getImpl().getTileColTileRow(coordinate, zoom);
+  }
 }
 
 export default WMTS;
