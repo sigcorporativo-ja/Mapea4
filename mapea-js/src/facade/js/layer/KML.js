@@ -26,15 +26,20 @@ class KML extends LayerVector {
    * @api
    */
   constructor(userParameters, options = {}, vendorOptions = {}) {
+    // This layer is of parameters.
+    const parameters = parameter.layer(userParameters, LayerType.KML);
+
+    const newOpts = {
+      ...options,
+      label: parameters.label,
+    };
+
     /**
      * Implementation of this layer
      * @public
      * @type {M.layer.KML}
      */
-    const impl = new KMLImpl(options, vendorOptions);
-
-    // This layer is of parameters.
-    const parameters = parameter.layer(userParameters, LayerType.KML);
+    const impl = new KMLImpl(newOpts, vendorOptions);
 
     // calls the super constructor
     super(parameters, options, undefined, impl);

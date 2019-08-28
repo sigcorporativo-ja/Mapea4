@@ -1514,7 +1514,10 @@ class Map extends Base {
               })(control);
               break;
             case Mouse.NAME:
-              control = new Mouse();
+              control = new Mouse({
+                srs: 'EPSG:4326',
+                precision: 2,
+              });
               panel = this.getPanels('map-info')[0];
               if (isNullOrEmpty(panel)) {
                 panel = new Panel('map-info', {
@@ -1617,6 +1620,17 @@ class Map extends Base {
           //               this.panel.EDITION.addControls(control);
           //            }
           panel = this.panel.EDITION;
+        }
+        if (control instanceof Mouse) {
+          panel = this.getPanels('map-info')[0];
+          if (isNullOrEmpty(panel)) {
+            panel = new Panel('map-info', {
+              collapsible: false,
+              className: 'm-map-info',
+              position: Position.BR,
+              tooltip: 'Coordenadas del puntero',
+            });
+          }
         }
 
         if (!isNullOrEmpty(panel) && !panel.hasControl(control)) {
