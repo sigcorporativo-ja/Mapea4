@@ -26,9 +26,9 @@ class Mouse extends ControlBase {
    * @extends {M.Control}
    * @api
    */
-  constructor(vendorOptions = {}) {
+  constructor(options = {}, vendorOptions = {}) {
     // implementation of this control
-    const impl = new MouseImpl(vendorOptions);
+    const impl = new MouseImpl(options, vendorOptions);
 
     // calls the super constructor
     super(impl, Mouse.NAME);
@@ -59,8 +59,7 @@ class Mouse extends ControlBase {
    * @api
    */
   equals(obj) {
-    const equals = (obj instanceof Mouse);
-    return equals;
+    return obj instanceof Mouse;
   }
 }
 
