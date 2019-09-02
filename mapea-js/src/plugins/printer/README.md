@@ -6,8 +6,10 @@ plantilla necesite. Las plantillas 'imagen apaisada' e 'imagen cuadrada' no nece
 
 ## Recursos y uso
 
-- js: [https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.ol.min.js](https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.ol.min.js)
-- css: [https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css](https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer.min.css)
+- js: https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer-x.y.z.ol.min.js
+- css: https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer-x.y.z.min.css  
+
+Donde x.y.z representan la versión del plugin a usar según la versión de Mapea, atendiendo a la tabla de compatibilidad de versiones que se muestra más adelante.  
 
 Configuración por defecto sin parámetros:
 ```javascript
@@ -42,8 +44,6 @@ Los json que Mapea envía al servidor Geoprint deben cumplir con las siguientes 
 * No contener atributos de estilo vacíos.  
 
 ## Tabla de compatibilidad de versiones   
-En caso de utilizar un core de Mapea con número de versión explícito, debe cumplirse la siguiente relación:  
-
 versión plugin | versión Mapea |
 --- | --- |
 1.0.0 | <= 4.1.0
