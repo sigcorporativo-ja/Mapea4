@@ -12,8 +12,10 @@ Los cambios no persistidos pueden deshacerse con el botón 'deshacer'.
 
 ## Recursos y uso
 
-- js: [https://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.ol.min.js](https://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.ol.min.js)
-- css: [https://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.min.css](https://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols.min.css)
+- js: https://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols-x.y.z.ol.min.js
+- css: https://mapea4-sigc.juntadeandalucia.es/plugins/wfstcontrols/wfstcontrols-x.y.z.min.css  
+
+Donde x.y.z representan la versión del plugin a usar según la versión de Mapea, atendiendo a la tabla de compatibilidad de versiones que se muestra más adelante.  
 
 Creación del plugin:
 ```
@@ -29,8 +31,6 @@ edicionWFST.setLayer('nombreNuevaCapaWFS');
 http://jsfiddle.net/sigcJunta/6onxnaow/
 
 ## Tabla de compatibilidad de versiones   
-En caso de utilizar un core de Mapea con número de versión explícito, debe cumplirse la siguiente relación:  
-
 versión plugin | versión Mapea |
 --- | --- |
 1.0.0 | 4.0.x
