@@ -322,7 +322,8 @@ class Map extends MObject {
       if (!includes(this.layerGroups_, group)) {
         this.layerGroups_.push(group);
         group.getAllLayers().forEach((layer) => {
-          layer.getImpl().addTo(this.facadeMap_);
+          this.addLayers([layer]);
+          // layer.getImpl().addTo(this.facadeMap_);
           /* if the layer is a base layer then
           sets its visibility */
           if (layer.transparent !== true) {
