@@ -1514,10 +1514,7 @@ class Map extends Base {
               })(control);
               break;
             case Mouse.NAME:
-              control = new Mouse({
-                srs: 'EPSG:4326',
-                precision: 2,
-              });
+              control = new Mouse();
               panel = this.getPanels('map-info')[0];
               if (isNullOrEmpty(panel)) {
                 panel = new Panel('map-info', {
