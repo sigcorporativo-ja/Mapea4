@@ -322,11 +322,9 @@ class Map extends MObject {
       if (!includes(this.layerGroups_, group)) {
         this.layerGroups_.push(group);
         group.getAllLayers().forEach((layer) => {
-          this.addLayers([layer]);
-          // layer.getImpl().addTo(this.facadeMap_);
           /* if the layer is a base layer then
           sets its visibility */
-          if (layer.transparent !== true) {
+          if (!layer.transparent) {
             layer.setVisible(!existsBaseLayer);
             existsBaseLayer = true;
             if (layer.isVisible()) {
@@ -337,6 +335,8 @@ class Map extends MObject {
             const allLayersGroups = groups.map(gr => gr.getAllLayers());
             const zIndex = this.layers_.length + allLayersGroups[0].length;
             layer.getImpl().setZIndex(zIndex);
+            layer.setMap(this.facadeMap_);
+            layer.getImpl().addTo(this.facadeMap_);
             // recalculates resolution if there are not
             // any base layer
             if (!existsBaseLayer) {
