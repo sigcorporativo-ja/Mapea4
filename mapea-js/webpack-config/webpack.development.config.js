@@ -57,8 +57,7 @@ module.exports = {
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html', '.jpg'],
   },
   module: {
-    rules: [
-      {
+    rules: [{
         test: /\.js$/,
         exclude: /(node_modules\/(?!ol)|bower_components)/,
         use: {
@@ -74,6 +73,12 @@ module.exports = {
         exclude: [/node_modules/, /lib/, /test/, /dist/],
       },
       {
+        test: /\.js$/,
+        loader: path.resolve(__dirname, 'expose-entry-loader'),
+        exclude: [/node_modules/, /lib/, /dist/],
+      },
+
+      {
         test: [/\.hbs$/, /\.html$/],
         loader: 'html-loader',
         exclude: /node_modules/,
@@ -87,7 +92,8 @@ module.exports = {
         test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
         exclude: /node_modules/,
         loader: 'url-loader?name=fonts/[name].[ext]',
-      }],
+      }
+    ],
   },
   plugins: [
     new AllowMutateEsmExports(),
