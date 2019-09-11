@@ -1,4 +1,4 @@
-import { isNullOrEmpty, normalize, isArray, generateRandom } from 'M/util/Utils';
+import { isNullOrEmpty, normalize, isArray } from 'M/util/Utils';
 import WMS from 'M/layer/WMS';
 import LayerGroup from 'M/layer/LayerGroup';
 import { get as getProj } from 'ol/proj';
@@ -252,9 +252,6 @@ class WMC110 extends XML {
   readwmcLayerList(contextVar, node) {
     const context = contextVar;
     context.layers = [];
-    if (isNullOrEmpty(context.º)) {
-      context.layerGroups = new LayerGroup(generateRandom('wmc_root_'), 'root', 0);
-    }
     this.runChildNodes(context, node);
   }
 

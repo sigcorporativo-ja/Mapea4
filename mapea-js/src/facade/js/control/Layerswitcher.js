@@ -136,7 +136,8 @@ class LayerSwitcher extends ControlBase {
           const displayInLayerSwitcher = (layer.displayInLayerSwitcher === true);
           const isNotWMC = (layer.type !== LayerType.WMC);
           const isNotWMSFull = !((layer.type === LayerType.WMS) && isNullOrEmpty(layer.name));
-          return (isTransparent && isNotWMC && isNotWMSFull && displayInLayerSwitcher);
+          const hasNoGrp = layer.getLayerGroup && layer.getLayerGroup() === null;
+          return (isTransparent && isNotWMC && isNotWMSFull && displayInLayerSwitcher && hasNoGrp);
         }).reverse();
 
         const baseLayersPromise = Promise.all(baseLayers.map(LayerSwitcher.parseLayerForTemplate));

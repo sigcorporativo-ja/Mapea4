@@ -92,6 +92,14 @@ class LayerBase extends Base {
      * @api
      */
     this.legend = parameter.legend;
+
+    /**
+     * Group Layer
+     * @private
+     * @type
+     * @api
+     */
+    this.layerGroup_ = null;
   }
 
   /**
@@ -262,7 +270,7 @@ class LayerBase extends Base {
    * @expose
    */
   getLayerGroup() {
-    return this.getImpl().layerGroup;
+    return this.layerGroup_;
   }
 
   /**
@@ -273,7 +281,7 @@ class LayerBase extends Base {
    * @expose
    */
   setLayerGroup(layerGroup) {
-    this.getImpl().layerGroup = layerGroup;
+    this.layerGroup_ = layerGroup;
   }
 
 

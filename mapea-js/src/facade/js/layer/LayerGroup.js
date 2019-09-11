@@ -6,8 +6,6 @@ import LayerGroupImpl from 'impl/layer/LayerGroup';
 import MObject from 'M/Object';
 import * as EventType from 'M/event/eventtype';
 import LayerBase from './Layer';
-
-// import WMC from './WMC';
 import { isNullOrEmpty, isArray, generateRandom } from '../util/Utils';
 
 /**
@@ -15,54 +13,75 @@ import { isNullOrEmpty, isArray, generateRandom } from '../util/Utils';
  * @extends {M.facade.Base}
  * @param {string|Mx.parameters.Layer} userParameters parameters
  * provided by the user
- * @api stable
+ * @api
  */
 class LayerGroup extends MObject {
-  constructor(id, title, order) {
+  constructor(userParameters) {
+    const parameters = {
+      ...userParameters,
+    };
+
+    if (isNullOrEmpty(parameters.id)) {
+      parameters.id = generateRandom('mapea_layer_group_');
+    }
+
+    if (isNullOrEmpty(parameters.title)) {
+      parameters.title = 'Grupo de capas';
+    }
+
+    if (isNullOrEmpty(parameters.zIndex)) {
+      parameters.zIndex = 10000;
+    }
+
+    if (isNullOrEmpty(parameters.order)) {
+      parameters.order = 0;
+    }
+
+
     /**
      * Implementation of this layer
      * @public
      * @type {M.impl.layer.LayerGroup}
      */
-    const impl = new LayerGroupImpl(id, title, order);
-    // calls the super constructor
+    const impl = new LayerGroupImpl(parameters);
     super(impl);
+
     /**
      * @public
      * @type {String}
-     * @api stable
+     * @api
      */
-    this.id = id;
-    if (isNullOrEmpty(this.id)) {
-      this.id = generateRandom('mapea_layer_group_');
-    }
+    this.id = parameters.id;
+
     /**
      * @public
      * @type {String}
-     * @api stable
+     * @api
      */
-    this.title = title;
-    if (isNullOrEmpty(this.title)) {
-      this.title = 'Conjunto de Servicios WMS';
-    }
+    this.title = parameters.title;
+
+
     /**
      * @public
      * @type {Boolean}
-     * @api stable
+     * @api
      */
-    this.collapsed = true;
+    this.collapsed = !!parameters.collapsed;
+
     /**
      * @public
      * @type {Number}
-     * @api stable
+     * @api
      */
-    this.order = order;
+    this.order = parameters.order;
+
     /**
      * @public
      * @type {M.layer.Group}
-     * @api stable
+     * @api
      */
     this.parent = null;
+
     /**
      * @private
      * @type {Array<M.layer.Group|M.Layer>}
@@ -80,9 +99,13 @@ class LayerGroup extends MObject {
     /**
      * @public
      * @type {Number}
-     * @api stable
+     * @api
      */
-    this.zIndex_ = 10000;
+    this.zIndex_ = parameters.zIndex;
+
+    if (Array.isArray(parameters.children)) {
+      this.addChildren(parameters.children);
+    }
   }
 
   /**
@@ -91,7 +114,7 @@ class LayerGroup extends MObject {
    * @public
    * @function
    * @param {M.Map} map
-   * @api stable
+   * @api
    */
   addTo(map) {
     this.map = map;
@@ -102,8 +125,7 @@ class LayerGroup extends MObject {
    * TODO
    *
    * @function
-   * @api stable
-   * @export
+   * @api
    */
   setVisible(visibility) {
     this.getAllLayers().forEach(l => (l.transparent === true) && l.setVisible(visibility));
@@ -113,12 +135,11 @@ class LayerGroup extends MObject {
    * TODO
    *
    * @function
-   * @api stable
-   * @export
+   * @api
    */
   setZIndex(zIndex) {
     this.zIndex_ = zIndex;
-    const layersOfLayerGroup = this.getAllLayers();
+    const layersOfLayerGroup = this.getChildren();
     let countZindex = zIndex;
     layersOfLayerGroup.forEach((varLayer) => {
       const layer = varLayer;
@@ -131,8 +152,7 @@ class LayerGroup extends MObject {
    * TODO
    *
    * @function
-   * @api stable
-   * @export
+   * @api
    */
   getZIndex(zIndex) {
     return this.zIndex_;
@@ -142,24 +162,28 @@ class LayerGroup extends MObject {
    * TODO
    *
    * @function
-   * @api stable
-   * @export
+   * @api
    */
   addChild(childParam, index) {
+    let zIndex = this.getZIndex() + this.children_.length;
     const child = childParam;
     if (isNullOrEmpty(index)) {
       this.children_.push(child);
     } else {
       this.children_.splice(index, 0, child);
+      zIndex = this.getZIndex() + index;
     }
     if (child instanceof LayerGroup) {
       child.parent = this;
     } else if (child instanceof LayerBase) {
-      child.group = this;
-      // if the layer is not in the map then is added
+      child.setLayerGroup(this);
+      child.setZIndex(zIndex);
       if (!isNullOrEmpty(this.map) &&
         !this.map.getRootLayers().some(rootLayer => rootLayer.equals(child))) {
         this.map.addLayers(child);
+        if (child instanceof LayerGroup) {
+          this.map.addLayerGroup(child);
+        }
       }
     }
   }
@@ -168,12 +192,10 @@ class LayerGroup extends MObject {
    * TODO
    *
    * @function
-   * @api stable
-   * @export
+   * @api
    */
   removeChild(child) {
     const children = child;
-    this.children_.remove(children);
     children.getImpl().destroy();
     if (children instanceof LayerGroup) {
       children.parent = null;
@@ -186,19 +208,40 @@ class LayerGroup extends MObject {
    * TODO
    *
    * @function
-   * @api stable
-   * @export
+   * @api
    */
-  addChildren(children = []) {
-    children.forEach(this.addChild, this);
+  removeChildren(children) {
+    children.forEach(this.removeChild, this);
+  }
+
+  /**
+   * TODO
+   * @function
+   * @api
+   */
+  deleteChild(child) {
+    this.children_.remove(child);
   }
 
   /**
    * TODO
    *
    * @function
-   * @api stable
-   * @export
+   * @api
+   */
+  addChildren(children = []) {
+    let arrChildren = children;
+    if (!Array.isArray(children)) {
+      arrChildren = [arrChildren];
+    }
+    arrChildren.forEach(this.addChild, this);
+  }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @api
    */
   getChildren() {
     return this.children_;
@@ -208,16 +251,15 @@ class LayerGroup extends MObject {
    * TODO
    *
    * @function
-   * @api stable
-   * @export
+   * @api
    */
   getAllLayers() {
-    const layers = [];
+    let layers = [];
     this.getChildren().forEach((child) => {
       if (child instanceof LayerBase) {
         layers.push(child);
       } else if (child instanceof LayerGroup) {
-        layers.push(child.getAllLayers());
+        layers = layers.concat(child.getAllLayers());
       }
     });
     return layers;
@@ -226,13 +268,18 @@ class LayerGroup extends MObject {
   /**
    * @public
    * @function
-   * @api stable
-   * @export
+   * @api
    */
   static findGroupById(groupId, layerGroups) {
     let group;
     if (isArray(layerGroups)) {
       group = layerGroups.find(g => g instanceof LayerGroup && g.id === groupId);
+      if (group == null) {
+        const childGroups = layerGroups.map(g => g.getChildren())
+          .reduce((current, next) => current.concat(next), [])
+          .filter(g => g instanceof LayerGroup);
+        group = LayerGroup.findGroupById(groupId, childGroups);
+      }
     }
     return group;
   }

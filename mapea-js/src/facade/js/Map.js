@@ -575,7 +575,7 @@ class Map extends Base {
   addLayerGroup(layerGroups) {
     let lGroups = layerGroups;
     // checks if the parameter is null or empty
-    if (isNullOrEmpty(lGroups)) {
+    if (isNull(lGroups)) {
       Exception('No ha especificado ningun grupo');
     }
     // checks if the implementation can manage groups
@@ -601,7 +601,7 @@ class Map extends Base {
    */
   removeLayerGroup(layerGroups) {
     // checks if the parameter is null or empty
-    if (isNullOrEmpty(layerGroups)) {
+    if (isNull(layerGroups)) {
       Exception('No ha especificado ningun grupo a eliminar');
     }
     // checks if the implementation can manage groups
