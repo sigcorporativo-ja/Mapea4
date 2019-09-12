@@ -1,7 +1,10 @@
+/**
+ * @module M/projection/addProjections
+ */
 import proj4 from 'proj4';
 import OLProjection from 'ol/proj/Projection';
 import { register } from 'ol/proj/proj4';
-import { addEquivalentProjections } from 'ol/proj';
+import { addEquivalentProjections, get } from 'ol/proj';
 
 // EPSG:25828
 const proj25828 = {
@@ -102,6 +105,7 @@ const proj4326 = {
   axisOrientation: 'neu',
 };
 
+
 // All projections above
 const projections = [
   proj25830,
@@ -118,7 +122,18 @@ const projections = [
   proj23031,
 ];
 
-const addProjections = (projectionsParam) => {
+/**
+ * This function registers a set of projections using ol/proj
+ *
+ * @public
+ * @function
+ * @api
+ */
+const addProjections = (projs) => {
+  let projectionsParam = projs;
+  if (!Array.isArray(projectionsParam)) {
+    projectionsParam = [projectionsParam];
+  }
   // Register and publish projections
   projectionsParam.forEach((projection) => {
     projection.codes.forEach((code) => {
@@ -128,9 +143,11 @@ const addProjections = (projectionsParam) => {
       return new OLProjection({
         code,
         extent: projection.extent,
+        worldExtent: projection.worldExtent,
         units: projection.units,
         metersPerUnit: projection.metersPerUnit,
         axisOrientation: projection.axisOrientation,
+        global: projection.global,
       });
     });
     addEquivalentProjections(olProjections);
@@ -140,3 +157,5 @@ const addProjections = (projectionsParam) => {
 // register proj4
 addProjections(projections);
 register(proj4);
+
+export default addProjections;
