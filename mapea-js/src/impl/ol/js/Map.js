@@ -343,33 +343,14 @@ class Map extends MObject {
    * @api stable
    */
   removeLayerGroups(groups) {
-    if (Array.isArray(groups)) {
-      groups.forEach((group) => {
-        this.layerGroups_.remove(group);
-        group.getAllLayers().forEach((layer) => {
-          layer.getImpl().destroy();
-          if (layer.transparent !== true) {
-            // it was base layer so sets the visibility of the first one
-            const baseLayers = this.facadeMap_.getBaseLayers();
-            if (baseLayers.length > 0) {
-              baseLayers[0].setVisible(true);
-            }
-          }
-        }, this);
-      }, this);
-    } else {
-      this.layerGroups_.remove(groups);
-      groups.getAllLayers().forEach((layer) => {
-        layer.getImpl().destroy();
-        if (layer.transparent !== true) {
-          // it was base layer so sets the visibility of the first one
-          const baseLayers = this.facadeMap_.getBaseLayers();
-          if (baseLayers.length > 0) {
-            baseLayers[0].setVisible(true);
-          }
-        }
-      }, this);
+    let groupsI = groups;
+    if (!Array.isArray(groupsI)) {
+      groupsI = [groupsI];
     }
+    groupsI.forEach((group) => {
+      this.layerGroups_.remove(group);
+      group.destroy();
+    });
     return this;
   }
 

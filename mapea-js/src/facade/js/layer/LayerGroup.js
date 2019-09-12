@@ -195,12 +195,12 @@ class LayerGroup extends MObject {
    * @api
    */
   removeChild(child) {
-    const children = child;
-    children.getImpl().destroy();
-    if (children instanceof LayerGroup) {
-      children.parent = null;
-    } else if (child instanceof LayerBase) {
-      children.group = null;
+    const childI = child;
+    if (childI instanceof LayerGroup) {
+      childI.parent = null;
+      this.map.removeLayerGroup(childI);
+    } else if (childI instanceof LayerBase) {
+      this.map.removeLayers(childI);
     }
   }
 
@@ -220,6 +220,7 @@ class LayerGroup extends MObject {
    * @api
    */
   deleteChild(child) {
+    child.setLayerGroup(null);
     this.children_.remove(child);
   }
 
@@ -263,6 +264,15 @@ class LayerGroup extends MObject {
       }
     });
     return layers;
+  }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  destroy() {
+    this.map.removeLayers(this.getAllLayers());
   }
 
   /**
