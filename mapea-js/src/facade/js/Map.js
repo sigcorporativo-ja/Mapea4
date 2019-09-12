@@ -390,7 +390,7 @@ class Map extends Base {
    * @api
    */
   getRootLayers(layersParamVar) {
-    const layers = this.getLayers(layersParamVar).filter(l => isNullOrEmpty(l.group));
+    const layers = this.getLayers(layersParamVar).filter(l => isNullOrEmpty(l.getLayerGroup()));
 
     return layers;
   }
