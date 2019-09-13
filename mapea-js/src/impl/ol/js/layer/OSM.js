@@ -181,10 +181,9 @@ class OSM extends Layer {
     }
     if (!isNullOrEmpty(this.ol3Layer) && isNullOrEmpty(this.vendorOptions_.source)) {
       const extent = this.facadeLayer_.getMaxExtent();
-      const newSource = new SourceOSM({
-        extent,
-      });
+      const newSource = new SourceOSM({});
       this.ol3Layer.setSource(newSource);
+      this.ol3Layer.setExtent(extent);
     }
   }
 
