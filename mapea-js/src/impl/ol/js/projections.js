@@ -4,7 +4,7 @@
 import proj4 from 'proj4';
 import OLProjection from 'ol/proj/Projection';
 import { register } from 'ol/proj/proj4';
-import { addEquivalentProjections, get } from 'ol/proj';
+import { addEquivalentProjections } from 'ol/proj';
 
 // EPSG:25828
 const proj25828 = {
@@ -105,6 +105,25 @@ const proj4326 = {
   axisOrientation: 'neu',
 };
 
+// EPSG:3857
+const proj3857 = {
+  def: '+proj=merc +a=6378137 +b=6378137 +lat_ts=0.0 +lon_0=0.0 +x_0=0.0 +y_0=0 +k=1.0 +units=m +nadgrids=@null +wktext  +no_defs',
+  extent: [-20037508.342789244, -20037508.342789244, 20037508.342789244, 20037508.342789244],
+  worldExtent: [-180, -85, 180, 85],
+  codes: [
+    'EPSG:3857',
+    'EPSG:102100',
+    'EPSG:102113',
+    'EPSG:900913',
+    'urn:ogc:def:crs:EPSG:6.18:3:3857',
+    'urn:ogc:def:crs:EPSG::3857',
+    'http://www.opengis.net/gml/srs/epsg.xml#3857',
+  ],
+  units: 'm',
+  metersPerUnit: 1,
+  axisOrientation: 'neu',
+  global: true,
+};
 
 // All projections above
 const projections = [
@@ -120,6 +139,7 @@ const projections = [
   proj25831,
   proj23028,
   proj23031,
+  proj3857,
 ];
 
 /**
