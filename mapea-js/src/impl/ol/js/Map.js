@@ -997,7 +997,8 @@ class Map extends MObject {
           /* if the layer is a base layer then
                  sets its visibility */
           if (layer.transparent !== true) {
-            layer.setVisible(!existsBaseLayer);
+            const impl = layer.getImpl();
+            impl.visibility = !existsBaseLayer;
             existsBaseLayer = true;
             if (layer.isVisible()) {
               this.updateResolutionsFromBaseLayer();
