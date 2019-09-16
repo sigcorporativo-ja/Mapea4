@@ -133,28 +133,26 @@ class WMTS extends LayerBase {
    */
   setVisible(visibility) {
     this.visibility = visibility;
-    if (this.inRange() === true) {
-      // if this layer is base then it hides all base layers
-      if ((visibility === true) && (this.transparent !== true)) {
-        // hides all base layers
-        this.map.getBaseLayers()
-          .filter(layer => !layer.equals(this) && layer.isVisible())
-          .forEach(layer => layer.setVisible(false));
+    // if this layer is base then it hides all base layers
+    if ((visibility === true) && (this.transparent !== true)) {
+      // hides all base layers
+      this.map.getBaseLayers()
+        .filter(layer => !layer.equals(this) && layer.isVisible())
+        .forEach(layer => layer.setVisible(false));
 
-        // set this layer visible
-        if (!isNullOrEmpty(this.ol3Layer)) {
-          this.ol3Layer.setVisible(visibility);
-        }
-
-        // updates resolutions and keep the bbox
-        const oldBbox = this.map.getBbox();
-        this.map.getImpl().updateResolutionsFromBaseLayer();
-        if (!isNullOrEmpty(oldBbox)) {
-          this.map.setBbox(oldBbox);
-        }
-      } else if (!isNullOrEmpty(this.ol3Layer)) {
+      // set this layer visible
+      if (!isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }
+
+      // updates resolutions and keep the bbox
+      const oldBbox = this.map.getBbox();
+      this.map.getImpl().updateResolutionsFromBaseLayer();
+      if (!isNullOrEmpty(oldBbox)) {
+        this.map.setBbox(oldBbox);
+      }
+    } else if (!isNullOrEmpty(this.ol3Layer)) {
+      this.ol3Layer.setVisible(visibility);
     }
   }
 
@@ -196,6 +194,9 @@ class WMTS extends LayerBase {
     if (zIndex !== null) {
       this.setZIndex(zIndex);
     }
+
+    this.setVisible(this.visibility);
+
 
     // activates animation always for WMTS layers
     this.ol3Layer.set('animated', true);
