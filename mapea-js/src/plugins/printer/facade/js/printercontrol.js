@@ -130,7 +130,8 @@ export default class PrinterControl extends M.Control {
   }
 
   /**
-   * This function creates the view to the specified map
+   * This function creates the view to the specified map. Igual que el render de react.
+   * Es la función más importante.
    *
    * @public
    * @function
@@ -151,22 +152,28 @@ export default class PrinterControl extends M.Control {
             break;
           }
         }
-        // default dpi
-        for (i = 0, ilen = capabilities.dpis.length; i < ilen; i += 1) {
-          const dpi = capabilities.dpis[i];
+        capabilities.dpis = [];
+        // default dpi -- habrá que cambiar el attributes cuando cambie la plantilla
+        for (i = 0, ilen = capabilities.layouts[0].attributes[2].clientInfo.dpiSuggestions.length; i < ilen; i += 1) {
+          const dpi = capabilities.layouts[0].attributes[2].clientInfo.dpiSuggestions[i];
 
-          if (parseInt(dpi.value, 10) === this.options_.dpi) {
+          if (parseInt(dpi, 10) === this.options_.dpi) {
             dpi.default = true;
             break;
           }
+          const object = {'value' : dpi};
+          capabilities.dpis.push(object);
         }
+        capabilities.format = [];
         // default outputFormat
-        for (i = 0, ilen = capabilities.outputFormats.length; i < ilen; i += 1) {
-          const outputFormat = capabilities.outputFormats[i];
+        for (i = 0, ilen = capabilities.formats.length; i < ilen; i += 1) {
+          const outputFormat = capabilities.formats[i];
           if (outputFormat.name === this.options_.format) {
             outputFormat.default = true;
             break;
           }
+          const object = {'name' : outputFormat};
+          capabilities.format.push(object);
         }
         // forceScale
         capabilities.forceScale = this.options_.forceScale;
@@ -341,15 +348,15 @@ export default class PrinterControl extends M.Control {
   printClick_(evt) {
     evt.preventDefault();
 
-    this.getCapabilities().then((capabilities) => {
+    //this.getCapabilities().then((capabilities) => {
       this.getPrintData().then((printData) => {
-        const printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
+        let printUrl = M.utils.concatUrlPaths([this.url_, 'report.' + printData.outputFormat]);
 
         // append child
         const queueEl = this.createQueueElement();
         this.queueContainer_.appendChild(queueEl);
         queueEl.classList.add(PrinterControl.LOADING_CLASS);
-
+        printUrl = M.utils.addParameters(printUrl, 'mapeaop=geoprint');
         M.remote.post(printUrl, printData).then((responseParam) => {
           let response = responseParam;
           queueEl.classList.remove(PrinterControl.LOADING_CLASS);
@@ -359,7 +366,8 @@ export default class PrinterControl extends M.Control {
             try {
               // const textParse = JSON.stringify(response.text);
               response = JSON.parse(response.text);
-              downloadUrl = response.getURL;
+              // poner la url en una variable
+              downloadUrl = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es', response.downloadURL]);
             } catch (err) {
               M.exception(err);
             }
@@ -371,11 +379,11 @@ export default class PrinterControl extends M.Control {
           }
         });
       });
-    });
+    //});
   }
 
   /**
-   * This function creates the view to the specified map
+   * Obtiene el capabilities (.yaml)
    *
    * @public
    * @function
@@ -385,7 +393,7 @@ export default class PrinterControl extends M.Control {
   getCapabilities() {
     if (M.utils.isNullOrEmpty(this.capabilitiesPromise_)) {
       this.capabilitiesPromise_ = new Promise((success, fail) => {
-        const capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'info.json']);
+        const capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'capabilities.json']);
         M.remote.get(capabilitiesUrl).then((response) => {
           let capabilities = {};
           try {
@@ -410,27 +418,70 @@ export default class PrinterControl extends M.Control {
   getPrintData() {
     const title = this.inputTitle_.value;
     const description = this.areaDescription_.value;
-    const projection = this.map_.getProjection();
+    const projection = this.map_.getProjection().code;
     const layout = this.layout_.name;
     const dpi = this.dpi_.value;
     const outputFormat = this.format_;
+    const scale = this.map_.getScale();
+    const center = this.map_.getCenter();
 
     const printData = M.utils.extend({
-      units: projection.units,
-      srs: projection.code,
       layout,
-      dpi,
       outputFormat,
+      attributes: {
+        title,
+        description,
+        map: {
+          scale,
+          center: [center.x, center.y],
+          projection,
+          dpi,
+        }
+      }
     }, this.params_.layout);
 
+  //   const printData = {
+  //     "layout": "A4 portrait",
+  //     "outputFormat": outputFormat,
+  //     "attributes": {
+  //         "description": "...",
+  //         "map": {
+  //             "center": [
+  //                 5,
+  //                 45
+  //             ],
+  //             "rotation": 0,
+  //             "longitudeFirst": true,
+  //             "layers": [{
+  //                 "geoJson": "file://countries.geojson",
+  //                 "style": {
+  //                     "*": {"symbolizers": [{
+  //                         "fillColor": "#5E7F99",
+  //                         "strokeWidth": 1,
+  //                         "fillOpacity": 1,
+  //                         "type": "polygon",
+  //                         "strokeColor": "#CC1D18",
+  //                         "strokeOpacity": 1
+  //                     }]},
+  //                     "version": "2"
+  //                 },
+  //                 "type": "geojson"
+  //             }],
+  //             "scale": 100000000,
+  //             "projection": "EPSG:4326",
+  //             "dpi": 72
+  //         }
+  //     }
+  // }; 
+
     return this.encodeLayers().then((encodedLayers) => {
-      printData.layers = encodedLayers;
+      printData.attributes.map.layers = encodedLayers;
       printData.pages = this.encodePages(title, description);
       if (this.options_.legend === true) {
         printData.legends = this.encodeLegends();
       }
       if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
-        printData.srs = 'EPSG:3857';
+        printData.attributes.map.projection = 'EPSG:3857';
       }
       return printData;
     });
@@ -454,6 +505,10 @@ export default class PrinterControl extends M.Control {
       layers.forEach((layer) => {
         this.getImpl().encodeLayer(layer).then((encodedLayer) => {
           if (!M.utils.isNullOrEmpty(encodedLayer)) {
+            //poner la capa contexto_andalucia transparente porque si no se como todo el mapa.
+            if (encodedLayer.layers == "contexto_andalucia") {
+              encodedLayer.customParams.TRANSPARENT = "true";
+            }
             encodedLayers.push(encodedLayer);
           }
           numLayersToProc -= 1;

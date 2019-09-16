@@ -25,7 +25,7 @@
          <label>DPI </label>
          <select>
             {{#each dpis}}
-            <option value="{{value}}" {{#if default}} selected{{/if}}>{{name}}</option>
+            <option value="{{value}}" {{#if default}} selected{{/if}}>{{value}}</option>
             {{/each}}
          </select>
       </div>
@@ -33,7 +33,7 @@
       <div class="format">
          <label>Formato </label>
          <select>
-            {{#each outputFormats}}
+            {{#each format}}
             <option value="{{name}}" {{#if default}} selected{{/if}}>{{name}}</option>
             {{/each}}
          </select>

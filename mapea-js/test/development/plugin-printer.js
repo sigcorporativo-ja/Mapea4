@@ -5,6 +5,7 @@ const mapjs = M.map({
 });
 
 const plugin = new Printer({
+  url: 'https://geoprint.desarrollo.guadaltel.es/print/sigc-integracion',
   params: {
     layout: {
       outputFilename: 'mapea_${yyyy-MM-dd_hhmmss}',
