@@ -153,9 +153,16 @@ export default class PrinterControl extends M.Control {
           }
         }
         capabilities.dpis = [];
-        // default dpi -- habrá que cambiar el attributes cuando cambie la plantilla
-        for (i = 0, ilen = capabilities.layouts[0].attributes[2].clientInfo.dpiSuggestions.length; i < ilen; i += 1) {
-          const dpi = capabilities.layouts[0].attributes[2].clientInfo.dpiSuggestions[i];
+        let attribute;
+        // default dpi 
+        // este for busca qué atributo tiene la lista de los DPI recomendados
+        for (i = 0, ilen = capabilities.layouts[0].attributes.length; i < ilen; i += 1) {
+          if (capabilities.layouts[0].attributes[i].clientInfo != null) {
+            attribute = capabilities.layouts[0].attributes[i];
+          }
+        }
+        for (i = 0, ilen = attribute.clientInfo.dpiSuggestions.length; i < ilen; i += 1) {
+          const dpi = attribute.clientInfo.dpiSuggestions[i];
 
           if (parseInt(dpi, 10) === this.options_.dpi) {
             dpi.default = true;
@@ -359,8 +366,17 @@ export default class PrinterControl extends M.Control {
         printUrl = M.utils.addParameters(printUrl, 'mapeaop=geoprint');
         M.remote.post(printUrl, printData).then((responseParam) => {
           let response = responseParam;
+          // let responseStatusURL = JSON.parse(response.text);
+          // let ref = responseStatusURL.ref;
+          // let status = "";
+          // let statusURL = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es/print/status', ref + '.json']);
+        //   while (status != "finished") {
+        //     M.remote.get(statusURL).then((responseStatus) => {
+        //       let responseStatusURL2 = JSON.parse(responseStatus.text);
+        //       status = responseStatusURL2.status;
+        //   });
+        // }
           queueEl.classList.remove(PrinterControl.LOADING_CLASS);
-
           if (response.error !== true) {
             let downloadUrl;
             try {
@@ -429,6 +445,8 @@ export default class PrinterControl extends M.Control {
       layout,
       outputFormat,
       attributes: {
+        imageSpain: "file://E01_logo_IGN_CNIG.png",
+        imageCoordinates: "file://E01_logo_IGN_CNIG.png",
         title,
         description,
         map: {
@@ -505,15 +523,11 @@ export default class PrinterControl extends M.Control {
       layers.forEach((layer) => {
         this.getImpl().encodeLayer(layer).then((encodedLayer) => {
           if (!M.utils.isNullOrEmpty(encodedLayer)) {
-            //poner la capa contexto_andalucia transparente porque si no se como todo el mapa.
-            if (encodedLayer.layers == "contexto_andalucia") {
-              encodedLayer.customParams.TRANSPARENT = "true";
-            }
             encodedLayers.push(encodedLayer);
           }
           numLayersToProc -= 1;
           if (numLayersToProc === 0) {
-            success(encodedLayers);
+            success(encodedLayers.reverse());
           }
         });
       });
