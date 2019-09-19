@@ -258,7 +258,7 @@ class OSM extends Layer {
           }
         });
     }
-    this.map = null;
+    // this.map = null;
   }
 
   /**
