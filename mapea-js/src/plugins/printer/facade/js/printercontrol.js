@@ -1,6 +1,27 @@
 import PrinterControlImpl from '../../impl/ol/js/printercontrol';
 import printerHTML from '../../templates/printer';
 
+/**
+ * Esta función determina cuando ha terminado la impresión del mapa
+ * Se hace la comprobación cada 1 segundo con la petición get
+ * @param {*} url
+ * @param {*} callback
+ */
+const getStatus = (url, callback) => {
+  M.remote.get(url).then((response) => {
+    const statusJson = JSON.parse(response.text);
+    const { status } = statusJson;
+    if (status === 'finished') {
+      callback();
+    } else if (status === 'error') {
+      callback();
+      M.dialog.error('Se ha producido un error en la impresión');
+    } else {
+      setTimeout(() => getStatus(url, callback), 1000);
+    }
+  });
+};
+
 export default class PrinterControl extends M.Control {
   /**
    * @classdesc
@@ -154,7 +175,7 @@ export default class PrinterControl extends M.Control {
         }
         capabilities.dpis = [];
         let attribute;
-        // default dpi 
+        // default dpi
         // este for busca qué atributo tiene la lista de los DPI recomendados
         for (i = 0, ilen = capabilities.layouts[0].attributes.length; i < ilen; i += 1) {
           if (capabilities.layouts[0].attributes[i].clientInfo != null) {
@@ -168,7 +189,7 @@ export default class PrinterControl extends M.Control {
             dpi.default = true;
             break;
           }
-          const object = {'value' : dpi};
+          const object = { value: dpi };
           capabilities.dpis.push(object);
         }
         capabilities.format = [];
@@ -179,7 +200,7 @@ export default class PrinterControl extends M.Control {
             outputFormat.default = true;
             break;
           }
-          const object = {'name' : outputFormat};
+          const object = { name: outputFormat };
           capabilities.format.push(object);
         }
         // forceScale
@@ -355,47 +376,42 @@ export default class PrinterControl extends M.Control {
   printClick_(evt) {
     evt.preventDefault();
 
-    //this.getCapabilities().then((capabilities) => {
-      this.getPrintData().then((printData) => {
-        let printUrl = M.utils.concatUrlPaths([this.url_, 'report.' + printData.outputFormat]);
+    // this.getCapabilities().then((capabilities) => {
+    this.getPrintData().then((printData) => {
+      let printUrl = M.utils.concatUrlPaths([this.url_, `report.${printData.outputFormat}`]);
 
-        // append child
-        const queueEl = this.createQueueElement();
-        this.queueContainer_.appendChild(queueEl);
-        queueEl.classList.add(PrinterControl.LOADING_CLASS);
-        printUrl = M.utils.addParameters(printUrl, 'mapeaop=geoprint');
-        M.remote.post(printUrl, printData).then((responseParam) => {
-          let response = responseParam;
-          // let responseStatusURL = JSON.parse(response.text);
-          // let ref = responseStatusURL.ref;
-          // let status = "";
-          // let statusURL = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es/print/status', ref + '.json']);
-        //   while (status != "finished") {
-        //     M.remote.get(statusURL).then((responseStatus) => {
-        //       let responseStatusURL2 = JSON.parse(responseStatus.text);
-        //       status = responseStatusURL2.status;
-        //   });
-        // }
-          queueEl.classList.remove(PrinterControl.LOADING_CLASS);
-          if (response.error !== true) {
-            let downloadUrl;
-            try {
-              // const textParse = JSON.stringify(response.text);
-              response = JSON.parse(response.text);
-              // poner la url en una variable
-              downloadUrl = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es', response.downloadURL]);
-            } catch (err) {
-              M.exception(err);
-            }
-            // sets the download URL
-            queueEl.setAttribute(PrinterControl.DOWNLOAD_ATTR_NAME, downloadUrl);
-            queueEl.addEventListener('click', this.dowloadPrint);
-          } else {
-            M.dialog.error('Se ha producido un error en la impresión');
+      // append child
+      const queueEl = this.createQueueElement();
+      this.queueContainer_.appendChild(queueEl);
+      queueEl.classList.add(PrinterControl.LOADING_CLASS);
+      printUrl = M.utils.addParameters(printUrl, 'mapeaop=geoprint');
+      M.remote.post(printUrl, printData).then((responseParam) => {
+        let response = responseParam;
+        const responseStatusURL = JSON.parse(response.text);
+        const ref = responseStatusURL.ref;
+        const statusURL = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es/print/status', `${ref}.json`]);
+        // Borra el símbolo loading cuando ha terminado la impresión del mapa
+        getStatus(statusURL, () => queueEl.classList.remove(PrinterControl.LOADING_CLASS));
+
+        if (response.error !== true) {
+          let downloadUrl;
+          try {
+            // const textParse = JSON.stringify(response.text);
+            response = JSON.parse(response.text);
+            // poner la url en una variable
+            downloadUrl = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es', response.downloadURL]);
+          } catch (err) {
+            M.exception(err);
           }
-        });
+          // sets the download URL
+          queueEl.setAttribute(PrinterControl.DOWNLOAD_ATTR_NAME, downloadUrl);
+          queueEl.addEventListener('click', this.dowloadPrint);
+        } else {
+          M.dialog.error('Se ha producido un error en la impresión');
+        }
       });
-    //});
+    });
+    // });
   }
 
   /**
@@ -445,8 +461,8 @@ export default class PrinterControl extends M.Control {
       layout,
       outputFormat,
       attributes: {
-        imageSpain: "file://E01_logo_IGN_CNIG.png",
-        imageCoordinates: "file://E01_logo_IGN_CNIG.png",
+        imageSpain: 'file://E01_logo_IGN_CNIG.png',
+        imageCoordinates: 'file://E01_logo_IGN_CNIG.png',
         title,
         description,
         map: {
@@ -454,43 +470,43 @@ export default class PrinterControl extends M.Control {
           center: [center.x, center.y],
           projection,
           dpi,
-        }
-      }
+        },
+      },
     }, this.params_.layout);
 
-  //   const printData = {
-  //     "layout": "A4 portrait",
-  //     "outputFormat": outputFormat,
-  //     "attributes": {
-  //         "description": "...",
-  //         "map": {
-  //             "center": [
-  //                 5,
-  //                 45
-  //             ],
-  //             "rotation": 0,
-  //             "longitudeFirst": true,
-  //             "layers": [{
-  //                 "geoJson": "file://countries.geojson",
-  //                 "style": {
-  //                     "*": {"symbolizers": [{
-  //                         "fillColor": "#5E7F99",
-  //                         "strokeWidth": 1,
-  //                         "fillOpacity": 1,
-  //                         "type": "polygon",
-  //                         "strokeColor": "#CC1D18",
-  //                         "strokeOpacity": 1
-  //                     }]},
-  //                     "version": "2"
-  //                 },
-  //                 "type": "geojson"
-  //             }],
-  //             "scale": 100000000,
-  //             "projection": "EPSG:4326",
-  //             "dpi": 72
-  //         }
-  //     }
-  // }; 
+    //   const printData = {
+    //     'layout': 'A4 portrait',
+    //     'outputFormat': outputFormat,
+    //     'attributes': {
+    //         'description': '...',
+    //         'map': {
+    //             'center': [
+    //                 5,
+    //                 45
+    //             ],
+    //             'rotation': 0,
+    //             'longitudeFirst': true,
+    //             'layers': [{
+    //                 'geoJson': 'file://countries.geojson',
+    //                 'style': {
+    //                     '*': {'symbolizers': [{
+    //                         'fillColor': '#5E7F99',
+    //                         'strokeWidth': 1,
+    //                         'fillOpacity': 1,
+    //                         'type': 'polygon',
+    //                         'strokeColor': '#CC1D18',
+    //                         'strokeOpacity': 1
+    //                     }]},
+    //                     'version': '2'
+    //                 },
+    //                 'type': 'geojson'
+    //             }],
+    //             'scale': 100000000,
+    //             'projection': 'EPSG:4326',
+    //             'dpi': 72
+    //         }
+    //     }
+    // };
 
     return this.encodeLayers().then((encodedLayers) => {
       printData.attributes.map.layers = encodedLayers;
@@ -527,6 +543,8 @@ export default class PrinterControl extends M.Control {
           }
           numLayersToProc -= 1;
           if (numLayersToProc === 0) {
+            // se usa reverse() para invertir el orden de las capas, así la capa base queda abajo
+            // y se visualiza el mapa correctamente.
             success(encodedLayers.reverse());
           }
         });
