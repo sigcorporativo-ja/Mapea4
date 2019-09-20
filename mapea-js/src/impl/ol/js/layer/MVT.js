@@ -95,10 +95,12 @@ class MVT extends Vector {
 
     // clear features when zoom changes
     this.map.on(EventType.CHANGE_ZOOM, () => {
-      const newZoom = this.map.getZoom();
-      if (this.lastZoom_ !== newZoom) {
-        this.features_.length = 0;
-        this.lastZoom_ = newZoom;
+      if (this.map) {
+        const newZoom = this.map.getZoom();
+        if (this.lastZoom_ !== newZoom) {
+          this.features_.length = 0;
+          this.lastZoom_ = newZoom;
+        }
       }
     });
 

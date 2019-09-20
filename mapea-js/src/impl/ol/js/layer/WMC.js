@@ -95,8 +95,10 @@ class WMC extends Layer {
    */
   select() {
     if (this.selected === false) {
-      // unselect layers
-      this.map.getWMC().forEach(wmcLayer => wmcLayer.unselect());
+      if (!isNullOrEmpty(this.map)) {
+        // unselect layers
+        this.map.getWMC().forEach(wmcLayer => wmcLayer.unselect());
+      }
 
       this.selected = true;
 
@@ -124,7 +126,9 @@ class WMC extends Layer {
         }
         // load layers
         this.loadLayers(context);
-        this.map.fire(EventType.CHANGE_WMC, this);
+        if (!isNullOrEmpty(this.map)) {
+          this.map.fire(EventType.CHANGE_WMC, this);
+        }
       });
     }
   }
@@ -168,14 +172,19 @@ class WMC extends Layer {
       this.groups.push(context.layerGroups);
     }
 
-    this.map.addWMS(this.layers, true);
-    this.map.addLayerGroup(this.groups);
+    if (!isNullOrEmpty(this.map)) {
+      this.map.addWMS(this.layers, true);
+      this.map.addLayerGroup(this.groups);
+    }
 
-    // updates the z-index of the layers and groups
-    this.layers.forEach((layer, i) => layer.setZIndex(this.getZIndex() + i));
-    this.groups.forEach((group, i) => group.setZIndex(this.getZIndex() + i));
-    this.facadeLayer_.fire(EventType.LOAD, [this.layers]);
-    this.facadeLayer_.fire(EventType.LOAD, [this.groups]);
+    if (!isNullOrEmpty(this.layers) && !isNullOrEmpty(this.groups) &&
+      !isNullOrEmpty(this.facadeLayer_)) {
+      // updates the z-index of the layers and groups
+      this.layers.forEach((layer, i) => layer.setZIndex(this.getZIndex() + i));
+      this.groups.forEach((group, i) => group.setZIndex(this.getZIndex() + i));
+      this.facadeLayer_.fire(EventType.LOAD, [this.layers]);
+      this.facadeLayer_.fire(EventType.LOAD, [this.groups]);
+    }
   }
 
   /**

@@ -545,9 +545,11 @@ class WMS extends LayerBase {
           const getCapabilitiesParser = new FormatWMS();
           const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
 
-          const projection = this.map.getProjection();
-          const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
-          success(getCapabilitiesUtils);
+          if (!isNullOrEmpty(this.map)) {
+            const projection = this.map.getProjection();
+            const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
+            success(getCapabilitiesUtils);
+          }
         });
       });
     }
