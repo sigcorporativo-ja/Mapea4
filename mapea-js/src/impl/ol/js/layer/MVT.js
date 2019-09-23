@@ -91,6 +91,9 @@ class MVT extends Vector {
       extent,
     }, this.vendorOptions_, true));
 
+    if (this.opacity_) {
+      this.setOpacity(this.opacity_);
+    }
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
     // clear features when zoom changes
