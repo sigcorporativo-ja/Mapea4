@@ -2,7 +2,7 @@ import PrinterControlImpl from '../../impl/ol/js/printercontrol';
 import printerHTML from '../../templates/printer';
 
 /**
- * Esta función determina cuando ha terminado la impresión del mapa
+ * Esta función determina cuándo ha terminado la impresión del mapa
  * Se hace la comprobación cada 1 segundo con la petición get
  * @param {*} url
  * @param {*} callback
@@ -13,7 +13,7 @@ const getStatus = (url, callback) => {
     const { status } = statusJson;
     if (status === 'finished') {
       callback();
-    } else if (status === 'error') {
+    } else if (status === 'error' || status === 'cancelled') {
       callback();
       M.dialog.error('Se ha producido un error en la impresión');
     } else {
