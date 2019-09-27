@@ -32,7 +32,7 @@ export default class PrinterControl extends M.Control {
    * @extends {M.Control}
    * @api stable
    */
-  constructor(url, params, options, name) {
+  constructor(url, params, options) {
     // implementation of this control
     const impl = new PrinterControlImpl();
 
@@ -389,7 +389,7 @@ export default class PrinterControl extends M.Control {
         let response = responseParam;
         const responseStatusURL = JSON.parse(response.text);
         const ref = responseStatusURL.ref;
-        const statusURL = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es/print/status', `${ref}.json`]);
+        const statusURL = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es/print/print/status', `${ref}.json`]);
         // Borra el símbolo loading cuando ha terminado la impresión del mapa
         getStatus(statusURL, () => queueEl.classList.remove(PrinterControl.LOADING_CLASS));
 
@@ -456,66 +456,77 @@ export default class PrinterControl extends M.Control {
     const outputFormat = this.format_;
     const scale = this.map_.getScale();
     const center = this.map_.getCenter();
+    const parameters = this.params_.parameters;
 
     const printData = M.utils.extend({
       layout,
       outputFormat,
       attributes: {
-        imageSpain: 'file://E01_logo_IGN_CNIG.png',
-        imageCoordinates: 'file://E01_logo_IGN_CNIG.png',
         title,
         description,
+        epsg: projection,
+        escala: `1:${scale}`,
         map: {
-          scale,
-          center: [center.x, center.y],
           projection,
           dpi,
         },
       },
     }, this.params_.layout);
 
-    //   const printData = {
-    //     'layout': 'A4 portrait',
-    //     'outputFormat': outputFormat,
-    //     'attributes': {
-    //         'description': '...',
-    //         'map': {
-    //             'center': [
-    //                 5,
-    //                 45
-    //             ],
-    //             'rotation': 0,
-    //             'longitudeFirst': true,
-    //             'layers': [{
-    //                 'geoJson': 'file://countries.geojson',
-    //                 'style': {
-    //                     '*': {'symbolizers': [{
-    //                         'fillColor': '#5E7F99',
-    //                         'strokeWidth': 1,
-    //                         'fillOpacity': 1,
-    //                         'type': 'polygon',
-    //                         'strokeColor': '#CC1D18',
-    //                         'strokeOpacity': 1
-    //                     }]},
-    //                     'version': '2'
-    //                 },
-    //                 'type': 'geojson'
-    //             }],
-    //             'scale': 100000000,
-    //             'projection': 'EPSG:4326',
-    //             'dpi': 72
-    //         }
-    //     }
-    // };
-
     return this.encodeLayers().then((encodedLayers) => {
-      printData.attributes.map.layers = encodedLayers;
-      printData.pages = this.encodePages(title, description);
+      // metemos los styles adecuadamente en el JSON
+      const layersParsedStyles = [];
+      for (let i = 0, ilen = encodedLayers.length; i < ilen; i += 1) {
+        const layer = encodedLayers[i];
+        const typeGeom = layer.geoJson && layer.geoJson.features.length > 0 ?
+          layer.geoJson.features[0].geometry.type :
+          '';
+        const stylesWithType = [];
+        const keysStyle = Object.keys(layer.styles);
+        keysStyle.forEach((k) => {
+          const style = layer.styles[k];
+          if (!M.utils.isNullOrEmpty(style)) {
+            style.type = typeGeom;
+            stylesWithType.push(style);
+          }
+        });
+
+        const objectStyle = {
+          '*': {
+            symbolizers: stylesWithType,
+          },
+        };
+        layer.styles = objectStyle;
+        layersParsedStyles.push(layer);
+      }
+
+      printData.attributes.map.layers = layersParsedStyles;
+      printData.attributes = Object.assign(printData.attributes, parameters);
+      printData.legends = this.encodeLegends();
       if (this.options_.legend === true) {
-        printData.legends = this.encodeLegends();
+        for (let i = 0, ilen = printData.legends.length; i < ilen; i += 1) {
+          if (printData.legends[i] !== undefined) {
+            printData.attributes[`leyenda${i}`] = printData.legends[i].name;
+
+            if (printData.legends[i].classes[0] !== undefined &&
+              printData.legends[i].classes[0].icons !== undefined) {
+              printData.attributes[`imagenLeyenda${i}`] = printData.legends[i].classes[0].icons[0];
+            }
+          }
+        }
       }
       if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
         printData.attributes.map.projection = 'EPSG:3857';
+      }
+      if (this.forceScale_ === false) {
+        const bbox = this.map_.getBbox();
+        printData.attributes.map.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
+        if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+          printData.attributes.map.bbox = ol.proj.transformExtent(printData.attributes.map.bbox, projection.code, 'EPSG:3857');
+        }
+      } else if (this.forceScale_ === true) {
+        printData.attributes.map.center = [center.x, center.y];
+        printData.attributes.map.scale = this.map_.getScale();
       }
       return printData;
     });
@@ -550,46 +561,6 @@ export default class PrinterControl extends M.Control {
         });
       });
     }));
-  }
-
-  /**
-   * This function checks if an object is equals
-   * to this control
-   *
-   * @private
-   * @function
-   */
-  encodePages(title, description) {
-    const encodedPages = [];
-    const projection = this.map_.getProjection();
-
-    if (!M.utils.isArray(this.params_.pages)) {
-      this.params_.pages = [this.params_.pages];
-    }
-    this.params_.pages.forEach((page) => {
-      const encodedPage = M.utils.extend({
-        title,
-        printTitle: title,
-        printDescription: description,
-        infoSRS: `\n ${this.map_.getProjection().code}`,
-      }, page);
-
-      if (this.forceScale_ === false) {
-        const bbox = this.map_.getBbox();
-        encodedPage.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-        if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
-          encodedPage.bbox = ol.proj.transformExtent(encodedPage.bbox, projection.code, 'EPSG:3857');
-        }
-      } else if (this.forceScale_ === true) {
-        const center = this.map_.getCenter();
-        encodedPage.center = [center.x, center.y];
-        encodedPage.scale = this.map_.getScale();
-      }
-      encodedPage.rotation = 0;
-      encodedPages.push(encodedPage);
-    }, this);
-
-    return encodedPages;
   }
 
   /**
