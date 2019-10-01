@@ -140,7 +140,7 @@ export default class PrinterControl extends M.impl.Control {
     const resolution = this.facadeMap_.getMapImpl().getView().getResolution();
 
     const encodedFeatures = [];
-    const encodedStyles = {};
+    const encodedStyles = [];
     const stylesNames = {};
     let index = 1;
     features.forEach((feature) => {
@@ -159,7 +159,8 @@ export default class PrinterControl extends M.impl.Control {
             imgSize = [64, 64];
           }
           const stroke = featureStyle.getStroke();
-          let style = {
+          const style = {
+            type: feature.getGeometry().getType().toLowerCase() === 'multipolygon' ? 'polygon' : feature.getGeometry().getType().toLowerCase(),
             id: styleId,
             externalGraphic: img.getSrc(),
             graphicHeight: imgSize[0],
@@ -169,7 +170,8 @@ export default class PrinterControl extends M.impl.Control {
           };
           const text = (featureStyle.getText && featureStyle.getText());
           if (!M.utils.isNullOrEmpty(text)) {
-            style = Object.assign(style, {
+            const styleText = {
+              type: 'text',
               label: M.utils.isNullOrEmpty(text.getText()) ? feature.get('name') : text.getText(),
               fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getFill().getColor()) ?
                 `rgba(${text.getFill().getColor().toString()})` :
@@ -187,9 +189,9 @@ export default class PrinterControl extends M.impl.Control {
                 `rgba(${text.getStroke().getColor().toString()})` :
                 text.getStroke().getColor()),
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
-            });
+            };
+            encodedStyles.push(styleText);
           }
-
 
           if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
             const styleStr = JSON.stringify(style);
@@ -197,7 +199,7 @@ export default class PrinterControl extends M.impl.Control {
             if (M.utils.isUndefined(styleName)) {
               styleName = index;
               stylesNames[styleStr] = styleName;
-              encodedStyles[styleName] = style;
+              encodedStyles.push(style);
               index += 1;
             }
             const geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
@@ -212,7 +214,12 @@ export default class PrinterControl extends M.impl.Control {
 
     encodedLayer = {
       type: 'Vector',
-      styles: encodedStyles,
+      style: {
+        version: '2',
+        '*': {
+          symbolizers: encodedStyles,
+        },
+      },
       styleProperty: '_gx_style',
       geoJson: {
         type: 'FeatureCollection',
@@ -317,7 +324,7 @@ export default class PrinterControl extends M.impl.Control {
       const resolution = this.facadeMap_.getMapImpl().getView().getResolution();
 
       const encodedFeatures = [];
-      const encodedStyles = {};
+      const encodedStyles = [];
       const stylesNames = {};
       let index = 1;
       features.forEach((feature) => {
@@ -362,7 +369,8 @@ export default class PrinterControl extends M.impl.Control {
 
           // JGL20180118: fillOpacity=1 por defecto
           let style = {
-            fillColor: M.utils.isNullOrEmpty(fill) ? '#000000' : M.utils.rgbaToHex(fill.getColor()),
+            type: feature.getGeometry().getType().toLowerCase() == 'multipolygon' ? 'polygon' : feature.getGeometry().getType().toLowerCase(),
+            fillColor: M.utils.isNullOrEmpty(fill) ? '#000000' : M.utils.rgbaToHex(fill.getColor()).slice(0, 7),
             fillOpacity: M.utils.isNullOrEmpty(fill) ?
               1 : M.utils.getOpacityFromRgba(fill.getColor()),
             strokeColor: M.utils.isNullOrEmpty(stroke) ? '#000000' : M.utils.rgbaToHex(stroke.getColor()),
@@ -418,7 +426,8 @@ export default class PrinterControl extends M.impl.Control {
                 }
               }
             }
-            style = Object.assign(style, {
+            let styleText = {
+              type: 'text',
               label: text.getText(),
               fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '#000000' : M.utils.rgbToHex(text.getFill().getColor()),
               fontSize,
@@ -432,18 +441,19 @@ export default class PrinterControl extends M.impl.Control {
               labelOutlineColor: M.utils.isNullOrEmpty(text.getStroke()) ? '' : M.utils.rgbToHex(text.getStroke().getColor() || '#FF0000'),
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
               labelAlign: align,
-            });
+            };
+            encodedStyles.push(styleText);
           }
-
           if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
             const styleStr = JSON.stringify(style);
             let styleName = stylesNames[styleStr];
             if (M.utils.isUndefined(styleName)) {
               styleName = index;
               stylesNames[styleStr] = styleName;
-              encodedStyles[styleName] = style;
-              index += 1;
+              encodedStyles.push(style);
             }
+            index += 1;
+
             let geoJSONFeature;
             if (projection.code !== 'EPSG:3857' && this.facadeMap_.getLayers().some(layerParam => (layerParam.type === M.layer.type.OSM || layerParam.type === M.layer.type.Mapbox))) {
               geoJSONFeature = geoJSONFormat.writeFeatureObject(feature, {
@@ -461,9 +471,15 @@ export default class PrinterControl extends M.impl.Control {
         }
       }, this);
 
+
       encodedLayer = {
         type: 'Vector',
-        styles: encodedStyles,
+        style: {
+          version: '2',
+          '*': {
+            symbolizers: encodedStyles,
+          },
+        },
         styleProperty: '_gx_style',
         geoJson: {
           type: 'FeatureCollection',
@@ -524,7 +540,7 @@ export default class PrinterControl extends M.impl.Control {
         requestEncoding: layerReqEncoding,
         tileSize,
         // 'style': style,
-        style: 'deafult',
+        style: 'default',
         // 'tileOrigin': tileOrigin,
         // 'zoomOffset': 0,
         rotation: 0,
@@ -536,7 +552,7 @@ export default class PrinterControl extends M.impl.Control {
         version: '1.0.0',
         maxExtent: layerExtent,
         matrixSet,
-        matrixIds: matrixIdsObj.TileMatrix.map((tileMatrix, i) => {
+        matrices: matrixIdsObj.TileMatrix.map((tileMatrix, i) => {
           return {
             identifier: tileMatrix.Identifier,
             matrixSize: [tileMatrix.MatrixHeight, tileMatrix.MatrixWidth],

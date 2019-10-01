@@ -474,33 +474,7 @@ export default class PrinterControl extends M.Control {
     }, this.params_.layout);
 
     return this.encodeLayers().then((encodedLayers) => {
-      // metemos los styles adecuadamente en el JSON
-      const layersParsedStyles = [];
-      for (let i = 0, ilen = encodedLayers.length; i < ilen; i += 1) {
-        const layer = encodedLayers[i];
-        const typeGeom = layer.geoJson && layer.geoJson.features.length > 0 ?
-          layer.geoJson.features[0].geometry.type :
-          '';
-        const stylesWithType = [];
-        const keysStyle = Object.keys(layer.styles);
-        keysStyle.forEach((k) => {
-          const style = layer.styles[k];
-          if (!M.utils.isNullOrEmpty(style)) {
-            style.type = typeGeom;
-            stylesWithType.push(style);
-          }
-        });
-
-        const objectStyle = {
-          '*': {
-            symbolizers: stylesWithType,
-          },
-        };
-        layer.styles = objectStyle;
-        layersParsedStyles.push(layer);
-      }
-
-      printData.attributes.map.layers = layersParsedStyles;
+      printData.attributes.map.layers = encodedLayers;
       printData.attributes = Object.assign(printData.attributes, parameters);
       printData.legends = this.encodeLegends();
       if (this.options_.legend === true) {
@@ -546,14 +520,20 @@ export default class PrinterControl extends M.Control {
     let numLayersToProc = layers.length;
 
     return (new Promise((success, fail) => {
-      const encodedLayers = [];
+      let encodedLayers = [];
+      const encodedLayersVector = [];
       layers.forEach((layer) => {
         this.getImpl().encodeLayer(layer).then((encodedLayer) => {
-          if (!M.utils.isNullOrEmpty(encodedLayer)) {
+          // añado la capa y compruebo si es vector. Las capas que sean vector
+          // tienen que quedar en último lugar para que no sean tapadas
+          if (!M.utils.isNullOrEmpty(encodedLayer) && encodedLayer.type !== 'Vector') {
             encodedLayers.push(encodedLayer);
+          } else {
+            encodedLayersVector.push(encodedLayer);
           }
           numLayersToProc -= 1;
           if (numLayersToProc === 0) {
+            encodedLayers = encodedLayers.concat(encodedLayersVector);
             // se usa reverse() para invertir el orden de las capas, así la capa base queda abajo
             // y se visualiza el mapa correctamente.
             success(encodedLayers.reverse());
