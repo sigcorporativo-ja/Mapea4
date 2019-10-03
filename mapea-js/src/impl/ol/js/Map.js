@@ -343,7 +343,7 @@ class Map extends MObject {
    * @api stable
    */
   removeLayerGroups(groups) {
-    let groupsI = groups;
+    let groupsI = [...groups];
     if (!Array.isArray(groupsI)) {
       groupsI = [groupsI];
     }
