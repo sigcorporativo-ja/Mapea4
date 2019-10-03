@@ -9,6 +9,7 @@ import Base from './Base';
 import { compileSync as compileTemplate } from './util/Template';
 import * as EventType from './event/eventtype';
 import MWindow from './util/Window';
+
 /**
  * @classdesc
  * Main constructor of the class. Creates a layer
@@ -25,18 +26,21 @@ class Tab {
      * @type {String}
      */
     this.icon = options.icon;
+
     /**
      * TODO
      * @public
      * @type {String}
      */
     this.title = options.title;
+
     /**
      * TODO
      * @public
      * @type {String}
      */
     this.content = options.content;
+
     /**
      * TODO
      * @public
@@ -45,6 +49,7 @@ class Tab {
     this.listeners = options.listeners || [];
   }
 }
+
 /**
  * @classdesc
  * Main constructor of the class. Creates a layer
@@ -61,24 +66,28 @@ class Popup extends Base {
     const impl = new PopupImpl(options);
     // calls the super constructor
     super(impl);
+
     /**
      * TODO
      * @private
      * @type {Array<Number>}
      */
     this.coord_ = null;
+
     /**
      * TODO
      * @private
      * @type {Array<Popup.Tab>}
      */
     this.tabs_ = [];
+
     /**
      * TODO
      * @private
      * @type {HTMLElement}
      */
     this.element_ = null;
+
     /**
      * TODO
      * @private
@@ -86,6 +95,7 @@ class Popup extends Base {
      */
     this.status_ = Popup.status.COLLAPSED;
   }
+
   /**
    * TODO
    * @public
@@ -95,6 +105,7 @@ class Popup extends Base {
   getTabs() {
     return this.tabs_;
   }
+
   /**
    * TODO
    * @public
@@ -105,6 +116,7 @@ class Popup extends Base {
     this.tabs_ = this.tabs_.filter(tab => tab.content !== tabToRemove.content);
     this.update();
   }
+
   /**
    * TODO
    * @public
@@ -119,6 +131,7 @@ class Popup extends Base {
     this.tabs_.push(tab);
     this.update();
   }
+
   /**
    * TODO
    * @public
@@ -132,6 +145,11 @@ class Popup extends Base {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
+          takeMeThere: Popup.takeMeThere,
+          coord: {
+            x: coordinate[0],
+            y: coordinate[1],
+          },
         },
       });
       if (this.tabs_.length > 0) {
@@ -145,6 +163,7 @@ class Popup extends Base {
       this.show(coordinate);
     }
   }
+
   /**
    * TODO
    * @public
@@ -157,6 +176,11 @@ class Popup extends Base {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
+          takeMeThere: Popup.takeMeThere,
+          coord: {
+            x: this.coord_[0],
+            y: this.coord_[1],
+          },
         },
       });
       if (this.tabs_.length > 0) {
@@ -168,6 +192,7 @@ class Popup extends Base {
       }
     }
   }
+
   /**
    * TODO
    * @public
@@ -180,6 +205,7 @@ class Popup extends Base {
       this.fire(EventType.SHOW);
     });
   }
+
   /**
    * TODO
    * @public
@@ -192,6 +218,7 @@ class Popup extends Base {
     }
     this.getImpl().hide();
   }
+
   /**
    * TODO
    * @public
@@ -206,6 +233,7 @@ class Popup extends Base {
       this.show(this.coord_);
     }
   }
+
   /**
    * This functions adds the events to the popup tabs.
    *
@@ -226,6 +254,7 @@ class Popup extends Base {
       }
     });
   }
+
   /**
    * TODO
    * @private
@@ -234,6 +263,7 @@ class Popup extends Base {
   setContent_(content) {
     this.getContent().innerHTML = content;
   }
+
   /**
    * TODO
    * @private
@@ -242,6 +272,7 @@ class Popup extends Base {
   getContent() {
     return this.getImpl().getContent();
   }
+
   /**
    * TODO
    * @private
@@ -332,6 +363,7 @@ class Popup extends Base {
       });
     }
   }
+
   /**
    * TODO
    * @private
@@ -350,6 +382,7 @@ class Popup extends Base {
       }
     }
   }
+
   /**
    * TODO
    * @private
@@ -416,6 +449,7 @@ class Popup extends Base {
       this.setStatus_(this.status_);
     }
   }
+
   /**
    * TODO
    * @public
@@ -425,6 +459,7 @@ class Popup extends Base {
   getCoordinate() {
     return this.coord_;
   }
+
   /**
    * TODO
    * @public
@@ -437,6 +472,7 @@ class Popup extends Base {
       this.getImpl().show(coord);
     }
   }
+
   /**
    * TODO
    * @public
@@ -449,6 +485,7 @@ class Popup extends Base {
     this.fire(EventType.DESTROY);
   }
 }
+
 /**
  * status of this popup
  * @const
@@ -457,6 +494,7 @@ class Popup extends Base {
  * @api
  */
 Popup.status = {};
+
 /**
  * collapsed status of this popup
  * @const
@@ -465,6 +503,7 @@ Popup.status = {};
  * @api
  */
 Popup.status.COLLAPSED = 'm-collapsed';
+
 /**
  * default status of this popup
  * @const
@@ -473,6 +512,7 @@ Popup.status.COLLAPSED = 'm-collapsed';
  * @api
  */
 Popup.status.DEFAULT = 'm-default';
+
 /**
  * full status of this popup
  * @const
@@ -481,4 +521,14 @@ Popup.status.DEFAULT = 'm-default';
  * @api
  */
 Popup.status.FULL = 'm-full';
+
+/**
+ * TakeMeThere parameter
+ *
+ * @public
+ * @api
+ * @type {bool}
+ */
+Popup.takeMeThere = false;
+
 export default Popup;

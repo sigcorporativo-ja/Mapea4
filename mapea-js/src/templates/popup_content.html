@@ -1,10 +1,13 @@
 <div>
-  {{#each contents}}
-    <div class="m-popup-content">
-      {{#gt contents.length 1}}
-        <p class="m-title">{{{title}}}</p>
-      {{/gt}}
-      <div class="m-content">{{{content}}}</div>
+    {{#each contents}}
+        <div class="m-popup-content">
+            {{#gt contents.length 1}}
+                <p class="m-title">{{{title}}}</p>
+            {{/gt}}
+            <div class="m-content">{{{content}}}</div>
+        </div>
+    {{/each}}
+    <div class="m-footer">
+        <button class="g-cartografia-posicion"></button>
     </div>
-  {{/each}}
 </div>

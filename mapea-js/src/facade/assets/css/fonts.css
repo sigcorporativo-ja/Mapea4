@@ -1,19 +1,13 @@
-/* TEXT */
-
-@font-face {
-    font-family: 'Muli';
-    src: url('../fonts/Muli-Regular-webfont.eot');
-    src: url('../fonts/Muli-Regular-webfont.eot?#iefix') format('embedded-opentype'), url('../fonts/Muli-Regular-webfont.woff') format('woff'), url('../fonts/Muli-Regular-webfont.ttf') format('truetype'), url('../fonts/Muli-Regular-webfont.svg#Muli') format('svg');
-}
-
-/* G-CARTOGRAFIA */
-
 @font-face {
     font-family: 'g-cartografia';
-    src: url('../fonts/g-cartografia.eot?yh0glf');
-    src: url('../fonts/g-cartografia.eot?yh0glf#iefix') format('embedded-opentype'), url('../fonts/g-cartografia.ttf?yh0glf') format('truetype'), url('../fonts/g-cartografia.woff?yh0glf') format('woff'), url('../fonts/g-cartografia.svg?yh0glf#g-cartografia') format('svg');
+    src: url('../fonts/g-cartografia.eot?qbigqk');
+    src: url('../fonts/g-cartografia.eot?qbigqk#iefix') format('embedded-opentype'),
+        url('../fonts/g-cartografia.ttf?qbigqk') format('truetype'),
+        url('../fonts/g-cartografia.woff?qbigqk') format('woff'),
+        url('../fonts/g-cartografia.svg?qbigqk#g-cartografia') format('svg');
     font-weight: normal;
     font-style: normal;
+    font-display: block;
 }
 
 [class^="g-cartografia-"],
@@ -26,209 +20,237 @@
     font-variant: normal;
     text-transform: none;
     line-height: 1;
+
     /* Better Font Rendering =========== */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
 }
 
-
-.g-cartografia-alerta:before {
+.g-cartografia-brujula-norte:before {
     content: "\e900";
 }
 
-.g-cartografia-ayuda:before {
+.g-cartografia-pin5:before {
     content: "\e901";
 }
 
-.g-cartografia-bandera:before {
+.g-cartografia-pin-seleccionado:before {
     content: "\e902";
 }
 
-.g-cartografia-brujula:before {
+.g-cartografia-pin-nuevo2:before {
     content: "\e903";
 }
 
-.g-cartografia-cancelar:before {
+.g-cartografia-spinner2 .path1:before {
     content: "\e904";
+    color: rgb(107, 107, 107);
 }
 
-.g-cartografia-cancelar2:before {
+.g-cartografia-spinner2 .path2:before {
     content: "\e905";
+    margin-left: -1em;
+    color: rgb(107, 107, 107);
+    opacity: 0.1;
 }
 
-.g-cartografia-capas:before {
+.g-cartografia-spinner2 .path3:before {
     content: "\e906";
+    margin-left: -1em;
+    color: rgb(107, 107, 107);
+    opacity: 0.2;
 }
 
-.g-cartografia-capas2:before {
+.g-cartografia-spinner2 .path4:before {
     content: "\e907";
+    margin-left: -1em;
+    color: rgb(107, 107, 107);
+    opacity: 0.3;
 }
 
-.g-cartografia-check:before {
+.g-cartografia-spinner2 .path5:before {
     content: "\e908";
+    margin-left: -1em;
+    color: rgb(107, 107, 107);
+    opacity: 0.4;
 }
 
-.g-cartografia-check2:before {
+.g-cartografia-spinner2 .path6:before {
     content: "\e909";
+    margin-left: -1em;
+    color: rgb(107, 107, 107);
+    opacity: 0.5;
 }
 
-.g-cartografia-check3:before {
+.g-cartografia-spinner2 .path7:before {
     content: "\e90a";
+    margin-left: -1em;
+    color: rgb(107, 107, 107);
+    opacity: 0.6;
 }
 
-.g-cartografia-check4:before {
+.g-cartografia-spinner2 .path8:before {
     content: "\e90b";
+    margin-left: -1em;
+    color: rgb(107, 107, 107);
+    opacity: 0.7;
+}
+
+.g-cartografia-spinner2 .path9:before {
+    content: "\e90c";
+    margin-left: -1em;
+    color: rgb(107, 107, 107);
+    opacity: 0.8;
+}
+
+.g-cartografia-spinner2 .path10:before {
+    content: "\e90d";
+    margin-left: -1em;
+    color: rgb(107, 107, 107);
+    opacity: 0.9;
 }
 
 .g-cartografia-check5:before {
-    content: "\e90c";
-}
-
-.g-cartografia-comentarios:before {
-    content: "\e90d";
-}
-
-.g-cartografia-descargar:before {
     content: "\e90e";
 }
 
-.g-cartografia-editar:before {
+.g-cartografia-check4:before {
     content: "\e90f";
 }
 
-.g-cartografia-editar2:before {
+.g-cartografia-capas2:before {
     content: "\e910";
 }
 
-.g-cartografia-escala:before {
+.g-cartografia-gps:before {
     content: "\e911";
 }
 
-.g-cartografia-escala2:before {
+.g-cartografia-texto:before {
     content: "\e912";
 }
 
-.g-cartografia-escala3:before {
+.g-cartografia-poligono:before {
     content: "\e913";
 }
 
-.g-cartografia-flecha:before {
+.g-cartografia-ayuda:before {
     content: "\e914";
 }
 
-.g-cartografia-flecha-abajo:before {
+.g-cartografia-brujula:before {
     content: "\e915";
 }
 
-.g-cartografia-flecha-abajo2:before {
+.g-cartografia-impresora:before {
     content: "\e916";
 }
 
-.g-cartografia-flecha-arriba:before {
+.g-cartografia-mundo:before {
     content: "\e917";
 }
 
-.g-cartografia-flecha-arriba2:before {
+.g-cartografia-pin-nuevo:before {
     content: "\e918";
 }
 
-.g-cartografia-flecha-derecha:before {
+.g-cartografia-mundo2:before {
     content: "\e919";
 }
 
-.g-cartografia-flecha-derecha2:before {
+.g-cartografia-comentarios:before {
     content: "\e91a";
 }
 
-.g-cartografia-flecha-derecha3:before {
+.g-cartografia-zoom-menos:before {
     content: "\e91b";
 }
 
-.g-cartografia-flecha-deshacer:before {
+.g-cartografia-zoom:before {
     content: "\e91c";
 }
 
-.g-cartografia-flecha-izquierda:before {
+.g-cartografia-zoom-mas:before {
     content: "\e91d";
 }
 
-.g-cartografia-flecha-izquierda2:before {
+.g-cartografia-posicion:before {
     content: "\e91e";
 }
 
-.g-cartografia-flecha-izquierda3:before {
+.g-cartografia-prismaticos:before {
     content: "\e91f";
 }
 
-.g-cartografia-flecha-link:before {
+.g-cartografia-pin:before {
     content: "\e920";
 }
 
-.g-cartografia-flechas-mover:before {
+.g-cartografia-medir-area:before {
     content: "\e921";
 }
 
-.g-cartografia-gps:before {
+.g-cartografia-papelera:before {
     content: "\e922";
 }
 
-.g-cartografia-gps2:before {
+.g-cartografia-cancelar:before {
     content: "\e923";
 }
 
-.g-cartografia-gps3:before {
+.g-cartografia-flecha-link:before {
     content: "\e924";
 }
 
-.g-cartografia-gps4:before {
+.g-cartografia-flecha-abajo:before {
     content: "\e925";
 }
 
-.g-cartografia-guardar:before {
+.g-cartografia-flecha-arriba:before {
     content: "\e926";
 }
 
-.g-cartografia-herramienta:before {
+.g-cartografia-flecha-izquierda:before {
     content: "\e927";
 }
 
-.g-cartografia-impresora:before {
+.g-cartografia-flecha-derecha:before {
     content: "\e928";
 }
 
-.g-cartografia-info:before {
+.g-cartografia-flecha:before {
     content: "\e929";
 }
 
-.g-cartografia-linea:before {
+.g-cartografia-guardar:before {
     content: "\e92a";
 }
 
-.g-cartografia-lineas:before {
+.g-cartografia-lista:before {
     content: "\e92b";
 }
 
-.g-cartografia-lista:before {
+.g-cartografia-temperatura:before {
     content: "\e92c";
 }
 
-.g-cartografia-localizacion:before {
+.g-cartografia-escala:before {
     content: "\e92d";
 }
 
-.g-cartografia-localizacion2:before {
+.g-cartografia-check:before {
     content: "\e92e";
 }
 
-.g-cartografia-localizacion3:before {
+.g-cartografia-check3:before {
     content: "\e92f";
 }
 
-.g-cartografia-localizacion4:before {
+.g-cartografia-flecha-deshacer:before {
     content: "\e930";
 }
 
-.g-cartografia-mano:before {
+.g-cartografia-escala3:before {
     content: "\e931";
 }
 
@@ -236,119 +258,119 @@
     content: "\e932";
 }
 
-.g-cartografia-mapa:before {
+.g-cartografia-mano:before {
     content: "\e933";
 }
 
-.g-cartografia-mas:before {
+.g-cartografia-regla:before {
     content: "\e934";
 }
 
-.g-cartografia-mas2:before {
+.g-cartografia-zoom-extension:before {
     content: "\e935";
 }
 
-.g-cartografia-medir-area:before {
+.g-cartografia-menos2:before {
     content: "\e936";
 }
 
-.g-cartografia-medir-linea:before {
+.g-cartografia-mas2:before {
     content: "\e937";
 }
 
-.g-cartografia-menos:before {
+.g-cartografia-medir-linea:before {
     content: "\e938";
 }
 
-.g-cartografia-menos2:before {
+.g-cartografia-reglas:before {
     content: "\e939";
 }
 
-.g-cartografia-menu:before {
+.g-cartografia-usuario2:before {
     content: "\e93a";
 }
 
-.g-cartografia-mundo:before {
+.g-cartografia-gps2:before {
     content: "\e93b";
 }
 
-.g-cartografia-mundo2:before {
+.g-cartografia-gps3:before {
     content: "\e93c";
 }
 
-.g-cartografia-opciones:before {
+.g-cartografia-posicion7:before {
     content: "\e93d";
 }
 
-.g-cartografia-papelera:before {
+.g-cartografia-posicion6:before {
     content: "\e93e";
 }
 
-.g-cartografia-pin:before {
+.g-cartografia-posicion5:before {
     content: "\e93f";
 }
 
-.g-cartografia-pin2:before {
+.g-cartografia-linea:before {
     content: "\e940";
 }
 
-.g-cartografia-pin3:before {
+.g-cartografia-ruta:before {
     content: "\e941";
 }
 
-.g-cartografia-pin4:before {
+.g-cartografia-pin3:before {
     content: "\e942";
 }
 
-.g-cartografia-pin-nuevo:before {
+.g-cartografia-pin2:before {
     content: "\e943";
 }
 
-.g-cartografia-poligono:before {
+.g-cartografia-localizacion4:before {
     content: "\e944";
 }
 
-.g-cartografia-posicion:before {
+.g-cartografia-localizacion3:before {
     content: "\e945";
 }
 
-.g-cartografia-posicion2:before {
+.g-cartografia-lineas:before {
     content: "\e946";
 }
 
-.g-cartografia-posicion3:before {
+.g-cartografia-tamano:before {
     content: "\e947";
 }
 
-.g-cartografia-posicion4:before {
+.g-cartografia-localizacion2:before {
     content: "\e948";
 }
 
-.g-cartografia-posicion5:before {
+.g-cartografia-posicion3:before {
     content: "\e949";
 }
 
-.g-cartografia-posicion6:before {
+.g-cartografia-localizacion:before {
     content: "\e94a";
 }
 
-.g-cartografia-posicion7:before {
+.g-cartografia-posicion4:before {
     content: "\e94b";
 }
 
-.g-cartografia-prismaticos:before {
+.g-cartografia-flecha-derecha3:before {
     content: "\e94c";
 }
 
-.g-cartografia-regla:before {
+.g-cartografia-flecha-izquierda3:before {
     content: "\e94d";
 }
 
-.g-cartografia-reglas:before {
+.g-cartografia-usuario:before {
     content: "\e94e";
 }
 
-.g-cartografia-ruta:before {
+.g-cartografia-escala2:before {
     content: "\e94f";
 }
 
@@ -356,114 +378,98 @@
     content: "\e950";
 }
 
-.g-cartografia-spinner2 .path1:before {
+.g-cartografia-posicion2:before {
     content: "\e951";
-    color: rgb(107, 107, 107);
 }
 
-.g-cartografia-spinner2 .path2:before {
+.g-cartografia-check2:before {
+    content: "\e952";
+}
+
+.g-cartografia-pin4:before {
+    content: "\e953";
+}
+
+.g-cartografia-opciones:before {
+    content: "\e954";
+}
+
+.g-cartografia-info:before {
     content: "\e955";
-    margin-left: -1em;
-    color: rgb(107, 107, 107);
-    opacity: 0.1;
 }
 
-.g-cartografia-spinner2 .path3:before {
+.g-cartografia-herramienta:before {
     content: "\e956";
-    margin-left: -1em;
-    color: rgb(107, 107, 107);
-    opacity: 0.2;
 }
 
-.g-cartografia-spinner2 .path4:before {
+.g-cartografia-gps4:before {
     content: "\e957";
-    margin-left: -1em;
-    color: rgb(107, 107, 107);
-    opacity: 0.3;
 }
 
-.g-cartografia-spinner2 .path5:before {
+.g-cartografia-flecha-izquierda2:before {
     content: "\e958";
-    margin-left: -1em;
-    color: rgb(107, 107, 107);
-    opacity: 0.4;
 }
 
-.g-cartografia-spinner2 .path6:before {
+.g-cartografia-flecha-derecha2:before {
     content: "\e959";
-    margin-left: -1em;
-    color: rgb(107, 107, 107);
-    opacity: 0.5;
 }
 
-.g-cartografia-spinner2 .path7:before {
+.g-cartografia-flecha-arriba2:before {
     content: "\e95a";
-    margin-left: -1em;
-    color: rgb(107, 107, 107);
-    opacity: 0.6;
 }
 
-.g-cartografia-spinner2 .path8:before {
+.g-cartografia-flecha-abajo2:before {
     content: "\e95b";
-    margin-left: -1em;
-    color: rgb(107, 107, 107);
-    opacity: 0.7;
 }
 
-.g-cartografia-spinner2 .path9:before {
+.g-cartografia-editar2:before {
     content: "\e95c";
-    margin-left: -1em;
-    color: rgb(107, 107, 107);
-    opacity: 0.8;
 }
 
-.g-cartografia-spinner2 .path10:before {
+.g-cartografia-editar:before {
     content: "\e95d";
-    margin-left: -1em;
-    color: rgb(107, 107, 107);
-    opacity: 0.9;
 }
 
-.g-cartografia-subir:before {
+.g-cartografia-capas:before {
     content: "\e95e";
 }
 
-.g-cartografia-tamano:before {
+.g-cartografia-cancelar2:before {
     content: "\e95f";
 }
 
-.g-cartografia-temperatura:before {
+.g-cartografia-bandera:before {
     content: "\e960";
 }
 
-.g-cartografia-texto:before {
+.g-cartografia-alerta:before {
     content: "\e961";
 }
 
-.g-cartografia-usuario:before {
+.g-cartografia-subir:before {
     content: "\e962";
 }
 
-.g-cartografia-usuario2:before {
+.g-cartografia-menu:before {
     content: "\e963";
 }
 
-.g-cartografia-zoom:before {
+.g-cartografia-menos:before {
     content: "\e964";
 }
 
-.g-cartografia-zoom-extension:before {
+.g-cartografia-mas:before {
     content: "\e965";
 }
 
-.g-cartografia-zoom-mas:before {
+.g-cartografia-mapa:before {
     content: "\e966";
 }
 
-.g-cartografia-zoom-menos:before {
+.g-cartografia-flechas-mover:before {
     content: "\e967";
 }
 
-.g-cartografia-brujula-norte:before {
+.g-cartografia-descargar:before {
     content: "\e968";
 }
