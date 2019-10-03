@@ -65,13 +65,13 @@ export const proxy = (enable) => {
 };
 
 /**
- * Lists of hosts that proxy will ignore
+ * Lists of hosts that will not pass through proxy
  * @type {Array}
  */
 export const proxyExceptions = [];
 
 /**
- * Add an url to the list of hosts that proxy will ignore
+ * Add an url to the list of hosts that will not pass through proxy
  * @public
  * @function
  * @param {String} url
@@ -83,7 +83,7 @@ export const addProxyException = (url) => {
 };
 
 /**
- * Remove an url from the list of hosts that proxy will ignore
+ * Remove an url from the list of hosts that will not pass through proxy
  * @public
  * @function
  * @param {String} url
