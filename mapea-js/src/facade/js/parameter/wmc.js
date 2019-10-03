@@ -81,7 +81,7 @@ const getOptionsWMC = (parameter) => {
  * @function
  * @api
  */
-export const wmc = (userParameters) => {
+const wmc = (userParameters) => {
   let layers = [];
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
