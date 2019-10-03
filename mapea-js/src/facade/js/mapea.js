@@ -63,3 +63,34 @@ export const proxy = (enable) => {
     useproxy = enable;
   }
 };
+
+/**
+ * Lists of hosts that proxy will ignore
+ * @type {Array}
+ */
+export const proxyExceptions = [];
+
+/**
+ * Add an url to the list of hosts that proxy will ignore
+ * @public
+ * @function
+ * @param {String} url
+ * @api
+ */
+export const addProxyException = (url) => {
+  const urlOrigin = new URL(url).origin;
+  if (proxyExceptions.indexOf(urlOrigin) === -1) proxyExceptions.push(urlOrigin);
+};
+
+/**
+ * Remove an url from the list of hosts that proxy will ignore
+ * @public
+ * @function
+ * @param {String} url
+ * @api
+ */
+export const removeProxyException = (url) => {
+  const urlOrigin = new URL(url).origin;
+  const loc = proxyExceptions.indexOf(urlOrigin);
+  if (loc !== -1) proxyExceptions.splice(loc, 1);
+};
