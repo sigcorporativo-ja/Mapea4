@@ -59,6 +59,8 @@ class KML extends LayerVector {
 
     // options
     this.options = options;
+
+    this.label = parameters.label;
   }
 
   /**

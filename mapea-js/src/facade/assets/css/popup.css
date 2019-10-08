@@ -388,7 +388,7 @@
     }
 
     .m-popup>div.m-content>div.m-header>a.m-popup-closer:after {
-        content: "\e919"
+        content: "\e923"
     }
 
     .m-popup.m-full.m-has-tabs>div.m-content>div.m-header>a.m-popup-closer {

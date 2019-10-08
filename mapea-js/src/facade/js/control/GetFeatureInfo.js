@@ -31,6 +31,15 @@ class GetFeatureInfo extends ControlBase {
     if (isUndefined(GetFeatureInfoImpl)) {
       Exception(getValue('exception').getfeatureinfo_method);
     }
+
+    /**
+     * User format
+     *
+     * @public
+     * @api
+     * @type {string}
+     */
+    this.format = format;
   }
 
   /**

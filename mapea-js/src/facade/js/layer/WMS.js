@@ -59,6 +59,9 @@ class WMS extends LayerBase {
     // options
     this.options = options;
 
+    // wmcParent
+    this.wmcParent_ = null;
+
     /**
      * get WMS getCapabilities promise
      * @private
@@ -269,6 +272,28 @@ class WMS extends LayerBase {
    */
   getNoCacheName() {
     return this._noCacheName;
+  }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @public
+   * @api
+   */
+  setWMCParent(wmc) {
+    this.wmcParent_ = wmc;
+  }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @public
+   * @api
+   */
+  getWMCParent() {
+    return this.wmcParent_;
   }
 
   /**

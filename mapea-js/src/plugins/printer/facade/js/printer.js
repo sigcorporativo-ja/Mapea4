@@ -157,12 +157,22 @@ export default class Printer extends M.Plugin {
   }
 
   /**
-   * Name to identify this plugin
-   * @const
-   * @type {string}
+   * Gets the parameter api rest of the plugin
+   *
    * @public
-   * @api stable
+   * @function
+   * @api
    */
+  getAPIRest() {
+    return `printer=${this.url_}`;
+  }
 }
 
+/**
+ * Name to identify this plugin
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
 Printer.NAME = 'printer';

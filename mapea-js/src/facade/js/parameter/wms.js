@@ -110,7 +110,7 @@ const wms = (userParameters) => {
       parameter: userParam,
       type: 'array_number',
       attr: 'maxExtent',
-      separator: ',',
+      separator: '_',
     });
 
     const version = getParameter({
