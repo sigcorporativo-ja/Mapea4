@@ -153,4 +153,15 @@ export default class SearchstreetGeosearch extends M.Plugin {
     }
     return false;
   }
+
+  /**
+   * Gets the parameter api rest of the plugin
+   *
+   * @public
+   * @function
+   * @api
+   */
+  getAPIRest() {
+    return 'searchstreetgeosearch';
+  }
 }

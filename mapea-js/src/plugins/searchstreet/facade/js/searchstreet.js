@@ -186,4 +186,15 @@ export default class Searchstreet extends M.Plugin {
     }
     return false;
   }
+
+  /**
+   * Gets the parameter api rest of the plugin
+   *
+   * @public
+   * @function
+   * @api
+   */
+  getAPIRest() {
+    return 'searchstreet';
+  }
 }

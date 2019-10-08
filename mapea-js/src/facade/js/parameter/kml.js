@@ -37,12 +37,12 @@ const getParameter = ({
     let param = params[position];
     value = parserType[type](param);
     if (attr === 'extract') {
-      param = params.slice(-2, -1);
+      param = params.slice(-2, -1)[0];
       value = param !== 'false';
     }
 
     if (attr === 'label') {
-      param = params.slice(-1);
+      param = params.slice(-1)[0];
       value = param !== 'false';
     }
 

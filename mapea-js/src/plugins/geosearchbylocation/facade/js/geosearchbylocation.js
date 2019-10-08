@@ -197,6 +197,17 @@ export default class Geosearchbylocation extends M.Plugin {
     }
     return false;
   }
+
+  /**
+   * Gets the parameter api rest of the plugin
+   *
+   * @public
+   * @function
+   * @api
+   */
+  getAPIRest() {
+    return `geosearchbylocation=${this.distance_}*${this.url_}*${this.core_}*${this.handler_}`;
+  }
 }
 
 

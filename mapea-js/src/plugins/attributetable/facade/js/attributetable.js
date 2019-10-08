@@ -99,12 +99,22 @@ export default class AttributeTable extends M.Plugin {
   }
 
   /**
-   * Name of this control
-   * @const
-   * @type {string}
+   * Gets the parameter api rest of the plugin
+   *
    * @public
-   * @api stable
+   * @function
+   * @api
    */
+  getAPIRest() {
+    return 'attributetable';
+  }
 }
 
+/**
+ * Name of this control
+ * @const
+ * @type {string}
+ * @public
+ * @api stable
+ */
 AttributeTable.NAME = 'attributetable';

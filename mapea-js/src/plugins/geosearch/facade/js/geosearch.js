@@ -181,6 +181,17 @@ export default class Geosearch extends M.Plugin {
     }
     return false;
   }
+
+  /**
+   * Gets the parameter api rest of the plugin
+   *
+   * @public
+   * @function
+   * @api
+   */
+  getAPIRest() {
+    return `geosearch=${this.url_}*${this.core_}*${this.handler_}`;
+  }
 }
 
 Geosearch.NAME = 'geosearch';
