@@ -145,7 +145,7 @@ class Popup extends Base {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
-          takeMeThere: Popup.takeMeThere,
+          options: Popup.options,
           coord: {
             x: coordinate[0],
             y: coordinate[1],
@@ -176,7 +176,7 @@ class Popup extends Base {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
-          takeMeThere: Popup.takeMeThere,
+          options: Popup.options,
           coord: {
             x: this.coord_[0],
             y: this.coord_[1],
@@ -523,12 +523,16 @@ Popup.status.DEFAULT = 'm-default';
 Popup.status.FULL = 'm-full';
 
 /**
- * TakeMeThere parameter
+ * TakeMeThere options
  *
  * @public
  * @api
  * @type {bool}
  */
-Popup.takeMeThere = false;
+Popup.options = {
+  takeMeThere: false,
+  textMode: true,
+  msg: 'Llévame allí',
+};
 
 export default Popup;

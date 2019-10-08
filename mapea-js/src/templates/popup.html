@@ -18,11 +18,17 @@
         </div>
         <div class="m-body">{{{tabs.0.content}}}</div>
     </div>
-    {{#if takeMeThere}}
-        <div class="m-footer">
-            <a href="geo:{{coord.x}},{{coord.y}}?q={{coord.x}},{{coord.y}}">
-                <button class="g-cartografia-localizacion3"></button>
-            </a>
-        </div>
+    {{#if options.takeMeThere}}
+        {{#if options.textMode}}
+            <div class="m-footer">
+                <a href="geo:{{coord.x}},{{coord.y}}?q={{coord.x}},{{coord.y}}">{{options.msg}}</a>
+            </div>
+        {{else}}
+            <div class="m-footer">
+                <a href="geo:{{coord.x}},{{coord.y}}?q={{coord.x}},{{coord.y}}">
+                    <button class="g-cartografia-localizacion3"></button>
+                </a>
+            </div>
+        {{/if}}
     {{/if}}
 </div>

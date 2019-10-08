@@ -228,6 +228,20 @@
         border-bottom-right-radius: 0px;
     }
 
+    .m-collapsed.m-popup .m-footer {
+        display: none;
+    }
+
+    .m-default.m-popup .m-footer {
+        position: absolute;
+        top: 50vh;
+    }
+
+    .m-full.m-popup .m-footer {
+        position: absolute;
+        top: 95vh;
+    }
+
     .m-popup>div.m-content>div.m-header,
     .m-popup>div.m-tabs {
         text-align: center;
@@ -282,6 +296,10 @@
 
     .m-popup>div.m-tabs>div.m-tab:first-child {
         border-left: 0px;
+    }
+
+    .m-popup>div.m-content {
+        padding: 0;
     }
 
     .m-popup>div.m-content>div.m-header>div.m-title {
@@ -388,7 +406,7 @@
     }
 
     .m-popup>div.m-content>div.m-header>a.m-popup-closer:after {
-        content: "\e923"
+        content: "\e928"
     }
 
     .m-popup.m-full.m-has-tabs>div.m-content>div.m-header>a.m-popup-closer {
