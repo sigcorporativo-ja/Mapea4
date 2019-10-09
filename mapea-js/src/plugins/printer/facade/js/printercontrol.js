@@ -7,20 +7,6 @@ import printerHTML from '../../templates/printer';
  * @param {*} url
  * @param {*} callback
  */
-const getStatus = (url, callback) => {
-  M.remote.get(url).then((response) => {
-    const statusJson = JSON.parse(response.text);
-    const { status } = statusJson;
-    if (status === 'finished') {
-      callback();
-    } else if (status === 'error' || status === 'cancelled') {
-      callback();
-      M.dialog.error('Se ha producido un error en la impresión');
-    } else {
-      setTimeout(() => getStatus(url, callback), 1000);
-    }
-  });
-};
 
 export default class PrinterControl extends M.Control {
   /**
@@ -32,6 +18,7 @@ export default class PrinterControl extends M.Control {
    * @extends {M.Control}
    * @api stable
    */
+
   constructor(url, params, options) {
     // implementation of this control
     const impl = new PrinterControlImpl();
@@ -57,6 +44,20 @@ export default class PrinterControl extends M.Control {
      * @type {M.Map}
      */
     this.url_ = url;
+
+    /**
+     * Facade of the map
+     * @private
+     * @type {M.Map}
+     */
+    this.ref_ = null;
+
+    /**
+     * Facade of the map
+     * @private
+     * @type {M.Map}
+     */
+    this.printing_ = false;
 
     /**
      * Facade of the map
@@ -148,6 +149,24 @@ export default class PrinterControl extends M.Control {
     if (M.utils.isNullOrEmpty(this.options_.legend)) {
       this.options_.legend = M.config.geoprint.LEGEND;
     }
+  }
+
+  getStatus(url, callback, callback2) {
+    M.remote.get(url).then((response) => {
+      const statusJson = JSON.parse(response.text);
+      const { status } = statusJson;
+      if (status === 'finished') {
+        callback();
+      } else if (status === 'error') {
+        callback();
+        M.dialog.error('Se ha producido un error en la impresión');
+      } else if (this.printing_ === false) {
+        callback2();
+        M.dialog.error('Se ha cancelado la impresión');
+      } else {
+        setTimeout(() => this.getStatus(url, callback, callback2), 1000);
+      }
+    });
   }
 
   /**
@@ -280,6 +299,10 @@ export default class PrinterControl extends M.Control {
     const printBtn = this.element_.querySelector('.button > button.print');
     printBtn.addEventListener('click', this.printClick_.bind(this));
 
+    // cancel button
+    const cancelBtn = this.element_.querySelector('.button > button.cancel');
+    cancelBtn.addEventListener('click', this.cancelClick_.bind(this));
+
     // clean button
     const cleanBtn = this.element_.querySelector('.button > button.remove');
     cleanBtn.addEventListener('click', (event) => {
@@ -388,10 +411,15 @@ export default class PrinterControl extends M.Control {
       M.remote.post(printUrl, printData).then((responseParam) => {
         let response = responseParam;
         const responseStatusURL = JSON.parse(response.text);
-        const ref = responseStatusURL.ref;
-        const statusURL = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es/print/print/status', `${ref}.json`]);
-        // Borra el símbolo loading cuando ha terminado la impresión del mapa
-        getStatus(statusURL, () => queueEl.classList.remove(PrinterControl.LOADING_CLASS));
+        this.ref_ = responseStatusURL.ref;
+        const statusURL = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es/print/status', `${this.ref_}.json`]);
+        // Borra el símbolo loading cuando ha terminado la impresión del mapa,
+        // o borra el botón de la impresión si se ha cancelado
+        this.printing_ = true;
+        this.getStatus(
+          statusURL, () => queueEl.classList.remove(PrinterControl.LOADING_CLASS),
+          () => this.queueContainer_.removeChild(queueEl),
+        );
 
         if (response.error !== true) {
           let downloadUrl;
@@ -413,6 +441,64 @@ export default class PrinterControl extends M.Control {
     });
     // });
   }
+
+  cancelClick_(evt) {
+    evt.preventDefault();
+    // if (!M.utils.isNullOrEmpty(this.ref_)) {
+    //   const url = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es/print/cancel', `${this.ref_}`]);
+    //   this.delete_(url, true);
+    // }
+    this.printing_ = false;
+  }
+
+  // manageProxy_(url, methodType) {
+  //   // deafult GET
+  //   let proxyUrl = M.config.PROXY_URL;
+  //   if (methodType === 'DELETE') {
+  //     proxyUrl = M.config.PROXY_POST_URL;
+  //   }
+
+  //   proxyUrl = M.utils.addParameters(proxyUrl, {
+  //     url,
+  //   });
+
+  //   return proxyUrl;
+  // }
+
+  // ajax_(urlVar, dataVar, methodType, useProxy) {
+  //   let url = urlVar;
+  //   let data = dataVar;
+  //   if ((useProxy !== false) && (useProxy === true)) {
+  //     url = this.manageProxy_(url, methodType);
+  //   }
+
+  //   // parses parameters to string
+  //   if (M.utils.isObject(data)) {
+  //     data = JSON.stringify(data);
+  //   }
+
+  //   return new Promise((success, fail) => {
+  //     let xhr;
+  //     if (window.XMLHttpRequest) {
+  //       xhr = new XMLHttpRequest();
+  //     } else if (window.ActiveXObject) {
+  //       xhr = new ActiveXObject('Microsoft.XMLHTTP');
+  //     }
+  //     xhr.onreadystatechange = () => {
+  //       if (xhr.readyState === 4) {
+  //         const response = new M.remote.Response();
+  //         response.parseXmlHttp(xhr);
+  //         success(response);
+  //       }
+  //     };
+  //     xhr.open(methodType, url, true);
+  //     xhr.send(data);
+  //   });
+  // }
+
+  // delete_(url, flag) {
+  //   return this.ajax_(url, {}, 'DELETE', flag);
+  // }
 
   /**
    * Obtiene el capabilities (.yaml)

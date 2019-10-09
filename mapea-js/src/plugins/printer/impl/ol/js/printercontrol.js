@@ -140,9 +140,11 @@ export default class PrinterControl extends M.impl.Control {
     const resolution = this.facadeMap_.getMapImpl().getView().getResolution();
 
     const encodedFeatures = [];
-    const encodedStyles = [];
-    const stylesNames = {};
+    let style = '';
     let index = 1;
+    let nameFeature;
+    let nameFeature2;
+    let filter;
     features.forEach((feature) => {
       const geometry = feature.getGeometry();
       let styleId = feature.get('styleUrl');
@@ -159,7 +161,8 @@ export default class PrinterControl extends M.impl.Control {
             imgSize = [64, 64];
           }
           const stroke = featureStyle.getStroke();
-          const style = {
+          let styleText;
+          const styleGeom = {
             type: feature.getGeometry().getType().toLowerCase() === 'multipolygon' ? 'polygon' : feature.getGeometry().getType().toLowerCase(),
             id: styleId,
             externalGraphic: img.getSrc(),
@@ -170,7 +173,7 @@ export default class PrinterControl extends M.impl.Control {
           };
           const text = (featureStyle.getText && featureStyle.getText());
           if (!M.utils.isNullOrEmpty(text)) {
-            const styleText = {
+            styleText = {
               type: 'text',
               label: M.utils.isNullOrEmpty(text.getText()) ? feature.get('name') : text.getText(),
               fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getFill().getColor()) ?
@@ -180,6 +183,7 @@ export default class PrinterControl extends M.impl.Control {
               fontSize: '11px',
               fontFamily: 'Helvetica, sans-serif',
               fontWeight: 'bold',
+              conflictResolution: 'false',
               //
               labelAlign: text.getTextAlign(),
               labelXOffset: text.getOffsetX(),
@@ -190,21 +194,40 @@ export default class PrinterControl extends M.impl.Control {
                 text.getStroke().getColor()),
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
             };
-            encodedStyles.push(styleText);
           }
-
-          if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
-            const styleStr = JSON.stringify(style);
-            let styleName = stylesNames[styleStr];
-            if (M.utils.isUndefined(styleName)) {
-              styleName = index;
-              stylesNames[styleStr] = styleName;
-              encodedStyles.push(style);
-              index += 1;
+          nameFeature = `draw${index}`;
+          nameFeature2 = `'draw${index}'`;
+          // eslint-disable-next-line no-useless-concat
+          filter = '"[name = ' + `${nameFeature2}` + ']"';
+          // eslint-disable-next-line no-mixed-operators
+          if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox) ||
+            !M.utils.isNullOrEmpty(text)) {
+            const styleStr = JSON.stringify(styleGeom);
+            const styleTextStr = JSON.stringify(styleText);
+            const symbolizers = [];
+            if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
+              symbolizers.push(styleStr);
             }
+            if (!M.utils.isNullOrEmpty(text)) {
+              symbolizers.push(styleTextStr);
+            }
+            // eslint-disable-next-line prefer-template
+            const a = '' + filter + ': {' +
+              '"symbolizers": [' + symbolizers +
+              ']}';
+            if (style !== '') {
+              // eslint-disable-next-line prefer-template
+              style += ',' + a;
+            } else {
+              // eslint-disable-next-line prefer-template
+              style += '{' + a + ',"version": "2"';
+            }
+
+            index += 1;
+
             const geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
             geoJSONFeature.properties = {
-              _gx_style: styleName,
+              name: nameFeature,
             };
             encodedFeatures.push(geoJSONFeature);
           }
@@ -212,14 +235,20 @@ export default class PrinterControl extends M.impl.Control {
       }
     }, this);
 
+    if (style !== '') {
+      style = JSON.parse(style.concat('}'));
+    } else {
+      style = {
+        '*': {
+          symbolizers: [],
+        },
+        version: '2',
+      };
+    }
+
     encodedLayer = {
       type: 'Vector',
-      style: {
-        version: '2',
-        '*': {
-          symbolizers: encodedStyles,
-        },
-      },
+      style,
       styleProperty: '_gx_style',
       geoJson: {
         type: 'FeatureCollection',
@@ -324,9 +353,11 @@ export default class PrinterControl extends M.impl.Control {
       const resolution = this.facadeMap_.getMapImpl().getView().getResolution();
 
       const encodedFeatures = [];
-      const encodedStyles = [];
-      const stylesNames = {};
+      let nameFeature;
+      let nameFeature2;
+      let filter;
       let index = 1;
+      let style = '';
       features.forEach((feature) => {
         const geometry = feature.getGeometry();
         let featureStyle;
@@ -368,7 +399,8 @@ export default class PrinterControl extends M.impl.Control {
             featureStyle.getFill() : (image.getFill && image.getFill());
 
           // JGL20180118: fillOpacity=1 por defecto
-          let style = {
+          let styleText;
+          const styleGeom = {
             type: feature.getGeometry().getType().toLowerCase() == 'multipolygon' ? 'polygon' : feature.getGeometry().getType().toLowerCase(),
             fillColor: M.utils.isNullOrEmpty(fill) ? '#000000' : M.utils.rgbaToHex(fill.getColor()).slice(0, 7),
             fillOpacity: M.utils.isNullOrEmpty(fill) ?
@@ -426,7 +458,7 @@ export default class PrinterControl extends M.impl.Control {
                 }
               }
             }
-            let styleText = {
+            styleText = {
               type: 'text',
               label: text.getText(),
               fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '#000000' : M.utils.rgbToHex(text.getFill().getColor()),
@@ -436,22 +468,35 @@ export default class PrinterControl extends M.impl.Control {
               fontWeight,
               labelXOffset: text.getOffsetX(),
               labelYOffset: text.getOffsetY(),
-              fillColor: style.fillColor || '#FF0000',
-              fillOpacity: style.fillOpacity || 1, // JGL20180118: fillOpacity=1 por defecto
+              fillColor: styleGeom.fillColor || '#FF0000',
+              fillOpacity: styleGeom.fillOpacity || 1, // JGL20180118: fillOpacity=1 por defecto
               labelOutlineColor: M.utils.isNullOrEmpty(text.getStroke()) ? '' : M.utils.rgbToHex(text.getStroke().getColor() || '#FF0000'),
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
               labelAlign: align,
             };
-            encodedStyles.push(styleText);
           }
-          if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
-            const styleStr = JSON.stringify(style);
-            let styleName = stylesNames[styleStr];
-            if (M.utils.isUndefined(styleName)) {
-              styleName = index;
-              stylesNames[styleStr] = styleName;
-              encodedStyles.push(style);
+          nameFeature = `draw${index}`;
+          nameFeature2 = `'draw${index}'`;
+          filter = '"[name = ' + `${nameFeature2}` + ']"';
+          if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox) || !M.utils.isNullOrEmpty(text)) {
+            const styleStr = JSON.stringify(styleGeom);
+            const styleTextStr = JSON.stringify(styleText);
+            let symbolizers = [];
+            if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
+              symbolizers.push(styleStr);
             }
+            if (!M.utils.isNullOrEmpty(text)) {
+              symbolizers.push(styleTextStr);
+            }
+            let a = '' + filter + ': {' +
+              '"symbolizers": [' + symbolizers +
+              ']}';
+            if (style != '') {
+              style += ',' + a;
+            } else {
+              style += '{' + a + ',"version": "2"';
+            }
+
             index += 1;
 
             let geoJSONFeature;
@@ -464,22 +509,27 @@ export default class PrinterControl extends M.impl.Control {
               geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
             }
             geoJSONFeature.properties = {
-              _gx_style: styleName,
+              name: nameFeature,
             };
             encodedFeatures.push(geoJSONFeature);
           }
         }
       }, this);
 
+      if (style != '') {
+        style = JSON.parse(style.concat('}'));
+      } else {
+        style = {
+          '*': {
+            'symbolizers': []
+          },
+          'version': '2'
+        }
+      }
 
       encodedLayer = {
         type: 'Vector',
-        style: {
-          version: '2',
-          '*': {
-            symbolizers: encodedStyles,
-          },
-        },
+        style,
         styleProperty: '_gx_style',
         geoJson: {
           type: 'FeatureCollection',
