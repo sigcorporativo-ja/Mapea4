@@ -25,8 +25,8 @@ const printer = new Printer({
       creditos: 'Impresión generada a través de Mapea',
     },
     parameters: {
-      imagenCoordenadas: 'file://windrose.jpeg',
-      imagenAndalucia: 'http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logojunta.gif',
+      imagenCoordenadas: 'file://windrose.png',
+      imagenAndalucia: 'file://logo_JA.png',
     },
   },
 }, {
@@ -35,75 +35,45 @@ const printer = new Printer({
   },
 });
 
-const campamentos = new M.layer.WFS({
-  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
-  name: 'campamentos',
-  legend: 'Campamentos',
-  geometry: 'MPOINT',
-});
-
-mapjs.addLayers(campamentos);
-
-const estiloBase = new M.style.Point({
-  radius: 5,
-  fill: {
-    color: 'yellow',
-    opacity: 0.5,
-  },
-  stroke: {
-    color: '#FF0000',
-  },
-});
-
-const estiloCluster = new M.style.Cluster();
-
-campamentos.setStyle(estiloBase);
-campamentos.setStyle(estiloCluster);
-
-// const campamentos = new M.layer.GeoJSON({
-//   name: 'Campamentos',
-//   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=sepim:campamentos&outputFormat=application/json&',
-//   extract: true,
+// const campamentos = new M.layer.WFS({
+//   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
+//   name: 'campamentos',
+//   legend: 'Campamentos',
+//   geometry: 'MPOINT',
 // });
 
-// const provincias = new M.layer.GeoJSON({
+// mapjs.addLayers(campamentos);
+
+// const estiloBase = new M.style.Point({
+//   radius: 5,
+//   fill: {
+//     color: 'yellow',
+//     opacity: 0.5,
+//   },
+//   stroke: {
+//     color: '#FF0000',
+//   },
+// });
+
+// const estiloCluster = new M.style.Cluster();
+
+// campamentos.setStyle(estiloBase);
+// campamentos.setStyle(estiloCluster);
+
+// const layer = new WFS({
+//   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
+//   namespace: 'tematicos',
 //   name: 'Provincias',
-//   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?service=WFS&version=1.0.0&request=GetFeature&typeName=tematicos:Provincias&maxFeatures=50&outputFormat=application/json',
+//   legend: 'Provincias',
+//   geometry: 'MPOLYGON',
+//   ids: '3,4',
+// });
+
+// const arboleda = new KML({
+//   url: 'http://mapea4-sigc.juntadeandalucia.es/files/kml/arbda_sing_se.kml',
+//   name: 'Arboleda',
 //   extract: true,
 // });
-
-// const layerGroup1 = new M.layer.LayerGroup({
-//   id: 'id_grupo_1',
-//   title: 'Grupo 1',
-//   collapsed: true,
-//   zIndex: 100000,
-//   children: [provincias, campamentos],
-//   order: 0,
-// });
-
-
-// const capaWMS = new M.layer.WMS({
-//   url: 'https://www.ideandalucia.es/services/andalucia/wms?',
-//   name: '05_Red_Viaria',
-//   legend: 'Red Viaria',
-//   transparent: true,
-//   tiled: false,
-// });
-
-const layer = new WFS({
-  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
-  namespace: 'tematicos',
-  name: 'Provincias',
-  legend: 'Provincias',
-  geometry: 'MPOLYGON',
-  ids: '3,4',
-});
-
-const arboleda = new KML({
-  url: 'http://mapea4-sigc.juntadeandalucia.es/files/kml/arbda_sing_se.kml',
-  name: 'Arboleda',
-  extract: true,
-});
 
 // const layerWMTS = new WMTS({
 //   url: 'http://www.ideandalucia.es/geowebcache/service/wmts',
@@ -133,53 +103,56 @@ const arboleda = new KML({
 //   },
 // });
 
-// const campamentos = new M.layer.WFS({
-//   name: 'campamentos',
-//   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/wfs',
-//   geometry: 'POINT',
-//   namespace: 'sepim',
-//   extract: true,
-// });
+const layer = new M.layer.WFS({
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
+  namespace: 'sepim',
+  name: 'EstructuraJA',
+  legend: 'Menores de 15 años por provincia',
+  geometry: 'MPOLYGON',
+});
 
-// // Estilos para categorización
-// const primera = new M.style.Point({
-//   icon: {
-//     src: 'https://image.flaticon.com/icons/svg/34/34697.svg',
-//     scale: 0.1,
-//   },
-// });
-// const segunda = new M.style.Point({
-//   icon: {
-//     src: 'https://image.flaticon.com/icons/svg/34/34651.svg',
-//     scale: 0.1,
-//   },
-// });
-// const tercera = new M.style.Point({
-//   icon: {
-//     src: 'https://image.flaticon.com/icons/svg/34/34654.svg',
-//     scale: 0.1,
-//   },
-// });
-// const categoryStyle = new M.style.Category('categoria', {
-//   Primera: primera,
-//   Segunda: segunda,
-//   Tercera: tercera,
-// });
+const provincias = new M.layer.WFS({
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
+  namespace: 'tematicos',
+  name: 'Provincias',
+  legend: 'Provincias',
+  geometry: 'MPOLYGON',
+});
 
-// const layer = new M.layer.WFS({
-//   url: 'http://www.juntadeandalucia.es/institutodeestadisticaycartografia/geoserver-ieca/grid/wfs?',
-//   namespace: 'grid',
-//   name: 'gridp_250',
-//   legend: 'Grid',
-//   geometry: 'MPOLYGON',
-//   version: '2.0',
-//   cql: "cmun LIKE ' % 18005 % '",
-// });
-// mapjs.addWFS(layer);
-// layer.setCQL("cmun LIKE ' % 18005 % '");
+const estiloProvincias = new M.style.Polygon({
+  stroke: {
+    color: '#FF0000',
+    width: 1,
+  },
+});
 
-// campamentos.setStyle(categoryStyle);
-mapjs.addWFS(campamentos);
+// provincias.setStyle(estiloProvincias);
+
+mapjs.addLayers([provincias]);
+
+// const styleProp = new M.style.Proportional('id', 5, 15, new M.style.Point({
+//   fill: {
+//     color: '#000000',
+//   },
+//   stroke: {
+//     color: '#FFFFFF',
+//     width: 2,
+//   },
+//   label: {
+//     text: '{{id}}',
+
+//     offset: [0, 20],
+//     stroke: {
+//       color: 'yellow', // Color de relleno del halo
+//       width: 2,
+//     }
+//   }
+// }));
+
+// lo establecemos a la capa
+// layer.setStyle(styleProp);
+
+// mapjs.addWFS(campamentos);
 
 // Estilo cluster por defecto
 

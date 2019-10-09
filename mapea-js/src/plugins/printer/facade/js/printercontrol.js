@@ -185,6 +185,9 @@ export default class PrinterControl extends M.Control {
         let i = 0;
         let ilen;
         // default layout
+        capabilities.layouts = capabilities.layouts.filter((l) => {
+          return !l.name.endsWith('jpg');
+        });
         for (i = 0, ilen = capabilities.layouts.length; i < ilen; i += 1) {
           const layout = capabilities.layouts[i];
           if (layout.name === this.options_.layout) {
@@ -211,17 +214,9 @@ export default class PrinterControl extends M.Control {
           const object = { value: dpi };
           capabilities.dpis.push(object);
         }
-        capabilities.format = [];
         // default outputFormat
-        for (i = 0, ilen = capabilities.formats.length; i < ilen; i += 1) {
-          const outputFormat = capabilities.formats[i];
-          if (outputFormat.name === this.options_.format) {
-            outputFormat.default = true;
-            break;
-          }
-          const object = { name: outputFormat };
-          capabilities.format.push(object);
-        }
+        capabilities.format = [{ name: 'pdf' }, { name: 'png' }, { name: 'jpg' }];
+
         // forceScale
         capabilities.forceScale = this.options_.forceScale;
         const html = M.template.compileSync(printerHTML, { jsonp: true, vars: capabilities });
@@ -537,12 +532,15 @@ export default class PrinterControl extends M.Control {
     const title = this.inputTitle_.value;
     const description = this.areaDescription_.value;
     const projection = this.map_.getProjection().code;
-    const layout = this.layout_.name;
+    let layout = this.layout_.name;
     const dpi = this.dpi_.value;
     const outputFormat = this.format_;
     const scale = this.map_.getScale();
     const center = this.map_.getCenter();
     const parameters = this.params_.parameters;
+    if (outputFormat === 'jpg') {
+      layout += ' jpg';
+    }
 
     const printData = M.utils.extend({
       layout,
@@ -562,19 +560,18 @@ export default class PrinterControl extends M.Control {
     return this.encodeLayers().then((encodedLayers) => {
       printData.attributes.map.layers = encodedLayers;
       printData.attributes = Object.assign(printData.attributes, parameters);
-      printData.legends = this.encodeLegends();
-      if (this.options_.legend === true) {
-        for (let i = 0, ilen = printData.legends.length; i < ilen; i += 1) {
-          if (printData.legends[i] !== undefined) {
-            printData.attributes[`leyenda${i}`] = printData.legends[i].name;
-
-            if (printData.legends[i].classes[0] !== undefined &&
-              printData.legends[i].classes[0].icons !== undefined) {
-              printData.attributes[`imagenLeyenda${i}`] = printData.legends[i].classes[0].icons[0];
-            }
-          }
-        }
+      const legends = [];
+      const leyenda = this.encodeLegends();
+      for (let i = 0, ilen = leyenda.length; i < ilen; i += 1) {
+        const a = {
+          name: leyenda[i].classes[0].name,
+          icons: leyenda[i].classes[0].icons,
+        };
+        legends.push(a);
       }
+      printData.attributes.legend = {
+        classes: legends,
+      };
       if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
         printData.attributes.map.projection = 'EPSG:3857';
       }

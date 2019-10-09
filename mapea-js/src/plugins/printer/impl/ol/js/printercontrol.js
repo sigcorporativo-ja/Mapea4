@@ -96,7 +96,6 @@ export default class PrinterControl extends M.impl.Control {
 
     if (layer.displayInLayerSwitcher) {
       encodedLegend = {
-        name: layer.name,
         classes: [],
       };
 
@@ -106,7 +105,7 @@ export default class PrinterControl extends M.impl.Control {
       if (!M.utils.isNullOrEmpty(legendURL) && !regExpImgDefault.test(legendURL) &&
         !regExpImgError.test(legendURL)) {
         encodedLegend.classes[0] = {
-          name: '',
+          name: layer.name,
           icons: [layer.getLegendURL()],
         };
         if (layer instanceof M.layer.Vector) {
