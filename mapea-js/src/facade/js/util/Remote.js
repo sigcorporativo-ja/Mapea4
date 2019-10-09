@@ -3,7 +3,7 @@
  */
 
 import { addParameters, generateRandom, isNullOrEmpty, isObject } from './Utils';
-import { useproxy } from '../mapea';
+import { useproxy, proxyExceptions } from '../mapea';
 import Response from './Response';
 
 /**
@@ -151,8 +151,11 @@ const ajax = (urlVar, dataVar, methodType, useProxy) => {
 export const get = (url, data, options) => {
   let req;
 
-  const useProxy = ((isNullOrEmpty(options) || (options.jsonp !== false)) &&
+  let useProxy = ((isNullOrEmpty(options) || (options.jsonp !== false)) &&
     useproxy !== false);
+
+  const urlOrigin = new URL(url).origin;
+  useProxy = useProxy && proxyExceptions.indexOf(urlOrigin) === -1;
 
   if (useProxy === true) {
     req = jsonp(url, data, options);
