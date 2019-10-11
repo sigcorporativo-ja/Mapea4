@@ -44,6 +44,13 @@ class WMC extends Layer {
     this.layers = [];
 
     /**
+     * Group layers defined into the WMC
+     * @private
+     * @type {Array<M.layer.Group>}
+     */
+    this.groups = [];
+
+    /**
      * Load WMC file promise
      * @private
      * @type {Promise}
@@ -138,6 +145,11 @@ class WMC extends Layer {
       if (!isNullOrEmpty(this.layers)) {
         this.map.removeLayers(this.layers);
       }
+
+      // removes all groups layers
+      if (!isNullOrEmpty(this.groups)) {
+        this.map.removeGroups(this.groups);
+      }
     }
   }
 
@@ -152,12 +164,18 @@ class WMC extends Layer {
   loadLayers(context) {
     this.layers = context.layers;
     this.maxExtent = context.maxExtent;
-
+    if (!isNullOrEmpty(context.layerGroups)) {
+      this.groups.push(context.layerGroups);
+    }
+    this.layers.forEach(wms => wms.setWMCParent(this.facadeLayer_));
     this.map.addWMS(this.layers, true);
+    this.map.addLayerGroup(this.groups);
 
-    // updates the z-index of the layers
+    // updates the z-index of the layers and groups
     this.layers.forEach((layer, i) => layer.setZIndex(this.getZIndex() + i));
+    this.groups.forEach((group, i) => group.setZIndex(this.getZIndex() + i));
     this.facadeLayer_.fire(EventType.LOAD, [this.layers]);
+    this.facadeLayer_.fire(EventType.LOAD, [this.groups]);
   }
 
   /**

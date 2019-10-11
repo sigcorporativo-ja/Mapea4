@@ -8,6 +8,7 @@ import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import * as parameter from '../parameter/parameter';
 import * as LayerType from './Type';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -27,11 +28,11 @@ class WMS extends LayerBase {
   constructor(userParameters, options = {}, vendorOptions) {
     // checks if the implementation can create WMC layers
     if (isUndefined(WMSImpl)) {
-      Exception('La implementación usada no puede crear capas WMS');
+      Exception(getValue('exception').wms_method);
     }
     // checks if the param is null or empty
     if (isNullOrEmpty(userParameters)) {
-      Exception('No ha especificado ningún parámetro');
+      Exception(getValue('exception').no_param);
     }
     // This Layer is of parameters.
     const parameters = parameter.layer(userParameters, LayerType.WMS);
@@ -57,6 +58,9 @@ class WMS extends LayerBase {
 
     // options
     this.options = options;
+
+    // wmcParent
+    this.wmcParent_ = null;
 
     /**
      * get WMS getCapabilities promise
@@ -268,6 +272,28 @@ class WMS extends LayerBase {
    */
   getNoCacheName() {
     return this._noCacheName;
+  }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @public
+   * @api
+   */
+  setWMCParent(wmc) {
+    this.wmcParent_ = wmc;
+  }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @public
+   * @api
+   */
+  getWMCParent() {
+    return this.wmcParent_;
   }
 
   /**

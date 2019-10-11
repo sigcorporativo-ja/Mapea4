@@ -25,6 +25,19 @@ class SelectCluster extends OLInteractionSelect {
    */
   constructor(optionsParam = {}) {
     const options = optionsParam;
+    const overlayLayer = new OLLayerVector({
+      source: new OLSourceVector({
+        features: new OLCollection(),
+        useSpatialIndex: true,
+      }),
+      name: 'Cluster overlay',
+      updateWhileAnimating: true,
+      updateWhileInteracting: true,
+      displayInLayerSwitcher: false,
+      style: options.featureStyle,
+    });
+    optionsParam.layers.push(overlayLayer);
+
     options.filter = (f, l) => {
       if (!l && f.get('selectclusterlink')) return false;
       return true;
@@ -44,17 +57,7 @@ class SelectCluster extends OLInteractionSelect {
     this.style_ = options.style;
     this.filter_ = options.filter;
     // Create a new overlay layer for
-    this.overlayLayer_ = new OLLayerVector({
-      source: new OLSourceVector({
-        features: new OLCollection(),
-        useSpatialIndex: true,
-      }),
-      name: 'Cluster overlay',
-      updateWhileAnimating: true,
-      updateWhileInteracting: true,
-      displayInLayerSwitcher: false,
-      style: options.featureStyle,
-    });
+    this.overlayLayer_ = overlayLayer;
 
     this.on('select', this.selectCluster.bind(this), this);
   }
@@ -187,8 +190,10 @@ class SelectCluster extends OLInteractionSelect {
     for (let i = 0; i < max; i += 1) {
       let a = (2 * Math.PI) * (i / max);
       if (max === 2 || max === 4) a += Math.PI / 4;
-      const newPoint = [center[0] + (radiusInPixels * Math.sin(a)),
-        center[1] + (radiusInPixels * Math.cos(a))];
+      const newPoint = [
+        center[0] + (radiusInPixels * Math.sin(a)),
+        center[1] + (radiusInPixels * Math.cos(a)),
+      ];
       this.drawAnimatedFeatureAndLink_(cluster[i], resolution, center, newPoint);
     }
   }

@@ -1,5 +1,6 @@
 import GeosearchbylocationControl from './geosearchbylocationcontrol';
 import '../assets/css/geosearchbylocation';
+import api from '../../api';
 
 export default class Geosearchbylocation extends M.Plugin {
   /**
@@ -99,6 +100,13 @@ export default class Geosearchbylocation extends M.Plugin {
      * @type {M.ui.Panel}
      */
     this.panel_ = null;
+
+    /**
+     * Metadata from api.json
+     * @private
+     * @type {Object}
+     */
+    this.metadata_ = api.metadata;
   }
 
   /**
@@ -196,6 +204,28 @@ export default class Geosearchbylocation extends M.Plugin {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Gets the parameter api rest of the plugin
+   *
+   * @public
+   * @function
+   * @api
+   */
+  getAPIRest() {
+    return `geosearchbylocation=${this.distance_}*${this.url_}*${this.core_}*${this.handler_}`;
+  }
+
+  /**
+   * This function gets metadata plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getMetadata() {
+    return this.metadata_;
   }
 }
 

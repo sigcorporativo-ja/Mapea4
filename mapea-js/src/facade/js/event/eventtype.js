@@ -63,6 +63,22 @@ export const ADDED_WFS = 'added:wfs';
  * @type {string}
  * @api
  */
+export const ADDED_VECTOR_TILE = 'added:vectortile';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const REMOVED_LAYER = 'removed:layer';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const ADDED_WMTS = 'added:wmts';
 
 /**
@@ -184,6 +200,14 @@ export const CHANGE_PROJ = 'change:proj';
  * @api
  */
 export const CHANGE_STYLE = 'change:style';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const CHANGE_ZOOM = 'change:zoom';
 
 /**
  * Event type

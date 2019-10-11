@@ -4,11 +4,11 @@
 import LocationImpl from 'impl/control/Location';
 import locationTemplate from 'templates/location';
 import 'assets/css/controls/location';
+import { getValue } from '../i18n/language';
 import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
-
 
 /**
  * @classdesc
@@ -25,7 +25,7 @@ class Location extends ControlBase {
    */
   constructor(tracking = true, highAccuracy = false, vendorOptions = {}) {
     if (isUndefined(LocationImpl)) {
-      Exception('La implementación usada no puede crear controles Location');
+      Exception(getValue('exception').location_method);
     }
 
     // implementation of this control
@@ -45,7 +45,11 @@ class Location extends ControlBase {
    * @api
    */
   createView(map) {
-    return compileTemplate(locationTemplate);
+    return compileTemplate(locationTemplate, {
+      vars: {
+        title: getValue('location').title,
+      },
+    });
   }
 
   /**

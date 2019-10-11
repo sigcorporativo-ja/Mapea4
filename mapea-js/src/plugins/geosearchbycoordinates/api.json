@@ -1,0 +1,29 @@
+{
+  "url": {
+    "name": "geosearchbycoordinates",
+    "separator": "*"
+  },
+  "constructor": "M.plugin.GeosearchByCoordinates",
+  "parameters": [],
+  "files": {
+    "ol": {
+      "scripts": [
+        "geosearchbycoordinates-1.0.0.ol.min.js"
+      ],
+      "styles": [
+        "geosearchbycoordinates-1.0.0.min.css"
+      ]
+    }
+  },
+  "metadata": {
+    "name": "GeosearchByCoordinates",
+    "description": "Search for locations within a given radius from a click on a point on the map.",
+    "text": "",
+    "version": "1.0.0",
+    "date": "11/10/2019",
+    "author": "Junta de Andalucía",
+    "org": "Junta de Andalucía",
+    "tags": "mapea,plugin",
+    "icon": "./facade/assets/icons/icons.svg"
+  }
+}

@@ -13,6 +13,7 @@ import StyleProportional from './Proportional';
 import StylePolygon from './Polygon';
 import StyleLine from './Line';
 import StylePoint from './Point';
+import { getValue } from '../i18n/language';
 
 /**
  * Accuracy of numbers on canvas
@@ -50,7 +51,7 @@ class Choropleth extends StyleComposite {
   constructor(attributeName, styles, quantification = StyleQuantification.JENKS(), options = {}) {
     super(options, {});
     if (isNullOrEmpty(attributeName)) {
-      Exception('No se ha especificado el nombre del atributo.');
+      Exception(getValue('exception').no_attr_name);
     }
 
     /**
@@ -502,7 +503,8 @@ class Choropleth extends StyleComposite {
    * @return {M.style.Choropleth}
    */
   static deserialize([serializedAttributeName, serializedStyles,
-    serializedQuantification, serializedOptions, serializedCompStyles]) {
+    serializedQuantification, serializedOptions, serializedCompStyles,
+  ]) {
     const attributeName = serializedAttributeName;
     const styles = serializedStyles.map(serializedStyle =>
       StyleBase.deserialize(serializedStyle));

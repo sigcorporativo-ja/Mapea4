@@ -3,7 +3,7 @@
  */
 import VectorImpl from 'impl/layer/Vector';
 import { geojsonTo4326 } from 'impl/util/Utils';
-import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils';
+import { isUndefined, isArray, isNullOrEmpty, isString, normalize } from '../util/Utils';
 import { generateStyleLayer } from '../style/utils';
 import Exception from '../exception/exception';
 import LayerBase from './Layer';
@@ -13,6 +13,7 @@ import FilterBase from '../filter/Base';
 import StyleCluster from '../style/Cluster';
 import Style from '../style/Style';
 import * as EventType from '../event/eventtype';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -36,7 +37,13 @@ class Vector extends LayerBase {
 
     // checks if the implementation can create Vector
     if (isUndefined(VectorImpl)) {
-      Exception('La implementación usada no puede crear capas Vector');
+      Exception(getValue('exception').vectorlayer_method);
+    }
+
+    // extract
+    this.extract = parameters.extract;
+    if (isNullOrEmpty(this.extract)) {
+      this.extract = true; // by default
     }
 
     /**
@@ -68,6 +75,25 @@ class Vector extends LayerBase {
     if (!isUndefined(newType) &&
       !isNullOrEmpty(newType) && (newType !== LayerType.Vector)) {
       Exception('El tipo de capa debe ser \''.concat(LayerType.Vector).concat('\' pero se ha especificado \'').concat(newType).concat('\''));
+    }
+  }
+
+  /**
+   * 'extract' the features properties
+   */
+  get extract() {
+    return this.getImpl().extract;
+  }
+
+  set extract(newExtract) {
+    if (!isNullOrEmpty(newExtract)) {
+      if (isString(newExtract)) {
+        this.getImpl().extract = (normalize(newExtract) === 'true');
+      } else {
+        this.getImpl().extract = newExtract;
+      }
+    } else {
+      this.getImpl().extract = true;
     }
   }
 
@@ -118,7 +144,7 @@ class Vector extends LayerBase {
     if (!isNullOrEmpty(id)) {
       feature = this.getImpl().getFeatureById(id);
     } else {
-      dialog.error('No se ha indicado un ID para obtener el feature');
+      dialog.error(getValue('dialog').id_feature);
     }
     return feature;
   }
@@ -214,7 +240,7 @@ class Vector extends LayerBase {
         style.refresh();
       }
     } else {
-      dialog.error('El filtro indicado no es correcto');
+      dialog.error(getValue('dialog').vector_filter);
     }
   }
 
@@ -329,7 +355,6 @@ class Vector extends LayerBase {
     this.fire(EventType.CHANGE_STYLE, [style, this]);
   }
 
-
   /**
    * This function return style vector
    *
@@ -363,7 +388,11 @@ class Vector extends LayerBase {
     let legendUrl = this.getImpl().getLegendURL();
     if (legendUrl.indexOf(LayerBase.LEGEND_DEFAULT) !== -1 &&
       legendUrl.indexOf(LayerBase.LEGEND_ERROR) === -1 && this.style_ instanceof Style) {
-      legendUrl = this.style_.toImage();
+      if (this.style_ instanceof StyleCluster && this.style_.getStyles().length > 0) {
+        legendUrl = this.style_.getStyles()[0].toImage();
+      } else {
+        legendUrl = this.style_.toImage();
+      }
     }
     return legendUrl;
   }

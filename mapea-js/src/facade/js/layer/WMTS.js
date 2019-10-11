@@ -7,6 +7,7 @@ import Exception from '../exception/exception';
 import LayerBase from './Layer';
 import * as parameter from '../parameter/parameter';
 import * as LayerType from './Type';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -40,12 +41,12 @@ class WMTS extends LayerBase {
 
     // checks if the implementation can create WMTS layers
     if (isUndefined(WMTSImpl)) {
-      Exception('La implementación usada no puede crear capas WMTS');
+      Exception(getValue('exception').wmts_method);
     }
 
     // checks if the param is null or empty
     if (isNullOrEmpty(userParameters)) {
-      Exception('No ha especificado ningún parámetro');
+      Exception(getValue('exception').no_param);
     }
 
     // matrixSet
@@ -144,6 +145,23 @@ class WMTS extends LayerBase {
     }
 
     return equals;
+  }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  getGetFeatureInfoUrl(coordinate, zoom, formatInfo) {
+    return this.getImpl().getGetFeatureInfoUrl(coordinate, zoom, formatInfo);
+  }
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  getTileColTileRow(coordinate, zoom) {
+    return this.getImpl().getTileColTileRow(coordinate, zoom);
   }
 }
 

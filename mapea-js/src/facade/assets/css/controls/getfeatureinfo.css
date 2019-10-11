@@ -1,10 +1,43 @@
 .m-getfeatureinfo-container {
-   top: 20px;
-   left: 300px;
+    top: 20px;
+    left: 300px;
 }
 
 .m-popup table.mapea-table td.header {
-   text-align: center;
-   padding-top: 10px;
-   border-bottom: 1px ridge #6C6C6C
+    text-align: center;
+    padding-top: 10px;
+    border-bottom: 1px ridge #6C6C6C
+}
+
+.m-getfeatureinfo-content-info {
+    min-width: 250px;
+    margin-bottom: .7rem;
+}
+
+.m-getfeatureinfo-content-info-body.m-content-collapsed,
+span.m-content-collapsed {
+    display: none;
+}
+
+.m-getfeatureinfo-content-info .m-getfeatureinfo-content-info-header {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    background-color: #eee;
+    margin-bottom: 5px;
+    color: black;
+    padding: 5px;
+}
+
+.m-getfeatureinfo-content-info .m-getfeatureinfo-content-info-header .m-arrow-right {
+    border: 7px solid transparent;
+    border-left-color: black;
+    cursor: pointer;
+}
+
+.m-getfeatureinfo-content-info .m-getfeatureinfo-content-info-header .m-arrow-down {
+    border: 7px solid transparent;
+    border-top-color: black;
+    cursor: pointer;
+    margin-right: 5px;
 }

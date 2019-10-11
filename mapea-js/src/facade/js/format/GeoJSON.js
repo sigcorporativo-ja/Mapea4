@@ -5,6 +5,7 @@ import GeoJSONImpl from 'impl/format/GeoJSON';
 import Base from '../Base';
 import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils';
 import Exception from '../exception/exception';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -34,7 +35,7 @@ class GeoJSON extends Base {
 
     // checks if the implementation can create format GeoJSON
     if (isUndefined(GeoJSONImpl)) {
-      Exception('La implementación usada no puede M.impl.format.GeoJSON');
+      Exception(getValue('exception').geojson_method);
     }
   }
 

@@ -2,14 +2,27 @@
  * @module M/Popup
  */
 import PopupImpl from 'impl/Popup';
-
 import 'assets/css/popup';
 import popupTemplate from 'templates/popup';
-import { isNullOrEmpty } from './util/Utils';
+import { isNullOrEmpty, reproject, getSystem } from './util/Utils';
 import Base from './Base';
 import { compileSync as compileTemplate } from './util/Template';
 import * as EventType from './event/eventtype';
 import MWindow from './util/Window';
+
+/**
+ * getUrlFromPlatform
+ * @private
+ * @function
+ */
+const getUrlFromPlatform = (platform, coords) => {
+  const platformURL = {
+    android: coord => `geo:${coord[1]}},${coord[0]}?q=${coord[1]},${coord[0]}`,
+    ios: coord => `maps://?ll=${coord[1]},${coord[0]}`,
+    unknown: coord => `http://maps.google.com?q=${coord[1]},${coord[0]}`,
+  };
+  return platformURL[platform](coords);
+};
 
 /**
  * @classdesc
@@ -41,6 +54,13 @@ class Tab {
      * @type {String}
      */
     this.content = options.content;
+
+    /**
+     * TODO
+     * @public
+     * @type {Array<object>}
+     */
+    this.listeners = options.listeners || [];
   }
 }
 
@@ -58,7 +78,6 @@ class Popup extends Base {
    */
   constructor(options) {
     const impl = new PopupImpl(options);
-
     // calls the super constructor
     super(impl);
 
@@ -136,10 +155,15 @@ class Popup extends Base {
   addTo(map, coordinate) {
     this.map_ = map;
     if (isNullOrEmpty(this.element_)) {
+      const coords = reproject(coordinate, this.map_.getProjection().code, 'EPSG:4326');
+      const platform = getSystem();
+
       const html = compileTemplate(popupTemplate, {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
+          options: Popup.options,
+          url: getUrlFromPlatform(platform, coords),
         },
       });
       if (this.tabs_.length > 0) {
@@ -162,14 +186,20 @@ class Popup extends Base {
    */
   update() {
     if (!isNullOrEmpty(this.map_)) {
+      const coords = reproject(this.coord_, this.map_.getProjection().code, 'EPSG:4326');
+      const platform = getSystem();
+
       const html = compileTemplate(popupTemplate, {
         jsonp: true,
         vars: {
           tabs: this.tabs_,
+          options: Popup.options,
+          url: getUrlFromPlatform(platform, coords),
         },
       });
       if (this.tabs_.length > 0) {
         this.element_ = html;
+        this.addEventTabs(this.tabs_[0], html);
         this.addEvents(html);
         this.getImpl().setContainer(html);
         this.show(this.coord_);
@@ -213,8 +243,30 @@ class Popup extends Base {
     if (this.tabs_.length > index) {
       const tab = this.tabs_[index];
       this.setContent_(tab.content);
+      this.addEventTabs(tab, this.getContent());
       this.show(this.coord_);
     }
+  }
+
+  /**
+   * This functions adds the events to the popup tabs.
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addEventTabs(tab, html) {
+    const { listeners } = tab;
+    listeners.forEach((listener) => {
+      if (listener.all === true) {
+        html.querySelectorAll(listener.selector).forEach((element) => {
+          element.addEventListener(listener.type, e => listener.callback(e));
+        });
+      } else {
+        html.querySelector(listener.selector)
+          .addEventListener(listener.type, e => listener.callback(e));
+      }
+    });
   }
 
   /**
@@ -223,7 +275,7 @@ class Popup extends Base {
    * @function
    */
   setContent_(content) {
-    this.getImpl().setContent(content);
+    this.getContent().innerHTML = content;
   }
 
   /**
@@ -242,7 +294,6 @@ class Popup extends Base {
    */
   addEvents(htmlParam) {
     const html = htmlParam;
-
     // adds tabs events
     let touchstartY;
     const tabs = html.querySelectorAll('div.m-tab');
@@ -261,12 +312,11 @@ class Popup extends Base {
           this.switchTab(index);
         }
       });
-
       tab.addEventListener('touchend', (evt) => {
         evt.preventDefault();
         // 5px tolerance
         const touchendY = evt.clientY;
-        if ((evt.type === 'click') || (Math.abs(touchstartY - touchendY) < 5)) {
+        if ((evt.type === 'touchend') || (Math.abs(touchstartY - touchendY) < 5)) {
           // remove m-activated from all tabs
           Array.prototype.forEach.call(tabs, (addedTab) => {
             addedTab.classList.remove('m-activated');
@@ -277,7 +327,6 @@ class Popup extends Base {
         }
       });
     });
-
     // adds close event
     const closeBtn = html.querySelector('a.m-popup-closer');
     closeBtn.addEventListener('click', this.hide.bind(this), false);
@@ -291,34 +340,29 @@ class Popup extends Base {
       let topPosition;
       headerElement.addEventListener('touchstart', (evt) => {
         evt.preventDefault();
-        touchstartY = evt.clientY;
+        touchstartY = evt.touches[0].clientY;
         if (this.status_ === Popup.status.COLLAPSED) {
-          topPosition = 0.9 * window.HEIGHT;
+          topPosition = 0.9 * MWindow.HEIGHT;
         } else if (this.status_ === Popup.status.DEFAULT) {
-          topPosition = 0.45 * window.HEIGHT;
+          topPosition = 0.45 * MWindow.HEIGHT;
         } else if (this.status_ === Popup.status.FULL) {
           topPosition = 0;
         }
         html.classList.add('m-no-animation');
       }, false);
-
       headerElement.addEventListener('touchmove', (evt) => {
         evt.preventDefault();
-        const touchY = evt.clientY;
-        const translatedPixels = touchY - touchstartY;
+        this.touchY = evt.touches[0].clientY;
+        const translatedPixels = this.touchY - touchstartY;
         html.style.top = `${topPosition + translatedPixels}px`;
       }, false);
-
       headerElement.addEventListener('touchend', (evt) => {
         evt.preventDefault();
-        const touchendY = evt.clientY;
-        this.manageCollapsiblePopup_(touchstartY, touchendY);
+        this.manageCollapsiblePopup_(touchstartY, this.touchY);
       }, false);
-
       // CLICK EVENTS
       headerElement.addEventListener('mouseup', (evt) => {
         evt.preventDefault();
-
         // COLLAPSED --> DEFAULT
         if (this.tabs_.length <= 1) {
           if (this.status_ === Popup.status.COLLAPSED) {
@@ -492,5 +536,17 @@ Popup.status.DEFAULT = 'm-default';
  */
 Popup.status.FULL = 'm-full';
 
+/**
+ * TakeMeThere options
+ *
+ * @public
+ * @api
+ * @type {bool}
+ */
+Popup.options = {
+  takeMeThere: false,
+  textMode: true,
+  msg: 'Llévame allí',
+};
 
 export default Popup;

@@ -3,6 +3,7 @@
  */
 import { isString, isNullOrEmpty, getParameterValue, isObject, isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
+import { getValue } from '../i18n/language';
 
 /**
  * This function parses a container parameter in a legible
@@ -25,13 +26,13 @@ const parseContainer = (userParameters) => {
     } else if (!isNullOrEmpty(userParameters.container)) {
       container = parseContainer(userParameters.container);
     } else {
-      Exception('No ha especificado ningún parámetro contenedor');
+      Exception(getValue('exception').no_container);
     }
   } else {
     Exception(`El tipo del parámetro container no es válido: ${typeof userParameters}`);
   }
   if (isNullOrEmpty(container)) {
-    Exception('No existe ningún contenedor con el id especificado');
+    Exception(getValue('exception').no_id_container);
   }
   return container;
 };
@@ -348,6 +349,23 @@ const parseTicket = (parameter) => {
 };
 
 /**
+ * This functions gets the rotation parameter setted by the user.
+ *
+ * @private
+ * @function
+ */
+const parseRotation = (parameter) => {
+  let rotation = parameter;
+
+  if (isString(parameter)) {
+    rotation = getParameterValue('rotation', parameter);
+  } else if (isObject(parameter)) {
+    rotation = parameter.rotation;
+  }
+  return rotation;
+};
+
+/**
  * This function parses a resolutions parameter in a legible
  * parameter to Mapea and checks posible errors
  *
@@ -436,7 +454,7 @@ class Parameters {
    */
   constructor(userParameters) {
     if (isNullOrEmpty(userParameters)) {
-      Exception('No ha especificado ningún parámetro');
+      Exception(getValue('exception').no_param);
     }
 
     /**
@@ -550,6 +568,13 @@ class Parameters {
      * @api
      */
     this.ticket = parseTicket(userParameters);
+
+    /**
+     * @public
+     * @type {number}
+     * @api
+     */
+    this.rotation = parseRotation(userParameters);
   }
 }
 

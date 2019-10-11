@@ -5,6 +5,7 @@ import Base from './Base';
 import { isNullOrEmpty, isUndefined } from './util/Utils';
 import Exception from './exception/exception';
 import * as EventType from './event/eventtype';
+import { getValue } from './i18n/language';
 
 /**
  * @classdesc
@@ -25,13 +26,13 @@ class Plugin extends Base {
   addTo(map) {
     // checks if the parameter is null or empty
     if (isNullOrEmpty(map)) {
-      Exception('No ha especificado ningún mapa');
+      Exception(getValue('exception').no_map);
     }
 
     // checks if the implementation can add itself into the map
     const impl = this.getImpl();
     if (isUndefined(impl.addTo)) {
-      Exception('La implementación usada no posee el método addTo');
+      Exception(getValue('exception').addto_method);
     }
 
     const view = this.createView(map);

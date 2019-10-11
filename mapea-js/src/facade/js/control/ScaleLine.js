@@ -8,6 +8,7 @@ import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -28,7 +29,7 @@ class ScaleLine extends ControlBase {
     super(impl, ScaleLine.NAME);
 
     if (isUndefined(ScaleLineImpl)) {
-      Exception('La implementación usada no puede crear controles ScaleLine');
+      Exception(getValue('exception').scaleline_method);
     }
   }
 
