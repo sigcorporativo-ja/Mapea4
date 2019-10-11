@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+    <title>GeosearchByCoordinates Production TEST</title>
+    <link href="http://mapea4-sigc.juntadeandalucia.es/assets/css/mapea-5.0.0.ol.min.css" rel="stylesheet" />
+    <link href="../dist/geosearchbycoordinates.ol.min.css" rel="stylesheet" />
+    <style rel="stylesheet">
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+
+</head>
+
+<body>
+    <div id="mapjs" class="container"></div>
+    <script type="text/javascript" src="http://mapea4-sigc.juntadeandalucia.es/js/mapea-5.0.0.ol.min.js"></script>
+    <script type="text/javascript" src="http://mapea4-sigc.juntadeandalucia.es/js/configuration-5.0.0.js"></script>
+    <script type="text/javascript" src="../dist/geosearchbycoordinates.ol.min.js"></script>
+    <script type="text/javascript">
+        const map = M.map({
+            container: 'mapjs',
+        });
+        const mp = new M.plugin.GeosearchByCoordinates();
+        map.addPlugin(mp);
+    </script>
+</body>
+
+</html>
