@@ -538,6 +538,7 @@ export default class PrinterControl extends M.Control {
     const scale = this.map_.getScale();
     const center = this.map_.getCenter();
     const parameters = this.params_.parameters;
+    const legend = this.options_.legend;
     if (outputFormat === 'jpg') {
       layout += ' jpg';
     }
@@ -560,18 +561,23 @@ export default class PrinterControl extends M.Control {
     return this.encodeLayers().then((encodedLayers) => {
       printData.attributes.map.layers = encodedLayers;
       printData.attributes = Object.assign(printData.attributes, parameters);
-      const legends = [];
-      const leyenda = this.encodeLegends();
-      for (let i = 0, ilen = leyenda.length; i < ilen; i += 1) {
-        const a = {
-          name: leyenda[i].classes[0].name,
-          icons: leyenda[i].classes[0].icons,
+      if (legend === 'true') {
+        const legends = [];
+        const leyenda = this.encodeLegends();
+        for (let i = 0, ilen = leyenda.length; i < ilen; i += 1) {
+          if (!M.utils.isNullOrEmpty(leyenda[i].classes[0])) {
+            const a = {
+              name: leyenda[i].classes[0].name,
+              icons: leyenda[i].classes[0].icons,
+            };
+            legends.push(a);
+          }
+        }
+        printData.attributes.legend = {
+          classes: legends,
         };
-        legends.push(a);
       }
-      printData.attributes.legend = {
-        classes: legends,
-      };
+
       if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
         printData.attributes.map.projection = 'EPSG:3857';
       }

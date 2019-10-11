@@ -139,7 +139,11 @@ export default class PrinterControl extends M.impl.Control {
     const resolution = this.facadeMap_.getMapImpl().getView().getResolution();
 
     const encodedFeatures = [];
+    let indexText = 1;
+    let indexGeom = 1;
     let style = '';
+    const stylesNames = {};
+    const stylesNamesText = {};
     let index = 1;
     let nameFeature;
     let nameFeature2;
@@ -159,10 +163,18 @@ export default class PrinterControl extends M.impl.Control {
           if (M.utils.isNullOrEmpty(imgSize)) {
             imgSize = [64, 64];
           }
+          let parseType;
+          if (feature.getGeometry().getType().toLowerCase() === 'multipolygon') {
+            parseType = 'polygon';
+          } else if (feature.getGeometry().getType().toLowerCase() === 'multipoint') {
+            parseType = 'point';
+          } else {
+            parseType = feature.getGeometry().getType().toLowerCase();
+          }
           const stroke = featureStyle.getStroke();
           let styleText;
           const styleGeom = {
-            type: feature.getGeometry().getType().toLowerCase() === 'multipolygon' ? 'polygon' : feature.getGeometry().getType().toLowerCase(),
+            type: parseType,
             id: styleId,
             externalGraphic: img.getSrc(),
             graphicHeight: imgSize[0],
@@ -198,34 +210,60 @@ export default class PrinterControl extends M.impl.Control {
           nameFeature2 = `'draw${index}'`;
           // eslint-disable-next-line no-useless-concat
           filter = '"[name = ' + `${nameFeature2}` + ']"';
-          // eslint-disable-next-line no-mixed-operators
-          if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox) ||
+          if ((!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) ||
             !M.utils.isNullOrEmpty(text)) {
             const styleStr = JSON.stringify(styleGeom);
             const styleTextStr = JSON.stringify(styleText);
-            const symbolizers = [];
-            if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
-              symbolizers.push(styleStr);
+            let styleName = stylesNames[styleStr];
+            let styleNameText = stylesNamesText[styleTextStr];
+            if (M.utils.isUndefined(styleName) || M.utils.isUndefined(styleNameText)) {
+              const symbolizers = [];
+              let flag = 0;
+              if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox) &&
+                M.utils.isUndefined(styleName)) {
+                styleName = indexGeom;
+                stylesNames[styleStr] = styleName;
+                flag = 1;
+                symbolizers.push(styleStr);
+                indexGeom += 1;
+                index += 1;
+              }
+              if (!M.utils.isNullOrEmpty(text) && M.utils.isUndefined(styleNameText)) {
+                styleNameText = indexText;
+                stylesNamesText[styleTextStr] = styleNameText;
+                symbolizers.push(styleTextStr);
+                indexText += 1;
+                if (flag === 0) {
+                  index += 1;
+                  symbolizers.push(styleStr);
+                }
+              }
+              if (styleName === undefined) {
+                styleName = 0;
+              }
+              if (styleNameText === undefined) {
+                styleNameText = 0;
+              }
+              // eslint-disable-next-line no-useless-concat
+              filter = '"[_gx_style = ' + `'${styleName + styleNameText}'` + ']"';
+              if (!M.utils.isNullOrEmpty(symbolizers)) {
+                // eslint-disable-next-line prefer-template
+                let a = '' + filter + ': {' +
+                  '"symbolizers": [' + symbolizers +
+                  ']}';
+                if (style !== '') {
+                  // eslint-disable-next-line prefer-template
+                  style += ',' + a;
+                } else {
+                  // eslint-disable-next-line prefer-template
+                  style += '{' + a + ',"version": "2"';
+                }
+              }
             }
-            if (!M.utils.isNullOrEmpty(text)) {
-              symbolizers.push(styleTextStr);
-            }
-            // eslint-disable-next-line prefer-template
-            const a = '' + filter + ': {' +
-              '"symbolizers": [' + symbolizers +
-              ']}';
-            if (style !== '') {
-              // eslint-disable-next-line prefer-template
-              style += ',' + a;
-            } else {
-              // eslint-disable-next-line prefer-template
-              style += '{' + a + ',"version": "2"';
-            }
-
-            index += 1;
 
             const geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
             geoJSONFeature.properties = {
+              _gx_style: styleName + styleNameText,
               name: nameFeature,
             };
             encodedFeatures.push(geoJSONFeature);
@@ -353,10 +391,13 @@ export default class PrinterControl extends M.impl.Control {
 
       const encodedFeatures = [];
       let nameFeature;
-      let nameFeature2;
       let filter;
       let index = 1;
+      let indexText = 1;
+      let indexGeom = 1;
       let style = '';
+      const stylesNames = {};
+      const stylesNamesText = {};
       features.forEach((feature) => {
         const geometry = feature.getGeometry();
         let featureStyle;
@@ -392,6 +433,14 @@ export default class PrinterControl extends M.impl.Control {
           if (M.utils.isNullOrEmpty(text) && !M.utils.isNullOrEmpty(featureStyle.textPath)) {
             text = featureStyle.textPath;
           }
+          let parseType;
+          if (feature.getGeometry().getType().toLowerCase() === 'multipolygon') {
+            parseType = 'polygon';
+          } else if (feature.getGeometry().getType().toLowerCase() === 'multipoint') {
+            parseType = 'point';
+          } else {
+            parseType = feature.getGeometry().getType().toLowerCase();
+          }
           const stroke = M.utils.isNullOrEmpty(image) ?
             featureStyle.getStroke() : (image.getStroke && image.getStroke());
           const fill = M.utils.isNullOrEmpty(image) ?
@@ -400,10 +449,10 @@ export default class PrinterControl extends M.impl.Control {
           // JGL20180118: fillOpacity=1 por defecto
           let styleText;
           const styleGeom = {
-            type: feature.getGeometry().getType().toLowerCase() == 'multipolygon' ? 'polygon' : feature.getGeometry().getType().toLowerCase(),
+            type: parseType,
             fillColor: M.utils.isNullOrEmpty(fill) ? '#000000' : M.utils.rgbaToHex(fill.getColor()).slice(0, 7),
             fillOpacity: M.utils.isNullOrEmpty(fill) ?
-              1 : M.utils.getOpacityFromRgba(fill.getColor()),
+              0 : M.utils.getOpacityFromRgba(fill.getColor()),
             strokeColor: M.utils.isNullOrEmpty(stroke) ? '#000000' : M.utils.rgbaToHex(stroke.getColor()),
             strokeOpacity: M.utils.isNullOrEmpty(stroke) ?
               0 : M.utils.getOpacityFromRgba(stroke.getColor()),
@@ -465,6 +514,7 @@ export default class PrinterControl extends M.impl.Control {
               fontFamily: 'Helvetica, sans-serif',
               fontStyle: 'normal',
               fontWeight,
+              conflictResolution: 'false',
               labelXOffset: text.getOffsetX(),
               labelYOffset: text.getOffsetY(),
               fillColor: styleGeom.fillColor || '#FF0000',
@@ -475,28 +525,52 @@ export default class PrinterControl extends M.impl.Control {
             };
           }
           nameFeature = `draw${index}`;
-          nameFeature2 = `'draw${index}'`;
-          filter = '"[name = ' + `${nameFeature2}` + ']"';
-          if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox) || !M.utils.isNullOrEmpty(text)) {
+
+          if ((!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) ||
+            !M.utils.isNullOrEmpty(text)) {
             const styleStr = JSON.stringify(styleGeom);
             const styleTextStr = JSON.stringify(styleText);
-            let symbolizers = [];
-            if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) {
-              symbolizers.push(styleStr);
+            let styleName = stylesNames[styleStr];
+            let styleNameText = stylesNamesText[styleTextStr];
+            if (M.utils.isUndefined(styleName) || M.utils.isUndefined(styleNameText)) {
+              let symbolizers = [];
+              let flag = 0;
+              if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox) && M.utils.isUndefined(styleName)) {
+                styleName = indexGeom;
+                stylesNames[styleStr] = styleName;
+                flag = 1;
+                symbolizers.push(styleStr);
+                indexGeom += 1;
+                index += 1;
+              }
+              if (!M.utils.isNullOrEmpty(text) && M.utils.isUndefined(styleNameText)) {
+                styleNameText = indexText;
+                stylesNamesText[styleTextStr] = styleNameText;
+                symbolizers.push(styleTextStr);
+                indexText += 1;
+                if (flag === 0) {
+                  index += 1;
+                  symbolizers.push(styleStr);
+                }
+              }
+              if (styleName === undefined) {
+                styleName = 0;
+              }
+              if (styleNameText === undefined) {
+                styleNameText = 0;
+              }
+              filter = '"[_gx_style = ' + `'${styleName + styleNameText}'` + ']"';
+              if (!M.utils.isNullOrEmpty(symbolizers)) {
+                let a = '' + filter + ': {' +
+                  '"symbolizers": [' + symbolizers +
+                  ']}';
+                if (style != '') {
+                  style += ',' + a;
+                } else {
+                  style += '{' + a + ',"version": "2"';
+                }
+              }
             }
-            if (!M.utils.isNullOrEmpty(text)) {
-              symbolizers.push(styleTextStr);
-            }
-            let a = '' + filter + ': {' +
-              '"symbolizers": [' + symbolizers +
-              ']}';
-            if (style != '') {
-              style += ',' + a;
-            } else {
-              style += '{' + a + ',"version": "2"';
-            }
-
-            index += 1;
 
             let geoJSONFeature;
             if (projection.code !== 'EPSG:3857' && this.facadeMap_.getLayers().some(layerParam => (layerParam.type === M.layer.type.OSM || layerParam.type === M.layer.type.Mapbox))) {
@@ -508,6 +582,7 @@ export default class PrinterControl extends M.impl.Control {
               geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
             }
             geoJSONFeature.properties = {
+              _gx_style: styleName + styleNameText,
               name: nameFeature,
             };
             encodedFeatures.push(geoJSONFeature);
