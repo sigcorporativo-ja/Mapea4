@@ -16,19 +16,19 @@
             {{/eq}}
             <a class="m-popup-closer" href="#" title="cerrar popup"></a>
         </div>
+        {{#if options.takeMeThere}}
+            {{#if options.textMode}}
+                <div class="m-footer">
+                    <a target="_blank" href="{{url}}">{{options.msg}}</a>
+                </div>
+            {{else}}
+                <div class="m-footer">
+                    <a target="_blank" href="{{url}}">
+                        <button class="g-cartografia-localizacion3"></button>
+                    </a>
+                </div>
+            {{/if}}
+        {{/if}}
         <div class="m-body">{{{tabs.0.content}}}</div>
     </div>
-    {{#if options.takeMeThere}}
-        {{#if options.textMode}}
-            <div class="m-footer">
-                <a href="geo:{{coord.x}},{{coord.y}}?q={{coord.x}},{{coord.y}}">{{options.msg}}</a>
-            </div>
-        {{else}}
-            <div class="m-footer">
-                <a href="geo:{{coord.x}},{{coord.y}}?q={{coord.x}},{{coord.y}}">
-                    <button class="g-cartografia-localizacion3"></button>
-                </a>
-            </div>
-        {{/if}}
-    {{/if}}
 </div>

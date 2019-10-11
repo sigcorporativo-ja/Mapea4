@@ -91,9 +91,8 @@
 
 .m-popup .m-footer {
     margin: 0px;
-    padding: 5px 8px;
+    padding: 5px 0;
     display: flex;
-    flex-direction: row-reverse;
 }
 
 .m-popup .m-footer>a>button {
@@ -124,6 +123,7 @@
         margin-top: 15px;
     }
 }
+
 
 .m-popup>div.m-popup-content>div.m-content+div.m-content {
     margin-top: 10px
@@ -228,18 +228,10 @@
         border-bottom-right-radius: 0px;
     }
 
-    .m-collapsed.m-popup .m-footer {
-        display: none;
-    }
-
-    .m-default.m-popup .m-footer {
-        position: absolute;
-        top: 50vh;
-    }
-
-    .m-full.m-popup .m-footer {
-        position: absolute;
-        top: 95vh;
+    .m-popup .m-footer {
+        position: relative;
+        display: flex;
+        padding: 15px 5px;
     }
 
     .m-popup>div.m-content>div.m-header,

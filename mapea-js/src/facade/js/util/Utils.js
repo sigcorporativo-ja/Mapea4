@@ -3,6 +3,7 @@
  */
 
 import chroma from 'chroma-js';
+import reproj from 'impl/util/reprojection';
 import * as dynamicImage from 'assets/img/dynamic_legend';
 import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units';
 import * as WKT from '../geom/WKT';
@@ -1141,4 +1142,41 @@ export const getEnvolvedExtent = (extents) => {
   }
 
   return envolvedExtent;
+};
+
+
+/**
+ * Determine the mobile operating system.
+ * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
+ *
+ * @function
+ * @public
+ * @returns {String}
+ * @api
+ */
+export const getSystem = () => {
+  const userAgent = window.navigator.userAgent || window.navigator.vendor || window.opera;
+  let env = 'unknown';
+  if (/android/i.test(userAgent)) {
+    env = 'android';
+  }
+
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    env = 'ios';
+  }
+
+  return env;
+};
+
+
+/**
+ * @private
+ * @function
+ * @param {ProjectionLike} sourceProj
+ * @param {ProjectionLike} destProj
+ * @param {coordinates} coordinates - 1-dimensional array of two coordinates
+ *
+ */
+export const reproject = (coordinates, sourceProj, destProj) => {
+  return reproj(coordinates, sourceProj, destProj);
 };
