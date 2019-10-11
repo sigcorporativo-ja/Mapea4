@@ -1,5 +1,6 @@
 import GeosearchControl from './geosearchcontrol';
 import '../assets/css/geosearch';
+import api from '../../api';
 
 export default class Geosearch extends M.Plugin {
   /**
@@ -85,6 +86,13 @@ export default class Geosearch extends M.Plugin {
      * @type {bool}
      */
     this.showHelp_ = parameters.showHelp;
+
+    /**
+     * Metadata from api.json
+     * @private
+     * @type {Object}
+     */
+    this.metadata_ = api.metadata;
   }
 
   /**
@@ -191,6 +199,17 @@ export default class Geosearch extends M.Plugin {
    */
   getAPIRest() {
     return `geosearch=${this.url_}*${this.core_}*${this.handler_}`;
+  }
+
+  /**
+   * This function gets metadata plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getMetadata() {
+    return this.metadata_;
   }
 }
 

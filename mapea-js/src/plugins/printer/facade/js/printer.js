@@ -1,5 +1,6 @@
 import PrinterControl from './printercontrol';
 import '../assets/css/printer';
+import api from '../../api';
 
 export default class Printer extends M.Plugin {
   /**
@@ -73,6 +74,13 @@ export default class Printer extends M.Plugin {
     if (!M.utils.isNullOrEmpty(parameters.options)) {
       this.options_ = parameters.options;
     }
+
+    /**
+     * Metadata from api.json
+     * @private
+     * @type {Object}
+     */
+    this.metadata_ = api.metadata;
   }
 
   /**
@@ -165,6 +173,17 @@ export default class Printer extends M.Plugin {
    */
   getAPIRest() {
     return `printer=${this.url_}`;
+  }
+
+  /**
+   * This function gets metadata plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getMetadata() {
+    return this.metadata_;
   }
 }
 

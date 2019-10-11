@@ -1,5 +1,6 @@
 import 'plugins/attributetable/facade/assets/css/attributetable';
 import AttributeTableControl from './attributetableControl';
+import api from '../../api';
 
 export default class AttributeTable extends M.Plugin {
   /**
@@ -27,6 +28,13 @@ export default class AttributeTable extends M.Plugin {
      * @api stable
      */
     this.name = AttributeTable.NAME;
+
+    /**
+     * Metadata from api.json
+     * @private
+     * @type {Object}
+     */
+    this.metadata_ = api.metadata;
   }
 
   /**
@@ -107,6 +115,17 @@ export default class AttributeTable extends M.Plugin {
    */
   getAPIRest() {
     return 'attributetable';
+  }
+
+  /**
+   * This function gets metadata plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getMetadata() {
+    return this.metadata_;
   }
 }
 

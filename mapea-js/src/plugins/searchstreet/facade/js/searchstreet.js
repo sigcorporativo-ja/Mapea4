@@ -1,7 +1,7 @@
 import Autocomplete from './autocomplete';
 import SearchstreetControl from './searchstreetcontrol';
 import '../assets/css/searchstreet';
-
+import api from '../../api';
 
 export default class Searchstreet extends M.Plugin {
   /**
@@ -73,6 +73,13 @@ export default class Searchstreet extends M.Plugin {
     if (!M.utils.isNullOrEmpty(parameters.locality)) {
       this.locality_ = parameters.locality;
     }
+
+    /**
+     * Metadata from api.json
+     * @private
+     * @type {Object}
+     */
+    this.metadata_ = api.metadata;
   }
 
   /**
@@ -196,5 +203,16 @@ export default class Searchstreet extends M.Plugin {
    */
   getAPIRest() {
     return 'searchstreet';
+  }
+
+  /**
+   * This function gets metadata plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getMetadata() {
+    return this.metadata_;
   }
 }
