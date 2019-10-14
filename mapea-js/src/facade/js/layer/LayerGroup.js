@@ -194,7 +194,7 @@ class LayerGroup extends MObject {
    * @function
    * @api
    */
-  removeChild(child) {
+  deleteChild(child) {
     const childI = child;
     if (childI instanceof LayerGroup) {
       childI.parent = null;
@@ -210,8 +210,8 @@ class LayerGroup extends MObject {
    * @function
    * @api
    */
-  removeChildren(children) {
-    children.forEach(this.removeChild, this);
+  deleteChildren(children) {
+    children.forEach(this.deleteChild, this);
   }
 
   /**
@@ -219,7 +219,7 @@ class LayerGroup extends MObject {
    * @function
    * @api
    */
-  deleteChild(child) {
+  ungroup(child) {
     child.setLayerGroup(null);
     this.children_.remove(child);
   }
