@@ -171,7 +171,7 @@ class OSM extends Layer {
    * @param resolutions new resolutions to apply
    */
   updateSource_(resolutions) {
-    if (isNullOrEmpty(resolutions)) {
+    if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.map)) {
       this.map.getMapImpl().updateSize();
       const size = this.map.getMapImpl().getSize();
       const units = this.map.getProjection().units;
@@ -181,10 +181,9 @@ class OSM extends Layer {
     }
     if (!isNullOrEmpty(this.ol3Layer) && isNullOrEmpty(this.vendorOptions_.source)) {
       const extent = this.facadeLayer_.getMaxExtent();
-      const newSource = new SourceOSM({
-        extent,
-      });
+      const newSource = new SourceOSM({});
       this.ol3Layer.setSource(newSource);
+      this.ol3Layer.setExtent(extent);
     }
   }
 

@@ -6,7 +6,7 @@ import { get as getRemote } from 'M/util/Remote';
 import { isNullOrEmpty } from 'M/util/Utils';
 import Exception from 'M/exception/exception';
 import * as Dialog from 'M/dialog';
-
+import { getValue } from 'M/i18n/language';
 /**
  * @classdesc
  * @api
@@ -75,11 +75,11 @@ class WFS extends MObject {
           const features = this.format_.read(response.text, projection);
           success(features);
         } else if (response.code === 401) {
-          Dialog.error('Ha ocurrido un error al cargar la capa: Usuario no autorizado.');
+          Dialog.error(getValue('dialog').unauthorized_user);
         } else if (response.text.indexOf('featureId and cql_filter') >= 0) {
-          Dialog.error('FeatureID y CQL son mutuamente excluyentes. Indicar sólo un tipo de filtrado.');
+          Dialog.error(getValue('dialog').only_one_filter);
         } else {
-          Exception('No hubo respuesta en la operación GetFeature');
+          Exception(getValue('exception').no_getfeature_response);
         }
       });
     });

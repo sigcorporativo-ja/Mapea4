@@ -5,6 +5,7 @@ import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import Base from '../Base';
 import * as EventType from '../event/eventtype';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -22,12 +23,12 @@ class Control extends Base {
 
     // checks if the implementation can create WMC layers
     if (isUndefined(impl.addTo)) {
-      Exception('La implementación usada no posee el método addTo');
+      Exception(getValue('exception').addto_method);
     }
 
     // checks if the implementation can create WMC layers
     if (isUndefined(impl.getElement)) {
-      Exception('La implementación usada no posee el método getElement');
+      Exception(getValue('exception').getelement_method);
     }
 
     // checks if the implementation can create default controls
@@ -99,10 +100,10 @@ class Control extends Base {
     const impl = implParam;
     // checks if the implementation can create WMC layers
     if (isUndefined(impl.addTo)) {
-      Exception('La implementación usada no posee el método addTo');
+      Exception(getValue('exception').addto_method);
     }
     if (isUndefined(impl.getElement)) {
-      Exception('La implementación usada no posee el método getElement');
+      Exception(getValue('exception').getelement_method);
     }
     // checks if the implementation can create default controls
     if (isUndefined(impl.isByDefault)) {

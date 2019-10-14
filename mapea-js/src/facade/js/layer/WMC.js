@@ -9,6 +9,7 @@ import LayerBase from './Layer';
 import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 import * as EventType from '../event/eventtype';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -41,12 +42,12 @@ class WMC extends LayerBase {
 
     // checks if the implementation can create WMC layers
     if (isUndefined(WMCImpl)) {
-      Exception('La implementación usada no puede crear capas WMC');
+      Exception(getValue('exception').wmclayer_method);
     }
 
     // checks if the param is null or empty
     if (isNullOrEmpty(userParameters)) {
-      Exception('No ha especificado ningún parámetro');
+      Exception(getValue('exception').no_param);
     }
 
     // options
@@ -178,7 +179,7 @@ class WMC extends LayerBase {
   select() {
     // checks if the implementation can manage select method
     if (isUndefined(this.getImpl().select)) {
-      Exception('La implementación usada no posee el método select');
+      Exception(getValue('exception').select_method);
     }
 
     this.getImpl().select();
@@ -194,7 +195,7 @@ class WMC extends LayerBase {
   unselect() {
     // checks if the implementation can manage select method
     if (isUndefined(this.getImpl().unselect)) {
-      Exception('La implementación usada no posee el método unselect');
+      Exception(getValue('exception').unselect_method);
     }
 
     this.getImpl().unselect();

@@ -1,0 +1,23 @@
+<div class="m-geosearch-help">
+  {{#eq entities.length 0}}
+    <div class="entity">
+      <p>El servicio no tiene ayuda configurada</p>
+      <button id="m-geosearch-closeHelp-btn" class="g-cartografia-cancelar" title="Cerrar ayuda"></button>
+    </div>
+  {{/eq}}
+  {{#each entities}}
+    <div class="entity">
+      <button id="m-geosearch-closeHelp-btn" class="g-cartografia-cancelar m-clear-btn" title="Cerrar ayuda"></button>
+      <div class="name">{{entity}}</div>
+      <div class="info">{{info}}</div>
+      <ul class="keywords">
+        {{#each keywords}}
+          <li>{{this}}</li>
+        {{/each}}
+      </ul>
+      <div class="example">
+        <code>{{example}}</code>
+      </div>
+    </div>
+  {{/each}}
+</div>

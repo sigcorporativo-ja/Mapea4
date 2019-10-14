@@ -6,6 +6,8 @@ import { get as getRemote } from 'M/util/Remote';
 import { isNullOrEmpty } from 'M/util/Utils';
 import FacadeFeature from 'M/feature/Feature';
 import Exception from 'M/exception/exception';
+import { getValue } from 'M/i18n/language';
+
 /**
  * @classdesc
  * @api
@@ -97,7 +99,7 @@ class KML extends MObject {
             screenOverlay,
           });
         } else {
-          Exception('No hubo respuesta del KML');
+          Exception(getValue('exception').no_kml_response);
         }
       });
     });

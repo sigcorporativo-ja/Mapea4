@@ -5,6 +5,7 @@ import Exception from '../exception/exception';
 import * as parserParameter from '../parameter/parameter';
 import Base from '../Base';
 import { isNullOrEmpty, concatUrlPaths, isUndefined, normalize, isString, isFunction, generateRandom, isBoolean, isArray, isObject } from '../util/Utils';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -83,6 +84,35 @@ class LayerBase extends Base {
      * @api
      */
     this.userMaxExtent = parameter.maxExtent;
+
+    /**
+     * Legend
+     * @public
+     * @type {string}
+     * @api
+     */
+    this.legend = parameter.legend;
+
+    /**
+     * Group Layer
+     * @private
+     * @type
+     * @api
+     */
+    this.layerGroup_ = null;
+  }
+
+  /**
+   *'legend' non - identifying name of layer
+   */
+
+  getLegend() {
+    return this.getImpl().legend;
+  }
+
+  setLegend(newLegend) {
+    this.legend = newLegend;
+    this.getImpl().legend = newLegend;
   }
 
   /**
@@ -233,6 +263,29 @@ class LayerBase extends Base {
   }
 
   /**
+   * 'LayerGroup' the layer transparence
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  getLayerGroup() {
+    return this.layerGroup_;
+  }
+
+  /**
+   * Defining new LayerGroup
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  setLayerGroup(layerGroup) {
+    this.layerGroup_ = layerGroup;
+  }
+
+
+  /**
    * This function indicates if the layer is visible
    *
    * @function
@@ -242,7 +295,7 @@ class LayerBase extends Base {
   isVisible() {
     // checks if the implementation can manage this method
     if (isUndefined(this.getImpl().isVisible)) {
-      Exception('La implementación usada no posee el método isVisible');
+      Exception(getValue('exception').isvisible_method);
     }
 
     return this.getImpl().isVisible();
@@ -258,7 +311,7 @@ class LayerBase extends Base {
   isQueryable() {
     // checks if the implementation can manage this method
     if (isUndefined(this.getImpl().isQueryable)) {
-      Exception('La implementación usada no posee el método isQueryable');
+      Exception(getValue('exception').isqueryable_method);
     }
 
     return this.getImpl().isQueryable();
@@ -275,17 +328,17 @@ class LayerBase extends Base {
     let visibility = visibilityParam;
     // checks if the param is null or empty
     if (isNullOrEmpty(visibility)) {
-      Exception('No ha especificado ningún parámetro de visibilidad');
+      Exception(getValue('exception').visibility_param);
     }
 
     // checks if the param is boolean or string
     if (!isString(visibility) && !isBoolean(visibility)) {
-      Exception('No ha especificado ningún parámetro de visibilidad');
+      Exception(getValue('exception').visibility_param);
     }
 
     // checks if the implementation can manage this method
     if (isUndefined(this.getImpl().setVisible)) {
-      Exception('La implementación usada no posee el método setVisible');
+      Exception(getValue('exception').setvisible_method);
     }
 
     visibility = /^1|(true)$/i.test(visibility);
@@ -303,7 +356,7 @@ class LayerBase extends Base {
   inRange() {
     // checks if the implementation can manage this method
     if (isUndefined(this.getImpl().inRange)) {
-      Exception('La implementación usada no posee el método inRange');
+      Exception(getValue('exception').inrage_method);
     }
 
     return this.getImpl().inRange();

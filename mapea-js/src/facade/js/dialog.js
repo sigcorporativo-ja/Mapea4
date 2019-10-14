@@ -5,6 +5,7 @@ import 'assets/css/dialog';
 import dialogTemplate from 'templates/dialog';
 import { isNullOrEmpty } from './util/Utils';
 import { compileSync as compileTemplate } from './util/Template';
+import { getValue } from './i18n/language';
 
 /**
  * TODO
@@ -73,7 +74,7 @@ export const show = (message, title, severity) => {
 export const info = (message, titleParam) => {
   let title = titleParam;
   if (isNullOrEmpty(title)) {
-    title = 'INFORMACIÓN';
+    title = getValue('dialog').info;
   }
   return show(message, title, 'info');
 };
@@ -91,7 +92,7 @@ export const info = (message, titleParam) => {
 export const error = (message, titleParam) => {
   let title = titleParam;
   if (isNullOrEmpty(title)) {
-    title = 'ERROR';
+    title = getValue('dialog').error;
   }
   return show(message, title, 'error');
 };
@@ -109,7 +110,7 @@ export const error = (message, titleParam) => {
 export const success = (message, titleParam) => {
   let title = titleParam;
   if (isNullOrEmpty(title)) {
-    title = 'ÉXITO';
+    title = getValue('dialog').success;
   }
   return show(message, title, 'success');
 };

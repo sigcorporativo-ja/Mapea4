@@ -7,6 +7,7 @@ import Exception from '../exception/exception';
 import Base from '../Base';
 import FacadeFeature from '../feature/Feature';
 import * as EventType from '../event/eventtype';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -62,10 +63,10 @@ class Features extends Base {
 
     // checks if the implementation has all methods
     if (!isFunction(impl.addTo)) {
-      Exception('La implementación usada no posee el método addTo');
+      Exception(getValue('exception').addto_method);
     }
     if (!isFunction(impl.getFeaturesByLayer)) {
-      Exception('La implementación usada no posee el método getFeaturesByLayer');
+      Exception(getValue('exception').getfeaturesbylayer_method);
     }
   }
   /**

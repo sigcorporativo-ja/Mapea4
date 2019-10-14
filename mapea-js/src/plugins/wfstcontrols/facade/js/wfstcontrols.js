@@ -5,6 +5,7 @@ import DeleteFeature from './deletefeature';
 import ClearFeature from './clearfeature';
 import SaveFeature from './savefeature';
 import EditAttribute from './editattribute';
+import api from '../../api';
 
 /**
  * @classdesc
@@ -97,7 +98,15 @@ export default class WFSTControls extends M.Plugin {
      * @type {Object}
      */
     this.editattibute_ = null;
+
+    /**
+     * Metadata from api.json
+     * @private
+     * @type {Object}
+     */
+    this.metadata_ = api.metadata;
   }
+
   /**
    * This function provides the implementation
    * of the object
@@ -244,6 +253,29 @@ export default class WFSTControls extends M.Plugin {
     }
     return false;
   }
+
+
+  /**
+   * Gets the parameter api rest of the plugin
+   *
+   * @public
+   * @function
+   * @api
+   */
+  getAPIRest() {
+    return `wfstcontrols=${this.controls.join(',')}`;
+  }
+
+  /**
+   * This function gets metadata plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getMetadata() {
+    return this.metadata_;
+  }
 }
 
 /**
@@ -253,5 +285,4 @@ export default class WFSTControls extends M.Plugin {
  * @public
  * @api stable
  */
-
 WFSTControls.NAME = 'wfstcontrols';

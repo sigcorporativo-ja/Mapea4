@@ -5,7 +5,7 @@ import MObject from 'M/Object';
 import { get as getRemote } from 'M/util/Remote';
 import Exception from 'M/exception/exception';
 import { isNullOrEmpty } from 'M/util/Utils';
-
+import { getValue } from 'M/i18n/language';
 /**
  * @classdesc
  * @api
@@ -77,7 +77,7 @@ class JSONP extends MObject {
           });
           success.call(this, [features]);
         } else {
-          Exception('No hubo respuesta del servicio');
+          Exception(getValue('exception').no_service_response);
         }
       });
     });

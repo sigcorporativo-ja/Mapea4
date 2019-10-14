@@ -4,6 +4,7 @@
 import ClusteredFeature from 'M/feature/Clustered';
 import Cluster from 'M/style/Cluster';
 import { isNullOrEmpty } from 'M/util/Utils';
+import RenderFeature from 'ol/render/Feature';
 import AnimatedCluster from '../layer/AnimatedCluster';
 import FeatureImpl from '../feature/Feature';
 
@@ -20,7 +21,9 @@ const getFacadeFeature = (feature, layer) => {
   if (!isNullOrEmpty(featureId)) {
     mFeature = layer.getFeatureById(featureId);
   }
-  if (isNullOrEmpty(mFeature)) {
+  if (isNullOrEmpty(mFeature) && (feature instanceof RenderFeature)) {
+    mFeature = FeatureImpl.olRenderFeature2Facade(feature);
+  } else if (isNullOrEmpty(mFeature)) {
     mFeature = FeatureImpl.olFeature2Facade(feature);
   }
   return mFeature;

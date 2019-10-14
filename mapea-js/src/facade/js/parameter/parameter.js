@@ -5,6 +5,13 @@ import { isNullOrEmpty, isString, isNull, isFunction, normalize, isArray, isObje
 import Exception from '../exception/exception';
 import * as LayerType from '../layer/Type';
 import Layer from '../layer/Layer';
+import { getValue } from '../i18n/language';
+import wms from './wms';
+import kml from './kml';
+import mapbox from './mapbox';
+import osm from './osm';
+import geojson from './geojson';
+import wmc from './wmc';
 
 /**
  * Parses the specified user center parameter into an object
@@ -21,7 +28,7 @@ export const center = (centerParameterVar) => {
   const centerParam = {};
   // checks if the param is null or empty
   if (isNullOrEmpty(centerParameter)) {
-    Exception('No ha especificado ningún parámetro center');
+    Exception(getValue('exception').no_center);
   }
   // string
   if (isString(centerParameter)) {
@@ -35,11 +42,11 @@ export const center = (centerParameterVar) => {
         centerParam.x = Number.parseFloat(coordArray[0]);
         centerParam.y = Number.parseFloat(coordArray[1]);
       } else {
-        Exception('El formato del parámetro center no es correcto');
+        Exception(getValue('exception').invalid_center_param);
       }
       centerParam.draw = /^1|(true)$/i.test(draw);
     } else {
-      Exception('El formato del parámetro center no es correcto');
+      Exception(getValue('exception').invalid_center_param);
     }
   } else if (isArray(centerParameter)) {
     // array
@@ -53,7 +60,7 @@ export const center = (centerParameterVar) => {
       centerParam.x = centerParameter[0];
       centerParam.y = centerParameter[1];
     } else {
-      Exception('El formato del parámetro center no es correcto');
+      Exception(getValue('exception').invalid_center_param);
     }
   } else if (isObject(centerParameter)) {
     // object
@@ -64,7 +71,7 @@ export const center = (centerParameterVar) => {
       }
       centerParam.x = centerParameter.x;
     } else {
-      Exception('El formato del parámetro center no es correcto');
+      Exception(getValue('exception').invalid_center_param);
     }
     // y
     if (!isNull(centerParameter.y)) {
@@ -73,7 +80,7 @@ export const center = (centerParameterVar) => {
       }
       centerParam.y = centerParameter.y;
     } else {
-      Exception('El formato del parámetro center no es correcto');
+      Exception(getValue('exception').invalid_center_param);
     }
     // draw
     if (!isNull(centerParameter.draw)) {
@@ -87,47 +94,12 @@ export const center = (centerParameterVar) => {
   }
 
   if (Number.isNaN(centerParam.x) || Number.isNaN(centerParam.y)) {
-    Exception('El formato del parámetro center no es correcto');
+    Exception(getValue('exception').invalid_center_param);
   }
 
   return centerParam;
 };
 
-/**
- * Parses the parameter in order to get the layer name
- * @private
- * @function
- */
-const getNameKML = (parameter) => {
-  let name;
-  let params;
-  if (isString(parameter)) {
-    if (/^KML\*.+/i.test(parameter)) {
-      // <KML>*<NAME>*<URL>(*<FILENAME>)?*<EXTRACT>
-      if (/^KML\*[^*]+\*[^*]+(\*[^*]+)?(\*(true|false))?$/i.test(parameter)) {
-        params = parameter.split(/\*/);
-        name = params[1].trim();
-      }
-    } else if (/^[^*]*\*[^*]+/.test(parameter)) {
-      // <NAME>*<URL>(*<FILENAME>)?(*<EXTRACT>)?
-      params = parameter.split(/\*/);
-      name = params[0].trim();
-    } else if (/^[^*]*/.test(parameter)) {
-      // <NAME>(*<URL>(*<FILENAME>)?(*<EXTRACT>)?)? filtering
-      params = parameter.split(/\*/);
-      name = params[0].trim();
-    }
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.name)) {
-    name = parameter.name.trim();
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-
-  if (isUrl(name) || /^(true|false)$/i.test(name)) {
-    name = null;
-  }
-  return name;
-};
 /**
  * Parses the parameter in order to get the type
  * @private
@@ -177,59 +149,6 @@ const getType = (parameter, forcedType) => {
 };
 
 /**
- * Parses the parameter in order to get the transparence
- * @private
- * @function
- */
-const getExtractKML = (parameter) => {
-  let extract;
-  let params;
-  if (isString(parameter)) {
-    // <KML>*<NAME>*<URL>(*<FILENAME>)?*<EXTRACT>
-    if (/^KML\*[^*]+\*[^*]+(\*[^*]+)?(\*(true|false))?$/i.test(parameter)) {
-      params = parameter.split(/\*/);
-      extract = params[params.length - 1].trim();
-    } else if (/^[^*]+\*[^*]+\*(true|false)$/i.test(parameter)) {
-      // <NAME>*<URL>*<EXTRACT>
-      params = parameter.split(/\*/);
-      extract = params[2].trim();
-    } else if (/^[^*]+\*(true|false)$/i.test(parameter)) {
-      // <URL>*<EXTRACT>
-      params = parameter.split(/\*/);
-      extract = params[1].trim();
-    }
-  } else if (isObject(parameter)) {
-    extract = normalize(parameter.extract);
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-
-  if (!isNullOrEmpty(extract)) {
-    extract = /^1|(true)$/i.test(extract);
-  } else {
-    extract = undefined;
-  }
-  return extract;
-};
-
-/**
- * Parses the parameter in order to get the options
- * @private
- * @function
- */
-const getOptionsKML = (parameter) => {
-  let options;
-  if (isString(parameter)) {
-    // TODO ver como se pone el parámetro
-  } else if (isObject(parameter)) {
-    options = parameter.options;
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  return options;
-};
-
-/**
  * Parses the specified user maxExtent parameter into an object
  *
  * @param {String|Array<String>|Array<Number>|Mx.Extent} maxExtentParameter parameters
@@ -250,7 +169,7 @@ export const maxExtent = (maxExtentParam) => {
 
     // checks if the param is null or empty
     if (isNullOrEmpty(maxExtentParameter)) {
-      Exception('No ha especificado ningún parámetro maxExtent');
+      Exception(getValue('exception').no_maxextent);
     }
 
     // string
@@ -263,10 +182,10 @@ export const maxExtent = (maxExtentParam) => {
           maxExtentVar.x.max = Number.parseFloat(extentArray[2]);
           maxExtentVar.y.max = Number.parseFloat(extentArray[3]);
         } else {
-          Exception('El formato del parámetro maxExtent no es correcto');
+          Exception(getValue('exception').invalid_maxextent_param);
         }
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
     } else if (isArray(maxExtentParameter)) {
       // array
@@ -288,7 +207,7 @@ export const maxExtent = (maxExtentParam) => {
         maxExtentVar.x.max = maxExtentParameter[2];
         maxExtentVar.y.max = maxExtentParameter[3];
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
     } else if (isObject(maxExtentParameter)) {
       // object
@@ -304,7 +223,7 @@ export const maxExtent = (maxExtentParam) => {
         }
         maxExtentVar.x.min = maxExtentParameter.x.min;
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
       // y min
       if (!isNull(maxExtentParameter.bottom)) {
@@ -318,7 +237,7 @@ export const maxExtent = (maxExtentParam) => {
         }
         maxExtentVar.y.min = maxExtentParameter.y.min;
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
       // x max
       if (!isNull(maxExtentParameter.right)) {
@@ -332,7 +251,7 @@ export const maxExtent = (maxExtentParam) => {
         }
         maxExtentVar.x.max = maxExtentParameter.x.max;
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
       // y max
       if (!isNull(maxExtentParameter.top)) {
@@ -346,7 +265,7 @@ export const maxExtent = (maxExtentParam) => {
         }
         maxExtentVar.y.max = maxExtentParameter.y.max;
       } else {
-        Exception('El formato del parámetro maxExtent no es correcto');
+        Exception(getValue('exception').invalid_maxextent_param);
       }
     } else {
       // unknown
@@ -355,7 +274,7 @@ export const maxExtent = (maxExtentParam) => {
 
     if (Number.isNaN(maxExtentVar.x.min) || Number.isNaN(maxExtentVar.y.min) ||
       Number.isNaN(maxExtentVar.x.max) || Number.isNaN(maxExtentVar.y.max)) {
-      Exception('El formato del parámetro maxExtent no es correcto');
+      Exception(getValue('exception').invalid_maxextent_param);
     }
   }
 
@@ -381,7 +300,7 @@ export const projection = (projectionParameter) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(projectionParameter)) {
-    Exception('No ha especificado ningún parámetro projection');
+    Exception(getValue('exception').no_projection);
   }
 
   // string
@@ -416,32 +335,6 @@ export const projection = (projectionParameter) => {
 };
 
 /**
- * Parses the parameter in order to get the service URL
- * @private
- * @function
- */
-const getURLKML = (parameter) => {
-  let url;
-  if (isString(parameter)) {
-    // v3 <KML>*<NAME>*<DIR>*<FILENAME>*<EXTRACT>
-    if (/^KML\*[^*]+\*[^*]+\*[^*]+\.kml\*(true|false)$/i.test(parameter)) {
-      const params = parameter.split(/\*/);
-      url = params[2].concat(params[3]);
-    } else {
-      const urlMatches = parameter.match(/^([^*]*\*)*(https?:\/\/[^*]+)(\*(true|false))?$/i);
-      if (urlMatches && (urlMatches.length > 2)) {
-        url = urlMatches[2];
-      }
-    }
-  } else if (isObject(parameter)) {
-    url = parameter.url;
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  return url;
-};
-
-/**
  * Parses the specified user resolutions parameter into an array
  *
  * @param {String|Array<String>|Array<Number>} resolutionsParameter parameters
@@ -457,7 +350,7 @@ export const resolutions = (resolutionsParam) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(resolutionsParameter)) {
-    Exception('No ha especificado ningún parámetro resolutions');
+    Exception(getValue('exception').no_resolutions);
   }
 
   // string
@@ -465,7 +358,7 @@ export const resolutions = (resolutionsParam) => {
     if (/^\d+(\.\d+)?([,;]\d+(\.\d+)?)*$/.test(resolutionsParameter)) {
       resolutionsParameter = resolutionsParameter.split(/[,;]+/);
     } else {
-      Exception('El formato del parámetro resolutions no es correcto');
+      Exception(getValue('exception').invalid_resolutions_param);
     }
   }
   // array
@@ -487,7 +380,7 @@ export const resolutions = (resolutionsParam) => {
   }
 
   if (!valid) {
-    Exception('El formato del parámetro resolutions no es correcto');
+    Exception(getValue('exception').invalid_resolutions_param);
   }
   return resolutionsVar;
 };
@@ -508,7 +401,7 @@ export const zoom = (zoomParam) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(zoomParameter)) {
-    Exception('No ha especificado ningún parámetro zoom');
+    Exception(getValue('exception').no_zoom);
   }
 
   // string
@@ -523,366 +416,9 @@ export const zoom = (zoomParam) => {
   }
 
   if (Number.isNaN(zoomVar)) {
-    Exception('El formato del parámetro zoom no es correcto');
+    Exception(getValue('exception').invalid_zoom_param);
   }
   return zoomVar;
-};
-
-/**
- * Parses the specified user layer KML parameters to a object
- *
- * @param {string|Mx.parameters.Layer} userParameters parameters
- * provided by the user
- * @returns {Mx.parameters.KML|Array<Mx.parameters.KML>}
- * @public
- * @function
- * @api
- */
-export const kml = (userParamer) => {
-  const userParameters = userParamer;
-  let layersVar = [];
-
-  // checks if the param is null or empty
-  if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
-  }
-
-  // checks if the parameter is an array
-  let userParametersArray = userParameters;
-  if (!isArray(userParametersArray)) {
-    userParametersArray = [userParametersArray];
-  }
-
-  layersVar = userParametersArray.map((userParam) => {
-    const layerObj = {};
-
-    // gets the layer type
-    layerObj.type = LayerType.KML;
-
-    // gets the name
-    layerObj.name = getNameKML(userParam);
-
-    // gets the URL
-    layerObj.url = getURLKML(userParam);
-
-    // gets the extract
-    layerObj.extract = getExtractKML(userParam);
-
-    // gets the options
-    layerObj.options = getOptionsKML(userParam);
-
-    return layerObj;
-  });
-
-  if (!isArray(userParameters)) {
-    layersVar = layersVar[0];
-  }
-
-  return layersVar;
-};
-
-/**
- * Parses the parameter in order to get the layer name
- * @private
- * @function
- */
-const getURLMapbox = (parameter) => {
-  let url;
-  if (isString(parameter)) {
-    url = null; // URL by string type no supported
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.url)) {
-    url = parameter.url.trim();
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  return url;
-};
-
-/**
- * Parses the parameter in order to get the layer name
- * @private
- * @function
- */
-const getNameMapbox = (parameter) => {
-  let name;
-  let params;
-  if (isString(parameter)) {
-    if (/^MAPBOX\*.+/i.test(parameter)) {
-      // <MAPBOX>*<NAME>(*<TRANSPARENT>)?(*<TITLE>)?
-      if (/^MAPBOX\*[^*]+(\*[^*]+){0,2}/i.test(parameter)) {
-        params = parameter.split(/\*/);
-        name = params[1].trim();
-      }
-    } else if (/^[^*]+(\*[^*]+){0,2}/.test(parameter)) {
-      // <NAME>(*<TRANSPARENT>)?(*<TITLE>)?
-      params = parameter.split(/\*/);
-      name = params[0].trim();
-    }
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.name)) {
-    name = parameter.name.trim();
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-
-  if (isUrl(name) || /^(true|false)$/i.test(name)) {
-    name = null;
-  }
-  return name;
-};
-
-/**
- * Parses the parameter in order to get the layer name
- * @private
- * @function
- */
-const getTransparentMapbox = (parameter) => {
-  let transparent;
-  let params;
-  if (isString(parameter)) {
-    if (/^MAPBOX\*.+/i.test(parameter)) {
-      // <MAPBOX>*<NAME>*<TRANSPARENT>(*<TITLE>)?
-      if (/^MAPBOX\*[^*]+\*[^*]+(\*[^*]+)?/i.test(parameter)) {
-        params = parameter.split(/\*/);
-        transparent = params[2].trim();
-      }
-    } else if (/^[^*]+\*[^*]+(\*[^*]+)?/.test(parameter)) {
-      // <NAME>*<TRANSPARENT>(*<TITLE>)?
-      params = parameter.split(/\*/);
-      transparent = params[1].trim();
-    }
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.transparent)) {
-    transparent = normalize(parameter.transparent);
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  if (!isNullOrEmpty(transparent)) {
-    transparent = /^1|(true)$/i.test(transparent);
-  }
-  return transparent;
-};
-
-/**
- * Parses the parameter in order to get the layer name
- * @private
- * @function
- */
-const getAccessTokenMapbox = (parameter) => {
-  let accessToken;
-  if (isString(parameter)) {
-    accessToken = null; // accessToken by string type no supported
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.accessToken)) {
-    accessToken = parameter.accessToken.trim();
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  return accessToken;
-};
-
-/**
- * Parses the parameter in order to get the layer legend
- * @private
- * @function
- */
-const getLegendMapbox = (parameter) => {
-  let legend;
-  let params;
-  if (isString(parameter)) {
-    if (/^MAPBOX\*.+/i.test(parameter)) {
-      // <MAPBOX>*<NAME>*<TRANSPARENT>*<TITLE>
-      if (/^MAPBOX\*[^*]+\*[^*]+\*[^*]+/i.test(parameter)) {
-        params = parameter.split(/\*/);
-        legend = params[3].trim();
-      }
-    } else if (/^[^*]+\*[^*]+\*[^*]+/.test(parameter)) {
-      // <NAME>*<TRANSPARENT>*<TITLE>
-      params = parameter.split(/\*/);
-      legend = params[2].trim();
-    }
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.legend)) {
-    legend = parameter.legend.trim();
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-
-  if (isUrl(legend) || /^(true|false)$/i.test(legend)) {
-    legend = null;
-  }
-  return legend;
-};
-
-/**
- * Parses the specified user layer Mapbox parameters to a object
- *
- * @param {string|Mx.parameters.Layer} userParameters parameters
- * provided by the user
- * @returns {Mx.parameters.KML|Array<Mx.parameters.KML>}
- * @public
- * @function
- * @api
- */
-export const mapbox = (userParameters) => {
-  let layers = [];
-
-  // checks if the param is null or empty
-  if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
-  }
-
-  // checks if the parameter is an array
-  let userParametersArray = userParameters;
-  if (!isArray(userParametersArray)) {
-    userParametersArray = [userParametersArray];
-  }
-
-  layers = userParametersArray.map((userParam) => {
-    const layerObj = {};
-
-    // gets the layer type
-    layerObj.type = LayerType.Mapbox;
-
-    // gets the name
-    layerObj.url = getURLMapbox(userParam);
-
-    // gets the name
-    layerObj.name = getNameMapbox(userParam);
-
-    // gets the transparent
-    layerObj.transparent = getTransparentMapbox(userParam);
-
-    // gets the accessToken
-    layerObj.accessToken = getAccessTokenMapbox(userParam);
-
-    // gets the legend
-    layerObj.legend = getLegendMapbox(userParam);
-
-    return layerObj;
-  });
-
-  if (!isArray(userParameters)) {
-    layers = layers[0];
-  }
-
-  return layers;
-};
-
-/**
- * Parses the parameter in order to get the layer name
- * @private
- * @function
- */
-const getNameOSM = (parameter) => {
-  let name;
-  if (isObject(parameter) && !isNullOrEmpty(parameter.name)) {
-    name = parameter.name.trim();
-  }
-  if (!isNullOrEmpty(name) && (isUrl(name) || /^(true|false)$/i.test(name))) {
-    name = null;
-  }
-  return name;
-};
-
-/**
- * Parses the parameter in order to get the layer name
- * @private
- * @function
- */
-const getTransparentOSM = (parameter) => {
-  let transparent;
-  let params;
-  if (isString(parameter)) {
-    // <OSM>*<TRANSPARENT>(*<TITLE>)?
-    if (/^OSM\*[^*]+(\*[^*]+)?/i.test(parameter)) {
-      params = parameter.split(/\*/);
-      transparent = params[1].trim();
-    }
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.transparent)) {
-    transparent = normalize(parameter.transparent);
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  if (!isNullOrEmpty(transparent)) {
-    transparent = /^1|(true)$/i.test(transparent);
-  }
-  return transparent;
-};
-
-/**
- * Parses the parameter in order to get the layer legend
- * @private
- * @function
- */
-const getLegendOSM = (parameter) => {
-  let legend;
-  let params;
-  if (isString(parameter)) {
-    // <OSM>*(<TRANSPARENT>)?*<TITLE>
-    if (/^OSM\*([^*]+)?\*[^*]+/i.test(parameter)) {
-      params = parameter.split(/\*/);
-      legend = params[2].trim();
-    }
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.legend)) {
-    legend = parameter.legend.trim();
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-
-  if (isUrl(legend) || /^(true|false)$/i.test(legend)) {
-    legend = null;
-  }
-  return legend;
-};
-
-/**
- * Parses the specified user layer KML parameters to a object
- *
- * @param {string|Mx.parameters.Layer} userParameters parameters
- * provided by the user
- * @returns {Mx.parameters.KML|Array<Mx.parameters.KML>}
- * @public
- * @function
- * @api
- */
-export const osm = (userParame) => {
-  let userParameters = userParame;
-  let layers = [];
-
-  // checks if the param is null or empty
-  if (isNullOrEmpty(userParameters)) {
-    userParameters = {
-      type: LayerType.OSM,
-      name: 'osm',
-    };
-  }
-
-  // checks if the parameter is an array
-  let userParametersArray = userParameters;
-  if (!isArray(userParametersArray)) {
-    userParametersArray = [userParametersArray];
-  }
-
-  layers = userParametersArray.map((userParam) => {
-    const layerObj = {};
-
-    // gets the layer type
-    layerObj.type = LayerType.OSM;
-
-    // gets the name
-    layerObj.name = getNameOSM(userParam);
-
-    // gets the transparent
-    layerObj.transparent = getTransparentOSM(userParam);
-
-    // gets the legend
-    layerObj.legend = getLegendOSM(userParam);
-
-    return layerObj;
-  });
-
-  if (!isArray(userParameters)) {
-    layers = layers[0];
-  }
-
-  return layers;
 };
 
 /**
@@ -1186,7 +722,7 @@ export const wfs = (userParameters) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array
@@ -1244,545 +780,62 @@ export const wfs = (userParameters) => {
   return layers;
 };
 
-
 /**
- * Parses the parameter in order to get the layer legend
- * @private
+ * This function gets the url of the string parameter mvt layer
+ *
  * @function
- */
-const getLegendGeoJSON = (parameter) => {
-  let legend;
-  let params;
-  if (isString(parameter)) {
-    // <GeoJSON(T)?>*<TYPE>*<LEGEND>...
-    if (/^GeoJSON(T)?\*[^*]/i.test(parameter)) {
-      params = parameter.split(/\*/);
-      legend = params[1].trim();
-    } else if (/^[^*]+\*[^*]+:[^*]+\*[^*]+/.test(parameter)) {
-      // <TYPE>*<LEGEND>...
-      params = parameter.split(/\*/);
-      legend = params[2].trim();
-    }
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.legend)) {
-    legend = parameter.legend.trim();
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-
-  if (isUrl(legend) || /^(true|false)$/i.test(legend)) {
-    legend = null;
-  }
-  return legend;
-};
-
-/**
- * Parses the parameter in order to get the service URL
  * @private
- * @function
+ * @param {string} parameter
  */
-const getURLGeoJSON = (parameter) => {
+const getURLMVT = (parameter) => {
   let url;
   if (isString(parameter)) {
-    const urlMatches = parameter.match(/^([^*]*\*)*(https?:\/\/[^*]+)([^*]*\*?)*$/i);
-    if (urlMatches && (urlMatches.length > 2)) {
-      url = urlMatches[2];
+    if (/^MVT\*.+/i.test(parameter)) {
+      const urlMatches = parameter.match(/.*\*(https?:\/\/[^*]+).*/i);
+      if (urlMatches && (urlMatches.length > 1)) {
+        url = urlMatches[1];
+      }
     }
-  } else if (isObject(parameter)) {
-    url = parameter.url;
-  } else {
+  } else if (isObject(parameter) && !isNullOrEmpty(parameter.url)) {
+    url = parameter.url.trim();
+  } else if (!isObject(parameter)) {
     Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
   }
   return url;
 };
 
 /**
- * Parses the parameter in order to get the transparence
- * @private
- * @function
- */
-const getExtractGeoJSON = (parameter) => {
-  let extract;
-  let params;
-  let hideParams;
-  if (isString(parameter)) {
-    // [TYPE]*[LEGEND]*[URL]*[EXTRACT/HIDE]*[STYLE]
-    if (/^GeoJSON\*[^*]+\*[^*]+\*[^*]*(true|false)/i.test(parameter)) {
-      params = parameter.split(/\*/);
-      extract = params[3].trim();
-    } else {
-      params = parameter.split(/\*/);
-      hideParams = params[3];
-      if (!isNullOrEmpty(hideParams)) {
-        extract = [hideParams];
-      } else {
-        extract = false;
-      }
-    }
-  } else if (isObject(parameter)) {
-    extract = normalize(parameter.extract);
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-
-  return extract;
-};
-
-/**
- * Parses the parameter in order to get the style
- * @private
- * @function
- */
-const getStyleGeoJSON = (parameter) => {
-  let params;
-  let style;
-
-  if (isString(parameter)) {
-    if (/^GeoJSON(T)?\*.+/i.test(parameter)) {
-      // [TYPE]*[LEGEND]*[URL]*[EXTRACT/HIDE]*[STYLE]
-      if (/^GeoJSON(T)?\*[^*]*\*[^*]+\*[^*]+\*[^*]*/i.test(parameter)) {
-        params = parameter.split(/\*/);
-        style = params[4].trim();
-      } else if (/^GeoJSON(T)?\*[^*]*\*[^*]+\*/i.test(parameter)) {
-        params = parameter.split(/\*/);
-        style = params[4].trim();
-      }
-    }
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.style)) {
-    style = parameter.style;
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  return style;
-};
-
-
-/**
- * Parses the specified user layer GeoJSON parameters to a object
+ * This function gets the url of the string parameter mvt layer
  *
- * @param {string|Mx.parameters.Layer} userParameters parameters
- * provided by the user
- * @returns {Mx.parameters.GeoJSON|Array<Mx.parameters.GeoJSON>}
- * @public
  * @function
- * @api
- */
-export const geojson = (userParameters) => {
-  let layers = [];
-
-  // checks if the param is null or empty
-  if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
-  }
-
-  // checks if the parameter is an array
-  let userParametersArray = userParameters;
-  if (!isArray(userParametersArray)) {
-    userParametersArray = [userParametersArray];
-  }
-
-  layers = userParametersArray.map((userParam) => {
-    const layerObj = {};
-
-    // gets the layer type
-    layerObj.type = LayerType.GeoJSON;
-
-    // gets the name
-    layerObj.name = getLegendGeoJSON(userParam);
-
-    // gets the URL
-    layerObj.url = getURLGeoJSON(userParam);
-
-    // gets the name
-    layerObj.extract = getExtractGeoJSON(userParam);
-
-    // gets the styles
-    layerObj.style = getStyleGeoJSON(userParam);
-
-    return layerObj;
-  });
-
-  if (!isArray(userParameters)) {
-    layers = layers[0];
-  }
-
-  return layers;
-};
-
-/**
- * Parses the parameter in order to get the layer name
  * @private
- * @function
+ * @param {string} parameter
  */
-const getNameWMC = (parameter, type) => {
+export const getNameMVT = (parameter) => {
   let name;
-  let params;
   if (isString(parameter)) {
-    // <WMC>*<URL>*<NAME>
-    if (/^\w{3,7}\*[^*]+\*[^*]+$/.test(parameter)) {
-      params = parameter.split(/\*/);
-      name = params[2].trim();
-    } else if (/^\w{3,7}\*[^*]$/.test(parameter)) {
-      // <WMC>*(<PREDEFINED_NAME> OR <URL>)
-      params = parameter.split(/\*/);
-      name = params[1].trim();
-    } else if (/^[^*]+\*[^*]+$/.test(parameter)) {
-      // (<URL>*<NAME>)
-      params = parameter.split(/\*/);
-      name = params[1].trim();
-    } else if (/^[^*]+$/.test(parameter) && !isUrl(parameter)) {
-      // (<PREDEFINED_NAME> OR <URL>)
-      name = parameter;
-    }
-  } else if (isObject(parameter)) {
-    name = normalize(parameter.name);
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-
-  if (isUrl(name)) {
-    name = null;
-  }
-  return name;
-};
-
-/**
- * Parses the parameter in order to get the service URL
- * @private
- * @function
- */
-const getURLWMC = (parameter) => {
-  let url;
-  if (isString(parameter)) {
-    const urlMatches = parameter.match(/^([^*]*\*)*(https?:\/\/[^*]+)([^*]*\*?)*$/i);
-    if (urlMatches && (urlMatches.length > 2)) {
-      url = urlMatches[2];
-    }
-  } else if (isObject(parameter)) {
-    url = parameter.url;
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  return url;
-};
-
-/**
- * Parses the parameter in order to get the options
- * @private
- * @function
- */
-const getOptionsWMC = (parameter) => {
-  let options;
-  if (isString(parameter)) {
-    // TODO ver como se pone el parámetro
-  } else if (isObject(parameter)) {
-    options = parameter.options;
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  return options;
-};
-
-/**
- * Parses the specified user layer WMC parameters to a object
- *
- * @param {string|Mx.parameters.Layer} userParameters parameters
- * provided by the user
- * @returns {Mx.parameters.WMC|Array<Mx.parameters.WMC>}
- * @public
- * @function
- * @api
- */
-export const wmc = (userParameters) => {
-  let layers = [];
-
-  // checks if the param is null or empty
-  if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
-  }
-
-  // checks if the parameter is an array
-  let userParametersArray = userParameters;
-  if (!isArray(userParametersArray)) {
-    userParametersArray = [userParametersArray];
-  }
-
-  layers = userParametersArray.map((userParam) => {
-    const layerObj = {};
-
-    // gets the layer type
-    layerObj.type = LayerType.WMC;
-
-    // gets the name
-    layerObj.name = getNameWMC(userParam);
-
-    // gets the URL
-    layerObj.url = getURLWMC(userParam);
-
-    // gets the options
-    layerObj.options = getOptionsWMC(userParam);
-
-    return layerObj;
-  });
-
-  if (!isArray(userParameters)) {
-    layers = layers[0];
-  }
-
-  return layers;
-};
-
-/**
- * Parses the parameter in order to get the layer name
- * @private
- * @function
- */
-const getNameWMS = (parameter) => {
-  let name;
-  let params;
-  if (isString(parameter)) {
-    if (/^WMS\*.+/i.test(parameter)) {
-      // <WMS>*<TITLE>*<URL>*<NAME>
-      if (/^WMS\*[^*]+\*[^*]+\*[^*]+/i.test(parameter)) {
-        params = parameter.split(/\*/);
-        name = params[3].trim();
+    if (/^MVT\*.+/i.test(parameter)) {
+      const urlMatches = parameter.match(/.*\*(https?:\/\/[^*]+)\*([^*]+)/i);
+      if (urlMatches && (urlMatches.length > 2)) {
+        name = urlMatches[2];
       }
-    } else if (/^[^*]*\*[^*]+/.test(parameter)) {
-      // <URL>*<NAME>
-      params = parameter.split(/\*/);
-      name = params[1].trim();
-    } else if (/^[^*]*/.test(parameter)) {
-      // <NAME>
-      params = parameter.split(/\*/);
-      name = params[0].trim();
     }
   } else if (isObject(parameter) && !isNullOrEmpty(parameter.name)) {
     name = parameter.name.trim();
   } else if (!isObject(parameter)) {
     Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
   }
-
-  if (isUrl(name) || /^(true|false)$/i.test(name)) {
-    name = null;
-  }
   return name;
 };
 
 /**
- * Parses the parameter in order to get the service URL
- * @private
- * @function
- */
-const getURLWMS = (parameter) => {
-  let url;
-  if (isString(parameter)) {
-    const urlMatches = parameter.match(/^([^*]*\*)*(https?:\/\/[^*]+)([^*]*\*?)*$/i);
-    if (urlMatches && (urlMatches.length > 2)) {
-      url = urlMatches[2];
-    }
-  } else if (isObject(parameter)) {
-    url = parameter.url;
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  return url;
-};
-
-/**
- * Parses the parameter in order to get the layer legend
- * @private
- * @function
- */
-const getLegendWMS = (parameter) => {
-  let legend;
-  let params;
-  if (isString(parameter)) {
-    // <WMS>*<TITLE>
-    if (/^WMS\*[^*]/i.test(parameter)) {
-      params = parameter.split(/\*/);
-      legend = params[1].trim();
-    } else if (/^[^*]+\*[^*]+\*[^*]+/.test(parameter)) {
-      // <URL>*<NAME>*<TITLE>
-      params = parameter.split(/\*/);
-      legend = params[2].trim();
-    }
-  } else if (isObject(parameter) && !isNullOrEmpty(parameter.legend)) {
-    legend = parameter.legend.trim();
-  } else if (!isObject(parameter)) {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-
-  if (isUrl(legend) || /^(true|false)$/i.test(legend)) {
-    legend = null;
-  }
-  return legend;
-};
-
-/**
- * Parses the parameter in order to get the transparence
- * @private
- * @function
- */
-const getTransparentWMS = (parameter) => {
-  let transparent;
-  let params;
-  if (isString(parameter)) {
-    // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>
-    if (/^WMS\*[^*]+\*[^*]+\*[^*]+\*(true|false)/i.test(parameter)) {
-      params = parameter.split(/\*/);
-      transparent = params[4].trim();
-    } else if (/^WMS_FULL\*[^*]+(\*(true|false))?/i.test(parameter)) {
-      // <WMS_FULL>*<URL>(*<TILED>)?
-      params = parameter.split(/\*/);
-      transparent = true;
-    } else if (/^[^*]+\*[^*]+\*[^*]+\*(true|false)/i.test(parameter)) {
-      // <URL>*<NAME>*<TITLE>*<TRANSPARENCE>
-      params = parameter.split(/\*/);
-      transparent = params[3].trim();
-    } else if (/^[^*]+\*[^*]+\*(true|false)/i.test(parameter)) {
-      // <URL>*<NAME>*<TRANSPARENCE>
-      params = parameter.split(/\*/);
-      transparent = params[2].trim();
-    }
-  } else if (isObject(parameter)) {
-    transparent = normalize(parameter.transparent);
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  if (!isNullOrEmpty(transparent)) {
-    transparent = /^1|(true)$/i.test(transparent);
-  }
-  return transparent;
-};
-
-/**
- * Parses the parameter in order to get the layer tile
- * @private
- * @function
- */
-const getTiledWMS = (parameter) => {
-  let tiled;
-  let params;
-  if (isString(parameter)) {
-    // <WMS>*<NAME>*<URL>*<TITLE>*<TRANSPARENCE>*<TILED>
-    if (/^WMS\*[^*]+\*[^*]+\*[^*]+\*(true|false)\*(true|false)$/i.test(parameter)) {
-      params = parameter.split(/\*/);
-      tiled = params[5].trim();
-    } else if (/^WMS\*[^*]+\*[^*]+\*[^*]+\*(true|false)/i.test(parameter)) {
-      tiled = true;
-    } else if (/^WMS_FULL\*[^*]+\*(true|false)/i.test(parameter)) {
-      // <WMS_FULL>*<URL>*<TILED>
-      params = parameter.split(/\*/);
-      tiled = params[2].trim();
-    } else if (/^[^*]+\*[^*]+\*[^*]+\*(true|false)\*(true|false)/i.test(parameter)) {
-      // <URL>*<NAME>*<TITLE>*<TRANSPARENCE>*<TILED>
-      params = parameter.split(/\*/);
-    } else if (/^[^*]+\*[^*]+\*(true|false)\*(true|false)/i.test(parameter)) {
-      // <URL>*<NAME>*<TRANSPARENCE>*<TILED>
-      params = parameter.split(/\*/);
-    }
-  } else if (isObject(parameter)) {
-    tiled = normalize(parameter.tiled);
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  if (!isNullOrEmpty(tiled)) {
-    tiled = /^1|(true)$/i.test(tiled);
-  }
-  return tiled;
-};
-
-/**
- * Parses the parameter in order to get the layer max extent
- * @private
- * @function
- */
-const getMaxExtentWMS = (parameter) => {
-  let maxExtentParam;
-  if (isString(parameter)) {
-    // <WMS>*<LEGEND>*<URL>*<NAME>*<TRANSPARENCE>*<TILED>*<MAXEXTENT>
-    if (/^WMS(\*[^*]*){6}$/i.test(parameter)) {
-      const params = parameter.split(/\*/);
-      maxExtentParam = params[6].trim();
-      // <WMS_FULL>*<URL>*<TILED>*<MAXEXTENT>
-    } else if (/^WMS_FULL(\*[^*]*){3}/i.test(parameter)) {
-      const params = parameter.split(/\*/);
-      maxExtentParam = params[3].trim();
-    }
-    if (!isNullOrEmpty(maxExtentParam)) {
-      maxExtentParam = maxExtentParam.split(/[,;]+/);
-    }
-  } else if (isObject(parameter)) {
-    maxExtentParam = parameter.maxExtent;
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  if (!isNullOrEmpty(maxExtentParam) && maxExtentParam.length === 4) {
-    if (isString(maxExtentParam[0])) {
-      maxExtentParam[0] = Number.parseFloat(maxExtentParam[0]);
-    }
-    if (isString(maxExtentParam[1])) {
-      maxExtentParam[1] = Number.parseFloat(maxExtentParam[1]);
-    }
-    if (isString(maxExtentParam[2])) {
-      maxExtentParam[2] = Number.parseFloat(maxExtentParam[2]);
-    }
-    if (isString(maxExtentParam[3])) {
-      maxExtentParam[3] = Number.parseFloat(maxExtentParam[3]);
-    }
-  } else if (!isNullOrEmpty(maxExtentParam)) {
-    Exception('El formato del parámetro maxExtent no es correcto');
-  }
-
-  return maxExtentParam;
-};
-
-/**
- * Parses the parameter in order to get the version
- * @private
- * @function
- */
-const getVersionWMS = (parameter) => {
-  let version;
-  if (isString(parameter)) {
-    if (/(\d\.\d\.\d)$/.test(parameter)) {
-      version = parameter.match(/\d\.\d\.\d$/)[0];
-    }
-  } else if (isObject(parameter)) {
-    version = parameter.version;
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  return version;
-};
-
-/**
- * Parses the parameter in order to get the options
- * @private
- * @function
- */
-const getOptionsWMS = (parameter) => {
-  let options;
-  if (isString(parameter)) {
-    // TODO ver como se pone el parámetro
-  } else if (isObject(parameter)) {
-    options = parameter.options;
-  } else {
-    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
-  }
-  return options;
-};
-
-/**
- * Parses the specified user layer WMS parameters to a object
+ * Parses the specified user layer MVT parameters to a object
  *
- * @param {string|Mx.parameters.Layer} userParameters parameters
- * provided by the user
- * @returns {Mx.parameters.WMS|Array<Mx.parameters.WMS>}
  * @public
  * @function
  * @api
  */
-export const wms = (userParameters) => {
+export const mvt = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -1797,26 +850,15 @@ export const wms = (userParameters) => {
   }
 
   layers = userParametersArray.map((userParam) => {
-    const type = LayerType.WMS;
-    const name = getNameWMS(userParam);
-    const url = getURLWMS(userParam);
-    const legend = getLegendWMS(userParam);
-    const transparent = getTransparentWMS(userParam);
-    const tiled = getTiledWMS(userParam);
-    const maxExtentWMS = getMaxExtentWMS(userParam);
-    const version = getVersionWMS(userParam);
-    const options = getOptionsWMS(userParam);
-    return {
-      type,
-      name,
-      url,
-      legend,
-      transparent,
-      tiled,
-      maxExtent: maxExtentWMS,
-      version,
-      options,
-    };
+    const layerObj = {};
+
+    layerObj.type = LayerType.MVT;
+
+    layerObj.name = getNameMVT(userParam);
+
+    layerObj.url = getURLMVT(userParam);
+
+    return layerObj;
   });
 
   if (!isArray(userParameters)) {
@@ -1969,7 +1011,7 @@ const getTransparentWMTS = (parameter) => {
     // <WMTS>*<URL>*<NAME>*<MATRIXSET>?*<TITLE>?*<TRANSPARENT>
     if (/^WMTS\*[^*]+\*[^*]+\*[^*]*\*[^*]*\*(true|false)/i.test(parameter)) {
       params = parameter.split(/\*/);
-      transparent = params[4].trim();
+      transparent = params[5].trim();
     } else if (/^WMS_FULL\*[^*]+(\*(true|false))?/i.test(parameter)) {
       // <WMS_FULL>*<URL>(*<TILED>)?
       params = parameter.split(/\*/);
@@ -1996,11 +1038,6 @@ const getTransparentWMTS = (parameter) => {
 
 
 /**
- * Parses the specified user layer WMTS parameters to a object
- *
- * @param {string|Mx.parameters.Layer} userParameters parameters
- * provided by the user
- * @returns {Mx.parameters.WMTS|Array<Mx.parameters.WMTS>}
  * @public
  * @function
  * @api
@@ -2010,7 +1047,7 @@ export const wmts = (userParameters) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array
@@ -2065,16 +1102,10 @@ const parameterFunction = {
   wms,
   wmts,
   geojson,
+  mvt,
 };
 
-
 /**
- * Parses the specified user layer parameters to a object
- *
- * @param {string|Mx.parameters.Layer} userParameters parameters
- * provided by the user
- * @param {string} forced type of the layer (optional)
- * @returns {Mx.parameters.Layer|Array<Mx.parameters.Layer>}
  * @public
  * @function
  * @api
@@ -2084,7 +1115,7 @@ export const layer = (userParameters, forcedType) => {
 
   // checks if the param is null or empty
   if (isNullOrEmpty(userParameters)) {
-    Exception('No ha especificado ningún parámetro');
+    Exception(getValue('exception').no_param);
   }
 
   // checks if the parameter is an array

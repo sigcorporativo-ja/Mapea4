@@ -11,7 +11,7 @@ import { isNullOrEmpty } from './util/Utils';
 import Exception from './exception/exception';
 import './util/Window';
 import './util/polyfills';
-
+import { getValue } from './i18n/language';
 
 /**
  * This function sets the configuration variables
@@ -38,7 +38,7 @@ export const config = (configKey, configValue) => {
 export const map = (parameters, options) => {
   // checks if the user specified an implementation
   if (isNullOrEmpty(MapImpl)) {
-    Exception('No se ha especificado ninguna implementación');
+    Exception(getValue('exception').no_impl);
   }
   return new Map(parameters, options);
 };

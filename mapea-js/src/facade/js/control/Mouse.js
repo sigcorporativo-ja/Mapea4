@@ -8,6 +8,7 @@ import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -25,15 +26,15 @@ class Mouse extends ControlBase {
    * @extends {M.Control}
    * @api
    */
-  constructor(vendorOptions = {}) {
+  constructor(options = {}, vendorOptions = {}) {
     // implementation of this control
-    const impl = new MouseImpl(vendorOptions);
+    const impl = new MouseImpl(options, vendorOptions);
 
     // calls the super constructor
     super(impl, Mouse.NAME);
 
     if (isUndefined(MouseImpl)) {
-      Exception('La implementación usada no puede crear controles Mouse');
+      Exception(getValue('exception').mouse_method);
     }
   }
 
@@ -58,8 +59,7 @@ class Mouse extends ControlBase {
    * @api
    */
   equals(obj) {
-    const equals = (obj instanceof Mouse);
-    return equals;
+    return obj instanceof Mouse;
   }
 }
 

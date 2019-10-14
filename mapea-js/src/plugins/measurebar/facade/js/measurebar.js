@@ -2,6 +2,7 @@ import MeasureLength from './measurelength';
 import MeasureArea from './measurearea';
 import MeasureClear from './measureclear';
 import '../assets/css/measurebar';
+import api from '../../api';
 
 export default class Measurebar extends M.Plugin {
   /**
@@ -51,6 +52,13 @@ export default class Measurebar extends M.Plugin {
      * @type {M.control.MeasureClear}
      */
     this.measureClear_ = null;
+
+    /**
+     * Metadata from api.json
+     * @private
+     * @type {Object}
+     */
+    this.metadata_ = api.metadata;
   }
 
   /**
@@ -112,6 +120,28 @@ export default class Measurebar extends M.Plugin {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Gets the parameter api rest of the plugin
+   *
+   * @public
+   * @function
+   * @api
+   */
+  getAPIRest() {
+    return 'measurebar';
+  }
+
+  /**
+   * This function gets metadata plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getMetadata() {
+    return this.metadata_;
   }
 }
 

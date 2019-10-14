@@ -134,7 +134,10 @@ class WFS extends Vector {
 
       this.requestFeatures_().then((features) => {
         const isCluster = (this.facadeVector_.getStyle() instanceof StyleCluster);
-        let ol3LayerSource = this.ol3Layer.getSource();
+        let ol3LayerSource = null;
+        if (!isNullOrEmpty(this.ol3Layer)) {
+          ol3LayerSource = this.ol3Layer.getSource();
+        }
         if (forceNewSource === true || isNullOrEmpty(ol3LayerSource)) {
           const newSource = new OLSourceVector({
             loader: () => {
@@ -153,7 +156,7 @@ class WFS extends Vector {
             });
             this.ol3Layer.setStyle(this.facadeVector_.getStyle().getImpl().olStyleFn);
             this.ol3Layer.setSource(clusterSource);
-          } else {
+          } else if (this.ol3Layer) {
             this.ol3Layer.setSource(newSource);
           }
         } else {
@@ -177,22 +180,6 @@ class WFS extends Vector {
         }
       });
     }
-  }
-
-  /**
-   * This function return extent of all features or discriminating by the filter
-   *
-   * @function
-   * @param {boolean} skipFilter - Indicates whether skip filter
-   * @param {M.Filter} filter - Filter to execute
-   * @return {Array<number>} Extent of features
-   * @api stable
-   */
-  getFeaturesExtent(skipFilter, filter) {
-    const codeProj = this.map.getProjection().code;
-    const features = this.getFeatures(skipFilter, filter);
-    const extent = ImplUtils.getFeaturesExtent(features, codeProj);
-    return extent;
   }
 
   /**

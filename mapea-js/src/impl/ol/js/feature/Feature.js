@@ -1,3 +1,6 @@
+import FacadeFeature from 'M/feature/Feature';
+import { isNullOrEmpty, generateRandom } from 'M/util/Utils';
+
 import OLGeomGeometry from 'ol/geom/Geometry';
 import OLGeomPoint from 'ol/geom/Point';
 import OLGeomCircle from 'ol/geom/Circle';
@@ -7,8 +10,7 @@ import OLGeomPolygon from 'ol/geom/Polygon';
 import OLGeomMultiLineString from 'ol/geom/MultiLineString';
 import OLGeomMultiPolygon from 'ol/geom/MultiPolygon';
 import OLFeature from 'ol/Feature';
-import FacadeFeature from 'M/feature/Feature';
-import { isNullOrEmpty, generateRandom } from 'M/util/Utils';
+
 import FormatGeoJSON from '../format/GeoJSON';
 import ImplUtils from '../util/Utils';
 
@@ -130,6 +132,7 @@ class Feature {
    * @public
    * @function
    * @param {OLFeature} olFeature - OLFeature
+   * @param {boolean} canBeModified
    * @return {M.Feature}  facadeFeature - M.Feature
    * @api stable
    */
@@ -140,6 +143,23 @@ class Feature {
       facadeFeature.getImpl().setOLFeature(olFeature, canBeModified);
     }
     return facadeFeature;
+  }
+
+  /**
+   * This funcion transform OLRenderFeature to M.Feature
+   *
+   * @public
+   * @function
+   * @param { RenderFeature } olRenderFeature - OLFeature
+   * @param {ol.Projection} tileProjection
+   * @param {ol.Projection} mapProjection
+   * @return {M.Feature} facadeFeature - M.Feature
+   * @api stable
+   */
+  static olRenderFeature2Facade(olRenderFeature, tileProjection, mapProjection) {
+    const olFeature =
+      ImplUtils.olRenderFeature2olFeature(olRenderFeature, tileProjection, mapProjection);
+    return Feature.olFeature2Facade(olFeature);
   }
 
   /**

@@ -7,6 +7,7 @@ import { isNullOrEmpty, isUndefined, normalize, isString } from '../util/Utils';
 import Exception from '../exception/exception';
 import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -25,27 +26,32 @@ class KML extends LayerVector {
    * @api
    */
   constructor(userParameters, options = {}, vendorOptions = {}) {
+    // This layer is of parameters.
+    const parameters = parameter.layer(userParameters, LayerType.KML);
+
+    const newOpts = {
+      ...options,
+      label: parameters.label,
+    };
+
     /**
      * Implementation of this layer
      * @public
      * @type {M.layer.KML}
      */
-    const impl = new KMLImpl(options, vendorOptions);
-
-    // This layer is of parameters.
-    const parameters = parameter.layer(userParameters, LayerType.KML);
+    const impl = new KMLImpl(newOpts, vendorOptions);
 
     // calls the super constructor
     super(parameters, options, undefined, impl);
 
     // checks if the implementation can create KML layers
     if (isUndefined(KMLImpl)) {
-      Exception('La implementación usada no puede crear capas KML');
+      Exception(getValue('exception').kmllayer_method);
     }
 
     // checks if the param is null or empty
     if (isNullOrEmpty(userParameters)) {
-      Exception('No ha especificado ningún parámetro');
+      Exception(getValue('exception').no_param);
     }
 
     // extract
@@ -53,6 +59,8 @@ class KML extends LayerVector {
 
     // options
     this.options = options;
+
+    this.label = parameters.label;
   }
 
   /**
