@@ -45,14 +45,11 @@ class GenerateVersionPlugin {
    * @function
    */
   geExecuteCB(index, stats) {
-    console.log(1, index);
     const entry = Object.keys(stats.compilation.options.entry)[index];
     const name = entry.split('/').slice(-1)[0];
     const context = stats.compilation.options.resolve.alias[this.aliasRoot];
     const absolutePath = pathmodule.resolve(context, name, this.fileName);
-    console.log(2, absolutePath);
     const version = JSON.parse(fs.readFileSync(absolutePath)).version;
-    console.log(3, version);
     return version;
   }
 }

@@ -16,7 +16,7 @@ class Mouse extends OLControlMousePosition {
     /**
      * Coordinates spatial reference system
      *
-     * @type { ProjectionLike } https://openlayers.org/en/latest/apidoc/module-ol_proj.html#~ProjectionLike
+     * @type { ProjectionLike }
      * @private
      */
     this.srs_ = options.srs;
