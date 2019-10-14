@@ -96,7 +96,6 @@ class LayerBase extends Base {
     /**
      * Group Layer
      * @private
-     * @type
      * @api
      */
     this.layerGroup_ = null;
