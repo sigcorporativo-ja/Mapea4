@@ -446,55 +446,6 @@ export default class PrinterControl extends M.Control {
     this.printing_ = false;
   }
 
-  // manageProxy_(url, methodType) {
-  //   // deafult GET
-  //   let proxyUrl = M.config.PROXY_URL;
-  //   if (methodType === 'DELETE') {
-  //     proxyUrl = M.config.PROXY_POST_URL;
-  //   }
-
-  //   proxyUrl = M.utils.addParameters(proxyUrl, {
-  //     url,
-  //   });
-
-  //   return proxyUrl;
-  // }
-
-  // ajax_(urlVar, dataVar, methodType, useProxy) {
-  //   let url = urlVar;
-  //   let data = dataVar;
-  //   if ((useProxy !== false) && (useProxy === true)) {
-  //     url = this.manageProxy_(url, methodType);
-  //   }
-
-  //   // parses parameters to string
-  //   if (M.utils.isObject(data)) {
-  //     data = JSON.stringify(data);
-  //   }
-
-  //   return new Promise((success, fail) => {
-  //     let xhr;
-  //     if (window.XMLHttpRequest) {
-  //       xhr = new XMLHttpRequest();
-  //     } else if (window.ActiveXObject) {
-  //       xhr = new ActiveXObject('Microsoft.XMLHTTP');
-  //     }
-  //     xhr.onreadystatechange = () => {
-  //       if (xhr.readyState === 4) {
-  //         const response = new M.remote.Response();
-  //         response.parseXmlHttp(xhr);
-  //         success(response);
-  //       }
-  //     };
-  //     xhr.open(methodType, url, true);
-  //     xhr.send(data);
-  //   });
-  // }
-
-  // delete_(url, flag) {
-  //   return this.ajax_(url, {}, 'DELETE', flag);
-  // }
-
   /**
    * Obtiene el capabilities (.yaml)
    *
@@ -539,6 +490,7 @@ export default class PrinterControl extends M.Control {
     const center = this.map_.getCenter();
     const parameters = this.params_.parameters;
     const legend = this.options_.legend;
+
     if (outputFormat === 'jpg') {
       layout += ' jpg';
     }
@@ -583,9 +535,15 @@ export default class PrinterControl extends M.Control {
       }
       if (this.forceScale_ === false) {
         const bbox = this.map_.getBbox();
-        printData.attributes.map.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
+        if (layout === 'Imagen cuadrada') {
+          printData.attributes.map.bbox = [(bbox.x.min * 1.04), (bbox.y.min * 1.0002),
+            (bbox.x.max * 1.38), (bbox.y.max * 1.02),
+          ];
+        } else {
+          printData.attributes.map.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
+        }
         if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
-          printData.attributes.map.bbox = ol.proj.transformExtent(printData.attributes.map.bbox, projection.code, 'EPSG:3857');
+          printData.attributes.map.bbox = this.getImpl().transformExt(printData.attributes.map.bbox, projection.code, 'EPSG:3857');
         }
       } else if (this.forceScale_ === true) {
         printData.attributes.map.center = [center.x, center.y];

@@ -146,7 +146,6 @@ export default class PrinterControl extends M.impl.Control {
     const stylesNamesText = {};
     let index = 1;
     let nameFeature;
-    let nameFeature2;
     let filter;
     features.forEach((feature) => {
       const geometry = feature.getGeometry();
@@ -207,9 +206,6 @@ export default class PrinterControl extends M.impl.Control {
             };
           }
           nameFeature = `draw${index}`;
-          nameFeature2 = `'draw${index}'`;
-          // eslint-disable-next-line no-useless-concat
-          filter = '"[name = ' + `${nameFeature2}` + ']"';
           if ((!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) ||
             !M.utils.isNullOrEmpty(text)) {
             const styleStr = JSON.stringify(styleGeom);
@@ -244,19 +240,13 @@ export default class PrinterControl extends M.impl.Control {
               if (styleNameText === undefined) {
                 styleNameText = 0;
               }
-              // eslint-disable-next-line no-useless-concat
-              filter = '"[_gx_style = ' + `'${styleName + styleNameText}'` + ']"';
+              filter = `"[_gx_style ='${styleName + styleNameText}']"`;
               if (!M.utils.isNullOrEmpty(symbolizers)) {
-                // eslint-disable-next-line prefer-template
-                let a = '' + filter + ': {' +
-                  '"symbolizers": [' + symbolizers +
-                  ']}';
+                const a = ` ${filter}:{"symbolizers": [${symbolizers}]}`;
                 if (style !== '') {
-                  // eslint-disable-next-line prefer-template
-                  style += ',' + a;
+                  style += `,${a}`;
                 } else {
-                  // eslint-disable-next-line prefer-template
-                  style += '{' + a + ',"version": "2"';
+                  style += `{${a},"version":"2"`;
                 }
               }
             }
@@ -312,7 +302,7 @@ export default class PrinterControl extends M.impl.Control {
     const olLayer = layer.getImpl().getOL3Layer();
     const layerUrl = layer.url;
     const layerOpacity = olLayer.getOpacity();
-    const tiled = layer.getImpl().tiled;
+    // const tiled = layer.getImpl().tiled;
     const params = olLayer.getSource().getParams();
     const paramsLayers = [params.LAYERS];
     const paramsFormat = params.FORMAT;
@@ -320,7 +310,7 @@ export default class PrinterControl extends M.impl.Control {
     encodedLayer = {
       baseURL: layerUrl,
       opacity: layerOpacity,
-      singleTile: !tiled,
+      // singleTile: !tiled,
       type: 'WMS',
       layers: paramsLayers.join(',').split(','),
       format: paramsFormat || 'image/jpeg',
@@ -330,7 +320,7 @@ export default class PrinterControl extends M.impl.Control {
     /** ***********************************
      MAPEA DE CAPAS TILEADA.
     ************************************ */
-    /* eslint-disable */
+    // eslint-disable-next-line no-underscore-dangle
     layer._updateNoCache();
     const noCacheName = layer.getNoCacheName();
     const noChacheUrl = layer.getNoCacheUrl();
@@ -438,6 +428,8 @@ export default class PrinterControl extends M.impl.Control {
             parseType = 'polygon';
           } else if (feature.getGeometry().getType().toLowerCase() === 'multipoint') {
             parseType = 'point';
+          } else if (feature.getGeometry().getType().toLowerCase() === 'multilinestring') {
+            parseType = 'line';
           } else {
             parseType = feature.getGeometry().getType().toLowerCase();
           }
@@ -533,9 +525,10 @@ export default class PrinterControl extends M.impl.Control {
             let styleName = stylesNames[styleStr];
             let styleNameText = stylesNamesText[styleTextStr];
             if (M.utils.isUndefined(styleName) || M.utils.isUndefined(styleNameText)) {
-              let symbolizers = [];
+              const symbolizers = [];
               let flag = 0;
-              if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox) && M.utils.isUndefined(styleName)) {
+              if (!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox) &&
+                M.utils.isUndefined(styleName)) {
                 styleName = indexGeom;
                 stylesNames[styleStr] = styleName;
                 flag = 1;
@@ -559,15 +552,13 @@ export default class PrinterControl extends M.impl.Control {
               if (styleNameText === undefined) {
                 styleNameText = 0;
               }
-              filter = '"[_gx_style = ' + `'${styleName + styleNameText}'` + ']"';
+              filter = `"[_gx_style ='${styleName + styleNameText}']"`;
               if (!M.utils.isNullOrEmpty(symbolizers)) {
-                let a = '' + filter + ': {' +
-                  '"symbolizers": [' + symbolizers +
-                  ']}';
-                if (style != '') {
-                  style += ',' + a;
+                const a = ` ${filter}:{"symbolizers": [${symbolizers}]}`;
+                if (style !== '') {
+                  style += `,${a}`;
                 } else {
-                  style += '{' + a + ',"version": "2"';
+                  style += `{${a},"version":"2"`;
                 }
               }
             }
@@ -590,15 +581,15 @@ export default class PrinterControl extends M.impl.Control {
         }
       }, this);
 
-      if (style != '') {
+      if (style !== '') {
         style = JSON.parse(style.concat('}'));
       } else {
         style = {
           '*': {
-            'symbolizers': []
+            symbolizers: [],
           },
-          'version': '2'
-        }
+          version: '2',
+        };
       }
 
       encodedLayer = {
@@ -771,7 +762,9 @@ export default class PrinterControl extends M.impl.Control {
     return encodedLayer;
   }
 
-  /* eslint-enable */
+  transformExt(box, code, currProj) {
+    return ol.proj.transformExtent(box, code, currProj);
+  }
 
   /**
    * This function destroys this control, clearing the HTML
