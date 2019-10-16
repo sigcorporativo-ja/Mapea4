@@ -155,7 +155,12 @@ export default class PrinterControl extends M.impl.Control {
       }
       const styleFn = feature.getStyle();
       if (!M.utils.isNullOrEmpty(styleFn)) {
-        const featureStyle = styleFn(feature, resolution)[0];
+        let featureStyle;
+        try {
+          featureStyle = styleFn(feature, resolution)[0];
+        } catch (e) {
+          featureStyle = styleFn.call(feature, resolution)[0];
+        }
         if (!M.utils.isNullOrEmpty(featureStyle)) {
           const img = featureStyle.getImage();
           let imgSize = img.getImageSize();
@@ -204,6 +209,8 @@ export default class PrinterControl extends M.impl.Control {
                 text.getStroke().getColor()),
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
             };
+            styleText.fontColor = styleText.fontColor.slice(0, 7);
+            styleText.labelOutlineColor = styleText.labelOutlineColor.slice(0, 7);
           }
           nameFeature = `draw${index}`;
           if ((!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) ||
@@ -321,12 +328,23 @@ export default class PrinterControl extends M.impl.Control {
      MAPEA DE CAPAS TILEADA.
     ************************************ */
     // eslint-disable-next-line no-underscore-dangle
-    layer._updateNoCache();
-    const noCacheName = layer.getNoCacheName();
-    const noChacheUrl = layer.getNoCacheUrl();
-    if (!M.utils.isNullOrEmpty(noCacheName) && !M.utils.isNullOrEmpty(noChacheUrl)) {
-      encodedLayer.layers = [noCacheName];
-      encodedLayer.baseURL = noChacheUrl;
+    // eslint-disable-next-line no-underscore-dangle
+    if (layer._updateNoCache) {
+      // eslint-disable-next-line no-underscore-dangle
+      layer._updateNoCache();
+      const noCacheName = layer.getNoCacheName();
+      const noChacheUrl = layer.getNoCacheUrl();
+      if (!M.utils.isNullOrEmpty(noCacheName) && !M.utils.isNullOrEmpty(noChacheUrl)) {
+        encodedLayer.layers = [noCacheName];
+        encodedLayer.baseURL = noChacheUrl;
+      }
+    } else {
+      const noCacheName = layer.getNoChacheName();
+      const noCacheUrl = layer.getNoChacheUrl();
+      if (!M.utils.isNullOrEmpty(noCacheName) && !M.utils.isNullOrEmpty(noCacheUrl)) {
+        encodedLayer.layers = [noCacheName];
+        encodedLayer.baseURL = noCacheUrl;
+      }
     }
 
     /** *********************************  */

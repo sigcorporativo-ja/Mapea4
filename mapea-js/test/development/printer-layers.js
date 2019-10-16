@@ -84,7 +84,7 @@ const styleHidro = new M.style.Category('cod_ent', {
   H5: azulp,
 });
 
-// ayuntamientos.setStyle(styleHidro);
+ayuntamientos.setStyle(styleHidro);
 
 // const optionsChartNoTexto = {
 //   type: 'pie',
@@ -282,29 +282,29 @@ const styleHidro = new M.style.Category('cod_ent', {
 // campamentos.setStyle(estiloBase);
 // campamentos.setStyle(estiloCluster);
 
-// const layer2 = new WFS({
-//   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
-//   namespace: 'tematicos',
-//   name: 'Provincias',
-//   legend: 'Provincias',
-//   geometry: 'MPOLYGON',
-//   ids: '3,4',
-// });
+const layer2 = new WFS({
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
+  namespace: 'tematicos',
+  name: 'Provincias',
+  legend: 'Provincias',
+  geometry: 'MPOLYGON',
+  ids: '3,4',
+});
 
-// const arboleda = new KML({
-//   url: 'http://mapea4-sigc.juntadeandalucia.es/files/kml/arbda_sing_se.kml',
-//   name: 'Arboleda',
-//   extract: true,
-// });
+const arboleda = new KML({
+  url: 'http://mapea4-sigc.juntadeandalucia.es/files/kml/arbda_sing_se.kml',
+  name: 'Arboleda',
+  extract: true,
+});
 
 // mapjs.addWFS(ayuntamientos);
 
-// const layerWMTS = new WMTS({
-//   url: 'http://www.ideandalucia.es/geowebcache/service/wmts',
-//   name: 'toporaster',
-//   matrixSet: 'EPSG:25830',
-//   legend: 'Toporaster',
-// });
+const layerWMTS = new WMTS({
+  url: 'http://www.ideandalucia.es/geowebcache/service/wmts',
+  name: 'toporaster',
+  matrixSet: 'EPSG:25830',
+  legend: 'Toporaster',
+});
 
 // const printer = new Printer({
 //   url: 'https://geoprint.desarrollo.guadaltel.es/print/CNIG',
@@ -327,51 +327,51 @@ const styleHidro = new M.style.Category('cod_ent', {
 //   },
 // });
 
-// const layer = new M.layer.WFS({
-//   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
-//   namespace: 'sepim',
-//   name: 'EstructuraJA',
-//   legend: 'Menores de 15 años por provincia',
-//   geometry: 'MPOLYGON',
-// });
+const layer = new M.layer.WFS({
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
+  namespace: 'sepim',
+  name: 'EstructuraJA',
+  legend: 'Menores de 15 años por provincia',
+  geometry: 'MPOLYGON',
+});
 
-// const provincias = new M.layer.WFS({
-//   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
-//   namespace: 'tematicos',
-//   name: 'Provincias',
-//   legend: 'Provincias',
-//   geometry: 'MPOLYGON',
-// });
+const provincias = new M.layer.WFS({
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
+  namespace: 'tematicos',
+  name: 'Provincias',
+  legend: 'Provincias',
+  geometry: 'MPOLYGON',
+});
 
-// const estiloProvincias = new M.style.Polygon({
-//   stroke: {
-//     color: '#FF0000',
-//     width: 1,
-//   },
-// });
+const estiloProvincias = new M.style.Polygon({
+  stroke: {
+    color: '#FF0000',
+    width: 1,
+  },
+});
 
-// provincias.setStyle(estiloProvincias);
+provincias.setStyle(estiloProvincias);
 
-// const styleProp = new M.style.Proportional('id', 5, 15, new M.style.Point({
-//   fill: {
-//     color: '#000000',
-//   },
-//   stroke: {
-//     color: '#FFFFFF',
-//     width: 2,
-//   },
-//   label: {
-//     text: '{{id}}',
+const styleProp = new M.style.Proportional('id', 5, 15, new M.style.Point({
+  fill: {
+    color: '#000000',
+  },
+  stroke: {
+    color: '#FFFFFF',
+    width: 2,
+  },
+  label: {
+    text: '{{id}}',
 
-//     offset: [0, 20],
-//     stroke: {
-//       color: 'yellow', // Color de relleno del halo
-//       width: 2,
-//     },
-//   },
-// }));
-// layer.setStyle(styleProp);
-// mapjs.addLayers([layer, provincias]);
+    offset: [0, 20],
+    stroke: {
+      color: 'yellow', // Color de relleno del halo
+      width: 2,
+    },
+  },
+}));
+layer.setStyle(styleProp);
+mapjs.addLayers([layer, provincias]);
 
 // const centros = new M.layer.WFS({
 //   url: 'https://clientes.guadaltel.es/desarrollo/geossigc/wfs?',

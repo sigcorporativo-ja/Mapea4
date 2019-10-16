@@ -178,6 +178,7 @@ export default class PrinterControl extends M.Control {
    * @param {M.Map} map to add the control
    * @api stabletrue
    */
+
   createView(map) {
     const promise = new Promise((success, fail) => {
       this.getCapabilities().then((capabilitiesParam) => {
@@ -218,6 +219,27 @@ export default class PrinterControl extends M.Control {
         capabilities.format = [{ name: 'pdf' }, { name: 'png' }, { name: 'jpg' }];
 
         // forceScale
+
+        if (!M.template.compileSync) { // JGL: retrocompatibilidad Mapea4
+          M.template.compileSync = (string, options) => {
+            let templateCompiled;
+            let templateVars = {};
+            let parseToHtml;
+            if (!M.utils.isUndefined(options)) {
+              templateVars = M.utils.extends(templateVars, options.vars);
+              parseToHtml = options.parseToHtml;
+            }
+            const templateFn = Handlebars.compile(string);
+            const htmlText = templateFn(templateVars);
+            if (parseToHtml !== false) {
+              templateCompiled = M.utils.stringToHtml(htmlText);
+            } else {
+              templateCompiled = htmlText;
+            }
+            return templateCompiled;
+          };
+        }
+
         capabilities.forceScale = this.options_.forceScale;
         const html = M.template.compileSync(printerHTML, { jsonp: true, vars: capabilities });
         this.addEvents(html);
@@ -536,8 +558,8 @@ export default class PrinterControl extends M.Control {
       if (this.forceScale_ === false) {
         const bbox = this.map_.getBbox();
         if (layout === 'Imagen cuadrada') {
-          printData.attributes.map.bbox = [(bbox.x.min * 1.04), (bbox.y.min * 1.0002),
-            (bbox.x.max * 1.38), (bbox.y.max * 1.02),
+          printData.attributes.map.bbox = [(bbox.x.min / 1.04), (bbox.y.min / 1.01),
+            (bbox.x.max * 1.38), (bbox.y.max * 1.015),
           ];
         } else {
           printData.attributes.map.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
