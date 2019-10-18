@@ -1,6 +1,13 @@
 import PrinterControlImpl from '../../impl/ol/js/printercontrol';
 import printerHTML from '../../templates/printer';
 
+/**
+ * Esta función determina cuándo ha terminado la impresión del mapa
+ * Se hace la comprobación cada 1 segundo con la petición get
+ * @param {*} url
+ * @param {*} callback
+ */
+
 export default class PrinterControl extends M.Control {
   /**
    * @classdesc
@@ -11,7 +18,8 @@ export default class PrinterControl extends M.Control {
    * @extends {M.Control}
    * @api stable
    */
-  constructor(url, params, options, name) {
+
+  constructor(url, params, options) {
     // implementation of this control
     const impl = new PrinterControlImpl();
 
@@ -36,6 +44,22 @@ export default class PrinterControl extends M.Control {
      * @type {M.Map}
      */
     this.url_ = url;
+
+    /**
+     * Facade of the map
+     * @private
+     * @type {M.Map}
+     */
+    this.ref_ = null;
+
+    /**
+     * Facade of the map
+     * Este atributo se pone a true cuando se está realizando la impresión
+     * Se pone a false cuando le damos al botón de cancelar impresión
+     * @private
+     * @type {M.Map}
+     */
+    this.printing_ = false;
 
     /**
      * Facade of the map
@@ -130,13 +154,40 @@ export default class PrinterControl extends M.Control {
   }
 
   /**
-   * This function creates the view to the specified map
+   * Este método sirve para comprobar el estado de la impresión del mapa.
+   * Se envía la petición cada 1 segundo.
+   * @param {*} url es la url que se le envía a la petición get para
+   * comprobar el estado de la impresión
+   * @param {*} callback quita el icono LOADING
+   * @param {*} callback2 quita el contenedor con la impresión del mapa
+   */
+  getStatus(url, callback, callback2) {
+    M.remote.get(url).then((response) => {
+      const statusJson = JSON.parse(response.text);
+      const { status } = statusJson;
+      if (status === 'finished') {
+        callback();
+      } else if (status === 'error') {
+        callback();
+        M.dialog.error('Se ha producido un error en la impresión');
+      } else if (this.printing_ === false) {
+        callback2();
+        M.dialog.error('Se ha cancelado la impresión');
+      } else {
+        setTimeout(() => this.getStatus(url, callback, callback2), 1000);
+      }
+    });
+  }
+
+  /**
+   * This function creates the view to the specified map.
    *
    * @public
    * @function
    * @param {M.Map} map to add the control
    * @api stabletrue
    */
+
   createView(map) {
     const promise = new Promise((success, fail) => {
       this.getCapabilities().then((capabilitiesParam) => {
@@ -144,6 +195,9 @@ export default class PrinterControl extends M.Control {
         let i = 0;
         let ilen;
         // default layout
+        capabilities.layouts = capabilities.layouts.filter((l) => {
+          return !l.name.endsWith('jpg');
+        });
         for (i = 0, ilen = capabilities.layouts.length; i < ilen; i += 1) {
           const layout = capabilities.layouts[i];
           if (layout.name === this.options_.layout) {
@@ -151,24 +205,47 @@ export default class PrinterControl extends M.Control {
             break;
           }
         }
+        capabilities.dpis = [];
+        let attribute;
         // default dpi
-        for (i = 0, ilen = capabilities.dpis.length; i < ilen; i += 1) {
-          const dpi = capabilities.dpis[i];
-
-          if (parseInt(dpi.value, 10) === this.options_.dpi) {
-            dpi.default = true;
-            break;
+        // este for busca qué atributo tiene la lista de los DPI recomendados
+        for (i = 0, ilen = capabilities.layouts[0].attributes.length; i < ilen; i += 1) {
+          if (capabilities.layouts[0].attributes[i].clientInfo != null) {
+            attribute = capabilities.layouts[0].attributes[i];
           }
+        }
+        for (i = 0, ilen = attribute.clientInfo.dpiSuggestions.length; i < ilen; i += 1) {
+          const dpi = attribute.clientInfo.dpiSuggestions[i];
+
+          const object = { value: dpi };
+          capabilities.dpis.push(object);
         }
         // default outputFormat
-        for (i = 0, ilen = capabilities.outputFormats.length; i < ilen; i += 1) {
-          const outputFormat = capabilities.outputFormats[i];
-          if (outputFormat.name === this.options_.format) {
-            outputFormat.default = true;
-            break;
-          }
-        }
+        // Ponemos solo estos 3 formatos disponibles
+        capabilities.format = [{ name: 'pdf' }, { name: 'png' }, { name: 'jpg' }];
+
         // forceScale
+
+        if (!M.template.compileSync) { // JGL: retrocompatibilidad Mapea4
+          M.template.compileSync = (string, options) => {
+            let templateCompiled;
+            let templateVars = {};
+            let parseToHtml;
+            if (!M.utils.isUndefined(options)) {
+              templateVars = M.utils.extends(templateVars, options.vars);
+              parseToHtml = options.parseToHtml;
+            }
+            const templateFn = Handlebars.compile(string);
+            const htmlText = templateFn(templateVars);
+            if (parseToHtml !== false) {
+              templateCompiled = M.utils.stringToHtml(htmlText);
+            } else {
+              templateCompiled = htmlText;
+            }
+            return templateCompiled;
+          };
+        }
+
         capabilities.forceScale = this.options_.forceScale;
         const html = M.template.compileSync(printerHTML, { jsonp: true, vars: capabilities });
         this.addEvents(html);
@@ -244,6 +321,10 @@ export default class PrinterControl extends M.Control {
     // print button
     const printBtn = this.element_.querySelector('.button > button.print');
     printBtn.addEventListener('click', this.printClick_.bind(this));
+
+    // cancel button
+    const cancelBtn = this.element_.querySelector('.button > button.cancel');
+    cancelBtn.addEventListener('click', this.cancelClick_.bind(this));
 
     // clean button
     const cleanBtn = this.element_.querySelector('.button > button.remove');
@@ -341,41 +422,66 @@ export default class PrinterControl extends M.Control {
   printClick_(evt) {
     evt.preventDefault();
 
-    this.getCapabilities().then((capabilities) => {
-      this.getPrintData().then((printData) => {
-        const printUrl = M.utils.addParameters(capabilities.createURL, 'mapeaop=geoprint');
+    this.getPrintData().then((printData) => {
+      let printUrl = M.utils.concatUrlPaths([this.url_, `report.${printData.outputFormat}`]);
 
-        // append child
-        const queueEl = this.createQueueElement();
-        this.queueContainer_.appendChild(queueEl);
-        queueEl.classList.add(PrinterControl.LOADING_CLASS);
+      // append child
+      const queueEl = this.createQueueElement();
+      this.queueContainer_.appendChild(queueEl);
+      queueEl.classList.add(PrinterControl.LOADING_CLASS);
+      printUrl = M.utils.addParameters(printUrl, 'mapeaop=geoprint');
+      M.remote.post(printUrl, printData).then((responseParam) => {
+        let response = responseParam;
+        const responseStatusURL = JSON.parse(response.text);
+        this.ref_ = responseStatusURL.ref;
+        const statusURL = M.utils.concatUrlPaths([this.params_.urlApplication, 'print/status', `${this.ref_}.json`]);
+        // Borra el símbolo loading cuando ha terminado la impresión del mapa,
+        // o borra el botón de la impresión si se ha cancelado
+        this.printing_ = true;
+        this.getStatus(
+          statusURL, () => queueEl.classList.remove(PrinterControl.LOADING_CLASS),
+          () => this.queueContainer_.removeChild(queueEl),
+        );
 
-        M.remote.post(printUrl, printData).then((responseParam) => {
-          let response = responseParam;
-          queueEl.classList.remove(PrinterControl.LOADING_CLASS);
-
-          if (response.error !== true) {
-            let downloadUrl;
-            try {
-              // const textParse = JSON.stringify(response.text);
-              response = JSON.parse(response.text);
-              downloadUrl = response.getURL;
-            } catch (err) {
-              M.exception(err);
-            }
-            // sets the download URL
-            queueEl.setAttribute(PrinterControl.DOWNLOAD_ATTR_NAME, downloadUrl);
-            queueEl.addEventListener('click', this.dowloadPrint);
-          } else {
-            M.dialog.error('Se ha producido un error en la impresión');
+        if (response.error !== true) {
+          let downloadUrl;
+          try {
+            response = JSON.parse(response.text);
+            // poner la url en una variable
+            downloadUrl = M.utils.concatUrlPaths([
+              this.params_.urlApplication,
+              response.downloadURL,
+            ]);
+          } catch (err) {
+            M.exception(err);
           }
-        });
+          // sets the download URL
+          queueEl.setAttribute(PrinterControl.DOWNLOAD_ATTR_NAME, downloadUrl);
+          queueEl.addEventListener('click', this.dowloadPrint);
+        } else {
+          M.dialog.error('Se ha producido un error en la impresión');
+        }
       });
     });
   }
 
   /**
-   * This function creates the view to the specified map
+   * Cancela la petición de impresión.
+   * De momento no se puede hacer una petición Delete con Mapea,
+   * simplemente se deja de preguntar por la impresión y se borra el contenedor de la misma.
+   * @public
+   * @function
+   * @param {M.Map} map to add the control
+   * @api stable
+   */
+  cancelClick_(evt) {
+    evt.preventDefault();
+    this.printing_ = false;
+    // TODO: Pendiente de hacer peticiones DELETE.
+  }
+
+  /**
+   * Obtiene el capabilities (.yaml)
    *
    * @public
    * @function
@@ -385,7 +491,7 @@ export default class PrinterControl extends M.Control {
   getCapabilities() {
     if (M.utils.isNullOrEmpty(this.capabilitiesPromise_)) {
       this.capabilitiesPromise_ = new Promise((success, fail) => {
-        const capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'info.json']);
+        const capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'capabilities.json']);
         M.remote.get(capabilitiesUrl).then((response) => {
           let capabilities = {};
           try {
@@ -410,27 +516,68 @@ export default class PrinterControl extends M.Control {
   getPrintData() {
     const title = this.inputTitle_.value;
     const description = this.areaDescription_.value;
-    const projection = this.map_.getProjection();
-    const layout = this.layout_.name;
+    const projection = this.map_.getProjection().code;
+    let layout = this.layout_.name;
     const dpi = this.dpi_.value;
     const outputFormat = this.format_;
+    const center = this.map_.getCenter();
+    const parameters = this.params_.parameters;
+    const legend = this.options_.legend;
+
+    // Al elegir el formato jpg, cambiamos la plantilla por su copia
+    // para poder imprimir en este formato
+    if (outputFormat === 'jpg') {
+      layout += ' jpg';
+    }
 
     const printData = M.utils.extend({
-      units: projection.units,
-      srs: projection.code,
       layout,
-      dpi,
       outputFormat,
+      attributes: {
+        title,
+        description,
+        epsg: projection,
+        map: {
+          useAdjustBounds: true,
+          projection,
+          dpi,
+        },
+      },
     }, this.params_.layout);
 
     return this.encodeLayers().then((encodedLayers) => {
-      printData.layers = encodedLayers;
-      printData.pages = this.encodePages(title, description);
-      if (this.options_.legend === true) {
-        printData.legends = this.encodeLegends();
+      printData.attributes.map.layers = encodedLayers;
+      printData.attributes = Object.assign(printData.attributes, parameters);
+      // Se añade la leyenda
+      if (legend === 'true') {
+        const legends = [];
+        const leyenda = this.encodeLegends();
+        for (let i = 0, ilen = leyenda.length; i < ilen; i += 1) {
+          if (!M.utils.isNullOrEmpty(leyenda[i].classes[0])) {
+            const a = {
+              name: leyenda[i].classes[0].name,
+              icons: leyenda[i].classes[0].icons,
+            };
+            legends.push(a);
+          }
+        }
+        printData.attributes.legend = {
+          classes: legends,
+        };
       }
+
       if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
-        printData.srs = 'EPSG:3857';
+        printData.attributes.map.projection = 'EPSG:3857';
+      }
+      if (this.forceScale_ === false) {
+        const bbox = this.map_.getBbox();
+        printData.attributes.map.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
+        if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
+          printData.attributes.map.bbox = this.getImpl().transformExt(printData.attributes.map.bbox, projection.code, 'EPSG:3857');
+        }
+      } else if (this.forceScale_ === true) {
+        printData.attributes.map.center = [center.x, center.y];
+        printData.attributes.map.scale = this.map_.getScale();
       }
       return printData;
     });
@@ -450,15 +597,23 @@ export default class PrinterControl extends M.Control {
     let numLayersToProc = layers.length;
 
     return (new Promise((success, fail) => {
-      const encodedLayers = [];
+      let encodedLayers = [];
+      const encodedLayersVector = [];
       layers.forEach((layer) => {
         this.getImpl().encodeLayer(layer).then((encodedLayer) => {
-          if (!M.utils.isNullOrEmpty(encodedLayer)) {
+          // añade la capa y comprueba si es vector. Las capas que sean vector
+          // tienen que quedar en último lugar para que no sean tapadas
+          if (!M.utils.isNullOrEmpty(encodedLayer) && encodedLayer.type !== 'Vector') {
             encodedLayers.push(encodedLayer);
+          } else {
+            encodedLayersVector.push(encodedLayer);
           }
           numLayersToProc -= 1;
           if (numLayersToProc === 0) {
-            success(encodedLayers);
+            encodedLayers = encodedLayers.concat(encodedLayersVector);
+            // se usa reverse() para invertir el orden de las capas, así la capa base queda abajo
+            // y se visualiza el mapa correctamente.
+            success(encodedLayers.reverse());
           }
         });
       });
@@ -472,48 +627,7 @@ export default class PrinterControl extends M.Control {
    * @private
    * @function
    */
-  encodePages(title, description) {
-    const encodedPages = [];
-    const projection = this.map_.getProjection();
-
-    if (!M.utils.isArray(this.params_.pages)) {
-      this.params_.pages = [this.params_.pages];
-    }
-    this.params_.pages.forEach((page) => {
-      const encodedPage = M.utils.extend({
-        title,
-        printTitle: title,
-        printDescription: description,
-        infoSRS: `\n ${this.map_.getProjection().code}`,
-      }, page);
-
-      if (this.forceScale_ === false) {
-        const bbox = this.map_.getBbox();
-        encodedPage.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-        if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
-          encodedPage.bbox = ol.proj.transformExtent(encodedPage.bbox, projection.code, 'EPSG:3857');
-        }
-      } else if (this.forceScale_ === true) {
-        const center = this.map_.getCenter();
-        encodedPage.center = [center.x, center.y];
-        encodedPage.scale = this.map_.getScale();
-      }
-      encodedPage.rotation = 0;
-      encodedPages.push(encodedPage);
-    }, this);
-
-    return encodedPages;
-  }
-
-  /**
-   * This function checks if an object is equals
-   * to this control
-   *
-   * @private
-   * @function
-   */
   encodeLegends() {
-    // TODO
     const encodedLegends = [];
 
     const layers = this.map_.getLayers();
