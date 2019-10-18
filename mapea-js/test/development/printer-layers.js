@@ -14,26 +14,7 @@ const mapjs = M.map({
 });
 
 // Se crea el plugin del printer
-const printer = new Printer({
-  url: 'https://geoprint.desarrollo.guadaltel.es/print/SIGC',
-  params: {
-    urlApplication: 'https://geoprint.desarrollo.guadaltel.es',
-    layout: {
-      outputFilename: 'mapea_${yyyy-MM-dd_hhmmss}',
-    },
-    pages: {
-      clientLogo: 'http://www.juntadeandalucia.es/economiayhacienda/images/plantilla/logo_cabecera.gif',
-      creditos: 'Impresión generada a través de Mapea',
-    },
-    parameters: {
-      imagenCoordenadas: 'file://windrose.png',
-      imagenAndalucia: 'file://logo_JA.png',
-    },
-  },
-  options: {
-    legend: 'true',
-  },
-});
+const printer = new Printer();
 
 // Capa con los ríos de Andalucía
 const rios = new M.layer.WFS({

@@ -180,8 +180,7 @@ export default class PrinterControl extends M.Control {
   }
 
   /**
-   * This function creates the view to the specified map. Igual que el render de react.
-   * Es la función más importante.
+   * This function creates the view to the specified map.
    *
    * @public
    * @function
@@ -218,10 +217,6 @@ export default class PrinterControl extends M.Control {
         for (i = 0, ilen = attribute.clientInfo.dpiSuggestions.length; i < ilen; i += 1) {
           const dpi = attribute.clientInfo.dpiSuggestions[i];
 
-          if (parseInt(dpi, 10) === this.options_.dpi) {
-            dpi.default = true;
-            break;
-          }
           const object = { value: dpi };
           capabilities.dpis.push(object);
         }
@@ -427,7 +422,6 @@ export default class PrinterControl extends M.Control {
   printClick_(evt) {
     evt.preventDefault();
 
-    // this.getCapabilities().then((capabilities) => {
     this.getPrintData().then((printData) => {
       let printUrl = M.utils.concatUrlPaths([this.url_, `report.${printData.outputFormat}`]);
 
@@ -454,8 +448,10 @@ export default class PrinterControl extends M.Control {
           try {
             response = JSON.parse(response.text);
             // poner la url en una variable
-            // eslint-disable-next-line max-len
-            downloadUrl = M.utils.concatUrlPaths([this.params_.urlApplication, response.downloadURL]);
+            downloadUrl = M.utils.concatUrlPaths([
+              this.params_.urlApplication,
+              response.downloadURL,
+            ]);
           } catch (err) {
             M.exception(err);
           }
@@ -467,7 +463,6 @@ export default class PrinterControl extends M.Control {
         }
       });
     });
-    // });
   }
 
   /**
@@ -482,6 +477,7 @@ export default class PrinterControl extends M.Control {
   cancelClick_(evt) {
     evt.preventDefault();
     this.printing_ = false;
+    // TODO: Pendiente de hacer peticiones DELETE.
   }
 
   /**

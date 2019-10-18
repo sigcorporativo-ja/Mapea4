@@ -231,7 +231,16 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'URL': 'http://geoprint-sigc.juntadeandalucia.es/geoprint/pdf',
+    'URL': 'https://geoprint.desarrollo.guadaltel.es/print/SIGC',
+
+    /**
+     * Printer service URL
+     * @const
+     * @type {Array<string>}
+     * @public
+     * @api stable
+     */
+    'URL_APPLICATION': 'https://geoprint.desarrollo.guadaltel.es',
 
     /**
      * WMC predefined names
@@ -240,7 +249,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'DPI': 150,
+    'DPI': 120,
 
     /**
      * WMC context names
@@ -258,7 +267,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'TEMPLATE': 'A4 horizontal (Leyenda en una hoja)',
+    'TEMPLATE': 'A4 landscape (SIGC)',
 
     /**
      * WMC context names
