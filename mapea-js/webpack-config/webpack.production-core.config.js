@@ -88,10 +88,6 @@ module.exports = {
     }),
     new CopywebpackPlugin([{
       from: 'src/configuration.js',
-      to: 'filter/configuration.js',
-    }]),
-    new CopywebpackPlugin([{
-      from: 'src/configuration.js',
       to: `filter/configuration-${pjson.version}.js`,
     }]),
     new CopywebpackPlugin([{
