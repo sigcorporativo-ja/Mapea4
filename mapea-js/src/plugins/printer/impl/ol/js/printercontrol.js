@@ -167,6 +167,7 @@ export default class PrinterControl extends M.impl.Control {
           if (M.utils.isNullOrEmpty(imgSize)) {
             imgSize = [64, 64];
           }
+          // MapFish Print 3 solo acepta los tipos polygon, text, line y point
           let parseType;
           if (feature.getGeometry().getType().toLowerCase() === 'multipolygon') {
             parseType = 'polygon';
@@ -194,21 +195,19 @@ export default class PrinterControl extends M.impl.Control {
               fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getFill().getColor()) ?
                 `rgba(${text.getFill().getColor().toString()})` :
                 text.getFill().getColor()),
-              // text.getFont() -->"bold 13px Helvetica, sans-serif"
               fontSize: '11px',
               fontFamily: 'Helvetica, sans-serif',
               fontWeight: 'bold',
               conflictResolution: 'false',
-              //
               labelAlign: text.getTextAlign(),
               labelXOffset: text.getOffsetX(),
               labelYOffset: text.getOffsetY(),
-              // no pinta la línea
               labelOutlineColor: M.utils.isNullOrEmpty(text.getStroke()) ? '' : M.utils.rgbToHex(M.utils.isArray(text.getStroke().getColor()) ?
                 `rgba(${text.getStroke().getColor().toString()})` :
                 text.getStroke().getColor()),
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
             };
+            // Se deja la cifra hexadecimal en 6 dígitos para la integración con Mapea 4
             styleText.fontColor = styleText.fontColor.slice(0, 7);
             styleText.labelOutlineColor = styleText.labelOutlineColor.slice(0, 7);
           }
@@ -247,6 +246,7 @@ export default class PrinterControl extends M.impl.Control {
               if (styleNameText === undefined) {
                 styleNameText = 0;
               }
+              // Se añaden los estilos con el formato adecuado para MapFish Print 3
               filter = `"[_gx_style ='${styleName + styleNameText}']"`;
               if (!M.utils.isNullOrEmpty(symbolizers)) {
                 const a = ` ${filter}:{"symbolizers": [${symbolizers}]}`;
@@ -260,6 +260,7 @@ export default class PrinterControl extends M.impl.Control {
 
             const geoJSONFeature = geoJSONFormat.writeFeatureObject(feature);
             geoJSONFeature.properties = {
+              // gx_style es la propiedad que se usa para referenciar a la feature en los estilos
               _gx_style: styleName + styleNameText,
               name: nameFeature,
             };
@@ -327,7 +328,8 @@ export default class PrinterControl extends M.impl.Control {
     /** ***********************************
      MAPEA DE CAPAS TILEADA.
     ************************************ */
-    // eslint-disable-next-line no-underscore-dangle
+    // Se adapta el código para llamar al método noCache o noChache
+    // dependiendo si usamos Mapea 5 o 4
     // eslint-disable-next-line no-underscore-dangle
     if (layer._updateNoCache) {
       // eslint-disable-next-line no-underscore-dangle
@@ -433,7 +435,6 @@ export default class PrinterControl extends M.impl.Control {
         }
 
         if (!M.utils.isNullOrEmpty(featureStyle)) {
-          // console.log(featureStyle);
           const image = featureStyle.getImage();
           const imgSize = M.utils
             .isNullOrEmpty(image) ? [0, 0] : (image.getImageSize() || [24, 24]);
@@ -456,7 +457,6 @@ export default class PrinterControl extends M.impl.Control {
           const fill = M.utils.isNullOrEmpty(image) ?
             featureStyle.getFill() : (image.getFill && image.getFill());
 
-          // JGL20180118: fillOpacity=1 por defecto
           let styleText;
           const styleGeom = {
             type: parseType,
@@ -472,7 +472,6 @@ export default class PrinterControl extends M.impl.Control {
             graphicHeight: imgSize[0],
             graphicWidth: imgSize[1],
           };
-          // console.log(style);
           if (!M.utils.isNullOrEmpty(text)) {
             let tAlign = text.getTextAlign();
             let tBLine = text.getTextBaseline();
@@ -528,7 +527,7 @@ export default class PrinterControl extends M.impl.Control {
               labelXOffset: text.getOffsetX(),
               labelYOffset: text.getOffsetY(),
               fillColor: styleGeom.fillColor || '#FF0000',
-              fillOpacity: styleGeom.fillOpacity || 1, // JGL20180118: fillOpacity=1 por defecto
+              fillOpacity: styleGeom.fillOpacity || 1,
               labelOutlineColor: M.utils.isNullOrEmpty(text.getStroke()) ? '' : M.utils.rgbToHex(text.getStroke().getColor() || '#FF0000'),
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
               labelAlign: align,
@@ -636,7 +635,6 @@ export default class PrinterControl extends M.impl.Control {
    */
   encodeWMTS(layer) {
     const zoom = this.facadeMap_.getZoom();
-    // var units = this.facadeMap_.getProjection().units;
     const layerImpl = layer.getImpl();
     const olLayer = layerImpl.getOL3Layer();
     const layerSource = olLayer.getSource();
@@ -644,18 +642,14 @@ export default class PrinterControl extends M.impl.Control {
 
     const layerUrl = layer.url;
     const layerName = layer.name;
-    // var layerVersion = layer.version;
     const layerOpacity = olLayer.getOpacity();
     const layerReqEncoding = layerSource.getRequestEncoding();
     const tiled = layerImpl.tiled;
-    // var style = layerSource.getStyle();
     const layerExtent = olLayer.getExtent();
     const params = {};
     const matrixSet = layerSource.getMatrixSet();
-    // var tileOrigin = tileGrid.getOrigin(zoom);
     const tileSize = tileGrid.getTileSize(zoom);
     const resolutions = tileGrid.getResolutions();
-    // var matrixIds = tileGrid.getMatrixIds();
 
     /**
      * @see http: //www.mapfish.org/doc/print/protocol.html#layers-params
@@ -672,16 +666,12 @@ export default class PrinterControl extends M.impl.Control {
         layer: layerName,
         requestEncoding: layerReqEncoding,
         tileSize,
-        // 'style': style,
         style: 'default',
-        // 'tileOrigin': tileOrigin,
-        // 'zoomOffset': 0,
         rotation: 0,
         imageFormat: 'image/png',
         dimensionParams: {},
         dimensions: [],
         params,
-        // 'version': layerVersion,
         version: '1.0.0',
         maxExtent: layerExtent,
         matrixSet,
@@ -689,7 +679,6 @@ export default class PrinterControl extends M.impl.Control {
           return {
             identifier: tileMatrix.Identifier,
             matrixSize: [tileMatrix.MatrixHeight, tileMatrix.MatrixWidth],
-            // "resolution": resolutions[resolutions.length - (i + 1)],
             scaleDenominator: tileMatrix.ScaleDenominator,
             tileSize: [tileMatrix.TileWidth, tileMatrix.TileHeight],
             topLeftCorner: tileMatrix.TopLeftCorner,

@@ -54,6 +54,8 @@ export default class PrinterControl extends M.Control {
 
     /**
      * Facade of the map
+     * Este atributo se pone a true cuando se está realizando la impresión
+     * Se pone a false cuando le damos al botón de cancelar impresión
      * @private
      * @type {M.Map}
      */
@@ -151,6 +153,14 @@ export default class PrinterControl extends M.Control {
     }
   }
 
+  /**
+   * Este método sirve para comprobar el estado de la impresión del mapa.
+   * Se envía la petición cada 1 segundo.
+   * @param {*} url es la url que se le envía a la petición get para
+   * comprobar el estado de la impresión
+   * @param {*} callback quita el icono LOADING
+   * @param {*} callback2 quita el contenedor con la impresión del mapa
+   */
   getStatus(url, callback, callback2) {
     M.remote.get(url).then((response) => {
       const statusJson = JSON.parse(response.text);
@@ -216,6 +226,7 @@ export default class PrinterControl extends M.Control {
           capabilities.dpis.push(object);
         }
         // default outputFormat
+        // Ponemos solo estos 3 formatos disponibles
         capabilities.format = [{ name: 'pdf' }, { name: 'png' }, { name: 'jpg' }];
 
         // forceScale
@@ -429,7 +440,7 @@ export default class PrinterControl extends M.Control {
         let response = responseParam;
         const responseStatusURL = JSON.parse(response.text);
         this.ref_ = responseStatusURL.ref;
-        const statusURL = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es/print/status', `${this.ref_}.json`]);
+        const statusURL = M.utils.concatUrlPaths([this.params_.urlApplication, 'print/status', `${this.ref_}.json`]);
         // Borra el símbolo loading cuando ha terminado la impresión del mapa,
         // o borra el botón de la impresión si se ha cancelado
         this.printing_ = true;
@@ -441,10 +452,10 @@ export default class PrinterControl extends M.Control {
         if (response.error !== true) {
           let downloadUrl;
           try {
-            // const textParse = JSON.stringify(response.text);
             response = JSON.parse(response.text);
             // poner la url en una variable
-            downloadUrl = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es', response.downloadURL]);
+            // eslint-disable-next-line max-len
+            downloadUrl = M.utils.concatUrlPaths([this.params_.urlApplication, response.downloadURL]);
           } catch (err) {
             M.exception(err);
           }
@@ -459,12 +470,17 @@ export default class PrinterControl extends M.Control {
     // });
   }
 
+  /**
+   * Cancela la petición de impresión.
+   * De momento no se puede hacer una petición Delete con Mapea,
+   * simplemente se deja de preguntar por la impresión y se borra el contenedor de la misma.
+   * @public
+   * @function
+   * @param {M.Map} map to add the control
+   * @api stable
+   */
   cancelClick_(evt) {
     evt.preventDefault();
-    // if (!M.utils.isNullOrEmpty(this.ref_)) {
-    //   const url = M.utils.concatUrlPaths(['https://geoprint.desarrollo.guadaltel.es/print/cancel', `${this.ref_}`]);
-    //   this.delete_(url, true);
-    // }
     this.printing_ = false;
   }
 
@@ -508,11 +524,12 @@ export default class PrinterControl extends M.Control {
     let layout = this.layout_.name;
     const dpi = this.dpi_.value;
     const outputFormat = this.format_;
-    const scale = this.map_.getScale();
     const center = this.map_.getCenter();
     const parameters = this.params_.parameters;
     const legend = this.options_.legend;
 
+    // Al elegir el formato jpg, cambiamos la plantilla por su copia
+    // para poder imprimir en este formato
     if (outputFormat === 'jpg') {
       layout += ' jpg';
     }
@@ -524,8 +541,8 @@ export default class PrinterControl extends M.Control {
         title,
         description,
         epsg: projection,
-        escala: `1:${scale}`,
         map: {
+          useAdjustBounds: true,
           projection,
           dpi,
         },
@@ -535,6 +552,7 @@ export default class PrinterControl extends M.Control {
     return this.encodeLayers().then((encodedLayers) => {
       printData.attributes.map.layers = encodedLayers;
       printData.attributes = Object.assign(printData.attributes, parameters);
+      // Se añade la leyenda
       if (legend === 'true') {
         const legends = [];
         const leyenda = this.encodeLegends();
@@ -557,13 +575,7 @@ export default class PrinterControl extends M.Control {
       }
       if (this.forceScale_ === false) {
         const bbox = this.map_.getBbox();
-        if (layout === 'Imagen cuadrada') {
-          printData.attributes.map.bbox = [(bbox.x.min / 1.04), (bbox.y.min / 1.01),
-            (bbox.x.max * 1.38), (bbox.y.max * 1.015),
-          ];
-        } else {
-          printData.attributes.map.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
-        }
+        printData.attributes.map.bbox = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
         if (projection.code !== 'EPSG:3857' && this.map_.getLayers().some(layer => (layer.type === M.layer.type.OSM || layer.type === M.layer.type.Mapbox))) {
           printData.attributes.map.bbox = this.getImpl().transformExt(printData.attributes.map.bbox, projection.code, 'EPSG:3857');
         }
@@ -593,7 +605,7 @@ export default class PrinterControl extends M.Control {
       const encodedLayersVector = [];
       layers.forEach((layer) => {
         this.getImpl().encodeLayer(layer).then((encodedLayer) => {
-          // añado la capa y compruebo si es vector. Las capas que sean vector
+          // añade la capa y comprueba si es vector. Las capas que sean vector
           // tienen que quedar en último lugar para que no sean tapadas
           if (!M.utils.isNullOrEmpty(encodedLayer) && encodedLayer.type !== 'Vector') {
             encodedLayers.push(encodedLayer);
@@ -620,7 +632,6 @@ export default class PrinterControl extends M.Control {
    * @function
    */
   encodeLegends() {
-    // TODO
     const encodedLegends = [];
 
     const layers = this.map_.getLayers();

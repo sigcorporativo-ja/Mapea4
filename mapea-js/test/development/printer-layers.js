@@ -11,12 +11,13 @@ import Cluster from 'M/style/Cluster';
 const mapjs = M.map({
   container: 'map',
   controls: ['layerswitcher'],
-  wmcfile: ['callejero'],
 });
 
+// Se crea el plugin del printer
 const printer = new Printer({
   url: 'https://geoprint.desarrollo.guadaltel.es/print/SIGC',
   params: {
+    urlApplication: 'https://geoprint.desarrollo.guadaltel.es',
     layout: {
       outputFilename: 'mapea_${yyyy-MM-dd_hhmmss}',
     },
@@ -34,15 +35,14 @@ const printer = new Printer({
   },
 });
 
-const ayuntamientos = new M.layer.WFS({
+// Capa con los ríos de Andalucía
+const rios = new M.layer.WFS({
   url: 'http://herramienta-centralizada-sigc.desarrollo.guadaltel.es/geoserver/Guadaltel/wms?',
   namespace: 'Guadaltel',
   name: 'guadaltel_pablo_hidrografia_2019_10_14',
   geometry: 'POINT',
   extract: true,
 });
-
-// mapjs.addWFS(ayuntamientos);
 
 const rojop = new M.style.Line({
   stroke: {
@@ -76,6 +76,7 @@ const azulp = new M.style.Line({
   },
 });
 
+// Estilo para los ríos, categoría
 const styleHidro = new M.style.Category('cod_ent', {
   H1: rojop,
   H2: moradop,
@@ -84,205 +85,36 @@ const styleHidro = new M.style.Category('cod_ent', {
   H5: azulp,
 });
 
-ayuntamientos.setStyle(styleHidro);
+// Se añade el estilo a la capa
+rios.setStyle(styleHidro);
 
-// const optionsChartNoTexto = {
-//   type: 'pie',
-//   donutRatio: 0.5,
-//   radius: 25,
-//   offsetX: 0,
-//   offsetY: 0,
-//   stroke: {
-//     color: 'white',
-//     width: 1,
-//   },
-//   animation: true,
-//   scheme: M.style.chart.schemes.Custom,
-//   rotateWithView: true,
-//   fill3DColor: '#CC33DD',
-//   variables: [{
-//     attribute: 's0303',
-//     legend: 'Prestaciones PEAP',
-//     fill: 'cyan',
-//   }, {
-//     attribute: 's0304',
-//     legend: 'Prestaciones PECEF',
-//     fill: 'blue',
-//   }, {
-//     attribute: 's0305',
-//     legend: 'Prestaciones PEVS',
-//     fill: 'pink',
-//   }, {
-//     attribute: 's0306',
-//     legend: 'Prestaciones SAD',
-//     fill: 'red',
-//   }, {
-//     attribute: 's0307',
-//     legend: 'Prestaciones SAR',
+// Capa con campamentos de andalucía
+const campamentos = new M.layer.WFS({
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
+  name: 'campamentos',
+  legend: 'Campamentos',
+  geometry: 'MPOINT',
+});
 
-//     fill: 'yellow',
-//   }, {
-//     attribute: 's0308',
-//     legend: 'Prestaciones SAT',
-//     fill: 'orange',
-//   }, {
-//     attribute: 's0309',
-//     legend: 'Prestaciones UED',
-//     fill: 'brown',
-//   }],
-// };
+const estiloBase = new M.style.Point({
+  radius: 5,
+  fill: {
+    color: 'yellow',
+    opacity: 0.5,
+  },
+  stroke: {
+    color: '#FF0000',
+  },
+});
 
-// const optionsChart = {
-//   type: 'pie3D',
-//   donutRatio: 0.5,
-//   radius: 25,
-//   offsetX: 100,
-//   offsetY: 100,
-//   stroke: {
-//     color: 'white',
-//     width: 1,
-//   },
-//   animation: true,
-//   scheme: M.style.chart.schemes.Custom,
-//   rotateWithView: true,
-//   fill3DColor: '#CC33DD',
-//   variables: [{
-//     attribute: 's0303',
-//     legend: 'Prestaciones PEAP',
-//     fill: 'cyan',
-//     label: {
-//       text: '{{s0303}}',
-//       radiusIncrement: 10,
-//       stroke: {
-//         color: '#000',
-//         width: 2,
-//       },
-//       fill: 'cyan',
-//       font: 'Comic Sans MS',
-//       scale: 1.25,
-//     },
-//   }, {
-//     attribute: 's0304',
-//     legend: 'Prestaciones PECEF',
-//     fill: 'blue',
-//     label: {
-//       text: '{{s0304}}',
-//       radiusIncrement: 10,
-//       stroke: {
-//         color: '#000',
-//         width: 2,
-//       },
-//       fill: 'cyan',
-//       font: 'Comic Sans MS',
-//       scale: 1.25,
-//     },
-//   }, {
-//     attribute: 's0305',
-//     legend: 'Prestaciones PEVS',
-//     fill: 'pink',
-//     label: {
-//       text: '{{s0305}}',
-//       radiusIncrement: 10,
-//       stroke: {
-//         color: '#000',
-//         width: 2,
-//       },
-//       fill: 'cyan',
-//       font: 'Comic Sans MS',
-//       scale: 1.25,
-//     },
-//   }, {
-//     attribute: 's0306',
-//     legend: 'Prestaciones SAD',
-//     fill: 'red',
-//     label: {
-//       text: '{{s0306}}',
-//       radiusIncrement: 10,
-//       stroke: {
-//         color: '#000',
-//         width: 2,
-//       },
-//       fill: 'cyan',
-//       font: 'Comic Sans MS',
-//       scale: 1.25,
-//     },
-//   }, {
-//     attribute: 's0307',
-//     legend: 'Prestaciones SAR',
+// Se agrupan los campamentos en clusters
+const estiloCluster = new M.style.Cluster();
 
-//     fill: 'yellow',
-//     label: {
-//       text: '{{s0307}}',
-//       radiusIncrement: 10,
-//       stroke: {
-//         color: '#000',
-//         width: 2,
-//       },
-//       fill: 'cyan',
-//       font: 'Comic Sans MS',
-//       scale: 1.25,
-//     },
-//   }, {
-//     attribute: 's0308',
-//     legend: 'Prestaciones SAT',
-//     fill: 'orange',
-//     label: {
-//       text: '{{s0308}}',
-//       radiusIncrement: 10,
-//       stroke: {
-//         color: '#000',
-//         width: 2,
-//       },
-//       fill: 'cyan',
-//       font: 'Comic Sans MS',
-//       scale: 1.25,
-//     },
-//   }, {
-//     attribute: 's0309',
-//     legend: 'Prestaciones UED',
-//     fill: 'brown',
-//     label: {
-//       text: '{{s0309}}',
-//       radiusIncrement: 10,
-//       stroke: {
-//         color: '#000',
-//         width: 2,
-//       },
-//       fill: 'cyan',
-//       font: 'Comic Sans MS',
-//       scale: 1.25,
-//     },
-//   }],
-// };
+campamentos.setStyle(estiloBase);
+campamentos.setStyle(estiloCluster);
 
-// const estadisticasPrestaciones = new M.style.Chart(optionsChartNoTexto);
-// ayuntamientos.setStyle(estadisticasPrestaciones);
-// const campamentos = new M.layer.WFS({
-//   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
-//   name: 'campamentos',
-//   legend: 'Campamentos',
-//   geometry: 'MPOINT',
-// });
-
-// mapjs.addLayers(campamentos);
-
-// const estiloBase = new M.style.Point({
-//   radius: 5,
-//   fill: {
-//     color: 'yellow',
-//     opacity: 0.5,
-//   },
-//   stroke: {
-//     color: '#FF0000',
-//   },
-// });
-
-// const estiloCluster = new M.style.Cluster();
-
-// campamentos.setStyle(estiloBase);
-// campamentos.setStyle(estiloCluster);
-
-const layer2 = new WFS({
+// Capa con estilo para las provincias de Córdoba y Granada
+const provinciasCordobaGranada = new WFS({
   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
   namespace: 'tematicos',
   name: 'Provincias',
@@ -291,43 +123,23 @@ const layer2 = new WFS({
   ids: '3,4',
 });
 
+// Capa con árboles de Andalucía
 const arboleda = new KML({
   url: 'http://mapea4-sigc.juntadeandalucia.es/files/kml/arbda_sing_se.kml',
   name: 'Arboleda',
   extract: true,
 });
 
-// mapjs.addWFS(ayuntamientos);
-
-const layerWMTS = new WMTS({
+// Capa WMTS
+const toporaster = new WMTS({
   url: 'http://www.ideandalucia.es/geowebcache/service/wmts',
   name: 'toporaster',
   matrixSet: 'EPSG:25830',
   legend: 'Toporaster',
 });
 
-// const printer = new Printer({
-//   url: 'https://geoprint.desarrollo.guadaltel.es/print/CNIG',
-//   params: {
-//     layout: {
-//       outputFilename: 'mapea_${yyyy-MM-dd_hhmmss}',
-//     },
-//     pages: {
-//       clientLogo: 'http://www.juntadeandalucia.es/economiayhacienda/images/plantilla/logo_cabecera.gif',
-//       creditos: 'Impresión generada a través de Mapea',
-//     },
-//     parameters: {
-//       imageSpain: 'file://E01_logo_IGN_CNIG.png',
-//       imageCoordinates: 'file://E01_logo_IGN_CNIG.png',
-//     },
-//   },
-// }, {
-//   options: {
-//     legend: 'true',
-//   },
-// });
-
-const layer = new M.layer.WFS({
+// Capa con los menores de 15 años por provincia
+const estructuraJA = new M.layer.WFS({
   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
   namespace: 'sepim',
   name: 'EstructuraJA',
@@ -343,6 +155,7 @@ const provincias = new M.layer.WFS({
   geometry: 'MPOLYGON',
 });
 
+// Estilo para bordear las provincias de color rojo
 const estiloProvincias = new M.style.Polygon({
   stroke: {
     color: '#FF0000',
@@ -370,54 +183,15 @@ const styleProp = new M.style.Proportional('id', 5, 15, new M.style.Point({
     },
   },
 }));
-layer.setStyle(styleProp);
-mapjs.addLayers([layer, provincias]);
+estructuraJA.setStyle(styleProp);
 
-// const centros = new M.layer.WFS({
-//   url: 'https://clientes.guadaltel.es/desarrollo/geossigc/wfs?',
-//   namespace: 'mapea',
-//   name: 'assda_centros',
-//   legend: 'centrosassda',
-//   geometry: 'POINT',
-// });
-
-// mapjs.addLayers(centros);
-
-// centros.setStyle(new M.style.Cluster({
-//   ranges: [{
-//     min: 2,
-//     max: 2000,
-//     style: new M.style.Point({
-//       stroke: {
-//         color: 'black',
-//       },
-//       fill: {
-//         color: 'red',
-//       },
-//       radius: 20,
-//     }),
-//   }],
-//   label: {
-//     color: 'black',
-//   },
-// }));
-
-// Asignamos el estilo a la capa
-// layer.setStyle(categoryStylep);
-
-// mapjs.addWFS(campamentos);
-
-// Estilo cluster por defecto
-
-// Y asignamos a la capa la composicion creada
-// M.proxy(false); // desactivar proxy
-// campamentos.setStyle(estiloCluster);
-// mapjs.addLayerGroup(layerGroup1);
-// mapjs.addLayers(capaWMS);
-// mapjs.addLayers([arboleda, layer]);
+// mapjs.addLayers(campamentos);
+// mapjs.addWFS(rios);
 // mapjs.addKML(arboleda);
-// mapjs.addWMTS(layerWMTS);
-// mapjs.addWFS(layer2);
+// mapjs.addLayers([estructuraJA, provincias]);
+// mapjs.addWMTS(toporaster);
+// mapjs.addWFS(provinciasCordobaGranada);
+// mapjs.addWFS(provincias);
 mapjs.addPlugin(printer);
 
 window.mapjs = mapjs;
