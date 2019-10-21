@@ -244,7 +244,7 @@
      * @public
      * @api stable
      */
-    'DPI': $ { geoprint.dpi },
+    'DPI': ${geoprint.dpi},
 
     /**
      * WMC context names
@@ -271,7 +271,7 @@
      * @public
      * @api stable
      */
-    'FORCE_SCALE': $ { geoprint.force_scale },
+    'FORCE_SCALE': ${geoprint.force_scale},
 
     /**
      * TODO
@@ -280,7 +280,7 @@
      * @public
      * @api stable
      */
-    'LEGEND': $ { geoprint.legend }
+    'LEGEND': ${geoprint.legend}
   });
 
   /**
