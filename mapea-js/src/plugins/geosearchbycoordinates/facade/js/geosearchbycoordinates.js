@@ -1,11 +1,8 @@
-/**
- * @module M/plugin/GeosearchByCoordinates
- */
 import '../assets/css/geosearchbycoordinates';
 import GeosearchByCoordinatesControl from './geosearchbycoordinatescontrol';
 import api from '../../api';
 
-export default class Geosearchbylocation extends M.Plugin {
+export default class GeosearchByCoordinates extends M.Plugin {
   /**
    * @classdesc
    * Main facade plugin object. This class creates a Control
@@ -26,7 +23,7 @@ export default class Geosearchbylocation extends M.Plugin {
      * @type {string}
      * @api stable
      */
-    this.name = Geosearchbylocation.NAME;
+    this.name = GeosearchByCoordinates.NAME;
 
     /**
      * URL for the query
@@ -129,7 +126,7 @@ export default class Geosearchbylocation extends M.Plugin {
       this.spatialField_,
       this.rows_);
 
-    this.panel_ = new M.ui.Panel(Geosearchbylocation.NAME, {
+    this.panel_ = new M.ui.Panel(GeosearchByCoordinates.NAME, {
       collapsible: false,
       className: 'm-geosearchbylocation',
       position: M.ui.position.BR,
@@ -197,7 +194,7 @@ export default class Geosearchbylocation extends M.Plugin {
    * @api stable
    */
   equals(plugin) {
-    if (plugin instanceof Geosearchbylocation) {
+    if (plugin instanceof GeosearchByCoordinates) {
       return true;
     }
     return false;
@@ -223,5 +220,4 @@ export default class Geosearchbylocation extends M.Plugin {
  * @public
  * @api stable
  */
-
-Geosearchbylocation.NAME = 'geosearchbylocation';
+GeosearchByCoordinates.NAME = 'geosearchbylocation';
