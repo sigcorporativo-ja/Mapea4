@@ -19,8 +19,6 @@ const mapbox = new M.layer.Mapbox({
   legend: 'Calles',
 });
 
-mapjs.addLayers(mapbox);
-
 // Se crea el plugin del printer
 const printer = new Printer({
   url: 'https://geoprint.desarrollo.guadaltel.es/print/SIGC',
@@ -193,12 +191,13 @@ const styleProp = new M.style.Proportional('id', 5, 15, new M.style.Point({
 }));
 estructuraJA.setStyle(styleProp);
 
-// mapjs.addLayers(campamentos);
+// mapjs.addLayers(mapbox);
+mapjs.addLayers(campamentos);
 // mapjs.addWFS(rios);
-// mapjs.addKML(arboleda);
+mapjs.addKML(arboleda);
 // mapjs.addLayers([estructuraJA, provincias]);
 // mapjs.addWMTS(toporaster);
-// mapjs.addWFS(provinciasCordobaGranada);
+mapjs.addWFS(provinciasCordobaGranada);
 // mapjs.addWFS(provinciasCordobaGranada);
 mapjs.addPlugin(printer);
 
