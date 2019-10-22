@@ -13,8 +13,35 @@ const mapjs = M.map({
   controls: ['layerswitcher'],
 });
 
+const mapbox = new M.layer.Mapbox({
+  url: 'https://api.mapbox.com',
+  name: 'mapbox.emerald',
+  legend: 'Calles',
+});
+
+mapjs.addLayers(mapbox);
+
 // Se crea el plugin del printer
-const printer = new Printer();
+const printer = new Printer({
+  url: 'https://geoprint.desarrollo.guadaltel.es/print/SIGC',
+  params: {
+    urlApplication: 'https://geoprint.desarrollo.guadaltel.es',
+    layout: {
+      outputFilename: 'mapea_${yyyy-MM-dd_hhmmss}',
+    },
+    pages: {
+      clientLogo: 'http://www.juntadeandalucia.es/economiayhacienda/images/plantilla/logo_cabecera.gif',
+      creditos: 'Impresión generada a través de Mapea',
+    },
+    parameters: {
+      imagenCoordenadas: 'file://windrose.png',
+      imagenAndalucia: 'file://logo_JA.png',
+    },
+  },
+  options: {
+    legend: 'true',
+  },
+});
 
 // Capa con los ríos de Andalucía
 const rios = new M.layer.WFS({
@@ -172,7 +199,7 @@ estructuraJA.setStyle(styleProp);
 // mapjs.addLayers([estructuraJA, provincias]);
 // mapjs.addWMTS(toporaster);
 // mapjs.addWFS(provinciasCordobaGranada);
-// mapjs.addWFS(provincias);
+// mapjs.addWFS(provinciasCordobaGranada);
 mapjs.addPlugin(printer);
 
 window.mapjs = mapjs;
