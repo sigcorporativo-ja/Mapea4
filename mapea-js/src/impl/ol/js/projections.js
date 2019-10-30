@@ -121,7 +121,6 @@ const proj3857 = {
   ],
   units: 'm',
   metersPerUnit: 1,
-  axisOrientation: 'neu',
   global: true,
 };
 
