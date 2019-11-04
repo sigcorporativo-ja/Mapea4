@@ -144,7 +144,7 @@ class LayerGroup extends MObject {
     layersOfLayerGroup.forEach((varLayer) => {
       const layer = varLayer;
       layer.setZIndex(countZindex);
-      countZindex -= 1;
+      countZindex += 1;
     });
   }
 
@@ -168,7 +168,7 @@ class LayerGroup extends MObject {
     let zIndex = this.getZIndex() + this.children_.length;
     const child = childParam;
     if (isNullOrEmpty(index)) {
-      this.children_.unshift(child);
+      this.children_.push(child);
     } else {
       this.children_.splice(index, 0, child);
       zIndex = this.getZIndex() + index;
