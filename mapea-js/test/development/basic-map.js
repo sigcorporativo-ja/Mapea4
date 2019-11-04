@@ -3,11 +3,13 @@ import WFS from 'M/layer/WFS';
 import GeoJSON from 'M/layer/GeoJSON';
 import LayerGroup from 'M/layer/LayerGroup';
 
-
 const mapjs = Mmap({
   container: 'map',
   controls: ['layerswitcher'],
 });
+
+window.map = mapjs;
+
 
 const provincias = new WFS({
   url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
@@ -28,20 +30,23 @@ const distritosSanitarios = new GeoJSON({
   name: 'Distritos Sanitarios',
 });
 
+mapjs.addLayers([municipios, distritosSanitarios, provincias]);
+
 const layerGroup = new LayerGroup({
   title: 'Grupo1',
   collapsed: false,
-  order: 4, // dentro del grupo de capas
-  children: [provincias, municipios],
-  zIndex: 100,
-});
-const layerGroup2 = new LayerGroup({
-  title: 'Grupo2',
-  collapsed: true,
-  order: 4,
-  children: [distritosSanitarios],
-  zIndex: 3,
 });
 
-layerGroup.addChild(layerGroup2);
-mapjs.addLayerGroup(layerGroup);
+document.getElementById('btn1').addEventListener('click', () => {
+  mapjs.addLayerGroup(layerGroup);
+  layerGroup.addChild(municipios);
+});
+document.getElementById('btn2').addEventListener('click', () => {
+  layerGroup.addChild(distritosSanitarios);
+});
+document.getElementById('btn3').addEventListener('click', () => {
+  layerGroup.addChild(provincias);
+});
+document.getElementById('btn4').addEventListener('click', () => {
+  mapjs.removeLayerGroup(layerGroup);
+});

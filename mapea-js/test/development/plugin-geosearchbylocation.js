@@ -2,6 +2,7 @@ import GeosearchByLocation from 'plugins/geosearchbylocation/facade/js/geosearch
 
 const mapjs = M.map({
   container: 'map',
+  layers: ['OSM'],
 });
 
 const plugin = new GeosearchByLocation({});

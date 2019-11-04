@@ -144,7 +144,7 @@ class LayerGroup extends MObject {
     layersOfLayerGroup.forEach((varLayer) => {
       const layer = varLayer;
       layer.setZIndex(countZindex);
-      countZindex += 1;
+      countZindex -= 1;
     });
   }
 
