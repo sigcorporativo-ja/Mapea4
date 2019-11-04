@@ -168,7 +168,7 @@ class LayerGroup extends MObject {
     let zIndex = this.getZIndex() + this.children_.length;
     const child = childParam;
     if (isNullOrEmpty(index)) {
-      this.children_.push(child);
+      this.children_.unshift(child);
     } else {
       this.children_.splice(index, 0, child);
       zIndex = this.getZIndex() + index;

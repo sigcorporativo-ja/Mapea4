@@ -343,9 +343,11 @@ class Map extends MObject {
    * @api stable
    */
   removeLayerGroups(groups) {
-    let groupsI = [...groups];
-    if (!Array.isArray(groupsI)) {
-      groupsI = [groupsI];
+    let groupsI = [];
+    if (!Array.isArray(groups)) {
+      groupsI = [groups];
+    } else {
+      groupsI = [...groups];
     }
     groupsI.forEach((group) => {
       this.layerGroups_.remove(group);
