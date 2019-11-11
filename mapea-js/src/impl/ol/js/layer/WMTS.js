@@ -147,9 +147,8 @@ class WMTS extends LayerBase {
 
       // updates resolutions and keep the bbox
       const oldBbox = this.map.getBbox();
-      this.map.getImpl().updateResolutionsFromBaseLayer();
       if (!isNullOrEmpty(oldBbox)) {
-        this.map.setBbox(oldBbox);
+        this.map.setBbox(oldBbox, { nearest: true });
       }
     } else if (!isNullOrEmpty(this.ol3Layer)) {
       this.ol3Layer.setVisible(visibility);
