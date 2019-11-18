@@ -16,13 +16,25 @@ import * as EventType from '../event/eventtype';
  */
 const rotateListener = (e, html, map) => {
   const htmlVar = html;
-  const { layerX, layerY } = e;
+  let sliderContainer = e.target.parentElement.parentElement;
+  let x = 0;
+  let y = 0;
+
+  while (sliderContainer && !Number.isNaN(sliderContainer.offsetLeft) &&
+    !Number.isNaN(sliderContainer.offsetTop)) {
+    x += sliderContainer.offsetLeft - sliderContainer.scrollLeft;
+    y += sliderContainer.offsetTop - sliderContainer.scrollTop;
+    sliderContainer = sliderContainer.offsetParent;
+  }
+  x = e.clientX - x;
+  y = e.clientY - y;
+
   const { clientWidth, clientHeight } = e.currentTarget;
   const perpendicularLine = [0, -clientHeight];
   // It needs this const to centre the button on mouse
   const angleToCenter = 45;
 
-  const coords = [layerX - (clientWidth / 2), layerY - (clientHeight / 2)];
+  const coords = [x - (clientWidth / 2), y - (clientHeight / 2)];
   const escalarProd = (perpendicularLine[0] * coords[0]) + (perpendicularLine[1] * coords[1]);
   const perpendicularMod = Math.sqrt((perpendicularLine[0] ** 2) + (perpendicularLine[1] ** 2));
   const pointerMod = Math.sqrt((coords[0] ** 2) + (coords[1] ** 2));
@@ -33,7 +45,10 @@ const rotateListener = (e, html, map) => {
     alfa = 360 - alfa;
   }
   map.setRotation(alfa);
-  htmlVar.querySelector('#m-rotate-marker').style.transform = `rotate(${alfa + angleToCenter}deg)`;
+  const transform = 'transform';
+  htmlVar.querySelector('#m-rotate-marker').style.WebkitTransform = `rotate(${alfa + angleToCenter}deg)`;
+  htmlVar.querySelector('#m-rotate-marker').style.MozTransform = `rotate(${alfa + angleToCenter}deg)`;
+  htmlVar.querySelector('#m-rotate-marker').style[transform] = `rotate(${alfa + angleToCenter}deg)`;
 };
 
 /**
@@ -70,10 +85,13 @@ export const onMouseUp = (instance, html) => {
 export const onClick = (instance, html, map) => {
   const htmlVar = html;
   const sliderContainer = html.querySelector('#m-rotate-slider-container');
+  const transform = 'transform';
   sliderContainer.addEventListener('click', (e) => {
     if (e.target.id === 'm-rotate-button' && !instance.getMouseDown()) {
       instance.getImpl().resetRotation();
-      htmlVar.querySelector('#m-rotate-marker').style.transform = 'rotate(40deg)';
+      htmlVar.querySelector('#m-rotate-marker').style.WebkitTransform = 'rotate(40deg)';
+      htmlVar.querySelector('#m-rotate-marker').style.MozTransform = 'rotate(40deg)';
+      htmlVar.querySelector('#m-rotate-marker').style[transform] = 'rotate(40deg)';
     } else {
       rotateListener(e, html, map);
     }
@@ -138,7 +156,10 @@ class Rotate extends ControlBase {
    */
   createView(map) {
     const html = compileTemplate(template);
-    html.querySelector('#m-rotate-marker').style.transform = 'rotate(40deg)';
+    const transform = 'transform';
+    html.querySelector('#m-rotate-marker').style.WebkitTransform = 'rotate(40deg)';
+    html.querySelector('#m-rotate-marker').style.MozTransform = 'rotate(40deg)';
+    html.querySelector('#m-rotate-marker').style[transform] = 'rotate(40deg)';
     onMouseDown(this, html);
     onMouseMove(this, html, map);
     onMouseUp(this, html);
