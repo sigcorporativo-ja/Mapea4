@@ -1,6 +1,6 @@
 import GeosearchControlImpl from './geosearch/geosearchcontrol';
 
-export default class GeosearchbylocationControl extends GeosearchControlImpl {
+export default class GeosearchByCoordinatesControl extends GeosearchControlImpl {
   /**
    * @classdesc
    * Main constructor of the Geosearchbylocation control.
@@ -14,7 +14,7 @@ export default class GeosearchbylocationControl extends GeosearchControlImpl {
   constructor(searchUrl_) {
     // calls super
     super({
-      layerName: GeosearchbylocationControl.NAME,
+      layerName: GeosearchByCoordinatesControl.NAME,
     });
 
 
@@ -145,5 +145,3 @@ export default class GeosearchbylocationControl extends GeosearchControlImpl {
    * @api stable
    */
 }
-
-GeosearchbylocationControl.POPUP_LOCATION = 'geosearchbylocationfeaturepopup.html';

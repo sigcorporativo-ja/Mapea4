@@ -89,7 +89,7 @@ export default class GeosearchByCoordinates extends M.Plugin {
     /**
      * Implementation of this object
      * @public
-     * @type {M.control.Geosearchbylocation}
+     * @type {M.control.GeosearchByCoordinates}
      * @api stable
      */
     this.controlGeo_ = null;
