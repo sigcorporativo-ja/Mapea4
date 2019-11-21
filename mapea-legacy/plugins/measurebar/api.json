@@ -1,0 +1,27 @@
+{
+  "url": {
+    "name": "measurebar"
+  },
+  "constructor": "M.plugin.Measurebar",
+  "files": {
+    "ol": {
+      "scripts": [
+        "measurebar-2.0.0.ol.min.js"
+      ],
+      "styles": [
+        "measurebar-2.0.0.min.css"
+      ]
+    }
+  },
+  "metadata": {
+    "name": "Measurebar",
+    "description": "Tool to measure distances and areas.",
+    "text": "",
+    "version": "2.0.0",
+    "date": "11/10/2019",
+    "author": "Junta de Andalucía",
+    "org": "Junta de Andalucía",
+    "tags": "mapea,plugin",
+    "icon": "./facade/assets/icons/icons.svg"
+  }
+}

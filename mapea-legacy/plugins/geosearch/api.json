@@ -1,0 +1,44 @@
+{
+  "url": {
+    "name": "geosearch",
+    "separator": "*"
+  },
+  "constructor": "M.plugin.Geosearch",
+  "parameters": [{
+    "type": "object",
+    "properties": [{
+      "type": "simple",
+      "name": "url",
+      "position": 0
+    }, {
+      "type": "simple",
+      "name": "core",
+      "position": 1
+    }, {
+      "type": "simple",
+      "name": "handler",
+      "position": 2
+    }]
+  }],
+  "files": {
+    "ol": {
+      "scripts": [
+        "geosearch-2.0.0.ol.min.js"
+      ],
+      "styles": [
+        "geosearch-2.0.0.min.css"
+      ]
+    }
+  },
+  "metadata": {
+    "name": "Geosearch",
+    "description": "",
+    "text": "",
+    "version": "2.0.0",
+    "date": "11/10/2019",
+    "author": "Junta de Andalucía",
+    "org": "Junta de Andalucía",
+    "tags": "mapea,plugin",
+    "icon": "./facade/assets/icons/icons.svg"
+  }
+}

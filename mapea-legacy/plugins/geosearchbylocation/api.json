@@ -1,0 +1,48 @@
+{
+  "url": {
+    "name": "geosearchbylocation",
+    "separator": "*"
+  },
+  "constructor": "M.plugin.Geosearchbylocation",
+  "parameters": [{
+    "type": "object",
+    "properties": [{
+      "type": "simple",
+      "name": "distance",
+      "position": 0
+    }, {
+      "type": "simple",
+      "name": "url",
+      "position": 1
+    }, {
+      "type": "simple",
+      "name": "core",
+      "position": 2
+    }, {
+      "type": "simple",
+      "name": "handler",
+      "position": 3
+    }]
+  }],
+  "files": {
+    "ol": {
+      "scripts": [
+        "geosearchbylocation-2.0.0.ol.min.js"
+      ],
+      "styles": [
+        "geosearchbylocation-2.0.0.min.css"
+      ]
+    }
+  },
+  "metadata": {
+    "name": "GeosearchByLocation",
+    "description": "Search for locations within a given radius from a location user.",
+    "text": "",
+    "version": "2.0.0",
+    "date": "11/10/2019",
+    "author": "Junta de Andalucía",
+    "org": "Junta de Andalucía",
+    "tags": "mapea,plugin",
+    "icon": "./facade/assets/icons/icons.svg"
+  }
+}
