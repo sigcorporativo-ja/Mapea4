@@ -11,7 +11,7 @@ import { isNullOrEmpty } from './util/Utils';
 import Exception from './exception/exception';
 import './util/Window';
 import './util/polyfills';
-
+import { getValue } from './i18n/language';
 
 /**
  * This function sets the configuration variables
@@ -38,7 +38,7 @@ export const config = (configKey, configValue) => {
 export const map = (parameters, options) => {
   // checks if the user specified an implementation
   if (isNullOrEmpty(MapImpl)) {
-    Exception('No se ha especificado ninguna implementación');
+    Exception(getValue('exception').no_impl);
   }
   return new Map(parameters, options);
 };
@@ -62,4 +62,35 @@ export const proxy = (enable) => {
   if (typeof enable === 'boolean') {
     useproxy = enable;
   }
+};
+
+/**
+ * Lists of hosts that will not pass through proxy
+ * @type {Array}
+ */
+export const proxyExceptions = [];
+
+/**
+ * Add an url to the list of hosts that will not pass through proxy
+ * @public
+ * @function
+ * @param {String} url
+ * @api
+ */
+export const addProxyException = (url) => {
+  const urlOrigin = new URL(url).origin;
+  if (proxyExceptions.indexOf(urlOrigin) === -1) proxyExceptions.push(urlOrigin);
+};
+
+/**
+ * Remove an url from the list of hosts that will not pass through proxy
+ * @public
+ * @function
+ * @param {String} url
+ * @api
+ */
+export const removeProxyException = (url) => {
+  const urlOrigin = new URL(url).origin;
+  const loc = proxyExceptions.indexOf(urlOrigin);
+  if (loc !== -1) proxyExceptions.splice(loc, 1);
 };

@@ -61,6 +61,12 @@ class KML extends Vector {
      * @type {HTMLElement}
      */
     this.screenOverlayImg_ = null;
+
+    /**
+     * @private
+     * @type {bool}
+     */
+    this.label_ = options.label;
   }
 
   /**
@@ -99,7 +105,9 @@ class KML extends Vector {
     this.map = map;
     this.fire(EventType.ADDED_TO_MAP);
     map.on(EventType.CHANGE_PROJ, this.setProjection_.bind(this), this);
-    this.formater_ = new FormatKML();
+    this.formater_ = new FormatKML({
+      label: this.label_,
+    });
     this.loader_ = new LoaderKML(this.map, this.url, this.formater_);
     this.ol3Layer = new OLLayerVector(extend({}, this.vendorOptions_, true));
     this.updateSource_();
@@ -245,22 +253,6 @@ class KML extends Vector {
         this.map.removePopup();
       }
     }
-  }
-
-  /**
-   * This function return extent of all features or discriminating by the filter
-   *
-   * @function
-   * @param {boolean} skipFilter - Indicates whether skip filter
-   * @param {M.Filter} filter - Filter to execute
-   * @return {Array<number>} Extent of features
-   * @api stable
-   */
-  getFeaturesExtent(skipFilter, filter) {
-    const codeProj = this.map.getProjection().code;
-    const features = this.getFeatures(skipFilter, filter);
-    const extent = ImplUtils.getFeaturesExtent(features, codeProj);
-    return extent;
   }
 
   /**

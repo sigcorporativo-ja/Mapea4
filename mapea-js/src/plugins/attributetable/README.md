@@ -5,8 +5,10 @@ puede desacoplarse del lateral.
 
 ## Recursos y uso
 
-- js: [https://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.ol.min.js](https://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.ol.min.js)
-- css: [https://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.min.css](https://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable.min.css)
+- js: https://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable-x.y.z.ol.min.js
+- css: https://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable-x.y.z.min.css
+
+Donde x.y.z representan la versión del plugin a usar según la versión de Mapea, atendiendo a la tabla de compatibilidad de versiones que se muestra más adelante.
 
 Configuración por defecto:
 ```javascript

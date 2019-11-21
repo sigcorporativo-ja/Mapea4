@@ -1,36 +1,47 @@
 {
-   "url": {
-      "name": "wfstcontrols",
-      "separator": ","
-   },
-   "constructor": "M.plugin.WFSTControls",
-   "parameters": [{
-      "type": "array",
-      "properties": [{
-         "type": "simple",
-         "position": 0
-      }, {
-         "type": "simple",
-         "position": 1
-      }, {
-         "type": "simple",
-         "position": 2
-      }, {
-         "type": "simple",
-         "position": 3
-      }, {
-         "type": "simple",
-         "position": 4
-      }]
-   }],
-   "files": {
-      "ol": {
-         "scripts": [
-            "wfstcontrols-2.0.0.ol.min.js"
-         ],
-         "styles": [
-            "wfstcontrols-2.0.0.min.css"
-         ]
-      }
-   }
+  "url": {
+    "name": "wfstcontrols",
+    "separator": ","
+  },
+  "constructor": "M.plugin.WFSTControls",
+  "parameters": [{
+    "type": "array",
+    "properties": [{
+      "type": "simple",
+      "position": 0
+    }, {
+      "type": "simple",
+      "position": 1
+    }, {
+      "type": "simple",
+      "position": 2
+    }, {
+      "type": "simple",
+      "position": 3
+    }, {
+      "type": "simple",
+      "position": 4
+    }]
+  }],
+  "files": {
+    "ol": {
+      "scripts": [
+        "wfstcontrols-2.0.0.ol.min.js"
+      ],
+      "styles": [
+        "wfstcontrols-2.0.0.min.css"
+      ]
+    }
+  },
+  "metadata": {
+    "name": "WFSTControls",
+    "description": "Tool for editing WFST layers.",
+    "text": "",
+    "version": "2.0.0",
+    "date": "11/10/2019",
+    "author": "Junta de Andalucía",
+    "org": "Junta de Andalucía",
+    "tags": "mapea,plugin",
+    "icon": "./facade/assets/icons/icons.svg"
+  }
 }

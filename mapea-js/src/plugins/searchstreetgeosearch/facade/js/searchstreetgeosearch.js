@@ -1,6 +1,7 @@
 import 'plugins/searchstreetgeosearch/facade/assets/css/searchstreetgeosearch';
 import Autocomplete from './autocomplete';
 import SearchstreetGeosearchControl from './searchstreetgeosearchcontrol';
+import api from '../../api';
 
 export default class SearchstreetGeosearch extends M.Plugin {
   /**
@@ -54,6 +55,13 @@ export default class SearchstreetGeosearch extends M.Plugin {
      * @type {number}
      */
     this.locality_ = parameters.locality;
+
+    /**
+     * Metadata from api.json
+     * @private
+     * @type {Object}
+     */
+    this.metadata_ = api.metadata;
   }
 
   /**
@@ -152,5 +160,27 @@ export default class SearchstreetGeosearch extends M.Plugin {
       return true;
     }
     return false;
+  }
+
+  /**
+   * Gets the parameter api rest of the plugin
+   *
+   * @public
+   * @function
+   * @api
+   */
+  getAPIRest() {
+    return 'searchstreetgeosearch';
+  }
+
+  /**
+   * This function gets metadata plugin
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getMetadata() {
+    return this.metadata_;
   }
 }

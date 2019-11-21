@@ -7,6 +7,7 @@ import {
   getResolutionFromScale,
   getWMTSGetCapabilitiesUrl,
   extend,
+  addParameters,
 } from 'M/util/Utils';
 import { default as OLSourceWMTS } from 'ol/source/WMTS';
 import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
@@ -132,28 +133,25 @@ class WMTS extends LayerBase {
    */
   setVisible(visibility) {
     this.visibility = visibility;
-    if (this.inRange() === true) {
-      // if this layer is base then it hides all base layers
-      if ((visibility === true) && (this.transparent !== true)) {
-        // hides all base layers
-        this.map.getBaseLayers()
-          .filter(layer => !layer.equals(this) && layer.isVisible())
-          .forEach(layer => layer.setVisible(false));
+    // if this layer is base then it hides all base layers
+    if ((visibility === true) && (this.transparent !== true)) {
+      // hides all base layers
+      this.map.getBaseLayers()
+        .filter(layer => !layer.equals(this) && layer.isVisible())
+        .forEach(layer => layer.setVisible(false));
 
-        // set this layer visible
-        if (!isNullOrEmpty(this.ol3Layer)) {
-          this.ol3Layer.setVisible(visibility);
-        }
-
-        // updates resolutions and keep the bbox
-        const oldBbox = this.map.getBbox();
-        this.map.getImpl().updateResolutionsFromBaseLayer();
-        if (!isNullOrEmpty(oldBbox)) {
-          this.map.setBbox(oldBbox);
-        }
-      } else if (!isNullOrEmpty(this.ol3Layer)) {
+      // set this layer visible
+      if (!isNullOrEmpty(this.ol3Layer)) {
         this.ol3Layer.setVisible(visibility);
       }
+
+      // updates resolutions and keep the bbox
+      const oldBbox = this.map.getBbox();
+      if (!isNullOrEmpty(oldBbox)) {
+        this.map.setBbox(oldBbox, { nearest: true });
+      }
+    } else if (!isNullOrEmpty(this.ol3Layer)) {
+      this.ol3Layer.setVisible(visibility);
     }
   }
 
@@ -195,6 +193,9 @@ class WMTS extends LayerBase {
     if (zIndex !== null) {
       this.setZIndex(zIndex);
     }
+
+    this.setVisible(this.visibility);
+
 
     // activates animation always for WMTS layers
     this.ol3Layer.set('animated', true);
@@ -333,6 +334,84 @@ class WMTS extends LayerBase {
     }
 
     return equals;
+  }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  getGetFeatureInfoUrl(coordinate, zoom, formatInfo) {
+    const tcr = this.getTileColTileRow(coordinate, zoom);
+    const coordPxl = this.getRelativeTileCoordInPixel_(coordinate, zoom);
+    const service = 'WMTS';
+    const request = 'GetFeatureInfo';
+    const version = '1.0.0';
+    const layer = this.name;
+    const style = 'default';
+    const format = 'image/jpeg';
+    const tilematrixset = this.matrixSet;
+    const tilematrix = zoom;
+    const infoFormat = formatInfo;
+    const tilecol = tcr[0];
+    const tilerow = tcr[1];
+    const I = coordPxl[0];
+    const J = coordPxl[1];
+    const url = addParameters(this.url, {
+      service,
+      request,
+      version,
+      layer,
+      style,
+      format,
+      tilematrixset,
+      tilematrix,
+      tilerow,
+      tilecol,
+      J,
+      I,
+      infoFormat,
+    });
+    return url;
+  }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  getTileColTileRow(coordinate, zoom) {
+    let tcr = null;
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      const source = this.ol3Layer.getSource();
+      if (!isNullOrEmpty(source)) {
+        const { tileGrid } = source;
+        tcr = tileGrid.getTileCoordForCoordAndZ(coordinate, zoom);
+        tcr[2] = -tcr[2] - 1;
+      }
+    }
+    return tcr.slice(1);
+  }
+
+  /**
+   * @function
+   * @private
+   */
+  getRelativeTileCoordInPixel_(coordinate, zoom) {
+    let coordPixel;
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      const source = this.ol3Layer.getSource();
+      if (!isNullOrEmpty(source)) {
+        const { tileGrid } = source;
+        const tileCoord = tileGrid.getTileCoordForCoordAndZ(coordinate, zoom);
+        const tileExtent = tileGrid.getTileCoordExtent(tileCoord, []);
+        const tileResolution = tileGrid.getResolution(tileCoord[0]);
+        const x = Math.floor((coordinate[0] - tileExtent[0]) / tileResolution);
+        const y = Math.floor((tileExtent[3] - coordinate[1]) / tileResolution);
+        coordPixel = [x, y];
+      }
+    }
+    return coordPixel;
   }
 }
 

@@ -1,24 +1,35 @@
 {
-   "url": {
-      "name": "searchstreet"
-   },
-   "constructor": "M.plugin.Searchstreet",
-   "parameters": [{
-      "type": "object",
-      "properties": [{
-         "type": "simple",
-         "name": "locality",
-         "position": 0
-      }]
-   }],
-   "files": {
-      "ol": {
-         "scripts": [
-            "searchstreet-2.0.0.ol.min.js"
-         ],
-         "styles": [
-            "searchstreet-2.0.0.min.css"
-         ]
-      }
-   }
+  "url": {
+    "name": "searchstreet"
+  },
+  "constructor": "M.plugin.Searchstreet",
+  "parameters": [{
+    "type": "object",
+    "properties": [{
+      "type": "simple",
+      "name": "locality",
+      "position": 0
+    }]
+  }],
+  "files": {
+    "ol": {
+      "scripts": [
+        "searchstreet-2.0.0.ol.min.js"
+      ],
+      "styles": [
+        "searchstreet-2.0.0.min.css"
+      ]
+    }
+  },
+  "metadata": {
+    "name": "Searchstreet",
+    "description": "",
+    "text": "",
+    "version": "2.0.0",
+    "date": "11/10/2019",
+    "author": "Junta de Andalucía",
+    "org": "Junta de Andalucía",
+    "tags": "mapea,plugin",
+    "icon": "./facade/assets/icons/icons.svg"
+  }
 }

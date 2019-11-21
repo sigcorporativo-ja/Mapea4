@@ -1,17 +1,22 @@
 /**
  * @module M/impl/layer/Vector
  */
+import ClusteredFeature from 'M/feature/Clustered';
 import StyleCluster from 'M/style/Cluster';
-import { isNullOrEmpty, isFunction } from 'M/util/Utils';
+import { isNullOrEmpty, isFunction, beautifyAttributeName, includes } from 'M/util/Utils';
 import * as EventType from 'M/event/eventtype';
 import Style from 'M/style/Style';
+import { compileSync as compileTemplate } from 'M/util/Template';
+import Popup from 'M/Popup';
 import { get as getProj } from 'ol/proj';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
+import PopupTemplate from 'templates/geojson_popup';
 import Layer from './Layer';
 import ImplUtils from '../util/Utils';
 import Feature from '../feature/Feature';
+
 /**
  * @classdesc
  * @api
@@ -88,6 +93,9 @@ class Vector extends Layer {
     this.ol3Layer = new OLLayerVector(this.vendorOptions_);
     this.updateSource_();
 
+    if (this.opacity_) {
+      this.setOpacity(this.opacity_);
+    }
     this.setVisible(this.visibility);
     const olMap = this.map.getMapImpl();
     olMap.addLayer(this.ol3Layer);
@@ -274,7 +282,8 @@ class Vector extends Layer {
   }
 
   /**
-   * TODO
+   * This function checks if an object is equals
+   * to this layer
    * @public
    * @function
    * @param {ol.Feature} feature
@@ -282,10 +291,33 @@ class Vector extends Layer {
    */
   selectFeatures(features, coord, evt) {
     const feature = features[0];
-    if (!isNullOrEmpty(feature)) {
-      const clickFn = feature.getAttribute('vendor.mapea.click');
-      if (isFunction(clickFn)) {
-        clickFn(evt, feature);
+    if (!(feature instanceof ClusteredFeature) && (this.extract === true)) {
+      // unselects previous features
+      this.unselectFeatures();
+
+      if (!isNullOrEmpty(feature)) {
+        const clickFn = feature.getAttribute('vendor.mapea.click');
+        if (isFunction(clickFn)) {
+          clickFn(evt, feature);
+        } else {
+          const htmlAsText = compileTemplate(PopupTemplate, {
+            vars: this.parseFeaturesForTemplate_(features),
+            parseToHtml: false,
+          });
+          const featureTabOpts = {
+            icon: 'g-cartografia-pin',
+            title: this.name,
+            content: htmlAsText,
+          };
+          let popup = this.map.getPopup();
+          if (isNullOrEmpty(popup)) {
+            popup = new Popup();
+            popup.addTab(featureTabOpts);
+            this.map.addPopup(popup, coord);
+          } else {
+            popup.addTab(featureTabOpts);
+          }
+        }
       }
     }
   }
@@ -334,6 +366,49 @@ class Vector extends Layer {
         style.getImpl().activateChangeEvent();
       }
     }
+  }
+
+  /**
+   * This function checks if an object is equals
+   * to this control
+   *
+   * @private
+   * @function
+   */
+  parseFeaturesForTemplate_(features) {
+    const featuresTemplate = {
+      features: [],
+    };
+
+    features.forEach((feature) => {
+      if (!(feature instanceof ClusteredFeature)) {
+        const properties = feature.getAttributes();
+        const propertyKeys = Object.keys(properties);
+        const attributes = [];
+        propertyKeys.forEach((key) => {
+          let addAttribute = true;
+          // adds the attribute just if it is not in
+          // hiddenAttributes_ or it is in showAttributes_
+          if (!isNullOrEmpty(this.showAttributes_)) {
+            addAttribute = includes(this.showAttributes_, key);
+          } else if (!isNullOrEmpty(this.hiddenAttributes_)) {
+            addAttribute = !includes(this.hiddenAttributes_, key);
+          }
+          if (addAttribute) {
+            attributes.push({
+              key: beautifyAttributeName(key),
+              value: properties[key],
+            });
+          }
+        });
+        const featureTemplate = {
+          id: feature.getId(),
+          attributes,
+        };
+        featuresTemplate.features.push(featureTemplate);
+      }
+    });
+    return featuresTemplate;
   }
 
   /**

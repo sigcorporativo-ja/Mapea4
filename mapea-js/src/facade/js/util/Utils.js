@@ -3,6 +3,7 @@
  */
 
 import chroma from 'chroma-js';
+import reproj from 'impl/util/reprojection';
 import * as dynamicImage from 'assets/img/dynamic_legend';
 import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units';
 import * as WKT from '../geom/WKT';
@@ -675,21 +676,16 @@ export const escapeJSCode = (jsCode) => {
  * @api
  */
 export const enableTouchScroll = (elem) => {
+  const elemParam = elem;
   if ('ontouchstart' in document) {
     let scrollStartPos = 0;
 
-    elem.addEventListener('touchstart', (evt) => {
-      scrollStartPos = this.scrollTop + evt
-        .getBrowserEvent()
-        .touches[0]
-        .pageY;
+    elemParam.addEventListener('touchstart', (evt) => {
+      scrollStartPos = elemParam.scrollTop + evt.touches[0].pageY;
     });
 
-    elem.addEventListener('touchmove', (evt) => {
-      this.scrollTop = scrollStartPos - evt
-        .getBrowserEvent()
-        .touches[0]
-        .pageY;
+    elemParam.addEventListener('touchmove', (evt) => {
+      elemParam.scrollTop = scrollStartPos - evt.touches[0].pageY;
     });
   }
 };
@@ -1146,4 +1142,41 @@ export const getEnvolvedExtent = (extents) => {
   }
 
   return envolvedExtent;
+};
+
+
+/**
+ * Determine the mobile operating system.
+ * This function returns one of 'iOS', 'Android', 'Windows Phone', or 'unknown'.
+ *
+ * @function
+ * @public
+ * @returns {String}
+ * @api
+ */
+export const getSystem = () => {
+  const userAgent = window.navigator.userAgent || window.navigator.vendor || window.opera;
+  let env = 'unknown';
+  if (/android/i.test(userAgent)) {
+    env = 'android';
+  }
+
+  if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+    env = 'ios';
+  }
+
+  return env;
+};
+
+
+/**
+ * @private
+ * @function
+ * @param {ProjectionLike} sourceProj
+ * @param {ProjectionLike} destProj
+ * @param {coordinates} coordinates - 1-dimensional array of two coordinates
+ *
+ */
+export const reproject = (coordinates, sourceProj, destProj) => {
+  return reproj(coordinates, sourceProj, destProj);
 };

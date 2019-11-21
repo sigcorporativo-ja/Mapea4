@@ -8,6 +8,7 @@ import ControlBase from './Control';
 import { isUndefined } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -28,7 +29,7 @@ class WMCSelector extends ControlBase {
 
     // checks if the implementation can create WMC layers
     if (isUndefined(WMCSelectorImpl)) {
-      Exception('La implementación usada no puede crear controles WMCSelector');
+      Exception(getValue('exception').wmcselector_method);
     }
   }
 
@@ -45,6 +46,7 @@ class WMCSelector extends ControlBase {
     return compileTemplate(wmcselectorTemplate, {
       vars: {
         layers: map.getWMC(),
+        title: getValue('wmcselector').title,
       },
     });
   }

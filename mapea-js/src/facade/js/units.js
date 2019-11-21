@@ -10,6 +10,7 @@ const METERS_PER_INCH = 0.02540005080010160020;
 /**
  * 72 (A sensible default)
  * @const {Number}
+ * @public
  * @api
  */
 export const DOTS_PER_INCH = 72;

@@ -1,0 +1,90 @@
+#!/usr/bin/env node
+
+/**
+ * @org Guadaltel SA
+ * @author Emilio Martinez Rivero
+ * @email (emiliomartinez@guadaltel.es)
+ */
+const { spawn } = require('child_process');
+const { argv } = require('process');
+
+const processArgs = (args) => {
+  const options = args.slice(2).reduce((accum, arg) => {
+    const regex = /(\-){2}([a-zA-Z]+)=([a-zA-Z]+)/;
+    if (regex.test(arg)) {
+      const key = arg.match(regex)[2];
+      const value = arg.match(regex)[3];
+      accum[key] = value;
+    }
+    return accum;
+  }, {});
+
+  args.slice(2).forEach((arg, index, arr) => {
+    const regex = /(\-){1}([a-zA-Z]+)/;
+    if (regex.test(arg) && !regex.test(arr[index + 1])) {
+      const key = arg.match(regex)[2];
+      options[key] = arr[index + 1];
+    }
+  });
+
+  return options;
+};
+
+const executeCommand = async (command, args, options) => {
+  return new Promise((resolve) => {
+
+    const exec = spawn(command, args, {
+      ...options,
+      stdio: 'inherit',
+    });
+
+    exec.on('close', (code) => {
+      resolve(code);
+    });
+  });
+};
+
+const ARGS_INPUT = processArgs(argv);
+const main = async () => {
+  const code = await executeCommand('mvn', ['clean', 'package', '-P', ARGS_INPUT['profile']], { cwd: './mapea-parent' });
+
+  if (!code) {
+    try {
+      const code2 = await executeCommand('mvn', [
+        'docker:build',
+        `-DdockerImageName=docker.guadaltel.es/sigc/mapea-chap${ARGS_INPUT['tag']}`,
+        '-DdockerHost=http://docker.guadaltel.es:2375/'
+      ], { cwd: './mapea-rest' });
+      const code3 = await executeCommand('mvn', [
+        'docker:build',
+        `-DdockerImageName=docker.guadaltel.es/sigc/mapea-chap${ARGS_INPUT['tag']}`,
+        '-DdockerHost=http://docker.guadaltel.es:2375/'
+      ], { cwd: './mapea-rest' });
+
+      const code4 = await executeCommand('sudo', [
+        'docker',
+        'build',
+        `-t`,
+        `docker.guadaltel.es/sigc/mapea-chap:${ARGS_INPUT['tag']}`,
+        'target/docker'
+      ], { cwd: './mapea-rest' });
+
+      const code5 = await executeCommand('sudo', [
+        'docker',
+        'push',
+        `docker.guadaltel.es/sigc/mapea-chap:${ARGS_INPUT['tag']}`,
+      ], { cwd: './mapea-rest' });
+
+      console.info('[SUCCESS] Everything is ok!');
+    } catch (e) {
+      console.error('[ERROR] ' + code);
+    }
+  } else {
+    console.error('[ERROR] ' + code);
+  }
+}
+console.log(ARGS_INPUT)
+ARGS_INPUT.profile = 'mapea-desarrollo';
+if (ARGS_INPUT.tag && ARGS_INPUT.profile) {
+  main();
+}

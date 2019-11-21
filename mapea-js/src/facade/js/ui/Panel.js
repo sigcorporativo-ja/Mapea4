@@ -208,9 +208,9 @@ class Panel extends MObject {
     }
 
     if (this._collapsed === true) {
-      this._collapse(html, this._buttonPanel);
+      this.collapse();
     } else {
-      this._open(html, this._buttonPanel);
+      this.open();
     }
 
     if (this._collapsible !== true) {
@@ -223,9 +223,9 @@ class Panel extends MObject {
     this._buttonPanel.addEventListener('click', (evt) => {
       evt.preventDefault();
       if (this._collapsed === false) {
-        this._collapse(html, this._buttonPanel);
+        this.collapse();
       } else {
-        this._open(html, this._buttonPanel);
+        this.open();
       }
     });
 

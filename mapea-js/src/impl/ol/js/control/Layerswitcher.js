@@ -7,6 +7,7 @@ import { isNullOrEmpty, concatUrlPaths } from 'M/util/Utils';
 import { compileSync as compileTemplate } from 'M/util/Template';
 import LayerSwitcherFacade from 'M/control/Layerswitcher';
 import Layer from 'M/layer/Layer';
+import LayerGroup from 'M/layer/LayerGroup';
 import Control from './Control';
 
 /**
@@ -60,11 +61,17 @@ class LayerSwitcher extends Control {
    */
   inputLayer(evtParameter) {
     const evt = (evtParameter || window.event);
+    const groupId = evt.target.getAttribute('data-group-id');
+    let group = null;
     if (!isNullOrEmpty(evt.target)) {
       const layerName = evt.target.getAttribute('data-layer-name');
       if (!isNullOrEmpty(layerName)) {
         evt.stopPropagation();
-        const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        let layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        if (isNullOrEmpty(layer) && !isNullOrEmpty(groupId)) {
+          group = LayerGroup.findGroupById(groupId, this.facadeMap_.getLayerGroup());
+          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.name === layerName)));
+        }
         // checkbox
         if (evt.target.classList.contains('m-check')) {
           /* sets the layer visibility only if
@@ -89,18 +96,24 @@ class LayerSwitcher extends Control {
 
   /**
    * Sets the visibility of the clicked layer
-   *
+   *const groupId = evt.target.getAttribute('data-group-id');
    * @public
    * @function
    * @api stable
    */
   clickLayer(evtParameter) {
     const evt = (evtParameter || window.event);
+    const groupId = evt.target.getAttribute('data-group-id');
+    let group = null;
     if (!isNullOrEmpty(evt.target)) {
       const layerName = evt.target.getAttribute('data-layer-name');
       if (!isNullOrEmpty(layerName)) {
         evt.stopPropagation();
-        const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        let layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        if (isNullOrEmpty(layer) && !isNullOrEmpty(groupId)) {
+          group = LayerGroup.findGroupById(groupId, this.facadeMap_.getLayerGroup());
+          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.name === layerName)));
+        }
         // checkbox
         if (evt.target.classList.contains('m-check')) {
           /* sets the layer visibility only if
@@ -112,12 +125,32 @@ class LayerSwitcher extends Control {
             }
             layer.setVisible(!layer.isVisible());
           }
-        } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
           // range
+        } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
           layer.setOpacity(evt.target.value);
           // remove span
         } else if (evt.target.classList.contains('m-layerswitcher-remove')) {
-          this.facadeMap_.removeLayers(layer);
+          if (!isNullOrEmpty(group)) {
+            layer.getImpl().destroy();
+            group.removeChild(layer);
+          } else {
+            this.facadeMap_.removeLayers(layer);
+          }
+        }
+      } else if (!isNullOrEmpty(groupId)) {
+        const idGroup = evt.target.getAttribute('data-group-id');
+        group = LayerGroup.findGroupById(idGroup, this.facadeMap_.getLayerGroup());
+        // checkbox
+        if (evt.target.classList.contains('m-check')) {
+          if (evt.target.classList.contains('g-cartografia-check3')) {
+            group.setVisible(false);
+          } else {
+            group.setVisible(true);
+          }
+          // collapse
+        } else {
+          group.collapsed = !group.collapsed;
+          this.renderPanel();
         }
       }
     }

@@ -6,10 +6,12 @@ import { unByKey } from 'ol/Observable';
 import OLControl from 'ol/control/Control';
 import * as dialog from 'M/dialog';
 import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup';
+import getfeatureinfoLayers from 'templates/getfeatureinfo_layers';
 import Popup from 'M/Popup';
 import { get as getRemote } from 'M/util/Remote';
 import { compileSync as compileTemplate } from 'M/util/Template';
 import { isNullOrEmpty, normalize, beautifyAttribute } from 'M/util/Utils';
+import { getValue } from 'M/i18n/language';
 import Control from './Control';
 
 /**
@@ -111,7 +113,7 @@ class GetFeatureInfo extends Control {
     } else {
       this.userFormat = 'text/html';
     }
-    this.clickEventKey_ = olMap.on('singleclick', this.buildUrl_(dialog).bind(this));
+    this.clickEventKey_ = olMap.on('singleclick', e => this.buildUrl_(dialog, e));
   }
 
   /**
@@ -121,39 +123,68 @@ class GetFeatureInfo extends Control {
    * @function
    * @param {ol.MapBrowserPointerEvent} evt - Browser point event
    */
-  buildUrl_(dialogParam) {
-    return (evt) => {
-      const olMap = this.facadeMap_.getMapImpl();
-      const viewResolution = olMap.getView().getResolution();
-      const srs = this.facadeMap_.getProjection().code;
-      const layerNamesUrls = [];
-      this.facadeMap_.getWMS().forEach((layer) => {
-        const olLayer = layer.getImpl().getOL3Layer();
-        if (layer.isVisible() && layer.isQueryable() && !isNullOrEmpty(olLayer)) {
-          const getFeatureInfoParams = {
-            INFO_FORMAT: this.userFormat,
-            FEATURE_COUNT: this.featureCount,
-          };
-          if (!/buffer/i.test(layer.url)) {
-            getFeatureInfoParams.Buffer = this.buffer;
-          }
-          const source = olLayer.getSource();
-          const coord = evt.coordinate;
-          const url = source.getGetFeatureInfoUrl(coord, viewResolution, srs, getFeatureInfoParams);
-          layerNamesUrls.push({
-            /** @type {String} */
-            layer: layer.name,
-            /** @type {String} */
-            url,
-          });
+  buildUrl_(dialogParam, evt) {
+    this.evt = evt;
+    const olMap = this.facadeMap_.getMapImpl();
+    const wmsInfoURLS = this.buildWMSInfoURL(this.facadeMap_.getWMS());
+    const wmtsInfoURLS = this.buildWMTSInfoURL(this.facadeMap_.getWMTS());
+    const layerNamesUrls = [...wmtsInfoURLS, ...wmsInfoURLS]
+      .filter(layer => !isNullOrEmpty(layer));
+    if (layerNamesUrls.length > 0) {
+      this.showInfoFromURL_(layerNamesUrls, evt.coordinate, olMap);
+    } else {
+      dialogParam.info('No existen capas consultables');
+    }
+  }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  buildWMSInfoURL(wmsLayers) {
+    const olMap = this.facadeMap_.getMapImpl();
+    const viewResolution = olMap.getView().getResolution();
+    const srs = this.facadeMap_.getProjection().code;
+    return wmsLayers.map((layer) => {
+      const olLayer = layer.getImpl().getOL3Layer();
+      let param;
+      if (layer.isVisible() && layer.isQueryable() && !isNullOrEmpty(olLayer)) {
+        param = {};
+        const getFeatureInfoParams = {
+          INFO_FORMAT: this.userFormat,
+          FEATURE_COUNT: this.featureCount,
+        };
+        const regexBuffer = /buffer/i;
+        const source = olLayer.getSource();
+        const coord = this.evt.coordinate;
+        const url = source.getGetFeatureInfoUrl(coord, viewResolution, srs, getFeatureInfoParams);
+        if (!regexBuffer.test(layer.url)) {
+          getFeatureInfoParams.Buffer = this.buffer;
         }
-      });
-      if (layerNamesUrls.length > 0) {
-        this.showInfoFromURL_(layerNamesUrls, evt.coordinate, olMap);
-      } else {
-        dialogParam.info('No existen capas consultables');
+        param = { layer: layer.legend || layer.name, url };
       }
-    };
+      return param;
+    });
+  }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  buildWMTSInfoURL(wmtsLayers) {
+    return wmtsLayers.map((layer) => {
+      let param;
+      if (layer.isVisible()) {
+        param = {};
+        const infoFormat = this.userFormat;
+        const coord = this.evt.coordinate;
+        const url = layer.getGetFeatureInfoUrl(coord, this.facadeMap_.getZoom(), infoFormat);
+        param = { layer: layer.legend || layer.name, url };
+      }
+      return param;
+    });
   }
 
   /**
@@ -490,30 +521,65 @@ class GetFeatureInfo extends Control {
           const info = response.text;
           if (GetFeatureInfo.insert(info, formato) === true) {
             const formatedInfo = this.formatInfo(info, formato, layerName);
-            infos.push(formatedInfo);
+            infos.push({ formatedInfo, layerName });
           } else if (GetFeatureInfo.unsupportedFormat(info, formato)) {
-            infos.push(`La capa <b>' ${layerName}'</b> no soporta el formato <i>'  ${formato}  '</i>`);
+            infos.push({
+              formatedInfo: getValue('getfeatureinfo').unsupported_format,
+              layerName,
+            });
           }
         }
         contFull += 1;
         if (layerNamesUrls.length === contFull && !isNullOrEmpty(popup)) {
           popup.removeTab(loadingInfoTab);
-          if (infos.join('') === '') {
+          if (infos.length === 0) {
             popup.addTab({
               icon: 'g-cartografia-info',
               title: GetFeatureInfo.POPUP_TITLE,
-              content: 'No hay información asociada.',
+              content: getValue('getfeatureinfo').no_info,
             });
           } else {
+            const popupContent = compileTemplate(getfeatureinfoLayers, {
+              vars: {
+                layers: infos,
+                info_of: getValue('getfeatureinfo').info_of,
+              },
+              parseToHtml: false,
+            });
             popup.addTab({
               icon: 'g-cartografia-info',
               title: GetFeatureInfo.POPUP_TITLE,
-              content: infos.join(''),
+              content: popupContent,
+              listeners: [{
+                selector: '.m-getfeatureinfo-content-info div.m-arrow-right',
+                all: true,
+                type: 'click',
+                callback: e => this.toogleSection(e),
+              }],
             });
           }
         }
       });
     });
+  }
+
+  /**
+   * This functions handle the close/open beahaviour of the sections feature info
+   * @function
+   */
+  toogleSection(e) {
+    const { target } = e;
+    const { parentElement } = target.parentElement;
+    const content = parentElement.querySelector('.m-getfeatureinfo-content-info-body');
+    if (content.classList.contains('m-content-collapsed')) {
+      content.classList.remove('m-content-collapsed');
+      target.classList.remove('m-arrow-right');
+      target.classList.add('m-arrow-down');
+    } else {
+      content.classList.add('m-content-collapsed');
+      target.classList.add('m-arrow-right');
+      target.classList.remove('m-arrow-down');
+    }
   }
 }
 

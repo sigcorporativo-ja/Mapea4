@@ -8,6 +8,7 @@ import Vector from './Vector';
 import * as LayerType from './Type';
 import * as parameter from '../parameter/parameter';
 import { parse } from '../geom/Geom';
+import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
@@ -19,27 +20,26 @@ class WFS extends Vector {
   /**
    * @constructor
    * @extends {M.layer.Vector}
-   * @param {string|Mx.parameters.WFS} userParameters parameters
+   * @param {string|Mx.parameters.WFS} userParams parameters
    * @param {Mx.parameters.LayerOptions} options provided by the user
-   * @param {Object} vendorOptions vendor options for the base library
+   * @param {Object} vendorOpts vendor options for the base library
    * @api
    */
-  constructor(userParameters, options = {}, vendorOptions = {}, impl =
-  new WFSImpl(options, vendorOptions)) {
+  constructor(userParams, options = {}, vendorOpts = {}, impl = new WFSImpl(options, vendorOpts)) {
     // This layer is of parameters.
-    const parameters = parameter.layer(userParameters, LayerType.WFS);
+    const parameters = parameter.layer(userParams, LayerType.WFS);
 
     // calls the super constructor
     super(parameters, options, undefined, impl);
 
     // checks if the implementation can create WFS layers
     if (isUndefined(WFSImpl)) {
-      Exception('La implementación usada no puede crear capas WFS');
+      Exception(getValue('exception').wfslayer_method);
     }
 
     // checks if the param is null or empty
-    if (isNullOrEmpty(userParameters)) {
-      Exception('No ha especificado ningún parámetro');
+    if (isNullOrEmpty(userParams)) {
+      Exception(getValue('exception').no_param);
     }
 
     // namespace

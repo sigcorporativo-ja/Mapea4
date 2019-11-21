@@ -147,7 +147,7 @@ class Popup extends OLOverlay {
       this.isAnimating_ = true;
       if (FacadeWindow.WIDTH > 768) {
         const tabHeight = 30; // 30px for tabs
-        const popupElement = this.element;
+        const popupElement = this.element.querySelector('.m-popup');
         const popupWidth = popupElement.clientWidth + 20;
         const popupHeight = popupElement.clientHeight + 20 + tabHeight;
         const mapSize = this.getMap().getSize();
@@ -182,7 +182,7 @@ class Popup extends OLOverlay {
           }
 
           // if (this.ani && this.ani_opts) {
-          if (!isNullOrEmpty(this.ani_opts) && !isNullOrEmpty(this.ani_opts.source)) {
+          if (!isNullOrEmpty(this.ani_opts) && isNullOrEmpty(this.ani_opts.source)) {
             this.ani_opts.source = center;
             this.getMap().getView().animate(this.ani_opts);
           }
@@ -242,17 +242,6 @@ class Popup extends OLOverlay {
     this.setElement(html);
     this.content = this.getContentFromContainer(html);
     enableTouchScroll(this.content);
-  }
-
-  /**
-   * change text popup
-   * @public
-   * @function
-   * @param {text} new text.
-   * @api stable
-   */
-  setContent(content) {
-    this.content.innerHTML = content;
   }
 
   /**

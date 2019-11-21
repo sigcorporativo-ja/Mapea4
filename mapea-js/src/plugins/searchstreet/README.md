@@ -5,8 +5,10 @@ Posibilidad de limitar el ámbito de búsqueda estableciendo el parámetro 'loca
 
 ## Recursos y uso
 
-- js: [https://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/searchstreet.ol.min.js](https://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/searchstreet.ol.min.js)
-- css: [https://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/searchstreet.min.css](https://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/searchstreet.min.css)
+- js: https://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/searchstreet-x.y.z.ol.min.js
+- css: https://mapea4-sigc.juntadeandalucia.es/plugins/searchstreet/searchstreet-x.y.z.min.css  
+
+Donde x.y.z representan la versión del plugin a usar según la versión de Mapea, atendiendo a la tabla de compatibilidad de versiones que se muestra más adelante.  
 
 Configuración por defecto:
 ```
@@ -25,8 +27,6 @@ mapajs.addPlugin(new M.plugin.Searchstreet({
 [JSFiddle](http://jsfiddle.net/sigcJunta/3xyz2jjq/)  
 
 ## Tabla de compatibilidad de versiones   
-En caso de utilizar un core de Mapea con número de versión explícito, debe cumplirse la siguiente relación:  
-
 versión plugin | versión Mapea |
 --- | --- |
 1.0.0 | <= 4.0.0
