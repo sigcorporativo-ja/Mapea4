@@ -1,7 +1,7 @@
 /**
  * @module M/impl/Layer
  */
-import { isNullOrEmpty, concatUrlPaths } from 'M/util/Utils';
+import { isNullOrEmpty, concatUrlPaths, getResolutionFromScale, getScaleFromResolution } from 'M/util/Utils';
 import MObject from 'M/Object';
 import FacadeLayer from 'M/layer/Layer';
 /**
@@ -79,6 +79,22 @@ class LayerBase extends MObject {
      * @expose
      */
     this.zIndex_ = null;
+
+    /**
+     * Layer min-scale
+     * @private
+     * @type {number}
+     * @expose
+     */
+    this.minScale_ = null;
+
+    /**
+     * Layer max-scale
+     * @private
+     * @type {number}
+     * @expose
+     */
+    this.maxScale_ = null;
 
     /**
      * Layer opacity
@@ -185,6 +201,65 @@ class LayerBase extends MObject {
     this.zIndex_ = zIndex;
     if (!isNullOrEmpty(this.getOL3Layer())) {
       this.getOL3Layer().setZIndex(zIndex);
+    }
+  }
+
+  /**
+   * This function gets the min-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  getMinScale() {
+    const units = this.map.getProjection().units;
+    if (!isNullOrEmpty(this.getOL3Layer()) && !isNullOrEmpty(units)) {
+      this.minScale_ = getScaleFromResolution(this.getOL3Layer().getMinResolution(), units);
+    }
+    return this.minScale_;
+  }
+
+  /**
+   * This function sets the min-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  setMinScale(minScale) {
+    this.minScale_ = minScale;
+    const units = this.map.getProjection().units;
+    const minResolution = getResolutionFromScale(minScale, units);
+    if (!isNullOrEmpty(this.getOL3Layer()) && !isNullOrEmpty(minResolution) &&
+      !isNullOrEmpty(units)) {
+      this.getOL3Layer().setMinResolution(minResolution);
+    }
+  }
+  /**
+   * This function gets the max-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  getMaxScale() {
+    const units = this.map.getProjection().units;
+    if (!isNullOrEmpty(this.getOL3Layer()) && !isNullOrEmpty(units)) {
+      this.maxScale_ = getScaleFromResolution(this.getOL3Layer().getMaxResolution(), units);
+    }
+    return this.maxScale_;
+  }
+
+  /**
+   * This function sets the max-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  setMaxScale(maxScale) {
+    this.maxScale_ = maxScale;
+    const units = this.map.getProjection().units;
+    const maxResolution = getResolutionFromScale(maxScale, units);
+    if (!isNullOrEmpty(this.getOL3Layer()) && !isNullOrEmpty(maxResolution) &&
+      !isNullOrEmpty(units)) {
+      this.getOL3Layer().setMaxResolution(maxResolution);
     }
   }
 
