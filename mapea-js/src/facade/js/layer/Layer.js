@@ -71,6 +71,22 @@ class LayerBase extends Base {
     this.zindex_ = null;
 
     /**
+     * MaxScale provided by the user
+     * @private
+     * @type {number}
+     * @expose
+     */
+    this.minScale_ = userParameters.minScale;
+
+    /**
+     * MaxScale provided by the user
+     * @private
+     * @type {number}
+     * @expose
+     */
+    this.maxScale_ = userParameters.maxScale;
+
+    /**
      * @private
      * @type {M.Map}
      * @expose
@@ -406,6 +422,47 @@ class LayerBase extends Base {
   setZIndex(zIndex) {
     this.zindex_ = zIndex;
     this.getImpl().setZIndex(zIndex);
+  }
+
+  /**
+   * This function gets the min-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  getMinScale() {
+    return this.minScale_;
+  }
+
+  /**
+   * This function sets the min-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  setMinScale(minScale) {
+    this.minScale_ = minScale;
+    this.getImpl().setMinScale(minScale);
+  }
+  /**
+   * This function gets the max-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  getMaxScale() {
+    return this.maxScale_;
+  }
+
+  /**
+   * This function sets the max-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  setMaxScale(maxScale) {
+    this.maxScale_ = maxScale;
+    this.getImpl().setMaxScale(maxScale);
   }
 
   /**

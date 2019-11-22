@@ -298,6 +298,8 @@ class WMS extends LayerBase {
         }, this.vendorOptions_, true));
       }
       this.map.getMapImpl().addLayer(this.ol3Layer);
+      // Fire the Event LOAD.
+      this.facadeLayer_.fire(EventType.LOAD);
       // sets its visibility if it is in range
       if (this.isVisible() && !this.inRange()) {
         this.setVisible(false);
