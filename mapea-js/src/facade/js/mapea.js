@@ -94,3 +94,11 @@ export const removeProxyException = (url) => {
   const loc = proxyExceptions.indexOf(urlOrigin);
   if (loc !== -1) proxyExceptions.splice(loc, 1);
 };
+
+/**
+ * Indicate the version of Mapea
+ * @public
+ * @const {String}
+ * @api
+ */
+export const version = '5.1.0';
