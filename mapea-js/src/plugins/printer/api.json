@@ -50,10 +50,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "printer-2.0.0.ol.min.js"
+        "printer-3.0.0.ol.min.js"
       ],
       "styles": [
-        "printer-2.0.0.min.css"
+        "printer-3.0.0.min.css"
       ]
     }
   },
