@@ -12,6 +12,7 @@ import Exception from './exception/exception';
 import './util/Window';
 import './util/polyfills';
 import { getValue } from './i18n/language';
+import pkg from '../../../package';
 
 /**
  * This function sets the configuration variables
@@ -101,4 +102,4 @@ export const removeProxyException = (url) => {
  * @const {String}
  * @api
  */
-export const version = '5.1.0';
+export const version = pkg.version;
