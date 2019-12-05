@@ -2,11 +2,14 @@ import PrinterControlImpl from '../../impl/ol/js/printercontrol';
 import printerHTML from '../../templates/printer';
 
 /**
- * Esta función determina cuándo ha terminado la impresión del mapa
- * Se hace la comprobación cada 1 segundo con la petición get
- * @param {*} url
- * @param {*} callback
+ * Time in secods
+ * @const
  */
+const DEFAULT_CONNECTION_TIMEOUT = 15;
+const NO_LOAD_TITLE = 'Error de conexión';
+const NO_LOAD_MSG = 'No se ha podido conectar con el servicio de impresión';
+const LOADING_TITLE = 'Servicio cargando';
+const LOADING_MSG = 'El servicio aún no ha cargado';
 
 export default class PrinterControl extends M.Control {
   /**
@@ -125,6 +128,37 @@ export default class PrinterControl extends M.Control {
     this.capabilitiesPromise_ = null;
 
     /**
+     * Connection timeout in seconds
+     * @private
+     * @type {number}
+     */
+    this.connectionTimeout_ = options.connectionTimeout || DEFAULT_CONNECTION_TIMEOUT;
+
+
+    /**
+     * Flag loading service
+     * @private
+     * @type {bool}
+     */
+    this.loadingService = true;
+
+    /**
+     * Flag error service
+     * @private
+     * @type {bool}
+     */
+    this.errorService = false;
+
+    /**
+     * Output formats
+     * @private
+     * @type {array<string>}
+     */
+    this.outputFormats_ = Array.isArray(options.outputFormats) ?
+      options.outputFormats : ['pdf', 'png', 'jpg'];
+
+
+    /**
      * Facade of the map
      * @private
      * @type {M.Map}
@@ -179,6 +213,23 @@ export default class PrinterControl extends M.Control {
     });
   }
 
+  open() {
+    if (this.loadingService) {
+      M.dialog.error(LOADING_MSG, LOADING_TITLE);
+    } else if (this.errorService) {
+      M.dialog.error(NO_LOAD_MSG, NO_LOAD_TITLE);
+    } else {
+      const html = this.getPanel().getTemplatePanel();
+      const buttonPanel = this.getPanel().getButtonPanel();
+      html.classList.remove('collapsed');
+      buttonPanel.classList.remove(this._collapsedButtonClass);
+      html.classList.add('opened');
+      buttonPanel.classList.add(this._openedButtonClass);
+      this.getPanel().setCollapsed(false);
+      this.getPanel().fire(M.evt.SHOW);
+    }
+  }
+
   /**
    * This function creates the view to the specified map.
    *
@@ -187,8 +238,8 @@ export default class PrinterControl extends M.Control {
    * @param {M.Map} map to add the control
    * @api stabletrue
    */
-
   createView(map) {
+    this.getPanel().open = this.open.bind(this);
     const promise = new Promise((success, fail) => {
       this.getCapabilities().then((capabilitiesParam) => {
         const capabilities = capabilitiesParam;
@@ -220,11 +271,13 @@ export default class PrinterControl extends M.Control {
           const object = { value: dpi };
           capabilities.dpis.push(object);
         }
-        // default outputFormat
-        // Ponemos solo estos 3 formatos disponibles
-        capabilities.format = [{ name: 'pdf' }, { name: 'png' }, { name: 'jpg' }];
 
-        // forceScale
+        // default outputFormat
+        capabilities.format = this.outputFormats_.map((format) => {
+          return {
+            name: format,
+          };
+        });
 
         if (!M.template.compileSync) { // JGL: retrocompatibilidad Mapea4
           M.template.compileSync = (string, options) => {
@@ -246,10 +299,16 @@ export default class PrinterControl extends M.Control {
           };
         }
 
+        // forceScale
         capabilities.forceScale = this.options_.forceScale;
         const html = M.template.compileSync(printerHTML, { jsonp: true, vars: capabilities });
         this.addEvents(html);
+        this.loadingService = false;
         success(html);
+      }).catch((e) => {
+        this.loadingService = false;
+        this.errorService = true;
+        M.dialog.error(NO_LOAD_MSG, NO_LOAD_TITLE);
       });
     });
     return promise;
@@ -491,6 +550,10 @@ export default class PrinterControl extends M.Control {
   getCapabilities() {
     if (M.utils.isNullOrEmpty(this.capabilitiesPromise_)) {
       this.capabilitiesPromise_ = new Promise((success, fail) => {
+        setTimeout(() => {
+          const err = new Error('CONNECTION TIMEOUT');
+          fail(err);
+        }, this.connectionTimeout_ * 1000);
         const capabilitiesUrl = M.utils.concatUrlPaths([this.url_, 'capabilities.json']);
         M.remote.get(capabilitiesUrl).then((response) => {
           let capabilities = {};

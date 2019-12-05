@@ -512,6 +512,18 @@ class Panel extends MObject {
   }
 
   /**
+   * Returns is collapsed
+   *
+   * @public
+   * @function
+   * @api
+   * @returns {Boolean}
+   */
+  setCollapsed(flag) {
+    this._collapsed = flag;
+  }
+
+  /**
    * TODO
    */
   getControlsContainer() {
