@@ -222,9 +222,9 @@ export default class PrinterControl extends M.Control {
       const html = this.getPanel().getTemplatePanel();
       const buttonPanel = this.getPanel().getButtonPanel();
       html.classList.remove('collapsed');
-      buttonPanel.classList.remove(this._collapsedButtonClass);
+      buttonPanel.classList.remove('g-cartografia-impresora');
       html.classList.add('opened');
-      buttonPanel.classList.add(this._openedButtonClass);
+      buttonPanel.classList.add('g-cartografia-flecha-derecha');
       this.getPanel().setCollapsed(false);
       this.getPanel().fire(M.evt.SHOW);
     }
