@@ -12,6 +12,7 @@ import Exception from './exception/exception';
 import './util/Window';
 import './util/polyfills';
 import { getValue } from './i18n/language';
+import pkg from '../../../package';
 
 /**
  * This function sets the configuration variables
@@ -94,3 +95,11 @@ export const removeProxyException = (url) => {
   const loc = proxyExceptions.indexOf(urlOrigin);
   if (loc !== -1) proxyExceptions.splice(loc, 1);
 };
+
+/**
+ * Indicate the version of Mapea
+ * @public
+ * @const {String}
+ * @api
+ */
+export const version = pkg.version;
