@@ -273,6 +273,9 @@ export default class PrinterControl extends M.Control {
         }
 
         // default outputFormat
+        if (Array.isArray(capabilities.formats)) {
+          this.outputFormats_ = capabilities.formats;
+        }
         capabilities.format = this.outputFormats_.map((format) => {
           return {
             name: format,
