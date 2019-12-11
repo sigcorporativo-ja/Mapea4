@@ -1,0 +1,59 @@
+<div class="m-control m-printer-container">
+   <!-- TITLE -->
+   <div class="title">Impresión del mapa</div>
+   <!-- FORM -->
+   <div class="form">
+      <!-- title -->
+      <div class="title">
+         <input type="text" placeholder="Título">
+      </div>
+      <!-- description -->
+      <div class="description">
+         <textarea placeholder="Descripción"></textarea>
+      </div>
+      <!-- layout -->
+      <div class="layout">
+         <label>Plantilla </label>
+         <select>
+            {{#each layouts}}
+            <option value="{{name}}" {{#if default}} selected{{/if}}>{{name}}</option>
+            {{/each}}
+         </select>
+      </div>
+      <!-- DPI -->
+      <div class="dpi">
+         <label>DPI </label>
+         <select>
+            {{#each dpis}}
+            <option value="{{value}}" {{#if default}} selected{{/if}}>{{name}}</option>
+            {{/each}}
+         </select>
+      </div>
+      <!-- format -->
+      <div class="format">
+         <label>Formato </label>
+         <select>
+            {{#each outputFormats}}
+            <option value="{{name}}" {{#if default}} selected{{/if}}>{{name}}</option>
+            {{/each}}
+         </select>
+      </div>
+      <!-- force scale -->
+      <div class="forcescale">
+         <label>Forzar escala </label>
+         <input type="checkbox" {{#if forceScale}} checked{{/if}}>
+      </div>
+   </div>
+   <!-- buttons -->
+   <div class="button">
+      <button class="print"><i class="g-cartografia-impresora"></i> Imprimir</button>
+       <button class="remove"><i class="g-cartografia-papelera"></i> Borrar</button>
+   </div>
+   <!-- queue -->
+   <div class="queue">
+      <div class="title">Descargar</div>
+      <ul class="queue-container"></ul>
+   </div>
+   <!-- minimize button -->
+   <div class="minimize" title="Minimizar el control de impresión"></div>
+</div>
