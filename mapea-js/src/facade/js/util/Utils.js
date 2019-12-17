@@ -1064,6 +1064,21 @@ export const replaceNode = (newNode, oldNode) => {
 };
 
 /**
+ * This function removes de html element of control
+ *
+ * @private
+ * @function
+ */
+export const removeHTML = (element) => {
+  if (element) {
+    const parent = element.parentElement;
+    if (parent) {
+      parent.removeChild(element);
+    }
+  }
+};
+
+/**
  * This function returns true if some object value is function or "{{*}}"
  * @function
  * @public
