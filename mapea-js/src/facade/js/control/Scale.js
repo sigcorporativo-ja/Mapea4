@@ -5,7 +5,7 @@ import 'assets/css/controls/scale';
 import scaleTemplate from 'templates/scale';
 import ScaleImpl from 'impl/control/Scale';
 import ControlBase from './Control';
-import { isUndefined } from '../util/Utils';
+import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
 import { getValue } from '../i18n/language';
@@ -61,6 +61,21 @@ class Scale extends ControlBase {
   equals(obj) {
     const equals = (obj instanceof Scale);
     return equals;
+  }
+
+  /**
+   * Destroys the control
+   *
+   * @public
+   * @function
+   * @api
+   */
+  destroy() {
+    super.destroy();
+    const panel = this.getPanel();
+    if (!isNullOrEmpty(panel)) {
+      panel.removeClassName('m-with-scale');
+    }
   }
 }
 
