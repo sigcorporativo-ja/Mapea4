@@ -2766,10 +2766,11 @@ class Map extends Base {
    * @api
    */
   on(eventType, listener, optThis) {
-    super.on(eventType, listener, optThis);
+    const idEvent = super.on(eventType, listener, optThis);
     if ((eventType === EventType.COMPLETED) && (this._finishedMap === true)) {
       this.fire(EventType.COMPLETED);
     }
+    return idEvent;
   }
 
   /**
