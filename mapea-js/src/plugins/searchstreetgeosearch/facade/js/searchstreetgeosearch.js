@@ -89,12 +89,12 @@ export default class SearchstreetGeosearch extends M.Plugin {
         if (M.utils.isNullOrEmpty(results.comprobarCodIneResponse.comprobarCodIneReturn)) {
           this.locality_ = '';
         }
-        const autocompletador = new Autocomplete({
+        this.autocompletador = new Autocomplete({
           locality: this.locality_,
           target: this.control_.getInput(),
           html: this.control_.getHtml(),
         });
-        this.map_.addPlugin(autocompletador);
+        this.map_.addPlugin(this.autocompletador);
       });
     }, this);
     this.panel_ = new M.ui.Panel('SearchstreetGeosearch', {
@@ -139,6 +139,7 @@ export default class SearchstreetGeosearch extends M.Plugin {
    */
   destroy() {
     this.map_.removeControls([this.control_]);
+    this.map_.removePlugins(this.autocompletador);
     this.name = null;
     this.parameters_ = null;
     this.map_ = null;
