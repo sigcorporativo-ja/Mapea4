@@ -17,6 +17,7 @@ import {
   enableTouchScroll,
   isNullOrEmpty,
   concatUrlPaths,
+  isFunction,
 } from '../util/Utils';
 import Exception from '../exception/exception';
 import * as Position from '../ui/position';
@@ -323,7 +324,9 @@ export const getPanelForControl = (control, map) => {
     [WMCSelector.NAME]: () => getWMCSelectorPanel(map),
   };
   const controlParam = control.name;
-  return panels[controlParam]();
+  const builderFunction = panels[controlParam];
+
+  return isFunction(builderFunction) ? builderFunction() : null;
 };
 
 /**

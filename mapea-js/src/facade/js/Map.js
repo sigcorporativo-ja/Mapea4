@@ -1394,8 +1394,12 @@ class Map extends Base {
         const control = buildControl(controlParam);
         const panel = getPanelForControl(control, this);
         if (!this.hasControl(control)) {
-          panel.addControls(control);
-          this.addPanels(panel);
+          if (!isNullOrEmpty(panel)) {
+            panel.addControls(control);
+            this.addPanels(panel);
+          } else {
+            control.addTo(this);
+          }
           controls.push(control);
         }
       });
