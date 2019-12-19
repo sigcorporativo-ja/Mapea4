@@ -82,6 +82,7 @@ export default class Measurebar extends M.Plugin {
         position: M.ui.position.TL,
         tooltip: 'Panel de herramientas',
       });
+      this.map_.addPanels(this.map_.panel.TOOLS);
     }
     this.controls_ = [this.measureLength_, this.measureArea_, this.measureClear_];
     this.map_.panel.TOOLS.addControls(this.controls_);
