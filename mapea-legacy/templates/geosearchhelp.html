@@ -1,0 +1,21 @@
+<div class="m-geosearch-help">
+   {{#eq entities.length 0}}
+   <div class="entity">
+      <p>El servicio no tiene ayuda configurada</p>
+   </div>
+   {{/eq}}
+   {{#each entities}}
+   <div class="entity">
+      <div class="name">{{entity}}</div>
+      <div class="info">{{info}}</div>
+      <ul class="keywords">
+         {{#each keywords}}
+         <li>{{this}}</li>
+         {{/each}}
+      </ul>
+      <div class="example">
+         <code>{{example}}</code>
+      </div>
+   </div>
+   {{/each}}
+</div>
