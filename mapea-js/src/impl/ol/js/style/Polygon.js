@@ -128,7 +128,7 @@ class Polygon extends Simple {
 
             size: Simple.getValue(options.fill.pattern.size, featureVariable, this.layer_),
             spacing: Simple.getValue(options.fill.pattern.spacing, featureVariable, this.layer_),
-            image: (Simple.getValue(options.fill.pattern.name, featureVariable, this.layer_) === 'Image') ?
+            image: (Simple.getValue(options.fill.pattern.name, featureVariable, this.layer_) === 'IMAGE') ?
               new OLStyleIcon({
                 src: Simple.getValue(options.fill.pattern.src, featureVariable, this.layer_),
               }) : undefined,
