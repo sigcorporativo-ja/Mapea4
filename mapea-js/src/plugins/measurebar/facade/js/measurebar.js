@@ -82,10 +82,11 @@ export default class Measurebar extends M.Plugin {
         position: M.ui.position.TL,
         tooltip: 'Panel de herramientas',
       });
-      this.map_.addPanels(this.map_.panel.TOOLS);
     }
     this.controls_ = [this.measureLength_, this.measureArea_, this.measureClear_];
     this.map_.panel.TOOLS.addControls(this.controls_);
+    this.panel_ = this.map_.panel.TOOLS;
+    this.map_.addPanels(this.panel_);
   }
 
   /**
@@ -96,7 +97,7 @@ export default class Measurebar extends M.Plugin {
    * @api stable
    */
   destroy() {
-    this.map_.removeControls([this.measureLength_, this.measureArea_, this.measureClear_]);
+    this.panel_.removeControls([this.measureLength_, this.measureArea_, this.measureClear_]);
     this.map_ = null;
     this.measureLength_ = null;
     this.measureArea_ = null;
