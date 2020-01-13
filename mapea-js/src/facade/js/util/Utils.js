@@ -257,9 +257,11 @@ export const getWMSGetCapabilitiesUrl = (serverUrl, version) => {
   // service
   wmsGetCapabilitiesUrl = addParameters(wmsGetCapabilitiesUrl, 'service=WMS');
   // capabilities
-  wmsGetCapabilitiesUrl = addParameters(wmsGetCapabilitiesUrl, {
-    version,
-  });
+  if (isString(version)) {
+    wmsGetCapabilitiesUrl = addParameters(wmsGetCapabilitiesUrl, {
+      version,
+    });
+  }
 
   return wmsGetCapabilitiesUrl;
 };
