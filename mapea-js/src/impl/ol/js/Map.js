@@ -1407,6 +1407,9 @@ class Map extends MObject {
   removeControls(controls) {
     const mapControls = this.getControls(controls);
     mapControls.forEach((control) => {
+      if (!isNullOrEmpty(this.map_)) {
+        this.map_.removeControl(control.getImpl());
+      }
       control.destroy();
       this.controls_ = this.controls_.filter((control2) => {
         let equals = control2.constructor === control.constructor;
