@@ -274,6 +274,8 @@ class Map extends MObject {
       }
     });
 
+    this.fire(EventType.REMOVED_LAYER, [layers]);
+
     return this;
   }
 
@@ -352,7 +354,7 @@ class Map extends MObject {
     groupsI.forEach((group) => {
       this.layerGroups_.remove(group);
       group.destroy();
-      group.fire(EventType.REMOVED_LAYER, [group]);
+      group.fire(EventType.REMOVED_FROM_MAP, [group]);
     });
     return this;
   }
@@ -458,7 +460,7 @@ class Map extends MObject {
         this.facadeMap_.removeWMS(wmcLayer.layers);
       }
       this.facadeMap_.refreshWMCSelectorControl();
-      wmcLayer.fire(EventType.REMOVED_LAYER, [wmcLayer]);
+      wmcLayer.fire(EventType.REMOVED_FROM_MAP, [wmcLayer]);
     }, this);
 
     return this;
@@ -569,7 +571,7 @@ class Map extends MObject {
     kmlMapLayers.forEach((kmlLayer) => {
       this.layers_ = this.layers_.filter(layer => !kmlLayer.equals(layer));
       kmlLayer.getImpl().destroy();
-      kmlLayer.fire(EventType.REMOVED_LAYER, [kmlLayer]);
+      kmlLayer.fire(EventType.REMOVED_FROM_MAP, [kmlLayer]);
     }, this);
 
     return this;
@@ -715,7 +717,7 @@ class Map extends MObject {
     wmsMapLayers.forEach((wmsLayer) => {
       this.layers_ = this.layers_.filter(layer => !wmsLayer.equals(layer));
       wmsLayer.getImpl().destroy();
-      wmsLayer.fire(EventType.REMOVED_LAYER, [wmsLayer]);
+      wmsLayer.fire(EventType.REMOVED_FROM_MAP, [wmsLayer]);
     });
 
     return this;
@@ -910,7 +912,7 @@ class Map extends MObject {
     wfsMapLayers.forEach((wfsLayer) => {
       this.layers_ = this.layers_.filter(layer => !layer.equals(wfsLayer));
       wfsLayer.getImpl().destroy();
-      wfsLayer.fire(EventType.REMOVED_LAYER, [wfsLayer]);
+      wfsLayer.fire(EventType.REMOVED_FROM_MAP, [wfsLayer]);
     });
 
     return this;
@@ -1042,7 +1044,7 @@ class Map extends MObject {
     wmtsMapLayers.forEach((wmtsLayer) => {
       this.layers_ = this.layers_.filter(layer => !layer.equals(wmtsLayer));
       wmtsLayer.getImpl().destroy();
-      wmtsLayer.fire(EventType.REMOVED_LAYER, [wmtsLayer]);
+      wmtsLayer.fire(EventType.REMOVED_FROM_MAP, [wmtsLayer]);
     });
 
     return this;
@@ -1216,7 +1218,7 @@ class Map extends MObject {
       if (includes(this.layers_, layer)) {
         this.layers_ = this.layers_.filter(layer2 => !layer2.equals(layer));
         layer.getImpl().destroy();
-        layer.fire(EventType.REMOVED_LAYER, [layer]);
+        layer.fire(EventType.REMOVED_FROM_MAP, [layer]);
         if (layer.transparent !== true) {
           // it was base layer so sets the visibility of the first one
           const baseLayers = this.facadeMap_.getBaseLayers();
@@ -1289,7 +1291,7 @@ class Map extends MObject {
     mvtLayers.forEach((mvtLayer) => {
       this.layers_ = this.layers_.filter(layer => !layer.equals(mvtLayer));
       mvtLayer.getImpl().destroy();
-      mvtLayer.fire(EventType.REMOVED_LAYER, [mvtLayer]);
+      mvtLayer.fire(EventType.REMOVED_FROM_MAP, [mvtLayer]);
     });
 
     return this;
