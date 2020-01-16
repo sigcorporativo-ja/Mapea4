@@ -274,7 +274,7 @@ class Map extends MObject {
       }
     });
 
-    this.fire(EventType.REMOVED_LAYER, [layers]);
+    this.facadeMap_.fire(EventType.REMOVED_LAYER, [layers]);
 
     return this;
   }
