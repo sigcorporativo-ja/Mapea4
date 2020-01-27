@@ -602,7 +602,7 @@ class WMS extends LayerBase {
   refresh() {
     const ol3Layer = this.getOL3Layer();
     if (!isNullOrEmpty(ol3Layer)) {
-      ol3Layer.getSource().changed();
+      ol3Layer.getSource().updateParams({ time: Date.now() });
     }
   }
 
