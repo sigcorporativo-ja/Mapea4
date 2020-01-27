@@ -338,6 +338,7 @@ export const buildControl = (control) => {
   if (isString(control)) {
     const controlParam = normalize(control);
     const controls = {
+      [GetFeatureInfo.NAME]: new GetFeatureInfo('html'),
       [LayerSwitcher.NAME]: new LayerSwitcher(),
       [Location.NAME]: new Location(),
       [Mouse.NAME]: new Mouse(),
