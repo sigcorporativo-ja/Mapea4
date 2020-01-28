@@ -274,6 +274,11 @@ class Map extends MObject {
       }
     });
 
+    const existsBaseLayer = Array.isArray(this.getBaseLayers()) && this.getBaseLayers().length > 0;
+    if (!existsBaseLayer) {
+      this._resolutionsBaseLayer = false;
+    }
+
     this.facadeMap_.fire(EventType.REMOVED_LAYER, [layers]);
 
     return this;
@@ -1939,6 +1944,7 @@ class Map extends MObject {
     const baseLayer = this.getBaseLayers().filter((bl) => {
       return bl.isVisible();
     })[0];
+
 
     // gets min/max resolutions from base layer
     let maxResolution = null;
