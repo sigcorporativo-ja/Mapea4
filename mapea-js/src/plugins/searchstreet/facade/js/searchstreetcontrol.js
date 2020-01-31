@@ -97,12 +97,40 @@ export default class SearchstreetControl extends M.Control {
     this.provincia_ = null;
 
     /**
-     * All provinces
+     * All provinces and theirs INE codes
      *
      * @private
      * @type {array}
      */
-    this.provincias_ = ['huelva', 'sevilla', 'córdoba', 'jaén', 'cádiz', 'málaga', 'granada', 'almería'];
+    /* this.provincias_ = [
+      'huelva', 'sevilla', 'córdoba', 'jaén', 'cádiz', 'málaga', 'granada', 'almería']; */
+
+
+    this.provincias_ = [{
+      nombre: 'Huelva',
+      codigoINE: '21',
+    }, {
+      nombre: 'Sevilla',
+      codigoINE: '41',
+    }, {
+      nombre: 'Córdoba',
+      codigoINE: '14',
+    }, {
+      nombre: 'Jaén',
+      codigoINE: '23',
+    }, {
+      nombre: 'Cádiz',
+      codigoINE: '11',
+    }, {
+      nombre: 'Málaga',
+      codigoINE: '29',
+    }, {
+      nombre: 'Granada',
+      codigoINE: '18',
+    }, {
+      nombre: 'Almería',
+      codigoINE: '04',
+    }];
 
     // checks if you receive the locality parameter, if so create two attributes.
     if (!M.utils.isUndefined(locality)) {
@@ -350,10 +378,10 @@ export default class SearchstreetControl extends M.Control {
             streetNumber: results.numeroPortal,
             streetType: results.tipoVia,
             municipio: this.municipio_,
-            provincia: this.provincias_[i],
+            provincia: this.provincias_[i].nombre,
             srs: this.facadeMap_.getProjection().code,
           });
-          this.querySearchProvinces(searchUrl, this.provincias_[i], processor);
+          this.querySearchProvinces(searchUrl, this.provincias_[i].nombre, processor);
         }
       } else {
         searchUrl = M.utils.addParameters(this.searchUrl_, {
@@ -520,7 +548,9 @@ export default class SearchstreetControl extends M.Control {
         if (!M.utils.isUndefined(docs.geocoderMunProvSrsReturn[0].coordinateX)) {
           for (let i = 0, ilen = docs.geocoderMunProvSrsReturn.length; i < ilen; i += 1) {
             docs.geocoderMunProvSrsReturn[i].localityName = this.municipio_;
-            docs.geocoderMunProvSrsReturn[i].cityName = this.provincia_;
+            // docs.geocoderMunProvSrsReturn[i].cityName = this.provincia_;
+            // eslint-disable-next-line max-len
+            docs.geocoderMunProvSrsReturn[i].cityName = this.getNameProvince(docs.geocoderMunProvSrsReturn[i].locality);
             docs.geocoderMunProvSrsReturn[i].streetType =
               M.utils.beautifyString(docs.geocoderMunProvSrsReturn[i].streetType);
             docs.geocoderMunProvSrsReturn[i].streetName =
@@ -552,7 +582,8 @@ export default class SearchstreetControl extends M.Control {
         };
       } else {
         docs.geocoderMunProvSrsReturn.localityName = this.municipio_;
-        docs.geocoderMunProvSrsReturn.cityName = this.provincia_;
+        // eslint-disable-next-line max-len
+        docs.geocoderMunProvSrsReturn.cityName = this.getNameProvince(docs.geocoderMunProvSrsReturn.locality);
         docs.geocoderMunProvSrsReturn.streetType =
           M.utils.beautifyString(docs.geocoderMunProvSrsReturn.streetType);
         docs.geocoderMunProvSrsReturn.streetName =
@@ -572,6 +603,30 @@ export default class SearchstreetControl extends M.Control {
     }
     return resultsTemplateVar;
   }
+
+  /**
+   * This function returns a province name from a locality code
+   *
+   * @private
+   * @function
+   * @param {string} codeINE - locality code
+   */
+  getNameProvince(codLocality) {
+    let codLocalityCadena = codLocality.toString();
+    if (codLocalityCadena.length < 5) {
+      codLocalityCadena = `0${codLocalityCadena}`;
+    }
+    const codProvincia = codLocalityCadena.substr(0, 2);
+    const provincia = this.provincias_.filter(l => (l.codigoINE === codProvincia));
+    let resultado;
+    if (provincia.length !== 0) {
+      resultado = provincia[0].nombre;
+    } else {
+      resultado = 'No encontrado código provincia';
+    }
+    return resultado;
+  }
+
 
   /**
    * This function adds a click event to the elements of the list
