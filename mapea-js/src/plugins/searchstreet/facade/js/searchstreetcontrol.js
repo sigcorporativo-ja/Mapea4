@@ -102,10 +102,6 @@ export default class SearchstreetControl extends M.Control {
      * @private
      * @type {array}
      */
-    /* this.provincias_ = [
-      'huelva', 'sevilla', 'córdoba', 'jaén', 'cádiz', 'málaga', 'granada', 'almería']; */
-
-
     this.provincias_ = [{
       nombre: 'Huelva',
       codigoINE: '21',
@@ -548,7 +544,6 @@ export default class SearchstreetControl extends M.Control {
         if (!M.utils.isUndefined(docs.geocoderMunProvSrsReturn[0].coordinateX)) {
           for (let i = 0, ilen = docs.geocoderMunProvSrsReturn.length; i < ilen; i += 1) {
             docs.geocoderMunProvSrsReturn[i].localityName = this.municipio_;
-            // docs.geocoderMunProvSrsReturn[i].cityName = this.provincia_;
             // eslint-disable-next-line max-len
             docs.geocoderMunProvSrsReturn[i].cityName = this.getNameProvince(docs.geocoderMunProvSrsReturn[i].locality);
             docs.geocoderMunProvSrsReturn[i].streetType =
@@ -618,13 +613,7 @@ export default class SearchstreetControl extends M.Control {
     }
     const codProvincia = codLocalityCadena.substr(0, 2);
     const provincia = this.provincias_.filter(l => (l.codigoINE === codProvincia));
-    let resultado;
-    if (provincia.length !== 0) {
-      resultado = provincia[0].nombre;
-    } else {
-      resultado = 'No encontrado código provincia';
-    }
-    return resultado;
+    return provincia[0].nombre;
   }
 
 
