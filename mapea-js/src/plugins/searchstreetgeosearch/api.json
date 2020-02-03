@@ -14,10 +14,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "searchstreetgeosearch-2.0.1.ol.min.js"
+        "searchstreetgeosearch-2.0.2.ol.min.js"
       ],
       "styles": [
-        "searchstreetgeosearch-2.0.1.min.css"
+        "searchstreetgeosearch-2.0.2.min.css"
       ]
     }
   },
@@ -25,8 +25,8 @@
     "name": "SearchstreetGeosearch",
     "description": "",
     "text": "",
-    "version": "2.0.1",
-    "date": "11/10/2019",
+    "version": "2.0.2",
+    "date": "03/02/2020",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",
     "tags": "mapea,plugin",
