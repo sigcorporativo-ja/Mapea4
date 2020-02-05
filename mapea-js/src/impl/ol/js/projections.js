@@ -70,14 +70,22 @@ const proj23031 = {
   units: 'm',
 };
 
+// EPSG:32628
+const proj32628 = {
+  def: '+proj=utm +zone=28 +ellps=WGS84 +datum=WGS84 +units=m +no_defs',
+  extent: [166021.44317933178, 0, 833978.5568206678, 9329005.18301614],
+  codes: ['EPSG:32628', 'urn:ogc:def:crs:EPSG::32628', 'http://www.opengis.net/gml/srs/epsg.xml#32628'],
+  units: 'm',
+};
+
 // EPSG:4258
 const proj4258 = {
   def: '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs',
   extent: [-16.1, 32.88, 39.65, 84.17],
   codes: ['EPSG:4258', 'urn:ogc:def:crs:EPSG::4258', 'http://www.opengis.net/gml/srs/epsg.xml#4258'],
   units: 'd',
+  metersPerUnit: 111319.49079327358,
 };
-
 
 // EPSG:4230
 const proj4230 = {
@@ -85,14 +93,8 @@ const proj4230 = {
   extent: [-16.09882145355955, 25.711114310330917, 48.60999527749605, 84.16977336415472],
   codes: ['EPSG:4230', 'urn:ogc:def:crs:EPSG::4230', 'http://www.opengis.net/gml/srs/epsg.xml#4230'],
   units: 'd',
-};
+  metersPerUnit: 111319.49079327358,
 
-// EPSG:32628
-const proj32628 = {
-  def: '+proj=utm +zone=28 +ellps=WGS84 +datum=WGS84 +units=m +no_defs',
-  extent: [166021.44317933178, 0, 833978.5568206678, 9329005.18301614],
-  codes: ['EPSG:32628', 'urn:ogc:def:crs:EPSG::32628', 'http://www.opengis.net/gml/srs/epsg.xml#32628'],
-  units: 'm',
 };
 
 // EPSG:4326
