@@ -268,8 +268,8 @@ class LayerSwitcher extends ControlBase {
    * @function
    */
   static orderLayerGroups(layerGroups) {
-    return layerGroups.sort((a, b) => { // Descending order
-      return b.order - a.order;
+    return layerGroups.sort((a, b) => { // Ascending order
+      return a.order - b.order;
     });
   }
 }

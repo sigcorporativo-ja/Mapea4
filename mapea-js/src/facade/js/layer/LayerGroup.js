@@ -66,7 +66,7 @@ class LayerGroup extends MObject {
      * @type {Boolean}
      * @api
      */
-    this.collapsed = !!parameters.collapsed;
+    this.collapsed = parameters.collapsed ? parameters.collapsed : true;
 
     /**
      * @public
@@ -139,7 +139,7 @@ class LayerGroup extends MObject {
    */
   setZIndex(zIndex) {
     this.zIndex_ = zIndex;
-    const layersOfLayerGroup = this.getChildren();
+    const layersOfLayerGroup = [...this.getChildren()];
     const reverseLayers = layersOfLayerGroup.reverse();
     let countZindex = zIndex;
     reverseLayers.forEach((layer) => {
@@ -281,8 +281,8 @@ class LayerGroup extends MObject {
    * @api
    */
   static findGroupById(groupId, layerGroups) {
-    let group;
-    if (isArray(layerGroups)) {
+    let group = null;
+    if (isArray(layerGroups) && layerGroups.length > 0) {
       group = layerGroups.find(g => g instanceof LayerGroup && g.id === groupId);
       if (group == null) {
         const childGroups = layerGroups.map(g => g.getChildren())
