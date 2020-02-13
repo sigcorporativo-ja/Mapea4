@@ -536,10 +536,10 @@ ul.m-base-layers>li {
     border: 1px solid rgba(0, 0, 0, 0.1);
 }
 
-ul>li.m-group>ul.m-layers>li>.m-tools {
+/* ul>li.m-group>ul.m-layers>li>.m-tools {
     display: inline-block;
     width: 33%;
-}
+} */
 
 ul.m-layers>li>div.m-legend,
 ul.m-base-layers>li>div.m-legend {

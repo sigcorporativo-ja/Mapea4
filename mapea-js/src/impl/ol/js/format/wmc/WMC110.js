@@ -45,7 +45,11 @@ class WMC110 extends XML {
       const context = objVar[0];
       const currentGroup = objVar[1];
       const groups = context.layerGroups;
-      const group = new LayerGroup(node.getAttribute('id'), node.getAttribute('title'), node.getAttribute('orderInsideGroupDisplay'));
+      const group = new LayerGroup({
+        id: node.getAttribute('id'),
+        title: node.getAttribute('title'),
+        order: node.getAttribute('orderInsideGroupDisplay'),
+      });
       if (isNullOrEmpty(currentGroup)) {
         groups.push(group);
       } else {
@@ -99,10 +103,12 @@ class WMC110 extends XML {
 
     if (!isNullOrEmpty(group)) {
       group.addChild(layer, parseInt(groupOrder, 10));
-    } else if (isNullOrEmpty(context.layers)) {
-      context.layers = [];
+    } else {
+      if (isNullOrEmpty(context.layers)) {
+        context.layers = [];
+      }
+      context.layers.push(layer);
     }
-    context.layers.push(layer);
   }
 
   /**
