@@ -41,11 +41,8 @@ export default class MeasureArea extends MeasureImpl {
   formatGeometry(geometry) {
     let area = null;
     const projection = this.facadeMap_.getProjection();
-    if (projection.units === 'd') {
-      area = ol.sphere.getArea(geometry, { projection: projection.code });
-    } else {
-      area = geometry.getArea();
-    }
+    area = ol.sphere.getArea(geometry, { projection: projection.code });
+
     let output;
     if (area > 10000) {
       output = `${((Math.round((area / 1000000) * 100) / 100))} km<sup>2</sup>`;
