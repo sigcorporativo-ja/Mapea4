@@ -561,6 +561,7 @@ class GetFeatureInfo extends Control {
         }
       });
     });
+    this.popup_ = popup;
   }
 
   /**
@@ -575,6 +576,10 @@ class GetFeatureInfo extends Control {
       content.classList.remove('m-content-collapsed');
       target.classList.remove('m-arrow-right');
       target.classList.add('m-arrow-down');
+      const coordinates = this.popup_.getCoordinate();
+      if (!isNullOrEmpty(this.popup_.getImpl().panIntoView)) {
+        this.popup_.getImpl().panIntoView(coordinates);
+      }
     } else {
       content.classList.add('m-content-collapsed');
       target.classList.add('m-arrow-right');
