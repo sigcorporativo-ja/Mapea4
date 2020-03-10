@@ -69,10 +69,11 @@
     "proj4": "^2.4.4"
   },
   "scripts": {
-    "build": "./node/npm run build:core && ./node/npm run build:plugins",
+    "build": "./node/npm run build:core && ./node/npm run build:plugins && ./node/npm run build:plugins-extern",
     "build:sourcemap": "npm run prebuild && npm run build:core -- --source-map && npm run build:plugins",
     "build:core": "webpack --config=webpack-config/webpack.production-core.config.js",
     "build:plugins": "webpack --config=webpack-config/webpack.production-plugins.config.js",
+    "build:plugins-extern": "./node/node tasks/build-extern-plugins.js",
     "debug:build": "webpack-dev-server --config=webpack-config/webpack.test-production.config.js",
     "debug:prebuild": "node --inspect-brk tasks/generate-index.js",
     "generate-doc": "jsdoc config/jsdoc/api/index.md -c config/jsdoc/api/conf.json",
