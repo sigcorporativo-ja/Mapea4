@@ -1,10 +1,28 @@
 .m-location-container {
-   top: 20px;
-   left: 600px;
+    top: 20px;
+    left: 600px;
 }
 
-.m-location-container.m-locating > button#m-location-button:before {
-   position: absolute;
-   top: 15px;
-   left: 10px;
+.m-location-container.m-locating>button#m-location-button:before {
+    animation: mloading 1s linear infinite;
+    position: absolute;
+    left: 11px;
+    top: 11px;
+}
+
+.m-location-container.m-locating>button#m-location-button {
+    padding: 8px;
+}
+
+/* DELETE AFTER FIX */
+
+/* MICROSOFT EDGE HACK */
+
+@supports (-ms-ime-align:auto) {
+    .m-location-container.m-locating>button#m-location-button {
+        height: 36px;
+        /* This fixes height, breaks align. */
+    }
+
+    .m-location-container.m-locating>button#m-location-button:before {}
 }
