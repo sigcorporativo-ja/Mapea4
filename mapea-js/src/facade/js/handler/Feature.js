@@ -315,8 +315,6 @@ class Features extends Base {
   clearHoverFeatures() {
     Object.keys(this.prevHoverFeatures_).forEach((key) => { this.prevHoverFeatures_[key] = []; });
   }
-
-
 }
 
 export default Features;
