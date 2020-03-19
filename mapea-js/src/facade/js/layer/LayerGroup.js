@@ -201,6 +201,7 @@ class LayerGroup extends MObject {
       this.map.removeLayerGroup(childI);
     } else if (childI instanceof LayerBase) {
       this.map.removeLayers(childI);
+      this.ungroup(child);
     }
   }
 
