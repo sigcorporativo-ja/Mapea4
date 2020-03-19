@@ -147,13 +147,16 @@ export default class SaveFeature extends M.impl.Control {
       feature.unset(editFeatureGeomName);
 
       // sets default values
-      describeFeatureType.properties.forEach((property) => {
-        if (!M.utils.isGeometryType(property.localType)) {
-          const valueToAdd = feature
-            .getProperties()[property.name] || layerImpl.getDefaultValue(property.localType);
-          feature.set(property.name, valueToAdd);
-        }
-      });
+      if (!M.utils.isNullOrEmpty(describeFeatureType) &&
+        M.utils.isArray(describeFeatureType.properties)) {
+        describeFeatureType.properties.forEach((property) => {
+          if (!M.utils.isGeometryType(property.localType)) {
+            const valueToAdd = feature
+              .getProperties()[property.name] || layerImpl.getDefaultValue(property.localType);
+            feature.set(property.name, valueToAdd);
+          }
+        });
+      }
     });
   }
 
