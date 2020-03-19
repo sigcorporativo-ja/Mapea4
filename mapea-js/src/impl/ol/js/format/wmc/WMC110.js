@@ -488,6 +488,16 @@ class WMC110 extends XML {
    * @function
    * @api stable
    */
+  readwmcextmetadata(layerInfoVar, node) {
+    const layerInfo = layerInfoVar;
+    layerInfo.options.metadataUrl = node && node.innerHTML;
+  }
+
+  /**
+   * @private
+   * @function
+   * @api stable
+   */
   readwmcAbstract(objVar, node) {
     const obj = objVar;
     const abst = XML.getChildValue(node);
