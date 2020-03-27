@@ -3,6 +3,7 @@
  */
 import { isNullOrEmpty } from 'M/util/Utils';
 import OLSourceTileWMS from 'ol/source/TileWMS';
+import { getParameterValue } from 'M/util/Utils';
 
 /**
  * @classdesc
@@ -48,7 +49,8 @@ class TileWMS extends OLSourceTileWMS {
    */
   static tileLoadFunction(imageTileParam, src) {
     const imageTile = imageTileParam;
-    imageTile.getImage().src = `${src}&_= ${this.revision_}`;
+    const ticket = getParameterValue('ticket', M.config.PROXY_URL);
+    imageTile.getImage().src = `${src}&ticket=${ticket}&_=${this.revision_}`;
   }
 }
 

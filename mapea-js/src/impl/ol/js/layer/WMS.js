@@ -549,18 +549,30 @@ class WMS extends LayerBase {
     if (isNullOrEmpty(this.getCapabilitiesPromise)) {
       const layerUrl = this.url;
       const layerVersion = this.version;
+      const projection = this.map.getProjection();
+
       this.getCapabilitiesPromise = new Promise((success, fail) => {
         // gest the capabilities URL
         const wmsGetCapabilitiesUrl = getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
         // gets the getCapabilities response
         getRemote(wmsGetCapabilitiesUrl).then((response) => {
-          const getCapabilitiesDocument = response.xml;
-          const getCapabilitiesParser = new FormatWMS();
-          const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
+          if ('xml' in response && !isNullOrEmpty(response.xml)) {
+            const getCapabilitiesDocument = response.xml;
+            const getCapabilitiesParser = new FormatWMS();
+            const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
 
-          const projection = this.map.getProjection();
-          const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
-          success(getCapabilitiesUtils);
+            const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
+            success(getCapabilitiesUtils);
+          } else {
+            getRemote(wmsGetCapabilitiesUrl, '', { ticket: false }).then((response2) => {
+              const getCapabilitiesDocument = response2.xml;
+              const getCapabilitiesParser = new FormatWMS();
+              const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
+
+              const capabilities = new GetCapabilities(getCapabilities, layerUrl, projection);
+              success(capabilities);
+            });
+          }
         });
       });
     }

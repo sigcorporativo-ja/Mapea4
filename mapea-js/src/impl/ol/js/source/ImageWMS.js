@@ -2,7 +2,7 @@
  * @module M/impl/source/ImageWMS
  */
 import OLSourceImageWMS from 'ol/source/ImageWMS';
-
+import { getParameterValue } from 'M/util/Utils';
 /**
  * @classdesc
  * Source for WMS servers providing single, untiled images.
@@ -42,7 +42,8 @@ class ImageWMS extends OLSourceImageWMS {
    */
   imageLoadFunction(image, src) {
     const imageVariable = image;
-    imageVariable.getImage().src = `${src}&_=${this.revision_}`;
+    const ticket = getParameterValue('ticket', M.config.PROXY_URL);
+    imageVariable.getImage().src = `${src}&ticket=${ticket}&_=${this.revision_}`;
   }
 }
 
