@@ -3,7 +3,7 @@
  */
 import MObject from 'M/Object';
 import { get as getRemote } from 'M/util/Remote';
-import { isNullOrEmpty } from 'M/util/Utils';
+import { isNullOrEmpty, addParameters, isString } from 'M/util/Utils';
 import Exception from 'M/exception/exception';
 import * as Dialog from 'M/dialog';
 import { getValue } from 'M/i18n/language';
@@ -69,8 +69,12 @@ class WFS extends MObject {
    * @function
    */
   loadInternal_(url, projection) {
+    let parameterizedURL = url;
     return new Promise((success, fail) => {
-      getRemote(url).then((response) => {
+      if (isString(M.config.ticket)) {
+        parameterizedURL = addParameters(parameterizedURL, { ticket: M.config.ticket });
+      }
+      getRemote(parameterizedURL).then((response) => {
         if (!isNullOrEmpty(response.text) && response.text.indexOf('ServiceExceptionReport') < 0) {
           const features = this.format_.read(response.text, projection);
           success(features);

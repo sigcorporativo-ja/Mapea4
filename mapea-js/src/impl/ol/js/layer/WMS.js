@@ -550,10 +550,11 @@ class WMS extends LayerBase {
       const layerUrl = this.url;
       const layerVersion = this.version;
       const projection = this.map.getProjection();
+      const ticket = this.map.getTicket();
 
       this.getCapabilitiesPromise = new Promise((success, fail) => {
         // gest the capabilities URL
-        const wmsGetCapabilitiesUrl = getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
+        const wmsGetCapabilitiesUrl = getWMSGetCapabilitiesUrl(layerUrl, layerVersion, ticket);
         // gets the getCapabilities response
         getRemote(wmsGetCapabilitiesUrl).then((response) => {
           if ('xml' in response && !isNullOrEmpty(response.xml)) {

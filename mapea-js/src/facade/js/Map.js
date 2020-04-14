@@ -10,7 +10,7 @@ import {
   isNull,
   isArray,
   isFunction,
-  addParameters,
+  // addParameters,
   escapeJSCode,
   isObject,
   getEnvolvedExtent,
@@ -187,6 +187,14 @@ class Map extends Base {
      * @api
      */
     this.userMaxExtent = null;
+
+    /**
+     * Ticket map for autheticated requests
+     * @private
+     * @type {String}
+     * @api
+     */
+    this.ticket_ = null;
 
     // adds class to the container
     params.container.classList.add('m-mapea-container');
@@ -2331,16 +2339,29 @@ class Map extends Base {
    * @api
    */
   setTicket(ticket) {
-    if (!isNullOrEmpty(ticket)) {
-      if (M.config.PROXY_POST_URL.indexOf('ticket=') === -1) {
-        M.config('PROXY_POST_URL', addParameters(M.config.PROXY_POST_URL, { ticket }));
-      }
-      if (M.config.PROXY_URL.indexOf('ticket=') === -1) {
-        M.config('PROXY_URL', addParameters(M.config.PROXY_URL, { ticket }));
-      }
-    }
+    this.ticket_ = ticket;
+    M.config.ticket = ticket;
+    // if (!isNullOrEmpty(ticket)) {
+    //   if (M.config.PROXY_POST_URL.indexOf('ticket=') === -1) {
+    //     M.config('PROXY_POST_URL', addParameters(M.config.PROXY_POST_URL, { ticket }));
+    //   }
+    //   if (M.config.PROXY_URL.indexOf('ticket=') === -1) {
+    //     M.config('PROXY_URL', addParameters(M.config.PROXY_URL, { ticket }));
+    //   }
+    // }
 
     return this;
+  }
+
+  /**
+   * This function gets the ticket of the map
+   * @function
+   * @public
+   * @param {String} ticket
+   * @api
+   */
+  getTicket() {
+    return this.ticket_;
   }
 
   /**
