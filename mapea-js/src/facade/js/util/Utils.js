@@ -249,7 +249,7 @@ export const generateRandom = (prefix, sufix) => {
  * @function
  * @api
  */
-export const getWMSGetCapabilitiesUrl = (serverUrl, version) => {
+export const getWMSGetCapabilitiesUrl = (serverUrl, version, ticket) => {
   let wmsGetCapabilitiesUrl = serverUrl;
 
   // request
@@ -261,6 +261,10 @@ export const getWMSGetCapabilitiesUrl = (serverUrl, version) => {
     wmsGetCapabilitiesUrl = addParameters(wmsGetCapabilitiesUrl, {
       version,
     });
+  }
+  // ticket
+  if (isString(ticket)) {
+    wmsGetCapabilitiesUrl = addParameters(wmsGetCapabilitiesUrl, { ticket });
   }
 
   return wmsGetCapabilitiesUrl;
