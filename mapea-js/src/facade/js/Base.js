@@ -41,7 +41,7 @@ class Base extends MObject {
    *
    * @public
    * @function
-   * @returns {Object}
+   * @returns {Object} implementation object
    * @api
    */
   getImpl() {
@@ -49,11 +49,11 @@ class Base extends MObject {
   }
 
   /**
-   * This function set implementation of this control
+   * This function set implementation of this object
    *
    * @public
    * @function
-   * @param {M.Map} impl to add the plugin
+   * @param {Object} value implementation object
    * @api
    */
   setImpl(value) {
