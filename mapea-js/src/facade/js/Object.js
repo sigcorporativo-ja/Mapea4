@@ -27,55 +27,67 @@ class MObject {
   }
 
   /**
-   * Sets the callback when the instace is loaded
+   * Adds event listener
    *
    * @public
    * @function
    * @api
+   * @param {M.evt} eventType constant to identify event type
+   * @param {function} listener callback function
+   * @param {Object} optThis object with aditional options
    */
   on(eventType, listener, optThis) {
     return this.eventsManager_.add(eventType, listener, optThis);
   }
 
   /**
-   * Sets the callback when the instace is loaded
+   * Adds event listener that only once fires
    *
    * @public
    * @function
    * @api
+   * @param {M.evt} eventType constant to identify event type
+   * @param {function} listener callback function
+   * @param {Object} optThis object with aditional options
    */
   once(eventType, listener, optThis) {
     return this.eventsManager_.add(eventType, listener, optThis, true);
   }
 
   /**
-   * Sets the callback when the instace is loaded
+   * Removes event listener
    *
    * @public
    * @function
    * @api
+   * @param {M.evt} eventType constant to identify event type
+   * @param {function} listener callback function
+   * @param {Object} optThis object with aditional options
    */
   un(eventType, listener, optThis) {
     this.eventsManager_.remove(eventType, listener, optThis);
   }
 
   /**
-   * Sets the callback when the instace is loaded
+   * Removes event listener by key
    *
    * @public
    * @function
    * @api
+   * @param {M.evt} eventType constant to identify event type
+   * @param {String} key event key
    */
   unByKey(eventType, key) {
     this.eventsManager_.remove(eventType, key);
   }
 
   /**
-   * Sets the callback when the instace is loaded
+   * Manual firing an event
    *
    * @public
    * @function
-   * @api
+   * @param {M.evt} eventType constant to identify event type
+   * @param {Object} argsParam object with aditional options
    */
   fire(eventType, argsParam) {
     let args = argsParam;
