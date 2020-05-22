@@ -156,7 +156,7 @@ class LayerBase extends Base {
   }
 
   /**
-   * 
+   *
    */
   set transparent(newTransparent) {
     if (!isNullOrEmpty(newTransparent)) {
@@ -197,7 +197,7 @@ class LayerBase extends Base {
    *
    * @function
    * @api
-   * @return {Array<Number>} - The maxExtent of the layer, as [xmin, ymin, xmax, ymax] 
+   * @return {Array<Number>} - The maxExtent of the layer, as [xmin, ymin, xmax, ymax]
    */
   getMaxExtent() {
     let maxExtent = this.userMaxExtent; // 1
@@ -369,8 +369,8 @@ class LayerBase extends Base {
   }
 
   /**
-   * Indicates if the layer is in range, that is, if the current map resolution is 
-   * between the min and max resolutions of the layer.
+   * Indicates if the layer is in range, that is, if the current map resolution is
+   *  between the min and max resolutions of the layer.
    *
    * @function
    * @api

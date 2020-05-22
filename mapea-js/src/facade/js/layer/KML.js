@@ -11,7 +11,7 @@ import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
- * Main constructor of the class. Creates a WMS layer
+ * Main constructor of the class. Creates a KML layer
  * with parameters specified by the user
  * @api
  */
@@ -79,7 +79,7 @@ class KML extends LayerVector {
   }
 
   /**
-   * 'transparent' the layer name
+   * 'extract'
    */
 
   get extract() {
@@ -110,10 +110,11 @@ class KML extends LayerVector {
   }
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Checks if an object is equal to this layer. Two KML layers are equal if both of them
+   * are instances of KML, and have the same 'name' and 'extract' attributes
    *
    * @function
+   * @return {boolean} True if equal, false otherwise
    * @api
    */
   equals(obj) {

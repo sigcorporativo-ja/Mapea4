@@ -10,7 +10,7 @@ import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
- * Main constructor of the class. Creates a WMS layer
+ * Main constructor of the class. Creates a GeoJSON layer
  * with parameters specified by the user
  * @api
  */
@@ -107,10 +107,11 @@ class GeoJSON extends LayerVector {
   }
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Checks if an object is equal to this layer. Two GeoJSON layers are equal if both of them are
+   * GeoJSON instances and have the same 'name' and 'extract' attributes
    *
    * @function
+   * @return {boolean} True if equal, false otherwise
    * @api
    */
   equals(obj) {
@@ -125,10 +126,10 @@ class GeoJSON extends LayerVector {
   }
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Sets the source of the layer, in GeoJSON format
    *
    * @function
+   * @param {Object} source GeoJSON representation of the layer
    * @api
    */
   setSource(source) {
@@ -137,12 +138,13 @@ class GeoJSON extends LayerVector {
   }
 
   /**
-   * This function sets the style to layer
+   * Sets the style of the layer
    *
    * @function
    * @public
-   * @param {M.Style}
-   * @param {bool}
+   * @param {M.Style} style Style to set
+   * @param {bool} [applyToFeature=false] True if set at feature level, false to set atlayer level
+   * @api
    */
   setStyle(styleParam, applyToFeature = false, defaultStyle = GeoJSON.DEFAULT_OPTIONS_STYLE) {
     super.setStyle(styleParam, applyToFeature, defaultStyle);
@@ -150,7 +152,7 @@ class GeoJSON extends LayerVector {
 }
 
 /**
- * Options style by default
+ * Default style for GeoJSON layers
  * @const
  * @type {object}
  * @public
