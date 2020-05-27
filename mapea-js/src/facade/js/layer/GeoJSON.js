@@ -111,6 +111,7 @@ class GeoJSON extends LayerVector {
    * GeoJSON instances and have the same 'name' and 'extract' attributes
    *
    * @function
+   * @param {Object} obj Object to to comapre
    * @return {boolean} True if equal, false otherwise
    * @api
    */
