@@ -165,8 +165,8 @@ class WFS extends Vector {
     }
   }
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Sets a CQL string to apply to the layer. A new query will be made to the WFS server.
+   * @param {String} cql CQL to apply
    *
    * @function
    * @api
@@ -186,12 +186,12 @@ class WFS extends Vector {
   }
 
   /**
-   * This function sets the style to layer
+   * This function sets a style to the layer
    *
    * @function
    * @public
-   * @param {M.Style}
-   * @param {bool}
+   * @param {M.Style} style Style to apply
+   * @param {bool} [applyToFeature=false] True if set at feature level, false to set at layer level
    */
   setStyle(styleParam, applyToFeature = false, defaultStyle = WFS.DEFAULT_OPTIONS_STYLE) {
     super.setStyle(styleParam, applyToFeature, defaultStyle);
@@ -199,10 +199,12 @@ class WFS extends Vector {
 
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Checks if an object is equal to this layer. Two WFS layers are equal if both of them are
+   * WFS instances and have the same namespace, name, id, cql and version.
    *
    * @function
+   * @param {Object} obj Object to to compare
+   * @return {boolean} True if equal, false otherwise
    * @api
    */
   equals(obj) {
@@ -222,7 +224,7 @@ class WFS extends Vector {
 }
 
 /**
- * Style options by default for this layer
+ * Default style for WFS layers
  * @const
  * @type {object}
  * @public

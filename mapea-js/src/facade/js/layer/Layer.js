@@ -386,7 +386,7 @@ class LayerBase extends Base {
 
   /**
    * Indicates if the layer is in range, that is, if the current map resolution is
-   * between the min and max resolutions of the layer.
+   *  between the min and max resolutions of the layer.
    *
    * @function
    * @api

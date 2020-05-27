@@ -113,12 +113,13 @@ class WMTS extends LayerBase {
   }
 
   /**
-   * This functions retrieves a Promise which will be
+   * Creates a Promise which will be
    * resolved when the GetCapabilities request is retrieved
    * by the service and parsed. The capabilities is cached in
    * order to prevent multiple requests
    *
    * @function
+   * @return {Promise} Promise object representing Capabilities
    * @api
    */
   getCapabilities() {
@@ -129,10 +130,11 @@ class WMTS extends LayerBase {
   }
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Checks if an object is equal to this layer. Two WMTS layers are equal if both of them are
+   * WMTS instances and have the same url, name and matrixset.
    *
    * @function
+   * @return {Promise} Promise object representing
    * @api
    */
   equals(obj) {
@@ -148,16 +150,26 @@ class WMTS extends LayerBase {
   }
 
   /**
+   * Generates a WMTS getFeatureInfo url that can be used to query the server
+   *
    * @function
    * @public
+   * @param {Array<Number>} coordinate Coordinate to query
+   * @param {Number} zoom Zoom level
+   * @param {string} formatInfo Format requested for the response
+   * @return {string} getFeatureInfo url
    * @api
    */
   getGetFeatureInfoUrl(coordinate, zoom, formatInfo) {
     return this.getImpl().getGetFeatureInfoUrl(coordinate, zoom, formatInfo);
   }
   /**
+   * Gets the tile column and tile row of a coordinate
    * @function
    * @public
+   * @param {Array<Number>} coordinate Coordinate to query
+   * @param {Number} zoom Zoom level
+   * @return {Array<Number>} Array with the tile and col numbers
    * @api
    */
   getTileColTileRow(coordinate, zoom) {
