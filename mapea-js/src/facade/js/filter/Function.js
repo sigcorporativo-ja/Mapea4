@@ -6,13 +6,16 @@ import { isNullOrEmpty } from '../util/Utils';
 
 /**
  * @classdesc
+ * A Filter represented by a function, which determines whether a feature complies
+ * with the filter or not
  * @api
  */
 class Function extends BaseFilter {
   /**
    * Creates a Filter Function to filter features
    *
-   * @param {function} filterFunction - Function to execute
+   * @param {function} filterFunction function to execute
+   * @param {Object} [options={}] declare 'cqlFilter' string equivalent inside, if any
    * @api
    */
   constructor(filterFunction, options = {}) {
@@ -36,10 +39,11 @@ class Function extends BaseFilter {
   }
 
   /**
-   * This function set a function filter
+   * Sets the function representing this filter
    *
    * @public
    * @function
+   * @param {function} function
    * @api
    */
   setFunction(filterFunction) {
@@ -47,11 +51,11 @@ class Function extends BaseFilter {
   }
 
   /**
-   * This function get a function filter
+   * Gets the function representing this filter
    *
    * @public
    * @function
-   * @return {M.filter.Function} filter to execute
+   * @return {function} function
    * @api
    */
   getFunctionFilter() {
@@ -59,12 +63,12 @@ class Function extends BaseFilter {
   }
 
   /**
-   * This function execute a function filter
+   * Executes the filter
    *
    * @public
    * @function
-   * @param {Array<M.Feature>} features - Features on which the filter runs
-   * @return {Array<M.Feature>} features to passed filter
+   * @param {Array<M.Feature>} features features on which the filter runs
+   * @return {Array<M.Feature>} features that comply with the filter
    * @api
    */
   execute(features) {
@@ -72,12 +76,12 @@ class Function extends BaseFilter {
   }
 
   /**
-   * This function return CQL
+   * Returns the CQL equivalent to the filter, if defined
    *
    * @public
    * @function
    * @api
-   * @return {string} CQL
+   * @return {string} CQL query
    */
   toCQL() {
     return this.cqlFilter_;
