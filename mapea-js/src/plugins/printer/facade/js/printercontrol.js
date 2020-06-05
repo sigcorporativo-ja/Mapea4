@@ -510,9 +510,10 @@ export default class PrinterControl extends M.Control {
           try {
             response = JSON.parse(response.text);
             // poner la url en una variable
+            const serverId = response.downloadURL.split('@')[1]; // identifica al servidor que ha ejecutado la impresión
             downloadUrl = M.utils.concatUrlPaths([
               this.params_.urlApplication,
-              response.downloadURL,
+              `${response.downloadURL};GEOPRID=.${serverId}`,
             ]);
           } catch (err) {
             M.exception(err);
