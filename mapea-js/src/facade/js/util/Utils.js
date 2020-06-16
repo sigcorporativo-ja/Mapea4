@@ -4,10 +4,10 @@
 
 import chroma from 'chroma-js';
 import reproj from 'impl/util/reprojection';
+import getImplWMTSCapabilities from 'impl/util/GetCapabilities';
 import * as dynamicImage from 'assets/img/dynamic_legend';
 import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units';
 import * as WKT from '../geom/WKT';
-
 /**
  *
  * @function
@@ -1187,6 +1187,15 @@ export const getSystem = () => {
   return env;
 };
 
+/**
+ * @function
+ * @public
+ * @param {String| URLLike} url
+ * @returns {Promise}
+ */
+export const getWMTSCapabilities = (url) => {
+  return getImplWMTSCapabilities(url);
+};
 
 /**
  * @private

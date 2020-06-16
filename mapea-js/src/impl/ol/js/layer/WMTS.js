@@ -59,7 +59,7 @@ class WMTS extends LayerBase {
      * @private
      * @type {Promise}
      */
-    this.getCapabilitiesPromise_ = null;
+    this.getCapabilitiesPromise_ = options.capabilities || null;
   }
 
   /**
@@ -83,8 +83,12 @@ class WMTS extends LayerBase {
     }
 
     // adds layer from capabilities
-    this.getCapabilitiesOptions_()
-      .then(capabilitiesOptions => this.addLayer_(capabilitiesOptions));
+    const capabilitiesOpts = this.getCapabilitiesOptions_();
+    if (capabilitiesOpts instanceof Promise) {
+      capabilitiesOpts.then(capabilitiesOptions => this.addLayer_(capabilitiesOptions));
+    } else {
+      this.addLayer_(capabilitiesOpts);
+    }
   }
 
   /**
@@ -220,25 +224,28 @@ class WMTS extends LayerBase {
    */
   getCapabilitiesOptions_() {
     if (isNullOrEmpty(this.capabilitiesOptionsPromise)) {
-      this.capabilitiesOptionsPromise = this.getCapabilities().then((capabilities) => {
-        const layerName = this.name;
-        let matrixSet = this.matrixSet;
-        if (isNullOrEmpty(matrixSet)) {
-          /* if no matrix set was specified then
-          it supposes the matrix set has the name
-          of the projection
-          */
-          matrixSet = this.map.getProjection().code;
-        }
-        const extent = this.facadeLayer_.getMaxExtent();
-        const capabilitiesOpts = optionsFromCapabilities(capabilities, {
-          layer: layerName,
-          matrixSet,
-          extent,
+      this.capabilitiesOptionsPromise = this.getCapabilities();
+      if (this.capabilitiesOptionsPromise instanceof Promise) {
+        this.capabilitiesOptionsPromise = this.capabilitiesOptionsPromise.then((capabilities) => {
+          const layerName = this.name;
+          let matrixSet = this.matrixSet;
+          if (isNullOrEmpty(matrixSet)) {
+            /* if no matrix set was specified then
+            it supposes the matrix set has the name
+            of the projection
+            */
+            matrixSet = this.map.getProjection().code;
+          }
+          const extent = this.facadeLayer_.getMaxExtent();
+          const capabilitiesOpts = optionsFromCapabilities(capabilities, {
+            layer: layerName,
+            matrixSet,
+            extent,
+          });
+          capabilitiesOpts.tileGrid.extent = extent;
+          return capabilitiesOpts;
         });
-        capabilitiesOpts.tileGrid.extent = extent;
-        return capabilitiesOpts;
-      });
+      }
     }
     return this.capabilitiesOptionsPromise;
   }
