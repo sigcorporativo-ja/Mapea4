@@ -154,16 +154,16 @@ class GeoJSON extends Vector {
    * @function
    */
   requestFeatures_() {
-    if (isNullOrEmpty(this.loadFeaturesPromise_)) {
+    if (this.source) {
       this.loadFeaturesPromise_ = new Promise((resolve) => {
-        if (this.source) {
-          const features = this.formater_.read(this.source, this.map.getProjection());
+        const features = this.formater_.read(this.source, this.map.getProjection());
+        resolve(features);
+      });
+    } else if (isNullOrEmpty(this.loadFeaturesPromise_)) {
+      this.loadFeaturesPromise_ = new Promise((resolve) => {
+        this.loader_.getLoaderFn((features) => {
           resolve(features);
-        } else {
-          this.loader_.getLoaderFn((features) => {
-            resolve(features);
-          })(null, null, getProj(this.map.getProjection().code));
-        }
+        })(null, null, getProj(this.map.getProjection().code));
       });
     }
     return this.loadFeaturesPromise_;
