@@ -217,8 +217,7 @@ function fun(M_) {
   M_.config('DEFAULT_PROJ', 'EPSG:25830*m');
 
   /**
-   * Predefined WMC files. It is composed of URL,
-   * predefined name and context name.
+   * Geoprint configuration.
    * @type {object}
    * @public
    * @api stable
@@ -231,16 +230,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'URL': 'https://geoprint.desarrollo.guadaltel.es/print/SIGC',
-
-    /**
-     * Printer service URL
-     * @const
-     * @type {Array<string>}
-     * @public
-     * @api stable
-     */
-    'URL_APPLICATION': 'https://geoprint.desarrollo.guadaltel.es',
+    'URL': 'http://geoprint-sigc.juntadeandalucia.es/geoprint/pdf',
 
     /**
      * WMC predefined names
@@ -286,6 +276,32 @@ function fun(M_) {
      * @api stable
      */
     'LEGEND': true
+  });
+
+  /**
+   * Geoprint configuration.
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M_.config('geoprint2', {
+    /**
+     * Printer service URL
+     * @const
+     * @type {Array<string>}
+     * @public
+     * @api stable
+     */
+    'URL': 'https://geoprint.desarrollo.guadaltel.es/print/SIGC',
+
+    /**
+     * Printer service URL
+     * @const
+     * @type {Array<string>}
+     * @public
+     * @api stable
+     */
+    'URL_APPLICATION': 'https://geoprint.desarrollo.guadaltel.es',
   });
 
   /**

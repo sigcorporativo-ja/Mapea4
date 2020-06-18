@@ -10,7 +10,7 @@
    * @private
    * @type {Number}
    */
-  M.config('MOBILE_WIDTH', ${mobile.width});
+  M.config('MOBILE_WIDTH', $ { mobile.width });
 
   /**
    * The Mapea URL
@@ -229,22 +229,13 @@
     'URL': '${geoprint.url}',
 
     /**
-     * Printer service URL
-     * @const
-     * @type {Array<string>}
-     * @public
-     * @api stable
-     */
-    'URL_APPLICATION': '${geoprint.url_application}',
-
-    /**
      * WMC predefined names
      * @const
      * @type {Array<string>}
      * @public
      * @api stable
      */
-    'DPI': ${geoprint.dpi},
+    'DPI': $ { geoprint.dpi },
 
     /**
      * WMC context names
@@ -271,7 +262,7 @@
      * @public
      * @api stable
      */
-    'FORCE_SCALE': ${geoprint.force_scale},
+    'FORCE_SCALE': $ { geoprint.force_scale },
 
     /**
      * TODO
@@ -280,7 +271,33 @@
      * @public
      * @api stable
      */
-    'LEGEND': ${geoprint.legend}
+    'LEGEND': $ { geoprint.legend }
+  });
+
+  /**
+   * Geoprint configuration.
+   * @type {object}
+   * @public
+   * @api stable
+   */
+  M.config('geoprint2', {
+    /**
+     * Printer service URL
+     * @const
+     * @type {Array<string>}
+     * @public
+     * @api stable
+     */
+    'URL': '${geoprint2.url}',
+
+    /**
+     * Printer service URL
+     * @const
+     * @type {Array<string>}
+     * @public
+     * @api stable
+     */
+    'URL_APPLICATION': '${geoprint.url_application}',
   });
 
   /**

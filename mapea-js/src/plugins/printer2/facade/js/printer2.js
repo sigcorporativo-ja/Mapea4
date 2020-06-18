@@ -50,7 +50,7 @@ export default class Printer extends M.Plugin {
      * @private
      * @type {String}
      */
-    this.url_ = M.config.geoprint2.URL;
+    this.url_ = M.config.geoprint.URL;
     if (!M.utils.isNullOrEmpty(parameters.url)) {
       this.url_ = parameters.url;
     }
@@ -60,9 +60,23 @@ export default class Printer extends M.Plugin {
      * @private
      * @type {String}
      */
-    this.params_ = {};
+    this.params_ = {
+      urlApplication: M.config.geoprint2.URL_APPLICATION,
+      layout: {
+        outputFilename: 'mapea_${yyyy-MM-dd_hhmmss}',
+      },
+    };
     if (!M.utils.isNullOrEmpty(parameters.params)) {
       this.params_ = parameters.params;
+      if (M.utils.isNullOrEmpty(this.params_.urlApplication)) {
+        this.params_.urlApplication = M.config.geoprint2.URL_APPLICATION;
+      }
+
+      if (M.utils.isNullOrEmpty(this.params_.layout)) {
+        this.params_.layout = {
+          outputFilename: 'mapea_${yyyy-MM-dd_hhmmss}',
+        };
+      }
     }
 
     /**
