@@ -74,8 +74,19 @@ export default class Measurebar extends M.Plugin {
     this.measureLength_ = new MeasureLength();
     this.measureArea_ = new MeasureArea();
     this.measureClear_ = new MeasureClear(this.measureLength_, this.measureArea_);
-
-    map.addControls([this.measureLength_, this.measureArea_, this.measureClear_]);
+    if (M.utils.isNullOrEmpty(this.map_.panel.TOOLS)) {
+      this.map_.panel.TOOLS = new M.ui.Panel('tools', {
+        collapsible: true,
+        className: 'm-tools',
+        collapsedButtonClass: 'g-cartografia-herramienta',
+        position: M.ui.position.TL,
+        tooltip: 'Panel de herramientas',
+      });
+    }
+    this.controls_ = [this.measureLength_, this.measureArea_, this.measureClear_];
+    this.map_.panel.TOOLS.addControls(this.controls_);
+    this.panel_ = this.map_.panel.TOOLS;
+    this.map_.addPanels(this.panel_);
   }
 
   /**
@@ -86,7 +97,7 @@ export default class Measurebar extends M.Plugin {
    * @api stable
    */
   destroy() {
-    this.map_.removeControls([this.measureLength_, this.measureArea_, this.measureClear_]);
+    this.panel_.removeControls([this.measureLength_, this.measureArea_, this.measureClear_]);
     this.map_ = null;
     this.measureLength_ = null;
     this.measureArea_ = null;

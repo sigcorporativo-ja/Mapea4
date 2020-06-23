@@ -291,6 +291,30 @@ class Features extends Base {
     // this.getImpl().destroy();
     // this.fire(M.evt.DESTROY);
   }
+
+  /**
+   * Clear selected features
+   *
+   * @private
+   * @function
+   * @api
+   */
+  clearSelectedFeatures() {
+    Object.keys(this.prevSelectedFeatures_).forEach((key) => {
+      this.prevSelectedFeatures_[key] = [];
+    });
+  }
+
+  /**
+   * Clear hover features
+   *
+   * @private
+   * @function
+   * @api
+   */
+  clearHoverFeatures() {
+    Object.keys(this.prevHoverFeatures_).forEach((key) => { this.prevHoverFeatures_[key] = []; });
+  }
 }
 
 export default Features;

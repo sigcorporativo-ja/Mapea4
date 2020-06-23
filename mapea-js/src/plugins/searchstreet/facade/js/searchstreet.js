@@ -169,7 +169,7 @@ export default class Searchstreet extends M.Plugin {
    */
   destroy() {
     this.map_.removeControls([this.control_]);
-    this.autocompletador_.destroy();
+    this.map_.removePlugins(this.autocompletador_);
     this.name = null;
     this.map_ = null;
     this.control_ = null;

@@ -63,7 +63,10 @@ class Rotate extends Control {
         // }
 
         const iconRotation = `rotate(${(rotation * 360) / (2 * Math.PI)}deg)`;
-        this.panel.querySelector('button').style.transform = iconRotation;
+        const transform = 'transform';
+        this.panel.querySelector('button').style.WebkitTransform = iconRotation;
+        this.panel.querySelector('button').style.MozTransform = iconRotation;
+        this.panel.querySelector('button').style[transform] = iconRotation;
       });
     });
   }

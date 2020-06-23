@@ -13,6 +13,7 @@ import { compileSync as compileTemplate } from 'M/util/Template';
 import { isNullOrEmpty, normalize, beautifyAttribute } from 'M/util/Utils';
 import { getValue } from 'M/i18n/language';
 import Control from './Control';
+import { isString, addParameters } from '../../../../facade/js/util/Utils';
 
 /**
  * @classdesc
@@ -158,7 +159,10 @@ class GetFeatureInfo extends Control {
         const regexBuffer = /buffer/i;
         const source = olLayer.getSource();
         const coord = this.evt.coordinate;
-        const url = source.getGetFeatureInfoUrl(coord, viewResolution, srs, getFeatureInfoParams);
+        let url = source.getGetFeatureInfoUrl(coord, viewResolution, srs, getFeatureInfoParams);
+        if (isString(M.config.ticket)) {
+          url = addParameters(url, { ticket: M.config.ticket });
+        }
         if (!regexBuffer.test(layer.url)) {
           getFeatureInfoParams.Buffer = this.buffer;
         }
@@ -180,7 +184,10 @@ class GetFeatureInfo extends Control {
         param = {};
         const infoFormat = this.userFormat;
         const coord = this.evt.coordinate;
-        const url = layer.getGetFeatureInfoUrl(coord, this.facadeMap_.getZoom(), infoFormat);
+        let url = layer.getGetFeatureInfoUrl(coord, this.facadeMap_.getZoom(), infoFormat);
+        if (isString(M.config.ticket)) {
+          url = addParameters(url, { ticket: M.config.ticket });
+        }
         param = { layer: layer.legend || layer.name, url };
       }
       return param;
@@ -561,6 +568,7 @@ class GetFeatureInfo extends Control {
         }
       });
     });
+    this.popup_ = popup;
   }
 
   /**
@@ -575,6 +583,10 @@ class GetFeatureInfo extends Control {
       content.classList.remove('m-content-collapsed');
       target.classList.remove('m-arrow-right');
       target.classList.add('m-arrow-down');
+      const coordinates = this.popup_.getCoordinate();
+      if (!isNullOrEmpty(this.popup_.getImpl().panIntoView)) {
+        this.popup_.getImpl().panIntoView(coordinates);
+      }
     } else {
       content.classList.add('m-content-collapsed');
       target.classList.add('m-arrow-right');

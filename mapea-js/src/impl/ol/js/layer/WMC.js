@@ -165,7 +165,7 @@ class WMC extends Layer {
     this.layers = context.layers;
     this.maxExtent = context.maxExtent;
     if (!isNullOrEmpty(context.layerGroups)) {
-      this.groups.push(context.layerGroups);
+      this.groups = this.groups.concat(context.layerGroups);
     }
     this.layers.forEach(wms => wms.setWMCParent(this.facadeLayer_));
     this.map.addWMS(this.layers, true);

@@ -5,7 +5,7 @@ import 'assets/css/controls/mouse';
 import mouseTemplate from 'templates/mouse';
 import MouseImpl from 'impl/control/Mouse';
 import ControlBase from './Control';
-import { isUndefined } from '../util/Utils';
+import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
 import { getValue } from '../i18n/language';
@@ -48,7 +48,8 @@ class Mouse extends ControlBase {
    * @api
    */
   createView(map) {
-    return compileTemplate(mouseTemplate);
+    const template = compileTemplate(mouseTemplate);
+    return template;
   }
 
   /**
@@ -60,6 +61,21 @@ class Mouse extends ControlBase {
    */
   equals(obj) {
     return obj instanceof Mouse;
+  }
+
+  /**
+   * Destroys the control
+   *
+   * @public
+   * @function
+   * @api
+   */
+  destroy() {
+    super.destroy();
+    const panel = this.getPanel();
+    if (!isNullOrEmpty(panel)) {
+      panel.removeClassName('m-with-mouse');
+    }
   }
 }
 

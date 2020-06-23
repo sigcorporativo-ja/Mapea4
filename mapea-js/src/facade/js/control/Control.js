@@ -1,7 +1,7 @@
 /**
  * @module M/Control
  */
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
+import { isUndefined, isNullOrEmpty, removeHTML } from '../util/Utils';
 import Exception from '../exception/exception';
 import Base from '../Base';
 import * as EventType from '../event/eventtype';
@@ -269,7 +269,9 @@ class Control extends Base {
    * @api
    * @export
    */
-  destroy() {}
+  destroy() {
+    removeHTML(this.getElement());
+  }
 }
 
 export default Control;

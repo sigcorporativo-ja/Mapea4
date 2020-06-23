@@ -62,6 +62,9 @@ class WFS extends Vector {
 
     // options
     this.options = options;
+
+    // extract
+    this.extract = false;
   }
 
   /**

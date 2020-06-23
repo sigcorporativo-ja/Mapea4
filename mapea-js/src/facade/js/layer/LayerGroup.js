@@ -75,7 +75,7 @@ class LayerGroup extends MObject {
      * @type {Boolean}
      * @api
      */
-    this.collapsed = !!parameters.collapsed;
+    this.collapsed = parameters.collapsed ? parameters.collapsed : true;
 
     /**
      * Position of the group in the TOC
@@ -153,10 +153,10 @@ class LayerGroup extends MObject {
    */
   setZIndex(zIndex) {
     this.zIndex_ = zIndex;
-    const layersOfLayerGroup = this.getChildren();
+    const layersOfLayerGroup = [...this.getChildren()];
+    const reverseLayers = layersOfLayerGroup.reverse();
     let countZindex = zIndex;
-    layersOfLayerGroup.forEach((varLayer) => {
-      const layer = varLayer;
+    reverseLayers.forEach((layer) => {
       layer.setZIndex(countZindex);
       countZindex += 1;
     });
@@ -185,7 +185,7 @@ class LayerGroup extends MObject {
     let zIndex = this.getZIndex() + this.children_.length;
     const child = childParam;
     if (isNullOrEmpty(index)) {
-      this.children_.push(child);
+      this.children_.unshift(child);
     } else {
       this.children_.splice(index, 0, child);
       zIndex = this.getZIndex() + index;
@@ -219,6 +219,7 @@ class LayerGroup extends MObject {
       this.map.removeLayerGroup(childI);
     } else if (childI instanceof LayerBase) {
       this.map.removeLayers(childI);
+      this.ungroup(child);
     }
   }
 
@@ -310,8 +311,8 @@ class LayerGroup extends MObject {
    * @api
    */
   static findGroupById(groupId, layerGroups) {
-    let group;
-    if (isArray(layerGroups)) {
+    let group = null;
+    if (isArray(layerGroups) && layerGroups.length > 0) {
       group = layerGroups.find(g => g instanceof LayerGroup && g.id === groupId);
       if (group == null) {
         const childGroups = layerGroups.map(g => g.getChildren())

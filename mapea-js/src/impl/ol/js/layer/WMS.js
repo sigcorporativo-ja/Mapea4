@@ -136,6 +136,11 @@ class WMS extends LayerBase {
       this.options.animated = false; // by default
     }
 
+    // styles
+    this.styles = this.options.styles || '';
+    // sldBody
+    this.sldBody = options.sldBody;
+
     this.zIndex_ = ImplMap.Z_INDEX[LayerType.WMS];
   }
 
@@ -293,6 +298,8 @@ class WMS extends LayerBase {
         }, this.vendorOptions_, true));
       }
       this.map.getMapImpl().addLayer(this.ol3Layer);
+      // Fire the Event LOAD.
+      this.facadeLayer_.fire(EventType.LOAD);
       // sets its visibility if it is in range
       if (this.isVisible() && !this.inRange()) {
         this.setVisible(false);
@@ -329,7 +336,13 @@ class WMS extends LayerBase {
         VERSION: this.version,
         TRANSPARENT: this.transparent,
         FORMAT: 'image/png',
+        STYLES: this.styles,
       };
+
+      if (!isNullOrEmpty(this.sldBody)) {
+        layerParams.SLD_BODY = this.sldBody;
+      }
+
       if (!isNullOrEmpty(this.options.params)) {
         Object.keys(this.options.params).forEach((key) => {
           layerParams[key.toUpperCase()] = this.options.params[key];
@@ -536,18 +549,31 @@ class WMS extends LayerBase {
     if (isNullOrEmpty(this.getCapabilitiesPromise)) {
       const layerUrl = this.url;
       const layerVersion = this.version;
+      const projection = this.map.getProjection();
+      const ticket = this.map.getTicket();
+
       this.getCapabilitiesPromise = new Promise((success, fail) => {
         // gest the capabilities URL
-        const wmsGetCapabilitiesUrl = getWMSGetCapabilitiesUrl(layerUrl, layerVersion);
+        const wmsGetCapabilitiesUrl = getWMSGetCapabilitiesUrl(layerUrl, layerVersion, ticket);
         // gets the getCapabilities response
         getRemote(wmsGetCapabilitiesUrl).then((response) => {
-          const getCapabilitiesDocument = response.xml;
-          const getCapabilitiesParser = new FormatWMS();
-          const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
+          if ('xml' in response && !isNullOrEmpty(response.xml)) {
+            const getCapabilitiesDocument = response.xml;
+            const getCapabilitiesParser = new FormatWMS();
+            const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
 
-          const projection = this.map.getProjection();
-          const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
-          success(getCapabilitiesUtils);
+            const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
+            success(getCapabilitiesUtils);
+          } else {
+            getRemote(wmsGetCapabilitiesUrl, '', { ticket: false }).then((response2) => {
+              const getCapabilitiesDocument = response2.xml;
+              const getCapabilitiesParser = new FormatWMS();
+              const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
+
+              const capabilities = new GetCapabilities(getCapabilities, layerUrl, projection);
+              success(capabilities);
+            });
+          }
         });
       });
     }
@@ -589,7 +615,7 @@ class WMS extends LayerBase {
   refresh() {
     const ol3Layer = this.getOL3Layer();
     if (!isNullOrEmpty(ol3Layer)) {
-      ol3Layer.getSource().changed();
+      ol3Layer.getSource().updateParams({ time: Date.now() });
     }
   }
 

@@ -123,7 +123,13 @@ export default class WFSTControls extends M.Plugin {
       name: this.layername_,
     })[0];
     const wfslayer = M.utils.isNullOrEmpty(firstNamedLayer) ? firstLayer : firstNamedLayer;
-
+    this.panel_ = new M.ui.Panel('edit', {
+      collapsible: true,
+      className: 'm-edition',
+      collapsedButtonClass: 'g-cartografia-editar',
+      position: M.ui.position.TL,
+      tooltip: 'Herramientas de edición',
+    });
     if (M.utils.isNullOrEmpty(wfslayer)) {
       M.dialog.error(`Los controles <b>${this.controls.join(',')}</b> no se pueden añadir al mapa porque no existe una capa WFS cargada.`);
     } else {
@@ -132,25 +138,21 @@ export default class WFSTControls extends M.Plugin {
       for (let i = 0, ilen = this.controls.length; i < ilen; i += 1) {
         if (this.controls[i] === 'drawfeature') {
           this.drawfeature_ = new DrawFeature(wfslayer);
-          map.addControls([this.drawfeature_]);
           this.controls_.push(this.drawfeature_);
           addSave = true;
           addClear = true;
         } else if (this.controls[i] === 'modifyfeature') {
           this.modifyfeature_ = new ModifyFeature(wfslayer);
-          map.addControls([this.modifyfeature_]);
           this.controls_.push(this.modifyfeature_);
           addSave = true;
           addClear = true;
         } else if (this.controls[i] === 'deletefeature') {
           this.deletefeature_ = new DeleteFeature(wfslayer);
-          map.addControls([this.deletefeature_]);
           this.controls_.push(this.deletefeature_);
           addSave = true;
           addClear = true;
         } else if (this.controls[i] === 'editattribute') {
           this.editattibute_ = new EditAttribute(wfslayer);
-          map.addControls([this.editattibute_]);
           this.controls_.push(this.editattibute_);
           addClear = true;
         }
@@ -158,14 +160,15 @@ export default class WFSTControls extends M.Plugin {
 
       if (addSave) {
         this.savefeature_ = new SaveFeature(wfslayer);
-        map.addControls([this.savefeature_]);
         this.controls_.push(this.savefeature_);
       }
       if (addClear) {
         this.clearfeature_ = new ClearFeature(wfslayer);
-        map.addControls([this.clearfeature_]);
         this.controls_.push(this.clearfeature_);
       }
+      this.panel_.addControls(this.controls_);
+      this.map_.addPanels(this.panel_);
+      this.map_.panel.EDITION = this.panel_;
     }
   }
 
