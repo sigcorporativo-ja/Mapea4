@@ -24,7 +24,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('MAPEA_URL', 'http://sigc-dev.desarrollo.guadaltel.es/mapea5');
+  M_.config('MAPEA_URL', location.protocol + '//sigc-dev.desarrollo.guadaltel.es/mapea5');
 
   /**
    * The path to the Mapea proxy to send
@@ -71,7 +71,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('GEOSEARCH_URL', 'http://geobusquedas-sigc.juntadeandalucia.es');
+  M_.config('GEOSEARCH_URL', location.protocol + '//geobusquedas-sigc.juntadeandalucia.es');
 
   /**
    * The Geosearch core
@@ -142,7 +142,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'urls': 'http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_callejero.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_hibrido.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_satelite.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejeroCache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejero.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextIDEA.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto2009.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/callejero2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/ortofoto2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/hibrido2011cache.xml,http://mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto.xml'.split(','),
+    'urls': '//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_callejero.xml,//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_hibrido.xml,//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/context_cdau_satelite.xml,//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejeroCache.xml,//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextCallejero.xml,//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextIDEA.xml,//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto2009.xml,//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/callejero2011cache.xml,//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/ortofoto2011cache.xml,//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/hibrido2011cache.xml,//mapea4-sigc.juntadeandalucia.es/mapea/files/wmc/contextOrtofoto.xml'.split(',').map(e => location.protocol + e),
 
     /**
      * WMC predefined names
@@ -186,7 +186,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'tiledUrls': 'http://www.callejerodeandalucia.es/servicios/base/gwc/service/wms?,http://www.callejerodeandalucia.es/servicios/base/gwc/service/wms?,http://www.ideandalucia.es/geowebcache/service/wms?,http://www.juntadeandalucia.es/servicios/mapas/callejero/wms-tiled?,http://www.ideandalucia.es/geowebcache/service/wms?'.split(','),
+    'tiledUrls': '//www.callejerodeandalucia.es/servicios/base/gwc/service/wms?,//www.callejerodeandalucia.es/servicios/base/gwc/service/wms?,//www.ideandalucia.es/geowebcache/service/wms?,//www.juntadeandalucia.es/servicios/mapas/callejero/wms-tiled?,//www.ideandalucia.es/geowebcache/service/wms?'.split(',').map(e => location.protocol + e),
 
     /**
      * WMC context names
@@ -204,7 +204,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'urls': 'http://www.callejerodeandalucia.es/servicios/base/wms?,http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_SPOT_Andalucia_2005?,http://www.ideandalucia.es/wms/ortofoto2010?,http://www.juntadeandalucia.es/servicios/mapas/callejero/wms?,http://www.ideandalucia.es/wms/ortofoto2010?'.split(',')
+    'urls': '//www.callejerodeandalucia.es/servicios/base/wms?,//www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_SPOT_Andalucia_2005?,//www.ideandalucia.es/wms/ortofoto2010?,//www.juntadeandalucia.es/servicios/mapas/callejero/wms?,//www.ideandalucia.es/wms/ortofoto2010?'.split(',').map(e => location.protocol + e)
   });
 
   /**
@@ -230,7 +230,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'URL': 'http://geoprint-sigc.juntadeandalucia.es/geoprint/pdf',
+    'URL': location.protocol + '//geoprint-sigc.juntadeandalucia.es/geoprint/pdf',
 
     /**
      * WMC predefined names
@@ -292,7 +292,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'URL': 'https://geoprint.desarrollo.guadaltel.es/print/SIGC',
+    'URL': location.protocol + '//geoprint.desarrollo.guadaltel.es/print/SIGC',
 
     /**
      * Printer service URL
@@ -301,7 +301,7 @@ function fun(M_) {
      * @public
      * @api stable
      */
-    'URL_APPLICATION': 'https://geoprint.desarrollo.guadaltel.es',
+    'URL_APPLICATION': location.protocol + '//geoprint.desarrollo.guadaltel.es',
   });
 
   /**
@@ -338,7 +338,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('SEARCHSTREET_URL', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/geocoderMunProvSrs');
+  M_.config('SEARCHSTREET_URL', location.protocol + '//ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/geocoderMunProvSrs');
 
   /**
    * Autocomplete municipality service URL
@@ -347,7 +347,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('SEARCHSTREET_URLCODINEAUTOCOMPLETE', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/autocompletarDireccionMunicipio');
+  M_.config('SEARCHSTREET_URLCODINEAUTOCOMPLETE', location.protocol + '//ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/autocompletarDireccionMunicipio');
 
   /**
    * service URL check code INE
@@ -356,7 +356,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('SEARCHSTREET_URLCOMPROBARINE', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/comprobarCodIne');
+  M_.config('SEARCHSTREET_URLCOMPROBARINE', location.protocol + '//ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/comprobarCodIne');
 
   /**
    * Normalizar searchstreet service URL
@@ -365,7 +365,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('SEARCHSTREET_NORMALIZAR', 'http://ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/normalizar');
+  M_.config('SEARCHSTREET_NORMALIZAR', location.protocol + '//ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/normalizar');
 
   /**
    * Minimum number of characters to start autocomplete
