@@ -6,6 +6,7 @@ import Rotate from '../control/Rotate';
 import ScaleLine from '../control/ScaleLine';
 import Mouse from '../control/Mouse';
 import OverviewMap from '../control/OverviewMap';
+import Navtoolbar from '../control/Navtoolbar';
 import Panzoom from '../control/Panzoom';
 import Panzoombar from '../control/Panzoombar';
 import GetFeatureInfo from '../control/GetFeatureInfo';
@@ -342,6 +343,7 @@ export const buildControl = (control) => {
       [LayerSwitcher.NAME]: new LayerSwitcher(),
       [Location.NAME]: new Location(),
       [Mouse.NAME]: new Mouse(),
+      [Navtoolbar.NAME]: new Navtoolbar(),
       [OverviewMap.NAME]: new OverviewMap({ toggleDelay: 400 }),
       [Panzoom.NAME]: new Panzoom(),
       [Panzoombar.NAME]: new Panzoombar(),
