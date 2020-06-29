@@ -75,7 +75,7 @@ class LayerGroup extends MObject {
      * @type {Boolean}
      * @api
      */
-    this.collapsed = parameters.collapsed ? parameters.collapsed : true;
+    this.collapsed = !!parameters.collapsed;
 
     /**
      * Position of the group in the TOC
