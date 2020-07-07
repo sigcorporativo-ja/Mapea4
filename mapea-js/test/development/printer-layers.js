@@ -1,4 +1,4 @@
-import Printer from 'plugins/printer/facade/js/printer';
+import Printer2 from 'plugins/printer2/facade/js/printer2';
 import WMS from 'M/layer/WMS';
 import GeoJSON from 'M/layer/GeoJSON';
 import LayerGroup from 'M/layer/LayerGroup';
@@ -20,7 +20,7 @@ const mapbox = new M.layer.Mapbox({
 });
 
 // Se crea el plugin del printer
-const printer = new Printer({
+const printer = new Printer2({
   url: 'https://geoprint.desarrollo.guadaltel.es/print/SIGC',
   params: {
     urlApplication: 'https://geoprint.desarrollo.guadaltel.es',
