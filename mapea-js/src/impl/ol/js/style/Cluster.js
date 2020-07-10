@@ -340,7 +340,7 @@ class Cluster extends Style {
         const convexFeature = Feature.olFeature2Facade(convexOlFeature);
         if (isNullOrEmpty(this.convexHullLayer_)) {
           this.convexHullLayer_ = new LayerVector({
-            name: 'cluster_cover',
+            name: `cluster_cover_${this.layer_.name}`,
             extract: false,
           }, {
             displayInLayerSwitcher: false,

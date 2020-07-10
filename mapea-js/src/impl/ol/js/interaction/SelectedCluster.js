@@ -59,6 +59,7 @@ class SelectCluster extends OLInteractionSelect {
     // Create a new overlay layer for
     this.overlayLayer_ = overlayLayer;
 
+    this.originalHandleEvent = this.handleEvent;
     this.on('select', this.selectCluster.bind(this), this);
   }
 
@@ -69,7 +70,6 @@ class SelectCluster extends OLInteractionSelect {
    * @function
    * @api
    */
-
   setMap(map) {
     if (this.getMap()) {
       if (this.getMap().getView()) {
@@ -85,6 +85,11 @@ class SelectCluster extends OLInteractionSelect {
     if (map && map.getView()) {
       map.getView().on('change:resolution', this.clear.bind(this));
     }
+
+    this.handleEvent = (mapBrowserEvent) => {
+      this.originalHandleEvent.apply(this, [mapBrowserEvent]);
+      return true;
+    };
   }
 
   /**
