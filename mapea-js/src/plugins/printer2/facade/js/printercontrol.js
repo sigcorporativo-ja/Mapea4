@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import PrinterControlImpl from '../../impl/ol/js/printercontrol';
 import printerHTML from '../../templates/printer';
 
@@ -490,6 +491,7 @@ export default class PrinterControl extends M.Control {
       this.queueContainer_.appendChild(queueEl);
       queueEl.classList.add(PrinterControl.LOADING_CLASS);
       printUrl = M.utils.addParameters(printUrl, 'mapeaop=geoprint');
+      M.proxy(false);
       M.remote.post(printUrl, printData).then((responseParam) => {
         let response = responseParam;
         const responseStatusURL = JSON.parse(response.text);
@@ -500,7 +502,7 @@ export default class PrinterControl extends M.Control {
         this.printing_ = true;
         this.getStatus(statusURL, () => queueEl.classList.remove(PrinterControl.LOADING_CLASS));
 
-        if (response.error !== true) {
+        if (response.code === 200) {
           let downloadUrl;
           try {
             response = JSON.parse(response.text);
@@ -668,7 +670,13 @@ export default class PrinterControl extends M.Control {
           if (!M.utils.isNullOrEmpty(encodedLayer) && encodedLayer.type !== 'Vector') {
             encodedLayers.push(encodedLayer);
           } else {
-            encodedLayersVector.push(encodedLayer);
+            // Se comprueba que las capas vectoriales estén en el rango del mapa.
+            const resolution = this.map_.getMapImpl().getView().getResolution();
+            const maxResolution = layer.impl_.ol3Layer.getMaxResolution();
+            const minResolution = layer.impl_.ol3Layer.getMinResolution();
+            if (((resolution >= minResolution) && (resolution <= maxResolution))) {
+              encodedLayersVector.push(encodedLayer);
+            }
           }
           numLayersToProc -= 1;
           if (numLayersToProc === 0) {
