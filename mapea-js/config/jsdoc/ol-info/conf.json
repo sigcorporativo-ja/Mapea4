@@ -16,6 +16,6 @@
     "config/jsdoc/info/virtual-plugin"
   ],
   "typescript": {
-    "moduleRoot": "src"
+    "moduleRoot": "node_modules/ol"
   }
 }
