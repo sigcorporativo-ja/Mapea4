@@ -1,9 +1,8 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
    <modelVersion>4.0.0</modelVersion>
    <groupId>es.juntadeandalucia.mapea</groupId>
    <artifactId>mapea-parent</artifactId>
-   <version>5.2.0</version>
+   <version>6.0.0</version>
    <packaging>pom</packaging>
    <name>Mapea PARENT</name>
    <description>Herramienta para desarrollo de mapas interactivos de forma sencilla</description>
@@ -112,8 +111,8 @@
          </plugins>
       </pluginManagement>
    </build>
-      <dependencies>
-         <dependency>
+   <dependencies>
+      <dependency>
          <groupId>commons-io</groupId>
          <artifactId>commons-io</artifactId>
          <version>1.4</version>
