@@ -1,6 +1,6 @@
 {
   "name": "mapea",
-  "version": "5.2.0",
+  "version": "6.0.0",
   "description": "Herramienta para desarrollo de mapas interactivos de forma sencilla",
   "keywords": [
     "map",
@@ -18,9 +18,9 @@
     "url": "https://github.com/sigcorporativo-ja/mapeaJS/issues"
   },
   "devDependencies": {
-    "@babel/core": "^7.0.0-beta.51",
+    "@babel/core": "^7.6.4",
     "@babel/plugin-proposal-export-default-from": "^7.0.0-beta.51",
-    "@babel/preset-env": "^7.0.0-beta.51",
+    "@babel/preset-env": "^7.4.4",
     "babel-loader": "^8.0.0-beta.4",
     "chromedriver": "^2.46.0",
     "copy-webpack-plugin": "^4.5.2",
@@ -37,6 +37,7 @@
     "file-loader": "^1.1.11",
     "fs-extra": "2.0.0",
     "html-loader": "^0.5.5",
+    "jsdoc-plugin-typescript": "^2.0.5",
     "karma": "^4.0.1",
     "karma-chrome-launcher": "^2.2.0",
     "karma-firefox-launcher": "^1.1.0",
@@ -63,9 +64,9 @@
     "draggabilly": "^2.2.0",
     "get-image-colors": "^2.0.0",
     "handlebars": "^4.5.3",
-    "jsdoc": "^3.6.3",
+    "jsdoc": "^3.6.4",
     "jsts": "^2.0.2",
-    "ol": "5.2.0",
+    "ol": "6.3.1",
     "proj4": "^2.4.4"
   },
   "scripts": {
