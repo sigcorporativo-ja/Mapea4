@@ -55,11 +55,11 @@ module.exports = {
       {
         test: /\.css$/,
         loader: MiniCssExtractPlugin.loader,
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!ol)/,
       }, {
         test: /\.css$/,
         loader: 'css-loader',
-        exclude: /node_modules/,
+        exclude: [/node_modules\/(?!ol)/],
 
       },
       {

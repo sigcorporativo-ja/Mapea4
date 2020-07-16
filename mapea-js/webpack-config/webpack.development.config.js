@@ -59,7 +59,7 @@ module.exports = {
   module: {
     rules: [{
         test: /\.js$/,
-        exclude: /(node_modules\/(?!ol)|bower_components)/,
+        exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -86,7 +86,7 @@ module.exports = {
       {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
-        exclude: [/node_modules/],
+        exclude: [/node_modules\/(?!ol)/],
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
