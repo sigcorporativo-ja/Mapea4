@@ -38,8 +38,4 @@ export default class Circle extends OLStyleCircle {
     style.setScale(this.getScale());
     return style;
   }
-
-  render() {
-    this.render_();
-  }
 }
