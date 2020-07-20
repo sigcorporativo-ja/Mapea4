@@ -18,6 +18,7 @@ class Mouse extends MousePosition {
    */
   constructor(vendorOptions) {
     super(vendorOptions);
+
     /**
      * Vendor options for the base library
      * @private
@@ -25,6 +26,7 @@ class Mouse extends MousePosition {
      */
     this.vendorOptions_ = vendorOptions;
   }
+
   /**
    * function remove the event 'click'
    *
@@ -35,6 +37,7 @@ class Mouse extends MousePosition {
   getElement() {
     return this.element;
   }
+
   /**
    * This function destroys this control, cleaning the HTML
    * and unregistering all events
@@ -42,12 +45,12 @@ class Mouse extends MousePosition {
    * @public
    * @function
    * @api
-   * @export
    */
   destroy() {
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_ = null;
   }
+
   /**
    * @param {Event} event Browser event.
    * @protected
@@ -57,6 +60,7 @@ class Mouse extends MousePosition {
     this.lastMouseMovePixel_ = map.getEventPixel(event);
     this.updateHTML_(this.lastMouseMovePixel_);
   }
+
   /**
    * @param {Event} event Browser event.
    * @protected
@@ -65,6 +69,7 @@ class Mouse extends MousePosition {
     this.updateHTML_(null);
     this.lastMouseMovePixel_ = null;
   }
+
   /**
    * @private
    * @function
@@ -101,4 +106,5 @@ class Mouse extends MousePosition {
     }
   }
 }
+
 export default Mouse;

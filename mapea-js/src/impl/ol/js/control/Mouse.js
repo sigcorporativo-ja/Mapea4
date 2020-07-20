@@ -12,7 +12,15 @@ import OLControlMousePosition from '../ext/OLMouse';
  */
 class Mouse extends OLControlMousePosition {
   constructor(options, vendorOptions) {
-    super();
+    const opts = extend({
+      coordinateFormat: createStringXY(options.precision || 4),
+      label: options.label,
+      undefinedHTML: '',
+      className: 'm-mouse-position g-cartografia-flecha',
+    }, vendorOptions, true);
+
+    super(opts);
+
     /**
      * Coordinates spatial reference system
      *
@@ -20,6 +28,7 @@ class Mouse extends OLControlMousePosition {
      * @private
      */
     this.srs_ = options.srs;
+
     /**
      * Label to show
      *
@@ -27,6 +36,7 @@ class Mouse extends OLControlMousePosition {
      * @private
      */
     this.label_ = options.label;
+
     /**
      * Precision of coordinates
      *
@@ -42,6 +52,7 @@ class Mouse extends OLControlMousePosition {
      */
     this.vendorOptions_ = vendorOptions;
   }
+
   /**
    * This function adds the control to the specified map
    *
@@ -54,14 +65,10 @@ class Mouse extends OLControlMousePosition {
    */
   addTo(map, html) {
     this.facadeMap_ = map;
-    OLControlMousePosition.call(this, extend({
-      coordinateFormat: createStringXY(this.precision_ || 4),
-      projection: this.srs_ || map.getProjection().code,
-      label: this.label_,
-      undefinedHTML: '',
-      className: 'm-mouse-position g-cartografia-flecha',
-      target: html,
-    }, this.vendorOptions_, true));
+
+    this.setProjection(this.srs_ || map.getProjection().code);
+    this.setTarget(html);
+
     map.getMapImpl().addControl(this);
 
     // update projection mouse only if the projection was no specified
