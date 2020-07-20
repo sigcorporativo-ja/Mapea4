@@ -24,7 +24,6 @@ import {
   fillResolutions,
   generateResolutionsFromExtent,
 } from 'M/util/Utils';
-import 'patches';
 import ImplUtils from './util/Utils';
 import View from './View';
 

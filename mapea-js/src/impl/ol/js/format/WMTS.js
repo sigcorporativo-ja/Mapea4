@@ -2,7 +2,7 @@
  * @module M/impl/format/WMTSCapabilities
  */
 import { isNullOrEmpty } from 'M/util/Utils';
-import { optionsFromCapabilities } from 'ol/source/WMTS';
+import { optionsFromCapabilities } from 'impl/patches';
 import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
 /**
  * @classdesc

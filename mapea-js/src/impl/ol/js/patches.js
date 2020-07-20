@@ -1,83 +1,9 @@
-/* eslint-disable */
-import * as LayerModule from 'ol/layer/Layer';
-import OLFormatGML3 from 'ol/format/GML3';
-// import OLInteractionPointer from 'ol/interaction/Pointer';
-import { writeStringTextNode } from 'ol/format/xsd';
 import { find, findIndex, includes } from 'ol/array';
 import { get as getProjection } from 'ol/proj';
 import { createFromCapabilitiesMatrixSet } from 'ol/tilegrid/WMTS';
 import WMTSRequestEncoding from 'ol/source/WMTSRequestEncoding';
 
-// import { POINTERUP, POINTERDOWN, POINTERDRAG } from 'ol/MapBrowserEventType';
-// import { getValues } from 'ol/obj';
-
-
-/**
- * Return `true` if the layer is visible, and if the passed resolution is
- * between the layer's minResolution and maxResolution. The comparison is
- * inclusive for `minResolution` and exclusive for `maxResolution`.
- * @param {ol.layer.LayerState} layerState Layer state.
- * @param {number} resolution Resolution.
- * @return {boolean} The layer is visible at the given resolution.
- *
- * PATCH: inclusive maxResolution comparasion to show layers with the
- * same resolution as its maxResolution
- */
-LayerModule.visibleAtResolution = (layerState, resolution) => {
-  return layerState.visible && resolution >= layerState.minResolution &&
-    resolution <= layerState.maxResolution;
-};
-
-/**
- * @param {Node} node Node.
- * @param {ol.geom.Point} value Point geometry.
- * @param {Array.<*>} objectStack Node stack.
- *
- * PATCH: disables axis order configuration
- */
-OLFormatGML3.prototype.writePos_ = (node, value, objectStack) => {
-  // var context = objectStack[objectStack.length - 1];
-  // PATCH: ------------------------------ init
-  // var srsName = context['srsName'];
-  // var axisOrientation = 'enu';
-  // if (srsName) {
-  //   axisOrientation = ol.proj.get(srsName).getAxisOrientation();
-  // }
-  // ------------------------------------- end
-  const point = value.getCoordinates();
-  const coords = `${point[0]} ${point[1]}`;
-  // PATCH: ------------------------------ init
-  // only 2d for simple features profile
-  // if (axisOrientation.substr(0, 2) === 'en') {
-  // ------------------------------------- end
-  // PATCH: ------------------------------ init
-  // } else {
-  //   coords = (point[1] + ' ' + point[0]);
-  // }
-  // ------------------------------------- end
-  writeStringTextNode(node, coords);
-};
-
-/**
- * @param {Array.<number>} point Point geometry.
- * @param {string=} optSRSName Optional srsName
- * @return {string} The coords string.
- *
- * PATCH: disables axis order configuration
- */
-OLFormatGML3.prototype.getCoords_ = (point, optSRSName) => {
-  // PATCH: ------------------------------ init
-  // var axisOrientation = 'enu';
-  // if (optSRSName) {
-  //   axisOrientation = ol.proj.get(optSRSName).getAxisOrientation();
-  // }
-  // return ((axisOrientation.substr(0, 2) === 'en') ?
-  //     point[0] + ' ' + point[1] :
-  //     point[1] + ' ' + point[0]);
-  return `${point[0]} ${point[1]}`;
-  // ------------------------------------- end
-};
-
+/* eslint-disable */
 /**
  * Generate source options from a capabilities object.
  * @param {Object} wmtsCap An object representing the capabilities document.

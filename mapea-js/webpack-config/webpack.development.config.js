@@ -1,7 +1,6 @@
 const path = require('path');
 const fse = require('fs-extra');
 const webpack = require('webpack');
-const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 const argv = require('yargs').argv;
 
 const testName = argv.name;
@@ -52,12 +51,21 @@ module.exports = {
       configuration: path.resolve(__dirname, '../test/configuration_filtered'),
       'impl-assets': path.resolve(__dirname, '../src/impl/ol/assets'),
       plugins: path.resolve(__dirname, '../src/plugins'),
-      patches: path.resolve(__dirname, '../src/impl/ol/js/patches_dev.js'),
     },
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html', '.jpg'],
   },
   module: {
     rules: [{
+        test: /\.js$/,
+        use: {
+          loader: path.resolve(__dirname, 'mutate-loader'),
+          options: {
+            mode: 'dev'
+          }
+        },
+        include: /node_modules\/ol\/*/,
+      },
+      {
         test: /\.js$/,
         exclude: /(node_modules|bower_components)/,
         use: {
@@ -77,7 +85,6 @@ module.exports = {
         loader: path.resolve(__dirname, 'expose-entry-loader'),
         exclude: [/node_modules/, /lib/, /dist/],
       },
-
       {
         test: [/\.hbs$/, /\.html$/],
         loader: 'html-loader',
@@ -96,7 +103,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new AllowMutateEsmExports(),
     new webpack.HotModuleReplacementPlugin(),
   ],
   devServer: {
