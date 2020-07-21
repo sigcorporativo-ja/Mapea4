@@ -42,10 +42,13 @@ class KML extends OLFormatKML {
   readCustomFeatures(textResponse, options) {
     const features = this.readFeatures(textResponse, options);
     const featuresModified = features.map((feature) => {
-      const styles = feature.getStyle()(feature);
+      let styles = feature.getStyle()(feature);
       if (this.label_ === false) {
         const news = [styles[0]];
         feature.setStyle(news);
+      }
+      if (!Array.isArray(styles)) {
+        styles = [styles];
       }
       styles.forEach((style) => {
         if (style.getImage() instanceof OLStyleIcon) {
