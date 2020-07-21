@@ -1951,9 +1951,6 @@ class Map extends MObject {
     // units
     const units = this.getProjection().units;
 
-    // size
-    const size = this.getMapImpl().getSize();
-
     const baseLayer = this.getBaseLayers().filter((bl) => {
       return bl.isVisible();
     })[0];
@@ -1985,6 +1982,7 @@ class Map extends MObject {
       } else {
         this.facadeMap_.calculateMaxExtent().then((extent) => {
           if (!this._resolutionsBaseLayer && (this.userResolutions_ === null)) {
+            const size = this.getMapImpl().getSize();
             resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
 
