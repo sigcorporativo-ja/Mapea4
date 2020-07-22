@@ -1982,6 +1982,7 @@ class Map extends MObject {
       } else {
         this.facadeMap_.calculateMaxExtent().then((extent) => {
           if (!this._resolutionsBaseLayer && (this.userResolutions_ === null)) {
+            this.getMapImpl().updateSize();
             const size = this.getMapImpl().getSize();
             resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
             this.setResolutions(resolutions, true);
