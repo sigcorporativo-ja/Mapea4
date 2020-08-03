@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import PrinterControlImpl from '../../impl/ol/js/printercontrol';
 import printerHTML from '../../templates/printer';
 
@@ -193,9 +194,8 @@ export default class PrinterControl extends M.Control {
    * @param {*} url es la url que se le envía a la petición get para
    * comprobar el estado de la impresión
    * @param {*} callback quita el icono LOADING
-   * @param {*} callback2 quita el contenedor con la impresión del mapa
    */
-  getStatus(url, callback, callback2) {
+  getStatus(url, callback) {
     M.remote.get(url).then((response) => {
       const statusJson = JSON.parse(response.text);
       const { status } = statusJson;
@@ -205,10 +205,11 @@ export default class PrinterControl extends M.Control {
         callback();
         M.dialog.error('Se ha producido un error en la impresión');
       } else if (this.printing_ === false) {
-        callback2();
         M.dialog.error('Se ha cancelado la impresión');
+
+        this.queueContainer_.lastChild.remove();
       } else {
-        setTimeout(() => this.getStatus(url, callback, callback2), 1000);
+        setTimeout(() => this.getStatus(url, callback), 1000);
       }
     });
   }
@@ -419,9 +420,7 @@ export default class PrinterControl extends M.Control {
         child.removeEventListener('click', this.dowloadPrint);
       }, this]);
 
-      while (this.queueContainer_.fistChild) {
-        this.queueContainer_(this.queueContainer_.firsChild);
-      }
+      this.queueContainer_.innerHTML = '';
     });
 
     // queue
@@ -492,6 +491,7 @@ export default class PrinterControl extends M.Control {
       this.queueContainer_.appendChild(queueEl);
       queueEl.classList.add(PrinterControl.LOADING_CLASS);
       printUrl = M.utils.addParameters(printUrl, 'mapeaop=geoprint');
+      M.proxy(false);
       M.remote.post(printUrl, printData).then((responseParam) => {
         let response = responseParam;
         const responseStatusURL = JSON.parse(response.text);
@@ -500,12 +500,9 @@ export default class PrinterControl extends M.Control {
         // Borra el símbolo loading cuando ha terminado la impresión del mapa,
         // o borra el botón de la impresión si se ha cancelado
         this.printing_ = true;
-        this.getStatus(
-          statusURL, () => queueEl.classList.remove(PrinterControl.LOADING_CLASS),
-          () => this.queueContainer_.removeChild(queueEl),
-        );
+        this.getStatus(statusURL, () => queueEl.classList.remove(PrinterControl.LOADING_CLASS));
 
-        if (response.error !== true) {
+        if (response.code === 200) {
           let downloadUrl;
           try {
             response = JSON.parse(response.text);
@@ -659,7 +656,7 @@ export default class PrinterControl extends M.Control {
    */
   encodeLayers() {
     const layers = this.map_.getLayers().filter((layer) => {
-      return ((layer.isVisible() === true) && (layer.inRange() === true) && layer.name !== 'cluster_cover');
+      return ((layer.isVisible() === true) && (layer.inRange() === true) && !layer.name.startsWith('cluster_cover'));
     });
     let numLayersToProc = layers.length;
 
@@ -673,7 +670,13 @@ export default class PrinterControl extends M.Control {
           if (!M.utils.isNullOrEmpty(encodedLayer) && encodedLayer.type !== 'Vector') {
             encodedLayers.push(encodedLayer);
           } else {
-            encodedLayersVector.push(encodedLayer);
+            // Se comprueba que las capas vectoriales estén en el rango del mapa.
+            const resolution = this.map_.getMapImpl().getView().getResolution();
+            const maxResolution = layer.impl_.ol3Layer.getMaxResolution();
+            const minResolution = layer.impl_.ol3Layer.getMinResolution();
+            if (((resolution >= minResolution) && (resolution <= maxResolution))) {
+              encodedLayersVector.push(encodedLayer);
+            }
           }
           numLayersToProc -= 1;
           if (numLayersToProc === 0) {
