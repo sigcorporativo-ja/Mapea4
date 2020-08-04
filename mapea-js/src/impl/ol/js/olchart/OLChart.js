@@ -148,7 +148,6 @@ export default class OLChart extends OLStyleRegularShape {
       // data: this.getData(),
       donutRatio: this.donutRatio_,
       data: this.data_,
-      snapToPixel: this.getSnapToPixel(),
       stroke: this.stroke_,
       scheme: this.colors_,
       offsetX: this.offset_[0],

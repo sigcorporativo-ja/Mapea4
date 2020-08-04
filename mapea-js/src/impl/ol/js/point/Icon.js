@@ -51,7 +51,6 @@ export default class Icon extends OLStyleIcon {
       size: this.size_ !== null ? this.size_.slice() : undefined,
       opacity: this.getOpacity(),
       scale: this.getScale(),
-      snapToPixel: this.getSnapToPixel(),
       rotation: this.getRotation(),
       rotateWithView: this.getRotateWithView(),
     });
