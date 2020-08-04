@@ -357,7 +357,7 @@ class WMTS extends LayerBase {
     const layer = this.name;
     const style = 'default';
     const format = 'image/jpeg';
-    const tilematrixset = this.matrixSet;
+    const tilematrixset = this.ol3Layer.getSource().getMatrixSet();
     const tilematrix = zoom;
     const infoFormat = formatInfo;
     const tilecol = tcr[0];
@@ -419,6 +419,19 @@ class WMTS extends LayerBase {
       }
     }
     return coordPixel;
+  }
+
+  /**
+   * This methods returns a layer clone of this instance
+   * @return {ol/layer/Tile|ol/layer/Image}
+   */
+  cloneOLLayer() {
+    let olLayer = null;
+    if (this.ol3Layer != null) {
+      const properties = this.ol3Layer.getProperties();
+      olLayer = new OLLayerTile(properties);
+    }
+    return olLayer;
   }
 }
 

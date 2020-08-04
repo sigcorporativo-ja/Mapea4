@@ -185,7 +185,7 @@ class OverviewMap extends OLControlOverviewMap {
     const olLayers = [];
     map.getLayers().forEach((layer) => {
       if ((layer.type === WMSType || layer.transparent === false) && layer.isVisible()) {
-        const olLayer = layer.getImpl().getOL3Layer();
+        const olLayer = layer.getImpl().cloneOLLayer();
         if (isNullOrEmpty(olLayer)) {
           layer.getImpl().on(EventType.ADDED_TO_MAP, this.addLayer_.bind(this));
         } else {

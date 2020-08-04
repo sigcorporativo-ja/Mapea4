@@ -682,6 +682,23 @@ class WMS extends LayerBase {
 
     return equals;
   }
+
+  /**
+   * This methods returns a layer clone of this instance
+   * @return {ol/layer/Tile|ol/layer/Image}
+   */
+  cloneOLLayer() {
+    let olLayer = null;
+    if (this.ol3Layer != null) {
+      const properties = this.ol3Layer.getProperties();
+      if (this.tiled === true) {
+        olLayer = new OLLayerTile(properties);
+      } else {
+        olLayer = new OLLayerImage(properties);
+      }
+    }
+    return olLayer;
+  }
 }
 
 /**
