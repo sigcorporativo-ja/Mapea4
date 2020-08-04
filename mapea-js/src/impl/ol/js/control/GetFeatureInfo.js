@@ -159,7 +159,7 @@ class GetFeatureInfo extends Control {
         const regexBuffer = /buffer/i;
         const source = olLayer.getSource();
         const coord = this.evt.coordinate;
-        let url = source.getGetFeatureInfoUrl(coord, viewResolution, srs, getFeatureInfoParams);
+        let url = source.getFeatureInfoUrl(coord, viewResolution, srs, getFeatureInfoParams);
         if (isString(M.config.ticket)) {
           url = addParameters(url, { ticket: M.config.ticket });
         }
