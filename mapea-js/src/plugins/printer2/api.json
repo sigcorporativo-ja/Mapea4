@@ -1,6 +1,6 @@
 {
   "url": {
-    "name": "printer",
+    "name": "printer2",
     "separator": "*"
   },
   "constructor": "M.plugin.Printer",

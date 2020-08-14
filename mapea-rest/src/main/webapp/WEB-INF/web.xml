@@ -5,10 +5,10 @@
     <filter>
       <filter-name>CorsFilter</filter-name>
       <filter-class>org.apache.catalina.filters.CorsFilter</filter-class>
- 	  <init-param>
+      <init-param>
     	<param-name>cors.allowed.origins</param-name>
     	<param-value>*</param-value>
-  	  </init-param>      
+      </init-param>      
     </filter>
     <filter-mapping>
       <filter-name>CorsFilter</filter-name>

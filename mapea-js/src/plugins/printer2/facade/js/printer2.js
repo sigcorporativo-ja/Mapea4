@@ -208,4 +208,4 @@ export default class Printer extends M.Plugin {
  * @public
  * @api stable
  */
-Printer.NAME = 'printer';
+Printer.NAME = 'printer2';
