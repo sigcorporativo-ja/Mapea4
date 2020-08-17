@@ -1,6 +1,6 @@
 {
   "url": {
-    "name": "printer",
+    "name": "printerdos",
     "separator": "*"
   },
   "constructor": "M.plugin.Printer",
@@ -50,10 +50,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "printer-4.0.0.ol.min.js"
+        "printerdos-4.0.0.ol.min.js"
       ],
       "styles": [
-        "printer-4.0.0.min.css"
+        "printerdos-4.0.0.min.css"
       ]
     }
   },
