@@ -491,7 +491,7 @@ export default class PrinterControl extends M.Control {
       this.queueContainer_.appendChild(queueEl);
       queueEl.classList.add(PrinterControl.LOADING_CLASS);
       printUrl = M.utils.addParameters(printUrl, 'mapeaop=geoprint');
-      M.proxy(false);
+      // M.proxy(false);
       M.remote.post(printUrl, printData).then((responseParam) => {
         let response = responseParam;
         const responseStatusURL = JSON.parse(response.text);
@@ -507,11 +507,9 @@ export default class PrinterControl extends M.Control {
           try {
             response = JSON.parse(response.text);
             // poner la url en una variable
-            const serverId = response.downloadURL.split('@')[1]; // identifica al servidor que ha ejecutado la impresión
-            downloadUrl = M.utils.concatUrlPaths([
-              this.params_.urlApplication,
-              `${response.downloadURL};GEOPRID=.${serverId}`,
-            ]);
+            const serverId = response.downloadURL.split('@')[1];
+            const url = response.downloadURL.substring(response.downloadURL.indexOf('/print'), response.downloadURL.length);
+            downloadUrl = M.utils.concatUrlPaths([this.params_.urlApplication, `${url};GEOPRID=.${serverId}`]);
           } catch (err) {
             M.exception(err);
           }
