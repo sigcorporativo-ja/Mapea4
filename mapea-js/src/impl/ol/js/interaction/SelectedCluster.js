@@ -10,6 +10,7 @@ import OLSourceVector from 'ol/source/Vector';
 import OLCollection from 'ol/Collection';
 import { unByKey } from 'ol/Observable';
 import { easeOut } from 'ol/easing';
+import { getVectorContext } from 'ol/render';
 import Icon from '../point/Icon';
 import Utils from '../util/Utils';
 
@@ -161,8 +162,8 @@ class SelectCluster extends OLInteractionSelect {
     }
 
     // Clic out of the cluster => close it
-    const source = this.overlayLayer_.getSource();
-    source.clear();
+    // const source = this.overlayLayer_.getSource();
+    // source.clear();
 
     // Remove cluster from selection
     if (!this.selectCluster_) {
@@ -174,12 +175,14 @@ class SelectCluster extends OLInteractionSelect {
     const radiusInPixels = resolution * this.pointRadius * (0.5 + (cluster.length / 4));
 
     if (!this.spiral || cluster.length <= this.circleMaxObjects) {
+      this.overlayLayer_.getSource().refresh();
       this.drawFeaturesAndLinsInCircle_(cluster, resolution, radiusInPixels, center);
     } else { // Start angle
+      this.overlayLayer_.getSource().refresh();
       this.drawFeaturesAndLinsInSpiral_(cluster, resolution, center);
     }
     if (this.animate) {
-      this.animateCluster_(center, () => this.overlayLayer_.getSource().refresh());
+      this.animateCluster_(center);
     }
   }
 
@@ -289,10 +292,10 @@ class SelectCluster extends OLInteractionSelect {
 
     // Animate function
     const animate = (event) => {
-      const vectorContext = event.vectorContext;
+      const vectorContext = getVectorContext(event);
       // Retina device
       // let ratio = event.frameState.pixelRatio;
-      const res = event.target.getView().getResolution();
+      const res = this.getMap().getView().getResolution();
       const e = easeOut((event.frameState.time - start) / duration);
       for (let i = 0; i < features.length; i += 1) {
         if (features[i].get('features')) {
@@ -336,7 +339,6 @@ class SelectCluster extends OLInteractionSelect {
               style.setImage(imgs);
             }
             // OL3 > v3.14
-            // if (vectorContext.setStyle) {
             vectorContext.setStyle(style);
             vectorContext.drawGeometry(geo);
           }
@@ -345,9 +347,7 @@ class SelectCluster extends OLInteractionSelect {
         if (e > 1.0) {
           unByKey(this.listenerKey_);
           this.overlayLayer_.setVisible(true);
-          callbackFn();
-          // text on chart style not show
-          // this.overlayLayer_.changed();
+          this.overlayLayer_.changed();
           return;
         }
         // tell OL3 to continue postcompose animation
@@ -356,7 +356,7 @@ class SelectCluster extends OLInteractionSelect {
       }
     };
     // Start a new postcompose animation
-    this.listenerKey_ = this.getMap().on('postcompose', animate, this);
+    this.listenerKey_ = this.facadeLayer_.getImpl().getOL3Layer().on(['postrender', 'postcompose'], animate, this);
     // select.getMap().renderSync();
   }
 }

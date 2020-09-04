@@ -7,6 +7,8 @@ import OLSourceVector from 'ol/source/Vector';
 import OLGeomPoint from 'ol/geom/Point';
 import { easeOut } from 'ol/easing';
 import { buffer } from 'ol/extent';
+import { getVectorContext } from 'ol/render';
+
 /**
  * @classdesc
  * @api
@@ -67,8 +69,8 @@ class AnimatedCluster extends OLLayerVector {
     // Save cluster before change
     this.getSource().on('change', this.saveCluster_.bind(this));
     // Animate the cluster
-    this.on('precompose', this.animate.bind(this));
-    this.on('postcompose', this.postanimate.bind(this));
+    this.on('prerender', this.animate.bind(this));
+    this.on('postrender', this.postanimate.bind(this));
     this.setStyle(options.style);
   }
 
@@ -136,7 +138,7 @@ class AnimatedCluster extends OLLayerVector {
 
     const numClusters = this.animation_.clustersFrom.length;
     if (numClusters > 0 && numClusters <= 1000 && this.animation_.start) {
-      const vectorContext = eventVariable.vectorContext;
+      const vectorContext = getVectorContext(eventVariable);
       let animationProgress = (eventVariable.frameState.time - this.animation_.start) / duration;
 
       // Animation ends

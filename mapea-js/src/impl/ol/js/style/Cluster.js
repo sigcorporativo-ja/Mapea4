@@ -295,7 +295,7 @@ class Cluster extends Style {
       maxFeaturesToSelect: this.options_.maxFeaturesToSelect,
       pointRadius: this.optionsVendor_.distanceSelectFeatures,
       animate: true,
-      style: this.clusterStyleFn_.bind(this),
+      // style: this.clusterStyleFn_.bind(this),
       layers: [this.clusterLayer_],
     });
     this.selectClusterInteraction_.on('select', this.selectClusterFeature_.bind(this), this);
