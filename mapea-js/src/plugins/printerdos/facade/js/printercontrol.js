@@ -198,9 +198,7 @@ export default class PrinterControl extends M.Control {
   getStatus(url, callback) {
     M.remote.get(url).then((response) => {
       const statusJson = JSON.parse(response.text);
-      const {
-        status
-      } = statusJson;
+      const { status } = statusJson;
       if (status === 'finished') {
         callback();
       } else if (status === 'error') {
@@ -271,9 +269,7 @@ export default class PrinterControl extends M.Control {
         for (i = 0, ilen = attribute.clientInfo.dpiSuggestions.length; i < ilen; i += 1) {
           const dpi = attribute.clientInfo.dpiSuggestions[i];
 
-          const object = {
-            value: dpi
-          };
+          const object = { value: dpi };
           capabilities.dpis.push(object);
         }
 
@@ -309,10 +305,7 @@ export default class PrinterControl extends M.Control {
 
         // forceScale
         capabilities.forceScale = this.options_.forceScale;
-        const html = M.template.compileSync(printerHTML, {
-          jsonp: true,
-          vars: capabilities
-        });
+        const html = M.template.compileSync(printerHTML, { jsonp: true, vars: capabilities });
         this.addEvents(html);
         this.loadingService = false;
         success(html);
@@ -498,6 +491,7 @@ export default class PrinterControl extends M.Control {
       this.queueContainer_.appendChild(queueEl);
       queueEl.classList.add(PrinterControl.LOADING_CLASS);
       printUrl = M.utils.addParameters(printUrl, 'mapeaop=geoprint');
+      // M.proxy(false);
       M.remote.post(printUrl, printData).then((responseParam) => {
         let response = responseParam;
         const responseStatusURL = JSON.parse(response.text);
