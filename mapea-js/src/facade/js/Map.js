@@ -2887,6 +2887,7 @@ class Map extends Base {
       Exception(getValue('exception').no_set_rotation_method);
     }
     this.getImpl().setRotation(rotation * (Math.PI / 180));
+    this.fire(EventType.CHANGE_ROTATION, [rotation]);
   }
 }
 
