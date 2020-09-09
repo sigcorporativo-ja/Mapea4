@@ -491,7 +491,7 @@ export default class PrinterControl extends M.Control {
       this.queueContainer_.appendChild(queueEl);
       queueEl.classList.add(PrinterControl.LOADING_CLASS);
       printUrl = M.utils.addParameters(printUrl, 'mapeaop=geoprint');
-      // M.proxy(false);
+      M.proxy(false);
       M.remote.post(printUrl, printData).then((responseParam) => {
         let response = responseParam;
         const responseStatusURL = JSON.parse(response.text);
