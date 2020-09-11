@@ -472,3 +472,7 @@
         }
     }
 }
+
+.unsetTransform{
+    transform: unset !important;
+}

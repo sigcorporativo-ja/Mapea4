@@ -360,6 +360,9 @@ class Popup extends Base {
         evt.preventDefault();
         this.manageCollapsiblePopup_(touchstartY, this.touchY);
       }, false);
+      const mediaQuery = window.matchMedia('(max-width: 768px)');
+      setTimeout(() => this.manageTransform(mediaQuery, html), 10);
+      mediaQuery.addEventListener('change', (e) => { this.manageTransform(e, html); });
       // CLICK EVENTS
       headerElement.addEventListener('mouseup', (evt) => {
         evt.preventDefault();
@@ -395,6 +398,16 @@ class Popup extends Base {
         this.getImpl().centerByStatus(status, this.coord_);
       }
     }
+  }
+
+  /**
+  * TODO
+  * @private
+  * @function
+  */
+  manageTransform(e, html) {
+    if (e.matches) html.parentElement.classList.add('unsetTransform');
+    else html.parentElement.classList.remove('unsetTransform');
   }
 
   /**
