@@ -26,7 +26,7 @@ const proj25829 = {
 const proj25830 = {
   def: '+proj=utm +zone=30 +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +units=m +no_defs',
   extent: [-729785.83, 3715125.82, 940929.67, 9518470.69],
-  codes: ['EPSG:25830', 'urn:ogc:def:crs:EPSG::25830', 'http://www.opengis.net/gml/srs/epsg.xml#23030'],
+  codes: ['EPSG:25830', 'EPSG:3042', 'urn:ogc:def:crs:EPSG::25830', 'urn:ogc:def:crs:EPSG::3042', 'http://www.opengis.net/gml/srs/epsg.xml#25830', 'http://www.opengis.net/gml/srs/epsg.xml#3042'],
   units: 'm',
 };
 
@@ -70,14 +70,22 @@ const proj23031 = {
   units: 'm',
 };
 
+// EPSG:32628
+const proj32628 = {
+  def: '+proj=utm +zone=28 +ellps=WGS84 +datum=WGS84 +units=m +no_defs',
+  extent: [166021.44317933178, 0, 833978.5568206678, 9329005.18301614],
+  codes: ['EPSG:32628', 'urn:ogc:def:crs:EPSG::32628', 'http://www.opengis.net/gml/srs/epsg.xml#32628'],
+  units: 'm',
+};
+
 // EPSG:4258
 const proj4258 = {
   def: '+proj=longlat +ellps=GRS80 +towgs84=0,0,0,0,0,0,0 +no_defs',
   extent: [-16.1, 32.88, 39.65, 84.17],
   codes: ['EPSG:4258', 'urn:ogc:def:crs:EPSG::4258', 'http://www.opengis.net/gml/srs/epsg.xml#4258'],
   units: 'd',
+  metersPerUnit: 111319.49079327358,
 };
-
 
 // EPSG:4230
 const proj4230 = {
@@ -85,14 +93,8 @@ const proj4230 = {
   extent: [-16.09882145355955, 25.711114310330917, 48.60999527749605, 84.16977336415472],
   codes: ['EPSG:4230', 'urn:ogc:def:crs:EPSG::4230', 'http://www.opengis.net/gml/srs/epsg.xml#4230'],
   units: 'd',
-};
+  metersPerUnit: 111319.49079327358,
 
-// EPSG:32628
-const proj32628 = {
-  def: '+proj=utm +zone=28 +ellps=WGS84 +datum=WGS84 +units=m +no_defs',
-  extent: [166021.44317933178, 0, 833978.5568206678, 9329005.18301614],
-  codes: ['EPSG:32628', 'urn:ogc:def:crs:EPSG::32628', 'http://www.opengis.net/gml/srs/epsg.xml#32628'],
-  units: 'm',
 };
 
 // EPSG:4326
@@ -124,6 +126,16 @@ const proj3857 = {
   global: true,
 };
 
+// CRS:84
+const crs84 = {
+  def: '+proj=longlat +datum=WGS84 +no_defs',
+  extent: [-180, -90, 180, 90],
+  codes: ['CRS:84'],
+  units: 'd',
+  metersPerUnit: 111319.49079327358,
+  axisOrientation: 'enu',
+};
+
 // All projections above
 const projections = [
   proj25830,
@@ -139,6 +151,7 @@ const projections = [
   proj23028,
   proj23031,
   proj3857,
+  crs84,
 ];
 
 /**

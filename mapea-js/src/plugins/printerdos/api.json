@@ -1,0 +1,71 @@
+{
+  "url": {
+    "name": "printerdos",
+    "separator": "*"
+  },
+  "constructor": "M.plugin.Printer",
+  "parameters": [{
+    "type": "object",
+    "properties": [{
+      "type": "simple",
+      "name": "url",
+      "position": 0
+    }, {
+      "type": "object",
+      "name": "params",
+      "properties": [{
+        "type": "object",
+        "name": "layout",
+        "properties": [{
+          "type": "simple",
+          "name": "outputFilename",
+          "value": "mapea_${yyyy-MM-dd_hhmmss}"
+        }]
+      }, {
+        "type": "object",
+        "name": "pages",
+        "properties": [{
+          "type": "simple",
+          "name": "clientLogo",
+          "value": "http://www.juntadeandalucia.es/economiayhacienda/images/plantilla/logo_cabecera.gif"
+        }, {
+          "type": "simple",
+          "name": "creditos",
+          "value": "Impresión generada a través de Mapea"
+        }]
+      }]
+    }]
+  }, {
+    "type": "object",
+    "properties": [{
+      "type": "object",
+      "name": "options",
+      "properties": [{
+        "type": "simple",
+        "name": "legend",
+        "value": "true"
+      }]
+    }]
+  }],
+  "files": {
+    "ol": {
+      "scripts": [
+        "printerdos-4.0.0.ol.min.js"
+      ],
+      "styles": [
+        "printerdos-4.0.0.min.css"
+      ]
+    }
+  },
+  "metadata": {
+    "name": "Printer",
+    "description": "Tool for printing maps.",
+    "text": "",
+    "version": "4.0.0",
+    "date": "11/10/2019",
+    "author": "Junta de Andalucía",
+    "org": "Junta de Andalucía",
+    "tags": "mapea,plugin",
+    "icon": "./facade/assets/icons/icons.svg"
+  }
+}

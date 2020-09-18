@@ -318,7 +318,7 @@ class Panel extends MObject {
           }
           if (!isNullOrEmpty(this._controlsContainer)) {
             control.on(EventType.ADDED_TO_MAP, this._moveControlView.bind(this), this);
-            this._map.addControls(control);
+            control.addTo(this._map);
           }
           control.on(EventType.ACTIVATED, this._manageActivation.bind(this), this);
         }
@@ -364,6 +364,9 @@ class Panel extends MObject {
         const control = controlParam;
         if ((control instanceof ControlBase) && this.hasControl(control)) {
           this._controls = this._controls.filter(control2 => !control.equals(control2));
+          if (control.destroy) {
+            control.destroy();
+          }
           control.setPanel(null);
         }
       }, this);
@@ -509,6 +512,18 @@ class Panel extends MObject {
    */
   isCollapsed() {
     return this._collapsed;
+  }
+
+  /**
+   * Returns is collapsed
+   *
+   * @public
+   * @function
+   * @api
+   * @returns {Boolean}
+   */
+  setCollapsed(flag) {
+    this._collapsed = flag;
   }
 
   /**

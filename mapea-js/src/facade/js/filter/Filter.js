@@ -3,11 +3,11 @@
  */
 import FilterFunction from './Function';
 /**
- * This function joins the filters so that all the filters are fulfilled
+ * Logical AND operator, all filters must be fulfilled
  *
  * @function
- * @param {Array<M.Fiter>} filters - Filters to joins
- * @return {M.Filter} Filters joins
+ * @param {Array<M.Filter>} filters filters to join
+ * @return {M.Filter} filter
  * @api
  */
 export const AND = (filters) => {
@@ -29,11 +29,11 @@ export const AND = (filters) => {
 };
 
 /**
- * This function joins the filters so that at least one of the filters
+ * Logical OR operator, at least one filter must be fulfilled
  *
  * @function
- * @param {Array<M.Fiter>} filters - Filters to joins
- * @return {M.Filter} Filters joins
+ * @param {Array<M.Fiter>} filters filters to join
+ * @return {M.Filter} filter
  * @api
  */
 export const OR = (filters) => {
@@ -55,11 +55,11 @@ export const OR = (filters) => {
 };
 
 /**
- * This function run the opposite of the filter
+ * Logical NOT operator, returns the opposite of the filter
  *
  * @function
- * @param {M.Fiter} filters - Filters to joins
- * @return {M.Filter} opposite filter
+ * @param {M.Filter} filters filter to negate
+ * @return {M.Filter} filter
  * @api
  */
 export const NOT = (filter) => {
@@ -71,12 +71,12 @@ export const NOT = (filter) => {
 };
 
 /**
- * This function compares the value of the indicated attribute with the indicated value.
+ * Compares an attribute with a value.
  *
  * @function
- * @param {string} nameAtt - Name Attribute
- * @param {string|number} value - Value to compare
- * @return {M.Filter} Filter - Filter to compare the value of an attribute
+ * @param {string} nameAtt attribute to compare
+ * @param {string|number} value value to compare
+ * @return {M.Filter} filter
  * @api
  */
 export const EQUAL = (nameAtt, value) => {
@@ -88,13 +88,12 @@ export const EQUAL = (nameAtt, value) => {
 };
 
 /**
- * This function return the value of the indicated attribute of the feature
- * if it satisfies the condition of the regular expression
+ * Compares an attribute with a regular expression
  *
  * @function
- * @param {string} nameAtt - Name Attribute
- * @param {string|number} value - Regular expression
- * @return {M.Filter} Filter - Filter
+ * @param {string} nameAtt attribute to compare
+ * @param {string|number} value regular expression
+ * @return {M.Filter} filter
  * @api
  */
 export const LIKE = (nameAtt, value) => {
@@ -106,12 +105,11 @@ export const LIKE = (nameAtt, value) => {
 };
 
 /**
- * This function returns if the value of the indicated attribute of
- * the feature is less than the indicated value.
+ * Less Than operator
  * @function
- * @param {string} nameAtt - name Attribute
- * @param {string|number} value - value to compare
- * @return {M.Filter} Filter - Filter
+ * @param {string} nameAtt atribute to compare
+ * @param {string|number} value value to compare
+ * @return {M.Filter} filter
  * @api
  */
 export const LT = (nameAtt, value) => {
@@ -123,12 +121,11 @@ export const LT = (nameAtt, value) => {
 };
 
 /**
- * This function returns if the value of the indicated attribute of the feature
- * is greater than the indicated value.
+ * Greater Than operator
  * @function
- * @param {string} nameAtt - name Attribute
- * @param {string|number} value - value to compare
- * @return {M.Filter} Filter - Filter
+ * @param {string} nameAtt atribute to compare
+ * @param {string|number} value value to compare
+ * @return {M.Filter} filter
  * @api
  */
 export const GT = (nameAtt, value) => {
@@ -140,12 +137,11 @@ export const GT = (nameAtt, value) => {
 };
 
 /**
- * This function returns if the value of the indicated attribute of
- * the feature is less than or equal to the indicated value.
+ * Less Than or Equal operator
  * @function
- * @param {string} nameAtt - name Attribute
- * @param {string|number} value - value to compare
- * @return {M.Filter} Filter - Filter
+ * @param {string} nameAtt atribute to compare
+ * @param {string|number} value value to compare
+ * @return {M.Filter} filter
  * @api
  */
 export const LTE = (nameAtt, value) => {
@@ -157,12 +153,11 @@ export const LTE = (nameAtt, value) => {
 };
 
 /**
- * This function returns if the value of the indicated attribute of
- * the feature is greater than or equal to the indicated value.
+ * Greater Than or Equal operator
  * @function
- * @param {string} nameAtt - name Attribute
- * @param {string|number} value - value to compare
- * @return {M.Filter} Filter - Filter
+ * @param {string} nameAtt atribute to compare
+ * @param {string|number} value value to compare
+ * @return {M.Filter} filter
  * @api
  */
 export const GTE = (nameAtt, value) => {

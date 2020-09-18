@@ -5,7 +5,7 @@ import wmcselectorTemplate from 'templates/wmcselector';
 import 'assets/css/controls/wmcselector';
 import WMCSelectorImpl from 'impl/control/WMCSelector';
 import ControlBase from './Control';
-import { isUndefined } from '../util/Utils';
+import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import { compileSync as compileTemplate } from '../util/Template';
 import { getValue } from '../i18n/language';
@@ -64,6 +64,21 @@ class WMCSelector extends ControlBase {
       equals = (this.name === obj.name);
     }
     return equals;
+  }
+
+  /**
+   * Destroys the control
+   *
+   * @public
+   * @function
+   * @api
+   */
+  destroy() {
+    super.destroy();
+    const panel = this.getPanel();
+    if (!isNullOrEmpty(panel)) {
+      panel.removeClassName('m-with-wmcselector');
+    }
   }
 }
 

@@ -35,6 +35,14 @@ export default class AttributeTable extends M.Plugin {
      * @type {Object}
      */
     this.metadata_ = api.metadata;
+
+    /**
+     * ID event ADDED_LAYER
+     *
+     * @public
+     * @type {string}
+     */
+    this.idAddedLayer = '';
   }
 
   /**
@@ -46,7 +54,7 @@ export default class AttributeTable extends M.Plugin {
    * @api stable
    */
   addTo(map) {
-    map.on(M.evt.ADDED_LAYER, () => {
+    this.idAddedLayer = map.on(M.evt.ADDED_LAYER, () => {
       this.destroy();
       this.add(map);
     });
@@ -89,6 +97,7 @@ export default class AttributeTable extends M.Plugin {
    * @api stable
    */
   destroy() {
+    this.facadeMap_.unByKey(M.evt.ADDED_LAYER, this.idAddedLayer);
     this.facadeMap_.removeControls([this.control_]);
     [this.control_, this.panel_, this.facadeMap_] = [null, null, null];
   }

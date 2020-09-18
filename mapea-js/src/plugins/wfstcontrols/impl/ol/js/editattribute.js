@@ -68,7 +68,6 @@ export default class EditAttribute extends M.impl.Control {
    */
   showEditPopup_(features, evt) {
     this.unselectFeature_();
-
     this.editFeature = features[0].getImpl().getOLFeature();
     const coordinate = evt.coord;
 
@@ -207,6 +206,7 @@ export default class EditAttribute extends M.impl.Control {
    * @api stable
    */
   unselectFeature_() {
+    this.facadeMap_.getFeatureHandler().clearSelectedFeatures();
     if (this.editFeature !== null) {
       this.editFeature.setStyle(M.impl.layer.WFS.STYLE);
       this.editFeature = null;

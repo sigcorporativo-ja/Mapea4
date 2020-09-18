@@ -13,15 +13,16 @@ import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
- * Main constructor of the class. Create a Feature
+ * Main constructor of the class. Creates a Feature
  * @api
  */
 class Feature extends Base {
   /**
    * @constructor
    * @extends {M.facade.Base}
-   * @param {string} id - id to feature
-   * @param {Object} geojson - geojson to feature
+   * @param {string} id id of feature
+   * @param {Object} geojson GeoJSON representation of the feature
+   * @param {M.style} [style=default vector style] style to apply
    * @api
    */
   constructor(id, geojson, style) {
@@ -51,11 +52,11 @@ class Feature extends Base {
   }
 
   /**
-   * This function set id
+   * Sets the id
    *
    * @public
    * @function
-   * @param {string} id - ID to feature
+   * @param {string} id id to set
    * @api
    */
   setId(id) {
@@ -63,11 +64,11 @@ class Feature extends Base {
   }
 
   /**
-   * This function return id feature
+   * Returns the id of the feature
    *
    * @public
    * @function
-   * @return {string} ID to feature
+   * @return {string} Id of the feature
    * @api
    */
   getId() {
@@ -75,11 +76,11 @@ class Feature extends Base {
   }
 
   /**
-   * This function return geometry feature
+   * Returns the geometry of the feature
    *
    * @public
    * @function
-   * @return {object} Geometry feature
+   * @return {object} GeoJSON Geometry of the feature
    * @api
    */
   getGeometry() {
@@ -87,11 +88,11 @@ class Feature extends Base {
   }
 
   /**
-   * This function set geometry feature
+   * Sets the geometry of the feature
    *
    * @public
    * @function
-   * @param {object} Geometry feature
+   * @param {object} Geometry GeoJSON geometry to set
    * @api
    */
   setGeometry(geometry) {
@@ -99,11 +100,11 @@ class Feature extends Base {
   }
 
   /**
-   * This function return geojson feature
+   * Returns the feature as GeoJSON
    *
    * @public
    * @function
-   * @return {Object} geojson feature
+   * @return {Object} GeoJSON representation of the feature
    * @api
    */
   getGeoJSON() {
@@ -111,11 +112,11 @@ class Feature extends Base {
   }
 
   /**
-   * This function return attributes feature
+   * Returns  attributes feature
    *
    * @public
    * @function
-   * @return {Object} attributes feature
+   * @return {Object} all attributes of the feature and their values
    * @api
    */
   getAttributes() {
@@ -123,7 +124,7 @@ class Feature extends Base {
   }
 
   /**
-   * This function set attributes feature
+   * Sets the attributes and their value
    *
    * @public
    * @function
@@ -139,12 +140,12 @@ class Feature extends Base {
   }
 
   /**
-   * This function returns the value of the indicated attribute
+   * Returns the value of one attribute
    *
    * @public
    * @function
-   * @param {string} attribute - Name attribute
-   * @return  {string|number|object} returns the value of the indicated attribute
+   * @param {string} attribute name of the attribute
+   * @return  {string|number|object} value of the requested attribute
    * @api
    */
   getAttribute(attribute) {
@@ -173,12 +174,12 @@ class Feature extends Base {
   }
 
   /**
-   * This function set value the value of the indicated attribute
+   * Sets a value to an attribute
    *
    * @public
    * @function
-   * @param {string} attribute - Name attribute
-   * @return  {string|number|object} returns the value of the indicated attribute
+   * @param {string} attribute - name of the attribute to set
+   * @param {string|number|object} value the value to set
    * @api
    */
   setAttribute(attribute, value) {
@@ -186,11 +187,12 @@ class Feature extends Base {
   }
 
   /**
-   * This function set style feature
+   * Sets the style to the feature. Style type must fit the appropriate
+   * geometry type (point, line, polygon)
    *
    * @public
    * @function
-   * @param {M.style.Feature}
+   * @param {M.style.Feature} style style to apply
    * @api
    */
   setStyle(style) {
@@ -205,22 +207,23 @@ class Feature extends Base {
   }
 
   /**
-   * This function return if two features are equals
+   * Checks if two features are equal, which happens when both of them
+   * have the same feature id.
    * @public
    * @function
-   * @param {M.Feature} feature
-   * @return {bool} returns the result of comparing two features
+   * @param {M.Feature} feature feature to compare
+   * @return {boolean} true if equal, false otherwise
    */
   equals(feature) {
     return this.getId() === feature.getId();
   }
 
   /**
-   * This function returns style feature
+   * Gets the style of feature, if any
    *
    * @public
    * @function
-   * @return {M.style.Feature} returns the style feature
+   * @return {M.style.Feature} style of the feature
    * @api
    */
   getStyle() {
@@ -228,11 +231,11 @@ class Feature extends Base {
   }
 
   /**
-   * This function clear style feature
+   * Clears the style of the feature. Layer style will apply now
+   * to the feature.
    *
    * @public
    * @function
-   * @return {M.style.Feature} returns the style feature
    * @api
    */
   clearStyle() {
@@ -240,11 +243,11 @@ class Feature extends Base {
   }
 
   /**
-   * This function returns de centroid of feature
+   * Returns de centroid of the feature as a feature itself
    *
    * @public
    * @function
-   * @return {M.Feature}
+   * @return {M.Feature} feature representing the centroid
    * @api
    */
   getCentroid() {

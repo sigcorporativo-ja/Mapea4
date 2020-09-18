@@ -43,6 +43,7 @@ class XML {
       xsi: 'http://www.w3.org/2001/XMLSchema-instance',
       xsd: 'http://www.w3.org/2001/XMLSchema',
       ogc: 'http://www.opengis.net/ogc',
+      wmcext: 'http://wmcext.org/context',
     };
 
     /**

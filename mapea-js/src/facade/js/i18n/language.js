@@ -69,3 +69,14 @@ export const setLang = (lang) => {
   }
   configuration.lang = lang;
 };
+
+/**
+ * This function gets the language of the library
+ *
+ * @function
+ * @public
+ * @api
+ */
+export const getLang = () => {
+  return configuration.lang;
+};

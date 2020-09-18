@@ -41,7 +41,19 @@ export default class MeasureLength extends Measure {
    * @api stable
    */
   formatGeometry(geometry) {
-    const length = Math.round(geometry.getLength() * 100) / 100;
+    let length = null;
+    const codeProj = this.facadeMap_.getProjection().code;
+    const unitsProj = this.facadeMap_.getProjection().units;
+    if (codeProj === 'EPSG:3857') {
+      length = Math.round(ol.sphere.getLength(geometry) * 100) / 100;
+    } else if (unitsProj === 'd') {
+      const coordinates = geometry.getCoordinates();
+      for (let i = 0, ii = coordinates.length - 1; i < ii; i += 1) {
+        length += ol.sphere.getDistance(ol.proj.transform(coordinates[i], codeProj, 'EPSG:4326'), ol.proj.transform(coordinates[i + 1], codeProj, 'EPSG:4326'));
+      }
+    } else {
+      length = Math.round(geometry.getLength() * 100) / 100;
+    }
     let output;
     if (length > 100) {
       output = `${Math.round(((length / 1000) * 100)) / 100} km`;

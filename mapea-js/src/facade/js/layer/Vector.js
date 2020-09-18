@@ -47,7 +47,9 @@ class Vector extends LayerBase {
     }
 
     /**
-     * TODO
+     * Style of the layer
+     * @private
+     * @type {M.Style}
      */
     this.style_ = null;
 
@@ -98,11 +100,12 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function add features to layer
-   *
+   * Adds features to layer. Only features that are not already in the layer
+   * will be added. Two features are equal if the have the same id.
    * @function
    * @public
-   * @param {Array<M.feature>} features - Features to add
+   * @param {Array<M.feature>|M.feature} features Features to add
+   * @param {boolean} [update=false] Update layer
    * @api
    */
   addFeatures(featuresParam, update = false) {
@@ -116,12 +119,13 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function returns all features or discriminating by the filter
+   * Returns all features. If the layer has a Filter, it can skip it and return all features,
+   * or apply it and return only features that comply with the Filter (default behaviour).
    *
    * @function
    * @public
-   * @param {boolean} applyFilter - Indicates whether execute filter
-   * @return {Array<M.Feature>} returns all features or discriminating by the filter
+   * @param {boolean} [skipFilter=false]  Indicates whether skip the layer filter, if any.
+   * @return {Array<M.Feature>} Features
    * @api
    */
   getFeatures(skipFilterParam) {
@@ -131,12 +135,12 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function returns the feature with this id
+   * Searchs and returns the feature with this id, if any.
+   *
    * @function
    * @public
-   * @param {string|number} id - Id feature
-   * @return {null|M.feature} feature - Returns the feature with that id if it is found,
-     in case it is not found or does not indicate the id returns null
+   * @param {string|number} id  Id ofthe feature
+   * @return {null|M.feature} Feature with id, if it is found, null otherwise
    * @api
    */
   getFeatureById(id) {
@@ -150,11 +154,11 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function remove the features indicated
+   * Removes the features indicated
    *
    * @function
    * @public
-   * @param {Array<M.feature>} features - Features to remove
+   * @param {Array<M.feature>|M.feature} features - Features to remove
    * @api
    */
   removeFeatures(featuresParam) {
@@ -166,7 +170,7 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function remove all features
+   * Removes all features and filter from the layer
    *
    * @function
    * @public
@@ -178,7 +182,7 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function refresh layer
+   * Refreshes the layer
    *
    * @function
    * @public
@@ -190,7 +194,7 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function redraw layer
+   * Redraws the layer
    *
    * @function
    * @public
@@ -214,7 +218,8 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function set a filter
+   * Sets a filter to the layer. Only features that comply with the filter are
+   * active as long as the filter is set.
    *
    * @function
    * @public
@@ -245,11 +250,11 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function return filter
+   * Returns the filter of the layer, if any, null otherwise
    *
    * @function
    * @public
-   * @return {M.Filter} returns filter assigned
+   * @return {M.Filter|null} Filter assigned to the layer
    * @api
    */
   getFilter() {
@@ -257,11 +262,12 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function return extent of all features or discriminating by the filter
+   * Returns the minimun extent that contains all features,
+   *  skipping the layer filter, if set, or not.
    *
    * @function
-   * @param {boolean} applyFilter - Indicates whether execute filter
-   * @return {Array<number>} Extent of features
+   * @param {boolean} [skipFilter=false] - Indicates whether to slkip filter
+   * @return {Array<number>} Extent that contains all the features
    * @api
    */
   getFeaturesExtent(skipFilterParam) {
@@ -271,7 +277,7 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function remove filter
+   * Removes the current filter. All previously filtered features will be active again.
    *
    * @function
    * @public
@@ -282,12 +288,14 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Checks if an object is equal to this layer. Two vector layers are equal
+   *  if they are Vector type
+   * and both have the same name.
    *
    * @function
    * @public
-   * @param {object} obj - Object to compare
+   * @param {object} obj Object to compare
+   * @return {boolean} True if equal, false otherwise
    * @api
    */
   equals(obj) {
@@ -299,12 +307,14 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function sets the style to layer
+   * Sets a style to the layer
    *
    * @function
    * @public
    * @param {M.Style}
-   * @param {bool}
+   * @param {boolean} [applyToFeature=false] True to apply the style at layer level,
+   *  false to apply style to each feature
+   * @api
    */
   setStyle(style, applyToFeature = false, defaultStyle = Vector.DEFAULT_OPTIONS_STYLE) {
     if (this.getImpl().isLoaded()) {
@@ -356,9 +366,9 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function return style vector
+   * Returns the style of the layer
    *
-   * TODO
+   * @return {M.Style} The style of the layer
    * @api
    */
   getStyle() {
@@ -366,7 +376,7 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function remove the style layer and style of all features
+   * Removes the style of the layer, both at layer and at feature level
    *
    * @function
    * @public
@@ -378,10 +388,11 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Builds an image for the legend for this layer,
+   *  or returns the url of an image if previously set as legend
    *
    * @function
+   * @return {string} png image in base64 or url
    * @api
    */
   getLegendURL() {
@@ -398,11 +409,11 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function gets the geometry type of a layer.
+   * Gets the geometry type of the layer.
    * @function
    * @public
-   * @param {M.layer.Vector} layer - layer vector
    * @return {string} geometry type of layer
+   * @api
    */
   getGeometryType() {
     let geometry = null;
@@ -416,9 +427,10 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function indicates the layer max extent
+   * Gets the minimum extent that includes all features from this layer
    *
    * @function
+   * @return {Array<number>} Minimun extent that contains all the features
    * @api
    */
   getMaxExtent() {
@@ -426,9 +438,10 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function indicates the layer max extent
+   * Calculates the max extent of the layer
    *
    * @function
+   * @return {Promise} Promise object representing the maxExtent of the layer
    * @api
    */
   calculateMaxExtent() {
@@ -436,8 +449,9 @@ class Vector extends LayerBase {
   }
 
   /**
-   * This function gets the geojson representation of the layer
+   * Generates the GeoJSON representation of the layer
    * @function
+   * @return {Object} Layer in GeoJSON format
    * @api
    */
   toGeoJSON() {
@@ -448,7 +462,7 @@ class Vector extends LayerBase {
 }
 
 /**
- * Options style by default
+ * Default style for Vector layers
  * @const
  * @type {object}
  * @public

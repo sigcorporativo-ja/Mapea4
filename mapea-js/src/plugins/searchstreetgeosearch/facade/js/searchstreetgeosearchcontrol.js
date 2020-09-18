@@ -1,7 +1,6 @@
 import SearchstreetGeosearchControlImpl from 'plugins/searchstreetgeosearch/impl/ol/js/searchstreetgeosearchcontrol';
 import SearchstreetIntegrated from './searchstreetintegratedcontrol';
 import GeosearchIntegrated from './geosearchintegratedcontrol';
-import SearchStreetGeosearch from './searchstreetgeosearch';
 import searchstreetgeosearchHTML from '../../templates/searchstreetgeosearch';
 
 /**
@@ -255,7 +254,7 @@ export default class SearchstreetGeosearchControl extends M.Control {
    */
   equals(obj) {
     let equals = false;
-    if (obj instanceof SearchStreetGeosearch) {
+    if (obj instanceof SearchstreetGeosearchControl) {
       equals = (this.name === obj.name);
     }
     return equals;

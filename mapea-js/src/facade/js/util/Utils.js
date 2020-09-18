@@ -4,10 +4,10 @@
 
 import chroma from 'chroma-js';
 import reproj from 'impl/util/reprojection';
+import getImplWMTSCapabilities from 'impl/util/GetCapabilities';
 import * as dynamicImage from 'assets/img/dynamic_legend';
 import { INCHES_PER_UNIT, DOTS_PER_INCH } from '../units';
 import * as WKT from '../geom/WKT';
-
 /**
  *
  * @function
@@ -249,19 +249,23 @@ export const generateRandom = (prefix, sufix) => {
  * @function
  * @api
  */
-export const getWMSGetCapabilitiesUrl = (serverUrl, version) => {
+export const getWMSGetCapabilitiesUrl = (serverUrl, version, ticket) => {
   let wmsGetCapabilitiesUrl = serverUrl;
 
   // request
   wmsGetCapabilitiesUrl = addParameters(wmsGetCapabilitiesUrl, 'request=GetCapabilities');
   // service
   wmsGetCapabilitiesUrl = addParameters(wmsGetCapabilitiesUrl, 'service=WMS');
-
-  // PATCH: En mapea 3 no se manda luego aquí tampoco. Hay servicios que dan error....
-  //       version
-  //      wmsGetCapabilitiesUrl = addParameters(wmsGetCapabilitiesUrl, {
-  //         'version': version
-  //      });
+  // capabilities
+  if (isString(version)) {
+    wmsGetCapabilitiesUrl = addParameters(wmsGetCapabilitiesUrl, {
+      version,
+    });
+  }
+  // ticket
+  if (isString(ticket)) {
+    wmsGetCapabilitiesUrl = addParameters(wmsGetCapabilitiesUrl, { ticket });
+  }
 
   return wmsGetCapabilitiesUrl;
 };
@@ -1066,6 +1070,21 @@ export const replaceNode = (newNode, oldNode) => {
 };
 
 /**
+ * This function removes de html element of control
+ *
+ * @private
+ * @function
+ */
+export const removeHTML = (element) => {
+  if (element) {
+    const parent = element.parentElement;
+    if (parent) {
+      parent.removeChild(element);
+    }
+  }
+};
+
+/**
  * This function returns true if some object value is function or "{{*}}"
  * @function
  * @public
@@ -1168,6 +1187,15 @@ export const getSystem = () => {
   return env;
 };
 
+/**
+ * @function
+ * @public
+ * @param {String| URLLike} url
+ * @returns {Promise}
+ */
+export const getWMTSCapabilities = (url) => {
+  return getImplWMTSCapabilities(url);
+};
 
 /**
  * @private

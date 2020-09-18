@@ -79,6 +79,14 @@ export const REMOVED_LAYER = 'removed:layer';
  * @type {string}
  * @api
  */
+export const REMOVED_FROM_MAP = 'removed:map';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const ADDED_WMTS = 'added:wmts';
 
 /**

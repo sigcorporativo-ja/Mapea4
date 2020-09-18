@@ -160,15 +160,17 @@ class WMS extends LayerBase {
   }
 
   /**
-   * This method calculates the maxExtent of this layer:
-   * 1. Check if the user specified a maxExtentn parameter
-   * 2. Gets the maxExtent of the layer in the WMC
-   * 3. Gets the map maxExtent
-   * 4. If not, sets the maxExtent from the WMC global
-   * 5. Sets the maxExtent from the capabilities
-   * 6. Sets the maxExtent from the map projection
+   * Calculates the maxExtent of this layer, being the first value found in this order:
+   * 1. checks if the user specified a maxExtent parameter for the layer.
+   * 2. gets the maxExtent of the layer in the WMC, if any.
+   * 3. gets the maxExtent of the map.
+   * 4. gets the global maxExtent from the WMC.
+   * 5. gets the maxExtent from the layer WMS Capabilities.
+   * 6. gets the maxExtent from the map projection.
    *
    * @function
+   * @param {Object} callbackFn Optional callback function
+   * @return {Array<number>} Max extent of the layer
    * @api
    */
   getMaxExtent(callbackFn) {
@@ -222,16 +224,17 @@ class WMS extends LayerBase {
   }
 
   /**
-   * This method calculates the maxExtent of this layer:
-   * 1. Check if the user specified a maxExtentn parameter
-   * 2. Gets the maxExtent of the layer in the WMC
-   * 3. Gets the map maxExtent
-   * 4. If not, sets the maxExtent from the WMC global
-   * 5. Sets the maxExtent from the capabilities
-   * 6. Sets the maxExtent from the map projection
+   * Async version of getMaxExtent.
+   * Calculates the maxExtent of this layer, being the first value found in this order::
+   * 1. checks if the user specified a maxExtent parameter for the layer.
+   * 2. gets the maxExtent of the layer in the WMC, if any.
+   * 3. gets the maxExtent of the map.
+   * 4. gets the global maxExtent from the WMC.
+   * 5. gets the maxExtent from the layer WMS Capabilities.
+   * 6. gets the maxExtent from the map projection.
    *
-   * Async version of getMaxExtent
    * @function
+   * @return {Promise} - Promise object represents the maxExtent of the layer
    * @api
    */
   calculateMaxExtent() {
@@ -239,12 +242,13 @@ class WMS extends LayerBase {
   }
 
   /**
-   * This functions retrieves a Promise which will be
+   * Retrieves a Promise which will be
    * resolved when the GetCapabilities request is retrieved
-   * by the service and parsed. The capabilities is cached in
-   * order to prevent multiple requests
+   * by the service and parsed. The returned capabilities is cached in
+   * order to prevent successive requests
    *
    * @function
+   * @return {Promise} - Promise object represents the getCapabilities of the layer
    * @api
    */
   getCapabilities() {
@@ -255,9 +259,11 @@ class WMS extends LayerBase {
   }
 
   /**
-   * TODO
+   * If this WMS layer actually requests a tiled layer service, there may be an
+   * equivalent WMS service which can be used for other purposes (printing, etc.)
    *
    * @function
+   * @return {string} url WMS equivalen service for this layer.
    * @api
    */
   getNoCacheUrl() {
@@ -265,9 +271,11 @@ class WMS extends LayerBase {
   }
 
   /**
-   * TODO
+   * If this WMS layer actually requests a tiled layer service, there may be an
+   * equivalent WMS service which can be used for other purposes (printing, etc.)
    *
    * @function
+   * @return {string} Name of the layer in the WMS equivalen service for this layer.
    * @api
    */
   getNoCacheName() {
@@ -275,10 +283,11 @@ class WMS extends LayerBase {
   }
 
   /**
-   * TODO
+   * Sets a WMC Layer as a parent of this layer.
    *
    * @function
    * @public
+   * @param {M.layer.WMC} wmcParent WMC Layer that includes this layer
    * @api
    */
   setWMCParent(wmc) {
@@ -286,10 +295,11 @@ class WMS extends LayerBase {
   }
 
   /**
-   * TODO
+   * Gets the parent WMC Layer, if any
    *
    * @function
    * @public
+   * @returns {M.layer.WMC} WMC Layer that includes this layer
    * @api
    */
   getWMCParent() {
@@ -297,7 +307,7 @@ class WMS extends LayerBase {
   }
 
   /**
-   * Update minimum and maximum resolution WMS layers
+   * Updates minimum and maximum resolutions
    *
    * @public
    * @function
@@ -323,10 +333,11 @@ class WMS extends LayerBase {
   }
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * This function checks if an object is equals to this layer. Two WMS layers are equal
+   * if the are both WMS instances and have the same url, name, cql and version values.
    *
    * @function
+   * @return {boolean} True if equal, false otherwise
    * @api
    */
   equals(obj) {

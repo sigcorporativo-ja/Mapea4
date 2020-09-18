@@ -170,6 +170,8 @@ class Cluster extends Style {
     if (!(ol3Layer instanceof AnimatedCluster)) {
       this.oldOLLayer_ = ol3Layer;
     }
+    this.clusterLayer_.setMaxResolution(this.oldOLLayer_.getMaxResolution());
+    this.clusterLayer_.setMinResolution(this.oldOLLayer_.getMinResolution());
     this.layer_.getImpl().setOL3Layer(this.clusterLayer_);
 
     if (isNullOrEmpty(this.options_.ranges)) {
@@ -340,7 +342,7 @@ class Cluster extends Style {
         const convexFeature = Feature.olFeature2Facade(convexOlFeature);
         if (isNullOrEmpty(this.convexHullLayer_)) {
           this.convexHullLayer_ = new LayerVector({
-            name: 'cluster_cover',
+            name: `cluster_cover_${this.layer_.name}`,
             extract: false,
           }, {
             displayInLayerSwitcher: false,
@@ -505,6 +507,8 @@ class Cluster extends Style {
   unapply() {
     if (!isNullOrEmpty(this.clusterLayer_)) {
       this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
+      this.oldOLLayer_.setMaxResolution(this.clusterLayer_.getMaxResolution());
+      this.oldOLLayer_.setMinResolution(this.clusterLayer_.getMinResolution());
       this.removeCoverInteraction_();
       this.removeSelectInteraction_();
       this.clearConvexHull();

@@ -6,15 +6,16 @@ import { generateRandom } from '../util/Utils';
 
 /**
  * @classdesc
- * Main constructor of the class. Create a clustered Feature
+ * Main constructor of the class. Creates a Clustered Feature, which is a group
+ * of features that will be represented as a single element in the map.
  * @api
  */
 class Clustered extends Feature {
   /**
    * @constructor
    * @extends {M.Feature}
-   * @param {Array<M.Feature>} features - array of features
-   * @param {Object} attributes - attributes
+   * @param {Array<M.Feature>} features features inside the cluster
+   * @param {Object} attributes cluster attributes, as in M.Style.Cluster
    * @api
    */
   constructor(features, attributes) {

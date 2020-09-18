@@ -9,8 +9,7 @@ import { getValue } from '../i18n/language';
 
 /**
  * @classdesc
- * Main constructor of the class. Creates a layer
- * with parameters specified by the user
+ * Represents the root of all other types of Layers. It is not meant to be instanced, but extended.
  * @api
  */
 class LayerBase extends Base {
@@ -71,6 +70,22 @@ class LayerBase extends Base {
     this.zindex_ = null;
 
     /**
+     * MaxScale provided by the user
+     * @private
+     * @type {number}
+     * @expose
+     */
+    this.minScale_ = userParameters.minScale;
+
+    /**
+     * MaxScale provided by the user
+     * @private
+     * @type {number}
+     * @expose
+     */
+    this.maxScale_ = userParameters.maxScale;
+
+    /**
      * @private
      * @type {M.Map}
      * @expose
@@ -86,7 +101,7 @@ class LayerBase extends Base {
     this.userMaxExtent = parameter.maxExtent;
 
     /**
-     * Legend
+     * Non - identifying, readable name of layer, to use in toc
      * @public
      * @type {string}
      * @api
@@ -102,32 +117,44 @@ class LayerBase extends Base {
   }
 
   /**
-   *'legend' non - identifying name of layer
+   * Returns the legend, a non - identifying, readable name of the layer, to use in toc, etc.
+   * @function
+   * @api
+   * @return {string} The legend of the layer.
    */
 
   getLegend() {
     return this.getImpl().legend;
   }
 
+  /**
+   * Sets the legend value
+   * @param {string} newLegend - The new legend
+   */
   setLegend(newLegend) {
     this.legend = newLegend;
     this.getImpl().legend = newLegend;
   }
 
   /**
-   * 'url' The service URL of the
-   * layer
+   * Returns the service URL of the layer
+   * @return {string} Service URL of the layer
    */
   get url() {
     return this.getImpl().url;
   }
 
+  /**
+   * Sets the Url of the layer
+   * @param {string} newUrl - The new Url
+   */
   set url(newUrl) {
     this.getImpl().url = newUrl;
   }
 
   /**
-   * 'name' the layer name
+   * Returns the name of the layer name
+   * @return {string} name - The internal name of the layeer
    */
   get name() {
     return this.getImpl().name;
@@ -144,6 +171,9 @@ class LayerBase extends Base {
     return this.getImpl().transparent;
   }
 
+  /**
+   *
+   */
   set transparent(newTransparent) {
     if (!isNullOrEmpty(newTransparent)) {
       if (isString(newTransparent)) {
@@ -176,13 +206,14 @@ class LayerBase extends Base {
   }
 
   /**
-   * This method calculates the maxExtent of this layer:
-   * 1. Check if the user specified a maxExtent parameter
-   * 2. Gets the map maxExtent
-   * 3. Sets the maxExtent from the map projection
+   * Gets the current maxExtent of this layer:
+   * 1. Checks if there is an assigned maxExtent for this layer
+   * 2. If not, checks if there is an assigned maxExtent for the map
+   * 3. If not, gets the maxExtent of the map projection
    *
    * @function
    * @api
+   * @return {Array<Number>} - The maxExtent of the layer, as [xmin, ymin, xmax, ymax]
    */
   getMaxExtent() {
     let maxExtent = this.userMaxExtent; // 1
@@ -196,25 +227,27 @@ class LayerBase extends Base {
   }
 
   /**
-   * This method calculates the maxExtent of this layer:
-   * 1. Check if the user specified a maxExtent parameter
-   * 2. Gets the map maxExtent
-   * 3. Sets the maxExtent from the map projection
-   * Async version of getMaxExtent
+   * Async version of getMaxExtent.
+   * Calculates the current maxExtent of this layer:
+   * 1. Checks if there is an assigned maxExtent for this layer
+   * 2. If not, checks if there is an assigned maxExtent for the map
+   * 3. If not, gets the maxExtent of the map projection
    *
    * @function
    * @api
+   * @return {Promise} - Promise object represents the maxExtent of the layer
    */
   calculateMaxExtent() {
     return new Promise(resolve => resolve(this.getMaxExtent()));
   }
 
   /**
-   * This function changes the layer max extent
+   * Sets a max extent for the layer.
    *
    * @function
    * @api
    * @export
+   * @param {(Array<number>|Mx.Extent)} maxExtent - maxExtent to set
    */
   setMaxExtent(maxExtent) {
     this.userMaxExtent = maxExtent;
@@ -236,7 +269,7 @@ class LayerBase extends Base {
   }
 
   /**
-   * This function resets the maximum extent of the layer.
+   * Resets the max extent of the layer.
    * @function
    * @api
    */
@@ -250,34 +283,37 @@ class LayerBase extends Base {
   }
 
   /**
-   * The facade map instace
+   * Sets the facade map instace
    *
    * @function
    * @public
    * @api
    * @export
+   * @param {M.Map} map Facade map instance
    */
   setMap(map) {
     this.map_ = map;
   }
 
   /**
-   * 'LayerGroup' the layer transparence
+   * Returns the Layer Group of this layer, if any.
    *
    * @function
    * @api stable
    * @expose
+   * @returns {M.LayerGroup} The Layer Group where this layer is in
    */
   getLayerGroup() {
     return this.layerGroup_;
   }
 
   /**
-   * Defining new LayerGroup
+   * Puts the layer inside a LayerGroup. A layer can only be inside one LayerGroup at a time.
    *
    * @function
    * @api stable
    * @expose
+   * @param {M.LayerGroup} layerGroup The Layer Group to put this layer in
    */
   setLayerGroup(layerGroup) {
     this.layerGroup_ = layerGroup;
@@ -285,11 +321,12 @@ class LayerBase extends Base {
 
 
   /**
-   * This function indicates if the layer is visible
+   * Returns whether the layer is visible or not.
    *
    * @function
    * @api
    * @export
+   * @returns {boolean} true if visible, false otherwise
    */
   isVisible() {
     // checks if the implementation can manage this method
@@ -301,11 +338,12 @@ class LayerBase extends Base {
   }
 
   /**
-   * This function indicates if the layer is visible
+   * Returns whether the layer is queryable or not.
    *
    * @function
    * @api
    * @export
+   * @returns {boolean} true if queryable, false otherwise
    */
   isQueryable() {
     // checks if the implementation can manage this method
@@ -317,11 +355,12 @@ class LayerBase extends Base {
   }
 
   /**
-   * This function sets the visibility of this layer
+   * Sets the visibility of this layer. A non-visible layer is not drawn.
    *
    * @function
    * @api
    * @export
+   * @param {boolean} visibility - true if visible, false otherwise
    */
   setVisible(visibilityParam) {
     let visibility = visibilityParam;
@@ -346,11 +385,13 @@ class LayerBase extends Base {
   }
 
   /**
-   * This function indicates if the layer is in range
+   * Indicates if the layer is in range, that is, if the current map resolution is
+   *  between the min and max resolutions of the layer.
    *
    * @function
    * @api
    * @export
+   * @returns {boolean} true if in range, false otherwise
    */
   inRange() {
     // checks if the implementation can manage this method
@@ -362,22 +403,22 @@ class LayerBase extends Base {
   }
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Gets the url for the legend image of the layer.
    *
    * @function
    * @api
+   * @returns {string} The url that returns the legend
    */
   getLegendURL() {
     return this.getImpl().getLegendURL();
   }
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Sets the url of the legend image of this layer.
    *
    * @function
    * @api
+   * @param {string} legendUr The url that returns the image to use as legend
    */
   setLegendURL(legendUrlParam) {
     let legendUrl = legendUrlParam;
@@ -388,20 +429,22 @@ class LayerBase extends Base {
   }
 
   /**
-   * This function gets the z-index of this layer
+   * Gets the z-index of the layer
    *
    * @function
    * @api
+   * @returns {Number} Z-index of the layer
    */
   getZIndex() {
     return this.zindex_;
   }
 
   /**
-   * This function sets the z-index for this layer
+   * Sets the z-index for this layer
    *
    * @function
    * @api
+   * @param {Number} zIndex Z-index to apply
    */
   setZIndex(zIndex) {
     this.zindex_ = zIndex;
@@ -409,20 +452,63 @@ class LayerBase extends Base {
   }
 
   /**
+   * This function gets the min-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  getMinScale() {
+    return this.minScale_;
+  }
+
+  /**
+   * This function sets the min-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  setMinScale(minScale) {
+    this.minScale_ = minScale;
+    this.getImpl().setMinScale(minScale);
+  }
+  /**
+   * This function gets the max-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  getMaxScale() {
+    return this.maxScale_;
+  }
+
+  /**
+   * This function sets the max-scale for this layer
+   *
+   * @function
+   * @api
+   */
+  setMaxScale(maxScale) {
+    this.maxScale_ = maxScale;
+    this.getImpl().setMaxScale(maxScale);
+  }
+
+  /**
    * This function gets the opacity of this layer
    *
    * @function
    * @api
+   * @returns {Number} 0 to 1, where 0 is fully transparent and 1 opaque
    */
   getOpacity() {
     return this.getImpl().getOpacity();
   }
 
   /**
-   * This function sets the opacity of this layer
+   * Sets the opacity of this layer
    *
    * @function
    * @api
+   * @param {Number} opacity 0 to 1, where 0 is fully transparent and 1 opaque
    */
   setOpacity(opacity) {
     this.getImpl().setOpacity(opacity);
@@ -455,7 +541,7 @@ class LayerBase extends Base {
 }
 
 /**
- * Image PNG for legend default
+ * Image PNG for default legend
  * @const
  * @type {string}
  * @public
@@ -464,7 +550,7 @@ class LayerBase extends Base {
 LayerBase.LEGEND_DEFAULT = '/img/legend-default.png';
 
 /**
- * Image PNG for legend default
+ * Image PNG for error legend
  * @const
  * @type {string}
  * @public

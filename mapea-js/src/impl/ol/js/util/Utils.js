@@ -19,6 +19,7 @@ import MultiPolygon from 'ol/geom/MultiPolygon';
 import GeometryCollection from 'ol/geom/GeometryCollection';
 import Circle from 'ol/geom/Circle';
 
+
 const getUnitsPerMeter = (projectionCode, meter) => {
   const projection = getProj(projectionCode);
   const metersPerUnit = projection.getMetersPerUnit();
@@ -113,7 +114,6 @@ export const geojsonTo4326 = (featuresAsJSON, codeProjection) => {
   });
   return jsonResult;
 };
-
 
 /**
  * @classdesc

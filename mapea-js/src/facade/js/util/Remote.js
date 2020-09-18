@@ -74,6 +74,12 @@ const jsonp = (urlVar, data, options) => {
     callback: jsonpHandlerName,
   });
 
+  if (!isNullOrEmpty(options) && 'ticket' in options && (options.ticket === false)) {
+    const indexTicket = url.indexOf('ticket=');
+    const endTicket = url.indexOf('&', indexTicket);
+    url = url.substring(url, indexTicket) + url.substring(endTicket, url.length);
+  }
+
   const req = new Promise((success, fail) => {
     const userCallback = success;
     // get the promise of the script tag

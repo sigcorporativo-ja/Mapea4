@@ -9,6 +9,11 @@ import LayerBase from './Layer';
 import { isNullOrEmpty, isArray, generateRandom } from '../util/Utils';
 
 /**
+ * @classdesc
+ * Represents a group of layers, of any type. If a group is already added to a Map,
+ * layers added to that group are automatically added to the map, and layers
+ * removed from the group, are automatically removed from the map. Elements inside the group
+ * are considered children of that group.
  * @constructor
  * @extends {M.facade.Base}
  * @param {string|Mx.parameters.Layer} userParameters parameters
@@ -47,6 +52,7 @@ class LayerGroup extends MObject {
     super(impl);
 
     /**
+     * Id for this LayerGroup, must be bunique
      * @public
      * @type {String}
      * @api
@@ -54,6 +60,8 @@ class LayerGroup extends MObject {
     this.id = parameters.id;
 
     /**
+     * Title of the group, to be displayed in TOC
+     *
      * @public
      * @type {String}
      * @api
@@ -62,6 +70,7 @@ class LayerGroup extends MObject {
 
 
     /**
+     * 'true' to display the group collapsed in the TOC, 'false' to display it expanded
      * @public
      * @type {Boolean}
      * @api
@@ -69,6 +78,7 @@ class LayerGroup extends MObject {
     this.collapsed = !!parameters.collapsed;
 
     /**
+     * Position of the group in the TOC
      * @public
      * @type {Number}
      * @api
@@ -76,6 +86,7 @@ class LayerGroup extends MObject {
     this.order = parameters.order;
 
     /**
+     * Parent group of this group, if any
      * @public
      * @type {M.layer.Group}
      * @api
@@ -109,7 +120,7 @@ class LayerGroup extends MObject {
   }
 
   /**
-   * This function sets the map object of the group
+   * Sets the map object of the group
    *
    * @public
    * @function
@@ -122,9 +133,10 @@ class LayerGroup extends MObject {
   }
 
   /**
-   * TODO
+   * Sets the visibility for the LayerGroup and all of its layers.
    *
    * @function
+   * @param {boolean} visibility Visibility to set
    * @api
    */
   setVisible(visibility) {
@@ -132,26 +144,29 @@ class LayerGroup extends MObject {
   }
 
   /**
-   * TODO
+   * The Z-index is applied to the first layer of the group, then it is increased by one
+   * and applied to the next layer of the group, and so on.
    *
    * @function
+   * @param {Number} zIndex
    * @api
    */
   setZIndex(zIndex) {
     this.zIndex_ = zIndex;
-    const layersOfLayerGroup = this.getChildren();
+    const layersOfLayerGroup = [...this.getChildren()];
+    const reverseLayers = layersOfLayerGroup.reverse();
     let countZindex = zIndex;
-    layersOfLayerGroup.forEach((varLayer) => {
-      const layer = varLayer;
+    reverseLayers.forEach((layer) => {
       layer.setZIndex(countZindex);
       countZindex += 1;
     });
   }
 
   /**
-   * TODO
+   * Gets the zIndex of the group, which is the lowest zIndex of its layers
    *
    * @function
+   * @returns {Number} zIndex of the group
    * @api
    */
   getZIndex(zIndex) {
@@ -159,16 +174,18 @@ class LayerGroup extends MObject {
   }
 
   /**
-   * TODO
+   * Adds a child to the group
    *
    * @function
+   * @param {M.Layer|M.LayerBase} layer Layer to add to the group
+   * @param {Number} [index=last position] Position to add the layer to, starting from 0
    * @api
    */
   addChild(childParam, index) {
     let zIndex = this.getZIndex() + this.children_.length;
     const child = childParam;
     if (isNullOrEmpty(index)) {
-      this.children_.push(child);
+      this.children_.unshift(child);
     } else {
       this.children_.splice(index, 0, child);
       zIndex = this.getZIndex() + index;
@@ -189,9 +206,10 @@ class LayerGroup extends MObject {
   }
 
   /**
-   * TODO
+   * Deletes a child from the group
    *
    * @function
+   * @param {M.LayerBase|M.LayerGroup} child Child to delete
    * @api
    */
   deleteChild(child) {
@@ -201,13 +219,15 @@ class LayerGroup extends MObject {
       this.map.removeLayerGroup(childI);
     } else if (childI instanceof LayerBase) {
       this.map.removeLayers(childI);
+      this.ungroup(child);
     }
   }
 
   /**
-   * TODO
+   * Deletes children from the group
    *
    * @function
+   * @param {Array<M.LayerBase|M.LayerGroup>}  children children to delete
    * @api
    */
   deleteChildren(children) {
@@ -215,8 +235,10 @@ class LayerGroup extends MObject {
   }
 
   /**
-   * TODO
+   * Moves a child out of a group, to the root level
+   * of the toc
    * @function
+   * @param {M.LayerBase|M.LayerGroup} child
    * @api
    */
   ungroup(child) {
@@ -225,9 +247,10 @@ class LayerGroup extends MObject {
   }
 
   /**
-   * TODO
+   * Adds children to the group
    *
    * @function
+   * @param {Array<M.LayerBase|M.LayerGroup>}  children
    * @api
    */
   addChildren(children = []) {
@@ -239,9 +262,10 @@ class LayerGroup extends MObject {
   }
 
   /**
-   * TODO
+   * Returns all the children inside the group
    *
    * @function
+   * @returns {Array<M.LayerBase|M.LayerGroup>}
    * @api
    */
   getChildren() {
@@ -249,9 +273,11 @@ class LayerGroup extends MObject {
   }
 
   /**
-   * TODO
+   * Returns all those children that are instances of LayerBase, whether they are
+   * direct children of the group, or children from inner groups.
    *
    * @function
+   * @returns  {Array<M.LayerBase>}
    * @api
    */
   getAllLayers() {
@@ -267,6 +293,7 @@ class LayerGroup extends MObject {
   }
 
   /**
+   * Destroys the group and all its layers
    * @function
    * @public
    * @api
@@ -276,13 +303,16 @@ class LayerGroup extends MObject {
   }
 
   /**
+   * Searchs a group by its id, recursively if there are nested groups.
    * @public
+   * @param {Number} Id
+   * @param {Array<LayerGroup>} layerGroup array of groups to perform the search
    * @function
    * @api
    */
   static findGroupById(groupId, layerGroups) {
-    let group;
-    if (isArray(layerGroups)) {
+    let group = null;
+    if (isArray(layerGroups) && layerGroups.length > 0) {
       group = layerGroups.find(g => g instanceof LayerGroup && g.id === groupId);
       if (group == null) {
         const childGroups = layerGroups.map(g => g.getChildren())

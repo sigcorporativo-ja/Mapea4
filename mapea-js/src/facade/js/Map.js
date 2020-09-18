@@ -2,6 +2,7 @@
  * @module M/Map
  */
 import MapImpl from 'impl/Map';
+import { getPanelForControl, buildControl } from './builder/builder';
 import Base from './Base';
 import {
   isNullOrEmpty,
@@ -9,12 +10,8 @@ import {
   isNull,
   isArray,
   isFunction,
-  normalize,
-  addParameters,
-  concatUrlPaths,
-  enableTouchScroll,
+  // addParameters,
   escapeJSCode,
-  isString,
   isObject,
   getEnvolvedExtent,
 } from './util/Utils';
@@ -30,16 +27,6 @@ import Feature from './feature/Feature';
 import * as Dialog from './dialog';
 import GetFeatureInfo from './control/GetFeatureInfo';
 import WMCSelector from './control/WMCSelector';
-import LayerSwitcher from './control/Layerswitcher';
-import Location from './control/Location';
-import Navtoolbar from './control/Navtoolbar';
-import Scale from './control/Scale';
-import Rotate from './control/Rotate';
-import ScaleLine from './control/ScaleLine';
-import Mouse from './control/Mouse';
-import OverviewMap from './control/OverviewMap';
-import Panzoom from './control/Panzoom';
-import Panzoombar from './control/Panzoombar';
 import Layer from './layer/Layer';
 import * as LayerType from './layer/Type';
 import Vector from './layer/Vector';
@@ -52,10 +39,9 @@ import OSM from './layer/OSM';
 import MVT from './layer/MVT';
 import Mapbox from './layer/Mapbox';
 import Panel from './ui/Panel';
-import * as Position from './ui/position';
-import Control from './control/Control';
 import GeoJSON from './layer/GeoJSON';
 import StylePoint from './style/Point';
+import Control from './control/Control';
 
 /**
  * @classdesc
@@ -201,6 +187,14 @@ class Map extends Base {
      * @api
      */
     this.userMaxExtent = null;
+
+    /**
+     * Ticket map for autheticated requests
+     * @private
+     * @type {String}
+     * @api
+     */
+    this.ticket_ = null;
 
     // adds class to the container
     params.container.classList.add('m-mapea-container');
@@ -1390,276 +1384,287 @@ class Map extends Base {
   }
 
   /**
-   * This function adds controls specified by the user
-   *
-   * @public
-   * @function
-   * @param {string|Object|Array<String>|Array<Object>} controlsParam
-   * @returns {Map}
-   * @api
+   * TODO:
    */
   addControls(controlsParamVar) {
     let controlsParam = controlsParamVar;
     if (!isNullOrEmpty(controlsParam)) {
-      // checks if the implementation can manage layers
       if (isUndefined(MapImpl.prototype.addControls)) {
         Exception(getValue('exception').addcontrols_method);
       }
 
-      // parses parameters to Array
       if (!isArray(controlsParam)) {
         controlsParam = [controlsParam];
       }
 
-      // gets the parameters as Control to add them
       const controls = [];
-      // for (let i = 0, ilen = controlsParam.length; i < ilen; i++) {
-      controlsParam.forEach((controlParamVar) => {
-        let controlParam = controlParamVar;
-        let control;
-        let panel;
-        if (isString(controlParam)) {
-          controlParam = normalize(controlParam);
-          switch (controlParam) {
-            case Scale.NAME:
-              control = new Scale();
-              panel = this.getPanels('map-info')[0];
-              if (isNullOrEmpty(panel)) {
-                panel = new Panel('map-info', {
-                  collapsible: false,
-                  className: 'm-map-info',
-                  position: Position.BR,
-                });
-                panel.on(EventType.ADDED_TO_MAP, (html) => {
-                  if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
-                    this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
-                  }
-                });
-              }
-              panel.addClassName('m-with-scale');
-              break;
-            case `${Scale.NAME}*true`:
-              control = new Scale({ exactScale: true });
-              panel = this.getPanels('map-info')[0];
-              if (isNullOrEmpty(panel)) {
-                panel = new Panel('map-info', {
-                  collapsible: false,
-                  className: 'm-map-info',
-                  position: Position.BR,
-                });
-                panel.on(EventType.ADDED_TO_MAP, (html) => {
-                  if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
-                    this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
-                  }
-                });
-              }
-              panel.addClassName('m-with-scale');
-              break;
-            case ScaleLine.NAME:
-              control = new ScaleLine();
-              panel = new Panel(ScaleLine.NAME, {
-                collapsible: false,
-                className: 'm-scaleline',
-                position: Position.BL,
-                tooltip: 'Línea de escala',
-              });
-              panel.on(EventType.ADDED_TO_MAP, (html) => {
-                if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
-                  this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
-                }
-              });
-              break;
-            case Panzoombar.NAME:
-              control = new Panzoombar();
-              panel = new Panel(Panzoombar.NAME, {
-                collapsible: false,
-                className: 'm-panzoombar',
-                position: Position.TL,
-                tooltip: 'Nivel de zoom',
-              });
-              break;
-            case Panzoom.NAME:
-              control = new Panzoom();
-              panel = new Panel(Panzoom.NAME, {
-                collapsible: false,
-                className: 'm-panzoom',
-                position: Position.TL,
-              });
-              break;
-            case LayerSwitcher.NAME:
-              control = new LayerSwitcher();
-              /* closure a function in order to keep
-               * the control value in the scope */
-              ((layerswitcherCtrl) => {
-                panel = new Panel(LayerSwitcher.NAME, {
-                  collapsible: true,
-                  className: 'm-layerswitcher',
-                  collapsedButtonClass: 'g-cartografia-capas2',
-                  position: Position.TR,
-                  tooltip: getValue('layerswitcher').title,
-                });
-                // enables touch scroll
-                panel.on(EventType.ADDED_TO_MAP, (html) => {
-                  enableTouchScroll(html.querySelector('.m-panel-controls'));
-                });
-                // renders and registers events
-                panel.on(EventType.SHOW, (evt) => {
-                  layerswitcherCtrl.registerEvents();
-                  layerswitcherCtrl.render();
-                });
-                // unregisters events
-                panel.on(EventType.HIDE, (evt) => {
-                  layerswitcherCtrl.unregisterEvents();
-                });
-              })(control);
-              break;
-            case Mouse.NAME:
-              control = new Mouse();
-              panel = this.getPanels('map-info')[0];
-              if (isNullOrEmpty(panel)) {
-                panel = new Panel('map-info', {
-                  collapsible: false,
-                  className: 'm-map-info',
-                  position: Position.BR,
-                  tooltip: 'Coordenadas del puntero',
-                });
-              }
-              panel.addClassName('m-with-mouse');
-              break;
-            case Navtoolbar.NAME:
-              control = new Navtoolbar();
-              break;
-            case OverviewMap.NAME:
-              control = new OverviewMap({ toggleDelay: 400 });
-              panel = this.getPanels('map-info')[0];
-              if (isNullOrEmpty(panel)) {
-                panel = new Panel('map-info', {
-                  collapsible: false,
-                  className: 'm-map-info',
-                  position: Position.BR,
-                });
-              }
-              panel.addClassName('m-with-overviewmap');
-              break;
-            case Location.NAME:
-              control = new Location();
-              panel = new Panel(Location.NAME, {
-                collapsible: false,
-                className: 'm-location',
-                position: Position.BR,
-              });
-              break;
-            case GetFeatureInfo.NAME:
-              control = new GetFeatureInfo();
-              break;
-            case Rotate.NAME:
-              control = new Rotate();
-              panel = new Panel(Rotate.name, {
-                collapsible: false,
-                className: 'm-rotate',
-                position: Position.TR,
-              });
-              break;
-            default:
-              const getControlsAvailable = concatUrlPaths([M.config.MAPEA_URL, '/api/actions/controls']);
-              Dialog.error(`El control ${controlParam} no está definido. Consulte los controles disponibles <a href='${getControlsAvailable}' target="_blank">aquí</a>`);
+      controlsParam.forEach((controlParam) => {
+        const control = buildControl(controlParam);
+        const panel = getPanelForControl(control, this);
+        if (!this.hasControl(control)) {
+          if (!isNullOrEmpty(panel)) {
+            panel.addControls(control);
+            this.addPanels(panel);
+          } else {
+            control.addTo(this);
           }
-        } else if (controlParam instanceof Control) {
-          control = controlParam;
-          if (control instanceof WMCSelector) {
-            panel = this.getPanels('map-info')[0];
-            if (isNullOrEmpty(panel)) {
-              panel = new Panel('map-info', {
-                collapsible: false,
-                className: 'm-map-info',
-                position: Position.BR,
-              });
-              panel.on(EventType.ADDED_TO_MAP, (html) => {
-                if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
-                  this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
-                }
-              });
-            }
-            panel.addClassName('m-with-wmcselector');
-          }
-        } else {
-          Exception('El control "'.concat(controlParam).concat('" no es un control válido.'));
-        }
-
-        // checks if it has to be added into a main panel
-        if (M.config.panels.TOOLS.indexOf(control.name) !== -1) {
-          if (isNullOrEmpty(this.panel.TOOLS)) {
-            this.panel.TOOLS = new Panel('tools', {
-              collapsible: true,
-              className: 'm-tools',
-              collapsedButtonClass: 'g-cartografia-herramienta',
-              position: Position.TL,
-              tooltip: 'Panel de herramientas',
-            });
-            //               this.addPanels([this.panel.TOOLS]);
-          }
-          //            if (!this.panel.TOOLS.hasControl(control)) {
-          //               this.panel.TOOLS.addControls(control);
-          //            }
-          panel = this.panel.TOOLS;
-        } else if (M.config.panels.EDITION.indexOf(control.name) !== -1) {
-          if (isNullOrEmpty(this.panel.EDITION)) {
-            this.panel.EDITION = new Panel('edit', {
-              collapsible: true,
-              className: 'm-edition',
-              collapsedButtonClass: 'g-cartografia-editar',
-              position: Position.TL,
-              tooltip: 'Herramientas de edición',
-            });
-            //               this.addPanels([this.panel.EDITION]);
-          }
-          //            if (!this.panel.EDITION.hasControl(control)) {
-          //               this.panel.EDITION.addControls(control);
-          //            }
-          panel = this.panel.EDITION;
-        }
-        if (control instanceof Mouse) {
-          panel = this.getPanels('map-info')[0];
-          if (isNullOrEmpty(panel)) {
-            panel = new Panel('map-info', {
-              collapsible: false,
-              className: 'm-map-info',
-              position: Position.BR,
-              tooltip: 'Coordenadas del puntero',
-            });
-          }
-          panel.addClassName('m-with-mouse');
-        }
-
-        if (control instanceof Scale) {
-          panel = this.getPanels('map-info')[0];
-          if (isNullOrEmpty(panel)) {
-            panel = new Panel('map-info', {
-              collapsible: false,
-              className: 'm-map-info',
-              position: Position.BR,
-            });
-            panel.on(EventType.ADDED_TO_MAP, (html) => {
-              if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
-                this.getControls(['scaleline'])[0].getImpl().getElement().classList.add('ol-scale-line-up');
-              }
-            });
-          }
-          panel.addClassName('m-with-scale');
-        }
-
-        if (!isNullOrEmpty(panel) && !panel.hasControl(control)) {
-          panel.addControls(control);
-          this.addPanels(panel);
-        } else {
-          control.addTo(this);
           controls.push(control);
         }
       });
+
       this.getImpl().addControls(controls);
     }
-    return this;
   }
+
+  /**
+   * TODO:
+   */
+  hasControl(control) {
+    let controlName = control;
+    if (control instanceof Control) {
+      controlName = control.name;
+    }
+    const controls = this.getControls();
+    const controlFiltered = controls.find(ctrl => ctrl.name === controlName);
+    const hasControl = !isNullOrEmpty(controlFiltered);
+
+    return hasControl;
+  }
+
+  // /**
+  //  * This function adds controls specified by the user
+  //  *
+  //  * @public
+  //  * @function
+  //  * @param {string|Object|Array<String>|Array<Object>} controlsParam
+  //  * @returns {Map}
+  //  * @api
+  //  */
+  // addControls(controlsParamVar) {
+  //   let controlsParam = controlsParamVar;
+  //   if (!isNullOrEmpty(controlsParam)) {
+  //     // checks if the implementation can manage layers
+  //     if (isUndefined(MapImpl.prototype.addControls)) {
+  //       Exception(getValue('exception').addcontrols_method);
+  //     }
+
+  //     // parses parameters to Array
+  //     if (!isArray(controlsParam)) {
+  //       controlsParam = [controlsParam];
+  //     }
+
+  //     // gets the parameters as Control to add them
+  //     const controls = [];
+  //     // for (let i = 0, ilen = controlsParam.length; i < ilen; i++) {
+  //     controlsParam.forEach((controlParamVar) => {
+  //       let controlParam = controlParamVar;
+  //       let control;
+  //       let panel;
+  //       if (isString(controlParam)) {
+  //         controlParam = normalize(controlParam);
+  //         switch (controlParam) {
+  //           case Scale.NAME:
+  //             control = new Scale();
+  //             panel = this.getPanels('map-info')[0];
+  //             if (isNullOrEmpty(panel)) {
+  //               panel = new Panel('map-info', {
+  //                 collapsible: false,
+  //                 className: 'm-map-info',
+  //                 position: Position.BR,
+  //               });
+  //               this.addUpClass_(panel);
+  //             }
+  //             panel.addClassName('m-with-scale');
+  //             break;
+  //           case `${Scale.NAME}*true`:
+  //             control = new Scale({ exactScale: true });
+  //             panel = this.getPanels('map-info')[0];
+  //             if (isNullOrEmpty(panel)) {
+  //               panel = new Panel('map-info', {
+  //                 collapsible: false,
+  //                 className: 'm-map-info',
+  //                 position: Position.BR,
+  //               });
+  //               this.addUpClass_(panel);
+  //             }
+  //             panel.addClassName('m-with-scale');
+  //             break;
+  //           case ScaleLine.NAME:
+  //             control = new ScaleLine();
+  //             panel = new Panel(ScaleLine.NAME, {
+  //               collapsible: false,
+  //               className: 'm-scaleline',
+  //               position: Position.BL,
+  //               tooltip: 'Línea de escala',
+  //             });
+  //             this.addUpClass_(panel);
+  //             break;
+  //           case Panzoombar.NAME:
+  //             control = new Panzoombar();
+  //             panel = new Panel(Panzoombar.NAME, {
+  //               collapsible: false,
+  //               className: 'm-panzoombar',
+  //               position: Position.TL,
+  //               tooltip: 'Nivel de zoom',
+  //             });
+  //             break;
+  //           case Panzoom.NAME:
+  //             control = new Panzoom();
+  //             panel = new Panel(Panzoom.NAME, {
+  //               collapsible: false,
+  //               className: 'm-panzoom',
+  //               position: Position.TL,
+  //             });
+  //             break;
+  //           case LayerSwitcher.NAME:
+  //             control = new LayerSwitcher();
+  //             /* closure a function in order to keep
+  //              * the control value in the scope */
+  //             ((layerswitcherCtrl) => {
+  //               panel = new Panel(LayerSwitcher.NAME, {
+  //                 collapsible: true,
+  //                 className: 'm-layerswitcher',
+  //                 collapsedButtonClass: 'g-cartografia-capas2',
+  //                 position: Position.TR,
+  //                 tooltip: getValue('layerswitcher').title,
+  //               });
+  //               // enables touch scroll
+  //               panel.on(EventType.ADDED_TO_MAP, (html) => {
+  //                 enableTouchScroll(html.querySelector('.m-panel-controls'));
+  //               });
+  //               // renders and registers events
+  //               panel.on(EventType.SHOW, (evt) => {
+  //                 layerswitcherCtrl.registerEvents();
+  //                 layerswitcherCtrl.render();
+  //               });
+  //               // unregisters events
+  //               panel.on(EventType.HIDE, (evt) => {
+  //                 layerswitcherCtrl.unregisterEvents();
+  //               });
+  //             })(control);
+  //             break;
+  //           case Mouse.NAME:
+  //             control = new Mouse();
+  //             panel = this.getPanels('map-info')[0];
+  //             if (isNullOrEmpty(panel)) {
+  //               panel = new Panel('map-info', {
+  //                 collapsible: false,
+  //                 className: 'm-map-info',
+  //                 position: Position.BR,
+  //                 tooltip: 'Coordenadas del puntero',
+  //               });
+  //             }
+  //             panel.addClassName('m-with-mouse');
+  //             break;
+  //           case OverviewMap.NAME:
+  //             control = new OverviewMap({ toggleDelay: 400 });
+  //             panel = this.getPanels('map-info')[0];
+  //             if (isNullOrEmpty(panel)) {
+  //               panel = new Panel('map-info', {
+  //                 collapsible: false,
+  //                 className: 'm-map-info',
+  //                 position: Position.BR,
+  //               });
+  //             }
+  //             panel.addClassName('m-with-overviewmap');
+  //             break;
+  //           case Location.NAME:
+  //             control = new Location();
+  //             panel = new Panel(Location.NAME, {
+  //               collapsible: false,
+  //               className: 'm-location',
+  //               position: Position.BR,
+  //             });
+  //             break;
+  //           case GetFeatureInfo.NAME:
+  //             control = new GetFeatureInfo();
+  //             break;
+  //           case Rotate.NAME:
+  //             control = new Rotate();
+  //             panel = new Panel(Rotate.name, {
+  //               collapsible: false,
+  //               className: 'm-rotate',
+  //               position: Position.TR,
+  //             });
+  //             break;
+  //           default:
+  //
+  // const getControlsAvailable = concatUrlPaths([M.config.MAPEA_URL, '/api/actions/controls']);
+  // Dialog.error(`El control ${controlParam}
+  // no está definido. Consulte los controles disponibles <a href='${getControlsAvailable}'
+  // target="_blank">aquí</a>`);
+  //         }
+  //       } else if (controlParam instanceof Control) {
+  //         control = controlParam;
+  //         if (control instanceof WMCSelector) {
+  //           panel = this.getPanels('map-info')[0];
+  //           if (isNullOrEmpty(panel)) {
+  //             panel = new Panel('map-info', {
+  //               collapsible: false,
+  //               className: 'm-map-info',
+  //               position: Position.BR,
+  //             });
+  //             this.addUpClass_(panel);
+  //           }
+  //           panel.addClassName('m-with-wmcselector');
+  //         }
+  //       } else {
+  //         Exception('El control "'.concat(controlParam).concat('" no es un control válido.'));
+  //       }
+
+  //       // checks if it has to be added into a main panel
+  //       // if (M.config.panels.TOOLS.indexOf(control.name) !== -1) {
+  //       //   if (isNullOrEmpty(this.panel.TOOLS)) {
+  //       //     this.panel.TOOLS = new Panel('tools', {
+  //       //       collapsible: true,
+  //       //       className: 'm-tools',
+  //       //       collapsedButtonClass: 'g-cartografia-herramienta',
+  //       //       position: Position.TL,
+  //       //       tooltip: 'Panel de herramientas',
+  //       //     });
+  //       //   }
+  //       //   panel = this.panel.TOOLS;
+  //       // }
+
+  //       // if (control instanceof Mouse) {
+  //       //   panel = this.getPanels('map-info')[0];
+  //       //   if (isNullOrEmpty(panel)) {
+  //       //     panel = new Panel('map-info', {
+  //       //       collapsible: false,
+  //       //       className: 'm-map-info',
+  //       //       position: Position.BR,
+  //       //       tooltip: 'Coordenadas del puntero',
+  //       //     });
+  //       //   }
+  //       //   panel.addClassName('m-with-mouse');
+  //       // }
+
+  //       // if (control instanceof Scale) {
+  //       //   panel = this.getPanels('map-info')[0];
+  //       //   if (isNullOrEmpty(panel)) {
+  //       //     panel = new Panel('map-info', {
+  //       //       collapsible: false,
+  //       //       className: 'm-map-info',
+  //       //       position: Position.BR,
+  //       //     });
+  //       //     this.addUpClass_(panel);
+  //       //   }
+  //       //   panel.addClassName('m-with-scale');
+  //       // }
+
+  //       if (!isNullOrEmpty(panel) && !panel.hasControl(control)) {
+  //         panel.addControls(control);
+  //         this.addPanels(panel);
+  //       } else {
+  //         control.addTo(this);
+  //         controls.push(control);
+  //       }
+  //     });
+
+  //     this.getImpl().addControls(controls);
+  //   }
+  //   return this;
+  // }
 
   /**
    * This function removes the specified controls from the map
@@ -2334,16 +2339,29 @@ class Map extends Base {
    * @api
    */
   setTicket(ticket) {
-    if (!isNullOrEmpty(ticket)) {
-      if (M.config.PROXY_POST_URL.indexOf('ticket=') === -1) {
-        M.config('PROXY_POST_URL', addParameters(M.config.PROXY_POST_URL, { ticket }));
-      }
-      if (M.config.PROXY_URL.indexOf('ticket=') === -1) {
-        M.config('PROXY_URL', addParameters(M.config.PROXY_URL, { ticket }));
-      }
-    }
+    this.ticket_ = ticket;
+    M.config.ticket = ticket;
+    // if (!isNullOrEmpty(ticket)) {
+    //   if (M.config.PROXY_POST_URL.indexOf('ticket=') === -1) {
+    //     M.config('PROXY_POST_URL', addParameters(M.config.PROXY_POST_URL, { ticket }));
+    //   }
+    //   if (M.config.PROXY_URL.indexOf('ticket=') === -1) {
+    //     M.config('PROXY_URL', addParameters(M.config.PROXY_URL, { ticket }));
+    //   }
+    // }
 
     return this;
+  }
+
+  /**
+   * This function gets the ticket of the map
+   * @function
+   * @public
+   * @param {String} ticket
+   * @api
+   */
+  getTicket() {
+    return this.ticket_;
   }
 
   /**
@@ -2741,6 +2759,18 @@ class Map extends Base {
   }
 
   /**
+   * @private
+   * @function
+   */
+  addUpClass_(panel) {
+    panel.on(EventType.ADDED_TO_MAP, (html) => {
+      if (this.getControls(['wmcselector', 'scale', 'scaleline']).length === 3) {
+        this.getControls(['scaleline'])[0].getElement().classList.add('ol-scale-line-up');
+      }
+    });
+  }
+
+  /**
    * TODO
    *
    * @public
@@ -2761,10 +2791,11 @@ class Map extends Base {
    * @api
    */
   on(eventType, listener, optThis) {
-    super.on(eventType, listener, optThis);
+    const idEvent = super.on(eventType, listener, optThis);
     if ((eventType === EventType.COMPLETED) && (this._finishedMap === true)) {
       this.fire(EventType.COMPLETED);
     }
+    return idEvent;
   }
 
   /**

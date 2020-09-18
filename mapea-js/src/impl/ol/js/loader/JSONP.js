@@ -4,7 +4,7 @@
 import MObject from 'M/Object';
 import { get as getRemote } from 'M/util/Remote';
 import Exception from 'M/exception/exception';
-import { isNullOrEmpty } from 'M/util/Utils';
+import { isNullOrEmpty, addParameters, isString } from 'M/util/Utils';
 import { getValue } from 'M/i18n/language';
 /**
  * @classdesc
@@ -69,8 +69,12 @@ class JSONP extends MObject {
    * @function
    */
   loadInternal_(projection) {
+    let url = this.url_;
     return new Promise((success) => {
-      getRemote(this.url_).then((response) => {
+      if (isString(M.config.ticket)) {
+        url = addParameters(url, { ticket: M.config.ticket });
+      }
+      getRemote(url).then((response) => {
         if (!isNullOrEmpty(response.text)) {
           const features = this.format_.read(response.text, {
             featureProjection: projection,

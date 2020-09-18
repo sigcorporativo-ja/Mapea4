@@ -1,9 +1,9 @@
 /**
  * @module M/impl/GetCapabilities
  */
-import { isNullOrEmpty, isArray, isObject, isUndefined } from 'M/util/Utils';
+import { isNullOrEmpty, isArray, isObject, isUndefined, isString } from 'M/util/Utils';
 import WMS from 'M/layer/WMS';
-import { get as getProj } from 'ol/proj';
+import { get as getProjection } from 'ol/proj';
 import ImplUtils from './Utils';
 
 /**
@@ -88,7 +88,7 @@ class GetCapabilities {
   getLayerExtent(layerName, projection) {
     const layer = this.capabilities_.Capability.Layer;
     const extent = this.getExtentRecursive_(layer, layerName, projection);
-    return extent;
+    return this.transformExtent(extent);
   }
 
   /**
@@ -118,19 +118,22 @@ class GetCapabilities {
           if (!isNullOrEmpty(layer.BoundingBox)) {
             const bboxSameProj = layer.BoundingBox.find(bbox => bbox.crs === projection);
             if (!isNullOrEmpty(bboxSameProj)) {
+              this.capabilitiesProj = bboxSameProj.crs;
               extent = bboxSameProj.extent;
             } else {
               const bbox = layer.BoundingBox[0];
-              const projSrc = getProj(bbox.crs);
-              const projDest = getProj(projection);
+              this.capabilitiesProj = bbox.crs;
+              const projSrc = getProjection(bbox.crs);
+              const projDest = getProjection(this.projection_.code);
               extent = ImplUtils.transformExtent(bbox.extent, projSrc, projDest);
             }
           } else if (!isNullOrEmpty(layer.LatLonBoundingBox)) {
             const bbox = layer.LatLonBoundingBox[0];
+            this.capabilitiesProj = 'EPSG:4326';
             // if the layer has not the SRS then transformExtent
             // the latLonBoundingBox which is always present
-            const projSrc = getProj('EPSG:4326');
-            const projDest = getProj(projection);
+            const projSrc = getProjection('EPSG:4326');
+            const projDest = getProjection(this.projection_.code);
             extent = ImplUtils.transformExtent(bbox.extent, projSrc, projDest);
           }
         } else if (!isUndefined(layer.Layer)) {
@@ -180,6 +183,36 @@ class GetCapabilities {
       layers.push(new WMS({ url: this.serviceUrl_, name: layer.Name }));
     }
     return layers;
+  }
+
+  /**
+   * PATCH
+   *
+   * Context: As stated on the OGC Web Map Services v1.3.0, the Layer bounding box declared
+   * in the GetCapabilities should be defined using the coordinates order established in the CRS.
+   * For example, in the case ofEPSG: 4326, the order of the bounding box
+   * should be(min_lat, min_long, max_lat, max_long).This order should also be used on a
+   * GetMap request. However, coming from WMS 1.1.0, the coordinate orders always were specified
+   * in LongLat order.
+   *
+   * To maintain the compatibility for all the clients, OpenLayers automatically flips the order in
+   * case ofusing a v1.3.0 service.This conflicts with our own development, given that we provide
+   * the bounding box in the same order that is declared on the GetCapabilities, resulting in an
+   * incorrect order for services that declared a CRS with the LatLong order
+   *
+   * @private
+   * @function
+   * @return {Array<Number>}
+   */
+  transformExtent(extent) {
+    let transformExtent = extent;
+    if (this.capabilities_.version === '1.3.0' && isString(this.capabilitiesProj)) {
+      const axisOrientation = getProjection(this.capabilitiesProj).getAxisOrientation();
+      if (Array.isArray(transformExtent) && axisOrientation.substr(0, 2) === 'ne') {
+        transformExtent = [extent[1], extent[0], extent[3], extent[2]];
+      }
+    }
+    return transformExtent;
   }
 }
 

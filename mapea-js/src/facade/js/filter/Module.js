@@ -10,12 +10,12 @@ import Vector from '../layer/Vector';
 import Feature from '../feature/Feature';
 
 /**
- * TODO
+ * Parses features and returns their GeoJSON geometries
  *
  * @function
- * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param -
- * Layer or geometry on which the query is performed
- * @return {Spatial} Space filter
+ * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param
+ * elements to parse
+ * @return {Array<GeoJSON>} equivalent geometries
  * @api
  */
 export const parseParamToGeometries = (paramParameter) => {
@@ -42,13 +42,13 @@ export const parseParamToGeometries = (paramParameter) => {
 };
 
 /**
- * TODO
+ * Creates an equivalent CQL query
  *
  * @private
  * @function
- * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param -
- *  Layer or geometry on which the query is performed
- * @return {Spatial} Space filter
+ * @param {string} operation name of the spatial operation
+ * @param {geometries} geometries geometries to use in the query
+ * @return {string} CQL query
  */
 const toCQLFilter = (operation, geometries) => {
   let cqlFilter = '';
@@ -70,11 +70,11 @@ const toCQLFilter = (operation, geometries) => {
 };
 
 /**
- * This function creates a spatial filter to know which features contain another feature or layer
+ * Spatial filter to know which features contain another feature or layer
  *
  * @function
- * @param {M.layer.Vector|object} param - Layer or geometry on which the query is performed
- * @return {Spatial} Space filter
+ * @param {M.layer.Vector|object} param Layer or geometry on which the query is performed
+ * @return {Spatial} Spatial filter
  * @api
  */
 export const CONTAIN = (param) => {
@@ -92,11 +92,11 @@ export const CONTAIN = (param) => {
 };
 
 /**
- * This function creates a spatial filter to know which features disjoint another feature or layer
+ * Spatial filter to know which features disjoint another feature or layer
  *
  * @function
- * @param {M.layer.Vector|object} param - Layer or geometry on which the query is performed
- * @return {Spatial} Space filter
+ * @param {M.layer.Vector|object} param layer or geometry on which the query is performed
+ * @return {Spatial} Spatial filter
  * @api
  */
 export const DISJOINT = (param) => {
@@ -114,11 +114,11 @@ export const DISJOINT = (param) => {
 };
 
 /**
- * This function creates a spatial filter to know which features within another feature or layer
+ * Spatial filter to know which features are within another feature or layer
  *
  * @function
- * @param {M.layer.Vector|object} param - Layer or geometry on which the query is performed
- * @return {Spatial} Space filter
+ * @param {M.layer.Vector|object} param layer or geometry on which the query is performed
+ * @return {Spatial} Spatial filter
  * @api
  */
 export const WITHIN = (param) => {
@@ -136,13 +136,13 @@ export const WITHIN = (param) => {
 };
 
 /**
- * This function creates a spatial filter to know which features intersects
+ * Spatial filter to know which features intersect
  * another feature or layer
  *
  * @function
- * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param -
- * Layer or geometry on which the query is performed
- * @return {Spatial} Space filter
+ * @param {M.layer.Vector|M.Feature|object|Array<M.Feature|object>} param
+ * layer or geometry on which the query is performed
+ * @return {Spatial} Spatial filter
  * @api
  */
 export const INTERSECT = (param) => {

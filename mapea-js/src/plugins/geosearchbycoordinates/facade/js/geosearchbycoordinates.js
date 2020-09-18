@@ -1,6 +1,3 @@
-/**
- * @module M/plugin/GeosearchByCoordinates
- */
 import '../assets/css/geosearchbycoordinates';
 import GeosearchByCoordinatesControl from './geosearchbycoordinatescontrol';
 import api from '../../api';
@@ -223,5 +220,4 @@ export default class GeosearchByCoordinates extends M.Plugin {
  * @public
  * @api stable
  */
-
 GeosearchByCoordinates.NAME = 'geosearchbylocation';
