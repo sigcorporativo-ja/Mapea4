@@ -805,7 +805,7 @@ const getURLMVT = (parameter) => {
 };
 
 /**
- * This function gets the url of the string parameter mvt layer
+ * This function gets the name of the string parameter mvt layer
  *
  * @function
  * @private
@@ -826,6 +826,54 @@ export const getNameMVT = (parameter) => {
     Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
   }
   return name;
+};
+
+/**
+ * This function gets the render of the string parameter mvt layer
+ *
+ * @function
+ * @private
+ * @param {string} parameter
+ */
+export const getModeMVT = (parameter) => {
+  let mode;
+  if (isString(parameter)) {
+    if (/^MVT\*.+/i.test(parameter)) {
+      const urlMatches = parameter.match(/.*\*(https?:\/\/[^*]+)\*([^*]+)\*([^*]+)/i);
+      if (urlMatches && (urlMatches.length > 3)) {
+        mode = urlMatches[3];
+      }
+    }
+  } else if (isObject(parameter) && !isNullOrEmpty(parameter.mode)) {
+    mode = parameter.mode.trim();
+  } else if (!isObject(parameter)) {
+    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
+  }
+  return mode;
+};
+
+/**
+ * This function gets the projection of the string parameter mvt layer
+ *
+ * @function
+ * @private
+ * @param {string} parameter
+ */
+export const getProjectionMVT = (parameter) => {
+  let proj;
+  if (isString(parameter)) {
+    if (/^MVT\*.+/i.test(parameter)) {
+      const urlMatches = parameter.match(/.*\*(https?:\/\/[^*]+)\*([^*]+)\*([^*]+)\*([^*]+)/i);
+      if (urlMatches && (urlMatches.length > 4)) {
+        proj = urlMatches[4];
+      }
+    }
+  } else if (isObject(parameter) && !isNullOrEmpty(parameter.proj)) {
+    proj = parameter.proj.trim();
+  } else if (!isObject(parameter)) {
+    Exception(`El parámetro no es de un tipo soportado: ${typeof parameter}`);
+  }
+  return proj;
 };
 
 /**
@@ -857,6 +905,10 @@ export const mvt = (userParameters) => {
     layerObj.name = getNameMVT(userParam);
 
     layerObj.url = getURLMVT(userParam);
+
+    layerObj.mode = getModeMVT(userParam);
+
+    layerObj.projection = getProjectionMVT(userParam);
 
     return layerObj;
   });

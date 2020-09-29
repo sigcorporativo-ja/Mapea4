@@ -85,7 +85,7 @@ class MVT extends Vector {
     this.fire(EventType.ADDED_TO_MAP);
 
     this.formater_ = new MVTFormatter({
-      featureClass: this.mode_ === mode.RENDER ? RenderFeature : Feature,
+      featureClass: this.mode_ === mode.FEATURE ? Feature : RenderFeature,
     });
 
     const extent = this.facadeVector_.getMaxExtent();

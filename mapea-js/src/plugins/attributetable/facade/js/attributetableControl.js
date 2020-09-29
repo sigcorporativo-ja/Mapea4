@@ -20,7 +20,8 @@ export default class AttributeTableControl extends M.Control {
 
     [this.facadeMap_, this.selectAllActive_, this.template_,
       this.areaTable_, this.layer_, this.numPages_,
-      this.draggable_] = [null, false, null, null, null, numPages, null];
+      this.draggable_,
+    ] = [null, false, null, null, null, numPages, null];
     this.pages_ = {
       total: 0,
       actual: 1,
@@ -51,9 +52,10 @@ export default class AttributeTableControl extends M.Control {
     const options = {
       jsonp: true,
       vars: {
-        layers: map.getWFS().concat(map.getKML().concat(map.getLayers().filter((layer) => {
-          return layer.type === 'GeoJSON';
-        }))),
+        layers: map.getWFS().concat(map.getKML()
+          .concat(map.getMVT().concat(map.getLayers().filter((layer) => {
+            return layer.type === 'GeoJSON';
+          })))),
       },
     };
     const html = M.template.compileSync(attributetableHTML, options);

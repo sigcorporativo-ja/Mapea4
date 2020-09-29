@@ -475,7 +475,7 @@ class Map extends Base {
                 layer = new WMTS(layerParam);
                 break;
               case 'MVT':
-                layer = new MVT(layerParam);
+                layer = new MVT(parameterVariable);
                 break;
               default:
                 Dialog.error(getValue('dialog').invalid_type_layer);
