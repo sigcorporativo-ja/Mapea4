@@ -257,8 +257,8 @@ export default class GeosearchControl extends M.Control {
     evt.preventDefault();
     // hidden results on click for mobile devices
     if (M.window.WIDTH <= M.config.MOBILE_WIDTH) {
-      evt.target = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-      this.resultsClick_(evt);
+      const button = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
+      button.click();
     }
     this.facadeMap_.removePopup();
     const solrid = evt.currentTarget.id;

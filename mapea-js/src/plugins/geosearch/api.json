@@ -23,10 +23,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "geosearch-2.0.0.ol.min.js"
+        "geosearch-2.0.1.ol.min.js"
       ],
       "styles": [
-        "geosearch-2.0.0.min.css"
+        "geosearch-2.0.1.min.css"
       ]
     }
   },
@@ -34,7 +34,7 @@
     "name": "Geosearch",
     "description": "",
     "text": "",
-    "version": "2.0.0",
+    "version": "2.0.1",
     "date": "11/10/2019",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",
