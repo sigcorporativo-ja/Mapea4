@@ -28,6 +28,7 @@ const proj25830 = {
   extent: [-729785.83, 3715125.82, 940929.67, 9518470.69],
   codes: ['EPSG:25830', 'EPSG:3042', 'urn:ogc:def:crs:EPSG::25830', 'urn:ogc:def:crs:EPSG::3042', 'http://www.opengis.net/gml/srs/epsg.xml#25830', 'http://www.opengis.net/gml/srs/epsg.xml#3042'],
   units: 'm',
+  metersPerUnit: 1,
 };
 
 // EPSG:25831

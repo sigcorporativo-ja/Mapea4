@@ -36,7 +36,7 @@ module.exports = {
         use: {
           loader: path.resolve(__dirname, 'mutate-loader'),
           options: {
-            mode: 'prod'
+            mode: 'prod',
           }
         },
         include: /node_modules\/ol\/*/,
@@ -78,13 +78,16 @@ module.exports = {
     ],
   },
   optimization: {
+    minimize: true,
     noEmitOnErrors: true,
     minimizer: [
       new OptimizeCssAssetsPlugin(),
       new TerserPlugin({
         sourceMap: true,
+        exclude: `filter/configuration-${pjson.version}.js`,
+        extractComments: false,
       }),
-    ]
+    ],
   },
   plugins: [
     // new GenerateVersionPlugin({
@@ -94,18 +97,24 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',
     }),
-    new CopywebpackPlugin([{
-      from: 'src/configuration.js',
-      to: `filter/configuration-${pjson.version}.js`,
-    }]),
-    new CopywebpackPlugin([{
-      from: 'src/facade/assets/img',
-      to: 'assets/img',
-    }]),
-    new CopywebpackPlugin([{
-      from: 'src/facade/assets/fonts',
-      to: 'assets/fonts',
-    }]),
+    new CopywebpackPlugin({
+      patterns: [{
+        from: 'src/configuration.js',
+        to: `filter/configuration-${pjson.version}.js`,
+      }],
+    }),
+    new CopywebpackPlugin({
+      patterns: [{
+        from: 'src/facade/assets/img',
+        to: 'assets/img',
+      }],
+    }),
+    new CopywebpackPlugin({
+      patterns: [{
+        from: 'src/facade/assets/fonts',
+        to: 'assets/fonts',
+      }],
+    }),
   ],
   devtool: 'source-map',
 };

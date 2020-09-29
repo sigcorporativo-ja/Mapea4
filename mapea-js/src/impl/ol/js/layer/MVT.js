@@ -9,9 +9,11 @@ import TileEventType from 'ol/source/TileEventType';
 import TileState from 'ol/TileState';
 import MVTFormatter from 'ol/format/MVT';
 import { get as getProj } from 'ol/proj';
-
+import { fromKey } from 'ol/tilecoord';
+import Feature from 'ol/Feature';
+import RenderFeature from 'ol/render/Feature';
+import { mode } from 'M/layer/MVT';
 import Vector from './Vector';
-import FeatureImpl from '../feature/Feature';
 
 /**
  * @classdesc
@@ -26,14 +28,6 @@ class MVT extends Vector {
    */
   constructor(parameters, options, vendorOptions) {
     super(options, vendorOptions);
-
-    /**
-     * Popup showed
-     * @private
-     * @type {M.impl.Popup}
-     */
-    this.popup_ = null;
-
     /**
      *
      * @private
@@ -62,6 +56,21 @@ class MVT extends Vector {
      * @type {ol.proj.Projection}
      */
     this.projection_ = parameters.projection || 'EPSG:3857';
+
+    /**
+     * Features of the openlayers source
+     * @private
+     * @type {ol.render.Feature | ol.Feature}
+     */
+    this.features_ = [];
+
+    /**
+     * Render mode of the layer. Possible values: 'render' | 'feature'.
+     *
+     * @private
+     * @type {string}
+     */
+    this.mode_ = parameters.mode;
   }
 
   /**
@@ -76,7 +85,7 @@ class MVT extends Vector {
     this.fire(EventType.ADDED_TO_MAP);
 
     this.formater_ = new MVTFormatter({
-
+      featureClass: this.mode_ === mode.RENDER ? RenderFeature : Feature,
     });
 
     const extent = this.facadeVector_.getMaxExtent();
@@ -109,26 +118,43 @@ class MVT extends Vector {
 
     // register events in order to fire the LOAD event
     source.on(TileEventType.TILELOADERROR, evt => this.checkAllTilesLoaded_(evt));
-    source.on(TileEventType.TILELOADEND, evt => this.parseFeaturesFromTile_(evt));
+    source.on(TileEventType.TILELOADEND, evt => this.checkAllTilesLoaded_(evt));
   }
 
   /**
-   * This function parses the tiled features contained
-   * in the loaded tile
+   * This function returns all features or discriminating by the filter
    *
-   * @private
    * @function
-   * @param {ol/source/Tile.TileSourceEvent} evt
+   * @public
+   * @param {boolean} skipFilter - Indicates whether skyp filter
+   * @param {M.Filter} filter - Filter to execute
+   * @return {Array<M.Feature>} returns all features or discriminating by the filter
+   * @api stable
    */
-  parseFeaturesFromTile_(evt) {
-    const vectorTile = evt.tile;
-    const renderFeatures = vectorTile.getFeatures();
-    const tileProjection = vectorTile.getProjection();
-    const mapProjection = getProj(this.projection_);
-    const features = renderFeatures.map(rf => FeatureImpl
-      .olRenderFeature2Facade(rf, tileProjection, mapProjection)).filter(f => f !== null);
-    this.features_ = [...this.features_, ...features];
-    this.checkAllTilesLoaded_(evt);
+  getFeatures(skipFilter, filter) {
+    let features = [];
+    if (this.ol3Layer) {
+      const olSource = this.ol3Layer.getSource();
+      const tileCache = olSource.tileCache;
+      if (tileCache.getCount() === 0) {
+        return features;
+      }
+      const z = fromKey(tileCache.peekFirstKey())[0];
+      tileCache.forEach((tile) => {
+        if (tile.tileCoord[0] !== z || tile.getState() !== TileState.LOADED) {
+          return;
+        }
+        const sourceTiles = tile.getSourceTiles();
+        for (let i = 0, ii = sourceTiles.length; i < ii; i += 1) {
+          const sourceTile = sourceTiles[i];
+          const olFeatures = sourceTile.getFeatures();
+          if (olFeatures) {
+            features = features.concat(olFeatures);
+          }
+        }
+      });
+    }
+    return features;
   }
 
   /**

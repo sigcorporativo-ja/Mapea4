@@ -2,14 +2,27 @@
  * @module M/layer/MVT
  */
 import MVTTileImpl from 'impl/layer/MVT';
+import RenderFeatureImpl from 'impl/feature/RenderFeature';
 import Vector from './Vector';
 import { isUndefined, isNullOrEmpty } from '../util/Utils';
 import Exception from '../exception/exception';
 import { MVT as MVTType } from './Type';
 
 /**
+ * Possibles modes of MVT
+ *
+ * @const
+ * @public
+ * @api
+ */
+export const mode = {
+  RENDER: 'render',
+  FEATURE: 'feature',
+};
+
+/**
  * @classdesc
- * Main constructor of the class. Creates a Vector layer
+ * Main constructor of the class. Creates a MVT layer
  * with parameters specified by the user
  * @api
  */
@@ -96,6 +109,15 @@ class MVT extends Vector {
    */
   getProjection() {
     return this.getImpl().getProjection();
+  }
+
+  /**
+   *
+   */
+  getFeatures() {
+    const features = this.getImpl().getFeatures();
+
+    return features.map(olFeature => RenderFeatureImpl.olFeature2Facade(olFeature));
   }
 }
 

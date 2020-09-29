@@ -6,7 +6,7 @@ import Cluster from 'M/style/Cluster';
 import { isNullOrEmpty } from 'M/util/Utils';
 import RenderFeature from 'ol/render/Feature';
 import AnimatedCluster from '../layer/AnimatedCluster';
-import FeatureImpl from '../feature/Feature';
+import RenderFeatureImpl from '../feature/RenderFeature';
 
 /**
  * function adds the event 'click'
@@ -22,9 +22,7 @@ const getFacadeFeature = (feature, layer) => {
     mFeature = layer.getFeatureById(featureId);
   }
   if (isNullOrEmpty(mFeature) && (feature instanceof RenderFeature)) {
-    mFeature = FeatureImpl.olRenderFeature2Facade(feature);
-  } else if (isNullOrEmpty(mFeature)) {
-    mFeature = FeatureImpl.olFeature2Facade(feature);
+    mFeature = RenderFeatureImpl.olFeature2Facade(feature);
   }
   return mFeature;
 };
