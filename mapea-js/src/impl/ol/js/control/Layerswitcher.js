@@ -79,13 +79,13 @@ class LayerSwitcher extends Control {
           if (layer.transparent === true || !layer.isVisible()) {
             const opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
             if (!isNullOrEmpty(opacity)) {
-              layer.setOpacity(opacity.value);
+              layer.setOpacity(parseFloat(opacity.value));
             }
             layer.setVisible(!layer.isVisible());
           }
         } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
           // range
-          layer.setOpacity(evt.target.value);
+          layer.setOpacity(parseFloat(evt.target.value));
           // remove span
         } else if (evt.target.classList.contains('m-layerswitcher-remove')) {
           this.facadeMap_.removeLayers(layer);
@@ -121,13 +121,13 @@ class LayerSwitcher extends Control {
           if (layer.transparent === true || !layer.isVisible()) {
             const opacity = evt.target.parentElement.parentElement.querySelector('div.tools > input');
             if (!isNullOrEmpty(opacity)) {
-              layer.setOpacity(opacity.value);
+              layer.setOpacity(parseFloat(opacity.value));
             }
             layer.setVisible(!layer.isVisible());
           }
           // range
         } else if (evt.target.classList.contains('m-layerswitcher-transparency')) {
-          layer.setOpacity(evt.target.value);
+          layer.setOpacity(parseFloat(evt.target.value));
           // remove span
         } else if (evt.target.classList.contains('m-layerswitcher-remove')) {
           if (!isNullOrEmpty(group)) {
