@@ -73,6 +73,17 @@ class RenderFeature extends Base {
   }
 
   /**
+   * Get geometry type of the feature.
+   * @function
+   * @public
+   * @return {string}
+   * @api
+   */
+  getType() {
+    return this.getImpl().getType();
+  }
+
+  /**
    * This function returns the value of the indicated attribute
    *
    * @public

@@ -38,13 +38,6 @@ class MVT extends Vector {
     /**
      *
      * @private
-     * @type {Boolean}
-     */
-    this.loaded_ = true;
-
-    /**
-     *
-     * @private
      * @type {Number}
      */
     this.lastZoom_ = -1;
@@ -71,6 +64,14 @@ class MVT extends Vector {
      * @type {string}
      */
     this.mode_ = parameters.mode;
+
+    /**
+     * Loaded flag attribute
+     *
+     * @private
+     * @type {bool}
+     */
+    this.loaded_ = false;
   }
 
   /**
@@ -95,6 +96,10 @@ class MVT extends Vector {
       projection: this.projection_,
     });
 
+    // register events in order to fire the LOAD event
+    source.on(TileEventType.TILELOADERROR, evt => this.checkAllTilesLoaded_(evt));
+    // source.on(TileEventType.TILELOADEND, evt => this.checkAllTilesLoaded_(evt));
+
     this.ol3Layer = new OLLayerVectorTile(extend({
       source,
       extent,
@@ -103,6 +108,7 @@ class MVT extends Vector {
     if (this.opacity_) {
       this.setOpacity(this.opacity_);
     }
+
     this.map.getMapImpl().addLayer(this.ol3Layer);
 
     // clear features when zoom changes
@@ -115,10 +121,6 @@ class MVT extends Vector {
         }
       }
     });
-
-    // register events in order to fire the LOAD event
-    source.on(TileEventType.TILELOADERROR, evt => this.checkAllTilesLoaded_(evt));
-    source.on(TileEventType.TILELOADEND, evt => this.checkAllTilesLoaded_(evt));
   }
 
   /**
@@ -129,7 +131,7 @@ class MVT extends Vector {
    * @param {boolean} skipFilter - Indicates whether skyp filter
    * @param {M.Filter} filter - Filter to execute
    * @return {Array<M.Feature>} returns all features or discriminating by the filter
-   * @api stable
+   * @api
    */
   getFeatures(skipFilter, filter) {
     let features = [];
@@ -179,7 +181,8 @@ class MVT extends Vector {
       const tileLoaded = sameTile || (tileState !== TileState.LOADING);
       return tileLoaded;
     });
-    if (loaded) {
+    if (loaded && !this.loaded_) {
+      this.loaded_ = true;
       this.facadeVector_.fire(EventType.LOAD);
     }
   }

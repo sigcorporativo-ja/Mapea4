@@ -6,6 +6,7 @@ import * as Baseline from 'M/style/Baseline';
 import OLFeature from 'ol/Feature';
 import * as Align from 'M/style/Align';
 import OLStyleStroke from 'ol/style/Stroke';
+import RenderFeature from 'ol/render/Feature';
 import OLStyleText from 'ol/style/Text';
 import OLGeomPolygon from 'ol/geom/Polygon';
 import { isNullOrEmpty } from 'M/util/Utils';
@@ -29,7 +30,7 @@ class Polygon extends Simple {
    * Main constructor of the class.
    * @constructor
    * @implements {Simple}
-   * @api stable
+   * @api
    */
   constructor(options) {
     super(options);
@@ -46,7 +47,7 @@ class Polygon extends Simple {
   updateFacadeOptions(options) {
     return (feature) => {
       let featureVariable = feature;
-      if (!(featureVariable instanceof OLFeature)) {
+      if (!(featureVariable instanceof OLFeature || feature instanceof RenderFeature)) {
         featureVariable = this;
       }
       const style = new Centroid();
@@ -55,8 +56,10 @@ class Polygon extends Simple {
           color: Simple.getValue(options.stroke.color, featureVariable, this.layer_),
           width: Simple.getValue(options.stroke.width, featureVariable, this.layer_),
           lineDash: Simple.getValue(options.stroke.linedash, featureVariable, this.layer_),
-          lineDashOffset:
-            Simple.getValue(options.stroke.linedashoffset, featureVariable, this.layer_),
+          lineDashOffset: Simple.getValue(
+            options.stroke.linedashoffset,
+            featureVariable, this.layer_,
+          ),
           lineCap: Simple.getValue(options.stroke.linecap, featureVariable, this.layer_),
           lineJoin: Simple.getValue(options.stroke.linejoin, featureVariable, this.layer_),
           miterLimit: Simple.getValue(options.stroke.miterlimit, featureVariable, this.layer_),
@@ -92,10 +95,14 @@ class Polygon extends Simple {
             lineCap: Simple.getValue(options.label.stroke.linecap, featureVariable, this.layer_),
             lineJoin: Simple.getValue(options.label.stroke.linejoin, featureVariable, this.layer_),
             lineDash: Simple.getValue(options.label.stroke.linedash, featureVariable, this.layer_),
-            lineDashOffset:
-              Simple.getValue(options.label.stroke.linedashoffset, featureVariable, this.layer_),
-            miterLimit:
-              Simple.getValue(options.label.stroke.miterlimit, featureVariable, this.layer_),
+            lineDashOffset: Simple.getValue(
+              options.label.stroke.linedashoffset,
+              featureVariable, this.layer_,
+            ),
+            miterLimit: Simple.getValue(
+              options.label.stroke.miterlimit,
+              featureVariable, this.layer_,
+            ),
           }));
         }
       }
@@ -151,7 +158,7 @@ class Polygon extends Simple {
    * @public
    * @function
    * @param {HTMLCanvasElement} canvas - canvas of style
-   * @api stable
+   * @api
    */
   updateCanvas(canvas) {
     this.updateFacadeOptions(this.options_);
@@ -179,7 +186,7 @@ class Polygon extends Simple {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   drawGeometryToCanvas(vectorContext) {
     const canvasSize = Polygon.getCanvasSize();
@@ -187,13 +194,15 @@ class Polygon extends Simple {
     const maxH = Math.floor(canvasSize[1]);
     const minW = (canvasSize[0] - maxW);
     const minH = (canvasSize[1] - maxH);
-    vectorContext.drawGeometry(new OLGeomPolygon([[
-      [minW + 3, minH + 3],
-      [maxW - 3, minH + 3],
-      [maxW - 3, maxH - 3],
-      [minW + 3, maxH - 3],
-      [minW + 3, minH + 3],
-    ]]));
+    vectorContext.drawGeometry(new OLGeomPolygon([
+      [
+        [minW + 3, minH + 3],
+        [maxW - 3, minH + 3],
+        [maxW - 3, maxH - 3],
+        [minW + 3, maxH - 3],
+        [minW + 3, minH + 3],
+      ],
+    ]));
   }
 
   /**
@@ -201,7 +210,7 @@ class Polygon extends Simple {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   static getCanvasSize() {
     return [25, 15];

@@ -5,6 +5,7 @@ import { isNullOrEmpty, concatUrlPaths, addParameters, isDynamic, drawDynamicSty
 import chroma from 'chroma-js';
 import OLStyleImage from 'ol/style/Image';
 import OLFeature from 'ol/Feature';
+import RenderFeature from 'ol/render/Feature';
 import * as Align from 'M/style/Align';
 import * as Baseline from 'M/style/Baseline';
 import OLStyleFill from 'ol/style/Fill';
@@ -35,7 +36,7 @@ class Point extends Simple {
    * @function
    * @public
    * @return {String} data url to canvas
-   * @api stable
+   * @api
    */
   toImage(canvas) {
     let image = null;
@@ -97,30 +98,30 @@ class Point extends Simple {
    * @private
    * @param {object} options - options to style
    * @function
-   * @api stable
+   * @api
    */
   updateFacadeOptions(options) {
     this.olStyleFn_ = (feature) => {
       let featureVariable = feature;
-      if (!(featureVariable instanceof OLFeature)) {
+      if (!(featureVariable instanceof OLFeature || featureVariable instanceof RenderFeature)) {
         featureVariable = this;
       }
       const style = new Centroid({
         zIndex: Simple.getValue(options.zindex, featureVariable, this.layer_),
-        geometry: (olFeature) => {
-          const center = Utils.getCentroid(olFeature.getGeometry());
-          const centroidGeometry = new OLGeomPoint(center);
-          return centroidGeometry;
-        },
       });
       const styleIcon = new Centroid({
         zIndex: Simple.getValue(options.zindex, featureVariable, this.layer_),
-        geometry: (olFeature) => {
+
+      });
+      if (featureVariable instanceof OLFeature) {
+        const geometryFunction = (olFeature) => {
           const center = Utils.getCentroid(olFeature.getGeometry());
           const centroidGeometry = new OLGeomPoint(center);
           return centroidGeometry;
-        },
-      });
+        };
+        style.setGeometry(geometryFunction);
+        styleIcon.setGeometry(geometryFunction);
+      }
       let fill;
       if (!isNullOrEmpty(options.fill)) {
         const fillColorValue = Simple.getValue(options.fill.color, featureVariable, this.layer_);
@@ -255,7 +256,7 @@ class Point extends Simple {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   drawGeometryToCanvas(vectorContext) {
     if (this.olStyleFn_()[1].getImage() instanceof OLStyleFontsSymbol) {
@@ -273,7 +274,7 @@ class Point extends Simple {
    * @public
    * @function
    * @param {HTMLCanvasElement} canvas - canvas of style
-   * @api stable
+   * @api
    */
   updateCanvas(canvas) {
     this.updateFacadeOptions(this.options_);
@@ -304,7 +305,7 @@ class Point extends Simple {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getCanvasSize() {
     const image = this.olStyleFn_()[1].getImage();
@@ -323,7 +324,7 @@ class Point extends Simple {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   getRadius_(image) {
     let r;

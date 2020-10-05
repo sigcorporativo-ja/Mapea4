@@ -3,6 +3,7 @@
  */
 import { isNullOrEmpty, isFunction } from 'M/util/Utils';
 import OLFeature from 'ol/Feature';
+import RenderFeature from 'ol/render/Feature';
 import OLStyleStroke from 'ol/style/Stroke';
 import OLStyleFill from 'ol/style/Fill';
 import { unByKey } from 'ol/Observable';
@@ -27,7 +28,7 @@ class Line extends Simple {
    * Main constructor of the class.
    * @constructor
    * @implements {M.impl.style.Simple}
-   * @api stable
+   * @api
    */
   constructor(options) {
     super(options);
@@ -40,12 +41,12 @@ class Line extends Simple {
    * @public
    * @param {object} options - options to style
    * @function
-   * @api stable
+   * @api
    */
   updateFacadeOptions(options) {
     return (feature) => {
       let featureVariable = feature;
-      if (!(featureVariable instanceof OLFeature)) {
+      if (!(featureVariable instanceof OLFeature || featureVariable instanceof RenderFeature)) {
         featureVariable = this;
       }
       const stroke = options.stroke;
@@ -135,7 +136,7 @@ class Line extends Simple {
    * @public
    * @function
    * @param {M.layer.Vector} layer - Layer
-   * @api stable
+   * @api
    */
   applyToLayer(layer) {
     super.applyToLayer(layer);
@@ -152,7 +153,7 @@ class Line extends Simple {
    * @function
    * @protected
    * @param {M.layer.Vector} layer - Layer to apply the styles
-   * @api stable
+   * @api
    */
   unapply() {
     unByKey(this.postComposeEvtKey_);
@@ -163,15 +164,17 @@ class Line extends Simple {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   drawGeometryToCanvas(vectorContext, canvas, style, stroke) {
     let x = Line.getCanvasSize()[0];
     let y = Line.getCanvasSize()[1];
-    vectorContext.drawGeometry(new OLGeomLineString([[0 + (stroke / 2), 0 + (stroke / 2)],
+    vectorContext.drawGeometry(new OLGeomLineString([
+      [0 + (stroke / 2), 0 + (stroke / 2)],
       [(x / 3), (y / 2) - (stroke / 2)],
       [(2 * x) / 3, 0 + (stroke / 2)],
-      [x - (stroke / 2), (y / 2) - (stroke / 2)]]));
+      [x - (stroke / 2), (y / 2) - (stroke / 2)],
+    ]));
     if (!isNullOrEmpty(style)) {
       const width = style.width;
       const ctx = canvas.getContext('2d');
@@ -193,7 +196,7 @@ class Line extends Simple {
    *
    * @public
    * @function
-   * @api stable
+   * @api
    */
   updateCanvas(canvas) {
     this.updateFacadeOptions(this.options_);
@@ -238,7 +241,7 @@ class Line extends Simple {
    * TODO
    * @public
    * @function
-   * @api stable
+   * @api
    */
   static getCanvasSize() {
     return [25, 15];

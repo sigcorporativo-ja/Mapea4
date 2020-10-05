@@ -24,10 +24,21 @@ class RenderFeature {
    * @public
    * @function
    * @return {OLFeature} returns the openlayers object of the features
-   * @api stable
+   * @api
    */
   getOLFeature() {
     return this.olFeature_;
+  }
+
+  /**
+   * Get geometry type of the feature.
+   * @function
+   * @public
+   * @return {string}
+   * @api
+   */
+  getType() {
+    return this.getOLFeature().getType();
   }
 
   /**
@@ -35,7 +46,7 @@ class RenderFeature {
    * @public
    * @param {OLFeature} olFeature - ol Feature to feature
    * @function
-   * @api stable
+   * @api
    */
   setOLFeature(olFeature) {
     if (!isNullOrEmpty(olFeature)) {
@@ -48,7 +59,7 @@ class RenderFeature {
    * @public
    * @return {Object} Attributes feature
    * @function
-   * @api stable
+   * @api
    */
   getAttributes() {
     const properties = this.olFeature_.getProperties();
@@ -63,7 +74,7 @@ class RenderFeature {
    * @param {OLFeature} olFeature - OLFeature
    * @param {boolean} canBeModified
    * @return {M.Feature}  facadeFeature - M.Feature
-   * @api stable
+   * @api
    */
   static olFeature2Facade(olFeature, canBeModified) {
     let facadeFeature = null;
@@ -81,7 +92,7 @@ class RenderFeature {
    * @function
    * @param {M.Feature}  facadeFeature - M.Feature
    * @return {OLFeature} olFeature - OLFeature
-   * @api stable
+   * @api
    */
   static facade2OLFeature(feature) {
     return feature.getImpl().getOLFeature();
@@ -94,7 +105,7 @@ class RenderFeature {
    * @function
    * @param {string} attribute - Name attribute
    * @return  {string|number|object} returns the value of the indicated attribute
-   * @api stable
+   * @api
    */
   getAttribute(attribute) {
     return this.olFeature_.get(attribute);
@@ -105,7 +116,7 @@ class RenderFeature {
    *
    * @function
    * @param {object} obj - Facade vector
-   * @api stable
+   * @api
    */
   setFacadeObj(obj) {
     this.facadeFeature_ = obj;
@@ -117,7 +128,7 @@ class RenderFeature {
    * @public
    * @function
    * @return {Array<number>}
-   * @api stable
+   * @api
    */
   getCentroid() {}
 }
