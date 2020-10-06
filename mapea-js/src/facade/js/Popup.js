@@ -401,13 +401,18 @@ class Popup extends Base {
   }
 
   /**
-  * TODO
-  * @private
-  * @function
-  */
+   * TODO
+   * @private
+   * @function
+   */
   manageTransform(e, html) {
-    if (e.matches) html.parentElement.classList.add('unsetTransform');
-    else html.parentElement.classList.remove('unsetTransform');
+    if (html && html.parentElement) {
+      if (e.matches) {
+        html.parentElement.classList.add('unsetTransform');
+      } else {
+        html.parentElement.classList.remove('unsetTransform');
+      }
+    }
   }
 
   /**
