@@ -198,9 +198,9 @@ class OverviewMap extends OLControlOverviewMap {
       resolutions: map.getResolutions(),
     });
 
+    map.getMapImpl().addControl(this);
     this.ovmap_.setView(newView);
     olLayers.forEach(layer => this.ovmap_.addLayer(layer));
-    map.getMapImpl().addControl(this);
     this.wasOpen_ = true;
   }
 
