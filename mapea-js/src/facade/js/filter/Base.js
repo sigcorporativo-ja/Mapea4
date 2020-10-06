@@ -8,7 +8,7 @@
  */
 class Base {
   /**
-   * This function get a function filter
+   * Gets a function filter
    *
    * @public
    * @protected
@@ -17,20 +17,20 @@ class Base {
   getFunctionFilter() {}
 
   /**
-   * This function execute a function filter
+   * Executes a function filter
    *
    * @protected
-   * @param {Array<M.Feature>} features - Features on which the filter runs
+   * @param {Array<M.Feature>} features features on which the filter runs
+   * @returns {Array<M.Feature>} features that comply with the filter
    * @function
    */
   execute(features) {}
 
   /**
-   * This function execute a function filter
+   * Returns the CQL equivalent of the filter
    *
    * @protected
-   * @param {Array<M.Feature>} features - Features on which the filter runs
-   * @return {Array<M.Feature>} Result of execute
+   * @return {string} CQL query
    * @function
    */
   toCQL() {}

@@ -6,14 +6,15 @@ import { isNullOrEmpty } from '../util/Utils';
 
 /**
  * @classdesc
+ * A filter whith a spatial function associated
  * @api
  */
 class Spatial extends FilterFunction {
   /**
-   * Creates a Filter Spatial to filter features
+   * Creates a spatial filter
    *
-   * @param {function} Function - filter function
-   * TODO @param {object} options
+   * @param {function} function filter function
+   * @param {object} [options={}] options
    * @api
    */
   constructor(FunctionParam, options) {
