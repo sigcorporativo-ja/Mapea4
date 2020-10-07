@@ -187,7 +187,7 @@ export default class AttributeTableControl extends M.Control {
   hasLayer_(layerSearch) {
     const layersFind = [];
     if (M.utils.isNullOrEmpty(layerSearch) || (!M.utils.isArray(layerSearch) &&
-        !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
+      !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
       M.dialog.error('El parametro para el método hasLayer no es correcto.', 'Error');
       return layersFind;
     }
@@ -404,7 +404,6 @@ export default class AttributeTableControl extends M.Control {
    */
   activateDraggable_() {
     if (M.utils.isNullOrEmpty(this.draggable_)) {
-      this.setFixed_();
       const panel = this.getPanel().getTemplatePanel();
       this.draggable_ = new Draggabilly(panel, {
         containment: '.m-mapea-container',
@@ -428,20 +427,6 @@ export default class AttributeTableControl extends M.Control {
     this.draggable_.disable();
   }
 
-  /**
-   * This function set fixed style to panel
-   *
-   * @private
-   * @function
-   * @api stable
-   */
-  setFixed_() {
-    const panel = document.querySelector('.m-attributetable');
-    const bClient = panel.getBoundingClientRect();
-    panel.style.position = 'fixed';
-    panel.style.left = `${bClient.left}px`;
-    panel.style.top = `${bClient.top}px`;
-  }
 
   /**
    * This function adjusts the panel position
