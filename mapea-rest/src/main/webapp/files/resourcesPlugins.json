@@ -1,35 +1,104 @@
 {
-  "plugins": [{
-      "name": "printer",
-      "versions": [{
-        "mapea": "5.2.0",
-        "js": "${MAPEA_URL}/plugins/printer/printer-2.0.0.ol.min.js",
-        "css": "${MAPEA_URL}/plugins/printer/printer-2.0.0.min.css"
-      }, {
-        "mapea": "5.1.0",
-        "js": "${MAPEA_URL}/plugins/printer/printer-2.0.0.ol.min.js",
-        "css": "${MAPEA_URL}/plugins/printer/printer-2.0.0.min.css"
-      }, {
-        "mapea": "5.0.0",
-        "js": "${MAPEA_URL}/plugins/printer/printer-1.0.0.ol.min.js",
-        "css": "${MAPEA_URL}/plugins/printer/printer-1.0.0.min.css"
-      }]
-    },
-    {
-      "name": "attributetable",
-      "versions": [{
-        "mapea": "5.2.0",
-        "js": "${MAPEA_URL}/plugins/attributetable/attributetable-2.0.0.ol.min.js",
-        "css": "${MAPEA_URL}/plugins/attributetable/attributetable-2.0.0.min.css"
-      }, {
-        "mapea": "5.1.0",
-        "js": "${MAPEA_URL}/plugins/attributetable/attributetable-2.0.0.ol.min.js",
-        "css": "${MAPEA_URL}/plugins/attributetable/attributetable-2.0.0.min.css"
-      }, {
-        "mapea": "5.0.0",
-        "js": "${MAPEA_URL}/plugins/attributetable/attributetable-1.0.0.ol.min.js",
-        "css": "${MAPEA_URL}/plugins/attributetable/attributetable-1.0.0.min.css"
-      }]
-    }
-  ]
+   "plugins":[
+      {
+         "name":"printerdos",
+         "versions":[
+            {
+               "mapea":"5.2.0",
+               "js":"${MAPEA_URL}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
+               "css":"${MAPEA_URL}/plugins/printerdos/printerdos-4.0.0.min.css"
+            }
+         ]
+      },
+      {
+         "name":"geosearch",
+         "versions":[
+            {
+               "mapea":"5.2.0",
+               "js":"${MAPEA_URL}/plugins/geosearch/geosearch-2.0.1.ol.min.js",
+               "css":"${MAPEA_URL}/plugins/geosearch/geosearch-2.0.1.min.css"
+            }
+         ]
+      },
+      {
+         "name":"attributetable",
+         "versions":[
+            {
+               "mapea":"5.2.0",
+               "js":"${MAPEA_URL}/plugins/attributetable/attributetable-2.0.0.ol.min.js",
+               "css":"${MAPEA_URL}/plugins/attributetable/attributetable-2.0.0.min.css"
+            }
+         ]
+      },
+      {
+         "name":"measurebar",
+         "versions":[
+            {
+               "mapea":"5.2.0",
+               "js":"${MAPEA_URL}/plugins/measurebar/measurebar-3.0.0.ol.min.js",
+               "css":"${MAPEA_URL}/plugins/measurebar/measurebar-3.0.0.min.css"
+            }
+         ]
+      },
+      {
+         "name":"printer",
+         "versions":[
+            {
+               "mapea":"5.2.0",
+               "js":"${MAPEA_URL}/plugins/printer/printer-2.0.0.ol.min.js",
+               "css":"${MAPEA_URL}/plugins/printer/printer-2.0.0.min.css"
+            }
+         ]
+      },
+      {
+         "name":"geosearchbylocation",
+         "versions":[
+            {
+               "mapea":"5.2.0",
+               "js":"${MAPEA_URL}/plugins/geosearchbylocation/geosearchbylocation-2.0.0.ol.min.js",
+               "css":"${MAPEA_URL}/plugins/geosearchbylocation/geosearchbylocation-2.0.0.min.css"
+            }
+         ]
+      },
+      {
+         "name":"geosearchbycoordinates",
+         "versions":[
+            {
+               "mapea":"5.2.0",
+               "js":"${MAPEA_URL}/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.0.ol.min.js",
+               "css":"${MAPEA_URL}/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.0.min.css"
+            }
+         ]
+      },
+      {
+         "name":"searchstreetgeosearch",
+         "versions":[
+            {
+               "mapea":"5.2.0",
+               "js":"${MAPEA_URL}/plugins/searchstreetgeosearch/searchstreetgeosearch-2.0.2.ol.min.js",
+               "css":"${MAPEA_URL}/plugins/searchstreetgeosearch/searchstreetgeosearch-2.0.2.min.css"
+            }
+         ]
+      },
+      {
+         "name":"searchstreet",
+         "versions":[
+            {
+               "mapea":"5.2.0",
+               "js":"${MAPEA_URL}/plugins/searchstreet/searchstreet-2.0.1.ol.min.js",
+               "css":"${MAPEA_URL}/plugins/searchstreet/searchstreet-2.0.1.min.css"
+            }
+         ]
+      },
+      {
+         "name":"wfstcontrols",
+         "versions":[
+            {
+               "mapea":"5.2.0",
+               "js":"${MAPEA_URL}/plugins/wfstcontrols/wfstcontrols-3.0.1.ol.min.js",
+               "css":"${MAPEA_URL}/plugins/wfstcontrols/wfstcontrols-3.0.1.min.css"
+            }
+         ]
+      }
+   ]
 }
