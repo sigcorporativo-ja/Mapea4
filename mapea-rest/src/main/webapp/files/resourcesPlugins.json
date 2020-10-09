@@ -5,8 +5,8 @@
          "versions":[
             {
                "mapea":"5.2.0",
-               "js":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/printerdos/printerdos-4.0.0.ol.min.js",
+               "css":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/printerdos/printerdos-4.0.0.min.css"
             }
          ]
       },
@@ -15,8 +15,8 @@
          "versions":[
             {
                "mapea":"5.2.0",
-               "js":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/geosearch/geosearch-2.0.1.ol.min.js",
-               "css":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/geosearch/geosearch-2.0.1.min.css"
+               "js":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/geosearch/geosearch-2.0.1.ol.min.js",
+               "css":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/geosearch/geosearch-2.0.1.min.css"
             }
          ]
       },
@@ -25,8 +25,8 @@
          "versions":[
             {
                "mapea":"5.2.0",
-               "js":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/attributetable/attributetable-2.0.0.ol.min.js",
-               "css":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/attributetable/attributetable-2.0.0.min.css"
+               "js":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/attributetable/attributetable-2.0.0.ol.min.js",
+               "css":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/attributetable/attributetable-2.0.0.min.css"
             }
          ]
       },
@@ -35,8 +35,8 @@
          "versions":[
             {
                "mapea":"5.2.0",
-               "js":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/measurebar/measurebar-3.0.0.ol.min.js",
-               "css":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/measurebar/measurebar-3.0.0.min.css"
+               "js":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/measurebar/measurebar-3.0.0.ol.min.js",
+               "css":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/measurebar/measurebar-3.0.0.min.css"
             }
          ]
       },
@@ -45,8 +45,8 @@
          "versions":[
             {
                "mapea":"5.2.0",
-               "js":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/printer/printer-2.0.0.ol.min.js",
-               "css":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/printer/printer-2.0.0.min.css"
+               "js":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/printer/printer-2.0.0.ol.min.js",
+               "css":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/printer/printer-2.0.0.min.css"
             }
          ]
       },
@@ -55,8 +55,8 @@
          "versions":[
             {
                "mapea":"5.2.0",
-               "js":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/geosearchbylocation/geosearchbylocation-2.0.0.ol.min.js",
-               "css":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/geosearchbylocation/geosearchbylocation-2.0.0.min.css"
+               "js":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/geosearchbylocation/geosearchbylocation-2.0.0.ol.min.js",
+               "css":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/geosearchbylocation/geosearchbylocation-2.0.0.min.css"
             }
          ]
       },
@@ -65,8 +65,8 @@
          "versions":[
             {
                "mapea":"5.2.0",
-               "js":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.0.ol.min.js",
-               "css":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.0.min.css"
+               "js":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.0.ol.min.js",
+               "css":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.0.min.css"
             }
          ]
       },
@@ -75,8 +75,8 @@
          "versions":[
             {
                "mapea":"5.2.0",
-               "js":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/searchstreetgeosearch/searchstreetgeosearch-2.0.2.ol.min.js",
-               "css":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/searchstreetgeosearch/searchstreetgeosearch-2.0.2.min.css"
+               "js":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/searchstreetgeosearch/searchstreetgeosearch-2.0.2.ol.min.js",
+               "css":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/searchstreetgeosearch/searchstreetgeosearch-2.0.2.min.css"
             }
          ]
       },
@@ -85,8 +85,8 @@
          "versions":[
             {
                "mapea":"5.2.0",
-               "js":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/searchstreet/searchstreet-2.0.1.ol.min.js",
-               "css":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/searchstreet/searchstreet-2.0.1.min.css"
+               "js":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/searchstreet/searchstreet-2.0.1.ol.min.js",
+               "css":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/searchstreet/searchstreet-2.0.1.min.css"
             }
          ]
       },
@@ -95,8 +95,8 @@
          "versions":[
             {
                "mapea":"5.2.0",
-               "js":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/wfstcontrols/wfstcontrols-3.0.1.ol.min.js",
-               "css":"http://sigc-dev.desarrollo.guadaltel.es/mapea5/plugins/wfstcontrols/wfstcontrols-3.0.1.min.css"
+               "js":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/wfstcontrols/wfstcontrols-3.0.1.ol.min.js",
+               "css":"http://sigc.desarrollo.guadaltel.es/mapea6/plugins/wfstcontrols/wfstcontrols-3.0.1.min.css"
             }
          ]
       }
