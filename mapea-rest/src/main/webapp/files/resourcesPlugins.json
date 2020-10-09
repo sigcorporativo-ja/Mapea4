@@ -3,32 +3,32 @@
       "name": "printer",
       "versions": [{
         "mapea": "5.2.0",
-        "js": "http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer-2.0.0.ol.min.js",
-        "css": "http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer-2.0.0.min.css"
+        "js": "${MAPEA_URL}/plugins/printer/printer-2.0.0.ol.min.js",
+        "css": "${MAPEA_URL}/plugins/printer/printer-2.0.0.min.css"
       }, {
         "mapea": "5.1.0",
-        "js": "http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer-2.0.0.ol.min.js",
-        "css": "http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer-2.0.0.min.css"
+        "js": "${MAPEA_URL}/plugins/printer/printer-2.0.0.ol.min.js",
+        "css": "${MAPEA_URL}/plugins/printer/printer-2.0.0.min.css"
       }, {
         "mapea": "5.0.0",
-        "js": "http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer-1.0.0.ol.min.js",
-        "css": "http://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer-1.0.0.min.css"
+        "js": "${MAPEA_URL}/plugins/printer/printer-1.0.0.ol.min.js",
+        "css": "${MAPEA_URL}/plugins/printer/printer-1.0.0.min.css"
       }]
     },
     {
       "name": "attributetable",
       "versions": [{
         "mapea": "5.2.0",
-        "js": "http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable-2.0.0.ol.min.js",
-        "css": "http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable-2.0.0.min.css"
+        "js": "${MAPEA_URL}/plugins/attributetable/attributetable-2.0.0.ol.min.js",
+        "css": "${MAPEA_URL}/plugins/attributetable/attributetable-2.0.0.min.css"
       }, {
         "mapea": "5.1.0",
-        "js": "http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable-2.0.0.ol.min.js",
-        "css": "http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable-2.0.0.min.css"
+        "js": "${MAPEA_URL}/plugins/attributetable/attributetable-2.0.0.ol.min.js",
+        "css": "${MAPEA_URL}/plugins/attributetable/attributetable-2.0.0.min.css"
       }, {
         "mapea": "5.0.0",
-        "js": "http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable-1.0.0.ol.min.js",
-        "css": "http://mapea4-sigc.juntadeandalucia.es/plugins/attributetable/attributetable-1.0.0.min.css"
+        "js": "${MAPEA_URL}/plugins/attributetable/attributetable-1.0.0.ol.min.js",
+        "css": "${MAPEA_URL}/plugins/attributetable/attributetable-1.0.0.min.css"
       }]
     }
   ]

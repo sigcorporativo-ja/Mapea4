@@ -1,0 +1,53 @@
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="mapea" content="yes">
+    <link href="${MAPEA_URL}/assets/css/mapea-5.2.0.ol.min.css" rel="stylesheet" />
+    <link href="${MAPEA_URL}/api/actions/resourcesPlugins?name=printer&version=5.2.0&type=css" rel="stylesheet" />
+    <title>MAPEA</title>
+    <style rel="stylesheet">
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            overflow: hidden;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map" class="container"></div>
+    <!-- core -->
+    <script type="text/javascript" src="${MAPEA_URL}/js/mapea-5.2.0.ol.min.js"></script>
+    <script type="text/javascript" src="${MAPEA_URL}/js/configuration-5.2.0.js"></script>
+    <script type="text/javascript" src="${MAPEA_URL}/api/actions/resourcesPlugins?name=printer&version=5.2.0&type=js"></script>
+    <!-- plugins -->
+    <script type="application/javascript">
+        var map = M.map({
+            "container": "map",
+            "controls": ["layerswitcher", "navtoolbar"],
+            "layers": ["WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true", "WFST*Provincias*http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?*tematicos:Provincias*MPOLYGON*3-4"],
+            "wmcfiles": ["mapa"]
+        }).addPlugin(new M.plugin.Printer({
+            "params": {
+                "layout": {
+                    "outputFilename": "mapea_${yyyy-MM-dd_hhmmss}"
+                },
+                "pages": {
+                    "clientLogo": "http://www.juntadeandalucia.es/economiayhacienda/images/plantilla/logo_cabecera.gif",
+                    "creditos": "Impresión generada a través de Mapea"
+                }
+            }
+        }, {
+            "options": {
+                "legend": "true"
+            }
+        }))
+    </script>
+</body>
+
+</html>
