@@ -12,6 +12,9 @@ const sourcemap = argv['source-map'];
 
 module.exports = {
   mode: 'production',
+  node: {
+    fs: 'empty',
+  },
   entry: {
     [`mapea-${pjson.version}.ol.min`]: path.resolve(__dirname, '..', 'src', 'index.js'),
   },
@@ -113,6 +116,12 @@ module.exports = {
       patterns: [{
         from: 'src/facade/assets/fonts',
         to: 'assets/fonts',
+      }],
+    }),
+    new CopywebpackPlugin({
+      patterns: [{
+        from: 'node_modules/sql.js/dist/sql-wasm.wasm',
+        to: 'wasm/',
       }],
     }),
   ],

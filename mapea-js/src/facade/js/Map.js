@@ -42,6 +42,7 @@ import Panel from './ui/Panel';
 import GeoJSON from './layer/GeoJSON';
 import StylePoint from './style/Point';
 import Control from './control/Control';
+import MBTiles from './layer/MBTiles';
 
 /**
  * @classdesc
@@ -476,6 +477,9 @@ class Map extends Base {
                 break;
               case 'MVT':
                 layer = new MVT(parameterVariable);
+                break;
+              case 'MBTiles':
+                layer = new MBTiles(parameterVariable);
                 break;
               default:
                 Dialog.error(getValue('dialog').invalid_type_layer);
@@ -1205,28 +1209,24 @@ class Map extends Base {
    * @returns {Array<M.layer.MBtiles>} layers from the map
    * @api
    */
-  getMBtiles(layersParamVar) {
+  getMBTiles(layersParamVar) {
     let layersParam = layersParamVar;
-    // checks if the implementation can manage layers
-    if (isUndefined(MapImpl.prototype.getMBtiles)) {
+    if (isUndefined(MapImpl.prototype.getMBTiles)) {
       Exception(getValue('exception').getmbtiles_method);
     }
 
-    // parses parameters to Array
     if (isNull(layersParam)) {
       layersParam = [];
     } else if (!isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
-    // gets the parameters as Layer objects to filter
     let filters = [];
     if (layersParam.length > 0) {
       filters = layersParam.map(parameter.layer);
     }
 
-    // gets the layers
-    const layers = this.getImpl().getMBtiles(filters).sort(Map.LAYER_SORT);
+    const layers = this.getImpl().getMBTiles(filters).sort(Map.LAYER_SORT);
 
     return layers;
   }
@@ -1239,8 +1239,34 @@ class Map extends Base {
    * @returns {Map}
    * @api
    */
-  addMBtiles(layersParam) {
-    // TODO
+  addMBTiles(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.addMBTiles)) {
+        Exception(getValue('exception').addmbtiles_method);
+      }
+
+      if (!isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      const mbtilesLayers = [];
+      layersParam.forEach((layerParam) => {
+        if (isObject(layerParam) && (layerParam instanceof MBTiles)) {
+          layerParam.setMap(this);
+          mbtilesLayers.push(layerParam);
+        } else if (!(layerParam instanceof Layer)) {
+          const mbtilesLayer = new MBTiles(layerParam, layerParam.options);
+          mbtilesLayer.setMap(this);
+          mbtilesLayers.push(mbtilesLayer);
+        }
+      });
+
+      this.getImpl().addMBTiles(mbtilesLayers);
+      this.fire(EventType.ADDED_LAYER, [mbtilesLayers]);
+      this.fire(EventType.ADDED_MBTILES, [mbtilesLayers]);
+    }
+    return this;
   }
 
   /**
@@ -1251,8 +1277,18 @@ class Map extends Base {
    * @returns {Map}
    * @api
    */
-  removeMBtiles(layersParam) {
-    // TODO
+  removeMBTiles(layersParam) {
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.removeMBTiles)) {
+        Exception(getValue('exception').removembtiles_method);
+      }
+
+      const mbtilesLayers = this.getMBTiles(layersParam);
+      if (mbtilesLayers.length > 0) {
+        this.getImpl().removeMBTiles(mbtilesLayers);
+      }
+    }
+    return this;
   }
 
   /**

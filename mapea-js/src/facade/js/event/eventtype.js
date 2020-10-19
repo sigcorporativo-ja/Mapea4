@@ -71,6 +71,14 @@ export const ADDED_VECTOR_TILE = 'added:vectortile';
  * @type {string}
  * @api
  */
+export const ADDED_MBTILES = 'added:mbtiles';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const REMOVED_LAYER = 'removed:layer';
 
 /**

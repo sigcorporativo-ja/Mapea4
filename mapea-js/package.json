@@ -8,14 +8,14 @@
     "tool",
     "sigcorporativo-ja"
   ],
-  "homepage": "http://mapea-sigc.juntadeandalucia.es",
+  "homepage": "http://mapea4-sigc.juntadeandalucia.es/",
   "repository": {
     "type": "git",
-    "url": "git://github.com/sigcorporativo-ja/mapeaJS.git"
+    "url": "https://github.com/sigcorporativo-ja/Mapea4"
   },
-  "license": "BSD",
+  "license": "EUPL",
   "bugs": {
-    "url": "https://github.com/sigcorporativo-ja/mapeaJS/issues"
+    "url": "https://github.com/sigcorporativo-ja/Mapea4/issues"
   },
   "devDependencies": {
     "@babel/core": "^7.6.4",
@@ -67,7 +67,8 @@
     "jsdoc": "^3.6.4",
     "jsts": "^2.0.2",
     "ol": "6.3.1",
-    "proj4": "^2.4.4"
+    "proj4": "^2.4.4",
+    "sql.js": "^1.3.2"
   },
   "scripts": {
     "build": "./node/npm run build:core && ./node/npm run build:plugins && ./node/npm run build:plugins-extern",
