@@ -59,6 +59,7 @@ class Tile {
       let uint8Array = new Uint8Array();
       if (data instanceof ArrayBuffer) {
         uint8Array = new Uint8Array(data);
+        resolve(uint8Array);
       } else if (data instanceof File) {
         data.arrayBuffer().then((buffer) => {
           uint8Array = new Uint8Array(buffer);
