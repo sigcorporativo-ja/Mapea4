@@ -1,7 +1,7 @@
-import { HELP_KEEP_MESSAGE } from 'plugins/measurebar/facade/js/measurearea';
+import { HELP_KEEP_MESSAGE } from '../../../facade/js/measurearea';
 
-import FacadeMeasure from 'plugins/measurebar/facade/js/measurebase';
-import FacadeMeasureLength from 'plugins/measurebar/facade/js/measurelength';
+import FacadeMeasure from '../../../facade/js/measurebase';
+import FacadeMeasureLength from '../../../facade/js/measurelength';
 import MeasureImpl from './measurebase';
 
 /**
@@ -11,11 +11,14 @@ import MeasureImpl from './measurebase';
  *
  * @constructor
  * @extends {M.impl.control.Measure}
+ * @param {number} distanciaArea -  factor de escala del area
+ * @param {string} unidadMedida - unidad de medida del area
  * @api stable
  */
 export default class MeasureArea extends MeasureImpl {
-  constructor() {
+  constructor(distanciaArea, unidadMedida) {
     super('Polygon');
+
     /**
      * Help message
      * @private
@@ -29,6 +32,20 @@ export default class MeasureArea extends MeasureImpl {
      * @type {string}
      */
     this.helpMsgContinue_ = HELP_KEEP_MESSAGE;
+
+    /**
+     * Implementation distanciaArea
+     * @private
+     * @type {number}
+     */
+    this.distanciaArea_ = distanciaArea;
+
+    /**
+     * Implementation unidadMedida
+     * @private
+     * @type {string}
+     */
+    this.unidadMedida_ = unidadMedida;
   }
 
   /**
@@ -39,13 +56,15 @@ export default class MeasureArea extends MeasureImpl {
    * @api stable
    */
   formatGeometry(geometry) {
+    /**let distanciaArea = 100;
+    let unidadMedida = 'ha';**/
     let area = null;
     const projection = this.facadeMap_.getProjection();
     area = ol.sphere.getArea(geometry, { projection: projection.code });
 
     let output;
     if (area > 10000) {
-      output = `${((Math.round((area / 1000000) * 100) / 100))} km<sup>2</sup>`;
+      output = `${((Math.round((area / 1000000) * this.distanciaArea_ * 100) / 100))} ` + this.unidadMedida_;
     } else {
       output = `${(Math.round(area * 100) / 100)} m<sup>2</sup>`;
     }
