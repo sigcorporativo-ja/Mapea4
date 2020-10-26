@@ -1,4 +1,4 @@
-import MeasureClearImpl from '../../impl/ol/js/measureclear';
+import MeasureClearImpl from 'plugins/measurebar/impl/ol/js/measureclear';
 import measureclearHTML from '../../templates/measureclear';
 
 /**

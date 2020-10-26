@@ -8,15 +8,14 @@ import measurelengthHTML from '../../templates/measurelength';
  * control to provides measure distances
  *
  * @constructor
- * @param {number} longitud -  factor de escala
  * @extends {M.control.Measure}
  * @api stable
  */
 
 export default class MeasureLength extends Measure {
-  constructor(longitud) {
+  constructor() {
     // implementation of this control
-    const impl = new MeasureLengthImpl(longitud);
+    const impl = new MeasureLengthImpl();
 
     // calls the super constructor
     super(impl, measurelengthHTML, MeasureLength.NAME);
