@@ -1,37 +1,27 @@
 {
   "url": {
-    "name": "Measurebar",
-    "separator": "*"
+    "name": "measurebar"
   },
   "constructor": "M.plugin.Measurebar",
-  "parameters": [],
   "files": {
     "ol": {
-      "scripts": [],
-      "styles": []
+      "scripts": [
+        "measurebar-3.1.0.ol.min.js"
+      ],
+      "styles": [
+        "measurebar-3.1.0.min.css"
+      ]
     }
   },
   "metadata": {
-    "uuid_plugin": "",
-    "uuid_version_plugin": "",
-    "version_ficha_metadatos": "",
     "name": "Measurebar",
-    "description": "Description of the plugin",
-    "text": "A full text about plugin",
-    "version": "1.0.0",
-    "date": "",
-    "author": "",
-    "org": "",
+    "description": "Tool to measure distances and areas.",
+    "text": "",
+    "version": "3.1.0",
+    "date": "20/10/2019",
+    "author": "Junta de Andalucía",
+    "org": "Junta de Andalucía",
     "tags": "mapea,plugin",
-    "icon": "./facade/assets/icons/icons.svg",
-    "buttons": [
-      { "title": "", "description": "", "querySelector": "" },
-      { "title": "", "description": "", "querySelector": "" }
-    ],
-    "dependencies": {
-      "modules": ["", ""],
-      "plugins": [{ "uuid": "", "name": "" }],
-      "services": [{ "name": "", "description": "" }]
-    }
+    "icon": "./facade/assets/icons/icons.svg"
   }
 }

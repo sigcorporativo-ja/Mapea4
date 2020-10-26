@@ -1,4 +1,4 @@
-import { HELP_KEEP_MESSAGE } from '../../../facade/js/measurelength';
+import { HELP_KEEP_MESSAGE } from 'plugins/measurebar/facade/js/measurelength';
 
 import Measure from './measurebase';
 import FacadeMeasure from '../../../facade/js/measurebase';
