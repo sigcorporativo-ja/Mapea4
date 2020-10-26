@@ -1,52 +1,28 @@
-# M.plugin.Measurebar
+## Descripción
 
-## Api.json
+Herramienta de medición de áreas y distancias.  
+Con clicks del ratón se establecen los vértices de la línea/área de medición.  
+Manteniendo pulsado SHIFT, la línea/área de edición se dibuja a mano alzada.
 
-INTEGRACIÓN DE PARÁMETROS EN API REST
+## Recursos y uso
 
-OPCIONES:  
-1. Nuevo parámetro en la API REST normalmente porque requiera parámetros de configuración.
-Example: <url_mapea>?geosearch=[params]
-Example: <url_mapea>?printer=[params]
+- js: https://mapea4-sigc.juntadeandalucia.es/plugins/measurebar/measurebar-x.y.x.ol.min.js
+- css: https://mapea4-sigc.juntadeandalucia.es/plugins/measurebar/measurebar-x.y.z.min.css  
 
-2. Nuevo valor para el parámetro plugins, el plugin no requiere configuración
-Example: <url_mapea>?plugins=measurebar,streetview
+Donde x.y.z representan la versión del plugin a usar según la versión de Mapea, atendiendo a la tabla de compatibilidad de versiones que se muestra más adelante.  
 
-
-### Plugin sin parámetros
-
+Configuración por defecto:
 ```
-{
-   "url": {
-      "name": "nombre_plugin"
-   },
-   "constructor": "M.plugin.nombre_plugin"
-}
+mapajs.addPlugin(new M.plugin.Measurebar());
 ```
-### Plugin con parámetros
 
-```
-{
-   "url": {
-      "name": "geosearch",
-      "separator": "*"
-   },
-   "constructor": "M.plugin.Geosearch",
-   "parameters": [{
-      "type": "object",
-      "properties": [{
-         "type": "simple",
-         "name": "url",
-         "position": 0
-      }, {
-         "type": "simple",
-         "name": "core",
-         "position": 1
-      }, {
-         "type": "simple",
-         "name": "handler",
-         "position": 2
-      }]
-   }]
-}
-```
+## Ejemplo funcional
+
+[JSFiddle](http://jsfiddle.net/sigcJunta/7kht2bvk/)  
+
+## Tabla de compatibilidad de versiones   
+versión plugin | versión Mapea |
+--- | --- |
+1.0.0 | <= 4.3.0
+2.0.0 | >= 5.0.0
+3.0.0 | >= 5.2.0

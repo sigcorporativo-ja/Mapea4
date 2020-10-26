@@ -1,4 +1,4 @@
-import { HELP_KEEP_MESSAGE } from '../../../facade/js/measurelength';
+import { HELP_KEEP_MESSAGE } from 'plugins/measurebar/facade/js/measurelength';
 
 import Measure from './measurebase';
 import FacadeMeasure from '../../../facade/js/measurebase';
@@ -10,12 +10,11 @@ import FacadeMeasureArea from '../../../facade/js/measurearea';
  * control
  *
  * @constructor
- * @param {number} longitud -  factor de escala
  * @extends {M.impl.control.Measure}
  * @api stable
  */
 export default class MeasureLength extends Measure {
-  constructor(longitud) {
+  constructor() {
     super('LineString');
 
     /**
@@ -31,14 +30,8 @@ export default class MeasureLength extends Measure {
      * @type {string}
      */
     this.helpMsgContinue_ = HELP_KEEP_MESSAGE;
-
-    /**
-     * Implementation longitud
-     * @private
-     * @type {number}
-     */
-    this.longitud_ = longitud;
   }
+
 
   /**
    * This function add tooltip with measure distance
@@ -48,7 +41,6 @@ export default class MeasureLength extends Measure {
    * @api stable
    */
   formatGeometry(geometry) {
-    //let longitud = 1000;
     let length = null;
     const codeProj = this.facadeMap_.getProjection().code;
     const unitsProj = this.facadeMap_.getProjection().units;
@@ -63,7 +55,7 @@ export default class MeasureLength extends Measure {
       length = Math.round(geometry.getLength() * 100) / 100;
     }
     let output;
-    if (length > this.longitud_) {
+    if (length > 100) {
       output = `${Math.round(((length / 1000) * 100)) / 100} km`;
     } else {
       output = `${Math.round(length * 100) / 100} m`;
