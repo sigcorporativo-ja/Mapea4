@@ -48,7 +48,7 @@ export default class MeasureLength extends Measure {
    * @api stable
    */
   formatGeometry(geometry) {
-    //let longitud = 1000;
+    // let longitud = 1000;
     let length = null;
     const codeProj = this.facadeMap_.getProjection().code;
     const unitsProj = this.facadeMap_.getProjection().units;
