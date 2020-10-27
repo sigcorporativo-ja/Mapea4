@@ -14,7 +14,7 @@ import measureareaHTML from '../../templates/measurearea';
  * @api stable
  */
 export default class MeasureArea extends Measure {
-  constructor(distanciaArea,unidadMedida) {
+  constructor(distanciaArea, unidadMedida) {
     // implementation of this control
     const impl = new MeasureAreaImpl(distanciaArea, unidadMedida);
 
