@@ -12,7 +12,7 @@ import { get as getProj } from 'ol/proj';
 import OLLayerVector from 'ol/layer/Vector';
 import OLSourceVector from 'ol/source/Vector';
 import OLSourceCluster from 'ol/source/Cluster';
-import PopupTemplate from 'templates/geojson_popup';
+import PopupTemplate from 'templates/geojson_popup.html';
 import Layer from './Layer';
 import ImplUtils from '../util/Utils';
 import Feature from '../feature/Feature';

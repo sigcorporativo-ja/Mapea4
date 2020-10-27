@@ -1,14 +1,14 @@
 /**
  * @module M/control/Mouse
  */
-import 'assets/css/controls/mouse';
-import mouseTemplate from 'templates/mouse';
-import MouseImpl from 'impl/control/Mouse';
-import ControlBase from './Control';
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
-import Exception from '../exception/exception';
-import { compileSync as compileTemplate } from '../util/Template';
-import { getValue } from '../i18n/language';
+import 'assets/css/controls/mouse.css';
+import mouseTemplate from 'templates/mouse.html';
+import MouseImpl from 'impl/control/Mouse.js';
+import ControlBase from './Control.js';
+import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

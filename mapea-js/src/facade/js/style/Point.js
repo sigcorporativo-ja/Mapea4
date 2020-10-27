@@ -1,9 +1,9 @@
 /**
  * @module M/style/Point
  */
-import StylePointImpl from 'impl/style/Point';
-import Simple from './Simple';
-import { isNullOrEmpty, extendsObj } from '../util/Utils';
+import StylePointImpl from 'impl/style/Point.js';
+import Simple from './Simple.js';
+import { isNullOrEmpty, extendsObj } from '../util/Utils.js';
 
 /**
  * @classdesc

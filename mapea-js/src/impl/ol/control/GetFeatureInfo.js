@@ -5,15 +5,15 @@ import OLFormatWFS from 'ol/format/WFS';
 import { unByKey } from 'ol/Observable';
 import OLControl from 'ol/control/Control';
 import * as dialog from 'M/dialog';
-import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup';
-import getfeatureinfoLayers from 'templates/getfeatureinfo_layers';
+import { isString, addParameters } from 'M/util/Utils';
+import getfeatureinfoPopupTemplate from 'templates/getfeatureinfo_popup.html';
+import getfeatureinfoLayers from 'templates/getfeatureinfo_layers.html';
 import Popup from 'M/Popup';
 import { get as getRemote } from 'M/util/Remote';
 import { compileSync as compileTemplate } from 'M/util/Template';
 import { isNullOrEmpty, normalize, beautifyAttribute } from 'M/util/Utils';
 import { getValue } from 'M/i18n/language';
 import Control from './Control';
-import { isString, addParameters } from '../../../../facade/js/util/Utils';
 
 /**
  * @classdesc

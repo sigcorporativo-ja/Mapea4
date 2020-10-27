@@ -1,11 +1,11 @@
 /**
  * @module M/format/GeoJSON
  */
-import GeoJSONImpl from 'impl/format/GeoJSON';
-import Base from '../Base';
-import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils';
-import Exception from '../exception/exception';
-import { getValue } from '../i18n/language';
+import GeoJSONImpl from 'impl/format/GeoJSON.js';
+import Base from '../Base.js';
+import { isUndefined, isArray, isNullOrEmpty, isString } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

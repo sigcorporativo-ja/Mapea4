@@ -1,8 +1,8 @@
 /**
  * @module M/ClusteredFeature
  */
-import Feature from './Feature';
-import { generateRandom } from '../util/Utils';
+import Feature from './Feature.js';
+import { generateRandom } from '../util/Utils.js';
 
 /**
  * @classdesc

@@ -1,14 +1,14 @@
 /**
  * @module M/control/WMCSelector
  */
-import wmcselectorTemplate from 'templates/wmcselector';
-import 'assets/css/controls/wmcselector';
-import WMCSelectorImpl from 'impl/control/WMCSelector';
-import ControlBase from './Control';
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
-import Exception from '../exception/exception';
-import { compileSync as compileTemplate } from '../util/Template';
-import { getValue } from '../i18n/language';
+import wmcselectorTemplate from 'templates/wmcselector.html';
+import 'assets/css/controls/wmcselector.css';
+import WMCSelectorImpl from 'impl/control/WMCSelector.js';
+import ControlBase from './Control.js';
+import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

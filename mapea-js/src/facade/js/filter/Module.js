@@ -2,12 +2,12 @@
  * @module M/filter/spatial
  */
 import { GeoJSONReader } from 'jsts/org/locationtech/jts/io';
-import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp';
-import Spatial from './Spatial';
-import WKT from '../format/WKT';
-import { isArray, isObject } from '../util/Utils';
-import Vector from '../layer/Vector';
-import Feature from '../feature/Feature';
+import RelateOp from 'jsts/org/locationtech/jts/operation/relate/RelateOp.js';
+import Spatial from './Spatial.js';
+import WKT from '../format/WKT.js';
+import { isArray, isObject } from '../util/Utils.js';
+import Vector from '../layer/Vector.js';
+import Feature from '../feature/Feature.js';
 
 /**
  * Parses features and returns their GeoJSON geometries

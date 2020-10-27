@@ -6,8 +6,6 @@ import OLInteraction from 'ol/interaction/Interaction';
 import MObject from 'M/Object';
 import FacadePanzoombar from 'M/control/Panzoombar';
 import * as LayerType from 'M/layer/Type';
-import 'impl-assets/css/ol';
-import 'impl-assets/css/custom';
 import Control from 'M/control/Control';
 import FacadeWMS from 'M/layer/WMS';
 import * as EventType from 'M/event/eventtype';
@@ -26,6 +24,8 @@ import {
 } from 'M/util/Utils';
 import ImplUtils from './util/Utils';
 import View from './View';
+import './ol.css';
+import './custom.css';
 
 /**
  * @module M/impl/Map

@@ -1,13 +1,13 @@
 /**
  * @module M/layer/WMTS
  */
-import WMTSImpl from 'impl/layer/WMTS';
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
-import Exception from '../exception/exception';
-import LayerBase from './Layer';
-import * as parameter from '../parameter/parameter';
-import * as LayerType from './Type';
-import { getValue } from '../i18n/language';
+import WMTSImpl from 'impl/layer/WMTS.js';
+import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import LayerBase from './Layer.js';
+import * as parameter from '../parameter/parameter.js';
+import * as LayerType from './Type.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

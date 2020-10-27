@@ -1,9 +1,9 @@
 /**
  * @module M/Map
  */
-import MapImpl from 'impl/Map';
+import MapImpl from 'impl/Map.js';
 import { getPanelForControl, buildControl } from './builder/builder';
-import Base from './Base';
+import Base from './Base.js';
 import {
   isNullOrEmpty,
   isUndefined,
@@ -14,35 +14,35 @@ import {
   escapeJSCode,
   isObject,
   getEnvolvedExtent,
-} from './util/Utils';
+} from './util/Utils.js';
 import { getValue } from './i18n/language';
 import Exception from './exception/exception';
-import Label from './Label';
-import Popup from './Popup';
-import Parameters from './parameter/Parameters';
+import Label from './Label.js';
+import Popup from './Popup.js';
+import Parameters from './parameter/Parameters.js';
 import * as parameter from './parameter/parameter';
 import * as EventType from './event/eventtype';
-import FeaturesHandler from './handler/Feature';
-import Feature from './feature/Feature';
+import FeaturesHandler from './handler/Feature.js';
+import Feature from './feature/Feature.js';
 import * as Dialog from './dialog';
-import GetFeatureInfo from './control/GetFeatureInfo';
-import WMCSelector from './control/WMCSelector';
-import Layer from './layer/Layer';
-import * as LayerType from './layer/Type';
-import Vector from './layer/Vector';
-import KML from './layer/KML';
-import WFS from './layer/WFS';
-import WMC from './layer/WMC';
-import WMS from './layer/WMS';
-import WMTS from './layer/WMTS';
-import OSM from './layer/OSM';
-import MVT from './layer/MVT';
-import Mapbox from './layer/Mapbox';
-import Panel from './ui/Panel';
-import GeoJSON from './layer/GeoJSON';
-import StylePoint from './style/Point';
-import Control from './control/Control';
-import MBTiles from './layer/MBTiles';
+import GetFeatureInfo from './control/GetFeatureInfo.js';
+import WMCSelector from './control/WMCSelector.js';
+import Layer from './layer/Layer.js';
+import * as LayerType from './layer/Type.js';
+import Vector from './layer/Vector.js';
+import KML from './layer/KML.js';
+import WFS from './layer/WFS.js';
+import WMC from './layer/WMC.js';
+import WMS from './layer/WMS.js';
+import WMTS from './layer/WMTS.js';
+import OSM from './layer/OSM.js';
+import MVT from './layer/MVT.js';
+import Mapbox from './layer/Mapbox.js';
+import Panel from './ui/Panel.js';
+import GeoJSON from './layer/GeoJSON.js';
+import StylePoint from './style/Point.js';
+import Control from './control/Control.js';
+import MBTiles from './layer/MBTiles.js';
 
 /**
  * @classdesc

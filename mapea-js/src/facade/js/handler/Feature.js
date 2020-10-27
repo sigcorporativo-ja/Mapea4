@@ -1,13 +1,13 @@
 /**
  * @module M/handler/Feature
  */
-import HandlerImpl from 'impl/handler/Feature';
-import { isFunction, includes } from '../util/Utils';
-import Exception from '../exception/exception';
-import Base from '../Base';
-import FacadeFeature from '../feature/Feature';
-import * as EventType from '../event/eventtype';
-import { getValue } from '../i18n/language';
+import HandlerImpl from 'impl/handler/Feature.js';
+import { isFunction, includes } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import Base from '../Base.js';
+import FacadeFeature from '../feature/Feature.js';
+import * as EventType from '../event/eventtype.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

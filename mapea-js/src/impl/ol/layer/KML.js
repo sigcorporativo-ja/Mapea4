@@ -3,7 +3,7 @@
  */
 import { compileSync as compileTemplate } from 'M/util/Template';
 import { get as getProj } from 'ol/proj';
-import popupKMLTemplate from 'templates/kml_popup';
+import popupKMLTemplate from 'templates/kml_popup.html';
 import Popup from 'M/Popup';
 import { isNullOrEmpty, extend } from 'M/util/Utils';
 import ClusteredFeature from 'M/feature/Clustered';

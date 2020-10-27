@@ -1,7 +1,7 @@
 import { compileSync as compileTemplate } from 'M/util/Template';
 import FacadePopup from 'M/Popup';
 import { isNullOrEmpty } from 'M/util/Utils';
-import labelPopupTemplate from 'templates/label_popup';
+import labelPopupTemplate from 'templates/label_popup.html';
 
 /**
  * @module M/impl/Label

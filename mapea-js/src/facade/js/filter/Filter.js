@@ -1,7 +1,7 @@
 /**
  * @module M/filter
  */
-import FilterFunction from './Function';
+import FilterFunction from './Function.js';
 /**
  * Logical AND operator, all filters must be fulfilled
  *

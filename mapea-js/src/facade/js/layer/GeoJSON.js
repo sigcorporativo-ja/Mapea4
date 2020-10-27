@@ -1,12 +1,12 @@
 /**
  * @module M/layer/GeoJSON
  */
-import GeoJSONImpl from 'impl/layer/GeoJSON';
-import LayerVector from './Vector';
-import { GeoJSON as GeoJSONType } from './Type';
-import { isString, isNullOrEmpty, isUndefined, isArray } from '../util/Utils';
-import Exception from '../exception/exception';
-import { getValue } from '../i18n/language';
+import GeoJSONImpl from 'impl/layer/GeoJSON.js';
+import LayerVector from './Vector.js';
+import { GeoJSON as GeoJSONType } from './Type.js';
+import { isString, isNullOrEmpty, isUndefined, isArray } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

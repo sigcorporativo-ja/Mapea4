@@ -2,7 +2,7 @@
  * @module M/impl/control/LayerSwitcher
  */
 
-import layerswitcherTemplate from 'templates/layerswitcher';
+import layerswitcherTemplate from 'templates/layerswitcher.html';
 import { isNullOrEmpty, concatUrlPaths } from 'M/util/Utils';
 import { compileSync as compileTemplate } from 'M/util/Template';
 import LayerSwitcherFacade from 'M/control/Layerswitcher';

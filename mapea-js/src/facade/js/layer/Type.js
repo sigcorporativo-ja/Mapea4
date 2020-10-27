@@ -1,7 +1,7 @@
 /**
  * @module M/layer/type
  */
-import { normalize, isString } from '../util/Utils';
+import { normalize, isString } from '../util/Utils.js';
 
 /**
  * WMC type

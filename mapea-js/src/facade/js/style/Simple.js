@@ -1,8 +1,8 @@
 /**
  * @module M/style/Simple
  */
-import { defineFunctionFromString, isDynamic, drawDynamicStyle } from '../util/Utils';
-import StyleFeature from './Feature';
+import { defineFunctionFromString, isDynamic, drawDynamicStyle } from '../util/Utils.js';
+import StyleFeature from './Feature.js';
 
 /**
  * @classdesc

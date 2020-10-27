@@ -1,15 +1,15 @@
 /**
  * @module M/Feature
  */
-import FeatureImpl from 'impl/feature/Feature';
-import Base from '../Base';
-import { isNullOrEmpty } from '../util/Utils';
-import GeoJSON from '../format/GeoJSON';
-import * as dialog from '../dialog';
-import StyleFeature from '../style/Feature';
-import StylePoint from '../style/Point';
-import * as EventType from '../event/eventtype';
-import { getValue } from '../i18n/language';
+import FeatureImpl from 'impl/feature/Feature.js';
+import Base from '../Base.js';
+import { isNullOrEmpty } from '../util/Utils.js';
+import GeoJSON from '../format/GeoJSON.js';
+import * as dialog from '../dialog.js';
+import StyleFeature from '../style/Feature.js';
+import StylePoint from '../style/Point.js';
+import * as EventType from '../event/eventtype.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

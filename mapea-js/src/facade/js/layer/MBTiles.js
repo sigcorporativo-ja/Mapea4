@@ -1,13 +1,13 @@
 /**
  * @module M/layer/MBTiles
  */
-import MBTilesImpl from 'impl/layer/MBTiles';
-import LayerBase from './Layer';
-import { isNullOrEmpty, isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as LayerType from './Type';
-import mbtiles from '../parameter/mbtiles';
-import { getValue } from '../i18n/language';
+import MBTilesImpl from 'impl/layer/MBTiles.js';
+import LayerBase from './Layer.js';
+import { isNullOrEmpty, isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as LayerType from './Type.js';
+import mbtiles from '../parameter/mbtiles.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

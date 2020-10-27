@@ -1,10 +1,10 @@
 /**
  * @module M/parameter/wms
  */
-import { isNullOrEmpty, isString, normalize, isArray, isObject } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as LayerType from '../layer/Type';
-import { getValue } from '../i18n/language';
+import { isNullOrEmpty, isString, normalize, isArray, isObject } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as LayerType from '../layer/Type.js';
+import { getValue } from '../i18n/language.js';
 
 const REGEXP_WMS = /WMS\*.*/;
 const REGEXP_WMS_FULL = /WMS_FULL\*.*/;

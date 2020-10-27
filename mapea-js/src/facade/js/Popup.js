@@ -1,14 +1,14 @@
 /**
  * @module M/Popup
  */
-import PopupImpl from 'impl/Popup';
-import 'assets/css/popup';
-import popupTemplate from 'templates/popup';
-import { isNullOrEmpty, reproject, getSystem } from './util/Utils';
-import Base from './Base';
-import { compileSync as compileTemplate } from './util/Template';
+import PopupImpl from 'impl/Popup.js';
+import 'assets/css/popup.css';
+import popupTemplate from 'templates/popup.html';
+import { isNullOrEmpty, reproject, getSystem } from './util/Utils.js';
+import Base from './Base.js';
+import { compileSync as compileTemplate } from './util/Template.js';
 import * as EventType from './event/eventtype';
-import MWindow from './util/Window';
+import MWindow from './util/Window.js';
 
 /**
  * getUrlFromPlatform

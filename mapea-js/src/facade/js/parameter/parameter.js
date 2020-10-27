@@ -1,17 +1,17 @@
 /**
  * @module M/parameter
  */
-import { isNullOrEmpty, isString, isNull, isFunction, normalize, isArray, isObject, isUrl, isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as LayerType from '../layer/Type';
-import Layer from '../layer/Layer';
-import { getValue } from '../i18n/language';
-import wms from './wms';
-import kml from './kml';
-import mapbox from './mapbox';
-import osm from './osm';
-import geojson from './geojson';
-import wmc from './wmc';
+import { isNullOrEmpty, isString, isNull, isFunction, normalize, isArray, isObject, isUrl, isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as LayerType from '../layer/Type.js';
+import Layer from '../layer/Layer.js';
+import { getValue } from '../i18n/language.js';
+import wms from './wms.js';
+import kml from './kml.js';
+import mapbox from './mapbox.js';
+import osm from './osm.js';
+import geojson from './geojson.js';
+import wmc from './wmc.js';
 
 /**
  * Parses the specified user center parameter into an object

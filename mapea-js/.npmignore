@@ -1,3 +1,15 @@
+assembly
+config
+tasks
+test
+webpack-config
+.eslintignore
+.eslintrc
+karma.conf.js
+nightwatch.conf.js
+package-lock.json
+pom.xml
+
 # Directorios y ficheros ignorados por git
 *.settings
 *.project
@@ -8,8 +20,8 @@ node
 node_modules
 target
 libraries
-publish
 doc
+build
 dist
 index.js
 index-*.js

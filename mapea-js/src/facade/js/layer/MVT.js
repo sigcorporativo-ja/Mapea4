@@ -1,12 +1,12 @@
 /**
  * @module M/layer/MVT
  */
-import MVTTileImpl from 'impl/layer/MVT';
-import RenderFeatureImpl from 'impl/feature/RenderFeature';
-import Vector from './Vector';
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
-import Exception from '../exception/exception';
-import { MVT as MVTType } from './Type';
+import MVTTileImpl from 'impl/layer/MVT.js';
+import RenderFeatureImpl from 'impl/feature/RenderFeature.js';
+import Vector from './Vector.js';
+import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { MVT as MVTType } from './Type.js';
 
 /**
  * Possibles modes of MVT

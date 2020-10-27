@@ -1,19 +1,19 @@
 /**
  * @module M/style/Choropleth
  */
-import StyleBase from './Style';
-import StyleComposite from './Composite';
-import * as StyleQuantification from './Quantification';
-import { extendsObj, isNullOrEmpty, generateColorScale, isArray, isString, stringifyFunctions, defineFunctionFromString } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as geometry from '../geom/GeoJSON';
-import * as Filter from '../filter/Filter';
-import StyleCluster from './Cluster';
-import StyleProportional from './Proportional';
-import StylePolygon from './Polygon';
-import StyleLine from './Line';
-import StylePoint from './Point';
-import { getValue } from '../i18n/language';
+import StyleBase from './Style.js';
+import StyleComposite from './Composite.js';
+import * as StyleQuantification from './Quantification.js';
+import { extendsObj, isNullOrEmpty, generateColorScale, isArray, isString, stringifyFunctions, defineFunctionFromString } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as geometry from '../geom/GeoJSON.js';
+import * as Filter from '../filter/Filter.js';
+import StyleCluster from './Cluster.js';
+import StyleProportional from './Proportional.js';
+import StylePolygon from './Polygon.js';
+import StyleLine from './Line.js';
+import StylePoint from './Point.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * Accuracy of numbers on canvas

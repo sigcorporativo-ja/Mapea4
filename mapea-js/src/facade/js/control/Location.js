@@ -1,14 +1,14 @@
 /**
  * @module M/control/Location
  */
-import LocationImpl from 'impl/control/Location';
-import locationTemplate from 'templates/location';
-import 'assets/css/controls/location';
-import { getValue } from '../i18n/language';
-import ControlBase from './Control';
-import { isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import { compileSync as compileTemplate } from '../util/Template';
+import LocationImpl from 'impl/control/Location.js';
+import locationTemplate from 'templates/location.html';
+import 'assets/css/controls/location.css';
+import { getValue } from '../i18n/language.js';
+import ControlBase from './Control.js';
+import { isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
 
 /**
  * @classdesc

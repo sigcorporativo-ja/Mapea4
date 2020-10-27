@@ -1,10 +1,10 @@
 /**
  * @module M/parameter/geojson
  */
-import { isNullOrEmpty, isString, normalize, isArray, isObject } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as LayerType from '../layer/Type';
-import { getValue } from '../i18n/language';
+import { isNullOrEmpty, isString, normalize, isArray, isObject } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as LayerType from '../layer/Type.js';
+import { getValue } from '../i18n/language.js';
 
 const GEOJSON_REGEX = /^GeoJSON(T)?\*.*/;
 

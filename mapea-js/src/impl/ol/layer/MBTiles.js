@@ -6,11 +6,11 @@ import { get as getProj } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
 import TileGrid from 'ol/tilegrid/TileGrid';
 import { getBottomLeft, getWidth } from 'ol/extent';
+import * as LayerType from 'M/layer/Type';
+import TileProvider from 'M/provider/Tile';
 import MBTilesSource from '../source/MBTiles';
 import ImplMap from '../Map';
 import Layer from './Layer';
-import * as LayerType from '../../../../facade/js/layer/Type';
-import TileProvider from '../../../../facade/js/provider/Tile';
 
 /**
  * Default tile size of MBTiles

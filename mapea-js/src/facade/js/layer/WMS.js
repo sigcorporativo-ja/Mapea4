@@ -1,14 +1,14 @@
 /**
  * @module M/layer/WMS
  */
-import WMSImpl from 'impl/layer/WMS';
+import WMSImpl from 'impl/layer/WMS.js';
 
-import { isNullOrEmpty, isUndefined, sameUrl, isString, normalize, isFunction } from '../util/Utils';
-import Exception from '../exception/exception';
-import LayerBase from './Layer';
-import * as parameter from '../parameter/parameter';
-import * as LayerType from './Type';
-import { getValue } from '../i18n/language';
+import { isNullOrEmpty, isUndefined, sameUrl, isString, normalize, isFunction } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import LayerBase from './Layer.js';
+import * as parameter from '../parameter/parameter.js';
+import * as LayerType from './Type.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

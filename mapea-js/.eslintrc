@@ -24,10 +24,6 @@
         "allowAfterThis": true
       }
     ],
-    "import/extensions": [
-      "error",
-      "never"
-    ],
     "import/no-unresolved": "off",
     "prefer-destructuring": "off",
     "arrow-body-style": "off",
@@ -45,5 +41,6 @@
     "no-template-curly-in-string": "off",
     "import/no-duplicates": "off",
     "import/no-named-default": "off",
+    "import/extensions": "off"
   }
 }

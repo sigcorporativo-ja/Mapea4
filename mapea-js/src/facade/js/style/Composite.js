@@ -1,10 +1,10 @@
 /**
  * @module M/style/Composite
  */
-import StyleBase from './Style';
-import { isNullOrEmpty, isArray, styleComparator } from '../util/Utils';
-// import StyleCluster from './Cluster';
-// import StyleProportional from './Proportional';
+import StyleBase from './Style.js';
+import { isNullOrEmpty, isArray, styleComparator } from '../util/Utils.js';
+// import StyleCluster from './Cluster.js';
+// import StyleProportional from './Proportional.js';
 
 /**
  * @classdesc

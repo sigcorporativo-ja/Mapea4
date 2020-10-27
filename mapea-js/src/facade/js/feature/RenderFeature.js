@@ -1,9 +1,9 @@
 /**
  * @module M/RenderFeature
  */
-import RenderFeatureImpl from 'impl/feature/RenderFeature';
-import Base from '../Base';
-import { isNullOrEmpty, generateRandom } from '../util/Utils';
+import RenderFeatureImpl from 'impl/feature/RenderFeature.js';
+import Base from '../Base.js';
+import { isNullOrEmpty, generateRandom } from '../util/Utils.js';
 
 /**
  * @classdesc

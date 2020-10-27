@@ -1,13 +1,13 @@
 /**
  * @module M/control/Panzoom
  */
-import panzoomTemplate from 'templates/panzoom';
-import PanzoomImpl from 'impl/control/Panzoom';
-import ControlBase from './Control';
-import { isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import { compileSync as compileTemplate } from '../util/Template';
-import { getValue } from '../i18n/language';
+import panzoomTemplate from 'templates/panzoom.html';
+import PanzoomImpl from 'impl/control/Panzoom.js';
+import ControlBase from './Control.js';
+import { isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc
