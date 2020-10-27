@@ -2,10 +2,21 @@ import Measure from './measurebase';
 import MeasureAreaImpl from '../../impl/ol/js/measurearea';
 import measureareaHTML from '../../templates/measurearea';
 
+/**
+ * @classdesc
+ * Main constructor of the class. Creates a MeasureArea
+ * control to provides area items drawn on the map
+ *
+ * @constructor
+ * @param {number} distanciaArea -  factor de escala del area
+ * @param {string} unidadMedida - unidad de medida del area
+ * @extends {M.Control}
+ * @api stable
+ */
 export default class MeasureArea extends Measure {
-  constructor() {
+  constructor(distanciaArea, unidadMedida) {
     // implementation of this control
-    const impl = new MeasureAreaImpl();
+    const impl = new MeasureAreaImpl(distanciaArea, unidadMedida);
 
     // const calls the super constructor
     super(impl, measureareaHTML, MeasureArea.NAME);
@@ -15,6 +26,7 @@ export default class MeasureArea extends Measure {
       M.Exception('La implementación usada no puede crear controles MeasureArea');
     }
   }
+
   /**
    * This function checks if an object is equals
    * to this control

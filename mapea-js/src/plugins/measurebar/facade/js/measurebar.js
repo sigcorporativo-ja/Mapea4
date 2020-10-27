@@ -14,7 +14,8 @@ export default class Measurebar extends M.Plugin {
    * @extends {M.Plugin}
    * @api stable
    */
-  constructor() {
+  constructor(parameters) {
+    const params = parameters || {};
     super();
 
     /**
@@ -54,11 +55,30 @@ export default class Measurebar extends M.Plugin {
     this.measureClear_ = null;
 
     /**
-     * Metadata from api.json
-     * @private
-     * @type {Object}
+     * Control MeasureLenght
+     * @privates
+     * @type {number}
      */
     this.metadata_ = api.metadata;
+
+    this.longitud_ = params.longitud || 100;
+
+    /**
+     * Control MeasureArea
+     * @privates
+     * @type {number}
+     */
+    this.metadata_ = api.metadata;
+
+    this.distanciaArea_ = params.distanciaArea || 1;
+
+    /**
+     * Control MeasureArea
+     * @privates
+     * @type {string}
+     */
+    this.metadata_ = api.metadata;
+    this.unidadMedida_ = params.unidadMedida || 'km<sup>2</sup>';
   }
 
   /**
@@ -71,8 +91,8 @@ export default class Measurebar extends M.Plugin {
   addTo(map) {
     this.map_ = map;
 
-    this.measureLength_ = new MeasureLength();
-    this.measureArea_ = new MeasureArea();
+    this.measureLength_ = new MeasureLength(this.longitud_);
+    this.measureArea_ = new MeasureArea(this.distanciaArea_, this.unidadMedida_);
     this.measureClear_ = new MeasureClear(this.measureLength_, this.measureArea_);
     if (M.utils.isNullOrEmpty(this.map_.panel.TOOLS)) {
       this.map_.panel.TOOLS = new M.ui.Panel('tools', {

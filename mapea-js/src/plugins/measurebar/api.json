@@ -6,10 +6,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "measurebar-3.0.0.ol.min.js"
+        "measurebar-3.1.0.ol.min.js"
       ],
       "styles": [
-        "measurebar-3.0.0.min.css"
+        "measurebar-3.1.0.min.css"
       ]
     }
   },
@@ -17,8 +17,8 @@
     "name": "Measurebar",
     "description": "Tool to measure distances and areas.",
     "text": "",
-    "version": "3.0.0",
-    "date": "11/10/2019",
+    "version": "3.1.0",
+    "date": "20/10/2019",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",
     "tags": "mapea,plugin",
