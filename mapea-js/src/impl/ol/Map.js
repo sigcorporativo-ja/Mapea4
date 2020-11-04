@@ -128,12 +128,6 @@ class Map extends MObject {
      */
     this._resolutionsBaseLayer = false;
 
-    // gets the renderer
-    // let renderer = ol.renderer.Type.CANVAS;
-    // if (!isNullOrEmpty(this.options_.renderer)) {
-    //   renderer = this.options_.renderer;
-    // }
-
     /**
      * Implementation of this map
      * @private
@@ -142,7 +136,6 @@ class Map extends MObject {
     this.map_ = new OLMap({
       controls: [],
       target: div.id,
-      // renderer,
       view: new View(),
     });
 
@@ -231,6 +224,10 @@ class Map extends MObject {
     this.facadeMap_.addWFS(knowLayers.filter(layer => (layer.type === LayerType.WFS)));
     this.facadeMap_.addMVT(knowLayers.filter(layer => (layer.type === LayerType.MVT)));
     this.facadeMap_.addMBTiles(knowLayers.filter(layer => (layer.type === LayerType.MBTiles)));
+    this.facadeMap_.addGeoPackageTile(knowLayers
+      .filter(layer => (layer.type === LayerType.GeoPackageTile)));
+    this.facadeMap_.addGeoPackageVector(knowLayers
+      .filter(layer => (layer.type === LayerType.GeoPackageVector)));
 
     return this;
   }
@@ -260,6 +257,8 @@ class Map extends MObject {
       this.removeWMTS(knowLayers);
       this.removeMVT(knowLayers);
       this.removeMBTiles(knowLayers);
+      this.removeGeoPackageTile(knowLayers);
+      this.removeGeoPackageVector(knowLayers);
     }
 
     if (unknowLayers.length > 0) {
@@ -1386,7 +1385,6 @@ class Map extends MObject {
     const existsBaseLayer = baseLayers.length > 0;
 
     layers.forEach((layer) => {
-      // checks if layer is WFS and was added to the map
       if (layer.type === LayerType.MVT) {
         if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
@@ -1394,6 +1392,194 @@ class Map extends MObject {
           layer.setZIndex(layer.getZIndex());
           if (layer.getZIndex() == null) {
             const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.MVT];
+            layer.setZIndex(zIndex);
+          }
+          if (!existsBaseLayer) {
+            this.updateResolutionsFromBaseLayer();
+          }
+        }
+      }
+    });
+
+    return this;
+  }
+
+  /**
+   * This function gets the geopackage tile layers
+   * @function
+   * @public
+   * @api
+   */
+  getGeoPackageTile(filtersParam) {
+    let foundLayers = [];
+    let filters = filtersParam;
+
+    const layers = this.layers_.filter((layer) => {
+      return (layer.type === LayerType.GeoPackageTile);
+    });
+
+    if (isNullOrEmpty(filters)) {
+      filters = [];
+    }
+    if (!isArray(filters)) {
+      filters = [filters];
+    }
+
+    if (filters.length === 0) {
+      foundLayers = layers;
+    } else {
+      filters.forEach((filterLayer) => {
+        const filteredLayers = layers.filter((layer) => {
+          let layerMatched = true;
+          if (!foundLayers.includes(layer)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
+              layerMatched = (layerMatched && (filterLayer.type === layer.type));
+            }
+            if (!isNullOrEmpty(filterLayer.name)) {
+              layerMatched = (layerMatched && (filterLayer.name === layer.name));
+            }
+          } else {
+            layerMatched = false;
+          }
+          return layerMatched;
+        });
+        foundLayers = foundLayers.concat(filteredLayers);
+      });
+    }
+    return foundLayers;
+  }
+
+  /**
+   * This function removes the geopackage tile layers from map.
+   *
+   * @function
+   * @public
+   * @api
+   */
+  removeGeoPackageTile(layers) {
+    const tileLayers = this.getMVT(layers);
+    tileLayers.forEach((tileLayer) => {
+      this.layers_ = this.layers_.filter(layer => !layer.equals(tileLayer));
+      tileLayer.getImpl().destroy();
+      tileLayer.fire(EventType.REMOVED_FROM_MAP, [tileLayer]);
+    });
+
+    return this;
+  }
+
+  /**
+   * This function adds the geopackage tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addGeoPackageTile(layers) {
+    const baseLayers = this.getBaseLayers();
+    const existsBaseLayer = baseLayers.length > 0;
+
+    layers.forEach((layer) => {
+      if (layer.type === LayerType.GeoPackageTile) {
+        if (!includes(this.layers_, layer)) {
+          layer.getImpl().addTo(this.facadeMap_);
+          this.layers_.push(layer);
+          layer.setZIndex(layer.getZIndex());
+          if (layer.getZIndex() == null) {
+            const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.GeoPackageTile];
+            layer.setZIndex(zIndex);
+          }
+          if (!existsBaseLayer) {
+            this.updateResolutionsFromBaseLayer();
+          }
+        }
+      }
+    });
+
+    return this;
+  }
+
+  /**
+   * This function gets the geopackage tile layers
+   * @function
+   * @public
+   * @api
+   */
+  getGeoPackageVector(filtersParam) {
+    let foundLayers = [];
+    let filters = filtersParam;
+
+    const layers = this.layers_.filter((layer) => {
+      return (layer.type === LayerType.GeoPackageVector);
+    });
+
+    if (isNullOrEmpty(filters)) {
+      filters = [];
+    }
+    if (!isArray(filters)) {
+      filters = [filters];
+    }
+
+    if (filters.length === 0) {
+      foundLayers = layers;
+    } else {
+      filters.forEach((filterLayer) => {
+        const filteredLayers = layers.filter((layer) => {
+          let layerMatched = true;
+          if (!foundLayers.includes(layer)) {
+            if (!isNullOrEmpty(filterLayer.type)) {
+              layerMatched = (layerMatched && (filterLayer.type === layer.type));
+            }
+            if (!isNullOrEmpty(filterLayer.name)) {
+              layerMatched = (layerMatched && (filterLayer.name === layer.name));
+            }
+          } else {
+            layerMatched = false;
+          }
+          return layerMatched;
+        });
+        foundLayers = foundLayers.concat(filteredLayers);
+      });
+    }
+    return foundLayers;
+  }
+
+  /**
+   * This function removes the geopackage tile layers from map.
+   *
+   * @function
+   * @public
+   * @api
+   */
+  removeGeoPackageVector(layers) {
+    const tileLayers = this.getMVT(layers);
+    tileLayers.forEach((vectorLayer) => {
+      this.layers_ = this.layers_.filter(layer => !layer.equals(vectorLayer));
+      vectorLayer.getImpl().destroy();
+      vectorLayer.fire(EventType.REMOVED_FROM_MAP, [vectorLayer]);
+    });
+
+    return this;
+  }
+
+  /**
+   * This function adds the geopackage tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addGeoPackageVector(layers) {
+    const baseLayers = this.getBaseLayers();
+    const existsBaseLayer = baseLayers.length > 0;
+
+    layers.forEach((layer) => {
+      if (layer.type === LayerType.GeoPackageVector) {
+        if (!includes(this.layers_, layer)) {
+          layer.getImpl().addTo(this.facadeMap_);
+          this.layers_.push(layer);
+          layer.setZIndex(layer.getZIndex());
+          if (layer.getZIndex() == null) {
+            const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.GeoPackageVector];
             layer.setZIndex(zIndex);
           }
           if (!existsBaseLayer) {
@@ -2251,7 +2437,7 @@ class Map extends MObject {
  * @const
  * @type {Object}
  * @public
- * @api stable
+ * @api
  */
 Map.Z_INDEX = {};
 Map.Z_INDEX_BASELAYER = 0;
@@ -2261,6 +2447,8 @@ Map.Z_INDEX[LayerType.WMTS] = 2000;
 Map.Z_INDEX[LayerType.OSM] = 2000;
 Map.Z_INDEX[LayerType.Mapbox] = 2000;
 Map.Z_INDEX[LayerType.MBTiles] = 2000;
+Map.Z_INDEX[LayerType.GeoPackageTile] = 2000;
+Map.Z_INDEX[LayerType.GeoPackageVector] = 3000;
 Map.Z_INDEX[LayerType.KML] = 3000;
 Map.Z_INDEX[LayerType.WFS] = 9999;
 Map.Z_INDEX[LayerType.Vector] = 9999;

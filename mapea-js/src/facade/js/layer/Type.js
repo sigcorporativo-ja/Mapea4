@@ -103,6 +103,24 @@ export const MVT = 'MVT';
 export const MBTiles = 'MBTiles';
 
 /**
+ * GeoPackageVector type
+ * @const
+ * @type {string}
+ * @public
+ * @api
+ */
+export const GeoPackageVector = 'GeoPackageVector';
+
+/**
+ * GeoPackageTile type
+ * @const
+ * @type {string}
+ * @public
+ * @api
+ */
+export const GeoPackageTile = 'GeoPackageTile';
+
+/**
  * All layer types
  * @const
  * @type {object}
@@ -120,6 +138,8 @@ const layertypes = {
   GeoJSON,
   Vector,
   MVT,
+  GeoPackageVector,
+  GeoPackageTile,
 };
 
 /**
@@ -158,6 +178,8 @@ export const know = (type) => {
     WMTS,
     MBTiles,
     MVT,
+    GeoPackageVector,
+    GeoPackageTile,
   ];
   return (knowTypes.indexOf(parse(type)) !== -1);
 };

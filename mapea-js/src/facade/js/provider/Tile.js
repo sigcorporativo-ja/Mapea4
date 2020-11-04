@@ -1,5 +1,5 @@
 import sqljs from 'sql.js';
-import { isNullOrEmpty, bytesToBase64 } from '../util/Utils.js';
+import { isNullOrEmpty, bytesToBase64, getUint8ArrayFromData } from '../util/Utils.js';
 
 const DEFAULT_WHITE_TILE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAQAAAD2e2DtAAABu0lEQVR42u3SQREAAAzCsOHf9F6oIJXQS07TxQIABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAgAACwAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAAsAEAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAKg9kK0BATSHu+YAAAAASUVORK5CYII=';
 
@@ -21,7 +21,7 @@ class Tile {
     sqljs({
       locateFile: file => `${M.config.SQL_WASM_URL}${file}`,
     }).then((SQL) => {
-      this.getUint8ArrayFromData(data).then((uint8Array) => {
+      getUint8ArrayFromData(data).then((uint8Array) => {
         this.db_ = new SQL.Database(uint8Array);
       });
     }).catch((err) => {
@@ -47,32 +47,6 @@ class Tile {
 
   setTile(tileCoord, tile) {
     this.tiles_[tileCoord] = tile;
-  }
-
-  /**
-   * @function
-   * @param {File|ArrayBuffer|Response|Uint8Array} data
-   * @return {Uint8Array}
-   */
-  getUint8ArrayFromData(data) {
-    return new Promise((resolve, reject) => {
-      let uint8Array = new Uint8Array();
-      if (data instanceof ArrayBuffer) {
-        uint8Array = new Uint8Array(data);
-        resolve(uint8Array);
-      } else if (data instanceof File) {
-        data.arrayBuffer().then((buffer) => {
-          uint8Array = new Uint8Array(buffer);
-          resolve(uint8Array);
-        });
-      } else if (data instanceof Response) {
-        resolve(data.arrayBuffer().then(this.getUint8ArrayFromData));
-      } else if (data instanceof Uint8Array) {
-        resolve(data);
-      } else {
-        resolve(uint8Array);
-      }
-    });
   }
 }
 

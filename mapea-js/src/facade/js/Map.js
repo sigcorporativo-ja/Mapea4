@@ -43,6 +43,9 @@ import GeoJSON from './layer/GeoJSON.js';
 import StylePoint from './style/Point.js';
 import Control from './control/Control.js';
 import MBTiles from './layer/MBTiles.js';
+import GeoPackage from './layer/GeoPackage';
+import GeoPackageTile from './layer/GeoPackageTile';
+import GeoPackageVector from './layer/GeoPackageVector';
 
 /**
  * @classdesc
@@ -562,6 +565,7 @@ class Map extends Base {
     }
     return this.getImpl().getLayerGroups().sort(Map.LAYER_SORT);
   }
+
   /**
    * TODO
    *
@@ -588,6 +592,7 @@ class Map extends Base {
     this.getImpl().addLayerGroups(lGroups);
     return this;
   }
+
   /**
    * TODO
    *
@@ -1376,9 +1381,6 @@ class Map extends Base {
             throw err;
           }
         }
-        // FIXME: Hay problemas majenando las features de los vector tiles
-        // en openlayers
-        // this.featuresHandler_.addLayer(vectorTile);
         mvtLayers.push(vectorTile);
       });
 
@@ -1388,6 +1390,223 @@ class Map extends Base {
     }
     return this;
   }
+
+  /**
+   * This function gets the geopackage tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  getGeoPackageTile(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (isUndefined(MapImpl.prototype.getGeoPackageTile)) {
+      Exception('La implementación usada no posee el método getWFS');
+    }
+
+    if (isNull(layersParam)) {
+      layersParam = [];
+    } else if (!isArray(layersParam)) {
+      layersParam = [layersParam];
+    }
+
+    let filters = [];
+    if (layersParam.length > 0) {
+      filters = layersParam.map((layerParam) => {
+        return parameter.layer(layerParam, LayerType.GeoPackageTile);
+      });
+    }
+
+    const layers = this.getImpl().getGeoPackageTile(filters).sort(Map.LAYER_SORT);
+
+    return layers;
+  }
+
+  /**
+   * This function removes the geopackage tile layers from map.
+   *
+   * @function
+   * @public
+   * @api
+   */
+  removeGeoPackageTile(layersParam) {
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.removeGeoPackageTile)) {
+        Exception('La implementación usada no posee el método removeWFS');
+      }
+      const layers = this.getGeoPackageTile(layersParam);
+      if (layers.length > 0) {
+        layers.forEach((layer) => {
+          this.featuresHandler_.removeLayer(layer);
+        });
+        this.getImpl().removeGeoPackageTile(layers);
+      }
+    }
+    return this;
+  }
+
+  /**
+   * This function adds the geopackage tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addGeoPackageTile(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.addGeoPackageTile)) {
+        Exception('La implementación usada no posee el método addWFS');
+      }
+
+      if (!isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      const layers = [];
+      layersParam.forEach((layerParam) => {
+        let vectorTile;
+        if (isObject(layerParam) && (layerParam instanceof GeoPackageTile)) {
+          vectorTile = layerParam;
+        }
+        layers.push(vectorTile);
+      });
+
+      this.getImpl().addGeoPackageTile(layers);
+      this.fire(EventType.ADDED_LAYER, [layers]);
+      this.fire(EventType.ADDED_GEOPACKAGE_TILE, [layers]);
+    }
+    return this;
+  }
+
+  /**
+   * This function gets the geopackage tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  getGeoPackageVector(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (isUndefined(MapImpl.prototype.getGeoPackageVector)) {
+      Exception('La implementación usada no posee el método getWFS');
+    }
+
+    if (isNull(layersParam)) {
+      layersParam = [];
+    } else if (!isArray(layersParam)) {
+      layersParam = [layersParam];
+    }
+
+    let filters = [];
+    if (layersParam.length > 0) {
+      filters = layersParam.map((layerParam) => {
+        return parameter.layer(layerParam, LayerType.GeoPackageVector);
+      });
+    }
+
+    const layers = this.getImpl().getGeoPackageVector(filters).sort(Map.LAYER_SORT);
+
+    return layers;
+  }
+
+  /**
+   * This function removes the geopackage tile layers from map.
+   *
+   * @function
+   * @public
+   * @api
+   */
+  removeGeoPackageVector(layersParam) {
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.removeGeoPackageVector)) {
+        Exception('La implementación usada no posee el método removeWFS');
+      }
+      const layers = this.getGeoPackageVector(layersParam);
+      if (layers.length > 0) {
+        layers.forEach((layer) => {
+          this.featuresHandler_.removeLayer(layer);
+        });
+        this.getImpl().removeGeoPackageVector(layers);
+      }
+    }
+    return this;
+  }
+
+  /**
+   * This function adds the geopackage tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addGeoPackageVector(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.addGeoPackageVector)) {
+        Exception('La implementación usada no posee el método addWFS');
+      }
+
+      if (!isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      const layers = [];
+      layersParam.forEach((layerParam) => {
+        let vectorTile;
+        if (isObject(layerParam) && (layerParam instanceof GeoPackageVector)) {
+          vectorTile = layerParam;
+        }
+        layers.push(vectorTile);
+      });
+
+      this.getImpl().addGeoPackageVector(layers);
+      this.fire(EventType.ADDED_LAYER, [layers]);
+      this.fire(EventType.ADDED_GEOPACKAGE_VECTOR, [layers]);
+    }
+    return this;
+  }
+
+  /**
+   * This function adds the geopackage layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addGeoPackage(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.addGeoPackage)) {
+        Exception('La implementación usada no posee el método addWFS');
+      }
+
+      if (!isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      const geopackageLayers = [];
+
+      geopackageLayers.forEach((geopackageLayer) => {
+        if (geopackageLayer instanceof GeoPackage) {
+          geopackageLayer.addTo(this);
+        }
+      });
+      this.fire(EventType.ADDED_LAYER, [geopackageLayers]);
+      this.fire(EventType.ADDED_GEOPACKAGE, [geopackageLayers]);
+    }
+    return this;
+  }
+
+  /**
+   *
+   */
+  removeGeoPackage() {}
+
+  /**
+   *
+   */
+  getGeoPackage() {}
 
   /**
    * This function gets controls specified by the user

@@ -79,6 +79,30 @@ export const ADDED_MBTILES = 'added:mbtiles';
  * @type {string}
  * @api
  */
+export const ADDED_GEOPACKAGE = 'added:geopackage';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const ADDED_GEOPACKAGE_TILE = 'added:geopackagetile';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const ADDED_GEOPACKAGE_VECTOR = 'added:geopackagevector';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const REMOVED_LAYER = 'removed:layer';
 
 /**

@@ -141,6 +141,21 @@ export const isUrl = (obj) => {
   return isUrlParam;
 };
 
+/**
+ * @function
+ * @api
+ */
+export const isNumber = (number) => {
+  return typeof number === 'number';
+};
+
+/**
+ * @function
+ * @api
+ */
+export const isPositiveNumber = (number) => {
+  return isNumber(number) && number > 0;
+};
 
 /**
  *
@@ -1244,4 +1259,30 @@ export const bytesToBase64 = (bytes, format = 'image/png') => {
     result += '=';
   }
   return `data:${format};base64,${result}`;
+};
+
+/**
+ * @function
+ * @param {File|ArrayBuffer|Response|Uint8Array} data
+ * @return {Uint8Array}
+ */
+export const getUint8ArrayFromData = (data) => {
+  return new Promise((resolve, reject) => {
+    let uint8Array = new Uint8Array();
+    if (data instanceof ArrayBuffer) {
+      uint8Array = new Uint8Array(data);
+      resolve(uint8Array);
+    } else if (data instanceof File) {
+      data.arrayBuffer().then((buffer) => {
+        uint8Array = new Uint8Array(buffer);
+        resolve(uint8Array);
+      });
+    } else if (data instanceof Response) {
+      resolve(data.arrayBuffer().then(getUint8ArrayFromData));
+    } else if (data instanceof Uint8Array) {
+      resolve(data);
+    } else {
+      resolve(uint8Array);
+    }
+  });
 };
