@@ -18,14 +18,17 @@ class Tile {
   }
 
   init(data) {
-    sqljs({
-      locateFile: file => `${M.config.SQL_WASM_URL}${file}`,
-    }).then((SQL) => {
-      getUint8ArrayFromData(data).then((uint8Array) => {
-        this.db_ = new SQL.Database(uint8Array);
+    this.initPromise_ = new Promise((resolve, reject) => {
+      sqljs({
+        locateFile: file => `${M.config.SQL_WASM_URL}${file}`,
+      }).then((SQL) => {
+        getUint8ArrayFromData(data).then((uint8Array) => {
+          this.db_ = new SQL.Database(uint8Array);
+          resolve(this.db_);
+        });
+      }).catch((err) => {
+        reject(err);
       });
-    }).catch((err) => {
-      throw err;
     });
   }
 
@@ -47,6 +50,19 @@ class Tile {
 
   setTile(tileCoord, tile) {
     this.tiles_[tileCoord] = tile;
+  }
+
+  getExtent() {
+    return this.initPromise_.then((db) => {
+      let extent = null;
+      const SELECT_SQL = 'select value from metadata where name="bounds"';
+      const query = db.exec(SELECT_SQL)[0];
+      if (query) {
+        const value = query.values[0][0];
+        extent = value.split(',').map(Number.parseFloat);
+      }
+      return extent;
+    });
   }
 }
 

@@ -2,7 +2,7 @@
  * @module M/impl/layer/MBTiles
  */
 import { isNullOrEmpty } from 'M/util/Utils';
-import { get as getProj } from 'ol/proj';
+import { get as getProj, transformExtent } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
 import TileGrid from 'ol/tilegrid/TileGrid';
 import { getBottomLeft, getWidth } from 'ol/extent';
@@ -127,29 +127,35 @@ class MBTiles extends Layer {
    */
   addTo(map) {
     this.map = map;
-    const projection = getProj('EPSG:3857');
+    const { code } = this.map.getProjection();
+    const projection = getProj(code);
     const extent = projection.getExtent();
 
     const resolutions = generateResolutions(extent, this.tileSize_, 16);
     this.fetchSource().then((tileProvider) => {
       this.tileProvider_ = tileProvider;
-      this.ol3Layer = new OLLayerTile({
-        visible: this.visibility,
-        opacity: this.opacity_,
-        zIndex: this.zIndex_,
-        extent,
-        source: new MBTilesSource({
-          projection,
-          tileLoadFunction: tile => this.loadTile(tile, tileProvider),
-          tileGrid: new TileGrid({
-            extent,
-            origin: getBottomLeft(extent),
-            resolutions,
+      this.tileProvider_.getExtent().then((mbtilesExtent) => {
+        let reprojectedExtent = mbtilesExtent;
+        if (reprojectedExtent) {
+          reprojectedExtent = transformExtent(mbtilesExtent, 'EPSG:4326', code);
+        }
+        this.ol3Layer = new OLLayerTile({
+          visible: this.visibility,
+          opacity: this.opacity_,
+          zIndex: this.zIndex_,
+          extent: this.maxExtent_ || reprojectedExtent,
+          source: new MBTilesSource({
+            projection,
+            tileLoadFunction: tile => this.loadTile(tile, tileProvider),
+            tileGrid: new TileGrid({
+              extent,
+              origin: getBottomLeft(extent),
+              resolutions,
+            }),
           }),
-        }),
+        });
+        this.map.getMapImpl().addLayer(this.ol3Layer);
       });
-
-      this.map.getMapImpl().addLayer(this.ol3Layer);
     });
   }
 
@@ -189,7 +195,7 @@ class MBTiles extends Layer {
    * TODO
    */
   setMaxExtent(maxExtent) {
-    // this.ol3Layer.setExtent(maxExtent);
+    this.ol3Layer.setExtent(maxExtent);
   }
 
   /**
