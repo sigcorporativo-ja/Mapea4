@@ -38,10 +38,9 @@ class GeoPackageConnector {
     this.tileProviders_ = [];
 
     /**
-     * GeoPackage object that provides access to
-     * .gpkg data.
+     * GeoPackage object that provides access to .gpkg data.
      * @private
-     * @type {@ngageoint/geopackage/GeoPackage}
+     * @type {geopackage/GeoPackage}
      */
     this.gpkg_ = null;
 

@@ -1,5 +1,5 @@
 /**
- * @module M/impl/layer/GeoPackageTile
+ * @module M/impl/layer/GeoPackageVector
  */
 import { isNullOrEmpty } from 'M/util/Utils';
 // import { get as getProj } from 'ol/proj';

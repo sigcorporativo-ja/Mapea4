@@ -6,7 +6,7 @@ class GeoPackageAbstractProvider {
     /**
      * GeoPacakage connector
      * @private
-     * @type {@ngageoint/geopackage/GeoPackage}
+     * @type {geopackage/GeoPackage}
      */
     this.connector_ = connector;
 
