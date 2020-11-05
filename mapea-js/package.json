@@ -71,7 +71,7 @@
     "sql.js": "^1.3.2"
   },
   "scripts": {
-    "build": "./node/npm run build:core && ./node/npm run build:plugins && ./node/npm run build:plugins-extern",
+    "build": "cross-env NODE_OPTIONS=--max_old_space_size=2048 ./node/npm run build:core && ./node/npm run build:plugins && ./node/npm run build:plugins-extern",
     "build:sourcemap": "npm run prebuild && npm run build:core -- --source-map && npm run build:plugins",
     "build:core": "webpack --config=webpack-config/webpack.production-core.config.js",
     "build:plugins": "webpack --config=webpack-config/webpack.production-plugins.config.js",
