@@ -3,7 +3,7 @@
  */
 import MObject from '../Object.js';
 import GeoPackageProvider from '../geopackage/GeoPackageConnector.js';
-import GeoPackageVector from './GeoPackageVector.js';
+import GeoJSON from './GeoJSON.js';
 import GeoPackageTile from './GeoPackageTile.js';
 import { extend } from '../util/Utils.js';
 
@@ -54,10 +54,13 @@ class GeoPackage extends MObject {
     this.map_ = map;
     this.connector_.getVectorProviders().then((vectorProviders) => {
       vectorProviders.forEach((vectorProvider) => {
-        // name, legend, maxExtent, style
+        const geojson = vectorProvider.getGeoJSON();
         const tableName = vectorProvider.getTableName();
         const optsExt = extend(this.options[tableName] || {}, { name: tableName });
-        const vectorLayer = new GeoPackageVector(optsExt);
+        const vectorLayer = new GeoJSON({
+          ...optsExt,
+          source: geojson,
+        });
 
         this.layers_[tableName] = vectorLayer;
         map.addLayers(vectorLayer);
@@ -66,9 +69,11 @@ class GeoPackage extends MObject {
 
     this.connector_.getTileProviders().then((tileProviders) => {
       tileProviders.forEach((tileProvider) => {
-        // name, legend, maxExtent, transparent
         const tableName = tileProvider.getTableName();
-        const optsExt = extend(this.options[tableName] || {}, { name: tableName });
+        const optsExt = extend(this.options[tableName] || {}, {
+          name: tableName,
+          legend: tableName,
+        });
         const tileLayer = new GeoPackageTile(optsExt, tileProvider);
 
         this.layers_[tableName] = tileLayer;
