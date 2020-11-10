@@ -103,6 +103,15 @@ export const MVT = 'MVT';
 export const MBTiles = 'MBTiles';
 
 /**
+ * MBTilesVector type
+ * @const
+ * @type {string}
+ * @public
+ * @api
+ */
+export const MBTilesVector = 'MBTilesVector';
+
+/**
  * GeoPackageVector type
  * @const
  * @type {string}
@@ -133,6 +142,7 @@ const layertypes = {
   WFS,
   WMTS,
   MBTiles,
+  MBTilesVector,
   OSM,
   Mapbox,
   GeoJSON,
@@ -177,6 +187,7 @@ export const know = (type) => {
     WFS,
     WMTS,
     MBTiles,
+    MBTilesVector,
     MVT,
     GeoPackageVector,
     GeoPackageTile,
