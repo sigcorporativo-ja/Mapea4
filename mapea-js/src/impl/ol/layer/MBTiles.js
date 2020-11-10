@@ -8,7 +8,7 @@ import TileGrid from 'ol/tilegrid/TileGrid';
 import { getBottomLeft, getWidth } from 'ol/extent';
 import * as LayerType from 'M/layer/Type';
 import TileProvider from 'M/provider/Tile';
-import MBTilesSource from '../source/MBTiles';
+import XYZ from 'ol/source/XYZ';
 import ImplMap from '../Map';
 import Layer from './Layer';
 
@@ -103,6 +103,11 @@ class MBTiles extends Layer {
      */
     this.opacity_ = typeof options.opacity === 'number' ? options.opacity : 1;
 
+    /**
+     * Z-index of the layer
+     * @private
+     * @type {number}
+     */
     this.zIndex_ = ImplMap.Z_INDEX[LayerType.MBTiles];
 
     this.visibility = userParameters.visibility === false ? userParameters.visibility : true;
@@ -122,6 +127,7 @@ class MBTiles extends Layer {
    * This function sets the map object of the layer
    *
    * @public
+   * @param {M/Map} map
    * @function
    * @api
    */
@@ -139,26 +145,56 @@ class MBTiles extends Layer {
         if (reprojectedExtent) {
           reprojectedExtent = transformExtent(mbtilesExtent, 'EPSG:4326', code);
         }
-        this.ol3Layer = new OLLayerTile({
-          visible: this.visibility,
-          opacity: this.opacity_,
-          zIndex: this.zIndex_,
-          extent: this.maxExtent_ || reprojectedExtent,
-          source: new MBTilesSource({
+        this.tileProvider_.getFormat().then((format) => {
+          this.ol3Layer = this.createLayer({
+            tileProvider,
+            resolutions,
+            extent: reprojectedExtent,
+            sourceExtent: extent,
             projection,
-            tileLoadFunction: tile => this.loadTile(tile, tileProvider),
-            tileGrid: new TileGrid({
-              extent,
-              origin: getBottomLeft(extent),
-              resolutions,
-            }),
-          }),
+            format,
+          });
+
+          this.map.getMapImpl().addLayer(this.ol3Layer);
         });
-        this.map.getMapImpl().addLayer(this.ol3Layer);
       });
     });
   }
 
+  /** This function create the implementation ol layer.
+   *
+   * @param {object} opts
+   * @return {ol/layer/TileLayer|ol/layer/VectorTile}
+   * @api
+   */
+  createLayer(opts) {
+    const layer = new OLLayerTile({
+      visible: this.visibility,
+      opacity: this.opacity_,
+      zIndex: this.zIndex_,
+      extent: this.maxExtent_ || opts.extent,
+      source: new XYZ({
+        url: '{z},{x},{y}',
+        projection: opts.projection,
+        tileLoadFunction: tile => this.loadTile(tile, opts.tileProvider),
+        tileGrid: new TileGrid({
+          extent: opts.sourceExtent,
+          origin: getBottomLeft(opts.sourceExtent),
+          resolutions: opts.resolutions,
+        }),
+      }),
+    });
+    return layer;
+  }
+
+  /**
+   * This function is the custom tile loader function of
+   * TileLayer
+   * @param {ol/Tile} tile
+   * @param {M/provider/Tile} tileProvider
+   * @function
+   * @api
+   */
   loadTile(tile, tileProvider) {
     const imgTile = tile;
     const tileCoord = tile.getTileCoord();
@@ -166,6 +202,12 @@ class MBTiles extends Layer {
     imgTile.getImage().src = tileSrc;
   }
 
+  /**
+   * This function load the source mbtiles
+   * @function
+   * @returns {Promise<M/provider/Tile>}
+   * @api
+   */
   fetchSource() {
     return new Promise((resolve, reject) => {
       if (this.tileProvider_) {

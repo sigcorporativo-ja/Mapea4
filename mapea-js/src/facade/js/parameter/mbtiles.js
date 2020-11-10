@@ -58,7 +58,7 @@ const getParameter = ({
  * @public
  * @api
  */
-const wms = (userParameters) => {
+const mbtiles = (userParameters) => {
   let layers = [];
 
   // checks if the param is null or empty
@@ -113,4 +113,4 @@ const wms = (userParameters) => {
   return layers;
 };
 
-export default wms;
+export default mbtiles;

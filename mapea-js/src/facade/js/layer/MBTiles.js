@@ -35,7 +35,7 @@ class MBTiles extends LayerBase {
     /**
      * Implementation of this layer
      * @public
-     * @type {M/impl/layer/MBTiles}
+     * @type {M/impl/layer/MBTilesVector}
      */
     const impl = new MBTilesImpl(userParameters, options, vendorOptions);
 
@@ -97,9 +97,7 @@ class MBTiles extends LayerBase {
     let equals = false;
 
     if (obj instanceof MBTiles) {
-      equals = (this.url === obj.url);
-      equals = equals && (this.name === obj.name);
-      equals = equals && (this.options === obj.options);
+      equals = this.name === obj.name;
     }
     return equals;
   }
