@@ -45,7 +45,7 @@ class GeoPackageTile extends Layer {
      * @private
      * @type {number}
      */
-    this.zIndex_ = ImplMap.Z_INDEX[LayerType.GeoPackageTile];
+    this.zIndex_ = typeof userParameters.zIndex === 'number' ? userParameters.zIndex : ImplMap.Z_INDEX[LayerType.GeoPackageTile];
 
     /**
      * Visibility of layer
@@ -125,6 +125,13 @@ class GeoPackageTile extends Layer {
     this.map.getMapImpl().addLayer(this.ol3Layer);
   }
 
+  /**
+   * This function load the image tile from x y z coordinates.
+   *
+   * @param {M/geopackage/TileProvider} tile
+   * @function
+   * @api
+   */
   loadTile(tile) {
     const imgTile = tile;
     const [z, x, y] = tile.getTileCoord();
@@ -134,7 +141,7 @@ class GeoPackageTile extends Layer {
   }
 
   /**
-   * This function set facade class OSM
+   * This function set facade layer GeoPackageTile
    *
    * @function
    * @api
@@ -144,10 +151,10 @@ class GeoPackageTile extends Layer {
   }
 
   /**
-   * TODO
+   * This function sets the maximum extent of the layer
    */
   setMaxExtent(maxExtent) {
-    // this.ol3Layer.setExtent(maxExtent);
+    this.ol3Layer.setExtent(maxExtent);
   }
 
   /**

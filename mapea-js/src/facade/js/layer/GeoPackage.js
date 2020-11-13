@@ -24,7 +24,7 @@ class GeoPackage extends MObject {
 
     /**
      * Layers of the geopackage
-     * @type {M/layer/GeoPackageTile|M/layer/GeoPackageVector}
+     * @type {M/layer/GeoPackageTile|M/layer/GeoJSON}
      * @private
      */
     this.layers_ = {};
@@ -85,7 +85,7 @@ class GeoPackage extends MObject {
   /**
    * This method gets the layers of geopackage
    * @function
-   * @return {array<M/layer/GeoPackageTile|M/layer/GeoPackageVector>}
+   * @return {array<M/layer/GeoPackageTile|M/layer/GeoJSON>}
    * @api
    */
   getLayers() {
@@ -96,7 +96,7 @@ class GeoPackage extends MObject {
    * This method gets the layer of geopackage by table name
    * @function
    * @param {string} tableName
-   * @return {M/layer/GeoPackageTile|M/layer/GeoPackageVector}
+   * @return {M/layer/GeoPackageTile|M/layer/GeoJSON}
    * @api
    */
   getLayer(tableName) {

@@ -262,7 +262,6 @@ class Map extends MObject {
       this.removeMVT(knowLayers);
       this.removeMBTiles(knowLayers);
       this.removeGeoPackageTile(knowLayers);
-      this.removeGeoPackageVector(knowLayers);
     }
 
     if (unknowLayers.length > 0) {
@@ -2468,7 +2467,6 @@ Map.Z_INDEX[LayerType.OSM] = 2000;
 Map.Z_INDEX[LayerType.Mapbox] = 2000;
 Map.Z_INDEX[LayerType.MBTiles] = 2000;
 Map.Z_INDEX[LayerType.GeoPackageTile] = 2000;
-Map.Z_INDEX[LayerType.GeoPackageVector] = 3000;
 Map.Z_INDEX[LayerType.KML] = 3000;
 Map.Z_INDEX[LayerType.MBTilesVector] = 9999;
 Map.Z_INDEX[LayerType.WFS] = 9999;
