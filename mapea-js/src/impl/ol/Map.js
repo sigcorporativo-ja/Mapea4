@@ -1570,7 +1570,7 @@ class Map extends MObject {
    * @api
    */
   removeGeoPackageTile(layers) {
-    const tileLayers = this.getMVT(layers);
+    const tileLayers = this.getGeoPackageTile(layers);
     tileLayers.forEach((tileLayer) => {
       this.layers_ = this.layers_.filter(layer => !layer.equals(tileLayer));
       tileLayer.getImpl().destroy();

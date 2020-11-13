@@ -1610,20 +1610,11 @@ class Map extends Base {
         layersParam = [layersParam];
       }
 
-      const geopackageLayers = [];
-      layersParam.forEach((layerParam) => {
-        let vectorTile;
-        if (isObject(layerParam) && (layerParam instanceof MVT)) {
-          vectorTile = layerParam;
-        } else if (!(layerParam instanceof Layer)) {
-          try {
-            vectorTile = new MVT(layerParam, layerParam.options);
-          } catch (err) {
-            Dialog.error(err.toString());
-            throw err;
-          }
-        }
-        geopackageLayers.push(vectorTile);
+      const geopackageLayers = layersParam.filter(layerParam => layerParam instanceof GeoPackage);
+      geopackageLayers.forEach((geopackageLayer) => {
+        geopackageLayer.removeLayers();
+        this.geopackages_ = this.geopackages_
+          .filter(geopackage => !geopackage.equals(geopackageLayer));
       });
 
       this.fire(EventType.REMOVED_LAYER, [geopackageLayers]);

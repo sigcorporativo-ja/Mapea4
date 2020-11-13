@@ -5,7 +5,7 @@ import MObject from '../Object.js';
 import GeoPackageProvider from '../geopackage/GeoPackageConnector.js';
 import GeoJSON from './GeoJSON.js';
 import GeoPackageTile from './GeoPackageTile.js';
-import { extend } from '../util/Utils.js';
+import { extend, generateRandom } from '../util/Utils.js';
 
 /**
  * @classdesc
@@ -21,6 +21,13 @@ class GeoPackage extends MObject {
    */
   constructor(data, options = {}) {
     super({});
+
+    /**
+     * Id of the GeoPackage
+     * @type{}
+     * @private
+     */
+    this.id_ = generateRandom('GeoPackage_');
 
     /**
      * Layers of the geopackage
@@ -42,6 +49,16 @@ class GeoPackage extends MObject {
      * @public
      */
     this.options = options;
+  }
+
+  /**
+   * This functions gets the id of the GeoPackage
+   * @public
+   * @function
+   * @api
+   */
+  getId() {
+    return this.id_;
   }
 
   /**
@@ -120,6 +137,25 @@ class GeoPackage extends MObject {
    */
   removeLayer(tableName) {
     this.map_.removeLayers(this.getLayer(tableName));
+  }
+
+  /**
+   * Checks if an object is equal to this GeoPackage.
+   *
+   * @function
+   * @param {Object} obj Object to to comapre
+   * @return {boolean} True if equal, false otherwise
+   * @public
+   * @api
+   */
+  equals(obj) {
+    let equals = false;
+
+    if (obj instanceof GeoPackage) {
+      equals = this.id === obj.id;
+    }
+
+    return equals;
   }
 }
 
