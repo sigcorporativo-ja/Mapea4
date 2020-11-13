@@ -36,6 +36,7 @@
             <filtering>true</filtering>
             <includes>
                <include>**/*.properties</include>
+               <include>**/resourcesPlugins.json</include>
             </includes>
          </resource>
       </resources>

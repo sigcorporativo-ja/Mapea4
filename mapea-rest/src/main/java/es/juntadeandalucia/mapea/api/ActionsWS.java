@@ -256,7 +256,7 @@ public class ActionsWS {
 
 		try {
 			String file = new String(Files.readAllBytes(Paths.get(context
-					.getRealPath("/files/resourcesPlugins.json"))));
+					.getRealPath("/WEB-INF/classes/resourcesPlugins.json"))));
 			JSONArray allPlugins = (JSONArray) new JSONObject(file)
 					.get("plugins");
 			JSONArray arrayResults = new JSONArray();
