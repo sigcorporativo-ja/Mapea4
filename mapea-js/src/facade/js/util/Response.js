@@ -64,7 +64,7 @@ class Response {
     this.text = xmlHttpResponse.responseText;
     this.xml = xmlHttpResponse.responseXML;
     this.code = xmlHttpResponse.status;
-    this.error = (xmlHttpResponse.statusText !== 'OK');
+    this.error = xmlHttpResponse.statusText !== '' && xmlHttpResponse.statusText !== 'OK';
 
     let headers = xmlHttpResponse.getAllResponseHeaders();
     headers = headers.split('\n');
