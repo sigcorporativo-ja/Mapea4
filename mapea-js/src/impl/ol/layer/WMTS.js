@@ -394,7 +394,7 @@ class WMTS extends LayerBase {
       if (!isNullOrEmpty(source)) {
         const { tileGrid } = source;
         tcr = tileGrid.getTileCoordForCoordAndZ(coordinate, zoom);
-        tcr[2] = -tcr[2] - 1;
+        // tcr[2] = -tcr[2] - 1;
       }
     }
     return tcr.slice(1);
