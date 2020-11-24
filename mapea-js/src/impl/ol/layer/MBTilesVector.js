@@ -2,6 +2,7 @@
  * @module M/impl/layer/MBTilesVector
  */
 import { isNullOrEmpty } from 'M/util/Utils';
+import { inflate } from 'pako';
 import { get as getProj, transformExtent } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
 import OLLayerVectorTile from 'ol/layer/VectorTile';
@@ -61,6 +62,13 @@ class MBTilesVector extends Vector {
   constructor(userParameters, options = {}, vendorOptions) {
     // calls the super constructor
     super(options, vendorOptions);
+
+    /**
+     * User tile load function
+     * @public
+     * @type {function}
+     */
+    this.tileLoadFunction = userParameters.tileLoadFunction || null;
 
     /**
      * MBTilesVector url
@@ -133,6 +141,9 @@ class MBTilesVector extends Vector {
    */
   setVisible(visibility) {
     this.visibility = visibility;
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      this.ol3Layer.setVisible(visibility);
+    }
   }
 
   /**
@@ -150,42 +161,68 @@ class MBTilesVector extends Vector {
     const extent = projection.getExtent();
 
     const resolutions = generateResolutions(extent, this.tileSize_, 16);
-    this.fetchSource().then((tileProvider) => {
-      this.tileProvider_ = tileProvider;
-      this.tileProvider_.getExtent().then((mbtilesExtent) => {
-        let reprojectedExtent = mbtilesExtent;
-        if (reprojectedExtent) {
-          reprojectedExtent = transformExtent(mbtilesExtent, 'EPSG:4326', code);
-        }
-        this.tileProvider_.getFormat().then((format) => {
-          this.ol3Layer = this.createLayer({
-            tileProvider,
-            resolutions,
-            extent: reprojectedExtent,
-            sourceExtent: extent,
-            projection,
-            format,
-          });
+    if (!this.tileLoadFunction) {
+      this.fetchSource().then((tileProvider) => {
+        this.tileProvider_ = tileProvider;
+        this.tileProvider_.getExtent().then((mbtilesExtent) => {
+          let reprojectedExtent = mbtilesExtent;
+          if (reprojectedExtent) {
+            reprojectedExtent = transformExtent(mbtilesExtent, 'EPSG:4326', code);
+          }
+          this.tileProvider_.getFormat().then((format) => {
+            this.ol3Layer = this.createLayer({
+              tileProvider,
+              resolutions,
+              extent: reprojectedExtent,
+              sourceExtent: extent,
+              projection,
+              format,
+            });
 
-          this.ol3Layer
-            .getSource().on(TileEventType.TILELOADERROR, evt => this.checkAllTilesLoaded_(evt));
-          this.ol3Layer
-            .getSource().on(TileEventType.TILELOADEND, evt => this.checkAllTilesLoaded_(evt));
+            this.ol3Layer
+              .getSource().on(TileEventType.TILELOADERROR, evt => this.checkAllTilesLoaded_(evt));
+            this.ol3Layer
+              .getSource().on(TileEventType.TILELOADEND, evt => this.checkAllTilesLoaded_(evt));
 
-          this.map.on(EventType.CHANGE_ZOOM, () => {
-            if (this.map) {
-              const newZoom = this.map.getZoom();
-              if (this.lastZoom_ !== newZoom) {
-                this.features_.length = 0;
-                this.lastZoom_ = newZoom;
+            this.map.on(EventType.CHANGE_ZOOM, () => {
+              if (this.map) {
+                const newZoom = this.map.getZoom();
+                if (this.lastZoom_ !== newZoom) {
+                  this.features_.length = 0;
+                  this.lastZoom_ = newZoom;
+                }
               }
-            }
-          });
+            });
 
-          this.map.getMapImpl().addLayer(this.ol3Layer);
+            this.map.getMapImpl().addLayer(this.ol3Layer);
+          });
         });
       });
-    });
+    } else {
+      this.ol3Layer = this.createLayer({
+        resolutions,
+        extent,
+        sourceExtent: extent,
+        projection,
+      });
+
+      this.ol3Layer
+        .getSource().on(TileEventType.TILELOADERROR, evt => this.checkAllTilesLoaded_(evt));
+      this.ol3Layer
+        .getSource().on(TileEventType.TILELOADEND, evt => this.checkAllTilesLoaded_(evt));
+
+      this.map.on(EventType.CHANGE_ZOOM, () => {
+        if (this.map) {
+          const newZoom = this.map.getZoom();
+          if (this.lastZoom_ !== newZoom) {
+            this.features_.length = 0;
+            this.lastZoom_ = newZoom;
+          }
+        }
+      });
+
+      this.map.getMapImpl().addLayer(this.ol3Layer);
+    }
   }
 
   /** This function create the implementation ol layer.
@@ -195,6 +232,10 @@ class MBTilesVector extends Vector {
    * @api
    */
   createLayer(opts) {
+    let tileLoadFn = this.loadVectorTileWithProvider;
+    if (this.tileLoadFunction) {
+      tileLoadFn = this.loadVectorTile;
+    }
     const mvtFormat = new MVT();
     const layer = new OLLayerVectorTile({
       visible: this.visibility,
@@ -204,7 +245,7 @@ class MBTilesVector extends Vector {
       source: new OLSourceVectorTile({
         projection: opts.projection,
         url: '{z},{x},{y}',
-        tileLoadFunction: tile => this.loadVectorTile(tile, mvtFormat, opts),
+        tileLoadFunction: tile => tileLoadFn(tile, mvtFormat, opts),
         tileGrid: new TileGrid({
           extent: opts.sourceExtent,
           origin: getBottomLeft(opts.sourceExtent),
@@ -224,7 +265,7 @@ class MBTilesVector extends Vector {
    * @function
    * @api
    */
-  loadVectorTile(tile, formatter, opts) {
+  loadVectorTileWithProvider(tile, formatter, opts) {
     tile.setState(TileState.LOADING);
     tile.setLoader((extent, resolution, projection) => {
       const tileCoord = tile.getTileCoord();
@@ -245,7 +286,39 @@ class MBTilesVector extends Vector {
   }
 
   /**
-   *
+   * This function is the custom tile loader function of
+   * TileLayer
+   * @param {ol/Tile} tile
+   * @param {ol/format/MVT} formatter
+   * @param {M/provider/Tile} tileProvider
+   * @function
+   * @api
+   */
+  loadVectorTile(tile, formatter, opts, target) {
+    tile.setState(TileState.LOADING);
+    tile.setLoader((extent, resolution, projection) => {
+      const tileCoord = tile.getTileCoord();
+      target.tileLoadFunction(tileCoord[0], tileCoord[1], -tileCoord[2] - 1).then((_vectorTile) => {
+        if (_vectorTile) {
+          const vectorTile = inflate(_vectorTile);
+          const features = formatter.readFeatures(vectorTile, {
+            extent,
+            featureProjection: projection,
+          });
+          tile.setFeatures(features);
+          tile.setState(TileState.LOADED);
+        } else {
+          tile.setState(TileState.ERROR);
+        }
+      });
+    });
+  }
+
+  /**
+   * This function load the source mbtiles
+   * @function
+   * @returns {Promise<M/provider/Tile>}
+   * @api
    */
   fetchSource() {
     return new Promise((resolve, reject) => {

@@ -7,7 +7,7 @@ import OLLayerTile from 'ol/layer/Tile';
 import TileGrid from 'ol/tilegrid/TileGrid';
 import { getBottomLeft, getWidth } from 'ol/extent';
 import * as LayerType from 'M/layer/Type';
-import TileProvider from 'M/provider/Tile';
+import TileProvider, { DEFAULT_WHITE_TILE } from 'M/provider/Tile';
 import XYZ from 'ol/source/XYZ';
 import ImplMap from '../Map';
 import Layer from './Layer';
@@ -54,6 +54,13 @@ class MBTiles extends Layer {
   constructor(userParameters, options = {}, vendorOptions) {
     // calls the super constructor
     super(options, vendorOptions);
+
+    /**
+     * User tile load function
+     * @public
+     * @type {function}
+     */
+    this.tileLoadFunction = userParameters.tileLoadFunction || null;
 
     /**
      * MBTiles url
@@ -121,6 +128,9 @@ class MBTiles extends Layer {
    */
   setVisible(visibility) {
     this.visibility = visibility;
+    if (!isNullOrEmpty(this.ol3Layer)) {
+      this.ol3Layer.setVisible(visibility);
+    }
   }
 
   /**
@@ -138,27 +148,33 @@ class MBTiles extends Layer {
     const extent = projection.getExtent();
 
     const resolutions = generateResolutions(extent, this.tileSize_, 16);
-    this.fetchSource().then((tileProvider) => {
-      this.tileProvider_ = tileProvider;
-      this.tileProvider_.getExtent().then((mbtilesExtent) => {
-        let reprojectedExtent = mbtilesExtent;
-        if (reprojectedExtent) {
-          reprojectedExtent = transformExtent(mbtilesExtent, 'EPSG:4326', code);
-        }
-        this.tileProvider_.getFormat().then((format) => {
+    if (!this.tileLoadFunction) {
+      this.fetchSource().then((tileProvider) => {
+        this.tileProvider_ = tileProvider;
+        this.tileProvider_.getExtent().then((mbtilesExtent) => {
+          let reprojectedExtent = mbtilesExtent;
+          if (reprojectedExtent) {
+            reprojectedExtent = transformExtent(mbtilesExtent, 'EPSG:4326', code);
+          }
           this.ol3Layer = this.createLayer({
             tileProvider,
             resolutions,
             extent: reprojectedExtent,
             sourceExtent: extent,
             projection,
-            format,
           });
-
           this.map.getMapImpl().addLayer(this.ol3Layer);
         });
       });
-    });
+    } else {
+      this.ol3Layer = this.createLayer({
+        resolutions,
+        extent,
+        sourceExtent: extent,
+        projection,
+      });
+      this.map.getMapImpl().addLayer(this.ol3Layer);
+    }
   }
 
   /** This function create the implementation ol layer.
@@ -168,6 +184,10 @@ class MBTiles extends Layer {
    * @api
    */
   createLayer(opts) {
+    let tileLoadFn = this.loadTileWithProvider;
+    if (this.tileLoadFunction) {
+      tileLoadFn = this.loadTile;
+    }
     const layer = new OLLayerTile({
       visible: this.visibility,
       opacity: this.opacity_,
@@ -176,7 +196,7 @@ class MBTiles extends Layer {
       source: new XYZ({
         url: '{z},{x},{y}',
         projection: opts.projection,
-        tileLoadFunction: tile => this.loadTile(tile, opts.tileProvider),
+        tileLoadFunction: tile => tileLoadFn(tile, opts.tileProvider, this),
         tileGrid: new TileGrid({
           extent: opts.sourceExtent,
           origin: getBottomLeft(opts.sourceExtent),
@@ -189,17 +209,37 @@ class MBTiles extends Layer {
 
   /**
    * This function is the custom tile loader function of
+   * TileLayer with tile provider.
+   * @param {ol/Tile} tile
+   * @param {M/provider/Tile} tileProvider
+   * @function
+   * @api
+   */
+  loadTileWithProvider(tile, tileProvider) {
+    const imgTile = tile;
+    const tileCoord = tile.getTileCoord();
+    const tileSrc = tileProvider.getTile([tileCoord[0], tileCoord[1], -tileCoord[2] - 1]);
+    imgTile.getImage().src = tileSrc;
+  }
+
+  /**
+   * This function is the custom tile loader function of
    * TileLayer
    * @param {ol/Tile} tile
    * @param {M/provider/Tile} tileProvider
    * @function
    * @api
    */
-  loadTile(tile, tileProvider) {
+  loadTile(tile, opts, target) {
     const imgTile = tile;
     const tileCoord = tile.getTileCoord();
-    const tileSrc = tileProvider.getTile([tileCoord[0], tileCoord[1], -tileCoord[2] - 1]);
-    imgTile.getImage().src = tileSrc;
+    target.tileLoadFunction(tileCoord[0], tileCoord[1], -tileCoord[2] - 1).then((tileSrc) => {
+      if (tileSrc) {
+        imgTile.getImage().src = tileSrc;
+      } else {
+        imgTile.getImage().src = DEFAULT_WHITE_TILE;
+      }
+    });
   }
 
   /**
