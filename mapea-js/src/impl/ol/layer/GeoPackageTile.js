@@ -9,6 +9,8 @@ import XYZ from 'ol/source/XYZ';
 import ImplMap from '../Map';
 import Layer from './Layer';
 
+const DEFAULT_WHITE_TILE = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQAAAAEACAQAAAD2e2DtAAABu0lEQVR42u3SQREAAAzCsOHf9F6oIJXQS07TxQIABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAgAACwAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAAsAEAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAAgAASAABIAAEAACQAAIAAEgAASAABAAAkAACAABIAAEgAAQAAJAAKg9kK0BATSHu+YAAAAASUVORK5CYII=';
+
 /**
  * @classdesc
  * @api
@@ -25,6 +27,13 @@ class GeoPackageTile extends Layer {
   constructor(userParameters, provider) {
     // calls the super constructor
     super({}, {});
+
+    /**
+     * User tile load function
+     * @public
+     * @type {function}
+     */
+    this.tileLoadFunction = userParameters.tileLoadFunction || null;
 
     /**
      * Layer extent
@@ -100,6 +109,11 @@ class GeoPackageTile extends Layer {
    * @api
    */
   addTo(map) {
+    let tileLoadFn = this.loadTileWithProvider;
+    if (this.tileLoadFunction) {
+      tileLoadFn = this.loadTile;
+    }
+
     this.map = map;
     const { code } = this.map.getProjection();
     const projection = getProj(code);
@@ -118,7 +132,7 @@ class GeoPackageTile extends Layer {
         maxZoom,
         projection,
         url: '{z},{x},{y}',
-        tileLoadFunction: tile => this.loadTile(tile),
+        tileLoadFunction: tile => tileLoadFn(tile, this),
       }),
     });
 
@@ -132,11 +146,31 @@ class GeoPackageTile extends Layer {
    * @function
    * @api
    */
-  loadTile(tile) {
+  loadTileWithProvider(tile) {
     const imgTile = tile;
     const [z, x, y] = tile.getTileCoord();
     this.provider_.getTile(x, y, z).then((imgSrc) => {
       imgTile.getImage().src = imgSrc;
+    });
+  }
+
+  /**
+   * This function is the custom tile loader function of
+   * TileLayer
+   * @param {ol/Tile} tile
+   * @param {M/provider/Tile} tileProvider
+   * @function
+   * @api
+   */
+  loadTile(tile, opts, target) {
+    const imgTile = tile;
+    const [z, x, y] = tile.getTileCoord();
+    target.tileLoadFunction(x, y, z).then((tileSrc) => {
+      if (tileSrc) {
+        imgTile.getImage().src = tileSrc;
+      } else {
+        imgTile.getImage().src = DEFAULT_WHITE_TILE;
+      }
     });
   }
 
