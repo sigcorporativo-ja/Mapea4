@@ -65,7 +65,11 @@ const replaceImportsPath = (src, level) => {
  */
 const copyFile = (src, dest) => {
   if (!fse.existsSync(dest)) {
-    fse.copyFileSync(src, dest);
+    if (src.match(/fonts\//)) {
+      fse.createReadStream(src).pipe(fse.createWriteStream(dest));
+    } else {
+      fse.copyFileSync(src, dest);
+    }
   }
 };
 
