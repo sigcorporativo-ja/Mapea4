@@ -66,16 +66,37 @@ class GeoPackageTile extends Layer {
     /**
      * Tile size
      * @private
-     * @type {boolean}
+     * @type {number}
      */
     this.tileSize_ = userParameters.tileSize || 256;
+
+    /**
+     * Extent of the layer
+     * @private
+     * @type {number}
+     */
+    this.extent_ = userParameters.extent || null;
+
+    /**
+     * Minimum zoom
+     * @private
+     * @type {number}
+     */
+    this.minZoom_ = userParameters.minZoom || null;
+
+    /**
+     * Maximum zoom
+     * @private
+     * @type {number}
+     */
+    this.maxZoom_ = userParameters.maxZoom || null;
 
     /**
      * Tile provider
      * @private
      * @type {GeoPackageTileProvider}
      */
-    this.provider_ = provider;
+    this.provider = provider;
   }
 
   /**
@@ -117,9 +138,9 @@ class GeoPackageTile extends Layer {
     this.map = map;
     const { code } = this.map.getProjection();
     const projection = getProj(code);
-    const extent = this.provider_.getExtent();
-    const minZoom = this.provider_.getMinZoom();
-    const maxZoom = this.provider_.getMaxZoom();
+    const extent = this.extent_ || this.provider.getExtent();
+    const minZoom = this.minZoom_ || this.provider.getMinZoom();
+    const maxZoom = this.maxZoom_ || this.provider.getMaxZoom();
 
     this.ol3Layer = new OLLayerTile({
       visible: this.visibility,
@@ -146,10 +167,10 @@ class GeoPackageTile extends Layer {
    * @function
    * @api
    */
-  loadTileWithProvider(tile) {
+  loadTileWithProvider(tile, target) {
     const imgTile = tile;
     const [z, x, y] = tile.getTileCoord();
-    this.provider_.getTile(x, y, z).then((imgSrc) => {
+    target.provider.getTile(x, y, z).then((imgSrc) => {
       imgTile.getImage().src = imgSrc;
     });
   }
@@ -162,7 +183,7 @@ class GeoPackageTile extends Layer {
    * @function
    * @api
    */
-  loadTile(tile, opts, target) {
+  loadTile(tile, target) {
     const imgTile = tile;
     const [z, x, y] = tile.getTileCoord();
     target.tileLoadFunction(x, y, z).then((tileSrc) => {
