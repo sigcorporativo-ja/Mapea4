@@ -6,6 +6,7 @@ import GeoPackageProvider from '../geopackage/GeoPackageConnector.js';
 import GeoJSON from './GeoJSON.js';
 import GeoPackageTile from './GeoPackageTile.js';
 import { extend, generateRandom } from '../util/Utils.js';
+import { LOAD_LAYERS } from '../event/eventtype.js';
 
 /**
  * @classdesc
@@ -49,6 +50,20 @@ class GeoPackage extends MObject {
      * @public
      */
     this.options = options;
+
+    /**
+     * Attribute loaded vector layers flag.
+     * @private
+     * @type {boolean}
+     */
+    this.loadedVectorLayers_ = false;
+
+    /**
+     * Attribute loaded vector layers flag.
+     * @private
+     * @type {boolean}
+     */
+    this.loadedTileLayers_ = false;
   }
 
   /**
@@ -82,6 +97,12 @@ class GeoPackage extends MObject {
         this.layers_[tableName] = vectorLayer;
         map.addLayers(vectorLayer);
       });
+
+      this.loadedVectorLayers_ = true;
+
+      if (this.loadedTileLayers_) {
+        this.fire(LOAD_LAYERS, [this.layers_]);
+      }
     });
 
     this.connector_.getTileProviders().then((tileProviders) => {
@@ -96,6 +117,11 @@ class GeoPackage extends MObject {
         this.layers_[tableName] = tileLayer;
         map.addLayers(tileLayer);
       });
+      this.loadedTileLayers_ = true;
+
+      if (this.loadedVectorLayers_) {
+        this.fire(LOAD_LAYERS, [this.layers_]);
+      }
     });
   }
 
