@@ -3,6 +3,7 @@
  */
 import OLFeature from 'ol/Feature';
 import { isFunction, isNullOrEmpty } from 'M/util/Utils';
+import RenderFeature from 'ol/render/Feature';
 import Style from './Style';
 import Feature from '../feature/Feature';
 
@@ -75,7 +76,7 @@ class Simple extends Style {
     const templateRegexp = /^\{\{([^}]+)\}\}$/;
     let attrFeature = attr;
     if (templateRegexp.test(attr) || isFunction(attr)) {
-      if (!(olFeature instanceof OLFeature)) {
+      if (!(olFeature instanceof OLFeature || olFeature instanceof RenderFeature)) {
         attrFeature = undefined;
       } else {
         const feature = Feature.olFeature2Facade(olFeature, false);
