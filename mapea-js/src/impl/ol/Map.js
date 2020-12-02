@@ -192,9 +192,16 @@ class Map extends MObject {
    */
   getBaseLayers() {
     const baseLayers = this.getLayers().filter((layer) => {
+      const layerTypes = [
+        LayerType.WMS,
+        LayerType.OSM,
+        LayerType.Mapbox,
+        LayerType.WMTS,
+        LayerType.MBTiles,
+        LayerType.GeoPackageTile,
+      ];
       let isBaseLayer = false;
-      if ((layer.type === LayerType.WMS) || (layer.type === LayerType.OSM) ||
-        (layer.type === LayerType.Mapbox) || (layer.type === LayerType.WMTS)) {
+      if (layerTypes.includes(layer.type)) {
         isBaseLayer = (layer.transparent !== true);
       }
       return isBaseLayer;
@@ -1138,25 +1145,36 @@ class Map extends MObject {
    */
   addMBTiles(layers) {
     const baseLayers = this.getBaseLayers();
-    const existsBaseLayer = (baseLayers.length > 0);
+    let existsBaseLayer = (baseLayers.length > 0);
 
+    const addedLayers = [];
     layers.forEach((layer) => {
       // checks if layer is WFS and was added to the map
       if (layer.type === LayerType.MBTiles) {
         if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
-          layer.setZIndex(layer.getZIndex());
-          if (layer.getZIndex() == null) {
+          addedLayers.push(layer);
+
+          if (layer.transparent !== true) {
+            layer.setVisible(!existsBaseLayer);
+            existsBaseLayer = true;
+            layer.setZIndex(Map.Z_INDEX_BASELAYER);
+          } else if (layer.getZIndex() == null) {
             const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.MBTiles];
             layer.setZIndex(zIndex);
-          }
-          if (!existsBaseLayer) {
-            this.updateResolutionsFromBaseLayer();
           }
         }
       }
     });
+
+    // calculate resolutions if layers were added and there is not any base layer
+    // or if some base layer was added
+    const calculateResolutions = (addedLayers.length > 0 && !existsBaseLayer) ||
+      addedLayers.some(l => l.transparent !== true && l.isVisible());
+    if (calculateResolutions) {
+      this.updateResolutionsFromBaseLayer();
+    }
 
     return this;
   }
@@ -1589,24 +1607,40 @@ class Map extends MObject {
    */
   addGeoPackageTile(layers) {
     const baseLayers = this.getBaseLayers();
-    const existsBaseLayer = baseLayers.length > 0;
+    let existsBaseLayer = baseLayers.length > 0;
 
+    const addedLayers = [];
     layers.forEach((layer) => {
       if (layer.type === LayerType.GeoPackageTile) {
         if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
+          addedLayers.push(layer);
           layer.setZIndex(layer.getZIndex());
           if (layer.getZIndex() == null) {
             const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.GeoPackageTile];
             layer.setZIndex(zIndex);
           }
-          if (!existsBaseLayer) {
-            this.updateResolutionsFromBaseLayer();
-          }
+        }
+
+        if (layer.transparent !== true) {
+          layer.setVisible(!existsBaseLayer);
+          existsBaseLayer = true;
+          layer.setZIndex(Map.Z_INDEX_BASELAYER);
+        } else if (layer.getZIndex() == null) {
+          const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.MBTiles];
+          layer.setZIndex(zIndex);
         }
       }
     });
+
+    // calculate resolutions if layers were added and there is not any base layer
+    // or if some base layer was added
+    const calculateResolutions = (addedLayers.length > 0 && !existsBaseLayer) ||
+      addedLayers.some(l => l.transparent !== true && l.isVisible());
+    if (calculateResolutions) {
+      this.updateResolutionsFromBaseLayer();
+    }
 
     return this;
   }
@@ -1983,7 +2017,7 @@ class Map extends MObject {
     const oldZoom = olMap.getView().getUserZoom();
     const size = olMap.getSize();
 
-    const newView = new View({ projection });
+    const newView = new View({ projection, ...oldViewProperties });
     newView.setProperties(oldViewProperties);
     newView.setResolutions(resolutions);
     newView.setUserZoom(oldZoom);

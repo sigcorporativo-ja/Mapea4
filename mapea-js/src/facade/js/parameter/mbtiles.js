@@ -93,9 +93,16 @@ const mbtiles = (userParameters) => {
       attr: 'legend',
     });
 
+    const transparent = getParameter({
+      parameter: userParam,
+      type: 'boolean',
+      attr: 'transparent',
+    });
+
     let params;
     if (REGEXP_MBTILES.test(userParam) || isObject(userParam)) {
       params = {
+        transparent: transparent(REGEXP_MBTILES, 4),
         type,
         name: name(REGEXP_MBTILES, 3),
         url: url(REGEXP_MBTILES, 2),

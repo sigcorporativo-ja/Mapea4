@@ -117,6 +117,13 @@ class MBTiles extends Layer {
      */
     this.zIndex_ = ImplMap.Z_INDEX[LayerType.MBTiles];
 
+    /**
+     * Zoom levels of the layer
+     * @private
+     * @type {number}
+     */
+    this.zoomLevels_ = 16;
+
     this.visibility = userParameters.visibility === false ? userParameters.visibility : true;
   }
 
@@ -128,7 +135,33 @@ class MBTiles extends Layer {
    */
   setVisible(visibility) {
     this.visibility = visibility;
-    if (!isNullOrEmpty(this.ol3Layer)) {
+    // if this layer is base then it hides all base layers
+    if ((visibility === true) && (this.transparent !== true)) {
+      // hides all base layers
+      this.map.getBaseLayers().forEach((layer) => {
+        if (!layer.equals(this.facadeLayer_) && layer.isVisible()) {
+          layer.setVisible(false);
+        }
+      });
+
+      // set this layer visible
+      if (!isNullOrEmpty(this.ol3Layer)) {
+        this.ol3Layer.setVisible(visibility);
+      }
+
+      // updates resolutions and keep the bbox
+      this.map.getImpl().updateResolutionsFromBaseLayer();
+      // this.getExtentFromProvider().then((reprojectedExtent) => {
+      //   const bbox = this.map.getBbox();
+      //   if (bbox) {
+      //     const { x, y } = bbox;
+      //     if (x.min < reprojectedExtent[0] || x.max > reprojectedExtent[1] ||
+      //       y.min < reprojectedExtent[1] || y.max > reprojectedExtent[2]) {
+      //       this.map.setBbox(reprojectedExtent);
+      //     }
+      //   }
+      // });
+    } else if (!isNullOrEmpty(this.ol3Layer)) {
       this.ol3Layer.setVisible(visibility);
     }
   }
@@ -150,16 +183,12 @@ class MBTiles extends Layer {
     const resolutions = generateResolutions(extent, this.tileSize_, 16);
     if (!this.tileLoadFunction) {
       this.fetchSource().then((tileProvider) => {
-        this.tileProvider_ = tileProvider;
-        this.tileProvider_.getExtent().then((mbtilesExtent) => {
-          let reprojectedExtent = mbtilesExtent;
-          if (reprojectedExtent) {
-            reprojectedExtent = transformExtent(mbtilesExtent, 'EPSG:4326', code);
-          }
+        tileProvider.getZoomLevels().then((zoomLevels) => { this.zoomLevels_ = zoomLevels; });
+        this.getExtentFromProvider().then((reprojectedExtent) => {
           this.ol3Layer = this.createLayer({
             tileProvider,
             resolutions,
-            extent: reprojectedExtent,
+            extent: reprojectedExtent || extent,
             sourceExtent: extent,
             projection,
           });
@@ -175,6 +204,27 @@ class MBTiles extends Layer {
       });
       this.map.getMapImpl().addLayer(this.ol3Layer);
     }
+  }
+
+  /**
+   * This function gets the layer extent from the mbtile file.
+   * @function
+   * @return {Promise<array<number>>}
+   * @api
+   */
+  getExtentFromProvider() {
+    return new Promise((resolve) => {
+      this.fetchSource().then((tileProvider) => {
+        tileProvider.getExtent().then((extent) => {
+          const { code } = this.map.getProjection();
+          let reprojectedExtent;
+          if (extent) {
+            reprojectedExtent = transformExtent(extent, 'EPSG:4326', code);
+          }
+          resolve(reprojectedExtent);
+        });
+      });
+    });
   }
 
   /** This function create the implementation ol layer.
@@ -254,6 +304,7 @@ class MBTiles extends Layer {
         resolve(this.tileProvider_);
       } else if (this.source_) {
         const tileProvider = new TileProvider(this.source_);
+        this.tileProvider_ = tileProvider;
         resolve(tileProvider);
       } else if (this.url_) {
         throw new Error('');
@@ -278,6 +329,17 @@ class MBTiles extends Layer {
    */
   setMaxExtent(maxExtent) {
     this.ol3Layer.setExtent(maxExtent);
+  }
+
+  /**
+   * This function gets the number zoom levels of the layer.
+   * @function
+   * @public
+   * @return {number}
+   * @api
+   */
+  getNumZoomLevels() {
+    return this.zoomLevels_;
   }
 
   /**

@@ -107,7 +107,33 @@ class GeoPackageTile extends Layer {
    */
   setVisible(visibility) {
     this.visibility = visibility;
-    if (!isNullOrEmpty(this.ol3Layer)) {
+    // if this layer is base then it hides all base layers
+    if ((visibility === true) && (this.transparent !== true)) {
+      // hides all base layers
+      this.map.getBaseLayers().forEach((layer) => {
+        if (!layer.equals(this.facadeLayer_) && layer.isVisible()) {
+          layer.setVisible(false);
+        }
+      });
+
+      // set this layer visible
+      if (!isNullOrEmpty(this.ol3Layer)) {
+        this.ol3Layer.setVisible(visibility);
+      }
+
+      // updates resolutions and keep the bbox
+      this.map.getImpl().updateResolutionsFromBaseLayer();
+      // this.getExtentFromProvider().then((reprojectedExtent) => {
+      //   const bbox = this.map.getBbox();
+      //   if (bbox) {
+      //     const { x, y } = bbox;
+      //     if (x.min < reprojectedExtent[0] || x.max > reprojectedExtent[1] ||
+      //       y.min < reprojectedExtent[1] || y.max > reprojectedExtent[2]) {
+      //       this.map.setBbox(reprojectedExtent);
+      //     }
+      //   }
+      // });
+    } else if (!isNullOrEmpty(this.ol3Layer)) {
       this.ol3Layer.setVisible(visibility);
     }
   }

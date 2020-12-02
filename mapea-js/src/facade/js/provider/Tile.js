@@ -101,6 +101,17 @@ class Tile {
       return format;
     });
   }
+
+  getZoomLevels() {
+    let zoomLevels = 16;
+    const SELECT_SQL = 'select count(*) from (select zoom_level from tiles group by zoom_level)';
+    return this.executeQuery(SELECT_SQL).then((result) => {
+      if (result) {
+        zoomLevels = result.values[0][0];
+      }
+      return zoomLevels;
+    });
+  }
 }
 
 export default Tile;
