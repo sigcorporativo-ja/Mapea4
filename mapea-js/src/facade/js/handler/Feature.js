@@ -6,6 +6,7 @@ import { isFunction, includes } from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import Base from '../Base.js';
 import FacadeFeature from '../feature/Feature.js';
+import RenderFeature from '../feature/RenderFeature.js';
 import * as EventType from '../event/eventtype.js';
 import { getValue } from '../i18n/language.js';
 
@@ -137,7 +138,8 @@ class Features extends Base {
           this.leaveFeatures_(prevFeatures, layer, evt);
         } else if (hoveredFeatures.length > 0) {
           const newFeatures = hoveredFeatures
-            .filter(f => (f instanceof FacadeFeature) && !prevFeatures.some(pf => pf.equals(f)));
+            .filter(f => (f instanceof FacadeFeature || f instanceof RenderFeature) &&
+              !prevFeatures.some(pf => pf.equals(f)));
           const diffFeatures = prevFeatures.filter(f => !hoveredFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
           if (diffFeatures.length > 0) {
