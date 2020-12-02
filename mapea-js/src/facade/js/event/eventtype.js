@@ -215,6 +215,14 @@ export const LOAD = 'load';
  * @type {string}
  * @api
  */
+export const LOAD_LAYERS = 'load:layers';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const COMPLETED = 'completed';
 
 /**
