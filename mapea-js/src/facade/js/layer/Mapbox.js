@@ -20,8 +20,8 @@ class Mapbox extends LayerBase {
    *
    * @constructor
    * @extends {M.Layer}
-   * @param {string|Mx.parameters.WMS} userParameters parameters
-   * @param {Mx.parameters.LayerOptions} options provided by the user
+   * @param {string|Mx.parameters.Mapbox} userParameters parameters
+   * @param {Mx.parameters.LayerOptions} options options provided by the user
    * @param {Object} vendorOptions vendor options for the base library
    * @api
    */
@@ -133,10 +133,12 @@ class Mapbox extends LayerBase {
   }
 
   /**
-   * This function checks if an object is equals
-   * to this layer
+   * Checks if an object is equal to this layer, which means that it is a Mapbox Layer instance and
+   * has the same url, name and options.
    *
    * @function
+   * @param {object} obj Object to compare
+   * @return {boolean} True if equal, false otherwise
    * @api
    */
   equals(obj) {
