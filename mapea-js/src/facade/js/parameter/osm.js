@@ -1,9 +1,9 @@
 /**
  * @module M/parameter/osm
  */
-import { isNullOrEmpty, isString, normalize, isArray, isObject } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as LayerType from '../layer/Type';
+import { isNullOrEmpty, isString, normalize, isArray, isObject } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as LayerType from '../layer/Type.js';
 
 const OSM_REGEXP = /OSM\.*/;
 

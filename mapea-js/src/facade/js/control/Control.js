@@ -1,11 +1,11 @@
 /**
  * @module M/Control
  */
-import { isUndefined, isNullOrEmpty, removeHTML } from '../util/Utils';
-import Exception from '../exception/exception';
-import Base from '../Base';
-import * as EventType from '../event/eventtype';
-import { getValue } from '../i18n/language';
+import { isUndefined, isNullOrEmpty, removeHTML } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import Base from '../Base.js';
+import * as EventType from '../event/eventtype.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

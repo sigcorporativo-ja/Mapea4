@@ -1,8 +1,8 @@
 /**
  * @module M/filter
  */
-import FilterFunction from './Function';
-import { isNullOrEmpty } from '../util/Utils';
+import FilterFunction from './Function.js';
+import { isNullOrEmpty } from '../util/Utils.js';
 
 /**
  * @classdesc

@@ -1,9 +1,9 @@
 /**
  * @module M/language
  */
-import en from './en';
-import es from './es';
-import Exception from '../exception/exception';
+import en from './en.json';
+import es from './es.json';
+import Exception from '../exception/exception.js';
 
 /**
  * Default object with es and en internacionalization.

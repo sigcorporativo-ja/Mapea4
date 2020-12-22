@@ -1,13 +1,14 @@
 /**
  * @module M/handler/Feature
  */
-import HandlerImpl from 'impl/handler/Feature';
-import { isFunction, includes } from '../util/Utils';
-import Exception from '../exception/exception';
-import Base from '../Base';
-import FacadeFeature from '../feature/Feature';
-import * as EventType from '../event/eventtype';
-import { getValue } from '../i18n/language';
+import HandlerImpl from 'impl/handler/Feature.js';
+import { isFunction, includes } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import Base from '../Base.js';
+import FacadeFeature from '../feature/Feature.js';
+import RenderFeature from '../feature/RenderFeature.js';
+import * as EventType from '../event/eventtype.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc
@@ -137,7 +138,8 @@ class Features extends Base {
           this.leaveFeatures_(prevFeatures, layer, evt);
         } else if (hoveredFeatures.length > 0) {
           const newFeatures = hoveredFeatures
-            .filter(f => (f instanceof FacadeFeature) && !prevFeatures.some(pf => pf.equals(f)));
+            .filter(f => (f instanceof FacadeFeature || f instanceof RenderFeature) &&
+              !prevFeatures.some(pf => pf.equals(f)));
           const diffFeatures = prevFeatures.filter(f => !hoveredFeatures.some(pf => pf.equals(f)));
           // unselect prev selected features which have not been selected this time
           if (diffFeatures.length > 0) {

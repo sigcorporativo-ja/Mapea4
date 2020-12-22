@@ -1,10 +1,10 @@
 /**
  * @module M/dialog
  */
-import 'assets/css/dialog';
-import dialogTemplate from 'templates/dialog';
-import { isNullOrEmpty } from './util/Utils';
-import { compileSync as compileTemplate } from './util/Template';
+import 'assets/css/dialog.css';
+import dialogTemplate from 'templates/dialog.html';
+import { isNullOrEmpty } from './util/Utils.js';
+import { compileSync as compileTemplate } from './util/Template.js';
 import { getValue } from './i18n/language';
 
 /**

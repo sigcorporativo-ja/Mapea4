@@ -20,7 +20,8 @@ export default class AttributeTableControl extends M.Control {
 
     [this.facadeMap_, this.selectAllActive_, this.template_,
       this.areaTable_, this.layer_, this.numPages_,
-      this.draggable_] = [null, false, null, null, null, numPages, null];
+      this.draggable_,
+    ] = [null, false, null, null, null, numPages, null];
     this.pages_ = {
       total: 0,
       actual: 1,
@@ -51,9 +52,10 @@ export default class AttributeTableControl extends M.Control {
     const options = {
       jsonp: true,
       vars: {
-        layers: map.getWFS().concat(map.getKML().concat(map.getLayers().filter((layer) => {
-          return layer.type === 'GeoJSON';
-        }))),
+        layers: map.getWFS().concat(map.getKML()
+          .concat(map.getMVT().concat(map.getLayers().filter((layer) => {
+            return layer.type === 'GeoJSON';
+          })))),
       },
     };
     const html = M.template.compileSync(attributetableHTML, options);
@@ -185,7 +187,7 @@ export default class AttributeTableControl extends M.Control {
   hasLayer_(layerSearch) {
     const layersFind = [];
     if (M.utils.isNullOrEmpty(layerSearch) || (!M.utils.isArray(layerSearch) &&
-        !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
+      !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
       M.dialog.error('El parametro para el método hasLayer no es correcto.', 'Error');
       return layersFind;
     }
@@ -402,7 +404,6 @@ export default class AttributeTableControl extends M.Control {
    */
   activateDraggable_() {
     if (M.utils.isNullOrEmpty(this.draggable_)) {
-      this.setFixed_();
       const panel = this.getPanel().getTemplatePanel();
       this.draggable_ = new Draggabilly(panel, {
         containment: '.m-mapea-container',
@@ -426,20 +427,6 @@ export default class AttributeTableControl extends M.Control {
     this.draggable_.disable();
   }
 
-  /**
-   * This function set fixed style to panel
-   *
-   * @private
-   * @function
-   * @api stable
-   */
-  setFixed_() {
-    const panel = document.querySelector('.m-attributetable');
-    const bClient = panel.getBoundingClientRect();
-    panel.style.position = 'fixed';
-    panel.style.left = `${bClient.left}px`;
-    panel.style.top = `${bClient.top}px`;
-  }
 
   /**
    * This function adjusts the panel position

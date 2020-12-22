@@ -1,9 +1,9 @@
 /**
  * @module M/style/Line
  */
-import StyleLineImpl from 'impl/style/Line';
-import Simple from './Simple';
-import { isNullOrEmpty, extendsObj } from '../util/Utils';
+import StyleLineImpl from 'impl/style/Line.js';
+import Simple from './Simple.js';
+import { isNullOrEmpty, extendsObj } from '../util/Utils.js';
 
 /**
  * @classdesc

@@ -1,10 +1,10 @@
 /**
  * @module M/style/Cluster
  */
-import ClusterImpl from 'impl/style/Cluster';
-import Style from './Style';
-import Composite from './Composite';
-import { extendsObj, isNullOrEmpty, stringifyFunctions, defineFunctionFromString } from '../util/Utils';
+import ClusterImpl from 'impl/style/Cluster.js';
+import Style from './Style.js';
+import Composite from './Composite.js';
+import { extendsObj, isNullOrEmpty, stringifyFunctions, defineFunctionFromString } from '../util/Utils.js';
 
 /**
  * @classdesc

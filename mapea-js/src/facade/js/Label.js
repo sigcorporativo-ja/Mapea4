@@ -1,8 +1,8 @@
 /**
  * @module M/Label
  */
-import LabelImpl from 'impl/Label';
-import Base from './Base';
+import LabelImpl from 'impl/Label.js';
+import Base from './Base.js';
 
 /**
  * @classdesc

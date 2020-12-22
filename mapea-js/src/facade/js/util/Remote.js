@@ -2,9 +2,9 @@
  * @module M/remote
  */
 
-import { addParameters, generateRandom, isNullOrEmpty, isObject } from './Utils';
-import { useproxy, proxyExceptions } from '../mapea';
-import Response from './Response';
+import { addParameters, generateRandom, isNullOrEmpty, isObject } from './Utils.js';
+import { useproxy, proxyExceptions } from '../mapea.js';
+import Response from './Response.js';
 
 /**
  * HTTP methods POST y GET

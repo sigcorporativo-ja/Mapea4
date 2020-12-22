@@ -1,13 +1,13 @@
 /**
  * @module M/layer/KML
  */
-import KMLImpl from 'impl/layer/KML';
-import LayerVector from './Vector';
-import { isNullOrEmpty, isUndefined, normalize, isString } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as LayerType from './Type';
-import * as parameter from '../parameter/parameter';
-import { getValue } from '../i18n/language';
+import KMLImpl from 'impl/layer/KML.js';
+import LayerVector from './Vector.js';
+import { isNullOrEmpty, isUndefined, normalize, isString } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as LayerType from './Type.js';
+import * as parameter from '../parameter/parameter.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

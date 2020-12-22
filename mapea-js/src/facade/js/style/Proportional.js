@@ -1,13 +1,13 @@
 /**
  * @module M/style/Proportional
  */
-import StyleBase from './Style';
-import StyleComposite from './Composite';
-import StylePoint from './Point';
-import StyleSimple from './Simple';
-import { isNullOrEmpty, stringifyFunctions, extendsObj, defineFunctionFromString } from '../util/Utils';
-import Exception from '../exception/exception';
-import { getValue } from '../i18n/language';
+import StyleBase from './Style.js';
+import StyleComposite from './Composite.js';
+import StylePoint from './Point.js';
+import StyleSimple from './Simple.js';
+import { isNullOrEmpty, stringifyFunctions, extendsObj, defineFunctionFromString } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * This function gets the min value of feature's atributte.

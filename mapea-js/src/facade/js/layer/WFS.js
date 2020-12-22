@@ -1,14 +1,14 @@
 /**
  * @module M/layer/WFS
  */
-import WFSImpl from 'impl/layer/WFS';
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
-import Exception from '../exception/exception';
-import Vector from './Vector';
-import * as LayerType from './Type';
-import * as parameter from '../parameter/parameter';
-import { parse } from '../geom/Geom';
-import { getValue } from '../i18n/language';
+import WFSImpl from 'impl/layer/WFS.js';
+import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import Vector from './Vector.js';
+import * as LayerType from './Type.js';
+import * as parameter from '../parameter/parameter.js';
+import { parse } from '../geom/Geom.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

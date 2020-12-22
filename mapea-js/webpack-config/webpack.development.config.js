@@ -1,7 +1,6 @@
 const path = require('path');
 const fse = require('fs-extra');
 const webpack = require('webpack');
-const AllowMutateEsmExports = require('./AllowMutateEsmExportsPlugin');
 const argv = require('yargs').argv;
 
 const testName = argv.name;
@@ -42,24 +41,37 @@ module.exports = {
   output: {
     filename: '[name].js',
   },
+  node: {
+    fs: 'empty',
+  },
   resolve: {
     alias: {
       handlebars: 'handlebars/dist/handlebars.min.js',
       templates: path.resolve(__dirname, '../src/templates'),
       assets: path.resolve(__dirname, '../src/facade/assets'),
       M: path.resolve(__dirname, '../src/facade/js'),
-      impl: path.resolve(__dirname, '../src/impl/ol/js'),
+      impl: path.resolve(__dirname, '../src/impl/ol'),
       configuration: path.resolve(__dirname, '../test/configuration_filtered'),
       'impl-assets': path.resolve(__dirname, '../src/impl/ol/assets'),
       plugins: path.resolve(__dirname, '../src/plugins'),
-      patches: path.resolve(__dirname, '../src/impl/ol/js/patches_dev.js'),
+      'package.json': path.resolve(__dirname, '..', 'package.json'),
     },
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html', '.jpg'],
   },
   module: {
     rules: [{
         test: /\.js$/,
-        exclude: /(node_modules\/(?!ol)|bower_components)/,
+        use: {
+          loader: path.resolve(__dirname, 'mutate-loader'),
+          options: {
+            mode: 'dev'
+          }
+        },
+        include: /node_modules\/ol\/*/,
+      },
+      {
+        test: /\.js$/,
+        exclude: /(node_modules|bower_components)/,
         use: {
           loader: 'babel-loader',
           options: {
@@ -77,7 +89,6 @@ module.exports = {
         loader: path.resolve(__dirname, 'expose-entry-loader'),
         exclude: [/node_modules/, /lib/, /dist/],
       },
-
       {
         test: [/\.hbs$/, /\.html$/],
         loader: 'html-loader',
@@ -86,7 +97,7 @@ module.exports = {
       {
         test: /\.css$/,
         loader: 'style-loader!css-loader',
-        exclude: [/node_modules/],
+        exclude: [/node_modules\/(?!ol)/],
       },
       {
         test: /\.(woff|woff2|eot|ttf|svg|jpg)$/,
@@ -96,7 +107,6 @@ module.exports = {
     ],
   },
   plugins: [
-    new AllowMutateEsmExports(),
     new webpack.HotModuleReplacementPlugin(),
   ],
   devServer: {

@@ -35,7 +35,8 @@ function getBinaryPath(binaryName) {
 
 const jsdoc = getBinaryPath('jsdoc');
 
-const jsdocConfig = path.join(__dirname, '..', 'config', 'jsdoc', 'info', 'conf.json');
+const jsdocConfig = path.join(
+  __dirname, '..', 'config', 'jsdoc', 'ol-info', 'conf.json');
 
 
 /**
@@ -121,7 +122,6 @@ function spawnJSDoc(paths) {
 
     child.stderr.on('data', data => {
       errors += String(data);
-      console.log(data.toString('utf8'));
     });
 
     child.on('exit', code => {

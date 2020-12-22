@@ -1,20 +1,20 @@
 /**
  * @module M/control/LayerSwitcher
  */
-import 'assets/css/controls/layerswitcher';
-import LayerSwitcherImpl from 'impl/control/Layerswitcher';
-import layerswitcherTemplate from 'templates/layerswitcher';
-import ControlBase from './Control';
-import LayerBase from '../layer/Layer';
-import LayerGroup from '../layer/LayerGroup';
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
-import Exception from '../exception/exception';
-import { compileSync as compileTemplate } from '../util/Template';
-import * as LayerType from '../layer/Type';
-import Vector from '../layer/Vector';
-import StylePoint from '../style/Point';
-import * as EventType from '../event/eventtype';
-import { getValue } from '../i18n/language';
+import 'assets/css/controls/layerswitcher.css';
+import LayerSwitcherImpl from 'impl/control/Layerswitcher.js';
+import layerswitcherTemplate from 'templates/layerswitcher.html';
+import ControlBase from './Control.js';
+import LayerBase from '../layer/Layer.js';
+import LayerGroup from '../layer/LayerGroup.js';
+import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
+import * as LayerType from '../layer/Type.js';
+import Vector from '../layer/Vector.js';
+import StylePoint from '../style/Point.js';
+import * as EventType from '../event/eventtype.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

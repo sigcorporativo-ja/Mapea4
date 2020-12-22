@@ -1,9 +1,9 @@
 /**
  * @module M/geom
  */
-import { normalize } from '../util/Utils';
-import * as WKT from './WKT';
-import * as WFS from './WFS';
+import { normalize } from '../util/Utils.js';
+import * as WKT from './WKT.js';
+import * as WFS from './WFS.js';
 
 /**
  * Parses the geometry
