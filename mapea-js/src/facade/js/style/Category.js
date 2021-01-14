@@ -1,14 +1,14 @@
 /**
  * @module M/style/Category
  */
-import StyleBase from './Style';
-import Composite from './Composite';
-import { isNullOrEmpty, getImageSize, isArray, extendsObj, stringifyFunctions, defineFunctionFromString } from '../util/Utils';
-import Exception from '../exception/exception';
-import StyleProportional from './Proportional';
-import StyleCluster from './Cluster';
-import { generateRandomStyle } from './utils';
-import { getValue } from '../i18n/language';
+import StyleBase from './Style.js';
+import Composite from './Composite.js';
+import { isNullOrEmpty, getImageSize, isArray, extendsObj, stringifyFunctions, defineFunctionFromString } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import StyleProportional from './Proportional.js';
+import StyleCluster from './Cluster.js';
+import { generateRandomStyle } from './utils.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

@@ -1,10 +1,10 @@
 /**
  * @module M/parameter/wmc
  */
-import { isNullOrEmpty, isString, normalize, isArray, isObject, isUrl } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as LayerType from '../layer/Type';
-import { getValue } from '../i18n/language';
+import { isNullOrEmpty, isString, normalize, isArray, isObject, isUrl } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as LayerType from '../layer/Type.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * Parses the parameter in order to get the layer name

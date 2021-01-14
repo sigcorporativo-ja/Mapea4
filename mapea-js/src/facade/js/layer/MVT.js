@@ -1,15 +1,28 @@
 /**
  * @module M/layer/MVT
  */
-import MVTTileImpl from 'impl/layer/MVT';
-import Vector from './Vector';
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
-import Exception from '../exception/exception';
-import { MVT as MVTType } from './Type';
+import MVTTileImpl from 'impl/layer/MVT.js';
+import RenderFeatureImpl from 'impl/feature/RenderFeature.js';
+import Vector from './Vector.js';
+import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { MVT as MVTType } from './Type.js';
+
+/**
+ * Possibles modes of MVT
+ *
+ * @const
+ * @public
+ * @api
+ */
+export const mode = {
+  RENDER: 'render',
+  FEATURE: 'feature',
+};
 
 /**
  * @classdesc
- * Main constructor of the class. Creates a Vector layer
+ * Main constructor of the class. Creates a MVT layer
  * with parameters specified by the user
  * @api
  */
@@ -97,6 +110,46 @@ class MVT extends Vector {
   getProjection() {
     return this.getImpl().getProjection();
   }
+
+  /**
+   * Gets the geometry type of the layer.
+   * @function
+   * @public
+   * @return {string} geometry type of layer
+   * @api
+   */
+  getGeometryType() {
+    let geometry = null;
+    const features = this.getFeatures();
+    if (!isNullOrEmpty(features)) {
+      const firstFeature = features[0];
+      if (!isNullOrEmpty(firstFeature)) {
+        geometry = firstFeature.getType();
+      }
+    }
+    return geometry;
+  }
+
+  /**
+   * Returns all features.
+   *
+   * @function
+   * @public
+   * @return {Array<M.RenderFeature>} Features
+   * @api
+   */
+  getFeatures() {
+    const features = this.getImpl().getFeatures();
+
+    return features.map(olFeature => RenderFeatureImpl.olFeature2Facade(olFeature));
+  }
+
+  setFilter() {}
+  addFeatures() {}
+  removeFeatures() {}
+  refresh() {}
+  redraw() {}
+  toGeoJSON() {}
 }
 
 /**
@@ -110,11 +163,11 @@ class MVT extends Vector {
 MVT.DEFAULT_OPTIONS_STYLE = {
   fill: {
     color: '#fff',
-    opacity: 0.4,
+    opacity: 0.6,
   },
   stroke: {
     color: '#827ec5',
-    width: 1,
+    width: 2,
   },
   radius: 5,
 };

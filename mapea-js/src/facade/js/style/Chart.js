@@ -1,11 +1,11 @@
 /**
  * @module M/style/Chart
  */
-import ChartImpl from 'impl/style/Chart';
-import StyleFeature from './Feature';
-import ChartVariable from '../chart/Variable';
-import * as ChartTypes from '../chart/types';
-import { isNullOrEmpty, extendsObj, isArray, stringifyFunctions, defineFunctionFromString } from '../util/Utils';
+import ChartImpl from 'impl/style/Chart.js';
+import StyleFeature from './Feature.js';
+import ChartVariable from '../chart/Variable.js';
+import * as ChartTypes from '../chart/types.js';
+import { isNullOrEmpty, extendsObj, isArray, stringifyFunctions, defineFunctionFromString } from '../util/Utils.js';
 
 /**
  * @classdesc

@@ -1,14 +1,14 @@
 /**
  * @module M/control/ScaleLine
  */
-import 'assets/css/controls/scale';
-import ScaleLineImpl from 'impl/control/ScaleLine';
-import scalelineTemplate from 'templates/scaleline';
-import ControlBase from './Control';
-import { isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import { compileSync as compileTemplate } from '../util/Template';
-import { getValue } from '../i18n/language';
+import 'assets/css/controls/scale.css';
+import ScaleLineImpl from 'impl/control/ScaleLine.js';
+import scalelineTemplate from 'templates/scaleline.html';
+import ControlBase from './Control.js';
+import { isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

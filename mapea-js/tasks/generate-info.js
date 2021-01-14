@@ -13,7 +13,7 @@ const isWindows = process.platform.indexOf('win') === 0;
  * Patch. rootDir of facade classes
  */
 const sourceFacadePath = path.join(__dirname, '..', 'src/facade/js/');
-const sourceImplPath = path.join(__dirname, '..', 'src/impl/ol/js/');
+const sourceImplPath = path.join(__dirname, '..', 'src/impl/ol/');
 const infoPath = path.join(__dirname, '..', 'build', 'info.json');
 
 /**

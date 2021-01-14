@@ -1,7 +1,7 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const GenerateVersionPlugin = require('./GenerateVersionPlugin');
-const CopywebpackPlugin = require('copy-webpack-plugin');
+const CopywebpackPlugin = require('./CopyPlugin');
 const entryPoints = require('./entry-points-plugins.json');
 
 const distDir = path.resolve(__dirname, '..', 'dist');
@@ -68,11 +68,7 @@ module.exports = {
       aliasRoot: 'plugins',
       override: true,
     }),
-    new CopywebpackPlugin([{
-      from: path.join(pluginDir, '**', 'api.json'),
-      to: path.join(distDir, 'plugins/[1]/api.json'),
-      test: /([^/]+)\/api\.json/,
-    }]),
+    new CopywebpackPlugin(),
     new MiniCssExtractPlugin({
       filename: '[name].min.css',
     }),

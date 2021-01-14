@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="mapea" content="yes">
+  <link rel="stylesheet" href="../../assets/css/mapea-6.0.0.ol.min.css">
+  <title>PRUEBA DESARROLLO</title>
+  <style rel="stylesheet">
+    html,
+    body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      overflow: auto;
+    }
+
+    .makidentist:before {
+      content: '\e814';
+      color: 'red'
+    }
+  </style>
+
+</head>
+
+<body>
+  <input type="file" id="file-input" />
+  <button id="load-button">Cargar MBTiles</button>
+  <div id="map" class="container"></div>
+  <script src="../../js/mapea-6.0.0.ol.min.js" charset="utf-8"></script>
+  <script src="../../js/configuration-6.0.0.js" charset="utf-8"></script>
+  <script>
+    const map = M.map({
+      container: 'map',
+      controls: ['layerswitcher'],
+      projection: 'EPSG:3857*m',
+      layers: ['OSM'],
+    });
+
+    function load() {
+      const input = document.querySelector('#file-input');
+      if (input.files.length > 0) {
+        const file = input.files[0];
+        const mbtiles = new M.layer.MBTiles({
+          name: file.name,
+          legend: file.name,
+          source: file,
+        });
+        map.addLayers(mbtiles);
+      } else {
+        M.dialog.info('No hay fichero adjuntado.')
+      }
+    }
+
+    document.body.onload = () => document.querySelector('#load-button').addEventListener('click', load);
+  </script>
+</body>
+
+</html>

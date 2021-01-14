@@ -1,19 +1,19 @@
 /**
  * @module M/layer/Vector
  */
-import VectorImpl from 'impl/layer/Vector';
-import { geojsonTo4326 } from 'impl/util/Utils';
-import { isUndefined, isArray, isNullOrEmpty, isString, normalize } from '../util/Utils';
-import { generateStyleLayer } from '../style/utils';
-import Exception from '../exception/exception';
-import LayerBase from './Layer';
-import * as LayerType from './Type';
-import * as dialog from '../dialog';
-import FilterBase from '../filter/Base';
-import StyleCluster from '../style/Cluster';
-import Style from '../style/Style';
-import * as EventType from '../event/eventtype';
-import { getValue } from '../i18n/language';
+import VectorImpl from 'impl/layer/Vector.js';
+import { geojsonTo4326 } from 'impl/util/Utils.js';
+import { isUndefined, isArray, isNullOrEmpty, isString, normalize } from '../util/Utils.js';
+import { generateStyleLayer } from '../style/utils.js';
+import Exception from '../exception/exception.js';
+import LayerBase from './Layer.js';
+import * as LayerType from './Type.js';
+import * as dialog from '../dialog.js';
+import FilterBase from '../filter/Base.js';
+import StyleCluster from '../style/Cluster.js';
+import Style from '../style/Style.js';
+import * as EventType from '../event/eventtype.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

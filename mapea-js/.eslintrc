@@ -2,7 +2,7 @@
   "extends": "airbnb",
   "globals": {
     "M": true,
-    "ol": "true",
+    "ol": true,
     "Handlebars": true,
     "proj4": true,
     "ActiveXObject": true,
@@ -14,22 +14,33 @@
     "Image": true,
     "Draggabilly": true,
     "XMLSerializer": true,
+    "File": true,
+    "Response": true
   },
   "rules": {
-    "no-underscore-dangle": ["error", { "allowAfterThis": true }],
-    "import/extensions": ["error", "never"],
+    "no-underscore-dangle": [
+      "error",
+      {
+        "allowAfterThis": true
+      }
+    ],
     "import/no-unresolved": "off",
     "prefer-destructuring": "off",
     "arrow-body-style": "off",
-    "no-unused-vars": ["error", {
-      "vars": "all",
-      "args": "none"
-    }],
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "none"
+      }
+    ],
+    "no-bitwise": "off",
     "class-methods-use-this": "off",
     "no-case-declarations": "off",
     "import/no-mutable-exports": "off",
     "no-template-curly-in-string": "off",
     "import/no-duplicates": "off",
     "import/no-named-default": "off",
+    "import/extensions": "off"
   }
 }

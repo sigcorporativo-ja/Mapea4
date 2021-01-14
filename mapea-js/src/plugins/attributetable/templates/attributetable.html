@@ -1,15 +1,15 @@
 <div class="m-control m-attributetable-container">
-  <div class="m-attributetable-panel">
-    <div class="title">Tabla de Atributos</div>
-    <div class="m-attributetable-container-select">
-      <p class="m-attributetable-headers">Capas disponibles <span id="m-attributetable-layer" class="g-cartografia-flecha-abajo"></span></p>
-      <select class="" id="m-attributetable-select">
-        <option disabled="disabled" selected="selected">Seleccione una capa...</option>
-        {{#each layers}}
-          <option name="{{this.name}}">{{this.name}}</option>
-        {{/each}}
-        <select>
+    <div class="m-attributetable-panel">
+        <div class="title">Tabla de Atributos</div>
+        <div class="m-attributetable-container-select">
+            <p class="m-attributetable-headers">Capas disponibles <span id="m-attributetable-layer" class="g-cartografia-flecha-abajo"></span></p>
+            <select class="" id="m-attributetable-select">
+                <option disabled="disabled" selected="selected">Seleccione una capa...</option>
+                {{#each layers}}
+                    <option name="{{this.name}}">{{this.name}}</option>
+                {{/each}}
+                <select>
+        </div>
+        <div id="m-attributetable-datas"></div>
     </div>
-    <div id="m-attributetable-datas"></div>
-  </div>
 </div>

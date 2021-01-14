@@ -1,47 +1,50 @@
 /**
  * @module M/Map
  */
-import MapImpl from 'impl/Map';
+import MapImpl from 'impl/Map.js';
 import { getPanelForControl, buildControl } from './builder/builder';
-import Base from './Base';
+import Base from './Base.js';
 import {
   isNullOrEmpty,
   isUndefined,
   isNull,
   isArray,
   isFunction,
-  // addParameters,
   escapeJSCode,
   isObject,
   getEnvolvedExtent,
-} from './util/Utils';
+} from './util/Utils.js';
 import { getValue } from './i18n/language';
 import Exception from './exception/exception';
-import Label from './Label';
-import Popup from './Popup';
-import Parameters from './parameter/Parameters';
+import Label from './Label.js';
+import Popup from './Popup.js';
+import Parameters from './parameter/Parameters.js';
 import * as parameter from './parameter/parameter';
 import * as EventType from './event/eventtype';
-import FeaturesHandler from './handler/Feature';
-import Feature from './feature/Feature';
+import FeaturesHandler from './handler/Feature.js';
+import Feature from './feature/Feature.js';
 import * as Dialog from './dialog';
-import GetFeatureInfo from './control/GetFeatureInfo';
-import WMCSelector from './control/WMCSelector';
-import Layer from './layer/Layer';
-import * as LayerType from './layer/Type';
-import Vector from './layer/Vector';
-import KML from './layer/KML';
-import WFS from './layer/WFS';
-import WMC from './layer/WMC';
-import WMS from './layer/WMS';
-import WMTS from './layer/WMTS';
-import OSM from './layer/OSM';
-import MVT from './layer/MVT';
-import Mapbox from './layer/Mapbox';
-import Panel from './ui/Panel';
-import GeoJSON from './layer/GeoJSON';
-import StylePoint from './style/Point';
-import Control from './control/Control';
+import GetFeatureInfo from './control/GetFeatureInfo.js';
+import WMCSelector from './control/WMCSelector.js';
+import Layer from './layer/Layer.js';
+import * as LayerType from './layer/Type.js';
+import Vector from './layer/Vector.js';
+import KML from './layer/KML.js';
+import WFS from './layer/WFS.js';
+import WMC from './layer/WMC.js';
+import WMS from './layer/WMS.js';
+import WMTS from './layer/WMTS.js';
+import OSM from './layer/OSM.js';
+import MVT from './layer/MVT.js';
+import Mapbox from './layer/Mapbox.js';
+import Panel from './ui/Panel.js';
+import GeoJSON from './layer/GeoJSON.js';
+import StylePoint from './style/Point.js';
+import Control from './control/Control.js';
+import MBTiles from './layer/MBTiles.js';
+import GeoPackage from './layer/GeoPackage';
+import GeoPackageTile from './layer/GeoPackageTile';
+import MBTilesVector from './layer/MBTilesVector';
 
 /**
  * @classdesc
@@ -195,6 +198,14 @@ class Map extends Base {
      * @api
      */
     this.ticket_ = null;
+
+    /**
+     * Geopackage layers
+     * @private
+     * @type {M/layer/GeoPackage}
+     * @api
+     */
+    this.geopackages_ = [];
 
     // adds class to the container
     params.container.classList.add('m-mapea-container');
@@ -475,7 +486,10 @@ class Map extends Base {
                 layer = new WMTS(layerParam);
                 break;
               case 'MVT':
-                layer = new MVT(layerParam);
+                layer = new MVT(parameterVariable);
+                break;
+              case 'MBTiles':
+                layer = new MBTiles(parameterVariable);
                 break;
               default:
                 Dialog.error(getValue('dialog').invalid_type_layer);
@@ -558,6 +572,7 @@ class Map extends Base {
     }
     return this.getImpl().getLayerGroups().sort(Map.LAYER_SORT);
   }
+
   /**
    * TODO
    *
@@ -584,6 +599,7 @@ class Map extends Base {
     this.getImpl().addLayerGroups(lGroups);
     return this;
   }
+
   /**
    * TODO
    *
@@ -1205,28 +1221,24 @@ class Map extends Base {
    * @returns {Array<M.layer.MBtiles>} layers from the map
    * @api
    */
-  getMBtiles(layersParamVar) {
+  getMBTiles(layersParamVar) {
     let layersParam = layersParamVar;
-    // checks if the implementation can manage layers
-    if (isUndefined(MapImpl.prototype.getMBtiles)) {
+    if (isUndefined(MapImpl.prototype.getMBTiles)) {
       Exception(getValue('exception').getmbtiles_method);
     }
 
-    // parses parameters to Array
     if (isNull(layersParam)) {
       layersParam = [];
     } else if (!isArray(layersParam)) {
       layersParam = [layersParam];
     }
 
-    // gets the parameters as Layer objects to filter
     let filters = [];
     if (layersParam.length > 0) {
       filters = layersParam.map(parameter.layer);
     }
 
-    // gets the layers
-    const layers = this.getImpl().getMBtiles(filters).sort(Map.LAYER_SORT);
+    const layers = this.getImpl().getMBTiles(filters).sort(Map.LAYER_SORT);
 
     return layers;
   }
@@ -1239,8 +1251,31 @@ class Map extends Base {
    * @returns {Map}
    * @api
    */
-  addMBtiles(layersParam) {
-    // TODO
+  addMBTiles(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.addMBTiles)) {
+        Exception(getValue('exception').addmbtiles_method);
+      }
+
+      if (!isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      const mbtilesLayers = [];
+      layersParam.forEach((layerParam) => {
+        if (isObject(layerParam) &&
+          (layerParam instanceof MBTiles)) {
+          layerParam.setMap(this);
+          mbtilesLayers.push(layerParam);
+        }
+      });
+
+      this.getImpl().addMBTiles(mbtilesLayers);
+      this.fire(EventType.ADDED_LAYER, [mbtilesLayers]);
+      this.fire(EventType.ADDED_MBTILES, [mbtilesLayers]);
+    }
+    return this;
   }
 
   /**
@@ -1251,8 +1286,105 @@ class Map extends Base {
    * @returns {Map}
    * @api
    */
-  removeMBtiles(layersParam) {
-    // TODO
+  removeMBTiles(layersParam) {
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.removeMBTiles)) {
+        Exception(getValue('exception').removembtiles_method);
+      }
+
+      const mbtilesLayers = this.getMBTiles(layersParam);
+      if (mbtilesLayers.length > 0) {
+        this.getImpl().removeMBTiles(mbtilesLayers);
+      }
+    }
+    return this;
+  }
+
+  /**
+   * This function gets the MBtiles layers added to the map
+   *
+   * @function
+   * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
+   * @returns {Array<M.layer.MBtiles>} layers from the map
+   * @api
+   */
+  getMBTilesVector(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (isUndefined(MapImpl.prototype.getMBTilesVector)) {
+      Exception(getValue('exception').getmbtiles_method);
+    }
+
+    if (isNull(layersParam)) {
+      layersParam = [];
+    } else if (!isArray(layersParam)) {
+      layersParam = [layersParam];
+    }
+
+    let filters = [];
+    if (layersParam.length > 0) {
+      filters = layersParam.map(parameter.layer);
+    }
+
+    const layers = this.getImpl().getMBTilesVector(filters).sort(Map.LAYER_SORT);
+
+    return layers;
+  }
+
+  /**
+   * This function adds the MBtiles layers to the map
+   *
+   * @function
+   * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
+   * @returns {Map}
+   * @api
+   */
+  addMBTilesVector(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.addMBTilesVector)) {
+        Exception(getValue('exception').addmbtiles_method);
+      }
+
+      if (!isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      const mbtilesLayers = [];
+      layersParam.forEach((layerParam) => {
+        if (isObject(layerParam) &&
+          (layerParam instanceof MBTilesVector)) {
+          layerParam.setMap(this);
+          mbtilesLayers.push(layerParam);
+        }
+      });
+
+      this.getImpl().addMBTilesVector(mbtilesLayers);
+      this.fire(EventType.ADDED_LAYER, [mbtilesLayers]);
+      this.fire(EventType.ADDED_MBTILES_VECTOR, [mbtilesLayers]);
+    }
+    return this;
+  }
+
+  /**
+   * This function removes the MBtiles layers to the map
+   *
+   * @function
+   * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
+   * @returns {Map}
+   * @api
+   */
+  removeMBTilesVector(layersParam) {
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.removeMBTilesVector)) {
+        Exception(getValue('exception').removembtiles_method);
+      }
+
+      const mbtilesLayers = this.getMBTilesVector(layersParam);
+      if (mbtilesLayers.length > 0) {
+        this.getImpl().removeMBTilesVector(mbtilesLayers);
+      }
+    }
+    return this;
   }
 
   /**
@@ -1340,9 +1472,6 @@ class Map extends Base {
             throw err;
           }
         }
-        // FIXME: Hay problemas majenando las features de los vector tiles
-        // en openlayers
-        // this.featuresHandler_.addLayer(vectorTile);
         mvtLayers.push(vectorTile);
       });
 
@@ -1351,6 +1480,157 @@ class Map extends Base {
       this.fire(EventType.ADDED_VECTOR_TILE, [mvtLayers]);
     }
     return this;
+  }
+
+  /**
+   * This function gets the geopackage tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  getGeoPackageTile(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (isUndefined(MapImpl.prototype.getGeoPackageTile)) {
+      Exception('La implementación usada no posee el método getWFS');
+    }
+
+    if (isNull(layersParam)) {
+      layersParam = [];
+    } else if (!isArray(layersParam)) {
+      layersParam = [layersParam];
+    }
+
+    let filters = [];
+    if (layersParam.length > 0) {
+      filters = layersParam.map((layerParam) => {
+        return parameter.layer(layerParam, LayerType.GeoPackageTile);
+      });
+    }
+
+    const layers = this.getImpl().getGeoPackageTile(filters).sort(Map.LAYER_SORT);
+
+    return layers;
+  }
+
+  /**
+   * This function removes the geopackage tile layers from map.
+   *
+   * @function
+   * @public
+   * @api
+   */
+  removeGeoPackageTile(layersParam) {
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.removeGeoPackageTile)) {
+        Exception('La implementación usada no posee el método removeWFS');
+      }
+      const layers = this.getGeoPackageTile(layersParam);
+      if (layers.length > 0) {
+        layers.forEach((layer) => {
+          this.featuresHandler_.removeLayer(layer);
+        });
+        this.getImpl().removeGeoPackageTile(layers);
+      }
+    }
+    return this;
+  }
+
+  /**
+   * This function adds the geopackage tile layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addGeoPackageTile(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (!isNullOrEmpty(layersParam)) {
+      if (isUndefined(MapImpl.prototype.addGeoPackageTile)) {
+        Exception('La implementación usada no posee el método addWFS');
+      }
+
+      if (!isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      const layers = [];
+      layersParam.forEach((layerParam) => {
+        let vectorTile;
+        if (isObject(layerParam) && (layerParam instanceof GeoPackageTile)) {
+          vectorTile = layerParam;
+        }
+        layers.push(vectorTile);
+      });
+
+      this.getImpl().addGeoPackageTile(layers);
+      this.fire(EventType.ADDED_LAYER, [layers]);
+      this.fire(EventType.ADDED_GEOPACKAGE_TILE, [layers]);
+    }
+    return this;
+  }
+
+  /**
+   * This function adds the geopackage layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  addGeoPackage(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (!isNullOrEmpty(layersParam)) {
+      if (!isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      layersParam.forEach((geopackageLayer) => {
+        if (geopackageLayer instanceof GeoPackage) {
+          geopackageLayer.addTo(this);
+          this.geopackages_.push(geopackageLayer);
+        }
+      });
+      this.fire(EventType.ADDED_LAYER, [this.geopackages_]);
+      this.fire(EventType.ADDED_GEOPACKAGE, [this.geopackages_]);
+    }
+    return this;
+  }
+
+  /**
+   * This function removes the geopackage layers
+   *
+   * @function
+   * @public
+   * @api
+   */
+  removeGeoPackage(layersParamVar) {
+    let layersParam = layersParamVar;
+    if (!isNullOrEmpty(layersParam)) {
+      if (!isArray(layersParam)) {
+        layersParam = [layersParam];
+      }
+
+      const geopackageLayers = layersParam.filter(layerParam => layerParam instanceof GeoPackage);
+      geopackageLayers.forEach((geopackageLayer) => {
+        geopackageLayer.removeLayers();
+        this.geopackages_ = this.geopackages_
+          .filter(geopackage => !geopackage.equals(geopackageLayer));
+      });
+
+      this.fire(EventType.REMOVED_LAYER, [geopackageLayers]);
+    }
+    return this;
+  }
+
+  /**
+   * This function returns the geopackage layers
+   * @function
+   * @public
+   * @return {M/layer/GeoPackage}
+   * @api
+   */
+  getGeoPackage() {
+    return this.geopackages_;
   }
 
   /**
@@ -1431,241 +1711,6 @@ class Map extends Base {
     return hasControl;
   }
 
-  // /**
-  //  * This function adds controls specified by the user
-  //  *
-  //  * @public
-  //  * @function
-  //  * @param {string|Object|Array<String>|Array<Object>} controlsParam
-  //  * @returns {Map}
-  //  * @api
-  //  */
-  // addControls(controlsParamVar) {
-  //   let controlsParam = controlsParamVar;
-  //   if (!isNullOrEmpty(controlsParam)) {
-  //     // checks if the implementation can manage layers
-  //     if (isUndefined(MapImpl.prototype.addControls)) {
-  //       Exception(getValue('exception').addcontrols_method);
-  //     }
-
-  //     // parses parameters to Array
-  //     if (!isArray(controlsParam)) {
-  //       controlsParam = [controlsParam];
-  //     }
-
-  //     // gets the parameters as Control to add them
-  //     const controls = [];
-  //     // for (let i = 0, ilen = controlsParam.length; i < ilen; i++) {
-  //     controlsParam.forEach((controlParamVar) => {
-  //       let controlParam = controlParamVar;
-  //       let control;
-  //       let panel;
-  //       if (isString(controlParam)) {
-  //         controlParam = normalize(controlParam);
-  //         switch (controlParam) {
-  //           case Scale.NAME:
-  //             control = new Scale();
-  //             panel = this.getPanels('map-info')[0];
-  //             if (isNullOrEmpty(panel)) {
-  //               panel = new Panel('map-info', {
-  //                 collapsible: false,
-  //                 className: 'm-map-info',
-  //                 position: Position.BR,
-  //               });
-  //               this.addUpClass_(panel);
-  //             }
-  //             panel.addClassName('m-with-scale');
-  //             break;
-  //           case `${Scale.NAME}*true`:
-  //             control = new Scale({ exactScale: true });
-  //             panel = this.getPanels('map-info')[0];
-  //             if (isNullOrEmpty(panel)) {
-  //               panel = new Panel('map-info', {
-  //                 collapsible: false,
-  //                 className: 'm-map-info',
-  //                 position: Position.BR,
-  //               });
-  //               this.addUpClass_(panel);
-  //             }
-  //             panel.addClassName('m-with-scale');
-  //             break;
-  //           case ScaleLine.NAME:
-  //             control = new ScaleLine();
-  //             panel = new Panel(ScaleLine.NAME, {
-  //               collapsible: false,
-  //               className: 'm-scaleline',
-  //               position: Position.BL,
-  //               tooltip: 'Línea de escala',
-  //             });
-  //             this.addUpClass_(panel);
-  //             break;
-  //           case Panzoombar.NAME:
-  //             control = new Panzoombar();
-  //             panel = new Panel(Panzoombar.NAME, {
-  //               collapsible: false,
-  //               className: 'm-panzoombar',
-  //               position: Position.TL,
-  //               tooltip: 'Nivel de zoom',
-  //             });
-  //             break;
-  //           case Panzoom.NAME:
-  //             control = new Panzoom();
-  //             panel = new Panel(Panzoom.NAME, {
-  //               collapsible: false,
-  //               className: 'm-panzoom',
-  //               position: Position.TL,
-  //             });
-  //             break;
-  //           case LayerSwitcher.NAME:
-  //             control = new LayerSwitcher();
-  //             /* closure a function in order to keep
-  //              * the control value in the scope */
-  //             ((layerswitcherCtrl) => {
-  //               panel = new Panel(LayerSwitcher.NAME, {
-  //                 collapsible: true,
-  //                 className: 'm-layerswitcher',
-  //                 collapsedButtonClass: 'g-cartografia-capas2',
-  //                 position: Position.TR,
-  //                 tooltip: getValue('layerswitcher').title,
-  //               });
-  //               // enables touch scroll
-  //               panel.on(EventType.ADDED_TO_MAP, (html) => {
-  //                 enableTouchScroll(html.querySelector('.m-panel-controls'));
-  //               });
-  //               // renders and registers events
-  //               panel.on(EventType.SHOW, (evt) => {
-  //                 layerswitcherCtrl.registerEvents();
-  //                 layerswitcherCtrl.render();
-  //               });
-  //               // unregisters events
-  //               panel.on(EventType.HIDE, (evt) => {
-  //                 layerswitcherCtrl.unregisterEvents();
-  //               });
-  //             })(control);
-  //             break;
-  //           case Mouse.NAME:
-  //             control = new Mouse();
-  //             panel = this.getPanels('map-info')[0];
-  //             if (isNullOrEmpty(panel)) {
-  //               panel = new Panel('map-info', {
-  //                 collapsible: false,
-  //                 className: 'm-map-info',
-  //                 position: Position.BR,
-  //                 tooltip: 'Coordenadas del puntero',
-  //               });
-  //             }
-  //             panel.addClassName('m-with-mouse');
-  //             break;
-  //           case OverviewMap.NAME:
-  //             control = new OverviewMap({ toggleDelay: 400 });
-  //             panel = this.getPanels('map-info')[0];
-  //             if (isNullOrEmpty(panel)) {
-  //               panel = new Panel('map-info', {
-  //                 collapsible: false,
-  //                 className: 'm-map-info',
-  //                 position: Position.BR,
-  //               });
-  //             }
-  //             panel.addClassName('m-with-overviewmap');
-  //             break;
-  //           case Location.NAME:
-  //             control = new Location();
-  //             panel = new Panel(Location.NAME, {
-  //               collapsible: false,
-  //               className: 'm-location',
-  //               position: Position.BR,
-  //             });
-  //             break;
-  //           case GetFeatureInfo.NAME:
-  //             control = new GetFeatureInfo();
-  //             break;
-  //           case Rotate.NAME:
-  //             control = new Rotate();
-  //             panel = new Panel(Rotate.name, {
-  //               collapsible: false,
-  //               className: 'm-rotate',
-  //               position: Position.TR,
-  //             });
-  //             break;
-  //           default:
-  //
-  // const getControlsAvailable = concatUrlPaths([M.config.MAPEA_URL, '/api/actions/controls']);
-  // Dialog.error(`El control ${controlParam}
-  // no está definido. Consulte los controles disponibles <a href='${getControlsAvailable}'
-  // target="_blank">aquí</a>`);
-  //         }
-  //       } else if (controlParam instanceof Control) {
-  //         control = controlParam;
-  //         if (control instanceof WMCSelector) {
-  //           panel = this.getPanels('map-info')[0];
-  //           if (isNullOrEmpty(panel)) {
-  //             panel = new Panel('map-info', {
-  //               collapsible: false,
-  //               className: 'm-map-info',
-  //               position: Position.BR,
-  //             });
-  //             this.addUpClass_(panel);
-  //           }
-  //           panel.addClassName('m-with-wmcselector');
-  //         }
-  //       } else {
-  //         Exception('El control "'.concat(controlParam).concat('" no es un control válido.'));
-  //       }
-
-  //       // checks if it has to be added into a main panel
-  //       // if (M.config.panels.TOOLS.indexOf(control.name) !== -1) {
-  //       //   if (isNullOrEmpty(this.panel.TOOLS)) {
-  //       //     this.panel.TOOLS = new Panel('tools', {
-  //       //       collapsible: true,
-  //       //       className: 'm-tools',
-  //       //       collapsedButtonClass: 'g-cartografia-herramienta',
-  //       //       position: Position.TL,
-  //       //       tooltip: 'Panel de herramientas',
-  //       //     });
-  //       //   }
-  //       //   panel = this.panel.TOOLS;
-  //       // }
-
-  //       // if (control instanceof Mouse) {
-  //       //   panel = this.getPanels('map-info')[0];
-  //       //   if (isNullOrEmpty(panel)) {
-  //       //     panel = new Panel('map-info', {
-  //       //       collapsible: false,
-  //       //       className: 'm-map-info',
-  //       //       position: Position.BR,
-  //       //       tooltip: 'Coordenadas del puntero',
-  //       //     });
-  //       //   }
-  //       //   panel.addClassName('m-with-mouse');
-  //       // }
-
-  //       // if (control instanceof Scale) {
-  //       //   panel = this.getPanels('map-info')[0];
-  //       //   if (isNullOrEmpty(panel)) {
-  //       //     panel = new Panel('map-info', {
-  //       //       collapsible: false,
-  //       //       className: 'm-map-info',
-  //       //       position: Position.BR,
-  //       //     });
-  //       //     this.addUpClass_(panel);
-  //       //   }
-  //       //   panel.addClassName('m-with-scale');
-  //       // }
-
-  //       if (!isNullOrEmpty(panel) && !panel.hasControl(control)) {
-  //         panel.addControls(control);
-  //         this.addPanels(panel);
-  //       } else {
-  //         control.addTo(this);
-  //         controls.push(control);
-  //       }
-  //     });
-
-  //     this.getImpl().addControls(controls);
-  //   }
-  //   return this;
-  // }
-
   /**
    * This function removes the specified controls from the map
    *
@@ -1744,7 +1789,7 @@ class Map extends Base {
       if (isNullOrEmpty(maxExtent)) {
         const selectedWmc = this.getWMC().find(wmc => wmc.selected);
         if (isNullOrEmpty(selectedWmc)) {
-          const calculateExtents = this.getLayers().filter(layer => layer.name !== '__draw__').map(l => l.calculateMaxExtent());
+          const calculateExtents = this.getLayers().filter(layer => layer.name !== '__draw__' && layer.isVisible()).map(l => l.calculateMaxExtent());
           Promise.all(calculateExtents).then((extents) => {
             maxExtent = getEnvolvedExtent(extents);
             if (isNullOrEmpty(maxExtent)) {
@@ -2887,6 +2932,7 @@ class Map extends Base {
       Exception(getValue('exception').no_set_rotation_method);
     }
     this.getImpl().setRotation(rotation * (Math.PI / 180));
+    this.fire(EventType.CHANGE_ROTATION, [rotation]);
   }
 }
 

@@ -1,8 +1,8 @@
 /**
  * @module M/Object
  */
-import EventsManager from './event/Manager';
-import { isNullOrEmpty } from './util/Utils';
+import EventsManager from './event/Manager.js';
+import { isNullOrEmpty } from './util/Utils.js';
 
 /**
  * @classdesc

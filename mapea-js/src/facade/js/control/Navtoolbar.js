@@ -1,13 +1,13 @@
 /**
  * @module M/control/Navtoolbar
  */
-import NavtoolbarImpl from 'impl/control/Navtoolbar';
-import navtoolbarTemplate from 'templates/navtoolbar';
-import ControlBase from './Control';
-import { isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import { compileSync as compileTemplate } from '../util/Template';
-import { getValue } from '../i18n/language';
+import NavtoolbarImpl from 'impl/control/Navtoolbar.js';
+import navtoolbarTemplate from 'templates/navtoolbar.html';
+import ControlBase from './Control.js';
+import { isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

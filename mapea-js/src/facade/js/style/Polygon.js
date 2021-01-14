@@ -1,9 +1,9 @@
 /**
  * @module M/style/Polygon
  */
-import PolygonImpl from 'impl/style/Polygon';
-import Simple from './Simple';
-import { isNullOrEmpty, extendsObj } from '../util/Utils';
+import PolygonImpl from 'impl/style/Polygon.js';
+import Simple from './Simple.js';
+import { isNullOrEmpty, extendsObj } from '../util/Utils.js';
 
 /**
  * @classdesc

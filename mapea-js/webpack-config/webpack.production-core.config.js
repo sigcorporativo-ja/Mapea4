@@ -12,6 +12,9 @@ const sourcemap = argv['source-map'];
 
 module.exports = {
   mode: 'production',
+  node: {
+    fs: 'empty',
+  },
   entry: {
     [`mapea-${pjson.version}.ol.min`]: path.resolve(__dirname, '..', 'src', 'index.js'),
   },
@@ -25,14 +28,22 @@ module.exports = {
       templates: path.resolve(__dirname, '..', 'src', 'templates'),
       assets: path.resolve(__dirname, '..', 'src', 'facade', 'assets'),
       M: path.resolve(__dirname, '../src/facade/js'),
-      impl: path.resolve(__dirname, '..', 'src', 'impl', 'ol', 'js'),
-      'impl-assets': path.resolve(__dirname, '..', 'src', 'impl', 'ol', 'assets'),
-      patches: path.resolve(__dirname, '../src/impl/ol/js/patches.js'),
+      impl: path.resolve(__dirname, '..', 'src', 'impl', 'ol'),
+      'package.json': path.resolve(__dirname, '..', 'package.json'),
     },
     extensions: ['.wasm', '.mjs', '.js', '.json', '.css', '.hbs', '.html', '.jpg'],
   },
   module: {
     rules: [{
+        test: /\.js$/,
+        use: {
+          loader: path.resolve(__dirname, 'mutate-loader'),
+          options: {
+            mode: 'prod',
+          }
+        },
+        include: /node_modules\/ol\/*/,
+      }, {
         test: /\.js$/,
         exclude: /(node_modules\/(?!ol)|bower_components)/,
         use: {
@@ -55,11 +66,11 @@ module.exports = {
       {
         test: /\.css$/,
         loader: MiniCssExtractPlugin.loader,
-        exclude: /node_modules/,
+        exclude: /node_modules\/(?!ol)/,
       }, {
         test: /\.css$/,
         loader: 'css-loader',
-        exclude: /node_modules/,
+        exclude: [/node_modules\/(?!ol)/],
 
       },
       {
@@ -70,13 +81,16 @@ module.exports = {
     ],
   },
   optimization: {
+    minimize: true,
     noEmitOnErrors: true,
     minimizer: [
       new OptimizeCssAssetsPlugin(),
       new TerserPlugin({
         sourceMap: true,
+        exclude: `filter/configuration-${pjson.version}.js`,
+        extractComments: false,
       }),
-    ]
+    ],
   },
   plugins: [
     // new GenerateVersionPlugin({
@@ -86,18 +100,30 @@ module.exports = {
     new MiniCssExtractPlugin({
       filename: 'assets/css/[name].css',
     }),
-    new CopywebpackPlugin([{
-      from: 'src/configuration.js',
-      to: `filter/configuration-${pjson.version}.js`,
-    }]),
-    new CopywebpackPlugin([{
-      from: 'src/facade/assets/img',
-      to: 'assets/img',
-    }]),
-    new CopywebpackPlugin([{
-      from: 'src/facade/assets/fonts',
-      to: 'assets/fonts',
-    }]),
+    new CopywebpackPlugin({
+      patterns: [{
+        from: 'src/configuration.js',
+        to: `filter/configuration-${pjson.version}.js`,
+      }],
+    }),
+    new CopywebpackPlugin({
+      patterns: [{
+        from: 'src/facade/assets/img',
+        to: 'assets/img',
+      }],
+    }),
+    new CopywebpackPlugin({
+      patterns: [{
+        from: 'src/facade/assets/fonts',
+        to: 'assets/fonts',
+      }],
+    }),
+    new CopywebpackPlugin({
+      patterns: [{
+        from: 'node_modules/sql.js/dist/sql-wasm.wasm',
+        to: 'wasm/',
+      }],
+    }),
   ],
   devtool: 'source-map',
 };

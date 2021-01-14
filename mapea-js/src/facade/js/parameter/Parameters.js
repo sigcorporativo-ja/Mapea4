@@ -1,9 +1,9 @@
 /**
  * @module M/Parameters
  */
-import { isString, isNullOrEmpty, getParameterValue, isObject, isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import { getValue } from '../i18n/language';
+import { isString, isNullOrEmpty, getParameterValue, isObject, isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * This function parses a container parameter in a legible

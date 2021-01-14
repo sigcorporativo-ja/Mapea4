@@ -1,11 +1,11 @@
 /**
  * @module M/style/Heatmap
  */
-import HeatmapImpl from 'impl/style/Heatmap';
-import Style from './Style';
-import { isString, isFunction, isArray, inverseColor, isNullOrEmpty, generateIntervals, extendsObj, defineFunctionFromString } from '../util/Utils';
-import Exception from '../exception/exception';
-import { getValue } from '../i18n/language';
+import HeatmapImpl from 'impl/style/Heatmap.js';
+import Style from './Style.js';
+import { isString, isFunction, isArray, inverseColor, isNullOrEmpty, generateIntervals, extendsObj, defineFunctionFromString } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

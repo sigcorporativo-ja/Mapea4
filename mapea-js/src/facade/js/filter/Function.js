@@ -1,8 +1,8 @@
 /**
  * @module M/filter/Function
  */
-import BaseFilter from './Base';
-import { isNullOrEmpty } from '../util/Utils';
+import BaseFilter from './Base.js';
+import { isNullOrEmpty } from '../util/Utils.js';
 
 /**
  * @classdesc

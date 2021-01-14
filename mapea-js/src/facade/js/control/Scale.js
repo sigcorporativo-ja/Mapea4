@@ -1,14 +1,14 @@
 /**
  * @module M/control/Scale
  */
-import 'assets/css/controls/scale';
-import scaleTemplate from 'templates/scale';
-import ScaleImpl from 'impl/control/Scale';
-import ControlBase from './Control';
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
-import Exception from '../exception/exception';
-import { compileSync as compileTemplate } from '../util/Template';
-import { getValue } from '../i18n/language';
+import 'assets/css/controls/scale.css';
+import scaleTemplate from 'templates/scale.html';
+import ScaleImpl from 'impl/control/Scale.js';
+import ControlBase from './Control.js';
+import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc
