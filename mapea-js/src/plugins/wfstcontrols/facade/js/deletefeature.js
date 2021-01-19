@@ -1,5 +1,5 @@
-import DeleteFeatureImpl from '../../impl/ol/js/deletefeature';
-import deletefeatureHTML from '../../templates/deletefeature';
+import DeleteFeatureImpl from '../../impl/ol/js/deletefeature.js';
+import deletefeatureHTML from '../../templates/deletefeature.html';
 
 export default class DeleteFeature extends M.Control {
   /**

@@ -1,7 +1,7 @@
-import GeosearchControl from 'plugins/geosearch/facade/js/geosearchcontrol';
-import GeosearchbylocationImpl from '../../impl/ol/js/geosearchbylocationcontrol';
-import geosearchbylocationHTML from '../../templates/geosearchbylocation';
-import geosearchbylocationresultsHTML from '../../templates/geosearchbylocationresults';
+import GeosearchControl from '../../../geosearch/facade/js/geosearchcontrol.js';
+import GeosearchbylocationImpl from '../../impl/ol/js/geosearchbylocationcontrol.js';
+import geosearchbylocationHTML from '../../templates/geosearchbylocation.html';
+import geosearchbylocationresultsHTML from '../../templates/geosearchbylocationresults.html';
 
 export default class GeosearchbylocationControl extends GeosearchControl {
   /**

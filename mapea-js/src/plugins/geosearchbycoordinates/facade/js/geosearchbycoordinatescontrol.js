@@ -1,8 +1,8 @@
 import Draggabilly from 'draggabilly';
-import GeosearchByCoordinatesImpl from '../../impl/ol/js/geosearchbycoordinatescontrol';
-import GeosearchByCoordinatesHTML from '../../templates/geosearchbycoordinates';
-import GeosearchByCoordinatesresultsHTML from '../../templates/results';
-import GeosearchControl from './geosearch/geosearchcontrol';
+import GeosearchByCoordinatesImpl from '../../impl/ol/js/geosearchbycoordinatescontrol.js';
+import GeosearchByCoordinatesHTML from '../../templates/geosearchbycoordinates.html';
+import GeosearchByCoordinatesresultsHTML from '../../templates/results.html';
+import GeosearchControl from './geosearch/geosearchcontrol.js';
 
 export default class GeosearchByCoordinatesControl extends GeosearchControl {
   /**

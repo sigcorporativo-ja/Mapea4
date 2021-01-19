@@ -1,6 +1,6 @@
-import Measure from './measurebase';
-import MeasureLengthImpl from '../../impl/ol/js/measurelength';
-import measurelengthHTML from '../../templates/measurelength';
+import Measure from './measurebase.js';
+import MeasureLengthImpl from '../../impl/ol/js/measurelength.js';
+import measurelengthHTML from '../../templates/measurelength.html';
 
 /**
  * @classdesc

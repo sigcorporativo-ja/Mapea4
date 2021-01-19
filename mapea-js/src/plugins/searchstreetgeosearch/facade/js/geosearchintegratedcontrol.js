@@ -1,6 +1,6 @@
-import GeosearchIntegratedImpl from 'plugins/searchstreetgeosearch/impl/ol/js/geosearchintegratedcontrol';
-import GeosearchControl from 'plugins/geosearch/facade/js/geosearchcontrol';
-import searchstreetgeosearchHTML from 'plugins/geosearch/templates/geosearchresults';
+import GeosearchIntegratedImpl from '../../impl/ol/js/geosearchintegratedcontrol.js';
+import GeosearchControl from '../../../geosearch/facade/js/geosearchcontrol.js';
+import searchstreetgeosearchHTML from '../../../geosearch/templates/geosearchresults.html';
 
 export default class GeosearchIntegrated extends GeosearchControl {
   /**

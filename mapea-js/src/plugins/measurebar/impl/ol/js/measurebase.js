@@ -1,5 +1,5 @@
-import tooltipPointerHTML from '../../../templates/measure_pointer_tooltip';
-import tooltipHTML from '../../../templates/measure_tooltip';
+import tooltipPointerHTML from '../../../templates/measure_pointer_tooltip.html';
+import tooltipHTML from '../../../templates/measure_tooltip.html';
 
 /**
  * @classdesc

@@ -1,8 +1,8 @@
-import { HELP_KEEP_MESSAGE } from 'plugins/measurebar/facade/js/measurearea';
+import { HELP_KEEP_MESSAGE } from '../../../facade/js/measurearea.js';
 
-import FacadeMeasure from 'plugins/measurebar/facade/js/measurebase';
-import FacadeMeasureLength from 'plugins/measurebar/facade/js/measurelength';
-import MeasureImpl from './measurebase';
+import FacadeMeasure from '../../../facade/js/measurebase.js';
+import FacadeMeasureLength from '../../../facade/js/measurelength.js';
+import MeasureImpl from './measurebase.js';
 
 /**
  * @classdesc

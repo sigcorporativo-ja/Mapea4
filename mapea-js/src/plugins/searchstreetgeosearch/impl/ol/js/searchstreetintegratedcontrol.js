@@ -1,4 +1,4 @@
-import SearchstreetImpl from 'plugins/searchstreet/impl/ol/js/searchstreetcontrol';
+import SearchstreetImpl from '../../../../searchstreet/impl/ol/js/searchstreetcontrol.js';
 
 export default class SearchstreetIntegratedControl extends SearchstreetImpl {
   /**

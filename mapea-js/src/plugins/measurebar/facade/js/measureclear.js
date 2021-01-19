@@ -1,5 +1,5 @@
-import MeasureClearImpl from 'plugins/measurebar/impl/ol/js/measureclear';
-import measureclearHTML from '../../templates/measureclear';
+import MeasureClearImpl from '../../impl/ol/js/measureclear.js';
+import measureclearHTML from '../../templates/measureclear.html';
 
 /**
  * @classdesc

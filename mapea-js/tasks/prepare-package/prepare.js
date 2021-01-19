@@ -1,20 +1,22 @@
 const path = require('path');
 const fse = require('fs-extra');
-
-const SRC_PATH = path.resolve(__dirname, '..', 'src');
-const PUBLISH_PATH = path.resolve(__dirname, '..', 'publish');
+const exec = require('./generate-index');
+const SRC_PATH = path.resolve(__dirname, '..', '..', 'src');
+const PUBLISH_PATH = path.resolve(__dirname, '..', '..', 'publish');
 
 const FOLDER = [
   { src: path.resolve(SRC_PATH, 'facade', 'js'), dest: PUBLISH_PATH },
   { src: path.resolve(SRC_PATH, 'facade', 'assets'), dest: path.resolve(PUBLISH_PATH, 'assets') },
   { src: path.resolve(SRC_PATH, 'impl', 'ol'), dest: path.resolve(PUBLISH_PATH, 'impl') },
   { src: path.resolve(SRC_PATH, 'templates'), dest: path.resolve(PUBLISH_PATH, 'templates') },
+  { src: path.resolve(SRC_PATH, 'plugins'), dest: path.resolve(PUBLISH_PATH, 'plugins') },
 ];
 
 const FILES = [
-  { src: path.resolve(__dirname, '..', 'package.json'), dest: path.resolve(PUBLISH_PATH, 'package.json') },
-  { src: path.resolve(__dirname, '..', 'LICENSE'), dest: path.resolve(PUBLISH_PATH, 'LICENSE') },
-  { src: path.resolve(__dirname, '..', 'README.md'), dest: path.resolve(PUBLISH_PATH, 'README.md') },
+  { src: path.resolve(__dirname, '..', '..', 'src', 'index.js'), dest: path.resolve(PUBLISH_PATH, 'index.js') },
+  { src: path.resolve(__dirname, '..', '..', 'package.json'), dest: path.resolve(PUBLISH_PATH, 'package.json') },
+  { src: path.resolve(__dirname, '..', '..', 'LICENSE'), dest: path.resolve(PUBLISH_PATH, 'LICENSE') },
+  { src: path.resolve(__dirname, '..', '..', 'README.md'), dest: path.resolve(PUBLISH_PATH, 'README.md') },
 ];
 
 /**
@@ -47,6 +49,28 @@ const replaceImportsPath = (src, level) => {
         const importStatement = `import config from '${replacePath(level)}configuration.js'`;
         replaceContent = replaceContent.replace(/M.config/g, 'config');
         replaceContent = `${importStatement};\n${replaceContent}`;
+      }
+      return replaceContent;
+    },
+  ];
+
+  const content = fse.readFileSync(src, 'utf-8');
+  const replaceContent = regexps.reduce((current, next) => next(current), content);
+  fse.writeFileSync(src, replaceContent);
+};
+
+/**
+ *
+ * @param {string} src
+ * @param {string} dest
+ */
+const replacePluginsImportsPath = (src, level) => {
+  const regexps = [
+    content => `import {M} from '${replacePath(level)}index.js';\n` + content,
+    (content) => {
+      let replaceContent = content;
+      if (src.includes('impl/')) {
+        replaceContent = `import {ol} from '${replacePath(level)}index.js';\n` + content;
       }
       return replaceContent;
     },
@@ -106,7 +130,13 @@ const replaceAllImportsPath = (src, level = 0) => {
   ls.forEach((name) => {
     const srcFile = path.resolve(src, name);
     if (fse.statSync(srcFile).isFile()) {
-      replaceImportsPath(srcFile, level);
+      if (!src.includes('/plugins')) {
+        replaceImportsPath(srcFile, level);
+      } else {
+        if (srcFile.endsWith('.js')) {
+          replacePluginsImportsPath(srcFile, level);
+        }
+      }
     }
     if (fse.statSync(srcFile).isDirectory()) {
       const newLevel = level + 1;
@@ -119,7 +149,8 @@ const replaceAllImportsPath = (src, level = 0) => {
  * Main function
  * @function
  */
-const main = () => {
+const main = async () => {
+  await exec();
   if (fse.existsSync(PUBLISH_PATH)) {
     fse.removeSync(PUBLISH_PATH);
   }

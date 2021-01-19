@@ -1,7 +1,7 @@
-import SearchstreetGeosearchControlImpl from 'plugins/searchstreetgeosearch/impl/ol/js/searchstreetgeosearchcontrol';
-import SearchstreetIntegrated from './searchstreetintegratedcontrol';
-import GeosearchIntegrated from './geosearchintegratedcontrol';
-import searchstreetgeosearchHTML from '../../templates/searchstreetgeosearch';
+import SearchstreetGeosearchControlImpl from '../../impl/ol/js/searchstreetgeosearchcontrol.js';
+import SearchstreetIntegrated from './searchstreetintegratedcontrol.js';
+import GeosearchIntegrated from './geosearchintegratedcontrol.js';
+import searchstreetgeosearchHTML from '../../templates/searchstreetgeosearch.html';
 
 /**
  * Name controls
