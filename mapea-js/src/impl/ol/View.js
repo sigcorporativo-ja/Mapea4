@@ -86,6 +86,8 @@ class View extends OLView {
       maxResolution: this.maxResolution_,
       projection: this.projection_,
       center: this.getCenter(),
+      constrainResolution: true,
+      multiWorld: true,
     });
     if (!isNullOrEmpty(this.userZoom_)) {
       this.setZoom(this.userZoom_);
