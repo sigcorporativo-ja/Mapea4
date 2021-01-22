@@ -148,11 +148,16 @@ function generateExports(symbols, namespaces, imports) {
   blocks = imports.concat(['export const M = {};\nexport const ol = {}']
     .concat(nsdefs.concat(blocks).sort()));
   blocks.push('');
-  return blocks.join('\n');
+  return blocks
+    .join('\n')
+    .replace("import * as olstyleIconOriginModule from 'ol/style/IconOrigin';", "import olstyleIconOriginModule from 'ol/style/IconOrigin';")
+    .replace("import * as olstyleIconAnchorUnitsModule from 'ol/style/IconAnchorUnits';", "import olstyleIconAnchorUnitsModule from 'ol/style/IconAnchorUnits';")
+    .replace("import * as olsourceWMSServerTypeModule from 'ol/source/WMSServerType';", "import olsourceWMSServerTypeModule from 'ol/source/WMSServerType';");
 }
 
 /**
- * Concat custom namespaces
+ * Concat custom namespace
+ * Concat custom namespace;
  * @param {array<object>} libraries - Object array of libraries -> [{name, path}]
  * @param {string} outputFilePath - output file path
  */
@@ -173,42 +178,10 @@ async function main() {
   const symbols = await getSymbols();
   const imports = await getImports(symbols);
   const olSymbols = await getOLSymbols();
-  imports.push('\n/* eslint-disable */\n');
   const olImports = await getOLImports(olSymbols);
   const totalSymbols = symbols.concat(olSymbols);
   const totalImports = imports.concat(olImports);
   return generateExports(totalSymbols, {}, totalImports);
-}
-
-class AnimationTime {
-  constructor() {
-    this.seconds = 0;
-    this.idInterval = null;
-  }
-
-  start() {
-    if (!this.idInterval) {
-      this.idInterval = setInterval(() => {
-        this.seconds += 1;
-        console.clear();
-        const bar = [' ', ' ', ' ', ' ', ' '];
-        const mod = this.seconds % 5;
-        bar[mod] = '===';
-        console.log(`[Prepublish] Processing - [${bar.join('')}]`.blue);
-      }, 500);
-    }
-  }
-
-  stop(err = null) {
-    if (this.idInterval) {
-      clearInterval(this.idInterval);
-      this.idInterval = null;
-      if (err) {
-        console.log(`Error!`.red);
-      }
-      console.log('Prepublish has finished succesfully!'.green);
-    }
-  }
 }
 
 /**
@@ -216,18 +189,14 @@ class AnimationTime {
  * function, and write the output file.
  */
 function exec() {
-  const animation = new AnimationTime();
-  animation.start();
   return new Promise((resolve, reject) => {
     main().then(async (code) => {
       const filepath = path.join(__dirname, '..', '..', 'src', 'index.js');
       fse.outputFileSync(filepath, code);
       includeCustomNamespaces(CUSTOM_NAMESPACES, '../../src/index.js');
     }).then(async () => {
-      animation.stop();
       resolve();
     }).catch((err) => {
-      animation.stop(err);
       process.stderr.write(`${err.message}\n`, () => process.exit(1));
       reject(err);
     });

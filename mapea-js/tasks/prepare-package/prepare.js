@@ -1,6 +1,7 @@
 const path = require('path');
 const fse = require('fs-extra');
 const exec = require('./generate-index');
+const { create } = require('domain');
 const SRC_PATH = path.resolve(__dirname, '..', '..', 'src');
 const PUBLISH_PATH = path.resolve(__dirname, '..', '..', 'publish');
 
@@ -47,8 +48,13 @@ const replaceImportsPath = (src, level) => {
       let replaceContent = content;
       if (/M.config/g.test(content)) {
         const importStatement = `import config from '${replacePath(level)}configuration.js'`;
-        replaceContent = replaceContent.replace(/M.config/g, 'config');
-        replaceContent = `${importStatement};\n${replaceContent}`;
+        if (!src.endsWith('index.js')) {
+          replaceContent = replaceContent.replace(/M.config/g, 'config');
+          replaceContent = `${importStatement};\n${replaceContent}`;
+        } else {
+          replaceContent = replaceContent.replace(/MModule.config/g, 'config');
+          replaceContent = `${importStatement};\n${replaceContent}`;
+        }
       }
       return replaceContent;
     },
@@ -67,18 +73,21 @@ const replaceImportsPath = (src, level) => {
 const replacePluginsImportsPath = (src, level) => {
   const regexps = [
     content => `import {M} from '${replacePath(level)}index.js';\n` + content,
-    (content) => {
-      let replaceContent = content;
-      if (src.includes('impl/')) {
-        replaceContent = `import {ol} from '${replacePath(level)}index.js';\n` + content;
-      }
-      return replaceContent;
-    },
+    content => `import {ol} from '${replacePath(level)}index.js';\n` + content,
   ];
 
   const content = fse.readFileSync(src, 'utf-8');
   const replaceContent = regexps.reduce((current, next) => next(current), content);
   fse.writeFileSync(src, replaceContent);
+};
+
+const createIndexPlugin = () => {
+  const PLUGINS_DIR = path.resolve(PUBLISH_PATH, 'plugins');
+  fse.readdirSync(PLUGINS_DIR).forEach((name) => {
+    const indexPath = path.resolve(PLUGINS_DIR, name, 'index.js');
+    const code = `import ${name} from './facade/js/${name}.js'\nexport default ${name};`;
+    fse.writeFileSync(indexPath, code);
+  });
 };
 
 /**
@@ -167,6 +176,7 @@ const main = async () => {
 
   replaceAllImportsPath(PUBLISH_PATH);
 
+  createIndexPlugin();
   // Prepare package.json
   const pkgPath = path.resolve(PUBLISH_PATH, 'package.json');
   const pkg = require(pkgPath);
