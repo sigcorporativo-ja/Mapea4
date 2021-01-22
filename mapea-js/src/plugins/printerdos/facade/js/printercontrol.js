@@ -611,7 +611,7 @@ export default class PrinterControl extends M.Control {
       printData.attributes.map.layers = encodedLayers;
       printData.attributes = Object.assign(printData.attributes, parameters);
       // Se añade la leyenda
-      if (legend === 'true') {
+      if (legend) {
         const legends = [];
         const leyenda = this.encodeLegends();
         for (let i = 0, ilen = leyenda.length; i < ilen; i += 1) {
