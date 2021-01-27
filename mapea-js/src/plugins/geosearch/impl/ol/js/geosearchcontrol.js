@@ -1,4 +1,4 @@
-import Geosearchlayer from '../../../facade/js/geosearchlayer';
+import Geosearchlayer from '../../../facade/js/geosearchlayer.js';
 
 /**
  * @namespace M.impl.control

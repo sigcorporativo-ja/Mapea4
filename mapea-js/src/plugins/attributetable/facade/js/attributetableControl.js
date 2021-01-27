@@ -1,7 +1,7 @@
-import AttributeTableControlImpl from 'plugins/attributetable/impl/ol/js/attributetableControl';
 import Draggabilly from 'draggabilly';
-import attributetableHTML from '../../templates/attributetable';
-import tableDataHTML from '../../templates/tableData';
+import AttributeTableControlImpl from '../../impl/ol/js/attributetableControl.js';
+import attributetableHTML from '../../templates/attributetable.html';
+import tableDataHTML from '../../templates/tableData.html';
 
 export default class AttributeTableControl extends M.Control {
   /**
@@ -187,7 +187,7 @@ export default class AttributeTableControl extends M.Control {
   hasLayer_(layerSearch) {
     const layersFind = [];
     if (M.utils.isNullOrEmpty(layerSearch) || (!M.utils.isArray(layerSearch) &&
-      !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
+        !M.utils.isString(layerSearch) && !(layerSearch instanceof M.Layer))) {
       M.dialog.error('El parametro para el método hasLayer no es correcto.', 'Error');
       return layersFind;
     }

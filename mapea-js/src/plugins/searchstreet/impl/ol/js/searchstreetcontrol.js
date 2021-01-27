@@ -1,4 +1,4 @@
-import SearchstreetPopup from '../../../templates/searchstreetpopup';
+import SearchstreetPopup from '../../../templates/searchstreetpopup.html';
 
 /**
  * @namespace M.impl.control
@@ -86,8 +86,7 @@ export default class SearchstreetControl extends ol.control.Control {
       }));
       positionFeature.setGeometry(results[i].coordinateX !== null &&
         results[i].coordinateY !== null ?
-        new ol.geom.Point([results[i].coordinateX, results[i].coordinateY,
-        ]) : null);
+        new ol.geom.Point([results[i].coordinateX, results[i].coordinateY]) : null);
       const feature = results[i];
       this.addEventClickFeature(feature, positionFeature);
 
@@ -134,7 +133,8 @@ export default class SearchstreetControl extends ol.control.Control {
     if (M.utils.isNullOrEmpty(result)) {
       this.showPopup(element, false);
       this.facadeMap_.setBbox([element.coordinateX,
-        element.coordinateY, element.coordinateX, element.coordinateY]);
+        element.coordinateY, element.coordinateX, element.coordinateY,
+      ]);
     } else if (result instanceof ol.Feature) {
       result.set('vendor', {
         mapea: {

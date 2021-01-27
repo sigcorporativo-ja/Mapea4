@@ -1,4 +1,4 @@
-import GeosearchControlImpl from 'plugins/geosearch/impl/ol/js/geosearchcontrol';
+import GeosearchControlImpl from '../../../../geosearch/impl/ol/js/geosearchcontrol.js';
 
 export default class GeosearchIntegrated extends GeosearchControlImpl {
   /**

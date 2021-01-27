@@ -19,7 +19,7 @@ class GenerateVersionPlugin {
    * @function
    */
   apply(compiler) {
-    compiler.hooks.done.tap('GenerateVersionPlugin', (stats) => {
+    compiler.hooks.done.tap('GenerateVersionPlugin', (stats, e) => {
       const { path } = stats.compilation.options.output;
       stats.compilation.chunks.forEach((chunk, index) => {
         chunk.files.forEach((file) => {
@@ -32,7 +32,9 @@ class GenerateVersionPlugin {
           const realPath = pathmodule.resolve(path, file);
           const newPath = pathmodule.join(pathmodule.dirname(realPath), replacePath);
           if (this.override === true) {
-            fs.renameSync(realPath, newPath);
+            if (fs.existsSync(realPath)) {
+              fs.renameSync(realPath, newPath);
+            }
           } else {
             fs.copyFileSync(realPath, newPath);
           }
