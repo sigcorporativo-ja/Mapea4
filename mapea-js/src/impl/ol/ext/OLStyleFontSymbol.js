@@ -978,7 +978,31 @@ OLStyleFontSymbol.addDefs({
   'g-cartografia-zoom-menos': {
     font: 'g-cartografia',
     code: 59748,
-    name: 'alerta',
+    name: 'zoom-menos',
     search: 'zoom-menos',
+  },
+  'g-cartografia-pin5': {
+    font: 'g-cartografia',
+    code: 59749,
+    name: 'pin5',
+    search: 'pin5',
+  },
+  'g-cartografia-pin-nuevo2': {
+    font: 'g-cartografia',
+    code: 59750,
+    name: 'pin-nuevo2',
+    search: 'pin-nuevo2',
+  },
+  'g-cartografia-pin-seleccionado': {
+    font: 'g-cartografia',
+    code: 59751,
+    name: 'pin-seleccionado',
+    search: 'pin-seleccionado',
+  },
+  'g-cartografia-brujula-norte': {
+    font: 'g-cartografia',
+    code: 59752,
+    name: 'brujula-norte',
+    search: 'brujula-norte',
   },
 });

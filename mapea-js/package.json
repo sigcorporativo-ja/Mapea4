@@ -85,7 +85,7 @@
     "nightwatch": "nightwatch --config=./nightwatch.conf.js",
     "prebuild": "node tasks/clean-build.js --path=dist && node tasks/generate-index.js && node tasks/generate-plugins-entrypoints.js",
     "postbuild": "npm run generate-doc && node tasks/copy-legacy.js",
-    "publish_npm": "node tasks/prepare-package.js",
+    "publish_npm": "node tasks/prepare-package/prepare.js",
     "start": "webpack-dev-server --config=webpack-config/webpack.development.config.js",
     "start:build": "npm run build && npm run debug:build",
     "test": "npm run karma && npm run nightwatch"

@@ -1,6 +1,6 @@
-import resultsPopupHTML from '../.././../../templates/geosearchfeaturepopup';
-import GeoStyle from './geosearchstyle';
-import UtilsGeosearch from './utils';
+import resultsPopupHTML from '../.././../../templates/geosearchfeaturepopup.html';
+import GeoStyle from './geosearchstyle.js';
+import UtilsGeosearch from './utils.js';
 
 export default class GeosearchLayer extends M.impl.layer.Vector {
   /**

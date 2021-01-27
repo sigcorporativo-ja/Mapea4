@@ -1,5 +1,5 @@
-import GeosearchControlImpl from 'plugins/geosearch/impl/ol/js/geosearchcontrol';
-import geosearchbylocationfeaturepopupHTML from '../../../templates/geosearchbylocationfeaturepopup';
+import GeosearchControlImpl from '../../../../geosearch/impl/ol/js/geosearchcontrol.js';
+import geosearchbylocationfeaturepopupHTML from '../../../templates/geosearchbylocationfeaturepopup.html';
 
 export default class GeosearchbylocationControl extends GeosearchControlImpl {
   /**

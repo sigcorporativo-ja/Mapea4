@@ -1,6 +1,6 @@
-import Measure from './measurebase';
-import MeasureAreaImpl from '../../impl/ol/js/measurearea';
-import measureareaHTML from '../../templates/measurearea';
+import Measure from './measurebase.js';
+import MeasureAreaImpl from '../../impl/ol/js/measurearea.js';
+import measureareaHTML from '../../templates/measurearea.html';
 
 /**
  * @classdesc

@@ -1,6 +1,6 @@
-import '../assets/css/geosearchbycoordinates';
-import GeosearchByCoordinatesControl from './geosearchbycoordinatescontrol';
-import api from '../../api';
+import '../assets/css/geosearchbycoordinates.css';
+import GeosearchByCoordinatesControl from './geosearchbycoordinatescontrol.js';
+import api from '../../api.json';
 
 export default class GeosearchByCoordinates extends M.Plugin {
   /**

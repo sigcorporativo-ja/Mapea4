@@ -1,7 +1,7 @@
-import Autocomplete from './autocomplete';
-import SearchstreetControl from './searchstreetcontrol';
-import '../assets/css/searchstreet';
-import api from '../../api';
+import Autocomplete from './autocomplete.js';
+import SearchstreetControl from './searchstreetcontrol.js';
+import '../assets/css/searchstreet.css';
+import api from '../../api.json';
 
 export default class Searchstreet extends M.Plugin {
   /**

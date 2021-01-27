@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import PrinterControlImpl from '../../impl/ol/js/printercontrol';
-import printerHTML from '../../templates/printer';
+import PrinterControlImpl from '../../impl/ol/js/printercontrol.js';
+import printerHTML from '../../templates/printer.html';
 
 /**
  * Time in secods
@@ -611,7 +611,7 @@ export default class PrinterControl extends M.Control {
       printData.attributes.map.layers = encodedLayers;
       printData.attributes = Object.assign(printData.attributes, parameters);
       // Se añade la leyenda
-      if (legend === 'true') {
+      if (legend) {
         const legends = [];
         const leyenda = this.encodeLegends();
         for (let i = 0, ilen = leyenda.length; i < ilen; i += 1) {
