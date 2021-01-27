@@ -1,5 +1,5 @@
-import PrinterControlImpl from '../../impl/ol/js/printercontrol';
-import printerHTML from '../../templates/printer';
+import PrinterControlImpl from '../../impl/ol/js/printercontrol.js';
+import printerHTML from '../../templates/printer.html';
 
 export default class PrinterControl extends M.Control {
   /**

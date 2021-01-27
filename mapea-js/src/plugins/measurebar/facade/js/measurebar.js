@@ -1,8 +1,8 @@
-import MeasureLength from './measurelength';
-import MeasureArea from './measurearea';
-import MeasureClear from './measureclear';
-import '../assets/css/measurebar';
-import api from '../../api';
+import MeasureLength from './measurelength.js';
+import MeasureArea from './measurearea.js';
+import MeasureClear from './measureclear.js';
+import '../assets/css/measurebar.css';
+import api from '../../api.json';
 
 export default class Measurebar extends M.Plugin {
   /**

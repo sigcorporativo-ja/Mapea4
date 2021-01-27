@@ -1,4 +1,4 @@
-import ResultsTemplate from '../../templates/resultautocomplete';
+import ResultsTemplate from '../../templates/resultautocomplete.html';
 
 export default class Autocomplete extends M.Plugin {
   /**

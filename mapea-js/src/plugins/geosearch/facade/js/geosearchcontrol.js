@@ -1,7 +1,7 @@
-import GeosearchImpl from '../../impl/ol/js/geosearchcontrol';
-import geosearchHTML from '../../templates/geosearch';
-import geosearchResultHTML from '../../templates/geosearchresults';
-import helpTemplateHTML from '../../templates/geosearchhelp';
+import GeosearchImpl from '../../impl/ol/js/geosearchcontrol.js';
+import geosearchHTML from '../../templates/geosearch.html';
+import geosearchResultHTML from '../../templates/geosearchresults.html';
+import helpTemplateHTML from '../../templates/geosearchhelp.html';
 
 export default class GeosearchControl extends M.Control {
   /**

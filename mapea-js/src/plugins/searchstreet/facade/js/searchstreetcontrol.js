@@ -1,6 +1,6 @@
-import SearchstreetImpl from '../../impl/ol/js/searchstreetcontrol';
-import SearchstreetTemplate from '../../templates/searchstreet';
-import SearchstreetResultsTemplate from '../../templates/searchstreetresults';
+import SearchstreetImpl from '../../impl/ol/js/searchstreetcontrol.js';
+import SearchstreetTemplate from '../../templates/searchstreet.html';
+import SearchstreetResultsTemplate from '../../templates/searchstreetresults.html';
 
 
 export default class SearchstreetControl extends M.Control {

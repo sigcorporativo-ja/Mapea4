@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import PrinterControlImpl from '../../impl/ol/js/printercontrol';
-import printerHTML from '../../templates/printer';
+import PrinterControlImpl from '../../impl/ol/js/printercontrol.js';
+import printerHTML from '../../templates/printer.html';
 
 /**
  * Time in secods

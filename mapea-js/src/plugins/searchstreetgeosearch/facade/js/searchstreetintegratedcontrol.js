@@ -1,5 +1,5 @@
-import SearchstreetControl from 'plugins/searchstreet/facade/js/searchstreetcontrol';
-import SearchstreetIntegratedControlImpl from '../../impl/ol/js/searchstreetintegratedcontrol';
+import SearchstreetControl from '../../../searchstreet/facade/js/searchstreetcontrol.js';
+import SearchstreetIntegratedControlImpl from '../../impl/ol/js/searchstreetintegratedcontrol.js';
 
 export default class SearchstreetIntegrated extends SearchstreetControl {
   /**
