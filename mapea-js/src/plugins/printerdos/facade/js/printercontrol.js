@@ -670,8 +670,8 @@ export default class PrinterControl extends M.Control {
           } else {
             // Se comprueba que las capas vectoriales estén en el rango del mapa.
             const resolution = this.map_.getMapImpl().getView().getResolution();
-            const maxResolution = layer.impl_.ol3Layer.getMaxResolution();
-            const minResolution = layer.impl_.ol3Layer.getMinResolution();
+            const maxResolution = layer.getImpl().getOL3Layer().getMaxResolution();
+            const minResolution = layer.getImpl().getOL3Layer().getMinResolution();
             if (((resolution >= minResolution) && (resolution <= maxResolution))) {
               encodedLayersVector.push(encodedLayer);
             }
