@@ -288,7 +288,7 @@
      * @public
      * @api stable
      */
-    'URL': location.protocol + '//geoprint.desarrollo.guadaltel.es/print/SIGC',
+    'URL': location.protocol + '//geoprint-sigc.juntadeandalucia.es/geoprint3/print/SIGC',
 
     /**
      * Printer service URL
@@ -297,7 +297,7 @@
      * @public
      * @api stable
      */
-    'URL_APPLICATION': location.protocol  + '//geoprint.desarrollo.guadaltel.es',
+    'URL_APPLICATION': location.protocol  + '//geoprint-sigc.juntadeandalucia.es/geoprint3',
   });
 
   /**
