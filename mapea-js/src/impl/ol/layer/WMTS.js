@@ -17,7 +17,7 @@ import { get as getRemote } from 'M/util/Remote';
 import * as EventType from 'M/event/eventtype';
 import { get as getProj } from 'ol/proj';
 import OLLayerTile from 'ol/layer/Tile';
-import { optionsFromCapabilities } from 'impl/patches';
+import { optionsFromCapabilities } from 'ol/source/WMTS';
 import LayerBase from './Layer';
 /**
  * @classdesc
