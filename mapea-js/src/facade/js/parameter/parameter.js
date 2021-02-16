@@ -982,9 +982,9 @@ const getMatrixSetWMTS = (parameter) => {
   let params;
   if (isString(parameter)) {
     // <WMTS>*<URL>*<NAME>*<MATRIXSET>
-    if (/^WMTS\*[^*]+\*[^*]+\*[^*]+/i.test(parameter)) {
+    if (/^WMTS\*[^*]+\*[^*]+(\*[^*]])*/i.test(parameter)) {
       params = parameter.split(/\*/);
-      matrixSet = params[3].trim();
+      matrixSet = params[3] ? params[3].trim() : null;
     } else if (/^[^*]+\*[^*]+\*[^*]+/.test(parameter)) {
       // <URL>*<NAME>*<MATRIXSET>
       params = parameter.split(/\*/);
