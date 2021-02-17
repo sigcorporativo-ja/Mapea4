@@ -42,8 +42,6 @@ import GeoJSON from './layer/GeoJSON.js';
 import StylePoint from './style/Point.js';
 import Control from './control/Control.js';
 import MBTiles from './layer/MBTiles.js';
-import GeoPackage from './layer/GeoPackage';
-import GeoPackageTile from './layer/GeoPackageTile';
 import MBTilesVector from './layer/MBTilesVector';
 
 /**
@@ -198,14 +196,6 @@ class Map extends Base {
      * @api
      */
     this.ticket_ = null;
-
-    /**
-     * Geopackage layers
-     * @private
-     * @type {M/layer/GeoPackage}
-     * @api
-     */
-    this.geopackages_ = [];
 
     // adds class to the container
     params.container.classList.add('m-mapea-container');
@@ -1480,157 +1470,6 @@ class Map extends Base {
       this.fire(EventType.ADDED_VECTOR_TILE, [mvtLayers]);
     }
     return this;
-  }
-
-  /**
-   * This function gets the geopackage tile layers
-   *
-   * @function
-   * @public
-   * @api
-   */
-  getGeoPackageTile(layersParamVar) {
-    let layersParam = layersParamVar;
-    if (isUndefined(MapImpl.prototype.getGeoPackageTile)) {
-      Exception('La implementación usada no posee el método getWFS');
-    }
-
-    if (isNull(layersParam)) {
-      layersParam = [];
-    } else if (!isArray(layersParam)) {
-      layersParam = [layersParam];
-    }
-
-    let filters = [];
-    if (layersParam.length > 0) {
-      filters = layersParam.map((layerParam) => {
-        return parameter.layer(layerParam, LayerType.GeoPackageTile);
-      });
-    }
-
-    const layers = this.getImpl().getGeoPackageTile(filters).sort(Map.LAYER_SORT);
-
-    return layers;
-  }
-
-  /**
-   * This function removes the geopackage tile layers from map.
-   *
-   * @function
-   * @public
-   * @api
-   */
-  removeGeoPackageTile(layersParam) {
-    if (!isNullOrEmpty(layersParam)) {
-      if (isUndefined(MapImpl.prototype.removeGeoPackageTile)) {
-        Exception('La implementación usada no posee el método removeWFS');
-      }
-      const layers = this.getGeoPackageTile(layersParam);
-      if (layers.length > 0) {
-        layers.forEach((layer) => {
-          this.featuresHandler_.removeLayer(layer);
-        });
-        this.getImpl().removeGeoPackageTile(layers);
-      }
-    }
-    return this;
-  }
-
-  /**
-   * This function adds the geopackage tile layers
-   *
-   * @function
-   * @public
-   * @api
-   */
-  addGeoPackageTile(layersParamVar) {
-    let layersParam = layersParamVar;
-    if (!isNullOrEmpty(layersParam)) {
-      if (isUndefined(MapImpl.prototype.addGeoPackageTile)) {
-        Exception('La implementación usada no posee el método addWFS');
-      }
-
-      if (!isArray(layersParam)) {
-        layersParam = [layersParam];
-      }
-
-      const layers = [];
-      layersParam.forEach((layerParam) => {
-        let vectorTile;
-        if (isObject(layerParam) && (layerParam instanceof GeoPackageTile)) {
-          vectorTile = layerParam;
-        }
-        layers.push(vectorTile);
-      });
-
-      this.getImpl().addGeoPackageTile(layers);
-      this.fire(EventType.ADDED_LAYER, [layers]);
-      this.fire(EventType.ADDED_GEOPACKAGE_TILE, [layers]);
-    }
-    return this;
-  }
-
-  /**
-   * This function adds the geopackage layers
-   *
-   * @function
-   * @public
-   * @api
-   */
-  addGeoPackage(layersParamVar) {
-    let layersParam = layersParamVar;
-    if (!isNullOrEmpty(layersParam)) {
-      if (!isArray(layersParam)) {
-        layersParam = [layersParam];
-      }
-
-      layersParam.forEach((geopackageLayer) => {
-        if (geopackageLayer instanceof GeoPackage) {
-          geopackageLayer.addTo(this);
-          this.geopackages_.push(geopackageLayer);
-        }
-      });
-      this.fire(EventType.ADDED_LAYER, [this.geopackages_]);
-      this.fire(EventType.ADDED_GEOPACKAGE, [this.geopackages_]);
-    }
-    return this;
-  }
-
-  /**
-   * This function removes the geopackage layers
-   *
-   * @function
-   * @public
-   * @api
-   */
-  removeGeoPackage(layersParamVar) {
-    let layersParam = layersParamVar;
-    if (!isNullOrEmpty(layersParam)) {
-      if (!isArray(layersParam)) {
-        layersParam = [layersParam];
-      }
-
-      const geopackageLayers = layersParam.filter(layerParam => layerParam instanceof GeoPackage);
-      geopackageLayers.forEach((geopackageLayer) => {
-        geopackageLayer.removeLayers();
-        this.geopackages_ = this.geopackages_
-          .filter(geopackage => !geopackage.equals(geopackageLayer));
-      });
-
-      this.fire(EventType.REMOVED_LAYER, [geopackageLayers]);
-    }
-    return this;
-  }
-
-  /**
-   * This function returns the geopackage layers
-   * @function
-   * @public
-   * @return {M/layer/GeoPackage}
-   * @api
-   */
-  getGeoPackage() {
-    return this.geopackages_;
   }
 
   /**
