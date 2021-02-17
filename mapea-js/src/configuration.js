@@ -427,11 +427,4 @@
    * @type {String}
    */
   M.config('ATTRIBUTETABLE_PAGES', '${attributetable.pages}');
-
-  /**
-   * URL of sql wasm file
-   * @private
-   * @type {String}
-   */
-  M.config('SQL_WASM_URL', location.protocol + '${sql_wasm.url}');
 })(window.M);
