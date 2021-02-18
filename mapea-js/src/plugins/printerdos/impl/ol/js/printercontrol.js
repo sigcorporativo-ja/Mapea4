@@ -524,7 +524,7 @@ export default class PrinterControl extends M.impl.Control {
             }
             styleText = {
               type: 'text',
-              label: text.getText(),
+              label: text.getText() || '',
               fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '#000000' : M.utils.rgbToHex(text.getFill().getColor()),
               fontSize,
               fontFamily: 'Helvetica, sans-serif',
@@ -779,7 +779,7 @@ export default class PrinterControl extends M.impl.Control {
             }
             styleText = {
               type: 'text',
-              label: text.getText(),
+              label: text.getText() || '',
               fontColor: M.utils.isNullOrEmpty(text.getFill()) ? '#000000' : M.utils.rgbToHex(text.getFill().getColor()),
               fontSize,
               fontFamily: 'Helvetica, sans-serif',
