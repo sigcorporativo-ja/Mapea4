@@ -41,8 +41,6 @@ import Panel from './ui/Panel.js';
 import GeoJSON from './layer/GeoJSON.js';
 import StylePoint from './style/Point.js';
 import Control from './control/Control.js';
-import MBTiles from './layer/MBTiles.js';
-import MBTilesVector from './layer/MBTilesVector';
 
 /**
  * @classdesc
@@ -477,9 +475,6 @@ class Map extends Base {
                 break;
               case 'MVT':
                 layer = new MVT(parameterVariable);
-                break;
-              case 'MBTiles':
-                layer = new MBTiles(parameterVariable);
                 break;
               default:
                 Dialog.error(getValue('dialog').invalid_type_layer);
@@ -1198,180 +1193,6 @@ class Map extends Base {
       if (wmtsLayers.length > 0) {
         // removes the layers
         this.getImpl().removeWMTS(wmtsLayers);
-      }
-    }
-    return this;
-  }
-
-  /**
-   * This function gets the MBtiles layers added to the map
-   *
-   * @function
-   * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @returns {Array<M.layer.MBtiles>} layers from the map
-   * @api
-   */
-  getMBTiles(layersParamVar) {
-    let layersParam = layersParamVar;
-    if (isUndefined(MapImpl.prototype.getMBTiles)) {
-      Exception(getValue('exception').getmbtiles_method);
-    }
-
-    if (isNull(layersParam)) {
-      layersParam = [];
-    } else if (!isArray(layersParam)) {
-      layersParam = [layersParam];
-    }
-
-    let filters = [];
-    if (layersParam.length > 0) {
-      filters = layersParam.map(parameter.layer);
-    }
-
-    const layers = this.getImpl().getMBTiles(filters).sort(Map.LAYER_SORT);
-
-    return layers;
-  }
-
-  /**
-   * This function adds the MBtiles layers to the map
-   *
-   * @function
-   * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
-   * @returns {Map}
-   * @api
-   */
-  addMBTiles(layersParamVar) {
-    let layersParam = layersParamVar;
-    if (!isNullOrEmpty(layersParam)) {
-      if (isUndefined(MapImpl.prototype.addMBTiles)) {
-        Exception(getValue('exception').addmbtiles_method);
-      }
-
-      if (!isArray(layersParam)) {
-        layersParam = [layersParam];
-      }
-
-      const mbtilesLayers = [];
-      layersParam.forEach((layerParam) => {
-        if (isObject(layerParam) &&
-          (layerParam instanceof MBTiles)) {
-          layerParam.setMap(this);
-          mbtilesLayers.push(layerParam);
-        }
-      });
-
-      this.getImpl().addMBTiles(mbtilesLayers);
-      this.fire(EventType.ADDED_LAYER, [mbtilesLayers]);
-      this.fire(EventType.ADDED_MBTILES, [mbtilesLayers]);
-    }
-    return this;
-  }
-
-  /**
-   * This function removes the MBtiles layers to the map
-   *
-   * @function
-   * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
-   * @returns {Map}
-   * @api
-   */
-  removeMBTiles(layersParam) {
-    if (!isNullOrEmpty(layersParam)) {
-      if (isUndefined(MapImpl.prototype.removeMBTiles)) {
-        Exception(getValue('exception').removembtiles_method);
-      }
-
-      const mbtilesLayers = this.getMBTiles(layersParam);
-      if (mbtilesLayers.length > 0) {
-        this.getImpl().removeMBTiles(mbtilesLayers);
-      }
-    }
-    return this;
-  }
-
-  /**
-   * This function gets the MBtiles layers added to the map
-   *
-   * @function
-   * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
-   * @returns {Array<M.layer.MBtiles>} layers from the map
-   * @api
-   */
-  getMBTilesVector(layersParamVar) {
-    let layersParam = layersParamVar;
-    if (isUndefined(MapImpl.prototype.getMBTilesVector)) {
-      Exception(getValue('exception').getmbtiles_method);
-    }
-
-    if (isNull(layersParam)) {
-      layersParam = [];
-    } else if (!isArray(layersParam)) {
-      layersParam = [layersParam];
-    }
-
-    let filters = [];
-    if (layersParam.length > 0) {
-      filters = layersParam.map(parameter.layer);
-    }
-
-    const layers = this.getImpl().getMBTilesVector(filters).sort(Map.LAYER_SORT);
-
-    return layers;
-  }
-
-  /**
-   * This function adds the MBtiles layers to the map
-   *
-   * @function
-   * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
-   * @returns {Map}
-   * @api
-   */
-  addMBTilesVector(layersParamVar) {
-    let layersParam = layersParamVar;
-    if (!isNullOrEmpty(layersParam)) {
-      if (isUndefined(MapImpl.prototype.addMBTilesVector)) {
-        Exception(getValue('exception').addmbtiles_method);
-      }
-
-      if (!isArray(layersParam)) {
-        layersParam = [layersParam];
-      }
-
-      const mbtilesLayers = [];
-      layersParam.forEach((layerParam) => {
-        if (isObject(layerParam) &&
-          (layerParam instanceof MBTilesVector)) {
-          layerParam.setMap(this);
-          mbtilesLayers.push(layerParam);
-        }
-      });
-
-      this.getImpl().addMBTilesVector(mbtilesLayers);
-      this.fire(EventType.ADDED_LAYER, [mbtilesLayers]);
-      this.fire(EventType.ADDED_MBTILES_VECTOR, [mbtilesLayers]);
-    }
-    return this;
-  }
-
-  /**
-   * This function removes the MBtiles layers to the map
-   *
-   * @function
-   * @param {Array<string>|Array<Mx.parameters.MBtiles>} layersParam
-   * @returns {Map}
-   * @api
-   */
-  removeMBTilesVector(layersParam) {
-    if (!isNullOrEmpty(layersParam)) {
-      if (isUndefined(MapImpl.prototype.removeMBTilesVector)) {
-        Exception(getValue('exception').removembtiles_method);
-      }
-
-      const mbtilesLayers = this.getMBTilesVector(layersParam);
-      if (mbtilesLayers.length > 0) {
-        this.getImpl().removeMBTilesVector(mbtilesLayers);
       }
     }
     return this;
