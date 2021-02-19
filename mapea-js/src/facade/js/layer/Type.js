@@ -113,6 +113,19 @@ const layertypes = {
 };
 
 /**
+ * This function register a new layer type.
+ * @public
+ * @function
+ * @param {array} layerTypes - Array of layer types to register
+ * @api
+ */
+export const registerLayerType = (layerType) => {
+  if (!(layerType in layertypes)) {
+    layertypes[layerType] = layerType;
+  }
+};
+
+/**
  * Parses the type
  * @private
  * @function
