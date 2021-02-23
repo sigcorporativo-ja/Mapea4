@@ -94,33 +94,6 @@ export const Vector = 'Vector';
 export const MVT = 'MVT';
 
 /**
- * MBTiles type
- * @const
- * @type {string}
- * @public
- * @api
- */
-export const MBTiles = 'MBTiles';
-
-/**
- * MBTilesVector type
- * @const
- * @type {string}
- * @public
- * @api
- */
-export const MBTilesVector = 'MBTilesVector';
-
-/**
- * GeoPackageTile type
- * @const
- * @type {string}
- * @public
- * @api
- */
-export const GeoPackageTile = 'GeoPackageTile';
-
-/**
  * All layer types
  * @const
  * @type {object}
@@ -132,14 +105,24 @@ const layertypes = {
   WMS,
   WFS,
   WMTS,
-  MBTiles,
-  MBTilesVector,
   OSM,
   Mapbox,
   GeoJSON,
   Vector,
   MVT,
-  GeoPackageTile,
+};
+
+/**
+ * This function register a new layer type.
+ * @public
+ * @function
+ * @param {array} layerTypes - Array of layer types to register
+ * @api
+ */
+export const registerLayerType = (layerType) => {
+  if (!(layerType in layertypes)) {
+    layertypes[layerType] = layerType;
+  }
 };
 
 /**
@@ -176,10 +159,7 @@ export const know = (type) => {
     WMS,
     WFS,
     WMTS,
-    MBTiles,
-    MBTilesVector,
     MVT,
-    GeoPackageTile,
   ];
   return (knowTypes.indexOf(parse(type)) !== -1);
 };

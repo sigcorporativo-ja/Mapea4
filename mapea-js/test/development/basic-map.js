@@ -5,48 +5,6 @@ import Point from 'M/style/Point';
 
 const mapa = Mmap({
   container: 'map',
-  controls: ['layerswitcher']
+  // controls: ['layerswitcher'],
+  layers: ['WMTS*https://www.ideandalucia.es/geowebcache/service/wmts?*orto_2010-11*false']
 });
-
-const l = new GeoJSON({
-  source: {
-    "type": "FeatureCollection",
-    "features": [{
-        "type": "Feature",
-        "properties": {
-          color: "#0ff"
-        },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-            -6.0205078125,
-            37.579412513438385
-          ]
-        }
-      },
-      {
-        "type": "Feature",
-        "properties": {
-          "color": "#f0f"
-        },
-        "geometry": {
-          "type": "Point",
-          "coordinates": [
-            -4.833984374999999,
-            37.92686760148135
-          ]
-        }
-      }
-    ]
-  },
-  name: 'wenas'
-}, {
-  style: new Point({
-    radius: 14,
-    fill: {
-      color: "{{color}}"
-    }
-  })
-});
-
-mapa.addLayers(l);
