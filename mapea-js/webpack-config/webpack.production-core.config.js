@@ -89,6 +89,7 @@ module.exports = {
         sourceMap: true,
         exclude: `filter/configuration-${pjson.version}.js`,
         extractComments: false,
+        parallel: true,
       }),
     ],
   },
@@ -116,12 +117,6 @@ module.exports = {
       patterns: [{
         from: 'src/facade/assets/fonts',
         to: 'assets/fonts',
-      }],
-    }),
-    new CopywebpackPlugin({
-      patterns: [{
-        from: 'node_modules/sql.js/dist/sql-wasm.wasm',
-        to: 'wasm/',
       }],
     }),
   ],
