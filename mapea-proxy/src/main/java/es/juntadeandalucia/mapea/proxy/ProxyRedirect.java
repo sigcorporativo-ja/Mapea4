@@ -58,6 +58,8 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import java.util.regex.Pattern;
 
@@ -242,17 +244,20 @@ public class ProxyRedirect extends HttpServlet {
          if (serverUrl.startsWith("http://") || serverUrl.startsWith("https://")) {
             PostMethod httppost = null;
             try {
-               if (log.isDebugEnabled()) {
-                  Enumeration<?> e = request.getHeaderNames();
-                  while (e.hasMoreElements()) {
-                     String name = (String) e.nextElement();
-                     String value = request.getHeader(name);
-                     log.debug("request header:" + name + ":" + value);
-                  }
-               }
+               
                HttpClient client = new HttpClient();
                httppost = new PostMethod(serverUrl);
                // PATH
+               if (log.isDebugEnabled()) {
+                   Enumeration<?> e = request.getHeaderNames();
+                   while (e.hasMoreElements()) {
+                      String name = (String) e.nextElement();
+                      String value = request.getHeader(name);
+                      log.debug("request header:" + name + ":" + value);
+                      httppost.addRequestHeader(name, value);
+                   }
+                }
+               
                httppost.setDoAuthentication(false);
                httppost.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
                      new DefaultHttpMethodRetryHandler(3, false));
@@ -485,7 +490,9 @@ public class ProxyRedirect extends HttpServlet {
     * inputStreamAsString
     **************************************************************************/
    public static String inputStreamAsString (InputStream stream) throws IOException {
-      BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+      //BufferedReader br = new BufferedReader(new InputStreamReader(stream));
+      BufferedReader br = new BufferedReader(new InputStreamReader(stream, "UTF-8"));
+
       StringBuilder sb = new StringBuilder();
       String line = null;
       while ((line = br.readLine()) != null) {
