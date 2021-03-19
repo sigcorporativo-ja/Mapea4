@@ -1518,6 +1518,9 @@ class Map extends MObject {
       extent = [bbox.x.min, bbox.y.min, bbox.x.max, bbox.y.max];
     }
     const olMap = this.getMapImpl();
+
+    // Tarea #185818
+    olMap.updateSize();
     olMap.getView().fit(extent, vendorOpts);
 
     return this;
