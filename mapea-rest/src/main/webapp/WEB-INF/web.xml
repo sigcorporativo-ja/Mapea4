@@ -19,7 +19,7 @@
         <servlet-class>com.sun.jersey.spi.container.servlet.ServletContainer</servlet-class>
         <init-param>
             <param-name>com.sun.jersey.config.property.packages</param-name>
-            <param-value>es.juntadeandalucia.mapea</param-value>
+            <param-value>es.juntadeandalucia.mapea.api,io.swagger.jaxrs.listing</param-value>
         </init-param>
         <load-on-startup>1</load-on-startup>
     </servlet>
@@ -35,4 +35,10 @@
          <servlet-name>proxyMapea</servlet-name>
       <url-pattern>/proxyPost</url-pattern>
     </servlet-mapping>
+
+  <servlet>
+       <servlet-name>SwaggerBootstrap</servlet-name>
+       <servlet-class>es.juntadeandalucia.mapea.api.SwaggerConfiguration</servlet-class>
+         <load-on-startup>2</load-on-startup>
+  </servlet>
 </web-app>

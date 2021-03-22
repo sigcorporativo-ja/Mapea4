@@ -15,9 +15,15 @@ import es.juntadeandalucia.mapea.parameter.Parameters;
 import es.juntadeandalucia.mapea.parameter.adapter.ParametersAdapterV3ToV4;
 import es.juntadeandalucia.mapea.parameter.parser.ParametersParser;
 import es.juntadeandalucia.mapea.plugins.PluginsManager;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ResponseHeader;
 
 @Produces("application/javascript; charset=UTF-8") 
 @Path("/")
+@Api(value = "BuilderWS Service", description = "REST para el servicio de acciones")
 public class BuilderWS {
 
    @Context
@@ -34,6 +40,11 @@ public class BuilderWS {
     */
    @GET
    @Path("/js")
+	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
+
+	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
+			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
+
    public String js(@Context UriInfo uriInfo) {
       MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
 
