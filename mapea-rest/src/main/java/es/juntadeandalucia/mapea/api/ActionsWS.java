@@ -74,18 +74,10 @@ public class ActionsWS {
 
 	@GET
 	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-	@Produces("application/json")
+	@Produces("application/javascript")
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
 			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
-//	@ApiImplicitParams({
-//			@ApiImplicitParam(name = "prueba", value = "descripcion", required = false, dataType = "String", paramType = "query"
-//
-//	        ,examples = @Example(value = {@ExampleProperty(mediaType = "application/json", value = "{foo: whatever, bar: whatever2}")})
-//			) })
 
-//	public Prediction predict(
-//	        @QueryParam("content") @NotEmpty String content,
-//	        @HeaderParam("outputProbability") @DefaultValue("false") Boolean outputProbability) {
 
 	public String showAvailableActions(@QueryParam("callback") String callbackFn) {
 		JSONArray actions = new JSONArray();
