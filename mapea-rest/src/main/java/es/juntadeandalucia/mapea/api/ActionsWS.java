@@ -78,7 +78,6 @@ public class ActionsWS {
 	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
 			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
 
-
 	public String showAvailableActions(@QueryParam("callback") String callbackFn) {
 		JSONArray actions = new JSONArray();
 
@@ -89,7 +88,6 @@ public class ActionsWS {
 		actions.put("/themes");
 		actions.put("/projection");
 		actions.put("/plugins");
-
 		actions.put("/../../doc");
 
 //      actions.put("/apk");
