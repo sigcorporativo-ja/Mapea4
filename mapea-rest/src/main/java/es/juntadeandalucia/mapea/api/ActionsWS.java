@@ -43,7 +43,7 @@ import io.swagger.annotations.ApiResponse;
  * @author Guadaltel S.A.
  */
 
-@SwaggerDefinition(info = @Info(description = "description", version = "V0.0", title = "Documentacion Mapea", termsOfService = "Lorem ipsum dolor", contact = @Contact(name = "Name", email = "email", url = "Lorem ipsum dolor"), license = @License(name = "license", url = "Lorem ipsum dolor")),
+@SwaggerDefinition(info = @Info(description = "Documentación del Rest de Mapea y Mapea iFrame", version = "V0.0", title = "Documentacion Mapea", termsOfService = "Lorem ipsum dolor", contact = @Contact(name = "Name", email = "email", url = "Lorem ipsum dolor"), license = @License(name = "license", url = "Lorem ipsum dolor")),
 
 		externalDocs = @ExternalDocs(value = "External docs", url = "Lorem ipsum dolor"))
 
@@ -73,11 +73,10 @@ public class ActionsWS {
 	 */
 
 	@GET
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
+	@ApiOperation(value = "", notes = "Las acciones disponibles que el usuario puede ejecutar")
 	@Produces("application/javascript")
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
-			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
-
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
 	public String showAvailableActions(@QueryParam("callback") String callbackFn) {
 		JSONArray actions = new JSONArray();
 
@@ -104,10 +103,9 @@ public class ActionsWS {
 	 */
 	@GET
 	@Path("/controls")
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
-			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
-
+	@ApiOperation(value = "", notes = "Los controles disponibles que el usuario puede usar")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
 	public String showAvailableControls(@QueryParam("callback") String callbackFn) {
 		String controlsRaw = configProperties.getString("controls");
 		String[] controls = controlsRaw.split(",");
@@ -130,11 +128,9 @@ public class ActionsWS {
 	 */
 	@GET
 	@Path("/contexts")
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
-			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
-
+	@ApiOperation(value = "", notes = "Los archivos WMC disponibles que el usuario puede usar")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
 	public String showAvailableContexts(@QueryParam("callback") String callbackFn) {
 		String wmcsRaw = configProperties.getString("wmcs");
 		String[] wmcs = wmcsRaw.split(",");
@@ -157,11 +153,9 @@ public class ActionsWS {
 	 */
 	@GET
 	@Path("/services")
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
-			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
-
+	@ApiOperation(value = "", notes = "Devuelve los servicios disponibles para el usuario")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
 	public String showAvailableServices(@QueryParam("callback") String callbackFn) {
 		String servicesRaw = configProperties.getString("services");
 		String[] services = servicesRaw.split(",");
@@ -184,11 +178,9 @@ public class ActionsWS {
 	 */
 	@GET
 	@Path("/themes")
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
-			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
-
+	@ApiOperation(value = "", notes = "Devuelve los temas disponibles para el usuario.")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
 	public String showAvailableThemes(@QueryParam("callback") String callbackFn) {
 		String themesRaw = configProperties.getString("themes");
 		String[] themes = themesRaw.split(",");
@@ -211,11 +203,9 @@ public class ActionsWS {
 	 */
 	@GET
 	@Path("/projection")
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
-			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
-
+	@ApiOperation(value = "", notes = "Devuelve la proyección predeterminada para mapas.")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
 	public String showDefaultProjection(@QueryParam("callback") String callbackFn) {
 		String projectionRaw = configProperties.getString("projection");
 		String[] projection = projectionRaw.split("\\*");
@@ -236,11 +226,9 @@ public class ActionsWS {
 	 */
 	@GET
 	@Path("/plugins")
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
-			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
-
+	@ApiOperation(value = "", notes = "Devuelve los complementos disponibles para mapea")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
 	public String showAvailablePlugins(@QueryParam("callback") String callbackFn) {
 		JSONArray pluginsJSON = new JSONArray();
 
@@ -262,11 +250,9 @@ public class ActionsWS {
 
 	@GET
 	@Path("/version")
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
-			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
-
+	@ApiOperation(value = "", notes = "Proporciona el número de versión y la fecha de la compilación actual.")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
 	public String showVersion(@QueryParam("callback") String callbackFn) {
 
 		JSONObject version = new JSONObject();

@@ -40,11 +40,9 @@ public class BuilderWS {
     */
    @GET
    @Path("/js")
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
-			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
-
+	@ApiOperation(value = "", notes = "Proporciona el código para construir un mapa usando Javascript.")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
    public String js(@Context UriInfo uriInfo) {
       MultivaluedMap<String, String> queryParams = uriInfo.getQueryParameters();
 

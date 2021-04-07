@@ -44,8 +44,8 @@ import io.swagger.annotations.ResponseHeader;
 @Path("/proxy")
 @Api(value = "User Service", description = "REST Endpoints for User Service")
 @Produces("application/javascript")
-@ApiResponses(value = { @ApiResponse(code = 200, message = "Solr re indexing completed successfully"),
-		@ApiResponse(code = 500, message = "Error occurred in server"), })
+@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+		@ApiResponse(code = 500, message = "Error interno del servidor") })
 public class Proxy {
 
 	// Ticket
@@ -67,7 +67,7 @@ public class Proxy {
 	 * @return the javascript code
 	 */
 	@GET
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
+	@ApiOperation(value = "", notes = "Proxy para ejecutar una solicitud a una URL especificada mediante el protocolo JSONP para evitar la restricción entre dominios.")
 	public String proxy(@QueryParam("url") String url, @QueryParam("ticket") String ticket,
 			@DefaultValue("GET") @QueryParam("method") String method, @QueryParam("callback") String callbackFn) {
 		String response;
@@ -106,10 +106,10 @@ public class Proxy {
 	 */
 	@GET
 	@Path("/image")
-	@ApiOperation(value = "Lorem ipsum dolor sit amet, consectetur adipiscing elit", notes = "Lorem ipsum dolor sit amet, consectetur adipiscing elit")
-
-	@ApiResponses(value = { @ApiResponse(code = 400, message = "Lorem ipsum dolor sit amet"),
-			@ApiResponse(code = 200, message = "Lorem ipsum dolor sit amet", responseHeaders = @ResponseHeader(name = "Prueba", description = "Lorem ipsum dolor sit amet", response = Integer.class)) })
+	@ApiOperation(value = "", notes = "Proxy para ejecutar una solicitud a una URL especificada mediante el protocolo JSONP para evitar la restricción entre dominios.")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 400, message = "Solicitud incorrecta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
 
 	public Response proxyImage(@QueryParam("url") String url) {
 		Response response;
