@@ -29,6 +29,11 @@ import es.guadaltel.framework.ticket.TicketFactory;
 import es.juntadeandalucia.mapea.bean.ProxyResponse;
 import es.juntadeandalucia.mapea.builder.JSBuilder;
 import es.juntadeandalucia.mapea.exception.InvalidResponseException;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
+import io.swagger.annotations.ResponseHeader;
 
 /**
  * This class manages the request from Mapea and it acts as proxy to check
@@ -37,7 +42,10 @@ import es.juntadeandalucia.mapea.exception.InvalidResponseException;
  * @author Guadaltel S.A.
  */
 @Path("/proxy")
+@Api(value = "User Service", description = "REST Endpoints for User Service")
 @Produces("application/javascript")
+@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+		@ApiResponse(code = 500, message = "Error interno del servidor") })
 public class Proxy {
 
 	// Ticket
@@ -49,19 +57,17 @@ public class Proxy {
 	private static final int IMAGE_MAX_BYTE_SIZE = Integer.parseInt(configProperties.getString("max.image.size"));
 
 	/**
-	 * Proxy to execute a request to specified URL using JSONP protocol to avoid
-	 * the Cross-Domain restriction.
+	 * Proxy to execute a request to specified URL using JSONP protocol to avoid the
+	 * Cross-Domain restriction.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
-	 * @param callbackFn
-	 *            function to execute as callback
+	 * @param url        URL of the request
+	 * @param op         type of mapea operation
+	 * @param callbackFn function to execute as callback
 	 * 
 	 * @return the javascript code
 	 */
 	@GET
+	@ApiOperation(value = "", notes = "Proxy para ejecutar una solicitud a una URL especificada mediante el protocolo JSONP para evitar la restricción entre dominios.")
 	public String proxy(@QueryParam("url") String url, @QueryParam("ticket") String ticket,
 			@DefaultValue("GET") @QueryParam("method") String method, @QueryParam("callback") String callbackFn) {
 		String response;
@@ -89,20 +95,22 @@ public class Proxy {
 	}
 
 	/**
-	 * Proxy to execute a request to specified URL using JSONP protocol to avoid
-	 * the Cross-Domain restriction.
+	 * Proxy to execute a request to specified URL using JSONP protocol to avoid the
+	 * Cross-Domain restriction.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
-	 * @param callbackFn
-	 *            function to execute as callback
+	 * @param url        URL of the request
+	 * @param op         type of mapea operation
+	 * @param callbackFn function to execute as callback
 	 * 
 	 * @return the javascript code
 	 */
 	@GET
 	@Path("/image")
+	@ApiOperation(value = "", notes = "Proxy para ejecutar una solicitud a una URL especificada mediante el protocolo JSONP para evitar la restricción entre dominios.")
+	@ApiResponses(value = { @ApiResponse(code = 200, message = "Solicitud correcta"),
+			@ApiResponse(code = 400, message = "Solicitud incorrecta"),
+			@ApiResponse(code = 500, message = "Error interno del servidor") })
+
 	public Response proxyImage(@QueryParam("url") String url) {
 		Response response;
 		byte[] data;
@@ -137,12 +145,9 @@ public class Proxy {
 	/**
 	 * Sends a GET operation request to the URL and gets its response.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
-	 * @param ticketParameter
-	 *            user ticket
+	 * @param url             URL of the request
+	 * @param op              type of mapea operation
+	 * @param ticketParameter user ticket
 	 *
 	 * @return the response of the request
 	 */
@@ -196,10 +201,8 @@ public class Proxy {
 	/**
 	 * Sends a POST operation request to the URL and gets its response.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
+	 * @param url URL of the request
+	 * @param op  type of mapea operation
 	 *
 	 * @return the response of the request
 	 */
@@ -211,10 +214,8 @@ public class Proxy {
 	/**
 	 * Checks if the request and the operation are valid.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
+	 * @param url URL of the request
+	 * @param op  type of mapea operation
 	 */
 	private void checkRequest(String url) {
 		// TODO comprobar
@@ -223,12 +224,9 @@ public class Proxy {
 	/**
 	 * Checks if the response is valid for tthe operation and the URL.
 	 * 
-	 * @param proxyResponse
-	 *            response got from the request
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
+	 * @param proxyResponse response got from the request
+	 * @param url           URL of the request
+	 * @param op            type of mapea operation
 	 */
 	private void checkResponse(ProxyResponse proxyResponse, String url) {
 		// TODO Auto-generated method stub
@@ -237,8 +235,7 @@ public class Proxy {
 	/**
 	 * Checks if the response image is valid .
 	 * 
-	 * @param proxyResponse
-	 *            response got from the request
+	 * @param proxyResponse response got from the request
 	 * @throws InvalidResponseException
 	 */
 	private void checkResponseImage(ProxyResponse proxyResponse) throws InvalidResponseException {
@@ -276,10 +273,8 @@ public class Proxy {
 	/**
 	 * Creates a response error using the specified message.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param message
-	 *            message of the error
+	 * @param url     URL of the request
+	 * @param message message of the error
 	 */
 	private ProxyResponse error(String url, String message) {
 		ProxyResponse proxyResponse = new ProxyResponse();
@@ -291,10 +286,8 @@ public class Proxy {
 	/**
 	 * Creates a response error using the specified exception.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param exception
-	 *            Exception object
+	 * @param url       URL of the request
+	 * @param exception Exception object
 	 */
 	private ProxyResponse error(String url, Exception exception) {
 		return error(url, exception.getLocalizedMessage());
