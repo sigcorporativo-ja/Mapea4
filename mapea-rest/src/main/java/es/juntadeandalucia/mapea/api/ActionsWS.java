@@ -43,9 +43,7 @@ import io.swagger.annotations.ApiResponse;
  * @author Guadaltel S.A.
  */
 
-@SwaggerDefinition(info = @Info(description = "Documentación del Rest de Mapea y Mapea iFrame", version = "V0.0", title = "Documentacion Mapea", termsOfService = "Lorem ipsum dolor", contact = @Contact(name = "Name", email = "email", url = "Lorem ipsum dolor"), license = @License(name = "license", url = "Lorem ipsum dolor")),
-
-		externalDocs = @ExternalDocs(value = "External docs", url = "Lorem ipsum dolor"))
+@SwaggerDefinition(info = @Info(description = "Documentación del Rest de Mapea y Mapea iFrame", version = "V1.0", license = @License(name = " EUPL-1.2 License ", url = "https://github.com/sigcorporativo-ja/Mapea4/blob/master/LICENSE"), title = ""))
 
 @Path("/actions")
 @Api(value = "ActionsWS Service", description = "REST para el servicio de proxy")
