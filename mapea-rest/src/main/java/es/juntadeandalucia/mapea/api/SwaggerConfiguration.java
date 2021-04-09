@@ -36,7 +36,7 @@ public class SwaggerConfiguration extends HttpServlet {
 		beanConfig.setSchemes(new String[] { "http" });
 		beanConfig.setHost(url);
 
-		beanConfig.setBasePath("/mapea/api");
+		beanConfig.setBasePath("/api");
 
 		beanConfig.setResourcePackage("es.juntadeandalucia.mapea.api");
 		beanConfig.setScan(true);
