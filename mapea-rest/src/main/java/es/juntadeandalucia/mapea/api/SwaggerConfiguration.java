@@ -33,7 +33,7 @@ public class SwaggerConfiguration extends HttpServlet {
 		BeanConfig beanConfig = new BeanConfig();
 		beanConfig.setTitle("Mapea Swagger");
 		beanConfig.setVersion("1.0");
-		beanConfig.setSchemes(new String[] { "" });
+		beanConfig.setSchemes(new String[] { "http" });
 		beanConfig.setHost(url);
 
 		beanConfig.setBasePath("/mapea/api");
