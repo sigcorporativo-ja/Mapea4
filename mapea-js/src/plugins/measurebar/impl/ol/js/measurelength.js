@@ -10,12 +10,11 @@ import FacadeMeasureArea from '../../../facade/js/measurearea.js';
  * control
  *
  * @constructor
- * @param {number} longitud -  factor de escala
  * @extends {M.impl.control.Measure}
  * @api stable
  */
 export default class MeasureLength extends Measure {
-  constructor(longitud) {
+  constructor() {
     super('LineString');
 
     /**
@@ -31,14 +30,8 @@ export default class MeasureLength extends Measure {
      * @type {string}
      */
     this.helpMsgContinue_ = HELP_KEEP_MESSAGE;
-
-    /**
-     * Implementation longitud
-     * @private
-     * @type {number}
-     */
-    this.longitud_ = longitud;
   }
+
 
   /**
    * This function add tooltip with measure distance
@@ -63,7 +56,7 @@ export default class MeasureLength extends Measure {
       length = Math.round(geometry.getLength() * 100) / 100;
     }
     let output;
-    if (length > this.longitud_) {
+    if (length > 100) {
       output = `${Math.round(((length / 1000) * 100)) / 100} km`;
     } else {
       output = `${Math.round(length * 100) / 100} m`;
