@@ -71,6 +71,46 @@ export const ADDED_VECTOR_TILE = 'added:vectortile';
  * @type {string}
  * @api
  */
+export const ADDED_MBTILES = 'added:mbtiles';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const ADDED_MBTILES_VECTOR = 'added:mbtilesvector';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const ADDED_GEOPACKAGE = 'added:geopackage';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const ADDED_GEOPACKAGE_TILE = 'added:geopackagetile';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const ADDED_GEOPACKAGE_VECTOR = 'added:geopackagevector';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const REMOVED_LAYER = 'removed:layer';
 
 /**
@@ -175,6 +215,14 @@ export const LOAD = 'load';
  * @type {string}
  * @api
  */
+export const LOAD_LAYERS = 'load:layers';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const COMPLETED = 'completed';
 
 /**
@@ -216,6 +264,14 @@ export const CHANGE_STYLE = 'change:style';
  * @api
  */
 export const CHANGE_ZOOM = 'change:zoom';
+
+/**
+ * Event Type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const CHANGE_ROTATION = 'change:rotation';
 
 /**
  * Event type

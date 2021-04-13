@@ -1,7 +1,7 @@
-import 'plugins/searchstreetgeosearch/facade/assets/css/searchstreetgeosearch';
-import Autocomplete from './autocomplete';
-import SearchstreetGeosearchControl from './searchstreetgeosearchcontrol';
-import api from '../../api';
+import '../assets/css/searchstreetgeosearch.css';
+import Autocomplete from './autocomplete.js';
+import SearchstreetGeosearchControl from './searchstreetgeosearchcontrol.js';
+import api from '../../api.json';
 
 export default class SearchstreetGeosearch extends M.Plugin {
   /**

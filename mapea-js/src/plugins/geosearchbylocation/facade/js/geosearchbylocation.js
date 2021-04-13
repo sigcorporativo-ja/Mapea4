@@ -1,6 +1,6 @@
-import GeosearchbylocationControl from './geosearchbylocationcontrol';
-import '../assets/css/geosearchbylocation';
-import api from '../../api';
+import GeosearchbylocationControl from './geosearchbylocationcontrol.js';
+import '../assets/css/geosearchbylocation.css';
+import api from '../../api.json';
 
 export default class Geosearchbylocation extends M.Plugin {
   /**

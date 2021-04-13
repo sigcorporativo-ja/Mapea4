@@ -1,14 +1,14 @@
 /**
  * @module M/control/Rotate
  */
-import 'assets/css/controls/rotate';
-import RotateImpl from 'impl/control/Rotate';
-import template from 'templates/rotate';
-import ControlBase from './Control';
-import { compileSync as compileTemplate } from '../util/Template';
-import { isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as EventType from '../event/eventtype';
+import 'assets/css/controls/rotate.css';
+import RotateImpl from 'impl/control/Rotate.js';
+import template from 'templates/rotate.html';
+import ControlBase from './Control.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
+import { isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as EventType from '../event/eventtype.js';
 
 /**
  * @function

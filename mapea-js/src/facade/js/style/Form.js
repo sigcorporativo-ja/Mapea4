@@ -57,7 +57,7 @@ export const BLAZON = 'BLAZON';
 export const TRIANGLE = 'TRIANGLE';
 
 /**
- * Sing style form
+ * Sign style form
  * @const
  * @type {string}
  * @public
@@ -92,12 +92,56 @@ export const LOZENGE = 'LOZENGE';
  */
 export const SQUARE = 'SQUARE';
 
-
 /**
- * Square style form
+ * None style form
  * @const
  * @type {string}
  * @public
  * @api
  */
 export const NONE = 'none';
+
+/**
+ * Diamond style form
+ * @const
+ * @type {string}
+ * @public
+ * @api
+ */
+export const DIAMOND = 'DIAMOND';
+
+/**
+ * POI style form
+ * @const
+ * @type {string}
+ * @public
+ * @api
+ */
+export const POI = 'POI';
+
+/**
+ * Hexagon style form
+ * @const
+ * @type {string}
+ * @public
+ * @api
+ */
+export const HEXAGON = 'HEXAGON';
+
+/**
+ * Bookmark style form
+ * @const
+ * @type {string}
+ * @public
+ * @api
+ */
+export const BOOKMARK = 'BOOKMARK';
+
+/**
+ * Coma style form
+ * @const
+ * @type {string}
+ * @public
+ * @api
+ */
+export const COMA = 'COMA';

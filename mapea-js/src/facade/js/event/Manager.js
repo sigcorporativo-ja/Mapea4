@@ -1,8 +1,8 @@
 /**
  * @module M/evt/EventsManager
  */
-import { isNullOrEmpty, isFunction } from '../util/Utils';
-import EventListener from './Listener';
+import { isNullOrEmpty, isFunction } from '../util/Utils.js';
+import EventListener from './Listener.js';
 
 /**
  * @classdesc

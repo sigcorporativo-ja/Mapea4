@@ -1,8 +1,8 @@
-import { HELP_KEEP_MESSAGE } from 'plugins/measurebar/facade/js/measurelength';
+import { HELP_KEEP_MESSAGE } from '../../../facade/js/measurelength.js';
 
-import Measure from './measurebase';
-import FacadeMeasure from '../../../facade/js/measurebase';
-import FacadeMeasureArea from '../../../facade/js/measurearea';
+import Measure from './measurebase.js';
+import FacadeMeasure from '../../../facade/js/measurebase.js';
+import FacadeMeasureArea from '../../../facade/js/measurearea.js';
 
 /**
  * @classdesc
@@ -41,6 +41,7 @@ export default class MeasureLength extends Measure {
    * @api stable
    */
   formatGeometry(geometry) {
+    // let longitud = 1000;
     let length = null;
     const codeProj = this.facadeMap_.getProjection().code;
     const unitsProj = this.facadeMap_.getProjection().units;

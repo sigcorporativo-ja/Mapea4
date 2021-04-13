@@ -1,5 +1,5 @@
-import ClearFeatureImpl from '../../impl/ol/js/clearfeature';
-import ClearFeatureHTML from '../../templates/clearfeature';
+import ClearFeatureImpl from '../../impl/ol/js/clearfeature.js';
+import ClearFeatureHTML from '../../templates/clearfeature.html';
 
 export default class ClearFeature extends M.Control {
   /**

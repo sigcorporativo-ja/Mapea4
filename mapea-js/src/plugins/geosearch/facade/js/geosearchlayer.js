@@ -1,4 +1,4 @@
-import GeosearchLayerImpl from '../../impl/ol/js/geosearchlayer';
+import GeosearchLayerImpl from '../../impl/ol/js/geosearchlayer.js';
 
 export default class GeosearchLayer extends M.layer.Vector {
   /**

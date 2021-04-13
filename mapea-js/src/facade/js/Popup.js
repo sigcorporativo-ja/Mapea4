@@ -1,14 +1,14 @@
 /**
  * @module M/Popup
  */
-import PopupImpl from 'impl/Popup';
-import 'assets/css/popup';
-import popupTemplate from 'templates/popup';
-import { isNullOrEmpty, reproject, getSystem } from './util/Utils';
-import Base from './Base';
-import { compileSync as compileTemplate } from './util/Template';
+import PopupImpl from 'impl/Popup.js';
+import 'assets/css/popup.css';
+import popupTemplate from 'templates/popup.html';
+import { isNullOrEmpty, reproject, getSystem } from './util/Utils.js';
+import Base from './Base.js';
+import { compileSync as compileTemplate } from './util/Template.js';
 import * as EventType from './event/eventtype';
-import MWindow from './util/Window';
+import MWindow from './util/Window.js';
 
 /**
  * getUrlFromPlatform
@@ -360,6 +360,9 @@ class Popup extends Base {
         evt.preventDefault();
         this.manageCollapsiblePopup_(touchstartY, this.touchY);
       }, false);
+      const mediaQuery = window.matchMedia('(max-width: 768px)');
+      setTimeout(() => this.manageTransform(mediaQuery, html), 10);
+      mediaQuery.addEventListener('change', (e) => { this.manageTransform(e, html); });
       // CLICK EVENTS
       headerElement.addEventListener('mouseup', (evt) => {
         evt.preventDefault();
@@ -393,6 +396,21 @@ class Popup extends Base {
       // mobile center
       if (MWindow.WIDTH <= M.config.MOBILE_WIDTH) {
         this.getImpl().centerByStatus(status, this.coord_);
+      }
+    }
+  }
+
+  /**
+   * TODO
+   * @private
+   * @function
+   */
+  manageTransform(e, html) {
+    if (html && html.parentElement) {
+      if (e.matches) {
+        html.parentElement.classList.add('unsetTransform');
+      } else {
+        html.parentElement.classList.remove('unsetTransform');
       }
     }
   }

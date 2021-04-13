@@ -1,13 +1,13 @@
 /**
  * @module M/layer/OSM
  */
-import OSMImpl from 'impl/layer/OSM';
-import LayerBase from './Layer';
-import { isNullOrEmpty, isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as LayerType from './Type';
-import * as parameter from '../parameter/parameter';
-import { getValue } from '../i18n/language';
+import OSMImpl from 'impl/layer/OSM.js';
+import LayerBase from './Layer.js';
+import { isNullOrEmpty, isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as LayerType from './Type.js';
+import * as parameter from '../parameter/parameter.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

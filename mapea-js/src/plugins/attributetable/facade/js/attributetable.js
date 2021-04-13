@@ -1,6 +1,6 @@
-import 'plugins/attributetable/facade/assets/css/attributetable';
-import AttributeTableControl from './attributetableControl';
-import api from '../../api';
+import '../assets/css/attributetable.css';
+import AttributeTableControl from './attributetableControl.js';
+import api from '../../api.json';
 
 export default class AttributeTable extends M.Plugin {
   /**

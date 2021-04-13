@@ -2,11 +2,11 @@
  * @module M/layer/LayerGroup
  */
 
-import LayerGroupImpl from 'impl/layer/LayerGroup';
-import MObject from 'M/Object';
-import * as EventType from 'M/event/eventtype';
-import LayerBase from './Layer';
-import { isNullOrEmpty, isArray, generateRandom } from '../util/Utils';
+import LayerGroupImpl from 'impl/layer/LayerGroup.js';
+import MObject from '../Object.js';
+import * as EventType from '../event/eventtype.js';
+import LayerBase from './Layer.js';
+import { isNullOrEmpty, isArray, generateRandom } from '../util/Utils.js';
 
 /**
  * @classdesc

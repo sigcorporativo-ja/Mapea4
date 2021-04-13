@@ -1,4 +1,4 @@
-import Geosearchlayer from '../../../facade/js/geosearchlayer';
+import Geosearchlayer from '../../../facade/js/geosearchlayer.js';
 
 /**
  * @namespace M.impl.control
@@ -34,7 +34,7 @@ export default class GeosearchControl extends M.impl.Control {
      * @type {M.impl.Layer}
      */
     this.layer_ = new Geosearchlayer({
-      name: options.layerName,
+      name: options.layerName || '__geosearch_plugin_layer_name__',
     });
   }
 

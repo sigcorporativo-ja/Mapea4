@@ -1,13 +1,13 @@
 /**
  * @module M/layer/Mapbox
  */
-import MapboxImpl from 'impl/layer/Mapbox';
-import LayerBase from './Layer';
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
-import Exception from '../exception/exception';
-import * as LayerType from './Type';
-import * as parameter from '../parameter/parameter';
-import { getValue } from '../i18n/language';
+import MapboxImpl from 'impl/layer/Mapbox.js';
+import LayerBase from './Layer.js';
+import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as LayerType from './Type.js';
+import * as parameter from '../parameter/parameter.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

@@ -1,4 +1,4 @@
-import GeosearchControlImpl from './geosearch/geosearchcontrol';
+import GeosearchControlImpl from './geosearch/geosearchcontrol.js';
 
 export default class GeosearchByCoordinatesControl extends GeosearchControlImpl {
   /**

@@ -1,9 +1,9 @@
 /**
  * @module M/Style
  */
-import Base from '../Base';
-import { isNullOrEmpty, isArray, isObject, extendsObj, stringifyFunctions } from '../util/Utils';
-import * as EventType from '../event/eventtype';
+import Base from '../Base.js';
+import { isNullOrEmpty, isArray, isObject, extendsObj, stringifyFunctions } from '../util/Utils.js';
+import * as EventType from '../event/eventtype.js';
 
 /**
  * @classdesc

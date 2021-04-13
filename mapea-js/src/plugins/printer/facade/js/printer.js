@@ -1,6 +1,6 @@
-import PrinterControl from './printercontrol';
-import '../assets/css/printer';
-import api from '../../api';
+import PrinterControl from './printercontrol.js';
+import '../assets/css/printer.css';
+import api from '../../api.json';
 
 export default class Printer extends M.Plugin {
   /**

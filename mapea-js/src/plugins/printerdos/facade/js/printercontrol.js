@@ -1,6 +1,6 @@
 /* eslint-disable no-underscore-dangle */
-import PrinterControlImpl from '../../impl/ol/js/printercontrol';
-import printerHTML from '../../templates/printer';
+import PrinterControlImpl from '../../impl/ol/js/printercontrol.js';
+import printerHTML from '../../templates/printer.html';
 
 /**
  * Time in secods
@@ -611,7 +611,7 @@ export default class PrinterControl extends M.Control {
       printData.attributes.map.layers = encodedLayers;
       printData.attributes = Object.assign(printData.attributes, parameters);
       // Se añade la leyenda
-      if (legend === 'true') {
+      if (legend) {
         const legends = [];
         const leyenda = this.encodeLegends();
         for (let i = 0, ilen = leyenda.length; i < ilen; i += 1) {
@@ -654,7 +654,8 @@ export default class PrinterControl extends M.Control {
    */
   encodeLayers() {
     const layers = this.map_.getLayers().filter((layer) => {
-      return ((layer.isVisible() === true) && (layer.inRange() === true) && !layer.name.startsWith('cluster_cover'));
+      return ((layer.isVisible() === true) && (layer.inRange() === true) &&
+        M.utils.isString(layer.name) && !layer.name.startsWith('cluster_cover'));
     });
     let numLayersToProc = layers.length;
 
@@ -670,8 +671,8 @@ export default class PrinterControl extends M.Control {
           } else {
             // Se comprueba que las capas vectoriales estén en el rango del mapa.
             const resolution = this.map_.getMapImpl().getView().getResolution();
-            const maxResolution = layer.impl_.ol3Layer.getMaxResolution();
-            const minResolution = layer.impl_.ol3Layer.getMinResolution();
+            const maxResolution = layer.getImpl().getOL3Layer().getMaxResolution();
+            const minResolution = layer.getImpl().getOL3Layer().getMinResolution();
             if (((resolution >= minResolution) && (resolution <= maxResolution))) {
               encodedLayersVector.push(encodedLayer);
             }

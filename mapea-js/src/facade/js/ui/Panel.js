@@ -1,14 +1,14 @@
 /**
  * @module M/ui/Panel
  */
-import 'assets/css/panel';
-import panelTemplate from 'templates/panel';
-import * as Position from './position';
-import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils';
-import MObject from '../Object';
-import * as EventType from '../event/eventtype';
-import ControlBase from '../control/Control';
-import { compileSync as compileTemplate } from '../util/Template';
+import 'assets/css/panel.css';
+import panelTemplate from 'templates/panel.html';
+import * as Position from './position.js';
+import { isNullOrEmpty, isArray, isString, includes } from '../util/Utils.js';
+import MObject from '../Object.js';
+import * as EventType from '../event/eventtype.js';
+import ControlBase from '../control/Control.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
 
 /**
  * @classdesc

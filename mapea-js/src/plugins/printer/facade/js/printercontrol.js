@@ -1,5 +1,5 @@
-import PrinterControlImpl from '../../impl/ol/js/printercontrol';
-import printerHTML from '../../templates/printer';
+import PrinterControlImpl from '../../impl/ol/js/printercontrol.js';
+import printerHTML from '../../templates/printer.html';
 
 export default class PrinterControl extends M.Control {
   /**
@@ -445,7 +445,8 @@ export default class PrinterControl extends M.Control {
    */
   encodeLayers() {
     const layers = this.map_.getLayers().filter((layer) => {
-      return ((layer.isVisible() === true) && (layer.inRange() === true) && !layer.name.startsWith('cluster_cover'));
+      return ((layer.isVisible() === true) && (layer.inRange() === true) &&
+        M.utils.isString(layer.name) && !layer.name.startsWith('cluster_cover'));
     });
     let numLayersToProc = layers.length;
 

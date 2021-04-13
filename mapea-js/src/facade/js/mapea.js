@@ -1,18 +1,18 @@
 /**
  * @module M
  */
-import 'assets/css/fonts';
-import 'assets/css/mapea';
-import 'assets/css/animations';
-import 'impl/projections';
-import MapImpl from 'impl/Map';
-import Map from './Map';
-import { isNullOrEmpty } from './util/Utils';
-import Exception from './exception/exception';
-import './util/Window';
-import './util/polyfills';
-import { getValue } from './i18n/language';
-import pkg from '../../../package';
+import 'assets/css/fonts.css';
+import 'assets/css/mapea.css';
+import 'assets/css/animations.css';
+import 'impl/projections.js';
+import pkg from 'package.json';
+import MapImpl from 'impl/Map.js';
+import Map from './Map.js';
+import { isNullOrEmpty } from './util/Utils.js';
+import Exception from './exception/exception.js';
+import './util/Window.js';
+import './util/polyfills.js';
+import { getValue } from './i18n/language.js';
 
 /**
  * This function sets the configuration variables

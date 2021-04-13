@@ -1,14 +1,14 @@
 /**
  * @module M/control/GetFeatureInfo
  */
-import 'assets/css/controls/getfeatureinfo';
-import GetFeatureInfoImpl from 'impl/control/GetFeatureInfo';
-import getfeatureinfoTemplate from 'templates/getfeatureinfo';
-import ControlBase from './Control';
-import { isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import { compileSync as compileTemplate } from '../util/Template';
-import { getValue } from '../i18n/language';
+import 'assets/css/controls/getfeatureinfo.css';
+import GetFeatureInfoImpl from 'impl/control/GetFeatureInfo.js';
+import getfeatureinfoTemplate from 'templates/getfeatureinfo.html';
+import ControlBase from './Control.js';
+import { isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { compileSync as compileTemplate } from '../util/Template.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

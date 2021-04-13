@@ -1,7 +1,7 @@
 /**
  * @module M/style/Feature
  */
-import StyleBase from './Style';
+import StyleBase from './Style.js';
 
 /**
  * @classdesc

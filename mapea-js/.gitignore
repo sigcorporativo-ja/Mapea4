@@ -8,6 +8,7 @@ node
 node_modules
 target
 libraries
+publish
 doc
 dist
 index.js

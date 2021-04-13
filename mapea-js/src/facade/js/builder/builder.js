@@ -1,17 +1,17 @@
-import WMCSelector from '../control/WMCSelector';
-import LayerSwitcher from '../control/Layerswitcher';
-import Location from '../control/Location';
-import Scale from '../control/Scale';
-import Rotate from '../control/Rotate';
-import ScaleLine from '../control/ScaleLine';
-import Mouse from '../control/Mouse';
-import OverviewMap from '../control/OverviewMap';
-import Navtoolbar from '../control/Navtoolbar';
-import Panzoom from '../control/Panzoom';
-import Panzoombar from '../control/Panzoombar';
-import GetFeatureInfo from '../control/GetFeatureInfo';
-import Control from '../control/Control';
-import Panel from '../ui/Panel';
+import WMCSelector from '../control/WMCSelector.js';
+import LayerSwitcher from '../control/Layerswitcher.js';
+import Location from '../control/Location.js';
+import Scale from '../control/Scale.js';
+import Rotate from '../control/Rotate.js';
+import ScaleLine from '../control/ScaleLine.js';
+import Mouse from '../control/Mouse.js';
+import OverviewMap from '../control/OverviewMap.js';
+import Navtoolbar from '../control/Navtoolbar.js';
+import Panzoom from '../control/Panzoom.js';
+import Panzoombar from '../control/Panzoombar.js';
+import GetFeatureInfo from '../control/GetFeatureInfo.js';
+import Control from '../control/Control.js';
+import Panel from '../ui/Panel.js';
 import {
   isString,
   normalize,
@@ -19,12 +19,12 @@ import {
   isNullOrEmpty,
   concatUrlPaths,
   isFunction,
-} from '../util/Utils';
-import Exception from '../exception/exception';
-import * as Position from '../ui/position';
-import { getValue } from '../i18n/language';
-import * as EventType from '../event/eventtype';
-import * as Dialog from '../dialog';
+} from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import * as Position from '../ui/position.js';
+import { getValue } from '../i18n/language.js';
+import * as EventType from '../event/eventtype.js';
+import * as Dialog from '../dialog.js';
 
 /**
  * Name of the info map panel

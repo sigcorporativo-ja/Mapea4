@@ -2,14 +2,14 @@
  * @module M/layer/WMC
  */
 
-import WMCImpl from 'impl/layer/WMC';
-import { isUndefined, isNullOrEmpty } from '../util/Utils';
-import Exception from '../exception/exception';
-import LayerBase from './Layer';
-import * as LayerType from './Type';
-import * as parameter from '../parameter/parameter';
-import * as EventType from '../event/eventtype';
-import { getValue } from '../i18n/language';
+import WMCImpl from 'impl/layer/WMC.js';
+import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import LayerBase from './Layer.js';
+import * as LayerType from './Type.js';
+import * as parameter from '../parameter/parameter.js';
+import * as EventType from '../event/eventtype.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

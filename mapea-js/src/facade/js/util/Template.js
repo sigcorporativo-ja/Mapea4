@@ -2,9 +2,8 @@
  * @module M/template
  */
 import Handlebars from 'handlebars';
-import { get as remoteGet } from 'M/util/Remote';
-import { isNullOrEmpty } from 'M/util/Utils';
-import { extendsObj, isUndefined, stringToHtml } from './Utils';
+import { get as remoteGet } from './Remote.js';
+import { extendsObj, isUndefined, isNullOrEmpty, stringToHtml } from './Utils.js';
 import './handlebarshelpers';
 
 /**

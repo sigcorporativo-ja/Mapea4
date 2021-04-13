@@ -1,7 +1,7 @@
 /**
  * @module M/layer/type
  */
-import { normalize, isString } from '../util/Utils';
+import { normalize, isString } from '../util/Utils.js';
 
 /**
  * WMC type
@@ -47,15 +47,6 @@ export const WFS = 'WFS';
  * @api
  */
 export const WMTS = 'WMTS';
-
-/**
- * MBtiles type
- * @const
- * @type {string}
- * @public
- * @api
- */
-export const MBtiles = 'MBtiles';
 
 /**
  * OSM type
@@ -114,12 +105,24 @@ const layertypes = {
   WMS,
   WFS,
   WMTS,
-  MBtiles,
   OSM,
   Mapbox,
   GeoJSON,
   Vector,
   MVT,
+};
+
+/**
+ * This function register a new layer type.
+ * @public
+ * @function
+ * @param {array} layerTypes - Array of layer types to register
+ * @api
+ */
+export const registerLayerType = (layerType) => {
+  if (!(layerType in layertypes)) {
+    layertypes[layerType] = layerType;
+  }
 };
 
 /**
@@ -156,7 +159,6 @@ export const know = (type) => {
     WMS,
     WFS,
     WMTS,
-    MBtiles,
     MVT,
   ];
   return (knowTypes.indexOf(parse(type)) !== -1);

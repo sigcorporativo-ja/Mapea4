@@ -1,8 +1,8 @@
-import { HELP_KEEP_MESSAGE } from 'plugins/measurebar/facade/js/measurearea';
+import { HELP_KEEP_MESSAGE } from '../../../facade/js/measurearea.js';
 
-import FacadeMeasure from 'plugins/measurebar/facade/js/measurebase';
-import FacadeMeasureLength from 'plugins/measurebar/facade/js/measurelength';
-import MeasureImpl from './measurebase';
+import FacadeMeasure from '../../../facade/js/measurebase.js';
+import FacadeMeasureLength from '../../../facade/js/measurelength.js';
+import MeasureImpl from './measurebase.js';
 
 /**
  * @classdesc
@@ -45,7 +45,7 @@ export default class MeasureArea extends MeasureImpl {
 
     let output;
     if (area > 10000) {
-      output = `${((Math.round((area / 1000000) * 100) / 100))} km<sup>2</sup>`;
+      output = `${((Math.round((area / 1000000) * this.distanciaArea_ * 100) / 100))} ${this.unidadMedida_}`;
     } else {
       output = `${(Math.round(area * 100) / 100)} m<sup>2</sup>`;
     }

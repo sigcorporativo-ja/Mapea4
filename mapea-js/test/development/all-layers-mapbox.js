@@ -31,8 +31,7 @@ const geojson = new GeoJSON({
   name: 'geojson',
   source: {
     type: 'FeatureCollection',
-    features: [
-      {
+    features: [{
         type: 'Feature',
         properties: {},
         geometry: {

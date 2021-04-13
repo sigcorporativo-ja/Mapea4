@@ -1,11 +1,11 @@
 /**
  * @module M/format/WKT
  */
-import WKTImpl from 'impl/format/WKT';
-import Base from '../Base';
-import { isUndefined } from '../util/Utils';
-import Exception from '../exception/exception';
-import { getValue } from '../i18n/language';
+import WKTImpl from 'impl/format/WKT.js';
+import Base from '../Base.js';
+import { isUndefined } from '../util/Utils.js';
+import Exception from '../exception/exception.js';
+import { getValue } from '../i18n/language.js';
 
 /**
  * @classdesc

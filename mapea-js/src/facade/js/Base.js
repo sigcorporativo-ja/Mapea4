@@ -1,8 +1,8 @@
 /**
  * @module M/facade/Base
  */
-import { isNullOrEmpty, isFunction } from './util/Utils';
-import MObject from './Object';
+import { isNullOrEmpty, isFunction } from './util/Utils.js';
+import MObject from './Object.js';
 
 /**
  * @classdesc
