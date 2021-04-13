@@ -1,6 +1,7 @@
 package es.juntadeandalucia.mapea.api;
 
 import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 import javax.validation.groups.ConvertGroup.List;
 import javax.ws.rs.GET;
@@ -28,7 +29,7 @@ public class iFrame {
 
 	ArrayList<String> campos = new ArrayList();
 	ArrayList<String> camposNull = new ArrayList();
-
+	private static final String url = ResourceBundle.getBundle("configuration").getString("swagger.url");
 	@POST
 	@ApiOperation(value = " ", notes = "Mapea puede ser integrado en paǵinas web mediante el uso de iframes. A través del API REST se puede incluir un visualizador interactivo en cualquier página web sin necesidad de disponer de conocimientos específicos en programación ni en el ámbito de los SIG. Para ello únicamente es necesario que el usuario configure el mapa a visualizar a través de una URL:\n"
 			+ "\n"
@@ -151,7 +152,7 @@ public class iFrame {
 		campos.add("geosearchbylocation=" + geosearchbylocation);
 		campos.add("searchstreet=" + searchstreet);
 
-		String estructura = "http://mapea4-sigc.juntadeandalucia.es/?";
+		String estructura = url+"/?";
 		int valor = 0;
 		for (int i = 0; i < campos.size(); i++) {
 			if (camposNull.get(i) != null) {
