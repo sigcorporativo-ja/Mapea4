@@ -30,7 +30,7 @@ public class iFrame {
 	ArrayList<String> campos = new ArrayList();
 	ArrayList<String> camposNull = new ArrayList();
 	private static final String url = ResourceBundle.getBundle("configuration").getString("swagger.url");
-	@POST
+	@GET
 	@ApiOperation(value = " ", notes = "Mapea puede ser integrado en paǵinas web mediante el uso de iframes. A través del API REST se puede incluir un visualizador interactivo en cualquier página web sin necesidad de disponer de conocimientos específicos en programación ni en el ámbito de los SIG. Para ello únicamente es necesario que el usuario configure el mapa a visualizar a través de una URL:\n"
 			+ "\n"
 			+ "http://mapea4-sigc.juntadeandalucia.es/?wmcfile=callejero,cdau_satelite&controls=mouse,layerswitcher,overviewmap,scaleline,location&layers=WMS\\*Redes\\*http://www.ideandalucia.es/wms/mta400v_2008?\\*Redes_energeticas\\*true&getfeatureinfo=html\n"
