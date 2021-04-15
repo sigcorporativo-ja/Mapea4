@@ -67,7 +67,7 @@
                      <filtering>true</filtering>
                      <includes>
                         <include>configuration.js</include>
-                        <include>configuration-${project.version}.js</include>
+                        <include>configuration-6.0.0.js</include>
                      </includes>
                   </resource>
                </webResources>
