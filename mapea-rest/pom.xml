@@ -13,7 +13,7 @@
    <parent>
       <groupId>es.juntadeandalucia.mapea</groupId>
       <artifactId>mapea-parent</artifactId>
-      <version>6.0.1</version>
+      <version>6.1.0</version>
       <relativePath>../mapea-parent/pom.xml</relativePath>
    </parent>
    <licenses>
@@ -67,7 +67,7 @@
                      <filtering>true</filtering>
                      <includes>
                         <include>configuration.js</include>
-                        <include>configuration-6.0.0.js</include>
+                        <include>configuration-${project.version}.js</include>
                      </includes>
                   </resource>
                </webResources>
