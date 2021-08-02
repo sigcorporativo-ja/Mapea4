@@ -214,9 +214,7 @@ export default class SearchstreetControl extends M.Control {
    */
   createView(map) {
     this.facadeMap_ = map;
-    const options = {
-      jsonp: true
-    };
+    const options = { jsonp: true };
     const html = M.template.compileSync(SearchstreetTemplate, options);
     this.addEvents(html);
     return html;
@@ -497,10 +495,7 @@ export default class SearchstreetControl extends M.Control {
         }
       }
     }
-    const options = {
-      jsonp: true,
-      vars: resultsTemplateVars
-    };
+    const options = { jsonp: true, vars: resultsTemplateVars };
     const html = M.template.compileSync(SearchstreetResultsTemplate, options);
     this.resultsContainer_.classList.remove(SearchstreetControl.HIDDEN_RESULTS_CLASS);
     this.resultsContainer_.innerHTML = html.innerHTML;
@@ -648,9 +643,7 @@ export default class SearchstreetControl extends M.Control {
     element.addEventListener('click', (e) => {
       // hidden results on click for mobile devices
       if (M.window.WIDTH <= M.config.MOBILE_WIDTH) {
-        this.resultsClick_(Object.create({
-          target: this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba')
-        }));
+        this.resultsClick_(Object.create({ target: this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba') }));
       }
       this.getImpl().addEventClickFeature(result);
     }, false, this);
