@@ -44,8 +44,4 @@ Los json que Mapea envía al servidor Geoprint deben cumplir con las siguientes 
 * No contener atributos de estilo vacíos.  
 
 ## Tabla de compatibilidad de versiones   
-versión plugin | versión Mapea |
---- | --- |
-1.0.0 | <= 4.1.0
-1.1.0 | 4.2.0
-2.0.0 | >= 5.0.0
+[Consulta el api resourcePlugin](https://mapea4-sigc.juntadeandalucia.es/mapea/api/actions/resourcesPlugins?name=printer)
