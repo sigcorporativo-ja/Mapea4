@@ -32,8 +32,4 @@ mapajs.addPlugin(new M.plugin.Measurebar({longitud:1000, distanciaArea:100, unid
 [JSFiddle](http://jsfiddle.net/sigcJunta/7kht2bvk/)  
 
 ## Tabla de compatibilidad de versiones   
-versión plugin | versión Mapea |
---- | --- |
-1.0.0 | <= 4.3.0
-2.0.0 | >= 5.0.0
-3.1.0 | >= 5.2.0
+[Consulta el api resourcePlugin](https://mapea4-sigc.juntadeandalucia.es/mapea/api/actions/resourcesPlugins?name=measurebar)
