@@ -108,16 +108,40 @@ class Point extends Simple {
       }
       const style = new Centroid({
         zIndex: Simple.getValue(options.zindex, featureVariable, this.layer_),
+        geometry: (olFeature) => {
+          let geom = null;
+          if (olFeature.getGeometry().getType() === 'MultiPoint') {
+            geom = new OLGeomMultiPoint(olFeature.getGeometry().getCoordinates());
+          } else {
+            const center = Utils.getCentroid(olFeature.getGeometry());
+            geom = new OLGeomPoint(center);
+          }
+          return geom;
+        },
       });
       const styleIcon = new Centroid({
         zIndex: Simple.getValue(options.zindex, featureVariable, this.layer_),
-
+        geometry: (olFeature) => {
+          let geom = null;
+          if (olFeature.getGeometry().getType() === 'MultiPoint') {
+            geom = new OLGeomMultiPoint(olFeature.getGeometry().getCoordinates());
+          } else {
+            const center = Utils.getCentroid(olFeature.getGeometry());
+            geom = new OLGeomPoint(center);
+          }
+          return geom;
+        },
       });
       if (featureVariable instanceof OLFeature) {
         const geometryFunction = (olFeature) => {
-          const center = Utils.getCentroid(olFeature.getGeometry());
-          const centroidGeometry = new OLGeomPoint(center);
-          return centroidGeometry;
+          let geom = null;
+          if (olFeature.getGeometry().getType() === 'MultiPoint') {
+            geom = new OLGeomMultiPoint(olFeature.getGeometry().getCoordinates());
+          } else {
+            const center = Utils.getCentroid(olFeature.getGeometry());
+            geom = new OLGeomPoint(center);
+          }
+          return geom;
         };
         style.setGeometry(geometryFunction);
         styleIcon.setGeometry(geometryFunction);
