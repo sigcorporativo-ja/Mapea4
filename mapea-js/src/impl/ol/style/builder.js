@@ -310,6 +310,11 @@ export const getPointStyle = (options, featureVariable, layer) => {
     iconStyle.setImage(icon);
   }
 
+  const label = getLabel(optionsVar, featureVariable, layer);
+  if (!isNullOrEmpty(optionsVar.label)) {
+    pointStyle.setText(label);
+  }
+
   return [pointStyle, iconStyle];
 };
 
