@@ -268,8 +268,10 @@ export default class PrinterControl extends M.Control {
         }
         for (i = 0, ilen = attribute.clientInfo.dpiSuggestions.length; i < ilen; i += 1) {
           const dpi = attribute.clientInfo.dpiSuggestions[i];
-
           const object = { value: dpi };
+          if (dpi === this.options_.dpi) {
+            object.default = true;
+          }
           capabilities.dpis.push(object);
         }
 
@@ -278,9 +280,11 @@ export default class PrinterControl extends M.Control {
           this.outputFormats_ = capabilities.formats;
         }
         capabilities.format = this.outputFormats_.map((format) => {
-          return {
-            name: format,
-          };
+          const obj = { name: format };
+          if (format === this.options_.format) {
+            obj.default = true;
+          }
+          return obj;
         });
 
         if (!M.template.compileSync) { // JGL: retrocompatibilidad Mapea4
