@@ -581,7 +581,15 @@ export default class PrinterControl extends M.impl.Control {
               }
               filter = `"[_gx_style ='${styleName + styleNameText}']"`;
               if (!M.utils.isNullOrEmpty(symbolizers)) {
-                const a = ` ${filter}:{"symbolizers": [${symbolizers}]}`;
+                let a = ` ${filter}:{"symbolizers": [${symbolizers}]}`;
+                if (layer.getStyle() instanceof M.style.Proportional) {
+                  const typeFeature = feature.getGeometry().getType().toLocaleLowerCase();
+                  if (typeFeature.indexOf('polygon') >= 0) {
+                    a = a.replace('polygon', 'point');
+                  } else if (typeFeature.indexOf('line') >= 0) {
+                    a = a.replace('line', 'point');
+                  }
+                }
                 if (style !== '') {
                   style += `,${a}`;
                 } else {
