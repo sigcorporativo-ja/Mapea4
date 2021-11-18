@@ -50,3 +50,7 @@ Example: <url_mapea>?plugins=measurebar,streetview
    }]
 }
 ```
+
+
+## Tabla de compatibilidad de versiones   
+[Consulta el api resourcePlugin](https://mapea4-sigc.juntadeandalucia.es/mapea/api/actions/resourcesPlugins?name=geosearchbycoordinates)  
