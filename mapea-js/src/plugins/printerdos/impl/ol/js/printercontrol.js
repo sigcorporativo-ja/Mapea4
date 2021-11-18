@@ -433,9 +433,13 @@ export default class PrinterControl extends M.impl.Control {
           featureStyle = featureStyle.call(featureStyle, feature, resolution);
         }
 
+        let styleIcon = null;
         if (featureStyle instanceof Array) {
           // JGL20180118: prioridad al estilo que tiene SRC
           if (featureStyle.length > 1) {
+            styleIcon = !M.utils.isNullOrEmpty(featureStyle[1]) &&
+              featureStyle[1].getImage().getGlyph ?
+              featureStyle[1].getImage() : null;
             featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage()) &&
                 featureStyle[1].getImage().getSrc) ?
               featureStyle[1] : featureStyle[0];
@@ -481,6 +485,7 @@ export default class PrinterControl extends M.impl.Control {
             externalGraphic: M.utils.isNullOrEmpty(image) ? '' : (image.getSrc && image.getSrc()),
             graphicHeight: imgSize[0],
             graphicWidth: imgSize[1],
+            graphicName: M.utils.isNullOrEmpty(styleIcon) ? '' : (styleIcon.getGlyph && `ttf://${styleIcon.getGlyph().font}#0x${styleIcon.getGlyph().code.toString(16)}`),
           };
           if (!M.utils.isNullOrEmpty(text)) {
             let tAlign = text.getTextAlign();

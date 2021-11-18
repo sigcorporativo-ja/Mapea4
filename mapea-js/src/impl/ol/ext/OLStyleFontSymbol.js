@@ -108,6 +108,7 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
         theme: g.theme || thefont.name,
         name: g.name || key,
         search: g.search || '',
+        code: g.code,
       };
     });
   }
