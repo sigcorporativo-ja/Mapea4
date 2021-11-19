@@ -438,6 +438,7 @@ export default class PrinterControl extends M.impl.Control {
           // JGL20180118: prioridad al estilo que tiene SRC
           if (featureStyle.length > 1) {
             styleIcon = !M.utils.isNullOrEmpty(featureStyle[1]) &&
+              !M.utils.isNullOrEmpty(featureStyle[1].getImage()) &&
               featureStyle[1].getImage().getGlyph ?
               featureStyle[1].getImage() : null;
             featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage()) &&
@@ -485,8 +486,19 @@ export default class PrinterControl extends M.impl.Control {
             externalGraphic: M.utils.isNullOrEmpty(image) ? '' : (image.getSrc && image.getSrc()),
             graphicHeight: imgSize[0],
             graphicWidth: imgSize[1],
-            graphicName: M.utils.isNullOrEmpty(styleIcon) ? '' : (styleIcon.getGlyph && `ttf://${styleIcon.getGlyph().font}#0x${styleIcon.getGlyph().code.toString(16)}`),
           };
+
+          if (!M.utils.isNullOrEmpty(styleIcon) && styleIcon.getGlyph) {
+            styleIcon = {
+              type: parseType,
+              pointRadius: styleIcon.getRadius(),
+              externalGraphic: styleIcon.getImage().toDataURL(),
+              graphicOpacity: styleIcon.getOpacity(),
+                          graphicHeight: imgSize[0],
+            graphicWidth: imgSize[1],
+            };
+          }
+
           if (!M.utils.isNullOrEmpty(text)) {
             let tAlign = text.getTextAlign();
             let tBLine = text.getTextBaseline();
@@ -577,6 +589,9 @@ export default class PrinterControl extends M.impl.Control {
                   index += 1;
                   symbolizers.push(styleStr);
                 }
+              }
+              if (!M.utils.isNullOrEmpty(styleIcon)) {
+                symbolizers.push(JSON.stringify(styleIcon));
               }
               if (styleName === undefined) {
                 styleName = 0;

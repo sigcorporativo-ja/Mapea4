@@ -107,8 +107,7 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
         char: g.char || `${String.fromCharCode(g.code)}` || '',
         theme: g.theme || thefont.name,
         name: g.name || key,
-        search: g.search || '',
-        code: g.code,
+        search: g.search || ''
       };
     });
   }
@@ -168,6 +167,22 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
    */
   getFontInfo(glyph) {
     return OLStyleFontSymbol.defs.fonts[glyph.font];
+  }
+
+  /**
+   * Get the stroke style for the symbol.
+   * @return {Integer} Stroke style.
+   */
+  getFontSize() {
+    return this.fontSize_;
+  }
+
+  /**
+   * Get the stroke style for the symbol.
+   * @return {String} Stroke style.
+   */
+  getForm() {
+    return this.form_;
   }
 
   /**
