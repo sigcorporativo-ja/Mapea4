@@ -473,6 +473,8 @@ export default class PrinterControl extends M.impl.Control {
             featureStyle.getFill() : (image.getFill && image.getFill());
 
           let styleText;
+          const pointRadius = M.utils.isNullOrEmpty(image) ? '' : (image.getRadius && image.getRadius());
+
           const styleGeom = {
             type: parseType,
             fillColor: M.utils.isNullOrEmpty(fill) ? '#000000' : M.utils.rgbaToHex(fill.getColor()).slice(0, 7),
@@ -488,16 +490,23 @@ export default class PrinterControl extends M.impl.Control {
             graphicWidth: imgSize[1],
           };
 
-          if (!M.utils.isNullOrEmpty(styleIcon) && styleIcon.getGlyph) {
-            styleIcon = {
-              type: parseType,
-              pointRadius: styleIcon.getRadius(),
-              externalGraphic: styleIcon.getImage().toDataURL(),
-              graphicOpacity: styleIcon.getOpacity(),
-                          graphicHeight: imgSize[0],
-            graphicWidth: imgSize[1],
-            };
+          if (Number.isNaN(pointRadius)) {
+            styleGeom.fillOpacity = 0;
+            styleGeom.strokeOpacity = 0;
+            styleGeom.pointRadius = 0;
           }
+          const imageIcon =
+            !M.utils.isNullOrEmpty(styleIcon) && styleIcon.getImage ? styleIcon.getImage() : null;
+          if (!M.utils.isNullOrEmpty(imageIcon)) {
+            if (styleIcon.getRadius && styleIcon.getRadius()) {
+              styleGeom.pointRadius = styleIcon.getRadius && styleIcon.getRadius();
+            }
+            if (styleIcon.getOpacity && styleIcon.getOpacity()) {
+              styleGeom.graphicOpacity = styleIcon.getOpacity();
+            }
+            styleGeom.externalGraphic = imageIcon.toDataURL();
+          }
+
 
           if (!M.utils.isNullOrEmpty(text)) {
             let tAlign = text.getTextAlign();
@@ -590,9 +599,7 @@ export default class PrinterControl extends M.impl.Control {
                   symbolizers.push(styleStr);
                 }
               }
-              if (!M.utils.isNullOrEmpty(styleIcon)) {
-                symbolizers.push(JSON.stringify(styleIcon));
-              }
+
               if (styleName === undefined) {
                 styleName = 0;
               }
