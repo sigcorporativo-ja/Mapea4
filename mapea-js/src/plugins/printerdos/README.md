@@ -1,51 +1,58 @@
 ## Descripción
 
-Plugin de impresión a través del servicio Geoprint. Las capacidades del mismo definen las opciones de impresión disponibles: dpi,
-formatos y plantillas. En función de la plantilla elegida, en el construtctor del plugin habrá que incluir los parámetros que dicha
-plantilla necesite. Las plantillas 'imagen apaisada' e 'imagen cuadrada' no necesitan parámetros.
+Plugin de impresión a través del servicio Geoprint3. Recibe como parámetro opcional la Configuración de impresión que consumir, siendo una Configuración un conjunto de plantillas y opciones de impresión (formatos, dpi) agrupadas bajo una denomincación. Así, cada aplicación web podrá tener su propia Configuración para imprimir plantillas personalizadas. 
 
 ## Recursos y uso
 
-- js: https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer-x.y.z.ol.min.js
-- css: https://mapea4-sigc.juntadeandalucia.es/plugins/printer/printer-x.y.z.min.css  
+- js: https://mapea4-sigc.juntadeandalucia.es/plugins/printerdos/printerdos-x.y.z.ol.min.js
+- css: https://mapea4-sigc.juntadeandalucia.es/plugins/printerdos/printerdos-x.y.z.min.css  
 
-Donde x.y.z representan la versión del plugin a usar según la versión de Mapea, atendiendo a la tabla de compatibilidad de versiones que se muestra más adelante.  
+Donde x.y.z representan la versión del plugin a usar según la versión de Mapea, atendiendo a la compatibilidad de versiones que se muestra más adelante.  
 
 Configuración por defecto sin parámetros:
 ```javascript
 mapajs.addPlugin(new M.plugin.Printer());
-```
-Establecimiento de parámetros y valores seleccionados por defecto en los selectores:
+```  
+parámetro | descripción |  
+--- | --- |  
+url | (opcional) Url de la Configuración que consumir |  
+params.urlApplication | (opcional) Instancia de Geoprint3 |  
+params.layout.outputFilename | (opcional) Nombre fichero generado |  
+params.parameters.imagenCoordenadas | (opcional) Imagen rosa de los vientos
+params.parameters.imagenAndalucia | (opcional) Logo Junta de Andalucía
+options.legend | (opcional) Indica si se desea mostrar la leyenda
+options.dpi | (opcional) Valor por defecto para el selector dpi
+options.layout | (opcional) Plantilla preseleccionada
+options.format | (opcional) Valor por defecto para el selector de formato
+
+
+Establecimiento de parámetros y valores preseleccionados:
 ```javascript
 mapajs.addPlugin(new M.plugin.Printer({
-  "params": {
-    "pages": {
-      "creditos": "Impresión generada a través de Mapea"
+  url: 'https://geoprint-sigc.juntadeandalucia.es/geoprint3/print/SIGC',
+  params: {
+    urlApplication: 'https://geoprint-sigc.juntadeandalucia.es/geoprint3',
+    layout: {
+      outputFilename: 'impresion_${yyyy-MM-dd_hhmmss}',
     },
-    "layout": {
-      "outputFilename": "mapea_${yyyy-MM-dd_hhmmss}"
-    },
+    parameters: {
+      imagenCoordenadas: 'file://windrose.png',
+      imagenAndalucia: 'file://logo_JA.png',
+    }
   },
-  'options': {
-      'layout': 'imagen apaisada',
-      'format': 'png',
-      'dpi': '127'
+  options: {
+      legend: true,
+      dpi: 300,
+      layout: 'A4 landscape (SIGC)',
+      format: 'png'
     }
 }));
 ```
 
 ## Ejemplo funcional
 
-[JSFiddle](http://jsfiddle.net/sigcJunta/b6d4hd53/)  
-
-## Observaciones  
-Los json que Mapea envía al servidor Geoprint deben cumplir con las siguientes condiciones:  
-* Los colores se indican en formato hexadecimal de seis dígitos, sin dígito para transparencia.
-* No contener atributos de estilo vacíos.  
+[JSFiddle](https://jsfiddle.net/sigcJunta/f6tpy27o/)  
+ 
 
 ## Tabla de compatibilidad de versiones   
-versión plugin | versión Mapea |
---- | --- |
-1.0.0 | <= 4.1.0
-1.1.0 | 4.2.0
-2.0.0 | >= 5.0.0
+[Consulta el api resourcePlugin](https://mapea4-sigc.juntadeandalucia.es/mapea/api/actions/resourcesPlugins?name=printerdos) 
