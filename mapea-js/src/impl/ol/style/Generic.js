@@ -64,7 +64,7 @@ class Generic extends Simple {
    */
   updateFacadeOptions(options) {
     this.olStyleFn_ = (feature) => {
-      const idFeature = feature.getId();
+      const idFeature = JSON.stringify(feature.getProperties());
       const storedStyles = this.styles_[idFeature];
       let styles = [];
       if (!isNullOrEmpty(storedStyles)) {
