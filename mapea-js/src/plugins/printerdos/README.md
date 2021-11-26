@@ -24,6 +24,15 @@ options.legend | (opcional) Indica si se desea mostrar la leyenda
 options.dpi | (opcional) Valor por defecto para el selector dpi
 options.layout | (opcional) Plantilla preseleccionada
 options.format | (opcional) Valor por defecto para el selector de formato
+options.labeling.conflictResolution | (opcional) Cuando su valor es verdadero no permite que se superpongan dos etiquetas
+options.labeling.goodnessOfFit | (opcional) Establece el porcentaje de la etiqueta que debe ubicarse dentro de la geometría para permitir dibujar la etiqueta
+options.labeling.allowOverruns | (opcional) Cuando su valor es falso no permite que las etiquetas de las líneas vayan más allá del principio / final de la línea
+options.labeling.autoWrap | (opcional) Número de píxeles que son en los que una etiqueta larga debe dividirse en varias líneas
+options.labeling.conflictResolution | (opcional) 
+options.labeling.followLine | (opcional) Cuando su valor es verdadero activa etiquetas curvas en geometrías lineales
+options.labeling.group | (opcional) Cuando su valor es verdadero las geometrías con las mismas etiquetas se agrupan y se consideran una sola entidad para etiquetar
+options.labeling.maxDisplacement | (opcional) La distancia, en píxeles, a la que se puede desplazar una etiqueta desde su posición natural en un intento de encontrar una posición que no entre en conflicto con las etiquetas ya dibujadas
+options.labeling.spaceAround | (opcional) la distancia mínima entre dos etiquetas, en píxeles
 
 
 Establecimiento de parámetros y valores preseleccionados:
@@ -44,7 +53,16 @@ mapajs.addPlugin(new M.plugin.Printer({
       legend: true,
       dpi: 300,
       layout: 'A4 landscape (SIGC)',
-      format: 'png'
+      format: 'png',
+      conflictResolution: false,
+      goodnessOfFit: 0.5,
+      allowOverruns: false,
+      autoWrap: 400,
+      conflictResolution: true,
+      followLine: true,
+      group: false,
+      maxDisplacement: 400,
+      spaceAround: 50
     }
 }));
 ```

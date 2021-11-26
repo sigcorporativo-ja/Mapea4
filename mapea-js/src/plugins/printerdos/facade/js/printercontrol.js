@@ -25,7 +25,7 @@ export default class PrinterControl extends M.Control {
 
   constructor(url, params, options) {
     // implementation of this control
-    const impl = new PrinterControlImpl();
+    const impl = new PrinterControlImpl(options);
 
     super(impl, PrinterControl.NAME);
 
@@ -108,6 +108,13 @@ export default class PrinterControl extends M.Control {
     this.forceScale_ = null;
 
     /**
+     * Text wrap for labels
+     * @private
+     * @type {Decimal}
+     */
+    this.textWrap_ = null;
+
+    /**
      * Facade of the map
      * @private
      * @type {Promise}
@@ -185,6 +192,12 @@ export default class PrinterControl extends M.Control {
     // legend
     if (M.utils.isNullOrEmpty(this.options_.legend)) {
       this.options_.legend = M.config.geoprint.LEGEND;
+    }
+    // text wrap
+    if (M.utils.isNullOrEmpty(this.options_.labeling) ||
+      (!M.utils.isNullOrEmpty(this.options_.labeling) &&
+        M.utils.isNullOrEmpty(this.options_.labeling.goodnessOfFit))) {
+      this.options_.labeling.goodnessOfFit = 0.9;
     }
   }
 
@@ -309,6 +322,8 @@ export default class PrinterControl extends M.Control {
 
         // forceScale
         capabilities.forceScale = this.options_.forceScale;
+        // textWrap
+        capabilities.textWrap = this.options_.labeling.goodnessOfFit;
         const html = M.template.compileSync(printerHTML, { jsonp: true, vars: capabilities });
         this.addEvents(html);
         this.loadingService = false;
@@ -385,6 +400,12 @@ export default class PrinterControl extends M.Control {
     });
     this.setForceScale(checkboxForceScale.checked === true);
 
+    // text wrap
+    const inputTextWrap = this.element_.querySelector('.form div.textwrap > input');
+    inputTextWrap.addEventListener('change', (event) => {
+      this.setTextWrap(parseFloat(inputTextWrap.value));
+    });
+
     // print button
     const printBtn = this.element_.querySelector('.button > button.print');
     printBtn.addEventListener('click', this.printClick_.bind(this));
@@ -405,6 +426,7 @@ export default class PrinterControl extends M.Control {
       selectDpi.value = this.options_.dpi;
       selectFormat.value = this.options_.format;
       checkboxForceScale.checked = this.options_.forceScale;
+      inputTextWrap.value = this.options_.labeling.textWrap;
 
       // Create events and init
       const changeEvent = document.createEvent('HTMLEvents');
@@ -416,6 +438,7 @@ export default class PrinterControl extends M.Control {
       selectDpi.dispatchEvent(changeEvent);
       selectFormat.dispatchEvent(changeEvent);
       checkboxForceScale.dispatchEvent(clickEvent);
+      inputTextWrap.dispatchEvent(changeEvent);
 
 
       // clean queue
@@ -475,6 +498,17 @@ export default class PrinterControl extends M.Control {
    */
   setForceScale(forceScale) {
     this.forceScale_ = forceScale;
+  }
+
+  /**
+   * This function set text wrap
+   *
+   * @private
+   * @function
+   */
+  setTextWrap(textWrap) {
+    this.textwrap_ = textWrap;
+    this.getImpl().setGoodnessOfFit(textWrap);
   }
 
   /**
