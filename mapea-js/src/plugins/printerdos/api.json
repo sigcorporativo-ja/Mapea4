@@ -50,10 +50,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "printerdosx-4.1.0.ol.min.js"
+        "printerdos-4.1.0.ol.min.js"
       ],
       "styles": [
-        "printerdosx-4.1.0.min.css"
+        "printerdos-4.1.0.min.css"
       ]
     }
   },
