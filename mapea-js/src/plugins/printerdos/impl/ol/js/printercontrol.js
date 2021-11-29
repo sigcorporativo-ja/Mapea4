@@ -981,6 +981,8 @@ export default class PrinterControl extends M.impl.Control {
     const olLayer = layerImpl.getOL3Layer();
     const layerSource = olLayer.getSource();
     const tileGrid = layerSource.getTileGrid();
+    const style = !M.utils.isNullOrEmpty(layerSource.getStyle) ? layerSource.getStyle() : 'default';
+
 
     const layerUrl = layer.url;
     const layerName = layer.name;
@@ -1008,7 +1010,7 @@ export default class PrinterControl extends M.impl.Control {
         layer: layerName,
         requestEncoding: layerReqEncoding,
         tileSize,
-        style: 'default',
+        style: !M.utils.isNullOrEmpty(style) ? style : 'default',
         rotation: 0,
         imageFormat: 'image/png',
         dimensionParams: {},
