@@ -194,9 +194,11 @@ export default class PrinterControl extends M.Control {
       this.options_.legend = M.config.geoprint.LEGEND;
     }
     // text wrap
-    if (M.utils.isNullOrEmpty(this.options_.labeling) ||
-      (!M.utils.isNullOrEmpty(this.options_.labeling) &&
-        M.utils.isNullOrEmpty(this.options_.labeling.goodnessOfFit))) {
+    if (M.utils.isNullOrEmpty(this.options_.labeling)) {
+      this.options_.labeling = {
+        goodnessOfFit: 0.9,
+      };
+    } else if (M.utils.isNullOrEmpty(this.options_.labeling.goodnessOfFit)) {
       this.options_.labeling.goodnessOfFit = 0.9;
     }
   }
