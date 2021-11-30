@@ -19,11 +19,7 @@ export default class PrinterControl extends M.impl.Control {
      */
     this.facadeMap_ = null;
 
-    this.additionalOptsLabel_ = {
-      conflictResolution: 'false',
-      goodnessOfFit: 0.9,
-    };
-
+    this.additionalOptsLabel_ = {};
     this.labeling_ = options.labeling;
     if (!M.utils.isNullOrEmpty(this.labeling_)) {
       if (!M.utils.isNullOrEmpty(this.labeling_.allowOverruns)) {
@@ -34,12 +30,16 @@ export default class PrinterControl extends M.impl.Control {
       }
       if (!M.utils.isNullOrEmpty(this.labeling_.conflictResolution)) {
         this.additionalOptsLabel_.conflictResolution = this.labeling_.conflictResolution;
+      } else {
+        this.additionalOptsLabel_.conflictResolution = 'false';
       }
       if (!M.utils.isNullOrEmpty(this.labeling_.followLine)) {
         this.additionalOptsLabel_.followLine = this.labeling_.followLine;
       }
       if (!M.utils.isNullOrEmpty(this.labeling_.goodnessOfFit)) {
         this.additionalOptsLabel_.goodnessOfFit = this.labeling_.goodnessOfFit;
+      } else {
+        this.additionalOptsLabel_.goodnessOfFit = 0.9;
       }
       if (!M.utils.isNullOrEmpty(this.labeling_.group)) {
         this.additionalOptsLabel_.group = this.labeling_.group;
@@ -50,6 +50,9 @@ export default class PrinterControl extends M.impl.Control {
       if (!M.utils.isNullOrEmpty(this.labeling_.spaceAround)) {
         this.additionalOptsLabel_.spaceAround = this.labeling_.spaceAround;
       }
+    } else {
+      this.additionalOptsLabel_.conflictResolution = 'false';
+      this.additionalOptsLabel_.goodnessOfFit = 0.9;
     }
   }
 
@@ -246,9 +249,7 @@ export default class PrinterControl extends M.impl.Control {
             // Se deja la cifra hexadecimal en 6 dígitos para la integración con Mapea 4
             styleText.fontColor = styleText.fontColor.slice(0, 7);
             styleText.labelOutlineColor = styleText.labelOutlineColor.slice(0, 7);
-            if (!M.utils.isNullOrEmpty(this.labeling_)) {
-              styleText = this.addAdditionalLabelOptions(styleText);
-            }
+            styleText = this.addAdditionalLabelOptions(styleText);
           }
           nameFeature = `draw${index}`;
           if ((!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) ||
@@ -604,9 +605,7 @@ export default class PrinterControl extends M.impl.Control {
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
               labelAlign: align,
             };
-            if (!M.utils.isNullOrEmpty(this.labeling_)) {
-              styleText = this.addAdditionalLabelOptions(styleText);
-            }
+            styleText = this.addAdditionalLabelOptions(styleText);
           }
           nameFeature = `draw${index}`;
 
@@ -871,9 +870,7 @@ export default class PrinterControl extends M.impl.Control {
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
               labelAlign: align,
             };
-            if (!M.utils.isNullOrEmpty(this.labeling_)) {
-              styleText = this.addAdditionalLabelOptions(styleText);
-            }
+            styleText = this.addAdditionalLabelOptions(styleText);
           }
           nameFeature = `draw${index}`;
 
