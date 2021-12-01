@@ -473,3 +473,11 @@ input[type="range"]::-moz-range-thumb {
         overflow: auto;
     }
 }
+
+.m-printer-container>div.form>div.textwrap>#label {
+    width: 30%;
+    float: right;
+    text-align: center;
+    font-size: 12px;
+    margin-top: 3px;
+}

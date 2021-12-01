@@ -511,6 +511,10 @@ export default class PrinterControl extends M.Control {
   setTextWrap(textWrap) {
     this.textwrap_ = textWrap;
     this.getImpl().setGoodnessOfFit(textWrap);
+    const template = this.getPanel().getTemplatePanel();
+    const label = template.querySelector('#label');
+    const input = template.querySelector('#inputRange');
+    label.innerHTML = input.value;
   }
 
   /**
