@@ -43,7 +43,7 @@ class Simple extends Style {
   applyToLayer(layer) {
     this.layer_ = layer;
     // we will apply the style on the ol3 layer
-    const olLayer = layer.getImpl().getOL3Layer();
+    const olLayer = layer.getImpl().getOLLayer();
     if (!isNullOrEmpty(olLayer)) {
       olLayer.setStyle(this.olStyleFn_);
       // layer.getFeatures().forEach(this.applyToFeature, this);

@@ -13,7 +13,7 @@ export default class DrawFeature extends WFSTBase {
    */
   createInteraction_() {
     const layerImpl = this.layer_.getImpl();
-    const olLayer = layerImpl.getOL3Layer();
+    const olLayer = layerImpl.getOLLayer();
     const olStyle = olLayer.getStyle()()[0];
     const [olFill, olStroke] = [olStyle.getFill(), olStyle.getStroke()];
     let image = new ol.style.Circle({

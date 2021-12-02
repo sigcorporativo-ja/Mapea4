@@ -148,7 +148,7 @@ class GetFeatureInfo extends Control {
     const viewResolution = olMap.getView().getResolution();
     const srs = this.facadeMap_.getProjection().code;
     return wmsLayers.map((layer) => {
-      const olLayer = layer.getImpl().getOL3Layer();
+      const olLayer = layer.getImpl().getOLLayer();
       let param;
       if (layer.isVisible() && layer.isQueryable() && !isNullOrEmpty(olLayer)) {
         param = {};

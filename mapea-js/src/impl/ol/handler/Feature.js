@@ -77,8 +77,8 @@ class Feature {
     const features = [];
 
     if (!isNullOrEmpty(layer) && layer.isVisible() &&
-      !isNullOrEmpty(layer.getImpl().getOL3Layer())) {
-      const olLayer = layer.getImpl().getOL3Layer();
+      !isNullOrEmpty(layer.getImpl().getOLLayer())) {
+      const olLayer = layer.getImpl().getOLLayer();
       this.map_.getMapImpl().forEachFeatureAtPixel(evt.pixel, (feature, layerFrom) => {
         if ((layerFrom instanceof AnimatedCluster) && !isNullOrEmpty(feature.get('features'))) {
           const clusteredFeatures = feature.get('features').map(f => getFacadeFeature(f, layer));

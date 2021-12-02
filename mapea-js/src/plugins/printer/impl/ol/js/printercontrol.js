@@ -130,7 +130,7 @@ export default class PrinterControl extends M.impl.Control {
   encodeKML(layer) {
     let encodedLayer = null;
 
-    const olLayer = layer.getImpl().getOL3Layer();
+    const olLayer = layer.getImpl().getOLLayer();
     const features = olLayer.getSource().getFeatures();
     const layerName = layer.name;
     const layerOpacity = olLayer.getOpacity();
@@ -236,7 +236,7 @@ export default class PrinterControl extends M.impl.Control {
    */
   encodeWMS(layer) {
     let encodedLayer = null;
-    const olLayer = layer.getImpl().getOL3Layer();
+    const olLayer = layer.getImpl().getOLLayer();
     const layerUrl = layer.url;
     const layerOpacity = olLayer.getOpacity();
     const tiled = layer.getImpl().tiled;
@@ -306,7 +306,7 @@ export default class PrinterControl extends M.impl.Control {
     }
     if (continuePrint) {
       const projection = this.facadeMap_.getProjection();
-      const olLayer = layer.getImpl().getOL3Layer();
+      const olLayer = layer.getImpl().getOLLayer();
       const features = olLayer.getSource().getFeatures();
       const layerName = layer.name;
       const layerOpacity = olLayer.getOpacity();
@@ -489,7 +489,7 @@ export default class PrinterControl extends M.impl.Control {
     const zoom = this.facadeMap_.getZoom();
     // var units = this.facadeMap_.getProjection().units;
     const layerImpl = layer.getImpl();
-    const olLayer = layerImpl.getOL3Layer();
+    const olLayer = layerImpl.getOLLayer();
     const layerSource = olLayer.getSource();
     const tileGrid = layerSource.getTileGrid();
 
@@ -564,7 +564,7 @@ export default class PrinterControl extends M.impl.Control {
     let encodedLayer = null;
 
     const layerImpl = layer.getImpl();
-    const olLayer = layerImpl.getOL3Layer();
+    const olLayer = layerImpl.getOLLayer();
     const layerSource = olLayer.getSource();
     const tileGrid = layerSource.getTileGrid();
 
@@ -602,7 +602,7 @@ export default class PrinterControl extends M.impl.Control {
     let encodedLayer = null;
 
     const layerImpl = layer.getImpl();
-    const olLayer = layerImpl.getOL3Layer();
+    const olLayer = layerImpl.getOLLayer();
     const layerSource = olLayer.getSource();
     const tileGrid = layerSource.getTileGrid();
 
