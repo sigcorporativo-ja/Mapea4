@@ -66,6 +66,7 @@ class Generic extends Simple {
     this.olStyleFn_ = (feature) => {
       const idFeature = JSON.stringify(feature.getProperties());
       let styles = [];
+      this.styles_ = [];
       let featureVariable = feature;
       if (!(featureVariable instanceof OLFeature || featureVariable instanceof RenderFeature)) {
         featureVariable = this;
