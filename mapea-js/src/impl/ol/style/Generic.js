@@ -1,7 +1,7 @@
 /**
  * @module M/impl/style/Generic
  */
-import { isFunction, isNullOrEmpty } from 'M/util/Utils';
+import { isFunction } from 'M/util/Utils';
 import OLFeature from 'ol/Feature';
 import RenderFeature from 'ol/render/Feature';
 import GeometryType from 'ol/geom/GeometryType';
@@ -65,22 +65,17 @@ class Generic extends Simple {
   updateFacadeOptions(options) {
     this.olStyleFn_ = (feature) => {
       const idFeature = JSON.stringify(feature.getProperties());
-      const storedStyles = this.styles_[idFeature];
       let styles = [];
-      if (!isNullOrEmpty(storedStyles)) {
-        styles = storedStyles;
+      let featureVariable = feature;
+      if (!(featureVariable instanceof OLFeature || featureVariable instanceof RenderFeature)) {
+        featureVariable = this;
       } else {
-        let featureVariable = feature;
-        if (!(featureVariable instanceof OLFeature || featureVariable instanceof RenderFeature)) {
-          featureVariable = this;
-        } else {
-          const type = featureVariable.getGeometry().getType();
-          const getter = GETTER_BY_GEOM[type];
+        const type = featureVariable.getGeometry().getType();
+        const getter = GETTER_BY_GEOM[type];
 
-          if (isFunction(getter)) {
-            styles = getter(options, featureVariable, this.layer_);
-            this.styles_[idFeature] = styles;
-          }
+        if (isFunction(getter)) {
+          styles = getter(options, featureVariable, this.layer_);
+          this.styles_[idFeature] = styles;
         }
       }
       return styles;
