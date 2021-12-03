@@ -148,7 +148,7 @@ class WMC extends Layer {
 
       // removes all groups layers
       if (!isNullOrEmpty(this.groups)) {
-        this.map.removeLayerGroups(this.groups);
+        this.map.removeLayerGroup(this.groups);
       }
     }
   }
