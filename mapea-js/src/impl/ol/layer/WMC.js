@@ -148,9 +148,7 @@ class WMC extends Layer {
 
       // removes all groups layers
       if (!isNullOrEmpty(this.groups)) {
-        const aux = [...this.groups];
-        this.groups = [];
-        this.map.removeLayerGroup(aux);
+        this.map.removeLayerGroup(this.groups);
       }
     }
   }
@@ -168,8 +166,6 @@ class WMC extends Layer {
     this.maxExtent = context.maxExtent;
     if (!isNullOrEmpty(context.layerGroups)) {
       this.groups = this.groups.concat(context.layerGroups);
-    } else {
-      this.groups = [];
     }
     this.layers.forEach(wms => wms.setWMCParent(this.facadeLayer_));
     this.map.addWMS(this.layers, true);
