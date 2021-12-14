@@ -55,7 +55,7 @@ class Point extends Simple {
       if (style.getImage && style.getImage() != null && style.getImage() instanceof OLStyleImage) {
         // see https://github.com/openlayers/openlayers/blob/master/src/ol/style/regularshape.js#L205
         if (style.getImage() instanceof PointFontSymbol) {
-          const imageCanvas = style.getImage().getImage();
+          const imageCanvas = style.getImage().getImage(1);
           if (imageCanvas != null && imageCanvas) {
             image = imageCanvas.toDataURL();
           }
@@ -83,7 +83,7 @@ class Point extends Simple {
           }
           style.getImage().render();
         }
-        const imageCanvas = style.getImage().getImage();
+        const imageCanvas = style.getImage().getImage(1);
         if (imageCanvas != null) {
           image = imageCanvas.toDataURL();
         }
@@ -111,7 +111,6 @@ class Point extends Simple {
       });
       const styleIcon = new Centroid({
         zIndex: Simple.getValue(options.zindex, featureVariable, this.layer_),
-
       });
       if (featureVariable instanceof OLFeature) {
         const geometryFunction = (olFeature) => {
