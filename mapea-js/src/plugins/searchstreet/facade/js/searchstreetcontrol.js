@@ -643,8 +643,7 @@ export default class SearchstreetControl extends M.Control {
     element.addEventListener('click', (e) => {
       // hidden results on click for mobile devices
       if (M.window.WIDTH <= M.config.MOBILE_WIDTH) {
-        e.target = this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba');
-        this.resultsClick_(e);
+        this.resultsClick_(Object.create({ target: this.resultsContainer_.querySelector('div.page > div.g-cartografia-flecha-arriba') }));
       }
       this.getImpl().addEventClickFeature(result);
     }, false, this);

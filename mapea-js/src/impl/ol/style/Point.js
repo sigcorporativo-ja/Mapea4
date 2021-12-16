@@ -10,6 +10,7 @@ import * as Align from 'M/style/Align';
 import * as Baseline from 'M/style/Baseline';
 import OLStyleFill from 'ol/style/Fill';
 import OLGeomPoint from 'ol/geom/Point';
+import OLGeomMultiPoint from 'ol/geom/MultiPoint';
 import OLStyleStroke from 'ol/style/Stroke';
 import OLGeomCircle from 'ol/geom/Circle';
 import OLStyleText from 'ol/style/Text';
@@ -108,15 +109,40 @@ class Point extends Simple {
       }
       const style = new Centroid({
         zIndex: Simple.getValue(options.zindex, featureVariable, this.layer_),
+        geometry: (olFeature) => {
+          let geom = null;
+          if (olFeature.getGeometry().getType() === 'MultiPoint') {
+            geom = new OLGeomMultiPoint(olFeature.getGeometry().getCoordinates());
+          } else {
+            const center = Utils.getCentroid(olFeature.getGeometry());
+            geom = new OLGeomPoint(center);
+          }
+          return geom;
+        },
       });
       const styleIcon = new Centroid({
         zIndex: Simple.getValue(options.zindex, featureVariable, this.layer_),
+        geometry: (olFeature) => {
+          let geom = null;
+          if (olFeature.getGeometry().getType() === 'MultiPoint') {
+            geom = new OLGeomMultiPoint(olFeature.getGeometry().getCoordinates());
+          } else {
+            const center = Utils.getCentroid(olFeature.getGeometry());
+            geom = new OLGeomPoint(center);
+          }
+          return geom;
+        },
       });
       if (featureVariable instanceof OLFeature) {
         const geometryFunction = (olFeature) => {
-          const center = Utils.getCentroid(olFeature.getGeometry());
-          const centroidGeometry = new OLGeomPoint(center);
-          return centroidGeometry;
+          let geom = null;
+          if (olFeature.getGeometry().getType() === 'MultiPoint') {
+            geom = new OLGeomMultiPoint(olFeature.getGeometry().getCoordinates());
+          } else {
+            const center = Utils.getCentroid(olFeature.getGeometry());
+            geom = new OLGeomPoint(center);
+          }
+          return geom;
         };
         style.setGeometry(geometryFunction);
         styleIcon.setGeometry(geometryFunction);

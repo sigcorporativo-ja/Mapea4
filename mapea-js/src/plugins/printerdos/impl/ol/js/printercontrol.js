@@ -581,7 +581,8 @@ export default class PrinterControl extends M.impl.Control {
               }
               filter = `"[_gx_style ='${styleName + styleNameText}']"`;
               if (!M.utils.isNullOrEmpty(symbolizers)) {
-                const a = ` ${filter}:{"symbolizers": [${symbolizers}]}`;
+                let a = ` ${filter}:{"symbolizers": [${symbolizers}]}`;
+                a = a.replace('linestring', 'line');
                 if (style !== '') {
                   style += `,${a}`;
                 } else {
