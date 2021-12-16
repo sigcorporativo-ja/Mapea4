@@ -101,8 +101,8 @@ class Mouse extends MousePosition {
       }
     }
     if (!this.renderedHTML_ || html !== this.renderedHTML_) {
-      this.element.innerHTML = html;
-      this.renderedHTML_ = html;
+      this.element.innerHTML = html !== undefined ? html : '';
+      this.renderedHTML_ = html !== undefined ? html : '';
     }
   }
 }
