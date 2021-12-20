@@ -231,15 +231,16 @@ class WFS extends Vector {
  * @api
  */
 WFS.DEFAULT_OPTIONS_STYLE = {
-  fill: {
-    color: 'rgba(103, 175, 19, 0.2)',
-    opacity: 0.4,
+  point: {
+    ...WFS.DEFAULT_PARAMS,
+    radius: 5,
   },
-  stroke: {
-    color: '#67af13',
-    width: 1,
+  line: {
+    ...WFS.DEFAULT_PARAMS,
   },
-  radius: 5,
+  polygon: {
+    ...WFS.DEFAULT_PARAMS,
+  },
 };
 
 export default WFS;

@@ -541,15 +541,20 @@ ul.m-base-layers>li {
     width: 33%;
 } */
 
-ul.m-layers>li>div.m-legend,
+ul.m-layers>li>div.m-legend {
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
+}
+
 ul.m-base-layers>li>div.m-legend {
     max-width: 50vw;
+    padding-top: 12.5px;
+    padding-bottom: 12.5px;
 }
 
 ul.m-layers>li>div.m-legend>img,
 ul.m-base-layers>li>div.m-legend>img {
     max-width: 45vw;
-    margin-left: 5px;
-    margin-right: 5px;
+    margin: auto !important;
     /*box-shadow: 0 1px 2px rgba(0, 0, 0, .3);*/
 }

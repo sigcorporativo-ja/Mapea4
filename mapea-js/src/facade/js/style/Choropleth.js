@@ -6,14 +6,12 @@ import StyleComposite from './Composite.js';
 import * as StyleQuantification from './Quantification.js';
 import { extendsObj, isNullOrEmpty, generateColorScale, isArray, isString, stringifyFunctions, defineFunctionFromString } from '../util/Utils.js';
 import Exception from '../exception/exception.js';
-import * as geometry from '../geom/GeoJSON.js';
 import * as Filter from '../filter/Filter.js';
 import StyleCluster from './Cluster.js';
 import StyleProportional from './Proportional.js';
-import StylePolygon from './Polygon.js';
-import StyleLine from './Line.js';
-import StylePoint from './Point.js';
 import { getValue } from '../i18n/language.js';
+import Generic from './Generic';
+
 
 /**
  * Accuracy of numbers on canvas
@@ -353,24 +351,8 @@ class Choropleth extends StyleComposite {
           if (!isArray(scaleColor)) {
             scaleColor = [scaleColor];
           }
-          const geometryType = this.layer_.getGeometryType();
           const generateStyle = (scale, defaultStyle) => (scale.map(c => defaultStyle(c)));
-          switch (geometryType) {
-            case geometry.POINT:
-            case geometry.MULTI_POINT:
-              this.choroplethStyles_ = generateStyle(scaleColor, Choropleth.DEFAULT_STYLE_POINT);
-              break;
-            case geometry.LINE_STRING:
-            case geometry.MULTI_LINE_STRING:
-              this.choroplethStyles_ = generateStyle(scaleColor, Choropleth.DEFAULT_STYLE_LINE);
-              break;
-            case geometry.POLYGON:
-            case geometry.MULTI_POLYGON:
-              this.choroplethStyles_ = generateStyle(scaleColor, Choropleth.DEFAULT_STYLE_POLYGON);
-              break;
-            default:
-              this.choroplethStyles_ = [];
-          }
+          this.choroplethStyles_ = generateStyle(scaleColor, Choropleth.DEFAULT_STYLE);
         } else {
           this.breakPoints_ = this.quantification_(this.dataValues_, this.choroplethStyles_.length);
         }
@@ -391,54 +373,34 @@ class Choropleth extends StyleComposite {
    * @return {Style.Point}
    * @api
    */
-  static DEFAULT_STYLE_POINT(c) {
-    return new StylePoint({
-      fill: {
-        color: c,
-        opacity: 1,
+  static DEFAULT_STYLE(c) {
+    return new Generic({
+      point: {
+        fill: {
+          color: c,
+          opacity: 1,
+        },
+        stroke: {
+          color: 'black',
+          width: 1,
+        },
+        radius: 5,
       },
-      stroke: {
-        color: 'black',
-        width: 1,
+      line: {
+        stroke: {
+          color: c,
+          width: 1,
+        },
       },
-      radius: 5,
-    });
-  }
-
-  /**
-   * This functions returns a line style by default
-   * @function
-   * @public
-   * @param {String} c - color in hexadecimal format
-   * @return {Style.Line}
-   * @api
-   */
-  static DEFAULT_STYLE_LINE(c) {
-    return new StyleLine({
-      stroke: {
-        color: c,
-        width: 1,
-      },
-    });
-  }
-
-  /**
-   * This functions returns a polygon style by default
-   * @function
-   * @public
-   * @param {String} c - color in hexadecimal format
-   * @return {Style.Polygon}
-   * @api
-   */
-  static DEFAULT_STYLE_POLYGON(c) {
-    return new StylePolygon({
-      fill: {
-        color: c,
-        opacity: 1,
-      },
-      stroke: {
-        color: c,
-        width: 1,
+      polygon: {
+        fill: {
+          color: c,
+          opacity: 1,
+        },
+        stroke: {
+          color: c,
+          width: 1,
+        },
       },
     });
   }

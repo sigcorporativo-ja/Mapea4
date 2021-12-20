@@ -182,7 +182,10 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
     }
 
     // no atlas manager is used, create a new canvas
-    const canvas = this.getImage();
+    const canvas = this.getImage(1);
+
+    canvas.height += 1;
+    canvas.width += 1;
 
     const renderOptions = {
       strokeStyle,
@@ -208,7 +211,7 @@ export default class OLStyleFontSymbol extends OLStyleRegularShape {
    */
   drawPath_(renderOptions, contextParam) {
     const context = contextParam;
-    const s = (2 * this.radius_) + renderOptions.strokeWidth + 1;
+    const s = (2 * this.radius_) + renderOptions.strokeWidth;
     const w = renderOptions.strokeWidth / 2;
     const c = renderOptions.size / 2;
     // Transfo to place the glyph at the right place

@@ -53,7 +53,7 @@ class KML extends OLFormatKML {
       styles.forEach((style) => {
         if (style.getImage() instanceof OLStyleIcon) {
           const image = style.getImage();
-          image.getImage().removeAttribute('crossorigin');
+          // image.getImage().removeAttribute('crossorigin');
           style.setImage(image);
         }
       });

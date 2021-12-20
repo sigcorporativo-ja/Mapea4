@@ -655,6 +655,7 @@ export default class PrinterControl extends M.impl.Control {
                     a = a.replace('line', 'point');
                   }
                 }
+                a = a.replace('linestring', 'line');
                 if (style !== '') {
                   style += `,${a}`;
                 } else {
