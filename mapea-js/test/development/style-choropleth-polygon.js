@@ -9,15 +9,15 @@ const mapjs = map({
 });
 
 const wfs = new WFS({
-  namespace: 'mapea',
-  name: 'da_provincia',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
+  namespace: 'tematicos',
+  name: 'Provincias',
+  legend: 'Provincias',
+  geometry: 'MPOLYGON',
 });
 
-
 mapjs.addLayers([wfs]);
-const stylechoropleth = new StyleChoropleth('area', ['#ff0aee', '#040fef'], StyleQuantification.QUANTILE());
+const stylechoropleth = new StyleChoropleth('u_cod_prov', ['#ff0aee', '#040fef'], StyleQuantification.QUANTILE());
 wfs.setStyle(stylechoropleth);
 
 window.mapjs = mapjs;
