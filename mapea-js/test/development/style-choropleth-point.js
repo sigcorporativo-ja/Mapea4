@@ -9,14 +9,15 @@ const mapjs = map({
 });
 
 const wfs = new WFS({
-  namespace: 'ggis',
-  name: 'Colegios',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
+  namespace: 'sepim',
+  name: 'campamentos',
+  legend: 'Campamentos',
+  geometry: 'Point',
 });
 
 mapjs.addLayers([wfs]);
-const stylechoropleth = new StyleChoropleth('Prueba', ['#ff0aee', '#040fef'], StyleQuantification.JENKS(3));
+const stylechoropleth = new StyleChoropleth('telefono', ['#ff0aee', '#040fef'], StyleQuantification.JENKS(3));
 wfs.setStyle(stylechoropleth);
 
 window.mapjs = mapjs;

@@ -18,10 +18,11 @@ const stylepolygon = new StylePolygon({
 });
 
 const wfs = new WFS({
-  namespace: 'mapea',
-  name: 'da_provincia',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?',
+  namespace: 'tematicos',
+  name: 'Provincias',
+  legend: 'Provincias',
+  geometry: 'MPOLYGON',
 });
 
 mapjs.addLayers(wfs);

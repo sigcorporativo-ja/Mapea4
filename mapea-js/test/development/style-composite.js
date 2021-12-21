@@ -16,23 +16,23 @@ const wfs = new WFS({
   extract: true,
 });
 
-// const styleBase = new StylePoint({
-//   radius: 5,
-//   fill: {
-//     color: 'yellow',
-//     opacity: 0.3,
-//   },
-//   stroke: {
-//     color: 'green',
-//   },
-// });
-//
-// const styleCluster = new StyleCluster();
-//
-// const composite = styleCluster.add(styleBase);
-//
-// wfs.setStyle(composite);
-//
+const styleBase = new StylePoint({
+  radius: 5,
+  fill: {
+    color: 'yellow',
+    opacity: 0.3,
+  },
+  stroke: {
+    color: 'green',
+  },
+});
+
+const styleCluster = new StyleCluster();
+
+const composite = styleCluster.add(styleBase);
+
+wfs.setStyle(composite);
+
 // console.log(`StyleCluster tiene agregados los siguientes estilos:${styleCluster.getStyles()}`);
 
 mapjs.addWFS(wfs);

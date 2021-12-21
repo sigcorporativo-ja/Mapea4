@@ -9,10 +9,11 @@ const mapjs = map({
 });
 
 const wfs = new WFS({
-  namespace: 'mapea',
-  name: 'assda_sv10_ayuntamiento_point_indicadores',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
+  namespace: 'sepim',
+  name: 'campamentos',
+  legend: 'Campamentos',
+  geometry: 'Point',
 });
 
 mapjs.addLayers([wfs]);

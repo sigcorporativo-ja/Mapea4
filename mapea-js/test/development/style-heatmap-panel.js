@@ -8,17 +8,15 @@ const mapjs = Mmap({
   container: 'map',
 });
 
-const ayuntamientos = new WFS({
-  url: 'https://clientes.guadaltel.es/desarrollo/geossigc/wfs?',
-  namespace: 'mapea',
-  name: 'assda_sv10_ayuntamiento_point_indicadores',
-  legend: 'Prestaciones - Ámbito municipal',
-  getfeatureinfo: 'plain',
-  geometry: 'POINT',
-  extract: true,
+const wfs = new WFS({
+  url: 'http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows?',
+  namespace: 'sepim',
+  name: 'campamentos',
+  legend: 'Campamentos',
+  geometry: 'Point',
 });
 
-mapjs.addLayers(ayuntamientos);
+mapjs.addLayers(wfs);
 
 const getValue = (field) => {
   return document.getElementById(field).value;
@@ -82,7 +80,7 @@ const eventHandlers = {
     }, {
       opacity,
     });
-    ayuntamientos.setStyle(heatmap);
+    wfs.setStyle(heatmap);
     eventHandlers.toggleStyleBuilder();
   },
   addColor: () => {
@@ -97,7 +95,7 @@ const eventHandlers = {
       colors.removeChild(lastChild);
     }
   },
-  clearStyle: () => ayuntamientos.clearStyle(),
+  clearStyle: () => wfs.clearStyle(),
 };
 
 
