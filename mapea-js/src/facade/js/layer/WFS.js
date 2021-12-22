@@ -224,6 +224,24 @@ class WFS extends Vector {
 }
 
 /**
+ * Default params for style vector layers
+ * @const
+ * @type {object}
+ * @public
+ * @api
+ */
+WFS.DEFAULT_PARAMS = {
+  fill: {
+    color: 'rgba(103, 175, 19, 0.2)',
+    opacity: 0.4,
+  },
+  stroke: {
+    color: '#67af13',
+    width: 1,
+  },
+};
+
+/**
  * Default style for WFS layers
  * @const
  * @type {object}

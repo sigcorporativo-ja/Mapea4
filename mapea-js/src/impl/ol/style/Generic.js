@@ -52,7 +52,9 @@ class Generic extends Simple {
    * @return {String} data url to canvas
    * @api
    */
-  toImage(canvas) {}
+  toImage(canvas) {
+    return 'data:image/gif;base64,R0lGODlhAQABAAAAACwAAAAAAQABAAA=';
+  }
 
   /**
    * This function se options to ol style
