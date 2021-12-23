@@ -2,7 +2,7 @@
  * @module M/impl/style/builder
  */
 import chroma from 'chroma-js';
-import { isNullOrEmpty, isFunction } from 'M/util/Utils';
+import { isNullOrEmpty, isFunction, isUndefined } from 'M/util/Utils';
 import * as Align from 'M/style/Align';
 import * as Baseline from 'M/style/Baseline';
 import OLStyle from 'ol/style/Style';
@@ -116,6 +116,7 @@ export const getLabel = (options, featureVariable, layer) => {
   return labelText;
 };
 
+const iconCache = {};
 /**
  *
  * @param {*} options
@@ -123,23 +124,45 @@ export const getLabel = (options, featureVariable, layer) => {
  * @param {*} layer
  */
 export const getIconSrc = (options, featureVariable, layer) => {
-  const styleIcon = new PointIcon({
-    anchor: Simple.getValue(options.icon.anchor, featureVariable, layer),
-    anchorXUnits: Simple.getValue(options.icon.anchorxunits, featureVariable, layer),
-    anchorYUnits: Simple.getValue(options.icon.anchoryunits, featureVariable, layer),
-    src: Simple.getValue(options.icon.src, featureVariable, layer),
-    opacity: Simple.getValue(options.icon.opacity, featureVariable, layer),
-    scale: Simple.getValue(options.icon.scale, featureVariable, layer),
-    rotation: Simple.getValue(options.icon.rotation, featureVariable, layer),
-    rotateWithView: Simple.getValue(options.icon.rotate, featureVariable, layer),
-    snapToPixel: Simple.getValue(options.icon.snaptopixel, featureVariable, layer),
-    offsetOrigin: Simple.getValue(options.icon.offsetorigin, featureVariable, layer),
-    offset: Simple.getValue(options.icon.offset, featureVariable, layer),
-    crossOrigin: Simple.getValue(options.icon.crossorigin, featureVariable, layer),
-    anchorOrigin: Simple.getValue(options.icon.anchororigin, featureVariable, layer),
-    size: Simple.getValue(options.icon.size, featureVariable, layer),
-  });
+  const anchor = Simple.getValue(options.icon.anchor, featureVariable, layer);
+  const anchorXUnits = Simple.getValue(options.icon.anchorxunits, featureVariable, layer);
+  const anchorYUnits = Simple.getValue(options.icon.anchoryunits, featureVariable, layer);
+  const src = Simple.getValue(options.icon.src, featureVariable, layer);
+  const opacity = Simple.getValue(options.icon.opacity, featureVariable, layer);
+  const scale = Simple.getValue(options.icon.scale, featureVariable, layer);
+  const rotation = Simple.getValue(options.icon.rotation, featureVariable, layer);
+  const rotateWithView = Simple.getValue(options.icon.rotate, featureVariable, layer);
+  const snapToPixel = Simple.getValue(options.icon.snaptopixel, featureVariable, layer);
+  const offsetOrigin = Simple.getValue(options.icon.offsetorigin, featureVariable, layer);
+  const offset = Simple.getValue(options.icon.offset, featureVariable, layer);
+  const crossOrigin = Simple.getValue(options.icon.crossorigin, featureVariable, layer);
+  const anchorOrigin = Simple.getValue(options.icon.anchororigin, featureVariable, layer);
+  const size = Simple.getValue(options.icon.size, featureVariable, layer);
 
+  const index = src + anchor + anchorXUnits + anchorYUnits + opacity +
+    scale + rotation + rotateWithView + snapToPixel +
+    offsetOrigin + offset + crossOrigin + anchorOrigin + anchorOrigin + size;
+  let styleIcon = iconCache[index];
+
+  if (!styleIcon) {
+    styleIcon = new PointIcon({
+      anchor: Simple.getValue(options.icon.anchor, featureVariable, layer),
+      anchorXUnits: Simple.getValue(options.icon.anchorxunits, featureVariable, layer),
+      anchorYUnits: Simple.getValue(options.icon.anchoryunits, featureVariable, layer),
+      src: Simple.getValue(options.icon.src, featureVariable, layer),
+      opacity: Simple.getValue(options.icon.opacity, featureVariable, layer),
+      scale: Simple.getValue(options.icon.scale, featureVariable, layer),
+      rotation: Simple.getValue(options.icon.rotation, featureVariable, layer),
+      rotateWithView: Simple.getValue(options.icon.rotate, featureVariable, layer),
+      snapToPixel: Simple.getValue(options.icon.snaptopixel, featureVariable, layer),
+      offsetOrigin: Simple.getValue(options.icon.offsetorigin, featureVariable, layer),
+      offset: Simple.getValue(options.icon.offset, featureVariable, layer),
+      crossOrigin: Simple.getValue(options.icon.crossorigin, featureVariable, layer),
+      anchorOrigin: Simple.getValue(options.icon.anchororigin, featureVariable, layer),
+      size: Simple.getValue(options.icon.size, featureVariable, layer),
+    });
+    iconCache[index] = styleIcon;
+  }
   return styleIcon;
 };
 
@@ -302,16 +325,19 @@ export const getPointStyle = (options, featureVariable, layer) => {
 
   if (!isNullOrEmpty(optionsVar.icon)) {
     let icon;
-    if (!isNullOrEmpty(optionsVar.icon.src)) {
+
+    const src = Simple.getValue(optionsVar.icon.src, featureVariable, layer);
+    if (!isNullOrEmpty(src)) {
       icon = getIconSrc(optionsVar, featureVariable, layer);
+      iconStyle.setImage(icon);
     } else if (!isNullOrEmpty(optionsVar.icon.form)) {
       icon = getIconForm(optionsVar, featureVariable, layer);
+      iconStyle.setImage(icon);
     }
-    iconStyle.setImage(icon);
   }
 
   const label = getLabel(optionsVar, featureVariable, layer);
-  if (!isNullOrEmpty(optionsVar.label)) {
+  if (!isNullOrEmpty(optionsVar.label) && !isUndefined(label.getText())) {
     pointStyle.setText(label);
   }
 
