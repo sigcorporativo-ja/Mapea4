@@ -33,6 +33,7 @@ options.labeling.followLine | (opcional) Cuando su valor es verdadero activa eti
 options.labeling.group | (opcional) Cuando su valor es verdadero las geometrías con las mismas etiquetas se agrupan y se consideran una sola entidad para etiquetar
 options.labeling.maxDisplacement | (opcional) La distancia, en píxeles, a la que se puede desplazar una etiqueta desde su posición natural en un intento de encontrar una posición que no entre en conflicto con las etiquetas ya dibujadas
 options.labeling.spaceAround | (opcional) la distancia mínima entre dos etiquetas, en píxeles
+options.layout | (opcional) Plantilla preseleccionada
 
 
 Establecimiento de parámetros y valores preseleccionados:
@@ -63,6 +64,10 @@ mapajs.addPlugin(new M.plugin.Printer({
       group: false,
       maxDisplacement: 400,
       spaceAround: 50
+    }
+  },
+  options: {
+      layout: 'A4 landscape (SIGC)'
     }
 }));
 ```

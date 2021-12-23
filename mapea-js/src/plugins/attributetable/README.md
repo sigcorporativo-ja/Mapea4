@@ -29,10 +29,5 @@ mapajs.addPlugin(new M.plugin.AttributeTable({
 [JSFiddle](http://jsfiddle.net/sigcJunta/t4oLhuo4/)  
 
 ## Tabla de compatibilidad de versiones   
-En caso de utilizar un core de Mapea con número de versión explícito, debe cumplirse la siguiente relación:  
+[Consulta el api resourcePlugin](https://mapea4-sigc.juntadeandalucia.es/mapea/api/actions/resourcesPlugins?name=attributetable) 
 
-versión plugin | versión Mapea |
---- | --- |
-1.0.0 | <= 4.1.0
-1.0.1 | 4.2.0
-2.0.0 | >=5.0.0
