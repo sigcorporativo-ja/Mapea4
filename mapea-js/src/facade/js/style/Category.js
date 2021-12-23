@@ -7,7 +7,7 @@ import { isNullOrEmpty, getImageSize, isArray, extendsObj, stringifyFunctions, d
 import Exception from '../exception/exception.js';
 import StyleProportional from './Proportional.js';
 import StyleCluster from './Cluster.js';
-import { generateRandomStyle } from './utils.js';
+import Utils from './utils.js';
 import { getValue } from '../i18n/language.js';
 
 /**
@@ -314,7 +314,7 @@ class Category extends Composite {
       this.layer_.getFeatures().forEach((feature) => {
         const value = feature.getAttribute(this.attributeName_);
         if (!Object.prototype.hasOwnProperty.call(categories, value)) {
-          categories[value] = generateRandomStyle({
+          categories[value] = Utils.generateRandomStyle({
             feature,
             radius: Category.RANDOM_RADIUS_OPTION,
             strokeColor: Category.RANDOM_STROKE_COLOR_OPTION,

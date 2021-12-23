@@ -10,7 +10,7 @@ import StylePolygon from '../style/Polygon.js';
  * @param {M.Feature} feature
  * @return {M.style.Simple}
  */
-export const generateRandomStyle = (opts) => {
+const generateRandomStyle = (opts) => {
   const radius = opts.radius;
   const fillColor = chroma.random().hex();
   const strokeColor = opts.strokeColor;
@@ -67,33 +67,6 @@ export const generateRandomStyle = (opts) => {
   return style;
 };
 
-
-/**
- * This function returns the appropiate style to geomtry layer
- * with parameter options.
- * @function
- * @private
- * @param {object} options - style options
- * @param {M.layer.Vector} layer -
- * @return {M.style.Simple}
- */
-export const generateStyleLayer = (options, layer) => {
-  let style;
-  switch (layer.getGeometryType()) {
-    case 'Point':
-    case 'MultiPoint':
-      style = new StylePoint(options);
-      break;
-    case 'LineString':
-    case 'MultiLineString':
-      style = new StyleLine(options);
-      break;
-    case 'Polygon':
-    case 'MultiPolygon':
-      style = new StylePolygon(options);
-      break;
-    default:
-      return null;
-  }
-  return style;
+export default {
+  generateRandomStyle,
 };

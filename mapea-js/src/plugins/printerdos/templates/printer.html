@@ -43,6 +43,12 @@
             <label>Forzar escala </label>
             <input type="checkbox" {{#if forceScale}} checked{{/if}}>
         </div>
+        <!-- text wrap -->
+        <div class="textwrap">
+            <label>% Ajuste texto</label>
+            <input id='inputRange' type="range" min="0" max="1" step="0.1" value={{textWrap}}>
+            <div id='label'>{{textWrap}}</div>
+        </div>
     </div>
     <!-- buttons -->
     <div class="button">

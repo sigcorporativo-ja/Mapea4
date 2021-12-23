@@ -26,10 +26,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "wfstcontrols-3.0.1.ol.min.js"
+        "wfstcontrols-3.0.2.ol.min.js"
       ],
       "styles": [
-        "wfstcontrols-3.0.1.min.css"
+        "wfstcontrols-3.0.2.min.css"
       ]
     }
   },
@@ -37,7 +37,7 @@
     "name": "WFSTControls",
     "description": "Tool for editing WFST layers.",
     "text": "",
-    "version": "3.0.1",
+    "version": "3.0.2",
     "date": "11/10/2019",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",

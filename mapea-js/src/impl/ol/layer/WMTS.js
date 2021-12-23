@@ -211,7 +211,7 @@ class WMTS extends LayerBase {
    * TODO
    */
   setMaxExtent(maxExtent) {
-    this.getOL3Layer().setExtent(maxExtent);
+    this.getOLLayer().setExtent(maxExtent);
   }
 
 

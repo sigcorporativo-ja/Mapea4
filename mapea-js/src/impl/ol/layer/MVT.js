@@ -5,10 +5,10 @@ import OLSourceVectorTile from 'ol/source/VectorTile';
 import OLLayerVectorTile from 'ol/layer/VectorTile';
 import { extend } from 'M/util/Utils';
 import * as EventType from 'M/event/eventtype';
-import TileEventType from 'ol/source/TileEventType';
+// import TileEventType from 'ol/source/TileEventType';
 import TileState from 'ol/TileState';
 import MVTFormatter from 'ol/format/MVT';
-import { get as getProj } from 'ol/proj';
+// import { get as getProj } from 'ol/proj';
 import { fromKey } from 'ol/tilecoord';
 import Feature from 'ol/Feature';
 import RenderFeature from 'ol/render/Feature';
@@ -97,7 +97,7 @@ class MVT extends Vector {
     });
 
     // register events in order to fire the LOAD event
-    source.on(TileEventType.TILELOADERROR, evt => this.checkAllTilesLoaded_(evt));
+    // source.on(TileEventType.TILELOADERROR, evt => this.checkAllTilesLoaded_(evt));
     // source.on(TileEventType.TILELOADEND, evt => this.checkAllTilesLoaded_(evt));
 
     this.ol3Layer = new OLLayerVectorTile(extend({
@@ -110,6 +110,8 @@ class MVT extends Vector {
     }
 
     this.map.getMapImpl().addLayer(this.ol3Layer);
+    this.loaded_ = true;
+    this.facadeVector_.fire(EventType.LOAD);
 
     // clear features when zoom changes
     this.map.on(EventType.CHANGE_ZOOM, () => {
@@ -159,33 +161,33 @@ class MVT extends Vector {
     return features;
   }
 
-  /**
-   * This function checks if an object is equals
-   * to this layer
-   *
-   * @private
-   * @function
-   * @param {ol/source/Tile.TileSourceEvent} evt
-   */
-  checkAllTilesLoaded_(evt) {
-    const currTileCoord = evt.tile.getTileCoord();
-    const olProjection = getProj(this.projection_);
-    const tileCache = this.ol3Layer.getSource().getTileCacheForProjection(olProjection);
-    const tileImages = tileCache.getValues();
-    const loaded = tileImages.every((tile) => {
-      const tileCoord = tile.getTileCoord();
-      const tileState = tile.getState();
-      const sameTile = (currTileCoord[0] === tileCoord[0] &&
-        currTileCoord[1] === tileCoord[1] &&
-        currTileCoord[2] === tileCoord[2]);
-      const tileLoaded = sameTile || (tileState !== TileState.LOADING);
-      return tileLoaded;
-    });
-    if (loaded && !this.loaded_) {
-      this.loaded_ = true;
-      this.facadeVector_.fire(EventType.LOAD);
-    }
-  }
+  // /**
+  //  * This function checks if an object is equals
+  //  * to this layer
+  //  *
+  //  * @private
+  //  * @function
+  //  * @param {ol/source/Tile.TileSourceEvent} evt
+  //  */
+  // checkAllTilesLoaded_(evt) {
+  //   const currTileCoord = evt.tile.getTileCoord();
+  //   const olProjection = getProj(this.projection_);
+  //   const tileCache = this.ol3Layer.getSource().getTileCacheForProjection(olProjection);
+  //   const tileImages = tileCache.getValues();
+  //   const loaded = tileImages.every((tile) => {
+  //     const tileCoord = tile.getTileCoord();
+  //     const tileState = tile.getState();
+  //     const sameTile = (currTileCoord[0] === tileCoord[0] &&
+  //       currTileCoord[1] === tileCoord[1] &&
+  //       currTileCoord[2] === tileCoord[2]);
+  //     const tileLoaded = sameTile || (tileState !== TileState.LOADING);
+  //     return tileLoaded;
+  //   });
+  //   if (loaded && !this.loaded_) {
+  //     this.loaded_ = true;
+  //     this.facadeVector_.fire(EventType.LOAD);
+  //   }
+  // }
 
   /**
    * This function checks if an object is equals

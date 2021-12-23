@@ -173,7 +173,7 @@ class OverviewMap extends OLControlOverviewMap {
    */
   addLayer_(layer) {
     layer.un(EventType.ADDED_TO_MAP, this.addLayer_, this);
-    this.getOverviewMap().addLayer(layer.getOL3Layer());
+    this.getOverviewMap().addLayer(layer.getOLLayer());
   }
 
   /**

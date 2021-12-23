@@ -4,7 +4,6 @@
 import VectorImpl from 'impl/layer/Vector.js';
 import { geojsonTo4326 } from 'impl/util/Utils.js';
 import { isUndefined, isArray, isNullOrEmpty, isString, normalize } from '../util/Utils.js';
-import { generateStyleLayer } from '../style/utils.js';
 import Exception from '../exception/exception.js';
 import LayerBase from './Layer.js';
 import * as LayerType from './Type.js';
@@ -14,6 +13,7 @@ import StyleCluster from '../style/Cluster.js';
 import Style from '../style/Style.js';
 import * as EventType from '../event/eventtype.js';
 import { getValue } from '../i18n/language.js';
+import Generic from '../style/Generic.js';
 
 /**
  * @classdesc
@@ -344,11 +344,10 @@ class Vector extends LayerBase {
     if (isString(style)) {
       style = Style.deserialize(style);
     } else if (!(style instanceof Style)) {
-      style = generateStyleLayer(style, this);
+      style = new Generic(style);
     }
-    // const isCluster = style instanceof StyleCluster;
-    // const isPoint = [POINT, MULTI_POINT].includes(this.getGeometryType());
-    if (style instanceof Style) /* && (!isCluster || isPoint) ) */ {
+
+    if (style instanceof Style) {
       if (!isNullOrEmpty(this.style_) && this.style_ instanceof Style) {
         this.style_.unapply(this);
       }
@@ -462,13 +461,13 @@ class Vector extends LayerBase {
 }
 
 /**
- * Default style for Vector layers
+ * Default params for style vector layers
  * @const
  * @type {object}
  * @public
  * @api
  */
-Vector.DEFAULT_OPTIONS_STYLE = {
+Vector.DEFAULT_PARAMS = {
   fill: {
     color: 'rgba(255, 255, 255, 0.4)',
     opacity: 0.4,
@@ -477,7 +476,26 @@ Vector.DEFAULT_OPTIONS_STYLE = {
     color: '#3399CC',
     width: 1.5,
   },
-  radius: 5,
+};
+
+/**
+ * Default style for Vector layers
+ * @const
+ * @type {object}
+ * @public
+ * @api
+ */
+Vector.DEFAULT_OPTIONS_STYLE = {
+  point: {
+    ...Vector.DEFAULT_PARAMS,
+    radius: 5,
+  },
+  line: {
+    ...Vector.DEFAULT_PARAMS,
+  },
+  polygon: {
+    ...Vector.DEFAULT_PARAMS,
+  },
 };
 
 export default Vector;

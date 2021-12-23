@@ -166,13 +166,13 @@ class Cluster extends Style {
       this.clusterLayer_.set('animationDuration', undefined);
     }
     this.clusterLayer_.setZIndex(99999);
-    const ol3Layer = this.layer_.getImpl().getOL3Layer();
+    const ol3Layer = this.layer_.getImpl().getOLLayer();
     if (!(ol3Layer instanceof AnimatedCluster)) {
       this.oldOLLayer_ = ol3Layer;
     }
     this.clusterLayer_.setMaxResolution(this.oldOLLayer_.getMaxResolution());
     this.clusterLayer_.setMinResolution(this.oldOLLayer_.getMinResolution());
-    this.layer_.getImpl().setOL3Layer(this.clusterLayer_);
+    this.layer_.getImpl().setOLLayer(this.clusterLayer_);
 
     if (isNullOrEmpty(this.options_.ranges)) {
       this.options_.ranges = this.getDefaultRanges_();
@@ -506,7 +506,7 @@ class Cluster extends Style {
    */
   unapply() {
     if (!isNullOrEmpty(this.clusterLayer_)) {
-      this.layer_.getImpl().setOL3Layer(this.oldOLLayer_);
+      this.layer_.getImpl().setOLLayer(this.oldOLLayer_);
       this.oldOLLayer_.setMaxResolution(this.clusterLayer_.getMaxResolution());
       this.oldOLLayer_.setMinResolution(this.clusterLayer_.getMinResolution());
       this.removeCoverInteraction_();

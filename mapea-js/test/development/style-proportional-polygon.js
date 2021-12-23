@@ -9,10 +9,11 @@ const mapjs = map({
 });
 
 const wfs = new WFS({
-  namespace: 'mapea',
-  name: 'da_provincia',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/tematicos/ows?",
+  namespace: "tematicos",
+  name: "Provincias",
+  legend: "Provincias",
+  geometry: 'MPOLYGON'
 });
 
 mapjs.addLayers([wfs]);
@@ -25,7 +26,7 @@ const Stylepolygon = new StylePolygon({
     stroke: 4,
   },
 });
-const styleproportional = new StyleProportional('area', 15, 30);
+const styleproportional = new StyleProportional('u_cod_prov', 15, 30);
 styleproportional.add(Stylepolygon);
 wfs.setStyle(styleproportional);
 

@@ -287,14 +287,13 @@ class Feature {
     const geometry = olFeature.getGeometry();
     const center = ImplUtils.getCentroid(geometry);
     if (!isNullOrEmpty(center)) {
-      const geom = new OLGeomPoint();
-      geom.setCoordinates(center);
+      const geom = new OLGeomPoint(center);
       olCentroid = new OLFeature({
         geometry: geom,
         name: 'centroid',
       });
     }
-    olCentroid = olCentroid || Feature.olFeature2Facade(olCentroid);
+    olCentroid = Feature.olFeature2Facade(olCentroid);
     return olCentroid;
   }
 

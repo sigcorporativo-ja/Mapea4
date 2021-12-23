@@ -9,10 +9,11 @@ const mapjs = map({
 });
 
 const wfs = new WFS({
-  namespace: 'ggis',
-  name: 'Colegios',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+  url: "http://geostematicos-sigc.juntadeandalucia.es/geoserver/sepim/ows",
+  name: "sepim:campamentos",
+  legend: "Campamentos",
+  geometry: 'POINT',
+  extract: true
 });
 
 mapjs.addLayers([wfs]);
@@ -25,7 +26,7 @@ const stylepoint = new StylePoint({
     stroke: 4,
   },
 });
-const styleproportional = new StyleProportional('Prueba', 15, 30);
+const styleproportional = new StyleProportional('yutm', 15, 30);
 styleproportional.add(stylepoint);
 wfs.setStyle(styleproportional);
 

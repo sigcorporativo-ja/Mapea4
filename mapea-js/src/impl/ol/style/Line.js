@@ -141,7 +141,7 @@ class Line extends Simple {
   applyToLayer(layer) {
     super.applyToLayer(layer);
 
-    const olLayer = layer.getImpl().getOL3Layer();
+    const olLayer = layer.getImpl().getOLLayer();
     if (!isNullOrEmpty(olLayer)) {
       this.postComposeEvtKey_ = olLayer.on('postcompose', postRender, olLayer);
     }

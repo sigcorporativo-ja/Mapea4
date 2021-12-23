@@ -10,7 +10,7 @@ export default class PrinterControl extends M.impl.Control {
    * @extends {ol.control.Control}
    * @api stable
    */
-  constructor() {
+  constructor(options = {}) {
     super();
     /**
      * Facade of the map
@@ -18,6 +18,42 @@ export default class PrinterControl extends M.impl.Control {
      * @type {M.Map}
      */
     this.facadeMap_ = null;
+
+    this.additionalOptsLabel_ = {};
+    this.labeling_ = options.labeling;
+    if (!M.utils.isNullOrEmpty(this.labeling_)) {
+      if (!M.utils.isNullOrEmpty(this.labeling_.allowOverruns)) {
+        this.additionalOptsLabel_.allowOverruns = this.labeling_.allowOverruns;
+      }
+      if (!M.utils.isNullOrEmpty(this.labeling_.autoWrap)) {
+        this.additionalOptsLabel_.autoWrap = this.labeling_.autoWrap;
+      }
+      if (!M.utils.isNullOrEmpty(this.labeling_.conflictResolution)) {
+        this.additionalOptsLabel_.conflictResolution = this.labeling_.conflictResolution;
+      } else {
+        this.additionalOptsLabel_.conflictResolution = 'false';
+      }
+      if (!M.utils.isNullOrEmpty(this.labeling_.followLine)) {
+        this.additionalOptsLabel_.followLine = this.labeling_.followLine;
+      }
+      if (!M.utils.isNullOrEmpty(this.labeling_.goodnessOfFit)) {
+        this.additionalOptsLabel_.goodnessOfFit = this.labeling_.goodnessOfFit;
+      } else {
+        this.additionalOptsLabel_.goodnessOfFit = 0.9;
+      }
+      if (!M.utils.isNullOrEmpty(this.labeling_.group)) {
+        this.additionalOptsLabel_.group = this.labeling_.group;
+      }
+      if (!M.utils.isNullOrEmpty(this.labeling_.maxDisplacement)) {
+        this.additionalOptsLabel_.maxDisplacement = this.labeling_.maxDisplacement;
+      }
+      if (!M.utils.isNullOrEmpty(this.labeling_.spaceAround)) {
+        this.additionalOptsLabel_.spaceAround = this.labeling_.spaceAround;
+      }
+    } else {
+      this.additionalOptsLabel_.conflictResolution = 'false';
+      this.additionalOptsLabel_.goodnessOfFit = 0.9;
+    }
   }
 
   /**
@@ -201,7 +237,7 @@ export default class PrinterControl extends M.impl.Control {
               fontSize: '11px',
               fontFamily: 'Helvetica, sans-serif',
               fontWeight: 'bold',
-              conflictResolution: 'false',
+              conflictResolution: this.additionalOptsLabel_.conflictResolution,
               labelAlign: text.getTextAlign(),
               labelXOffset: text.getOffsetX(),
               labelYOffset: text.getOffsetY(),
@@ -213,6 +249,7 @@ export default class PrinterControl extends M.impl.Control {
             // Se deja la cifra hexadecimal en 6 dígitos para la integración con Mapea 4
             styleText.fontColor = styleText.fontColor.slice(0, 7);
             styleText.labelOutlineColor = styleText.labelOutlineColor.slice(0, 7);
+            styleText = this.addAdditionalLabelOptions(styleText);
           }
           nameFeature = `draw${index}`;
           if ((!M.utils.isNullOrEmpty(geometry) && geometry.intersectsExtent(bbox)) ||
@@ -433,9 +470,14 @@ export default class PrinterControl extends M.impl.Control {
           featureStyle = featureStyle.call(featureStyle, feature, resolution);
         }
 
+        let styleIcon = null;
         if (featureStyle instanceof Array) {
           // JGL20180118: prioridad al estilo que tiene SRC
           if (featureStyle.length > 1) {
+            styleIcon = !M.utils.isNullOrEmpty(featureStyle[1]) &&
+              !M.utils.isNullOrEmpty(featureStyle[1].getImage()) &&
+              featureStyle[1].getImage().getGlyph ?
+              featureStyle[1].getImage() : null;
             featureStyle = (!M.utils.isNullOrEmpty(featureStyle[1].getImage()) &&
                 featureStyle[1].getImage().getSrc) ?
               featureStyle[1] : featureStyle[0];
@@ -468,6 +510,8 @@ export default class PrinterControl extends M.impl.Control {
             featureStyle.getFill() : (image.getFill && image.getFill());
 
           let styleText;
+          const pointRadius = M.utils.isNullOrEmpty(image) ? '' : (image.getRadius && image.getRadius());
+
           const styleGeom = {
             type: parseType,
             fillColor: M.utils.isNullOrEmpty(fill) ? '#000000' : M.utils.rgbaToHex(fill.getColor()).slice(0, 7),
@@ -482,6 +526,25 @@ export default class PrinterControl extends M.impl.Control {
             graphicHeight: imgSize[0],
             graphicWidth: imgSize[1],
           };
+
+          if (Number.isNaN(pointRadius)) {
+            styleGeom.fillOpacity = 0;
+            styleGeom.strokeOpacity = 0;
+            styleGeom.pointRadius = 0;
+          }
+          const imageIcon = !M.utils.isNullOrEmpty(styleIcon) &&
+            styleIcon.getImage ? styleIcon.getImage() : null;
+          if (!M.utils.isNullOrEmpty(imageIcon)) {
+            if (styleIcon.getRadius && styleIcon.getRadius()) {
+              styleGeom.pointRadius = styleIcon.getRadius && styleIcon.getRadius();
+            }
+            if (styleIcon.getOpacity && styleIcon.getOpacity()) {
+              styleGeom.graphicOpacity = styleIcon.getOpacity();
+            }
+            styleGeom.externalGraphic = imageIcon.toDataURL();
+          }
+
+
           if (!M.utils.isNullOrEmpty(text)) {
             let tAlign = text.getTextAlign();
             let tBLine = text.getTextBaseline();
@@ -533,7 +596,7 @@ export default class PrinterControl extends M.impl.Control {
               fontFamily: 'Helvetica, sans-serif',
               fontStyle: 'normal',
               fontWeight,
-              conflictResolution: 'false',
+              conflictResolution: this.additionalOptsLabel_.conflictResolution,
               labelXOffset: text.getOffsetX(),
               labelYOffset: text.getOffsetY(),
               fillColor: styleGeom.fillColor || '#FF0000',
@@ -542,6 +605,7 @@ export default class PrinterControl extends M.impl.Control {
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
               labelAlign: align,
             };
+            styleText = this.addAdditionalLabelOptions(styleText);
           }
           nameFeature = `draw${index}`;
 
@@ -573,6 +637,7 @@ export default class PrinterControl extends M.impl.Control {
                   symbolizers.push(styleStr);
                 }
               }
+
               if (styleName === undefined) {
                 styleName = 0;
               }
@@ -581,7 +646,16 @@ export default class PrinterControl extends M.impl.Control {
               }
               filter = `"[_gx_style ='${styleName + styleNameText}']"`;
               if (!M.utils.isNullOrEmpty(symbolizers)) {
-                const a = ` ${filter}:{"symbolizers": [${symbolizers}]}`;
+                let a = ` ${filter}:{"symbolizers": [${symbolizers}]}`;
+                if (layer.getStyle() instanceof M.style.Proportional) {
+                  const typeFeature = feature.getGeometry().getType().toLocaleLowerCase();
+                  if (typeFeature.indexOf('polygon') >= 0) {
+                    a = a.replace('polygon', 'point');
+                  } else if (typeFeature.indexOf('line') >= 0) {
+                    a = a.replace('line', 'point');
+                  }
+                }
+                a = a.replace('linestring', 'line');
                 if (style !== '') {
                   style += `,${a}`;
                 } else {
@@ -788,7 +862,7 @@ export default class PrinterControl extends M.impl.Control {
               fontFamily: 'Helvetica, sans-serif',
               fontStyle: 'normal',
               fontWeight,
-              conflictResolution: 'false',
+              conflictResolution: this.additionalOptsLabel_.conflictResolution,
               labelXOffset: text.getOffsetX(),
               labelYOffset: text.getOffsetY(),
               fillColor: styleGeom.fillColor || '#FF0000',
@@ -797,6 +871,7 @@ export default class PrinterControl extends M.impl.Control {
               labelOutlineWidth: M.utils.isNullOrEmpty(text.getStroke()) ? '' : text.getStroke().getWidth(),
               labelAlign: align,
             };
+            styleText = this.addAdditionalLabelOptions(styleText);
           }
           nameFeature = `draw${index}`;
 
@@ -904,6 +979,8 @@ export default class PrinterControl extends M.impl.Control {
     const olLayer = layerImpl.getOL3Layer();
     const layerSource = olLayer.getSource();
     const tileGrid = layerSource.getTileGrid();
+    const style = !M.utils.isNullOrEmpty(layerSource.getStyle) ? layerSource.getStyle() : 'default';
+
 
     const layerUrl = layer.url;
     const layerName = layer.name;
@@ -931,7 +1008,7 @@ export default class PrinterControl extends M.impl.Control {
         layer: layerName,
         requestEncoding: layerReqEncoding,
         tileSize,
-        style: 'default',
+        style: !M.utils.isNullOrEmpty(style) ? style : 'default',
         rotation: 0,
         imageFormat: 'image/png',
         dimensionParams: {},
@@ -1036,6 +1113,57 @@ export default class PrinterControl extends M.impl.Control {
 
   transformExt(box, code, currProj) {
     return ol.proj.transformExtent(box, code, currProj);
+  }
+
+  /**
+   * This function adds new parameters
+   * for labels
+   *
+   * @public
+   * @function
+   * @param { Object } styleText style defined
+   * for the label
+   * @api stable
+   */
+  addAdditionalLabelOptions(styleText) {
+    const auxStyleText = styleText;
+
+    if (!M.utils.isNullOrEmpty(this.additionalOptsLabel_.allowOverruns)) {
+      auxStyleText.allowOverruns = this.additionalOptsLabel_.allowOverruns;
+    }
+    if (!M.utils.isNullOrEmpty(this.additionalOptsLabel_.autoWrap)) {
+      auxStyleText.autoWrap = this.additionalOptsLabel_.autoWrap;
+    }
+    if (!M.utils.isNullOrEmpty(this.additionalOptsLabel_.followLine)) {
+      auxStyleText.followLine = this.additionalOptsLabel_.followLine;
+    }
+    if (!M.utils.isNullOrEmpty(this.additionalOptsLabel_.goodnessOfFit)) {
+      auxStyleText.goodnessOfFit = this.additionalOptsLabel_.goodnessOfFit;
+    }
+    if (!M.utils.isNullOrEmpty(this.additionalOptsLabel_.group)) {
+      auxStyleText.group = this.additionalOptsLabel_.group;
+    }
+    if (!M.utils.isNullOrEmpty(this.additionalOptsLabel_.maxDisplacement)) {
+      auxStyleText.maxDisplacement = this.additionalOptsLabel_.maxDisplacement;
+    }
+    if (!M.utils.isNullOrEmpty(this.additionalOptsLabel_.spaceAround)) {
+      auxStyleText.spaceAround = this.additionalOptsLabel_.spaceAround;
+    }
+
+    return auxStyleText;
+  }
+
+  /**
+   * This function assigns value to goodnessOfFit
+   *
+   * @public
+   * @function
+   * @param { Decimal } value value to goodnessOfFit param for label
+   * for the label
+   * @api stable
+   */
+  setGoodnessOfFit(value) {
+    this.additionalOptsLabel_.goodnessOfFit = value;
   }
 
   /**
