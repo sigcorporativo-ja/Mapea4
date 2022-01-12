@@ -16,6 +16,7 @@ import OLGeomCircle from 'ol/geom/Circle';
 import OLStyleText from 'ol/style/Text';
 import OLStyleIcon from 'ol/style/Icon';
 import { toContext as toContextRender } from 'ol/render';
+import OLGeomMultiPoint from 'ol/geom/MultiPoint';
 import OLStyleFontsSymbol from '../ext/OLStyleFontSymbol';
 import Simple from './Simple';
 import Utils from '../util/Utils';

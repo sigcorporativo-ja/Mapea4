@@ -27,8 +27,4 @@ mapajs.addPlugin(new M.plugin.Searchstreet({
 [JSFiddle](http://jsfiddle.net/sigcJunta/3xyz2jjq/)  
 
 ## Tabla de compatibilidad de versiones   
-versión plugin | versión Mapea |
---- | --- |
-1.0.0 | <= 4.0.0
-1.1.0 | 4.1.0
-2.0.1 | >= 5.0.0
+[Consulta el api resourcePlugin](https://mapea4-sigc.juntadeandalucia.es/mapea/api/actions/resourcesPlugins?name=searchstreet)
