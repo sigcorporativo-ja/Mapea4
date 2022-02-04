@@ -9,10 +9,11 @@ const mapjs = map({
 });
 
 const wfs = new WFS({
-  namespace: 'mapea',
-  name: 'mapb_hs1_100',
-  url: 'http://clientes.guadaltel.es/desarrollo/geossigc/ows?',
-  legend: 'Prestaciones - Ámbito municipal',
+  url: 'http://www.ideandalucia.es/services/DERA_g3_hidrografia/wfs',
+  namespace: 'DERA_g3_hidrografia',
+  name: 'g03_08_Conduccion',
+  legend: 'Rios',
+  geometry: 'LINE',
 });
 
 mapjs.addLayers([wfs]);
@@ -25,7 +26,7 @@ const styleline = new StyleLine({
     width: 3,
   },
 });
-const styleproportional = new StyleProportional('gid', 15, 30);
+const styleproportional = new StyleProportional('id', 15, 30);
 styleproportional.add(styleline);
 wfs.setStyle(styleproportional);
 

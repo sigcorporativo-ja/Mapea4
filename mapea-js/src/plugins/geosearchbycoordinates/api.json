@@ -8,10 +8,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "geosearchbycoordinates-1.0.0.ol.min.js"
+        "geosearchbycoordinates-1.0.1.ol.min.js"
       ],
       "styles": [
-        "geosearchbycoordinates-1.0.0.min.css"
+        "geosearchbycoordinates-1.0.1.min.css"
       ]
     }
   },
@@ -19,7 +19,7 @@
     "name": "GeosearchByCoordinates",
     "description": "Search for locations within a given radius from a click on a point on the map.",
     "text": "",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "date": "11/10/2019",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",

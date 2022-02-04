@@ -263,7 +263,7 @@ export default class OLChart extends OLStyleRegularShape {
    * This function draw the Bar chart
    */
   renderBarChart() {
-    const canvas = this.getImage();
+    const canvas = this.getImage(1);
     const context = canvas.getContext('2d');
     let strokeStyle;
     let strokeWidth = 0;
@@ -313,7 +313,7 @@ export default class OLChart extends OLStyleRegularShape {
       strokeWidth = this.stroke_.getWidth();
     }
 
-    const canvas = this.getImage();
+    const canvas = this.getImage(1);
     const context = canvas.getContext('2d');
     context.clearRect(0, 0, canvas.width, canvas.height);
     context.lineJoin = 'round';

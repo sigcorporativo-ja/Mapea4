@@ -10,7 +10,7 @@
  * @api
  */
 const exception = (msg) => {
-  throw msg;
+  throw new Error(msg);
 };
 
 export default exception;

@@ -10,12 +10,12 @@ import * as Align from 'M/style/Align';
 import * as Baseline from 'M/style/Baseline';
 import OLStyleFill from 'ol/style/Fill';
 import OLGeomPoint from 'ol/geom/Point';
+import OLGeomMultiPoint from 'ol/geom/MultiPoint';
 import OLStyleStroke from 'ol/style/Stroke';
 import OLGeomCircle from 'ol/geom/Circle';
 import OLStyleText from 'ol/style/Text';
 import OLStyleIcon from 'ol/style/Icon';
 import { toContext as toContextRender } from 'ol/render';
-import OLGeomMultiPoint from 'ol/geom/MultiPoint';
 import OLStyleFontsSymbol from '../ext/OLStyleFontSymbol';
 import Simple from './Simple';
 import Utils from '../util/Utils';
@@ -56,7 +56,7 @@ class Point extends Simple {
       if (style.getImage && style.getImage() != null && style.getImage() instanceof OLStyleImage) {
         // see https://github.com/openlayers/openlayers/blob/master/src/ol/style/regularshape.js#L205
         if (style.getImage() instanceof PointFontSymbol) {
-          const imageCanvas = style.getImage().getImage();
+          const imageCanvas = style.getImage().getImage(1);
           if (imageCanvas != null && imageCanvas) {
             image = imageCanvas.toDataURL();
           }
@@ -84,7 +84,7 @@ class Point extends Simple {
           }
           style.getImage().render();
         }
-        const imageCanvas = style.getImage().getImage();
+        const imageCanvas = style.getImage().getImage(1);
         if (imageCanvas != null) {
           image = imageCanvas.toDataURL();
         }

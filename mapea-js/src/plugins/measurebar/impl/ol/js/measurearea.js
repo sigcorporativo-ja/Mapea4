@@ -14,7 +14,7 @@ import MeasureImpl from './measurebase.js';
  * @api stable
  */
 export default class MeasureArea extends MeasureImpl {
-  constructor() {
+  constructor(distanciaArea, unidadMedida) {
     super('Polygon');
     /**
      * Help message
@@ -29,6 +29,20 @@ export default class MeasureArea extends MeasureImpl {
      * @type {string}
      */
     this.helpMsgContinue_ = HELP_KEEP_MESSAGE;
+
+    /**
+     * Implementation distanciaArea
+     * @private
+     * @type {number}
+     */
+    this.distanciaArea_ = distanciaArea;
+
+    /**
+     * Implementation unidadMedida
+     * @private
+     * @type {string}
+     */
+    this.unidadMedida_ = unidadMedida;
   }
 
   /**

@@ -50,10 +50,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "printerdos-4.0.0.ol.min.js"
+        "printerdos-4.1.0.ol.min.js"
       ],
       "styles": [
-        "printerdos-4.0.0.min.css"
+        "printerdos-4.1.0.min.css"
       ]
     }
   },
@@ -61,7 +61,7 @@
     "name": "Printer",
     "description": "Tool for printing maps.",
     "text": "",
-    "version": "4.0.0",
+    "version": "4.1.0",
     "date": "11/10/2019",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",

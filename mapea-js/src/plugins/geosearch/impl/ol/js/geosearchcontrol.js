@@ -116,7 +116,7 @@ export default class GeosearchControl extends M.impl.Control {
    * @api stable
    */
   zoomToResults() {
-    const bbox = ol.extent.boundingExtent(this.layer_.getImpl().getOL3Layer()
+    const bbox = ol.extent.boundingExtent(this.layer_.getImpl().getOLLayer()
       .getSource().getFeatures()
       .map((feature) => {
         return ol.extent.getCenter(feature.getGeometry().getExtent());

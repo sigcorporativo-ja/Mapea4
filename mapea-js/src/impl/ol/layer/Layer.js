@@ -184,8 +184,8 @@ class LayerBase extends MObject {
    * @expose
    */
   getZIndex() {
-    if (!isNullOrEmpty(this.getOL3Layer())) {
-      this.zIndex_ = this.getOL3Layer().getZIndex();
+    if (!isNullOrEmpty(this.getOLLayer())) {
+      this.zIndex_ = this.getOLLayer().getZIndex();
     }
     return this.zIndex_;
   }
@@ -199,8 +199,8 @@ class LayerBase extends MObject {
    */
   setZIndex(zIndex) {
     this.zIndex_ = zIndex;
-    if (!isNullOrEmpty(this.getOL3Layer())) {
-      this.getOL3Layer().setZIndex(zIndex);
+    if (!isNullOrEmpty(this.getOLLayer())) {
+      this.getOLLayer().setZIndex(zIndex);
     }
   }
 
@@ -212,8 +212,8 @@ class LayerBase extends MObject {
    */
   getMinScale() {
     const units = this.map.getProjection().units;
-    if (!isNullOrEmpty(this.getOL3Layer()) && !isNullOrEmpty(units)) {
-      this.minScale_ = getScaleFromResolution(this.getOL3Layer().getMinResolution(), units);
+    if (!isNullOrEmpty(this.getOLLayer()) && !isNullOrEmpty(units)) {
+      this.minScale_ = getScaleFromResolution(this.getOLLayer().getMinResolution(), units);
     }
     return this.minScale_;
   }
@@ -228,9 +228,9 @@ class LayerBase extends MObject {
     this.minScale_ = minScale;
     const units = this.map.getProjection().units;
     const minResolution = getResolutionFromScale(minScale, units);
-    if (!isNullOrEmpty(this.getOL3Layer()) && !isNullOrEmpty(minResolution) &&
+    if (!isNullOrEmpty(this.getOLLayer()) && !isNullOrEmpty(minResolution) &&
       !isNullOrEmpty(units)) {
-      this.getOL3Layer().setMinResolution(minResolution);
+      this.getOLLayer().setMinResolution(minResolution);
     }
   }
   /**
@@ -241,8 +241,8 @@ class LayerBase extends MObject {
    */
   getMaxScale() {
     const units = this.map.getProjection().units;
-    if (!isNullOrEmpty(this.getOL3Layer()) && !isNullOrEmpty(units)) {
-      this.maxScale_ = getScaleFromResolution(this.getOL3Layer().getMaxResolution(), units);
+    if (!isNullOrEmpty(this.getOLLayer()) && !isNullOrEmpty(units)) {
+      this.maxScale_ = getScaleFromResolution(this.getOLLayer().getMaxResolution(), units);
     }
     return this.maxScale_;
   }
@@ -257,9 +257,9 @@ class LayerBase extends MObject {
     this.maxScale_ = maxScale;
     const units = this.map.getProjection().units;
     const maxResolution = getResolutionFromScale(maxScale, units);
-    if (!isNullOrEmpty(this.getOL3Layer()) && !isNullOrEmpty(maxResolution) &&
+    if (!isNullOrEmpty(this.getOLLayer()) && !isNullOrEmpty(maxResolution) &&
       !isNullOrEmpty(units)) {
-      this.getOL3Layer().setMaxResolution(maxResolution);
+      this.getOLLayer().setMaxResolution(maxResolution);
     }
   }
 
@@ -271,8 +271,8 @@ class LayerBase extends MObject {
    * @expose
    */
   getOpacity() {
-    if (!isNullOrEmpty(this.getOL3Layer())) {
-      this.opacity_ = this.getOL3Layer().getOpacity();
+    if (!isNullOrEmpty(this.getOLLayer())) {
+      this.opacity_ = this.getOLLayer().getOpacity();
     }
     return this.opacity_;
   }
@@ -286,8 +286,8 @@ class LayerBase extends MObject {
    */
   setOpacity(opacity) {
     this.opacity_ = opacity;
-    if (!isNullOrEmpty(this.getOL3Layer())) {
-      this.getOL3Layer().setOpacity(opacity);
+    if (!isNullOrEmpty(this.getOLLayer())) {
+      this.getOLLayer().setOpacity(opacity);
     }
   }
 
@@ -297,8 +297,20 @@ class LayerBase extends MObject {
    * @function
    * @api stable
    * @expose
+   * @deprecated
    */
   getOL3Layer() {
+    return this.ol3Layer;
+  }
+
+  /**
+   * This function gets the created OL layer
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  getOLLayer() {
     return this.ol3Layer;
   }
 
@@ -308,8 +320,24 @@ class LayerBase extends MObject {
    * @function
    * @api stable
    * @expose
+   * @deprecated
    */
   setOL3Layer(layer) {
+    const olMap = this.map.getMapImpl();
+    olMap.removeLayer(this.ol3Layer);
+    this.ol3Layer = layer;
+    olMap.addLayer(layer);
+    return this;
+  }
+
+  /**
+   * This function sets the OL layer
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  setOLLayer(layer) {
     const olMap = this.map.getMapImpl();
     olMap.removeLayer(this.ol3Layer);
     this.ol3Layer = layer;

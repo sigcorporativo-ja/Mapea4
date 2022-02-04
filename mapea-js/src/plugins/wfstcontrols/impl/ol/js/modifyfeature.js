@@ -82,7 +82,7 @@ export default class ModifyFeature extends M.impl.Control {
   createInteractionModify_() {
     const olMap = this.facadeMap_.getMapImpl();
     const layerImpl = this.layer_.getImpl();
-    const olLayer = layerImpl.getOL3Layer();
+    const olLayer = layerImpl.getOLLayer();
     const olStyle = olLayer.getStyle()()[0];
     let styleImage = olStyle.getImage();
     let olStroke = olStyle.getStroke();

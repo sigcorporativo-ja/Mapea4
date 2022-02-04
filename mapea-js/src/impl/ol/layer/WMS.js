@@ -495,7 +495,7 @@ class WMS extends LayerBase {
   setMaxExtent(maxExtent) {
     const minResolution = this.options.minResolution;
     const maxResolution = this.options.maxResolution;
-    const olLayer = this.getOL3Layer();
+    const olLayer = this.getOLLayer();
     if (!isNullOrEmpty(olLayer)) {
       olLayer.setExtent(maxExtent);
       if (this.tiled === true) {
@@ -613,7 +613,7 @@ class WMS extends LayerBase {
    * @export
    */
   refresh() {
-    const ol3Layer = this.getOL3Layer();
+    const ol3Layer = this.getOLLayer();
     if (!isNullOrEmpty(ol3Layer)) {
       ol3Layer.getSource().updateParams({ time: Date.now() });
     }

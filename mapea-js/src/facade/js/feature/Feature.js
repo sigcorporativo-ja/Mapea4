@@ -266,9 +266,9 @@ class Feature extends Base {
     });
     const centroid = this.getImpl().getCentroid();
     if (!isNullOrEmpty(centroid)) {
-      centroid.id(`${id} centroid}`);
-      centroid.attributes(attributes);
-      centroid.style = style;
+      centroid.setId(`${id} centroid}`);
+      centroid.setAttributes(attributes);
+      centroid.setStyle(style);
     }
     return centroid;
   }

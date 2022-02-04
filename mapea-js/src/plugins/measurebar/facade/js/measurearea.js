@@ -5,7 +5,7 @@ import measureareaHTML from '../../templates/measurearea.html';
 export default class MeasureArea extends Measure {
   constructor(distanciaArea, unidadMedida) {
     // implementation of this control
-    const impl = new MeasureAreaImpl();
+    const impl = new MeasureAreaImpl(distanciaArea, unidadMedida);
 
     // const calls the super constructor
     super(impl, measureareaHTML, MeasureArea.NAME);

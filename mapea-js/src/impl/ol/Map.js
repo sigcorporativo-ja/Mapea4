@@ -2093,7 +2093,9 @@ class Map extends MObject {
    * @function
    */
   zoomEvent_(evt) {
-    this.facadeMap_.fire(EventType.CHANGE_ZOOM, evt);
+    if (this.getZoom() <= evt.target.getZoom()) {
+      this.facadeMap_.fire(EventType.CHANGE_ZOOM, evt);
+    }
   }
 
   /**

@@ -45,6 +45,13 @@ export default class Printer extends M.Plugin {
      */
     this.name = Printer.NAME;
 
+    if (M.utils.isUndefined(M.config.geoprint2)) {
+      M.config('geoprint2', {
+        URL: 'https://geoprint-sigc.juntadeandalucia.es/geoprint3/print/SIGC',
+        URL_APPLICATION: 'https://geoprint-sigc.juntadeandalucia.es/geoprint3',
+      });
+    }
+
     /**
      * Facade of the map
      * @private

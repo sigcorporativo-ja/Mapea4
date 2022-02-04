@@ -356,7 +356,7 @@ class SelectCluster extends OLInteractionSelect {
       }
     };
     // Start a new postcompose animation
-    this.listenerKey_ = this.facadeLayer_.getImpl().getOL3Layer().on(['postrender', 'postcompose'], animate, this);
+    this.listenerKey_ = this.facadeLayer_.getImpl().getOLLayer().on(['postrender', 'postcompose'], animate, this);
     // select.getMap().renderSync();
   }
 }

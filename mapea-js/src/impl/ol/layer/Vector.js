@@ -238,7 +238,7 @@ class Vector extends Layer {
    * @api stable
    */
   redraw() {
-    const olLayer = this.getOL3Layer();
+    const olLayer = this.getOLLayer();
     if (!isNullOrEmpty(olLayer)) {
       const style = this.facadeVector_.getStyle();
       let olSource = olLayer.getSource();
@@ -433,7 +433,7 @@ class Vector extends Layer {
    * @api stable
    */
   refresh() {
-    this.getOL3Layer().getSource().clear();
+    this.getOLLayer().getSource().clear();
   }
 
   /**
