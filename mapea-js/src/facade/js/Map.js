@@ -17,7 +17,7 @@ import {
 import { getValue } from './i18n/language';
 import Exception from './exception/exception';
 import Label from './Label.js';
-import Popup from './Popup.js';
+// import Popup from './Popup.js';
 import Parameters from './parameter/Parameters.js';
 import * as parameter from './parameter/parameter';
 import * as EventType from './event/eventtype';
@@ -101,9 +101,9 @@ class Map extends Base {
     /**
      * The added popup
      * @private
-     * @type {Popup}
+     * @type {Array}
      */
-    this.popup_ = null;
+    this.popup_ = [];
 
     /**
      * Flag that indicates if the used projection
@@ -2124,10 +2124,7 @@ class Map extends Base {
    * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
    * @api
    */
-  addLabel(labelParam, coordParam) {
-    const panMapIfOutOfView = labelParam.panMapIfOutOfView === undefined ?
-      true :
-      labelParam.panMapIfOutOfView;
+  addLabel(labelParam, coordParam, removePrevious = true) {
     // checks if the param is null or empty
     if (isNullOrEmpty(labelParam)) {
       Exception(getValue('exception').no_projection);
@@ -2141,31 +2138,50 @@ class Map extends Base {
     let text = null;
     let coord = null;
 
-    // object
-    if (isObject(labelParam)) {
-      text = escapeJSCode(labelParam.text);
-      coord = labelParam.coord;
-    } else {
-      // string
-      text = escapeJSCode(labelParam);
-      coord = coordParam;
+    let arrayLabel = labelParam;
+    let arrayCoordinate = coordParam;
+
+    if (!isArray(labelParam)) {
+      arrayLabel = [labelParam];
     }
 
-    if (isNullOrEmpty(coord)) {
-      coord = this.getCenter();
-    } else {
-      coord = parameter.center(coord);
+    if (!isUndefined(coordParam) && !isArray(coordParam[0])) {
+      arrayCoordinate = [coordParam];
+    } else if (isUndefined(coordParam)) {
+      arrayCoordinate = [];
     }
 
-    if (isNullOrEmpty(coord)) {
-      this.getInitCenter_().then((initCenter) => {
-        const label = new Label(text, initCenter, panMapIfOutOfView);
-        this.getImpl().addLabel(label);
-      });
-    } else {
-      const label = new Label(text, coord, panMapIfOutOfView);
-      this.getImpl().addLabel(label);
-    }
+    arrayLabel.forEach((element, index) => {
+      const panMapIfOutOfView = element.panMapIfOutOfView === undefined ?
+        true :
+        labelParam.panMapIfOutOfView;
+
+      // object
+      if (isObject(element)) {
+        text = escapeJSCode(element.text);
+        coord = element.coord;
+      } else {
+        // string
+        text = escapeJSCode(element);
+        coord = arrayCoordinate[index];
+      }
+
+      if (isNullOrEmpty(coord)) {
+        coord = this.getCenter();
+      } else {
+        coord = parameter.center(coord);
+      }
+
+      if (isNullOrEmpty(coord)) {
+        this.getInitCenter_().then((initCenter) => {
+          const label = new Label(text, initCenter, panMapIfOutOfView);
+          this.getImpl().addLabel(label, removePrevious);
+        });
+      } else {
+        const label = new Label(text, coord, panMapIfOutOfView);
+        this.getImpl().addLabel(label, removePrevious);
+      }
+    });
 
     return this;
   }
@@ -2190,8 +2206,20 @@ class Map extends Base {
    * @returns {Map}
    * @api
    */
-  removeLabel() {
-    return this.getImpl().removeLabel();
+  getLabels() {
+    return this.getImpl().getLabels();
+  }
+
+  /**
+   * This function removes the WMC layers to the map
+   *
+   * @function
+   * @param {Array<string>|Array<Mx.parameters.Layer>} layersParam
+   * @returns {Map}
+   * @api
+   */
+  removeLabel(label) {
+    return this.getImpl().removeLabel(label);
   }
 
   /**
@@ -2412,7 +2440,30 @@ class Map extends Base {
    * @returns {Popup} core map used by the implementation
    */
   getPopup() {
-    return this.popup_;
+    let value = null;
+    if (this.popup_.length === 0) {
+      value = null;
+    } else {
+      value = this.popup_[0];
+    }
+    return value;
+  }
+
+  /**
+   * TODO
+   *
+   * @function
+   * @api
+   * @returns {Popup} core map used by the implementation
+   */
+  getPopups() {
+    let value = null;
+    if (this.popup_.length === 0) {
+      value = null;
+    } else if (this.popup_.length > 1) {
+      value = this.popup_;
+    }
+    return value;
   }
 
   /**
@@ -2422,18 +2473,30 @@ class Map extends Base {
    * @api
    * @returns {Map} core map used by the implementation
    */
-  removePopup() {
+  removePopup(popup) {
     // checks if the implementation can add popups
     if (isUndefined(MapImpl.prototype.removePopup)) {
       Exception(getValue('exception').removepopup_method);
     }
 
-    if (!isNullOrEmpty(this.popup_)) {
-      this.getImpl().removePopup(this.popup_);
-      this.popup_.destroy();
-      this.popup_ = null;
+    if (isNullOrEmpty(popup)) {
+      this.popup_.forEach(elm => this.getImpl().removePopup(elm));
+      this.popup_ = [];
+    } else if (isArray(popup)) {
+      popup.forEach((elm, index) => {
+        const findPopup = element => element.getId() === elm.getId();
+        const find = this.popup_.findIndex(findPopup);
+        this.getImpl().removePopup(this.popup_[find]);
+        this.popup_.splice(find, 1);
+      });
+    } else {
+      this.getImpl().removePopup(popup);
+      this.popup_.forEach((elm, index) => {
+        if (elm.getId() === popup.getId()) {
+          this.popup_.splice(index, 1);
+        }
+      });
     }
-
     return this;
   }
 
@@ -2444,21 +2507,32 @@ class Map extends Base {
    * @api
    * @returns {Map} core map used by the implementation
    */
-  addPopup(popup, coordinate) {
+  addPopup(popup, coordinate, removePrevious = true) {
     // checks if the param is null or empty
     if (isNullOrEmpty(popup)) {
       Exception(getValue('exception').no_popup);
     }
 
-    if (!(popup instanceof Popup)) {
-      Exception(getValue('exception').invalid_popup);
+    let arrayPopup = popup;
+    let arrayCoordinate = coordinate;
+
+
+    if (!isArray(popup)) {
+      arrayPopup = [popup];
     }
 
-    if (!isNullOrEmpty(this.popup_)) {
-      this.removePopup();
+    if (!isArray(coordinate[0])) {
+      arrayCoordinate = [coordinate];
     }
-    this.popup_ = popup;
-    this.popup_.addTo(this, coordinate);
+
+    arrayPopup.forEach((popupAux, index) => {
+      if (removePrevious) {
+        this.removePopup(this.popup_);
+        this.popup_ = [];
+      }
+      this.popup_.push(popupAux);
+      popupAux.addTo(this, arrayCoordinate[index]);
+    });
 
     return this;
   }

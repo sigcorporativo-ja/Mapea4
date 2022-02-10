@@ -10,6 +10,8 @@ import { compileSync as compileTemplate } from './util/Template.js';
 import * as EventType from './event/eventtype';
 import MWindow from './util/Window.js';
 
+let id = 0;
+
 /**
  * getUrlFromPlatform
  * @private
@@ -108,6 +110,20 @@ class Popup extends Base {
      * @type {string}
      */
     this.status_ = Popup.status.COLLAPSED;
+
+    id += 1;
+
+    this.id_ = 'm-popup-'.concat(id);
+  }
+
+  /**
+   * TODO
+   * @public
+   * @function
+   * @api
+   */
+  getId() {
+    return this.id_;
   }
 
   /**
@@ -161,6 +177,7 @@ class Popup extends Base {
       const html = compileTemplate(popupTemplate, {
         jsonp: true,
         vars: {
+          id: this.id_,
           tabs: this.tabs_,
           options: Popup.options,
           url: getUrlFromPlatform(platform, coords),

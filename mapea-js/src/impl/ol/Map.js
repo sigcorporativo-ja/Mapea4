@@ -166,6 +166,13 @@ class Map extends MObject {
     this._resolutionsBaseLayer = false;
 
     /**
+     * Labels
+     * @private
+     * @type {Array}
+     */
+    this.label = [];
+
+    /**
      * Implementation of this map
      * @private
      * @type {ol.Map}
@@ -1996,9 +2003,9 @@ class Map extends MObject {
    * @function
    * @api stable
    */
-  addLabel(label) {
-    this.label = label;
-    label.show(this.facadeMap_);
+  addLabel(label, removePrevious) {
+    this.label.push(label);
+    label.show(this.facadeMap_, removePrevious);
     return this;
   }
 
@@ -2013,6 +2020,20 @@ class Map extends MObject {
    * @api stable
    */
   getLabel() {
+    return this.label[0];
+  }
+
+  /**
+   * This function adds a popup and removes the previous
+   * showed
+   *
+   * @public
+   * @param {M.impl.Popup} popup to add
+   * @returns {ol.Map}
+   * @function
+   * @api stable
+   */
+  getLabels() {
     return this.label;
   }
 
@@ -2024,11 +2045,25 @@ class Map extends MObject {
    * @function
    * @api stable
    */
-  removeLabel() {
+  removeLabel(label) {
+    let arrayLabels = label;
     if (!isNullOrEmpty(this.label)) {
-      const popup = this.label.getPopup();
-      this.removePopup(popup);
-      this.label = null;
+      if (isNullOrEmpty(label)) {
+        this.label.forEach(lbl => this.removePopup(lbl.getPopup()));
+        this.label = [];
+      } else {
+        if (!isArray(label)) {
+          arrayLabels = [label];
+        }
+        arrayLabels.forEach((elm) => {
+          const labelAux =
+            this.label.findIndex(lbl => lbl.text === elm.text && lbl.coord === elm.coord);
+          if (labelAux !== -1) {
+            this.removePopup(this.label[labelAux].getPopup());
+            this.label.splice(labelAux, 1);
+          }
+        });
+      }
     }
   }
 

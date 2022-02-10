@@ -44,11 +44,12 @@ class Label extends Base {
    * @public
    * @function
    * @param {M.Map} map - Facade map
+   * @param { Boolean } removePrevious - remove previous labels
    * @api
    * @export
    */
-  show(map) {
-    this.getImpl().show(map);
+  show(map, removePrevious) {
+    this.getImpl().show(map, removePrevious);
   }
 
   /**

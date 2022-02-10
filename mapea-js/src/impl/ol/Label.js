@@ -67,7 +67,7 @@ class Label {
    * @param {M.Map} map - Map where show popup
    * @api stable
    */
-  show(map) {
+  show(map, removePrevious) {
     this.facadeMap_ = map;
     const htmlAsText = compileTemplate(labelPopupTemplate, {
       vars: {
@@ -75,7 +75,6 @@ class Label {
       },
       parseToHtml: false,
     });
-    map.removePopup();
     this.popup_ = new FacadePopup({
       panMapIfOutOfView: this.panMapIfOutOfView,
     });
@@ -84,7 +83,7 @@ class Label {
       title: 'Información',
       content: htmlAsText,
     });
-    map.addPopup(this.popup_, this.coord_);
+    map.addPopup(this.popup_, this.coord_, removePrevious);
   }
 
   /**
