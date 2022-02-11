@@ -79,6 +79,6 @@
       "plugins": [{ "uuid": "", "name": "" }],
       "services": [{ "name": "", "description": "" }]
     },
-    "compatibility": ["{{archetype.plugin.mapea.version}}"]
+    "compatibility": ["4" ,"5", "6"]
   }
 }
