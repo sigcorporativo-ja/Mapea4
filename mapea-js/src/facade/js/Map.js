@@ -2668,6 +2668,21 @@ class Map extends Base {
     this.getImpl().setRotation(rotation * (Math.PI / 180));
     this.fire(EventType.CHANGE_ROTATION, [rotation]);
   }
+
+  /**
+   * This function assigns a color to the map container
+   *
+   * @function
+   * @public
+   * @api
+   * @param {String}
+   */
+  setBGColorContainer(color) {
+    if (!isNullOrEmpty(color)) {
+      document.querySelector('.m-mapea-container').style.backgroundColor = color;
+      document.querySelector('.m-mapea-container').style.backgroundImage = 'unset';
+    }
+  }
 }
 
 /**
