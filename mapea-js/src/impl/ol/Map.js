@@ -1899,7 +1899,7 @@ class Map extends MObject {
       const olPopup = popup.getImpl();
       const olMap = this.getMapImpl();
       olMap.removeOverlay(olPopup);
-      this.facadeMap_.fire(EventType.POPUP_REMOVED, [popup]);
+      popup.fire(EventType.POPUP_REMOVED, [popup]);
     }
     return this;
   }

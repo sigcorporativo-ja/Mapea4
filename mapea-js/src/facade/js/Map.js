@@ -2480,17 +2480,22 @@ class Map extends Base {
     }
 
     if (isNullOrEmpty(popup)) {
-      this.popup_.forEach(elm => this.getImpl().removePopup(elm));
+      this.popup_.forEach((elm) => {
+        this.getImpl().removePopup(elm);
+        elm.destroy();
+      });
       this.popup_ = [];
     } else if (isArray(popup)) {
       popup.forEach((elm, index) => {
         const findPopup = element => element.getId() === elm.getId();
         const find = this.popup_.findIndex(findPopup);
         this.getImpl().removePopup(this.popup_[find]);
+        this.popup_[find].destroy();
         this.popup_.splice(find, 1);
       });
     } else {
       this.getImpl().removePopup(popup);
+      popup.destroy();
       this.popup_.forEach((elm, index) => {
         if (elm.getId() === popup.getId()) {
           this.popup_.splice(index, 1);

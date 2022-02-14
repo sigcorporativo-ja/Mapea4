@@ -303,4 +303,28 @@ export const DOUBLE_CLICK = 'doubleclick';
  * @type {string}
  * @api
  */
+export const POPUP_ADD = 'popup:add';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
 export const POPUP_REMOVED = 'popup:removed';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const POPUP_ADD_TAB = 'popup:addtab';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const POPUP_REMOVED_TAB = 'popup:removedtab';
