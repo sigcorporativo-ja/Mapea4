@@ -184,6 +184,9 @@ const addProjections = (projs) => {
       });
     });
     addEquivalentProjections(olProjections);
+    if (projections.indexOf(projection) === -1) {
+      projections.push(projection);
+    }
   });
 };
 
