@@ -167,7 +167,7 @@ class Popup extends Base {
     let tab = tabOptions;
     if (!(tab instanceof Tab)) {
       tab = new Tab(tabOptions);
-      this.fire(EventType.POPUP_ADD_TAB, [tab]);
+      this.fire(EventType.POPUP_ADDED_TAB, [tab]);
     }
     this.tabs_.push(tab);
     this.update();
@@ -204,7 +204,7 @@ class Popup extends Base {
       this.getImpl().addTo(map, this.element_);
       this.show(coordinate);
     }
-    this.fire(EventType.POPUP_ADD, [this]);
+    this.fire(EventType.POPUP_ADDED, [this]);
   }
 
   /**

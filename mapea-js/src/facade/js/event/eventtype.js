@@ -303,7 +303,7 @@ export const DOUBLE_CLICK = 'doubleclick';
  * @type {string}
  * @api
  */
-export const POPUP_ADD = 'popup:add';
+export const POPUP_ADDED = 'popup:added';
 
 /**
  * Event type
@@ -319,7 +319,7 @@ export const POPUP_REMOVED = 'popup:removed';
  * @type {string}
  * @api
  */
-export const POPUP_ADD_TAB = 'popup:addtab';
+export const POPUP_ADDED_TAB = 'popup:addtabed';
 
 /**
  * Event type
