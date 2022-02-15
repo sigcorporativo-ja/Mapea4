@@ -197,6 +197,9 @@ class Map extends Base {
 
     // adds class to the container
     params.container.classList.add('m-mapea-container');
+    if (!isNullOrEmpty(params.bgColorContainer)) {
+      this.setBGColorContainer(params.bgColorContainer);
+    }
 
     impl.on(EventType.COMPLETED, () => {
       this._finishedMapImpl = true;
