@@ -129,6 +129,11 @@ class LayerGroup extends MObject {
    */
   addTo(map) {
     this.map = map;
+    this.children_.forEach((child) => {
+      if (child instanceof LayerGroup) {
+        child.addTo(map);
+      }
+    });
     this.fire(EventType.ADDED_TO_MAP);
   }
 
