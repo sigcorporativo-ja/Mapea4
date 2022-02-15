@@ -1900,6 +1900,7 @@ class Map extends MObject {
       const olMap = this.getMapImpl();
       olMap.removeOverlay(olPopup);
       popup.fire(EventType.POPUP_REMOVED, [popup]);
+      this.facadeMap_.fire(EventType.POPUP_REMOVED, [popup]);
     }
     return this;
   }

@@ -205,6 +205,7 @@ class Popup extends Base {
       this.show(coordinate);
     }
     this.fire(EventType.POPUP_ADDED, [this]);
+    map.fire(EventType.POPUP_ADDED, [this]);
   }
 
   /**
