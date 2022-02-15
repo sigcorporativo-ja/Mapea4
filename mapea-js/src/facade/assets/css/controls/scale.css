@@ -19,6 +19,10 @@
     line-height: normal;
 }
 
+.m-scale-container>.m-scale {
+    line-height: normal;
+}
+
 .m-scale-container>.m-unit:before {
     font-family: 'g-cartografia' !important;
     color: #a35d38;
