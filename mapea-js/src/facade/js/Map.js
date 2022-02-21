@@ -2703,6 +2703,18 @@ class Map extends Base {
   enableMouseWheel(active) {
     this.getImpl().enableMouseWheel(active);
   }
+
+  /**
+   * This function enables or disables the interaction DragPan
+   *
+   * @function
+   * @public
+   * @api
+   * @param { Boolean }
+   */
+  enableDrag(active) {
+    this.getImpl().enableDrag(active);
+  }
 }
 
 /**

@@ -2,7 +2,7 @@ import OLMap from 'ol/Map';
 import { get as getProj } from 'ol/proj';
 import OLProjection from 'ol/proj/Projection';
 import OLInteraction from 'ol/interaction/Interaction';
-import MouseWheelZoom from 'ol/interaction/MouseWheelZoom';
+import { MouseWheelZoom, DragPan } from 'ol/interaction';
 import MObject from 'M/Object';
 import FacadePanzoombar from 'M/control/Panzoombar';
 import * as LayerType from 'M/layer/Type';
@@ -204,6 +204,15 @@ class Map extends MObject {
      */
     this.mouseWheelZoom_ = interactions.find((interaction) => {
       return interaction instanceof MouseWheelZoom;
+    });
+
+    /**
+     * DragPan - Interaction
+     * @private
+     * @type {ol.Interaction}
+     */
+    this.dragPan_ = interactions.find((interaction) => {
+      return interaction instanceof DragPan;
     });
   }
   /**
@@ -2262,8 +2271,24 @@ class Map extends MObject {
    * @api
    * @param { Boolean }
    */
-  enableMouseWheel(active) {
-    this.mouseWheelZoom_.setActive(active);
+  enableMouseWheel(active = true) {
+    if (!isNullOrEmpty(this.mouseWheelZoom_)) {
+      this.mouseWheelZoom_.setActive(active);
+    }
+  }
+
+  /**
+   * This function enables or disables the interaction DragPan
+   *
+   * @function
+   * @public
+   * @api
+   * @param { Boolean }
+   */
+  enableDrag(active = true) {
+    if (!isNullOrEmpty(this.dragPan_)) {
+      this.dragPan_.setActive(active);
+    }
   }
 }
 
