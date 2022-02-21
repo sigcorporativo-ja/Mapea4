@@ -2,6 +2,7 @@ import OLMap from 'ol/Map';
 import { get as getProj } from 'ol/proj';
 import OLProjection from 'ol/proj/Projection';
 import OLInteraction from 'ol/interaction/Interaction';
+import MouseWheelZoom from 'ol/interaction/MouseWheelZoom';
 import MObject from 'M/Object';
 import FacadePanzoombar from 'M/control/Panzoombar';
 import * as LayerType from 'M/layer/Type';
@@ -193,6 +194,17 @@ class Map extends MObject {
         return true;
       },
     }));
+
+    const interactions = this.map_.getInteractions().getArray();
+
+    /**
+     * MouseWheelZoom - Interaction
+     * @private
+     * @type {ol.Interaction}
+     */
+    this.mouseWheelZoom_ = interactions.find((interaction) => {
+      return interaction instanceof MouseWheelZoom;
+    });
   }
   /**
    * This function gets the layers added to the map
@@ -2240,6 +2252,18 @@ class Map extends MObject {
     if (notIncluded) {
       BASE_LAYER_TYPES.push(type);
     }
+  }
+
+  /**
+   * This function enables or disables the interaction MouseWheelZoom
+   *
+   * @function
+   * @public
+   * @api
+   * @param { Boolean }
+   */
+  enableMouseWheel(active) {
+    this.mouseWheelZoom_.setActive(active);
   }
 }
 

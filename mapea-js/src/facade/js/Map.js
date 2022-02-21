@@ -2691,6 +2691,18 @@ class Map extends Base {
       document.querySelector('.m-mapea-container').style.backgroundImage = 'unset';
     }
   }
+
+  /**
+   * This function enables or disables the interaction MouseWheelZoom
+   *
+   * @function
+   * @public
+   * @api
+   * @param { Boolean }
+   */
+  enableMouseWheel(active) {
+    this.getImpl().enableMouseWheel(active);
+  }
 }
 
 /**
