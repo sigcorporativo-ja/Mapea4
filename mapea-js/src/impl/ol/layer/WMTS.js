@@ -8,6 +8,7 @@ import {
   getWMTSGetCapabilitiesUrl,
   extend,
   addParameters,
+  isUndefined,
 } from 'M/util/Utils';
 import { default as OLSourceWMTS } from 'ol/source/WMTS';
 import OLFormatWMTSCapabilities from 'ol/format/WMTSCapabilities';
@@ -60,6 +61,17 @@ class WMTS extends LayerBase {
      * @type {Promise}
      */
     this.getCapabilitiesPromise_ = options.capabilities || null;
+
+    /**
+     * Options from the GetFeatureInfo
+     * @private
+     * @type {Promise}
+     */
+    this.optionsFromGetFeatureInfoUrl_ = {
+      version: '1.0.0',
+      style: 'default',
+      format: 'image/jpeg',
+    };
   }
 
   /**
@@ -348,15 +360,44 @@ class WMTS extends LayerBase {
    * @public
    * @api
    */
+  setOptionsGetFeatureInfoUrl(options) {
+    const version = options.version;
+    const style = options.style;
+    const format = options.format;
+    if (!isUndefined(version)) {
+      this.optionsFromGetFeatureInfoUrl_.version = version;
+    }
+    if (!isUndefined(style)) {
+      this.optionsFromGetFeatureInfoUrl_.style = style;
+    }
+    if (!isUndefined(format)) {
+      this.optionsFromGetFeatureInfoUrl_.format = format;
+    }
+  }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  getOptionsGetFeatureInfoUrl() {
+    return this.optionsFromGetFeatureInfoUrl_;
+  }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
   getGetFeatureInfoUrl(coordinate, zoom, formatInfo) {
     const tcr = this.getTileColTileRow(coordinate, zoom);
     const coordPxl = this.getRelativeTileCoordInPixel_(coordinate, zoom);
     const service = 'WMTS';
     const request = 'GetFeatureInfo';
-    const version = '1.0.0';
+    const version = this.optionsFromGetFeatureInfoUrl_.version;
     const layer = this.name;
-    const style = 'default';
-    const format = 'image/jpeg';
+    const style = this.optionsFromGetFeatureInfoUrl_.style;
+    const format = this.optionsFromGetFeatureInfoUrl_.format;
     const tilematrixset = this.ol3Layer.getSource().getMatrixSet();
     const tilematrix = zoom;
     const infoFormat = formatInfo;
