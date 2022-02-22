@@ -138,6 +138,7 @@ class WMS extends LayerBase {
 
     // styles
     this.styles = this.options.styles || '';
+
     // sldBody
     this.sldBody = options.sldBody;
 
@@ -641,6 +642,34 @@ class WMS extends LayerBase {
    */
   setFacadeObj(obj) {
     this.facadeLayer_ = obj;
+  }
+
+  /**
+   * This function returns the styles of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getStyles() {
+    const ol3Layer = this.getOLLayer();
+    const params = ol3Layer.getSource().getParams();
+    return params.STYLES;
+  }
+
+  /**
+   * This function applies styles to the layer
+   *
+   * @public
+   * @function
+   * @param { string | Array } styles style name
+   * @api stable
+   */
+  setStyles(styles) {
+    const ol3Layer = this.getOLLayer();
+    if (!isNullOrEmpty(ol3Layer)) {
+      ol3Layer.getSource().updateParams({ STYLES: styles });
+    }
   }
 
   /**
