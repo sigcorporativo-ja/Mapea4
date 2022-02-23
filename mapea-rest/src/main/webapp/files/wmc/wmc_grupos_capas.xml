@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<ViewContext xmlns="http://www.opengis.net/context" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" id="534" version="1.1.0" xsi:schemaLocation="http://www.opengis.net/context http://schemas.opengis.net/context/1.1.0/context.xsd">
+	<General>
+		<Window height="370" width="610"/>
+		<BoundingBox SRS="EPSG:25830" maxx="925539.7100184662" maxy="4411536.285173452" minx="-205272.68375962577" miny="3872789.712499214"/>
+		<Title>Mapa grupos de capas</Title>
+		<Extension>
+			<ol:maxExtent xmlns:ol="http://openlayers.org/context" maxx="643932.2012028776" maxy="4306467.175585712" minx="76334.82505596284" miny="3977858.822086953"/>
+			<ol:group xmlns:ol="http://openlayers.org/context" id="nivel0" title="Layers" orderInsideGroupDisplay="0">
+						<ol:group id="GROUP_363" title="Grupo 1" orderInsideGroupDisplay="0"/>
+						<ol:group id="GROUP_364" title="Grupo 2" orderInsideGroupDisplay="1"/>
+			</ol:group>
+		</Extension>		
+		<KeywordList>
+				<Keyword>Mapa grupos de capas</Keyword>
+		</KeywordList>
+		<Abstract>Mapa grupos de capas</Abstract>
+	</General>
+	<LayerList>
+			<Layer hidden="0" queryable="1">
+				<Server service="OGC:WMS" title="Default" version="1.1.1">
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://g-gis-online-lab.desarrollo.guadaltel.es/geoserver/guadaltel02/wms?"/>
+				</Server>
+				<Name>a1593167060614_cabeceraMunicipal4326UTF8</Name>
+				<Title>Cabeceras municipales de más de 10.000 habitantes</Title>
+				<SRS>EPSG:25830</SRS>
+				<FormatList>
+					<Format current="1">image/png</Format>
+				</FormatList>
+				<Extension>
+						<wmcext:metadata xmlns:wmcext="http://wmcext.org/context">http://gnoide-lote2-publico.desarrollo.guadaltel.es:80/ggiscloud/restapi/metadata/service/717</wmcext:metadata>
+					<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+					<ol:numZoomLevels xmlns:ol="http://openlayers.org/context">16</ol:numZoomLevels>
+					<ol:units xmlns:ol="http://openlayers.org/context">meters</ol:units>
+					<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+					<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+					<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+					<ol:opacity xmlns:ol="http://openlayers.org/context">1</ol:opacity>
+					<ol:groupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">GROUP_364</ol:groupDisplayLayerSwitcher>
+					<ol:orderInsideGroupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">1</ol:orderInsideGroupDisplayLayerSwitcher>
+				</Extension>
+				<StyleList>
+				</StyleList>
+				<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">384</sld:MinScaleDenominator>
+				<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1300000000</sld:MaxScaleDenominator>
+			</Layer>
+			<Layer hidden="0" queryable="1">
+				<Server service="OGC:WMS" title="Default" version="1.1.1">
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://g-gis-online-lab.desarrollo.guadaltel.es/geoserver/ggiscloud_root/wms?"/>
+				</Server>
+				<Name>a1592900170430_colegios</Name>
+				<Title>Colegios</Title>
+				<SRS>EPSG:25830</SRS>
+				<FormatList>
+					<Format current="1">image/png</Format>
+				</FormatList>
+				<Extension>
+						<wmcext:metadata xmlns:wmcext="http://wmcext.org/context">http://gnoide-lote2-publico.desarrollo.guadaltel.es:80/ggiscloud/restapi/metadata/service/715</wmcext:metadata>
+					<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+					<ol:numZoomLevels xmlns:ol="http://openlayers.org/context">16</ol:numZoomLevels>
+					<ol:units xmlns:ol="http://openlayers.org/context">meters</ol:units>
+					<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+					<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+					<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+					<ol:opacity xmlns:ol="http://openlayers.org/context">1</ol:opacity>
+					<ol:groupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">GROUP_363</ol:groupDisplayLayerSwitcher>
+					<ol:orderInsideGroupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">1</ol:orderInsideGroupDisplayLayerSwitcher>
+				</Extension>
+				<StyleList>
+					<Style current="1">
+						<Name/>						
+						<Title>Default</Title>
+						<LegendURL format="image/png" height="40" width="48">
+								<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://g-gis-online-lab.desarrollo.guadaltel.es/geoserver/ggiscloud_root/wms?service=WMS&amp;request=GetLegendGraphic&amp;layer=a1592900170430_colegios&amp;format=image/png"/>
+						</LegendURL>
+						
+					</Style>
+				</StyleList>
+				<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">384</sld:MinScaleDenominator>
+				<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1300000000</sld:MaxScaleDenominator>
+			</Layer>
+			<Layer hidden="0" queryable="1">
+				<Server service="OGC:WMS" title="Default" version="1.1.1">
+					<OnlineResource xmlns:xlink="http://www.w3.org/1999/xlink" xlink:type="simple" xlink:href="http://g-gis-online-lab.desarrollo.guadaltel.es/geoserver/guadaltel02/wms?"/>
+				</Server>
+				<Name>a1593166719672_limiteMunicipal25830ISO8859_1</Name>
+				<Title>Límites municipales de Andalucía</Title>
+				<SRS>EPSG:25830</SRS>
+				<FormatList>
+					<Format current="1">image/png</Format>
+				</FormatList>
+				<Extension>
+						<wmcext:metadata xmlns:wmcext="http://wmcext.org/context">http://gnoide-lote2-publico.desarrollo.guadaltel.es:80/ggiscloud/restapi/metadata/service/716</wmcext:metadata>
+					<ol:transparent xmlns:ol="http://openlayers.org/context">true</ol:transparent>
+					<ol:numZoomLevels xmlns:ol="http://openlayers.org/context">16</ol:numZoomLevels>
+					<ol:units xmlns:ol="http://openlayers.org/context">meters</ol:units>
+					<ol:isBaseLayer xmlns:ol="http://openlayers.org/context">false</ol:isBaseLayer>
+					<ol:displayInLayerSwitcher xmlns:ol="http://openlayers.org/context">true</ol:displayInLayerSwitcher>
+					<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
+					<ol:opacity xmlns:ol="http://openlayers.org/context">1</ol:opacity>
+					<ol:groupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">GROUP_363</ol:groupDisplayLayerSwitcher>
+					<ol:orderInsideGroupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">2</ol:orderInsideGroupDisplayLayerSwitcher>
+				</Extension>
+				<StyleList>
+				</StyleList>
+				<sld:MinScaleDenominator xmlns:sld="http://www.opengis.net/sld">384</sld:MinScaleDenominator>
+				<sld:MaxScaleDenominator xmlns:sld="http://www.opengis.net/sld">1300000000</sld:MaxScaleDenominator>
+			</Layer>
+  </LayerList>
+</ViewContext>
