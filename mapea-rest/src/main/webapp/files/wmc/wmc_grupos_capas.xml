@@ -64,7 +64,7 @@
 					<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
 					<ol:opacity xmlns:ol="http://openlayers.org/context">1</ol:opacity>
 					<ol:groupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">GROUP_363</ol:groupDisplayLayerSwitcher>
-					<ol:orderInsideGroupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">1</ol:orderInsideGroupDisplayLayerSwitcher>
+					<ol:orderInsideGroupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">2</ol:orderInsideGroupDisplayLayerSwitcher>
 				</Extension>
 				<StyleList>
 					<Style current="1">
@@ -99,7 +99,7 @@
 					<ol:singleTile xmlns:ol="http://openlayers.org/context">true</ol:singleTile>
 					<ol:opacity xmlns:ol="http://openlayers.org/context">1</ol:opacity>
 					<ol:groupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">GROUP_363</ol:groupDisplayLayerSwitcher>
-					<ol:orderInsideGroupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">2</ol:orderInsideGroupDisplayLayerSwitcher>
+					<ol:orderInsideGroupDisplayLayerSwitcher xmlns:ol="http://openlayers.org/context">1</ol:orderInsideGroupDisplayLayerSwitcher>
 				</Extension>
 				<StyleList>
 				</StyleList>
