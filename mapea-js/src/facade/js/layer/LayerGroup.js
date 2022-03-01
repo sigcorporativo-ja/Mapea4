@@ -192,7 +192,7 @@ class LayerGroup extends MObject {
     if (isNullOrEmpty(index)) {
       this.children_.unshift(child);
     } else {
-      this.children_.splice(index, 0, child);
+      this.children_.splice(index - 1, 0, child);
       zIndex = this.getZIndex() + index;
     }
     if (child instanceof LayerGroup) {
