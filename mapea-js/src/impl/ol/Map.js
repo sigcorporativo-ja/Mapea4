@@ -1867,7 +1867,10 @@ class Map extends MObject {
       if (!isArray(prevBbox)) {
         prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
       }
-      const newBbox = ImplUtils.transformExtent(prevBbox, olPrevProjection, olProjection);
+      let newBbox = ImplUtils.transformExtent(prevBbox, olPrevProjection, olProjection);
+      if (newBbox.includes(NaN)) {
+        newBbox = olProjection.getExtent();
+      }
       this.facadeMap_.setBbox(newBbox, {
         nearest: true,
       });
