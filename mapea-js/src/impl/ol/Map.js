@@ -1961,7 +1961,7 @@ class Map extends MObject {
     let resolutions = [];
 
     // zoom levels
-    let zoomLevels = 16;
+    let zoomLevels = M.config.ZOOM_LEVELS;
 
     // units
     const units = this.getProjection().units;

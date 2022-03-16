@@ -176,7 +176,7 @@ class OSM extends Layer {
       this.map.getMapImpl().updateSize();
       const size = this.map.getMapImpl().getSize();
       const units = this.map.getProjection().units;
-      const zoomLevels = 16;
+      const zoomLevels = M.config.ZOOM_LEVELS;
       this.resolutions_ =
         generateResolutionsFromExtent(this.facadeLayer_.getMaxExtent(), size, zoomLevels, units);
     }

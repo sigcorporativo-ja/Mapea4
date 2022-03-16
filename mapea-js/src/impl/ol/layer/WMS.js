@@ -128,7 +128,7 @@ class WMS extends LayerBase {
 
     // number of zoom levels
     if (isNullOrEmpty(this.options.numZoomLevels)) {
-      this.options.numZoomLevels = 16; // by default
+      this.options.numZoomLevels = M.config.ZOOM_LEVELS; // by default
     }
 
     // animated

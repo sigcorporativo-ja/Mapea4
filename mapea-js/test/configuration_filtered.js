@@ -438,6 +438,14 @@ function fun(M_) {
    * @type {String}
    */
   M_.config('SQL_WASM_URL', '../../../../node_modules/sql.js/dist/');
+
+  /**
+   * Zoom levels
+   *
+   * @private
+   * @type {Number}
+   */
+  M_.config('ZOOM_LEVELS', '16');
 }
 
 fun(window.M);

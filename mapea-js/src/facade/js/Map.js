@@ -13,6 +13,7 @@ import {
   escapeJSCode,
   isObject,
   getEnvolvedExtent,
+  generateResolutionsFromExtent,
 } from './util/Utils.js';
 import { getValue } from './i18n/language';
 import Exception from './exception/exception';
@@ -2714,6 +2715,32 @@ class Map extends Base {
    */
   enableDrag(active) {
     this.getImpl().enableDrag(active);
+  }
+
+  /**
+   * This function set zoom levels
+   *
+   * @function
+   * @public
+   * @api
+   * @param { Number }
+   */
+  setZoomLevels(zoomLevels) {
+    if (!isUndefined(zoomLevels) && !isNullOrEmpty(zoomLevels)) {
+      this.calculateMaxExtent().then((extent) => {
+        const zoom = this.getZoom();
+        const size = this.getMapImpl().getSize();
+        const units = this.getProjection().units;
+        const resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
+        this.setResolutions(resolutions, true);
+        M.config.ZOOM_LEVELS = zoomLevels;
+        if (zoom < zoomLevels) {
+          this.setZoom(zoom);
+        }
+      }).catch((error) => {
+        throw error;
+      });
+    }
   }
 }
 
