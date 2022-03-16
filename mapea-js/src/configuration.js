@@ -435,5 +435,4 @@
    * @type {Number}
    */
   M.config('ZOOM_LEVELS', '${zoom.levels}');
-
 })(window.M);
