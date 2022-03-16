@@ -1,7 +1,6 @@
 /**
  * @module M/Map
  */
-import html2canvas from 'html2canvas';
 import MapImpl from 'impl/Map.js';
 import { getPanelForControl, buildControl } from './builder/builder';
 import Base from './Base.js';
@@ -376,16 +375,6 @@ class Map extends Base {
     const layers = this.getImpl().getLayers(filters).sort(Map.LAYER_SORT);
 
     return layers;
-  }
-
-  getImage() {
-    html2canvas(document.body, {
-      proxy: M.config.PROXY_URL,
-      useCORS: true,
-      onrendered: (canvas) => {
-        console.log(canvas);
-      },
-    });
   }
 
   /**
