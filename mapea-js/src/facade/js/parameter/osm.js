@@ -89,7 +89,7 @@ const osm = (userParam) => {
 
     const transparent = getParameter({
       parameter: param,
-      type: 'string',
+      type: 'boolean',
       attr: 'transparent',
     })(OSM_REGEXP, 1);
 
