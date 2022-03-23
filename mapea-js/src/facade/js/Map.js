@@ -2464,7 +2464,7 @@ class Map extends Base {
     let value = null;
     if (this.popup_.length === 0) {
       value = null;
-    } else if (this.popup_.length > 1) {
+    } else if (this.popup_.length >= 1) {
       value = this.popup_;
     }
     return value;
