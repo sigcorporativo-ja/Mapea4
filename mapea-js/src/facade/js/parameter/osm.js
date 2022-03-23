@@ -81,21 +81,27 @@ const osm = (userParam) => {
   layers = userParametersArray.map((param) => {
     const type = LayerType.OSM;
 
-    const transparent = getParameter({
+    const name = getParameter({
       parameter: param,
       type: 'string',
       attr: 'name',
-    })(OSM_REGEXP, 1);
+    })(OSM_REGEXP, 3);
 
+    const transparent = getParameter({
+      parameter: param,
+      type: 'string',
+      attr: 'transparent',
+    })(OSM_REGEXP, 1);
 
     const legend = getParameter({
       parameter: param,
       type: 'string',
-      name: 'legend',
+      attr: 'legend',
     })(OSM_REGEXP, 2);
 
     return {
       type,
+      name,
       transparent,
       legend,
     };
