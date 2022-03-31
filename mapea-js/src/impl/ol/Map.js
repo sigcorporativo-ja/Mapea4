@@ -2309,7 +2309,7 @@ class Map extends MObject {
       try {
         img = canvas.toDataURL();
       } catch (e) {
-        img = null;
+        throw e;
       }
     }
     return img;

@@ -2751,15 +2751,7 @@ class Map extends Base {
    * @api
    */
   getImageMap() {
-    const img = this.getImpl().getImageMap();
-    if (!isNull(img)) {
-      const link = document.createElement('a');
-      link.download = 'map.png';
-      link.href = img;
-      link.click();
-    } else {
-      Dialog.error(getValue('exception').generate_image);
-    }
+    return this.getImpl().getImageMap();
   }
 }
 
