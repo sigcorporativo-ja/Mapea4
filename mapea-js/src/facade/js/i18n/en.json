@@ -144,6 +144,7 @@
     "min_gt_max": "A minimum radius greater than the maximum can not be established.",
     "max_lt_min": "A maximum radius of less than the minimum can not be established.",
     "no_geojson": "No GeoJSON has been specified",
-    "unsupported_lang": "A language without support has been established"
+    "unsupported_lang": "A language without support has been established",
+    "generate_image": "An error occurred while generating the image"
   }
 }

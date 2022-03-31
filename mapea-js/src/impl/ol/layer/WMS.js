@@ -29,6 +29,7 @@ import GetCapabilities from '../util/WMSCapabilities';
 import FormatWMS from '../format/WMS';
 import TileWMS from '../source/TileWMS';
 import ImageWMS from '../source/ImageWMS';
+import { isUndefined } from '../../../facade/js/util/Utils';
 
 /**
  * @classdesc
@@ -331,6 +332,7 @@ class WMS extends LayerBase {
   createOLSource_(resolutions, minResolution, maxResolution, extent) {
     let olSource = this.vendorOptions_.source;
     if (isNullOrEmpty(this.vendorOptions_.source)) {
+      const crossOrigin = this.options.crossOrigin;
       const layerParams = {
         LAYERS: this.name,
         TILED: true,
@@ -353,7 +355,7 @@ class WMS extends LayerBase {
       const zIndex = this.zIndex_;
       if (this.tiled === true) {
         const origin = getBottomLeft(extent);
-        olSource = new TileWMS({
+        const opts = {
           url: this.url,
           params: layerParams,
           tileGrid: new OLTileGrid({
@@ -366,9 +368,13 @@ class WMS extends LayerBase {
           maxResolution,
           opacity,
           zIndex,
-        });
+        };
+        if (!isUndefined(crossOrigin)) {
+          opts.crossOrigin = crossOrigin;
+        }
+        olSource = new TileWMS(opts);
       } else {
-        olSource = new ImageWMS({
+        const opts = {
           url: this.url,
           params: layerParams,
           resolutions,
@@ -377,7 +383,11 @@ class WMS extends LayerBase {
           maxResolution,
           opacity,
           zIndex,
-        });
+        };
+        if (!isUndefined(crossOrigin)) {
+          opts.crossOrigin = crossOrigin;
+        }
+        olSource = new ImageWMS(opts);
       }
     }
     return olSource;

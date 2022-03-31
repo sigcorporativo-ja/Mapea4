@@ -21,6 +21,7 @@ import {
   getScaleFromResolution,
   fillResolutions,
   generateResolutionsFromExtent,
+  isUndefined,
 } from 'M/util/Utils';
 import ImplUtils from './util/Utils';
 import View from './View';
@@ -2292,6 +2293,26 @@ class Map extends MObject {
     if (!isNullOrEmpty(this.dragPan_)) {
       this.dragPan_.setActive(active);
     }
+  }
+
+  /**
+   * This function generate image map
+   *
+   * @function
+   * @public
+   * @api
+   */
+  getImageMap() {
+    const canvas = this.map_.getViewport().querySelectorAll('.ol-layer canvas, canvas.ol-layer')[0];
+    let img = null;
+    if (!isUndefined(canvas)) {
+      try {
+        img = canvas.toDataURL();
+      } catch (e) {
+        img = null;
+      }
+    }
+    return img;
   }
 }
 
