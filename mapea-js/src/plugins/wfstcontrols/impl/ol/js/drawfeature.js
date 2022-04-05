@@ -1,4 +1,3 @@
-import { isUndefined } from 'M/util/Utils';
 import WFSTBase from './wfstcontrolbase';
 
 /**
@@ -17,7 +16,7 @@ export default class DrawFeature extends WFSTBase {
     const olLayer = layerImpl.getOLLayer();
     const featureAux = olLayer.getSource().getFeatures()[0];
     let olStyle = null;
-    if (isUndefined(featureAux)) {
+    if (M.utils.isUndefined(featureAux)) {
       olStyle = new ol.style.Style({
         fill: new ol.style.Fill({
           color: 'rgba(103, 175, 19, 0.2)',

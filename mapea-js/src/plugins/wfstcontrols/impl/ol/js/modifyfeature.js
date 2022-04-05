@@ -1,5 +1,3 @@
-import { isUndefined } from 'M/util/Utils';
-
 /**
  * @namespace M.impl.control
  */
@@ -87,7 +85,7 @@ export default class ModifyFeature extends M.impl.Control {
     const olLayer = layerImpl.getOLLayer();
     let olStyle = null;
     const featureAux = olLayer.getSource().getFeatures()[0];
-    if (isUndefined(featureAux)) {
+    if (M.utils.isUndefined(featureAux)) {
       olStyle = new ol.style.Style({
         fill: new ol.style.Fill({
           color: 'rgba(103, 175, 19, 0.2)',
