@@ -183,7 +183,7 @@ class GeoJSON extends Vector {
             loader: (extent, resolution, projection) => {
               this.loaded_ = true;
               // removes previous features
-              // this.facadeVector_.clear();
+              this.facadeVector_.clear();
               this.facadeVector_.addFeatures(features);
               this.redraw();
               this.fire(EventType.LOAD, [features]);
