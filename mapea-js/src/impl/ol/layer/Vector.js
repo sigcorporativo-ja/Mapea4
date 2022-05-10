@@ -146,6 +146,8 @@ class Vector extends Layer {
           this.features_.push(newFeature);
         }
       });
+    } else {
+      this.features_.push(...features);
     }
 
     if (update) {

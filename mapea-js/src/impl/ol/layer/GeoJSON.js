@@ -184,13 +184,13 @@ class GeoJSON extends Vector {
               this.loaded_ = true;
               // removes previous features
               this.facadeVector_.clear();
-              this.facadeVector_.addFeatures(features);
+              this.facadeVector_.addFeatures(features, false, false);
               this.redraw();
               this.fire(EventType.LOAD, [features]);
             },
           }));
         }
-        this.facadeVector_.addFeatures(features, false, false);
+        // this.facadeVector_.addFeatures(features, false, false);
       });
     }
   }
