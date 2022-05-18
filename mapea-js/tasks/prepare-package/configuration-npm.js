@@ -42,7 +42,7 @@ const configuration = {
   },
   SEARCHSTREET_URL: window.location.protocol + '//ws079.juntadeandalucia.es/EXT_PUB_CallejeroREST/geocoderMunProvSrs',
   SEARCHSTREET_URLCODINEAUTOCOMPLETE: window.location.protocol + '//ws079.juntadeandalucia.es/EXT_PUB_CallejeroREST/autocompletarDireccionMunicipio',
-  SEARCHSTREET_URLCOMPROBARINE: window.location.protocol + '//ws079.juntadeandalucia.es/EXT_PUB_CallejeroREST/comprobarCodIne',
+  SEARCHSTREET_URLCOMPROBARINE: window.location.protocol + '//ws248.juntadeandalucia.es/EXT_PUB_CallejeroREST/comprobarCodIne',
   SEARCHSTREET_NORMALIZAR: window.location.protocol + '//ws079.juntadeandalucia.es/EXT_PUB_CallejeroREST/normalizar',
   AUTOCOMPLETE_MINLENGTH: '3',
   AUTOCOMPLETE_DELAYTIME: '750',
