@@ -26,7 +26,7 @@ window.mapjs = mapjs;
 // cargar/quitar wmc
 const maxExtent = [193104.52926740074, 4119420.5399687593, 287161.9825899291, 4164759.1717656343];
 const wmc = new WMC("http://sigc.desarrollo.guadaltel.es/mapea5/files/wmc/wmcprueba.xml*prueba");
-const permeabilidad = new WMS("http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Permeabilidad_Andalucia?*permeabilidad");
+const permeabilidad = new WMS("WMS*permeabilidad*http://www.juntadeandalucia.es/medioambiente/mapwms/REDIAM_Permeabilidad_Andalucia?*permeabilidad");
 const redesEnergeticas = new WMS("WMS*Redes*http://www.ideandalucia.es/wms/mta400v_2008?*Redes_energeticas*true");
 const limites = new WMS("WMS*Limites*http://www.ideandalucia.es/wms/mta10v_2007?*Limites*true");
 const canarias = new WMS("WMS*canarias*http://idecan2.grafcan.es/ServicioWMS/MOS?*WMS_MOS*true*false");
