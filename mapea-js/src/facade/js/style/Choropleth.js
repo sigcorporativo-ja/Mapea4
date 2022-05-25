@@ -255,13 +255,12 @@ class Choropleth extends StyleComposite {
         this.loadCanvasImages_((currentIndex + 1), canvasImages, callbackFn);
       };
       this.choroplethStyles_[currentIndex].updateCanvas();
-
       const imageSrc = this.choroplethStyles_[currentIndex].toImage();
       if (isString(imageSrc)) {
-        imageSrc.src = imageSrc;
+        image.src = imageSrc;
       } else {
         imageSrc.then((src) => {
-          imageSrc.src = src;
+          image.src = src;
         });
       }
     }
