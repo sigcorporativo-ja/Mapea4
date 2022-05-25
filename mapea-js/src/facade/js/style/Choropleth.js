@@ -256,9 +256,14 @@ class Choropleth extends StyleComposite {
       };
       this.choroplethStyles_[currentIndex].updateCanvas();
 
-      this.choroplethStyles_[currentIndex].toImage().then((src) => {
-        image.src = src;
-      });
+      const imageSrc = this.choroplethStyles_[currentIndex].toImage();
+      if (isString(imageSrc)) {
+        imageSrc.src = imageSrc;
+      } else {
+        imageSrc.then((src) => {
+          imageSrc.src = src;
+        });
+      }
     }
   }
 
