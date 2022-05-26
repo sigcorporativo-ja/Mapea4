@@ -123,7 +123,7 @@ class WMTS extends LayerBase {
         // gets format
         const format = capabilities.getFormat(this.name);
 
-        const newSource = new OLSourceWMTS({
+        const opts = {
           url: this.url,
           layer: this.name,
           matrixSet,
@@ -135,7 +135,14 @@ class WMTS extends LayerBase {
             matrixIds,
           }),
           extent,
-        });
+        };
+
+        const crossOrigin = this.options.crossOrigin;
+        if (!isUndefined(crossOrigin)) {
+          opts.crossOrigin = crossOrigin;
+        }
+
+        const newSource = new OLSourceWMTS(opts);
         this.ol3Layer.setSource(newSource);
       });
     }
@@ -184,6 +191,11 @@ class WMTS extends LayerBase {
     const minResolution = this.options.minResolution;
     const maxResolution = this.options.maxResolution;
     capabilitiesOptionsVariable.format = this.options.format || capabilitiesOptions.format;
+
+    const crossOrigin = this.options.crossOrigin;
+    if (!isUndefined(crossOrigin)) {
+      capabilitiesOptionsVariable.crossOrigin = crossOrigin;
+    }
 
     const wmtsSource = new OLSourceWMTS(extend(capabilitiesOptionsVariable, {
       // tileGrid: new OLTileGridWMTS({
