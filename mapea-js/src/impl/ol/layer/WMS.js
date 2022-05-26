@@ -29,6 +29,7 @@ import GetCapabilities from '../util/WMSCapabilities';
 import FormatWMS from '../format/WMS';
 import TileWMS from '../source/TileWMS';
 import ImageWMS from '../source/ImageWMS';
+import { isUndefined } from '../../../facade/js/util/Utils';
 
 /**
  * @classdesc
@@ -128,7 +129,7 @@ class WMS extends LayerBase {
 
     // number of zoom levels
     if (isNullOrEmpty(this.options.numZoomLevels)) {
-      this.options.numZoomLevels = 16; // by default
+      this.options.numZoomLevels = M.config.ZOOM_LEVELS; // by default
     }
 
     // animated
@@ -138,6 +139,7 @@ class WMS extends LayerBase {
 
     // styles
     this.styles = this.options.styles || '';
+
     // sldBody
     this.sldBody = options.sldBody;
 
@@ -330,6 +332,7 @@ class WMS extends LayerBase {
   createOLSource_(resolutions, minResolution, maxResolution, extent) {
     let olSource = this.vendorOptions_.source;
     if (isNullOrEmpty(this.vendorOptions_.source)) {
+      const crossOrigin = this.options.crossOrigin;
       const layerParams = {
         LAYERS: this.name,
         TILED: true,
@@ -352,7 +355,7 @@ class WMS extends LayerBase {
       const zIndex = this.zIndex_;
       if (this.tiled === true) {
         const origin = getBottomLeft(extent);
-        olSource = new TileWMS({
+        const opts = {
           url: this.url,
           params: layerParams,
           tileGrid: new OLTileGrid({
@@ -365,9 +368,13 @@ class WMS extends LayerBase {
           maxResolution,
           opacity,
           zIndex,
-        });
+        };
+        if (!isUndefined(crossOrigin)) {
+          opts.crossOrigin = crossOrigin;
+        }
+        olSource = new TileWMS(opts);
       } else {
-        olSource = new ImageWMS({
+        const opts = {
           url: this.url,
           params: layerParams,
           resolutions,
@@ -376,7 +383,11 @@ class WMS extends LayerBase {
           maxResolution,
           opacity,
           zIndex,
-        });
+        };
+        if (!isUndefined(crossOrigin)) {
+          opts.crossOrigin = crossOrigin;
+        }
+        olSource = new ImageWMS(opts);
       }
     }
     return olSource;
@@ -641,6 +652,34 @@ class WMS extends LayerBase {
    */
   setFacadeObj(obj) {
     this.facadeLayer_ = obj;
+  }
+
+  /**
+   * This function returns the styles of the layer
+   *
+   * @public
+   * @function
+   * @api stable
+   */
+  getStyles() {
+    const ol3Layer = this.getOLLayer();
+    const params = ol3Layer.getSource().getParams();
+    return params.STYLES;
+  }
+
+  /**
+   * This function applies styles to the layer
+   *
+   * @public
+   * @function
+   * @param { string | Array } styles style name
+   * @api stable
+   */
+  setStyles(styles) {
+    const ol3Layer = this.getOLLayer();
+    if (!isNullOrEmpty(ol3Layer)) {
+      ol3Layer.getSource().updateParams({ STYLES: styles });
+    }
   }
 
   /**

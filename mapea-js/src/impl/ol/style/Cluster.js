@@ -284,6 +284,17 @@ class Cluster extends Style {
    * Add selected interaction and layer to see the features of cluster
    *
    * @function
+   * @public
+   * @api stable
+   */
+  addSelectInteraction() {
+    this.addSelectInteraction_();
+  }
+
+  /**
+   * Add selected interaction and layer to see the features of cluster
+   *
+   * @function
    * @private
    * @api stable
    */
@@ -301,6 +312,17 @@ class Cluster extends Style {
     this.selectClusterInteraction_.on('select', this.selectClusterFeature_.bind(this), this);
     map.getMapImpl().addInteraction(this.selectClusterInteraction_);
     map.getMapImpl().on('change:view', evt => this.selectClusterInteraction_.refreshViewEvents(evt));
+  }
+
+  /**
+   * Remove selected interaction and layer to see the features of cluster
+   *
+   * @function
+   * @public
+   * @api stable
+   */
+  removeSelectInteraction() {
+    this.removeSelectInteraction_();
   }
 
   /**

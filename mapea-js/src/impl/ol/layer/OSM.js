@@ -9,8 +9,10 @@ import * as EventType from 'M/event/eventtype';
 import OLLayerTile from 'ol/layer/Tile';
 import OLControlAttribution from 'ol/control/Attribution';
 import SourceOSM from 'ol/source/OSM';
+import SourceXYZ from 'ol/source/XYZ';
 import ImplMap from '../Map';
 import Layer from './Layer';
+import { isUndefined } from '../../../facade/js/util/Utils';
 
 /**
  * @classdesc
@@ -58,6 +60,9 @@ class OSM extends Layer {
     }
 
     this.zIndex_ = ImplMap.Z_INDEX[LayerType.OSM];
+
+    // URL
+    this.url_ = userParameters.url;
   }
 
   /**
@@ -176,13 +181,20 @@ class OSM extends Layer {
       this.map.getMapImpl().updateSize();
       const size = this.map.getMapImpl().getSize();
       const units = this.map.getProjection().units;
-      const zoomLevels = 16;
+      const zoomLevels = M.config.ZOOM_LEVELS;
       this.resolutions_ =
         generateResolutionsFromExtent(this.facadeLayer_.getMaxExtent(), size, zoomLevels, units);
     }
     if (!isNullOrEmpty(this.ol3Layer) && isNullOrEmpty(this.vendorOptions_.source)) {
       const extent = this.facadeLayer_.getMaxExtent();
-      const newSource = new SourceOSM({});
+      let newSource = '';
+      if (!isUndefined(this.url_)) {
+        newSource = new SourceXYZ({
+          url: this.url_,
+        });
+      } else {
+        newSource = new SourceOSM({});
+      }
       this.ol3Layer.setSource(newSource);
       this.ol3Layer.setExtent(extent);
     }

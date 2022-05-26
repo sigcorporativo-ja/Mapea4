@@ -235,6 +235,28 @@ class Cluster extends Composite {
     return 4;
   }
 
+  /**
+   * Add selected interaction and layer to see the features of cluster
+   *
+   * @public
+   * @function
+   * @api
+   */
+  addSelectInteraction() {
+    this.getImpl().addSelectInteraction();
+  }
+
+  /**
+   * Remove selected interaction and layer to see the features of cluster
+   *
+   * @public
+   * @function
+   * @api
+   */
+  removeSelectInteraction() {
+    this.getImpl().removeSelectInteraction();
+  }
+
   // /**
   //  * TODO
   //  *

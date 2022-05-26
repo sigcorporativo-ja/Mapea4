@@ -105,6 +105,12 @@ public class Parameters {
          }
       }
    }
+
+   public void addBGColorContainer (String color) {
+      if (color != null) {
+         parameters.put("bgColorContainer", color);
+      }
+   }
    
    public JSONObject toJSON () {
       return parameters;

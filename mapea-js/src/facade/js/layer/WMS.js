@@ -36,6 +36,13 @@ class WMS extends LayerBase {
     }
     // This Layer is of parameters.
     const parameters = parameter.layer(userParameters, LayerType.WMS);
+
+    // styles
+    const styles = parameters.styles || '';
+    if (!isNullOrEmpty(styles)) {
+      Object.defineProperty(options, 'styles', { value: styles, writable: true });
+    }
+
     const impl = new WMSImpl(options, vendorOptions);
     // calls the super constructor
     super(parameters, impl);
@@ -55,6 +62,9 @@ class WMS extends LayerBase {
 
     // transparent
     this.transparent = parameters.transparent;
+
+    // styles
+    this.styles = styles;
 
     // options
     this.options = options;
@@ -146,6 +156,18 @@ class WMS extends LayerBase {
     } else {
       this.getImpl().version = '1.1.0'; // default value
     }
+  }
+
+  /**
+   * 'styles'
+   */
+  getStyles() {
+    return this.getImpl().getStyles();
+  }
+
+  setStyles(newStyles) {
+    this.styles = newStyles;
+    this.getImpl().setStyles(newStyles);
   }
 
   /**

@@ -56,7 +56,126 @@ class Generic extends Simple {
    * @api
    */
   toImage() {
+    const imgSize = 30;
+    let loadImagePoint = null;
+    let loadImagePoly = null;
+    let loadImageLine = null;
     const dinamic = drawDynamicStyle();
+    const promises = [];
+
+    // Point image
+    if (!isUndefined(this.options_.point)) {
+      loadImagePoint = d =>
+        new Promise((resolve, reject) => {
+          const img = new Image();
+
+          // onload / onerror
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+
+          // img
+          img.width = imgSize;
+          img.height = imgSize;
+
+          if (isDynamic(this.options_.point) === true) {
+            img.src = d;
+          } else {
+            const getterPoint = GETTER_BY_GEOM.Point;
+            const stylesPoint = getterPoint(this.options_, this, this.layer_);
+            stylesPoint[0].getImage().setRadius(5);
+            const imageURLPoint = stylesPoint[0].getImage().getImage(1).toDataURL();
+            img.src = imageURLPoint;
+          }
+        });
+      promises.push(loadImagePoint(dinamic));
+    }
+
+    // Polygon image
+    if (!isUndefined(this.options_.polygon)) {
+      loadImagePoly = d =>
+        new Promise((resolve, reject) => {
+          const img = new Image();
+
+          // onload / onerror
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+
+          // img
+
+          if (isDynamic(this.options_.polygon) === true) {
+            img.src = d;
+            img.width = imgSize;
+            img.height = imgSize;
+          } else {
+            const getterPolygon = GETTER_BY_GEOM.Polygon;
+            const stylesPolygon = getterPolygon(this.options_, this, this.layer_);
+            const canvasPO = document.createElement('canvas');
+            canvasPO.width = imgSize;
+            canvasPO.height = imgSize;
+            const ctxPO = canvasPO.getContext('2d');
+            const vectorContextPol = toContextRender(ctxPO);
+            vectorContextPol.setStyle(stylesPolygon[0], 0, 0);
+            const canvasSize = [25, 15];
+            const maxW = Math.floor(canvasSize[0]);
+            const maxH = Math.floor(canvasSize[1]);
+            const minW = (canvasSize[0] - maxW);
+            const minH = (canvasSize[1] - maxH);
+            vectorContextPol.drawGeometry(new OLGeomPolygon([
+              [
+                [minW + 3, minH + 3],
+                [maxW - 3, minH + 3],
+                [maxW - 3, maxH - 3],
+                [minW + 3, maxH - 3],
+                [minW + 3, minH + 3],
+              ],
+            ]));
+            img.src = canvasPO.toDataURL();
+          }
+        });
+      promises.push(loadImagePoly(dinamic));
+    }
+
+    // Line image
+    if (!isUndefined(this.options_.line)) {
+      loadImageLine = d =>
+        new Promise((resolve, reject) => {
+          const img = new Image();
+
+          // onload / onerror
+          img.onload = () => resolve(img);
+          img.onerror = reject;
+
+          // img
+          if (isDynamic(this.options_.line) === true) {
+            img.src = d;
+            img.width = 30;
+            img.height = 30;
+          } else {
+            const getterLine = GETTER_BY_GEOM.LineString;
+            const stylesLine = getterLine(this.options_, this, this.layer_);
+            const canvasLI = document.createElement('canvas');
+            canvasLI.width = 30;
+            canvasLI.height = 30;
+            const ctxLI = canvasLI.getContext('2d');
+            const vectorContextLin = toContextRender(ctxLI);
+            vectorContextLin.setStyle(stylesLine[0], 0, 0);
+            const x = 25;
+            const y = 15;
+            const stroke = isUndefined(stylesLine[0].getStroke()) ?
+              1.5 : stylesLine[0].getStroke().getWidth();
+            vectorContextLin.drawGeometry(new OLGeomLineString([
+              [0 + (stroke / 2), 0 + (stroke / 2)],
+              [(x / 3), (y / 2) - (stroke / 2)],
+              [(2 * x) / 3, 0 + (stroke / 2)],
+              [x - (stroke / 2), (y / 2) - (stroke / 2)],
+            ]));
+            img.src = canvasLI.toDataURL();
+          }
+        });
+      promises.push(loadImageLine(dinamic));
+    }
+
+    // Canvas / Context
     const canvasGL = document.createElement('canvas');
     canvasGL.width = 200;
     canvasGL.height = 50;
@@ -65,93 +184,14 @@ class Generic extends Simple {
     const positions = [0, 60, 120];
     let cont = 0;
 
-    // point
-    const imgPoint = new Image();
-    imgPoint.width = 30;
-    imgPoint.height = 30;
-    if (!isUndefined(this.options_.point)) {
-      if (isDynamic(this.options_.point) === true) {
-        imgPoint.src = dinamic;
-      } else {
-        const getterPoint = GETTER_BY_GEOM.Point;
-        const stylesPoint = getterPoint(this.options_, this, this.layer_);
-        stylesPoint[0].getImage().setRadius(5);
-        const imageURLPoint = stylesPoint[0].getImage().getImage(1).toDataURL();
-        imgPoint.src = imageURLPoint;
-      }
-      ctxGL.drawImage(imgPoint, positions[cont], 0);
-      cont += 1;
-    }
-
-    // polygon
-    const imgPol = new Image();
-    if (!isUndefined(this.options_.polygon)) {
-      if (isDynamic(this.options_.polygon) === true) {
-        imgPol.src = dinamic;
-        imgPol.width = 30;
-        imgPol.height = 30;
-      } else {
-        const getterPolygon = GETTER_BY_GEOM.Polygon;
-        const stylesPolygon = getterPolygon(this.options_, this, this.layer_);
-        const canvasPO = document.createElement('canvas');
-        canvasPO.width = 30;
-        canvasPO.height = 30;
-        const ctxPO = canvasPO.getContext('2d');
-        const vectorContextPol = toContextRender(ctxPO);
-        vectorContextPol.setStyle(stylesPolygon[0], 0, 0);
-        const canvasSize = [25, 15];
-        const maxW = Math.floor(canvasSize[0]);
-        const maxH = Math.floor(canvasSize[1]);
-        const minW = (canvasSize[0] - maxW);
-        const minH = (canvasSize[1] - maxH);
-        vectorContextPol.drawGeometry(new OLGeomPolygon([
-          [
-            [minW + 3, minH + 3],
-            [maxW - 3, minH + 3],
-            [maxW - 3, maxH - 3],
-            [minW + 3, maxH - 3],
-            [minW + 3, minH + 3],
-          ],
-        ]));
-        imgPol.src = canvasPO.toDataURL();
-      }
-      ctxGL.drawImage(imgPol, positions[cont], 0);
-      cont += 1;
-    }
-
-    // linestring
-    const imgLin = new Image();
-    if (!isUndefined(this.options_.line)) {
-      if (isDynamic(this.options_.line) === true) {
-        imgLin.src = dinamic;
-        imgLin.width = 30;
-        imgLin.height = 30;
-      } else {
-        const getterLine = GETTER_BY_GEOM.LineString;
-        const stylesLine = getterLine(this.options_, this, this.layer_);
-        const canvasLI = document.createElement('canvas');
-        canvasLI.width = 30;
-        canvasLI.height = 30;
-        const ctxLI = canvasLI.getContext('2d');
-        const vectorContextLin = toContextRender(ctxLI);
-        vectorContextLin.setStyle(stylesLine[0], 0, 0);
-        const x = 25;
-        const y = 15;
-        const stroke = isUndefined(stylesLine[0].getStroke()) ?
-          1.5 : stylesLine[0].getStroke().getWidth();
-        vectorContextLin.drawGeometry(new OLGeomLineString([
-          [0 + (stroke / 2), 0 + (stroke / 2)],
-          [(x / 3), (y / 2) - (stroke / 2)],
-          [(2 * x) / 3, 0 + (stroke / 2)],
-          [x - (stroke / 2), (y / 2) - (stroke / 2)],
-        ]));
-        imgLin.src = canvasLI.toDataURL();
-      }
-      ctxGL.drawImage(imgLin, positions[cont], 0);
-      cont += 1;
-    }
-
-    return canvasGL.toDataURL();
+    // Loading images
+    return Promise.all(promises).then((values) => {
+      values.forEach((image) => {
+        ctxGL.drawImage(image, positions[cont], 0);
+        cont += 1;
+      });
+      return canvasGL.toDataURL();
+    });
   }
 
   /**

@@ -163,6 +163,25 @@ class WMTS extends LayerBase {
   getGetFeatureInfoUrl(coordinate, zoom, formatInfo) {
     return this.getImpl().getGetFeatureInfoUrl(coordinate, zoom, formatInfo);
   }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  setOptionsGetFeatureInfoUrl(options) {
+    this.getImpl().setOptionsGetFeatureInfoUrl(options);
+  }
+
+  /**
+   * @function
+   * @public
+   * @api
+   */
+  getOptionsGetFeatureInfoUrl() {
+    return this.getImpl().getOptionsGetFeatureInfoUrl();
+  }
+
   /**
    * Gets the tile column and tile row of a coordinate
    * @function

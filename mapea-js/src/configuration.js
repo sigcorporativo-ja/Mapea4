@@ -427,4 +427,12 @@
    * @type {String}
    */
   M.config('ATTRIBUTETABLE_PAGES', '${attributetable.pages}');
+
+  /**
+   * Zoom levels
+   *
+   * @private
+   * @type {Number}
+   */
+  M.config('ZOOM_LEVELS', '${zoom.levels}');
 })(window.M);

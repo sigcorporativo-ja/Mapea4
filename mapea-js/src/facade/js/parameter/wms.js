@@ -29,6 +29,9 @@ const getParameter = ({
     array_number: param => param.split(separator || '')
       .map(elem => elem.trim())
       .map(n => Number.parseFloat(n)),
+    array_string: param => param.split(separator)
+      .map(elem => elem.trim())
+      .map(n => String(n)),
   };
 
   if (isString(parameter) && regexp.test(parameter)) {
@@ -119,6 +122,13 @@ const wms = (userParameters) => {
       attr: 'version',
     });
 
+    const styles = getParameter({
+      parameter: userParam,
+      type: 'array_string',
+      attr: 'styles',
+      separator: '%',
+    });
+
     let params;
     if (REGEXP_WMS.test(userParam) || isObject(userParam)) {
       params = {
@@ -130,6 +140,7 @@ const wms = (userParameters) => {
         transparent: transparent(REGEXP_WMS, 4),
         maxExtent: maxExtentWMS(REGEXP_WMS, 6),
         version: version(REGEXP_WMS, 7),
+        styles: styles(REGEXP_WMS, 8),
       };
     } else {
       params = {

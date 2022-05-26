@@ -24,7 +24,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('MAPEA_URL', location.protocol + '//sigc.desarrollo.guadaltel.es/mapea6');
+  M_.config('MAPEA_URL', location.protocol + '//sigc-dev.desarrollo.guadaltel.es/mapea6');
 
   /**
    * The path to the Mapea proxy to send
@@ -34,7 +34,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('PROXY_URL', location.protocol + '//sigc.desarrollo.guadaltel.es/mapea6/api/proxy');
+  M_.config('PROXY_URL', location.protocol + '//sigc-dev.desarrollo.guadaltel.es/mapea6/api/proxy');
 
   /**
    * The path to the Mapea proxy to send
@@ -44,7 +44,7 @@ function fun(M_) {
    * @public
    * @api stable
    */
-  M_.config('PROXY_POST_URL', location.protocol + '//sigc.desarrollo.guadaltel.es/mapea6/proxyPost');
+  M_.config('PROXY_POST_URL', location.protocol + '//sigc-dev.desarrollo.guadaltel.es/mapea6/proxyPost');
 
   /**
    * The path to the Mapea templates
@@ -438,6 +438,14 @@ function fun(M_) {
    * @type {String}
    */
   M_.config('SQL_WASM_URL', '../../../../node_modules/sql.js/dist/');
+
+  /**
+   * Zoom levels
+   *
+   * @private
+   * @type {Number}
+   */
+  M_.config('ZOOM_LEVELS', '16');
 }
 
 fun(window.M);

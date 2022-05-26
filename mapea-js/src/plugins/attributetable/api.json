@@ -23,6 +23,9 @@
     }
   },
   "metadata": {
+    "uuid_plugin": "",
+    "uuid_version_plugin": "",
+    "version_ficha_metadatos": "",
     "name": "Attributable",
     "description": "Shows a table of all the attributes of each feature of a vector layer.",
     "text": "",
@@ -31,6 +34,16 @@
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",
     "tags": "mapea,plugin",
-    "icon": "./facade/assets/icons/icons.svg"
+    "icon": "./facade/assets/icons/icons.svg",
+    "buttons": [
+      { "title": "", "description": "", "querySelector": "" },
+      { "title": "", "description": "", "querySelector": "" }
+    ],
+    "dependencies": {
+      "modules": ["", ""],
+      "plugins": [{ "uuid": "", "name": "" }],
+      "services": [{ "name": "", "description": "" }]
+    },
+    "compatibility": ["4" ,"5", "6"]
   }
 }

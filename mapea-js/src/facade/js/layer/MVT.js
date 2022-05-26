@@ -144,6 +144,17 @@ class MVT extends Vector {
     return features.map(olFeature => RenderFeatureImpl.olFeature2Facade(olFeature));
   }
 
+  /**
+   * Removes the style of the layer, both at layer and at feature level
+   *
+   * @function
+   * @public
+   * @api
+   */
+  clearStyle() {
+    this.setStyle(null);
+  }
+
   setFilter() {}
   addFeatures() {}
   removeFeatures() {}

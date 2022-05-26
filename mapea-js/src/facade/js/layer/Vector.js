@@ -108,13 +108,13 @@ class Vector extends LayerBase {
    * @param {boolean} [update=false] Update layer
    * @api
    */
-  addFeatures(featuresParam, update = false) {
+  addFeatures(featuresParam, update = false, checkDuplicate = true) {
     let features = featuresParam;
     if (!isNullOrEmpty(features)) {
       if (!isArray(features)) {
         features = [features];
       }
-      this.getImpl().addFeatures(features, update);
+      this.getImpl().addFeatures(features, update, checkDuplicate);
     }
   }
 
