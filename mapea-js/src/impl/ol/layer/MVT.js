@@ -14,6 +14,7 @@ import Feature from 'ol/Feature';
 import RenderFeature from 'ol/render/Feature';
 import { mode } from 'M/layer/MVT';
 import Vector from './Vector';
+import { isNullOrEmpty } from '../../../facade/js/util/Utils';
 
 /**
  * @classdesc
@@ -90,9 +91,12 @@ class MVT extends Vector {
     });
 
     const extent = this.facadeVector_.getMaxExtent();
+    const ticket = this.map.getTicket();
+    const url = isNullOrEmpty(ticket) ? this.url : `${this.url}?ticket=${ticket}`;
+
     const source = new OLSourceVectorTile({
       format: this.formater_,
-      url: this.url,
+      url,
       projection: this.projection_,
     });
 
