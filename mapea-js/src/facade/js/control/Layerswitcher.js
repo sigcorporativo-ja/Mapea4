@@ -232,18 +232,7 @@ class LayerSwitcher extends ControlBase {
       if (child instanceof LayerBase) {
         varTemplate.layers.push(LayerSwitcher.parseLayerForTemplate(child));
       } else if (child instanceof LayerGroup) {
-        const varGroup = LayerSwitcher.parseGroupForTemplate(child, baseLayers);
-        if (!isNullOrEmpty(varGroup)) {
-          varTemplate.layerGroups.push(varGroup);
-        }
-      }
-    });
-
-    // Resolve the layers promise
-    const promiseLayers = Promise.all(varTemplate.layers);
-    promiseLayers.then((layers) => {
-      if (!isNullOrEmpty(varTemplate)) {
-        varTemplate.layers = layers;
+        varTemplate.layerGroups.push(LayerSwitcher.parseGroupForTemplate(child, baseLayers));
       }
     });
 
@@ -258,7 +247,24 @@ class LayerSwitcher extends ControlBase {
     if (isNullOrEmpty(varTemplate.layers) && isNullOrEmpty(varTemplate.layerGroups)) {
       varTemplate = null;
     }
-    return varTemplate;
+
+    // Resolve the layers promise
+    return new Promise((success, fail) => {
+      const promiseLayers = Promise.all(varTemplate.layers);
+      promiseLayers.then((layersResponse) => {
+        if (!isNullOrEmpty(varTemplate)) {
+          varTemplate.layers = layersResponse;
+          if (varTemplate.layerGroups.length > 0) {
+            Promise.all(varTemplate.layerGroups).then((response) => {
+              varTemplate.layerGroups = response;
+              success(varTemplate);
+            });
+          } else {
+            success(varTemplate);
+          }
+        }
+      });
+    });
   }
 
   /**
