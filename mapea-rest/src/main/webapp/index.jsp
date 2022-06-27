@@ -12,7 +12,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="mapea" content="yes">
     <title>MAPEA</title>
-    <link type="text/css" rel="stylesheet" href="assets/css/mapea-6.2.0.ol.min.css">
+    <link type="text/css" rel="stylesheet" href="assets/css/mapea-6.3.0.ol.min.css">
     </link>
     <style type="text/css">
         html,
@@ -44,8 +44,8 @@
 <body>
     <div id="map" class="m-container"></div>
     <script type="text/javascript" src="vendor/browser-polyfill.js"></script>
-    <script type="text/javascript" src="js/mapea-6.2.0.ol.min.js"></script>
-    <script type="text/javascript" src="js/configuration-6.2.0.js"></script>
+    <script type="text/javascript" src="js/mapea-6.3.0.ol.min.js"></script>
+    <script type="text/javascript" src="js/configuration-6.3.0.js"></script>
     <%
       String[] jsfiles = PluginsManager.getJSFiles(adaptedParams);
       for (int i = 0; i < jsfiles.length; i++) {
