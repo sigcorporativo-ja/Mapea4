@@ -64,6 +64,7 @@ const BASE_LAYER_TYPES = [
   LayerType.OSM,
   LayerType.Mapbox,
   LayerType.WMTS,
+  LayerType.MVT,
 ];
 
 /**
@@ -1340,10 +1341,14 @@ class Map extends MObject {
         if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
-          layer.setZIndex(layer.getZIndex());
-          if (layer.getZIndex() == null) {
-            const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.MVT];
-            layer.setZIndex(zIndex);
+          if (layer.transparent !== true) {
+            layer.setZIndex(Map.Z_INDEX_BASELAYER);
+          } else {
+            layer.setZIndex(layer.getZIndex());
+            if (layer.getZIndex() == null) {
+              const zIndex = this.layers_.length + Map.Z_INDEX[LayerType.MVT];
+              layer.setZIndex(zIndex);
+            }
           }
           if (!existsBaseLayer) {
             this.updateResolutionsFromBaseLayer();
@@ -1976,8 +1981,12 @@ class Map extends MObject {
     let maxResolution = null;
     let minResolution = null;
     if (!isNullOrEmpty(baseLayer)) {
-      minResolution = baseLayer.getImpl().getMinResolution();
-      maxResolution = baseLayer.getImpl().getMaxResolution();
+      minResolution = baseLayer.getImpl().getMinResolution !== undefined ?
+        baseLayer.getImpl().getMinResolution() :
+        null;
+      maxResolution = baseLayer.getImpl().getMaxResolution !== undefined ?
+        baseLayer.getImpl().getMaxResolution() :
+        null;
       zoomLevels = baseLayer.getImpl().getNumZoomLevels();
     }
 
