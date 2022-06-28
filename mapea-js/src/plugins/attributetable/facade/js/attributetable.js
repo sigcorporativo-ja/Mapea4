@@ -71,6 +71,9 @@ export default class AttributeTable extends M.Plugin {
   add(map) {
     this.facadeMap_ = map;
     this.control_ = new AttributeTableControl(this.numPages_);
+    this.control_.on(M.evt.ADDED_TO_MAP, () => {
+      this.fire(M.evt.ADDED_TO_MAP);
+    });
     this.panel_ = new M.ui.Panel(AttributeTable.NAME, {
       collapsible: true,
       className: 'm-attributetable',

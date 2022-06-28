@@ -15,10 +15,10 @@
   "files": {
     "ol": {
       "scripts": [
-        "attributetable-2.0.1.ol.min.js"
+        "attributetable-2.0.2.ol.min.js"
       ],
       "styles": [
-        "attributetable-2.0.1.min.css"
+        "attributetable-2.0.2.min.css"
       ]
     }
   },
@@ -29,7 +29,7 @@
     "name": "Attributable",
     "description": "Shows a table of all the attributes of each feature of a vector layer.",
     "text": "",
-    "version": "2.0.1",
+    "version": "2.0.2",
     "date": "11/10/2019",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",

@@ -126,6 +126,9 @@ export default class Geosearchbylocation extends M.Plugin {
       this.spatialField_,
       this.rows_,
     );
+    this.controlGeo_.on(M.evt.ADDED_TO_MAP, () => {
+      this.fire(M.evt.ADDED_TO_MAP);
+    });
 
     this.panel_ = new M.ui.Panel(Geosearchbylocation.NAME, {
       collapsible: false,
