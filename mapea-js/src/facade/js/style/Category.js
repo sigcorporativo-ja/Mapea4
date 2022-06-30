@@ -314,8 +314,7 @@ class Category extends Composite {
       this.layer_.getFeatures().forEach((feature) => {
         const value = feature.getAttribute(this.attributeName_);
         if (!Object.prototype.hasOwnProperty.call(categories, value)) {
-          categories[value] = Utils.generateRandomStyle({
-            feature,
+          categories[value] = Utils.generateRandomGenericStyle({
             radius: Category.RANDOM_RADIUS_OPTION,
             strokeColor: Category.RANDOM_STROKE_COLOR_OPTION,
             strokeWidth: Category.RANDOM_STROKE_WIDTH_OPTION,
