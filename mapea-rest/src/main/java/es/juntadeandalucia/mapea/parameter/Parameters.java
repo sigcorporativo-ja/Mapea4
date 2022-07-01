@@ -57,6 +57,12 @@ public class Parameters {
       }
    }
 
+   public void addLayerswitcher (String layerswitcher) {
+      if (layerswitcher != null) {
+         parameters.put("layerswitcher", layerswitcher);
+      }
+   }
+
    public void addZoom (String zoom) {
       if (zoom != null) {
          parameters.put("zoom", zoom);
@@ -86,7 +92,7 @@ public class Parameters {
          parameters.put("maxExtent", maxextent);
       }
    }
-   
+
    public void addTicket (String ticket) {
       if (ticket != null) {
          parameters.put("ticket", ticket);
@@ -111,7 +117,7 @@ public class Parameters {
          parameters.put("bgColorContainer", color);
       }
    }
-   
+
    public JSONObject toJSON () {
       return parameters;
    }

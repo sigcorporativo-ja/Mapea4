@@ -11,7 +11,7 @@ import org.apache.commons.lang3.StringUtils;
 import es.juntadeandalucia.mapea.parameter.Parameters;
 
 public abstract class ParametersParser {
-   
+
    public static Parameters parse (MultivaluedMap<String, String> queryParams) {
       String container = queryParams.getFirst("container");
       if ((container == null) || (container.trim().isEmpty())) {
@@ -22,6 +22,7 @@ public abstract class ParametersParser {
       String controls = queryParams.getFirst("controls");
       String label = queryParams.getFirst("label");
       String getfeatureinfo = queryParams.getFirst("getfeatureinfo");
+      String layerswitcher = queryParams.getFirst("layerswitcher");
       String zoom = queryParams.getFirst("zoom");
       String projection = queryParams.getFirst("projection");
       String center = queryParams.getFirst("center");
@@ -30,7 +31,7 @@ public abstract class ParametersParser {
       String callbackFn = queryParams.getFirst("callback");
       String ticket = queryParams.getFirst("ticket");
       String bgcolorcontainer = queryParams.getFirst("bgcolorcontainer");
-      
+
       Parameters parameters = new Parameters();
       parameters.addContainer(container);
       parameters.addWmcfiles(wmcfiles);
@@ -38,6 +39,7 @@ public abstract class ParametersParser {
       parameters.addControls(controls);
       parameters.addLabel(label);
       parameters.addGetFeatureInfo(getfeatureinfo);
+      parameters.addLayerswitcher(layerswitcher);
       parameters.addZoom(zoom);
       parameters.addProjection(projection);
       parameters.addCenter(center);
@@ -46,10 +48,10 @@ public abstract class ParametersParser {
       parameters.setCallbackFn(callbackFn);
       parameters.addTicket(ticket);
       parameters.addBGColorContainer(bgcolorcontainer);
-      
+
       return parameters;
    }
-   
+
    public static List<String> parseControls (String controlsParameter) {
       List<String> controls = new LinkedList<String>();
       if (!StringUtils.isEmpty(controlsParameter)) {
