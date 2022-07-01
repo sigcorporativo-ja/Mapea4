@@ -297,7 +297,7 @@ class Map extends Base {
     // layerswitcher
     if (!isNullOrEmpty(params.layerswitcher)) {
       if (params.layerswitcher !== 'emptylayer') {
-        Dialog.error(getValue('dialog').unsupported_param);
+        Dialog.error(getValue('layerswitcher').unsupported_param);
       } else {
         const layerswitcher = new Layerswitcher(params.layerswitcher);
         this.addControls(layerswitcher);
