@@ -7,7 +7,7 @@ import layerswitcherTemplate from 'templates/layerswitcher.html';
 import ControlBase from './Control.js';
 import LayerBase from '../layer/Layer.js';
 import LayerGroup from '../layer/LayerGroup.js';
-import { isUndefined, isNullOrEmpty, isNull, concatUrlPaths } from '../util/Utils.js';
+import { isUndefined, isNullOrEmpty, isNull } from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import { compileSync as compileTemplate } from '../util/Template.js';
 import * as LayerType from '../layer/Type.js';
@@ -317,7 +317,7 @@ LayerSwitcher.EMPTYLAYER = {
   base: true,
   id: 'emptyLayer',
   isIcon: false,
-  legend: concatUrlPaths([M.config.THEME_URL, '/img/legend-default.png']),
+  legend: '',
   opacity: 1,
   outOfRange: false,
   title: getValue('layerswitcher').no_base_layer,
