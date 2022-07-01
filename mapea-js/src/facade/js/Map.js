@@ -26,6 +26,7 @@ import FeaturesHandler from './handler/Feature.js';
 import Feature from './feature/Feature.js';
 import * as Dialog from './dialog';
 import GetFeatureInfo from './control/GetFeatureInfo.js';
+import Layerswitcher from './control/Layerswitcher.js';
 import WMCSelector from './control/WMCSelector.js';
 import Layer from './layer/Layer.js';
 import * as LayerType from './layer/Type.js';
@@ -290,6 +291,16 @@ class Map extends Base {
       } else {
         const getFeatureInfo = new GetFeatureInfo(params.getfeatureinfo);
         this.addControls(getFeatureInfo);
+      }
+    }
+
+    // layerswitcher
+    if (!isNullOrEmpty(params.layerswitcher)) {
+      if (params.layerswitcher !== 'emptylayer') {
+        Dialog.error(getValue('dialog').unsupported_param);
+      } else {
+        const layerswitcher = new Layerswitcher(params.layerswitcher);
+        this.addControls(layerswitcher);
       }
     }
 

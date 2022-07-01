@@ -3,7 +3,9 @@
     "title": "Get current location"
   },
   "layerswitcher": {
-    "title": "Layer selector"
+    "title": "Layer selector",
+    "unsupported_param": "Unsupported parameter",
+    "no_base_layer": "Without base layer"
   },
   "scale": {
     "title": "Scale",

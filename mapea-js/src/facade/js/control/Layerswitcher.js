@@ -7,7 +7,7 @@ import layerswitcherTemplate from 'templates/layerswitcher.html';
 import ControlBase from './Control.js';
 import LayerBase from '../layer/Layer.js';
 import LayerGroup from '../layer/LayerGroup.js';
-import { isUndefined, isNullOrEmpty, isNull } from '../util/Utils.js';
+import { isUndefined, isNullOrEmpty, isNull, concatUrlPaths } from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import { compileSync as compileTemplate } from '../util/Template.js';
 import * as LayerType from '../layer/Type.js';
@@ -31,14 +31,20 @@ class LayerSwitcher extends ControlBase {
    * @extends {M.Control}
    * @api
    */
-  constructor() {
+  constructor(emptyLayer) {
     // implementation of this control
-    const impl = new LayerSwitcherImpl();
+    const impl = new LayerSwitcherImpl(emptyLayer);
     // calls the super constructor
     super(impl, LayerSwitcher.NAME);
 
     if (isUndefined(LayerSwitcherImpl)) {
       Exception(getValue('exception').layerswitcher_method);
+    }
+
+    if (!isUndefined(emptyLayer)) {
+      this.activeEmptyLayer = true;
+    } else {
+      this.activeEmptyLayer = false;
     }
   }
 
@@ -68,6 +74,9 @@ class LayerSwitcher extends ControlBase {
   createView(map) {
     return new Promise((resolve) => {
       LayerSwitcher.getTemplateVariables(this.map_).then((templateVars) => {
+        if (this.activeEmptyLayer) {
+          templateVars.baseLayers.unshift(LayerSwitcher.EMPTYLAYER);
+        }
         const html = compileTemplate(layerswitcherTemplate, {
           vars: templateVars,
         });
@@ -296,5 +305,23 @@ class LayerSwitcher extends ControlBase {
  * @api
  */
 LayerSwitcher.NAME = 'layerswitcher';
+
+/**
+ * Empty layer
+ * @const
+ * @type {Object}
+ * @public
+ * @api
+ */
+LayerSwitcher.EMPTYLAYER = {
+  base: true,
+  id: 'emptyLayer',
+  isIcon: false,
+  legend: concatUrlPaths([M.config.THEME_URL, '/img/legend-default.png']),
+  opacity: 1,
+  outOfRange: false,
+  title: getValue('layerswitcher').no_base_layer,
+  visible: false,
+};
 
 export default LayerSwitcher;

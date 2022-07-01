@@ -3,7 +3,9 @@
     "title": "Obtener ubicación actual"
   },
   "layerswitcher": {
-    "title": "Selector de capas"
+    "title": "Selector de capas",
+    "unsupported_param": "Parámetro no soportado",
+    "no_base_layer": "Sin capa base"
   },
   "scale": {
     "title": "Escala",
