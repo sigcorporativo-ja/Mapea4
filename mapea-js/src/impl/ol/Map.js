@@ -1334,14 +1334,18 @@ class Map extends MObject {
    */
   addMVT(layers) {
     const baseLayers = this.getBaseLayers();
-    const existsBaseLayer = baseLayers.length > 0;
+    let existsBaseLayer = baseLayers.length > 0;
+    const addedLayers = [];
 
     layers.forEach((layer) => {
       if (layer.type === LayerType.MVT) {
         if (!includes(this.layers_, layer)) {
           layer.getImpl().addTo(this.facadeMap_);
           this.layers_.push(layer);
+          addedLayers.push(layer);
           if (layer.transparent !== true) {
+            layer.setVisible(!existsBaseLayer);
+            existsBaseLayer = true;
             layer.setZIndex(Map.Z_INDEX_BASELAYER);
           } else {
             layer.setZIndex(layer.getZIndex());
