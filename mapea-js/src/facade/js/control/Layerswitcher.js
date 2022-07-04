@@ -41,7 +41,7 @@ class LayerSwitcher extends ControlBase {
       Exception(getValue('exception').layerswitcher_method);
     }
 
-    if (!isUndefined(emptyLayer)) {
+    if (!isUndefined(emptyLayer) && emptyLayer !== '') {
       this.activeEmptyLayer = true;
     } else {
       this.activeEmptyLayer = false;

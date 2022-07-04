@@ -25,7 +25,7 @@ class LayerSwitcher extends Control {
     this.mouseoutTimeId = null;
     this.panel = null;
     this.statusEmptyLayer = false;
-    if (!isUndefined(emptyLayer)) {
+    if (!isUndefined(emptyLayer) && emptyLayer !== '') {
       this.activeEmptyLayer = true;
     } else {
       this.activeEmptyLayer = false;

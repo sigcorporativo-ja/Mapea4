@@ -295,8 +295,8 @@ class Map extends Base {
     }
 
     // layerswitcher
-    if (!isNullOrEmpty(params.layerswitcher)) {
-      if (params.layerswitcher !== 'emptylayer') {
+    if (!isUndefined(params.layerswitcher)) {
+      if (params.layerswitcher !== 'emptylayer' && params.layerswitcher !== '') {
         Dialog.error(getValue('layerswitcher').unsupported_param);
       } else {
         const layerswitcher = new Layerswitcher(params.layerswitcher);

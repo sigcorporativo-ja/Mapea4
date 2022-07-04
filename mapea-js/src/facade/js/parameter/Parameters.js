@@ -235,9 +235,6 @@ const parseLayerswitcher = (parameter) => {
     layerswitcher = getParameterValue('layerswitcher', parameter);
   } else if (isObject(parameter)) {
     layerswitcher = parameter.layerswitcher;
-    if (!isUndefined(layerswitcher) && isNullOrEmpty(layerswitcher)) {
-      layerswitcher = 'emptylayer';
-    }
   } else {
     Exception(`El tipo del parámetro controls no es válido: ${typeof parameter}`);
   }
