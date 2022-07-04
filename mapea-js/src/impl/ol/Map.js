@@ -1354,7 +1354,9 @@ class Map extends MObject {
               layer.setZIndex(zIndex);
             }
           }
-          if (!existsBaseLayer) {
+          const calculateResolutions = (addedLayers.length > 0 && !existsBaseLayer) ||
+            addedLayers.some(l => l.transparent !== true && l.isVisible());
+          if (calculateResolutions) {
             this.updateResolutionsFromBaseLayer();
           }
         }
