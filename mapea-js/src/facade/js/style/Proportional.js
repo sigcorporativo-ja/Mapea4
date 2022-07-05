@@ -150,13 +150,11 @@ class Proportional extends StyleComposite {
     }
     if (!isNullOrEmpty(style)) {
       if (style instanceof StyleGeneric) {
-        style = new StyleGeneric({ point: style.getOptions().point });
-      } else if (style instanceof StylePoint) {
-        style = new StyleGeneric({ point: style.getOptions() });
+        style = new StylePoint(style.getOptions().point);
       } else if (!(style instanceof StylePoint) && style instanceof StyleSimple) {
-        style = new StyleGeneric({ point: style.getOptions() });
+        style = new StylePoint(style.getOptions());
       } else if (style instanceof StyleComposite) {
-        style = new StyleGeneric(style.getOldStyle().getOptions());
+        style = new StylePoint(style.getOldStyle().getOptions());
       }
       const newStyle = this.calculateStyle_(feature, {
         minRadius: this.minRadius_,
