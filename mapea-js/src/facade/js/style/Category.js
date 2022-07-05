@@ -207,10 +207,14 @@ class Category extends Composite {
         getImageSize(style.get('icon.src')).then((img) => {
           image.width = style.get('icon.scale') ? img.width * style.get('icon.scale') : img.width;
           image.height = style.get('icon.scale') ? img.height * style.get('icon.scale') : img.height;
-          image.src = style.toImage();
+          style.toImage().then((data) => {
+            image.src = data;
+          });
         });
       } else {
-        image.src = style.toImage();
+        style.toImage().then((data) => {
+          image.src = data;
+        });
       }
     }
   }
