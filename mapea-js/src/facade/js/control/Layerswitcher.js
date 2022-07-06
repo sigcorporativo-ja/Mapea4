@@ -194,7 +194,7 @@ class LayerSwitcher extends ControlBase {
       const layerVarTemplate = {
         base: (layer.transparent === false),
         visible: (layer.isVisible() === true),
-        id: layer.name,
+        id: layer.id,
         title: layerTitle,
         outOfRange: !layer.inRange(),
         opacity: layer.getOpacity(),

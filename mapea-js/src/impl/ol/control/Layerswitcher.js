@@ -70,13 +70,13 @@ class LayerSwitcher extends Control {
     const groupId = evt.target.getAttribute('data-group-id');
     let group = null;
     if (!isNullOrEmpty(evt.target)) {
-      const layerName = evt.target.getAttribute('data-layer-name');
-      if (!isNullOrEmpty(layerName)) {
+      const layerID = evt.target.getAttribute('data-layer-name');
+      if (!isNullOrEmpty(layerID)) {
         evt.stopPropagation();
-        let layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        let layer = this.facadeMap_.getLayers().filter(l => l.id === layerID)[0];
         if (isNullOrEmpty(layer) && !isNullOrEmpty(groupId)) {
           group = LayerGroup.findGroupById(groupId, this.facadeMap_.getLayerGroup());
-          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.name === layerName)));
+          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.id === layerID)));
         }
         // checkbox
         if (evt.target.classList.contains('m-check')) {
@@ -118,13 +118,13 @@ class LayerSwitcher extends Control {
     const groupId = evt.target.getAttribute('data-group-id');
     let group = null;
     if (!isNullOrEmpty(evt.target)) {
-      const layerName = evt.target.getAttribute('data-layer-name');
-      if (!isNullOrEmpty(layerName)) {
+      const layerID = evt.target.getAttribute('data-layer-name');
+      if (!isNullOrEmpty(layerID)) {
         evt.stopPropagation();
-        let layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        let layer = this.facadeMap_.getLayers().filter(l => l.id === layerID)[0];
         if (isNullOrEmpty(layer) && !isNullOrEmpty(groupId)) {
           group = LayerGroup.findGroupById(groupId, this.facadeMap_.getLayerGroup());
-          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.name === layerName)));
+          layer = group.getChildren().find(l => ((l instanceof Layer) && (l.id === layerID)));
         }
         // checkbox
         if (evt.target.classList.contains('m-check')) {
@@ -308,9 +308,9 @@ class LayerSwitcher extends Control {
     const imgElements = html.querySelectorAll('img');
     Array.prototype.forEach.call(imgElements, (imgElem) => {
       imgElem.addEventListener('error', (evt) => {
-        const layerName = evt.target.getAttribute('data-layer-name');
+        const layerIDs = evt.target.getAttribute('data-layer-name');
         const legendErrorUrl = concatUrlPaths([M.config.THEME_URL, Layer.LEGEND_ERROR]);
-        const layer = this.facadeMap_.getLayers().filter(l => l.name === layerName)[0];
+        const layer = this.facadeMap_.getLayers().filter(l => l.id === layerIDs)[0];
         if (!isNullOrEmpty(layer)) {
           layer.setLegendURL(legendErrorUrl);
         }

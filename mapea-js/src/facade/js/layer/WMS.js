@@ -370,6 +370,7 @@ class WMS extends LayerBase {
       equals = equals && (this.name === obj.name);
       equals = equals && (this.cql === obj.cql);
       equals = equals && (this.version === obj.version);
+      equals = equals && (this.id === obj.id);
     }
 
     return equals;

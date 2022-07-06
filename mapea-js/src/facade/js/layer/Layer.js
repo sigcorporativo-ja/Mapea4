@@ -114,6 +114,13 @@ class LayerBase extends Base {
      * @api
      */
     this.layerGroup_ = null;
+
+    /**
+     * ID Layer
+     * @public
+     * @api
+     */
+    this.id = generateRandom(`${parameter.name}_`);
   }
 
   /**
@@ -134,6 +141,24 @@ class LayerBase extends Base {
   setLegend(newLegend) {
     this.legend = newLegend;
     this.getImpl().legend = newLegend;
+  }
+
+  /**
+   * Returns the ID
+   * @function
+   * @api
+   * @return {Number} The legend of the layer.
+   */
+  getID() {
+    return this.id;
+  }
+
+  /**
+   * Sets the ID value
+   * @param {Number} newID - The new ID
+   */
+  setId(newID) {
+    this.id = newID;
   }
 
   /**
