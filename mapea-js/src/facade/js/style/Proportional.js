@@ -350,8 +350,8 @@ class Proportional extends StyleComposite {
 
         if (style instanceof StyleSimple) {
           let featureStyle = style.clone();
-          if (!(featureStyle instanceof StylePoint)) {
-            featureStyle = new StylePoint(featureStyle.getOptions());
+          if ((featureStyle instanceof StyleGeneric)) {
+            featureStyle = new StylePoint(featureStyle.getOptions().point);
           }
           const sizeAttribute = Proportional.getSizeAttribute(featureStyle);
 
@@ -488,7 +488,7 @@ class Proportional extends StyleComposite {
     if (!isNullOrEmpty(style)) {
       style = style.clone();
       let [minRadius, maxRadius] = [options.minRadius, options.maxRadius];
-      if (!isNullOrEmpty(style.get('point.icon.src'))) {
+      if (!isNullOrEmpty(style.get('icon.src'))) {
         minRadius = options.minRadius / Proportional.SCALE_PROPORTION;
         maxRadius = options.maxRadius / Proportional.SCALE_PROPORTION;
       }
@@ -498,8 +498,8 @@ class Proportional extends StyleComposite {
       }
       const radius = propFun(value, options.minValue, options.maxValue, minRadius, maxRadius);
       const zindex = options.maxValue - parseFloat(feature.getAttribute(this.attributeName_));
-      style.set(`point.${Proportional.getSizeAttribute(style)}`, radius);
-      style.set('point.zindex', zindex);
+      style.set(`${Proportional.getSizeAttribute(style)}`, radius);
+      style.set('zindex', zindex);
     }
     return style;
   }
