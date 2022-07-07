@@ -144,6 +144,7 @@ class WMTS extends LayerBase {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
       equals = equals && (this.matrixSet === obj.matrixSet);
+      equals = equals && (this.id === obj.id);
     }
 
     return equals;

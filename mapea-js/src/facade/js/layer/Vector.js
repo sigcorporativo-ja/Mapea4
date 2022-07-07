@@ -302,6 +302,7 @@ class Vector extends LayerBase {
     let equals = false;
     if (obj instanceof Vector) {
       equals = this.name === obj.name;
+      equals = equals && (this.id === obj.id);
     }
     return equals;
   }
