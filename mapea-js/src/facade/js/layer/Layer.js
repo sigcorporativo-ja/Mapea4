@@ -158,7 +158,25 @@ class LayerBase extends Base {
    * @param {Number} newID - The new ID
    */
   setId(newID) {
-    this.id = newID;
+    if (!isNullOrEmpty(this.map_)) {
+      const findId = this.map_.getLayers().find((layer) => {
+        let result = null;
+        if (layer.constructor.name === 'WMC') {
+          result = layer.layers.find((layerwmc) => {
+            return layer.id === newID;
+          });
+        } else {
+          result = layer.id === newID;
+        }
+        return result;
+      });
+      if (isUndefined(findId)) {
+        this.map_.getFeatureHandler().changeNamePrevs(this.id, newID);
+        this.id = newID;
+      } else {
+        Exception(getValue('exception').id_exists);
+      }
+    }
   }
 
   /**

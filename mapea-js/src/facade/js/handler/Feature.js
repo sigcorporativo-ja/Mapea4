@@ -88,13 +88,31 @@ class Features extends Base {
   }
 
   /**
+   * This function modifies the objects a and b after changing the ID of the layer
+   *
+   * @public
+   * @function
+   * @param {Number} id ID layer
+   * @param {Number} newID New ID layer
+   * @api
+   * @export
+   */
+  changeNamePrevs(id, newID) {
+    const prevHF = this.prevHoverFeatures_[id];
+    const prevSF = this.prevSelectedFeatures_[id];
+    this.prevHoverFeatures_[newID] = prevHF;
+    this.prevSelectedFeatures_[newID] = prevSF;
+    delete this.prevHoverFeatures_[id];
+    delete this.prevSelectedFeatures_[id];
+  }
+
+  /**
    * TODO
    *
    * @private
    * @function
    */
   clickOnMap_(evt) {
-    console.log('pulsado');
     if (this.activated_ === true) {
       const impl = this.getImpl();
       // TODO [FIX] Think a better solution for removePopup on unselect features
