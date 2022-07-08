@@ -194,7 +194,7 @@ export default class AttributeTableControl extends M.Control {
 
     if (M.utils.isString(layerSearch)) {
       this.facadeMap_.getLayers().forEach((lay) => {
-        if (lay.name === layerSearch) {
+        if (lay.id === layerSearch) {
           layersFind.push(lay);
         }
       });
@@ -209,7 +209,7 @@ export default class AttributeTableControl extends M.Control {
     }
     if (M.utils.isArray(layerSearch)) {
       this.facadeMap_.getLayers().forEach((lay) => {
-        if (layerSearch.indexOf(lay.name) >= 0) {
+        if (layerSearch.indexOf(lay.id) >= 0) {
           layersFind.push(lay);
         }
       });

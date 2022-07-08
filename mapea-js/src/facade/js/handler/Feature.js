@@ -94,13 +94,14 @@ class Features extends Base {
    * @function
    */
   clickOnMap_(evt) {
+    console.log('pulsado');
     if (this.activated_ === true) {
       const impl = this.getImpl();
       // TODO [FIX] Think a better solution for removePopup on unselect features
       this.map_.removePopup();
       this.layers_.forEach((layer) => {
         const clickedFeatures = impl.getFeaturesByLayer(evt, layer);
-        const prevFeatures = [...(this.prevSelectedFeatures_[layer.name])];
+        const prevFeatures = [...(this.prevSelectedFeatures_[layer.id])];
         // no features selected then unselect prev selected features
         if (clickedFeatures.length === 0 && prevFeatures.length > 0) {
           this.unselectFeatures(prevFeatures, layer, evt);
@@ -132,7 +133,7 @@ class Features extends Base {
 
       this.layers_.forEach((layer) => {
         const hoveredFeatures = impl.getFeaturesByLayer(evt, layer);
-        const prevFeatures = [...this.prevHoverFeatures_[layer.name]];
+        const prevFeatures = [...this.prevHoverFeatures_[layer.id]];
         // no features selected then unselect prev selected features
         if (hoveredFeatures.length === 0 && prevFeatures.length > 0) {
           this.leaveFeatures_(prevFeatures, layer, evt);
@@ -162,7 +163,7 @@ class Features extends Base {
    * @api
    */
   selectFeatures(features, layer, evt) {
-    this.prevSelectedFeatures_[layer.name] = this.prevSelectedFeatures_[layer.name]
+    this.prevSelectedFeatures_[layer.id] = this.prevSelectedFeatures_[layer.id]
       .concat(features);
     const layerImpl = layer.getImpl();
     if (isFunction(layerImpl.selectFeatures)) {
@@ -180,8 +181,8 @@ class Features extends Base {
    */
   unselectFeatures(features, layer, evt) {
     // removes unselected features
-    this.prevSelectedFeatures_[layer.name] =
-      this.prevSelectedFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
+    this.prevSelectedFeatures_[layer.id] =
+      this.prevSelectedFeatures_[layer.id].filter(pf => !features.some(f => f.equals(pf)));
     const layerImpl = layer.getImpl();
     if (isFunction(layerImpl.unselectFeatures)) {
       layerImpl.unselectFeatures(features, evt.coord);
@@ -197,7 +198,7 @@ class Features extends Base {
    * @api
    */
   hoverFeatures_(features, layer, evt) {
-    this.prevHoverFeatures_[layer.name] = this.prevHoverFeatures_[layer.name].concat(features);
+    this.prevHoverFeatures_[layer.id] = this.prevHoverFeatures_[layer.id].concat(features);
     layer.fire(EventType.HOVER_FEATURES, [features, evt]);
     this.getImpl().addCursorPointer();
   }
@@ -210,8 +211,8 @@ class Features extends Base {
    * @api
    */
   leaveFeatures_(features, layer, evt) {
-    this.prevHoverFeatures_[layer.name] =
-      this.prevHoverFeatures_[layer.name].filter(pf => !features.some(f => f.equals(pf)));
+    this.prevHoverFeatures_[layer.id] =
+      this.prevHoverFeatures_[layer.id].filter(pf => !features.some(f => f.equals(pf)));
     layer.fire(EventType.LEAVE_FEATURES, [features, evt.coord]);
     this.getImpl().removeCursorPointer();
   }
@@ -258,8 +259,8 @@ class Features extends Base {
   addLayer(layer) {
     if (!includes(this.layers_, layer)) {
       this.layers_.push(layer);
-      this.prevSelectedFeatures_[layer.name] = [];
-      this.prevHoverFeatures_[layer.name] = [];
+      this.prevSelectedFeatures_[layer.id] = [];
+      this.prevHoverFeatures_[layer.id] = [];
     }
   }
 
@@ -274,10 +275,10 @@ class Features extends Base {
    */
   removeLayer(layer) {
     this.layers_ = this.layers_.filter(layer2 => !layer2.equals(layer));
-    this.prevSelectedFeatures_[layer.name] = null;
-    this.prevHoverFeatures_[layer.name] = null;
-    delete this.prevSelectedFeatures_[layer.name];
-    delete this.prevHoverFeatures_[layer.name];
+    this.prevSelectedFeatures_[layer.id] = null;
+    this.prevHoverFeatures_[layer.id] = null;
+    delete this.prevSelectedFeatures_[layer.id];
+    delete this.prevHoverFeatures_[layer.id];
   }
 
   /**
