@@ -217,22 +217,6 @@ export default class SearchstreetControl extends ol.control.Control {
     return this.element_;
   }
 
-
-  /**
-   * This function remove the points drawn on the map
-   *
-   * @private
-   * @function
-   */
-  removePoints() {
-    for (let i = 0, ilen = this.listPoints.length; i < ilen; i += 1) {
-      this.facadeMap_.removeFeatures(this.listPoints[i].map(M.impl.Feature.olFeature2Facade));
-      // this.facadeMap_.removeFeatures(this.listPoints[i].map(M.Feature));
-    }
-    this.listPoints = [];
-  }
-
-
   /**
    * This function destroys this control and clearing the HTML
    *
@@ -242,7 +226,6 @@ export default class SearchstreetControl extends ol.control.Control {
    */
   destroy() {
     this.facadeMap_.areasContainer.getElementsByClassName('m-top m-right')[0].classList.remove('top-extra');
-    this.removePoints();
     this.facadeMap_.getMapImpl().removeControl(this);
     this.facadeMap_.getImpl().removePopup();
     this.facadeMap_ = null;
