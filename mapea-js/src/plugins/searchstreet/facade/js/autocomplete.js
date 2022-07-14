@@ -213,7 +213,7 @@ export default class Autocomplete extends M.Plugin {
    *        evt - Keypress event
    */
   hiddenAutocomplete_(evt) {
-    if (evt.keyCode === 27) {
+    if (evt.keyCode === 27 || evt.keyCode === 13) {
       this.cancelSearch_(evt);
     }
   }
