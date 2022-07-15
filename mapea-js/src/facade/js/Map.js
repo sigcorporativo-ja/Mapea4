@@ -1972,7 +1972,7 @@ class Map extends Base {
    *
    * @public
    * @function
-   * @param { Array < Plugin > } plugins  plugins to add to the map
+   * @param {Array<Plugin>} plugins  plugins to add to the map
    * @returns {Map}
    * @api
    */
