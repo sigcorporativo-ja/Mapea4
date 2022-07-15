@@ -1968,6 +1968,32 @@ class Map extends Base {
   }
 
   /**
+   * This function adds plugins
+   *
+   * @public
+   * @function
+   * @param { Array < Plugin > } plugins  plugins to add to the map
+   * @returns {Map}
+   * @api
+   */
+  addPlugins(plugins) {
+    // checks if the param is null or empty
+    if (isNullOrEmpty(plugins)) {
+      Exception(getValue('exception').no_plugins);
+    }
+    let allPlugins = plugins;
+    if (!isArray(plugins)) {
+      allPlugins = [plugins];
+    }
+
+    allPlugins.forEach((plugin) => {
+      this.addPlugin(plugin);
+    });
+
+    return this;
+  }
+
+  /**
    * This function removes the specified plugins from the map
    *
    * @function
