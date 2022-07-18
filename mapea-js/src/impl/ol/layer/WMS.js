@@ -216,18 +216,6 @@ class WMS extends LayerBase {
     } else { // just one WMS layer
       this.addSingleLayer_();
     }
-
-    if (this.legendUrl_ === concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
-      this.legendUrl_ = addParameters(this.url, {
-        SERVICE: 'WMS',
-        VERSION: this.version,
-        REQUEST: 'GetLegendGraphic',
-        LAYER: this.name,
-        FORMAT: 'image/png',
-        EXCEPTIONS: 'image/png',
-        STYLE: this.styles[0] || '',
-      });
-    }
   }
 
   /**
@@ -573,7 +561,9 @@ class WMS extends LayerBase {
             const getCapabilitiesDocument = response.xml;
             const getCapabilitiesParser = new FormatWMS();
             const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
-
+            if (isUndefined(this.version)) {
+              this.version = getCapabilities.version;
+            }
             const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
             success(getCapabilitiesUtils);
           } else {
@@ -581,9 +571,23 @@ class WMS extends LayerBase {
               const getCapabilitiesDocument = response2.xml;
               const getCapabilitiesParser = new FormatWMS();
               const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
-
+              if (isUndefined(this.version)) {
+                this.version = getCapabilities.version;
+              }
               const capabilities = new GetCapabilities(getCapabilities, layerUrl, projection);
               success(capabilities);
+            });
+          }
+          if (this.legendUrl_ ===
+            concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
+            this.legendUrl_ = addParameters(this.url, {
+              SERVICE: 'WMS',
+              VERSION: this.version,
+              REQUEST: 'GetLegendGraphic',
+              LAYER: this.name,
+              FORMAT: 'image/png',
+              EXCEPTIONS: 'image/png',
+              STYLE: this.styles[0] || '',
             });
           }
         });
