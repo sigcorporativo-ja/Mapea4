@@ -216,6 +216,7 @@ class WMS extends LayerBase {
     } else if (isUndefined(this.version)) { // just one WMS layer
       this.getCapabilities().then(() => {
         this.addSingleLayer_();
+        this.options.params.version = this.version;
       });
     } else {
       this.addSingleLayer_();
