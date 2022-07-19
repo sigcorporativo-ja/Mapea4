@@ -213,7 +213,11 @@ class WMS extends LayerBase {
     // checks if it is a WMS_FULL
     if (isNullOrEmpty(this.name)) { // WMS_FULL (add all wms layers)
       this.addAllLayers_();
-    } else { // just one WMS layer
+    } else if (isUndefined(this.version)) { // just one WMS layer
+      this.getCapabilities().then(() => {
+        this.addSingleLayer_();
+      });
+    } else {
       this.addSingleLayer_();
     }
   }
@@ -246,83 +250,81 @@ class WMS extends LayerBase {
    * @function
    */
   addSingleLayer_() {
-    this.getCapabilities().then(() => {
-      this.facadeLayer_.calculateMaxExtent().then((extent) => {
-        const minResolution = this.options.minResolution;
-        const maxResolution = this.options.maxResolution;
-        const opacity = this.opacity_;
-        const zIndex = this.zIndex_;
-        const visible = this.visibility && (this.options.visibility !== false);
-        let resolutions = this.map.getResolutions();
-        if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
-          resolutions = this.resolutions_;
-        } else if (isNullOrEmpty(resolutions)) {
-          // generates the resolution
-          const zoomLevels = this.getNumZoomLevels();
-          const size = this.map.getMapImpl().getSize();
-          const units = this.map.getProjection().units;
-          if (!isNullOrEmpty(minResolution) && !isNullOrEmpty(maxResolution)) {
-            resolutions = fillResolutions(minResolution, maxResolution, zoomLevels);
-          } else {
-            resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
-          }
-        }
-        const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
-        if (this.tiled === true) {
-          this.ol3Layer = new OLLayerTile(extend({
-            visible,
-            source,
-            extent,
-            minResolution,
-            maxResolution,
-            opacity,
-            zIndex,
-          }, this.vendorOptions_, true));
+    this.facadeLayer_.calculateMaxExtent().then((extent) => {
+      const minResolution = this.options.minResolution;
+      const maxResolution = this.options.maxResolution;
+      const opacity = this.opacity_;
+      const zIndex = this.zIndex_;
+      const visible = this.visibility && (this.options.visibility !== false);
+      let resolutions = this.map.getResolutions();
+      if (isNullOrEmpty(resolutions) && !isNullOrEmpty(this.resolutions_)) {
+        resolutions = this.resolutions_;
+      } else if (isNullOrEmpty(resolutions)) {
+        // generates the resolution
+        const zoomLevels = this.getNumZoomLevels();
+        const size = this.map.getMapImpl().getSize();
+        const units = this.map.getProjection().units;
+        if (!isNullOrEmpty(minResolution) && !isNullOrEmpty(maxResolution)) {
+          resolutions = fillResolutions(minResolution, maxResolution, zoomLevels);
         } else {
-          this.ol3Layer = new OLLayerImage(extend({
-            visible,
-            source,
-            extent,
-            minResolution,
-            maxResolution,
-            opacity,
-            zIndex,
-          }, this.vendorOptions_, true));
+          resolutions = generateResolutionsFromExtent(extent, size, zoomLevels, units);
         }
-        this.map.getMapImpl().addLayer(this.ol3Layer);
-        // Fire the Event LOAD.
-        this.facadeLayer_.fire(EventType.LOAD);
-        // sets its visibility if it is in range
-        if (this.isVisible() && !this.inRange()) {
-          this.setVisible(false);
-        } else {
-          this.setVisible(this.visibility);
-        }
+      }
+      const source = this.createOLSource_(resolutions, minResolution, maxResolution, extent);
+      if (this.tiled === true) {
+        this.ol3Layer = new OLLayerTile(extend({
+          visible,
+          source,
+          extent,
+          minResolution,
+          maxResolution,
+          opacity,
+          zIndex,
+        }, this.vendorOptions_, true));
+      } else {
+        this.ol3Layer = new OLLayerImage(extend({
+          visible,
+          source,
+          extent,
+          minResolution,
+          maxResolution,
+          opacity,
+          zIndex,
+        }, this.vendorOptions_, true));
+      }
+      this.map.getMapImpl().addLayer(this.ol3Layer);
+      // Fire the Event LOAD.
+      this.facadeLayer_.fire(EventType.LOAD);
+      // sets its visibility if it is in range
+      if (this.isVisible() && !this.inRange()) {
+        this.setVisible(false);
+      } else {
+        this.setVisible(this.visibility);
+      }
 
-        // sets its z-index
-        if (zIndex !== null) {
-          this.setZIndex(zIndex);
-        }
-        // sets the resolutions
-        if (this.resolutions_ !== null) {
-          this.setResolutions(this.resolutions_);
-        }
-        // activates animation for base layers or animated parameters
-        const animated = ((this.transparent === false) || (this.options.animated === true));
-        this.ol3Layer.set('animated', animated);
-        if (this.legendUrl_ ===
-          concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
-          this.legendUrl_ = addParameters(this.url, {
-            SERVICE: 'WMS',
-            VERSION: this.version,
-            REQUEST: 'GetLegendGraphic',
-            LAYER: this.name,
-            FORMAT: 'image/png',
-            EXCEPTIONS: 'image/png',
-            STYLE: this.styles[0] || '',
-          });
-        }
-      });
+      // sets its z-index
+      if (zIndex !== null) {
+        this.setZIndex(zIndex);
+      }
+      // sets the resolutions
+      if (this.resolutions_ !== null) {
+        this.setResolutions(this.resolutions_);
+      }
+      // activates animation for base layers or animated parameters
+      const animated = ((this.transparent === false) || (this.options.animated === true));
+      this.ol3Layer.set('animated', animated);
+      if (this.legendUrl_ ===
+        concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
+        this.legendUrl_ = addParameters(this.url, {
+          SERVICE: 'WMS',
+          VERSION: this.version,
+          REQUEST: 'GetLegendGraphic',
+          LAYER: this.name,
+          FORMAT: 'image/png',
+          EXCEPTIONS: 'image/png',
+          STYLE: this.styles[0] || '',
+        });
+      }
     });
   }
 
