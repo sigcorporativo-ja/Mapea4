@@ -506,7 +506,9 @@ export default class SearchstreetControl extends M.Control {
 
     this.facadeMap_.removePopup();
     if (this.getImpl().listPoints.length > 0) {
-      this.getImpl().removePoints();
+      const layers = this.facadeMap_.getLayers();
+      const layerDraw = layers.filter(layer => layer.name === '__draw__')[0];
+      layerDraw.removeFeatures(layerDraw.getFeatures());
     }
     if (!M.utils.isUndefined(resultsTemplateVars.docs[0])) {
       this.getImpl().drawPoints(resultsTemplateVars.docs);
@@ -698,7 +700,9 @@ export default class SearchstreetControl extends M.Control {
   clearSearchs_() {
     this.element_.classList.remove('shown');
     this.facadeMap_.removePopup();
-    this.getImpl().removePoints();
+    const layers = this.facadeMap_.getLayers();
+    const layerDraw = layers.filter(layer => layer.name === '__draw__')[0];
+    layerDraw.removeFeatures(layerDraw.getFeatures());
     this.input_.value = '';
     this.resultsContainer_.innerHTML = '';
     this.resultsAutocomplete_.innerHTML = '';
