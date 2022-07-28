@@ -2329,6 +2329,18 @@ class Map extends MObject {
     }
     return img;
   }
+
+  /**
+   * This function set scale to map
+   *
+   * @function
+   * @public
+   * @api
+   * @param { Number }
+   */
+  setToClosestScale(resolution) {
+    this.getMapImpl().getView().setResolution(resolution);
+  }
 }
 
 /**

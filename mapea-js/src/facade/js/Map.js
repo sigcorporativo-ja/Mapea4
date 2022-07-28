@@ -14,6 +14,7 @@ import {
   isObject,
   getEnvolvedExtent,
   generateResolutionsFromExtent,
+  getResolutionFromScale,
 } from './util/Utils.js';
 import { getValue } from './i18n/language';
 import Exception from './exception/exception';
@@ -2789,6 +2790,19 @@ class Map extends Base {
    */
   getImageMap() {
     return this.getImpl().getImageMap();
+  }
+
+  /**
+   * This function set scale to map
+   *
+   * @function
+   * @public
+   * @param { Number }
+   * @api
+   */
+  setToClosestScale(scale) {
+    const resolution = getResolutionFromScale(scale, this.getProjection().units);
+    this.getImpl().setToClosestScale(resolution);
   }
 }
 
