@@ -123,7 +123,6 @@ export default class SearchstreetIntegrated extends SearchstreetControl {
     const layerDraw = layers.filter(layer => layer.name === '__draw__')[0];
     layerDraw.removeFeatures(layerDraw.getFeatures());
     this.facadeMap_.removePopup();
-    this.getImpl().removePoints();
     this.input_.value = '';
     this.resultsContainer_.innerHTML = '';
     this.resultsAutocomplete_.innerHTML = '';
