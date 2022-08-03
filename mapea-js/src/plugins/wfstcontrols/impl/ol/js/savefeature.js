@@ -99,7 +99,6 @@ export default class SaveFeature extends M.impl.Control {
       const wfstRequestText = oSerializer.serializeToString(wfstRequestXml);
 
       // const wfstRequestText = goog.dom.xml.serialize(wfstRequestXml);
-      M.proxy(false);
       M.remote.post(this.layer_.url, wfstRequestText).then((response) => {
         // clears layer
         const clearCtrl = this.facadeMap_.getControls(FClearFeature.NAME)[0];
@@ -112,7 +111,6 @@ export default class SaveFeature extends M.impl.Control {
           M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
         }
       });
-      M.proxy(true);
     });
   }
 
