@@ -213,6 +213,10 @@ class WMS extends LayerBase {
     // checks if it is a WMS_FULL
     if (isNullOrEmpty(this.name)) { // WMS_FULL (add all wms layers)
       this.addAllLayers_();
+    } else if (isUndefined(this.version)) { // just one WMS layer
+      this.getCapabilities().then(() => {
+        this.addSingleLayer_();
+      });
     } else {
       this.addSingleLayer_();
     }
