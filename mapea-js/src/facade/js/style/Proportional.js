@@ -352,6 +352,8 @@ class Proportional extends StyleComposite {
           let featureStyle = style.clone();
           if ((featureStyle instanceof StyleGeneric)) {
             featureStyle = new StylePoint(featureStyle.getOptions().point);
+          } else if (!(featureStyle instanceof StylePoint)) {
+            featureStyle = new StylePoint(featureStyle.getOptions());
           }
           const sizeAttribute = Proportional.getSizeAttribute(featureStyle);
 
