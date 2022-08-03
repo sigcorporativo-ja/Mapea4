@@ -212,9 +212,14 @@ class Category extends Composite {
           });
         });
       } else {
-        style.toImage().then((data) => {
-          image.src = data;
-        });
+        const src = style.toImage();
+        if (src instanceof Promise) {
+          src.then((data) => {
+            image.src = data;
+          });
+        } else {
+          image.src = src;
+        }
       }
     }
   }
