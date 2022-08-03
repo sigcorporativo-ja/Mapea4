@@ -96,6 +96,12 @@ export default class EditAttribute extends M.impl.Control {
         icon: 'g-cartografia-texto',
         title: POPUP_TITLE,
         content: htmlAsText,
+        listeners: [{
+          selector: '#m-button-editattributeSave',
+          all: true,
+          type: 'click',
+          callback: e => this.saveAttributes_(e),
+        }],
       };
       this.popup_ = this.facadeMap_.getPopup();
       if (!M.utils.isNullOrEmpty(this.popup_)) {
@@ -115,21 +121,6 @@ export default class EditAttribute extends M.impl.Control {
         this.popup_.addTab(popupContent);
         this.facadeMap_.addPopup(this.popup_, coordinate);
       }
-
-      // adds save button events on show
-      const popupButton = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
-      if (!M.utils.isNullOrEmpty(popupButton)) {
-        popupButton.addEventListener('click', this.saveAttributes_.bind(this));
-      }
-
-      // removes events on destroy
-      this.popup_.on(M.evt.DESTROY, () => {
-        const popupButton2 = this.popup_.getContent().querySelector('button#m-button-editattributeSave');
-        if (!M.utils.isNullOrEmpty(popupButton2)) {
-          popupButton.removeEventListener('click', this.saveAttributes_.bind(this));
-        }
-        this.unselectFeature_();
-      }, this);
     }
   }
 
@@ -194,6 +185,7 @@ export default class EditAttribute extends M.impl.Control {
         } else {
           M.dialog.error('Ha ocurrido un error al guardar: '.concat(response.text));
         }
+        this.unselectFeature_();
       });
     });
   }
