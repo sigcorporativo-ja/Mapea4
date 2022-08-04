@@ -1,35 +1,34 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <kml xmlns="http://earth.google.com/kml/2.1">
-<Document>
-            <Style id="arbol">
-              <IconStyle>
-                <Icon>
-                  <href>http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/ico_arbol.png</href>
-                </Icon>
-              </IconStyle>
-              <LineStyle>
-                <width>2</width>
-              </LineStyle>
-            </Style>
-    <open>1</open>
-        <ScreenOverlay>
-            <name>Nombre</name>
+   <Document>
+      <Style id="arbol">
+         <IconStyle>
             <Icon>
-                <href>http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logojunta.gif</href>
+               <href>data:image/png;base64,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</href>
             </Icon>
-            <overlayXY x="0.5" y="1" xunits="fraction" yunits="fraction"/>
-            <screenXY x="0.5" y="1" xunits="fraction" yunits="fraction"/>
-            <rotationXY x="0" y="0" xunits="fraction" yunits="fraction"/>
-            <size x="94" y="73" xunits="pixels" yunits="pixels"/>
-        </ScreenOverlay>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="102">
-    <styleUrl>#arbol</styleUrl>
-        <name>Agracejal de la Cuerda de Vallehondo</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </IconStyle>
+         <LineStyle>
+            <width>2</width>
+         </LineStyle>
+      </Style>
+      <open>1</open>
+      <ScreenOverlay>
+         <name>Nombre</name>
+         <Icon>
+            <href>http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logojunta.gif</href>
+         </Icon>
+         <overlayXY x="0.5" y="1" xunits="fraction" yunits="fraction" />
+         <screenXY x="0.5" y="1" xunits="fraction" yunits="fraction" />
+         <rotationXY x="0" y="0" xunits="fraction" yunits="fraction" />
+         <size x="94" y="73" xunits="pixels" yunits="pixels" />
+      </ScreenOverlay>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="102">
+         <styleUrl>#arbol</styleUrl>
+         <name>Agracejal de la Cuerda de Vallehondo</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -51,21 +50,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.58288384444444,37.8449611,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="96">
-    <styleUrl>#arbol</styleUrl>
-        <name>Alcornocal de la Indiana</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="96">
+         <styleUrl>#arbol</styleUrl>
+         <name>Alcornocal de la Indiana</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -87,21 +84,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.85889086666667,37.1916069583333,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="97">
-    <styleUrl>#arbol</styleUrl>
-        <name>Alcornocal de la Mocheta</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="97">
+         <styleUrl>#arbol</styleUrl>
+         <name>Alcornocal de la Mocheta</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -128,21 +123,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.48207405555556,37.2678068222222,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="106">
-    <styleUrl>#arbol</styleUrl>
-        <name>Alcornoques de la Finca El Alcornocal</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="106">
+         <styleUrl>#arbol</styleUrl>
+         <name>Alcornoques de la Finca El Alcornocal</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -169,21 +162,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.77237164166667,37.9537608166667,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="99">
-    <styleUrl>#arbol</styleUrl>
-        <name>Almezar de La Cartuja</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="99">
+         <styleUrl>#arbol</styleUrl>
+         <name>Almezar de La Cartuja</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -210,21 +201,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.72789629444444,37.9538222944445,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="94">
-    <styleUrl>#arbol</styleUrl>
-        <name>Ciruelos Silvestres de la Hoya de Santa Mar&#xED;a</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="94">
+         <styleUrl>#arbol</styleUrl>
+         <name>Ciruelos Silvestres de la Hoya de Santa María</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -251,21 +240,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.85838345833333,37.9930792277778,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="90">
-    <styleUrl>#arbol</styleUrl>
-        <name>Encinar de Coronado</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="90">
+         <styleUrl>#arbol</styleUrl>
+         <name>Encinar de Coronado</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -292,21 +279,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.81015456666667,37.9802310694444,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="93">
-    <styleUrl>#arbol</styleUrl>
-        <name>Eucaliptos de la Casa de El Colmenar</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="93">
+         <styleUrl>#arbol</styleUrl>
+         <name>Eucaliptos de la Casa de El Colmenar</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -333,21 +318,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-6.194889375,37.2616089861111,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="105">
-    <styleUrl>#arbol</styleUrl>
-        <name>Lentiscos de La Motilla</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="105">
+         <styleUrl>#arbol</styleUrl>
+         <name>Lentiscos de La Motilla</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -374,21 +357,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.26002325,37.581755975,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="89">
-    <styleUrl>#arbol</styleUrl>
-        <name>Madro&#xF1;os de la Finca la Algaidilla</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="89">
+         <styleUrl>#arbol</styleUrl>
+         <name>Madroños de la Finca la Algaidilla</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -415,21 +396,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-4.79915325833333,37.2511880027778,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="88">
-    <styleUrl>#arbol</styleUrl>
-        <name>Melojar de Cerro Negrillo</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="88">
+         <styleUrl>#arbol</styleUrl>
+         <name>Melojar de Cerro Negrillo</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -456,21 +435,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.58335940833333,37.9180365972222,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="107">
-    <styleUrl>#arbol</styleUrl>
-        <name>Melojar de la Ca&#xF1;ada del del Robledo</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="107">
+         <styleUrl>#arbol</styleUrl>
+         <name>Melojar de la Cañada del del Robledo</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -497,21 +474,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.59183774722222,37.9617881972222,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="101">
-    <styleUrl>#arbol</styleUrl>
-        <name>Melojar de los Navazos</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="101">
+         <styleUrl>#arbol</styleUrl>
+         <name>Melojar de los Navazos</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -533,21 +508,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.59758210277778,37.9581744916667,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="92">
-    <styleUrl>#arbol</styleUrl>
-        <name>Pinar de Los Planos</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="92">
+         <styleUrl>#arbol</styleUrl>
+         <name>Pinar de Los Planos</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -574,21 +547,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-6.18468338611111,37.25382425,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="91">
-    <styleUrl>#arbol</styleUrl>
-        <name>Quejigar de La Abejera</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="91">
+         <styleUrl>#arbol</styleUrl>
+         <name>Quejigar de La Abejera</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -615,21 +586,19 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.59693125555556,37.9580484833333,14000</coordinates>
-        </Point>
-    </Placemark>
-<!-- Detalle del Equipamiento -->
-    <Placemark id="103">
-    <styleUrl>#arbol</styleUrl>
-        <name>Ribera del Arroyo de La Brava</name>
-        <visibility>0</visibility>
-        <Snippet maxLines="2"></Snippet>
-        <description>
-        <![CDATA[<table>
+         </Point>
+      </Placemark>
+      <!-- Detalle del Equipamiento -->
+      <Placemark id="103">
+         <styleUrl>#arbol</styleUrl>
+         <name>Ribera del Arroyo de La Brava</name>
+         <visibility>0</visibility>
+         <Snippet maxLines="2" />
+         <description><![CDATA[<table>
         <tr>
             <td></td>
             <td><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/logoJunta.png" border="0"></td>
@@ -656,12 +625,11 @@
         <tr align="center">
             <td colspan="3" ><img src="http://www.juntadeandalucia.es/medioambiente/BIO/DOC/ARB_SING/gfx/cabecera.png" border="0"></td>
         </tr>
-        </table>]]>
-        </description>
-        <Point>
+        </table>]]></description>
+         <Point>
             <!-- LONG., LAT., AND THEN ALTITUDE -->
             <coordinates>-5.72800698888889,37.9472941027778,14000</coordinates>
-        </Point>
-    </Placemark>
-</Document>
+         </Point>
+      </Placemark>
+   </Document>
 </kml>
