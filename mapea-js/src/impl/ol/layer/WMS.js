@@ -313,18 +313,6 @@ class WMS extends LayerBase {
       // activates animation for base layers or animated parameters
       const animated = ((this.transparent === false) || (this.options.animated === true));
       this.ol3Layer.set('animated', animated);
-      if (this.legendUrl_ ===
-        concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
-        this.legendUrl_ = addParameters(this.url, {
-          SERVICE: 'WMS',
-          VERSION: this.version,
-          REQUEST: 'GetLegendGraphic',
-          LAYER: this.name,
-          FORMAT: 'image/png',
-          EXCEPTIONS: 'image/png',
-          STYLE: this.styles[0] || '',
-        });
-      }
     });
   }
 
@@ -430,18 +418,6 @@ class WMS extends LayerBase {
         layer.setZIndex(ImplMap.Z_INDEX[LayerType.WMS] + baseLayersIdx);
         baseLayersIdx += 1;
       });
-      if (this.legendUrl_ ===
-        concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
-        this.legendUrl_ = addParameters(this.url, {
-          SERVICE: 'WMS',
-          VERSION: this.version,
-          REQUEST: 'GetLegendGraphic',
-          LAYER: this.name,
-          FORMAT: 'image/png',
-          EXCEPTIONS: 'image/png',
-          STYLE: this.styles[0] || '',
-        });
-      }
     });
   }
 
@@ -608,6 +584,31 @@ class WMS extends LayerBase {
           }
         });
       });
+      if (this.legendUrl_ ===
+        concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
+        this.getCapabilitiesPromise.then((getCapabilities) => {
+          if (parseInt(this.version.replaceAll('.', ''), 10) < 130) {
+            this.legendUrl_ = addParameters(this.url, {
+              SERVICE: 'WMS',
+              VERSION: this.version,
+              REQUEST: 'GetLegendGraphic',
+              LAYER: this.name,
+              FORMAT: 'image/png',
+              EXCEPTIONS: 'image/png',
+              STYLE: this.styles[0] || '',
+            });
+          } else {
+            let layer = getCapabilities.capabilities.Capability.Layer.Layer;
+            if (layer.length > 1) {
+              layer =
+                layer.find(elm => elm.Name === this.name);
+            } else {
+              layer = layer[0];
+            }
+            this.legendUrl_ = layer.Style[0].LegendURL[0].OnlineResource;
+          }
+        });
+      }
     }
     return this.getCapabilitiesPromise;
   }
