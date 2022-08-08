@@ -4,6 +4,11 @@
          "name": "attributetable",
          "versions": [
             {
+               "mapea": "6.2.0",
+               "js": "https:${mapea.url}/plugins/attributetable/attributetable-2.0.1.ol.min.js",
+               "css": "https:${mapea.url}/plugins/attributetable/attributetable-2.0.1.min.css"
+            },
+            {
                "mapea": "6.1.0",
                "js": "https:${mapea.url}/plugins/attributetable/attributetable-2.0.1.ol.min.js",
                "css": "https:${mapea.url}/plugins/attributetable/attributetable-2.0.1.min.css"
@@ -89,90 +94,100 @@
          "name": "printerdos",
          "versions": [
             {
+               "mapea": "6.2.0",
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
+            },
+            {
                "mapea": "6.1.0",
                "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
                "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "6.0.0",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "5.2.0",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "5.1.0",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "5.0.1",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "5.0.0",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "4.3.0",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "4.2.5",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "4.2.4",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "4.2.1",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "4.2.0",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "4.1.0",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "4.0.4",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "4.0.3",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "4.0.2",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             },
             {
                "mapea": "4.0.0",
-               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.ol.min.js",
-               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.0.0.min.css"
+               "js": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printerdos/printerdos-4.1.0.min.css"
             }
          ]
       },
       {
          "name": "geosearch",
          "versions": [
+            {
+               "mapea": "6.2.0",
+               "js": "https:${mapea.url}/plugins/geosearch/geosearch-2.0.2.ol.min.js",
+               "css": "https:${mapea.url}/plugins/geosearch/geosearch-2.0.2.min.css"
+            },
             {
                "mapea": "6.1.0",
                "js": "https:${mapea.url}/plugins/geosearch/geosearch-2.0.2.ol.min.js",
@@ -259,6 +274,11 @@
          "name": "measurebar",
          "versions": [
             {
+               "mapea": "6.2.0",
+               "js": "https:${mapea.url}/plugins/measurebar/measurebar-3.1.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/measurebar/measurebar-3.1.0.min.css"
+            },
+            {
                "mapea": "6.1.0",
                "js": "https:${mapea.url}/plugins/measurebar/measurebar-3.1.0.ol.min.js",
                "css": "https:${mapea.url}/plugins/measurebar/measurebar-3.1.0.min.css"
@@ -343,6 +363,11 @@
       {
          "name": "printer",
          "versions": [
+            {
+               "mapea": "6.2.0",
+               "js": "https:${mapea.url}/plugins/printer/printer-2.0.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/printer/printer-2.0.0.min.css"
+            },
             {
                "mapea": "6.1.0",
                "js": "https:${mapea.url}/plugins/printer/printer-2.0.0.ol.min.js",
@@ -429,6 +454,11 @@
          "name": "geosearchbylocation",
          "versions": [
             {
+               "mapea": "6.2.0",
+               "js": "https:${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.0.ol.min.js",
+               "css": "https:${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.0.min.css"
+            },
+            {
                "mapea": "6.1.0",
                "js": "https:${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.0.ol.min.js",
                "css": "https:${mapea.url}/plugins/geosearchbylocation/geosearchbylocation-2.0.0.min.css"
@@ -513,6 +543,11 @@
       {
          "name": "geosearchbycoordinates",
          "versions": [
+            {
+               "mapea": "6.2.0",
+               "js": "https:${mapea.url}/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.1.ol.min.js",
+               "css": "https:${mapea.url}/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.1.min.css"
+            },
             {
                "mapea": "6.1.0",
                "js": "https:${mapea.url}/plugins/geosearchbycoordinates/geosearchbycoordinates-1.0.1.ol.min.js",
@@ -599,6 +634,11 @@
          "name": "searchstreetgeosearch",
          "versions": [
             {
+               "mapea": "6.2.0",
+               "js": "https:${mapea.url}/plugins/searchstreetgeosearch/searchstreetgeosearch-2.0.2.ol.min.js",
+               "css": "https:${mapea.url}/plugins/searchstreetgeosearch/searchstreetgeosearch-2.0.2.min.css"
+            },
+            {
                "mapea": "6.1.0",
                "js": "https:${mapea.url}/plugins/searchstreetgeosearch/searchstreetgeosearch-2.0.2.ol.min.js",
                "css": "https:${mapea.url}/plugins/searchstreetgeosearch/searchstreetgeosearch-2.0.2.min.css"
@@ -683,6 +723,11 @@
       {
          "name": "searchstreet",
          "versions": [
+            {
+               "mapea": "6.2.0",
+               "js": "https:${mapea.url}/plugins/searchstreet/searchstreet-2.0.1.ol.min.js",
+               "css": "https:${mapea.url}/plugins/searchstreet/searchstreet-2.0.1.min.css"
+            },
             {
                "mapea": "6.1.0",
                "js": "https:${mapea.url}/plugins/searchstreet/searchstreet-2.0.1.ol.min.js",
@@ -769,6 +814,10 @@
          "name": "wfstcontrols",
          "versions": [
             {
+               "mapea": "6.2.0",
+               "js": "https:${mapea.url}/plugins/wfstcontrols/wfstcontrols-3.0.2.ol.min.js",
+               "css": "https:${mapea.url}/plugins/wfstcontrols/wfstcontrols-3.0.2.min.css"
+            },            {
                "mapea": "6.1.0",
                "js": "https:${mapea.url}/plugins/wfstcontrols/wfstcontrols-3.0.2.ol.min.js",
                "css": "https:${mapea.url}/plugins/wfstcontrols/wfstcontrols-3.0.2.min.css"

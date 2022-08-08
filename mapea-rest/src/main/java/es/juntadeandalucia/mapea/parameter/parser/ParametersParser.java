@@ -29,6 +29,7 @@ public abstract class ParametersParser {
       String maxextent = queryParams.getFirst("maxextent");
       String callbackFn = queryParams.getFirst("callback");
       String ticket = queryParams.getFirst("ticket");
+      String bgcolorcontainer = queryParams.getFirst("bgcolorcontainer");
       
       Parameters parameters = new Parameters();
       parameters.addContainer(container);
@@ -44,6 +45,7 @@ public abstract class ParametersParser {
       parameters.addMaxextent(maxextent);
       parameters.setCallbackFn(callbackFn);
       parameters.addTicket(ticket);
+      parameters.addBGColorContainer(bgcolorcontainer);
       
       return parameters;
    }

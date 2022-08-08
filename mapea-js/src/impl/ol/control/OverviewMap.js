@@ -4,6 +4,8 @@
 import { isNullOrEmpty, classToggle, replaceNode, extend } from 'M/util/Utils';
 import OLControlOverviewMap from 'ol/control/OverviewMap';
 import { get as getProj } from 'ol/proj';
+import OLLayerTile from 'ol/layer/Tile';
+import OLLayerImage from 'ol/layer/Image';
 import * as EventType from 'M/event/eventtype';
 import { WMS as WMSType } from 'M/layer/Type';
 import View from '../View';
@@ -185,11 +187,20 @@ class OverviewMap extends OLControlOverviewMap {
     const olLayers = [];
     map.getLayers().forEach((layer) => {
       if ((layer.type === WMSType || layer.transparent === false) && layer.isVisible()) {
-        const olLayer = layer.getImpl().cloneOLLayer();
-        if (isNullOrEmpty(olLayer)) {
+        // const olLayer = layer.getImpl().cloneOLLayer();
+        const olLayer = layer.getImpl().getOLLayer();
+        let layerAux = null;
+        const properties = olLayer.getProperties();
+        delete properties.map;
+        if (layer.tiled === true) {
+          layerAux = new OLLayerTile(properties);
+        } else {
+          layerAux = new OLLayerImage(properties);
+        }
+        if (isNullOrEmpty(layerAux)) {
           layer.getImpl().on(EventType.ADDED_TO_MAP, this.addLayer_.bind(this));
         } else {
-          olLayers.push(olLayer);
+          olLayers.push(layerAux);
         }
       }
     });

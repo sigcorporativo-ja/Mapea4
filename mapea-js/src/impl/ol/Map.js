@@ -2,6 +2,7 @@ import OLMap from 'ol/Map';
 import { get as getProj } from 'ol/proj';
 import OLProjection from 'ol/proj/Projection';
 import OLInteraction from 'ol/interaction/Interaction';
+import { MouseWheelZoom, DragPan } from 'ol/interaction';
 import MObject from 'M/Object';
 import FacadePanzoombar from 'M/control/Panzoombar';
 import * as LayerType from 'M/layer/Type';
@@ -20,6 +21,7 @@ import {
   getScaleFromResolution,
   fillResolutions,
   generateResolutionsFromExtent,
+  isUndefined,
 } from 'M/util/Utils';
 import ImplUtils from './util/Utils';
 import View from './View';
@@ -166,6 +168,13 @@ class Map extends MObject {
     this._resolutionsBaseLayer = false;
 
     /**
+     * Labels
+     * @private
+     * @type {Array}
+     */
+    this.label = [];
+
+    /**
      * Implementation of this map
      * @private
      * @type {ol.Map}
@@ -186,6 +195,26 @@ class Map extends MObject {
         return true;
       },
     }));
+
+    const interactions = this.map_.getInteractions().getArray();
+
+    /**
+     * MouseWheelZoom - Interaction
+     * @private
+     * @type {ol.Interaction}
+     */
+    this.mouseWheelZoom_ = interactions.find((interaction) => {
+      return interaction instanceof MouseWheelZoom;
+    });
+
+    /**
+     * DragPan - Interaction
+     * @private
+     * @type {ol.Interaction}
+     */
+    this.dragPan_ = interactions.find((interaction) => {
+      return interaction instanceof DragPan;
+    });
   }
   /**
    * This function gets the layers added to the map
@@ -1839,7 +1868,10 @@ class Map extends MObject {
       if (!isArray(prevBbox)) {
         prevBbox = [prevBbox.x.min, prevBbox.y.min, prevBbox.x.max, prevBbox.y.max];
       }
-      const newBbox = ImplUtils.transformExtent(prevBbox, olPrevProjection, olProjection);
+      let newBbox = ImplUtils.transformExtent(prevBbox, olPrevProjection, olProjection);
+      if (newBbox.includes(NaN)) {
+        newBbox = olProjection.getExtent();
+      }
       this.facadeMap_.setBbox(newBbox, {
         nearest: true,
       });
@@ -1892,6 +1924,8 @@ class Map extends MObject {
       const olPopup = popup.getImpl();
       const olMap = this.getMapImpl();
       olMap.removeOverlay(olPopup);
+      popup.fire(EventType.POPUP_REMOVED, [popup]);
+      this.facadeMap_.fire(EventType.POPUP_REMOVED, [popup]);
     }
     return this;
   }
@@ -1928,7 +1962,7 @@ class Map extends MObject {
     let resolutions = [];
 
     // zoom levels
-    let zoomLevels = 16;
+    let zoomLevels = M.config.ZOOM_LEVELS;
 
     // units
     const units = this.getProjection().units;
@@ -1996,9 +2030,9 @@ class Map extends MObject {
    * @function
    * @api stable
    */
-  addLabel(label) {
-    this.label = label;
-    label.show(this.facadeMap_);
+  addLabel(label, removePrevious) {
+    this.label.push(label);
+    label.show(this.facadeMap_, removePrevious);
     return this;
   }
 
@@ -2013,6 +2047,20 @@ class Map extends MObject {
    * @api stable
    */
   getLabel() {
+    return this.label[0];
+  }
+
+  /**
+   * This function adds a popup and removes the previous
+   * showed
+   *
+   * @public
+   * @param {M.impl.Popup} popup to add
+   * @returns {ol.Map}
+   * @function
+   * @api stable
+   */
+  getLabels() {
     return this.label;
   }
 
@@ -2024,11 +2072,25 @@ class Map extends MObject {
    * @function
    * @api stable
    */
-  removeLabel() {
+  removeLabel(label) {
+    let arrayLabels = label;
     if (!isNullOrEmpty(this.label)) {
-      const popup = this.label.getPopup();
-      this.removePopup(popup);
-      this.label = null;
+      if (isNullOrEmpty(label)) {
+        this.label.forEach(lbl => this.removePopup(lbl.getPopup()));
+        this.label = [];
+      } else {
+        if (!isArray(label)) {
+          arrayLabels = [label];
+        }
+        arrayLabels.forEach((elm) => {
+          const labelAux =
+            this.label.findIndex(lbl => lbl.text === elm.text && lbl.coord === elm.coord);
+          if (labelAux !== -1) {
+            this.removePopup(this.label[labelAux].getPopup());
+            this.label.splice(labelAux, 1);
+          }
+        });
+      }
     }
   }
 
@@ -2203,6 +2265,54 @@ class Map extends MObject {
     if (notIncluded) {
       BASE_LAYER_TYPES.push(type);
     }
+  }
+
+  /**
+   * This function enables or disables the interaction MouseWheelZoom
+   *
+   * @function
+   * @public
+   * @api
+   * @param { Boolean }
+   */
+  enableMouseWheel(active = true) {
+    if (!isNullOrEmpty(this.mouseWheelZoom_)) {
+      this.mouseWheelZoom_.setActive(active);
+    }
+  }
+
+  /**
+   * This function enables or disables the interaction DragPan
+   *
+   * @function
+   * @public
+   * @api
+   * @param { Boolean }
+   */
+  enableDrag(active = true) {
+    if (!isNullOrEmpty(this.dragPan_)) {
+      this.dragPan_.setActive(active);
+    }
+  }
+
+  /**
+   * This function generate image map
+   *
+   * @function
+   * @public
+   * @api
+   */
+  getImageMap() {
+    const canvas = this.map_.getViewport().querySelectorAll('.ol-layer canvas, canvas.ol-layer')[0];
+    let img = null;
+    if (!isUndefined(canvas)) {
+      try {
+        img = canvas.toDataURL();
+      } catch (e) {
+        throw e;
+      }
+    }
+    return img;
   }
 }
 

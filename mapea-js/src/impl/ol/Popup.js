@@ -227,8 +227,8 @@ class Popup extends OLOverlay {
    * @function
    * @api stable
    */
-  hide() {
-    this.facadeMap_.removePopup();
+  hide(popup) {
+    this.facadeMap_.removePopup(popup);
   }
 
   /**

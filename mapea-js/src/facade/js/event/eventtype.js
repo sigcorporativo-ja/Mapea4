@@ -296,3 +296,35 @@ export const MOVE = 'move';
  * @api
  */
 export const DOUBLE_CLICK = 'doubleclick';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const POPUP_ADDED = 'popup:added';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const POPUP_REMOVED = 'popup:removed';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const POPUP_ADDED_TAB = 'popup:addtabed';
+
+/**
+ * Event type
+ * @public
+ * @type {string}
+ * @api
+ */
+export const POPUP_REMOVED_TAB = 'popup:removedtab';

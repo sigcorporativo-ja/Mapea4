@@ -7,7 +7,7 @@ import layerswitcherTemplate from 'templates/layerswitcher.html';
 import ControlBase from './Control.js';
 import LayerBase from '../layer/Layer.js';
 import LayerGroup from '../layer/LayerGroup.js';
-import { isUndefined, isNullOrEmpty } from '../util/Utils.js';
+import { isUndefined, isNullOrEmpty, isNull } from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import { compileSync as compileTemplate } from '../util/Template.js';
 import * as LayerType from '../layer/Type.js';
@@ -227,38 +227,52 @@ class LayerSwitcher extends ControlBase {
       layers: [],
       layerGroups: [],
     };
-
-    layersOfLayerGroup.forEach((child) => {
-      if (child instanceof LayerBase) {
-        varTemplate.layers.push(LayerSwitcher.parseLayerForTemplate(child));
-      } else if (child instanceof LayerGroup) {
-        const varGroup = LayerSwitcher.parseGroupForTemplate(child, baseLayers);
-        if (!isNullOrEmpty(varGroup)) {
-          varTemplate.layerGroups.push(varGroup);
+    let promiseResult = null;
+    if (layersOfLayerGroup.length > 0) {
+      layersOfLayerGroup.forEach((child) => {
+        if (child instanceof LayerBase) {
+          varTemplate.layers.push(LayerSwitcher.parseLayerForTemplate(child));
+        } else if (child instanceof LayerGroup) {
+          varTemplate.layerGroups.push(LayerSwitcher.parseGroupForTemplate(child, baseLayers));
         }
-      }
-    });
+      });
 
-    // Resolve the layers promise
-    const promiseLayers = Promise.all(varTemplate.layers);
-    promiseLayers.then((layers) => {
-      if (!isNullOrEmpty(varTemplate)) {
-        varTemplate.layers = layers;
+      let visibleLevel = 0;
+      const layers = groupLayer.getAllLayers();
+      if (layers.every(l => l.isVisible())) {
+        visibleLevel = 2;
+      } else if (layers.some(l => l.isVisible())) {
+        visibleLevel = 1;
       }
-    });
-
-    let visibleLevel = 0;
-    const layers = groupLayer.getAllLayers();
-    if (layers.every(l => l.isVisible())) {
-      visibleLevel = 2;
-    } else if (layers.some(l => l.isVisible())) {
-      visibleLevel = 1;
+      varTemplate.visible = visibleLevel;
+      if (isNullOrEmpty(varTemplate.layers) && isNullOrEmpty(varTemplate.layerGroups)) {
+        varTemplate = null;
+      }
+      if (!isNull(varTemplate)) {
+        // Resolve the layers promise
+        promiseResult = new Promise((success, fail) => {
+          const promiseLayers = Promise.all(varTemplate.layers);
+          promiseLayers.then((layersResponse) => {
+            if (!isNullOrEmpty(varTemplate)) {
+              varTemplate.layers = layersResponse;
+              if (varTemplate.layerGroups.length > 0) {
+                Promise.all(varTemplate.layerGroups).then((response) => {
+                  if (!isNull(response[0])) {
+                    varTemplate.layerGroups = response;
+                  } else {
+                    varTemplate.layerGroups = [];
+                  }
+                  success(varTemplate);
+                });
+              } else {
+                success(varTemplate);
+              }
+            }
+          });
+        });
+      }
     }
-    varTemplate.visible = visibleLevel;
-    if (isNullOrEmpty(varTemplate.layers) && isNullOrEmpty(varTemplate.layerGroups)) {
-      varTemplate = null;
-    }
-    return varTemplate;
+    return promiseResult;
   }
 
   /**

@@ -1,5 +1,5 @@
 /**
- * @module M/projection/addProjections
+ * @module M/projection
  */
 import proj4 from 'proj4';
 import OLProjection from 'ol/proj/Projection';
@@ -184,11 +184,26 @@ const addProjections = (projs) => {
       });
     });
     addEquivalentProjections(olProjections);
+    if (projections.indexOf(projection) === -1) {
+      projections.push(projection);
+    }
   });
 };
 
-// register proj4
+/**
+ *
+ * This function return all projections supported in Mapea
+ *
+ * @public
+ * @function
+ * @api
+ */
+const getSupportedProjs = () => {
+  return projections;
+};
+
 addProjections(projections);
+getSupportedProjs();
 register(proj4);
 
-export default addProjections;
+export default { addProjections, getSupportedProjs };

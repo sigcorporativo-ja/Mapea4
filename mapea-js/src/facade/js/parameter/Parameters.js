@@ -440,6 +440,26 @@ const parseLabel = (parameter) => {
 };
 
 /**
+ * This functions gets the background color container parameter setted by the user.
+ *
+ * @private
+ * @function
+ */
+const parseBGColorContainer = (parameter) => {
+  let bgColorContainer;
+
+  if (isString(parameter)) {
+    bgColorContainer = getParameterValue('bgColorContainer', parameter);
+  } else if (isObject(parameter)) {
+    bgColorContainer = parameter.bgColorContainer;
+  } else {
+    Exception(`El tipo del parámetro bgColorContainer no es válido: ${typeof parameter}`);
+  }
+
+  return bgColorContainer;
+};
+
+/**
  * @classdesc
  * Main constructor of the class. Creates the parsed parameters
  * with parameters specified by the user
@@ -575,6 +595,13 @@ class Parameters {
      * @api
      */
     this.rotation = parseRotation(userParameters);
+
+    /**
+     * @public
+     * @type {String}
+     * @api
+     */
+    this.bgColorContainer = parseBGColorContainer(userParameters);
   }
 }
 

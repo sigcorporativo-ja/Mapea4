@@ -144,6 +144,7 @@
     "min_gt_max": "No puede establecerse un radio mínimo mayor que el máximo.",
     "max_lt_min": "No puede establecerse un radio máximo menor que el mínimo.",
     "no_geojson": "No se ha especificado ningun GeoJSON",
-    "unsupported_lang": "Se ha establecido un idioma sin soporte"
+    "unsupported_lang": "Se ha establecido un idioma sin soporte",
+    "generate_image": "Se ha producido un error al generar la imagen"
   }
 }

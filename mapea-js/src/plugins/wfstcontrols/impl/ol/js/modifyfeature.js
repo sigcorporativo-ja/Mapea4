@@ -83,7 +83,22 @@ export default class ModifyFeature extends M.impl.Control {
     const olMap = this.facadeMap_.getMapImpl();
     const layerImpl = this.layer_.getImpl();
     const olLayer = layerImpl.getOLLayer();
-    const olStyle = olLayer.getStyle()()[0];
+    let olStyle = null;
+    const featureAux = olLayer.getSource().getFeatures()[0];
+    if (M.utils.isUndefined(featureAux)) {
+      olStyle = new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: 'rgba(103, 175, 19, 0.2)',
+          opacity: 0.4,
+        }),
+        stroke: new ol.style.Stroke({
+          color: '#67af13',
+          width: 1,
+        }),
+      });
+    } else {
+      olStyle = olLayer.getStyle()(olLayer.getSource().getFeatures()[0])[0];
+    }
     let styleImage = olStyle.getImage();
     let olStroke = olStyle.getStroke();
     const olFill = olStyle.getFill();

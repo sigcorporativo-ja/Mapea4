@@ -5,6 +5,7 @@ import StyleBase from './Style.js';
 import StyleComposite from './Composite.js';
 import StylePoint from './Point.js';
 import StyleSimple from './Simple.js';
+import StyleGeneric from './Generic.js';
 import { isNullOrEmpty, stringifyFunctions, extendsObj, defineFunctionFromString } from '../util/Utils.js';
 import Exception from '../exception/exception.js';
 import { getValue } from '../i18n/language.js';
@@ -148,7 +149,9 @@ class Proportional extends StyleComposite {
       style = feature.getStyle() ? feature.getStyle() : this.layer_.getStyle();
     }
     if (!isNullOrEmpty(style)) {
-      if (!(style instanceof StylePoint) && style instanceof StyleSimple) {
+      if (style instanceof StyleGeneric) {
+        style = new StylePoint(style.getOptions().point);
+      } else if (!(style instanceof StylePoint) && style instanceof StyleSimple) {
         style = new StylePoint(style.getOptions());
       } else if (style instanceof StyleComposite) {
         style = new StylePoint(style.getOldStyle().getOptions());
