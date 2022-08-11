@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.servlet.ServletContext;
@@ -17,11 +16,18 @@ import javax.ws.rs.QueryParam;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpException;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.methods.GetMethod;
+import org.apache.http.Header;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpClient;
+import org.apache.http.HttpException;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.commons.io.IOUtils;
 
 import es.guadaltel.framework.ticket.Ticket;
@@ -44,20 +50,17 @@ public class Proxy {
 	private static final String AUTHORIZATION = "Authorization";
 	public ServletContext context_ = null;
 	private static ResourceBundle configProperties = ResourceBundle.getBundle("configuration");
-	private static final String THEME_URL = configProperties.getString("mapea.theme.url");
-	private static final String LEGEND_ERROR = "/img/legend-error.png";
+//	private static final String THEME_URL = configProperties.getString("mapea.theme.url");
+//	private static final String LEGEND_ERROR = "/img/legend-error.png";
 	private static final int IMAGE_MAX_BYTE_SIZE = Integer.parseInt(configProperties.getString("max.image.size"));
 
 	/**
-	 * Proxy to execute a request to specified URL using JSONP protocol to avoid
-	 * the Cross-Domain restriction.
+	 * Proxy to execute a request to specified URL using JSONP protocol to avoid the
+	 * Cross-Domain restriction.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
-	 * @param callbackFn
-	 *            function to execute as callback
+	 * @param url        URL of the request
+	 * @param op         type of mapea operation
+	 * @param callbackFn function to execute as callback
 	 * 
 	 * @return the javascript code
 	 */
@@ -89,15 +92,12 @@ public class Proxy {
 	}
 
 	/**
-	 * Proxy to execute a request to specified URL using JSONP protocol to avoid
-	 * the Cross-Domain restriction.
+	 * Proxy to execute a request to specified URL using JSONP protocol to avoid the
+	 * Cross-Domain restriction.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
-	 * @param callbackFn
-	 *            function to execute as callback
+	 * @param url        URL of the request
+	 * @param op         type of mapea operation
+	 * @param callbackFn function to execute as callback
 	 * 
 	 * @return the javascript code
 	 */
@@ -137,19 +137,33 @@ public class Proxy {
 	/**
 	 * Sends a GET operation request to the URL and gets its response.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
-	 * @param ticketParameter
-	 *            user ticket
+	 * @param url             URL of the request
+	 * @param op              type of mapea operation
+	 * @param ticketParameter user ticket
 	 *
 	 * @return the response of the request
 	 */
 	private ProxyResponse get(String url, String ticketParameter) throws HttpException, IOException {
 		ProxyResponse response = new ProxyResponse();
-		HttpClient client = new HttpClient();
-		GetMethod httpget = new GetMethod(url);
+
+		String host = System.getProperty("https.proxyHost");
+		HttpClientBuilder clientBuilder = HttpClientBuilder.create();
+		if (host != null) {
+			Integer port = Integer.parseInt(System.getProperty("https.proxyPort"));
+			clientBuilder.useSystemProperties();
+			String user = System.getProperty("https.proxyUser");
+			if (user != null) {
+				Credentials credentials = new UsernamePasswordCredentials(user,
+						System.getProperty("https.proxyPassword"));
+				AuthScope authScope = new AuthScope(host, port);
+				CredentialsProvider credsProvider = new BasicCredentialsProvider();
+				credsProvider.setCredentials(authScope, credentials);
+				clientBuilder.setDefaultCredentialsProvider(credsProvider);
+			}
+		}
+
+		HttpClient client = clientBuilder.build();
+		HttpGet httpget = new HttpGet(url);
 
 		// sets ticket if the user specified one
 		if (ticketParameter != null) {
@@ -163,7 +177,7 @@ public class Proxy {
 					String userAndPass = user + ":" + pass;
 					String encodedLogin = new String(
 							org.apache.commons.codec.binary.Base64.encodeBase64(userAndPass.getBytes()));
-					httpget.addRequestHeader(AUTHORIZATION, "Basic " + encodedLogin);
+					httpget.setHeader(AUTHORIZATION, "Basic " + encodedLogin);
 				} catch (Exception e) {
 					System.out.println("-------------------------------------------");
 					System.out.println("EXCEPCTION THROWED BY PROXYREDIRECT CLASS");
@@ -174,32 +188,30 @@ public class Proxy {
 			}
 		}
 
-		client.executeMethod(httpget);
+		HttpResponse httpResponse = client.execute(httpget);
 
-		int statusCode = httpget.getStatusCode();
+		int statusCode = httpResponse.getStatusLine().getStatusCode();
 		response.setStatusCode(statusCode);
 		if (statusCode == HttpStatus.SC_OK) {
 			String encoding = this.getResponseEncoding(httpget);
 			if (encoding == null) {
 				encoding = "UTF-8";
 			}
-			InputStream responseStream = httpget.getResponseBodyAsStream();
+			InputStream responseStream = httpResponse.getEntity().getContent();
 			byte[] data = IOUtils.toByteArray(responseStream);
 			response.setData(data);
 			String responseContent = new String(data, encoding);
 			response.setContent(responseContent);
 		}
-		response.setHeaders(httpget.getResponseHeaders());
+		response.setHeaders(httpResponse.getAllHeaders());
 		return response;
 	}
 
 	/**
 	 * Sends a POST operation request to the URL and gets its response.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
+	 * @param url URL of the request
+	 * @param op  type of mapea operation
 	 *
 	 * @return the response of the request
 	 */
@@ -211,10 +223,8 @@ public class Proxy {
 	/**
 	 * Checks if the request and the operation are valid.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
+	 * @param url URL of the request
+	 * @param op  type of mapea operation
 	 */
 	private void checkRequest(String url) {
 		// TODO comprobar
@@ -223,12 +233,9 @@ public class Proxy {
 	/**
 	 * Checks if the response is valid for tthe operation and the URL.
 	 * 
-	 * @param proxyResponse
-	 *            response got from the request
-	 * @param url
-	 *            URL of the request
-	 * @param op
-	 *            type of mapea operation
+	 * @param proxyResponse response got from the request
+	 * @param url           URL of the request
+	 * @param op            type of mapea operation
 	 */
 	private void checkResponse(ProxyResponse proxyResponse, String url) {
 		// TODO Auto-generated method stub
@@ -237,8 +244,7 @@ public class Proxy {
 	/**
 	 * Checks if the response image is valid .
 	 * 
-	 * @param proxyResponse
-	 *            response got from the request
+	 * @param proxyResponse response got from the request
 	 * @throws InvalidResponseException
 	 */
 	private void checkResponseImage(ProxyResponse proxyResponse) throws InvalidResponseException {
@@ -276,10 +282,8 @@ public class Proxy {
 	/**
 	 * Creates a response error using the specified message.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param message
-	 *            message of the error
+	 * @param url     URL of the request
+	 * @param message message of the error
 	 */
 	private ProxyResponse error(String url, String message) {
 		ProxyResponse proxyResponse = new ProxyResponse();
@@ -291,10 +295,8 @@ public class Proxy {
 	/**
 	 * Creates a response error using the specified exception.
 	 * 
-	 * @param url
-	 *            URL of the request
-	 * @param exception
-	 *            Exception object
+	 * @param url       URL of the request
+	 * @param exception Exception object
 	 */
 	private ProxyResponse error(String url, Exception exception) {
 		return error(url, exception.getLocalizedMessage());
@@ -303,11 +305,11 @@ public class Proxy {
 	/**
 	 * Gets the encoding of a response
 	 */
-	private String getResponseEncoding(GetMethod httpget) {
+	private String getResponseEncoding(HttpGet httpget) {
 		String regexp = ".*charset\\=([^;]+).*";
 		Boolean isCharset = null;
 		String encoding = null;
-		Header[] headerResponse = httpget.getResponseHeaders("Content-Type");
+		Header[] headerResponse = httpget.getHeaders("Content-Type");
 		for (Header header : headerResponse) {
 			String contentType = header.getValue();
 			if (!contentType.isEmpty()) {
