@@ -19,7 +19,7 @@
    * @public
    * @api stable
    */
-  M.config('MAPEA_URL', location.protocol + '${mapea.url}');
+  M.config('MAPEA_URL', '${mapea.url}');
 
   /**
    * The path to the Mapea proxy to send
@@ -29,7 +29,7 @@
    * @public
    * @api stable
    */
-  M.config('PROXY_URL', location.protocol + '${mapea.proxy.url}');
+  M.config('PROXY_URL', '${mapea.proxy.url}');
 
   /**
    * The path to the Mapea proxy to send
@@ -39,7 +39,7 @@
    * @public
    * @api stable
    */
-  M.config('PROXY_POST_URL', location.protocol + '${mapea.proxy_post.url}');
+  M.config('PROXY_POST_URL', '${mapea.proxy_post.url}');
 
   /**
    * The path to the Mapea templates
@@ -57,7 +57,7 @@
    * @public
    * @api stable
    */
-  M.config('THEME_URL', location.protocol + '${mapea.theme.url}');
+  M.config('THEME_URL', '${mapea.theme.url}');
 
   /**
    * The Geosearch URL
@@ -66,7 +66,7 @@
    * @public
    * @api stable
    */
-  M.config('GEOSEARCH_URL', location.protocol + '${geosearch.url}');
+  M.config('GEOSEARCH_URL', '${geosearch.url}');
 
   /**
    * The Geosearch core
@@ -181,7 +181,7 @@
      * @public
      * @api stable
      */
-    'tiledUrls': '${tile.mappings.tiledUrls}'.split(',').map(e => location.protocol + e),
+    'tiledUrls': '${tile.mappings.tiledUrls}'.split(',').map(e => e),
 
     /**
      * WMC context names
@@ -199,7 +199,7 @@
      * @public
      * @api stable
      */
-    'urls': '${tile.mappings.urls}'.split(',').map(e => location.protocol + e)
+    'urls': '${tile.mappings.urls}'.split(',').map(e => e)
   });
 
   /**
@@ -226,7 +226,7 @@
      * @public
      * @api stable
      */
-    'URL': location.protocol + '${geoprint.url}',
+    'URL': '${geoprint.url}',
 
     /**
      * WMC predefined names
@@ -288,7 +288,7 @@
      * @public
      * @api stable
      */
-    'URL': location.protocol + '${geoprint2.url}',
+    'URL': '${geoprint2.url}',
 
     /**
      * Printer service URL
@@ -297,7 +297,7 @@
      * @public
      * @api stable
      */
-    'URL_APPLICATION': location.protocol  + '${geoprint.url_application}',
+    'URL_APPLICATION': '${geoprint.url_application}',
   });
 
   /**
@@ -334,7 +334,7 @@
    * @public
    * @api stable
    */
-  M.config('SEARCHSTREET_URL', location.protocol + '${searchstreet.url}');
+  M.config('SEARCHSTREET_URL', '${searchstreet.url}');
 
   /**
    * Autocomplete municipality service URL
@@ -343,7 +343,7 @@
    * @public
    * @api stable
    */
-  M.config('SEARCHSTREET_URLCODINEAUTOCOMPLETE', location.protocol + '${searchstreet.urlcodineautocomplete}');
+  M.config('SEARCHSTREET_URLCODINEAUTOCOMPLETE', '${searchstreet.urlcodineautocomplete}');
 
   /**
    * service URL check code INE
@@ -352,7 +352,7 @@
    * @public
    * @api stable
    */
-  M.config('SEARCHSTREET_URLCOMPROBARINE', location.protocol + '${searchstreet.urlcomprobarine}');
+  M.config('SEARCHSTREET_URLCOMPROBARINE', '${searchstreet.urlcomprobarine}');
 
   /**
    * Normalizar searchstreet service URL
@@ -361,7 +361,7 @@
    * @public
    * @api stable
    */
-  M.config('SEARCHSTREET_NORMALIZAR', location.protocol + '${searchstreet.normalizar}');
+  M.config('SEARCHSTREET_NORMALIZAR', '${searchstreet.normalizar}');
 
   /**
    * Minimum number of characters to start autocomplete
