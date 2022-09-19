@@ -51,6 +51,8 @@ export default class AttributeTable extends M.Plugin {
      * @type {Boolean}
      */
     this.added_to_map = true;
+
+    this.userSelectedStyle = parameters.selectedStyle;
   }
 
   /**
@@ -78,7 +80,7 @@ export default class AttributeTable extends M.Plugin {
    */
   add(map) {
     this.facadeMap_ = map;
-    this.control_ = new AttributeTableControl(this.numPages_);
+    this.control_ = new AttributeTableControl(this.numPages_, this.userSelectedStyle);
     this.control_.on(M.evt.ADDED_TO_MAP, () => {
       if (this.added_to_map) {
         this.fire(M.evt.ADDED_TO_MAP);

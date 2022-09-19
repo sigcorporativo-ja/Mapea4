@@ -30,7 +30,7 @@
     "description": "Shows a table of all the attributes of each feature of a vector layer.",
     "text": "",
     "version": "2.1.0",
-    "date": "11/10/2019",
+    "date": "01/09/2022",
     "author": "Junta de Andalucía",
     "org": "Junta de Andalucía",
     "tags": "mapea,plugin",
@@ -44,6 +44,6 @@
       "plugins": [{ "uuid": "", "name": "" }],
       "services": [{ "name": "", "description": "" }]
     },
-    "compatibility": ["4" ,"5", "6"]
+    "compatibility": ["6"]
   }
 }
