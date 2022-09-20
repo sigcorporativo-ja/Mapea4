@@ -10,7 +10,7 @@
    * @private
    * @type {Number}
    */
-  M.config('MOBILE_WIDTH', $ { mobile.width });
+  M.config('MOBILE_WIDTH', ${mobile.width});
 
   /**
    * The Mapea URL
@@ -235,7 +235,7 @@
      * @public
      * @api stable
      */
-    'DPI': $ { geoprint.dpi },
+    'DPI': ${geoprint.dpi},
 
     /**
      * WMC context names
@@ -262,7 +262,7 @@
      * @public
      * @api stable
      */
-    'FORCE_SCALE': $ { geoprint.force_scale },
+    'FORCE_SCALE': ${geoprint.force_scale},
 
     /**
      * TODO
@@ -271,7 +271,7 @@
      * @public
      * @api stable
      */
-    'LEGEND': $ { geoprint.legend }
+    'LEGEND': ${geoprint.legend}
   });
 
   /**
