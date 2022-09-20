@@ -181,7 +181,7 @@ export default class AttributeTableControl extends M.Control {
    * @param {null|string} name- Name Layer
    * @return {HTMLElement}
    */
-  renderPanel_(name) {
+   renderPanel_(name) {
     if (!M.utils.isNullOrEmpty(name)) {
       this.layer_ = this.hasLayer_(name)[0];
     }
@@ -194,14 +194,19 @@ export default class AttributeTableControl extends M.Control {
         const properties = Object.values(feature.getAttributes());
         const fid = feature.getId();
         let seleccionado = false;
+        let disableChecks = false;
         if (this.featuresSeleccionados.includes(fid)) {
           seleccionado = true;
+        }
+        if (this.layer_ instanceof M.layer.MVT) {
+          disableChecks = true;
         }
         if (!M.utils.isNullOrEmpty(properties)) {
           attributes.push({
             properties,
             id: fid,
             seleccionado,
+            disableChecks,
           });
         }
       });
@@ -210,6 +215,10 @@ export default class AttributeTableControl extends M.Control {
       }
     }
     let params = {};
+    let disableChecks = false;
+    if (this.layer_ instanceof M.layer.MVT) {
+      disableChecks = true;
+    }
     if (!M.utils.isUndefined(headerAtt)) {
       params = {
         headerAtt,
@@ -218,6 +227,7 @@ export default class AttributeTableControl extends M.Control {
         attributes: (M.utils.isNullOrEmpty(attributes)) ? false : attributes
           .slice(this.pages_.element, this.pages_.element + this.numPages_),
         allSelected: this.selectAllActive_,
+        disableChecks,
       };
     }
     const options = { jsonp: true, vars: params };

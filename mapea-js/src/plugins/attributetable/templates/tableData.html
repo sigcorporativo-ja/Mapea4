@@ -8,13 +8,13 @@
         <table>
             <tbody>
                 <tr class="m-attributetable-thead">
-                    <td><input type="checkbox" name="selectAll" value="selectAll" {{#if this.allSelected}} checked="true" {{/if}}></td>
+                    <td><input type="checkbox" name="selectAll" value="selectAll" {{#if this.allSelected}} checked="true" {{/if}} {{#if this.disableChecks}} disabled="true" {{/if}}></td>
                     {{#each headerAtt}}
                     <td>{{this}}</td>
                     {{/each}}
                 </tr> {{#each attributes}}
                 <tr>
-                    <td><input type="checkbox" {{#if this.seleccionado}} checked="true" {{/if}} id="m-check-select" name="" value="{{this.id}}"></td>
+                    <td><input type="checkbox" {{#if this.seleccionado}} checked="true" {{/if}} {{#if this.disableChecks}} disabled="true" {{/if}} id="m-check-select" name="" value="{{this.id}}"></td>
                     {{#each this.properties}}
                     <td> {{{this}}}</td>
                     {{/each}}
