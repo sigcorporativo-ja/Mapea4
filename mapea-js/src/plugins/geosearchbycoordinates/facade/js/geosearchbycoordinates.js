@@ -125,7 +125,9 @@ export default class GeosearchByCoordinates extends M.Plugin {
       this.distance_,
       this.spatialField_,
       this.rows_);
-
+    this.controlGeo_.on(M.evt.ADDED_TO_MAP, () => {
+      this.fire(M.evt.ADDED_TO_MAP);
+    });
     this.panel_ = new M.ui.Panel(GeosearchByCoordinates.NAME, {
       collapsible: false,
       className: 'm-geosearchbylocation',

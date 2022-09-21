@@ -4,7 +4,6 @@
 import { isFunction, isUndefined, isDynamic, drawDynamicStyle } from 'M/util/Utils';
 import OLFeature from 'ol/Feature';
 import RenderFeature from 'ol/render/Feature';
-import GeometryType from 'ol/geom/GeometryType';
 import OLStyleIcon from 'ol/style/Icon';
 import OLGeomPolygon from 'ol/geom/Polygon';
 import OLGeomLineString from 'ol/geom/LineString';
@@ -18,14 +17,13 @@ import { getLineStyle, getPointStyle, getPolygonStyle } from './builder';
  * @type {object}
  */
 const GETTER_BY_GEOM = {
-  [GeometryType.POINT]: (...args) => getPointStyle(args[0].point, args[1], args[2]),
-  [GeometryType.LINE_STRING]: (...args) => getLineStyle(args[0].line, args[1], args[2]),
-  [GeometryType.POLYGON]: (...args) => getPolygonStyle(args[0].polygon, args[1], args[2]),
-  [GeometryType.MULTI_POINT]: (...args) => getPointStyle(args[0].point, args[1], args[2]),
-  [GeometryType.MULTI_LINE_STRING]: (...args) => getLineStyle(args[0].line, args[1], args[2]),
-  [GeometryType.MULTI_POLYGON]: (...args) => getPolygonStyle(args[0].polygon, args[1], args[2]),
+  Point: (...args) => getPointStyle(args[0].point, args[1], args[2]),
+  LineString: (...args) => getLineStyle(args[0].line, args[1], args[2]),
+  Polygon: (...args) => getPolygonStyle(args[0].polygon, args[1], args[2]),
+  MultiPoint: (...args) => getPointStyle(args[0].point, args[1], args[2]),
+  MultiLineString: (...args) => getLineStyle(args[0].line, args[1], args[2]),
+  MultiPolygon: (...args) => getPolygonStyle(args[0].polygon, args[1], args[2]),
 };
-
 
 /**
  * @classdesc

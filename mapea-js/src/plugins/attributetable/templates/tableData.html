@@ -4,31 +4,31 @@
         <span id="m-attributetable-attributes" class="g-cartografia-flecha-abajo"></span>
     </div>
     {{#if attributes}}
-    <div id="m-attributetable-table">
-        <table>
-            <tbody>
-                <tr class="m-attributetable-thead">
-                    <td><input type="checkbox" name="selectAll" value="selectAll" {{#if this.allSelected}} checked="true" {{/if}} {{#if this.disableChecks}} disabled="true" {{/if}}></td>
-                    {{#each headerAtt}}
-                    <td>{{this}}</td>
+        <div id="m-attributetable-table">
+            <table>
+                <tbody>
+                    <tr class="m-attributetable-thead">
+                        <td><input type="checkbox" name="selectAll" value="selectAll" {{#if this.allSelected}} checked="true" {{/if}} {{#if this.disableChecks}} disabled="true" {{/if}}></td>
+                        {{#each headerAtt}}
+                            <td>{{this}}</td>
+                        {{/each}}
+                    </tr> {{#each attributes}}
+                        <tr>
+                            <td><input type="checkbox" {{#if this.seleccionado}} checked="true" {{/if}} {{#if this.disableChecks}} disabled="true" {{/if}} id="m-check-select" name="" value="{{this.id}}"></td>
+                            {{#each this.properties}}
+                                <td> {{{this}}}</td>
+                            {{/each}}
+                        </tr>
                     {{/each}}
-                </tr> {{#each attributes}}
-                <tr>
-                    <td><input type="checkbox" {{#if this.seleccionado}} checked="true" {{/if}} {{#if this.disableChecks}} disabled="true" {{/if}} id="m-check-select" name="" value="{{this.id}}"></td>
-                    {{#each this.properties}}
-                    <td> {{{this}}}</td>
-                    {{/each}}
-                </tr>
-                {{/each}}
-            </tbody>
-        </table>
-    </div>
-    <div id="m-attributetable-tfoot">
-        <span class="g-cartografia-flecha-izquierda m-attributetable-hidden" id="m-attributetable-previous"></span>
-        <span>Página {{pages.actual}} de {{pages.total}}</span>
-        <span class="g-cartografia-flecha-derecha m-attributetable-hidden" id="m-attributetable-next"></span>
-    </div>
+                </tbody>
+            </table>
+        </div>
+        <div id="m-attributetable-tfoot">
+            <span class="g-cartografia-flecha-izquierda m-attributetable-hidden" id="m-attributetable-previous"></span>
+            <span>Página {{pages.actual}} de {{pages.total}}</span>
+            <span class="g-cartografia-flecha-derecha m-attributetable-hidden" id="m-attributetable-next"></span>
+        </div>
     {{else}}
-    <div class="m-attributetable-notResult">No se han encontrado atributos.</div>
+        <div class="m-attributetable-notResult">No se han encontrado atributos.</div>
     {{/if}}
 </div>

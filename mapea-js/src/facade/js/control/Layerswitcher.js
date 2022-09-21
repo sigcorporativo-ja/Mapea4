@@ -31,14 +31,20 @@ class LayerSwitcher extends ControlBase {
    * @extends {M.Control}
    * @api
    */
-  constructor() {
+  constructor(emptyLayer) {
     // implementation of this control
-    const impl = new LayerSwitcherImpl();
+    const impl = new LayerSwitcherImpl(emptyLayer);
     // calls the super constructor
     super(impl, LayerSwitcher.NAME);
 
     if (isUndefined(LayerSwitcherImpl)) {
       Exception(getValue('exception').layerswitcher_method);
+    }
+
+    if (!isUndefined(emptyLayer) && emptyLayer !== '') {
+      this.activeEmptyLayer = true;
+    } else {
+      this.activeEmptyLayer = false;
     }
   }
 
@@ -68,6 +74,9 @@ class LayerSwitcher extends ControlBase {
   createView(map) {
     return new Promise((resolve) => {
       LayerSwitcher.getTemplateVariables(this.map_).then((templateVars) => {
+        if (this.activeEmptyLayer) {
+          templateVars.baseLayers.unshift(LayerSwitcher.EMPTYLAYER);
+        }
         const html = compileTemplate(layerswitcherTemplate, {
           vars: templateVars,
         });
@@ -185,7 +194,7 @@ class LayerSwitcher extends ControlBase {
       const layerVarTemplate = {
         base: (layer.transparent === false),
         visible: (layer.isVisible() === true),
-        id: layer.name,
+        id: layer.id,
         title: layerTitle,
         outOfRange: !layer.inRange(),
         opacity: layer.getOpacity(),
@@ -296,5 +305,23 @@ class LayerSwitcher extends ControlBase {
  * @api
  */
 LayerSwitcher.NAME = 'layerswitcher';
+
+/**
+ * Empty layer
+ * @const
+ * @type {Object}
+ * @public
+ * @api
+ */
+LayerSwitcher.EMPTYLAYER = {
+  base: true,
+  id: 'emptyLayer',
+  isIcon: false,
+  legend: '',
+  opacity: 1,
+  outOfRange: false,
+  title: getValue('layerswitcher').no_base_layer,
+  visible: false,
+};
 
 export default LayerSwitcher;

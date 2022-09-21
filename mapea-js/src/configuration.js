@@ -137,7 +137,7 @@
      * @public
      * @api stable
      */
-    'urls': '${wmc.urls}'.split(',').map(e => location.protocol + e),
+    'urls': '${wmc.urls}'.split(',').map(e => e),
 
     /**
      * WMC predefined names

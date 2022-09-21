@@ -148,6 +148,7 @@ class Mapbox extends LayerBase {
       equals = (this.url === obj.url);
       equals = equals && (this.name === obj.name);
       equals = equals && (this.options === obj.options);
+      equals = equals && (this.id === obj.id);
     }
     return equals;
   }

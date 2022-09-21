@@ -129,6 +129,7 @@ class WMC110 extends XML {
       legend: layerInfo.title,
       url: layerInfo.href,
       transparent: !/^1|(true)$/i.test(options.isBaseLayer),
+      version: layerInfo.params.version,
     }, options);
     return layer;
   }

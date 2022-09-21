@@ -1,6 +1,6 @@
 package es.juntadeandalucia.mapea.bean;
 
-import org.apache.commons.httpclient.Header;
+import org.apache.http.Header;
 import org.json.JSONObject;
 
 /**

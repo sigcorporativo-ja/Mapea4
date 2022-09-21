@@ -14,6 +14,7 @@ import {
   isObject,
   getEnvolvedExtent,
   generateResolutionsFromExtent,
+  getResolutionFromScale,
 } from './util/Utils.js';
 import { getValue } from './i18n/language';
 import Exception from './exception/exception';
@@ -26,6 +27,7 @@ import FeaturesHandler from './handler/Feature.js';
 import Feature from './feature/Feature.js';
 import * as Dialog from './dialog';
 import GetFeatureInfo from './control/GetFeatureInfo.js';
+import Layerswitcher from './control/Layerswitcher.js';
 import WMCSelector from './control/WMCSelector.js';
 import Layer from './layer/Layer.js';
 import * as LayerType from './layer/Type.js';
@@ -290,6 +292,16 @@ class Map extends Base {
       } else {
         const getFeatureInfo = new GetFeatureInfo(params.getfeatureinfo);
         this.addControls(getFeatureInfo);
+      }
+    }
+
+    // layerswitcher
+    if (!isUndefined(params.layerswitcher)) {
+      if (params.layerswitcher !== 'emptylayer' && params.layerswitcher !== '') {
+        Dialog.error(getValue('layerswitcher').unsupported_param);
+      } else {
+        const layerswitcher = new Layerswitcher(params.layerswitcher);
+        this.addControls(layerswitcher);
       }
     }
 
@@ -1957,6 +1969,32 @@ class Map extends Base {
   }
 
   /**
+   * This function adds plugins
+   *
+   * @public
+   * @function
+   * @param {Array<Plugin>} plugins  plugins to add to the map
+   * @returns {Map}
+   * @api
+   */
+  addPlugins(plugins) {
+    // checks if the param is null or empty
+    if (isNullOrEmpty(plugins)) {
+      Exception(getValue('exception').no_plugins);
+    }
+    let allPlugins = plugins;
+    if (!isArray(plugins)) {
+      allPlugins = [plugins];
+    }
+
+    allPlugins.forEach((plugin) => {
+      this.addPlugin(plugin);
+    });
+
+    return this;
+  }
+
+  /**
    * This function removes the specified plugins from the map
    *
    * @function
@@ -2752,6 +2790,19 @@ class Map extends Base {
    */
   getImageMap() {
     return this.getImpl().getImageMap();
+  }
+
+  /**
+   * This function set scale to map
+   *
+   * @function
+   * @public
+   * @param { Number }
+   * @api
+   */
+  setToClosestScale(scale) {
+    const resolution = getResolutionFromScale(scale, this.getProjection().units);
+    this.getImpl().setToClosestScale(resolution);
   }
 }
 

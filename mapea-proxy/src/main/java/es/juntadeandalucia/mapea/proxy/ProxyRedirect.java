@@ -55,11 +55,13 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
@@ -69,17 +71,27 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import org.apache.commons.httpclient.DefaultHttpMethodRetryHandler;
-import org.apache.commons.httpclient.Header;
-import org.apache.commons.httpclient.HttpClient;
-import org.apache.commons.httpclient.HttpStatus;
-import org.apache.commons.httpclient.NameValuePair;
-import org.apache.commons.httpclient.methods.GetMethod;
-import org.apache.commons.httpclient.methods.PostMethod;
-import org.apache.commons.httpclient.methods.StringRequestEntity;
-import org.apache.commons.httpclient.params.HttpClientParams;
-import org.apache.commons.httpclient.params.HttpMethodParams;
 import org.apache.commons.io.IOUtils;
+import org.apache.http.Header;
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.Credentials;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.config.RequestConfig;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ByteArrayEntity;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.BasicResponseHandler;
+import org.apache.http.impl.client.DefaultHttpRequestRetryHandler;
+import org.apache.http.impl.client.HttpClientBuilder;
+import org.apache.http.protocol.HTTP;
 import org.apache.log4j.Logger;
 
 import es.guadaltel.framework.ticket.Ticket;
@@ -130,18 +142,20 @@ public class ProxyRedirect extends HttpServlet {
 				String url = serverUrl.replaceAll("\\&?\\??mapeaop=geoprint", "");
 				url = serverUrl.replaceAll("\\&?\\??mapeaop=getcapabilities", "");
 				url = serverUrl.replaceAll("\\&?\\??mapeaop=wmsinfo", "");
-				HttpClient client = new HttpClient();
-				GetMethod httpget = null;
+
+				HttpClient client = HttpClientBuilder.create().build();
+				HttpGet httpget = null;
+
 				try {
-					httpget = new GetMethod(url);
-					HttpClientParams params = client.getParams();
-					params.setIntParameter(HttpClientParams.MAX_REDIRECTS, numMaxRedirects);
-					client.executeMethod(httpget);
+					httpget = new HttpGet(url);
+					httpget.setConfig(RequestConfig.custom().setMaxRedirects(numMaxRedirects).build());
+
+					HttpResponse httpResponse = client.execute(httpget);
 					// REDIRECTS MANAGEMENT
-					if (httpget.getStatusCode() == HttpStatus.SC_OK) {
+					if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 						// PATH_SECURITY_PROXY - AG
-						Header[] respHeaders = httpget.getResponseHeaders();
-						int compSize = httpget.getResponseBody().length;
+						Header[] respHeaders = httpResponse.getAllHeaders();
+						int compSize = (int) httpResponse.getEntity().getContentLength();
 						ArrayList<Header> headerList = new ArrayList<Header>(Arrays.asList(respHeaders));
 						String headersString = headerList.toString();
 						boolean checkedContent = checkContent(headersString, compSize, serverUrl);
@@ -171,7 +185,7 @@ public class ProxyRedirect extends HttpServlet {
 							} else if (GETINFO_HTML_REGEX.matcher(requesteredUrl).matches()) {
 								response.setContentType("text/html");
 							}
-							InputStream st = httpget.getResponseBodyAsStream();
+							InputStream st = httpResponse.getEntity().getContent();
 							ServletOutputStream sos = response.getOutputStream();
 							IOUtils.copy(st, sos);
 						} else {
@@ -179,7 +193,7 @@ public class ProxyRedirect extends HttpServlet {
 							log.error(strErrorMessage);
 						}
 					} else {
-						strErrorMessage = "Unexpected failure: " + httpget.getStatusLine().toString();
+						strErrorMessage = "Unexpected failure: " + httpResponse.getStatusLine().toString();
 						log.error(strErrorMessage);
 					}
 					httpget.releaseConnection();
@@ -191,7 +205,6 @@ public class ProxyRedirect extends HttpServlet {
 					}
 				}
 			} else {
-				// String errorXML = strErrorMessage;
 				String errorXML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><error><descripcion>Error en el parametro url de entrada</descripcion></error>";
 				response.setContentType("text/xml");
 				try {
@@ -223,48 +236,38 @@ public class ProxyRedirect extends HttpServlet {
 			legend = true;
 		}
 		serverUrl = checkTypeRequest(serverUrl);
-		// log.info("serverUrl ckecked: " + serverUrl);
 		if (!serverUrl.equals("ERROR")) {
 			if (serverUrl.startsWith("http://") || serverUrl.startsWith("https://")) {
-				PostMethod httppost = null;
+				HttpPost httppost = null;
 				try {
-
-					HttpClient client = new HttpClient();
-					httppost = new PostMethod(serverUrl);
-					// PATH
-					Enumeration<?> enume = request.getHeaderNames();
-					ArrayList<String> removeHeaders = new ArrayList<>(Arrays.asList("accept-encoding"));
-					while (enume.hasMoreElements()) {
-						String name = (String) enume.nextElement();
-						String value = request.getHeader(name);
-						log.debug("request header:" + name + ":" + value);
-						if (!removeHeaders.contains(name.toLowerCase())) {
-							httppost.addRequestHeader(name, value);
+					String host = System.getProperty("https.proxyHost");
+					HttpClientBuilder clientBuilder = HttpClientBuilder.create();
+					clientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(3, false));
+					if (host != null) {
+						Integer port = Integer.parseInt(System.getProperty("https.proxyPort"));
+						clientBuilder.useSystemProperties();
+						String user = System.getProperty("https.proxyUser");
+						if (user != null) {
+							Credentials credentials = new UsernamePasswordCredentials(user,
+									System.getProperty("https.proxyPassword"));
+							AuthScope authScope = new AuthScope(host, port);
+							CredentialsProvider credsProvider = new BasicCredentialsProvider();
+							credsProvider.setCredentials(authScope, credentials);
+							clientBuilder.setDefaultCredentialsProvider(credsProvider);
 						}
 					}
-
-					httppost.setDoAuthentication(false);
-					httppost.getParams().setParameter(HttpMethodParams.RETRY_HANDLER,
-							new DefaultHttpMethodRetryHandler(3, false));
-					// FIN_PATH
-					// PATH_MAPEAEDITA_SECURITY - AP
-					// PATCH_TICKET_MJM-20112405-POST
-					String authorizationValue = request.getHeader(AUTHORIZATION); // ADD_SECURITY_20091210
+					HttpClient client = clientBuilder.build();
+					httppost = new HttpPost(serverUrl);
+					String authorizationValue = request.getHeader(AUTHORIZATION);
 					if (authorizationValue == null) {
-						// The 'Authorization' header must be in this form ->
-						// Authorization: Basic <encodedLogin>
-						// 'encodedLogin' is a string in the form 'user:pass'
-						// that has been encoded by way of the Base64 algorithm.
-						// More info on this can be found at
-						// http://en.wikipedia.org/wiki/Basic_access_authentication
 						String user = (String) request.getSession().getAttribute("user");
 						String pass = (String) request.getSession().getAttribute("pass");
 						if (user != null && pass != null) {
 							String userAndPass = user + ":" + pass;
 							String encodedLogin = new String(
 									org.apache.commons.codec.binary.Base64.encodeBase64(userAndPass.getBytes()));
-							httppost.addRequestHeader(AUTHORIZATION, "Basic " + encodedLogin);
-						} else { // MJM - 20110520
+							httppost.setHeader(AUTHORIZATION, "Basic " + encodedLogin);
+						} else {
 							String ticketParameter = request.getParameter("ticket");
 							if (ticketParameter != null) {
 								ticketParameter = ticketParameter.trim();
@@ -277,7 +280,7 @@ public class ProxyRedirect extends HttpServlet {
 										String userAndPass = user + ":" + pass;
 										String encodedLogin = new String(org.apache.commons.codec.binary.Base64
 												.encodeBase64(userAndPass.getBytes()));
-										httppost.addRequestHeader(AUTHORIZATION, "Basic " + encodedLogin);
+										httppost.setHeader(AUTHORIZATION, "Basic " + encodedLogin);
 									} catch (Exception e) {
 										log.info("-------------------------------------------");
 										log.info("EXCEPCTION THROWED BY PROXYREDIRECT CLASS");
@@ -289,51 +292,39 @@ public class ProxyRedirect extends HttpServlet {
 							}
 						}
 					} else {
-						httppost.addRequestHeader(AUTHORIZATION, authorizationValue);
+						httppost.setHeader(AUTHORIZATION, authorizationValue);
 					}
-					// FIN_PATH_TICKET_MJM-20112405-POST
-					// FIN_PATH_MAPEAEDITA_SECURITY - AP
+
 					String body = inputStreamAsString(request.getInputStream());
-					StringRequestEntity bodyEntity = new StringRequestEntity(body, null, null);
-					if (0 == httppost.getParameters().length) {
-						log.debug("No Name/Value pairs found ... pushing as received"); // PATCH
-						httppost.setRequestEntity(bodyEntity); // PATCH
-					}
-					if (log.isDebugEnabled()) {
-						log.debug("Body = " + body);
-						NameValuePair[] nameValuePairs = httppost.getParameters();
-						log.debug("NameValuePairs found: " + nameValuePairs.length);
-						for (int i = 0; i < nameValuePairs.length; ++i) {
-							log.debug("parameters:" + nameValuePairs[i].toString());
-						}
-					}
+					HttpEntity bodyEntity = new ByteArrayEntity(body.getBytes("UTF-8"));
+					httppost.setEntity(bodyEntity); // PATCH
+
 					if (!legend)
-						client.getParams().setParameter("http.protocol.content-charset", "UTF-8");
+						request.setCharacterEncoding("UTF-8");
 					if (soap) {
-						httppost.addRequestHeader("SOAPAction", serverUrl);
+						httppost.setHeader("SOAPAction", serverUrl);
 					}
-					client.executeMethod(httppost);
+
+					HttpResponse httpResponse = client.execute(httppost);
+
 					// PATH_FOLLOW_REDIRECT_POST
 					int j = 0;
 					String redirectLocation;
-					Header locationHeader = httppost.getResponseHeader("location");
-					while (locationHeader != null && j < numMaxRedirects) {
-						redirectLocation = locationHeader.getValue();
-						// AGG 20111304 Añadimos el cuerpo de la petición POST a
-						// la nueva petición redirigida
-						// String bodyPost = httppost.getResponseBodyAsString();
-						StringRequestEntity bodyEntityPost = new StringRequestEntity(body, null, null);
+					Header[] locationHeader = httpResponse.getHeaders("location");
+					while (locationHeader.length != 0 && j < numMaxRedirects) {
+						redirectLocation = locationHeader[0].getValue();
+						StringEntity bodyEntityPost = new StringEntity(body);
 						httppost.releaseConnection();
-						httppost = new PostMethod(redirectLocation);
+						httppost = new HttpPost(redirectLocation);
 						// AGG 20110912 Añadidas cabeceras petición SOAP
 						if (redirectLocation.toLowerCase().contains("wsdl")) {
 							redirectLocation = serverUrl.replace("?wsdl", "");
-							httppost.addRequestHeader("SOAPAction", redirectLocation);
-							httppost.addRequestHeader("Content-type", "text/xml");
+							httppost.setHeader("SOAPAction", redirectLocation);
+							httppost.setHeader("Content-type", "text/xml");
 						}
-						httppost.setRequestEntity(bodyEntityPost);
-						client.executeMethod(httppost);
-						locationHeader = httppost.getResponseHeader("location");
+						httppost.setEntity(bodyEntityPost);
+						httpResponse = client.execute(httppost);
+						locationHeader = httppost.getHeaders("location");
 						j++;
 					}
 					log.info("Number of followed redirections: " + j);
@@ -342,27 +333,24 @@ public class ProxyRedirect extends HttpServlet {
 					}
 					// FIN_PATH_FOLLOW_REDIRECT_POST
 					if (log.isDebugEnabled()) {
-						Header[] responseHeaders = httppost.getResponseHeaders();
+						Header[] responseHeaders = httpResponse.getAllHeaders();
 						for (int i = 0; i < responseHeaders.length; ++i) {
 							String headerName = responseHeaders[i].getName();
 							String headerValue = responseHeaders[i].getValue();
 							log.debug("responseHeaders:" + headerName + "=" + headerValue);
 						}
 					}
-					// dump response to out
-					if (httppost.getStatusCode() == HttpStatus.SC_OK) {
+					if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_OK) {
 						// PATH_SECURITY_PROXY - AG
-						Header[] respHeaders = httppost.getResponseHeaders();
-						int compSize = httppost.getResponseBody().length;
-						ArrayList<Header> headerList = new ArrayList<Header>(Arrays.asList(respHeaders));
-						String headersString = headerList.toString();
+						final Header[] respHeaders = httpResponse.getAllHeaders();
+						final ResponseHandler<String> handler = new BasicResponseHandler();
+						final String responseBody = handler.handleResponse(httpResponse);
+						final int compSize = responseBody.length();
+						final ArrayList<Header> headerList = new ArrayList<Header>(Arrays.asList(respHeaders));
+						final String headersString = headerList.toString();
 						checkedContent = checkContent(headersString, compSize, serverUrl);
 						// FIN_PATH_SECURITY_PROXY - AG
 						if (checkedContent == true) {
-							/*
-							 * checks if it has requested an getfeatureinfo to modify the response content
-							 * type.
-							 */
 							String requesteredUrl = request.getParameter("url");
 							if (GETINFO_PLAIN_REGEX.matcher(requesteredUrl).matches()) {
 								response.setContentType("text/plain");
@@ -377,13 +365,12 @@ public class ProxyRedirect extends HttpServlet {
 								response.setContentType("text/xml");
 							}
 							if (legend) {
-								String responseBody = httppost.getResponseBodyAsString();
 								if (responseBody.contains("ServiceExceptionReport")
 										&& serverUrl.contains("LegendGraphic")) {
 									response.sendRedirect("Componente/img/blank.gif");
 								} else {
 									response.setContentLength(responseBody.length());
-									PrintWriter out = response.getWriter();
+									final PrintWriter out = response.getWriter();
 									out.print(responseBody);
 									response.flushBuffer();
 								}
@@ -397,36 +384,31 @@ public class ProxyRedirect extends HttpServlet {
 								response.setDateHeader("Expires", -1);
 								// END patch
 								// Copy request to response
-								InputStream st = httppost.getResponseBodyAsStream();
-								final ServletOutputStream sos = response.getOutputStream();
-								IOUtils.copy(st, sos);
+								final PrintWriter out = response.getWriter();
+								out.print(responseBody);
+								response.flushBuffer();
 							}
 						} else {
-							strErrorMessage += errorType;
+							strErrorMessage += errorType.toString();
 							log.error(strErrorMessage);
 						}
-					} else if (httppost.getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
+					} else if (httpResponse.getStatusLine().getStatusCode() == HttpStatus.SC_UNAUTHORIZED) {
 						response.setStatus(HttpStatus.SC_UNAUTHORIZED);
-						response.addHeader(WWW_AUTHENTICATE, httppost.getResponseHeader(WWW_AUTHENTICATE).getValue());
+						response.setHeader(WWW_AUTHENTICATE, httpResponse.getAllHeaders()[0].getName());
 					} else {
-						strErrorMessage = "Unexpected failure: ".concat(httppost.getStatusLine().toString()).concat(" ")
-								.concat(httppost.getResponseBodyAsString());
-						log.error("Unexpected failure: " + httppost.getStatusLine().toString());
+						strErrorMessage = "Unexpected failure: " + httpResponse.getStatusLine().getStatusCode()
+								+ "".concat(" ") + httppost.getEntity().getContent();
+						log.error("Unexpected failure: " + httpResponse.getStatusLine().getStatusCode());
 					}
 					httppost.releaseConnection();
-					// AGG 20110927 Avoid Throwable (change it with exceptions)
 				} catch (Exception e) {
 					log.error("Error al tratar el contenido de la peticion: " + e.getMessage(), e);
 				} finally {
-					if (httppost != null) {
-						httppost.releaseConnection();
-					}
+					httppost.releaseConnection();
 				}
 			} else {
 				strErrorMessage += "Only HTTP(S) protocol supported";
 				log.error("Only HTTP(S) protocol supported");
-				// throw new
-				// ServletException("only HTTP(S) protocol supported");
 			}
 		}
 		// There are errors.

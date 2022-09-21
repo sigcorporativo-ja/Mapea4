@@ -181,7 +181,7 @@ export default class AttributeTableControl extends M.Control {
    * @param {null|string} name- Name Layer
    * @return {HTMLElement}
    */
-   renderPanel_(name) {
+  renderPanel_(name) {
     if (!M.utils.isNullOrEmpty(name)) {
       this.layer_ = this.hasLayer_(name)[0];
     }
@@ -282,6 +282,7 @@ export default class AttributeTableControl extends M.Control {
       }
     }
   }
+
   /**
    *This functi;on is has Layer map
    *

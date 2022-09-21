@@ -165,6 +165,36 @@ class MVT extends Vector {
     return features;
   }
 
+  /**
+   * This function sets the visibility of this layer
+   *
+   * @function
+   * @api stable
+   * @expose
+   */
+  setVisible(visibility) {
+    this.visibility = visibility;
+    if ((visibility === true) && (this.transparent !== true)) {
+      this.map.getBaseLayers()
+        .filter(layer => !layer.equals(this) && layer.isVisible())
+        .forEach(layer => layer.setVisible(false));
+      this.ol3Layer.setVisible(visibility);
+      // updates resolutions and keep the zoom
+      const oldZoom = this.map.getZoom();
+      this.map.getImpl().updateResolutionsFromBaseLayer();
+      if (!isNullOrEmpty(oldZoom)) {
+        this.map.setZoom(oldZoom);
+      }
+      // updates resolutions and keep the bbox
+      const oldBbox = this.map.getBbox();
+      if (!isNullOrEmpty(oldBbox)) {
+        this.map.setBbox(oldBbox, { nearest: true });
+      }
+    } else if (!isNullOrEmpty(this.ol3Layer)) {
+      this.ol3Layer.setVisible(visibility);
+    }
+  }
+
   // /**
   //  * This function checks if an object is equals
   //  * to this layer

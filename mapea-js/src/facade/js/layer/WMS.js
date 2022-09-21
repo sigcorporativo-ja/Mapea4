@@ -153,8 +153,6 @@ class WMS extends LayerBase {
   set version(newVersion) {
     if (!isNullOrEmpty(newVersion)) {
       this.getImpl().version = newVersion;
-    } else {
-      this.getImpl().version = '1.1.0'; // default value
     }
   }
 
@@ -370,6 +368,7 @@ class WMS extends LayerBase {
       equals = equals && (this.name === obj.name);
       equals = equals && (this.cql === obj.cql);
       equals = equals && (this.version === obj.version);
+      equals = equals && (this.id === obj.id);
     }
 
     return equals;

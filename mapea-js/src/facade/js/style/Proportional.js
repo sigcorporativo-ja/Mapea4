@@ -182,11 +182,8 @@ class Proportional extends StyleComposite {
       const minMaxValues = getMinMaxValues(this.layer_.getFeatures(), this.attributeName_);
       [this.minValue_, this.maxValue_] = minMaxValues;
       this.layer_.getFeatures().forEach(feature => this.applyToFeature(feature, 1));
-      let newStyle = this.oldStyle_.clone();
+      const newStyle = this.oldStyle_.clone();
       if (newStyle instanceof StyleSimple) {
-        if (!(newStyle instanceof StylePoint)) {
-          newStyle = new StylePoint(newStyle.getOptions());
-        }
         newStyle.set('zindex', feature => (this.maxValue_ - parseFloat(feature.getAttribute(this.attributeName_))));
         newStyle.set(Proportional.getSizeAttribute(newStyle), (feature) => {
           const weigh = Proportional.SCALE_PROPORTION;
@@ -353,7 +350,9 @@ class Proportional extends StyleComposite {
 
         if (style instanceof StyleSimple) {
           let featureStyle = style.clone();
-          if (!(featureStyle instanceof StylePoint)) {
+          if ((featureStyle instanceof StyleGeneric)) {
+            featureStyle = new StylePoint(featureStyle.getOptions().point);
+          } else if (!(featureStyle instanceof StylePoint)) {
             featureStyle = new StylePoint(featureStyle.getOptions());
           }
           const sizeAttribute = Proportional.getSizeAttribute(featureStyle);
@@ -501,7 +500,7 @@ class Proportional extends StyleComposite {
       }
       const radius = propFun(value, options.minValue, options.maxValue, minRadius, maxRadius);
       const zindex = options.maxValue - parseFloat(feature.getAttribute(this.attributeName_));
-      style.set(Proportional.getSizeAttribute(style), radius);
+      style.set(`${Proportional.getSizeAttribute(style)}`, radius);
       style.set('zindex', zindex);
     }
     return style;

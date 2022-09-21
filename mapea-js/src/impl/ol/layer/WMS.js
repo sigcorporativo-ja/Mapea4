@@ -213,19 +213,12 @@ class WMS extends LayerBase {
     // checks if it is a WMS_FULL
     if (isNullOrEmpty(this.name)) { // WMS_FULL (add all wms layers)
       this.addAllLayers_();
-    } else { // just one WMS layer
-      this.addSingleLayer_();
-    }
-
-    if (this.legendUrl_ === concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
-      this.legendUrl_ = addParameters(this.url, {
-        SERVICE: 'WMS',
-        VERSION: this.version,
-        REQUEST: 'GetLegendGraphic',
-        LAYER: this.name,
-        FORMAT: 'image/png',
-        EXCEPTIONS: 'image/png',
+    } else if (isUndefined(this.version)) { // just one WMS layer
+      this.getCapabilities().then(() => {
+        this.addSingleLayer_();
       });
+    } else {
+      this.addSingleLayer_();
     }
   }
 
@@ -572,7 +565,9 @@ class WMS extends LayerBase {
             const getCapabilitiesDocument = response.xml;
             const getCapabilitiesParser = new FormatWMS();
             const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
-
+            if (isUndefined(this.version)) {
+              this.version = getCapabilities.version;
+            }
             const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
             success(getCapabilitiesUtils);
           } else {
@@ -580,13 +575,40 @@ class WMS extends LayerBase {
               const getCapabilitiesDocument = response2.xml;
               const getCapabilitiesParser = new FormatWMS();
               const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
-
+              if (isUndefined(this.version)) {
+                this.version = getCapabilities.version;
+              }
               const capabilities = new GetCapabilities(getCapabilities, layerUrl, projection);
               success(capabilities);
             });
           }
         });
       });
+      if (this.legendUrl_ ===
+        concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
+        this.getCapabilitiesPromise.then((getCapabilities) => {
+          if (parseInt(this.version.replaceAll('.', ''), 10) < 130) {
+            this.legendUrl_ = addParameters(this.url, {
+              SERVICE: 'WMS',
+              VERSION: this.version,
+              REQUEST: 'GetLegendGraphic',
+              LAYER: this.name,
+              FORMAT: 'image/png',
+              EXCEPTIONS: 'image/png',
+              STYLE: this.styles[0] || '',
+            });
+          } else {
+            let layer = getCapabilities.capabilities.Capability.Layer.Layer;
+            if (layer.length > 1) {
+              layer =
+                layer.find(elm => elm.Name === this.name);
+            } else {
+              layer = layer[0];
+            }
+            this.legendUrl_ = layer.Style[0].LegendURL[0].OnlineResource;
+          }
+        });
+      }
     }
     return this.getCapabilitiesPromise;
   }

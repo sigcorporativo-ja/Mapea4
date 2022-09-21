@@ -2,7 +2,7 @@
    <modelVersion>4.0.0</modelVersion>
    <groupId>es.juntadeandalucia.mapea</groupId>
    <artifactId>mapea-parent</artifactId>
-   <version>6.2.0</version>
+   <version>6.3.0</version>
    <packaging>pom</packaging>
    <name>Mapea PARENT</name>
    <description>Herramienta para desarrollo de mapas interactivos de forma sencilla</description>
@@ -117,10 +117,10 @@
          <artifactId>commons-io</artifactId>
          <version>1.4</version>
       </dependency>
-      <dependency>
-         <groupId>commons-httpclient</groupId>
-         <artifactId>commons-httpclient</artifactId>
-         <version>3.1</version>
-      </dependency>
+	  <dependency>
+	     <groupId>org.apache.httpcomponents</groupId>
+	     <artifactId>httpclient</artifactId>
+	     <version>4.5.2</version>
+	  </dependency>
    </dependencies>
 </project>

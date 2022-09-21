@@ -23,7 +23,6 @@ mapajs.addPlugin(new M.plugin.AttributeTable({
   pages: 8,
   selectedStyle: estiloSeleccion
 }));
-
 ```
 
 ## Ejemplo funcional
@@ -32,4 +31,3 @@ mapajs.addPlugin(new M.plugin.AttributeTable({
 
 ## Tabla de compatibilidad de versiones   
 [Consulta el api resourcePlugin](https://mapea4-sigc.juntadeandalucia.es/mapea/api/actions/resourcesPlugins?name=attributetable) 
-
