@@ -24,6 +24,7 @@ options.legend | (opcional) Indica si se desea mostrar la leyenda
 options.dpi | (opcional) Valor por defecto para el selector dpi
 options.layout | (opcional) Plantilla preseleccionada
 options.format | (opcional) Valor por defecto para el selector de formato
+options.forceScale | (opcional) Check de forzar escala marcado, false por defecto  
 options.labeling.conflictResolution | (opcional) Cuando su valor es verdadero no permite que se superpongan dos etiquetas
 options.labeling.goodnessOfFit | (opcional) Establece el porcentaje de la etiqueta que debe ubicarse dentro de la geometría para permitir dibujar la etiqueta
 options.labeling.allowOverruns | (opcional) Cuando su valor es falso no permite que las etiquetas de las líneas vayan más allá del principio / final de la línea
