@@ -61,7 +61,6 @@ import java.util.Arrays;
 import java.util.Enumeration;
 import java.util.Map;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletContext;
