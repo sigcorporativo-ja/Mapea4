@@ -68,7 +68,7 @@
       }
    %>
     <script type="text/javascript">
-        M.config.DEFAULT_PROJ = 'EPSG:23030*m';
+        M.config.DEFAULT_PROJ = 'EPSG:25830*m';
     </script>
     <script type="text/javascript" src="api/js?<%out.print(params);%>"></script>
 </body>
