@@ -605,7 +605,9 @@ class WMS extends LayerBase {
             } else {
               layer = layer[0];
             }
-            this.legendUrl_ = layer.Style[0].LegendURL[0].OnlineResource;
+            if (!isUndefined(layer.Style)) {
+              this.legendUrl_ = layer.Style[0].LegendURL[0].OnlineResource;
+            }
           }
         });
       }
