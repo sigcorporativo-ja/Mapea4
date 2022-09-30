@@ -603,10 +603,7 @@ class WMS extends LayerBase {
               layer =
                 layer.find(elm => elm.Name === this.name);
             } else if (layer.Name !== this.name) {
-              layer =
-                layer[0].Layer.find((elm) => {
-                  return elm.Name === this.name;
-                });
+              layer = layer[0].Layer.find(elm => elm.Name === this.name);
             } else {
               layer = layer[0];
             }
