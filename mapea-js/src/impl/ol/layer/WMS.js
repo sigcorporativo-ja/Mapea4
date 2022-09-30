@@ -213,12 +213,19 @@ class WMS extends LayerBase {
     // checks if it is a WMS_FULL
     if (isNullOrEmpty(this.name)) { // WMS_FULL (add all wms layers)
       this.addAllLayers_();
-    } else if (isUndefined(this.version)) { // just one WMS layer
-      this.getCapabilities().then(() => {
-        this.addSingleLayer_();
-      });
     } else {
       this.addSingleLayer_();
+    }
+    if (this.legendUrl_ === concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
+      this.legendUrl_ = addParameters(this.url, {
+        SERVICE: 'WMS',
+        VERSION: this.version,
+        REQUEST: 'GetLegendGraphic',
+        LAYER: this.name,
+        FORMAT: 'image/png',
+        EXCEPTIONS: 'image/png',
+        STYLE: this.styles[0] || '',
+      });
     }
   }
 
@@ -584,37 +591,35 @@ class WMS extends LayerBase {
           }
         });
       });
-      if (this.legendUrl_ ===
-        concatUrlPaths([M.config.THEME_URL, FacadeLayerBase.LEGEND_DEFAULT])) {
-        this.getCapabilitiesPromise.then((getCapabilities) => {
-          if (parseInt(this.version.replaceAll('.', ''), 10) < 130) {
-            this.legendUrl_ = addParameters(this.url, {
-              SERVICE: 'WMS',
-              VERSION: this.version,
-              REQUEST: 'GetLegendGraphic',
-              LAYER: this.name,
-              FORMAT: 'image/png',
-              EXCEPTIONS: 'image/png',
-              STYLE: this.styles[0] || '',
-            });
-          } else {
-            let layer = getCapabilities.capabilities.Capability.Layer.Layer;
-            if (layer.length > 1) {
-              layer =
-                layer.find(elm => elm.Name === this.name);
-            } else if (layer.Name !== this.name) {
-              layer = layer[0].Layer.find(elm => elm.Name === this.name);
-            } else {
-              layer = layer[0];
-            }
-            if (!isUndefined(layer.Style)) {
-              this.legendUrl_ = layer.Style[0].LegendURL[0].OnlineResource;
-            }
-          }
-        });
-      }
     }
     return this.getCapabilitiesPromise;
+  }
+
+  /**
+   * This funcion returns the URL of the legend of GetCapabilities
+   *
+   * @function
+   * @return {Promise} url WMS equivalen service for this layer.
+   * @api
+   */
+  getLegendCapabilities() {
+    return this.getCapabilities().then((getCapabilities) => {
+      let url = '';
+      let layer = getCapabilities.capabilities.Capability.Layer.Layer;
+      if (layer.length > 1) {
+        layer =
+          layer.find(elm => elm.Name === this.name);
+      } else if (layer.length === 1 && layer[0].Name !== this.name) {
+        layer = layer[0].Layer.find(elm => elm.Name === this.name);
+      } else {
+        layer = layer[0];
+      }
+      if (!isUndefined(layer.Style) && !isUndefined(layer.Style[0].LegendURL) &&
+        !isUndefined(layer.Style[0].LegendURL[0].OnlineResource)) {
+        url = layer.Style[0].LegendURL[0].OnlineResource;
+      }
+      return url;
+    });
   }
 
   /**

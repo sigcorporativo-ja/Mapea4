@@ -279,6 +279,17 @@ class WMS extends LayerBase {
   }
 
   /**
+   * This funcion returns the URL of the legend of GetCapabilities
+   *
+   * @function
+   * @return {Promise} url WMS equivalen service for this layer.
+   * @api
+   */
+  getLegendCapabilities() {
+    return this.getImpl().getLegendCapabilities();
+  }
+
+  /**
    * If this WMS layer actually requests a tiled layer service, there may be an
    * equivalent WMS service which can be used for other purposes (printing, etc.)
    *
