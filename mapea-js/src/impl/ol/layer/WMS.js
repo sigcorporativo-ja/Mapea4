@@ -572,9 +572,6 @@ class WMS extends LayerBase {
             const getCapabilitiesDocument = response.xml;
             const getCapabilitiesParser = new FormatWMS();
             const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
-            if (isUndefined(this.version)) {
-              this.version = getCapabilities.version;
-            }
             const getCapabilitiesUtils = new GetCapabilities(getCapabilities, layerUrl, projection);
             success(getCapabilitiesUtils);
           } else {
@@ -582,9 +579,6 @@ class WMS extends LayerBase {
               const getCapabilitiesDocument = response2.xml;
               const getCapabilitiesParser = new FormatWMS();
               const getCapabilities = getCapabilitiesParser.customRead(getCapabilitiesDocument);
-              if (isUndefined(this.version)) {
-                this.version = getCapabilities.version;
-              }
               const capabilities = new GetCapabilities(getCapabilities, layerUrl, projection);
               success(capabilities);
             });

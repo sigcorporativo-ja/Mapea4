@@ -153,6 +153,8 @@ class WMS extends LayerBase {
   set version(newVersion) {
     if (!isNullOrEmpty(newVersion)) {
       this.getImpl().version = newVersion;
+    } else {
+      this.getImpl().version = '1.3.0'; // default value
     }
   }
 
