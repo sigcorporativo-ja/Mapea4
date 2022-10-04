@@ -153,6 +153,8 @@ class WMS extends LayerBase {
   set version(newVersion) {
     if (!isNullOrEmpty(newVersion)) {
       this.getImpl().version = newVersion;
+    } else {
+      this.getImpl().version = '1.3.0'; // default value
     }
   }
 
@@ -276,6 +278,17 @@ class WMS extends LayerBase {
       this.getCapabilitiesPromise_ = this.getImpl().getCapabilities();
     }
     return this.getCapabilitiesPromise_;
+  }
+
+  /**
+   * This funcion returns the URL of the legend of GetCapabilities
+   *
+   * @function
+   * @return {Promise} url WMS equivalen service for this layer.
+   * @api
+   */
+  getLegendCapabilities() {
+    return this.getImpl().getLegendCapabilities();
   }
 
   /**
