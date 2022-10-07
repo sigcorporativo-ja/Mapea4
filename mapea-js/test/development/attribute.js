@@ -42,11 +42,7 @@ const estiloSeleccion = new M.style.Generic({
   },
 });
 
-<<<<<<< HEAD
 const attributetable = new Attributetable({ pages: 5 /* , selectedStyle:estiloSeleccion */ });
-=======
-const attributetable = new Attributetable({pages:5/* , selectedStyle:estiloSeleccion */});
->>>>>>> upstream/develop
 mapjs.addPlugin(attributetable);
 
 let campamentosa = new M.layer.GeoJSON({
@@ -90,15 +86,9 @@ let estiloPunto = new M.style.Generic({
       opacity: '0.8'
     },
     stroke: {
-<<<<<<< HEAD
-      color: 'red',
-      width: 1,
-    },
-=======
        color: 'red',
        width: 1,
      },
->>>>>>> upstream/develop
     icon: {
       src: 'http://mapea4-sigc.juntadeandalucia.es/assets/img/m-pin-24-sel.svg',
       rotation: 0,
@@ -107,24 +97,6 @@ let estiloPunto = new M.style.Generic({
       anchor: [0.5, 1],
       rotate: false,
     },
-<<<<<<< HEAD
-  }
-});
-
-campamentosa.setStyle(estiloPunto);
-
-
-mapjs.addLayers([ /*, campamentosB,*/ provincias, campamentosa, conduccion]);
-
-let verde = new M.style.Polygon({ fill: { color: 'green' } });
-let amarillo = new M.style.Polygon({ fill: { color: 'pink' } });
-let rojo = new M.style.Polygon({ fill: { color: 'red' } });
-let azul = new M.style.Polygon({ fill: { color: 'grey' } });
-let naranja = new M.style.Polygon({ fill: { color: 'orange' } });
-let marron = new M.style.Polygon({ fill: { color: 'brown' } });
-let magenta = new M.style.Polygon({ fill: { color: '#e814d9' } });
-let morado = new M.style.Polygon({ fill: { color: '#b213dd' } });
-=======
    }
   });
   
@@ -141,7 +113,6 @@ let naranja = new M.style.Polygon({fill: {color: 'orange'}});
 let marron = new M.style.Polygon({fill: {color: 'brown'}});
 let magenta = new M.style.Polygon({fill: {color: '#e814d9'}});
 let morado = new M.style.Polygon({fill: {color: '#b213dd'}});
->>>>>>> upstream/develop
 
 // Creamos la simbologia. El atributo "provincia" contiene el nombre
 // de la provincia a la que pertenece cada feature

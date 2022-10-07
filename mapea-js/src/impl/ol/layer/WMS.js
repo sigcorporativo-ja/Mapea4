@@ -224,6 +224,7 @@ class WMS extends LayerBase {
         LAYER: this.name,
         FORMAT: 'image/png',
         STYLE: this.styles[0] || '',
+        SLD_VERSION: '1.1.0',
       });
     }
   }
